@@ -51,7 +51,8 @@ public final class Jdk14LoggerPatched extends Jdk14Logger {
 		return commonsFactory.getInstance(name);
 	}
 
-	private final void log(final java.util.logging.Level level, final String msg, final Throwable ex) {
+	@Override
+	protected final void log(final java.util.logging.Level level, final String msg, final Throwable ex) {
 		final java.util.logging.Logger logger = this.getLogger();
 		if (logger.isLoggable(level)) {
 			final String sourceClass;

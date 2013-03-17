@@ -89,14 +89,14 @@
 
 		<path id="kieker.monitoring-compile-classpath">
 			<fileset dir="${lib.dir}">
-				<include name="aopalliance-*.jar" />
 				<!--<include name="aspectjrt-*.jar" />-->
-				<include name="framework-libs/cxf/cxf-*.jar" />
 				<include name="javax.jms-*.jar" />
-				<include name="framework-libs/javax.servlet-*.jar" />
 				<include name="sigar-*.jar" />
-				<include name="framework-libs/spring/org.springframework.context-*.jar" />
-				<include name="framework-libs/spring/org.springframework.web-*.jar" />
+				<include name="framework-libs/javax.servlet-*.jar" />
+				<include name="framework-libs/cxf/cxf-*.jar" />
+				<include name="framework-libs/spring/aopalliance-*.jar" />
+				<include name="framework-libs/spring/spring-context-*.jar" />
+				<include name="framework-libs/spring/spring-web*.jar" />
 			</fileset>
 			<pathelement location="${build.kieker.common.dir}/" />
 		</path>
@@ -901,7 +901,6 @@
 			<fileset dir="${lib.dir}">
 				<include name="hamcrest-core-*.jar" />
 				<include name="junit-*.jar" />
-				<include name="aopalliance-*.jar" />
 				<include name="framework-libs/spring/*.jar" />
 				<include name="framework-libs/cxf/*.jar" />
 			</fileset>
@@ -1186,7 +1185,6 @@
 			<fileset dir="${lib.dir}">
 				<include name="hamcrest-core-*.jar" />
 				<include name="junit-*.jar" />
-				<include name="aopalliance-*.jar" />
 				<include name="aspectjweaver-*.jar" /> <!-- needed for the spring tests -->
 				<include name="commons-logging-*.jar" /> <!-- needed for the spring tests -->
 				<include name="org.eclipse.emf.*.jar" />

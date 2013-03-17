@@ -19,10 +19,9 @@
 	<classpathentry kind="src" path="examples/SPECjEnterprise2010/src"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
-	<classpathentry kind="lib" path="lib/aopalliance-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/aspectjrt-1.7.2.jar"/>
 	<classpathentry kind="lib" path="lib/commons-cli-1.2.jar"/>
-	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/derby-10.9.1.0.jar"/>
 	<classpathentry kind="lib" path="lib/hamcrest-core-1.3.jar"/>
 	<classpathentry kind="lib" path="lib/javax.jms-1.1.jar"/>
@@ -51,17 +50,17 @@
 	<classpathentry kind="lib" path="lib/framework-libs/cxf/geronimo-ws-metadata_2.0_spec-1.1.3.jar"/>
 	<classpathentry kind="lib" path="lib/framework-libs/cxf/saaj-api-1.3.4.jar"/>
 	<classpathentry kind="lib" path="lib/framework-libs/cxf/saaj-impl-1.3.19.jar"/>
-	<classpathentry kind="lib" path="lib/framework-libs/spring/org.springframework.aop-3.1.2.jar"/>
-	<classpathentry kind="lib" path="lib/framework-libs/spring/org.springframework.asm-3.1.2.jar"/>
-	<classpathentry kind="lib" path="lib/framework-libs/spring/org.springframework.beans-3.1.2.jar"/>
-	<classpathentry kind="lib" path="lib/framework-libs/spring/org.springframework.context-3.1.2.jar"/>
-	<classpathentry kind="lib" path="lib/framework-libs/spring/org.springframework.core-3.1.2.jar"/>
-	<classpathentry kind="lib" path="lib/framework-libs/spring/org.springframework.expression-3.1.2.jar"/>
-	<classpathentry kind="lib" path="lib/framework-libs/spring/org.springframework.instrument-3.1.2.jar"/>
-	<classpathentry kind="lib" path="lib/framework-libs/spring/org.springframework.web-3.1.2.jar"/>
-	<classpathentry kind="lib" path="lib/framework-libs/spring/org.springframework.web.portlet-3.1.2.jar"/>
-	<classpathentry kind="lib" path="lib/framework-libs/spring/org.springframework.web.servlet-3.1.2.jar"/>
-	<classpathentry kind="lib" path="lib/framework-libs/spring/org.springframework.web.struts-3.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/framework-libs/spring/aopalliance-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/framework-libs/spring/spring-aop-3.2.2.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/framework-libs/spring/spring-beans-3.2.2.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/framework-libs/spring/spring-context-3.2.2.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/framework-libs/spring/spring-core-3.2.2.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/framework-libs/spring/spring-expression-3.2.2.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/framework-libs/spring/spring-instrument-3.2.2.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/framework-libs/spring/spring-struts-3.2.2.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/framework-libs/spring/spring-web-3.2.2.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/framework-libs/spring/spring-webmvc-3.2.2.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/framework-libs/spring/spring-webmvc-portlet-3.2.2.RELEASE.jar"/>
 	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-continuation-7.6.7.v20120910.jar"/>
 	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-http-7.6.7.v20120910.jar"/>
 	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-io-7.6.7.v20120910.jar"/>
