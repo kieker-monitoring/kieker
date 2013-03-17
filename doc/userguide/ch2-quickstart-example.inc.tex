@@ -105,7 +105,7 @@ The directory structure of the Bookstore example is shown in Figure~\ref{fig:Pla
 
 \enlargethispage{1cm}
 
-\noindent The class \class{BookstoreStarter}, contains the application's \method{main} method (shown in Listing~\ref{lst:class:BookstoreStarter}), i.e., the program start routine. It initializes the \class{Bookstore} and issues five search requests by calling the \method{searchBook} method of the \object{bookstore} object.
+\noindent The class \class{BookstoreStarter} contains the application's \method{main} method (shown in Listing~\ref{lst:class:BookstoreStarter}), i.e., the program start routine. It initializes the \class{Bookstore} and issues five search requests by calling the \method{searchBook} method of the \object{bookstore} object.
 
 \medskip
 
@@ -120,7 +120,7 @@ In a real application these methods would pass objects to ensure the results of 
 
 \lstinputlisting[caption=Bookstore.java,label=lst:class:Bookstore,firstline=19,firstnumber=19]{\plainBookstoreApplicationDir/src/kieker/examples/userguide/ch2bookstore/Bookstore.java}
 
-\noindent The customer relationship management for this application is modeled in the \class{CRM} class shown in Listing~\ref{lst:class:CRM}. It only provides a business method to collect offers which uses the catalog for some lookup. The additional catalog lookup is later used to illustrate different traces in the application.
+\noindent The customer relationship management for this application is modeled in the \class{CRM} class shown in Listing~\ref{lst:class:CRM}. It provides only a business method to collect offers by using the catalog for some lookup. The additional catalog lookup is later used to illustrate different traces in the application.
 
 \lstinputlisting[caption=CRM.java,label=lst:class:CRM,firstline=19,firstnumber=19]{\plainBookstoreApplicationDir/src/kieker/examples/userguide/ch2bookstore/CRM.java}
 
