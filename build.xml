@@ -1280,12 +1280,9 @@
 		<taskdef resource="checkstyletask.properties" classpath="${lib.cs.dir}/lib/checkstyle-all.jar;${build.tests.dir};${build.kieker.analysis.dir};${build.kieker.common.dir}" />
 		<checkstyle config="${lib.cs.dir}/cs-conf.xml" failOnViolation="false">
 			<classpath>
-				<fileset dir="${lib.dir}">
-					<include name="*.jar" />
-				</fileset>
-				<fileset dir="${dist.dir}">
-					<include name="${dist.kieker.main.jar}" />
-				</fileset>
+				<fileset dir="${lib.dir}" includes="*.jar" />
+				<fileset dir="${lib.dir}/framework-libs/" includes="**/*.jar" />
+				<fileset dir="${dist.dir}"includes="${dist.kieker.main.jar}" />
 			</classpath>
 			<fileset dir="${src.dir}" includes="**/*.java" />
 			<fileset dir="${test.dir}" includes="**/*.java" />
