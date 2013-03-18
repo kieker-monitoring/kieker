@@ -443,6 +443,7 @@
 			<arg value="-Dsources=${maven.dir}/${dist.kieker.main.sources.jar}" />
 			<arg value="-Djavadoc=${maven.dir}/${dist.kieker.main.javadoc.jar}" />
 			<arg value="-Dclassifiers=emf,aspectj" />
+			<arg value="-Dtypes=jar,jar" />
 			<arg value="-Dfiles=${maven.dir}/${dist.kieker.main.emf.jar},${maven.dir}/${dist.kieker.main.aspectj.jar}" />
 		</artifact:mvn>
 	</target>
@@ -459,6 +460,7 @@
       <arg value="-Dsources=${maven.dir}/${dist.kieker.main.sources.jar}" />
 			<arg value="-Djavadoc=${maven.dir}/${dist.kieker.main.javadoc.jar}" />
 			<arg value="-Dclassifiers=emf,aspectj" />
+			<arg value="-Dtypes=jar,jar" />
 			<arg value="-Dfiles=${maven.dir}/${dist.kieker.main.emf.jar},${maven.dir}/${dist.kieker.main.aspectj.jar}" />
 			<arg value="-Pgpg" />
 		</artifact:mvn>
