@@ -336,7 +336,7 @@
 	</target>
 
 	<target name="dist-kieker-sources" depends="-init" description="Packages the source archives (.zip|.tar.gz) for a release">
-		<echo message="${test.dir}/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/jetty.xml" />
+		<!-- <echo message="${test.dir}/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/jetty.xml" /> -->
 		<patternset id="dist_src_files-nonbinmode"> <!-- NOTE that the order of includes/excludes seems to have no effect. So be careful with excludes -->
 			<include name="${bin.dir}/logging.properties" />
 			<include name="${bin.dir}/*.bat" />
@@ -564,7 +564,7 @@
 			<include name="${dist.dir}/*.jar" />
 			<include name="${dist.dir}/*.war" />
 			<include name="${lib.dir}/**/*" />
-			<exclude name="${lib.dir}/static-analysis/**/*" />
+			<exclude name="${lib.dir}/static-analysis/" />
 			<!-- exclude some src only libraries begin -->
 			<exclude name="${lib.dir}/aspectjtools-*" />
 			<exclude name="${lib.dir}/maven-ant-tasks-*" />
@@ -842,10 +842,13 @@
 
 	<target name="clean" description="Removes artifacts from previous builds">
 		<!-- <delete dir="tmp"/>-->
-		<delete dir="${dist.dir}" />
-		<delete dir="${release.dir}" />
-		<delete dir="${maven.dir}" />
-		<delete dir="${build.dir}" />
+		<delete dir="${dist.dir}" includeemptydirs="true" />
+		<delete dir="${release.dir}" includeemptydirs="true" />
+		<delete dir="${maven.dir}" includeemptydirs="true" />
+		<delete dir="${build.dir}" includeemptydirs="true" />
+    <delete>
+      <fileset dir="${examples.dir}" includes="**/.classpath-binrelease.generated" />
+    </delete>
 	</target>
 
 	<target name="run-test-storage" depends="-compile-tests-monitoring" description="Runs a simple storage test">

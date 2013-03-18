@@ -51,25 +51,30 @@ public final class Jdk14LoggerPatched extends Jdk14Logger {
 		return commonsFactory.getInstance(name);
 	}
 
+	/**
+	 * Copy of {@link Jdk14Logger.log(level, msg, ex)} with correct stack depth for Kieker.
+	 * 
+	 * @param level
+	 * @param msg
+	 * @param ex
+	 */
 	private final void logpatched(final java.util.logging.Level level, final String msg, final Throwable ex) {
 		final java.util.logging.Logger logger = this.getLogger();
 		if (logger.isLoggable(level)) {
-			final String sourceClass;
-			final String sourceMethod;
+			final String cname = this.name;
+			final String method;
 			{ // NOCS detect calling class and method
-				final StackTraceElement[] stackArray = new Throwable().getStackTrace(); // NOPMD (throwable)
-				if (stackArray.length > 3) {
-					sourceClass = stackArray[3].getClassName();
-					sourceMethod = stackArray[3].getMethodName();
+				final StackTraceElement locations[] = new Throwable().getStackTrace(); // NOPMD (throwable)
+				if ((locations != null) && (locations.length > 3)) {
+					method = locations[3].getMethodName();
 				} else {
-					sourceClass = this.name;
-					sourceMethod = "";
+					method = "unknown";
 				}
 			}
 			if (ex == null) {
-				logger.logp(level, sourceClass, sourceMethod, msg);
+				logger.logp(level, cname, method, msg);
 			} else {
-				logger.logp(level, sourceClass, sourceMethod, msg, ex);
+				logger.logp(level, cname, method, msg, ex);
 			}
 		}
 	}
