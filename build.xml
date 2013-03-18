@@ -568,6 +568,8 @@
 			<!-- exclude some src only libraries begin -->
 			<exclude name="${lib.dir}/aspectjtools-*" />
 			<exclude name="${lib.dir}/maven-ant-tasks-*" />
+			<exclude name="${lib.dir}/junit-*" />
+			<exclude name="${lib.dir}/hamcrest-core-*" />
 			<!-- exclude some src only libraries end -->
 			<include name="${src.userguide.dist.pdf}" />
 			<include name="${examples.dir}/**/*" />
