@@ -413,7 +413,6 @@
 		<copy file="${dist.dir}/${dist.kieker.main.jar}" tofile="${maven.dir}/${dist.kieker.main.jar}" />
 		<copy file="${dist.dir}/${dist.kieker.main.emf.jar}" tofile="${maven.dir}/${dist.kieker.main.emf.jar}" />
 		<copy file="${dist.dir}/${dist.kieker.main.aspectj.jar}" tofile="${maven.dir}/${dist.kieker.main.aspectj.jar}" />
-
 		<!-- The source files -->
 		<jar zipfile="${maven.dir}/${dist.kieker.main.sources.jar}">
 			<zipfileset dir="${src.kieker.common.dir}" defaultexcludes="yes" />
@@ -422,24 +421,14 @@
 			<zipfileset dir="${src.kieker.tools.dir}" defaultexcludes="yes" />
 			<zipfileset dir="${src.gen.kieker.analysis.dir}" defaultexcludes="yes" />
 		</jar>
-		<copy file="${maven.dir}/${dist.kieker.main.sources.jar}" tofile="${maven.dir}/${dist.kieker.main.sources.aspectj.jar}" />
-		<copy file="${maven.dir}/${dist.kieker.main.sources.jar}" tofile="${maven.dir}/${dist.kieker.main.sources.emf.jar}" />
-
 		<!-- The javadoc files -->
 		<jar zipfile="${maven.dir}/${dist.kieker.main.javadoc.jar}">
 			<zipfileset dir="${build.api.dir}" prefix="" defaultexcludes="yes" />
 		</jar>
-		<copy file="${maven.dir}/${dist.kieker.main.javadoc.jar}" tofile="${maven.dir}/${dist.kieker.main.javadoc.aspectj.jar}" />
-		<copy file="${maven.dir}/${dist.kieker.main.javadoc.jar}" tofile="${maven.dir}/${dist.kieker.main.javadoc.emf.jar}" />
-
 		<!-- The pom files -->
 		<copy file="${pom.xml.kieker.main}" tofile="${maven.dir}/${dist.kieker.main.pom}" />
-		<copy file="${pom.xml.kieker.main.aspectj}" tofile="${maven.dir}/${dist.kieker.main.aspectj.pom}" />
-		<copy file="${pom.xml.kieker.main.emf}" tofile="${maven.dir}/${dist.kieker.main.emf.pom}" />
-
+    <!-- update version -->
 		<replaceregexp file="${maven.dir}/${dist.kieker.main.pom}" match="&lt;version&gt;.*&lt;/version&gt;&lt;!--Kieker.*" replace="&lt;version&gt;${kieker.version}&lt;/version&gt;" />
-		<replaceregexp file="${maven.dir}/${dist.kieker.main.aspectj.pom}" match="&lt;version&gt;.*&lt;/version&gt;&lt;!--Kieker.*" replace="&lt;version&gt;${kieker.version}&lt;/version&gt;" />
-		<replaceregexp file="${maven.dir}/${dist.kieker.main.emf.pom}" match="&lt;version&gt;.*&lt;/version&gt;&lt;!--Kieker.*" replace="&lt;version&gt;${kieker.version}&lt;/version&gt;" />
 	</target>
 
 	<!-- Note that this target just uploads but does NOT build! -->
@@ -456,14 +445,16 @@
 			<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.6:deploy-file" />
 			<arg value="-Durl=${maven-snapshots-repository-url}" />
 			<arg value="-DrepositoryId=${maven-snapshots-repository-id}" />
-			<arg value="-DpomFile=${maven.dir}/${dist.kieker.main.emf.pom}" />
+			<arg value="-DpomFile=${maven.dir}/${dist.kieker.main.pom}" />
+			<arg value="-Dclassifier=emf" />
 			<arg value="-Dfile=${maven.dir}/${dist.kieker.main.emf.jar}" />
 		</artifact:mvn>
 		<artifact:mvn>
 			<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.6:deploy-file" />
 			<arg value="-Durl=${maven-snapshots-repository-url}" />
 			<arg value="-DrepositoryId=${maven-snapshots-repository-id}" />
-			<arg value="-DpomFile=${maven.dir}/${dist.kieker.main.aspectj.pom}" />
+			<arg value="-DpomFile=${maven.dir}/${dist.kieker.main.pom}" />
+			<arg value="-Dclassifier=aspectj" />
 			<arg value="-Dfile=${maven.dir}/${dist.kieker.main.aspectj.jar}" />
 		</artifact:mvn>
 	</target>
