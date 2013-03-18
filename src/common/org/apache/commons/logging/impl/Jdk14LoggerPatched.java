@@ -51,8 +51,7 @@ public final class Jdk14LoggerPatched extends Jdk14Logger {
 		return commonsFactory.getInstance(name);
 	}
 
-	@Override
-	protected final void log(final java.util.logging.Level level, final String msg, final Throwable ex) {
+	private final void logpatched(final java.util.logging.Level level, final String msg, final Throwable ex) {
 		final java.util.logging.Logger logger = this.getLogger();
 		if (logger.isLoggable(level)) {
 			final String sourceClass;
@@ -77,41 +76,41 @@ public final class Jdk14LoggerPatched extends Jdk14Logger {
 
 	@Override
 	public final void debug(final Object message) {
-		this.log(java.util.logging.Level.FINE, String.valueOf(message), null);
+		this.logpatched(java.util.logging.Level.FINE, String.valueOf(message), null);
 	}
 
 	@Override
 	public final void debug(final Object message, final Throwable exception) {
-		this.log(java.util.logging.Level.FINE, String.valueOf(message), exception);
+		this.logpatched(java.util.logging.Level.FINE, String.valueOf(message), exception);
 	}
 
 	@Override
 	public final void info(final Object message) {
-		this.log(java.util.logging.Level.INFO, String.valueOf(message), null);
+		this.logpatched(java.util.logging.Level.INFO, String.valueOf(message), null);
 	}
 
 	@Override
 	public final void info(final Object message, final Throwable exception) {
-		this.log(java.util.logging.Level.INFO, String.valueOf(message), exception);
+		this.logpatched(java.util.logging.Level.INFO, String.valueOf(message), exception);
 	}
 
 	@Override
 	public final void warn(final Object message) {
-		this.log(java.util.logging.Level.WARNING, String.valueOf(message), null);
+		this.logpatched(java.util.logging.Level.WARNING, String.valueOf(message), null);
 	}
 
 	@Override
 	public final void warn(final Object message, final Throwable exception) {
-		this.log(java.util.logging.Level.WARNING, String.valueOf(message), exception);
+		this.logpatched(java.util.logging.Level.WARNING, String.valueOf(message), exception);
 	}
 
 	@Override
 	public final void error(final Object message) {
-		this.log(java.util.logging.Level.SEVERE, String.valueOf(message), null);
+		this.logpatched(java.util.logging.Level.SEVERE, String.valueOf(message), null);
 	}
 
 	@Override
 	public final void error(final Object message, final Throwable exception) {
-		this.log(java.util.logging.Level.SEVERE, String.valueOf(message), exception);
+		this.logpatched(java.util.logging.Level.SEVERE, String.valueOf(message), exception);
 	}
 }
