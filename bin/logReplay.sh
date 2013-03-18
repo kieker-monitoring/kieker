@@ -7,7 +7,7 @@
 
 BINDIR=$(cd "$(dirname "$0")"; pwd)/
 
-JAVAARGS="-Dkieker.common.logging.Log=JDK -Djava.util.logging.config.file=./logging.properties -Dkieker.monitoring.asyncBlockOnFullQueue=true"
+JAVAARGS="-Dkieker.common.logging.Log=JDK -Djava.util.logging.config.file=./logging.properties"
 MAINCLASSNAME=kieker.tools.logReplayer.FilesystemLogReplayerStarter
 CLASSPATH=$(ls "${BINDIR}/../lib/"*.jar | tr "\n" ":")$(ls "${BINDIR}/../dist/"*.jar | tr "\n" ":")${BINDIR}
 

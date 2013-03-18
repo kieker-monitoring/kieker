@@ -3,7 +3,7 @@ REM This script should NOT be called directly. Use logReplay.bat instead.
 REM
 REM @author Nils Christian Ehmke
 
-SET JAVAARGS=-Dkieker.common.logging.Log=JDK -Djava.util.logging.config.file=./logging.properties -Dkieker.monitoring.asyncBlockOnFullQueue=true
+SET JAVAARGS=-Dkieker.common.logging.Log=JDK -Djava.util.logging.config.file=./logging.properties
 SET MAINCLASSNAME=kieker.tools.logReplayer.FilesystemLogReplayerStarter
 
 REM Get the directory of this file and change the working directory to it.
