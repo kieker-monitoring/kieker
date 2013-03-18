@@ -163,7 +163,7 @@ public final class TeeFilter extends AbstractFilterPlugin {
 	public final Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_ENCODING, this.encoding);
-		/* We reverse the if-decisions within the constructor. */
+		// We reverse the if-decisions within the constructor.
 		if (this.printStream == null) {
 			if (this.active) {
 				configuration.setProperty(CONFIG_PROPERTY_NAME_STREAM, CONFIG_PROPERTY_VALUE_STREAM_STDLOG);

@@ -162,9 +162,7 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 				this.startTime = currentTime;
 			}
 
-			/*
-			 * Compute scheduling time
-			 */
+			// Compute scheduling time
 			long schedTimeFromNow = (monitoringRecord.getLoggingTimestamp() - this.firstLoggingTimestamp) // relative to 1st record
 					- (currentTime - this.startTime); // substract elapsed time
 			if (schedTimeFromNow < -this.warnOnNegativeSchedTime) {
@@ -181,9 +179,7 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 				this.latestSchedulingTime = absSchedTime;
 			}
 
-			/*
-			 * Schedule
-			 */
+			// Schedule
 			this.executor.schedule(new Runnable() {
 
 				public void run() {

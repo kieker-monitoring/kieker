@@ -111,7 +111,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 				LOG.error("Two OutputPorts use the same name: " + outputPort.name());
 			}
 		}
-		/* Get all input ports. */
+		// Get all input ports.
 		this.inputPorts = new ConcurrentHashMap<String, InputPort>();
 		// ignore possible inputPorts for IReaderPlugins
 		if (!(this instanceof IReaderPlugin)) {
@@ -142,12 +142,12 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		}
 		this.registeredRepositories = new ConcurrentHashMap<String, AbstractRepository>(this.repositoryPorts.size());
 
-		/* Now create a linked queue for every output port of the class, to store the registered methods. */
+		// Now create a linked queue for every output port of the class, to store the registered methods.
 		this.registeredMethods = new ConcurrentHashMap<String, ConcurrentLinkedQueue<PluginInputPortReference>>();
 		for (final OutputPort outputPort : annotation.outputPorts()) {
 			this.registeredMethods.put(outputPort.name(), new ConcurrentLinkedQueue<PluginInputPortReference>());
 		}
-		/* and a List for every incoming and outgoing plugin */
+		// and a List for every incoming and outgoing plugin
 		this.incomingPlugins = new ArrayList<AbstractPlugin>(1); // usually only one incoming
 		this.outgoingPlugins = new ArrayList<AbstractPlugin>(1); // usually only one outgoing
 	}
@@ -171,13 +171,13 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			return true;
 		}
 
-		/* First step: Get the output port. */
+		// First step: Get the output port.
 		final OutputPort outputPort = this.outputPorts.get(outputPortName);
 		if (outputPort == null) {
 			return false;
 		}
 
-		/* Second step: Check whether the data fits the event types. */
+		// Second step: Check whether the data fits the event types.
 		Class<?>[] outTypes = outputPort.eventTypes();
 		if (outTypes.length == 0) {
 			outTypes = new Class<?>[] { Object.class };
@@ -193,11 +193,11 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			return false;
 		}
 
-		/* Third step: Send everything to the registered ports. */
+		// Third step: Send everything to the registered ports.
 		final ConcurrentLinkedQueue<PluginInputPortReference> registeredMethodsOfPort = this.registeredMethods.get(outputPortName);
 
 		for (final PluginInputPortReference pluginInputPortReference : registeredMethodsOfPort) {
-			/* Check whether the data fits the event types. */
+			// Check whether the data fits the event types.
 			Class<?>[] eventTypes = pluginInputPortReference.getEventTypes();
 			if (eventTypes.length == 0) {
 				eventTypes = new Class<?>[] { Object.class };
@@ -321,7 +321,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	 *         not be a reader.
 	 */
 	public static final boolean isConnectionAllowed(final AbstractPlugin src, final String output, final AbstractPlugin dst, final String input) {
-		/* First step: Check whether the plugins are valid. */
+		// First step: Check whether the plugins are valid.
 		if ((src == null) || (dst == null) || (dst instanceof IReaderPlugin)) {
 			LOG.warn("Plugins are invalid or null.");
 			return false;
@@ -335,7 +335,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			return false;
 		}
 
-		/* Second step: Check whether the ports exist. */
+		// Second step: Check whether the ports exist.
 		final OutputPort outputPort = src.outputPorts.get(output);
 		if (outputPort == null) {
 			LOG.warn("Output port does not exist. " + "Plugin: " + src.getClass().getName() + "; output: " + output);
@@ -347,7 +347,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			return false;
 		}
 
-		/* Third step: Make sure the ports are compatible. */
+		// Third step: Make sure the ports are compatible.
 		if (inputPort.eventTypes().length != 0) {
 			final Class<?>[] outEventTypes;
 			if (outputPort.eventTypes().length == 0) {
@@ -422,11 +422,11 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	 * @return true if and only if all plugin ports (defined in the annotation) are connected to a repository.
 	 */
 	public final boolean areAllRepositoryPortsConnected() {
-		/* Run through all port names and check them. */
+		// Run through all port names and check them.
 		final Iterator<String> repositoryNameIter = this.repositoryPorts.keySet().iterator();
 		while (repositoryNameIter.hasNext()) {
 			if (!this.registeredRepositories.containsKey(repositoryNameIter.next())) {
-				/* The current port is not connected. */
+				// The current port is not connected.
 				return false;
 			}
 		}
@@ -507,12 +507,12 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	 * {@inheritDoc}
 	 */
 	public final List<PluginInputPortReference> getConnectedPlugins(final String outputPortName) {
-		/* Make sure that the output port exists */
+		// Make sure that the output port exists
 		final OutputPort outputPort = this.outputPorts.get(outputPortName);
 		if (outputPort == null) {
 			return null;
 		}
-		/* Now get the connections. */
+		// Now get the connections.
 		final List<PluginInputPortReference> result = new ArrayList<PluginInputPortReference>();
 		for (final PluginInputPortReference ref : this.registeredMethods.get(outputPortName)) {
 			result.add(ref);

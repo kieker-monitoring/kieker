@@ -177,7 +177,7 @@ public class ClassOperationSignaturePair {
 		}
 
 		final StringBuilder strBuilder = new StringBuilder();
-		/* Append modifiers and return type */
+		// Append modifiers and return type
 		if ((signature.getReturnType() != null) && (signature.getReturnType().length() != 0)) {
 			for (final String type : signature.getModifier()) {
 				strBuilder.append(type).append(' ');
@@ -187,7 +187,7 @@ public class ClassOperationSignaturePair {
 			}
 		}
 
-		/* Append operation name and parameter type list */
+		// Append operation name and parameter type list
 		strBuilder.append(fqClassName);
 		strBuilder.append('.').append(signature.getName());
 		strBuilder.append('(');

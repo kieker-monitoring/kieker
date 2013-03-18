@@ -353,10 +353,8 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 					classLoader); // throws AnalysisConfigurationException on errors
 			repositoryMap.put(mRepository, repository);
 		}
-		/*
-		 * We run through the project and collect all plugins. As we create an actual object for every plugin within the model, we have to remember the mapping
-		 * between the plugins within the model and the actual objects we create.
-		 */
+		// We run through the project and collect all plugins. As we create an actual object for every plugin within the model, we have to remember the mapping
+		// between the plugins within the model and the actual objects we create.
 		final EList<MIPlugin> mPlugins = mProject.getPlugins();
 		// Now run through all plugins.
 		final Map<MIPlugin, AbstractPlugin> pluginMap = new HashMap<MIPlugin, AbstractPlugin>(); // NOPMD (no concurrent access)
@@ -925,7 +923,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 			newEx.initCause(ex);
 			throw newEx; // NOPMD (cause is set above)
 		} catch (final Exception ex) { // NOPMD NOCS (illegal catch)
-			/* Some exceptions like the XMIException can be thrown during loading although it cannot be seen. Catch this situation. */
+			// Some exceptions like the XMIException can be thrown during loading although it cannot be seen. Catch this situation.
 			final IOException newEx = new IOException("The given file '" + file.getAbsolutePath() + "' is not a valid kax-configuration file.");
 			newEx.initCause(ex);
 			throw newEx; // NOPMD (cause is set above)

@@ -183,9 +183,7 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 		final long endOfTimestampsInterval = this.computeLastTimestampInInterval(currentTime);
 
 		synchronized (this) {
-			/*
-			 * Check if we need to close the current interval.
-			 */
+			// Check if we need to close the current interval.
 			if (endOfTimestampsInterval > this.lastTimestampInCurrentInterval) {
 				if (this.firstTimestampInCurrentInterval >= 0) { // don't do this for the first record (only used for initialization of variables)
 					this.eventCountsPerInterval.add(
