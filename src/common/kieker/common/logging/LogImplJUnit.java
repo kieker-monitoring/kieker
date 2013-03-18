@@ -52,7 +52,7 @@ public final class LogImplJUnit implements Log {
 			final String sourceMethod;
 			{ // NOCS detect calling class and method
 				final StackTraceElement[] stackArray = new Throwable().getStackTrace(); // NOPMD (throwable)
-				if ((stackArray != null) && (stackArray.length > 2)) { // our stackDepth
+				if (stackArray.length > 2) { // our stackDepth
 					sourceMethod = stackArray[2].getMethodName();
 				} else {
 					sourceMethod = "unknown";
