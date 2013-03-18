@@ -353,7 +353,7 @@
 			<include name="${test.dir}/**/META-INF/*" />
 			<include name="${test.dir}/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/jetty.xml" />
 			<include name="${test.dir}/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/webapp/**" />
-			<include name="${lib.dir}/**" />
+			<include name="${lib.dir}/**/*" />
 			<include name="${examples.dir}/**/*" />
 			<exclude name="${examples.dir}/**/.classpath-binrelease.generated" />
 			<exclude name="${src.userguide.examples.dir}/**/lib/**/*" />
@@ -365,10 +365,12 @@
 			<exclude name="${example.javaee.jetty.dir}/logs/**/*" />
 			<exclude name="${example.javaee.jetty.dir}/**/kieker*.jar" />
 			<exclude name="${example.javaee.jetty.dir}/**/aspectj*.jar" />
+			<include name=".settings/**/*" />
 			<include name=".checkstyle" />
 			<include name=".classpath" />
 			<include name=".pmd" />
 			<include name=".project" />
+			<include name="kieker-eclipse.importorder" />
 			<include name="kieker-eclipse-cleanup.xml" />
 			<include name="kieker-eclipse-formatter.xml" />
 			<include name="build.xml" />
@@ -555,18 +557,18 @@
 
 	<target name="dist-kieker-binaries" depends="build-all,-build-userguide,-build-userguide-examples" description="Packages the binary archives (.zip|.tar.gz) for a release">
 		<patternset id="dist_bin_files-nonbinmode"> <!-- NOTE that the order of includes/excludes seems to have no effect. So be careful with excludes -->
+			<include name="${history.file}" />
+			<include name="${license.file}" />
 			<include name="${bin.dir}/logging.properties" />
 			<include name="${bin.dir}/*.bat" />
 			<include name="${dist.dir}/*.jar" />
 			<include name="${dist.dir}/*.war" />
-
-			<include name="${lib.dir}/*" />
-			<exclude name="${lib.dir}/checkstyle-*" />
-			<exclude name="${lib.dir}/findbugs-*" />
-			<exclude name="${lib.dir}/pmd-*" />
-			<include name="${lib.sigar-native.dir}/*" />
-			<include name="${history.file}" />
-			<include name="${license.file}" />
+			<include name="${lib.dir}/**/*" />
+			<exclude name="${lib.dir}/static-analysis/**/*" />
+			<!-- exclude some src only libraries begin -->
+			<exclude name="${lib.dir}/aspectjtools-*" />
+			<exclude name="${lib.dir}/maven-ant-tasks-*" />
+			<!-- exclude some src only libraries end -->
 			<include name="${src.userguide.dist.pdf}" />
 			<include name="${examples.dir}/**/*" />
 			<exclude name="${examples.dir}/**/*.sh" /> <!-- added in bin mode below -->
