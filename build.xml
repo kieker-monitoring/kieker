@@ -442,36 +442,27 @@
 			<arg value="-Dfile=${maven.dir}/${dist.kieker.main.jar}" />
 			<arg value="-Dsources=${maven.dir}/${dist.kieker.main.sources.jar}" />
 			<arg value="-Djavadoc=${maven.dir}/${dist.kieker.main.javadoc.jar}" />
-		</artifact:mvn>
-		<artifact:mvn>
-			<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.6:deploy-file" />
-			<arg value="-Durl=${maven-snapshots-repository-url}" />
-			<arg value="-DrepositoryId=${maven-snapshots-repository-id}" />
-			<arg value="-DpomFile=${maven.dir}/${dist.kieker.main.pom}" />
-			<arg value="-Dfile=${maven.dir}/${dist.kieker.main.emf.jar}" />
-			<arg value="-Dclassifier=emf" />
-		</artifact:mvn>
-		<artifact:mvn>
-			<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.6:deploy-file" />
-			<arg value="-Durl=${maven-snapshots-repository-url}" />
-			<arg value="-DrepositoryId=${maven-snapshots-repository-id}" />
-			<arg value="-DpomFile=${maven.dir}/${dist.kieker.main.pom}" />
-			<arg value="-Dfile=${maven.dir}/${dist.kieker.main.aspectj.jar}" />
-			<arg value="-Dclassifier=aspectj" />
+			<arg value="-Dclassifiers=emf,aspectj" />
+			<arg value="-Dfiles=${maven.dir}/${dist.kieker.main.emf.jar},${maven.dir}/${dist.kieker.main.aspectj.jar}" />
 		</artifact:mvn>
 	</target>
 
 	<!-- Note that this target just uploads but does NOT build! -->
 	<target name="deploy-maven-release" depends="-update-version" description="deploy release version to Maven snapshot repository">
-		<!-- sign and deploy the main artifacts -->
+		<!-- sign and deploy all artifacts -->
 		<artifact:mvn>
 			<arg value="org.apache.maven.plugins:maven-gpg-plugin:1.3:sign-and-deploy-file" />
 			<arg value="-Durl=${maven-staging-repository-url}" />
 			<arg value="-DrepositoryId=${maven-staging-repository-id}" />
 			<arg value="-DpomFile=${maven.dir}/${dist.kieker.main.pom}" />
 			<arg value="-Dfile=${maven.dir}/${dist.kieker.main.jar}" />
+      <arg value="-Dsources=${maven.dir}/${dist.kieker.main.sources.jar}" />
+			<arg value="-Djavadoc=${maven.dir}/${dist.kieker.main.javadoc.jar}" />
+			<arg value="-Dclassifiers=emf,aspectj" />
+			<arg value="-Dfiles=${maven.dir}/${dist.kieker.main.emf.jar},${maven.dir}/${dist.kieker.main.aspectj.jar}" />
 			<arg value="-Pgpg" />
 		</artifact:mvn>
+    <!-- should already be included above
 		<artifact:mvn>
 			<arg value="org.apache.maven.plugins:maven-gpg-plugin:1.3:sign-and-deploy-file" />
 			<arg value="-Durl=${maven-staging-repository-url}" />
@@ -490,7 +481,9 @@
 			<arg value="-Dclassifier=aspectj" />
 			<arg value="-Pgpg" />
 		</artifact:mvn>
+		-->
 		<!-- sign and deploy the sources artifacts -->
+		<!-- should already be included above
 		<artifact:mvn>
 			<arg value="org.apache.maven.plugins:maven-gpg-plugin:1.3:sign-and-deploy-file" />
 			<arg value="-Durl=${maven-staging-repository-url}" />
@@ -500,7 +493,9 @@
 			<arg value="-Dclassifier=sources" />
 			<arg value="-Pgpg" />
 		</artifact:mvn>
+		-->
 		<!-- sign and deploy the javadoc artifacts -->
+		<!-- should already be included above
 		<artifact:mvn>
 			<arg value="org.apache.maven.plugins:maven-gpg-plugin:1.3:sign-and-deploy-file" />
 			<arg value="-Durl=${maven-staging-repository-url}" />
@@ -510,6 +505,7 @@
 			<arg value="-Dclassifier=javadoc" />
 			<arg value="-Pgpg" />
 		</artifact:mvn>
+		-->
 	</target>
 
 	<target name="dist-kieker-binaries" depends="build-all,-build-userguide,-build-userguide-examples" description="Packages the binary archives (.zip|.tar.gz) for a release">
