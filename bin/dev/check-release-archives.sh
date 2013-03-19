@@ -189,8 +189,8 @@ function assert_files_exist_src {
 	assert_file_exists_regular ".checkstyle"
 	assert_file_exists_regular ".pmd"
 	assert_dir_exists ".settings/"
-	assert_file_exists_regular "README-bin"
-	assert_file_exists_regular "README-src"
+	assert_file_exists_regular "doc/README-bin"
+	assert_file_exists_regular "doc/README-src"
 }
 
 # Asserts the existence of files in the bin release
@@ -223,8 +223,8 @@ function assert_files_exist_bin {
 	assert_file_NOT_exists ".checkstyle"
 	assert_file_NOT_exists ".pmd"
 	assert_file_NOT_exists ".settings/"
-	assert_file_NOT_exists "README-bin"
-	assert_file_NOT_exists "README-src"
+	assert_file_NOT_exists "doc/README-bin"
+	assert_file_NOT_exists "doc/README-src"
 }
 
 function check_src_archive {
