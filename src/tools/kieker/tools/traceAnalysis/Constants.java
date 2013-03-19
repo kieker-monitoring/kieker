@@ -172,10 +172,22 @@ public final class Constants {
 				.withDescription("If selected, abbreviated labels (e.g., package names) are used in the visualizations.").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_INCLUDESELFLOOPS).hasArg(false).isRequired(false)
 				.withDescription("If selected, self-loops are included in the visualizations.").create());
-		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TRACE_COLORING).hasArg().isRequired(false)
-				.withDescription("Color traces according to the given color map.").withArgName(COLORING_FILE_OPTION_NAME).create());
-		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_ADD_DESCRIPTIONS).hasArg().isRequired(false)
-				.withDescription("Adds descriptions to elements according to the given file.").withArgName(DESCRIPTIONS_FILE_OPTION_NAME).create());
+		SORTED_OPTION_LIST
+				.add(OptionBuilder
+						.withLongOpt(CMD_OPT_NAME_TRACE_COLORING)
+						.hasArg()
+						.isRequired(false)
+						.withDescription(
+								"Color traces according to the given color map given as a properties file (key: trace ID, value: color in hex format, e.g., 0xff0000 for red; use trace ID 'default' to specify the default color)")
+						.withArgName(COLORING_FILE_OPTION_NAME).create());
+		SORTED_OPTION_LIST
+				.add(OptionBuilder
+						.withLongOpt(CMD_OPT_NAME_ADD_DESCRIPTIONS)
+						.hasArg()
+						.isRequired(false)
+						.withDescription(
+								"Adds descriptions to elements according to the given file as a properties file (key: component ID, e.g., @1; value: description)")
+						.withArgName(DESCRIPTIONS_FILE_OPTION_NAME).create());
 
 		for (final Option o : SORTED_OPTION_LIST) {
 			CMDL_OPTIONS.addOption(o);
