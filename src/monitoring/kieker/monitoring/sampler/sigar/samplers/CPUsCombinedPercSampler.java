@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.monitoring.probe.sigar.samplers;
+package kieker.monitoring.sampler.sigar.samplers;
 
 import org.hyperic.sigar.CpuPerc;
 import org.hyperic.sigar.SigarException;
@@ -39,7 +39,7 @@ public class CPUsCombinedPercSampler extends AbstractSigarSampler {
 
 	/**
 	 * Constructs a new {@link AbstractSigarSampler} with given {@link SigarProxy} instance used to retrieve the sensor data. Users
-	 * should use the factory method {@link kieker.monitoring.probe.sigar.SigarSamplerFactory#createSensorCPUsCombinedPerc()} to acquire an
+	 * should use the factory method {@link kieker.monitoring.sampler.sigar.SigarSamplerFactory#createSensorCPUsCombinedPerc()} to acquire an
 	 * instance rather than calling this constructor directly.
 	 * 
 	 * @param sigar

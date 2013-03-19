@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.monitoring.probe.sigar.samplers;
+package kieker.monitoring.sampler.sigar.samplers;
 
 import org.hyperic.sigar.SigarProxy;
 

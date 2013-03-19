@@ -29,10 +29,10 @@ import kieker.common.logging.LogFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.sampler.ScheduledSamplerJob;
-import kieker.monitoring.probe.sigar.ISigarSamplerFactory;
-import kieker.monitoring.probe.sigar.SigarSamplerFactory;
-import kieker.monitoring.probe.sigar.samplers.CPUsDetailedPercSampler;
-import kieker.monitoring.probe.sigar.samplers.MemSwapUsageSampler;
+import kieker.monitoring.sampler.sigar.ISigarSamplerFactory;
+import kieker.monitoring.sampler.sigar.SigarSamplerFactory;
+import kieker.monitoring.sampler.sigar.samplers.CPUsDetailedPercSampler;
+import kieker.monitoring.sampler.sigar.samplers.MemSwapUsageSampler;
 
 /**
  * <p>

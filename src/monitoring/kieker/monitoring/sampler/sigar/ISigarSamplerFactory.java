@@ -14,15 +14,15 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.monitoring.probe.sigar;
+package kieker.monitoring.sampler.sigar;
 
-import kieker.monitoring.probe.sigar.samplers.CPUsCombinedPercSampler;
-import kieker.monitoring.probe.sigar.samplers.CPUsDetailedPercSampler;
-import kieker.monitoring.probe.sigar.samplers.MemSwapUsageSampler;
+import kieker.monitoring.sampler.sigar.samplers.CPUsCombinedPercSampler;
+import kieker.monitoring.sampler.sigar.samplers.CPUsDetailedPercSampler;
+import kieker.monitoring.sampler.sigar.samplers.MemSwapUsageSampler;
 
 /**
  * Defines the list of methods to be provided by a factory for {@link org.hyperic.sigar.Sigar}-based
- * {@link kieker.monitoring.probe.sigar.samplers.AbstractSigarSampler}s.
+ * {@link kieker.monitoring.sampler.sigar.samplers.AbstractSigarSampler}s.
  * 
  * @author Andre van Hoorn
  * 

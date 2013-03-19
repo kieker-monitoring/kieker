@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.monitoring.probe.sigar;
+package kieker.monitoring.sampler.sigar;
 
 import org.hyperic.sigar.Humidor;
 import org.hyperic.sigar.Sigar;
@@ -22,12 +22,12 @@ import org.hyperic.sigar.SigarProxy;
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.monitoring.probe.sigar.samplers.CPUsCombinedPercSampler;
-import kieker.monitoring.probe.sigar.samplers.CPUsDetailedPercSampler;
-import kieker.monitoring.probe.sigar.samplers.MemSwapUsageSampler;
+import kieker.monitoring.sampler.sigar.samplers.CPUsCombinedPercSampler;
+import kieker.monitoring.sampler.sigar.samplers.CPUsDetailedPercSampler;
+import kieker.monitoring.sampler.sigar.samplers.MemSwapUsageSampler;
 
 /**
- * Provides factory methods for {@link kieker.monitoring.probe.sigar.samplers.AbstractSigarSampler}s.
+ * Provides factory methods for {@link kieker.monitoring.sampler.sigar.samplers.AbstractSigarSampler}s.
  * 
  * @author Andre van Hoorn, Jan Waller
  */
