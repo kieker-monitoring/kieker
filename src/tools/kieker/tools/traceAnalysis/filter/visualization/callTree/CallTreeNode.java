@@ -36,7 +36,7 @@ public class CallTreeNode {
 
 	private final CallTreeNode parent;
 	private final List<CallTreeNode> children = Collections.synchronizedList(new ArrayList<CallTreeNode>());
-	private final CallTreeOperationHashKey opInfo;
+	private final kieker.tools.traceAnalysis.filter.visualization.callTree.CallTreeOperationHashKey opInfo;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -46,7 +46,7 @@ public class CallTreeNode {
 	 * @param opInfo
 	 *            The info to be stored in this node.
 	 */
-	public CallTreeNode(final CallTreeNode parent, final CallTreeOperationHashKey opInfo) {
+	public CallTreeNode(final CallTreeNode parent, final kieker.tools.traceAnalysis.filter.visualization.callTree.CallTreeOperationHashKey opInfo) {
 		this.parent = parent;
 		if (opInfo == null) {
 			throw new IllegalArgumentException("opInfo must not be null");
@@ -74,7 +74,8 @@ public class CallTreeNode {
 	 * @return The newly created node.
 	 */
 	public final CallTreeNode createNewChild(final AllocationComponent allocationComponent, final Operation operation) {
-		final CallTreeOperationHashKey k = new CallTreeOperationHashKey(allocationComponent, operation);
+		final kieker.tools.traceAnalysis.filter.visualization.callTree.CallTreeOperationHashKey k = new kieker.tools.traceAnalysis.filter.visualization.callTree.CallTreeOperationHashKey(
+				allocationComponent, operation);
 		final CallTreeNode node = new CallTreeNode(this, k);
 		this.children.add(node);
 		return node;
