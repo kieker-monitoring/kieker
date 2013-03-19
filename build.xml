@@ -26,8 +26,6 @@
 		<property name="dist.kieker.main.javadoc.emf.jar" value="${kieker.main.packagenamebase}-${kieker.version}_emf-${kieker-api.suffix}.jar" />
 
 		<property name="dist.kieker.main.pom" value="${kieker.main.packagenamebase}-${kieker.version}.pom" />
-		<property name="dist.kieker.main.aspectj.pom" value="${kieker.main.packagenamebase}-${kieker.version}_aspectj.pom" />
-		<property name="dist.kieker.main.emf.pom" value="${kieker.main.packagenamebase}-${kieker.version}_emf.pom" />
 
 		<property name="dist.kieker.main.jar" value="${kieker.main.packagenamebase}-${kieker.version}.jar" />
 		<property name="dist.kieker.main.aspectj.jar" value="${kieker.main.packagenamebase}-${kieker.version}_aspectj.jar" />
@@ -408,11 +406,13 @@
 		</zip>
 	</target>
 
-	<target name="dist-maven" depends="-generate-javadoc, build-all" description="Creates the Kieker release artifacts to be uploaded to a Maven repository">
+	<target name="dist-maven" depends="build-all,-generate-javadoc,-build-userguide" description="Creates the Kieker release artifacts to be uploaded to a Maven repository">
 		<!-- The "real" jar files -->
 		<copy file="${dist.dir}/${dist.kieker.main.jar}" tofile="${maven.dir}/${dist.kieker.main.jar}" />
 		<copy file="${dist.dir}/${dist.kieker.main.emf.jar}" tofile="${maven.dir}/${dist.kieker.main.emf.jar}" />
 		<copy file="${dist.dir}/${dist.kieker.main.aspectj.jar}" tofile="${maven.dir}/${dist.kieker.main.aspectj.jar}" />
+		<!-- The userguide -->
+		<copy file="${src.userguide.pdf}" tofile="${maven.dir}/${dist.kieker.userguide.pdf}" />
 		<!-- The source files -->
 		<jar zipfile="${maven.dir}/${dist.kieker.main.sources.jar}">
 			<zipfileset dir="${src.kieker.common.dir}" defaultexcludes="yes" />
@@ -442,9 +442,9 @@
 			<arg value="-Dfile=${maven.dir}/${dist.kieker.main.jar}" />
 			<arg value="-Dsources=${maven.dir}/${dist.kieker.main.sources.jar}" />
 			<arg value="-Djavadoc=${maven.dir}/${dist.kieker.main.javadoc.jar}" />
-			<arg value="-Dclassifiers=emf,aspectj" />
-			<arg value="-Dtypes=jar,jar" />
-			<arg value="-Dfiles=${maven.dir}/${dist.kieker.main.emf.jar},${maven.dir}/${dist.kieker.main.aspectj.jar}" />
+			<arg value="-Dclassifiers=emf,aspectj,userguide" />
+			<arg value="-Dtypes=jar,jar,pdf" />
+			<arg value="-Dfiles=${maven.dir}/${dist.kieker.main.emf.jar},${maven.dir}/${dist.kieker.main.aspectj.jar},${maven.dir}/${dist.kieker.userguide.pdf}" />
 		</artifact:mvn>
 	</target>
 
@@ -459,9 +459,9 @@
 			<arg value="-Dfile=${maven.dir}/${dist.kieker.main.jar}" />
       <arg value="-Dsources=${maven.dir}/${dist.kieker.main.sources.jar}" />
 			<arg value="-Djavadoc=${maven.dir}/${dist.kieker.main.javadoc.jar}" />
-			<arg value="-Dclassifiers=emf,aspectj" />
-			<arg value="-Dtypes=jar,jar" />
-			<arg value="-Dfiles=${maven.dir}/${dist.kieker.main.emf.jar},${maven.dir}/${dist.kieker.main.aspectj.jar}" />
+			<arg value="-Dclassifiers=emf,aspectj,userguide" />
+			<arg value="-Dtypes=jar,jar,pdf" />
+			<arg value="-Dfiles=${maven.dir}/${dist.kieker.main.emf.jar},${maven.dir}/${dist.kieker.main.aspectj.jar},${maven.dir}/${dist.kieker.userguide.pdf}" />
 			<arg value="-Pgpg" />
 		</artifact:mvn>
 	</target>
