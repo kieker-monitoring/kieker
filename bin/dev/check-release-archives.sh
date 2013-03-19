@@ -134,6 +134,7 @@ function assert_files_exist_common {
 	assert_file_exists_regular "lib/sigar-native-libs/sigar-amd64-winnt.dll"
 	assert_file_exists_regular "lib/sigar-native-libs/sigar-x86-winnt.dll"
 	assert_file_exists_regular "lib/sigar-native-libs/sigar-x86-winnt.lib"
+	assert_file_exists_regular "README"
 	assert_file_exists_regular "HISTORY"
 	assert_file_exists_regular "LICENSE"
 	assert_file_NOT_exists "build/"
@@ -188,6 +189,8 @@ function assert_files_exist_src {
 	assert_file_exists_regular ".checkstyle"
 	assert_file_exists_regular ".pmd"
 	assert_dir_exists ".settings/"
+	assert_file_exists_regular "README-bin"
+	assert_file_exists_regular "README-src"
 }
 
 # Asserts the existence of files in the bin release
@@ -220,6 +223,8 @@ function assert_files_exist_bin {
 	assert_file_NOT_exists ".checkstyle"
 	assert_file_NOT_exists ".pmd"
 	assert_file_NOT_exists ".settings/"
+	assert_file_NOT_exists "README-bin"
+	assert_file_NOT_exists "README-src"
 }
 
 function check_src_archive {

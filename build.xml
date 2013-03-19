@@ -375,6 +375,8 @@
 			<include name="build.properties" />
 			<include name="${history.file}" />
 			<include name="${license.file}" />
+			<include name="${readme.src.file}" />
+			<include name="${readme.bin.file}" />
 			<exclude name="**/build-eclipse/**" />
 		</patternset>
 		<patternset id="dist_src_files-binmode">
@@ -390,6 +392,7 @@
 			<tarfileset dir="." prefix="${kieker.dist.name}" filemode="755" defaultexcludes="yes">
 				<patternset refid="dist_src_files-binmode" />
 			</tarfileset>
+			<tarfileset file="${readme.src.file}" fullpath="${kieker.dist.name}/${readme.file}" />
 		</tar>
 		<gzip zipfile="${release.dir}/${dist.kieker.srcBaseName}.tar.gz" src="${release.dir}/${dist.kieker.srcBaseName}.tar" />
 		<!-- tar file no longer needed -->
@@ -403,6 +406,7 @@
 			<zipfileset dir="." prefix="${kieker.dist.name}" filemode="755" defaultexcludes="yes">
 				<patternset refid="dist_src_files-binmode" />
 			</zipfileset>
+			<zipfileset file="${readme.src.file}" fullpath="${kieker.dist.name}/${readme.file}" />
 		</zip>
 	</target>
 
@@ -511,6 +515,9 @@
 			<tarfileset dir="." prefix="${kieker.dist.name}" filemode="755" defaultexcludes="yes">
 				<patternset refid="dist_bin_files-binmode" />
 			</tarfileset>
+			
+			<tarfileset file="${readme.bin.file}" fullpath="${kieker.dist.name}/${readme.file}" />
+			
 			<tarfileset file="${kieker.monitoring.default.properties}"
 						fullpath="${kieker.dist.name}/${example.javaee.jetty.dir}/webapps/jpetstore/WEB-INF/classes/META-INF/kieker.monitoring.properties" />
 			<tarfileset file="${dist.dir}/${dist.kieker.main.jar}"
@@ -547,6 +554,9 @@
 			<zipfileset dir="." prefix="${kieker.dist.name}" filemode="755" defaultexcludes="yes">
 				<patternset refid="dist_bin_files-binmode" />
 			</zipfileset>
+			
+			<zipfileset file="${readme.bin.file}" fullpath="${kieker.dist.name}/${readme.file}" />
+			
 			<zipfileset file="${kieker.monitoring.default.properties}"
 						fullpath="${kieker.dist.name}/${example.javaee.jetty.dir}/webapps/jpetstore/WEB-INF/classes/META-INF/kieker.monitoring.properties" />
 			<zipfileset file="${dist.dir}/${dist.kieker.main.jar}"
