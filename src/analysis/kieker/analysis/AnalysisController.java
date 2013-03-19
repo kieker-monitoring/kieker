@@ -779,8 +779,6 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	}
 
 	/**
-	 * {@inheritDoc}
-	 * 
 	 * @deprecated This method will not be for public use in Kieker 1.8. Use the new constructor instead.
 	 */
 	@Deprecated
@@ -802,8 +800,6 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	}
 
 	/**
-	 * {@inheritDoc}
-	 * 
 	 * @deprecated This method will not be for public use in Kieker 1.8. Use the new constructor instead.
 	 */
 	@Deprecated
@@ -825,8 +821,6 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	}
 
 	/**
-	 * {@inheritDoc}
-	 * 
 	 * @deprecated This method will not be for public use in Kieker 1.8. Use the new constructor instead.
 	 */
 	@Deprecated

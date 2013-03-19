@@ -89,9 +89,8 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * 
 	 * <ul>
 	 * <li>a constructor accepting a single Object[] as argument.
-	 * <li>a <code>private static final Class&lt;?&gt;[] TYPES</code> specifying the types of the records, usually returned via
-	 * {@link #IMonitoringRecord.getValueTypes()}.
-	 * <li>the {@link #IMonitoringRecord.initFromArray(Object[] values)} method does not have to be implemented
+	 * <li>a <code>private static final Class&lt;?&gt;[] TYPES</code> specifying the types of the records, usually returned via {@link #getValueTypes()}.
+	 * <li>the {@link #initFromArray(Object[])} method does not have to be implemented
 	 * </ul>
 	 */
 	public static interface Factory { // NOCS (name)

@@ -83,8 +83,6 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisFi
 	 * 
 	 * @param execRec
 	 *            The next operation execution record.
-	 * 
-	 * @return Always true.
 	 */
 	@InputPort(
 			name = INPUT_PORT_NAME_RECORDS,

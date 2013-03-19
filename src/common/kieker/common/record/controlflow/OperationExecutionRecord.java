@@ -79,7 +79,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	 * Creates a new {@link OperationExecutionRecord} with the given parameters.
 	 * 
 	 * @param operationSignature
-	 *            an operation string, as defined in {@link kieker.common.util.ClassOperationSignaturePair#splitOperationSignatureStr(String)}.
+	 *            an operation string, as defined in {@link kieker.common.util.signature.ClassOperationSignaturePair#splitOperationSignatureStr(String)}.
 	 * @param sessionId
 	 *            the session ID; must not be null, use {@link #NO_SESSION_ID} if no session ID desired.
 	 * @param traceId
