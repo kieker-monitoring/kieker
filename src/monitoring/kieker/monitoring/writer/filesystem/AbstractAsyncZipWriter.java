@@ -105,8 +105,8 @@ public abstract class AbstractAsyncZipWriter extends AbstractAsyncWriter {
 	@Override
 	protected final void init() throws Exception {
 		// Create writer thread (should be only one to get a single consistent mapping file)
-		this.addWorker(this.initWorker(super.monitoringController, this.blockingQueue, this.mappingFileWriter, this.configPath, this.configMaxEntriesInFile, this.configBuffersize,
-				this.configLevel));
+		this.addWorker(this.initWorker(super.monitoringController, this.blockingQueue, this.mappingFileWriter, this.configPath, this.configMaxEntriesInFile,
+				this.configBuffersize, this.configLevel));
 	}
 
 	protected abstract AbstractZipWriterThread initWorker(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,

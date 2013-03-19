@@ -74,8 +74,8 @@ public class CallTreeNode {
 	 * @return The newly created node.
 	 */
 	public final CallTreeNode createNewChild(final AllocationComponent allocationComponent, final Operation operation) {
-		final kieker.tools.traceAnalysis.filter.visualization.callTree.CallTreeOperationHashKey k = new kieker.tools.traceAnalysis.filter.visualization.callTree.CallTreeOperationHashKey(
-				allocationComponent, operation);
+		final kieker.tools.traceAnalysis.filter.visualization.callTree.CallTreeOperationHashKey k =
+				new kieker.tools.traceAnalysis.filter.visualization.callTree.CallTreeOperationHashKey(allocationComponent, operation);
 		final CallTreeNode node = new CallTreeNode(this, k);
 		this.children.add(node);
 		return node;
