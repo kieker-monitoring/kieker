@@ -5,11 +5,13 @@ import javax.faces.bean.ManagedBean;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.AnalysisControllerThread;
 import kieker.analysis.exception.AnalysisConfigurationException;
-import kieker.analysis.plugin.filter.forward.CountingThroughputFilter;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
+import kieker.analysis.plugin.filter.select.TypeFilter;
 import kieker.analysis.plugin.reader.jmx.JMXReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.controlflow.OperationExecutionRecord;
+import kieker.common.record.system.CPUUtilizationRecord;
+import kieker.common.record.system.MemSwapUsageRecord;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.IGraphOutputtingFilter;
@@ -26,14 +28,16 @@ public class StartingBean {
 	
 	final AnalysisController analysisInstance;
 	AnalysisControllerThread act;
-	final ListCollectionFilter<OperationExecutionRecord> listCollectionFilter;
-	final CountingThroughputFilter ctFilter;
+	final ListCollectionFilter<OperationExecutionRecord> oerCollectionFilter;
+	final ListCollectionFilter<CPUUtilizationRecord> cpuCollectionFilter;
+	final ListCollectionFilter<MemSwapUsageRecord> memSwapCollectionFilter;
 	SystemModelRepository systemModelRepository;
 	
 	public StartingBean(){
 		this.analysisInstance = new AnalysisController();
-		this.listCollectionFilter = new ListCollectionFilter<OperationExecutionRecord>(new Configuration());
-		this.ctFilter = new CountingThroughputFilter(new Configuration());
+		this.oerCollectionFilter = new ListCollectionFilter<OperationExecutionRecord>(new Configuration());
+		this.cpuCollectionFilter = new ListCollectionFilter<CPUUtilizationRecord>(new Configuration());
+		this.memSwapCollectionFilter = new ListCollectionFilter<MemSwapUsageRecord>(new Configuration());
 		this.systemModelRepository = new SystemModelRepository(new Configuration());
 		try {
 			init();
@@ -50,12 +54,16 @@ public class StartingBean {
 		return this.systemModelRepository;
 	}
 	
-	public CountingThroughputFilter getCountingFilter(){
-		return this.ctFilter;
+	public ListCollectionFilter<OperationExecutionRecord> getOERCollectionFilter(){
+		return this.oerCollectionFilter;
 	}
 	
-	public ListCollectionFilter<OperationExecutionRecord> getCollectionFilter(){
-		return this.listCollectionFilter;
+	public ListCollectionFilter<CPUUtilizationRecord> getCPUCollectionFilter(){
+		return this.cpuCollectionFilter;
+	}
+	
+	public ListCollectionFilter<MemSwapUsageRecord> getMemSwapCollectionFilter(){
+		return this.memSwapCollectionFilter;
 	}
 	
 	private void init() throws IllegalStateException, AnalysisConfigurationException{
@@ -65,24 +73,50 @@ public class StartingBean {
 		final JMXReader reader = new JMXReader(jmxReaderConfig);
 		analysisInstance.registerReader(reader);
 
+		final Configuration typeFilter1Config = new Configuration();
+		typeFilter1Config.setProperty(TypeFilter.CONFIG_PROPERTY_NAME_TYPES, "kieker.common.record.controlflow.OperationExecutionRecord");
+		final TypeFilter typeFilter1 = new TypeFilter(typeFilter1Config);
+		
+		final Configuration typeFilter2Config = new Configuration();
+		typeFilter2Config.setProperty(TypeFilter.CONFIG_PROPERTY_NAME_TYPES, "kieker.common.record.system.CPUUtilizationRecord");
+		final TypeFilter typeFilter2 = new TypeFilter(typeFilter2Config);
+		
+		final Configuration typeFilter3Config = new Configuration();
+		typeFilter3Config.setProperty(TypeFilter.CONFIG_PROPERTY_NAME_TYPES, "kieker.common.record.system.MemSwapUsageRecord");
+		final TypeFilter typeFilter3 = new TypeFilter(typeFilter3Config);
 		
 //		final Configuration teeFilterConfig = new Configuration();
 //		teeFilterConfig.setProperty(TeeFilter.CONFIG_PROPERTY_NAME_STREAM,
 //		TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_STDOUT);
 //		final TeeFilter teeFilter = new TeeFilter(teeFilterConfig);
-//
-//		analysisInstance.registerFilter(teeFilter);
-		analysisInstance.registerFilter(listCollectionFilter);
-		analysisInstance.registerFilter(ctFilter);
 
-		analysisInstance.connect(reader, JMXReader.OUTPUT_PORT_NAME_RECORDS,
-				listCollectionFilter, ListCollectionFilter.INPUT_PORT_NAME);
-//		analysisInstance.connect(listCollectionFilter, ListCollectionFilter.OUTPUT_PORT_NAME,
-//				teeFilter, TeeFilter.INPUT_PORT_NAME_EVENTS);
-		analysisInstance.connect(listCollectionFilter, ListCollectionFilter.OUTPUT_PORT_NAME, 
-				ctFilter, CountingThroughputFilter.INPUT_PORT_NAME_RECORDS);
+//		analysisInstance.registerFilter(teeFilter);
+		analysisInstance.registerFilter(oerCollectionFilter);
+		analysisInstance.registerFilter(cpuCollectionFilter);
+		analysisInstance.registerFilter(memSwapCollectionFilter);
+		analysisInstance.registerFilter(typeFilter1);
+		analysisInstance.registerFilter(typeFilter2);
+		analysisInstance.registerFilter(typeFilter3);
 		
-	
+//		analysisInstance.connect(reader, JMXReader.OUTPUT_PORT_NAME_RECORDS,
+//				teeFilter, TeeFilter.INPUT_PORT_NAME_EVENTS);
+//		analysisInstance.connect(teeFilter, TeeFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
+//				typeFilter1, TypeFilter.INPUT_PORT_NAME_EVENTS);
+		
+		analysisInstance.connect(reader, JMXReader.OUTPUT_PORT_NAME_RECORDS,
+				typeFilter1, TypeFilter.INPUT_PORT_NAME_EVENTS);
+
+		analysisInstance.connect(typeFilter1, TypeFilter.OUTPUT_PORT_NAME_TYPE_MATCH,
+				oerCollectionFilter, ListCollectionFilter.INPUT_PORT_NAME);
+		analysisInstance.connect(typeFilter1, TypeFilter.OUTPUT_PORT_NAME_TYPE_MISMATCH,
+				typeFilter2, TypeFilter.INPUT_PORT_NAME_EVENTS);
+		analysisInstance.connect(typeFilter2, TypeFilter.OUTPUT_PORT_NAME_TYPE_MATCH,
+				cpuCollectionFilter, ListCollectionFilter.INPUT_PORT_NAME);
+		analysisInstance.connect(typeFilter2, TypeFilter.OUTPUT_PORT_NAME_TYPE_MISMATCH,
+				typeFilter3, TypeFilter.INPUT_PORT_NAME_EVENTS);
+		analysisInstance.connect(typeFilter3, TypeFilter.OUTPUT_PORT_NAME_TYPE_MATCH,
+				memSwapCollectionFilter, ListCollectionFilter.INPUT_PORT_NAME);
+		
 		analysisInstance.registerRepository(systemModelRepository);
 		
 		ExecutionRecordTransformationFilter ertf = new ExecutionRecordTransformationFilter(new Configuration());

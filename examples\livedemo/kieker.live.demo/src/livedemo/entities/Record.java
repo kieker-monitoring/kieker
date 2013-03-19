@@ -53,16 +53,4 @@ public class Record {
 		return shortSignature;
 	}
 	
-	public String getSessionId() {
-		return this.record.getSessionId();
-	}
-	
-	public long getTraceId() {
-		return this.record.getTraceId();
-	}
-	
-	public String getOperationSignature() {
-		return this.record.getOperationSignature();
-	}
-	
 }

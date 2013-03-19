@@ -63,9 +63,9 @@
 	<!-- End: Integration of Kieker's SessionAndTraceRegistrationFilter -->
 
 	<!-- Begin: Example for kieker.monitoring.probe.servlet.CPUMemUsageServletContextListener  -->
-	<!--<context-param>
+	<context-param>
 	  <param-name>CPUMemUsageServletContextListener.samplingIntervalSeconds</param-name>
-	  <param-value>15</param-value>
+	  <param-value>1</param-value>
 	</context-param>
 	
 	<context-param>
@@ -77,7 +77,7 @@
 	  <listener-class>
 	    kieker.monitoring.probe.servlet.CPUMemUsageServletContextListener
 	  </listener-class>
-	</listener>-->
+	</listener>
 	<!-- End: Example for kieker.monitoring.probe.servlet.CPUMemUsageServletContextListener -->
 
 </web-app>

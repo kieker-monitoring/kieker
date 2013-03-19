@@ -4,41 +4,97 @@
     xmlns:p="http://primefaces.org/ui">
     
 <h:head>
-    <link type="text/css" rel="StyleSheet" href="css/theme.css" />
+    <link rel="stylesheet" type="text/css" media="all" href="http://kieker-monitoring.net/wp-content/themes/kieker/style.css" />
+    <link rel='stylesheet' id='meteor-slides-css'  href='http://kieker-monitoring.net/wp-content/plugins/meteor-slides/css/meteor-slides.css?ver=1.0' type='text/css' media='all' />
+	<link rel='stylesheet' id='wp-advanced-rp-css-css'  href='http://kieker-monitoring.net/wp-content/plugins/advanced-recent-posts-widget/css/advanced-recent-posts-widget.css?ver=3.5.1' type='text/css' media='all' />
+	<link rel='stylesheet' id='featured-widget-css-css'  href='http://kieker-monitoring.net/wp-content/plugins/featured-page-widget/templates/featured-page-widget.css?ver=3.5.1' type='text/css' media='all' />
     <title>Kieker Live Demo</title>
+    <link rel="shortcut icon" type="image/x-icon" href="http://kieker-monitoring.net/wp-content/themes/kieker/favicon.ico" />
+    <style>
+		/* Link color */
+		a,
+		#site-title a:focus,
+		#site-title a:hover,
+		#site-title a:active,
+		.entry-title a:hover,
+		.entry-title a:focus,
+		.entry-title a:active,
+		.widget_twentyeleven_ephemera .comments-link a:hover,
+		section.recent-posts .other-recent-posts a[rel="bookmark"]:hover,
+		section.recent-posts .other-recent-posts .comments-link a:hover,
+		.format-image footer.entry-meta a:hover,
+		#site-generator a:hover {
+			color: #2456a1;
+		}
+		section.recent-posts .other-recent-posts .comments-link a:hover {
+			border-color: #2456a1;
+		}
+		article.feature-image.small .entry-summary p a:hover,
+		.entry-header .comments-link a:hover,
+		.entry-header .comments-link a:focus,
+		.entry-header .comments-link a:active,
+		.feature-slider a.active {
+			background-color: #2456a1;
+		}
+	</style>
 </h:head>
-<h:body>
-	<div  class="title ui-widget-header ui-corner-all">
-		<h1 align="center">List Of Records</h1>	
-		<table width="100%">
-			<tr>
-			<!-- 	<td align="left"><p:commandButton id="basic" value="freeze" onclick="dlg1.show();" type="button" /></td> -->
-				<td align="right"><a href="../index.jsf">Return to Main Menu</a></td>
-			</tr>
-		</table>
-	</div>
-	
-	<h:form>  
-    	<p:dataTable var="record" id="rec" value="#{recordBean.records}">
-    		<p:column headerText="Session Id">  
-            	<h:outputText value="#{record.sessionId}" />  
-	        </p:column>
-    		<p:column headerText="Trace Id">  
-            	<h:outputText id="trace" value="#{record.traceId}"/>  
-            	<p:tooltip for="trace" value="#{record.wholeRecord}" showEffect="fade" hideEffect="fade"/>
-	        </p:column>
-    	    <p:column headerText="Signature">  
-        	    <h:outputText id="signature" value="#{record.shortSignature}" />  
-        	    <p:tooltip for="signature" value="#{record.operationSignature}" showEffect="fade" hideEffect="fade"/>
-	        </p:column>
-    	    <p:column headerText="Response Time">  
-        	    <h:outputText value="#{record.responseTime} ms" />  
-	        </p:column>
-    	</p:dataTable>
-    	<p:poll interval="2" update="rec" />  
-    	<p:dialog id="basicDialog" header="Basic Dialog" widgetVar="dlg1">  
-    		<h:outputText value="Resistance to PrimeFaces is futile!" />  
-		</p:dialog> 
-	</h:form>   
+
+<h:body class="page">
+	<div id="page" class="hfeed" style="background:#FFFFFF">
+		<img src="header_image_small.jpg" width="960" height="125" border="0" alt=""/>
+	    	
+	  	<div class="menu-header">
+	  		<ul id="menu-header_menu" class="menu">
+	  			<li><a style="color:#000000" href="recordList.jsf">Record List</a></li>
+	  			<li><a href="chart.jsf">Method Response Times</a></li>
+<!-- 	       	<li><a href="graph.jsf">Graph</a></li> -->
+		       	<li><a href="systemModel.jsf">System Model</a></li>
+		       	<li><a href="cpu.jsf">CPU and MemSwap</a></li>
+		       	<li><a href="../index.jsf">Main Menu</a></li>
+			</ul>
+		</div>
+	 
+		<h:form id="table">
+			<p:commandButton id="button" update="button,table" value="#{recordBean.freezeButton}" action="#{recordBean.freeze}"/>
+			
+	    	<p:dataTable var="record" id="rec" value="#{recordBean.records}">
+	    		<p:column headerText="Session Id">  
+	            	<h:outputText id="session" value="#{record.operationExecutionRecord.sessionId}" />
+<!-- 	            	
+	            	<p:tooltip for="session">
+	            		<h:outputText value="operationSignature: #{record.operationExecutionRecord.operationSignature}" />
+	            		<br></br>
+	            		<h:outputText value="sessionId: #{record.operationExecutionRecord.sessionId}" />
+	            		<br></br>
+	            		<h:outputText value="traceId: #{record.operationExecutionRecord.traceId}" />
+	            		<br></br>
+	            		<h:outputText value="tin: #{record.operationExecutionRecord.tin}" />
+	            		<br></br>
+	            		<h:outputText value="tout: #{record.operationExecutionRecord.tout}" />
+	            		<br></br>
+	            		<h:outputText value="hostname: #{record.operationExecutionRecord.hostname}" />
+	            		<br></br>
+	            		<h:outputText value="eoi: #{record.operationExecutionRecord.eoi}" />
+	            		<br></br>
+	            		<h:outputText value="ess: #{record.operationExecutionRecord.ess}" />
+	            	</p:tooltip>
+ -->	            	  
+	            </p:column>
+	    		<p:column headerText="Trace Id">  
+	            	<h:outputText id="trace" value="#{record.operationExecutionRecord.traceId}"/>  
+	            	<p:tooltip for="trace" style="max-width:700px;font-size:10px" value="#{record.wholeRecord}"/>
+		        </p:column>
+	    	    <p:column headerText="Signature">  
+	        	    <h:outputText id="signature" value="#{record.shortSignature}" />  
+	        	    <p:tooltip for="signature" style="max-width:500px;font-size:10px" value="#{record.operationExecutionRecord.operationSignature}"/>
+		        </p:column>
+	    	    <p:column headerText="Response Time">  
+	        	    <h:outputText style="float:right" value="#{record.responseTime} ms" /> 
+		        </p:column>
+	    	</p:dataTable>
+	    	
+	    	<p:poll interval="2" update="#{recordBean.updateForm}" />
+		</h:form>
+	</div>   
 </h:body>
 </html>
