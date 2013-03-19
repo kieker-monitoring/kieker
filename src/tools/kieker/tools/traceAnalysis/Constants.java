@@ -101,7 +101,7 @@ public final class Constants {
 	public static final Options CMDL_OPTIONS = new Options();
 	public static final List<Option> SORTED_OPTION_LIST = new CopyOnWriteArrayList<Option>();
 
-	public static final String DECORATORS_OPTION_NAME = "node decorations";
+	public static final String DECORATORS_OPTION_NAME = "responseTimes"; // <- currently the only decoration; "node decorations";
 	public static final char DECORATOR_SEPARATOR = ',';
 	public static final String RESPONSE_TIME_DECORATOR_FLAG = "responseTimes";
 
