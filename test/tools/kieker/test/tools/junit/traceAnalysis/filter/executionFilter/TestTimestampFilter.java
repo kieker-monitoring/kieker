@@ -25,7 +25,6 @@ import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
-import kieker.tools.traceAnalysis.filter.executionFilter.TimestampFilter;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
@@ -66,12 +65,15 @@ public class TestTimestampFilter extends AbstractKiekerTest { // NOCS
 	 *            The analysis controller which will be used to register this component.
 	 * @return A suitable instance of {@link TimestampFilter}.
 	 */
-	private static TimestampFilter createTimestampFilter(final long ignoreExecutionsBeforeTimestamp, final long ignoreExecutionsAfterTimestamp,
+	private static kieker.tools.traceAnalysis.filter.executionFilter.TimestampFilter createTimestampFilter(final long ignoreExecutionsBeforeTimestamp,
+			final long ignoreExecutionsAfterTimestamp,
 			final IAnalysisController analysisController) {
 		final Configuration cfg = new Configuration();
-		cfg.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP, Long.toString(ignoreExecutionsBeforeTimestamp));
-		cfg.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP, Long.toString(ignoreExecutionsAfterTimestamp));
-		return new TimestampFilter(cfg, analysisController);
+		cfg.setProperty(kieker.tools.traceAnalysis.filter.executionFilter.TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP,
+				Long.toString(ignoreExecutionsBeforeTimestamp));
+		cfg.setProperty(kieker.tools.traceAnalysis.filter.executionFilter.TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP,
+				Long.toString(ignoreExecutionsAfterTimestamp));
+		return new kieker.tools.traceAnalysis.filter.executionFilter.TimestampFilter(cfg, analysisController);
 	}
 
 	/**
@@ -89,7 +91,8 @@ public class TestTimestampFilter extends AbstractKiekerTest { // NOCS
 		final AnalysisController controller = new AnalysisController();
 
 		final ListReader<Execution> reader = new ListReader<Execution>(new Configuration(), controller);
-		final TimestampFilter filter = TestTimestampFilter.createTimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
+		final kieker.tools.traceAnalysis.filter.executionFilter.TimestampFilter filter = TestTimestampFilter.createTimestampFilter(
+				TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP, controller);
 		final ListCollectionFilter<Execution> sinkPlugin = new ListCollectionFilter<Execution>(new Configuration(), controller);
 		final Execution exec = this.eFactory.genExecution(77, // traceId (value not important)
@@ -101,8 +104,9 @@ public class TestTimestampFilter extends AbstractKiekerTest { // NOCS
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
-		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, TimestampFilter.INPUT_PORT_NAME_EXECUTION);
-		controller.connect(filter, TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
+		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, kieker.tools.traceAnalysis.filter.executionFilter.TimestampFilter.INPUT_PORT_NAME_EXECUTION);
+		controller.connect(filter, kieker.tools.traceAnalysis.filter.executionFilter.TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, sinkPlugin,
+				ListCollectionFilter.INPUT_PORT_NAME);
 
 		controller.run();
 
@@ -126,7 +130,8 @@ public class TestTimestampFilter extends AbstractKiekerTest { // NOCS
 		final AnalysisController controller = new AnalysisController();
 
 		final ListReader<Execution> reader = new ListReader<Execution>(new Configuration(), controller);
-		final TimestampFilter filter = TestTimestampFilter.createTimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
+		final kieker.tools.traceAnalysis.filter.executionFilter.TimestampFilter filter = TestTimestampFilter.createTimestampFilter(
+				TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP, controller);
 		final ListCollectionFilter<Execution> sinkPlugin = new ListCollectionFilter<Execution>(new Configuration(), controller);
 
@@ -139,8 +144,9 @@ public class TestTimestampFilter extends AbstractKiekerTest { // NOCS
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
-		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, TimestampFilter.INPUT_PORT_NAME_EXECUTION);
-		controller.connect(filter, TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
+		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, kieker.tools.traceAnalysis.filter.executionFilter.TimestampFilter.INPUT_PORT_NAME_EXECUTION);
+		controller.connect(filter, kieker.tools.traceAnalysis.filter.executionFilter.TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, sinkPlugin,
+				ListCollectionFilter.INPUT_PORT_NAME);
 
 		controller.run();
 
@@ -163,7 +169,8 @@ public class TestTimestampFilter extends AbstractKiekerTest { // NOCS
 		final AnalysisController controller = new AnalysisController();
 
 		final ListReader<Execution> reader = new ListReader<Execution>(new Configuration(), controller);
-		final TimestampFilter filter = TestTimestampFilter.createTimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
+		final kieker.tools.traceAnalysis.filter.executionFilter.TimestampFilter filter = TestTimestampFilter.createTimestampFilter(
+				TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP, controller);
 		final ListCollectionFilter<Execution> sinkPlugin = new ListCollectionFilter<Execution>(new Configuration(), controller);
 
@@ -176,8 +183,9 @@ public class TestTimestampFilter extends AbstractKiekerTest { // NOCS
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
-		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, TimestampFilter.INPUT_PORT_NAME_EXECUTION);
-		controller.connect(filter, TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
+		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, kieker.tools.traceAnalysis.filter.executionFilter.TimestampFilter.INPUT_PORT_NAME_EXECUTION);
+		controller.connect(filter, kieker.tools.traceAnalysis.filter.executionFilter.TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, sinkPlugin,
+				ListCollectionFilter.INPUT_PORT_NAME);
 
 		controller.run();
 
@@ -203,7 +211,8 @@ public class TestTimestampFilter extends AbstractKiekerTest { // NOCS
 		final AnalysisController controller = new AnalysisController();
 
 		final ListReader<Execution> reader = new ListReader<Execution>(new Configuration(), controller);
-		final TimestampFilter filter = TestTimestampFilter.createTimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
+		final kieker.tools.traceAnalysis.filter.executionFilter.TimestampFilter filter = TestTimestampFilter.createTimestampFilter(
+				TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP, controller);
 		final ListCollectionFilter<Execution> sinkPlugin = new ListCollectionFilter<Execution>(new Configuration(), controller);
 
@@ -216,8 +225,9 @@ public class TestTimestampFilter extends AbstractKiekerTest { // NOCS
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
-		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, TimestampFilter.INPUT_PORT_NAME_EXECUTION);
-		controller.connect(filter, TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
+		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, kieker.tools.traceAnalysis.filter.executionFilter.TimestampFilter.INPUT_PORT_NAME_EXECUTION);
+		controller.connect(filter, kieker.tools.traceAnalysis.filter.executionFilter.TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, sinkPlugin,
+				ListCollectionFilter.INPUT_PORT_NAME);
 
 		controller.run();
 

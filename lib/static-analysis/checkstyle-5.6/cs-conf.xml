@@ -174,33 +174,24 @@
         <!-- KIEKER -->
         <property name="tabWidth" value="4"/>
         <!-- KIEKER -->
-        <!--
         <module name="kieker.test.common.cs.AnalysisComponentConstructorCheck">
             <property name="ignoreAbstractClasses" value="true"/>
+            <property name="severity" value="${checkstyle.ignoreCustomKieker}" default="ignore"/>
         </module>
-        -->
-        <!-- KIEKER -->
-        <!--
         <module name="kieker.test.common.cs.MonitoringRecordFactoryConventionCheck">
             <property name="ignoreAbstractClasses" value="true"/>
+            <property name="severity" value="${checkstyle.ignoreCustomKieker}" default="ignore"/>
         </module>
-        -->
-		<!-- KIEKER -->
-        <!--
-		 <module name="kieker.test.common.cs.JUnitTestsExtendingAbstractKiekerTestCheck">
+        <module name="kieker.test.common.cs.JUnitTestsExtendingAbstractKiekerTestCheck">
             <property name="ignoreAbstractClasses" value="true"/>
+            <property name="severity" value="${checkstyle.ignoreCustomKieker}" default="ignore"/>
         </module>
-		-->
-		<!-- KIEKER -->
-		<!--
-		<module name="kieker.test.common.cs.MissingSinceTagCheck">
+        <module name="kieker.test.common.cs.MissingSinceTagCheck">
+            <property name="severity" value="${checkstyle.ignoreCustomKieker}" default="ignore"/>
         </module>
-		-->
-		<!-- KIEKER -->
-		 <!--
-		<module name="kieker.test.common.cs.NotAllowedSinceTagCheck">
+        <module name="kieker.test.common.cs.NotAllowedSinceTagCheck">
+            <property name="severity" value="${checkstyle.ignoreCustomKieker}" default="ignore"/>
         </module>
-		-->
 	
         <module name="FileContentsHolder"/>
 

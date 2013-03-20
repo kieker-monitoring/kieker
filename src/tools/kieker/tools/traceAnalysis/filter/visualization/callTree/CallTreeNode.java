@@ -32,6 +32,7 @@ import kieker.tools.traceAnalysis.systemModel.Operation;
  * @deprecated To be removed in Kieker 1.8.
  */
 @Deprecated
+@SuppressWarnings("deprecation")
 public class CallTreeNode {
 
 	private final CallTreeNode parent;
@@ -46,7 +47,8 @@ public class CallTreeNode {
 	 * @param opInfo
 	 *            The info to be stored in this node.
 	 */
-	public CallTreeNode(final CallTreeNode parent, final kieker.tools.traceAnalysis.filter.visualization.callTree.CallTreeOperationHashKey opInfo) {
+	public CallTreeNode(final kieker.tools.traceAnalysis.filter.visualization.callTree.CallTreeNode parent,
+			final kieker.tools.traceAnalysis.filter.visualization.callTree.CallTreeOperationHashKey opInfo) {
 		this.parent = parent;
 		if (opInfo == null) {
 			throw new IllegalArgumentException("opInfo must not be null");

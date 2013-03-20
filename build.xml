@@ -1215,6 +1215,7 @@
 			<fileset dir="${src.dir}" includes="**/*.java" />
 			<fileset dir="${test.dir}" includes="**/*.java" />
 			<formatter type="xml" toFile="${tmp.dir}/cs_report.xml" />
+			<property key="checkstyle.ignoreCustomKieker" value="error" />
 		</checkstyle>
 		<echo message="Checkstyle report written to '${tmp.dir}/cs_report.xml'" />
 	</target>
