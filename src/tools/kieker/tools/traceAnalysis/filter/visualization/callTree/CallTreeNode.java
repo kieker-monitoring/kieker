@@ -46,7 +46,11 @@ public class CallTreeNode {
 	 *            The parent of this node. If this is null, the node will be interpreted as a root node.
 	 * @param opInfo
 	 *            The info to be stored in this node.
+	 * 
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
+	@Deprecated
+	@SuppressWarnings("deprecation")
 	public CallTreeNode(final kieker.tools.traceAnalysis.filter.visualization.callTree.CallTreeNode parent,
 			final kieker.tools.traceAnalysis.filter.visualization.callTree.CallTreeOperationHashKey opInfo) {
 		this.parent = parent;

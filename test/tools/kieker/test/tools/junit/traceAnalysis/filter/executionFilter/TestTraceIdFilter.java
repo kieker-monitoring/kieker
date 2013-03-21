@@ -40,7 +40,10 @@ import kieker.test.tools.util.ExecutionFactory;
  * A test for the {@link TraceIdFilter}.
  * 
  * @author Andre van Hoorn, Nils christian Ehmke
+ * 
+ * @deprecated to be removed in Kieker 1.8
  */
+@Deprecated
 @SuppressWarnings("deprecation")
 public class TestTraceIdFilter extends AbstractKiekerTest { // NOCS
 

@@ -35,7 +35,10 @@ import kieker.test.tools.util.ExecutionFactory;
  * A test for the {@link TimestampFilter}.
  * 
  * @author Andre van Hoorn, Nils Christian Ehmke
+ * 
+ * @deprecated to be removed in Kieker 1.8
  */
+@Deprecated
 @SuppressWarnings("deprecation")
 public class TestTimestampFilter extends AbstractKiekerTest { // NOCS
 
