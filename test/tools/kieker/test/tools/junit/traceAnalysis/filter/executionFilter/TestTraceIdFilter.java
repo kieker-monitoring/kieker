@@ -67,7 +67,11 @@ public class TestTraceIdFilter extends AbstractKiekerTest { // NOCS
 	 * @param analysisController
 	 *            The analysis controller which will be used to register this component.
 	 * @return
+	 * 
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
+	@Deprecated
+	@SuppressWarnings("deprecation")
 	private static kieker.tools.traceAnalysis.filter.executionFilter.TraceIdFilter createTraceIdFilter(final Set<Long> selectedTraces,
 			final IAnalysisController analysisController) {
 		final Configuration cfg = new Configuration();

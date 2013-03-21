@@ -67,7 +67,11 @@ public class TestTimestampFilter extends AbstractKiekerTest { // NOCS
 	 * @param analysisController
 	 *            The analysis controller which will be used to register this component.
 	 * @return A suitable instance of {@link TimestampFilter}.
+	 * 
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
+	@Deprecated
+	@SuppressWarnings("deprecation")
 	private static kieker.tools.traceAnalysis.filter.executionFilter.TimestampFilter createTimestampFilter(final long ignoreExecutionsBeforeTimestamp,
 			final long ignoreExecutionsAfterTimestamp,
 			final IAnalysisController analysisController) {

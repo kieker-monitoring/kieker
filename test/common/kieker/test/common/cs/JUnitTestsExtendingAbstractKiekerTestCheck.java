@@ -66,7 +66,7 @@ public class JUnitTestsExtendingAbstractKiekerTestCheck extends Check {
 			return;
 		}
 		// Now check whether the package contains junit and - if this is the case - whether the class extends the class in question.
-		if (!this.packageNameContainsJUnit(ast) || this.extendsAbstractKiekerTest(ast)) {
+		if (!this.isJUnitTest(ast) || this.extendsAbstractKiekerTest(ast)) {
 			return;
 		}
 
@@ -87,25 +87,56 @@ public class JUnitTestsExtendingAbstractKiekerTestCheck extends Check {
 		if (extClause == null) {
 			return false;
 		}
-
 		// ... and check the name of the identifier if it exists
 		final DetailAST ident = extClause.findFirstToken(TokenTypes.IDENT);
 		if (ident == null) {
 			return false;
 		}
+		final String classname = ident.getText();
+		if (ABSTRACT_KIEKER_TEST_CLASS_NAME.equals(classname)) {
+			return true;
+		}
 
-		return ABSTRACT_KIEKER_TEST_CLASS_NAME.equals(ident.getText());
+		// // Try to find the package definition. It has to be a sibling of the class definition node.
+		// DetailAST packageDef = clazz;
+		// while ((packageDef != null) && (packageDef.getType() != TokenTypes.PACKAGE_DEF)) {
+		// packageDef = packageDef.getPreviousSibling();
+		// }
+		// // Check whether there is a package definition or not
+		// if (packageDef == null) {
+		// this.log(0, "No package def");
+		// return false;
+		// }
+		// // Check the package name. We do assume that there is at least one dot in the package-name.
+		// final DetailAST packageStart = packageDef.findFirstToken(TokenTypes.DOT);
+		// final String packageName = FullIdent.createFullIdent(packageStart).getText();
+
+		// this does not work, yet:
+
+		// try {
+		// final Class<?> extendedClass = Class.forName(packageName + '.' + classname);
+		// this.log(0, extendedClass.toString());
+		// if (extendedClass.isInstance(AbstractKiekerTest.class)) {
+		// return true;
+		// }
+		// } catch (final ClassNotFoundException ignore) {
+		// this.log(0, ignore.toString());
+		// return false;
+		// }
+
+		return false;
 	}
 
 	/**
 	 * This method checks whether the package name of the given class contains the name {@code JUnit}.
+	 * If this is true it is further checked whether the class name contains {@code Test}
 	 * 
 	 * @param clazz
 	 *            The class to check.
 	 * 
-	 * @return true if and only if the full qualified name of the class contains {@code JUnit}.
+	 * @return true if the class is a JUnit test
 	 */
-	private boolean packageNameContainsJUnit(final DetailAST clazz) {
+	private boolean isJUnitTest(final DetailAST clazz) {
 		// Try to find the package definition. It has to be a sibling of the class definition node.
 		DetailAST packageDef = clazz;
 		while ((packageDef != null) && (packageDef.getType() != TokenTypes.PACKAGE_DEF)) {
@@ -121,7 +152,10 @@ public class JUnitTestsExtendingAbstractKiekerTestCheck extends Check {
 		final DetailAST packageStart = packageDef.findFirstToken(TokenTypes.DOT);
 		final String packageName = FullIdent.createFullIdent(packageStart).getText();
 
-		return packageName.contains(JUNIT_NAME);
+		if (!packageName.contains(JUNIT_NAME)) {
+			return false;
+		}
+		return clazz.findFirstToken(TokenTypes.IDENT).getText().contains("Test");
 	}
 
 	/**
