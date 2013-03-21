@@ -101,6 +101,8 @@ import kieker.tools.util.LoggingTimestampConverter;
  * system behavior.
  * 
  * @author Andre van Hoorn, Matthias Rohr, Nils Christian Ehmke
+ * 
+ * @since 0.95a
  */
 public final class TraceAnalysisTool {
 	public static final String DATE_FORMAT_PATTERN_CMD_USAGE_HELP = Constants.DATE_FORMAT_PATTERN.replaceAll("'", ""); // only for usage info

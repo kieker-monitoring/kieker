@@ -19,6 +19,8 @@ package kieker.tools.traceAnalysis.systemModel;
 /**
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 public class AssemblyComponent implements ISystemModelElement {
 	private final int id;

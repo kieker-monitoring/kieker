@@ -22,6 +22,8 @@ import java.util.Collections;
 
 /**
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 public class ExecutionContainer implements ISystemModelElement {
 	private final int id;

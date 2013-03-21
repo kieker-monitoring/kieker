@@ -20,6 +20,8 @@ package kieker.tools.traceAnalysis.systemModel;
  * This class represents an execution within the trace analysis tool.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 public class Execution {
 

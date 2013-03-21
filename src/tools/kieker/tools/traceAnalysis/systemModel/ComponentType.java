@@ -24,6 +24,8 @@ import java.util.Collections;
  * This class represents the type of a component within the trace analysis tool.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 public class ComponentType {
 	private final int id;

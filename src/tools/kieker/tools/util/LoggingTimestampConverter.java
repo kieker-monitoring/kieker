@@ -29,6 +29,8 @@ import java.util.TimeZone;
  * This is a utility class which can be used to convert timestamps, for example by transforming a simple timestamp into a human-readable datetime string.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.2
  */
 public final class LoggingTimestampConverter {
 	// private static final Log log = LogFactory.getLog(LoggingTimestampConverter.class);

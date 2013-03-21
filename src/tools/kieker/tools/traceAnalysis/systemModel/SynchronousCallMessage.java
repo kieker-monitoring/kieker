@@ -20,6 +20,8 @@ package kieker.tools.traceAnalysis.systemModel;
  * A specified class of messages which represent synchronous calls.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 public class SynchronousCallMessage extends AbstractMessage {
 

@@ -20,6 +20,8 @@ package kieker.tools.traceAnalysis.systemModel;
  * This object represents an somehow invalid trace of executions.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.2
  */
 public class InvalidExecutionTrace {
 

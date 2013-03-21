@@ -34,6 +34,8 @@ import kieker.tools.util.LoggingTimestampConverter;
  * This class is a container for a whole trace of executions (represented as instances of {@link Execution}).
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 0.95a
  */
 public class ExecutionTrace extends AbstractTrace {
 

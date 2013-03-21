@@ -33,8 +33,8 @@ import org.apache.commons.cli.Options;
  * implementation and then modifying it step by step; hence, it includes third-party code from Apache's Commons CLI, licensed under Apache License, Version 2.0.
  * 
  * @author Andre van Hoorn
- * @since 1.7
  * 
+ * @since 1.7
  */
 public class CLIHelpFormatter extends HelpFormatter {
 

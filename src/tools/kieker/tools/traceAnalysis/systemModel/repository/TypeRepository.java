@@ -26,6 +26,8 @@ import kieker.tools.traceAnalysis.systemModel.ComponentType;
  * This is a repository in which the different component types ({@link ComponentType}) can be stored.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 public class TypeRepository extends AbstractSystemSubRepository {
 
