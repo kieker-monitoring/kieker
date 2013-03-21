@@ -20,6 +20,8 @@ package kieker.common.exception;
  * This exception can be used to show that something in context with a monitoring record failed.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.0
  */
 public class MonitoringRecordException extends Exception {
 

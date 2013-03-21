@@ -21,6 +21,8 @@ import kieker.common.record.IMonitoringRecord;
 
 /**
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 0.91
  */
 public final class OperationExecutionRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
 

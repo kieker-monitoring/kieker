@@ -50,6 +50,7 @@ import kieker.common.record.misc.TimestampRecord;
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.3
  */
 @Plugin(description = "Generates time events with a given resolution based on the timestamps of incoming IMonitoringRecords",
 		outputPorts = {

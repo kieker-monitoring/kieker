@@ -21,6 +21,8 @@ import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent implements IObjectRecord {
 

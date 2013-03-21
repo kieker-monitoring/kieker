@@ -28,6 +28,8 @@ import java.io.Serializable;
  * @see Factory
  * 
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.2
  */
 public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringRecord> {
 
@@ -35,6 +37,8 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * Delivers the current timestamp of the record.
 	 * 
 	 * @return The timestamp.
+	 * 
+	 * @since 1.2
 	 */
 	public long getLoggingTimestamp();
 
@@ -43,6 +47,8 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * 
 	 * @param timestamp
 	 *            The new timestamp for the record.
+	 * 
+	 * @since 1.2
 	 */
 	public void setLoggingTimestamp(long timestamp);
 
@@ -50,6 +56,8 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * This method should deliver an array containing the content of the record. It should be possible to convert this array later into a record again.
 	 * 
 	 * @return An array with the values of the record.
+	 * 
+	 * @since 1.2
 	 */
 	public Object[] toArray();
 
@@ -60,6 +68,8 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * This method should not be used for serialization purposes since this is not the purpose of Object's toString method.
 	 * 
 	 * @return A (human readable) string of this record.
+	 * 
+	 * @since 1.2
 	 */
 	public String toString();
 
@@ -68,6 +78,8 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * 
 	 * @param values
 	 *            The values for the record.
+	 * 
+	 * @since 1.2
 	 */
 	public void initFromArray(Object[] values);
 
@@ -77,6 +89,8 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * @return The types of the values.
 	 * 
 	 * @see #toArray()
+	 * 
+	 * @since 1.2
 	 */
 	public Class<?>[] getValueTypes();
 

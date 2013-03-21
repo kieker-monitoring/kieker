@@ -23,6 +23,8 @@ import kieker.common.record.IMonitoringRecord;
  * This class represents an (always) empty record.
  * 
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 0.95a
  */
 public final class EmptyRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
 

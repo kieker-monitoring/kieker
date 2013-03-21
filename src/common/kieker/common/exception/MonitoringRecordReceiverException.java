@@ -22,6 +22,8 @@ package kieker.common.exception;
  * @author Andre van Hoorn
  * 
  * @deprecated To be removed in Kieker 1.8
+ * 
+ * @since 1.2
  */
 @Deprecated
 public class MonitoringRecordReceiverException extends Exception {

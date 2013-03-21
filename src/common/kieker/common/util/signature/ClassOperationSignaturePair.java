@@ -22,6 +22,8 @@ import java.util.StringTokenizer;
  * This class represents a pair containing the classname and the signature of an operation.
  * 
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.5
  */
 public class ClassOperationSignaturePair {
 
