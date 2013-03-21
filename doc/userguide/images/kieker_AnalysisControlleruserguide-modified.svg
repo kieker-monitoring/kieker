@@ -9,35 +9,51 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    shape-rendering="auto"
-   width="1348.1957"
+   width="1348.1956"
    text-rendering="auto"
    contentScriptType="text/ecmascript"
    color-interpolation="auto"
    color-rendering="auto"
    preserveAspectRatio="xMidYMid meet"
    font-size="12"
-   viewBox="0 0 1348.1957 687.08001"
+   viewBox="0 0 1348.1956 580.04876"
    image-rendering="auto"
    stroke-miterlimit="10"
    zoomAndPan="magnify"
    version="1.0"
    contentStyleType="text/css"
    font-style="normal"
-   height="687.08002"
+   height="580.04877"
    font-weight="normal"
    id="svg2"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="kieker_AnalysisControlleruserguide-modified.svg"
+   sodipodi:docname="kieker_AnalysisControlleruserguide-modified.pdf"
    style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog">
+  <g
+     transform="matrix(0,-1,-1,0,325.20696,830.15379)"
+     id="g6502"
+     style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog">
+    <g
+       id="g6504">
+      <path
+         sodipodi:nodetypes="ccc"
+         inkscape:connector-curvature="0"
+         id="path6506"
+         d="m 658,196 -46.78327,0 0,-89.75057 -168.60823,0 0,-45.870782"
+         clip-path="url(#clipPath45-3-7-2-0)"
+         style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:0.85368359;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dashoffset:0;font-family:Arial"
+         transform="matrix(0,1.6085051,-1,0,559.18326,-1191.8509)" />
+    </g>
+  </g>
   <polygon
      clip-path="url(#clipPath60)"
      points="648,191 658,196 648,201 "
      id="polygon489"
      style="font-size:11px;fill:none;stroke-width:1.08270001;stroke-linecap:butt;font-family:Arial"
-     transform="matrix(0,1,-1,0,737.2262,-217.69358)" />
+     transform="matrix(0,1,-1,0,737.2262,-324.72484)" />
   <g
      id="g6137"
-     transform="translate(248.13041,208.22317)">
+     transform="translate(248.13041,101.19191)">
     <line
        transform="matrix(0,0.92048978,-1,0,451.32266,-400.69837)"
        style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.12849247;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
@@ -65,7 +81,7 @@
      points="648,191 658,196 648,201 "
      id="polygon487"
      style="font-size:11px;fill:#ffffff;stroke:none;font-family:Arial"
-     transform="matrix(0,1,-1,0,737.2262,-217.69358)" />
+     transform="matrix(0,1,-1,0,737.2262,-324.72484)" />
   <metadata
      id="metadata511">
     <rdf:RDF>
@@ -74,7 +90,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -92,8 +108,8 @@
      id="namedview509"
      showgrid="false"
      inkscape:zoom="1.1097727"
-     inkscape:cx="576.38462"
-     inkscape:cy="278.63871"
+     inkscape:cx="707.52858"
+     inkscape:cy="333.20984"
      inkscape:window-x="-9"
      inkscape:window-y="-9"
      inkscape:window-maximized="1"
@@ -1368,9 +1384,73 @@
          d="m 646,190 14,0 0,14 -14,0 0,-14 z"
          inkscape:connector-curvature="0" />
     </clipPath>
+    <clipPath
+       id="clipPath45-3-7-2"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path191-3-7-6"
+         d="m -1,-1 836,0 0,372 -836,0 0,-372 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath60-9-7-0"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path236-7-42-1"
+         d="m 646,190 14,0 0,14 -14,0 0,-14 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath6341"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path6343"
+         d="m 646,190 14,0 0,14 -14,0 0,-14 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath60-9-7-0-0"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path236-7-42-1-0"
+         d="m 646,190 14,0 0,14 -14,0 0,-14 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath6423"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path6425"
+         d="m 646,190 14,0 0,14 -14,0 0,-14 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath45-3-7-2-0"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path191-3-7-6-7"
+         d="m -1,-1 836,0 0,372 -836,0 0,-372 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath60-9-7-0-1"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path236-7-42-1-7"
+         d="m 646,190 14,0 0,14 -14,0 0,-14 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath6463"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path6465"
+         d="m 646,190 14,0 0,14 -14,0 0,-14 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
   </defs>
   <g
-     transform="matrix(1.0297497,0,0,1,300.25892,392.38757)"
+     transform="matrix(1.0297497,0,0,1,300.25892,285.35631)"
      id="g5089"
      style="stroke-width:0.98544896">
     <g
@@ -1415,7 +1495,7 @@
      y2="68"
      id="line435"
      style="font-size:11px;fill:none;stroke-width:0.79944283;stroke-linecap:butt;font-family:Arial"
-     transform="matrix(1.834178,0,0,1,-77.61925,195.62959)" />
+     transform="matrix(1.834178,0,0,1,-77.61925,88.598331)" />
   <line
      clip-path="url(#clipPath45)"
      x1="162"
@@ -1424,19 +1504,19 @@
      y2="162"
      id="line437"
      style="font-size:11px;fill:none;stroke-width:1.08270001;stroke-linecap:butt;font-family:Arial"
-     transform="translate(58.06065,195.62959)" />
+     transform="translate(58.06065,88.598331)" />
   <polygon
      clip-path="url(#clipPath49)"
-     points="260,73 250,68 260,63 270,68 "
+     points="270,68 260,73 250,68 260,63 "
      id="polygon445"
      style="font-size:11px;fill:#ffffff;stroke:none;font-family:Arial"
-     transform="translate(148.06065,195.62959)" />
+     transform="translate(148.06065,88.598331)" />
   <polygon
      clip-path="url(#clipPath49)"
-     points="260,73 250,68 260,63 270,68 "
+     points="270,68 260,73 250,68 260,63 "
      id="polygon447"
      style="font-size:11px;fill:none;stroke-width:1.08270001;stroke-linecap:butt;font-family:Arial"
-     transform="translate(148.06065,195.62959)" />
+     transform="translate(148.06065,88.598331)" />
   <line
      clip-path="url(#clipPath50)"
      x1="157"
@@ -1445,7 +1525,7 @@
      y2="162"
      id="line449"
      style="font-size:11px;fill:none;stroke-width:1.08270001;stroke-linecap:butt;font-family:Arial"
-     transform="translate(58.06065,163.62959)" />
+     transform="translate(58.06065,56.598331)" />
   <line
      clip-path="url(#clipPath50)"
      x1="162"
@@ -1454,10 +1534,10 @@
      y2="152"
      id="line451"
      style="font-size:11px;fill:none;stroke-width:1.08270001;stroke-linecap:butt;font-family:Arial"
-     transform="translate(58.06065,163.62959)" />
+     transform="translate(58.06065,56.598331)" />
   <g
      id="g4947"
-     transform="translate(334.70307,180.15383)">
+     transform="translate(334.70307,73.122571)">
     <text
        style="font-size:12px;stroke:none;font-family:Arial"
        id="text443"
@@ -1477,8 +1557,24 @@
        font-size="12">1..*</text>
   </g>
   <g
+     style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog"
+     id="g5077-5-7"
+     transform="matrix(0,-1,1,0,391.36717,830.15379)">
+    <g
+       id="g5074-7-7">
+      <path
+         transform="matrix(0,1.6085051,-1,0,559.18326,-1191.8509)"
+         style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:0.85368359;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dashoffset:0;font-family:Arial"
+         clip-path="url(#clipPath45-3-7-2-0)"
+         d="m 658,196 -102.73584,0 0,-111.750571"
+         id="line485-6-9-5-7"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccc" />
+    </g>
+  </g>
+  <g
      id="g5795"
-     transform="translate(340.47433,187.09535)">
+     transform="translate(340.47433,80.064091)">
     <rect
        y="227.75768"
        x="-339.98221"
@@ -1529,7 +1625,7 @@
   </g>
   <g
      id="g6131"
-     transform="translate(1005.626,207.68744)">
+     transform="translate(1005.626,100.65618)">
     <polygon
        clip-path="url(#clipPath60-9-6-7)"
        points="658,196 648,201 648,191 "
@@ -1545,7 +1641,7 @@
   </g>
   <g
      id="g5765"
-     transform="translate(265.62005,189.65338)">
+     transform="translate(265.62005,82.622121)">
     <rect
        y="225.19965"
        x="450.82068"
@@ -1579,8 +1675,24 @@
        xml:space="preserve">(from kieker::analysis::plugin::filter)</text>
   </g>
   <g
+     transform="matrix(0,-1,-1,0,807.42145,926.68314)"
+     id="g6405"
+     style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog">
+    <g
+       id="g6407">
+      <path
+         sodipodi:nodetypes="ccc"
+         inkscape:connector-curvature="0"
+         id="path6409"
+         d="m 680.38103,196 -205.93726,0 0,-189.7505711"
+         clip-path="url(#clipPath45-3-7-2)"
+         style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:0.85368359;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dashoffset:0;font-family:Arial"
+         transform="matrix(0,1.6085051,-1,0,559.18326,-1191.8509)" />
+    </g>
+  </g>
+  <g
      id="g6096"
-     transform="translate(295.05894,207.68744)">
+     transform="translate(295.05894,100.65618)">
     <rect
        transform="matrix(1.394649,0,0,1.1980129,-90.012636,13.128844)"
        style="font-size:11px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.83761603;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
@@ -1644,7 +1756,7 @@
   <g
      style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog"
      id="g6137-8"
-     transform="translate(361.06136,305.11948)">
+     transform="translate(361.06136,198.08822)">
     <line
        transform="matrix(0,0.92048978,-1,0,451.32266,-400.69837)"
        style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.12849247;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
@@ -1668,7 +1780,7 @@
        clip-path="url(#clipPath60-9-63)" />
   </g>
   <g
-     transform="translate(559.05387,303.40999)"
+     transform="translate(559.05387,196.37873)"
      style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog"
      id="g6127-7">
     <polygon
@@ -1684,21 +1796,38 @@
        style="font-size:12px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:4.00000005, 4.00000005;stroke-dashoffset:1.90000004;font-family:Dialog"
        sodipodi:nodetypes="cc" />
   </g>
+  <g
+     transform="matrix(0,-1,-1,0,325.20696,830.15379)"
+     id="g6508"
+     style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog">
+    <polygon
+       clip-path="url(#clipPath60-9-7-0-1)"
+       points="658,196 648,201 648,191 "
+       id="polygon6510"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.08270001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
+       transform="matrix(0,1,-1,0,559.18326,-805.12324)" />
+    <polygon
+       clip-path="url(#clipPath60-9-7-0-1)"
+       points="648,191 658,196 648,201 "
+       id="polygon6512"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Arial"
+       transform="matrix(0,1,-1,0,559.18326,-805.12324)" />
+  </g>
   <rect
      style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:1.9"
      id="rect5022"
      width="402.88452"
      height="47.034"
      x="245.06757"
-     y="414.85303" />
+     y="307.82178" />
   <path
      style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     d="m 244.70175,444.55929 402.49069,0"
+     d="m 244.70175,337.52803 402.49069,0"
      id="path5099"
      inkscape:connector-curvature="0" />
   <text
      x="407.73859"
-     y="426.95432"
+     y="319.92307"
      clip-path="none"
      font-weight="bold"
      xml:space="preserve"
@@ -1707,20 +1836,20 @@
   <text
      xml:space="preserve"
      x="374.80573"
-     y="439.95428"
+     y="332.92303"
      clip-path="none"
      id="text303-0"
      style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial">(from kieker::analysis::plugin)</text>
   <text
      xml:space="preserve"
      x="247.76645"
-     y="456.95428"
+     y="349.92303"
      clip-path="none"
      id="text305-3"
      style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial">+ AbstractPlugin ( configuration : Configuration, projectContext : IProjectContext )</text>
   <g
      id="g6127"
-     transform="translate(295.05894,207.68744)">
+     transform="translate(295.05894,100.65618)">
     <polygon
        transform="matrix(0,1,-1,0,-5.32482,-451.5924)"
        style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.08270001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
@@ -1742,7 +1871,7 @@
      y2="162"
      id="line437-6"
      style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.08270001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
-     transform="matrix(-1,0,0,1,1285.4933,196.99359)" />
+     transform="matrix(-1,0,0,1,1285.4933,89.962331)" />
   <line
      clip-path="url(#clipPath45-3-1)"
      x1="605"
@@ -1751,10 +1880,10 @@
      y2="196"
      id="line485-6-7"
      style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:0.65838325;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
-     transform="matrix(0,2.7043243,-1,0,1148.1339,-1269.7185)" />
+     transform="matrix(0,2.7043243,-1,0,1148.1339,-1376.7498)" />
   <g
      id="g5312"
-     transform="translate(281.00813,176.74007)">
+     transform="translate(281.00813,69.708811)">
     <rect
        y="148.95992"
        x="632.7439"
@@ -1795,7 +1924,7 @@
        clip-path="url(#clipPath17-7-7)" />
   </g>
   <g
-     transform="translate(144.13041,208.22317)"
+     transform="translate(144.13041,101.19191)"
      id="g6142">
     <line
        clip-path="url(#clipPath45-3)"
@@ -1821,7 +1950,7 @@
   </g>
   <g
      id="g5978"
-     transform="translate(295.05894,200.34342)">
+     transform="translate(295.05894,93.312161)">
     <g
        transform="translate(-295.18394,-24.849381)"
        id="g5326">
@@ -1915,19 +2044,19 @@
      y2="68"
      id="line435-0"
      style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:0.80760241;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
-     transform="matrix(-1.7973022,0,0,1,1415.192,196.99359)" />
+     transform="matrix(-1.7973022,0,0,1,1415.192,89.962331)" />
   <polygon
      clip-path="url(#clipPath49-3)"
-     points="270,68 260,73 250,68 260,63 "
+     points="260,63 270,68 260,73 250,68 "
      id="polygon445-4"
      style="font-size:11px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Arial"
-     transform="matrix(-1,0,0,1,1199.4934,196.99359)" />
+     transform="matrix(-1,0,0,1,1199.4934,89.962331)" />
   <polygon
      clip-path="url(#clipPath49-3)"
-     points="270,68 260,73 250,68 260,63 "
+     points="260,63 270,68 260,73 250,68 "
      id="polygon447-9"
      style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.08270001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
-     transform="matrix(-1,0,0,1,1199.4934,196.99359)" />
+     transform="matrix(-1,0,0,1,1199.4934,89.962331)" />
   <line
      clip-path="url(#clipPath50-2)"
      x1="157"
@@ -1936,7 +2065,7 @@
      y2="162"
      id="line449-2"
      style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.08270001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
-     transform="matrix(-1,0,0,1,1285.5104,163.14427)" />
+     transform="matrix(-1,0,0,1,1285.5104,56.113011)" />
   <line
      clip-path="url(#clipPath50-2)"
      x1="162"
@@ -1945,10 +2074,10 @@
      y2="152"
      id="line451-4"
      style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.08270001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
-     transform="matrix(-1,0,0,1,1285.5104,163.14427)" />
+     transform="matrix(-1,0,0,1,1285.5104,56.113011)" />
   <g
      id="g5159"
-     transform="translate(295.05894,245.81632)">
+     transform="translate(295.05894,138.78506)">
     <rect
        y="0.42926955"
        x="124.1484"
@@ -1981,7 +2110,7 @@
   <text
      font-size="12"
      x="955.05078"
-     y="261.03732"
+     y="154.00606"
      clip-path="none"
      xml:space="preserve"
      id="text443-5"
@@ -1994,11 +2123,11 @@
      xml:space="preserve"
      id="text457-1-8"
      style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
-     transform="translate(505.125,123.54275)">1..*</text>
+     transform="translate(505.125,16.511491)">1..*</text>
   <g
      style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog"
      id="g4528-2"
-     transform="translate(759.40235,225.2514)">
+     transform="translate(759.40235,118.22014)">
     <polygon
        transform="matrix(0,1,-1,0,671.32408,-469.84742)"
        style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.08270001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
@@ -2013,7 +2142,7 @@
   </g>
   <g
      id="g6049"
-     transform="translate(197.62422,207.68744)">
+     transform="translate(197.62422,100.65618)">
     <text
        transform="translate(-6.9115192,-46.833754)"
        style="font-size:12px;stroke:none;font-family:Arial"
@@ -2055,13 +2184,13 @@
        id="g3540">
       <polygon
          clip-path="url(#clipPath64-4)"
-         points="534,78 524,73 534,68 544,73 "
+         points="544,73 534,78 524,73 534,68 "
          id="polygon501-4"
          style="font-size:11px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Arial"
          transform="translate(131.00107,-9.684619)" />
       <polygon
          clip-path="url(#clipPath64-4)"
-         points="534,78 524,73 534,68 544,73 "
+         points="544,73 534,78 524,73 534,68 "
          id="polygon503-8"
          style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.08270001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
          transform="translate(131.00107,-9.684619)" />
@@ -2074,7 +2203,7 @@
   </g>
   <g
      id="g5081"
-     transform="translate(310.91358,253.68757)">
+     transform="matrix(0,-1,1,0,565.51467,396.14587)">
     <g
        id="g5077">
       <g
@@ -2094,73 +2223,76 @@
        id="g5070">
       <polygon
          clip-path="url(#clipPath60-9-7)"
-         points="648,201 648,191 658,196 "
+         points="658,196 648,201 648,191 "
          id="polygon489-3-3"
          style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.08270001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
          transform="matrix(0,1,-1,0,559.18326,-805.12324)" />
       <polygon
          clip-path="url(#clipPath60-9-7)"
-         points="658,196 648,201 648,191 "
+         points="648,191 658,196 648,201 "
          id="polygon487-7-1"
          style="font-size:11px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Arial"
          transform="matrix(0,1,-1,0,559.18326,-805.12324)" />
     </g>
   </g>
   <g
-     id="g3726"
-     transform="translate(295.05894,311.6875)">
-    <rect
-       y="-311.18927"
-       x="124.1484"
-       height="64.917732"
-       width="509.77899"
-       id="rect5002-7-3"
-       style="font-size:12px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:1.9;font-family:Dialog" />
+     id="g6317"
+     transform="translate(324,-107.03126)">
     <g
-       transform="translate(-169.12604,86)"
-       id="g3667">
-      <text
-         xml:space="preserve"
-         x="711"
-         y="177"
-         clip-path="url(#clipPath37-7)"
-         id="text405-43"
-         style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
-         transform="translate(-190.04335,-561.48294)">«interface»</text>
-      <text
-         x="697"
-         y="190"
-         clip-path="url(#clipPath38-8)"
-         font-weight="bold"
-         xml:space="preserve"
-         id="text407-1"
-         style="font-size:11px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
-         transform="translate(-189.82021,-561.48294)">IProjectContext</text>
-      <text
-         xml:space="preserve"
-         x="494.20593"
-         y="-358.48291"
-         clip-path="none"
-         id="text409-2"
-         style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial">(from kieker::analysis)</text>
+       id="g6310">
+      <rect
+         style="font-size:12px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:1.9;font-family:Dialog"
+         id="rect5002-7-3"
+         width="188.01137"
+         height="64.917732"
+         x="-162.10252"
+         y="107.535" />
+      <g
+         id="g3667"
+         transform="translate(-616.26078,504.72427)">
+        <text
+           transform="translate(-190.04335,-561.48294)"
+           style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+           id="text405-43"
+           clip-path="url(#clipPath37-7)"
+           y="177"
+           x="711"
+           xml:space="preserve">«interface»</text>
+        <text
+           transform="translate(-189.82021,-561.48294)"
+           style="font-size:11px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+           id="text407-1"
+           xml:space="preserve"
+           font-weight="bold"
+           clip-path="url(#clipPath38-8)"
+           y="190"
+           x="697">IProjectContext</text>
+        <text
+           style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+           id="text409-2"
+           clip-path="none"
+           y="-358.48291"
+           x="494.20593"
+           xml:space="preserve">(from kieker::analysis)</text>
+      </g>
     </g>
     <text
        style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
        id="text413-3"
        clip-path="none"
-       y="-253.71062"
-       x="127.03609"
+       y="165.01366"
+       x="-159.21484"
        xml:space="preserve">+ getProperty ( key : String ) : String</text>
     <path
        sodipodi:nodetypes="cc"
        inkscape:connector-curvature="0"
        id="path3712"
-       d="m 124.54115,-267.35675 509.04024,0"
+       d="m -161.95767,151.36752 187.738901,0"
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
   </g>
   <g
      id="g5179"
-     transform="translate(295.05894,234.50369)">
+     transform="translate(295.05894,127.47243)">
     <rect
        y="-126.96869"
        x="124.1484"
@@ -2232,8 +2364,41 @@
          style="font-size:11px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial Bold">IAnalysisController</tspan></text>
   </g>
   <g
+     style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog"
+     id="g5077-5"
+     transform="matrix(0,-1,1,0,833.58167,922.68314)">
+    <g
+       id="g5074-7">
+      <path
+         transform="matrix(0,1.6085051,-1,0,559.18326,-1191.8509)"
+         style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:0.85368359;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dashoffset:0;font-family:Arial"
+         clip-path="url(#clipPath45-3-7-2)"
+         d="m 658,196 -212.15421,0 0,-51.75057"
+         id="line485-6-9-5"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccc" />
+    </g>
+  </g>
+  <g
+     style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog"
+     id="g5070-4-3"
+     transform="matrix(0,-1,1,0,391.36717,830.15379)">
+    <polygon
+       transform="matrix(0,1,-1,0,559.18326,-805.12324)"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.08270001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
+       id="polygon489-3-3-1-3"
+       points="658,196 648,201 648,191 "
+       clip-path="url(#clipPath60-9-7-0-1)" />
+    <polygon
+       transform="matrix(0,1,-1,0,559.18326,-805.12324)"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Arial"
+       id="polygon487-7-1-2-5"
+       points="648,191 658,196 648,201 "
+       clip-path="url(#clipPath60-9-7-0-1)" />
+  </g>
+  <g
      id="g5333"
-     transform="translate(42.32333,203.11062)">
+     transform="translate(42.32333,96.079361)">
     <rect
        transform="matrix(1.394649,0,0,1.5932032,-714.49521,50.59066)"
        style="font-size:11px;fill:#ffffff;stroke-width:0.72634023;stroke-linecap:butt;font-family:Arial"
@@ -2316,7 +2481,7 @@
   </g>
   <g
      id="g5319"
-     transform="translate(94.23853,144.90167)">
+     transform="translate(94.23853,37.870411)">
     <rect
        y="366.85718"
        x="473.39746"
@@ -2357,8 +2522,25 @@
        clip-path="url(#clipPath17-7-7-0)" />
   </g>
   <g
+     style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog"
+     id="g5070-4"
+     transform="matrix(0,-1,1,0,833.58167,922.68314)">
+    <polygon
+       transform="matrix(0,1,-1,0,559.18326,-805.12324)"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.08270001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
+       id="polygon489-3-3-1"
+       points="658,196 648,201 648,191 "
+       clip-path="url(#clipPath60-9-7-0)" />
+    <polygon
+       transform="matrix(0,1,-1,0,559.18326,-805.12324)"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Arial"
+       id="polygon487-7-1-2"
+       points="648,191 658,196 648,201 "
+       clip-path="url(#clipPath60-9-7-0)" />
+  </g>
+  <g
      id="g5363"
-     transform="translate(383.03672,128.60007)">
+     transform="translate(383.03672,21.568811)">
     <rect
        transform="matrix(1.394649,0,0,1.0068805,-613.59947,321.39106)"
        style="font-size:11px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.91366446;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
@@ -2418,15 +2600,15 @@
      points="658,196 648,201 648,191 "
      id="polygon489-3-6"
      style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.08270001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
-     transform="matrix(0,1,-1,0,1148.1339,-147.2973)" />
+     transform="matrix(0,1,-1,0,1148.1339,-254.32856)" />
   <polygon
      clip-path="url(#clipPath60-9-5)"
      points="648,191 658,196 648,201 "
      id="polygon487-7-3"
      style="font-size:11px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Arial"
-     transform="matrix(0,1,-1,0,1148.1339,-147.2973)" />
+     transform="matrix(0,1,-1,0,1148.1339,-254.32856)" />
   <g
-     transform="translate(1000.663,404.00065)"
+     transform="translate(1000.663,296.96939)"
      style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog"
      id="g6127-5">
     <polygon
@@ -2441,5 +2623,22 @@
        d="m -201.00624,195.36784 0,-40.50788"
        style="font-size:12px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:4.00000005, 4.00000005;stroke-dashoffset:1.90000004;font-family:Dialog"
        sodipodi:nodetypes="cc" />
+  </g>
+  <g
+     style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog"
+     id="g5070-4-1"
+     transform="matrix(0,-1,-1,0,765.30777,926.70804)">
+    <polygon
+       transform="matrix(0,1,-1,0,559.18326,-805.12324)"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.08270001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
+       id="polygon489-3-3-1-4"
+       points="648,201 648,191 658,196 "
+       clip-path="url(#clipPath60-9-7-0-0)" />
+    <polygon
+       transform="matrix(0,1,-1,0,559.18326,-805.12324)"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Arial"
+       id="polygon487-7-1-2-6"
+       points="658,196 648,201 648,191 "
+       clip-path="url(#clipPath60-9-7-0-0)" />
   </g>
 </svg>
