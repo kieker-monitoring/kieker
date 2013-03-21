@@ -26,8 +26,11 @@ import kieker.common.record.IMonitoringRecord;
  * @since 1.3
  */
 public interface IPipeReader {
+
 	/**
 	 * Called to notify the reader that the pipe is closed.
+	 * 
+	 * @since 1.3
 	 */
 	public void notifyPipeClosed();
 
@@ -37,6 +40,8 @@ public interface IPipeReader {
 	 * @param record
 	 *            the record.
 	 * @return true on success; false in case of an error.
+	 * 
+	 * @since 1.3
 	 */
 	public abstract boolean newMonitoringRecord(IMonitoringRecord record);
 }

@@ -26,12 +26,16 @@ public interface ITimeSource {
 	/**
 	 * Returns the timestamp for the current time. Usually, the timestamp is assumed to
 	 * be in {@link java.util.concurrent.TimeUnit#NANOSECONDS}.
+	 * 
+	 * @since 1.3
 	 */
 	public long getTime();
 
 	/**
 	 * Returns a String representation of the timesource.
 	 * E.g., the meaning of a timestamp from this source.
+	 * 
+	 * @since 1.3
 	 */
 	public String toString();
 }

@@ -35,6 +35,8 @@ public interface IMonitoringController extends
 	 * It is included in this interface to ensure its publication over JMX.
 	 * 
 	 * @return a String representation of the current controller
+	 * 
+	 * @since 1.3
 	 */
 	public String toString();
 

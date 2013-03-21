@@ -42,6 +42,8 @@ public interface ISamplingController {
 	 * 
 	 * @return a {@link ScheduledSamplerJob} as a handler for removing the scheduled sampler later on by using the method
 	 *         {@link #removeScheduledSampler(ScheduledSamplerJob)}.
+	 * 
+	 * @since 1.3
 	 */
 	public abstract ScheduledSamplerJob schedulePeriodicSampler(final ISampler sampler, final long initialDelay, final long period, final TimeUnit timeUnit);
 
@@ -52,6 +54,8 @@ public interface ISamplingController {
 	 *            The sampler to be removed.
 	 * 
 	 * @return true if the sensor is not registered
+	 * 
+	 * @since 1.3
 	 */
 	public abstract boolean removeScheduledSampler(final ScheduledSamplerJob sampler);
 }

@@ -39,6 +39,8 @@ public interface IGraphOutputtingFilter<G extends AbstractGraph<?, ?, ?>> {
 	 * Returns the name of the port this filter uses to emit the graph.
 	 * 
 	 * @return See above
+	 * 
+	 * @since 1.6
 	 */
 	public String getGraphOutputPortName();
 

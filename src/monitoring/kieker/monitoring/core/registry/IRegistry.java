@@ -37,6 +37,8 @@ public interface IRegistry<E> {
 	 *            the object
 	 * @return
 	 *         the unique id
+	 * 
+	 * @since 1.5
 	 */
 	public int get(E value);
 
@@ -47,6 +49,8 @@ public interface IRegistry<E> {
 	 *            the unique id
 	 * @return
 	 *         the associated object
+	 * 
+	 * @since 1.5
 	 */
 	public E get(int i);
 
@@ -55,6 +59,8 @@ public interface IRegistry<E> {
 	 * 
 	 * @return
 	 *         array of registered objects
+	 * 
+	 * @since 1.5
 	 */
 	public E[] getAll();
 
@@ -63,6 +69,8 @@ public interface IRegistry<E> {
 	 * 
 	 * @return
 	 *         number of registered objects
+	 * 
+	 * @since 1.5
 	 */
 	public int getSize();
 
@@ -71,6 +79,8 @@ public interface IRegistry<E> {
 	 * 
 	 * @param recordReceiver
 	 *            the IMonitoringRecordReceiver logged to
+	 * 
+	 * @since 1.5
 	 */
 	public void setRecordReceiver(final IMonitoringRecordReceiver recordReceiver);
 }

@@ -181,6 +181,8 @@ public interface IPlugin extends IAnalysisComponent {
 	 * This simple class represents a container for the reference between a plugin, its input port and the corresponding method.
 	 * 
 	 * @author Nils Christian Ehmke
+	 * 
+	 * @since 1.5
 	 */
 	public static final class PluginInputPortReference {
 
@@ -249,6 +251,8 @@ public interface IPlugin extends IAnalysisComponent {
 	 * An enumeration used to describe the state of an {@link AbstractPlugin}.
 	 * 
 	 * @author Jan Waller
+	 * 
+	 * @since 1.5
 	 */
 	public static enum STATE {
 		/**

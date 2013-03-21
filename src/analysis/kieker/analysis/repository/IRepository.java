@@ -31,6 +31,8 @@ public interface IRepository extends IAnalysisComponent {
 	 * This method delivers the repository name of this repository type. The name should be unique, e.g., the classname.
 	 * 
 	 * @return The name of the repository type.
+	 * 
+	 * @since 1.5
 	 */
 	public abstract String getRepositoryName();
 
@@ -38,6 +40,8 @@ public interface IRepository extends IAnalysisComponent {
 	 * This method delivers the description of this repository type.
 	 * 
 	 * @return The description of the repository type.
+	 * 
+	 * @since 1.5
 	 */
 	public abstract String getRepositoryDescription();
 
