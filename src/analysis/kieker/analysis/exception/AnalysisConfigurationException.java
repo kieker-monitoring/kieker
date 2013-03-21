@@ -20,6 +20,8 @@ package kieker.analysis.exception;
  * An exception to show that something went wrong during the configuration of an analysis.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public class AnalysisConfigurationException extends Exception {
 

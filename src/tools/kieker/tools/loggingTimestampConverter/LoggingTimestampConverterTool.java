@@ -38,6 +38,8 @@ import kieker.tools.util.LoggingTimestampConverter;
  * This tool can be used to convert timestamps.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 public final class LoggingTimestampConverterTool {
 

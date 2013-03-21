@@ -26,6 +26,8 @@ import kieker.tools.traceAnalysis.systemModel.RootExecutionContainer;
 /**
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 public class ExecutionEnvironmentRepository extends AbstractSystemSubRepository {
 	public static final ExecutionContainer ROOT_EXECUTION_CONTAINER = new RootExecutionContainer();

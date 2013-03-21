@@ -28,6 +28,8 @@ import kieker.common.configuration.Configuration;
  * {@link kieker.analysis.plugin.reader.AbstractReaderPlugin} should be used instead.
  * 
  * @author Nils Christian Ehmke
+ * 
+ * @since 1.5
  */
 @Plugin
 public abstract class AbstractFilterPlugin extends AbstractPlugin implements IFilterPlugin {

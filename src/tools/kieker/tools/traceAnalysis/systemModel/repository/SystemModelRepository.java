@@ -37,6 +37,8 @@ import kieker.tools.traceAnalysis.systemModel.Operation;
  * This repository is a model manager for the Kieker's component model. It consists of multiple "sub"repositories.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 @Repository(
 		name = "System model repository",

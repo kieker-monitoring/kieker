@@ -40,6 +40,8 @@ import kieker.tools.util.CLIHelpFormatter;
  * Command-line tool for replaying a filesystem monitoring log using the {@link FilesystemLogReplayer}.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 0.95a
  */
 @SuppressWarnings({ "static-access", "static" })
 public final class FilesystemLogReplayerStarter {

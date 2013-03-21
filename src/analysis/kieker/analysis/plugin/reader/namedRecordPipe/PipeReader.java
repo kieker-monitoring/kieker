@@ -35,6 +35,8 @@ import kieker.common.record.IMonitoringRecord;
  * This reader can be used to read records via an in-memory pipe.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.3
  */
 @Plugin(description = "A reader which reads records via an in-memory pipe",
 		outputPorts = {

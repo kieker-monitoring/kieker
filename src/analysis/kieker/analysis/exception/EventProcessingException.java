@@ -19,6 +19,8 @@ package kieker.analysis.exception;
 /**
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.2
  */
 public class EventProcessingException extends Exception {
 

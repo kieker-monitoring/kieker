@@ -27,6 +27,8 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
 /**
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 public class AllocationComponentOperationPairFactory extends AbstractSystemSubRepository {
 	public static final AllocationComponentOperationPair ROOT_PAIR =

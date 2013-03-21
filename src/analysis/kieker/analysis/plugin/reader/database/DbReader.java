@@ -38,6 +38,8 @@ import kieker.common.record.IMonitoringRecord;
  * A very simple database reader that probably only works for small data sets.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 @Plugin(description = "A reader which reads records from a database",
 		outputPorts = {

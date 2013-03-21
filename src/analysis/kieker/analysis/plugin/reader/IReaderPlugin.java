@@ -22,6 +22,8 @@ import kieker.analysis.plugin.IPlugin;
  * This is the interface for reader plugins.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 0.95a
  */
 public interface IReaderPlugin extends IPlugin {
 
@@ -34,6 +36,8 @@ public interface IReaderPlugin extends IPlugin {
 	 * to initiate the termination of this method.
 	 * 
 	 * @return true if reading was successful; false if an error occurred
+	 * 
+	 * @since 1.2
 	 */
 	public boolean read();
 }

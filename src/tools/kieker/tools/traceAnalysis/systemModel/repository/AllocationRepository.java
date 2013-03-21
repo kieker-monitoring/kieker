@@ -27,6 +27,8 @@ import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
 /**
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 public class AllocationRepository extends AbstractSystemSubRepository {
 	public static final AllocationComponent ROOT_ALLOCATION_COMPONENT =

@@ -50,6 +50,8 @@ import kieker.common.record.IMonitoringRecord;
  * 
  * 
  * @author Andre van Hoorn, Matthias Rohr
+ * 
+ * @since 0.95a
  */
 @Plugin(description = "A reader which reads records from a (remove or local) JMS queue",
 		dependencies = "This plugin needs the file 'javax.jms-*.jar'.",

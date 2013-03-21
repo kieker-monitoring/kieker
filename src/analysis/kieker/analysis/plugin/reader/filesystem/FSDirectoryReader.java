@@ -44,6 +44,8 @@ import kieker.common.util.filesystem.FSUtil;
  * Reads the contents of a single file system log directory and passes the records to the registered receiver of type {@link IMonitoringRecordReceiver}.
  * 
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.2
  */
 final class FSDirectoryReader implements Runnable {
 	private static final Log LOG = LogFactory.getLog(FSDirectoryReader.class);

@@ -28,6 +28,8 @@ import kieker.tools.traceAnalysis.systemModel.Operation;
  * This is a repository in which the available operations ({@link Operation}) can be stored.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 public class OperationRepository extends AbstractSystemSubRepository {
 	public static final Signature ROOT_SIGNATURE = new Signature("$", new String[] {}, "<>", new String[] {});

@@ -27,6 +27,8 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
 /**
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 public class AssemblyComponentOperationPairFactory extends AbstractSystemSubRepository {
 	public static final AssemblyComponentOperationPair ROOT_PAIR =

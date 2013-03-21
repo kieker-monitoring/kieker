@@ -27,6 +27,8 @@ import kieker.tools.traceAnalysis.systemModel.RootAssemblyComponent;
 /**
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 public class AssemblyRepository extends AbstractSystemSubRepository {
 

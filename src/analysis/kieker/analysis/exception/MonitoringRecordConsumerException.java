@@ -21,6 +21,8 @@ package kieker.analysis.exception;
  * @author Andre van Hoorn
  * 
  * @deprecated To be removed in Kieker 1.8
+ * 
+ * @since 0.95a
  */
 @Deprecated
 public class MonitoringRecordConsumerException extends Exception {

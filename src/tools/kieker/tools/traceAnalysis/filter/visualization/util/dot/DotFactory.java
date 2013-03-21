@@ -25,6 +25,8 @@ package kieker.tools.traceAnalysis.filter.visualization.util.dot;
  * @see <a href="http://de.wikipedia.org/wiki/Graphviz">Graphviz - Wikipedia</a>
  * 
  * @author Nina Marwede
+ * 
+ * @since 1.1
  */
 public final class DotFactory {
 

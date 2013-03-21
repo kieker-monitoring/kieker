@@ -21,6 +21,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 public abstract class AbstractSystemSubRepository { // NOPMD (abstract without abstract)
 

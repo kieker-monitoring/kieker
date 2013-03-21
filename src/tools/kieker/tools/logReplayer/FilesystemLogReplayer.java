@@ -26,6 +26,8 @@ import kieker.common.configuration.Configuration;
  * system monitoring logs.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 0.95a
  */
 public class FilesystemLogReplayer extends AbstractLogReplayer {
 	// private static final Log LOG = LogFactory.getLog(FilesystemLogReplayer.class);

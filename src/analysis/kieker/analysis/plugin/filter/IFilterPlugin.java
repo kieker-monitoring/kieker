@@ -22,6 +22,8 @@ import kieker.analysis.plugin.IPlugin;
  * This is the interface for filter plugins within Kieker.
  * 
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.2
  */
 public interface IFilterPlugin extends IPlugin {
 
