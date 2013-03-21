@@ -22,6 +22,8 @@ package kieker.common.namedRecordPipe;
  * @author Andre van Hoorn
  * 
  * @deprecated to be removed in Kieker 1.8
+ * 
+ * @since 1.3
  */
 @Deprecated
 public class PipeException extends Exception {

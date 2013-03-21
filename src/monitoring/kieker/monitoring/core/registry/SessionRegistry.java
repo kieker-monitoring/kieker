@@ -18,6 +18,8 @@ package kieker.monitoring.core.registry;
 
 /**
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.3
  */
 public enum SessionRegistry { // Singleton (Effective Java #3)
 	INSTANCE;

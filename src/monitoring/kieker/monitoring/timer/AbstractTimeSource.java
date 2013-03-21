@@ -22,6 +22,8 @@ import kieker.common.logging.LogFactory;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.3
  */
 public abstract class AbstractTimeSource implements ITimeSource {
 	private static final Log LOG = LogFactory.getLog(AbstractTimeSource.class);

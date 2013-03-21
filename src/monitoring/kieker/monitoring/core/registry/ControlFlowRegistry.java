@@ -25,6 +25,8 @@ import kieker.monitoring.core.controller.MonitoringController;
 
 /**
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.3
  */
 public enum ControlFlowRegistry { // Singleton (Effective Java #3)
 	/** The singleton instance. */

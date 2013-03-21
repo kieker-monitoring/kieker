@@ -73,6 +73,8 @@ import kieker.monitoring.sampler.sigar.samplers.MemSwapUsageSampler;
  * </p>
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.3
  */
 public class CPUMemUsageServletContextListener implements ServletContextListener {
 	public static final long DEFAULT_SENSOR_INTERVAL_SECONDS = 15;

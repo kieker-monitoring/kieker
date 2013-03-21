@@ -31,6 +31,8 @@ import kieker.common.record.IMonitoringRecord;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.3
  */
 public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 

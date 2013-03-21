@@ -24,6 +24,7 @@ import kieker.common.logging.LogFactory;
 
 /**
  * @author Jan Waller
+ * @since 1.3
  */
 public abstract class AbstractController {
 	private static final Log LOG = LogFactory.getLog(AbstractController.class);

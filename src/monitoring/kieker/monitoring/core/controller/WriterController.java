@@ -28,6 +28,8 @@ import kieker.monitoring.writer.IMonitoringWriter;
 
 /**
  * @author Andre van Hoorn, Matthias Rohr, Jan Waller, Robert von Massow
+ * 
+ * @since 1.3
  */
 public final class WriterController extends AbstractController implements IWriterController {
 	private static final Log LOG = LogFactory.getLog(WriterController.class);

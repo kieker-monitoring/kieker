@@ -34,6 +34,8 @@ import kieker.tools.util.CLIHelpFormatter;
  * A simple execution of Analysis Configurations.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public final class KaxRun {
 	private static final Log LOG = LogFactory.getLog(KaxRun.class);

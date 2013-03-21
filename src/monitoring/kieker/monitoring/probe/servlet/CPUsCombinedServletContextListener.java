@@ -71,6 +71,8 @@ import kieker.monitoring.sampler.sigar.samplers.CPUsCombinedPercSampler;
  * </p>
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.3
  */
 public class CPUsCombinedServletContextListener implements ServletContextListener {
 	public static final long DEFAULT_SENSOR_INTERVAL_SECONDS = 15;

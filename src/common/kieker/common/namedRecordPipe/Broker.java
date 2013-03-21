@@ -21,6 +21,8 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.3
  */
 public enum Broker { // Singleton pattern (Effective Java #3)
 	/** This is the singleton instance. */

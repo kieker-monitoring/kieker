@@ -31,6 +31,8 @@ import kieker.tools.util.CLIHelpFormatter;
  * Externalized Strings from {@link TraceAnalysisTool}.
  * 
  * @author Robert von Massow
+ * 
+ * @since 1.2
  */
 @SuppressWarnings({ "static-access", "static" })
 public final class Constants {

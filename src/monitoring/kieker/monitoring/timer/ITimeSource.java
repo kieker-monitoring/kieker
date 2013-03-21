@@ -18,6 +18,8 @@ package kieker.monitoring.timer;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.3
  */
 public interface ITimeSource {
 

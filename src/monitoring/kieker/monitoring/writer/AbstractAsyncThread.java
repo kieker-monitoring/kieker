@@ -27,6 +27,8 @@ import kieker.monitoring.core.controller.IMonitoringController;
 
 /**
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.3
  */
 public abstract class AbstractAsyncThread extends Thread {
 	private static final Log LOG = LogFactory.getLog(AbstractAsyncThread.class);

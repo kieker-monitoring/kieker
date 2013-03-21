@@ -21,6 +21,8 @@ package kieker.monitoring.core.configuration;
  * Ideally it would be created using this file! (#151)
  * 
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.3
  */
 interface Keys { // NOPMD NOCS (static list)
 	/** prefix used for all kieker.monitoring components. */

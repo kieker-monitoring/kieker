@@ -20,6 +20,8 @@ import kieker.monitoring.timer.ITimeSource;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.3
  */
 public interface ITimeSourceController {
 
@@ -27,6 +29,8 @@ public interface ITimeSourceController {
 	 * Returns the ITimeSource used in this controller.
 	 * 
 	 * @return ITimeSource
+	 * 
+	 * @since 1.3
 	 */
 	public abstract ITimeSource getTimeSource();
 }

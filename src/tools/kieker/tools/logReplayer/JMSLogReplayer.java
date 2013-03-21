@@ -26,7 +26,7 @@ import kieker.common.configuration.Configuration;
  * 
  * @author Andre van Hoorn
  * 
- * @since 1.6
+ * @since 1.3
  */
 public class JMSLogReplayer extends AbstractLogReplayer {
 

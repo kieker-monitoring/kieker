@@ -29,6 +29,7 @@ import kieker.monitoring.core.controller.MonitoringController;
  * 
  * @author Dennis Kieselhorst
  * 
+ * @since 1.3
  */
 public class TerminationServletContextListener implements ServletContextListener {
 	private static final Log LOG = LogFactory.getLog(TerminationServletContextListener.class);

@@ -25,6 +25,8 @@ import kieker.monitoring.core.controller.IMonitoringController;
 
 /**
  * @author Jan Waller, Robert von Massow
+ * 
+ * @since 1.3
  */
 public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 	private static final Log LOG = LogFactory.getLog(AbstractMonitoringWriter.class);

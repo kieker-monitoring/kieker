@@ -26,6 +26,8 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
 
 /**
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.3
  */
 public final class StateController extends AbstractController implements IStateController {
 	private static final Log LOG = LogFactory.getLog(StateController.class);

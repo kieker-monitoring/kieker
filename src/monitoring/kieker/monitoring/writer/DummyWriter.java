@@ -25,6 +25,8 @@ import kieker.common.record.IMonitoringRecord;
  * A writer that does nothing but consuming records.
  * 
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.3
  */
 public class DummyWriter extends AbstractMonitoringWriter {
 	private static final Log LOG = LogFactory.getLog(DummyWriter.class);

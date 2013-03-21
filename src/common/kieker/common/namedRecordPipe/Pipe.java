@@ -24,6 +24,8 @@ import kieker.common.record.IMonitoringRecord;
  * This implementation represents a simple pipe that can be used by readers and writers to transfer monitoring records.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.3
  */
 public final class Pipe {
 	private static final Log LOG = LogFactory.getLog(Pipe.class);

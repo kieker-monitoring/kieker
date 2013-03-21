@@ -18,6 +18,8 @@ package kieker.monitoring.core.controller;
 
 /**
  * @author Jan Waller, Robert von Massow
+ * 
+ * @since 1.3
  */
 public interface IMonitoringController extends
 		IJMXController,

@@ -22,6 +22,8 @@ import kieker.monitoring.core.controller.IMonitoringController;
 
 /**
  * @author Andre van Hoorn
+ * 
+ * @since 1.3
  */
 public class ScheduledSamplerJob implements Runnable {
 	// private static final Log LOG = LogFactory.getLog(ScheduledSamplerJob.class);
