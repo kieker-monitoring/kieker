@@ -29,6 +29,8 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
  * This is just a simple helper class which collects {@link Execution}s.
  * 
  * @author Nils Christian Ehmke
+ * 
+ * @since 1.5
  */
 public class ExecutionSinkClass extends AbstractFilterPlugin {
 

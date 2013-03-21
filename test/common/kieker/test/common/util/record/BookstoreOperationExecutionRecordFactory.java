@@ -28,6 +28,7 @@ import kieker.common.record.controlflow.OperationExecutionRecord;
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.5
  */
 public final class BookstoreOperationExecutionRecordFactory {
 	public static final String PACKAGE_BOOKSTORE_APP = "bookstore";

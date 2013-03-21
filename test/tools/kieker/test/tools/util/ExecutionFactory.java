@@ -31,6 +31,8 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * This factory class can be used to create artificial executions.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.2
  */
 public class ExecutionFactory {
 

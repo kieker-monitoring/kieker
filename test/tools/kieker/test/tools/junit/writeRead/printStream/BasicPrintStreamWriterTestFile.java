@@ -30,6 +30,8 @@ import kieker.test.tools.util.StringUtils;
 
 /**
  * @author Andre van Hoorn
+ * 
+ * @since 1.5
  */
 public class BasicPrintStreamWriterTestFile extends AbstractPrintStreamWriterTest {
 	private static final String OUTPUT_BASE_FN = "S0fYvPsI.out"; // the name doesn't matter

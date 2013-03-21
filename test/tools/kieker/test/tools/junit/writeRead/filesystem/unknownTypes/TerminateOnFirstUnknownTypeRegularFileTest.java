@@ -32,6 +32,7 @@ import kieker.monitoring.writer.filesystem.AsyncFsWriter;
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.5
  */
 public class TerminateOnFirstUnknownTypeRegularFileTest extends AbstractUnknownTypeTest { // NOPMD NOCS (TestClassWithoutTestCases)
 

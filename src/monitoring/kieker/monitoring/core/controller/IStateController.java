@@ -18,6 +18,8 @@ package kieker.monitoring.core.controller;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.3
  */
 public interface IStateController {
 
@@ -26,6 +28,8 @@ public interface IStateController {
 	 * 
 	 * @see #isMonitoringTerminated()
 	 * @return true if now terminated; false if already terminated
+	 * 
+	 * @since 1.3
 	 */
 	public abstract boolean terminateMonitoring();
 
@@ -34,6 +38,8 @@ public interface IStateController {
 	 * 
 	 * @see #terminateMonitoring()
 	 * @return true if monitoring is permanently terminated, false if monitoring is enabled or disabled.
+	 * 
+	 * @since 1.3
 	 */
 	public abstract boolean isMonitoringTerminated();
 
@@ -41,6 +47,8 @@ public interface IStateController {
 	 * Enables monitoring.
 	 * 
 	 * @return true if monitoring is enabled, false otherwise
+	 * 
+	 * @since 1.3
 	 */
 	public abstract boolean enableMonitoring();
 
@@ -52,6 +60,8 @@ public interface IStateController {
 	 * writers stop should stop writing existing data.
 	 * 
 	 * @return true if monitoring is disabled, false otherwise
+	 * 
+	 * @since 1.3
 	 */
 	public abstract boolean disableMonitoring();
 
@@ -62,6 +72,8 @@ public interface IStateController {
 	 * @see #enableMonitoring()
 	 * 
 	 * @return true of monitoring is enabled, false if monitoring is disabled or terminated.
+	 * 
+	 * @since 1.3
 	 */
 	public abstract boolean isMonitoringEnabled();
 
@@ -100,6 +112,8 @@ public interface IStateController {
 	 * Returns the experiment ID.
 	 * 
 	 * @return experimentID
+	 * 
+	 * @since 1.3
 	 */
 	public abstract int getExperimentId();
 

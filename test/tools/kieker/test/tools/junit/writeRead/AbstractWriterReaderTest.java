@@ -33,6 +33,8 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Andre van Hoorn
+ * 
+ * @since 1.5
  */
 public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 

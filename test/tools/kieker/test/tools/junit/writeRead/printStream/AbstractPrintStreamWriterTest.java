@@ -32,6 +32,8 @@ import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
 
 /**
  * @author Andre van Hoorn
+ * 
+ * @since 1.5
  */
 public abstract class AbstractPrintStreamWriterTest extends AbstractWriterReaderTest {
 

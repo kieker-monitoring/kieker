@@ -32,6 +32,7 @@ import kieker.test.tools.junit.writeRead.filesystem.unknownTypes.ContinueAfterUn
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.5
  */
 public class SkipBrokenRecordsRegularFileTest extends ContinueAfterUnknownTypeRegularFileTest { // NOPMD NOCS (TestClassWithoutTestCases)
 

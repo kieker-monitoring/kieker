@@ -27,7 +27,9 @@ import kieker.common.record.misc.EmptyRecord;
 import kieker.test.tools.junit.writeRead.filesystem.AbstractTestFSWriterReader;
 
 /**
- * @author André van Hoorn, Jan Waller
+ * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.5
  */
 public abstract class AbstractUnknownTypeTest extends AbstractTestFSWriterReader { // NOPMD (TestClassWithoutTestCases) // NOCS (MissingCtorCheck)
 	protected static final EmptyRecord EVENT0_KNOWN_TYPE = new EmptyRecord();

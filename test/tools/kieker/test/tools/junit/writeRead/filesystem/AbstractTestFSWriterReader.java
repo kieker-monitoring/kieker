@@ -48,6 +48,8 @@ import kieker.test.tools.util.StringUtils;
 
 /**
  * @author Andre van Hoorn
+ * 
+ * @since 1.5
  */
 public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTest {
 

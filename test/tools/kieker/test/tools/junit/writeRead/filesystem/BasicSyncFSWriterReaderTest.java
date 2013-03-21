@@ -24,6 +24,7 @@ import kieker.monitoring.writer.filesystem.SyncFsWriter;
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.5
  */
 public class BasicSyncFSWriterReaderTest extends AbstractTestFSWriterReader { // NOPMD (TestClassWithoutTestCases) // NOCS (MissingCtorCheck)
 

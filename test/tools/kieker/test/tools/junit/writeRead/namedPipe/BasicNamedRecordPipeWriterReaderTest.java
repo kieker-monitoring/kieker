@@ -36,6 +36,8 @@ import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
 
 /**
  * @author Andre van Hoorn
+ * 
+ * @since 1.5
  */
 public class BasicNamedRecordPipeWriterReaderTest extends AbstractWriterReaderTest { // NOPMD NOCS (TestClassWithoutTestCases)
 	private static final String PIPE_NAME = "pipe-IVvirGREEf";

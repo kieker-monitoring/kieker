@@ -27,6 +27,8 @@ import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
  * This factory class can be used to create artificial executions within the bookstore example.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.5
  */
 public class BookstoreExecutionFactory {
 

@@ -32,6 +32,8 @@ import kieker.monitoring.writer.filesystem.AsyncBinaryFsWriter;
  * A warning by the reader should show up that this mode is not supported for binary files.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.5
  */
 public class ContinueAfterUnknownTypeNotForBinaryTest extends AbstractUnknownTypeTest { // NOPMD (TestClassWithoutTestCases)
 

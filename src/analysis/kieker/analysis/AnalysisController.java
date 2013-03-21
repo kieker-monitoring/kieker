@@ -76,6 +76,8 @@ import kieker.common.record.misc.KiekerMetadataRecord;
  * It is responsible for the life cycle of the readers, filters and repositories.
  * 
  * @author Andre van Hoorn, Matthias Rohr, Nils Christian Ehmke, Jan Waller
+ * 
+ * @since 0.95a
  */
 @kieker.analysis.annotation.AnalysisController(
 		configuration = {
@@ -1152,6 +1154,8 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * This interface can be used for observers which want to get notified about state changes of an analysis controller.
 	 * 
 	 * @author Nils Christian Ehmke
+	 * 
+	 * @since 1.5
 	 */
 	public static interface IStateObserver {
 
@@ -1162,6 +1166,8 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		 *            The controller which updated its state.
 		 * @param state
 		 *            The new state of the given controller.
+		 * 
+		 * @since 1.5
 		 */
 		public void update(final AnalysisController controller, final STATE state);
 	}

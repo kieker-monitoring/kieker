@@ -29,6 +29,8 @@ import kieker.test.tools.util.StringTeePrintStream;
 
 /**
  * @author Andre van Hoorn
+ * 
+ * @since 1.5
  */
 public class BasicPrintStreamWriterTestStdout extends AbstractPrintStreamWriterTest {
 
