@@ -431,7 +431,7 @@
 		</jar>
 		<!-- The pom files -->
 		<copy file="${pom.xml.kieker.main}" tofile="${maven.dir}/${dist.kieker.main.pom}" />
-    <!-- update version -->
+		<!-- update version -->
 		<replaceregexp file="${maven.dir}/${dist.kieker.main.pom}" match="&lt;version&gt;.*&lt;/version&gt;&lt;!--Kieker.*" replace="&lt;version&gt;${kieker.version}&lt;/version&gt;" />
 	</target>
 
@@ -461,7 +461,7 @@
 			<arg value="-DrepositoryId=${maven-staging-repository-id}" />
 			<arg value="-DpomFile=${maven.dir}/${dist.kieker.main.pom}" />
 			<arg value="-Dfile=${maven.dir}/${dist.kieker.main.jar}" />
-      <arg value="-Dsources=${maven.dir}/${dist.kieker.main.sources.jar}" />
+			<arg value="-Dsources=${maven.dir}/${dist.kieker.main.sources.jar}" />
 			<arg value="-Djavadoc=${maven.dir}/${dist.kieker.main.javadoc.jar}" />
 			<arg value="-Dclassifiers=emf,aspectj,userguide" />
 			<arg value="-Dtypes=jar,jar,pdf" />
@@ -470,7 +470,7 @@
 		</artifact:mvn>
 	</target>
 
-	<target name="dist-kieker-binaries" depends="build-all,-build-userguide,-build-userguide-examples" description="Packages the binary archives (.zip|.tar.gz) for a release">
+	<target name="dist-kieker-binaries" depends="build-all,-build-userguide,-build-userguide-examples,-prepate-userguide-examples-binary-release" description="Packages the binary archives (.zip|.tar.gz) for a release">
 		<patternset id="dist_bin_files-nonbinmode"> <!-- NOTE that the order of includes/excludes seems to have no effect. So be careful with excludes -->
 			<include name="${history.file}" />
 			<include name="${license.file}" />
@@ -588,8 +588,14 @@
 		<ant antfile="build.xml" dir="${src.userguide.example.aspectj.dir}" target="clean" />
 		<ant antfile="build.xml" dir="${src.userguide.example.jms.dir}" target="clean" />
 		<ant antfile="build.xml" dir="${src.userguide.example.sigar.dir}" target="clean" />
+			<delete>
+				<fileset dir="${examples.dir}" includes="**/.classpath-binrelease.generated" />
+			</delete>
+		<!-- make sure a current version is included -->
 		<copy file="${kieker.monitoring.default.properties}" tofile="${src.userguide.example.aspectj.dir}/META-INF/kieker.monitoring.properties" />
-		
+	</target>
+
+	<target name="-prepate-userguide-examples-binary-release" depends="-init-version" description="Removes artifacts from previous builds and manually changed configuration files">
 		<!-- Create .classpath variant for binary release(#710) -->
 		<copy file="${example.microbenchmark.dir}/.classpath" tofile="${example.microbenchmark.dir}/.classpath-binrelease.generated" overwrite="true"/>
 		<copy file="${src.userguide.example.manual.dir}/.classpath" tofile="${src.userguide.example.manual.dir}/.classpath-binrelease.generated" overwrite="true"/>
@@ -638,7 +644,7 @@
 			</fileset>
 		</replaceregexp>
 	</target>
-
+	
 	<target name="-build-userguide-examples" depends="-init,build-all,clean-userguide-examples" description="Builds all userguide examples">
 		<path id="classpath">
 			<fileset dir="${lib.dir}" includes="**/*.jar" />
@@ -761,15 +767,12 @@
 		</exec>
 	</target>
 
-	<target name="clean" description="Removes artifacts from previous builds">
+	<target name="clean" depends="clean-userguide-examples" description="Removes artifacts from previous builds">
 		<!-- <delete dir="tmp"/>-->
 		<delete dir="${dist.dir}" includeemptydirs="true" />
 		<delete dir="${release.dir}" includeemptydirs="true" />
 		<delete dir="${maven.dir}" includeemptydirs="true" />
 		<delete dir="${build.dir}" includeemptydirs="true" />
-    <delete>
-      <fileset dir="${examples.dir}" includes="**/.classpath-binrelease.generated" />
-    </delete>
 	</target>
 
 	<target name="run-test-storage" depends="-compile-tests-monitoring" description="Runs a simple storage test">
