@@ -35,7 +35,7 @@ public interface ITimeSource {
 	 * Returns a String representation of the timesource.
 	 * E.g., the meaning of a timestamp from this source.
 	 * 
-	 * @since 1.3
+	 * @since 1.5
 	 */
 	public String toString();
 }

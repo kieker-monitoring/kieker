@@ -81,6 +81,8 @@ public interface IStateController {
 	 * Returns the name of this controller.
 	 * 
 	 * @return String
+	 * 
+	 * @since 1.3
 	 */
 	public abstract String getName();
 
@@ -91,6 +93,8 @@ public interface IStateController {
 	 * 
 	 * When you want to distinguish multiple Virtual Machines on one host, you
 	 * have to set the hostname manually in the Configuration.
+	 * 
+	 * @since 1.3
 	 */
 	public abstract String getHostname();
 
@@ -98,6 +102,8 @@ public interface IStateController {
 	 * Increments the experiment ID by 1 and returns the new value.
 	 * 
 	 * @return experimentID
+	 * 
+	 * @since 1.3
 	 */
 	public abstract int incExperimentId();
 
@@ -105,6 +111,8 @@ public interface IStateController {
 	 * Sets the experiment ID to the given value.
 	 * 
 	 * @param newExperimentID
+	 * 
+	 * @since 1.3
 	 */
 	public abstract void setExperimentId(final int newExperimentID);
 
@@ -126,6 +134,8 @@ public interface IStateController {
 	 * </p>
 	 * 
 	 * @return debug mode
+	 * 
+	 * @since 1.6
 	 */
 	public abstract boolean isDebug();
 }

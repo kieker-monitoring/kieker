@@ -18,6 +18,8 @@ package kieker.monitoring.core.controller;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public interface IRegistryController {
 
@@ -28,6 +30,8 @@ public interface IRegistryController {
 	 *            the string
 	 * @return
 	 *         the unique id
+	 * 
+	 * @since 1.5
 	 */
 	public int getIdForString(final String string);
 }

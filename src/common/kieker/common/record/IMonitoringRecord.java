@@ -69,7 +69,7 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * 
 	 * @return A (human readable) string of this record.
 	 * 
-	 * @since 1.2
+	 * @since 1.5
 	 */
 	public String toString();
 
@@ -106,6 +106,8 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * <li>a <code>private static final Class&lt;?&gt;[] TYPES</code> specifying the types of the records, usually returned via {@link #getValueTypes()}.
 	 * <li>the {@link #initFromArray(Object[])} method does not have to be implemented
 	 * </ul>
+	 * 
+	 * @since 1.5
 	 */
 	public static interface Factory { // NOCS (name)
 		// empty marker interface

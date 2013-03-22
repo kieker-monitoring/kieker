@@ -26,6 +26,7 @@ import kieker.monitoring.sampler.sigar.samplers.MemSwapUsageSampler;
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.3
  */
 public interface ISigarSamplerFactory {
 
@@ -33,6 +34,8 @@ public interface ISigarSamplerFactory {
 	 * Creates an instance of {@link MemSwapUsageSampler}.
 	 * 
 	 * @return the created instance.
+	 * 
+	 * @since 1.3
 	 */
 	public MemSwapUsageSampler createSensorMemSwapUsage();
 
@@ -40,6 +43,8 @@ public interface ISigarSamplerFactory {
 	 * Creates an instance of {@link CPUsDetailedPercSampler}.
 	 * 
 	 * @return the created instance.
+	 * 
+	 * @since 1.3
 	 */
 	public CPUsDetailedPercSampler createSensorCPUsDetailedPerc();
 
@@ -47,6 +52,8 @@ public interface ISigarSamplerFactory {
 	 * Creates an instance of {@link CPUsCombinedPercSampler}.
 	 * 
 	 * @return the created instance.
+	 * 
+	 * @since 1.3
 	 */
 	public CPUsCombinedPercSampler createSensorCPUsCombinedPerc();
 }
