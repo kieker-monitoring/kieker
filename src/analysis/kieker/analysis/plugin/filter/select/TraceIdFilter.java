@@ -40,6 +40,8 @@ import kieker.common.record.flow.trace.Trace;
  * contains the defined traceID, the object is delivered unmodified to the output port.
  * 
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.2
  */
 @Plugin(description = "A filter allowing to filter incoming objects based on their trace ID",
 		outputPorts = {

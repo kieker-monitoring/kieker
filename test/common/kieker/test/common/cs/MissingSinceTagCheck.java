@@ -47,6 +47,11 @@ public class MissingSinceTagCheck extends Check {
 
 	@Override
 	public void visitToken(final DetailAST ast) {
+		// Do not check private classes etc.
+		if (CSUtility.isPrivate(ast)) {
+			return;
+		}
+
 		// Check whether the since tag is there
 		if (!CSUtility.sinceTagAvailable(this, ast)) {
 			this.log(ast.getLineNo(), "@since tag missing");

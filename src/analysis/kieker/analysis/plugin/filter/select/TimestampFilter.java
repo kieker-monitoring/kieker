@@ -41,6 +41,8 @@ import kieker.common.record.flow.trace.Trace;
  * If the received record is within the defined timestamps, the object is delivered unmodified to the output port.
  * 
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.2
  */
 @Plugin(description = "A filter which filters incoming records based on their timestamps",
 		outputPorts = {

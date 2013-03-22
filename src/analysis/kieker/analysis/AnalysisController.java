@@ -1073,6 +1073,8 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * one wants to create an analysis based on an instance of {@link MIProject} and needs to map from the model instances to the actual created objects.
 	 * 
 	 * @author Andre van Hoorn, Nils Christian Ehmke, Jan Waller
+	 * 
+	 * @since 1.6
 	 */
 	public static final class AnalysisControllerWithMapping {
 
@@ -1130,6 +1132,8 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * An enumeration used to describe the state of an {@link AnalysisController}.
 	 * 
 	 * @author Jan Waller
+	 * 
+	 * @since 1.5
 	 */
 	public static enum STATE {
 		/**

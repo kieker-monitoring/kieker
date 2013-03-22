@@ -20,6 +20,7 @@ import com.puppycrawl.tools.checkstyle.api.Check;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.FileContents;
 import com.puppycrawl.tools.checkstyle.api.TextBlock;
+import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 import com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocTag;
 import com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocTags;
 import com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocUtils;
@@ -69,5 +70,33 @@ public final class CSUtility {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Checks whether the given class is marked as private or not.
+	 * 
+	 * @param clazz
+	 *            The class to check.
+	 * 
+	 * @return true if and only if the class contains a private modifier.
+	 */
+	public static boolean isPrivate(final DetailAST clazz) {
+		final DetailAST modifiers = clazz.findFirstToken(TokenTypes.MODIFIERS);
+
+		return modifiers.findFirstToken(TokenTypes.LITERAL_PRIVATE) != null;
+	}
+
+	/**
+	 * Checks whether the given class is marked as abstract or not.
+	 * 
+	 * @param clazz
+	 *            The class to check.
+	 * 
+	 * @return true if and only if the class contains an abstract modifier.
+	 */
+	public static boolean isAbstract(final DetailAST clazz) {
+		final DetailAST modifiers = clazz.findFirstToken(TokenTypes.MODIFIERS);
+
+		return modifiers.findFirstToken(TokenTypes.ABSTRACT) != null;
 	}
 }

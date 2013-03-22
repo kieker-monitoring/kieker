@@ -36,6 +36,8 @@ import kieker.common.logging.LogFactory;
  * All other objects are forwarded to the output-not port.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 @Plugin(
 		description = "Filters incoming objects based on their type",

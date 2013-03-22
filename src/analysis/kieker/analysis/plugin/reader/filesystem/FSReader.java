@@ -35,6 +35,8 @@ import kieker.common.util.filesystem.FSUtil;
  * Filesystem reader which reads from multiple directories simultaneously ordered by the logging timestamp.
  * 
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 0.95a
  */
 @Plugin(description = "A file system reader which reads records from multiple directories",
 		outputPorts = {
@@ -186,6 +188,8 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
  * This is a simple interface showing that the {@link FSReader} can receive records. This is mostly a relict from an older version.
  * 
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.2
  */
 interface IMonitoringRecordReceiver {
 
@@ -195,6 +199,8 @@ interface IMonitoringRecordReceiver {
 	 * @param record
 	 *            The record to be processed.
 	 * @return true if and only if the record has been handled correctly.
+	 * 
+	 * @since 1.2
 	 */
 	public abstract boolean newMonitoringRecord(IMonitoringRecord record);
 }
