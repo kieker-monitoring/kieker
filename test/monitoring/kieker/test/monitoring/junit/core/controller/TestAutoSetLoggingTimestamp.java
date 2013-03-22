@@ -35,6 +35,7 @@ import kieker.test.monitoring.util.NamedPipeFactory;
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.3
  */
 public class TestAutoSetLoggingTimestamp extends AbstractKiekerTest { // NOCS
 

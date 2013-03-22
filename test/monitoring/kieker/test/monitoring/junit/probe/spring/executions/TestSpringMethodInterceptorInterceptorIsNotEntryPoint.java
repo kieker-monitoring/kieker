@@ -20,6 +20,7 @@ package kieker.test.monitoring.junit.probe.spring.executions;
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.5
  */
 public class TestSpringMethodInterceptorInterceptorIsNotEntryPoint extends AbstractTestSpringMethodInterceptor {
 	private static final boolean INTERCEPTOR_IS_ENTRY_POINT = false;

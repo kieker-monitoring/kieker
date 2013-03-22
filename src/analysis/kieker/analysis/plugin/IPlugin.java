@@ -41,7 +41,7 @@ public interface IPlugin extends IAnalysisComponent {
 	 * 
 	 * @return true on success; false otherwise.
 	 * 
-	 * @since 1.5
+	 * @since 1.6
 	 */
 	public boolean init();
 
@@ -56,7 +56,7 @@ public interface IPlugin extends IAnalysisComponent {
 	 * @param error
 	 *            Determines whether the plugin is terminated due to an error or not.
 	 * 
-	 * @since 1.5
+	 * @since 1.6
 	 */
 	public void terminate(final boolean error);
 
@@ -144,7 +144,7 @@ public interface IPlugin extends IAnalysisComponent {
 	 * 
 	 * @return An array with all available display names.
 	 * 
-	 * @since 1.5
+	 * @since 1.6
 	 */
 	public abstract String[] getAllDisplayNames();
 
@@ -153,7 +153,7 @@ public interface IPlugin extends IAnalysisComponent {
 	 * 
 	 * @return An array with all available repository port names.
 	 * 
-	 * @since 1.5
+	 * @since 1.7
 	 */
 	public abstract String[] getAllRepositoryPortNames();
 
@@ -173,7 +173,7 @@ public interface IPlugin extends IAnalysisComponent {
 	 * 
 	 * @return the current state of the plugin
 	 * 
-	 * @since 1.5
+	 * @since 1.6
 	 */
 	public abstract STATE getState();
 
@@ -252,7 +252,7 @@ public interface IPlugin extends IAnalysisComponent {
 	 * 
 	 * @author Jan Waller
 	 * 
-	 * @since 1.5
+	 * @since 1.6
 	 */
 	public static enum STATE {
 		/**

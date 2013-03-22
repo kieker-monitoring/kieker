@@ -27,6 +27,8 @@ import kieker.monitoring.timer.SystemMilliTimer;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public final class TestSystemMilliTimer extends AbstractTestTimeSource {
 

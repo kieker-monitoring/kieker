@@ -30,6 +30,8 @@ import kieker.test.monitoring.util.NamedPipeFactory;
 
 /**
  * @author Andre van Hoorn
+ * 
+ * @since 1.3
  */
 public class TestPipeWriter extends AbstractKiekerTest { // NOCS
 
@@ -43,24 +45,17 @@ public class TestPipeWriter extends AbstractKiekerTest { // NOCS
 		final String pipeName = NamedPipeFactory.createPipeName();
 		final IMonitoringController monitoringController = NamedPipeFactory.createMonitoringControllerWithNamedPipe(pipeName);
 
-		/*
-		 * We will now register a custom IPipeReader which receives records
-		 * through the pipe and collects these in a list. On purpose, we are not
-		 * using the corresponding PipeReader that comes with Kieker.
-		 */
+		// We will now register a custom IPipeReader which receives records through the pipe and collects these in a list. On purpose, we are not using the
+		// corresponding PipeReader that comes with Kieker.
 		final List<IMonitoringRecord> receivedRecords = NamedPipeFactory.createAndRegisterNamedPipeRecordCollector(pipeName);
 
-		/*
-		 * Send 7 dummy records
-		 */
+		// Send 7 dummy records
 		final int numRecordsToSend = 7;
 		for (int i = 0; i < numRecordsToSend; i++) {
 			monitoringController.newMonitoringRecord(new EmptyRecord());
 		}
 
-		/*
-		 * Make sure that numRecordsToSend where written.
-		 */
+		// Make sure that numRecordsToSend where written.
 		Assert.assertEquals("Unexpected number of records received", numRecordsToSend, receivedRecords.size());
 	}
 

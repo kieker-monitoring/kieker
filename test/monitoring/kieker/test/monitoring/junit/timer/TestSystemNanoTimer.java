@@ -27,6 +27,8 @@ import kieker.monitoring.timer.SystemNanoTimer;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public final class TestSystemNanoTimer extends AbstractTestTimeSource {
 

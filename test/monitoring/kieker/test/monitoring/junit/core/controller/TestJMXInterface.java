@@ -26,6 +26,8 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * Otherwise jUnit gets Problems with two open JMX servers.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public final class TestJMXInterface extends AbstractKiekerTest { // NOPMD NOCS
 

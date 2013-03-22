@@ -31,6 +31,8 @@ import kieker.test.monitoring.util.DefaultConfigurationFactory;
  * instances and performs basic checks on these.
  * 
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.3
  */
 public class TestConfigurationFactoryMethods extends AbstractKiekerTest {
 

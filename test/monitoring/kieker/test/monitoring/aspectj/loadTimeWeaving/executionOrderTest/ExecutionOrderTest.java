@@ -26,8 +26,8 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
  * 
  *         2007-03-30: Initial version
  * 
+ * @since < 0.9
  */
-
 public final class ExecutionOrderTest {
 
 	private ExecutionOrderTest() {}

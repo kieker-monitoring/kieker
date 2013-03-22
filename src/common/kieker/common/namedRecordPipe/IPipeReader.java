@@ -41,7 +41,7 @@ public interface IPipeReader {
 	 *            the record.
 	 * @return true on success; false in case of an error.
 	 * 
-	 * @since 1.3
+	 * @since 1.5
 	 */
 	public abstract boolean newMonitoringRecord(IMonitoringRecord record);
 }

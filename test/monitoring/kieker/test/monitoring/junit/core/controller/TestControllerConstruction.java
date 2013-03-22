@@ -29,6 +29,8 @@ import kieker.test.monitoring.util.DefaultConfigurationFactory;
 
 /**
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.3
  */
 public class TestControllerConstruction extends AbstractKiekerTest { // NOCS
 

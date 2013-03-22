@@ -35,6 +35,7 @@ import kieker.test.monitoring.util.DefaultConfigurationFactory;
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.3
  */
 public class TestPeriodicSampling extends AbstractKiekerTest { // NOCS
 

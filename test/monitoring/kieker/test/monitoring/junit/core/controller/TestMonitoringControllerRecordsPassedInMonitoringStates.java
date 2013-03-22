@@ -30,6 +30,8 @@ import kieker.test.monitoring.util.NamedPipeFactory;
 
 /**
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.3
  */
 public class TestMonitoringControllerRecordsPassedInMonitoringStates extends AbstractKiekerTest { // NOCS
 
