@@ -23,6 +23,7 @@ import kieker.monitoring.writer.DummyWriter;
 /**
  * @author Andre van Hoorn, Jan Waller
  * 
+ * @since 1.3
  */
 public final class DefaultConfigurationFactory {
 

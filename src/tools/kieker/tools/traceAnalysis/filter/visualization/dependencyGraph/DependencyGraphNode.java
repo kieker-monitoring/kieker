@@ -36,6 +36,8 @@ import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubReposi
  *            The type of the entity to be stored in this node.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 public class DependencyGraphNode<T extends ISystemModelElement> extends
 		AbstractPayloadedVertex<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>, TraceInformation, T> {

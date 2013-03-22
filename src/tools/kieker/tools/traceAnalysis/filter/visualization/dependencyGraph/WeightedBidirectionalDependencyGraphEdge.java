@@ -28,6 +28,8 @@ import kieker.tools.traceAnalysis.systemModel.TraceInformation;
  *            The type of the entity stored in the nodes linked by this edge.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 public class WeightedBidirectionalDependencyGraphEdge<T extends ISystemModelElement> extends
 		AbstractWeightedEdge<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>, TraceInformation> {

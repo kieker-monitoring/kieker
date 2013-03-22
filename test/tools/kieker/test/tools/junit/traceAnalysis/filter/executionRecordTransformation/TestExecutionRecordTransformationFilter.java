@@ -40,6 +40,8 @@ import kieker.test.tools.util.filter.ExecutionSinkClass;
 
 /**
  * @author Andre van Hoorn
+ * 
+ * @since 1.5
  */
 public class TestExecutionRecordTransformationFilter extends AbstractKiekerTest {
 
@@ -97,6 +99,7 @@ public class TestExecutionRecordTransformationFilter extends AbstractKiekerTest 
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.5
  */
 class ExecRecordTransformationFilterChecker { // NOPMD (subclass of TestCase)
 	private final IAnalysisController analysisController = new AnalysisController();

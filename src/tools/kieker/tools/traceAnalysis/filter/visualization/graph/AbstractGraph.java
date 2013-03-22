@@ -85,6 +85,8 @@ public abstract class AbstractGraph<V extends AbstractVertex<V, E, O>, E extends
 	 *            The type of the graph's vertices
 	 * @param <E>
 	 *            The type of the graph's edges
+	 * 
+	 * @since 1.6
 	 */
 	public interface IGraphVisitor<V, E> {
 
@@ -93,6 +95,8 @@ public abstract class AbstractGraph<V extends AbstractVertex<V, E, O>, E extends
 		 * 
 		 * @param vertex
 		 *            The encountered vertex
+		 * 
+		 * @since 1.6
 		 */
 		public void visitVertex(V vertex);
 
@@ -101,6 +105,8 @@ public abstract class AbstractGraph<V extends AbstractVertex<V, E, O>, E extends
 		 * 
 		 * @param edge
 		 *            The encountered edge
+		 * 
+		 * @since 1.6
 		 */
 		public void visitEdge(E edge);
 

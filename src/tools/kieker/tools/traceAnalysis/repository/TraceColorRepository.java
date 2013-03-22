@@ -270,6 +270,8 @@ public class TraceColorRepository extends AbstractRepository {
 	 * This class groups the data required for a {@link TraceColorRepository}.
 	 * 
 	 * @author Holger Knoche
+	 * 
+	 * @since 1.6
 	 */
 	public static class TraceColorRepositoryData {
 		private final ConcurrentMap<Long, Color> colorMap;

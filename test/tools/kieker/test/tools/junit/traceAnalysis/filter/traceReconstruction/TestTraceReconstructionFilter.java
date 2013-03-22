@@ -42,6 +42,8 @@ import kieker.test.tools.util.ExecutionFactory;
  * A test for the {@link TraceReconstructionFilter}.
  * 
  * @author Andre van Hoorn, Nils Christian Ehmke
+ * 
+ * @since 1.2
  */
 public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 

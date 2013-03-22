@@ -23,6 +23,8 @@ import kieker.monitoring.timer.ITimeSource;
 
 /**
  * @author Andre van Hoorn
+ * 
+ * @since 0.91
  */
 public final class HelloWorld {
 

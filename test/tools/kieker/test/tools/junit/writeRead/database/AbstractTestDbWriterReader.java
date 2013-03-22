@@ -35,6 +35,8 @@ import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public abstract class AbstractTestDbWriterReader extends AbstractWriterReaderTest {
 

@@ -39,6 +39,8 @@ import kieker.test.tools.util.BookstoreExecutionFactory;
 
 /**
  * @author Andre van Hoorn
+ * 
+ * @since 1.5
  */
 public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractKiekerTest {
 	// private static final Log LOG = LogFactory.getLog(TestEventTrace2ExecutionTraceFilter.class);

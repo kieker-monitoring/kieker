@@ -38,7 +38,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
 /**
  * @author Andre van Hoorn
  * 
- * @since 1.2
+ * @since 1.5
  */
 public class TestTraceIdFilter extends AbstractKiekerTest {
 

@@ -34,6 +34,8 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
 
 /**
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 @Plugin(description = "Uses the incoming data to enrich the connected repository with data for the aggregated allocation component operation call tree",
 		repositoryPorts = {
@@ -91,6 +93,8 @@ public class AggregatedAllocationComponentOperationCallTreeFilter extends Abstra
 
 /**
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 class AggregatedAllocationComponentOperationCallTreeNode extends AbstractAggregatedCallTreeNode<AllocationComponentOperationPair> {
 

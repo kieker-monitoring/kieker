@@ -20,6 +20,8 @@ package kieker.tools.traceAnalysis.systemModel;
  * This is the abstract base for a trace (like a message trace e.g.).
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.2
  */
 public abstract class AbstractTrace {
 

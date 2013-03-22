@@ -26,6 +26,8 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
  * and keeps track of the minimal, maximal and average response time.
  * 
  * @author Holger Knoche
+ * 
+ * @since 1.5
  */
 public class ResponseTimeDecoration extends AbstractVertexDecoration {
 

@@ -189,6 +189,7 @@ public abstract class AbstractTestSpringMethodInterceptor extends AbstractKieker
 	 * 
 	 * @author Andre van Hoorn
 	 * 
+	 * @since 1.5
 	 */
 	class BasicMethodInvocation implements MethodInvocation {
 		private final Method myMethod;
@@ -287,6 +288,8 @@ public abstract class AbstractTestSpringMethodInterceptor extends AbstractKieker
 
 	/**
 	 * @author Andre van Hoorn
+	 * 
+	 * @since 1.5
 	 */
 	public abstract static class AbstractPseudoComponent { // NOPMD (AbstractClassWithoutAbstractMethod)
 		private final String pseudoMethodName;
@@ -302,6 +305,8 @@ public abstract class AbstractTestSpringMethodInterceptor extends AbstractKieker
 
 	/**
 	 * @author Andre van Hoorn
+	 * 
+	 * @since 1.5
 	 */
 	public static final class Bookstore extends AbstractPseudoComponent { // NOPMD (TestClassWithoutTestCases, reported because classname ends with "Test")
 		Bookstore() {
@@ -313,6 +318,8 @@ public abstract class AbstractTestSpringMethodInterceptor extends AbstractKieker
 
 	/**
 	 * @author Andre van Hoorn
+	 * 
+	 * @since 1.5
 	 */
 	public static final class CRM extends AbstractPseudoComponent { // NOPMD (TestClassWithoutTestCases, reported because classname ends with "Test")
 		CRM() {
@@ -324,6 +331,8 @@ public abstract class AbstractTestSpringMethodInterceptor extends AbstractKieker
 
 	/**
 	 * @author Andre van Hoorn
+	 * 
+	 * @since 1.5
 	 */
 	public static final class Catalog extends AbstractPseudoComponent { // NOPMD (TestClassWithoutTestCases, reported because classname ends with "Test")
 		Catalog() {

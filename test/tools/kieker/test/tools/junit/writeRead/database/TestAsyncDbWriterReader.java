@@ -24,6 +24,8 @@ import kieker.monitoring.writer.database.AsyncDbWriter;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public final class TestAsyncDbWriterReader extends AbstractTestDbWriterReader { // NOPMD (TestClassWithoutTestCases)
 

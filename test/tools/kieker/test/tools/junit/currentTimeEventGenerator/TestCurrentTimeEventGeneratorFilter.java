@@ -39,6 +39,8 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * {@link CurrentTimeEventGenerationFilter#inputRecord(kieker.common.record.IMonitoringRecord)}.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.3
  */
 public class TestCurrentTimeEventGeneratorFilter extends AbstractKiekerTest {
 

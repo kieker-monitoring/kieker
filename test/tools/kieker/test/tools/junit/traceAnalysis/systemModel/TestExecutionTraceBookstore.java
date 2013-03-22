@@ -42,6 +42,8 @@ import kieker.test.tools.util.ExecutionFactory;
 /**
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.2
  */
 public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 	private static final long TRACE_ID = 69898L;

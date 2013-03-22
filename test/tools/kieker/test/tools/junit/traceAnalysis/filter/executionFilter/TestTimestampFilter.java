@@ -37,6 +37,8 @@ import kieker.test.tools.util.ExecutionFactory;
  * @author Andre van Hoorn, Nils Christian Ehmke
  * 
  * @deprecated to be removed in Kieker 1.8
+ * 
+ * @since 1.2
  */
 @Deprecated
 @SuppressWarnings("deprecation")

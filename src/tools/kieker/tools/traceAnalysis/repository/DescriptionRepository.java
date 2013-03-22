@@ -215,6 +215,8 @@ public class DescriptionRepository extends AbstractRepository {
 	 * This class groups the data required for a {@link DescriptionRepository}.
 	 * 
 	 * @author Holger Knoche
+	 * 
+	 * @since 1.6
 	 */
 	public static class DescriptionRepositoryData {
 

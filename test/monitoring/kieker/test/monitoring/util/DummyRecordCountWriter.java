@@ -27,6 +27,8 @@ import kieker.monitoring.writer.DummyWriter;
  * A writer that simply counts the number of records of type DummyRecord received.
  * 
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.3
  */
 public final class DummyRecordCountWriter extends DummyWriter {
 	private final AtomicInteger numDummyRecords = new AtomicInteger(0);
