@@ -21,6 +21,8 @@ import kieker.common.record.flow.ITraceRecord;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public abstract class AbstractTraceEvent extends AbstractEvent implements ITraceRecord {
 	private static final long serialVersionUID = 1L;

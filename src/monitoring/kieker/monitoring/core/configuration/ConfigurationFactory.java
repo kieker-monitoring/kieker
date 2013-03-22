@@ -32,6 +32,8 @@ import kieker.monitoring.core.controller.MonitoringController;
  * A ConfigurationFactory for kieker.monitoring.
  * 
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.3
  */
 public final class ConfigurationFactory implements Keys {
 	private static final Log LOG = LogFactory.getLog(ConfigurationFactory.class);

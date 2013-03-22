@@ -23,6 +23,8 @@ import kieker.common.record.IMonitoringRecord;
  * Internal record type used exclusively by the monitoring subsystem.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public final class RegistryRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
 	private static final long serialVersionUID = 4566332478835872121L;

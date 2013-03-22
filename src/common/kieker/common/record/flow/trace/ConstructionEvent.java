@@ -20,6 +20,8 @@ import kieker.common.record.flow.IObjectRecord;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public class ConstructionEvent extends AbstractTraceEvent implements IObjectRecord {
 	private static final long serialVersionUID = -7484030624827825815L;

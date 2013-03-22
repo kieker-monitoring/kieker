@@ -21,6 +21,8 @@ import kieker.common.record.flow.IOperationRecord;
 
 /**
  * @author Andre van Hoorn, Holger Knoche, Jan Waller
+ * 
+ * @since 1.5
  */
 public class CallOperationEvent extends AbstractOperationEvent implements ICallRecord {
 	private static final long serialVersionUID = 1193776099551467929L;

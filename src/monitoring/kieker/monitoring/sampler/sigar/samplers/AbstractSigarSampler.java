@@ -27,6 +27,7 @@ import kieker.monitoring.core.sampler.ISampler;
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.3
  */
 public abstract class AbstractSigarSampler implements ISampler {
 	protected final SigarProxy sigar;

@@ -28,6 +28,8 @@ import kieker.monitoring.core.controller.MonitoringController;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public enum TraceRegistry { // Singleton (Effective Java #3)
 	INSTANCE;

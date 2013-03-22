@@ -32,6 +32,7 @@ import kieker.monitoring.timer.ITimeSource;
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.3
  */
 public class CPUsCombinedPercSampler extends AbstractSigarSampler {
 

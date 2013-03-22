@@ -28,6 +28,8 @@ import kieker.monitoring.probe.IMonitoringProbe;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.2
  */
 @Aspect
 public abstract class AbstractAspectJProbe implements IMonitoringProbe {

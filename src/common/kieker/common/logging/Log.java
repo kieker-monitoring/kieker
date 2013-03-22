@@ -47,6 +47,8 @@ public interface Log { // NOCS (Name of Interface)
 	 * </p>
 	 * 
 	 * @return true if debug is enabled in the underlying logger.
+	 * 
+	 * @since 1.5
 	 */
 	public boolean isDebugEnabled();
 
@@ -57,6 +59,8 @@ public interface Log { // NOCS (Name of Interface)
 	 * 
 	 * @param message
 	 *            log this message
+	 * 
+	 * @since 1.5
 	 */
 	public void debug(String message);
 
@@ -69,6 +73,8 @@ public interface Log { // NOCS (Name of Interface)
 	 *            log this message
 	 * @param t
 	 *            log this cause
+	 * 
+	 * @since 1.5
 	 */
 	public void debug(String message, Throwable t);
 
@@ -79,6 +85,8 @@ public interface Log { // NOCS (Name of Interface)
 	 * 
 	 * @param message
 	 *            log this message
+	 * 
+	 * @since 1.5
 	 */
 	public void info(String message);
 
@@ -91,6 +99,8 @@ public interface Log { // NOCS (Name of Interface)
 	 *            log this message
 	 * @param t
 	 *            log this cause
+	 * 
+	 * @since 1.5
 	 */
 	public void info(String message, Throwable t);
 
@@ -101,6 +111,8 @@ public interface Log { // NOCS (Name of Interface)
 	 * 
 	 * @param message
 	 *            log this message
+	 * 
+	 * @since 1.5
 	 */
 	public void warn(String message);
 
@@ -113,6 +125,8 @@ public interface Log { // NOCS (Name of Interface)
 	 *            log this message
 	 * @param t
 	 *            log this cause
+	 * 
+	 * @since 1.5
 	 */
 	public void warn(String message, Throwable t);
 
@@ -123,6 +137,8 @@ public interface Log { // NOCS (Name of Interface)
 	 * 
 	 * @param message
 	 *            log this message
+	 * 
+	 * @since 1.5
 	 */
 	public void error(String message);
 
@@ -135,6 +151,8 @@ public interface Log { // NOCS (Name of Interface)
 	 *            log this message
 	 * @param t
 	 *            log this cause
+	 * 
+	 * @since 1.5
 	 */
 	public void error(String message, Throwable t);
 }

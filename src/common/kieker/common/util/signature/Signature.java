@@ -22,6 +22,8 @@ import java.util.Arrays;
  * A signature for a software operation. Note that this is just an operation signature declaration which is not bound to an implementing class or interface.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 public class Signature {
 

@@ -26,6 +26,8 @@ import kieker.common.logging.LogFactory;
  * in- and out-interceptors.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.0
  */
 public final class SOAPTraceRegistry {
 	private static final Log LOG = LogFactory.getLog(SOAPTraceRegistry.class);

@@ -20,6 +20,8 @@ import kieker.common.record.flow.IExceptionRecord;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public class AfterOperationFailedEvent extends AfterOperationEvent implements IExceptionRecord {
 

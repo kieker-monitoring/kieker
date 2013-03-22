@@ -31,6 +31,7 @@ import kieker.monitoring.core.signaturePattern.SignatureFactory;
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.3
  */
 public class MemSwapUsageSampler extends AbstractSigarSampler {
 
