@@ -16,8 +16,6 @@
 
 package kieker.tools.tslib;
 
-import java.util.Deque;
-
 /**
  * 
  * @author Tom Frotscher
@@ -51,10 +49,4 @@ public interface ITimeSeriesPointsBuffer<T> {
 	 */
 	public void printBuffer();
 
-	/**
-	 * Returns the internal held collection.
-	 * 
-	 * @return Returned Collection
-	 */
-	public Deque<T> getBuffer();
 }

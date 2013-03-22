@@ -16,8 +16,7 @@
 
 package kieker.tools.tslib;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * This class is using a Deque to implement a bounded FifoBuffer.
@@ -26,9 +25,8 @@ import java.util.Deque;
  * 
  * @param <T>
  */
-public class TimeSeriesPointsBuffer<T> implements ITimeSeriesPointsBuffer<T> {
+public class TimeSeriesPointsBuffer<T> extends CopyOnWriteArrayList<T> {
 
-	private final Deque<T> buffer;
 	private final int capacity;
 	private boolean unbounded;
 
@@ -40,49 +38,45 @@ public class TimeSeriesPointsBuffer<T> implements ITimeSeriesPointsBuffer<T> {
 	 *            Capacity of the Buffer
 	 */
 	public TimeSeriesPointsBuffer(final int cap) {
+		super();
 		if (cap <= 0) {
 			this.capacity = cap;
 			this.unbounded = true;
-			this.buffer = new ArrayDeque<T>(1);
 		} else {
 			this.capacity = cap;
 			this.unbounded = false;
-			this.buffer = new ArrayDeque<T>(this.capacity);
 		}
 	}
 
-	public void add(final T o) {
+	@Override
+	public boolean add(final T o) {
 		if (this.unbounded) {
-			this.buffer.add(o);
+			return super.add(o);
 		} else {
-			this.addBounded(o);
+			return this.addBounded(o);
 		}
 	}
 
-	private void addBounded(final T o) {
-		if (this.buffer.size() == this.capacity) {
-			this.buffer.remove();
-			this.buffer.add(o);
+	private boolean addBounded(final T o) {
+		if (this.size() == this.capacity) {
+			super.remove(0);
+			return super.add(o);
 		} else {
-			this.buffer.add(o);
+			return super.add(o);
 		}
 
 	}
 
 	public void remove() {
-		this.buffer.remove();
+		super.remove(0);
 	}
 
 	public int getSize() {
-		return this.buffer.size();
+		return this.size();
 	}
 
 	public void printBuffer() {
-		System.out.println(this.buffer.toString());
-	}
-
-	public Deque<T> getBuffer() {
-		return this.buffer;
+		System.out.println(this.toString());
 	}
 
 }

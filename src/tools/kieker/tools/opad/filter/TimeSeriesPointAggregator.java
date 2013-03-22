@@ -62,7 +62,6 @@ public class TimeSeriesPointAggregator extends AbstractFilterPlugin {
 		this.aggregationList = new ArrayList<NamedDoubleTimeSeriesPoint>();
 		this.aggregationSpan = configuration.getIntProperty(CONFIG_PROPERTY_NAME_AGGREGATION_SPAN);
 		// this.timeUnit = configuration.getStringProperty(CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT);
-		this.aggregationStartTime = System.currentTimeMillis();
 	}
 
 	@Deprecated
@@ -79,17 +78,18 @@ public class TimeSeriesPointAggregator extends AbstractFilterPlugin {
 	public void inputTSPoint(final NamedDoubleTimeSeriesPoint input) {
 		// First TSPoint Event, so set the Starttimer
 		if (this.aggregationList.size() == 0) {
-			this.aggregationStartTime = System.currentTimeMillis();
+			this.aggregationStartTime = input.getTime().getTime();
 		}
-		// Next TSPoint in the Span
-		if ((System.currentTimeMillis() - this.aggregationStartTime) < this.aggregationSpan) {
+		// Next TSPoint in the Span, so collect it
+		if ((input.getTime().getTime() - this.aggregationStartTime) <= this.aggregationSpan) {
 			this.aggregationList.add(input);
 			// Span exceeded, calculate Mean
 		} else {
 			final NamedDoubleTimeSeriesPoint result = this.calculateMean(input.getName());
 			this.aggregationList.clear();
 			this.aggregationList.add(input);
-			this.aggregationStartTime = System.currentTimeMillis();
+			// System.out.println("Mean: " + result.getValue() + " - " + result.getTime().getTime());
+			this.aggregationStartTime = this.aggregationStartTime + this.aggregationSpan;
 			super.deliver(OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, result);
 		}
 	}
@@ -101,6 +101,6 @@ public class TimeSeriesPointAggregator extends AbstractFilterPlugin {
 			a[i] = this.aggregationList.get(i).getValue();
 		}
 		final double meanTSValue = StatUtils.mean(a);
-		return new NamedDoubleTimeSeriesPoint(new Date(System.currentTimeMillis()), meanTSValue, n);
+		return new NamedDoubleTimeSeriesPoint(new Date(this.aggregationStartTime + this.aggregationSpan), meanTSValue, n);
 	}
 }

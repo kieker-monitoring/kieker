@@ -87,7 +87,7 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 	}
 
 	public List<ITimeSeriesPoint<T>> getPoints() {
-		return new ArrayList<ITimeSeriesPoint<T>>(this.points.getBuffer());
+		return new ArrayList<ITimeSeriesPoint<T>>(this.points);
 	}
 
 	public List<T> getValues() {
