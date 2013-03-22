@@ -30,7 +30,7 @@ import kieker.tools.util.CLIHelpFormatter;
 /**
  * Externalized Strings from {@link TraceAnalysisTool}.
  * 
- * @author Robert von Massow
+ * @author Robert von Massow, Andre van Hoorn
  * 
  * @since 1.2
  */
@@ -180,7 +180,7 @@ public final class Constants {
 						.hasArg()
 						.isRequired(false)
 						.withDescription(
-								"Color traces according to the given color map given as a properties file (key: trace ID, value: color in hex format, e.g., 0xff0000 for red; use trace ID 'default' to specify the default color)")
+								"Color traces according to the given color map given as a properties file (key: trace ID, value: color in hex format, e.g., 0xff0000 for red; use trace ID 'default' to specify the default color)") // NOCS
 						.withArgName(COLORING_FILE_OPTION_NAME).create());
 		SORTED_OPTION_LIST
 				.add(OptionBuilder
