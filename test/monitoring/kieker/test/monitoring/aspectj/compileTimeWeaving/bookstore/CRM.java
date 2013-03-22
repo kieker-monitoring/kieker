@@ -28,8 +28,8 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
  *         Kieker and publication under an open source licence
  *         2007-04-18: Initial version
  * 
+ * @since < 0.9
  */
-
 public final class CRM {
 
 	private CRM() {}

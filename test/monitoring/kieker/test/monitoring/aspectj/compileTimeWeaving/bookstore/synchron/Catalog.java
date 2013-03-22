@@ -31,6 +31,7 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
  *         Refactoring for the first release of Kieker and publication under an
  *         open source licence 2007-04-18: Initial version
  * 
+ * @since 0.91
  */
 public final class Catalog {
 

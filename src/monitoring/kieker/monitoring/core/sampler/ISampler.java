@@ -20,6 +20,8 @@ import kieker.monitoring.core.controller.IMonitoringController;
 
 /**
  * @author Andre van Hoorn
+ * 
+ * @since 1.3
  */
 public interface ISampler {
 
@@ -29,6 +31,8 @@ public interface ISampler {
 	 * 
 	 * @throws Exception
 	 *             thrown to indicate an error.
+	 * 
+	 * @since 1.3
 	 */
 	public void sample(final IMonitoringController monitoringController) throws Exception;
 }

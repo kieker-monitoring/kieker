@@ -23,6 +23,8 @@ import kieker.common.record.flow.trace.Trace;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public final class TraceEventRecords {
 	private final Trace trace;

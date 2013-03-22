@@ -23,8 +23,9 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
  * monitoring component.
  * 
  * @author Matthias Rohr
+ * 
+ * @since < 0.9
  */
-
 public final class CRM {
 
 	private CRM() {}

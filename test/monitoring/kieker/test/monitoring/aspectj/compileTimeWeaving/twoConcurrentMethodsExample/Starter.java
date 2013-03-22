@@ -29,6 +29,7 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
  *         2009/02/20: Reduced text length
  *         2008/10/20: Initial version
  * 
+ * @since 0.91
  */
 public class Starter extends Thread {
 

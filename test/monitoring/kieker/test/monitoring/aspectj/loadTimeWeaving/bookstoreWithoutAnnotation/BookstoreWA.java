@@ -27,8 +27,9 @@ import java.util.List;
  * to demonstrate how to instrument programs for that no sources are available.
  * 
  * @author Matthias Rohr
+ * 
+ * @since 0.9
  */
-
 public class BookstoreWA extends Thread {
 	public static final List<BookstoreWA> BOOKSTORE_SCENARIOS = new ArrayList<BookstoreWA>();
 

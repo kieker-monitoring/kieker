@@ -24,8 +24,8 @@ package kieker.test.monitoring.aspectj.loadTimeWeaving.bookstoreWithoutAnnotatio
  *         History:
  *         2008/08/30: Created based on CRM.java without Annotations
  * 
+ * @since 0.9
  */
-
 public final class CRMWA {
 
 	private CRMWA() {}

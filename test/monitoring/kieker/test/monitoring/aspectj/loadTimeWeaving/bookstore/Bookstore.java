@@ -28,8 +28,8 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
  *         Kieker and publication under an open source licence
  *         2007-04-18: Initial version
  * 
+ * @since < 0.9
  */
-
 public class Bookstore extends Thread {
 	private static final int NUM_REQUESTS = 1000;
 	private static final int INTER_REQUEST_TIME = 5;

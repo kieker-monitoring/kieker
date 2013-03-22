@@ -25,6 +25,8 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.2
  */
 public class TestOperationExecutionRecordEquals extends AbstractKiekerTest { // NOCS (MissingCtorCheck)
 

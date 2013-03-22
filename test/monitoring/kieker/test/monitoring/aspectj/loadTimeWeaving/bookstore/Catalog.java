@@ -23,8 +23,8 @@ package kieker.test.monitoring.aspectj.loadTimeWeaving.bookstore;
  *         of Kieker and publication under an open source licence 2007-04-18:
  *         Initial version
  * 
+ * @since < 0.9
  */
-
 public final class Catalog {
 
 	private Catalog() {}

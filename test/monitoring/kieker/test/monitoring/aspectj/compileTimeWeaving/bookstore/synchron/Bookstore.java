@@ -37,8 +37,8 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
  *         Kieker and publication under an open source licence
  *         2007-04-18: Initial version
  * 
+ * @since 0.91
  */
-
 public class Bookstore extends Thread {
 	public static final List<Bookstore> BOOKSTORE_SCENARIOS = new ArrayList<Bookstore>();
 

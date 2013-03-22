@@ -47,6 +47,8 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public final class TestAnalysis {
 	private static final Log LOG = LogFactory.getLog(TestAnalysis.class);

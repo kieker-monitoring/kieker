@@ -26,6 +26,8 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
  * monitoring component.
  * 
  * @author Matthias Rohr
+ * 
+ * @since < 0.9
  */
 public class Bookstore extends Thread {
 	public static final List<Bookstore> BOOKSTORE_SCENARIOS = new ArrayList<Bookstore>();

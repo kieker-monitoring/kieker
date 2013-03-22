@@ -25,6 +25,8 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.5
  */
 public class TestOperationCallEvent extends AbstractKiekerTest {
 

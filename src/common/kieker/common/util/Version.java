@@ -21,6 +21,8 @@ package kieker.common.util;
  * set during build (String replacement task within build.xml).
  * 
  * @author Andre van Hoorn
+ * 
+ * @since < 0.9
  */
 public final class Version {
 	/*

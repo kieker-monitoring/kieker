@@ -30,6 +30,7 @@ import kieker.monitoring.probe.manual.BranchingProbe;
  *         Kieker and publication under an open source licence
  *         2007-04-18: Initial version
  * 
+ * @since < 0.9
  */
 public final class Catalog {
 

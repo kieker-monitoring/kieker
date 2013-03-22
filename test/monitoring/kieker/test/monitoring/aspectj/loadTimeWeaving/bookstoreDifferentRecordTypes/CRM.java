@@ -22,8 +22,9 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
  * A simple test and demonstration scenario for Kieker's monitoring component.
  * 
  * @author Matthias Rohr
+ * 
+ * @since < 0.9
  */
-
 public final class CRM {
 
 	private CRM() {}

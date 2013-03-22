@@ -22,6 +22,8 @@ import kieker.common.record.flow.IFlowRecord;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public final class Trace extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IFlowRecord {
 

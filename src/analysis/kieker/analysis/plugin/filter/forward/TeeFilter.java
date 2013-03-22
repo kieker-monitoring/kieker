@@ -37,6 +37,8 @@ import kieker.common.logging.LogFactory;
  * A simple message is printed to a configurable stream and all objects are forwarded to the output port.
  * 
  * @author Matthias Rohr, Jan Waller
+ * 
+ * @since 1.2
  */
 @Plugin(description = "A filter to print the object to a configured stream",
 		outputPorts = @OutputPort(name = TeeFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming object", eventTypes = { Object.class }),

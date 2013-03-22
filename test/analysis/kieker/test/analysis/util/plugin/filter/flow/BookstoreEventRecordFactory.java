@@ -30,6 +30,8 @@ import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
  * A starter method for this factory is implemented in kieker.test.tools.junit.traceAnalysis.util.BookstoreEventRecordFactoryStarter.
  * 
  * @author Andre van Hoorn, Holger Knoche, Jan Waller
+ * 
+ * @since 1.5
  */
 public final class BookstoreEventRecordFactory {
 	// private static final Log LOG = LogFactory.getLog(BookstoreEventRecordFactory.class);

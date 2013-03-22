@@ -33,6 +33,8 @@ import kieker.common.configuration.Configuration;
  * corresponding method.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.4
  */
 @Plugin(
 		description = "A filter counting the elements flowing through this filter",

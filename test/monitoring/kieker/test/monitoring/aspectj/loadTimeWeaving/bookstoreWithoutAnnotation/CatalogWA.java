@@ -22,8 +22,8 @@ package kieker.test.monitoring.aspectj.loadTimeWeaving.bookstoreWithoutAnnotatio
  * @author Matthias Rohr History: 2008/08/30: Created based on Catalog.java
  *         without Annotations
  * 
+ * @since 0.9
  */
-
 public final class CatalogWA {
 
 	private CatalogWA() {}

@@ -30,6 +30,7 @@ import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.5
  */
 public class TestOperationExecutionRecordConstructors extends AbstractKiekerTest {
 

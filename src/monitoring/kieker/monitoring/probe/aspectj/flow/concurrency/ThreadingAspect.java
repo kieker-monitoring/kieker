@@ -29,6 +29,8 @@ import kieker.monitoring.timer.ITimeSource;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 @Aspect
 public class ThreadingAspect extends AbstractAspectJProbe {

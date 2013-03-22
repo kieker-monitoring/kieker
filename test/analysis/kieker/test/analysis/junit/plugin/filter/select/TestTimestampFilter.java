@@ -34,6 +34,8 @@ import kieker.test.common.junit.AbstractKiekerTest;
 /**
  * 
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.2
  */
 public final class TestTimestampFilter extends AbstractKiekerTest {
 

@@ -28,6 +28,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.5
  */
 public class TestClassOperationSignaturePair extends AbstractKiekerTest {
 

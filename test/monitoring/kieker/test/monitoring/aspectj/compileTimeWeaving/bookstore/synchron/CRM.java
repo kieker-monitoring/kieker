@@ -27,8 +27,9 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
  * test the (negative) performance influence of synchronized method invocation.
  * 
  * @author Matthias Rohr
+ * 
+ * @since 0.91
  */
-
 public final class CRM {
 
 	private CRM() {}
