@@ -21,7 +21,7 @@ import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 
 /**
- * This is an additional checkstyle check which makes sure that <b>only</b> classes, interfaces, annotations and methods within interfaces have a since tag.
+ * This is an additional checkstyle check which makes sure that <b>only</b> classes, interfaces, annotations, enums and methods within interfaces have a since tag.
  * 
  * @author Nils Christian Ehmke
  * 
@@ -30,6 +30,7 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
  * @see MissingSinceTagCheck
  */
 public class NotAllowedSinceTagCheck extends Check {
+
 	/**
 	 * Creates a new instance of this class.
 	 */
@@ -46,20 +47,9 @@ public class NotAllowedSinceTagCheck extends Check {
 
 	@Override
 	public void visitToken(final DetailAST ast) {
-		if (CSUtility.sinceTagAvailable(this, ast) && ((ast.getType() == TokenTypes.VARIABLE_DEF) || !(this.parentIsInterface(ast)))) {
+		if (CSUtility.sinceTagAvailable(this, ast) && ((ast.getType() == TokenTypes.VARIABLE_DEF) || !(CSUtility.parentIsInterface(ast)))) {
 			this.log(ast.getLineNo(), "@since tag not allowed");
 		}
 	}
 
-	/**
-	 * Checks whether the "parent" (the containing element) of the method is an interface or not.
-	 * 
-	 * @param ast
-	 *            The method to check.
-	 * 
-	 * @return true if and only if the method is contained in an interface.
-	 */
-	private boolean parentIsInterface(final DetailAST ast) {
-		return ast.getParent().getParent().getType() == TokenTypes.INTERFACE_DEF;
-	}
 }

@@ -22,6 +22,8 @@ import kieker.analysis.exception.EventProcessingException;
  * This exceptions shows that something went wrong during the processing of a trace.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 public class TraceProcessingException extends EventProcessingException {
 	private static final long serialVersionUID = 189899L;

@@ -24,6 +24,8 @@ import kieker.tools.traceAnalysis.systemModel.Operation;
  * @author Andre van Hoorn
  * 
  * @deprecated To be removed in Kieker 1.8.
+ * 
+ * @since 1.1
  */
 @Deprecated
 public class CallTreeOperationHashKey {

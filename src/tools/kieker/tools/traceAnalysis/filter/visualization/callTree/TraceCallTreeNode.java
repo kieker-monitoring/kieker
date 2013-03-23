@@ -24,6 +24,8 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
  * This class represents a single node within the trace call tree.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 public class TraceCallTreeNode extends AbstractCallTreeNode<AllocationComponentOperationPair> {
 

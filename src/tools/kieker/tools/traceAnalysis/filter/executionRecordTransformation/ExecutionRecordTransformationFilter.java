@@ -35,6 +35,8 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * transformed into an instance of {@link Execution}.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 @Plugin(description = "A filter transforming OperationExecutionRecords into Execution objects",
 		outputPorts = {

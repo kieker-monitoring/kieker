@@ -40,6 +40,8 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * the output port.
  * 
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
+ * 
+ * @since 1.2
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class),
 		outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH))

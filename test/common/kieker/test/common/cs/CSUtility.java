@@ -16,6 +16,9 @@
 
 package kieker.test.common.cs;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import com.puppycrawl.tools.checkstyle.api.Check;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.FileContents;
@@ -70,6 +73,34 @@ public final class CSUtility {
 		}
 
 		return false;
+	}
+
+	public static Collection<DetailAST> getMethodsFromClass(final DetailAST ast) {
+		final Collection<DetailAST> result = new ArrayList<DetailAST>();
+
+		final DetailAST objBlock = ast.findFirstToken(TokenTypes.OBJBLOCK);
+
+		DetailAST child = objBlock.getFirstChild();
+		while (child != null) {
+			if (child.getType() == TokenTypes.METHOD_DEF) {
+				result.add(child);
+			}
+			child = child.getNextSibling();
+		}
+
+		return result;
+	}
+
+	/**
+	 * Checks whether the "parent" (the containing element) of the method is an interface or not.
+	 * 
+	 * @param ast
+	 *            The method to check.
+	 * 
+	 * @return true if and only if the method is contained in an interface.
+	 */
+	public static boolean parentIsInterface(final DetailAST ast) {
+		return ast.getParent().getParent().getType() == TokenTypes.INTERFACE_DEF;
 	}
 
 	/**

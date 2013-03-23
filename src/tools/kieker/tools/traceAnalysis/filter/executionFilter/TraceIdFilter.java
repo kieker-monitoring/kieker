@@ -32,6 +32,8 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
  * @author Andre van Hoorn
  * 
  * @deprecated To be removed in Kieker 1.8 (Use {@link kieker.analysis.plugin.filter.select.TraceIdFilter instead}).
+ * 
+ * @since 1.2
  */
 @SuppressWarnings("deprecation")
 @Deprecated

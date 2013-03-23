@@ -45,6 +45,8 @@ import kieker.tools.util.LoggingTimestampConverter;
 
 /**
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 @Plugin(description = "Uses the incoming data to enrich the connected repository with the reconstructed traces",
 		outputPorts = {

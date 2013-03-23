@@ -28,6 +28,8 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * This is an abstract base for components which process message traces.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public abstract class AbstractMessageTraceProcessingFilter extends AbstractTraceProcessingFilter {

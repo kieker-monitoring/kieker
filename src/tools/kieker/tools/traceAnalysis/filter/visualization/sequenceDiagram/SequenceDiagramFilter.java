@@ -132,6 +132,8 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 
 	/**
 	 * @author Andre van Hoorn
+	 * 
+	 * @since 1.2
 	 */
 	public static enum SDModes {
 		ASSEMBLY, ALLOCATION

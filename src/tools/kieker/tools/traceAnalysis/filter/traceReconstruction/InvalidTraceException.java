@@ -20,6 +20,8 @@ package kieker.tools.traceAnalysis.filter.traceReconstruction;
  * This exception can be used to mark an invalid trace.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 0.95a
  */
 public class InvalidTraceException extends Exception {
 

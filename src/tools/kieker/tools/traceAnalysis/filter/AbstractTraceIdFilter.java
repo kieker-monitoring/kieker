@@ -28,6 +28,8 @@ import kieker.common.configuration.Configuration;
  * @author Andre van Hoorn
  * 
  * @deprecated To be removed in Kieker 1.8
+ * 
+ * @since 1.5
  */
 @Deprecated
 public abstract class AbstractTraceIdFilter extends kieker.analysis.plugin.filter.AbstractFilterPlugin {

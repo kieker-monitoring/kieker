@@ -49,6 +49,8 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
  * this plugin is not delegated in any way.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 @Plugin(description = "A filter allowing to write the incoming data into a calling tree",
 		repositoryPorts = {

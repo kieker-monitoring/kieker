@@ -27,6 +27,8 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
  *            The type of the entity to be stored in the nodes linked by this edge.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 public class WeightedDirectedCallTreeEdge<T> extends AbstractWeightedEdge<AbstractCallTreeNode<T>, WeightedDirectedCallTreeEdge<T>, MessageTrace> {
 

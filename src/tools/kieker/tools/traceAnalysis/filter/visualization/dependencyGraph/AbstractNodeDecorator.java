@@ -26,6 +26,7 @@ import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
  * 
  * @author Holger Knoche
  * 
+ * @since 1.5
  */
 public abstract class AbstractNodeDecorator {
 

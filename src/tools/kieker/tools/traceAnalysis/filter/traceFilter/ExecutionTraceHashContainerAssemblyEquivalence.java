@@ -24,6 +24,8 @@ import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
 /**
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.2
  */
 class ExecutionTraceHashContainerAssemblyEquivalence extends AbstractExecutionTraceHashContainer {
 

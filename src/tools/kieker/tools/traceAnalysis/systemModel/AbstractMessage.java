@@ -20,6 +20,8 @@ package kieker.tools.traceAnalysis.systemModel;
  * An abstract base for messages which can later be used and combined in a {@link kieker.tools.traceAnalysis.systemModel.MessageTrace}.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 0.95a
  */
 public abstract class AbstractMessage {
 

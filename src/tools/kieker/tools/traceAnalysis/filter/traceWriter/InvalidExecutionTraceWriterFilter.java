@@ -33,6 +33,8 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * @author Andre van Hoorn
+ * 
+ * @since 1.2
  */
 @Plugin(description = "A filter allowing to write the incoming InvalidExecutionTraces into a configured file",
 		repositoryPorts = {

@@ -38,6 +38,8 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * @param <T>
  * 
  * @author Andre van Hoorn, Lena Stoever, Matthias Rohr,
+ * 
+ * @since 1.1
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public abstract class AbstractDependencyGraphFilter<T extends ISystemModelElement> extends AbstractGraphProducingFilter<AbstractDependencyGraph<T>> {

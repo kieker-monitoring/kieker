@@ -41,6 +41,8 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * the single output port.
  * 
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr, Jan Waller
+ * 
+ * @since 0.95a
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class),
 		outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH, eventTypes = { AbstractGraph.class }))

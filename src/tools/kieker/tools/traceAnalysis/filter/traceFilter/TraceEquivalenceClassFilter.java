@@ -42,6 +42,8 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * "messageTraceOutput", "executionTraceOutput".
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.2
  */
 @Plugin(description = "Puts the incoming traces into equivalence classes",
 		outputPorts = {
@@ -86,6 +88,8 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 	 * This enum represents the different trace equivalence class modes.
 	 * 
 	 * @author Andre van Hoorn
+	 * 
+	 * @since 1.2
 	 */
 	public static enum TraceEquivalenceClassModes {
 		/** Disabled equivalence mode */

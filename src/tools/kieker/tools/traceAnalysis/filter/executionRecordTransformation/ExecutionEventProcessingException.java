@@ -21,6 +21,8 @@ import kieker.analysis.exception.EventProcessingException;
 /**
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 public class ExecutionEventProcessingException extends EventProcessingException {
 

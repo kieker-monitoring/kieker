@@ -41,6 +41,8 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * @param <T>
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 @Plugin(description = "An abstract filter for aggregated call trees",
 		repositoryPorts = {

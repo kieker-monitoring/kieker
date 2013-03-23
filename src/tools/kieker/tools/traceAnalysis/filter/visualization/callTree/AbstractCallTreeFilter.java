@@ -54,6 +54,8 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
  * @param <T>
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 @Plugin(repositoryPorts = { @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class) })
 public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProcessingFilter {
@@ -308,8 +310,14 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 
 	/**
 	 * @author Andre van Hoorn
+	 * 
+	 * @since 1.5
 	 */
 	public interface IPairFactory<T> {
+
+		/**
+		 * @since 1.5
+		 */
 		public T createPair(final SynchronousCallMessage callMsg);
 	}
 }

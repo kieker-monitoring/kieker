@@ -16,12 +16,14 @@
 
 package kieker.test.common.cs;
 
+import java.util.Collection;
+
 import com.puppycrawl.tools.checkstyle.api.Check;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 
 /**
- * This is an additional checkstyle check which makes sure that classes, interfaces, annotations and methods within interfaces have a since tag.
+ * This is an additional checkstyle check which makes sure that classes, interfaces, enums, annotations and methods within interfaces have a since tag.
  * 
  * @author Nils Christian Ehmke
  * 
@@ -48,27 +50,24 @@ public class MissingSinceTagCheck extends Check {
 	@Override
 	public void visitToken(final DetailAST ast) {
 		// Do not check private classes etc.
-		if (CSUtility.isPrivate(ast)) {
-			return;
-		}
+		if (!CSUtility.isPrivate(ast)) {
+			this.checkSinceTag(ast);
 
-		// Check whether the since tag is there
-		if (!CSUtility.sinceTagAvailable(this, ast)) {
-			this.log(ast.getLineNo(), "@since tag missing");
-		}
-
-		// If we have an interface, the methods have to get the tag as well
-		if (ast.getType() == TokenTypes.INTERFACE_DEF) {
-			final DetailAST objBlock = ast.findFirstToken(TokenTypes.OBJBLOCK);
-			DetailAST child = objBlock.getFirstChild();
-			// Run through all children
-			while (child != null) {
-				if (child.getType() == TokenTypes.METHOD_DEF) {
-					this.visitToken(child);
-				}
-				child = child.getNextSibling();
+			if (ast.getType() == TokenTypes.INTERFACE_DEF) {
+				this.checkSinceTag(CSUtility.getMethodsFromClass(ast));
 			}
 		}
 	}
 
+	private void checkSinceTag(final Collection<DetailAST> asts) {
+		for (final DetailAST ast : asts) {
+			this.checkSinceTag(ast);
+		}
+	}
+
+	private void checkSinceTag(final DetailAST ast) {
+		if (!CSUtility.sinceTagAvailable(this, ast)) {
+			this.log(ast.getLineNo(), "@since tag missing");
+		}
+	}
 }

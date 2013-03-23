@@ -29,6 +29,8 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
  *            The type of the entity to be stored in this node.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 public abstract class AbstractAggregatedCallTreeNode<T> extends AbstractCallTreeNode<T> {
 

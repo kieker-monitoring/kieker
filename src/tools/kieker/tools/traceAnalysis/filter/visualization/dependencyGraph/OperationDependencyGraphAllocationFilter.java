@@ -46,6 +46,8 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
  * this plugin is not delegated in any way.
  * 
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
+ * 
+ * @since 1.1
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class),
 		outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH, eventTypes = { AbstractGraph.class }))

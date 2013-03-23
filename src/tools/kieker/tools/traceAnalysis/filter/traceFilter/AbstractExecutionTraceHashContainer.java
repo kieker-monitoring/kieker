@@ -20,6 +20,8 @@ import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
 
 /**
  * @author Andre van Hoorn
+ * 
+ * @since 1.2
  */
 abstract class AbstractExecutionTraceHashContainer { // NOPMD (abstract class without abstract methods)
 
