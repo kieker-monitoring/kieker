@@ -814,6 +814,10 @@
 				<include name="hamcrest-core-*.jar" />
 				<include name="junit-*.jar" />
 			</fileset>
+			<!-- This part is necessary as one of the tests uses helper methods from this jar. -->
+			<fileset dir="${lib.dir}/framework-libs/cxf">
+				<include name="cxf-*.jar" />
+			</fileset>
 			<!-- This part is necessary for the additional checkstyle checks - to compile them. -->
 			<fileset dir="${lib.cs.dir}">
 				<include name="**/*.jar" />
