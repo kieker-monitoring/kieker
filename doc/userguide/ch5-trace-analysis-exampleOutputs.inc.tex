@@ -235,6 +235,19 @@ operation dependency graphs for the monitoring data used in this section.
 
 \pagebreak
 
+\subsection{Response Times}
+
+The deployment component dependency, assembly component dependency, deployment operation dependency and the assembly operation dependency graphs can also be decorated with the response times, adding the minimum, the maximum and the average response times of the components. The decoration will be generated with the additional command line parameter \OPT{responseTimes} behind the corresponding \OPT{plot-}command.  An exemplaric graph with response times can be seen in Figure~\ref{fig:appendix:traceAnalysisExample:graphWithRespTimes}.
+
+\begin{figure}[h]
+\includegraphics[scale=0.45]{images/assemblyComponentDependencyGraphWithResponseTimes}
+\caption{Assembly component dependency graph with response times}
+\label{fig:appendix:traceAnalysisExample:graphWithRespTimes}
+\end{figure}
+   
+
+\pagebreak
+
 \subsection{HTML Output of the System Model}
 
 \KiekerTraceAnalysis{} writes an HTML representation of the system model reconstructed %
