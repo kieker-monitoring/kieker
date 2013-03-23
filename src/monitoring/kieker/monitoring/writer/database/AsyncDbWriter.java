@@ -99,6 +99,8 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 
 /**
  * @author Jan Waller
+ * 
+ * @since < 0.9
  */
 final class DbWriterThread extends AbstractAsyncThread {
 	private static final Log LOG = LogFactory.getLog(DbWriterThread.class);

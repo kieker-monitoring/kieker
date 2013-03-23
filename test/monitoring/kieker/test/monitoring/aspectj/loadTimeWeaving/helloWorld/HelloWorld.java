@@ -22,6 +22,8 @@ package kieker.test.monitoring.aspectj.loadTimeWeaving.helloWorld;
  * capabilities of Kieker.
  * 
  * @author Matthias Rohr
+ * 
+ * @since < 0.9
  */
 public final class HelloWorld {
 

@@ -22,8 +22,9 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
  * Experimental test for Kieker in combination with exceptions.
  * 
  * @author Matthias Rohr
+ * 
+ * @since < 0.9
  */
-
 public final class Main {
 
 	private Main() {}

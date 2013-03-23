@@ -26,6 +26,8 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * This is the abstract base for a filter processing execution traces.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public abstract class AbstractExecutionTraceProcessingFilter extends AbstractTraceProcessingFilter {

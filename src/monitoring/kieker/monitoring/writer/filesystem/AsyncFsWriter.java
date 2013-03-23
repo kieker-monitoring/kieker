@@ -29,6 +29,8 @@ import kieker.monitoring.writer.filesystem.map.MappingFileWriter;
 
 /**
  * @author Matthias Rohr, Robert von Massow, Andre van Hoorn, Jan Waller
+ * 
+ * @since < 0.9
  */
 public final class AsyncFsWriter extends AbstractAsyncFSWriter {
 	private static final String PREFIX = AsyncFsWriter.class.getName() + ".";

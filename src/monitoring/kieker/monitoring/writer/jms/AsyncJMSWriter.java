@@ -42,6 +42,8 @@ import kieker.monitoring.writer.AbstractAsyncWriter;
 /**
  * 
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
+ * 
+ * @since 0.95a
  */
 public final class AsyncJMSWriter extends AbstractAsyncWriter {
 	private static final String PREFIX = AsyncJMSWriter.class.getName() + ".";
@@ -82,6 +84,8 @@ public final class AsyncJMSWriter extends AbstractAsyncWriter {
  * History: 2008-09-13: Initial prototype
  * 
  * @author Matthias Rohr, Jan Waller
+ * 
+ * @since < 0.9
  */
 final class JMSWriterThread extends AbstractAsyncThread {
 	private static final Log LOG = LogFactory.getLog(JMSWriterThread.class);

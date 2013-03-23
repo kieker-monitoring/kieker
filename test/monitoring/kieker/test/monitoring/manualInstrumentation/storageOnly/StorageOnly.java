@@ -37,6 +37,8 @@ import kieker.monitoring.core.controller.MonitoringController;
  * the folder specified in kieker.monitoring.properties (default: /tmp).
  * 
  * @author Matthias Rohr
+ * 
+ * @since < 0.9
  */
 public final class StorageOnly {
 	private static final int NUMBER_OF_EVENTS = 1000;

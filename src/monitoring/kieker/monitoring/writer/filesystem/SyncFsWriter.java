@@ -58,6 +58,8 @@ import kieker.monitoring.writer.filesystem.map.MappingFileWriter;
  * outliers described above.
  * 
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
+ * 
+ * @since < 0.9
  */
 public final class SyncFsWriter extends AbstractMonitoringWriter {
 	private static final String PREFIX = SyncFsWriter.class.getName() + ".";
