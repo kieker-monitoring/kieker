@@ -31,6 +31,8 @@ import kieker.common.logging.LogFactory;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public final class DBWriterHelper {
 	private static final Log LOG = LogFactory.getLog(DBWriterHelper.class);

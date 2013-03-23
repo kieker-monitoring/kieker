@@ -24,6 +24,8 @@ import org.aspectj.lang.annotation.Pointcut;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.3
  */
 @Aspect
 public class OperationExecutionAspectAnnotationServlet extends AbstractOperationExecutionAspectServlet {

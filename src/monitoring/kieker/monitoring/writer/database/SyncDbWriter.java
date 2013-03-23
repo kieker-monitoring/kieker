@@ -38,6 +38,8 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
  * Warning! This class is an academic prototype and not intended for usage in any critical system.
  * 
  * @author Jan Waller
+ * 
+ * @since < 0.9
  */
 public final class SyncDbWriter extends AbstractMonitoringWriter {
 	private static final String PREFIX = SyncDbWriter.class.getName() + ".";

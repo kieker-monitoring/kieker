@@ -28,6 +28,8 @@ import kieker.monitoring.timer.ITimeSource;
  * Convenience class which provides a static method to log branching.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 0.95a
  */
 public final class BranchingProbe implements IMonitoringProbe {
 	private static final Log LOG = LogFactory.getLog(BranchingProbe.class);

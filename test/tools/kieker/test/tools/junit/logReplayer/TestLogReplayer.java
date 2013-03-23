@@ -107,6 +107,8 @@ public class TestLogReplayer extends AbstractKiekerTest {
 
 /**
  * @author Andre van Hoorn
+ * 
+ * @since 1.6
  */
 class ListReplayer extends AbstractLogReplayer { // NOPMD
 	private final List<IMonitoringRecord> replayList = new ArrayList<IMonitoringRecord>();

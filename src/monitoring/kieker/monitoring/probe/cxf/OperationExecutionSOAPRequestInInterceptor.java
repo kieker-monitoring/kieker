@@ -41,6 +41,8 @@ import kieker.monitoring.timer.ITimeSource;
  * Look here how to add it to your server config: http://cwiki.apache.org/CXF20DOC/interceptors.html
  * 
  * @author Dennis Kieselhorst, Andre van Hoorn
+ * 
+ * @since 1.0
  */
 public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterceptor implements IMonitoringProbe {
 

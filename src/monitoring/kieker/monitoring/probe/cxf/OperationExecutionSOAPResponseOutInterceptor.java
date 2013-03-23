@@ -43,6 +43,8 @@ import kieker.monitoring.timer.ITimeSource;
  * http://www.nabble.com/Add-%22out-of-band%22-soap-header-using-simple-frontend-td19380093.html
  * 
  * @author Dennis Kieselhorst, Andre van Hoorn
+ * 
+ * @since 1.0
  */
 public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutFilterInterceptor implements IMonitoringProbe {
 

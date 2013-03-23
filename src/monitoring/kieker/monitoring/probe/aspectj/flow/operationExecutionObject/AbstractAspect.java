@@ -34,6 +34,8 @@ import kieker.monitoring.timer.ITimeSource;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 @Aspect
 public abstract class AbstractAspect extends AbstractAspectJProbe {

@@ -21,6 +21,8 @@ import org.aspectj.lang.annotation.Pointcut;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 @Aspect
 public class FullInstrumentation extends AbstractAspect {

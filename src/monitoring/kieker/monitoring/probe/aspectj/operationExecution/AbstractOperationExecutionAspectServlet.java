@@ -30,6 +30,8 @@ import kieker.monitoring.core.registry.SessionRegistry;
 
 /**
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.3
  */
 @Aspect
 public abstract class AbstractOperationExecutionAspectServlet extends AbstractOperationExecutionAspect {

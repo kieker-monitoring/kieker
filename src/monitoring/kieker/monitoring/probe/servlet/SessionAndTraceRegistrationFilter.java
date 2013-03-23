@@ -64,6 +64,7 @@ import kieker.monitoring.timer.ITimeSource;
  * 
  * @author Andre van Hoorn, Marco Luebcke, Jan Waller
  * 
+ * @since 1.5
  */
 public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringProbe {
 	public static final String CONFIG_PROPERTY_NAME_LOG_FILTER_EXECUTION = "logFilterExecution";

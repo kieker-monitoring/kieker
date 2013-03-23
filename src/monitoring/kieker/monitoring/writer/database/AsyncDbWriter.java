@@ -42,6 +42,8 @@ import kieker.monitoring.writer.AbstractAsyncWriter;
  * Warning! This class is an academic prototype and not intended for usage in any critical system.
  * 
  * @author Jan Waller
+ * 
+ * @since < 0.9
  */
 public final class AsyncDbWriter extends AbstractAsyncWriter {
 	private static final String PREFIX = AsyncDbWriter.class.getName() + ".";

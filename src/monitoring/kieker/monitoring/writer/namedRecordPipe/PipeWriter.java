@@ -26,6 +26,8 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
 /**
  * 
  * @author Andre van Hoorn, Jan Waller, Robert von Massow
+ * 
+ * @since 1.3
  */
 public final class PipeWriter extends AbstractMonitoringWriter implements IPipeWriter {
 	private static final String PREFIX = PipeWriter.class.getName() + ".";

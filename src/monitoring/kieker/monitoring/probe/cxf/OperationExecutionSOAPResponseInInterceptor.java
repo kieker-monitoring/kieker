@@ -42,6 +42,8 @@ import kieker.monitoring.timer.ITimeSource;
  */
 /**
  * @author Andre van Hoorn, Dennis Kieselhorst
+ * 
+ * @since 1.0
  */
 public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInterceptor implements IMonitoringProbe {
 	// the CXF logger uses java.util.logging by default, look here how to change it to log4j: http://cwiki.apache.org/CXF20DOC/debugging.html

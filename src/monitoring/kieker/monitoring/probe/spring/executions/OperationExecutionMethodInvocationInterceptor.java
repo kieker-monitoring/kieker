@@ -31,6 +31,8 @@ import kieker.monitoring.timer.ITimeSource;
 
 /**
  * @author Marco Luebcke, Andre van Hoorn, Jan Waller
+ * 
+ * @since 0.91
  */
 public class OperationExecutionMethodInvocationInterceptor implements MethodInterceptor, IMonitoringProbe {
 	private static final Log LOG = LogFactory.getLog(OperationExecutionMethodInvocationInterceptor.class);

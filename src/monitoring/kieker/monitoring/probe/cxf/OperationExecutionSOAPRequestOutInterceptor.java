@@ -43,6 +43,8 @@ import kieker.monitoring.timer.ITimeSource;
 /**
  * 
  * @author Dennis Kieselhorst, Andre van Hoorn
+ * 
+ * @since 0.91
  */
 public class OperationExecutionSOAPRequestOutInterceptor extends SoapHeaderOutFilterInterceptor implements IMonitoringProbe {
 
