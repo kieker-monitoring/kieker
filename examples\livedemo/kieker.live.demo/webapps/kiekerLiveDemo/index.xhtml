@@ -4,11 +4,8 @@
     xmlns:p="http://primefaces.org/ui">
     
 <h:head>
-    <link rel="stylesheet" type="text/css" media="all" href="http://kieker-monitoring.net/wp-content/themes/kieker/style.css" />
-    <link rel='stylesheet' id='meteor-slides-css'  href='http://kieker-monitoring.net/wp-content/plugins/meteor-slides/css/meteor-slides.css?ver=1.0' type='text/css' media='all' />
-	<link rel='stylesheet' id='wp-advanced-rp-css-css'  href='http://kieker-monitoring.net/wp-content/plugins/advanced-recent-posts-widget/css/advanced-recent-posts-widget.css?ver=3.5.1' type='text/css' media='all' />
-	<link rel='stylesheet' id='featured-widget-css-css'  href='http://kieker-monitoring.net/wp-content/plugins/featured-page-widget/templates/featured-page-widget.css?ver=3.5.1' type='text/css' media='all' />
     <title>Kieker Live Demo</title>
+    <link rel="stylesheet" type="text/css" media="all" href="http://kieker-monitoring.net/wp-content/themes/kieker/style.css" />
     <link rel="shortcut icon" type="image/x-icon" href="http://kieker-monitoring.net/wp-content/themes/kieker/favicon.ico" />
     <style>
 		/* Link color */
@@ -42,8 +39,12 @@
 
 <h:body class="page page-template-default">
 	<div id="page" style="background:#FFFFFF">
-		<img src="resources/header_image_small.jpg" width="960" height="125" border="0" alt=""/>
-	    	
+      <div id="header">
+        <img src="resources/header_image_small.jpg" width="960" height="125" border="0" usemap="#kiekermenumap" />
+        <map name="kiekermenumap">
+          <area shape="rect" coords="70,3,350,93" href="http://kieker-monitoring.net" alt="home" title="home" />
+        </map>
+      </div>	    	
 	  	<div class="menu-header">
 	  		<ul id="menu-header_menu" class="menu">
 	  			<li><a href="resources/recordList.jsf">Record List</a></li>
@@ -56,7 +57,7 @@
 		</div>  
 		
 		<div>
-			<p class="ex">For the analysis presented on this page the <a href="http://localhost:8080/jpetstore" target="_blank">JPetStore</a> (an exemplary online shop)
+			<p class="ex">For the analysis presented on this page the <a href="/jpetstore" target="_blank">JPetStore</a> (an exemplary online shop)
 			has been instrumented with <strong>Kieker</strong>.
 			</p>
 			<table width="100%">
