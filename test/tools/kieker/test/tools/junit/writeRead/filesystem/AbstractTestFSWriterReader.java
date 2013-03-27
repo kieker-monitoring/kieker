@@ -73,7 +73,7 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractAsyncFSWriter.CONFIG_TEMP, Boolean.FALSE.toString());
 		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractAsyncFSWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
 
-		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractAsyncWriter.CONFIG_QUEUESIZE, Integer.toString(numRecordsWritten * 2));
+		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractAsyncWriter.CONFIG_QUEUESIZE, Integer.toString(numRecordsWritten * 4));
 		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractAsyncWriter.CONFIG_BEHAVIOR, "0");
 		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractAsyncWriter.CONFIG_SHUTDOWNDELAY, "-1");
 
