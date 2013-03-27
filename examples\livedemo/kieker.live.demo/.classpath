@@ -2,9 +2,10 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
-	<classpathentry kind="lib" path="lib"/>
-	<classpathentry kind="lib" path="lib/kieker-1.7-SNAPSHOT_emf.jar"/>
-	<classpathentry kind="lib" path="lib/jsf/javax.faces-2.1.14.jar"/>
-	<classpathentry kind="lib" path="webapps/kiekerLiveDemo/WEB-INF/lib/primefaces-3.4.2.jar"/>
-	<classpathentry kind="output" path="webapps/kiekerLiveDemo/WEB-INF/classes"/>
+	<classpathentry kind="lib" path="webapps/root/WEB-INF/lib"/>
+	<classpathentry kind="lib" path="webapps/root/WEB-INF/lib/kieker-1.7-SNAPSHOT_emf.jar"/>
+	<classpathentry kind="lib" path="webapps/root/WEB-INF/lib/jsf-api-2.1.20.jar"/>
+	<classpathentry kind="lib" path="webapps/root/WEB-INF/lib/jsf-impl-2.1.20.jar"/>
+	<classpathentry kind="lib" path="webapps/root/WEB-INF/lib/primefaces-3.4.2.jar"/>
+	<classpathentry kind="output" path="webapps/root/WEB-INF/classes"/>
 </classpath>
