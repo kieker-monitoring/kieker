@@ -75,10 +75,10 @@
     <Set name="gracefulShutdown">1000</Set>
     <Set name="dumpAfterStart">false</Set>
     <Set name="dumpBeforeStop">false</Set>
-    
-    <Call class="java.lang.System" name="setProperty">
-        <Arg>org.apache.jasper.compiler.disablejsr199</Arg>
-        <Arg>true</Arg>
+
+    <Call class="java.lang.System"  name="setProperty">
+      <Arg>org.apache.jasper.compiler.disablejsr199</Arg>
+      <Arg>true</Arg>
     </Call>
 
 </Configure>
