@@ -2,22 +2,40 @@ package livedemo.entities;
 
 import org.primefaces.model.chart.CartesianChartModel;
 
+/**
+ * @author Bjoern Weissenfels
+ */
 public class Model{
 	
-	CartesianChartModel ccmodel;
+	CartesianChartModel firstModel;
+	CartesianChartModel secondModel;
 	String name;
 	
 	public Model(CartesianChartModel model, String name){
-		this.ccmodel = model;
+		this.firstModel = model;
+		this.name = name;
+	}
+	
+	public Model(CartesianChartModel firstModel, CartesianChartModel secondModel, String name){
+		this.firstModel = firstModel;
+		this.secondModel = secondModel;
 		this.name = name;
 	}
 	
 	public CartesianChartModel getModel(){
-		return this.ccmodel;
+		return this.firstModel;
 	}
 	
 	public void setModel(CartesianChartModel model){
-		this.ccmodel = model;
+		this.firstModel = model;
+	}
+	
+	public CartesianChartModel getSecondModel(){
+		return this.secondModel;
+	}
+	
+	public void setSecondModel(CartesianChartModel model){
+		this.secondModel = model;
 	}
 	
 	public String getName(){

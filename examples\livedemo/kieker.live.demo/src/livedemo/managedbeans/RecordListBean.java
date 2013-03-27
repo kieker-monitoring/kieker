@@ -7,6 +7,9 @@ import javax.faces.bean.SessionScoped;
 
 import livedemo.entities.Record;
 
+/**
+ * @author Bjoern Weissenfels
+ */
 @ManagedBean(name="recordBean", eager=true)
 @SessionScoped
 public class RecordListBean {
@@ -49,7 +52,8 @@ public class RecordListBean {
 	}
 	
 	public List<Record> getRecords(){
-		return this.dataBean.getOERList();
+		this.dataBean.updateOERList();
+		return this.dataBean.getReverseOERList();
 	}
 
 }

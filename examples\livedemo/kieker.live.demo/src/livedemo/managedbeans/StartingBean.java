@@ -5,7 +5,6 @@ import javax.faces.bean.ManagedBean;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.AnalysisControllerThread;
 import kieker.analysis.exception.AnalysisConfigurationException;
-import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.filter.select.TypeFilter;
 import kieker.analysis.plugin.reader.jmx.JMXReader;
 import kieker.common.configuration.Configuration;
@@ -21,23 +20,27 @@ import kieker.tools.traceAnalysis.filter.visualization.GraphWriterConfiguration;
 import kieker.tools.traceAnalysis.filter.visualization.GraphWriterPlugin;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.OperationDependencyGraphAllocationFilter;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
+import livedemo.filter.ListFilter;
 
+/**
+ * @author Bjoern Weissenfels
+ */
 @ManagedBean(name="startingBean", eager=true)
 @ApplicationScoped
 public class StartingBean {
 	
 	final AnalysisController analysisInstance;
 	AnalysisControllerThread act;
-	final ListCollectionFilter<OperationExecutionRecord> oerCollectionFilter;
-	final ListCollectionFilter<CPUUtilizationRecord> cpuCollectionFilter;
-	final ListCollectionFilter<MemSwapUsageRecord> memSwapCollectionFilter;
+	final ListFilter<OperationExecutionRecord> oerCollectionFilter;
+	final ListFilter<CPUUtilizationRecord> cpuCollectionFilter;
+	final ListFilter<MemSwapUsageRecord> memSwapCollectionFilter;
 	SystemModelRepository systemModelRepository;
 	
 	public StartingBean(){
 		this.analysisInstance = new AnalysisController();
-		this.oerCollectionFilter = new ListCollectionFilter<OperationExecutionRecord>(new Configuration());
-		this.cpuCollectionFilter = new ListCollectionFilter<CPUUtilizationRecord>(new Configuration());
-		this.memSwapCollectionFilter = new ListCollectionFilter<MemSwapUsageRecord>(new Configuration());
+		this.oerCollectionFilter = new ListFilter<OperationExecutionRecord>(new Configuration());
+		this.cpuCollectionFilter = new ListFilter<CPUUtilizationRecord>(new Configuration());
+		this.memSwapCollectionFilter = new ListFilter<MemSwapUsageRecord>(new Configuration());
 		this.systemModelRepository = new SystemModelRepository(new Configuration());
 		try {
 			init();
@@ -54,15 +57,15 @@ public class StartingBean {
 		return this.systemModelRepository;
 	}
 	
-	public ListCollectionFilter<OperationExecutionRecord> getOERCollectionFilter(){
+	public ListFilter<OperationExecutionRecord> getOERCollectionFilter(){
 		return this.oerCollectionFilter;
 	}
 	
-	public ListCollectionFilter<CPUUtilizationRecord> getCPUCollectionFilter(){
+	public ListFilter<CPUUtilizationRecord> getCPUCollectionFilter(){
 		return this.cpuCollectionFilter;
 	}
 	
-	public ListCollectionFilter<MemSwapUsageRecord> getMemSwapCollectionFilter(){
+	public ListFilter<MemSwapUsageRecord> getMemSwapCollectionFilter(){
 		return this.memSwapCollectionFilter;
 	}
 	
@@ -84,13 +87,7 @@ public class StartingBean {
 		final Configuration typeFilter3Config = new Configuration();
 		typeFilter3Config.setProperty(TypeFilter.CONFIG_PROPERTY_NAME_TYPES, "kieker.common.record.system.MemSwapUsageRecord");
 		final TypeFilter typeFilter3 = new TypeFilter(typeFilter3Config);
-		
-//		final Configuration teeFilterConfig = new Configuration();
-//		teeFilterConfig.setProperty(TeeFilter.CONFIG_PROPERTY_NAME_STREAM,
-//		TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_STDOUT);
-//		final TeeFilter teeFilter = new TeeFilter(teeFilterConfig);
-
-//		analysisInstance.registerFilter(teeFilter);
+	
 		analysisInstance.registerFilter(oerCollectionFilter);
 		analysisInstance.registerFilter(cpuCollectionFilter);
 		analysisInstance.registerFilter(memSwapCollectionFilter);
@@ -98,24 +95,19 @@ public class StartingBean {
 		analysisInstance.registerFilter(typeFilter2);
 		analysisInstance.registerFilter(typeFilter3);
 		
-//		analysisInstance.connect(reader, JMXReader.OUTPUT_PORT_NAME_RECORDS,
-//				teeFilter, TeeFilter.INPUT_PORT_NAME_EVENTS);
-//		analysisInstance.connect(teeFilter, TeeFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
-//				typeFilter1, TypeFilter.INPUT_PORT_NAME_EVENTS);
-		
 		analysisInstance.connect(reader, JMXReader.OUTPUT_PORT_NAME_RECORDS,
 				typeFilter1, TypeFilter.INPUT_PORT_NAME_EVENTS);
 
 		analysisInstance.connect(typeFilter1, TypeFilter.OUTPUT_PORT_NAME_TYPE_MATCH,
-				oerCollectionFilter, ListCollectionFilter.INPUT_PORT_NAME);
+				oerCollectionFilter, ListFilter.INPUT_PORT_NAME);
 		analysisInstance.connect(typeFilter1, TypeFilter.OUTPUT_PORT_NAME_TYPE_MISMATCH,
 				typeFilter2, TypeFilter.INPUT_PORT_NAME_EVENTS);
 		analysisInstance.connect(typeFilter2, TypeFilter.OUTPUT_PORT_NAME_TYPE_MATCH,
-				cpuCollectionFilter, ListCollectionFilter.INPUT_PORT_NAME);
+				cpuCollectionFilter, ListFilter.INPUT_PORT_NAME);
 		analysisInstance.connect(typeFilter2, TypeFilter.OUTPUT_PORT_NAME_TYPE_MISMATCH,
 				typeFilter3, TypeFilter.INPUT_PORT_NAME_EVENTS);
 		analysisInstance.connect(typeFilter3, TypeFilter.OUTPUT_PORT_NAME_TYPE_MATCH,
-				memSwapCollectionFilter, ListCollectionFilter.INPUT_PORT_NAME);
+				memSwapCollectionFilter, ListFilter.INPUT_PORT_NAME);
 		
 		analysisInstance.registerRepository(systemModelRepository);
 		

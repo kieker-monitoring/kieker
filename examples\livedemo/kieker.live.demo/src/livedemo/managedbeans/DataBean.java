@@ -3,19 +3,13 @@ package livedemo.managedbeans;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Observable;
-import java.util.Set;
-
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 
-import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.record.system.CPUUtilizationRecord;
 import kieker.common.record.system.MemSwapUsageRecord;
@@ -24,9 +18,12 @@ import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
 import kieker.tools.traceAnalysis.systemModel.ComponentType;
 import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
 import kieker.tools.traceAnalysis.systemModel.Operation;
-import livedemo.entities.DataEntry;
 import livedemo.entities.Record;
+import livedemo.filter.ListFilter;
 
+/**
+ * @author Bjoern Weissenfels
+ */
 @ManagedBean(name="dataBean", eager=true)
 @ApplicationScoped
 public class DataBean extends Observable{
@@ -34,53 +31,42 @@ public class DataBean extends Observable{
 	int listLength; // number of entries displayed in the record list
 	
 	LinkedList<Record> records;
-	Map<String, List<DataEntry>> dataEntries; // Map of Signatures and corresponding DataEntries
-	long oerDuration; // duration for collecting method response times in nanos
-	long oerTimestamp; // temp var in nanos
+	LinkedList<Record> reverseRecords;
+	List<Record> newRecords;
 	
 	LinkedList<CPUUtilizationRecord> cpuList;
 	List<CPUUtilizationRecord> newCpuEntries;
 	LinkedList<MemSwapUsageRecord> memSwapList;
 	List<MemSwapUsageRecord> newMemSwapEntries;
-	int cpuAndMemSwapListLength;
 	
 	@ManagedProperty(value = "#{startingBean}")
 	StartingBean startingBean;
 	
 	public DataBean(){
-		this.listLength = 100;
-		
+		this.listLength = 1500; // 25 * 60 entries
 		this.records = new LinkedList<Record>();
-		this.oerDuration = 3 * 1000000000L; // 3 seconds
-		this.dataEntries = new HashMap<String, List<DataEntry>>();
-		this.oerTimestamp = new Date().getTime() * 1000000;
-		
+		this.reverseRecords = new LinkedList<Record>();
 		this.cpuList = new LinkedList<CPUUtilizationRecord>();
 		this.newCpuEntries = new LinkedList<CPUUtilizationRecord>();
 		this.memSwapList = new LinkedList<MemSwapUsageRecord>();
 		this.newMemSwapEntries = new LinkedList<MemSwapUsageRecord>();
-		this.cpuAndMemSwapListLength = 1800; // 30 * 60 entries
+		this.newRecords = new LinkedList<Record>();
 	}
 	
 	public void setStartingBean(StartingBean startingBean){
 		this.startingBean = startingBean;
 	}
 	
-	public long getDuration(){
-		return this.oerDuration;
-	}
-	
-	public void setDuration(long duration){
-		this.oerDuration = duration;
-	}
-	
-	public Set<String> getAvailableMethods(){
-		return this.dataEntries.keySet();
-	}
-	
-	public List<Record> getOERList(){
-		this.updateOERList();
+	public LinkedList<Record> getOERList(){
 		return this.records;
+	}
+	
+	public LinkedList<Record> getReverseOERList(){
+		return this.reverseRecords;
+	}
+	
+	public List<Record> getNewOEREntries(){
+		return this.newRecords;
 	}
 	
 	public LinkedList<CPUUtilizationRecord> getCpuList(){
@@ -97,11 +83,6 @@ public class DataBean extends Observable{
 	
 	public List<MemSwapUsageRecord> getNewMemSwapEntries(){
 		return this.newMemSwapEntries;
-	}
-	
-	public Map<String, List<DataEntry>> getDataEntries(){
-		this.updateOERList();
-		return this.dataEntries;
 	}
 	
 	public List<ComponentType> getComponentTypes(){
@@ -139,72 +120,39 @@ public class DataBean extends Observable{
 		return acList;
 	}
 		
-	private void updateOERList(){
-		ListCollectionFilter<OperationExecutionRecord> lcf = this.startingBean.getOERCollectionFilter();
+	public synchronized void updateOERList(){
+		ListFilter<OperationExecutionRecord> lcf = this.startingBean.getOERCollectionFilter();
 		List<OperationExecutionRecord> newEntries;
-		synchronized(lcf){
-			newEntries = lcf.getList();
-			lcf.clear();
-		}
+		newEntries = lcf.getListAndClear();
 		
-		List<Record> newRecords = new ArrayList<Record>();
+		this.newRecords.clear();
 		for(OperationExecutionRecord r : newEntries){
-			newRecords.add(new Record(r));
+			this.newRecords.add(new Record(r));
 		}
 		
-		// update response times
-		for(Record r : newRecords){
-			if(r.getOperationExecutionRecord().getLoggingTimestamp() > this.oerTimestamp){
-				this.oerTimestamp += this.oerDuration;
-				while(r.getOperationExecutionRecord().getLoggingTimestamp() > this.oerTimestamp){
-					for(String signature : this.dataEntries.keySet()){
-						this.dataEntries.get(signature).add(new DataEntry(this.oerTimestamp));
-					}
-					this.oerTimestamp += this.oerDuration;
-				}
-				if(!this.dataEntries.containsKey(r.getOperationExecutionRecord().getOperationSignature())){
-					this.dataEntries.put(r.getOperationExecutionRecord().getOperationSignature(), new ArrayList<DataEntry>());
-				}
-				for(String signature : this.dataEntries.keySet()){
-					this.dataEntries.get(signature).add(new DataEntry(this.oerTimestamp));
-				}
-				List<DataEntry> entries = this.dataEntries.get(r.getOperationExecutionRecord().getOperationSignature());
-				entries.get(entries.size() - 1).addRecord(r);
-			}else{
-				if(this.dataEntries.containsKey(r.getOperationExecutionRecord().getOperationSignature())){
-					List<DataEntry> entries = this.dataEntries.get(r.getOperationExecutionRecord().getOperationSignature());
-					entries.get(entries.size() - 1).addRecord(r);
-				}else{
-					List<DataEntry> newData = new ArrayList<DataEntry>();
-					DataEntry data = new DataEntry(this.oerTimestamp);
-					data.addRecord(r);
-					newData.add(data);
-					this.dataEntries.put(r.getOperationExecutionRecord().getOperationSignature(), newData);
-				}
-			}	
-		}
-		
-		// update recordList
+		// update recordLists
 		Collections.reverse(newRecords);
-		this.records.addAll(0, newRecords);
+		this.reverseRecords.addAll(0, newRecords);
+		Collections.reverse(newRecords);
+		this.records.addAll(newRecords);
 		int diff = this.records.size() - this.listLength;
 		for(int i=0; i < diff; i++){
-			this.records.removeLast();
+			this.records.removeFirst();
+			this.reverseRecords.removeLast();
 		}
+		
+		this.setChanged();
+		this.notifyObservers("oer");
 	}
 	
-	public void updateCPUList(){
-		ListCollectionFilter<CPUUtilizationRecord> cpuFilter = this.startingBean.getCPUCollectionFilter();
-		// TODO: talk with Jan about synchronized block
-		synchronized(cpuFilter){
-			this.newCpuEntries = cpuFilter.getList();
-			cpuFilter.clear();
-		}
+	public synchronized void updateCPUList(){
+		ListFilter<CPUUtilizationRecord> cpuFilter = this.startingBean.getCPUCollectionFilter();
+		this.newCpuEntries = cpuFilter.getListAndClear();
 		
 		// update list
 		if(!this.newCpuEntries.isEmpty()){
 			this.cpuList.addAll(this.newCpuEntries);
-			int diff = this.cpuList.size() - this.cpuAndMemSwapListLength;
+			int diff = this.cpuList.size() - this.listLength;
 			for(int i=0; i < diff; i++){
 				this.cpuList.removeFirst();
 			}
@@ -213,15 +161,12 @@ public class DataBean extends Observable{
 		}
 	}
 	
-	public void updateMemSwapList(){
-		ListCollectionFilter<MemSwapUsageRecord> memSwapFilter = this.startingBean.getMemSwapCollectionFilter();
-		synchronized(memSwapFilter){
-			this.newMemSwapEntries = memSwapFilter.getList();
-			memSwapFilter.clear();
-		}
+	public synchronized void updateMemSwapList(){
+		ListFilter<MemSwapUsageRecord> memSwapFilter = this.startingBean.getMemSwapCollectionFilter();
+		this.newMemSwapEntries = memSwapFilter.getListAndClear();
 		if(!this.newMemSwapEntries.isEmpty()){
 			this.memSwapList.addAll(this.newMemSwapEntries);
-			int diff = this.memSwapList.size() - this.cpuAndMemSwapListLength;
+			int diff = this.memSwapList.size() - this.listLength;
 			for(int i=0; i < diff; i++){
 				this.memSwapList.removeFirst();
 			} 

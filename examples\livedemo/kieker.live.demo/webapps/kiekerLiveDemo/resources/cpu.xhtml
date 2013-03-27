@@ -81,27 +81,19 @@
 			        		<p:ajax update="memswapbox" event="select"/>
 			    		</p:selectCheckboxMenu>
 					</td>
-					<td>
-						<p:selectCheckboxMenu id="memswapattributebox" value="#{cpuBean.selectedMemSwapAttributes}" label="Select Attributes" 
-							filter="true" filterText="Filter" filterMatchMode="contains">  
-			        		<f:selectItems value="#{cpuBean.possibleMemSwapAttributes}" />  
-			        		<p:ajax update="memswapattributebox" event="select"/>
-			    		</p:selectCheckboxMenu>
-					</td>
 				</tr>
 			</table>
 		
 			<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">  
-  				<h:outputText value="Number of displayed entries: " />  
-				<p:selectOneMenu value="#{cpuBean.numberOfDisplayedEntries}">  
-					<f:selectItems value="#{cpuBean.possibleNumberOfDisplayedEntries}"/> 
-					<p:ajax update="charts" listener="#{cpuBean.changeNumberOfDisplayedEntries}"/>
-				</p:selectOneMenu>
-				
-				<h:outputText value="Intervall length: " />  
+  				<h:outputText value="Intervall length in seconds: " />  
 				<p:selectOneMenu value="#{cpuBean.intervallLength}">  
 					<f:selectItems value="#{cpuBean.possibleIntervallLength}"/>  
 					<p:ajax update="charts" listener="#{cpuBean.changeIntervallLength}"/>
+				</p:selectOneMenu>
+				
+  				<h:outputText value="Number of displayed entries: " />  
+				<p:selectOneMenu value="#{cpuBean.numberOfDisplayedEntries}">  
+					<f:selectItems value="#{cpuBean.possibleNumberOfDisplayedEntries}"/> 
 				</p:selectOneMenu>
 			</h:panelGrid>	
 		    
@@ -112,8 +104,11 @@
 				   		xaxisLabel="Time" yaxisLabel="Percent"/>
 				</ui:repeat>
 				<ui:repeat value="#{cpuBean.memSwapModels}" var="model">	         
-					<p:barChart value="#{model.model}" legendPosition="ne"  
-				   		title="#{model.name}" minY="0" style="height:300px;margin-top:20px"
+					<p:barChart value="#{model.model}" legendPosition="ne" stacked="true"  
+				   		title="#{model.name} - MEM" minY="0" style="height:200px;margin-top:20px"
+				   		xaxisLabel="Time" yaxisLabel="MB"/>
+				   	<p:barChart value="#{model.secondModel}" legendPosition="ne" stacked="true" 
+				   		title="#{model.name} - SWAP" minY="0" style="height:200px;margin-top:20px"
 				   		xaxisLabel="Time" yaxisLabel="MB"/>
 				</ui:repeat>
 			</h:panelGroup>

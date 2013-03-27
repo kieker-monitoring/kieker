@@ -2,6 +2,9 @@ package livedemo.entities;
 
 import kieker.common.record.controlflow.OperationExecutionRecord;
 
+/**
+ * @author Bjoern Weissenfels
+ */
 public class Record {
 	
 	private final OperationExecutionRecord record;

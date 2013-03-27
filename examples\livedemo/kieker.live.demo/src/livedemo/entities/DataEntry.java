@@ -5,6 +5,9 @@ import java.util.Date;
 import kieker.common.record.system.CPUUtilizationRecord;
 import kieker.common.record.system.MemSwapUsageRecord;
 
+/**
+ * @author Bjoern Weissenfels
+ */
 public class DataEntry {
 	
 	long timestamp;
@@ -20,10 +23,8 @@ public class DataEntry {
 	double sumWait;
 	
 	long sumMemFree;
-	long sumMemTotal;
 	long sumMemUsed;
 	long sumSwapFree;
-	long sumSwapTotal;
 	long sumSwapUsed;
 	
 	String hourMinSec;
@@ -45,10 +46,8 @@ public class DataEntry {
 		this.sumWait = 0;
 		
 		this.sumMemFree = 0;
-		this.sumMemTotal = 0;
 		this.sumMemUsed = 0;
 		this.sumSwapFree = 0;
-		this.sumSwapTotal = 0;
 		this.sumSwapUsed = 0;
 	}
 	
@@ -71,10 +70,8 @@ public class DataEntry {
 	public void addMemSwapUsageRecord(MemSwapUsageRecord record){
 		count++;
 		this.sumMemFree += record.getMemFree();
-		this.sumMemTotal += record.getMemTotal();
 		this.sumMemUsed += record.getMemUsed();
 		this.sumSwapFree += record.getSwapFree();
-		this.sumSwapTotal += record.getSwapTotal();
 		this.sumSwapUsed += record.getSwapUsed();
 	}
 	
@@ -145,13 +142,6 @@ public class DataEntry {
 		return this.sumMemFree/(this.count*1048576);
 	}
 	
-	public long getAverageMemTotal(){
-		if(this.count == 0){
-			return 0;
-		}
-		return this.sumMemTotal/(this.count*1048576);
-	}
-	
 	public long getAverageMemUsed(){
 		if(this.count == 0){
 			return 0;
@@ -164,13 +154,6 @@ public class DataEntry {
 			return 0;
 		}
 		return this.sumSwapFree/(this.count*1048576);
-	}
-	
-	public long getAverageSwapTotal(){
-		if(this.count == 0){
-			return 0;
-		}
-		return this.sumSwapTotal/(this.count*1048576);
 	}
 	
 	public long getAverageSwapUsed(){

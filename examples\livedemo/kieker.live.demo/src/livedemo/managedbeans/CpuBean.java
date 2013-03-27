@@ -23,6 +23,9 @@ import kieker.common.record.system.MemSwapUsageRecord;
 import livedemo.entities.DataEntry;
 import livedemo.entities.Model;
 
+/**
+ * @author Bjoern Weissenfels
+ */
 @ManagedBean(name="cpuBean", eager=true)
 @SessionScoped
 public class CpuBean implements Observer{
@@ -30,11 +33,13 @@ public class CpuBean implements Observer{
 	@ManagedProperty(value = "#{dataBean}")
 	DataBean dataBean;
 	
+	int numberOfDisplayedEntries = 12; // 12 is the default start value
+	final int maxNumberOfDisplayedEntries = 25;
+	int intervallLength = 3; // in seconds; 3 is the default start value
+	final int maxIntervallLength = 60; // in seconds
+	long duration = 3 * 1000000000L; // in nanos (intervallLength * 1.000.000.000)
 	List<Integer> possibleNumberOfDisplayedEntries;
-	int numberOfDisplayedEntries;
 	List<Integer> possibleIntervallLength;
-	int intervallLength;
-	long duration;
 	
 	Map<String, LinkedList<DataEntry>> cpuMap; // key = hostname + " - " + cpuId
 	final String[] possibleCpuAttributes = {"user", "system", "wait", "nice", "irq", "totalUtilization", "idle"};
@@ -46,8 +51,6 @@ public class CpuBean implements Observer{
 	boolean firstCpuCall;
 	
 	Map<String, LinkedList<DataEntry>> memSwapMap; // key = hostname
-	final String[] possibleMemSwapAttributes = {"memTotal", "memUsed", "memFree", "swapTotal", "swapUsed", "swapFree"};
-	List<String> selectedMemSwapAttributes;
 	List<String> possibleHosts;
 	List<String> selectedHosts;
 	List<Model> memSwapModels;
@@ -57,9 +60,6 @@ public class CpuBean implements Observer{
 	public CpuBean(){
 		this.possibleNumberOfDisplayedEntries = new ArrayList<Integer>();
 		this.possibleIntervallLength = new ArrayList<Integer>();
-		this.numberOfDisplayedEntries = 12;
-		this.intervallLength = 3;
-		this.duration = 3 * 1000000000L; // 3 seconds
 		
 		this.cpuMap = new HashMap<String, LinkedList<DataEntry>>();
 		this.selectedCpuAttributes = new ArrayList<String>();
@@ -70,7 +70,6 @@ public class CpuBean implements Observer{
 		this.firstCpuCall = true;
 		
 		this.memSwapMap = new HashMap<String, LinkedList<DataEntry>>();
-		this.selectedCpuAttributes = new ArrayList<String>();
 		this.possibleHosts = new ArrayList<String>();
 		this.selectedHosts = new ArrayList<String>();
 		this.memSwapModels = new ArrayList<Model>();
@@ -81,10 +80,10 @@ public class CpuBean implements Observer{
 	@PostConstruct
 	public void init() {
 		this.dataBean.addObserver(this);
-		for(int i=10; i<31;i++){
+		for(int i=10; i<=this.maxNumberOfDisplayedEntries;i++){
 			this.possibleNumberOfDisplayedEntries.add(i);
 		}
-		for(int i=1; i<61;i++){
+		for(int i=1; i<=this.maxIntervallLength;i++){
 			this.possibleIntervallLength.add(i);
 		}
 	}
@@ -124,6 +123,10 @@ public class CpuBean implements Observer{
 	}
 	
 	public List<String> getSelectedCpuAttributes() {
+		if(this.selectedCpuAttributes.isEmpty()){
+			this.selectedCpuAttributes.add("system");
+			this.selectedCpuAttributes.add("totalUtilization");
+		}
 		return this.selectedCpuAttributes;
 	}
 	
@@ -145,6 +148,9 @@ public class CpuBean implements Observer{
 	}
 	
 	public List<String> getSelectedCPUs(){
+		if(this.selectedCPUs.isEmpty() && !this.possibleCPUs.isEmpty()){
+			this.selectedCPUs.add(this.possibleCPUs.get(0));
+		}
 		return this.selectedCPUs;
 	}
 	
@@ -163,18 +169,6 @@ public class CpuBean implements Observer{
 	}
 	
 	// getter and setter for MemSwap variables
-	public String[] getPossibleMemSwapAttributes(){
-		return this.possibleMemSwapAttributes;
-	}
-	
-	public List<String> getSelectedMemSwapAttributes(){
-		return this.selectedMemSwapAttributes;
-	}
-	
-	public void setSelectedMemSwapAttributes(List<String> selectedMemSwapAttributes){
-		this.selectedMemSwapAttributes = selectedMemSwapAttributes;
-	}
-	
 	public List<String> getPossibleHosts(){
 		if(this.possibleHosts.isEmpty()){
 			// this call will update the map, after this all cpuIds are known
@@ -189,6 +183,9 @@ public class CpuBean implements Observer{
 	}
 	
 	public List<String> getSelectedHosts(){
+		if(this.selectedHosts.isEmpty() && !this.possibleHosts.isEmpty()){
+			this.selectedHosts.add(this.possibleHosts.get(0));
+		}
 		return this.selectedHosts;
 	}
 	
@@ -200,19 +197,13 @@ public class CpuBean implements Observer{
 		this.dataBean.updateMemSwapList();
 		this.memSwapModels.clear();
 		for (String hostname : this.selectedHosts){
-			Model model = new Model(this.getMemSwapModel(this.numberOfDisplayedEntries, hostname),hostname);
-			this.memSwapModels.add(model);
+			this.memSwapModels.add(this.getMemSwapModel(this.numberOfDisplayedEntries, hostname));
 		}
 		return this.memSwapModels;
 	}
 
 	// EventListener
-	public void changeNumberOfDisplayedEntries(AjaxBehaviorEvent event){
-		// TODO: change possibleIntervallLength
-	}
-	
 	public synchronized void changeIntervallLength(AjaxBehaviorEvent event){
-		// TODO: change possibleNumberOfDisplayedEntries
 		this.duration = this.intervallLength * 1000000000L;
 		this.cpuMap.clear();
 		this.memSwapMap.clear();
@@ -222,16 +213,6 @@ public class CpuBean implements Observer{
 	
 	private CartesianChartModel getCpuModel(int numberOfDisplayedEntries, String id) {
 		CartesianChartModel cpuModel = new CartesianChartModel();
-		if(this.getSelectedCpuAttributes().isEmpty()){
-			ChartSeries cpuSeries = new ChartSeries();
-			cpuSeries.setLabel("choose attribute");
-			for(int i=0; i < numberOfDisplayedEntries; i++){
-				cpuSeries.set("x"+i,0);
-			}
-			cpuModel.addSeries(cpuSeries);
-			return cpuModel;
-		}
-		
 		List<DataEntry> cpuList = this.cpuMap.get(id);
 		int fromIndex;
 		int toIndex = cpuList.size() - 1;
@@ -280,18 +261,10 @@ public class CpuBean implements Observer{
         return cpuModel;
 	}
 	
-	private CartesianChartModel getMemSwapModel(int numberOfDisplayedEntries, String id) {
-		CartesianChartModel memSwapModel = new CartesianChartModel();
-		if(this.getSelectedMemSwapAttributes().isEmpty()){
-			ChartSeries memSwapSeries = new ChartSeries();
-			memSwapSeries.setLabel("choose attribute");
-			for(int i=0; i < numberOfDisplayedEntries; i++){
-				memSwapSeries.set("x"+i,0);
-			}
-			memSwapModel.addSeries(memSwapSeries);
-			return memSwapModel;
-		}
-		
+	private Model getMemSwapModel(int numberOfDisplayedEntries, String id) {
+		CartesianChartModel memModel = new CartesianChartModel();
+		CartesianChartModel swapModel = new CartesianChartModel();
+	
 		List<DataEntry> memSwapList = this.memSwapMap.get(id);
 		int fromIndex;
 		int toIndex = memSwapList.size() - 1;
@@ -302,38 +275,35 @@ public class CpuBean implements Observer{
 		}
         List<DataEntry> subList = memSwapList.subList(fromIndex, toIndex);
         
-		for (String attribute : this.getSelectedMemSwapAttributes()){
-			ChartSeries memSwapSeries = new ChartSeries();  
-	        memSwapSeries.setLabel(attribute);
-	        
-	        if("memTotal".equals(attribute)){
-	        	for(int i = 0; i < subList.size(); i++){
-		        	memSwapSeries.set(subList.get(i).getMinSec(), subList.get(i).getAverageMemTotal());
-		        }
-	        }else if("memUsed".equals(attribute)){
-	        	for(int i = 0; i < subList.size(); i++){
-		        	memSwapSeries.set(subList.get(i).getMinSec(), subList.get(i).getAverageMemUsed());
-		        }
-	        }else if("memFree".equals(attribute)){
-	        	for(int i = 0; i < subList.size(); i++){
-		        	memSwapSeries.set(subList.get(i).getMinSec(), subList.get(i).getAverageMemFree());
-		        }
-	        }else if("swapTotal".equals(attribute)){
-	        	for(int i = 0; i < subList.size(); i++){
-		        	memSwapSeries.set(subList.get(i).getMinSec(), subList.get(i).getAverageSwapTotal());
-		        }
-	        }else if("swapUsed".equals(attribute)){
-	        	for(int i = 0; i < subList.size(); i++){
-		        	memSwapSeries.set(subList.get(i).getMinSec(), subList.get(i).getAverageSwapUsed());
-		        }
-	        }else if("swapFree".equals(attribute)){
-	        	for(int i = 0; i < subList.size(); i++){
-		        	memSwapSeries.set(subList.get(i).getMinSec(), subList.get(i).getAverageSwapFree());
-		        }
-	        }
-	        memSwapModel.addSeries(memSwapSeries);   
+	    ChartSeries memUsedSeries = new ChartSeries();  
+	    memUsedSeries.setLabel("Used");
+		for(int i = 0; i < subList.size(); i++){
+			memUsedSeries.set(subList.get(i).getMinSec(), subList.get(i).getAverageMemUsed());
 		}
-        return memSwapModel;
+	    memModel.addSeries(memUsedSeries);
+	    
+	    ChartSeries memFreeSeries = new ChartSeries();  
+	    memFreeSeries.setLabel("Free");
+		for(int i = 0; i < subList.size(); i++){
+			memFreeSeries.set(subList.get(i).getMinSec(), subList.get(i).getAverageMemFree());
+		}
+	    memModel.addSeries(memFreeSeries);
+	    
+	    ChartSeries swapUsedSeries = new ChartSeries();  
+	    swapUsedSeries.setLabel("Used");
+		for(int i = 0; i < subList.size(); i++){
+			swapUsedSeries.set(subList.get(i).getMinSec(), subList.get(i).getAverageSwapUsed());
+		}
+	    swapModel.addSeries(swapUsedSeries);
+	    
+	    ChartSeries swapFreeSeries = new ChartSeries();  
+	    swapFreeSeries.setLabel("Free");
+		for(int i = 0; i < subList.size(); i++){
+			swapFreeSeries.set(subList.get(i).getMinSec(), subList.get(i).getAverageSwapFree());
+		}
+	    swapModel.addSeries(swapFreeSeries);
+		
+        return new Model(memModel, swapModel, id);
 	}
 	
 	// should be called at the beginning and when duration has changed
@@ -409,6 +379,14 @@ public class CpuBean implements Observer{
 					}
 				}
 			}
+			// remove old values
+			for(String signature : this.cpuMap.keySet()){
+				LinkedList<DataEntry> list = this.cpuMap.get(signature);
+				int removeFirst = list.size() - this.maxNumberOfDisplayedEntries - 1;
+				for(int i=0; i < removeFirst; i++){
+					list.removeFirst();
+				}
+			}
 		}else if("memswap".equals(message)){
 			if(this.firstMemSwapCall){
 				this.generateMemSwapMap();
@@ -426,8 +404,16 @@ public class CpuBean implements Observer{
 					}
 				}
 			}
+			// remove old values
+			for(String signature : this.memSwapMap.keySet()){
+				LinkedList<DataEntry> list = this.memSwapMap.get(signature);
+				int removeFirst = list.size() - this.maxNumberOfDisplayedEntries - 1;
+				for(int i=0; i < removeFirst; i++){
+					list.removeFirst();
+				}
+			}
 		}
-		// TODO: remove old values from cpuMap and memSwapMap?
+		
 	}
 
 	

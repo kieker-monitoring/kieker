@@ -57,20 +57,34 @@
 		</div>
 	
 		<h:form>
-			<p:selectCheckboxMenu id="methodbox" value="#{chartBean.selectedMethods}" label="Select Methods" 
+			<p:selectCheckboxMenu id="methodbox" onShow="poll.stop()" onHide="poll.start()" 
+				value="#{chartBean.selectedMethods}" label="Select Methods" 
 				filter="true" filterText="Filter" filterMatchMode="contains">  
 				<f:selectItems value="#{chartBean.availableMethods}" />  
-<!-- 				<p:ajax update="methodbox" event="select"/> -->
 			</p:selectCheckboxMenu>
-					
+			
+			<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">  
+			<h:outputText value="Intervall length in seconds: " />  
+				<p:selectOneMenu value="#{chartBean.intervallLength}">  
+					<f:selectItems value="#{chartBean.possibleIntervallLength}"/>  
+					<p:ajax update="count,resp" listener="#{chartBean.changeIntervallLength}"/>
+				</p:selectOneMenu>
+				
+  				<h:outputText value="Number of displayed entries: " />  
+				<p:selectOneMenu value="#{chartBean.numberOfDisplayedEntries}">  
+					<f:selectItems value="#{chartBean.possibleNumberOfDisplayedEntries}"/> 
+				</p:selectOneMenu>
+			</h:panelGrid>
+			
 			<p:lineChart id="count" value="#{chartBean.countingModel}" legendPosition="ne"  
-	     		title="Method Calls Per 3 Seconds" minY="0" style="height:300px;margin-top:20px"
-	     		xaxisLabel="Time" yaxisLabel="Number of calls"/>
-		
+		    	title="Method Calls Per 3 Seconds" minY="0" style="height:300px;margin-top:20px"
+		    	xaxisLabel="Time" yaxisLabel="Number of calls"/>
+			
 			<p:barChart id="resp" value="#{chartBean.responsetimeModel}" legendPosition="ne"  
-	     		title="Average Responsetime" minY="0" style="height:300px;margin-top:20px"
-	     		xaxisLabel="Time" yaxisLabel="Responsetime in ms"/>
+		    	title="Average Responsetime" minY="0" style="height:300px;margin-top:20px"
+		    	xaxisLabel="Time" yaxisLabel="Responsetime in ms"/>
 	     		
+	     	<p:poll interval="1" widgetVar="poll" update="methodbox" autoStart="true"/>
 			<p:poll interval="1" update="count,resp" />
 		</h:form>
 	</div>

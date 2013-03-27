@@ -12,6 +12,9 @@ import kieker.tools.traceAnalysis.systemModel.ComponentType;
 import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
 import kieker.tools.traceAnalysis.systemModel.Operation;
 
+/**
+ * @author Bjoern Weissenfels
+ */
 @ManagedBean(name="systemModelBean", eager=true)
 @ApplicationScoped
 public class SystemModelBean {

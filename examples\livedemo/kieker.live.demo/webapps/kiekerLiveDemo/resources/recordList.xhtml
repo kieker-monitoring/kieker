@@ -54,32 +54,13 @@
 		       	<li><a href="../index.jsf">Main Menu</a></li>
 			</ul>
 		</div>
-	 
-		<h:form id="table">
+		
+	 	<h:form id="table">
 			<p:commandButton id="button" update="button,table" value="#{recordBean.freezeButton}" action="#{recordBean.freeze}"/>
 			
-	    	<p:dataTable var="record" id="rec" value="#{recordBean.records}">
+	    	<p:dataTable id="rec" value="#{recordBean.records}" var="record">
 	    		<p:column headerText="Session Id">  
-	            	<h:outputText id="session" value="#{record.operationExecutionRecord.sessionId}" />
-<!-- 	            	
-	            	<p:tooltip for="session">
-	            		<h:outputText value="operationSignature: #{record.operationExecutionRecord.operationSignature}" />
-	            		<br></br>
-	            		<h:outputText value="sessionId: #{record.operationExecutionRecord.sessionId}" />
-	            		<br></br>
-	            		<h:outputText value="traceId: #{record.operationExecutionRecord.traceId}" />
-	            		<br></br>
-	            		<h:outputText value="tin: #{record.operationExecutionRecord.tin}" />
-	            		<br></br>
-	            		<h:outputText value="tout: #{record.operationExecutionRecord.tout}" />
-	            		<br></br>
-	            		<h:outputText value="hostname: #{record.operationExecutionRecord.hostname}" />
-	            		<br></br>
-	            		<h:outputText value="eoi: #{record.operationExecutionRecord.eoi}" />
-	            		<br></br>
-	            		<h:outputText value="ess: #{record.operationExecutionRecord.ess}" />
-	            	</p:tooltip>
- -->	            	  
+	            	<h:outputText id="session" value="#{record.operationExecutionRecord.sessionId}" />     	  
 	            </p:column>
 	    		<p:column headerText="Trace Id">  
 	            	<h:outputText id="trace" value="#{record.operationExecutionRecord.traceId}"/>  
@@ -96,6 +77,7 @@
 	    	
 	    	<p:poll interval="2" update="#{recordBean.updateForm}" />
 		</h:form>
+		
 	</div>   
 </h:body>
 </html>
