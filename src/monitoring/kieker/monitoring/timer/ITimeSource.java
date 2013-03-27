@@ -32,6 +32,13 @@ public interface ITimeSource {
 	public long getTime();
 
 	/**
+	 * Returns a String representation of the {@link java.util.concurrent.TimeUnit} of the timesource.
+	 * 
+	 * @since 1.7
+	 */
+	public String getTimeUnit();
+
+	/**
 	 * Returns a String representation of the timesource.
 	 * E.g., the meaning of a timestamp from this source.
 	 * 

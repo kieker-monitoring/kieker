@@ -72,8 +72,12 @@ public final class SystemMilliTimer extends AbstractTimeSource {
 		return this.timeunit.convert(System.currentTimeMillis() - this.offset, TimeUnit.MILLISECONDS);
 	}
 
+	public final String getTimeUnit() {
+		return this.timeunit.name();
+	}
+
 	@Override
-	public String toString() {
+	public final String toString() {
 		final StringBuilder sb = new StringBuilder(64);
 		sb.append("Time in " + this.timeunit.toString().toLowerCase(Locale.ENGLISH) + " (with milliseconds precision) since ");
 		sb.append(new Date(this.offset));
