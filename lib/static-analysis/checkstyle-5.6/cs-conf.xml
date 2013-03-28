@@ -188,7 +188,9 @@
         <module name="kieker.test.common.cs.NotAllowedSinceTagCheck">
             <property name="severity" value="${checkstyle.ignoreCustomKieker}" default="ignore"/>
         </module>
-	
+		<module name="kieker.test.common.cs.NoBlockCommentsCheck">
+            <property name="severity" value="${checkstyle.ignoreCustomKieker}" default="ignore"/>
+        </module>
         <module name="FileContentsHolder"/>
 
         <!--
