@@ -210,14 +210,12 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 				this.bookstoreExecutionFactory.createBookstoreExecution_exec2_1__crm_getOrders(
 						TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID,
 						TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.HOSTNAME,
-						/* The assumed entry timestamp is the exit timestamp of the previous call */
-						/* tin: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call2_1__crm_getOrders,
-						/*
-						 * We will only have a (before) call to CRM.getOrder(..), hence the assumed return timestamp is
-						 * the return time of the wrapping Bookstore.searchBook(..) execution:
-						 */
-						/* tout: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook,
-						/* assumed: */false));
+						// The assumed entry timestamp is the exit timestamp of the previous call
+						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call2_1__crm_getOrders, // tin
+						// We will only have a (before) call to CRM.getOrder(..), hence the assumed return timestamp is the return time of the wrapping
+						// Bookstore.searchBook(..) execution:
+						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook, // tout
+						false)); // assumed
 
 		executionTrace.add(this.exec3_2__catalog_getBook);
 

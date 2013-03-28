@@ -144,15 +144,11 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 			return;
 		}
 
-		/*
-		 * Register session information which needs to be reset after the chain has been executed.
-		 */
+		// Register session information which needs to be reset after the chain has been executed.
 		String sessionId = this.registerSessionInformation(request); // {@link OperationExecutionRecord#NO_SESSION_ID} if no session ID
 		long traceId = OperationExecutionRecord.NO_TRACEID; // note that we must NOT register anything to the CF_REGISTRY here!
 
-		/*
-		 * If this filter execution shall be part of the traced control flow, we need to register some control flow information.
-		 */
+		// If this filter execution shall be part of the traced control flow, we need to register some control flow information.
 		if (this.logFilterExecution) {
 			traceId = CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId();
 			CF_REGISTRY.storeThreadLocalEOI(0); // current execution's eoi is 0
@@ -171,16 +167,12 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 					sessionId = this.registerSessionInformation(request);
 				}
 
-				/*
-				 * Log this execution
-				 */
+				// Log this execution
 				MONITORING_CTRL.newMonitoringRecord(
 						new OperationExecutionRecord(this.getFilterOperationSignatureString(), sessionId, traceId, tin, tout,
 								VM_NAME, 0, 0)); // 0,0 state that this method is the application entry point
 
-				/*
-				 * Reset the thread-local trace information
-				 */
+				// Reset the thread-local trace information
 				CF_REGISTRY.unsetThreadLocalTraceId();
 				CF_REGISTRY.unsetThreadLocalEOI();
 				CF_REGISTRY.unsetThreadLocalESS();

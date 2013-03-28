@@ -120,9 +120,7 @@ final class JMSWriterThread extends AbstractAsyncThread {
 
 			Destination destination;
 			try {
-				/*
-				 * As a first step, try a JNDI lookup (this seems to fail with ActiveMQ /HornetQ sometimes)
-				 */
+				// As a first step, try a JNDI lookup (this seems to fail with ActiveMQ /HornetQ sometimes)
 				destination = (Destination) context.lookup(topic);
 			} catch (final NameNotFoundException exc) {
 				// JNDI lookup failed, try manual creation (this seems to fail with ActiveMQ/HornetQ sometimes)

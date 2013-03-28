@@ -84,21 +84,14 @@ public class OperationExecutionSOAPRequestOutInterceptor extends SoapHeaderOutFi
 		int eoi;
 		int ess;
 
-		/*
-		 * Store entry time tin for this trace.
-		 * This value will be used by the corresponding invocation of the
-		 * ResponseOutProbe.
-		 */
+		// Store entry time tin for this trace. This value will be used by the corresponding invocation of the ResponseOutProbe.
+
 		final long tin = this.timeSource.getTime();
 		boolean isEntryCall = false; // set true below if is entry call
 
 		if (traceId == -1) {
-			/*
-			 * traceId has not been registered before.
-			 * This might be caused by a thread which has been spawned
-			 * asynchronously. We will now acquire a thread id and store it
-			 * in the thread local variable.
-			 */
+			// traceId has not been registered before. This might be caused by a thread which has been spawned asynchronously. We will now acquire a thread id and
+			// store it in the thread local variable.
 			traceId = CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId();
 			eoi = 0; // eoi of this execution
 			CF_REGISTRY.storeThreadLocalEOI(eoi);

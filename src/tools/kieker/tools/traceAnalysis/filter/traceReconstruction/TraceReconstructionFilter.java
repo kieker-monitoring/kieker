@@ -278,12 +278,8 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 			// If the polled trace is invalid, the following method toMessageTrace(..) throws an exception
 			final MessageTrace mt = executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 
-			/*
-			 * Transformation successful and the trace is for itself valid.
-			 * However, this trace may actually contain the [0,0] execution
-			 * and thus complete a trace that has timed out before and has
-			 * thus been considered an invalid trace.
-			 */
+			// Transformation successful and the trace is for itself valid. However, this trace may actually contain the [0,0] execution and thus complete a trace
+			// that has timed out before and has thus been considered an invalid trace.
 			if (!this.invalidTraces.contains(mt.getTraceId())) {
 				// Not completing part of an invalid trace
 				super.deliver(OUTPUT_PORT_NAME_MESSAGE_TRACE, mt);

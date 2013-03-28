@@ -222,9 +222,7 @@ public class TestProbeController extends AbstractKiekerTest {
 		ctrl.terminateMonitoring();
 	}
 
-	/*
-	 * Reads the significant content of the config file.
-	 */
+	// Reads the significant content of the config file.
 	private List<String> readFromConfigFile() throws IOException {
 		BufferedReader reader = null;
 		try {
@@ -244,9 +242,7 @@ public class TestProbeController extends AbstractKiekerTest {
 		}
 	}
 
-	/*
-	 * Replaces the old content of the config file with the given pattern and a few additional information.
-	 */
+	// Replaces the old content of the config file with the given pattern and a few additional information.
 	private void writeToConfigFile(final String[] pattern) throws UnsupportedEncodingException, FileNotFoundException, InterruptedException {
 		Thread.sleep(1000); // enforce last modified timestamp to be different than before
 		final PrintWriter pw = new PrintWriter(

@@ -76,11 +76,9 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 		// start the server
 		this.ctx = new FileSystemXmlApplicationContext("test/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/jetty.xml");
 
-		/*
-		 * Note that the Spring interceptor is configure in
-		 * test/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/webapp/WEB-INF/spring/servlet-context.xml
-		 * to only instrument Bookstore.searchBook and Catalog.getBook
-		 */
+		// Note that the Spring interceptor is configure in
+		// test/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/webapp/WEB-INF/spring/servlet-context.xml to only instrument
+		// Bookstore.searchBook and Catalog.getBook
 	}
 
 	@Test
@@ -111,12 +109,9 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 	private void checkRecordList(final List<IMonitoringRecord> records) {
 		Assert.assertFalse("No records in List", records.isEmpty());
 
-		/*
-		 * Note that the Spring interceptor is configured in
-		 * test/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/webapp/WEB-INF/spring/servlet-context.xml
-		 * to only instrument Bookstore.searchBook and Catalog.getBook
-		 */
-
+		// Note that the Spring interceptor is configured in
+		// test/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/webapp/WEB-INF/spring/servlet-context.xml to only instrument
+		// Bookstore.searchBook and Catalog.getBook
 		for (final IMonitoringRecord record : records) {
 			final OperationExecutionRecord opRec = (OperationExecutionRecord) record;
 

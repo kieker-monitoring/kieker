@@ -129,9 +129,7 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 	public void testSimpleLog() throws Exception { // NOPMD (JUnitTestsShouldIncludeAssert)
 		final List<IMonitoringRecord> someEvents = this.provideEvents();
 
-		/*
-		 * Write batch of records:
-		 */
+		// Write batch of records:
 		final IMonitoringController ctrl = this.createController(someEvents.size());
 
 		this.checkControllerStateBeforeRecordsPassedToController(ctrl);

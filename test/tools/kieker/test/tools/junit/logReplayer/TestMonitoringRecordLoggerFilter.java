@@ -87,7 +87,7 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 
 		OutputStream os = null;
 		try {
-			os = new FileOutputStream(monitoringPropertiesFn, /* !append */false);
+			os = new FileOutputStream(monitoringPropertiesFn, false); // !append
 			config.store(os, "Created by " + TestMonitoringRecordLoggerFilter.class.getName());
 		} finally {
 			if (os != null) {
@@ -189,10 +189,7 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 
 		final List<IMonitoringRecord> eventsFromLog = this.readEvents();
 
-		/*
-		 * The following line is an easy way to test the tests (given monitoringRecords includes at least one record).
-		 * But don't forget to deactivate afterwards.
-		 */
+		// The following line is an easy way to test the tests (given monitoringRecords includes at least one record). But don't forget to deactivate afterwards.
 		// eventsToWrite.remove(eventsToWrite.size() - 1);
 
 		Assert.assertEquals("Unexpected set of records in monitoring log", eventsToWrite, eventsFromLog);

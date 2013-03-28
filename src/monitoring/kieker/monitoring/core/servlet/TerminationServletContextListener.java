@@ -47,8 +47,7 @@ public class TerminationServletContextListener implements ServletContextListener
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see javax.servlet.ServletContextListener#contextDestroyed(javax.servlet.
-	 * ServletContextEvent)
+	 * @see javax.servlet.ServletContextListener#contextDestroyed(javax.servlet.ServletContextEvent)
 	 */
 	public void contextDestroyed(final ServletContextEvent evt) {
 		this.ctrl.terminateMonitoring();
@@ -59,8 +58,7 @@ public class TerminationServletContextListener implements ServletContextListener
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * javax.servlet.ServletContextListener#contextInitialized(javax.servlet
-	 * .ServletContextEvent)
+	 * javax.servlet.ServletContextListener#contextInitialized(javax.servlet.ServletContextEvent)
 	 */
 	public void contextInitialized(final ServletContextEvent evt) {
 		LOG.info("context initialized");

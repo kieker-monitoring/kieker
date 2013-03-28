@@ -364,10 +364,7 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 	@Test
 	public void testMessageTraceTransformationOnlyOnce() throws InvalidTraceException {
 		final ExecutionTrace executionTrace = this.genValidBookstoreTrace();
-		/*
-		 * Transform Execution Trace to Message Trace representation (twice)
-		 * and make sure, that the instances are the same.
-		 */
+		// Transform Execution Trace to Message Trace representation (twice) and make sure, that the instances are the same.
 		final MessageTrace messageTrace1 = executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 		final MessageTrace messageTrace2 = executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 		Assert.assertSame(messageTrace1, messageTrace2);
@@ -405,10 +402,7 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 	 *             If the internally assembled execution trace is somehow invalid.
 	 */
 	private ExecutionTrace genBrokenBookstoreTraceEssSkip() throws InvalidTraceException {
-		/*
-		 * Create an Execution Trace and add Executions in
-		 * arbitrary order
-		 */
+		// Create an Execution Trace and add Executions in arbitrary order
 		final ExecutionTrace executionTrace = new ExecutionTrace(TestExecutionTraceBookstore.TRACE_ID, TestExecutionTraceBookstore.SESSION_ID);
 		final Execution exec1_1__catalog_getBook__broken = this.eFactory.genExecution("Catalog", "catalog", "getBook", TestExecutionTraceBookstore.TRACE_ID, // NOCS
 				TestExecutionTraceBookstore.SESSION_ID, 2, 4, 1, 3); // NOCS
@@ -436,11 +430,9 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 	@Test(expected = InvalidTraceException.class)
 	public void testMessageTraceTransformationBrokenTraceEssSkip() throws InvalidTraceException {
 		final ExecutionTrace executionTrace = this.genBrokenBookstoreTraceEssSkip();
+		// Transform Execution Trace to Message Trace representation
 
-		/*
-		 * Transform Execution Trace to Message Trace representation
-		 */
-		/* The following call must throw an Exception in this test case */
+		// The following call must throw an Exception in this test case
 		executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 	}
 
@@ -457,10 +449,7 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 	 *             If the internally assembled execution trace is somehow invalid.
 	 */
 	private ExecutionTrace genBrokenBookstoreTraceEoiSkip() throws InvalidTraceException {
-		/*
-		 * Create an Execution Trace and add Executions in
-		 * arbitrary order
-		 */
+		// Create an Execution Trace and add Executions in arbitrary order
 		final ExecutionTrace executionTrace = new ExecutionTrace(TestExecutionTraceBookstore.TRACE_ID, TestExecutionTraceBookstore.SESSION_ID);
 		final Execution exec3_2__catalog_getBook__broken = this.eFactory.genExecution("Catalog", "catalog", "getBook", TestExecutionTraceBookstore.TRACE_ID, // NOCS
 				TestExecutionTraceBookstore.SESSION_ID, 6, 7, 4, 2);
@@ -487,16 +476,12 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 	 */
 	@Test(expected = InvalidTraceException.class)
 	public void testMessageTraceTransformationBrokenTraceEoiSkip() throws InvalidTraceException {
-		/*
-		 * Create an Execution Trace and add Executions in
-		 * arbitrary order
-		 */
+		// Create an Execution Trace and add Executions in arbitrary order
 		final ExecutionTrace executionTrace = this.genBrokenBookstoreTraceEoiSkip();
 
-		/*
-		 * Transform Execution Trace to Message Trace representation
-		 */
-		/* The following call must throw an Exception in this test case */
+		// Transform Execution Trace to Message Trace representation
+
+		// The following call must throw an Exception in this test case
 		executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 	}
 }

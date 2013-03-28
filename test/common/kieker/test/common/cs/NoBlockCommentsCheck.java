@@ -26,8 +26,8 @@ import com.puppycrawl.tools.checkstyle.api.TextBlock;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 
 /**
- * This class extends checkstyle with a new check which makes sure that no block comments (expect for javadoc) are used within the source files. The check detects
- * all files with a package declaration.
+ * This class extends checkstyle with a new check which makes sure that no block comments (expect for javadoc and comments containing {@code (non-javadoc)}) are
+ * used within the source files. The check detects all files with a package declaration.
  * 
  * @author Nils Christian Ehmke
  * 
@@ -58,13 +58,26 @@ public class NoBlockCommentsCheck extends Check {
 		final Set<Entry<Integer, List<TextBlock>>> comments = this.getFileContents().getCComments().entrySet();
 
 		for (final Entry<Integer, List<TextBlock>> comment : comments) {
-			if (!this.isJavadocComment(comment.getValue())) {
+			if (!NoBlockCommentsCheck.isJavadocComment(comment.getValue()) && !NoBlockCommentsCheck.isSeeJavaDoc(comment.getValue())) {
 				this.log(comment.getKey(), "block comments are not allowed");
 			}
 		}
 	}
 
-	private boolean isJavadocComment(final List<TextBlock> comment) {
+	private static boolean isJavadocComment(final List<TextBlock> comment) {
 		return comment.get(0).getText()[0].startsWith("/**");
+	}
+
+	private static boolean isSeeJavaDoc(final List<TextBlock> comment) {
+		// Check whether there is a line containing (non-Javadoc) in the comment
+		for (final TextBlock block : comment) {
+			for (final String line : block.getText()) {
+				if (line.toLowerCase().contains("(non-javadoc)")) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 }

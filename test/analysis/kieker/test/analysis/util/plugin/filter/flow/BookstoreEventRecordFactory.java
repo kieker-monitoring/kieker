@@ -429,7 +429,7 @@ public final class BookstoreEventRecordFactory {
 		disturbEvent = new SplitEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call3_2__catalog_getBook, traceId, curOrderIndex++);
 		call2_1__crm_getOrders =
 				new CallOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call2_1__crm_getOrders,
-						/* note that we are using the timestamp of the omitted event here! */
+						// note that we are using the timestamp of the omitted event here!
 						traceId, curOrderIndex++,
 						BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
 						BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
@@ -489,7 +489,7 @@ public final class BookstoreEventRecordFactory {
 						BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE);
 		call2_1__crm_getOrders =
 				new CallOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call2_1__crm_getOrders,
-						/* note that we are using the timestamp of the omitted event here! */
+						// note that we are using the timestamp of the omitted event here!
 						traceId, curOrderIndex++,
 						BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
 						BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,

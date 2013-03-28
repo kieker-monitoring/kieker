@@ -86,7 +86,7 @@ public class TestPlugin extends AbstractKiekerTest {
 		final SimpleForwardFilterWithRepository simpleFilter = new SimpleForwardFilterWithRepository(new Configuration(), analysisController);
 		final ListCollectionFilter<Object> simpleSinkPlugin = new ListCollectionFilter<Object>(new Configuration(), analysisController);
 
-		/* Connect the plugins. */
+		// Connect the plugins.
 		analysisController.connect(
 				simpleListReader, ListReader.OUTPUT_PORT_NAME,
 				simpleFilter, SimpleForwardFilterWithRepository.INPUT_PORT_NAME);

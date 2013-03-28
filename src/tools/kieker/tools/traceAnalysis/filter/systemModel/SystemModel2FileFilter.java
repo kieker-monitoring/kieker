@@ -111,10 +111,7 @@ public class SystemModel2FileFilter extends AbstractTraceAnalysisFilter {
 		boolean error = errorBeforeTermination;
 		if (!error) {
 			try {
-				/*
-				 * Trying to create the canonical file path here.
-				 * Using a code block to hide the File.
-				 */
+				// Trying to create the canonical file path here. Using a code block to hide the File.
 				final File outputFileHTML = new File(this.outputFnHTML);
 				outputFnHTMLCanonical = outputFileHTML.getCanonicalPath(); // may throw IOExecption
 

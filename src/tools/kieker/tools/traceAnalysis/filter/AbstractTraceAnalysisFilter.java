@@ -92,13 +92,13 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 
 		AllocationComponent allocInst = systemModelRepository.getAllocationFactory()
 				.lookupAllocationComponentInstanceByNamedIdentifier(allocationComponentName);
-		if (allocInst == null) { /* Allocation component instance doesn't exist */
+		if (allocInst == null) { // Allocation component instance doesn't exist
 			AssemblyComponent assemblyComponent = systemModelRepository.getAssemblyFactory()
 					.lookupAssemblyComponentInstanceByNamedIdentifier(assemblyComponentTypeName);
 			if (assemblyComponent == null) { // assembly instance doesn't exist
 				ComponentType componentType = systemModelRepository.getTypeRepositoryFactory().lookupComponentTypeByNamedIdentifier(assemblyComponentTypeName);
 				if (componentType == null) { // NOPMD NOCS (NestedIf)
-					/* Component type doesn't exist */
+					// Component type doesn't exist
 					componentType = systemModelRepository.getTypeRepositoryFactory().createAndRegisterComponentType(assemblyComponentTypeName,
 							assemblyComponentTypeName);
 				}
@@ -116,7 +116,7 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 		}
 
 		Operation op = systemModelRepository.getOperationFactory().lookupOperationByNamedIdentifier(operationFactoryName);
-		if (op == null) { /* Operation doesn't exist */
+		if (op == null) {// Operation doesn't exist
 			op = systemModelRepository.getOperationFactory()
 					.createAndRegisterOperation(operationFactoryName, allocInst.getAssemblyComponent().getType(), operationSignature);
 			allocInst.getAssemblyComponent().getType().addOperation(op);

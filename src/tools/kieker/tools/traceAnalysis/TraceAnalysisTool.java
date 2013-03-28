@@ -428,22 +428,15 @@ public final class TraceAnalysisTool {
 				reader = new FSReader(conf, ANALYSIS_INSTANCE);
 			}
 
-			/*
-			 * Unify Strings
-			 */
+			// Unify Strings
 			final StringBufferFilter stringBufferFilter = new StringBufferFilter(new Configuration(), ANALYSIS_INSTANCE);
 			ANALYSIS_INSTANCE.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, stringBufferFilter, StringBufferFilter.INPUT_PORT_NAME_EVENTS);
 
-			/*
-			 * This map can be used within the constructor for all following plugins which use the repository with the name defined in the
-			 * AbstractTraceAnalysisPlugin.
-			 */
-
+			// This map can be used within the constructor for all following plugins which use the repository with the name defined in the
+			// AbstractTraceAnalysisPlugin.
 			final TimestampFilter timestampFilter;
 			{ // NOCS (nested block)
-				/*
-				 * Create the timestamp filter and connect to the reader's output port
-				 */
+				// Create the timestamp filter and connect to the reader's output port
 				final Configuration configTimestampFilter = new Configuration();
 				configTimestampFilter.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP,
 						Long.toString(TraceAnalysisTool.ignoreExecutionsBeforeTimestamp));
@@ -459,9 +452,7 @@ public final class TraceAnalysisTool {
 
 			final TraceIdFilter traceIdFilter;
 			{ // NOCS (nested block)
-				/*
-				 * Create the trace ID filter and connect to the timestamp filter's output port
-				 */
+				// Create the trace ID filter and connect to the timestamp filter's output port
 				final Configuration configTraceIdFilterFlow = new Configuration();
 				if (TraceAnalysisTool.selectedTraces == null) {
 					configTraceIdFilterFlow.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, Boolean.TRUE.toString());
@@ -479,9 +470,7 @@ public final class TraceAnalysisTool {
 
 			final ExecutionRecordTransformationFilter execRecTransformer;
 			{ // NOCS (nested block)
-				/*
-				 * Create the execution record transformation filter and connect to the trace ID filter's output port
-				 */
+				// Create the execution record transformation filter and connect to the trace ID filter's output port
 				final Configuration execRecTransformerConfig = new Configuration();
 				execRecTransformerConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.EXEC_TRACE_RECONSTR_COMPONENT_NAME);
 				execRecTransformer = new ExecutionRecordTransformationFilter(execRecTransformerConfig, ANALYSIS_INSTANCE);
@@ -491,9 +480,7 @@ public final class TraceAnalysisTool {
 			}
 
 			{ // NOCS (nested block)
-				/*
-				 * Create the trace reconstruction filter and connect to the record transformation filter's output port
-				 */
+				// Create the trace reconstruction filter and connect to the record transformation filter's output port
 				final Configuration mtReconstrFilterConfig = new Configuration();
 				mtReconstrFilterConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.TRACERECONSTR_COMPONENT_NAME);
 				mtReconstrFilterConfig.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
@@ -509,9 +496,7 @@ public final class TraceAnalysisTool {
 			}
 
 			{ // NOCS (nested block)
-				/*
-				 * Create the event record trace generation filter and connect to the trace ID filter's output port
-				 */
+				// Create the event record trace generation filter and connect to the trace ID filter's output port
 				final Configuration configurationEventRecordTraceGenerationFilter = new Configuration();
 				configurationEventRecordTraceGenerationFilter.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.EVENTRECORDTRACERECONSTR_COMPONENT_NAME);
 				configurationEventRecordTraceGenerationFilter.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
@@ -525,9 +510,7 @@ public final class TraceAnalysisTool {
 			}
 
 			{ // NOCS (nested block)
-				/*
-				 * Create the counter for valid/invalid event record traces
-				 */
+				// Create the counter for valid/invalid event record traces
 				final Configuration configurationEventRecordTraceCounter = new Configuration();
 				configurationEventRecordTraceCounter.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.EXECEVENTRACESFROMEVENTTRACES_COMPONENT_NAME);
 				eventRecordTraceCounter = new EventRecordTraceCounter(configurationEventRecordTraceCounter, ANALYSIS_INSTANCE);
@@ -541,10 +524,8 @@ public final class TraceAnalysisTool {
 			}
 
 			{ // NOCS (nested block)
-				/*
-				 * Create the event trace to execution/message trace transformation filter and connect its input to the
-				 * event record trace generation filter's output port
-				 */
+				// Create the event trace to execution/message trace transformation filter and connect its input to the event record trace generation filter's output
+				// port
 				final Configuration configurationEventTrace2ExecutionTraceFilter = new Configuration();
 				configurationEventTrace2ExecutionTraceFilter.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
 						Constants.EXECTRACESFROMEVENTTRACES_COMPONENT_NAME);
@@ -1014,7 +995,7 @@ public final class TraceAnalysisTool {
 					return false;
 				}
 
-				/* check whether inputDirFile contains a (kieker|tpmon).map file; the latter for legacy reasons */
+				// check whether inputDirFile contains a (kieker|tpmon).map file; the latter for legacy reasons
 				final File[] mapFiles = { new File(inputDir + File.separatorChar + FSUtil.MAP_FILENAME),
 					new File(inputDir + File.separatorChar + FSUtil.LEGACY_MAP_FILENAME), };
 				boolean mapFileExists = false;

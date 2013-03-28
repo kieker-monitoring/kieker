@@ -97,7 +97,7 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 			final int rootOperationId = OperationRepository.ROOT_OPERATION.getId();
 			final Operation senderOperation = m.getSendingExecution().getOperation();
 			final Operation receiverOperation = m.getReceivingExecution().getOperation();
-			/* The following two get-calls to the factory return s.th. in either case */
+			// The following two get-calls to the factory return s.th. in either case
 			final AllocationComponentOperationPairFactory pairFactory = this.getSystemEntityFactory().getAllocationPairFactory();
 
 			AllocationComponentOperationPair senderPair;

@@ -93,11 +93,8 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 	private final boolean shortLabels;
 	private final SDModes sdmode;
 
-	/*
-	 * Read Spinellis' UML macros from file META-INF/sequence.pic to the String
-	 * variable sequencePicContent. This contents are copied to every sequence
-	 * diagram .pic file
-	 */
+	// Read Spinellis' UML macros from file META-INF/sequence.pic to the String variable sequencePicContent. This contents are copied to every sequence diagram .pic
+	// file
 	static {
 		final StringBuilder sb = new StringBuilder();
 		boolean error = true;

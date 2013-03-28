@@ -92,10 +92,7 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 			this.unsetKiekerThreadLocalData(); // unset all variables
 			return;
 		} else {
-			/*
-			 * thread-local traceId exists: eoi, ess, and sessionID should have
-			 * been registered before
-			 */
+			// thread-local traceId exists: eoi, ess, and sessionID should have been registered before
 			eoi = CF_REGISTRY.recallThreadLocalEOI();
 			sessionID = SESSION_REGISTRY.recallThreadLocalSessionId();
 			myEoi = SOAP_REGISTRY.recallThreadLocalInRequestEOI();
@@ -123,7 +120,7 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 		// .) Add sessionId to response header
 		// There's no need to pass the session ID back.
 
-		/* 2.) Add traceId to response header */
+		// 2.) Add traceId to response header
 		// Actually, there's no need to pass the trace ID back but
 		// we do this for consistency checks on the caller side.
 		e = d.createElementNS(SOAPHeaderConstants.NAMESPACE_URI, SOAPHeaderConstants.TRACE_QUALIFIED_NAME);

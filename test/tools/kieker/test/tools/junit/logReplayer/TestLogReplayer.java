@@ -88,11 +88,11 @@ public class TestLogReplayer extends AbstractKiekerTest {
 	@Test
 	public void testIt() {
 		final ListReplayer replayer = new ListReplayer(this.monitoringConfigurationFile.getAbsolutePath(),
-				/* realtimeMode: */false,
-				/* keepOriginalLoggingTimestamps: */true,
-				/* numRealtimeWorkerThreads: */1,
-				/* ignoreRecordsBeforeTimestamp */AbstractLogReplayer.MIN_TIMESTAMP,
-				/* ignoreRecordsAfterTimestamp */AbstractLogReplayer.MAX_TIMESTAMP,
+				false, // realtimeMode
+				true, // keepOriginalLoggingTimestamps
+				1, // numRealtimeWorkerThreads
+				AbstractLogReplayer.MIN_TIMESTAMP, // ignoreRecordsBeforeTimestamp
+				AbstractLogReplayer.MAX_TIMESTAMP, // ignoreRecordsAfterTimestamp
 				this.replayList);
 		Assert.assertTrue(replayer.replay());
 

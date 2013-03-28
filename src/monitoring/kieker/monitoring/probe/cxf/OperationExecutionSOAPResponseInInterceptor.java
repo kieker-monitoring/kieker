@@ -80,18 +80,16 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 			final boolean isEntryCall = SOAP_REGISTRY.recallThreadLocalOutRequestIsEntryCall(); // NOPMD (must be requerst here!)
 			final SoapMessage soapMsg = (SoapMessage) msg;
 
-			/* 1.) Extract sessionId from SOAP header */
+			// 1.) Extract sessionId from SOAP header
 			// No need to fetch sessionId from reponse header since it must be
 			// the same as before the request.
 
-			/* 2.) Extract eoi from SOAP header */
+			// 2.) Extract eoi from SOAP header
 			Header hdr = soapMsg.getHeader(SOAPHeaderConstants.EOI_IDENTIFIER_QNAME);
 			final String eoiStr = this.getStringContentFromHeader(hdr); // null if hdr==null
 			if (eoiStr == null) {
-				/*
-				 * No Kieker eoi in header.
-				 * This may happen for responses from callees w/o Kieker instrumentation.
-				 */
+				// No Kieker eoi in header. This may happen for responses from callees w/o Kieker instrumentation.
+
 				LOG.info("Found no Kieker eoi in response header. Will unset all threadLocal variables");
 				this.unsetKiekerThreadLocalData();
 				return;
@@ -105,18 +103,16 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 				return;
 			}
 
-			/* 3.) Extract ess from SOAP header */
+			// 3.) Extract ess from SOAP header
 			// No need to fetch ess from reponse header since the stack size
 			// is the same as before the request.
 
-			/* 4. Extract traceId from SOAP header */
+			// 4. Extract traceId from SOAP header
 			hdr = soapMsg.getHeader(SOAPHeaderConstants.TRACE_IDENTIFIER_QNAME);
 			final String traceIdStr = this.getStringContentFromHeader(hdr); // null if hdr==null
 			if (traceIdStr == null) {
-				/*
-				 * No Kieker trace Id in header.
-				 * This may happen for responses from callees w/o Kieker instrumentation.
-				 */
+				// No Kieker trace Id in header. This may happen for responses from callees w/o Kieker instrumentation.
+
 				LOG.info("Found no Kieker traceId in response header. Will unset all threadLocal variables");
 				this.unsetKiekerThreadLocalData();
 				return;
@@ -130,7 +126,7 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 				return;
 			}
 
-			/* Recall my thread-local data stored before the SOAP call */
+			// Recall my thread-local data stored before the SOAP call
 			final long myTraceId = CF_REGISTRY.recallThreadLocalTraceId();
 			final String mySessionId = SESSION_REGISTRY.recallThreadLocalSessionId();
 			final int myEoi = CF_REGISTRY.recallThreadLocalEOI();
@@ -147,10 +143,8 @@ public class OperationExecutionSOAPResponseInInterceptor extends SoapHeaderInter
 					myTout, this.vmName, myEoi, myEss);
 			this.monitoringController.newMonitoringRecord(rec);
 
-			/*
-			 * Store received Kieker EOI
-			 * ESS remains the same as before the call since we didn't increment the variable!
-			 */
+			// Store received Kieker EOI. ESS remains the same as before the call since we didn't increment the variable!
+
 			CF_REGISTRY.storeThreadLocalEOI(eoi);
 
 			if (isEntryCall) { // clean up iff trace's origin was right before the call!

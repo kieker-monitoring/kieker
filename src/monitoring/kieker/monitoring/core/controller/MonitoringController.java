@@ -96,11 +96,8 @@ public final class MonitoringController extends AbstractController implements IM
 		}
 
 		if (configuration.getBooleanProperty(ConfigurationFactory.USE_SHUTDOWN_HOOK)) {
-			/*
-			 * This ensures that the terminateMonitoring() method is always called
-			 * before shutting down the JVM. This method ensures that necessary cleanup
-			 * steps are finished and no information is lost due to asynchronous writers.
-			 */
+			// This ensures that the terminateMonitoring() method is always called before shutting down the JVM. This method ensures that necessary cleanup steps are
+			// finished and no information is lost due to asynchronous writers.
 			try {
 				Runtime.getRuntime().addShutdownHook(new Thread() {
 

@@ -144,16 +144,16 @@ public class TestConfigurationFactoryMethods extends AbstractKiekerTest {
 			final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
 			Assert.assertEquals("KIEKER-SINGLETON", configuration.getStringProperty(ConfigurationFactory.CONTROLLER_NAME));
 		}
-		/*
-		 * { // NOCS (adding properties file in default location)
-		 * final String fn = "build/tests/" + Configuration.CUSTOM_PROPERTIES_LOCATION_CLASSPATH;
-		 * final PrintWriter pw = new PrintWriter(new FileOutputStream(fn, false));
-		 * pw.println(Configuration.CONTROLLER_NAME + "=KIEKER-SINGLETON-PROPERTIES-FILE-DEFAULT");
-		 * pw.close();
-		 * final Configuration configuration = Configuration.createSingletonConfiguration();
-		 * Assert.assertEquals("KIEKER-SINGLETON-PROPERTIES-FILE-DEFAULT", configuration.getStringProperty(Configuration.CONTROLLER_NAME));
-		 * }
-		 */
+
+		// { // NOCS (adding properties file in default location)
+		// final String fn = "build/tests/" + Configuration.CUSTOM_PROPERTIES_LOCATION_CLASSPATH;
+		// final PrintWriter pw = new PrintWriter(new FileOutputStream(fn, false));
+		// pw.println(Configuration.CONTROLLER_NAME + "=KIEKER-SINGLETON-PROPERTIES-FILE-DEFAULT");
+		// pw.close();
+		// final Configuration configuration = Configuration.createSingletonConfiguration();
+		// Assert.assertEquals("KIEKER-SINGLETON-PROPERTIES-FILE-DEFAULT", configuration.getStringProperty(Configuration.CONTROLLER_NAME));
+		// }
+
 		{ // NOCS (adding properties file in custom location)
 			System.setProperty(ConfigurationFactory.CUSTOM_PROPERTIES_LOCATION_JVM, TestConfigurationFactoryMethods.EXAMPLE_CONFIG_FILE_IN_TRUNK);
 			final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
