@@ -133,15 +133,21 @@ attributes and operations via the MBean interface. %
 \label{fig:monitoringController:MBean:jconsole}
 \end{figure}
 
-In order to enable JMX MBean access to the \class{MonitoringController}, the value of the %
-configuration property \textit{kieker.monitoring.MBean} must be set to \textit{true} (listing below). %
+In order to enable JMX MBean access to the \class{MonitoringController}, the corresponding configuration properties must be set to \textit{true} (listing below). %
 The \file{\monitoringPropertiesFile} includes additional JMX-related configuration properties. \\
 
 \setPropertiesListing
 \begin{lstlisting}
- # Whether the MonitoringController will be available as an MBean.
-kieker.monitoring.MBean=true
+## Whether any JMX functionality is available
+kieker.monitoring.jmx=true
+...
+
+## Enable/Disable the MonitoringController MBean
+kieker.monitoring.jmx.MonitoringController=true
+...
 \end{lstlisting}
+
+For remote access to the server, set \textit{kieker.monitoring.jmx.remote=true}. In this case it is recommended to set \textit{com.sun.management.jmxremote.authenticate=true} as well. 
 
 \subsection{Adaptive Monitoring}
 
