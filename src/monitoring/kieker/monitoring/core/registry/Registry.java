@@ -173,7 +173,7 @@ public final class Registry<E> implements IRegistry<E> {
 		this.eArrayCached = (E[]) new Object[0]; // invalidate cache
 	}
 
-	/* ---------------- Inner Classes -------------- */
+	// ---------------- Inner Classes --------------
 
 	/**
 	 * Registry entry.

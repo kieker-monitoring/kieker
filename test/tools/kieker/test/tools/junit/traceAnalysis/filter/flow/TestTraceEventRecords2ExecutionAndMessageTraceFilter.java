@@ -78,9 +78,9 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 		this.exec0_0__bookstore_searchBook =
 				this.bookstoreExecutionFactory.createBookstoreExecution_exec0_0__bookstore_searchBook(TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID,
 						TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.HOSTNAME,
-						/* tin: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry0_0__bookstore_searchBook,
-						/* tout: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook,
-						/* assumed: */false);
+						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry0_0__bookstore_searchBook, // tin
+						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook, // tout
+						false); // assumed
 		// might be needed, eventually:
 		// this.exec0_0__bookstore_searchBook_assumed =
 		// this.bookstoreExecutionFactory.createBookstoreExecution_exec0_0__bookstore_searchBook(TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID,
@@ -246,14 +246,12 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 					this.bookstoreExecutionFactory.createBookstoreExecution_exec2_1__crm_getOrders(
 							TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID,
 							TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.HOSTNAME,
-							/* The assumed entry timestamp is the exit timestamp of the previous call */
-							/* tin: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call2_1__crm_getOrders,
-							/*
-							 * We will only have a (before) call to CRM.getOrder(..), hence the assumed return timestamp is
-							 * the return time of the wrapping Bookstore.searchBook(..) execution:
-							 */
-							/* tout: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook,
-							/* assumed: */true)); // because call is missing
+							// The assumed entry timestamp is the exit timestamp of the previous call
+							initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call2_1__crm_getOrders, // tin
+							// We will only have a (before) call to CRM.getOrder(..), hence the assumed return timestamp is the return time of the wrapping
+							// Bookstore.searchBook(..) execution:
+							initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook, // tout
+							true)); // assumed, because call is missing
 
 			expectedExecutionTrace.add(this.exec3_2__catalog_getBook);
 		}
@@ -283,20 +281,18 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 		executionTrace.add(
 				this.bookstoreExecutionFactory.createBookstoreExecution_exec0_0__bookstore_searchBook(TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID,
 						TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.HOSTNAME,
-						/* tin: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry0_0__bookstore_searchBook,
-						/* tout: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook,
-						/* assumed: */false));
+						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry0_0__bookstore_searchBook, // tin
+						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook, // tout
+						false)); // assumed
 
 		executionTrace.add(
 				this.bookstoreExecutionFactory.createBookstoreExecution_exec1_1__catalog_getBook(TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID,
 						TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.HOSTNAME,
-						/* tin: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call1_1__catalog_getBook,
-						/*
-						 * We will only have a (before) call to Catalog.getBook(..), hence the assumed return timestamp is
-						 * the return time of the wrapping Bookstore.searchBook(..) execution:
-						 */
-						/* tout: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook,
-						/* assumed: */true)); // because no entry
+						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call1_1__catalog_getBook, // tin
+						// We will only have a (before) call to Catalog.getBook(..), hence the assumed return timestamp is the return time of the wrapping
+						// Bookstore.searchBook(..) execution:
+						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook, // tout
+						true)); // assumed, because no entry
 
 		// just to make sure that this trace is valid
 		executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
@@ -337,29 +333,27 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 		executionTrace.add(
 				this.bookstoreExecutionFactory.createBookstoreExecution_exec0_0__bookstore_searchBook(TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID,
 						TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.HOSTNAME,
-						/* tin: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry0_0__bookstore_searchBook,
-						/* tout: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook,
-						/* assumed: */false));
+						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry0_0__bookstore_searchBook, // tin
+						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook, // tout
+						false)); // assumed
 
 		executionTrace.add(
 				this.bookstoreExecutionFactory.createBookstoreExecution_exec1_1__catalog_getBook(TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID,
 						TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.HOSTNAME,
-						/* tin: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call1_1__catalog_getBook,
-						/* tout: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call2_1__crm_getOrders,
-						/* assumed: */true)); // because only call no entry
+						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call1_1__catalog_getBook, // tin
+						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call2_1__crm_getOrders, // tout
+						true)); // assumed, because only call no entry
 
 		executionTrace.add(
 				this.bookstoreExecutionFactory.createBookstoreExecution_exec2_1__crm_getOrders(
 						TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID,
 						TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.HOSTNAME,
-						/* The assumed entry timestamp is the exit timestamp of the previous call */
-						/* tin: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call2_1__crm_getOrders,
-						/*
-						 * We will only have a (before) call to CRM.getOrder(..), hence the assumed return timestamp is
-						 * the return time of the wrapping Bookstore.searchBook(..) execution:
-						 */
-						/* tout: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook,
-						/* assumed: */true)); // because only call no entry
+						// The assumed entry timestamp is the exit timestamp of the previous call
+						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call2_1__crm_getOrders, // tin
+						// We will only have a (before) call to CRM.getOrder(..), hence the assumed return timestamp is the return time of the wrapping
+						// Bookstore.searchBook(..) execution:
+						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook, // tout
+						true)); // , assumedbecause only call no entry
 
 		// just to make sure that this trace is valid
 		executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
@@ -400,30 +394,30 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 		executionTrace.add(
 				this.bookstoreExecutionFactory.createBookstoreExecution_exec0_0__bookstore_searchBook(TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID,
 						TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.HOSTNAME,
-						/* tin: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry0_0__bookstore_searchBook,
-						/* tout: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook,
-						/* assumed: */false));
+						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry0_0__bookstore_searchBook, // tin
+						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook, // tout
+						false)); // assumed
 		executionTrace.add(
 				this.bookstoreExecutionFactory.createBookstoreExecution_crm_getOrders(
 						TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID,
 						TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.HOSTNAME,
-						/* The assumed entry timestamp is the exit timestamp of the previous call */
-						/* tin: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call2_1__crm_getOrders,
-						/*
-						 * We will only have a (before) call to CRM.getOrder(..), hence the assumed return timestamp is
-						 * the return time of the wrapping Bookstore.searchBook(..) execution:
-						 */
-						/* tout: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook,
-						/* eoi: */1, /* ess: */1,
-						/* assumed: */true)); // because only call no entry
+						// The assumed entry timestamp is the exit timestamp of the previous call
+						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call2_1__crm_getOrders, // tin
+						// We will only have a (before) call to CRM.getOrder(..), hence the assumed return timestamp is the return time of the wrapping
+						// Bookstore.searchBook(..) execution:
+						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook, // tout
+						1, // eoi
+						1, // ess
+						true)); // assumed, because only call no entry
 		executionTrace.add(
 				this.bookstoreExecutionFactory.createBookstoreExecution_catalog_getBook(
 						TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID,
 						TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.HOSTNAME,
-						/* tin: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call3_2__catalog_getBook,
-						/* tout: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook,
-						/* eoi: */2, /* ess: */2,
-						/* assumed: */true)); // because only call no entry
+						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call3_2__catalog_getBook, // tin
+						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook, // tout
+						2, // eoi
+						2, // ess
+						true)); // assumed, because only call no entry
 
 		// just to make sure that this trace is valid
 		executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);

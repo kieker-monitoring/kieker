@@ -537,7 +537,8 @@ public class TestPatternParser extends AbstractKiekerTest {
 		final String[] operationNames = { "doIt", "get*", "*" };
 		final String[] paramLists = { "", "*", "A, B", ".." };
 		final String[] whites = { " ", "  ", "\t" };
-		final String[] whiteAndNoWhite = { " ", "  ", "\t", /* in addition to whites: */"" };
+		final String[] whiteAndNoWhite = { " ", "  ", "\t",
+			"", }; // in addition to whites
 
 		// works
 		// final String signature01 = "public static void package.Class.method(A, B)";

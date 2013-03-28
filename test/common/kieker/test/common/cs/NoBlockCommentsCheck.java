@@ -17,6 +17,7 @@
 package kieker.test.common.cs;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -72,7 +73,7 @@ public class NoBlockCommentsCheck extends Check {
 		// Check whether there is a line containing (non-Javadoc) in the comment
 		for (final TextBlock block : comment) {
 			for (final String line : block.getText()) {
-				if (line.toLowerCase().contains("(non-javadoc)")) {
+				if (line.toLowerCase(Locale.ENGLISH).contains("(non-javadoc)")) {
 					return true;
 				}
 			}

@@ -107,7 +107,7 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 			}
 			ExecutionContainer execContainer = systemModelRepository.getExecutionEnvironmentFactory()
 					.lookupExecutionContainerByNamedIdentifier(executionContainerName);
-			if (execContainer == null) { /* doesn't exist, yet */
+			if (execContainer == null) { // doesn't exist, yet
 				execContainer = systemModelRepository.getExecutionEnvironmentFactory()
 						.createAndRegisterExecutionContainer(executionContainerName, executionContainerName);
 			}
@@ -116,7 +116,7 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 		}
 
 		Operation op = systemModelRepository.getOperationFactory().lookupOperationByNamedIdentifier(operationFactoryName);
-		if (op == null) {// Operation doesn't exist
+		if (op == null) { // Operation doesn't exist
 			op = systemModelRepository.getOperationFactory()
 					.createAndRegisterOperation(operationFactoryName, allocInst.getAssemblyComponent().getType(), operationSignature);
 			allocInst.getAssemblyComponent().getType().addOperation(op);
