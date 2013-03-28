@@ -80,23 +80,19 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 		if (msg instanceof SoapMessage) {
 			final SoapMessage soapMsg = (SoapMessage) msg;
 
-			/*
-			 * Store entry time tin for this trace.
-			 * This value will be used by the corresponding invocation of the
-			 * ResponseOutProbe.
-			 */
+			// Store entry time tin for this trace. This value will be used by the corresponding invocation of the ResponseOutProbe.
 			final long tin = this.timeSource.getTime();
 			boolean isEntryCall = false; // set true below if is entry call
 
-			/* 1.) Extract sessionId from SOAP header */
+			// 1.) Extract sessionId from SOAP header
 			Header hdr = soapMsg.getHeader(SOAPHeaderConstants.SESSION_IDENTIFIER_QNAME);
 			String sessionId = this.getStringContentFromHeader(hdr); // null if hdr==null
 			if (sessionId == null) {
-				/* no Kieker session id in header */
+				// no Kieker session id in header
 				sessionId = OperationExecutionRecord.NO_SESSION_ID;
 			}
 
-			/* 2.) Extract eoi from SOAP header */
+			// 2.) Extract eoi from SOAP header
 			hdr = soapMsg.getHeader(SOAPHeaderConstants.EOI_IDENTIFIER_QNAME);
 			final String eoiStr = this.getStringContentFromHeader(hdr); // null if hdr==null
 			int eoi = -1;
@@ -108,7 +104,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 				}
 			}
 
-			/* 3.) Extract ess from SOAP header */
+			// 3.) Extract ess from SOAP header
 			hdr = soapMsg.getHeader(SOAPHeaderConstants.ESS_IDENTIFIER_QNAME);
 			final String essStr = this.getStringContentFromHeader(hdr); // null if hdr==null
 			int ess = -1;
@@ -120,7 +116,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 				}
 			}
 
-			/* 4. Extract traceId from SOAP header */
+			// 4. Extract traceId from SOAP header
 			hdr = soapMsg.getHeader(SOAPHeaderConstants.TRACE_IDENTIFIER_QNAME);
 			final String traceIdStr = this.getStringContentFromHeader(hdr); // null if hdr==null
 			long traceId = -1;
@@ -145,7 +141,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 				ess = 0; // ESS of this execution
 			}
 
-			/* Store thread-local values */
+			// Store thread-local values
 			CF_REGISTRY.storeThreadLocalTraceId(traceId);
 			CF_REGISTRY.storeThreadLocalEOI(eoi); // this execution has EOI=eoi; next execution will get eoi with
 													// incrementAndRecall

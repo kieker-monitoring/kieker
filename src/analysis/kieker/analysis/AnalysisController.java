@@ -685,7 +685,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		}
 		// Call init() method of all plug-ins.
 		for (final AbstractReaderPlugin reader : this.readers) {
-			/* Make also sure that all repository ports of all plugins are connected. */
+			// Make also sure that all repository ports of all plugins are connected.
 			if (!reader.areAllRepositoryPortsConnected()) {
 				this.terminate(true);
 				throw new AnalysisConfigurationException("Reader '" + reader.getName() + "' (" + reader.getPluginName() + ") has unconnected repositories.");
@@ -696,7 +696,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 			}
 		}
 		for (final AbstractFilterPlugin filter : this.filters) {
-			/* Make also sure that all repository ports of all plugins are connected. */
+			// Make also sure that all repository ports of all plugins are connected.
 			if (!filter.areAllRepositoryPortsConnected()) {
 				this.terminate(true);
 				throw new AnalysisConfigurationException("Plugin '" + filter.getName() + "' (" + filter.getPluginName() + ") has unconnected repositories.");

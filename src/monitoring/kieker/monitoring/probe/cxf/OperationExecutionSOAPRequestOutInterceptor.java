@@ -110,7 +110,7 @@ public class OperationExecutionSOAPRequestOutInterceptor extends SoapHeaderOutFi
 				SESSION_REGISTRY.storeThreadLocalSessionId(sessionID);
 			}
 		} else {
-			/* thread-local traceId exists: eoi and ess should have been registered before */
+			// thread-local traceId exists: eoi and ess should have been registered before
 			eoi = CF_REGISTRY.incrementAndRecallThreadLocalEOI();
 			ess = CF_REGISTRY.recallThreadLocalESS(); // do not increment in this case!
 			if (sessionID == null) {
@@ -124,22 +124,22 @@ public class OperationExecutionSOAPRequestOutInterceptor extends SoapHeaderOutFi
 		final Document d = DOMUtils.createDocument();
 		Element e;
 		Header hdr;
-		/* Add sessionId to header */
+		// Add sessionId to header
 		e = d.createElementNS(SOAPHeaderConstants.NAMESPACE_URI, SOAPHeaderConstants.SESSION_QUALIFIED_NAME);
 		e.setTextContent(sessionID);
 		hdr = new Header(SOAPHeaderConstants.SESSION_IDENTIFIER_QNAME, e);
 		msg.getHeaders().add(hdr);
-		/* Add traceId to header */
+		// Add traceId to header
 		e = d.createElementNS(SOAPHeaderConstants.NAMESPACE_URI, SOAPHeaderConstants.TRACE_QUALIFIED_NAME);
 		e.setTextContent(Long.toString(traceId));
 		hdr = new Header(SOAPHeaderConstants.TRACE_IDENTIFIER_QNAME, e);
 		msg.getHeaders().add(hdr);
-		/* Add eoi to header */
+		// Add eoi to header
 		e = d.createElementNS(SOAPHeaderConstants.NAMESPACE_URI, SOAPHeaderConstants.EOI_QUALIFIED_NAME);
 		e.setTextContent(Integer.toString(eoi));
 		hdr = new Header(SOAPHeaderConstants.EOI_IDENTIFIER_QNAME, e);
 		msg.getHeaders().add(hdr);
-		/* Add ess to header */
+		// Add ess to header
 		e = d.createElementNS(SOAPHeaderConstants.NAMESPACE_URI, SOAPHeaderConstants.ESS_QUALIFIED_NAME);
 		e.setTextContent(Integer.toString(ess + 1));
 		hdr = new Header(SOAPHeaderConstants.ESS_IDENTIFIER_QNAME, e);

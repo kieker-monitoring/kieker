@@ -134,13 +134,13 @@ public final class FilesystemLogReplayerStarter {
 	private static boolean initFromArgs() {
 		boolean retVal = true;
 
-		/* 0.) monitoring properties */
+		// 0.) monitoring properties
 		monitoringConfigurationFile = cmdl.getOptionValue(CMD_OPT_NAME_MONITORING_CONFIGURATION);
 
-		/* 1.) init inputDirs */
+		// 1.) init inputDirs
 		FilesystemLogReplayerStarter.inputDirs = FilesystemLogReplayerStarter.cmdl.getOptionValues(CMD_OPT_NAME_INPUTDIRS);
 
-		/* 2.) init keepOriginalLoggingTimestamps */
+		// 2.) init keepOriginalLoggingTimestamps
 		final String keepOriginalLoggingTimestampsOptValStr = FilesystemLogReplayerStarter.cmdl.getOptionValue(
 				CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS, "true");
 		if (!("true".equals(keepOriginalLoggingTimestampsOptValStr) || "false".equals(keepOriginalLoggingTimestampsOptValStr))) {
@@ -152,7 +152,7 @@ public final class FilesystemLogReplayerStarter {
 		LOG.info("Keeping original logging timestamps: "
 				+ (FilesystemLogReplayerStarter.keepOriginalLoggingTimestamps ? "true" : "false")); // NOCS
 
-		/* 3.) init realtimeMode */
+		// 3.) init realtimeMode
 		final String realtimeOptValStr = FilesystemLogReplayerStarter.cmdl.getOptionValue(CMD_OPT_NAME_REALTIME, "false");
 		if (!("true".equals(realtimeOptValStr) || "false".equals(realtimeOptValStr))) {
 			System.out.println("Invalid value for option " + CMD_OPT_NAME_REALTIME + ": '" + realtimeOptValStr + "'"); // NOPMD (System.out)
@@ -160,7 +160,7 @@ public final class FilesystemLogReplayerStarter {
 		}
 		FilesystemLogReplayerStarter.realtimeMode = "true".equals(realtimeOptValStr);
 
-		/* 4.) init numRealtimeWorkerThreads */
+		// 4.) init numRealtimeWorkerThreads
 		final String numRealtimeWorkerThreadsStr = FilesystemLogReplayerStarter.cmdl.getOptionValue(CMD_OPT_NAME_NUM_REALTIME_WORKERS,
 				"1");
 		try {
@@ -179,7 +179,7 @@ public final class FilesystemLogReplayerStarter {
 			retVal = false;
 		}
 
-		/* 5.) init ignoreRecordsBefore/After */
+		// 5.) init ignoreRecordsBefore/After
 		final DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT_PATTERN, Locale.US);
 		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
@@ -208,7 +208,7 @@ public final class FilesystemLogReplayerStarter {
 			return false;
 		}
 
-		/* log configuration */
+		// log configuration
 		if (retVal) {
 			LOG.info("inputDirs: "
 					+ FilesystemLogReplayerStarter.fromStringArrayToDeliminedString(FilesystemLogReplayerStarter.inputDirs, ';'));
@@ -246,7 +246,7 @@ public final class FilesystemLogReplayerStarter {
 			System.exit(1);
 		}
 
-		/* Parsed args and initialized variables */
+		// Parsed args and initialized variables
 
 		if (FilesystemLogReplayerStarter.realtimeMode) {
 			LOG.info("Replaying log data in real time");

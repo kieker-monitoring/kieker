@@ -87,10 +87,7 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 		int myEss = -1;
 
 		if (traceId == -1) {
-			/*
-			 * Kieker trace Id not registered.
-			 * Should not happen, since this is a response message!
-			 */
+			// Kieker trace Id not registered. Should not happen, since this is a response message!
 			LOG.warn("Kieker traceId not registered. Will unset all threadLocal variables and return.");
 			this.unsetKiekerThreadLocalData(); // unset all variables
 			return;
@@ -108,17 +105,14 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 			isEntryCall = SOAP_REGISTRY.recallThreadLocalInRequestIsEntryCall();
 		}
 
-		/* The trace is leaving this node, thus we need to clean up the thread-local variables. */
+		// The trace is leaving this node, thus we need to clean up the thread-local variables.
 		this.unsetKiekerThreadLocalData();
 
-		/* Log this execution */
+		// Log this execution
 		final OperationExecutionRecord rec = new OperationExecutionRecord(SIGNATURE, sessionID, traceId, tin, tout, this.vmName, myEoi, myEss);
 		this.monitoringController.newMonitoringRecord(rec);
 
-		/*
-		 * We don't put Kieker data into response header if request didn't
-		 * contain Kieker information
-		 */
+		// We don't put Kieker data into response header if request didn't contain Kieker information
 		if (isEntryCall) {
 			return;
 		}
@@ -126,7 +120,7 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 		final Document d = DOMUtils.createDocument();
 		Element e;
 		Header hdr;
-		/* 1.) Add sessionId to response header */
+		// .) Add sessionId to response header
 		// There's no need to pass the session ID back.
 
 		/* 2.) Add traceId to response header */
@@ -137,13 +131,13 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 		hdr = new Header(SOAPHeaderConstants.TRACE_IDENTIFIER_QNAME, e);
 		msg.getHeaders().add(hdr);
 
-		/* 3.) Add eoi to response header */
+		// 3.) Add eoi to response header
 		e = d.createElementNS(SOAPHeaderConstants.NAMESPACE_URI, SOAPHeaderConstants.EOI_QUALIFIED_NAME);
 		e.setTextContent(Integer.toString(eoi));
 		hdr = new Header(SOAPHeaderConstants.EOI_IDENTIFIER_QNAME, e);
 		msg.getHeaders().add(hdr);
 
-		/* 4.) Add ess to response header */
+		// 4.) Add ess to response header
 		// There's no need to pass the ESS back.
 	}
 

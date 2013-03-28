@@ -43,9 +43,7 @@ public final class ConfigurationFactory implements Keys {
 	 */
 	private ConfigurationFactory() {}
 
-	/*
-	 * factory methods
-	 */
+	// factory methods
 
 	/**
 	 * Creates the configuration for the singleton controller instance. Note

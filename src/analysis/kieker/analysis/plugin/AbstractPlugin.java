@@ -375,7 +375,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			return false;
 		}
 
-		/* Seems like the connection is okay. */
+		// Seems like the connection is okay.
 		return true;
 	}
 

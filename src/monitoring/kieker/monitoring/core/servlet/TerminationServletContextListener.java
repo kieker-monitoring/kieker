@@ -50,7 +50,6 @@ public class TerminationServletContextListener implements ServletContextListener
 	 * @see javax.servlet.ServletContextListener#contextDestroyed(javax.servlet.
 	 * ServletContextEvent)
 	 */
-
 	public void contextDestroyed(final ServletContextEvent evt) {
 		this.ctrl.terminateMonitoring();
 		LOG.info("context destroyed");
@@ -63,7 +62,6 @@ public class TerminationServletContextListener implements ServletContextListener
 	 * javax.servlet.ServletContextListener#contextInitialized(javax.servlet
 	 * .ServletContextEvent)
 	 */
-
 	public void contextInitialized(final ServletContextEvent evt) {
 		LOG.info("context initialized");
 	}
