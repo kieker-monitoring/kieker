@@ -65,14 +65,14 @@ public class TestPeriodicSampling extends AbstractKiekerTest { // NOCS
 		monitoringController.disableMonitoring();
 
 		Thread.sleep(2000); // sleep 2 seconds while being disabled
-		/* There should be no new trigger events */
+		// There should be no new trigger events
 		final int numEventsWhileDisabled = numTriggers.get() - numEventsBeforeDisabled;
 
 		monitoringController.enableMonitoring();
 
 		Thread.sleep(2000); // sleep 2 seconds while being re-enabled
 
-		/* There should be at least one new trigger event */
+		// There should be at least one new trigger event
 
 		final int numEventsAfterReEnabled = numTriggers.get() - numEventsBeforeDisabled - numEventsWhileDisabled;
 
@@ -110,7 +110,7 @@ public class TestPeriodicSampling extends AbstractKiekerTest { // NOCS
 
 		Thread.sleep(10000); // sleep another 10 seconds
 
-		/* There should be no new trigger events */
+		// There should be no new trigger events
 
 		final int numEventsAfterRemoval = numTriggers.get();
 

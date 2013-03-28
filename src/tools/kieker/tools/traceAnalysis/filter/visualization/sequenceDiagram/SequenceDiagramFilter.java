@@ -122,7 +122,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 				LOG.error("Failed to close input stream", ex);
 			}
 			if (error) {
-				/* sequence.pic must be provided on execution of pic2plot */
+				// sequence.pic must be provided on execution of pic2plot
 				SEQUENCE_PIC_CONTENT = "copy \"sequence.pic\";"; // NOCS (this)
 			} else {
 				SEQUENCE_PIC_CONTENT = sb.toString(); // NOCS (this)

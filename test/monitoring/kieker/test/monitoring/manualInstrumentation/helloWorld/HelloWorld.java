@@ -36,7 +36,7 @@ public final class HelloWorld {
 		final IMonitoringController monitoringController = MonitoringController.getInstance();
 		final ITimeSource timeSource = monitoringController.getTimeSource();
 
-		/* recording of the start time of doSomething */
+		// recording of the start time of doSomething
 		final long startTime = timeSource.getTime();
 		HelloWorld.doSomething();
 		final long endTime = timeSource.getTime();
@@ -45,7 +45,7 @@ public final class HelloWorld {
 
 	private static void doSomething() {
 		System.out.println("doing something"); // NOPMD (System.out)
-		/* .. some application logic does something meaningful .. */
+		// .. some application logic does something meaningful ..
 	}
 
 	private static OperationExecutionRecord createOperationExecutionRecord(final String opString, final long traceId, final long tin, final long tout) {

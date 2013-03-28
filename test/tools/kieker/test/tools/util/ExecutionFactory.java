@@ -88,14 +88,14 @@ public class ExecutionFactory {
 			throw new NullPointerException("None of the String args must be null.");
 		}
 
-		/* Register component type (if it hasn't been registered before) */
+		// Register component type (if it hasn't been registered before)
 		ComponentType componentTypeA = this.systemEntityFactory.getTypeRepositoryFactory().lookupComponentTypeByNamedIdentifier(componentTypeName);
 		if (componentTypeA == null) {
 			componentTypeA = this.systemEntityFactory.getTypeRepositoryFactory().createAndRegisterComponentType(componentTypeName, componentTypeName);
 		}
 		Assert.assertEquals("Unexpected component type name", componentTypeName, componentTypeA.getTypeName());
 
-		/* Register operation (if it hasn't been registered before) */
+		// Register operation (if it hasn't been registered before)
 		Operation operationAa = this.systemEntityFactory.getOperationFactory().lookupOperationByNamedIdentifier(operationName);
 		if (operationAa == null) {
 			operationAa = this.systemEntityFactory.getOperationFactory().createAndRegisterOperation(
@@ -106,20 +106,20 @@ public class ExecutionFactory {
 			componentTypeA.addOperation(operationAa);
 		}
 
-		/* Register assembly component (if it hasn't been registered before) */
+		// Register assembly component (if it hasn't been registered before)
 		AssemblyComponent assemblyComponentA = this.systemEntityFactory.getAssemblyFactory().lookupAssemblyComponentInstanceByNamedIdentifier(componentInstanceName);
 		if (assemblyComponentA == null) {
 			assemblyComponentA = this.systemEntityFactory.getAssemblyFactory().createAndRegisterAssemblyComponentInstance(componentInstanceName, componentTypeA);
 		}
 
-		/* Register execution container (if it hasn't been registered before) */
+		// Register execution container (if it hasn't been registered before)
 		ExecutionContainer containerC = this.systemEntityFactory.getExecutionEnvironmentFactory().lookupExecutionContainerByNamedIdentifier(executionContainerName);
 		if (containerC == null) {
 			containerC = this.systemEntityFactory.getExecutionEnvironmentFactory().createAndRegisterExecutionContainer(executionContainerName,
 					executionContainerName);
 		}
 
-		/* Register allocation component (if it hasn't been registered before) */
+		// Register allocation component (if it hasn't been registered before)
 		final String allocationName = componentInstanceName + "::" + executionContainerName;
 		AllocationComponent allocationComponentA =
 				this.systemEntityFactory.getAllocationFactory().lookupAllocationComponentInstanceByNamedIdentifier(allocationName);

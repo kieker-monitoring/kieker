@@ -384,16 +384,12 @@ public class ExecutionTrace extends AbstractTrace {
 		 * @return -1 if e1 < e2, 1 if e1 > e2, 0 otherwise.
 		 */
 		public final int compare(final Execution e1, final Execution e2) {
-			/*
-			 * If executions equal, return immediately
-			 */
+			// If executions equal, return immediately
 			if (e1.equals(e2)) {
 				return 0;
 			}
 
-			/*
-			 * 1. criterion: trace id
-			 */
+			// 1. criterion: trace id
 			if (e1.getTraceId() < e2.getTraceId()) {
 				return -1;
 			} else if (e1.getTraceId() > e2.getTraceId()) {
@@ -402,9 +398,7 @@ public class ExecutionTrace extends AbstractTrace {
 
 			// At this location: trace ids equal
 
-			/*
-			 * 2. criterion: eoi
-			 */
+			// 2. criterion: eoi
 			if (e1.getEoi() < e2.getEoi()) {
 				return -1;
 			}
@@ -414,9 +408,7 @@ public class ExecutionTrace extends AbstractTrace {
 
 			// At this location: trace ids, eoi equal
 
-			/*
-			 * 3. criterion: ess
-			 */
+			// 3. criterion: ess
 			if (e1.getEss() < e2.getEss()) {
 				return -1;
 			}
@@ -426,9 +418,7 @@ public class ExecutionTrace extends AbstractTrace {
 
 			// At this location: trace ids, eoi, ess equal
 
-			/*
-			 * 4. criterion: tin
-			 */
+			// 4. criterion: tin
 			if (e1.getTin() < e2.getTin()) {
 				return -1;
 			}
@@ -438,9 +428,7 @@ public class ExecutionTrace extends AbstractTrace {
 
 			// At this location: trace ids, eoi, ess, tin equal
 
-			/*
-			 * 5. criterion: tout
-			 */
+			// 5. criterion: tout
 			if (e1.getTout() < e2.getTout()) {
 				return -1;
 			}
@@ -449,7 +437,6 @@ public class ExecutionTrace extends AbstractTrace {
 			}
 
 			// At this location: trace ids, eoi, ess, tin, tout equal
-
 			return e1.hashCode() - e2.hashCode();
 		}
 	}

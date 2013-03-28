@@ -59,7 +59,7 @@ public class TestLogReplayer extends AbstractKiekerTest {
 	private final List<IMonitoringRecord> replayList = new ArrayList<IMonitoringRecord>();
 
 	public TestLogReplayer() {
-		/* Adding arbitrary records */
+		// Adding arbitrary records
 		this.replayList.add(new EmptyRecord());
 		this.replayList.add(
 				new MemSwapUsageRecord(1, "myHost", /* memTotal: */17, /* memUsed */3, /* memFree: */14, /* swapTotal: */100, /* swapUsed: */0, /* swapFree: */100));

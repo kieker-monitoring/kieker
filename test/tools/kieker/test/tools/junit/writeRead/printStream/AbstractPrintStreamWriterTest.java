@@ -72,10 +72,8 @@ public abstract class AbstractPrintStreamWriterTest extends AbstractWriterReader
 
 	@Override
 	protected List<IMonitoringRecord> readEvents() {
-		/*
-		 * we cannot do anything meaningful here, because there's nothing like a PrintStreamReader.
-		 * We'll return an empty List and use our own buffer when evaluating the result.
-		 */
+		// We cannot do anything meaningful here, because there's nothing like a PrintStreamReader. We'll return an empty List and use our own buffer when evaluating
+		// the result.
 		return new ArrayList<IMonitoringRecord>();
 	}
 

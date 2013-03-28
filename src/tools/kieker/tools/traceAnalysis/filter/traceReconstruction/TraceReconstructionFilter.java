@@ -155,7 +155,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 			configTimeunit = this.timeunit;
 		}
 
-		/* Load from the configuration. */
+		// Load from the configuration.
 		this.maxTraceDuration = this.timeunit.convert(configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION), configTimeunit);
 		this.ignoreInvalidTraces = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES);
 
@@ -235,13 +235,13 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 			this.maxTout = execution.getTout() > this.maxTout ? execution.getTout() : this.maxTout; // NOCS
 
 			ExecutionTrace executionTrace = this.pendingTraces.get(traceId);
-			if (executionTrace != null) { /* trace (artifacts) exists already; */
-				if (!this.timeoutMap.remove(executionTrace)) { /* remove from timeoutMap. Will be re-added below */
+			if (executionTrace != null) { // trace (artifacts) exists already;
+				if (!this.timeoutMap.remove(executionTrace)) { // remove from timeoutMap. Will be re-added below
 					LOG.error("Missing entry for trace in timeoutMap: " + executionTrace
 							+ " PendingTraces and timeoutMap are now longer consistent!");
 					this.reportError(traceId);
 				}
-			} else { /* create and add new trace */
+			} else { // create and add new trace
 				executionTrace = new ExecutionTrace(traceId, execution.getSessionId());
 				this.pendingTraces.put(traceId, executionTrace);
 			}
@@ -275,10 +275,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	private void processExecutionTrace(final ExecutionTrace executionTrace) throws ExecutionEventProcessingException {
 		final long curTraceId = executionTrace.getTraceId();
 		try {
-			/*
-			 * If the polled trace is invalid, the following method
-			 * toMessageTrace(..) throws an exception
-			 */
+			// If the polled trace is invalid, the following method toMessageTrace(..) throws an exception
 			final MessageTrace mt = executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 
 			/*
@@ -288,18 +285,18 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 			 * thus been considered an invalid trace.
 			 */
 			if (!this.invalidTraces.contains(mt.getTraceId())) {
-				/* Not completing part of an invalid trace */
+				// Not completing part of an invalid trace
 				super.deliver(OUTPUT_PORT_NAME_MESSAGE_TRACE, mt);
 				super.deliver(OUTPUT_PORT_NAME_EXECUTION_TRACE, executionTrace);
 				this.reportSuccess(curTraceId);
 			} else {
-				/* mt is the completing part of an invalid trace */
+				// mt is the completing part of an invalid trace
 				super.deliver(OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, new InvalidExecutionTrace(executionTrace));
 				// the statistics have been updated on the first
 				// occurrence of artifacts of this trace
 			}
 		} catch (final InvalidTraceException ex) {
-			/* Transformation failed (i.e., trace invalid) */
+			// Transformation failed (i.e., trace invalid)
 			super.deliver(OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, new InvalidExecutionTrace(executionTrace));
 			final String transformationError = "Failed to transform execution trace to message trace (ID: " + curTraceId + "). \n"
 					+ "Reason: " + ex.getMessage() + "\n Trace: " + executionTrace;

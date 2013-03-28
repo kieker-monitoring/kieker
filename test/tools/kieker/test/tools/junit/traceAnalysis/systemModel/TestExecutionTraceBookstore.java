@@ -54,7 +54,7 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 	private volatile long maxTout;
 	private volatile int numExecutions;
 
-	/* Executions of a valid trace */
+	// Executions of a valid trace
 	private volatile Execution exec0_0__bookstore_searchBook; // NOPMD NOCS (VariableNamingConventions)
 	private volatile Execution exec1_1__catalog_getBook; // NOPMD NOCS (VariableNamingConventions)
 	private volatile Execution exec2_1__crm_getOrders; // NOPMD NOCS (VariableNamingConventions)
@@ -71,7 +71,7 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 
 		int myNumExecutions = 0;
 
-		/* Manually create Executions for a trace */
+		// Manually create Executions for a trace
 		myNumExecutions++;
 		this.exec0_0__bookstore_searchBook = this.eFactory.genExecution("Bookstore", "bookstore", "searchBook", TestExecutionTraceBookstore.TRACE_ID,
 				TestExecutionTraceBookstore.SESSION_ID, 1, 10, 0, 0);
@@ -96,10 +96,7 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 	}
 
 	private ExecutionTrace genValidBookstoreTrace() throws InvalidTraceException {
-		/*
-		 * Create an Execution Trace and add Executions in
-		 * arbitrary order
-		 */
+		// Create an Execution Trace and add Executions in arbitrary order
 		final ExecutionTrace executionTrace = new ExecutionTrace(TestExecutionTraceBookstore.TRACE_ID, TestExecutionTraceBookstore.SESSION_ID);
 
 		executionTrace.add(this.exec3_2__catalog_getBook);
@@ -120,7 +117,7 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 	@Test
 	public void testValidExecutionTrace() throws InvalidTraceException {
 		final ExecutionTrace executionTrace = this.genValidBookstoreTrace();
-		/* Perform some validity checks on the execution trace object */
+		// Perform some validity checks on the execution trace object
 		Assert.assertEquals("Invalid length of Execution Trace", executionTrace.getLength(), this.numExecutions);
 		Assert.assertEquals("Invalid maximum stack depth", executionTrace.getMaxEss(), 2);
 		Assert.assertEquals("Invalid minimum tin timestamp", executionTrace.getMinTin(), this.minTin);
@@ -180,7 +177,7 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 		long tout = executionTemplate.getTout();
 		final boolean assumed = executionTemplate.isAssumed();
 
-		/* Now perform the selected variation */
+		// Now perform the selected variation
 		switch (vPoint) {
 		case ALLOCATION:
 			allocComp = variationTemplate.getAllocationComponent();
@@ -288,14 +285,12 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 
 		final ExecutionTrace executionTrace = this.genValidBookstoreTrace();
 
-		/*
-		 * Transform Execution Trace to Message Trace representation
-		 */
+		// Transform Execution Trace to Message Trace representation
+
 		final MessageTrace messageTrace = executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 
-		/*
-		 * Validate Message Trace representation.
-		 */
+		// Validate Message Trace representation.
+
 		Assert.assertEquals("Invalid traceId", messageTrace.getTraceId(), TestExecutionTraceBookstore.TRACE_ID);
 		final List<AbstractMessage> msgVector = messageTrace.getSequenceAsVector();
 		Assert.assertEquals("Invalid number of messages in trace", msgVector.size(), this.numExecutions * 2);
@@ -303,7 +298,7 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 		Assert.assertEquals(msgArray.length, this.numExecutions * 2);
 
 		int curIdx = 0;
-		{ /* 1.: [0,0].Call $->bookstore.searchBook(..) */// NOCS
+		{ // 1.: [0,0].Call $->bookstore.searchBook(..) // NOCS
 			final AbstractMessage call0_0___root__bookstore_searchBook = msgArray[curIdx++]; // NOCS
 			Assert.assertTrue("Message is not a call", call0_0___root__bookstore_searchBook instanceof SynchronousCallMessage);
 			Assert.assertEquals("Sending execution is not root execution", call0_0___root__bookstore_searchBook.getSendingExecution(),
@@ -311,7 +306,7 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 			Assert.assertEquals(call0_0___root__bookstore_searchBook.getReceivingExecution(), this.exec0_0__bookstore_searchBook);
 			Assert.assertEquals("Message has wrong timestamp", call0_0___root__bookstore_searchBook.getTimestamp(), this.exec0_0__bookstore_searchBook.getTin());
 		}
-		{ /* 2.: [1,1].Call bookstore.searchBook(..)->catalog.getBook(..) */// NOCS
+		{ // 2.: [1,1].Call bookstore.searchBook(..)->catalog.getBook(..) // NOCS
 			final AbstractMessage call1_1___bookstore_searchBook_catalog_getBook = msgArray[curIdx++]; // NOCS
 			Assert.assertTrue("Message is not a call", call1_1___bookstore_searchBook_catalog_getBook instanceof SynchronousCallMessage);
 			Assert.assertEquals(call1_1___bookstore_searchBook_catalog_getBook.getSendingExecution(), this.exec0_0__bookstore_searchBook);
@@ -319,7 +314,7 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 			Assert.assertEquals("Message has wrong timestamp", call1_1___bookstore_searchBook_catalog_getBook.getTimestamp(),
 					this.exec1_1__catalog_getBook.getTin());
 		}
-		{ /* 2.: [1,1].Return catalog.getBook(..)->bookstore.searchBook(..) */// NOCS
+		{ // 2.: [1,1].Return catalog.getBook(..)->bookstore.searchBook(..) // NOCS
 			final AbstractMessage return1_1___catalog_getBook__bookstore_searchBook = msgArray[curIdx++]; // NOCS
 			Assert.assertTrue("Message is not a reply", return1_1___catalog_getBook__bookstore_searchBook instanceof SynchronousReplyMessage);
 			Assert.assertEquals(return1_1___catalog_getBook__bookstore_searchBook.getSendingExecution(), this.exec1_1__catalog_getBook);
@@ -327,14 +322,14 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 			Assert.assertEquals("Message has wrong timestamp", return1_1___catalog_getBook__bookstore_searchBook.getTimestamp(),
 					this.exec1_1__catalog_getBook.getTout());
 		}
-		{ /* 3.: [2,1].Call bookstore.searchBook(..)->crm.getOrders(..) */// NOCS
+		{// 3.: [2,1].Call bookstore.searchBook(..)->crm.getOrders(..) // NOCS
 			final AbstractMessage call2_1___bookstore_searchBook__crm_getOrders = msgArray[curIdx++]; // NOCS
 			Assert.assertTrue("Message is not a call", call2_1___bookstore_searchBook__crm_getOrders instanceof SynchronousCallMessage);
 			Assert.assertEquals(call2_1___bookstore_searchBook__crm_getOrders.getSendingExecution(), this.exec0_0__bookstore_searchBook);
 			Assert.assertEquals(call2_1___bookstore_searchBook__crm_getOrders.getReceivingExecution(), this.exec2_1__crm_getOrders);
 			Assert.assertEquals("Message has wrong timestamp", call2_1___bookstore_searchBook__crm_getOrders.getTimestamp(), this.exec2_1__crm_getOrders.getTin());
 		}
-		{ /* 4.: [3,2].Call crm.getOrders(..)->catalog.getBook(..) */// NOCS
+		{ // 4.: [3,2].Call crm.getOrders(..)->catalog.getBook(..) // NOCS
 			final AbstractMessage call3_2___bookstore_searchBook__catalog_getBook = msgArray[curIdx++]; // NOCS
 			Assert.assertTrue("Message is not a call", call3_2___bookstore_searchBook__catalog_getBook instanceof SynchronousCallMessage);
 			Assert.assertEquals(call3_2___bookstore_searchBook__catalog_getBook.getSendingExecution(), this.exec2_1__crm_getOrders);
@@ -342,14 +337,14 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 			Assert.assertEquals("Message has wrong timestamp", call3_2___bookstore_searchBook__catalog_getBook.getTimestamp(),
 					this.exec3_2__catalog_getBook.getTin());
 		}
-		{ /* 5.: [3,2].Return catalog.getBook(..)->crm.getOrders(..) */// NOCS
+		{ // 5.: [3,2].Return catalog.getBook(..)->crm.getOrders(..) // NOCS
 			final AbstractMessage return3_2___catalog_getBook__crm_getOrders = msgArray[curIdx++]; // NOCS
 			Assert.assertTrue("Message is not a reply", return3_2___catalog_getBook__crm_getOrders instanceof SynchronousReplyMessage);
 			Assert.assertEquals(return3_2___catalog_getBook__crm_getOrders.getSendingExecution(), this.exec3_2__catalog_getBook);
 			Assert.assertEquals(return3_2___catalog_getBook__crm_getOrders.getReceivingExecution(), this.exec2_1__crm_getOrders);
 			Assert.assertEquals("Message has wrong timestamp", return3_2___catalog_getBook__crm_getOrders.getTimestamp(), this.exec3_2__catalog_getBook.getTout());
 		}
-		{ /* 6.: [2,1].Return crm.getOrders(..)->bookstore.searchBook */// NOCS
+		{ // 6.: [2,1].Return crm.getOrders(..)->bookstore.searchBook // NOCS
 			final AbstractMessage return2_1___crm_getOrders__bookstore_searchBook = msgArray[curIdx++]; // NOCS
 			Assert.assertTrue("Message is not a reply", return2_1___crm_getOrders__bookstore_searchBook instanceof SynchronousReplyMessage);
 			Assert.assertEquals(return2_1___crm_getOrders__bookstore_searchBook.getSendingExecution(), this.exec2_1__crm_getOrders);

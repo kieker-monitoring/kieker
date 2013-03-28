@@ -75,19 +75,19 @@ public final class TestAnalysis {
 			analysisController = new AnalysisController("TestProject");
 			final SystemModelRepository traceRepo = new SystemModelRepository(new Configuration(), analysisController);
 
-			/* Reader */
+			// Reader
 			final Configuration confFSReader = new Configuration();
 			confFSReader.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, SRC_FILENAME);
 			final FSReader reader = new FSReader(confFSReader, analysisController);
 
-			/* String Buffer */
+			// String Buffer
 			final StringBufferFilter buffer = new StringBufferFilter(new Configuration(), analysisController);
 
-			/* TypeFilter */
+			// TypeFilter
 			final Configuration confTypeFilter = new Configuration();
 			final TypeFilter typeFilter = new TypeFilter(confTypeFilter, analysisController);
 
-			/* TeeFilter */
+			// TeeFilter
 			final Configuration confTeeFilter1 = new Configuration();
 			confTeeFilter1.setProperty(TeeFilter.CONFIG_PROPERTY_NAME_STREAM, TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_STDOUT);
 			// confTeeFilter1.setProperty(TeeFilter.CONFIG_PROPERTY_NAME_STREAM, TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_NULL);
@@ -105,7 +105,7 @@ public final class TestAnalysis {
 			confTeeFilter3.setProperty(AbstractAnalysisComponent.CONFIG_NAME, "CountAfter");
 			final TeeFilter teeFilter3 = new TeeFilter(confTeeFilter3, analysisController);
 
-			/* CountingFilter */
+			// CountingFilter
 			final Configuration confCountingFilter1 = new Configuration();
 			final CountingFilter countingFilter1 = new CountingFilter(confCountingFilter1, analysisController);
 
@@ -115,7 +115,7 @@ public final class TestAnalysis {
 			final Configuration confTimestampFilter = new Configuration();
 			final TimestampFilter timestampFilter = new TimestampFilter(confTimestampFilter, analysisController);
 
-			/* Filter */
+			// Filter
 			final Configuration confTraceIdFilter = new Configuration();
 			final TraceIdFilter traceIdFilter = new TraceIdFilter(confTraceIdFilter, analysisController);
 
@@ -127,7 +127,7 @@ public final class TestAnalysis {
 			final TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter =
 					new TraceEventRecords2ExecutionAndMessageTraceFilter(confTraceEvents2ExecutionAndMessageTraceFilter, analysisController);
 
-			/* Visualization */
+			// Visualization
 			final Configuration confSequenceDiagramFilter = new Configuration();
 			confSequenceDiagramFilter.setProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE, "tmp/SequenceAssembly");
 			final SequenceDiagramFilter sequenceDiagramFilter = new SequenceDiagramFilter(confSequenceDiagramFilter, analysisController);
@@ -148,7 +148,7 @@ public final class TestAnalysis {
 			operationAllocationWriterConfiguration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_OUTPUT_FILE_NAME, "dependency-operation.dot");
 			final GraphWriterPlugin operationAllocationGraphWriter = new GraphWriterPlugin(operationAllocationWriterConfiguration, analysisController);
 
-			/* Visualization */
+			// Visualization
 			final Configuration confSystemModel2FileFilter = new Configuration();
 			confSystemModel2FileFilter.setProperty(SystemModel2FileFilter.CONFIG_PROPERTY_NAME_HTML_OUTPUT_FN, "tmp/system-model.html");
 			final SystemModel2FileFilter systemModel2FileFilter = new SystemModel2FileFilter(confSystemModel2FileFilter, analysisController);

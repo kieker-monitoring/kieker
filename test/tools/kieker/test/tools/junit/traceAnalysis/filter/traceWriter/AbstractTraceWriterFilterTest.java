@@ -94,7 +94,7 @@ public abstract class AbstractTraceWriterFilterTest extends AbstractKiekerTest {
 				AbstractTraceWriterFilterTest.SESSION_ID, AbstractTraceWriterFilterTest.HOSTNAME,
 				AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_VALID_EXEC_TRACE + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry0_0__bookstore_searchBook,
 				AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_VALID_EXEC_TRACE + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook,
-				/* assumed: */false));
+				false)); // assumed
 		execTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION); // just to make sure this trace is really valid
 		return execTrace;
 	}
@@ -105,7 +105,7 @@ public abstract class AbstractTraceWriterFilterTest extends AbstractKiekerTest {
 				AbstractTraceWriterFilterTest.SESSION_ID, AbstractTraceWriterFilterTest.HOSTNAME,
 				AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_VALID_MESSAGE_TRACE + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry0_0__bookstore_searchBook,
 				AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_VALID_MESSAGE_TRACE + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook,
-				/* assumed: */false));
+				false)); // assumed
 		execTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION); // just to make sure this trace is really valid
 		return execTrace;
 	}
@@ -116,13 +116,13 @@ public abstract class AbstractTraceWriterFilterTest extends AbstractKiekerTest {
 				AbstractTraceWriterFilterTest.SESSION_ID, AbstractTraceWriterFilterTest.HOSTNAME,
 				AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_INVALID_EXEC_TRACE + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry1_1__catalog_getBook,
 				AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_INVALID_EXEC_TRACE + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit1_1__catalog_getBook,
-				/* assumed: */false));
+				false)); // assumed
 
 		try {
 			execTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 			Assert.fail("Test invalid: wanted to create an *invalid* trace");
 		} catch (final InvalidTraceException e) { // NOPMD (EmptyCatchBlock)
-			/* that's what we expect here */
+			// that's what we expect here
 		}
 		return new InvalidExecutionTrace(execTrace);
 	}

@@ -92,23 +92,17 @@ public class TestCountingThroughputFilter extends AbstractKiekerTest {
 	public void prepareConfiguration() throws IllegalStateException, AnalysisConfigurationException {
 		this.analysisController = new AnalysisController();
 
-		/*
-		 * Reader
-		 */
+		// Reader
 		final Configuration readerConfiguration = new Configuration();
 		readerConfiguration.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
 		this.simpleListReader = new ListReader<IMonitoringRecord>(new Configuration(), this.analysisController);
 
-		/*
-		 * Counting filter (before delay)
-		 */
+		// Counting filter (before delay)
 		this.countingFilterReader = new CountingFilter(new Configuration(), this.analysisController);
 		this.analysisController.connect(this.simpleListReader, ListReader.OUTPUT_PORT_NAME,
 				this.countingFilterReader, CountingFilter.INPUT_PORT_NAME_EVENTS);
 
-		/*
-		 * The CountingThroughputFilter to be tested
-		 */
+		// The CountingThroughputFilter to be tested
 		final Configuration throughputFilterConfiguration = new Configuration();
 		throughputFilterConfiguration.setProperty(CountingThroughputFilter.CONFIG_PROPERTY_NAME_INTERVAL_SIZE, Long.toString(INTERVAL_SIZE_NANOS));
 		throughputFilterConfiguration.setProperty(CountingThroughputFilter.CONFIG_PROPERTY_NAME_INTERVALS_BASED_ON_1ST_TSTAMP,
@@ -117,9 +111,7 @@ public class TestCountingThroughputFilter extends AbstractKiekerTest {
 		this.analysisController.connect(this.countingFilterReader, CountingFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
 				this.throughputFilter, CountingThroughputFilter.INPUT_PORT_NAME_RECORDS); // we use this input port because it's easier to test!
 
-		/*
-		 * Sink plugin
-		 */
+		// Sink plugin
 		this.sinkPlugin = new ListCollectionFilter<EmptyRecord>(new Configuration(), this.analysisController);
 		this.analysisController.connect(this.throughputFilter, CountingThroughputFilter.OUTPUT_PORT_NAME_RELAYED_OBJECTS,
 				this.sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
@@ -228,9 +220,7 @@ public class TestCountingThroughputFilter extends AbstractKiekerTest {
 
 		Assert.assertEquals(this.expectedThroughputValues, throughputListFromFilterAndCurrentInterval);
 
-		/*
-		 * Make sure that all events have been passed through the delay filter
-		 */
+		// Make sure that all events have been passed through the delay filter
 		Assert.assertEquals("Unexpected number of relayed events", this.countingFilterReader.getMessageCount(), this.sinkPlugin.size());
 	}
 }

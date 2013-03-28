@@ -42,10 +42,8 @@ public class TestAutoSetLoggingTimestamp extends AbstractKiekerTest { // NOCS
 	private void executeTestSetLoggingTimestamp(final boolean setLoggingTimestampEnabled) {
 		final String pipeName = NamedPipeFactory.createPipeName();
 
-		/*
-		 * We will pass the property Configuration.AUTO_SET_LOGGINGTSTAMP as
-		 * and additional configuration property
-		 */
+		// We will pass the property Configuration.AUTO_SET_LOGGINGTSTAMP as and additional configuration property
+
 		final Properties additionalConfigurationProperties = new Properties();
 		if (setLoggingTimestampEnabled) {
 			// auto set logging timestamps enabled
@@ -57,11 +55,9 @@ public class TestAutoSetLoggingTimestamp extends AbstractKiekerTest { // NOCS
 
 		final IMonitoringController monitoringController = NamedPipeFactory.createMonitoringControllerWithNamedPipe(pipeName, additionalConfigurationProperties);
 
-		/*
-		 * We will now register a custom IPipeReader which receives records
-		 * through the pipe and collects these in a list. On purpose, we are not
-		 * using the corresponding PipeReader that comes with Kieker.
-		 */
+		// We will now register a custom IPipeReader which receives records through the pipe and collects these in a list. On purpose, we are not using the
+		// corresponding PipeReader that comes with Kieker.
+
 		final List<IMonitoringRecord> receivedRecords = NamedPipeFactory.createAndRegisterNamedPipeRecordCollector(pipeName);
 
 		final EmptyRecord rSent = new EmptyRecord();
@@ -70,9 +66,7 @@ public class TestAutoSetLoggingTimestamp extends AbstractKiekerTest { // NOCS
 
 		Assert.assertEquals("Test invalid: exactly one record should have been received", 1, receivedRecords.size());
 
-		// Note, that rSent and rReceived are actually the same, but
-		// since this is implementation knowledge, we'll fetch the
-		// logged record from the list
+		// Note, that rSent and rReceived are actually the same, but since this is implementation knowledge, we'll fetch the logged record from the list
 		final EmptyRecord rReceived = (EmptyRecord) receivedRecords.get(0);
 		final long timestampReceived = rReceived.getLoggingTimestamp();
 

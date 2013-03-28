@@ -65,9 +65,7 @@ public class TestPipeReader extends AbstractKiekerTest { // NOCS (MissingCtorChe
 
 		final AnalysisControllerThread analysisThread = new AnalysisControllerThread(analysis);
 		analysisThread.start(); // start asynchronously
-		/*
-		 * Send 7 dummy records
-		 */
+		// Send 7 dummy records
 		final int numRecordsToSend = 7;
 		for (int i = 0; i < numRecordsToSend; i++) {
 			writer.newMonitoringRecord(new EmptyRecord());
@@ -76,9 +74,7 @@ public class TestPipeReader extends AbstractKiekerTest { // NOCS (MissingCtorChe
 		analysisThread.terminate();
 		Assert.assertEquals(AnalysisController.STATE.TERMINATED, analysis.getState());
 
-		/*
-		 * Make sure that numRecordsToSend where read.
-		 */
+		// Make sure that numRecordsToSend where read.
 		Assert.assertEquals("Unexpected number of records received", numRecordsToSend, countingFilter.getMessageCount());
 	}
 }

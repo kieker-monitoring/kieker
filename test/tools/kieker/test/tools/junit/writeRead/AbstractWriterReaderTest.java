@@ -153,10 +153,7 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 
 		final List<IMonitoringRecord> monitoringRecords = this.readEvents();
 
-		/*
-		 * The following line is an easy way to test the tests (given monitoringRecords includes at least one record).
-		 * But don't forget to deactivate afterwards.
-		 */
+		// The following line is an easy way to test the tests (given monitoringRecords includes at least one record). But don't forget to deactivate afterwards.
 		// monitoringRecords.remove(monitoringRecords.size() - 1);
 
 		this.inspectRecords(someEvents, monitoringRecords);

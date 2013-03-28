@@ -427,7 +427,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 
 		final StringBuilder signatureBuilder = new StringBuilder(128);
 
-		/* Visibility */
+		// Visibility
 		if ("public".equals(visibility)) {
 			signatureBuilder.append("public ");
 		} else if ("private".equals(visibility)) {
@@ -442,7 +442,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 			Assert.fail("Invalid visibility: " + visibility);
 		}
 
-		/* Static/Non-static */
+		// Static/Non-static
 		if ("static".equals(staticNonStatic)) {
 			signatureBuilder.append("static ");
 		} else if ("non_static".equals(staticNonStatic)) { // NOPMD NOCS
@@ -453,7 +453,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 			Assert.fail("Invalid staticNonStatic: " + staticNonStatic);
 		}
 
-		/* Static/Non-static */
+		// Static/Non-static
 		if ("native".equals(nativeNonNative)) {
 			signatureBuilder.append("native ");
 		} else if ("non_native".equals(nativeNonNative)) { // NOPMD NOCS
@@ -464,7 +464,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 			Assert.fail("Invalid nativeNonNative: " + nativeNonNative);
 		}
 
-		/* Return type/Constructor */
+		// Return type/Constructor
 		if ("new".equals(returnTypeOrNew)) { // NOPMD NOCS
 			// nothing to do
 		} else if ("*".equals(returnTypeOrNew)) {
@@ -477,7 +477,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 			Assert.fail("Invalid returnTypeOrNew: " + returnTypeOrNew);
 		}
 
-		/* classname */
+		// classname
 		if ("a.b.C".equals(fqClassName)) {
 			signatureBuilder.append("a.b.C");
 		} else if ("a.b.*".equals(fqClassName)) {
@@ -491,7 +491,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 		}
 		signatureBuilder.append('.');
 
-		/* Operation name */
+		// Operation name
 		if ("doIt".equals(operationName)) {
 			signatureBuilder.append("doIt");
 		} else if ("get*".equals(operationName)) {
@@ -503,7 +503,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 		}
 		signatureBuilder.append('(');
 
-		/* Parameter list */
+		// Parameter list
 		if ("".equals(paramList)) { // NOPMD NOCS
 			// nothing to do
 		} else if ("*".equals(paramList)) {

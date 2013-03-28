@@ -117,9 +117,7 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 		this.srvFactory.setAddress(this.serviceAddress);
 		this.srvFactory.setServiceBean(implementor);
 
-		/*
-		 * On the server-side, we only intercept incoming requests and outgoing responses.
-		 */
+		// On the server-side, we only intercept incoming requests and outgoing responses.
 		this.srvFactory.getInInterceptors().add(new OperationExecutionSOAPRequestInInterceptor(this.serverMonitoringController));
 		this.srvFactory.getOutInterceptors().add(new OperationExecutionSOAPResponseOutInterceptor(this.serverMonitoringController));
 		this.srvFactory.create();
@@ -127,9 +125,7 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 
 	private void createClient() {
 		final JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
-		/*
-		 * On the client-side, we only intercept outgoing requests and incoming responses.
-		 */
+		// On the client-side, we only intercept outgoing requests and incoming responses.
 		factory.getOutInterceptors().add(new OperationExecutionSOAPRequestOutInterceptor(this.clientMonitoringController));
 		factory.getInInterceptors().add(new OperationExecutionSOAPResponseInInterceptor(this.clientMonitoringController));
 

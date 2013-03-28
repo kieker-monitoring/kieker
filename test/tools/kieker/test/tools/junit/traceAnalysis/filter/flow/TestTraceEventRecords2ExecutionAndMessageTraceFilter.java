@@ -53,7 +53,7 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 	private final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration(), this.analysisController);
 	private final BookstoreExecutionFactory bookstoreExecutionFactory = new BookstoreExecutionFactory(this.systemEntityFactory);
 
-	/* Executions of a valid trace */
+	// Executions of a valid trace
 	private final Execution exec0_0__bookstore_searchBook; // NOCS
 	private final Execution exec1_1__catalog_getBook; // NOCS
 	private final Execution exec2_1__crm_getOrders; // NOCS
@@ -74,7 +74,7 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 
 		final long initialTimestamp = 1 * (1000 * 1000);
 
-		/* Manually create Executions for a trace */
+		// Manually create Executions for a trace
 		this.exec0_0__bookstore_searchBook =
 				this.bookstoreExecutionFactory.createBookstoreExecution_exec0_0__bookstore_searchBook(TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID,
 						TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.HOSTNAME,
@@ -92,41 +92,41 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 		this.exec1_1__catalog_getBook =
 				this.bookstoreExecutionFactory.createBookstoreExecution_exec1_1__catalog_getBook(TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID,
 						TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.HOSTNAME,
-						/* tin: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry1_1__catalog_getBook,
-						/* tout: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit1_1__catalog_getBook,
-						/* assumed: */false);
+						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry1_1__catalog_getBook, // tin
+						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit1_1__catalog_getBook, // tout
+						false); // assumed
 		this.exec1_1__catalog_getBook_assumed =
 				this.bookstoreExecutionFactory.createBookstoreExecution_exec1_1__catalog_getBook(TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID,
 						TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.HOSTNAME,
-						/* tin: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry1_1__catalog_getBook,
-						/* tout: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit1_1__catalog_getBook,
-						/* assumed: */true);
+						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry1_1__catalog_getBook, // tin
+						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit1_1__catalog_getBook, // tout
+						true); // assumed
 
 		this.exec2_1__crm_getOrders = this.bookstoreExecutionFactory.createBookstoreExecution_exec2_1__crm_getOrders(
 				TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID,
 				TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.HOSTNAME,
-				/* tin: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry2_1__crm_getOrders,
-				/* tout: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit2_1__crm_getOrders,
-				/* assumed: */false);
+				initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry2_1__crm_getOrders, // tin
+				initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit2_1__crm_getOrders, // tout
+				false); // assumed
 		this.exec2_1__crm_getOrders_assumed = this.bookstoreExecutionFactory.createBookstoreExecution_exec2_1__crm_getOrders(
 				TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID,
 				TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.HOSTNAME,
-				/* tin: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry2_1__crm_getOrders,
-				/* tout: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit2_1__crm_getOrders,
-				/* assumed: */true);
+				initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry2_1__crm_getOrders, // tin
+				initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit2_1__crm_getOrders, // tout
+				true); // assumed
 
 		this.exec3_2__catalog_getBook = this.bookstoreExecutionFactory.createBookstoreExecution_exec3_2__catalog_getBook(
 				TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID,
 				TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.HOSTNAME,
-				/* tin: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry3_2__catalog_getBook,
-				/* tout: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit3_2__catalog_getBook,
-				/* assumed: */false);
+				initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry3_2__catalog_getBook, // tin
+				initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit3_2__catalog_getBook, // tout
+				false); // assumed
 		this.exec3_2__catalog_getBook_assumed = this.bookstoreExecutionFactory.createBookstoreExecution_exec3_2__catalog_getBook(
 				TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID,
 				TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.HOSTNAME,
-				/* tin: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry3_2__catalog_getBook,
-				/* tout: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit3_2__catalog_getBook,
-				/* assumed: */true);
+				initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry3_2__catalog_getBook, // tin
+				initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit3_2__catalog_getBook, // tout
+				true); // assumed
 	}
 
 	/**
@@ -140,10 +140,7 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 	 *             If the internally assembled execution trace is somehow invalid.
 	 */
 	private ExecutionTrace genValidBookstoreTrace() throws InvalidTraceException {
-		/*
-		 * Create an Execution Trace and add Executions in
-		 * arbitrary order
-		 */
+		// Create an Execution Trace and add Executions in arbitrary order
 		final ExecutionTrace executionTrace =
 				new ExecutionTrace(TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID);
 
@@ -160,17 +157,13 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 
 	@Test
 	public void testValidTraceWithBeforeAndAfterOperationEvents() throws InvalidTraceException, IllegalStateException, AnalysisConfigurationException { // NOPMD
-		/*
-		 * Create an EventRecordTrace, containing only Before- and AfterOperation events.
-		 */
+		// Create an EventRecordTrace, containing only Before- and AfterOperation events.
 		final TraceEventRecords traceEvents = BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(this.exec0_0__bookstore_searchBook.getTin(),
 				TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID,
 				TestTraceEventRecords2ExecutionAndMessageTraceFilter.HOSTNAME);
 		final ExecutionTrace expectedExecutionTrace;
 		{ // NOCS
-			/*
-			 * Create an Execution Trace and add Executions in arbitrary order
-			 */
+			// Create an Execution Trace and add Executions in arbitrary order
 			expectedExecutionTrace =
 					new ExecutionTrace(TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID,
 							TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID);
@@ -190,9 +183,7 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 	@Test
 	public void testValidTraceWithBeforeAndAfterOperationEventsAndAdditionalCallEvents() throws InvalidTraceException, IllegalStateException, // NOPMD
 			AnalysisConfigurationException {
-		/*
-		 * Create an EventRecordTrace, containing only Before- and AfterOperation events.
-		 */
+		// Create an EventRecordTrace, containing only Before- and AfterOperation events.
 		final TraceEventRecords traceEvents =
 				BookstoreEventRecordFactory.validSyncTraceAdditionalCallEvents(this.exec0_0__bookstore_searchBook.getTin(),
 						TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID,
@@ -211,7 +202,7 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 
 		final long initialTimestamp = 1 * (1000 * 1000);
 
-		/* Manually create Executions for a trace */
+		// Manually create Executions for a trace
 		executionTrace.add(this.exec0_0__bookstore_searchBook);
 		executionTrace.add(this.exec1_1__catalog_getBook);
 
@@ -236,9 +227,7 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 	@Test
 	public void testValidTraceWithBeforeAndAfterOperationEventsAndAdditionalCallEventsAndGap() throws InvalidTraceException, IllegalStateException, // NOPMD
 			AnalysisConfigurationException {
-		/*
-		 * Create an EventRecordTrace, containing only Before- and AfterOperation events.
-		 */
+		// Create an EventRecordTrace, containing only Before- and AfterOperation events.
 		final TraceEventRecords traceEvents =
 				BookstoreEventRecordFactory.validSyncTraceAdditionalCallEventsGap(this.exec0_0__bookstore_searchBook.getTin(),
 						TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID,
@@ -251,7 +240,7 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 
 			final long initialTimestamp = 1 * (1000 * 1000);
 
-			/* Manually create Executions for a trace */
+			// Manually create Executions for a trace
 			expectedExecutionTrace.add(this.exec0_0__bookstore_searchBook);
 			expectedExecutionTrace.add(this.exec1_1__catalog_getBook);
 
@@ -286,16 +275,13 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 	 *             If the internally assembled execution trace is somehow invalid.
 	 */
 	private ExecutionTrace genValidBookstoreTraceEntryCallExit() throws InvalidTraceException {
-		/*
-		 * Create an Execution Trace and add Executions in
-		 * arbitrary order
-		 */
+		// Create an Execution Trace and add Executions in arbitrary order
 		final ExecutionTrace executionTrace =
 				new ExecutionTrace(TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID);
 
 		final long initialTimestamp = this.exec0_0__bookstore_searchBook.getTin();
 
-		/* Manually create Executions for a trace */
+		// Manually create Executions for a trace
 		executionTrace.add(
 				this.bookstoreExecutionFactory.createBookstoreExecution_exec0_0__bookstore_searchBook(TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID,
 						TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.HOSTNAME,
@@ -322,9 +308,7 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 
 	@Test
 	public void testValidSyncTraceSimpleEntryCallExit() throws InvalidTraceException, IllegalStateException, AnalysisConfigurationException { // NOPMD
-		/*
-		 * Create an EventRecordTrace, containing only Before- and AfterOperation events.
-		 */
+		// Create an EventRecordTrace, containing only Before- and AfterOperation events.
 		final TraceEventRecords traceEvents =
 				BookstoreEventRecordFactory.validSyncTraceSimpleEntryCallExit(this.exec0_0__bookstore_searchBook.getTin(),
 						TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID,
@@ -345,16 +329,13 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 	 *             If the internally assembled execution trace is somehow invalid.
 	 */
 	private ExecutionTrace genValidBookstoreTraceSimpleEntryCallReturnCallCallExit() throws InvalidTraceException {
-		/*
-		 * Create an Execution Trace and add Executions in
-		 * arbitrary order
-		 */
+		// Create an Execution Trace and add Executions in arbitrary order
 		final ExecutionTrace executionTrace =
 				new ExecutionTrace(TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID);
 
 		final long initialTimestamp = this.exec0_0__bookstore_searchBook.getTin();
 
-		/* Manually create Executions for a trace */
+		// Manually create Executions for a trace
 		executionTrace.add(
 				this.bookstoreExecutionFactory.createBookstoreExecution_exec0_0__bookstore_searchBook(TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID,
 						TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.HOSTNAME,
@@ -390,9 +371,7 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 
 	@Test
 	public void testValidSyncTraceSimpleEntryCallReturnCallCallExit() throws InvalidTraceException, IllegalStateException, AnalysisConfigurationException { // NOPMD
-		/*
-		 * Create an EventRecordTrace, containing only Before- and AfterOperation events.
-		 */
+		// Create an EventRecordTrace, containing only Before- and AfterOperation events.
 		final TraceEventRecords traceEvents =
 				BookstoreEventRecordFactory.validSyncTraceSimpleEntryCallReturnCallCallExit(this.exec0_0__bookstore_searchBook.getTin(),
 						TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID,
@@ -413,16 +392,13 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 	 *             If the internally assembled execution trace is somehow invalid.
 	 */
 	private ExecutionTrace genValidSyncTraceSimpleEntryCallCallExit() throws InvalidTraceException {
-		/*
-		 * Create an Execution Trace and add Executions in
-		 * arbitrary order
-		 */
+		// Create an Execution Trace and add Executions in arbitrary order
 		final ExecutionTrace executionTrace =
 				new ExecutionTrace(TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID);
 
 		final long initialTimestamp = this.exec0_0__bookstore_searchBook.getTin();
 
-		/* Manually create Executions for a trace */
+		// Manually create Executions for a trace
 		executionTrace.add(
 				this.bookstoreExecutionFactory.createBookstoreExecution_exec0_0__bookstore_searchBook(TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID,
 						TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.HOSTNAME,
@@ -459,10 +435,7 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 
 	@Test
 	public void testValidSyncTraceSimpleEntryCallCallExit() throws InvalidTraceException, IllegalStateException, AnalysisConfigurationException { // NOPMD
-
-		/*
-		 * Create an EventRecordTrace, containing only Before- and AfterOperation events.
-		 */
+		// Create an EventRecordTrace, containing only Before- and AfterOperation events.
 		final TraceEventRecords traceEvents =
 				BookstoreEventRecordFactory.validSyncTraceSimpleEntryCallCallExit(this.exec0_0__bookstore_searchBook.getTin(),
 						TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID,
@@ -552,23 +525,16 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 	 */
 	private void checkTrace(final TraceEventRecords traceEvents, final ExecutionTrace expectedExecutionTrace) throws InvalidTraceException,
 			IllegalStateException, AnalysisConfigurationException {
-		/*
-		 * Create the SimpleListReader
-		 */
+		// Create the SimpleListReader
 		final Configuration readerConfiguration = new Configuration();
 		final ListReader<TraceEventRecords> reader = new ListReader<TraceEventRecords>(readerConfiguration, this.analysisController);
 		reader.addObject(traceEvents);
 
-		/*
-		 * Create the transformation filter
-		 */
+		// Create the transformation filter
 		final Configuration filterConfiguration = new Configuration();
 		final TraceEventRecords2ExecutionAndMessageTraceFilter filter = new TraceEventRecords2ExecutionAndMessageTraceFilter(filterConfiguration,
 				this.analysisController);
-		/*
-		 * Create and connect a sink plugin which collects the transformed
-		 * ExecutionTraces
-		 */
+		// Create and connect a sink plugin which collects the transformed ExecutionTraces
 		final ListCollectionFilter<ExecutionTrace> executionTraceSinkPlugin = new ListCollectionFilter<ExecutionTrace>(new Configuration(), this.analysisController);
 
 		this.analysisController.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, TraceEventRecords2ExecutionAndMessageTraceFilter.INPUT_PORT_NAME_EVENT_TRACE);
