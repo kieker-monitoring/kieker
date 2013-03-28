@@ -32,10 +32,16 @@ import kieker.test.common.junit.AbstractKiekerTest;
  */
 public class TestClassOperationSignaturePair extends AbstractKiekerTest {
 
+	/**
+	 * Default constructor.
+	 */
 	public TestClassOperationSignaturePair() {
 		// empty default constructor
 	}
 
+	/**
+	 * A test for the class when using no modifiers.
+	 */
 	@Test
 	public void testNoModifiers() {
 		final String fqClassName = "a.b.c.D";
@@ -56,6 +62,9 @@ public class TestClassOperationSignaturePair extends AbstractKiekerTest {
 		Assert.assertEquals("Signatures not equal", inputSignature, compSigPair.getSignature());
 	}
 
+	/**
+	 * A test for the class when using modifiers but no packages.
+	 */
 	@Test
 	public void testNoPackage() {
 		final String fqClassName = "D";
@@ -77,6 +86,9 @@ public class TestClassOperationSignaturePair extends AbstractKiekerTest {
 		Assert.assertEquals("Signatures not equal", inputSignature, compSigPair.getSignature());
 	}
 
+	/**
+	 * A test for the class when using no return type.
+	 */
 	@Test
 	public void testNoModifiersNoReturnType() {
 		final String fqClassName = "a.b.c.D";
@@ -96,6 +108,9 @@ public class TestClassOperationSignaturePair extends AbstractKiekerTest {
 		Assert.assertEquals("Signatures not equal", inputSignature, compSigPair.getSignature());
 	}
 
+	/**
+	 * A test for the class when using modifiers but no return type.
+	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void testModifierButNoReturnType() {
 		final String fqClassName = "a.b.c.D";
@@ -108,6 +123,9 @@ public class TestClassOperationSignaturePair extends AbstractKiekerTest {
 		ClassOperationSignaturePair.createOperationSignatureString(fqClassName, inputSignature);
 	}
 
+	/**
+	 * A test for the class when using no parameters.
+	 */
 	@Test
 	public void testNoParamTypes() {
 		final String fqClassName = "a.b.c.D";

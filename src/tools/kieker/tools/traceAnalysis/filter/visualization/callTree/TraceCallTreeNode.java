@@ -29,6 +29,20 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
  */
 public class TraceCallTreeNode extends AbstractCallTreeNode<AllocationComponentOperationPair> {
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param id
+	 *            The identifier of this node.
+	 * @param entity
+	 *            The content of this node.
+	 * @param rootNode
+	 *            Determines whether this node is the root node or not.
+	 * @param origin
+	 *            The meta data of this node.
+	 * @param originPolicy
+	 *            The origin policy.
+	 */
 	public TraceCallTreeNode(final int id, final AllocationComponentOperationPair entity, final boolean rootNode, final MessageTrace origin,
 			final IOriginRetentionPolicy originPolicy) {
 		super(id, entity, rootNode, origin, originPolicy);

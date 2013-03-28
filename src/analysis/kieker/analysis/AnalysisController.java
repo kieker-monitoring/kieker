@@ -781,6 +781,14 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	}
 
 	/**
+	 * Registers the given reader with this analysis instance.
+	 * 
+	 * @param reader
+	 *            The reader to register with this analysis.
+	 * 
+	 * @throws IllegalStateException
+	 *             If the analysis has already been started when this method is called.
+	 * 
 	 * @deprecated This method will not be for public use in Kieker 1.8. Use the new constructor instead.
 	 */
 	@Deprecated
@@ -802,6 +810,14 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	}
 
 	/**
+	 * Registers the given filter with this analysis instance.
+	 * 
+	 * @param filter
+	 *            The filter to register with this analysis.
+	 * 
+	 * @throws IllegalStateException
+	 *             If the analysis has already been started when this method is called.
+	 * 
 	 * @deprecated This method will not be for public use in Kieker 1.8. Use the new constructor instead.
 	 */
 	@Deprecated
@@ -823,6 +839,14 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	}
 
 	/**
+	 * Registers the given repository with this analysis instance.
+	 * 
+	 * @param repository
+	 *            The repository to register with this analysis.
+	 * 
+	 * @throws IllegalStateException
+	 *             If the analysis has already been started when this method is called.
+	 * 
 	 * @deprecated This method will not be for public use in Kieker 1.8. Use the new constructor instead.
 	 */
 	@Deprecated

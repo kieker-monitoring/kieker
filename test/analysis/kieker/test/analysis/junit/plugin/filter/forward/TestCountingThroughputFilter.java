@@ -80,6 +80,14 @@ public class TestCountingThroughputFilter extends AbstractKiekerTest {
 		// empty default constructor
 	}
 
+	/**
+	 * Prepares the test setup.
+	 * 
+	 * @throws IllegalStateException
+	 *             If something failed during the test setup (should not happen).
+	 * @throws AnalysisConfigurationException
+	 *             If something failed during the test setup (should not happen).
+	 */
 	// Note that @Before is not working because the configuration depends on which @Test is executed
 	public void prepareConfiguration() throws IllegalStateException, AnalysisConfigurationException {
 		this.analysisController = new AnalysisController();

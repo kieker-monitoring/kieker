@@ -37,6 +37,9 @@ public class TestBeforeOperationObjectEvent extends AbstractKiekerTest {
 	private static final String FQ_OPERATION_SIGNATURE = FQ_CLASSNAME + ".callerOp(boolean arg1, int arg2)";
 	private static final int OBJECT_ID = 42;
 
+	/**
+	 * Default constructor.
+	 */
 	public TestBeforeOperationObjectEvent() {
 		// empty default constructor
 	}

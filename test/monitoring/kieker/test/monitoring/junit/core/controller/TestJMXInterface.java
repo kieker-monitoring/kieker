@@ -31,6 +31,9 @@ import kieker.test.common.junit.AbstractKiekerTest;
  */
 public final class TestJMXInterface extends AbstractKiekerTest { // NOPMD NOCS
 
+	/**
+	 * A dummy test method.
+	 */
 	@Test
 	public void testIt() {
 		Assert.assertTrue(true); // NOPMD // NOCS // NOGARNIX, tested elsewhere

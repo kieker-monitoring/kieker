@@ -63,11 +63,13 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
 					defaultValue = TraceCallTreeFilter.CONFIG_PROPERTY_VALUE_OUTPUT_FILENAME_DEFAULT)
 		})
 public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
-
+	/** This is the name of the property determining the output file name. */
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FILENAME = "dotOutputFn";
+	/** This is the name of the property determining whether to use short labels or not. */
 	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "shortLabels";
-
+	/** This is the default used output file name. */
 	public static final String CONFIG_PROPERTY_VALUE_OUTPUT_FILENAME_DEFAULT = "traceCalltree.dot";
+	/** This is the default value whether to use short labels or not. */
 	public static final String CONFIG_PROPERTY_VALUE_SHORT_LABELS_DEFAULT = "true";
 
 	private static final Log LOG = LogFactory.getLog(TraceCallTreeFilter.class);

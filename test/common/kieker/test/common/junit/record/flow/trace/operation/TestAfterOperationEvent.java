@@ -36,6 +36,9 @@ public class TestAfterOperationEvent extends AbstractKiekerTest {
 	private static final String FQ_CLASSNAME = "p1.p2.p3.classname";
 	private static final String FQ_OPERATION_SIGNATURE = FQ_CLASSNAME + ".callerOp(boolean arg1, int arg2)";
 
+	/**
+	 * Default constructor.
+	 */
 	public TestAfterOperationEvent() {
 		// empty default constructor
 	}

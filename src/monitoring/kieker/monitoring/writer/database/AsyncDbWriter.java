@@ -58,6 +58,15 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 	private final boolean overwrite;
 	private final int connections;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this writer.
+	 * 
+	 * @throws Exception
+	 *             If something went wrong during the initialization of the writer.
+	 */
 	public AsyncDbWriter(final Configuration configuration) throws Exception {
 		super(configuration);
 		try {

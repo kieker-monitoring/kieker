@@ -38,6 +38,9 @@ public class TestConfigurationPath extends AbstractKiekerTest {
 		"C:\\Temp\\x.txt", "C:/Temp/x.txt",
 	};
 
+	/**
+	 * Default constructor.
+	 */
 	public TestConfigurationPath() {
 		// empty default constructor
 	}

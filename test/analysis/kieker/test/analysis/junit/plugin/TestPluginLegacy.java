@@ -38,6 +38,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * @author Nils Christian Ehmke, Jan Waller
  * 
  * @since 1.7
+ * 
  * @deprecated Will be removed in Kieker 1.8
  */
 @SuppressWarnings("deprecation")

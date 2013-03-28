@@ -36,6 +36,18 @@ public class WeightedBidirectionalDependencyGraphEdge<T extends ISystemModelElem
 
 	private boolean assumed; // false
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param source
+	 *            The source of this edge.
+	 * @param target
+	 *            The target of this edge.
+	 * @param origin
+	 *            The meta information for this edge.
+	 * @param originPolicy
+	 *            The origin policy.
+	 */
 	public WeightedBidirectionalDependencyGraphEdge(final DependencyGraphNode<T> source, final DependencyGraphNode<T> target, final TraceInformation origin,
 			final IOriginRetentionPolicy originPolicy) {
 		super(source, target, origin, originPolicy);
@@ -45,6 +57,9 @@ public class WeightedBidirectionalDependencyGraphEdge<T extends ISystemModelElem
 		return this.assumed;
 	}
 
+	/**
+	 * Sets the assumed flag to {@code true}.
+	 */
 	public void setAssumed() {
 		this.assumed = true;
 	}

@@ -71,14 +71,22 @@ public final class KiekerMetadataRecord extends AbstractMonitoringRecord impleme
 	 * Creates a new instance of this class.
 	 * 
 	 * @param controllerName
+	 *            The name of the controller (can be null).
 	 * @param hostname
+	 *            The name of the host (can be null).
 	 * @param experimentId
+	 *            The experiment ID.
+	 * @param timeUnit
+	 *            The time unit (can be null).
 	 * @param timeSource
+	 *            The timesource (can be null).
 	 * @param debugMode
+	 *            Whether debug mode is enabled or not.
+	 * @param numberOfRecords
+	 *            The number of records.
 	 */
 	public KiekerMetadataRecord(final String controllerName, final String hostname, final int experimentId, final String timeUnit, final String timeSource,
-			final boolean debugMode,
-			final long numberOfRecords) {
+			final boolean debugMode, final long numberOfRecords) {
 		this.controllerName = (controllerName == null) ? NO_CONTROLLERNAME : controllerName; // NOCS
 		this.hostname = (hostname == null) ? NO_HOSTNAME : hostname; // NOCS
 		this.experimentId = experimentId;

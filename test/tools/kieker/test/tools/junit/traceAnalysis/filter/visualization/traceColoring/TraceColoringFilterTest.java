@@ -76,10 +76,19 @@ public class TraceColoringFilterTest extends AbstractKiekerTest {
 
 	private static GraphTestSetup testSetup;
 
+	/**
+	 * Default constructor.
+	 */
 	public TraceColoringFilterTest() {
 		// default constructor
 	}
 
+	/**
+	 * Prepares the setup for the test.
+	 * 
+	 * @throws AnalysisConfigurationException
+	 *             If the setup of the filters failed.
+	 */
 	@BeforeClass
 	public static void prepareSetup() throws AnalysisConfigurationException {
 		final AnalysisController analysisController = new AnalysisController();
@@ -132,6 +141,12 @@ public class TraceColoringFilterTest extends AbstractKiekerTest {
 		return records;
 	}
 
+	/**
+	 * This method tests whether the trace coloring works or not. It uses the nodes resulting from the test setup and checks them against the expected colors.
+	 * 
+	 * @throws AnalysisConfigurationException
+	 *             If the assembled test setup is somehow invalid.
+	 */
 	@Test
 	public void testTraceColoring() throws AnalysisConfigurationException {
 		testSetup.run();

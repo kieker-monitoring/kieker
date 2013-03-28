@@ -77,11 +77,11 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	public static final String OUTPUT_PORT_NAME_EXECUTION_TRACE = "executionTraces";
 	/** This is the name of the output port delivering the reconstructed, but invalid executions traces. */
 	public static final String OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE = "invalidExecutionTraces";
-
+	/** This is the name of the property determining the used time unit. */
 	public static final String CONFIG_PROPERTY_NAME_TIMEUNIT = "timeunit";
 	public static final String CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION = "maxTraceDuration";
 	public static final String CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES = "ignoreInvalidTraces";
-
+	/** This is the default used time unit. */
 	public static final String CONFIG_PROPERTY_VALUE_TIMEUNIT = "NANOSECONDS"; // TimeUnit.NANOSECONDS.name()
 	public static final String CONFIG_PROPERTY_VALUE_MAX_TRACE_DURATION = "9223372036854775807"; // Long.toString(Long.MAX_VALUE)
 

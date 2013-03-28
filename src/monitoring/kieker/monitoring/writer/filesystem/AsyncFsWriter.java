@@ -42,6 +42,12 @@ public final class AsyncFsWriter extends AbstractAsyncFSWriter {
 	private final int buffersize;
 	private final boolean flush;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this writer.
+	 */
 	public AsyncFsWriter(final Configuration configuration) {
 		super(configuration);
 		int tmpBuffersize = configuration.getIntProperty(CONFIG_BUFFER);

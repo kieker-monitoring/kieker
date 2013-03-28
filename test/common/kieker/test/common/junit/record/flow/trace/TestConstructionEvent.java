@@ -36,6 +36,9 @@ public class TestConstructionEvent extends AbstractKiekerTest {
 	private static final String FQ_CLASSNAME = "p1.p2.p3.classname";
 	private static final int OBJECT_ID = 5166;
 
+	/**
+	 * Default constructor.
+	 */
 	public TestConstructionEvent() {
 		// empty default constructor
 	}

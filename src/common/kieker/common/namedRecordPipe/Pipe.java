@@ -71,6 +71,8 @@ public final class Pipe {
 	 * 
 	 * @param monitoringRecord
 	 *            The monitoring record to write into the pipe.
+	 * 
+	 * @return true on success; false otherwise.
 	 */
 	public boolean writeMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 		if (this.closed) {

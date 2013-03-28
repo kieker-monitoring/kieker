@@ -57,11 +57,14 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 	private final Execution exec2_1__crm_getOrders; // NOCS
 	private final Execution exec3_2__catalog_getBook; // NOCS
 
+	/**
+	 * Creates a new instance of this class.
+	 */
 	public TestTraceReconstructionFilter() {
 		final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration(), null);
 		final ExecutionFactory executionFactory = new ExecutionFactory(systemEntityFactory);
 
-		/* Manually create Executions for a trace */
+		// Manually create Executions for a trace
 		this.exec0_0__bookstore_searchBook = executionFactory.genExecution("Bookstore", "bookstore", "searchBook", TestTraceReconstructionFilter.TRACE_ID,
 				TestTraceReconstructionFilter.SESSION_ID, 1 * (1000 * 1000), 10 * (1000 * 1000), 0, 0);
 

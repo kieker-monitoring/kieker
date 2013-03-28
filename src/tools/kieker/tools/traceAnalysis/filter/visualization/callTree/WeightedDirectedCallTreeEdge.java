@@ -32,6 +32,18 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
  */
 public class WeightedDirectedCallTreeEdge<T> extends AbstractWeightedEdge<AbstractCallTreeNode<T>, WeightedDirectedCallTreeEdge<T>, MessageTrace> {
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param source
+	 *            The source of this edge.
+	 * @param target
+	 *            The target of this edge.
+	 * @param origin
+	 *            The meta information for this edge.
+	 * @param originPolicy
+	 *            The origin policy.
+	 */
 	public WeightedDirectedCallTreeEdge(final AbstractCallTreeNode<T> source, final AbstractCallTreeNode<T> target, final MessageTrace origin,
 			final IOriginRetentionPolicy originPolicy) {
 		super(source, target, origin, originPolicy);

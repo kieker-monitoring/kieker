@@ -44,6 +44,13 @@ public final class AsyncBinaryFsWriter extends AbstractAsyncFSWriter {
 	private final int buffersize;
 	private final BinaryCompressionMethod method;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this writer.
+	 * 
+	 */
 	public AsyncBinaryFsWriter(final Configuration configuration) {
 		super(configuration);
 		BinaryCompressionMethod tmpMethod;

@@ -37,6 +37,9 @@ public class TestTrace extends AbstractKiekerTest {
 	private static final long PARENT_TRACE_ID = 3487L;
 	private static final int PARENT_ORDER_ID = 357835;
 
+	/**
+	 * Default constructor.
+	 */
 	public TestTrace() {
 		// empty default constructor
 	}

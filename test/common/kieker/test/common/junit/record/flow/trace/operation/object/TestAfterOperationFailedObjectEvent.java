@@ -38,6 +38,9 @@ public class TestAfterOperationFailedObjectEvent extends AbstractKiekerTest {
 	private static final String CAUSE = "myCause";
 	private static final int OBJECT_ID = 42;
 
+	/**
+	 * Default constructor.
+	 */
 	public TestAfterOperationFailedObjectEvent() {
 		// empty default constructor
 	}

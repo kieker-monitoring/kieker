@@ -32,6 +32,7 @@ import kieker.monitoring.core.controller.MonitoringController;
  * @since 1.5
  */
 public enum TraceRegistry { // Singleton (Effective Java #3)
+	/** The singleton instance. */
 	INSTANCE;
 
 	private static final Log LOG = LogFactory.getLog(TraceRegistry.class); // NOPMD (enum logger)

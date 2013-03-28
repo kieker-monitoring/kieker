@@ -33,6 +33,15 @@ import kieker.monitoring.writer.filesystem.map.StringMappingFileWriter;
  */
 public final class AsyncBinaryZipWriter extends AbstractAsyncZipWriter {
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this writer.
+	 * 
+	 * @throws IOException
+	 *             If something went wrong during the initialization of the writer.
+	 */
 	public AsyncBinaryZipWriter(final Configuration configuration) throws IOException {
 		super(configuration);
 	}

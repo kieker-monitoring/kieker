@@ -45,6 +45,9 @@ public class TestTraceIdFilter extends AbstractKiekerTest {
 	private static final String SESSION_ID = "sv7w1ifhK";
 	private static final String HOSTNAME = "srv098";
 
+	/**
+	 * Default constructor.
+	 */
 	public TestTraceIdFilter() {
 		// empty default constructor
 	}

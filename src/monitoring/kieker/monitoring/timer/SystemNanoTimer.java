@@ -33,7 +33,9 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
  * @since 1.5
  */
 public final class SystemNanoTimer extends AbstractTimeSource {
+	/** This is the name of the configuration determining the used offset (in nanoseconds). */
 	public static final String CONFIG_OFFSET = SystemNanoTimer.class.getName() + ".offset";
+	/** This is the name of the configuration determining the used time unit (0 = nanoseconds, 1 = microseconds, 2 = milliseconds, 3 = seconds). */
 	public static final String CONFIG_UNIT = SystemNanoTimer.class.getName() + ".unit";
 
 	private static final Log LOG = LogFactory.getLog(SystemNanoTimer.class);
@@ -42,6 +44,13 @@ public final class SystemNanoTimer extends AbstractTimeSource {
 	private final long clockdifference;
 	private final TimeUnit timeunit;
 
+	/**
+	 * 
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this timer.
+	 */
 	public SystemNanoTimer(final Configuration configuration) {
 		super(configuration);
 		this.clockdifference = System.nanoTime() - (TimeUnit.MILLISECONDS.toNanos(System.currentTimeMillis()));

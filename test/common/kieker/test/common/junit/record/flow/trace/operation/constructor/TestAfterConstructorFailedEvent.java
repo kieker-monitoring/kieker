@@ -37,6 +37,9 @@ public class TestAfterConstructorFailedEvent extends AbstractKiekerTest {
 	private static final String FQ_OPERATION_SIGNATURE = FQ_CLASSNAME + ".callerOp(boolean arg1, int arg2)";
 	private static final String CAUSE = "myCause";
 
+	/**
+	 * Default constructor.
+	 */
 	public TestAfterConstructorFailedEvent() {
 		// empty default constructor
 	}

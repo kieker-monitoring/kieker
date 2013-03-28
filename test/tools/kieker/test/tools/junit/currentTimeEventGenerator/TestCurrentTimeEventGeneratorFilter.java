@@ -44,6 +44,9 @@ import kieker.test.common.junit.AbstractKiekerTest;
  */
 public class TestCurrentTimeEventGeneratorFilter extends AbstractKiekerTest {
 
+	/**
+	 * Default constructor.
+	 */
 	public TestCurrentTimeEventGeneratorFilter() {
 		// empty default constructor
 	}

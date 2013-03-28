@@ -35,10 +35,16 @@ import kieker.test.common.junit.AbstractKiekerTest;
  */
 public class TestGlobalConfiguration extends AbstractKiekerTest {
 
+	/**
+	 * Default constructor.
+	 */
 	public TestGlobalConfiguration() {
 		// No code necessary
 	}
 
+	/**
+	 * This test makes sure that a filter can access the global configuration.
+	 */
 	@Test
 	public void testGlobalConfiguration() {
 		final Configuration globalConfiguration = new Configuration();
@@ -50,6 +56,9 @@ public class TestGlobalConfiguration extends AbstractKiekerTest {
 		Assert.assertEquals("value", filter.getProperty("key"));
 	}
 
+	/**
+	 * This test makes sure that an empty string is returned, if a plugin searches for a non existing key.
+	 */
 	@Test
 	public void testNoGlobalConfiguration() {
 		final IAnalysisController analysisController = new AnalysisController();
@@ -59,6 +68,9 @@ public class TestGlobalConfiguration extends AbstractKiekerTest {
 		Assert.assertEquals("", filter.getProperty("key"));
 	}
 
+	/**
+	 * This test makes sure that a filter can access the default global configuration.
+	 */
 	@Test
 	public void testDefaultGlobalConfiguration() {
 		final IAnalysisController analysisController = new AnalysisController();
@@ -68,6 +80,9 @@ public class TestGlobalConfiguration extends AbstractKiekerTest {
 		Assert.assertEquals("NANOSECONDS", filter.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT));
 	}
 
+	/**
+	 * This test makes sure that a filter can access an overwritten property of the default global configuration.
+	 */
 	@Test
 	public void testOverwrittenDefaultGlobalConfiguration() {
 		final Configuration globalConfiguration = new Configuration();

@@ -131,10 +131,16 @@ public class TraceColoringFilter<V extends AbstractVertex<V, E, TraceInformation
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void visitVertex(final V vertex) {
 		this.handleGraphElement(vertex);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void visitEdge(final E edge) {
 		this.handleGraphElement(edge);
 	}

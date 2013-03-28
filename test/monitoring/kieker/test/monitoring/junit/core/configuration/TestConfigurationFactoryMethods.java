@@ -38,6 +38,9 @@ public class TestConfigurationFactoryMethods extends AbstractKiekerTest {
 
 	private static final String EXAMPLE_CONFIG_FILE_IN_TRUNK = "test/monitoring/META-INF/kieker.monitoring.test.properties";
 
+	/**
+	 * Default constructor.
+	 */
 	public TestConfigurationFactoryMethods() {
 		// empty default constructor
 	}

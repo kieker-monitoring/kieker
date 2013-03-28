@@ -40,6 +40,9 @@ public class TestCallOperationObjectEvent extends AbstractKiekerTest {
 	private static final int CALLER_OBJECT_ID = 42;
 	private static final int CALLEE_OBJECT_ID = 666;
 
+	/**
+	 * Default constructor.
+	 */
 	public TestCallOperationObjectEvent() {
 		// empty default constructor
 	}

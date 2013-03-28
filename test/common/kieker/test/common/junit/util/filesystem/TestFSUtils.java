@@ -34,10 +34,16 @@ public class TestFSUtils extends AbstractKiekerTest {
 	private static final String ENCODED_STRING = "Hallo\\nTest\\r asjd \\\\ asd \t";
 	private static final String IRRELEVANT_STRING = "Hallo Test asjd asd \t";
 
+	/**
+	 * Default constructor.
+	 */
 	public TestFSUtils() {
 		// empty default constructor
 	}
 
+	/**
+	 * Test the method {@link FSUtil#encodeNewline(String)}.
+	 */
 	@Test
 	public final void testEncodeNewline() {
 		Assert.assertSame("", FSUtil.encodeNewline(""));
@@ -46,6 +52,9 @@ public class TestFSUtils extends AbstractKiekerTest {
 		Assert.assertNotSame(ENCODED_STRING, FSUtil.encodeNewline(DECODED_STRING));
 	}
 
+	/**
+	 * Test the method {@link FSUtil#decodeNewline(String)}.
+	 */
 	@Test
 	public final void testDecodeNewline() {
 		Assert.assertSame("", FSUtil.encodeNewline(""));
@@ -55,6 +64,9 @@ public class TestFSUtils extends AbstractKiekerTest {
 		Assert.assertSame(DECODED_STRING, FSUtil.decodeNewline(DECODED_STRING));
 	}
 
+	/**
+	 * Test the methods {@link FSUtil#encodeNewline(String)} and {@link FSUtil#decodeNewline(String)} toegether.
+	 */
 	@Test
 	public final void testEncodeDecodeNewline() {
 		Assert.assertEquals(DECODED_STRING, FSUtil.decodeNewline(FSUtil.encodeNewline(DECODED_STRING)));
