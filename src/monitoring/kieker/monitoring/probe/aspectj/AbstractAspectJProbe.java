@@ -36,15 +36,28 @@ public abstract class AbstractAspectJProbe implements IMonitoringProbe {
 
 	// Pointcuts should not be final!
 
+	/**
+	 * This is a pointcut accepting everything that is not within kieker.common, kieker.monitoring, kieker.analysis and kieker.tools.
+	 */
 	@Pointcut("!within(kieker.common..*) && !within(kieker.monitoring..*) && !within(kieker.analysis..*) && !within(kieker.tools..*)")
 	public void notWithinKieker() {} // NOPMD (Aspect)
 
+	/**
+	 * This is a pointcut accepting all calls and executions of setter methods (methods which return void and start with {@code set}).
+	 */
 	@Pointcut("execution(void set*(..)) || call(void set*(..))")
 	public void setter() {} // NOPMD (Aspect)
 
+	/**
+	 * This is a pointcut accepting all calls and executions of getter methods (methods which return something and start with {@code get} or return a boolean and
+	 * start with {@code is}).
+	 */
 	@Pointcut("execution(* get*(..)) || call(* get*(..)) || execution(boolean is*(..)) || call(boolean is*(..))")
 	public void getter() {} // NOPMD (Aspect)
 
+	/**
+	 * This is a pointcut accepting everything that is neither a getter nor a setter.
+	 */
 	@Pointcut("!getter() && !setter()")
 	public void noGetterAndSetter() {} // NOPMD (Aspect)
 

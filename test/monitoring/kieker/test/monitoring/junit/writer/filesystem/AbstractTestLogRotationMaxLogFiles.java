@@ -110,26 +110,56 @@ public abstract class AbstractTestLogRotationMaxLogFiles extends AbstractKiekerT
 		this.checkMaxLogFiles(2, 3);
 	}
 
+	/**
+	 * This test writes 10 records, but with a limit of 2 records.
+	 * 
+	 * @throws IOException
+	 *             If something went wrong during the writing.
+	 */
 	@Test
 	public final void testMaxLogFilesLimitedTwo10() throws IOException { // NOPMD (assert in checkMaxLogFiles)
 		this.checkMaxLogFiles(2, 10);
 	}
 
+	/**
+	 * This test writes 0 records, but with a limit of 10 records.
+	 * 
+	 * @throws IOException
+	 *             If something went wrong during the writing.
+	 */
 	@Test
 	public final void testMaxLogFilesLimitedTen0() throws IOException { // NOPMD (assert in checkMaxLogFiles)
 		this.checkMaxLogFiles(10, 0);
 	}
 
+	/**
+	 * This test writes 2 records, but with a limit of 10 records.
+	 * 
+	 * @throws IOException
+	 *             If something went wrong during the writing.
+	 */
 	@Test
 	public final void testMaxLogFilesLimitedTen2() throws IOException { // NOPMD (assert in checkMaxLogFiles)
 		this.checkMaxLogFiles(10, 2);
 	}
 
+	/**
+	 * This test writes 10 records, with a limit of 10 records.
+	 * 
+	 * @throws IOException
+	 *             If something went wrong during the writing.
+	 */
 	@Test
 	public final void testMaxLogFilesLimitedTen10() throws IOException { // NOPMD (assert in checkMaxLogFiles)
 		this.checkMaxLogFiles(10, 10);
 	}
 
+	/**
+	 * This test writes 11 records, but with a limit of 10 records.
+	 * 
+	 * @throws IOException
+	 *             If something went wrong during the writing.
+	 */
 	@Test
 	public final void testMaxLogFilesLimitedTen11() throws IOException { // NOPMD (assert in checkMaxLogFiles)
 		this.checkMaxLogFiles(10, 11);

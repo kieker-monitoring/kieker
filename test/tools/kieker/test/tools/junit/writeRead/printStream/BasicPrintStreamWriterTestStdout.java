@@ -38,6 +38,9 @@ public class BasicPrintStreamWriterTestStdout extends AbstractPrintStreamWriterT
 
 	private volatile StringTeePrintStream stringTeePrintStream = null; // NOPMD (init for findbugs)
 
+	/**
+	 * Creates a new instance of this class.
+	 */
 	public BasicPrintStreamWriterTestStdout() {
 		// empty default constructor
 	}

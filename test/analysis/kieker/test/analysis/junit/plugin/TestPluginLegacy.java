@@ -52,6 +52,9 @@ public final class TestPluginLegacy extends AbstractKiekerTest {
 		// empty default constructor
 	}
 
+	/**
+	 * This method tests some attributes of plugins.
+	 */
 	@Test
 	public void testPluginAttributes() {
 		final Configuration myPluginConfig = new Configuration();
@@ -65,6 +68,9 @@ public final class TestPluginLegacy extends AbstractKiekerTest {
 		Assert.assertEquals("Unexpected plugin description", SimpleForwardFilterWithRepository.FILTER_DESCRIPTION, sourcePlugin.getPluginDescription());
 	}
 
+	/**
+	 * This method tests whether the repository is still working.
+	 */
 	@Test
 	public void testRepository() {
 		final Configuration myRepoConfig = new Configuration();
@@ -78,6 +84,14 @@ public final class TestPluginLegacy extends AbstractKiekerTest {
 		Assert.assertEquals("Unexpected repository description", SimpleRepository.REPOSITORY_DESCRIPTION, myRepo.getRepositoryDescription());
 	}
 
+	/**
+	 * This method tests whether the chaining of filters, readers, and repositories is still working.
+	 * 
+	 * @throws IllegalStateException
+	 *             If something went wrong during the test.
+	 * @throws AnalysisConfigurationException
+	 *             If something went wrong during the test.
+	 */
 	@Test
 	public void testChaining() throws IllegalStateException, AnalysisConfigurationException {
 		final Object testObject1 = new Object();
@@ -117,6 +131,14 @@ public final class TestPluginLegacy extends AbstractKiekerTest {
 		Assert.assertEquals(testObject2, list.get(1));
 	}
 
+	/**
+	 * This method tests whether new constructor is compatible with null as project context.
+	 * 
+	 * @throws IllegalStateException
+	 *             If something went wrong during the test.
+	 * @throws AnalysisConfigurationException
+	 *             If something went wrong during the test.
+	 */
 	@Test
 	public void testCompatibleConstructor() throws IllegalStateException, AnalysisConfigurationException {
 		// Some test objects

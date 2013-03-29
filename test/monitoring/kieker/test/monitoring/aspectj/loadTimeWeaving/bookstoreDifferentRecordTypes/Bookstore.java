@@ -40,6 +40,9 @@ public class Bookstore extends Thread {
 	private static final int NUM_REQUESTS = 3;
 	private static final int INTER_REQUEST_TIME = 1000;
 
+	/**
+	 * Default constructor.
+	 */
 	public Bookstore() {
 		// nothing to do
 	}

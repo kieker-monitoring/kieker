@@ -148,6 +148,12 @@ public final class TraceIdFilter extends AbstractFilterPlugin {
 		}
 	}
 
+	/**
+	 * This method represents an input port for execution records.
+	 * 
+	 * @param record
+	 *            The next record.
+	 */
 	@InputPort(name = INPUT_PORT_NAME_EXECUTION, description = "Receives execution events to be selected by trace ID",
 			eventTypes = { OperationExecutionRecord.class })
 	public void inputOperationExecutionRecord(final OperationExecutionRecord record) {

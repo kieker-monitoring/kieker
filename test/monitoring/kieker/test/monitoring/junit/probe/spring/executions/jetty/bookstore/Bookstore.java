@@ -32,6 +32,9 @@ public class Bookstore {
 	@Autowired
 	private CRM crm;
 
+	/**
+	 * Default constructor.
+	 */
 	public Bookstore() {
 		// empty default constructor
 	}

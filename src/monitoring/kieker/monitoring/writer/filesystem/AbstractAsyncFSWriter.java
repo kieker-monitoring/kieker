@@ -37,10 +37,15 @@ import kieker.monitoring.writer.filesystem.map.MappingFileWriter;
  * @since 1.5
  */
 public abstract class AbstractAsyncFSWriter extends AbstractAsyncWriter {
+	/** The name of the configuration for the custom storage path if the writer is advised not to store in the temporary directory. */
 	public static final String CONFIG_PATH = "customStoragePath";
+	/** The name of the configuration determining whether to store the data in the temporary directory or not. */
 	public static final String CONFIG_TEMP = "storeInJavaIoTmpdir";
+	/** The name of the configuration determining the maximal number of entries in a file. */
 	public static final String CONFIG_MAXENTRIESINFILE = "maxEntriesInFile";
+	/** The name of the configuration determining the maximal size of the files in MiB. */
 	public static final String CONFIG_MAXLOGSIZE = "maxLogSize"; // in MiB
+	/** The name of the configuration determining the maximal number of log files. */
 	public static final String CONFIG_MAXLOGFILES = "maxLogFiles";
 
 	private final String configPath;
@@ -48,6 +53,13 @@ public abstract class AbstractAsyncFSWriter extends AbstractAsyncWriter {
 	private final int configMaxlogSize;
 	private final int configMaxLogFiles;
 
+	/**
+	 * 
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this writer.
+	 */
 	protected AbstractAsyncFSWriter(final Configuration configuration) {
 		super(configuration);
 		final String prefix = this.getClass().getName() + '.';
