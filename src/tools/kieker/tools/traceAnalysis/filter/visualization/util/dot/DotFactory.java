@@ -179,6 +179,7 @@ public final class DotFactory {
 	 * @param fontsize
 	 *            The size of the font. This parameter can be null.
 	 * @param imageFilename
+	 *            The name of the image to be displayed inside the node.
 	 * @param misc
 	 *            This parameter can be used to add miscellaneous data and dot code.
 	 * @param tooltip

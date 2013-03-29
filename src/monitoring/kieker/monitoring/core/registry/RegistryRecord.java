@@ -41,6 +41,12 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 		this.object = object;
 	}
 
+	/**
+	 * This constructor converts the given array into a record. It is recommended to use the array which is the result of a call to {@link #toArray()}.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 */
 	public RegistryRecord(final Object[] values) {
 		final Object[] myValues = values.clone(); // to protect object from tampering
 		AbstractMonitoringRecord.checkArray(myValues, TYPES);
@@ -52,6 +58,9 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Object[] toArray() {
 		return new Object[] { this.id, this.object };
 	}

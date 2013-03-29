@@ -109,6 +109,12 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 		this.ess = ess;
 	}
 
+	/**
+	 * This constructor converts the given array into a record. It is recommended to use the array which is the result of a call to {@link #toArray()}.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 */
 	public OperationExecutionRecord(final Object[] values) { // NOPMD (values stored directly)
 		AbstractMonitoringRecord.checkArray(values, TYPES); // throws IllegalArgumentException
 		this.operationSignature = (String) values[0];

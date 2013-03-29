@@ -66,7 +66,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	}
 
 	/**
-	 * Make sure that the three required properties always have default values!
+	 * {@inheritDoc} Make sure that the three required properties always have default values!
 	 */
 	@Override
 	protected Configuration getDefaultConfiguration() {
@@ -82,6 +82,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	 * This method must be called at the end of the child constructor!
 	 * 
 	 * @param worker
+	 *            The new worker.
 	 */
 	protected final void addWorker(final AbstractAsyncThread worker) {
 		this.workers.add(worker);
@@ -92,7 +93,6 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	/**
 	 * The framework ensures, that this method is called only once!
 	 */
-
 	public final void terminate() {
 		final CountDownLatch cdl = new CountDownLatch(this.workers.size());
 		for (final AbstractAsyncThread worker : this.workers) {
@@ -118,6 +118,9 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 		try {
 			switch (this.queueFullBehavior) {

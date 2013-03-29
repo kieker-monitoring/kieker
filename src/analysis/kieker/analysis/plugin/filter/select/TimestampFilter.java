@@ -63,15 +63,23 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 	public static final String INPUT_PORT_NAME_EXECUTION = "monitoringRecordsExecution";
 	public static final String INPUT_PORT_NAME_COMBINED = "monitoringRecordsCombined";
 
+	/** The name of the output port delivering records which are within the defined time limits. */
 	public static final String OUTPUT_PORT_NAME_WITHIN_PERIOD = "recordsWithinTimePeriod";
+	/** The name of the output port delivering records which are not within the defined time limits. */
 	public static final String OUTPUT_PORT_NAME_OUTSIDE_PERIOD = "recordsOutsidePeriod";
 
+	/** This is the name of the property for the used time unit. */
 	public static final String CONFIG_PROPERTY_NAME_TIMEUNIT = "timeunit";
+	/** This is the name of the property for the lower limit of the records. */
 	public static final String CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP = "ignoreBeforeTimestamp";
+	/** This is the name of the property for the upper limit of the records. */
 	public static final String CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP = "ignoreAfterTimestamp";
 
+	/** The default used time unit. */
 	public static final String CONFIG_PROPERTY_VALUE_TIMEUNIT = "NANOSECONDS"; // TimeUnit.NANOSECONDS.name()
+	/** The default used upper limit for the records. **/
 	public static final String CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP = "9223372036854775807"; // Long.toString(Long.MAX_VALUE)
+	/** The default used lower limit for the records. **/
 	public static final String CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP = "0"; // Long.toString(0)
 
 	private static final Log LOG = LogFactory.getLog(TimestampFilter.class);

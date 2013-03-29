@@ -53,6 +53,12 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 		this.objectId = objectId;
 	}
 
+	/**
+	 * This constructor converts the given array into a record. It is recommended to use the array which is the result of a call to {@link #toArray()}.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 */
 	public AfterOperationFailedObjectEvent(final Object[] values) { // NOPMD (values stored directly)
 		super(values, TYPES); // values[0..5]
 		this.objectId = (Integer) values[6];

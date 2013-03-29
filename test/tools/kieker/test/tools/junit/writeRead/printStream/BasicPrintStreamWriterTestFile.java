@@ -41,16 +41,31 @@ public class BasicPrintStreamWriterTestFile extends AbstractPrintStreamWriterTes
 
 	private volatile File outputFile = null; // NOPMD (init for findbugs)
 
+	/**
+	 * Default constructor.
+	 */
 	public BasicPrintStreamWriterTestFile() {
 		// empty default constructor
 	}
 
+	/**
+	 * Initializes the test setup.
+	 * 
+	 * @throws Exception
+	 *             If something went wrong during the initialization.
+	 */
 	@Before
 	public void setUp() throws Exception {
 		this.tmpFolder.create();
 		this.outputFile = this.tmpFolder.newFile(BasicPrintStreamWriterTestFile.OUTPUT_BASE_FN);
 	}
 
+	/**
+	 * Cleans up after the test.
+	 * 
+	 * @throws Exception
+	 *             If remaining files could not be removed.
+	 */
 	@After
 	public void tearDown() throws Exception {
 		this.tmpFolder.delete();

@@ -28,11 +28,15 @@ package kieker.common.record.flow;
 public interface ITraceRecord extends IFlowRecord {
 
 	/**
+	 * @return The trace ID.
+	 * 
 	 * @since 1.6
 	 */
 	public abstract long getTraceId();
 
 	/**
+	 * @return The order index.
+	 * 
 	 * @since 1.6
 	 */
 	public abstract int getOrderIndex();

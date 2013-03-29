@@ -45,6 +45,12 @@ public class BasicPrintStreamWriterTestStdout extends AbstractPrintStreamWriterT
 		// empty default constructor
 	}
 
+	/**
+	 * Initializes the test setup.
+	 * 
+	 * @throws Exception
+	 *             If something went wrong during the initialization.
+	 */
 	@Before
 	public void setUp() throws Exception {
 		this.originalPrintStream = System.out;
@@ -52,6 +58,12 @@ public class BasicPrintStreamWriterTestStdout extends AbstractPrintStreamWriterT
 		System.setOut(this.stringTeePrintStream);
 	}
 
+	/**
+	 * Cleans up after the test.
+	 * 
+	 * @throws Exception
+	 *             If something went wrong.
+	 */
 	@After
 	public void tearDown() throws Exception {
 		System.setOut(this.originalPrintStream);

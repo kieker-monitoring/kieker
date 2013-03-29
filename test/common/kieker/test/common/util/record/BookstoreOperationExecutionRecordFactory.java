@@ -22,9 +22,8 @@ import java.util.List;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 
 /**
- * Provides some constants for the bookstore example, including class names,
- * operation signatures etc., as well as methods returning (valid and invalid)
- * bookstore traces.
+ * Provides some constants for the bookstore example, including class names, operation signatures etc., as well as methods returning (valid and invalid) bookstore
+ * traces.
  * 
  * @author Andre van Hoorn
  * 
@@ -105,8 +104,8 @@ public final class BookstoreOperationExecutionRecordFactory {
 	private BookstoreOperationExecutionRecordFactory() {}
 
 	/**
-	 * Returns the ordered List of {@link OperationExecutionRecord}s for the "well-known" bookstore trace with
-	 * short operation signatures, i.e., class name and operation without modifiers, return type, args etc.
+	 * Returns the ordered List of {@link OperationExecutionRecord}s for the "well-known" bookstore trace with short operation signatures, i.e., class name and
+	 * operation without modifiers, return type, args etc.
 	 * Example: <code>Catalog.searchBook</code>.
 	 * 
 	 * @param sessionId

@@ -42,6 +42,7 @@ public class FilesystemLogReplayer extends AbstractLogReplayer {
 	 * @param realtimeMode
 	 *            Whether realtime mode should be used.
 	 * @param keepOriginalLoggingTimestamps
+	 *            Whether to keep the original logging timestamps or not.
 	 * @param numRealtimeWorkerThreads
 	 *            The number of realtime worker threads to be used.
 	 * @param ignoreRecordsBeforeTimestamp

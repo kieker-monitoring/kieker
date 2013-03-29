@@ -26,6 +26,8 @@ import kieker.common.logging.LogFactory;
 import kieker.common.logging.LogImplJUnit;
 
 /**
+ * This abstract class is the base for all other JUnit tests within the system.
+ * 
  * @author Jan Waller
  * 
  * @since 1.6
@@ -44,15 +46,24 @@ public abstract class AbstractKiekerTest { // NOPMD (no abstract methods)
 	@Rule
 	public TestName nameOfCurrentTest = new TestName(); // NOPMD NOCS
 
+	/**
+	 * Default constructor.
+	 */
 	public AbstractKiekerTest() {
 		// empty default constructor
 	}
 
+	/**
+	 * This method writes in fact just the name of the test which is currently executed.
+	 */
 	@Before
 	public final void printNameOfCurrentTest() {
 		LOG.info("Executing test: " + this.getClass().getName() + "." + this.nameOfCurrentTest.getMethodName() + "()\n\n");
 	}
 
+	/**
+	 * This method resets the logger.
+	 */
 	@After
 	public final void resetStateOfJUnitLogger() {
 		LogImplJUnit.reset();

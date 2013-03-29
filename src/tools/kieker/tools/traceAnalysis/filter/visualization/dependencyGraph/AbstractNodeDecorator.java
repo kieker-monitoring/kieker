@@ -54,6 +54,8 @@ public abstract class AbstractNodeDecorator {
 	 *            The source node sending the message
 	 * @param targetNode
 	 *            The target node receiving the message
+	 * @param timeunit
+	 *            The time unit which determines how to interpret times.
 	 */
 	public abstract void processMessage(AbstractMessage message, DependencyGraphNode<?> sourceNode, DependencyGraphNode<?> targetNode, final TimeUnit timeunit);
 

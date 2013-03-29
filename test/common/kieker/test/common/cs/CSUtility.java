@@ -75,6 +75,14 @@ public final class CSUtility {
 		return false;
 	}
 
+	/**
+	 * This method extracts all method definitions from the given class (or interface).
+	 * 
+	 * @param ast
+	 *            The class (or interface).
+	 * 
+	 * @return A collection of available methods.
+	 */
 	public static Collection<DetailAST> getMethodsFromClass(final DetailAST ast) {
 		final Collection<DetailAST> result = new ArrayList<DetailAST>();
 

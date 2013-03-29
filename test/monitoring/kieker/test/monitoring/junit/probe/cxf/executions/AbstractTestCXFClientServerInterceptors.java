@@ -146,6 +146,9 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 
 	/**
 	 * Gives implementing classes the possibility to inspect the records written by the probes.
+	 * 
+	 * @param records
+	 *            The list of written records.
 	 */
 	protected abstract void checkRecordList(List<IMonitoringRecord> records);
 

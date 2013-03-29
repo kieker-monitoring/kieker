@@ -28,6 +28,13 @@ import javax.jws.WebService;
 public interface IBookstore {
 
 	/**
+	 * Searches for the given book.
+	 * 
+	 * @param term
+	 *            The term to search for.
+	 * 
+	 * @return The resulting book.
+	 * 
 	 * @since 1.6
 	 */
 	public abstract String searchBook(@WebParam(name = "term") String term);

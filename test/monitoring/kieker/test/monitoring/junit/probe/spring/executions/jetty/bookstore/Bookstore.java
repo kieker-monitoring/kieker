@@ -39,6 +39,14 @@ public class Bookstore {
 		// empty default constructor
 	}
 
+	/**
+	 * Searches for a book.
+	 * 
+	 * @param term
+	 *            The term to search for.
+	 * 
+	 * @return The resulting book.
+	 */
 	public Book searchBook(final String term) {
 		this.catalog.getBook(false);
 		return this.crm.getOffers();

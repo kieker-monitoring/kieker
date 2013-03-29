@@ -117,6 +117,12 @@ public final class TraceIdFilter extends AbstractFilterPlugin {
 		return false;
 	}
 
+	/**
+	 * This method represents an input port for both operation execution and flow records.
+	 * 
+	 * @param record
+	 *            The next record.
+	 */
 	@InputPort(name = INPUT_PORT_NAME_COMBINED, description = "Receives execution and trace events to be selected by trace ID",
 			eventTypes = { ITraceRecord.class, Trace.class, OperationExecutionRecord.class })
 	public void inputCombined(final IMonitoringRecord record) {
@@ -127,6 +133,12 @@ public final class TraceIdFilter extends AbstractFilterPlugin {
 		} // else discard it, we should never have gotten it anyhow
 	}
 
+	/**
+	 * This method represents an input port for flow records.
+	 * 
+	 * @param record
+	 *            The next record.
+	 */
 	@InputPort(name = INPUT_PORT_NAME_FLOW, description = "Receives trace events to be selected by trace ID",
 			eventTypes = { ITraceRecord.class, Trace.class })
 	public void inputTraceEvent(final IFlowRecord record) {
@@ -149,7 +161,7 @@ public final class TraceIdFilter extends AbstractFilterPlugin {
 	}
 
 	/**
-	 * This method represents an input port for execution records.
+	 * This method represents an input port for operation execution records.
 	 * 
 	 * @param record
 	 *            The next record.

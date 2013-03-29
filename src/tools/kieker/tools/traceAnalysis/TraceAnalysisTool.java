@@ -92,13 +92,9 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.tools.util.LoggingTimestampConverter;
 
 /**
- * This is the main class to start the Kieker TraceAnalysisTool - the model
- * synthesis and analysis tool to process the monitoring data that comes from
- * the instrumented system, or from a file that contains Kieker monitoring data.
- * The Kieker TraceAnalysisTool can produce output such as sequence diagrams,
- * dependency graphs on demand. Alternatively it can be used continuously for
- * online performance analysis, anomaly detection or live visualization of
- * system behavior.
+ * This is the main class to start the Kieker TraceAnalysisTool - the model synthesis and analysis tool to process the monitoring data that comes from the
+ * instrumented system, or from a file that contains Kieker monitoring data. The Kieker TraceAnalysisTool can produce output such as sequence diagrams, dependency
+ * graphs on demand. Alternatively it can be used continuously for online performance analysis, anomaly detection or live visualization of system behavior.
  * 
  * @author Andre van Hoorn, Matthias Rohr, Nils Christian Ehmke
  * 

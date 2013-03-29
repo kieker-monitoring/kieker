@@ -29,6 +29,12 @@ public final class Catalog {
 
 	private Catalog() {}
 
+	/**
+	 * A dummy method which waits a little bit.
+	 * 
+	 * @param complexQuery
+	 *            Determines whether to wait 20 ms or 2 ms.
+	 */
 	public static void getBook(final boolean complexQuery) {
 		if (complexQuery) {
 			// complex query

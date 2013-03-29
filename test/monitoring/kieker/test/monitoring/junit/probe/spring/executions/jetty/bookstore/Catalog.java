@@ -26,10 +26,21 @@ import org.springframework.stereotype.Service;
 @Service
 public class Catalog {
 
+	/**
+	 * Default constructor.
+	 */
 	public Catalog() {
 		// empty default constructor
 	}
 
+	/**
+	 * A dummy method returning just a book with a constant string.
+	 * 
+	 * @param complexQuery
+	 *            Some dummy parameter which is not used in fact.
+	 * 
+	 * @return A new book.
+	 */
 	public Book getBook(final boolean complexQuery) {
 		return new Book("Kieker 1.5 User Guide");
 	}

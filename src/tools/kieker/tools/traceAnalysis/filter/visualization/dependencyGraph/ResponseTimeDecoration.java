@@ -22,8 +22,8 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractVertexDecor
 import kieker.tools.traceAnalysis.systemModel.Execution;
 
 /**
- * Response time decoration for graph vertices. This decoration extracts response times from executions
- * and keeps track of the minimal, maximal and average response time.
+ * Response time decoration for graph vertices. This decoration extracts response times from executions and keeps track of the minimal, maximal and average response
+ * time.
  * 
  * @author Holger Knoche
  * 
@@ -44,6 +44,9 @@ public class ResponseTimeDecoration extends AbstractVertexDecoration {
 
 	/**
 	 * Creates a new response time decoration.
+	 * 
+	 * @param executionTimeunit
+	 *            The time unit which tells how to interpret the times of the executions.
 	 */
 	public ResponseTimeDecoration(final TimeUnit executionTimeunit) {
 		this.executionTimeunit = executionTimeunit;

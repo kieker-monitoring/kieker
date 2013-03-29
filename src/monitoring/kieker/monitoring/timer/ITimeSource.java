@@ -24,23 +24,22 @@ package kieker.monitoring.timer;
 public interface ITimeSource {
 
 	/**
-	 * Returns the timestamp for the current time. Usually, the timestamp is assumed to
-	 * be in {@link java.util.concurrent.TimeUnit#NANOSECONDS}.
+	 * @return The timestamp for the current time. Usually, the timestamp is assumed to be in {@link java.util.concurrent.TimeUnit#NANOSECONDS}.
+	 * 
 	 * 
 	 * @since 1.3
 	 */
 	public long getTime();
 
 	/**
-	 * Returns a String representation of the {@link java.util.concurrent.TimeUnit} of the timesource.
+	 * @return A String representation of the {@link java.util.concurrent.TimeUnit} of the timesource.
 	 * 
 	 * @since 1.7
 	 */
 	public String getTimeUnit();
 
 	/**
-	 * Returns a String representation of the timesource.
-	 * E.g., the meaning of a timestamp from this source.
+	 * @return A String representation of the timesource. E.g., the meaning of a timestamp from this source.
 	 * 
 	 * @since 1.5
 	 */

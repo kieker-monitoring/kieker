@@ -22,11 +22,9 @@ import java.util.List;
 import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 
 /**
- * A simple test and demonstration scenario for Kieker's
- * monitoring component.
+ * A simple test and demonstration scenario for Kieker's monitoring component.
  * 
- * THIS VARIANT IS IDENTICAL TO kieker.tests.compileTimeWeaving.bookstore.Bookstore,
- * but it uses a different Catalog that has a synchronized method. This allows to
+ * THIS VARIANT IS IDENTICAL TO kieker.tests.compileTimeWeaving.bookstore.Bookstore, but it uses a different Catalog that has a synchronized method. This allows to
  * test the (negative) performance influence of synchronized method invocation.
  * 
  * 
@@ -101,6 +99,9 @@ public class Bookstore extends Thread {
 		}
 	}
 
+	/**
+	 * Searches for a book.
+	 */
 	@OperationExecutionMonitoringProbe
 	public static void searchBook() {
 		Catalog.getBook(false);

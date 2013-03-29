@@ -26,8 +26,10 @@ import kieker.monitoring.core.controller.IMonitoringController;
 public interface ISampler {
 
 	/**
-	 * Triggers this {@link ISampler} to perform a measurement and to pass the data
-	 * to the given {@link IMonitoringController}.
+	 * Triggers this {@link ISampler} to perform a measurement and to pass the data to the given {@link IMonitoringController}.
+	 * 
+	 * @param monitoringController
+	 *            The controller to which the sampler should pass the data.
 	 * 
 	 * @throws Exception
 	 *             thrown to indicate an error.

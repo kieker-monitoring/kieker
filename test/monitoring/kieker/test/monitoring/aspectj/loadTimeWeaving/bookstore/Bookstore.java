@@ -78,6 +78,9 @@ public class Bookstore extends Thread {
 		Bookstore.searchBook();
 	}
 
+	/**
+	 * Searches for a book.
+	 */
 	@OperationExecutionMonitoringProbe
 	public static void searchBook() {
 		Catalog.getBook(false);

@@ -28,14 +28,14 @@ package kieker.common.record.flow;
 public interface IOperationRecord extends IFlowRecord {
 
 	/**
-	 * Get the actually executing class.
+	 * @return The actually executing class.
 	 * 
 	 * @since 1.6
 	 */
 	public abstract String getClassSignature();
 
 	/**
-	 * Get the actual OperationSignature.
+	 * @return The actual OperationSignature.
 	 * 
 	 * @since 1.6
 	 */

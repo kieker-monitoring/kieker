@@ -43,6 +43,8 @@ public class JMSLogReplayer extends AbstractLogReplayer {
 	 *            = for instance "queue1"
 	 * @param jmsFactoryLookupName
 	 *            = for instance "org.exolab.jms.jndi.InitialContextFactory" (OpenJMS)
+	 * @param monitoringConfigurationFile
+	 *            The path of the monitoring.properties file.
 	 */
 	public JMSLogReplayer(final String monitoringConfigurationFile, final String jmsProviderUrl, final String jmsDestination, final String jmsFactoryLookupName) {
 		super(monitoringConfigurationFile,

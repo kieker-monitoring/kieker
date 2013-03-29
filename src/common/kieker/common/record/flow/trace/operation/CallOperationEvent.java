@@ -53,6 +53,12 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 		this.calleeClassSignature = (calleeClassSignature == null) ? NO_CALLEECLASSSIGANTURE : calleeClassSignature; // NOCS
 	}
 
+	/**
+	 * This constructor converts the given array into a record. It is recommended to use the array which is the result of a call to {@link #toArray()}.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 */
 	public CallOperationEvent(final Object[] values) { // NOPMD (values stored directly)
 		super(values, TYPES); // values[0..4]
 		this.calleeOperationSignature = (String) values[5];

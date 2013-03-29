@@ -69,6 +69,18 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 	 *            The timestamp of the measure.
 	 * @param hostname
 	 *            The name of the host.
+	 * @param memTotal
+	 *            The total available memory.
+	 * @param memUsed
+	 *            The used memory.
+	 * @param memFree
+	 *            The free memory.
+	 * @param swapTotal
+	 *            The total available swap.
+	 * @param swapUsed
+	 *            The used swap.
+	 * @param swapFree
+	 *            The free swap.
 	 */
 	public MemSwapUsageRecord(final long timestamp, final String hostname, final long memTotal, final long memUsed, final long memFree, final long swapTotal,
 			final long swapUsed, final long swapFree) {
@@ -82,6 +94,12 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 		this.swapFree = swapFree;
 	}
 
+	/**
+	 * This constructor converts the given array into a record. It is recommended to use the array which is the result of a call to {@link #toArray()}.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 */
 	public MemSwapUsageRecord(final Object[] values) { // NOPMD (values stored directly)
 		AbstractMonitoringRecord.checkArray(values, TYPES);
 		this.timestamp = (Long) values[0];

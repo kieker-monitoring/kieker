@@ -32,7 +32,9 @@ import kieker.common.logging.LogFactory;
  * @since 1.5
  */
 public final class SystemMilliTimer extends AbstractTimeSource {
+	/** The name of the configuration for the offset. */
 	public static final String CONFIG_OFFSET = SystemMilliTimer.class.getName() + ".offset";
+	/** The name of the configuration for the time unit (0 = nanoseconds, 1 = microseconds, 2 = milliseconds, 3 = seconds). */
 	public static final String CONFIG_UNIT = SystemMilliTimer.class.getName() + ".unit";
 
 	private static final Log LOG = LogFactory.getLog(SystemMilliTimer.class);
@@ -40,6 +42,12 @@ public final class SystemMilliTimer extends AbstractTimeSource {
 	private final long offset;
 	private final TimeUnit timeunit;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this timer.
+	 */
 	public SystemMilliTimer(final Configuration configuration) {
 		super(configuration);
 		if (configuration.getStringProperty(CONFIG_OFFSET).length() == 0) {

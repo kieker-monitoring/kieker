@@ -35,10 +35,19 @@ public final class SplitEvent extends AbstractTraceEvent {
 		super(timestamp, traceId, orderIndex);
 	}
 
+	/**
+	 * This constructor converts the given array into a record. It is recommended to use the array which is the result of a call to {@link #toArray()}.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 */
 	public SplitEvent(final Object[] values) {
 		super(values, TYPES); // values[0..2]
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final Object[] toArray() {
 		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), };
 	}

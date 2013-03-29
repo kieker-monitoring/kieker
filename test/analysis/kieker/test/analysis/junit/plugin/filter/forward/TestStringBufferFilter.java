@@ -41,6 +41,9 @@ import kieker.test.common.junit.AbstractKiekerTest;
  */
 public class TestStringBufferFilter extends AbstractKiekerTest {
 
+	/**
+	 * Default constructor.
+	 */
 	public TestStringBufferFilter() {
 		// default empty constructor
 	}

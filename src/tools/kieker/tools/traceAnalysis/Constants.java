@@ -37,25 +37,43 @@ import kieker.tools.util.CLIHelpFormatter;
 @SuppressWarnings({ "static-access", "static" })
 public final class Constants {
 
+	/** Command for the input directories containing monitoring records. */
 	public static final String CMD_OPT_NAME_INPUTDIRS = "inputdirs";
+	/** Command for the output directories. */
 	public static final String CMD_OPT_NAME_OUTPUTDIR = "outputdir";
 	public static final String CMD_OPT_NAME_OUTPUTFNPREFIX = "output-filename-prefix";
 	public static final String CMD_OPT_NAME_SELECTTRACES = "select-traces";
+	/** Command whether to use short labels or not. */
 	public static final String CMD_OPT_NAME_SHORTLABELS = "short-labels";
+	/** Command whether to include self loops or not. */
 	public static final String CMD_OPT_NAME_INCLUDESELFLOOPS = "include-self-loops";
+	/** Command whether to ignore invalid traces or not. */
 	public static final String CMD_OPT_NAME_IGNOREINVALIDTRACES = "ignore-invalid-traces";
+	/** Command whether to plot deployment sequence diagrams or not. */
 	public static final String CMD_OPT_NAME_TASK_PLOTALLOCATIONSEQDS = "plot-Deployment-Sequence-Diagrams";
+	/** Command whether to plot assembly sequence diagrams or not. */
 	public static final String CMD_OPT_NAME_TASK_PLOTASSEMBLYSEQDS = "plot-Assembly-Sequence-Diagrams";
+	/** Command whether to plot deployment component dependency graphs or not. */
 	public static final String CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG = "plot-Deployment-Component-Dependency-Graph";
+	/** Command whether to plot assembly component dependency graphs or not. */
 	public static final String CMD_OPT_NAME_TASK_PLOTASSEMBLYCOMPONENTDEPG = "plot-Assembly-Component-Dependency-Graph";
+	/** Command whether to plot container dependency graphs or not. */
 	public static final String CMD_OPT_NAME_TASK_PLOTCONTAINERDEPG = "plot-Container-Dependency-Graph";
+	/** Command whether to plot deployment operation dependency graphs or not. */
 	public static final String CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG = "plot-Deployment-Operation-Dependency-Graph";
+	/** Command whether to plot assembly operation dependency graphs or not. */
 	public static final String CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG = "plot-Assembly-Operation-Dependency-Graph";
+	/** Command whether to plot aggregated deployment call trees or not. */
 	public static final String CMD_OPT_NAME_TASK_PLOTAGGREGATEDALLOCATIONCALLTREE = "plot-Aggregated-Deployment-Call-Tree";
+	/** Command whether to plot aggregated assembly call trees or not. */
 	public static final String CMD_OPT_NAME_TASK_PLOTAGGREGATEDASSEMBLYCALLTREE = "plot-Aggregated-Assembly-Call-Tree";
+	/** Command whether to plot call trees or not. */
 	public static final String CMD_OPT_NAME_TASK_PLOTCALLTREES = "plot-Call-Trees";
+	/** Command whether to print message traces or not. */
 	public static final String CMD_OPT_NAME_TASK_PRINTMSGTRACES = "print-Message-Traces";
+	/** Command whether to print execution traces or not. */
 	public static final String CMD_OPT_NAME_TASK_PRINTEXECTRACES = "print-Execution-Traces";
+	/** Command whether to print invalid execution traces or not. */
 	public static final String CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES = "print-invalid-Execution-Traces";
 	public static final String CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT = "print-Deployment-Equivalence-Classes";
 	public static final String CMD_OPT_NAME_TASK_ASSEMBLYEQUIVCLASSREPORT = "print-Assembly-Equivalence-Classes";
@@ -71,13 +89,16 @@ public final class Constants {
 	public static final String ASSEMBLY_OPERATION_DEPENDENCY_GRAPH_FN_PREFIX = "assemblyOperationDependencyGraph";
 	public static final String AGGREGATED_ALLOCATION_CALL_TREE_FN_PREFIX = "aggregatedDeploymentCallTree";
 	public static final String AGGREGATED_ASSEMBLY_CALL_TREE_FN_PREFIX = "aggregatedAssemblyCallTree";
+	/** The suffix for dot files. */
 	public static final String DOT_FILE_SUFFIX = ".dot";
+	/** The prefix for the call tree files. */
 	public static final String CALL_TREE_FN_PREFIX = "callTree";
 	public static final String MESSAGE_TRACES_FN_PREFIX = "messageTraces";
 	public static final String EXECUTION_TRACES_FN_PREFIX = "executionTraces";
 	public static final String INVALID_TRACES_FN_PREFIX = "invalidTraceArtifacts";
 	public static final String TRACE_ALLOCATION_EQUIV_CLASSES_FN_PREFIX = "traceDeploymentEquivClasses";
 	public static final String TRACE_ASSEMBLY_EQUIV_CLASSES_FN_PREFIX = "traceAssemblyEquivClasses";
+	/** The format pattern which is used to print the date. */
 	public static final String DATE_FORMAT_PATTERN = "yyyyMMdd'-'HHmmss";
 	public static final String EXEC_TRACE_RECONSTR_COMPONENT_NAME = "Execution record transformation";
 	public static final String TRACERECONSTR_COMPONENT_NAME = "Trace reconstruction (execution records -> execution traces)";

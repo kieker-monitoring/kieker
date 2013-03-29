@@ -68,6 +68,7 @@ public abstract class AbstractTestSpringMethodInterceptor extends AbstractKieker
 
 	/**
 	 * @param interceptorIsEntryPoint
+	 *            Whether the interceptor is an entry point or not.
 	 */
 	public AbstractTestSpringMethodInterceptor(final boolean interceptorIsEntryPoint) {
 		this.interceptorIsEntryPoint = interceptorIsEntryPoint;

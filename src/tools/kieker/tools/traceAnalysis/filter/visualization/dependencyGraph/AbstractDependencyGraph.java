@@ -52,10 +52,26 @@ public abstract class AbstractDependencyGraph<T extends ISystemModelElement> ext
 		this.nodes.put(DependencyGraphNode.ROOT_NODE_ID, this.rootNode);
 	}
 
+	/**
+	 * Delivers the node with the given key.
+	 * 
+	 * @param i
+	 *            The key to search for.
+	 * 
+	 * @return The corresponding node to the given key if it exists, null otherwise.
+	 */
 	protected final DependencyGraphNode<T> getNode(final int i) {
 		return this.nodes.get(i);
 	}
 
+	/**
+	 * Adds a node to this graph.
+	 * 
+	 * @param i
+	 *            The key of the node.
+	 * @param node
+	 *            The node itself.
+	 */
 	protected final void addNode(final int i, final DependencyGraphNode<T> node) {
 		this.nodes.put(i, node);
 	}

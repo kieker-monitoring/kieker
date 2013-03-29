@@ -37,6 +37,12 @@ public class BeforeConstructorEvent extends BeforeOperationEvent {
 		super(timestamp, traceId, orderIndex, operationSiganture, classSignature);
 	}
 
+	/**
+	 * This constructor converts the given array into a record. It is recommended to use the array which is the result of a call to {@link #toArray()}.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 */
 	public BeforeConstructorEvent(final Object[] values) {
 		super(values, TYPES); // values[0..4]
 	}

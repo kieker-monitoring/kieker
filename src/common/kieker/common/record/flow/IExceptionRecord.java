@@ -28,6 +28,8 @@ package kieker.common.record.flow;
 public interface IExceptionRecord extends IFlowRecord {
 
 	/**
+	 * @return The cause of the exception.
+	 * 
 	 * @since 1.6
 	 */
 	public abstract String getCause();

@@ -111,15 +111,14 @@ public interface IStateController {
 	 * Sets the experiment ID to the given value.
 	 * 
 	 * @param newExperimentID
+	 *            The new ID.
 	 * 
 	 * @since 1.3
 	 */
 	public abstract void setExperimentId(final int newExperimentID);
 
 	/**
-	 * Returns the experiment ID.
-	 * 
-	 * @return experimentID
+	 * @return The experiment ID.
 	 * 
 	 * @since 1.3
 	 */

@@ -94,6 +94,9 @@ public class Bookstore extends Thread {
 		}
 	}
 
+	/**
+	 * Searches for a book.
+	 */
 	@OperationExecutionMonitoringProbe
 	public static void searchBook() {
 		for (int i = 0; i < 1; i++) {

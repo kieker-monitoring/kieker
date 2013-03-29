@@ -47,6 +47,12 @@ public class ConstructionEvent extends AbstractTraceEvent implements IObjectReco
 		this.objectId = objectId;
 	}
 
+	/**
+	 * This constructor converts the given array into a record. It is recommended to use the array which is the result of a call to {@link #toArray()}.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 */
 	public ConstructionEvent(final Object[] values) { // NOPMD (values stored directly)
 		super(values, TYPES); // values[0..2]
 		this.classSignature = (String) values[3];

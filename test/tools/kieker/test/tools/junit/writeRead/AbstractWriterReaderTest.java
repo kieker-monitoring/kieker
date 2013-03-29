@@ -77,6 +77,11 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 
 	/**
 	 * Check if the given set of records is as expected.
+	 * 
+	 * @param eventsPassedToController
+	 *            The events which have been passed to the controller.
+	 * @param eventFromMonitoringLog
+	 *            The events from the monitoring log.
 	 */
 	protected abstract void inspectRecords(List<IMonitoringRecord> eventsPassedToController, List<IMonitoringRecord> eventFromMonitoringLog) throws Exception;
 

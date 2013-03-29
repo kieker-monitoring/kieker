@@ -28,6 +28,12 @@ import org.springframework.stereotype.Service;
 public class CRM {
 	private final Catalog catalog;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param catalog
+	 *            The catalog for this CRM.
+	 */
 	@Autowired
 	public CRM(final Catalog catalog) {
 		this.catalog = catalog;

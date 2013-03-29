@@ -20,11 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A simple test and demonstration scenario for Kieker's
- * monitoring component.
+ * A simple test and demonstration scenario for Kieker's monitoring component.
  * 
- * This test does not use the Kieker typical Java Annotations. The test is used
- * to demonstrate how to instrument programs for that no sources are available.
+ * This test does not use the Kieker typical Java Annotations. The test is used to demonstrate how to instrument programs for that no sources are available.
  * 
  * @author Matthias Rohr
  * 
@@ -36,6 +34,9 @@ public class BookstoreWA extends Thread {
 	private static final int NUM_REQUESTS = 100;
 	private static final int INTER_REQUEST_TIME = 5;
 
+	/**
+	 * Default constructor.
+	 */
 	public BookstoreWA() {
 		// nothing to do
 	}

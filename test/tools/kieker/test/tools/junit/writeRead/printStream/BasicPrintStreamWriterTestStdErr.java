@@ -38,10 +38,19 @@ public class BasicPrintStreamWriterTestStdErr extends AbstractPrintStreamWriterT
 
 	private volatile StringTeePrintStream stringTeePrintStream = null; // NOPMD (init for findbugs)
 
+	/**
+	 * Default constructor.
+	 */
 	public BasicPrintStreamWriterTestStdErr() {
 		// empty default constructor
 	}
 
+	/**
+	 * Initializes the test setup.
+	 * 
+	 * @throws Exception
+	 *             If something went wrong during the initialization.
+	 */
 	@Before
 	public void setUp() throws Exception {
 		this.originalPrintStream = System.err;
@@ -49,6 +58,12 @@ public class BasicPrintStreamWriterTestStdErr extends AbstractPrintStreamWriterT
 		System.setErr(this.stringTeePrintStream);
 	}
 
+	/**
+	 * Cleans up after the test.
+	 * 
+	 * @throws Exception
+	 *             If something went wrong.
+	 */
 	@After
 	public void tearDown() throws Exception {
 		System.setErr(this.originalPrintStream);

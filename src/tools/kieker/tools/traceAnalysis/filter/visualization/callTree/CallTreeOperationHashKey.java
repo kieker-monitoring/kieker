@@ -34,6 +34,14 @@ public class CallTreeOperationHashKey {
 
 	private final int hashCode; // NOPMD (the final is computed once and never changes)
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param allocationComponent
+	 *            The allocation component.
+	 * @param operation
+	 *            The operation.
+	 */
 	public CallTreeOperationHashKey(final AllocationComponent allocationComponent, final Operation operation) {
 		this.allocationComponent = allocationComponent;
 		this.operation = operation;

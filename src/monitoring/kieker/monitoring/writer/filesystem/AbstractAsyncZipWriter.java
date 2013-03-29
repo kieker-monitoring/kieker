@@ -35,10 +35,15 @@ import kieker.monitoring.writer.filesystem.map.StringMappingFileWriter;
  * @since 1.7
  */
 public abstract class AbstractAsyncZipWriter extends AbstractAsyncWriter {
+	/** The name of the configuration for the custom storage path if the writer is advised not to store in the temporary directory. */
 	public static final String CONFIG_PATH = "customStoragePath";
+	/** The name of the configuration determining whether to store the data in the temporary directory or not. */
 	public static final String CONFIG_TEMP = "storeInJavaIoTmpdir";
+	/** The name of the configuration determining the maximal number of entries in a file. */
 	public static final String CONFIG_MAXENTRIESINFILE = "maxEntriesInFile";
+	/** The name of the configuration determining the size of the buffer. */
 	public static final String CONFIG_BUFFER = "bufferSize";
+	/** The name of the configuration determining the compression level. */
 	public static final String CONFIG_COMPRESS_LEVEL = "compressionLevel";
 
 	private static final Log LOG = LogFactory.getLog(AbstractAsyncZipWriter.class);
@@ -49,6 +54,10 @@ public abstract class AbstractAsyncZipWriter extends AbstractAsyncWriter {
 	private final int configBuffersize;
 	private final int configLevel;
 
+	/**
+	 * @param configuration
+	 *            The configuration for this writer.
+	 */
 	public AbstractAsyncZipWriter(final Configuration configuration) {
 		super(configuration);
 		// Mapping file can be create here (no (real) side effects)

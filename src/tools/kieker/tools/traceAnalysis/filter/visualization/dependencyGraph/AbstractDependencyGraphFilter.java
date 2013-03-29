@@ -101,12 +101,32 @@ public abstract class AbstractDependencyGraphFilter<T extends ISystemModelElemen
 		this.decorators.add(decorator);
 	}
 
+	/**
+	 * This is a helper method to invoke all decorators and send them a message.
+	 * 
+	 * @param message
+	 *            The message to send the decorators.
+	 * @param sourceNode
+	 *            The source node.
+	 * @param targetNode
+	 *            The target node.
+	 */
 	protected void invokeDecorators(final AbstractMessage message, final DependencyGraphNode<?> sourceNode, final DependencyGraphNode<?> targetNode) {
 		for (final AbstractNodeDecorator currentDecorator : this.decorators) {
 			currentDecorator.processMessage(message, sourceNode, targetNode, this.timeunit);
 		}
 	}
 
+	/**
+	 * Determines whether the given edge is assumed or not.
+	 * 
+	 * @param source
+	 *            The source of the edge.
+	 * @param target
+	 *            The target of the edge.
+	 * 
+	 * @return true iff the edge is assumed (which means in fact that either the source or the target or both are assumed).
+	 */
 	protected boolean isDependencyAssumed(final DependencyGraphNode<?> source, final DependencyGraphNode<?> target) {
 		return source.isAssumed() || target.isAssumed();
 	}

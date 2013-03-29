@@ -26,10 +26,18 @@ import javax.jws.WebService;
 @WebService(endpointInterface = "kieker.test.monitoring.junit.probe.cxf.executions.bookstore.IBookstore", serviceName = "Bookstore")
 public class BookstoreImpl implements IBookstore {
 
+	/**
+	 * Default constructor.
+	 */
 	public BookstoreImpl() {
 		// empty default constructor
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.test.monitoring.junit.probe.cxf.executions.bookstore.IBookstore#searchBook(java.lang.String)
+	 */
 	public String searchBook(final String term) {
 		return term;
 	}

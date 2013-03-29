@@ -83,7 +83,12 @@ public abstract class AbstractCallTreeNode<T> extends AbstractVertex<AbstractCal
 		return this.childEdges;
 	}
 
-	/** Append edge to *sorted* list of children. */
+	/**
+	 * Append edge to *sorted* list of children.
+	 * 
+	 * @param destination
+	 *            The edge to add to the list of children edges.
+	 */
 	protected final void appendChildEdge(final WeightedDirectedCallTreeEdge<T> destination) {
 		this.childEdges.add(destination);
 	}
