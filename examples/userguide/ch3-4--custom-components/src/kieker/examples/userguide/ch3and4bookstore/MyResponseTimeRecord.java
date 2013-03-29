@@ -36,12 +36,6 @@ public class MyResponseTimeRecord extends AbstractMonitoringRecord
 		this.responseTimeNanos = rtNano;
 	}
 
-	/**
-	 * This constructor converts the given array into a record. It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
-	 * @param values
-	 *            The values for the record.
-	 */
 	public MyResponseTimeRecord(final Object[] values) {
 		AbstractMonitoringRecord.checkArray(values, MyResponseTimeRecord.TYPES);
 
@@ -56,9 +50,6 @@ public class MyResponseTimeRecord extends AbstractMonitoringRecord
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public final Object[] toArray() {
 		return new Object[] { this.className, this.methodName, this.responseTimeNanos };
 	}
