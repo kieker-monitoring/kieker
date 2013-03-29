@@ -116,7 +116,7 @@ interface methods (see Figure~\ref{fig:monitoringController:classdiagram}) can b
 as a JMX MBean. For example, this allows to control the monitoring state using %
 the methods described in the previous Section~\ref{sec:componentsMonitoring:monitoringController:controState}. %
 As a JMX-compliant graphical client that is included in the JDK, \class{jconsole} %
-is probably the easiest way to get started. Figure~\ref{fig:monitoringController:MBean:jconsole} %
+is probably the easiest way to get started. Just keep in mind to add \Kieker{} to the classpath when calling \class{jconsole} so that the MBean works correctly. Figure~\ref{fig:monitoringController:MBean:jconsole} %
 shows two screenshots of the MBean access using \class{jconsole}.
 
 % nie: I forced the figure to be here, as it would otherwise cut the listing in half. 
@@ -147,7 +147,7 @@ kieker.monitoring.jmx.MonitoringController=true
 ...
 \end{lstlisting}
 
-For remote access to the server, set \textit{kieker.monitoring.jmx.remote=true}. In this case it is recommended to set \textit{com.sun.management.jmxremote.authenticate=true} as well. 
+For remote access to the server, set \textit{kieker.monitoring.jmx.remote=true}. In this case it is recommended to set \textit{com.sun.management.jmxremote.authenticate=true} as well. More information can be found on Oracle's JMX Technology Home Page~\cite{JMX-Website}.
 
 \subsection{Adaptive Monitoring}
 
