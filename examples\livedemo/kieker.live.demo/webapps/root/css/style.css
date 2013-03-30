@@ -3,7 +3,101 @@ Theme Name: Kieker Theme
 Template: twentyeleven
 */
 
-@import url("../twentyeleven/style.css");
+@import url("theme.css");
+
+body {
+  color: rgb(55, 55, 55);
+  padding: 0px 2em;
+  margin: 0px;
+  background: none repeat scroll 0% 0% rgb(226, 226, 226);
+  vertical-align: baseline;
+}
+
+div.page {
+  margin: 0px auto;
+  padding: 0px;
+  max-width: 960px;
+  min-width: 960px;
+  background: none repeat scroll 0% 0% rgb(255, 255, 255);
+  position: relative;
+}
+
+div#main, div#mainnav {
+  margin: 0 2em 0 2em;
+}
+
+div#footer {
+  padding: 0;
+  margin: 2em 0px 1em 0px;
+  clear: both;
+  clear: both;
+  height: 30px;
+  border-top: 1px solid rgb(221, 221, 221);
+}
+
+#footer #sourceforgepowered {
+  border: 0px none;
+  float:right;
+  height: 30px;
+}
+
+#footer #sourceforgepowered:hover {
+    background: none repeat scroll 0% 0% transparent;
+}
+
+#footer #sourceforgepowered, #footer #tracpowered {
+  width: 130px;
+}
+
+#footernav {
+  text-align: center;
+}
+
+#footernav ul {
+  display: inline;
+  font: 300 15px/1.625 "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+#footernav li {
+  border: 0px none;
+}
+
+#footernav li a {
+  vertical-align: middle;
+  font-weight: bold;
+  text-decoration: none;
+  border: 0px none;
+  color: rgb(55, 55, 55);
+  font-size: 13px;
+}
+
+#footernav a:link, #footernav a:visited, #footernav a:active, #footernav a:hover {
+  color: rgb(55, 55, 55);
+}
+#footernav a:active, #footernav a:hover {
+  text-decoration: underline;
+  background-color: inherit;
+}
+/* Navigation */
+.nav h2, .nav hr { display: none }
+.nav ul { 
+ font-size: 10px;
+ list-style: none;
+ margin: 0;
+ padding: 0;
+ text-align: right;
+}
+.nav li {
+ border-right: 1px solid #d7d7d7;
+ display: inline-block;
+ padding: 0 .75em;
+ white-space: nowrap;
+ /* IE7 hack to make inline-block effective on block element */
+ zoom: 1;
+ *display: inline;
+}
+.nav li.last { border-right: none }
+
 
 /* Hide some stuff */
 #site-generator, footer.entry-meta {
@@ -116,17 +210,6 @@ div.area-right {
 a.more-link {
 	color: inherit;
 	font-weight: inherit;
-}
-
-/* Slideshow */
-header#branding div.kieker-slides .meteor-slides .meteor-buttons {
-	bottom: 6px;
-	right: 6px;
-	left: auto;
-	width: auto;
-}
-header#branding div.kieker-slides div.navpaged, header#branding div.kieker-slides div.navboth {
-	margin: 0;
 }
 
 /* Headermenu */

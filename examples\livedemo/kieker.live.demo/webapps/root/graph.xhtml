@@ -5,7 +5,7 @@
     
 <h:head>
   <title>Kieker Live Demo</title>
-  <link rel="stylesheet" type="text/css" media="all" href="http://kieker-monitoring.net/wp-content/themes/kieker/style.css" />
+  <link rel="stylesheet" type="text/css" media="all" href="css/style.css" />
   <link rel="shortcut icon" type="image/x-icon" href="resources/favicon.ico" />
   <style>
 		/* Link color */
@@ -37,13 +37,13 @@
 </h:head>
 
 <h:body class="page">
-	<div id="page" class="hfeed" style="background:#FFFFFF">
-      <div id="header">
-        <img src="header_image_small.jpg" width="960" height="125" border="0" usemap="#kiekermenumap" />
-        <map name="kiekermenumap">
-          <area shape="rect" coords="70,3,350,93" href="http://kieker-monitoring.net" alt="home" title="home" />
-        </map>
-      </div>	    	
+	<div id="page" style="background:#FFFFFF">
+    	<div id="header">
+	        <img src="resources/header_image_small.jpg" width="960" height="125" border="0" usemap="#kiekermenumap" />
+	        <map name="kiekermenumap">
+	          <area shape="rect" coords="70,3,350,93" href="http://kieker-monitoring.net" alt="home" title="home" />
+	        </map>
+      	</div>	    	
 	  	<div class="menu-header">
 	  		<ul id="menu-header_menu" class="menu">
 	  			<li><a href="recordList.jsf">Record List</a></li>
@@ -51,10 +51,20 @@
 		       	<li><a style="color:#000000" href="graph.jsf">Graph</a></li>
 		       	<li><a href="systemModel.jsf">System Model</a></li>
 		       	<li><a href="cpu.jsf">CPU and MemSwap</a></li>
-		       	<li><a href="../index.jsf">Main Menu</a></li>
+		       	<li><a href="index.jsf">Main Menu</a></li>
 			</ul>
 		</div>
-		<object data="testgraph.png" type="image/png" width="1224" height="355"/>
+		<div id="main">
+			<object data="resources/testgraph.png" type="image/png" width="1224" height="355"/>
+		</div>
+		<div id="footer">
+       		<div id="footernav" class="nav">
+        		<ul class="menu">
+          			<li class="menu-item"><a href="http://kieker-monitoring.net/contact/">Contact</a></li>
+          			<li class="menu-item"><a href="http://kieker-monitoring.net/legal-notice/">Legal Notice</a></li>
+        		</ul>
+        	</div>
+    	</div>
 	</div>  
 </h:body>
 </html>

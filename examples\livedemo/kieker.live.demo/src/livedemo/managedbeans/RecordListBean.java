@@ -14,6 +14,7 @@ import livedemo.entities.Record;
 @SessionScoped
 public class RecordListBean {
 	
+	int displayedRecords = 100;
 	boolean freeze;
 	String freezeButton;
 	String updateForm;
@@ -53,7 +54,13 @@ public class RecordListBean {
 	
 	public List<Record> getRecords(){
 		this.dataBean.updateOERList();
-		return this.dataBean.getReverseOERList();
+		List<Record> list = this.dataBean.getReverseOERList();
+		if(list.size() > this.displayedRecords){
+			return list.subList(0, this.displayedRecords);
+		}else{
+			return list;
+		}
+		
 	}
 
 }

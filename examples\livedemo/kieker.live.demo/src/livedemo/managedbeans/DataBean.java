@@ -28,7 +28,9 @@ import livedemo.filter.ListFilter;
 @ApplicationScoped
 public class DataBean extends Observable{
 	
-	int listLength; // number of entries displayed in the record list
+	int cpuListLength = 6240; // 26 min * 60 entries * 4 cpus
+	int memSwapListLength = 1560; // 26 min * 60 entries * 1 host
+	long recordStorageDuration = 1560000000000L; // 26 min in nanos
 	
 	LinkedList<Record> records;
 	LinkedList<Record> reverseRecords;
@@ -43,7 +45,6 @@ public class DataBean extends Observable{
 	StartingBean startingBean;
 	
 	public DataBean(){
-		this.listLength = 1500; // 25 * 60 entries
 		this.records = new LinkedList<Record>();
 		this.reverseRecords = new LinkedList<Record>();
 		this.cpuList = new LinkedList<CPUUtilizationRecord>();
@@ -135,10 +136,14 @@ public class DataBean extends Observable{
 		this.reverseRecords.addAll(0, newRecords);
 		Collections.reverse(newRecords);
 		this.records.addAll(newRecords);
-		int diff = this.records.size() - this.listLength;
-		for(int i=0; i < diff; i++){
-			this.records.removeFirst();
-			this.reverseRecords.removeLast();
+		
+		// remove old records
+		if(!this.records.isEmpty()){
+			long currentTime = System.currentTimeMillis() * 1000000;
+			while((currentTime - this.recordStorageDuration) > this.records.getFirst().getOperationExecutionRecord().getLoggingTimestamp()){
+				this.records.removeFirst();
+				this.reverseRecords.removeLast();
+			}
 		}
 		
 		this.setChanged();
@@ -149,13 +154,15 @@ public class DataBean extends Observable{
 		ListFilter<CPUUtilizationRecord> cpuFilter = this.startingBean.getCPUCollectionFilter();
 		this.newCpuEntries = cpuFilter.getListAndClear();
 		
-		// update list
 		if(!this.newCpuEntries.isEmpty()){
+			// update list
 			this.cpuList.addAll(this.newCpuEntries);
-			int diff = this.cpuList.size() - this.listLength;
-			for(int i=0; i < diff; i++){
-				this.cpuList.removeFirst();
+			// remove old entries
+			int diff = this.cpuList.size() - this.cpuListLength;
+			if(diff > 0){
+				this.cpuList.subList(0, diff).clear();
 			}
+			// notify observers
 			this.setChanged();
 			this.notifyObservers("cpu");
 		}
@@ -166,10 +173,10 @@ public class DataBean extends Observable{
 		this.newMemSwapEntries = memSwapFilter.getListAndClear();
 		if(!this.newMemSwapEntries.isEmpty()){
 			this.memSwapList.addAll(this.newMemSwapEntries);
-			int diff = this.memSwapList.size() - this.listLength;
-			for(int i=0; i < diff; i++){
-				this.memSwapList.removeFirst();
-			} 
+			int diff = this.memSwapList.size() - this.memSwapListLength;
+			if(diff > 0){
+				this.memSwapList.subList(0, diff).clear();
+			}
 			this.setChanged();
 			this.notifyObservers("memswap");
 		}

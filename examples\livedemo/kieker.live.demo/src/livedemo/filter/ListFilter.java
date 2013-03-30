@@ -26,6 +26,7 @@ public class ListFilter<T> extends AbstractFilterPlugin {
 
 	private final List<T> list = Collections.synchronizedList(new ArrayList<T>());
 
+	@SuppressWarnings("deprecation")
 	public ListFilter(final Configuration configuration) {
 		super(configuration);
 	}

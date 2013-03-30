@@ -196,7 +196,7 @@ public class CpuBean implements Observer{
 	public List<Model> getMemSwapModels(){
 		this.dataBean.updateMemSwapList();
 		this.memSwapModels.clear();
-		for (String hostname : this.selectedHosts){
+		for (String hostname : this.getSelectedHosts()){
 			this.memSwapModels.add(this.getMemSwapModel(this.numberOfDisplayedEntries, hostname));
 		}
 		return this.memSwapModels;
