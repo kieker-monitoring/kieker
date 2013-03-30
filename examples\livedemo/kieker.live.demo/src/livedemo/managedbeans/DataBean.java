@@ -2,7 +2,6 @@ package livedemo.managedbeans;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Observable;
@@ -33,7 +32,6 @@ public class DataBean extends Observable{
 	long recordStorageDuration = 1560000000000L; // 26 min in nanos
 	
 	LinkedList<Record> records;
-	LinkedList<Record> reverseRecords;
 	List<Record> newRecords;
 	
 	LinkedList<CPUUtilizationRecord> cpuList;
@@ -46,7 +44,6 @@ public class DataBean extends Observable{
 	
 	public DataBean(){
 		this.records = new LinkedList<Record>();
-		this.reverseRecords = new LinkedList<Record>();
 		this.cpuList = new LinkedList<CPUUtilizationRecord>();
 		this.newCpuEntries = new LinkedList<CPUUtilizationRecord>();
 		this.memSwapList = new LinkedList<MemSwapUsageRecord>();
@@ -60,10 +57,6 @@ public class DataBean extends Observable{
 	
 	public LinkedList<Record> getOERList(){
 		return this.records;
-	}
-	
-	public LinkedList<Record> getReverseOERList(){
-		return this.reverseRecords;
 	}
 	
 	public List<Record> getNewOEREntries(){
@@ -131,10 +124,7 @@ public class DataBean extends Observable{
 			this.newRecords.add(new Record(r));
 		}
 		
-		// update recordLists
-		Collections.reverse(newRecords);
-		this.reverseRecords.addAll(0, newRecords);
-		Collections.reverse(newRecords);
+		// update recordList
 		this.records.addAll(newRecords);
 		
 		// remove old records
@@ -142,7 +132,6 @@ public class DataBean extends Observable{
 			long currentTime = System.currentTimeMillis() * 1000000;
 			while((currentTime - this.recordStorageDuration) > this.records.getFirst().getOperationExecutionRecord().getLoggingTimestamp()){
 				this.records.removeFirst();
-				this.reverseRecords.removeLast();
 			}
 		}
 		
