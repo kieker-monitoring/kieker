@@ -54,6 +54,18 @@ public class DependencyGraphNode<T extends ISystemModelElement> extends
 
 	private volatile boolean assumed; // false
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param id
+	 *            The ID of this node.
+	 * @param entity
+	 *            The entity which will be the payload of this node.
+	 * @param origin
+	 *            The trace information which will be additional meta data for this node.
+	 * @param originPolicy
+	 *            The origin policy.
+	 */
 	public DependencyGraphNode(final int id, final T entity, final TraceInformation origin, final IOriginRetentionPolicy originPolicy) {
 		super(origin, originPolicy, entity);
 		this.id = id;
@@ -84,6 +96,9 @@ public class DependencyGraphNode<T extends ISystemModelElement> extends
 		return this.assumedOutgoingDependencies.values();
 	}
 
+	/**
+	 * Sets the assumed flag of this node to {@code true}.
+	 */
 	public void setAssumed() {
 		this.assumed = true;
 	}

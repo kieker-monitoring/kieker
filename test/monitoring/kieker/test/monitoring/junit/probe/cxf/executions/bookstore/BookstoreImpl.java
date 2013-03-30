@@ -33,10 +33,8 @@ public class BookstoreImpl implements IBookstore {
 		// empty default constructor
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.test.monitoring.junit.probe.cxf.executions.bookstore.IBookstore#searchBook(java.lang.String)
+	/**
+	 * {@inheritDoc}
 	 */
 	public String searchBook(final String term) {
 		return term;

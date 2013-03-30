@@ -33,12 +33,20 @@ import kieker.monitoring.core.controller.IMonitoringController;
 public abstract class AbstractAsyncThread extends Thread {
 	private static final Log LOG = LogFactory.getLog(AbstractAsyncThread.class);
 	private static final IMonitoringRecord END_OF_MONITORING_MARKER = new EmptyRecord();
-
+	/** The monitoring controller for the current monitoring session. */
 	protected final IMonitoringController monitoringController;
 	private final BlockingQueue<IMonitoringRecord> writeQueue;
 	private boolean finished; // only accessed in synchronized blocks
 	private CountDownLatch shutdownLatch; // only accessed in synchronized blocks
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param monitoringController
+	 *            The monitoring controller for the current monitoring session.
+	 * @param writeQueue
+	 *            The queue containing the records (and the potential {@code end of monitoring} marker).
+	 */
 	public AbstractAsyncThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue) {
 		this.writeQueue = writeQueue;
 		this.monitoringController = monitoringController;
@@ -126,7 +134,6 @@ public abstract class AbstractAsyncThread extends Thread {
 	 * 
 	 * @return the information string.
 	 */
-
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder();
@@ -136,7 +143,19 @@ public abstract class AbstractAsyncThread extends Thread {
 		return sb.toString();
 	}
 
+	/**
+	 * Inheriting classes should implement this method to consume the given record by, for example, sending it to a JMS client or by writing it to the file sysytem.
+	 * 
+	 * @param monitoringRecord
+	 *            The record to consume.
+	 * 
+	 * @throws Exception
+	 *             Indicates that something went wrong during the consumption.
+	 */
 	protected abstract void consume(final IMonitoringRecord monitoringRecord) throws Exception;
 
+	/**
+	 * Inheriting classes should implement this method to do some cleanup work like, for example, closing open connections.
+	 */
 	protected abstract void cleanup();
 }

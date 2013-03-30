@@ -30,6 +30,9 @@ public final class CRMWA {
 
 	private CRMWA() {}
 
+	/**
+	 * Get the offers (dummy method).
+	 */
 	public static void getOffers() {
 		CatalogWA.getBook(true);
 	}

@@ -64,6 +64,14 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 		this.objectId = (Integer) values[6];
 	}
 
+	/**
+	 * This constructor uses the given array to initialize the fields of this record.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 * @param types
+	 *            The types of the elements in the first array.
+	 */
 	protected AfterOperationFailedObjectEvent(final Object[] values, final Class<?>[] types) { // NOPMD (values stored directly)
 		super(values, types); // values[0..5]
 		this.objectId = (Integer) values[6];

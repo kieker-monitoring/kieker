@@ -35,6 +35,7 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
  */
 public class Bookstore extends Thread {
 
+	/** The list of bookstores which will be filled in the main method and consumed by other threads. */
 	public static final List<Bookstore> BOOKSTORE_SCENARIOS = new ArrayList<Bookstore>();
 
 	private static final int NUM_REQUESTS = 3;
@@ -48,15 +49,11 @@ public class Bookstore extends Thread {
 	}
 
 	/**
+	 * main is the load driver for the Bookstore. It creates request which all request a search from the bookstore. A fixed time delay is between two request.
+	 * Requests are likely to overlap, which leads to request processing in more than one thread.
 	 * 
-	 * main is the load driver for the Bookstore. It creates
-	 * request which all request a search from the bookstore.
-	 * A fixed time delay is between two request. Requests
-	 * are likely to overlap, which leads to request processing
-	 * in more than one thread.
+	 * Both the number of requests and arrival rate are defined by the local variables above the method.
 	 * 
-	 * Both the number of requests and arrival rate are defined
-	 * by the local variables above the method.
 	 * (default: 100 requests; interRequestTime 5 (millisecs))
 	 * 
 	 * @param args

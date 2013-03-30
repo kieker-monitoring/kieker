@@ -38,6 +38,9 @@ import org.apache.commons.cli.Options;
  */
 public class CLIHelpFormatter extends HelpFormatter {
 
+	/**
+	 * Creates a new instance of this class.
+	 */
 	public CLIHelpFormatter() {
 		super();
 	}

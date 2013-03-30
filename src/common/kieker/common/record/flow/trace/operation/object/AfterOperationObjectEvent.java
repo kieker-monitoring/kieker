@@ -54,6 +54,14 @@ public class AfterOperationObjectEvent extends AfterOperationEvent implements IO
 		this.objectId = (Integer) values[5];
 	}
 
+	/**
+	 * This constructor uses the given array to initialize the fields of this record.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 * @param types
+	 *            The types of the elements in the first array.
+	 */
 	protected AfterOperationObjectEvent(final Object[] values, final Class<?>[] types) { // NOPMD (values stored directly)
 		super(values, types); // values[0..4]
 		this.objectId = (Integer) values[5];

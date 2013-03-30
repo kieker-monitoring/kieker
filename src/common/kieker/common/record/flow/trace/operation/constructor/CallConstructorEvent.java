@@ -51,6 +51,14 @@ public final class CallConstructorEvent extends CallOperationEvent {
 		super(values, TYPES); // values[0..6]
 	}
 
+	/**
+	 * This constructor uses the given array to initialize the fields of this record.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 * @param types
+	 *            The types of the elements in the first array.
+	 */
 	protected CallConstructorEvent(final Object[] values, final Class<?>[] types) {
 		super(values, types); // values[0..6]
 	}

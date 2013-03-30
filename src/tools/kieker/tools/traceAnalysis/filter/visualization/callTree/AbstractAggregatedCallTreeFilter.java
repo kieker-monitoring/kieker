@@ -58,12 +58,17 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 		})
 public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTreeFilter<T> {
 
+	/** The name of the configuration determining the dot output file name. */
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FILENAME = "dotOutputFn";
+	/** The name of the configuration determining whether to include weights or not. */
 	public static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "includeWeights";
+	/** The name of the configuration determining whether to use short labels in the call tree or not. */
 	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "shortLabels";
-
+	/** The default used output file name. */
 	public static final String CONFIG_PROPERTY_VALUE_OUTPUT_FILENAME_DEFAULT = "calltree.dot";
+	/** The default used value determining whether to include weights or not. */
 	public static final String CONFIG_PROPERTY_VALUE_INCLUDE_WEIGHTS_DEFAULT = "true";
+	/** The default used value determining whether to use short labels in the call tree or not. */
 	public static final String CONFIG_PROPERTY_VALUE_SHORT_LABELS_DEFAULT = "true";
 
 	private static final Log LOG = LogFactory.getLog(AbstractAggregatedCallTreeFilter.class);
@@ -103,6 +108,12 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 		this(configuration, null);
 	}
 
+	/**
+	 * Sets the root of the call tree.
+	 * 
+	 * @param root
+	 *            The new root.
+	 */
 	protected void setRoot(final AbstractAggregatedCallTreeNode<T> root) {
 		synchronized (this) {
 			this.root = root;
@@ -189,9 +200,12 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	}
 
 	/**
-	 * HACK.
+	 * HACK. Inheriting classes should implement this method to deliver the actual pair.
 	 * 
 	 * @param callMsg
+	 *            The call message which contains the information necessary to create the pair.
+	 * 
+	 * @return The actual pair.
 	 */
 	protected abstract T concreteCreatePair(SynchronousCallMessage callMsg);
 

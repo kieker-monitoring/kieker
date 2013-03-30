@@ -33,6 +33,12 @@ import kieker.monitoring.writer.DummyWriter;
 public final class DummyRecordCountWriter extends DummyWriter {
 	private final AtomicInteger numDummyRecords = new AtomicInteger(0);
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this writer.
+	 */
 	public DummyRecordCountWriter(final Configuration configuration) {
 		super(configuration);
 	}

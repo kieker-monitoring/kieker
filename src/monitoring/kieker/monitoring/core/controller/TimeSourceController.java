@@ -33,6 +33,12 @@ public final class TimeSourceController extends AbstractController implements IT
 	/** the ITimeSource used by this instance. */
 	private final ITimeSource timeSource;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration which is used to configure this controller.
+	 */
 	protected TimeSourceController(final Configuration configuration) {
 		super(configuration);
 		this.timeSource = AbstractController.createAndInitialize(ITimeSource.class, configuration.getStringProperty(ConfigurationFactory.TIMER_CLASSNAME),

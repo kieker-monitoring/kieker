@@ -42,6 +42,14 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 		this.classSignature = (classSignature == null) ? NO_CLASSSIGNATURE : classSignature; // NOCS
 	}
 
+	/**
+	 * This constructor uses the given array to initialize the fields of this record.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 * @param valueTypes
+	 *            The types of the elements in the first array.
+	 */
 	protected AbstractOperationEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes); // values[0..2]
 		this.operationSignature = (String) values[3];

@@ -28,6 +28,8 @@ package kieker.common.record.flow;
 public interface ICallRecord extends IOperationRecord {
 
 	/**
+	 * @return The class signature of the caller.
+	 * 
 	 * @see #getClassSignature()
 	 * 
 	 * @since 1.6
@@ -35,6 +37,8 @@ public interface ICallRecord extends IOperationRecord {
 	public abstract String getCallerClassSignature();
 
 	/**
+	 * @return The operation signature of the caller.
+	 * 
 	 * @see #getOperationSignature()
 	 * 
 	 * @since 1.6
@@ -42,11 +46,15 @@ public interface ICallRecord extends IOperationRecord {
 	public abstract String getCallerOperationSignature();
 
 	/**
+	 * @return The class signature of the callee.
+	 * 
 	 * @since 1.6
 	 */
 	public abstract String getCalleeClassSignature();
 
 	/**
+	 * @return The operation signature of the callee.
+	 * 
 	 * @since 1.6
 	 */
 	public abstract String getCalleeOperationSignature();

@@ -48,8 +48,7 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
 import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPair;
 
 /**
- * Plugin providing the creation of calling trees both for individual traces
- * and an aggregated form mulitple traces.
+ * Plugin providing the creation of calling trees both for individual traces and an aggregated form multiple traces.
  * 
  * @param <T>
  * 
@@ -274,9 +273,26 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		ps.close();
 	}
 
+	/**
+	 * Adds the given trace to the given tree.
+	 * 
+	 * @param root
+	 *            The root of the call tree.
+	 * @param t
+	 *            The trace to add.
+	 * @param pairFactory
+	 *            The factory creating the necessary pairs for the tree.
+	 * @param aggregated
+	 *            Determines whether the tree is aggregated or not.
+	 * 
+	 * @throws TraceProcessingException
+	 *             If the message type is not supported or the trace is somehow invalid.
+	 * 
+	 * @param <T>
+	 *            The type of the tree.
+	 */
 	protected static <T> void addTraceToTree(final AbstractCallTreeNode<T> root, final MessageTrace t, final IPairFactory<T> pairFactory, final boolean aggregated)
-			throws
-			TraceProcessingException {
+			throws TraceProcessingException {
 		final Stack<AbstractCallTreeNode<T>> curStack = new Stack<AbstractCallTreeNode<T>>();
 
 		final Collection<AbstractMessage> msgTraceVec = t.getSequenceAsVector();
@@ -316,6 +332,13 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 	public interface IPairFactory<T> {
 
 		/**
+		 * This method creates an actual pair using the given call message.
+		 * 
+		 * @param callMsg
+		 *            The call message containing the necessary information to create the pair.
+		 * 
+		 * @return The actual pair.
+		 * 
 		 * @since 1.5
 		 */
 		public T createPair(final SynchronousCallMessage callMsg);

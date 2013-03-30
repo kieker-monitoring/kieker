@@ -34,6 +34,9 @@ public class TestSplitEvent extends AbstractKiekerTest {
 	private static final long TRACE_ID = 23444L;
 	private static final int ORDER_INDEX = 234;
 
+	/**
+	 * Default constructor.
+	 */
 	public TestSplitEvent() {
 		// empty default constructor
 	}

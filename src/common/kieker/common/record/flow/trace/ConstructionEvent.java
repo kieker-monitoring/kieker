@@ -59,6 +59,14 @@ public class ConstructionEvent extends AbstractTraceEvent implements IObjectReco
 		this.objectId = (Integer) values[4];
 	}
 
+	/**
+	 * This constructor uses the given array to initialize the fields of this record.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 * @param types
+	 *            The types of the elements in the first array.
+	 */
 	protected ConstructionEvent(final Object[] values, final Class<?>[] types) { // NOPMD (values stored directly)
 		super(values, types); // values[0..2]
 		this.classSignature = (String) values[3];

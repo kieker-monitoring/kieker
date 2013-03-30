@@ -100,11 +100,14 @@ public class ClassOperationSignaturePair {
 	}
 
 	/**
-	 * Extracts an {@link ClassOperationSignaturePair} from an an operation signature string (e.g., <code>public static Boolean a.b.c.D.op1(Integer, Long)</code>).
-	 * Modifier list, return type, and parameter list wrapped by parentheses are optional. But note that
-	 * a return type must be given if one or more modifiers are present.
+	 * Extracts an {@link ClassOperationSignaturePair} from an operation signature string (e.g., <code>public static Boolean a.b.c.D.op1(Integer, Long)</code>).
+	 * Modifier list, return type, and parameter list wrapped by parentheses are optional. But note that a return type must be given if one or more modifiers are
+	 * present.
 	 * 
 	 * @param operationSignatureStr
+	 *            The signature string.
+	 * 
+	 * @return The {@link ClassOperationSignaturePair} extracted from the given string.
 	 */
 	public static ClassOperationSignaturePair splitOperationSignatureStr(final String operationSignatureStr) {
 		return ClassOperationSignaturePair.splitOperationSignatureStr(operationSignatureStr, false);

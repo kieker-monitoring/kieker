@@ -54,6 +54,9 @@ public class TestTimestampFilter extends AbstractKiekerTest { // NOCS
 	private final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration(), null);
 	private final ExecutionFactory eFactory = new ExecutionFactory(this.systemEntityFactory);
 
+	/**
+	 * Default constructor.
+	 */
 	public TestTimestampFilter() {
 		// empty default constructor
 	}

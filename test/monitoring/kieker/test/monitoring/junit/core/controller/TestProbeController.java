@@ -67,6 +67,9 @@ public class TestProbeController extends AbstractKiekerTest {
 
 	private volatile File configFile;
 
+	/**
+	 * Default constructor.
+	 */
 	public TestProbeController() {
 		// empty default constructor
 	}
@@ -76,6 +79,9 @@ public class TestProbeController extends AbstractKiekerTest {
 		this.configFile = this.tmpFolder.newFile("adaptiveMonitoring.configFile");
 	}
 
+	/**
+	 * This method does some cleanup after the test.
+	 */
 	@After
 	public void cleanup() {
 		this.tmpFolder.delete();

@@ -42,10 +42,16 @@ import kieker.test.common.junit.AbstractKiekerTest;
  */
 public class TestPlugin extends AbstractKiekerTest {
 
+	/**
+	 * Default constructor.
+	 */
 	public TestPlugin() {
 		// empty default constructor
 	}
 
+	/**
+	 * This method tests some attributes of plugins.
+	 */
 	@Test
 	public void testPluginAttributes() {
 		final Configuration myPluginConfig = new Configuration();
@@ -59,6 +65,9 @@ public class TestPlugin extends AbstractKiekerTest {
 		Assert.assertEquals("Unexpected plugin description", SimpleForwardFilterWithRepository.FILTER_DESCRIPTION, sourcePlugin.getPluginDescription());
 	}
 
+	/**
+	 * This method tests whether the repository class works.
+	 */
 	@Test
 	public void testRepository() {
 		final Configuration myRepoConfig = new Configuration();
@@ -72,6 +81,14 @@ public class TestPlugin extends AbstractKiekerTest {
 		Assert.assertEquals("Unexpected repository description", SimpleRepository.REPOSITORY_DESCRIPTION, myRepo.getRepositoryDescription());
 	}
 
+	/**
+	 * This method tests whether the chaining of filters, readers, and repositories is working.
+	 * 
+	 * @throws IllegalStateException
+	 *             If something went wrong during the test.
+	 * @throws AnalysisConfigurationException
+	 *             If something went wrong during the test.
+	 */
 	@Test
 	public void testChaining() throws IllegalStateException, AnalysisConfigurationException {
 		final Object testObject1 = new Object();

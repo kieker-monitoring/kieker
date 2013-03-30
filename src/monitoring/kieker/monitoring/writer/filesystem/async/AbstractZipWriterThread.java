@@ -128,10 +128,31 @@ public abstract class AbstractZipWriterThread extends AbstractAsyncThread {
 		}
 	}
 
+	/**
+	 * Inheriting classes should implement this method to actually write the monitoring record.
+	 * 
+	 * @param monitoringRecord
+	 *            The record to be written.
+	 * 
+	 * @throws IOException
+	 *             If something went wrong during the writing.
+	 */
 	protected abstract void write(IMonitoringRecord monitoringRecord) throws IOException;
 
+	/**
+	 * Inheriting classes should implement this method to perform a cleanup for the next entry.
+	 * 
+	 * @throws IOException
+	 *             If something went wrong during the cleanup.
+	 */
 	protected abstract void cleanupForNextEntry() throws IOException;
 
+	/**
+	 * Inheriting classes should implement this method to perform a final cleanup.
+	 * 
+	 * @throws IOException
+	 *             If something went wrong during the cleanup.
+	 */
 	protected abstract void cleanupFinal() throws IOException;
 
 	@Override

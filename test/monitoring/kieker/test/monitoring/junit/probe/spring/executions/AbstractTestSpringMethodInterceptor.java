@@ -314,6 +314,9 @@ public abstract class AbstractTestSpringMethodInterceptor extends AbstractKieker
 			super("searchBook");
 		}
 
+		/**
+		 * Searches a book (dummy method).
+		 */
 		public void searchBook() {} // NOPMD (UncommentedEmptyMethod)
 	}
 
@@ -327,6 +330,9 @@ public abstract class AbstractTestSpringMethodInterceptor extends AbstractKieker
 			super("getOffers");
 		}
 
+		/**
+		 * Delivers the offers (dummy method).
+		 */
 		public void getOffers() {} // NOPMD (UncommentedEmptyMethod)
 	}
 
@@ -336,10 +342,14 @@ public abstract class AbstractTestSpringMethodInterceptor extends AbstractKieker
 	 * @since 1.5
 	 */
 	public static final class Catalog extends AbstractPseudoComponent { // NOPMD (TestClassWithoutTestCases, reported because classname ends with "Test")
+
 		Catalog() {
 			super("getBook");
 		}
 
+		/**
+		 * Delivers a book (dummy method).
+		 */
 		public void getBook() {} // NOPMD (UncommentedEmptyMethod)
 	}
 

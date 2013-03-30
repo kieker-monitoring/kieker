@@ -53,6 +53,18 @@ public abstract class AbstractLogReplayer {
 	private final boolean keepOriginalLoggingTimestamps;
 	private final int numRealtimeWorkerThreads;
 
+	/**
+	 * @param monitoringConfigurationFile
+	 *            The name of the {@code monitoring.properties} file.
+	 * @param realtimeMode
+	 *            Determines whether to use real time mode or not.
+	 * @param keepOriginalLoggingTimestamps
+	 * @param numRealtimeWorkerThreads
+	 * @param ignoreRecordsBeforeTimestamp
+	 *            The lower limit for the time stamps of the records.
+	 * @param ignoreRecordsAfterTimestamp
+	 *            The upper limit for the time stamps of the records.
+	 */
 	public AbstractLogReplayer(final String monitoringConfigurationFile, final boolean realtimeMode,
 			final boolean keepOriginalLoggingTimestamps, final int numRealtimeWorkerThreads, final long ignoreRecordsBeforeTimestamp,
 			final long ignoreRecordsAfterTimestamp) {

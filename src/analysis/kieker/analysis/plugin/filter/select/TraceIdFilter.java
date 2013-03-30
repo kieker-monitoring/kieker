@@ -55,11 +55,15 @@ import kieker.common.record.flow.trace.Trace;
 			@Property(name = TraceIdFilter.CONFIG_PROPERTY_NAME_SELECTED_TRACES, defaultValue = "")
 		})
 public final class TraceIdFilter extends AbstractFilterPlugin {
+	/** The name of the input port accepting flow records. */
 	public static final String INPUT_PORT_NAME_FLOW = "monitoringRecordsFlow";
+	/** The name of the input port accepting execution records. */
 	public static final String INPUT_PORT_NAME_EXECUTION = "monitoringRecordsExecution";
+	/** The name of the input port accepting both types of records. */
 	public static final String INPUT_PORT_NAME_COMBINED = "monitoringRecordsCombined";
-
+	/** The name of the output port delivering the records with matching IDs. */
 	public static final String OUTPUT_PORT_NAME_MATCH = "recordsMatchingId";
+	/** The name of the output port delivering the records with the non matching IDs. */
 	public static final String OUTPUT_PORT_NAME_MISMATCH = "recordsNotMatchingId";
 
 	public static final String CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES = "acceptAllTraces";

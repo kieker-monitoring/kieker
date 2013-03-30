@@ -44,6 +44,7 @@ public final class DotFactory {
 	public static final String DOT_STYLE_DASHED = "dashed";
 	/** Determines to use an open arrow head for an edge. */
 	public static final String DOT_ARROWHEAD_OPEN = "open";
+	/** Determines the default font size. */
 	public static final double DOT_DEFAULT_FONTSIZE = 0.0;
 	/** Determines to use the rank direction left to right . */
 	public static final String DOT_DOT_RANKDIR_LR = "LR";

@@ -25,6 +25,12 @@ public class Book {
 
 	private String title;
 
+	/**
+	 * Creates a new book with the given title.
+	 * 
+	 * @param title
+	 *            The title of the book.
+	 */
 	public Book(final String title) {
 		this.title = title;
 	}

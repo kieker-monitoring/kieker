@@ -57,9 +57,11 @@ import kieker.common.record.flow.trace.Trace;
 			@Property(name = TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP, defaultValue = TimestampFilter.CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP)
 		})
 public final class TimestampFilter extends AbstractFilterPlugin {
-
+	/** The name of the input port accepting records of any type. */
 	public static final String INPUT_PORT_NAME_ANY_RECORD = "monitoringRecordsAny";
+	/** The name of the input port accepting flow records. */
 	public static final String INPUT_PORT_NAME_FLOW = "monitoringRecordsFlow";
+	/** The name of the input port accepting execution records. */
 	public static final String INPUT_PORT_NAME_EXECUTION = "monitoringRecordsExecution";
 	public static final String INPUT_PORT_NAME_COMBINED = "monitoringRecordsCombined";
 

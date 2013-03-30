@@ -36,6 +36,12 @@ public final class Catalog {
 
 	private Catalog() {}
 
+	/**
+	 * Delivers a book using the "complex query".
+	 * 
+	 * @param complexQuery
+	 *            The complex query. This parameter determines in fact how much time will be consumed and which branch will be used.
+	 */
 	@OperationExecutionMonitoringProbe
 	public static void getBook(final boolean complexQuery) {
 		if (complexQuery) {

@@ -39,6 +39,12 @@ public final class EmptyRecord extends AbstractMonitoringRecord implements IMoni
 		// nothing to do
 	}
 
+	/**
+	 * This constructor converts the given array into a record. It is recommended to use the array which is the result of a call to {@link #toArray()}.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 */
 	public EmptyRecord(final Object[] values) { // NOPMD (UnusedFormalParameter)
 		// nothing to do
 	}

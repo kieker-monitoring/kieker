@@ -28,11 +28,15 @@ package kieker.common.record.flow;
 public interface IObjectRecord extends IFlowRecord {
 
 	/**
+	 * @return The class signature.
+	 * 
 	 * @since 1.6
 	 */
 	public abstract String getClassSignature();
 
 	/**
+	 * @return The object ID.
+	 * 
 	 * @since 1.6
 	 */
 	public abstract int getObjectId();

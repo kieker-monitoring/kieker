@@ -68,6 +68,9 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
 
+	/**
+	 * Default constructor.
+	 */
 	public TestMonitoringRecordLoggerFilter() {
 		// empty default constructor
 	}

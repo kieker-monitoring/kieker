@@ -44,6 +44,12 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	@Pointcut
 	public abstract void monitoredConstructor();
 
+	/**
+	 * This is an advice which will be used after the construction of an object.
+	 * 
+	 * @param thisObject
+	 * @param jp
+	 */
 	// HINT: This may be logged multiple times due to super constructor calls...
 	@AfterReturning("monitoredConstructor() && this(thisObject) && notWithinKieker()")
 	public void afterConstruction(final Object thisObject, final JoinPoint.StaticPart jp) {

@@ -36,21 +36,49 @@ public final class BookstoreController {
 	@Autowired
 	private Bookstore bookstore;
 
+	/**
+	 * Default constructor.
+	 */
 	public BookstoreController() {
 		// empty default constructor
 	}
 
+	/**
+	 * Spring maps a specific web request onto this method. In this case it is the home path request.
+	 * 
+	 * @return The home path.
+	 */
 	@RequestMapping(value = "/")
 	public String home() {
 		return "home";
 	}
 
+	/**
+	 * Spring maps a specific web request onto this method. In this case it is the search path request.
+	 * 
+	 * @param term
+	 *            The term to search for.
+	 * @param model
+	 *            The Spring model object.
+	 * 
+	 * @return The search path.
+	 */
 	@RequestMapping(value = "/search/{term}", method = RequestMethod.GET)
 	public String search1(@PathVariable("term") final String term, final Model model) {
 		model.addAttribute("result", this.bookstore.searchBook(term));
 		return "search";
 	}
 
+	/**
+	 * Spring maps a specific web request onto this method. In this case it is the search path request.
+	 * 
+	 * @param term
+	 *            The term to search for.
+	 * @param model
+	 *            The Spring model object.
+	 * 
+	 * @return The search path.
+	 */
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public String search2(@RequestParam final String term, final Model model) {
 		model.addAttribute("result", this.bookstore.searchBook(term));

@@ -27,6 +27,9 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 public final class MonitoredClass {
 	private final ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
 
+	/**
+	 * Default constructor.
+	 */
 	public MonitoredClass() {
 		// empty default constructor
 	}

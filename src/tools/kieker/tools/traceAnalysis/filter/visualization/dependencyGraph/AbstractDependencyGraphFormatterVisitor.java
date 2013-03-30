@@ -35,9 +35,11 @@ public abstract class AbstractDependencyGraphFormatterVisitor<T extends ISystemM
 		IGraphVisitor<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>> {
 
 	protected final StringBuilder builder; // NOPMD (AvoidStringBufferField)
-
+	/** The flag determining whether to include weights or not. */
 	protected final boolean includeWeights;
+	/** The flag determining whether to plot loops or not. */
 	protected final boolean plotLoops;
+	/** The flag determining whether to use short labels or not. */
 	protected final boolean useShortLabels;
 
 	/**

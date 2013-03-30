@@ -45,9 +45,8 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	private final String calleeOperationSignature;
 	private final String calleeClassSignature;
 
-	public CallOperationEvent(final long timestamp, final long traceId, final int orderIndex,
-			final String callerOperationSignature, final String callerClassSignature,
-			final String calleeOperationSignature, final String calleeClassSignature) {
+	public CallOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String callerOperationSignature,
+			final String callerClassSignature, final String calleeOperationSignature, final String calleeClassSignature) {
 		super(timestamp, traceId, orderIndex, callerOperationSignature, callerClassSignature);
 		this.calleeOperationSignature = (calleeOperationSignature == null) ? NO_CALLEEOPERATIONSIGANTURE : calleeOperationSignature; // NOCS
 		this.calleeClassSignature = (calleeClassSignature == null) ? NO_CALLEECLASSSIGANTURE : calleeClassSignature; // NOCS
@@ -65,6 +64,14 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 		this.calleeClassSignature = (String) values[6];
 	}
 
+	/**
+	 * This constructor uses the given array to initialize the fields of this record.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 * @param types
+	 *            The types of the elements in the first array.
+	 */
 	protected CallOperationEvent(final Object[] values, final Class<?>[] types) { // NOPMD (values stored directly)
 		super(values, types); // values[0..4]
 		this.calleeOperationSignature = (String) values[5];

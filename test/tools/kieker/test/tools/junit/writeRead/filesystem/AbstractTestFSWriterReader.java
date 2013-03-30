@@ -60,6 +60,11 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 
 	protected abstract Class<? extends IMonitoringWriter> getTestedWriterClazz();
 
+	/**
+	 * Initializes the setup for the test.
+	 * 
+	 * @throws IOException
+	 */
 	@Before
 	public void setUp() throws IOException {
 		this.testedWriterClazz = this.getTestedWriterClazz();

@@ -29,6 +29,7 @@ import kieker.common.record.IMonitoringRecord;
  */
 public final class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
 
+	/** A constant which can be used as a default value for non existing fields of the record. */
 	public static final String DEFAULT_VALUE = "N/A";
 
 	private static final long serialVersionUID = 8072422694598002383L;
@@ -62,7 +63,7 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 	private final long memTotal;
 
 	/**
-	 * Constructs a new {@link MemSwapUsageRecord} with the given values. If certain {@link String} values shall remain undefined, use the constants
+	 * Constructs a new {@link MemSwapUsageRecord} with the given values. If certain {@link String} values shall remain undefined, use the constant
 	 * {@link #DEFAULT_VALUE}.
 	 * 
 	 * @param timestamp

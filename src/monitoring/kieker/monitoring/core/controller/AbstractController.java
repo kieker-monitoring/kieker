@@ -24,6 +24,7 @@ import kieker.common.logging.LogFactory;
 
 /**
  * @author Jan Waller
+ * 
  * @since 1.3
  */
 public abstract class AbstractController {
@@ -32,10 +33,22 @@ public abstract class AbstractController {
 	protected volatile MonitoringController monitoringController;
 	private final AtomicBoolean terminated = new AtomicBoolean(false);
 
+	/**
+	 * Default constructor.
+	 * 
+	 * @param configuration
+	 *            The configuration for this controller.
+	 */
 	protected AbstractController(final Configuration configuration) { // NOPMD (unused parameter)
 		// do nothing but enforce constructor
 	}
 
+	/**
+	 * Sets and initializes the monitoring controller, if it has not been set yet.
+	 * 
+	 * @param monitoringController
+	 *            The monitoring controller.
+	 */
 	protected final void setMonitoringController(final MonitoringController monitoringController) {
 		synchronized (this) {
 			if (this.monitoringController == null) {

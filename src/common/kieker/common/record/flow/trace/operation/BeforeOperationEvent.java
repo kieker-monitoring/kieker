@@ -45,6 +45,14 @@ public class BeforeOperationEvent extends AbstractOperationEvent {
 		super(values, TYPES); // values[0..4]
 	}
 
+	/**
+	 * This constructor uses the given array to initialize the fields of this record.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 * @param types
+	 *            The types of the elements in the first array.
+	 */
 	protected BeforeOperationEvent(final Object[] values, final Class<?>[] types) {
 		super(values, types); // values[0..4]
 	}

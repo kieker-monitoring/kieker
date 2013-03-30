@@ -41,6 +41,9 @@ public abstract class AbstractTestLogRotationMaxLogFiles extends AbstractKiekerT
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (Rule has to be public)
 
+	/**
+	 * Default constructor.
+	 */
 	public AbstractTestLogRotationMaxLogFiles() {
 		// empty default constructor
 	}

@@ -29,6 +29,8 @@ import java.util.List;
  * @since 0.9
  */
 public class BookstoreWA extends Thread {
+
+	/** The list of bookstores which will be filled in the main method and consumed by other threads. */
 	public static final List<BookstoreWA> BOOKSTORE_SCENARIOS = new ArrayList<BookstoreWA>();
 
 	private static final int NUM_REQUESTS = 100;
@@ -87,6 +89,9 @@ public class BookstoreWA extends Thread {
 		}
 	}
 
+	/**
+	 * Searches for a book.
+	 */
 	public static void searchBook() {
 		CatalogWA.getBook(false);
 		CRMWA.getOffers();

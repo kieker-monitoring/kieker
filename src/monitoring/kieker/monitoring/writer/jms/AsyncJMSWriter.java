@@ -59,6 +59,12 @@ public final class AsyncJMSWriter extends AbstractAsyncWriter {
 	private final String configTopic;
 	private final long configMessageTimeToLive;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this writer.
+	 */
 	public AsyncJMSWriter(final Configuration configuration) {
 		super(configuration);
 		this.configContextFactoryType = configuration.getStringProperty(CONFIG_CONTEXTFACTORYTYPE);

@@ -31,14 +31,31 @@ import kieker.common.record.IMonitoringRecord;
 public class DummyWriter extends AbstractMonitoringWriter {
 	private static final Log LOG = LogFactory.getLog(DummyWriter.class);
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this writer.
+	 */
 	public DummyWriter(final Configuration configuration) {
 		super(configuration);
 	}
 
+	/**
+	 * This method consumes the record but does nothing with it.
+	 * 
+	 * @param record
+	 *            The record to consume.
+	 * 
+	 * @return True.
+	 */
 	public boolean newMonitoringRecord(final IMonitoringRecord record) {
 		return true; // we don't care about incoming records
 	}
 
+	/**
+	 * Terminates the writer.
+	 */
 	public void terminate() {
 		LOG.info(this.getClass().getName() + " shutting down");
 	}

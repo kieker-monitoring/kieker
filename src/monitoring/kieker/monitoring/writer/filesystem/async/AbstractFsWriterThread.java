@@ -136,8 +136,26 @@ public abstract class AbstractFsWriterThread extends AbstractAsyncThread {
 		}
 	}
 
+	/**
+	 * Inheriting classes should implement this method to actually write the monitoring record.
+	 * 
+	 * @param monitoringRecord
+	 *            The record to be written.
+	 * 
+	 * @throws IOException
+	 *             If something went wrong during the writing.
+	 */
 	protected abstract void write(IMonitoringRecord monitoringRecord) throws IOException;
 
+	/**
+	 * Inheriting classes should implement this method to prepare a new file if needed.
+	 * 
+	 * @param filename
+	 *            The name of the file to be prepared.
+	 * 
+	 * @throws IOException
+	 *             If something went wrong during the preparation.
+	 */
 	protected abstract void prepareFile(final String filename) throws IOException;
 
 	@Override

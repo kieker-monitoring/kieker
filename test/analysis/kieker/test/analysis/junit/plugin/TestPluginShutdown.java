@@ -36,6 +36,8 @@ import kieker.common.configuration.Configuration;
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
+ * This is a test to make sure that the plugins are shutdown in the correct order, when the analysis terminates.
+ * 
  * @author Jan Waller
  * 
  * @since 1.6
@@ -44,15 +46,29 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 
 	static final AtomicInteger SHUTDOWNORDER = new AtomicInteger(); // NOPMD package for inner class
 
+	/**
+	 * Default constructor.
+	 */
 	public TestPluginShutdown() {
 		// nothing to do...
 	}
 
+	/**
+	 * Initializes the test setup.
+	 */
 	@Before
 	public void init() {
 		SHUTDOWNORDER.set(0);
 	}
 
+	/**
+	 * This is a test using only one reader.
+	 * 
+	 * @throws IllegalStateException
+	 *             If the analysis is in an invalid state (should not happen).
+	 * @throws AnalysisConfigurationException
+	 *             If there is a configuration error in the analysis (should not happen).
+	 */
 	@Test
 	public void testOnlyReader() throws IllegalStateException, AnalysisConfigurationException {
 		final IAnalysisController ctrl = new AnalysisController();
@@ -62,6 +78,14 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 		Assert.assertEquals(AnalysisController.STATE.TERMINATED, ctrl.getState());
 	}
 
+	/**
+	 * This is a test using only one reader connected with one filter.
+	 * 
+	 * @throws IllegalStateException
+	 *             If the analysis is in an invalid state (should not happen).
+	 * @throws AnalysisConfigurationException
+	 *             If there is a configuration error in the analysis (should not happen).
+	 */
 	@Test
 	public void testReaderWithConnectedFilter() throws IllegalStateException, AnalysisConfigurationException {
 		final IAnalysisController ctrl = new AnalysisController();
@@ -75,6 +99,14 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 		Assert.assertEquals(AnalysisController.STATE.TERMINATED, ctrl.getState());
 	}
 
+	/**
+	 * This is a test using one reader and one filter.
+	 * 
+	 * @throws IllegalStateException
+	 *             If the analysis is in an invalid state (should not happen).
+	 * @throws AnalysisConfigurationException
+	 *             If there is a configuration error in the analysis (should not happen).
+	 */
 	@Test
 	public void testReaderWithUnconnectedFilter() throws IllegalStateException, AnalysisConfigurationException {
 		final IAnalysisController ctrl = new AnalysisController();
@@ -87,6 +119,14 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 		Assert.assertEquals(AnalysisController.STATE.TERMINATED, ctrl.getState());
 	}
 
+	/**
+	 * This is a test using only one reader but multiple filters.
+	 * 
+	 * @throws IllegalStateException
+	 *             If the analysis is in an invalid state (should not happen).
+	 * @throws AnalysisConfigurationException
+	 *             If there is a configuration error in the analysis (should not happen).
+	 */
 	@Test
 	public void testChainOfFilters() throws IllegalStateException, AnalysisConfigurationException {
 		final IAnalysisController ctrl = new AnalysisController();
@@ -109,6 +149,14 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 		Assert.assertEquals(AnalysisController.STATE.TERMINATED, ctrl.getState());
 	}
 
+	/**
+	 * This is a test using two readers and one filter.
+	 * 
+	 * @throws IllegalStateException
+	 *             If the analysis is in an invalid state (should not happen).
+	 * @throws AnalysisConfigurationException
+	 *             If there is a configuration error in the analysis (should not happen).
+	 */
 	@Test
 	public void testTwoReadersOneFilter() throws IllegalStateException, AnalysisConfigurationException {
 		final IAnalysisController ctrl = new AnalysisController();
