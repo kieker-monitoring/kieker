@@ -67,16 +67,19 @@ public class ForecastingFilter extends AbstractFilterPlugin {
 	private final ForecastMethod forecastMethod;
 	private NamedDoubleTimeSeriesPoint lastPoint;
 
+	private final long deltat;
+	private final TimeUnit tunit;
+
 	private final IForecaster<Double> forecaster;
 
 	public ForecastingFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
-		final long deltat = configuration.getLongProperty(CONFIG_PROPERTY_DELTA_TIME);
-		final TimeUnit tunit = TimeUnit.valueOf(configuration
+		this.deltat = configuration.getLongProperty(CONFIG_PROPERTY_DELTA_TIME);
+		this.tunit = TimeUnit.valueOf(configuration
 				.getStringProperty(CONFIG_PROPERTY_DELTA_UNIT));
 
-		this.timeSeriesWindow = new TimeSeries<Double>(new Date(), deltat, tunit);
+		this.timeSeriesWindow = new TimeSeries<Double>(new Date(), this.deltat, this.tunit);
 
 		// TODO select the method based on the configuration
 		this.forecastMethod = ForecastMethod.valueOf(configuration
@@ -91,7 +94,11 @@ public class ForecastingFilter extends AbstractFilterPlugin {
 
 	@Override
 	public Configuration getCurrentConfiguration() {
-		return new Configuration();
+		final Configuration configuration = new Configuration();
+		configuration.setProperty(CONFIG_PROPERTY_DELTA_TIME, Long.toString(this.deltat));
+		configuration.setProperty(CONFIG_PROPERTY_DELTA_UNIT, this.tunit.name());
+		configuration.setProperty(CONFIG_PROPERTY_FC_METHOD, this.forecastMethod.name());
+		return configuration;
 	}
 
 	@InputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = ForecastingFilter.INPUT_PORT_NAME_TSPOINT)

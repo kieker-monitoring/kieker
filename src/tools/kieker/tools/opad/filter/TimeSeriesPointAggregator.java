@@ -53,7 +53,7 @@ public class TimeSeriesPointAggregator extends AbstractFilterPlugin {
 	// public static final String CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT = "timeUnit";
 
 	private final List<NamedDoubleTimeSeriesPoint> aggregationList;
-	private final int aggregationSpan;
+	private final long aggregationSpan;
 	// private final String timeUnit;
 	private long aggregationStartTime;
 
@@ -71,7 +71,9 @@ public class TimeSeriesPointAggregator extends AbstractFilterPlugin {
 
 	@Override
 	public Configuration getCurrentConfiguration() {
-		return new Configuration();
+		final Configuration configuration = new Configuration();
+		configuration.setProperty(CONFIG_PROPERTY_NAME_AGGREGATION_SPAN, Long.toString(this.aggregationSpan));
+		return configuration;
 	}
 
 	@InputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = TimeSeriesPointAggregator.INPUT_PORT_NAME_TSPOINT)

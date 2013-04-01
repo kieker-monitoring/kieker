@@ -23,6 +23,7 @@ import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.controlflow.OperationExecutionRecord;
@@ -35,17 +36,32 @@ import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
  * @author Andre van Hoorn
  * 
  */
-@Plugin(outputPorts = { @OutputPort(name = ResponseTimeExtractionFilter.OUTPUT_PORT_NAME_VALUE, eventTypes = { NamedDoubleTimeSeriesPoint.class }) })
+@Plugin(outputPorts = { @OutputPort(name = ResponseTimeExtractionFilter.OUTPUT_PORT_NAME_VALUE, eventTypes = { NamedDoubleTimeSeriesPoint.class }) },
+		configuration = {
+			@Property(name = ResponseTimeExtractionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, defaultValue = "NANOSECONDS")
+		})
 public class ResponseTimeExtractionFilter extends AbstractFilterPlugin {
 	// private static final Log LOG = LogFactory.getLog(ResponseTimeExtractionFilter.class);
 
 	public static final String OUTPUT_PORT_NAME_VALUE = "outputResponseTime";
 	public static final String INPUT_PORT_NAME_VALUE = "inputExecutionRecord";
+	public static final String CONFIG_PROPERTY_NAME_TIMEUNIT = "timeunit";
+
+	private TimeUnit timeunit = TimeUnit.NANOSECONDS;
 
 	// TODO: Add configuration property for Time Unit
 
 	public ResponseTimeExtractionFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
+
+		TimeUnit configTimeunit;
+		try {
+			configTimeunit = TimeUnit.valueOf(configuration.getStringProperty(CONFIG_PROPERTY_NAME_TIMEUNIT));
+		} catch (final IllegalArgumentException ex) {
+			configTimeunit = this.timeunit;
+		}
+		this.timeunit = configTimeunit;
+
 	}
 
 	@Deprecated
@@ -57,13 +73,18 @@ public class ResponseTimeExtractionFilter extends AbstractFilterPlugin {
 	public void inputExecutionRecord(final OperationExecutionRecord execution) {
 		final long toutMillis = TimeUnit.MILLISECONDS.convert(execution.getTout(), TimeUnit.NANOSECONDS);
 		final Date time = new Date(toutMillis);
-		final double responseTime = execution.getTout() - execution.getTin();
-		final NamedDoubleTimeSeriesPoint tspoint = new NamedDoubleTimeSeriesPoint(time, responseTime, execution.getOperationSignature());
+		// ResponseTime in Nanoseconds
+		final long responseTime = execution.getTout() - execution.getTin();
+		// Convert the Responsetimes from Nanoseconds to Configurable TimeUnit
+		final double responseTimeConfigurableTimeunit = this.timeunit.convert(responseTime, TimeUnit.NANOSECONDS);
+		final NamedDoubleTimeSeriesPoint tspoint = new NamedDoubleTimeSeriesPoint(time, responseTimeConfigurableTimeunit, execution.getOperationSignature());
 		super.deliver(OUTPUT_PORT_NAME_VALUE, tspoint);
 	}
 
 	@Override
 	public Configuration getCurrentConfiguration() {
-		return new Configuration();
+		final Configuration configuration = new Configuration();
+		configuration.setProperty(CONFIG_PROPERTY_NAME_TIMEUNIT, this.timeunit.name());
+		return configuration;
 	}
 }

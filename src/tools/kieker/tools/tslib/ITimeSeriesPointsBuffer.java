@@ -30,7 +30,7 @@ public interface ITimeSeriesPointsBuffer<T> {
 	 * @param o
 	 *            The Value to add
 	 */
-	public void add(T o);
+	public boolean add(T o);
 
 	/**
 	 * Removes a Value from the buffer in FIFO order.

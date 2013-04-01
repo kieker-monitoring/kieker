@@ -17,6 +17,7 @@
 package kieker.tools.opad.filter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import kieker.analysis.IProjectContext;
@@ -46,12 +47,12 @@ public class UniteMeasurementPairFilter extends AbstractFilterPlugin {
 	public static final String OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT = "forecastedcurrent";
 
 	private final List<IForecastResult<Double>> forecastValues;
-	private boolean firstTSPoint = true;
+	private volatile boolean firstTSPoint = true;
 
 	public UniteMeasurementPairFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
-		this.forecastValues = new ArrayList<IForecastResult<Double>>();
+		this.forecastValues = Collections.synchronizedList(new ArrayList<IForecastResult<Double>>());
 	}
 
 	@Deprecated

@@ -87,6 +87,7 @@ public class ResponseTimeExtractionFilterTest {
 
 		// Start - ResponseTimeExtractionFilter Configuration
 		final Configuration responseTimeExtractionConfiguration = new Configuration();
+		// responseTimeExtractionConfiguration.setProperty(ResponseTimeExtractionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, "MICROSECONDS");
 		this.responsetimeExtr = new ResponseTimeExtractionFilter(responseTimeExtractionConfiguration);
 		this.controller.registerFilter(this.responsetimeExtr);
 		// End - ResponseTimeExtractionFilter

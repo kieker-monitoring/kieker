@@ -19,16 +19,16 @@ package kieker.tools.tslib;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * This class is using a Deque to implement a bounded FifoBuffer.
+ * This class is using a CopyOnWriteArrayList to implement a bounded FifoBuffer.
  * 
  * @author Tom Frotscher
  * 
  * @param <T>
  */
-public class TimeSeriesPointsBuffer<T> extends CopyOnWriteArrayList<T> {
+public class TimeSeriesPointsBuffer<T> extends CopyOnWriteArrayList<T> implements ITimeSeriesPointsBuffer<T> {
 
 	private final int capacity;
-	private boolean unbounded;
+	private final boolean unbounded;
 
 	/**
 	 * Creates a new TimeSeriesPointsBuffer with the given capacity.
@@ -57,7 +57,7 @@ public class TimeSeriesPointsBuffer<T> extends CopyOnWriteArrayList<T> {
 		}
 	}
 
-	private boolean addBounded(final T o) {
+	private synchronized boolean addBounded(final T o) {
 		if (this.size() == this.capacity) {
 			super.remove(0);
 			return super.add(o);
