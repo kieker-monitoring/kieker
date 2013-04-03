@@ -525,6 +525,7 @@
 			<tarfileset file="${lib.dir}/aspectjweaver-*"
 						prefix="${kieker.dist.name}/${example.javaee.jetty.dir}/webapps/jpetstore/WEB-INF/lib" />
 
+			<!-- Include tailored Eclipse files in the examples -->
 			<tarfileset file="${example.microbenchmark.dir}/.classpath-binrelease.generated"
 						fullpath="${kieker.dist.name}/${example.microbenchmark.dir}/.classpath" />
 			<tarfileset file="${src.userguide.example.bookstore.dir}/.classpath"
@@ -539,6 +540,28 @@
 						fullpath="${kieker.dist.name}/${src.userguide.example.jms.dir}/.classpath" />
 			<tarfileset file="${src.userguide.example.sigar.dir}/.classpath-binrelease.generated"
 						fullpath="${kieker.dist.name}/${src.userguide.example.sigar.dir}/.classpath" />
+			
+			<!-- Include the right Kieker libs in the examples -->
+			<tarfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
+						prefix="${kieker.dist.name}/${example.microbenchmark.dir}/lib" />
+			<tarfileset file="${lib.dir}/commons-cli-*.jar"
+						prefix="${kieker.dist.name}/${example.microbenchmark.dir}/lib" />
+			<tarfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
+						prefix="${kieker.dist.name}/${src.userguide.example.manual.dir}/lib" />
+			<tarfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
+						prefix="${kieker.dist.name}/${src.userguide.example.extended.dir}/lib" />
+			<tarfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
+						prefix="${kieker.dist.name}/${src.userguide.example.aspectj.dir}/lib" />
+			<tarfileset file="${dist.dir}/${dist.kieker.main.jar}"
+						prefix="${kieker.dist.name}/${src.userguide.example.jms.dir}/lib" />
+			<tarfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
+						prefix="${kieker.dist.name}/${src.userguide.example.sigar.dir}/lib" />
+			<tarfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
+						prefix="${kieker.dist.name}/${src.userguide.example.sigar.dir}/lib" />
+			<tarfileset file="${lib.dir}/sigar-*.jar"
+						prefix="${kieker.dist.name}/${src.userguide.example.sigar.dir}/lib" />
+			<tarfileset file="${lib.sigar-native.dir}/*"
+						prefix="${kieker.dist.name}/${src.userguide.example.sigar.dir}/lib" />
 		</tar>
 		<gzip zipfile="${release.dir}/${dist.kieker.binBaseName}.tar.gz" src="${release.dir}/${dist.kieker.binBaseName}.tar" />
 		<!-- tar file no longer needed -->
@@ -564,6 +587,7 @@
 			<zipfileset file="${lib.dir}/aspectjweaver-*"
 						prefix="${kieker.dist.name}/${example.javaee.jetty.dir}/webapps/jpetstore/WEB-INF/lib" />
 			
+			<!-- Include tailored Eclipse files in the examples -->
 			<zipfileset file="${example.microbenchmark.dir}/.classpath-binrelease.generated"
 						fullpath="${kieker.dist.name}/${example.microbenchmark.dir}/.classpath" />
 			<zipfileset file="${src.userguide.example.bookstore.dir}/.classpath"
@@ -578,6 +602,26 @@
 						fullpath="${kieker.dist.name}/${src.userguide.example.jms.dir}/.classpath" />
 			<zipfileset file="${src.userguide.example.sigar.dir}/.classpath-binrelease.generated"
 						fullpath="${kieker.dist.name}/${src.userguide.example.sigar.dir}/.classpath" />
+			
+			<!-- Include the right Kieker libs in the examples -->
+			<zipfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
+						prefix="${kieker.dist.name}/${example.microbenchmark.dir}/lib" />
+			<zipfileset file="${lib.dir}/commons-cli-*.jar"
+						prefix="${kieker.dist.name}/${example.microbenchmark.dir}/lib" />
+			<zipfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
+						prefix="${kieker.dist.name}/${src.userguide.example.manual.dir}/lib" />
+			<zipfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
+						prefix="${kieker.dist.name}/${src.userguide.example.extended.dir}/lib" />
+			<zipfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
+						prefix="${kieker.dist.name}/${src.userguide.example.aspectj.dir}/lib" />
+			<zipfileset file="${dist.dir}/${dist.kieker.main.jar}"
+						prefix="${kieker.dist.name}/${src.userguide.example.jms.dir}/lib" />
+			<zipfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
+						prefix="${kieker.dist.name}/${src.userguide.example.sigar.dir}/lib" />
+			<zipfileset file="${lib.dir}/sigar-*.jar"
+						prefix="${kieker.dist.name}/${src.userguide.example.sigar.dir}/lib" />
+			<zipfileset file="${lib.sigar-native.dir}/*"
+						prefix="${kieker.dist.name}/${src.userguide.example.sigar.dir}/lib" />
 		</zip>
 	</target>
 
@@ -620,6 +664,7 @@
 			<fileset dir=".">
 				<include name="${src.userguide.example.manual.dir}/.classpath-binrelease.generated"/>
 				<include name="${src.userguide.example.extended.dir}/.classpath-binrelease.generated"/>
+				<include name="${src.userguide.example.sigar.dir}/.classpath-binrelease.generated"/>
 			</fileset>
 		</replaceregexp>
 		

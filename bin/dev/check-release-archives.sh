@@ -176,6 +176,15 @@ function assert_files_exist_src {
 	assert_file_exists_regular "src/monitoring/META-INF/kieker.monitoring.default.properties"
 	assert_file_NOT_exists "dist/"
 	assert_file_NOT_exists "META-INF/"
+	
+	assert_file_NOT_exists "examples/OverheadEvaluationMicrobenchmark/lib/*.jar"
+	assert_file_NOT_exists "examples/OverheadEvaluationMicrobenchmark/lib/*.jar"
+	assert_file_NOT_exists "examples/userguide/ch2--manual-instrumentation/lib/*.jar"
+	assert_file_NOT_exists "examples/userguide/ch3-4--custom-components/lib/*.jar"
+	assert_file_NOT_exists "examples/userguide/ch5--trace-monitoring-aspectj/lib/*.jar"
+	assert_file_NOT_exists "examples/userguide/appendix-JMS/lib/*.jar"
+	assert_file_NOT_exists "examples/userguide/appendix-Sigar/lib/*.jar"
+	
 	assert_file_NOT_exists "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/classes/META-INF/kieker.monitoring.properties"
 	assert_file_NOT_exists "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/aspectjweaver-*"
 	assert_file_NOT_exists "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/kieker-*.jar"
@@ -204,6 +213,19 @@ function assert_files_exist_bin {
 	assert_file_exists_regular ${MAIN_JAR}
 	assert_file_exists_regular "dist/kieker-"*"_aspectj.jar"
 	assert_file_exists_regular "dist/kieker-"*"_emf.jar"
+	
+	assert_file_exists_regular "examples/OverheadEvaluationMicrobenchmark/lib/kieker-*_aspectj.jar"
+	assert_file_exists_regular "examples/OverheadEvaluationMicrobenchmark/lib/commons-cli-*.jar"
+    assert_file_exists_regular "examples/userguide/ch2--manual-instrumentation/lib/kieker-*_emf.jar"
+    assert_file_exists_regular "examples/userguide/ch3-4--custom-components/lib/kieker-*_emf.jar"
+    assert_file_exists_regular "examples/userguide/ch5--trace-monitoring-aspectj/lib/kieker-*_aspectj.jar"
+    assert_file_exists_regular "examples/userguide/appendix-JMS/lib/kieker-*.jar"
+    assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/kieker-*_emf.jar"
+    assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/sigar-*.jar"
+    assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/libsigar-*.so"
+    assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/sigar-*.dll"
+    assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/sigar-*.lib"
+	
 	assert_file_exists "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/classes/META-INF/kieker.monitoring.properties"
 	assert_file_exists "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/aspectjweaver-*"
 	assert_file_exists "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/kieker-*.jar"
