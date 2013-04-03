@@ -57,22 +57,37 @@ public final class ExecutionOrderTest {
 		}
 	}
 
+	/**
+	 * This main method executes some of the methods for test purposes.
+	 * 
+	 * @param args
+	 *            The command line arguments. They have no effect.
+	 */
 	public static void main(final String[] args) {
 		ExecutionOrderTest.methoda(true);
 		ExecutionOrderTest.methoda(false);
 		ExecutionOrderTest.methodd1();
 	}
 
+	/**
+	 * A simple method for test purposes.
+	 */
 	@OperationExecutionMonitoringProbe
 	public static void methodd1() {
 		ExecutionOrderTest.methodd2();
 	}
 
+	/**
+	 * A simple method for test purposes.
+	 */
 	@OperationExecutionMonitoringProbe
 	public static void methodd2() {
 		ExecutionOrderTest.methodd3();
 	}
 
+	/**
+	 * A simple method for test purposes.
+	 */
 	@OperationExecutionMonitoringProbe
 	public static void methodd3() {
 		System.out.println("d3()"); // NOPMD (System.out)

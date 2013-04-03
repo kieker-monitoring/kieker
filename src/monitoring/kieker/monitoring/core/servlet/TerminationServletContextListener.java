@@ -36,6 +36,9 @@ public class TerminationServletContextListener implements ServletContextListener
 
 	private final IStateController ctrl;
 
+	/**
+	 * Creates a new instance of this class using the singleton instance of the {@link MonitoringController} as a controller.
+	 */
 	public TerminationServletContextListener() {
 		this.ctrl = MonitoringController.getInstance();
 	}
@@ -44,21 +47,16 @@ public class TerminationServletContextListener implements ServletContextListener
 		this.ctrl = ctrl;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.servlet.ServletContextListener#contextDestroyed(javax.servlet.ServletContextEvent)
+	/**
+	 * {@inheritDoc}
 	 */
 	public void contextDestroyed(final ServletContextEvent evt) {
 		this.ctrl.terminateMonitoring();
 		LOG.info("context destroyed");
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * javax.servlet.ServletContextListener#contextInitialized(javax.servlet.ServletContextEvent)
+	/**
+	 * {@inheritDoc}
 	 */
 	public void contextInitialized(final ServletContextEvent evt) {
 		LOG.info("context initialized");

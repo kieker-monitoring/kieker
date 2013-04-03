@@ -51,6 +51,7 @@ public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessing
 	/** This is the name of the input port receiving new execution traces. */
 	public static final String INPUT_PORT_NAME_EXECUTION_TRACES = "executionTraces";
 
+	/** The name of the configuration determining the output file name. */
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FN = "outputFn";
 
 	private static final String ENCODING = "UTF-8";

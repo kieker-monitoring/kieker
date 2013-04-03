@@ -36,8 +36,11 @@ import kieker.common.record.IMonitoringRecord;
  */
 public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 
+	/** The name of the configuration determining the size of the queue of this writer. */
 	public static final String CONFIG_QUEUESIZE = "QueueSize";
+	/** The name of the configuration determining the behavior of this writer in case of a full queue. */
 	public static final String CONFIG_BEHAVIOR = "QueueFullBehavior";
+	/** The name of the configuration determining the maximal shutdown delay of this writer (in milliseconds). */
 	public static final String CONFIG_SHUTDOWNDELAY = "MaxShutdownDelay";
 
 	private static final Log LOG = LogFactory.getLog(AbstractAsyncWriter.class);

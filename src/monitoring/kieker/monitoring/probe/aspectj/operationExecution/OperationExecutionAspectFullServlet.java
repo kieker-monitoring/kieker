@@ -30,6 +30,9 @@ import org.aspectj.lang.annotation.Pointcut;
 @Aspect
 public class OperationExecutionAspectFullServlet extends AbstractOperationExecutionAspectServlet {
 
+	/**
+	 * Default constructor.
+	 */
 	public OperationExecutionAspectFullServlet() {
 		// empty default constructor
 	}

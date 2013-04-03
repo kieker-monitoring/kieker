@@ -50,8 +50,10 @@ import kieker.common.logging.LogFactory;
 		})
 public class ListReader<T> extends AbstractReaderPlugin {
 
+	/** The name of the output port delivering the read objects. */
 	public static final String OUTPUT_PORT_NAME = "defaultOutput";
 
+	/** The name of the configuration determining whether the reader terminates after all objects have been delivered of whether it waits for a terminate signal. */
 	public static final String CONFIG_PROPERTY_NAME_AWAIT_TERMINATION = "awaitTermination";
 
 	private static final Log LOG = LogFactory.getLog(ListReader.class);

@@ -34,7 +34,9 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
  */
 public class NamedListWriter extends AbstractMonitoringWriter {
 
+	/** The name of the configuration determining the name of the list used by this writer. */
 	public static final String CONFIG_PROPERTY_NAME_LIST_NAME = NamedListWriter.class.getName() + ".listName";
+	/** The default used list name if no name has been specified. */
 	public static final String FALLBACK_LIST_NAME = "VbDt0E7Aqv";
 
 	private static final Log LOG = LogFactory.getLog(NamedListWriter.class);

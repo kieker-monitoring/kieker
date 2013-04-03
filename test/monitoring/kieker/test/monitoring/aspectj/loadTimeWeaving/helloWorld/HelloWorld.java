@@ -17,9 +17,7 @@
 package kieker.test.monitoring.aspectj.loadTimeWeaving.helloWorld;
 
 /**
- * Simple example, used in the tutorial for
- * illustration the instrumentation and monitoring
- * capabilities of Kieker.
+ * Simple example, used in the tutorial for illustration the instrumentation and monitoring capabilities of Kieker.
  * 
  * @author Matthias Rohr
  * 
@@ -29,11 +27,20 @@ public final class HelloWorld {
 
 	private HelloWorld() {}
 
+	/**
+	 * This main method starts the example.
+	 * 
+	 * @param args
+	 *            The command line arguments. They have no effect.
+	 */
 	public static void main(final String[] args) {
 		System.out.println("Hello"); // NOPMD (System.out)
 		HelloWorld.doSomething();
 	}
 
+	/**
+	 * A simple dummy method.
+	 */
 	public static void doSomething() {
 		System.out.println("doing something"); // NOPMD (System.out)
 	}

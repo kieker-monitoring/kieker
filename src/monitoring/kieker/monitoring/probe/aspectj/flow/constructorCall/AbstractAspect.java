@@ -42,12 +42,30 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
 	private static final TraceRegistry TRACEREGISTRY = TraceRegistry.INSTANCE;
 
+	/**
+	 * The pointcut for the monitored constructors. Inheriting classes should extend the pointcut in order to find the correct calls (e.g. all constructors or only
+	 * constructors with specific annotations).
+	 */
 	@Pointcut
 	public abstract void monitoredConstructor();
 
+	/**
+	 * This is an advice used around calls from members to constructors.
+	 * 
+	 * @param thisObject
+	 *            The caller object.
+	 * @param thisJoinPoint
+	 *            The joint point of the callee.
+	 * @param thisEnclosingJoinPoint
+	 *            The joint point of the caller.
+	 * 
+	 * @return The result of {@code proceed method} of the given joint point.
+	 * 
+	 * @throws Throwable
+	 */
 	@Around("monitoredConstructor() && this(thisObject) && notWithinKieker()")
-	public Object member2constructor(final Object thisObject, final ProceedingJoinPoint thisJoinPoint,
-			final EnclosingStaticPart thisEnclosingJoinPoint) throws Throwable { // NOCS
+	public Object member2constructor(final Object thisObject, final ProceedingJoinPoint thisJoinPoint, final EnclosingStaticPart thisEnclosingJoinPoint)
+			throws Throwable { // NOCS
 		final Signature calleeSig = thisJoinPoint.getSignature();
 		final String callee = this.signatureToLongString(calleeSig);
 		if (!CTRLINST.isProbeActivated(callee)) {
@@ -81,6 +99,18 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		return retval;
 	}
 
+	/**
+	 * This is an advice used around calls from static elements to constructors.
+	 * 
+	 * @param thisJoinPoint
+	 *            The joint point of the callee.
+	 * @param thisEnclosingJoinPoint
+	 *            The joint point of the caller.
+	 * 
+	 * @return The result of {@code proceed method} of the given joint point.
+	 * 
+	 * @throws Throwable
+	 */
 	@Around("monitoredConstructor() && !this(java.lang.Object) && notWithinKieker()")
 	public Object static2constructor(final ProceedingJoinPoint thisJoinPoint, final EnclosingStaticPart thisEnclosingJoinPoint)
 			throws Throwable { // NOCS

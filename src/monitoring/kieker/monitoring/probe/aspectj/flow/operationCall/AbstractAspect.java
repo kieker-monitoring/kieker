@@ -42,6 +42,10 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
 	private static final TraceRegistry TRACEREGISTRY = TraceRegistry.INSTANCE;
 
+	/**
+	 * The pointcut for the monitored operations. Inheriting classes should extend the pointcut in order to find the correct method calls (e.g. all methods or
+	 * only methods with specific annotations).
+	 */
 	@Pointcut
 	public abstract void monitoredOperation();
 

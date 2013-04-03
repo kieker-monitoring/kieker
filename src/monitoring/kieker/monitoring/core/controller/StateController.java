@@ -38,6 +38,12 @@ public final class StateController extends AbstractController implements IStateC
 	private final AtomicInteger experimentId = new AtomicInteger(0);
 	private final boolean debug;
 
+	/**
+	 * Creates a new instance of this class using the given parameter.
+	 * 
+	 * @param configuration
+	 *            The configuration which will be used to initialize the controller.
+	 */
 	protected StateController(final Configuration configuration) {
 		super(configuration);
 		this.name = configuration.getStringProperty(ConfigurationFactory.CONTROLLER_NAME);
@@ -89,6 +95,9 @@ public final class StateController extends AbstractController implements IStateC
 		return sb.toString();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final boolean terminateMonitoring() {
 		if (super.monitoringController != null) {
 			return super.monitoringController.terminate();
@@ -102,6 +111,9 @@ public final class StateController extends AbstractController implements IStateC
 		return super.isTerminated();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final boolean enableMonitoring() {
 		if (this.isMonitoringTerminated()) {
 			LOG.error("Refused to enable monitoring because monitoring has been permanently terminated");
@@ -112,6 +124,9 @@ public final class StateController extends AbstractController implements IStateC
 		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final boolean disableMonitoring() {
 		LOG.info("Disabling monitoring");
 		this.monitoringEnabled = false;
@@ -130,10 +145,16 @@ public final class StateController extends AbstractController implements IStateC
 		return this.hostname;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final int incExperimentId() {
 		return this.experimentId.incrementAndGet();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final void setExperimentId(final int newExperimentID) {
 		this.experimentId.set(newExperimentID);
 	}

@@ -26,6 +26,9 @@ import kieker.common.util.filesystem.FSUtil;
 import kieker.monitoring.core.registry.RegistryRecord;
 
 /**
+ * This writer is a helper class to handle the mapping files for Kieker's records, containing the mapping between short IDs and actual record classes. It provides
+ * the possibility to create these mapping files and to write the mappings into them.
+ * 
  * @author Andre van Hoorn, Jan Waller
  * 
  * @since 1.7
@@ -34,6 +37,15 @@ public final class MappingFileWriter {
 
 	private final File mappingFile;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param path
+	 *            The path containing the record files. The writer will put the mapping file into this directory.
+	 * 
+	 * @throws IOException
+	 *             If the mapping file has already been created.
+	 */
 	public MappingFileWriter(final String path) throws IOException {
 		final StringBuilder sbm = new StringBuilder(path.length() + 11);
 		sbm.append(path).append(File.separatorChar).append(FSUtil.MAP_FILENAME);
@@ -44,6 +56,15 @@ public final class MappingFileWriter {
 		}
 	}
 
+	/**
+	 * Writes the given mapping into the mapping file.
+	 * 
+	 * @param hashRecord
+	 *            The mapping between the ID and the actual object.
+	 * 
+	 * @throws IOException
+	 *             If something went wrong during the writing.
+	 */
 	public final void write(final RegistryRecord hashRecord) throws IOException {
 		synchronized (this.mappingFile) {
 			PrintWriter pw = null;

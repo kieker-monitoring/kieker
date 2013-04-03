@@ -49,11 +49,15 @@ import kieker.common.util.filesystem.FSUtil;
 		})
 public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordReceiver {
 
+	/** The name of the output port delivering the record read by this plugin. */
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
 
+	/** The name of the configuration determining the input directories for this plugin. */
 	public static final String CONFIG_PROPERTY_NAME_INPUTDIRS = "inputDirs";
+	/** The name of the configuration determining whether the reader ignores unknown record types or not. */
 	public static final String CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES = "ignoreUnknownRecordTypes";
 
+	/** This dummy record can be send to the reader's record queue to mark the end of the current file. */
 	public static final IMonitoringRecord EOF = new EmptyRecord();
 
 	private static final Log LOG = LogFactory.getLog(FSReader.class);

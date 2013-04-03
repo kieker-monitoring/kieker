@@ -75,10 +75,9 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 	 */
 	public static final String OUTPUT_PORT_NAME_RELAYED_OBJECTS = "relayedEvents";
 
-	/**
-	 * The name of the property determining the time unit.
-	 */
+	/** The name of the property determining the time unit. */
 	public static final String CONFIG_PROPERTY_NAME_TIMEUNIT = "timeunit";
+	/** The name of the property determining the interval size. */
 	public static final String CONFIG_PROPERTY_NAME_INTERVAL_SIZE = "intervalSize";
 
 	/**
@@ -212,6 +211,12 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 		super.deliver(OUTPUT_PORT_NAME_RELAYED_OBJECTS, event);
 	}
 
+	/**
+	 * This method represents the input port for incoming records.
+	 * 
+	 * @param record
+	 *            The next record.
+	 */
 	// #841 What happens with unordered events (i.e., timestamps before firstTimestampInCurrentInterval)?
 	@InputPort(name = INPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class },
 			description = "Receives incoming monitoring records to be considered for the throughput computation and uses the record's logging timestamp")
@@ -219,6 +224,12 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 		this.processEvent(record, record.getLoggingTimestamp());
 	}
 
+	/**
+	 * This method represents the input port for incoming object.
+	 * 
+	 * @param object
+	 *            The next object.
+	 */
 	@InputPort(name = INPUT_PORT_NAME_OBJECTS, eventTypes = { Object.class },
 			description = "Receives incoming objects to be considered for the throughput computation and uses the current system time")
 	public final void inputObjects(final Object object) {

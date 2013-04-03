@@ -39,6 +39,7 @@ import kieker.monitoring.writer.filesystem.map.MappingFileWriter;
  */
 public abstract class AbstractFsWriterThread extends AbstractAsyncThread {
 
+	/** The extension of the written files. */
 	protected String fileExtension = FSUtil.NORMAL_FILE_EXTENSION;
 
 	private final MappingFileWriter mappingFileWriter;

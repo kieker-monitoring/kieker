@@ -66,6 +66,9 @@ public abstract class AbstractTraceWriterFilterTest extends AbstractKiekerTest {
 	private static final int INITIAL_TIMESTAMP_INVALID_EXEC_TRACE = AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_VALID_EXEC_TRACE + 300;
 	private static final int INITIAL_TIMESTAMP_VALID_MESSAGE_TRACE = AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_INVALID_EXEC_TRACE + 300;
 
+	/**
+	 * A rule making sure that a temporary folder exists for every test method (which is removed after the test).
+	 */
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
 

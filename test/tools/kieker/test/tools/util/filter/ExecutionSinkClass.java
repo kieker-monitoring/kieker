@@ -77,9 +77,13 @@ public class ExecutionSinkClass extends AbstractFilterPlugin {
 		return new Configuration();
 	}
 
-	@InputPort(
-			name = ExecutionSinkClass.INPUT_PORT_NAME,
-			eventTypes = { Execution.class })
+	/**
+	 * This method represents the input ports for the execution objects.
+	 * 
+	 * @param data
+	 *            The next execution.
+	 */
+	@InputPort(name = ExecutionSinkClass.INPUT_PORT_NAME, eventTypes = { Execution.class })
 	public void doJob(final Object data) {
 		this.lst.add((Execution) data);
 	}

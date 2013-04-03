@@ -45,6 +45,12 @@ public final class JMXWriter extends AbstractMonitoringWriter {
 	private KiekerJMXMonitoringLog kiekerJMXMonitoringLog;
 	private ObjectName monitoringLogName;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this writer.
+	 */
 	public JMXWriter(final Configuration configuration) {
 		super(configuration);
 		this.configDomain = configuration.getStringProperty(CONFIG_DOMAIN);
@@ -71,10 +77,16 @@ public final class JMXWriter extends AbstractMonitoringWriter {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean newMonitoringRecord(final IMonitoringRecord record) {
 		return this.kiekerJMXMonitoringLog.newMonitoringRecord(record);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void terminate() {
 		try {
 			ManagementFactory.getPlatformMBeanServer().unregisterMBean(this.monitoringLogName);

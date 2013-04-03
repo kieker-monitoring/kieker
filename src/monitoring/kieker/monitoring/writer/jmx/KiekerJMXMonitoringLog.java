@@ -36,6 +36,14 @@ public final class KiekerJMXMonitoringLog extends NotificationBroadcasterSupport
 		this.kiekerMonitoringLogName = kiekerMonitoringLogName;
 	}
 
+	/**
+	 * Consumes the given record by sending a notification.
+	 * 
+	 * @param record
+	 *            The record to consume.
+	 * 
+	 * @return Always true.
+	 */
 	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
 		final Notification notification = new Notification(MESSAGE_TYPE, this.kiekerMonitoringLogName, 0L, 0L);
 		notification.setUserData(record);

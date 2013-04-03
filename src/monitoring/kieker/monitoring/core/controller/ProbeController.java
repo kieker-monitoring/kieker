@@ -129,14 +129,23 @@ public class ProbeController extends AbstractController implements IProbeControl
 		return sb.toString();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean activateProbe(final String pattern) {
 		return this.addPattern(pattern, true);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean deactivateProbe(final String pattern) {
 		return this.addPattern(pattern, false);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean isProbeActivated(final String signature) {
 		if (!this.monitoringController.isMonitoringEnabled()) {
 			return false;
@@ -191,10 +200,16 @@ public class ProbeController extends AbstractController implements IProbeControl
 
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void setProbePatternList(final List<String> strPatternList) {
 		this.setProbePatternList(strPatternList, true);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public List<String> getProbePatternList() {
 		if (!this.enabled) {
 			LOG.warn("Adapative Monitoring is disabled!");

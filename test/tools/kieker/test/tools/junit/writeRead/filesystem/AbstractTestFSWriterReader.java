@@ -53,6 +53,9 @@ import kieker.test.tools.util.StringUtils;
  */
 public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTest {
 
+	/**
+	 * A rule making sure that a temporary folder exists for every test method (which is removed after the test).
+	 */
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
 

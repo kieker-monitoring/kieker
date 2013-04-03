@@ -82,10 +82,10 @@ public class AssemblyComponentOperationPairFactory extends AbstractSystemSubRepo
 	}
 
 	/**
-	 * Returns the instance for the passed ID; null if no instance with this ID is available.
-	 * 
 	 * @param id
 	 *            The ID of the instance in question.
+	 * 
+	 * @return The instance for the passed ID; null if no instance with this ID is available.
 	 */
 	public final AssemblyComponentOperationPair getPairById(final int id) {
 		return this.pairsById.get(id);

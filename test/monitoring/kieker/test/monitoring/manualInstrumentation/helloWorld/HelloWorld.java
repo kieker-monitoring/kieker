@@ -30,6 +30,12 @@ public final class HelloWorld {
 
 	private HelloWorld() {}
 
+	/**
+	 * This main method starts the example.
+	 * 
+	 * @param args
+	 *            The command line arguments. They have no effect.
+	 */
 	public static void main(final String[] args) {
 		System.out.println("Hello"); // NOPMD (System.out)
 

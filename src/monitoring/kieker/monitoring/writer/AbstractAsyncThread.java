@@ -52,6 +52,13 @@ public abstract class AbstractAsyncThread extends Thread {
 		this.monitoringController = monitoringController;
 	}
 
+	/**
+	 * Initializes the shutdown of this thread if necessary. The method returns immediately in every case and counts the latch down eventually (assuming that no
+	 * exception occurs).
+	 * 
+	 * @param cdl
+	 *            The latch which will be count down once the thread has been terminated.
+	 */
 	public final void initShutdown(final CountDownLatch cdl) {
 		synchronized (this) {
 			this.shutdownLatch = cdl;
@@ -66,6 +73,11 @@ public abstract class AbstractAsyncThread extends Thread {
 		}
 	}
 
+	/**
+	 * Can be used to determine whether the thread is in the finished state or not.
+	 * 
+	 * @return true iff the thread has set the finished flag.
+	 */
 	public final boolean isFinished() {
 		synchronized (this) { // may not be necessary, but doesn't really hurt here
 			return this.finished;

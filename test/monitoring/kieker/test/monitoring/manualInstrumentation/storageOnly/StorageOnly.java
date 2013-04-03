@@ -21,19 +21,14 @@ import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 
 /**
- * This is a small test for the part of Kieker that stores monitoring data.
- * Kieker's monitoring API is manually invoked to collect monitoring data.
- * Therefore, the instrumentation and logic in the monitoring points (the
- * aspects) of Kieker is not used.
+ * This is a small test for the part of Kieker that stores monitoring data. Kieker's monitoring API is manually invoked to collect monitoring data. Therefore, the
+ * instrumentation and logic in the monitoring points (the aspects) of Kieker is not used.
  * 
- * The main purpose of this test is to isolate configuration and installation
- * problems and to get Kieker running.
+ * The main purpose of this test is to isolate configuration and installation problems and to get Kieker running.
  * 
- * Just compile and start it with the Kieker library in the classpath
- * (no javaagent required).
+ * Just compile and start it with the Kieker library in the classpath (no javaagent required).
  * 
- * If in kieker.monitoring.properties file system storage (store in database = false) is
- * selected, a new file (kieker*.dat) with monitoring data should be created in
+ * If in kieker.monitoring.properties file system storage (store in database = false) is selected, a new file (kieker*.dat) with monitoring data should be created in
  * the folder specified in kieker.monitoring.properties (default: /tmp).
  * 
  * @author Matthias Rohr
@@ -47,6 +42,12 @@ public final class StorageOnly {
 
 	private StorageOnly() {}
 
+	/**
+	 * This main method starts the test.
+	 * 
+	 * @param args
+	 *            The command line arguments. They have no effect.
+	 */
 	public static void main(final String[] args) {
 		try {
 			System.out.println("Starting test by adding " + StorageOnly.NUMBER_OF_EVENTS + " monitoring events"); // NOPMD (System.out)

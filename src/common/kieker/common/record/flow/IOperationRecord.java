@@ -42,6 +42,11 @@ public interface IOperationRecord extends IFlowRecord {
 	public abstract String getOperationSignature();
 
 	/**
+	 * @param record
+	 *            The record to check.
+	 * 
+	 * @return True iff the specifieid record refers to the same operation as this record.
+	 * 
 	 * @since 1.6
 	 */
 	public abstract boolean refersToSameOperationAs(final IOperationRecord record);

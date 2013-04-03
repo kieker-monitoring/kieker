@@ -58,6 +58,16 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 
 	private final AtomicLong recordId = new AtomicLong();
 
+	/**
+	 * 
+	 * Creates a new instance of this class using the given parameter.
+	 * 
+	 * @param configuration
+	 *            The configuration which will be used to initialize this writer.
+	 * 
+	 * @throws Exception
+	 *             If the constructor failed to establish a connection to the database.
+	 */
 	public SyncDbWriter(final Configuration configuration) throws Exception {
 		super(configuration);
 		try {
@@ -81,6 +91,9 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 		// nothing to do
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
 		final Class<? extends IMonitoringRecord> recordClass = record.getClass();
 		final String recordClassName = recordClass.getSimpleName();
@@ -133,6 +146,9 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void terminate() {
 		try {
 			// close all prepared statements

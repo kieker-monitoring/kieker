@@ -53,6 +53,9 @@ public final class PatternConstructor {
 	private final List<String> optionalWhitespaceList = new ArrayList<String>();
 	private final List<String> throwsListList = new ArrayList<String>();
 
+	/**
+	 * Default constructor.
+	 */
 	public PatternConstructor() {
 		// empty default constructor
 	}

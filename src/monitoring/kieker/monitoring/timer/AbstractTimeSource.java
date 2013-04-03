@@ -34,6 +34,12 @@ public abstract class AbstractTimeSource implements ITimeSource {
 	@Deprecated
 	protected final Configuration configuration;
 
+	/**
+	 * This constructor initializes the class using the given configuration.
+	 * 
+	 * @param configuration
+	 *            The configuration for this time source.
+	 */
 	protected AbstractTimeSource(final Configuration configuration) {
 		try {
 			// somewhat dirty hack...

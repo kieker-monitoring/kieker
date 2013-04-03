@@ -48,7 +48,9 @@ import kieker.common.record.IMonitoringRecord;
 		))
 public final class StringBufferFilter extends AbstractFilterPlugin {
 
+	/** The name of the input port for the incoming events. */
 	public static final String INPUT_PORT_NAME_EVENTS = "received-events";
+	/** The name of the output port for the relayed events. */
 	public static final String OUTPUT_PORT_NAME_RELAYED_EVENTS = "relayed-events";
 
 	private static final int INITIAL_CAPACITY = 16;

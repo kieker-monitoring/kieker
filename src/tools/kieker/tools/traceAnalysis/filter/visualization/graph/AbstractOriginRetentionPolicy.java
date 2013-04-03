@@ -27,6 +27,12 @@ public abstract class AbstractOriginRetentionPolicy implements IOriginRetentionP
 
 	private final OriginRetentionPolicyKind kind;
 
+	/**
+	 * This constructor uses the given parameter to initialize the class.
+	 * 
+	 * @param kind
+	 *            The origin retention policy kind.
+	 */
 	protected AbstractOriginRetentionPolicy(final OriginRetentionPolicyKind kind) {
 		this.kind = kind;
 	}
@@ -35,10 +41,16 @@ public abstract class AbstractOriginRetentionPolicy implements IOriginRetentionP
 		return this.kind;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean isCompatibleWith(final IOriginRetentionPolicy policy) { // NOPMD, for some reason, PMD regards this function as empty
 		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean dependsOn(final IOriginRetentionPolicy policy) {
 		return this == policy;
 	}

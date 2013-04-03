@@ -139,11 +139,13 @@ public final class DBWriterHelper {
 	 * Creates a table using the given parameters.
 	 * 
 	 * @param classname
+	 *            The name of the class which corresponds to the newly created table.
 	 * @param columns
 	 *            The array of classes determining the columns of this table.
 	 * @return The name of the newly created table.
 	 * 
 	 * @throws SQLException
+	 *             If something went wrong during the creation.
 	 */
 	public String createTable(final String classname, final Class<?>... columns) throws SQLException {
 		// automatically determine the tablename

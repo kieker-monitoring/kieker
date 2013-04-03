@@ -43,7 +43,9 @@ import kieker.common.configuration.Configuration;
 		outputPorts = @OutputPort(name = ListCollectionFilter.OUTPUT_PORT_NAME, eventTypes = { Object.class }, description = "Provides each incoming object"))
 public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 
+	/** The name of the input port for the incoming objects. */
 	public static final String INPUT_PORT_NAME = "inputObject";
+	/** The name of the output port for the forwared objects. */
 	public static final String OUTPUT_PORT_NAME = "outputObjects";
 
 	private final List<T> list = Collections.synchronizedList(new ArrayList<T>());
@@ -73,6 +75,12 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 		this(configuration, null);
 	}
 
+	/**
+	 * This method represents the input port.
+	 * 
+	 * @param data
+	 *            The next element.
+	 */
 	@InputPort(name = ListCollectionFilter.INPUT_PORT_NAME)
 	@SuppressWarnings("unchecked")
 	public void input(final Object data) {
@@ -80,6 +88,9 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 		super.deliver(OUTPUT_PORT_NAME, data);
 	}
 
+	/**
+	 * Clears the list.
+	 */
 	public void clear() {
 		this.list.clear();
 	}

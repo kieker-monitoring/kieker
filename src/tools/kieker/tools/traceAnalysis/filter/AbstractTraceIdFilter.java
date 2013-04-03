@@ -94,11 +94,12 @@ public abstract class AbstractTraceIdFilter extends kieker.analysis.plugin.filte
 	}
 
 	/**
-	 * Returns true iff the given trace ID is in the set of IDs to accept.
 	 * This method is a convenience function to inheriting filters.
 	 * 
 	 * @param traceId
 	 *            The trace ID to check.
+	 * 
+	 * @return True iff the given trace ID is in the set of IDs to accept.
 	 */
 	protected boolean passId(final long traceId) {
 		if ((this.selectedTraceIds != null) && !this.selectedTraceIds.contains(traceId)) {

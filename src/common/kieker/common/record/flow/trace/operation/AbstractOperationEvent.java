@@ -36,6 +36,20 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 	private final String operationSignature;
 	private final String classSignature;
 
+	/**
+	 * This constructor uses the given parameters to initialize the fields of this record.
+	 * 
+	 * @param timestamp
+	 *            The timestamp of this record.
+	 * @param traceId
+	 *            The trace ID.
+	 * @param orderIndex
+	 *            The order index.
+	 * @param operationSignature
+	 *            The operation signature.
+	 * @param classSignature
+	 *            The class signature.
+	 */
 	public AbstractOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature) {
 		super(timestamp, traceId, orderIndex);
 		this.operationSignature = (operationSignature == null) ? NO_OPERATIONSIGNATURE : operationSignature; // NOCS
@@ -64,6 +78,9 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 		return this.classSignature;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final boolean refersToSameOperationAs(final IOperationRecord record) {
 		return this.getOperationSignature().equals(record.getOperationSignature()) && this.getClassSignature().equals(record.getClassSignature());
 	}

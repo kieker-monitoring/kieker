@@ -77,7 +77,9 @@ import kieker.monitoring.sampler.sigar.samplers.MemSwapUsageSampler;
  * @since 1.3
  */
 public class CPUMemUsageServletContextListener implements ServletContextListener {
+	/** The default used sensor interval in seconds. */
 	public static final long DEFAULT_SENSOR_INTERVAL_SECONDS = 15;
+	/** The default used initial delay in seconds. */
 	public static final long DEFAULT_SENSOR_INITIAL_DELAY_SECONDS = 0;
 
 	/** Prefix for parameters used in the web.xml file. */
@@ -104,16 +106,25 @@ public class CPUMemUsageServletContextListener implements ServletContextListener
 	private volatile long sensorIntervalSeconds = DEFAULT_SENSOR_INTERVAL_SECONDS;
 	private volatile long initialDelaySeconds = DEFAULT_SENSOR_INITIAL_DELAY_SECONDS;
 
+	/**
+	 * Default constructor.
+	 */
 	public CPUMemUsageServletContextListener() {
 		// nothing to do
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void contextDestroyed(final ServletContextEvent sce) {
 		for (final ScheduledSamplerJob s : this.samplerJobs) {
 			this.monitoringController.removeScheduledSampler(s);
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void contextInitialized(final ServletContextEvent sce) {
 		this.initParameters(sce.getServletContext());
 		this.initSensors();

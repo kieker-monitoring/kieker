@@ -270,6 +270,9 @@ public final class MonitoringController extends AbstractController implements IM
 		return this.stateController.getExperimentId();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
 		return this.writerController.newMonitoringRecord(record);
 	}
@@ -278,10 +281,16 @@ public final class MonitoringController extends AbstractController implements IM
 		return this.writerController.getNumberOfInserts();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final ScheduledSamplerJob schedulePeriodicSampler(final ISampler sampler, final long initialDelay, final long period, final TimeUnit timeUnit) {
 		return this.samplingController.schedulePeriodicSampler(sampler, initialDelay, period, timeUnit);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final boolean removeScheduledSampler(final ScheduledSamplerJob sampler) {
 		return this.samplingController.removeScheduledSampler(sampler);
 	}
@@ -294,22 +303,37 @@ public final class MonitoringController extends AbstractController implements IM
 		return this.jmxController.getJMXDomain();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final int getIdForString(final String string) {
 		return this.registryController.getIdForString(string);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final boolean activateProbe(final String pattern) {
 		return this.probeController.activateProbe(pattern);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final boolean deactivateProbe(final String pattern) {
 		return this.probeController.deactivateProbe(pattern);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean isProbeActivated(final String signature) {
 		return this.probeController.isProbeActivated(signature);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void setProbePatternList(final List<String> patternList) {
 		this.probeController.setProbePatternList(patternList);
 	}

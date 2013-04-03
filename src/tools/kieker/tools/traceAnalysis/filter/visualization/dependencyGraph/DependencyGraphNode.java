@@ -107,10 +107,32 @@ public class DependencyGraphNode<T extends ISystemModelElement> extends
 		return this.assumed;
 	}
 
+	/**
+	 * Adds an outgoing dependency to this node. The dependency will be marked as not assumed.
+	 * 
+	 * @param destination
+	 *            The destination of the dependency.
+	 * @param origin
+	 *            The origin of the destination.
+	 * @param originPolicy
+	 *            The origin policy of the destination.
+	 */
 	public void addOutgoingDependency(final DependencyGraphNode<T> destination, final TraceInformation origin, final IOriginRetentionPolicy originPolicy) {
 		this.addOutgoingDependency(destination, false, origin, originPolicy);
 	}
 
+	/**
+	 * Adds an outgoing dependency to this node.
+	 * 
+	 * @param destination
+	 *            The destination of the dependency.
+	 * @param isAssumed
+	 *            Whether the dependency is assumed or not.
+	 * @param origin
+	 *            The origin of the destination.
+	 * @param originPolicy
+	 *            The origin policy of the destination.
+	 */
 	public void addOutgoingDependency(final DependencyGraphNode<T> destination, final boolean isAssumed, final TraceInformation origin,
 			final IOriginRetentionPolicy originPolicy) {
 		synchronized (this) {
@@ -133,10 +155,32 @@ public class DependencyGraphNode<T extends ISystemModelElement> extends
 		}
 	}
 
+	/**
+	 * Adds an incoming dependency to this node. The dependency will be marked as not assumed.
+	 * 
+	 * @param source
+	 *            The source of the dependency.
+	 * @param origin
+	 *            The origin of the destination.
+	 * @param originPolicy
+	 *            The origin policy of the destination.
+	 */
 	public void addIncomingDependency(final DependencyGraphNode<T> source, final TraceInformation origin, final IOriginRetentionPolicy originPolicy) {
 		this.addIncomingDependency(source, false, origin, originPolicy);
 	}
 
+	/**
+	 * Adds an incoming dependency to this node.
+	 * 
+	 * @param source
+	 *            The source of the dependency.
+	 * @param isAssumed
+	 *            Whether the dependency is assumed or not.
+	 * @param origin
+	 *            The origin of the destination.
+	 * @param originPolicy
+	 *            The origin policy of the destination.
+	 */
 	public void addIncomingDependency(final DependencyGraphNode<T> source, final boolean isAssumed, final TraceInformation origin,
 			final IOriginRetentionPolicy originPolicy) {
 		synchronized (this) {

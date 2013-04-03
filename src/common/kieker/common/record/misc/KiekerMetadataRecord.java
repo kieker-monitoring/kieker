@@ -165,6 +165,11 @@ public final class KiekerMetadataRecord extends AbstractMonitoringRecord impleme
 		return this.numberOfRecords;
 	}
 
+	/**
+	 * Converts the current record into a formatted string.
+	 * 
+	 * @return A formatted string representation of this record.
+	 */
 	public String toFormattedString() {
 		final StringBuilder sb = new StringBuilder(512);
 		sb.append("Kieker metadata: controllerName='");

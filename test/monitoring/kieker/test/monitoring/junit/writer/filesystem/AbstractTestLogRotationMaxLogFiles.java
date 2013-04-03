@@ -38,6 +38,9 @@ public abstract class AbstractTestLogRotationMaxLogFiles extends AbstractKiekerT
 
 	private static final int MAXENTRIESINFILE = 2;
 
+	/**
+	 * A rule making sure that a temporary folder exists for every test method (which is removed after the test).
+	 */
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (Rule has to be public)
 

@@ -41,6 +41,8 @@ public abstract class AbstractPayloadedVertex<V extends AbstractPayloadedVertex<
 	 * 
 	 * @param origin
 	 *            The vertex' origin
+	 * @param originPolicy
+	 *            The origin policy.
 	 * @param payload
 	 *            The vertex' payload
 	 */

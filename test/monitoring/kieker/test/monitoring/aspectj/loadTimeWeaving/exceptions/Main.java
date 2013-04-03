@@ -29,6 +29,12 @@ public final class Main {
 
 	private Main() {}
 
+	/**
+	 * This main method executes some of the dummy test methods.
+	 * 
+	 * @param args
+	 *            The command line arguments. They have no effect.
+	 */
 	public static void main(final String[] args) {
 
 		for (int i = 0; i < 10; i++) {
@@ -52,6 +58,15 @@ public final class Main {
 
 	}
 
+	/**
+	 * A simple dummy method.
+	 * 
+	 * @param throwException
+	 *            Determines whether this method throws an exception or not.
+	 * 
+	 * @throws Exception
+	 *             If the parameter is set to true.
+	 */
 	@OperationExecutionMonitoringProbe
 	public static void helloKieker(final boolean throwException) throws Exception {
 		System.out.println("Hello World (look at your monitoring log ...)." + Thread.currentThread().getId() + " "); // NOPMD (System.out)

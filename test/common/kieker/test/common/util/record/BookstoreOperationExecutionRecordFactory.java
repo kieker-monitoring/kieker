@@ -30,23 +30,34 @@ import kieker.common.record.controlflow.OperationExecutionRecord;
  * @since 1.5
  */
 public final class BookstoreOperationExecutionRecordFactory {
+	/** The name of the Bookstore package. */
 	public static final String PACKAGE_BOOKSTORE_APP = "bookstore";
 
+	/** The simple name of the Bookstore class. */
 	public static final String SIMPLE_CLASS_BOOKSTORE = "Bookstore";
+	/** The simple name of the Catalog class. */
 	public static final String SIMPLE_CLASS_CATALOG = "Catalog";
+	/** The simple name of the CRM class. */
 	public static final String SIMPLE_CLASS_CRM = "CRM";
 
+	/** The fully qualified name of the Bookstore class. */
 	public static final String FQ_CLASS_BOOKSTORE =
 			BookstoreOperationExecutionRecordFactory.PACKAGE_BOOKSTORE_APP
 					+ "." + BookstoreOperationExecutionRecordFactory.SIMPLE_CLASS_BOOKSTORE;
+	/** The fully qualified name of the Catalog class. */
 	public static final String FQ_CLASS_CATALOG = BookstoreOperationExecutionRecordFactory.PACKAGE_BOOKSTORE_APP
 			+ "." + BookstoreOperationExecutionRecordFactory.SIMPLE_CLASS_CATALOG;
+	/** The fully qualified name of the CRM class. */
 	public static final String FQ_CLASS_CRM = BookstoreOperationExecutionRecordFactory.PACKAGE_BOOKSTORE_APP
 			+ "." + BookstoreOperationExecutionRecordFactory.SIMPLE_CLASS_CRM;
 
+	/** The modifier of the {@code searchBook} method of the Bookstore. */
 	public static final String OP_MODIFIER_BOOKSTORE_SEARCH_BOOK = "public";
+	/** The return type of the {@code searchBook} method of the Bookstore. */
 	public static final String OP_RETTYPE_BOOKSTORE_SEARCH_BOOK = "Book";
+	/** The name of the {@code searchBook} method of the Bookstore. */
 	public static final String OP_NAME_BOOKSTORE_SEARCH_BOOK = "searchBook";
+	/** The argument type of the {@code searchBook} method of the Bookstore. */
 	public static final String OP_ARGTYPE_BOOKSTORE_SEARCH_BOOK = "long";
 	public static final String OP_FQNAME_BOOKSTORE_SEARCH_BOOK =
 			BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE + "." + BookstoreOperationExecutionRecordFactory.OP_NAME_BOOKSTORE_SEARCH_BOOK;
@@ -54,8 +65,11 @@ public final class BookstoreOperationExecutionRecordFactory {
 			BookstoreOperationExecutionRecordFactory.OP_NAME_BOOKSTORE_SEARCH_BOOK + "("
 					+ BookstoreOperationExecutionRecordFactory.OP_ARGTYPE_BOOKSTORE_SEARCH_BOOK + ")";
 
+	/** The modifier of the {@code getBook} method of the Catalog. */
 	public static final String OP_MODIFIER_CATALOG_GET_BOOK = "private";
+	/** The return type of the {@code getBook} method of the Catalog. */
 	public static final String OP_RETTYPE_CATALOG_GET_BOOK = "Book";
+	/** The name of the {@code getBook} method of the Catalog. */
 	public static final String OP_NAME_CATALOG_GET_BOOK = "getBook";
 	public static final String OP_ARGTYPE_CATALOG_GET_BOOK = "long";
 	public static final String OP_FQNAME_CATALOG_GET_BOOK =

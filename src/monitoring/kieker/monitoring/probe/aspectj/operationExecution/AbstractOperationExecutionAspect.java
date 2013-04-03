@@ -46,6 +46,10 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 	private static final ControlFlowRegistry CFREGISTRY = ControlFlowRegistry.INSTANCE;
 	private static final SessionRegistry SESSIONREGISTRY = SessionRegistry.INSTANCE;
 
+	/**
+	 * The pointcut for the monitored operations. Inheriting classes should extend the pointcut in order to find the correct executions of the methods (e.g. all
+	 * methods or only methods with specific annotations).
+	 */
 	@Pointcut
 	public abstract void monitoredOperation();
 

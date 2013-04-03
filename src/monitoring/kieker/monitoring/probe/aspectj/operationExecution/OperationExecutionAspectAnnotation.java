@@ -27,6 +27,9 @@ import org.aspectj.lang.annotation.Pointcut;
 @Aspect
 public class OperationExecutionAspectAnnotation extends AbstractOperationExecutionAspect {
 
+	/**
+	 * Default constructor.
+	 */
 	public OperationExecutionAspectAnnotation() {
 		// empty default constructor
 	}

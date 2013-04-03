@@ -75,6 +75,8 @@ public enum ControlFlowRegistry { // Singleton (Effective Java #3)
 	/**
 	 * This method returns a thread-local traceid which is globally unique and stored it local for the thread. The thread is responsible for invalidating the stored
 	 * curTraceId using the method unsetThreadLocalTraceId()!
+	 * 
+	 * @return A unique trace ID.
 	 */
 	public final long getAndStoreUniqueThreadLocalTraceId() {
 		final long id = this.getUniqueTraceId();

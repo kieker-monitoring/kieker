@@ -44,10 +44,9 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 	private static final int DEFAULT_EVENTS_NUMBER = 5; // just a basic test with (potentially) at bit more than a hand full of records
 
 	/**
-	 * Returns an {@link IMonitoringController} initialized with the respective FS Writer.
-	 * 
 	 * @param numRecordsWritten
-	 * @return
+	 * 
+	 * @return An {@link IMonitoringController} initialized with the respective FS Writer.
 	 */
 	protected abstract IMonitoringController createController(final int numRecordsWritten) throws Exception;
 

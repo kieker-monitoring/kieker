@@ -49,16 +49,12 @@ import kieker.common.record.IMonitoringRecord;
 		})
 public final class PipeReader extends AbstractReaderPlugin implements IPipeReader {
 
-	/**
-	 * This is the name of the default output port.
-	 */
+	/** This is the name of the default output port. */
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
 
-	/**
-	 * This is the configuration-parameter for the name of the pipe to be used.
-	 */
+	/** This is the configuration-parameter for the name of the pipe to be used. */
 	public static final String CONFIG_PROPERTY_NAME_PIPENAME = "pipeName";
-
+	/** The default used pipe name. */
 	public static final String CONFIG_PROPERTY_VALUE_PIPENAME_DEFAULT = "kieker-pipe";
 
 	private static final Log LOG = LogFactory.getLog(PipeReader.class);
@@ -134,6 +130,9 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 		return super.deliver(OUTPUT_PORT_NAME_RECORDS, rec);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void notifyPipeClosed() {
 		// Notify main thread
 		this.terminationLatch.countDown();

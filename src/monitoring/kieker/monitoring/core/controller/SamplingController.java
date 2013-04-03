@@ -85,6 +85,9 @@ public final class SamplingController extends AbstractController implements ISam
 		return sb.toString();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final ScheduledSamplerJob schedulePeriodicSampler(final ISampler sensor, final long initialDelay, final long period, final TimeUnit timeUnit) {
 		if (null == this.periodicSensorsPoolExecutor) {
 			LOG.warn("Won't schedule periodic sensor since Periodic Sampling is deactivated.");
@@ -97,6 +100,9 @@ public final class SamplingController extends AbstractController implements ISam
 		return job;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final boolean removeScheduledSampler(final ScheduledSamplerJob sensorJob) {
 		if (null == this.periodicSensorsPoolExecutor) {
 			LOG.warn("Won't schedule periodic sensor since Periodic Sampling is deactivated.");

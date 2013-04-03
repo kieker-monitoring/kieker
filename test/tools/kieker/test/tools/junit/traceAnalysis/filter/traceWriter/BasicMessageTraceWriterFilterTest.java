@@ -34,6 +34,9 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
  */
 public class BasicMessageTraceWriterFilterTest extends AbstractTraceWriterFilterTest { // NOPMD (TestClassWithoutTestCases)
 
+	/**
+	 * Default constructor.
+	 */
 	public BasicMessageTraceWriterFilterTest() {
 		// empty default constructor
 	}

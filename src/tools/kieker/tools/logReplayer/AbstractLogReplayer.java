@@ -59,7 +59,9 @@ public abstract class AbstractLogReplayer {
 	 * @param realtimeMode
 	 *            Determines whether to use real time mode or not.
 	 * @param keepOriginalLoggingTimestamps
+	 *            Determines whether the original logging timestamps will be used of whether the timestamps will be modified.
 	 * @param numRealtimeWorkerThreads
+	 *            Determines how many realtime worker threads should be used.
 	 * @param ignoreRecordsBeforeTimestamp
 	 *            The lower limit for the time stamps of the records.
 	 * @param ignoreRecordsAfterTimestamp

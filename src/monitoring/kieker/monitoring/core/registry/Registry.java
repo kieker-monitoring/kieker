@@ -117,17 +117,26 @@ public final class Registry<E> implements IRegistry<E> {
 		return h ^ (h >>> 16);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final void setRecordReceiver(final IMonitoringRecordReceiver recordReceiver) {
 		for (final Segment<E> segment : this.segments) {
 			segment.setRecordReceiver(recordReceiver);
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final int get(final E value) {
 		final int hash = Registry.hash(value);
 		return this.segments[(hash >>> this.segmentShift) & this.segmentMask].get(value, hash, this.nextId);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final E get(final int id) {
 		if (id > this.nextId.get()) {
 			return null;
@@ -135,6 +144,9 @@ public final class Registry<E> implements IRegistry<E> {
 		return this.getAll()[id];
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final E[] getAll() {
 		final int capacity = this.nextId.get();
 		if (this.eArrayCached.length != capacity) { // volatile read
@@ -158,6 +170,12 @@ public final class Registry<E> implements IRegistry<E> {
 		return this.nextId.get();
 	}
 
+	/**
+	 * Removes the given element from the registry.
+	 * 
+	 * @param value
+	 *            The element to remove.
+	 */
 	@SuppressWarnings("unchecked")
 	public final void remove(final E value) {
 		final int hash = Registry.hash(value);
@@ -165,6 +183,9 @@ public final class Registry<E> implements IRegistry<E> {
 		this.eArrayCached = (E[]) new Object[0]; // invalidate cache
 	}
 
+	/**
+	 * Clears the whole registry.
+	 */
 	@SuppressWarnings("unchecked")
 	public final void clear() {
 		for (final Segment<E> segment : this.segments) {

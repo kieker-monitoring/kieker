@@ -43,6 +43,7 @@ public abstract class AbstractKiekerTest { // NOPMD (no abstract methods)
 		LOG = LogFactory.getLog(AbstractKiekerTest.class);
 	}
 
+	/** This rule makes sure that we can dump the name of the currently executed test on the screen. */
 	@Rule
 	public TestName nameOfCurrentTest = new TestName(); // NOPMD NOCS
 

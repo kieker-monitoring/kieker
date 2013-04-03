@@ -39,6 +39,17 @@ public final class StringUtils {
 		// empty private constructor
 	}
 
+	/**
+	 * A simple helper method reading the given file's content as a string (UTF-8).
+	 * 
+	 * @param outputFile
+	 *            The file to read.
+	 * 
+	 * @return A string representation of the file's content.
+	 * 
+	 * @throws IOException
+	 *             If something went wrong during the reading.
+	 */
 	public static final String readOutputFileAsString(final File outputFile) throws IOException {
 		final byte[] buffer = new byte[(int) outputFile.length()];
 		BufferedInputStream f = null;

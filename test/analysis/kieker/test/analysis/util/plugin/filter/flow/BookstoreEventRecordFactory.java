@@ -62,7 +62,7 @@ public final class BookstoreEventRecordFactory {
 	 *            The session ID.
 	 * @param hostname
 	 *            The name of the host to be used for the trace.
-	 * @return
+	 * @return A Bookstore trace.
 	 */
 	public static TraceEventRecords validSyncTraceBeforeAfterEvents(final long firstTimestamp, final long traceId, final String sessionId,
 			final String hostname) {
@@ -137,7 +137,7 @@ public final class BookstoreEventRecordFactory {
 	 *            The session ID.
 	 * @param hostname
 	 *            The name of the host.
-	 * @return
+	 * @return A Bookstore trace.
 	 */
 	public static TraceEventRecords validSyncTraceAdditionalCallEvents(final long firstTimestamp, final long traceId, final String sessionId,
 			final String hostname) {
@@ -237,7 +237,7 @@ public final class BookstoreEventRecordFactory {
 	 * @param hostname
 	 *            The name of the host.
 	 * 
-	 * @return
+	 * @return A Bookstore trace.
 	 */
 	public static TraceEventRecords validSyncTraceAdditionalCallEventsGap(final long firstTimestamp, final long traceId, final String sessionId,
 			final String hostname) {
@@ -339,7 +339,7 @@ public final class BookstoreEventRecordFactory {
 	 * @param hostname
 	 *            The name of the host.
 	 * 
-	 * @return
+	 * @return A Bookstore trace.
 	 */
 	public static TraceEventRecords validSyncTraceSimpleEntryCallExit(final long firstTimestamp, final long traceId, final String sessionId,
 			final String hostname) {
@@ -396,7 +396,7 @@ public final class BookstoreEventRecordFactory {
 	 * @param hostname
 	 *            The name of the host for the trace.
 	 * 
-	 * @return
+	 * @return A Bookstore trace.
 	 */
 	public static TraceEventRecords validSyncTraceSimpleEntryCallReturnCallCallExit(final long firstTimestamp, final long traceId, final String sessionId,
 			final String hostname) {
@@ -465,7 +465,7 @@ public final class BookstoreEventRecordFactory {
 	 * @param hostname
 	 *            The name of the host for the trace.
 	 * 
-	 * @return
+	 * @return A Bookstore trace.
 	 */
 	public static TraceEventRecords validSyncTraceSimpleEntryCallCallExit(final long firstTimestamp, final long traceId, final String sessionId,
 			final String hostname) {

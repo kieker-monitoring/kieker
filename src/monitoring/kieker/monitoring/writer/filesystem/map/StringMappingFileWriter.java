@@ -30,10 +30,22 @@ public final class StringMappingFileWriter {
 
 	private final StringBuilder sb; // NOPMD (we need this buffer here)
 
+	/**
+	 * Creates a new instance of this class.
+	 */
 	public StringMappingFileWriter() {
 		this.sb = new StringBuilder(1024 * 1024); // reserve 1 MiB space
 	}
 
+	/**
+	 * Writes the given mapping to the internal string builder.
+	 * 
+	 * @param hashRecord
+	 *            The mapping to write.
+	 * 
+	 * @throws IOException
+	 *             Should not happen under normal circumstances.
+	 */
 	public final void write(final RegistryRecord hashRecord) throws IOException {
 		synchronized (this.sb) {
 			final StringBuilder sbl = this.sb;

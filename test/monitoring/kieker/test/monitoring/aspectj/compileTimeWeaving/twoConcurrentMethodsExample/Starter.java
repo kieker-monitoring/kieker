@@ -36,6 +36,9 @@ public class Starter extends Thread {
 	private static volatile boolean boolvar = true;
 	private final Random random = new Random();
 
+	/**
+	 * Creates a new instance of this class.
+	 */
 	public Starter() {
 		// nothing to do
 	}
@@ -65,6 +68,12 @@ public class Starter extends Thread {
 		}
 	}
 
+	/**
+	 * A simple wrapper method for {@link Thread#sleep(long)}.
+	 * 
+	 * @param sleeptime
+	 *            The time to sleep in milliseconds.
+	 */
 	@OperationExecutionMonitoringProbe
 	public void waitP(final long sleeptime) {
 		try {

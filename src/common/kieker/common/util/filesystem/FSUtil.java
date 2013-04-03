@@ -23,21 +23,36 @@ package kieker.common.util.filesystem;
  */
 public final class FSUtil { // NOCS NOPMD (constants interface)
 
+	/** The prefix of Kieker's record files. */
 	public static final String FILE_PREFIX = "kieker";
+	/** The name of Kieker's map files. */
 	public static final String MAP_FILENAME = "kieker.map";
 
+	/** The old prefix of Kieker's record files. */
 	public static final String LEGACY_FILE_PREFIX = "tpmon";
+	/** The old name of Kieker's map files. */
 	public static final String LEGACY_MAP_FILENAME = "tpmon.map";
 
+	/** The usual extension of Kieker's record files. */
 	public static final String NORMAL_FILE_EXTENSION = ".dat";
+	/** The extension of Kieker's zipped record files. */
 	public static final String ZIP_FILE_EXTENSION = ".zip";
 
+	/** The encoding usually used within Kieker. */
 	public static final String ENCODING = "UTF-8";
 
 	private FSUtil() {
 		// private default constructor
 	}
 
+	/**
+	 * Encodes the given line (replaces {@code \\} with {@code \\\\}, {@code \r} with {@code \\r} and {@code \n} with {@code \\n}).
+	 * 
+	 * @param str
+	 *            The string to encode.
+	 * 
+	 * @return The modified string.
+	 */
 	public static final String encodeNewline(final String str) {
 		final int length = str.length();
 		final StringBuilder sb = new StringBuilder(length + 16);
@@ -67,6 +82,14 @@ public final class FSUtil { // NOCS NOPMD (constants interface)
 		}
 	}
 
+	/**
+	 * Decodes the given line (replaces {@code \\\\} with {@code \\}, {@code \\r} with {@code \r} and {@code \\n} with {@code \n}).
+	 * 
+	 * @param str
+	 *            The string to decode.
+	 * 
+	 * @return The modified string.
+	 */
 	public static final String decodeNewline(final String str) {
 		final int length = str.length();
 		final StringBuilder sb = new StringBuilder(length);

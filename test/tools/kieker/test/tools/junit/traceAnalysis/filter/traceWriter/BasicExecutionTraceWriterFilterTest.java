@@ -33,6 +33,9 @@ import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
  */
 public class BasicExecutionTraceWriterFilterTest extends AbstractTraceWriterFilterTest { // NOPMD (TestClassWithoutTestCases)
 
+	/**
+	 * Default constructor.
+	 */
 	public BasicExecutionTraceWriterFilterTest() {
 		// empty default constructor
 	}

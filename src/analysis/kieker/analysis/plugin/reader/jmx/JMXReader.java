@@ -69,13 +69,20 @@ import kieker.common.record.IMonitoringRecord;
 		})
 public final class JMXReader extends AbstractReaderPlugin {
 
+	/** The name of the output port delivering the received records. */
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
 
+	/** The name of the configuration determining the JMX server. */
 	public static final String CONFIG_PROPERTY_NAME_SERVER = "server";
+	/** The name of the configuration determining the JMX port. */
 	public static final String CONFIG_PROPERTY_NAME_PORT = "port";
+	/** The name of the configuration determining the optional service URL. */
 	public static final String CONFIG_PROPERTY_NAME_SERVICEURL = "serviceUrl";
+	/** The name of the configuration determining the JMX domain. */
 	public static final String CONFIG_PROPERTY_NAME_DOMAIN = "domain";
+	/** The name of the configuration determining the logname used by the reader. */
 	public static final String CONFIG_PROPERTY_NAME_LOGNAME = "logname";
+	/** The name of the configuration determining whether the reader silently reconnects on any errors. */
 	public static final String CONFIG_PROPERTY_NAME_SILENT = "silentReconnect";
 
 	static final Log LOG = LogFactory.getLog(JMXReader.class); // NOPMD package for inner class

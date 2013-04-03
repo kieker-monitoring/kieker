@@ -19,10 +19,8 @@ package kieker.monitoring.probe.cxf;
 import javax.xml.namespace.QName;
 
 /**
- * Constants for the sessionIdentifier soap header.
- */
-
-/**
+ * This interface contains some constants for the sessionIdentifier soap header.
+ * 
  * @author Dennis Kieselhorst
  */
 public interface SOAPHeaderConstants { // NOPMD NOCS (constants interface)

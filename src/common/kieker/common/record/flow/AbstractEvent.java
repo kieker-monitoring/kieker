@@ -29,6 +29,12 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 
 	private final long timestamp;
 
+	/**
+	 * This constructor uses the given parameter to initialize the field of this record.
+	 * 
+	 * @param timestamp
+	 *            The timestamp of this record.
+	 */
 	public AbstractEvent(final long timestamp) {
 		this.timestamp = timestamp;
 	}

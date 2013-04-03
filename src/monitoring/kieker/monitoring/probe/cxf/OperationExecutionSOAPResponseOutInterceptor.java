@@ -57,14 +57,24 @@ public class OperationExecutionSOAPResponseOutInterceptor extends SoapHeaderOutF
 
 	private static final Log LOG = LogFactory.getLog(OperationExecutionSOAPResponseOutInterceptor.class);
 
+	/** The monitoring controller of this interceptor. */
 	protected final IMonitoringController monitoringController;
 	protected final ITimeSource timeSource;
 	protected final String vmName;
 
+	/**
+	 * Creates a new instance of this class, using the singleton instance of the {@link MonitoringController} as controller.
+	 */
 	public OperationExecutionSOAPResponseOutInterceptor() {
 		this(MonitoringController.getInstance());
 	}
 
+	/**
+	 * Creates a new instance of this class, using the given instance of a {@link MonitoringController} as controller.
+	 * 
+	 * @param monitoringCtrl
+	 *            The controller of this interceptor.
+	 */
 	public OperationExecutionSOAPResponseOutInterceptor(final IMonitoringController monitoringCtrl) {
 		this.monitoringController = monitoringCtrl;
 		this.timeSource = this.monitoringController.getTimeSource();

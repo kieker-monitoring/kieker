@@ -99,6 +99,21 @@ public abstract class AbstractController {
 	@Override
 	public abstract String toString();
 
+	/**
+	 * This is a helper method trying to find, create and initialize the given class, using its public constructor which accepts a single {@link Configuration}.
+	 * 
+	 * @param c
+	 *            This class defines the expected result of the method call.
+	 * @param classname
+	 *            The name of the class to be created.
+	 * @param configuration
+	 *            The configuration which will be used to initialize the class in question.
+	 * 
+	 * @return A new and initializes class instance if everything went well.
+	 * 
+	 * @param <C>
+	 *            The type of the returned class.
+	 */
 	@SuppressWarnings("unchecked")
 	protected static final <C> C createAndInitialize(final Class<C> c, final String classname, final Configuration configuration) {
 		C createdClass = null; // NOPMD (null)

@@ -27,6 +27,9 @@ import org.aspectj.lang.annotation.Pointcut;
 @Aspect
 public class FullInstrumentation extends AbstractAspect {
 
+	/**
+	 * Default constructor.
+	 */
 	public FullInstrumentation() {
 		// empty default constructor
 	}

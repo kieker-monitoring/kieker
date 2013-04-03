@@ -47,7 +47,7 @@ public class InvalidExecutionTraceWriterFilter extends AbstractInvalidExecutionT
 
 	/** This is the name of the input port receiving new (invalid) execution traces. */
 	public static final String INPUT_PORT_NAME_INVALID_EXECUTION_TRACES = "invalidExecutionTraces";
-
+	/** The name of the configuration determining the output file name. */
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FN = "outputFn";
 
 	private static final String ENCODING = "UTF-8";

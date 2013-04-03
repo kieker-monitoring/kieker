@@ -33,6 +33,9 @@ import kieker.monitoring.writer.filesystem.AsyncAsciiZipWriter;
  */
 public class BasicAsyncAsciiZipWriterReaderTest extends AbstractTestFSWriterReader { // NOPMD (TestClassWithoutTestCases) // NOCS (MissingCtorCheck)
 
+	/**
+	 * Default constructor.
+	 */
 	public BasicAsyncAsciiZipWriterReaderTest() {
 		// empty default constructor
 	}

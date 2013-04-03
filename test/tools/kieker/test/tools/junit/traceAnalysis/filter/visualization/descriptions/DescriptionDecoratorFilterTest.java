@@ -69,10 +69,19 @@ public class DescriptionDecoratorFilterTest extends AbstractKiekerTest {
 
 	private static GraphTestSetup testSetup;
 
+	/**
+	 * Default constructor.
+	 */
 	public DescriptionDecoratorFilterTest() {
 		// empty default constructor
 	}
 
+	/**
+	 * Initializes the test setup.
+	 * 
+	 * @throws AnalysisConfigurationException
+	 *             If the preparation of the analysis failed.
+	 */
 	@BeforeClass
 	public static void prepareSetup() throws AnalysisConfigurationException {
 		final AnalysisController analysisController = new AnalysisController();

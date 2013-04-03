@@ -36,6 +36,14 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	private final int id;
 	private final Object object;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param id
+	 *            The ID.
+	 * @param object
+	 *            The object.
+	 */
 	public RegistryRecord(final int id, final Object object) {
 		this.id = id;
 		this.object = object;

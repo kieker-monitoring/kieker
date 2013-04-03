@@ -58,6 +58,9 @@ public final class RegistryController extends AbstractController implements IReg
 		return sb.toString();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final int getIdForString(final String string) {
 		return this.stringRegistry.get(string);
 	}

@@ -30,6 +30,9 @@ import kieker.common.util.filesystem.FSUtil;
  */
 public class KiekerLogDirFilter implements FilenameFilter { // NOPMD (TestClassWithoutTestCases)
 
+	/**
+	 * Default constructor.
+	 */
 	public KiekerLogDirFilter() {
 		// empty default constructor
 	}

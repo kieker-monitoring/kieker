@@ -42,9 +42,23 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
 	private static final TraceRegistry TRACEREGISTRY = TraceRegistry.INSTANCE;
 
+	/**
+	 * The pointcut for the monitored constructors. Inheriting classes should extend the pointcut in order to find the correct constructor executions (e.g. all
+	 * constructors or only constructors with specific annotations).
+	 */
 	@Pointcut
 	public abstract void monitoredConstructor();
 
+	/**
+	 * The advice used around the constructor executions.
+	 * 
+	 * @param thisObject
+	 * @param thisJoinPoint
+	 * 
+	 * @return
+	 * 
+	 * @throws Throwable
+	 */
 	@Around("monitoredConstructor() && this(thisObject) && notWithinKieker()")
 	public Object constructor(final Object thisObject, final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
 		final String signature = this.signatureToLongString(thisJoinPoint.getSignature());

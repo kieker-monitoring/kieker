@@ -75,7 +75,9 @@ import kieker.monitoring.sampler.sigar.samplers.CPUsCombinedPercSampler;
  * @since 1.3
  */
 public class CPUsCombinedServletContextListener implements ServletContextListener {
+	/** The default used sensor interval in seconds. */
 	public static final long DEFAULT_SENSOR_INTERVAL_SECONDS = 15;
+	/** The default used initial delay in seconds. */
 	public static final long DEFAULT_SENSOR_INITIAL_DELAY_SECONDS = 0;
 
 	/** Prefix for parameters used in the web.xml file. */
@@ -109,10 +111,8 @@ public class CPUsCombinedServletContextListener implements ServletContextListene
 		// nothing to do
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.servlet.ServletContextListener#contextDestroyed(javax.servlet.ServletContextEvent)
+	/**
+	 * {@inheritDoc}
 	 */
 	public void contextDestroyed(final ServletContextEvent sce) {
 		for (final ScheduledSamplerJob s : this.samplerJobs) {
@@ -120,10 +120,8 @@ public class CPUsCombinedServletContextListener implements ServletContextListene
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.servlet.ServletContextListener#contextInitialized(javax.servlet.ServletContextEvent)
+	/**
+	 * {@inheritDoc}
 	 */
 	public void contextInitialized(final ServletContextEvent sce) {
 		this.initParameters(sce.getServletContext());

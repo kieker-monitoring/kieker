@@ -65,10 +65,14 @@ import kieker.common.record.IMonitoringRecord;
 		})
 public final class JMSReader extends AbstractReaderPlugin {
 
+	/** The name of the output port delivering the received records. */
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
 
+	/** The name of the configuration determining the JMS provider URL. */
 	public static final String CONFIG_PROPERTY_NAME_PROVIDERURL = "jmsProviderUrl";
+	/** The name of the configuration determining the JMS destination (e.g. queue1). */
 	public static final String CONFIG_PROPERTY_NAME_DESTINATION = "jmsDestination";
+	/** The name of the configuration determining the name of the used JMS factory. */
 	public static final String CONFIG_PROPERTY_NAME_FACTORYLOOKUP = "jmsFactoryLookupName";
 
 	static final Log LOG = LogFactory.getLog(JMSReader.class); // NOPMD package for inner class
@@ -131,6 +135,8 @@ public final class JMSReader extends AbstractReaderPlugin {
 
 	/**
 	 * A call to this method is a blocking call.
+	 * 
+	 * @return true if the method succeeds, false otherwise.
 	 */
 	public boolean read() {
 		boolean retVal = true;

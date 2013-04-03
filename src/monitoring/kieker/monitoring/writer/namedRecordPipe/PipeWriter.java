@@ -45,12 +45,18 @@ public final class PipeWriter extends AbstractMonitoringWriter implements IPipeW
 		this.pipe = Broker.INSTANCE.acquirePipe(pipeName);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final void terminate() {
 		if (this.pipe != null) {
 			this.pipe.close();
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 		return this.pipe.writeMonitoringRecord(monitoringRecord);
 	}

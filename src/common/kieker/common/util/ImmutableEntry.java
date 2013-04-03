@@ -57,7 +57,15 @@ public class ImmutableEntry<K, V> implements Map.Entry<K, V> {
 		return this.value;
 	}
 
-	public V setValue(final V arg0) {
+	/**
+	 * This method is not supported, as the entry is immutable.
+	 * 
+	 * @param v
+	 *            The argument. It will be ignored.
+	 * 
+	 * @return Nothing. The method throws an exception.
+	 */
+	public V setValue(final V v) {
 		throw new UnsupportedOperationException("This entry is immutable");
 	}
 

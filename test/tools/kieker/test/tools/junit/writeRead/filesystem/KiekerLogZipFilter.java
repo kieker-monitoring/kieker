@@ -30,6 +30,9 @@ import kieker.common.util.filesystem.FSUtil;
  */
 public class KiekerLogZipFilter implements FilenameFilter { // NOPMD (TestClassWithoutTestCases)
 
+	/**
+	 * Default constructor.
+	 */
 	public KiekerLogZipFilter() {
 		// empty default constructor
 	}

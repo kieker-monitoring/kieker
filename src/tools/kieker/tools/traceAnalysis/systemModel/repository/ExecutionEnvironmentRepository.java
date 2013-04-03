@@ -46,11 +46,10 @@ public class ExecutionEnvironmentRepository extends AbstractSystemSubRepository 
 	}
 
 	/**
-	 * Returns the instance for the passed namedIdentifier; null if no instance
-	 * with this namedIdentifier.
-	 * 
 	 * @param namedIdentifier
 	 *            The identifier to search for.
+	 * 
+	 * @return The instance for the passed namedIdentifier; null if no instance with this namedIdentifier.
 	 */
 	public final ExecutionContainer lookupExecutionContainerByNamedIdentifier(final String namedIdentifier) {
 		return this.executionContainersByName.get(namedIdentifier);
