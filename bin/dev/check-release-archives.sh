@@ -226,7 +226,7 @@ function assert_files_exist_bin {
     assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/sigar-"*".dll"
     assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/sigar-"*".lib"
 	
-	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/classes/META-INF/kieker.monitoring.properties"
+	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/kieker.monitoring.properties"
 	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/aspectjweaver-"*
 	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/kieker-"*".jar"
 	assert_file_NOT_exists "lib/static-analysis/"

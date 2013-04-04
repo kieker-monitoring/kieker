@@ -519,7 +519,7 @@
 			<tarfileset file="${readme.bin.file}" fullpath="${kieker.dist.name}/${readme.file}" />
 			
 			<tarfileset file="${kieker.monitoring.default.properties}"
-						fullpath="${kieker.dist.name}/${example.javaee.jetty.dir}/webapps/jpetstore/WEB-INF/classes/META-INF/kieker.monitoring.properties" />
+						fullpath="${kieker.dist.name}/${example.javaee.jetty.dir}/kieker.monitoring.properties" />
 			<tarfileset file="${dist.dir}/${dist.kieker.main.jar}"
 						prefix="${kieker.dist.name}/${example.javaee.jetty.dir}/webapps/jpetstore/WEB-INF/lib" />
 			<tarfileset file="${lib.dir}/aspectjweaver-*"
@@ -581,7 +581,7 @@
 			<zipfileset file="${readme.bin.file}" fullpath="${kieker.dist.name}/${readme.file}" />
 			
 			<zipfileset file="${kieker.monitoring.default.properties}"
-						fullpath="${kieker.dist.name}/${example.javaee.jetty.dir}/webapps/jpetstore/WEB-INF/classes/META-INF/kieker.monitoring.properties" />
+						fullpath="${kieker.dist.name}/${example.javaee.jetty.dir}/kieker.monitoring.properties" />
 			<zipfileset file="${dist.dir}/${dist.kieker.main.jar}"
 						prefix="${kieker.dist.name}/${example.javaee.jetty.dir}/webapps/jpetstore/WEB-INF/lib" />
 			<zipfileset file="${lib.dir}/aspectjweaver-*"
