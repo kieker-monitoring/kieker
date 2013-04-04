@@ -24,11 +24,6 @@ import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 
-/**
- * This filter uses its configuration to filter the incoming response times based on a threshold.
- * 
- * @author Nils Christian Ehmke
- */
 @Plugin(
 		name = "Response time filter",
 		description = "Filters incoming response times based on a threshold",

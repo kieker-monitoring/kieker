@@ -25,7 +25,7 @@ public class MyResponseTimeRecord extends AbstractMonitoringRecord
 	private static final long serialVersionUID = 1775L;
 	private static final Class<?>[] TYPES = { String.class, String.class, long.class };
 
-	/* Attributes storing the actual monitoring data: */
+	// Attributes storing the actual monitoring data:
 	private final String className;
 	private final String methodName;
 	private final long responseTimeNanos;

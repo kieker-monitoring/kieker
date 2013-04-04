@@ -27,11 +27,6 @@ import kieker.common.logging.LogFactory;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 
-/**
- * The class {@link MyPipeReader} uses a registered and configured in-memory pipe to receive monitoring records.
- * 
- * @author Nils Christian Ehmke
- */
 @Plugin(
 		name = "Pipe reader",
 		description = "Reads records from a configured pipe",
@@ -73,15 +68,15 @@ public class MyPipeReader extends AbstractReaderPlugin {
 
 	public boolean read() {
 		try {
-			/* Wait max. 4 seconds for the next data. */
+			// Wait max. 4 seconds for the next data.
 			PipeData data = this.pipe.poll(4);
 			while (data != null) {
-				/* Create new record, init from received array ... */
+				// Create new record, init from received array ...
 				final IMonitoringRecord record = // throws MonitoringRecordException:
 				AbstractMonitoringRecord.createFromArray(data.getRecordType(),
 						data.getRecordData());
 				record.setLoggingTimestamp(data.getLoggingTimestamp());
-				/* ...and delegate the task of delivering to the super class. */
+				// ...and delegate the task of delivering to the super class.
 				super.deliver(MyPipeReader.OUTPUT_PORT_NAME, record);
 				// next turn
 				data = this.pipe.poll(4);

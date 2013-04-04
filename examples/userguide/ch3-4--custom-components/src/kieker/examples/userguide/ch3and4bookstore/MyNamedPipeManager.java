@@ -23,7 +23,7 @@ public class MyNamedPipeManager {
 
 	private static final MyNamedPipeManager PIPE_MGR_INSTANCE = new MyNamedPipeManager();
 
-	/* Not synchronized! */
+	// Not synchronized!
 	private final Map<String, MyPipe> pipeMap = new HashMap<String, MyPipe>();
 
 	public static MyNamedPipeManager getInstance() {

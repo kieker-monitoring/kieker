@@ -17,6 +17,7 @@
 package kieker.examples.userguide.ch3and4bookstore;
 
 public class Catalog {
+
 	public void getBook(final boolean complexQuery) {
 		try {
 			if (complexQuery) {

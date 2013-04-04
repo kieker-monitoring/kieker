@@ -36,7 +36,7 @@ public class MyPipeWriter extends AbstractMonitoringWriter {
 
 	public boolean newMonitoringRecord(final IMonitoringRecord record) {
 		try {
-			/* Just write the content of the record into the pipe. */
+			// Just write the content of the record into the pipe.
 			this.pipe.put(new PipeData(record.getLoggingTimestamp(),
 					record.toArray(), record.getClass()));
 		} catch (final InterruptedException e) {

@@ -19,6 +19,7 @@ package kieker.examples.userguide.ch3and4bookstore;
 import kieker.common.record.IMonitoringRecord;
 
 public class PipeData {
+
 	private final long loggingTimestamp;
 	private final Object[] recordData;
 	private final Class<? extends IMonitoringRecord> recordType;

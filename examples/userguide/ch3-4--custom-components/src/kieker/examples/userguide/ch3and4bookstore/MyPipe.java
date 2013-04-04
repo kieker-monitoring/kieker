@@ -20,6 +20,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 public class MyPipe {
+
 	private final String pipeName;
 	private final LinkedBlockingQueue<PipeData> buffer =
 			new LinkedBlockingQueue<PipeData>();

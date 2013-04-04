@@ -31,10 +31,8 @@ public class CRM {
 	}
 
 	public void getOffers() {
-		/*
-		 * Call the Catalog component's getBook() method
-		 * and log its entry and exit timestamp using Kieker.
-		 */
+		// Call the Catalog component's getBook() method
+		// and log its entry and exit timestamp using Kieker.
 		final long tin = MONITORING_CONTROLLER.getTimeSource().getTime();
 		this.catalog.getBook(false);
 		final long tout = MONITORING_CONTROLLER.getTimeSource().getTime();

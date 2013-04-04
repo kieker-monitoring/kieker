@@ -55,7 +55,7 @@ public final class Benchmark {
 
 	public static void main(final String[] args) throws InterruptedException {
 
-		/* 1. Preparations */
+		// 1. Preparations
 		Benchmark.parseAndInitializeArguments(args);
 
 		System.out.println(" # Experiment run configuration:"); // NOPMD (System.out)
@@ -65,7 +65,7 @@ public final class Benchmark {
 		System.out.println(" # 4. Total-Calls " + Benchmark.totalCalls); // NOPMD (System.out)
 		System.out.println(" # 5. Method-Time " + Benchmark.methodTime); // NOPMD (System.out)
 
-		/* 2. Initialize Threads and Classes */
+		// 2. Initialize Threads and Classes
 		final CountDownLatch doneSignal = new CountDownLatch(Benchmark.totalThreads);
 		final MonitoredClass mc = new MonitoredClass();
 		final BenchmarkingThread[] threads = new BenchmarkingThread[Benchmark.totalThreads];
@@ -89,12 +89,12 @@ public final class Benchmark {
 			Thread.sleep(5000);
 		}
 		System.out.print(" # 6. Starting benchmark ... "); // NOPMD (System.out)
-		/* 3. Starting Threads */
+		// 3. Starting Threads
 		for (int i = 0; i < Benchmark.totalThreads; i++) {
 			threads[i].start();
 		}
 
-		/* 4. Wait for all Threads */
+		// 4. Wait for all Threads
 		try {
 			doneSignal.await();
 		} catch (final InterruptedException e) {
@@ -103,7 +103,7 @@ public final class Benchmark {
 		}
 		System.out.println("done"); // NOPMD (System.out)
 
-		/* 5. Print experiment statistics */
+		// 5. Print experiment statistics
 		System.out.print(" # 7. Writing results ... "); // NOPMD (System.out)
 		// CSV Format: configuration;order_index;Thread-ID;duration_nsec
 		long[] timings;

@@ -29,10 +29,9 @@ public final class Starter {
 	private Starter() {}
 
 	public static void main(final String[] args) throws Exception {
-		/*
-		 * Spawn a thread that performs asynchronous requests
-		 * to a bookstore.
-		 */
+		// Spawn a thread that performs asynchronous requests
+		// to a bookstore.
+
 		new Thread(new Runnable() {
 
 			public void run() {

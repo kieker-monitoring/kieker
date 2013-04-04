@@ -19,6 +19,7 @@ package kieker.examples.userguide.ch5bookstore;
 import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 
 public class CRM {
+
 	private final Catalog catalog;
 
 	public CRM(final Catalog catalog) {
