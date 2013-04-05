@@ -58,7 +58,7 @@ the class \class{AnalysisController}. %
 Setting up and running an analysis with \KiekerAnalysisPart{} requires the %
 following steps to be performed, as sketched in Section~\ref{sec:example:analysis} already:
 
-\enlargethispage{1cm}
+\enlargethispage{1.2cm}
 
 \medskip
 
@@ -289,6 +289,8 @@ output port name and the event to be sent as arguments. Listing~%
 shows how the example filter plugin \class{MyResponseTimeFilter} delivers records %
 to its two output ports declared in the \class{@Plugin} annotation.
 
+\pagebreak
+
 \setJavaCodeListing
 \lstinputlisting[firstline=65, firstnumber=65, lastline=71, caption={Plugin sending events to output ports}, label=listing:MyResponseTimeFilterDelivers]%
 {\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyResponseTimeFilter.java}
@@ -322,19 +324,21 @@ The \method{read} method should be implemented synchronously, i.e., it should %
 return after reading is finished or has been aborted via an invocation of the %
 \method{terminate} method.
 
+% If there is nothing on the pipe to be read, the reader waits 4 seconds at maximum before it terminates.
+% \setJavaCodeListing
+% \lstinputlisting[firstline=29, firstnumber=29, caption=MyPipeReader.java (excerpt), label=listing:MyReader,float]{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeReader.java}
+
+\enlargethispage{1cm}
+
+\setJavaCodeListing
+\lstinputlisting[firstline=30, firstnumber=30, lastline=42, caption={@Plugin annotation for the example reader}, label=listing:MyPipeReaderPluginAnnotation]%
+{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeReader.java}
+
 Listing~\ref{listing:MyPipeReaderPluginAnnotation} shows the \class{@Plugin} %
 annotation  of the example reader \class{MyPipeReader}. Reading monitoring %
 records from the monitoring pipe introduced in the previous Chapter~%
 \ref{sec:monitoring-log-writers}, the reader provides received monitoring %
 records via its output port.
-
-% If there is nothing on the pipe to be read, the reader waits 4 seconds at maximum before it terminates.
-% \setJavaCodeListing
-% \lstinputlisting[firstline=29, firstnumber=29, caption=MyPipeReader.java (excerpt), label=listing:MyReader,float]{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeReader.java}
-
-\setJavaCodeListing
-\lstinputlisting[firstline=30, firstnumber=30, lastline=42, caption={@Plugin annotation for the example reader}, label=listing:MyPipeReaderPluginAnnotation]%
-{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeReader.java}
 
 \noindent Listing~\ref{listing:MyPipeReaderInit} shows an excerpt of the \class{MyPipeReader}'s %
 constructor. In this case, the reader reads the pipe name from the %

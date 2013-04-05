@@ -249,8 +249,10 @@ Finally, a record is created (see lines~40--46) and stored by calling the monito
 \noindent %
 The next step after instrumenting the code is running the instrumented application. Listing~\ref{lst:bookstoreStarterLinux} shows the commands to compile and run the application under \UnixLikeSystems{}. Listing \ref{lst:bookstoreStarterWin} shows the same commands for Windows. The expected working directory is the base directory of this example, i.e. %
  \dir{\manualInstrumentedBookstoreApplicationDirDistro{}/}.
+ 
+\pagebreak
 
-\enlargethispage{1cm}
+% \enlargethispage{1cm}
 
 \setBashListing
 \input{ch2-quickstart-example_Compile_Run_Example_1.inc}
@@ -355,12 +357,6 @@ be found in \Kieker's \file{lib/} directory) need to be added to the classpath. 
 \label{lst:analysisExampleLayout}
 \end{figure}
 
-\begin{figure}[t]
-\includegraphics[width=\textwidth]{images/ch2-example-pnp}
-\caption{Example pipe-and-filter configuration}
-\label{fig:example:ch2:pipe-and-filter}
-\end{figure}
-
 \noindent The analysis application developed in this section comprises the file %
 \file{BookstoreAnalysisStarter.java}, as shown in Figure~\ref{lst:analysisExampleLayout}. %
 This file can also be found in the directory \dir{\manualInstrumentedBookstoreApplicationDirDistro{}/}.
@@ -371,6 +367,13 @@ and passes these to the \class{TeeFilter} plugin; the \class{TeeFilter} plugin %
 reads events of arbitrary type (i.e., Java \class{Object}), prints them to a %
 configured output stream, and also relays them to filters connected to the %
 filter's output port \method{relayedEvents}. %
+
+\begin{figure}[h]
+\includegraphics[width=\textwidth]{images/ch2-example-pnp}
+\caption{Example pipe-and-filter configuration}
+\label{fig:example:ch2:pipe-and-filter}
+\end{figure}
+
 Currently, \KiekerAnalysisPart{} pipe-and-filter configurations can only %
 be created programmatically, i.e., by configuring, instantiating, and %
 connecting the plugins in a Java program. %
@@ -378,13 +381,13 @@ For the example, this is demonstrated in Listing~\ref{lst:BookstoreAnalysisStart
 which shows an excerpt from the \class{BookstoreAnalysisStarter}'s \method{main} %
 method. %
 
-\
+\pagebreak
 
 \setJavaCodeListing
 \lstinputlisting[gobble=4,caption=BookstoreAnalysisStarter.java (excerpt from \method{main} method),label=lst:BookstoreAnalysisStarter,firstline=37,firstnumber=36,lastline=56]%
 {\manualInstrumentedBookstoreApplicationDir/src/kieker/examples/userguide/ch2bookstore/manual/BookstoreAnalysisStarter.java}
 
-\pagebreak
+% \pagebreak
 
 \noindent The \class{BookstoreAnalysisStarter} follows a simple scheme. Each %
 analysis tool has to create at least one \class{AnalysisController} which can be %
@@ -406,8 +409,9 @@ The Listings~\ref{lst:bookstoreAnalysisStarterLinux} and \ref{lst:bookstoreAnaly
 describe how the analysis application can be compiled and executed under \UnixLikeSystems{} and Windows.
 
 \setBashListing
-
+\enlargethispage{1.0cm}
 \input{ch2-quickstart-example_Compile_Run_Example_2.inc.tex}
+
 \input{ch2-quickstart-example_Compile_Run_Example_2.inc-win.tex}
 
 \noindent You need to make sure that the application gets the correct path from the monitoring run.
