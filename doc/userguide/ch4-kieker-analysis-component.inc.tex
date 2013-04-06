@@ -78,8 +78,8 @@ method. Plugins send data via their output ports to connected input ports of oth
 plugins. Being the source in a pipe-and-filter architecture, readers don't have %
 input ports. Plugins can be connected to repositories, which may provide %
 shared services, such as managed access to a common architectural model %
-of the analyzed system. As soon as the reader returns from the execution of its \method{read}
-method, the method \method{terminate} of each registered plugin is called by the %
+of the analyzed system. As soon as all readers have returned from the execution of their \method{read}
+methods, the method \method{terminate} of each registered plugin is called by the %
 \class{AnalysisController}. \KiekerAnalysisPart{} configurations can be saved %
 to a \class{.kax} file by calling the \class{AnalysisController}'s \method{saveToFile} method. %
 The \class{AnalysisController} provides a constructor which accepts the %
