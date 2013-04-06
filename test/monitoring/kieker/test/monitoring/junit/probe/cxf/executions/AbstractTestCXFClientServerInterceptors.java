@@ -56,7 +56,9 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
 	protected static final SOAPTraceRegistry SOAP_REGISTRY = SOAPTraceRegistry.getInstance();
 
+	/** This constant is used as the hostname of the server. */
 	protected static final String SERVER_HOSTNAME = "srv";
+	/** This constant is used as the hostname of the client. */
 	protected static final String CLIENT_HOSTNAME = "client";
 
 	private static final String SERVICE_ADDRESS_TEMPLATE = "http://localhost:909X/bookstore";
@@ -93,10 +95,10 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 	}
 
 	/**
-	 * Workaround to have unique port numbers among the CXF tests. A mechanism having a static
-	 * integer increment by each instance did work under Eclipse, but not when executed by ant.
+	 * Workaround to have unique port numbers among the CXF tests. A mechanism having a static integer increment by each instance did work under Eclipse, but not
+	 * when executed by ant.
 	 * 
-	 * @return
+	 * @return A port digit.
 	 */
 	protected abstract int getPortDigit();
 

@@ -51,6 +51,7 @@ import kieker.test.tools.util.StringUtils;
  */
 public abstract class AbstractTraceWriterFilterTest extends AbstractKiekerTest {
 
+	/** This constant contains the line separator for the current system. */
 	protected static final String SYSTEM_NEWLINE_STRING = System.getProperty("line.separator");
 
 	private static final String OUTPUT_BASE_FN = "NLdQ3wsS.out"; // the name doesn't matter
@@ -79,6 +80,11 @@ public abstract class AbstractTraceWriterFilterTest extends AbstractKiekerTest {
 
 	private volatile File outputFile = null; // NOPMD (init for fb)
 
+	/**
+	 * Initializes the test setup.
+	 * 
+	 * @throws Exception
+	 */
 	@Before
 	public void setUp() throws Exception {
 		this.tmpFolder.create();

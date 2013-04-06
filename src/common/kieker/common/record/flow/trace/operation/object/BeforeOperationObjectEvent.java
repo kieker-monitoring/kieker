@@ -37,9 +37,25 @@ public class BeforeOperationObjectEvent extends BeforeOperationEvent implements 
 
 	private final int objectId;
 
-	public BeforeOperationObjectEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSiganture, final String classSignature,
+	/**
+	 * This constructor uses the given parameters to initialize the fields of this record.
+	 * 
+	 * @param timestamp
+	 *            The timestamp of this record.
+	 * @param traceId
+	 *            The trace ID.
+	 * @param orderIndex
+	 *            The order index.
+	 * @param operationSignature
+	 *            The operation signature. This parameter can be null.
+	 * @param classSignature
+	 *            The class signature. This parameter can be null.
+	 * @param objectId
+	 *            The object ID.
+	 */
+	public BeforeOperationObjectEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature,
 			final int objectId) {
-		super(timestamp, traceId, orderIndex, operationSiganture, classSignature);
+		super(timestamp, traceId, orderIndex, operationSignature, classSignature);
 		this.objectId = objectId;
 	}
 

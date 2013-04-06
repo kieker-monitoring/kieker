@@ -47,9 +47,27 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 
 	private final int objectId;
 
-	public AfterOperationFailedObjectEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSiganture,
+	/**
+	 * This constructor initializes the fields of the record using the given parameters.
+	 * 
+	 * @param timestamp
+	 *            The timestamp.
+	 * @param traceId
+	 *            The trace ID.
+	 * @param orderIndex
+	 *            The order index.
+	 * @param operationSignature
+	 *            The operation signature. This parameter can be null.
+	 * @param classSignature
+	 *            The class signature. This parameter can be null.
+	 * @param cause
+	 *            The cause. This parameter can be null.
+	 * @param objectId
+	 *            The object ID.
+	 */
+	public AfterOperationFailedObjectEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature,
 			final String classSignature, final String cause, final int objectId) {
-		super(timestamp, traceId, orderIndex, operationSiganture, classSignature, cause);
+		super(timestamp, traceId, orderIndex, operationSignature, classSignature, cause);
 		this.objectId = objectId;
 	}
 

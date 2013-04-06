@@ -195,6 +195,8 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 
 	/**
 	 * Borrowed from {@link kieker.test.tools.junit.traceAnalysis.filter.TestTraceReconstructionFilter}.
+	 * 
+	 * @return An execution trace from the Bookstore example.
 	 */
 	public ExecutionTrace genValidBookstoreTraceNoExitGetOrders() throws InvalidTraceException {
 		final ExecutionTrace executionTrace =

@@ -86,6 +86,16 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		return retval;
 	}
 
+	/**
+	 * This advice is used around static operations.
+	 * 
+	 * @param thisJoinPoint
+	 *            The joint point of the advice.
+	 * 
+	 * @return The return value of the joint point's {@code proceed} method.
+	 * 
+	 * @throws Throwable
+	 */
 	@Around("monitoredOperation() && !this(java.lang.Object) && notWithinKieker()")
 	public Object staticOperation(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
 		final Signature sig = thisJoinPoint.getSignature();

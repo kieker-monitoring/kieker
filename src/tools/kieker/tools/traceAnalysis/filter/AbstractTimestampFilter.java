@@ -79,14 +79,16 @@ public abstract class AbstractTimestampFilter extends AbstractFilterPlugin {
 	}
 
 	/**
-	 * Inheriting properties must provide the name of the configuration
-	 * property used to store the minimum time value to be accepted.
+	 * Inheriting properties must provide the name of the configuration property used to store the minimum time value to be accepted.
+	 * 
+	 * @return The name of the configuration.
 	 */
 	protected abstract String getConfigurationPropertyIgnoreBeforeTimestamp();
 
 	/**
-	 * Inheriting properties must provide the name of the configuration
-	 * property used to store the maximum time value to be accepted.
+	 * Inheriting properties must provide the name of the configuration property used to store the maximum time value to be accepted.
+	 * 
+	 * @return The name of the configuration.
 	 */
 	protected abstract String getConfigurationPropertyIgnoreAfterTimestamp();
 

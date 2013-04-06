@@ -36,6 +36,12 @@ public final class PipeWriter extends AbstractMonitoringWriter implements IPipeW
 
 	private final Pipe pipe;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration used to initialize the pipe writer.
+	 */
 	public PipeWriter(final Configuration configuration) {
 		super(configuration);
 		final String pipeName = configuration.getStringProperty(CONFIG_PIPENAME);

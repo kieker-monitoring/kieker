@@ -38,9 +38,6 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
- * This class has exactly one input port named "in" and two output ports named
- * "messageTraceOutput", "executionTraceOutput".
- * 
  * @author Andre van Hoorn
  * 
  * @since 1.2

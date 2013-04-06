@@ -32,6 +32,12 @@ public final class RegistryController extends AbstractController implements IReg
 
 	private final IRegistry<String> stringRegistry;
 
+	/**
+	 * Creates a new instance of this class using the given configuration to initialize the class.
+	 * 
+	 * @param configuration
+	 *            The configuration used to initialize this controller.
+	 */
 	protected RegistryController(final Configuration configuration) {
 		super(configuration);
 		this.stringRegistry = new Registry<String>();

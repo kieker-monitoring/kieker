@@ -34,6 +34,7 @@ import kieker.monitoring.sampler.sigar.samplers.MemSwapUsageSampler;
  * @since 1.3
  */
 public enum SigarSamplerFactory implements ISigarSamplerFactory { // Singleton pattern (Effective Java #3)
+	/** The singleton instance. */
 	INSTANCE;
 
 	/**
@@ -64,14 +65,23 @@ public enum SigarSamplerFactory implements ISigarSamplerFactory { // Singleton p
 		return this.sigar;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public CPUsCombinedPercSampler createSensorCPUsCombinedPerc() {
 		return new CPUsCombinedPercSampler(this.sigar);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public CPUsDetailedPercSampler createSensorCPUsDetailedPerc() {
 		return new CPUsDetailedPercSampler(this.sigar);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public MemSwapUsageSampler createSensorMemSwapUsage() {
 		return new MemSwapUsageSampler(this.sigar);
 	}

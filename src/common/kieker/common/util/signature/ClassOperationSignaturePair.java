@@ -165,16 +165,16 @@ public class ClassOperationSignaturePair {
 	}
 
 	/**
-	 * Given a fully-qualified class name <i>fqClassName</i> (e.g., <code>a.b.c.D</code>) and
-	 * and a {@link Signature} (e.g., for operation <code>op1</code> with modifiers <code>public</code> and <code>static</code>, the return type <code>Boolean</code>
-	 * ,
-	 * and the parameter types <code>Integer</code> and <code>Long</code>), the method
-	 * returns an operation signature string (e.g., <code>public static Boolean a.b.c.D.op1(Integer, Long)</code>).
+	 * Given a fully-qualified class name <i>fqClassName</i> (e.g., <code>a.b.c.D</code>) and a {@link Signature} (e.g., for operation <code>op1</code> with
+	 * modifiers <code>public</code> and <code>static</code>, the return type <code>Boolean</code> , and the parameter types <code>Integer</code> and
+	 * <code>Long</code>), the method returns an operation signature string (e.g., <code>public static Boolean a.b.c.D.op1(Integer, Long)</code>).
 	 * 
 	 * @param fqClassName
 	 *            The fully qualified class name.
 	 * @param signature
 	 *            The signature string.
+	 * 
+	 * @return An operation signature string as defined by the given parameters.
 	 */
 	public static String createOperationSignatureString(final String fqClassName, final Signature signature) {
 		if ((signature.getModifier().length != 0) && (!signature.hasReturnType())) {

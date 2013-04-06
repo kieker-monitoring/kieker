@@ -31,8 +31,22 @@ public class AfterOperationEvent extends AbstractOperationEvent {
 		String.class, // OperationEvent.classSignature
 	};
 
-	public AfterOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSiganture, final String classSignature) {
-		super(timestamp, traceId, orderIndex, operationSiganture, classSignature);
+	/**
+	 * This constructor initializes the fields of the record using the given parameters.
+	 * 
+	 * @param timestamp
+	 *            The timestamp.
+	 * @param traceId
+	 *            The trace ID.
+	 * @param orderIndex
+	 *            The order index.
+	 * @param operationSignature
+	 *            The operation signature. This parameter can be null.
+	 * @param classSignature
+	 *            The class signature. This parameter can be null.
+	 */
+	public AfterOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature) {
+		super(timestamp, traceId, orderIndex, operationSignature, classSignature);
 	}
 
 	/**

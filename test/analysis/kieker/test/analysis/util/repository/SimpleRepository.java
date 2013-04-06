@@ -31,8 +31,9 @@ import kieker.common.configuration.Configuration;
 @Repository(programmaticOnly = true, name = SimpleRepository.REPOSITORY_NAME, description = SimpleRepository.REPOSITORY_DESCRIPTION)
 public class SimpleRepository extends AbstractRepository { // NOPMD (SubClassOfTest)
 
+	/** The repository's dummy name. */
 	public static final String REPOSITORY_NAME = "repoName-hNcuzIKc8e";
-
+	/** The repository's dummy description. */
 	public static final String REPOSITORY_DESCRIPTION = "repoDescription-DEYmVN6sEp";
 
 	/**

@@ -31,6 +31,16 @@ public final class SplitEvent extends AbstractTraceEvent {
 		int.class, // TraceEvent.orderIndex
 	};
 
+	/**
+	 * This constructor uses the given parameters to initialize the fields of this record.
+	 * 
+	 * @param timestamp
+	 *            The timestamp.
+	 * @param traceId
+	 *            The trace ID.
+	 * @param orderIndex
+	 *            The order index.
+	 */
 	public SplitEvent(final long timestamp, final long traceId, final int orderIndex) {
 		super(timestamp, traceId, orderIndex);
 	}

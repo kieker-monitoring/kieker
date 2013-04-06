@@ -181,6 +181,12 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 		Assert.assertEquals("Unexpected set of records", eventsPassedToController, eventFromMonitoringLog);
 	}
 
+	/**
+	 * Inheriting classes can use this method to refine the existing configuration by adding more properties.
+	 * 
+	 * @param config
+	 *            The configuration to refine.
+	 */
 	protected abstract void refineFSReaderConfiguration(Configuration config);
 
 	/**

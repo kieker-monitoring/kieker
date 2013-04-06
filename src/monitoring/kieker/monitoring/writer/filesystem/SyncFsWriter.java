@@ -96,6 +96,12 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	private long previousFileDate; // only used in synchronized
 	private long sameFilenameCounter; // only used in synchronized
 
+	/**
+	 * Creates a new instance of this class using the given configuration to initialize the class.
+	 * 
+	 * @param configuration
+	 *            The configuration used to initialize this writer.
+	 */
 	public SyncFsWriter(final Configuration configuration) throws IllegalArgumentException {
 		super(configuration);
 		this.autoflush = configuration.getBooleanProperty(CONFIG_FLUSH);
@@ -152,6 +158,9 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 		if (monitoringRecord instanceof RegistryRecord) {
 			try {
@@ -253,6 +262,9 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		return sb.toString();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final void terminate() {
 		synchronized (this) {
 			if (this.pos != null) {

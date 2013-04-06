@@ -46,9 +46,9 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 	 * @param orderIndex
 	 *            The order index.
 	 * @param operationSignature
-	 *            The operation signature.
+	 *            The operation signature. This parameter can be null.
 	 * @param classSignature
-	 *            The class signature.
+	 *            The class signature. This parameter can be null.
 	 */
 	public AbstractOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature) {
 		super(timestamp, traceId, orderIndex);

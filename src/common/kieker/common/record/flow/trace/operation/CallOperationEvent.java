@@ -45,6 +45,24 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	private final String calleeOperationSignature;
 	private final String calleeClassSignature;
 
+	/**
+	 * This constructor uses the given parameters to initialize the fields of this record.
+	 * 
+	 * @param timestamp
+	 *            The timestamp of this record.
+	 * @param traceId
+	 *            The trace ID.
+	 * @param orderIndex
+	 *            The order index.
+	 * @param callerOperationSignature
+	 *            The caller operation signature. This parameter can be null.
+	 * @param callerClassSignature
+	 *            The caller class signature. This parameter can be null.
+	 * @param calleeOperationSignature
+	 *            The callee operation signature. This parameter can be null.
+	 * @param calleeClassSignature
+	 *            The callee class signature. This parameter can be null.
+	 */
 	public CallOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String callerOperationSignature,
 			final String callerClassSignature, final String calleeOperationSignature, final String calleeClassSignature) {
 		super(timestamp, traceId, orderIndex, callerOperationSignature, callerClassSignature);

@@ -42,22 +42,22 @@ public final class CallOperationObjectEvent extends CallOperationEvent implement
 	private final int calleeObjectId;
 
 	/**
-	 * Creates a new instance of this class using the given parameters.
+	 * This constructor uses the given parameters to initialize the fields of this record.
 	 * 
 	 * @param timestamp
-	 *            The timestamp.
+	 *            The timestamp of this record.
 	 * @param traceId
 	 *            The trace ID.
 	 * @param orderIndex
 	 *            The order index.
 	 * @param callerOperationSignature
-	 *            The operation signature of the caller.
+	 *            The caller operation signature. This parameter can be null.
 	 * @param callerClassSignature
-	 *            The class signature of the caller.
+	 *            The caller class signature. This parameter can be null.
 	 * @param calleeOperationSignature
-	 *            The operation signature of the callee.
+	 *            The callee operation signature. This parameter can be null.
 	 * @param calleeClassSignature
-	 *            The class signature of the callee.
+	 *            The callee class signature. This parameter can be null.
 	 * @param callerObjectId
 	 *            The ID of the caller object.
 	 * @param calleeObjectId

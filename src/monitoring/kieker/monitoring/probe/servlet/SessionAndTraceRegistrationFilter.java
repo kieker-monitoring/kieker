@@ -109,6 +109,8 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 	 * Extending classes may override this method in order to provide an alternative signature. However,
 	 * note that this method is executed on each filter execution. Hence, you should return a final
 	 * value here instead of executing expensive String operations.
+	 * 
+	 * @return The operation signature as a string.
 	 */
 	protected String getFilterOperationSignatureString() {
 		return this.filterOperationSignatureString;

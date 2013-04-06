@@ -37,6 +37,14 @@ public abstract class AbstractGraphElement<O> {
 
 	private final Set<O> origins = new HashSet<O>();
 
+	/**
+	 * This constructor initializes the element based on the given parameters.
+	 * 
+	 * @param origin
+	 *            The origin of this element.
+	 * @param originPolicy
+	 *            The origin policy of this element.
+	 */
 	protected AbstractGraphElement(final O origin, final IOriginRetentionPolicy originPolicy) {
 		originPolicy.handleOrigin(this, origin);
 	}

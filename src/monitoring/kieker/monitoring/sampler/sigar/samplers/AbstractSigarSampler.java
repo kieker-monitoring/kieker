@@ -21,8 +21,8 @@ import org.hyperic.sigar.SigarProxy;
 import kieker.monitoring.core.sampler.ISampler;
 
 /**
- * Eases the implementation of {@link ISampler}s which collect
- * system-level sensor data via the {@link org.hyperic.sigar.Sigar} API and store this data as {@link kieker.common.record.IMonitoringRecord}s via
+ * Eases the implementation of {@link ISampler}s which collect system-level sensor data via the {@link org.hyperic.sigar.Sigar} API and store this data as
+ * {@link kieker.common.record.IMonitoringRecord}s via
  * {@link kieker.monitoring.core.controller.WriterController#newMonitoringRecord(kieker.common.record.IMonitoringRecord)} .
  * 
  * @author Andre van Hoorn
@@ -30,11 +30,11 @@ import kieker.monitoring.core.sampler.ISampler;
  * @since 1.3
  */
 public abstract class AbstractSigarSampler implements ISampler {
+	/** The sigar proxy which will be used to retrieve the sensor data. */
 	protected final SigarProxy sigar;
 
 	/**
-	 * Constructs a new {@link AbstractSigarSampler} with given {@link SigarProxy} instance used to retrieve the sensor
-	 * data.
+	 * Constructs a new {@link AbstractSigarSampler} with given {@link SigarProxy} instance used to retrieve the sensor data.
 	 * 
 	 * @param sigar
 	 *            The sigar proxy which will be used to retrieve the data.

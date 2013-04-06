@@ -41,6 +41,20 @@ public class ConstructionEvent extends AbstractTraceEvent implements IObjectReco
 	private final String classSignature;
 	private final int objectId;
 
+	/**
+	 * This constructor uses the given parameters to initialize the fields of this record.
+	 * 
+	 * @param timestamp
+	 *            The timestamp.
+	 * @param traceId
+	 *            The trace ID.
+	 * @param orderIndex
+	 *            The order index.
+	 * @param className
+	 *            The class name.
+	 * @param objectId
+	 *            The object ID.
+	 */
 	public ConstructionEvent(final long timestamp, final long traceId, final int orderIndex, final String className, final int objectId) {
 		super(timestamp, traceId, orderIndex);
 		this.classSignature = (className == null) ? NO_CLASSNAME : className; // NOCS

@@ -46,12 +46,19 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	private static final Log LOG = LogFactory.getLog(AbstractAsyncWriter.class);
 
 	// internal variables
+	/** The queue containing the records to be written. */
 	protected final BlockingQueue<IMonitoringRecord> blockingQueue;
 	private final List<AbstractAsyncThread> workers = new CopyOnWriteArrayList<AbstractAsyncThread>();
 	private final int queueFullBehavior;
 	private final int maxShutdownDelay;
 	private final AtomicLong missedRecords;
 
+	/**
+	 * This constructor initializes the writer based on the given configuration.
+	 * 
+	 * @param configuration
+	 *            The configuration for this writer.
+	 */
 	protected AbstractAsyncWriter(final Configuration configuration) {
 		super(configuration);
 		final String prefix = this.getClass().getName() + ".";

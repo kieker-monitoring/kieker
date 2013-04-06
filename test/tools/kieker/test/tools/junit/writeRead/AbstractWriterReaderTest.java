@@ -87,11 +87,9 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 	protected abstract boolean terminateBeforeLogInspection();
 
 	/**
-	 * Returns a list of {@link IMonitoringRecord}s to be used in this test.
-	 * Extending classes can override this method to use their own list of
-	 * records.
+	 * Returns a list of {@link IMonitoringRecord}s to be used in this test. Extending classes can override this method to use their own list of records.
 	 * 
-	 * @return
+	 * @return A list of records.
 	 */
 	protected List<IMonitoringRecord> provideEvents() {
 		final List<IMonitoringRecord> someEvents = new ArrayList<IMonitoringRecord>();

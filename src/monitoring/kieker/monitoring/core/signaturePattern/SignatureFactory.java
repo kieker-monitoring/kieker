@@ -27,6 +27,7 @@ public final class SignatureFactory {
 
 	/** This constant contains the necessary prefix for patterns. */
 	public static final char PATTERN_PREFIX = '%';
+	/** This constant contains the colons, which are used to separate the elements in the signature. */
 	public static final String COLONS = "::";
 
 	// Note: for static final String it is better to use "+" to help the compiler to resolve them at compile time!

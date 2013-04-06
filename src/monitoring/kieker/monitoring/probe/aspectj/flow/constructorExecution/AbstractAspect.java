@@ -55,7 +55,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	 * @param thisObject
 	 * @param thisJoinPoint
 	 * 
-	 * @return
+	 * @return The result of the joint point's {@code proceed} method.
 	 * 
 	 * @throws Throwable
 	 */

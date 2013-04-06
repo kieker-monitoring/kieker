@@ -72,11 +72,14 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 					defaultValue = "ASSEMBLY") // SDModes.ASSEMBLY.toString())
 		})
 public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter {
-
+	/** The name of the configuration determining the used output filename base. */
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE = "filename";
+	/** The name of the configuration determining whether to use short labels or not. */
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES = "shortLabels";
+	/** The name of the configuration determining the used mode. */
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_SDMODE = "SDMode";
 
+	/** This constant determines the default used output filename base. */
 	public static final String CONFIG_PROPERTY_VALUE_OUTPUT_FN_BASE_DEFAULT = "SequenceDiagram";
 
 	/**
@@ -133,7 +136,10 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 	 * @since 1.2
 	 */
 	public static enum SDModes {
-		ASSEMBLY, ALLOCATION
+		/** The assembly mode for the sequence diagrams. */
+		ASSEMBLY,
+		/** The allocation mode for the sequence diagrams. */
+		ALLOCATION
 	}
 
 	/**

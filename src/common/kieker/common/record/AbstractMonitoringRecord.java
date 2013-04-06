@@ -168,6 +168,20 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		}
 	}
 
+	/**
+	 * This helper method converts the given array with string objects into an array containing objects from the specified type. (e.g. via the {@code valueOf}
+	 * methods).
+	 * 
+	 * @param recordFields
+	 *            The array containing the string objects.
+	 * @param valueTypes
+	 *            The array containing the types the new array will have.
+	 * 
+	 * @return An array of objects, converted from the given string array.
+	 * 
+	 * @throws IllegalArgumentException
+	 *             If one or more of the given types are not supported.
+	 */
 	public static final Object[] fromStringArrayToTypedArray(final String[] recordFields, final Class<?>[] valueTypes) throws IllegalArgumentException {
 		if (recordFields.length != valueTypes.length) {
 			throw new IllegalArgumentException("Expected " + valueTypes.length + " record fields, but found " + recordFields.length);

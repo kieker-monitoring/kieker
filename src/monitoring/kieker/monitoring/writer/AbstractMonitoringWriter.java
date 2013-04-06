@@ -40,7 +40,6 @@ public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 
 	/**
 	 * 
-	 * @param IWriterController
 	 * @param configuration
 	 *            The configuration for this component.
 	 */
@@ -98,6 +97,8 @@ public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 	}
 
 	/**
+	 * @return The configuration of this writer.
+	 * 
 	 * @deprecated to be removed in Kieker 1.8
 	 */
 	@Deprecated

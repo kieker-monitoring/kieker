@@ -41,6 +41,12 @@ public final class SamplingController extends AbstractController implements ISam
 	/** Executes the {@link kieker.monitoring.sampler.sigar.samplers.AbstractSigarSampler}s. */
 	final ScheduledThreadPoolExecutor periodicSensorsPoolExecutor; // NOPMD NOCS (package visible)
 
+	/**
+	 * Creates a new instance of this class using the given configuration to initialize the class.
+	 * 
+	 * @param configuration
+	 *            The configuration used to initialize this controller.
+	 */
 	protected SamplingController(final Configuration configuration) {
 		super(configuration);
 		final int threadPoolSize = configuration.getIntProperty(ConfigurationFactory.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE);

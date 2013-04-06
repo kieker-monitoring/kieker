@@ -97,7 +97,7 @@ public abstract class AbstractAsyncZipWriter extends AbstractAsyncWriter {
 	}
 
 	/**
-	 * Make sure that the required properties always have default values!
+	 * {@inheritDoc}
 	 */
 	@Override
 	protected Configuration getDefaultConfiguration() {

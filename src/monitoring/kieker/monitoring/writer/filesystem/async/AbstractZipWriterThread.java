@@ -47,6 +47,7 @@ public abstract class AbstractZipWriterThread extends AbstractAsyncThread {
 	private static final Log LOG = LogFactory.getLog(AbstractZipWriterThread.class);
 
 	protected String fileExtension = FSUtil.NORMAL_FILE_EXTENSION;
+	/** The output stream pointing to the defined zip file. */
 	protected final ZipOutputStream zipOutputStream;
 
 	private final StringMappingFileWriter mappingFileWriter;

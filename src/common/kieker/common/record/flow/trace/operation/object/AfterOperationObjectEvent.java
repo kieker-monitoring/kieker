@@ -37,6 +37,22 @@ public class AfterOperationObjectEvent extends AfterOperationEvent implements IO
 
 	private final int objectId;
 
+	/**
+	 * This constructor initializes the fields of the record using the given parameters.
+	 * 
+	 * @param timestamp
+	 *            The timestamp.
+	 * @param traceId
+	 *            The trace ID.
+	 * @param orderIndex
+	 *            The order index.
+	 * @param operationSiganture
+	 *            The operation signature. This parameter can be null.
+	 * @param classSignature
+	 *            The class signature. This parameter can be null.
+	 * @param objectId
+	 *            The object ID.
+	 */
 	public AfterOperationObjectEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSiganture, final String classSignature,
 			final int objectId) {
 		super(timestamp, traceId, orderIndex, operationSiganture, classSignature);

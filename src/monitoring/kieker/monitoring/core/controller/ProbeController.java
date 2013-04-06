@@ -66,6 +66,12 @@ public class ProbeController extends AbstractController implements IProbeControl
 	private final ConcurrentMap<String, Boolean> signatureCache = new ConcurrentHashMap<String, Boolean>();
 	private final List<PatternEntry> patternList = new ArrayList<PatternEntry>(); // only accessed synchronized
 
+	/**
+	 * Creates a new instance of this class using the given configuration to initialize the class.
+	 * 
+	 * @param configuration
+	 *            The configuration used to initialize this controller.
+	 */
 	protected ProbeController(final Configuration configuration) {
 		super(configuration);
 		this.enabled = configuration.getBooleanProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED);

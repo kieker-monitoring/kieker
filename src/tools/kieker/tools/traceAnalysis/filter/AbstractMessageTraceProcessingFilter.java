@@ -34,6 +34,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public abstract class AbstractMessageTraceProcessingFilter extends AbstractTraceProcessingFilter {
 
+	/** The name of the input port receiving the message traces. */
 	public static final String INPUT_PORT_NAME_MESSAGE_TRACES = "messageTraces";
 
 	/**

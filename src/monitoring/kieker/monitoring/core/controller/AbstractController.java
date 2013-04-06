@@ -63,6 +63,8 @@ public abstract class AbstractController {
 	/**
 	 * Permanently terminates this controller.
 	 * 
+	 * @return true iff the controller was terminated.
+	 * 
 	 * @see #isTerminated()
 	 */
 	protected final boolean terminate() {

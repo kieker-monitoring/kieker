@@ -42,9 +42,25 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 
 	private final String cause;
 
-	public AfterOperationFailedEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSiganture, final String classSignature,
+	/**
+	 * This constructor initializes the fields of the record using the given parameters.
+	 * 
+	 * @param timestamp
+	 *            The timestamp.
+	 * @param traceId
+	 *            The trace ID.
+	 * @param orderIndex
+	 *            The order index.
+	 * @param operationSignature
+	 *            The operation signature. This parameter can be null.
+	 * @param classSignature
+	 *            The class signature. This parameter can be null.
+	 * @param cause
+	 *            The cause. This parameter can be null.
+	 */
+	public AfterOperationFailedEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature,
 			final String cause) {
-		super(timestamp, traceId, orderIndex, operationSiganture, classSignature);
+		super(timestamp, traceId, orderIndex, operationSignature, classSignature);
 		this.cause = (cause == null) ? NO_CAUSE : cause; // NOCS
 	}
 

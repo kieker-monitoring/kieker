@@ -87,12 +87,11 @@ public interface IStateController {
 	public abstract String getName();
 
 	/**
-	 * The hostname will be part of the monitoring data and allows to distinguish
-	 * observations in cases where the software system is deployed on more
-	 * than one host.
+	 * The hostname will be part of the monitoring data and allows to distinguish observations in cases where the software system is deployed on more than one host.
 	 * 
-	 * When you want to distinguish multiple Virtual Machines on one host, you
-	 * have to set the hostname manually in the Configuration.
+	 * When you want to distinguish multiple Virtual Machines on one host, you* have to set the hostname manually in the Configuration.
+	 * 
+	 * @return The hostname.
 	 * 
 	 * @since 1.3
 	 */
