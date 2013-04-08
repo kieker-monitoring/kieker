@@ -90,16 +90,14 @@ public class OpadIntegrationTest {
 		// Start - Read OperationExecutionRecords
 		final Configuration readerOERConfiguration = new Configuration();
 		readerOERConfiguration.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
-		this.theReaderOperationExecutionRecords = new ListReader<OperationExecutionRecord>(readerOERConfiguration);
+		this.theReaderOperationExecutionRecords = new ListReader<OperationExecutionRecord>(readerOERConfiguration, this.controller);
 		this.theReaderOperationExecutionRecords.addAllObjects(this.createInputEventSetOER());
-		this.controller.registerReader(this.theReaderOperationExecutionRecords);
 		// End - Read OperationExecutionRecords
 
 		// Start - ResponseTimeExtractionFilter Configuration
 		// ResponseTimeExtractionFilter Configuration
 		final Configuration responseTimeExtractionConfiguration = new Configuration();
-		this.responsetimeExtr = new ResponseTimeExtractionFilter(responseTimeExtractionConfiguration);
-		this.controller.registerFilter(this.responsetimeExtr);
+		this.responsetimeExtr = new ResponseTimeExtractionFilter(responseTimeExtractionConfiguration, this.controller);
 		// End - ResponseTimeExtractionFilter
 
 		// Start - ForecastingFilter
@@ -109,30 +107,25 @@ public class OpadIntegrationTest {
 		forecastConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_DELTA_UNIT,
 				"MILLISECONDS");
 		forecastConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_FC_METHOD, "MEAN");
-		this.forecasting = new ForecastingFilter(forecastConfiguration);
-		this.controller.registerFilter(this.forecasting);
+		this.forecasting = new ForecastingFilter(forecastConfiguration, this.controller);
 		// End - ForecastingFilter
 
 		// Start - AnomalyScoreCalculatorFilter
 		final Configuration scoreConfiguration = new Configuration();
-		this.scoreCalc = new AnomalyScoreCalculationFilter(scoreConfiguration);
-		this.controller.registerFilter(this.scoreCalc);
+		this.scoreCalc = new AnomalyScoreCalculationFilter(scoreConfiguration, this.controller);
 		// End - AnomalyScoreCalculatorFilter
 
 		// Start - AnomalyDetectionFilter
 		// AnomalyDetectionFilter Configuration
 		final Configuration configAnomaly = new Configuration();
 		configAnomaly.setProperty(AnomalyDetectionFilter.CONFIG_PROPERTY_THRESHOLD, "0.6");
-		this.anomalyDetectionFilter = new AnomalyDetectionFilter(configAnomaly);
-		this.controller.registerFilter(this.anomalyDetectionFilter);
+		this.anomalyDetectionFilter = new AnomalyDetectionFilter(configAnomaly, this.controller);
 
 		// SINK 1 Mock-up
-		this.sinkPluginIfAnomaly = new ListCollectionFilter<NamedDoubleTimeSeriesPoint>(new Configuration());
-		this.controller.registerFilter(this.sinkPluginIfAnomaly);
+		this.sinkPluginIfAnomaly = new ListCollectionFilter<NamedDoubleTimeSeriesPoint>(new Configuration(), this.controller);
 
 		// SINK 2 Mock-up
-		this.sinkPluginElse = new ListCollectionFilter<NamedDoubleTimeSeriesPoint>(new Configuration());
-		this.controller.registerFilter(this.sinkPluginElse);
+		this.sinkPluginElse = new ListCollectionFilter<NamedDoubleTimeSeriesPoint>(new Configuration(), this.controller);
 		// End - AnomalyDetectionFilter
 
 		// CONNECT the filters

@@ -73,9 +73,8 @@ public class ForecastingFilterTest {
 		// READER
 		final Configuration readerForecastConfiguration = new Configuration();
 		readerForecastConfiguration.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
-		this.theReaderForecast = new ListReader<NamedDoubleTimeSeriesPoint>(readerForecastConfiguration);
+		this.theReaderForecast = new ListReader<NamedDoubleTimeSeriesPoint>(readerForecastConfiguration, this.controller);
 		this.theReaderForecast.addAllObjects(this.createInputEventSetForecast());
-		this.controller.registerReader(this.theReaderForecast);
 
 		// FORECASTINGFILTER
 		final Configuration forecastConfiguration = new Configuration();
@@ -83,13 +82,11 @@ public class ForecastingFilterTest {
 		forecastConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_DELTA_UNIT,
 				"MILLISECONDS");
 		forecastConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_FC_METHOD, "MEAN");
-		this.forecasting = new ForecastingFilter(forecastConfiguration);
-		this.controller.registerFilter(this.forecasting);
+		this.forecasting = new ForecastingFilter(forecastConfiguration, this.controller);
 
 		// SINK 1
-		this.sinkPlugin = new ListCollectionFilter<IForecastResult<Double>>(new Configuration());
+		this.sinkPlugin = new ListCollectionFilter<IForecastResult<Double>>(new Configuration(), this.controller);
 		Assert.assertTrue(this.sinkPlugin.getList().isEmpty());
-		this.controller.registerFilter(this.sinkPlugin);
 
 		// CONNECTION
 		this.controller.connect(this.theReaderForecast, ListReader.OUTPUT_PORT_NAME, this.forecasting, ForecastingFilter.INPUT_PORT_NAME_TSPOINT);

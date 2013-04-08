@@ -80,21 +80,18 @@ public class ResponseTimeExtractionFilterTest {
 		// Start - Read OperationExecutionRecords
 		final Configuration readerOERConfiguration = new Configuration();
 		readerOERConfiguration.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
-		this.theReaderOperationExecutionRecords = new ListReader<OperationExecutionRecord>(readerOERConfiguration);
+		this.theReaderOperationExecutionRecords = new ListReader<OperationExecutionRecord>(readerOERConfiguration, this.controller);
 		this.theReaderOperationExecutionRecords.addAllObjects(this.createInputEventSetOER());
-		this.controller.registerReader(this.theReaderOperationExecutionRecords);
 		// End - Read OperationExecutionRecords
 
 		// Start - ResponseTimeExtractionFilter Configuration
 		final Configuration responseTimeExtractionConfiguration = new Configuration();
 		// responseTimeExtractionConfiguration.setProperty(ResponseTimeExtractionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, "MICROSECONDS");
-		this.responsetimeExtr = new ResponseTimeExtractionFilter(responseTimeExtractionConfiguration);
-		this.controller.registerFilter(this.responsetimeExtr);
+		this.responsetimeExtr = new ResponseTimeExtractionFilter(responseTimeExtractionConfiguration, this.controller);
 		// End - ResponseTimeExtractionFilter
 
 		// SINK Mock-up
-		this.sinkPlugin = new ListCollectionFilter<NamedDoubleTimeSeriesPoint>(new Configuration());
-		this.controller.registerFilter(this.sinkPlugin);
+		this.sinkPlugin = new ListCollectionFilter<NamedDoubleTimeSeriesPoint>(new Configuration(), this.controller);
 
 		// CONNECT the filters
 		// Mock-up Reader (OperationExecutionRecords) -> ResponseTimeExtractionFIlter

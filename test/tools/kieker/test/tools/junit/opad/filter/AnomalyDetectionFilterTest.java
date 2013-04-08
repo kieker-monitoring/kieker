@@ -76,23 +76,19 @@ public class AnomalyDetectionFilterTest {
 		// READER
 		final Configuration readerConfiguration = new Configuration();
 		readerConfiguration.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
-		this.theReader = new ListReader<NamedDoubleTimeSeriesPoint>(readerConfiguration);
+		this.theReader = new ListReader<NamedDoubleTimeSeriesPoint>(readerConfiguration, this.controller);
 		this.theReader.addAllObjects(this.createInputEventSet());
-		this.controller.registerReader(this.theReader);
 
 		// ANOMALY DETECTION FILTER
 		final Configuration configAnomaly = new Configuration();
 		configAnomaly.setProperty(AnomalyDetectionFilter.CONFIG_PROPERTY_THRESHOLD, "0.6");
-		this.anomalyDetectionFilter = new AnomalyDetectionFilter(configAnomaly);
-		this.controller.registerFilter(this.anomalyDetectionFilter);
+		this.anomalyDetectionFilter = new AnomalyDetectionFilter(configAnomaly, this.controller);
 
 		// SINK 1
-		this.sinkPluginIfAnomaly = new ListCollectionFilter<NamedDoubleTimeSeriesPoint>(new Configuration());
-		this.controller.registerFilter(this.sinkPluginIfAnomaly);
+		this.sinkPluginIfAnomaly = new ListCollectionFilter<NamedDoubleTimeSeriesPoint>(new Configuration(), this.controller);
 
 		// SINK 2
-		this.sinkPluginElse = new ListCollectionFilter<NamedDoubleTimeSeriesPoint>(new Configuration());
-		this.controller.registerFilter(this.sinkPluginElse);
+		this.sinkPluginElse = new ListCollectionFilter<NamedDoubleTimeSeriesPoint>(new Configuration(), this.controller);
 
 		// CONNECT the filters
 		this.controller.connect(this.theReader, ListReader.OUTPUT_PORT_NAME,

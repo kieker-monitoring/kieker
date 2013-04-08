@@ -87,11 +87,6 @@ public class ForecastingFilter extends AbstractFilterPlugin {
 		this.forecaster = this.forecastMethod.getForecaster(this.timeSeriesWindow);
 	}
 
-	@Deprecated
-	public ForecastingFilter(final Configuration configuration) {
-		this(configuration, null);
-	}
-
 	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();

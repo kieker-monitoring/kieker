@@ -62,11 +62,6 @@ public class NameFilter extends AbstractFilterPlugin {
 		NameFilter.LOG.info("Started NameFilter filtering for names: " + this.names);
 	}
 
-	@Deprecated
-	public NameFilter(final Configuration configuration) {
-		this(configuration, null);
-	}
-
 	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();

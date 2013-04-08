@@ -61,11 +61,6 @@ public class AnomalyDetectionFilter extends AbstractFilterPlugin {
 		this.threshold = Double.parseDouble(sThreshold);
 	}
 
-	@Deprecated
-	public AnomalyDetectionFilter(final Configuration configuration) {
-		this(configuration, null);
-	}
-
 	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration config = new Configuration();

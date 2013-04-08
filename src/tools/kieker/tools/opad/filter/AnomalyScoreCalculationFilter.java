@@ -44,10 +44,6 @@ public class AnomalyScoreCalculationFilter extends AbstractFilterPlugin {
 		super(configAnomaly, projectContext);
 	}
 
-	public AnomalyScoreCalculationFilter(final Configuration configAnomaly) {
-		this(configAnomaly, null);
-	}
-
 	@InputPort(eventTypes = { IForecastMeasurementPair.class }, name = AnomalyScoreCalculationFilter.INPUT_PORT_CURRENT_FORECAST_PAIR)
 	public void inputForecastAndMeasurement(final IForecastMeasurementPair fmp) {
 

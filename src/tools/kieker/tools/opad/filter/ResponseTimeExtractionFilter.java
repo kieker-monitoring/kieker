@@ -30,7 +30,6 @@ import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
 
 /**
- * TODO: Current response time unit: Nanoseconds
  * TODO: Make source of timestamp configurable? (may be loggingTimestamp, tin, tout)
  * 
  * @author Andre van Hoorn
@@ -62,11 +61,6 @@ public class ResponseTimeExtractionFilter extends AbstractFilterPlugin {
 		}
 		this.timeunit = configTimeunit;
 
-	}
-
-	@Deprecated
-	public ResponseTimeExtractionFilter(final Configuration configuration) {
-		this(configuration, null);
 	}
 
 	@InputPort(name = INPUT_PORT_NAME_VALUE, eventTypes = { OperationExecutionRecord.class })

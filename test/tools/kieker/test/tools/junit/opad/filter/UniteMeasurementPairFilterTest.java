@@ -96,16 +96,14 @@ public class UniteMeasurementPairFilterTest {
 		// READER TSPoints
 		final Configuration readerUniteConfigurationTS = new Configuration();
 		readerUniteConfigurationTS.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
-		this.theReaderUniteTSPoints = new ListReader<NamedDoubleTimeSeriesPoint>(readerUniteConfigurationTS);
+		this.theReaderUniteTSPoints = new ListReader<NamedDoubleTimeSeriesPoint>(readerUniteConfigurationTS, this.controller);
 		this.theReaderUniteTSPoints.addAllObjects(this.createInputEventSetUnite());
-		this.controller.registerReader(this.theReaderUniteTSPoints);
 
 		// READER Forecasts
 		final Configuration readerUniteConfigurationForecast = new Configuration();
 		readerUniteConfigurationForecast.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
-		this.theReaderUniteForecast = new ListReader<IForecastResult<Double>>(readerUniteConfigurationForecast);
+		this.theReaderUniteForecast = new ListReader<IForecastResult<Double>>(readerUniteConfigurationForecast, this.controller);
 		this.theReaderUniteForecast.addAllObjects(this.createInputEventSetUniteForecast());
-		this.controller.registerReader(this.theReaderUniteForecast);
 
 		// UniteMeasurementPair Filter
 		final Configuration uniteConfiguration = new Configuration();
@@ -113,13 +111,11 @@ public class UniteMeasurementPairFilterTest {
 		uniteConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_DELTA_UNIT,
 				"MILLISECONDS");
 		uniteConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_FC_METHOD, "MEAN");
-		this.unite = new UniteMeasurementPairFilter(uniteConfiguration);
-		this.controller.registerFilter(this.unite);
+		this.unite = new UniteMeasurementPairFilter(uniteConfiguration, this.controller);
 
 		// SINK 1
-		this.sinkPlugin = new ListCollectionFilter<ForecastMeasurementPair>(new Configuration());
+		this.sinkPlugin = new ListCollectionFilter<ForecastMeasurementPair>(new Configuration(), this.controller);
 		Assert.assertTrue(this.sinkPlugin.getList().isEmpty());
-		this.controller.registerFilter(this.sinkPlugin);
 
 		// CONNECTION
 		this.controller.connect(this.theReaderUniteTSPoints, ListReader.OUTPUT_PORT_NAME, this.unite, UniteMeasurementPairFilter.INPUT_PORT_NAME_TSPOINT);

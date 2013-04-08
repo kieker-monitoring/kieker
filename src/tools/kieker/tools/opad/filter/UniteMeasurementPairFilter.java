@@ -55,11 +55,6 @@ public class UniteMeasurementPairFilter extends AbstractFilterPlugin {
 		this.forecastValues = Collections.synchronizedList(new ArrayList<IForecastResult<Double>>());
 	}
 
-	@Deprecated
-	public UniteMeasurementPairFilter(final Configuration configuration) {
-		this(configuration, null);
-	}
-
 	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
@@ -67,8 +62,8 @@ public class UniteMeasurementPairFilter extends AbstractFilterPlugin {
 
 	@InputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = UniteMeasurementPairFilter.INPUT_PORT_NAME_TSPOINT)
 	public void inputTSPoint(final NamedDoubleTimeSeriesPoint input) {
-		// First TSPoint have no corresponding Forecastvalue, cause first Forecastvale is one Step in the Future.
-		// For further processing we need to give this Point a Forecast. We use the TSPoint itsel as Dummy for now
+		// First TSPoint have no corresponding Forecastvalue, cause first Forecastvalue is one Step in the Future.
+		// For further processing we need to give this Point a Forecast. We use the TSPoint itself as Dummy for now
 		if (this.firstTSPoint) {
 			this.firstTSPoint = false;
 			final ForecastMeasurementPair fmp = new ForecastMeasurementPair(
@@ -79,6 +74,9 @@ public class UniteMeasurementPairFilter extends AbstractFilterPlugin {
 			super.deliver(OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, fmp);
 		} else {
 			// Bring together the currently incoming TSPoint with the corresponding ForecastValue
+			while (this.forecastValues.size() == 0) {
+				// Wait until Value arrives
+			}
 			final ForecastMeasurementPair fmp = new ForecastMeasurementPair(
 					input.getName(),
 					this.forecastValues.get(0).getForecast().getPoints().get(0).getValue(),

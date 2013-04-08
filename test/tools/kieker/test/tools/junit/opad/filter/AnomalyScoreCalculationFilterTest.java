@@ -75,17 +75,14 @@ public class AnomalyScoreCalculationFilterTest {
 		// READER
 		final Configuration readerScoreCalcConfiguration = new Configuration();
 		readerScoreCalcConfiguration.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
-		this.theReaderScoreCalc = new ListReader<ForecastMeasurementPair>(readerScoreCalcConfiguration);
+		this.theReaderScoreCalc = new ListReader<ForecastMeasurementPair>(readerScoreCalcConfiguration, this.controller);
 		this.theReaderScoreCalc.addAllObjects(this.createInputEventSetScoreCalc());
-		this.controller.registerReader(this.theReaderScoreCalc);
 
 		final Configuration scoreConfiguration = new Configuration();
-		this.scoreCalc = new AnomalyScoreCalculationFilter(scoreConfiguration);
-		this.controller.registerFilter(this.scoreCalc);
+		this.scoreCalc = new AnomalyScoreCalculationFilter(scoreConfiguration, this.controller);
 
 		// SINK 1
-		this.sinkAnomalyScore = new ListCollectionFilter<NamedDoubleTimeSeriesPoint>(new Configuration());
-		this.controller.registerFilter(this.sinkAnomalyScore);
+		this.sinkAnomalyScore = new ListCollectionFilter<NamedDoubleTimeSeriesPoint>(new Configuration(), this.controller);
 
 		// CONNECTION
 		this.controller
