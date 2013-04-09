@@ -12,12 +12,12 @@ import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.record.system.CPUUtilizationRecord;
 import kieker.common.record.system.MemSwapUsageRecord;
 //import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
-//import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 //import kieker.tools.traceAnalysis.filter.IGraphOutputtingFilter;
-//import kieker.tools.traceAnalysis.filter.executionRecordTransformation.ExecutionRecordTransformationFilter;
 //import kieker.tools.traceAnalysis.filter.traceReconstruction.TraceReconstructionFilter;
 //import kieker.tools.traceAnalysis.filter.visualization.GraphWriterPlugin;
 //import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.OperationDependencyGraphAllocationFilter;
+import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
+import kieker.tools.traceAnalysis.filter.executionRecordTransformation.ExecutionRecordTransformationFilter;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import livedemo.filter.ListFilter;
 
@@ -112,10 +112,10 @@ public class StartingBean {
 		
 		analysisInstance.registerRepository(systemModelRepository);
 		
-//		ExecutionRecordTransformationFilter ertf = new ExecutionRecordTransformationFilter(new Configuration());
-//		analysisInstance.registerFilter(ertf);
-//		analysisInstance.connect(ertf, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemModelRepository);
-//		analysisInstance.connect(reader, JMXReader.OUTPUT_PORT_NAME_RECORDS, ertf, ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
+		ExecutionRecordTransformationFilter ertf = new ExecutionRecordTransformationFilter(new Configuration());
+		analysisInstance.registerFilter(ertf);
+		analysisInstance.connect(ertf, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemModelRepository);
+		analysisInstance.connect(reader, JMXReader.OUTPUT_PORT_NAME_RECORDS, ertf, ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
 //		
 //		Configuration traceConfig = new Configuration();
 //		traceConfig.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT, TimeUnit.MILLISECONDS.name());
