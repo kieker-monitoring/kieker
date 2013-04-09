@@ -23,9 +23,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
 
-import kieker.common.record.IMonitoringRecord;
-
 import org.apache.activemq.broker.BrokerService;
+
+import kieker.common.record.IMonitoringRecord;
 
 /**
  * @author rju
@@ -33,7 +33,7 @@ import org.apache.activemq.broker.BrokerService;
  */
 public class JMSEmbeddedService extends JMSService {
 	private BrokerService broker;
-	private int port;
+	private final int port;
 
 	/**
 	 * Construct a new JMS service consumer and an embedded JMS service.
@@ -43,7 +43,7 @@ public class JMSEmbeddedService extends JMSService {
 	 * @param lookupEntityMap
 	 *            IMonitoringRecord id map
 	 * @param port
-	 * 			  Port the JMS service is listening to
+	 *            Port the JMS service is listening to
 	 * @throws URISyntaxException
 	 *             if the URI is malformed. Most likely will not happen.
 	 */
