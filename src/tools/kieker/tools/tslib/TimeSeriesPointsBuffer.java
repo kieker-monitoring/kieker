@@ -26,6 +26,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @param <T>
  */
 public class TimeSeriesPointsBuffer<T> extends CopyOnWriteArrayList<T> implements ITimeSeriesPointsBuffer<T> {
+	private static final long serialVersionUID = -7988633509408488397L;
 
 	private final int capacity;
 	private final boolean unbounded;
@@ -49,7 +50,7 @@ public class TimeSeriesPointsBuffer<T> extends CopyOnWriteArrayList<T> implement
 	}
 
 	@Override
-	public boolean add(final T o) {
+	public synchronized boolean add(final T o) {
 		if (this.unbounded) {
 			return super.add(o);
 		} else {

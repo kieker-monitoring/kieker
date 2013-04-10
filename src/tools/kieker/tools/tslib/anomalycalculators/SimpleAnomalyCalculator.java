@@ -38,10 +38,7 @@ public class SimpleAnomalyCalculator implements IAnomalyCalculator<Double> {
 
 		double measuredValue = 0.0;
 
-		// TODO how to do the fancy generic cast / check?
-		if (current.getValue() instanceof Double) {
-			measuredValue = current.getValue();
-		}
+		measuredValue = current.getValue();
 
 		double difference = nextpredicted - measuredValue;
 		final double sum = nextpredicted + measuredValue;

@@ -32,7 +32,7 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 	private final long deltaTime;
 	private final TimeUnit deltaTimeUnit;
 	private final int capacity;
-	private final TimeSeriesPointsBuffer points;
+	private final TimeSeriesPointsBuffer<ITimeSeriesPoint<T>> points;
 	// approach of avh: private final CopyOnWriteArrayList<ITimeSeriesPoint<T>> points;
 	private long oneStepMillis;
 
