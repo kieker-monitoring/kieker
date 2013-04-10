@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,6 +37,8 @@ import kieker.common.record.IMonitoringRecord;
  * Every record received is cloned and each detected String is buffered in a shared area in order so save memory.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 @Plugin(description = "A filter to reduce the memory footprint of strings used in records",
 		outputPorts = @OutputPort(
@@ -46,7 +48,9 @@ import kieker.common.record.IMonitoringRecord;
 		))
 public final class StringBufferFilter extends AbstractFilterPlugin {
 
+	/** The name of the input port for the incoming events. */
 	public static final String INPUT_PORT_NAME_EVENTS = "received-events";
+	/** The name of the output port for the relayed events. */
 	public static final String OUTPUT_PORT_NAME_RELAYED_EVENTS = "relayed-events";
 
 	private static final int INITIAL_CAPACITY = 16;
@@ -67,7 +71,7 @@ public final class StringBufferFilter extends AbstractFilterPlugin {
 	private final int segmentShift;
 
 	/**
-	 * The segments, each of which is a specialized hash table
+	 * The segments, each of which is a specialized hash table.
 	 */
 	private final Segment[] segments;
 
@@ -78,8 +82,6 @@ public final class StringBufferFilter extends AbstractFilterPlugin {
 	 *            The configuration for this component.
 	 * @param projectContext
 	 *            The project context for this component.
-	 * 
-	 * @since 1.7
 	 */
 	public StringBufferFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
@@ -127,7 +129,8 @@ public final class StringBufferFilter extends AbstractFilterPlugin {
 	}
 
 	@SuppressWarnings("unchecked")
-	@InputPort(name = StringBufferFilter.INPUT_PORT_NAME_EVENTS, description = "Receives incoming objects to be buffered and forwarded", eventTypes = { Object.class })
+	@InputPort(name = StringBufferFilter.INPUT_PORT_NAME_EVENTS, description = "Receives incoming objects to be buffered and forwarded",
+			eventTypes = { Object.class })
 	public final void inputEvent(final Object object) {
 		if (object instanceof String) {
 			super.deliver(StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, this.get((String) object));
@@ -176,7 +179,7 @@ public final class StringBufferFilter extends AbstractFilterPlugin {
 		return this.segments[(hash >>> this.segmentShift) & this.segmentMask].get(value, hash);
 	}
 
-	/* ---------------- Inner Classes -------------- */
+	// ---------------- Inner Classes --------------
 
 	/**
 	 * StringBuffer entry.
@@ -195,27 +198,26 @@ public final class StringBufferFilter extends AbstractFilterPlugin {
 	/**
 	 * Segments are specialized versions of hash tables. This subclasses from ReentrantLock opportunistically, just to simplify some locking and avoid separate
 	 * construction.
+	 * 
+	 * Segments maintain a table of entry lists that are ALWAYS kept in a consistent state, so can be read without locking. Next fields of nodes are immutable
+	 * (final). All list additions are performed at the front of each bin. This makes it easy to check changes, and also fast to traverse. When nodes would
+	 * otherwise be changed, new nodes are created to replace them. This works well for hash tables since the bin lists tend to be short. (The average length is
+	 * less than two for the default load factor threshold.)
+	 * 
+	 * Read operations can thus proceed without locking, but rely on selected uses of volatiles to ensure that completed write operations performed by other
+	 * threads are noticed. For most purposes, the "count" field, tracking the number of elements, serves as that volatile variable ensuring visibility. This is
+	 * convenient because this field needs to be read in many read operations anyway:
+	 * 
+	 * - All (unsynchronized) read operations must first read the "count" field, and should not look at table entries if it is 0.
+	 * 
+	 * - All (synchronized) write operations should write to the "count" field after structurally changing any bin. The operations must not take any action that
+	 * could even momentarily cause a concurrent read operation to see inconsistent data. This is made easier by the nature of the read operations in Map. For
+	 * example, no operation can reveal that the table has grown but the threshold has not yet been updated, so there are no atomicity requirements for this with
+	 * respect to reads.
+	 * 
+	 * As a guide, all critical volatile reads and writes to the count field are marked in code comments.
 	 */
 	private static final class Segment extends ReentrantLock {
-		/*
-		 * Segments maintain a table of entry lists that are ALWAYS kept in a consistent state, so can be read without locking. Next fields of nodes are immutable
-		 * (final). All list additions are performed at the front of each bin. This makes it easy to check changes, and also fast to traverse. When nodes would
-		 * otherwise be changed, new nodes are created to replace them. This works well for hash tables since the bin lists tend to be short. (The average length is
-		 * less than two for the default load factor threshold.)
-		 * 
-		 * Read operations can thus proceed without locking, but rely on selected uses of volatiles to ensure that completed write operations performed by other
-		 * threads are noticed. For most purposes, the "count" field, tracking the number of elements, serves as that volatile variable ensuring visibility. This is
-		 * convenient because this field needs to be read in many read operations anyway:
-		 * 
-		 * - All (unsynchronized) read operations must first read the "count" field, and should not look at table entries if it is 0.
-		 * 
-		 * - All (synchronized) write operations should write to the "count" field after structurally changing any bin. The operations must not take any action that
-		 * could even momentarily cause a concurrent read operation to see inconsistent data. This is made easier by the nature of the read operations in Map. For
-		 * example, no operation can reveal that the table has grown but the threshold has not yet been updated, so there are no atomicity requirements for this with
-		 * respect to reads.
-		 * 
-		 * As a guide, all critical volatile reads and writes to the count field are marked in code comments.
-		 */
 
 		private static final long serialVersionUID = 1L;
 

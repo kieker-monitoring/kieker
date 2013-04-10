@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,14 +26,24 @@ import kieker.monitoring.timer.ITimeSource;
 import kieker.monitoring.timer.SystemMilliTimer;
 
 /**
+ * A test for the class {@link SystemMilliTimer}.
+ * 
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public final class TestSystemMilliTimer extends AbstractTestTimeSource {
 
+	/**
+	 * Default constructor.
+	 */
 	public TestSystemMilliTimer() {
 		// empty default constructor
 	}
 
+	/**
+	 * This method tests the timer with default configuration.
+	 */
 	@Test
 	public final void testDefault() { // NOPMD (assert in superclass)
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
@@ -41,6 +51,9 @@ public final class TestSystemMilliTimer extends AbstractTestTimeSource {
 		super.testTime(ts, TimeUnit.NANOSECONDS);
 	}
 
+	/**
+	 * This method tests the timer with nanoseconds as used time unit.
+	 */
 	@Test
 	public final void testNanoseconds() { // NOPMD (assert in superclass)
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
@@ -49,6 +62,9 @@ public final class TestSystemMilliTimer extends AbstractTestTimeSource {
 		super.testTime(ts, TimeUnit.NANOSECONDS);
 	}
 
+	/**
+	 * This method tests the timer with microseconds as used time unit.
+	 */
 	@Test
 	public final void testMicroseconds() { // NOPMD (assert in superclass)
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
@@ -57,6 +73,9 @@ public final class TestSystemMilliTimer extends AbstractTestTimeSource {
 		super.testTime(ts, TimeUnit.MICROSECONDS);
 	}
 
+	/**
+	 * This method tests the timer with milliseconds as used time unit.
+	 */
 	@Test
 	public final void testMilliseconds() { // NOPMD (assert in superclass)
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
@@ -65,6 +84,9 @@ public final class TestSystemMilliTimer extends AbstractTestTimeSource {
 		super.testTime(ts, TimeUnit.MILLISECONDS);
 	}
 
+	/**
+	 * This method tests the timer with seconds as used time unit.
+	 */
 	@Test
 	public final void testSeconds() { // NOPMD (assert in superclass)
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();

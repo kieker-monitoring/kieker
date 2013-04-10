@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import kieker.common.configuration.Configuration;
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.3
  */
 public class JMSLogReplayer extends AbstractLogReplayer {
 
@@ -42,12 +43,16 @@ public class JMSLogReplayer extends AbstractLogReplayer {
 	 *            = for instance "queue1"
 	 * @param jmsFactoryLookupName
 	 *            = for instance "org.exolab.jms.jndi.InitialContextFactory" (OpenJMS)
-	 * @throws IllegalArgumentException
-	 *             if passed parameters are null or empty.
+	 * @param monitoringConfigurationFile
+	 *            The path of the monitoring.properties file.
 	 */
 	public JMSLogReplayer(final String monitoringConfigurationFile, final String jmsProviderUrl, final String jmsDestination, final String jmsFactoryLookupName) {
-		super(monitoringConfigurationFile, /* realtimeMode */false, /* keepOriginalLoggingTimestamps */true,
-				/* numRealtimeWorkerThreads: any value will do because realtimeMode = false */1, Long.MIN_VALUE, Long.MAX_VALUE);
+		super(monitoringConfigurationFile,
+				false, // realtimeMode
+				true, // keepOriginalLoggingTimestamps
+				1, // numRealtimeWorkerThreads: any value will do because realtimeMode = false
+				Long.MIN_VALUE,
+				Long.MAX_VALUE);
 		this.jmsProviderUrl = jmsProviderUrl;
 		this.jmsDestination = jmsDestination;
 		this.jmsFactoryLookupName = jmsFactoryLookupName;

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
@@ -68,34 +69,24 @@ import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.common.record.misc.KiekerMetadataRecord;
 
 /**
  * The <code>AnalysisController</code> can be used to configure, control, save and load an analysis instance.
  * It is responsible for the life cycle of the readers, filters and repositories.
  * 
  * @author Andre van Hoorn, Matthias Rohr, Nils Christian Ehmke, Jan Waller
+ * 
+ * @since 0.95a
  */
-// TODO Use the new constructor in the reflection calls as well
-@kieker.analysis.annotation.AnalysisController(configuration = {
-	@Property(name = AnalysisController.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT, defaultValue = "NANOSECONDS"),
-	@Property(name = AnalysisController.CONFIG_PROPERTY_NAME_PROJECT_NAME, defaultValue = "AnalysisProject")
-})
+@kieker.analysis.annotation.AnalysisController(
+		configuration = {
+			@Property(name = IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT, defaultValue = "NANOSECONDS"),
+			@Property(name = IProjectContext.CONFIG_PROPERTY_NAME_PROJECT_NAME, defaultValue = "AnalysisProject")
+		})
 public final class AnalysisController implements IAnalysisController { // NOPMD (really long class)
 
-	/**
-	 * This is the name of the property containing the time unit for the monitoring records.
-	 * 
-	 * @since 1.7
-	 */
-	public static final String CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT = "recordsTimeUnit";
-	/**
-	 * This is the name of the property containing the project name.
-	 * 
-	 * @since 1.7
-	 */
-	public static final String CONFIG_PROPERTY_NAME_PROJECT_NAME = "projectName";
-
-	private static final Log LOG = LogFactory.getLog(AnalysisController.class);
+	static final Log LOG = LogFactory.getLog(AnalysisController.class); // NOPMD package for inner class
 
 	private final String projectName;
 
@@ -226,7 +217,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		if (project == null) {
 			throw new NullPointerException("Can not load project null.");
 		} else {
-			this.globalConfiguration = new Configuration(this.getDefaultConfiguration());
+			this.globalConfiguration = this.validateConfiguration(new Configuration(this.getDefaultConfiguration()));
 			this.loadFromModelProject(project, classLoader);
 			this.projectName = project.getName();
 		}
@@ -237,12 +228,28 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * 
 	 * @param configuration
 	 *            The global configuration of this analysis. All plugins can indirectly access it.
-	 * 
-	 * @since 1.7
 	 */
 	public AnalysisController(final Configuration configuration) {
-		this.globalConfiguration = configuration.flatten(this.getDefaultConfiguration());
+		this.globalConfiguration = this.validateConfiguration(configuration.flatten(this.getDefaultConfiguration()));
 		this.projectName = this.getProperty(CONFIG_PROPERTY_NAME_PROJECT_NAME);
+	}
+
+	/**
+	 * This simple helper method validates the configuration object.
+	 * 
+	 * @param configuration
+	 *            The configuration object to check and (perhaps) update.
+	 * @return The configuration object.
+	 */
+	private Configuration validateConfiguration(final Configuration configuration) {
+		final String stringProperty = configuration.getStringProperty(CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
+		try {
+			TimeUnit.valueOf(stringProperty);
+		} catch (final IllegalArgumentException ignore) {
+			LOG.warn(stringProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
+			configuration.setProperty(CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT, TimeUnit.NANOSECONDS.name());
+		}
+		return configuration;
 	}
 
 	/**
@@ -262,8 +269,6 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * This method provides the default properties, as supplied by the annotation.
 	 * 
 	 * @return The default configuration.
-	 * 
-	 * @since 1.7
 	 */
 	private final Configuration getDefaultConfiguration() {
 		final Configuration defaultConfiguration = new Configuration();
@@ -276,6 +281,18 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 			}
 		}
 		return defaultConfiguration;
+	}
+
+	/**
+	 * Called whenever an {@link KiekerMetadataRecord} is found inside the filters network.
+	 * 
+	 * Currently this method only logs all details.
+	 * 
+	 * @param record
+	 *            the KiekerMetadataRecord containing the information
+	 */
+	public final void handleKiekerMetadataRecord(final KiekerMetadataRecord record) {
+		LOG.info(record.toFormattedString());
 	}
 
 	/**
@@ -334,15 +351,12 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		for (final MIRepository mRepository : mProject.getRepositories()) {
 			// Extract the necessary informations to create the repository.
 			final Configuration configuration = AnalysisController.modelPropertiesToConfiguration(mRepository.getProperties());
-			final AbstractRepository repository = AnalysisController.createAndInitialize(AbstractRepository.class, mRepository.getClassname(), configuration,
+			final AbstractRepository repository = AnalysisController.createAndInitialize(AbstractRepository.class, mRepository.getClassname(), configuration, this,
 					classLoader); // throws AnalysisConfigurationException on errors
 			repositoryMap.put(mRepository, repository);
-			this.registerRepository(repository);
 		}
-		/*
-		 * We run through the project and collect all plugins. As we create an actual object for every plugin within the model, we have to remember the mapping
-		 * between the plugins within the model and the actual objects we create.
-		 */
+		// We run through the project and collect all plugins. As we create an actual object for every plugin within the model, we have to remember the mapping
+		// between the plugins within the model and the actual objects we create.
 		final EList<MIPlugin> mPlugins = mProject.getPlugins();
 		// Now run through all plugins.
 		final Map<MIPlugin, AbstractPlugin> pluginMap = new HashMap<MIPlugin, AbstractPlugin>(); // NOPMD (no concurrent access)
@@ -352,16 +366,10 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 			final String pluginClassname = mPlugin.getClassname();
 			configuration.setProperty(AbstractAnalysisComponent.CONFIG_NAME, mPlugin.getName());
 			// Create the plugin and put it into our map. */
-			final AbstractPlugin plugin = AnalysisController.createAndInitialize(AbstractPlugin.class, pluginClassname, configuration, classLoader);
+			final AbstractPlugin plugin = AnalysisController.createAndInitialize(AbstractPlugin.class, pluginClassname, configuration, this, classLoader);
 			pluginMap.put(mPlugin, plugin);
 			// Check the used configuration against the actual available configuration keys.
 			AnalysisController.checkConfiguration(plugin, configuration);
-			// Add the plugin to our controller instance.
-			if (plugin instanceof AbstractReaderPlugin) {
-				this.registerReader((AbstractReaderPlugin) plugin);
-			} else {
-				this.registerFilter((AbstractFilterPlugin) plugin);
-			}
 		}
 		// Now we have all plugins. We can start to assemble the wiring.
 		for (final MIPlugin mPlugin : mPlugins) {
@@ -483,8 +491,8 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * {@inheritDoc}
 	 */
-	public final void connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst,
-			final String inputPortName) throws IllegalStateException, AnalysisConfigurationException {
+	public final void connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst, final String inputPortName)
+			throws IllegalStateException, AnalysisConfigurationException {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to connect readers and filters after starting analysis.");
 		}
@@ -509,8 +517,8 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * {@inheritDoc}
 	 */
-	public final void connect(final AbstractPlugin plugin, final String repositoryPort, final AbstractRepository repository) throws IllegalStateException,
-			AnalysisConfigurationException {
+	public final void connect(final AbstractPlugin plugin, final String repositoryPort, final AbstractRepository repository)
+			throws IllegalStateException, AnalysisConfigurationException {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to connect repositories after starting analysis.");
 		}
@@ -677,7 +685,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		}
 		// Call init() method of all plug-ins.
 		for (final AbstractReaderPlugin reader : this.readers) {
-			/* Make also sure that all repository ports of all plugins are connected. */
+			// Make also sure that all repository ports of all plugins are connected.
 			if (!reader.areAllRepositoryPortsConnected()) {
 				this.terminate(true);
 				throw new AnalysisConfigurationException("Reader '" + reader.getName() + "' (" + reader.getPluginName() + ") has unconnected repositories.");
@@ -688,7 +696,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 			}
 		}
 		for (final AbstractFilterPlugin filter : this.filters) {
-			/* Make also sure that all repository ports of all plugins are connected. */
+			// Make also sure that all repository ports of all plugins are connected.
 			if (!filter.areAllRepositoryPortsConnected()) {
 				this.terminate(true);
 				throw new AnalysisConfigurationException("Plugin '" + filter.getName() + "' (" + filter.getPluginName() + ") has unconnected repositories.");
@@ -773,20 +781,23 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Registers the given reader with this analysis instance.
+	 * 
+	 * @param reader
+	 *            The reader to register with this analysis.
+	 * 
+	 * @throws IllegalStateException
+	 *             If the analysis has already been started when this method is called.
+	 * 
+	 * @deprecated This method will not be for public use in Kieker 1.8. Use the new constructor instead.
 	 */
-	// TODO This is not really deprecated, but we have to make sure that only AbstractComponent can use this method. Maybe we should remove the method just from the
-	// interface? sounds good!
 	@Deprecated
 	public final void registerReader(final AbstractReaderPlugin reader) throws IllegalStateException {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to register filter after starting analysis.");
 		}
-		// Try to register the current analysis controller for the given component
-		if (!reader.setProjectContext(this)) {
-			// Seems like it failed
-			LOG.warn("Reader " + reader.getName() + " already registered with other AnalysisController.");
-			return;
+		if (!reader.setProjectContext(this)) { // just to make sure
+			return; // already registered elsewhere
 		}
 		if (this.readers.contains(reader)) {
 			LOG.warn("Reader " + reader.getName() + " already registered.");
@@ -799,20 +810,23 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Registers the given filter with this analysis instance.
+	 * 
+	 * @param filter
+	 *            The filter to register with this analysis.
+	 * 
+	 * @throws IllegalStateException
+	 *             If the analysis has already been started when this method is called.
+	 * 
+	 * @deprecated This method will not be for public use in Kieker 1.8. Use the new constructor instead.
 	 */
-	// TODO This is not really deprecated, but we have to make sure that only AbstractComponent can use this method. Maybe we should remove the method just from the
-	// interface? sounds good!
 	@Deprecated
 	public final void registerFilter(final AbstractFilterPlugin filter) throws IllegalStateException {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to register filter after starting analysis.");
 		}
-		// Try to register the current analysis controller for the given component
-		if (!filter.setProjectContext(this)) {
-			// Seems like it failed
-			LOG.warn("Filter " + filter.getName() + " already registered with other AnalysisController.");
-			return;
+		if (!filter.setProjectContext(this)) { // just to make sure
+			return; // already registered elsewhere
 		}
 		if (this.filters.contains(filter)) {
 			LOG.warn("Filter '" + filter.getName() + "' (" + filter.getPluginName() + ") already registered.");
@@ -825,20 +839,23 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Registers the given repository with this analysis instance.
+	 * 
+	 * @param repository
+	 *            The repository to register with this analysis.
+	 * 
+	 * @throws IllegalStateException
+	 *             If the analysis has already been started when this method is called.
+	 * 
+	 * @deprecated This method will not be for public use in Kieker 1.8. Use the new constructor instead.
 	 */
-	// TODO This is not really deprecated, but we have to make sure that only AbstractComponent can use this method. Maybe we should remove the method just from the
-	// interface? sounds good!
 	@Deprecated
 	public final void registerRepository(final AbstractRepository repository) throws IllegalStateException {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to register respository after starting analysis.");
 		}
-		// Try to register the current analysis controller for the given component
-		if (!repository.setProjectContext(this)) {
-			// Seems like it failed
-			LOG.warn("Repository " + repository.getName() + "' (" + repository.getRepositoryName() + ") already registered with other AnalysisController.");
-			return;
+		if (!repository.setProjectContext(this)) { // just to make sure
+			return; // already registered elsewhere
 		}
 		if (this.repos.contains(repository)) {
 			LOG.warn("Repository '" + repository.getName() + "' (" + repository.getRepositoryName() + ") already registered.");
@@ -909,7 +926,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 				return resource;
 			}
 		});
-		// Try to load the ressource.
+		// Try to load the resource
 		try {
 			final XMIResource resource = (XMIResource) resourceSet.getResource(URI.createFileURI(file.toString()), true);
 			final EList<EObject> content;
@@ -926,7 +943,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 			newEx.initCause(ex);
 			throw newEx; // NOPMD (cause is set above)
 		} catch (final Exception ex) { // NOPMD NOCS (illegal catch)
-			/* Some exceptions like the XMIException can be thrown during loading although it cannot be seen. Catch this situation. */
+			// Some exceptions like the XMIException can be thrown during loading although it cannot be seen. Catch this situation.
 			final IOException newEx = new IOException("The given file '" + file.getAbsolutePath() + "' is not a valid kax-configuration file.");
 			newEx.initCause(ex);
 			throw newEx; // NOPMD (cause is set above)
@@ -944,15 +961,15 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 *             In case of errors.
 	 */
 	public static final void saveToFile(final File file, final MIProject project) throws IOException {
-		/* Create a resource and put the given project into it. */
+		// Create a resource and put the given project into it
 		final ResourceSet resourceSet = new ResourceSetImpl();
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
 		final Resource resource = resourceSet.createResource(URI.createFileURI(file.getAbsolutePath()));
 		resource.getContents().add(project);
-		/* Make sure that the controller uses utf8 instead of ascii. */
+		// Make sure that the controller uses utf8 instead of ascii.
 		final Map<String, String> options = new HashMap<String, String>(); // NOPMD (no concurrent access)
 		options.put(XMLResource.OPTION_ENCODING, "UTF-8");
-		/* Now try to save the resource. */
+		// Now try to save the resource
 		try {
 			resource.save(options);
 		} catch (final IOException ex) {
@@ -971,7 +988,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 */
 	private static final Configuration modelPropertiesToConfiguration(final EList<MIProperty> mProperties) {
 		final Configuration configuration = new Configuration();
-		/* Run through the properties and convert every single of them. */
+		// Run through the properties and convert every single of them
 		for (final MIProperty mProperty : mProperties) {
 			configuration.setProperty(mProperty.getName(), mProperty.getValue());
 		}
@@ -1035,11 +1052,11 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 */
 	@SuppressWarnings("unchecked")
 	private static final <C extends AbstractAnalysisComponent> C createAndInitialize(final Class<C> c, final String classname, final Configuration configuration,
-			final ClassLoader classLoader) throws AnalysisConfigurationException {
+			final IProjectContext projectContext, final ClassLoader classLoader) throws AnalysisConfigurationException {
 		try {
 			final Class<?> clazz = Class.forName(classname, true, classLoader);
 			if (c.isAssignableFrom(clazz)) {
-				return (C) clazz.getConstructor(Configuration.class).newInstance(configuration);
+				return (C) clazz.getConstructor(Configuration.class, IProjectContext.class).newInstance(configuration, projectContext);
 			} else {
 				throw new AnalysisConfigurationException("Class '" + classname + "' has to implement or extend '" + c.getSimpleName() + "'");
 			}
@@ -1080,6 +1097,8 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * one wants to create an analysis based on an instance of {@link MIProject} and needs to map from the model instances to the actual created objects.
 	 * 
 	 * @author Andre van Hoorn, Nils Christian Ehmke, Jan Waller
+	 * 
+	 * @since 1.6
 	 */
 	public static final class AnalysisControllerWithMapping {
 
@@ -1137,6 +1156,8 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * An enumeration used to describe the state of an {@link AnalysisController}.
 	 * 
 	 * @author Jan Waller
+	 * 
+	 * @since 1.5
 	 */
 	public static enum STATE {
 		/**
@@ -1161,6 +1182,8 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * This interface can be used for observers which want to get notified about state changes of an analysis controller.
 	 * 
 	 * @author Nils Christian Ehmke
+	 * 
+	 * @since 1.5
 	 */
 	public static interface IStateObserver {
 
@@ -1171,6 +1194,8 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		 *            The controller which updated its state.
 		 * @param state
 		 *            The new state of the given controller.
+		 * 
+		 * @since 1.5
 		 */
 		public void update(final AnalysisController controller, final STATE state);
 	}

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,9 +25,15 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 
 /**
- * This class represents a configuration object within the Kieker project. Technically it is a property list with some additional methods and possibilities.
+ * This class represents a configuration object within the Kieker project. Technically it is a property list with some additional methods and possibilities.<br/>
+ * 
+ * Some of the methods are marked as deprecated. This is not because they will be removed, but rather because they should not be used anymore (at least not directly
+ * - they are still used in a valid way within this class). Normally we would remove them, but they are inherited from the class {@link Properties} and can neither
+ * be removed nor get a lower visibility modificator.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public final class Configuration extends Properties {
 
@@ -56,6 +62,7 @@ public final class Configuration extends Properties {
 	 * 
 	 * @param key
 	 *            The key of the property.
+	 * 
 	 * @return A string with the value of the given property or null, if the property does not exist.
 	 */
 	public final String getStringProperty(final String key) {
@@ -68,6 +75,7 @@ public final class Configuration extends Properties {
 	 * 
 	 * @param key
 	 *            The key of the property.
+	 * 
 	 * @return A boolean with the value of the given property or null, if the property does not exist.
 	 */
 	public final boolean getBooleanProperty(final String key) {
@@ -79,6 +87,7 @@ public final class Configuration extends Properties {
 	 * 
 	 * @param key
 	 *            The key of the property.
+	 * 
 	 * @return An integer with the value of the given property or null, if the property does not exist.
 	 */
 	public final int getIntProperty(final String key) {
@@ -108,15 +117,25 @@ public final class Configuration extends Properties {
 		}
 	}
 
+	/**
+	 * Reads the given property from the configuration and interprets it as a path.
+	 * 
+	 * @param key
+	 *            The key of the property.
+	 * 
+	 * @return A string with the value of the given property or null, if the property does not exist.
+	 */
 	public final String getPathProperty(final String key) {
 		return Configuration.convertToPath(this.getStringProperty(key));
 	}
 
 	/**
-	 * Property values have to be split by '|'.
+	 * Interprets the property (defined by the given key) as an array of values and transforms it into a real array. Property values have to be split by '|'.
 	 * 
 	 * @param key
 	 *            The key of the property.
+	 * 
+	 * @return A string array containing the single values of the properties.
 	 */
 	public final String[] getStringArrayProperty(final String key) {
 		return this.getStringArrayProperty(key, "\\|");
@@ -136,12 +155,16 @@ public final class Configuration extends Properties {
 	}
 
 	/**
-	 * Property values have to be split by 'split'.
+	 * Interprets the property (defined by the given key) as an array of values and transforms it into a real array. Property values have to be split by 'split'.
 	 * 
 	 * @param split
 	 *            a regular expression
 	 * @param key
 	 *            The key of the property.
+	 * 
+	 * @return A string array containing the single values of the properties.
+	 * 
+	 * @see #toProperty(Object[])
 	 */
 	public final String[] getStringArrayProperty(final String key, final String split) {
 		final String s = this.getStringProperty(key);
@@ -156,6 +179,12 @@ public final class Configuration extends Properties {
 	 * Converts the Object[] to a String split by '|'.
 	 * 
 	 * @param values
+	 *            The values which will be transformed into a string.
+	 * 
+	 * @return A string representation of the given values array.
+	 * 
+	 * @see #getStringArrayProperty(String)
+	 * @see #getStringArrayProperty(String, String)
 	 */
 	public static final String toProperty(final Object[] values) {
 		final StringBuilder sb = new StringBuilder();
@@ -173,7 +202,9 @@ public final class Configuration extends Properties {
 	 * E.g., test/../x/y/./z/a/../x -> x/y/z/x
 	 * 
 	 * @param path
-	 * @return a simplified path
+	 *            The path to be simplified.
+	 * 
+	 * @return A simplified version of the given path.
 	 */
 	public static final String convertToPath(final String path) {
 		try {
@@ -188,6 +219,9 @@ public final class Configuration extends Properties {
 	 * Flattens the Properties hierarchies and returns a Configuration object containing only keys starting with the prefix.
 	 * 
 	 * @param prefix
+	 *            The prefix to be used during the flattening.
+	 * 
+	 * @return A new configuration object with a flattened properties hierarchy.
 	 */
 	public final Configuration getPropertiesStartingWith(final String prefix) {
 		final Configuration configuration = new Configuration(null);
@@ -207,8 +241,9 @@ public final class Configuration extends Properties {
 	 * Flattens the Properties hierarchies and returns a new Configuration object.
 	 * 
 	 * @param defaultConfiguration
+	 *            The configuration which will be used as a base.
 	 * 
-	 * @return A new configuration object with a flatten properties hierarchy.
+	 * @return A new configuration object with a flattened properties hierarchy.
 	 */
 	public final Configuration flatten(final Configuration defaultConfiguration) {
 		final Configuration configuration = new Configuration(defaultConfiguration);
@@ -225,18 +260,20 @@ public final class Configuration extends Properties {
 	/**
 	 * Flattens the Properties hierarchies and returns a new Configuration object.
 	 * 
-	 * @return A new configuration object with a flatten properties hierarchy.
+	 * @return A new configuration object with a flattened properties hierarchy.
 	 */
 	public final Configuration flatten() {
 		return this.flatten(null);
 	}
 
 	/**
-	 * You should know what you do if you use this method!
-	 * Currently it is used for a (dirty) hack to implement writers.
+	 * You should know what you do if you use this method! Currently it is used for a (dirty) hack to implement writers.
 	 * 
 	 * @param defaultConfiguration
+	 *            The default configuration for this configuration object.
+	 * 
 	 * @throws IllegalAccessException
+	 *             If the default value has already been set.
 	 */
 	public final void setDefaultConfiguration(final Configuration defaultConfiguration) throws IllegalAccessException {
 		if (this.defaults == null) {
@@ -247,8 +284,18 @@ public final class Configuration extends Properties {
 	}
 
 	/**
-	 * This method should never be used directly!
+	 * Puts a given key value pair into the container. This method should never be used directly!
 	 * Use {@link #setProperty(String, String)} instead!
+	 * 
+	 * @param key
+	 *            The key which will be used to store the given value.
+	 * @param value
+	 *            The value to store.
+	 * 
+	 * @return The old object which was stored under the given key or null if there wasn't a value before.
+	 * 
+	 * @deprecated This method will not be removed (as this is for technical reasons not possible), but should only be used within this class. Don't call this method
+	 *             directly.
 	 */
 	@Override
 	@Deprecated
@@ -257,8 +304,16 @@ public final class Configuration extends Properties {
 	}
 
 	/**
-	 * This method should never be used directly!
+	 * Searches for a given key. This method should never be used directly!
 	 * Use {@link #getStringProperty(String)} instead!
+	 * 
+	 * @param key
+	 *            The key for the value in question.
+	 * 
+	 * @return The value for the specified key if available, null otherwise.
+	 * 
+	 * @deprecated This method will not be removed (as this is for technical reasons not possible), but should only be used within this class. Don't call this method
+	 *             directly.
 	 */
 	@Override
 	@Deprecated
@@ -267,8 +322,16 @@ public final class Configuration extends Properties {
 	}
 
 	/**
-	 * This method should never be used directly!
+	 * Searches for a given property key. This method should never be used directly!
 	 * Use {@link #getStringProperty(String)} instead!
+	 * 
+	 * @param key
+	 *            The key for the property in question.
+	 * 
+	 * @return The property for the specified key if available, null otherwise.
+	 * 
+	 * @deprecated This method will not be removed (as this is for technical reasons not possible), but should only be used within this class. Don't call this method
+	 *             directly.
 	 */
 	@Override
 	@Deprecated
@@ -277,7 +340,17 @@ public final class Configuration extends Properties {
 	}
 
 	/**
-	 * This method should never be used directly!
+	 * Searches for a given property key. This method should never be used directly!
+	 * 
+	 * @param key
+	 *            The key for the property in question.
+	 * @param defaultValue
+	 *            The default value to be returned.
+	 * 
+	 * @return The property for the specified key if available, the given default value otherwise.
+	 * 
+	 * @deprecated This method will not be removed (as this is for technical reasons not possible), but should only be used within this class. Don't call this method
+	 *             directly.
 	 */
 	@Override
 	@Deprecated

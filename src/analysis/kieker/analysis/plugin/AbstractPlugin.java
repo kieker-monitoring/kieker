@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import kieker.analysis.AnalysisController;
+import kieker.analysis.IProjectContext;
 import kieker.analysis.analysisComponent.AbstractAnalysisComponent;
 import kieker.analysis.display.annotation.Display;
 import kieker.analysis.exception.AnalysisConfigurationException;
@@ -44,12 +46,15 @@ import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.common.record.misc.KiekerMetadataRecord;
 
 /**
  * <b>Do not</b> inherit directly from this class! Instead inherit from the class {@link kieker.analysis.plugin.filter.AbstractFilterPlugin} or
  * {@link kieker.analysis.plugin.reader.AbstractReaderPlugin}.
  * 
  * @author Nils Christian Ehmke, Jan Waller
+ * 
+ * @since 1.5
  */
 @Plugin
 public abstract class AbstractPlugin extends AbstractAnalysisComponent implements IPlugin {
@@ -72,12 +77,25 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	 * 
 	 * @param configuration
 	 *            The configuration for this repository.
+	 * 
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
+	@Deprecated
 	public AbstractPlugin(final Configuration configuration) {
-		// Registering will happen in the subclass
-		super(configuration);
+		this(configuration, null);
+	}
 
-		// KEEP IN MIND: Although we use "this" in the following code, it points to the actual class. Not to AbstractPlugin!!
+	/**
+	 * Each Plugin requires a constructor with a Configuration object and a IProjectContext.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component. The component will be registered.
+	 */
+	public AbstractPlugin(final Configuration configuration, final IProjectContext projectContext) {
+		// Registering will happen in the subclass
+		super(configuration, projectContext);
 
 		// Get all repository and output ports.
 		this.repositoryPorts = new ConcurrentHashMap<String, RepositoryPort>();
@@ -93,7 +111,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 				LOG.error("Two OutputPorts use the same name: " + outputPort.name());
 			}
 		}
-		/* Get all input ports. */
+		// Get all input ports.
 		this.inputPorts = new ConcurrentHashMap<String, InputPort>();
 		// ignore possible inputPorts for IReaderPlugins
 		if (!(this instanceof IReaderPlugin)) {
@@ -102,16 +120,34 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 				if ((inputPort != null) && (this.inputPorts.put(inputPort.name(), inputPort) != null)) {
 					LOG.error("Two InputPorts use the same name: " + inputPort.name());
 				}
+				if (inputPort != null) {
+					final Class<?>[] parameters = method.getParameterTypes();
+					if (parameters.length != 1) {
+						LOG.error("The input port " + inputPort.name() + " has to provide exactly one parameter of the correct type.");
+					} else {
+						Class<?>[] eventTypes = inputPort.eventTypes();
+						if (eventTypes.length == 0) { // NOPMD (nested if)
+							eventTypes = new Class<?>[] { Object.class };
+						}
+						for (final Class<?> event : eventTypes) {
+							if (!parameters[0].isAssignableFrom(event)) { // NOPMD (nested if)
+								LOG.error("The event type " + event.getName() + " of the input port " + inputPort.name()
+										+ " is not accepted by the parameter of type "
+										+ parameters[0].getName());
+							}
+						}
+					}
+				}
 			}
 		}
 		this.registeredRepositories = new ConcurrentHashMap<String, AbstractRepository>(this.repositoryPorts.size());
 
-		/* Now create a linked queue for every output port of the class, to store the registered methods. */
+		// Now create a linked queue for every output port of the class, to store the registered methods.
 		this.registeredMethods = new ConcurrentHashMap<String, ConcurrentLinkedQueue<PluginInputPortReference>>();
 		for (final OutputPort outputPort : annotation.outputPorts()) {
 			this.registeredMethods.put(outputPort.name(), new ConcurrentLinkedQueue<PluginInputPortReference>());
 		}
-		/* and a List for every incoming and outgoing plugin */
+		// and a List for every incoming and outgoing plugin
 		this.incomingPlugins = new ArrayList<AbstractPlugin>(1); // usually only one incoming
 		this.outgoingPlugins = new ArrayList<AbstractPlugin>(1); // usually only one outgoing
 	}
@@ -129,14 +165,19 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		if (((this.state != STATE.RUNNING) && (this.state != STATE.TERMINATING)) || (data == null)) {
 			return false;
 		}
+		// discard this kind of record when encountered ...
+		if (data instanceof KiekerMetadataRecord) {
+			((AnalysisController) this.projectContext).handleKiekerMetadataRecord((KiekerMetadataRecord) data);
+			return true;
+		}
 
-		/* First step: Get the output port. */
+		// First step: Get the output port.
 		final OutputPort outputPort = this.outputPorts.get(outputPortName);
 		if (outputPort == null) {
 			return false;
 		}
 
-		/* Second step: Check whether the data fits the event types. */
+		// Second step: Check whether the data fits the event types.
 		Class<?>[] outTypes = outputPort.eventTypes();
 		if (outTypes.length == 0) {
 			outTypes = new Class<?>[] { Object.class };
@@ -152,11 +193,11 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			return false;
 		}
 
-		/* Third step: Send everything to the registered ports. */
+		// Third step: Send everything to the registered ports.
 		final ConcurrentLinkedQueue<PluginInputPortReference> registeredMethodsOfPort = this.registeredMethods.get(outputPortName);
 
 		for (final PluginInputPortReference pluginInputPortReference : registeredMethodsOfPort) {
-			/* Check whether the data fits the event types. */
+			// Check whether the data fits the event types.
 			Class<?>[] eventTypes = pluginInputPortReference.getEventTypes();
 			if (eventTypes.length == 0) {
 				eventTypes = new Class<?>[] { Object.class };
@@ -233,17 +274,17 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	 *             if any given plugin is invalid, any output or input port doesn't exist or if they are incompatible.
 	 *             Furthermore the destination plugin must not be a reader.
 	 */
-	public static final void connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst, final String inputPortName)
-			throws AnalysisConfigurationException {
+	public static final void connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst, final String inputPortName) throws
+			AnalysisConfigurationException {
 		if (!AbstractPlugin.isConnectionAllowed(src, outputPortName, dst, inputPortName)) {
 			throw new AnalysisConfigurationException("Failed to connect plugin '" + src.getName() + "' (" + src.getPluginName() + ") to plugin '"
 					+ dst.getName() + "' (" + dst.getPluginName() + ").");
 		}
 		// Connect the ports.
-		// TODO: add a better check for the parameter of the method (currently only if 1 parameter present)
 		for (final Method m : dst.getClass().getMethods()) {
 			final InputPort ip = m.getAnnotation(InputPort.class);
 			if ((ip != null) && (m.getParameterTypes().length == 1) && ip.name().equals(inputPortName)) {
+				src.outputPorts.get(outputPortName).eventTypes();
 				java.security.AccessController.doPrivileged(new PrivilegedAction<Object>() {
 					public Object run() {
 						m.setAccessible(true);
@@ -280,7 +321,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	 *         not be a reader.
 	 */
 	public static final boolean isConnectionAllowed(final AbstractPlugin src, final String output, final AbstractPlugin dst, final String input) {
-		/* First step: Check whether the plugins are valid. */
+		// First step: Check whether the plugins are valid.
 		if ((src == null) || (dst == null) || (dst instanceof IReaderPlugin)) {
 			LOG.warn("Plugins are invalid or null.");
 			return false;
@@ -294,7 +335,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			return false;
 		}
 
-		/* Second step: Check whether the ports exist. */
+		// Second step: Check whether the ports exist.
 		final OutputPort outputPort = src.outputPorts.get(output);
 		if (outputPort == null) {
 			LOG.warn("Output port does not exist. " + "Plugin: " + src.getClass().getName() + "; output: " + output);
@@ -306,7 +347,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			return false;
 		}
 
-		/* Third step: Make sure the ports are compatible. */
+		// Third step: Make sure the ports are compatible.
 		if (inputPort.eventTypes().length != 0) {
 			final Class<?>[] outEventTypes;
 			if (outputPort.eventTypes().length == 0) {
@@ -334,7 +375,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			return false;
 		}
 
-		/* Seems like the connection is okay. */
+		// Seems like the connection is okay.
 		return true;
 	}
 
@@ -381,11 +422,11 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	 * @return true if and only if all plugin ports (defined in the annotation) are connected to a repository.
 	 */
 	public final boolean areAllRepositoryPortsConnected() {
-		/* Run through all port names and check them. */
+		// Run through all port names and check them.
 		final Iterator<String> repositoryNameIter = this.repositoryPorts.keySet().iterator();
 		while (repositoryNameIter.hasNext()) {
 			if (!this.registeredRepositories.containsKey(repositoryNameIter.next())) {
-				/* The current port is not connected. */
+				// The current port is not connected.
 				return false;
 			}
 		}
@@ -466,12 +507,12 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	 * {@inheritDoc}
 	 */
 	public final List<PluginInputPortReference> getConnectedPlugins(final String outputPortName) {
-		/* Make sure that the output port exists */
+		// Make sure that the output port exists
 		final OutputPort outputPort = this.outputPorts.get(outputPortName);
 		if (outputPort == null) {
 			return null;
 		}
-		/* Now get the connections. */
+		// Now get the connections.
 		final List<PluginInputPortReference> result = new ArrayList<PluginInputPortReference>();
 		for (final PluginInputPortReference ref : this.registeredMethods.get(outputPortName)) {
 			result.add(ref);
@@ -563,8 +604,8 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	 * @throws AnalysisConfigurationException
 	 *             If an error occurs while processing of this notification
 	 */
-	protected void notifyNewIncomingConnection(final String inputPortName, final AbstractPlugin connectedPlugin, final String outputPortName) // NOPMD
-			throws AnalysisConfigurationException {
+	protected void notifyNewIncomingConnection(final String inputPortName, final AbstractPlugin connectedPlugin, // NOPMD
+			final String outputPortName) throws AnalysisConfigurationException {
 		// Do nothing by default
 	}
 
@@ -580,8 +621,8 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	 * @throws AnalysisConfigurationException
 	 *             If an error occurs while processing of this notification
 	 */
-	protected void notifyNewOutgoingConnection(final String outputPortName, final AbstractPlugin connectedPlugin, final String inputPortName) // NOPMD
-			throws AnalysisConfigurationException {
+	protected void notifyNewOutgoingConnection(final String outputPortName, final AbstractPlugin connectedPlugin, // NOPMD
+			final String inputPortName) throws AnalysisConfigurationException {
 		// Do nothing by default
 	}
 

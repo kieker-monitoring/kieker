@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,8 @@ import kieker.common.configuration.Configuration;
  * Implementation of a description repository which stores descriptions for names.
  * 
  * @author Holger Knoche
+ * 
+ * @since 1.6
  */
 @Repository(name = "Description repository",
 		description = "Stores descriptions for names",
@@ -59,6 +61,7 @@ public class DescriptionRepository extends AbstractRepository {
 	 * 
 	 * @param configuration
 	 *            The configuration to use
+	 * 
 	 * @throws IOException
 	 *             If an I/O error occurs during initialization
 	 * 
@@ -70,6 +73,21 @@ public class DescriptionRepository extends AbstractRepository {
 	}
 
 	/**
+	 * Creates a new description repository using the given configuration.
+	 * 
+	 * @param configuration
+	 *            The configuration to use
+	 * @param projectContext
+	 *            The project context for this plugin.
+	 * 
+	 * @throws IOException
+	 *             If an I/O error occurs during initialization
+	 */
+	public DescriptionRepository(final Configuration configuration, final IProjectContext projectContext) throws IOException {
+		this(configuration, DescriptionRepository.readDataFromFile(configuration.getStringProperty(CONFIG_PROPERTY_NAME_DESCRIPTION_FILE_NAME)), projectContext);
+	}
+
+	/**
 	 * Creates a new description repository using the given data.
 	 * 
 	 * @param configuration
@@ -78,8 +96,6 @@ public class DescriptionRepository extends AbstractRepository {
 	 *            The description data to use
 	 * @param projectContext
 	 *            The project context to use.
-	 * 
-	 * @since 1.7
 	 */
 	public DescriptionRepository(final Configuration configuration, final DescriptionRepositoryData descriptionData, final IProjectContext projectContext) {
 		super(configuration, projectContext);
@@ -95,7 +111,7 @@ public class DescriptionRepository extends AbstractRepository {
 	 * @param descriptionData
 	 *            The description data to use
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public DescriptionRepository(final Configuration configuration, final DescriptionRepositoryData descriptionData) {
@@ -111,7 +127,7 @@ public class DescriptionRepository extends AbstractRepository {
 	}
 
 	/**
-	 * Returns the description map (node id -> description) contained in this repository-
+	 * Returns the description map (node id -> description) contained in this repository.
 	 * 
 	 * @return See above
 	 */
@@ -141,7 +157,7 @@ public class DescriptionRepository extends AbstractRepository {
 	 * @throws IOException
 	 *             If an I/O error occurs
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public static DescriptionRepository createFromFile(final String fileName) throws IOException {
@@ -159,8 +175,6 @@ public class DescriptionRepository extends AbstractRepository {
 	 * 
 	 * @throws IOException
 	 *             If an I/O error occurs
-	 * 
-	 * @since 1.7
 	 */
 	public static DescriptionRepository createFromFile(final String fileName, final IProjectContext projectContext) throws IOException {
 		final Configuration configuration = new Configuration();
@@ -201,6 +215,8 @@ public class DescriptionRepository extends AbstractRepository {
 	 * This class groups the data required for a {@link DescriptionRepository}.
 	 * 
 	 * @author Holger Knoche
+	 * 
+	 * @since 1.6
 	 */
 	public static class DescriptionRepositoryData {
 
@@ -217,7 +233,7 @@ public class DescriptionRepository extends AbstractRepository {
 			this.descriptionMap = descriptionMap;
 		}
 
-		private ConcurrentMap<String, String> getDescriptionMap() {
+		ConcurrentMap<String, String> getDescriptionMap() { // NOPMD package for outer class
 			return this.descriptionMap;
 		}
 

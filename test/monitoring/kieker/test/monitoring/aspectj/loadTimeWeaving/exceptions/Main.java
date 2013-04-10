@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,12 +22,19 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
  * Experimental test for Kieker in combination with exceptions.
  * 
  * @author Matthias Rohr
+ * 
+ * @since < 0.9
  */
-
 public final class Main {
 
 	private Main() {}
 
+	/**
+	 * This main method executes some of the dummy test methods.
+	 * 
+	 * @param args
+	 *            The command line arguments. They have no effect.
+	 */
 	public static void main(final String[] args) {
 
 		for (int i = 0; i < 10; i++) {
@@ -51,6 +58,15 @@ public final class Main {
 
 	}
 
+	/**
+	 * A simple dummy method.
+	 * 
+	 * @param throwException
+	 *            Determines whether this method throws an exception or not.
+	 * 
+	 * @throws Exception
+	 *             If the parameter is set to true.
+	 */
 	@OperationExecutionMonitoringProbe
 	public static void helloKieker(final boolean throwException) throws Exception {
 		System.out.println("Hello World (look at your monitoring log ...)." + Thread.currentThread().getId() + " "); // NOPMD (System.out)

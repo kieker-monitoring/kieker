@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,15 +20,19 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import kieker.analysis.IProjectContext;
-import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 
 /**
  * Convenience class for plugins filtering by trace IDs.
  * 
  * @author Andre van Hoorn
+ * 
+ * @deprecated To be removed in Kieker 1.8
+ * 
+ * @since 1.5
  */
-public abstract class AbstractTraceIdFilter extends AbstractFilterPlugin {
+@Deprecated
+public abstract class AbstractTraceIdFilter extends kieker.analysis.plugin.filter.AbstractFilterPlugin {
 	/**
 	 * List of trace IDs to accept. Set null to accept any ID.
 	 */
@@ -41,8 +45,6 @@ public abstract class AbstractTraceIdFilter extends AbstractFilterPlugin {
 	 *            The configuration for this component.
 	 * @param projectContext
 	 *            The project context for this component.
-	 * 
-	 * @since 1.7
 	 */
 	public AbstractTraceIdFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
@@ -68,9 +70,13 @@ public abstract class AbstractTraceIdFilter extends AbstractFilterPlugin {
 	 * Convenience function for inheriting filters.
 	 * 
 	 * @param configuration
+	 *            The configuration which will be used to extract the IDs.
 	 * @param configurationPropertySelectAllTraces
+	 *            The property name to select all traces.
 	 * @param configurationPropertySelectedTraces
-	 * @return
+	 *            The property name of the selected traces.
+	 * 
+	 * @return A set containing the IDs of the traces to pass.
 	 */
 	private static Set<Long> extractIDsFromConfiguration(final Configuration configuration, final String configurationPropertySelectAllTraces,
 			final String configurationPropertySelectedTraces) {
@@ -88,11 +94,12 @@ public abstract class AbstractTraceIdFilter extends AbstractFilterPlugin {
 	}
 
 	/**
-	 * Returns true iff the given trace ID is in the set of IDs to accept.
 	 * This method is a convenience function to inheriting filters.
 	 * 
 	 * @param traceId
-	 * @return
+	 *            The trace ID to check.
+	 * 
+	 * @return True iff the given trace ID is in the set of IDs to accept.
 	 */
 	protected boolean passId(final long traceId) {
 		if ((this.selectedTraceIds != null) && !this.selectedTraceIds.contains(traceId)) {
@@ -107,7 +114,7 @@ public abstract class AbstractTraceIdFilter extends AbstractFilterPlugin {
 	 * Inheriting properties must provide the name of the configuration
 	 * property used to indicate whether or not to select any ID.
 	 * 
-	 * @return
+	 * @return The property name.
 	 */
 	protected abstract String getConfigurationPropertySelectAllTraces();
 
@@ -115,7 +122,7 @@ public abstract class AbstractTraceIdFilter extends AbstractFilterPlugin {
 	 * Inheriting properties must provide the name of the configuration
 	 * property used to store the set of selected trace IDs.
 	 * 
-	 * @return
+	 * @return The property name.
 	 */
 	protected abstract String getConfigurationPropertySelectedTraces();
 

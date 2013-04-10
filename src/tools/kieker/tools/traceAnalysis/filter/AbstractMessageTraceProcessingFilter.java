@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,12 +25,16 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
+ * This is an abstract base for components which process message traces.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public abstract class AbstractMessageTraceProcessingFilter extends AbstractTraceProcessingFilter {
 
+	/** The name of the input port receiving the message traces. */
 	public static final String INPUT_PORT_NAME_MESSAGE_TRACES = "messageTraces";
 
 	/**
@@ -40,8 +44,6 @@ public abstract class AbstractMessageTraceProcessingFilter extends AbstractTrace
 	 *            The configuration for this component.
 	 * @param projectContext
 	 *            The project context for this component.
-	 * 
-	 * @since 1.7
 	 */
 	public AbstractMessageTraceProcessingFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
@@ -60,6 +62,12 @@ public abstract class AbstractMessageTraceProcessingFilter extends AbstractTrace
 		this(configuration, null);
 	}
 
+	/**
+	 * This is the (abstract) input port for the incoming message traces.
+	 * 
+	 * @param mt
+	 *            The incoming message trace.
+	 */
 	@InputPort(name = INPUT_PORT_NAME_MESSAGE_TRACES, description = "Receives the message traces to be processed", eventTypes = { MessageTrace.class })
 	public abstract void inputMessageTraces(final MessageTrace mt);
 }

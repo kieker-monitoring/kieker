@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,27 +34,28 @@ import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.filesystem.FSUtil;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
+import kieker.monitoring.writer.AbstractAsyncWriter;
 import kieker.monitoring.writer.IMonitoringWriter;
 import kieker.monitoring.writer.filesystem.AbstractAsyncFSWriter;
 import kieker.monitoring.writer.filesystem.AsyncFsWriter;
 
 import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
-import kieker.test.tools.junit.writeRead.printStream.BasicPrintStreamWriterTestFile;
+import kieker.test.tools.util.StringUtils;
 
 /**
  * @author Andre van Hoorn
+ * 
+ * @since 1.5
  */
 public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTest {
-	// TODO: constants are private in AbstractAsyncWriter ... why?
-	private static final String CONFIG_ASYNC_WRITER_QUEUESIZE = "QueueSize";
-	private static final String CONFIG_ASYNC_WRITER_BEHAVIOR = "QueueFullBehavior";
-	private static final String CONFIG_ASYNC_WRITER_SHUTDOWNDELAY = "MaxShutdownDelay";
 
-	private static final String ENCODING = "UTF-8";
-
+	/**
+	 * A rule making sure that a temporary folder exists for every test method (which is removed after the test).
+	 */
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
 
@@ -62,6 +63,11 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 
 	protected abstract Class<? extends IMonitoringWriter> getTestedWriterClazz();
 
+	/**
+	 * Initializes the setup for the test.
+	 * 
+	 * @throws IOException
+	 */
 	@Before
 	public void setUp() throws IOException {
 		this.testedWriterClazz = this.getTestedWriterClazz();
@@ -75,10 +81,9 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractAsyncFSWriter.CONFIG_TEMP, Boolean.FALSE.toString());
 		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractAsyncFSWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
 
-		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractTestFSWriterReader.CONFIG_ASYNC_WRITER_QUEUESIZE,
-				Integer.toString(numRecordsWritten * 2));
-		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractTestFSWriterReader.CONFIG_ASYNC_WRITER_BEHAVIOR, "0");
-		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractTestFSWriterReader.CONFIG_ASYNC_WRITER_SHUTDOWNDELAY, "-1");
+		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractAsyncWriter.CONFIG_QUEUESIZE, Integer.toString(numRecordsWritten * 4));
+		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractAsyncWriter.CONFIG_BEHAVIOR, "0");
+		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractAsyncWriter.CONFIG_SHUTDOWNDELAY, "-1");
 
 		// Give extending classes the chance to refine the configuration
 		this.refineWriterConfiguration(config, numRecordsWritten);
@@ -122,13 +127,18 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 	/**
 	 * Replaces the given search String by the given replacement String in all given files.
 	 * 
-	 * @param monitoringLogDirs
+	 * @param dirs
+	 *            The directories containing the files in question.
 	 * @param findString
+	 *            The string to search for.
 	 * @param replaceByString
+	 *            The string that will be used as a substitution.
+	 * 
 	 * @throws IOException
+	 *             If something during the file accesses went wrong.
 	 */
-	protected void replaceStringInMapFiles(final String[] monitoringLogDirs, final String findString, final String replaceByString) throws IOException {
-		for (final String curLogDir : monitoringLogDirs) {
+	protected void replaceStringInMapFiles(final String[] dirs, final String findString, final String replaceByString) throws IOException {
+		for (final String curLogDir : dirs) {
 			final String[] mapFilesInDir = new File(curLogDir).list(new KiekerMapFileFilter());
 			Assert.assertEquals("Unexpected number of map files", 1, mapFilesInDir.length);
 
@@ -139,12 +149,25 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 
 	}
 
+	/**
+	 * Replaces the given search String by the given replacement String in the given file.
+	 * 
+	 * @param filename
+	 *            The name of the file to be modified.
+	 * @param findString
+	 *            The string to search for.
+	 * @param replaceByString
+	 *            The string that will be used as a substitution.
+	 * 
+	 * @throws IOException
+	 *             If something during the file access went wrong.
+	 */
 	private void searchReplaceInFile(final String filename, final String findString, final String replaceByString) throws IOException {
-		final String mapFileContent = BasicPrintStreamWriterTestFile.readOutputFileAsString(new File(filename));
+		final String mapFileContent = StringUtils.readOutputFileAsString(new File(filename));
 		final String manipulatedContent = mapFileContent.replaceAll(findString, replaceByString);
 		PrintStream printStream = null;
 		try {
-			printStream = new PrintStream(new FileOutputStream(filename), false, ENCODING);
+			printStream = new PrintStream(new FileOutputStream(filename), false, FSUtil.ENCODING);
 			printStream.print(manipulatedContent);
 		} finally {
 			if (printStream != null) {
@@ -158,9 +181,25 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 		Assert.assertEquals("Unexpected set of records", eventsPassedToController, eventFromMonitoringLog);
 	}
 
+	/**
+	 * Inheriting classes can use this method to refine the existing configuration by adding more properties.
+	 * 
+	 * @param config
+	 *            The configuration to refine.
+	 */
 	protected abstract void refineFSReaderConfiguration(Configuration config);
 
-	private List<IMonitoringRecord> readLog(final String[] monitoringLogDirs) throws AnalysisConfigurationException {
+	/**
+	 * This method can be used to read monitoring records from the given directories.
+	 * 
+	 * @param monitoringLogDirs
+	 *            The directories containing the monitoring logs.
+	 * @return A list containing all monitoring records.
+	 * 
+	 * @throws AnalysisConfigurationException
+	 *             If something went wrong during the reading.
+	 */
+	protected List<IMonitoringRecord> readLog(final String[] monitoringLogDirs) throws AnalysisConfigurationException {
 		final AnalysisController analysisController = new AnalysisController();
 		final Configuration readerConfiguration = new Configuration();
 		readerConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(monitoringLogDirs));

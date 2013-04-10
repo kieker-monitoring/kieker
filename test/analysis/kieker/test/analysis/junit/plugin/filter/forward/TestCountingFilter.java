@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,8 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * This test is for the class {@link CountingFilter}.
  * 
  * @author Nils Christian Ehmke, Jan Waller
+ * 
+ * @since 1.6
  */
 public class TestCountingFilter extends AbstractKiekerTest {
 
@@ -40,10 +42,21 @@ public class TestCountingFilter extends AbstractKiekerTest {
 	private ListReader<Object> simpleListReader;
 	private CountingFilter countingFilter;
 
+	/**
+	 * Default constructor.
+	 */
 	public TestCountingFilter() {
 		// empty default constructor
 	}
 
+	/**
+	 * This method prepares the test setup.
+	 * 
+	 * @throws IllegalStateException
+	 *             If something went wrong during the test setup (should not happen).
+	 * @throws AnalysisConfigurationException
+	 *             If something went wrong during the test setup (should not happen).
+	 */
 	@Before
 	public void before() throws IllegalStateException, AnalysisConfigurationException {
 		this.analysisController = new AnalysisController();
@@ -53,6 +66,14 @@ public class TestCountingFilter extends AbstractKiekerTest {
 		this.analysisController.connect(this.simpleListReader, ListReader.OUTPUT_PORT_NAME, this.countingFilter, CountingFilter.INPUT_PORT_NAME_EVENTS);
 	}
 
+	/**
+	 * A simple test for the counting filter.
+	 * 
+	 * @throws IllegalStateException
+	 *             If the test setup is somehow invalid (should not happen).
+	 * @throws AnalysisConfigurationException
+	 *             If the test setup is somehow invalid (should not happen).
+	 */
 	@Test
 	public void testNormal() throws IllegalStateException, AnalysisConfigurationException {
 		this.simpleListReader.addObject(new Object());
@@ -64,6 +85,14 @@ public class TestCountingFilter extends AbstractKiekerTest {
 		Assert.assertEquals(3, this.countingFilter.getMessageCount());
 	}
 
+	/**
+	 * A test for the counting filter with multiple readers.
+	 * 
+	 * @throws IllegalStateException
+	 *             If the test setup is somehow invalid (should not happen).
+	 * @throws AnalysisConfigurationException
+	 *             If the test setup is somehow invalid (should not happen).
+	 */
 	@Test
 	public void testConcurrently() throws IllegalStateException, AnalysisConfigurationException {
 		this.simpleListReader.addObject(new Object());
@@ -80,6 +109,14 @@ public class TestCountingFilter extends AbstractKiekerTest {
 		Assert.assertEquals(3, this.countingFilter.getMessageCount());
 	}
 
+	/**
+	 * A simple test for the counting filter using objects of different classes.
+	 * 
+	 * @throws IllegalStateException
+	 *             If the test setup is somehow invalid (should not happen).
+	 * @throws AnalysisConfigurationException
+	 *             If the test setup is somehow invalid (should not happen).
+	 */
 	@Test
 	public void testDifferentClasses() throws IllegalStateException, AnalysisConfigurationException {
 		this.simpleListReader.addObject(Long.valueOf(10));

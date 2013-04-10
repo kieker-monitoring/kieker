@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,6 +44,8 @@ import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 @Plugin(
 		name = "Trace Reconstruction Filter (Event)",
@@ -100,10 +102,9 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	 */
 	public static final String CONFIG_PROPERTY_VALUE_TIMEUNIT = "NANOSECONDS"; // TimeUnit.NANOSECONDS.name()
 
-	// internally we will assume nanosecond precision
-	// TODO: it would be better to use the actual precision of the records (we assume records use nanoseconds)
-	// TODO: log meta-information on monitoring logs somewhere? e.g. used timesource
-	private final TimeUnit timeunit = TimeUnit.NANOSECONDS;
+	private static final Log LOG = LogFactory.getLog(EventRecordTraceReconstructionFilter.class);
+
+	private final TimeUnit timeunit;
 	private final long maxTraceDuration;
 	private final long maxTraceTimeout;
 	private final boolean timeout;
@@ -118,16 +119,30 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	 *            The configuration for this component.
 	 * @param projectContext
 	 *            The project context for this component.
-	 * 
-	 * @since 1.7
 	 */
 	public EventRecordTraceReconstructionFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
+		if (null != projectContext) { // TODO #819 remove non-null check and else case in Kieker 1.8
+			final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
+			TimeUnit recordTimeunit;
+			try {
+				recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
+			} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
+				LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
+				recordTimeunit = TimeUnit.NANOSECONDS;
+			}
+			this.timeunit = recordTimeunit;
+		} else {
+			this.timeunit = TimeUnit.NANOSECONDS;
+		}
+
+		final String configTimeunitProperty = configuration.getStringProperty(CONFIG_PROPERTY_NAME_TIMEUNIT);
 		TimeUnit configTimeunit;
 		try {
-			configTimeunit = TimeUnit.valueOf(configuration.getStringProperty(CONFIG_PROPERTY_NAME_TIMEUNIT));
+			configTimeunit = TimeUnit.valueOf(configTimeunitProperty);
 		} catch (final IllegalArgumentException ex) {
+			LOG.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + this.timeunit.name() + " instead.");
 			configTimeunit = this.timeunit;
 		}
 
@@ -217,7 +232,6 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	 */
 	@Override
 	public void terminate(final boolean error) {
-		super.terminate(error);
 		synchronized (this) {
 			for (final Entry<Long, TraceBuffer> entry : this.traceId2trace.entrySet()) {
 				final TraceBuffer traceBuffer = entry.getValue();
@@ -321,7 +335,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 					this.openEvents--;
 				}
 				if (!this.events.add(event)) {
-					LOG.error("Duplicate entry for orderIndex " + orderIndex + " with tarceId " + myTraceId);
+					LOG.error("Duplicate entry for orderIndex " + orderIndex + " with traceId " + myTraceId);
 					this.damaged = true;
 				}
 			}
@@ -353,7 +367,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 
 		public boolean isInvalid() {
 			synchronized (this) {
-				return (this.trace == null) || this.damaged || (this.openEvents != 0) || ((this.maxOrderIndex + 1) != this.events.size());
+				return (this.trace == null) || this.damaged || (this.openEvents != 0) || (((this.maxOrderIndex + 1) != this.events.size()) || this.events.isEmpty());
 			}
 		}
 

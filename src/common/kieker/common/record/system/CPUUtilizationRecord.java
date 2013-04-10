@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,8 @@ import kieker.common.record.IMonitoringRecord;
 
 /**
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.3
  */
 public final class CPUUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
 	private static final long serialVersionUID = 229860008090066333L;
@@ -99,15 +101,27 @@ public final class CPUUtilizationRecord extends AbstractMonitoringRecord impleme
 	 * certain {@link String} values shall remain undefined, use the constant {@link #DEFAULT_VALUE}.
 	 * 
 	 * @param timestamp
+	 *            The timestamp for the record.
 	 * @param hostname
+	 *            The name of the host.
 	 * @param cpuID
+	 *            The ID of the CPU.
 	 * @param user
+	 *            The fraction of time during which the CPU was used for user-space processes.
 	 * @param system
+	 *            The fraction of time during which the CPU was used by the kernel.
 	 * @param wait
+	 *            The fraction of CPU wait time.
 	 * @param nice
+	 *            The fraction of time during which the CPU was used by user space processes
+	 *            with a high nice value.
 	 * @param irq
+	 *            The fraction of time during which the CPU was used by user space processes
+	 *            with a high nice value.
 	 * @param totalUtilization
+	 *            The fraction of time during which the CPU was utilized.
 	 * @param idle
+	 *            The fraction of time during which the CPU was idle
 	 */
 	public CPUUtilizationRecord(final long timestamp, final String hostname, final String cpuID, final double user, final double system, final double wait,
 			final double nice, final double irq, final double totalUtilization, final double idle) {
@@ -123,6 +137,12 @@ public final class CPUUtilizationRecord extends AbstractMonitoringRecord impleme
 		this.idle = idle;
 	}
 
+	/**
+	 * This constructor converts the given array into a record. It is recommended to use the array which is the result of a call to {@link #toArray()}.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 */
 	public CPUUtilizationRecord(final Object[] values) { // NOPMD (direct store of values)
 		AbstractMonitoringRecord.checkArray(values, TYPES);
 		this.timestamp = (Long) values[0];
@@ -137,18 +157,26 @@ public final class CPUUtilizationRecord extends AbstractMonitoringRecord impleme
 		this.idle = (Double) values[9];
 	}
 
-	/*
-	 * {@inheritdoc}
+	/**
+	 * {@inheritDoc}
 	 */
 	public Object[] toArray() {
 		return new Object[] { this.timestamp, this.hostname, this.cpuID, this.user, this.system, this.wait, this.nice, this.irq, this.totalUtilization, this.idle, };
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
+	 */
 	@Deprecated
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Class<?>[] getValueTypes() {
 		return TYPES.clone();
 	}

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,8 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 public class TestBeforeOperationObjectEvent extends AbstractKiekerTest {
 
@@ -35,6 +37,9 @@ public class TestBeforeOperationObjectEvent extends AbstractKiekerTest {
 	private static final String FQ_OPERATION_SIGNATURE = FQ_CLASSNAME + ".callerOp(boolean arg1, int arg2)";
 	private static final int OBJECT_ID = 42;
 
+	/**
+	 * Default constructor.
+	 */
 	public TestBeforeOperationObjectEvent() {
 		// empty default constructor
 	}

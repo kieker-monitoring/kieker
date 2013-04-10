@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,9 +29,13 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
  * A timer implementation, counting in nanoseconds since a specified offset.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public final class SystemNanoTimer extends AbstractTimeSource {
+	/** This is the name of the configuration determining the used offset (in nanoseconds). */
 	public static final String CONFIG_OFFSET = SystemNanoTimer.class.getName() + ".offset";
+	/** This is the name of the configuration determining the used time unit (0 = nanoseconds, 1 = microseconds, 2 = milliseconds, 3 = seconds). */
 	public static final String CONFIG_UNIT = SystemNanoTimer.class.getName() + ".unit";
 
 	private static final Log LOG = LogFactory.getLog(SystemNanoTimer.class);
@@ -40,6 +44,13 @@ public final class SystemNanoTimer extends AbstractTimeSource {
 	private final long clockdifference;
 	private final TimeUnit timeunit;
 
+	/**
+	 * 
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this timer.
+	 */
 	public SystemNanoTimer(final Configuration configuration) {
 		super(configuration);
 		this.clockdifference = System.nanoTime() - (TimeUnit.MILLISECONDS.toNanos(System.currentTimeMillis()));
@@ -73,6 +84,10 @@ public final class SystemNanoTimer extends AbstractTimeSource {
 		return this.timeunit.convert(System.nanoTime() - this.offset, TimeUnit.NANOSECONDS);
 	}
 
+	public final String getTimeUnit() {
+		return this.timeunit.name();
+	}
+
 	@Override
 	public final String toString() {
 		final StringBuilder sb = new StringBuilder(64);
@@ -83,16 +98,26 @@ public final class SystemNanoTimer extends AbstractTimeSource {
 
 	/**
 	 * @return a singleton instance of SystemNanoTimer
+	 * 
+	 * @deprecated to be removed in Kieker 1.8
 	 */
+	@Deprecated
 	public static final ITimeSource getInstance() {
 		return LazyHolder.INSTANCE;
 	}
 
 	/**
-	 * SINGLETON
+	 * SINGLETON.
+	 * 
+	 * @deprecated to be removed in Kieker 1.8
 	 */
-	private static final class LazyHolder { // NOCS (MissingCtorCheck)
-		private static final ITimeSource INSTANCE = new SystemNanoTimer(ConfigurationFactory.createDefaultConfiguration().getPropertiesStartingWith(
+	@Deprecated
+	private static final class LazyHolder {
+		static final ITimeSource INSTANCE = new SystemNanoTimer(ConfigurationFactory.createDefaultConfiguration().getPropertiesStartingWith(// NOPMD package
 				SystemNanoTimer.class.getName()));
+
+		private LazyHolder() {
+			// private default constructor
+		}
 	}
 }

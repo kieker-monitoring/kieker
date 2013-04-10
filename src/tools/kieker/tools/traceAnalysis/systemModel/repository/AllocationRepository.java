@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,8 @@ import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
 /**
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 public class AllocationRepository extends AbstractSystemSubRepository {
 	public static final AllocationComponent ROOT_ALLOCATION_COMPONENT =
@@ -36,13 +38,23 @@ public class AllocationRepository extends AbstractSystemSubRepository {
 	private final Map<String, AllocationComponent> allocationComponentInstancesByName = new Hashtable<String, AllocationComponent>(); // NOPMD (UseConcurrentHashMap)
 	private final Map<Integer, AllocationComponent> allocationComponentInstancesById = new Hashtable<Integer, AllocationComponent>(); // NOPMD (UseConcurrentHashMap)
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param systemFactory
+	 *            The system factory.
+	 */
 	public AllocationRepository(final SystemModelRepository systemFactory) {
 		super(systemFactory);
 	}
 
 	/**
-	 * Returns the instance for the passed factoryIdentifier; null if no instance
-	 * with this factoryIdentifier.
+	 * Returns the instance for the passed factoryIdentifier; null if no instance with this factoryIdentifier.
+	 * 
+	 * @param namedIdentifier
+	 *            The identifier to search for.
+	 * 
+	 * @return The corresponding instance if it exists.
 	 */
 	public final AllocationComponent lookupAllocationComponentInstanceByNamedIdentifier(final String namedIdentifier) {
 		return this.allocationComponentInstancesByName.get(namedIdentifier);

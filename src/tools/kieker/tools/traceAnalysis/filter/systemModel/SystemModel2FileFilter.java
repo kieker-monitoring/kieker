@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.5
  */
 @Plugin(
 		description = "Prints the contents of a connected SystemModelRepository to an HTML file",
@@ -66,8 +67,6 @@ public class SystemModel2FileFilter extends AbstractTraceAnalysisFilter {
 	 *            The configuration for this component.
 	 * @param projectContext
 	 *            The project context for this component.
-	 * 
-	 * @since 1.7
 	 */
 	public SystemModel2FileFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
@@ -112,10 +111,7 @@ public class SystemModel2FileFilter extends AbstractTraceAnalysisFilter {
 		boolean error = errorBeforeTermination;
 		if (!error) {
 			try {
-				/*
-				 * Trying to create the canonical file path here.
-				 * Using a code block to hide the File.
-				 */
+				// Trying to create the canonical file path here. Using a code block to hide the File.
 				final File outputFileHTML = new File(this.outputFnHTML);
 				outputFnHTMLCanonical = outputFileHTML.getCanonicalPath(); // may throw IOExecption
 

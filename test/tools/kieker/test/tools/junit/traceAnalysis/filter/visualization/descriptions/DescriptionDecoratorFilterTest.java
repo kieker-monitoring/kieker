@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,6 +48,8 @@ import kieker.test.tools.util.graph.GraphTestSetup;
  * Test suite for the description decorator filter.
  * 
  * @author Holger Knoche, Nils Christian Ehmke
+ * 
+ * @since 1.6
  */
 public class DescriptionDecoratorFilterTest extends AbstractKiekerTest {
 
@@ -67,10 +69,19 @@ public class DescriptionDecoratorFilterTest extends AbstractKiekerTest {
 
 	private static GraphTestSetup testSetup;
 
+	/**
+	 * Default constructor.
+	 */
 	public DescriptionDecoratorFilterTest() {
 		// empty default constructor
 	}
 
+	/**
+	 * Initializes the test setup.
+	 * 
+	 * @throws AnalysisConfigurationException
+	 *             If the preparation of the analysis failed.
+	 */
 	@BeforeClass
 	public static void prepareSetup() throws AnalysisConfigurationException {
 		final AnalysisController analysisController = new AnalysisController();
@@ -123,7 +134,7 @@ public class DescriptionDecoratorFilterTest extends AbstractKiekerTest {
 		Assert.assertEquals(1, graphReceiver.getNumberOfReceivedGraphs());
 
 		// Prepare the produced graph
-		final ComponentAllocationDependencyGraph graph = graphReceiver.<ComponentAllocationDependencyGraph> getFirstGraph(); // NOCS (generic)
+		final ComponentAllocationDependencyGraph graph = graphReceiver.<ComponentAllocationDependencyGraph>getFirstGraph(); // NOCS (generic)
 		final ConcurrentMap<String, DependencyGraphNode<AllocationComponent>> nodeMap = DependencyGraphTestUtil.createNodeLookupTable(graph);
 
 		final DependencyGraphNode<AllocationComponent> component1Node = nodeMap.get(EXPECTED_ALLOCATION_COMPONENT_NAME_1);

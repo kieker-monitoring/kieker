@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.writer.filesystem.AbstractAsyncFSWriter;
 import kieker.monitoring.writer.filesystem.AsyncFsWriter;
-import kieker.tools.logReplayer.MonitoringRecordLoggerFilter;
+import kieker.tools.logReplayer.filter.MonitoringRecordLoggerFilter;
 
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
 import kieker.test.common.junit.AbstractKiekerTest;
@@ -55,6 +55,7 @@ import kieker.test.tools.junit.writeRead.filesystem.KiekerLogDirFilter;
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.6
  */
 public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 	private static final Log LOG = LogFactory.getLog(TestMonitoringRecordLoggerFilter.class);
@@ -67,6 +68,9 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
 
+	/**
+	 * Default constructor.
+	 */
 	public TestMonitoringRecordLoggerFilter() {
 		// empty default constructor
 	}
@@ -86,7 +90,7 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 
 		OutputStream os = null;
 		try {
-			os = new FileOutputStream(monitoringPropertiesFn, /* !append */false);
+			os = new FileOutputStream(monitoringPropertiesFn, false); // !append
 			config.store(os, "Created by " + TestMonitoringRecordLoggerFilter.class.getName());
 		} finally {
 			if (os != null) {
@@ -96,11 +100,9 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 	}
 
 	/**
-	 * Returns a list of {@link IMonitoringRecord}s to be used in this test.
-	 * Extending classes can override this method to use their own list of
-	 * records.
+	 * Returns a list of {@link IMonitoringRecord}s to be used in this test. Extending classes can override this method to use their own list of records.
 	 * 
-	 * @return
+	 * @return A list of records.
 	 */
 	protected List<IMonitoringRecord> provideEvents() {
 		final List<IMonitoringRecord> someEvents = new ArrayList<IMonitoringRecord>();
@@ -155,6 +157,7 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 	 * The actual (parameterized) Test.
 	 * 
 	 * @throws Exception
+	 *             If something went wrong during the test.
 	 */
 	private void testIt(final boolean keepLoggingTimestamps) throws Exception { // NOPMD (JUnitTestsShouldIncludeAssert)
 		final List<IMonitoringRecord> eventsToWrite = this.provideEvents();
@@ -187,10 +190,7 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 
 		final List<IMonitoringRecord> eventsFromLog = this.readEvents();
 
-		/*
-		 * The following line is an easy way to test the tests (given monitoringRecords includes at least one record).
-		 * But don't forget to deactivate afterwards.
-		 */
+		// The following line is an easy way to test the tests (given monitoringRecords includes at least one record). But don't forget to deactivate afterwards.
 		// eventsToWrite.remove(eventsToWrite.size() - 1);
 
 		Assert.assertEquals("Unexpected set of records in monitoring log", eventsToWrite, eventsFromLog);

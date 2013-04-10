@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,6 +40,7 @@ import kieker.monitoring.writer.namedRecordPipe.PipeWriter;
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.4
  */
 public final class NamedPipeFactory {
 
@@ -63,6 +64,7 @@ public final class NamedPipeFactory {
 	 * being a {@link PipeWriter} with the given name.
 	 * 
 	 * @param pipeName
+	 *            The name of the pipe to use.
 	 * @return the created IMonitoringController instance
 	 */
 	public static IMonitoringController createMonitoringControllerWithNamedPipe(final String pipeName) {
@@ -75,12 +77,14 @@ public final class NamedPipeFactory {
 	 * properties can be passed.
 	 * 
 	 * @param pipeName
+	 *            The name of the pipe to use.
 	 * @param additionalProperties
 	 *            additional configuration properties; null is allowed
 	 * @return the created IMonitoringController instance
 	 */
 	public static IMonitoringController createMonitoringControllerWithNamedPipe(final String pipeName, final Properties additionalProperties) {
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
+		configuration.setProperty(ConfigurationFactory.METADATA, "false");
 		configuration.setProperty(ConfigurationFactory.WRITER_CLASSNAME, PipeWriter.class.getName());
 		configuration.setProperty(PipeWriter.CONFIG_PIPENAME, pipeName);
 
@@ -98,6 +102,7 @@ public final class NamedPipeFactory {
 	 * Creates an {@link kieker.monitoring.writer.IMonitoringWriter} that collects records from a {@link Pipe} and collects these in the returned {@link List}.
 	 * 
 	 * @param pipeName
+	 *            The name of the pipe to use.
 	 * @return a list which contains the collected records
 	 */
 	public static List<IMonitoringRecord> createAndRegisterNamedPipeRecordCollector(final String pipeName) {

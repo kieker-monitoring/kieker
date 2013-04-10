@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
-import kieker.analysis.IAnalysisController;
 import kieker.analysis.analysisComponent.AbstractAnalysisComponent;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
@@ -39,18 +38,23 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * @author Nils Christian Ehmke, Jan Waller
  * 
  * @since 1.7
+ * 
+ * @deprecated Will be removed in Kieker 1.8
  */
+@SuppressWarnings("deprecation")
+@Deprecated
 public final class TestPluginLegacy extends AbstractKiekerTest {
 
 	/**
 	 * Creates a new instance of this test class.
-	 * 
-	 * @since 1.7
 	 */
 	public TestPluginLegacy() {
 		// empty default constructor
 	}
 
+	/**
+	 * This method tests some attributes of plugins.
+	 */
 	@Test
 	public void testPluginAttributes() {
 		final Configuration myPluginConfig = new Configuration();
@@ -64,6 +68,9 @@ public final class TestPluginLegacy extends AbstractKiekerTest {
 		Assert.assertEquals("Unexpected plugin description", SimpleForwardFilterWithRepository.FILTER_DESCRIPTION, sourcePlugin.getPluginDescription());
 	}
 
+	/**
+	 * This method tests whether the repository is still working.
+	 */
 	@Test
 	public void testRepository() {
 		final Configuration myRepoConfig = new Configuration();
@@ -77,12 +84,20 @@ public final class TestPluginLegacy extends AbstractKiekerTest {
 		Assert.assertEquals("Unexpected repository description", SimpleRepository.REPOSITORY_DESCRIPTION, myRepo.getRepositoryDescription());
 	}
 
+	/**
+	 * This method tests whether the chaining of filters, readers, and repositories is still working.
+	 * 
+	 * @throws IllegalStateException
+	 *             If something went wrong during the test.
+	 * @throws AnalysisConfigurationException
+	 *             If something went wrong during the test.
+	 */
 	@Test
 	public void testChaining() throws IllegalStateException, AnalysisConfigurationException {
 		final Object testObject1 = new Object();
 		final Object testObject2 = new Object();
 
-		final IAnalysisController analysisController = new AnalysisController();
+		final AnalysisController analysisController = new AnalysisController();
 
 		final SimpleRepository simpleRepository = new SimpleRepository(new Configuration());
 		final ListReader<Object> simpleListReader = new ListReader<Object>(new Configuration());
@@ -116,6 +131,14 @@ public final class TestPluginLegacy extends AbstractKiekerTest {
 		Assert.assertEquals(testObject2, list.get(1));
 	}
 
+	/**
+	 * This method tests whether new constructor is compatible with null as project context.
+	 * 
+	 * @throws IllegalStateException
+	 *             If something went wrong during the test.
+	 * @throws AnalysisConfigurationException
+	 *             If something went wrong during the test.
+	 */
 	@Test
 	public void testCompatibleConstructor() throws IllegalStateException, AnalysisConfigurationException {
 		// Some test objects
@@ -123,7 +146,7 @@ public final class TestPluginLegacy extends AbstractKiekerTest {
 		final Object testObject2 = new Object();
 
 		// The controller for the analysis
-		final IAnalysisController analysisController = new AnalysisController();
+		final AnalysisController analysisController = new AnalysisController();
 
 		// The analysis components
 		final ListReader<Object> simpleListReader = new ListReader<Object>(new Configuration(), null);

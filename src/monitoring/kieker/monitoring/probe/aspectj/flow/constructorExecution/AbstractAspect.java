@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,8 @@ import kieker.monitoring.timer.ITimeSource;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 @Aspect
 public abstract class AbstractAspect extends AbstractAspectJProbe {
@@ -40,12 +42,26 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
 	private static final TraceRegistry TRACEREGISTRY = TraceRegistry.INSTANCE;
 
+	/**
+	 * The pointcut for the monitored constructors. Inheriting classes should extend the pointcut in order to find the correct constructor executions (e.g. all
+	 * constructors or only constructors with specific annotations).
+	 */
 	@Pointcut
 	public abstract void monitoredConstructor();
 
+	/**
+	 * The advice used around the constructor executions.
+	 * 
+	 * @param thisObject
+	 * @param thisJoinPoint
+	 * 
+	 * @return The result of the joint point's {@code proceed} method.
+	 * 
+	 * @throws Throwable
+	 */
 	@Around("monitoredConstructor() && this(thisObject) && notWithinKieker()")
 	public Object constructor(final Object thisObject, final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
-		final String signature = thisJoinPoint.getSignature().toLongString();
+		final String signature = this.signatureToLongString(thisJoinPoint.getSignature());
 		if (!CTRLINST.isProbeActivated(signature)) {
 			return thisJoinPoint.proceed();
 		}

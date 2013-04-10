@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,8 @@ import kieker.common.configuration.Configuration;
  * corresponding method.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.4
  */
 @Plugin(
 		description = "A filter counting the elements flowing through this filter",
@@ -65,8 +67,6 @@ public final class CountingFilter extends AbstractFilterPlugin {
 	 *            The configuration for this component.
 	 * @param projectContext
 	 *            The project context for this component.
-	 * 
-	 * @since 1.7
 	 */
 	public CountingFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
@@ -102,6 +102,12 @@ public final class CountingFilter extends AbstractFilterPlugin {
 		return this.counter.get();
 	}
 
+	/**
+	 * This method represents the input port of this filter.
+	 * 
+	 * @param event
+	 *            The next event.
+	 */
 	@InputPort(name = INPUT_PORT_NAME_EVENTS, eventTypes = { Object.class }, description = "Receives incoming objects to be counted and forwarded")
 	public final void inputEvent(final Object event) {
 		final Long count = CountingFilter.this.counter.incrementAndGet();
@@ -112,6 +118,9 @@ public final class CountingFilter extends AbstractFilterPlugin {
 	/**
 	 * This method is being used to display the currently stored value within this counter.
 	 * It sets the current text within the given instance of {@link PlainText}.
+	 * 
+	 * @param plainText
+	 *            The text object to be filled with the current counter value.
 	 */
 	@Display(name = "Counter Display")
 	public final void countDisplay(final PlainText plainText) {

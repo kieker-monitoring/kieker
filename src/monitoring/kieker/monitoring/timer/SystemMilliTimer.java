@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,9 +28,13 @@ import kieker.common.logging.LogFactory;
  * A timer implementation, counting in milliseconds since a specified offset.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public final class SystemMilliTimer extends AbstractTimeSource {
+	/** The name of the configuration for the offset. */
 	public static final String CONFIG_OFFSET = SystemMilliTimer.class.getName() + ".offset";
+	/** The name of the configuration for the time unit (0 = nanoseconds, 1 = microseconds, 2 = milliseconds, 3 = seconds). */
 	public static final String CONFIG_UNIT = SystemMilliTimer.class.getName() + ".unit";
 
 	private static final Log LOG = LogFactory.getLog(SystemMilliTimer.class);
@@ -38,6 +42,12 @@ public final class SystemMilliTimer extends AbstractTimeSource {
 	private final long offset;
 	private final TimeUnit timeunit;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this timer.
+	 */
 	public SystemMilliTimer(final Configuration configuration) {
 		super(configuration);
 		if (configuration.getStringProperty(CONFIG_OFFSET).length() == 0) {
@@ -70,8 +80,12 @@ public final class SystemMilliTimer extends AbstractTimeSource {
 		return this.timeunit.convert(System.currentTimeMillis() - this.offset, TimeUnit.MILLISECONDS);
 	}
 
+	public final String getTimeUnit() {
+		return this.timeunit.name();
+	}
+
 	@Override
-	public String toString() {
+	public final String toString() {
 		final StringBuilder sb = new StringBuilder(64);
 		sb.append("Time in " + this.timeunit.toString().toLowerCase(Locale.ENGLISH) + " (with milliseconds precision) since ");
 		sb.append(new Date(this.offset));

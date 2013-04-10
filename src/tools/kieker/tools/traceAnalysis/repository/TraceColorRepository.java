@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,6 +40,7 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.Color;
  * 
  * @author Holger Knoche
  * 
+ * @since 1.6
  */
 @Repository(name = "Trace color repository",
 		description = "Provides color information for trace coloring",
@@ -83,6 +84,21 @@ public class TraceColorRepository extends AbstractRepository {
 	}
 
 	/**
+	 * Creates a new description repository using the given configuration.
+	 * 
+	 * @param configuration
+	 *            The configuration to use
+	 * @param projectContext
+	 *            The project context for this plugin.
+	 * 
+	 * @throws IOException
+	 *             If an I/O error occurs during initialization
+	 */
+	public TraceColorRepository(final Configuration configuration, final IProjectContext projectContext) throws IOException {
+		this(configuration, TraceColorRepository.readDataFromFile(configuration.getStringProperty(CONFIG_PROPERTY_NAME_TRACE_COLOR_FILE_NAME)), projectContext);
+	}
+
+	/**
 	 * Creates a new color repository with the given data.
 	 * 
 	 * @param configuration
@@ -91,8 +107,6 @@ public class TraceColorRepository extends AbstractRepository {
 	 *            The color data to use for this repository
 	 * @param projectContext
 	 *            The project context to use for this repository.
-	 * 
-	 * @since 1.7
 	 */
 	public TraceColorRepository(final Configuration configuration, final TraceColorRepositoryData colorData, final IProjectContext projectContext) {
 		super(configuration, projectContext);
@@ -110,7 +124,7 @@ public class TraceColorRepository extends AbstractRepository {
 	 * @param colorData
 	 *            The color data to use for this repository
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public TraceColorRepository(final Configuration configuration, final TraceColorRepositoryData colorData) {
@@ -178,7 +192,7 @@ public class TraceColorRepository extends AbstractRepository {
 	 * @return The initialized trace color repository
 	 * @throws IOException
 	 *             If an I/O error occurs
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public static TraceColorRepository createFromFile(final String fileName) throws IOException {
@@ -196,8 +210,6 @@ public class TraceColorRepository extends AbstractRepository {
 	 * 
 	 * @throws IOException
 	 *             If an I/O error occurs
-	 * 
-	 * @since 1.7
 	 */
 	public static TraceColorRepository createFromFile(final String fileName, final IProjectContext projectContext) throws IOException {
 		final Configuration configuration = new Configuration();
@@ -258,6 +270,8 @@ public class TraceColorRepository extends AbstractRepository {
 	 * This class groups the data required for a {@link TraceColorRepository}.
 	 * 
 	 * @author Holger Knoche
+	 * 
+	 * @since 1.6
 	 */
 	public static class TraceColorRepositoryData {
 		private final ConcurrentMap<Long, Color> colorMap;
@@ -280,15 +294,15 @@ public class TraceColorRepository extends AbstractRepository {
 			this.collisionColor = collisionColor;
 		}
 
-		private ConcurrentMap<Long, Color> getColorMap() {
+		ConcurrentMap<Long, Color> getColorMap() { // NOPMD package for outer class
 			return this.colorMap;
 		}
 
-		private Color getDefaultColor() {
+		Color getDefaultColor() { // NOPMD package for outer class
 			return this.defaultColor;
 		}
 
-		private Color getCollisionColor() {
+		Color getCollisionColor() { // NOPMD package for outer class
 			return this.collisionColor;
 		}
 

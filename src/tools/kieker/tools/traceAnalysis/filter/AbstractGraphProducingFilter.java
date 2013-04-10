@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,12 +32,15 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.NoOriginRetentionPo
  * 
  * @param <G>
  *            The graph type created by this filter
+ * 
+ * @since 1.6
  */
 @Plugin
 public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?, ?>> extends AbstractMessageTraceProcessingFilter implements
 		IGraphProducingFilter<G> {
 
-	private static final String INCOMPATIBLE_RETENTION_ERROR_TEMPLATE = "%s: The current retention policy %s is incompatible with the requested retention policy %s.";
+	private static final String INCOMPATIBLE_RETENTION_ERROR_TEMPLATE =
+			"%s: The current retention policy %s is incompatible with the requested retention policy %s.";
 
 	private final G graph;
 	private IOriginRetentionPolicy originRetentionPolicy = NoOriginRetentionPolicy.createInstance();
@@ -51,8 +54,6 @@ public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?,
 	 *            The project context to use.
 	 * @param graph
 	 *            The (usually empty) graph to produce / extend
-	 * 
-	 * @since 1.7
 	 */
 	public AbstractGraphProducingFilter(final Configuration configuration, final IProjectContext projectContext, final G graph) {
 		super(configuration, projectContext);
@@ -101,6 +102,11 @@ public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?,
 		return OUTPUT_PORT_NAME_GRAPH;
 	}
 
+	/**
+	 * Delivers the graph stored in this filter.
+	 * 
+	 * @return The graph.
+	 */
 	protected G getGraph() {
 		return this.graph;
 	}

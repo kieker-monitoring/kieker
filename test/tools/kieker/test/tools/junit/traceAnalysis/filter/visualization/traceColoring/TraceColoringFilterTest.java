@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +48,9 @@ import kieker.test.tools.util.graph.GraphTestSetup;
 /**
  * Test suite for the graph coloring filter.
  * 
- * @author Holger Knoche, Nils Christian Ehmke *
+ * @author Holger Knoche, Nils Christian Ehmke
+ * 
+ * @since 1.6
  */
 public class TraceColoringFilterTest extends AbstractKiekerTest {
 
@@ -74,10 +76,19 @@ public class TraceColoringFilterTest extends AbstractKiekerTest {
 
 	private static GraphTestSetup testSetup;
 
+	/**
+	 * Default constructor.
+	 */
 	public TraceColoringFilterTest() {
 		// default constructor
 	}
 
+	/**
+	 * Prepares the setup for the test.
+	 * 
+	 * @throws AnalysisConfigurationException
+	 *             If the setup of the filters failed.
+	 */
 	@BeforeClass
 	public static void prepareSetup() throws AnalysisConfigurationException {
 		final AnalysisController analysisController = new AnalysisController();
@@ -130,6 +141,12 @@ public class TraceColoringFilterTest extends AbstractKiekerTest {
 		return records;
 	}
 
+	/**
+	 * This method tests whether the trace coloring works or not. It uses the nodes resulting from the test setup and checks them against the expected colors.
+	 * 
+	 * @throws AnalysisConfigurationException
+	 *             If the assembled test setup is somehow invalid.
+	 */
 	@Test
 	public void testTraceColoring() throws AnalysisConfigurationException {
 		testSetup.run();
@@ -139,7 +156,7 @@ public class TraceColoringFilterTest extends AbstractKiekerTest {
 		Assert.assertEquals(1, graphReceiver.getNumberOfReceivedGraphs());
 
 		// Prepare the produced graph
-		final ComponentAllocationDependencyGraph graph = graphReceiver.<ComponentAllocationDependencyGraph> getFirstGraph(); // NOCS (generic)
+		final ComponentAllocationDependencyGraph graph = graphReceiver.<ComponentAllocationDependencyGraph>getFirstGraph(); // NOCS (generic)
 		final ConcurrentMap<String, DependencyGraphNode<AllocationComponent>> nodeMap = DependencyGraphTestUtil.createNodeLookupTable(graph);
 
 		final DependencyGraphNode<AllocationComponent> component1Node = nodeMap.get(EXPECTED_ALLOCATION_COMPONENT_NAME_1);

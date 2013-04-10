@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,21 +49,27 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
  * this plugin is not delegated in any way.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 @Plugin(description = "A filter allowing to write the incoming data into a calling tree",
 		repositoryPorts = {
 			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
 		},
 		configuration = {
-			@Property(name = TraceCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, defaultValue = TraceCallTreeFilter.CONFIG_PROPERTY_VALUE_SHORT_LABELS_DEFAULT),
-			@Property(name = TraceCallTreeFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILENAME, defaultValue = TraceCallTreeFilter.CONFIG_PROPERTY_VALUE_OUTPUT_FILENAME_DEFAULT)
+			@Property(name = TraceCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS,
+					defaultValue = TraceCallTreeFilter.CONFIG_PROPERTY_VALUE_SHORT_LABELS_DEFAULT),
+			@Property(name = TraceCallTreeFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILENAME,
+					defaultValue = TraceCallTreeFilter.CONFIG_PROPERTY_VALUE_OUTPUT_FILENAME_DEFAULT)
 		})
 public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
-
+	/** This is the name of the property determining the output file name. */
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FILENAME = "dotOutputFn";
+	/** This is the name of the property determining whether to use short labels or not. */
 	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "shortLabels";
-
+	/** This is the default used output file name. */
 	public static final String CONFIG_PROPERTY_VALUE_OUTPUT_FILENAME_DEFAULT = "traceCalltree.dot";
+	/** This is the default value whether to use short labels or not. */
 	public static final String CONFIG_PROPERTY_VALUE_SHORT_LABELS_DEFAULT = "true";
 
 	private static final Log LOG = LogFactory.getLog(TraceCallTreeFilter.class);
@@ -78,8 +84,6 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 	 *            The configuration for this component.
 	 * @param projectContext
 	 *            The project context for this component.
-	 * 
-	 * @since 1.7
 	 */
 	public TraceCallTreeFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
@@ -95,7 +99,7 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 	 * @param configuration
 	 *            The configuration for this component.
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public TraceCallTreeFilter(final Configuration configuration) {
@@ -119,6 +123,7 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(this.shortLabels));
@@ -136,9 +141,9 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 			final TraceCallTreeNode rootNode =
 					new TraceCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID, AllocationComponentOperationPairFactory.ROOT_PAIR, true, mt,
 							NoOriginRetentionPolicy.createInstance()); // rootNode
-			AbstractCallTreeFilter.writeDotForMessageTrace(rootNode, new IPairFactory() {
+			AbstractCallTreeFilter.writeDotForMessageTrace(rootNode, new IPairFactory<AllocationComponentOperationPair>() {
 
-				public Object createPair(final SynchronousCallMessage callMsg) {
+				public AllocationComponentOperationPair createPair(final SynchronousCallMessage callMsg) {
 					final AllocationComponent allocationComponent = callMsg.getReceivingExecution().getAllocationComponent();
 					final Operation op = callMsg.getReceivingExecution().getOperation();
 					final AllocationComponentOperationPair destination = TraceCallTreeFilter.this.getSystemEntityFactory().getAllocationPairFactory()

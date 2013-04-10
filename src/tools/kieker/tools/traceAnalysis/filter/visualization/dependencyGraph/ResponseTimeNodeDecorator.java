@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 
 package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
+import java.util.concurrent.TimeUnit;
+
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 
 /**
@@ -23,6 +25,7 @@ import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
  * 
  * @author Holger Knoche
  * 
+ * @since 1.5
  */
 public class ResponseTimeNodeDecorator extends AbstractNodeDecorator {
 
@@ -34,7 +37,8 @@ public class ResponseTimeNodeDecorator extends AbstractNodeDecorator {
 	}
 
 	@Override
-	public void processMessage(final AbstractMessage message, final DependencyGraphNode<?> sourceNode, final DependencyGraphNode<?> targetNode) {
+	public void processMessage(final AbstractMessage message, final DependencyGraphNode<?> sourceNode, final DependencyGraphNode<?> targetNode,
+			final TimeUnit timeunit) {
 		// Ignore internal executions
 		if (sourceNode.equals(targetNode)) {
 			return;
@@ -43,7 +47,7 @@ public class ResponseTimeNodeDecorator extends AbstractNodeDecorator {
 		ResponseTimeDecoration timeDecoration = targetNode.getDecoration(ResponseTimeDecoration.class);
 
 		if (timeDecoration == null) {
-			timeDecoration = new ResponseTimeDecoration();
+			timeDecoration = new ResponseTimeDecoration(timeunit);
 			targetNode.addDecoration(timeDecoration);
 		}
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
  * 
  * @author Holger Knoche
  * 
+ * @since 1.6
  */
 @Plugin(description = "A plugin that receives one or more graphs and provides access them via methods.")
 public class GraphReceiverPlugin extends ListCollectionFilter<AbstractGraph<?, ?, ?>> {
@@ -44,8 +45,6 @@ public class GraphReceiverPlugin extends ListCollectionFilter<AbstractGraph<?, ?
 	 *            The configuration to use
 	 * @param projectContext
 	 *            The project context to use.
-	 * 
-	 * @since 1.7
 	 */
 	public GraphReceiverPlugin(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
@@ -57,7 +56,7 @@ public class GraphReceiverPlugin extends ListCollectionFilter<AbstractGraph<?, ?
 	 * @param configuration
 	 *            The configuration to use
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public GraphReceiverPlugin(final Configuration configuration) {
@@ -77,9 +76,12 @@ public class GraphReceiverPlugin extends ListCollectionFilter<AbstractGraph<?, ?
 	 * Returns the first received graph, if any.
 	 * 
 	 * @return See above
+	 * 
+	 * @param <T>
+	 *            The type of the graph.
 	 */
 	public <T extends AbstractGraph<?, ?, ?>> T getFirstGraph() {
-		return this.<T> getGraphAt(0); // NOCS Explicit bound is required to work around a possible javac bug
+		return this.<T>getGraphAt(0); // NOCS Explicit bound is required to work around a possible javac bug
 	}
 
 	/**
@@ -88,6 +90,9 @@ public class GraphReceiverPlugin extends ListCollectionFilter<AbstractGraph<?, ?
 	 * @param index
 	 *            The (zero-based) index of the desired graph
 	 * @return See above
+	 * 
+	 * @param <T>
+	 *            The type of the graph.
 	 */
 	@SuppressWarnings("unchecked")
 	public <T extends AbstractGraph<?, ?, ?>> T getGraphAt(final int index) {

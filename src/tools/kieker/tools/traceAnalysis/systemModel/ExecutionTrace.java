@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package kieker.tools.traceAnalysis.systemModel;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -30,7 +31,11 @@ import kieker.tools.traceAnalysis.filter.traceReconstruction.InvalidTraceExcepti
 import kieker.tools.util.LoggingTimestampConverter;
 
 /**
+ * This class is a container for a whole trace of executions (represented as instances of {@link Execution}).
+ * 
  * @author Andre van Hoorn
+ * 
+ * @since 0.95a
  */
 public class ExecutionTrace extends AbstractTrace {
 
@@ -43,10 +48,24 @@ public class ExecutionTrace extends AbstractTrace {
 	private int maxEss = -1;
 	private final SortedSet<Execution> set = new TreeSet<Execution>(ExecutionTrace.createExecutionTraceComparator());
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param traceId
+	 *            The ID of this trace.
+	 */
 	public ExecutionTrace(final long traceId) {
 		super(traceId);
 	}
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param traceId
+	 *            The ID of this trace.
+	 * @param sessionId
+	 *            The ID of the current session.
+	 */
 	public ExecutionTrace(final long traceId, final String sessionId) {
 		super(traceId, sessionId);
 	}
@@ -55,9 +74,10 @@ public class ExecutionTrace extends AbstractTrace {
 	 * Adds an execution to the trace.
 	 * 
 	 * @param execution
+	 *            The execution object which will be added to this trace.
+	 * 
 	 * @throws InvalidTraceException
-	 *             if the traceId of the passed Execution
-	 *             object is not the same as the traceId of this ExecutionTrace object.
+	 *             If the traceId of the passed Execution object is not the same as the traceId of this ExecutionTrace object.
 	 */
 	public void add(final Execution execution) throws InvalidTraceException {
 		synchronized (this) {
@@ -80,17 +100,24 @@ public class ExecutionTrace extends AbstractTrace {
 				this.maxEss = execution.getEss();
 			}
 			this.set.add(execution);
-			/* Invalidate the current message trace representation */
+			// Invalidate the current message trace representation
 			this.messageTrace.set(null);
 		}
 	}
 
 	/**
-	 * Returns the message trace representation for this trace.
+	 * Returns the message trace representation for this trace.<br/>
 	 * 
-	 * The transformation to a message trace is only computed during the
-	 * first execution of this method. After this, the stored reference
-	 * is returned --- unless executions are added to the trace afterwards.
+	 * The transformation to a message trace is only computed during the first execution of this method. After this, the stored reference is returned --- unless
+	 * executions are added to the trace afterwards.
+	 * 
+	 * @param rootExecution
+	 *            The root execution object.
+	 * 
+	 * @return The resulting message trace.
+	 * 
+	 * @throws InvalidTraceException
+	 *             If the given execution is somehow inconsistent or invalid.
 	 */
 	public MessageTrace toMessageTrace(final Execution rootExecution) throws InvalidTraceException {
 		synchronized (this) {
@@ -179,7 +206,6 @@ public class ExecutionTrace extends AbstractTrace {
 	 */
 	public final SortedSet<Execution> getTraceAsSortedExecutionSet() {
 		synchronized (this) {
-			// TODO: copy set?
 			return Collections.unmodifiableSortedSet(this.set);
 		}
 	}
@@ -296,14 +322,13 @@ public class ExecutionTrace extends AbstractTrace {
 	}
 
 	/**
-	 * Returns whether this Execution Trace and the passed Object are equal.
-	 * Two execution traces are equal if the set of contained executions is
-	 * equal.
+	 * Returns whether this Execution Trace and the passed Object are equal. Two execution traces are equal if the set of contained executions is equal.
 	 * 
 	 * @param obj
-	 * @return true if the two objects are equal.
+	 *            The object to be compared for equality with this.
+	 * 
+	 * @return true if and only if the two objects are equal.
 	 */
-
 	@Override
 	public boolean equals(final Object obj) {
 		synchronized (this) {
@@ -326,83 +351,93 @@ public class ExecutionTrace extends AbstractTrace {
 	/**
 	 * Returns an instance of the {@link Comparator} used by the internal {@link TreeSet} to
 	 * compare {@link Execution}s.
+	 * 
+	 * @return A comparator instance to compare execution objects.
 	 */
 	public static final Comparator<Execution> createExecutionTraceComparator() {
-		return new Comparator<Execution>() {
+		return new ExecutionTraceComparator();
+	}
 
-			/**
-			 * Note that this method is not only used by {@link ExecutionTrace#add(Execution)} but also by {@link TreeSet#equals(Object)} utilized in
-			 * {@link ExecutionTrace#equals(Object)}.
-			 */
-			public int compare(final Execution e1, final Execution e2) {
-				/*
-				 * If executions equal, return immediately
-				 */
-				if (e1.equals(e2)) {
-					return 0;
-				}
+	/**
+	 * @author Andre van Hoorn
+	 */
+	private static final class ExecutionTraceComparator implements Comparator<Execution>, Serializable {
 
-				/*
-				 * 1. criterion: trace id
-				 */
-				if (e1.getTraceId() < e2.getTraceId()) {
-					return -1;
-				} else if (e1.getTraceId() > e2.getTraceId()) {
-					return 1;
-				}
+		private static final long serialVersionUID = -6334359132236475506L;
 
-				// At this location: trace ids equal
+		/**
+		 * Creates a new instance of this class.
+		 */
+		public ExecutionTraceComparator() {
+			// Nothing to do here
+		}
 
-				/*
-				 * 2. criterion: eoi
-				 */
-				if (e1.getEoi() < e2.getEoi()) {
-					return -1;
-				}
-				if (e1.getEoi() > e2.getEoi()) {
-					return 1;
-				}
-
-				// At this location: trace ids, eoi equal
-
-				/*
-				 * 3. criterion: ess
-				 */
-				if (e1.getEss() < e2.getEss()) {
-					return -1;
-				}
-				if (e1.getEss() > e2.getEss()) {
-					return 1;
-				}
-
-				// At this location: trace ids, eoi, ess equal
-
-				/*
-				 * 4. criterion: tin
-				 */
-				if (e1.getTin() < e2.getTin()) {
-					return -1;
-				}
-				if (e1.getTin() > e2.getTin()) {
-					return 1;
-				}
-
-				// At this location: trace ids, eoi, ess, tin equal
-
-				/*
-				 * 5. criterion: tout
-				 */
-				if (e1.getTout() < e2.getTout()) {
-					return -1;
-				}
-				if (e1.getTout() > e2.getTout()) {
-					return 1;
-				}
-
-				// At this location: trace ids, eoi, ess, tin, tout equal
-
-				return e1.hashCode() - e2.hashCode();
+		/**
+		 * Note that this method is not only used by {@link ExecutionTrace#add(Execution)} but also by {@link TreeSet#equals(Object)} utilized in
+		 * {@link ExecutionTrace#equals(Object)}.
+		 * 
+		 * @param e1
+		 *            The first execution object.
+		 * @param e2
+		 *            The second execution object.
+		 * 
+		 * @return -1 if e1 < e2, 1 if e1 > e2, 0 otherwise.
+		 */
+		public final int compare(final Execution e1, final Execution e2) {
+			// If executions equal, return immediately
+			if (e1.equals(e2)) {
+				return 0;
 			}
-		};
+
+			// 1. criterion: trace id
+			if (e1.getTraceId() < e2.getTraceId()) {
+				return -1;
+			} else if (e1.getTraceId() > e2.getTraceId()) {
+				return 1;
+			}
+
+			// At this location: trace ids equal
+
+			// 2. criterion: eoi
+			if (e1.getEoi() < e2.getEoi()) {
+				return -1;
+			}
+			if (e1.getEoi() > e2.getEoi()) {
+				return 1;
+			}
+
+			// At this location: trace ids, eoi equal
+
+			// 3. criterion: ess
+			if (e1.getEss() < e2.getEss()) {
+				return -1;
+			}
+			if (e1.getEss() > e2.getEss()) {
+				return 1;
+			}
+
+			// At this location: trace ids, eoi, ess equal
+
+			// 4. criterion: tin
+			if (e1.getTin() < e2.getTin()) {
+				return -1;
+			}
+			if (e1.getTin() > e2.getTin()) {
+				return 1;
+			}
+
+			// At this location: trace ids, eoi, ess, tin equal
+
+			// 5. criterion: tout
+			if (e1.getTout() < e2.getTout()) {
+				return -1;
+			}
+			if (e1.getTout() > e2.getTout()) {
+				return 1;
+			}
+
+			// At this location: trace ids, eoi, ess, tin, tout equal
+			return e1.hashCode() - e2.hashCode();
+		}
 	}
 }

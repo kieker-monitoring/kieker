@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,6 +53,7 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
  * 
  * @author Holger Knoche
  * 
+ * @since 1.6
  */
 @Plugin(name = "Graph writer plugin",
 		description = "Generic plugin for writing graphs to files",
@@ -120,8 +121,6 @@ public class GraphWriterPlugin extends AbstractFilterPlugin {
 	 *            The configuration for this component.
 	 * @param projectContext
 	 *            The project context for this component.
-	 * 
-	 * @since 1.7
 	 */
 	public GraphWriterPlugin(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
@@ -201,10 +200,8 @@ public class GraphWriterPlugin extends AbstractFilterPlugin {
 	}
 
 	/**
-	 * Formats a given graph and saves the generated specification to disk. The file name to save the
-	 * output to is specified by a the configuration options
-	 * {@link kieker.tools.traceAnalysis.filter.visualization.GraphWriterConfiguration#CONFIG_PROPERTY_NAME_OUTPUT_PATH_NAME} and
-	 * {@link kieker.tools.traceAnalysis.filter.visualization.GraphWriterConfiguration#CONFIG_PROPERTY_NAME_OUTPUT_FILE_NAME}.
+	 * Formats a given graph and saves the generated specification to disk. The file name to save the output to is specified by a the configuration options
+	 * {@link #CONFIG_PROPERTY_NAME_OUTPUT_PATH_NAME} and {@link #CONFIG_PROPERTY_NAME_OUTPUT_FILE_NAME}.
 	 * 
 	 * @param graph
 	 *            The graph to save
@@ -236,7 +233,9 @@ public class GraphWriterPlugin extends AbstractFilterPlugin {
 	 * Configuration class for the graph writer plugin (see {@link GraphWriterPlugin}).
 	 * 
 	 * @author Holger Knoche
-	 * @Deprectaed (not used anymore)
+	 * @deprecated (not used anymore)
+	 * 
+	 * @since 1.6
 	 */
 	@Deprecated
 	public static final class GraphWriterConfiguration {

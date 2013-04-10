@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,6 @@ import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
-import kieker.tools.traceAnalysis.filter.executionFilter.TimestampFilter;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
@@ -36,7 +35,13 @@ import kieker.test.tools.util.ExecutionFactory;
  * A test for the {@link TimestampFilter}.
  * 
  * @author Andre van Hoorn, Nils Christian Ehmke
+ * 
+ * @deprecated to be removed in Kieker 1.8
+ * 
+ * @since 1.2
  */
+@Deprecated
+@SuppressWarnings("deprecation")
 public class TestTimestampFilter extends AbstractKiekerTest { // NOCS
 
 	// private static final Log LOG = LogFactory.getLog(TestTimestampFilter.class);
@@ -50,19 +55,37 @@ public class TestTimestampFilter extends AbstractKiekerTest { // NOCS
 	private final ExecutionFactory eFactory = new ExecutionFactory(this.systemEntityFactory);
 
 	/**
-	 * Creates a {@link TimestampFilter} with the given properties
-	 * using the constructor {@link TimestampFilter#TimestampFilter(kieker.common.configuration.Configuration, java.util.Map)}
+	 * Default constructor.
+	 */
+	public TestTimestampFilter() {
+		// empty default constructor
+	}
+
+	/**
+	 * Creates a {@link TimestampFilter} with the given properties using the constructor
+	 * {@link TimestampFilter#TimestampFilter(kieker.common.configuration.Configuration, java.util.Map)}.
 	 * 
 	 * @param ignoreExecutionsBeforeTimestamp
+	 *            The lower limit for the timestamps.
 	 * @param ignoreExecutionsAfterTimestamp
-	 * @return
+	 *            The upper limit for the timestamps.
+	 * @param analysisController
+	 *            The analysis controller which will be used to register this component.
+	 * @return A suitable instance of {@link TimestampFilter}.
+	 * 
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
-	private static TimestampFilter createTimestampFilter(final long ignoreExecutionsBeforeTimestamp, final long ignoreExecutionsAfterTimestamp,
+	@Deprecated
+	@SuppressWarnings("deprecation")
+	private static kieker.tools.traceAnalysis.filter.executionFilter.TimestampFilter createTimestampFilter(final long ignoreExecutionsBeforeTimestamp,
+			final long ignoreExecutionsAfterTimestamp,
 			final IAnalysisController analysisController) {
 		final Configuration cfg = new Configuration();
-		cfg.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP, Long.toString(ignoreExecutionsBeforeTimestamp));
-		cfg.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP, Long.toString(ignoreExecutionsAfterTimestamp));
-		return new TimestampFilter(cfg, analysisController);
+		cfg.setProperty(kieker.tools.traceAnalysis.filter.executionFilter.TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP,
+				Long.toString(ignoreExecutionsBeforeTimestamp));
+		cfg.setProperty(kieker.tools.traceAnalysis.filter.executionFilter.TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP,
+				Long.toString(ignoreExecutionsAfterTimestamp));
+		return new kieker.tools.traceAnalysis.filter.executionFilter.TimestampFilter(cfg, analysisController);
 	}
 
 	/**
@@ -71,14 +94,17 @@ public class TestTimestampFilter extends AbstractKiekerTest { // NOCS
 	 * &gt; a </i>, <i>r.tout &lt; b</i> does not pass the filter.
 	 * 
 	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
+	 *             If the internal analysis is in an invalid state.
 	 */
 	@Test
 	public void testRecordTinBeforeToutWithinIgnored() throws IllegalStateException, AnalysisConfigurationException {
 		final AnalysisController controller = new AnalysisController();
 
 		final ListReader<Execution> reader = new ListReader<Execution>(new Configuration(), controller);
-		final TimestampFilter filter = TestTimestampFilter.createTimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
+		final kieker.tools.traceAnalysis.filter.executionFilter.TimestampFilter filter = TestTimestampFilter.createTimestampFilter(
+				TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP, controller);
 		final ListCollectionFilter<Execution> sinkPlugin = new ListCollectionFilter<Execution>(new Configuration(), controller);
 		final Execution exec = this.eFactory.genExecution(77, // traceId (value not important)
@@ -90,8 +116,9 @@ public class TestTimestampFilter extends AbstractKiekerTest { // NOCS
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
-		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, TimestampFilter.INPUT_PORT_NAME_EXECUTION);
-		controller.connect(filter, TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
+		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, kieker.tools.traceAnalysis.filter.executionFilter.TimestampFilter.INPUT_PORT_NAME_EXECUTION);
+		controller.connect(filter, kieker.tools.traceAnalysis.filter.executionFilter.TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, sinkPlugin,
+				ListCollectionFilter.INPUT_PORT_NAME);
 
 		controller.run();
 
@@ -106,14 +133,17 @@ public class TestTimestampFilter extends AbstractKiekerTest { // NOCS
 	 * &lt; b</i> and <i>r.tout &gt; b </i> does not pass the filter.
 	 * 
 	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
+	 *             If the internal analysis is in an invalid state.
 	 */
 	@Test
 	public void testRecordTinWithinToutAfterIgnored() throws IllegalStateException, AnalysisConfigurationException {
 		final AnalysisController controller = new AnalysisController();
 
 		final ListReader<Execution> reader = new ListReader<Execution>(new Configuration(), controller);
-		final TimestampFilter filter = TestTimestampFilter.createTimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
+		final kieker.tools.traceAnalysis.filter.executionFilter.TimestampFilter filter = TestTimestampFilter.createTimestampFilter(
+				TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP, controller);
 		final ListCollectionFilter<Execution> sinkPlugin = new ListCollectionFilter<Execution>(new Configuration(), controller);
 
@@ -126,8 +156,9 @@ public class TestTimestampFilter extends AbstractKiekerTest { // NOCS
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
-		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, TimestampFilter.INPUT_PORT_NAME_EXECUTION);
-		controller.connect(filter, TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
+		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, kieker.tools.traceAnalysis.filter.executionFilter.TimestampFilter.INPUT_PORT_NAME_EXECUTION);
+		controller.connect(filter, kieker.tools.traceAnalysis.filter.executionFilter.TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, sinkPlugin,
+				ListCollectionFilter.INPUT_PORT_NAME);
 
 		controller.run();
 
@@ -141,14 +172,17 @@ public class TestTimestampFilter extends AbstractKiekerTest { // NOCS
 	 * does pass the filter.
 	 * 
 	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
+	 *             If the internal analysis is in an invalid state.
 	 */
 	@Test
 	public void testRecordTinToutOnBordersPassed() throws IllegalStateException, AnalysisConfigurationException {
 		final AnalysisController controller = new AnalysisController();
 
 		final ListReader<Execution> reader = new ListReader<Execution>(new Configuration(), controller);
-		final TimestampFilter filter = TestTimestampFilter.createTimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
+		final kieker.tools.traceAnalysis.filter.executionFilter.TimestampFilter filter = TestTimestampFilter.createTimestampFilter(
+				TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP, controller);
 		final ListCollectionFilter<Execution> sinkPlugin = new ListCollectionFilter<Execution>(new Configuration(), controller);
 
@@ -161,8 +195,9 @@ public class TestTimestampFilter extends AbstractKiekerTest { // NOCS
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
-		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, TimestampFilter.INPUT_PORT_NAME_EXECUTION);
-		controller.connect(filter, TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
+		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, kieker.tools.traceAnalysis.filter.executionFilter.TimestampFilter.INPUT_PORT_NAME_EXECUTION);
+		controller.connect(filter, kieker.tools.traceAnalysis.filter.executionFilter.TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, sinkPlugin,
+				ListCollectionFilter.INPUT_PORT_NAME);
 
 		controller.run();
 
@@ -179,14 +214,17 @@ public class TestTimestampFilter extends AbstractKiekerTest { // NOCS
 	 * and <i>r.tout &lt; b </i>, <i>r.tout &gt; a </i> does pass the filter.
 	 * 
 	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
+	 *             If the internally assembled analysis is in an invalid state.
 	 */
 	@Test
 	public void testRecordTinToutWithinRangePassed() throws IllegalStateException, AnalysisConfigurationException {
 		final AnalysisController controller = new AnalysisController();
 
 		final ListReader<Execution> reader = new ListReader<Execution>(new Configuration(), controller);
-		final TimestampFilter filter = TestTimestampFilter.createTimestampFilter(TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
+		final kieker.tools.traceAnalysis.filter.executionFilter.TimestampFilter filter = TestTimestampFilter.createTimestampFilter(
+				TestTimestampFilter.IGNORE_EXECUTIONS_BEFORE_TIMESTAMP,
 				TestTimestampFilter.IGNORE_EXECUTIONS_AFTER_TIMESTAMP, controller);
 		final ListCollectionFilter<Execution> sinkPlugin = new ListCollectionFilter<Execution>(new Configuration(), controller);
 
@@ -199,8 +237,9 @@ public class TestTimestampFilter extends AbstractKiekerTest { // NOCS
 
 		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
-		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, TimestampFilter.INPUT_PORT_NAME_EXECUTION);
-		controller.connect(filter, TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
+		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, kieker.tools.traceAnalysis.filter.executionFilter.TimestampFilter.INPUT_PORT_NAME_EXECUTION);
+		controller.connect(filter, kieker.tools.traceAnalysis.filter.executionFilter.TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, sinkPlugin,
+				ListCollectionFilter.INPUT_PORT_NAME);
 
 		controller.run();
 

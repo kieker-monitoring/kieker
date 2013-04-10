@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,17 @@
 package kieker.monitoring.core.signaturePattern;
 
 /**
+ * This class can be used to create signatures (for example a string containing the whole signature of a method).
+ * 
  * @author Bjoern Weissenfels, Jan Waller
+ * 
+ * @since 1.7
  */
 public final class SignatureFactory {
 
+	/** This constant contains the necessary prefix for patterns. */
 	public static final char PATTERN_PREFIX = '%';
+	/** This constant contains the colons, which are used to separate the elements in the signature. */
 	public static final String COLONS = "::";
 
 	// Note: for static final String it is better to use "+" to help the compiler to resolve them at compile time!
@@ -36,6 +42,9 @@ public final class SignatureFactory {
 	 */
 	public static final String PATTERN_PREFIX_MEM_SWAP = PATTERN_PREFIX + "MEM_SWAP";
 
+	/**
+	 * Private constructor to avoid instantiation.
+	 */
 	private SignatureFactory() {
 		// private default constructor
 	}
@@ -91,7 +100,9 @@ public final class SignatureFactory {
 	 *            Null or empty list, if no exceptions are required.
 	 * @return
 	 *         A signature which has been generated from the inputs.
+	 * 
 	 * @throws InvalidPatternException
+	 *             If any of the mandatory parameters is null.
 	 */
 	public static String createMethodSignature(final String[] modList, final String retType,
 			final String fqName, final String method, final String[] params, final String[] exceptions) throws InvalidPatternException {

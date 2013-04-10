@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -31,42 +31,53 @@ import kieker.common.record.IMonitoringRecord;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.3
  */
 public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 
+	/** The name of the configuration determining the size of the queue of this writer. */
 	public static final String CONFIG_QUEUESIZE = "QueueSize";
+	/** The name of the configuration determining the behavior of this writer in case of a full queue. */
 	public static final String CONFIG_BEHAVIOR = "QueueFullBehavior";
+	/** The name of the configuration determining the maximal shutdown delay of this writer (in milliseconds). */
 	public static final String CONFIG_SHUTDOWNDELAY = "MaxShutdownDelay";
 
 	private static final Log LOG = LogFactory.getLog(AbstractAsyncWriter.class);
 
 	// internal variables
+	/** The queue containing the records to be written. */
 	protected final BlockingQueue<IMonitoringRecord> blockingQueue;
 	private final List<AbstractAsyncThread> workers = new CopyOnWriteArrayList<AbstractAsyncThread>();
 	private final int queueFullBehavior;
 	private final int maxShutdownDelay;
-	private final AtomicInteger missedRecords;
+	private final AtomicLong missedRecords;
 
+	/**
+	 * This constructor initializes the writer based on the given configuration.
+	 * 
+	 * @param configuration
+	 *            The configuration for this writer.
+	 */
 	protected AbstractAsyncWriter(final Configuration configuration) {
 		super(configuration);
 		final String prefix = this.getClass().getName() + ".";
 
-		final int queueFullBehaviorTmp = this.configuration.getIntProperty(prefix + CONFIG_BEHAVIOR);
+		final int queueFullBehaviorTmp = configuration.getIntProperty(prefix + CONFIG_BEHAVIOR);
 		if ((queueFullBehaviorTmp < 0) || (queueFullBehaviorTmp > 2)) {
 			LOG.warn("Unknown value '" + queueFullBehaviorTmp + "' for " + prefix + CONFIG_BEHAVIOR + "; using default value 0");
 			this.queueFullBehavior = 0;
 		} else {
 			this.queueFullBehavior = queueFullBehaviorTmp;
 		}
-		this.missedRecords = new AtomicInteger(0);
-		this.blockingQueue = new ArrayBlockingQueue<IMonitoringRecord>(this.configuration.getIntProperty(prefix + CONFIG_QUEUESIZE));
-		this.maxShutdownDelay = this.configuration.getIntProperty(prefix + CONFIG_SHUTDOWNDELAY);
+		this.missedRecords = new AtomicLong(0);
+		this.blockingQueue = new ArrayBlockingQueue<IMonitoringRecord>(configuration.getIntProperty(prefix + CONFIG_QUEUESIZE));
+		this.maxShutdownDelay = configuration.getIntProperty(prefix + CONFIG_SHUTDOWNDELAY);
 	}
 
 	/**
-	 * Make sure that the three required properties always have default values!
+	 * {@inheritDoc} Make sure that the three required properties always have default values!
 	 */
-
 	@Override
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration(super.getDefaultConfiguration());
@@ -81,6 +92,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	 * This method must be called at the end of the child constructor!
 	 * 
 	 * @param worker
+	 *            The new worker.
 	 */
 	protected final void addWorker(final AbstractAsyncThread worker) {
 		this.workers.add(worker);
@@ -91,7 +103,6 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	/**
 	 * The framework ensures, that this method is called only once!
 	 */
-
 	public final void terminate() {
 		final CountDownLatch cdl = new CountDownLatch(this.workers.size());
 		for (final AbstractAsyncThread worker : this.workers) {
@@ -117,26 +128,48 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 		try {
 			switch (this.queueFullBehavior) {
 			case 1: // blocks when queue full
-				this.blockingQueue.put(monitoringRecord);
-				break;
-			case 2: // does nothing if queue is full
-				if (!this.blockingQueue.offer(monitoringRecord) && ((this.missedRecords.getAndIncrement() % 1000) == 0)) { // NOCS
-					LOG.warn("Queue is full, dropping records.");
+				boolean interrupted = false;
+				for (int i = 0; i < 10; i++) { // drop out if more than 10 times interrupted
+					try {
+						this.blockingQueue.put(monitoringRecord);
+						if (interrupted) {
+							LOG.warn("Interupted when adding new monitoring record to queue. Tries: " + i);
+							Thread.currentThread().interrupt(); // propagate interrupt
+						}
+						return true;
+					} catch (final InterruptedException ignore) {
+						interrupted = true;
+					}
 				}
-				break;
+				return false;
+			case 2: // does nothing if queue is full
+				if (!this.blockingQueue.offer(monitoringRecord)) {
+					final long tmpMissedRecords = this.missedRecords.getAndIncrement();
+					if ((tmpMissedRecords % 1024) == 0) {
+						LOG.warn("Queue is full, dropping records. Number of already dropped records: " + tmpMissedRecords);
+					}
+				}
+				return true;
 			default: // tries to add immediately (error if full)
-				this.blockingQueue.add(monitoringRecord);
-				break;
+				try {
+					this.blockingQueue.add(monitoringRecord);
+				} catch (final IllegalStateException ex) {
+					LOG.error("Failed to add new monitoring record to queue. Queue is full. Either increase 'QueueSize' or change 'QueueFullBehavior' for the configured writer."); // NOCS
+					return false;
+				}
+				return true;
 			}
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
-			LOG.error("Failed to retrieve new monitoring record.", ex);
+			LOG.error("Failed to add new monitoring record to queue.", ex);
 			return false;
 		}
-		return true;
 	}
 
 	@Override

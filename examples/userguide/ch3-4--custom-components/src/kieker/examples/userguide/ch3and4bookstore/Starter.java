@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,10 +29,9 @@ public final class Starter {
 	private Starter() {}
 
 	public static void main(final String[] args) throws Exception {
-		/*
-		 * Spawn a thread that performs asynchronous requests
-		 * to a bookstore.
-		 */
+		// Spawn a thread that performs asynchronous requests
+		// to a bookstore.
+
 		new Thread(new Runnable() {
 
 			public void run() {

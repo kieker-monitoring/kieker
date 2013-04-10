@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.common.configuration.Configuration;
-import kieker.tools.traceAnalysis.filter.AbstractTraceIdFilter;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 
 /**
@@ -31,14 +30,23 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
  * contains the defined traceID, the object is delivered unmodified to the output port.
  * 
  * @author Andre van Hoorn
+ * 
+ * @deprecated To be removed in Kieker 1.8 (Use {@link kieker.analysis.plugin.filter.select.TraceIdFilter instead}).
+ * 
+ * @since 1.2
  */
+@SuppressWarnings("deprecation")
+@Deprecated
 @Plugin(description = "A filter allowing to filter incoming execution objects based on their trace ID",
 		outputPorts = {
 			@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME_MATCH, description = "Forwards executions with matching trace IDs", eventTypes = { Execution.class })
 		})
-public class TraceIdFilter extends AbstractTraceIdFilter {
+public class TraceIdFilter extends kieker.tools.traceAnalysis.filter.AbstractTraceIdFilter {
 
+	/** This is the name of the input port receiving new executions. */
 	public static final String INPUT_PORT_NAME_EXECUTION = "executions";
+
+	/** This is the name of the output port delivering the accepted executions. */
 	public static final String OUTPUT_PORT_NAME_MATCH = "executionsMatchingId";
 
 	public static final String CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES = "selectedAll";
@@ -51,8 +59,6 @@ public class TraceIdFilter extends AbstractTraceIdFilter {
 	 *            The configuration for this component.
 	 * @param projectContext
 	 *            The project context for this component.
-	 * 
-	 * @since 1.7
 	 */
 	public TraceIdFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
@@ -71,6 +77,12 @@ public class TraceIdFilter extends AbstractTraceIdFilter {
 		this(configuration, null);
 	}
 
+	/**
+	 * This method represents the input port of this filter, processing incoming execution objects.
+	 * 
+	 * @param execution
+	 *            The next execution object.
+	 */
 	@InputPort(name = INPUT_PORT_NAME_EXECUTION, description = "Receives execution events to be selected by trace ID", eventTypes = { Execution.class })
 	public void inputExecution(final Execution execution) {
 		if (super.passId(execution.getTraceId())) {

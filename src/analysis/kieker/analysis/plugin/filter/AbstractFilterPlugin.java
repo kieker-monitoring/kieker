@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,8 @@ import kieker.common.configuration.Configuration;
  * {@link kieker.analysis.plugin.reader.AbstractReaderPlugin} should be used instead.
  * 
  * @author Nils Christian Ehmke
+ * 
+ * @since 1.5
  */
 @Plugin
 public abstract class AbstractFilterPlugin extends AbstractPlugin implements IFilterPlugin {
@@ -41,21 +43,21 @@ public abstract class AbstractFilterPlugin extends AbstractPlugin implements IFi
 	 */
 	@Deprecated
 	public AbstractFilterPlugin(final Configuration configuration) {
-		super(configuration);
+		this(configuration, null);
 	}
 
 	/**
-	 * The second "default constructor".
+	 * Each Plugin requires a constructor with a Configuration object and a IProjectContext.
 	 * 
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext
 	 *            The project context for this component. The component will be registered.
-	 * 
-	 * @since 1.7
 	 */
+	// Internal use of the register methods:
+	@SuppressWarnings("deprecation")
 	public AbstractFilterPlugin(final Configuration configuration, final IProjectContext projectContext) {
-		super(configuration);
+		super(configuration, projectContext);
 
 		// Register the filter
 		if (projectContext instanceof AnalysisController) {

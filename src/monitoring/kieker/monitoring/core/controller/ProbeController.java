@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,9 +50,11 @@ import kieker.monitoring.core.signaturePattern.PatternParser;
 
 /**
  * @author Jan Waller, Bjoern Weissenfels
+ * 
+ * @since 1.6
  */
 public class ProbeController extends AbstractController implements IProbeController {
-	private static final Log LOG = LogFactory.getLog(ProbeController.class);
+	static final Log LOG = LogFactory.getLog(ProbeController.class); // NOPMD package for inner class
 	private static final String ENCODING = "UTF-8";
 
 	private final boolean enabled;
@@ -64,6 +66,12 @@ public class ProbeController extends AbstractController implements IProbeControl
 	private final ConcurrentMap<String, Boolean> signatureCache = new ConcurrentHashMap<String, Boolean>();
 	private final List<PatternEntry> patternList = new ArrayList<PatternEntry>(); // only accessed synchronized
 
+	/**
+	 * Creates a new instance of this class using the given configuration to initialize the class.
+	 * 
+	 * @param configuration
+	 *            The configuration used to initialize this controller.
+	 */
 	protected ProbeController(final Configuration configuration) {
 		super(configuration);
 		this.enabled = configuration.getBooleanProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED);
@@ -127,14 +135,23 @@ public class ProbeController extends AbstractController implements IProbeControl
 		return sb.toString();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean activateProbe(final String pattern) {
 		return this.addPattern(pattern, true);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean deactivateProbe(final String pattern) {
 		return this.addPattern(pattern, false);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean isProbeActivated(final String signature) {
 		if (!this.monitoringController.isMonitoringEnabled()) {
 			return false;
@@ -189,10 +206,16 @@ public class ProbeController extends AbstractController implements IProbeControl
 
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void setProbePatternList(final List<String> strPatternList) {
 		this.setProbePatternList(strPatternList, true);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public List<String> getProbePatternList() {
 		if (!this.enabled) {
 			LOG.warn("Adapative Monitoring is disabled!");
@@ -214,7 +237,10 @@ public class ProbeController extends AbstractController implements IProbeControl
 	}
 
 	/**
-	 * tests if signature matches a pattern and completes accordingly the signatureCache map
+	 * This method tests if the given signature matches a pattern and completes accordingly the signatureCache map.
+	 * 
+	 * @param signature
+	 *            The signature to match.
 	 */
 	private boolean matchesPattern(final String signature) {
 		synchronized (this) {
@@ -248,7 +274,6 @@ public class ProbeController extends AbstractController implements IProbeControl
 			}
 			this.patternList.add(new PatternEntry(strPattern, pattern, activated));
 			if (this.configFileUpdate) {
-				// TODO remove double entries in list? Use modified(?) CopyOnWriteArraySet
 				this.updatePatternFile();
 			}
 		}
@@ -281,6 +306,9 @@ public class ProbeController extends AbstractController implements IProbeControl
 		LOG.info("Updating Adaptive Monitoring config file succeeded.");
 	}
 
+	/**
+	 * @author Jan Waller
+	 */
 	private final class ConfigFileReader implements Runnable {
 		private final String configFilePathname;
 		volatile long lastModifiedTimestamp; // NOPMD NOCS (package)

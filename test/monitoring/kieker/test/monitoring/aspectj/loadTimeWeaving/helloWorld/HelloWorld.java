@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,21 +17,30 @@
 package kieker.test.monitoring.aspectj.loadTimeWeaving.helloWorld;
 
 /**
- * Simple example, used in the tutorial for
- * illustration the instrumentation and monitoring
- * capabilities of Kieker.
+ * Simple example, used in the tutorial for illustration the instrumentation and monitoring capabilities of Kieker.
  * 
  * @author Matthias Rohr
+ * 
+ * @since < 0.9
  */
 public final class HelloWorld {
 
 	private HelloWorld() {}
 
+	/**
+	 * This main method starts the example.
+	 * 
+	 * @param args
+	 *            The command line arguments. They have no effect.
+	 */
 	public static void main(final String[] args) {
 		System.out.println("Hello"); // NOPMD (System.out)
 		HelloWorld.doSomething();
 	}
 
+	/**
+	 * A simple dummy method.
+	 */
 	public static void doSomething() {
 		System.out.println("doing something"); // NOPMD (System.out)
 	}

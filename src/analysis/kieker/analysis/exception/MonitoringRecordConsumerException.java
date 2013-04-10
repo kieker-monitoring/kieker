@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,12 @@ package kieker.analysis.exception;
 /**
  * 
  * @author Andre van Hoorn
+ * 
+ * @deprecated To be removed in Kieker 1.8
+ * 
+ * @since 0.95a
  */
+@Deprecated
 public class MonitoringRecordConsumerException extends Exception {
 
 	private static final long serialVersionUID = 1L;

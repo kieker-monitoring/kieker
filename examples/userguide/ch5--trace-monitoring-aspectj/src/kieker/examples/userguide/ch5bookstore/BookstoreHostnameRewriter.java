@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,6 @@ import kieker.analysis.AnalysisController;
 import kieker.analysis.IAnalysisController;
 import kieker.analysis.IProjectContext;
 import kieker.analysis.exception.AnalysisConfigurationException;
-import kieker.analysis.exception.MonitoringReaderException;
-import kieker.analysis.exception.MonitoringRecordConsumerException;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
@@ -31,23 +29,15 @@ import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.common.util.ClassOperationSignaturePair;
+import kieker.common.util.signature.ClassOperationSignaturePair;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 
-/**
- * Reads a FS monitoring log of {@link OperationExecutionRecord}s and turns the contained
- * traces into distributed traces by modifying the {@link OperationExecutionRecord#getHostname()}.
- * 
- * @author Andre van Hoorn
- * 
- */
 public final class BookstoreHostnameRewriter {
 
 	private BookstoreHostnameRewriter() {}
 
-	public static void main(final String[] args)
-			throws MonitoringReaderException, MonitoringRecordConsumerException {
+	public static void main(final String[] args) {
 
 		if (args.length == 0) {
 			return;
@@ -87,28 +77,10 @@ class HostNameRewriterPlugin extends AbstractFilterPlugin {
 	private static final String[] CATALOG_HOSTNAMES = { "SRV0", "SRV1" };
 	private static final String CRM_HOSTNAME = "SRV0";
 
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * @param projectContext
-	 *            The project context for this component.
-	 * 
-	 * @since 1.7
-	 */
 	public HostNameRewriterPlugin(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 	}
 
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @deprecated
-	 */
 	@Deprecated
 	public HostNameRewriterPlugin(final Configuration configuration) {
 		this(configuration, null);
@@ -146,6 +118,7 @@ class HostNameRewriterPlugin extends AbstractFilterPlugin {
 		HostNameRewriterPlugin.MONITORING_CTRL.newMonitoringRecord(newExec);
 	}
 
+	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}

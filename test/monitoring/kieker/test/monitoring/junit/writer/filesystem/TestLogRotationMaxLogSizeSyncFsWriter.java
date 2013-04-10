@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,8 @@ import kieker.monitoring.writer.filesystem.SyncFsWriter;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 public class TestLogRotationMaxLogSizeSyncFsWriter extends AbstractTestLogRotationMaxLogSize {
 
@@ -35,6 +37,7 @@ public class TestLogRotationMaxLogSizeSyncFsWriter extends AbstractTestLogRotati
 	@Override
 	protected IMonitoringController createController(final String path, final int maxEntriesInFile, final int maxLogSize) {
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
+		configuration.setProperty(ConfigurationFactory.METADATA, "false");
 		configuration.setProperty(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP, "false"); // needed for constant size
 		configuration.setProperty(ConfigurationFactory.WRITER_CLASSNAME, SyncFsWriter.class.getName());
 		configuration.setProperty(SyncFsWriter.CONFIG_TEMP, "false");

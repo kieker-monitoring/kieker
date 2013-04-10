@@ -105,7 +105,7 @@ The directory structure of the Bookstore example is shown in Figure~\ref{fig:Pla
 
 \enlargethispage{1cm}
 
-\noindent The class \class{BookstoreStarter}, contains the application's \method{main} method (shown in Listing~\ref{lst:class:BookstoreStarter}), i.e., the program start routine. It initializes the \class{Bookstore} and issues five search requests by calling the \method{searchBook} method of the \object{bookstore} object.
+\noindent The class \class{BookstoreStarter} contains the application's \method{main} method (shown in Listing~\ref{lst:class:BookstoreStarter}), i.e., the program start routine. It initializes the \class{Bookstore} and issues five search requests by calling the \method{searchBook} method of the \object{bookstore} object.
 
 \medskip
 
@@ -120,7 +120,7 @@ In a real application these methods would pass objects to ensure the results of 
 
 \lstinputlisting[caption=Bookstore.java,label=lst:class:Bookstore,firstline=19,firstnumber=19]{\plainBookstoreApplicationDir/src/kieker/examples/userguide/ch2bookstore/Bookstore.java}
 
-\noindent The customer relationship management for this application is modeled in the \class{CRM} class shown in Listing~\ref{lst:class:CRM}. It only provides a business method to collect offers which uses the catalog for some lookup. The additional catalog lookup is later used to illustrate different traces in the application.
+\noindent The customer relationship management for this application is modeled in the \class{CRM} class shown in Listing~\ref{lst:class:CRM}. It provides only a business method to collect offers by using the catalog for some lookup. The additional catalog lookup is later used to illustrate different traces in the application.
 
 \lstinputlisting[caption=CRM.java,label=lst:class:CRM,firstline=19,firstnumber=19]{\plainBookstoreApplicationDir/src/kieker/examples/userguide/ch2bookstore/CRM.java}
 
@@ -220,7 +220,7 @@ The record type will be detailed in Chapter~\ref{chap:aspectJ} .
 as well as \method{tin} and \method{tout} for %
 the timestamps before and after the call of the instrumented method.
 
-\enlargethispage{0.7cm}
+\enlargethispage{1.2cm}
 
 Listing~\ref{lst:cuttingBookstore} shows the instrumentation of the \class{Bookstore} class and its method \method{searchBook()}. In the lines~25 and~26, the monitoring controller is instantiated. It provides the monitoring service for the instrumentation.
 
@@ -249,8 +249,10 @@ Finally, a record is created (see lines~40--46) and stored by calling the monito
 \noindent %
 The next step after instrumenting the code is running the instrumented application. Listing~\ref{lst:bookstoreStarterLinux} shows the commands to compile and run the application under \UnixLikeSystems{}. Listing \ref{lst:bookstoreStarterWin} shows the same commands for Windows. The expected working directory is the base directory of this example, i.e. %
  \dir{\manualInstrumentedBookstoreApplicationDirDistro{}/}.
+ 
+\pagebreak
 
-\enlargethispage{1cm}
+% \enlargethispage{1cm}
 
 \setBashListing
 \input{ch2-quickstart-example_Compile_Run_Example_1.inc}
@@ -355,12 +357,6 @@ be found in \Kieker's \file{lib/} directory) need to be added to the classpath. 
 \label{lst:analysisExampleLayout}
 \end{figure}
 
-\begin{figure}[t]
-\includegraphics[width=\textwidth]{images/ch2-example-pnp}
-\caption{Example pipe-and-filter configuration}
-\label{fig:example:ch2:pipe-and-filter}
-\end{figure}
-
 \noindent The analysis application developed in this section comprises the file %
 \file{BookstoreAnalysisStarter.java}, as shown in Figure~\ref{lst:analysisExampleLayout}. %
 This file can also be found in the directory \dir{\manualInstrumentedBookstoreApplicationDirDistro{}/}.
@@ -371,43 +367,51 @@ and passes these to the \class{TeeFilter} plugin; the \class{TeeFilter} plugin %
 reads events of arbitrary type (i.e., Java \class{Object}), prints them to a %
 configured output stream, and also relays them to filters connected to the %
 filter's output port \method{relayedEvents}. %
+
+\begin{figure}[h]
+\includegraphics[width=\textwidth]{images/ch2-example-pnp}
+\caption{Example pipe-and-filter configuration}
+\label{fig:example:ch2:pipe-and-filter}
+\end{figure}
+
 Currently, \KiekerAnalysisPart{} pipe-and-filter configurations can only %
-be created programmatically, i.e., by configuring, instantiating, registering, and %
+be created programmatically, i.e., by configuring, instantiating, and %
 connecting the plugins in a Java program. %
 For the example, this is demonstrated in Listing~\ref{lst:BookstoreAnalysisStarter}, %
 which shows an excerpt from the \class{BookstoreAnalysisStarter}'s \method{main} %
 method. %
 
-\
+\pagebreak
 
 \setJavaCodeListing
-\lstinputlisting[gobble=4,caption=BookstoreAnalysisStarter.java (excerpt from \method{main} method),label=lst:BookstoreAnalysisStarter,firstline=36,firstnumber=36,lastline=57]%
+\lstinputlisting[gobble=4,caption=BookstoreAnalysisStarter.java (excerpt from \method{main} method),label=lst:BookstoreAnalysisStarter,firstline=37,firstnumber=36,lastline=56]%
 {\manualInstrumentedBookstoreApplicationDir/src/kieker/examples/userguide/ch2bookstore/manual/BookstoreAnalysisStarter.java}
 
-\pagebreak
+% \pagebreak
 
 \noindent The \class{BookstoreAnalysisStarter} follows a simple scheme. Each %
 analysis tool has to create at least one \class{AnalysisController} which can be %
 seen in Listing~\ref{lst:BookstoreAnalysisStarter} in line~37. Then, the plugins, %
-which may be readers or filters, are configured, instantiated, and registered %
-with the analysis instance. %
-Lines~40--44 configure, instantiate, and register the file system monitoring %
+which may be readers or filters, are configured, and instantiated. The usage of the  %
+constructor ensures that the component is registered with the analysis instance. %
+Lines~40--42 configure, instantiate, and register the file system monitoring %
 log reader, which uses the command-line argument value as the input directory. %
 The application expects the %
 output directory from the earlier monitoring run (see Section~\ref{sec:example:monitoring}) %
 as the only argument value, which must be passed manually. %
-Lines~47--51 configure, instantiate, and register the \class{TeeFilter}, %
-which outputs received events to the standard output. Lines~54 and~55 connect %
+Lines~45--48 configure, instantiate, and register the \class{TeeFilter}, %
+which outputs received events to the standard output. Lines~51 and~52 connect %
 the \class{TeeFilter}'s input port to the filesystem reader's output port. %
-The analysis is started by calling its \method{run} method (line~57). %
+The analysis is started by calling its \method{run} method (line~54). %
 
 
 The Listings~\ref{lst:bookstoreAnalysisStarterLinux} and \ref{lst:bookstoreAnalysisStarterWin} %
 describe how the analysis application can be compiled and executed under \UnixLikeSystems{} and Windows.
 
 \setBashListing
-
+\enlargethispage{1.0cm}
 \input{ch2-quickstart-example_Compile_Run_Example_2.inc.tex}
+
 \input{ch2-quickstart-example_Compile_Run_Example_2.inc-win.tex}
 
 \noindent You need to make sure that the application gets the correct path from the monitoring run.

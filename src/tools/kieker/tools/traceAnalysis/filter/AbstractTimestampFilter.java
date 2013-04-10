@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,15 @@ import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 
 /**
+ * This is an abstract base for components which filter elements based on the timestamp.
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.5
+ * 
+ * @deprecated To be removed in Kieker 1.8
  */
+@Deprecated
 public abstract class AbstractTimestampFilter extends AbstractFilterPlugin {
 
 	public static final long MAX_TIMESTAMP = Long.MAX_VALUE;
@@ -40,8 +45,6 @@ public abstract class AbstractTimestampFilter extends AbstractFilterPlugin {
 	 *            The configuration for this component.
 	 * @param projectContext
 	 *            The project context for this component.
-	 * 
-	 * @since 1.7
 	 */
 	public AbstractTimestampFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
@@ -68,25 +71,24 @@ public abstract class AbstractTimestampFilter extends AbstractFilterPlugin {
 	 * Returns true iff the given timestamp is within the configured time period.
 	 * 
 	 * @param timestamp
-	 * @return
+	 *            The timestamp to check.
+	 * @return true if and only if the timestamp is within the time period.
 	 */
 	protected boolean inRange(final long timestamp) {
 		return (timestamp >= this.ignoreBeforeTimestamp) && (timestamp <= this.ignoreAfterTimestamp);
 	}
 
 	/**
-	 * Inheriting properties must provide the name of the configuration
-	 * property used to store the minimum time value to be accepted.
+	 * Inheriting properties must provide the name of the configuration property used to store the minimum time value to be accepted.
 	 * 
-	 * @return
+	 * @return The name of the configuration.
 	 */
 	protected abstract String getConfigurationPropertyIgnoreBeforeTimestamp();
 
 	/**
-	 * Inheriting properties must provide the name of the configuration
-	 * property used to store the maximum time value to be accepted.
+	 * Inheriting properties must provide the name of the configuration property used to store the maximum time value to be accepted.
 	 * 
-	 * @return
+	 * @return The name of the configuration.
 	 */
 	protected abstract String getConfigurationPropertyIgnoreAfterTimestamp();
 

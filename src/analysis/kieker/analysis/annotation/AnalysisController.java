@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,6 +39,8 @@ public @interface AnalysisController {
 	 * The list of possible properties for the analysis controller.
 	 * 
 	 * @return A list of properties.
+	 * 
+	 * @since 1.7
 	 */
 	Property[] configuration() default {};
 }

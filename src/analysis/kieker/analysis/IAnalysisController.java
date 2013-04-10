@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,6 +42,8 @@ public interface IAnalysisController extends IProjectContext {
 	 * 
 	 * @param stateObserver
 	 *            The observer to be registered.
+	 * 
+	 * @since 1.7
 	 */
 	public void registerStateObserver(final IStateObserver stateObserver);
 
@@ -50,6 +52,8 @@ public interface IAnalysisController extends IProjectContext {
 	 * 
 	 * @param stateObserver
 	 *            The observer to be unregistered.
+	 * 
+	 * @since 1.7
 	 */
 	public void unregisterStateObserver(final IStateObserver stateObserver);
 
@@ -57,7 +61,7 @@ public interface IAnalysisController extends IProjectContext {
 	 * This method can be used to store the current configuration of this analysis controller in a specified file.
 	 * The file can later be used to initialize the analysis controller.
 	 * 
-	 * @see AnalysisController#saveToFile(String)
+	 * @see #saveToFile(String)
 	 * 
 	 * @param file
 	 *            The file in which the configuration will be stored.
@@ -65,14 +69,16 @@ public interface IAnalysisController extends IProjectContext {
 	 *             If an exception during the storage occurred.
 	 * @throws AnalysisConfigurationException
 	 *             If the current configuration is somehow invalid.
+	 * 
+	 * @since 1.7
 	 */
 	public void saveToFile(final File file) throws IOException, AnalysisConfigurationException;
 
 	/**
 	 * This method can be used to store the current configuration of this analysis controller in a specified file. It is just a convenient method which does the same
-	 * as {@code AnalysisController.saveToFile(new File(pathname))}.
+	 * as {@code #saveToFile(File)}.
 	 * 
-	 * @see AnalysisController#saveToFile(File)
+	 * @see #saveToFile(File)
 	 * 
 	 * @param pathname
 	 *            The pathname of the file in which the configuration will be stored.
@@ -80,6 +86,8 @@ public interface IAnalysisController extends IProjectContext {
 	 *             If an exception during the storage occurred.
 	 * @throws AnalysisConfigurationException
 	 *             If the current configuration is somehow invalid.
+	 * 
+	 * @since 1.7
 	 */
 	public void saveToFile(final String pathname) throws IOException, AnalysisConfigurationException;
 
@@ -98,6 +106,7 @@ public interface IAnalysisController extends IProjectContext {
 	 *             If this instance has already been started or has already been terminated.
 	 * @throws AnalysisConfigurationException
 	 *             If the port names or the given plugins are invalid or not compatible.
+	 * @since 1.7
 	 */
 	public void connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst,
 			final String inputPortName) throws IllegalStateException, AnalysisConfigurationException;
@@ -115,6 +124,8 @@ public interface IAnalysisController extends IProjectContext {
 	 *             If this instance has already been started or has already been terminated.
 	 * @throws AnalysisConfigurationException
 	 *             If the port names or the given objects are invalid or not compatible.
+	 * 
+	 * @since 1.7
 	 */
 	public void connect(final AbstractPlugin plugin, final String repositoryPort, final AbstractRepository repository) throws IllegalStateException,
 			AnalysisConfigurationException;
@@ -129,11 +140,15 @@ public interface IAnalysisController extends IProjectContext {
 	 *             If the current instance has already been started or already been terminated.
 	 * @throws AnalysisConfigurationException
 	 *             If plugins with mandatory repositories have not been connected properly or couldn't be initialized.
+	 * 
+	 * @since 1.7
 	 */
 	public void run() throws IllegalStateException, AnalysisConfigurationException;
 
 	/**
 	 * Initiates a termination of the analysis.
+	 * 
+	 * @since 1.7
 	 */
 	public void terminate();
 
@@ -142,51 +157,17 @@ public interface IAnalysisController extends IProjectContext {
 	 * 
 	 * @param error
 	 *            Determines whether this is a normal termination or an termination due to an error during the analysis.
+	 * 
+	 * @since 1.7
 	 */
 	public void terminate(final boolean error);
-
-	/**
-	 * Registers a log reader used as a source for monitoring records.
-	 * 
-	 * @param reader
-	 *            The reader to be registered.
-	 * @throws IllegalStateException
-	 *             If the controller is already running or has already been terminated.
-	 * @deprecated The registering of a plugin should be done via the constructor.
-	 */
-	@Deprecated
-	public void registerReader(final AbstractReaderPlugin reader) throws IllegalStateException;
-
-	/**
-	 * Registers the passed plugin.
-	 * 
-	 * All plugins which have been registered before calling the <i>run</i>-method, will be started once the analysis is started.
-	 * 
-	 * @param filter
-	 *            The filter to be registered.
-	 * @throws IllegalStateException
-	 *             If the controller is already running or has already been terminated.
-	 * @deprecated The registering of a filter should be done via the constructor.
-	 */
-	@Deprecated
-	public void registerFilter(final AbstractFilterPlugin filter) throws IllegalStateException;
-
-	/**
-	 * Registers the passed repository.
-	 * 
-	 * @param repository
-	 *            The repository to be registered.
-	 * @throws IllegalStateException
-	 *             If the controller is already running or has already been terminated.
-	 * @deprecated The registering of a repository should be done via the constructor.
-	 */
-	@Deprecated
-	public void registerRepository(final AbstractRepository repository) throws IllegalStateException;
 
 	/**
 	 * Delivers an unmodifiable collection of all readers.
 	 * 
 	 * @return All registered readers.
+	 * 
+	 * @since 1.7
 	 */
 	public Collection<AbstractReaderPlugin> getReaders();
 
@@ -194,6 +175,8 @@ public interface IAnalysisController extends IProjectContext {
 	 * Delivers an unmodifiable collection of all filters.
 	 * 
 	 * @return All registered filters.
+	 * 
+	 * @since 1.7
 	 */
 	public Collection<AbstractFilterPlugin> getFilters();
 
@@ -201,6 +184,8 @@ public interface IAnalysisController extends IProjectContext {
 	 * Delivers an unmodifiable collection of all repositories.
 	 * 
 	 * @return All registered repositories.
+	 * 
+	 * @since 1.7
 	 */
 	public Collection<AbstractRepository> getRepositories();
 

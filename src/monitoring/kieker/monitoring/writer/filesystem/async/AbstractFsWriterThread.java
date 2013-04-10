@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,19 +26,21 @@ import java.util.TimeZone;
 import java.util.concurrent.BlockingQueue;
 
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.filesystem.FSUtil;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.registry.RegistryRecord;
 import kieker.monitoring.writer.AbstractAsyncThread;
-import kieker.monitoring.writer.filesystem.MappingFileWriter;
+import kieker.monitoring.writer.filesystem.map.MappingFileWriter;
 
 /**
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.5
  */
 public abstract class AbstractFsWriterThread extends AbstractAsyncThread {
 
-	private static final String FILE_PREFIX = "kieker-";
-
-	protected String fileExtension = ".dat";
+	/** The extension of the written files. */
+	protected String fileExtension = FSUtil.NORMAL_FILE_EXTENSION;
 
 	private final MappingFileWriter mappingFileWriter;
 	private final String filenamePrefix;
@@ -62,7 +64,7 @@ public abstract class AbstractFsWriterThread extends AbstractAsyncThread {
 		super(monitoringController, writeQueue);
 		this.mappingFileWriter = mappingFileWriter;
 		this.path = new File(path).getAbsolutePath();
-		this.filenamePrefix = path + File.separatorChar + FILE_PREFIX;
+		this.filenamePrefix = path + File.separatorChar + FSUtil.FILE_PREFIX;
 		this.maxEntriesInFile = maxEntriesInFile;
 		if ((maxLogSize > 0) || (maxLogFiles > 0)) {
 			this.maxLogSize = maxLogSize * 1024L * 1024L; // convert from MiBytes to Bytes
@@ -89,8 +91,8 @@ public abstract class AbstractFsWriterThread extends AbstractAsyncThread {
 			this.sameFilenameCounter = 0;
 			this.previousFileDate = date;
 		}
-		final StringBuilder sb = new StringBuilder(this.filenamePrefix.length() + threadName.length() + this.fileExtension.length() + 27);
-		sb.append(this.filenamePrefix).append(this.dateFormat.format(new java.util.Date(date))).append("-UTC-") // NOPMD (Date)
+		final StringBuilder sb = new StringBuilder(this.filenamePrefix.length() + threadName.length() + this.fileExtension.length() + 28);
+		sb.append(this.filenamePrefix).append('-').append(this.dateFormat.format(new java.util.Date(date))).append("-UTC-") // NOPMD (Date)
 				.append(String.format("%03d", this.sameFilenameCounter)).append('-')
 				.append(threadName).append(this.fileExtension);
 		return sb.toString();
@@ -135,8 +137,26 @@ public abstract class AbstractFsWriterThread extends AbstractAsyncThread {
 		}
 	}
 
+	/**
+	 * Inheriting classes should implement this method to actually write the monitoring record.
+	 * 
+	 * @param monitoringRecord
+	 *            The record to be written.
+	 * 
+	 * @throws IOException
+	 *             If something went wrong during the writing.
+	 */
 	protected abstract void write(IMonitoringRecord monitoringRecord) throws IOException;
 
+	/**
+	 * Inheriting classes should implement this method to prepare a new file if needed.
+	 * 
+	 * @param filename
+	 *            The name of the file to be prepared.
+	 * 
+	 * @throws IOException
+	 *             If something went wrong during the preparation.
+	 */
 	protected abstract void prepareFile(final String filename) throws IOException;
 
 	@Override
@@ -149,6 +169,9 @@ public abstract class AbstractFsWriterThread extends AbstractAsyncThread {
 		return sb.toString();
 	}
 
+	/**
+	 * @author Jan Waller
+	 */
 	private static final class FileNameSize {
 		public final String name; // NOCS
 		public long size; // NOCS

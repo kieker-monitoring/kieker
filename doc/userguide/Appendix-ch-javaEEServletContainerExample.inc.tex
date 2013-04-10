@@ -20,9 +20,8 @@ filter. %
 
 Both settings require the files \file{\aspectJWeaverJar{}} and \file{\mainJar}, %
 which are already included in the webapps's \dir{WEB-INF/lib/} directory. %
-Also, the \Kieker{} configuration file is already included in the webapps's 
-\dir{WEB-INF/classes/META-INF/} directory, where it is considered for %
-configuration by \KiekerMonitoringPart{} in both modes. 
+Also, a \Kieker{} configuration file is already included in the Jetty's root directory, %
+where it is considered for configuration by \KiekerMonitoringPart{} in both modes. 
 
 \paragraph{Servlet Filter (Default)}
 
@@ -43,6 +42,8 @@ AspectJ-based instrumentation mode.
 \setXMLListing
 \lstinputlisting[firstline=38,lastline=43, numbers=none, linewidth=1\textwidth, caption=Enabling the Spring interceptor in \file{applicationContext.xml}]{\JavaEEServletExampleDir/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/applicationContext.xml}
 
+\NOTIFYBOX{When using, for example, the \texttt{@Autowired} feature in your Spring beans, it can be necessary to force the usage of CGLIB proxy objects with \texttt{<aop:aspectj-autoproxy proxy-target-class="true"/>}.}
+
 \paragraph{AspectJ-based Instrumentation}
 
 \enlargethispage{1cm}
@@ -54,10 +55,10 @@ to the server on startup. When using AspectJ for instrumentation, the respective
 JVM argument needs to be activated in this file: %
 
 \setPropertiesListing
-\lstinputlisting[firstline=33,lastline=33, linewidth=1\textwidth,caption=Enabling the AspectJ weaver in Jetty's \file{start.ini}]{\JavaEEServletExampleDir/jetty-hightide-jpetstore/start.KiekerAspectJActivated.ini}
+\lstinputlisting[firstline=37,lastline=40, linewidth=1\textwidth,caption=Enabling the AspectJ weaver in Jetty's \file{start.ini}]{\JavaEEServletExampleDir/jetty-hightide-jpetstore/start.KiekerAspectJActivated.ini}
 
 \noindent The AspectJ configuration file \file{aop.xml} is already located in the %
-webapps's \dir{WEB-INF/classes/META-INF/} directory and configured to instrument %
+webapps's\linebreak \dir{WEB-INF/classes/META-INF/} directory and configured to instrument %
 the JPetStore classes with \Kieker{}'s \class{OperationExecutionAspectFull} aspect %
 (Section~\ref{chap:aspectJ}). 
 

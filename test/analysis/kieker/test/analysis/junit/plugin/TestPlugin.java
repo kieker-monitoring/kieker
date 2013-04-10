@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,13 +37,21 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * A simple test for the plugins in general. It tests for example if the chaining of different plugins does work.
  * 
  * @author Nils Christian Ehmke, Jan Waller
+ * 
+ * @since 1.6
  */
 public class TestPlugin extends AbstractKiekerTest {
 
+	/**
+	 * Default constructor.
+	 */
 	public TestPlugin() {
 		// empty default constructor
 	}
 
+	/**
+	 * This method tests some attributes of plugins.
+	 */
 	@Test
 	public void testPluginAttributes() {
 		final Configuration myPluginConfig = new Configuration();
@@ -57,6 +65,9 @@ public class TestPlugin extends AbstractKiekerTest {
 		Assert.assertEquals("Unexpected plugin description", SimpleForwardFilterWithRepository.FILTER_DESCRIPTION, sourcePlugin.getPluginDescription());
 	}
 
+	/**
+	 * This method tests whether the repository class works.
+	 */
 	@Test
 	public void testRepository() {
 		final Configuration myRepoConfig = new Configuration();
@@ -70,6 +81,14 @@ public class TestPlugin extends AbstractKiekerTest {
 		Assert.assertEquals("Unexpected repository description", SimpleRepository.REPOSITORY_DESCRIPTION, myRepo.getRepositoryDescription());
 	}
 
+	/**
+	 * This method tests whether the chaining of filters, readers, and repositories is working.
+	 * 
+	 * @throws IllegalStateException
+	 *             If something went wrong during the test.
+	 * @throws AnalysisConfigurationException
+	 *             If something went wrong during the test.
+	 */
 	@Test
 	public void testChaining() throws IllegalStateException, AnalysisConfigurationException {
 		final Object testObject1 = new Object();
@@ -84,7 +103,7 @@ public class TestPlugin extends AbstractKiekerTest {
 		final SimpleForwardFilterWithRepository simpleFilter = new SimpleForwardFilterWithRepository(new Configuration(), analysisController);
 		final ListCollectionFilter<Object> simpleSinkPlugin = new ListCollectionFilter<Object>(new Configuration(), analysisController);
 
-		/* Connect the plugins. */
+		// Connect the plugins.
 		analysisController.connect(
 				simpleListReader, ListReader.OUTPUT_PORT_NAME,
 				simpleFilter, SimpleForwardFilterWithRepository.INPUT_PORT_NAME);

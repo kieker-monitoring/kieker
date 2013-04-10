@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,19 @@ package kieker.test.monitoring.junit.probe.spring.executions.jetty.bookstore;
 
 /**
  * @author Andre van Hoorn
+ * 
+ * @since 1.6
  */
 public class Book {
 
 	private String title;
 
+	/**
+	 * Creates a new book with the given title.
+	 * 
+	 * @param title
+	 *            The title of the book.
+	 */
 	public Book(final String title) {
 		this.title = title;
 	}

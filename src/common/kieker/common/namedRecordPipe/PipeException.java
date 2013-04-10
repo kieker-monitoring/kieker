@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,19 +17,37 @@
 package kieker.common.namedRecordPipe;
 
 /**
+ * This exception shows that something with respective to a pipe failed.
  * 
  * @author Andre van Hoorn
+ * 
+ * @deprecated to be removed in Kieker 1.8
+ * 
+ * @since 1.3
  */
+@Deprecated
 public class PipeException extends Exception {
-	/**
-	 * 
-	 */
+	/** The UID. */
 	private static final long serialVersionUID = 56L;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param msg
+	 *            The message of this exception.
+	 */
 	public PipeException(final String msg) {
 		super(msg);
 	}
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param msg
+	 *            The message of this exception.
+	 * @param thrw
+	 *            The cause of this exception.
+	 */
 	public PipeException(final String msg, final Throwable thrw) {
 		super(msg, thrw);
 	}

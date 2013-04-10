@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,15 @@ import kieker.analysis.model.analysisMetaModel.MIProject;
 public interface IProjectContext {
 
 	/**
+	 * This is the name of the property containing the time unit for the monitoring records.
+	 */
+	public static final String CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT = "recordsTimeUnit";
+	/**
+	 * This is the name of the property containing the project name.
+	 */
+	public static final String CONFIG_PROPERTY_NAME_PROJECT_NAME = "projectName";
+
+	/**
 	 * Delivers the value for the given (global) property within the analysis.
 	 * 
 	 * @param key
@@ -47,6 +56,8 @@ public interface IProjectContext {
 	 * @return A filled meta model instance.
 	 * @throws AnalysisConfigurationException
 	 *             If the current configuration is somehow invalid.
+	 * 
+	 * @since 1.7
 	 */
 	public MIProject getCurrentConfiguration() throws AnalysisConfigurationException;
 
@@ -54,6 +65,8 @@ public interface IProjectContext {
 	 * Delivers the current name of the project.
 	 * 
 	 * @return The current project name.
+	 * 
+	 * @since 1.7
 	 */
 	public String getProjectName();
 
@@ -61,6 +74,8 @@ public interface IProjectContext {
 	 * Delivers the current state of the analysis controller.
 	 * 
 	 * @return The current state.
+	 * 
+	 * @since 1.7
 	 */
 	public STATE getState();
 }

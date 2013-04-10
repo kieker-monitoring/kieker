@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +36,8 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * this plugin is not delegated in any way.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.2
  */
 @Plugin(description = "A filter allowing to write the incoming ExecutionTraces into a configured file",
 		repositoryPorts = {
@@ -46,8 +48,10 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 		})
 public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessingFilter {
 
+	/** This is the name of the input port receiving new execution traces. */
 	public static final String INPUT_PORT_NAME_EXECUTION_TRACES = "executionTraces";
 
+	/** The name of the configuration determining the output file name. */
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FN = "outputFn";
 
 	private static final String ENCODING = "UTF-8";
@@ -63,7 +67,8 @@ public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessing
 	 * @param projectContext
 	 *            The project context for this component.
 	 * 
-	 * @since 1.7
+	 * @throws IOException
+	 *             If the write stream could not be prepared.
 	 */
 	public ExecutionTraceWriterFilter(final Configuration configuration, final IProjectContext projectContext) throws IOException {
 		super(configuration, projectContext);
@@ -77,6 +82,9 @@ public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessing
 	 * 
 	 * @param configuration
 	 *            The configuration for this component.
+	 * 
+	 * @throws IOException
+	 *             If the write stream could not be prepared.
 	 * 
 	 * @deprecated To be removed in Kieker 1.8.
 	 */
@@ -102,6 +110,12 @@ public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessing
 		}
 	}
 
+	/**
+	 * This method represents the input port of this filter.
+	 * 
+	 * @param et
+	 *            The next execution trace.
+	 */
 	@InputPort(
 			name = INPUT_PORT_NAME_EXECUTION_TRACES,
 			description = "Receives the execution traces to be written",

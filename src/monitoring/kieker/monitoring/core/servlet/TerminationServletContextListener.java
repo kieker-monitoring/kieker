@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,12 +29,16 @@ import kieker.monitoring.core.controller.MonitoringController;
  * 
  * @author Dennis Kieselhorst
  * 
+ * @since 1.3
  */
 public class TerminationServletContextListener implements ServletContextListener {
 	private static final Log LOG = LogFactory.getLog(TerminationServletContextListener.class);
 
 	private final IStateController ctrl;
 
+	/**
+	 * Creates a new instance of this class using the singleton instance of the {@link MonitoringController} as a controller.
+	 */
 	public TerminationServletContextListener() {
 		this.ctrl = MonitoringController.getInstance();
 	}
@@ -43,26 +47,17 @@ public class TerminationServletContextListener implements ServletContextListener
 		this.ctrl = ctrl;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.servlet.ServletContextListener#contextDestroyed(javax.servlet.
-	 * ServletContextEvent)
+	/**
+	 * {@inheritDoc}
 	 */
-
 	public void contextDestroyed(final ServletContextEvent evt) {
 		this.ctrl.terminateMonitoring();
 		LOG.info("context destroyed");
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * javax.servlet.ServletContextListener#contextInitialized(javax.servlet
-	 * .ServletContextEvent)
+	/**
+	 * {@inheritDoc}
 	 */
-
 	public void contextInitialized(final ServletContextEvent evt) {
 		LOG.info("context initialized");
 	}

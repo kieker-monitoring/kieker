@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,6 +51,7 @@ public final class BookstoreAnalysisStarter {
 			// Connect the output of the reader with the input of the filter.
 			analysisInstance.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS,
 					teeFilter, TeeFilter.INPUT_PORT_NAME_EVENTS);
+
 			// Start the analysis
 			analysisInstance.run();
 		} catch (final Exception e) {

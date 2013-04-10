@@ -9,40 +9,48 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    shape-rendering="auto"
-   width="901.64374"
+   width="1187.8303"
    text-rendering="auto"
    contentScriptType="text/ecmascript"
    color-interpolation="auto"
    color-rendering="auto"
    preserveAspectRatio="xMidYMid meet"
    font-size="12"
-   viewBox="0 0 901.64374 430.02194"
+   viewBox="0 0 1187.8304 676.04876"
    image-rendering="auto"
    stroke-miterlimit="10"
    zoomAndPan="magnify"
    version="1.0"
    contentStyleType="text/css"
    font-style="normal"
-   height="430.02194"
+   height="676.04877"
    font-weight="normal"
    id="svg2"
-   inkscape:version="0.48.3.1 r9886"
+   inkscape:version="0.48.4 r9939"
    sodipodi:docname="kieker_AnalysisControlleruserguide-modified.svg"
    style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog">
-  <rect
-     style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:1.9"
-     id="rect5103"
-     width="285.439"
-     height="47.034"
-     x="335.68689"
-     y="150.20639" />
-  <rect
-     style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:1.9"
-     id="rect5101"
-     width="285.439"
-     height="47.034"
-     x="0.62787545"
-     y="150.20639" />
+  <g
+     transform="matrix(0,-1,-1,0,305.20695,926.15379)"
+     id="g6502"
+     style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog">
+    <g
+       id="g6504">
+      <path
+         sodipodi:nodetypes="ccc"
+         inkscape:connector-curvature="0"
+         id="path6506"
+         d="m 658,196 -46.78327,0 0,-89.75057 -168.60823,0 0,-45.870782"
+         clip-path="url(#clipPath45-3-7-2-0)"
+         style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:0.85368359;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dashoffset:0;font-family:Arial"
+         transform="matrix(0,1.6085051,-1,0,559.18326,-1191.8509)" />
+    </g>
+  </g>
+  <polygon
+     clip-path="url(#clipPath60)"
+     points="648,191 658,196 648,201 "
+     id="polygon489"
+     style="font-size:11px;fill:none;stroke-width:1.08270001;stroke-linecap:butt;font-family:Arial"
+     transform="matrix(0,1,-1,0,717.22619,-228.72484)" />
   <line
      clip-path="url(#clipPath45-3)"
      x1="605"
@@ -50,119 +58,26 @@
      y1="196"
      y2="196"
      id="line485-6"
-     style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.12849247;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
-     transform="matrix(0,0.92048978,-1,0,568.01322,-358.98999)" />
-  <line
-     clip-path="url(#clipPath45)"
-     x1="605"
-     x2="658"
-     y1="196"
-     y2="196"
-     id="line485"
-     style="font-size:11px;fill:none;stroke-width:1.12849247;stroke-linecap:butt;font-family:Arial"
-     transform="matrix(0,0.92048978,-1,0,442.16726,-358.98999)" />
+     style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:0.6703431;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
+     transform="matrix(0,2.6086875,-1,0,733.11964,-1315.3092)" />
   <polygon
      clip-path="url(#clipPath60-9)"
-     points="648,191 658,196 648,201 "
+     points="648,201 648,191 658,196 "
      id="polygon489-3"
      style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.08270001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
-     transform="matrix(0,1,-1,0,568.01322,-425.38102)" />
-  <polygon
-     clip-path="url(#clipPath60)"
-     points="648,191 658,196 648,201 "
-     id="polygon489"
-     style="font-size:11px;fill:none;stroke-width:1.08270001;stroke-linecap:butt;font-family:Arial"
-     transform="matrix(0,1,-1,0,442.16726,-425.38102)" />
+     transform="matrix(0,1,-1,0,733.11964,-255.87333)" />
   <polygon
      clip-path="url(#clipPath60-9)"
-     points="648,191 658,196 648,201 "
+     points="648,201 648,191 658,196 "
      id="polygon487-7"
      style="font-size:11px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Arial"
-     transform="matrix(0,1,-1,0,568.01322,-425.38102)" />
+     transform="matrix(0,1,-1,0,733.11964,-255.87333)" />
   <polygon
      clip-path="url(#clipPath60)"
      points="648,191 658,196 648,201 "
      id="polygon487"
      style="font-size:11px;fill:#ffffff;stroke:none;font-family:Arial"
-     transform="matrix(0,1,-1,0,442.16726,-425.38102)" />
-  <rect
-     style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:1.89999999999999991"
-     id="rect5022"
-     width="246.688"
-     height="47.034"
-     x="193.50682"
-     y="233.16432" />
-  <path
-     style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     d="m 193.28283,262.87059 246.44687,0"
-     id="path5099"
-     inkscape:connector-curvature="0"
-     transform="translate(0,-1.5956369e-6)" />
-  <rect
-     x="658"
-     y="162"
-     clip-path="url(#clipPath36-0)"
-     width="161"
-     height="73"
-     id="rect433-2"
-     style="font-size:11px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.75548291;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
-     transform="matrix(1.394649,0,0,1.4726588,-262.85639,-5.5460301)" />
-  <path
-     style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     d="m 654.18804,278.18904 225.27137,0"
-     id="path5067"
-     inkscape:connector-curvature="0"
-     transform="translate(0,-1.5956369e-6)" />
-  <rect
-     style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:1.9"
-     id="rect5065"
-     width="268.28699"
-     height="47.034"
-     x="632.7439"
-     y="148.95992" />
-  <rect
-     style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:1.9"
-     id="rect5049"
-     width="175.72099"
-     height="61.769566"
-     x="445.40479"
-     y="233.16418" />
-  <rect
-     x="658"
-     y="162"
-     clip-path="url(#clipPath36)"
-     width="161"
-     height="73"
-     id="rect433"
-     style="font-size:11px;fill:#ffffff;stroke-width:0.72634023;stroke-linecap:butt;font-family:Arial"
-     transform="matrix(1.394649,0,0,1.5932032,-714.49521,50.59066)" />
-  <path
-     style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     d="m 202.74423,353.88022 224.82082,0"
-     id="path5029"
-     inkscape:connector-curvature="0"
-     transform="translate(0,-1.5956369e-6)" />
-  <rect
-     style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:1.9"
-     id="rect5013"
-     width="186.48401"
-     height="62.406731"
-     x="0.62807631"
-     y="233.16418" />
-  <rect
-     style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:1.9"
-     id="rect5002"
-     width="509.77899"
-     height="109.972"
-     x="124.1484"
-     y="0.42926955" />
-  <path
-     style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     d="m 125.64511,32.643254 508.32483,0"
-     id="path5004"
-     inkscape:connector-curvature="0"
-     transform="translate(0,-1.5956369e-6)"
-     sodipodi:nodetypes="cc" />
+     transform="matrix(0,1,-1,0,717.22619,-228.72484)" />
   <metadata
      id="metadata511">
     <rdf:RDF>
@@ -171,7 +86,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -184,21 +99,23 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1280"
-     inkscape:window-height="1004"
+     inkscape:window-width="1920"
+     inkscape:window-height="1005"
      id="namedview509"
      showgrid="false"
-     inkscape:zoom="1.5694556"
-     inkscape:cx="351.63083"
-     inkscape:cy="207.83337"
-     inkscape:window-x="1278"
-     inkscape:window-y="-3"
+     inkscape:zoom="1.1097727"
+     inkscape:cx="418.37435"
+     inkscape:cy="415.47173"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2"
      fit-margin-top="0"
      fit-margin-left="0"
      fit-margin-right="0"
-     fit-margin-bottom="0" />
+     fit-margin-bottom="0"
+     showguides="true"
+     inkscape:guide-bbox="true" />
   <!--Generated by the Batik Graphics2D SVG Generator-->
   <defs
      id="genericDefs">
@@ -1239,134 +1156,357 @@
          d="m 646,190 14,0 0,14 -14,0 0,-14 z"
          inkscape:connector-curvature="0" />
     </clipPath>
+    <clipPath
+       id="clipPath37-9"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path167-4"
+         d="m 710,165 58,0 0,16 -58,0 0,-16 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath3-8"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path65-2"
+         d="m 343,46 110,0 0,16 -110,0 0,-16 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath2-5"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path62-5"
+         d="m 345,33 106,0 0,16 -106,0 0,-16 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath2-5-1"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path62-5-1"
+         d="m 345,33 106,0 0,16 -106,0 0,-16 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath37-9-2"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path167-4-7"
+         d="m 710,165 58,0 0,16 -58,0 0,-16 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath3-8-1"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path65-2-4"
+         d="m 343,46 110,0 0,16 -110,0 0,-16 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath38-2"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path170-2"
+         d="m 696,178 87,0 0,16 -87,0 0,-16 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath37-16"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path167-8"
+         d="m 710,165 58,0 0,16 -58,0 0,-16 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath38-8"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path170-92"
+         d="m 696,178 87,0 0,16 -87,0 0,-16 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath37-7"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path167-9"
+         d="m 710,165 58,0 0,16 -58,0 0,-16 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath60-9-3"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path236-7-4"
+         d="m 646,190 14,0 0,14 -14,0 0,-14 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath60-9-1"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path236-7-3"
+         d="m 646,190 14,0 0,14 -14,0 0,-14 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath60-9-7"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path236-7-42"
+         d="m 646,190 14,0 0,14 -14,0 0,-14 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath3812"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path3814"
+         d="m 646,190 14,0 0,14 -14,0 0,-14 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath45-3-7"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path191-3-7"
+         d="m -1,-1 836,0 0,372 -836,0 0,-372 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath6-9"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path74-8"
+         d="m 276,89 42,0 0,16 -42,0 0,-16 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath17-7-7-0"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path107-7-3-2"
+         d="m 9,207 335,0 0,43 -335,0 0,-43 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath38-86"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path170-5"
+         d="m 696,178 87,0 0,16 -87,0 0,-16 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath37-0"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path167-90"
+         d="m 710,165 58,0 0,16 -58,0 0,-16 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath36-06"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path164-1"
+         d="m 657,161 168,0 0,81 -168,0 0,-81 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath45-3-4"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path191-3-9"
+         d="m -1,-1 836,0 0,372 -836,0 0,-372 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath60-9-63"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path236-7-7"
+         d="m 646,190 14,0 0,14 -14,0 0,-14 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath6164"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path6166"
+         d="m 646,190 14,0 0,14 -14,0 0,-14 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath45-3-1"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path191-3-3"
+         d="m -1,-1 836,0 0,372 -836,0 0,-372 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath60-9-5"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path236-7-9"
+         d="m 646,190 14,0 0,14 -14,0 0,-14 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath6164-8"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path6166-4"
+         d="m 646,190 14,0 0,14 -14,0 0,-14 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath60-9-6-7-6"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path236-7-0-4-1"
+         d="m 646,190 14,0 0,14 -14,0 0,-14 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath60-9-6-7-0"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path236-7-0-4-9"
+         d="m 646,190 14,0 0,14 -14,0 0,-14 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath45-3-7-2"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path191-3-7-6"
+         d="m -1,-1 836,0 0,372 -836,0 0,-372 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath60-9-7-0"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path236-7-42-1"
+         d="m 646,190 14,0 0,14 -14,0 0,-14 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath6341"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path6343"
+         d="m 646,190 14,0 0,14 -14,0 0,-14 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath60-9-7-0-0"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path236-7-42-1-0"
+         d="m 646,190 14,0 0,14 -14,0 0,-14 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath6423"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path6425"
+         d="m 646,190 14,0 0,14 -14,0 0,-14 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath45-3-7-2-0"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path191-3-7-6-7"
+         d="m -1,-1 836,0 0,372 -836,0 0,-372 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath60-9-7-0-1"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path236-7-42-1-7"
+         d="m 646,190 14,0 0,14 -14,0 0,-14 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath6463"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path6465"
+         d="m 646,190 14,0 0,14 -14,0 0,-14 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath60-9-63-1"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path236-7-7-7"
+         d="m 646,190 14,0 0,14 -14,0 0,-14 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath60-9-63-0"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path236-7-7-9"
+         d="m 646,190 14,0 0,14 -14,0 0,-14 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
+    <clipPath
+       id="clipPath3555"
+       clipPathUnits="userSpaceOnUse">
+      <path
+         id="path3557"
+         d="m 646,190 14,0 0,14 -14,0 0,-14 z"
+         inkscape:connector-curvature="0" />
+    </clipPath>
   </defs>
-  <text
-     x="346"
-     y="45"
-     clip-path="url(#clipPath2)"
-     font-weight="bold"
-     xml:space="preserve"
-     id="text261"
-     style="font-size:11px;font-weight:bold;fill:#000000;stroke:none;font-family:Arial"
-     transform="translate(-15.954536,-30.034919)">AnalysisController</text>
-  <text
-     x="344"
-     y="58"
-     clip-path="url(#clipPath3)"
-     xml:space="preserve"
-     id="text263"
-     style="font-size:11px;fill:#000000;stroke:none;font-family:Arial"
-     transform="translate(-18.920112,-30.034919)">(from kieker::analysis)</text>
-  <text
-     x="128.37318"
-     y="57.298477"
-     clip-path="none"
-     xml:space="preserve"
-     id="text267"
-     style="font-size:11px;fill:#000000;stroke:none;font-family:Arial">+ registerFilter ( filter : AbstractFilterPlugin )</text>
-  <text
-     x="277"
-     y="101"
-     clip-path="url(#clipPath6)"
-     xml:space="preserve"
-     id="text269"
-     style="font-size:11px;fill:#000000;stroke:none;font-family:Arial"
-     transform="translate(-149.29206,4.2063243)">+ run ( )</text>
-  <text
-     x="85.916954"
-     y="162.30768"
-     clip-path="none"
-     font-weight="bold"
-     xml:space="preserve"
-     id="text301"
-     style="font-size:11px;font-weight:bold;stroke:none;font-family:Arial">AbstractReaderPlugin</text>
-  <text
-     xml:space="preserve"
-     x="52.672569"
-     y="175.30768"
-     clip-path="none"
-     id="text303"
-     style="font-size:11px;stroke:none;font-family:Arial">(from kieker::analysis::plugin::reader)</text>
-  <text
-     xml:space="preserve"
-     x="7.8125477"
-     y="192.30768"
-     clip-path="none"
-     id="text305"
-     style="font-size:11px;stroke:none;font-family:Arial">+ AbstractReaderPlugin ( configuration : Configuration  )</text>
-  <line
-     clip-path="url(#clipPath17)"
-     x1="10"
-     x2="342"
-     y1="208"
-     y2="208"
-     id="line311"
-     style="font-size:11px;fill:none;stroke-width:1.16959882;stroke-linecap:butt;font-family:Arial"
-     transform="matrix(0.85692433,0,0,1,-7.0428468,-27.692319)" />
-  <text
-     font-size="12"
-     x="457"
-     y="154"
-     clip-path="url(#clipPath52)"
-     xml:space="preserve"
-     id="text457"
-     style="font-size:12px;stroke:none;font-family:Arial"
-     transform="translate(-3.7257011,-11.789755)">1..*</text>
-  <text
-     font-size="12"
-     x="492"
-     y="154"
-     clip-path="url(#clipPath53)"
-     xml:space="preserve"
-     id="text459"
-     style="font-size:12px;stroke:none;font-family:Arial"
-     transform="translate(-2.8246157,-11.789755)">- filters</text>
-  <line
-     clip-path="url(#clipPath54)"
-     x1="478"
-     x2="483"
-     y1="152"
-     y2="162"
-     id="line461"
-     style="font-size:11px;fill:none;stroke-width:1.08270001;stroke-linecap:butt;font-family:Arial"
-     transform="translate(-2.8246157,-12.240297)" />
-  <line
-     clip-path="url(#clipPath54)"
-     x1="483"
-     x2="488"
-     y1="162"
-     y2="152"
-     id="line463"
-     style="font-size:11px;fill:none;stroke-width:1.08270001;stroke-linecap:butt;font-family:Arial"
-     transform="translate(-2.8246157,-12.240297)" />
-  <text
-     x="128.37318"
-     y="45.321518"
-     clip-path="none"
-     xml:space="preserve"
-     id="text265-8"
-     style="font-size:11px;fill:#000000;stroke:none;font-family:Arial">+ registerReader ( reader : AbstractReaderPlugin )</text>
-  <text
-     x="128.37318"
-     y="69.275436"
-     clip-path="none"
-     xml:space="preserve"
-     id="text267-1"
-     style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial">+ registerRepository ( filter : AbstractRepository )</text>
-  <text
-     x="128.37318"
-     y="81.252396"
-     clip-path="none"
-     xml:space="preserve"
-     id="text267-1-5"
-     style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial">+ connect ( plugin : AbstractPlugin, repositoryPort : String, repository : AbstractRepository )</text>
-  <text
-     x="128.37318"
-     y="93.229355"
-     clip-path="none"
-     xml:space="preserve"
-     id="text267-1-5-2"
-     style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial">+ connect ( srcPlugin : AbstractPlugin, outputPort : String, dstPlugin : AbstractPlugin, inputPort : String )</text>
+  <g
+     transform="matrix(1.0297497,0,0,1,160.25891,285.35631)"
+     id="g5089"
+     style="stroke-width:0.98544896">
+    <g
+       id="g5091"
+       style="stroke-width:0.98544896">
+      <g
+         id="g5093"
+         style="stroke-width:0.98544896">
+        <line
+           clip-path="url(#clipPath45-3-7)"
+           x1="605"
+           x2="658"
+           y1="196"
+           y2="196"
+           id="line5095"
+           style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:0.84126163;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
+           transform="matrix(0,1.6085051,-1,0,559.18326,-1191.8509)" />
+      </g>
+    </g>
+    <g
+       id="g5097"
+       style="stroke-width:0.98544896">
+      <polygon
+         transform="matrix(0,1,-1,0,559.18326,-805.12324)"
+         style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.06694567;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
+         id="polygon5099"
+         points="648,191 658,196 648,201 "
+         clip-path="url(#clipPath60-9-7)" />
+      <polygon
+         transform="matrix(0,1,-1,0,559.18326,-805.12324)"
+         style="font-size:11px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Arial"
+         id="polygon5101"
+         points="648,201 648,191 658,196 "
+         clip-path="url(#clipPath60-9-7)" />
+    </g>
+  </g>
   <line
      clip-path="url(#clipPath45)"
      x1="270"
@@ -1374,8 +1514,8 @@
      y1="68"
      y2="68"
      id="line435"
-     style="font-size:11px;fill:none;stroke-width:1.08270001;stroke-linecap:butt;font-family:Arial"
-     transform="translate(-146.99829,-12.057851)" />
+     style="font-size:11px;fill:none;stroke-width:1.0344367;stroke-linecap:butt;font-family:Arial"
+     transform="matrix(1.0954899,0,0,1,-17.95616,88.598328)" />
   <line
      clip-path="url(#clipPath45)"
      x1="162"
@@ -1383,41 +1523,45 @@
      y1="68"
      y2="162"
      id="line437"
-     style="font-size:11px;fill:none;stroke-width:1.08270001;stroke-linecap:butt;font-family:Arial"
-     transform="translate(-146.99829,-12.057851)" />
+     style="font-size:11px;fill:none;stroke-width:0.83710265;stroke-linecap:butt;font-family:Arial"
+     transform="matrix(1,0,0,1.6728571,-1.93936,43.208298)" />
   <polygon
      clip-path="url(#clipPath49)"
-     points="250,68 260,63 270,68 260,73 "
+     points="260,63 270,68 260,73 250,68 "
      id="polygon445"
      style="font-size:11px;fill:#ffffff;stroke:none;font-family:Arial"
-     transform="translate(-146.99829,-12.057851)" />
+     transform="translate(8.06064,88.598328)" />
   <polygon
      clip-path="url(#clipPath49)"
-     points="250,68 260,63 270,68 260,73 "
+     points="260,63 270,68 260,73 250,68 "
      id="polygon447"
      style="font-size:11px;fill:none;stroke-width:1.08270001;stroke-linecap:butt;font-family:Arial"
-     transform="translate(-146.99829,-12.057851)" />
-  <line
-     clip-path="url(#clipPath50)"
-     x1="157"
-     x2="162"
-     y1="152"
-     y2="162"
-     id="line449"
-     style="font-size:11px;fill:none;stroke-width:1.08270001;stroke-linecap:butt;font-family:Arial"
-     transform="translate(-146.99829,-12.057851)" />
-  <line
-     clip-path="url(#clipPath50)"
-     x1="162"
-     x2="167"
-     y1="162"
-     y2="152"
-     id="line451"
-     style="font-size:11px;fill:none;stroke-width:1.08270001;stroke-linecap:butt;font-family:Arial"
-     transform="translate(-146.99829,-12.057851)" />
+     transform="translate(8.06064,88.598328)" />
+  <g
+     id="g3486"
+     transform="translate(-60.00001,79.999997)">
+    <line
+       transform="translate(58.06065,56.598331)"
+       style="font-size:11px;fill:none;stroke-width:1.08270001;stroke-linecap:butt;font-family:Arial"
+       id="line449"
+       y2="162"
+       y1="152"
+       x2="162"
+       x1="157"
+       clip-path="url(#clipPath50)" />
+    <line
+       transform="translate(58.06065,56.598331)"
+       style="font-size:11px;fill:none;stroke-width:1.08270001;stroke-linecap:butt;font-family:Arial"
+       id="line451"
+       y2="152"
+       y1="162"
+       x2="167"
+       x1="162"
+       clip-path="url(#clipPath50)" />
+  </g>
   <g
      id="g4947"
-     transform="translate(5.6441343,44.466395)">
+     transform="translate(194.70306,73.122568)">
     <text
        style="font-size:12px;stroke:none;font-family:Arial"
        id="text443"
@@ -1436,286 +1580,294 @@
        x="457"
        font-size="12">1..*</text>
   </g>
-  <text
-     xml:space="preserve"
-     x="711"
-     y="177"
-     clip-path="url(#clipPath37)"
-     id="text405"
-     style="font-size:11px;stroke:none;font-family:Arial"
-     transform="translate(-421.84756,146.09638)">«interface»</text>
-  <text
-     x="697"
-     y="190"
-     clip-path="url(#clipPath38)"
-     font-weight="bold"
-     xml:space="preserve"
-     id="text407"
-     style="font-size:11px;font-weight:bold;stroke:none;font-family:Arial"
-     transform="translate(-398.97988,146.09638)">IPlugin</text>
-  <text
-     xml:space="preserve"
-     x="244.65562"
-     y="349.09641"
-     clip-path="none"
-     id="text409"
-     style="font-size:11px;stroke:none;font-family:Arial">(from kieker::analysis::plugin)</text>
-  <text
-     xml:space="preserve"
-     x="208.7892"
-     y="407.62854"
-     clip-path="none"
-     id="text413"
-     style="font-size:11px;stroke:none;font-family:Arial">+ getCurrentConfiguration ( ) : Configuration</text>
-  <text
-     xml:space="preserve"
-     x="208.7892"
-     y="366.97809"
-     clip-path="none"
-     id="text411-4"
-     style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial">+ name : String</text>
-  <text
-     xml:space="preserve"
-     x="207.8873"
-     y="378.47357"
-     clip-path="none"
-     id="text411-4-7"
-     style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial">+ pluginName : String</text>
-  <text
-     xml:space="preserve"
-     x="208.49843"
-     y="391.08878"
-     clip-path="none"
-     id="text411-4-7-0"
-     style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial">+ pluginDescription : String</text>
-  <text
-     xml:space="preserve"
-     x="469"
-     y="177"
-     clip-path="url(#clipPath21)"
-     id="text337"
-     style="font-size:11px;stroke:none;font-family:Arial"
-     transform="translate(-402.0614,70.954387)">«interface»</text>
-  <text
-     x="399"
-     y="190"
-     clip-path="url(#clipPath22)"
-     font-weight="bold"
-     xml:space="preserve"
-     id="text339"
-     style="font-size:11px;font-weight:bold;stroke:none;font-family:Arial"
-     transform="translate(-341.8529,70.954387)">IReaderPlugin</text>
-  <text
-     xml:space="preserve"
-     x="3.2637932"
-     y="273.95441"
-     clip-path="none"
-     id="text341"
-     style="font-size:11px;stroke:none;font-family:Arial">(from kieker::analysis::plugin::reader)</text>
-  <line
-     clip-path="url(#clipPath25)"
-     x1="389"
-     x2="604"
-     y1="208"
-     y2="208"
-     id="line345"
-     style="font-size:11px;fill:none;stroke-width:1.16549563;stroke-linecap:butt;font-family:Arial"
-     transform="matrix(0.86296857,0,0,1,-334.16233,70.954387)" />
-  <text
-     xml:space="preserve"
-     x="3.2075188"
-     y="289.98758"
-     clip-path="none"
-     id="text307"
-     style="font-size:11px;stroke:none;font-family:Arial">+ read ( ) : boolean</text>
-  <text
-     xml:space="preserve"
-     x="208.37421"
-     y="420.22568"
-     clip-path="none"
-     id="text309"
-     style="font-size:11px;stroke:none;font-family:Arial">+ terminate ( error : boolean )</text>
-  <text
-     xml:space="preserve"
-     x="469"
-     y="177"
-     clip-path="url(#clipPath21-8)"
-     id="text337-6"
-     style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
-     transform="translate(37.058022,70.954387)">«interface»</text>
-  <text
-     x="399"
-     y="190"
-     clip-path="url(#clipPath22-5)"
-     font-weight="bold"
-     xml:space="preserve"
-     id="text339-4"
-     style="font-size:11px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
-     transform="translate(102.47648,70.954387)">IFilterPlugin</text>
-  <text
-     xml:space="preserve"
-     x="448.112"
-     y="273.95441"
-     clip-path="none"
-     id="text341-4"
-     style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial">(from kieker::analysis::plugin::filter)</text>
-  <line
-     clip-path="url(#clipPath25-0)"
-     x1="389"
-     x2="604"
-     y1="208"
-     y2="208"
-     id="line345-5"
-     style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.20067585;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
-     transform="matrix(0.81313896,0,0,1,129.94837,70.954387)" />
-  <text
-     xml:space="preserve"
-     x="448.03418"
-     y="289.98758"
-     clip-path="none"
-     id="text307-8"
-     style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial">+ init ( ) : boolean</text>
-  <text
-     x="426.18594"
-     y="162.30768"
-     clip-path="none"
-     font-weight="bold"
-     xml:space="preserve"
-     id="text301-4"
-     style="font-size:11px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial">AbstractFilterPlugin</text>
-  <text
-     xml:space="preserve"
-     x="393.25308"
-     y="175.30768"
-     clip-path="none"
-     id="text303-9"
-     style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial">(from kieker::analysis::plugin::filter)</text>
-  <text
-     xml:space="preserve"
-     x="342.87158"
-     y="192.30768"
-     clip-path="none"
-     id="text305-9"
-     style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial">+ AbstractFilterPlugin ( configuration : Configuration  )</text>
-  <line
-     clip-path="url(#clipPath17-7)"
-     x1="10"
-     x2="342"
-     y1="208"
-     y2="208"
-     id="line311-4"
-     style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.16959882;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
-     transform="matrix(0.85692433,0,0,1,328.01618,-27.692318)" />
   <g
-     id="g3540"
-     transform="matrix(0,1,-1,0,543.49076,-542.80192)">
+     style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog"
+     id="g5077-5-7"
+     transform="matrix(0,-1,1,0,371.36716,926.15379)">
+    <g
+       id="g5074-7-7">
+      <path
+         transform="matrix(0,1.6085051,-1,0,559.18326,-1191.8509)"
+         style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:0.85368359;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dashoffset:0;font-family:Arial"
+         clip-path="url(#clipPath45-3-7-2-0)"
+         d="m 658,196 -90.30193,0 0,-111.750571"
+         id="line485-6-9-5-7"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccc" />
+    </g>
+  </g>
+  <g
+     id="g5795"
+     transform="translate(340.47433,176.06409)">
+    <rect
+       y="227.75768"
+       x="-339.98221"
+       height="62.406731"
+       width="186.48401"
+       id="rect5013"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:1.9" />
+    <text
+       transform="translate(-742.67169,65.547874)"
+       style="font-size:11px;stroke:none;font-family:Arial"
+       id="text337"
+       clip-path="url(#clipPath21)"
+       y="177"
+       x="469"
+       xml:space="preserve">«interface»</text>
+    <text
+       transform="translate(-682.46319,65.547874)"
+       style="font-size:11px;font-weight:bold;stroke:none;font-family:Arial"
+       id="text339"
+       xml:space="preserve"
+       font-weight="bold"
+       clip-path="url(#clipPath22)"
+       y="190"
+       x="399">IReaderPlugin</text>
+    <text
+       style="font-size:11px;stroke:none;font-family:Arial"
+       id="text341"
+       clip-path="none"
+       y="268.54788"
+       x="-337.3465"
+       xml:space="preserve">(from kieker::analysis::plugin::reader)</text>
+    <line
+       transform="matrix(0.86296857,0,0,1,-674.77262,65.547874)"
+       style="font-size:11px;fill:none;stroke-width:1.16549563;stroke-linecap:butt;font-family:Arial"
+       id="line345"
+       y2="208"
+       y1="208"
+       x2="604"
+       x1="389"
+       clip-path="url(#clipPath25)" />
+    <text
+       style="font-size:11px;stroke:none;font-family:Arial"
+       id="text307"
+       clip-path="none"
+       y="284.58105"
+       x="-337.40277"
+       xml:space="preserve">+ read ( ) : boolean</text>
+  </g>
+  <g
+     id="g6131"
+     transform="translate(985.62599,196.65618)">
     <polygon
-       transform="translate(131.00107,-9.684619)"
+       clip-path="url(#clipPath60-9-6-7)"
+       points="658,196 648,201 648,191 "
+       id="polygon6133"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.08270001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
+       transform="matrix(0,1,-1,0,-5.32482,-451.5924)" />
+    <path
+       sodipodi:nodetypes="cc"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:4.00000006, 4.00000006;stroke-dashoffset:1.90000004;font-family:Dialog"
+       d="m -201.00624,195.36784 0,-40.50788"
+       id="path6135"
+       inkscape:connector-curvature="0" />
+  </g>
+  <g
+     id="g5765"
+     transform="translate(245.62004,178.62212)">
+    <rect
+       y="225.19965"
+       x="450.82068"
+       height="46.796219"
+       width="175.72099"
+       id="rect5049"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:1.9" />
+    <text
+       transform="translate(42.47391,62.989842)"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       id="text337-6"
+       clip-path="url(#clipPath21-8)"
+       y="177"
+       x="469"
+       xml:space="preserve">«interface»</text>
+    <text
+       transform="translate(107.89237,62.989842)"
+       style="font-size:11px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       id="text339-4"
+       xml:space="preserve"
+       font-weight="bold"
+       clip-path="url(#clipPath22-5)"
+       y="190"
+       x="399">IFilterPlugin</text>
+    <text
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       id="text341-4"
+       clip-path="none"
+       y="265.98987"
+       x="453.52789"
+       xml:space="preserve">(from kieker::analysis::plugin::filter)</text>
+  </g>
+  <g
+     id="g3464"
+     transform="matrix(1,0,0,1.0923972,-20.00001,58.748066)"
+     style="stroke-width:0.95677471">
+    <line
+       transform="matrix(0,2.7043243,-1,0,1148.1339,-1376.7498)"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:0.62992448;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
+       id="line485-6-7"
+       y2="196"
+       y1="196"
+       x2="658"
+       x1="605"
+       clip-path="url(#clipPath45-3-1)" />
+    <polygon
+       transform="matrix(0,1,-1,0,1148.1339,-254.32856)"
        style="font-size:11px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Arial"
-       id="polygon501-4"
-       points="534,78 524,73 534,68 544,73 "
-       clip-path="url(#clipPath64-4)" />
-    <polygon
-       transform="translate(131.00107,-9.684619)"
-       style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.08270001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
-       id="polygon503-8"
-       points="534,78 524,73 534,68 544,73 "
-       clip-path="url(#clipPath64-4)" />
+       id="polygon487-7-3"
+       points="648,201 648,191 658,196 "
+       clip-path="url(#clipPath60-9-5)" />
   </g>
   <g
-     id="g4528"
-     transform="translate(57.941217,44.466395)">
-    <polygon
-       transform="matrix(0,1,-1,0,671.32408,-469.84742)"
-       style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.08270001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
-       id="polygon489-3-6"
-       points="658,196 648,201 648,191 "
-       clip-path="url(#clipPath60-9-6)" />
-    <path
-       inkscape:connector-curvature="0"
-       id="path3727"
-       d="m 475.64266,177.70929 0,-25.16797"
-       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:4, 4;stroke-dashoffset:1.9" />
+     transform="matrix(0,-1,-0.57302756,0,829.01419,1022.6831)"
+     id="g6405"
+     style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1.32102871;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog">
+    <g
+       id="g6407"
+       style="stroke-width:1.32102871">
+      <path
+         sodipodi:nodetypes="ccc"
+         inkscape:connector-curvature="0"
+         id="path6409"
+         d="m 680.38103,196 -205.93726,0 0,-189.7505711"
+         clip-path="url(#clipPath45-3-7-2)"
+         style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.1277405;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dashoffset:0;font-family:Arial"
+         transform="matrix(0,1.6085051,-1,0,559.18326,-1191.8509)" />
+    </g>
   </g>
   <g
-     id="g4524"
-     transform="translate(-18.907896,-93.493805)">
-    <polygon
-       transform="matrix(0,1,-1,0,308.14081,-331.88722)"
-       style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.08270001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
-       id="polygon489-3-6-0"
-       points="658,196 648,201 648,191 "
-       clip-path="url(#clipPath60-9-6-9)" />
+     id="g6096"
+     transform="translate(135.05893,196.65618)">
+    <rect
+       transform="matrix(1.394649,0,0,1.1980129,-90.012636,13.128844)"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.83761603;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
+       id="rect433-2"
+       height="73"
+       width="161"
+       clip-path="url(#clipPath36-0)"
+       y="162"
+       x="658" />
     <path
        inkscape:connector-curvature="0"
-       id="path3727-8"
-       d="m 112.45939,315.66949 0,-25.16797"
-       style="font-size:12px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:4, 4;stroke-dashoffset:1.9;font-family:Dialog" />
+       id="path5067"
+       d="m 827.03179,252.37128 225.27141,0"
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <text
+       transform="translate(201.72837,44.734259)"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       id="text405-4"
+       clip-path="url(#clipPath37-1)"
+       y="177"
+       x="711"
+       xml:space="preserve">«interface»</text>
+    <text
+       transform="translate(212.3795,44.734259)"
+       style="font-size:11px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       id="text407-0"
+       xml:space="preserve"
+       font-weight="bold"
+       clip-path="url(#clipPath38-4)"
+       y="190"
+       x="697">IRepository</text>
+    <text
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       id="text409-6"
+       clip-path="none"
+       y="247.73424"
+       x="858.75696"
+       xml:space="preserve">(from kieker::analysis::repository)</text>
+    <text
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       id="text411-4-6"
+       clip-path="none"
+       y="265.61594"
+       x="833.27179"
+       xml:space="preserve">+ name : String</text>
+    <text
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       id="text411-4-7-4"
+       clip-path="none"
+       y="277.11145"
+       x="832.36987"
+       xml:space="preserve">+ repositoryName : String</text>
+    <text
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       id="text411-4-7-0-4"
+       clip-path="none"
+       y="289.72665"
+       x="832.98102"
+       xml:space="preserve">+ repositoryDescription : String</text>
   </g>
-  <text
-     xml:space="preserve"
-     x="711"
-     y="177"
-     clip-path="url(#clipPath37-1)"
-     id="text405-4"
-     style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
-     transform="translate(28.884624,70.552021)">«interface»</text>
-  <text
-     x="697"
-     y="190"
-     clip-path="url(#clipPath38-4)"
-     font-weight="bold"
-     xml:space="preserve"
-     id="text407-0"
-     style="font-size:11px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
-     transform="translate(39.535747,70.552021)">IRepository</text>
-  <text
-     xml:space="preserve"
-     x="685.91321"
-     y="273.552"
-     clip-path="none"
-     id="text409-6"
-     style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial">(from kieker::analysis::repository)</text>
-  <text
-     xml:space="preserve"
-     x="660.42804"
-     y="334.61523"
-     clip-path="none"
-     id="text413-0"
-     style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial">+ getCurrentConfiguration ( ) : Configuration</text>
   <line
-     clip-path="url(#clipPath42-1-8)"
-     x1="659"
-     x2="819"
-     y1="208"
-     y2="208"
-     id="line415-9-0"
-     style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:0.91316754;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
-     transform="matrix(1.4057735,0,0,1,-271.57099,113.3806)" />
+     clip-path="url(#clipPath45-3-4)"
+     x1="605"
+     x2="658"
+     y1="196"
+     y2="196"
+     id="line485-6-8"
+     style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.12849247;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
+     transform="matrix(0,0.92048978,-1,0,792.38401,-106.61015)" />
+  <polygon
+     clip-path="url(#clipPath60-9-63)"
+     points="658,196 648,201 648,191 "
+     id="polygon489-3-2"
+     style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.08270001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
+     transform="matrix(0,1,-1,0,792.38401,-159.00118)" />
+  <polygon
+     clip-path="url(#clipPath60-9-63)"
+     points="648,191 658,196 648,201 "
+     id="polygon487-7-9"
+     style="font-size:11px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Arial"
+     transform="matrix(0,1,-1,0,792.38401,-159.00118)" />
+  <g
+     transform="translate(539.05386,292.37873)"
+     style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog"
+     id="g6127-7">
+    <polygon
+       transform="matrix(0,1,-1,0,-5.32482,-451.5924)"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.08270001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
+       id="polygon489-3-6-1-3"
+       points="658,196 648,201 648,191 "
+       clip-path="url(#clipPath60-9-6-7-0)" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path3727-5-7"
+       d="m -201.00624,195.36784 0,-40.50788"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:4.00000005, 4.00000005;stroke-dashoffset:1.90000004;font-family:Dialog"
+       sodipodi:nodetypes="cc" />
+  </g>
+  <g
+     transform="matrix(0,-1,-1,0,305.20695,926.15379)"
+     id="g6508"
+     style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog">
+    <polygon
+       clip-path="url(#clipPath60-9-7-0-1)"
+       points="658,196 648,201 648,191 "
+       id="polygon6510"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.08270001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
+       transform="matrix(0,1,-1,0,559.18326,-805.12324)" />
+    <polygon
+       clip-path="url(#clipPath60-9-7-0-1)"
+       points="648,191 658,196 648,201 "
+       id="polygon6512"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Arial"
+       transform="matrix(0,1,-1,0,559.18326,-805.12324)" />
+  </g>
+  <rect
+     style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:1.9"
+     id="rect5022"
+     width="402.88452"
+     height="47.034"
+     x="225.06755"
+     y="403.82178" />
+  <path
+     style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="m 224.70174,433.52803 402.49069,0"
+     id="path5099"
+     inkscape:connector-curvature="0" />
   <text
-     xml:space="preserve"
-     x="660.42804"
-     y="291.43369"
-     clip-path="none"
-     id="text411-4-6"
-     style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial">+ name : String</text>
-  <text
-     xml:space="preserve"
-     x="659.52612"
-     y="302.9292"
-     clip-path="none"
-     id="text411-4-7-4"
-     style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial">+ repositoryName : String</text>
-  <text
-     xml:space="preserve"
-     x="660.13727"
-     y="315.5444"
-     clip-path="none"
-     id="text411-4-7-0-4"
-     style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial">+ repositoryDescription : String</text>
-  <text
-     x="278.07959"
-     y="245.26561"
+     x="387.73859"
+     y="415.92307"
      clip-path="none"
      font-weight="bold"
      xml:space="preserve"
@@ -1723,101 +1875,216 @@
      style="font-size:11px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial">AbstractPlugin</text>
   <text
      xml:space="preserve"
-     x="245.14673"
-     y="258.26559"
+     x="354.80573"
+     y="428.92303"
      clip-path="none"
      id="text303-0"
      style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial">(from kieker::analysis::plugin)</text>
   <text
      xml:space="preserve"
-     x="196.34753"
-     y="275.26559"
+     x="227.76643"
+     y="445.92303"
      clip-path="none"
      id="text305-3"
-     style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial">+ AbstractPlugin ( configuration : Configuration  )</text>
+     style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial">+ AbstractPlugin ( configuration : Configuration, projectContext : IProjectContext )</text>
   <g
-     transform="translate(-158.47326,119.43341)"
-     style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog"
-     id="g4528-5">
+     id="g6127"
+     transform="translate(295.05895,194.65618)">
     <polygon
-       transform="matrix(0,1,-1,0,671.32408,-469.84742)"
+       transform="matrix(0,1,-1,0,-5.32482,-451.5924)"
        style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.08270001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
        id="polygon489-3-6-1"
-       points="658,196 648,201 648,191 "
+       points="648,201 648,191 658,196 "
        clip-path="url(#clipPath60-9-6-7)" />
     <path
        inkscape:connector-curvature="0"
        id="path3727-5"
-       d="m 475.64266,177.70929 0,-16.60766"
-       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:4, 4;stroke-dashoffset:1.9"
+       d="m -201.00624,195.36784 0,-40.50788"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:4.00000006, 4.00000006;stroke-dashoffset:1.90000004;font-family:Dialog"
        sodipodi:nodetypes="cc" />
   </g>
-  <text
-     x="715.89954"
-     y="161.06122"
-     clip-path="none"
-     font-weight="bold"
-     xml:space="preserve"
-     id="text301-4-7"
-     style="font-size:11px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial">AbstractRepository</text>
-  <text
-     xml:space="preserve"
-     x="685.70862"
-     y="174.06122"
-     clip-path="none"
-     id="text303-9-9"
-     style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial">(from kieker::analysis::repository)</text>
-  <text
-     xml:space="preserve"
-     x="639.97998"
-     y="191.06122"
-     clip-path="none"
-     id="text305-9-4"
-     style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial">+ AbstractRepository ( configuration : Configuration  )</text>
   <line
-     clip-path="url(#clipPath17-7-7)"
-     x1="10"
-     x2="342"
-     y1="208"
-     y2="208"
-     id="line311-4-4"
-     style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.2064178;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
-     transform="matrix(0.80541709,0,0,1,625.53667,-28.938787)" />
+     clip-path="url(#clipPath45-9)"
+     x1="162"
+     x2="162"
+     y1="68"
+     y2="162"
+     id="line437-6"
+     style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:0.86791271;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
+     transform="matrix(-1,0,0,1.5561956,1065.4933,52.442122)" />
   <g
-     id="g4927"
-     transform="matrix(-1,0,0,1,1456.2878,70.554827)">
+     id="g5312"
+     transform="translate(1.00812,149.70881)">
+    <rect
+       y="148.95992"
+       x="632.7439"
+       height="47.034"
+       width="433.94952"
+       id="rect5065"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:1.9" />
+    <text
+       style="font-size:11px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       id="text301-4-7"
+       xml:space="preserve"
+       font-weight="bold"
+       clip-path="none"
+       y="161.06122"
+       x="798.73083">AbstractRepository</text>
+    <text
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       id="text303-9-9"
+       clip-path="none"
+       y="174.06122"
+       x="768.53992"
+       xml:space="preserve">(from kieker::analysis::repository)</text>
+    <text
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       id="text305-9-4"
+       clip-path="none"
+       y="191.06122"
+       x="639.97998"
+       xml:space="preserve">+ AbstractRepository ( configuration : Configuration, projectContext : IProjectContext  )</text>
     <line
-       transform="translate(552.37069,-82.612678)"
-       style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.08270001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
-       id="line435-0"
-       y2="68"
-       y1="68"
-       x2="162"
-       x1="270"
-       clip-path="url(#clipPath45-9)" />
+       transform="matrix(1.3024052,0,0,1,620.854,-28.938787)"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:0.9487136;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
+       id="line311-4-4"
+       y2="208"
+       y1="208"
+       x2="342"
+       x1="10"
+       clip-path="url(#clipPath17-7-7)" />
+  </g>
+  <line
+     transform="matrix(0,1.0792626,-1,0,536.90299,-308.83046)"
+     style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.04218447;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
+     id="line6144"
+     y2="196"
+     y1="196"
+     x2="658"
+     x1="605"
+     clip-path="url(#clipPath45-3)" />
+  <polygon
+     transform="matrix(0,1,-1,0,536.90299,-256.65563)"
+     style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.08270001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
+     id="polygon6146"
+     points="648,191 658,196 648,201 "
+     clip-path="url(#clipPath60-9)" />
+  <polygon
+     transform="matrix(0,1,-1,0,536.90299,-256.65563)"
+     style="font-size:11px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Arial"
+     id="polygon6148"
+     points="648,191 658,196 648,201 "
+     clip-path="url(#clipPath60-9)" />
+  <g
+     id="g5326"
+     transform="translate(-0.125,148.46278)">
+    <rect
+       y="150.20595"
+       x="0.61711687"
+       height="47.034"
+       width="439.38739"
+       id="rect5101"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.99999994;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:1.9" />
+    <text
+       style="font-size:11px;font-weight:bold;stroke:none;font-family:Arial"
+       id="text301"
+       xml:space="preserve"
+       font-weight="bold"
+       clip-path="none"
+       y="162.30768"
+       x="160.17245">AbstractReaderPlugin</text>
+    <text
+       style="font-size:11px;stroke:none;font-family:Arial"
+       id="text303"
+       clip-path="none"
+       y="175.30768"
+       x="126.92808"
+       xml:space="preserve">(from kieker::analysis::plugin::reader)</text>
+    <text
+       style="font-size:11px;stroke:none;font-family:Arial"
+       id="text305"
+       clip-path="none"
+       y="192.30768"
+       x="3.8125477"
+       xml:space="preserve">+ AbstractReaderPlugin ( configuration : Configuration, projectContext : IProjectContext )</text>
     <line
-       transform="translate(552.37069,-82.612678)"
-       style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.08270001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
-       id="line437-6"
-       y2="162"
-       y1="68"
-       x2="162"
-       x1="162"
-       clip-path="url(#clipPath45-9)" />
-    <polygon
-       transform="translate(552.37069,-82.612678)"
-       style="font-size:11px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Arial"
-       id="polygon445-4"
-       points="260,63 270,68 260,73 250,68 "
-       clip-path="url(#clipPath49-3)" />
-    <polygon
-       transform="translate(552.37069,-82.612678)"
-       style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.08270001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
-       id="polygon447-9"
-       points="260,63 270,68 260,73 250,68 "
-       clip-path="url(#clipPath49-3)" />
+       transform="matrix(1.3210245,0,0,1.2942475,-11.219491,-88.736965)"
+       style="font-size:11px;fill:none;stroke-width:0.82802612;stroke-linecap:butt;font-family:Arial"
+       id="line311"
+       y2="208"
+       y1="208"
+       x2="342"
+       x1="10"
+       clip-path="url(#clipPath17)" />
+  </g>
+  <g
+     id="g5396"
+     transform="translate(-13.59882,68.462334)">
+    <rect
+       y="150.20639"
+       x="335.67639"
+       height="47.034"
+       width="430.08414"
+       id="rect5103"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:1.9" />
+    <text
+       style="font-size:11px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       id="text301-4"
+       xml:space="preserve"
+       font-weight="bold"
+       clip-path="none"
+       y="162.30768"
+       x="498.49802">AbstractFilterPlugin</text>
+    <text
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       id="text303-9"
+       clip-path="none"
+       y="175.30768"
+       x="465.56516"
+       xml:space="preserve">(from kieker::analysis::plugin::filter)</text>
     <line
-       transform="translate(552.37069,-82.612678)"
+       transform="matrix(1.2911676,0,0,1,324.1186,-27.692318)"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:0.95283312;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
+       id="line311-4"
+       y2="208"
+       y1="208"
+       x2="342"
+       x1="10"
+       clip-path="url(#clipPath17-7)" />
+    <text
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       id="text305-9"
+       clip-path="none"
+       y="192.30768"
+       x="342.87158"
+       xml:space="preserve">+ AbstractFilterPlugin ( configuration : Configuration, projectContext : IProjectContext )</text>
+  </g>
+  <line
+     clip-path="url(#clipPath45-9)"
+     x1="270"
+     x2="162"
+     y1="68"
+     y2="68"
+     id="line435-0"
+     style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.05232167;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
+     transform="matrix(-1.0585693,0,0,1,1075.5142,89.962328)" />
+  <polygon
+     clip-path="url(#clipPath49-3)"
+     points="250,68 260,63 270,68 260,73 "
+     id="polygon445-4"
+     style="font-size:11px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Arial"
+     transform="matrix(-1,0,0,1,1059.4934,89.962328)" />
+  <polygon
+     clip-path="url(#clipPath49-3)"
+     points="250,68 260,63 270,68 260,73 "
+     id="polygon447-9"
+     style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.08270001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
+     transform="matrix(-1,0,0,1,1059.4934,89.962328)" />
+  <g
+     id="g3490"
+     transform="translate(-220.01711,79.999997)">
+    <line
+       transform="matrix(-1,0,0,1,1285.5104,56.113011)"
        style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.08270001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
        id="line449-2"
        y2="162"
@@ -1826,7 +2093,7 @@
        x1="157"
        clip-path="url(#clipPath50-2)" />
     <line
-       transform="translate(552.37069,-82.612678)"
+       transform="matrix(-1,0,0,1,1285.5104,56.113011)"
        style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.08270001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
        id="line451-4"
        y2="152"
@@ -1835,10 +2102,42 @@
        x1="162"
        clip-path="url(#clipPath50-2)" />
   </g>
+  <g
+     id="g5159"
+     transform="translate(155.05893,138.78506)">
+    <rect
+       y="0.42926955"
+       x="124.1484"
+       height="37.33535"
+       width="509.77899"
+       id="rect5002"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:1.9" />
+    <g
+       transform="translate(0,5.3691071e-6)"
+       id="g3796">
+      <text
+         x="346"
+         y="45"
+         clip-path="url(#clipPath2)"
+         font-weight="bold"
+         xml:space="preserve"
+         id="text261"
+         style="font-size:11px;font-weight:bold;fill:#000000;stroke:none;font-family:Arial"
+         transform="translate(-15.954536,-30.034919)">AnalysisController</text>
+      <text
+         x="344"
+         y="58"
+         clip-path="url(#clipPath3)"
+         xml:space="preserve"
+         id="text263"
+         style="font-size:11px;fill:#000000;stroke:none;font-family:Arial"
+         transform="translate(-18.920112,-30.034919)">(from kieker::analysis)</text>
+    </g>
+  </g>
   <text
      font-size="12"
-     x="669.33319"
-     y="125.43673"
+     x="815.05078"
+     y="154.00606"
      clip-path="none"
      xml:space="preserve"
      id="text443-5"
@@ -1851,31 +2150,527 @@
      xml:space="preserve"
      id="text457-1-8"
      style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
-     transform="translate(256.92868,-12.057851)">1..*</text>
+     transform="translate(365.12499,16.511488)">1..*</text>
   <g
      style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog"
      id="g4528-2"
-     transform="translate(291.56329,44.466395)">
+     transform="translate(544.6614,214.50029)">
+    <path
+       inkscape:connector-curvature="0"
+       id="path3727-1"
+       d="m 475.64266,177.70929 0,-45.16797"
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:4, 4;stroke-dashoffset:1.9"
+       sodipodi:nodetypes="cc" />
     <polygon
        transform="matrix(0,1,-1,0,671.32408,-469.84742)"
        style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.08270001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
        id="polygon489-3-6-3"
-       points="658,196 648,201 648,191 "
+       points="648,191 658,196 648,201 "
        clip-path="url(#clipPath60-9-6-4)" />
+  </g>
+  <g
+     id="g6049"
+     transform="translate(57.62421,100.65618)">
+    <text
+       transform="translate(-6.9115192,-46.833754)"
+       style="font-size:12px;stroke:none;font-family:Arial"
+       id="text457"
+       xml:space="preserve"
+       clip-path="url(#clipPath52)"
+       y="154"
+       x="457"
+       font-size="12">1..*</text>
+    <text
+       transform="translate(-6.0104338,-46.833754)"
+       style="font-size:12px;stroke:none;font-family:Arial"
+       id="text459"
+       xml:space="preserve"
+       clip-path="url(#clipPath53)"
+       y="154"
+       x="492"
+       font-size="12">- filters</text>
+    <line
+       transform="translate(-6.0104338,-44.484409)"
+       style="font-size:11px;fill:none;stroke-width:1.08270001;stroke-linecap:butt;font-family:Arial"
+       id="line461"
+       y2="162"
+       y1="152"
+       x2="483"
+       x1="478"
+       clip-path="url(#clipPath54)" />
+    <line
+       transform="translate(-6.0104338,-44.484409)"
+       style="font-size:11px;fill:none;stroke-width:1.08270001;stroke-linecap:butt;font-family:Arial"
+       id="line463"
+       y2="152"
+       y1="162"
+       x2="488"
+       x1="483"
+       clip-path="url(#clipPath54)" />
+    <g
+       transform="matrix(0,1,-1,0,540.30494,-577.84592)"
+       id="g3540">
+      <polygon
+         clip-path="url(#clipPath64-4)"
+         points="534,68 544,73 534,78 524,73 "
+         id="polygon501-4"
+         style="font-size:11px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Arial"
+         transform="translate(131.00107,-9.684619)" />
+      <polygon
+         clip-path="url(#clipPath64-4)"
+         points="534,68 544,73 534,78 524,73 "
+         id="polygon503-8"
+         style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.08270001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
+         transform="translate(131.00107,-9.684619)" />
+    </g>
     <path
        inkscape:connector-curvature="0"
-       id="path3727-1"
-       d="m 475.64266,177.70929 0,-25.16797"
-       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:4, 4;stroke-dashoffset:1.9" />
+       id="path5124"
+       d="m 476.98956,96.208446 0,20.347684"
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
   </g>
-  <path
-     style="font-size:12px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog"
-     d="m 203.24639,396.92496 224.82083,0"
-     id="path5029-4"
-     inkscape:connector-curvature="0" />
-  <path
-     style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     d="m 480.17538,131.19219 0,18.15917"
-     id="path5124"
-     inkscape:connector-curvature="0" />
+  <g
+     id="g5077"
+     transform="matrix(0,-1,1.2706697,0,461.62557,396.14587)"
+     style="stroke-width:0.88712263">
+    <g
+       id="g5074"
+       style="stroke-width:0.88712263">
+      <line
+         clip-path="url(#clipPath45-3-7)"
+         x1="605"
+         x2="658"
+         y1="196"
+         y2="196"
+         id="line485-6-9"
+         style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:0.75732207;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
+         transform="matrix(0,1.6085051,-1,0,559.18326,-1191.8509)" />
+    </g>
+  </g>
+  <g
+     id="g5070"
+     transform="matrix(0,-1,1,0,425.51466,396.14587)">
+    <polygon
+       transform="matrix(0,1,-1,0,559.18326,-805.12324)"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.08270001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
+       id="polygon489-3-3"
+       points="648,201 648,191 658,196 "
+       clip-path="url(#clipPath60-9-7)" />
+    <polygon
+       transform="matrix(0,1,-1,0,559.18326,-805.12324)"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Arial"
+       id="polygon487-7-1"
+       points="658,196 648,201 648,191 "
+       clip-path="url(#clipPath60-9-7)" />
+  </g>
+  <g
+     id="g6317"
+     transform="translate(162.59464,-107.03126)">
+    <g
+       id="g6310">
+      <rect
+         style="font-size:12px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:1.9;font-family:Dialog"
+         id="rect5002-7-3"
+         width="188.01137"
+         height="64.917732"
+         x="-162.10252"
+         y="107.535" />
+      <g
+         id="g3667"
+         transform="translate(-616.26078,504.72427)">
+        <text
+           transform="translate(-190.04335,-561.48294)"
+           style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+           id="text405-43"
+           clip-path="url(#clipPath37-7)"
+           y="177"
+           x="711"
+           xml:space="preserve">«interface»</text>
+        <text
+           transform="translate(-189.82021,-561.48294)"
+           style="font-size:11px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+           id="text407-1"
+           xml:space="preserve"
+           font-weight="bold"
+           clip-path="url(#clipPath38-8)"
+           y="190"
+           x="697">IProjectContext</text>
+        <text
+           style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+           id="text409-2"
+           clip-path="none"
+           y="-358.48291"
+           x="494.20593"
+           xml:space="preserve">(from kieker::analysis)</text>
+      </g>
+    </g>
+    <text
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       id="text413-3"
+       clip-path="none"
+       y="165.01366"
+       x="-159.21484"
+       xml:space="preserve">+ getProperty ( key : String ) : String</text>
+    <path
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="path3712"
+       d="m -161.95767,151.36752 187.738901,0"
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+  </g>
+  <g
+     id="g5179"
+     transform="translate(155.05893,127.47243)">
+    <rect
+       y="-126.96869"
+       x="124.1484"
+       height="96.591568"
+       width="509.77899"
+       id="rect5002-7"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:1.9;font-family:Dialog" />
+    <text
+       transform="translate(-149.9639,-148.66026)"
+       style="font-size:11px;fill:#000000;stroke:none;font-family:Arial"
+       id="text269"
+       xml:space="preserve"
+       clip-path="url(#clipPath6)"
+       y="101"
+       x="277">+ run ( )</text>
+    <text
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       id="text267-1-5"
+       xml:space="preserve"
+       clip-path="none"
+       y="-71.614189"
+       x="127.03609">+ connect ( plugin : AbstractPlugin, repositoryPort : String, repository : AbstractRepository )</text>
+    <text
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       id="text267-1-5-2"
+       xml:space="preserve"
+       clip-path="none"
+       y="-59.63723"
+       x="127.03609">+ connect ( srcPlugin : AbstractPlugin, outputPort : String, dstPlugin : AbstractPlugin, inputPort : String )</text>
+    <text
+       transform="translate(-359.16938,-293.05427)"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       id="text405-5"
+       clip-path="url(#clipPath37-16)"
+       y="177"
+       x="711"
+       xml:space="preserve">«interface»</text>
+    <text
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       id="text409-61"
+       clip-path="none"
+       y="-90.054237"
+       x="325.0799"
+       xml:space="preserve">(from kieker::analysis)</text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 124.54115,-84.929679 509.04024,0"
+       id="path3608"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
+    <text
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       id="text267-1-5-2-5"
+       xml:space="preserve"
+       clip-path="none"
+       y="-35.800674"
+       x="127.0361">+ terminate ( )</text>
+    <text
+       xml:space="preserve"
+       style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Serif;-inkscape-font-specification:Serif"
+       x="328.1441"
+       y="-103.05427"
+       id="text6293"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan6295"
+         x="328.1441"
+         y="-103.05427"
+         style="font-size:11px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial Bold">IAnalysisController</tspan></text>
+  </g>
+  <g
+     style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog"
+     id="g5077-5"
+     transform="matrix(0,-1,1,0,813.58166,1022.6831)">
+    <g
+       id="g5074-7">
+      <path
+         transform="matrix(0,1.6085051,-1,0,559.18326,-1191.8509)"
+         style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:0.85368359;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dashoffset:0;font-family:Arial"
+         clip-path="url(#clipPath45-3-7-2)"
+         d="m 658,196 -212.15421,0 0,-51.75057"
+         id="line485-6-9-5"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccc" />
+    </g>
+  </g>
+  <g
+     style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog"
+     id="g5070-4-3"
+     transform="matrix(0,-1,1,0,371.36716,926.15379)">
+    <polygon
+       transform="matrix(0,1,-1,0,559.18326,-805.12324)"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.08270001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
+       id="polygon489-3-3-1-3"
+       points="658,196 648,201 648,191 "
+       clip-path="url(#clipPath60-9-7-0-1)" />
+    <polygon
+       transform="matrix(0,1,-1,0,559.18326,-805.12324)"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Arial"
+       id="polygon487-7-1-2-5"
+       points="648,191 658,196 648,201 "
+       clip-path="url(#clipPath60-9-7-0-1)" />
+  </g>
+  <g
+     id="g5333"
+     transform="translate(22.32332,192.07936)">
+    <rect
+       transform="matrix(1.394649,0,0,1.5932032,-714.49521,50.59066)"
+       style="font-size:11px;fill:#ffffff;stroke-width:0.72634023;stroke-linecap:butt;font-family:Arial"
+       id="rect433"
+       height="73"
+       width="161"
+       clip-path="url(#clipPath36)"
+       y="162"
+       x="658" />
+    <path
+       transform="translate(0,-1.5956369e-6)"
+       inkscape:connector-curvature="0"
+       id="path5029"
+       d="m 202.74423,353.88022 224.82082,0"
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <text
+       transform="translate(-421.84756,146.09638)"
+       style="font-size:11px;stroke:none;font-family:Arial"
+       id="text405"
+       clip-path="url(#clipPath37)"
+       y="177"
+       x="711"
+       xml:space="preserve">«interface»</text>
+    <text
+       transform="translate(-398.97988,146.09638)"
+       style="font-size:11px;font-weight:bold;stroke:none;font-family:Arial"
+       id="text407"
+       xml:space="preserve"
+       font-weight="bold"
+       clip-path="url(#clipPath38)"
+       y="190"
+       x="697">IPlugin</text>
+    <text
+       style="font-size:11px;stroke:none;font-family:Arial"
+       id="text409"
+       clip-path="none"
+       y="349.09641"
+       x="244.65562"
+       xml:space="preserve">(from kieker::analysis::plugin)</text>
+    <text
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       id="text411-4"
+       clip-path="none"
+       y="366.97809"
+       x="208.7892"
+       xml:space="preserve">+ name : String</text>
+    <text
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       id="text411-4-7"
+       clip-path="none"
+       y="378.47357"
+       x="207.8873"
+       xml:space="preserve">+ pluginName : String</text>
+    <text
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       id="text411-4-7-0"
+       clip-path="none"
+       y="391.08878"
+       x="208.49843"
+       xml:space="preserve">+ pluginDescription : String</text>
+    <text
+       style="font-size:11px;stroke:none;font-family:Arial"
+       id="text309"
+       clip-path="none"
+       y="420.22568"
+       x="208.37421"
+       xml:space="preserve">+ terminate ( error : boolean )</text>
+    <text
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       id="text307-8"
+       clip-path="none"
+       y="409.13718"
+       x="208.37421"
+       xml:space="preserve">+ init ( ) : boolean</text>
+    <path
+       inkscape:connector-curvature="0"
+       id="path5029-4"
+       d="m 203.24639,396.92496 224.82083,0"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog" />
+  </g>
+  <g
+     id="g5319"
+     transform="translate(74.23852,133.87041)">
+    <rect
+       y="366.85718"
+       x="473.39746"
+       height="47.034"
+       width="477.82175"
+       id="rect5065-8"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:1.9;font-family:Dialog" />
+    <text
+       style="font-size:11px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       id="text301-4-7-6"
+       xml:space="preserve"
+       font-weight="bold"
+       clip-path="none"
+       y="378.9585"
+       x="636.8418">AbstractAnalysisComponent</text>
+    <text
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       id="text303-9-9-0"
+       clip-path="none"
+       y="391.9585"
+       x="606.95972"
+       xml:space="preserve">(from kieker::analysis::analysisComponent)</text>
+    <text
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       id="text305-9-4-2"
+       clip-path="none"
+       y="408.9585"
+       x="480.64972"
+       xml:space="preserve">+ AbstractAnalysisComponent ( configuration : Configuration, projectContext : IProjectContext  )</text>
+    <line
+       transform="matrix(1.4344557,0,0,1,460.56125,188.95848)"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:0.903992;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
+       id="line311-4-4-4"
+       y2="208"
+       y1="208"
+       x2="342"
+       x1="10"
+       clip-path="url(#clipPath17-7-7-0)" />
+  </g>
+  <g
+     style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog"
+     id="g5070-4"
+     transform="matrix(0,-1,1,0,813.58166,1022.708)">
+    <polygon
+       transform="matrix(0,1,-1,0,559.18326,-805.12324)"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.08270001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
+       id="polygon489-3-3-1"
+       points="648,201 648,191 658,196 "
+       clip-path="url(#clipPath60-9-7-0)" />
+    <polygon
+       transform="matrix(0,1,-1,0,559.18326,-805.12324)"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Arial"
+       id="polygon487-7-1-2"
+       points="658,196 648,201 648,191 "
+       clip-path="url(#clipPath60-9-7-0)" />
+  </g>
+  <g
+     id="g5363"
+     transform="translate(363.03671,117.56881)">
+    <rect
+       transform="matrix(1.394649,0,0,1.0068805,-613.59947,321.39106)"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.91366446;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
+       id="rect433-3"
+       height="73"
+       width="161"
+       clip-path="url(#clipPath36-06)"
+       y="162"
+       x="658" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path5029-8"
+       d="m 303.63997,529.69634 224.82082,0"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog" />
+    <text
+       transform="translate(-321.85846,321.9125)"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       id="text405-9"
+       clip-path="url(#clipPath37-0)"
+       y="177"
+       x="711"
+       xml:space="preserve">«interface»</text>
+    <text
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       id="text409-4"
+       clip-path="none"
+       y="524.91254"
+       x="344.64471"
+       xml:space="preserve">(from kieker::analysis::plugin)</text>
+    <text
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
+       id="text413-4"
+       clip-path="none"
+       y="551.94025"
+       x="307.04776"
+       xml:space="preserve">+ getCurrentConfiguration ( ) : Configuration</text>
+    <path
+       inkscape:connector-curvature="0"
+       id="path5029-4-8"
+       d="m 304.14213,540.74108 224.82083,0"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog" />
+    <text
+       sodipodi:linespacing="125%"
+       id="text5308"
+       y="511.1196"
+       x="361.3139"
+       style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Serif;-inkscape-font-specification:Serif"
+       xml:space="preserve"><tspan
+         style="font-size:11px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial Bold"
+         y="511.1196"
+         x="361.3139"
+         id="tspan5310"
+         sodipodi:role="line">IAnalysisComponent</tspan></text>
+  </g>
+  <g
+     transform="translate(980.66299,392.96939)"
+     style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog"
+     id="g6127-5">
+    <polygon
+       transform="matrix(0,1,-1,0,-5.32482,-451.5924)"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.08270001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
+       id="polygon489-3-6-1-4"
+       points="648,191 658,196 648,201 "
+       clip-path="url(#clipPath60-9-6-7-6)" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path3727-5-2"
+       d="m -201.00624,195.36784 0,-40.50788"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:4.00000005, 4.00000005;stroke-dashoffset:1.90000004;font-family:Dialog"
+       sodipodi:nodetypes="cc" />
+  </g>
+  <g
+     style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog"
+     id="g5070-4-1"
+     transform="matrix(0,-1,-1,0,745.30776,1022.708)">
+    <polygon
+       transform="matrix(0,1,-1,0,559.18326,-805.12324)"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.08270001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
+       id="polygon489-3-3-1-4"
+       points="648,201 648,191 658,196 "
+       clip-path="url(#clipPath60-9-7-0-0)" />
+    <polygon
+       transform="matrix(0,1,-1,0,559.18326,-805.12324)"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Arial"
+       id="polygon487-7-1-2-6"
+       points="658,196 648,201 648,191 "
+       clip-path="url(#clipPath60-9-7-0-0)" />
+  </g>
+  <g
+     id="g3578"
+     transform="translate(-1.8318455,-1.8318455)">
+    <polygon
+       transform="matrix(0,1,-1,0,1129.9751,-156.94304)"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.08270001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
+       id="polygon489-3-2-4"
+       points="658,196 648,201 648,191 "
+       clip-path="url(#clipPath60-9-63-0)" />
+    <polygon
+       transform="matrix(0,1,-1,0,1129.9751,-156.94304)"
+       style="font-size:11px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Arial"
+       id="polygon487-7-9-8"
+       points="648,191 658,196 648,201 "
+       clip-path="url(#clipPath60-9-63-0)" />
+  </g>
 </svg>

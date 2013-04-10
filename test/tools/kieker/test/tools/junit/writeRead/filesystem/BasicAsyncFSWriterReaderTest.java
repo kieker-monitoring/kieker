@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,9 @@ import kieker.monitoring.writer.filesystem.AsyncFsWriter;
 
 /**
  * 
- * @author André van Hoorn
+ * @author Andre van Hoorn
  * 
+ * @since 1.5
  */
 public class BasicAsyncFSWriterReaderTest extends AbstractTestFSWriterReader { // NOPMD (TestClassWithoutTestCases) // NOCS (MissingCtorCheck)
 	private static final boolean FLUSH = true;
@@ -40,8 +41,7 @@ public class BasicAsyncFSWriterReaderTest extends AbstractTestFSWriterReader { /
 
 	@Override
 	protected void refineWriterConfiguration(final Configuration config, final int numRecordsWritten) {
-		config.setProperty(this.getClass().getName() + "." + AsyncFsWriter.CONFIG_FLUSH, Boolean.toString(BasicAsyncFSWriterReaderTest.FLUSH));
-		// TODO: additional configuration parameters
+		config.setProperty(AsyncFsWriter.CONFIG_FLUSH, Boolean.toString(BasicAsyncFSWriterReaderTest.FLUSH));
 	}
 
 	@Override

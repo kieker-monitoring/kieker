@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,10 +31,8 @@ public class CRM {
 	}
 
 	public void getOffers() {
-		/*
-		 * Call the Catalog component's getBook() method
-		 * and log its entry and exit timestamp using Kieker.
-		 */
+		// Call the Catalog component's getBook() method
+		// and log its entry and exit timestamp using Kieker.
 		final long tin = MONITORING_CONTROLLER.getTimeSource().getTime();
 		this.catalog.getBook(false);
 		final long tout = MONITORING_CONTROLLER.getTimeSource().getTime();

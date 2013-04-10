@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,12 +25,15 @@ import kieker.common.configuration.Configuration;
  * A simple repository, used only for test purposes.
  * 
  * @author Nils Christian Ehmke, Jan Waller
+ * 
+ * @since 1.6
  */
 @Repository(programmaticOnly = true, name = SimpleRepository.REPOSITORY_NAME, description = SimpleRepository.REPOSITORY_DESCRIPTION)
 public class SimpleRepository extends AbstractRepository { // NOPMD (SubClassOfTest)
 
+	/** The repository's dummy name. */
 	public static final String REPOSITORY_NAME = "repoName-hNcuzIKc8e";
-
+	/** The repository's dummy description. */
 	public static final String REPOSITORY_DESCRIPTION = "repoDescription-DEYmVN6sEp";
 
 	/**
@@ -40,8 +43,6 @@ public class SimpleRepository extends AbstractRepository { // NOPMD (SubClassOfT
 	 *            The configuration for this repository.
 	 * @param projectContext
 	 *            The project context for this repository.
-	 * 
-	 * @since 1.7
 	 */
 	public SimpleRepository(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
@@ -53,7 +54,7 @@ public class SimpleRepository extends AbstractRepository { // NOPMD (SubClassOfT
 	 * @param configuration
 	 *            The configuration for this repository.
 	 * 
-	 * @deprecated
+	 * @deprecated To be removed in Kieker 1.8.
 	 */
 	@Deprecated
 	public SimpleRepository(final Configuration configuration) {
@@ -63,6 +64,7 @@ public class SimpleRepository extends AbstractRepository { // NOPMD (SubClassOfT
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}

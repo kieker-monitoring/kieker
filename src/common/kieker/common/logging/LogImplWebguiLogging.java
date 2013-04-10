@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,8 @@ import java.util.concurrent.ArrayBlockingQueue;
  * removed for new entries. As the entries have to be accessible from outside, the queues are stored statically.
  * 
  * @author Jan Waller, Nils Christian Ehmke
+ * 
+ * @since 1.6
  */
 public final class LogImplWebguiLogging implements Log {
 
@@ -51,38 +53,65 @@ public final class LogImplWebguiLogging implements Log {
 		this.date.setTimeZone(TimeZone.getTimeZone("UTC"));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean isDebugEnabled() {
 		return false;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void debug(final String message) {
 		// Ignore
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void debug(final String message, final Throwable t) {
 		// Ignore
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void info(final String message) {
 		this.addMessage(message, "[Info]", null);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void info(final String message, final Throwable t) {
 		this.addMessage(message, "[Info]", t);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void warn(final String message) {
 		this.addMessage(message, "[Warn]", null);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void warn(final String message, final Throwable t) {
 		this.addMessage(message, "[Warn]", t);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void error(final String message) {
 		this.addMessage(message, "[Crit]", null);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void error(final String message, final Throwable t) {
 		this.addMessage(message, "[Crit]", t);
 	}

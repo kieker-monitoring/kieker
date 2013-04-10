@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,22 +19,26 @@ package kieker.test.tools.junit.writeRead.filesystem;
 import java.io.File;
 import java.io.FilenameFilter;
 
+import kieker.common.util.filesystem.FSUtil;
+
 /**
  * Accepts Kieker file system monitoring logs.
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.6
  */
 public class KiekerLogDirFilter implements FilenameFilter { // NOPMD (TestClassWithoutTestCases)
-	public static final String LOG_DIR_PREFIX = "kieker-"; // TODO: do we have this constant in the FS Writer(s)?
-	public static final String MAP_FILENAME = "kieker.map"; // TODO: do we have this constant in the FS Writer(s)?
 
+	/**
+	 * Default constructor.
+	 */
 	public KiekerLogDirFilter() {
 		// empty default constructor
 	}
 
 	public boolean accept(final File dir, final String name) {
-		if (!name.startsWith(KiekerLogDirFilter.LOG_DIR_PREFIX)) {
+		if (!name.startsWith(FSUtil.FILE_PREFIX)) {
 			return false;
 		}
 
@@ -51,7 +55,7 @@ public class KiekerLogDirFilter implements FilenameFilter { // NOPMD (TestClassW
 			 * Accepts directories containing a `kieker.map` file.
 			 */
 			public boolean accept(final File dir, final String name) {
-				return name.equals(KiekerLogDirFilter.MAP_FILENAME);
+				return name.equals(FSUtil.MAP_FILENAME);
 			}
 		});
 		return kiekerMapFiles.length == 1;

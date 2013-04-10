@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.tools.logReplayer.filter.MonitoringRecordLoggerFilter;
 
 /**
  * Replays a monitoring log to a {@link kieker.monitoring.core.controller.IMonitoringController} with a given {@link Configuration}.
@@ -34,6 +35,7 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.6
  */
 public abstract class AbstractLogReplayer {
 
@@ -51,6 +53,20 @@ public abstract class AbstractLogReplayer {
 	private final boolean keepOriginalLoggingTimestamps;
 	private final int numRealtimeWorkerThreads;
 
+	/**
+	 * @param monitoringConfigurationFile
+	 *            The name of the {@code monitoring.properties} file.
+	 * @param realtimeMode
+	 *            Determines whether to use real time mode or not.
+	 * @param keepOriginalLoggingTimestamps
+	 *            Determines whether the original logging timestamps will be used of whether the timestamps will be modified.
+	 * @param numRealtimeWorkerThreads
+	 *            Determines how many realtime worker threads should be used.
+	 * @param ignoreRecordsBeforeTimestamp
+	 *            The lower limit for the time stamps of the records.
+	 * @param ignoreRecordsAfterTimestamp
+	 *            The upper limit for the time stamps of the records.
+	 */
 	public AbstractLogReplayer(final String monitoringConfigurationFile, final boolean realtimeMode,
 			final boolean keepOriginalLoggingTimestamps, final int numRealtimeWorkerThreads, final long ignoreRecordsBeforeTimestamp,
 			final long ignoreRecordsAfterTimestamp) {
@@ -75,23 +91,17 @@ public abstract class AbstractLogReplayer {
 	 */
 	public boolean replay() {
 		boolean success = true;
-
 		try {
-
 			final IAnalysisController analysisInstance = new AnalysisController();
 
-			/*
-			 * Initializing the reader
-			 */
+			// Initializing the reader
 			final AbstractReaderPlugin reader = this.createReader(analysisInstance);
 
 			// These two variables will be updated while plugging together the configuration
 			AbstractPlugin lastFilter = reader;
 			String lastOutputPortName = this.readerOutputPortName();
 
-			/*
-			 * (Potentially) initializing the timestamp filter
-			 */
+			// (Potentially) initializing the timestamp filter
 			{ // NOCS (nested Block)
 				final Configuration timestampFilterConfiguration = new Configuration();
 
@@ -118,9 +128,7 @@ public abstract class AbstractLogReplayer {
 				}
 			}
 
-			/*
-			 * (Potentially) initializing delay filter
-			 */
+			// (Potentially) initializing delay filter
 			if (this.realtimeMode) {
 				final Configuration delayFilterConfiguration = new Configuration();
 				delayFilterConfiguration.setProperty(RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_NUM_WORKERS, Integer.toString(this.numRealtimeWorkerThreads));
@@ -131,9 +139,7 @@ public abstract class AbstractLogReplayer {
 				lastOutputPortName = RealtimeRecordDelayFilter.OUTPUT_PORT_NAME_RECORDS;
 			}
 
-			/*
-			 * And finally, we'll add the MonitoringRecordLoggerFilter
-			 */
+			// And finally, we'll add the MonitoringRecordLoggerFilter
 			final Configuration recordLoggerConfig = new Configuration();
 			if (this.monitoringConfigurationFile != null) {
 				recordLoggerConfig.setProperty(MonitoringRecordLoggerFilter.CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN, this.monitoringConfigurationFile);
@@ -159,7 +165,7 @@ public abstract class AbstractLogReplayer {
 	/**
 	 * Implementing classes returns the name of the reader's output port which provides the {@link kieker.common.record.IMonitoringRecord}s from the monitoring log.
 	 * 
-	 * @return
+	 * @return The name of the reader's output port.
 	 */
 	protected abstract String readerOutputPortName();
 
@@ -167,8 +173,9 @@ public abstract class AbstractLogReplayer {
 	 * Implementing classes return the reader to be used for reading the monitoring log.
 	 * 
 	 * @param analysisInstance
+	 *            The analysis controller which will be the parent of the reader.
 	 * 
-	 * @return
+	 * @return The reader which can be used to read the monitoring log.
 	 */
 	protected abstract AbstractReaderPlugin createReader(final IAnalysisController analysisInstance);
 }

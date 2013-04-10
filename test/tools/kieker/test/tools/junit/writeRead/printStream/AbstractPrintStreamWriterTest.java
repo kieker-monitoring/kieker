@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,13 @@
 
 package kieker.test.tools.junit.writeRead.printStream;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Assert;
 
 import kieker.common.configuration.Configuration;
+import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
@@ -27,19 +31,19 @@ import kieker.monitoring.writer.PrintStreamWriter;
 import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
 
 /**
- * 
  * @author Andre van Hoorn
  * 
+ * @since 1.5
  */
 public abstract class AbstractPrintStreamWriterTest extends AbstractWriterReaderTest {
 
+	/** This constant contains the correct line separator for the current system. */
 	protected static final String SYSTEM_NEWLINE_STRING = System.getProperty("line.separator");
 
 	/**
-	 * Returns the name of the stream to write to. In addition to a file name,
-	 * the constants <i>STDOUT</i> and <i>STDERR</i> can be used.
+	 * Returns the name of the stream to write to. In addition to a file name, the constants <i>STDOUT</i> and <i>STDERR</i> can be used.
 	 * 
-	 * @return
+	 * @return The stream name.
 	 */
 	protected abstract String provideStreamName();
 
@@ -59,5 +63,31 @@ public abstract class AbstractPrintStreamWriterTest extends AbstractWriterReader
 	@Override
 	protected void checkControllerStateAfterRecordsPassedToController(final IMonitoringController monitoringController) {
 		Assert.assertTrue(monitoringController.isMonitoringEnabled());
+	}
+
+	@Override
+	protected boolean terminateBeforeLogInspection() { // NOPMD (method is not empty, just returning false)
+		return false;
+	}
+
+	@Override
+	protected List<IMonitoringRecord> readEvents() {
+		// We cannot do anything meaningful here, because there's nothing like a PrintStreamReader. We'll return an empty List and use our own buffer when evaluating
+		// the result.
+		return new ArrayList<IMonitoringRecord>();
+	}
+
+	protected void checkRecords(final String outputString, final List<IMonitoringRecord> eventsPassedToController) {
+		for (final IMonitoringRecord rec : eventsPassedToController) {
+			final StringBuilder inputRecordStringBuilder = new StringBuilder();
+			inputRecordStringBuilder
+					// note that this format needs to be adjusted if the writer's format changes
+					.append(rec.getClass().getSimpleName())
+					.append(": ")
+					.append(rec).append(AbstractPrintStreamWriterTest.SYSTEM_NEWLINE_STRING);
+			final String curLine = inputRecordStringBuilder.toString();
+			Assert.assertTrue("Record '" + curLine + "' not found in output stream: '" + outputString + "'",
+					outputString.indexOf(curLine) != -1);
+		}
 	}
 }

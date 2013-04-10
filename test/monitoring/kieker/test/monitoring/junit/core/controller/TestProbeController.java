@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,6 +55,8 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Bjoern Weissenfels, Jan Waller
+ * 
+ * @since 1.6
  */
 public class TestProbeController extends AbstractKiekerTest {
 
@@ -65,6 +67,9 @@ public class TestProbeController extends AbstractKiekerTest {
 
 	private volatile File configFile;
 
+	/**
+	 * Default constructor.
+	 */
 	public TestProbeController() {
 		// empty default constructor
 	}
@@ -74,6 +79,9 @@ public class TestProbeController extends AbstractKiekerTest {
 		this.configFile = this.tmpFolder.newFile("adaptiveMonitoring.configFile");
 	}
 
+	/**
+	 * This method does some cleanup after the test.
+	 */
 	@After
 	public void cleanup() {
 		this.tmpFolder.delete();
@@ -213,15 +221,14 @@ public class TestProbeController extends AbstractKiekerTest {
 		list3.add("+ Test test.Test.getTest()");
 		ctrl.setProbePatternList(list3);
 		final List<String> list4 = this.readFromConfigFile();
-		Assert.assertArrayEquals(new String[] { "-public * test.Test.get*()", "+public void test.Test.getNothing()", "+Test test.Test.getTest()", }, list4.toArray());
+		Assert.assertArrayEquals(new String[] { "-public * test.Test.get*()", "+public void test.Test.getNothing()", "+Test test.Test.getTest()", },
+				list4.toArray());
 
 		Assert.assertFalse(ctrl.isMonitoringTerminated());
 		ctrl.terminateMonitoring();
 	}
 
-	/*
-	 * Reads the significant content of the config file.
-	 */
+	// Reads the significant content of the config file.
 	private List<String> readFromConfigFile() throws IOException {
 		BufferedReader reader = null;
 		try {
@@ -241,9 +248,7 @@ public class TestProbeController extends AbstractKiekerTest {
 		}
 	}
 
-	/*
-	 * Replaces the old content of the config file with the given pattern and a few additional information.
-	 */
+	// Replaces the old content of the config file with the given pattern and a few additional information.
 	private void writeToConfigFile(final String[] pattern) throws UnsupportedEncodingException, FileNotFoundException, InterruptedException {
 		Thread.sleep(1000); // enforce last modified timestamp to be different than before
 		final PrintWriter pw = new PrintWriter(

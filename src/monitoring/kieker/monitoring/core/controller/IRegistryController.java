@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,8 @@ package kieker.monitoring.core.controller;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public interface IRegistryController {
 
@@ -28,6 +30,8 @@ public interface IRegistryController {
 	 *            the string
 	 * @return
 	 *         the unique id
+	 * 
+	 * @since 1.5
 	 */
 	public int getIdForString(final String string);
 }

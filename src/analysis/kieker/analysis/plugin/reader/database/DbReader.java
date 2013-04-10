@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,6 +38,8 @@ import kieker.common.record.IMonitoringRecord;
  * A very simple database reader that probably only works for small data sets.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 @Plugin(description = "A reader which reads records from a database",
 		outputPorts = {
@@ -53,10 +55,14 @@ import kieker.common.record.IMonitoringRecord;
 		})
 public class DbReader extends AbstractReaderPlugin {
 
+	/** This is the name of the outport port delivering the records from the database. */
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
 
+	/** The name of the property containing the class name of the driver. */
 	public static final String CONFIG_PROPERTY_NAME_DRIVERCLASSNAME = "DriverClassname";
+	/** The name of the property containing the string to connect to the database. */
 	public static final String CONFIG_PROPERTY_NAME_CONNECTIONSTRING = "ConnectionString";
+	/** The name of the property containing the prefix for the tables to read. */
 	public static final String CONFIG_PROPERTY_NAME_TABLEPREFIX = "TablePrefix";
 
 	private static final Log LOG = LogFactory.getLog(DbReader.class);
@@ -77,8 +83,6 @@ public class DbReader extends AbstractReaderPlugin {
 	 * 
 	 * @throws Exception
 	 *             If the driver for the database could not be found.
-	 * 
-	 * @since 1.7
 	 */
 	public DbReader(final Configuration configuration, final IProjectContext projectContext) throws Exception {
 		super(configuration, projectContext);
@@ -171,8 +175,8 @@ public class DbReader extends AbstractReaderPlugin {
 	 * @throws MonitoringRecordException
 	 *             If the data within the table could not be converted into a valid record.
 	 */
-	private void table2record(final Connection connection, final String tablename, final Class<? extends IMonitoringRecord> clazz)
-			throws SQLException, MonitoringRecordException {
+	private void table2record(final Connection connection, final String tablename, final Class<? extends IMonitoringRecord> clazz) throws SQLException,
+			MonitoringRecordException {
 		Statement selectRecord = null;
 		try {
 			selectRecord = connection.createStatement();

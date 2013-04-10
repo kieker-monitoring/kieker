@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,8 @@ import kieker.monitoring.core.IMonitoringRecordReceiver;
  *            the type of the objects
  * 
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public interface IRegistry<E> {
 
@@ -35,6 +37,8 @@ public interface IRegistry<E> {
 	 *            the object
 	 * @return
 	 *         the unique id
+	 * 
+	 * @since 1.5
 	 */
 	public int get(E value);
 
@@ -45,6 +49,8 @@ public interface IRegistry<E> {
 	 *            the unique id
 	 * @return
 	 *         the associated object
+	 * 
+	 * @since 1.5
 	 */
 	public E get(int i);
 
@@ -53,6 +59,8 @@ public interface IRegistry<E> {
 	 * 
 	 * @return
 	 *         array of registered objects
+	 * 
+	 * @since 1.5
 	 */
 	public E[] getAll();
 
@@ -61,6 +69,8 @@ public interface IRegistry<E> {
 	 * 
 	 * @return
 	 *         number of registered objects
+	 * 
+	 * @since 1.5
 	 */
 	public int getSize();
 
@@ -69,6 +79,8 @@ public interface IRegistry<E> {
 	 * 
 	 * @param recordReceiver
 	 *            the IMonitoringRecordReceiver logged to
+	 * 
+	 * @since 1.5
 	 */
 	public void setRecordReceiver(final IMonitoringRecordReceiver recordReceiver);
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,13 +22,26 @@ import kieker.tools.traceAnalysis.systemModel.Operation;
 /**
  * 
  * @author Andre van Hoorn
+ * 
+ * @deprecated To be removed in Kieker 1.8.
+ * 
+ * @since 1.1
  */
+@Deprecated
 public class CallTreeOperationHashKey {
 	private final AllocationComponent allocationComponent;
 	private final Operation operation;
 
 	private final int hashCode; // NOPMD (the final is computed once and never changes)
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param allocationComponent
+	 *            The allocation component.
+	 * @param operation
+	 *            The operation.
+	 */
 	public CallTreeOperationHashKey(final AllocationComponent allocationComponent, final Operation operation) {
 		this.allocationComponent = allocationComponent;
 		this.operation = operation;

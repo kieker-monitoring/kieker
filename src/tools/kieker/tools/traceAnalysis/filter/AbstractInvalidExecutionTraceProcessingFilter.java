@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +23,11 @@ import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
+ * This is an abstract base for filters processing invalid execution traces.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.2
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public abstract class AbstractInvalidExecutionTraceProcessingFilter extends AbstractTraceProcessingFilter {
@@ -36,8 +39,6 @@ public abstract class AbstractInvalidExecutionTraceProcessingFilter extends Abst
 	 *            The configuration for this component.
 	 * @param projectContext
 	 *            The project context for this component.
-	 * 
-	 * @since 1.7
 	 */
 	public AbstractInvalidExecutionTraceProcessingFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
@@ -56,6 +57,11 @@ public abstract class AbstractInvalidExecutionTraceProcessingFilter extends Abst
 		this(configuration, null);
 	}
 
+	/**
+	 * Implementing classes should return the name of the input port for the invalid executions.
+	 * 
+	 * @return The name of the input port.
+	 */
 	public abstract String getInvalidExecutionTraceInputPortName();
 
 }

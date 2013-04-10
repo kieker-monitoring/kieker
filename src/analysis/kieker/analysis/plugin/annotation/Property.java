@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@ package kieker.analysis.plugin.annotation;
  * This annotation can be used to describe a single property for a plugin or a repository.
  * 
  * @author Nils Christian Ehmke
+ * 
+ * @since 1.6
  */
 public @interface Property {
 

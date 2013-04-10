@@ -2,4 +2,4 @@
 /build-eclipse/
 /build/
 /*.jar
-/META-INF/kieker.monitoring.properties
+.classpath-binrelease.generated

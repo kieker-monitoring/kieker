@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.common.util.Signature;
+import kieker.common.util.signature.Signature;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
@@ -56,22 +56,30 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * this plugin is not delegated in any way.
  * 
  * @author Andre van Hoorn, Nils Sommer, Jan Waller
+ * 
+ * @since 0.95a
  */
 @Plugin(description = "A filter allowing to write the incoming data into a sequence diagram",
 		repositoryPorts = {
 			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
 		},
 		configuration = {
-			@Property(name = SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE, defaultValue = SequenceDiagramFilter.CONFIG_PROPERTY_VALUE_OUTPUT_FN_BASE_DEFAULT),
-			@Property(name = SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES, defaultValue = "true"),
-			@Property(name = SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SDMODE, defaultValue = "ASSEMBLY") // SDModes.ASSEMBLY.toString())
+			@Property(name = SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE,
+					defaultValue = SequenceDiagramFilter.CONFIG_PROPERTY_VALUE_OUTPUT_FN_BASE_DEFAULT),
+			@Property(name = SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES,
+					defaultValue = "true"),
+			@Property(name = SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SDMODE,
+					defaultValue = "ASSEMBLY") // SDModes.ASSEMBLY.toString())
 		})
 public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter {
-
+	/** The name of the configuration determining the used output filename base. */
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE = "filename";
+	/** The name of the configuration determining whether to use short labels or not. */
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES = "shortLabels";
+	/** The name of the configuration determining the used mode. */
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_SDMODE = "SDMode";
 
+	/** This constant determines the default used output filename base. */
 	public static final String CONFIG_PROPERTY_VALUE_OUTPUT_FN_BASE_DEFAULT = "SequenceDiagram";
 
 	/**
@@ -88,11 +96,8 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 	private final boolean shortLabels;
 	private final SDModes sdmode;
 
-	/*
-	 * Read Spinellis' UML macros from file META-INF/sequence.pic to the String
-	 * variable sequencePicContent. This contents are copied to every sequence
-	 * diagram .pic file
-	 */
+	// Read Spinellis' UML macros from file META-INF/sequence.pic to the String variable sequencePicContent. This contents are copied to every sequence diagram .pic
+	// file
 	static {
 		final StringBuilder sb = new StringBuilder();
 		boolean error = true;
@@ -117,7 +122,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 				LOG.error("Failed to close input stream", ex);
 			}
 			if (error) {
-				/* sequence.pic must be provided on execution of pic2plot */
+				// sequence.pic must be provided on execution of pic2plot
 				SEQUENCE_PIC_CONTENT = "copy \"sequence.pic\";"; // NOCS (this)
 			} else {
 				SEQUENCE_PIC_CONTENT = sb.toString(); // NOCS (this)
@@ -127,9 +132,14 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 
 	/**
 	 * @author Andre van Hoorn
+	 * 
+	 * @since 1.2
 	 */
 	public static enum SDModes {
-		ASSEMBLY, ALLOCATION
+		/** The assembly mode for the sequence diagrams. */
+		ASSEMBLY,
+		/** The allocation mode for the sequence diagrams. */
+		ALLOCATION
 	}
 
 	/**
@@ -139,8 +149,6 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 	 *            The configuration to use for this filter.
 	 * @param projectContext
 	 *            The project context to use for this filter.
-	 * 
-	 * @since 1.7
 	 */
 	public SequenceDiagramFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
@@ -173,13 +181,14 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 		this.stdOutPrintln("Wrote " + numPlots + " sequence diagram" + (numPlots > 1 ? "s" : "") // NOCS (AvoidInlineConditionalsCheck)
 				+ " to file" + (numPlots > 1 ? "s" : "") + " with name pattern '" + this.outputFnBase + "-<traceId>.pic'"); // NOCS (AvoidInlineConditionalsCheck)
 		this.stdOutPrintln("Pic files can be converted using the pic2plot tool (package plotutils)");
-		this.stdOutPrintln("Example: pic2plot -T svg " + this.outputFnBase + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") // NOCS
-																																		// (AvoidInlineConditionalsCheck)
+		this.stdOutPrintln("Example: pic2plot -T svg " + this.outputFnBase + "-" + ((numPlots > 0)
+				? lastSuccessTracesId : "<traceId>") // NOCS (AvoidInlineConditionalsCheck)
 				+ ".pic > " + this.outputFnBase + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".svg"); // NOCS (AvoidInlineConditionalsCheck)
 	}
 
 	@Override
-	@InputPort(name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES, description = "Receives the message traces to be processed", eventTypes = { MessageTrace.class })
+	@InputPort(name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES, description = "Receives the message traces to be processed",
+			eventTypes = { MessageTrace.class })
 	public void inputMessageTraces(final MessageTrace mt) {
 		try {
 			SequenceDiagramFilter.writePicForMessageTrace(mt,
@@ -230,11 +239,14 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 	 * linebreak by printing the character \n. The pic2plot tool can only
 	 * process pic files with UNIX line breaks.
 	 * 
-	 * @param systemEntityFactory
 	 * @param messageTrace
+	 *            The message trace to convert.
 	 * @param sdMode
+	 *            The mode of the sequence diagram (allocation, assembly).
 	 * @param ps
+	 *            The print stream which will be used to print the pic code.
 	 * @param shortLabels
+	 *            Determines whether to use short labels or not.
 	 */
 	private static void picFromMessageTrace(final MessageTrace messageTrace, final SDModes sdMode,
 			final PrintStream ps, final boolean shortLabels) {
@@ -347,6 +359,23 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 		ps.print(".PE\n");
 	}
 
+	/**
+	 * This method writes the pic code for the given message trace into the given file.
+	 * 
+	 * @param msgTrace
+	 *            The message trace to convert.
+	 * @param sdMode
+	 *            The mode of the sequence diagram (allocation, assembly).
+	 * @param shortLabels
+	 *            Determines whether to use short labels or not.
+	 * @param outputFilename
+	 *            The name of the file in which the code will be written.
+	 * 
+	 * @throws FileNotFoundException
+	 *             If the given file is somehow invalid.
+	 * @throws UnsupportedEncodingException
+	 *             If the used default encoding is not supported.
+	 */
 	public static void writePicForMessageTrace(final MessageTrace msgTrace, final SDModes sdMode,
 			final String outputFilename, final boolean shortLabels) throws FileNotFoundException, UnsupportedEncodingException {
 		final PrintStream ps = new PrintStream(new FileOutputStream(outputFilename), false, ENCODING);

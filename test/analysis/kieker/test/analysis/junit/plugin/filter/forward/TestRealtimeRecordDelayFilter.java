@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,6 +49,8 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * This test is for the class {@link RealtimeRecordDelayFilter}.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.6
  */
 public class TestRealtimeRecordDelayFilter extends AbstractKiekerTest {
 
@@ -62,26 +64,26 @@ public class TestRealtimeRecordDelayFilter extends AbstractKiekerTest {
 	private IAnalysisController analysisController;
 
 	/**
-	 * List of all {@link EmptyRecord}s to be read by the {@link #simpleListReader}
+	 * List of all {@link EmptyRecord}s to be read by the {@link #simpleListReader}.
 	 */
 	private final List<EmptyRecord> inputRecords = new ArrayList<EmptyRecord>();
 
-	/** Provides the list of {@link IMonitoringRecord}s to be delayed */
+	/** Provides the list of {@link IMonitoringRecord}s to be delayed. */
 	private ListReader<IMonitoringRecord> simpleListReader;
 
-	/** The filter actually tested: */
+	/** The filter actually tested. */
 	private RealtimeRecordDelayFilter delayFilter; // NOPMD (SingularField) // We want to have all filters declared here
 
-	/** Provides the (current) number of {@link IMonitoringRecord}s provided by the {@link #simpleListReader} */
+	/** Provides the (current) number of {@link IMonitoringRecord}s provided by the {@link #simpleListReader}. */
 	private CountingFilter countingFilterReader;
 
-	/** Provides the (current) number of {@link IMonitoringRecord}s provided by the {@link #delayFilter} */
+	/** Provides the (current) number of {@link IMonitoringRecord}s provided by the {@link #delayFilter}. */
 	private CountingFilter countingFilterDelayed;
 
-	/** Records the number of records provided by the {@link RealtimeRecordDelayFilter} */
+	/** Records the number of records provided by the {@link RealtimeRecordDelayFilter}. */
 	private CountingThroughputFilter throughputFilter;
 
-	/** Simply collects all delayed {@link IMonitoringRecord}s */
+	/** Simply collects all delayed {@link IMonitoringRecord}s. */
 	private ListCollectionFilter<EmptyRecord> sinkPlugin;
 
 	static {
@@ -91,41 +93,34 @@ public class TestRealtimeRecordDelayFilter extends AbstractKiekerTest {
 		EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.add(new ImmutableEntry<Long, Long>((long) 20, (long) 2)); // i.e., in interval (15,20(
 	}
 
+	/**
+	 * Creates a new instance of this class.
+	 */
 	public TestRealtimeRecordDelayFilter() {
 		// empty default constructor
 	}
 
 	@Before
 	public void before() throws IllegalStateException, AnalysisConfigurationException {
-		/*
-		 * Analysis controller
-		 */
+		// Analysis controller
 		this.analysisController = new AnalysisController();
 
-		/*
-		 * Reader
-		 */
+		// Reader
 		final Configuration readerConfiguration = new Configuration();
 		readerConfiguration.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.FALSE.toString());
 		this.simpleListReader = new ListReader<IMonitoringRecord>(readerConfiguration, this.analysisController);
 
-		/*
-		 * Counting filter (before delay)
-		 */
+		// Counting filter (before delay)
 		this.countingFilterReader = new CountingFilter(new Configuration(), this.analysisController);
 		this.analysisController.connect(this.simpleListReader, ListReader.OUTPUT_PORT_NAME,
 				this.countingFilterReader, CountingFilter.INPUT_PORT_NAME_EVENTS);
 
-		/*
-		 * Delay filter
-		 */
+		// Delay filter
 		this.delayFilter = new RealtimeRecordDelayFilter(new Configuration(), this.analysisController);
 		this.analysisController.connect(this.countingFilterReader, CountingFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
 				this.delayFilter, RealtimeRecordDelayFilter.INPUT_PORT_NAME_RECORDS);
 
-		/*
-		 * The CountingThroughputFilter to be tested
-		 */
+		// The CountingThroughputFilter to be tested
 		final Configuration throughputFilterConfiguration = new Configuration();
 		throughputFilterConfiguration.setProperty(CountingThroughputFilter.CONFIG_PROPERTY_NAME_INTERVAL_SIZE, Long.toString(INTERVAL_SIZE_NANOS));
 		// We use the following property because this is way easier to test:
@@ -134,16 +129,12 @@ public class TestRealtimeRecordDelayFilter extends AbstractKiekerTest {
 		this.analysisController.connect(this.delayFilter, RealtimeRecordDelayFilter.OUTPUT_PORT_NAME_RECORDS,
 				this.throughputFilter, CountingThroughputFilter.INPUT_PORT_NAME_OBJECTS); // NOT: INPUT_PORT_NAME_RECORDS because we need "real time"
 
-		/*
-		 * Counting filter (after delay)
-		 */
+		// Counting filter (after delay)
 		this.countingFilterDelayed = new CountingFilter(new Configuration(), this.analysisController);
 		this.analysisController.connect(this.throughputFilter, CountingThroughputFilter.OUTPUT_PORT_NAME_RELAYED_OBJECTS,
 				this.countingFilterDelayed, CountingFilter.INPUT_PORT_NAME_EVENTS);
 
-		/*
-		 * Sink plugin
-		 */
+		// Sink plugin
 		this.sinkPlugin = new ListCollectionFilter<EmptyRecord>(new Configuration(), this.analysisController);
 		this.analysisController.connect(this.countingFilterDelayed, CountingFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
 				this.sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
@@ -207,21 +198,15 @@ public class TestRealtimeRecordDelayFilter extends AbstractKiekerTest {
 		this.analysisController.run();
 		Assert.assertEquals(AnalysisController.STATE.TERMINATED, this.analysisController.getState());
 
-		/*
-		 * Make sure that all events have been provided to the delay filter (otherwise the test make no sense)
-		 */
+		// Make sure that all events have been provided to the delay filter (otherwise the test make no sense)
 		Assert.assertEquals("Test invalid: Unexpected number of events provided TO the delay filter", eventList.size(), this.countingFilterReader.getMessageCount());
 
-		/*
-		 * Make sure that all events have been passed through the delay filter
-		 */
+		// Make sure that all events have been passed through the delay filter
 		Assert.assertEquals("Unexpected number of events relayed by the delay filter", eventList.size(), this.countingFilterDelayed.getMessageCount());
 
 		this.checkTiming();
 
-		/*
-		 * Make sure that exactly the right objects have been passed
-		 */
+		// Make sure that exactly the right objects have been passed
 		this.checkRelayedRecords();
 	}
 }

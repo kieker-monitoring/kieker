@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,8 @@ import kieker.monitoring.timer.ITimeSource;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 @Aspect
 public class ThreadingAspect extends AbstractAspectJProbe {
@@ -36,11 +38,19 @@ public class ThreadingAspect extends AbstractAspectJProbe {
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
 	private static final TraceRegistry TRACEREGISTRY = TraceRegistry.INSTANCE;
 
+	/**
+	 * Default constructor.
+	 */
 	public ThreadingAspect() {
 		// empty default constructor
 	}
 
-	// TODO: what about other forms of executions? ThreadPool, ...?
+	/**
+	 * This method represents the advice which is used before the actual start of a thread.
+	 * 
+	 * @param thread
+	 *            The thread.
+	 */
 	// Must be @Before
 	@Before("call(void java.lang.Thread.start()) && target(thread) && notWithinKieker()")
 	public void beforeNewThread(final Thread thread) {
