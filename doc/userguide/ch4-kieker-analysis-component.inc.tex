@@ -296,11 +296,11 @@ to its two output ports declared in the \class{@Plugin} annotation.
 {\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyResponseTimeFilter.java}
 
 Listing~\ref{listing:MyResponseTimeFilterPluginAnnotationOutputs} shows also how %
-the properties are declared. Using the @Property annotation, it is possible to declare %
+the properties are declared. Using the \class{@Property} annotation, it is possible to declare %
 the existing properties. Each property has a default value which should be sufficient %
 to initialize the plugin.%
 
-The @Plugin annotation (as well as the later introduced @Repository annotation) contains %
+The \class{@Plugin} annotation (as well as the later introduced \class{@Repository} annotation) contains %
 furthermore the two fields \method{dependencies} and \method{programmaticOnly}. The first %
 one offers the possibility to give a description of the needed dependencies for a plugin %
 (other libraries e.g.). The latter marks whether the current plugin (or repository) is for %
@@ -400,7 +400,7 @@ Custom repositories must extend the class \class{AbstractRepository}. %
 The \class{@Repository} annotation is used to provide a \method{name} %
 and a \method{description} for a repository type. %
 Listing~\ref{listing:RepositoryAnnotation} shows the \class{@Repository} annotation %
-of the \class{SystemModelRepository} which as included in Kieker, as part of the %
+of the \class{SystemModelRepository}, which is included in \Kieker{} as part of the %
 \KiekerTraceAnalysis{} tool. %
 
 \enlargethispage{1cm}
