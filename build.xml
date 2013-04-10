@@ -552,7 +552,7 @@
 						prefix="${kieker.dist.name}/${src.userguide.example.extended.dir}/lib" />
 			<tarfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
 						prefix="${kieker.dist.name}/${src.userguide.example.aspectj.dir}/lib" />
-			<tarfileset file="${dist.dir}/${dist.kieker.main.jar}"
+			<tarfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
 						prefix="${kieker.dist.name}/${src.userguide.example.jms.dir}/lib" />
 			<tarfileset file="${lib.dir}/commons-logging-*.jar"
 						prefix="${kieker.dist.name}/${src.userguide.example.jms.dir}/lib" />
@@ -616,7 +616,7 @@
 						prefix="${kieker.dist.name}/${src.userguide.example.extended.dir}/lib" />
 			<zipfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
 						prefix="${kieker.dist.name}/${src.userguide.example.aspectj.dir}/lib" />
-			<zipfileset file="${dist.dir}/${dist.kieker.main.jar}"
+			<zipfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
 						prefix="${kieker.dist.name}/${src.userguide.example.jms.dir}/lib" />
 			<zipfileset file="${lib.dir}/commons-logging-*.jar"
 						prefix="${kieker.dist.name}/${src.userguide.example.jms.dir}/lib" />

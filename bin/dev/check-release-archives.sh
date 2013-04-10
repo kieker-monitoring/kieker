@@ -219,7 +219,7 @@ function assert_files_exist_bin {
 	assert_file_exists_regular "examples/userguide/ch2--manual-instrumentation/lib/kieker-"*"_emf.jar"
 	assert_file_exists_regular "examples/userguide/ch3-4--custom-components/lib/kieker-"*"_emf.jar"
 	assert_file_exists_regular "examples/userguide/ch5--trace-monitoring-aspectj/lib/kieker-"*"_aspectj.jar"
-	assert_file_exists_regular "examples/userguide/appendix-JMS/lib/kieker-"*".jar"
+	assert_file_exists_regular "examples/userguide/appendix-JMS/lib/kieker-"*"_emf.jar"
 	assert_file_exists_regular "examples/userguide/appendix-JMS/lib/commons-logging-"*".jar"
 	assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/kieker-"*"_emf.jar"
 	assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/sigar-"*".jar"
