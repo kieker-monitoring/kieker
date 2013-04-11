@@ -1,6 +1,7 @@
 package livedemo.managedbeans;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -140,16 +141,18 @@ public class CpuBean implements Observer{
 			this.dataBean.updateCPUList();  
 			Set<String> ids = this.cpuMap.keySet();
 			this.possibleCPUs.clear();
+			
 			for(String s : ids){
 				this.possibleCPUs.add(s);
 			}
+			Collections.sort(this.possibleCPUs);
 		}
 		return this.possibleCPUs;
 	}
 	
 	public List<String> getSelectedCPUs(){
 		if(this.selectedCPUs.isEmpty() && !this.possibleCPUs.isEmpty()){
-			this.selectedCPUs.add(this.possibleCPUs.get(0));
+			this.selectedCPUs.addAll(this.possibleCPUs);
 		}
 		return this.selectedCPUs;
 	}
@@ -174,7 +177,7 @@ public class CpuBean implements Observer{
 			// this call will update the map, after this all cpuIds are known
 			this.dataBean.updateMemSwapList();  
 			Set<String> ids = this.memSwapMap.keySet();
-			this.possibleCPUs.clear();
+			this.possibleHosts.clear();
 			for(String s : ids){
 				this.possibleHosts.add(s);
 			}

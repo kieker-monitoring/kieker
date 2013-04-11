@@ -77,7 +77,7 @@
 				</h:panelGrid>
 				
 				<p:lineChart id="count" value="#{chartBean.countingModel}" legendPosition="ne"  
-			    	title="Method Calls Per 3 Seconds" minY="0" style="height:300px;margin-top:20px"
+			    	title="Method Calls Per #{chartBean.intervallLength} Seconds" minY="0" style="height:300px;margin-top:20px"
 			    	xaxisLabel="Time" yaxisLabel="Number of calls"/>
 				
 				<p:barChart id="resp" value="#{chartBean.responsetimeModel}" legendPosition="ne"  

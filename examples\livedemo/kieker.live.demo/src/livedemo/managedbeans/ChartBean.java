@@ -15,8 +15,6 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.event.AjaxBehaviorEvent;
 
-import kieker.common.record.controlflow.OperationExecutionRecord;
-
 import livedemo.entities.DataEntry;
 import livedemo.entities.Record;
 
@@ -47,7 +45,6 @@ public class ChartBean implements Observer{
 	long oerTimestamp; // temp var in nanos
 	long lastTimestamp;
 	boolean firstCall;
-	boolean newMethod;
 	
 	@ManagedProperty(value = "#{dataBean}")
 	DataBean dataBean;
@@ -64,7 +61,6 @@ public class ChartBean implements Observer{
 		this.lastTimestamp = System.currentTimeMillis();
 		this.availableMethods = new ArrayList<String>();
 		this.firstCall = true;
-		this.newMethod = false;
 	}
 	
 	@PostConstruct
@@ -81,17 +77,7 @@ public class ChartBean implements Observer{
 	public void setDataBean(DataBean dataBean){
 		this.dataBean = dataBean;
 	}
-	
-	public boolean getNewMethod(){
-		System.out.println("try to get newMethod: " + this.newMethod);
-		if(this.newMethod){
-			this.newMethod = false;
-			return false;
-		}else{
-			return true;
-		}
-	}
-	
+
 	public List<Integer> getPossibleNumberOfDisplayedEntries(){
 		return this.possibleNumberOfDisplayedEntries;
 	}
@@ -238,16 +224,15 @@ public class ChartBean implements Observer{
 		if(!allRecords.isEmpty()){
 			this.oerTimestamp = allRecords.getFirst().getOperationExecutionRecord().getLoggingTimestamp();
 			for(Record r : allRecords){
-				OperationExecutionRecord oer = r.getOperationExecutionRecord();
-				String signature = oer.getOperationSignature();
-				if(oer.getLoggingTimestamp() >= this.oerTimestamp){
+				String signature = r.getShortSignature();
+				if(r.getOperationExecutionRecord().getLoggingTimestamp() >= this.oerTimestamp){
 					do{
 						this.oerTimestamp += this.duration;
 						for(String sig : this.oerMap.keySet()){
 							this.oerMap.get(sig).add(new DataEntry(this.oerTimestamp));
 						}
 					}
-					while(oer.getLoggingTimestamp() >= this.oerTimestamp);
+					while(r.getOperationExecutionRecord().getLoggingTimestamp() >= this.oerTimestamp);
 					if(!this.oerMap.containsKey(signature)){
 						LinkedList<DataEntry> newData = new LinkedList<DataEntry>();
 						DataEntry data = new DataEntry(this.oerTimestamp);
@@ -255,7 +240,6 @@ public class ChartBean implements Observer{
 						newData.add(data);
 						this.oerMap.put(signature, newData);
 						this.availableMethods.add(signature);
-						this.newMethod = true;
 					}else{
 						LinkedList<DataEntry> entries = this.oerMap.get(signature);
 						entries.getLast().addRecord(r);
@@ -271,7 +255,6 @@ public class ChartBean implements Observer{
 						newData.add(data);
 						this.oerMap.put(signature, newData);
 						this.availableMethods.add(signature);
-						this.newMethod = true;
 					}
 				}	
 			}
@@ -310,16 +293,15 @@ public class ChartBean implements Observer{
 					}
 				}else{
 					for(Record r : newRecords){
-						OperationExecutionRecord oer = r.getOperationExecutionRecord();
-						String signature = oer.getOperationSignature();
-						if(oer.getLoggingTimestamp() > this.oerTimestamp){
+						String signature = r.getShortSignature();
+						if(r.getOperationExecutionRecord().getLoggingTimestamp() > this.oerTimestamp){
 							do{
 								this.oerTimestamp += this.duration;
 								for(String sig : this.oerMap.keySet()){
 									this.oerMap.get(sig).add(new DataEntry(this.oerTimestamp));
 								}
 							}
-							while(oer.getLoggingTimestamp() > this.oerTimestamp);
+							while(r.getOperationExecutionRecord().getLoggingTimestamp() > this.oerTimestamp);
 							if(!this.oerMap.containsKey(signature)){
 								LinkedList<DataEntry> newData = new LinkedList<DataEntry>();
 								DataEntry data = new DataEntry(this.oerTimestamp);
@@ -327,7 +309,6 @@ public class ChartBean implements Observer{
 								newData.add(data);
 								this.oerMap.put(signature, newData);
 								this.availableMethods.add(signature);
-								this.newMethod = true;
 							}else{
 								LinkedList<DataEntry> entries = this.oerMap.get(signature);
 								entries.getLast().addRecord(r);
@@ -343,7 +324,6 @@ public class ChartBean implements Observer{
 								newData.add(data);
 								this.oerMap.put(signature, newData);
 								this.availableMethods.add(signature);
-								this.newMethod = true;
 							}
 						}	
 					}
