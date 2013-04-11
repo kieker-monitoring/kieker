@@ -34,6 +34,10 @@ public class DataBean extends Observable{
 	LinkedList<Record> records;
 	List<Record> newRecords;
 	
+	List<Record> lastRecords;
+	int numberOfRecords = 100;
+	
+	
 	LinkedList<CPUUtilizationRecord> cpuList;
 	List<CPUUtilizationRecord> newCpuEntries;
 	LinkedList<MemSwapUsageRecord> memSwapList;
@@ -49,10 +53,15 @@ public class DataBean extends Observable{
 		this.memSwapList = new LinkedList<MemSwapUsageRecord>();
 		this.newMemSwapEntries = new LinkedList<MemSwapUsageRecord>();
 		this.newRecords = new LinkedList<Record>();
+		this.lastRecords = new LinkedList<Record>();
 	}
 	
 	public void setStartingBean(StartingBean startingBean){
 		this.startingBean = startingBean;
+	}
+		
+	public List<Record> getLastRecords(){
+		return this.lastRecords;
 	}
 	
 	public LinkedList<Record> getOERList(){
@@ -126,6 +135,14 @@ public class DataBean extends Observable{
 		
 		// update recordList
 		this.records.addAll(newRecords);
+		
+		// update last 100 entries
+		for(int i=0; i < newRecords.size(); i++){
+			this.lastRecords.add(0, newRecords.get(i));
+		}
+		if(this.lastRecords.size() > this.numberOfRecords){
+			this.lastRecords.subList(this.numberOfRecords, this.lastRecords.size()).clear();
+		}
 		
 		// remove old records
 		if(!this.records.isEmpty()){
