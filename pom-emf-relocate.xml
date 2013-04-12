@@ -1,0 +1,12 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>net.kieker-monitoring</groupId>
+  <artifactId>kieker-emf</artifactId>
+  <version>KIEKER-VERSION</version><!--Kieker marker comment for automatic version updates; DO NOT REMOVE!-->
+  <distributionManagement>
+    <relocation>
+      <artifactId>kieker</artifactId>
+      <message>Please use the classifier 'emf' with the artifactId 'kieker'.</message>
+    </relocation>
+  </distributionManagement>
+</project>
