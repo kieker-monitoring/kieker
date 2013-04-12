@@ -439,20 +439,6 @@
 		<replaceregexp file="${maven.dir}/${dist.kieker.main.pom}" match="&lt;version&gt;.*&lt;/version&gt;&lt;!--Kieker.*" replace="&lt;version&gt;${kieker.version}&lt;/version&gt;" />
 		<replaceregexp file="${maven.dir}/${dist.kieker.main.aspectj.pom}" match="&lt;version&gt;.*&lt;/version&gt;&lt;!--Kieker.*" replace="&lt;version&gt;${kieker.version}&lt;/version&gt;" />
 		<replaceregexp file="${maven.dir}/${dist.kieker.main.emf.pom}" match="&lt;version&gt;.*&lt;/version&gt;&lt;!--Kieker.*" replace="&lt;version&gt;${kieker.version}&lt;/version&gt;" />
-
-		<!-- Dummy file for relocation -->
-		<jar destfile="${maven.dir}/relocate-dummy.jar">
-			<manifest>
-				<section name="kieker">
-					<attribute name="Specification-Title" value="${kieker.name}" />
-					<attribute name="Specification-Version" value="${kieker.version}" />
-					<attribute name="Specification-Vendor" value="${copyright}" />
-					<attribute name="Implementation-Title" value="${kieker.name}" />
-					<attribute name="Implementation-Version" value="${kieker.version} (${TODAY})" />
-					<attribute name="Implementation-Vendor" value="${copyright}" />
-				</section>
-			</manifest>
-		</jar>
 	</target>
 
 	<!-- Note that this target just uploads but does NOT build! -->
@@ -495,9 +481,7 @@
 			<arg value="org.apache.maven.plugins:maven-gpg-plugin:1.4:sign-and-deploy-file" />
 			<arg value="-Durl=${maven-staging-repository-url}" />
 			<arg value="-DrepositoryId=${maven-staging-repository-id}" />
-			<arg value="-Dfile=${maven.dir}/${dist.kieker.main.emf.jar}" />
-			<arg value="-Dsources=${maven.dir}/${dist.kieker.main.sources.jar}" />
-			<arg value="-Djavadoc=${maven.dir}/${dist.kieker.main.javadoc.jar}" />
+			<arg value="-Dfile=${maven.dir}/${dist.kieker.main.emf.pom}" />
 			<arg value="-DpomFile=${maven.dir}/${dist.kieker.main.emf.pom}" />
 			<arg value="-Pgpg" />
 		</artifact:mvn>
@@ -505,9 +489,7 @@
 			<arg value="org.apache.maven.plugins:maven-gpg-plugin:1.4:sign-and-deploy-file" />
 			<arg value="-Durl=${maven-staging-repository-url}" />
 			<arg value="-DrepositoryId=${maven-staging-repository-id}" />
-			<arg value="-Dfile=${maven.dir}/${dist.kieker.main.aspectj.jar}" />
-			<arg value="-Dsources=${maven.dir}/${dist.kieker.main.sources.jar}" />
-			<arg value="-Djavadoc=${maven.dir}/${dist.kieker.main.javadoc.jar}" />
+			<arg value="-Dfile=${maven.dir}/${dist.kieker.main.aspectj.pom}" />
 			<arg value="-DpomFile=${maven.dir}/${dist.kieker.main.aspectj.pom}" />
 			<arg value="-Pgpg" />
 		</artifact:mvn>
