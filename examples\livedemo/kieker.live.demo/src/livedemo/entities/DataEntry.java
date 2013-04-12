@@ -170,6 +170,10 @@ public class DataEntry {
 		this.sec = date.toString().substring(17, 19);
 	}
 	
+	public long getTimestamp(){
+		return this.timestamp;
+	}
+	
 	public String getHourMinSec(){
 		return this.hourMinSec;
 	}

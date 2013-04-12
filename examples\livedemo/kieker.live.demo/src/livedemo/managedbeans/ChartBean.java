@@ -138,8 +138,9 @@ public class ChartBean implements Observer{
 		if(this.getSelectedMethods().isEmpty()){
 			ChartSeries responsetimes = new ChartSeries();
 			responsetimes.setLabel("choose method");
+			long time = System.currentTimeMillis() * 1000000;
 			for(int i=0; i < number; i++){
-				responsetimes.set(" ",0);
+				responsetimes.set(computeTime(time-this.duration*(number-i)),0);
 			}
 			this.responsetimeModel.addSeries(responsetimes);
 			return this.responsetimeModel;
@@ -148,22 +149,30 @@ public class ChartBean implements Observer{
 		for (String signature : this.getSelectedMethods()){
 			List<DataEntry> dataEntries = this.oerMap.get(signature);
 			ChartSeries responsetimes = new ChartSeries();  
-	        responsetimes.setLabel(this.getMethodName(signature));
+	        responsetimes.setLabel(signature);
 	        int fromIndex;
 			int toIndex = dataEntries.size() - 1;
-			int diff;
-			if(toIndex > number){
+			int diff = 0;
+			if(toIndex <= 0){
+				long time = System.currentTimeMillis() * 1000000;
+				for(int i=0; i < number; i++){
+					responsetimes.set(computeTime(time-this.duration*(number-i)),0);
+				}
+				this.responsetimeModel.addSeries(responsetimes);
+				return this.responsetimeModel;
+			}else if(toIndex > number){
 				fromIndex = toIndex - number;
 			}else if(toIndex < number){
 				fromIndex = 0;
 				diff = number - toIndex;
-				for(int i=0; i < diff; i++){
-					responsetimes.set(" ", 0);
-				}
 			}else{
 				fromIndex = 0;
 			}
 	        List<DataEntry> subList = dataEntries.subList(fromIndex, toIndex);
+	        long time = subList.get(0).getTimestamp();
+			for(int i=0; i < diff; i++){
+				responsetimes.set(computeTime(time-this.duration*(number-i)),0);
+			}
 	        for(int i = 0; i < subList.size(); i++){
 	        	responsetimes.set(subList.get(i).getMinSec(), subList.get(i).getAverageResponsetime());
 	        }
@@ -177,8 +186,9 @@ public class ChartBean implements Observer{
 		if(this.getSelectedMethods().isEmpty()){
 			ChartSeries count = new ChartSeries();
 			count.setLabel("choose method");
+			long time = System.currentTimeMillis() * 1000000;
 			for(int i=0; i < number; i++){
-				count.set(" ",0);
+				count.set(computeTime(time-this.duration*(number-i)),0);
 			}
 			this.countingModel.addSeries(count);
 			return this.countingModel;
@@ -186,22 +196,30 @@ public class ChartBean implements Observer{
 		for (String signature : this.getSelectedMethods()){
 			List<DataEntry> dataEntries = this.oerMap.get(signature);
 			ChartSeries count = new ChartSeries();  
-			count.setLabel(this.getMethodName(signature));
+			count.setLabel(signature);
 	        int fromIndex;
 			int toIndex = dataEntries.size() - 1;
-			int diff;
-			if(toIndex > number){
+			int diff = 0;
+			if(toIndex <= 0){
+				long time = System.currentTimeMillis() * 1000000;
+				for(int i=0; i < number; i++){
+					count.set(computeTime(time-this.duration*(number-i)),0);
+				}
+				this.countingModel.addSeries(count);
+				return this.countingModel;
+			}else if(toIndex > number){
 				fromIndex = toIndex - number;
 			}else if(toIndex < number){
 				fromIndex = 0;
-				diff = number - toIndex;
-				for(int i=0; i < diff; i++){
-					count.set(" ", 0);
-				}
+				diff = number - toIndex;	
 			}else{
 				fromIndex = 0;
 			}
 	        List<DataEntry> subList = dataEntries.subList(fromIndex, toIndex);
+	        long time = subList.get(0).getTimestamp();
+	        for(int i=0; i < diff; i++){
+				count.set(computeTime(time-this.duration*(diff-i)), 0);
+			}
 	        for(int i = 0; i < subList.size(); i++){
 	        	count.set(subList.get(i).getMinSec(), subList.get(i).getCount());
 	        }
@@ -210,14 +228,11 @@ public class ChartBean implements Observer{
         return this.countingModel;
     }  
 	
-	public String getMethodName(String signature){
-		String[] array = signature.split("\\(");
-		array = array[0].split("\\.");
-		int end = array.length;
-		String result = "..." + array[end-2] + "." + array[end-1] + "(...)";
-		return result;
+	private String computeTime(long timestamp){
+		Date date = new Date(timestamp/1000000);
+		return date.toString().substring(14, 19);
 	}
-	
+		
 	// should be called at the beginning and when duration has changed
 	private void generateOERMap(){
 		LinkedList<Record> allRecords = this.dataBean.getOERList();
