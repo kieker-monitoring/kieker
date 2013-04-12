@@ -17,10 +17,11 @@ Please refer to the Kieker User Guide for details on using Kieker.
        A legacy mode for the previous API is included in this version.
     2. Analysis projects can now have properties available to the plugins.
   - Bug fixes and improvements to code, tests, documentation, examples
-  - Kieker releases now also published via Sonatype Maven repository
-    (https://repository.sonatype.org/)
-  - Completely redesigned web site: http://kieker-monitoring.net
-  - Live demo at http://demo.kieker-monitoring.net
+  - Infrastructure:
+    - Kieker releases now also published via Sonatype Maven repository
+      (https://repository.sonatype.org/)
+    - Completely redesigned web site: http://kieker-monitoring.net
+    - Live demo at http://demo.kieker-monitoring.net
 
 * 1.6 (October 17, 2012)
 - Major changes
