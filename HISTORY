@@ -12,7 +12,7 @@ Please refer to the Kieker User Guide for details on using Kieker.
     to de-activate monitoring for operation signature patterns.
   - New file system writers supporting (ZIP) compression
   - Minor modifications to the Kieker.Analysis API:
-    1. Removed the register methods. Registration now implicit by 
+    1. Removed the `register` methods. Registration now implicit by 
        passing context information to the plugin constructors. 
        A legacy mode for the previous API is included in this version.
     2. Analysis projects can now have properties available to the plugins.
