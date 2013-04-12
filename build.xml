@@ -476,13 +476,14 @@
 		</artifact:mvn>
 
 		<!-- Legacy relocation POMs (section to be removed after release 1.7) -->
-				
+
 		<artifact:mvn>
 			<arg value="org.apache.maven.plugins:maven-gpg-plugin:1.4:sign-and-deploy-file" />
 			<arg value="-Durl=${maven-staging-repository-url}" />
 			<arg value="-DrepositoryId=${maven-staging-repository-id}" />
 			<arg value="-Dfile=${maven.dir}/${dist.kieker.main.emf.pom}" />
 			<arg value="-DpomFile=${maven.dir}/${dist.kieker.main.emf.pom}" />
+			<arg value="-Dtype=pom" />
 			<arg value="-Pgpg" />
 		</artifact:mvn>
 		<artifact:mvn>
@@ -491,6 +492,7 @@
 			<arg value="-DrepositoryId=${maven-staging-repository-id}" />
 			<arg value="-Dfile=${maven.dir}/${dist.kieker.main.aspectj.pom}" />
 			<arg value="-DpomFile=${maven.dir}/${dist.kieker.main.aspectj.pom}" />
+			<arg value="-Dtype=pom" />
 			<arg value="-Pgpg" />
 		</artifact:mvn>
 

@@ -3,6 +3,7 @@
   <groupId>net.kieker-monitoring</groupId>
   <artifactId>kieker-emf</artifactId>
   <version>KIEKER-VERSION</version><!--Kieker marker comment for automatic version updates; DO NOT REMOVE!-->
+  <packaging>pom</packaging>
   <distributionManagement>
     <relocation>
       <artifactId>kieker</artifactId>
