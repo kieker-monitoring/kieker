@@ -24,8 +24,8 @@ import org.apache.commons.math.stat.StatUtils;
  * 
  */
 public enum AggregationMethod {
-	// TODO: PERCENTILE - Where to configure Parameter p for the StatUtils.percentile() Method
-	GEOMETRIC_MEAN, MAX, MEAN, MIN, PRODUCT, SUM, SUMLOG, SUMSQ, VARIANCE;
+	// TODO: PERCENTILE - Configurable Percentile?
+	GEOMETRIC_MEAN, MAX, MEAN, MIN, PERCENTILE90, PERCENTILE95, PRODUCT, SUM, SUMLOG, SUMSQ, VARIANCE;
 
 	public double getAggregationValue(final double[] aggregationValues) {
 		switch (this) {
@@ -37,8 +37,10 @@ public enum AggregationMethod {
 			return StatUtils.mean(aggregationValues);
 		case MIN:
 			return StatUtils.min(aggregationValues);
-			// case PERCENTILE:
-			// return StatUtils.percentile(aggregationValues, percentile);
+		case PERCENTILE90:
+			return StatUtils.percentile(aggregationValues, 90);
+		case PERCENTILE95:
+			return StatUtils.percentile(aggregationValues, 95);
 		case PRODUCT:
 			return StatUtils.product(aggregationValues);
 		case SUM:
