@@ -980,35 +980,34 @@ public final class TraceAnalysisTool {
 			final File inputDirFile = new File(inputDir);
 			try {
 				if (!inputDirFile.exists()) {
-					System.err.println(""); // NOPMD (System.out)
+					System.err.println(); // NOPMD (System.out)
 					System.err.println("The specified input directory '" + inputDirFile.getCanonicalPath() + "' does not exist"); // NOPMD (System.out)
 					return false;
 				}
-
-				if (!inputDirFile.isDirectory()) {
-					System.err.println(""); // NOPMD (System.out)
-					System.err.println("The specified input directory '" + inputDirFile.getCanonicalPath() + "' is not a directory"); // NOPMD (System.out)
+				if (!inputDirFile.isDirectory() && !inputDir.endsWith(FSUtil.ZIP_FILE_EXTENSION)) {
+					System.err.println(); // NOPMD (System.out)
+					System.err.println("The specified input directory '" + inputDirFile.getCanonicalPath() + "' is neither a directory nor a zip file"); // NOPMD
 					return false;
 				}
-
 				// check whether inputDirFile contains a (kieker|tpmon).map file; the latter for legacy reasons
-				final File[] mapFiles = { new File(inputDir + File.separatorChar + FSUtil.MAP_FILENAME),
-					new File(inputDir + File.separatorChar + FSUtil.LEGACY_MAP_FILENAME), };
-				boolean mapFileExists = false;
-				for (final File potentialMapFile : mapFiles) {
-					if (potentialMapFile.isFile()) {
-						mapFileExists = true;
-						break;
+				if (inputDirFile.isDirectory()) { // only check for dirs
+					final File[] mapFiles = { new File(inputDir + File.separatorChar + FSUtil.MAP_FILENAME),
+						new File(inputDir + File.separatorChar + FSUtil.LEGACY_MAP_FILENAME), };
+					boolean mapFileExists = false;
+					for (final File potentialMapFile : mapFiles) {
+						if (potentialMapFile.isFile()) {
+							mapFileExists = true;
+							break;
+						}
+					}
+					if (!mapFileExists) {
+						System.err.println(); // NOPMD (System.out)
+						System.err.println("The specified input directory '" + inputDirFile.getCanonicalPath() + "' is not a kieker log directory"); // NOPMD
+						return false;
 					}
 				}
-				if (!mapFileExists) {
-					System.err.println(""); // NOPMD (System.out)
-					System.err.println("The specified input directory '" + inputDirFile.getCanonicalPath() + "' is not a kieker log directory"); // NOPMD
-																																					// (System.out)
-					return false;
-				}
 			} catch (final IOException e) { // thrown by File.getCanonicalPath()
-				System.err.println(""); // NOPMD (System.out)
+				System.err.println(); // NOPMD (System.out)
 				System.err.println("Error resolving name of input directory: '" + inputDir + "'"); // NOPMD (System.out)
 			}
 		}
