@@ -18,6 +18,7 @@ package kieker.common.record.misc;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.Version;
 
 /**
  * This records collects metadata for the monitoring session.
@@ -50,26 +51,30 @@ public final class KiekerMetadataRecord extends AbstractMonitoringRecord impleme
 
 	private static final long serialVersionUID = 6867244598532769180L;
 	private static final Class<?>[] TYPES = {
+		String.class, // version
 		String.class, // controllerName
 		String.class, // hostname
 		int.class, // experimentId
-		String.class, // timeUnit
-		String.class, // timeSource
 		boolean.class, // debugMode
+		long.class, // timeOffset
+		String.class, // timeUnit
 		long.class, // numberOfRecords
 	};
 
+	private final String version;
 	private final String controllerName;
 	private final String hostname;
 	private final int experimentId;
-	private final String timeUnit;
-	private final String timeSource;
 	private final boolean debugMode;
+	private final long timeOffset;
+	private final String timeUnit;
 	private final long numberOfRecords;
 
 	/**
 	 * Creates a new instance of this class.
 	 * 
+	 * @param version
+	 *            The Kieker version (can be null).
 	 * @param controllerName
 	 *            The name of the controller (can be null).
 	 * @param hostname
@@ -85,14 +90,15 @@ public final class KiekerMetadataRecord extends AbstractMonitoringRecord impleme
 	 * @param numberOfRecords
 	 *            The number of records.
 	 */
-	public KiekerMetadataRecord(final String controllerName, final String hostname, final int experimentId, final String timeUnit, final String timeSource,
-			final boolean debugMode, final long numberOfRecords) {
+	public KiekerMetadataRecord(final String version, final String controllerName, final String hostname, final int experimentId, final boolean debugMode,
+			final long timeOffset, final String timeUnit, final long numberOfRecords) {
+		this.version = (version == null) ? Version.getVERSION() : version; // NOCS
 		this.controllerName = (controllerName == null) ? NO_CONTROLLERNAME : controllerName; // NOCS
 		this.hostname = (hostname == null) ? NO_HOSTNAME : hostname; // NOCS
 		this.experimentId = experimentId;
-		this.timeUnit = (timeUnit == null) ? NO_TIMEUNIT : timeUnit; // NOCS
-		this.timeSource = (timeSource == null) ? NO_TIMESOURCE : timeSource; // NOCS
 		this.debugMode = debugMode;
+		this.timeOffset = timeOffset;
+		this.timeUnit = (timeUnit == null) ? NO_TIMEUNIT : timeUnit; // NOCS
 		this.numberOfRecords = numberOfRecords;
 	}
 
@@ -104,20 +110,22 @@ public final class KiekerMetadataRecord extends AbstractMonitoringRecord impleme
 	 */
 	public KiekerMetadataRecord(final Object[] values) { // NOPMD (values stored directly)
 		AbstractMonitoringRecord.checkArray(values, TYPES);
-		this.controllerName = (String) values[0];
-		this.hostname = (String) values[1];
-		this.experimentId = (Integer) values[2];
-		this.timeUnit = (String) values[3];
-		this.timeSource = (String) values[4];
-		this.debugMode = (Boolean) values[5];
-		this.numberOfRecords = (Long) values[6];
+		this.version = (String) values[0];
+		this.controllerName = (String) values[1];
+		this.hostname = (String) values[2];
+		this.experimentId = (Integer) values[3];
+		this.debugMode = (Boolean) values[4];
+		this.timeOffset = (Long) values[5];
+		this.timeUnit = (String) values[6];
+		this.numberOfRecords = (Long) values[7];
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public Object[] toArray() {
-		return new Object[] { this.controllerName, this.hostname, this.experimentId, this.timeUnit, this.timeSource, this.debugMode, this.getNumberOfRecords() };
+		return new Object[] { this.version, this.controllerName, this.hostname, this.experimentId, this.debugMode, this.timeOffset, this.timeUnit,
+			this.numberOfRecords, };
 	}
 
 	/**
@@ -137,6 +145,10 @@ public final class KiekerMetadataRecord extends AbstractMonitoringRecord impleme
 		throw new UnsupportedOperationException();
 	}
 
+	public String getVersion() {
+		return this.version;
+	}
+
 	public String getControllerName() {
 		return this.controllerName;
 	}
@@ -149,16 +161,16 @@ public final class KiekerMetadataRecord extends AbstractMonitoringRecord impleme
 		return this.experimentId;
 	}
 
-	public String getTimeUnit() {
-		return this.timeUnit;
-	}
-
-	public String getTimeSource() {
-		return this.timeSource;
-	}
-
 	public boolean isDebugMode() {
 		return this.debugMode;
+	}
+
+	public long getTimeOffset() {
+		return this.timeOffset;
+	}
+
+	public String getTimeUnit() {
+		return this.timeUnit;
 	}
 
 	public long getNumberOfRecords() {
@@ -172,18 +184,20 @@ public final class KiekerMetadataRecord extends AbstractMonitoringRecord impleme
 	 */
 	public String toFormattedString() {
 		final StringBuilder sb = new StringBuilder(512);
-		sb.append("Kieker metadata: controllerName='");
+		sb.append("Kieker metadata: version='");
+		sb.append(this.version);
+		sb.append("', controllerName='");
 		sb.append(this.controllerName);
 		sb.append("', hostname='");
 		sb.append(this.hostname);
 		sb.append("', experimentId='");
 		sb.append(this.experimentId);
-		sb.append("', timeUnit='");
-		sb.append(this.timeUnit);
-		sb.append("', timeSource='");
-		sb.append(this.timeSource);
 		sb.append("', debugMode='");
 		sb.append(this.debugMode);
+		sb.append("', timeOffset='");
+		sb.append(this.timeOffset);
+		sb.append("', timeUnit='");
+		sb.append(this.timeUnit);
 		sb.append("', numberOfRecords='");
 		sb.append(this.numberOfRecords);
 		sb.append('\'');

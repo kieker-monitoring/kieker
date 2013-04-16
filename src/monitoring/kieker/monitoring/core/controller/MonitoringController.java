@@ -180,12 +180,13 @@ public final class MonitoringController extends AbstractController implements IM
 	public final boolean sendMetadataAsRecord() {
 		final ITimeSource timesource = this.getTimeSource();
 		return this.newMonitoringRecord(new KiekerMetadataRecord(
+				null, // Kieker version will be filled in
 				this.getName(), // controllerName
 				this.getHostname(), // hostname
 				this.getExperimentId(), // experimentId
-				timesource.getTimeUnit(), // timeUnit
-				timesource.toString(), // timeSource
 				this.isDebug(), // debugMode
+				timesource.getOffset(), // timeOffset
+				timesource.getTimeUnit().name(), // timeUnit
 				this.getNumberOfInserts() // numberOfRecords
 				));
 	}
