@@ -12,6 +12,7 @@ import java.util.Observer;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
@@ -87,6 +88,11 @@ public class CpuBean implements Observer{
 		for(int i=1; i<=this.maxIntervallLength;i++){
 			this.possibleIntervallLength.add(i);
 		}
+	}
+	
+	@PreDestroy
+	public void cleanup(){
+		this.dataBean.deleteObserver(this);
 	}
 	
 	// getter and setter

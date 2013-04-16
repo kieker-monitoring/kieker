@@ -145,11 +145,10 @@ public class DataBean extends Observable{
 		}
 		
 		// remove old records
-		if(!this.records.isEmpty()){
-			long currentTime = System.currentTimeMillis() * 1000000;
-			while((currentTime - this.recordStorageDuration) > this.records.getFirst().getOperationExecutionRecord().getLoggingTimestamp()){
-				this.records.removeFirst();
-			}
+		long currentTime = System.currentTimeMillis() * 1000000;
+		while(!this.records.isEmpty() && 
+				(currentTime - this.recordStorageDuration) > this.records.getFirst().getOperationExecutionRecord().getLoggingTimestamp()){
+			this.records.removeFirst();
 		}
 		
 		this.setChanged();
