@@ -7,9 +7,9 @@ Please refer to the Kieker User Guide for details on using Kieker.
 
 * 1.7 (April 17, 2013)
 - Major changes
-  - Adaptive monitoring: extended set of (re)activation patterns to 
+  - Adaptive monitoring: extended set of (de)activation patterns to 
     support adaptive monitoring for custom probes. Before: limited 
-    to de-activate monitoring for operation signature patterns.
+    to (de)activate monitoring for operation signature patterns.
   - New file system writers supporting (ZIP) compression
   - Minor modifications to the Kieker.Analysis API:
     1. Removed the `register` methods. Registration now implicit by 
