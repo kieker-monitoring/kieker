@@ -28,6 +28,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
+import kieker.monitoring.core.registry.RegistryRecord;
 
 /**
  * @author Jan Waller
@@ -151,9 +152,19 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 				return false;
 			case 2: // does nothing if queue is full
 				if (!this.blockingQueue.offer(monitoringRecord)) {
-					final long tmpMissedRecords = this.missedRecords.getAndIncrement();
-					if ((tmpMissedRecords % 1024) == 0) {
-						LOG.warn("Queue is full, dropping records. Number of already dropped records: " + tmpMissedRecords);
+					// RegistryRecords must always be placed in the queue
+					if (monitoringRecord instanceof RegistryRecord) {
+						try {
+							this.blockingQueue.put(monitoringRecord);
+						} catch (final InterruptedException ignore) {
+							LOG.error("Interrupted while adding RegistryRecord. Monitorig log will be corrupted!");
+							return false;
+						}
+					} else {
+						final long tmpMissedRecords = this.missedRecords.getAndIncrement();
+						if ((tmpMissedRecords % 1024) == 0) {
+							LOG.warn("Queue is full, dropping records. Number of already dropped records: " + tmpMissedRecords);
+						}
 					}
 				}
 				return true;
