@@ -29,7 +29,7 @@ JAVAARGS="${JAVAARGS} -verbose:gc -XX:+PrintCompilation"
 JAR="-jar dist/OverheadEvaluationMicrobenchmark.jar"
 
 JAVAARGS_NOINSTR="${JAVAARGS}"
-JAVAARGS_LTW="${JAVAARGS} -javaagent:${BASEDIR}lib/kieker-1.7_aspectj.jar -Dorg.aspectj.weaver.showWeaveInfo=false -Daj.weaving.verbose=false"
+JAVAARGS_LTW="${JAVAARGS} -javaagent:${BASEDIR}lib/kieker-1.8-SNAPSHOT_aspectj.jar -Dorg.aspectj.weaver.showWeaveInfo=false -Daj.weaving.verbose=false"
 JAVAARGS_KIEKER_DEACTV="${JAVAARGS_LTW} -Dkieker.monitoring.adaptiveMonitoring.configFile=META-INF/kieker.monitoring.adaptiveMonitoring.disabled.conf -Dkieker.monitoring.writer=kieker.monitoring.writer.DummyWriter"
 JAVAARGS_KIEKER_NOLOGGING="${JAVAARGS_LTW} -Dkieker.monitoring.writer=kieker.monitoring.writer.DummyWriter"
 JAVAARGS_KIEKER_LOGGING="${JAVAARGS_LTW} -Dkieker.monitoring.writer=kieker.monitoring.writer.filesystem.SyncFsWriter -Dkieker.monitoring.writer.filesystem.SyncFsWriter.customStoragePath=${BASEDIR}tmp"
