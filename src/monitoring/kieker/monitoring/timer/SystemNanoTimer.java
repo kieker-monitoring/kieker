@@ -85,7 +85,7 @@ public final class SystemNanoTimer extends AbstractTimeSource {
 	}
 
 	public long getOffset() {
-		return this.timeunit.convert(this.offset, TimeUnit.NANOSECONDS);
+		return this.timeunit.convert(this.offset - this.clockdifference, TimeUnit.NANOSECONDS);
 	}
 
 	public final TimeUnit getTimeUnit() {
