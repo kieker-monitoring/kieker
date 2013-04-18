@@ -781,23 +781,17 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	}
 
 	/**
-	 * Registers the given reader with this analysis instance.
+	 * Registers the given reader with this analysis instance. <b>This method is for internal use only!</b>
 	 * 
 	 * @param reader
 	 *            The reader to register with this analysis.
 	 * 
 	 * @throws IllegalStateException
 	 *             If the analysis has already been started when this method is called.
-	 * 
-	 * @deprecated This method will not be for public use in Kieker 1.8. Use the new constructor instead.
 	 */
-	@Deprecated
 	public final void registerReader(final AbstractReaderPlugin reader) throws IllegalStateException {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to register filter after starting analysis.");
-		}
-		if (!reader.setProjectContext(this)) { // just to make sure
-			return; // already registered elsewhere
 		}
 		if (this.readers.contains(reader)) {
 			LOG.warn("Reader " + reader.getName() + " already registered.");
@@ -810,23 +804,17 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	}
 
 	/**
-	 * Registers the given filter with this analysis instance.
+	 * Registers the given filter with this analysis instance. <b>This method is for internal use only!</b>
 	 * 
 	 * @param filter
 	 *            The filter to register with this analysis.
 	 * 
 	 * @throws IllegalStateException
 	 *             If the analysis has already been started when this method is called.
-	 * 
-	 * @deprecated This method will not be for public use in Kieker 1.8. Use the new constructor instead.
 	 */
-	@Deprecated
 	public final void registerFilter(final AbstractFilterPlugin filter) throws IllegalStateException {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to register filter after starting analysis.");
-		}
-		if (!filter.setProjectContext(this)) { // just to make sure
-			return; // already registered elsewhere
 		}
 		if (this.filters.contains(filter)) {
 			LOG.warn("Filter '" + filter.getName() + "' (" + filter.getPluginName() + ") already registered.");
@@ -839,23 +827,17 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	}
 
 	/**
-	 * Registers the given repository with this analysis instance.
+	 * Registers the given repository with this analysis instance. <b>This method is for internal use only!</b>
 	 * 
 	 * @param repository
 	 *            The repository to register with this analysis.
 	 * 
 	 * @throws IllegalStateException
 	 *             If the analysis has already been started when this method is called.
-	 * 
-	 * @deprecated This method will not be for public use in Kieker 1.8. Use the new constructor instead.
 	 */
-	@Deprecated
 	public final void registerRepository(final AbstractRepository repository) throws IllegalStateException {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to register respository after starting analysis.");
-		}
-		if (!repository.setProjectContext(this)) { // just to make sure
-			return; // already registered elsewhere
 		}
 		if (this.repos.contains(repository)) {
 			LOG.warn("Repository '" + repository.getName() + "' (" + repository.getRepositoryName() + ") already registered.");

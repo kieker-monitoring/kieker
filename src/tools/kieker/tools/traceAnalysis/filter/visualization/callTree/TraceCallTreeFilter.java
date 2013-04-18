@@ -93,19 +93,6 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 		this.dotOutputFn = configuration.getStringProperty(CONFIG_PROPERTY_NAME_OUTPUT_FILENAME);
 	}
 
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public TraceCallTreeFilter(final Configuration configuration) {
-		this(configuration, null);
-	}
-
 	@Override
 	public void printStatusMessage() {
 		synchronized (this) {

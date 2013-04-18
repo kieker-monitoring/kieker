@@ -82,19 +82,6 @@ public class TraceColoringFilter<V extends AbstractVertex<V, E, TraceInformation
 		super(configuration, projectContext);
 	}
 
-	/**
-	 * Creates a new filter using the given configuration.
-	 * 
-	 * @param configuration
-	 *            The configuration to use for this filter
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public TraceColoringFilter(final Configuration configuration) {
-		this(configuration, null);
-	}
-
 	private void initialize() {
 		final TraceColorRepository colorRepository = (TraceColorRepository) super.getRepository(COLOR_REPOSITORY_PORT_NAME);
 		this.colorMap = colorRepository.getColorMap();

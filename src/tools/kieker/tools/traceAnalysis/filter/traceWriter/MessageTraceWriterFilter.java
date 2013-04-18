@@ -72,22 +72,6 @@ public class MessageTraceWriterFilter extends AbstractMessageTraceProcessingFilt
 		this.ps = new PrintStream(new FileOutputStream(this.outputFn), false, ENCODING);
 	}
 
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @throws IOException
-	 *             If either the default encoding is not supported or the given file is somehow invalid.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public MessageTraceWriterFilter(final Configuration configuration) throws IOException {
-		this(configuration, null);
-	}
-
 	@Override
 	public void printStatusMessage() {
 		super.printStatusMessage();

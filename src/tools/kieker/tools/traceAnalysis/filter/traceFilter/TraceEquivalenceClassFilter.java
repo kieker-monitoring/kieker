@@ -112,20 +112,6 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 		this.equivalenceMode = this.extractTraceEquivalenceClassMode(this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_EQUIVALENCE_MODE));
 	}
 
-	/**
-	 * Creates a new instance of this class using the given configuration object. Keep in mind that the Trace-Equivalence-Class-Mode has to be set via the method
-	 * <i>setTraceEquivalenceCallMode</i> before using this component!
-	 * 
-	 * @param configuration
-	 *            The configuration object used to initialize this object.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public TraceEquivalenceClassFilter(final Configuration configuration) {
-		this(configuration, null);
-	}
-
 	private TraceEquivalenceClassModes extractTraceEquivalenceClassMode(final String traceEquivalenceCallModeString) {
 		TraceEquivalenceClassModes extractedEquivalenceMode;
 		try {

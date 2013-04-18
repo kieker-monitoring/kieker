@@ -29,12 +29,6 @@ public abstract class AbstractTimeSource implements ITimeSource {
 	private static final Log LOG = LogFactory.getLog(AbstractTimeSource.class);
 
 	/**
-	 * @deprecated to be removed in Kieker 1.8
-	 */
-	@Deprecated
-	protected final Configuration configuration;
-
-	/**
 	 * This constructor initializes the class using the given configuration.
 	 * 
 	 * @param configuration
@@ -50,7 +44,6 @@ public abstract class AbstractTimeSource implements ITimeSource {
 		} catch (final IllegalAccessException ex) {
 			LOG.error("Unable to set timer custom default properties"); // ok to ignore ex here
 		}
-		this.configuration = configuration;
 	}
 
 	/**

@@ -31,11 +31,7 @@ import kieker.monitoring.core.controller.IMonitoringController;
 public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 	private static final Log LOG = LogFactory.getLog(AbstractMonitoringWriter.class);
 
-	/**
-	 * @deprecated to be private in Kieker 1.8
-	 */
-	@Deprecated
-	protected final Configuration configuration;
+	private final Configuration configuration;
 	protected IMonitoringController monitoringController;
 
 	/**
@@ -94,16 +90,6 @@ public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 	public final void setController(final IMonitoringController controller) throws Exception {
 		this.monitoringController = controller;
 		this.init();
-	}
-
-	/**
-	 * @return The configuration of this writer.
-	 * 
-	 * @deprecated to be removed in Kieker 1.8
-	 */
-	@Deprecated
-	public final Configuration getConfiguration() {
-		return this.configuration;
 	}
 
 	/**

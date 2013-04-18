@@ -69,21 +69,6 @@ public class TraceColorRepository extends AbstractRepository {
 	private final Color collisionColor;
 
 	/**
-	 * Creates a new trace color repository using the given configuration.
-	 * 
-	 * @param configuration
-	 *            The configuration to use
-	 * @throws IOException
-	 *             If an I/O error occurs during initialization
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public TraceColorRepository(final Configuration configuration) throws IOException {
-		this(configuration, TraceColorRepository.readDataFromFile(configuration.getStringProperty(CONFIG_PROPERTY_NAME_TRACE_COLOR_FILE_NAME)), null);
-	}
-
-	/**
 	 * Creates a new description repository using the given configuration.
 	 * 
 	 * @param configuration
@@ -114,21 +99,6 @@ public class TraceColorRepository extends AbstractRepository {
 		this.colorMap = colorData.getColorMap();
 		this.defaultColor = colorData.getDefaultColor();
 		this.collisionColor = colorData.getCollisionColor();
-	}
-
-	/**
-	 * Creates a new color repository with the given data.
-	 * 
-	 * @param configuration
-	 *            The configuration to use
-	 * @param colorData
-	 *            The color data to use for this repository
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public TraceColorRepository(final Configuration configuration, final TraceColorRepositoryData colorData) {
-		this(configuration, colorData, null);
 	}
 
 	/**
@@ -182,21 +152,6 @@ public class TraceColorRepository extends AbstractRepository {
 
 		final int rgbValue = Integer.parseInt(matcher.group(1), 16);
 		return new Color(rgbValue);
-	}
-
-	/**
-	 * Initializes a trace color repository from a given file.
-	 * 
-	 * @param fileName
-	 *            The name of the file to read from
-	 * @return The initialized trace color repository
-	 * @throws IOException
-	 *             If an I/O error occurs
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public static TraceColorRepository createFromFile(final String fileName) throws IOException {
-		return TraceColorRepository.createFromFile(fileName, null);
 	}
 
 	/**

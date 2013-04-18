@@ -62,21 +62,6 @@ public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?,
 	}
 
 	/**
-	 * Creates a new graph-producing filter using the given configuration and the given graph.
-	 * 
-	 * @param configuration
-	 *            The configuration to use
-	 * @param graph
-	 *            The (usually empty) graph to produce / extend
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public AbstractGraphProducingFilter(final Configuration configuration, final G graph) {
-		this(configuration, null, graph);
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	@Override

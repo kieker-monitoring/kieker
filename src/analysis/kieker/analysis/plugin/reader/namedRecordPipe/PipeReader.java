@@ -90,19 +90,6 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 	}
 
 	/**
-	 * Creates a new instance of this class using the given parameter.
-	 * 
-	 * @param configuration
-	 *            The configuration used to load the pipe name. It <b>must</b> contain the property {@link #CONFIG_PROPERTY_NAME_PIPENAME}.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public PipeReader(final Configuration configuration) {
-		this(configuration, null);
-	}
-
-	/**
 	 * Blocks until the associated pipe is being closed.
 	 * 
 	 * @return true if the reading terminated in a "normal" way. If an interrupt terminates the wait-method too early, false will be returned.

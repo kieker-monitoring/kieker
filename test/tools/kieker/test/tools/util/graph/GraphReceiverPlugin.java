@@ -51,19 +51,6 @@ public class GraphReceiverPlugin extends ListCollectionFilter<AbstractGraph<?, ?
 	}
 
 	/**
-	 * Creates a new receiver plugin with the given configuration.
-	 * 
-	 * @param configuration
-	 *            The configuration to use
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public GraphReceiverPlugin(final Configuration configuration) {
-		this(configuration, null);
-	}
-
-	/**
 	 * Returns the number of graphs received so far.
 	 * 
 	 * @return See above

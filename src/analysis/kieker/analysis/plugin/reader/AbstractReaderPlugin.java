@@ -35,18 +35,6 @@ import kieker.common.configuration.Configuration;
 public abstract class AbstractReaderPlugin extends AbstractPlugin implements IReaderPlugin {
 
 	/**
-	 * Each Plugin requires a constructor with a single Configuration object.
-	 * 
-	 * @param configuration
-	 *            The configuration which should be used to initialize the object.
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public AbstractReaderPlugin(final Configuration configuration) {
-		this(configuration, null);
-	}
-
-	/**
 	 * Each Plugin requires a constructor with a Configuration object and a IProjectContext.
 	 * 
 	 * @param configuration

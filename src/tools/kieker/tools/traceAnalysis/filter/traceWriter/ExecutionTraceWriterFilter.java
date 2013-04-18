@@ -77,22 +77,6 @@ public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessing
 		this.ps = new PrintStream(new FileOutputStream(this.outputFn), false, ENCODING);
 	}
 
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @throws IOException
-	 *             If the write stream could not be prepared.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public ExecutionTraceWriterFilter(final Configuration configuration) throws IOException {
-		this(configuration, null);
-	}
-
 	@Override
 	public void printStatusMessage() {
 		super.printStatusMessage();

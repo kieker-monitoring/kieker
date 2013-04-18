@@ -73,19 +73,6 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		super(configuration, projectContext);
 	}
 
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public AbstractCallTreeFilter(final Configuration configuration) {
-		this(configuration, null);
-	}
-
 	private static final String assemblyComponentOperationPairNodeLabel(final AbstractCallTreeNode<AssemblyComponentOperationPair> node, final boolean shortLabels) {
 		final AssemblyComponentOperationPair p = node.getEntity();
 		final AssemblyComponent component = p.getAssemblyComponent();

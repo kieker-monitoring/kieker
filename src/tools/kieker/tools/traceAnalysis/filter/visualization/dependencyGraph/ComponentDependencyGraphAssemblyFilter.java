@@ -62,19 +62,6 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 	}
 
 	/**
-	 * Creates a new filter using the given configuration.
-	 * 
-	 * @param configuration
-	 *            The configuration to use
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public ComponentDependencyGraphAssemblyFilter(final Configuration configuration) {
-		this(configuration, null);
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	@Override

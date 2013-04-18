@@ -81,19 +81,6 @@ public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V ex
 		this.configuration = configuration;
 	}
 
-	/**
-	 * Creates a new filter with the given configuration.
-	 * 
-	 * @param configuration
-	 *            The filter configuration to use
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public AbstractGraphFilter(final Configuration configuration) {
-		this(configuration, null);
-	}
-
 	@Override
 	protected void notifyNewIncomingConnection(final String inputPortName, final AbstractPlugin connectedPlugin, final String outputPortName) throws
 			AnalysisConfigurationException {

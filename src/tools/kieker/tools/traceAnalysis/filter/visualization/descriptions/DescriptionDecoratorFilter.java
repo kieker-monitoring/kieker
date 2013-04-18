@@ -74,19 +74,6 @@ public class DescriptionDecoratorFilter<V extends AbstractPayloadedVertex<V, E, 
 		super(configuration, projectContext);
 	}
 
-	/**
-	 * Creates a new description decorator filter using the given configuration.
-	 * 
-	 * @param configuration
-	 *            The configuration to use
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public DescriptionDecoratorFilter(final Configuration configuration) {
-		this(configuration, null);
-	}
-
 	public void visitVertex(final V vertex) {
 		final ISystemModelElement element = vertex.getPayload();
 		if (element == null) {

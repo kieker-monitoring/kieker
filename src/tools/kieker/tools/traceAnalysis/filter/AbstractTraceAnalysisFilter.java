@@ -71,19 +71,6 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 		super(configuration, projectContext);
 	}
 
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public AbstractTraceAnalysisFilter(final Configuration configuration) {
-		this(configuration, null);
-	}
-
 	public static final Execution createExecutionByEntityNames(final SystemModelRepository systemModelRepository,
 			final String executionContainerName, final String assemblyComponentTypeName, final String componentTypeName,
 			final Signature operationSignature, final long traceId, final String sessionId, final int eoi, final int ess,

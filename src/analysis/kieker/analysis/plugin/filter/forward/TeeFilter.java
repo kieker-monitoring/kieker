@@ -138,19 +138,6 @@ public final class TeeFilter extends AbstractFilterPlugin {
 		}
 	}
 
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public TeeFilter(final Configuration configuration) {
-		this(configuration, null);
-	}
-
 	@Override
 	public final void terminate(final boolean error) {
 		if ((this.printStream != null) && (this.printStream != System.out) && (this.printStream != System.err)) {

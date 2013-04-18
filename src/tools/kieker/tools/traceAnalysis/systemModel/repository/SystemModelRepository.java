@@ -78,19 +78,6 @@ public class SystemModelRepository extends AbstractRepository {
 		this.assemblyPairFactory = new AssemblyComponentOperationPairFactory(this);
 	}
 
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration to use for this repository.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public SystemModelRepository(final Configuration configuration) {
-		this(configuration, null);
-	}
-
 	public final AllocationRepository getAllocationFactory() {
 		return this.allocationFactory;
 	}

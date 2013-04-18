@@ -35,18 +35,6 @@ import kieker.common.configuration.Configuration;
 public abstract class AbstractFilterPlugin extends AbstractPlugin implements IFilterPlugin {
 
 	/**
-	 * The constructor for the plugin. Every plugin must have this constructor.
-	 * 
-	 * @param configuration
-	 *            The configuration to use for this plugin.
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public AbstractFilterPlugin(final Configuration configuration) {
-		this(configuration, null);
-	}
-
-	/**
 	 * Each Plugin requires a constructor with a Configuration object and a IProjectContext.
 	 * 
 	 * @param configuration

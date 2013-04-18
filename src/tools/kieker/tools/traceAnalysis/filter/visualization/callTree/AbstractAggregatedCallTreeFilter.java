@@ -96,19 +96,6 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	}
 
 	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public AbstractAggregatedCallTreeFilter(final Configuration configuration) {
-		this(configuration, null);
-	}
-
-	/**
 	 * Sets the root of the call tree.
 	 * 
 	 * @param root

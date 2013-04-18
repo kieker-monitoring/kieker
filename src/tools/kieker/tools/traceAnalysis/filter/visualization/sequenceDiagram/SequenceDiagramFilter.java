@@ -159,18 +159,6 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 	}
 
 	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration to use for this filter.
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public SequenceDiagramFilter(final Configuration configuration) {
-		this(configuration, null);
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	@Override

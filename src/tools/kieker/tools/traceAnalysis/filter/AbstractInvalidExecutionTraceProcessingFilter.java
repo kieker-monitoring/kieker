@@ -45,19 +45,6 @@ public abstract class AbstractInvalidExecutionTraceProcessingFilter extends Abst
 	}
 
 	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public AbstractInvalidExecutionTraceProcessingFilter(final Configuration configuration) {
-		this(configuration, null);
-	}
-
-	/**
 	 * Implementing classes should return the name of the input port for the invalid executions.
 	 * 
 	 * @return The name of the input port.

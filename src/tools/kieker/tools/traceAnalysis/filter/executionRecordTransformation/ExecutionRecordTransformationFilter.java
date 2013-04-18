@@ -68,19 +68,6 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisFi
 	}
 
 	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public ExecutionRecordTransformationFilter(final Configuration configuration) {
-		this(configuration, null);
-	}
-
-	/**
 	 * This method represents the input port, processing incoming operation execution records.
 	 * 
 	 * @param execRec

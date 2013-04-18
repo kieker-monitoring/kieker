@@ -73,19 +73,6 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	private volatile STATE state = STATE.READY;
 
 	/**
-	 * Each Plugin requires a constructor with a single Configuration object and an array of repositories!
-	 * 
-	 * @param configuration
-	 *            The configuration for this repository.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public AbstractPlugin(final Configuration configuration) {
-		this(configuration, null);
-	}
-
-	/**
 	 * Each Plugin requires a constructor with a Configuration object and a IProjectContext.
 	 * 
 	 * @param configuration

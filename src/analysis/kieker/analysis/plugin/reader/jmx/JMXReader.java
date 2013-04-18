@@ -135,22 +135,6 @@ public final class JMXReader extends AbstractReaderPlugin {
 	}
 
 	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @throws IllegalArgumentException
-	 *             If the arguments are invalid.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public JMXReader(final Configuration configuration) throws IllegalArgumentException {
-		this(configuration, null);
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	public void terminate(final boolean error) {

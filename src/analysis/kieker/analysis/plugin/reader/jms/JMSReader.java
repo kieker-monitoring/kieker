@@ -113,27 +113,6 @@ public final class JMSReader extends AbstractReaderPlugin {
 	}
 
 	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration used to initialize the whole reader. Keep in mind that the configuration should contain the following properties:
-	 *            <ul>
-	 *            <li>The property {@link #CONFIG_PROPERTY_NAME_PROVIDERURL}, e.g. {@code tcp://localhost:3035/}
-	 *            <li>The property {@link #CONFIG_PROPERTY_NAME_DESTINATION}, e.g. {@code queue1}
-	 *            <li>The property {@link #CONFIG_PROPERTY_NAME_FACTORYLOOKUP}, e.g. {@code org.exolab.jms.jndi.InitialContextFactory}
-	 *            </ul>
-	 * 
-	 * @throws IllegalArgumentException
-	 *             If one of the properties is empty.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public JMSReader(final Configuration configuration) throws IllegalArgumentException {
-		this(configuration, null);
-	}
-
-	/**
 	 * A call to this method is a blocking call.
 	 * 
 	 * @return true if the method succeeds, false otherwise.

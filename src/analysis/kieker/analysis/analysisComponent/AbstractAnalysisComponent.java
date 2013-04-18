@@ -45,9 +45,8 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 
 	/**
 	 * The project context of this component.
-	 */
-	// TODO #819 can be final in Kieker 1.8
-	protected volatile IProjectContext projectContext;
+	 */ 
+	protected final IProjectContext projectContext;
 
 	/**
 	 * The current configuration of this component.
@@ -55,19 +54,6 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 	protected final Configuration configuration;
 
 	private final String name;
-
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public AbstractAnalysisComponent(final Configuration configuration) {
-		this(configuration, null);
-	}
 
 	/**
 	 * Each AnalysisComponent requires a constructor with a Configuration object and a IProjectContext.
@@ -112,32 +98,5 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 	 */
 	public final String getName() {
 		return this.name;
-	}
-
-	/**
-	 * Sets the project context atomically of this component to a new value. This property can only be set once. Every additional setting will be ignored but logged.
-	 * <b>Do not call this method manually. A component will not be registered just by calling this method. Instead use the register methods of the
-	 * {@link kieker.analysis.AnalysisController}. </b>
-	 * 
-	 * @param context
-	 *            The new project context of this component.
-	 * 
-	 * @return true iff the project context of this plugin was not null and has been set to the given value.
-	 * 
-	 * @deprecated To be removed in 1.8
-	 */
-	@Deprecated
-	public final boolean setProjectContext(final IProjectContext context) {
-		synchronized (this) {
-			if (this.projectContext == null) {
-				this.projectContext = context;
-				return true;
-			} else if (this.projectContext == context) {
-				return true;
-			} else {
-				LOG.warn("Project context of component already set to different project context.");
-				return false;
-			}
-		}
 	}
 }

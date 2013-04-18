@@ -35,19 +35,6 @@ import kieker.common.configuration.Configuration;
 public abstract class AbstractRepository extends AbstractAnalysisComponent implements IRepository {
 
 	/**
-	 * Each Repository requires a constructor with a single Configuration object!
-	 * 
-	 * @param configuration
-	 *            The configuration for this repository.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public AbstractRepository(final Configuration configuration) {
-		this(configuration, null);
-	}
-
-	/**
 	 * The second "default constructor".
 	 * 
 	 * @param configuration
