@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.common.util.Signature;
+import kieker.common.util.signature.Signature;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
 import kieker.tools.traceAnalysis.systemModel.ComponentType;
@@ -36,9 +36,12 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * @author Andre van Hoorn
+ * 
+ * @since 1.2
  */
 @Plugin(repositoryPorts = { @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class) })
 public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
+	/** The name of the repository port for the system model repository. */
 	public static final String REPOSITORY_PORT_NAME_SYSTEM_MODEL = "systemModelRepository";
 
 	// Please leave the logger here, because the "composition" above is used in the user guide
@@ -68,19 +71,6 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 		super(configuration, projectContext);
 	}
 
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public AbstractTraceAnalysisFilter(final Configuration configuration) {
-		this(configuration, null);
-	}
-
 	public static final Execution createExecutionByEntityNames(final SystemModelRepository systemModelRepository,
 			final String executionContainerName, final String assemblyComponentTypeName, final String componentTypeName,
 			final Signature operationSignature, final long traceId, final String sessionId, final int eoi, final int ess,
@@ -90,13 +80,13 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 
 		AllocationComponent allocInst = systemModelRepository.getAllocationFactory()
 				.lookupAllocationComponentInstanceByNamedIdentifier(allocationComponentName);
-		if (allocInst == null) { /* Allocation component instance doesn't exist */
+		if (allocInst == null) { // Allocation component instance doesn't exist
 			AssemblyComponent assemblyComponent = systemModelRepository.getAssemblyFactory()
 					.lookupAssemblyComponentInstanceByNamedIdentifier(assemblyComponentTypeName);
 			if (assemblyComponent == null) { // assembly instance doesn't exist
 				ComponentType componentType = systemModelRepository.getTypeRepositoryFactory().lookupComponentTypeByNamedIdentifier(assemblyComponentTypeName);
 				if (componentType == null) { // NOPMD NOCS (NestedIf)
-					/* Component type doesn't exist */
+					// Component type doesn't exist
 					componentType = systemModelRepository.getTypeRepositoryFactory().createAndRegisterComponentType(assemblyComponentTypeName,
 							assemblyComponentTypeName);
 				}
@@ -105,7 +95,7 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 			}
 			ExecutionContainer execContainer = systemModelRepository.getExecutionEnvironmentFactory()
 					.lookupExecutionContainerByNamedIdentifier(executionContainerName);
-			if (execContainer == null) { /* doesn't exist, yet */
+			if (execContainer == null) { // doesn't exist, yet
 				execContainer = systemModelRepository.getExecutionEnvironmentFactory()
 						.createAndRegisterExecutionContainer(executionContainerName, executionContainerName);
 			}
@@ -114,7 +104,7 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 		}
 
 		Operation op = systemModelRepository.getOperationFactory().lookupOperationByNamedIdentifier(operationFactoryName);
-		if (op == null) { /* Operation doesn't exist */
+		if (op == null) { // Operation doesn't exist
 			op = systemModelRepository.getOperationFactory()
 					.createAndRegisterOperation(operationFactoryName, allocInst.getAssemblyComponent().getType(), operationSignature);
 			allocInst.getAssemblyComponent().getType().addOperation(op);

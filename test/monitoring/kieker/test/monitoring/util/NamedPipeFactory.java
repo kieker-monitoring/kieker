@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,6 +40,7 @@ import kieker.monitoring.writer.namedRecordPipe.PipeWriter;
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.4
  */
 public final class NamedPipeFactory {
 
@@ -83,6 +84,7 @@ public final class NamedPipeFactory {
 	 */
 	public static IMonitoringController createMonitoringControllerWithNamedPipe(final String pipeName, final Properties additionalProperties) {
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
+		configuration.setProperty(ConfigurationFactory.METADATA, "false");
 		configuration.setProperty(ConfigurationFactory.WRITER_CLASSNAME, PipeWriter.class.getName());
 		configuration.setProperty(PipeWriter.CONFIG_PIPENAME, pipeName);
 

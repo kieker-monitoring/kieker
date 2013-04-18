@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,10 +20,10 @@ import java.util.concurrent.TimeUnit;
 
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.probe.sigar.ISigarSamplerFactory;
-import kieker.monitoring.probe.sigar.SigarSamplerFactory;
-import kieker.monitoring.probe.sigar.samplers.CPUsDetailedPercSampler;
-import kieker.monitoring.probe.sigar.samplers.MemSwapUsageSampler;
+import kieker.monitoring.sampler.sigar.ISigarSamplerFactory;
+import kieker.monitoring.sampler.sigar.SigarSamplerFactory;
+import kieker.monitoring.sampler.sigar.samplers.CPUsDetailedPercSampler;
+import kieker.monitoring.sampler.sigar.samplers.MemSwapUsageSampler;
 
 public final class MonitoringStarter {
 

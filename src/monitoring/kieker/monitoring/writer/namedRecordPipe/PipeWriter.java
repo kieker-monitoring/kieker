@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,8 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
 /**
  * 
  * @author Andre van Hoorn, Jan Waller, Robert von Massow
+ * 
+ * @since 1.3
  */
 public final class PipeWriter extends AbstractMonitoringWriter implements IPipeWriter {
 	private static final String PREFIX = PipeWriter.class.getName() + ".";
@@ -34,21 +36,33 @@ public final class PipeWriter extends AbstractMonitoringWriter implements IPipeW
 
 	private final Pipe pipe;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration used to initialize the pipe writer.
+	 */
 	public PipeWriter(final Configuration configuration) {
 		super(configuration);
-		final String pipeName = this.configuration.getStringProperty(CONFIG_PIPENAME);
+		final String pipeName = configuration.getStringProperty(CONFIG_PIPENAME);
 		if (pipeName.length() == 0) {
 			throw new IllegalArgumentException("Invalid or missing value for property '" + CONFIG_PIPENAME + "': '" + pipeName + "'");
 		}
 		this.pipe = Broker.INSTANCE.acquirePipe(pipeName);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final void terminate() {
 		if (this.pipe != null) {
 			this.pipe.close();
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 		return this.pipe.writeMonitoringRecord(monitoringRecord);
 	}

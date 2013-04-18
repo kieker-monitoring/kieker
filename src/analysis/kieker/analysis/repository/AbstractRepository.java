@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,22 +28,11 @@ import kieker.common.configuration.Configuration;
  * This class should be used as a base for every repository used within <i>Kieker</i>.
  * 
  * @author Nils Christian Ehmke?
+ * 
+ * @since 1.5
  */
 @Repository
 public abstract class AbstractRepository extends AbstractAnalysisComponent implements IRepository {
-
-	/**
-	 * Each Repository requires a constructor with a single Configuration object!
-	 * 
-	 * @param configuration
-	 *            The configuration for this repository.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public AbstractRepository(final Configuration configuration) {
-		super(configuration);
-	}
 
 	/**
 	 * The second "default constructor".
@@ -53,10 +42,8 @@ public abstract class AbstractRepository extends AbstractAnalysisComponent imple
 	 * @param projectContext
 	 *            The project context for this component. The component will be registered.
 	 */
-	// Internal use of the register methods:
-	@SuppressWarnings("deprecation")
 	public AbstractRepository(final Configuration configuration, final IProjectContext projectContext) {
-		super(configuration);
+		super(configuration, projectContext);
 
 		// Register the repository
 		if (projectContext instanceof AnalysisController) {

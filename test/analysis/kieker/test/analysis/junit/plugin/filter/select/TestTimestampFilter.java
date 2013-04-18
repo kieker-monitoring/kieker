@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,8 +32,11 @@ import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
+ * A test for the class {@link TimestampFilter}.
  * 
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.5
  */
 public final class TestTimestampFilter extends AbstractKiekerTest {
 
@@ -53,6 +56,9 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 	private ListCollectionFilter<AbstractTraceEvent> sinkPlugin;
 	private IAnalysisController controller;
 
+	/**
+	 * Default constructor.
+	 */
 	public TestTimestampFilter() {
 		// empty default constructor
 	}
@@ -79,6 +85,9 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 		this.controller.connect(filter, TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, this.sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
 	}
 
+	/**
+	 * This method initializes the setup.
+	 */
 	@Before
 	public void before() {
 		this.controller = new AnalysisController();

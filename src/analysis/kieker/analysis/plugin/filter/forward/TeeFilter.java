@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,6 +37,8 @@ import kieker.common.logging.LogFactory;
  * A simple message is printed to a configurable stream and all objects are forwarded to the output port.
  * 
  * @author Matthias Rohr, Jan Waller
+ * 
+ * @since 1.2
  */
 @Plugin(description = "A filter to print the object to a configured stream",
 		outputPorts = @OutputPort(name = TeeFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming object", eventTypes = { Object.class }),
@@ -136,19 +138,6 @@ public final class TeeFilter extends AbstractFilterPlugin {
 		}
 	}
 
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public TeeFilter(final Configuration configuration) {
-		this(configuration, null);
-	}
-
 	@Override
 	public final void terminate(final boolean error) {
 		if ((this.printStream != null) && (this.printStream != System.out) && (this.printStream != System.err)) {
@@ -163,7 +152,7 @@ public final class TeeFilter extends AbstractFilterPlugin {
 	public final Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_ENCODING, this.encoding);
-		/* We reverse the if-decisions within the constructor. */
+		// We reverse the if-decisions within the constructor.
 		if (this.printStream == null) {
 			if (this.active) {
 				configuration.setProperty(CONFIG_PROPERTY_NAME_STREAM, CONFIG_PROPERTY_VALUE_STREAM_STDLOG);

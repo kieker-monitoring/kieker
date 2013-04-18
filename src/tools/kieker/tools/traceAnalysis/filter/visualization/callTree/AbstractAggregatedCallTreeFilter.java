@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,6 +41,8 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * @param <T>
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 @Plugin(description = "An abstract filter for aggregated call trees",
 		repositoryPorts = {
@@ -56,12 +58,17 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 		})
 public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTreeFilter<T> {
 
+	/** The name of the configuration determining the dot output file name. */
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FILENAME = "dotOutputFn";
+	/** The name of the configuration determining whether to include weights or not. */
 	public static final String CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS = "includeWeights";
+	/** The name of the configuration determining whether to use short labels in the call tree or not. */
 	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "shortLabels";
-
+	/** The default used output file name. */
 	public static final String CONFIG_PROPERTY_VALUE_OUTPUT_FILENAME_DEFAULT = "calltree.dot";
+	/** The default used value determining whether to include weights or not. */
 	public static final String CONFIG_PROPERTY_VALUE_INCLUDE_WEIGHTS_DEFAULT = "true";
+	/** The default used value determining whether to use short labels in the call tree or not. */
 	public static final String CONFIG_PROPERTY_VALUE_SHORT_LABELS_DEFAULT = "true";
 
 	private static final Log LOG = LogFactory.getLog(AbstractAggregatedCallTreeFilter.class);
@@ -89,18 +96,11 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	}
 
 	/**
-	 * Creates a new instance of this class using the given parameters.
+	 * Sets the root of the call tree.
 	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
+	 * @param root
+	 *            The new root.
 	 */
-	@Deprecated
-	public AbstractAggregatedCallTreeFilter(final Configuration configuration) {
-		this(configuration, null);
-	}
-
 	protected void setRoot(final AbstractAggregatedCallTreeNode<T> root) {
 		synchronized (this) {
 			this.root = root;
@@ -172,9 +172,9 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	public void inputMessageTraces(final MessageTrace t) {
 		synchronized (this) {
 			try {
-				AbstractCallTreeFilter.addTraceToTree(this.root, t, new IPairFactory() {
+				AbstractCallTreeFilter.addTraceToTree(this.root, t, new IPairFactory<T>() {
 
-					public Object createPair(final SynchronousCallMessage callMsg) {
+					public T createPair(final SynchronousCallMessage callMsg) {
 						return AbstractAggregatedCallTreeFilter.this.concreteCreatePair(callMsg);
 					}
 				}, true); // aggregated
@@ -187,10 +187,13 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	}
 
 	/**
-	 * HACK.
+	 * HACK. Inheriting classes should implement this method to deliver the actual pair.
 	 * 
 	 * @param callMsg
+	 *            The call message which contains the information necessary to create the pair.
+	 * 
+	 * @return The actual pair.
 	 */
-	protected abstract Object concreteCreatePair(SynchronousCallMessage callMsg);
+	protected abstract T concreteCreatePair(SynchronousCallMessage callMsg);
 
 }

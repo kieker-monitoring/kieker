@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,6 +37,14 @@ public abstract class AbstractGraphElement<O> {
 
 	private final Set<O> origins = new HashSet<O>();
 
+	/**
+	 * This constructor initializes the element based on the given parameters.
+	 * 
+	 * @param origin
+	 *            The origin of this element.
+	 * @param originPolicy
+	 *            The origin policy of this element.
+	 */
 	protected AbstractGraphElement(final O origin, final IOriginRetentionPolicy originPolicy) {
 		originPolicy.handleOrigin(this, origin);
 	}

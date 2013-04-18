@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,8 @@ import kieker.tools.util.LoggingTimestampConverter;
  * This class is a container for a whole trace of executions (represented as instances of {@link Execution}).
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 0.95a
  */
 public class ExecutionTrace extends AbstractTrace {
 
@@ -204,7 +206,6 @@ public class ExecutionTrace extends AbstractTrace {
 	 */
 	public final SortedSet<Execution> getTraceAsSortedExecutionSet() {
 		synchronized (this) {
-			// TODO: copy set?
 			return Collections.unmodifiableSortedSet(this.set);
 		}
 	}
@@ -357,6 +358,9 @@ public class ExecutionTrace extends AbstractTrace {
 		return new ExecutionTraceComparator();
 	}
 
+	/**
+	 * @author Andre van Hoorn
+	 */
 	private static final class ExecutionTraceComparator implements Comparator<Execution>, Serializable {
 
 		private static final long serialVersionUID = -6334359132236475506L;
@@ -380,16 +384,12 @@ public class ExecutionTrace extends AbstractTrace {
 		 * @return -1 if e1 < e2, 1 if e1 > e2, 0 otherwise.
 		 */
 		public final int compare(final Execution e1, final Execution e2) {
-			/*
-			 * If executions equal, return immediately
-			 */
+			// If executions equal, return immediately
 			if (e1.equals(e2)) {
 				return 0;
 			}
 
-			/*
-			 * 1. criterion: trace id
-			 */
+			// 1. criterion: trace id
 			if (e1.getTraceId() < e2.getTraceId()) {
 				return -1;
 			} else if (e1.getTraceId() > e2.getTraceId()) {
@@ -398,9 +398,7 @@ public class ExecutionTrace extends AbstractTrace {
 
 			// At this location: trace ids equal
 
-			/*
-			 * 2. criterion: eoi
-			 */
+			// 2. criterion: eoi
 			if (e1.getEoi() < e2.getEoi()) {
 				return -1;
 			}
@@ -410,9 +408,7 @@ public class ExecutionTrace extends AbstractTrace {
 
 			// At this location: trace ids, eoi equal
 
-			/*
-			 * 3. criterion: ess
-			 */
+			// 3. criterion: ess
 			if (e1.getEss() < e2.getEss()) {
 				return -1;
 			}
@@ -422,9 +418,7 @@ public class ExecutionTrace extends AbstractTrace {
 
 			// At this location: trace ids, eoi, ess equal
 
-			/*
-			 * 4. criterion: tin
-			 */
+			// 4. criterion: tin
 			if (e1.getTin() < e2.getTin()) {
 				return -1;
 			}
@@ -434,9 +428,7 @@ public class ExecutionTrace extends AbstractTrace {
 
 			// At this location: trace ids, eoi, ess, tin equal
 
-			/*
-			 * 5. criterion: tout
-			 */
+			// 5. criterion: tout
 			if (e1.getTout() < e2.getTout()) {
 				return -1;
 			}
@@ -445,7 +437,6 @@ public class ExecutionTrace extends AbstractTrace {
 			}
 
 			// At this location: trace ids, eoi, ess, tin, tout equal
-
 			return e1.hashCode() - e2.hashCode();
 		}
 	}

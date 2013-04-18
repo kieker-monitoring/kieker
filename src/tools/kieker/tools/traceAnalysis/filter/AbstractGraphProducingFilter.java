@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,21 +59,6 @@ public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?,
 		super(configuration, projectContext);
 
 		this.graph = graph;
-	}
-
-	/**
-	 * Creates a new graph-producing filter using the given configuration and the given graph.
-	 * 
-	 * @param configuration
-	 *            The configuration to use
-	 * @param graph
-	 *            The (usually empty) graph to produce / extend
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public AbstractGraphProducingFilter(final Configuration configuration, final G graph) {
-		this(configuration, null, graph);
 	}
 
 	/**

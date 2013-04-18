@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,8 +33,9 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Andre van Hoorn
+ * 
+ * @since 1.5
  */
-// TODO: The idea is to make this class independent of FS, i.e., to provide a basic test for each writer/reader.
 public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 
 	// parameters for the default list of events to use in the test
@@ -43,10 +44,9 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 	private static final int DEFAULT_EVENTS_NUMBER = 5; // just a basic test with (potentially) at bit more than a hand full of records
 
 	/**
-	 * Returns an {@link IMonitoringController} initialized with the respective FS Writer.
-	 * 
 	 * @param numRecordsWritten
-	 * @return
+	 * 
+	 * @return An {@link IMonitoringController} initialized with the respective FS Writer.
 	 */
 	protected abstract IMonitoringController createController(final int numRecordsWritten) throws Exception;
 
@@ -76,17 +76,20 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 
 	/**
 	 * Check if the given set of records is as expected.
+	 * 
+	 * @param eventsPassedToController
+	 *            The events which have been passed to the controller.
+	 * @param eventFromMonitoringLog
+	 *            The events from the monitoring log.
 	 */
 	protected abstract void inspectRecords(List<IMonitoringRecord> eventsPassedToController, List<IMonitoringRecord> eventFromMonitoringLog) throws Exception;
 
 	protected abstract boolean terminateBeforeLogInspection();
 
 	/**
-	 * Returns a list of {@link IMonitoringRecord}s to be used in this test.
-	 * Extending classes can override this method to use their own list of
-	 * records.
+	 * Returns a list of {@link IMonitoringRecord}s to be used in this test. Extending classes can override this method to use their own list of records.
 	 * 
-	 * @return
+	 * @return A list of records.
 	 */
 	protected List<IMonitoringRecord> provideEvents() {
 		final List<IMonitoringRecord> someEvents = new ArrayList<IMonitoringRecord>();
@@ -128,9 +131,7 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 	public void testSimpleLog() throws Exception { // NOPMD (JUnitTestsShouldIncludeAssert)
 		final List<IMonitoringRecord> someEvents = this.provideEvents();
 
-		/*
-		 * Write batch of records:
-		 */
+		// Write batch of records:
 		final IMonitoringController ctrl = this.createController(someEvents.size());
 
 		this.checkControllerStateBeforeRecordsPassedToController(ctrl);
@@ -152,10 +153,7 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 
 		final List<IMonitoringRecord> monitoringRecords = this.readEvents();
 
-		/*
-		 * The following line is an easy way to test the tests (given monitoringRecords includes at least one record).
-		 * But don't forget to deactivate afterwards.
-		 */
+		// The following line is an easy way to test the tests (given monitoringRecords includes at least one record). But don't forget to deactivate afterwards.
 		// monitoringRecords.remove(monitoringRecords.size() - 1);
 
 		this.inspectRecords(someEvents, monitoringRecords);

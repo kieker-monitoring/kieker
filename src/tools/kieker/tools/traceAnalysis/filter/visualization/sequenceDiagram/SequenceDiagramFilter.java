@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.common.util.Signature;
+import kieker.common.util.signature.Signature;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
@@ -56,6 +56,8 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * this plugin is not delegated in any way.
  * 
  * @author Andre van Hoorn, Nils Sommer, Jan Waller
+ * 
+ * @since 0.95a
  */
 @Plugin(description = "A filter allowing to write the incoming data into a sequence diagram",
 		repositoryPorts = {
@@ -70,11 +72,14 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 					defaultValue = "ASSEMBLY") // SDModes.ASSEMBLY.toString())
 		})
 public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter {
-
+	/** The name of the configuration determining the used output filename base. */
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE = "filename";
+	/** The name of the configuration determining whether to use short labels or not. */
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES = "shortLabels";
+	/** The name of the configuration determining the used mode. */
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_SDMODE = "SDMode";
 
+	/** This constant determines the default used output filename base. */
 	public static final String CONFIG_PROPERTY_VALUE_OUTPUT_FN_BASE_DEFAULT = "SequenceDiagram";
 
 	/**
@@ -91,11 +96,8 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 	private final boolean shortLabels;
 	private final SDModes sdmode;
 
-	/*
-	 * Read Spinellis' UML macros from file META-INF/sequence.pic to the String
-	 * variable sequencePicContent. This contents are copied to every sequence
-	 * diagram .pic file
-	 */
+	// Read Spinellis' UML macros from file META-INF/sequence.pic to the String variable sequencePicContent. This contents are copied to every sequence diagram .pic
+	// file
 	static {
 		final StringBuilder sb = new StringBuilder();
 		boolean error = true;
@@ -120,7 +122,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 				LOG.error("Failed to close input stream", ex);
 			}
 			if (error) {
-				/* sequence.pic must be provided on execution of pic2plot */
+				// sequence.pic must be provided on execution of pic2plot
 				SEQUENCE_PIC_CONTENT = "copy \"sequence.pic\";"; // NOCS (this)
 			} else {
 				SEQUENCE_PIC_CONTENT = sb.toString(); // NOCS (this)
@@ -130,9 +132,14 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 
 	/**
 	 * @author Andre van Hoorn
+	 * 
+	 * @since 1.2
 	 */
 	public static enum SDModes {
-		ASSEMBLY, ALLOCATION
+		/** The assembly mode for the sequence diagrams. */
+		ASSEMBLY,
+		/** The allocation mode for the sequence diagrams. */
+		ALLOCATION
 	}
 
 	/**
@@ -149,18 +156,6 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 		this.sdmode = SDModes.valueOf(configuration.getStringProperty(CONFIG_PROPERTY_NAME_OUTPUT_SDMODE));
 		this.outputFnBase = configuration.getStringProperty(CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE);
 		this.shortLabels = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES);
-	}
-
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration to use for this filter.
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public SequenceDiagramFilter(final Configuration configuration) {
-		this(configuration, null);
 	}
 
 	/**

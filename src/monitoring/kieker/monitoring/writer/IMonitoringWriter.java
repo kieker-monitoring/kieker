@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,17 +22,23 @@ import kieker.monitoring.core.controller.IMonitoringController;
 
 /**
  * @author Andre van Hoorn, Jan Waller, Robert von Massow
+ * 
+ * @since < 0.9
  */
 public interface IMonitoringWriter extends IMonitoringRecordReceiver {
 
 	/**
 	 * {@inheritDoc}
+	 * 
+	 * @since 1.3
 	 */
 	public abstract boolean newMonitoringRecord(IMonitoringRecord record);
 
 	/**
 	 * Called by the Monitoring Controller to announce a shutdown of monitoring.
 	 * Writers should return as soon as it is safe to terminate Kieker.
+	 * 
+	 * @since 1.3
 	 */
 	public abstract void terminate();
 
@@ -44,6 +50,8 @@ public interface IMonitoringWriter extends IMonitoringRecordReceiver {
 	 * 
 	 * @throws Exception
 	 *             If something went wrong.
+	 * 
+	 * @since 1.3
 	 */
 	public abstract void setController(final IMonitoringController monitoringController) throws Exception;
 
@@ -51,6 +59,8 @@ public interface IMonitoringWriter extends IMonitoringRecordReceiver {
 	 * Delivers a string representation of this writer.
 	 * 
 	 * @return A string.
+	 * 
+	 * @since 1.3
 	 */
 	public abstract String toString();
 }

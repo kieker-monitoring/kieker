@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,6 +37,9 @@ public class TestAfterConstructorFailedEvent extends AbstractKiekerTest {
 	private static final String FQ_OPERATION_SIGNATURE = FQ_CLASSNAME + ".callerOp(boolean arg1, int arg2)";
 	private static final String CAUSE = "myCause";
 
+	/**
+	 * Default constructor.
+	 */
 	public TestAfterConstructorFailedEvent() {
 		// empty default constructor
 	}

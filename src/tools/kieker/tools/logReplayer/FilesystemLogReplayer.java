@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,8 @@ import kieker.common.configuration.Configuration;
  * system monitoring logs.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 0.95a
  */
 public class FilesystemLogReplayer extends AbstractLogReplayer {
 	// private static final Log LOG = LogFactory.getLog(FilesystemLogReplayer.class);
@@ -40,6 +42,7 @@ public class FilesystemLogReplayer extends AbstractLogReplayer {
 	 * @param realtimeMode
 	 *            Whether realtime mode should be used.
 	 * @param keepOriginalLoggingTimestamps
+	 *            Whether to keep the original logging timestamps or not.
 	 * @param numRealtimeWorkerThreads
 	 *            The number of realtime worker threads to be used.
 	 * @param ignoreRecordsBeforeTimestamp
@@ -68,7 +71,6 @@ public class FilesystemLogReplayer extends AbstractLogReplayer {
 	protected AbstractReaderPlugin createReader(final IAnalysisController analysisInstance) {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(this.inputDirs));
-		// TODO: we might want to pull this out as a property
 		configuration.setProperty(FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, Boolean.toString(true));
 		return new FSReader(configuration, analysisInstance);
 	}
@@ -80,5 +82,4 @@ public class FilesystemLogReplayer extends AbstractLogReplayer {
 	protected String readerOutputPortName() {
 		return FSReader.OUTPUT_PORT_NAME_RECORDS;
 	}
-
 }

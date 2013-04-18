@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,19 +72,6 @@ public class DescriptionDecoratorFilter<V extends AbstractPayloadedVertex<V, E, 
 	 */
 	public DescriptionDecoratorFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
-	}
-
-	/**
-	 * Creates a new description decorator filter using the given configuration.
-	 * 
-	 * @param configuration
-	 *            The configuration to use
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public DescriptionDecoratorFilter(final Configuration configuration) {
-		this(configuration, null);
 	}
 
 	public void visitVertex(final V vertex) {

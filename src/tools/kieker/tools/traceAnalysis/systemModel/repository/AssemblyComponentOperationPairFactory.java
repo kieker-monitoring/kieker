@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,8 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
 /**
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 public class AssemblyComponentOperationPairFactory extends AbstractSystemSubRepository {
 	public static final AssemblyComponentOperationPair ROOT_PAIR =
@@ -46,7 +48,16 @@ public class AssemblyComponentOperationPairFactory extends AbstractSystemSubRepo
 		super(systemFactory);
 	}
 
-	/** Returns a corresponding pair instance (existing or newly created). */
+	/**
+	 * Returns a corresponding pair instance (existing or newly created).
+	 * 
+	 * @param assemblyComponent
+	 *            The assemble component for the pair.
+	 * @param operation
+	 *            The operation for the pair.
+	 * 
+	 * @return The corresponding pair instance if it exists, otherwise a new one.
+	 */
 	public final AssemblyComponentOperationPair getPairInstanceByPair(final AssemblyComponent assemblyComponent, final Operation operation) {
 		final AssemblyComponentOperationPair inst = this.getPairByNamedIdentifier(assemblyComponent.getId() + "-" + operation.getId());
 		if (inst == null) {
@@ -71,10 +82,10 @@ public class AssemblyComponentOperationPairFactory extends AbstractSystemSubRepo
 	}
 
 	/**
-	 * Returns the instance for the passed ID; null if no instance with this ID is available.
-	 * 
 	 * @param id
 	 *            The ID of the instance in question.
+	 * 
+	 * @return The instance for the passed ID; null if no instance with this ID is available.
 	 */
 	public final AssemblyComponentOperationPair getPairById(final int id) {
 		return this.pairsById.get(id);

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,8 @@ package kieker.common.record.flow;
 public interface ICallObjectRecord extends ICallRecord, IObjectRecord {
 
 	/**
+	 * @return The ID of the caller object.
+	 * 
 	 * @see #getObjectId()
 	 * 
 	 * @since 1.6
@@ -35,6 +37,8 @@ public interface ICallObjectRecord extends ICallRecord, IObjectRecord {
 	public abstract int getCallerObjectId();
 
 	/**
+	 * @return The ID of the callee object.
+	 * 
 	 * @since 1.6
 	 */
 	public abstract int getCalleeObjectId();

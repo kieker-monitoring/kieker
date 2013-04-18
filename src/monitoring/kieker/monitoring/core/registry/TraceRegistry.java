@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,8 +28,11 @@ import kieker.monitoring.core.controller.MonitoringController;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public enum TraceRegistry { // Singleton (Effective Java #3)
+	/** The singleton instance. */
 	INSTANCE;
 
 	private static final Log LOG = LogFactory.getLog(TraceRegistry.class); // NOPMD (enum logger)
@@ -91,7 +94,7 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 			parentOrderId = tp.orderId;
 		} else if (enclosingTrace != null) { // we create a sub trace without a known split point
 			parentTraceId = enclosingTrace.getTraceId();
-			parentOrderId = -1; // TODO: should we instead get the last orderId?
+			parentOrderId = -1; // we could instead get the last orderId ... But this would make it harder to distinguish from known split points
 		} else { // we create a new trace without a parent
 			parentTraceId = traceId;
 			parentOrderId = -1;
@@ -121,16 +124,6 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 		}
 	}
 
-	private static final class TracePoint {
-		public final long traceId; // NOCS (public no setters or getters)
-		public final int orderId; // NOCS (public no setters or getters)
-
-		public TracePoint(final long traceId, final int orderId) {
-			this.traceId = traceId;
-			this.orderId = orderId;
-		}
-	}
-
 	private final TracePoint getAndRemoveParentTraceId(final Thread t) {
 		synchronized (this) {
 			return this.parentTrace.remove(t);
@@ -151,6 +144,19 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 	public final void setParentTraceId(final Thread t, final long traceId, final int orderId) {
 		synchronized (this) {
 			this.parentTrace.put(t, new TracePoint(traceId, orderId));
+		}
+	}
+
+	/**
+	 * @author Jan Waller
+	 */
+	private static final class TracePoint {
+		public final long traceId; // NOCS (public no setters or getters)
+		public final int orderId; // NOCS (public no setters or getters)
+
+		public TracePoint(final long traceId, final int orderId) {
+			this.traceId = traceId;
+			this.orderId = orderId;
 		}
 	}
 }

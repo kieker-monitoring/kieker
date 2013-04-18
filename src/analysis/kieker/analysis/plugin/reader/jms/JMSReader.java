@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,6 +50,8 @@ import kieker.common.record.IMonitoringRecord;
  * 
  * 
  * @author Andre van Hoorn, Matthias Rohr
+ * 
+ * @since 0.95a
  */
 @Plugin(description = "A reader which reads records from a (remove or local) JMS queue",
 		dependencies = "This plugin needs the file 'javax.jms-*.jar'.",
@@ -63,10 +65,14 @@ import kieker.common.record.IMonitoringRecord;
 		})
 public final class JMSReader extends AbstractReaderPlugin {
 
+	/** The name of the output port delivering the received records. */
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
 
+	/** The name of the configuration determining the JMS provider URL. */
 	public static final String CONFIG_PROPERTY_NAME_PROVIDERURL = "jmsProviderUrl";
+	/** The name of the configuration determining the JMS destination (e.g. queue1). */
 	public static final String CONFIG_PROPERTY_NAME_DESTINATION = "jmsDestination";
+	/** The name of the configuration determining the name of the used JMS factory. */
 	public static final String CONFIG_PROPERTY_NAME_FACTORYLOOKUP = "jmsFactoryLookupName";
 
 	static final Log LOG = LogFactory.getLog(JMSReader.class); // NOPMD package for inner class
@@ -107,28 +113,9 @@ public final class JMSReader extends AbstractReaderPlugin {
 	}
 
 	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration used to initialize the whole reader. Keep in mind that the configuration should contain the following properties:
-	 *            <ul>
-	 *            <li>The property {@link #CONFIG_PROPERTY_NAME_PROVIDERURL}, e.g. {@code tcp://localhost:3035/}
-	 *            <li>The property {@link #CONFIG_PROPERTY_NAME_DESTINATION}, e.g. {@code queue1}
-	 *            <li>The property {@link #CONFIG_PROPERTY_NAME_FACTORYLOOKUP}, e.g. {@code org.exolab.jms.jndi.InitialContextFactory}
-	 *            </ul>
-	 * 
-	 * @throws IllegalArgumentException
-	 *             If one of the properties is empty.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public JMSReader(final Configuration configuration) throws IllegalArgumentException {
-		this(configuration, null);
-	}
-
-	/**
 	 * A call to this method is a blocking call.
+	 * 
+	 * @return true if the method succeeds, false otherwise.
 	 */
 	public boolean read() {
 		boolean retVal = true;

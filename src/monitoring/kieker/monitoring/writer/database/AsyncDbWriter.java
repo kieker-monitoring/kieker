@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,6 +42,8 @@ import kieker.monitoring.writer.AbstractAsyncWriter;
  * Warning! This class is an academic prototype and not intended for usage in any critical system.
  * 
  * @author Jan Waller
+ * 
+ * @since < 0.9
  */
 public final class AsyncDbWriter extends AbstractAsyncWriter {
 	private static final String PREFIX = AsyncDbWriter.class.getName() + ".";
@@ -51,25 +53,40 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 	public static final String CONFIG_NRCONN = PREFIX + "numberOfConnections"; // NOCS (AfterPREFIX)
 	public static final String CONFIG_OVERWRITE = PREFIX + "DropTables"; // NOCS (AfterPREFIX)
 
+	private final String connectionString;
+	private final String tablePrefix;
+	private final boolean overwrite;
+	private final int connections;
+
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this writer.
+	 * 
+	 * @throws Exception
+	 *             If something went wrong during the initialization of the writer.
+	 */
 	public AsyncDbWriter(final Configuration configuration) throws Exception {
 		super(configuration);
 		try {
-			Class.forName(this.configuration.getStringProperty(CONFIG_DRIVERCLASSNAME)).newInstance();
+			Class.forName(configuration.getStringProperty(CONFIG_DRIVERCLASSNAME)).newInstance();
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
 			throw new Exception("DB driver registration failed. Perhaps the driver jar is missing?", ex);
 		}
+		this.connectionString = configuration.getStringProperty(CONFIG_CONNECTIONSTRING);
+		this.tablePrefix = configuration.getStringProperty(CONFIG_TABLEPREFIX);
+		this.overwrite = configuration.getBooleanProperty(CONFIG_OVERWRITE);
+		this.connections = configuration.getIntProperty(CONFIG_NRCONN);
 	}
 
 	@Override
 	public void init() throws Exception {
 		final AtomicInteger tableCounter = new AtomicInteger();
-		final String connectionString = this.configuration.getStringProperty(CONFIG_CONNECTIONSTRING);
-		final String tablePrefix = this.configuration.getStringProperty(CONFIG_TABLEPREFIX);
-		final boolean overwrite = this.configuration.getBooleanProperty(CONFIG_OVERWRITE);
 		Connection connection = null;
 		try {
-			connection = DriverManager.getConnection(connectionString);
-			new DBWriterHelper(connection, tablePrefix, tableCounter, overwrite).createIndexTable();
+			connection = DriverManager.getConnection(this.connectionString);
+			new DBWriterHelper(connection, this.tablePrefix, tableCounter, this.overwrite).createIndexTable();
 		} catch (final SQLException ex) {
 			throw new Exception("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
 		} finally {
@@ -79,9 +96,9 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 		}
 		final AtomicLong recordId = new AtomicLong();
 		try {
-			for (int i = 0; i < this.configuration.getIntProperty(CONFIG_NRCONN); i++) {
-				this.addWorker(new DbWriterThread(super.monitoringController, super.blockingQueue, connectionString, tablePrefix, tableCounter, recordId,
-						overwrite));
+			for (int i = 0; i < this.connections; i++) {
+				this.addWorker(new DbWriterThread(super.monitoringController, super.blockingQueue, this.connectionString, this.tablePrefix, tableCounter, recordId,
+						this.overwrite));
 			}
 		} catch (final SQLException ex) {
 			throw new Exception("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
@@ -91,6 +108,8 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 
 /**
  * @author Jan Waller
+ * 
+ * @since < 0.9
  */
 final class DbWriterThread extends AbstractAsyncThread {
 	private static final Log LOG = LogFactory.getLog(DbWriterThread.class);
@@ -152,7 +171,12 @@ final class DbWriterThread extends AbstractAsyncThread {
 				final PreparedStatement preparedStatement = this.connection.prepareStatement("INSERT INTO " + tableName + " VALUES (" + sb.toString() + ")");
 				this.recordTypeInformation.put(recordClass, preparedStatement);
 			} catch (final SQLException ex) {
-				throw new Exception("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
+				if (null == ex.getSQLState()) { // probably an exception by Kieker
+					LOG.error("Unable to log records of type " + recordClass.getName() + ": " + ex.getMessage());
+					return; // we ignore this kind of error
+				} else {
+					throw new Exception("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
+				}
 			}
 		}
 		try {

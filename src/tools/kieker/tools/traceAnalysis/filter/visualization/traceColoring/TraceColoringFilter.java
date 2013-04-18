@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -82,19 +82,6 @@ public class TraceColoringFilter<V extends AbstractVertex<V, E, TraceInformation
 		super(configuration, projectContext);
 	}
 
-	/**
-	 * Creates a new filter using the given configuration.
-	 * 
-	 * @param configuration
-	 *            The configuration to use for this filter
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public TraceColoringFilter(final Configuration configuration) {
-		this(configuration, null);
-	}
-
 	private void initialize() {
 		final TraceColorRepository colorRepository = (TraceColorRepository) super.getRepository(COLOR_REPOSITORY_PORT_NAME);
 		this.colorMap = colorRepository.getColorMap();
@@ -131,10 +118,16 @@ public class TraceColoringFilter<V extends AbstractVertex<V, E, TraceInformation
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void visitVertex(final V vertex) {
 		this.handleGraphElement(vertex);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void visitEdge(final E edge) {
 		this.handleGraphElement(edge);
 	}

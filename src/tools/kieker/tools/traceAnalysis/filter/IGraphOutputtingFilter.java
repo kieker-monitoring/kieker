@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,8 +32,6 @@ public interface IGraphOutputtingFilter<G extends AbstractGraph<?, ?, ?>> {
 
 	/**
 	 * The default name for graph output ports.
-	 * 
-	 * @since 1.6
 	 */
 	public static final String OUTPUT_PORT_NAME_GRAPH = "graphs";
 

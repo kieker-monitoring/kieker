@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,18 +24,34 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
  * This class represents a single node within the trace call tree.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 public class TraceCallTreeNode extends AbstractCallTreeNode<AllocationComponentOperationPair> {
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param id
+	 *            The identifier of this node.
+	 * @param entity
+	 *            The content of this node.
+	 * @param rootNode
+	 *            Determines whether this node is the root node or not.
+	 * @param origin
+	 *            The meta data of this node.
+	 * @param originPolicy
+	 *            The origin policy.
+	 */
 	public TraceCallTreeNode(final int id, final AllocationComponentOperationPair entity, final boolean rootNode, final MessageTrace origin,
 			final IOriginRetentionPolicy originPolicy) {
 		super(id, entity, rootNode, origin, originPolicy);
 	}
 
 	@Override
-	public AbstractCallTreeNode<AllocationComponentOperationPair> newCall(final Object destination, final MessageTrace origin,
+	public AbstractCallTreeNode<AllocationComponentOperationPair> newCall(final AllocationComponentOperationPair destination, final MessageTrace origin,
 			final IOriginRetentionPolicy originPolicy) {
-		final AllocationComponentOperationPair destPair = (AllocationComponentOperationPair) destination;
+		final AllocationComponentOperationPair destPair = destination;
 		final TraceCallTreeNode destNode = new TraceCallTreeNode(destPair.getId(), destPair, false, origin, originPolicy);
 		final WeightedDirectedCallTreeEdge<AllocationComponentOperationPair> e = new WeightedDirectedCallTreeEdge<AllocationComponentOperationPair>(this, destNode,
 				origin, originPolicy);

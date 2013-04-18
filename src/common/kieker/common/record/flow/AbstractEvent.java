@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,16 +21,32 @@ import kieker.common.record.IMonitoringRecord;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public abstract class AbstractEvent extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IEventRecord {
 	private static final long serialVersionUID = 1L;
 
 	private final long timestamp;
 
+	/**
+	 * This constructor uses the given parameter to initialize the field of this record.
+	 * 
+	 * @param timestamp
+	 *            The timestamp of this record.
+	 */
 	public AbstractEvent(final long timestamp) {
 		this.timestamp = timestamp;
 	}
 
+	/**
+	 * This constructor uses the given array to initialize the fields of this record.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 * @param valueTypes
+	 *            The types of the elements in the first array.
+	 */
 	protected AbstractEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		AbstractMonitoringRecord.checkArray(values, valueTypes);
 		this.timestamp = (Long) values[0];

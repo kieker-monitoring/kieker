@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,8 +30,8 @@ import javax.servlet.http.HttpSession;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.common.util.ClassOperationSignaturePair;
-import kieker.common.util.Signature;
+import kieker.common.util.signature.ClassOperationSignaturePair;
+import kieker.common.util.signature.Signature;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
@@ -64,8 +64,8 @@ import kieker.monitoring.timer.ITimeSource;
  * 
  * @author Andre van Hoorn, Marco Luebcke, Jan Waller
  * 
+ * @since 1.5
  */
-// TODO: Properties
 public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringProbe {
 	public static final String CONFIG_PROPERTY_NAME_LOG_FILTER_EXECUTION = "logFilterExecution";
 
@@ -87,7 +87,6 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 	private volatile boolean logFilterExecution = true; // default
 
 	public SessionAndTraceRegistrationFilter() {
-		super();
 		final Signature methodSignature =
 				new Signature("doFilter", // operation name
 						new String[] { "public" }, // modifier list
@@ -110,6 +109,8 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 	 * Extending classes may override this method in order to provide an alternative signature. However,
 	 * note that this method is executed on each filter execution. Hence, you should return a final
 	 * value here instead of executing expensive String operations.
+	 * 
+	 * @return The operation signature as a string.
 	 */
 	protected String getFilterOperationSignatureString() {
 		return this.filterOperationSignatureString;
@@ -138,6 +139,9 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 	 *            The response.
 	 * @param chain
 	 *            The filter chain to be used.
+	 * 
+	 * @throws IOException
+	 * @throws ServletException
 	 */
 	public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
 		if (!MONITORING_CTRL.isProbeActivated(this.filterOperationSignatureString)) {
@@ -145,15 +149,11 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 			return;
 		}
 
-		/*
-		 * Register session information which needs to be reset after the chain has been executed.
-		 */
+		// Register session information which needs to be reset after the chain has been executed.
 		String sessionId = this.registerSessionInformation(request); // {@link OperationExecutionRecord#NO_SESSION_ID} if no session ID
 		long traceId = OperationExecutionRecord.NO_TRACEID; // note that we must NOT register anything to the CF_REGISTRY here!
 
-		/*
-		 * If this filter execution shall be part of the traced control flow, we need to register some control flow information.
-		 */
+		// If this filter execution shall be part of the traced control flow, we need to register some control flow information.
 		if (this.logFilterExecution) {
 			traceId = CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId();
 			CF_REGISTRY.storeThreadLocalEOI(0); // current execution's eoi is 0
@@ -172,16 +172,12 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 					sessionId = this.registerSessionInformation(request);
 				}
 
-				/*
-				 * Log this execution
-				 */
+				// Log this execution
 				MONITORING_CTRL.newMonitoringRecord(
 						new OperationExecutionRecord(this.getFilterOperationSignatureString(), sessionId, traceId, tin, tout,
 								VM_NAME, 0, 0)); // 0,0 state that this method is the application entry point
 
-				/*
-				 * Reset the thread-local trace information
-				 */
+				// Reset the thread-local trace information
 				CF_REGISTRY.unsetThreadLocalTraceId();
 				CF_REGISTRY.unsetThreadLocalEOI();
 				CF_REGISTRY.unsetThreadLocalESS();
@@ -194,13 +190,14 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 	}
 
 	/**
-	 * If the given {@link ServletRequest} is an instance of {@link HttpServletRequest}, this
-	 * methods extracts the session ID and registers it in the {@link #SESSION_REGISTRY} in
-	 * order to be accessible for other probes in this thread. In case no session
-	 * is associated with this request (or if the request is not an instance of {@link HttpServletRequest}),
-	 * this method returns without any further actions and returns {@link OperationExecutionRecord#NO_SESSION_ID}.
+	 * If the given {@link ServletRequest} is an instance of {@link HttpServletRequest}, this methods extracts the session ID and registers it in the
+	 * {@link #SESSION_REGISTRY} in order to be accessible for other probes in this thread. In case no session is associated with this request (or if the request is
+	 * not an instance of {@link HttpServletRequest}), this method returns without any further actions and returns {@link OperationExecutionRecord#NO_SESSION_ID}.
 	 * 
 	 * @param request
+	 *            The request.
+	 * 
+	 * @return The session ID.
 	 */
 	protected String registerSessionInformation(final ServletRequest request) {
 		String sessionId = OperationExecutionRecord.NO_SESSION_ID;

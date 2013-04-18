@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
-import kieker.common.util.Signature;
+import kieker.common.util.signature.Signature;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.traceReconstruction.TraceProcessingException;
@@ -48,12 +48,13 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
 import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPair;
 
 /**
- * Plugin providing the creation of calling trees both for individual traces
- * and an aggregated form mulitple traces.
+ * Plugin providing the creation of calling trees both for individual traces and an aggregated form multiple traces.
  * 
  * @param <T>
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 @Plugin(repositoryPorts = { @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class) })
 public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProcessingFilter {
@@ -70,19 +71,6 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 	 */
 	public AbstractCallTreeFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
-	}
-
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public AbstractCallTreeFilter(final Configuration configuration) {
-		this(configuration, null);
 	}
 
 	private static final String assemblyComponentOperationPairNodeLabel(final AbstractCallTreeNode<AssemblyComponentOperationPair> node, final boolean shortLabels) {
@@ -272,17 +260,35 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		ps.close();
 	}
 
-	protected static void addTraceToTree(final AbstractCallTreeNode<?> root, final MessageTrace t, final IPairFactory pairFactory, final boolean aggregated) throws
-			TraceProcessingException {
-		final Stack<AbstractCallTreeNode<?>> curStack = new Stack<AbstractCallTreeNode<?>>();
+	/**
+	 * Adds the given trace to the given tree.
+	 * 
+	 * @param root
+	 *            The root of the call tree.
+	 * @param t
+	 *            The trace to add.
+	 * @param pairFactory
+	 *            The factory creating the necessary pairs for the tree.
+	 * @param aggregated
+	 *            Determines whether the tree is aggregated or not.
+	 * 
+	 * @throws TraceProcessingException
+	 *             If the message type is not supported or the trace is somehow invalid.
+	 * 
+	 * @param <T>
+	 *            The type of the tree.
+	 */
+	protected static <T> void addTraceToTree(final AbstractCallTreeNode<T> root, final MessageTrace t, final IPairFactory<T> pairFactory, final boolean aggregated)
+			throws TraceProcessingException {
+		final Stack<AbstractCallTreeNode<T>> curStack = new Stack<AbstractCallTreeNode<T>>();
 
 		final Collection<AbstractMessage> msgTraceVec = t.getSequenceAsVector();
-		AbstractCallTreeNode<?> curNode = root;
+		AbstractCallTreeNode<T> curNode = root;
 		curStack.push(curNode);
 		for (final AbstractMessage m : msgTraceVec) {
 			if (m instanceof SynchronousCallMessage) {
 				curNode = curStack.peek();
-				AbstractCallTreeNode<?> child;
+				AbstractCallTreeNode<T> child;
 				child = curNode.newCall(pairFactory.createPair((SynchronousCallMessage) m), t, NoOriginRetentionPolicy.createInstance());
 				curNode = child;
 				curStack.push(curNode);
@@ -297,18 +303,31 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		}
 	}
 
-	public static void writeDotForMessageTrace(final AbstractCallTreeNode<?> root, final IPairFactory pairFactory, final MessageTrace msgTrace,
+	public static <T> void writeDotForMessageTrace(final AbstractCallTreeNode<T> root, final IPairFactory<T> pairFactory, final MessageTrace msgTrace,
 			final String outputFilename, final boolean includeWeights, final boolean shortLabels) throws FileNotFoundException, TraceProcessingException,
 			UnsupportedEncodingException {
 
-		AbstractCallTreeFilter.addTraceToTree(root, msgTrace, pairFactory, false); // false: no aggregation
+		AbstractCallTreeFilter.<T>addTraceToTree(root, msgTrace, pairFactory, false); // false: no aggregation
 		AbstractCallTreeFilter.saveTreeToDotFile(root, outputFilename, includeWeights, true, shortLabels); // includeEois
 	}
 
 	/**
 	 * @author Andre van Hoorn
+	 * 
+	 * @since 1.5
 	 */
-	public interface IPairFactory {
-		public Object createPair(final SynchronousCallMessage callMsg);
+	public interface IPairFactory<T> {
+
+		/**
+		 * This method creates an actual pair using the given call message.
+		 * 
+		 * @param callMsg
+		 *            The call message containing the necessary information to create the pair.
+		 * 
+		 * @return The actual pair.
+		 * 
+		 * @since 1.5
+		 */
+		public T createPair(final SynchronousCallMessage callMsg);
 	}
 }

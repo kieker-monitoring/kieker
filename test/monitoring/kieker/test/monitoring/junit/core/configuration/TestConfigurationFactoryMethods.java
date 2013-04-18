@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,11 +31,16 @@ import kieker.test.monitoring.util.DefaultConfigurationFactory;
  * instances and performs basic checks on these.
  * 
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.3
  */
 public class TestConfigurationFactoryMethods extends AbstractKiekerTest {
 
 	private static final String EXAMPLE_CONFIG_FILE_IN_TRUNK = "test/monitoring/META-INF/kieker.monitoring.test.properties";
 
+	/**
+	 * Default constructor.
+	 */
 	public TestConfigurationFactoryMethods() {
 		// empty default constructor
 	}
@@ -55,6 +60,8 @@ public class TestConfigurationFactoryMethods extends AbstractKiekerTest {
 		// Writer controller
 		Assert.assertNotNull(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP + " must not be empty",
 				configuration.getProperty(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP));
+		Assert.assertNotNull(ConfigurationFactory.METADATA + " must not be empty",
+				configuration.getProperty(ConfigurationFactory.METADATA));
 		Assert.assertNotNull(ConfigurationFactory.WRITER_CLASSNAME + " must not be empty", configuration.getProperty(ConfigurationFactory.WRITER_CLASSNAME));
 		// TimeSource controller
 		Assert.assertNotNull(ConfigurationFactory.TIMER_CLASSNAME + " must not be empty", configuration.getProperty(ConfigurationFactory.TIMER_CLASSNAME));
@@ -107,6 +114,7 @@ public class TestConfigurationFactoryMethods extends AbstractKiekerTest {
 		// JMX controller
 		Assert.assertEquals(false, configuration.getBooleanProperty(ConfigurationFactory.ACTIVATE_JMX));
 		// Writer controller
+		Assert.assertEquals(true, configuration.getBooleanProperty(ConfigurationFactory.METADATA));
 		Assert.assertEquals(true, configuration.getBooleanProperty(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP));
 		Assert.assertEquals("kieker.monitoring.writer.filesystem.AsyncFsWriter", configuration.getStringProperty(ConfigurationFactory.WRITER_CLASSNAME));
 		// TimeSource controller
@@ -136,16 +144,16 @@ public class TestConfigurationFactoryMethods extends AbstractKiekerTest {
 			final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
 			Assert.assertEquals("KIEKER-SINGLETON", configuration.getStringProperty(ConfigurationFactory.CONTROLLER_NAME));
 		}
-		/*
-		 * { // NOCS (adding properties file in default location)
-		 * final String fn = "build/tests/" + Configuration.CUSTOM_PROPERTIES_LOCATION_CLASSPATH;
-		 * final PrintWriter pw = new PrintWriter(new FileOutputStream(fn, false));
-		 * pw.println(Configuration.CONTROLLER_NAME + "=KIEKER-SINGLETON-PROPERTIES-FILE-DEFAULT");
-		 * pw.close();
-		 * final Configuration configuration = Configuration.createSingletonConfiguration();
-		 * Assert.assertEquals("KIEKER-SINGLETON-PROPERTIES-FILE-DEFAULT", configuration.getStringProperty(Configuration.CONTROLLER_NAME));
-		 * }
-		 */
+
+		// { // NOCS (adding properties file in default location)
+		// final String fn = "build/tests/" + Configuration.CUSTOM_PROPERTIES_LOCATION_CLASSPATH;
+		// final PrintWriter pw = new PrintWriter(new FileOutputStream(fn, false));
+		// pw.println(Configuration.CONTROLLER_NAME + "=KIEKER-SINGLETON-PROPERTIES-FILE-DEFAULT");
+		// pw.close();
+		// final Configuration configuration = Configuration.createSingletonConfiguration();
+		// Assert.assertEquals("KIEKER-SINGLETON-PROPERTIES-FILE-DEFAULT", configuration.getStringProperty(Configuration.CONTROLLER_NAME));
+		// }
+
 		{ // NOCS (adding properties file in custom location)
 			System.setProperty(ConfigurationFactory.CUSTOM_PROPERTIES_LOCATION_JVM, TestConfigurationFactoryMethods.EXAMPLE_CONFIG_FILE_IN_TRUNK);
 			final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();

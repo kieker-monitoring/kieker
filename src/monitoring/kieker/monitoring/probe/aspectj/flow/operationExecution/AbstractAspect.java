@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,12 +43,16 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
 	private static final TraceRegistry TRACEREGISTRY = TraceRegistry.INSTANCE;
 
+	/**
+	 * The pointcut for the monitored operations. Inheriting classes should extend the pointcut in order to find the correct executions of the methods (e.g. all
+	 * methods or only methods with specific annotations).
+	 */
 	@Pointcut
 	public abstract void monitoredOperation();
 
 	@Around("monitoredOperation() && this(thisObject) && notWithinKieker()")
 	public Object operation(final Object thisObject, final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
-		final String signature = thisJoinPoint.getSignature().toLongString();
+		final String signature = this.signatureToLongString(thisJoinPoint.getSignature());
 		if (!CTRLINST.isProbeActivated(signature)) {
 			return thisJoinPoint.proceed();
 		}
@@ -85,7 +89,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	@Around("monitoredOperation() && !this(java.lang.Object) && notWithinKieker()")
 	public Object staticOperation(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
 		final Signature sig = thisJoinPoint.getSignature();
-		final String signature = sig.toLongString();
+		final String signature = this.signatureToLongString(sig);
 		if (!CTRLINST.isProbeActivated(signature)) {
 			return thisJoinPoint.proceed();
 		}

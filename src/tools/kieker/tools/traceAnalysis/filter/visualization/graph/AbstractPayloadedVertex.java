@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,6 +41,8 @@ public abstract class AbstractPayloadedVertex<V extends AbstractPayloadedVertex<
 	 * 
 	 * @param origin
 	 *            The vertex' origin
+	 * @param originPolicy
+	 *            The origin policy.
 	 * @param payload
 	 *            The vertex' payload
 	 */

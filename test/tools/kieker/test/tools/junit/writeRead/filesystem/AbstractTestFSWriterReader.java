@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,7 @@ import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.filesystem.FSUtil;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
@@ -43,15 +44,18 @@ import kieker.monitoring.writer.filesystem.AbstractAsyncFSWriter;
 import kieker.monitoring.writer.filesystem.AsyncFsWriter;
 
 import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
-import kieker.test.tools.junit.writeRead.printStream.BasicPrintStreamWriterTestFile;
+import kieker.test.tools.util.StringUtils;
 
 /**
  * @author Andre van Hoorn
+ * 
+ * @since 1.5
  */
 public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTest {
 
-	private static final String ENCODING = "UTF-8";
-
+	/**
+	 * A rule making sure that a temporary folder exists for every test method (which is removed after the test).
+	 */
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
 
@@ -59,6 +63,11 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 
 	protected abstract Class<? extends IMonitoringWriter> getTestedWriterClazz();
 
+	/**
+	 * Initializes the setup for the test.
+	 * 
+	 * @throws IOException
+	 */
 	@Before
 	public void setUp() throws IOException {
 		this.testedWriterClazz = this.getTestedWriterClazz();
@@ -72,7 +81,7 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractAsyncFSWriter.CONFIG_TEMP, Boolean.FALSE.toString());
 		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractAsyncFSWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
 
-		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractAsyncWriter.CONFIG_QUEUESIZE, Integer.toString(numRecordsWritten * 2));
+		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractAsyncWriter.CONFIG_QUEUESIZE, Integer.toString(numRecordsWritten * 4));
 		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractAsyncWriter.CONFIG_BEHAVIOR, "0");
 		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractAsyncWriter.CONFIG_SHUTDOWNDELAY, "-1");
 
@@ -154,11 +163,11 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 	 *             If something during the file access went wrong.
 	 */
 	private void searchReplaceInFile(final String filename, final String findString, final String replaceByString) throws IOException {
-		final String mapFileContent = BasicPrintStreamWriterTestFile.readOutputFileAsString(new File(filename));
+		final String mapFileContent = StringUtils.readOutputFileAsString(new File(filename));
 		final String manipulatedContent = mapFileContent.replaceAll(findString, replaceByString);
 		PrintStream printStream = null;
 		try {
-			printStream = new PrintStream(new FileOutputStream(filename), false, ENCODING);
+			printStream = new PrintStream(new FileOutputStream(filename), false, FSUtil.ENCODING);
 			printStream.print(manipulatedContent);
 		} finally {
 			if (printStream != null) {
@@ -172,6 +181,12 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 		Assert.assertEquals("Unexpected set of records", eventsPassedToController, eventFromMonitoringLog);
 	}
 
+	/**
+	 * Inheriting classes can use this method to refine the existing configuration by adding more properties.
+	 * 
+	 * @param config
+	 *            The configuration to refine.
+	 */
 	protected abstract void refineFSReaderConfiguration(Configuration config);
 
 	/**
@@ -184,7 +199,7 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 	 * @throws AnalysisConfigurationException
 	 *             If something went wrong during the reading.
 	 */
-	private List<IMonitoringRecord> readLog(final String[] monitoringLogDirs) throws AnalysisConfigurationException {
+	protected List<IMonitoringRecord> readLog(final String[] monitoringLogDirs) throws AnalysisConfigurationException {
 		final AnalysisController analysisController = new AnalysisController();
 		final Configuration readerConfiguration = new Configuration();
 		readerConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(monitoringLogDirs));

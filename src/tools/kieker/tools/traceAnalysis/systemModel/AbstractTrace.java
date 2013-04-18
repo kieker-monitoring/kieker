@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@ package kieker.tools.traceAnalysis.systemModel;
  * This is the abstract base for a trace (like a message trace e.g.).
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.2
  */
 public abstract class AbstractTrace {
 

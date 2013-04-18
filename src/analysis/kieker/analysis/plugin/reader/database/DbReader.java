@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,6 +38,8 @@ import kieker.common.record.IMonitoringRecord;
  * A very simple database reader that probably only works for small data sets.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 @Plugin(description = "A reader which reads records from a database",
 		outputPorts = {
@@ -93,21 +95,6 @@ public class DbReader extends AbstractReaderPlugin {
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
 			throw new Exception("DB driver registration failed. Perhaps the driver jar is missing?", ex);
 		}
-	}
-
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * @throws Exception
-	 *             If the driver for the database could not be found.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public DbReader(final Configuration configuration) throws Exception {
-		this(configuration, null);
 	}
 
 	/**

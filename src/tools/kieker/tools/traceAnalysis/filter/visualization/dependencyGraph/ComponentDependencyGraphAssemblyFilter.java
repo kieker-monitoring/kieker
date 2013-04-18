@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,6 +40,8 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * the output port.
  * 
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
+ * 
+ * @since 1.2
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class),
 		outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH))
@@ -57,19 +59,6 @@ public class ComponentDependencyGraphAssemblyFilter extends AbstractDependencyGr
 	 */
 	public ComponentDependencyGraphAssemblyFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext, new ComponentAssemblyDependencyGraph(AssemblyRepository.ROOT_ASSEMBLY_COMPONENT));
-	}
-
-	/**
-	 * Creates a new filter using the given configuration.
-	 * 
-	 * @param configuration
-	 *            The configuration to use
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public ComponentDependencyGraphAssemblyFilter(final Configuration configuration) {
-		this(configuration, null);
 	}
 
 	/**

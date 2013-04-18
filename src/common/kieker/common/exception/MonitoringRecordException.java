@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@ package kieker.common.exception;
  * This exception can be used to show that something in context with a monitoring record failed.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.0
  */
 public class MonitoringRecordException extends Exception {
 

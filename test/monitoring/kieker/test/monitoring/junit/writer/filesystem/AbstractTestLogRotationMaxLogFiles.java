@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,9 +38,15 @@ public abstract class AbstractTestLogRotationMaxLogFiles extends AbstractKiekerT
 
 	private static final int MAXENTRIESINFILE = 2;
 
+	/**
+	 * A rule making sure that a temporary folder exists for every test method (which is removed after the test).
+	 */
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (Rule has to be public)
 
+	/**
+	 * Default constructor.
+	 */
 	public AbstractTestLogRotationMaxLogFiles() {
 		// empty default constructor
 	}
@@ -110,26 +116,56 @@ public abstract class AbstractTestLogRotationMaxLogFiles extends AbstractKiekerT
 		this.checkMaxLogFiles(2, 3);
 	}
 
+	/**
+	 * This test writes 10 records, but with a limit of 2 records.
+	 * 
+	 * @throws IOException
+	 *             If something went wrong during the writing.
+	 */
 	@Test
 	public final void testMaxLogFilesLimitedTwo10() throws IOException { // NOPMD (assert in checkMaxLogFiles)
 		this.checkMaxLogFiles(2, 10);
 	}
 
+	/**
+	 * This test writes 0 records, but with a limit of 10 records.
+	 * 
+	 * @throws IOException
+	 *             If something went wrong during the writing.
+	 */
 	@Test
 	public final void testMaxLogFilesLimitedTen0() throws IOException { // NOPMD (assert in checkMaxLogFiles)
 		this.checkMaxLogFiles(10, 0);
 	}
 
+	/**
+	 * This test writes 2 records, but with a limit of 10 records.
+	 * 
+	 * @throws IOException
+	 *             If something went wrong during the writing.
+	 */
 	@Test
 	public final void testMaxLogFilesLimitedTen2() throws IOException { // NOPMD (assert in checkMaxLogFiles)
 		this.checkMaxLogFiles(10, 2);
 	}
 
+	/**
+	 * This test writes 10 records, with a limit of 10 records.
+	 * 
+	 * @throws IOException
+	 *             If something went wrong during the writing.
+	 */
 	@Test
 	public final void testMaxLogFilesLimitedTen10() throws IOException { // NOPMD (assert in checkMaxLogFiles)
 		this.checkMaxLogFiles(10, 10);
 	}
 
+	/**
+	 * This test writes 11 records, but with a limit of 10 records.
+	 * 
+	 * @throws IOException
+	 *             If something went wrong during the writing.
+	 */
 	@Test
 	public final void testMaxLogFilesLimitedTen11() throws IOException { // NOPMD (assert in checkMaxLogFiles)
 		this.checkMaxLogFiles(10, 11);

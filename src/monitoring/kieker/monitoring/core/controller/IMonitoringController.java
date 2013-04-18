@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,8 @@ package kieker.monitoring.core.controller;
 
 /**
  * @author Jan Waller, Robert von Massow
+ * 
+ * @since 1.3
  */
 public interface IMonitoringController extends
 		IJMXController,
@@ -33,16 +35,19 @@ public interface IMonitoringController extends
 	 * It is included in this interface to ensure its publication over JMX.
 	 * 
 	 * @return a String representation of the current controller
+	 * 
+	 * @since 1.3
 	 */
 	public String toString();
 
 	/**
 	 * This method is used to log the status of the controllers to the configured writer.
 	 * The {@link kieker.common.record.misc.KiekerMetadataRecord} record is used.
+	 * This method is automatically executed for the first record sent.
 	 * 
 	 * @return true if successful
 	 * 
 	 * @since 1.7
 	 */
-	public boolean saveMetadataAsRecord();
+	public boolean sendMetadataAsRecord();
 }

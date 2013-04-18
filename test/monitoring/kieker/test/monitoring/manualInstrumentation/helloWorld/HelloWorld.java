@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,18 +23,26 @@ import kieker.monitoring.timer.ITimeSource;
 
 /**
  * @author Andre van Hoorn
+ * 
+ * @since 0.91
  */
 public final class HelloWorld {
 
 	private HelloWorld() {}
 
+	/**
+	 * This main method starts the example.
+	 * 
+	 * @param args
+	 *            The command line arguments. They have no effect.
+	 */
 	public static void main(final String[] args) {
 		System.out.println("Hello"); // NOPMD (System.out)
 
 		final IMonitoringController monitoringController = MonitoringController.getInstance();
 		final ITimeSource timeSource = monitoringController.getTimeSource();
 
-		/* recording of the start time of doSomething */
+		// recording of the start time of doSomething
 		final long startTime = timeSource.getTime();
 		HelloWorld.doSomething();
 		final long endTime = timeSource.getTime();
@@ -43,7 +51,7 @@ public final class HelloWorld {
 
 	private static void doSomething() {
 		System.out.println("doing something"); // NOPMD (System.out)
-		/* .. some application logic does something meaningful .. */
+		// .. some application logic does something meaningful ..
 	}
 
 	private static OperationExecutionRecord createOperationExecutionRecord(final String opString, final long traceId, final long tin, final long tout) {

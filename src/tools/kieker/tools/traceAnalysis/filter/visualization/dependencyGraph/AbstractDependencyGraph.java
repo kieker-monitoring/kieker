@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,10 +52,26 @@ public abstract class AbstractDependencyGraph<T extends ISystemModelElement> ext
 		this.nodes.put(DependencyGraphNode.ROOT_NODE_ID, this.rootNode);
 	}
 
+	/**
+	 * Delivers the node with the given key.
+	 * 
+	 * @param i
+	 *            The key to search for.
+	 * 
+	 * @return The corresponding node to the given key if it exists, null otherwise.
+	 */
 	protected final DependencyGraphNode<T> getNode(final int i) {
 		return this.nodes.get(i);
 	}
 
+	/**
+	 * Adds a node to this graph.
+	 * 
+	 * @param i
+	 *            The key of the node.
+	 * @param node
+	 *            The node itself.
+	 */
 	protected final void addNode(final int i, final DependencyGraphNode<T> node) {
 		this.nodes.put(i, node);
 	}

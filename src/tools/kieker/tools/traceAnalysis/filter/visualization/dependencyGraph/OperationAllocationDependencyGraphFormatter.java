@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -165,7 +165,8 @@ public class OperationAllocationDependencyGraphFormatter extends AbstractOperati
 							DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
 							null, // imagefilename
 							null, // misc
-							node.getDescription() /* tooltip */));
+							node.getDescription() // tooltip
+							));
 				}
 
 				builder.append("}\n");
@@ -193,6 +194,9 @@ public class OperationAllocationDependencyGraphFormatter extends AbstractOperati
 		return DEFAULT_FILE_NAME;
 	}
 
+	/**
+	 * @author Holger Knoche
+	 */
 	private static class ElementGrouping {
 
 		private final ConcurrentMap<ExecutionContainer, Set<AllocationComponent>> allocationComponentGrouping;
@@ -214,6 +218,9 @@ public class OperationAllocationDependencyGraphFormatter extends AbstractOperati
 
 	}
 
+	/**
+	 * @author Holger Knoche
+	 */
 	private static class EdgeVisitor extends AbstractDependencyGraphFormatterVisitor<AllocationComponentOperationPair> {
 
 		public EdgeVisitor(final StringBuilder builder, final boolean includeWeights, final boolean plotLoops, final boolean useShortLabels) {

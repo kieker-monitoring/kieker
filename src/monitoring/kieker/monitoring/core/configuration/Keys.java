@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,8 @@ package kieker.monitoring.core.configuration;
  * Ideally it would be created using this file! (#151)
  * 
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.3
  */
 interface Keys { // NOPMD NOCS (static list)
 	/** prefix used for all kieker.monitoring components. */
@@ -43,6 +45,7 @@ interface Keys { // NOPMD NOCS (static list)
 	public static final String EXPERIMENT_ID = PREFIX + "initialExperimentId";
 	public static final String USE_SHUTDOWN_HOOK = PREFIX + "useShutdownHook";
 	public static final String DEBUG = PREFIX + "debug";
+	public static final String METADATA = PREFIX + "metadata";
 
 	// JMX Controller
 	public static final String ACTIVATE_JMX = PREFIX + "jmx";

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +36,8 @@ import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubReposi
  *            The type of the entity to be stored in this node.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 public class DependencyGraphNode<T extends ISystemModelElement> extends
 		AbstractPayloadedVertex<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>, TraceInformation, T> {
@@ -52,6 +54,18 @@ public class DependencyGraphNode<T extends ISystemModelElement> extends
 
 	private volatile boolean assumed; // false
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param id
+	 *            The ID of this node.
+	 * @param entity
+	 *            The entity which will be the payload of this node.
+	 * @param origin
+	 *            The trace information which will be additional meta data for this node.
+	 * @param originPolicy
+	 *            The origin policy.
+	 */
 	public DependencyGraphNode(final int id, final T entity, final TraceInformation origin, final IOriginRetentionPolicy originPolicy) {
 		super(origin, originPolicy, entity);
 		this.id = id;
@@ -82,6 +96,9 @@ public class DependencyGraphNode<T extends ISystemModelElement> extends
 		return this.assumedOutgoingDependencies.values();
 	}
 
+	/**
+	 * Sets the assumed flag of this node to {@code true}.
+	 */
 	public void setAssumed() {
 		this.assumed = true;
 	}
@@ -90,10 +107,32 @@ public class DependencyGraphNode<T extends ISystemModelElement> extends
 		return this.assumed;
 	}
 
+	/**
+	 * Adds an outgoing dependency to this node. The dependency will be marked as not assumed.
+	 * 
+	 * @param destination
+	 *            The destination of the dependency.
+	 * @param origin
+	 *            The origin of the destination.
+	 * @param originPolicy
+	 *            The origin policy of the destination.
+	 */
 	public void addOutgoingDependency(final DependencyGraphNode<T> destination, final TraceInformation origin, final IOriginRetentionPolicy originPolicy) {
 		this.addOutgoingDependency(destination, false, origin, originPolicy);
 	}
 
+	/**
+	 * Adds an outgoing dependency to this node.
+	 * 
+	 * @param destination
+	 *            The destination of the dependency.
+	 * @param isAssumed
+	 *            Whether the dependency is assumed or not.
+	 * @param origin
+	 *            The origin of the destination.
+	 * @param originPolicy
+	 *            The origin policy of the destination.
+	 */
 	public void addOutgoingDependency(final DependencyGraphNode<T> destination, final boolean isAssumed, final TraceInformation origin,
 			final IOriginRetentionPolicy originPolicy) {
 		synchronized (this) {
@@ -116,10 +155,32 @@ public class DependencyGraphNode<T extends ISystemModelElement> extends
 		}
 	}
 
+	/**
+	 * Adds an incoming dependency to this node. The dependency will be marked as not assumed.
+	 * 
+	 * @param source
+	 *            The source of the dependency.
+	 * @param origin
+	 *            The origin of the destination.
+	 * @param originPolicy
+	 *            The origin policy of the destination.
+	 */
 	public void addIncomingDependency(final DependencyGraphNode<T> source, final TraceInformation origin, final IOriginRetentionPolicy originPolicy) {
 		this.addIncomingDependency(source, false, origin, originPolicy);
 	}
 
+	/**
+	 * Adds an incoming dependency to this node.
+	 * 
+	 * @param source
+	 *            The source of the dependency.
+	 * @param isAssumed
+	 *            Whether the dependency is assumed or not.
+	 * @param origin
+	 *            The origin of the destination.
+	 * @param originPolicy
+	 *            The origin policy of the destination.
+	 */
 	public void addIncomingDependency(final DependencyGraphNode<T> source, final boolean isAssumed, final TraceInformation origin,
 			final IOriginRetentionPolicy originPolicy) {
 		synchronized (this) {

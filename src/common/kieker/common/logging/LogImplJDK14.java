@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@ package kieker.common.logging;
  * This is an actual implementation of the logging interface used by the JDK 14 logger.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public final class LogImplJDK14 implements Log {
 	private final java.util.logging.Logger logger; // NOPMD (Implementation of an logger)
@@ -38,16 +40,14 @@ public final class LogImplJDK14 implements Log {
 
 	private final void log(final java.util.logging.Level level, final String message, final Throwable t) {
 		if (this.logger.isLoggable(level)) {
-			final String sourceClass;
+			final String sourceClass = this.name;
 			final String sourceMethod;
 			{ // NOCS detect calling class and method
 				final StackTraceElement[] stackArray = new Throwable().getStackTrace(); // NOPMD (throwable)
 				if (stackArray.length > 2) { // our stackDepth
-					sourceClass = stackArray[2].getClassName();
 					sourceMethod = stackArray[2].getMethodName();
 				} else {
-					sourceClass = this.name;
-					sourceMethod = "";
+					sourceMethod = "unknown";
 				}
 			}
 			if (t != null) {

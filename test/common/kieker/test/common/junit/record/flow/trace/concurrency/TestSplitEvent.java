@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,9 @@ public class TestSplitEvent extends AbstractKiekerTest {
 	private static final long TRACE_ID = 23444L;
 	private static final int ORDER_INDEX = 234;
 
+	/**
+	 * Default constructor.
+	 */
 	public TestSplitEvent() {
 		// empty default constructor
 	}

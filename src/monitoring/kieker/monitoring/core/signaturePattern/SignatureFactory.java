@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ public final class SignatureFactory {
 
 	/** This constant contains the necessary prefix for patterns. */
 	public static final char PATTERN_PREFIX = '%';
+	/** This constant contains the colons, which are used to separate the elements in the signature. */
 	public static final String COLONS = "::";
 
 	// Note: for static final String it is better to use "+" to help the compiler to resolve them at compile time!

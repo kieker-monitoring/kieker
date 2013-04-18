@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,8 @@ import kieker.common.logging.LogFactory;
 import kieker.common.logging.LogImplJUnit;
 
 /**
+ * This abstract class is the base for all other JUnit tests within the system.
+ * 
  * @author Jan Waller
  * 
  * @since 1.6
@@ -41,18 +43,28 @@ public abstract class AbstractKiekerTest { // NOPMD (no abstract methods)
 		LOG = LogFactory.getLog(AbstractKiekerTest.class);
 	}
 
+	/** This rule makes sure that we can dump the name of the currently executed test on the screen. */
 	@Rule
 	public TestName nameOfCurrentTest = new TestName(); // NOPMD NOCS
 
+	/**
+	 * Default constructor.
+	 */
 	public AbstractKiekerTest() {
 		// empty default constructor
 	}
 
+	/**
+	 * This method writes in fact just the name of the test which is currently executed.
+	 */
 	@Before
 	public final void printNameOfCurrentTest() {
 		LOG.info("Executing test: " + this.getClass().getName() + "." + this.nameOfCurrentTest.getMethodName() + "()\n\n");
 	}
 
+	/**
+	 * This method resets the logger.
+	 */
 	@After
 	public final void resetStateOfJUnitLogger() {
 		LogImplJUnit.reset();

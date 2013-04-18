@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,27 +26,31 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
  * monitoring component.
  * 
  * @author Matthias Rohr
+ * 
+ * @since < 0.9
  */
 public class Bookstore extends Thread {
+
+	/** The list of bookstores which will be filled in the main method and consumed by other threads. */
 	public static final List<Bookstore> BOOKSTORE_SCENARIOS = new ArrayList<Bookstore>();
 
 	private static final int NUM_REQUESTS = 1000;
 	private static final int INTER_REQUEST_TIMES = 25;
 
+	/**
+	 * Default constructor.
+	 */
 	public Bookstore() {
 		// nothing to do
 	}
 
 	/**
 	 * 
-	 * main is the load driver for the Bookstore. It creates
-	 * request which all request a search from the bookstore.
-	 * A fixed time delay is between two request. Requests
-	 * are likely to overlap, which leads to request processing
-	 * in more than one thread.
+	 * main is the load driver for the Bookstore. It creates request which all request a search from the bookstore. A fixed time delay is between two request.
+	 * Requests are likely to overlap, which leads to request processing in more than one thread.
 	 * 
-	 * Both the number of requests and arrival rate are defined
-	 * by the local variables above the method.
+	 * Both the number of requests and arrival rate are defined by the local variables above the method.
+	 * 
 	 * (default: 100 requests; interRequestTime 5 (millisecs))
 	 * 
 	 * @param args
@@ -83,6 +87,9 @@ public class Bookstore extends Thread {
 		}
 	}
 
+	/**
+	 * Searches for a book.
+	 */
 	@OperationExecutionMonitoringProbe
 	public static void searchBook() {
 		Catalog.getBook(false);

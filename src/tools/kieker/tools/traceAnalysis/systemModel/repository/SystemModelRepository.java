@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,6 +37,8 @@ import kieker.tools.traceAnalysis.systemModel.Operation;
  * This repository is a model manager for the Kieker's component model. It consists of multiple "sub"repositories.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 @Repository(
 		name = "System model repository",
@@ -74,19 +76,6 @@ public class SystemModelRepository extends AbstractRepository {
 		this.operationFactory = new OperationRepository(this);
 		this.allocationPairFactory = new AllocationComponentOperationPairFactory(this);
 		this.assemblyPairFactory = new AssemblyComponentOperationPairFactory(this);
-	}
-
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration to use for this repository.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public SystemModelRepository(final Configuration configuration) {
-		this(configuration, null);
 	}
 
 	public final AllocationRepository getAllocationFactory() {

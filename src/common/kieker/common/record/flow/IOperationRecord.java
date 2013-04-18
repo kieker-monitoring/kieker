@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,20 +28,25 @@ package kieker.common.record.flow;
 public interface IOperationRecord extends IFlowRecord {
 
 	/**
-	 * Get the actually executing class.
+	 * @return The actually executing class.
 	 * 
 	 * @since 1.6
 	 */
 	public abstract String getClassSignature();
 
 	/**
-	 * Get the actual OperationSignature.
+	 * @return The actual OperationSignature.
 	 * 
 	 * @since 1.6
 	 */
 	public abstract String getOperationSignature();
 
 	/**
+	 * @param record
+	 *            The record to check.
+	 * 
+	 * @return True iff the specifieid record refers to the same operation as this record.
+	 * 
 	 * @since 1.6
 	 */
 	public abstract boolean refersToSameOperationAs(final IOperationRecord record);

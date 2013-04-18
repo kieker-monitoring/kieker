@@ -7,11 +7,6 @@ import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 
-/**
- * This filter prints the response times of the incoming records on the standard output.
- * 
- * @author Nils Christian Ehmke
- */
 @Plugin(name = "Reponse time printer", description = "Prints the response time on the standard output",
 		configuration = {
 			@Property(name = MyResponseTimeOutputPrinter.CONFIG_PROPERTY_NAME_VALID_OUTPUT, defaultValue = "true")
@@ -29,15 +24,10 @@ public class MyResponseTimeOutputPrinter extends AbstractFilterPlugin {
 		this.validOutput = configuration.getBooleanProperty(MyResponseTimeOutputPrinter.CONFIG_PROPERTY_NAME_VALID_OUTPUT);
 	}
 
-	@Deprecated
-	public MyResponseTimeOutputPrinter(final Configuration configuration) {
-		this(configuration, null);
-	}
-
 	@InputPort(name = MyResponseTimeOutputPrinter.INPUT_PORT_NAME_EVENTS, eventTypes = { MyResponseTimeRecord.class })
 	public void newEvent(final Object event) {
 		if (event instanceof MyResponseTimeRecord) {
-			/* Write the content to the standard output stream. */
+			// Write the content to the standard output stream.
 			final MyResponseTimeRecord myRecord = (MyResponseTimeRecord) event;
 
 			String msg = this.validOutput ? "[Valid] " : "[Invalid] ";

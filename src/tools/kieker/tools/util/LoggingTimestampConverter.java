@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,8 @@ import java.util.TimeZone;
  * This is a utility class which can be used to convert timestamps, for example by transforming a simple timestamp into a human-readable datetime string.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.2
  */
 public final class LoggingTimestampConverter {
 	// private static final Log log = LogFactory.getLog(LoggingTimestampConverter.class);

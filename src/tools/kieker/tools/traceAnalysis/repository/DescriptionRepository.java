@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,22 +61,6 @@ public class DescriptionRepository extends AbstractRepository {
 	 * 
 	 * @param configuration
 	 *            The configuration to use
-	 * 
-	 * @throws IOException
-	 *             If an I/O error occurs during initialization
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public DescriptionRepository(final Configuration configuration) throws IOException {
-		this(configuration, DescriptionRepository.readDataFromFile(configuration.getStringProperty(CONFIG_PROPERTY_NAME_DESCRIPTION_FILE_NAME)), null);
-	}
-
-	/**
-	 * Creates a new description repository using the given configuration.
-	 * 
-	 * @param configuration
-	 *            The configuration to use
 	 * @param projectContext
 	 *            The project context for this plugin.
 	 * 
@@ -101,21 +85,6 @@ public class DescriptionRepository extends AbstractRepository {
 		super(configuration, projectContext);
 
 		this.descriptionMap = descriptionData.getDescriptionMap();
-	}
-
-	/**
-	 * Creates a new description repository using the given data.
-	 * 
-	 * @param configuration
-	 *            The configuration to use
-	 * @param descriptionData
-	 *            The description data to use
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public DescriptionRepository(final Configuration configuration, final DescriptionRepositoryData descriptionData) {
-		this(configuration, descriptionData, null);
 	}
 
 	/**
@@ -146,22 +115,6 @@ public class DescriptionRepository extends AbstractRepository {
 		returnValue[1] = inputLine.substring(delimiterIndex + 1);
 
 		return returnValue;
-	}
-
-	/**
-	 * Initializes a new description repository from the given file.
-	 * 
-	 * @param fileName
-	 *            The name of the file to use
-	 * @return The initialized description repository
-	 * @throws IOException
-	 *             If an I/O error occurs
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public static DescriptionRepository createFromFile(final String fileName) throws IOException {
-		return DescriptionRepository.createFromFile(fileName, null);
 	}
 
 	/**
@@ -215,6 +168,8 @@ public class DescriptionRepository extends AbstractRepository {
 	 * This class groups the data required for a {@link DescriptionRepository}.
 	 * 
 	 * @author Holger Knoche
+	 * 
+	 * @since 1.6
 	 */
 	public static class DescriptionRepositoryData {
 

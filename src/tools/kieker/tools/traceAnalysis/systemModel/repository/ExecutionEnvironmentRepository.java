@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,8 @@ import kieker.tools.traceAnalysis.systemModel.RootExecutionContainer;
 /**
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 public class ExecutionEnvironmentRepository extends AbstractSystemSubRepository {
 	public static final ExecutionContainer ROOT_EXECUTION_CONTAINER = new RootExecutionContainer();
@@ -44,11 +46,10 @@ public class ExecutionEnvironmentRepository extends AbstractSystemSubRepository 
 	}
 
 	/**
-	 * Returns the instance for the passed namedIdentifier; null if no instance
-	 * with this namedIdentifier.
-	 * 
 	 * @param namedIdentifier
 	 *            The identifier to search for.
+	 * 
+	 * @return The instance for the passed namedIdentifier; null if no instance with this namedIdentifier.
 	 */
 	public final ExecutionContainer lookupExecutionContainerByNamedIdentifier(final String namedIdentifier) {
 		return this.executionContainersByName.get(namedIdentifier);

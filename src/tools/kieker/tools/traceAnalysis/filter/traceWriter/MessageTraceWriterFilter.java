@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,8 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 /**
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.2
  */
 @Plugin(description = "A filter allowing to write the incoming MessageTraces into a configured file",
 		repositoryPorts = {
@@ -44,6 +46,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 		})
 public class MessageTraceWriterFilter extends AbstractMessageTraceProcessingFilter {
 
+	/** The name of the configuration determining the output file name. */
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FN = "outputFn";
 
 	private static final String ENCODING = "UTF-8";
@@ -67,22 +70,6 @@ public class MessageTraceWriterFilter extends AbstractMessageTraceProcessingFilt
 
 		this.outputFn = this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_OUTPUT_FN);
 		this.ps = new PrintStream(new FileOutputStream(this.outputFn), false, ENCODING);
-	}
-
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @throws IOException
-	 *             If either the default encoding is not supported or the given file is somehow invalid.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public MessageTraceWriterFilter(final Configuration configuration) throws IOException {
-		this(configuration, null);
 	}
 
 	@Override

@@ -9,29 +9,29 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    shape-rendering="auto"
-   width="614.19745"
+   width="691.0661"
    text-rendering="auto"
    contentScriptType="text/ecmascript"
    color-interpolation="auto"
    color-rendering="auto"
    preserveAspectRatio="xMidYMid meet"
    font-size="12"
-   viewBox="0 0 614.19745 111.87716"
+   viewBox="0 0 691.0661 111.80887"
    image-rendering="auto"
    stroke-miterlimit="10"
    zoomAndPan="magnify"
    version="1.0"
    contentStyleType="text/css"
    font-style="normal"
-   height="111.87716"
+   height="111.80887"
    font-weight="normal"
    id="svg2"
-   inkscape:version="0.48.3.1 r9886"
+   inkscape:version="0.48.4 r9939"
    sodipodi:docname="kieker_readerimplsuserguide-modified.svg"
    style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog">
   <g
      id="g3979"
-     transform="matrix(0,-1,1,0,162.36479,437.89509)">
+     transform="matrix(0,-1,1,0,162.39713,437.82679)">
     <line
        transform="translate(-15.566208,-97.8607)"
        style="font-size:11px;fill:none;stroke-width:1.09290004;stroke-linecap:butt;stroke-dasharray:3, 3"
@@ -76,14 +76,14 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1280"
-     inkscape:window-height="1004"
+     inkscape:window-height="949"
      id="namedview490"
      showgrid="false"
-     inkscape:zoom="1.4089552"
-     inkscape:cx="290.6016"
-     inkscape:cy="10.975502"
-     inkscape:window-x="1278"
-     inkscape:window-y="-3"
+     inkscape:zoom="0.99628178"
+     inkscape:cx="432.14764"
+     inkscape:cy="-26.446905"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2"
      fit-margin-top="0"
@@ -826,7 +826,7 @@
      clip-path="url(#clipPath10)"
      id="text264"
      style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
-     transform="translate(-342.33666,-47.223018)"
+     transform="translate(-342.30432,-47.291314)"
      sodipodi:linespacing="125%">«interface»</text>
   <text
      x="389"
@@ -836,12 +836,12 @@
      xml:space="preserve"
      id="text266"
      style="font-size:11px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;stroke:none;font-family:Arial;-inkscape-font-specification:Arial Bold"
-     transform="translate(-325.12816,-47.223018)"
+     transform="translate(-325.09582,-47.291314)"
      sodipodi:linespacing="125%">IReaderPlugin</text>
   <text
      xml:space="preserve"
-     x="10.195812"
-     y="41.776981"
+     x="10.228157"
+     y="41.708687"
      clip-path="none"
      id="text268"
      style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
@@ -849,20 +849,11 @@
   <text
      xml:space="preserve"
      x="264"
-     y="106"
-     clip-path="url(#clipPath13)"
-     id="text270"
-     style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
-     transform="translate(-257.12938,-35.223018)"
-     sodipodi:linespacing="125%">+ terminate ( error : boolean )</text>
-  <text
-     xml:space="preserve"
-     x="264"
      y="132"
      clip-path="url(#clipPath15)"
      id="text274"
      style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
-     transform="translate(-257.12938,-73.807764)"
+     transform="translate(-257.09704,-73.87606)"
      sodipodi:linespacing="125%">+ read ( ) : boolean</text>
   <line
      clip-path="url(#clipPath16)"
@@ -872,7 +863,7 @@
      y2="94"
      id="line276"
      style="font-size:11px;fill:none;stroke-width:1.39006662;stroke-linecap:butt;stroke-miterlimit:10;stroke-dasharray:none"
-     transform="matrix(0.5175219,0,0,1,-133.13251,-47.223018)" />
+     transform="matrix(0.5175219,0,0,1,-133.10017,-47.291314)" />
   <rect
      x="258"
      y="48"
@@ -880,8 +871,8 @@
      width="380"
      height="86"
      id="rect294"
-     style="font-size:11px;fill:none;stroke-width:1.47175801;stroke-linecap:butt;stroke-miterlimit:10;stroke-dasharray:none"
-     transform="matrix(0.5175219,0,0,0.89206907,-133.13251,-42.150264)" />
+     style="font-size:11px;fill:none;stroke-width:1.6165849;stroke-linecap:butt;stroke-miterlimit:10;stroke-dasharray:none"
+     transform="matrix(0.5175219,0,0,0.7393912,-133.10017,-34.890022)" />
   <rect
      x="268"
      y="187"
@@ -889,8 +880,8 @@
      width="360"
      height="60"
      id="rect256"
-     style="font-size:11px;fill:#ffffff;fill-opacity:1;stroke-width:1.1862942;stroke-linecap:butt"
-     transform="matrix(1,0,0,0.8487427,-14.396328,-158.15064)" />
+     style="font-size:11px;fill:#ffffff;fill-opacity:1;stroke-width:1.07698476;stroke-linecap:butt"
+     transform="matrix(1.2132931,0,0,0.8487427,-71.526527,-158.21894)" />
   <text
      xml:space="preserve"
      x="365"
@@ -898,11 +889,11 @@
      clip-path="url(#clipPath2)"
      id="text228"
      style="font-size:11px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;stroke:none;font-family:Arial;-inkscape-font-specification:Arial Bold"
-     transform="translate(-0.88485295,-186.2845)"
+     transform="translate(49.598362,-186.3528)"
      sodipodi:linespacing="125%">AbstractReaderPlugin</text>
   <text
-     x="345.27066"
-     y="28.7155"
+     x="381.35397"
+     y="28.647203"
      clip-path="none"
      font-style="normal"
      font-weight="normal"
@@ -910,17 +901,6 @@
      id="text230"
      style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
      sodipodi:linespacing="125%">(from kieker::analysis::plugin::reader)</text>
-  <text
-     x="274"
-     y="232"
-     clip-path="url(#clipPath4)"
-     font-style="normal"
-     font-weight="normal"
-     xml:space="preserve"
-     id="text232"
-     style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
-     transform="translate(-14.396328,-186.2845)"
-     sodipodi:linespacing="125%">+ AbstractReaderPlugin ( configuration : Configuration )</text>
   <line
      clip-path="url(#clipPath6)"
      x1="269"
@@ -928,239 +908,271 @@
      y1="220"
      y2="220"
      id="line238"
-     style="font-size:11px;fill:none;stroke-width:1.09290004;stroke-linecap:butt"
-     transform="translate(-14.396328,-186.2845)" />
+     style="font-size:11px;fill:none;stroke-width:0.99221873;stroke-linecap:butt"
+     transform="matrix(1.213238,0,0,1,-71.608493,-186.3528)" />
   <g
-     id="g3344"
-     transform="translate(12.072427,-115.57369)">
-    <text
-       sodipodi:linespacing="125%"
-       transform="translate(-4.6420898,-79.46875)"
-       style="font-size:11px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;stroke:none;font-family:Arial;-inkscape-font-specification:Arial Bold"
-       id="text300"
-       xml:space="preserve"
-       font-weight="bold"
-       clip-path="url(#clipPath20)"
-       y="301"
-       x="214">FSReader</text>
-    <rect
-       transform="matrix(0.79226953,0,0,1,42.217485,-79.46875)"
-       style="font-size:11px;fill:none;stroke-width:1.22784615;stroke-linecap:butt"
-       id="rect318"
-       height="20"
-       width="82"
-       clip-path="url(#clipPath19)"
-       y="286"
-       x="203" />
+     id="g3227"
+     transform="translate(38.515404,-0.06829625)">
+    <g
+       transform="translate(12.072427,-115.57369)"
+       id="g3344">
+      <text
+         x="214"
+         y="301"
+         clip-path="url(#clipPath20)"
+         font-weight="bold"
+         xml:space="preserve"
+         id="text300"
+         style="font-size:11px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;stroke:none;font-family:Arial;-inkscape-font-specification:Arial Bold"
+         transform="translate(-4.6420898,-79.46875)"
+         sodipodi:linespacing="125%">FSReader</text>
+      <rect
+         x="203"
+         y="286"
+         clip-path="url(#clipPath19)"
+         width="82"
+         height="20"
+         id="rect318"
+         style="font-size:11px;fill:none;stroke-width:1.22784615;stroke-linecap:butt"
+         transform="matrix(0.79226953,0,0,1,42.217485,-79.46875)" />
+    </g>
+    <g
+       transform="translate(-15.927573,-115.57369)"
+       id="g3363">
+      <line
+         clip-path="url(#clipPath41)"
+         x1="272"
+         x2="272"
+         y1="286"
+         y2="248"
+         id="line426"
+         style="font-size:11px;fill:none;stroke-width:1.09290004;stroke-linecap:butt"
+         transform="translate(-8.46875,-79.46875)" />
+      <polygon
+         clip-path="url(#clipPath43)"
+         points="267,258 272,248 277,258 "
+         id="polygon428"
+         style="font-size:11px;fill:#ffffff;stroke:none"
+         transform="translate(-8.46875,-79.46875)" />
+      <polygon
+         clip-path="url(#clipPath43)"
+         points="267,258 272,248 277,258 "
+         id="polygon430"
+         style="font-size:11px;fill:none;stroke-width:1.09290004;stroke-linecap:butt"
+         transform="translate(-8.46875,-79.46875)" />
+    </g>
   </g>
   <g
-     id="g3328"
-     transform="translate(-83.241132,-115.57369)">
-    <text
-       sodipodi:linespacing="125%"
-       transform="translate(-111.25441,-79.46875)"
-       style="font-size:11px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;stroke:none;font-family:Arial;-inkscape-font-specification:Arial Bold"
-       id="text348"
-       xml:space="preserve"
-       font-weight="bold"
-       clip-path="url(#clipPath28)"
-       y="301"
-       x="577">JMSReader</text>
-    <rect
-       transform="matrix(0.82455723,0,0,1,-7.498649,-79.46875)"
-       style="font-size:11px;fill:none;stroke-width:1.20356643;stroke-linecap:butt"
-       id="rect366"
-       height="20"
-       width="89"
-       clip-path="url(#clipPath27)"
-       y="286"
-       x="566" />
+     id="g3210"
+     transform="translate(55.537421,-0.06829625)">
+    <g
+       transform="translate(-83.241132,-115.57369)"
+       id="g3328">
+      <text
+         x="577"
+         y="301"
+         clip-path="url(#clipPath28)"
+         font-weight="bold"
+         xml:space="preserve"
+         id="text348"
+         style="font-size:11px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;stroke:none;font-family:Arial;-inkscape-font-specification:Arial Bold"
+         transform="translate(-111.25441,-79.46875)"
+         sodipodi:linespacing="125%">JMSReader</text>
+      <rect
+         x="566"
+         y="286"
+         clip-path="url(#clipPath27)"
+         width="89"
+         height="20"
+         id="rect366"
+         style="font-size:11px;fill:none;stroke-width:1.20356643;stroke-linecap:butt"
+         transform="matrix(0.82455723,0,0,1,-7.498649,-79.46875)" />
+    </g>
+    <g
+       transform="translate(-73.741132,-115.57369)"
+       id="g3348">
+      <line
+         clip-path="url(#clipPath41)"
+         x1="601"
+         x2="601"
+         y1="286"
+         y2="248"
+         id="line462"
+         style="font-size:11px;fill:none;stroke-width:1.09290004;stroke-linecap:butt"
+         transform="translate(-114.60646,-79.46875)" />
+      <polygon
+         clip-path="url(#clipPath50)"
+         points="601,248 606,258 596,258 "
+         id="polygon464"
+         style="font-size:11px;fill:#ffffff;stroke:none"
+         transform="translate(-114.60646,-79.46875)" />
+      <polygon
+         clip-path="url(#clipPath50)"
+         points="601,248 606,258 596,258 "
+         id="polygon466"
+         style="font-size:11px;fill:none;stroke-width:1.09290004;stroke-linecap:butt"
+         transform="translate(-114.60646,-79.46875)" />
+    </g>
   </g>
   <g
-     id="g3336"
-     transform="translate(-90.082225,-115.57369)">
-    <text
-       sodipodi:linespacing="125%"
-       transform="translate(-80.649481,-79.46875)"
-       style="font-size:11px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;stroke:none;font-family:Arial;-inkscape-font-specification:Arial Bold"
-       id="text400"
-       xml:space="preserve"
-       font-weight="bold"
-       clip-path="url(#clipPath38)"
-       y="300"
-       x="468">PipeReader</text>
-    <rect
-       transform="matrix(0.72818247,0,0,0.89596737,51.101437,-49.123075)"
-       style="font-size:11px;fill:none;stroke-width:1.35305119;stroke-linecap:butt"
-       id="rect418"
-       height="23"
-       width="94"
-       clip-path="url(#clipPath37)"
-       y="285"
-       x="457" />
-  </g>
-  <g
-     id="g3363"
-     transform="translate(-5.9275776,-115.57369)">
+     id="g3219"
+     transform="translate(47.026403,-0.06829625)">
+    <g
+       transform="translate(-90.082225,-115.57369)"
+       id="g3336">
+      <text
+         x="468"
+         y="300"
+         clip-path="url(#clipPath38)"
+         font-weight="bold"
+         xml:space="preserve"
+         id="text400"
+         style="font-size:11px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;stroke:none;font-family:Arial;-inkscape-font-specification:Arial Bold"
+         transform="translate(-80.649481,-79.46875)"
+         sodipodi:linespacing="125%">PipeReader</text>
+      <rect
+         x="457"
+         y="285"
+         clip-path="url(#clipPath37)"
+         width="94"
+         height="23"
+         id="rect418"
+         style="font-size:11px;fill:none;stroke-width:1.35305119;stroke-linecap:butt"
+         transform="matrix(0.72818247,0,0,0.89596737,51.101437,-49.123075)" />
+    </g>
     <line
-       transform="translate(-8.46875,-79.46875)"
+       transform="translate(-177.97682,-195.04244)"
        style="font-size:11px;fill:none;stroke-width:1.09290004;stroke-linecap:butt"
-       id="line426"
+       id="line484"
        y2="248"
-       y1="286"
-       x2="272"
-       x1="272"
+       y1="285"
+       x2="506"
+       x1="506"
        clip-path="url(#clipPath41)" />
     <polygon
-       transform="translate(-8.46875,-79.46875)"
+       transform="translate(-177.97682,-195.04244)"
        style="font-size:11px;fill:#ffffff;stroke:none"
-       id="polygon428"
-       points="267,258 272,248 277,258 "
-       clip-path="url(#clipPath43)" />
+       id="polygon486"
+       points="506,248 511,258 501,258 "
+       clip-path="url(#clipPath55)" />
     <polygon
-       transform="translate(-8.46875,-79.46875)"
+       transform="translate(-177.97682,-195.04244)"
        style="font-size:11px;fill:none;stroke-width:1.09290004;stroke-linecap:butt"
-       id="polygon430"
-       points="267,258 272,248 277,258 "
-       clip-path="url(#clipPath43)" />
+       id="polygon488"
+       points="506,248 511,258 501,258 "
+       clip-path="url(#clipPath55)" />
   </g>
   <g
-     id="g3348"
-     transform="translate(-70.620346,-115.57369)">
-    <line
-       transform="translate(-114.60646,-79.46875)"
-       style="font-size:11px;fill:none;stroke-width:1.09290004;stroke-linecap:butt"
-       id="line462"
-       y2="248"
-       y1="286"
-       x2="601"
-       x1="601"
-       clip-path="url(#clipPath41)" />
-    <polygon
-       transform="translate(-114.60646,-79.46875)"
-       style="font-size:11px;fill:#ffffff;stroke:none"
-       id="polygon464"
-       points="606,258 596,258 601,248 "
-       clip-path="url(#clipPath50)" />
-    <polygon
-       transform="translate(-114.60646,-79.46875)"
-       style="font-size:11px;fill:none;stroke-width:1.09290004;stroke-linecap:butt"
-       id="polygon466"
-       points="606,258 596,258 601,248 "
-       clip-path="url(#clipPath50)" />
+     id="g3201"
+     transform="translate(64.048411,-0.06829625)">
+    <g
+       transform="translate(-95.927562,-115.57369)"
+       id="g3332">
+      <text
+         x="577"
+         y="301"
+         clip-path="url(#clipPath28-9)"
+         font-weight="bold"
+         xml:space="preserve"
+         id="text348-0"
+         style="font-size:11px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial Bold"
+         transform="translate(-12.890007,-79.9223)"
+         sodipodi:linespacing="125%">JMXReader</text>
+      <rect
+         x="566"
+         y="286"
+         clip-path="url(#clipPath27-7)"
+         width="89"
+         height="20"
+         id="rect366-4"
+         style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.2275449;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog"
+         transform="matrix(0.79265854,0,0,1,110.33991,-79.9223)" />
+    </g>
+    <g
+       transform="translate(-86.427556,-115.57369)"
+       id="g3323">
+      <line
+         clip-path="url(#clipPath41-7)"
+         x1="601"
+         x2="601"
+         y1="286"
+         y2="248"
+         id="line462-1"
+         style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.09290004;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog"
+         transform="translate(-16.242057,-79.9223)" />
+      <polygon
+         clip-path="url(#clipPath50-9)"
+         points="601,248 606,258 596,258 "
+         id="polygon464-7"
+         style="font-size:11px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Dialog"
+         transform="translate(-16.242057,-79.9223)" />
+      <polygon
+         clip-path="url(#clipPath50-9)"
+         points="601,248 606,258 596,258 "
+         id="polygon466-9"
+         style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.09290004;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog"
+         transform="translate(-16.242057,-79.9223)" />
+    </g>
   </g>
-  <line
-     clip-path="url(#clipPath41)"
-     x1="506"
-     x2="506"
-     y1="285"
-     y2="248"
-     id="line484"
-     style="font-size:11px;fill:none;stroke-width:1.09290004;stroke-linecap:butt"
-     transform="translate(-171.73528,-195.04244)" />
-  <polygon
-     clip-path="url(#clipPath55)"
-     points="511,258 501,258 506,248 "
-     id="polygon486"
-     style="font-size:11px;fill:#ffffff;stroke:none"
-     transform="translate(-171.73528,-195.04244)" />
-  <polygon
-     clip-path="url(#clipPath55)"
-     points="511,258 501,258 506,248 "
-     id="polygon488"
-     style="font-size:11px;fill:none;stroke-width:1.09290004;stroke-linecap:butt"
-     transform="translate(-171.73528,-195.04244)" />
   <g
-     id="g3332"
-     transform="translate(-95.927559,-115.57369)">
+     id="g3193"
+     transform="translate(76.817902,-0.06829625)">
     <text
        sodipodi:linespacing="125%"
-       transform="translate(-12.890007,-79.9223)"
+       transform="translate(-25.748002,-195.496)"
        style="font-size:11px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial Bold"
-       id="text348-0"
+       id="text348-0-1"
        xml:space="preserve"
        font-weight="bold"
-       clip-path="url(#clipPath28-9)"
+       clip-path="url(#clipPath28-9-7)"
        y="301"
-       x="577">JMXReader</text>
+       x="577">DBReader</text>
     <rect
-       transform="matrix(0.79265854,0,0,1,110.33991,-79.9223)"
+       transform="matrix(0.79265854,0,0,1,94.412328,-195.496)"
        style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.2275449;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog"
-       id="rect366-4"
+       id="rect366-4-3"
        height="20"
        width="89"
-       clip-path="url(#clipPath27-7)"
+       clip-path="url(#clipPath27-7-0)"
        y="286"
        x="566" />
-  </g>
-  <g
-     id="g3323"
-     transform="translate(-86.427556,-115.57369)">
-    <line
-       transform="translate(-16.242057,-79.9223)"
-       style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.09290004;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog"
-       id="line462-1"
-       y2="248"
-       y1="286"
-       x2="601"
-       x1="601"
-       clip-path="url(#clipPath41-7)" />
-    <polygon
-       transform="translate(-16.242057,-79.9223)"
-       style="font-size:11px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Dialog"
-       id="polygon464-7"
-       points="596,258 601,248 606,258 "
-       clip-path="url(#clipPath50-9)" />
-    <polygon
-       transform="translate(-16.242057,-79.9223)"
-       style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.09290004;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog"
-       id="polygon466-9"
-       points="596,258 601,248 606,258 "
-       clip-path="url(#clipPath50-9)" />
+    <g
+       transform="translate(-6.4275763,-115.5737)"
+       id="g3323-9"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog">
+      <line
+         clip-path="url(#clipPath41-7-2)"
+         x1="601"
+         x2="601"
+         y1="286"
+         y2="248"
+         id="line462-1-9"
+         style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.09290004;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog"
+         transform="translate(-16.242057,-79.9223)" />
+      <polygon
+         clip-path="url(#clipPath50-9-2)"
+         points="606,258 596,258 601,248 "
+         id="polygon464-7-1"
+         style="font-size:11px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Dialog"
+         transform="translate(-16.242057,-79.9223)" />
+      <polygon
+         clip-path="url(#clipPath50-9-2)"
+         points="606,258 596,258 601,248 "
+         id="polygon466-9-4"
+         style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.09290004;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog"
+         transform="translate(-16.242057,-79.9223)" />
+    </g>
   </g>
   <text
-     x="577"
-     y="301"
-     clip-path="url(#clipPath28-9-7)"
-     font-weight="bold"
      xml:space="preserve"
-     id="text348-0-1"
-     style="font-size:11px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial Bold"
-     transform="translate(-25.748002,-195.496)"
-     sodipodi:linespacing="125%">DBReader</text>
-  <rect
-     x="566"
-     y="286"
-     clip-path="url(#clipPath27-7-0)"
-     width="89"
-     height="20"
-     id="rect366-4-3"
-     style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.2275449;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog"
-     transform="matrix(0.79265854,0,0,1,94.412328,-195.496)" />
-  <g
-     style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog"
-     id="g3323-9"
-     transform="translate(-6.4275818,-115.5737)">
-    <line
-       transform="translate(-16.242057,-79.9223)"
-       style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.09290004;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog"
-       id="line462-1-9"
-       y2="248"
-       y1="286"
-       x2="601"
-       x1="601"
-       clip-path="url(#clipPath41-7-2)" />
-    <polygon
-       transform="translate(-16.242057,-79.9223)"
-       style="font-size:11px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Dialog"
-       id="polygon464-7-1"
-       points="606,258 596,258 601,248 "
-       clip-path="url(#clipPath50-9-2)" />
-    <polygon
-       transform="translate(-16.242057,-79.9223)"
-       style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:1.09290004;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog"
-       id="polygon466-9-4"
-       points="606,258 596,258 601,248 "
-       clip-path="url(#clipPath50-9-2)" />
-  </g>
+     style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Serif;-inkscape-font-specification:Serif"
+     x="258.87692"
+     y="45.435047"
+     id="text3189"
+     sodipodi:linespacing="125%"><tspan
+       sodipodi:role="line"
+       id="tspan3191"
+       x="258.87692"
+       y="45.435047"
+       style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial">+ AbstractReaderPlugin ( configuration : Configuration, IProjectContext projectContext )</tspan></text>
 </svg>

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -161,50 +161,6 @@ public interface IAnalysisController extends IProjectContext {
 	 * @since 1.7
 	 */
 	public void terminate(final boolean error);
-
-	/**
-	 * Registers a log reader used as a source for monitoring records.
-	 * 
-	 * @param reader
-	 *            The reader to be registered.
-	 * @throws IllegalStateException
-	 *             If the controller is already running or has already been terminated.
-	 * @deprecated The registering of a plugin should be done via the constructor.
-	 * 
-	 * @since 1.7
-	 */
-	@Deprecated
-	public void registerReader(final AbstractReaderPlugin reader) throws IllegalStateException;
-
-	/**
-	 * Registers the passed plugin.
-	 * 
-	 * All plugins which have been registered before calling the <i>run</i>-method, will be started once the analysis is started.
-	 * 
-	 * @param filter
-	 *            The filter to be registered.
-	 * @throws IllegalStateException
-	 *             If the controller is already running or has already been terminated.
-	 * @deprecated The registering of a filter should be done via the constructor.
-	 * 
-	 * @since 1.7
-	 */
-	@Deprecated
-	public void registerFilter(final AbstractFilterPlugin filter) throws IllegalStateException;
-
-	/**
-	 * Registers the passed repository.
-	 * 
-	 * @param repository
-	 *            The repository to be registered.
-	 * @throws IllegalStateException
-	 *             If the controller is already running or has already been terminated.
-	 * @deprecated The registering of a repository should be done via the constructor.
-	 * 
-	 * @since 1.7
-	 */
-	@Deprecated
-	public void registerRepository(final AbstractRepository repository) throws IllegalStateException;
 
 	/**
 	 * Delivers an unmodifiable collection of all readers.

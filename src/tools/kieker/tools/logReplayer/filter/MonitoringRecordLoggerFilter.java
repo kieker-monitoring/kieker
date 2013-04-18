@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -103,25 +103,11 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 	}
 
 	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public MonitoringRecordLoggerFilter(final Configuration configuration) {
-		this(configuration, null);
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void terminate(final boolean error) {
-		super.terminate(error);
-		this.monitoringController.terminateMonitoring(); // TODO in this order?
+		this.monitoringController.terminateMonitoring();
 	}
 
 	/**
