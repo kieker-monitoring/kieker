@@ -42,8 +42,6 @@ public abstract class AbstractFilterPlugin extends AbstractPlugin implements IFi
 	 * @param projectContext
 	 *            The project context for this component. The component will be registered.
 	 */
-	// Internal use of the register methods:
-	@SuppressWarnings("deprecation")
 	public AbstractFilterPlugin(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 

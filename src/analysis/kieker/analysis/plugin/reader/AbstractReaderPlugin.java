@@ -42,8 +42,6 @@ public abstract class AbstractReaderPlugin extends AbstractPlugin implements IRe
 	 * @param projectContext
 	 *            The project context for this component. The component will be registered.
 	 */
-	// Internal use of the register methods:
-	@SuppressWarnings("deprecation")
 	public AbstractReaderPlugin(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 

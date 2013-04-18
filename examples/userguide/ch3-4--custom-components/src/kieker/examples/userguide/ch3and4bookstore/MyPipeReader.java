@@ -61,11 +61,6 @@ public class MyPipeReader extends AbstractReaderPlugin {
 		}
 	}
 
-	@Deprecated
-	public MyPipeReader(final Configuration configuration) {
-		this(configuration, null);
-	}
-
 	public boolean read() {
 		try {
 			// Wait max. 4 seconds for the next data.
