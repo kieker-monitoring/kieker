@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,6 +40,8 @@ import kieker.common.record.flow.trace.Trace;
  * contains the defined traceID, the object is delivered unmodified to the output port.
  * 
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.2
  */
 @Plugin(description = "A filter allowing to filter incoming objects based on their trace ID",
 		outputPorts = {
@@ -53,11 +55,15 @@ import kieker.common.record.flow.trace.Trace;
 			@Property(name = TraceIdFilter.CONFIG_PROPERTY_NAME_SELECTED_TRACES, defaultValue = "")
 		})
 public final class TraceIdFilter extends AbstractFilterPlugin {
+	/** The name of the input port accepting flow records. */
 	public static final String INPUT_PORT_NAME_FLOW = "monitoringRecordsFlow";
+	/** The name of the input port accepting execution records. */
 	public static final String INPUT_PORT_NAME_EXECUTION = "monitoringRecordsExecution";
+	/** The name of the input port accepting both types of records. */
 	public static final String INPUT_PORT_NAME_COMBINED = "monitoringRecordsCombined";
-
+	/** The name of the output port delivering the records with matching IDs. */
 	public static final String OUTPUT_PORT_NAME_MATCH = "recordsMatchingId";
+	/** The name of the output port delivering the records with the non matching IDs. */
 	public static final String OUTPUT_PORT_NAME_MISMATCH = "recordsNotMatchingId";
 
 	public static final String CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES = "acceptAllTraces";
@@ -85,19 +91,6 @@ public final class TraceIdFilter extends AbstractFilterPlugin {
 	}
 
 	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public TraceIdFilter(final Configuration configuration) {
-		this(configuration, null);
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -115,6 +108,12 @@ public final class TraceIdFilter extends AbstractFilterPlugin {
 		return false;
 	}
 
+	/**
+	 * This method represents an input port for both operation execution and flow records.
+	 * 
+	 * @param record
+	 *            The next record.
+	 */
 	@InputPort(name = INPUT_PORT_NAME_COMBINED, description = "Receives execution and trace events to be selected by trace ID",
 			eventTypes = { ITraceRecord.class, Trace.class, OperationExecutionRecord.class })
 	public void inputCombined(final IMonitoringRecord record) {
@@ -125,6 +124,12 @@ public final class TraceIdFilter extends AbstractFilterPlugin {
 		} // else discard it, we should never have gotten it anyhow
 	}
 
+	/**
+	 * This method represents an input port for flow records.
+	 * 
+	 * @param record
+	 *            The next record.
+	 */
 	@InputPort(name = INPUT_PORT_NAME_FLOW, description = "Receives trace events to be selected by trace ID",
 			eventTypes = { ITraceRecord.class, Trace.class })
 	public void inputTraceEvent(final IFlowRecord record) {
@@ -146,6 +151,12 @@ public final class TraceIdFilter extends AbstractFilterPlugin {
 		}
 	}
 
+	/**
+	 * This method represents an input port for operation execution records.
+	 * 
+	 * @param record
+	 *            The next record.
+	 */
 	@InputPort(name = INPUT_PORT_NAME_EXECUTION, description = "Receives execution events to be selected by trace ID",
 			eventTypes = { OperationExecutionRecord.class })
 	public void inputOperationExecutionRecord(final OperationExecutionRecord record) {

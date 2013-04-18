@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,12 @@ import kieker.common.record.IMonitoringRecord;
 
 /**
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.3
  */
 public final class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
 
+	/** A constant which can be used as a default value for non existing fields of the record. */
 	public static final String DEFAULT_VALUE = "N/A";
 
 	private static final long serialVersionUID = 8072422694598002383L;
@@ -60,13 +63,25 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 	private final long memTotal;
 
 	/**
-	 * Constructs a new {@link MemSwapUsageRecord} with the given values. If certain {@link String} values shall remain undefined, use the constants
+	 * Constructs a new {@link MemSwapUsageRecord} with the given values. If certain {@link String} values shall remain undefined, use the constant
 	 * {@link #DEFAULT_VALUE}.
 	 * 
 	 * @param timestamp
 	 *            The timestamp of the measure.
 	 * @param hostname
 	 *            The name of the host.
+	 * @param memTotal
+	 *            The total available memory.
+	 * @param memUsed
+	 *            The used memory.
+	 * @param memFree
+	 *            The free memory.
+	 * @param swapTotal
+	 *            The total available swap.
+	 * @param swapUsed
+	 *            The used swap.
+	 * @param swapFree
+	 *            The free swap.
 	 */
 	public MemSwapUsageRecord(final long timestamp, final String hostname, final long memTotal, final long memUsed, final long memFree, final long swapTotal,
 			final long swapUsed, final long swapFree) {
@@ -80,6 +95,12 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 		this.swapFree = swapFree;
 	}
 
+	/**
+	 * This constructor converts the given array into a record. It is recommended to use the array which is the result of a call to {@link #toArray()}.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 */
 	public MemSwapUsageRecord(final Object[] values) { // NOPMD (values stored directly)
 		AbstractMonitoringRecord.checkArray(values, TYPES);
 		this.timestamp = (Long) values[0];

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,14 +33,14 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPair;
 
 /**
- * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 @Plugin(description = "Uses the incoming data to enrich the connected repository with data for the aggregated assembly component operation call tree",
 		repositoryPorts = {
 			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
 		})
-// TODO: don't we have to redefine the configuration properties from the super class here?
 public class AggregatedAssemblyComponentOperationCallTreeFilter extends AbstractAggregatedCallTreeFilter<AssemblyComponentOperationPair> {
 
 	/**
@@ -53,19 +53,6 @@ public class AggregatedAssemblyComponentOperationCallTreeFilter extends Abstract
 	 */
 	public AggregatedAssemblyComponentOperationCallTreeFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
-	}
-
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public AggregatedAssemblyComponentOperationCallTreeFilter(final Configuration configuration) {
-		this(configuration, null);
 	}
 
 	/**
@@ -94,6 +81,8 @@ public class AggregatedAssemblyComponentOperationCallTreeFilter extends Abstract
 
 /**
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 class AggregatedAssemblyComponentOperationCallTreeNode extends AbstractAggregatedCallTreeNode<AssemblyComponentOperationPair> {
 
@@ -103,8 +92,9 @@ class AggregatedAssemblyComponentOperationCallTreeNode extends AbstractAggregate
 	}
 
 	@Override
-	public AbstractCallTreeNode<AssemblyComponentOperationPair> newCall(final Object dstObj, final MessageTrace origin, final IOriginRetentionPolicy originPolicy) {
-		final AssemblyComponentOperationPair destination = (AssemblyComponentOperationPair) dstObj;
+	public AbstractCallTreeNode<AssemblyComponentOperationPair> newCall(final AssemblyComponentOperationPair dstObj, final MessageTrace origin,
+			final IOriginRetentionPolicy originPolicy) {
+		final AssemblyComponentOperationPair destination = dstObj;
 		WeightedDirectedCallTreeEdge<AssemblyComponentOperationPair> e = this.childMap.get(destination.getId());
 		AbstractCallTreeNode<AssemblyComponentOperationPair> n;
 		if (e != null) {

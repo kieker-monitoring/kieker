@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,11 +24,6 @@ import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 
-/**
- * This filter uses its configuration to filter the incoming response times based on a threshold.
- * 
- * @author Nils Christian Ehmke
- */
 @Plugin(
 		name = "Response time filter",
 		description = "Filters incoming response times based on a threshold",
@@ -54,11 +49,6 @@ public class MyResponseTimeFilter extends AbstractFilterPlugin {
 		super(configuration, projectContext);
 
 		this.rtThresholdNanos = configuration.getLongProperty(CONFIG_PROPERTY_NAME_TS_NANOS);
-	}
-
-	@Deprecated
-	public MyResponseTimeFilter(final Configuration configuration) {
-		this(configuration, null);
 	}
 
 	public static final String INPUT_PORT_NAME_RESPONSE_TIMES = "newResponseTime";

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.common.util.ClassOperationSignaturePair;
+import kieker.common.util.signature.ClassOperationSignaturePair;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
@@ -35,6 +35,8 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * transformed into an instance of {@link Execution}.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 @Plugin(description = "A filter transforming OperationExecutionRecords into Execution objects",
 		outputPorts = {
@@ -66,39 +68,22 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisFi
 	}
 
 	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public ExecutionRecordTransformationFilter(final Configuration configuration) {
-		this(configuration, null);
-	}
-
-	/**
 	 * This method represents the input port, processing incoming operation execution records.
 	 * 
 	 * @param execRec
 	 *            The next operation execution record.
-	 * 
-	 * @return Always true.
 	 */
 	@InputPort(
 			name = INPUT_PORT_NAME_RECORDS,
 			description = "Receives operation execution records to be transformed",
 			eventTypes = { OperationExecutionRecord.class })
-	public boolean inputOperationExecutionRecords(final OperationExecutionRecord execRec) {
+	public void inputOperationExecutionRecords(final OperationExecutionRecord execRec) {
 		final ClassOperationSignaturePair fqComponentNameSignaturePair = ClassOperationSignaturePair.splitOperationSignatureStr(execRec.getOperationSignature());
 
 		final Execution execution = this.createExecutionByEntityNames(execRec.getHostname(), fqComponentNameSignaturePair.getFqClassname(),
 				fqComponentNameSignaturePair.getSignature(),
 				execRec.getTraceId(), execRec.getSessionId(), execRec.getEoi(), execRec.getEss(), execRec.getTin(), execRec.getTout(), false);
 		super.deliver(OUTPUT_PORT_NAME_EXECUTIONS, execution);
-		// TODO Why to we return true here? Is the return value necessary?
-		return true;
 	}
 
 	/**

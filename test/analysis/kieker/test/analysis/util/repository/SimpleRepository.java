@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,8 +31,9 @@ import kieker.common.configuration.Configuration;
 @Repository(programmaticOnly = true, name = SimpleRepository.REPOSITORY_NAME, description = SimpleRepository.REPOSITORY_DESCRIPTION)
 public class SimpleRepository extends AbstractRepository { // NOPMD (SubClassOfTest)
 
+	/** The repository's dummy name. */
 	public static final String REPOSITORY_NAME = "repoName-hNcuzIKc8e";
-
+	/** The repository's dummy description. */
 	public static final String REPOSITORY_DESCRIPTION = "repoDescription-DEYmVN6sEp";
 
 	/**
@@ -45,19 +46,6 @@ public class SimpleRepository extends AbstractRepository { // NOPMD (SubClassOfT
 	 */
 	public SimpleRepository(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
-	}
-
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this repository.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public SimpleRepository(final Configuration configuration) {
-		this(configuration, null);
 	}
 
 	/**

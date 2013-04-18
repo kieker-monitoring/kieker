@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -123,19 +123,15 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	public EventRecordTraceReconstructionFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
-		if (null != projectContext) { // TODO: remove non-null check and else case in Kieker 1.8)
-			final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
-			TimeUnit recordTimeunit;
-			try {
-				recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
-			} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
-				LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
-				recordTimeunit = TimeUnit.NANOSECONDS;
-			}
-			this.timeunit = recordTimeunit;
-		} else {
-			this.timeunit = TimeUnit.NANOSECONDS;
+		final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
+		TimeUnit recordTimeunit;
+		try {
+			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
+		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
+			LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
+			recordTimeunit = TimeUnit.NANOSECONDS;
 		}
+		this.timeunit = recordTimeunit;
 
 		final String configTimeunitProperty = configuration.getStringProperty(CONFIG_PROPERTY_NAME_TIMEUNIT);
 		TimeUnit configTimeunit;
@@ -150,19 +146,6 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		this.maxTraceTimeout = this.timeunit.convert(configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT), configTimeunit);
 		this.timeout = !((this.maxTraceTimeout == Long.MAX_VALUE) && (this.maxTraceDuration == Long.MAX_VALUE)); // NOPMD (bitwise conversion makes code unreadable)
 		this.traceId2trace = new ConcurrentHashMap<Long, TraceBuffer>();
-	}
-
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public EventRecordTraceReconstructionFilter(final Configuration configuration) {
-		this(configuration, null);
 	}
 
 	/**
@@ -232,7 +215,6 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	 */
 	@Override
 	public void terminate(final boolean error) {
-		super.terminate(error);
 		synchronized (this) {
 			for (final Entry<Long, TraceBuffer> entry : this.traceId2trace.entrySet()) {
 				final TraceBuffer traceBuffer = entry.getValue();
@@ -336,7 +318,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 					this.openEvents--;
 				}
 				if (!this.events.add(event)) {
-					LOG.error("Duplicate entry for orderIndex " + orderIndex + " with tarceId " + myTraceId);
+					LOG.error("Duplicate entry for orderIndex " + orderIndex + " with traceId " + myTraceId);
 					this.damaged = true;
 				}
 			}
@@ -368,7 +350,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 
 		public boolean isInvalid() {
 			synchronized (this) {
-				return (this.trace == null) || this.damaged || (this.openEvents != 0) || ((this.maxOrderIndex + 1) != this.events.size());
+				return (this.trace == null) || this.damaged || (this.openEvents != 0) || (((this.maxOrderIndex + 1) != this.events.size()) || this.events.isEmpty());
 			}
 		}
 

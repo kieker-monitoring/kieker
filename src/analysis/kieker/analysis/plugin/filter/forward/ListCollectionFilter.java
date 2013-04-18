@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,9 @@ import kieker.common.configuration.Configuration;
 		outputPorts = @OutputPort(name = ListCollectionFilter.OUTPUT_PORT_NAME, eventTypes = { Object.class }, description = "Provides each incoming object"))
 public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 
+	/** The name of the input port for the incoming objects. */
 	public static final String INPUT_PORT_NAME = "inputObject";
+	/** The name of the output port for the forwared objects. */
 	public static final String OUTPUT_PORT_NAME = "outputObjects";
 
 	private final List<T> list = Collections.synchronizedList(new ArrayList<T>());
@@ -61,18 +63,11 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 	}
 
 	/**
-	 * Creates a new instance of this class using the given parameters.
+	 * This method represents the input port.
 	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
+	 * @param data
+	 *            The next element.
 	 */
-	@Deprecated
-	public ListCollectionFilter(final Configuration configuration) {
-		this(configuration, null);
-	}
-
 	@InputPort(name = ListCollectionFilter.INPUT_PORT_NAME)
 	@SuppressWarnings("unchecked")
 	public void input(final Object data) {
@@ -80,6 +75,9 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 		super.deliver(OUTPUT_PORT_NAME, data);
 	}
 
+	/**
+	 * Clears the list.
+	 */
 	public void clear() {
 		this.list.clear();
 	}
@@ -90,7 +88,7 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 	}
 
 	/**
-	 * Returns the current number of collected objects.
+	 * @return The current number of collected objects.
 	 */
 	public int size() {
 		return this.list.size();

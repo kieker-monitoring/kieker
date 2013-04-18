@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,8 @@ import kieker.common.record.IMonitoringRecord;
  * Internal record type used exclusively by the monitoring subsystem.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public final class RegistryRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
 	private static final long serialVersionUID = 4566332478835872121L;
@@ -34,11 +36,25 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	private final int id;
 	private final Object object;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param id
+	 *            The ID.
+	 * @param object
+	 *            The object.
+	 */
 	public RegistryRecord(final int id, final Object object) {
 		this.id = id;
 		this.object = object;
 	}
 
+	/**
+	 * This constructor converts the given array into a record. It is recommended to use the array which is the result of a call to {@link #toArray()}.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 */
 	public RegistryRecord(final Object[] values) {
 		final Object[] myValues = values.clone(); // to protect object from tampering
 		AbstractMonitoringRecord.checkArray(myValues, TYPES);
@@ -50,6 +66,9 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Object[] toArray() {
 		return new Object[] { this.id, this.object };
 	}

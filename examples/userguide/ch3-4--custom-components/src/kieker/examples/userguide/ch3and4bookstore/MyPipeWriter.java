@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ public class MyPipeWriter extends AbstractMonitoringWriter {
 
 	public boolean newMonitoringRecord(final IMonitoringRecord record) {
 		try {
-			/* Just write the content of the record into the pipe. */
+			// Just write the content of the record into the pipe.
 			this.pipe.put(new PipeData(record.getLoggingTimestamp(),
 					record.toArray(), record.getClass()));
 		} catch (final InterruptedException e) {

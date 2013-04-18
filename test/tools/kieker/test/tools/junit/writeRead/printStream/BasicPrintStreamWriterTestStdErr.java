@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,9 @@
 package kieker.test.tools.junit.writeRead.printStream;
 
 import java.io.PrintStream;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 
 import kieker.common.record.IMonitoringRecord;
@@ -31,14 +29,28 @@ import kieker.test.tools.util.StringTeePrintStream;
 
 /**
  * @author Andre van Hoorn
+ * 
+ * @since 1.5
  */
-// TODO: introduce abstract intermediate class with {@link BasicPrintStreamWriterTestStdout}, because a lot of code is shared.
-public class BasicPrintStreamWriterTestStdErr extends AbstractPrintStreamWriterTest { // NOCS (test class without constructor)
+public class BasicPrintStreamWriterTestStdErr extends AbstractPrintStreamWriterTest {
 
 	private volatile PrintStream originalPrintStream;
 
 	private volatile StringTeePrintStream stringTeePrintStream = null; // NOPMD (init for findbugs)
 
+	/**
+	 * Default constructor.
+	 */
+	public BasicPrintStreamWriterTestStdErr() {
+		// empty default constructor
+	}
+
+	/**
+	 * Initializes the test setup.
+	 * 
+	 * @throws Exception
+	 *             If something went wrong during the initialization.
+	 */
 	@Before
 	public void setUp() throws Exception {
 		this.originalPrintStream = System.err;
@@ -46,6 +58,12 @@ public class BasicPrintStreamWriterTestStdErr extends AbstractPrintStreamWriterT
 		System.setErr(this.stringTeePrintStream);
 	}
 
+	/**
+	 * Cleans up after the test.
+	 * 
+	 * @throws Exception
+	 *             If something went wrong.
+	 */
 	@After
 	public void tearDown() throws Exception {
 		System.setErr(this.originalPrintStream);
@@ -57,33 +75,7 @@ public class BasicPrintStreamWriterTestStdErr extends AbstractPrintStreamWriterT
 	}
 
 	@Override
-	protected List<IMonitoringRecord> readEvents() {
-		/*
-		 * we cannot do anything meaningful here, because there's nothing like a PrintStreamReader.
-		 * We'll return an empty List and use our own buffer when evaluating the result.
-		 */
-		return new ArrayList<IMonitoringRecord>();
-	}
-
-	@Override
 	protected void inspectRecords(final List<IMonitoringRecord> eventsPassedToController, final List<IMonitoringRecord> eventFromMonitoringLog) {
-		final String outputString = this.stringTeePrintStream.getString();
-
-		for (final IMonitoringRecord rec : eventsPassedToController) {
-			final StringBuilder inputRecordStringBuilder = new StringBuilder();
-			inputRecordStringBuilder
-					// note that this format needs to be adjusted if the writer's format changes
-					.append(rec.getClass().getSimpleName())
-					.append(": ")
-					.append(rec).append(AbstractPrintStreamWriterTest.SYSTEM_NEWLINE_STRING);
-			final String curLine = inputRecordStringBuilder.toString();
-			Assert.assertTrue("Record '" + curLine + "' not found in output stream: '" + outputString + "'",
-					outputString.indexOf(curLine) != -1);
-		}
-	}
-
-	@Override
-	protected boolean terminateBeforeLogInspection() {
-		return false;
+		this.checkRecords(this.stringTeePrintStream.getString(), eventsPassedToController);
 	}
 }

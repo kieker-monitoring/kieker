@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,8 +39,9 @@ public class TestLogRotationMaxLogSizeAsyncFsWriter extends AbstractTestLogRotat
 	@Override
 	protected IMonitoringController createController(final String path, final int maxEntriesInFile, final int maxLogSize) {
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
-		final String writer = AsyncFsWriter.class.getName();
+		configuration.setProperty(ConfigurationFactory.METADATA, "false");
 		configuration.setProperty(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP, "false"); // needed for constant size
+		final String writer = AsyncFsWriter.class.getName();
 		configuration.setProperty(ConfigurationFactory.WRITER_CLASSNAME, writer);
 		configuration.setProperty(writer + '.' + AbstractAsyncFSWriter.CONFIG_TEMP, "false");
 		configuration.setProperty(writer + '.' + AbstractAsyncFSWriter.CONFIG_PATH, path);

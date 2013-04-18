@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,6 +45,8 @@ import kieker.tools.util.LoggingTimestampConverter;
 
 /**
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 @Plugin(description = "Uses the incoming data to enrich the connected repository with the reconstructed traces",
 		outputPorts = {
@@ -75,12 +77,15 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	public static final String OUTPUT_PORT_NAME_EXECUTION_TRACE = "executionTraces";
 	/** This is the name of the output port delivering the reconstructed, but invalid executions traces. */
 	public static final String OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE = "invalidExecutionTraces";
-
+	/** This is the name of the property determining the used time unit. */
 	public static final String CONFIG_PROPERTY_NAME_TIMEUNIT = "timeunit";
+	/** This is the name of the property determining the maximal duration of a trace. */
 	public static final String CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION = "maxTraceDuration";
+	/** This is the name of the property determining whether to ignore invalid traces or not. */
 	public static final String CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES = "ignoreInvalidTraces";
-
+	/** This is the default used time unit. */
 	public static final String CONFIG_PROPERTY_VALUE_TIMEUNIT = "NANOSECONDS"; // TimeUnit.NANOSECONDS.name()
+	/** This is the default value for the maximal duration of a trace. */
 	public static final String CONFIG_PROPERTY_VALUE_MAX_TRACE_DURATION = "9223372036854775807"; // Long.toString(Long.MAX_VALUE)
 
 	private static final Log LOG = LogFactory.getLog(TraceReconstructionFilter.class);
@@ -130,19 +135,15 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	public TraceReconstructionFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
-		if (null != projectContext) { // TODO: remove non-null check and else case in Kieker 1.8)
-			final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
-			TimeUnit recordTimeunit;
-			try {
-				recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
-			} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
-				LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
-				recordTimeunit = TimeUnit.NANOSECONDS;
-			}
-			this.timeunit = recordTimeunit;
-		} else {
-			this.timeunit = TimeUnit.NANOSECONDS;
+		final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
+		TimeUnit recordTimeunit;
+		try {
+			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
+		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
+			LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
+			recordTimeunit = TimeUnit.NANOSECONDS;
 		}
+		this.timeunit = recordTimeunit;
 
 		final String configTimeunitProperty = configuration.getStringProperty(CONFIG_PROPERTY_NAME_TIMEUNIT);
 		TimeUnit configTimeunit;
@@ -153,27 +154,13 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 			configTimeunit = this.timeunit;
 		}
 
-		/* Load from the configuration. */
+		// Load from the configuration.
 		this.maxTraceDuration = this.timeunit.convert(configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION), configTimeunit);
 		this.ignoreInvalidTraces = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES);
 
 		if (this.maxTraceDuration < 0) {
 			throw new IllegalArgumentException("value maxTraceDurationMillis must not be negative (found: " + this.maxTraceDuration + ")");
 		}
-	}
-
-	/**
-	 * Creates a new instance of this class using the given parameters. Keep in mind that the Trace-Equivalence-Class-Mode has to be set via the method
-	 * <i>setTraceEquivalenceCallMode</i> before using this component!
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public TraceReconstructionFilter(final Configuration configuration) {
-		this(configuration, null);
 	}
 
 	/**
@@ -233,13 +220,13 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 			this.maxTout = execution.getTout() > this.maxTout ? execution.getTout() : this.maxTout; // NOCS
 
 			ExecutionTrace executionTrace = this.pendingTraces.get(traceId);
-			if (executionTrace != null) { /* trace (artifacts) exists already; */
-				if (!this.timeoutMap.remove(executionTrace)) { /* remove from timeoutMap. Will be re-added below */
+			if (executionTrace != null) { // trace (artifacts) exists already;
+				if (!this.timeoutMap.remove(executionTrace)) { // remove from timeoutMap. Will be re-added below
 					LOG.error("Missing entry for trace in timeoutMap: " + executionTrace
 							+ " PendingTraces and timeoutMap are now longer consistent!");
 					this.reportError(traceId);
 				}
-			} else { /* create and add new trace */
+			} else { // create and add new trace
 				executionTrace = new ExecutionTrace(traceId, execution.getSessionId());
 				this.pendingTraces.put(traceId, executionTrace);
 			}
@@ -273,31 +260,24 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	private void processExecutionTrace(final ExecutionTrace executionTrace) throws ExecutionEventProcessingException {
 		final long curTraceId = executionTrace.getTraceId();
 		try {
-			/*
-			 * If the polled trace is invalid, the following method
-			 * toMessageTrace(..) throws an exception
-			 */
+			// If the polled trace is invalid, the following method toMessageTrace(..) throws an exception
 			final MessageTrace mt = executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 
-			/*
-			 * Transformation successful and the trace is for itself valid.
-			 * However, this trace may actually contain the [0,0] execution
-			 * and thus complete a trace that has timed out before and has
-			 * thus been considered an invalid trace.
-			 */
+			// Transformation successful and the trace is for itself valid. However, this trace may actually contain the [0,0] execution and thus complete a trace
+			// that has timed out before and has thus been considered an invalid trace.
 			if (!this.invalidTraces.contains(mt.getTraceId())) {
-				/* Not completing part of an invalid trace */
+				// Not completing part of an invalid trace
 				super.deliver(OUTPUT_PORT_NAME_MESSAGE_TRACE, mt);
 				super.deliver(OUTPUT_PORT_NAME_EXECUTION_TRACE, executionTrace);
 				this.reportSuccess(curTraceId);
 			} else {
-				/* mt is the completing part of an invalid trace */
+				// mt is the completing part of an invalid trace
 				super.deliver(OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, new InvalidExecutionTrace(executionTrace));
 				// the statistics have been updated on the first
 				// occurrence of artifacts of this trace
 			}
 		} catch (final InvalidTraceException ex) {
-			/* Transformation failed (i.e., trace invalid) */
+			// Transformation failed (i.e., trace invalid)
 			super.deliver(OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, new InvalidExecutionTrace(executionTrace));
 			final String transformationError = "Failed to transform execution trace to message trace (ID: " + curTraceId + "). \n"
 					+ "Reason: " + ex.getMessage() + "\n Trace: " + executionTrace;

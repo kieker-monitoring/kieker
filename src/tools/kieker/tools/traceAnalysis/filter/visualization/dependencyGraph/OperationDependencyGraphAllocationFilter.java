@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,6 +46,8 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
  * this plugin is not delegated in any way.
  * 
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
+ * 
+ * @since 1.1
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class),
 		outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH, eventTypes = { AbstractGraph.class }))
@@ -67,19 +69,6 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 	}
 
 	/**
-	 * Creates a new filter using the given configuration.
-	 * 
-	 * @param configuration
-	 *            The configuration to use
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public OperationDependencyGraphAllocationFilter(final Configuration configuration) {
-		this(configuration, null);
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -95,7 +84,7 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 			final int rootOperationId = OperationRepository.ROOT_OPERATION.getId();
 			final Operation senderOperation = m.getSendingExecution().getOperation();
 			final Operation receiverOperation = m.getReceivingExecution().getOperation();
-			/* The following two get-calls to the factory return s.th. in either case */
+			// The following two get-calls to the factory return s.th. in either case
 			final AllocationComponentOperationPairFactory pairFactory = this.getSystemEntityFactory().getAllocationPairFactory();
 
 			AllocationComponentOperationPair senderPair;

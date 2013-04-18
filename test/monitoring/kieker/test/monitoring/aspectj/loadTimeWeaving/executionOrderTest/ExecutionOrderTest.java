@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +26,8 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
  * 
  *         2007-03-30: Initial version
  * 
+ * @since < 0.9
  */
-
 public final class ExecutionOrderTest {
 
 	private ExecutionOrderTest() {}
@@ -57,22 +57,37 @@ public final class ExecutionOrderTest {
 		}
 	}
 
+	/**
+	 * This main method executes some of the methods for test purposes.
+	 * 
+	 * @param args
+	 *            The command line arguments. They have no effect.
+	 */
 	public static void main(final String[] args) {
 		ExecutionOrderTest.methoda(true);
 		ExecutionOrderTest.methoda(false);
 		ExecutionOrderTest.methodd1();
 	}
 
+	/**
+	 * A simple method for test purposes.
+	 */
 	@OperationExecutionMonitoringProbe
 	public static void methodd1() {
 		ExecutionOrderTest.methodd2();
 	}
 
+	/**
+	 * A simple method for test purposes.
+	 */
 	@OperationExecutionMonitoringProbe
 	public static void methodd2() {
 		ExecutionOrderTest.methodd3();
 	}
 
+	/**
+	 * A simple method for test purposes.
+	 */
 	@OperationExecutionMonitoringProbe
 	public static void methodd3() {
 		System.out.println("d3()"); // NOPMD (System.out)

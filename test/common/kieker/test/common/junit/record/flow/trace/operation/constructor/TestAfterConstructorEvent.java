@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +36,9 @@ public class TestAfterConstructorEvent extends AbstractKiekerTest {
 	private static final String FQ_CLASSNAME = "p1.p2.p3.classname";
 	private static final String FQ_OPERATION_SIGNATURE = FQ_CLASSNAME + ".callerOp(boolean arg1, int arg2)";
 
+	/**
+	 * Default constructor.
+	 */
 	public TestAfterConstructorEvent() {
 		// empty default constructor
 	}

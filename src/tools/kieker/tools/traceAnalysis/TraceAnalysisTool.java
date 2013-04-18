@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,6 +53,7 @@ import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.common.util.filesystem.FSUtil;
 import kieker.tools.traceAnalysis.filter.AbstractGraphProducingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
@@ -91,23 +92,14 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.tools.util.LoggingTimestampConverter;
 
 /**
- * 
- * This is the main class to start Tpan - the model synthesis and analysis
- * server to process the monitoring data that comes from the instrumented
- * system, or from a file that contains Kieker monitoring data. Tpan can produce
- * output such as sequence diagrams, dependency graphs on demand. Alternatively
- * it can be used continuously for online performance analysis, anomaly
- * detection or live visualization of system behavior.
- * 
- * A Tpan is started via ant-script or command line. Visualization and output
- * should be implemented as plugins. These plugins must be implemented to be
- * loaded at runtime (Class.forName...) in order to keep compile-time
- * dependencies low.
- * 
+ * This is the main class to start the Kieker TraceAnalysisTool - the model synthesis and analysis tool to process the monitoring data that comes from the
+ * instrumented system, or from a file that contains Kieker monitoring data. The Kieker TraceAnalysisTool can produce output such as sequence diagrams, dependency
+ * graphs on demand. Alternatively it can be used continuously for online performance analysis, anomaly detection or live visualization of system behavior.
  * 
  * @author Andre van Hoorn, Matthias Rohr, Nils Christian Ehmke
+ * 
+ * @since 0.95a
  */
-// TODO: Fix JavaDoc comment
 public final class TraceAnalysisTool {
 	public static final String DATE_FORMAT_PATTERN_CMD_USAGE_HELP = Constants.DATE_FORMAT_PATTERN.replaceAll("'", ""); // only for usage info
 	private static final Log LOG = LogFactory.getLog(TraceAnalysisTool.class);
@@ -432,22 +424,15 @@ public final class TraceAnalysisTool {
 				reader = new FSReader(conf, ANALYSIS_INSTANCE);
 			}
 
-			/*
-			 * Unify Strings
-			 */
+			// Unify Strings
 			final StringBufferFilter stringBufferFilter = new StringBufferFilter(new Configuration(), ANALYSIS_INSTANCE);
 			ANALYSIS_INSTANCE.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, stringBufferFilter, StringBufferFilter.INPUT_PORT_NAME_EVENTS);
 
-			/*
-			 * This map can be used within the constructor for all following plugins which use the repository with the name defined in the
-			 * AbstractTraceAnalysisPlugin.
-			 */
-
+			// This map can be used within the constructor for all following plugins which use the repository with the name defined in the
+			// AbstractTraceAnalysisPlugin.
 			final TimestampFilter timestampFilter;
 			{ // NOCS (nested block)
-				/*
-				 * Create the timestamp filter and connect to the reader's output port
-				 */
+				// Create the timestamp filter and connect to the reader's output port
 				final Configuration configTimestampFilter = new Configuration();
 				configTimestampFilter.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP,
 						Long.toString(TraceAnalysisTool.ignoreExecutionsBeforeTimestamp));
@@ -463,9 +448,7 @@ public final class TraceAnalysisTool {
 
 			final TraceIdFilter traceIdFilter;
 			{ // NOCS (nested block)
-				/*
-				 * Create the trace ID filter and connect to the timestamp filter's output port
-				 */
+				// Create the trace ID filter and connect to the timestamp filter's output port
 				final Configuration configTraceIdFilterFlow = new Configuration();
 				if (TraceAnalysisTool.selectedTraces == null) {
 					configTraceIdFilterFlow.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, Boolean.TRUE.toString());
@@ -483,9 +466,7 @@ public final class TraceAnalysisTool {
 
 			final ExecutionRecordTransformationFilter execRecTransformer;
 			{ // NOCS (nested block)
-				/*
-				 * Create the execution record transformation filter and connect to the trace ID filter's output port
-				 */
+				// Create the execution record transformation filter and connect to the trace ID filter's output port
 				final Configuration execRecTransformerConfig = new Configuration();
 				execRecTransformerConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.EXEC_TRACE_RECONSTR_COMPONENT_NAME);
 				execRecTransformer = new ExecutionRecordTransformationFilter(execRecTransformerConfig, ANALYSIS_INSTANCE);
@@ -495,9 +476,7 @@ public final class TraceAnalysisTool {
 			}
 
 			{ // NOCS (nested block)
-				/*
-				 * Create the trace reconstruction filter and connect to the record transformation filter's output port
-				 */
+				// Create the trace reconstruction filter and connect to the record transformation filter's output port
 				final Configuration mtReconstrFilterConfig = new Configuration();
 				mtReconstrFilterConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.TRACERECONSTR_COMPONENT_NAME);
 				mtReconstrFilterConfig.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
@@ -513,9 +492,7 @@ public final class TraceAnalysisTool {
 			}
 
 			{ // NOCS (nested block)
-				/*
-				 * Create the event record trace generation filter and connect to the trace ID filter's output port
-				 */
+				// Create the event record trace generation filter and connect to the trace ID filter's output port
 				final Configuration configurationEventRecordTraceGenerationFilter = new Configuration();
 				configurationEventRecordTraceGenerationFilter.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.EVENTRECORDTRACERECONSTR_COMPONENT_NAME);
 				configurationEventRecordTraceGenerationFilter.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
@@ -529,9 +506,7 @@ public final class TraceAnalysisTool {
 			}
 
 			{ // NOCS (nested block)
-				/*
-				 * Create the counter for valid/invalid event record traces
-				 */
+				// Create the counter for valid/invalid event record traces
 				final Configuration configurationEventRecordTraceCounter = new Configuration();
 				configurationEventRecordTraceCounter.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.EXECEVENTRACESFROMEVENTTRACES_COMPONENT_NAME);
 				eventRecordTraceCounter = new EventRecordTraceCounter(configurationEventRecordTraceCounter, ANALYSIS_INSTANCE);
@@ -545,10 +520,8 @@ public final class TraceAnalysisTool {
 			}
 
 			{ // NOCS (nested block)
-				/*
-				 * Create the event trace to execution/message trace transformation filter and connect its input to the
-				 * event record trace generation filter's output port
-				 */
+				// Create the event trace to execution/message trace transformation filter and connect its input to the event record trace generation filter's output
+				// port
 				final Configuration configurationEventTrace2ExecutionTraceFilter = new Configuration();
 				configurationEventTrace2ExecutionTraceFilter.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
 						Constants.EXECTRACESFROMEVENTTRACES_COMPONENT_NAME);
@@ -666,10 +639,9 @@ public final class TraceAnalysisTool {
 						componentPrintInvalidTrace, InvalidExecutionTraceWriterFilter.INPUT_PORT_NAME_INVALID_EXECUTION_TRACES);
 				ANALYSIS_INSTANCE.connect(componentPrintInvalidTrace, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
 						SYSTEM_ENTITY_FACTORY);
-				// TODO: We haven't such port for the EventTrace2ExecutionTraceFilter, yet
-				LOG.warn("EventTrace2ExecutionTraceFilter doesn't provide an output port for invalid execution traces, yet");
-				// AbstractPlugin.connect(eventTrace2ExecutionTraceFilter, EventTrace2ExecutionTraceFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE,
-				// componentPrintInvalidTrace, InvalidExecutionTraceWriterPlugin.INVALID_EXECUTION_TRACES_INPUT_PORT_NAME);
+				ANALYSIS_INSTANCE.connect(traceEvents2ExecutionAndMessageTraceFilter,
+						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE,
+						componentPrintInvalidTrace, InvalidExecutionTraceWriterFilter.INPUT_PORT_NAME_INVALID_EXECUTION_TRACES);
 				allTraceProcessingComponents.add(componentPrintInvalidTrace);
 			}
 			SequenceDiagramFilter componentPlotAllocationSeqDiagr = null;
@@ -1008,34 +980,34 @@ public final class TraceAnalysisTool {
 			final File inputDirFile = new File(inputDir);
 			try {
 				if (!inputDirFile.exists()) {
-					System.err.println(""); // NOPMD (System.out)
+					System.err.println(); // NOPMD (System.out)
 					System.err.println("The specified input directory '" + inputDirFile.getCanonicalPath() + "' does not exist"); // NOPMD (System.out)
 					return false;
 				}
-
-				if (!inputDirFile.isDirectory()) {
-					System.err.println(""); // NOPMD (System.out)
-					System.err.println("The specified input directory '" + inputDirFile.getCanonicalPath() + "' is not a directory"); // NOPMD (System.out)
+				if (!inputDirFile.isDirectory() && !inputDir.endsWith(FSUtil.ZIP_FILE_EXTENSION)) {
+					System.err.println(); // NOPMD (System.out)
+					System.err.println("The specified input directory '" + inputDirFile.getCanonicalPath() + "' is neither a directory nor a zip file"); // NOPMD
 					return false;
 				}
-
-				/* check whether inputDirFile contains a (kieker|tpmon).map file; the latter for legacy reasons */
-				final File[] mapFiles = { new File(inputDir + "/kieker.map"), new File(inputDir + "/tpmon.map") };
-				boolean mapFileExists = false;
-				for (final File potentialMapFile : mapFiles) {
-					if (potentialMapFile.isFile()) {
-						mapFileExists = true;
-						break;
+				// check whether inputDirFile contains a (kieker|tpmon).map file; the latter for legacy reasons
+				if (inputDirFile.isDirectory()) { // only check for dirs
+					final File[] mapFiles = { new File(inputDir + File.separatorChar + FSUtil.MAP_FILENAME),
+						new File(inputDir + File.separatorChar + FSUtil.LEGACY_MAP_FILENAME), };
+					boolean mapFileExists = false;
+					for (final File potentialMapFile : mapFiles) {
+						if (potentialMapFile.isFile()) {
+							mapFileExists = true;
+							break;
+						}
+					}
+					if (!mapFileExists) {
+						System.err.println(); // NOPMD (System.out)
+						System.err.println("The specified input directory '" + inputDirFile.getCanonicalPath() + "' is not a kieker log directory"); // NOPMD
+						return false;
 					}
 				}
-				if (!mapFileExists) {
-					System.err.println(""); // NOPMD (System.out)
-					System.err.println("The specified input directory '" + inputDirFile.getCanonicalPath() + "' is not a kieker log directory"); // NOPMD
-																																					// (System.out)
-					return false;
-				}
 			} catch (final IOException e) { // thrown by File.getCanonicalPath()
-				System.err.println(""); // NOPMD (System.out)
+				System.err.println(); // NOPMD (System.out)
 				System.err.println("Error resolving name of input directory: '" + inputDir + "'"); // NOPMD (System.out)
 			}
 		}

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,8 @@ import kieker.monitoring.timer.ITimeSource;
 
 /**
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.3
  */
 @Aspect
 public abstract class AbstractOperationExecutionAspect extends AbstractAspectJProbe {
@@ -44,12 +46,16 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 	private static final ControlFlowRegistry CFREGISTRY = ControlFlowRegistry.INSTANCE;
 	private static final SessionRegistry SESSIONREGISTRY = SessionRegistry.INSTANCE;
 
+	/**
+	 * The pointcut for the monitored operations. Inheriting classes should extend the pointcut in order to find the correct executions of the methods (e.g. all
+	 * methods or only methods with specific annotations).
+	 */
 	@Pointcut
 	public abstract void monitoredOperation();
 
 	@Around("monitoredOperation() && notWithinKieker()")
 	public Object operation(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
-		final String signature = thisJoinPoint.getSignature().toLongString();
+		final String signature = this.signatureToLongString(thisJoinPoint.getSignature());
 		if (!CTRLINST.isProbeActivated(signature)) {
 			return thisJoinPoint.proceed();
 		}
@@ -85,8 +91,7 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 		} finally {
 			// measure after
 			final long tout = TIME.getTime();
-			CTRLINST.newMonitoringRecord(
-					new OperationExecutionRecord(signature, sessionId, traceId, tin, tout, hostname, eoi, ess));
+			CTRLINST.newMonitoringRecord(new OperationExecutionRecord(signature, sessionId, traceId, tin, tout, hostname, eoi, ess));
 			// cleanup
 			if (entrypoint) {
 				CFREGISTRY.unsetThreadLocalTraceId();

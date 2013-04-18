@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,9 @@ import kieker.common.record.misc.EmptyRecord;
 import kieker.test.tools.junit.writeRead.filesystem.AbstractTestFSWriterReader;
 
 /**
- * @author André van Hoorn, Jan Waller
+ * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.5
  */
 public abstract class AbstractUnknownTypeTest extends AbstractTestFSWriterReader { // NOPMD (TestClassWithoutTestCases) // NOCS (MissingCtorCheck)
 	protected static final EmptyRecord EVENT0_KNOWN_TYPE = new EmptyRecord();

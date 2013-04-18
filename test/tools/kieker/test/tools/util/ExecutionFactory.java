@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package kieker.test.tools.util;
 
 import org.junit.Assert;
 
-import kieker.common.util.Signature;
+import kieker.common.util.signature.Signature;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
 import kieker.tools.traceAnalysis.systemModel.ComponentType;
@@ -31,6 +31,8 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * This factory class can be used to create artificial executions.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.2
  */
 public class ExecutionFactory {
 
@@ -86,14 +88,14 @@ public class ExecutionFactory {
 			throw new NullPointerException("None of the String args must be null.");
 		}
 
-		/* Register component type (if it hasn't been registered before) */
+		// Register component type (if it hasn't been registered before)
 		ComponentType componentTypeA = this.systemEntityFactory.getTypeRepositoryFactory().lookupComponentTypeByNamedIdentifier(componentTypeName);
 		if (componentTypeA == null) {
 			componentTypeA = this.systemEntityFactory.getTypeRepositoryFactory().createAndRegisterComponentType(componentTypeName, componentTypeName);
 		}
 		Assert.assertEquals("Unexpected component type name", componentTypeName, componentTypeA.getTypeName());
 
-		/* Register operation (if it hasn't been registered before) */
+		// Register operation (if it hasn't been registered before)
 		Operation operationAa = this.systemEntityFactory.getOperationFactory().lookupOperationByNamedIdentifier(operationName);
 		if (operationAa == null) {
 			operationAa = this.systemEntityFactory.getOperationFactory().createAndRegisterOperation(
@@ -104,20 +106,20 @@ public class ExecutionFactory {
 			componentTypeA.addOperation(operationAa);
 		}
 
-		/* Register assembly component (if it hasn't been registered before) */
+		// Register assembly component (if it hasn't been registered before)
 		AssemblyComponent assemblyComponentA = this.systemEntityFactory.getAssemblyFactory().lookupAssemblyComponentInstanceByNamedIdentifier(componentInstanceName);
 		if (assemblyComponentA == null) {
 			assemblyComponentA = this.systemEntityFactory.getAssemblyFactory().createAndRegisterAssemblyComponentInstance(componentInstanceName, componentTypeA);
 		}
 
-		/* Register execution container (if it hasn't been registered before) */
+		// Register execution container (if it hasn't been registered before)
 		ExecutionContainer containerC = this.systemEntityFactory.getExecutionEnvironmentFactory().lookupExecutionContainerByNamedIdentifier(executionContainerName);
 		if (containerC == null) {
 			containerC = this.systemEntityFactory.getExecutionEnvironmentFactory().createAndRegisterExecutionContainer(executionContainerName,
 					executionContainerName);
 		}
 
-		/* Register allocation component (if it hasn't been registered before) */
+		// Register allocation component (if it hasn't been registered before)
 		final String allocationName = componentInstanceName + "::" + executionContainerName;
 		AllocationComponent allocationComponentA =
 				this.systemEntityFactory.getAllocationFactory().lookupAllocationComponentInstanceByNamedIdentifier(allocationName);

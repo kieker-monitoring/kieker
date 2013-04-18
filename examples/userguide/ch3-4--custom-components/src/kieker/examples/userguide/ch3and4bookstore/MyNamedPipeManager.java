@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ public class MyNamedPipeManager {
 
 	private static final MyNamedPipeManager PIPE_MGR_INSTANCE = new MyNamedPipeManager();
 
-	/* Not synchronized! */
+	// Not synchronized!
 	private final Map<String, MyPipe> pipeMap = new HashMap<String, MyPipe>();
 
 	public static MyNamedPipeManager getInstance() {

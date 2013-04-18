@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,9 +29,9 @@ import kieker.common.logging.LogFactory;
 import kieker.monitoring.core.controller.ISamplingController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.sampler.ScheduledSamplerJob;
-import kieker.monitoring.probe.sigar.ISigarSamplerFactory;
-import kieker.monitoring.probe.sigar.SigarSamplerFactory;
-import kieker.monitoring.probe.sigar.samplers.CPUsCombinedPercSampler;
+import kieker.monitoring.sampler.sigar.ISigarSamplerFactory;
+import kieker.monitoring.sampler.sigar.SigarSamplerFactory;
+import kieker.monitoring.sampler.sigar.samplers.CPUsCombinedPercSampler;
 
 /**
  * <p>
@@ -71,9 +71,13 @@ import kieker.monitoring.probe.sigar.samplers.CPUsCombinedPercSampler;
  * </p>
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.3
  */
 public class CPUsCombinedServletContextListener implements ServletContextListener {
+	/** The default used sensor interval in seconds. */
 	public static final long DEFAULT_SENSOR_INTERVAL_SECONDS = 15;
+	/** The default used initial delay in seconds. */
 	public static final long DEFAULT_SENSOR_INITIAL_DELAY_SECONDS = 0;
 
 	/** Prefix for parameters used in the web.xml file. */
@@ -100,16 +104,25 @@ public class CPUsCombinedServletContextListener implements ServletContextListene
 	private volatile long sensorIntervalSeconds = DEFAULT_SENSOR_INTERVAL_SECONDS;
 	private volatile long initialDelaySeconds = DEFAULT_SENSOR_INITIAL_DELAY_SECONDS;
 
+	/**
+	 * Creates a new instance of this class.
+	 */
 	public CPUsCombinedServletContextListener() {
 		// nothing to do
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void contextDestroyed(final ServletContextEvent sce) {
 		for (final ScheduledSamplerJob s : this.samplerJobs) {
 			this.samplingController.removeScheduledSampler(s);
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void contextInitialized(final ServletContextEvent sce) {
 		this.initParameters(sce.getServletContext());
 		this.initSensors();

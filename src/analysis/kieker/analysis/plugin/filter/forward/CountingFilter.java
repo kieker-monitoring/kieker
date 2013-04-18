@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,8 @@ import kieker.common.configuration.Configuration;
  * corresponding method.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.4
  */
 @Plugin(
 		description = "A filter counting the elements flowing through this filter",
@@ -68,19 +70,6 @@ public final class CountingFilter extends AbstractFilterPlugin {
 	 */
 	public CountingFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
-	}
-
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public CountingFilter(final Configuration configuration) {
-		this(configuration, null);
 	}
 
 	/**

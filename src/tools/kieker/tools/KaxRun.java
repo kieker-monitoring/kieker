@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,11 +28,14 @@ import org.apache.commons.cli.ParseException;
 import kieker.analysis.AnalysisController;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.tools.util.CLIHelpFormatter;
 
 /**
  * A simple execution of Analysis Configurations.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public final class KaxRun {
 	private static final Log LOG = LogFactory.getLog(KaxRun.class);
@@ -64,7 +67,7 @@ public final class KaxRun {
 			kaxFilename = line.getOptionValue('i');
 		} catch (final ParseException ex) {
 			System.out.println(ex.getMessage()); // NOPMD (System.out)
-			final HelpFormatter formatter = new HelpFormatter();
+			final HelpFormatter formatter = new CLIHelpFormatter();
 			formatter.printHelp(KaxRun.class.getName(), options, true);
 			return;
 		}

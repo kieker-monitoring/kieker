@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,11 +46,11 @@ import kieker.common.record.misc.TimestampRecord;
  * </li>
  * </ol>
  * 
- * 
  * It is guaranteed that the generated timestamps are in ascending order.
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.3
  */
 @Plugin(description = "Generates time events with a given resolution based on the timestamps of incoming IMonitoringRecords",
 		outputPorts = {
@@ -116,19 +116,15 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 	public CurrentTimeEventGenerationFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
-		if (null != projectContext) { // TODO: remove non-null check and else case in Kieker 1.8)
-			final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
-			TimeUnit recordTimeunit;
-			try {
-				recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
-			} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
-				LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
-				recordTimeunit = TimeUnit.NANOSECONDS;
-			}
-			this.timeunit = recordTimeunit;
-		} else {
-			this.timeunit = TimeUnit.NANOSECONDS;
+		final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
+		TimeUnit recordTimeunit;
+		try {
+			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
+		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
+			LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
+			recordTimeunit = TimeUnit.NANOSECONDS;
 		}
+		this.timeunit = recordTimeunit;
 
 		final String configTimeunitProperty = configuration.getStringProperty(CONFIG_PROPERTY_NAME_TIMEUNIT);
 		TimeUnit configTimeunit;
@@ -143,20 +139,6 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 	}
 
 	/**
-	 * Creates an event generator which generates time events with the given resolution in timeunits via the output port
-	 * {@link #OUTPUT_PORT_NAME_CURRENT_TIME_RECORD}.
-	 * 
-	 * @param configuration
-	 *            The configuration to be used for this plugin.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public CurrentTimeEventGenerationFilter(final Configuration configuration) {
-		this(configuration, null);
-	}
-
-	/**
 	 * This method represents the input port for new records.
 	 * 
 	 * @param record
@@ -165,9 +147,7 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 	@InputPort(name = INPUT_PORT_NAME_NEW_RECORD, eventTypes = { IMonitoringRecord.class },
 			description = "Receives a new record and extracts the logging timestamp as a time event")
 	public void inputRecord(final IMonitoringRecord record) {
-		if (record != null) { // TODO: can we get null?
-			this.inputTimestamp(record.getLoggingTimestamp());
-		}
+		this.inputTimestamp(record.getLoggingTimestamp());
 	}
 
 	/**

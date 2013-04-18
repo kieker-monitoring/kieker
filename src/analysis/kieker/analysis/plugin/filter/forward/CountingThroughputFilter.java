@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,9 +45,6 @@ import kieker.common.util.ImmutableEntry;
  * 
  * @since 1.6
  */
-// TODO: In future versions, this filter should provide an output port in addition to the existing relay port.
-// TODO: In future versions, the throughput computation could (additionally) be triggered by external timer events
-// TODO: Introduce bounding capacity (Circular Buffer)
 @Plugin(
 		description = "A filter computing the throughput in terms of the number of events received per time unit",
 		outputPorts = {
@@ -78,10 +75,9 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 	 */
 	public static final String OUTPUT_PORT_NAME_RELAYED_OBJECTS = "relayedEvents";
 
-	/**
-	 * The name of the property determining the time unit.
-	 */
+	/** The name of the property determining the time unit. */
 	public static final String CONFIG_PROPERTY_NAME_TIMEUNIT = "timeunit";
+	/** The name of the property determining the interval size. */
 	public static final String CONFIG_PROPERTY_NAME_INTERVAL_SIZE = "intervalSize";
 
 	/**
@@ -105,14 +101,11 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 	private final boolean intervalsBasedOn1stTstamp;
 	private final TimeUnit timeunit;
 
-	// TODO: Introduce bounded capacity
 	/**
 	 * For a key <i>k</i>, the {@link Queue} stores the number of events observed in the time interval <i>(k-intervalSize,k(</i>, i.e.,
 	 * the interval <b>excludes</b> the value <i>k</i>.
 	 */
 	private final Queue<Entry<Long, Long>> eventCountsPerInterval = new ConcurrentLinkedQueue<Entry<Long, Long>>();
-
-	// TODO: additional TreeMap for accumulated values?
 
 	private final long intervalSize;
 
@@ -132,19 +125,15 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 	public CountingThroughputFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
-		if (null != projectContext) { // TODO: remove non-null check and else case in Kieker 1.8)
-			final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
-			TimeUnit recordTimeunit;
-			try {
-				recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
-			} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
-				LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
-				recordTimeunit = TimeUnit.NANOSECONDS;
-			}
-			this.timeunit = recordTimeunit;
-		} else {
-			this.timeunit = TimeUnit.NANOSECONDS;
+		final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
+		TimeUnit recordTimeunit;
+		try {
+			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
+		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
+			LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
+			recordTimeunit = TimeUnit.NANOSECONDS;
 		}
+		this.timeunit = recordTimeunit;
 
 		final String configTimeunitProperty = configuration.getStringProperty(CONFIG_PROPERTY_NAME_TIMEUNIT);
 		TimeUnit configTimeunit;
@@ -157,19 +146,6 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 
 		this.intervalSize = this.timeunit.convert(configuration.getLongProperty(CONFIG_PROPERTY_NAME_INTERVAL_SIZE), configTimeunit);
 		this.intervalsBasedOn1stTstamp = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_INTERVALS_BASED_ON_1ST_TSTAMP);
-	}
-
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public CountingThroughputFilter(final Configuration configuration) {
-		this(configuration, null);
 	}
 
 	/**
@@ -189,9 +165,7 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 		final long endOfTimestampsInterval = this.computeLastTimestampInInterval(currentTime);
 
 		synchronized (this) {
-			/*
-			 * Check if we need to close the current interval.
-			 */
+			// Check if we need to close the current interval.
 			if (endOfTimestampsInterval > this.lastTimestampInCurrentInterval) {
 				if (this.firstTimestampInCurrentInterval >= 0) { // don't do this for the first record (only used for initialization of variables)
 					this.eventCountsPerInterval.add(
@@ -220,13 +194,25 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 		super.deliver(OUTPUT_PORT_NAME_RELAYED_OBJECTS, event);
 	}
 
-	// TODO: What happens with unordered events (i.e., timestamps before firstTimestampInCurrentInterval)?
+	/**
+	 * This method represents the input port for incoming records.
+	 * 
+	 * @param record
+	 *            The next record.
+	 */
+	// #841 What happens with unordered events (i.e., timestamps before firstTimestampInCurrentInterval)?
 	@InputPort(name = INPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class },
 			description = "Receives incoming monitoring records to be considered for the throughput computation and uses the record's logging timestamp")
 	public final void inputRecord(final IMonitoringRecord record) {
 		this.processEvent(record, record.getLoggingTimestamp());
 	}
 
+	/**
+	 * This method represents the input port for incoming object.
+	 * 
+	 * @param object
+	 *            The next object.
+	 */
 	@InputPort(name = INPUT_PORT_NAME_OBJECTS, eventTypes = { Object.class },
 			description = "Receives incoming objects to be considered for the throughput computation and uses the current system time")
 	public final void inputObjects(final Object object) {
@@ -234,16 +220,15 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 	}
 
 	/**
-	 * Returns the current time in since 1970.
+	 * Returns the current time in {@link TimeUnit#MILLISECONDS} since 1970.
 	 * 
-	 * @return The current time.
+	 * @return The current time
 	 */
-	// TODO: Note that we only have a timer resolution of milliseconds here!
 	private long currentTime() {
 		return this.timeunit.convert(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
 	}
 
-	// TODO: is this correct? it probably makes more sense to provide a copy.
+	// #840 is this correct? it probably makes more sense to provide a copy.
 	public Collection<Entry<Long, Long>> getCountsPerInterval() {
 		return Collections.unmodifiableCollection(this.eventCountsPerInterval);
 	}
@@ -315,5 +300,4 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 	public long getCurrentCountForCurrentInterval() {
 		return this.currentCountForCurrentInterval.get();
 	}
-
 }

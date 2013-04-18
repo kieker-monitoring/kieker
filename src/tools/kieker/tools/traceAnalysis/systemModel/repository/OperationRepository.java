@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Map;
 
-import kieker.common.util.Signature;
+import kieker.common.util.signature.Signature;
 import kieker.tools.traceAnalysis.systemModel.ComponentType;
 import kieker.tools.traceAnalysis.systemModel.Operation;
 
@@ -28,6 +28,8 @@ import kieker.tools.traceAnalysis.systemModel.Operation;
  * This is a repository in which the available operations ({@link Operation}) can be stored.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 public class OperationRepository extends AbstractSystemSubRepository {
 	public static final Signature ROOT_SIGNATURE = new Signature("$", new String[] {}, "<>", new String[] {});
@@ -48,11 +50,10 @@ public class OperationRepository extends AbstractSystemSubRepository {
 	}
 
 	/**
-	 * Returns the instance for the passed namedIdentifier; null if no instance
-	 * with this namedIdentifier.
-	 * 
 	 * @param namedIdentifier
 	 *            The identifier to search for.
+	 * 
+	 * @return The instance for the passed namedIdentifier; null if no instance with this namedIdentifier.
 	 */
 	public final Operation lookupOperationByNamedIdentifier(final String namedIdentifier) {
 		return this.operationsByName.get(namedIdentifier);

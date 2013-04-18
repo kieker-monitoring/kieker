@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +40,6 @@ import org.w3c.dom.Document;
 
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxGeometry;
-import com.mxgraph.swing.handler.mxRubberband;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.util.mxCellRenderer;
 import com.mxgraph.util.mxConstants;
@@ -58,11 +57,14 @@ import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.tools.util.CLIHelpFormatter;
 
 /**
  * A simple visualization of Analysis Configurations.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public final class KaxViz extends JFrame {
 	static final Log LOG = LogFactory.getLog(KaxViz.class); // NOPMD package for inner class
@@ -194,7 +196,7 @@ public final class KaxViz extends JFrame {
 		graphComponent.setConnectable(false); // Inhibit edge creation in the graph.
 		graphComponent.setGridVisible(true); // Show the grid
 		graphComponent.setFoldingEnabled(false); // prevent folding of vertexes
-		new mxRubberband(graphComponent).isEnabled(); // add rubberband selection
+		new com.mxgraph.swing.handler.mxRubberband(graphComponent).isEnabled(); // add rubberband selection
 		this.getContentPane().add(graphComponent);
 
 		// add the actual graph
@@ -355,7 +357,7 @@ public final class KaxViz extends JFrame {
 			svgFilename = line.getOptionValue("svg");
 		} catch (final ParseException ex) {
 			System.out.println(ex.getMessage()); // NOPMD (System.out)
-			final HelpFormatter formatter = new HelpFormatter();
+			final HelpFormatter formatter = new CLIHelpFormatter();
 			formatter.printHelp(KaxViz.class.getName(), options, true);
 			return;
 		}

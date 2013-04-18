@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,8 @@ import kieker.monitoring.core.controller.MonitoringController;
 
 /**
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.3
  */
 public enum ControlFlowRegistry { // Singleton (Effective Java #3)
 	/** The singleton instance. */
@@ -32,12 +34,10 @@ public enum ControlFlowRegistry { // Singleton (Effective Java #3)
 
 	private static final Log LOG = LogFactory.getLog(ControlFlowRegistry.class); // NOPMD (enum logger)
 
-	/*
-	 * In order to (probabilistically!) avoid that other instances in our system (on another node, in another vm, ...) generate the same thread ids, we fill the
-	 * left-most 16 bits of the thread id with a uniquely distributed random number (0,0000152587890625 = 0,00152587890625 %). As a consequence, this constitutes
-	 * a uniquely distributed offset of size 2^(64-1-16) = 2^47 = 140737488355328L in the worst case. Note that we restrict ourselves to the positive long values
-	 * so far. Of course, negative values may occur (as a result of an overflow) -- this does not hurt!
-	 */
+	// In order to (probabilistically!) avoid that other instances in our system (on another node, in another vm, ...) generate the same thread ids, we fill the
+	// left-most 16 bits of the thread id with a uniquely distributed random number (0,0000152587890625 = 0,00152587890625 %). As a consequence, this constitutes a
+	// uniquely distributed offset of size 2^(64-1-16) = 2^47 = 140737488355328L in the worst case. Note that we restrict ourselves to the positive long values so
+	// far. Of course, negative values may occur (as a result of an overflow) -- this does not hurt!
 	private final AtomicLong lastThreadId = new AtomicLong(MonitoringController.getInstance().isDebug() ? 0 // NOCS
 			: (long) new Random().nextInt(65536) << (Long.SIZE - 16 - 1));
 	private final transient ThreadLocal<Long> threadLocalTraceId = new ThreadLocal<Long>();
@@ -58,16 +58,14 @@ public enum ControlFlowRegistry { // Singleton (Effective Java #3)
 		final long id = this.lastThreadId.incrementAndGet();
 		// Since we use -1 as a marker for an invalid traceId, it must not be returned!
 		if (id == -1) {
-			/*
-			 * in this case, choose a valid threadId. Note, that this is not necessarily 0 due to concurrent executions of this method.
-			 * 
-			 * Example: like the following one, but it seems to fine:
-			 * 
-			 * (this.lastThreadId = -2) Thread A: id = -1 (inc&get -2)
-			 * (this.lastThreadId = -1) Thread B: id = 0 (inc&get -1)
-			 * (this.lastThreadId = 0) Thread A: returns 1 (because id == -1, and this.lastThreadId=0 in the meantime)
-			 * (this.lastThreadId = 1) Thread B: returns 0 (because id != -1)
-			 */
+			// in this case, choose a valid threadId. Note, that this is not necessarily 0 due to concurrent executions of this method.
+			//
+			// Example: like the following one, but it seems to fine:
+			//
+			// (this.lastThreadId = -2) Thread A: id = -1 (inc&get -2)
+			// (this.lastThreadId = -1) Thread B: id = 0 (inc&get -1)
+			// (this.lastThreadId = 0) Thread A: returns 1 (because id == -1, and this.lastThreadId=0 in the meantime)
+			// (this.lastThreadId = 1) Thread B: returns 0 (because id != -1)
 			return this.lastThreadId.incrementAndGet();
 		} else { // i.e., id <> -1
 			return id;
@@ -77,6 +75,8 @@ public enum ControlFlowRegistry { // Singleton (Effective Java #3)
 	/**
 	 * This method returns a thread-local traceid which is globally unique and stored it local for the thread. The thread is responsible for invalidating the stored
 	 * curTraceId using the method unsetThreadLocalTraceId()!
+	 * 
+	 * @return A unique trace ID.
 	 */
 	public final long getAndStoreUniqueThreadLocalTraceId() {
 		final long id = this.getUniqueTraceId();

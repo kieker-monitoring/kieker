@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,8 +34,10 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.filesystem.FSUtil;
 import kieker.monitoring.core.registry.RegistryRecord;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
+import kieker.monitoring.writer.filesystem.map.MappingFileWriter;
 
 /**
  * Simple class to store monitoring data in the file system. Although a buffered
@@ -56,6 +58,8 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
  * outliers described above.
  * 
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
+ * 
+ * @since < 0.9
  */
 public final class SyncFsWriter extends AbstractMonitoringWriter {
 	private static final String PREFIX = SyncFsWriter.class.getName() + ".";
@@ -69,15 +73,13 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 
 	private static final Log LOG = LogFactory.getLog(SyncFsWriter.class);
 
-	private static final String FILE_PREFIX = "kieker-";
-	private static final String ENCODING = "UTF-8";
-
 	// internal variables
 	private final boolean autoflush;
 	private final int bufferSize;
 	private final int maxEntriesInFile;
 	private final long maxLogSize;
 	private final int maxLogFiles;
+	private final String configPath;
 
 	// only access within synchronized
 	private int entriesInCurrentFileCounter;
@@ -85,9 +87,8 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	private final LinkedList<FileNameSize> listOfLogFiles; // NOCS NOPMD (we explicitly need LinekdList here)
 	private long totalLogSize;
 
-	private MappingFileWriter mappingFileWriter;
-	private String filenamePrefix;
 	private String path;
+	private MappingFileWriter mappingFileWriter;
 	private PrintWriter pos;
 
 	private final DateFormat dateFormat;
@@ -95,12 +96,18 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	private long previousFileDate; // only used in synchronized
 	private long sameFilenameCounter; // only used in synchronized
 
+	/**
+	 * Creates a new instance of this class using the given configuration to initialize the class.
+	 * 
+	 * @param configuration
+	 *            The configuration used to initialize this writer.
+	 */
 	public SyncFsWriter(final Configuration configuration) throws IllegalArgumentException {
 		super(configuration);
-		this.autoflush = this.configuration.getBooleanProperty(CONFIG_FLUSH);
-		this.bufferSize = this.configuration.getIntProperty(CONFIG_BUFFER);
+		this.autoflush = configuration.getBooleanProperty(CONFIG_FLUSH);
+		this.bufferSize = configuration.getIntProperty(CONFIG_BUFFER);
 		// get number of entries per file
-		this.maxEntriesInFile = this.configuration.getIntProperty(CONFIG_MAXENTRIESINFILE);
+		this.maxEntriesInFile = configuration.getIntProperty(CONFIG_MAXENTRIESINFILE);
 		if (this.maxEntriesInFile < 1) {
 			throw new IllegalArgumentException(CONFIG_MAXENTRIESINFILE + " must be greater than 0 but is '" + this.maxEntriesInFile + "'");
 		}
@@ -119,38 +126,41 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		// initialize Date
 		this.dateFormat = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
 		this.dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+		// Determine path
+		String pathTmp;
+		if (configuration.getBooleanProperty(CONFIG_TEMP)) {
+			pathTmp = System.getProperty("java.io.tmpdir");
+		} else {
+			pathTmp = configuration.getStringProperty(CONFIG_PATH);
+		}
+		if (!(new File(pathTmp)).isDirectory()) {
+			throw new IllegalArgumentException("'" + pathTmp + "' is not a directory.");
+		}
+		this.configPath = pathTmp;
 	}
 
 	@Override
 	protected void init() throws IllegalArgumentException, IOException {
-		// Determine path
-		String pathTmp;
-		if (this.configuration.getBooleanProperty(CONFIG_TEMP)) {
-			pathTmp = System.getProperty("java.io.tmpdir");
-		} else {
-			pathTmp = this.configuration.getStringProperty(CONFIG_PATH);
-		}
-		File f = new File(pathTmp);
-		if (!f.isDirectory()) {
-			throw new IllegalArgumentException("'" + pathTmp + "' is not a directory.");
-		}
 		// Determine directory for files
 		final String ctrlName = super.monitoringController.getHostname() + "-" + super.monitoringController.getName();
 		final String dateStr = this.dateFormat.format(new java.util.Date()); // NOPMD (Date)
-		final StringBuffer sb = new StringBuffer(pathTmp.length() + FILE_PREFIX.length() + ctrlName.length() + 25);
-		sb.append(pathTmp).append(File.separatorChar).append(FILE_PREFIX).append(dateStr).append("-UTC-").append(ctrlName).append(File.separatorChar);
-		pathTmp = sb.toString();
-		f = new File(pathTmp);
+		final StringBuffer sb = new StringBuffer(this.configPath.length() + FSUtil.FILE_PREFIX.length() + ctrlName.length() + 26);
+		sb.append(this.configPath).append(File.separatorChar).append(FSUtil.FILE_PREFIX).append('-').append(dateStr).append("-UTC-").append(ctrlName)
+				.append(File.separatorChar);
+		final String pathTmp = sb.toString();
+		final File f = new File(pathTmp);
 		if (!f.mkdir()) {
 			throw new IllegalArgumentException("Failed to create directory '" + pathTmp + "'");
 		}
 		synchronized (this) { // visibility
 			this.path = f.getAbsolutePath();
-			this.filenamePrefix = this.path + File.separatorChar + FILE_PREFIX;
 			this.mappingFileWriter = new MappingFileWriter(this.path);
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 		if (monitoringRecord instanceof RegistryRecord) {
 			try {
@@ -228,9 +238,9 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 			this.pos.close();
 		}
 		if (this.autoflush) {
-			this.pos = new PrintWriter(new OutputStreamWriter(new FileOutputStream(filename), ENCODING), true);
+			this.pos = new PrintWriter(new OutputStreamWriter(new FileOutputStream(filename), FSUtil.ENCODING), true);
 		} else {
-			this.pos = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), ENCODING), this.bufferSize), false);
+			this.pos = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), FSUtil.ENCODING), this.bufferSize), false);
 		}
 		this.pos.flush();
 	}
@@ -246,12 +256,15 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 			this.sameFilenameCounter = 0;
 			this.previousFileDate = date;
 		}
-		final StringBuilder sb = new StringBuilder(this.filenamePrefix.length() + 30);
-		sb.append(this.filenamePrefix).append(this.dateFormat.format(new java.util.Date(date))).append("-UTC-") // NOPMD (Date)
-				.append(String.format("%03d", this.sameFilenameCounter)).append(".dat");
+		final StringBuilder sb = new StringBuilder(this.path.length() + FSUtil.FILE_PREFIX.length() + 31);
+		sb.append(this.path).append(File.separatorChar).append(FSUtil.FILE_PREFIX).append(this.dateFormat.format(new java.util.Date(date))) // NOPMD (date)
+				.append("-UTC-").append(String.format("%03d", this.sameFilenameCounter)).append(FSUtil.NORMAL_FILE_EXTENSION);
 		return sb.toString();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final void terminate() {
 		synchronized (this) {
 			if (this.pos != null) {
@@ -271,6 +284,9 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		return sb.toString();
 	}
 
+	/**
+	 * @author Jan Waller
+	 */
 	private static final class FileNameSize {
 		public final String name; // NOCS
 		public long size; // NOCS

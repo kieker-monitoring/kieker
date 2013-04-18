@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,12 +23,18 @@ package kieker.test.monitoring.aspectj.loadTimeWeaving.bookstore;
  *         of Kieker and publication under an open source licence 2007-04-18:
  *         Initial version
  * 
+ * @since < 0.9
  */
-
 public final class Catalog {
 
 	private Catalog() {}
 
+	/**
+	 * A dummy method which waits a little bit.
+	 * 
+	 * @param complexQuery
+	 *            Determines whether to wait 20 ms or 2 ms.
+	 */
 	public static void getBook(final boolean complexQuery) {
 		if (complexQuery) {
 			// complex query

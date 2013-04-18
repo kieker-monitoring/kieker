@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +36,8 @@ import kieker.common.logging.LogFactory;
  * All other objects are forwarded to the output-not port.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 @Plugin(
 		description = "Filters incoming objects based on their type",
@@ -93,19 +95,6 @@ public final class TypeFilter extends AbstractFilterPlugin {
 			}
 		}
 		this.acceptedClasses = listOfClasses.toArray(new Class<?>[listOfClasses.size()]);
-	}
-
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public TypeFilter(final Configuration configuration) {
-		this(configuration, null);
 	}
 
 	/**

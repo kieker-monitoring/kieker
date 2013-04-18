@@ -8,7 +8,7 @@
 \chapter{\KiekerTraceAnalysis{} Tool}\label{chap:aspectJ}
 
 \KiekerTraceAnalysis{} implements the special feature of \Kieker{} allowing to %
-monitor, analyze and visualize (distributed) traces of method executions and %
+monitor, analyze, and visualize (distributed) traces of method executions and %
 corresponding timing information. For this purpose, it includes monitoring probes employing %
 AspectJ~\cite{AspectJ-WebSite}, Java~EE Servlet~\cite{JavaServletTechnology-WebSite}, %
 Spring~\cite{Spring-WebSite}, and Apache~CXF~\cite{CXF-WebSite} technology. %
@@ -149,6 +149,7 @@ Once the necessary files have been copied to the example directory, the source c
 
 The \file{\aopConfigFile} file has to be modified to specify the classes to be considered for instrumentation by the AspectJ weaver. Listing~\ref{lst:aopConfigFileAnnotations} shows the modified configuration file.
 
+\enlargethispage{1cm}
 \setXMLListing
 \lstinputlisting[caption=aop.xml, label=lst:aopConfigFileAnnotations]{\aspectJBookstoreApplicationDir/META-INF/aop.xml}
 
@@ -188,7 +189,7 @@ Appendix~\ref{sec:appendix:exampleConsoleOutputs:aspectJExample}.
 AspectJ-based instrumentation without using annotations is quite simple. It is %
 only necessary to modify the file \file{\aopConfigFile{}}, as shown %
 in Listing~\ref{lst:aopConfigFileFull}.
-
+\pagebreak
 \setXMLListing
 \lstinputlisting[caption=aop.xml, label=lst:aopConfigFileFull]{\aspectJBookstoreApplicationDir/META-INF/aop-full.xml}
 

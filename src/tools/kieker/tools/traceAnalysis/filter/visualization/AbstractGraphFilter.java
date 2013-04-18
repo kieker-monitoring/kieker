@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -79,19 +79,6 @@ public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V ex
 		super(configuration, projectContext);
 
 		this.configuration = configuration;
-	}
-
-	/**
-	 * Creates a new filter with the given configuration.
-	 * 
-	 * @param configuration
-	 *            The filter configuration to use
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public AbstractGraphFilter(final Configuration configuration) {
-		this(configuration, null);
 	}
 
 	@Override

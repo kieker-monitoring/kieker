@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,6 +46,8 @@ import kieker.common.record.IMonitoringRecord;
  * This is a reader which reads the records from a JMX queue.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.4
  */
 @Plugin(description = "A reader which reads records from a JMX queue",
 		outputPorts = {
@@ -67,13 +69,20 @@ import kieker.common.record.IMonitoringRecord;
 		})
 public final class JMXReader extends AbstractReaderPlugin {
 
+	/** The name of the output port delivering the received records. */
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
 
+	/** The name of the configuration determining the JMX server. */
 	public static final String CONFIG_PROPERTY_NAME_SERVER = "server";
+	/** The name of the configuration determining the JMX port. */
 	public static final String CONFIG_PROPERTY_NAME_PORT = "port";
+	/** The name of the configuration determining the optional service URL. */
 	public static final String CONFIG_PROPERTY_NAME_SERVICEURL = "serviceUrl";
+	/** The name of the configuration determining the JMX domain. */
 	public static final String CONFIG_PROPERTY_NAME_DOMAIN = "domain";
+	/** The name of the configuration determining the logname used by the reader. */
 	public static final String CONFIG_PROPERTY_NAME_LOGNAME = "logname";
+	/** The name of the configuration determining whether the reader silently reconnects on any errors. */
 	public static final String CONFIG_PROPERTY_NAME_SILENT = "silentReconnect";
 
 	static final Log LOG = LogFactory.getLog(JMXReader.class); // NOPMD package for inner class
@@ -123,22 +132,6 @@ public final class JMXReader extends AbstractReaderPlugin {
 			throw new IllegalArgumentException("Failed to parse configuration.", e);
 		}
 		this.silentreconnect = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SILENT);
-	}
-
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @throws IllegalArgumentException
-	 *             If the arguments are invalid.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public JMXReader(final Configuration configuration) throws IllegalArgumentException {
-		this(configuration, null);
 	}
 
 	/**
@@ -315,6 +308,9 @@ public final class JMXReader extends AbstractReaderPlugin {
 		return configuration;
 	}
 
+	/**
+	 * @author Jan waller
+	 */
 	private final class LogNotificationListener implements NotificationListener {
 
 		public LogNotificationListener() {
@@ -326,6 +322,9 @@ public final class JMXReader extends AbstractReaderPlugin {
 		}
 	}
 
+	/**
+	 * @author Jan waller
+	 */
 	private final class ServerNotificationListener implements NotificationListener {
 
 		/**

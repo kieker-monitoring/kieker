@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,8 @@ import kieker.common.configuration.Configuration;
  * This is the interface for plugins within Kieker.
  * 
  * @author Nils Christian Ehmke, Jan Waller
+ * 
+ * @since 1.5
  */
 public interface IPlugin extends IAnalysisComponent {
 
@@ -38,6 +40,8 @@ public interface IPlugin extends IAnalysisComponent {
 	 * Asynchronous consumers would spawn (an) asynchronous thread(s) in this method.
 	 * 
 	 * @return true on success; false otherwise.
+	 * 
+	 * @since 1.6
 	 */
 	public boolean init();
 
@@ -51,6 +55,8 @@ public interface IPlugin extends IAnalysisComponent {
 	 * 
 	 * @param error
 	 *            Determines whether the plugin is terminated due to an error or not.
+	 * 
+	 * @since 1.6
 	 */
 	public void terminate(final boolean error);
 
@@ -59,6 +65,8 @@ public interface IPlugin extends IAnalysisComponent {
 	 * able to use the given object to initialize a new instance of this class with the same intern properties.
 	 * 
 	 * @return A completely filled configuration object.
+	 * 
+	 * @since 1.5
 	 */
 	public abstract Configuration getCurrentConfiguration();
 
@@ -66,6 +74,8 @@ public interface IPlugin extends IAnalysisComponent {
 	 * This method delivers the plugin name of this plugin. The name should be unique, e.g., the classname.
 	 * 
 	 * @return The name of the plugin.
+	 * 
+	 * @since 1.5
 	 */
 	public abstract String getPluginName();
 
@@ -73,6 +83,8 @@ public interface IPlugin extends IAnalysisComponent {
 	 * This method delivers the description of this plugin type.
 	 * 
 	 * @return The description of the plugin type.
+	 * 
+	 * @since 1.5
 	 */
 	public abstract String getPluginDescription();
 
@@ -80,6 +92,8 @@ public interface IPlugin extends IAnalysisComponent {
 	 * This method delivers the current name of this plugin instance. The name does not have to be unique.
 	 * 
 	 * @return The current name of the plugin instance.
+	 * 
+	 * @since 1.5
 	 */
 	public abstract String getName();
 
@@ -92,6 +106,8 @@ public interface IPlugin extends IAnalysisComponent {
 	 *            The repository which should be used.
 	 * @throws AnalysisConfigurationException
 	 *             if the repository-port is invalid, the repository itself is incompatible or the port is already used.
+	 * 
+	 * @since 1.5
 	 */
 	public abstract void connect(final String name, final AbstractRepository repo) throws AnalysisConfigurationException;
 
@@ -100,6 +116,8 @@ public interface IPlugin extends IAnalysisComponent {
 	 * be able to use the given object to initialize a new instance of this class with the same intern properties.
 	 * 
 	 * @return An (possible empty) array of repositories.
+	 * 
+	 * @since 1.5
 	 */
 	public abstract Map<String, AbstractRepository> getCurrentRepositories();
 
@@ -107,6 +125,8 @@ public interface IPlugin extends IAnalysisComponent {
 	 * Delivers an array containing all output port names.
 	 * 
 	 * @return An array with all available output port names.
+	 * 
+	 * @since 1.5
 	 */
 	public abstract String[] getAllOutputPortNames();
 
@@ -114,6 +134,8 @@ public interface IPlugin extends IAnalysisComponent {
 	 * Delivers an array containing all input port names.
 	 * 
 	 * @return An array with all available input port names.
+	 * 
+	 * @since 1.5
 	 */
 	public abstract String[] getAllInputPortNames();
 
@@ -121,6 +143,8 @@ public interface IPlugin extends IAnalysisComponent {
 	 * Delivers an array containing all display names.
 	 * 
 	 * @return An array with all available display names.
+	 * 
+	 * @since 1.6
 	 */
 	public abstract String[] getAllDisplayNames();
 
@@ -128,6 +152,8 @@ public interface IPlugin extends IAnalysisComponent {
 	 * Delivers an array containing all repository port names.
 	 * 
 	 * @return An array with all available repository port names.
+	 * 
+	 * @since 1.7
 	 */
 	public abstract String[] getAllRepositoryPortNames();
 
@@ -138,12 +164,16 @@ public interface IPlugin extends IAnalysisComponent {
 	 *            The name of the output port.
 	 * @return An array of pairs, whereat the first element is the plugin and the second one the name of the input port. If the given output port is invalid, null is
 	 *         returned
+	 * 
+	 * @since 1.5
 	 */
 	public abstract List<PluginInputPortReference> getConnectedPlugins(final String outputPortName);
 
 	/**
 	 * 
 	 * @return the current state of the plugin
+	 * 
+	 * @since 1.6
 	 */
 	public abstract STATE getState();
 
@@ -151,6 +181,8 @@ public interface IPlugin extends IAnalysisComponent {
 	 * This simple class represents a container for the reference between a plugin, its input port and the corresponding method.
 	 * 
 	 * @author Nils Christian Ehmke
+	 * 
+	 * @since 1.5
 	 */
 	public static final class PluginInputPortReference {
 
@@ -219,6 +251,8 @@ public interface IPlugin extends IAnalysisComponent {
 	 * An enumeration used to describe the state of an {@link AbstractPlugin}.
 	 * 
 	 * @author Jan Waller
+	 * 
+	 * @since 1.6
 	 */
 	public static enum STATE {
 		/**

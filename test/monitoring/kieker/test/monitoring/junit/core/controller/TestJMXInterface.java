@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,9 +26,14 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * Otherwise jUnit gets Problems with two open JMX servers.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public final class TestJMXInterface extends AbstractKiekerTest { // NOPMD NOCS
 
+	/**
+	 * A dummy test method.
+	 */
 	@Test
 	public void testIt() {
 		Assert.assertTrue(true); // NOPMD // NOCS // NOGARNIX, tested elsewhere

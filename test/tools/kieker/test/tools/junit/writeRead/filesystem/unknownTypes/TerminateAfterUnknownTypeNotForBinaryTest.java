@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,7 @@ import kieker.monitoring.writer.filesystem.AsyncBinaryFsWriter;
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.5
  */
 public class TerminateAfterUnknownTypeNotForBinaryTest extends AbstractUnknownTypeTest { // NOPMD (TestClassWithoutTestCases)
 
@@ -47,7 +48,6 @@ public class TerminateAfterUnknownTypeNotForBinaryTest extends AbstractUnknownTy
 
 	@Override
 	protected void refineWriterConfiguration(final Configuration config, final int numRecordsWritten) {
-		// TODO: additional configuration parameters
 		LogImplJUnit.disableThrowable(MonitoringRecordException.class);
 	}
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,6 +49,8 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
  * this plugin is not delegated in any way.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 @Plugin(description = "A filter allowing to write the incoming data into a calling tree",
 		repositoryPorts = {
@@ -61,11 +63,13 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
 					defaultValue = TraceCallTreeFilter.CONFIG_PROPERTY_VALUE_OUTPUT_FILENAME_DEFAULT)
 		})
 public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
-
+	/** This is the name of the property determining the output file name. */
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FILENAME = "dotOutputFn";
+	/** This is the name of the property determining whether to use short labels or not. */
 	public static final String CONFIG_PROPERTY_NAME_SHORT_LABELS = "shortLabels";
-
+	/** This is the default used output file name. */
 	public static final String CONFIG_PROPERTY_VALUE_OUTPUT_FILENAME_DEFAULT = "traceCalltree.dot";
+	/** This is the default value whether to use short labels or not. */
 	public static final String CONFIG_PROPERTY_VALUE_SHORT_LABELS_DEFAULT = "true";
 
 	private static final Log LOG = LogFactory.getLog(TraceCallTreeFilter.class);
@@ -87,19 +91,6 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 		// Initialize the fields based on the given parameters. */
 		this.shortLabels = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS);
 		this.dotOutputFn = configuration.getStringProperty(CONFIG_PROPERTY_NAME_OUTPUT_FILENAME);
-	}
-
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public TraceCallTreeFilter(final Configuration configuration) {
-		this(configuration, null);
 	}
 
 	@Override
@@ -137,9 +128,9 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 			final TraceCallTreeNode rootNode =
 					new TraceCallTreeNode(AbstractSystemSubRepository.ROOT_ELEMENT_ID, AllocationComponentOperationPairFactory.ROOT_PAIR, true, mt,
 							NoOriginRetentionPolicy.createInstance()); // rootNode
-			AbstractCallTreeFilter.writeDotForMessageTrace(rootNode, new IPairFactory() {
+			AbstractCallTreeFilter.writeDotForMessageTrace(rootNode, new IPairFactory<AllocationComponentOperationPair>() {
 
-				public Object createPair(final SynchronousCallMessage callMsg) {
+				public AllocationComponentOperationPair createPair(final SynchronousCallMessage callMsg) {
 					final AllocationComponent allocationComponent = callMsg.getReceivingExecution().getAllocationComponent();
 					final Operation op = callMsg.getReceivingExecution().getOperation();
 					final AllocationComponentOperationPair destination = TraceCallTreeFilter.this.getSystemEntityFactory().getAllocationPairFactory()

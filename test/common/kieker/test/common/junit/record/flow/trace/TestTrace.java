@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,6 +37,9 @@ public class TestTrace extends AbstractKiekerTest {
 	private static final long PARENT_TRACE_ID = 3487L;
 	private static final int PARENT_ORDER_ID = 357835;
 
+	/**
+	 * Default constructor.
+	 */
 	public TestTrace() {
 		// empty default constructor
 	}

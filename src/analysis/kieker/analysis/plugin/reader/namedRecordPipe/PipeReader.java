@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,8 @@ import kieker.common.record.IMonitoringRecord;
  * This reader can be used to read records via an in-memory pipe.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.3
  */
 @Plugin(description = "A reader which reads records via an in-memory pipe",
 		outputPorts = {
@@ -47,16 +49,12 @@ import kieker.common.record.IMonitoringRecord;
 		})
 public final class PipeReader extends AbstractReaderPlugin implements IPipeReader {
 
-	/**
-	 * This is the name of the default output port.
-	 */
+	/** This is the name of the default output port. */
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
 
-	/**
-	 * This is the configuration-parameter for the name of the pipe to be used.
-	 */
+	/** This is the configuration-parameter for the name of the pipe to be used. */
 	public static final String CONFIG_PROPERTY_NAME_PIPENAME = "pipeName";
-
+	/** The default used pipe name. */
 	public static final String CONFIG_PROPERTY_VALUE_PIPENAME_DEFAULT = "kieker-pipe";
 
 	private static final Log LOG = LogFactory.getLog(PipeReader.class);
@@ -87,21 +85,8 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 				LOG.debug("Connected to named pipe '" + this.pipe.getName() + "'");
 			}
 		}
-		// TODO: escaping this in constructor! very bad practice!
+		// escaping this in constructor! very bad practice!
 		this.pipe.setPipeReader(this);
-	}
-
-	/**
-	 * Creates a new instance of this class using the given parameter.
-	 * 
-	 * @param configuration
-	 *            The configuration used to load the pipe name. It <b>must</b> contain the property {@link #CONFIG_PROPERTY_NAME_PIPENAME}.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public PipeReader(final Configuration configuration) {
-		this(configuration, null);
 	}
 
 	/**
@@ -132,6 +117,9 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 		return super.deliver(OUTPUT_PORT_NAME_RECORDS, rec);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void notifyPipeClosed() {
 		// Notify main thread
 		this.terminationLatch.countDown();

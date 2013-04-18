@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,8 @@ import kieker.common.record.IMonitoringRecord;
 
 /**
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.3
  */
 public final class ResourceUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
 	private static final long serialVersionUID = 8412442607068036054L;
@@ -74,6 +76,12 @@ public final class ResourceUtilizationRecord extends AbstractMonitoringRecord im
 		this.utilization = utilization;
 	}
 
+	/**
+	 * This constructor converts the given array into a record. It is recommended to use the array which is the result of a call to {@link #toArray()}.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 */
 	public ResourceUtilizationRecord(final Object[] values) { // NOPMD (values stored directly)
 		AbstractMonitoringRecord.checkArray(values, TYPES);
 		this.timestamp = (Long) values[0];

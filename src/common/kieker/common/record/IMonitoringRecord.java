@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,20 +19,26 @@ package kieker.common.record;
 import java.io.Serializable;
 
 /**
+ * All Kieker monitoring records have to implement this minimal interface.
  * 
  * <p>
  * <b>Warning:</b> Objects within records should not contain ';', '\n', or '\r' in their respective toString() representation.
  * </p>
  * 
+ * @see Factory
+ * 
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.2
  */
-// TODO: further description
 public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringRecord> {
 
 	/**
 	 * Delivers the current timestamp of the record.
 	 * 
 	 * @return The timestamp.
+	 * 
+	 * @since 1.2
 	 */
 	public long getLoggingTimestamp();
 
@@ -41,6 +47,8 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * 
 	 * @param timestamp
 	 *            The new timestamp for the record.
+	 * 
+	 * @since 1.2
 	 */
 	public void setLoggingTimestamp(long timestamp);
 
@@ -48,6 +56,8 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * This method should deliver an array containing the content of the record. It should be possible to convert this array later into a record again.
 	 * 
 	 * @return An array with the values of the record.
+	 * 
+	 * @since 1.2
 	 */
 	public Object[] toArray();
 
@@ -58,6 +68,8 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * This method should not be used for serialization purposes since this is not the purpose of Object's toString method.
 	 * 
 	 * @return A (human readable) string of this record.
+	 * 
+	 * @since 1.5
 	 */
 	public String toString();
 
@@ -66,6 +78,8 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * 
 	 * @param values
 	 *            The values for the record.
+	 * 
+	 * @since 1.2
 	 */
 	public void initFromArray(Object[] values);
 
@@ -75,16 +89,25 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * @return The types of the values.
 	 * 
 	 * @see #toArray()
+	 * 
+	 * @since 1.2
 	 */
 	public Class<?>[] getValueTypes();
 
 	/**
 	 * Any record that implements this interface has to conform to certain specifications.
 	 * 
+	 * <p>
+	 * These records can use final fields and thus provide better performance.
+	 * </p>
+	 * 
 	 * <ul>
 	 * <li>a constructor accepting a single Object[] as argument.
 	 * <li>a <code>private static final Class&lt;?&gt;[] TYPES</code> specifying the types of the records, usually returned via {@link #getValueTypes()}.
+	 * <li>the {@link #initFromArray(Object[])} method does not have to be implemented
 	 * </ul>
+	 * 
+	 * @since 1.5
 	 */
 	public static interface Factory { // NOCS (name)
 		// empty marker interface

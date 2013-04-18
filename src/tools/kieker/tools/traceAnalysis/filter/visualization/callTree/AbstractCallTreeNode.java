@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,8 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
  *            The type of the entity to be stored in the node.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 public abstract class AbstractCallTreeNode<T> extends AbstractVertex<AbstractCallTreeNode<T>, WeightedDirectedCallTreeEdge<T>, MessageTrace> {
 
@@ -42,6 +44,20 @@ public abstract class AbstractCallTreeNode<T> extends AbstractVertex<AbstractCal
 
 	private final List<WeightedDirectedCallTreeEdge<T>> childEdges = Collections.synchronizedList(new ArrayList<WeightedDirectedCallTreeEdge<T>>());
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param id
+	 *            The identifier of this node.
+	 * @param entity
+	 *            The content of this node.
+	 * @param rootNode
+	 *            Determines whether this node is the root node or not.
+	 * @param origin
+	 *            The meta data of this node.
+	 * @param originPolicy
+	 *            The origin policy.
+	 */
 	public AbstractCallTreeNode(final int id, final T entity, final boolean rootNode, final MessageTrace origin, final IOriginRetentionPolicy originPolicy) {
 		super(origin, originPolicy);
 		this.id = id;
@@ -67,13 +83,17 @@ public abstract class AbstractCallTreeNode<T> extends AbstractVertex<AbstractCal
 		return this.childEdges;
 	}
 
-	/** Append edge to *sorted* list of children. */
+	/**
+	 * Append edge to *sorted* list of children.
+	 * 
+	 * @param destination
+	 *            The edge to add to the list of children edges.
+	 */
 	protected final void appendChildEdge(final WeightedDirectedCallTreeEdge<T> destination) {
 		this.childEdges.add(destination);
 	}
 
-	// TODO: Dirty hack, Object should be T.
-	public abstract AbstractCallTreeNode<T> newCall(Object destination, MessageTrace origin, IOriginRetentionPolicy originPolicy);
+	public abstract AbstractCallTreeNode<T> newCall(T destination, MessageTrace origin, IOriginRetentionPolicy originPolicy);
 
 	public final int getId() {
 		return this.id;

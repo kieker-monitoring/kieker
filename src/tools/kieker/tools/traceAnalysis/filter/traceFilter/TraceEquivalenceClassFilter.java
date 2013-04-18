@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,10 +38,9 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
- * This class has exactly one input port named "in" and two output ports named
- * "messageTraceOutput", "executionTraceOutput".
- * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.2
  */
 @Plugin(description = "Puts the incoming traces into equivalence classes",
 		outputPorts = {
@@ -86,6 +85,8 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 	 * This enum represents the different trace equivalence class modes.
 	 * 
 	 * @author Andre van Hoorn
+	 * 
+	 * @since 1.2
 	 */
 	public static enum TraceEquivalenceClassModes {
 		/** Disabled equivalence mode */
@@ -109,20 +110,6 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 		super(configuration, projectContext);
 
 		this.equivalenceMode = this.extractTraceEquivalenceClassMode(this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_EQUIVALENCE_MODE));
-	}
-
-	/**
-	 * Creates a new instance of this class using the given configuration object. Keep in mind that the Trace-Equivalence-Class-Mode has to be set via the method
-	 * <i>setTraceEquivalenceCallMode</i> before using this component!
-	 * 
-	 * @param configuration
-	 *            The configuration object used to initialize this object.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public TraceEquivalenceClassFilter(final Configuration configuration) {
-		this(configuration, null);
 	}
 
 	private TraceEquivalenceClassModes extractTraceEquivalenceClassMode(final String traceEquivalenceCallModeString) {

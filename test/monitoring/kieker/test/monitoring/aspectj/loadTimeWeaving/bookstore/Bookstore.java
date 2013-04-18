@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,12 +28,15 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
  *         Kieker and publication under an open source licence
  *         2007-04-18: Initial version
  * 
+ * @since < 0.9
  */
-
 public class Bookstore extends Thread {
 	private static final int NUM_REQUESTS = 1000;
 	private static final int INTER_REQUEST_TIME = 5;
 
+	/**
+	 * Default constructor.
+	 */
 	public Bookstore() {
 		// nothing to do
 	}
@@ -75,6 +78,9 @@ public class Bookstore extends Thread {
 		Bookstore.searchBook();
 	}
 
+	/**
+	 * Searches for a book.
+	 */
 	@OperationExecutionMonitoringProbe
 	public static void searchBook() {
 		Catalog.getBook(false);

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,7 +68,7 @@ public class AnalysisComponentConstructorCheck extends Check {
 	@Override
 	public void visitToken(final DetailAST ast) {
 		// Check whether we are interested in the class (whether it is an analysis component or not)
-		if (!(this.ignoreAbstractClasses && AnalysisComponentConstructorCheck.isAbstract(ast)) && AnalysisComponentConstructorCheck.isAnalysisComponent(ast)) {
+		if (!(this.ignoreAbstractClasses && CSUtility.isAbstract(ast)) && AnalysisComponentConstructorCheck.isAnalysisComponent(ast)) {
 			// Now check the constructors
 			DetailAST child = ast.findFirstToken(TokenTypes.OBJBLOCK).findFirstToken(TokenTypes.CTOR_DEF);
 			while (child != null) {
@@ -83,20 +83,6 @@ public class AnalysisComponentConstructorCheck extends Check {
 			// Seems like there is no valid constructor
 			this.log(ast.getLineNo(), "invalid analysis component constructor");
 		}
-	}
-
-	/**
-	 * Checks whether the given class is marked as abstract or not.
-	 * 
-	 * @param clazz
-	 *            The class to check.
-	 * 
-	 * @return true if and only if the class contains an abstract modifier.
-	 */
-	private static boolean isAbstract(final DetailAST clazz) {
-		final DetailAST modifiers = clazz.findFirstToken(TokenTypes.MODIFIERS);
-
-		return modifiers.findFirstToken(TokenTypes.ABSTRACT) != null;
 	}
 
 	/**

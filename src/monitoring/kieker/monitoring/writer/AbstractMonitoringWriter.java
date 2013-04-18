@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,16 +25,17 @@ import kieker.monitoring.core.controller.IMonitoringController;
 
 /**
  * @author Jan Waller, Robert von Massow
+ * 
+ * @since 1.3
  */
 public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 	private static final Log LOG = LogFactory.getLog(AbstractMonitoringWriter.class);
 
-	protected final Configuration configuration;
+	private final Configuration configuration;
 	protected IMonitoringController monitoringController;
 
 	/**
 	 * 
-	 * @param IWriterController
 	 * @param configuration
 	 *            The configuration for this component.
 	 */
@@ -89,10 +90,6 @@ public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 	public final void setController(final IMonitoringController controller) throws Exception {
 		this.monitoringController = controller;
 		this.init();
-	}
-
-	public final Configuration getConfiguration() {
-		return this.configuration;
 	}
 
 	/**

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,22 +42,22 @@ public final class CallOperationObjectEvent extends CallOperationEvent implement
 	private final int calleeObjectId;
 
 	/**
-	 * Creates a new instance of this class using the given parameters.
+	 * This constructor uses the given parameters to initialize the fields of this record.
 	 * 
 	 * @param timestamp
-	 *            The timestamp.
+	 *            The timestamp of this record.
 	 * @param traceId
 	 *            The trace ID.
 	 * @param orderIndex
 	 *            The order index.
 	 * @param callerOperationSignature
-	 *            The operation signature of the caller.
+	 *            The caller operation signature. This parameter can be null.
 	 * @param callerClassSignature
-	 *            The class signature of the caller.
+	 *            The caller class signature. This parameter can be null.
 	 * @param calleeOperationSignature
-	 *            The operation signature of the callee.
+	 *            The callee operation signature. This parameter can be null.
 	 * @param calleeClassSignature
-	 *            The class signature of the callee.
+	 *            The callee class signature. This parameter can be null.
 	 * @param callerObjectId
 	 *            The ID of the caller object.
 	 * @param calleeObjectId
@@ -146,7 +146,8 @@ public final class CallOperationObjectEvent extends CallOperationEvent implement
 		return this.calleeObjectId;
 	}
 
-	// TODO include objectIds?
+	// Currently, we do not override this method to include a comparison of object ids. So, these events stay downward compatible and just provide additional
+	// information.
 	// @Override
 	// public final boolean callsReferencedOperationOf(final IOperationRecord record) {
 	// return this.getCalleeOperationSignature().equals(record.getOperationSignature()) && this.getCalleeClassSignature().equals(record.getClassSignature());

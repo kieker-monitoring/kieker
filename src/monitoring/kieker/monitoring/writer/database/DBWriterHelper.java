@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,8 @@ import kieker.common.logging.LogFactory;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public final class DBWriterHelper {
 	private static final Log LOG = LogFactory.getLog(DBWriterHelper.class);
@@ -42,10 +44,38 @@ public final class DBWriterHelper {
 
 	private final Map<Class<?>, String> createTypeMap = new ConcurrentHashMap<Class<?>, String>(); // NOPMD (Map)
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param connection
+	 *            The connection to the database.
+	 * @param indexTablename
+	 *            The index table name (The created tables will have this name as a prefix).
+	 * @param overwrite
+	 *            If set to true, existing tables will be dropped and newly created.
+	 * 
+	 * @throws SQLException
+	 *             If something went wrong during the preparation of the connection.
+	 */
 	public DBWriterHelper(final Connection connection, final String indexTablename, final boolean overwrite) throws SQLException {
 		this(connection, indexTablename, new AtomicInteger(), overwrite);
 	}
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param connection
+	 *            The connection to the database.
+	 * @param indexTablename
+	 *            The index table name (The created tables will have this name as a prefix).
+	 * @param tableCounter
+	 *            The counter containing the number of tables within the current system.
+	 * @param overwrite
+	 *            If set to true, existing tables will be dropped and newly created.
+	 * 
+	 * @throws SQLException
+	 *             If something went wrong during the preparation of the connection.
+	 */
 	public DBWriterHelper(final Connection connection, final String indexTablename, final AtomicInteger tableCounter, final boolean overwrite) throws SQLException {
 		this.connection = connection;
 		ResultSet databaseTypeInfo = null;
@@ -105,6 +135,18 @@ public final class DBWriterHelper {
 		this.overwrite = overwrite;
 	}
 
+	/**
+	 * Creates a table using the given parameters.
+	 * 
+	 * @param classname
+	 *            The name of the class which corresponds to the newly created table.
+	 * @param columns
+	 *            The array of classes determining the columns of this table.
+	 * @return The name of the newly created table.
+	 * 
+	 * @throws SQLException
+	 *             If something went wrong during the creation.
+	 */
 	public String createTable(final String classname, final Class<?>... columns) throws SQLException {
 		// automatically determine the tablename
 		final String tablename = this.indexTablename + "_" + this.tableCounter.getAndIncrement();
@@ -211,6 +253,21 @@ public final class DBWriterHelper {
 		}
 	}
 
+	/**
+	 * This is a simple helper method using automatically the correct setter method for the given value to set a value within the prepared statement.
+	 * 
+	 * @param preparedStatement
+	 *            The prepared statement to fill.
+	 * @param parameterIndex
+	 *            The index of the parameter to fill.
+	 * @param value
+	 *            The value of the parameter to fill.
+	 * 
+	 * @return true iff the setting was successful.
+	 * 
+	 * @throws SQLException
+	 *             If, for example, the connection has already been closed or the given index is invalid.
+	 */
 	public boolean set(final PreparedStatement preparedStatement, final int parameterIndex, final Object value) throws SQLException {
 		if (value instanceof String) {
 			preparedStatement.setString(parameterIndex, (String) value);

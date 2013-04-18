@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,8 @@ package kieker.tools.traceAnalysis.filter.visualization.util.dot;
  * @see <a href="http://de.wikipedia.org/wiki/Graphviz">Graphviz - Wikipedia</a>
  * 
  * @author Nina Marwede
+ * 
+ * @since 1.1
  */
 public final class DotFactory {
 
@@ -42,6 +44,7 @@ public final class DotFactory {
 	public static final String DOT_STYLE_DASHED = "dashed";
 	/** Determines to use an open arrow head for an edge. */
 	public static final String DOT_ARROWHEAD_OPEN = "open";
+	/** Determines the default font size. */
 	public static final double DOT_DEFAULT_FONTSIZE = 0.0;
 	/** Determines to use the rank direction left to right . */
 	public static final String DOT_DOT_RANKDIR_LR = "LR";
@@ -177,6 +180,7 @@ public final class DotFactory {
 	 * @param fontsize
 	 *            The size of the font. This parameter can be null.
 	 * @param imageFilename
+	 *            The name of the image to be displayed inside the node.
 	 * @param misc
 	 *            This parameter can be used to add miscellaneous data and dot code.
 	 * @param tooltip
