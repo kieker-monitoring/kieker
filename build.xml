@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Kieker" default="build-all" basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 	<property file="build-config/build.properties" />
-	
-	<taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask" />
         
 	<import file="build-config/init-and-clean.xml"/>
 	<import file="build-config/compile-and-build.xml"/>

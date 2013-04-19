@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Kieker (test)"  basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
     
+	<taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask" />
+	
     <target name="run-test-storage" depends="-compile-tests-monitoring" description="Runs a simple storage test">
 		<echo>
 			This is a small test for the part of Kieker that
