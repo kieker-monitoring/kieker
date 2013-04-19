@@ -354,6 +354,21 @@
 		</iajc>
 	</target>
         
-        <target name="compile-tests" depends="-compile-tests-common,-compile-tests-analysis,-compile-tests-monitoring,-compile-tests-tools" description="Compile the tests for the Kieker components" />
+     <target name="compile-tests" depends="-compile-tests-common,-compile-tests-analysis,-compile-tests-monitoring,-compile-tests-tools" description="Compile the tests for the Kieker components" />
 
+	<!--
+	<target name="rebuild-aspectj" description="Corrects the manifest.mf file of the aspectweaver-*.jar">
+		<fileset dir="${lib.dir}" id="aspectjweaver-jar-set">
+			<include name="aspectjweaver-*.jar" />
+		</fileset>
+		<pathconvert property="aspectjweaver-jar" refid="aspectjweaver-jar-set" />
+		<jar destfile="${dist.dir}/aspectjweaver.jar" duplicate="fail" filesetmanifest="merge">
+			<zipfileset src="${aspectjweaver-jar}" />
+			<manifest>
+				<attribute name="Premain-Class" value="org.aspectj.weaver.loadtime.Agent" />
+				<attribute name="Can-Redefine-Classes" value="true" />
+			</manifest>
+		</jar>
+	</target>
+	-->
 </project>

@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Kieker (dist and deploy)"  basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
     
-    
+    <path id="maven-ant-tasks.classpath" path="lib/maven-ant-tasks-2.1.3.jar" />
+	<typedef resource="org/apache/maven/artifact/ant/antlib.xml"
+					 uri="antlib:org.apache.maven.artifact.ant"
+					 classpathref="maven-ant-tasks.classpath" />
 
 	<target name="dist-kieker-javadoc" depends="-init,-generate-javadoc" description="Packages the Javadoc API documentation archives">
 		<tar destfile="${release.dir}/${dist.kieker.apiBaseName}.tar" longfile="gnu">
