@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2013 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
+
 package kieker.tools.bridge.connector.tcp;
 
 import java.io.DataInputStream;
@@ -28,8 +25,10 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.tools.bridge.LookupEntity;
 
 /**
- * @author rju
  * 
+ * 
+ * @author Reiner Jung
+ * @since 1.8
  */
 public class TCPClientService extends AbstractTCPService {
 

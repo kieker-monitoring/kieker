@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2013 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,20 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
+
 package kieker.tools.bridge;
 
 /**
- * @author rju
- *
+ * 
+ * 
+ * @author Reiner Jung
+ * @since 1.8
  */
 public interface IServiceListener {
-	
+
 	/**
-	 * Called by the main service loop to inform the listener about processed records and
-	 * an optional message.
+	 * Called by the main service loop to inform the listener about processed records and an optional message.
 	 * 
-	 * @param recordCount number of processed records
-	 * @param message optional message (could be null)
+	 * @param recordCount
+	 *            number of processed records
+	 * @param message
+	 *            optional message (could be null)
+	 * 
+	 * @since 1.8
 	 */
 	void handleEvent(long recordCount, String message);
 }

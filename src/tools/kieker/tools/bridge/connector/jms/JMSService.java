@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2013 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
+
 package kieker.tools.bridge.connector.jms;
 
 import java.io.IOException;
@@ -37,14 +34,15 @@ import javax.jms.TextMessage;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 
-
 import kieker.common.record.IMonitoringRecord;
 import kieker.tools.bridge.LookupEntity;
 import kieker.tools.bridge.connector.IServiceConnector;
 
 /**
- * @author Reiner Jung -- initial contribution
  * 
+ * 
+ * @author Reiner Jung
+ * @since 1.8
  */
 public class JMSService implements IServiceConnector {
 
@@ -115,9 +113,7 @@ public class JMSService implements IServiceConnector {
 				if (boolean.class.equals(parameterType)) {
 					values[i] = message.readBoolean();
 				} else if (Boolean.class.equals(parameterType)) {
-					// CHECKSTYLE:OFF would be a great idea, however could be present in a IMonitoringRecord
-					values[i] = new Boolean(message.readBoolean());
-					// CHECKSTYLE:ON
+					values[i] = message.readBoolean() ? Boolean.TRUE : Boolean.FALSE;
 				} else if (byte.class.equals(parameterType)) {
 					values[i] = message.readByte();
 				} else if (Byte.class.equals(parameterType)) {
@@ -147,13 +143,11 @@ public class JMSService implements IServiceConnector {
 					message.readBytes(this.buffer, bufLen);
 					values[i] = new String(this.buffer, 0, bufLen, "UTF-8");
 				} else { // reference types
-					throw new Exception("References are not yet supported.");
+					throw new Exception("References are not yet supported."); // TODO: better to use other Exception, e.g., IOException, JMSException, ...?
 				}
-				i++;
+				i++; // TODO: use a real for loop and access both arrays with the index?
 			}
-
-			return recordProperty.constructor.newInstance(new Object[] { values });
-
+			return recordProperty.constructor.newInstance(new Object[] { values }); // TODO: why repack the array?
 		} else {
 			throw new IOException("Record type " + id + " is not registered.");
 		}
@@ -180,9 +174,7 @@ public class JMSService implements IServiceConnector {
 					if (boolean.class.equals(parameterType)) {
 						values[i] = "t".equals(attributes[i + 1]);
 					} else if (parameterType.equals(Boolean.class)) {
-						// CHECKSTYLE:OFF would be a great idea, however could be present in a IMonitoringRecord
-						values[i] = new Boolean(attributes[i + 1].equals("t"));
-						// CHECKSTYLE:ON
+						values[i] = attributes[i + 1].equals("t") ? Boolean.TRUE : Boolean.FALSE;
 					} else if (byte.class.equals(parameterType)) {
 						values[i] = Byte.parseByte(attributes[i + 1]);
 					} else if (Byte.class.equals(parameterType)) {
@@ -210,12 +202,11 @@ public class JMSService implements IServiceConnector {
 					} else if (String.class.equals(parameterType)) {
 						values[i] = attributes[i + 1];
 					} else { // reference types
-						throw new Exception("References are not yet supported.");
+						throw new Exception("References are not yet supported."); // TODO see above ...
 					}
-					i++;
+					i++; // TODO see above ...
 				}
-
-				return recordProperty.constructor.newInstance(new Object[] { values });
+				return recordProperty.constructor.newInstance(new Object[] { values }); // TODO see above ...
 			} else {
 				throw new IOException("Record type " + id + " is not registered.");
 			}
@@ -225,12 +216,13 @@ public class JMSService implements IServiceConnector {
 
 	}
 
+	// TODO: use subsets of Exception?
 	public void setup() throws Exception {
 		// setup value lookup
 		this.lookupEntityMap = new HashMap<Integer, LookupEntity>();
 		for (final int key : this.recordMap.keySet()) {
 			final Class<IMonitoringRecord> type = this.recordMap.get(key);
-
+			// TODO: use existing methods?
 			final Field parameterTypesField = type.getDeclaredField("TYPES");
 			java.security.AccessController.doPrivileged(new PrivilegedAction<Object>() {
 				public Object run() {
@@ -260,5 +252,4 @@ public class JMSService implements IServiceConnector {
 	public void close() throws Exception {
 		this.connection.stop();
 	}
-
 }

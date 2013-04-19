@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2013 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
+
 package kieker.tools.bridge.cli;
 
 import java.io.BufferedReader;
@@ -39,7 +36,6 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
@@ -49,8 +45,10 @@ import kieker.tools.bridge.connector.IServiceConnector;
 import kieker.tools.bridge.connector.ServiceConnectorFactory;
 
 /**
- * @author rju
  * 
+ * 
+ * @author Reiner Jung
+ * @since 1.8
  */
 public final class CLIServerMain {
 
@@ -62,11 +60,8 @@ public final class CLIServerMain {
 	private static Options options;
 	private static CommandLine commandLine;
 
-	/**
-	 * 
-	 */
 	private CLIServerMain() {
-
+		// private default constructor
 	}
 
 	/**
@@ -75,6 +70,7 @@ public final class CLIServerMain {
 	 * @param args
 	 *            command line arguments
 	 */
+	// TODO: the used format for CLI should be the same as for the rest of teh Kieker tools.
 	public static void main(final String[] args) {
 		CLIServerMain.declareOptions();
 		try {
@@ -92,11 +88,12 @@ public final class CLIServerMain {
 			// Find libraries and setup mapping
 			recordMap = CLIServerMain.createRecordMap();
 
-			// kieker setup
+			// Kieker setup
 			Configuration configuration = null;
 			if (commandLine.hasOption("k")) {
 				configuration = ConfigurationFactory.createConfigurationFromFile(commandLine.getOptionValue("k"));
 			} else {
+				// TODO: this does not allow for, e.g., command line parameters passed to Kieker
 				configuration = ConfigurationFactory.createDefaultConfiguration();
 			}
 
@@ -145,16 +142,13 @@ public final class CLIServerMain {
 				System.out.println("TCP server stopped.");
 			}
 			if (stats) {
-				System.out.println("Execution time: " + deltaTime + " ns  " + deltaTime / 1000000000 + " s");
-				System.out.println("Time per records: " + deltaTime / service.getRecordCount() + " ns/r");
-				System.out.println("Records per second: " + (service.getRecordCount()) / ((double) deltaTime / 1000000000));
+				System.out.println("Execution time: " + deltaTime + " ns  " + (deltaTime / 1000000000) + " s");
+				System.out.println("Time per records: " + (deltaTime / service.getRecordCount()) + " ns/r");
+				System.out.println("Records per second: " + ((service.getRecordCount()) / ((double) deltaTime / 1000000000)));
 			}
-			// CHECKSTYLE:OFF
-		} catch (final Exception e) {
-			// CHECKSTYLE:ON
+		} catch (final Exception e) { // NOCS
 			System.err.println("CLIServerMain cannot start. Cause: " + e.getMessage());
 		}
-
 	}
 
 	/**
@@ -178,7 +172,6 @@ public final class CLIServerMain {
 		} else {
 			CLIServerMain.usage("At least one library reference is required.", 5);
 		}
-
 		return recordMap;
 	}
 
@@ -203,7 +196,7 @@ public final class CLIServerMain {
 			return CLIServerMain.createJMSEmbeddedService(recordList);
 		} else {
 			CLIServerMain.usage("Unknown service type: '" + commandLine.getOptionValue("type") + "'", 10);
-			return null;
+			return null; // TODO: null as error? should AT LEAST be documented
 		}
 	}
 
@@ -226,7 +219,7 @@ public final class CLIServerMain {
 			}
 		} else {
 			CLIServerMain.usage("Missing port for embedded server.", 10);
-			return null;
+			return null; // TODO: null as error? should AT LEAST be documented
 		}
 	}
 
@@ -241,7 +234,6 @@ public final class CLIServerMain {
 	private static IServiceConnector createJMSService(final Map<Integer, Class<IMonitoringRecord>> recordList) {
 		final String username = commandLine.hasOption("u") ? commandLine.getOptionValue("u") : null;
 		final String password = commandLine.hasOption("w") ? commandLine.getOptionValue("w") : null;
-
 		if (commandLine.hasOption("url")) {
 			try {
 				return ServiceConnectorFactory.createJMSServiceConnector(recordList, username, password, new URI(commandLine.getOptionValue("url")));
@@ -251,7 +243,7 @@ public final class CLIServerMain {
 			}
 		} else {
 			CLIServerMain.usage("Missing URL for JMS service", 10);
-			return null;
+			return null; // TODO: null as error? should AT LEAST be documented
 		}
 	}
 
@@ -273,7 +265,7 @@ public final class CLIServerMain {
 			return service;
 		} else {
 			CLIServerMain.usage("Missing port for tcp server", 10);
-			return null;
+			return null; // TODO: null as error? should AT LEAST be documented
 		}
 	}
 
@@ -295,7 +287,7 @@ public final class CLIServerMain {
 			return service;
 		} else {
 			CLIServerMain.usage("Missing port for tcp server", 10);
-			return null;
+			return null; // TODO: null as error? should AT LEAST be documented
 		}
 	}
 
@@ -323,7 +315,7 @@ public final class CLIServerMain {
 		} else {
 			CLIServerMain.usage("Missing port for tcp client", 10);
 		}
-		return null;
+		return null; // TODO: null as error? should AT LEAST be documented
 	}
 
 	/**
@@ -336,6 +328,7 @@ public final class CLIServerMain {
 	 */
 	private static void usage(final String message, final int code) {
 		System.err.println(message);
+		// TODO: we have a custom formatted HelpFormatter somewhere.
 		final HelpFormatter formatter = new HelpFormatter();
 		formatter.printHelp("cli-kieker-service", options, true);
 		System.exit(code);
@@ -360,7 +353,7 @@ public final class CLIServerMain {
 				urls[i] = new File(libraries[i]).toURI().toURL();
 			} catch (final MalformedURLException e) {
 				System.err.println(libraries[i] + " is not a valid URL");
-				System.exit(3);
+				System.exit(3); // TODO: are exit codes documented somewhere?
 			}
 		}
 
@@ -394,7 +387,6 @@ public final class CLIServerMain {
 			System.err.println("Mapping file \"" + filename + "\" read error. " + e.getMessage());
 			System.exit(2);
 		}
-
 		return map;
 	}
 

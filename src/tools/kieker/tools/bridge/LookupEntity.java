@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2013 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
+
 package kieker.tools.bridge;
 
 import java.lang.reflect.Constructor;
@@ -24,26 +21,31 @@ import java.lang.reflect.Constructor;
 import kieker.common.record.IMonitoringRecord;
 
 /**
- * @author rju
- *
+ * 
+ * 
+ * @author Reiner Jung
+ * @since 1.8
  */
 public final class LookupEntity {
-	// CHECKSTYLE:OFF for speedup reasons these properties are public
+	// TODO: there should be no real speedup compared to getter/setter (or is here anything special at work?)
+
 	/**
 	 * List of parameter types for a given IMonitoringRecord.
 	 */
-	public final Class<?>[] parameterTypes;
+	public final Class<?>[] parameterTypes; // NOCS (for speedup reasons these properties are public)
+
 	/**
 	 * Constructor for an IMonitoringRecord class.
 	 */
-	public final Constructor<? extends IMonitoringRecord> constructor;
-	// CHECKSTYLE:ON
-	
+	public final Constructor<? extends IMonitoringRecord> constructor; // NOCS (for speedup reasons these properties are public)
+
 	/**
 	 * Construct one new LookupEntry.
 	 * 
-	 * @param constructor constructor for a IMonitoringRecord class
-	 * @param parameterTypes monitoring record property type list
+	 * @param constructor
+	 *            constructor for a IMonitoringRecord class
+	 * @param parameterTypes
+	 *            monitoring record property type list
 	 */
 	public LookupEntity(final Constructor<? extends IMonitoringRecord> constructor, final Class<?>[] parameterTypes) {
 		this.parameterTypes = parameterTypes;

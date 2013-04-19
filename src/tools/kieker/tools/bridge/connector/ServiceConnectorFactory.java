@@ -1,9 +1,5 @@
 /***************************************************************************
- * Copyright 2013 by
- *  + Christian-Albrechts-University of Kiel
- *    + Department of Computer Science
- *      + Software Engineering Group 
- *  and others.
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
+
 package kieker.tools.bridge.connector;
 
 import java.net.URI;
@@ -30,13 +27,16 @@ import kieker.tools.bridge.connector.tcp.TCPClientService;
 import kieker.tools.bridge.connector.tcp.TCPMultiServerService;
 import kieker.tools.bridge.connector.tcp.TCPSingleServerService;
 
+// TODO: add documentation
 
 /**
- * @author Reiner Jung -- initial contribution
- *
+ * 
+ * 
+ * @author Reiner Jung
+ * @since 1.8
  */
 public final class ServiceConnectorFactory {
-	
+
 	/**
 	 * 
 	 * @param recordMap
@@ -45,7 +45,7 @@ public final class ServiceConnectorFactory {
 	 * @param url
 	 * @return
 	 */
-	public static IServiceConnector createJMSServiceConnector(final Map<Integer, Class<IMonitoringRecord>> recordMap, 
+	public static IServiceConnector createJMSServiceConnector(final Map<Integer, Class<IMonitoringRecord>> recordMap,
 			final String username, final String password, final URI url) {
 		return new JMSService(recordMap, username, password, url);
 	}
@@ -57,8 +57,9 @@ public final class ServiceConnectorFactory {
 	 * @return
 	 * @throws URISyntaxException
 	 */
-	public static IServiceConnector createJMSEmbeddedServiceConnector(Map<Integer, Class<IMonitoringRecord>> recordMap, int port) throws URISyntaxException {
-		return new JMSEmbeddedService(recordMap,port);
+	public static IServiceConnector createJMSEmbeddedServiceConnector(final Map<Integer, Class<IMonitoringRecord>> recordMap, final int port)
+			throws URISyntaxException {
+		return new JMSEmbeddedService(recordMap, port);
 	}
 
 	/**
@@ -67,8 +68,8 @@ public final class ServiceConnectorFactory {
 	 * @param port
 	 * @return
 	 */
-	public static IServiceConnector createTCPSingleServerServiceConnector(Map<Integer, Class<IMonitoringRecord>> recordMap, int port) {
-		return new TCPSingleServerService(recordMap,port);
+	public static IServiceConnector createTCPSingleServerServiceConnector(final Map<Integer, Class<IMonitoringRecord>> recordMap, final int port) {
+		return new TCPSingleServerService(recordMap, port);
 	}
 
 	/**
@@ -77,8 +78,8 @@ public final class ServiceConnectorFactory {
 	 * @param port
 	 * @return
 	 */
-	public static IServiceConnector createTCPMultiServerServiceConnector(Map<Integer, Class<IMonitoringRecord>> recordMap, int port) {
-		return new TCPMultiServerService(recordMap,port);
+	public static IServiceConnector createTCPMultiServerServiceConnector(final Map<Integer, Class<IMonitoringRecord>> recordMap, final int port) {
+		return new TCPMultiServerService(recordMap, port);
 	}
 
 	/**
@@ -88,7 +89,7 @@ public final class ServiceConnectorFactory {
 	 * @param port
 	 * @return
 	 */
-	public static IServiceConnector createTCPClientServiceConnector(Map<Integer, Class<IMonitoringRecord>> recordMap, String hostname, int port) {
-		return new TCPClientService(recordMap,hostname,port);
+	public static IServiceConnector createTCPClientServiceConnector(final Map<Integer, Class<IMonitoringRecord>> recordMap, final String hostname, final int port) {
+		return new TCPClientService(recordMap, hostname, port);
 	}
 }
