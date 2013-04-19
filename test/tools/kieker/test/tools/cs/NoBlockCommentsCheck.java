@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.common.cs;
+package kieker.test.tools.cs;
 
 import java.util.List;
 import java.util.Locale;

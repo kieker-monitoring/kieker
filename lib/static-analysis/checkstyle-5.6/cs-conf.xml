@@ -174,21 +174,21 @@
         <!-- KIEKER -->
         <property name="tabWidth" value="4"/>
         <!-- KIEKER -->
-        <module name="kieker.test.common.cs.AnalysisComponentConstructorCheck">
+        <module name="kieker.test.tools.cs.AnalysisComponentConstructorCheck">
             <property name="ignoreAbstractClasses" value="true"/>
             <property name="severity" value="${checkstyle.ignoreCustomKieker}" default="ignore"/>
         </module>
-        <module name="kieker.test.common.cs.MonitoringRecordFactoryConventionCheck">
+        <module name="kieker.test.tools.cs.MonitoringRecordFactoryConventionCheck">
             <property name="ignoreAbstractClasses" value="true"/>
             <property name="severity" value="${checkstyle.ignoreCustomKieker}" default="ignore"/>
         </module>
-        <module name="kieker.test.common.cs.MissingSinceTagCheck">
+        <module name="kieker.test.tools.cs.MissingSinceTagCheck">
             <property name="severity" value="${checkstyle.ignoreCustomKieker}" default="ignore"/>
         </module>
-        <module name="kieker.test.common.cs.NotAllowedSinceTagCheck">
+        <module name="kieker.test.tools.cs.NotAllowedSinceTagCheck">
             <property name="severity" value="${checkstyle.ignoreCustomKieker}" default="ignore"/>
         </module>
-		<module name="kieker.test.common.cs.NoBlockCommentsCheck">
+		<module name="kieker.test.tools.cs.NoBlockCommentsCheck">
             <property name="severity" value="${checkstyle.ignoreCustomKieker}" default="ignore"/>
         </module>
         <module name="FileContentsHolder"/>
