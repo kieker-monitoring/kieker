@@ -48,6 +48,7 @@ import kieker.monitoring.timer.ITimeSource;
  */
 public class OperationExecutionSOAPRequestOutInterceptor extends SoapHeaderOutFilterInterceptor implements IMonitoringProbe {
 
+	/** This constant can be used as a session ID for asynchronous traces. */
 	public static final String SESSION_ID_ASYNC_TRACE = "NOSESSION-ASYNCOUT";
 
 	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;

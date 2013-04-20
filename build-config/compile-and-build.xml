@@ -243,10 +243,6 @@
 			<fileset dir="${lib.dir}/framework-libs/cxf">
 				<include name="cxf-*.jar" />
 			</fileset>
-			<!-- This part is necessary for the additional checkstyle checks - to compile them. -->
-			<fileset dir="${lib.cs.dir}">
-				<include name="**/*.jar" />
-			</fileset>
 			<fileset dir="${dist.dir}">
 				<include name="${dist.kieker.main.jar}" />
 			</fileset>
@@ -297,6 +293,10 @@
 			</fileset>
 			<fileset dir="${dist.dir}">
 				<include name="${dist.kieker.main.jar}" />
+			</fileset>
+			<!-- This part is necessary for the additional checkstyle checks - to compile them. -->
+			<fileset dir="${lib.cs.dir}">
+				<include name="**/*.jar" />
 			</fileset>
 		</path>
 		<javac source="1.5" target="1.5" destDir="${build.tests.dir}" classpathref="tools-test-compile-classpath" srcdir="${test.kieker.tools.dir}" debug="true" includeAntRuntime="false">

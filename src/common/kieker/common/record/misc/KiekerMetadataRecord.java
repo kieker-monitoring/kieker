@@ -83,8 +83,8 @@ public final class KiekerMetadataRecord extends AbstractMonitoringRecord impleme
 	 *            The experiment ID.
 	 * @param timeUnit
 	 *            The time unit (can be null).
-	 * @param timeSource
-	 *            The timesource (can be null).
+	 * @param timeOffset
+	 *            The time offset.
 	 * @param debugMode
 	 *            Whether debug mode is enabled or not.
 	 * @param numberOfRecords

@@ -27,6 +27,12 @@ package org.apache.commons.logging.impl;
 public final class Jdk14LoggerPatched extends Jdk14Logger {
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param name
+	 *            The name of the logger instance.
+	 */
 	public Jdk14LoggerPatched(final String name) {
 		super(name);
 	}
@@ -55,8 +61,11 @@ public final class Jdk14LoggerPatched extends Jdk14Logger {
 	 * Copy of {@link Jdk14Logger.log(level, msg, ex)} with correct stack depth for Kieker.
 	 * 
 	 * @param level
+	 *            The level of the log entry (the severity).
 	 * @param msg
+	 *            The message to log.
 	 * @param ex
+	 *            The cause.
 	 */
 	private final void logpatched(final java.util.logging.Level level, final String msg, final Throwable ex) {
 		final java.util.logging.Logger logger = this.getLogger();
