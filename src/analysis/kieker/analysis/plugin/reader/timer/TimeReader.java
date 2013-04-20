@@ -128,7 +128,8 @@ public final class TimeReader extends AbstractReaderPlugin {
 			// Inform the read method about the termination
 			this.terminated = true;
 			synchronized (this.blockObject) {
-				this.blockObject.notify();
+				// Technically notify() is enough, as only exactly one thread is waiting, but otherwise findbugs complains.
+				this.blockObject.notifyAll();
 			}
 		} catch (final InterruptedException ex) {
 

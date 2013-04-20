@@ -42,6 +42,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
  */
 public class TimeReaderTest extends AbstractKiekerTest {
 
+	@SuppressWarnings("unused")
 	@Test
 	public void testNonBlockingMode() throws IllegalStateException, AnalysisConfigurationException, InterruptedException {
 		final AnalysisController ac = new AnalysisController();
@@ -49,8 +50,7 @@ public class TimeReaderTest extends AbstractKiekerTest {
 
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(TimeReader.CONFIG_PROPERTY_NAME_BLOCKING_READ, "false");
-		@SuppressWarnings("unused")
-		final TimeReader tr = new TimeReader(configuration, ac);
+		new TimeReader(configuration, ac);
 
 		// We expect the reader to return immediately - in this case we expect the AC to return within five seconds
 		thread.start();
@@ -59,6 +59,7 @@ public class TimeReaderTest extends AbstractKiekerTest {
 		Assert.assertEquals(STATE.TERMINATED, ac.getState());
 	}
 
+	@SuppressWarnings("unused")
 	@Test
 	public void testBlockingMode() throws InterruptedException {
 		final AnalysisController ac = new AnalysisController();
@@ -66,8 +67,8 @@ public class TimeReaderTest extends AbstractKiekerTest {
 
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(TimeReader.CONFIG_PROPERTY_NAME_BLOCKING_READ, "true");
-		@SuppressWarnings("unused")
-		final TimeReader tr = new TimeReader(configuration, ac);
+
+		new TimeReader(configuration, ac);
 
 		// We expect that the reader doesn't return immediately - in this case we expect the AC to run at least five seconds
 		thread.start();
