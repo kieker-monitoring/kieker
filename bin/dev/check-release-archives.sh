@@ -420,7 +420,7 @@ function assert_no_common_files_in_archives {
 ## "main" 
 ##
 
-aspectjversion="$(grep "lib.aspectj.version=" build.properties | sed s/.*=//g)"
+aspectjversion="$(grep "lib.aspectj.version=" build-config/build.properties | sed s/.*=//g)"
 
 assert_dir_exists ${BASE_TMP_DIR}
 change_dir "${BASE_TMP_DIR}"
