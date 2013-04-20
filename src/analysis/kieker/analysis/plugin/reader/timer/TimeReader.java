@@ -58,7 +58,7 @@ import kieker.common.record.misc.TimestampRecord;
 			@Property(name = TimeReader.CONFIG_PROPERTY_NAME_DELAY_NS, defaultValue = TimeReader.CONFIG_PROPERTY_VALUE_DELAY_NS,
 					description = "Determines the initial delay in nano seconds."),
 			@Property(name = TimeReader.CONFIG_PROPERTY_NAME_BLOCKING_READ, defaultValue = TimeReader.CONFIG_PROPERTY_VALUE_BLOCKING_READ,
-					description = "Determines whether the read method of this reader returns immediately or not."),
+					description = "Determines whether the read method of this reader returns immediately or not.")
 		})
 public final class TimeReader extends AbstractReaderPlugin {
 
