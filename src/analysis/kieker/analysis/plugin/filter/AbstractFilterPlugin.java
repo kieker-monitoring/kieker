@@ -48,7 +48,7 @@ public abstract class AbstractFilterPlugin extends AbstractPlugin implements IFi
 		// Register the filter
 		if (projectContext instanceof AnalysisController) {
 			((AnalysisController) projectContext).registerFilter(this);
-		} else if (projectContext != null) {
+		} else {
 			throw new InvalidProjectContextException("Invalid analysis controller in constructor");
 		}
 	}
