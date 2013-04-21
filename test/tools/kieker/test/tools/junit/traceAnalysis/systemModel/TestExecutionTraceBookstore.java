@@ -24,6 +24,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import kieker.analysis.AnalysisController;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.filter.traceReconstruction.InvalidTraceException;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
@@ -66,7 +67,7 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 
 	@Before
 	public void setUp() throws Exception {
-		final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration(), null);
+		final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration(), new AnalysisController());
 		this.eFactory = new ExecutionFactory(systemEntityFactory);
 
 		int myNumExecutions = 0;
