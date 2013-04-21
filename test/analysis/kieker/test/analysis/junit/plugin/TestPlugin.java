@@ -54,11 +54,12 @@ public class TestPlugin extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testPluginAttributes() {
+		final IAnalysisController ac = new AnalysisController();
 		final Configuration myPluginConfig = new Configuration();
 		// Set a name in order to test the getName() function below
 		final String myPluginName = "name-ieuIyxLG";
 		myPluginConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, myPluginName);
-		final SimpleForwardFilterWithRepository sourcePlugin = new SimpleForwardFilterWithRepository(myPluginConfig, null);
+		final SimpleForwardFilterWithRepository sourcePlugin = new SimpleForwardFilterWithRepository(myPluginConfig, ac);
 		Assert.assertEquals("Unexpected plugin name", myPluginName, sourcePlugin.getName());
 		// Test if name and description from the annotation are returned correctly
 		Assert.assertEquals("Unexpected plugin type name", SimpleForwardFilterWithRepository.FILTER_NAME, sourcePlugin.getPluginName());
@@ -70,11 +71,12 @@ public class TestPlugin extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testRepository() {
+		final IAnalysisController ac = new AnalysisController();
 		final Configuration myRepoConfig = new Configuration();
 		// Set a name in order to test the getName() function below
 		final String myRepoName = "name-22db22rLQ";
 		myRepoConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, myRepoName);
-		final SimpleRepository myRepo = new SimpleRepository(myRepoConfig, null);
+		final SimpleRepository myRepo = new SimpleRepository(myRepoConfig, ac);
 		Assert.assertEquals("Unexpected repository name", myRepoName, myRepo.getName());
 		// Test if name and description from the annotation are returned correctly
 		Assert.assertEquals("Unexpected repository type name", SimpleRepository.REPOSITORY_NAME, myRepo.getRepositoryName());
