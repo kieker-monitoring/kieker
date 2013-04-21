@@ -77,7 +77,7 @@ public final class TimeReader extends AbstractReaderPlugin {
 	private static final Log LOG = LogFactory.getLog(TimeReader.class);
 
 	private final Object blockObject = new Object();
-	private volatile boolean terminated = false;
+	private volatile boolean terminated;
 
 	private final ScheduledExecutorService executorService = new ScheduledThreadPoolExecutor(1);
 	private final long initialDelay;
@@ -110,9 +110,7 @@ public final class TimeReader extends AbstractReaderPlugin {
 		}
 		this.timeunit = recordTimeunit;
 
-		if (!this.blockingRead) {
-			this.terminated = true;
-		}
+		this.terminated = true ^ this.blockingRead; // !this.blockingRead
 	}
 
 	/**
