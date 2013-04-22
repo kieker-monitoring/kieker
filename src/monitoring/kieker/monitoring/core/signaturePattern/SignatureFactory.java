@@ -43,6 +43,16 @@ public final class SignatureFactory {
 	public static final String PATTERN_PREFIX_MEM_SWAP = PATTERN_PREFIX + "MEM_SWAP";
 
 	/**
+	 * Prefix of a stack size 0 operation
+	 */
+	public static final String ESS0 = PATTERN_PREFIX + "ESS0";
+
+	/**
+	 * Prefix of a stack size >0 operation
+	 */
+	public static final String ESS1 = PATTERN_PREFIX + "ESS1";
+
+	/**
 	 * Private constructor to avoid instantiation.
 	 */
 	private SignatureFactory() {

@@ -29,6 +29,7 @@ import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.TraceRegistry;
+import kieker.monitoring.core.signaturePattern.SignatureFactory;
 import kieker.monitoring.probe.aspectj.AbstractAspectJProbe;
 import kieker.monitoring.timer.ITimeSource;
 
@@ -61,7 +62,16 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final boolean newTrace = trace == null;
 		if (newTrace) {
 			trace = TRACEREGISTRY.registerTrace();
+			if (!CTRLINST.isProbeActivated(SignatureFactory.ESS0)) {
+				try {
+					return thisJoinPoint.proceed();
+				} finally {
+					TRACEREGISTRY.unregisterTrace();
+				}
+			}
 			CTRLINST.newMonitoringRecord(trace);
+		} else if (!CTRLINST.isProbeActivated(SignatureFactory.ESS1)) {
+			return thisJoinPoint.proceed();
 		}
 		final long traceId = trace.getTraceId();
 		final String clazz = thisObject.getClass().getName();
@@ -98,7 +108,16 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final boolean newTrace = trace == null;
 		if (newTrace) {
 			trace = TRACEREGISTRY.registerTrace();
+			if (!CTRLINST.isProbeActivated(SignatureFactory.ESS0)) {
+				try {
+					return thisJoinPoint.proceed();
+				} finally {
+					TRACEREGISTRY.unregisterTrace();
+				}
+			}
 			CTRLINST.newMonitoringRecord(trace);
+		} else if (!CTRLINST.isProbeActivated(SignatureFactory.ESS1)) {
+			return thisJoinPoint.proceed();
 		}
 		final long traceId = trace.getTraceId();
 		final String clazz = sig.getDeclaringTypeName();
