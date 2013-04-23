@@ -260,7 +260,7 @@
 
 			<tarfileset file="${kieker.monitoring.default.properties}"
 						fullpath="${kieker.dist.name}/${example.javaee.jetty.dir}/kieker.monitoring.properties" />
-			<tarfileset file="${dist.dir}/${dist.kieker.main.jar}"
+			<tarfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
 						prefix="${kieker.dist.name}/${example.javaee.jetty.dir}/webapps/jpetstore/WEB-INF/lib" />
 
 			<!-- Include tailored Eclipse files in the examples -->
@@ -322,7 +322,7 @@
 
 			<zipfileset file="${kieker.monitoring.default.properties}"
 						fullpath="${kieker.dist.name}/${example.javaee.jetty.dir}/kieker.monitoring.properties" />
-			<zipfileset file="${dist.dir}/${dist.kieker.main.jar}"
+			<zipfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
 						prefix="${kieker.dist.name}/${example.javaee.jetty.dir}/webapps/jpetstore/WEB-INF/lib" />
 
 			<!-- Include tailored Eclipse files in the examples -->
