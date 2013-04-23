@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Kieker (test)"  basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
-    
+<project name="Kieker (test)" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+
 	<taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask" />
-	
-    <target name="run-test-storage" depends="-compile-tests-monitoring" description="Runs a simple storage test">
+
+	<target name="run-test-storage" depends="-compile-tests-monitoring" description="Runs a simple storage test">
 		<echo>
 			This is a small test for the part of Kieker that
 			stores monitoring data. Kieker's monitoring API
@@ -35,8 +35,8 @@
 			<jvmarg value="-D${tests.writer}.customStoragePath=${tests.storagepath}" />
 		</java>
 	</target>
-        
-        <target name="run-test-loadTimeWeaving-bookstoreDifferentRecordTypes" depends="-compile-tests-monitoring" description="Runs a load-time weaving test with different record types">
+
+	<target name="run-test-loadTimeWeaving-bookstoreDifferentRecordTypes" depends="-compile-tests-monitoring" description="Runs a load-time weaving test with different record types">
 		<path id="kieker.test-loadTimeWeaving-run-classpath">
 			<pathelement location="${build.tests.dir}/" />
 			<fileset dir="${dist.dir}">
@@ -157,8 +157,8 @@
 			<jvmarg value="-Daj.weaving.verbose=true" />
 		</java>
 	</target>
-        
-        <target name="run-test-compileTimeWeaving-bookstore" depends="-compile-tests-monitoring,-compile-tests-compileTimeWeaving-bookstore" description="Runs a simple compile-time-weaving test">
+
+	<target name="run-test-compileTimeWeaving-bookstore" depends="-compile-tests-monitoring,-compile-tests-compileTimeWeaving-bookstore" description="Runs a simple compile-time-weaving test">
 		<path id="kieker.test-compileTimeWeaving-bookstore-run-classpath">
 			<fileset dir="${lib.dir}">
 				<include name="aspectjweaver-*.jar" />
@@ -216,8 +216,8 @@
 			<jvmarg value="-D${tests.writer}.customStoragePath=${tests.storagepath}" />
 		</java>
 	</target>
-    
-        <target name="run-tests-integration" depends="run-test-compileTimeWeaving-bookstore, run-test-compileTimeWeaving-bookstore-synchronized, run-test-compileTimeWeaving-twoConcurrentMethodsExample, run-test-loadTimeWeaving-bookstoreDifferentRecordTypes, run-test-loadTimeWeaving-bookstoreFullInstrumentation, run-test-loadTimeWeaving-executionOrderTest, run-test-storage" description="Runs the collection of integration tests (takes quite a while)">
+
+	<target name="run-tests-integration" depends="run-test-compileTimeWeaving-bookstore, run-test-compileTimeWeaving-bookstore-synchronized, run-test-compileTimeWeaving-twoConcurrentMethodsExample, run-test-loadTimeWeaving-bookstoreDifferentRecordTypes, run-test-loadTimeWeaving-bookstoreFullInstrumentation, run-test-loadTimeWeaving-executionOrderTest, run-test-storage" description="Runs the collection of integration tests (takes quite a while)">
 	</target>
 
 	<target name="run-tests-junit" depends="compile-tests" description="Runs the JUnit tests">
@@ -277,5 +277,5 @@
 
 		<echo message="To see the test report, open ${tests.junit-results.dir}/report/index.html in your Web browser." />
 	</target>
-    
+
 </project>

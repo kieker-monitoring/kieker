@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Kieker (init and clean)"  basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
-    
-        <target name="-init-version" description="Initializes variables based on the Kieker version number">
+<project name="Kieker (init and clean)" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+
+	<target name="-init-version" description="Initializes variables based on the Kieker version number">
 		<tstamp />
 		<property name="kieker.name" value="Kieker Framework" />
 		<property name="kieker.version" value="1.8-SNAPSHOT" />
@@ -19,7 +19,7 @@
 		<property name="dist.kieker.main.pom" value="${kieker.main.packagenamebase}-${kieker.version}.pom" />
 		<property name="dist.kieker.main.aspectj.pom" value="${kieker.main.packagenamebase}-aspectj-${kieker.version}.pom" />
 		<property name="dist.kieker.main.emf.pom" value="${kieker.main.packagenamebase}-emf-${kieker.version}.pom" />
-		
+
 		<property name="dist.kieker.main.jar" value="${kieker.main.packagenamebase}-${kieker.version}.jar" />
 		<property name="dist.kieker.main.aspectj.jar" value="${kieker.main.packagenamebase}-${kieker.version}_aspectj.jar" />
 		<property name="dist.kieker.main.aspectj.jar.latex" value="${kieker.main.packagenamebase}-${kieker.version}\\\\\\_aspectj.jar" />
@@ -35,22 +35,20 @@
 
 	<target name="-update-version" unless="version.noupdate" depends="-init-version" description="Updates the version number contained in the Kieker sources">
 		<replaceregexp file="${src.kieker.common.dir}/kieker/common/util/Version.java" match="VERSION = &quot;.*?&quot;" replace="VERSION = &quot;${kieker.version}&quot;" />
-		
+
 		<!-- Update the AspectJ version in various files -->
 		<replaceregexp byline="true" flags="g">
 			<regexp pattern="(aspectj.*)-.*.jar"/>
 			<substitution expression="\1-${lib.aspectj.version}.jar"/>
 			<fileset dir=".">
 				<include name="${src.userguide.dir}/Macros.tex"/>
-				<include name="${example.javaee.jetty.dir}/start.ini"/>
-				<include name="${example.javaee.jetty.dir}/start.KiekerAspectJActivated.ini"/>
 				<include name="${src.userguide.example.aspectj.dir}/BookstoreStarter.launch"/>
 				<include name=".classpath"/>
 			</fileset>
 		</replaceregexp>
 	</target>
-        
-        <target name="-init" depends="clean,-update-version,-init-compile-classpaths" description="Initializes variables and creates directories">
+
+	<target name="-init" depends="clean,-update-version,-init-compile-classpaths" description="Initializes variables and creates directories">
 		<!-- Register special aspectj commands in ant - allow ant to use special AspectJ commands: -->
 		<path id="aspectjtools-jar">
 			<fileset dir="${lib.dir}">
@@ -118,17 +116,17 @@
 			<pathelement location="${build.kieker.analysis.model.dir}/" />
 		</path>
 	</target>
-        
-        <target name="clean-userguide-examples" description="Removes artifacts from previous builds and manually changed configuration files">
+
+	<target name="clean-userguide-examples" description="Removes artifacts from previous builds and manually changed configuration files">
 		<ant antfile="build.xml" dir="${src.userguide.example.bookstore.dir}" target="clean" />
 		<ant antfile="build.xml" dir="${src.userguide.example.manual.dir}" target="clean" />
 		<ant antfile="build.xml" dir="${src.userguide.example.extended.dir}" target="clean" />
 		<ant antfile="build.xml" dir="${src.userguide.example.aspectj.dir}" target="clean" />
 		<ant antfile="build.xml" dir="${src.userguide.example.jms.dir}" target="clean" />
 		<ant antfile="build.xml" dir="${src.userguide.example.sigar.dir}" target="clean" />
-			<delete>
-				<fileset dir="${examples.dir}" includes="**/.classpath-binrelease.generated" />
-			</delete>
+		<delete>
+			<fileset dir="${examples.dir}" includes="**/.classpath-binrelease.generated" />
+		</delete>
 		<!-- make sure a current version is included -->
 		<copy file="${kieker.monitoring.default.properties}" tofile="${src.userguide.example.aspectj.dir}/META-INF/kieker.monitoring.properties" />
 	</target>
@@ -141,7 +139,7 @@
 		<copy file="${src.userguide.example.aspectj.dir}/.classpath" tofile="${src.userguide.example.aspectj.dir}/.classpath-binrelease.generated" overwrite="true"/>
 		<copy file="${src.userguide.example.jms.dir}/.classpath" tofile="${src.userguide.example.jms.dir}/.classpath-binrelease.generated" overwrite="true"/>
 		<copy file="${src.userguide.example.sigar.dir}/.classpath" tofile="${src.userguide.example.sigar.dir}/.classpath-binrelease.generated" overwrite="true"/>
-		
+
 		<!-- Examples using the plain Jar -->
 		<replaceregexp byline="true" flags="g">
 			<regexp pattern="&lt;classpathentry .*/Kieker&quot;.*"/>
@@ -150,7 +148,7 @@
 				<include name="${src.userguide.example.jms.dir}/.classpath-binrelease.generated"/>
 			</fileset>
 		</replaceregexp>
-		
+
 		<!-- Examples using the EMF Jar -->
 		<replaceregexp byline="true" flags="g">
 			<regexp pattern="&lt;classpathentry .*/Kieker&quot;.*"/>
@@ -161,7 +159,7 @@
 				<include name="${src.userguide.example.sigar.dir}/.classpath-binrelease.generated"/>
 			</fileset>
 		</replaceregexp>
-		
+
 		<!-- Examples using the AspectJ Jar -->
 		<replaceregexp byline="true" flags="g">
 			<regexp pattern="&lt;classpathentry .*/Kieker&quot;.*"/>
@@ -171,7 +169,7 @@
 				<include name="${src.userguide.example.aspectj.dir}/.classpath-binrelease.generated"/>
 			</fileset>
 		</replaceregexp>
-		
+
 		<!-- Examples referencing libs from /Kieker/lib/ -->
 		<replaceregexp byline="true" flags="g">
 			<regexp pattern="(&lt;classpathentry .*)/Kieker/lib/(.*&quot;.*)"/>
@@ -183,14 +181,16 @@
 			</fileset>
 		</replaceregexp>
 	</target>
-        
-        <target name="-update-version.examples" depends="-init-version" description="Updates the Kieker version in the examples (e.g., in the .classpath files)">
+
+	<target name="-update-version.examples" depends="-init-version" description="Updates the Kieker version in the examples (e.g., in the .classpath files)">
 		<replaceregexp match="kieker-\S*.jar" replace="${dist.kieker.main.aspectj.jar}" flags="g">
-		<fileset dir="${example.microbenchmark.dir}/bin/">
-			<include name="*.sh" />
-		 </fileset>
+			<fileset dir="${example.microbenchmark.dir}/bin/">
+				<include name="*.sh" />
+		 	</fileset>
 		</replaceregexp>
 
+		<replaceregexp file="${src.userguide.example.bookstore.dir}/start.ini" match="kieker-\S*.jar" replace="${dist.kieker.main.jar}" flags="g" />
+		<replaceregexp file="${src.userguide.example.bookstore.dir}/start.KiekerAspectJActivated.ini" match="kieker-\S*.jar" replace="${dist.kieker.main.jar}" flags="g" />
 		<replaceregexp file="${src.userguide.example.bookstore.dir}/.classpath" match="kieker-\S*.jar" replace="${dist.kieker.main.jar}" flags="g" />
 		<replaceregexp file="${src.userguide.example.bookstore.dir}/README.txt" match="kieker-\S*.jarr" replace="${dist.kieker.main.jar}" flags="g" />
 		<replaceregexp file="${src.userguide.example.manual.dir}/.classpath" match="kieker-\S*.jar" replace="${dist.kieker.main.emf.jar}" flags="g" />
@@ -203,13 +203,13 @@
 		<replaceregexp file="${src.userguide.example.jms.dir}/.classpath" match="kieker-\S*.jar" replace="${dist.kieker.main.jar}" flags="g" />
 		<replaceregexp file="${src.userguide.example.sigar.dir}/.classpath" match="kieker-\S*.jar" replace="${dist.kieker.main.jar}" flags="g" />
 	</target>
-        
-        <target name="clean" depends="clean-userguide-examples" description="Removes artifacts from previous builds">
+
+	<target name="clean" depends="clean-userguide-examples" description="Removes artifacts from previous builds">
 		<!-- <delete dir="tmp"/>-->
 		<delete dir="${dist.dir}" includeemptydirs="true" />
 		<delete dir="${release.dir}" includeemptydirs="true" />
 		<delete dir="${maven.dir}" includeemptydirs="true" />
 		<delete dir="${build.dir}" includeemptydirs="true" />
 	</target>
-    
+
 </project>
