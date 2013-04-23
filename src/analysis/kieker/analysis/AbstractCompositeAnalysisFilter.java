@@ -20,8 +20,6 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 import kieker.analysis.analysisComponent.AbstractAnalysisComponent;
 import kieker.analysis.plugin.annotation.InputPort;
@@ -41,12 +39,11 @@ import kieker.common.configuration.Configuration;
 @Plugin(outputPorts = {
 	@OutputPort(name = "out", eventTypes = Object.class),
 	@OutputPort(name = "internalInputPort", eventTypes = Object.class) })
-public abstract class AbstractConcurrentCompositeAnalysisFilter extends AbstractFilterPlugin {
+public abstract class AbstractCompositeAnalysisFilter extends AbstractFilterPlugin {
 
 	private final List<AbstractAnalysisComponent> components = Collections.synchronizedList(new ArrayList<AbstractAnalysisComponent>());
-	private final BlockingQueue<Object> senderQueue = new LinkedBlockingQueue<Object>();
 
-	public AbstractConcurrentCompositeAnalysisFilter(final Configuration configuration, final IProjectContext projectContext) {
+	public AbstractCompositeAnalysisFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 	}
 
@@ -82,22 +79,7 @@ public abstract class AbstractConcurrentCompositeAnalysisFilter extends Abstract
 
 	@InputPort(name = "internalOutputPort", eventTypes = Object.class)
 	public void out(final Object obj) {
-		this.senderQueue.add(obj);
+		this.deliver("out", obj);
 	}
 
-	class SenderThread extends Thread {
-
-		@Override
-		public void run() {
-			while (true) {
-				Object obj;
-				try {
-					obj = AbstractConcurrentCompositeAnalysisFilter.this.senderQueue.take();
-					AbstractConcurrentCompositeAnalysisFilter.this.deliver("out", obj);
-				} catch (final InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
 }
