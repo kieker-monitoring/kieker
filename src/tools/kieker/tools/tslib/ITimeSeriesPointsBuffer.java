@@ -25,7 +25,7 @@ package kieker.tools.tslib;
 public interface ITimeSeriesPointsBuffer<T> {
 
 	/**
-	 * Add an Object to the Buffer.
+	 * Add an Object to the tail of the Buffer.
 	 * 
 	 * @param o
 	 *            The Value to add
@@ -35,7 +35,7 @@ public interface ITimeSeriesPointsBuffer<T> {
 	/**
 	 * Removes a Value from the buffer in FIFO order.
 	 */
-	public void remove();
+	public T remove();
 
 	/**
 	 * Returns the current size of the buffer.
@@ -43,10 +43,5 @@ public interface ITimeSeriesPointsBuffer<T> {
 	 * @return Returned Buffersize
 	 */
 	public int getSize();
-
-	/**
-	 * Prints out the Buffer.
-	 */
-	public void printBuffer();
 
 }

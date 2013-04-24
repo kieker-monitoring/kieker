@@ -58,13 +58,13 @@ public class UniteMeasurementPairFilterTest {
 
 	// HelperMethods UniteFilter
 
-	private NamedDoubleTimeSeriesPoint createNDTSP(final String signature, final double value) {
-		final NamedDoubleTimeSeriesPoint r = new NamedDoubleTimeSeriesPoint(new Date(), value, signature);
+	private NamedDoubleTimeSeriesPoint createNDTSP(final Date d, final String signature, final double value) {
+		final NamedDoubleTimeSeriesPoint r = new NamedDoubleTimeSeriesPoint(d, value, signature);
 		return r;
 	}
 
-	private IForecastResult<Double> createFR(final double value) {
-		final TimeSeries<Double> ts = new TimeSeries<Double>(new Date(), 1, TimeUnit.MICROSECONDS);
+	private IForecastResult<Double> createFR(final Date d, final double value) {
+		final TimeSeries<Double> ts = new TimeSeries<Double>(d, 1, TimeUnit.MICROSECONDS);
 		ts.append(value);
 		final IForecastResult<Double> r = new ForecastResult(ts, null);
 		return r;
@@ -72,19 +72,19 @@ public class UniteMeasurementPairFilterTest {
 
 	private List<NamedDoubleTimeSeriesPoint> createInputEventSetUnite() {
 		final List<NamedDoubleTimeSeriesPoint> retList = new ArrayList<NamedDoubleTimeSeriesPoint>();
-		retList.add(this.createNDTSP(OP_SIGNATURE_A, 0.3));
-		retList.add(this.createNDTSP(OP_SIGNATURE_A, 0.4));
-		retList.add(this.createNDTSP(OP_SIGNATURE_A, 0.5));
-		retList.add(this.createNDTSP(OP_SIGNATURE_A, 0.9));
+		retList.add(this.createNDTSP(new Date(0L), OP_SIGNATURE_A, 0.3));
+		retList.add(this.createNDTSP(new Date(5L), OP_SIGNATURE_A, 0.4));
+		retList.add(this.createNDTSP(new Date(10L), OP_SIGNATURE_A, 0.5));
+		retList.add(this.createNDTSP(new Date(15L), OP_SIGNATURE_A, 0.9));
 		return retList;
 	}
 
 	private List<IForecastResult<Double>> createInputEventSetUniteForecast() {
 		final List<IForecastResult<Double>> retList = new ArrayList<IForecastResult<Double>>();
-		retList.add(this.createFR(0.35));
-		retList.add(this.createFR(0.45));
-		retList.add(this.createFR(0.55));
-		retList.add(this.createFR(0.95));
+		retList.add(this.createFR(new Date(5L), 0.35));
+		retList.add(this.createFR(new Date(10L), 0.45));
+		retList.add(this.createFR(new Date(15L), 0.55));
+		retList.add(this.createFR(new Date(20L), 0.95));
 		return retList;
 	}
 
@@ -139,7 +139,7 @@ public class UniteMeasurementPairFilterTest {
 		System.out.println("--- Paar 1 ---");
 		final double r1 = this.sinkPlugin.getList().get(0).getValue();
 		final double f1 = this.sinkPlugin.getList().get(0).getForecasted();
-		System.out.println(r1 + " und " + f1);
+		System.out.println(r1 + " und " + f1 + " <-- Dummy");
 
 		System.out.println("--- Paar 2 ---");
 		final double r2 = this.sinkPlugin.getList().get(1).getValue();

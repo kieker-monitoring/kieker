@@ -16,9 +16,7 @@
 
 package kieker.tools.opad.filter;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
@@ -29,6 +27,7 @@ import kieker.common.configuration.Configuration;
 import kieker.tools.opad.record.ForecastMeasurementPair;
 import kieker.tools.opad.record.IForecastMeasurementPair;
 import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
+import kieker.tools.tslib.ITimeSeriesPoint;
 import kieker.tools.tslib.forecast.IForecastResult;
 
 /**
@@ -41,18 +40,40 @@ import kieker.tools.tslib.forecast.IForecastResult;
 	@OutputPort(eventTypes = { IForecastMeasurementPair.class }, name = UniteMeasurementPairFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT) })
 public class UniteMeasurementPairFilter extends AbstractFilterPlugin {
 
+	/**
+	 * Name of the input port receiving the measurements.
+	 */
 	public static final String INPUT_PORT_NAME_TSPOINT = "tspoint";
+
+	/**
+	 * Name of the input port receiving the forecasts.
+	 */
 	public static final String INPUT_PORT_NAME_FORECAST = "forecast";
 
+	/**
+	 * Name of the output port delivering the corresponding measurement-forecast-pairs.
+	 */
 	public static final String OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT = "forecastedcurrent";
 
-	private final List<IForecastResult<Double>> forecastValues;
+	/**
+	 * Stores incoming measurements and forecasts until a corresponding forecast or measurement is found.
+	 */
+	private final ConcurrentHashMap<Long, ITimeSeriesPoint<Double>> tsPointMap;
+
 	private volatile boolean firstTSPoint = true;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The projectContext for this component.
+	 */
 	public UniteMeasurementPairFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
-		this.forecastValues = Collections.synchronizedList(new ArrayList<IForecastResult<Double>>());
+		this.tsPointMap = new ConcurrentHashMap<Long, ITimeSeriesPoint<Double>>();
 	}
 
 	@Override
@@ -60,36 +81,105 @@ public class UniteMeasurementPairFilter extends AbstractFilterPlugin {
 		return new Configuration();
 	}
 
+	/**
+	 * Method that represents the input port for incoming measurements.
+	 * 
+	 * @param input
+	 *            The incoming measurement.
+	 */
 	@InputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = UniteMeasurementPairFilter.INPUT_PORT_NAME_TSPOINT)
 	public void inputTSPoint(final NamedDoubleTimeSeriesPoint input) {
-		// First TSPoint have no corresponding Forecastvalue, cause first Forecastvalue is one Step in the Future.
-		// For further processing we need to give this Point a Forecast. We use the TSPoint itself as Dummy for now
-		if (this.firstTSPoint) {
-			this.firstTSPoint = false;
-			final ForecastMeasurementPair fmp = new ForecastMeasurementPair(
-					input.getName(),
-					input.getValue(),
-					input.getValue(),
-					input.getTime());
-			super.deliver(OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, fmp);
-		} else {
-			// Bring together the currently incoming TSPoint with the corresponding ForecastValue
-			while (this.forecastValues.size() == 0) {
-				// Wait until Value arrives
-			}
-			final ForecastMeasurementPair fmp = new ForecastMeasurementPair(
-					input.getName(),
-					this.forecastValues.get(0).getForecast().getPoints().get(0).getValue(),
-					input.getValue(),
-					input.getTime());
-			super.deliver(OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, fmp);
-			this.forecastValues.remove(0);
+		if (!this.checkCorrespondingForecast(input)) {
+			// no matching point found --> add it to the waiting map
+			this.addTsPoint(input);
 		}
 	}
 
+	/**
+	 * Method that represents the input port for incoming forecast.
+	 * 
+	 * @param input
+	 *            The incoming forecast.
+	 */
 	@InputPort(eventTypes = { IForecastResult.class }, name = UniteMeasurementPairFilter.INPUT_PORT_NAME_FORECAST)
-	public void inputForecastValue(final IForecastResult<Double> value) {
-		this.forecastValues.add(value);
+	public void inputForecastValue(final IForecastResult<Double> input) {
+		final ITimeSeriesPoint<Double> pointFromForecast = input.getForecast().getPoints().get(0);
+		if (!this.checkCorrespondingMeasurement(pointFromForecast)) {
+			// no matching point found --> add it to the waiting map
+			this.addTsPoint(pointFromForecast);
+		}
+
+	}
+
+	/**
+	 * This method adds a TimeSeriesPoint to this class's tsPointMap.
+	 * 
+	 * @param p
+	 *            TimeSeriesPoint to add.
+	 */
+	private void addTsPoint(final ITimeSeriesPoint<Double> p) {
+		this.tsPointMap.put(p.getTime().getTime(), p);
+	}
+
+	/**
+	 * This method checks the tsPointMap for a corresponding forecast to its measurement. If this check is successfully
+	 * the measurement-forecast-pair is delivered.
+	 * 
+	 * @param p
+	 *            Measurement
+	 * @return
+	 *         True, if corresponding forecast found
+	 *         False, else
+	 */
+	private boolean checkCorrespondingForecast(final NamedDoubleTimeSeriesPoint p) {
+		// The first measurement has no corresponding forecast --> submit a dummy (the measurement itself as forecast replacement)
+		if (this.firstTSPoint) {
+			this.firstTSPoint = false;
+			final ForecastMeasurementPair fmp = new ForecastMeasurementPair(
+					p.getName(),
+					p.getValue(),
+					p.getValue(),
+					p.getTime());
+			super.deliver(OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, fmp);
+			return true;
+		} else {
+			final long key = p.getTime().getTime();
+			if (this.tsPointMap.containsKey(key)) {
+				final ForecastMeasurementPair fmp = new ForecastMeasurementPair(
+						p.getName(),
+						this.tsPointMap.get(key).getValue(),
+						p.getValue(),
+						p.getTime());
+				super.deliver(OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, fmp);
+				return true;
+			}
+			return false;
+		}
+	}
+
+	/**
+	 * This method checks the tsPointMap for a corresponding measurement to its forecast. If this check is successfully
+	 * the measurement-forecast-pair is delivered.
+	 * 
+	 * @param p
+	 *            forecast
+	 * @return
+	 *         True, if corresponding measurement found
+	 *         False, else
+	 */
+	private boolean checkCorrespondingMeasurement(final ITimeSeriesPoint<Double> p) {
+		final long key = p.getTime().getTime();
+		if (this.tsPointMap.containsKey(key)) {
+			final NamedDoubleTimeSeriesPoint m = (NamedDoubleTimeSeriesPoint) this.tsPointMap.get(key);
+			final ForecastMeasurementPair fmp = new ForecastMeasurementPair(
+					m.getName(),
+					p.getValue(),
+					m.getValue(),
+					m.getTime());
+			super.deliver(OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, fmp);
+			return true;
+		}
+		return false;
 	}
 
 }

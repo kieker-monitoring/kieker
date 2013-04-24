@@ -28,16 +28,16 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 
 	private static final long serialVersionUID = 436L;
 
+	private final long timestamp;
+	private final double value;
+	private final String name;
+
 	public NamedTSPoint(final long timestamp, final double value, final String name) {
 		super();
 		this.timestamp = timestamp;
 		this.value = value;
 		this.name = name;
 	}
-
-	private final long timestamp;
-	private final double value;
-	private final String name;
 
 	public Object[] toArray() {
 		// TODO Auto-generated method stub

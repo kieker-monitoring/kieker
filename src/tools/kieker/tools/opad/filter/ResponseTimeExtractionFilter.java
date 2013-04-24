@@ -30,7 +30,7 @@ import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
 
 /**
- * TODO: Make source of timestamp configurable? (may be loggingTimestamp, tin, tout)
+ * An instance of this class extracts the response times from OperationExecutionRecords.
  * 
  * @author Andre van Hoorn
  * 
@@ -42,14 +42,31 @@ import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
 public class ResponseTimeExtractionFilter extends AbstractFilterPlugin {
 	// private static final Log LOG = LogFactory.getLog(ResponseTimeExtractionFilter.class);
 
-	public static final String OUTPUT_PORT_NAME_VALUE = "outputResponseTime";
+	/**
+	 * Name of the input port receiving the OperationExecutionRecords.
+	 */
 	public static final String INPUT_PORT_NAME_VALUE = "inputExecutionRecord";
+
+	/**
+	 * Name of the output port delivering the response times.
+	 */
+	public static final String OUTPUT_PORT_NAME_VALUE = "outputResponseTime";
+
+	/**
+	 * Name of the property determining the time unit.
+	 */
 	public static final String CONFIG_PROPERTY_NAME_TIMEUNIT = "timeunit";
 
 	private TimeUnit timeunit = TimeUnit.NANOSECONDS;
 
-	// TODO: Add configuration property for Time Unit
-
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 */
 	public ResponseTimeExtractionFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
@@ -63,6 +80,12 @@ public class ResponseTimeExtractionFilter extends AbstractFilterPlugin {
 
 	}
 
+	/**
+	 * This method represents the input port for incoming OperationExecutionRecords. The response time is computed and delivered as
+	 * NamedDoubleTimeSeriesPoint.
+	 * 
+	 * @param execution
+	 */
 	@InputPort(name = INPUT_PORT_NAME_VALUE, eventTypes = { OperationExecutionRecord.class })
 	public void inputExecutionRecord(final OperationExecutionRecord execution) {
 		final long toutMillis = TimeUnit.MILLISECONDS.convert(execution.getTout(), TimeUnit.NANOSECONDS);

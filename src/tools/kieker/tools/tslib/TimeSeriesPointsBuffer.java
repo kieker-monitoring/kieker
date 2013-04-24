@@ -16,16 +16,16 @@
 
 package kieker.tools.tslib;
 
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
- * This class is using a CopyOnWriteArrayList to implement a bounded FifoBuffer.
+ * This class is using a ConcurrentLinkedQueue to implement a bounded FifoBuffer.
  * 
  * @author Tom Frotscher
  * 
  * @param <T>
  */
-public class TimeSeriesPointsBuffer<T> extends CopyOnWriteArrayList<T> implements ITimeSeriesPointsBuffer<T> {
+public class TimeSeriesPointsBuffer<T> extends ConcurrentLinkedQueue<T> implements ITimeSeriesPointsBuffer<T> {
 	private static final long serialVersionUID = -7988633509408488397L;
 
 	private final int capacity;
@@ -60,7 +60,7 @@ public class TimeSeriesPointsBuffer<T> extends CopyOnWriteArrayList<T> implement
 
 	private synchronized boolean addBounded(final T o) {
 		if (this.size() == this.capacity) {
-			super.remove(0);
+			super.poll();
 			return super.add(o);
 		} else {
 			return super.add(o);
@@ -68,8 +68,9 @@ public class TimeSeriesPointsBuffer<T> extends CopyOnWriteArrayList<T> implement
 
 	}
 
-	public void remove() {
-		super.remove(0);
+	@Override
+	public T remove() {
+		return super.poll();
 	}
 
 	public int getSize() {

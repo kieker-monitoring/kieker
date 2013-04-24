@@ -36,7 +36,7 @@ import kieker.tools.tslib.forecast.IForecastResult;
 import kieker.tools.tslib.forecast.IForecaster;
 
 /**
- * Filters every incoming events by a given list of names
+ * Computes a forecast for every incoming measurement.
  * 
  * @author Tillmann Carlos Bielefeld, Andre van Hoorn
  * 
@@ -51,14 +51,31 @@ import kieker.tools.tslib.forecast.IForecaster;
 		})
 public class ForecastingFilter extends AbstractFilterPlugin {
 
+	/**
+	 * Name of the input port receiving the measurements.
+	 */
 	public static final String INPUT_PORT_NAME_TSPOINT = "tspoint";
+
+	/**
+	 * Name of the input port receiving the triggers.
+	 */
 	public static final String INPUT_PORT_NAME_TRIGGER = "trigger";
 
+	/**
+	 * Name of the output port delivering the forecasts.
+	 */
 	public static final String OUTPUT_PORT_NAME_FORECAST = "forecast";
+
+	/**
+	 * Name of the output port delivering the measurement-forecast-pairs.
+	 */
 	public static final String OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT = "forecastedcurrent";
 
+	/** Name of the property determining the deltatime. */
 	public static final String CONFIG_PROPERTY_DELTA_TIME = "deltatime";
+	/** Name of the property determining the timeunit of the deltatime. */
 	public static final String CONFIG_PROPERTY_DELTA_UNIT = "deltaunit";
+	/** Name of the property determining the forecasting method. */
 	public static final String CONFIG_PROPERTY_FC_METHOD = "fcmethod";
 
 	private static final Object TRIGGER = new Object();
@@ -72,6 +89,14 @@ public class ForecastingFilter extends AbstractFilterPlugin {
 
 	private final IForecaster<Double> forecaster;
 
+	/**
+	 * Creates a new instance of this class.
+	 * 
+	 * @param configuration
+	 *            Configuration of this component
+	 * @param projectContext
+	 *            ProjectContext of this component
+	 */
 	public ForecastingFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
@@ -81,7 +106,6 @@ public class ForecastingFilter extends AbstractFilterPlugin {
 
 		this.timeSeriesWindow = new TimeSeries<Double>(new Date(), this.deltat, this.tunit);
 
-		// TODO select the method based on the configuration
 		this.forecastMethod = ForecastMethod.valueOf(configuration
 				.getStringProperty(CONFIG_PROPERTY_FC_METHOD));
 		this.forecaster = this.forecastMethod.getForecaster(this.timeSeriesWindow);
@@ -96,20 +120,30 @@ public class ForecastingFilter extends AbstractFilterPlugin {
 		return configuration;
 	}
 
+	/**
+	 * Represents the input port for measurements.
+	 * 
+	 * @param input
+	 *            Incoming measurements
+	 */
 	@InputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = ForecastingFilter.INPUT_PORT_NAME_TSPOINT)
 	public void inputEvent(final NamedDoubleTimeSeriesPoint input) {
 		this.timeSeriesWindow.append(input.getValue());
 
 		this.lastPoint = input;
 
-		// TODO: have this method triggered if no trigger port is given!
 		this.inputTrigger(TRIGGER);
 	}
 
+	/**
+	 * Represents the input port for triggers. Delivers the forecasting result and a forecasting-measurement-pair.
+	 * 
+	 * @param trigger
+	 *            Incoming trigger
+	 */
 	@InputPort(eventTypes = { Object.class }, name = ForecastingFilter.INPUT_PORT_NAME_TRIGGER)
 	public void inputTrigger(final Object trigger) {
 
-		// TODO read the steps from config
 		final IForecastResult<Double> result = this.forecaster.forecast(1);
 		super.deliver(OUTPUT_PORT_NAME_FORECAST, result);
 

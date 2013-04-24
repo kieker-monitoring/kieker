@@ -48,13 +48,34 @@ import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
 		})
 public class AnomalyDetectionFilter extends AbstractFilterPlugin {
 
-	public static final String OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY = "anomalyscore_anomaly";
-	public static final String OUTPUT_PORT_ANOMALY_SCORE_ELSE = "anomalyscore_else";
+	/**
+	 * Name of the input port receiving the anomalyscore.
+	 */
 	public static final String INPUT_PORT_ANOMALY_SCORE = "anomalyscore";
+
+	/**
+	 * Name of the output port delivering the anomalyscore if it exceeds the threshhold.
+	 */
+	public static final String OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY = "anomalyscore_anomaly";
+
+	/**
+	 * Name of the output port delivering the anomalyscore if it remains below the threshhold.
+	 */
+	public static final String OUTPUT_PORT_ANOMALY_SCORE_ELSE = "anomalyscore_else";
+
+	/** Name of the property determining the threshold. */
 	public static final String CONFIG_PROPERTY_THRESHOLD = "threshold";
 
 	private final double threshold;
 
+	/**
+	 * Creates a new instance of this class.
+	 * 
+	 * @param configuration
+	 *            Configuration of this component
+	 * @param projectContext
+	 *            ProjectContext of this component
+	 */
 	public AnomalyDetectionFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 		final String sThreshold = super.configuration.getStringProperty(CONFIG_PROPERTY_THRESHOLD);
@@ -68,10 +89,15 @@ public class AnomalyDetectionFilter extends AbstractFilterPlugin {
 		return new Configuration();
 	}
 
+	/**
+	 * This method represents the input port for the incoming anomalyscore.
+	 * 
+	 * @param anomalyScore
+	 *            Incoming anomaly score
+	 */
 	@InputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = AnomalyDetectionFilter.INPUT_PORT_ANOMALY_SCORE)
 	public void inputForecastAndMeasurement(final NamedDoubleTimeSeriesPoint anomalyScore) {
 
-		// TODO check for null value?!
 		if (anomalyScore.getDoubleValue() >= this.threshold) {
 			super.deliver(OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY, anomalyScore);
 		} else {

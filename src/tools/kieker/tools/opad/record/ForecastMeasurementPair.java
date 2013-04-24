@@ -27,6 +27,8 @@ public class ForecastMeasurementPair implements IForecastMeasurementPair {
 
 	private final String name;
 	private final Double forecast;
+	private final Double measurement;
+	private final Date time;
 
 	public ForecastMeasurementPair(final String name, final Double forecast,
 			final Double measurement, final Date time) {
@@ -36,9 +38,6 @@ public class ForecastMeasurementPair implements IForecastMeasurementPair {
 		this.measurement = measurement;
 		this.time = time;
 	}
-
-	private final Double measurement;
-	private final Date time;
 
 	public String getName() {
 		return this.name;
