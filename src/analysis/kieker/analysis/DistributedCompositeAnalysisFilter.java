@@ -16,14 +16,6 @@
 
 package kieker.analysis;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import kieker.analysis.analysisComponent.AbstractAnalysisComponent;
-import kieker.analysis.plugin.annotation.OutputPort;
-import kieker.analysis.plugin.annotation.Plugin;
-import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 
 /**
@@ -33,16 +25,22 @@ import kieker.common.configuration.Configuration;
  * 
  * @since 1.8
  */
-// TODO: Make sure that the connection method in the AC allows connections only between elements within this instance.
-@Plugin(outputPorts = {
-	@OutputPort(name = "out", eventTypes = Object.class),
-	@OutputPort(name = "internalInputPort", eventTypes = Object.class) })
-public abstract class AbstractDistributedCompositeAnalysisFilter extends AbstractFilterPlugin {
+public class DistributedCompositeAnalysisFilter extends AbstractCompositeAnalysisFilter {
 
-	private final List<AbstractAnalysisComponent> components = Collections.synchronizedList(new ArrayList<AbstractAnalysisComponent>());
-
-	public AbstractDistributedCompositeAnalysisFilter(final Configuration configuration, final IProjectContext projectContext) {
+	public DistributedCompositeAnalysisFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
+	}
+
+	@Override
+	protected void handleIncomingData(final Object data) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	protected void handleOutgoingData(final Object data) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

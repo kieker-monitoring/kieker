@@ -18,6 +18,7 @@ package kieker.analysis.analysisComponent;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import kieker.analysis.AbstractCompositeAnalysisFilter;
 import kieker.analysis.IProjectContext;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -45,7 +46,7 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 
 	/**
 	 * The project context of this component.
-	 */ 
+	 */
 	protected final IProjectContext projectContext;
 
 	/**
@@ -54,6 +55,8 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 	protected final Configuration configuration;
 
 	private final String name;
+
+	private volatile AbstractCompositeAnalysisFilter containingComponent;
 
 	/**
 	 * Each AnalysisComponent requires a constructor with a Configuration object and a IProjectContext.
@@ -98,5 +101,9 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 	 */
 	public final String getName() {
 		return this.name;
+	}
+
+	public void registerWithinComponent(final AbstractCompositeAnalysisFilter containingComponent) {
+		this.containingComponent = containingComponent;
 	}
 }
