@@ -27,9 +27,12 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.IProjectContext;
@@ -71,6 +74,10 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	private final List<AbstractPlugin> incomingPlugins;
 	private final List<AbstractPlugin> outgoingPlugins;
 	private volatile STATE state = STATE.READY;
+
+	private final Map<String, Queue<Object>> inputPortQueues;
+	private final Map<String, BlockingQueue<Object>> outputPortQueues;
+	private final Map<String, Queue<Object>> repositoryPortQueues;
 
 	/**
 	 * Each Plugin requires a constructor with a Configuration object and a IProjectContext.
@@ -137,18 +144,36 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		// and a List for every incoming and outgoing plugin
 		this.incomingPlugins = new ArrayList<AbstractPlugin>(1); // usually only one incoming
 		this.outgoingPlugins = new ArrayList<AbstractPlugin>(1); // usually only one outgoing
+
+		// Those are the queues for asynchronous ports
+		this.inputPortQueues = new ConcurrentHashMap<String, Queue<Object>>();
+		this.outputPortQueues = new ConcurrentHashMap<String, BlockingQueue<Object>>();
+		this.repositoryPortQueues = new ConcurrentHashMap<String, Queue<Object>>();
+
+		for (final OutputPort outputPort : annotation.outputPorts()) {
+			if (outputPort.asynchronous()) {
+				final BlockingQueue<Object> senderQueue = new LinkedBlockingQueue<Object>();
+				this.outputPortQueues.put(outputPort.name(), senderQueue);
+				final Thread senderThread = new Thread() {
+					@Override
+					public void run() {
+						while (true) {
+							try {
+								final Object data = senderQueue.take();
+								AbstractPlugin.this.deliver(outputPort.name(), data, false);
+							} catch (final InterruptedException ex) {
+								ex.printStackTrace();
+							}
+						}
+					}
+				};
+				senderThread.setDaemon(true);
+				senderThread.start();
+			}
+		}
 	}
 
-	/**
-	 * Delivers the given data to all registered input ports of the given output port.
-	 * 
-	 * @param outputPortName
-	 *            The output port to be used to send the given data.
-	 * @param data
-	 *            The data to be send; must not be null.
-	 * @return true if and only if the given output port does exist and if the data is not null and if it suits the port's event types.
-	 */
-	protected final boolean deliver(final String outputPortName, final Object data) {
+	private final boolean deliver(final String outputPortName, final Object data, final boolean checkForAsync) {
 		if (((this.state != STATE.RUNNING) && (this.state != STATE.TERMINATING)) || (data == null)) {
 			return false;
 		}
@@ -178,6 +203,11 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		}
 		if (!outTypeMatch) {
 			return false;
+		}
+
+		if (checkForAsync && outputPort.asynchronous()) {
+			this.outputPortQueues.get(outputPortName).add(data);
+			return true;
 		}
 
 		// Third step: Send everything to the registered ports.
@@ -216,6 +246,19 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * Delivers the given data to all registered input ports of the given output port.
+	 * 
+	 * @param outputPortName
+	 *            The output port to be used to send the given data.
+	 * @param data
+	 *            The data to be send; must not be null.
+	 * @return true if and only if the given output port does exist and if the data is not null and if it suits the port's event types.
+	 */
+	protected final boolean deliver(final String outputPortName, final Object data) {
+		return this.deliver(outputPortName, data, true);
 	}
 
 	/**

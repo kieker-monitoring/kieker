@@ -56,4 +56,12 @@ public @interface OutputPort {
 	 */
 	Class<?>[] eventTypes() default {};
 
+	/**
+	 * Determines whether the port is asynchronous or not. If set to true, the port gets an additional queue and a thread to send the data.
+	 * 
+	 * @return Whether this port is asynchronous or not.
+	 */
+	boolean asynchronous() default false;
+
+	boolean distributed() default false;
 }
