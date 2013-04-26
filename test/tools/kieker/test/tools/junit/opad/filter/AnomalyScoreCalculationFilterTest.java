@@ -52,6 +52,10 @@ public class AnomalyScoreCalculationFilterTest {
 	private ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkAnomalyScore;
 	private ListReader<ForecastMeasurementPair> theReaderScoreCalc;
 
+	public AnomalyScoreCalculationFilterTest() {
+		// empty default constructor
+	}
+
 	// HelperMethods AnomalyScoreCalculation
 	private ForecastMeasurementPair createFMP(final String name, final Double forecast,
 			final Double measurement) {

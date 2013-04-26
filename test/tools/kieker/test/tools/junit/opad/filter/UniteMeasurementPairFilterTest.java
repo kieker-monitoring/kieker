@@ -56,8 +56,11 @@ public class UniteMeasurementPairFilterTest {
 	private UniteMeasurementPairFilter unite;
 	private ListCollectionFilter<ForecastMeasurementPair> sinkPlugin;
 
-	// HelperMethods UniteFilter
+	public UniteMeasurementPairFilterTest() {
+		// empty default constructor
+	}
 
+	// HelperMethods UniteFilter
 	private NamedDoubleTimeSeriesPoint createNDTSP(final Date d, final String signature, final double value) {
 		final NamedDoubleTimeSeriesPoint r = new NamedDoubleTimeSeriesPoint(d, value, signature);
 		return r;

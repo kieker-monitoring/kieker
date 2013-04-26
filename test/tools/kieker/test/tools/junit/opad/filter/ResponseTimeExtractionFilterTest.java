@@ -45,14 +45,22 @@ import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
  */
 public class ResponseTimeExtractionFilterTest {
 
-	private AnalysisController controller;
 	private static final String OP_SIGNATURE_A = "a.A.opA";
 	private static final String SESSION_ID_TEST = "TestId";
 	private static final String HOST_ID_TEST = "TestRechner";
 	private static final long TRACE_ID_TEST = (long) 0.1;
+	private AnalysisController controller;
 
 	// Variables Mockup OperationExecutionReader
 	private ListReader<OperationExecutionRecord> theReaderOperationExecutionRecords;
+
+	// Variables ResponsetimeExtractionFilter
+	private ResponseTimeExtractionFilter responsetimeExtr;
+	private ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPlugin;
+
+	public ResponseTimeExtractionFilterTest() {
+		// empty default constructor
+	}
 
 	// HelperMethods Mockup OperationExecutionReader
 	private List<OperationExecutionRecord> createInputEventSetOER() {
@@ -67,10 +75,6 @@ public class ResponseTimeExtractionFilterTest {
 		final OperationExecutionRecord oer = new OperationExecutionRecord(signature, sessionid, traceid, tin, tout, HOST_ID_TEST, -1, -1);
 		return oer;
 	}
-
-	// Variables ResponsetimeExtractionFilter
-	private ResponseTimeExtractionFilter responsetimeExtr;
-	private ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPlugin;
 
 	@Before
 	public void setUp() throws IllegalStateException,

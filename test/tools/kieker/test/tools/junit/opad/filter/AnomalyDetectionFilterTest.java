@@ -56,6 +56,10 @@ public class AnomalyDetectionFilterTest {
 	private ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPluginElse;
 	private AnalysisController controller;
 
+	public AnomalyDetectionFilterTest() {
+		// empty default constructor
+	}
+
 	private NamedDoubleTimeSeriesPoint createNDTSP(final String signature, final double value) {
 		final NamedDoubleTimeSeriesPoint r = new NamedDoubleTimeSeriesPoint(new Date(), value, signature);
 		return r;

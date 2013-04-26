@@ -26,8 +26,9 @@ import kieker.tools.tslib.forecast.AbstractRForecaster;
  * 
  */
 public class ARIMA101Forecaster extends AbstractRForecaster {
-	private final static String MODEL_FUNC_NAME = "arima"; // no explicit stochastic model
-	private final static String FORECAST_FUNC_NAME = "predict";
+
+	private static final String FORECAST_FUNC_NAME = "predict";
+	private static final String MODEL_FUNC_NAME = "arima"; // no explicit stochastic model
 
 	public ARIMA101Forecaster(final ITimeSeries<Double> historyTimeseries) {
 		super(historyTimeseries, ARIMA101Forecaster.MODEL_FUNC_NAME, ARIMA101Forecaster.FORECAST_FUNC_NAME);

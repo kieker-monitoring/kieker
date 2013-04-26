@@ -42,16 +42,20 @@ import kieker.tools.tslib.forecast.IForecastResult;
  */
 public class ForecastingFilterTest {
 
+	private static final String OP_SIGNATURE_A = "a.A.opA";
+
 	private AnalysisController controller;
 
 	// Variables ForecastingFilter
-	private static final String OP_SIGNATURE_A = "a.A.opA";
 	private ListReader<NamedDoubleTimeSeriesPoint> theReaderForecast;
 	private ForecastingFilter forecasting;
 	private ListCollectionFilter<IForecastResult<Double>> sinkPlugin;
 
-	// HelperMethods ForecastingFilter
+	public ForecastingFilterTest() {
+		// empty default constructor
+	}
 
+	// HelperMethods ForecastingFilter
 	private NamedDoubleTimeSeriesPoint createNDTSP(final String signature, final double value) {
 		final NamedDoubleTimeSeriesPoint r = new NamedDoubleTimeSeriesPoint(new Date(), value, signature);
 		return r;

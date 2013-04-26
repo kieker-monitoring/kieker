@@ -46,7 +46,7 @@ public class OpadIntegrationTest {
 
 	private static final String OP_SIGNATURE_A = "a.A.opA";
 	private static final String SESSION_ID_TEST = "TestId";
-	private static final String HOST_ID_TEST = "TestRechner";
+	private static final String HOST_ID_TEST = "TestPC";
 	private static final long TRACE_ID_TEST = (long) 0.1;
 
 	private AnalysisController controller;
@@ -67,6 +67,10 @@ public class OpadIntegrationTest {
 
 	// Variables Mockup OperationExecutionReader
 	private ListReader<OperationExecutionRecord> theReaderOperationExecutionRecords;
+
+	public OpadIntegrationTest() {
+		// empty default constructor
+	}
 
 	// HelperMethods Mockup OperationExecutionReader
 	private List<OperationExecutionRecord> createInputEventSetOER() {

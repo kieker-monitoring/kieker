@@ -26,8 +26,8 @@ import kieker.tools.tslib.forecast.AbstractRForecaster;
  * 
  */
 public class MeanForecaster extends AbstractRForecaster {
-	private final static String MODEL_FUNC_NAME = null; // no explicit stochastic model
-	private final static String FORECAST_FUNC_NAME = "meanf";
+	private static final String MODEL_FUNC_NAME = null; // no explicit stochastic model
+	private static final String FORECAST_FUNC_NAME = "meanf";
 
 	public MeanForecaster(final ITimeSeries<Double> historyTimeseries) {
 		super(historyTimeseries, MeanForecaster.MODEL_FUNC_NAME, MeanForecaster.FORECAST_FUNC_NAME);

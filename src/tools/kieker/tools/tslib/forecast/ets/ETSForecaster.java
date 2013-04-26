@@ -26,8 +26,8 @@ import kieker.tools.tslib.forecast.AbstractRForecaster;
  * 
  */
 public class ETSForecaster extends AbstractRForecaster {
-	private final static String MODEL_FUNC_NAME = "ets"; // no explicit stochastic model
-	private final static String FORECAST_FUNC_NAME = "forecast.ets";
+	private static final String MODEL_FUNC_NAME = "ets"; // no explicit stochastic model
+	private static final String FORECAST_FUNC_NAME = "forecast.ets";
 
 	public ETSForecaster(final ITimeSeries<Double> historyTimeseries) {
 		super(historyTimeseries, ETSForecaster.MODEL_FUNC_NAME, ETSForecaster.FORECAST_FUNC_NAME);

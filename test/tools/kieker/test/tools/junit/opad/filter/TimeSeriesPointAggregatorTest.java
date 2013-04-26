@@ -36,16 +36,20 @@ import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
  */
 public class TimeSeriesPointAggregatorTest {
 
+	private static final String OP_SIGNATURE_A = "a.A.opA";
+
 	private AnalysisController controller;
 
 	// Variables ForecastingFilter
-	private static final String OP_SIGNATURE_A = "a.A.opA";
 	private ListReader<NamedDoubleTimeSeriesPoint> theReaderAggregator;
 	private TimeSeriesPointAggregator aggregator;
 	private ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPlugin;
 
-	// HelperMethods ForecastingFilter
+	public TimeSeriesPointAggregatorTest() {
+		// empty default constructor
+	}
 
+	// HelperMethods ForecastingFilter
 	private NamedDoubleTimeSeriesPoint createNDTSP(final String signature, final double value) {
 		final NamedDoubleTimeSeriesPoint r = new NamedDoubleTimeSeriesPoint(new Date(), value, signature);
 		return r;
@@ -68,7 +72,7 @@ public class TimeSeriesPointAggregatorTest {
 
 		// AGGREGATIONFILTER
 		final Configuration aggregationConfiguration = new Configuration();
-		aggregationConfiguration.setProperty(TimeSeriesPointAggregator.CONFIG_PROPERTY_NAME_AGGREGATION_SPAN, "20");
+		aggregationConfiguration.setProperty(TimeSeriesPointAggregator.CONFIG_PROPERTY_NAME_AGGREGATION_SPAN, "0");
 		aggregationConfiguration.setProperty(TimeSeriesPointAggregator.CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT, "MILLISECONDS");
 		// aggregationConfiguration.setProperty(TimeSeriesPointAggregator.CONFIG_PROPERTY_NAME_AGGREGATION_METHOD, "MAX");
 		this.aggregator = new TimeSeriesPointAggregator(aggregationConfiguration, this.controller);
