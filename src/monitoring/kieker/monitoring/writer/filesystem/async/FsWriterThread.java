@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,10 +27,12 @@ import java.util.concurrent.BlockingQueue;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
-import kieker.monitoring.writer.filesystem.MappingFileWriter;
+import kieker.monitoring.writer.filesystem.map.MappingFileWriter;
 
 /**
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.5
  */
 public final class FsWriterThread extends AbstractFsWriterThread {
 
@@ -38,12 +40,14 @@ public final class FsWriterThread extends AbstractFsWriterThread {
 
 	private PrintWriter pos = null; // NOPMD (init for findbugs)
 	private final boolean autoflush;
+	private final int bufferSize;
 
 	public FsWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
 			final MappingFileWriter mappingFileWriter, final String path, final int maxEntiresInFile, final int maxLogSize, final int maxLogFiles,
-			final boolean autoflush) {
+			final boolean autoflush, final int bufferSize) {
 		super(monitoringController, writeQueue, mappingFileWriter, path, maxEntiresInFile, maxLogSize, maxLogFiles);
 		this.autoflush = autoflush;
+		this.bufferSize = bufferSize;
 	}
 
 	@Override
@@ -64,8 +68,13 @@ public final class FsWriterThread extends AbstractFsWriterThread {
 	/**
 	 * Prepares a new file if needed.
 	 * 
+	 * @param filename
+	 *            The name of the file to be prepared.
+	 * 
 	 * @throws FileNotFoundException
+	 *             If the given file is somehow invalid.
 	 * @throws UnsupportedEncodingException
+	 *             If the used default encoding is not supported.
 	 */
 	@Override
 	protected final void prepareFile(final String filename) throws FileNotFoundException, UnsupportedEncodingException {
@@ -75,7 +84,7 @@ public final class FsWriterThread extends AbstractFsWriterThread {
 		if (this.autoflush) {
 			this.pos = new PrintWriter(new OutputStreamWriter(new FileOutputStream(filename), ENCODING), true);
 		} else {
-			this.pos = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), ENCODING)), false);
+			this.pos = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), ENCODING), this.bufferSize), false);
 		}
 		this.pos.flush();
 	}

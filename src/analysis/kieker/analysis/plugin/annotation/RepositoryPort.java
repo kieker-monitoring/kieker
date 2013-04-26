@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,8 @@ import kieker.analysis.repository.AbstractRepository;
  * repository port and the corresponding repository type. There is also a field for a human-readable description available.
  * 
  * @author Nils Christian Ehmke
+ * 
+ * @since 1.5
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.ANNOTATION_TYPE)

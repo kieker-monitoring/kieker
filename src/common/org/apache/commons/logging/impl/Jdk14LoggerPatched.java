@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,21 @@ package org.apache.commons.logging.impl;
 
 /**
  * Based upon the Apache commons logging class Jdk14Logger
- * Used to determine the correct calling method
+ * Used to determine the correct calling method.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public final class Jdk14LoggerPatched extends Jdk14Logger {
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param name
+	 *            The name of the logger instance.
+	 */
 	public Jdk14LoggerPatched(final String name) {
 		super(name);
 	}
@@ -35,7 +43,8 @@ public final class Jdk14LoggerPatched extends Jdk14Logger {
 		try {
 			if (commonsFactory instanceof LogFactoryImpl) {
 				final LogFactoryImpl commonsFactoryImpl = (LogFactoryImpl) commonsFactory;
-				if (("org.apache.commons.logging.impl.Jdk14Logger".equals(commonsFactoryImpl.getLogClassName())) && (commonsFactoryImpl.instances.get(name) == null)) {
+				if (("org.apache.commons.logging.impl.Jdk14Logger".equals(commonsFactoryImpl.getLogClassName()))
+						&& (commonsFactoryImpl.instances.get(name) == null)) {
 					// commons using Jdk14Logger and not yet assigned
 					final org.apache.commons.logging.Log instance = new Jdk14LoggerPatched(name);
 					commonsFactoryImpl.instances.put(name, instance);
@@ -48,66 +57,74 @@ public final class Jdk14LoggerPatched extends Jdk14Logger {
 		return commonsFactory.getInstance(name);
 	}
 
-	private final void log(final java.util.logging.Level level, final String msg, final Throwable ex) {
+	/**
+	 * Copy of {@link Jdk14Logger.log(level, msg, ex)} with correct stack depth for Kieker.
+	 * 
+	 * @param level
+	 *            The level of the log entry (the severity).
+	 * @param msg
+	 *            The message to log.
+	 * @param ex
+	 *            The cause.
+	 */
+	private final void logpatched(final java.util.logging.Level level, final String msg, final Throwable ex) {
 		final java.util.logging.Logger logger = this.getLogger();
 		if (logger.isLoggable(level)) {
-			final String sourceClass;
-			final String sourceMethod;
+			final String cname = this.name;
+			final String method;
 			{ // NOCS detect calling class and method
-				final StackTraceElement[] stackArray = new Throwable().getStackTrace(); // NOPMD (throwable)
-				if (stackArray.length > 3) {
-					sourceClass = stackArray[3].getClassName();
-					sourceMethod = stackArray[3].getMethodName();
+				final StackTraceElement[] locations = new Throwable().getStackTrace(); // NOPMD (throwable)
+				if (locations.length > 3) {
+					method = locations[3].getMethodName();
 				} else {
-					sourceClass = this.name;
-					sourceMethod = "";
+					method = "unknown";
 				}
 			}
 			if (ex == null) {
-				logger.logp(level, sourceClass, sourceMethod, msg);
+				logger.logp(level, cname, method, msg);
 			} else {
-				logger.logp(level, sourceClass, sourceMethod, msg, ex);
+				logger.logp(level, cname, method, msg, ex);
 			}
 		}
 	}
 
 	@Override
 	public final void debug(final Object message) {
-		this.log(java.util.logging.Level.FINE, String.valueOf(message), null);
+		this.logpatched(java.util.logging.Level.FINE, String.valueOf(message), null);
 	}
 
 	@Override
 	public final void debug(final Object message, final Throwable exception) {
-		this.log(java.util.logging.Level.FINE, String.valueOf(message), exception);
+		this.logpatched(java.util.logging.Level.FINE, String.valueOf(message), exception);
 	}
 
 	@Override
 	public final void info(final Object message) {
-		this.log(java.util.logging.Level.INFO, String.valueOf(message), null);
+		this.logpatched(java.util.logging.Level.INFO, String.valueOf(message), null);
 	}
 
 	@Override
 	public final void info(final Object message, final Throwable exception) {
-		this.log(java.util.logging.Level.INFO, String.valueOf(message), exception);
+		this.logpatched(java.util.logging.Level.INFO, String.valueOf(message), exception);
 	}
 
 	@Override
 	public final void warn(final Object message) {
-		this.log(java.util.logging.Level.WARNING, String.valueOf(message), null);
+		this.logpatched(java.util.logging.Level.WARNING, String.valueOf(message), null);
 	}
 
 	@Override
 	public final void warn(final Object message, final Throwable exception) {
-		this.log(java.util.logging.Level.WARNING, String.valueOf(message), exception);
+		this.logpatched(java.util.logging.Level.WARNING, String.valueOf(message), exception);
 	}
 
 	@Override
 	public final void error(final Object message) {
-		this.log(java.util.logging.Level.SEVERE, String.valueOf(message), null);
+		this.logpatched(java.util.logging.Level.SEVERE, String.valueOf(message), null);
 	}
 
 	@Override
 	public final void error(final Object message, final Throwable exception) {
-		this.log(java.util.logging.Level.SEVERE, String.valueOf(message), exception);
+		this.logpatched(java.util.logging.Level.SEVERE, String.valueOf(message), exception);
 	}
 }

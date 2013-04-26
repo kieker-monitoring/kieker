@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link kieker.analysis.model.analysisMetaModel.MIProject#getRepositories <em>Repositories</em>}</li>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.MIProject#getDependencies <em>Dependencies</em>}</li>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.MIProject#getViews <em>Views</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.MIProject#getProperties <em>Properties</em>}</li>
  * </ul>
  * </p>
  *
@@ -116,5 +117,21 @@ public interface MIProject extends EObject {
 	 * @generated
 	 */
 	EList<MIView> getViews();
+
+	/**
+	 * Returns the value of the '<em><b>Properties</b></em>' containment reference list.
+	 * The list contents are of type {@link kieker.analysis.model.analysisMetaModel.MIProperty}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Properties</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Properties</em>' containment reference list.
+	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getProject_Properties()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<MIProperty> getProperties();
 
 } // MIProject

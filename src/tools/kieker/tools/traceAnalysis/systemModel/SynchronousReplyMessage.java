@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,24 @@
 package kieker.tools.traceAnalysis.systemModel;
 
 /**
+ * A specified class of messages which represent synchronous replies.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 public class SynchronousReplyMessage extends AbstractMessage {
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param timestamp
+	 *            The timestamp of the message.
+	 * @param sendingExecution
+	 *            The {@link Execution} object which sent the message.
+	 * @param receivingExecution
+	 *            The {@link Execution} object which received the message.
+	 */
 	public SynchronousReplyMessage(final long timestamp, final Execution sendingExecution, final Execution receivingExecution) {
 		super(timestamp, sendingExecution, receivingExecution);
 	}

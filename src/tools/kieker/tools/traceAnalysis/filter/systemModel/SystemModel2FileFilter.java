@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package kieker.tools.traceAnalysis.filter.systemModel;
 import java.io.File;
 import java.io.IOException;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
@@ -34,6 +35,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.5
  */
 @Plugin(
 		description = "Prints the contents of a connected SystemModelRepository to an HTML file",
@@ -58,17 +60,33 @@ public class SystemModel2FileFilter extends AbstractTraceAnalysisFilter {
 
 	private final String outputFnHTML;
 
-	public SystemModel2FileFilter(final Configuration configuration) {
-		super(configuration);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 */
+	public SystemModel2FileFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+
 		this.outputFnHTML = configuration.getPathProperty(CONFIG_PROPERTY_NAME_HTML_OUTPUT_FN);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration currentConfiguration = new Configuration();
 		currentConfiguration.setProperty(CONFIG_PROPERTY_NAME_HTML_OUTPUT_FN, this.outputFnHTML);
 		return currentConfiguration;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void terminate(final boolean errorBeforeTermination) {
 		String outputFnHTMLCanonical = this.outputFnHTML; // not yet canonical here
@@ -80,10 +98,7 @@ public class SystemModel2FileFilter extends AbstractTraceAnalysisFilter {
 		boolean error = errorBeforeTermination;
 		if (!error) {
 			try {
-				/*
-				 * Trying to create the canonical file path here.
-				 * Using a code block to hide the File.
-				 */
+				// Trying to create the canonical file path here. Using a code block to hide the File.
 				final File outputFileHTML = new File(this.outputFnHTML);
 				outputFnHTMLCanonical = outputFileHTML.getCanonicalPath(); // may throw IOExecption
 

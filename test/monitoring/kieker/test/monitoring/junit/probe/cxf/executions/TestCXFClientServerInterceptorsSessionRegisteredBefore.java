@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,14 +26,18 @@ import kieker.monitoring.probe.cxf.OperationExecutionSOAPResponseInInterceptor;
 import kieker.monitoring.probe.cxf.OperationExecutionSOAPResponseOutInterceptor;
 
 /**
- * Tests the CXF interceptors with a previously registered Session ID
+ * Tests the CXF interceptors with a previously registered Session ID.
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.6
  */
 public class TestCXFClientServerInterceptorsSessionRegisteredBefore extends AbstractTestCXFClientServerInterceptors {
 	private static final String SESSION_ID = "SESSION-KQ8wFM0U";
 
+	/**
+	 * Default constructor.
+	 */
 	public TestCXFClientServerInterceptorsSessionRegisteredBefore() {
 		// empty default constructor
 	}

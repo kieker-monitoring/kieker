@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.CountingFilter;
 import kieker.analysis.plugin.filter.forward.CountingThroughputFilter;
@@ -41,78 +42,77 @@ import kieker.test.common.junit.AbstractKiekerTest;
 /**
  * Tests the {@link CountingThroughputFilter}.
  * 
- * TODO: Note that currently, we are only testing the {@link CountingThroughputFilter}'s input {@link CountingThroughputFilter#INPUT_PORT_NAME_RECORDS}.
- * 
  * @author Andre van Hoorn
  * 
+ * @since 1.6
  */
+// TODO #822 Note that currently, we are only testing the {@link CountingThroughputFilter}'s input {@link CountingThroughputFilter#INPUT_PORT_NAME_RECORDS}.
 public class TestCountingThroughputFilter extends AbstractKiekerTest {
 
 	private static final long START_TIME_NANOS = 246561L; // just a non-trivial number
 	private static final long INTERVAL_SIZE_NANOS = 100; // just a non-trivial number
 
-	private AnalysisController analysisController;
+	private IAnalysisController analysisController;
 
-	/** Provides the list of {@link IMonitoringRecord}s to be processed */
+	/** Provides the list of {@link IMonitoringRecord}s to be processed. */
 	private ListReader<IMonitoringRecord> simpleListReader; // initialized in #prepareConfiguration()
 
-	/** Provides the (current) number of {@link IMonitoringRecord}s provided by the {@link #simpleListReader} */
+	/** Provides the (current) number of {@link IMonitoringRecord}s provided by the {@link #simpleListReader}. */
 	private CountingFilter countingFilterReader; // initialized in #prepareConfiguration()
 
-	/** The filter to be tested */
+	/** The filter to be tested. */
 	private CountingThroughputFilter throughputFilter; // initialized in #prepareConfiguration()
 
-	/** Simply collects all {@link IMonitoringRecord}s processed by the tested filter */
+	/** Simply collects all {@link IMonitoringRecord}s processed by the tested filter. */
 	private ListCollectionFilter<EmptyRecord> sinkPlugin; // initialized in #prepareConfiguration()
 
 	private volatile boolean intervalsBasedOn1stTstamp; // will be set by the @Test's
 
 	/**
-	 * Will be filled by {@link #createInputEvents(SimpleListReader)}
+	 * Will be filled by {@link #createInputEvents(SimpleListReader)}.
 	 */
 	private final List<Entry<Long, Long>> expectedThroughputValues = new ArrayList<Entry<Long, Long>>();
 
+	/**
+	 * Creates a new instance of this class.
+	 */
 	public TestCountingThroughputFilter() {
 		// empty default constructor
 	}
 
+	/**
+	 * Prepares the test setup.
+	 * 
+	 * @throws IllegalStateException
+	 *             If something failed during the test setup (should not happen).
+	 * @throws AnalysisConfigurationException
+	 *             If something failed during the test setup (should not happen).
+	 */
 	// Note that @Before is not working because the configuration depends on which @Test is executed
 	public void prepareConfiguration() throws IllegalStateException, AnalysisConfigurationException {
 		this.analysisController = new AnalysisController();
 
-		/*
-		 * Reader
-		 */
+		// Reader
 		final Configuration readerConfiguration = new Configuration();
 		readerConfiguration.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
-		this.simpleListReader = new ListReader<IMonitoringRecord>(new Configuration());
-		this.analysisController.registerReader(this.simpleListReader);
+		this.simpleListReader = new ListReader<IMonitoringRecord>(new Configuration(), this.analysisController);
 
-		/*
-		 * Counting filter (before delay)
-		 */
-		this.countingFilterReader = new CountingFilter(new Configuration());
-		this.analysisController.registerFilter(this.countingFilterReader);
+		// Counting filter (before delay)
+		this.countingFilterReader = new CountingFilter(new Configuration(), this.analysisController);
 		this.analysisController.connect(this.simpleListReader, ListReader.OUTPUT_PORT_NAME,
 				this.countingFilterReader, CountingFilter.INPUT_PORT_NAME_EVENTS);
 
-		/*
-		 * The CountingThroughputFilter to be tested
-		 */
+		// The CountingThroughputFilter to be tested
 		final Configuration throughputFilterConfiguration = new Configuration();
-		throughputFilterConfiguration.setProperty(CountingThroughputFilter.CONFIG_PROPERTY_NAME_INTERVAL_SIZE_NANOS, Long.toString(INTERVAL_SIZE_NANOS));
+		throughputFilterConfiguration.setProperty(CountingThroughputFilter.CONFIG_PROPERTY_NAME_INTERVAL_SIZE, Long.toString(INTERVAL_SIZE_NANOS));
 		throughputFilterConfiguration.setProperty(CountingThroughputFilter.CONFIG_PROPERTY_NAME_INTERVALS_BASED_ON_1ST_TSTAMP,
 				Boolean.toString(this.intervalsBasedOn1stTstamp));
-		this.throughputFilter = new CountingThroughputFilter(throughputFilterConfiguration);
-		this.analysisController.registerFilter(this.throughputFilter);
+		this.throughputFilter = new CountingThroughputFilter(throughputFilterConfiguration, this.analysisController);
 		this.analysisController.connect(this.countingFilterReader, CountingFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
 				this.throughputFilter, CountingThroughputFilter.INPUT_PORT_NAME_RECORDS); // we use this input port because it's easier to test!
 
-		/*
-		 * Sink plugin
-		 */
-		this.sinkPlugin = new ListCollectionFilter<EmptyRecord>(new Configuration());
-		this.analysisController.registerFilter(this.sinkPlugin);
+		// Sink plugin
+		this.sinkPlugin = new ListCollectionFilter<EmptyRecord>(new Configuration(), this.analysisController);
 		this.analysisController.connect(this.throughputFilter, CountingThroughputFilter.OUTPUT_PORT_NAME_RELAYED_OBJECTS,
 				this.sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
 	}
@@ -164,21 +164,19 @@ public class TestCountingThroughputFilter extends AbstractKiekerTest {
 
 		final long stopTimeOfFirstInterval = (startTimeOfFirstInterval + INTERVAL_SIZE_NANOS) - 1;
 
-		final int[] expectedCountsForIntervals = { 24, 4, 0, 11, 55, 1, 0 };
+		final int[] expectedCountsForIntervals = { 24, 4, 0, 11, 55, 0, 1 };
 
 		for (int i = 0; i < expectedCountsForIntervals.length; i++) {
 			final int countForCurInterval = expectedCountsForIntervals[i];
 
-			if (countForCurInterval == 0) {
-				continue;
-			}
-
 			final long startTimeOfCurInterval = startTimeOfFirstInterval + (i * INTERVAL_SIZE_NANOS);
 			final long stopTimeOfCurInterval = stopTimeOfFirstInterval + (i * INTERVAL_SIZE_NANOS);
 
-			final List<IMonitoringRecord> recordsForInterval = this.createRecordsForInterval(startTimeOfCurInterval, stopTimeOfCurInterval, countForCurInterval);
-			for (final IMonitoringRecord r : recordsForInterval) {
-				reader.addObject(r);
+			if (countForCurInterval > 0) {
+				final List<IMonitoringRecord> recordsForInterval = this.createRecordsForInterval(startTimeOfCurInterval, stopTimeOfCurInterval, countForCurInterval);
+				for (final IMonitoringRecord r : recordsForInterval) {
+					reader.addObject(r);
+				}
 			}
 
 			this.expectedThroughputValues.add(new ImmutableEntry<Long, Long>(stopTimeOfCurInterval + 1, (long) countForCurInterval));
@@ -186,19 +184,23 @@ public class TestCountingThroughputFilter extends AbstractKiekerTest {
 	}
 
 	@Test
-	public void testIntervalsBasedOn1stTstamp() throws IllegalStateException, AnalysisConfigurationException, InterruptedException { // NOPMD
-																																		// (JUnitTestsShouldIncludeAssert)
+	public void testIntervalsBasedOn1stTstamp() throws IllegalStateException, AnalysisConfigurationException, InterruptedException {
 		this.intervalsBasedOn1stTstamp = true;
 		this.prepareConfiguration();
 		this.doTheTest();
+
+		// Make PMD happy
+		Assert.assertTrue(true);
 	}
 
 	@Test
-	public void testIntervalsBasedOn1970() throws IllegalStateException, AnalysisConfigurationException, InterruptedException { // NOPMD
-																																// (JUnitTestsShouldIncludeAssert)
+	public void testIntervalsBasedOn1970() throws IllegalStateException, AnalysisConfigurationException, InterruptedException {
 		this.intervalsBasedOn1stTstamp = false;
 		this.prepareConfiguration();
 		this.doTheTest();
+
+		// Make PMD happy
+		Assert.assertTrue(true);
 	}
 
 	private void doTheTest() throws IllegalStateException, AnalysisConfigurationException, InterruptedException {
@@ -218,9 +220,7 @@ public class TestCountingThroughputFilter extends AbstractKiekerTest {
 
 		Assert.assertEquals(this.expectedThroughputValues, throughputListFromFilterAndCurrentInterval);
 
-		/*
-		 * Make sure that all events have been passed through the delay filter
-		 */
+		// Make sure that all events have been passed through the delay filter
 		Assert.assertEquals("Unexpected number of relayed events", this.countingFilterReader.getMessageCount(), this.sinkPlugin.size());
 	}
 }

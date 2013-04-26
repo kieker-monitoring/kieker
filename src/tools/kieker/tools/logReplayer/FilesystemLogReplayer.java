@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package kieker.tools.logReplayer;
 
+import kieker.analysis.IAnalysisController;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
@@ -25,12 +26,32 @@ import kieker.common.configuration.Configuration;
  * system monitoring logs.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 0.95a
  */
 public class FilesystemLogReplayer extends AbstractLogReplayer {
 	// private static final Log LOG = LogFactory.getLog(FilesystemLogReplayer.class);
 
 	private final String[] inputDirs;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param monitoringConfigurationFile
+	 *            The name of the monitoring configuration file.
+	 * @param realtimeMode
+	 *            Whether realtime mode should be used.
+	 * @param keepOriginalLoggingTimestamps
+	 *            Whether to keep the original logging timestamps or not.
+	 * @param numRealtimeWorkerThreads
+	 *            The number of realtime worker threads to be used.
+	 * @param ignoreRecordsBeforeTimestamp
+	 *            The lower limit for the timestamps.
+	 * @param ignoreRecordsAfterTimestamp
+	 *            The upper limit for the timestamps.
+	 * @param inputDirs
+	 *            The array containing the input directories.
+	 */
 	public FilesystemLogReplayer(final String monitoringConfigurationFile, final boolean realtimeMode, final boolean keepOriginalLoggingTimestamps,
 			final int numRealtimeWorkerThreads, final long ignoreRecordsBeforeTimestamp, final long ignoreRecordsAfterTimestamp,
 			final String[] inputDirs) {
@@ -43,18 +64,22 @@ public class FilesystemLogReplayer extends AbstractLogReplayer {
 		// this.inputDirs = Arrays.copyOf(inputDirs, inputDirs.length);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	protected AbstractReaderPlugin createReader() {
+	protected AbstractReaderPlugin createReader(final IAnalysisController analysisInstance) {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(this.inputDirs));
-		// TODO: we might want to pull this out as a property
 		configuration.setProperty(FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, Boolean.toString(true));
-		return new FSReader(configuration);
+		return new FSReader(configuration, analysisInstance);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected String readerOutputPortName() {
 		return FSReader.OUTPUT_PORT_NAME_RECORDS;
 	}
-
 }

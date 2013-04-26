@@ -4,6 +4,8 @@
         <include within="kieker.evaluation.monitoredApplication.MonitoredClass"/>
     </weaver>
     <aspects>
+        <aspect name="kieker.monitoring.probe.aspectj.flow.constructorExecution.FullInstrumentation" />
         <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecution.FullInstrumentation" />
+        <!-- <aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFull"/> -->
     </aspects>
 </aspectj>

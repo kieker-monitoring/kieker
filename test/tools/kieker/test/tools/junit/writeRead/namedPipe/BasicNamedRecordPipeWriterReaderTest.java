@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +36,8 @@ import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
 
 /**
  * @author Andre van Hoorn
+ * 
+ * @since 1.5
  */
 public class BasicNamedRecordPipeWriterReaderTest extends AbstractWriterReaderTest { // NOPMD NOCS (TestClassWithoutTestCases)
 	private static final String PIPE_NAME = "pipe-IVvirGREEf";
@@ -44,13 +46,14 @@ public class BasicNamedRecordPipeWriterReaderTest extends AbstractWriterReaderTe
 
 	@Before
 	public void setUp() throws Exception {
+		final AnalysisController analysisController = new AnalysisController();
+
 		final Configuration pipeReaderConfig = new Configuration();
 		pipeReaderConfig.setProperty(PipeReader.CONFIG_PROPERTY_NAME_PIPENAME, BasicNamedRecordPipeWriterReaderTest.PIPE_NAME);
-		final PipeReader pipeReader = new PipeReader(pipeReaderConfig);
-		this.sinkFilter = new ListCollectionFilter<IMonitoringRecord>(new Configuration());
-		final AnalysisController analysisController = new AnalysisController();
-		analysisController.registerReader(pipeReader);
-		analysisController.registerFilter(this.sinkFilter);
+
+		final PipeReader pipeReader = new PipeReader(pipeReaderConfig, analysisController);
+		this.sinkFilter = new ListCollectionFilter<IMonitoringRecord>(new Configuration(), analysisController);
+
 		analysisController.connect(pipeReader, PipeReader.OUTPUT_PORT_NAME_RECORDS, this.sinkFilter, ListCollectionFilter.INPUT_PORT_NAME);
 		final AnalysisControllerThread analysisThread = new AnalysisControllerThread(analysisController);
 		analysisThread.start();

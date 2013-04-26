@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,8 @@ package kieker.tools.traceAnalysis.filter.visualization.graph;
  * and corresponds to the kind {@link kieker.tools.traceAnalysis.filter.visualization.graph.OriginRetentionPolicyKind#NONE}.
  * 
  * @author Holger Knoche
+ * 
+ * @since 1.6
  */
 public final class NoOriginRetentionPolicy extends AbstractOriginRetentionPolicy {
 

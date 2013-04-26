@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,22 @@
 package kieker.common.logging;
 
 /**
+ * This is an actual implementation of the logging interface used by the JDK 14 logger.
+ * 
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public final class LogImplJDK14 implements Log {
 	private final java.util.logging.Logger logger; // NOPMD (Implementation of an logger)
 	private final String name;
 
+	/**
+	 * Creates a new instance of this class.
+	 * 
+	 * @param name
+	 *            The name of the logger.
+	 */
 	protected LogImplJDK14(final String name) {
 		this.name = name;
 		this.logger = java.util.logging.Logger.getLogger(name);
@@ -30,16 +40,14 @@ public final class LogImplJDK14 implements Log {
 
 	private final void log(final java.util.logging.Level level, final String message, final Throwable t) {
 		if (this.logger.isLoggable(level)) {
-			final String sourceClass;
+			final String sourceClass = this.name;
 			final String sourceMethod;
 			{ // NOCS detect calling class and method
 				final StackTraceElement[] stackArray = new Throwable().getStackTrace(); // NOPMD (throwable)
 				if (stackArray.length > 2) { // our stackDepth
-					sourceClass = stackArray[2].getClassName();
 					sourceMethod = stackArray[2].getMethodName();
 				} else {
-					sourceClass = this.name;
-					sourceMethod = "";
+					sourceMethod = "unknown";
 				}
 			}
 			if (t != null) {
@@ -50,38 +58,65 @@ public final class LogImplJDK14 implements Log {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final boolean isDebugEnabled() {
 		return this.logger.isLoggable(java.util.logging.Level.FINE);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final void debug(final String message) {
 		this.log(java.util.logging.Level.FINE, message, null);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final void debug(final String message, final Throwable t) {
 		this.log(java.util.logging.Level.FINE, message, t);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final void info(final String message) {
 		this.log(java.util.logging.Level.INFO, message, null);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final void info(final String message, final Throwable t) {
 		this.log(java.util.logging.Level.INFO, message, t);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final void warn(final String message) {
 		this.log(java.util.logging.Level.WARNING, message, null);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final void warn(final String message, final Throwable t) {
 		this.log(java.util.logging.Level.WARNING, message, t);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final void error(final String message) {
 		this.log(java.util.logging.Level.SEVERE, message, null);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final void error(final String message, final Throwable t) {
 		this.log(java.util.logging.Level.SEVERE, message, t);
 	}

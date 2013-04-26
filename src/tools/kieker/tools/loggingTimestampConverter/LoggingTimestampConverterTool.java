@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,19 +31,23 @@ import org.apache.commons.cli.ParseException;
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.tools.util.CLIHelpFormatter;
 import kieker.tools.util.LoggingTimestampConverter;
 
 /**
+ * This tool can be used to convert timestamps.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 public final class LoggingTimestampConverterTool {
 
+	static final List<Option> OPTIONS = new CopyOnWriteArrayList<Option>(); // NOPMD package for inner class
 	private static final Log LOG = LogFactory.getLog(LoggingTimestampConverterTool.class);
 	private static final CommandLineParser CMDL_PARSER = new BasicParser();
-	private static final HelpFormatter CMD_HELP_FORMATTER = new HelpFormatter();
+	private static final HelpFormatter CMD_HELP_FORMATTER = new CLIHelpFormatter();
 	private static final Options CMDL_OPTS = new Options();
-	private static final List<Option> OPTIONS = new CopyOnWriteArrayList<Option>();
 	private static final String CMD_OPT_NAME_TIMESTAMPS = "timestamps";
 	private static CommandLine cmdl;
 	private static String[] timestampsStr;
@@ -53,9 +57,15 @@ public final class LoggingTimestampConverterTool {
 		LoggingTimestampConverterTool.initializeOptions();
 	}
 
+	/**
+	 * Private constructor to avoid instantiation.
+	 */
 	private LoggingTimestampConverterTool() {}
 
-	@SuppressWarnings("static-access")
+	/**
+	 * This method initializes some static fields.
+	 */
+	@SuppressWarnings({ "static-access", "static" })
 	private static final void initializeOptions() {
 		OPTIONS.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TIMESTAMPS)
 				.withArgName("timestamp1 ... timestampN").hasArgs().isRequired(true).withDescription("List of timestamps (UTC timezone) to convert").create("t"));
@@ -81,6 +91,12 @@ public final class LoggingTimestampConverterTool {
 		});
 	}
 
+	/**
+	 * This is the main method of the tool.
+	 * 
+	 * @param args
+	 *            The command line arguments.
+	 */
 	public static void main(final String[] args) {
 		if (!LoggingTimestampConverterTool.parseArgs(args) || !LoggingTimestampConverterTool.initFromArgs()) {
 			System.exit(1);
@@ -94,6 +110,13 @@ public final class LoggingTimestampConverterTool {
 		}
 	}
 
+	/**
+	 * This method tries to parse the given command line arguments.
+	 * 
+	 * @param args
+	 *            The command line arguments.
+	 * @return true if and only if the arguments have been parsed successfully.
+	 */
 	private static boolean parseArgs(final String[] args) {
 		try {
 			LoggingTimestampConverterTool.cmdl = CMDL_PARSER.parse(CMDL_OPTS, args);
@@ -105,12 +128,20 @@ public final class LoggingTimestampConverterTool {
 		return true;
 	}
 
+	/**
+	 * This method prints a help text on the screen to show the usage of the tool.
+	 */
 	private static void printUsage() {
 		CMD_HELP_FORMATTER.printHelp(80, LoggingTimestampConverterTool.class.getName(), "",
 				CMDL_OPTS,
 				"", true);
 	}
 
+	/**
+	 * This method tries to initialize the tool by using the (already parsed and stored) command line arguments.
+	 * 
+	 * @return true if and only if the tool has been initialized successfully.
+	 */
 	private static boolean initFromArgs() {
 		LoggingTimestampConverterTool.timestampsStr = LoggingTimestampConverterTool.cmdl.getOptionValues(CMD_OPT_NAME_TIMESTAMPS);
 		if (LoggingTimestampConverterTool.timestampsStr == null) { // should not happen since marked as required opt

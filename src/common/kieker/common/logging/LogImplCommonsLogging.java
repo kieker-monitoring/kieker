@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,14 @@
 package kieker.common.logging;
 
 /**
+ * This is an actual implementation of the logging interface used by the common logger of the JVM.
+ * 
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public final class LogImplCommonsLogging implements Log {
+
 	private static final boolean JDK14PATCH;
 
 	private final org.apache.commons.logging.Log log;
@@ -33,6 +38,12 @@ public final class LogImplCommonsLogging implements Log {
 		}
 	}
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param name
+	 *            The name of the logger to be used.
+	 */
 	protected LogImplCommonsLogging(final String name) {
 		if (JDK14PATCH) {
 			this.log = org.apache.commons.logging.impl.Jdk14LoggerPatched.getLog(name);
@@ -41,52 +52,79 @@ public final class LogImplCommonsLogging implements Log {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean isDebugEnabled() {
 		return this.log.isDebugEnabled();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void debug(final String message) {
 		if (this.log.isDebugEnabled()) {
 			this.log.debug(message);
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void debug(final String message, final Throwable t) {
 		if (this.log.isDebugEnabled()) {
 			this.log.debug(message, t);
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void info(final String message) {
 		if (this.log.isInfoEnabled()) {
 			this.log.info(message);
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void info(final String message, final Throwable t) {
 		if (this.log.isInfoEnabled()) {
 			this.log.info(message, t);
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void warn(final String message) {
 		if (this.log.isWarnEnabled()) {
 			this.log.warn(message);
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void warn(final String message, final Throwable t) {
 		if (this.log.isWarnEnabled()) {
 			this.log.warn(message, t);
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void error(final String message) {
 		if (this.log.isErrorEnabled()) {
 			this.log.error(message);
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void error(final String message, final Throwable t) {
 		if (this.log.isErrorEnabled()) {
 			this.log.error(message, t);

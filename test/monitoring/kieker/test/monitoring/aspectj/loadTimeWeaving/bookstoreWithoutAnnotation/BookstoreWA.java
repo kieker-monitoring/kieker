@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,21 +20,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A simple test and demonstration scenario for Kieker's
- * monitoring component.
+ * A simple test and demonstration scenario for Kieker's monitoring component.
  * 
- * This test does not use the Kieker typical Java Annotations. The test is used
- * to demonstrate how to instrument programs for that no sources are available.
+ * This test does not use the Kieker typical Java Annotations. The test is used to demonstrate how to instrument programs for that no sources are available.
  * 
  * @author Matthias Rohr
+ * 
+ * @since 0.9
  */
-
 public class BookstoreWA extends Thread {
+
+	/** The list of bookstores which will be filled in the main method and consumed by other threads. */
 	public static final List<BookstoreWA> BOOKSTORE_SCENARIOS = new ArrayList<BookstoreWA>();
 
 	private static final int NUM_REQUESTS = 100;
 	private static final int INTER_REQUEST_TIME = 5;
 
+	/**
+	 * Default constructor.
+	 */
 	public BookstoreWA() {
 		// nothing to do
 	}
@@ -51,6 +55,11 @@ public class BookstoreWA extends Thread {
 	 * by the local variables above the method.
 	 * (default: 100 requests; interRequestTime 5 (millisecs))
 	 * 
+	 * @param args
+	 *            The command line arguments. They have currently no effect.
+	 * 
+	 * @throws InterruptedException
+	 *             If the main thread has been interrupted.
 	 */
 	public static void main(final String[] args) throws InterruptedException {
 		for (int i = 0; i < BookstoreWA.NUM_REQUESTS; i++) {
@@ -80,13 +89,19 @@ public class BookstoreWA extends Thread {
 		}
 	}
 
+	/**
+	 * Searches for a book.
+	 */
 	public static void searchBook() {
 		CatalogWA.getBook(false);
 		CRMWA.getOffers();
 	}
 
 	/**
-	 * Only encapsulates Thread.sleep()
+	 * This method encapsulates simply Thread.sleep().
+	 * 
+	 * @param waittime
+	 *            The time to wait in milliseconds.
 	 */
 	public static void waitabit(final long waittime) {
 		if (waittime > 0) {

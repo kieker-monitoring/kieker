@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ public class MyResponseTimeRecord extends AbstractMonitoringRecord
 	private static final long serialVersionUID = 1775L;
 	private static final Class<?>[] TYPES = { String.class, String.class, long.class };
 
-	/* Attributes storing the actual monitoring data: */
+	// Attributes storing the actual monitoring data:
 	private final String className;
 	private final String methodName;
 	private final long responseTimeNanos;

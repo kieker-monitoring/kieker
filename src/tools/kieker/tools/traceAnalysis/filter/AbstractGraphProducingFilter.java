@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package kieker.tools.traceAnalysis.filter;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.common.configuration.Configuration;
@@ -31,12 +32,15 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.NoOriginRetentionPo
  * 
  * @param <G>
  *            The graph type created by this filter
+ * 
+ * @since 1.6
  */
 @Plugin
 public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?, ?>> extends AbstractMessageTraceProcessingFilter implements
 		IGraphProducingFilter<G> {
 
-	private static final String INCOMPATIBLE_RETENTION_ERROR_TEMPLATE = "%s: The current retention policy %s is incompatible with the requested retention policy %s.";
+	private static final String INCOMPATIBLE_RETENTION_ERROR_TEMPLATE =
+			"%s: The current retention policy %s is incompatible with the requested retention policy %s.";
 
 	private final G graph;
 	private IOriginRetentionPolicy originRetentionPolicy = NoOriginRetentionPolicy.createInstance();
@@ -46,15 +50,21 @@ public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?,
 	 * 
 	 * @param configuration
 	 *            The configuration to use
+	 * @param projectContext
+	 *            The project context to use.
 	 * @param graph
 	 *            The (usually empty) graph to produce / extend
 	 */
-	public AbstractGraphProducingFilter(final Configuration configuration, final G graph) {
-		super(configuration);
+	public AbstractGraphProducingFilter(final Configuration configuration, final IProjectContext projectContext, final G graph) {
+		super(configuration, projectContext);
 
 		this.graph = graph;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		return this.configuration;
 	}
@@ -77,6 +87,11 @@ public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?,
 		return OUTPUT_PORT_NAME_GRAPH;
 	}
 
+	/**
+	 * Delivers the graph stored in this filter.
+	 * 
+	 * @return The graph.
+	 */
 	protected G getGraph() {
 		return this.graph;
 	}

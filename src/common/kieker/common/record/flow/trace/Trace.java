@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,8 @@ import kieker.common.record.flow.IFlowRecord;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public final class Trace extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IFlowRecord {
 
@@ -64,9 +66,12 @@ public final class Trace extends AbstractMonitoringRecord implements IMonitoring
 	private transient int nextOrderId = 0; // used only thread local! // NOPMD (transient init)
 
 	/**
+	 * Creates a new instance of this class using the given parameters.
 	 * 
 	 * @param traceId
+	 *            The trace ID.
 	 * @param threadId
+	 *            The thread ID.
 	 * @param sessionId
 	 *            the session ID; use {@link #NO_SESSION_ID} if no session ID desired.
 	 * @param hostname
@@ -85,6 +90,12 @@ public final class Trace extends AbstractMonitoringRecord implements IMonitoring
 		this.parentOrderId = parentOrderId;
 	}
 
+	/**
+	 * Creates a new instance of this class using the given parameter.
+	 * 
+	 * @param values
+	 *            The array containing the values for the fields of this class. This should normally be the array resulting in a call to {@link #toArray()}.
+	 */
 	public Trace(final Object[] values) { // NOPMD (values stored directly)
 		AbstractMonitoringRecord.checkArray(values, TYPES);
 		this.traceId = (Long) values[0];
@@ -95,14 +106,25 @@ public final class Trace extends AbstractMonitoringRecord implements IMonitoring
 		this.parentOrderId = (Integer) values[5];
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final Object[] toArray() {
 		return new Object[] { this.traceId, this.threadId, this.sessionId, this.hostname, this.parentTraceId, this.parentOrderId, };
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final Class<?>[] getValueTypes() {
 		return TYPES.clone();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
+	 */
 	@Deprecated
 	public final void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();

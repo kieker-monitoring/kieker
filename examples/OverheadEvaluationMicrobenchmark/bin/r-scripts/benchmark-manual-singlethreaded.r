@@ -1,5 +1,7 @@
 #DO NOT REMOVE IN TRUNK
-output_fn="C:\\Users\\jwa\\Projects\\Kieker\\software\\kieker\\trunk\\examples\\OverheadEvaluationMicrobenchmark\\tmp\\results-singelthreaded.pdf"
+
+rm(list=ls(all=TRUE))
+output_fn="tmp/results-singelthreaded.pdf"
 
 configs.labels=c("Method Time (T)","Instrumentation (I)","Collecting (C)","Writing (W)")
 configs.count=4

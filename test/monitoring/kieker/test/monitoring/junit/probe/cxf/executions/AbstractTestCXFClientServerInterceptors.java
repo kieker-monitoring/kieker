@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,13 +49,16 @@ import kieker.test.monitoring.util.NamedListWriter;
  * 
  * @author Andre van Hoorn, Marius Loewe
  * 
+ * @since 1.6
  */
 public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKiekerTest {
 	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
 	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
 	protected static final SOAPTraceRegistry SOAP_REGISTRY = SOAPTraceRegistry.getInstance();
 
+	/** This constant is used as the hostname of the server. */
 	protected static final String SERVER_HOSTNAME = "srv";
+	/** This constant is used as the hostname of the client. */
 	protected static final String CLIENT_HOSTNAME = "client";
 
 	private static final String SERVICE_ADDRESS_TEMPLATE = "http://localhost:909X/bookstore";
@@ -63,7 +66,7 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 	private static final Log LOG = LogFactory.getLog(AbstractTestCXFClientServerInterceptors.class);
 
 	/**
-	 * Each instance of this class increments the port number by 1
+	 * Each instance of this class increments the port number by 1.
 	 */
 	private volatile String serviceAddress;
 
@@ -92,15 +95,16 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 	}
 
 	/**
-	 * Workaround to have unique port numbers among the CXF tests. A mechanism having a static
-	 * integer increment by each instance did work under Eclipse, but not when executed by ant.
+	 * Workaround to have unique port numbers among the CXF tests. A mechanism having a static integer increment by each instance did work under Eclipse, but not
+	 * when executed by ant.
 	 * 
-	 * @return
+	 * @return A port digit.
 	 */
 	protected abstract int getPortDigit();
 
 	private IMonitoringController createMonitoringController(final String hostname) {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
+		config.setProperty(ConfigurationFactory.METADATA, "false");
 		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, NamedListWriter.class.getName());
 		config.setProperty(NamedListWriter.CONFIG_PROPERTY_NAME_LIST_NAME, this.listName);
 		config.setProperty(ConfigurationFactory.HOST_NAME, hostname);
@@ -115,9 +119,7 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 		this.srvFactory.setAddress(this.serviceAddress);
 		this.srvFactory.setServiceBean(implementor);
 
-		/*
-		 * On the server-side, we only intercept incoming requests and outgoing responses.
-		 */
+		// On the server-side, we only intercept incoming requests and outgoing responses.
 		this.srvFactory.getInInterceptors().add(new OperationExecutionSOAPRequestInInterceptor(this.serverMonitoringController));
 		this.srvFactory.getOutInterceptors().add(new OperationExecutionSOAPResponseOutInterceptor(this.serverMonitoringController));
 		this.srvFactory.create();
@@ -125,9 +127,7 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 
 	private void createClient() {
 		final JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
-		/*
-		 * On the client-side, we only intercept outgoing requests and incoming responses.
-		 */
+		// On the client-side, we only intercept outgoing requests and incoming responses.
 		factory.getOutInterceptors().add(new OperationExecutionSOAPRequestOutInterceptor(this.clientMonitoringController));
 		factory.getInInterceptors().add(new OperationExecutionSOAPResponseInInterceptor(this.clientMonitoringController));
 
@@ -148,6 +148,9 @@ public abstract class AbstractTestCXFClientServerInterceptors extends AbstractKi
 
 	/**
 	 * Gives implementing classes the possibility to inspect the records written by the probes.
+	 * 
+	 * @param records
+	 *            The list of written records.
 	 */
 	protected abstract void checkRecordList(List<IMonitoringRecord> records);
 

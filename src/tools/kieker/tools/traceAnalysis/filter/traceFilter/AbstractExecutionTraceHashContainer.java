@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,17 +19,29 @@ package kieker.tools.traceAnalysis.filter.traceFilter;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
 
 /**
- * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.2
  */
 abstract class AbstractExecutionTraceHashContainer { // NOPMD (abstract class without abstract methods)
 
 	private final ExecutionTrace executionTrace;
 
+	/**
+	 * Abstract constructor to initialize the container.
+	 * 
+	 * @param t
+	 *            The execution trace to be stored in this container.
+	 */
 	public AbstractExecutionTraceHashContainer(final ExecutionTrace t) {
 		this.executionTrace = t;
 	}
 
+	/**
+	 * Delivers the stored execution trace.
+	 * 
+	 * @return The content of this container.
+	 */
 	public ExecutionTrace getExecutionTrace() {
 		return this.executionTrace;
 	}

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.analysis.repository.annotation.Repository;
 import kieker.common.configuration.Configuration;
@@ -33,8 +34,11 @@ import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
 import kieker.tools.traceAnalysis.systemModel.Operation;
 
 /**
+ * This repository is a model manager for the Kieker's component model. It consists of multiple "sub"repositories.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 @Repository(
 		name = "System model repository",
@@ -54,8 +58,17 @@ public class SystemModelRepository extends AbstractRepository {
 	private final AllocationComponentOperationPairFactory allocationPairFactory;
 	private final AssemblyComponentOperationPairFactory assemblyPairFactory;
 
-	public SystemModelRepository(final Configuration configuration) {
-		super(configuration);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration to use for this repository.
+	 * @param projectContext
+	 *            The project context to use for this repository.
+	 */
+	public SystemModelRepository(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+
 		this.typeRepositoryFactory = new TypeRepository(this);
 		this.assemblyFactory = new AssemblyRepository(this);
 		this.executionEnvironmentFactory = new ExecutionEnvironmentRepository(this);
@@ -77,10 +90,20 @@ public class SystemModelRepository extends AbstractRepository {
 		return this.executionEnvironmentFactory;
 	}
 
+	/**
+	 * Delivering the factory managing the available operations.
+	 * 
+	 * @return The operation factory.
+	 */
 	public final OperationRepository getOperationFactory() {
 		return this.operationFactory;
 	}
 
+	/**
+	 * Delivering the factory managing the available component types.
+	 * 
+	 * @return The types factory.
+	 */
 	public final TypeRepository getTypeRepositoryFactory() {
 		return this.typeRepositoryFactory;
 	}
@@ -94,9 +117,8 @@ public class SystemModelRepository extends AbstractRepository {
 	}
 
 	private static enum EntityType {
-
 		COMPONENT_TYPE, OPERATION, ASSEMBLY_COMPONENT, ALLOCATION_COMPONENT, EXECUTION_CONTAINER
-	};
+	}
 
 	private String htmlEntityLabel(final int id, final String caption, final EntityType entityType) {
 		final StringBuilder strBuild = new StringBuilder(64);
@@ -147,8 +169,11 @@ public class SystemModelRepository extends AbstractRepository {
 	 * 
 	 * @param outputFn
 	 *            file system location of the output file (as accepted by {@link java.io.File#File(String)}).
+	 * 
 	 * @throws FileNotFoundException
+	 *             If the given file is somehow invalid.
 	 * @throws UnsupportedEncodingException
+	 *             If the used default encoding is not supported.
 	 */
 	public void saveSystemToHTMLFile(final String outputFn) throws FileNotFoundException, UnsupportedEncodingException {
 		final PrintStream ps = new PrintStream(new FileOutputStream(outputFn), false, ENCODING);
@@ -228,6 +253,7 @@ public class SystemModelRepository extends AbstractRepository {
 		ps.close();
 	}
 
+	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}

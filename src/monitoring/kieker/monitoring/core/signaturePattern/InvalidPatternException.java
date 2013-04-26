@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +18,32 @@ package kieker.monitoring.core.signaturePattern;
 
 /**
  * @author Bjoern Weissenfels, Jan Waller
+ * 
+ * @since 1.6
  */
 public class InvalidPatternException extends Exception {
+
 	private static final long serialVersionUID = 7568907124941706485L;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param reason
+	 *            The message for this exception.
+	 */
 	public InvalidPatternException(final String reason) {
 		super(reason);
 	}
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param reason
+	 *            The message for this exception.
+	 * 
+	 * @param cause
+	 *            The cause of this exception.
+	 */
 	public InvalidPatternException(final String reason, final Throwable cause) {
 		super(reason, cause);
 	}

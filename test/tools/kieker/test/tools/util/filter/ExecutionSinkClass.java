@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package kieker.test.tools.util.filter;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
@@ -28,6 +29,8 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
  * This is just a simple helper class which collects {@link Execution}s.
  * 
  * @author Nils Christian Ehmke
+ * 
+ * @since 1.5
  */
 public class ExecutionSinkClass extends AbstractFilterPlugin {
 
@@ -46,18 +49,28 @@ public class ExecutionSinkClass extends AbstractFilterPlugin {
 	 * 
 	 * @param configuration
 	 *            The configuration for this plugin. It will not be used.
+	 * @param projectContext
+	 *            The project context for this plugin. It will not be used.
 	 */
-	public ExecutionSinkClass(final Configuration configuration) {
-		super(configuration);
+	public ExecutionSinkClass(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}
 
-	@InputPort(
-			name = ExecutionSinkClass.INPUT_PORT_NAME,
-			eventTypes = { Execution.class })
+	/**
+	 * This method represents the input ports for the execution objects.
+	 * 
+	 * @param data
+	 *            The next execution.
+	 */
+	@InputPort(name = ExecutionSinkClass.INPUT_PORT_NAME, eventTypes = { Execution.class })
 	public void doJob(final Object data) {
 		this.lst.add((Execution) data);
 	}

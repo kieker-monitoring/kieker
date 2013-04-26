@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
  * 
  * @author Holger Knoche
  * 
+ * @since 1.6
  */
 public class OperationAssemblyDependencyGraphFormatter extends AbstractOperationDependencyGraphFormatter<OperationAssemblyDependencyGraph> {
 
@@ -101,8 +102,7 @@ public class OperationAssemblyDependencyGraphFormatter extends AbstractOperation
 						DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
 						null, // imagefilename
 						null, // misc
-						null
-						));
+						null));
 				continue;
 			}
 
@@ -131,8 +131,7 @@ public class OperationAssemblyDependencyGraphFormatter extends AbstractOperation
 						DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
 						null, // imagefilename
 						null, // misc
-						node.getDescription() // tooltip
-						));
+						node.getDescription())); // tooltip
 			}
 			builder.append("}\n");
 		}
@@ -157,6 +156,9 @@ public class OperationAssemblyDependencyGraphFormatter extends AbstractOperation
 		return DEFAULT_FILE_NAME;
 	}
 
+	/**
+	 * @author Holger Knoche
+	 */
 	private static class EdgeVisitor extends AbstractDependencyGraphFormatterVisitor<AssemblyComponentOperationPair> {
 		public EdgeVisitor(final StringBuilder builder, final boolean includeWeights, final boolean plotLoops, final boolean useShortLabels) {
 			super(builder, includeWeights, plotLoops, useShortLabels);

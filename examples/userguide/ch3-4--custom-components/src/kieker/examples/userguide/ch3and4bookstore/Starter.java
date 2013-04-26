@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,8 @@ import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 import kieker.analysis.AnalysisController;
-import kieker.analysis.plugin.AbstractPlugin;
+import kieker.analysis.IAnalysisController;
+import kieker.analysis.analysisComponent.AbstractAnalysisComponent;
 import kieker.common.configuration.Configuration;
 
 public final class Starter {
@@ -28,10 +29,9 @@ public final class Starter {
 	private Starter() {}
 
 	public static void main(final String[] args) throws Exception {
-		/*
-		 * Spawn a thread that performs asynchronous requests
-		 * to a bookstore.
-		 */
+		// Spawn a thread that performs asynchronous requests
+		// to a bookstore.
+
 		new Thread(new Runnable() {
 
 			public void run() {
@@ -43,47 +43,41 @@ public final class Starter {
 			}
 		}).start();
 
-		/* Create a new analysis controller for our response time analysis. */
-		final AnalysisController analysisController = new AnalysisController();
+		// Create a new analysis controller for our response time analysis.
+		final IAnalysisController analysisController = new AnalysisController();
 
-		/* Configure and register the reader */
+		// Configure and register the reader
 		final Configuration readerConfig = new Configuration();
-		readerConfig.setProperty(
-				MyPipeReader.CONFIG_PROPERTY_NAME_PIPE_NAME, "somePipe");
-		final MyPipeReader reader = new MyPipeReader(readerConfig);
-		analysisController.registerReader(reader);
+		readerConfig.setProperty(MyPipeReader.CONFIG_PROPERTY_NAME_PIPE_NAME, "somePipe");
+		final MyPipeReader reader = new MyPipeReader(readerConfig, analysisController);
 
-		/* Configure, register, and connect the response time filter */
+		// Configure, register, and connect the response time filter
 		final Configuration filterConfig = new Configuration();
 		final long rtThresholdNanos =
 				TimeUnit.NANOSECONDS.convert(1900, TimeUnit.MICROSECONDS);
 		filterConfig.setProperty( // configure threshold of 1.9 milliseconds:
 				MyResponseTimeFilter.CONFIG_PROPERTY_NAME_TS_NANOS,
 				Long.toString(rtThresholdNanos));
-		final MyResponseTimeFilter filter = new MyResponseTimeFilter(filterConfig);
-		analysisController.registerFilter(filter);
-		analysisController.connect(reader, MyPipeReader.OUTPUT_PORT_NAME,
-				filter, MyResponseTimeFilter.INPUT_PORT_NAME_RESPONSE_TIMES);
+		final MyResponseTimeFilter filter = new MyResponseTimeFilter(filterConfig, analysisController);
+		analysisController.connect(reader, MyPipeReader.OUTPUT_PORT_NAME, filter, MyResponseTimeFilter.INPUT_PORT_NAME_RESPONSE_TIMES);
 
-		/* Configure, register, and connect the filter printing *valid* response times */
+		// Configure, register, and connect the filter printing *valid* response times
 		final Configuration validOutputConfig = new Configuration();
 		validOutputConfig.setProperty(MyResponseTimeOutputPrinter.CONFIG_PROPERTY_NAME_VALID_OUTPUT, Boolean.toString(true));
-		validOutputConfig.setProperty(AbstractPlugin.CONFIG_NAME, "Print valid");
-		final MyResponseTimeOutputPrinter validPrinter = new MyResponseTimeOutputPrinter(validOutputConfig);
-		analysisController.registerFilter(validPrinter);
+		validOutputConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, "Print valid");
+		final MyResponseTimeOutputPrinter validPrinter = new MyResponseTimeOutputPrinter(validOutputConfig, analysisController);
 		analysisController.connect(filter, MyResponseTimeFilter.OUTPUT_PORT_NAME_RT_VALID, validPrinter, MyResponseTimeOutputPrinter.INPUT_PORT_NAME_EVENTS);
 
-		/* Configure, register, and connect the filter printing *invalid* response times */
+		// Configure, register, and connect the filter printing *invalid* response times
 		final Configuration invalidOutputConfig = new Configuration();
 		invalidOutputConfig.setProperty(MyResponseTimeOutputPrinter.CONFIG_PROPERTY_NAME_VALID_OUTPUT, Boolean.toString(false));
-		invalidOutputConfig.setProperty(AbstractPlugin.CONFIG_NAME, "Print invalid");
-		final MyResponseTimeOutputPrinter invalidPrinter = new MyResponseTimeOutputPrinter(invalidOutputConfig);
-		analysisController.registerFilter(invalidPrinter);
+		invalidOutputConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, "Print invalid");
+		final MyResponseTimeOutputPrinter invalidPrinter = new MyResponseTimeOutputPrinter(invalidOutputConfig, analysisController);
 		analysisController.connect(filter, MyResponseTimeFilter.OUTPUT_PORT_NAME_RT_EXCEED, invalidPrinter, MyResponseTimeOutputPrinter.INPUT_PORT_NAME_EVENTS);
 
 		analysisController.saveToFile(new File("out.kax"));
 
-		/* Start the analysis. */
+		// Start the analysis.
 		analysisController.run();
 	}
 }

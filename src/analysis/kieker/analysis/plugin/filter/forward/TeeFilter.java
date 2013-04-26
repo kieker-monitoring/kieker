@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -36,28 +37,48 @@ import kieker.common.logging.LogFactory;
  * A simple message is printed to a configurable stream and all objects are forwarded to the output port.
  * 
  * @author Matthias Rohr, Jan Waller
+ * 
+ * @since 1.2
  */
 @Plugin(description = "A filter to print the object to a configured stream",
 		outputPorts = @OutputPort(name = TeeFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming object", eventTypes = { Object.class }),
 		configuration = {
 			@Property(name = TeeFilter.CONFIG_PROPERTY_NAME_STREAM, defaultValue = TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_STDOUT,
-					description = "The name of the stream used to print the incoming data (special values are STDOUT, STDERR, STDLOG, and NULL; other values are interpreted as filenames)."),
+					description = "The name of the stream used to print the incoming data (special values are STDOUT, STDERR, STDLOG, and NULL; "
+							+ "other values are interpreted as filenames)."),
 			@Property(name = TeeFilter.CONFIG_PROPERTY_NAME_ENCODING, defaultValue = TeeFilter.CONFIG_PROPERTY_VALUE_DEFAULT_ENCODING,
 					description = "The used encoding for the selected stream.")
 		})
 public final class TeeFilter extends AbstractFilterPlugin {
 
+	/** The name of the input port for incoming events. */
 	public static final String INPUT_PORT_NAME_EVENTS = "receivedEvents";
-
+	/** The name of the output port delivering the incoming events. */
 	public static final String OUTPUT_PORT_NAME_RELAYED_EVENTS = "relayedEvents";
-
+	/** The name of the property determining the stream in which the incoming data will be printed. */
 	public static final String CONFIG_PROPERTY_NAME_STREAM = "stream";
+	/** The name of the property determining the used encoding. */
 	public static final String CONFIG_PROPERTY_NAME_ENCODING = "characterEncoding";
 
+	/**
+	 * The value of the stream property which determines that the filter uses the standard output.
+	 */
 	public static final String CONFIG_PROPERTY_VALUE_STREAM_STDOUT = "STDOUT";
+	/**
+	 * The value of the stream property which determines that the filter uses the standard error output.
+	 */
 	public static final String CONFIG_PROPERTY_VALUE_STREAM_STDERR = "STDERR";
+	/**
+	 * The value of the stream property which determines that the filter uses the standard log.
+	 */
 	public static final String CONFIG_PROPERTY_VALUE_STREAM_STDLOG = "STDLOG";
+	/**
+	 * The value of the stream property which determines that the filter doesn't print anything.
+	 */
 	public static final String CONFIG_PROPERTY_VALUE_STREAM_NULL = "NULL";
+	/**
+	 * The default value of the encoding property which determines that the filter uses utf-8.
+	 */
 	public static final String CONFIG_PROPERTY_VALUE_DEFAULT_ENCODING = "UTF-8";
 
 	private static final Log LOG = LogFactory.getLog(TeeFilter.class);
@@ -67,15 +88,23 @@ public final class TeeFilter extends AbstractFilterPlugin {
 	private final boolean active;
 	private final String encoding;
 
-	public TeeFilter(final Configuration configuration) {
-		super(configuration);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 */
+	public TeeFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
 
-		/* Get the name of the stream. */
+		// Get the name of the stream.
 		final String printStreamNameConfig = this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_STREAM);
-		/* Get the encoding. */
+		// Get the encoding.
 		this.encoding = this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_ENCODING);
 
-		/* Decide which stream to be used - but remember the name! */
+		// Decide which stream to be used - but remember the name!
 		if (CONFIG_PROPERTY_VALUE_STREAM_STDLOG.equals(printStreamNameConfig)) {
 			this.printStream = null; // NOPMD (null)
 			this.printStreamName = null; // NOPMD (null)
@@ -116,10 +145,14 @@ public final class TeeFilter extends AbstractFilterPlugin {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public final Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_ENCODING, this.encoding);
-		/* We reverse the if-decisions within the constructor. */
+		// We reverse the if-decisions within the constructor.
 		if (this.printStream == null) {
 			if (this.active) {
 				configuration.setProperty(CONFIG_PROPERTY_NAME_STREAM, CONFIG_PROPERTY_VALUE_STREAM_STDLOG);
@@ -136,6 +169,13 @@ public final class TeeFilter extends AbstractFilterPlugin {
 		return configuration;
 	}
 
+	/**
+	 * This method is the input port of the filter receiving incoming objects. Every object will be printed into a stream (based on the configuration) before the
+	 * filter sends it to the output port.
+	 * 
+	 * @param object
+	 *            The new object.
+	 */
 	@InputPort(name = INPUT_PORT_NAME_EVENTS, description = "Receives incoming objects to be logged and forwarded", eventTypes = { Object.class })
 	public final void inputEvent(final Object object) {
 		if (this.active) {

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,11 @@ import java.io.Serializable;
 import java.util.regex.Pattern;
 
 /**
- * the activated state is ignored for purposes of equals() and hashcode()
+ * the activated state is ignored for purposes of equals() and hashcode().
  * 
  * @author Bjoern Weissenfels, Jan Waller
+ * 
+ * @since 1.6
  */
 public class PatternEntry implements Serializable {
 	private static final long serialVersionUID = 6225456449265043944L;

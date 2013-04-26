@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,10 @@
 
 package kieker.analysis.plugin.reader.filesystem;
 
+import java.io.File;
 import java.util.PriorityQueue;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
@@ -27,12 +29,14 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
+import kieker.common.util.filesystem.FSUtil;
 
-// TODO: check correct handling of errors by creating suitable tests in kieker.test.tools.junit.writeRead.filesystem!
 /**
  * Filesystem reader which reads from multiple directories simultaneously ordered by the logging timestamp.
  * 
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 0.95a
  */
 @Plugin(description = "A file system reader which reads records from multiple directories",
 		outputPorts = {
@@ -45,11 +49,15 @@ import kieker.common.record.misc.EmptyRecord;
 		})
 public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordReceiver {
 
+	/** The name of the output port delivering the record read by this plugin. */
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
 
+	/** The name of the configuration determining the input directories for this plugin. */
 	public static final String CONFIG_PROPERTY_NAME_INPUTDIRS = "inputDirs";
+	/** The name of the configuration determining whether the reader ignores unknown record types or not. */
 	public static final String CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES = "ignoreUnknownRecordTypes";
 
+	/** This dummy record can be send to the reader's record queue to mark the end of the current file. */
 	public static final IMonitoringRecord EOF = new EmptyRecord();
 
 	private static final Log LOG = LogFactory.getLog(FSReader.class);
@@ -61,28 +69,54 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 
 	private volatile boolean running = true;
 
-	public FSReader(final Configuration configuration) {
-		super(configuration);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 */
+	public FSReader(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+
 		this.inputDirs = this.configuration.getStringArrayProperty(CONFIG_PROPERTY_NAME_INPUTDIRS);
-		for (int i = 0; i < this.inputDirs.length; i++) {
+		int nDirs = this.inputDirs.length;
+		for (int i = 0; i < nDirs; i++) {
 			this.inputDirs[i] = Configuration.convertToPath(this.inputDirs[i]);
 		}
-		if (this.inputDirs.length == 0) {
+		if (nDirs == 0) {
 			LOG.warn("The list of input dirs passed to the " + FSReader.class.getSimpleName() + " is empty");
+			nDirs = 1;
 		}
-		this.recordQueue = new PriorityQueue<IMonitoringRecord>(this.inputDirs.length);
+		this.recordQueue = new PriorityQueue<IMonitoringRecord>(nDirs);
 		this.ignoreUnknownRecordTypes = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void terminate(final boolean error) {
 		LOG.info("Shutting down reader.");
 		this.running = false;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean read() {
 		// start all reader
-		for (final String inputDir : this.inputDirs) {
-			final Thread readerThread = new Thread(new FSDirectoryReader(inputDir, this, this.ignoreUnknownRecordTypes));
+		for (final String inputDirFn : this.inputDirs) {
+			final File inputDir = new File(inputDirFn);
+			final Thread readerThread;
+			if (inputDir.isDirectory()) {
+				readerThread = new Thread(new FSDirectoryReader(inputDir, this, this.ignoreUnknownRecordTypes));
+			} else if (inputDir.isFile() && inputDirFn.endsWith(FSUtil.ZIP_FILE_EXTENSION)) {
+				readerThread = new Thread(new FSZipReader(inputDir, this, this.ignoreUnknownRecordTypes));
+			} else {
+				LOG.warn("Invalid Directory or filename (no Kieker log): " + inputDirFn);
+				continue;
+			}
 			readerThread.setDaemon(true);
 			readerThread.start();
 		}
@@ -112,7 +146,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	}
 
 	/**
-	 * This method is called for each new record by each ReaderThread.
+	 * {@inheritDoc}
 	 */
 	public boolean newMonitoringRecord(final IMonitoringRecord record) {
 		synchronized (record) { // with read()
@@ -129,6 +163,10 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 		return this.running;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(this.inputDirs));
@@ -138,8 +176,22 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 }
 
 /**
+ * This is a simple interface showing that the {@link FSReader} can receive records. This is mostly a relict from an older version.
+ * 
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.2
  */
 interface IMonitoringRecordReceiver {
+
+	/**
+	 * This method is called for each new record by each ReaderThread.
+	 * 
+	 * @param record
+	 *            The record to be processed.
+	 * @return true if and only if the record has been handled correctly.
+	 * 
+	 * @since 1.2
+	 */
 	public abstract boolean newMonitoringRecord(IMonitoringRecord record);
 }

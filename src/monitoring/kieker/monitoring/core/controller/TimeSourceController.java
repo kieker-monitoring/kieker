@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,13 +24,21 @@ import kieker.monitoring.timer.ITimeSource;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.3
  */
 public final class TimeSourceController extends AbstractController implements ITimeSourceController {
 	private static final Log LOG = LogFactory.getLog(TimeSourceController.class);
 
-	/** the ITimeSource used by this instance */
+	/** the ITimeSource used by this instance. */
 	private final ITimeSource timeSource;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration which is used to configure this controller.
+	 */
 	protected TimeSourceController(final Configuration configuration) {
 		super(configuration);
 		this.timeSource = AbstractController.createAndInitialize(ITimeSource.class, configuration.getStringProperty(ConfigurationFactory.TIMER_CLASSNAME),

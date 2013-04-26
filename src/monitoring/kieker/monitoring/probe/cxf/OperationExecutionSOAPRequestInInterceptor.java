@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,6 +41,8 @@ import kieker.monitoring.timer.ITimeSource;
  * Look here how to add it to your server config: http://cwiki.apache.org/CXF20DOC/interceptors.html
  * 
  * @author Dennis Kieselhorst, Andre van Hoorn
+ * 
+ * @since 1.0
  */
 public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterceptor implements IMonitoringProbe {
 
@@ -61,10 +63,19 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 	protected final IMonitoringController monitoringController;
 	protected final ITimeSource timeSource;
 
+	/**
+	 * Creates a new instance of this class, using the singleton instance of the {@link MonitoringController} as controller.
+	 */
 	public OperationExecutionSOAPRequestInInterceptor() {
 		this(MonitoringController.getInstance());
 	}
 
+	/**
+	 * Creates a new instance of this class, using the given instance of a {@link MonitoringController} as controller.
+	 * 
+	 * @param monitoringCtrl
+	 *            The controller of this interceptor.
+	 */
 	public OperationExecutionSOAPRequestInInterceptor(final IMonitoringController monitoringCtrl) {
 		this.monitoringController = monitoringCtrl;
 		this.timeSource = this.monitoringController.getTimeSource();
@@ -78,23 +89,19 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 		if (msg instanceof SoapMessage) {
 			final SoapMessage soapMsg = (SoapMessage) msg;
 
-			/*
-			 * Store entry time tin for this trace.
-			 * This value will be used by the corresponding invocation of the
-			 * ResponseOutProbe.
-			 */
+			// Store entry time tin for this trace. This value will be used by the corresponding invocation of the ResponseOutProbe.
 			final long tin = this.timeSource.getTime();
 			boolean isEntryCall = false; // set true below if is entry call
 
-			/* 1.) Extract sessionId from SOAP header */
+			// 1.) Extract sessionId from SOAP header
 			Header hdr = soapMsg.getHeader(SOAPHeaderConstants.SESSION_IDENTIFIER_QNAME);
 			String sessionId = this.getStringContentFromHeader(hdr); // null if hdr==null
 			if (sessionId == null) {
-				/* no Kieker session id in header */
+				// no Kieker session id in header
 				sessionId = OperationExecutionRecord.NO_SESSION_ID;
 			}
 
-			/* 2.) Extract eoi from SOAP header */
+			// 2.) Extract eoi from SOAP header
 			hdr = soapMsg.getHeader(SOAPHeaderConstants.EOI_IDENTIFIER_QNAME);
 			final String eoiStr = this.getStringContentFromHeader(hdr); // null if hdr==null
 			int eoi = -1;
@@ -106,7 +113,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 				}
 			}
 
-			/* 3.) Extract ess from SOAP header */
+			// 3.) Extract ess from SOAP header
 			hdr = soapMsg.getHeader(SOAPHeaderConstants.ESS_IDENTIFIER_QNAME);
 			final String essStr = this.getStringContentFromHeader(hdr); // null if hdr==null
 			int ess = -1;
@@ -118,7 +125,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 				}
 			}
 
-			/* 4. Extract traceId from SOAP header */
+			// 4. Extract traceId from SOAP header
 			hdr = soapMsg.getHeader(SOAPHeaderConstants.TRACE_IDENTIFIER_QNAME);
 			final String traceIdStr = this.getStringContentFromHeader(hdr); // null if hdr==null
 			long traceId = -1;
@@ -129,13 +136,8 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 					LOG.warn("Invalid trace id", exc);
 				}
 			} else {
-				/*
-				 * SOAP Header doesn't contain a trace id.
-				 * This might be caused by a request which has been sent by
-				 * a host not equipped with the RequestOutProbe.
-				 * We will now acquire a thread id which is stored (below!!)
-				 * in the thread local variable!
-				 */
+				// SOAP Header doesn't contain a trace id. This might be caused by a request which has been sent by a host not equipped with the RequestOutProbe. We
+				// will now acquire a thread id which is stored (below!!) in the thread local variable!
 				traceId = CF_REGISTRY.getUniqueTraceId();
 				sessionId = SESSION_ID_ASYNC_TRACE;
 				isEntryCall = true;
@@ -143,7 +145,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 				ess = 0; // ESS of this execution
 			}
 
-			/* Store thread-local values */
+			// Store thread-local values
 			CF_REGISTRY.storeThreadLocalTraceId(traceId);
 			CF_REGISTRY.storeThreadLocalEOI(eoi); // this execution has EOI=eoi; next execution will get eoi with
 													// incrementAndRecall

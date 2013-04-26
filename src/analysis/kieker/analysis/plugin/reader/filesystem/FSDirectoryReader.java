@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package kieker.analysis.plugin.reader.filesystem;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.EOFException;
@@ -38,71 +37,70 @@ import kieker.common.logging.LogFactory;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.common.util.StringUtils;
+import kieker.common.util.filesystem.BinaryCompressionMethod;
+import kieker.common.util.filesystem.FSUtil;
 
 /**
  * Reads the contents of a single file system log directory and passes the records to the registered receiver of type {@link IMonitoringRecordReceiver}.
  * 
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.2
  */
 final class FSDirectoryReader implements Runnable {
 	private static final Log LOG = LogFactory.getLog(FSDirectoryReader.class);
 
-	private static final String LEGACY_FILE_PREFIX = "tpmon";
-	private static final String NORMAL_FILE_PREFIX = "kieker";
-	private static final String NORMAL_FILE_POSTFIX = ".dat";
-	private static final String BINARY_FILE_POSTFIX = ".bin";
-
-	private static final String ENCODING = "UTF-8";
-
-	String filePrefix = NORMAL_FILE_PREFIX; // NOPMD NOCS (package visible for inner class)
+	String filePrefix = FSUtil.FILE_PREFIX; // NOPMD NOCS (package visible for inner class)
 
 	private final Map<Integer, String> stringRegistry = new HashMap<Integer, String>(); // NOPMD (no synchronization needed)
-	// This set of classes is used to filter only records of a specific type. The value null means all record types are read.
+
 	private final IMonitoringRecordReceiver recordReceiver;
 	private final File inputDir;
 	private boolean terminated;
 
 	private final boolean ignoreUnknownRecordTypes;
+	// This set of classes is used to filter only records of a specific type. The value null means all record types are read.
 	private final Set<String> unknownTypesObserved = new HashSet<String>();
 
 	/**
+	 * Creates a new instance of this class.
 	 * 
-	 * @param inputDirName
+	 * @param inputDir
+	 *            The File object for the input directory.
+	 * @param recordReceiver
+	 *            The receiver handling the records.
 	 * @param ignoreUnknownRecordTypes
 	 *            select only records of this type; null selects all
 	 */
-	public FSDirectoryReader(final String inputDirName, final IMonitoringRecordReceiver recordReceiver,
+	public FSDirectoryReader(final File inputDir, final IMonitoringRecordReceiver recordReceiver,
 			final boolean ignoreUnknownRecordTypes) {
-		if ((inputDirName == null) || (inputDirName.length() == 0)) {
-			throw new IllegalArgumentException("Invalid or empty inputDir: " + inputDirName);
+		if ((inputDir == null) || !inputDir.isDirectory()) {
+			throw new IllegalArgumentException("Invalid or empty inputDir");
 		}
-		this.inputDir = new File(inputDirName);
+		this.inputDir = inputDir;
 		this.recordReceiver = recordReceiver;
 		this.ignoreUnknownRecordTypes = ignoreUnknownRecordTypes;
 	}
 
 	/**
 	 * Starts reading and returns after each record has been passed to the registered {@link #recordReceiver}.
-	 * 
-	 * Errors must be indicated by throwing an {@link RuntimeException}.
 	 */
 	public final void run() {
 		this.readMappingFile(); // must be the first line to set filePrefix!
 		final File[] inputFiles = this.inputDir.listFiles(new FileFilter() {
 
 			public boolean accept(final File pathname) {
+				final String name = pathname.getName();
 				return pathname.isFile()
-						&& pathname.getName().startsWith(FSDirectoryReader.this.filePrefix)
-						&& (pathname.getName().endsWith(NORMAL_FILE_POSTFIX) || pathname.getName().endsWith(BINARY_FILE_POSTFIX));
+						&& name.startsWith(FSDirectoryReader.this.filePrefix)
+						&& (name.endsWith(FSUtil.NORMAL_FILE_EXTENSION) || BinaryCompressionMethod.hasValidFileExtension(name));
 			}
 		});
 		if (inputFiles == null) {
 			LOG.error("Directory '" + this.inputDir + "' does not exist or an I/O error occured.");
 		} else if (inputFiles.length == 0) {
 			// level 'warn' for this case, because this is not unusual for large monitoring logs including a number of directories
-			LOG.warn("Directory '" + this.inputDir + "' contains no files starting with '" + this.filePrefix + "' and ending with '"
-					+ NORMAL_FILE_POSTFIX + "' or '" + BINARY_FILE_POSTFIX + "'.");
+			LOG.warn("Directory '" + this.inputDir + "' contains no files starting with '" + this.filePrefix + "' and ending with a valid file extension.");
 		} else { // everything ok, we process the files
 			Arrays.sort(inputFiles, new Comparator<File>() {
 
@@ -116,14 +114,20 @@ final class FSDirectoryReader implements Runnable {
 					break;
 				}
 				LOG.info("< Loading " + inputFile.getAbsolutePath());
-				if (inputFile.getName().endsWith(NORMAL_FILE_POSTFIX)) {
+				if (inputFile.getName().endsWith(FSUtil.NORMAL_FILE_EXTENSION)) {
 					this.processNormalInputFile(inputFile);
-				} else if (inputFile.getName().endsWith(BINARY_FILE_POSTFIX)) {
+				} else {
 					if (this.ignoreUnknownRecordTypes) {
 						LOG.warn("The property '" + FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES
 								+ "' is not supported for binary files. But trying to read '" + inputFile + "'");
 					}
-					this.processBinaryInputFile(inputFile);
+					try {
+						final BinaryCompressionMethod method = BinaryCompressionMethod.getByFileExtension(inputFile.getName());
+						this.processBinaryInputFile(inputFile, method);
+					} catch (final IllegalArgumentException ex) {
+						LOG.warn("Unknown file extension for file " + inputFile);
+						continue;
+					}
 				}
 			}
 		}
@@ -132,17 +136,16 @@ final class FSDirectoryReader implements Runnable {
 
 	/**
 	 * Reads the mapping file located in the directory.
-	 * 
-	 * @throws IOException
 	 */
 	private final void readMappingFile() {
-		File mappingFile = new File(this.inputDir.getAbsolutePath() + File.separator + "kieker.map");
+		File mappingFile = new File(this.inputDir.getAbsolutePath() + File.separator + FSUtil.MAP_FILENAME);
 		if (!mappingFile.exists()) {
 			// No mapping file found. Check whether we find a legacy tpmon.map file!
-			mappingFile = new File(this.inputDir.getAbsolutePath() + File.separator + "tpmon.map");
+			mappingFile = new File(this.inputDir.getAbsolutePath() + File.separator + FSUtil.LEGACY_MAP_FILENAME);
 			if (mappingFile.exists()) {
-				LOG.info("Directory '" + this.inputDir + "' contains no file 'kieker.map'. Found 'tpmon.map' ... switching to legacy mode");
-				this.filePrefix = LEGACY_FILE_PREFIX;
+				LOG.info("Directory '" + this.inputDir + "' contains no file '" + FSUtil.MAP_FILENAME + "'. Found '" + FSUtil.LEGACY_MAP_FILENAME
+						+ "' ... switching to legacy mode");
+				this.filePrefix = FSUtil.LEGACY_FILE_PREFIX;
 			} else {
 				// no {kieker|tpmon}.map exists. This is valid for very old monitoring logs. Hence, only dump a log.warn
 				LOG.warn("No mapping file in directory '" + this.inputDir.getAbsolutePath() + "'");
@@ -152,7 +155,7 @@ final class FSDirectoryReader implements Runnable {
 		// found any kind of mapping file
 		BufferedReader in = null;
 		try {
-			in = new BufferedReader(new InputStreamReader(new FileInputStream(mappingFile), ENCODING));
+			in = new BufferedReader(new InputStreamReader(new FileInputStream(mappingFile), FSUtil.ENCODING));
 			String line;
 			while ((line = in.readLine()) != null) { // NOPMD (assign)
 				if (line.length() == 0) {
@@ -165,7 +168,7 @@ final class FSDirectoryReader implements Runnable {
 					continue; // continue on errors
 				}
 				final String key = line.substring(0, split);
-				final String value = StringUtils.decodeNewline(line.substring(split + 1));
+				final String value = FSUtil.decodeNewline(line.substring(split + 1));
 				// the leading $ is optional
 				final Integer id;
 				try {
@@ -196,12 +199,13 @@ final class FSDirectoryReader implements Runnable {
 	 * Reads the records contained in the given normal file and passes them to the registered {@link #recordReceiver}.
 	 * 
 	 * @param inputFile
+	 *            The input file which should be processed.
 	 */
 	private final void processNormalInputFile(final File inputFile) {
 		boolean abortDueToUnknownRecordType = false;
 		BufferedReader in = null;
 		try {
-			in = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile), ENCODING));
+			in = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile), FSUtil.ENCODING));
 			String line;
 			while ((line = in.readLine()) != null) { // NOPMD (assign)
 				line = line.trim();
@@ -264,14 +268,6 @@ final class FSDirectoryReader implements Runnable {
 						newEx.initCause(ex);
 						throw newEx; // NOPMD (cause is set above)
 					} else {
-						// final StringBuilder sb = new StringBuilder();
-						// sb.append("Error processing line: ").append(line);
-						// Throwable t = ex;
-						// do {
-						// sb.append('\n').append(t.getLocalizedMessage());
-						// t = t.getCause();
-						// } while (t != null);
-						// LOG.warn(sb.toString());
 						LOG.warn("Error processing line: " + line, ex);
 						continue; // skip this record
 					}
@@ -298,11 +294,14 @@ final class FSDirectoryReader implements Runnable {
 	 * Reads the records contained in the given binary file and passes them to the registered {@link #recordReceiver}.
 	 * 
 	 * @param inputFile
+	 *            The input file which should be processed.
+	 * @param compressionMethod
+	 *            Whether the input file is compressed.
 	 */
-	private final void processBinaryInputFile(final File inputFile) {
+	private final void processBinaryInputFile(final File inputFile, final BinaryCompressionMethod method) {
 		DataInputStream in = null;
 		try {
-			in = new DataInputStream(new BufferedInputStream(new FileInputStream(inputFile), 1048576)); // 1 MB buffer
+			in = method.getDataInputStream(inputFile, 1024 * 1024); // 1 MiB buffer
 			while (true) {
 				final Integer id;
 				try {

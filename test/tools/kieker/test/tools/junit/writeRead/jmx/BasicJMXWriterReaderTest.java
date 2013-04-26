@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,6 +43,8 @@ import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public class BasicJMXWriterReaderTest extends AbstractWriterReaderTest { // NOPMD NOCS (TestClassWithoutTestCases)
 
@@ -54,7 +56,10 @@ public class BasicJMXWriterReaderTest extends AbstractWriterReaderTest { // NOPM
 	private volatile ListCollectionFilter<IMonitoringRecord> sinkFilter = null; // NOPMD (init for findbugs)
 
 	@Override
-	protected IMonitoringController createController(final int numRecordsWritten) throws IllegalStateException, AnalysisConfigurationException, InterruptedException {
+	protected IMonitoringController createController(final int numRecordsWritten) throws IllegalStateException, AnalysisConfigurationException,
+			InterruptedException {
+		final AnalysisController analysisController = new AnalysisController();
+
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
 		config.setProperty(ConfigurationFactory.ACTIVATE_JMX, "true");
 		config.setProperty(ConfigurationFactory.ACTIVATE_JMX_CONTROLLER, "true");
@@ -76,11 +81,10 @@ public class BasicJMXWriterReaderTest extends AbstractWriterReaderTest { // NOPM
 		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_PORT, BasicJMXWriterReaderTest.PORT);
 		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_SERVICEURL, "");
 		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_SILENT, "false");
-		final JMXReader jmxReader = new JMXReader(jmxReaderConfig);
-		this.sinkFilter = new ListCollectionFilter<IMonitoringRecord>(new Configuration());
-		final AnalysisController analysisController = new AnalysisController();
-		analysisController.registerReader(jmxReader);
-		analysisController.registerFilter(this.sinkFilter);
+
+		final JMXReader jmxReader = new JMXReader(jmxReaderConfig, analysisController);
+		this.sinkFilter = new ListCollectionFilter<IMonitoringRecord>(new Configuration(), analysisController);
+
 		analysisController.connect(jmxReader, JMXReader.OUTPUT_PORT_NAME_RECORDS, this.sinkFilter, ListCollectionFilter.INPUT_PORT_NAME);
 		final AnalysisControllerThread analysisThread = new AnalysisControllerThread(analysisController);
 		analysisThread.start();

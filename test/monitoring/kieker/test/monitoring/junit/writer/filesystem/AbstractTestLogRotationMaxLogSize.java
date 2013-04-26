@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,8 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 public abstract class AbstractTestLogRotationMaxLogSize extends AbstractKiekerTest {
 
@@ -127,11 +129,13 @@ public abstract class AbstractTestLogRotationMaxLogSize extends AbstractKiekerTe
 	protected abstract IMonitoringController createController(final String path, final int maxEntriesInFile, final int maxLogSize);
 
 	/**
-	 * Integer division rounding up!
+	 * This is a simple integer division which rounds up.
 	 * 
 	 * @param num
+	 *            The dividend of the operation.
 	 * @param div
-	 * @return
+	 *            The divisor of the operation.
+	 * @return The quotient of the given parameters, but rounded up.
 	 */
 	private static final int div(final int num, final int div) {
 		return ((num + div) - 1) / div;

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
@@ -49,6 +50,8 @@ import kieker.common.record.IMonitoringRecord;
  * 
  * 
  * @author Andre van Hoorn, Matthias Rohr
+ * 
+ * @since 0.95a
  */
 @Plugin(description = "A reader which reads records from a (remove or local) JMS queue",
 		dependencies = "This plugin needs the file 'javax.jms-*.jar'.",
@@ -62,13 +65,17 @@ import kieker.common.record.IMonitoringRecord;
 		})
 public final class JMSReader extends AbstractReaderPlugin {
 
+	/** The name of the output port delivering the received records. */
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
 
+	/** The name of the configuration determining the JMS provider URL. */
 	public static final String CONFIG_PROPERTY_NAME_PROVIDERURL = "jmsProviderUrl";
+	/** The name of the configuration determining the JMS destination (e.g. queue1). */
 	public static final String CONFIG_PROPERTY_NAME_DESTINATION = "jmsDestination";
+	/** The name of the configuration determining the name of the used JMS factory. */
 	public static final String CONFIG_PROPERTY_NAME_FACTORYLOOKUP = "jmsFactoryLookupName";
 
-	private static final Log LOG = LogFactory.getLog(JMSReader.class);
+	static final Log LOG = LogFactory.getLog(JMSReader.class); // NOPMD package for inner class
 
 	private final String jmsProviderUrl;
 	private final String jmsDestination;
@@ -76,7 +83,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 	private final CountDownLatch cdLatch = new CountDownLatch(1);
 
 	/**
-	 * Creates a new instance of this class using the given parameters to configure the reader.
+	 * Creates a new instance of this class using the given parameters.
 	 * 
 	 * @param configuration
 	 *            The configuration used to initialize the whole reader. Keep in mind that the configuration should contain the following properties:
@@ -85,14 +92,16 @@ public final class JMSReader extends AbstractReaderPlugin {
 	 *            <li>The property {@link #CONFIG_PROPERTY_NAME_DESTINATION}, e.g. {@code queue1}
 	 *            <li>The property {@link #CONFIG_PROPERTY_NAME_FACTORYLOOKUP}, e.g. {@code org.exolab.jms.jndi.InitialContextFactory}
 	 *            </ul>
+	 * @param projectContext
+	 *            The project context for this component.
 	 * 
 	 * @throws IllegalArgumentException
 	 *             If one of the properties is empty.
 	 */
-	public JMSReader(final Configuration configuration) throws IllegalArgumentException {
-		/* Call the inherited constructor. */
-		super(configuration);
-		/* Initialize the reader bases on the given configuration. */
+	public JMSReader(final Configuration configuration, final IProjectContext projectContext) throws IllegalArgumentException {
+		super(configuration, projectContext);
+
+		// Initialize the reader bases on the given configuration.
 		this.jmsProviderUrl = configuration.getStringProperty(CONFIG_PROPERTY_NAME_PROVIDERURL);
 		this.jmsDestination = configuration.getStringProperty(CONFIG_PROPERTY_NAME_DESTINATION);
 		this.jmsFactoryLookupName = configuration.getStringProperty(CONFIG_PROPERTY_NAME_FACTORYLOOKUP);
@@ -105,9 +114,11 @@ public final class JMSReader extends AbstractReaderPlugin {
 
 	/**
 	 * A call to this method is a blocking call.
+	 * 
+	 * @return true if the method succeeds, false otherwise.
 	 */
 	public boolean read() {
-		boolean retVal = false;
+		boolean retVal = true;
 		Connection connection = null;
 		try {
 			final Hashtable<String, String> properties = new Hashtable<String, String>(); // NOPMD NOCS (InitialContext expects Hashtable)
@@ -135,31 +146,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 
 			LOG.info("Listening to destination:" + destination + " at " + this.jmsProviderUrl + " !\n***\n\n");
 			final MessageConsumer receiver = session.createConsumer(destination);
-			receiver.setMessageListener(new MessageListener() {
-				// the MessageListener will read onMessage each time a message comes in
-
-				public void onMessage(final Message jmsMessage) {
-					if (jmsMessage instanceof TextMessage) {
-						final TextMessage text = (TextMessage) jmsMessage;
-						LOG.info("Received text message: " + text);
-
-					} else {
-						try {
-							final ObjectMessage om = (ObjectMessage) jmsMessage;
-							final Serializable omo = om.getObject();
-							if ((omo instanceof IMonitoringRecord) && (!JMSReader.super.deliver(OUTPUT_PORT_NAME_RECORDS, omo))) {
-								LOG.error("deliverRecord returned false");
-							}
-						} catch (final MessageFormatException ex) {
-							LOG.error("Error delivering record", ex);
-						} catch (final JMSException ex) {
-							LOG.error("Error delivering record", ex);
-						} catch (final Exception ex) { // NOPMD NOCS (catch Exception)
-							LOG.error("Error delivering record", ex);
-						}
-					}
-				}
-			});
+			receiver.setMessageListener(new JMSMessageListener());
 
 			// start the connection to enable message delivery
 			connection.start();
@@ -200,11 +187,22 @@ public final class JMSReader extends AbstractReaderPlugin {
 		this.cdLatch.countDown();
 	}
 
+	final boolean deliverIndirect(final String outputPortName, final Object data) { // NOPMD (package visible for inner class)
+		return super.deliver(outputPortName, data);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public void terminate(final boolean error) {
 		LOG.info("Shutdown of JMSReader requested.");
 		this.unblock();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
@@ -213,5 +211,36 @@ public final class JMSReader extends AbstractReaderPlugin {
 		configuration.setProperty(CONFIG_PROPERTY_NAME_FACTORYLOOKUP, this.jmsFactoryLookupName);
 
 		return configuration;
+	}
+
+	/**
+	 * The MessageListener will read onMessage each time a message comes in.
+	 */
+	private final class JMSMessageListener implements MessageListener {
+
+		public JMSMessageListener() {
+			// empty default constructor
+		}
+
+		public void onMessage(final Message jmsMessage) {
+			if (jmsMessage instanceof TextMessage) {
+				final TextMessage text = (TextMessage) jmsMessage;
+				LOG.info("Received text message: " + text);
+			} else {
+				try {
+					final ObjectMessage om = (ObjectMessage) jmsMessage;
+					final Serializable omo = om.getObject();
+					if ((omo instanceof IMonitoringRecord) && (!JMSReader.this.deliverIndirect(OUTPUT_PORT_NAME_RECORDS, omo))) {
+						LOG.error("deliverRecord returned false");
+					}
+				} catch (final MessageFormatException ex) {
+					LOG.error("Error delivering record", ex);
+				} catch (final JMSException ex) {
+					LOG.error("Error delivering record", ex);
+				} catch (final Exception ex) { // NOPMD NOCS (catch Exception)
+					LOG.error("Error delivering record", ex);
+				}
+			}
+		}
 	}
 }

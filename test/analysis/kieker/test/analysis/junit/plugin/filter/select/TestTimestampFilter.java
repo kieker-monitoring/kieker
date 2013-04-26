@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.filter.select.TimestampFilter;
@@ -31,8 +32,11 @@ import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
+ * A test for the class {@link TimestampFilter}.
  * 
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.5
  */
 public final class TestTimestampFilter extends AbstractKiekerTest {
 
@@ -50,40 +54,45 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 
 	private ListReader<AbstractTraceEvent> reader;
 	private ListCollectionFilter<AbstractTraceEvent> sinkPlugin;
-	private AnalysisController controller;
+	private IAnalysisController controller;
 
+	/**
+	 * Default constructor.
+	 */
 	public TestTimestampFilter() {
 		// empty default constructor
 	}
 
 	/**
 	 * Creates a {@link TimestampFilter} with the given properties
-	 * using the constructor {@link TimestampFilter#TimestampFilter(kieker.common.configuration.Configuration, java.util.Map)}
+	 * using the constructor {@link TimestampFilter#TimestampFilter(kieker.common.configuration.Configuration, java.util.Map)}.
 	 * 
 	 * @param ignoreExecutionsBeforeTimestamp
 	 * @param ignoreExecutionsAfterTimestamp
 	 * @return
 	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
+	 *             If the internal analysis is in an invalid state.
 	 */
-	private void createTimestampFilter(final long ignoreExecutionsBeforeTimestamp, final long ignoreExecutionsAfterTimestamp)
-			throws IllegalStateException, AnalysisConfigurationException {
+	private void createTimestampFilter(final long ignoreExecutionsBeforeTimestamp, final long ignoreExecutionsAfterTimestamp) throws IllegalStateException,
+			AnalysisConfigurationException {
 		final Configuration cfg = new Configuration();
 		cfg.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP, Long.toString(ignoreExecutionsBeforeTimestamp));
 		cfg.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP, Long.toString(ignoreExecutionsAfterTimestamp));
-		final TimestampFilter filter = new TimestampFilter(cfg);
-		this.controller.registerFilter(filter);
+		final TimestampFilter filter = new TimestampFilter(cfg, this.controller);
 		this.controller.connect(this.reader, ListReader.OUTPUT_PORT_NAME, filter, TimestampFilter.INPUT_PORT_NAME_FLOW);
 		this.controller.connect(filter, TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD, this.sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
 	}
 
+	/**
+	 * This method initializes the setup.
+	 */
 	@Before
 	public void before() {
 		this.controller = new AnalysisController();
-		this.reader = new ListReader<AbstractTraceEvent>(new Configuration());
-		this.sinkPlugin = new ListCollectionFilter<AbstractTraceEvent>(new Configuration());
-		this.controller.registerReader(this.reader);
-		this.controller.registerFilter(this.sinkPlugin);
+		this.reader = new ListReader<AbstractTraceEvent>(new Configuration(), this.controller);
+		this.sinkPlugin = new ListCollectionFilter<AbstractTraceEvent>(new Configuration(), this.controller);
 	}
 
 	/**
@@ -91,7 +100,9 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 	 * assert that a {@link AbstractTraceEvent} <i>e</i> with <i>e.timestamp &lt; a</i> does not pass the filter.
 	 * 
 	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
+	 *             If the internal analysis is in an invalid state.
 	 */
 	@Test
 	public void testEventBeforeIgnored() throws IllegalStateException, AnalysisConfigurationException {
@@ -113,7 +124,9 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 	 * pass the filter.
 	 * 
 	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
+	 *             If the internal analysis is in an invalid state.
 	 */
 	@Test
 	public void testEventAfterIgnored() throws IllegalStateException, AnalysisConfigurationException {
@@ -133,7 +146,9 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 	 * assert that an event <i>e</i> with <i>e.timestamp == a</i> does pass the filter.
 	 * 
 	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
+	 *             If the internal analysis is in an invalid state.
 	 */
 	@Test
 	public void testRecordOnLeftBorderPasses() throws IllegalStateException, AnalysisConfigurationException {
@@ -155,7 +170,9 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 	 * assert that an event <i>e</i> with <i>e.timestamp == b</i> does pass the filter.
 	 * 
 	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
+	 *             If the internal analysis is in an invalid state.
 	 */
 	@Test
 	public void testRecordOnRightBorderPasses() throws IllegalStateException, AnalysisConfigurationException {
@@ -178,7 +195,9 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 	 * &gt; a </i> does pass the filter.
 	 * 
 	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
+	 *             If the internally assembled analysis is in an invalid state.
 	 */
 	@Test
 	public void testRecordTinToutWithinRangePassed() throws IllegalStateException, AnalysisConfigurationException {

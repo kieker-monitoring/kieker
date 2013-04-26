@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,32 @@
 
 package kieker.tools.traceAnalysis.filter;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
+ * This is the abstract base for a filter processing execution traces.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public abstract class AbstractExecutionTraceProcessingFilter extends AbstractTraceProcessingFilter {
 
-	public AbstractExecutionTraceProcessingFilter(final Configuration configuration) {
-		super(configuration);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 */
+	public AbstractExecutionTraceProcessingFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
 	}
+
 }

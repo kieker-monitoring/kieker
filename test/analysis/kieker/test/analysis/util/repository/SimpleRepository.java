@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,24 +16,42 @@
 
 package kieker.test.analysis.util.repository;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.analysis.repository.annotation.Repository;
 import kieker.common.configuration.Configuration;
 
 /**
+ * A simple repository, used only for test purposes.
+ * 
  * @author Nils Christian Ehmke, Jan Waller
+ * 
+ * @since 1.6
  */
 @Repository(programmaticOnly = true, name = SimpleRepository.REPOSITORY_NAME, description = SimpleRepository.REPOSITORY_DESCRIPTION)
 public class SimpleRepository extends AbstractRepository { // NOPMD (SubClassOfTest)
 
+	/** The repository's dummy name. */
 	public static final String REPOSITORY_NAME = "repoName-hNcuzIKc8e";
-
+	/** The repository's dummy description. */
 	public static final String REPOSITORY_DESCRIPTION = "repoDescription-DEYmVN6sEp";
 
-	public SimpleRepository(final Configuration configuration) {
-		super(configuration);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this repository.
+	 * @param projectContext
+	 *            The project context for this repository.
+	 */
+	public SimpleRepository(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}

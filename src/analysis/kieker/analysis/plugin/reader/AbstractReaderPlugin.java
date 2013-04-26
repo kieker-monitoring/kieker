@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,28 +16,46 @@
 
 package kieker.analysis.plugin.reader;
 
+import kieker.analysis.AnalysisController;
+import kieker.analysis.IProjectContext;
+import kieker.analysis.exception.InvalidProjectContextException;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.common.configuration.Configuration;
 
 /**
- * This class should be used as a base for every reader used within <i>Kieker</i>.
+ * This class should be used as a base for every reader used within <i>Kieker</i>. For filter plugins, the class
+ * {@link kieker.analysis.plugin.filter.AbstractFilterPlugin} should be used instead.
  * 
  * @author Nils Christian Ehmke
+ * 
+ * @since 1.5
  */
 @Plugin
 public abstract class AbstractReaderPlugin extends AbstractPlugin implements IReaderPlugin {
 
 	/**
-	 * Each Plugin requires a constructor with a single Configuration object.
+	 * Each Plugin requires a constructor with a Configuration object and a IProjectContext.
 	 * 
 	 * @param configuration
-	 *            The configuration which should be used to initialize the object.
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component. The component will be registered.
 	 */
-	public AbstractReaderPlugin(final Configuration configuration) {
-		super(configuration);
+	public AbstractReaderPlugin(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+
+		// Register the reader
+		if (projectContext instanceof AnalysisController) {
+			((AnalysisController) projectContext).registerReader(this);
+		} else {
+			throw new InvalidProjectContextException("Invalid analysis controller in constructor");
+		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean init() { // NOPMD (default implementation)
 		return true;
 	}

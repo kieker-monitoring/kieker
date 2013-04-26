@@ -16,22 +16,25 @@ binary release.}
 \section{Monitoring Controller}\label{sec:componentsMonitoring:monitoringController}
 
 The \class{MonitoringController} constructs and controls a \KiekerMonitoringPart{} %
-instance. As depicted by the class diagram in Figure~\ref{fig:monitoringController:classdiagram}, it provides methods for\\
+instance.
 
 \enlargethispage{1cm}
 
-\begin{figure}\centering % [H]
+\begin{figure}[h]\centering % 
 \includegraphics[scale=0.7]{images/kieker_monitoringControlleruserguide-simplified}
 \caption{Class diagram of the \class{MonitoringController} (including selected methods)}
 \label{fig:monitoringController:classdiagram}
 \end{figure}
 
+As depicted by the class diagram in Figure~\ref{fig:monitoringController:classdiagram}, it provides methods for\\
+
 \begin{compactitem}
  \item Creating \class{IMonitoringController} instances (Section~\ref{sec:componentsMonitoring:monitoringController:factory}),
  \item Logging monitoring records with the configured monitoring writer (Section~\ref{sec:componentsMonitoring:monitoringController:logging}),
  \item Retrieving the current time via the configured time source (Section~\ref{sec:componentsMonitoring:monitoringController:getTime}),
- \item Scheduling and removing period samplers (Section~\ref{sec:componentsMonitoring:monitoringController:periodicSamplers}), and
- \item Controlling the monitoring state (Section~\ref{sec:componentsMonitoring:monitoringController:controState}).
+ \item Scheduling and removing period samplers (Section~\ref{sec:componentsMonitoring:monitoringController:periodicSamplers}), 
+ \item Controlling the monitoring state (Section~\ref{sec:componentsMonitoring:monitoringController:controState}), and
+ \item Activating and deactivating probes at runtime \ref{sec:componentsMonitoring:monitoringController:adaptive}.
 \end{compactitem}
 
 \subsection{Creating \class{MonitoringController} Instances}\label{sec:componentsMonitoring:monitoringController:factory}
@@ -85,16 +88,16 @@ of the \class{MemSwapUsageSampler} which can be used to monitor memory %
 and swap usage employing the Sigar library~\cite{HypericSigarWebsite}. %
 Likewise to other monitoring probes described in this user guide (see for %
 example Sections~\ref{sec:monitoring:probe} and \ref{sec:example:monitoring}),
-it collects the data of interest (lines~53--54), creates a monitoring record~%
-(lines~55--58), and passes this monitoring record to the monitoring controller~%
-(line~59). %
+it collects the data of interest (lines~58--59), creates a monitoring record~%
+(lines~60--63), and passes this monitoring record to the monitoring controller~%
+(line~64). %
 The available Sigar-based samplers for monitoring system-level monitoring %
 data, such as CPU and memory usage, are discussed in Appendix~\ref{appendix:SigarBasedSamplers}. %
 
 \pagebreak
 
 \setJavaCodeListing
-\lstinputlisting[firstline=47, lastline=60, firstnumber=47, caption=Method \method{sample} from MemSwapUsageSampler.java, label=listing:sigarSamplerMethod]{\kiekerSrcDir/monitoring/kieker/monitoring/probe/sigar/samplers/MemSwapUsageSampler.java}
+\lstinputlisting[firstline=53, lastline=70, firstnumber=53, caption=Method \method{sample} from MemSwapUsageSampler.java, label=listing:sigarSamplerMethod]{\kiekerSrcDir/monitoring/kieker/monitoring/sampler/sigar/samplers/MemSwapUsageSampler.java}
 
 \subsection{Controlling the Monitoring State}\label{sec:componentsMonitoring:monitoringController:controState}
 
@@ -109,40 +112,7 @@ with respect to the return value of the method \method{isMonitoringEnabled}. %
 Note, that once the \class{MonitoringController} is terminated, it cannot be enabled %
 later on.
 
-\subsection{JMX MBean Access to \class{MonitoringController}}
-
-\begin{figure}\centering
-\subfigure[Attributes]{%
-\includegraphics[width=0.485\textwidth]{images/jmxbean-monitoringcontroller-attributes.png}
-}
-\subfigure[Operations]{%
-\includegraphics[width=0.485\textwidth]{images/jmxbean-monitoringcontroller-operations.png}
-}
-\caption{Screenshots of the \class{jconsole} JMX client accessing the \class{MonitoringController}'s %
-attributes and operations via the MBean interface. %
-}
-\label{fig:monitoringController:MBean:jconsole}
-\end{figure}
-
-The \class{MonitoringController}'s %
-interface methods (see Figure~\ref{fig:monitoringController:classdiagram}) can be accessed %
-as a JMX MBean. For example, this allows to control the monitoring state using %
-the methods described in the previous Section~\ref{sec:componentsMonitoring:monitoringController:controState}. %
-As a JMX-compliant graphical client that is included in the JDK, \class{jconsole} %
-is probably the easiest way to get started. Figure~\ref{fig:monitoringController:MBean:jconsole} %
-shows two screenshots of the MBean access using \class{jconsole}.
-
-In order to enable JMX MBean access to the \class{MonitoringController}, the value of the %
-configuration property \textit{kieker.monitoring.MBean} must be set to \textit{true} (listing below). %
-The \file{\monitoringPropertiesFile} includes additional JMX-related configuration properties. \\
-
-\setPropertiesListing
-\begin{lstlisting}
- # Whether the MonitoringController will be available as an MBean.
-kieker.monitoring.MBean=true
-\end{lstlisting}
-
-\subsection{Adaptive Monitoring}
+\subsection{Adaptive Monitoring}\label{sec:componentsMonitoring:monitoringController:adaptive}
 
 The \class{MonitoringController} provides an API to activate and deactivate %
 probes at runtime. By passing a method signature---e.g., %
@@ -160,13 +130,60 @@ A default configuration file, including a description of the pattern syntax, is 
 by the file \file{kieker.monitoring.adaptive\-Monitoring.conf} in the %
 \dir{META-INF/} directory of the binary release. %
 
+With the same mechanism arbitrary probes can be controlled. The syntax is also included %
+in the above file. For example, \Kieker's probes for CPU and memory make use of %
+this mechanism.
+
 By default, \Kieker{}'s adaptive monitoring feature is deactivated. It can be %
 enabled by setting the value of the configuration property %
 \lstinline{kieker.monitoring.adaptiveMonitoring.enabled} %
-in the \file{\monitoringPropertiesFile} file to \textit{true}. The %
-kieker.monitoring.properties includes additional properties to configure the %
-adaptive monitoring, e.g., the location of the afore-mentioned file with %
+in the \file{\monitoringPropertiesFile} file to \textit{true}. Additional properties %
+to configure the adaptive monitoring are included in the file %
+\file{kieker.monitoring.proper\-ties}, e.g., the location of the afore-mentioned file with %
 include/exclude patterns and the polling interval for this file. 
+
+\enlargethispage{0.8cm}
+
+\subsection{JMX MBean Access to \class{MonitoringController}}
+
+The \class{MonitoringController}'s %
+interface methods (see Figure~\ref{fig:monitoringController:classdiagram}) can be accessed %
+as a JMX MBean. For example, this allows to control the monitoring state using %
+the methods described in the previous Section~\ref{sec:componentsMonitoring:monitoringController:controState}. %
+As a JMX-compliant graphical client that is included in the JDK, \class{jconsole} %
+is probably the easiest way to get started. Just keep in mind to add \Kieker{} to the classpath when calling \class{jconsole} so that the MBean works correctly. Figure~\ref{fig:monitoringController:MBean:jconsole} %
+shows two screenshots of the MBean access using \class{jconsole}.
+
+% nie: I forced the figure to be here, as it would otherwise cut the listing in half. 
+\begin{figure}[H]\centering
+\subfigure[Attributes]{%
+\includegraphics[width=0.485\textwidth]{images/jmxbean-monitoringcontroller-attributes.png}
+}
+\subfigure[Operations]{%
+\includegraphics[width=0.485\textwidth]{images/jmxbean-monitoringcontroller-operations.png}
+}
+\caption{Screenshots of the \class{jconsole} JMX client accessing the \class{MonitoringController}'s %
+attributes and operations via the MBean interface. %
+}
+\label{fig:monitoringController:MBean:jconsole}
+\end{figure}
+
+In order to enable JMX MBean access to the \class{MonitoringController}, the corresponding configuration properties must be set to \textit{true} (listing below). %
+The \file{\monitoringPropertiesFile} includes additional JMX-related configuration properties. \\
+
+\setPropertiesListing
+\begin{lstlisting}
+## Whether any JMX functionality is available
+kieker.monitoring.jmx=true
+...
+
+## Enable/Disable the MonitoringController MBean
+kieker.monitoring.jmx.MonitoringController=true
+...
+\end{lstlisting}
+
+For remote access to the server, set \textit{kieker.monitoring.jmx.remote=true}. In this case it is recommended to set \textit{com.sun.management.jmxremote.authenticate=true} as well. More information can be found on Oracle's JMX Technology Home Page~\cite{JMX-Website}.
+
 
 \section{\KiekerMonitoringPart{} Configuration}\label{sec:monitoring:configuration}
 
@@ -245,7 +262,7 @@ class \class{AbstractMonitoringRecord}, and a custom monitoring record type %
 \label{sec:monitoringrecord:interfacesAndImplementingClasses}
 \end{figure}
 
-% \pagebreak
+ \pagebreak
 
 \noindent In order to use the abstract class for implementing your own monitoring record type, you need to:
 
@@ -268,7 +285,7 @@ that can be used to monitor response times of method executions. %
 Implementing \class{IMonitoringRecord.Factory}, \class{MyResponseTimeRecord} is %
 an immutable type, i.e., it includes only final fields. %
 
-\pagebreak 
+% \pagebreak 
 
 \ % pushing the method initFromArray in the listing to the following page
 
@@ -283,12 +300,13 @@ The probes are responsible for collecting the monitoring data and passing it %
 to the monitoring controller. %
 In Chapter~\ref{sec:example:monitoring}, we have already demonstrated how to %
 manually instrument a Java application. Listing~\ref{listing:cuttingBookstore} %
-shows a similar manual monitoring probe which uses the monitoring record type %
+shows a similar manual monitoring probe, which uses the monitoring record type %
 \class{MyResponseTimeRecord} defined in the previous Section~\ref{sec:componentsMonitoring:monitoringRecords}.
 
 % Make sure that this listing will be modified, once the sourcecode changes!!!
 % It must show the whole monitoring of the bookstorecall, from getting the first time to persisting of the record!!
-\lstinputlisting[firstline=32, lastline=39, firstnumber=32, caption=Excerpt from Bookstore.java, label=listing:cuttingBookstore]{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/Bookstore.java}
+\pagebreak
+\lstinputlisting[firstline=32, lastline=40, firstnumber=32, caption=Excerpt from Bookstore.java, label=listing:cuttingBookstore]{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/Bookstore.java}
 
 \noindent In order to avoid multiple calls to the \method{getInstance} method of the %
 \class{MonitoringController} class, singleton instances should be stored %
@@ -320,15 +338,15 @@ already implemented in \KiekerMonitoringPart{}. The available properties for the
 included writers are well-documented in the %
 example configuration file (see Appendix~\ref{sec:appdx:monitoringproperties}). %
 
-\enlargethispage{1.2cm}
+% \enlargethispage{1.2cm}
 
-The writers \class{AsyncFsWriter}, %
-\class{SyncFsWriter}, \class{AsyncDbWriter}, and \class{SyncDbWriter} can be used %
-to store monitoring records to filesystems and databases respectively. %
+Different writers can be used %
+to store monitoring records to filesystems and databases respectively (e.g., \class{AsyncFsWriter}, %
+\class{SyncFsWriter}, \class{AsyncDbWriter}, and \class{SyncDbWriter}). %
 The variants with the prefix \class{Async} are implemented using asynchronous %
 threads that decouple the I/O operations from the control flow of the %
 instrumented application. %
-The \class{AsyncFsWriter} is the default writer which has already been used in %
+The \class{AsyncFsWriter} is the default writer that has already been used in %
 Section~\ref{sec:example:monitoring}. %
 Please note that the database writers are currently in a prototype stage and
 that they should be used with care. %
@@ -360,12 +378,14 @@ a custom writer \class{MyPipeWriter} which uses a named pipe to %
 write the given records into a buffer located in the memory. The source code of %
 the class \class{MyPipe} is listed in Appendix~\ref{appendix:pipeListings}. %
 
-\enlargethispage{1cm}
+% \enlargethispage{1cm}
 
-\
+\pagebreak
 
 \setJavaCodeListing
 \lstinputlisting[caption=MyPipeWriter.java, label=listing:MyWriter,firstline=23,firstnumber=23]{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeWriter.java}
+
+\pagebreak
 
 \noindent The monitoring writer to be used is selected by the %
 \KiekerMonitoringPart{} configuration property (Section~\ref{chap:componentsMonitoring}) %

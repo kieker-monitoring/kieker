@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,12 +21,14 @@ import kieker.common.record.flow.trace.AbstractTraceEvent;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public abstract class AbstractOperationEvent extends AbstractTraceEvent implements IOperationRecord {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * This field should not be exported, because it makes little sense to have no associated class
+	 * This field should not be exported, because it makes little sense to have no associated class.
 	 */
 	private static final String NO_OPERATIONSIGNATURE = "<no-operationSignature>";
 	private static final String NO_CLASSSIGNATURE = ""; // default is empty
@@ -34,12 +36,34 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 	private final String operationSignature;
 	private final String classSignature;
 
+	/**
+	 * This constructor uses the given parameters to initialize the fields of this record.
+	 * 
+	 * @param timestamp
+	 *            The timestamp of this record.
+	 * @param traceId
+	 *            The trace ID.
+	 * @param orderIndex
+	 *            The order index.
+	 * @param operationSignature
+	 *            The operation signature. This parameter can be null.
+	 * @param classSignature
+	 *            The class signature. This parameter can be null.
+	 */
 	public AbstractOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature) {
 		super(timestamp, traceId, orderIndex);
 		this.operationSignature = (operationSignature == null) ? NO_OPERATIONSIGNATURE : operationSignature; // NOCS
 		this.classSignature = (classSignature == null) ? NO_CLASSSIGNATURE : classSignature; // NOCS
 	}
 
+	/**
+	 * This constructor uses the given array to initialize the fields of this record.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 * @param valueTypes
+	 *            The types of the elements in the first array.
+	 */
 	protected AbstractOperationEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes); // values[0..2]
 		this.operationSignature = (String) values[3];
@@ -54,6 +78,9 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 		return this.classSignature;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final boolean refersToSameOperationAs(final IOperationRecord record) {
 		return this.getOperationSignature().equals(record.getOperationSignature()) && this.getClassSignature().equals(record.getClassSignature());
 	}

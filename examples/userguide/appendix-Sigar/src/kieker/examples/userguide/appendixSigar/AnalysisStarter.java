@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,8 @@
 package kieker.examples.userguide.appendixSigar;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.IAnalysisController;
+import kieker.analysis.IProjectContext;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -39,23 +41,21 @@ public final class AnalysisStarter {
 			System.exit(1);
 		}
 
-		/* Create Kieker.Analysis instance */
-		final AnalysisController analysisInstance = new AnalysisController();
-		/* Create a register our own consumer */
-		final StdOutDumpConsumer consumer = new StdOutDumpConsumer(new Configuration());
-		analysisInstance.registerFilter(consumer);
+		// Create Kieker.Analysis instance
+		final IAnalysisController analysisInstance = new AnalysisController();
+		// Create and register our own consumer
+		final StdOutDumpConsumer consumer = new StdOutDumpConsumer(new Configuration(), analysisInstance);
 
-		/* Set filesystem monitoring log input directory for our analysis */
+		// Set filesystem monitoring log input directory for our analysis
 		final Configuration readerConfiguration = new Configuration();
 		final String[] inputDirs = { args[0] };
 		readerConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(inputDirs));
-		final FSReader fsReader = new FSReader(readerConfiguration);
-		analysisInstance.registerReader(fsReader);
+		final FSReader fsReader = new FSReader(readerConfiguration, analysisInstance);
 
 		try {
-			/* Connect both components. */
+			// Connect both components.
 			analysisInstance.connect(fsReader, FSReader.OUTPUT_PORT_NAME_RECORDS, consumer, StdOutDumpConsumer.INPUT_PORT_NAME);
-			/* Start the analysis */
+			// Start the analysis
 			analysisInstance.run();
 		} catch (final AnalysisConfigurationException e) {
 			e.printStackTrace();
@@ -65,10 +65,11 @@ public final class AnalysisStarter {
 
 @Plugin
 class StdOutDumpConsumer extends AbstractFilterPlugin {
+
 	public static final String INPUT_PORT_NAME = "newMonitoringRecord";
 
-	public StdOutDumpConsumer(final Configuration configuration) {
-		super(configuration);
+	public StdOutDumpConsumer(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
 	}
 
 	@InputPort(
@@ -108,6 +109,7 @@ class StdOutDumpConsumer extends AbstractFilterPlugin {
 		} // else Unexpected record type
 	}
 
+	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}

@@ -2,6 +2,7 @@
  */
 package kieker.analysis.model.analysisMetaModel.impl;
 
+import kieker.analysis.model.analysisMetaModel.MIAnalysisComponent;
 import kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelFactory;
 import kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage;
 import kieker.analysis.model.analysisMetaModel.MIDependency;
@@ -132,6 +133,13 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	private EClass displayConnectorEClass = null;
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass analysisComponentEClass = null;
+
+	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
 	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
 	 * package URI value.
@@ -251,6 +259,15 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getProject_Properties() {
+		return (EReference)projectEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getPlugin() {
 		return pluginEClass;
 	}
@@ -260,35 +277,8 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPlugin_Name() {
-		return (EAttribute)pluginEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getPlugin_Classname() {
-		return (EAttribute)pluginEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getPlugin_Properties() {
-		return (EReference)pluginEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EReference getPlugin_Repositories() {
-		return (EReference)pluginEClass.getEStructuralFeatures().get(3);
+		return (EReference)pluginEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -297,7 +287,7 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	 * @generated
 	 */
 	public EReference getPlugin_OutputPorts() {
-		return (EReference)pluginEClass.getEStructuralFeatures().get(4);
+		return (EReference)pluginEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -306,7 +296,7 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	 * @generated
 	 */
 	public EReference getPlugin_Displays() {
-		return (EReference)pluginEClass.getEStructuralFeatures().get(5);
+		return (EReference)pluginEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -449,33 +439,6 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getRepository_Properties() {
-		return (EReference)repositoryEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getRepository_Classname() {
-		return (EAttribute)repositoryEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getRepository_Name() {
-		return (EAttribute)repositoryEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EClass getDependency() {
 		return dependencyEClass;
 	}
@@ -611,6 +574,42 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getAnalysisComponent() {
+		return analysisComponentEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getAnalysisComponent_Name() {
+		return (EAttribute)analysisComponentEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getAnalysisComponent_Classname() {
+		return (EAttribute)analysisComponentEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getAnalysisComponent_Properties() {
+		return (EReference)analysisComponentEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public MIAnalysisMetaModelFactory getAnalysisMetaModelFactory() {
 		return (MIAnalysisMetaModelFactory)getEFactoryInstance();
 	}
@@ -640,11 +639,9 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 		createEReference(projectEClass, PROJECT__REPOSITORIES);
 		createEReference(projectEClass, PROJECT__DEPENDENCIES);
 		createEReference(projectEClass, PROJECT__VIEWS);
+		createEReference(projectEClass, PROJECT__PROPERTIES);
 
 		pluginEClass = createEClass(PLUGIN);
-		createEAttribute(pluginEClass, PLUGIN__NAME);
-		createEAttribute(pluginEClass, PLUGIN__CLASSNAME);
-		createEReference(pluginEClass, PLUGIN__PROPERTIES);
 		createEReference(pluginEClass, PLUGIN__REPOSITORIES);
 		createEReference(pluginEClass, PLUGIN__OUTPUT_PORTS);
 		createEReference(pluginEClass, PLUGIN__DISPLAYS);
@@ -670,9 +667,6 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 		readerEClass = createEClass(READER);
 
 		repositoryEClass = createEClass(REPOSITORY);
-		createEReference(repositoryEClass, REPOSITORY__PROPERTIES);
-		createEAttribute(repositoryEClass, REPOSITORY__CLASSNAME);
-		createEAttribute(repositoryEClass, REPOSITORY__NAME);
 
 		dependencyEClass = createEClass(DEPENDENCY);
 		createEAttribute(dependencyEClass, DEPENDENCY__FILE_PATH);
@@ -693,6 +687,11 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 		displayConnectorEClass = createEClass(DISPLAY_CONNECTOR);
 		createEAttribute(displayConnectorEClass, DISPLAY_CONNECTOR__NAME);
 		createEReference(displayConnectorEClass, DISPLAY_CONNECTOR__DISPLAY);
+
+		analysisComponentEClass = createEClass(ANALYSIS_COMPONENT);
+		createEAttribute(analysisComponentEClass, ANALYSIS_COMPONENT__NAME);
+		createEAttribute(analysisComponentEClass, ANALYSIS_COMPONENT__CLASSNAME);
+		createEReference(analysisComponentEClass, ANALYSIS_COMPONENT__PROPERTIES);
 	}
 
 	/**
@@ -723,10 +722,12 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
+		pluginEClass.getESuperTypes().add(this.getAnalysisComponent());
 		inputPortEClass.getESuperTypes().add(this.getPort());
 		outputPortEClass.getESuperTypes().add(this.getPort());
 		filterEClass.getESuperTypes().add(this.getPlugin());
 		readerEClass.getESuperTypes().add(this.getPlugin());
+		repositoryEClass.getESuperTypes().add(this.getAnalysisComponent());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(projectEClass, MIProject.class, "Project", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -735,11 +736,9 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 		initEReference(getProject_Repositories(), this.getRepository(), null, "repositories", null, 0, -1, MIProject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getProject_Dependencies(), this.getDependency(), null, "dependencies", null, 0, -1, MIProject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getProject_Views(), this.getView(), null, "views", null, 0, -1, MIProject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getProject_Properties(), this.getProperty(), null, "properties", null, 0, -1, MIProject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(pluginEClass, MIPlugin.class, "Plugin", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getPlugin_Name(), ecorePackage.getEString(), "name", null, 1, 1, MIPlugin.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getPlugin_Classname(), ecorePackage.getEString(), "classname", null, 1, 1, MIPlugin.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getPlugin_Properties(), this.getProperty(), null, "properties", null, 0, -1, MIPlugin.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPlugin_Repositories(), this.getRepositoryConnector(), null, "repositories", null, 0, -1, MIPlugin.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPlugin_OutputPorts(), this.getOutputPort(), this.getOutputPort_Parent(), "outputPorts", null, 0, -1, MIPlugin.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPlugin_Displays(), this.getDisplay(), this.getDisplay_Parent(), "displays", null, 0, -1, MIPlugin.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -765,9 +764,6 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 		initEClass(readerEClass, MIReader.class, "Reader", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(repositoryEClass, MIRepository.class, "Repository", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getRepository_Properties(), this.getProperty(), null, "properties", null, 0, -1, MIRepository.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getRepository_Classname(), ecorePackage.getEString(), "classname", null, 1, 1, MIRepository.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getRepository_Name(), ecorePackage.getEString(), "name", null, 1, 1, MIRepository.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(dependencyEClass, MIDependency.class, "Dependency", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getDependency_FilePath(), ecorePackage.getEString(), "filePath", null, 1, 1, MIDependency.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -788,6 +784,11 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 		initEClass(displayConnectorEClass, MIDisplayConnector.class, "DisplayConnector", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getDisplayConnector_Name(), ecorePackage.getEString(), "name", null, 1, 1, MIDisplayConnector.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getDisplayConnector_Display(), this.getDisplay(), null, "display", null, 1, 1, MIDisplayConnector.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(analysisComponentEClass, MIAnalysisComponent.class, "AnalysisComponent", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getAnalysisComponent_Name(), ecorePackage.getEString(), "name", null, 1, 1, MIAnalysisComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAnalysisComponent_Classname(), ecorePackage.getEString(), "classname", null, 1, 1, MIAnalysisComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAnalysisComponent_Properties(), this.getProperty(), null, "properties", null, 0, -1, MIAnalysisComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

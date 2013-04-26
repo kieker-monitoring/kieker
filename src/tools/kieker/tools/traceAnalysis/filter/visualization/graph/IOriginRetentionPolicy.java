@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ package kieker.tools.traceAnalysis.filter.visualization.graph;
  * 
  * @author Holger Knoche
  * 
+ * @since 1.6
  */
 public interface IOriginRetentionPolicy {
 
@@ -30,6 +31,8 @@ public interface IOriginRetentionPolicy {
 	 * Returns the kind of this retention policy.
 	 * 
 	 * @return See above
+	 * 
+	 * @since 1.6
 	 */
 	public OriginRetentionPolicyKind getKind();
 
@@ -39,6 +42,8 @@ public interface IOriginRetentionPolicy {
 	 * @param other
 	 *            The retention policy to check against
 	 * @return {@code True} if the policies may be united, {@code false} otherwise
+	 * 
+	 * @since 1.6
 	 */
 	public boolean isCompatibleWith(final IOriginRetentionPolicy other);
 
@@ -48,6 +53,8 @@ public interface IOriginRetentionPolicy {
 	 * @param policy
 	 *            The policy to check for dependencies
 	 * @return {@code True} if the policy depends on the given policy, {@code false} otherwise
+	 * 
+	 * @since 1.6
 	 */
 	public boolean dependsOn(IOriginRetentionPolicy policy);
 
@@ -58,6 +65,8 @@ public interface IOriginRetentionPolicy {
 	 * @param other
 	 *            The retention policy to unite this policy with
 	 * @return The resulting policy, which may be a completely new object
+	 * 
+	 * @since 1.6
 	 */
 	public IOriginRetentionPolicy uniteWith(IOriginRetentionPolicy other);
 
@@ -68,6 +77,11 @@ public interface IOriginRetentionPolicy {
 	 *            The graph element to handle the origin for
 	 * @param origin
 	 *            The origin to handle
+	 * 
+	 * @param <T>
+	 *            The type of the entity within the graph element.
+	 * 
+	 * @since 1.6
 	 */
 	public <T> void handleOrigin(AbstractGraphElement<T> element, T origin);
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,12 +28,15 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
  *         Kieker and publication under an open source licence
  *         2007-04-18: Initial version
  * 
+ * @since < 0.9
  */
-
 public class Bookstore extends Thread {
 	private static final int NUM_REQUESTS = 1000;
 	private static final int INTER_REQUEST_TIME = 5;
 
+	/**
+	 * Default constructor.
+	 */
 	public Bookstore() {
 		// nothing to do
 	}
@@ -52,6 +55,9 @@ public class Bookstore extends Thread {
 	 * 
 	 * This will be monitored by Kieker, since it has the
 	 * OperationExecutionMonitoringProbe annotation.
+	 * 
+	 * @param args
+	 *            The command line arguments. They have currently no effect.
 	 */
 	@OperationExecutionMonitoringProbe
 	public static void main(final String[] args) {
@@ -72,6 +78,9 @@ public class Bookstore extends Thread {
 		Bookstore.searchBook();
 	}
 
+	/**
+	 * Searches for a book.
+	 */
 	@OperationExecutionMonitoringProbe
 	public static void searchBook() {
 		Catalog.getBook(false);
@@ -79,7 +88,10 @@ public class Bookstore extends Thread {
 	}
 
 	/**
-	 * Only encapsulates Thread.sleep()
+	 * This method encapsulates only Thread.sleep().
+	 * 
+	 * @param waittime
+	 *            The time to wait in milliseconds.
 	 */
 	public static void waitabit(final long waittime) {
 		if (waittime > 0) {

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.analysis.repository.annotation.Repository;
@@ -34,6 +35,8 @@ import kieker.common.configuration.Configuration;
  * Implementation of a description repository which stores descriptions for names.
  * 
  * @author Holger Knoche
+ * 
+ * @since 1.6
  */
 @Repository(name = "Description repository",
 		description = "Stores descriptions for names",
@@ -58,11 +61,14 @@ public class DescriptionRepository extends AbstractRepository {
 	 * 
 	 * @param configuration
 	 *            The configuration to use
+	 * @param projectContext
+	 *            The project context for this plugin.
+	 * 
 	 * @throws IOException
 	 *             If an I/O error occurs during initialization
 	 */
-	public DescriptionRepository(final Configuration configuration) throws IOException {
-		this(configuration, DescriptionRepository.readDataFromFile(configuration.getStringProperty(CONFIG_PROPERTY_NAME_DESCRIPTION_FILE_NAME)));
+	public DescriptionRepository(final Configuration configuration, final IProjectContext projectContext) throws IOException {
+		this(configuration, DescriptionRepository.readDataFromFile(configuration.getStringProperty(CONFIG_PROPERTY_NAME_DESCRIPTION_FILE_NAME)), projectContext);
 	}
 
 	/**
@@ -72,18 +78,25 @@ public class DescriptionRepository extends AbstractRepository {
 	 *            The configuration to use
 	 * @param descriptionData
 	 *            The description data to use
+	 * @param projectContext
+	 *            The project context to use.
 	 */
-	public DescriptionRepository(final Configuration configuration, final DescriptionRepositoryData descriptionData) {
-		super(configuration);
+	public DescriptionRepository(final Configuration configuration, final DescriptionRepositoryData descriptionData, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+
 		this.descriptionMap = descriptionData.getDescriptionMap();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		return this.configuration;
 	}
 
 	/**
-	 * Returns the description map (node id -> description) contained in this repository-
+	 * Returns the description map (node id -> description) contained in this repository.
 	 * 
 	 * @return See above
 	 */
@@ -108,15 +121,18 @@ public class DescriptionRepository extends AbstractRepository {
 	 * Initializes a new description repository from the given file.
 	 * 
 	 * @param fileName
-	 *            The name of the file to use
+	 *            The name of the file to use.
+	 * @param projectContext
+	 *            The project context to use.
 	 * @return The initialized description repository
+	 * 
 	 * @throws IOException
 	 *             If an I/O error occurs
 	 */
-	public static DescriptionRepository createFromFile(final String fileName) throws IOException {
+	public static DescriptionRepository createFromFile(final String fileName, final IProjectContext projectContext) throws IOException {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_DESCRIPTION_FILE_NAME, fileName);
-		return new DescriptionRepository(configuration, DescriptionRepository.readDataFromFile(fileName));
+		return new DescriptionRepository(configuration, DescriptionRepository.readDataFromFile(fileName), projectContext);
 	}
 
 	private static DescriptionRepositoryData readDataFromFile(final String fileName) throws IOException {
@@ -152,6 +168,8 @@ public class DescriptionRepository extends AbstractRepository {
 	 * This class groups the data required for a {@link DescriptionRepository}.
 	 * 
 	 * @author Holger Knoche
+	 * 
+	 * @since 1.6
 	 */
 	public static class DescriptionRepositoryData {
 
@@ -168,7 +186,7 @@ public class DescriptionRepository extends AbstractRepository {
 			this.descriptionMap = descriptionMap;
 		}
 
-		private ConcurrentMap<String, String> getDescriptionMap() {
+		ConcurrentMap<String, String> getDescriptionMap() { // NOPMD package for outer class
 			return this.descriptionMap;
 		}
 

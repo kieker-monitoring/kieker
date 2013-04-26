@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,11 +30,16 @@ import kieker.tools.traceAnalysis.systemModel.Operation;
  * 
  * @param <G>
  *            The graph type this formatter is for
+ * 
+ * @since 1.6
  */
 public abstract class AbstractDependencyGraphFormatter<G extends AbstractDependencyGraph<?>> extends AbstractGraphFormatter<G> {
 
+	/** The string used in the node labels for execution containers. */
 	protected static final String STEREOTYPE_EXECUTION_CONTAINER = "<<execution container>>";
+	/** The string used in the node labels for assembly components. */
 	protected static final String STEREOTYPE_ASSEMBLY_COMPONENT = "<<assembly component>>";
+	/** The string used in the node labels for deployment components. */
 	protected static final String STEREOTYPE_ALLOCATION_COMPONENT = "<<deployment component>>";
 
 	private static final String NODE_ID_PREFIX = "depNode_";
@@ -147,5 +152,20 @@ public abstract class AbstractDependencyGraphFormatter<G extends AbstractDepende
 		}
 	}
 
+	/**
+	 * The inheriting classes should implement this method to encapsulate the concrete graph formatting.
+	 * 
+	 * @param graph
+	 *            The input graph to format
+	 * @param includeWeights
+	 *            Determines whether to include weights or not.
+	 * @param useShortLabels
+	 *            Determines whether to use short labels or not.
+	 * @param plotLoops
+	 *            Determines whether to plot loops or not.
+	 * 
+	 * @return
+	 *         A textual specification of the input graph
+	 */
 	protected abstract String formatDependencyGraph(G graph, boolean includeWeights, boolean useShortLabels, boolean plotLoops);
 }

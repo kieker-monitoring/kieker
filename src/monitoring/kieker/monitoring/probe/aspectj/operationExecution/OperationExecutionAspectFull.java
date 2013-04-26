@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,17 +21,22 @@ import org.aspectj.lang.annotation.Pointcut;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.3
  */
 @Aspect
-public final class OperationExecutionAspectFull extends AbstractOperationExecutionAspect {
+public class OperationExecutionAspectFull extends AbstractOperationExecutionAspect {
 
+	/**
+	 * Default constructor.
+	 */
 	public OperationExecutionAspectFull() {
 		// empty default constructor
 	}
 
 	@Override
 	@Pointcut("execution(* *(..)) || execution(new(..))")
-	public final void monitoredOperation() {
+	public void monitoredOperation() {
 		// Aspect Declaration (MUST be empty)
 	}
 }

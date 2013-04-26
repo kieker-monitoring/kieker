@@ -1,11 +1,11 @@
 usage: kieker.tools.traceAnalysis.TraceAnalysisTool -i <dir1 ... dirN> -o <dir>
        [-p <prefix>] [--plot-Deployment-Sequence-Diagrams]
        [--plot-Assembly-Sequence-Diagrams]
-       [--plot-Deployment-Component-Dependency-Graph]
-       [--plot-Assembly-Component-Dependency-Graph]
+       [--plot-Deployment-Component-Dependency-Graph <responseTimes>]
+       [--plot-Assembly-Component-Dependency-Graph <responseTimes>]
        [--plot-Container-Dependency-Graph]
-       [--plot-Deployment-Operation-Dependency-Graph]
-       [--plot-Assembly-Operation-Dependency-Graph]
+       [--plot-Deployment-Operation-Dependency-Graph <responseTimes>]
+       [--plot-Assembly-Operation-Dependency-Graph <responseTimes>]
        [--plot-Aggregated-Deployment-Call-Tree]
        [--plot-Aggregated-Assembly-Call-Tree] [--plot-Call-Trees]
        [--print-Message-Traces] [--print-Execution-Traces]
@@ -14,89 +14,93 @@ usage: kieker.tools.traceAnalysis.TraceAnalysisTool -i <dir1 ... dirN> -o <dir>
        [--print-Assembly-Equivalence-Classes] [--select-traces <id0 ... idn>]
        [--ignore-invalid-traces] [--max-trace-duration <duration in ms>]
        [--ignore-executions-before-date <yyyyMMdd-HHmmss>]
-       [--ignore-executions-after-date <yyyyMMdd-HHmmss>] 
-       [--short-labels]
- -i,--inputdirs <dir1 ... dirN>                         Log directories to read
-                                                        data from
- -o,--outputdir <dir>                                   Directory for the
-                                                        generated file(s)
- -p,--output-filename-prefix <prefix>                   Prefix for output
-                                                        filenames
-    --plot-Deployment-Sequence-Diagrams                 Generate and store
-                                                        deployment-level
-                                                        sequence diagrams (.pic
-                                                        files)
-    --plot-Assembly-Sequence-Diagrams                   Generate and store
-                                                        assembly-level sequence
-                                                        diagrams (.pic files)
-    --plot-Deployment-Component-Dependency-Graph        Generate and store a
-                                                        deployment-level
-                                                        component dependency
-                                                        graph (.dot file)
-    --plot-Assembly-Component-Dependency-Graph          Generate and store an
-                                                        assembly-level component
-                                                        dependency graph (.dot
-                                                        file)
-    --plot-Container-Dependency-Graph                   Generate and store a
-                                                        container dependency
-                                                        graph (.dot file)
-    --plot-Deployment-Operation-Dependency-Graph        Generate and store a
-                                                        deployment-level
-                                                        operation dependency
-                                                        graph (.dot file)
-    --plot-Assembly-Operation-Dependency-Graph          Generate and store an
-                                                        assembly-level operation
-                                                        dependency graph (.dot
-                                                        file)
-    --plot-Aggregated-Deployment-Call-Tree              Generate and store an
-                                                        aggregated
-                                                        deployment-level call
-                                                        tree (.dot files)
-    --plot-Aggregated-Assembly-Call-Tree                Generate and store an
-                                                        aggregated
-                                                        assembly-level call tree
-                                                        (.dot files)
-    --plot-Call-Trees                                   Generate and store call
-                                                        trees for the selected
-                                                        traces (.dot files)
-    --print-Message-Traces                              Save message trace
-                                                        representations of valid
-                                                        traces (.txt files)
-    --print-Execution-Traces                            Save execution trace
-                                                        representations of valid
-                                                        traces (.txt files)
-    --print-invalid-Execution-Traces                    Save a execution trace
-                                                        representations of
-                                                        invalid trace artifacts
-                                                        (.txt files)
-    --print-Deployment-Equivalence-Classes              Output an overview about
-                                                        the deployment-level
-                                                        trace equivalence
-                                                        classes
-    --print-Assembly-Equivalence-Classes                Output an overview about
-                                                        the assembly-level trace
-                                                        equivalence classes
-    --select-traces <id0 ... idn>                       Consider only the traces
-                                                        identified by the list
-                                                        of trace IDs. Defaults
-                                                        to all traces.
-    --ignore-invalid-traces                             If selected, the
-                                                        execution aborts on the
-                                                        occurence of an invalid
-                                                        trace.
-    --max-trace-duration <duration in ms>               Threshold (in
-                                                        milliseconds) after
-                                                        which an incomplete
-                                                        trace becomes invalid.
-                                                        Defaults to 600000 (10
-                                                        minutes).
-    --ignore-executions-before-date <yyyyMMdd-HHmmss>   Executions starting
-                                                        before this date (UTC
-                                                        timezone) are ignored.
-    --ignore-executions-after-date <yyyyMMdd-HHmmss>    Executions ending after
-                                                        this date (UTC timezone)
-                                                        are ignored.
-    --short-labels                                      If selected, abbreviated
-                                                        labels (e.g., package
-                                                        names) are used in the
-                                                        visualizations.
+       [--ignore-executions-after-date <yyyyMMdd-HHmmss>] [--short-labels]
+       [--include-self-loops] [--traceColoring <color map file>]
+       [--addDescriptions <descriptions file>]
+ --i,--inputdirs <dir1 ... dirN>
+        Log directories to read data from
+
+ --o,--outputdir <dir>
+        Directory for the generated file(s)
+
+ --p,--output-filename-prefix <prefix>
+        Prefix for output filenames
+        
+
+    --plot-Deployment-Sequence-Diagrams
+        Generate and store deployment-level sequence diagrams (.pic)
+
+    --plot-Assembly-Sequence-Diagrams
+        Generate and store assembly-level sequence diagrams (.pic)
+
+    --plot-Deployment-Component-Dependency-Graph <responseTimes>
+        Generate and store a deployment-level component dependency graph (.dot)
+
+    --plot-Assembly-Component-Dependency-Graph <responseTimes>
+        Generate and store an assembly-level component dependency graph (.dot)
+
+    --plot-Container-Dependency-Graph
+        Generate and store a container dependency graph (.dot file)
+
+    --plot-Deployment-Operation-Dependency-Graph <responseTimes>
+        Generate and store a deployment-level operation dependency graph (.dot)
+
+    --plot-Assembly-Operation-Dependency-Graph <responseTimes>
+        Generate and store an assembly-level operation dependency graph (.dot)
+
+    --plot-Aggregated-Deployment-Call-Tree
+        Generate and store an aggregated deployment-level call tree (.dot)
+
+    --plot-Aggregated-Assembly-Call-Tree
+        Generate and store an aggregated assembly-level call tree (.dot)
+
+    --plot-Call-Trees
+        Generate and store call trees for the selected traces (.dot)
+
+    --print-Message-Traces
+        Save message trace representations of valid traces (.txt)
+
+    --print-Execution-Traces
+        Save execution trace representations of valid traces (.txt)
+
+    --print-invalid-Execution-Traces
+        Save a execution trace representations of invalid trace artifacts (.txt)
+
+    --print-Deployment-Equivalence-Classes
+        Output an overview about the deployment-level trace equivalence classes
+
+    --print-Assembly-Equivalence-Classes
+        Output an overview about the assembly-level trace equivalence classes
+
+    --select-traces <id0 ... idn>
+        Consider only the traces identified by the list of trace IDs. Defaults
+        to all traces.
+
+    --ignore-invalid-traces
+        If selected, the execution aborts on the occurence of an invalid trace.
+
+    --max-trace-duration <duration in ms>
+        Threshold (in ms) after which incomplete traces become invalid. Defaults
+        to 600,000 (i.e, 10 minutes).
+
+    --ignore-executions-before-date <yyyyMMdd-HHmmss>
+        Executions starting before this date (UTC timezone) are ignored.
+
+    --ignore-executions-after-date <yyyyMMdd-HHmmss>
+        Executions ending after this date (UTC timezone) are ignored.
+
+    --short-labels
+        If selected, abbreviated labels (e.g., package names) are used in the
+        visualizations.
+
+    --include-self-loops
+        If selected, self-loops are included in the visualizations.
+
+    --traceColoring <color map file>
+        Color traces according to the given color map given as a properties file
+        (key: trace ID, value: color in hex format, e.g., 0xff0000 for red; use
+        trace ID 'default' to specify the default color)
+
+    --addDescriptions <descriptions file>
+        Adds descriptions to elements according to the given file as a
+        properties file (key: component ID, e.g., @1; value: description)

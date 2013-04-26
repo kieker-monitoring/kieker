@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,13 +32,21 @@ import kieker.monitoring.core.sampler.ScheduledSamplerJob;
 
 /**
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.3
  */
 public final class SamplingController extends AbstractController implements ISamplingController {
 	private static final Log LOG = LogFactory.getLog(SamplingController.class);
 
-	/** Executes the {@link kieker.monitoring.probe.sigar.samplers.AbstractSigarSampler}s. */
+	/** Executes the {@link kieker.monitoring.sampler.sigar.samplers.AbstractSigarSampler}s. */
 	final ScheduledThreadPoolExecutor periodicSensorsPoolExecutor; // NOPMD NOCS (package visible)
 
+	/**
+	 * Creates a new instance of this class using the given configuration to initialize the class.
+	 * 
+	 * @param configuration
+	 *            The configuration used to initialize this controller.
+	 */
 	protected SamplingController(final Configuration configuration) {
 		super(configuration);
 		final int threadPoolSize = configuration.getIntProperty(ConfigurationFactory.PERIODIC_SENSORS_EXECUTOR_POOL_SIZE);
@@ -83,6 +91,9 @@ public final class SamplingController extends AbstractController implements ISam
 		return sb.toString();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final ScheduledSamplerJob schedulePeriodicSampler(final ISampler sensor, final long initialDelay, final long period, final TimeUnit timeUnit) {
 		if (null == this.periodicSensorsPoolExecutor) {
 			LOG.warn("Won't schedule periodic sensor since Periodic Sampling is deactivated.");
@@ -95,6 +106,9 @@ public final class SamplingController extends AbstractController implements ISam
 		return job;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final boolean removeScheduledSampler(final ScheduledSamplerJob sensorJob) {
 		if (null == this.periodicSensorsPoolExecutor) {
 			LOG.warn("Won't schedule periodic sensor since Periodic Sampling is deactivated.");
@@ -127,11 +141,11 @@ public final class SamplingController extends AbstractController implements ISam
 	}
 
 	/**
-	 * A thread factory to create daemon threads
+	 * A thread factory to create daemon threads.
 	 * 
 	 * @see java.util.concurrent.Executors.DefaultThreadFactory
 	 * 
-	 * @Author Jan Waller
+	 * @author Jan Waller
 	 */
 	private static final class DaemonThreadFactory implements ThreadFactory {
 		private final ThreadFactory defaultThreadFactory = Executors.defaultThreadFactory();

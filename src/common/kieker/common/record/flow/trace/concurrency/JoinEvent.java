@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@ import kieker.common.record.flow.trace.AbstractTraceEvent;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.? (experimental branch)
  */
 public class JoinEvent extends AbstractTraceEvent {
 	private static final long serialVersionUID = 8348010228570530470L;

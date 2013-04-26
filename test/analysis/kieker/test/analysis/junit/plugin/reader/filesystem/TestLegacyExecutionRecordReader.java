@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,19 +28,21 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.CountingFilter;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
+import kieker.common.util.filesystem.FSUtil;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 public class TestLegacyExecutionRecordReader extends AbstractKiekerTest {
-
-	private static final String ENCODING = "UTF-8";
 
 	private static final String MAP_FILE = "$0=kieker.common.record.controlflow.OperationExecutionRecord\n"
 			+ "$1=kieker.common.record.OperationExecutionRecord\n"
@@ -62,28 +64,26 @@ public class TestLegacyExecutionRecordReader extends AbstractKiekerTest {
 
 	@Before
 	public void setUp() throws IOException {
-		final File mapFile = this.tmpFolder.newFile("kieker.map");
-		final PrintStream mapStream = new PrintStream(new FileOutputStream(mapFile), false, ENCODING);
+		final File mapFile = this.tmpFolder.newFile(FSUtil.MAP_FILENAME);
+		final PrintStream mapStream = new PrintStream(new FileOutputStream(mapFile), false, FSUtil.ENCODING);
 		mapStream.print(MAP_FILE);
 		mapStream.close();
-		final File datFile = this.tmpFolder.newFile("kieker.dat");
-		final PrintStream datStream = new PrintStream(new FileOutputStream(datFile), false, ENCODING);
+		final File datFile = this.tmpFolder.newFile(FSUtil.FILE_PREFIX + FSUtil.NORMAL_FILE_EXTENSION);
+		final PrintStream datStream = new PrintStream(new FileOutputStream(datFile), false, FSUtil.ENCODING);
 		datStream.print(DAT_FILE);
 		datStream.close();
 	}
 
 	@Test
 	public void testRecords() throws IOException, IllegalStateException, AnalysisConfigurationException {
-		final AnalysisController analysisController = new AnalysisController();
+		final IAnalysisController analysisController = new AnalysisController();
 
 		final Configuration configurationFSReader = new Configuration();
 		configurationFSReader.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, this.tmpFolder.getRoot().getCanonicalPath());
-		final FSReader reader = new FSReader(configurationFSReader);
+		final FSReader reader = new FSReader(configurationFSReader, analysisController);
 
-		final CountingFilter sink = new CountingFilter(new Configuration());
+		final CountingFilter sink = new CountingFilter(new Configuration(), analysisController);
 
-		analysisController.registerReader(reader);
-		analysisController.registerFilter(sink);
 		analysisController.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, sink, CountingFilter.INPUT_PORT_NAME_EVENTS);
 
 		analysisController.run();

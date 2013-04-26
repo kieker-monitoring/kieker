@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,16 +48,15 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.signaturePattern.InvalidPatternException;
+import kieker.monitoring.core.signaturePattern.SignatureFactory;
 import kieker.monitoring.writer.DummyWriter;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
- * TODO: missing test:
- * * periodic reading of config file
- * * writing of config file
- * 
  * @author Bjoern Weissenfels, Jan Waller
+ * 
+ * @since 1.6
  */
 public class TestProbeController extends AbstractKiekerTest {
 
@@ -68,6 +67,9 @@ public class TestProbeController extends AbstractKiekerTest {
 
 	private volatile File configFile;
 
+	/**
+	 * Default constructor.
+	 */
 	public TestProbeController() {
 		// empty default constructor
 	}
@@ -77,6 +79,9 @@ public class TestProbeController extends AbstractKiekerTest {
 		this.configFile = this.tmpFolder.newFile("adaptiveMonitoring.configFile");
 	}
 
+	/**
+	 * This method does some cleanup after the test.
+	 */
 	@After
 	public void cleanup() {
 		this.tmpFolder.delete();
@@ -111,9 +116,9 @@ public class TestProbeController extends AbstractKiekerTest {
 		Assert.assertFalse(list.isEmpty());
 		Assert.assertArrayEquals(new String[] { "+*", "-* test.Test()", }, list.toArray());
 		// add manual entries to list
-		ctrl.activateProbe("void test.Test()");
+		ctrl.activateProbe("void test.$1.Test()");
 		final List<String> list2 = ctrl.getProbePatternList();
-		Assert.assertArrayEquals(new String[] { "+*", "-* test.Test()", "+void test.Test()", }, list2.toArray());
+		Assert.assertArrayEquals(new String[] { "+*", "-* test.Test()", "+void test.$1.Test()", }, list2.toArray());
 		Assert.assertFalse(ctrl.isMonitoringTerminated());
 		ctrl.terminateMonitoring();
 	}
@@ -216,15 +221,14 @@ public class TestProbeController extends AbstractKiekerTest {
 		list3.add("+ Test test.Test.getTest()");
 		ctrl.setProbePatternList(list3);
 		final List<String> list4 = this.readFromConfigFile();
-		Assert.assertArrayEquals(new String[] { "-public * test.Test.get*()", "+public void test.Test.getNothing()", "+Test test.Test.getTest()", }, list4.toArray());
+		Assert.assertArrayEquals(new String[] { "-public * test.Test.get*()", "+public void test.Test.getNothing()", "+Test test.Test.getTest()", },
+				list4.toArray());
 
 		Assert.assertFalse(ctrl.isMonitoringTerminated());
 		ctrl.terminateMonitoring();
 	}
 
-	/*
-	 * Reads the significant content of the config file.
-	 */
+	// Reads the significant content of the config file.
 	private List<String> readFromConfigFile() throws IOException {
 		BufferedReader reader = null;
 		try {
@@ -244,9 +248,7 @@ public class TestProbeController extends AbstractKiekerTest {
 		}
 	}
 
-	/*
-	 * Replaces the old content of the config file with the given pattern and a few additional information.
-	 */
+	// Replaces the old content of the config file with the given pattern and a few additional information.
 	private void writeToConfigFile(final String[] pattern) throws UnsupportedEncodingException, FileNotFoundException, InterruptedException {
 		Thread.sleep(1000); // enforce last modified timestamp to be different than before
 		final PrintWriter pw = new PrintWriter(
@@ -286,6 +288,38 @@ public class TestProbeController extends AbstractKiekerTest {
 		Assert.assertTrue(ctrl.isProbeActivated(signature));
 		Assert.assertTrue(ctrl.deactivateProbe(pattern));
 		Assert.assertFalse(ctrl.isProbeActivated(signature));
+		ctrl.terminateMonitoring();
+	}
+
+	@Test
+	public void testSpecialProbes() {
+		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
+		configuration.setProperty(ConfigurationFactory.WRITER_CLASSNAME, DummyWriter.class.getName());
+		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED, "true");
+
+		final IMonitoringController ctrl = MonitoringController.createInstance(configuration);
+
+		final String memSwapSignature = SignatureFactory.createMemSwapSignature(); // %MEM_SWAP
+		final String cpuSignature = SignatureFactory.createCPUSignature(); // %CPU
+
+		Assert.assertTrue(ctrl.isProbeActivated(memSwapSignature)); // default is true
+		ctrl.deactivateProbe(memSwapSignature); // this entry deactivates the MemSwapProbe
+		Assert.assertFalse(ctrl.isProbeActivated(memSwapSignature));
+
+		Assert.assertTrue(ctrl.isProbeActivated(cpuSignature)); // default is true
+		ctrl.deactivateProbe(cpuSignature); // this entry deactivates the CpuProbe
+		Assert.assertFalse(ctrl.isProbeActivated(cpuSignature));
+
+		// Independent of 'cpuSignature' all specific signatures are active by default.
+		Assert.assertTrue(ctrl.isProbeActivated(SignatureFactory.createCPUSignature(0))); // %CPU::0
+		ctrl.deactivateProbe(SignatureFactory.createCPUSignature(0));
+		Assert.assertFalse(ctrl.isProbeActivated(SignatureFactory.createCPUSignature(0)));
+		Assert.assertTrue(ctrl.isProbeActivated(SignatureFactory.createCPUSignature(1))); // %CPU::1
+		ctrl.deactivateProbe("%CPU::.*"); // regular expressions also allowed, this one deactivates all probes
+		Assert.assertFalse(ctrl.isProbeActivated(SignatureFactory.createCPUSignature(0)));
+		Assert.assertFalse(ctrl.isProbeActivated(SignatureFactory.createCPUSignature(1)));
+
+		Assert.assertFalse(ctrl.isMonitoringTerminated());
 		ctrl.terminateMonitoring();
 	}
 }

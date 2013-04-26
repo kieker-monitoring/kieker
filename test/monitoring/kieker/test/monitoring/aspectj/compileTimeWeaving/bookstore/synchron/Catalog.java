@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,11 +31,18 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
  *         Refactoring for the first release of Kieker and publication under an
  *         open source licence 2007-04-18: Initial version
  * 
+ * @since 0.91
  */
 public final class Catalog {
 
 	private Catalog() {}
 
+	/**
+	 * A dummy method which waits a little bit.
+	 * 
+	 * @param complexQuery
+	 *            Determines whether to wait 20 ms or 2 ms.
+	 */
 	@OperationExecutionMonitoringProbe
 	public static void getBook(final boolean complexQuery) {
 		synchronized (Catalog.class) {

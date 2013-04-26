@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,8 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.4
  */
 public final class JMXWriter extends AbstractMonitoringWriter {
 	private static final String PREFIX = JMXWriter.class.getName() + ".";
@@ -37,25 +39,35 @@ public final class JMXWriter extends AbstractMonitoringWriter {
 
 	private static final Log LOG = LogFactory.getLog(JMXWriter.class);
 
+	private final String configDomain;
+	private final String configLogname;
+
 	private KiekerJMXMonitoringLog kiekerJMXMonitoringLog;
 	private ObjectName monitoringLogName;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this writer.
+	 */
 	public JMXWriter(final Configuration configuration) {
 		super(configuration);
+		this.configDomain = configuration.getStringProperty(CONFIG_DOMAIN);
+		this.configLogname = configuration.getStringProperty(CONFIG_LOGNAME);
 	}
 
 	@Override
 	protected void init() throws Exception {
 		try {
-			String domain = this.configuration.getStringProperty(CONFIG_DOMAIN);
+			String domain = this.configDomain;
 			if ("".equals(domain)) {
 				domain = this.monitoringController.getJMXDomain();
 			}
-			this.monitoringLogName = new ObjectName(domain, "type", this.configuration.getStringProperty(CONFIG_LOGNAME));
+			this.monitoringLogName = new ObjectName(domain, "type", this.configLogname);
 		} catch (final MalformedObjectNameException ex) {
 			throw new IllegalArgumentException("The generated ObjectName is not correct! Check the following configuration values '" + CONFIG_DOMAIN
-					+ "=" + this.configuration.getStringProperty(CONFIG_DOMAIN) + "' and '" + CONFIG_LOGNAME + "="
-					+ this.configuration.getStringProperty(CONFIG_LOGNAME) + "'", ex);
+					+ "=" + this.configDomain + "' and '" + CONFIG_LOGNAME + "=" + this.configLogname + "'", ex);
 		}
 		this.kiekerJMXMonitoringLog = new KiekerJMXMonitoringLog(this.monitoringLogName);
 		try {
@@ -65,10 +77,16 @@ public final class JMXWriter extends AbstractMonitoringWriter {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean newMonitoringRecord(final IMonitoringRecord record) {
 		return this.kiekerJMXMonitoringLog.newMonitoringRecord(record);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void terminate() {
 		try {
 			ManagementFactory.getPlatformMBeanServer().unregisterMBean(this.monitoringLogName);

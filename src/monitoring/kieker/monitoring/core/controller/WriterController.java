@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,19 +28,30 @@ import kieker.monitoring.writer.IMonitoringWriter;
 
 /**
  * @author Andre van Hoorn, Matthias Rohr, Jan Waller, Robert von Massow
+ * 
+ * @since 1.3
  */
 public final class WriterController extends AbstractController implements IWriterController {
 	private static final Log LOG = LogFactory.getLog(WriterController.class);
 
-	/** the total number of monitoring records received */
+	/** the total number of monitoring records received. */
 	private final AtomicLong numberOfInserts = new AtomicLong(0);
-	/** Monitoring Writer */
+	/** Monitoring Writer. */
 	private final IMonitoringWriter monitoringWriter;
-	/** Whether or not the {@link IMonitoringRecord#setLoggingTimestamp(long)} is automatically set */
+	/** Whether or not the {@link IMonitoringRecord#setLoggingTimestamp(long)} is automatically set. */
 	private final boolean autoSetLoggingTimestamp;
+	/** Whether or not to automatically log the metadata record. */
+	private final boolean logMetadataRecord;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for the controller.
+	 */
 	public WriterController(final Configuration configuration) {
 		super(configuration);
+		this.logMetadataRecord = configuration.getBooleanProperty(ConfigurationFactory.METADATA);
 		this.autoSetLoggingTimestamp = configuration.getBooleanProperty(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP);
 		this.monitoringWriter = AbstractController.createAndInitialize(IMonitoringWriter.class,
 				configuration.getStringProperty(ConfigurationFactory.WRITER_CLASSNAME),
@@ -90,6 +101,9 @@ public final class WriterController extends AbstractController implements IWrite
 		return sb.toString();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
 		try {
 			// fast lane for RegistryRecords (these must always be delivered!)
@@ -101,7 +115,9 @@ public final class WriterController extends AbstractController implements IWrite
 				if (this.autoSetLoggingTimestamp) {
 					record.setLoggingTimestamp(monitoringController.getTimeSource().getTime());
 				}
-				this.numberOfInserts.incrementAndGet();
+				if ((0L == this.numberOfInserts.getAndIncrement()) && this.logMetadataRecord) {
+					this.monitoringController.sendMetadataAsRecord();
+				}
 			}
 			if (!this.monitoringWriter.newMonitoringRecord(record)) {
 				LOG.error("Error writing the monitoring data. Will terminate monitoring!");
@@ -116,6 +132,9 @@ public final class WriterController extends AbstractController implements IWrite
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final long getNumberOfInserts() {
 		return this.numberOfInserts.longValue();
 	}

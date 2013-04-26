@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,8 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.2
  */
 public class TestOperationExecutionRecordEquals extends AbstractKiekerTest { // NOCS (MissingCtorCheck)
 
@@ -116,63 +118,5 @@ public class TestOperationExecutionRecordEquals extends AbstractKiekerTest { // 
 		);
 
 		Assert.assertFalse(r1.equals(r2));
-
-		// TODO: One could check each entry, but it is simply forwarded to Arrays.equals(...)
-
-		// /* Modification of operationSignature */
-		// final String oldOperationSignature = r2.getOperationSignature();
-		// r2.setOperationSignature(r2.getOperationSignature() + "_");
-		// Assert.assertFalse(r1.equals(r2));
-		// r2.setOperationSignature(oldOperationSignature);
-		// Assert.assertEquals(r1, r2);
-		//
-		// /* Modification of eoi */
-		// final int oldEoi = r2.getEoi();
-		// r2.setEoi(r2.getEoi() + 1);
-		// Assert.assertFalse(r1.equals(r2));
-		// r2.setEoi(oldEoi);
-		// Assert.assertEquals(r1, r2);
-		//
-		// /* Modification of ess */
-		// final int oldEss = r2.getEss();
-		// r2.setEss(r2.getEss() + 1);
-		// Assert.assertFalse(r1.equals(r2));
-		// r2.setEss(oldEss);
-		// Assert.assertEquals(r1, r2);
-		//
-		// /* Modification of sessionId */
-		// final String oldsessionId = r2.getSessionId();
-		// r2.setSessionId(r2.getSessionId() + "_");
-		// Assert.assertFalse(r1.equals(r2));
-		// r2.setSessionId(oldsessionId);
-		// Assert.assertEquals(r1, r2);
-		//
-		// /* Modification of tin */
-		// final long oldTin = r2.getTin();
-		// r2.setTin(r2.getTin() + 1);
-		// Assert.assertFalse(r1.equals(r2));
-		// r2.setTin(oldTin);
-		// Assert.assertEquals(r1, r2);
-		//
-		// /* Modification of tout */
-		// final long oldTout = r2.getTout();
-		// r2.setTout(r2.getTout() + 1);
-		// Assert.assertFalse(r1.equals(r2));
-		// r2.setTout(oldTout);
-		// Assert.assertEquals(r1, r2);
-		//
-		// /* Modification of traceId */
-		// final long oldTraceId = r2.getTraceId();
-		// r2.setTraceId(r2.getTraceId() + 1);
-		// Assert.assertFalse(r1.equals(r2));
-		// r2.setTraceId(oldTraceId);
-		// Assert.assertEquals(r1, r2);
-		//
-		// /* Modification of hostname */
-		// final String oldVmName = r2.getHostname();
-		// r2.setHostname(r2.getHostname() + "_");
-		// Assert.assertFalse(r1.equals(r2));
-		// r2.setHostname(oldVmName);
-		// Assert.assertEquals(r1, r2);
 	}
 }

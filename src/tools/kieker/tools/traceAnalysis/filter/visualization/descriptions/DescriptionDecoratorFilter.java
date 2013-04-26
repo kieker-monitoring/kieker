@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package kieker.tools.traceAnalysis.filter.visualization.descriptions;
 
 import java.util.Map;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
@@ -44,6 +45,8 @@ import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
  *            The type of the graph's edges
  * @param <O>
  *            The type of the origin of the graph's elements
+ * 
+ * @since 1.6
  */
 @Plugin(name = "",
 		description = "This filter attaches decorations to graph entities",
@@ -63,10 +66,12 @@ public class DescriptionDecoratorFilter<V extends AbstractPayloadedVertex<V, E, 
 	 * Creates a new description decorator filter using the given configuration.
 	 * 
 	 * @param configuration
-	 *            The configuration to use
+	 *            The configuration to use for this filter.
+	 * @param projectContext
+	 *            The project context to use for this filter.
 	 */
-	public DescriptionDecoratorFilter(final Configuration configuration) {
-		super(configuration);
+	public DescriptionDecoratorFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
 	}
 
 	public void visitVertex(final V vertex) {

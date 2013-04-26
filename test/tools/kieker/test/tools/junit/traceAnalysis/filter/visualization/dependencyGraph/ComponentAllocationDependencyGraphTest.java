@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.controlflow.OperationExecutionRecord;
@@ -43,8 +44,9 @@ import kieker.test.tools.util.graph.GraphTestSetup;
 /**
  * Test suite for the creation of component allocation dependency graphs ({@link ComponentDependencyGraphAllocationFilter}).
  * 
- * @author Holger Knoche
+ * @author Holger Knoche, Nils Christian Ehmke
  * 
+ * @since 1.6
  */
 public class ComponentAllocationDependencyGraphTest extends AbstractKiekerTest {
 
@@ -75,11 +77,13 @@ public class ComponentAllocationDependencyGraphTest extends AbstractKiekerTest {
 
 	@BeforeClass
 	public static void prepareSetup() throws AnalysisConfigurationException {
-		final ComponentDependencyGraphAllocationFilter filter = new ComponentDependencyGraphAllocationFilter(new Configuration());
+		final AnalysisController analysisController = new AnalysisController();
+
+		final ComponentDependencyGraphAllocationFilter filter = new ComponentDependencyGraphAllocationFilter(new Configuration(), analysisController);
 		final String inputPortName = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES;
 		final String repositoryPortName = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL;
 
-		testSetup = DependencyGraphTestUtil.prepareEnvironmentForProducerTest(filter, inputPortName, repositoryPortName,
+		testSetup = DependencyGraphTestUtil.prepareEnvironmentForProducerTest(analysisController, filter, inputPortName, repositoryPortName,
 				ComponentAllocationDependencyGraphTest.createExecutionRecords());
 	}
 
@@ -107,7 +111,7 @@ public class ComponentAllocationDependencyGraphTest extends AbstractKiekerTest {
 		Assert.assertEquals(1, graphReceiver.getNumberOfReceivedGraphs());
 
 		// Inspect the graph itself
-		final ComponentAllocationDependencyGraph graph = graphReceiver.<ComponentAllocationDependencyGraph> getFirstGraph(); // NOCS (generic)
+		final ComponentAllocationDependencyGraph graph = graphReceiver.<ComponentAllocationDependencyGraph>getFirstGraph(); // NOCS (generic)
 		final ConcurrentMap<String, DependencyGraphNode<AllocationComponent>> nodeMap = DependencyGraphTestUtil.createNodeLookupTable(graph);
 
 		// Obtain the expected allocation components

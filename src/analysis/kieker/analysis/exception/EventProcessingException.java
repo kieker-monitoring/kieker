@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,15 +19,32 @@ package kieker.analysis.exception;
 /**
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.2
  */
 public class EventProcessingException extends Exception {
+
 	private static final long serialVersionUID = 345L;
 
-	public EventProcessingException(final String msg) {
-		super(msg);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param message
+	 *            The message of the exception.
+	 * @param cause
+	 *            The cause of the exception.
+	 */
+	public EventProcessingException(final String message, final Throwable cause) {
+		super(message, cause);
 	}
 
-	public EventProcessingException(final String msg, final Throwable t) {
-		super(msg, t);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param message
+	 *            The message of the exception.
+	 */
+	public EventProcessingException(final String message) {
+		super(message);
 	}
 }

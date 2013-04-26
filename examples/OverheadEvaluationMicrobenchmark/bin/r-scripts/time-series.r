@@ -37,7 +37,7 @@ for (cr in (1:configs.recursion)) {
       ts(results.ts[2,],end=results.count,deltat=buckets.size),
       ts(results.ts[3,],end=results.count,deltat=buckets.size),
       ts(results.ts[4,],end=results.count,deltat=buckets.size),
-      gpars=list(ylim=c(500,600),col=configs.colors,xlab="Executions"))
+      gpars=list(ylim=c(500,510),col=configs.colors,xlab="Executions"))
     legend("topright",inset=c(0.01,0.01),legend=c(rev(configs.labels)),lty="solid",col=rev(configs.colors),bg="white",title="Mean execution time of ...",ncol=2)
     title(main=paste("Iteration: ", cl, "  Recursion Depth: ", cr),ylab="Execution Time (µs)")
   }

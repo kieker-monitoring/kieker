@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,8 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 public class TestCallConstructorEvent extends AbstractKiekerTest {
 
@@ -36,6 +38,9 @@ public class TestCallConstructorEvent extends AbstractKiekerTest {
 	private static final String FQ_CALLEE_CLASSNAME = "p1.p2.p3.calleename";
 	private static final String FQ_CALLEE_OPERATION_SIGNATURE = FQ_CALLEE_CLASSNAME + ".calleeOp(boolean arg1, int arg2)";
 
+	/**
+	 * Default constructor.
+	 */
 	public TestCallConstructorEvent() {
 		// empty default constructor
 	}

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,30 +16,38 @@
 
 package kieker.monitoring.writer.filesystem.async;
 
-import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
-import java.io.FileOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.filesystem.BinaryCompressionMethod;
 import kieker.monitoring.core.controller.IMonitoringController;
-import kieker.monitoring.writer.filesystem.MappingFileWriter;
+import kieker.monitoring.writer.filesystem.map.MappingFileWriter;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public class BinaryFsWriterThread extends AbstractFsWriterThread {
 	private static final Log LOG = LogFactory.getLog(BinaryFsWriterThread.class);
 
 	private DataOutputStream out;
 
+	private final int bufferSize;
+	private final BinaryCompressionMethod compressionMethod;
+
 	public BinaryFsWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
-			final MappingFileWriter mappingFileWriter, final String path, final int maxEntriesInFile, final int maxLogSize, final int maxLogFiles) {
+			final MappingFileWriter mappingFileWriter, final String path, final int maxEntriesInFile, final int maxLogSize, final int maxLogFiles,
+			final int bufferSize, final BinaryCompressionMethod compressionMethod) {
 		super(monitoringController, writeQueue, mappingFileWriter, path, maxEntriesInFile, maxLogSize, maxLogFiles);
-		this.fileExtension = ".bin";
+		this.compressionMethod = compressionMethod;
+		this.fileExtension = compressionMethod.getFileExtension();
+		this.bufferSize = bufferSize;
 	}
 
 	@Override
@@ -95,10 +103,10 @@ public class BinaryFsWriterThread extends AbstractFsWriterThread {
 
 	@Override
 	protected void prepareFile(final String filename) throws IOException {
-		if (this.out != null) {
+		if (null != this.out) {
 			this.out.close();
 		}
-		this.out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(filename)));
+		this.out = this.compressionMethod.getDataOutputStream(new File(filename), this.bufferSize);
 	}
 
 	@Override

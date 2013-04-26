@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,9 +43,12 @@ import kieker.monitoring.timer.ITimeSource;
 /**
  * 
  * @author Dennis Kieselhorst, Andre van Hoorn
+ * 
+ * @since 0.91
  */
 public class OperationExecutionSOAPRequestOutInterceptor extends SoapHeaderOutFilterInterceptor implements IMonitoringProbe {
 
+	/** This constant can be used as a session ID for asynchronous traces. */
 	public static final String SESSION_ID_ASYNC_TRACE = "NOSESSION-ASYNCOUT";
 
 	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
@@ -61,10 +64,19 @@ public class OperationExecutionSOAPRequestOutInterceptor extends SoapHeaderOutFi
 	protected final IMonitoringController monitoringController;
 	protected final ITimeSource timeSource;
 
+	/**
+	 * Creates a new instance of this class, using the singleton instance of the {@link MonitoringController} as controller.
+	 */
 	public OperationExecutionSOAPRequestOutInterceptor() {
 		this(MonitoringController.getInstance());
 	}
 
+	/**
+	 * Creates a new instance of this class, using the given instance of a {@link MonitoringController} as controller.
+	 * 
+	 * @param monitoringCtrl
+	 *            The controller of this interceptor.
+	 */
 	public OperationExecutionSOAPRequestOutInterceptor(final IMonitoringController monitoringCtrl) {
 		this.monitoringController = monitoringCtrl;
 		this.timeSource = this.monitoringController.getTimeSource();
@@ -82,21 +94,14 @@ public class OperationExecutionSOAPRequestOutInterceptor extends SoapHeaderOutFi
 		int eoi;
 		int ess;
 
-		/*
-		 * Store entry time tin for this trace.
-		 * This value will be used by the corresponding invocation of the
-		 * ResponseOutProbe.
-		 */
+		// Store entry time tin for this trace. This value will be used by the corresponding invocation of the ResponseOutProbe.
+
 		final long tin = this.timeSource.getTime();
 		boolean isEntryCall = false; // set true below if is entry call
 
 		if (traceId == -1) {
-			/*
-			 * traceId has not been registered before.
-			 * This might be caused by a thread which has been spawned
-			 * asynchronously. We will now acquire a thread id and store it
-			 * in the thread local variable.
-			 */
+			// traceId has not been registered before. This might be caused by a thread which has been spawned asynchronously. We will now acquire a thread id and
+			// store it in the thread local variable.
 			traceId = CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId();
 			eoi = 0; // eoi of this execution
 			CF_REGISTRY.storeThreadLocalEOI(eoi);
@@ -108,7 +113,7 @@ public class OperationExecutionSOAPRequestOutInterceptor extends SoapHeaderOutFi
 				SESSION_REGISTRY.storeThreadLocalSessionId(sessionID);
 			}
 		} else {
-			/* thread-local traceId exists: eoi and ess should have been registered before */
+			// thread-local traceId exists: eoi and ess should have been registered before
 			eoi = CF_REGISTRY.incrementAndRecallThreadLocalEOI();
 			ess = CF_REGISTRY.recallThreadLocalESS(); // do not increment in this case!
 			if (sessionID == null) {
@@ -122,22 +127,22 @@ public class OperationExecutionSOAPRequestOutInterceptor extends SoapHeaderOutFi
 		final Document d = DOMUtils.createDocument();
 		Element e;
 		Header hdr;
-		/* Add sessionId to header */
+		// Add sessionId to header
 		e = d.createElementNS(SOAPHeaderConstants.NAMESPACE_URI, SOAPHeaderConstants.SESSION_QUALIFIED_NAME);
 		e.setTextContent(sessionID);
 		hdr = new Header(SOAPHeaderConstants.SESSION_IDENTIFIER_QNAME, e);
 		msg.getHeaders().add(hdr);
-		/* Add traceId to header */
+		// Add traceId to header
 		e = d.createElementNS(SOAPHeaderConstants.NAMESPACE_URI, SOAPHeaderConstants.TRACE_QUALIFIED_NAME);
 		e.setTextContent(Long.toString(traceId));
 		hdr = new Header(SOAPHeaderConstants.TRACE_IDENTIFIER_QNAME, e);
 		msg.getHeaders().add(hdr);
-		/* Add eoi to header */
+		// Add eoi to header
 		e = d.createElementNS(SOAPHeaderConstants.NAMESPACE_URI, SOAPHeaderConstants.EOI_QUALIFIED_NAME);
 		e.setTextContent(Integer.toString(eoi));
 		hdr = new Header(SOAPHeaderConstants.EOI_IDENTIFIER_QNAME, e);
 		msg.getHeaders().add(hdr);
-		/* Add ess to header */
+		// Add ess to header
 		e = d.createElementNS(SOAPHeaderConstants.NAMESPACE_URI, SOAPHeaderConstants.ESS_QUALIFIED_NAME);
 		e.setTextContent(Integer.toString(ess + 1));
 		hdr = new Header(SOAPHeaderConstants.ESS_IDENTIFIER_QNAME, e);

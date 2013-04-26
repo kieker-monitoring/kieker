@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,22 +22,45 @@ package kieker.common.record.flow;
  * All call records have a <code>calleeClassSignature</code> and an <code>calleeOperationSignature</code> field of type <code>String</code>.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 public interface ICallRecord extends IOperationRecord {
 
 	/**
-	 * @see {@link IOperationRecord#getClassSignature()}
+	 * @return The class signature of the caller.
+	 * 
+	 * @see #getClassSignature()
+	 * 
+	 * @since 1.6
 	 */
 	public abstract String getCallerClassSignature();
 
 	/**
-	 * @see {@link IOperationRecord#getOperationSignature()}
+	 * @return The operation signature of the caller.
+	 * 
+	 * @see #getOperationSignature()
+	 * 
+	 * @since 1.6
 	 */
 	public abstract String getCallerOperationSignature();
 
+	/**
+	 * @return The class signature of the callee.
+	 * 
+	 * @since 1.6
+	 */
 	public abstract String getCalleeClassSignature();
 
+	/**
+	 * @return The operation signature of the callee.
+	 * 
+	 * @since 1.6
+	 */
 	public abstract String getCalleeOperationSignature();
 
+	/**
+	 * @since 1.6
+	 */
 	public abstract boolean callsReferencedOperationOf(final IOperationRecord record);
 }

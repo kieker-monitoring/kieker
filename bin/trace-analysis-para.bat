@@ -3,7 +3,7 @@ REM This script should NOT be called directly. Use trace-analysis.bat instead.
 REM
 REM @author Nils Christian Ehmke
 
-SET JAVAARGS=-Dlog4j.configuration=./log4j.properties -Xms56m -Xmx1024m
+SET JAVAARGS=-Dkieker.common.logging.Log=JDK -Djava.util.logging.config.file=./logging.properties -Xms56m -Xmx1024m
 SET MAINCLASSNAME=kieker.tools.traceAnalysis.TraceAnalysisTool
 
 REM Get the directory of this file and change the working directory to it.

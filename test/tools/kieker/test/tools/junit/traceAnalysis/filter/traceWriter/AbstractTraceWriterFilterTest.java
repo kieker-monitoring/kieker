@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,7 @@
 
 package kieker.test.tools.junit.traceAnalysis.filter.traceWriter;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,18 +41,20 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.tools.util.BookstoreExecutionFactory;
+import kieker.test.tools.util.StringUtils;
 
 /**
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.5
  */
 public abstract class AbstractTraceWriterFilterTest extends AbstractKiekerTest {
 
+	/** This constant contains the line separator for the current system. */
 	protected static final String SYSTEM_NEWLINE_STRING = System.getProperty("line.separator");
 
 	private static final String OUTPUT_BASE_FN = "NLdQ3wsS.out"; // the name doesn't matter
-	private static final String ENCODING = "UTF-8";
 
 	private static final String SESSION_ID = "Kzx7Gd5zMF"; // the value doesn't matter
 	private static final String HOSTNAME = "srv-FtfN0uwban"; // the value doesn't matter
@@ -67,22 +67,31 @@ public abstract class AbstractTraceWriterFilterTest extends AbstractKiekerTest {
 	private static final int INITIAL_TIMESTAMP_INVALID_EXEC_TRACE = AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_VALID_EXEC_TRACE + 300;
 	private static final int INITIAL_TIMESTAMP_VALID_MESSAGE_TRACE = AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_INVALID_EXEC_TRACE + 300;
 
+	/**
+	 * A rule making sure that a temporary folder exists for every test method (which is removed after the test).
+	 */
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
 
-	private final SystemModelRepository modelRepo = new SystemModelRepository(new Configuration());
+	private final AnalysisController analysisController = new AnalysisController();
+	private final SystemModelRepository modelRepo = new SystemModelRepository(new Configuration(), this.analysisController);
 
 	private final BookstoreExecutionFactory execFactory = new BookstoreExecutionFactory(this.modelRepo);
 
 	private volatile File outputFile = null; // NOPMD (init for fb)
 
+	/**
+	 * Initializes the test setup.
+	 * 
+	 * @throws Exception
+	 */
 	@Before
 	public void setUp() throws Exception {
 		this.tmpFolder.create();
 		this.outputFile = this.tmpFolder.newFile(AbstractTraceWriterFilterTest.OUTPUT_BASE_FN);
 	}
 
-	protected abstract AbstractTraceProcessingFilter provideWriterFilter(String filename) throws IOException;
+	protected abstract AbstractTraceProcessingFilter provideWriterFilter(String filename, AnalysisController ctrl) throws IOException;
 
 	protected abstract String provideFilterInputName();
 
@@ -94,7 +103,7 @@ public abstract class AbstractTraceWriterFilterTest extends AbstractKiekerTest {
 				AbstractTraceWriterFilterTest.SESSION_ID, AbstractTraceWriterFilterTest.HOSTNAME,
 				AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_VALID_EXEC_TRACE + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry0_0__bookstore_searchBook,
 				AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_VALID_EXEC_TRACE + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook,
-				/* assumed: */false));
+				false)); // assumed
 		execTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION); // just to make sure this trace is really valid
 		return execTrace;
 	}
@@ -105,7 +114,7 @@ public abstract class AbstractTraceWriterFilterTest extends AbstractKiekerTest {
 				AbstractTraceWriterFilterTest.SESSION_ID, AbstractTraceWriterFilterTest.HOSTNAME,
 				AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_VALID_MESSAGE_TRACE + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry0_0__bookstore_searchBook,
 				AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_VALID_MESSAGE_TRACE + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook,
-				/* assumed: */false));
+				false)); // assumed
 		execTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION); // just to make sure this trace is really valid
 		return execTrace;
 	}
@@ -116,13 +125,13 @@ public abstract class AbstractTraceWriterFilterTest extends AbstractKiekerTest {
 				AbstractTraceWriterFilterTest.SESSION_ID, AbstractTraceWriterFilterTest.HOSTNAME,
 				AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_INVALID_EXEC_TRACE + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry1_1__catalog_getBook,
 				AbstractTraceWriterFilterTest.INITIAL_TIMESTAMP_INVALID_EXEC_TRACE + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit1_1__catalog_getBook,
-				/* assumed: */false));
+				false)); // assumed
 
 		try {
 			execTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 			Assert.fail("Test invalid: wanted to create an *invalid* trace");
 		} catch (final InvalidTraceException e) { // NOPMD (EmptyCatchBlock)
-			/* that's what we expect here */
+			// that's what we expect here
 		}
 		return new InvalidExecutionTrace(execTrace);
 	}
@@ -137,39 +146,19 @@ public abstract class AbstractTraceWriterFilterTest extends AbstractKiekerTest {
 
 	@Test
 	public void testIt() throws Exception {
-		final AbstractTraceProcessingFilter filter = this.provideWriterFilter(this.outputFile.getAbsolutePath());
+		final AbstractTraceProcessingFilter filter = this.provideWriterFilter(this.outputFile.getAbsolutePath(), this.analysisController);
 
-		final ListReader<Object> reader = new ListReader<Object>(new Configuration());
+		final ListReader<Object> reader = new ListReader<Object>(new Configuration(), this.analysisController);
 		final List<Object> eventList = this.createTraces();
 		reader.addAllObjects(eventList);
 
-		final AnalysisController analysisController = new AnalysisController();
-		analysisController.registerFilter(filter);
-		analysisController.registerReader(reader);
-		analysisController.registerRepository(this.modelRepo);
-		analysisController.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, this.provideFilterInputName());
-		analysisController.connect(filter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.modelRepo);
-		analysisController.run();
+		this.analysisController.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, this.provideFilterInputName());
+		this.analysisController.connect(filter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.modelRepo);
+		this.analysisController.run();
 
-		final String actualFileContent = this.readOutputFileAsString();
+		final String actualFileContent = StringUtils.readOutputFileAsString(this.outputFile);
 		final String expectedFileContent = this.provideExpectedFileContent(eventList);
 		Assert.assertEquals("Unexpected file content", expectedFileContent, actualFileContent);
-	}
-
-	private String readOutputFileAsString() throws IOException {
-		final byte[] buffer = new byte[(int) this.outputFile.length()];
-		BufferedInputStream f = null;
-		try {
-			f = new BufferedInputStream(new FileInputStream(this.outputFile));
-			if (f.read(buffer) == -1) {
-				Assert.fail("Failed to read file into buffer: " + this.outputFile.getAbsolutePath());
-			}
-		} finally {
-			if (f != null) {
-				f.close();
-			}
-		}
-		return new String(buffer, AbstractTraceWriterFilterTest.ENCODING);
 	}
 
 	@After

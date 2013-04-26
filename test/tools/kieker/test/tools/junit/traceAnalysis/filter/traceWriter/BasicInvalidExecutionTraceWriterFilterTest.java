@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package kieker.test.tools.junit.traceAnalysis.filter.traceWriter;
 import java.io.IOException;
 import java.util.List;
 
+import kieker.analysis.AnalysisController;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.filter.AbstractTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.traceWriter.InvalidExecutionTraceWriterFilter;
@@ -28,19 +29,23 @@ import kieker.tools.traceAnalysis.systemModel.InvalidExecutionTrace;
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.5
  */
 public class BasicInvalidExecutionTraceWriterFilterTest extends AbstractTraceWriterFilterTest { // NOPMD (TestClassWithoutTestCases)
 
+	/**
+	 * Default constructor.
+	 */
 	public BasicInvalidExecutionTraceWriterFilterTest() {
 		// empty default constructor
 	}
 
 	@Override
-	protected AbstractTraceProcessingFilter provideWriterFilter(final String filename) throws IOException {
+	protected AbstractTraceProcessingFilter provideWriterFilter(final String filename, final AnalysisController analysisController) throws IOException {
 		final Configuration filterConfiguration = new Configuration();
 		filterConfiguration.setProperty(InvalidExecutionTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN, filename);
 
-		return new InvalidExecutionTraceWriterFilter(filterConfiguration);
+		return new InvalidExecutionTraceWriterFilter(filterConfiguration, analysisController);
 	}
 
 	@Override

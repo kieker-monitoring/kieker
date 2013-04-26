@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,11 +22,11 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.IAnalysisController;
+import kieker.analysis.analysisComponent.AbstractAnalysisComponent;
 import kieker.analysis.exception.AnalysisConfigurationException;
-import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
-import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 
 import kieker.test.analysis.util.plugin.filter.SimpleForwardFilterWithRepository;
@@ -37,58 +37,75 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * A simple test for the plugins in general. It tests for example if the chaining of different plugins does work.
  * 
  * @author Nils Christian Ehmke, Jan Waller
+ * 
+ * @since 1.6
  */
 public class TestPlugin extends AbstractKiekerTest {
 
+	/**
+	 * Default constructor.
+	 */
 	public TestPlugin() {
 		// empty default constructor
 	}
 
+	/**
+	 * This method tests some attributes of plugins.
+	 */
 	@Test
 	public void testPluginAttributes() {
+		final IAnalysisController ac = new AnalysisController();
 		final Configuration myPluginConfig = new Configuration();
 		// Set a name in order to test the getName() function below
 		final String myPluginName = "name-ieuIyxLG";
-		myPluginConfig.setProperty(AbstractPlugin.CONFIG_NAME, myPluginName);
-		final SimpleForwardFilterWithRepository sourcePlugin = new SimpleForwardFilterWithRepository(myPluginConfig);
+		myPluginConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, myPluginName);
+		final SimpleForwardFilterWithRepository sourcePlugin = new SimpleForwardFilterWithRepository(myPluginConfig, ac);
 		Assert.assertEquals("Unexpected plugin name", myPluginName, sourcePlugin.getName());
 		// Test if name and description from the annotation are returned correctly
 		Assert.assertEquals("Unexpected plugin type name", SimpleForwardFilterWithRepository.FILTER_NAME, sourcePlugin.getPluginName());
 		Assert.assertEquals("Unexpected plugin description", SimpleForwardFilterWithRepository.FILTER_DESCRIPTION, sourcePlugin.getPluginDescription());
 	}
 
+	/**
+	 * This method tests whether the repository class works.
+	 */
 	@Test
 	public void testRepository() {
+		final IAnalysisController ac = new AnalysisController();
 		final Configuration myRepoConfig = new Configuration();
 		// Set a name in order to test the getName() function below
 		final String myRepoName = "name-22db22rLQ";
-		myRepoConfig.setProperty(AbstractRepository.CONFIG_NAME, myRepoName);
-		final SimpleRepository myRepo = new SimpleRepository(myRepoConfig);
+		myRepoConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, myRepoName);
+		final SimpleRepository myRepo = new SimpleRepository(myRepoConfig, ac);
 		Assert.assertEquals("Unexpected repository name", myRepoName, myRepo.getName());
 		// Test if name and description from the annotation are returned correctly
 		Assert.assertEquals("Unexpected repository type name", SimpleRepository.REPOSITORY_NAME, myRepo.getRepositoryName());
 		Assert.assertEquals("Unexpected repository description", SimpleRepository.REPOSITORY_DESCRIPTION, myRepo.getRepositoryDescription());
 	}
 
+	/**
+	 * This method tests whether the chaining of filters, readers, and repositories is working.
+	 * 
+	 * @throws IllegalStateException
+	 *             If something went wrong during the test.
+	 * @throws AnalysisConfigurationException
+	 *             If something went wrong during the test.
+	 */
 	@Test
 	public void testChaining() throws IllegalStateException, AnalysisConfigurationException {
 		final Object testObject1 = new Object();
 		final Object testObject2 = new Object();
 
-		final SimpleRepository simpleRepository = new SimpleRepository(new Configuration());
-		final ListReader<Object> simpleListReader = new ListReader<Object>(new Configuration());
+		final IAnalysisController analysisController = new AnalysisController();
+
+		final SimpleRepository simpleRepository = new SimpleRepository(new Configuration(), analysisController);
+		final ListReader<Object> simpleListReader = new ListReader<Object>(new Configuration(), analysisController);
 		simpleListReader.addObject(testObject1);
 		simpleListReader.addObject(testObject2);
-		final SimpleForwardFilterWithRepository simpleFilter = new SimpleForwardFilterWithRepository(new Configuration());
-		final ListCollectionFilter<Object> simpleSinkPlugin = new ListCollectionFilter<Object>(new Configuration());
+		final SimpleForwardFilterWithRepository simpleFilter = new SimpleForwardFilterWithRepository(new Configuration(), analysisController);
+		final ListCollectionFilter<Object> simpleSinkPlugin = new ListCollectionFilter<Object>(new Configuration(), analysisController);
 
-		final AnalysisController analysisController = new AnalysisController();
-		analysisController.registerRepository(simpleRepository);
-		analysisController.registerReader(simpleListReader);
-		analysisController.registerFilter(simpleFilter);
-		analysisController.registerFilter(simpleSinkPlugin);
-
-		/* Connect the plugins. */
+		// Connect the plugins.
 		analysisController.connect(
 				simpleListReader, ListReader.OUTPUT_PORT_NAME,
 				simpleFilter, SimpleForwardFilterWithRepository.INPUT_PORT_NAME);

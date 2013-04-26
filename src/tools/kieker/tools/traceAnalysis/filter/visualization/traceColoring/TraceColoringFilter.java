@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -50,6 +51,8 @@ import kieker.tools.traceAnalysis.systemModel.TraceInformation;
  *            The type of the graph's vertices
  * @param <E>
  *            The type of the graph's edges
+ * 
+ * @since 1.6
  */
 @Plugin(name = "Trace coloring filter",
 		description = "Colors graph elements that can uniquely associated to a trace according to the color repository",
@@ -71,10 +74,12 @@ public class TraceColoringFilter<V extends AbstractVertex<V, E, TraceInformation
 	 * Creates a new filter using the given configuration.
 	 * 
 	 * @param configuration
-	 *            The configuration to use for this filter
+	 *            The configuration to use for this filter.
+	 * @param projectContext
+	 *            The project context to use for this filter.
 	 */
-	public TraceColoringFilter(final Configuration configuration) {
-		super(configuration);
+	public TraceColoringFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
 	}
 
 	private void initialize() {
@@ -113,14 +118,23 @@ public class TraceColoringFilter<V extends AbstractVertex<V, E, TraceInformation
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void visitVertex(final V vertex) {
 		this.handleGraphElement(vertex);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void visitEdge(final E edge) {
 		this.handleGraphElement(edge);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected AbstractGraph<V, E, TraceInformation> performConcreteGraphProcessing(final AbstractGraph<V, E, TraceInformation> graph) {
 		this.initialize();
@@ -130,6 +144,9 @@ public class TraceColoringFilter<V extends AbstractVertex<V, E, TraceInformation
 		return graph;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected IOriginRetentionPolicy getDesiredOriginRetentionPolicy() throws AnalysisConfigurationException {
 		final TraceColorRepository colorRepository = (TraceColorRepository) super.getRepository(COLOR_REPOSITORY_PORT_NAME);

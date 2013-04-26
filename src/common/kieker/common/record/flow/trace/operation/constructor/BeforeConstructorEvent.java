@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@ import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 public class BeforeConstructorEvent extends BeforeOperationEvent {
 	private static final long serialVersionUID = 6255387982554604813L;
@@ -31,14 +33,42 @@ public class BeforeConstructorEvent extends BeforeOperationEvent {
 		String.class, // OperationEvent.classSignature
 	};
 
-	public BeforeConstructorEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSiganture, final String classSignature) {
-		super(timestamp, traceId, orderIndex, operationSiganture, classSignature);
+	/**
+	 * This constructor uses the given parameters to initialize the fields of this record.
+	 * 
+	 * @param timestamp
+	 *            The timestamp of this record.
+	 * @param traceId
+	 *            The trace ID.
+	 * @param orderIndex
+	 *            The order index.
+	 * @param operationSignature
+	 *            The operation signature. This parameter can be null.
+	 * @param classSignature
+	 *            The class signature. This parameter can be null.
+	 */
+	public BeforeConstructorEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature) {
+		super(timestamp, traceId, orderIndex, operationSignature, classSignature);
 	}
 
+	/**
+	 * This constructor converts the given array into a record. It is recommended to use the array which is the result of a call to {@link #toArray()}.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 */
 	public BeforeConstructorEvent(final Object[] values) {
 		super(values, TYPES); // values[0..4]
 	}
 
+	/**
+	 * This constructor uses the given array to initialize the fields of this record.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 * @param types
+	 *            The types of the elements in the first array.
+	 */
 	protected BeforeConstructorEvent(final Object[] values, final Class<?>[] types) {
 		super(values, types); // values[0..4]
 	}
