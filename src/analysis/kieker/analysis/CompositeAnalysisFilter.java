@@ -39,7 +39,7 @@ import kieker.common.configuration.Configuration;
 @Plugin(outputPorts = {
 	@OutputPort(name = "out", eventTypes = Object.class),
 	@OutputPort(name = "internalInputPort", eventTypes = Object.class) })
-public abstract class CompositeAnalysisFilter extends AbstractFilterPlugin {
+public class CompositeAnalysisFilter extends AbstractFilterPlugin {
 
 	private final List<AbstractAnalysisComponent> components = Collections.synchronizedList(new ArrayList<AbstractAnalysisComponent>());
 
@@ -80,6 +80,16 @@ public abstract class CompositeAnalysisFilter extends AbstractFilterPlugin {
 	@InputPort(name = "internalOutputPort", eventTypes = Object.class)
 	public void out(final Object obj) {
 		this.deliver("out", obj);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.analysis.analysisComponent.AbstractAnalysisComponent#getCurrentConfiguration()
+	 */
+	@Override
+	public Configuration getCurrentConfiguration() {
+		return new Configuration();
 	}
 
 }

@@ -234,6 +234,10 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		this.projectName = this.getProperty(CONFIG_PROPERTY_NAME_PROJECT_NAME);
 	}
 
+	public void initializeDistributedMode(final String name, final boolean supervisorNode) {
+
+	}
+
 	/**
 	 * This simple helper method validates the configuration object.
 	 * 
