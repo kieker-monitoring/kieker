@@ -110,7 +110,7 @@ public final class TimeReader extends AbstractReaderPlugin {
 		}
 		this.timeunit = recordTimeunit;
 
-		this.terminated = true ^ this.blockingRead; // !this.blockingRead
+		this.terminated = !this.blockingRead;
 	}
 
 	/**
