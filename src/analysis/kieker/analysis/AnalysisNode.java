@@ -33,6 +33,7 @@ import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 
@@ -41,10 +42,20 @@ import kieker.common.configuration.Configuration;
  * 
  * @since 1.8
  */
-@Plugin(outputPorts = {
-	@OutputPort(name = "out", eventTypes = Object.class),
-	@OutputPort(name = "internalOutputPort", eventTypes = Object.class) })
+@Plugin(
+		outputPorts = {
+			@OutputPort(name = "out", eventTypes = Object.class),
+			@OutputPort(name = "internalOutputPort", eventTypes = Object.class) },
+		configuration = {
+			@Property(name = AnalysisNode.CONFIG_PROPERTY_NAME_MOM_SERVER, defaultValue = "localhost"),
+			@Property(name = AnalysisNode.CONFIG_PROPERTY_NAME_DISTRIBUTED, defaultValue = "false"),
+			@Property(name = AnalysisNode.CONFIG_PROPERTY_NAME_NODE_NAME, defaultValue = "kieker-node"),
+		})
 public class AnalysisNode extends AbstractFilterPlugin {
+
+	public static final String CONFIG_PROPERTY_NAME_MOM_SERVER = "server";
+	public static final String CONFIG_PROPERTY_NAME_DISTRIBUTED = "distributed";
+	public static final String CONFIG_PROPERTY_NAME_NODE_NAME = "nodeName";
 
 	public static final String INPUT_PORT_NAME_EVENTS = "receivedEvents";
 	public static final String OUTPUT_PORT_NAME_EVENTS = "sentEvents";
@@ -54,23 +65,22 @@ public class AnalysisNode extends AbstractFilterPlugin {
 
 	protected static final String DATA_EXCHANGE_NAME = "net.kieker-monitoring.analysis.data";
 
-	private final BlockingQueue<Object> sendQueue = new LinkedBlockingQueue<Object>();
+	private final BlockingQueue<Object> sendQueue;
 	private final String name;
 	private final boolean distributed;
 	private final Channel receiveChannel;
 	private final Channel sendChannel;
 	private final String receiveQueueName;
 
-	public AnalysisNode(final Configuration configuration, final IProjectContext projectContext, final String name, final boolean distributed) throws IOException {
+	public AnalysisNode(final Configuration configuration, final IProjectContext projectContext) throws IOException {
 		super(configuration, projectContext);
 
-		// TODO: As configuration
-		this.name = name;
-		this.distributed = distributed;
+		this.name = configuration.getStringProperty(CONFIG_PROPERTY_NAME_NODE_NAME);
+		this.distributed = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_DISTRIBUTED);
 
-		if (distributed) {
+		if (this.distributed) {
 			final ConnectionFactory factory = new ConnectionFactory();
-			factory.setHost("localhost");
+			factory.setHost(configuration.getStringProperty(CONFIG_PROPERTY_NAME_MOM_SERVER));
 
 			this.receiveChannel = factory.newConnection().createChannel();
 			this.receiveChannel.exchangeDeclare(DATA_EXCHANGE_NAME, "topic");
@@ -78,10 +88,13 @@ public class AnalysisNode extends AbstractFilterPlugin {
 
 			this.sendChannel = factory.newConnection().createChannel();
 			this.sendChannel.exchangeDeclare(DATA_EXCHANGE_NAME, "topic");
+
+			this.sendQueue = new LinkedBlockingQueue<Object>();
 		} else {
 			this.receiveChannel = null;
 			this.sendChannel = null;
 			this.receiveQueueName = null;
+			this.sendQueue = null;
 		}
 	}
 
@@ -106,7 +119,9 @@ public class AnalysisNode extends AbstractFilterPlugin {
 	}
 
 	public final void connect(final String predecessorNode) throws IOException {
-		this.receiveChannel.queueBind(this.receiveQueueName, DATA_EXCHANGE_NAME, predecessorNode);
+		if (this.distributed) {
+			this.receiveChannel.queueBind(this.receiveQueueName, DATA_EXCHANGE_NAME, predecessorNode);
+		}
 	}
 
 	/**
@@ -139,7 +154,9 @@ public class AnalysisNode extends AbstractFilterPlugin {
 
 	@InputPort(name = INTERNAL_INPUT_PORT_NAME_EVENTS, eventTypes = Object.class)
 	public final void internalInputPort(final Object data) {
-		this.sendQueue.add(data);
+		if (this.distributed) {
+			this.sendQueue.add(data);
+		}
 		super.deliver(OUTPUT_PORT_NAME_EVENTS, data);
 	}
 
