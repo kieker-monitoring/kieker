@@ -28,7 +28,6 @@ import kieker.tools.opad.record.ForecastMeasurementPair;
 import kieker.tools.opad.record.IForecastMeasurementPair;
 import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
 import kieker.tools.tslib.ITimeSeriesPoint;
-import kieker.tools.tslib.forecast.IForecastResult;
 
 /**
  * This Filter brings a Measurement Point and a corresponding Forecasting value together.
@@ -58,7 +57,7 @@ public class UniteMeasurementPairFilter extends AbstractFilterPlugin {
 	/**
 	 * Stores incoming measurements and forecasts until a corresponding forecast or measurement is found.
 	 */
-	private final ConcurrentHashMap<Long, ITimeSeriesPoint<Double>> tsPointMap;
+	private final ConcurrentHashMap<Long, NamedDoubleTimeSeriesPoint> tsPointMap;
 
 	private volatile boolean firstTSPoint = true;
 
@@ -73,7 +72,7 @@ public class UniteMeasurementPairFilter extends AbstractFilterPlugin {
 	public UniteMeasurementPairFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
-		this.tsPointMap = new ConcurrentHashMap<Long, ITimeSeriesPoint<Double>>();
+		this.tsPointMap = new ConcurrentHashMap<Long, NamedDoubleTimeSeriesPoint>();
 	}
 
 	@Override
@@ -89,6 +88,7 @@ public class UniteMeasurementPairFilter extends AbstractFilterPlugin {
 	 */
 	@InputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = UniteMeasurementPairFilter.INPUT_PORT_NAME_TSPOINT)
 	public void inputTSPoint(final NamedDoubleTimeSeriesPoint input) {
+		System.out.println("timestampmeasurements: " + input.getTime().getTime());
 		if (!this.checkCorrespondingForecast(input)) {
 			// no matching point found --> add it to the waiting map
 			this.addTsPoint(input);
@@ -101,9 +101,10 @@ public class UniteMeasurementPairFilter extends AbstractFilterPlugin {
 	 * @param input
 	 *            The incoming forecast.
 	 */
-	@InputPort(eventTypes = { IForecastResult.class }, name = UniteMeasurementPairFilter.INPUT_PORT_NAME_FORECAST)
-	public void inputForecastValue(final IForecastResult<Double> input) {
-		final ITimeSeriesPoint<Double> pointFromForecast = input.getForecast().getPoints().get(0);
+	@InputPort(eventTypes = { IForecastMeasurementPair.class }, name = UniteMeasurementPairFilter.INPUT_PORT_NAME_FORECAST)
+	public void inputForecastValue(final IForecastMeasurementPair input) {
+		System.out.println("timestampforecasts: " + input.getTime().getTime());
+		final NamedDoubleTimeSeriesPoint pointFromForecast = new NamedDoubleTimeSeriesPoint(input.getTime(), input.getForecasted(), input.getName());
 		if (!this.checkCorrespondingMeasurement(pointFromForecast)) {
 			// no matching point found --> add it to the waiting map
 			this.addTsPoint(pointFromForecast);
@@ -117,7 +118,7 @@ public class UniteMeasurementPairFilter extends AbstractFilterPlugin {
 	 * @param p
 	 *            TimeSeriesPoint to add.
 	 */
-	private void addTsPoint(final ITimeSeriesPoint<Double> p) {
+	private void addTsPoint(final NamedDoubleTimeSeriesPoint p) {
 		this.tsPointMap.put(p.getTime().getTime(), p);
 	}
 
@@ -151,6 +152,7 @@ public class UniteMeasurementPairFilter extends AbstractFilterPlugin {
 						p.getValue(),
 						p.getTime());
 				super.deliver(OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, fmp);
+				System.out.println("deliveredm");
 				return true;
 			}
 			return false;
@@ -170,13 +172,14 @@ public class UniteMeasurementPairFilter extends AbstractFilterPlugin {
 	private boolean checkCorrespondingMeasurement(final ITimeSeriesPoint<Double> p) {
 		final long key = p.getTime().getTime();
 		if (this.tsPointMap.containsKey(key)) {
-			final NamedDoubleTimeSeriesPoint m = (NamedDoubleTimeSeriesPoint) this.tsPointMap.get(key);
+			final NamedDoubleTimeSeriesPoint m = this.tsPointMap.get(key);
 			final ForecastMeasurementPair fmp = new ForecastMeasurementPair(
 					m.getName(),
 					p.getValue(),
 					m.getValue(),
 					m.getTime());
 			super.deliver(OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, fmp);
+			System.out.println("deliveredf");
 			return true;
 		}
 		return false;

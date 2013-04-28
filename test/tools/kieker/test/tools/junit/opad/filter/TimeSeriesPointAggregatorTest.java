@@ -26,7 +26,7 @@ import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
-import kieker.tools.opad.filter.TimeSeriesPointAggregator;
+import kieker.tools.opad.filter.TimeSeriesPointAggregatorFilter;
 import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
 
 /**
@@ -42,7 +42,7 @@ public class TimeSeriesPointAggregatorTest {
 
 	// Variables ForecastingFilter
 	private ListReader<NamedDoubleTimeSeriesPoint> theReaderAggregator;
-	private TimeSeriesPointAggregator aggregator;
+	private TimeSeriesPointAggregatorFilter aggregator;
 	private ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPlugin;
 
 	public TimeSeriesPointAggregatorTest() {
@@ -72,19 +72,19 @@ public class TimeSeriesPointAggregatorTest {
 
 		// AGGREGATIONFILTER
 		final Configuration aggregationConfiguration = new Configuration();
-		aggregationConfiguration.setProperty(TimeSeriesPointAggregator.CONFIG_PROPERTY_NAME_AGGREGATION_SPAN, "0");
-		aggregationConfiguration.setProperty(TimeSeriesPointAggregator.CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT, "MILLISECONDS");
+		aggregationConfiguration.setProperty(TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_SPAN, "10");
+		aggregationConfiguration.setProperty(TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT, "MILLISECONDS");
 		// aggregationConfiguration.setProperty(TimeSeriesPointAggregator.CONFIG_PROPERTY_NAME_AGGREGATION_METHOD, "MAX");
-		this.aggregator = new TimeSeriesPointAggregator(aggregationConfiguration, this.controller);
+		this.aggregator = new TimeSeriesPointAggregatorFilter(aggregationConfiguration, this.controller);
 
 		// SINK 1
 		this.sinkPlugin = new ListCollectionFilter<NamedDoubleTimeSeriesPoint>(new Configuration(), this.controller);
 		Assert.assertTrue(this.sinkPlugin.getList().isEmpty());
 
 		// CONNECTION
-		this.controller.connect(this.theReaderAggregator, ListReader.OUTPUT_PORT_NAME, this.aggregator, TimeSeriesPointAggregator.INPUT_PORT_NAME_TSPOINT);
+		this.controller.connect(this.theReaderAggregator, ListReader.OUTPUT_PORT_NAME, this.aggregator, TimeSeriesPointAggregatorFilter.INPUT_PORT_NAME_TSPOINT);
 		this.controller.connect(this.aggregator,
-				TimeSeriesPointAggregator.OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, this.sinkPlugin,
+				TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, this.sinkPlugin,
 				ListCollectionFilter.INPUT_PORT_NAME);
 		Assert.assertEquals(0, this.sinkPlugin.getList().size());
 		this.controller.run();

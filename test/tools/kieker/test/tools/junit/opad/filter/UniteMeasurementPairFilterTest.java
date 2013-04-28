@@ -19,7 +19,6 @@ package kieker.test.tools.junit.opad.filter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -31,13 +30,10 @@ import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
-import kieker.tools.opad.filter.ForecastingFilter;
 import kieker.tools.opad.filter.UniteMeasurementPairFilter;
 import kieker.tools.opad.record.ForecastMeasurementPair;
+import kieker.tools.opad.record.IForecastMeasurementPair;
 import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
-import kieker.tools.tslib.TimeSeries;
-import kieker.tools.tslib.forecast.ForecastResult;
-import kieker.tools.tslib.forecast.IForecastResult;
 
 /**
  * 
@@ -52,7 +48,7 @@ public class UniteMeasurementPairFilterTest {
 
 	// Variables UniteFilter
 	private ListReader<NamedDoubleTimeSeriesPoint> theReaderUniteTSPoints;
-	private ListReader<IForecastResult<Double>> theReaderUniteForecast;
+	private ListReader<IForecastMeasurementPair> theReaderUniteForecast;
 	private UniteMeasurementPairFilter unite;
 	private ListCollectionFilter<ForecastMeasurementPair> sinkPlugin;
 
@@ -66,11 +62,9 @@ public class UniteMeasurementPairFilterTest {
 		return r;
 	}
 
-	private IForecastResult<Double> createFR(final Date d, final double value) {
-		final TimeSeries<Double> ts = new TimeSeries<Double>(d, 1, TimeUnit.MICROSECONDS);
-		ts.append(value);
-		final IForecastResult<Double> r = new ForecastResult(ts, null);
-		return r;
+	private IForecastMeasurementPair createFMP(final Date d, final double value) {
+		final IForecastMeasurementPair fmp = new ForecastMeasurementPair(OP_SIGNATURE_A, value, 1.0, d);
+		return fmp;
 	}
 
 	private List<NamedDoubleTimeSeriesPoint> createInputEventSetUnite() {
@@ -82,12 +76,12 @@ public class UniteMeasurementPairFilterTest {
 		return retList;
 	}
 
-	private List<IForecastResult<Double>> createInputEventSetUniteForecast() {
-		final List<IForecastResult<Double>> retList = new ArrayList<IForecastResult<Double>>();
-		retList.add(this.createFR(new Date(5L), 0.35));
-		retList.add(this.createFR(new Date(10L), 0.45));
-		retList.add(this.createFR(new Date(15L), 0.55));
-		retList.add(this.createFR(new Date(20L), 0.95));
+	private List<IForecastMeasurementPair> createInputEventSetUniteForecast() {
+		final List<IForecastMeasurementPair> retList = new ArrayList<IForecastMeasurementPair>();
+		retList.add(this.createFMP(new Date(5L), 0.35));
+		retList.add(this.createFMP(new Date(10L), 0.45));
+		retList.add(this.createFMP(new Date(15L), 0.55));
+		retList.add(this.createFMP(new Date(20L), 0.95));
 		return retList;
 	}
 
@@ -105,15 +99,11 @@ public class UniteMeasurementPairFilterTest {
 		// READER Forecasts
 		final Configuration readerUniteConfigurationForecast = new Configuration();
 		readerUniteConfigurationForecast.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
-		this.theReaderUniteForecast = new ListReader<IForecastResult<Double>>(readerUniteConfigurationForecast, this.controller);
+		this.theReaderUniteForecast = new ListReader<IForecastMeasurementPair>(readerUniteConfigurationForecast, this.controller);
 		this.theReaderUniteForecast.addAllObjects(this.createInputEventSetUniteForecast());
 
 		// UniteMeasurementPair Filter
 		final Configuration uniteConfiguration = new Configuration();
-		uniteConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_DELTA_TIME, "1000");
-		uniteConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_DELTA_UNIT,
-				"MILLISECONDS");
-		uniteConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_FC_METHOD, "MEAN");
 		this.unite = new UniteMeasurementPairFilter(uniteConfiguration, this.controller);
 
 		// SINK 1
