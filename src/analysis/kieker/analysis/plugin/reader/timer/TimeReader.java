@@ -49,7 +49,7 @@ import kieker.common.record.misc.TimestampRecord;
 @Plugin(
 		description = "Delivers the current (system) time in regular intervals",
 		outputPorts = {
-			@OutputPort(name = TimeReader.OUTPUT_PORT_NAME_TIMESTAMPS, eventTypes = Long.class, asynchronous = true),
+			@OutputPort(name = TimeReader.OUTPUT_PORT_NAME_TIMESTAMPS, eventTypes = Long.class),
 			@OutputPort(name = TimeReader.OUTPUT_PORT_NAME_TIMESTAMP_RECORDS, eventTypes = TimestampRecord.class)
 		},
 		configuration = {

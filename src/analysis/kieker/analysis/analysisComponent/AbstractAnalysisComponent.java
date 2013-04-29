@@ -18,7 +18,6 @@ package kieker.analysis.analysisComponent;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import kieker.analysis.AnalysisNode;
 import kieker.analysis.IProjectContext;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -56,7 +55,7 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 
 	private final String name;
 
-	private volatile AnalysisNode analyisNode;
+	protected volatile AbstractAnalysisComponent containerComponent;
 
 	/**
 	 * Each AnalysisComponent requires a constructor with a Configuration object and a IProjectContext.
@@ -103,7 +102,14 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 		return this.name;
 	}
 
-	public void registerWithinComponent(final AnalysisNode analyisNode) {
-		this.analyisNode = analyisNode;
+	/**
+	 * This method can be used to show that this component is contained within another component. <b>Do not call this method manually. It is for internal use
+	 * only!</b> (Normally this should be an instance of {@link kieker.analysis.plugin.AnalysisNode}).
+	 * 
+	 * @param containerComponent
+	 *            The component which contains this.
+	 */
+	public final void registerWithinComponent(final AbstractAnalysisComponent containerComponent) {
+		this.containerComponent = containerComponent;
 	}
 }

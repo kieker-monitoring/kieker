@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis;
+package kieker.analysis.plugin;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -27,15 +27,18 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.QueueingConsumer;
 
+import kieker.analysis.AnalysisController;
+import kieker.analysis.IProjectContext;
 import kieker.analysis.analysisComponent.AbstractAnalysisComponent;
 import kieker.analysis.exception.AnalysisConfigurationException;
-import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 
 /**
  * @author Nils Christian Ehmke
@@ -65,8 +68,13 @@ public class AnalysisNode extends AbstractFilterPlugin {
 
 	protected static final String DATA_EXCHANGE_NAME = "net.kieker-monitoring.analysis.data";
 
+	private static final Log LOG = LogFactory.getLog(AnalysisNode.class);
+
+	private final ReceiverThread receiverThread;
+	private final SenderThread senderThread;
 	private final BlockingQueue<Object> sendQueue;
 	private final String name;
+	private final String host;
 	private final boolean distributed;
 	private final Channel receiveChannel;
 	private final Channel sendChannel;
@@ -75,9 +83,12 @@ public class AnalysisNode extends AbstractFilterPlugin {
 	public AnalysisNode(final Configuration configuration, final IProjectContext projectContext) throws IOException {
 		super(configuration, projectContext);
 
+		// Get the properties
 		this.name = configuration.getStringProperty(CONFIG_PROPERTY_NAME_NODE_NAME);
 		this.distributed = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_DISTRIBUTED);
+		this.host = configuration.getStringProperty(CONFIG_PROPERTY_NAME_MOM_SERVER);
 
+		// Configure the plugin depending on whether this is a distributed or a local node.
 		if (this.distributed) {
 			final ConnectionFactory factory = new ConnectionFactory();
 			factory.setHost(configuration.getStringProperty(CONFIG_PROPERTY_NAME_MOM_SERVER));
@@ -90,37 +101,44 @@ public class AnalysisNode extends AbstractFilterPlugin {
 			this.sendChannel.exchangeDeclare(DATA_EXCHANGE_NAME, "topic");
 
 			this.sendQueue = new LinkedBlockingQueue<Object>();
+
+			this.senderThread = new SenderThread();
+			this.receiverThread = new ReceiverThread();
 		} else {
 			this.receiveChannel = null;
 			this.sendChannel = null;
 			this.receiveQueueName = null;
 			this.sendQueue = null;
+			this.receiverThread = null;
+			this.senderThread = null;
 		}
 	}
 
 	@Override
 	public boolean init() {
+		// Start both threads if necessary
 		if (this.distributed) {
-			final Thread senderThread = new SenderThread();
-			final Thread receiverThread = new ReceiverThread();
-
-			senderThread.setDaemon(true);
-			receiverThread.setDaemon(true);
-
-			senderThread.start();
-			receiverThread.start();
+			this.senderThread.start();
+			this.receiverThread.start();
 		}
+
 		return true;
 	}
 
 	@Override
 	public void terminate(final boolean error) {
-		super.terminate(error);
+		// Terminate both threads if necessary
+		if (this.distributed) {
+			this.senderThread.terminate();
+			this.receiverThread.terminate();
+		}
 	}
 
-	public final void connect(final String predecessorNode) throws IOException {
+	public final void connect(final String predecessorNode) throws IOException, AnalysisConfigurationException {
 		if (this.distributed) {
 			this.receiveChannel.queueBind(this.receiveQueueName, DATA_EXCHANGE_NAME, predecessorNode);
+		} else {
+			throw new AnalysisConfigurationException("Node is not configured for distributed usage.");
 		}
 	}
 
@@ -154,6 +172,7 @@ public class AnalysisNode extends AbstractFilterPlugin {
 
 	@InputPort(name = INTERNAL_INPUT_PORT_NAME_EVENTS, eventTypes = Object.class)
 	public final void internalInputPort(final Object data) {
+		// If this node is configured for distributed access, we have to send the message to the MOM as well.
 		if (this.distributed) {
 			this.sendQueue.add(data);
 		}
@@ -170,42 +189,70 @@ public class AnalysisNode extends AbstractFilterPlugin {
 
 	@Override
 	public Configuration getCurrentConfiguration() {
-		return new Configuration();
+		final Configuration configuration = new Configuration();
+
+		configuration.setProperty(CONFIG_PROPERTY_NAME_MOM_SERVER, this.host);
+		configuration.setProperty(CONFIG_PROPERTY_NAME_NODE_NAME, this.name);
+		configuration.setProperty(CONFIG_PROPERTY_NAME_DISTRIBUTED, Boolean.toString(this.distributed));
+
+		return configuration;
 	}
 
 	class SenderThread extends Thread {
 
+		private volatile boolean terminated;
+
+		@SuppressWarnings("synthetic-access")
 		@Override
 		public void run() {
-			while (true) {
+			while (!this.terminated) {
 				try {
 					final Object data = AnalysisNode.this.sendQueue.take();
 					// TODO Replace SerializationUtils
 					AnalysisNode.this.sendChannel.basicPublish(DATA_EXCHANGE_NAME, AnalysisNode.this.name, null, SerializationUtils.serialize(data));
-				} catch (final Exception ex) {
-					ex.printStackTrace();
+				} catch (final InterruptedException ex) {
+					// We expect this to happen as it is possible that another method wants to terminate this thread.
+					LOG.info("SenderThread interrupted", ex);
+				} catch (final IOException ex) {
+					LOG.warn("Sending failed", ex);
 				}
 			}
+		}
+
+		public void terminate() {
+			this.terminated = true;
+			this.interrupt();
 		}
 
 	}
 
 	class ReceiverThread extends Thread {
 
+		private volatile boolean terminated;
+
+		@SuppressWarnings("synthetic-access")
 		@Override
 		public void run() {
 			try {
 				final QueueingConsumer consumer = new QueueingConsumer(AnalysisNode.this.receiveChannel);
 				AnalysisNode.this.receiveChannel.basicConsume(AnalysisNode.this.receiveQueueName, true, consumer);
 
-				while (true) {
+				while (!this.terminated) {
 					final QueueingConsumer.Delivery delivery = consumer.nextDelivery();
 					final Object data = SerializationUtils.deserialize(delivery.getBody());
 					AnalysisNode.this.deliver(INTERNAL_OUTPUT_PORT_NAME_EVENTS, data);
 				}
-			} catch (final Exception ex) {
-				ex.printStackTrace();
+			} catch (final InterruptedException ex) {
+				// We expect this to happen as it is possible that another method wants to terminate this thread.
+				LOG.info("ReceiverThread interrupted", ex);
+			} catch (final IOException ex) {
+				LOG.warn("Receiving failed", ex);
 			}
+		}
+
+		public void terminate() {
+			this.terminated = true;
+			this.interrupt();
 		}
 
 	}

@@ -139,10 +139,6 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		this.outgoingPlugins = new ArrayList<AbstractPlugin>(1); // usually only one outgoing
 	}
 
-	public void addAsynchronousModeForRepositoryPort(final String outputPortName) {
-
-	}
-
 	public void addAsynchronousModeForOutputPort(final String outputPortName) {
 
 	}
@@ -279,6 +275,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			throw new AnalysisConfigurationException("Failed to connect plugin '" + src.getName() + "' (" + src.getPluginName() + ") to plugin '"
 					+ dst.getName() + "' (" + dst.getPluginName() + ").");
 		}
+
 		// Connect the ports.
 		for (final Method m : dst.getClass().getMethods()) {
 			final InputPort ip = m.getAnnotation(InputPort.class);
@@ -333,6 +330,12 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			LOG.warn("Plugin: " + dst.getClass().getName() + " not in " + STATE.READY + " state, but in state " + dst.state + ".");
 			return false;
 		}
+
+		// Make sure that components within containers are only connected to components within the same container
+		// if (src.containerComponent != dst.containerComponent) {
+		// LOG.warn("Components are contained in different containers.");
+		// return false;
+		// }
 
 		// Second step: Check whether the ports exist.
 		final OutputPort outputPort = src.outputPorts.get(output);
