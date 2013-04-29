@@ -29,11 +29,16 @@ public interface ITimeSeriesPointsBuffer<T> {
 	 * 
 	 * @param o
 	 *            The Value to add
+	 * @return
+	 *         Returns true if Object is added successfully
 	 */
 	public boolean add(T o);
 
 	/**
 	 * Removes a Value from the buffer in FIFO order.
+	 * 
+	 * @return
+	 *         Returns the removed Object
 	 */
 	public T remove();
 

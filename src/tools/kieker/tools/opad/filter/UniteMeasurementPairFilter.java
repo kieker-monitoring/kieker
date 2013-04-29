@@ -88,7 +88,6 @@ public class UniteMeasurementPairFilter extends AbstractFilterPlugin {
 	 */
 	@InputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = UniteMeasurementPairFilter.INPUT_PORT_NAME_TSPOINT)
 	public void inputTSPoint(final NamedDoubleTimeSeriesPoint input) {
-		System.out.println("timestampmeasurements: " + input.getTime().getTime());
 		if (!this.checkCorrespondingForecast(input)) {
 			// no matching point found --> add it to the waiting map
 			this.addTsPoint(input);
@@ -103,7 +102,6 @@ public class UniteMeasurementPairFilter extends AbstractFilterPlugin {
 	 */
 	@InputPort(eventTypes = { IForecastMeasurementPair.class }, name = UniteMeasurementPairFilter.INPUT_PORT_NAME_FORECAST)
 	public void inputForecastValue(final IForecastMeasurementPair input) {
-		System.out.println("timestampforecasts: " + input.getTime().getTime());
 		final NamedDoubleTimeSeriesPoint pointFromForecast = new NamedDoubleTimeSeriesPoint(input.getTime(), input.getForecasted(), input.getName());
 		if (!this.checkCorrespondingMeasurement(pointFromForecast)) {
 			// no matching point found --> add it to the waiting map
@@ -152,7 +150,6 @@ public class UniteMeasurementPairFilter extends AbstractFilterPlugin {
 						p.getValue(),
 						p.getTime());
 				super.deliver(OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, fmp);
-				System.out.println("deliveredm");
 				return true;
 			}
 			return false;
@@ -179,7 +176,6 @@ public class UniteMeasurementPairFilter extends AbstractFilterPlugin {
 					m.getValue(),
 					m.getTime());
 			super.deliver(OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, fmp);
-			System.out.println("deliveredf");
 			return true;
 		}
 		return false;

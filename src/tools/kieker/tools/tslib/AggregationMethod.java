@@ -24,9 +24,16 @@ import org.apache.commons.math.stat.StatUtils;
  * 
  */
 public enum AggregationMethod {
-	// TODO: PERCENTILE - Configurable Percentile?
 	GEOMETRIC_MEAN, MAX, MEAN, MIN, PERCENTILE90, PERCENTILE95, PRODUCT, SUM, SUMLOG, SUMSQ, VARIANCE;
 
+	/**
+	 * This method returns the result of the aggregation under one of the defined aggregation methods.
+	 * 
+	 * @param aggregationValues
+	 *            Values to be aggregated
+	 * @return
+	 *         Result of the aggregation
+	 */
 	public double getAggregationValue(final double[] aggregationValues) {
 		switch (this) {
 		case GEOMETRIC_MEAN:

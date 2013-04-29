@@ -31,9 +31,26 @@ public class TimeSeriesPointsBufferTest {
 	private TimeSeriesPointsBuffer<Integer> bounded;
 	private TimeSeriesPointsBuffer<Integer> unbounded;
 
+	/**
+	 * Creates a new instance of this class.
+	 */
+	public TimeSeriesPointsBufferTest() {
+		// Default Constructor
+	}
+
+	/**
+	 * Test of the bounded buffer version of the time series point buffer.
+	 * 
+	 * @throws InterruptedException
+	 *             If interrupted
+	 * @throws IllegalStateException
+	 *             If illegal state is reached
+	 * @throws AnalysisConfigurationException
+	 *             If analysis configuration exception appears
+	 */
 	@Test
 	public void testBoundedBuffer() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
-		this.bounded = new TimeSeriesPointsBuffer(3);
+		this.bounded = new TimeSeriesPointsBuffer<Integer>(3);
 		this.bounded.add(1);
 		this.bounded.add(2);
 		this.bounded.add(3);
@@ -45,9 +62,19 @@ public class TimeSeriesPointsBufferTest {
 		Assert.assertEquals(2, this.bounded.getSize());
 	}
 
+	/**
+	 * Test of the unbounded buffer version of the time series point buffer.
+	 * 
+	 * @throws InterruptedException
+	 *             If interrupted
+	 * @throws IllegalStateException
+	 *             If illegal state is reached
+	 * @throws AnalysisConfigurationException
+	 *             If analysis configuration exception appears
+	 */
 	@Test
 	public void testUnboundedBuffer() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
-		this.unbounded = new TimeSeriesPointsBuffer(-1);
+		this.unbounded = new TimeSeriesPointsBuffer<Integer>(-1);
 		int i = 0;
 		while (i < 100) {
 			this.unbounded.add(i);

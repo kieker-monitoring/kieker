@@ -21,9 +21,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import junit.framework.Assert;
-import junit.framework.TestCase;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.tools.tslib.TimeSeries;
@@ -35,10 +33,20 @@ import kieker.tools.tslib.TimeSeries;
  * @author Andre van Hoorn
  * 
  */
-public class TimeSeriesTestAvh extends TestCase {
-	final long startTime = 98890787;
-	final long deltaTimeMillis = 1000;
+public class TimeSeriesTestAvh {
+	static final long STARTTIME = 98890787;
+	static final long DELTATIMEMILIS = 1000;
 
+	/**
+	 * Creates a new instance of this class.
+	 */
+	public TimeSeriesTestAvh() {
+		// Default constructor
+	}
+
+	/**
+	 * Test the append method of the time series.
+	 */
 	@Test
 	public void testAppendAll() {
 		final Double[] values = { 600.9, 400.2, 223.9 };
@@ -47,7 +55,7 @@ public class TimeSeriesTestAvh extends TestCase {
 			expectedValues.add(curVal);
 		}
 
-		final TimeSeries<Double> ts = new TimeSeries<Double>(new Date(this.startTime), this.deltaTimeMillis, TimeUnit.MILLISECONDS);
+		final TimeSeries<Double> ts = new TimeSeries<Double>(new Date(TimeSeriesTestAvh.STARTTIME), TimeSeriesTestAvh.DELTATIMEMILIS, TimeUnit.MILLISECONDS);
 		ts.appendAll(values);
 
 		final List<Double> tsValues = ts.getValues();

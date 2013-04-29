@@ -97,7 +97,6 @@ public class AnomalyDetectionFilter extends AbstractFilterPlugin {
 	 */
 	@InputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = AnomalyDetectionFilter.INPUT_PORT_ANOMALY_SCORE)
 	public void inputForecastAndMeasurement(final NamedDoubleTimeSeriesPoint anomalyScore) {
-
 		if (anomalyScore.getDoubleValue() >= this.threshold) {
 			super.deliver(OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY, anomalyScore);
 		} else {

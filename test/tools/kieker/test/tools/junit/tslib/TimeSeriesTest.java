@@ -38,6 +38,19 @@ public class TimeSeriesTest {
 	private TimeUnit timeUnit;
 	private Date startTime;
 
+	/**
+	 * Creates a new instance of this class.
+	 */
+	public TimeSeriesTest() {
+		// Default constructor
+	}
+
+	/**
+	 * Setup of the test case.
+	 * 
+	 * @throws Exception
+	 *             Thrown if exception appears
+	 */
 	@Before
 	public void setUp() throws Exception {
 		final long deltaTime = 1000;
@@ -49,6 +62,9 @@ public class TimeSeriesTest {
 		this.boundedTS = new TimeSeries<Integer>(this.startTime, deltaTime, this.timeUnit, this.bounds);
 	}
 
+	/**
+	 * Test of the getter and appends methods.
+	 */
 	@Test
 	public void testGettersAndAppendingValues() {
 		Assert.assertEquals(this.timeUnit, this.unboundTS.getDeltaTimeUnit());
@@ -60,20 +76,26 @@ public class TimeSeriesTest {
 		Assert.assertEquals(2, this.unboundTS.size());
 	}
 
+	/**
+	 * Test if values are collected in the correct order.
+	 */
 	@Test
 	public void testValueSort() {
 		final int count = 30;
 		for (int i = 0; i < count; i++) {
-			this.unboundTS.append(new Double(i));
+			this.unboundTS.append(Double.valueOf(i));
 		}
 
 		for (int i = 0; i < count; i++) {
-			Assert.assertEquals(new Double(i), this.unboundTS.getPoints().get(i).getValue());
+			Assert.assertEquals(Double.valueOf(i), this.unboundTS.getPoints().get(i).getValue());
 		}
 
 		Assert.assertEquals(count, this.unboundTS.size());
 	}
 
+	/**
+	 * Test of the buffer capacity.
+	 */
 	@Test
 	public void testCapacityRestriction() {
 		Assert.assertEquals(0, this.boundedTS.size());
@@ -84,6 +106,9 @@ public class TimeSeriesTest {
 		Assert.assertEquals(this.bounds, this.boundedTS.size());
 	}
 
+	/**
+	 * Test if newer values are stored in FIFO order.
+	 */
 	@Test
 	public void testKeepNewerValuesInCapacity() {
 		Assert.assertEquals(0, this.boundedTS.size());

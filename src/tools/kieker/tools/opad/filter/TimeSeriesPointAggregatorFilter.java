@@ -136,8 +136,9 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 				numIntervalsElapsed = (endOfTimestampsInterval - this.lastTimestampInCurrentInterval) / this.aggregationSpan;
 				if (numIntervalsElapsed > 1) {
 					for (int i = 1; i < numIntervalsElapsed; i++) {
-						// TODO: add zero-Value for exceeded intervals
-						System.out.println("exceeded");
+						super.deliver(OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, new NamedDoubleTimeSeriesPoint(new Date(this.lastTimestampInCurrentInterval
+								+ (i * this.aggregationSpan)), 0.0,
+								"empty"));
 					}
 				}
 
@@ -152,12 +153,6 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 
 	private synchronized void calculateAggregationValue() {
 		final int listSize = this.aggregationList.size();
-		// this.aggregationStartTime = this.aggregationStartTime + TimeUnit.MILLISECONDS.convert(this.aggregationSpan, this.timeunit);
-		// if (listSize == 0) {
-		// super.deliver(OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, new NamedDoubleTimeSeriesPoint(new Date(this.aggregationStartTime), 0.0,
-		// "empty"));
-		// } else {
-		// debugging output: System.out.println(this.aggregationList.toString());
 		final double[] a = new double[listSize];
 		for (int i = 0; i < listSize; i++) {
 			a[i] = this.aggregationList.get(i).getValue();
@@ -167,7 +162,6 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 				aggregationValue,
 				this.aggregationList.get(0).getName()));
 		this.aggregationList.clear();
-		// }
 	}
 
 	/**

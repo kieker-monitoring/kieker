@@ -46,7 +46,6 @@ public class AnomalyScoreCalculationFilter extends AbstractFilterPlugin {
 
 	@InputPort(eventTypes = { IForecastMeasurementPair.class }, name = AnomalyScoreCalculationFilter.INPUT_PORT_CURRENT_FORECAST_PAIR)
 	public void inputForecastAndMeasurement(final IForecastMeasurementPair fmp) {
-
 		Double score = null;
 
 		if (null != fmp.getForecasted()) {

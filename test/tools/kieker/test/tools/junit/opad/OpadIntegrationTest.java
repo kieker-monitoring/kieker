@@ -80,16 +80,30 @@ public class OpadIntegrationTest {
 		// empty default constructor
 	}
 
-	// HelperMethods Mockup OperationExecutionReader
 	private List<OperationExecutionRecord> createInputEventSetOER() {
 		final List<OperationExecutionRecord> retList = new ArrayList<OperationExecutionRecord>();
-		int i = 0;
-		long j = 0L;
-		while (i < 10000) {
-			retList.add(this.createOER(OP_SIGNATURE_A, SESSION_ID_TEST, TRACE_ID_TEST, i, i + j));
-			i = i + 1;
-			j = j + 10000;
-		}
+		// First Span:
+		retList.add(this.createOER(OP_SIGNATURE_A, SESSION_ID_TEST, TRACE_ID_TEST, 1000000, 1500000));
+		retList.add(this.createOER(OP_SIGNATURE_A, SESSION_ID_TEST, TRACE_ID_TEST, 2300000, 2400000));
+		retList.add(this.createOER(OP_SIGNATURE_A, SESSION_ID_TEST, TRACE_ID_TEST, 2500000, 2600000));
+		retList.add(this.createOER(OP_SIGNATURE_A, SESSION_ID_TEST, TRACE_ID_TEST, 2700000, 2900000));
+		// Second Span:
+		retList.add(this.createOER(OP_SIGNATURE_A, SESSION_ID_TEST, TRACE_ID_TEST, 4100000, 4300000));
+		retList.add(this.createOER(OP_SIGNATURE_A, SESSION_ID_TEST, TRACE_ID_TEST, 4350000, 4400000));
+		retList.add(this.createOER(OP_SIGNATURE_A, SESSION_ID_TEST, TRACE_ID_TEST, 4600000, 4640000));
+		retList.add(this.createOER(OP_SIGNATURE_A, SESSION_ID_TEST, TRACE_ID_TEST, 4800000, 4900000));
+		retList.add(this.createOER(OP_SIGNATURE_A, SESSION_ID_TEST, TRACE_ID_TEST, 4100000, 4900000));
+		// Third Span:
+		retList.add(this.createOER(OP_SIGNATURE_A, SESSION_ID_TEST, TRACE_ID_TEST, 5100000, 5300000));
+		// Fourth Span:
+		retList.add(this.createOER(OP_SIGNATURE_A, SESSION_ID_TEST, TRACE_ID_TEST, 7100000, 7200000));
+		// Fifth Span:
+		retList.add(this.createOER(OP_SIGNATURE_A, SESSION_ID_TEST, TRACE_ID_TEST, 9100000, 9150000));
+		// Sixth Span exceeded: (Anomaly)
+		retList.add(this.createOER(OP_SIGNATURE_A, SESSION_ID_TEST, TRACE_ID_TEST, 800000, 11000000));
+		// One Span exceeded:
+		retList.add(this.createOER(OP_SIGNATURE_A, SESSION_ID_TEST, TRACE_ID_TEST, 1500000, 15400000));
+
 		return retList;
 	}
 
