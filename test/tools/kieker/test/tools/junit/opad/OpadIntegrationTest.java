@@ -76,6 +76,9 @@ public class OpadIntegrationTest {
 	// Variables Mockup OperationExecutionReader
 	private ListReader<OperationExecutionRecord> theReaderOperationExecutionRecords;
 
+	/**
+	 * Creates a new instance of this class.
+	 */
 	public OpadIntegrationTest() {
 		// empty default constructor
 	}
