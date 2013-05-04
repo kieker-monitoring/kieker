@@ -32,20 +32,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emf.ecore.xmi.XMIResource;
-import org.eclipse.emf.ecore.xmi.XMLResource;
-import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
-import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
-import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 
 import kieker.analysis.analysisComponent.AbstractAnalysisComponent;
+import kieker.analysis.common.MetaModelHandler;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.model.analysisMetaModel.MIDependency;
 import kieker.analysis.model.analysisMetaModel.MIFilter;
@@ -57,7 +47,6 @@ import kieker.analysis.model.analysisMetaModel.MIProperty;
 import kieker.analysis.model.analysisMetaModel.MIRepository;
 import kieker.analysis.model.analysisMetaModel.MIRepositoryConnector;
 import kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelFactory;
-import kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.IPlugin;
 import kieker.analysis.plugin.IPlugin.PluginInputPortReference;
@@ -350,7 +339,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		final Map<MIRepository, AbstractRepository> repositoryMap = new HashMap<MIRepository, AbstractRepository>(); // NOPMD (no concurrent access)
 		for (final MIRepository mRepository : mProject.getRepositories()) {
 			// Extract the necessary informations to create the repository.
-			final Configuration configuration = AnalysisController.modelPropertiesToConfiguration(mRepository.getProperties());
+			final Configuration configuration = MetaModelHandler.modelPropertiesToConfiguration(mRepository.getProperties());
 			final AbstractRepository repository = AnalysisController.createAndInitialize(AbstractRepository.class, mRepository.getClassname(), configuration, this,
 					classLoader); // throws AnalysisConfigurationException on errors
 			repositoryMap.put(mRepository, repository);
@@ -362,7 +351,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		final Map<MIPlugin, AbstractPlugin> pluginMap = new HashMap<MIPlugin, AbstractPlugin>(); // NOPMD (no concurrent access)
 		for (final MIPlugin mPlugin : mPlugins) {
 			// Extract the necessary informations to create the plugin.
-			final Configuration configuration = AnalysisController.modelPropertiesToConfiguration(mPlugin.getProperties());
+			final Configuration configuration = MetaModelHandler.modelPropertiesToConfiguration(mPlugin.getProperties());
 			final String pluginClassname = mPlugin.getClassname();
 			configuration.setProperty(AbstractAnalysisComponent.CONFIG_NAME, mPlugin.getName());
 			// Create the plugin and put it into our map. */
@@ -374,7 +363,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		// Now we have all plugins. We can start to assemble the wiring.
 		for (final MIPlugin mPlugin : mPlugins) {
 			// Check whether the ports exist and log this if necessary.
-			AnalysisController.checkPorts(mPlugin, pluginMap.get(mPlugin));
+			MetaModelHandler.checkPorts(mPlugin, pluginMap.get(mPlugin));
 			final EList<MIRepositoryConnector> mPluginRPorts = mPlugin.getRepositories();
 			for (final MIRepositoryConnector mPluginRPort : mPluginRPorts) {
 				this.connect(pluginMap.get(mPlugin), mPluginRPort.getName(), repositoryMap.get(mPluginRPort.getRepository()));
@@ -402,46 +391,6 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		// Remember the mapping!
 		this.pluginModelMap = pluginMap;
 		this.repositoryModelMap = repositoryMap;
-	}
-
-	/**
-	 * This method checks the ports of the given model plugin against the ports of the actual plugin. If there are ports which are in the model instance, but not in
-	 * the "real" plugin, an exception is thrown.
-	 * 
-	 * This method should be called during the creation of an <i>AnalysisController</i> via a configuration file to find invalid (outdated) ports.
-	 * 
-	 * @param mPlugin
-	 *            The model instance of the plugin.
-	 * @param plugin
-	 *            The corresponding "real" plugin.
-	 * @throws AnalysisConfigurationException
-	 *             If an invalid port has been detected.
-	 */
-	private static void checkPorts(final MIPlugin mPlugin, final AbstractPlugin plugin) throws AnalysisConfigurationException {
-		// Get all ports.
-		final EList<MIOutputPort> mOutputPorts = mPlugin.getOutputPorts();
-		final Set<String> outputPorts = new HashSet<String>();
-		for (final String outputPort : plugin.getAllOutputPortNames()) {
-			outputPorts.add(outputPort);
-		}
-		final Set<String> inputPorts = new HashSet<String>();
-		for (final String inputPort : plugin.getAllInputPortNames()) {
-			inputPorts.add(inputPort);
-		}
-		// Check whether the ports of the model plugin exist.
-		for (final MIOutputPort mOutputPort : mOutputPorts) {
-			if (!outputPorts.contains(mOutputPort.getName())) {
-				throw new AnalysisConfigurationException("The output port '" + mOutputPort.getName() + "' of '" + mPlugin.getName() + "' (" + mPlugin.getClassname()
-						+ ") does not exist.");
-			}
-		}
-		final EList<MIInputPort> mInputPorts = (mPlugin instanceof MIFilter) ? ((MIFilter) mPlugin).getInputPorts() : new BasicEList<MIInputPort>(); // NOCS
-		for (final MIInputPort mInputPort : mInputPorts) {
-			if (!inputPorts.contains(mInputPort.getName())) {
-				throw new AnalysisConfigurationException("The input port '" + mInputPort.getName() + "' of '" + mPlugin.getName() + "' (" + mPlugin.getClassname()
-						+ ") does not exist.");
-			}
-		}
 	}
 
 	/**
@@ -535,30 +484,6 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	}
 
 	/**
-	 * Converts the given configuration into a list of {@link MIProperty}s using the given factory.
-	 * 
-	 * @param configuration
-	 *            The configuration to be converted.
-	 * @param factory
-	 *            The factory to be used to create the model instances.
-	 * @return A list of model instances.
-	 */
-	private static List<MIProperty> convertProperties(final Configuration configuration, final MAnalysisMetaModelFactory factory) {
-		if (null == configuration) { // should not happen, but better be safe than sorry
-			return Collections.emptyList();
-		}
-		final List<MIProperty> properties = new ArrayList<MIProperty>(configuration.size());
-		for (final Enumeration<?> e = configuration.propertyNames(); e.hasMoreElements();) {
-			final String key = (String) e.nextElement();
-			final MIProperty property = factory.createProperty();
-			property.setName(key);
-			property.setValue(configuration.getStringProperty(key));
-			properties.add(property);
-		}
-		return properties;
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	public final MIProject getCurrentConfiguration() throws AnalysisConfigurationException {
@@ -575,7 +500,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 			for (final AbstractRepository repo : this.repos) {
 				final MIRepository mRepo = factory.createRepository();
 				mRepo.setClassname(repo.getClass().getName());
-				mRepo.getProperties().addAll(AnalysisController.convertProperties(repo.getCurrentConfiguration(), factory));
+				mRepo.getProperties().addAll(MetaModelHandler.convertProperties(repo.getCurrentConfiguration(), factory));
 				mProject.getRepositories().add(mRepo);
 				repositoryMap.put(repo, mRepo);
 			}
@@ -595,7 +520,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 				pluginMap.put(plugin, mPlugin);
 				mPlugin.setClassname(plugin.getClass().getName());
 				mPlugin.setName(plugin.getName());
-				mPlugin.getProperties().addAll(AnalysisController.convertProperties(plugin.getCurrentConfiguration(), factory));
+				mPlugin.getProperties().addAll(MetaModelHandler.convertProperties(plugin.getCurrentConfiguration(), factory));
 
 				// Extract the repositories.
 				for (final Entry<String, AbstractRepository> repoEntry : plugin.getCurrentRepositories().entrySet()) {
@@ -634,7 +559,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 				// Check all output ports of the original plugin.
 				for (final String outputPortName : plugin.getAllOutputPortNames()) {
 					// Get the corresponding port of the model counterpart and get also the plugins which are currently connected with the original plugin.
-					final EList<MIInputPort> subscribers = AnalysisController.findOutputPort(mOutputPlugin, outputPortName).getSubscribers();
+					final EList<MIInputPort> subscribers = MetaModelHandler.findOutputPort(mOutputPlugin, outputPortName).getSubscribers();
 					// Run through all connected plugins.
 					for (final PluginInputPortReference subscriber : plugin.getConnectedPlugins(outputPortName)) {
 						final IPlugin subscriberPlugin = subscriber.getPlugin();
@@ -644,7 +569,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 							throw new AnalysisConfigurationException("Plugin '" + subscriberPlugin.getName() + "' (" + subscriberPlugin.getPluginName()
 									+ ") not contained in project. Maybe the plugin has not been registered.");
 						}
-						final MIInputPort mInputPort = AnalysisController.findInputPort((MIFilter) mSubscriberPlugin, subscriber.getInputPortName());
+						final MIInputPort mInputPort = MetaModelHandler.findInputPort((MIFilter) mSubscriberPlugin, subscriber.getInputPortName());
 						subscribers.add(mInputPort);
 					}
 				}
@@ -894,41 +819,13 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 *             If something during loading went wrong.
 	 */
 	public static final MIProject loadFromFile(final File file) throws IOException {
-		// Create a resource set to work with.
-		final ResourceSet resourceSet = new ResourceSetImpl();
-		// Initialize the package information
-		MAnalysisMetaModelPackage.init();
-		// Set OPTION_RECORD_UNKNOWN_FEATURE prior to calling getResource.
-		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("*", new EcoreResourceFactoryImpl() {
-
-			@Override
-			public Resource createResource(final URI uri) {
-				final XMIResourceImpl resource = (XMIResourceImpl) super.createResource(uri);
-				resource.getDefaultLoadOptions().put(XMLResource.OPTION_RECORD_UNKNOWN_FEATURE, Boolean.TRUE);
-				return resource;
-			}
-		});
-		// Try to load the resource
 		try {
-			final XMIResource resource = (XMIResource) resourceSet.getResource(URI.createFileURI(file.toString()), true);
-			final EList<EObject> content;
-			resource.load(Collections.EMPTY_MAP);
-			content = resource.getContents();
-			if (!content.isEmpty()) {
-				// The first (and only) element should be the project.
-				return (MIProject) content.get(0);
-			} else {
-				throw new IOException("No project found in file '" + file.getAbsolutePath() + "'.");
-			}
+			return MetaModelHandler.loadProjectFromFile(file);
 		} catch (final IOException ex) {
-			final IOException newEx = new IOException("Error loading file '" + file.getAbsolutePath() + "'.");
-			newEx.initCause(ex);
-			throw newEx; // NOPMD (cause is set above)
+			throw new IOException("Error loading file '" + file.getAbsolutePath() + "'.", ex);
 		} catch (final Exception ex) { // NOPMD NOCS (illegal catch)
 			// Some exceptions like the XMIException can be thrown during loading although it cannot be seen. Catch this situation.
-			final IOException newEx = new IOException("The given file '" + file.getAbsolutePath() + "' is not a valid kax-configuration file.");
-			newEx.initCause(ex);
-			throw newEx; // NOPMD (cause is set above)
+			throw new IOException("The given file '" + file.getAbsolutePath() + "' is not a valid kax-configuration file.", ex);
 		}
 	}
 
@@ -943,74 +840,11 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 *             In case of errors.
 	 */
 	public static final void saveToFile(final File file, final MIProject project) throws IOException {
-		// Create a resource and put the given project into it
-		final ResourceSet resourceSet = new ResourceSetImpl();
-		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
-		final Resource resource = resourceSet.createResource(URI.createFileURI(file.getAbsolutePath()));
-		resource.getContents().add(project);
-		// Make sure that the controller uses utf8 instead of ascii.
-		final Map<String, String> options = new HashMap<String, String>(); // NOPMD (no concurrent access)
-		options.put(XMLResource.OPTION_ENCODING, "UTF-8");
-		// Now try to save the resource
 		try {
-			resource.save(options);
+			MetaModelHandler.saveProjectToFile(file, project);
 		} catch (final IOException ex) {
-			final IOException newEx = new IOException("Unable to save configuration file '" + file.getAbsolutePath() + "'.");
-			newEx.initCause(ex);
-			throw newEx; // NOPMD (cause is set above)
+			throw new IOException("Unable to save configuration file '" + file.getAbsolutePath() + "'.", ex);
 		}
-	}
-
-	/**
-	 * This method can be used to convert a given list of <code>MIProperty</code> to a configuration object.
-	 * 
-	 * @param mProperties
-	 *            The properties to be converted.
-	 * @return A filled configuration object.
-	 */
-	private static final Configuration modelPropertiesToConfiguration(final EList<MIProperty> mProperties) {
-		final Configuration configuration = new Configuration();
-		// Run through the properties and convert every single of them
-		for (final MIProperty mProperty : mProperties) {
-			configuration.setProperty(mProperty.getName(), mProperty.getValue());
-		}
-		return configuration;
-	}
-
-	/**
-	 * Searches for an input port within the given plugin with the given name.
-	 * 
-	 * @param mPlugin
-	 *            The plugin which will be searched through.
-	 * @param name
-	 *            The name of the searched input port.
-	 * @return The searched port or null, if it is not available.
-	 */
-	private static final MIInputPort findInputPort(final MIFilter mPlugin, final String name) {
-		for (final MIInputPort port : mPlugin.getInputPorts()) {
-			if (port.getName().equals(name)) {
-				return port;
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * Searches for an output port within the given plugin with the given name.
-	 * 
-	 * @param mPlugin
-	 *            The plugin which will be searched through.
-	 * @param name
-	 *            The name of the searched output port.
-	 * @return The searched port or null, if it is not available.
-	 */
-	private static final MIOutputPort findOutputPort(final MIPlugin mPlugin, final String name) {
-		for (final MIOutputPort port : mPlugin.getOutputPorts()) {
-			if (port.getName().equals(name)) {
-				return port;
-			}
-		}
-		return null;
 	}
 
 	/**

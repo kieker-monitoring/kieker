@@ -52,7 +52,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  */
 public final class TestAnalysis {
 	private static final Log LOG = LogFactory.getLog(TestAnalysis.class);
-	private static final boolean LOADCONFIG = false;
+	private static final boolean LOADCONFIG = true;
 
 	private static final String KAX_FILENAME = "tmp/testproject.kax";
 	private static final String SRC_FILENAME = "tmp/testdata-ascii/";
@@ -64,6 +64,7 @@ public final class TestAnalysis {
 		if (TestAnalysis.LOADCONFIG) {
 			try {
 				analysisController = new AnalysisController(new File(TestAnalysis.KAX_FILENAME));
+
 			} catch (final IOException ex) {
 				TestAnalysis.LOG.error("Failed to load " + TestAnalysis.KAX_FILENAME, ex);
 				return;
