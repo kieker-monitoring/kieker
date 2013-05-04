@@ -58,4 +58,6 @@ public @interface InputPort {
 	 */
 	Class<?>[] eventTypes() default {};
 
+	boolean internalUseOnly() default false;
+
 }

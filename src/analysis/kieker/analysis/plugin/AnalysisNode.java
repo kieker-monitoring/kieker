@@ -48,7 +48,7 @@ import kieker.common.logging.LogFactory;
 @Plugin(
 		outputPorts = {
 			@OutputPort(name = "out", eventTypes = Object.class),
-			@OutputPort(name = "internalOutputPort", eventTypes = Object.class) },
+			@OutputPort(name = "internalOutputPort", eventTypes = Object.class, internalUseOnly = true) },
 		configuration = {
 			@Property(name = AnalysisNode.CONFIG_PROPERTY_NAME_MOM_SERVER, defaultValue = "localhost"),
 			@Property(name = AnalysisNode.CONFIG_PROPERTY_NAME_DISTRIBUTED, defaultValue = "false"),
@@ -170,7 +170,7 @@ public class AnalysisNode extends AbstractFilterPlugin {
 		super.deliver(INTERNAL_OUTPUT_PORT_NAME_EVENTS, data);
 	}
 
-	@InputPort(name = INTERNAL_INPUT_PORT_NAME_EVENTS, eventTypes = Object.class)
+	@InputPort(name = INTERNAL_INPUT_PORT_NAME_EVENTS, eventTypes = Object.class, internalUseOnly = true)
 	public final void internalInputPort(final Object data) {
 		// If this node is configured for distributed access, we have to send the message to the MOM as well.
 		if (this.distributed) {

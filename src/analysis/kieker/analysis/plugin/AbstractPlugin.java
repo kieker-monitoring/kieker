@@ -454,6 +454,16 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			LOG.warn("Input port does not exist. " + "Plugin: " + dst.getClass().getName() + "; input: " + input);
 			return false;
 		}
+		// They must not be for internal use only - except they belong to an analysis node.
+		// TODO Can we avoid to use AnalysisNode here?
+		if (outputPort.internalUseOnly() && !(src instanceof AnalysisNode)) {
+			LOG.warn("Output port is for internal use only. " + "Plugin: " + src.getClass().getName() + "; output: " + output);
+			return false;
+		}
+		if (inputPort.internalUseOnly() && !(dst instanceof AnalysisNode)) {
+			LOG.warn("Input port is for internal use only. " + "Plugin: " + dst.getClass().getName() + "; input: " + input);
+			return false;
+		}
 
 		// Third step: Make sure the ports are compatible.
 		if (inputPort.eventTypes().length != 0) {

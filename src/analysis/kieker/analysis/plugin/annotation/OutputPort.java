@@ -56,4 +56,5 @@ public @interface OutputPort {
 	 */
 	Class<?>[] eventTypes() default {};
 
+	boolean internalUseOnly() default false;
 }
