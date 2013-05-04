@@ -1,0 +1,133 @@
+\documentclass[paper=a4,twoside=false,fontsize=11pt,numbers=noenddot,version=first,bibliography=totoc,headsepline]{scrbook}
+
+% Get the necessary packages for the document.
+\input{Packages}
+% Get the new commands we defined for this document.
+\input{Macros}
+
+\pagestyle{scrheadings}
+\clearscrheadfoot
+
+\ifoot[\hrule\sffamily Kieker \version{} User Guide]{\hrule\sffamily Kieker \version{} User Guide}
+\ofoot[\hrule\sffamily\pagemark]{\hrule\sffamily\pagemark}
+
+% Set the title and everything.
+\titlehead{
+  \begin{center}
+    \includegraphics[height=25mm]{./images/20120511-kieker-logo-1-6}\\
+\href{http://kieker-monitoring.net}{\sffamily\Large http://kieker-monitoring.net}
+  \end{center}
+}
+
+\title{%
+\Huge\Kieker{} \version{} User Guide%
+\footnote{\sffamily \textit{For guide lines on how to cite Kieker and this document, please see~Section~\ref{sec:ch1:citingKieker}.}}
+}
+
+\author{\sffamily Kieker Project%
+% , and contributors
+}
+\date{\sffamily\today}
+% \date{\sffamily May 19, 2011}
+\publishers{\normalsize\sffamily
+
+\begin{center}
+\begin{tabular}{cc}
+Kiel University & University of Stuttgart\\
+Department of Computer Science & Institute of Software Technology\\
+Software Engineering Group & Reliable Software Systems Group \\
+Christian-Albrechts-Platz 4 & Universitätsstra\ss{}e 38\\
+24118 Kiel, Germany & 70569 Stuttgart, Germany
+\end{tabular}
+\end{center}
+
+
+%\flushleft
+% \includegraphics[height=2.5cm]{./images/caulogo}\\[0.5ex]
+
+}
+
+\hypersetup
+{%
+pdftitle = {\Kieker{} \version{} User Guide},
+pdfauthor = {Nils Ehmke, Andr\'e van Hoorn, and Reiner Jung}
+% colorlinks = {true}
+}
+
+% Here we go.
+\begin{document}
+  % We want a table of contents separated from the rest of the text.
+  \maketitle
+  \setcounter{tocdepth}{1} % not deeper than section level
+  {\sffamily\tableofcontents}
+
+	\chapter{Introduction}\label{chp:Introduction}
+		\section{What is Kieker?}
+		\section{Licensing}
+		\section{Citing Kieker}
+		\section{Kieker is Recommended by the SPEC Research Group}
+		\section{Quickstart Example}
+			\subsection{Monitoring}
+			\subsection{Analysis}
+		\section{Outline of this User Guide}
+
+	\chapter{Kieker Monitoring}\label{chp:Monitoring}
+		\section{The Concept behind the Monitoring}
+			\subsection{Data Flow}
+			\subsection{Monitoring Components}
+		\section{How to Monitor Applications}
+			\subsection{Manual Probes}
+			\subsection{Aspect Oriented Probes}
+			\subsection{Monitoring within Java EE Applications}
+				\subsubsection{Spring Probes}
+				\subsubsection{Aspect Oriented Probes}
+				\subsubsection{SOAP Interceptors}
+		\section{Creating and Controlling the Monitoring}
+			\subsection{Adaptive Monitoring}
+			\subsection{JMX MBean Access}
+		\section{Development of own Monitoring Components}
+			\subsection{Records}
+			\subsection{Probes}
+			\subsection{Writers}
+
+	\chapter{Kieker Analysis}\label{chp:Analysis}
+		\section{The Concept behind the Analysis}
+			\subsection{Data Flow}
+			\subsection{Analysis Components}
+		\section{Creating and Controlling the Analysis}
+		\section{Development of own Analysis Components}
+			\subsection{Readers}
+			\subsection{Filters}
+			\subsection{Repositories}
+
+	\chapter{Kieker Tools}\label{chp:Tools}
+		\section{Trace Analysis}
+			\subsection{Visualizations}
+		\section{Replay Monitoring Logs}
+		\section{Convert Monitoring Timestamps}
+		\section{KAX Viz}
+		\section{KAX Runner}
+		
+	\chapter{Kieker WebGUI}\label{chp:WebGUI}
+		\section{Features}
+		\section{Quickstart Example}
+		\section{Detailed Introduction}
+  
+	\appendix
+		\phantomsection
+		\addcontentsline{toc}{chapter}{Appendix}\hypertarget{hypertarget:appendix}{}
+		\addtocontents{toc}{\protect\setcounter{tocdepth}{-1}}
+	
+		\chapter{JMS}
+			\section{OpenJMS}
+			\section{ActiveMQ}
+			\section{HornetQ}
+		\chapter{Sigar}
+
+  % suppress appendix chapters in toc:
+  \addtocontents{toc}{\protect\setcounter{tocdepth}{0}}
+
+\bibliographystyle{abbrvnatAvanhoorn} % alpha
+\bibliography{bibliography}
+\end{document}
+
