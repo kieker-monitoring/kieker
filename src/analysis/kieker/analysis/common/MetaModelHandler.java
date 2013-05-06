@@ -19,6 +19,7 @@ package kieker.analysis.common;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -40,6 +41,7 @@ import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 
+import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.model.analysisMetaModel.MIFilter;
 import kieker.analysis.model.analysisMetaModel.MIInputPort;
@@ -50,6 +52,9 @@ import kieker.analysis.model.analysisMetaModel.MIProperty;
 import kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelFactory;
 import kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage;
 import kieker.analysis.plugin.AbstractPlugin;
+import kieker.analysis.plugin.filter.AbstractFilterPlugin;
+import kieker.analysis.plugin.reader.AbstractReaderPlugin;
+import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
 
 /**
@@ -220,5 +225,15 @@ public class MetaModelHandler {
 			}
 		}
 		return null;
+	}
+
+	public static final MIProject javaToMetaModel(final Collection<AbstractReaderPlugin> readers, final Collection<AbstractFilterPlugin> filters,
+			final Collection<AbstractRepository> repositories, final Collection<IConnection> connections, final Map<String, String> globalProperties) {
+
+	}
+
+	public static final void metaModelToJava(final MIProject project, final AnalysisController ac, final Collection<IConnection> connections,
+			final Map<String, String> globalProperties, final Map<MIPlugin, AbstractPlugin> pluginMapping) {
+
 	}
 }
