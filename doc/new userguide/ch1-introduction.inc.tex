@@ -1,0 +1,54 @@
+\chapter{Introduction}\label{chp:Introduction}
+
+	Modern software applications are often complex and have to fulfill a large set of functional and non-functional requirements. The internal behavior of such large systems cannot easily be determined on the basis of the source code. Furthermore, existing applications often lack sufficient documentation which makes it cumbersome to extend and change them for future needs. A solution to these problems can be dynamic analysis based on application-level monitoring, which allows to log the behavior of the application and to discover, for example, application-internal control flows, calling dependencies, and method response times.
+
+	Dynamic analysis can help in detecting performance problems and faulty behavior, capacity planning, and many other areas. The \Kieker{} framework provides the necessary monitoring capabilities and comes with tools and libraries for the analysis of monitored data. \Kieker{} has been designed for continuous monitoring in production systems inducing only a very low overhead. Further information on the overhead caused by \Kieker{} is provided at \url{http://kieker-monitoring.net/overhead-evaluation/}.
+	
+	\vspace{1cm}
+
+	\NOTIFYBOX{In case that you are only interested in a quickstart example, you may want to skip directly to Section~\ref{sec:ch1:Quickstart}.}
+	
+	\section{What is Kieker?}
+		\Kieker{} is a Java-based application performance monitoring and dynamic software analysis framework~\cite{KiekerICPE2012}. Monitoring adapters for other platforms, such as Visual Basic~6~(VB6), .NET, and COBOL are currently under development \footnote{\href{http://kieker-monitoring.net/support/}{Contact us} directly if you are interested in \Kieker{} support for other platforms}. Figure~\ref{fig:KiekerComponentDiagram} shows the framework's composition based on the two main components \KiekerMonitoringPart{} and \KiekerAnalysisPart{}.
+
+		The \KiekerMonitoringPart{} component is responsible for program instrumentation, data collection, and logging. Its core is the \class{MonitoringController}. The component \KiekerAnalysisPart{} is responsible for reading, analyzing, and visualizing the monitoring data. Its core is the \class{AnalysisController} which manages the life-cycle of the pipe-and-filter architecture of analysis plugins, including monitoring readers and  analysis filters.
+	
+		% This is the component diagram of Kieker (the satellite).
+		\begin{figure}[H]\centering
+			\includegraphics[width=0.81\textwidth]{images/kiekerComponentDiagram-woCloud-bw-w-record-newNames-withTraceAnalysis-colors}
+			
+			\caption{Overview of the framework components}
+			\label{fig:KiekerComponentDiagram}
+		\end{figure}
+	
+	\section{Licensing}
+		\Kieker{} is licensed under the Apache License, Version 2.0. You may obtain a copy of the license at \url{http://www.apache.org/licenses/LICENSE-2.0}.
+		
+		The \Kieker{} source and binary release archives include a number of third-party libraries. The \dir{lib/} directory of the release archives contains a \file{.LICENSE} file for each third-party library, pointing to the respective license text.
+	
+	\section{Citing Kieker}\label{sec:ch1:citingKieker}
+		When referencing Kieker resources in your publications, we would be happy if you respected the following guide lines:
+
+		\begin{itemize}
+			\item 
+			When referencing the Kieker project, please cite our ICPE~2012~\cite{KiekerICPE2012} paper and/or our 2009 technical report~\cite{vanHoornRohrHasselbringWallerEhlersFreyKieselhorst2009TRContinuousMonitoringOfSoftwareServicesDesignAndApplicationOfTheKiekerFramework}. Also, you might want to add a reference to our web site (\url{http://kieker-monitoring.net/}) like~\cite{KiekerWebSite}. 
+			\item 
+			When referencing this user guide, e.g., when reprinting contents, please use a citation like~\cite{Kieker1.7UserGuide}.
+		\end{itemize}
+
+		\noindent At \url{http://kieker-monitoring.net/research/publications/} we provide entries for $\mathrm{B\scriptstyle IB}\!$\TeX{} and other bibliography systems.
+
+	\section{Kieker is Recommended by the SPEC Research Group}
+		In 2011, Kieker was reviewed and accepted for distribution as part of the SPEC Research Group's repository of peer-reviewed tools for quantitative system evaluation and analysis. See \url{http://research.spec.org/projects/tools.html} for details.
+	
+	\section{Quickstart Example}\label{sec:ch1:Quickstart}
+		\subsection{Monitoring}
+		\subsection{Analysis}
+		
+	\section{Outline of this User Guide}
+		This user guide is structured as followed. Chapter~\ref{chp:Introduction} contains an introduction and a short overview of \Kieker{}, including a quick start example. In Chapter~\ref{chp:Kieker-Monitoring} we provide a detailed description of \KiekerMonitoringPart{} and its components, before presenting in Chapter~\ref{chp:Kieker-Analysis} the \KiekerAnalysisPart{} and its important parts. Various tools, which \Kieker{} already provides, can be found in Chapter~\ref{chp:Kieker-Tools}. A new project, to assemble and run analysis configurations in a web based application, is shown in Chapter~\ref{chp:Kieker-WebGUI}. The \hyperlink{hypertarget:appendix}{Appendix} finally includes additional resources, e.g., how to use the JMS writers and readers, as well as monitoring system-level measures (CPU, memory, etc.) with Sigar. 
+
+		\vspace{1cm}
+
+		% Notify-tag because this could be interesting for the reader.
+		\NOTIFYBOX{The Java sources presented in this user guide, as well as pre-compiled binaries, are included in the \file{\exampleDir/} directory of the \Kieker{} distribution (see Section~\ref{sec:example:downloadInstall}). Also, the example directories can be imported as Eclipse projects.}

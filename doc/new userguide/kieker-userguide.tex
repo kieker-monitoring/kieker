@@ -61,86 +61,13 @@ pdfauthor = {Nils Ehmke, Andr\'e van Hoorn, and Reiner Jung}
   \setcounter{tocdepth}{1} % not deeper than section level
   {\sffamily\tableofcontents}
 
-	\chapter{Introduction}\label{chp:Introduction}
-		\section{What is Kieker?}
-		\section{Licensing}
-			\Kieker{} is licensed under the Apache License, Version 2.0. You may obtain a copy of the license at \url{http://www.apache.org/licenses/LICENSE-2.0}.
-			
-			The \Kieker{} source and binary release archives include a number of third-party libraries. The \dir{lib/} directory of the release archives contains a \file{.LICENSE} file for each third-party library, pointing to the respective license text.
-		
-		\section{Citing Kieker}
-			When referencing Kieker resources in your publications, we would be happy if you respected the following guide lines:
-
-			\begin{itemize}
-				\item 
-				When referencing the Kieker project, please cite our ICPE~2012~\cite{KiekerICPE2012} paper and/or our 2009 technical report~\cite{vanHoornRohrHasselbringWallerEhlersFreyKieselhorst2009TRContinuousMonitoringOfSoftwareServicesDesignAndApplicationOfTheKiekerFramework}. Also, you might want to add a reference to our web site (\url{http://kieker-monitoring.net/}) like~\cite{KiekerWebSite}. 
-				\item 
-				When referencing this user guide, e.g., when reprinting contents, please use a citation like~\cite{Kieker1.7UserGuide}.
-			\end{itemize}
-
-			\noindent At \url{http://kieker-monitoring.net/research/publications/} we provide entries for $\mathrm{B\scriptstyle IB}\!$\TeX{} and other bibliography systems.
-
-		\section{Kieker is Recommended by the SPEC Research Group}
-			In 2011, Kieker was reviewed and accepted for distribution as part of the SPEC Research Group's repository of peer-reviewed tools for quantitative system evaluation and analysis. See \url{http://research.spec.org/projects/tools.html} for details.
-		
-		\section{Quickstart Example}
-			\subsection{Monitoring}
-			\subsection{Analysis}
-		\section{Outline of this User Guide}
-
-	\chapter{Kieker Monitoring}\label{chp:Monitoring}
-		\section{The Concept behind the Monitoring}
-			\subsection{Data Flow}
-			\subsection{Monitoring Components}
-		\section{How to Monitor Applications}
-			\subsection{Manual Probes}
-			\subsection{Aspect Oriented Probes}
-			\subsection{Monitoring within Java EE Applications}
-				\subsubsection{Spring Probes}
-				\subsubsection{Aspect Oriented Probes}
-				\subsubsection{SOAP Interceptors}
-		\section{Creating and Controlling the Monitoring}
-			\subsection{Adaptive Monitoring}
-			\subsection{JMX MBean Access}
-		\section{Development of own Monitoring Components}
-			\subsection{Records}
-			\subsection{Probes}
-			\subsection{Writers}
-
-	\chapter{Kieker Analysis}\label{chp:Analysis}
-		\section{The Concept behind the Analysis}
-			\subsection{Data Flow}
-			\subsection{Analysis Components}
-		\section{Creating and Controlling the Analysis}
-		\section{Development of own Analysis Components}
-			\subsection{Readers}
-			\subsection{Filters}
-			\subsection{Repositories}
-
-	\chapter{Kieker Tools}\label{chp:Tools}
-		\section{Trace Analysis}
-			\subsection{Visualizations}
-		\section{Replay Monitoring Logs}
-		\section{Convert Monitoring Timestamps}
-		\section{KAX Viz}
-		\section{KAX Runner}
-		
-	\chapter{Kieker WebGUI}\label{chp:WebGUI}
-		\section{Features}
-		\section{Quickstart Example}
-		\section{Detailed Introduction}
+  \input{ch1-introduction.inc}
+  \input{ch2-kieker-monitoring.inc}
+  \input{ch3-kieker-analysis.inc}
+  \input{ch4-kieker-tools.inc}
+  \input{ch5-kieker-webgui.inc}
+  \input{appendix.inc}
   
-	\appendix
-		\phantomsection
-		\addcontentsline{toc}{chapter}{Appendix}\hypertarget{hypertarget:appendix}{}
-		\addtocontents{toc}{\protect\setcounter{tocdepth}{-1}}
-	
-		\chapter{JMS}
-			\section{OpenJMS}
-			\section{ActiveMQ}
-			\section{HornetQ}
-		\chapter{Sigar}
-
   % suppress appendix chapters in toc:
   \addtocontents{toc}{\protect\setcounter{tocdepth}{0}}
 
