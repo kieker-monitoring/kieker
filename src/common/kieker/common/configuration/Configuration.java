@@ -276,7 +276,7 @@ public final class Configuration extends Properties {
 			final String property = (String) keys.nextElement();
 			this.setProperty(property, super.getProperty(property));
 		}
-		this.defaults = null;
+		this.defaults = null; // NOPMD (assign null)
 	}
 
 	/**

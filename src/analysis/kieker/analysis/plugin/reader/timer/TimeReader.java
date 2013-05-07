@@ -79,7 +79,7 @@ public final class TimeReader extends AbstractReaderPlugin {
 
 	private static final Log LOG = LogFactory.getLog(TimeReader.class);
 
-	private volatile boolean terminated;
+	private volatile boolean terminated = false;
 
 	private final ScheduledExecutorService executorService = new ScheduledThreadPoolExecutor(1);
 	private volatile ScheduledFuture<?> result;
@@ -113,8 +113,6 @@ public final class TimeReader extends AbstractReaderPlugin {
 			recordTimeunit = TimeUnit.NANOSECONDS;
 		}
 		this.timeunit = recordTimeunit;
-
-		this.terminated = !this.blockingRead;
 	}
 
 	/**
@@ -142,15 +140,17 @@ public final class TimeReader extends AbstractReaderPlugin {
 	 */
 	public boolean read() {
 		this.result = this.executorService.scheduleAtFixedRate(new TimestampEventTask(), this.initialDelay, this.period, TimeUnit.NANOSECONDS);
-		try {
-			this.result.get();
-		} catch (final ExecutionException ex) {
-			this.terminate(true);
-			throw new RuntimeException(ex.getCause());
-		} catch (final InterruptedException ignore) {
-			// ignore this one
-		} catch (final CancellationException ignore) {
-			// ignore this one, too
+		if (this.blockingRead) {
+			try {
+				this.result.get();
+			} catch (final ExecutionException ex) {
+				this.terminate(true);
+				throw new RuntimeException(ex.getCause()); // NOPMD (throw RunTimeException)
+			} catch (final InterruptedException ignore) { // NOPMD (ignore exception)
+				// ignore this one
+			} catch (final CancellationException ignore) { // NOPMD (ignore exception)
+				// ignore this one, too
+			}
 		}
 		this.terminate(false);
 		return true;
@@ -189,6 +189,10 @@ public final class TimeReader extends AbstractReaderPlugin {
 	 * @since 1.8
 	 */
 	protected class TimestampEventTask implements Runnable {
+
+		public TimestampEventTask() {
+			// empty default constructor
+		}
 
 		public void run() {
 			TimeReader.this.sendTimestampEvent();

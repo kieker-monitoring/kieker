@@ -42,6 +42,10 @@ import kieker.test.common.junit.AbstractKiekerTest;
  */
 public class TimeReaderTest extends AbstractKiekerTest {
 
+	public TimeReaderTest() {
+		// empty default constructor
+	}
+
 	@SuppressWarnings("unused")
 	@Test
 	public void testNonBlockingMode() throws IllegalStateException, AnalysisConfigurationException, InterruptedException {
@@ -54,7 +58,7 @@ public class TimeReaderTest extends AbstractKiekerTest {
 
 		// We expect the reader to return immediately - in this case we expect the AC to return within five seconds
 		thread.start();
-		Thread.sleep(5000);
+		Thread.sleep(6000);
 
 		Assert.assertEquals(STATE.TERMINATED, ac.getState());
 	}
