@@ -1,5 +1,7 @@
 package livedemo.managedbeans;
 
+//import java.util.concurrent.TimeUnit;
+
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import kieker.analysis.AnalysisController;
@@ -35,13 +37,12 @@ public class StartingBean {
 	final ListFilter<MemSwapUsageRecord> memSwapCollectionFilter;
 	SystemModelRepository systemModelRepository;
 	
-	@SuppressWarnings("deprecation")
 	public StartingBean(){
 		this.analysisInstance = new AnalysisController();
-		this.oerCollectionFilter = new ListFilter<OperationExecutionRecord>(new Configuration());
-		this.cpuCollectionFilter = new ListFilter<CPUUtilizationRecord>(new Configuration());
-		this.memSwapCollectionFilter = new ListFilter<MemSwapUsageRecord>(new Configuration());
-		this.systemModelRepository = new SystemModelRepository(new Configuration());
+		this.oerCollectionFilter = new ListFilter<OperationExecutionRecord>(new Configuration(), analysisInstance);
+		this.cpuCollectionFilter = new ListFilter<CPUUtilizationRecord>(new Configuration(), analysisInstance);
+		this.memSwapCollectionFilter = new ListFilter<MemSwapUsageRecord>(new Configuration(), analysisInstance);
+		this.systemModelRepository = new SystemModelRepository(new Configuration(), analysisInstance);
 		try {
 			init();
 		} catch (IllegalStateException e) {
@@ -69,33 +70,24 @@ public class StartingBean {
 		return this.memSwapCollectionFilter;
 	}
 	
-	@SuppressWarnings("deprecation")
 	private void init() throws IllegalStateException, AnalysisConfigurationException{
 	
 		final Configuration jmxReaderConfig = new Configuration();
 		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_SILENT, "true");
-		final JMXReader reader = new JMXReader(jmxReaderConfig);
-		analysisInstance.registerReader(reader);
+		final JMXReader reader = new JMXReader(jmxReaderConfig, analysisInstance);
 
 		final Configuration typeFilter1Config = new Configuration();
 		typeFilter1Config.setProperty(TypeFilter.CONFIG_PROPERTY_NAME_TYPES, "kieker.common.record.controlflow.OperationExecutionRecord");
-		final TypeFilter typeFilter1 = new TypeFilter(typeFilter1Config);
+		final TypeFilter typeFilter1 = new TypeFilter(typeFilter1Config, analysisInstance);
 		
 		final Configuration typeFilter2Config = new Configuration();
 		typeFilter2Config.setProperty(TypeFilter.CONFIG_PROPERTY_NAME_TYPES, "kieker.common.record.system.CPUUtilizationRecord");
-		final TypeFilter typeFilter2 = new TypeFilter(typeFilter2Config);
+		final TypeFilter typeFilter2 = new TypeFilter(typeFilter2Config, analysisInstance);
 		
 		final Configuration typeFilter3Config = new Configuration();
 		typeFilter3Config.setProperty(TypeFilter.CONFIG_PROPERTY_NAME_TYPES, "kieker.common.record.system.MemSwapUsageRecord");
-		final TypeFilter typeFilter3 = new TypeFilter(typeFilter3Config);
+		final TypeFilter typeFilter3 = new TypeFilter(typeFilter3Config, analysisInstance);
 	
-		analysisInstance.registerFilter(oerCollectionFilter);
-		analysisInstance.registerFilter(cpuCollectionFilter);
-		analysisInstance.registerFilter(memSwapCollectionFilter);
-		analysisInstance.registerFilter(typeFilter1);
-		analysisInstance.registerFilter(typeFilter2);
-		analysisInstance.registerFilter(typeFilter3);
-		
 		analysisInstance.connect(reader, JMXReader.OUTPUT_PORT_NAME_RECORDS,
 				typeFilter1, TypeFilter.INPUT_PORT_NAME_EVENTS);
 
@@ -110,30 +102,25 @@ public class StartingBean {
 		analysisInstance.connect(typeFilter3, TypeFilter.OUTPUT_PORT_NAME_TYPE_MATCH,
 				memSwapCollectionFilter, ListFilter.INPUT_PORT_NAME);
 		
-		analysisInstance.registerRepository(systemModelRepository);
 		
-		ExecutionRecordTransformationFilter ertf = new ExecutionRecordTransformationFilter(new Configuration());
-		analysisInstance.registerFilter(ertf);
+		ExecutionRecordTransformationFilter ertf = new ExecutionRecordTransformationFilter(new Configuration(), analysisInstance);
 		analysisInstance.connect(ertf, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemModelRepository);
 		analysisInstance.connect(reader, JMXReader.OUTPUT_PORT_NAME_RECORDS, ertf, ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
-//		
+		
 //		Configuration traceConfig = new Configuration();
 //		traceConfig.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT, TimeUnit.MILLISECONDS.name());
 //		traceConfig.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TRACE_DURATION, "1000");
-//		TraceReconstructionFilter trf = new TraceReconstructionFilter(traceConfig);
-//		analysisInstance.registerFilter(trf);
+//		TraceReconstructionFilter trf = new TraceReconstructionFilter(traceConfig, analysisInstance);
 //		analysisInstance.connect(trf, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemModelRepository);
 //		analysisInstance.connect(ertf, ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME_EXECUTIONS, trf, TraceReconstructionFilter.INPUT_PORT_NAME_EXECUTIONS);
 //		
 //		OperationDependencyGraphAllocationFilter dependencyGraphFilter = 
-//				new OperationDependencyGraphAllocationFilter(new Configuration());
-//		analysisInstance.registerFilter(dependencyGraphFilter);
+//				new OperationDependencyGraphAllocationFilter(new Configuration(), analysisInstance);
 //		analysisInstance.connect(trf, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, dependencyGraphFilter, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
 //		analysisInstance.connect(dependencyGraphFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemModelRepository);
 //
 //		Configuration writerConfig = new Configuration();
-//		GraphWriterPlugin graphWriter = new GraphWriterPlugin(writerConfig);
-//		analysisInstance.registerFilter(graphWriter);
+//		GraphWriterPlugin graphWriter = new GraphWriterPlugin(writerConfig, analysisInstance);
 //		analysisInstance.connect(dependencyGraphFilter, IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH, 
 //				graphWriter, GraphWriterPlugin.INPUT_PORT_NAME_GRAPHS);
 	}

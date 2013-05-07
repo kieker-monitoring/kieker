@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -26,9 +27,8 @@ public class ListFilter<T> extends AbstractFilterPlugin {
 
 	private final List<T> list = Collections.synchronizedList(new ArrayList<T>());
 
-	@SuppressWarnings("deprecation")
-	public ListFilter(final Configuration configuration) {
-		super(configuration);
+	public ListFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
 	}
 
 	@InputPort(name = ListFilter.INPUT_PORT_NAME)
