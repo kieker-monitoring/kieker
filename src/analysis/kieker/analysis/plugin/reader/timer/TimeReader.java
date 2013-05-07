@@ -79,7 +79,7 @@ public final class TimeReader extends AbstractReaderPlugin {
 
 	private static final Log LOG = LogFactory.getLog(TimeReader.class);
 
-	private volatile boolean terminated = false;
+	private volatile boolean terminated;
 
 	private final ScheduledExecutorService executorService = new ScheduledThreadPoolExecutor(1);
 	private volatile ScheduledFuture<?> result;
