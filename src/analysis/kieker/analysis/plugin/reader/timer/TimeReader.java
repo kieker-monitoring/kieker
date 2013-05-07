@@ -82,6 +82,8 @@ public final class TimeReader extends AbstractReaderPlugin {
 	private volatile boolean terminated;
 
 	private final ScheduledExecutorService executorService = new ScheduledThreadPoolExecutor(1);
+	private volatile ScheduledFuture<?> result;
+
 	private final long initialDelay;
 	private final long period;
 	private final boolean blockingRead;
@@ -128,6 +130,10 @@ public final class TimeReader extends AbstractReaderPlugin {
 			} catch (final InterruptedException ex) {
 				// ignore
 			}
+			if (!this.terminated) {
+				// problems shutting down
+				this.result.cancel(true);
+			}
 		}
 	}
 
@@ -135,10 +141,9 @@ public final class TimeReader extends AbstractReaderPlugin {
 	 * {@inheritDoc}
 	 */
 	public boolean read() {
-		final ScheduledFuture<?> result = this.executorService.scheduleAtFixedRate(new TimestampEventTask(), this.initialDelay, this.period,
-				TimeUnit.NANOSECONDS);
+		this.result = this.executorService.scheduleAtFixedRate(new TimestampEventTask(), this.initialDelay, this.period, TimeUnit.NANOSECONDS);
 		try {
-			result.get();
+			this.result.get();
 		} catch (final ExecutionException ex) {
 			this.terminate(true);
 			throw new RuntimeException(ex.getCause());
