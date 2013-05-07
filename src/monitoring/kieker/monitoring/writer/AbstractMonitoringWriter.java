@@ -19,8 +19,6 @@ package kieker.monitoring.writer;
 import java.util.Enumeration;
 
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 
 /**
@@ -29,7 +27,6 @@ import kieker.monitoring.core.controller.IMonitoringController;
  * @since 1.3
  */
 public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
-	private static final Log LOG = LogFactory.getLog(AbstractMonitoringWriter.class);
 
 	/** The controller of this writer. */
 	protected IMonitoringController monitoringController;
@@ -41,14 +38,10 @@ public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 	 *            The configuration for this component.
 	 */
 	protected AbstractMonitoringWriter(final Configuration configuration) {
-		try {
-			// somewhat dirty hack...
-			final Configuration defaultConfiguration = this.getDefaultConfiguration(); // NOPMD (overrideable)
-			if (defaultConfiguration != null) {
-				configuration.setDefaultConfiguration(defaultConfiguration);
-			}
-		} catch (final IllegalAccessException ex) {
-			LOG.error("Unable to set writer custom default properties"); // ok to ignore ex here
+		// somewhat dirty hack...
+		final Configuration defaultConfiguration = this.getDefaultConfiguration(); // NOPMD (overrideable)
+		if (defaultConfiguration != null) {
+			configuration.setDefaultConfiguration(defaultConfiguration);
 		}
 		this.configuration = configuration;
 	}
