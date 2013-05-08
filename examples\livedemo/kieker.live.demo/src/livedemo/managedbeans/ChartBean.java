@@ -13,7 +13,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.event.AjaxBehaviorEvent;
 
 import livedemo.entities.DataEntry;
@@ -26,7 +26,7 @@ import org.primefaces.model.chart.ChartSeries;
  * @author Bjoern Weissenfels
  */
 @ManagedBean(name="chartBean", eager=true)
-@SessionScoped
+@ViewScoped
 public class ChartBean implements Observer{
 	
 	int numberOfDisplayedEntries = 12;
@@ -67,6 +67,7 @@ public class ChartBean implements Observer{
 	@PostConstruct
 	public void init(){
 		this.dataBean.addObserver(this);
+		System.out.println("View gestartet");
 		for(int i=10; i<=this.maxNumberOfDisplayedEntries;i++){
 			this.possibleNumberOfDisplayedEntries.add(i);
 		}

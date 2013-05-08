@@ -15,7 +15,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.event.AjaxBehaviorEvent;
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
@@ -29,7 +29,7 @@ import livedemo.entities.Model;
  * @author Bjoern Weissenfels
  */
 @ManagedBean(name="cpuBean", eager=true)
-@SessionScoped
+@ViewScoped
 public class CpuBean implements Observer{
 	
 	@ManagedProperty(value = "#{dataBean}")

@@ -3,7 +3,7 @@ package livedemo.managedbeans;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 
 import livedemo.entities.Record;
 
@@ -11,7 +11,7 @@ import livedemo.entities.Record;
  * @author Bjoern Weissenfels
  */
 @ManagedBean(name="recordBean", eager=true)
-@SessionScoped
+@ViewScoped
 public class RecordListBean{
 	
 	boolean firstCall;
