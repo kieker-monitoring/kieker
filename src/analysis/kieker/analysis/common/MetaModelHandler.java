@@ -43,6 +43,7 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
+import kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelFactory;
 import kieker.analysis.model.analysisMetaModel.MIFilter;
 import kieker.analysis.model.analysisMetaModel.MIInputPort;
 import kieker.analysis.model.analysisMetaModel.MIOutputPort;
@@ -228,12 +229,74 @@ public class MetaModelHandler {
 	}
 
 	public static final MIProject javaToMetaModel(final Collection<AbstractReaderPlugin> readers, final Collection<AbstractFilterPlugin> filters,
-			final Collection<AbstractRepository> repositories, final Collection<IConnection> connections, final Map<String, String> globalProperties) {
+			final Collection<AbstractRepository> repositories, final Collection<PluginConnection> pluginConnections,
+			final Collection<RepositoryConnection> repositoryConnections, final Map<String, String> globalProperties) {
+		final MIAnalysisMetaModelFactory factory = MIAnalysisMetaModelFactory.eINSTANCE;
+		final MIProject project = factory.createProject();
+
+		return project;
+	}
+
+	public static final void metaModelToJava(final MIProject project, final AnalysisController ac, final Collection<PluginConnection> pluginConnections,
+			final Collection<RepositoryConnection> repositoryConnections, final Map<String, String> globalProperties,
+			final Map<MIPlugin, AbstractPlugin> pluginMapping) {
 
 	}
 
-	public static final void metaModelToJava(final MIProject project, final AnalysisController ac, final Collection<IConnection> connections,
-			final Map<String, String> globalProperties, final Map<MIPlugin, AbstractPlugin> pluginMapping) {
+	public class RepositoryConnection {
+
+		private final AbstractPlugin source;
+		private final AbstractRepository repository;
+		private final String outputName;
+
+		public RepositoryConnection(final AbstractPlugin source, final AbstractRepository repository, final String outputName) {
+			this.source = source;
+			this.repository = repository;
+			this.outputName = outputName;
+		}
+
+		public AbstractPlugin getSource() {
+			return this.source;
+		}
+
+		public AbstractRepository getRepository() {
+			return this.repository;
+		}
+
+		public String getOutputName() {
+			return this.outputName;
+		}
+
+	}
+
+	public class PluginConnection {
+		private final AbstractPlugin source;
+		private final AbstractPlugin destination;
+		private final String outputName;
+		private final String inputName;
+
+		public PluginConnection(final AbstractPlugin source, final AbstractPlugin destination, final String outputName, final String inputName) {
+			this.source = source;
+			this.destination = destination;
+			this.outputName = outputName;
+			this.inputName = inputName;
+		}
+
+		public AbstractPlugin getSource() {
+			return this.source;
+		}
+
+		public AbstractPlugin getDestination() {
+			return this.destination;
+		}
+
+		public String getOutputName() {
+			return this.outputName;
+		}
+
+		public String getInputName() {
+			return this.inputName;
+		}
 
 	}
 }
