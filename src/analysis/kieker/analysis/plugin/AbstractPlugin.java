@@ -63,6 +63,9 @@ import kieker.common.record.misc.KiekerMetadataRecord;
 @Plugin
 public abstract class AbstractPlugin extends AbstractAnalysisComponent implements IPlugin {
 
+	public static final String CONFIG_ASYNC_INPUT_PORTS = "async-ports-hiddenAndNeverExportedProperty";
+	public static final String CONFIG_ASYNC_OUTPUT_PORTS = "async-outputports-hiddenAndNeverExportedProperty";
+
 	private static final Log LOG = LogFactory.getLog(AbstractPlugin.class);
 
 	private final ConcurrentHashMap<String, ConcurrentLinkedQueue<PluginInputPortReference>> registeredMethods;
@@ -79,7 +82,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	// Queues and threads for the asynchronous mode
 	private final ConcurrentHashMap<String, BlockingQueue<Object>> sendingQueues = new ConcurrentHashMap<String, BlockingQueue<Object>>();
 	private final Collection<SendingThread> sendingThreads = new CopyOnWriteArrayList<SendingThread>();
-	private final ConcurrentHashMap<String, BlockingQueue<Object>> receivingQueues = new ConcurrentHashMap<String, BlockingQueue<Object>>();
+	private final ConcurrentHashMap<String, BlockingQueue<MethodDataContainer>> receivingQueues = new ConcurrentHashMap<String, BlockingQueue<MethodDataContainer>>();
 	private final Collection<ReceivingThread> receivingThreads = new CopyOnWriteArrayList<ReceivingThread>();
 
 	/**
@@ -147,43 +150,36 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		// and a List for every incoming and outgoing plugin
 		this.incomingPlugins = new ArrayList<AbstractPlugin>(1); // usually only one incoming
 		this.outgoingPlugins = new ArrayList<AbstractPlugin>(1); // usually only one outgoing
-	}
 
-	public void setOutputPortToAsynchronousMode(final String outputPortName) throws AnalysisConfigurationException {
-		// Plugins can only be configured before the analysis has been started.
-		if (this.state != IPlugin.STATE.READY) {
-			throw new AnalysisConfigurationException("Plugin is not in ready state.");
+		final String[] asyncInputPorts = configuration.getStringArrayProperty(CONFIG_ASYNC_INPUT_PORTS);
+		final String[] asyncOutputPorts = configuration.getStringArrayProperty(CONFIG_ASYNC_OUTPUT_PORTS);
+		for (final String port : asyncInputPorts) {
+			this.setInputPortToAsynchronousMode(port);
 		}
-
-		final BlockingQueue<Object> newQueue = new LinkedBlockingQueue<Object>();
-		if (this.sendingQueues.putIfAbsent(outputPortName, newQueue) != null) {
-			throw new AnalysisConfigurationException("Port is already in asynchronous mode.");
-		} else {
-			this.sendingThreads.add(new SendingThread(newQueue, outputPortName));
+		for (final String port : asyncOutputPorts) {
+			this.setOutputPortToAsynchronousMode(port);
 		}
 	}
 
-	public void setInputPortToAsynchronousMode(final String inputPortName) throws AnalysisConfigurationException {
-		// Plugins can only be configured before the analysis has been started.
-		if (this.state != IPlugin.STATE.READY) {
-			throw new AnalysisConfigurationException("Plugin: " + this.getClass().getName() + " not in " + STATE.READY + " state, but in state " + this.state + ".");
-		}
-
+	private void setOutputPortToAsynchronousMode(final String outputPortName) {
 		final BlockingQueue<Object> newQueue = new LinkedBlockingQueue<Object>();
-		if (this.receivingQueues.putIfAbsent(inputPortName, newQueue) != null) {
-			throw new AnalysisConfigurationException("Port is already in asynchronous mode.");
-		} else {
-			this.receivingThreads.add(new ReceivingThread(newQueue, inputPortName));
-		}
+		this.sendingQueues.put(outputPortName, newQueue);
+		this.sendingThreads.add(new SendingThread(newQueue, outputPortName));
+	}
+
+	private void setInputPortToAsynchronousMode(final String inputPortName) {
+		final BlockingQueue<MethodDataContainer> newQueue = new LinkedBlockingQueue<MethodDataContainer>();
+		this.receivingQueues.put(inputPortName, newQueue);
+		this.receivingThreads.add(new ReceivingThread(newQueue, inputPortName));
 	}
 
 	private class ReceivingThread extends Thread {
 
-		private final BlockingQueue<Object> queue;
+		private final BlockingQueue<MethodDataContainer> queue;
 		private final String inputPortName;
 		private volatile boolean terminated;
 
-		public ReceivingThread(final BlockingQueue<Object> queue, final String inputPortName) {
+		public ReceivingThread(final BlockingQueue<MethodDataContainer> queue, final String inputPortName) {
 			this.queue = queue;
 			this.inputPortName = inputPortName;
 		}
@@ -192,11 +188,20 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		public void run() {
 			while (!this.terminated) {
 				try {
-					final Object data = this.queue.take();
-					final InputPort inputPort = AbstractPlugin.this.inputPorts.get(this.inputPortName);
-					// Now find out the method...and call it.
+					final MethodDataContainer container = this.queue.take();
+					final Object data = container.data;
+					container.method.invoke(AbstractPlugin.this, data);
 				} catch (final InterruptedException ex) {
 					LOG.info("ReceiverThread interrupted", ex);
+				} catch (final IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (final IllegalArgumentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (final InvocationTargetException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		}
@@ -204,6 +209,26 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		public void terminate() {
 			this.terminated = true;
 			this.interrupt();
+		}
+
+	}
+
+	private class MethodDataContainer {
+		private final Method method;
+		private final Object data;
+
+		public MethodDataContainer(final Method method, final Object data) {
+			super();
+			this.method = method;
+			this.data = data;
+		}
+
+		public Method getMethod() {
+			return this.method;
+		}
+
+		public Object getData() {
+			return this.data;
 		}
 
 	}
@@ -301,8 +326,10 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			for (final Class<?> eventType : eventTypes) {
 				if (eventType.isAssignableFrom(data.getClass())) { // data instanceof eventType
 					// Check whether we have to send the data asynchronously for this input port
-					if (this.receivingQueues.containsKey(pluginInputPortReference.getInputPortName())) {
-						this.receivingQueues.get(pluginInputPortReference.getInputPortName()).add(data);
+
+					if (((AbstractPlugin) (pluginInputPortReference.getPlugin())).receivingQueues.containsKey(pluginInputPortReference.getInputPortName())) {
+						((AbstractPlugin) (pluginInputPortReference.getPlugin())).receivingQueues.get(pluginInputPortReference.getInputPortName()).add(
+								new MethodDataContainer(pluginInputPortReference.getInputPortMethod(), data));
 						break;
 					}
 					try {
