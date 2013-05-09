@@ -80,6 +80,8 @@ public @interface Plugin {
 	 */
 	RepositoryPort[] repositoryPorts() default {};
 
+	RepositoryOutputPort[] repositoryOutputPorts() default {};
+
 	/**
 	 * The list of possible properties for this plugin.
 	 * 

@@ -23,6 +23,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import kieker.analysis.plugin.annotation.Property;
+import kieker.analysis.plugin.annotation.RepositoryInputPort;
 
 /**
  * This type annotation can be used to mark repositories.
@@ -72,4 +73,6 @@ public @interface Repository {
 	 * @return A list of properties.
 	 */
 	Property[] configuration() default {};
+
+	RepositoryInputPort[] inputPorts() default {};
 }

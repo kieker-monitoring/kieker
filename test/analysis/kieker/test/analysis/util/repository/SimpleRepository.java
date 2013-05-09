@@ -55,4 +55,5 @@ public class SimpleRepository extends AbstractRepository { // NOPMD (SubClassOfT
 	public Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}
+
 }
