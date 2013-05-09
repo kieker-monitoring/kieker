@@ -28,6 +28,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
@@ -63,8 +64,8 @@ import kieker.common.record.misc.KiekerMetadataRecord;
 @Plugin
 public abstract class AbstractPlugin extends AbstractAnalysisComponent implements IPlugin {
 
-	public static final String CONFIG_ASYNC_INPUT_PORTS = "async-ports-hiddenAndNeverExportedProperty";
-	public static final String CONFIG_ASYNC_OUTPUT_PORTS = "async-outputports-hiddenAndNeverExportedProperty";
+	public static final String CONFIG_ASYNC_INPUT_PORTS = "async-input-ports-hiddenAndNeverExportedProperty";
+	public static final String CONFIG_ASYNC_OUTPUT_PORTS = "async-output-ports-hiddenAndNeverExportedProperty";
 
 	private static final Log LOG = LogFactory.getLog(AbstractPlugin.class);
 
@@ -82,7 +83,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	// Queues and threads for the asynchronous mode
 	private final ConcurrentHashMap<String, BlockingQueue<Object>> sendingQueues = new ConcurrentHashMap<String, BlockingQueue<Object>>();
 	private final Collection<SendingThread> sendingThreads = new CopyOnWriteArrayList<SendingThread>();
-	private final ConcurrentHashMap<String, BlockingQueue<MethodDataContainer>> receivingQueues = new ConcurrentHashMap<String, BlockingQueue<MethodDataContainer>>();
+	private final ConcurrentHashMap<String, BlockingQueue<Object>> receivingQueues = new ConcurrentHashMap<String, BlockingQueue<Object>>();
 	private final Collection<ReceivingThread> receivingThreads = new CopyOnWriteArrayList<ReceivingThread>();
 
 	/**
@@ -97,6 +98,12 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		// Registering will happen in the subclass
 		super(configuration, projectContext);
 
+		// Find out which of the ports should be asynchronous
+		final String[] asyncInputPorts = configuration.getStringArrayProperty(CONFIG_ASYNC_INPUT_PORTS);
+		final String[] asyncOutputPorts = configuration.getStringArrayProperty(CONFIG_ASYNC_OUTPUT_PORTS);
+		Arrays.sort(asyncInputPorts);
+		Arrays.sort(asyncOutputPorts);
+
 		// Get all repository and output ports.
 		this.repositoryPorts = new ConcurrentHashMap<String, RepositoryPort>();
 		this.outputPorts = new ConcurrentHashMap<String, OutputPort>();
@@ -109,6 +116,8 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		for (final OutputPort outputPort : annotation.outputPorts()) {
 			if (this.outputPorts.put(outputPort.name(), outputPort) != null) {
 				LOG.error("Two OutputPorts use the same name: " + outputPort.name());
+			} else if (Arrays.binarySearch(asyncOutputPorts, outputPort.name()) >= 0) {
+				this.setOutputPortToAsynchronousMode(outputPort.name());
 			}
 		}
 		// Get all input ports.
@@ -119,6 +128,8 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 				final InputPort inputPort = method.getAnnotation(InputPort.class);
 				if ((inputPort != null) && (this.inputPorts.put(inputPort.name(), inputPort) != null)) {
 					LOG.error("Two InputPorts use the same name: " + inputPort.name());
+				} else if ((inputPort != null) && (Arrays.binarySearch(asyncInputPorts, inputPort.name()) >= 0)) {
+					this.setInputPortToAsynchronousMode(inputPort.name(), method);
 				}
 				if (inputPort != null) {
 					final Class<?>[] parameters = method.getParameterTypes();
@@ -150,15 +161,6 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		// and a List for every incoming and outgoing plugin
 		this.incomingPlugins = new ArrayList<AbstractPlugin>(1); // usually only one incoming
 		this.outgoingPlugins = new ArrayList<AbstractPlugin>(1); // usually only one outgoing
-
-		final String[] asyncInputPorts = configuration.getStringArrayProperty(CONFIG_ASYNC_INPUT_PORTS);
-		final String[] asyncOutputPorts = configuration.getStringArrayProperty(CONFIG_ASYNC_OUTPUT_PORTS);
-		for (final String port : asyncInputPorts) {
-			this.setInputPortToAsynchronousMode(port);
-		}
-		for (final String port : asyncOutputPorts) {
-			this.setOutputPortToAsynchronousMode(port);
-		}
 	}
 
 	private void setOutputPortToAsynchronousMode(final String outputPortName) {
@@ -167,100 +169,10 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		this.sendingThreads.add(new SendingThread(newQueue, outputPortName));
 	}
 
-	private void setInputPortToAsynchronousMode(final String inputPortName) {
-		final BlockingQueue<MethodDataContainer> newQueue = new LinkedBlockingQueue<MethodDataContainer>();
+	private void setInputPortToAsynchronousMode(final String inputPortName, final Method method) {
+		final BlockingQueue<Object> newQueue = new LinkedBlockingQueue<Object>();
 		this.receivingQueues.put(inputPortName, newQueue);
-		this.receivingThreads.add(new ReceivingThread(newQueue, inputPortName));
-	}
-
-	private class ReceivingThread extends Thread {
-
-		private final BlockingQueue<MethodDataContainer> queue;
-		private final String inputPortName;
-		private volatile boolean terminated;
-
-		public ReceivingThread(final BlockingQueue<MethodDataContainer> queue, final String inputPortName) {
-			this.queue = queue;
-			this.inputPortName = inputPortName;
-		}
-
-		@Override
-		public void run() {
-			while (!this.terminated) {
-				try {
-					final MethodDataContainer container = this.queue.take();
-					final Object data = container.data;
-					container.method.invoke(AbstractPlugin.this, data);
-				} catch (final InterruptedException ex) {
-					LOG.info("ReceiverThread interrupted", ex);
-				} catch (final IllegalAccessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (final IllegalArgumentException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (final InvocationTargetException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-
-		public void terminate() {
-			this.terminated = true;
-			this.interrupt();
-		}
-
-	}
-
-	private class MethodDataContainer {
-		private final Method method;
-		private final Object data;
-
-		public MethodDataContainer(final Method method, final Object data) {
-			super();
-			this.method = method;
-			this.data = data;
-		}
-
-		public Method getMethod() {
-			return this.method;
-		}
-
-		public Object getData() {
-			return this.data;
-		}
-
-	}
-
-	private class SendingThread extends Thread {
-
-		private final BlockingQueue<Object> queue;
-		private final String outputPortName;
-		private volatile boolean terminated;
-
-		public SendingThread(final BlockingQueue<Object> queue, final String outputPortName) {
-			this.queue = queue;
-			this.outputPortName = outputPortName;
-		}
-
-		@Override
-		public void run() {
-			while (!this.terminated) {
-				try {
-					final Object data = this.queue.take();
-					// Make sure that deliver sends the data to the queue but this deliver here should do so, but deliver directly.
-					AbstractPlugin.this.deliver(this.outputPortName, data, false);
-				} catch (final InterruptedException ex) {
-					LOG.info("SendingThread interrupted", ex);
-				}
-			}
-		}
-
-		public void terminate() {
-			this.terminated = true;
-			this.interrupt();
-		}
+		this.receivingThreads.add(new ReceivingThread(newQueue, method));
 	}
 
 	/**
@@ -326,12 +238,13 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			for (final Class<?> eventType : eventTypes) {
 				if (eventType.isAssignableFrom(data.getClass())) { // data instanceof eventType
 					// Check whether we have to send the data asynchronously for this input port
-
-					if (((AbstractPlugin) (pluginInputPortReference.getPlugin())).receivingQueues.containsKey(pluginInputPortReference.getInputPortName())) {
-						((AbstractPlugin) (pluginInputPortReference.getPlugin())).receivingQueues.get(pluginInputPortReference.getInputPortName()).add(
-								new MethodDataContainer(pluginInputPortReference.getInputPortMethod(), data));
+					final AbstractPlugin receivingPlugin = (AbstractPlugin) pluginInputPortReference.getPlugin();
+					final Queue<Object> receivingQueue = receivingPlugin.receivingQueues.get(pluginInputPortReference.getInputPortName());
+					if (receivingQueue != null) {
+						receivingQueue.add(data);
 						break;
 					}
+
 					try {
 						pluginInputPortReference.getInputPortMethod().invoke(pluginInputPortReference.getPlugin(), data);
 					} catch (final InvocationTargetException e) {
@@ -792,4 +705,76 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		// Do nothing by default
 	}
 
+	private class ReceivingThread extends Thread {
+
+		private final BlockingQueue<Object> queue;
+		private final Method method;
+
+		private volatile boolean terminated;
+
+		public ReceivingThread(final BlockingQueue<Object> queue, final Method method) {
+			this.queue = queue;
+			this.method = method;
+			java.security.AccessController.doPrivileged(new PrivilegedAction<Object>() {
+				public Object run() {
+					ReceivingThread.this.method.setAccessible(true);
+					return null;
+				}
+			});
+		}
+
+		@Override
+		public void run() {
+			while (!this.terminated) {
+				try {
+					final Object data = this.queue.take();
+					this.method.invoke(AbstractPlugin.this, data);
+				} catch (final InterruptedException ex) {
+					LOG.info("ReceiverThread interrupted", ex);
+				} catch (final IllegalAccessException e) {
+					e.printStackTrace();
+				} catch (final IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (final InvocationTargetException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		public void terminate() {
+			this.terminated = true;
+			this.interrupt();
+		}
+
+	}
+
+	private class SendingThread extends Thread {
+
+		private final BlockingQueue<Object> queue;
+		private final String outputPortName;
+		private volatile boolean terminated;
+
+		public SendingThread(final BlockingQueue<Object> queue, final String outputPortName) {
+			this.queue = queue;
+			this.outputPortName = outputPortName;
+		}
+
+		@Override
+		public void run() {
+			while (!this.terminated) {
+				try {
+					final Object data = this.queue.take();
+					// Make sure that deliver sends the data to the queue but this deliver here should do so, but deliver directly.
+					AbstractPlugin.this.deliver(this.outputPortName, data, false);
+				} catch (final InterruptedException ex) {
+					LOG.info("SendingThread interrupted", ex);
+				}
+			}
+		}
+
+		public void terminate() {
+			this.terminated = true;
+			this.interrupt();
+		}
+	}
 }
