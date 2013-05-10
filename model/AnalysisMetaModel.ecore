@@ -16,8 +16,8 @@
         eType="#//Property" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Plugin" abstract="true" eSuperTypes="#//AnalysisComponent">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="repositories" upperBound="-1"
-        eType="#//RepositoryConnector" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="repositoryPorts" upperBound="-1"
+        eType="#//RepositoryPort" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="outputPorts" upperBound="-1"
         eType="#//OutputPort" containment="true" eOpposite="#//OutputPort/parent"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="displays" upperBound="-1"
@@ -27,6 +27,8 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="eventTypes" lowerBound="1"
         upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="asynchronous" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="InputPort" eSuperTypes="#//Port">
     <eStructuralFeatures xsi:type="ecore:EReference" name="parent" lowerBound="1"
@@ -47,15 +49,13 @@
         eType="#//InputPort" containment="true" eOpposite="#//InputPort/parent"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Reader" eSuperTypes="#//Plugin"/>
-  <eClassifiers xsi:type="ecore:EClass" name="Repository" eSuperTypes="#//AnalysisComponent"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Repository" eSuperTypes="#//AnalysisComponent">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputPorts" upperBound="-1"
+        eType="#//RepositoryInputPort" containment="true"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Dependency">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="filePath" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="RepositoryConnector">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="repository" lowerBound="1"
-        eType="#//Repository"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Display">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -79,5 +79,11 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
         eType="#//Property" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RepositoryPort" eSuperTypes="#//Port"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RepositoryInputPort" eSuperTypes="#//Port"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AnalysisNode" eSuperTypes="#//Filter">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//AnalysisComponent"/>
   </eClassifiers>
 </ecore:EPackage>

@@ -134,12 +134,6 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR: {
-				MIRepositoryConnector repositoryConnector = (MIRepositoryConnector)theEObject;
-				T result = caseRepositoryConnector(repositoryConnector);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case MIAnalysisMetaModelPackage.DISPLAY: {
 				MIDisplay display = (MIDisplay)theEObject;
 				T result = caseDisplay(display);
@@ -161,6 +155,29 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 			case MIAnalysisMetaModelPackage.ANALYSIS_COMPONENT: {
 				MIAnalysisComponent analysisComponent = (MIAnalysisComponent)theEObject;
 				T result = caseAnalysisComponent(analysisComponent);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case MIAnalysisMetaModelPackage.REPOSITORY_PORT: {
+				MIRepositoryPort repositoryPort = (MIRepositoryPort)theEObject;
+				T result = caseRepositoryPort(repositoryPort);
+				if (result == null) result = casePort(repositoryPort);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case MIAnalysisMetaModelPackage.REPOSITORY_INPUT_PORT: {
+				MIRepositoryInputPort repositoryInputPort = (MIRepositoryInputPort)theEObject;
+				T result = caseRepositoryInputPort(repositoryInputPort);
+				if (result == null) result = casePort(repositoryInputPort);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case MIAnalysisMetaModelPackage.ANALYSIS_NODE: {
+				MIAnalysisNode analysisNode = (MIAnalysisNode)theEObject;
+				T result = caseAnalysisNode(analysisNode);
+				if (result == null) result = caseFilter(analysisNode);
+				if (result == null) result = casePlugin(analysisNode);
+				if (result == null) result = caseAnalysisComponent(analysisNode);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -319,21 +336,6 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Repository Connector</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Repository Connector</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseRepositoryConnector(MIRepositoryConnector object) {
-		return null;
-	}
-
-	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Display</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -390,6 +392,51 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseAnalysisComponent(MIAnalysisComponent object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Repository Port</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Repository Port</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseRepositoryPort(MIRepositoryPort object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Repository Input Port</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Repository Input Port</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseRepositoryInputPort(MIRepositoryInputPort object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Analysis Node</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Analysis Node</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAnalysisNode(MIAnalysisNode object) {
 		return null;
 	}
 

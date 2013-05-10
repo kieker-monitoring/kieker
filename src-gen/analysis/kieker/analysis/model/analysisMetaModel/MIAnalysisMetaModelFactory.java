@@ -94,15 +94,6 @@ public interface MIAnalysisMetaModelFactory extends EFactory {
 	MIDependency createDependency();
 
 	/**
-	 * Returns a new object of class '<em>Repository Connector</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Repository Connector</em>'.
-	 * @generated
-	 */
-	MIRepositoryConnector createRepositoryConnector();
-
-	/**
 	 * Returns a new object of class '<em>Display</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -128,6 +119,33 @@ public interface MIAnalysisMetaModelFactory extends EFactory {
 	 * @generated
 	 */
 	MIDisplayConnector createDisplayConnector();
+
+	/**
+	 * Returns a new object of class '<em>Repository Port</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Repository Port</em>'.
+	 * @generated
+	 */
+	MIRepositoryPort createRepositoryPort();
+
+	/**
+	 * Returns a new object of class '<em>Repository Input Port</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Repository Input Port</em>'.
+	 * @generated
+	 */
+	MIRepositoryInputPort createRepositoryInputPort();
+
+	/**
+	 * Returns a new object of class '<em>Analysis Node</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Analysis Node</em>'.
+	 * @generated
+	 */
+	MIAnalysisNode createAnalysisNode();
 
 	/**
 	 * Returns the package supported by this factory.

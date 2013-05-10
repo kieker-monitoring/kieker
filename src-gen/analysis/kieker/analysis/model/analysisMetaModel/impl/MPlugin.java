@@ -8,7 +8,7 @@ import kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage;
 import kieker.analysis.model.analysisMetaModel.MIDisplay;
 import kieker.analysis.model.analysisMetaModel.MIOutputPort;
 import kieker.analysis.model.analysisMetaModel.MIPlugin;
-import kieker.analysis.model.analysisMetaModel.MIRepositoryConnector;
+import kieker.analysis.model.analysisMetaModel.MIRepositoryPort;
 
 import org.eclipse.emf.common.notify.NotificationChain;
 
@@ -28,7 +28,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MPlugin#getRepositories <em>Repositories</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MPlugin#getRepositoryPorts <em>Repository Ports</em>}</li>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MPlugin#getOutputPorts <em>Output Ports</em>}</li>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MPlugin#getDisplays <em>Displays</em>}</li>
  * </ul>
@@ -38,14 +38,14 @@ import org.eclipse.emf.ecore.util.InternalEList;
  */
 public abstract class MPlugin extends MAnalysisComponent implements MIPlugin {
 	/**
-	 * The cached value of the '{@link #getRepositories() <em>Repositories</em>}' containment reference list.
+	 * The cached value of the '{@link #getRepositoryPorts() <em>Repository Ports</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getRepositories()
+	 * @see #getRepositoryPorts()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<MIRepositoryConnector> repositories;
+	protected EList<MIRepositoryPort> repositoryPorts;
 
 	/**
 	 * The cached value of the '{@link #getOutputPorts() <em>Output Ports</em>}' containment reference list.
@@ -91,11 +91,11 @@ public abstract class MPlugin extends MAnalysisComponent implements MIPlugin {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<MIRepositoryConnector> getRepositories() {
-		if (repositories == null) {
-			repositories = new EObjectContainmentEList<MIRepositoryConnector>(MIRepositoryConnector.class, this, MIAnalysisMetaModelPackage.PLUGIN__REPOSITORIES);
+	public EList<MIRepositoryPort> getRepositoryPorts() {
+		if (repositoryPorts == null) {
+			repositoryPorts = new EObjectContainmentEList<MIRepositoryPort>(MIRepositoryPort.class, this, MIAnalysisMetaModelPackage.PLUGIN__REPOSITORY_PORTS);
 		}
-		return repositories;
+		return repositoryPorts;
 	}
 
 	/**
@@ -147,8 +147,8 @@ public abstract class MPlugin extends MAnalysisComponent implements MIPlugin {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case MIAnalysisMetaModelPackage.PLUGIN__REPOSITORIES:
-				return ((InternalEList<?>)getRepositories()).basicRemove(otherEnd, msgs);
+			case MIAnalysisMetaModelPackage.PLUGIN__REPOSITORY_PORTS:
+				return ((InternalEList<?>)getRepositoryPorts()).basicRemove(otherEnd, msgs);
 			case MIAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
 				return ((InternalEList<?>)getOutputPorts()).basicRemove(otherEnd, msgs);
 			case MIAnalysisMetaModelPackage.PLUGIN__DISPLAYS:
@@ -165,8 +165,8 @@ public abstract class MPlugin extends MAnalysisComponent implements MIPlugin {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case MIAnalysisMetaModelPackage.PLUGIN__REPOSITORIES:
-				return getRepositories();
+			case MIAnalysisMetaModelPackage.PLUGIN__REPOSITORY_PORTS:
+				return getRepositoryPorts();
 			case MIAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
 				return getOutputPorts();
 			case MIAnalysisMetaModelPackage.PLUGIN__DISPLAYS:
@@ -184,9 +184,9 @@ public abstract class MPlugin extends MAnalysisComponent implements MIPlugin {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case MIAnalysisMetaModelPackage.PLUGIN__REPOSITORIES:
-				getRepositories().clear();
-				getRepositories().addAll((Collection<? extends MIRepositoryConnector>)newValue);
+			case MIAnalysisMetaModelPackage.PLUGIN__REPOSITORY_PORTS:
+				getRepositoryPorts().clear();
+				getRepositoryPorts().addAll((Collection<? extends MIRepositoryPort>)newValue);
 				return;
 			case MIAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
 				getOutputPorts().clear();
@@ -208,8 +208,8 @@ public abstract class MPlugin extends MAnalysisComponent implements MIPlugin {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case MIAnalysisMetaModelPackage.PLUGIN__REPOSITORIES:
-				getRepositories().clear();
+			case MIAnalysisMetaModelPackage.PLUGIN__REPOSITORY_PORTS:
+				getRepositoryPorts().clear();
 				return;
 			case MIAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
 				getOutputPorts().clear();
@@ -229,8 +229,8 @@ public abstract class MPlugin extends MAnalysisComponent implements MIPlugin {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case MIAnalysisMetaModelPackage.PLUGIN__REPOSITORIES:
-				return repositories != null && !repositories.isEmpty();
+			case MIAnalysisMetaModelPackage.PLUGIN__REPOSITORY_PORTS:
+				return repositoryPorts != null && !repositoryPorts.isEmpty();
 			case MIAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
 				return outputPorts != null && !outputPorts.isEmpty();
 			case MIAnalysisMetaModelPackage.PLUGIN__DISPLAYS:

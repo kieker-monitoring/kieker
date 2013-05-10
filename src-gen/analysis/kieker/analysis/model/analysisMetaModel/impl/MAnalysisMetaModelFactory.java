@@ -64,10 +64,12 @@ public class MAnalysisMetaModelFactory extends EFactoryImpl implements MIAnalysi
 			case MIAnalysisMetaModelPackage.READER: return createReader();
 			case MIAnalysisMetaModelPackage.REPOSITORY: return createRepository();
 			case MIAnalysisMetaModelPackage.DEPENDENCY: return createDependency();
-			case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR: return createRepositoryConnector();
 			case MIAnalysisMetaModelPackage.DISPLAY: return createDisplay();
 			case MIAnalysisMetaModelPackage.VIEW: return createView();
 			case MIAnalysisMetaModelPackage.DISPLAY_CONNECTOR: return createDisplayConnector();
+			case MIAnalysisMetaModelPackage.REPOSITORY_PORT: return createRepositoryPort();
+			case MIAnalysisMetaModelPackage.REPOSITORY_INPUT_PORT: return createRepositoryInputPort();
+			case MIAnalysisMetaModelPackage.ANALYSIS_NODE: return createAnalysisNode();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -158,16 +160,6 @@ public class MAnalysisMetaModelFactory extends EFactoryImpl implements MIAnalysi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public MIRepositoryConnector createRepositoryConnector() {
-		MRepositoryConnector repositoryConnector = new MRepositoryConnector();
-		return repositoryConnector;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public MIDisplay createDisplay() {
 		MDisplay display = new MDisplay();
 		return display;
@@ -191,6 +183,36 @@ public class MAnalysisMetaModelFactory extends EFactoryImpl implements MIAnalysi
 	public MIDisplayConnector createDisplayConnector() {
 		MDisplayConnector displayConnector = new MDisplayConnector();
 		return displayConnector;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public MIRepositoryPort createRepositoryPort() {
+		MRepositoryPort repositoryPort = new MRepositoryPort();
+		return repositoryPort;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public MIRepositoryInputPort createRepositoryInputPort() {
+		MRepositoryInputPort repositoryInputPort = new MRepositoryInputPort();
+		return repositoryInputPort;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public MIAnalysisNode createAnalysisNode() {
+		MAnalysisNode analysisNode = new MAnalysisNode();
+		return analysisNode;
 	}
 
 	/**
