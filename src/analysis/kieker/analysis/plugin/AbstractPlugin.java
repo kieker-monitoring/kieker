@@ -64,8 +64,8 @@ import kieker.common.record.misc.KiekerMetadataRecord;
 @Plugin
 public abstract class AbstractPlugin extends AbstractAnalysisComponent implements IPlugin {
 
-	public static final String CONFIG_ASYNC_INPUT_PORTS = "async-input-ports-hiddenAndNeverExportedProperty";
-	public static final String CONFIG_ASYNC_OUTPUT_PORTS = "async-output-ports-hiddenAndNeverExportedProperty";
+	public static final String CONFIG_ASYNC_INPUT_PORTS = "async-input-ports";
+	public static final String CONFIG_ASYNC_OUTPUT_PORTS = "async-output-ports";
 
 	private static final Log LOG = LogFactory.getLog(AbstractPlugin.class);
 
@@ -776,5 +776,13 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			this.terminated = true;
 			this.interrupt();
 		}
+	}
+
+	public Object[] getAllAsynchronousInputPorts() {
+		return this.receivingQueues.keySet().toArray(new String[0]);
+	}
+
+	public String[] getAllAsynchronousOutputPorts() {
+		return this.sendingQueues.keySet().toArray(new String[0]);
 	}
 }

@@ -26,6 +26,7 @@ public interface MIPlugin extends MIAnalysisComponent {
 	/**
 	 * Returns the value of the '<em><b>Repository Ports</b></em>' containment reference list.
 	 * The list contents are of type {@link kieker.analysis.model.analysisMetaModel.MIRepositoryPort}.
+	 * It is bidirectional and its opposite is '{@link kieker.analysis.model.analysisMetaModel.MIRepositoryPort#getParent <em>Parent</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Repository Ports</em>' containment reference list isn't clear,
@@ -34,7 +35,8 @@ public interface MIPlugin extends MIAnalysisComponent {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Repository Ports</em>' containment reference list.
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getPlugin_RepositoryPorts()
-	 * @model containment="true"
+	 * @see kieker.analysis.model.analysisMetaModel.MIRepositoryPort#getParent
+	 * @model opposite="parent" containment="true"
 	 * @generated
 	 */
 	EList<MIRepositoryPort> getRepositoryPorts();

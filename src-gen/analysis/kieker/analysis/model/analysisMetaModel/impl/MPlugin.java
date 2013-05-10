@@ -93,7 +93,7 @@ public abstract class MPlugin extends MAnalysisComponent implements MIPlugin {
 	 */
 	public EList<MIRepositoryPort> getRepositoryPorts() {
 		if (repositoryPorts == null) {
-			repositoryPorts = new EObjectContainmentEList<MIRepositoryPort>(MIRepositoryPort.class, this, MIAnalysisMetaModelPackage.PLUGIN__REPOSITORY_PORTS);
+			repositoryPorts = new EObjectContainmentWithInverseEList<MIRepositoryPort>(MIRepositoryPort.class, this, MIAnalysisMetaModelPackage.PLUGIN__REPOSITORY_PORTS, MIAnalysisMetaModelPackage.REPOSITORY_PORT__PARENT);
 		}
 		return repositoryPorts;
 	}
@@ -131,6 +131,8 @@ public abstract class MPlugin extends MAnalysisComponent implements MIPlugin {
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
+			case MIAnalysisMetaModelPackage.PLUGIN__REPOSITORY_PORTS:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getRepositoryPorts()).basicAdd(otherEnd, msgs);
 			case MIAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS:
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getOutputPorts()).basicAdd(otherEnd, msgs);
 			case MIAnalysisMetaModelPackage.PLUGIN__DISPLAYS:

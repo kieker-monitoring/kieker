@@ -17,7 +17,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Plugin" abstract="true" eSuperTypes="#//AnalysisComponent">
     <eStructuralFeatures xsi:type="ecore:EReference" name="repositoryPorts" upperBound="-1"
-        eType="#//RepositoryPort" containment="true"/>
+        eType="#//RepositoryPort" containment="true" eOpposite="#//RepositoryPort/parent"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="outputPorts" upperBound="-1"
         eType="#//OutputPort" containment="true" eOpposite="#//OutputPort/parent"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="displays" upperBound="-1"
@@ -80,7 +80,12 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
         eType="#//Property" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="RepositoryPort" eSuperTypes="#//Port"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RepositoryPort" eSuperTypes="#//Port">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subscribers" upperBound="-1"
+        eType="#//RepositoryInputPort"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" lowerBound="1"
+        eType="#//Plugin" eOpposite="#//Plugin/repositoryPorts"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="RepositoryInputPort" eSuperTypes="#//Port"/>
   <eClassifiers xsi:type="ecore:EClass" name="AnalysisNode" eSuperTypes="#//Filter">
     <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"

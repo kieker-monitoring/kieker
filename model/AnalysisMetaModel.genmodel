@@ -23,7 +23,6 @@
     <genClasses ecoreClass="AnalysisMetaModel.ecore#//Port">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AnalysisMetaModel.ecore#//Port/name"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EAttribute AnalysisMetaModel.ecore#//Port/eventTypes"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AnalysisMetaModel.ecore#//Port/asynchronous"/>
     </genClasses>
     <genClasses ecoreClass="AnalysisMetaModel.ecore#//InputPort">
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference AnalysisMetaModel.ecore#//InputPort/parent"/>
@@ -64,7 +63,10 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute AnalysisMetaModel.ecore#//AnalysisComponent/classname"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference AnalysisMetaModel.ecore#//AnalysisComponent/properties"/>
     </genClasses>
-    <genClasses ecoreClass="AnalysisMetaModel.ecore#//RepositoryPort"/>
+    <genClasses ecoreClass="AnalysisMetaModel.ecore#//RepositoryPort">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference AnalysisMetaModel.ecore#//RepositoryPort/subscribers"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference AnalysisMetaModel.ecore#//RepositoryPort/parent"/>
+    </genClasses>
     <genClasses ecoreClass="AnalysisMetaModel.ecore#//RepositoryInputPort"/>
     <genClasses ecoreClass="AnalysisMetaModel.ecore#//AnalysisNode">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference AnalysisMetaModel.ecore#//AnalysisNode/children"/>
