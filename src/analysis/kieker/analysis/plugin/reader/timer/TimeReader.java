@@ -24,6 +24,8 @@ import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
+import kieker.analysis.plugin.metasignal.InitializationSignal;
+import kieker.analysis.plugin.metasignal.TerminationSignal;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -138,6 +140,7 @@ public final class TimeReader extends AbstractReaderPlugin {
 	 * {@inheritDoc}
 	 */
 	public boolean read() {
+		super.deliver(OUTPUT_PORT_NAME_TIMESTAMPS, new InitializationSignal(this));
 		this.executorService.scheduleAtFixedRate(new TimestampEventTask(), this.initialDelay, this.period, TimeUnit.NANOSECONDS);
 
 		// Wait for the termination method to be called (if necessary)
@@ -150,7 +153,7 @@ public final class TimeReader extends AbstractReaderPlugin {
 				}
 			}
 		}
-
+		super.deliver(OUTPUT_PORT_NAME_TIMESTAMPS, new TerminationSignal(this));
 		return true;
 	}
 

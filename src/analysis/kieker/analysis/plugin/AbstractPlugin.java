@@ -46,6 +46,9 @@ import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
+import kieker.analysis.plugin.metasignal.InitializationSignal;
+import kieker.analysis.plugin.metasignal.MetaSignal;
+import kieker.analysis.plugin.metasignal.TerminationSignal;
 import kieker.analysis.plugin.reader.IReaderPlugin;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
@@ -189,6 +192,18 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	}
 
 	private final boolean deliver(final String outputPortName, final Object data, final boolean checkForAsynchronousMode) {
+		// Is this a meta signal?
+		if (data instanceof MetaSignal) {
+			for (final AbstractPlugin plugin : this.outgoingPlugins) {
+
+				if (plugin.processMetaSignal((MetaSignal) data)) {
+					for (final String outputPort : plugin.getAllOutputPortNames()) {
+						plugin.deliver(outputPort, data);
+					}
+				}
+			}
+		}
+
 		// Check whether the data has to be delivered asynchronously
 		if (checkForAsynchronousMode && this.sendingQueues.containsKey(outputPortName)) {
 			this.sendingQueues.get(outputPortName).add(data);
@@ -269,6 +284,16 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 				}
 			}
 		}
+		return true;
+	}
+
+	private boolean processMetaSignal(final MetaSignal data) {
+		if (data instanceof InitializationSignal) {
+			System.out.println(this + " received " + data);
+		} else if (data instanceof TerminationSignal) {
+			System.out.println(this + " received " + data);
+		}
+
 		return true;
 	}
 
