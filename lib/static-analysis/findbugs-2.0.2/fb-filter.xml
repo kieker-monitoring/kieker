@@ -24,8 +24,8 @@
 	</Match>
 
 	<Match>
-		<Class name="kieker.analysis.AnalysisController" />
-		<Method name="getCurrentConfiguration" params="" returns="kieker.analysis.model.analysisMetaModel.MIProject" />
+		<Class name="kieker.analysis.model.MetaModelHandler" />
+		<Method name="javaToMetaModel" params="java.util.Collection,java.util.Collection,java.util.Collection,java.util.Collection,java.lang.String,kieker.common.configuration.Configuration" returns="kieker.analysis.model.analysisMetaModel.MIProject" />
 		<Bug pattern="REC_CATCH_EXCEPTION" />
 	</Match>
 

@@ -72,7 +72,11 @@ import kieker.common.configuration.Configuration;
  * 
  * @since 1.8
  */
-public class MetaModelHandler {
+public final class MetaModelHandler {
+
+	private MetaModelHandler() {
+		// No code necessary
+	}
 
 	public static final void saveProjectToFile(final File file, final MIProject project) throws IOException {
 		// Create a resource and put the given project into it
