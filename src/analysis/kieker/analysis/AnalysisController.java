@@ -634,12 +634,12 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		} catch (final IOException ex) {
 			final IOException newEx = new IOException("Error loading file '" + file.getAbsolutePath() + "'.");
 			newEx.initCause(ex);
-			throw newEx;
+			throw newEx; // NOPMD (cause is set)
 		} catch (final Exception ex) { // NOPMD NOCS (illegal catch)
 			// Some exceptions like the XMIException can be thrown during loading although it cannot be seen. Catch this situation.
 			final IOException newEx = new IOException("The given file '" + file.getAbsolutePath() + "' is not a valid kax-configuration file.");
 			newEx.initCause(ex);
-			throw newEx;
+			throw newEx; // NOPMD (cause is set)
 		}
 	}
 
@@ -659,7 +659,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		} catch (final IOException ex) {
 			final IOException newEx = new IOException("Unable to save configuration file '" + file.getAbsolutePath() + "'.");
 			newEx.initCause(ex);
-			throw newEx;
+			throw newEx; // NOPMD (cause is set)
 		}
 	}
 
