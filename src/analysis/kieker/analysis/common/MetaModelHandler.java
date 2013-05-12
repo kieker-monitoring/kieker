@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.eclipse.emf.common.util.BasicEList;
@@ -42,17 +43,23 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.IProjectContext;
+import kieker.analysis.analysisComponent.AbstractAnalysisComponent;
 import kieker.analysis.exception.AnalysisConfigurationException;
-import kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelFactory;
+import kieker.analysis.model.analysisMetaModel.MIDependency;
 import kieker.analysis.model.analysisMetaModel.MIFilter;
 import kieker.analysis.model.analysisMetaModel.MIInputPort;
 import kieker.analysis.model.analysisMetaModel.MIOutputPort;
 import kieker.analysis.model.analysisMetaModel.MIPlugin;
 import kieker.analysis.model.analysisMetaModel.MIProject;
 import kieker.analysis.model.analysisMetaModel.MIProperty;
+import kieker.analysis.model.analysisMetaModel.MIRepository;
+import kieker.analysis.model.analysisMetaModel.MIRepositoryConnector;
 import kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelFactory;
 import kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage;
 import kieker.analysis.plugin.AbstractPlugin;
+import kieker.analysis.plugin.IPlugin;
+import kieker.analysis.plugin.IPlugin.PluginInputPortReference;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.repository.AbstractRepository;
@@ -229,21 +236,253 @@ public class MetaModelHandler {
 	}
 
 	public static final MIProject javaToMetaModel(final Collection<AbstractReaderPlugin> readers, final Collection<AbstractFilterPlugin> filters,
-			final Collection<AbstractRepository> repositories, final Collection<PluginConnection> pluginConnections,
-			final Collection<RepositoryConnection> repositoryConnections, final Map<String, String> globalProperties) {
-		final MIAnalysisMetaModelFactory factory = MIAnalysisMetaModelFactory.eINSTANCE;
-		final MIProject project = factory.createProject();
+			final Collection<AbstractRepository> repositories, final Collection<MIDependency> dependencies, final String projectName,
+			final Configuration globalConfiguration) throws AnalysisConfigurationException {
+		try {
+			// Create a factory to create all other model instances.
+			final MAnalysisMetaModelFactory factory = new MAnalysisMetaModelFactory();
 
-		return project;
+			// We start with the project instance
+			final MIProject mProject = factory.createProject();
+			mProject.setName(projectName);
+			mProject.getDependencies().addAll(dependencies);
+
+			final Map<AbstractPlugin, MIPlugin> pluginMap = new HashMap<AbstractPlugin, MIPlugin>(); // NOPMD (no concurrent access)
+			final Map<AbstractRepository, MIRepository> repositoryMap = new HashMap<AbstractRepository, MIRepository>(); // NOPMD (no concurrent access)
+
+			// Run through all repositories and create the model counterparts.
+			for (final AbstractRepository repository : repositories) {
+				final MIRepository mRepository = factory.createRepository();
+				mRepository.setClassname(repository.getClass().getName());
+				mRepository.getProperties().addAll(MetaModelHandler.convertProperties(repository.getCurrentConfiguration(), factory));
+				mProject.getRepositories().add(mRepository);
+
+				// Remember the mapping.
+				repositoryMap.put(repository, mRepository);
+			}
+
+			// Run through all plugins and create the model counterparts.
+			final List<AbstractPlugin> plugins = new ArrayList<AbstractPlugin>(readers);
+			plugins.addAll(filters);
+			for (final AbstractPlugin plugin : plugins) {
+				MIPlugin mPlugin;
+				if (plugin instanceof AbstractReaderPlugin) {
+					mPlugin = factory.createReader();
+				} else {
+					mPlugin = factory.createFilter();
+				}
+
+				mPlugin.setClassname(plugin.getClass().getName());
+				mPlugin.setName(plugin.getName());
+				mPlugin.getProperties().addAll(MetaModelHandler.convertProperties(plugin.getCurrentConfiguration(), factory));
+
+				// Extract the repositories.
+				for (final Entry<String, AbstractRepository> repoEntry : plugin.getCurrentRepositories().entrySet()) {
+					// Try to find the repository within our map.
+					final AbstractRepository repository = repoEntry.getValue();
+					final MIRepository mRepository = repositoryMap.get(repository);
+					// If it doesn't exist, we have a problem...
+					if (mRepository == null) {
+						throw new AnalysisConfigurationException("Repository '" + repository.getName() + "' (" + repository.getRepositoryName()
+								+ ") not contained in project. Maybe the repository has not been registered.");
+					}
+					// Now the connector.
+					final MIRepositoryConnector mRepositoryConn = factory.createRepositoryConnector();
+					mRepositoryConn.setName(repoEntry.getKey());
+					mRepositoryConn.setRepository(mRepository);
+					mPlugin.getRepositories().add(mRepositoryConn);
+				}
+				// Create the ports.
+				final String[] outs = plugin.getAllOutputPortNames();
+				for (final String out : outs) {
+					final MIOutputPort mOutputPort = factory.createOutputPort();
+					mOutputPort.setName(out);
+					mPlugin.getOutputPorts().add(mOutputPort);
+				}
+				final String[] ins = plugin.getAllInputPortNames();
+				for (final String in : ins) {
+					final MIInputPort mInputPort = factory.createInputPort();
+					mInputPort.setName(in);
+					((MIFilter) mPlugin).getInputPorts().add(mInputPort);
+				}
+				mProject.getPlugins().add(mPlugin);
+
+				// Remember the mapping.
+				pluginMap.put(plugin, mPlugin);
+			}
+
+			// Now connect the plugins.
+			for (final IPlugin plugin : plugins) {
+				final MIPlugin mOutputPlugin = pluginMap.get(plugin);
+				// Check all output ports of the original plugin.
+				for (final String outputPortName : plugin.getAllOutputPortNames()) {
+					// Get the corresponding port of the model counterpart and get also the plugins which are currently connected with the original plugin.
+					final EList<MIInputPort> subscribers = MetaModelHandler.findOutputPort(mOutputPlugin, outputPortName).getSubscribers();
+					// Run through all connected plugins.
+					for (final PluginInputPortReference subscriber : plugin.getConnectedPlugins(outputPortName)) {
+						final IPlugin subscriberPlugin = subscriber.getPlugin();
+						final MIPlugin mSubscriberPlugin = pluginMap.get(subscriberPlugin);
+						// If it doesn't exist, we have a problem...
+						if (mSubscriberPlugin == null) {
+							throw new AnalysisConfigurationException("Plugin '" + subscriberPlugin.getName() + "' (" + subscriberPlugin.getPluginName()
+									+ ") not contained in project. Maybe the plugin has not been registered.");
+						}
+						final MIInputPort mInputPort = MetaModelHandler.findInputPort((MIFilter) mSubscriberPlugin, subscriber.getInputPortName());
+						subscribers.add(mInputPort);
+					}
+				}
+			}
+
+			// Now put our global configuration into the model instance
+			final Set<Entry<Object, Object>> properties = globalConfiguration.entrySet();
+			for (final Entry<Object, Object> property : properties) {
+				final MIProperty mProperty = factory.createProperty();
+				mProperty.setName((String) property.getKey());
+				mProperty.setValue((String) property.getValue());
+
+				mProject.getProperties().add(mProperty);
+			}
+
+			// We are finished. Return the finished project.
+			return mProject;
+		} catch (final Exception ex) { // NOPMD NOCS (catch any remaining problems)
+			throw new AnalysisConfigurationException("Failed to retrieve current configuration of AnalysisCopntroller.", ex);
+		}
 	}
 
-	public static final void metaModelToJava(final MIProject project, final AnalysisController ac, final Collection<PluginConnection> pluginConnections,
-			final Collection<RepositoryConnection> repositoryConnections, final Map<String, String> globalProperties,
-			final Map<MIPlugin, AbstractPlugin> pluginMapping) {
+	public static final void metaModelToJava(final MIProject mProject, final AnalysisController ac, final Collection<PluginConnection> pluginConnections,
+			final Collection<RepositoryConnection> repositoryConnections, final Collection<MIDependency> dependencies, final ClassLoader classLoader,
+			final Configuration globalConfiguration, final Map<MIRepository, AbstractRepository> repositoryMap, final Map<MIPlugin, AbstractPlugin> pluginMap)
+			throws AnalysisConfigurationException {
+		// Remember the libraries (But create them via a factory to avoid that the dependencies are removed during the saving.
+		final MAnalysisMetaModelFactory factory = new MAnalysisMetaModelFactory();
+		for (final MIDependency mDepdendency : mProject.getDependencies()) {
+			final MIDependency mDepdendencyCopy = factory.createDependency();
+			mDepdendencyCopy.setFilePath(mDepdendency.getFilePath());
+			dependencies.add(mDepdendencyCopy);
+		}
+		// Create the repositories.
+		for (final MIRepository mRepository : mProject.getRepositories()) {
+			// Extract the necessary informations to create the repository.
+			final Configuration configuration = MetaModelHandler.modelPropertiesToConfiguration(mRepository.getProperties());
+			final AbstractRepository repository = MetaModelHandler.createAndInitialize(AbstractRepository.class, mRepository.getClassname(), configuration, ac,
+					classLoader); // throws AnalysisConfigurationException on errors
+			repositoryMap.put(mRepository, repository);
+		}
+		// We run through the project and collect all plugins. As we create an actual object for every plugin within the model, we have to remember the mapping
+		// between the plugins within the model and the actual objects we create.
+		final EList<MIPlugin> mPlugins = mProject.getPlugins();
+		// Now run through all plugins.
+		for (final MIPlugin mPlugin : mPlugins) {
+			// Extract the necessary informations to create the plugin.
+			final Configuration configuration = MetaModelHandler.modelPropertiesToConfiguration(mPlugin.getProperties());
+			final String pluginClassname = mPlugin.getClassname();
+			configuration.setProperty(AbstractAnalysisComponent.CONFIG_NAME, mPlugin.getName());
+			// Create the plugin and put it into our map. */
+			final AbstractPlugin plugin = MetaModelHandler.createAndInitialize(AbstractPlugin.class, pluginClassname, configuration, ac, classLoader);
+			pluginMap.put(mPlugin, plugin);
+			// Check the used configuration against the actual available configuration keys.
+			MetaModelHandler.checkConfiguration(plugin, configuration);
+		}
+		// Now we have all plugins. We can start to assemble the wiring.
+		for (final MIPlugin mPlugin : mPlugins) {
+			// Check whether the ports exist and log this if necessary.
+			MetaModelHandler.checkPorts(mPlugin, pluginMap.get(mPlugin));
+			final EList<MIRepositoryConnector> mPluginRPorts = mPlugin.getRepositories();
+			for (final MIRepositoryConnector mPluginRPort : mPluginRPorts) {
+				repositoryConnections.add(new RepositoryConnection(pluginMap.get(mPlugin), repositoryMap.get(mPluginRPort.getRepository()), mPluginRPort.getName()));
+			}
+			final EList<MIOutputPort> mPluginOPorts = mPlugin.getOutputPorts();
+			for (final MIOutputPort mPluginOPort : mPluginOPorts) {
+				final String outputPortName = mPluginOPort.getName();
+				final AbstractPlugin srcPlugin = pluginMap.get(mPlugin);
+				// Get all ports which should be subscribed to this port.
+				final EList<MIInputPort> mSubscribers = mPluginOPort.getSubscribers();
+				for (final MIInputPort mSubscriber : mSubscribers) {
+					// Find the mapping and subscribe
+					final String inputPortName = mSubscriber.getName();
+					final AbstractPlugin dstPlugin = pluginMap.get(mSubscriber.getParent());
+					pluginConnections.add(new PluginConnection(srcPlugin, dstPlugin, outputPortName, inputPortName));
+				}
+			}
+		}
 
+		// Now load our global configuration from the model instance
+		for (final MIProperty mProperty : mProject.getProperties()) {
+			globalConfiguration.setProperty(mProperty.getName(), mProperty.getValue());
+		}
 	}
 
-	public class RepositoryConnection {
+	/**
+	 * Creates and initializes the given class with the given configuration via reflection.
+	 * 
+	 * @param c
+	 *            The base class of the class to be created ({@link AbstractRepository}, {@link AbstractPlugin}).
+	 * @param classname
+	 *            The name of the class to be created.
+	 * @param configuration
+	 *            The configuration to be used to initialize the class.
+	 * @param classLoader
+	 *            The classloader which will be used to initialize the class.
+	 * 
+	 * @param <C>
+	 *            The type of the class.
+	 * 
+	 * @return A fully initialized class.
+	 * @throws AnalysisConfigurationException
+	 *             If the class could not be found or the class doesn't implement the correct classloader.
+	 */
+	@SuppressWarnings("unchecked")
+	private static final <C extends AbstractAnalysisComponent> C createAndInitialize(final Class<C> c, final String classname, final Configuration configuration,
+			final IProjectContext projectContext, final ClassLoader classLoader) throws AnalysisConfigurationException {
+		try {
+			final Class<?> clazz = Class.forName(classname, true, classLoader);
+			if (c.isAssignableFrom(clazz)) {
+				return (C) clazz.getConstructor(Configuration.class, IProjectContext.class).newInstance(configuration, projectContext);
+			} else {
+				throw new AnalysisConfigurationException("Class '" + classname + "' has to implement or extend '" + c.getSimpleName() + "'");
+			}
+		} catch (final ClassNotFoundException ex) {
+			throw new AnalysisConfigurationException(c.getSimpleName() + ": Class '" + classname + "' not found", ex);
+		} catch (final NoSuchMethodException ex) {
+			throw new AnalysisConfigurationException(c.getSimpleName() + ": Class '" + classname
+					+ "' has to implement a (public) constructor that accepts a single Configuration", ex);
+		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
+			// SecurityException, IllegalAccessException, IllegalArgumentException, InstantiationException, InvocationTargetException
+			throw new AnalysisConfigurationException(c.getSimpleName() + ": Failed to load class for name '" + classname + "'", ex);
+		}
+	}
+
+	/**
+	 * This method uses the given configuration object and checks the used keys against the actual existing keys within the given plugin. If there are keys in the
+	 * configuration object which are not used in the plugin, an exception is thrown.
+	 * 
+	 * This method should be called during the creation of the plugins via a given configuration file to find outdated properties.
+	 * 
+	 * @param plugin
+	 *            The plugin to be used for the check.
+	 * @param configuration
+	 *            The configuration to be checked for correctness.
+	 * @throws AnalysisConfigurationException
+	 *             If an invalid property has been detected.
+	 */
+	private static void checkConfiguration(final AbstractPlugin plugin, final Configuration configuration) throws AnalysisConfigurationException {
+		final Set<String> possibleKeys = new HashSet<String>();
+		// Run through all used keys in the actual configuration. (all possible keys)
+		for (final Enumeration<?> e = plugin.getCurrentConfiguration().propertyNames(); e.hasMoreElements();) {
+			possibleKeys.add((String) e.nextElement());
+		}
+		// Run through all used keys in the given configuration.
+		for (final Enumeration<?> e = configuration.propertyNames(); e.hasMoreElements();) {
+			final String key = (String) e.nextElement();
+			if (!possibleKeys.contains(key) && !(key.equals(AbstractAnalysisComponent.CONFIG_NAME))) {
+				// Found an invalid key.
+				throw new AnalysisConfigurationException("Invalid property of '" + plugin.getName() + "' (" + plugin.getPluginName() + ") found: '" + key + "'.");
+			}
+		}
+	}
+
+	public static class RepositoryConnection {
 
 		private final AbstractPlugin source;
 		private final AbstractRepository repository;
@@ -269,7 +508,7 @@ public class MetaModelHandler {
 
 	}
 
-	public class PluginConnection {
+	public static class PluginConnection {
 		private final AbstractPlugin source;
 		private final AbstractPlugin destination;
 		private final String outputName;
