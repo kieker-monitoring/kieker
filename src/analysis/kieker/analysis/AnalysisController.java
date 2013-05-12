@@ -27,10 +27,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import kieker.analysis.common.MetaModelHandler;
-import kieker.analysis.common.MetaModelHandler.PluginConnection;
-import kieker.analysis.common.MetaModelHandler.RepositoryConnection;
 import kieker.analysis.exception.AnalysisConfigurationException;
+import kieker.analysis.model.MetaModelHandler;
+import kieker.analysis.model.MetaModelHandler.PluginConnection;
+import kieker.analysis.model.MetaModelHandler.RepositoryConnection;
 import kieker.analysis.model.analysisMetaModel.MIDependency;
 import kieker.analysis.model.analysisMetaModel.MIPlugin;
 import kieker.analysis.model.analysisMetaModel.MIProject;

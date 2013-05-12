@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.common;
+package kieker.analysis.model;
 
 import java.io.File;
 import java.io.IOException;
@@ -482,6 +482,11 @@ public class MetaModelHandler {
 		}
 	}
 
+	/**
+	 * @author Nils Christian Ehmke
+	 * 
+	 * @since 1.8
+	 */
 	public static class RepositoryConnection {
 
 		private final AbstractPlugin source;
@@ -508,6 +513,11 @@ public class MetaModelHandler {
 
 	}
 
+	/**
+	 * @author Nils Christian Ehmke
+	 * 
+	 * @since 1.8
+	 */
 	public static class PluginConnection {
 		private final AbstractPlugin source;
 		private final AbstractPlugin destination;
