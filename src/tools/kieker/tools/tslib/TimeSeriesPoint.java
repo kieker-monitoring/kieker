@@ -16,7 +16,6 @@
 
 package kieker.tools.tslib;
 
-import java.util.Date;
 
 /**
  * @author Andre van Hoorn
@@ -25,7 +24,7 @@ import java.util.Date;
  */
 public class TimeSeriesPoint<T> implements ITimeSeriesPoint<T> {
 
-	private final Date time;
+	private final long time;
 	private final T value;
 
 	// TODO: Add possibility to attach arbitrary objects
@@ -34,13 +33,13 @@ public class TimeSeriesPoint<T> implements ITimeSeriesPoint<T> {
 	 * @param time
 	 * @param value
 	 */
-	public TimeSeriesPoint(final Date time, final T value) {
+	public TimeSeriesPoint(final long time, final T value) {
 		// TODO is that a good pattern or should we ensure that the object is immutable from outside?
-		this.time = (Date) time.clone();
+		this.time = time;
 		this.value = value;
 	}
 
-	public Date getTime() {
+	public long getTime() {
 		return this.time;
 	}
 
@@ -50,7 +49,7 @@ public class TimeSeriesPoint<T> implements ITimeSeriesPoint<T> {
 
 	@Override
 	public String toString() {
-		return "[" + this.getTime().getTime() + "=" + this.getValue() + "]";
+		return "[" + this.getTime() + "=" + this.getValue() + "]";
 	}
 
 }

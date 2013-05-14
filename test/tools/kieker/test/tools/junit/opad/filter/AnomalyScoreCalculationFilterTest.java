@@ -17,7 +17,6 @@
 package kieker.test.tools.junit.opad.filter;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.junit.Assert;
@@ -59,7 +58,7 @@ public class AnomalyScoreCalculationFilterTest {
 	// HelperMethods AnomalyScoreCalculation
 	private ForecastMeasurementPair createFMP(final String name, final Double forecast,
 			final Double measurement) {
-		final ForecastMeasurementPair r = new ForecastMeasurementPair(name, forecast, measurement, new Date());
+		final ForecastMeasurementPair r = new ForecastMeasurementPair(name, forecast, measurement, System.currentTimeMillis());
 		return r;
 	}
 

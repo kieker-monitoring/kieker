@@ -35,7 +35,7 @@ import kieker.tools.tslib.forecast.mean.MeanForecaster;
 public class MeanForecasterTest {
 	private TimeSeries<Double> ts;
 	private TimeUnit timeUnit;
-	private Date startTime;
+	private long startTime;
 	private int steps;
 	private MeanForecaster forecaster;
 	private IForecastResult<Double> forecast;
@@ -50,7 +50,7 @@ public class MeanForecasterTest {
 	public void setUp() throws Exception {
 		this.deltaTime = 1000;
 		this.timeUnit = TimeUnit.MILLISECONDS;
-		this.startTime = new Date(System.currentTimeMillis() - (this.deltaTime * 10));
+		this.startTime = System.currentTimeMillis() - (this.deltaTime * 10);
 
 		this.initForecastWithTimeUnit(this.timeUnit);
 	}
@@ -78,7 +78,7 @@ public class MeanForecasterTest {
 		Assert.assertEquals(this.ts, this.forecaster.getTsOriginal());
 
 		// we added three timepoints, so we must be here:
-		final long expectedStartTime = this.startTime.getTime() + (this.deltaTime * 4);
+		final long expectedStartTime = this.startTime + (this.deltaTime * 4);
 		Assert.assertEquals(new Date(expectedStartTime), this.forecastSeries.getStartTime());
 	}
 
@@ -89,7 +89,7 @@ public class MeanForecasterTest {
 	public void testForecastStartingIsAccordingToLastAppendSecondsTU() {
 		this.initForecastWithTimeUnit(TimeUnit.SECONDS);
 
-		final long expectedStartTime = this.startTime.getTime() + TimeUnit.MILLISECONDS.convert(this.deltaTime * 4, TimeUnit.SECONDS);
+		final long expectedStartTime = this.startTime + TimeUnit.MILLISECONDS.convert(this.deltaTime * 4, TimeUnit.SECONDS);
 		Assert.assertEquals(new Date(expectedStartTime), this.forecastSeries.getStartTime());
 	}
 

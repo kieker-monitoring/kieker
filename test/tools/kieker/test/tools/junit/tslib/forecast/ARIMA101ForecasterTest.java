@@ -17,7 +17,6 @@
 package kieker.test.tools.junit.tslib.forecast;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -58,7 +57,7 @@ public class ARIMA101ForecasterTest extends TestCase {
 		}
 
 		final TimeSeries<Double> ts =
-				new TimeSeries<Double>(new Date(this.startTime), this.deltaTimeMillis, TimeUnit.MILLISECONDS);
+				new TimeSeries<Double>(this.startTime, this.deltaTimeMillis, TimeUnit.MILLISECONDS);
 		ts.appendAll(values);
 
 		final ARIMA101Forecaster forecaster = new ARIMA101Forecaster(ts, this.confidenceLevel);

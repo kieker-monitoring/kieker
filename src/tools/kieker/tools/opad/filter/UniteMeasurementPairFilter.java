@@ -117,7 +117,7 @@ public class UniteMeasurementPairFilter extends AbstractFilterPlugin {
 	 *            TimeSeriesPoint to add.
 	 */
 	private void addTsPoint(final NamedDoubleTimeSeriesPoint p) {
-		this.tsPointMap.put(p.getTime().getTime(), p);
+		this.tsPointMap.put(p.getTime(), p);
 	}
 
 	/**
@@ -142,7 +142,7 @@ public class UniteMeasurementPairFilter extends AbstractFilterPlugin {
 			super.deliver(OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, fmp);
 			return true;
 		} else {
-			final long key = p.getTime().getTime();
+			final long key = p.getTime();
 			if (this.tsPointMap.containsKey(key)) {
 				final ForecastMeasurementPair fmp = new ForecastMeasurementPair(
 						p.getName(),
@@ -167,7 +167,7 @@ public class UniteMeasurementPairFilter extends AbstractFilterPlugin {
 	 *         False, else
 	 */
 	private boolean checkCorrespondingMeasurement(final ITimeSeriesPoint<Double> p) {
-		final long key = p.getTime().getTime();
+		final long key = p.getTime();
 		if (this.tsPointMap.containsKey(key)) {
 			final NamedDoubleTimeSeriesPoint m = this.tsPointMap.get(key);
 			final ForecastMeasurementPair fmp = new ForecastMeasurementPair(

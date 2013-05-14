@@ -16,8 +16,6 @@
 
 package kieker.test.tools.junit.opad.filter;
 
-import java.util.Date;
-
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -51,7 +49,7 @@ public class TimeSeriesPointAggregatorTest {
 
 	// HelperMethods ForecastingFilter
 	private NamedDoubleTimeSeriesPoint createNDTSP(final String signature, final double value) {
-		final NamedDoubleTimeSeriesPoint r = new NamedDoubleTimeSeriesPoint(new Date(), value, signature);
+		final NamedDoubleTimeSeriesPoint r = new NamedDoubleTimeSeriesPoint(System.currentTimeMillis(), value, signature);
 		return r;
 	}
 
@@ -92,7 +90,7 @@ public class TimeSeriesPointAggregatorTest {
 		int j = 0;
 		while (j <= (this.sinkPlugin.getList().size() - 1)) {
 			System.out
-					.println("value: " + this.sinkPlugin.getList().get(j).getDoubleValue() + " timestamp: " + this.sinkPlugin.getList().get(j).getTime().getTime()
+					.println("value: " + this.sinkPlugin.getList().get(j).getDoubleValue() + " timestamp: " + this.sinkPlugin.getList().get(j).getTime()
 							+ " name: " + this.sinkPlugin.getList().get(j).getName());
 			j++;
 		}

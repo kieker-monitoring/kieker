@@ -16,7 +16,6 @@
 
 package kieker.tools.opad.record;
 
-import java.util.Date;
 
 /**
  * 
@@ -28,10 +27,10 @@ public class ForecastMeasurementPair implements IForecastMeasurementPair {
 	private final String name;
 	private final Double forecast;
 	private final Double measurement;
-	private final Date time;
+	private final long time;
 
 	public ForecastMeasurementPair(final String name, final Double forecast,
-			final Double measurement, final Date time) {
+			final Double measurement, final long time) {
 		super();
 		this.name = name;
 		this.forecast = forecast;
@@ -43,7 +42,7 @@ public class ForecastMeasurementPair implements IForecastMeasurementPair {
 		return this.name;
 	}
 
-	public Date getTime() {
+	public long getTime() {
 		return this.time;
 	}
 

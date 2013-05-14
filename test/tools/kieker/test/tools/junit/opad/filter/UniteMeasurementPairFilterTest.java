@@ -17,7 +17,6 @@
 package kieker.test.tools.junit.opad.filter;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.junit.Assert;
@@ -57,31 +56,31 @@ public class UniteMeasurementPairFilterTest {
 	}
 
 	// HelperMethods UniteFilter
-	private NamedDoubleTimeSeriesPoint createNDTSP(final Date d, final String signature, final double value) {
+	private NamedDoubleTimeSeriesPoint createNDTSP(final long d, final String signature, final double value) {
 		final NamedDoubleTimeSeriesPoint r = new NamedDoubleTimeSeriesPoint(d, value, signature);
 		return r;
 	}
 
-	private IForecastMeasurementPair createFMP(final Date d, final double value) {
+	private IForecastMeasurementPair createFMP(final long d, final double value) {
 		final IForecastMeasurementPair fmp = new ForecastMeasurementPair(OP_SIGNATURE_A, value, 1.0, d);
 		return fmp;
 	}
 
 	private List<NamedDoubleTimeSeriesPoint> createInputEventSetUnite() {
 		final List<NamedDoubleTimeSeriesPoint> retList = new ArrayList<NamedDoubleTimeSeriesPoint>();
-		retList.add(this.createNDTSP(new Date(0L), OP_SIGNATURE_A, 0.3));
-		retList.add(this.createNDTSP(new Date(5L), OP_SIGNATURE_A, 0.4));
-		retList.add(this.createNDTSP(new Date(10L), OP_SIGNATURE_A, 0.5));
-		retList.add(this.createNDTSP(new Date(15L), OP_SIGNATURE_A, 0.9));
+		retList.add(this.createNDTSP(0L, OP_SIGNATURE_A, 0.3));
+		retList.add(this.createNDTSP(5L, OP_SIGNATURE_A, 0.4));
+		retList.add(this.createNDTSP(10L, OP_SIGNATURE_A, 0.5));
+		retList.add(this.createNDTSP(15L, OP_SIGNATURE_A, 0.9));
 		return retList;
 	}
 
 	private List<IForecastMeasurementPair> createInputEventSetUniteForecast() {
 		final List<IForecastMeasurementPair> retList = new ArrayList<IForecastMeasurementPair>();
-		retList.add(this.createFMP(new Date(5L), 0.35));
-		retList.add(this.createFMP(new Date(10L), 0.45));
-		retList.add(this.createFMP(new Date(15L), 0.55));
-		retList.add(this.createFMP(new Date(20L), 0.95));
+		retList.add(this.createFMP(5L, 0.35));
+		retList.add(this.createFMP(10L, 0.45));
+		retList.add(this.createFMP(15L, 0.55));
+		retList.add(this.createFMP(20L, 0.95));
 		return retList;
 	}
 

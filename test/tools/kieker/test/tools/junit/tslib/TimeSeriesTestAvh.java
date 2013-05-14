@@ -17,7 +17,6 @@
 package kieker.test.tools.junit.tslib;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -55,7 +54,7 @@ public class TimeSeriesTestAvh {
 			expectedValues.add(curVal);
 		}
 
-		final TimeSeries<Double> ts = new TimeSeries<Double>(new Date(TimeSeriesTestAvh.STARTTIME), TimeSeriesTestAvh.DELTATIMEMILIS, TimeUnit.MILLISECONDS);
+		final TimeSeries<Double> ts = new TimeSeries<Double>(TimeSeriesTestAvh.STARTTIME, TimeSeriesTestAvh.DELTATIMEMILIS, TimeUnit.MILLISECONDS);
 		ts.appendAll(values);
 
 		final List<Double> tsValues = ts.getValues();

@@ -16,7 +16,6 @@
 
 package kieker.tools.tslib;
 
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -34,7 +33,7 @@ public interface ITimeSeries<T> {
 	 * 
 	 * @return
 	 */
-	public Date getStartTime();
+	public long getStartTime();
 
 	/**
 	 * Returns the temporal distance between to time series values with respect to the configured {@link TimeUnit} {@link #getDeltaTime()}.
@@ -102,5 +101,5 @@ public interface ITimeSeries<T> {
 	 * 
 	 * @return
 	 */
-	public Date getEndTime();
+	public long getEndTime();
 }

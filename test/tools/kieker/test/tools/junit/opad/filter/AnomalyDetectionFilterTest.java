@@ -17,7 +17,6 @@
 package kieker.test.tools.junit.opad.filter;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.junit.Assert;
@@ -61,7 +60,7 @@ public class AnomalyDetectionFilterTest {
 	}
 
 	private NamedDoubleTimeSeriesPoint createNDTSP(final String signature, final double value) {
-		final NamedDoubleTimeSeriesPoint r = new NamedDoubleTimeSeriesPoint(new Date(), value, signature);
+		final NamedDoubleTimeSeriesPoint r = new NamedDoubleTimeSeriesPoint(System.currentTimeMillis(), value, signature);
 		return r;
 	}
 

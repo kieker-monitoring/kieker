@@ -18,7 +18,6 @@ package kieker.tools.opad.filter;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -122,7 +121,7 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 	 */
 	@InputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = TimeSeriesPointAggregatorFilter.INPUT_PORT_NAME_TSPOINT)
 	public void inputTSPoint(final NamedDoubleTimeSeriesPoint input) {
-		this.processInput(input, input.getTime().getTime());
+		this.processInput(input, input.getTime());
 	}
 
 	private void processInput(final NamedDoubleTimeSeriesPoint input, final long currentTime) {
@@ -136,8 +135,8 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 				numIntervalsElapsed = (endOfTimestampsInterval - this.lastTimestampInCurrentInterval) / this.aggregationSpan;
 				if (numIntervalsElapsed > 1) {
 					for (int i = 1; i < numIntervalsElapsed; i++) {
-						super.deliver(OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, new NamedDoubleTimeSeriesPoint(new Date(this.lastTimestampInCurrentInterval
-								+ (i * this.aggregationSpan)), 0.0,
+						super.deliver(OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, new NamedDoubleTimeSeriesPoint(this.lastTimestampInCurrentInterval
+								+ (i * this.aggregationSpan), 0.0,
 								"empty"));
 					}
 				}
@@ -158,7 +157,7 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 			a[i] = this.aggregationList.get(i).getValue();
 		}
 		final double aggregationValue = this.aggregationMethod.getAggregationValue(a);
-		super.deliver(OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, new NamedDoubleTimeSeriesPoint(new Date(this.lastTimestampInCurrentInterval),
+		super.deliver(OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, new NamedDoubleTimeSeriesPoint(this.lastTimestampInCurrentInterval,
 				aggregationValue,
 				this.aggregationList.get(0).getName()));
 		this.aggregationList.clear();

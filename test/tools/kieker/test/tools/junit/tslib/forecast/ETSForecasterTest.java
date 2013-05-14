@@ -17,7 +17,6 @@
 package kieker.test.tools.junit.tslib.forecast;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -48,7 +47,7 @@ public class ETSForecasterTest extends TestCase {
 		}
 
 		final TimeSeries<Double> ts =
-				new TimeSeries<Double>(new Date(this.startTime), this.deltaTimeMillis, TimeUnit.MILLISECONDS);
+				new TimeSeries<Double>(this.startTime, this.deltaTimeMillis, TimeUnit.MILLISECONDS);
 		ts.appendAll(values);
 
 		final ETSForecaster forecaster = new ETSForecaster(ts, this.confidenceLevel);

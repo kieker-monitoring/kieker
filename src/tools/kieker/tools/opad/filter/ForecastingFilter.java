@@ -16,7 +16,6 @@
 
 package kieker.tools.opad.filter;
 
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import kieker.analysis.IProjectContext;
@@ -104,7 +103,7 @@ public class ForecastingFilter extends AbstractFilterPlugin {
 		this.tunit = TimeUnit.valueOf(configuration
 				.getStringProperty(CONFIG_PROPERTY_DELTA_UNIT));
 
-		this.timeSeriesWindow = new TimeSeries<Double>(new Date(), this.deltat, this.tunit);
+		this.timeSeriesWindow = new TimeSeries<Double>(System.currentTimeMillis(), this.deltat, this.tunit);
 
 		this.forecastMethod = ForecastMethod.valueOf(configuration
 				.getStringProperty(CONFIG_PROPERTY_FC_METHOD));

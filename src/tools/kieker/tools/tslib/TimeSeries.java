@@ -17,7 +17,6 @@
 package kieker.tools.tslib;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -27,8 +26,8 @@ import java.util.concurrent.TimeUnit;
  * @param <T>
  */
 public class TimeSeries<T> implements ITimeSeries<T> {
-	private final Date startTime;
-	private final Date nextTime;
+	private final long startTime;
+	private long nextTime;
 	private final long deltaTime;
 	private final TimeUnit deltaTimeUnit;
 	private final int capacity;
@@ -42,8 +41,8 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 	 * @param deltaTimeUnit
 	 * @param capacity
 	 */
-	public TimeSeries(final Date startTime, final long deltaTime, final TimeUnit deltaTimeUnit, final int capacity) {
-		this.startTime = (Date) startTime.clone();
+	public TimeSeries(final long startTime, final long deltaTime, final TimeUnit deltaTimeUnit, final int capacity) {
+		this.startTime = startTime;
 		this.deltaTime = deltaTime;
 		this.deltaTimeUnit = deltaTimeUnit;
 		this.capacity = capacity;
@@ -55,15 +54,15 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 			this.points = new TimeSeriesPointsBuffer<ITimeSeriesPoint<T>>(this.capacity);
 		}
 
-		this.nextTime = (Date) this.startTime.clone();
+		this.nextTime = this.startTime;
 		this.setNextTime();
 	}
 
-	public TimeSeries(final Date startTime, final long deltaTime, final TimeUnit deltaTimeUnit) {
+	public TimeSeries(final long startTime, final long deltaTime, final TimeUnit deltaTimeUnit) {
 		this(startTime, deltaTime, deltaTimeUnit, ITimeSeries.INFINITE_CAPACITY);
 	}
 
-	public Date getStartTime() {
+	public long getStartTime() {
 		return this.startTime;
 	}
 
@@ -83,7 +82,7 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 	}
 
 	private void setNextTime() {
-		this.nextTime.setTime(this.nextTime.getTime() + this.oneStepMillis);
+		this.nextTime = this.nextTime + this.oneStepMillis;
 	}
 
 	public List<ITimeSeriesPoint<T>> getPoints() {
@@ -107,8 +106,8 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 		return this.points.getSize();
 	}
 
-	public Date getEndTime() {
-		return new Date(this.getStartTime().getTime() + (this.oneStepMillis * this.size()));
+	public long getEndTime() {
+		return this.getStartTime() + (this.oneStepMillis * this.size());
 	}
 
 	public List<ITimeSeriesPoint<T>> appendAll(final T[] values) {

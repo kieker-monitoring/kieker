@@ -16,7 +16,6 @@
 
 package kieker.test.tools.junit.tslib.forecast;
 
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
@@ -45,7 +44,7 @@ public class SESRForecasterTest {
 	public void test() {
 		final int deltaTime = 1000;
 		final TimeUnit timeUnit = TimeUnit.MILLISECONDS;
-		final Date startTime = new Date(System.currentTimeMillis() - (deltaTime * 10));
+		final long startTime = System.currentTimeMillis() - (deltaTime * 10);
 
 		final TimeSeries<Double> ts = new TimeSeries<Double>(startTime, deltaTime,
 				timeUnit);

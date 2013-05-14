@@ -16,7 +16,6 @@
 
 package kieker.tools.tslib.forecast;
 
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import kieker.tools.tslib.ITimeSeries;
@@ -58,7 +57,7 @@ public abstract class AbstractForecaster<T> implements IForecaster<T> {
 		final long lastDistanceMillis = TimeUnit.MILLISECONDS.convert(
 				history.getDeltaTime(), history.getDeltaTimeUnit());
 		// ... plus the end point of the historic series
-		final Date startTime = new Date(history.getEndTime().getTime());
+		final long startTime = history.getEndTime();
 		final TimeSeries<T> tsFC = new TimeSeries<T>(startTime,
 				history.getDeltaTime(), history.getDeltaTimeUnit());
 

@@ -16,7 +16,6 @@
 
 package kieker.test.tools.junit.tslib;
 
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
@@ -36,7 +35,7 @@ public class TimeSeriesTest {
 	private int bounds;
 	private TimeSeries<Integer> boundedTS;
 	private TimeUnit timeUnit;
-	private Date startTime;
+	private long startTime;
 
 	/**
 	 * Creates a new instance of this class.
@@ -55,7 +54,7 @@ public class TimeSeriesTest {
 	public void setUp() throws Exception {
 		final long deltaTime = 1000;
 		this.timeUnit = TimeUnit.MILLISECONDS;
-		this.startTime = new Date(System.currentTimeMillis() - (deltaTime * 10));
+		this.startTime = System.currentTimeMillis() - (deltaTime * 10);
 		this.unboundTS = new TimeSeries<Double>(this.startTime, deltaTime, this.timeUnit);
 
 		this.bounds = 3;

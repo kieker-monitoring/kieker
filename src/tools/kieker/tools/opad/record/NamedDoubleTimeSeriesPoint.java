@@ -16,8 +16,6 @@
 
 package kieker.tools.opad.record;
 
-import java.util.Date;
-
 import kieker.tools.tslib.TimeSeriesPoint;
 
 /**
@@ -29,7 +27,7 @@ public class NamedDoubleTimeSeriesPoint extends TimeSeriesPoint<Double> implemen
 
 	private final String name;
 
-	public NamedDoubleTimeSeriesPoint(final Date time, final Double value, final String name) {
+	public NamedDoubleTimeSeriesPoint(final long time, final Double value, final String name) {
 		super(time, value);
 		this.name = name;
 	}

@@ -16,7 +16,6 @@
 
 package kieker.tools.opad.filter;
 
-import java.sql.Date;
 import java.util.concurrent.TimeUnit;
 
 import kieker.analysis.IProjectContext;
@@ -89,7 +88,7 @@ public class ResponseTimeExtractionFilter extends AbstractFilterPlugin {
 	@InputPort(name = INPUT_PORT_NAME_VALUE, eventTypes = { OperationExecutionRecord.class })
 	public void inputExecutionRecord(final OperationExecutionRecord execution) {
 		final long toutMillis = TimeUnit.MILLISECONDS.convert(execution.getTout(), TimeUnit.NANOSECONDS);
-		final Date time = new Date(toutMillis);
+		final long time = toutMillis;
 		// ResponseTime in Nanoseconds
 		final long responseTime = execution.getTout() - execution.getTin();
 		// Convert the Responsetimes from Nanoseconds to Configurable TimeUnit

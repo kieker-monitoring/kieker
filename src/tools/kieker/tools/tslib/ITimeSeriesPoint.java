@@ -16,7 +16,6 @@
 
 package kieker.tools.tslib;
 
-import java.util.Date;
 
 /**
  * @author Andre van Hoorn
@@ -25,7 +24,7 @@ import java.util.Date;
  */
 public interface ITimeSeriesPoint<T> {
 
-	public Date getTime();
+	public long getTime();
 
 	public T getValue();
 }
