@@ -101,6 +101,9 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	 * 
 	 * @param configuration
 	 *            The configuration used to initialize this writer.
+	 * 
+	 * @throws IllegalArgumentException
+	 *             If the given configuration is invalid.
 	 */
 	public SyncFsWriter(final Configuration configuration) throws IllegalArgumentException {
 		super(configuration);

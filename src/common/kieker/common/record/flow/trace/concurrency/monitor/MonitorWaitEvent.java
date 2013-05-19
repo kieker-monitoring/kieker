@@ -30,10 +30,28 @@ public final class MonitorWaitEvent extends AbstractMonitorEvent {
 		int.class, // AbstractMonitorEvent.lockId
 	};
 
+	/**
+	 * This constructor uses the given parameters to initialize the fields of this record.
+	 * 
+	 * @param timestamp
+	 *            The timestamp.
+	 * @param traceId
+	 *            The trace ID.
+	 * @param orderIndex
+	 *            the order index.
+	 * @param lockId
+	 *            The lock ID.
+	 */
 	public MonitorWaitEvent(final long timestamp, final long traceId, final int orderIndex, final int lockId) {
 		super(timestamp, traceId, orderIndex, lockId);
 	}
 
+	/**
+	 * This constructor uses the given array to initialize the fields of this record.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 */
 	public MonitorWaitEvent(final Object[] values) {
 		super(values, TYPES); // values[0..3]
 	}

@@ -30,6 +30,9 @@ import kieker.monitoring.writer.filesystem.AsyncBinaryFsWriter;
  */
 public class TestLogRotationMaxLogFilesAsyncBinaryFsWriter extends AbstractTestLogRotationMaxLogFiles {
 
+	/**
+	 * Default constructor.
+	 */
 	public TestLogRotationMaxLogFilesAsyncBinaryFsWriter() {
 		// empty default constructor
 	}

@@ -168,6 +168,15 @@ public class ProbeController extends AbstractController implements IProbeControl
 		}
 	}
 
+	/**
+	 * Sets the list of probe patterns.
+	 * 
+	 * @param strPatternList
+	 *            The new list with pattern strings.
+	 * 
+	 * @param updateConfig
+	 *            Whether the pattern file should be updated or not.
+	 */
 	protected void setProbePatternList(final List<String> strPatternList, final boolean updateConfig) {
 		if (!this.enabled) {
 			LOG.warn("Adapative Monitoring is disabled!");

@@ -51,8 +51,11 @@ public class OperationExecutionSOAPRequestOutInterceptor extends SoapHeaderOutFi
 	/** This constant can be used as a session ID for asynchronous traces. */
 	public static final String SESSION_ID_ASYNC_TRACE = "NOSESSION-ASYNCOUT";
 
+	/** Stores the singleton instance of the control flow registry. */
 	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
+	/** Stores the singleton instance of the session registry. */
 	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
+	/** Stores the singleton instance of the SOAP trace registry. */
 	protected static final SOAPTraceRegistry SOAP_REGISTRY = SOAPTraceRegistry.getInstance();
 
 	/**
@@ -62,6 +65,7 @@ public class OperationExecutionSOAPRequestOutInterceptor extends SoapHeaderOutFi
 	 * differ from Kieker's default timer (SystemNanoTimer).
 	 */
 	protected final IMonitoringController monitoringController;
+	/** The used time source. */
 	protected final ITimeSource timeSource;
 
 	/**

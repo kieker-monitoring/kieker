@@ -99,19 +99,29 @@ public final class Constants {
 	public static final String DOT_FILE_SUFFIX = ".dot";
 	/** The prefix for the call tree files. */
 	public static final String CALL_TREE_FN_PREFIX = "callTree";
+	/** The name prefix for the message traces files. */
 	public static final String MESSAGE_TRACES_FN_PREFIX = "messageTraces";
+	/** The name prefix for the execution traces files. */
 	public static final String EXECUTION_TRACES_FN_PREFIX = "executionTraces";
+	/** The name prefix for the invalid traces files. */
 	public static final String INVALID_TRACES_FN_PREFIX = "invalidTraceArtifacts";
 	public static final String TRACE_ALLOCATION_EQUIV_CLASSES_FN_PREFIX = "traceDeploymentEquivClasses";
 	public static final String TRACE_ASSEMBLY_EQUIV_CLASSES_FN_PREFIX = "traceAssemblyEquivClasses";
 	/** The format pattern which is used to print the date. */
 	public static final String DATE_FORMAT_PATTERN = "yyyyMMdd'-'HHmmss";
+	/** The name of the component for the execution trace reconstruction. */
 	public static final String EXEC_TRACE_RECONSTR_COMPONENT_NAME = "Execution record transformation";
+	/** The name of the component for the trace reconstruction of execution records. */
 	public static final String TRACERECONSTR_COMPONENT_NAME = "Trace reconstruction (execution records -> execution traces)";
+	/** The name of the component for the trace equivalence class filtering (deployment mode). */
 	public static final String TRACEALLOCATIONEQUIVCLASS_COMPONENT_NAME = "Trace equivalence class filter (deployment mode)";
+	/** The name of the component for the trace equivalence class filtering (assembly mode). */
 	public static final String TRACEASSEMBLYEQUIVCLASS_COMPONENT_NAME = "Trace equivalence class filter (assembly mode)";
+	/** The name of the component for the trace reconstruction of trace event records. */
 	public static final String EVENTRECORDTRACERECONSTR_COMPONENT_NAME = "Trace reconstruction (trace event records -> event record traces)";
+	/** The name of the component for the trace reconstruction of event record traces. */
 	public static final String EXECTRACESFROMEVENTTRACES_COMPONENT_NAME = "Trace reconstruction (event record traces -> execution traces)";
+	/** The name of the component for the trace reconstruction of event records. */
 	public static final String EXECEVENTRACESFROMEVENTTRACES_COMPONENT_NAME = "Trace reconstruction (event records -> event record traces)";
 	public static final String PRINTMSGTRACE_COMPONENT_NAME = "Print message traces";
 	public static final String PRINTEXECTRACE_COMPONENT_NAME = "Print execution traces";

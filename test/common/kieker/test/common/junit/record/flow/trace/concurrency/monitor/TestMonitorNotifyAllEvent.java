@@ -35,6 +35,9 @@ public class TestMonitorNotifyAllEvent extends AbstractKiekerTest {
 	private static final int ORDER_INDEX = 234;
 	private static final int LOCK_ID = 13;
 
+	/**
+	 * Default constructor.
+	 */
 	public TestMonitorNotifyAllEvent() {
 		// empty default constructor
 	}

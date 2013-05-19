@@ -78,6 +78,17 @@ public final class MetaModelHandler {
 		// No code necessary
 	}
 
+	/**
+	 * Saves the given meta model project to the given file.
+	 * 
+	 * @param file
+	 *            The file in which the project will be stored.
+	 * @param project
+	 *            The meta model project.
+	 * 
+	 * @throws IOException
+	 *             If something went wrong during the saving.
+	 */
 	public static final void saveProjectToFile(final File file, final MIProject project) throws IOException {
 		// Create a resource and put the given project into it
 		final ResourceSet resourceSet = new ResourceSetImpl();
@@ -93,6 +104,16 @@ public final class MetaModelHandler {
 		resource.save(options);
 	}
 
+	/**
+	 * Loads a meta model project instance from the given file.
+	 * 
+	 * @param file
+	 *            The file to load the model from.
+	 * @return The meta model instance.
+	 * 
+	 * @throws IOException
+	 *             If something went wrong during the loading.
+	 */
 	public static final MIProject loadProjectFromFile(final File file) throws IOException {
 		// Create a resource set to work with.
 		final ResourceSet resourceSet = new ResourceSetImpl();
@@ -239,6 +260,27 @@ public final class MetaModelHandler {
 		return null;
 	}
 
+	/**
+	 * This method can be used to convert the current analysis configuration (which is represented by Java objects) into a meta model.
+	 * 
+	 * @param readers
+	 *            The readers within the analysis.
+	 * @param filters
+	 *            The filters within the analysis.
+	 * @param repositories
+	 *            The repositories within the analysis.
+	 * @param dependencies
+	 *            The dependencies of the analysis.
+	 * @param projectName
+	 *            The name of the project.
+	 * @param globalConfiguration
+	 *            The global project configuration.
+	 * 
+	 * @return A meta model instance, representing the given analysis.
+	 * 
+	 * @throws AnalysisConfigurationException
+	 *             If the given analysis components are somehow invalid connected.
+	 */
 	public static final MIProject javaToMetaModel(final Collection<AbstractReaderPlugin> readers, final Collection<AbstractFilterPlugin> filters,
 			final Collection<AbstractRepository> repositories, final Collection<MIDependency> dependencies, final String projectName,
 			final Configuration globalConfiguration) throws AnalysisConfigurationException {
@@ -354,6 +396,31 @@ public final class MetaModelHandler {
 		}
 	}
 
+	/**
+	 * This method can be used to convert a given analysis meta model instance to the actual java instances.
+	 * 
+	 * @param mProject
+	 *            The meta model project.
+	 * @param ac
+	 *            The analysis controller which will be the parent of the new analysis.
+	 * @param pluginConnections
+	 *            The connections between the plugins (this object will be filled by the method).
+	 * @param repositoryConnections
+	 *            The connections between filters and repositories (this object will be filled by the method).
+	 * @param dependencies
+	 *            The dependencies of the analysis (this object will be filled by the method).
+	 * @param classLoader
+	 *            The class loader which will be used to create the analysis components.
+	 * @param globalConfiguration
+	 *            The global project configuration (this object will be filled by the method).
+	 * @param repositoryMap
+	 *            The mapping between the created repositories and the meta model instances (this object will be filled by the method).
+	 * @param pluginMap
+	 *            The mapping between the created plugins and the meta model instances (this object will be filled by the method).
+	 * 
+	 * @throws AnalysisConfigurationException
+	 *             If the given meta model instance is somehow invalid configured.
+	 */
 	public static final void metaModelToJava(final MIProject mProject, final AnalysisController ac, final Collection<PluginConnection> pluginConnections,
 			final Collection<RepositoryConnection> repositoryConnections, final Collection<MIDependency> dependencies, final ClassLoader classLoader,
 			final Configuration globalConfiguration, final Map<MIRepository, AbstractRepository> repositoryMap, final Map<MIPlugin, AbstractPlugin> pluginMap)
@@ -497,6 +564,16 @@ public final class MetaModelHandler {
 		private final AbstractRepository repository;
 		private final String outputName;
 
+		/**
+		 * Creates a new connection between a repository and a filter.
+		 * 
+		 * @param source
+		 *            The filter.
+		 * @param repository
+		 *            The repository.
+		 * @param outputName
+		 *            The name of the repository port.
+		 */
 		public RepositoryConnection(final AbstractPlugin source, final AbstractRepository repository, final String outputName) {
 			this.source = source;
 			this.repository = repository;
@@ -528,6 +605,18 @@ public final class MetaModelHandler {
 		private final String outputName;
 		private final String inputName;
 
+		/**
+		 * Creates a new connection between two filters.
+		 * 
+		 * @param source
+		 *            The source filter.
+		 * @param destination
+		 *            The destination filter.
+		 * @param outputName
+		 *            The name of the output port.
+		 * @param inputName
+		 *            The name of the input port.
+		 */
 		public PluginConnection(final AbstractPlugin source, final AbstractPlugin destination, final String outputName, final String inputName) {
 			this.source = source;
 			this.destination = destination;

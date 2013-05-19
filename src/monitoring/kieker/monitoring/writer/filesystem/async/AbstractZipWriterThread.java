@@ -80,6 +80,9 @@ public abstract class AbstractZipWriterThread extends AbstractAsyncThread {
 		this.zipOutputStream.closeEntry();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected final void cleanup() {
 		PrintWriter pw = null;

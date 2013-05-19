@@ -43,6 +43,9 @@ public final class SynchronizedAspect extends AbstractAspectJProbe {
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
 	private static final TraceRegistry TRACEREGISTRY = TraceRegistry.INSTANCE;
 
+	/**
+	 * Default constructor.
+	 */
 	public SynchronizedAspect() {
 		// empty default constructor
 	}

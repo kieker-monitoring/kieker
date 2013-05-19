@@ -33,12 +33,33 @@ public class PatternEntry implements Serializable {
 	private final String strPattern;
 	private final boolean activated;
 
+	/**
+	 * Creates a new pattern entry using the given parameters.
+	 * 
+	 * @param strPattern
+	 *            The pattern string.
+	 * @param activated
+	 *            Determines the activated state.
+	 * 
+	 * @throws InvalidPatternException
+	 *             If the given pattern is invalid.
+	 */
 	public PatternEntry(final String strPattern, final boolean activated) throws InvalidPatternException {
 		this.pattern = PatternParser.parseToPattern(strPattern);
 		this.strPattern = strPattern;
 		this.activated = activated;
 	}
 
+	/**
+	 * Creates a new pattern entry using the given parameters.
+	 * 
+	 * @param strPattern
+	 *            The pattern string.
+	 * @param activated
+	 *            Determines the activated state.
+	 * @param pattern
+	 *            The pattern.
+	 */
 	public PatternEntry(final String strPattern, final Pattern pattern, final boolean activated) {
 		this.pattern = pattern;
 		this.strPattern = strPattern;

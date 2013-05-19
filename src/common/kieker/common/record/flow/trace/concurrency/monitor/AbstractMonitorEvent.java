@@ -34,16 +34,39 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent {
 
 	private final int lockId;
 
+	/**
+	 * This constructor uses the given parameters to initialize the fields of this record.
+	 * 
+	 * @param timestamp
+	 *            The timestamp.
+	 * @param traceId
+	 *            The trace ID.
+	 * @param orderIndex
+	 *            the order index.
+	 * @param lockId
+	 *            The lock ID.
+	 */
 	public AbstractMonitorEvent(final long timestamp, final long traceId, final int orderIndex, final int lockId) {
 		super(timestamp, traceId, orderIndex);
 		this.lockId = lockId;
 	}
 
+	/**
+	 * This constructor uses the given array to initialize the fields of this record.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 * @param valueTypes
+	 *            The types of the elements in the first array.
+	 */
 	protected AbstractMonitorEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes); // values[0..2]
 		this.lockId = (Integer) values[3];
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Object[] toArray() {
 		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.lockId, };
 	}

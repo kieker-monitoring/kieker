@@ -30,6 +30,16 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 	private final long traceId;
 	private final int orderIndex;
 
+	/**
+	 * This constructor uses the given parameters to initialize the fields of this record.
+	 * 
+	 * @param timestamp
+	 *            The timestamp.
+	 * @param traceId
+	 *            The trace ID.
+	 * @param orderIndex
+	 *            the order index.
+	 */
 	public AbstractTraceEvent(final long timestamp, final long traceId, final int orderIndex) {
 		super(timestamp);
 		this.traceId = traceId;

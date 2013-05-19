@@ -35,6 +35,9 @@ public class TestJoinEvent extends AbstractKiekerTest {
 	private static final int ORDER_INDEX = 234;
 	private static final long JOINED_TRACE_ID = 89775L;
 
+	/**
+	 * Default constructor.
+	 */
 	public TestJoinEvent() {
 		// empty default constructor
 	}

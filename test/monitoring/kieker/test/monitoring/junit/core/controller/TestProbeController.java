@@ -62,6 +62,7 @@ public class TestProbeController extends AbstractKiekerTest {
 
 	private static final String ENCODING = "UTF-8";
 
+	/** A rule making sure that a temporary folder exists for every test method (which is removed after the test). */
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
 

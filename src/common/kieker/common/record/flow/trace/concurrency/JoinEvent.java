@@ -34,21 +34,50 @@ public class JoinEvent extends AbstractTraceEvent {
 
 	private final long joinedTraceId;
 
+	/**
+	 * This constructor uses the given parameters to initialize the fields of this record.
+	 * 
+	 * @param timestamp
+	 *            The time stamp.
+	 * @param traceId
+	 *            The trace ID.
+	 * @param orderIndex
+	 *            The order index.
+	 * @param joinedTraceId
+	 *            The joined trace ID.
+	 */
 	public JoinEvent(final long timestamp, final long traceId, final int orderIndex, final long joinedTraceId) {
 		super(timestamp, traceId, orderIndex);
 		this.joinedTraceId = joinedTraceId;
 	}
 
+	/**
+	 * This constructor uses the given array to initialize the fields of this record.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 */
 	public JoinEvent(final Object[] values) { // NOPMD (values stored directly)
 		super(values, TYPES); // values[0..2]
 		this.joinedTraceId = (Long) values[3];
 	}
 
+	/**
+	 * This constructor uses the given array to initialize the fields of this record.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 * @param valueTypes
+	 *            The types of the elements in the first array.
+	 */
 	public JoinEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes); // values[0..2]
 		this.joinedTraceId = (Long) values[3];
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Object[] toArray() {
 		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getJoinedTraceId(), };
 	}

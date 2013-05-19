@@ -74,6 +74,9 @@ public class DescriptionDecoratorFilter<V extends AbstractPayloadedVertex<V, E, 
 		super(configuration, projectContext);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void visitVertex(final V vertex) {
 		final ISystemModelElement element = vertex.getPayload();
 		if (element == null) {
@@ -84,6 +87,9 @@ public class DescriptionDecoratorFilter<V extends AbstractPayloadedVertex<V, E, 
 		vertex.setDescription(decoration);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void visitEdge(final E edge) {
 		// Not yet supported
 	}

@@ -47,6 +47,12 @@ public class PrintStreamWriter extends AbstractMonitoringWriter {
 
 	private PrintStream printStream;
 
+	/**
+	 * Creates a new instance of this writer.
+	 * 
+	 * @param configuration
+	 *            The configuration which will be used to initialize this writer.
+	 */
 	public PrintStreamWriter(final Configuration configuration) {
 		super(configuration);
 		this.configPrintStreamName = configuration.getStringProperty(STREAM);

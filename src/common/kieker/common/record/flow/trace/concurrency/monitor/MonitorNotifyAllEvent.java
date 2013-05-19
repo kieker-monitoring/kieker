@@ -30,10 +30,28 @@ public final class MonitorNotifyAllEvent extends AbstractMonitorEvent {
 		int.class, // AbstractMonitorEvent.lockId
 	};
 
+	/**
+	 * This constructor uses the given parameters to initialize the fields of this record.
+	 * 
+	 * @param timestamp
+	 *            The timestamp.
+	 * @param traceId
+	 *            The trace ID.
+	 * @param orderIndex
+	 *            the order index.
+	 * @param lockId
+	 *            The lock ID.
+	 */
 	public MonitorNotifyAllEvent(final long timestamp, final long traceId, final int orderIndex, final int lockId) {
 		super(timestamp, traceId, orderIndex, lockId);
 	}
 
+	/**
+	 * This constructor uses the given array to initialize the fields of this record.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 */
 	public MonitorNotifyAllEvent(final Object[] values) {
 		super(values, TYPES); // values[0..3]
 	}

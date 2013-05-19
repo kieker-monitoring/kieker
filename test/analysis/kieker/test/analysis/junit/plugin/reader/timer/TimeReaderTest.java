@@ -42,13 +42,22 @@ import kieker.test.common.junit.AbstractKiekerTest;
  */
 public class TimeReaderTest extends AbstractKiekerTest {
 
+	/**
+	 * Default constructor.
+	 */
 	public TimeReaderTest() {
 		// empty default constructor
 	}
 
+	/**
+	 * Tests the "non blocking" mode of the reader.
+	 * 
+	 * @throws InterruptedException
+	 *             If the thread is interrupted. This should not happen.
+	 */
 	@SuppressWarnings("unused")
 	@Test
-	public void testNonBlockingMode() throws IllegalStateException, AnalysisConfigurationException, InterruptedException {
+	public void testNonBlockingMode() throws InterruptedException {
 		final AnalysisController ac = new AnalysisController();
 		final AnalysisControllerThread thread = new AnalysisControllerThread(ac);
 
@@ -63,6 +72,12 @@ public class TimeReaderTest extends AbstractKiekerTest {
 		Assert.assertEquals(STATE.TERMINATED, ac.getState());
 	}
 
+	/**
+	 * Tests the "blocking" mode of the reader.
+	 * 
+	 * @throws InterruptedException
+	 *             If the thread is interrupted. This should not happen.
+	 */
 	@SuppressWarnings("unused")
 	@Test
 	public void testBlockingMode() throws InterruptedException {
@@ -82,6 +97,9 @@ public class TimeReaderTest extends AbstractKiekerTest {
 		ac.terminate();
 	}
 
+	/**
+	 * This test makes sure that the reader stores its configuration.
+	 */
 	@Test
 	public void testConfigurationConservation() {
 		final Configuration configuration = new Configuration();
@@ -95,6 +113,16 @@ public class TimeReaderTest extends AbstractKiekerTest {
 		Assert.assertEquals(false, tr.getCurrentConfiguration().getBooleanProperty(TimeReader.CONFIG_PROPERTY_NAME_BLOCKING_READ));
 	}
 
+	/**
+	 * This test should make sure that the timer delivers a correct amount of records within a given limit.
+	 * 
+	 * @throws InterruptedException
+	 *             If the test thread is interrupted.
+	 * @throws IllegalStateException
+	 *             If the analysis is in the wrong state.
+	 * @throws AnalysisConfigurationException
+	 *             If the analysis is somehow invalid configured.
+	 */
 	@Test
 	public void testIntervalTimer() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
 		// Running 5 seconds, firing one event per 100 ms, we expect to receive approx. 50 events.

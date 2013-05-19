@@ -53,7 +53,9 @@ import kieker.common.record.IMonitoringRecord;
 		})
 public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 
+	/** The name of the input port receiving the records. */
 	public static final String INPUT_PORT_NAME_RECORDS = "inputRecords";
+	/** The name of the output port delivering the delayed records. */
 	public static final String OUTPUT_PORT_NAME_RECORDS = "outputRecords";
 
 	/**
@@ -135,6 +137,12 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 		this.executor.setContinueExistingPeriodicTasksAfterShutdownPolicy(false);
 	}
 
+	/**
+	 * This method represents the input port of this filter.
+	 * 
+	 * @param monitoringRecord
+	 *            The next monitoring record.
+	 */
 	@InputPort(name = INPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Receives the records to be delayed")
 	public final void inputRecord(final IMonitoringRecord monitoringRecord) {
 		final long currentTime = this.timer.getCurrentTime(this.timeunit);

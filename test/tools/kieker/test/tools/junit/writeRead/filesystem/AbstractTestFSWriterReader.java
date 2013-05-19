@@ -67,6 +67,7 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 	 * Initializes the setup for the test.
 	 * 
 	 * @throws IOException
+	 *             If the setup failed.
 	 */
 	@Before
 	public void setUp() throws IOException {
@@ -91,6 +92,14 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 		return MonitoringController.createInstance(config);
 	}
 
+	/**
+	 * Inheriting classes should use this method to refine and enrich the configuration of the writer.
+	 * 
+	 * @param config
+	 *            The configuration to refine.
+	 * @param numRecordsWritten
+	 *            The number of written records.
+	 */
 	protected abstract void refineWriterConfiguration(Configuration config, final int numRecordsWritten);
 
 	@Override

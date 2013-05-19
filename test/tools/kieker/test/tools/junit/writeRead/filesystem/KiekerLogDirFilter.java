@@ -37,6 +37,9 @@ public class KiekerLogDirFilter implements FilenameFilter { // NOPMD (TestClassW
 		// empty default constructor
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean accept(final File dir, final String name) {
 		if (!name.startsWith(FSUtil.FILE_PREFIX)) {
 			return false;

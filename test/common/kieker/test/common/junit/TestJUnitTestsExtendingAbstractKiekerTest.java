@@ -38,6 +38,9 @@ public class TestJUnitTestsExtendingAbstractKiekerTest extends AbstractKiekerTes
 	private static final String DIR_NAME_TEST = "test";
 	private static final String PATTERN_TEST_SOURCE_FILES = ".*Test.*java";
 
+	/**
+	 * Default constructor.
+	 */
 	public TestJUnitTestsExtendingAbstractKiekerTest() {
 		// empty default constructor
 	}

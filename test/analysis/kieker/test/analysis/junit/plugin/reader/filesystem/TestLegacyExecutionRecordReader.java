@@ -55,6 +55,7 @@ public class TestLegacyExecutionRecordReader extends AbstractKiekerTest {
 			+ "$1;1;public void kieker.test.Class.method();<no-session-id>;2;3;4;HOST;1;1\n" // legacy names
 			+ "$2;1;public void kieker.test.Class.method();<no-session-id>;2;3;4;HOST;1;1\n"; // legacy names
 
+	/** A rule making sure that a temporary folder exists for every test method (which is removed after the test). */
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
 
@@ -62,6 +63,12 @@ public class TestLegacyExecutionRecordReader extends AbstractKiekerTest {
 		// default constructor
 	}
 
+	/**
+	 * Performs an initial test setup.
+	 * 
+	 * @throws IOException
+	 *             If the setup failed.
+	 */
 	@Before
 	public void setUp() throws IOException {
 		final File mapFile = this.tmpFolder.newFile(FSUtil.MAP_FILENAME);
