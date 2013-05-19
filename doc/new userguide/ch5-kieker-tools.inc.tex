@@ -17,7 +17,7 @@
 			\subsubsection{Response Times}
 		\subsection{HTML Output of the System Model}	
 			
-	\section{Kieker WebGUI}\label{chp:Kieker-WebGUI}
+	\section{Kieker WebGUI}
 			
 		The \KiekerWebGUI{} is a JavaEE-based web application to assemble, control, and observe Kieker analyses. Although currently still in the beta state, it already provides a user and project management, a graphical editor, and a control interface for analyses. A cockpit, which can be used, for example, for the realtime monitoring of applications, is currently under development.
 
@@ -111,13 +111,148 @@
 				TeeFilter(TimestampRecord) -1;211651816748213
 			\end{lstlisting}
 			
-		\subsection{Detailed Introduction}		
+		\subsection{Detailed Introduction}
+		
+			In this section we will take a closer look at the \KiekerWebGUI{} and the single pages.
+			
+			\paragraph*{Project Management}
+			
+			This is the default page after the log in and available under \url{http://localhost:8080/Kieker.WebGUI/}. It provides the possibility to add, import, remove, rename, and copy projects. Those options are either available under the \texttt{File} menu or under the context menu, which appears when clicking on a project name. It allows also to navigate to the further pages. Those links are visible in the context menu, but can also used by clicking on the buttons in the top right of the page, when a project has been selected. The only button, which can be always used, even if no project is selected, is the user management button. The available buttons can change, depending on the role of your log in.
+			
+			\paragraph*{User Management}
+			
+			The user management page is available under \url{http://localhost:8080/Kieker.WebGUI/pages/admin/userManagement}, but can only be accessed by administrators. Here it is possible to add, edit, and remove users of the system.
 			
 	\section{Supporting Tools}
 		\subsection{Replay Monitoring Logs}
+		
+			Replays filesystem monitoring logs created by \KiekerMonitoringPart{}. Example applications are:
+			\begin{compactitem}
+				\item 
+				Merging multiple directories containing monitoring data into a single output directory. 
+				\item 
+				Importing a filesystem monitoring log to another monitoring log, e.g., a database. Therefore, an appropriate \KiekerMonitoringPart{} configuration	file must be passed to the script.
+				\item 
+				Replaying a recorded filesystem monitoring log in real-time in order to simulate incoming monitoring data from a running system, e.g., via JMS. 
+			\end{compactitem}
+
+			\
+
+			\noindent Main-class: {\small \class{kieker.tools.logReplayer.FilesystemLogReplayerStarter}}
+
+			\paragraph*{Usage}\
+
+				\setTextListing
+				\begin{lstlisting}[gobble = 10]
+					usage: kieker.tools.logReplayer.FilesystemLogReplayerStarter
+					 --c,--monitoring.configuration <\path\to\monitoring.properties>
+							Configuration to use for the Kieker monitoring instance
+
+					 --i,--inputdirs <dir1 ... dirN>
+							Log directories to read data from
+
+						--ignore-records-after-date <yyyyMMdd-HHmmss>
+							Records logged after this date (UTC timezone) are ignored
+							(disabled by default).
+
+						--ignore-records-before-date <yyyyMMdd-HHmmss>
+							Records logged before this date (UTC timezone) are ignored
+							(disabled by default).
+
+					 --k,--keep-logging-timestamps <true|false>
+							Replay the original logging timestamps (defaults to true)?)
+
+					 --n,--realtime-worker-threads <num>
+							Number of worker threads used in realtime mode (defaults to 1).
+
+					 --r,--realtime <true|false>
+							Replay log data in realtime?. 
+				\end{lstlisting}
+
+			\paragraph*{Example}\
+
+				\noindent The following command replays the monitoring testdata included in the binary release to another directory:
+
+				\setTextListing
+				\begin{lstlisting}[gobble = 10, caption=Execution under UNIX-like systems]
+					$\lstshellprompt{}$ $\textbf{bin/logReplay.sh}$
+					  $\textbf{-\,-inputdirs}$ $\distributedTestdataDirDistro$ 
+					  $\textbf{-\,-keep-logging-timestamps}$ $true$ 
+					  $\textbf{-\,-realtime}$ $false$
+				\end{lstlisting}
+				\begin{lstlisting}[gobble = 10, caption=Execution under Windows]
+					$\lstshellprompt{}$ $\textbf{logReplay.bat}$
+					  $\textbf{-\,-inputdirs}$ $\distributedTestdataDirDistroWin$ 
+					  $\textbf{-\,-keep-logging-timestamps}$ $true$ 
+					  $\textbf{-\,-realtime}$ $false$
+				\end{lstlisting}
+		
 		\subsection{Convert Monitoring Timestamps}
+		
+			The script converts \KiekerMonitoringPart{} logging timestamps, representing the number of nanoseconds since 1~Jan 1970 00:00 UTC, to a human-readable textual representation in the UTC and local timezones.\\
+			
+			\noindent Main-class: {\small \class{kieker.tools.loggingTimestampConverter.LoggingTimestampConverterTool}}
+
+			\paragraph*{Usage}\
+
+				\setTextListing
+				\begin{lstlisting}[gobble = 10]
+					usage: kieker.tools.loggingTimestampConverter.LoggingTimestampConverterTool -t
+						   <timestamp1 ... timestampN>
+					 --t,--timestamps <timestamp1 ... timestampN>
+							List of timestamps (UTC timezone) to convert
+				\end{lstlisting}
+
+			\paragraph*{Example}\
+
+				\noindent
+				The following listing shows the command to convert two logging timestamps as well as the resulting output.
+
+				\setTextListing
+				\begin{lstlisting}[gobble = 10, caption=Execution under UNIX-like systems]
+					$\lstshellprompt{}$ $\textbf{bin/convertLoggingTimestamp.sh}$ $\textbf{-\,-timestamps}$ 1283156545581511026 1283156546127117246 
+					1283156545581511026: Mo, 30 Aug 2010 08:22:25 +0000 (UTC) (Mo, 30 Aug 2010 10:22:25 +0200 (local time))
+					1283156546127117246: Mo, 30 Aug 2010 08:22:26 +0000 (UTC) (Mo, 30 Aug 2010 10:22:26 +0200 (local time))
+				\end{lstlisting}
+
+				\begin{lstlisting}[gobble = 10, caption=Execution under Windows]
+					$\lstshellprompt{}$ $\textbf{convertLoggingTimestamp.bat}$ $\textbf{-\,-timestamps}$ 1283156545581511026 1283156546127117246 
+					1283156545581511026: Mo, 30 Aug 2010 08:22:25 +0000 (UTC) (Mo, 30 Aug 2010 10:22:25 +0200 (local time))
+					1283156546127117246: Mo, 30 Aug 2010 08:22:26 +0000 (UTC) (Mo, 30 Aug 2010 10:22:26 +0200 (local time))
+				\end{lstlisting}
+		
 		\subsection{KAX Viz}
+		
+			The KAX Viz tool visualizes a \KiekerAnalysisPart{} pipe-and-filter configuration file (\file{.kax} file).\\
+
+			\noindent Main-class: {\small \class{kieker.tools.KaxViz}}
+
+			\paragraph*{Usage}\
+
+				\setTextListing
+				\begin{lstlisting}[gobble = 10]
+					usage: kieker.tools.KaxViz -i <filename> [-svg <filename>]
+					 --i,--input <filename>
+							the analysis project file (.kax) loaded
+
+					 --svg <filename>
+							name of svg saved on close
+				\end{lstlisting}
+		
 		\subsection{KAX Runner}
 		
+			The KAX Runner tool executes a \KiekerAnalysisPart{} pipe-and-filter configuration file (\file{.kax} file). \\
+
+			\noindent Main-class: {\small \class{kieker.tools.KaxRun}}
+
+			\paragraph*{Usage}\
+
+				\setTextListing
+				\begin{lstlisting}[gobble = 10]
+					usage: kieker.tools.KaxRun -i <filename>
+					 --i,--input <filename>
+							the analysis project file (.kax) loaded
+				\end{lstlisting}	
+			
 	\section{TSLib \& OPAD}
 	
