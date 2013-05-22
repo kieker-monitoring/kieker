@@ -16,10 +16,15 @@
 
 package kieker.analysis.plugin.filter.forward;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
 import java.util.concurrent.atomic.AtomicLong;
 
 import kieker.analysis.IProjectContext;
+import kieker.analysis.display.Image;
 import kieker.analysis.display.PlainText;
+import kieker.analysis.display.Plot;
 import kieker.analysis.display.annotation.Display;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
@@ -103,8 +108,7 @@ public final class CountingFilter extends AbstractFilterPlugin {
 	}
 
 	/**
-	 * This method is being used to display the currently stored value within this counter.
-	 * It sets the current text within the given instance of {@link PlainText}.
+	 * A simple test display, which prints the current counter on the given Kieker image to the given text object.
 	 * 
 	 * @param plainText
 	 *            The text object to be filled with the current counter value.
@@ -112,5 +116,41 @@ public final class CountingFilter extends AbstractFilterPlugin {
 	@Display(name = "Counter Display")
 	public final void countDisplay(final PlainText plainText) {
 		plainText.setText(Long.toString(this.counter.get()));
+	}
+
+	/**
+	 * A simple test display, which prints the current counter on the given Kieker image.
+	 * 
+	 * @param image
+	 *            The image object to be filled with the current counter value.
+	 */
+	@Display(name = "Visual Counter Display")
+	public final void countDisplay(final Image image) {
+		final String value = Long.toString(this.counter.get());
+		final int width = image.getImage().getWidth();
+		final int height = image.getImage().getHeight();
+		final Graphics2D g = image.getGraphics();
+
+		g.setFont(g.getFont().deriveFont(20.0f));
+
+		g.setColor(Color.white);
+		g.fillRect(0, 0, width - 1, height - 1);
+		g.setColor(Color.gray);
+		g.drawRect(0, 0, width - 2, height - 2);
+
+		final Rectangle2D bounds = g.getFontMetrics().getStringBounds(value, g);
+
+		g.drawString(value, (int) (width - bounds.getWidth()) / 2, (int) (height - bounds.getHeight()) / 2);
+	}
+
+	/**
+	 * A simple test display, which puts the current counter into the given plot.
+	 * 
+	 * @param plot
+	 *            The plot object to be filled with the current counter value.
+	 */
+	@Display(name = "Plot Counter Display")
+	public final void countDisplay(final Plot plot) {
+		plot.addEntry(this.counter.get());
 	}
 }

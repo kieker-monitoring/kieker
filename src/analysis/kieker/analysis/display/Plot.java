@@ -16,20 +16,37 @@
 
 package kieker.analysis.display;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
 /**
- * This is a display type used for html text. This class is currently under development and not designed for productive deployment.
+ * This class is currently under development, mostly for test purposes, and not designed for productive deployment.
  * 
  * @author Nils Christian Ehmke
  * 
- * @since 1.6
+ * @since 1.8
  */
-public class HtmlText extends AbstractDisplay {
+public class Plot extends AbstractDisplay {
 
-	/**
-	 * Creates a new instance of this class.
-	 */
-	public HtmlText() {
+	private final Queue<Long> entries = new ConcurrentLinkedQueue<Long>();
+
+	public Plot() {
 		// No code necessary
+	}
+
+	public Collection<Long> getEntries() {
+		return Collections.unmodifiableCollection(this.entries);
+	}
+
+	public void addEntry(final Long entry) {
+		synchronized (this) {
+			this.entries.add(entry); // NOFB (ignore the return value)
+			if (this.entries.size() > 50) {
+				this.entries.poll(); // NOFB (ignore the return value)
+			}
+		}
 	}
 
 }
