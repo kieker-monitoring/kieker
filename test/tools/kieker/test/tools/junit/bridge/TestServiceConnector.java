@@ -1,4 +1,4 @@
-package bridge.test.tools;
+package kieker.test.tools.junit.bridge;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;

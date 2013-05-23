@@ -1,4 +1,4 @@
-package bridge.test.tools;
+package kieker.test.tools.junit.bridge;
 
 import org.junit.Test;
 
