@@ -11,9 +11,9 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * @author Pascale Brandt
  */
 
-public class FirstUnitTest extends AbstractKiekerTest {
+public class ConnectorTest extends AbstractKiekerTest {
 
-	public FirstUnitTest() {}
+	public ConnectorTest() {}
 
 	@Test
 	public void firstTest() {
