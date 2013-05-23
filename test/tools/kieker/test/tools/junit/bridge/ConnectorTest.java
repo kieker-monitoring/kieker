@@ -13,6 +13,8 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 public class ConnectorTest extends AbstractKiekerTest {
 
+	private final boolean setup = false;
+
 	public ConnectorTest() {}
 
 	@Test
@@ -25,7 +27,7 @@ public class ConnectorTest extends AbstractKiekerTest {
 		 * the second part starts a new record which is written in the TestServiceConnector class.
 		 * 
 		 */
-		final ServiceContainer serviceContainer = new ServiceContainer(ConfigurationFactory.createDefaultConfiguration(), new TestServiceConnector());
+		final ServiceContainer serviceContainer = new ServiceContainer(ConfigurationFactory.createDefaultConfiguration(), new TestServiceConnector(this));
 		try {
 			serviceContainer.run();
 		} catch (final Exception e) {
@@ -33,6 +35,15 @@ public class ConnectorTest extends AbstractKiekerTest {
 			e.printStackTrace();
 		}
 
+	}
+
+	public void setupCalled() {
+		if (this.setup == false)
+		{
+			this.setup = true;
+			// else
+			// add error handling here
+		}
 	}
 
 }
