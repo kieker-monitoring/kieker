@@ -13,7 +13,9 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 public class ConnectorTest extends AbstractKiekerTest {
 
-	private final boolean setup = false;
+	private boolean setup = false;
+	private boolean deserialize = false;
+	private boolean close = false;
 
 	public ConnectorTest() {}
 
@@ -37,86 +39,34 @@ public class ConnectorTest extends AbstractKiekerTest {
 
 	}
 
+	/**
+	 * The following three methods test if the setup, deserialize and close method is getting called.
+	 * If that is not the case the error should throw an exception which has to be catched.
+	 */
 	public void setupCalled() {
 		if (this.setup == false)
 		{
 			this.setup = true;
-			// else
-			// add error handling here
+
+		} else {
+			System.out.println("The setup was called once. But before this test should call the setup!");
+		}
+	}
+
+	public void deserializeCalled() {
+		if (this.deserialize == false) {
+			this.deserialize = true;
+		} else {
+			System.out.println("The desereialize method was called once. But before this test should call it!");
+		}
+	}
+
+	public void closeCalled() {
+		if (this.close == false) {
+			this.close = true;
+		} else {
+			System.out.println("The close method was called once. But before this test should call it!");
 		}
 	}
 
 }
-
-/*
- * /**
- * Implements two Methods, first public String toString():
- * Log the status of the controller to the console .
- * 
- * @return a String representation of the current controller.
- * 
- * Second public boolean saveMetadataAsBoolean.
- * It logs the status of the controller to the configured writer.
- * 
- * @return true if successful.
- * 
- * final IMonitoringController monitoringController = MonitoringController.getInstance();
- * 
- * /**
- * ITimeSource also implements two methods, first is getTime().
- * This return the timestamp for the current time.
- * 
- * Second method is again toString(), which do nothing more then returning
- * a String representation of timeSource.
- * 
- * 
- * final ITimeSource timeSource = monitoringController.getTimeSource();
- * 
- * final long startTime = timeSource.getTime();
- * 
- * FirstUnitTest.TestConnector();
- * final long endTime = timeSource.getTime();
- * 
- * /**
- * This create a new record
- * 
- * 
- * monitoringController.newMonitoringRecord(FirstUnitTest.createOperationExecutionRecord("kieker.bridge", 1, startTime, endTime));
- * }
- * 
- * /**
- * This should test the Interface from the ServiceConnector.
- * For that it usually get 'fake' records.
- * For no infinite loop we should stop the recording with sending a 0 to run() method of ServiceContainer class in KDB.
- * 
- * private static void TestConnector() {
- * 
- * }
- * 
- * }
- * 
- * /**
- * Creates a new OperationExecutionRecord with given parameters.
- * OperationExecutionRecord has different Constants which have to be used if f.e. no hostname, session_id etc required.
- * 
- * @param opString
- * this is an operation String which is defined in {@link kieker.common.util.ClassOperationSignaturePair#splitOperationSignatureStr(String)}.
- * 
- * @param traceId
- * 
- * @param tin
- * the execution start timestamp.
- * 
- * @param tout
- * the execution stop timestamp.
- * 
- * @return
- * 
- * private static OperationExecutionRecord createOperationExecutionRecord(final String opString, final long traceId, final long tin, final long tout) {
- * 
- * return new OperationExecutionRecord(opString, OperationExecutionRecord.NO_SESSION_ID, traceId, tin, tout, OperationExecutionRecord.NO_HOSTNAME,
- * OperationExecutionRecord.NO_EOI_ESS, OperationExecutionRecord.NO_EOI_ESS);
- * }
- * }
- */
-
