@@ -30,7 +30,7 @@ import kieker.common.record.IMonitoringRecord;
  * @author Reiner Jung
  * @since 1.8
  */
-public class JMSEmbeddedService extends JMSService {
+public class JMSEmbeddedConnector extends JMSClientConnector {
 	private BrokerService broker;
 	private final int port;
 
@@ -46,7 +46,7 @@ public class JMSEmbeddedService extends JMSService {
 	 * @throws URISyntaxException
 	 *             if the URI is malformed. Most likely will not happen.
 	 */
-	public JMSEmbeddedService(final Map<Integer, Class<IMonitoringRecord>> recordMap, final int port) throws URISyntaxException {
+	public JMSEmbeddedConnector(final Map<Integer, Class<IMonitoringRecord>> recordMap, final int port) throws URISyntaxException {
 		super(recordMap, null, null, new URI("tcp://localhost:" + port));
 		this.port = port;
 	}

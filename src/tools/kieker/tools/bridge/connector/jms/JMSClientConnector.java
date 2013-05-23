@@ -44,7 +44,7 @@ import kieker.tools.bridge.connector.IServiceConnector;
  * @author Reiner Jung
  * @since 1.8
  */
-public class JMSService implements IServiceConnector {
+public class JMSClientConnector implements IServiceConnector {
 
 	private static final int BUF_LEN = 65536;
 
@@ -70,7 +70,7 @@ public class JMSService implements IServiceConnector {
 	 * @param uri
 	 *            JMSService URI
 	 */
-	public JMSService(final Map<Integer, Class<IMonitoringRecord>> recordMap, final String username, final String password, final URI uri) {
+	public JMSClientConnector(final Map<Integer, Class<IMonitoringRecord>> recordMap, final String username, final String password, final URI uri) {
 		this.recordMap = recordMap;
 		this.username = username;
 		this.password = password;

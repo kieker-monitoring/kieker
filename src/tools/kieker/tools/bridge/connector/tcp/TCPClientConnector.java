@@ -30,7 +30,7 @@ import kieker.tools.bridge.LookupEntity;
  * @author Reiner Jung
  * @since 1.8
  */
-public class TCPClientService extends AbstractTCPService {
+public class TCPClientConnector extends AbstractTCPConnector {
 
 	private static final int BUF_LEN = 65536;
 
@@ -51,7 +51,7 @@ public class TCPClientService extends AbstractTCPService {
 	 * @param port
 	 *            port number where this service connects to
 	 */
-	public TCPClientService(final Map<Integer, Class<IMonitoringRecord>> recordMap, final String hostname, final int port) {
+	public TCPClientConnector(final Map<Integer, Class<IMonitoringRecord>> recordMap, final String hostname, final int port) {
 		super(recordMap);
 		this.port = port;
 		this.hostname = hostname;

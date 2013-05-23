@@ -30,7 +30,7 @@ import kieker.tools.bridge.LookupEntity;
  * @author Reiner Jung
  * @since 1.8
  */
-public class TCPSingleServerService extends AbstractTCPService {
+public class TCPSingleServerConnector extends AbstractTCPConnector {
 	private static final int BUF_LEN = 65536;
 
 	private final int port;
@@ -49,7 +49,7 @@ public class TCPSingleServerService extends AbstractTCPService {
 	 * @param port
 	 *            Port the server listens to
 	 */
-	public TCPSingleServerService(final Map<Integer, Class<IMonitoringRecord>> recordList, final int port) {
+	public TCPSingleServerConnector(final Map<Integer, Class<IMonitoringRecord>> recordList, final int port) {
 		super(recordList);
 		this.port = port;
 	}

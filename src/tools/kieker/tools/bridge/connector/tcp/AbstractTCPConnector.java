@@ -31,7 +31,7 @@ import kieker.tools.bridge.connector.IServiceConnector;
  * @author Reiner Jung
  * @since 1.8
  */
-public abstract class AbstractTCPService implements IServiceConnector {
+public abstract class AbstractTCPConnector implements IServiceConnector {
 
 	protected Map<Integer, LookupEntity> lookupEntityMap;
 
@@ -45,7 +45,7 @@ public abstract class AbstractTCPService implements IServiceConnector {
 	 * @param recordMap
 	 *            IMonitoringRecord to id map
 	 */
-	public AbstractTCPService(final Map<Integer, Class<IMonitoringRecord>> recordMap) {
+	public AbstractTCPConnector(final Map<Integer, Class<IMonitoringRecord>> recordMap) {
 		this.recordMap = recordMap;
 	}
 

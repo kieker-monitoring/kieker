@@ -21,11 +21,11 @@ import java.net.URISyntaxException;
 import java.util.Map;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.tools.bridge.connector.jms.JMSEmbeddedService;
-import kieker.tools.bridge.connector.jms.JMSService;
-import kieker.tools.bridge.connector.tcp.TCPClientService;
-import kieker.tools.bridge.connector.tcp.TCPMultiServerService;
-import kieker.tools.bridge.connector.tcp.TCPSingleServerService;
+import kieker.tools.bridge.connector.jms.JMSEmbeddedConnector;
+import kieker.tools.bridge.connector.jms.JMSClientConnector;
+import kieker.tools.bridge.connector.tcp.TCPClientConnector;
+import kieker.tools.bridge.connector.tcp.TCPMultiServerConnector;
+import kieker.tools.bridge.connector.tcp.TCPSingleServerConnector;
 
 // TODO: add documentation
 
@@ -47,7 +47,7 @@ public final class ServiceConnectorFactory {
 	 */
 	public static IServiceConnector createJMSServiceConnector(final Map<Integer, Class<IMonitoringRecord>> recordMap,
 			final String username, final String password, final URI url) {
-		return new JMSService(recordMap, username, password, url);
+		return new JMSClientConnector(recordMap, username, password, url);
 	}
 
 	/**
@@ -59,7 +59,7 @@ public final class ServiceConnectorFactory {
 	 */
 	public static IServiceConnector createJMSEmbeddedServiceConnector(final Map<Integer, Class<IMonitoringRecord>> recordMap, final int port)
 			throws URISyntaxException {
-		return new JMSEmbeddedService(recordMap, port);
+		return new JMSEmbeddedConnector(recordMap, port);
 	}
 
 	/**
@@ -69,7 +69,7 @@ public final class ServiceConnectorFactory {
 	 * @return
 	 */
 	public static IServiceConnector createTCPSingleServerServiceConnector(final Map<Integer, Class<IMonitoringRecord>> recordMap, final int port) {
-		return new TCPSingleServerService(recordMap, port);
+		return new TCPSingleServerConnector(recordMap, port);
 	}
 
 	/**
@@ -79,7 +79,7 @@ public final class ServiceConnectorFactory {
 	 * @return
 	 */
 	public static IServiceConnector createTCPMultiServerServiceConnector(final Map<Integer, Class<IMonitoringRecord>> recordMap, final int port) {
-		return new TCPMultiServerService(recordMap, port);
+		return new TCPMultiServerConnector(recordMap, port);
 	}
 
 	/**
@@ -90,6 +90,6 @@ public final class ServiceConnectorFactory {
 	 * @return
 	 */
 	public static IServiceConnector createTCPClientServiceConnector(final Map<Integer, Class<IMonitoringRecord>> recordMap, final String hostname, final int port) {
-		return new TCPClientService(recordMap, hostname, port);
+		return new TCPClientConnector(recordMap, hostname, port);
 	}
 }

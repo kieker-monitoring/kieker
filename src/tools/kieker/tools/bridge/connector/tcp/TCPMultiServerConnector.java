@@ -33,7 +33,7 @@ import kieker.tools.bridge.LookupEntity;
  * @author Reiner Jung
  * @since 1.8
  */
-public class TCPMultiServerService extends AbstractTCPService {
+public class TCPMultiServerConnector extends AbstractTCPConnector {
 
 	private static final int QUEUE_CAPACITY = 10;
 
@@ -52,7 +52,7 @@ public class TCPMultiServerService extends AbstractTCPService {
 	 * @param port
 	 *            TCP port the service listens to
 	 */
-	public TCPMultiServerService(final Map<Integer, Class<IMonitoringRecord>> recordMap, final int port) {
+	public TCPMultiServerConnector(final Map<Integer, Class<IMonitoringRecord>> recordMap, final int port) {
 		super(recordMap);
 		this.port = port;
 		this.active = true;
@@ -69,11 +69,11 @@ public class TCPMultiServerService extends AbstractTCPService {
 				// accept client connections
 				// CHECKSTYLE:OFF checkstyle does not understand that serverSocket and active are from the outer class
 				try {
-					while (TCPMultiServerService.this.active) {
-						new ServiceThread(TCPMultiServerService.this.serverSocket.accept());
+					while (TCPMultiServerConnector.this.active) {
+						new ServiceThread(TCPMultiServerConnector.this.serverSocket.accept());
 					}
 				} catch (final IOException e) {
-					TCPMultiServerService.this.active = false;
+					TCPMultiServerConnector.this.active = false;
 				}
 				// CHECKSTYLE:ON
 			}
@@ -113,19 +113,19 @@ public class TCPMultiServerService extends AbstractTCPService {
 
 		public void run() {
 			// CHECKSTYLE:OFF checkstyle does not understand that recordQueue is from the outer class
-			while (TCPMultiServerService.this.active) {
+			while (TCPMultiServerConnector.this.active) {
 				try {
 					this.in = new DataInputStream(this.socket.getInputStream());
-					TCPMultiServerService.this.recordQueue.put(this.deserialize());
+					TCPMultiServerConnector.this.recordQueue.put(this.deserialize());
 				} catch (final IOException e) {
-					TCPMultiServerService.this.active = false;
+					TCPMultiServerConnector.this.active = false;
 					System.out.println("Listener " + Thread.currentThread().getId() + " died. Cause " + e.getMessage());
 				} catch (final InterruptedException e) {
-					TCPMultiServerService.this.active = false;
+					TCPMultiServerConnector.this.active = false;
 					System.out.println("Listener " + Thread.currentThread().getId() + " died. Cause " + e.getMessage());
 					// deserialize does return Exception, therefore at the moment checkstyle has to accept this.
 				} catch (final Exception e) {
-					TCPMultiServerService.this.active = false;
+					TCPMultiServerConnector.this.active = false;
 					System.out.println("Listener " + Thread.currentThread().getId() + " died. Cause " + e.getMessage());
 				}
 			}
@@ -147,7 +147,7 @@ public class TCPMultiServerService extends AbstractTCPService {
 		private IMonitoringRecord deserialize() throws Exception {
 			try {
 				final Integer id = this.in.readInt();
-				final LookupEntity recordProperty = TCPMultiServerService.this.lookupEntityMap.get(id);
+				final LookupEntity recordProperty = TCPMultiServerConnector.this.lookupEntityMap.get(id);
 				if (recordProperty != null) {
 					final Object[] values = new Object[recordProperty.parameterTypes.length];
 
