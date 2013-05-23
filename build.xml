@@ -124,8 +124,6 @@
 				<include name="commons-cli-*.jar" />
 				<include name="jgraphx-*.jar" />
 				<include name="activemq-core-5.7.0.jar" />
-				<!-- <include name="geronimo-j2ee-management_1.1_spec-1.0.1.jar" />
-				<include name="kahadb-5.7.0.jar" />-->
 				<include name="javax.jms-1.1.jar" />
 			</fileset>
 			<pathelement location="${build.kieker.common.dir}/" />
