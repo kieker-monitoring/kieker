@@ -1,5 +1,6 @@
 package kieker.test.tools.junit.bridge;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.monitoring.core.configuration.ConfigurationFactory;
@@ -14,7 +15,6 @@ import kieker.test.common.junit.AbstractKiekerTest;
 public class ConnectorTest extends AbstractKiekerTest {
 
 	private boolean setup = false;
-	private boolean deserialize = false;
 	private boolean close = false;
 
 	public ConnectorTest() {}
@@ -29,7 +29,8 @@ public class ConnectorTest extends AbstractKiekerTest {
 		 * the second part starts a new record which is written in the TestServiceConnector class.
 		 * 
 		 */
-		final ServiceContainer serviceContainer = new ServiceContainer(ConfigurationFactory.createDefaultConfiguration(), new TestServiceConnector(this));
+		final ServiceContainer serviceContainer = new ServiceContainer(ConfigurationFactory.createDefaultConfiguration(),
+				new TestServiceConnector(this));
 		try {
 			serviceContainer.run();
 		} catch (final Exception e) {
@@ -37,6 +38,8 @@ public class ConnectorTest extends AbstractKiekerTest {
 			e.printStackTrace();
 		}
 
+		// TODO check if the number of send records is equal to TestServiceConnector.SEND_NUMBER_OF_RECORDS, you have to get the information from the Kieker record
+		// log
 	}
 
 	/**
@@ -44,29 +47,19 @@ public class ConnectorTest extends AbstractKiekerTest {
 	 * If that is not the case the error should throw an exception which has to be catched.
 	 */
 	public void setupCalled() {
-		if (this.setup == false)
-		{
-			this.setup = true;
-
-		} else {
-			System.out.println("The setup was called once. But before this test should call the setup!");
-		}
+		Assert.assertTrue("Connector's setup() method was called more than once.", this.setup == false);
+		this.setup = true;
+		this.close = false;
 	}
 
 	public void deserializeCalled() {
-		if (this.deserialize == false) {
-			this.deserialize = true;
-		} else {
-			System.out.println("The desereialize method was called once. But before this test should call it!");
-		}
+		Assert.assertTrue("Connector's deserialize() method called before setup() was called.", this.setup == true);
 	}
 
 	public void closeCalled() {
-		if (this.close == false) {
-			this.close = true;
-		} else {
-			System.out.println("The close method was called once. But before this test should call it!");
-		}
+		Assert.assertTrue("Connector's close() method was called before setup() was called.", this.setup == true);
+		Assert.assertTrue("Connector's close() method was called more than once.", this.close == false);
+		this.close = true;
 	}
 
 }

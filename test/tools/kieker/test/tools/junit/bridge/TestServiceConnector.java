@@ -10,20 +10,25 @@ import kieker.tools.bridge.connector.IServiceConnector;
 
 public class TestServiceConnector implements IServiceConnector {
 
+	static public int SEND_NUMBER_OF_RECORDS = 20;
+
 	private final ConnectorTest unitTest;
+	private int count = 0;
 
 	public TestServiceConnector(final ConnectorTest unitTest) {
 		this.unitTest = unitTest;
 	}
 
 	public IMonitoringRecord deserialize() throws Exception {
-
-		this.unitTest.deserializeCalled();
-
-		return new OperationExecutionRecord("kieker.bridge", OperationExecutionRecord.NO_SESSION_ID, 1, 0, 0,
-				OperationExecutionRecord.NO_HOSTNAME, OperationExecutionRecord.NO_EOI_ESS,
-				OperationExecutionRecord.NO_EOI_ESS);
-
+		if (this.count < SEND_NUMBER_OF_RECORDS) {
+			this.unitTest.deserializeCalled();
+			this.count++;
+			return new OperationExecutionRecord("kieker.bridge", OperationExecutionRecord.NO_SESSION_ID, 1, 0, 0,
+					OperationExecutionRecord.NO_HOSTNAME, OperationExecutionRecord.NO_EOI_ESS,
+					OperationExecutionRecord.NO_EOI_ESS);
+		} else {
+			return null;
+		}
 	}
 
 	/**
