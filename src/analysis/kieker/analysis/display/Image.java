@@ -28,7 +28,7 @@ import java.awt.image.BufferedImage;
  */
 public class Image extends AbstractDisplay {
 
-	private final BufferedImage image = new BufferedImage(200, 200, BufferedImage.TYPE_INT_RGB);
+	private final BufferedImage internalImage = new BufferedImage(200, 200, BufferedImage.TYPE_INT_RGB);
 
 	/**
 	 * Creates a new instance of this class.
@@ -38,10 +38,10 @@ public class Image extends AbstractDisplay {
 	}
 
 	public BufferedImage getImage() {
-		return this.image;
+		return this.internalImage;
 	}
 
 	public Graphics2D getGraphics() {
-		return this.image.createGraphics();
+		return this.internalImage.createGraphics();
 	}
 }
