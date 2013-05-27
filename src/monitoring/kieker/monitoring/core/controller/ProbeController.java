@@ -153,9 +153,6 @@ public class ProbeController extends AbstractController implements IProbeControl
 	 * {@inheritDoc}
 	 */
 	public boolean isProbeActivated(final String signature) {
-		if (!this.monitoringController.isMonitoringEnabled()) {
-			return false;
-		}
 		if (this.enabled) {
 			final Boolean active = this.signatureCache.get(signature);
 			if (null == active) {

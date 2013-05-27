@@ -52,6 +52,9 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	@Around("monitoredOperation() && this(thisObject) && target(targetObject) && notWithinKieker()")
 	public Object member2memberOperation(final Object thisObject, final Object targetObject, final ProceedingJoinPoint thisJoinPoint,
 			final EnclosingStaticPart thisEnclosingJoinPoint) throws Throwable { // NOCS
+		if (!CTRLINST.isMonitoringEnabled()) {
+			return thisJoinPoint.proceed();
+		}
 		final String callee = this.signatureToLongString(thisJoinPoint.getSignature());
 		if (!CTRLINST.isProbeActivated(callee)) {
 			return thisJoinPoint.proceed();
@@ -87,6 +90,9 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	@Around("monitoredOperation() && !this(java.lang.Object) && target(targetObject) && notWithinKieker()")
 	public Object static2memberOperation(final Object targetObject, final ProceedingJoinPoint thisJoinPoint, final EnclosingStaticPart thisEnclosingJoinPoint)
 			throws Throwable { // NOCS
+		if (!CTRLINST.isMonitoringEnabled()) {
+			return thisJoinPoint.proceed();
+		}
 		final String callee = this.signatureToLongString(thisJoinPoint.getSignature());
 		if (!CTRLINST.isProbeActivated(callee)) {
 			return thisJoinPoint.proceed();
@@ -124,6 +130,9 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	@Around("monitoredOperation() && this(thisObject) && !target(java.lang.Object) && notWithinKieker()")
 	public Object member2staticOperation(final Object thisObject, final ProceedingJoinPoint thisJoinPoint,
 			final EnclosingStaticPart thisEnclosingJoinPoint) throws Throwable { // NOCS
+		if (!CTRLINST.isMonitoringEnabled()) {
+			return thisJoinPoint.proceed();
+		}
 		final Signature calleeSig = thisJoinPoint.getSignature();
 		final String callee = this.signatureToLongString(calleeSig);
 		if (!CTRLINST.isProbeActivated(callee)) {
@@ -160,6 +169,9 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	@Around("monitoredOperation() && !this(java.lang.Object) && !target(java.lang.Object) && notWithinKieker()")
 	public Object static2staticOperation(final ProceedingJoinPoint thisJoinPoint, final EnclosingStaticPart thisEnclosingJoinPoint)
 			throws Throwable { // NOCS
+		if (!CTRLINST.isMonitoringEnabled()) {
+			return thisJoinPoint.proceed();
+		}
 		final Signature calleeSig = thisJoinPoint.getSignature();
 		final String callee = this.signatureToLongString(calleeSig);
 		if (!CTRLINST.isProbeActivated(callee)) {

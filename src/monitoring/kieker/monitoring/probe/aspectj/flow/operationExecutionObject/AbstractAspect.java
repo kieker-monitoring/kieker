@@ -51,6 +51,9 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 
 	@Around("monitoredOperation() && this(thisObject) && notWithinKieker()")
 	public Object operation(final Object thisObject, final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
+		if (!CTRLINST.isMonitoringEnabled()) {
+			return thisJoinPoint.proceed();
+		}
 		final String signature = this.signatureToLongString(thisJoinPoint.getSignature());
 		if (!CTRLINST.isProbeActivated(signature)) {
 			return thisJoinPoint.proceed();
@@ -98,6 +101,9 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	 */
 	@Around("monitoredOperation() && !this(java.lang.Object) && notWithinKieker()")
 	public Object staticOperation(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
+		if (!CTRLINST.isMonitoringEnabled()) {
+			return thisJoinPoint.proceed();
+		}
 		final Signature sig = thisJoinPoint.getSignature();
 		final String signature = this.signatureToLongString(sig);
 		if (!CTRLINST.isProbeActivated(signature)) {

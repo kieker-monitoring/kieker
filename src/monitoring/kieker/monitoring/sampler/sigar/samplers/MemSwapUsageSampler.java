@@ -51,6 +51,9 @@ public class MemSwapUsageSampler extends AbstractSigarSampler {
 	 * {@inheritDoc}
 	 */
 	public void sample(final IMonitoringController monitoringCtr) throws SigarException {
+		if (!monitoringCtr.isMonitoringEnabled()) {
+			return;
+		}
 		if (!monitoringCtr.isProbeActivated(SignatureFactory.createMemSwapSignature())) {
 			return;
 		}

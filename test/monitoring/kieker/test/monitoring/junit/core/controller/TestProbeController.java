@@ -135,12 +135,16 @@ public class TestProbeController extends AbstractKiekerTest {
 			Assert.assertTrue(ctrl.isProbeActivated("void test.Test()"));
 			ctrl.disableMonitoring();
 			Assert.assertFalse(ctrl.isMonitoringEnabled());
-			Assert.assertFalse(ctrl.isProbeActivated("void test.Test()"));
+			Assert.assertTrue(ctrl.isProbeActivated("void test.Test()"));
 			ctrl.enableMonitoring();
 			Assert.assertTrue(ctrl.isMonitoringEnabled());
 			Assert.assertTrue(ctrl.isProbeActivated("void test.Test()"));
 			ctrl.deactivateProbe("*");
+			Assert.assertTrue(ctrl.isMonitoringEnabled());
 			Assert.assertFalse(ctrl.isProbeActivated("void test.Test()"));
+			ctrl.activateProbe("*");
+			Assert.assertTrue(ctrl.isMonitoringEnabled());
+			Assert.assertTrue(ctrl.isProbeActivated("void test.Test()"));
 			ctrl.terminateMonitoring();
 		}
 		{ // NOCS // adaptive disabled
@@ -153,7 +157,7 @@ public class TestProbeController extends AbstractKiekerTest {
 			Assert.assertTrue(ctrl.isProbeActivated("void test.Test()"));
 			ctrl.disableMonitoring();
 			Assert.assertFalse(ctrl.isMonitoringEnabled());
-			Assert.assertFalse(ctrl.isProbeActivated("void test.Test()"));
+			Assert.assertTrue(ctrl.isProbeActivated("void test.Test()"));
 			ctrl.enableMonitoring();
 			Assert.assertTrue(ctrl.isMonitoringEnabled());
 			Assert.assertTrue(ctrl.isProbeActivated("void test.Test()"));

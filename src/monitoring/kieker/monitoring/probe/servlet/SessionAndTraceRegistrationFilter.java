@@ -144,6 +144,10 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 	 * @throws ServletException
 	 */
 	public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
+		if (!MONITORING_CTRL.isMonitoringEnabled()) {
+			chain.doFilter(request, response);
+			return;
+		}
 		if (!MONITORING_CTRL.isProbeActivated(this.filterOperationSignatureString)) {
 			chain.doFilter(request, response);
 			return;
