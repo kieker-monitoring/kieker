@@ -20,8 +20,8 @@
 		<javac destDir="${build.kieker.monitoring.dir}" source="1.5" target="1.5" srcdir="${src.kieker.monitoring.dir}" excludes="kieker/monitoring/probe/aspectj/" debug="true" classpathref="kieker.monitoring-compile-classpath" includeAntRuntime="false">
 			<compilerarg value="-Xlint:all" />
 		</javac>
-		<!-- WORKAROUND!!! otherwise the include statement of the aop.xml HAS TO include the apsect.class files -->
-		<iajc destdir="${build.kieker.monitoring.dir}" source="1.5" target="1.5" Xlint="ignore" debug="true" classpathref="kieker.monitoring-ajc-compile-classpath">
+		<!-- WORKAROUND!!! otherwise the include statement of the aop.xml HAS TO include the aspect.class files -->
+		<iajc destdir="${build.kieker.monitoring.dir}" source="1.5" target="1.5" debug="true" XlintFile="build-config/aspectjXlint.properties" classpathref="kieker.monitoring-ajc-compile-classpath" X="joinpoints:synchronization">
 			<sourceroots>
 				<pathelement location="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectj/" />
 			</sourceroots>
