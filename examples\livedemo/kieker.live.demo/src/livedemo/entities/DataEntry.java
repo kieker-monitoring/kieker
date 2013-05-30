@@ -10,26 +10,26 @@ import kieker.common.record.system.MemSwapUsageRecord;
  */
 public class DataEntry {
 	
-	long timestamp;
-	int count;
+	private long timestamp;
+	private int count;
 	
-	double sumRespTime;
-	double sumIdle;
-	double sumIrq;
-	double sumNice;
-	double sumSystem;
-	double sumTotalUtilzation;
-	double sumUser;
-	double sumWait;
+	private double sumRespTime;
+	private double sumIdle;
+	private double sumIrq;
+	private double sumNice;
+	private double sumSystem;
+	private double sumTotalUtilzation;
+	private double sumUser;
+	private double sumWait;
 	
-	long sumMemFree;
-	long sumMemUsed;
-	long sumSwapFree;
-	long sumSwapUsed;
+	private long sumMemFree;
+	private long sumMemUsed;
+	private long sumSwapFree;
+	private long sumSwapUsed;
 	
-	String hourMinSec;
-	String minSec;
-	String sec;
+	private String hourMinSec;
+	private String minSec;
+	private String sec;
 	
 	public DataEntry(long timestamp){
 		this.timestamp = timestamp;
@@ -49,6 +49,24 @@ public class DataEntry {
 		this.sumMemUsed = 0;
 		this.sumSwapFree = 0;
 		this.sumSwapUsed = 0;
+	}
+	
+	public void mergeDataEntries(DataEntry dataEntry){
+		this.count += dataEntry.getCount();
+		
+		this.sumRespTime += dataEntry.sumRespTime;
+		this.sumIdle += dataEntry.sumIdle;
+		this.sumIrq += dataEntry.sumIrq;
+		this.sumNice += dataEntry.sumNice;
+		this.sumSystem += dataEntry.sumSystem;
+		this.sumTotalUtilzation += dataEntry.sumTotalUtilzation;
+		this.sumUser += dataEntry.sumUser;
+		this.sumWait += dataEntry.sumWait;
+		
+		this.sumMemFree += dataEntry.sumMemFree;
+		this.sumMemUsed += dataEntry.sumMemUsed;
+		this.sumSwapFree += dataEntry.sumSwapFree;
+		this.sumSwapUsed += dataEntry.sumSwapUsed;
 	}
 	
 	public void addRecord(Record record){
