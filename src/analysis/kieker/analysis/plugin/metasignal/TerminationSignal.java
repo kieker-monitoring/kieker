@@ -1,17 +1,31 @@
-package kieker.analysis.plugin.metasignal;
+/***************************************************************************
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 
-import kieker.analysis.plugin.reader.AbstractReaderPlugin;
+package kieker.analysis.plugin.metasignal;
 
 public class TerminationSignal extends MetaSignal {
 
-	private final AbstractReaderPlugin reader;
+	private final boolean error;
 
-	public TerminationSignal(final AbstractReaderPlugin reader) {
-		this.reader = reader;
+	public TerminationSignal(final boolean error) {
+		this.error = error;
 	}
 
-	public AbstractReaderPlugin getReader() {
-		return this.reader;
+	public boolean isError() {
+		return this.error;
 	}
 
 }

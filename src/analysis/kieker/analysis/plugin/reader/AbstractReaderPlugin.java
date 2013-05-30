@@ -21,6 +21,8 @@ import kieker.analysis.IProjectContext;
 import kieker.analysis.exception.InvalidProjectContextException;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.metasignal.InitializationSignal;
+import kieker.analysis.plugin.metasignal.TerminationSignal;
 import kieker.common.configuration.Configuration;
 
 /**
@@ -58,5 +60,25 @@ public abstract class AbstractReaderPlugin extends AbstractPlugin implements IRe
 	 */
 	public boolean init() { // NOPMD (default implementation)
 		return true;
+	}
+
+	public final void startInitializationSequence() {
+		if (this.getState() != STATE.RUNNING) {
+			for (final String outputPort : this.getAllOutputPortNames()) {
+				super.deliver(outputPort, new InitializationSignal());
+			}
+		}
+	}
+
+	public final void startTerminationSequence(final boolean error) {
+		if ((this.getState() != STATE.READY) && (this.getState() != STATE.RUNNING)) {
+			return;
+		}
+
+		this.shutdown(error);
+
+		for (final String outputPort : this.getAllOutputPortNames()) {
+			super.deliver(outputPort, new TerminationSignal(error));
+		}
 	}
 }

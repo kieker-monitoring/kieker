@@ -82,6 +82,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	private final List<AbstractPlugin> incomingPlugins;
 	private final List<AbstractPlugin> outgoingPlugins;
 	private volatile STATE state = STATE.READY;
+	private volatile int metaSignalCounter = 0;
 
 	// Queues and threads for the asynchronous mode
 	private final ConcurrentHashMap<String, BlockingQueue<Object>> sendingQueues = new ConcurrentHashMap<String, BlockingQueue<Object>>();
@@ -192,22 +193,19 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	}
 
 	private final boolean deliver(final String outputPortName, final Object data, final boolean checkForAsynchronousMode) {
-		// Is this a meta signal?
-		if (data instanceof MetaSignal) {
-			for (final AbstractPlugin plugin : this.outgoingPlugins) {
-
-				if (plugin.processMetaSignal((MetaSignal) data)) {
-					for (final String outputPort : plugin.getAllOutputPortNames()) {
-						plugin.deliver(outputPort, data);
-					}
-				}
-			}
-		}
-
 		// Check whether the data has to be delivered asynchronously
 		if (checkForAsynchronousMode && this.sendingQueues.containsKey(outputPortName)) {
 			this.sendingQueues.get(outputPortName).add(data);
 			return true;
+		}
+
+		// Is this a meta signal?
+		if (data instanceof MetaSignal) {
+			final ConcurrentLinkedQueue<PluginInputPortReference> registeredMethodsOfPort = this.registeredMethods.get(outputPortName);
+
+			for (final PluginInputPortReference pluginInputPortReference : registeredMethodsOfPort) {
+				((AbstractPlugin) pluginInputPortReference.getPlugin()).processMetaSignal((MetaSignal) data);
+			}
 		}
 
 		if (((this.state != STATE.RUNNING) && (this.state != STATE.TERMINATING)) || (data == null)) {
@@ -288,10 +286,22 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	}
 
 	private boolean processMetaSignal(final MetaSignal data) {
+		AbstractPlugin.LOG.info("Plugin " + this.getName() + " received meta signal (" + data + ")");
+
 		if (data instanceof InitializationSignal) {
-			System.out.println(this + " received " + data);
+			this.metaSignalCounter++;
 		} else if (data instanceof TerminationSignal) {
-			System.out.println(this + " received " + data);
+			this.metaSignalCounter--;
+		}
+
+		if ((this.metaSignalCounter == 0) || ((data instanceof TerminationSignal) && ((TerminationSignal) data).isError())) {
+			// Time to shut this filter down!
+			this.shutdown(((TerminationSignal) data).isError());
+		}
+
+		// Forward the meta signal!
+		for (final String outputPort : this.getAllOutputPortNames()) {
+			this.deliver(outputPort, data, false);
 		}
 
 		return true;
@@ -633,12 +643,14 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		}
 	}
 
-	private void shutdownAsynchronousPorts() {
+	private void shutdownAsynchronousPorts() throws InterruptedException {
 		for (final ReceivingThread t : this.receivingThreads) {
 			t.terminate();
+			t.join();
 		}
 		for (final SendingThread t : this.sendingThreads) {
 			t.terminate();
+			t.join();
 		}
 	}
 
@@ -658,20 +670,15 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			this.state = STATE.TERMINATING;
 		}
 
-		for (final AbstractPlugin plugin : this.incomingPlugins) {
-			plugin.shutdown(error);
-		}
 		// when we arrive here, all incoming plugins are terminated!
 		this.terminate(error);
-		this.shutdownAsynchronousPorts();
-		if (error) {
-			this.state = STATE.FAILED;
-		} else {
-			this.state = STATE.TERMINATED;
+		try {
+			this.shutdownAsynchronousPorts();
+		} catch (final InterruptedException ex) {
+			LOG.warn("Interrupted while waiting for asynchronous ports to finish.");
 		}
-		for (final AbstractPlugin plugin : this.outgoingPlugins) {
-			plugin.shutdown(error);
-		}
+
+		((AnalysisController) this.projectContext).notifyFilterTermination(this);
 	}
 
 	/**

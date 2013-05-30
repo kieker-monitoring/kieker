@@ -111,6 +111,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	private final Collection<IStateObserver> stateObservers = new CopyOnWriteArrayList<IStateObserver>();
 
 	private final CountDownLatch initializationLatch = new CountDownLatch(1);
+	private volatile CountDownLatch filterLatch;
 
 	/**
 	 * This map is used to store the mapping between a given instance of {@link MIProject} and an actual instantiation of an analysis. It is not modified after
@@ -703,11 +704,13 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 				this.terminate(true);
 				throw new AnalysisConfigurationException("Reader '" + reader.getName() + "' (" + reader.getPluginName() + ") has unconnected repositories.");
 			}
+			reader.startInitializationSequence();
 			if (!reader.start()) {
 				this.terminate(true);
 				throw new AnalysisConfigurationException("Reader '" + reader.getName() + "' (" + reader.getPluginName() + ") failed to initialize.");
 			}
 		}
+
 		for (final AbstractFilterPlugin filter : this.filters) {
 			// Make also sure that all repository ports of all plugins are connected.
 			if (!filter.areAllRepositoryPortsConnected()) {
@@ -721,6 +724,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		}
 		// Start reading
 		final CountDownLatch readerLatch = new CountDownLatch(this.readers.size());
+		this.filterLatch = new CountDownLatch(this.filters.size());
 		for (final AbstractReaderPlugin reader : this.readers) {
 			new Thread(new Runnable() {
 				public void run() {
@@ -746,7 +750,23 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		} catch (final InterruptedException ex) {
 			LOG.warn("Interrupted while waiting for readers to finish", ex);
 		}
+
 		this.terminate();
+
+		// wait for the remaining filters
+		try {
+			this.filterLatch.await();
+		} catch (final InterruptedException ex) {
+			LOG.warn("Interrupted while waiting for filters to finish", ex);
+		}
+
+		LOG.info("Analysis terminated");
+	}
+
+	public final void notifyFilterTermination(final AbstractPlugin plugin) {
+		if (plugin instanceof AbstractFilterPlugin) {
+			this.filterLatch.countDown();
+		}
 	}
 
 	/**
@@ -786,10 +806,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 			}
 		}
 		for (final AbstractReaderPlugin reader : this.readers) {
-			reader.shutdown(error);
-		}
-		for (final AbstractFilterPlugin filter : this.filters) {
-			filter.shutdown(error);
+			reader.startTerminationSequence(error);
 		}
 	}
 
