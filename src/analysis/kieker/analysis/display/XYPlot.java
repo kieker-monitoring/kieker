@@ -55,7 +55,7 @@ public class XYPlot extends AbstractDisplay {
 		}
 
 		@Override
-		protected boolean removeEldestEntry(final java.util.Map.Entry<Object, Number> arg0) {
+		protected boolean removeEldestEntry(final Map.Entry<Object, Number> arg0) {
 			return this.size() > MAX_ENTRIES;
 		}
 
