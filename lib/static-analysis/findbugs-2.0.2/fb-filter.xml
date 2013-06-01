@@ -144,8 +144,8 @@
 	</Match>
 	
 	<Match>
-		<Class name="kieker.analysis.display.Plot" />
-		<Method name="addEntry" params="java.lang.Long" returns="void" />
+		<Class name="kieker.analysis.display.XYPlot" />
+		<Method name="setEntry" params="java.lang.Object, java.lang.Number" returns="void" />
 		<Bug pattern="RV_RETURN_VALUE_IGNORED" />
 	</Match>
 

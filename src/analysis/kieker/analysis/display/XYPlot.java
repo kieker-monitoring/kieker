@@ -16,10 +16,9 @@
 
 package kieker.analysis.display;
 
-import java.util.Collection;
 import java.util.Collections;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * This class is currently under development, mostly for test purposes, and not designed for productive deployment.
@@ -28,25 +27,38 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * 
  * @since 1.8
  */
-public class Plot extends AbstractDisplay {
+public class XYPlot extends AbstractDisplay {
 
-	private final Queue<Long> entries = new ConcurrentLinkedQueue<Long>();
+	private final CacheMap entries = new CacheMap();
 
-	public Plot() {
+	public XYPlot() {
 		// No code necessary
 	}
 
-	public Collection<Long> getEntries() {
-		return Collections.unmodifiableCollection(this.entries);
+	public Map<Object, Number> getEntries() {
+		return Collections.unmodifiableMap(this.entries);
 	}
 
-	public void addEntry(final Long entry) {
+	public void setEntry(final Object x, final Number y) {
 		synchronized (this) {
-			this.entries.add(entry); // NOFB (ignore the return value)
-			if (this.entries.size() > 50) {
-				this.entries.poll(); // NOFB (ignore the return value)
-			}
+			this.entries.put(x, y);
 		}
+	}
+
+	private static class CacheMap extends LinkedHashMap<Object, Number> {
+
+		private static final long serialVersionUID = 1L;
+		private static final int MAX_ENTRIES = 50;
+
+		public CacheMap() {
+			// No code necessary
+		}
+
+		@Override
+		protected boolean removeEldestEntry(final java.util.Map.Entry<Object, Number> arg0) {
+			return this.size() > MAX_ENTRIES;
+		}
+
 	}
 
 }

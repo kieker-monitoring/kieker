@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import kieker.analysis.IProjectContext;
 import kieker.analysis.display.Image;
 import kieker.analysis.display.PlainText;
-import kieker.analysis.display.Plot;
+import kieker.analysis.display.XYPlot;
 import kieker.analysis.display.annotation.Display;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
@@ -149,8 +149,8 @@ public final class CountingFilter extends AbstractFilterPlugin {
 	 * @param plot
 	 *            The plot object to be filled with the current counter value.
 	 */
-	@Display(name = "Plot Counter Display")
-	public final void countDisplay(final Plot plot) {
-		plot.addEntry(this.counter.get());
+	@Display(name = "XYPlot Counter Display")
+	public final void countDisplay(final XYPlot plot) {
+		plot.setEntry(System.currentTimeMillis(), this.counter.get());
 	}
 }
