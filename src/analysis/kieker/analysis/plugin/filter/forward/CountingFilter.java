@@ -19,10 +19,12 @@ package kieker.analysis.plugin.filter.forward;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicLong;
 
 import kieker.analysis.IProjectContext;
 import kieker.analysis.display.Image;
+import kieker.analysis.display.MeterGauge;
 import kieker.analysis.display.PlainText;
 import kieker.analysis.display.XYPlot;
 import kieker.analysis.display.annotation.Display;
@@ -152,5 +154,17 @@ public final class CountingFilter extends AbstractFilterPlugin {
 	@Display(name = "XYPlot Counter Display")
 	public final void countDisplay(final XYPlot plot) {
 		plot.setEntry(System.currentTimeMillis(), this.counter.get());
+	}
+
+	/**
+	 * A simple test display, which uses a meter gauge to show the current value.
+	 * 
+	 * @param meterGauge
+	 *            The meter gauge object to be filled with the current counter value.
+	 */
+	@Display(name = "Meter Gauge Counter Display")
+	public final void countDisplay(final MeterGauge meterGauge) {
+		meterGauge.setIntervals(Arrays.asList((Number) 10, 20, 40, 100));
+		meterGauge.setValue(this.counter);
 	}
 }
