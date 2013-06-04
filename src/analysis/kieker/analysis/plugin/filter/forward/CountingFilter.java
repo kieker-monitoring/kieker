@@ -67,6 +67,8 @@ public final class CountingFilter extends AbstractFilterPlugin {
 
 	private final AtomicLong counter = new AtomicLong();
 
+	private volatile long timeStampOfInitialization;
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -145,6 +147,16 @@ public final class CountingFilter extends AbstractFilterPlugin {
 		g.drawString(value, (int) (width - bounds.getWidth()) / 2, (int) (height - bounds.getHeight()) / 2);
 	}
 
+	@Override
+	public boolean init() {
+		if (super.init()) {
+			this.timeStampOfInitialization = System.currentTimeMillis();
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	/**
 	 * A simple test display, which puts the current counter into the given plot.
 	 * 
@@ -153,7 +165,9 @@ public final class CountingFilter extends AbstractFilterPlugin {
 	 */
 	@Display(name = "XYPlot Counter Display")
 	public final void countDisplay(final XYPlot plot) {
-		plot.setEntry(System.currentTimeMillis(), this.counter.get());
+		final long timeStampDeltaInSeconds = (System.currentTimeMillis() - this.timeStampOfInitialization) / 1000;
+
+		plot.setEntry(timeStampDeltaInSeconds, this.counter.get());
 	}
 
 	/**
