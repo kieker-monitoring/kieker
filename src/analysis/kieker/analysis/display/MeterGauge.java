@@ -16,9 +16,10 @@
 
 package kieker.analysis.display;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This class is currently under development, mostly for test purposes, and not designed for productive deployment.
@@ -29,30 +30,42 @@ import java.util.List;
  */
 public class MeterGauge extends AbstractDisplay {
 
-	private volatile List<Number> intervals;
-	private volatile Number value;
+	private final Map<String, List<Number>> intervals;
+	private final Map<String, Number> values;
+	private final Map<String, List<String>> intervalColors;
 
 	/**
 	 * Creates a new instance of this class.
 	 */
 	public MeterGauge() {
-		this.intervals = Collections.emptyList();
+		this.intervals = new ConcurrentHashMap<String, List<Number>>();
+		this.intervalColors = new ConcurrentHashMap<String, List<String>>();
+		this.values = new ConcurrentHashMap<String, Number>();
 	}
 
-	public void setIntervals(final List<Number> intervals) {
-		this.intervals = new ArrayList<Number>(intervals);
+	public void setIntervals(final String key, final List<Number> intervals, final List<String> colors) {
+		this.intervals.put(key, intervals);
+		this.intervalColors.put(key, colors);
 	}
 
-	public void setValue(final Number value) {
-		this.value = value;
+	public void setValue(final String key, final Number value) {
+		this.values.put(key, value);
 	}
 
-	public List<Number> getIntervals() {
-		return this.intervals;
+	public Set<String> getKeys() {
+		return this.intervals.keySet();
 	}
 
-	public Number getValue() {
-		return this.value;
+	public List<Number> getIntervals(final String key) {
+		return this.intervals.get(key);
+	}
+
+	public List<String> getIntervalColors(final String key) {
+		return this.intervalColors.get(key);
+	}
+
+	public Number getValue(final String key) {
+		return this.values.get(key);
 	}
 
 }

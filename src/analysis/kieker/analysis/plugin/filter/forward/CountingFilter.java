@@ -178,7 +178,8 @@ public final class CountingFilter extends AbstractFilterPlugin {
 	 */
 	@Display(name = "Meter Gauge Counter Display")
 	public final void countDisplay(final MeterGauge meterGauge) {
-		meterGauge.setIntervals(Arrays.asList((Number) 10, 20, 40, 100));
-		meterGauge.setValue(this.counter);
+		meterGauge.setIntervals("", Arrays.asList((Number) 10, 20, 40, 100), Arrays.asList("66cc66, 93b75f, E7E658, cc6666"));
+		meterGauge.setValue("", this.counter);
 	}
+
 }
