@@ -65,7 +65,7 @@ public class ComponentAllocationDependencyGraphTest extends AbstractKiekerTest {
 	private static final String OPERATION_SIGNATURE_1 = TYPE_NAME_1 + "." + OPERATION_NAME_1 + PARAMETERS;
 	private static final String OPERATION_SIGNATURE_2 = TYPE_NAME_2 + "." + OPERATION_NAME_2 + PARAMETERS;
 
-	private static final String ROOT_COMPONENT_NAME = "$";
+	private static final String ROOT_COMPONENT_NAME = "#";
 	private static final String EXPECTED_ALLOCATION_COMPONENT_NAME_1 = "@1";
 	private static final String EXPECTED_ALLOCATION_COMPONENT_NAME_2 = "@2";
 

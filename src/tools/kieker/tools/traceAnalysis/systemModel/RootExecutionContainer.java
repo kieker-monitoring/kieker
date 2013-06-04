@@ -27,7 +27,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubReposi
  */
 public class RootExecutionContainer extends ExecutionContainer {
 
-	private static final String ROOT_EXECUTION_CONTAINER_NAME = "$";
+	private static final String ROOT_EXECUTION_CONTAINER_NAME = "#";
 
 	/**
 	 * Creates a new root execution container.

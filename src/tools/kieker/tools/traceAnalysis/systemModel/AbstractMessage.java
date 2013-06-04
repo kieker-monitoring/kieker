@@ -85,13 +85,13 @@ public abstract class AbstractMessage {
 		strBuild.append(this.timestamp);
 		strBuild.append(' ');
 		if (this.getSendingExecution().getOperation().getId() == Operation.ROOT_OPERATION_ID) {
-			strBuild.append('$');
+			strBuild.append('#');
 		} else {
 			strBuild.append(this.getSendingExecution());
 		}
 		strBuild.append(" --> ");
 		if (this.getReceivingExecution().getOperation().getId() == Operation.ROOT_OPERATION_ID) {
-			strBuild.append('$');
+			strBuild.append('#');
 		} else {
 			strBuild.append(this.getReceivingExecution());
 		}

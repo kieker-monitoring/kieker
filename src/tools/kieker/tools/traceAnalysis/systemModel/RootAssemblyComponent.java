@@ -29,7 +29,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.TypeRepository;
  */
 public class RootAssemblyComponent extends AssemblyComponent {
 
-	private static final String ROOT_COMPONENT_NAME = "$";
+	private static final String ROOT_COMPONENT_NAME = "#";
 
 	/**
 	 * Creates a new root assembly component.
