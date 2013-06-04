@@ -16,9 +16,6 @@
 
 package kieker.analysis.plugin.filter.forward;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.geom.Rectangle2D;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -132,21 +129,23 @@ public final class CountingFilter extends AbstractFilterPlugin {
 		this.plainText.setText(Long.toString(this.counter.get()));
 
 		// Image
-		final String value = Long.toString(this.counter.get());
-		final int width = this.image.getImage().getWidth();
-		final int height = this.image.getImage().getHeight();
-		final Graphics2D g = this.image.getGraphics();
-
-		g.setFont(g.getFont().deriveFont(20.0f));
-
-		g.setColor(Color.white);
-		g.fillRect(0, 0, width - 1, height - 1);
-		g.setColor(Color.gray);
-		g.drawRect(0, 0, width - 2, height - 2);
-
-		final Rectangle2D bounds = g.getFontMetrics().getStringBounds(value, g);
-
-		g.drawString(value, (int) (width - bounds.getWidth()) / 2, (int) (height - bounds.getHeight()) / 2);
+		/*
+		 * final String value = Long.toString(this.counter.get());
+		 * final int width = this.image.getImage().getWidth();
+		 * final int height = this.image.getImage().getHeight();
+		 * final Graphics2D g = this.image.getGraphics();
+		 * 
+		 * g.setFont(g.getFont().deriveFont(20.0f));
+		 * 
+		 * g.setColor(Color.white);
+		 * g.fillRect(0, 0, width - 1, height - 1);
+		 * g.setColor(Color.gray);
+		 * g.drawRect(0, 0, width - 2, height - 2);
+		 * 
+		 * final Rectangle2D bounds = g.getFontMetrics().getStringBounds(value, g);
+		 * 
+		 * g.drawString(value, (int) (width - bounds.getWidth()) / 2, (int) (height - bounds.getHeight()) / 2);
+		 */
 	}
 
 	@Override

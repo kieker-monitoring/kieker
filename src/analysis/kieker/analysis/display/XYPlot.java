@@ -51,7 +51,7 @@ public class XYPlot extends AbstractDisplay {
 	}
 
 	public void setEntry(final String key, final Object x, final Number y) {
-		final CacheMap newCacheMap = new CacheMap();
+		final CacheMap newCacheMap = new CacheMap(this.maxEntriesPerSeries);
 		final CacheMap oldCacheMap = this.entries.putIfAbsent(key, newCacheMap);
 
 		final CacheMap syncObj;
@@ -66,17 +66,18 @@ public class XYPlot extends AbstractDisplay {
 		}
 	}
 
-	private class CacheMap extends LinkedHashMap<Object, Number> {
+	private static class CacheMap extends LinkedHashMap<Object, Number> {
 
 		private static final long serialVersionUID = 1L;
+		private final int maxEntriesPerSeries;
 
-		public CacheMap() {
-			// No code necessary
+		public CacheMap(final int maxEntriesPerSeries) {
+			this.maxEntriesPerSeries = maxEntriesPerSeries;
 		}
 
 		@Override
 		protected boolean removeEldestEntry(final Map.Entry<Object, Number> entry) {
-			return this.size() > XYPlot.this.maxEntriesPerSeries;
+			return this.size() > this.maxEntriesPerSeries;
 		}
 
 	}
