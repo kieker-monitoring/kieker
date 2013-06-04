@@ -165,9 +165,9 @@ public final class CountingFilter extends AbstractFilterPlugin {
 	 */
 	@Display(name = "XYPlot Counter Display")
 	public final void countDisplay(final XYPlot plot) {
-		final long timeStampDeltaInSeconds = (System.currentTimeMillis() - this.timeStampOfInitialization) / 1000;
+		final long timeStampDeltaInMS = System.currentTimeMillis() - this.timeStampOfInitialization;
 
-		plot.setEntry(timeStampDeltaInSeconds, this.counter.get());
+		plot.setEntry(timeStampDeltaInMS, this.counter.get());
 	}
 
 	/**
