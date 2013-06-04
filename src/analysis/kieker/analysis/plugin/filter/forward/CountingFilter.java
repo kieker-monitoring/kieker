@@ -69,6 +69,11 @@ public final class CountingFilter extends AbstractFilterPlugin {
 
 	private volatile long timeStampOfInitialization;
 
+	private final PlainText plainText = new PlainText();
+	private final MeterGauge meterGauge = new MeterGauge();
+	private final XYPlot xyPlot = new XYPlot(50);
+	private final Image image = new Image();
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -107,33 +112,30 @@ public final class CountingFilter extends AbstractFilterPlugin {
 	@InputPort(name = INPUT_PORT_NAME_EVENTS, eventTypes = { Object.class }, description = "Receives incoming objects to be counted and forwarded")
 	public final void inputEvent(final Object event) {
 		final Long count = CountingFilter.this.counter.incrementAndGet();
+
+		this.updateDisplays();
+
 		super.deliver(OUTPUT_PORT_NAME_RELAYED_EVENTS, event);
 		super.deliver(OUTPUT_PORT_NAME_COUNT, count);
 	}
 
-	/**
-	 * A simple test display, which prints the current counter on the given Kieker image to the given text object.
-	 * 
-	 * @param plainText
-	 *            The text object to be filled with the current counter value.
-	 */
-	@Display(name = "Counter Display")
-	public final void countDisplay(final PlainText plainText) {
-		plainText.setText(Long.toString(this.counter.get()));
-	}
+	private void updateDisplays() {
+		// Meter gauge
+		this.meterGauge.setIntervals("", Arrays.asList((Number) 10, 20, 40, 100), Arrays.asList("66cc66, 93b75f, E7E658, cc6666"));
+		this.meterGauge.setValue("", this.counter);
 
-	/**
-	 * A simple test display, which prints the current counter on the given Kieker image.
-	 * 
-	 * @param image
-	 *            The image object to be filled with the current counter value.
-	 */
-	@Display(name = "Visual Counter Display")
-	public final void countDisplay(final Image image) {
+		// XY Plot
+		final long timeStampDeltaInSeconds = (System.currentTimeMillis() - this.timeStampOfInitialization) / 1000;
+		this.xyPlot.setEntry("", timeStampDeltaInSeconds, this.counter.get());
+
+		// Plain text
+		this.plainText.setText(Long.toString(this.counter.get()));
+
+		// Image
 		final String value = Long.toString(this.counter.get());
-		final int width = image.getImage().getWidth();
-		final int height = image.getImage().getHeight();
-		final Graphics2D g = image.getGraphics();
+		final int width = this.image.getImage().getWidth();
+		final int height = this.image.getImage().getHeight();
+		final Graphics2D g = this.image.getGraphics();
 
 		g.setFont(g.getFont().deriveFont(20.0f));
 
@@ -157,29 +159,24 @@ public final class CountingFilter extends AbstractFilterPlugin {
 		}
 	}
 
-	/**
-	 * A simple test display, which puts the current counter into the given plot.
-	 * 
-	 * @param plot
-	 *            The plot object to be filled with the current counter value.
-	 */
-	@Display(name = "XYPlot Counter Display")
-	public final void countDisplay(final XYPlot plot) {
-		final long timeStampDeltaInMS = System.currentTimeMillis() - this.timeStampOfInitialization;
-
-		plot.setEntry(timeStampDeltaInMS, this.counter.get());
+	@Display(name = "Visual Counter Display")
+	public final Image imageDisplay() {
+		return this.image;
 	}
 
-	/**
-	 * A simple test display, which uses a meter gauge to show the current value.
-	 * 
-	 * @param meterGauge
-	 *            The meter gauge object to be filled with the current counter value.
-	 */
+	@Display(name = "Counter Display")
+	public final PlainText plainTextDisplay() {
+		return this.plainText;
+	}
+
+	@Display(name = "XYPlot Counter Display")
+	public final XYPlot xyPlotDisplay() {
+		return this.xyPlot;
+	}
+
 	@Display(name = "Meter Gauge Counter Display")
-	public final void countDisplay(final MeterGauge meterGauge) {
-		meterGauge.setIntervals("", Arrays.asList((Number) 10, 20, 40, 100), Arrays.asList("66cc66, 93b75f, E7E658, cc6666"));
-		meterGauge.setValue("", this.counter);
+	public final MeterGauge meterGaugeDisplay() {
+		return this.meterGauge;
 	}
 
 }

@@ -19,6 +19,9 @@ package kieker.analysis.display;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * This class is currently under development, mostly for test purposes, and not designed for productive deployment.
@@ -29,34 +32,51 @@ import java.util.Map;
  */
 public class XYPlot extends AbstractDisplay {
 
-	private final CacheMap entries = new CacheMap();
+	private final ConcurrentMap<String, CacheMap> entries;
+	private final int maxEntriesPerSeries;
 
-	public XYPlot() {
-		// No code necessary
+	public XYPlot(final int maxEntriesPerSeries) {
+		this.entries = new ConcurrentHashMap<String, CacheMap>();
+		this.maxEntriesPerSeries = maxEntriesPerSeries;
 	}
 
-	public Map<Object, Number> getEntries() {
-		return Collections.unmodifiableMap(this.entries);
-	}
-
-	public void setEntry(final Object x, final Number y) {
-		synchronized (this) {
-			this.entries.put(x, y);
+	public Map<Object, Number> getEntries(final String key) {
+		synchronized (this.entries.get(key)) {
+			return Collections.unmodifiableMap(this.entries.get(key));
 		}
 	}
 
-	private static class CacheMap extends LinkedHashMap<Object, Number> {
+	public Set<String> getKeys() {
+		return this.entries.keySet();
+	}
+
+	public void setEntry(final String key, final Object x, final Number y) {
+		final CacheMap newCacheMap = new CacheMap();
+		final CacheMap oldCacheMap = this.entries.putIfAbsent(key, newCacheMap);
+
+		final CacheMap syncObj;
+		if (oldCacheMap != null) {
+			syncObj = oldCacheMap;
+		} else {
+			syncObj = newCacheMap;
+		}
+
+		synchronized (syncObj) {
+			syncObj.put(x, y);
+		}
+	}
+
+	private class CacheMap extends LinkedHashMap<Object, Number> {
 
 		private static final long serialVersionUID = 1L;
-		private static final int MAX_ENTRIES = 50;
 
 		public CacheMap() {
 			// No code necessary
 		}
 
 		@Override
-		protected boolean removeEldestEntry(final Map.Entry<Object, Number> arg0) {
-			return this.size() > MAX_ENTRIES;
+		protected boolean removeEldestEntry(final Map.Entry<Object, Number> entry) {
+			return this.size() > XYPlot.this.maxEntriesPerSeries;
 		}
 
 	}
