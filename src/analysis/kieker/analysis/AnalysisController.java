@@ -517,8 +517,10 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		} catch (final Throwable t) { // NOPMD NOCS (Catch errors and exceptions)
 			// Make sure that neither an exception nor an error can crash the application
 			LOG.error("Error during shutdown.", t);
-			this.state = STATE.FAILED;
-			this.notifyStateObservers();
+			synchronized (this) {
+				this.state = STATE.FAILED;
+				this.notifyStateObservers();
+			}
 		}
 	}
 
