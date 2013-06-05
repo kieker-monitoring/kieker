@@ -493,25 +493,32 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * {@inheritDoc}
 	 */
 	public final void terminate(final boolean error) {
-		synchronized (this) {
-			if (this.state != STATE.RUNNING) {
-				return;
+		try {
+			synchronized (this) {
+				if (this.state != STATE.RUNNING) {
+					return;
+				}
+				if (error) {
+					LOG.info("Error during analysis. Terminating ...");
+					this.state = STATE.FAILED;
+					this.notifyStateObservers();
+				} else {
+					LOG.info("Terminating analysis.");
+					this.state = STATE.TERMINATED;
+					this.notifyStateObservers();
+				}
 			}
-			if (error) {
-				LOG.info("Error during analysis. Terminating ...");
-				this.state = STATE.FAILED;
-				this.notifyStateObservers();
-			} else {
-				LOG.info("Terminating analysis.");
-				this.state = STATE.TERMINATED;
-				this.notifyStateObservers();
+			for (final AbstractReaderPlugin reader : this.readers) {
+				reader.shutdown(error);
 			}
-		}
-		for (final AbstractReaderPlugin reader : this.readers) {
-			reader.shutdown(error);
-		}
-		for (final AbstractFilterPlugin filter : this.filters) {
-			filter.shutdown(error);
+			for (final AbstractFilterPlugin filter : this.filters) {
+				filter.shutdown(error);
+			}
+		} catch (final Throwable t) { // NOPMD NOCS (Catch errors and exceptions)
+			// Make sure that neither an exception nor an error can crash the application
+			LOG.error("Error during shutdown.", t);
+			this.state = STATE.FAILED;
+			this.notifyStateObservers();
 		}
 	}
 
