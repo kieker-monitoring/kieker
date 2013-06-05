@@ -17,6 +17,7 @@
 package kieker.tools.traceAnalysis.systemModel;
 
 import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubRepository;
+import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.TypeRepository;
 
 /**
@@ -29,13 +30,11 @@ import kieker.tools.traceAnalysis.systemModel.repository.TypeRepository;
  */
 public class RootAssemblyComponent extends AssemblyComponent {
 
-	private static final String ROOT_COMPONENT_NAME = "#";
-
 	/**
 	 * Creates a new root assembly component.
 	 */
 	public RootAssemblyComponent() {
-		super(AbstractSystemSubRepository.ROOT_ELEMENT_ID, ROOT_COMPONENT_NAME, TypeRepository.ROOT_COMPONENT);
+		super(AbstractSystemSubRepository.ROOT_ELEMENT_ID, SystemModelRepository.ROOT_NODE_LABEL, TypeRepository.ROOT_COMPONENT);
 	}
 
 	@Override

@@ -164,7 +164,8 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 			final Map<AbstractCallTreeNode<?>, Integer> nodeIds, final AtomicInteger nextNodeId, final PrintStream ps, final boolean shortLabels) {
 		final StringBuilder strBuild = new StringBuilder(64);
 		nodeIds.put(n, nextNodeId.get());
-		strBuild.append(nextNodeId.getAndIncrement()).append("[label =\"").append(n.isRootNode() ? "#" : AbstractCallTreeFilter.nodeLabel(n, shortLabels)) // NOCS
+		strBuild.append(nextNodeId.getAndIncrement()).append("[label =\"").append(n.isRootNode() ? SystemModelRepository.ROOT_NODE_LABEL :
+				AbstractCallTreeFilter.nodeLabel(n, shortLabels)) // NOCS
 				.append("\",shape=" + DotFactory.DOT_SHAPE_NONE + "];");
 		ps.println(strBuild.toString());
 		for (final WeightedDirectedCallTreeEdge<?> child : n.getChildEdges()) {

@@ -17,6 +17,7 @@
 package kieker.tools.traceAnalysis.systemModel;
 
 import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubRepository;
+import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * Specific subtype for the root execution container.
@@ -27,13 +28,11 @@ import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubReposi
  */
 public class RootExecutionContainer extends ExecutionContainer {
 
-	private static final String ROOT_EXECUTION_CONTAINER_NAME = "#";
-
 	/**
 	 * Creates a new root execution container.
 	 */
 	public RootExecutionContainer() {
-		super(AbstractSystemSubRepository.ROOT_ELEMENT_ID, null, ROOT_EXECUTION_CONTAINER_NAME);
+		super(AbstractSystemSubRepository.ROOT_ELEMENT_ID, null, SystemModelRepository.ROOT_NODE_LABEL);
 	}
 
 	@Override

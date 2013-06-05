@@ -27,6 +27,7 @@ import kieker.tools.traceAnalysis.filter.visualization.AbstractGraphFormatter;
 import kieker.tools.traceAnalysis.filter.visualization.util.dot.DotFactory;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
+import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * Formatter class for component dependency graphs on the allocation level (see {@link ComponentAllocationDependencyGraph}) .
@@ -72,7 +73,7 @@ public class ComponentAllocationDependencyGraphFormatter extends AbstractCompone
 
 		if (container.isRootContainer()) {
 			builder.append(DotFactory.createNode("", AbstractDependencyGraphFormatter.createNodeId(DependencyGraphNode.ROOT_NODE_ID),
-					DependencyGraphNode.ROOT_NODE_NAME, DotFactory.DOT_SHAPE_NONE, null, // style
+					SystemModelRepository.ROOT_NODE_LABEL, DotFactory.DOT_SHAPE_NONE, null, // style
 					null, // framecolor
 					null, // fillcolor
 					null, // fontcolor
