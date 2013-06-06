@@ -498,15 +498,12 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 				if (this.state != STATE.RUNNING) {
 					return;
 				}
-				if (error) {
-					LOG.info("Error during analysis. Terminating ...");
-					this.state = STATE.FAILED;
-					this.notifyStateObservers();
-				} else {
-					LOG.info("Terminating analysis.");
-					this.state = STATE.TERMINATED;
-					this.notifyStateObservers();
-				}
+				this.state = STATE.TERMINATING;
+			}
+			if (error) {
+				LOG.info("Error during analysis. Terminating ...");
+			} else {
+				LOG.info("Terminating analysis.");
 			}
 			for (final AbstractReaderPlugin reader : this.readers) {
 				reader.shutdown(error);
@@ -514,15 +511,18 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 			for (final AbstractFilterPlugin filter : this.filters) {
 				filter.shutdown(error);
 			}
+			if (error) {
+				this.state = STATE.FAILED;
+			} else {
+				this.state = STATE.TERMINATED;
+			}
 		} catch (final Throwable t) { // NOPMD NOCS (Catch errors and exceptions)
 			// Make sure that neither an exception nor an error can crash the application
-			synchronized (this) {
-				// Even if the logging or the notify method fails, we have a correct state now!
-				this.state = STATE.FAILED;
-
-				LOG.error("Error during shutdown.", t);
-				this.notifyStateObservers();
-			}
+			// Even if the logging or the notify method fails, we have a correct state now!
+			this.state = STATE.FAILED;
+			LOG.error("Error during shutdown.", t);
+		} finally {
+			this.notifyStateObservers();
 		}
 	}
 
@@ -771,6 +771,10 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		 * The analysis is currently running.
 		 */
 		RUNNING,
+		/**
+		 * The controller has initiated a termination.
+		 */
+		TERMINATING,
 		/**
 		 * The controller has been terminated without errors.
 		 */
