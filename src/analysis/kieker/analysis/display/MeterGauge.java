@@ -30,42 +30,42 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class MeterGauge extends AbstractDisplay {
 
-	private final Map<String, List<Number>> intervals;
-	private final Map<String, Number> values;
-	private final Map<String, List<String>> intervalColors;
+	private final Map<String, List<Number>> intervalMap;
+	private final Map<String, Number> valueMap;
+	private final Map<String, List<String>> intervalColorMap;
 
 	/**
 	 * Creates a new instance of this class.
 	 */
 	public MeterGauge() {
-		this.intervals = new ConcurrentHashMap<String, List<Number>>();
-		this.intervalColors = new ConcurrentHashMap<String, List<String>>();
-		this.values = new ConcurrentHashMap<String, Number>();
+		this.intervalMap = new ConcurrentHashMap<String, List<Number>>();
+		this.intervalColorMap = new ConcurrentHashMap<String, List<String>>();
+		this.valueMap = new ConcurrentHashMap<String, Number>();
 	}
 
 	public void setIntervals(final String key, final List<Number> intervals, final List<String> colors) {
-		this.intervals.put(key, intervals);
-		this.intervalColors.put(key, colors);
+		this.intervalMap.put(key, intervals);
+		this.intervalColorMap.put(key, colors);
 	}
 
 	public void setValue(final String key, final Number value) {
-		this.values.put(key, value);
+		this.valueMap.put(key, value);
 	}
 
 	public Set<String> getKeys() {
-		return this.intervals.keySet();
+		return this.intervalMap.keySet();
 	}
 
 	public List<Number> getIntervals(final String key) {
-		return this.intervals.get(key);
+		return this.intervalMap.get(key);
 	}
 
 	public List<String> getIntervalColors(final String key) {
-		return this.intervalColors.get(key);
+		return this.intervalColorMap.get(key);
 	}
 
 	public Number getValue(final String key) {
-		return this.values.get(key);
+		return this.valueMap.get(key);
 	}
 
 }
