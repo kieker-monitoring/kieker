@@ -31,15 +31,21 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.system.CPUUtilizationRecord;
 
 /**
+ * This is a filter which accepts {@link CPUUtilizationRecord} instances and provides different views to visualize them. The incoming records are relayed without any
+ * enrichment.
  * 
  * @author Bjoern Weissenfels, Nils Ehmke
  * 
  * @since 1.8
  */
-
-@Plugin(outputPorts = @OutputPort(name = CPUUtilizationDisplayFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
-		eventTypes = { CPUUtilizationRecord.class }, description = "Provides each incoming object"),
-		configuration = @Property(name = CPUUtilizationDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES,
+@Plugin(outputPorts =
+		@OutputPort(
+				name = CPUUtilizationDisplayFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
+				eventTypes = { CPUUtilizationRecord.class },
+				description = "Provides each incoming object"),
+		configuration =
+		@Property(
+				name = CPUUtilizationDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES,
 				defaultValue = CPUUtilizationDisplayFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES,
 				description = "sets the number of max plot entries per cpu"))
 public class CPUUtilizationDisplayFilter extends AbstractFilterPlugin {
@@ -57,12 +63,15 @@ public class CPUUtilizationDisplayFilter extends AbstractFilterPlugin {
 	private static final String NICE = "nice";
 	private static final String SYSTEM = "system";
 	private static final String USER = "user";
+
 	private final MeterGauge meterGauge;
 	private final XYPlot xyplot;
 	private final int numberOfEntries;
 
 	public CPUUtilizationDisplayFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
+
+		// Create the display objects
 		this.numberOfEntries = configuration.getIntProperty(CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES);
 		this.meterGauge = new MeterGauge();
 		this.xyplot = new XYPlot(this.numberOfEntries);
@@ -72,15 +81,17 @@ public class CPUUtilizationDisplayFilter extends AbstractFilterPlugin {
 	@InputPort(name = CPUUtilizationDisplayFilter.INPUT_PORT_NAME_EVENTS, eventTypes = { CPUUtilizationRecord.class })
 	public void input(final CPUUtilizationRecord record) {
 		final String id = record.getHostname() + " - " + record.getCpuID();
+
 		this.meterGauge.setIntervals(id, Arrays.asList((Number) 70, 90, 100), Arrays.asList("66cc66", "E7E658", "cc6666"));
 		this.meterGauge.setValue(id, record.getTotalUtilization() * 100);
 
-		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.TOTAL_UTILIZATION, record.getLoggingTimestamp(), record.getTotalUtilization());
-		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.ILDE, record.getLoggingTimestamp(), record.getIdle());
-		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.IRQ, record.getLoggingTimestamp(), record.getIrq());
-		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.NICE, record.getLoggingTimestamp(), record.getNice());
-		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.SYSTEM, record.getLoggingTimestamp(), record.getSystem());
-		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.USER, record.getLoggingTimestamp(), record.getUser());
+		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.TOTAL_UTILIZATION, record.getLoggingTimestamp(), record.getTotalUtilization() * 100);
+		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.ILDE, record.getLoggingTimestamp(), record.getIdle() * 100);
+		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.IRQ, record.getLoggingTimestamp(), record.getIrq() * 100);
+		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.NICE, record.getLoggingTimestamp(), record.getNice() * 100);
+		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.SYSTEM, record.getLoggingTimestamp(), record.getSystem() * 100);
+		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.USER, record.getLoggingTimestamp(), record.getUser() * 100);
+
 		super.deliver(OUTPUT_PORT_NAME_RELAYED_EVENTS, record);
 	}
 
@@ -97,7 +108,9 @@ public class CPUUtilizationDisplayFilter extends AbstractFilterPlugin {
 	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
+
 		configuration.setProperty(CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, String.valueOf(this.numberOfEntries));
+
 		return configuration;
 	}
 
