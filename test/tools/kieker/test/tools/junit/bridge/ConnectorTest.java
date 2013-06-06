@@ -1,6 +1,7 @@
 package kieker.test.tools.junit.bridge;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -35,6 +36,15 @@ public class ConnectorTest extends AbstractKiekerTest {
 		 * 
 		 */
 		final String path = "/tmp/kdb/";
+		final String dirName = "data";
+		final File dir = new File(path + dirName);
+		int rows = 0;
+
+		if (dir.mkdir()) {
+			System.out.println(dir + " - konnte nicht erstellt werden.");
+		} else {
+			System.out.println(dir + " - konnte nicht erstellt werden.");
+		}
 
 		// TODO create dir
 
@@ -53,15 +63,15 @@ public class ConnectorTest extends AbstractKiekerTest {
 
 		try {
 
-			final FileReader fr = new FileReader("test.txt");
+			final FileReader fr = new FileReader("test.txt"); // instead of test.txt fill the correct filename
 			final BufferedReader br = new BufferedReader(fr);
 			String line;
-			int rows = 0;
 
 			while ((line = br.readLine()) != null) {
 				rows++;
 			}
 			rows = rows - 1;
+			br.close();
 
 		} catch (final IOException e) {
 			System.out.println(e.getMessage());
@@ -70,11 +80,11 @@ public class ConnectorTest extends AbstractKiekerTest {
 		// TODO check if the number of send records is equal to TestServiceConnector.SEND_NUMBER_OF_RECORDS,
 		// you have to get the information from the Kieker record log
 		Assert.assertTrue("The number of send records is not equal to TestServiceConnector.SEND_NUMBER_OF_RECORDS",
-				TestServiceConnector.SEND_NUMBER_OF_RECORDS == 20);
+				TestServiceConnector.SEND_NUMBER_OF_RECORDS == rows);
 		// find file /tmp/kdb/kieker-*/kieker-*.dat
 		// count lines in file
 
-		// remove all files and directories in /tmp/kdb/ (including /tmp/kdb/)
+		dir.delete(); // deletes the whole directory from path /tmp/kdb/data/
 	}
 
 	/**
