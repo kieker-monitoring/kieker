@@ -41,12 +41,11 @@ public class ConnectorTest extends AbstractKiekerTest {
 		int rows = 0;
 
 		if (dir.mkdir()) {
-			System.out.println(dir + " - konnte nicht erstellt werden.");
+			System.out.println(dir + " - konnte erstellt werden.");
 		} else {
+			// TODO make this an assertions
 			System.out.println(dir + " - konnte nicht erstellt werden.");
 		}
-
-		// TODO create dir
 
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
 		configuration.setProperty("kieker.monitoring.writer.filesystem.AsyncFsWriter.storeInJavaIoTmpdir", "false");
@@ -61,8 +60,8 @@ public class ConnectorTest extends AbstractKiekerTest {
 			e.printStackTrace();
 		}
 
+		// check number of lines in Kieker record file
 		try {
-
 			final FileReader fr = new FileReader("test.txt"); // instead of test.txt fill the correct filename
 			final BufferedReader br = new BufferedReader(fr);
 			String line;
@@ -77,13 +76,11 @@ public class ConnectorTest extends AbstractKiekerTest {
 			System.out.println(e.getMessage());
 
 		}
-		// TODO check if the number of send records is equal to TestServiceConnector.SEND_NUMBER_OF_RECORDS,
-		// you have to get the information from the Kieker record log
+
 		Assert.assertTrue("The number of send records is not equal to TestServiceConnector.SEND_NUMBER_OF_RECORDS",
 				TestServiceConnector.SEND_NUMBER_OF_RECORDS == rows);
-		// find file /tmp/kdb/kieker-*/kieker-*.dat
-		// count lines in file
 
+		// http://stackoverflow.com/questions/779519/delete-files-recursively-in-java
 		dir.delete(); // deletes the whole directory from path /tmp/kdb/data/
 	}
 
