@@ -878,8 +878,6 @@ public final class TraceAnalysisTool {
 			int numErrorCount = 0;
 			try {
 				ANALYSIS_INSTANCE.run();
-			} catch (final Exception ex) { // NOPMD NOCS (FindBugs reports that Exception is never thrown; but wontfix (#44)!)
-				throw new Exception("Error occured while running analysis", ex);
 			} finally {
 				for (final AbstractTraceProcessingFilter c : allTraceProcessingComponents) {
 					numErrorCount += c.getErrorCount();
