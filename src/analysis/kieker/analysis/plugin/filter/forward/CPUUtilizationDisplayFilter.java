@@ -75,7 +75,6 @@ public class CPUUtilizationDisplayFilter extends AbstractFilterPlugin {
 		this.numberOfEntries = configuration.getIntProperty(CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES);
 		this.meterGauge = new MeterGauge();
 		this.xyplot = new XYPlot(this.numberOfEntries);
-
 	}
 
 	@InputPort(name = CPUUtilizationDisplayFilter.INPUT_PORT_NAME_EVENTS, eventTypes = { CPUUtilizationRecord.class })
