@@ -82,8 +82,10 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 
 	private final TimeUnit timeunit;
 
+	private final String strTimerOrigin;
 	private final TimerWithPrecision timer;
 
+	private final long warnOnNegativeSchedTimeOrigin;
 	private final long warnOnNegativeSchedTime;
 
 	private final int numWorkers;
@@ -117,17 +119,18 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 		}
 		this.timeunit = recordTimeunit;
 
-		final String strTimer = configuration.getStringProperty(CONFIG_PROPERTY_NAME_TIMER);
+		this.strTimerOrigin = configuration.getStringProperty(CONFIG_PROPERTY_NAME_TIMER);
 		TimerWithPrecision tmpTimer;
 		try {
-			tmpTimer = TimerWithPrecision.valueOf(strTimer);
+			tmpTimer = TimerWithPrecision.valueOf(this.strTimerOrigin);
 		} catch (final IllegalArgumentException ex) {
-			LOG.warn(strTimer + " is no valid timer precision! Using MILLISECONDS instead.");
+			LOG.warn(this.strTimerOrigin + " is no valid timer precision! Using MILLISECONDS instead.");
 			tmpTimer = TimerWithPrecision.MILLISECONDS;
 		}
 		this.timer = tmpTimer;
 
-		this.warnOnNegativeSchedTime = this.timeunit.convert(this.configuration.getLongProperty(CONFIG_PROPERTY_NAME_WARN_NEGATIVE_DELAY_SECONDS), TimeUnit.SECONDS);
+		this.warnOnNegativeSchedTimeOrigin = this.configuration.getLongProperty(CONFIG_PROPERTY_NAME_WARN_NEGATIVE_DELAY_SECONDS);
+		this.warnOnNegativeSchedTime = this.timeunit.convert(this.warnOnNegativeSchedTimeOrigin, TimeUnit.SECONDS);
 
 		this.numWorkers = configuration.getIntProperty(CONFIG_PROPERTY_NAME_NUM_WORKERS);
 		this.shutdownDelay = this.timeunit.convert(this.configuration.getLongProperty(CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS), TimeUnit.SECONDS);
@@ -211,9 +214,14 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
+
+		configuration.setProperty(CONFIG_PROPERTY_NAME_WARN_NEGATIVE_DELAY_SECONDS, Long.toString(this.warnOnNegativeSchedTimeOrigin));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_NUM_WORKERS, Integer.toString(this.numWorkers));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_TIMER, this.strTimerOrigin);
+
 		configuration
 				.setProperty(CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS, Long.toString(TimeUnit.SECONDS.convert(this.shutdownDelay, this.timeunit)));
+
 		return configuration;
 	}
 
