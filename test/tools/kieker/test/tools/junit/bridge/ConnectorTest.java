@@ -1,5 +1,9 @@
 package kieker.test.tools.junit.bridge;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -21,7 +25,7 @@ public class ConnectorTest extends AbstractKiekerTest {
 	public ConnectorTest() {}
 
 	@Test
-	public void firstTest() {
+	public void firstTest() throws IOException {
 
 		/**
 		 * 1st parameter: Configuration is in CLIServerMain
@@ -47,9 +51,26 @@ public class ConnectorTest extends AbstractKiekerTest {
 			e.printStackTrace();
 		}
 
+		try {
+
+			final FileReader fr = new FileReader("test.txt");
+			final BufferedReader br = new BufferedReader(fr);
+			String line;
+			int rows = 0;
+
+			while ((line = br.readLine()) != null) {
+				rows++;
+			}
+			rows = rows - 1;
+
+		} catch (final IOException e) {
+			System.out.println(e.getMessage());
+
+		}
 		// TODO check if the number of send records is equal to TestServiceConnector.SEND_NUMBER_OF_RECORDS,
 		// you have to get the information from the Kieker record log
-
+		Assert.assertTrue("The number of send records is not equal to TestServiceConnector.SEND_NUMBER_OF_RECORDS",
+				TestServiceConnector.SEND_NUMBER_OF_RECORDS == 20);
 		// find file /tmp/kdb/kieker-*/kieker-*.dat
 		// count lines in file
 
