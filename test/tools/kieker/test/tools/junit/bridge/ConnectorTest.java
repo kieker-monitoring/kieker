@@ -36,8 +36,7 @@ public class ConnectorTest extends AbstractKiekerTest {
 		 * 
 		 */
 		final String path = "/tmp/kdb/";
-		final String dirName = "data";
-		final File dir = new File(path + dirName);
+		final File dir = new File(path);
 		int rows = 0;
 
 		if (dir.mkdir()) {
@@ -62,7 +61,7 @@ public class ConnectorTest extends AbstractKiekerTest {
 
 		// check number of lines in Kieker record file
 		try {
-			final FileReader fr = new FileReader("test.txt"); // instead of test.txt fill the correct filename
+			final FileReader fr = new FileReader("");
 			final BufferedReader br = new BufferedReader(fr);
 			String line;
 
