@@ -3,6 +3,7 @@ package kieker.test.tools.junit.bridge;
 import org.junit.Assert;
 import org.junit.Test;
 
+import kieker.common.configuration.Configuration;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.tools.bridge.ServiceContainer;
 
@@ -29,7 +30,15 @@ public class ConnectorTest extends AbstractKiekerTest {
 		 * the second part starts a new record which is written in the TestServiceConnector class.
 		 * 
 		 */
-		final ServiceContainer serviceContainer = new ServiceContainer(ConfigurationFactory.createDefaultConfiguration(),
+		final String path = "/tmp/kdb/";
+
+		// TODO create dir
+
+		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
+		configuration.setProperty("kieker.monitoring.writer.filesystem.AsyncFsWriter.storeInJavaIoTmpdir", "false");
+		configuration.setProperty("kieker.monitoring.writer.filesystem.AsyncFsWriter.customStoragePath", path);
+
+		final ServiceContainer serviceContainer = new ServiceContainer(configuration,
 				new TestServiceConnector(this));
 		try {
 			serviceContainer.run();
@@ -38,8 +47,13 @@ public class ConnectorTest extends AbstractKiekerTest {
 			e.printStackTrace();
 		}
 
-		// TODO check if the number of send records is equal to TestServiceConnector.SEND_NUMBER_OF_RECORDS, you have to get the information from the Kieker record
-		// log
+		// TODO check if the number of send records is equal to TestServiceConnector.SEND_NUMBER_OF_RECORDS,
+		// you have to get the information from the Kieker record log
+
+		// find file /tmp/kdb/kieker-*/kieker-*.dat
+		// count lines in file
+
+		// remove all files and directories in /tmp/kdb/ (including /tmp/kdb/)
 	}
 
 	/**
@@ -60,6 +74,7 @@ public class ConnectorTest extends AbstractKiekerTest {
 		Assert.assertTrue("Connector's close() method was called before setup() was called.", this.setup == true);
 		Assert.assertTrue("Connector's close() method was called more than once.", this.close == false);
 		this.close = true;
+		this.setup = false;
 	}
 
 }
