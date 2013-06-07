@@ -60,7 +60,7 @@ public class CPUUtilizationDisplayFilter extends AbstractFilterPlugin {
 	public static final String CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES = "numberOfEntries";
 	public static final String CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES = "100";
 
-	private static final Log LOG = LogFactory.getLog(CountingThroughputFilter.class);
+	private static final Log LOG = LogFactory.getLog(CPUUtilizationDisplayFilter.class);
 
 	private static final String TOTAL_UTILIZATION = "totalUtilization";
 	private static final String ILDE = "idle";
@@ -73,8 +73,8 @@ public class CPUUtilizationDisplayFilter extends AbstractFilterPlugin {
 	private final XYPlot xyplot;
 	private final int numberOfEntries;
 
-	private boolean firstTimeStampSet = false;
-	private long firstTimeStamp = 0;
+	private boolean firstTimeStampSet;
+	private long firstTimeStamp;
 	private final TimeUnit timeunit;
 
 	public CPUUtilizationDisplayFilter(final Configuration configuration, final IProjectContext projectContext) {
@@ -103,26 +103,28 @@ public class CPUUtilizationDisplayFilter extends AbstractFilterPlugin {
 		super.deliver(OUTPUT_PORT_NAME_RELAYED_EVENTS, record);
 	}
 
-	private synchronized void updateDisplays(final CPUUtilizationRecord record) {
-		if (!this.firstTimeStampSet) {
-			this.firstTimeStampSet = true;
-			this.firstTimeStamp = TimeUnit.SECONDS.convert(record.getLoggingTimestamp(), this.timeunit);
+	private void updateDisplays(final CPUUtilizationRecord record) {
+		synchronized (this) {
+			if (!this.firstTimeStampSet) {
+				this.firstTimeStampSet = true;
+				this.firstTimeStamp = TimeUnit.SECONDS.convert(record.getLoggingTimestamp(), this.timeunit);
+			}
+
+			// Calculate the time delta in seconds from the first record
+			final long deltaInSeconds = TimeUnit.SECONDS.convert(record.getLoggingTimestamp(), this.timeunit) - this.firstTimeStamp;
+
+			final String id = record.getHostname() + " - " + record.getCpuID();
+
+			this.meterGauge.setIntervals(id, Arrays.asList((Number) 70, 90, 100), Arrays.asList("66cc66", "E7E658", "cc6666"));
+			this.meterGauge.setValue(id, record.getTotalUtilization() * 100);
+
+			this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.TOTAL_UTILIZATION, deltaInSeconds, record.getTotalUtilization() * 100);
+			this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.ILDE, deltaInSeconds, record.getIdle() * 100);
+			this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.IRQ, deltaInSeconds, record.getIrq() * 100);
+			this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.NICE, deltaInSeconds, record.getNice() * 100);
+			this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.SYSTEM, deltaInSeconds, record.getSystem() * 100);
+			this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.USER, deltaInSeconds, record.getUser() * 100);
 		}
-
-		// Calculate the time delta in seconds from the first record
-		final long deltaInSeconds = TimeUnit.SECONDS.convert(record.getLoggingTimestamp(), this.timeunit) - this.firstTimeStamp;
-
-		final String id = record.getHostname() + " - " + record.getCpuID();
-
-		this.meterGauge.setIntervals(id, Arrays.asList((Number) 70, 90, 100), Arrays.asList("66cc66", "E7E658", "cc6666"));
-		this.meterGauge.setValue(id, record.getTotalUtilization() * 100);
-
-		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.TOTAL_UTILIZATION, deltaInSeconds, record.getTotalUtilization() * 100);
-		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.ILDE, deltaInSeconds, record.getIdle() * 100);
-		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.IRQ, deltaInSeconds, record.getIrq() * 100);
-		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.NICE, deltaInSeconds, record.getNice() * 100);
-		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.SYSTEM, deltaInSeconds, record.getSystem() * 100);
-		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.USER, deltaInSeconds, record.getUser() * 100);
 	}
 
 	@Display(name = "Meter Gauge CPU total utilization Display")
