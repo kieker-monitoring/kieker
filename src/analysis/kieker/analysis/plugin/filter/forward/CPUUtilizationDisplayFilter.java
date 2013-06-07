@@ -17,6 +17,7 @@
 package kieker.analysis.plugin.filter.forward;
 
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 import kieker.analysis.IProjectContext;
 import kieker.analysis.display.MeterGauge;
@@ -28,6 +29,8 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.system.CPUUtilizationRecord;
 
 /**
@@ -47,7 +50,7 @@ import kieker.common.record.system.CPUUtilizationRecord;
 		@Property(
 				name = CPUUtilizationDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES,
 				defaultValue = CPUUtilizationDisplayFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES,
-				description = "sets the number of max plot entries per cpu"))
+				description = "Sets the number of max plot entries per cpu"))
 public class CPUUtilizationDisplayFilter extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME_EVENTS = "inputEvents";
@@ -56,6 +59,8 @@ public class CPUUtilizationDisplayFilter extends AbstractFilterPlugin {
 
 	public static final String CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES = "numberOfEntries";
 	public static final String CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES = "100";
+
+	private static final Log LOG = LogFactory.getLog(CountingThroughputFilter.class);
 
 	private static final String TOTAL_UTILIZATION = "totalUtilization";
 	private static final String ILDE = "idle";
@@ -68,6 +73,10 @@ public class CPUUtilizationDisplayFilter extends AbstractFilterPlugin {
 	private final XYPlot xyplot;
 	private final int numberOfEntries;
 
+	private boolean firstTimeStampSet = false;
+	private long firstTimeStamp = 0;
+	private final TimeUnit timeunit;
+
 	public CPUUtilizationDisplayFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
@@ -75,23 +84,45 @@ public class CPUUtilizationDisplayFilter extends AbstractFilterPlugin {
 		this.numberOfEntries = configuration.getIntProperty(CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES);
 		this.meterGauge = new MeterGauge();
 		this.xyplot = new XYPlot(this.numberOfEntries);
+
+		final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
+		TimeUnit recordTimeunit;
+		try {
+			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
+		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
+			LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
+			recordTimeunit = TimeUnit.NANOSECONDS;
+		}
+		this.timeunit = recordTimeunit;
 	}
 
 	@InputPort(name = CPUUtilizationDisplayFilter.INPUT_PORT_NAME_EVENTS, eventTypes = { CPUUtilizationRecord.class })
 	public void input(final CPUUtilizationRecord record) {
+		this.updateDisplays(record);
+
+		super.deliver(OUTPUT_PORT_NAME_RELAYED_EVENTS, record);
+	}
+
+	private synchronized void updateDisplays(final CPUUtilizationRecord record) {
+		if (!this.firstTimeStampSet) {
+			this.firstTimeStampSet = true;
+			this.firstTimeStamp = TimeUnit.SECONDS.convert(record.getLoggingTimestamp(), this.timeunit);
+		}
+
+		// Calculate the time delta in seconds from the first record
+		final long deltaInSeconds = TimeUnit.SECONDS.convert(record.getLoggingTimestamp(), this.timeunit) - this.firstTimeStamp;
+
 		final String id = record.getHostname() + " - " + record.getCpuID();
 
 		this.meterGauge.setIntervals(id, Arrays.asList((Number) 70, 90, 100), Arrays.asList("66cc66", "E7E658", "cc6666"));
 		this.meterGauge.setValue(id, record.getTotalUtilization() * 100);
 
-		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.TOTAL_UTILIZATION, record.getLoggingTimestamp(), record.getTotalUtilization() * 100);
-		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.ILDE, record.getLoggingTimestamp(), record.getIdle() * 100);
-		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.IRQ, record.getLoggingTimestamp(), record.getIrq() * 100);
-		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.NICE, record.getLoggingTimestamp(), record.getNice() * 100);
-		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.SYSTEM, record.getLoggingTimestamp(), record.getSystem() * 100);
-		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.USER, record.getLoggingTimestamp(), record.getUser() * 100);
-
-		super.deliver(OUTPUT_PORT_NAME_RELAYED_EVENTS, record);
+		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.TOTAL_UTILIZATION, deltaInSeconds, record.getTotalUtilization() * 100);
+		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.ILDE, deltaInSeconds, record.getIdle() * 100);
+		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.IRQ, deltaInSeconds, record.getIrq() * 100);
+		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.NICE, deltaInSeconds, record.getNice() * 100);
+		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.SYSTEM, deltaInSeconds, record.getSystem() * 100);
+		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.USER, deltaInSeconds, record.getUser() * 100);
 	}
 
 	@Display(name = "Meter Gauge CPU total utilization Display")
