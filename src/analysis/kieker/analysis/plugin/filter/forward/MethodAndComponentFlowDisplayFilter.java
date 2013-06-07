@@ -35,12 +35,21 @@ public class MethodAndComponentFlowDisplayFilter extends AbstractFilterPlugin {
 
 	@InputPort(name = MethodAndComponentFlowDisplayFilter.INPUT_PORT_NAME_EVENTS, eventTypes = { OperationExecutionRecord.class })
 	public void input(final OperationExecutionRecord record) {
-		final String className = ClassOperationSignaturePair.splitOperationSignatureStr(record.getOperationSignature()).getSimpleClassname();
+		final String shortClassName = ClassOperationSignaturePair.splitOperationSignatureStr(record.getOperationSignature()).getSimpleClassname();
+		final String methodName = shortClassName + '.' + this.extractMethodName(record.getOperationSignature());
 
-		this.methodTagCloud.incrementCounter(record.getOperationSignature());
-		this.componentTagCloud.incrementCounter(className);
+		this.methodTagCloud.incrementCounter(methodName);
+		this.componentTagCloud.incrementCounter(shortClassName);
 
 		super.deliver(OUTPUT_PORT_NAME_RELAYED_EVENTS, record);
+	}
+
+	private String extractMethodName(final String operationSignature) {
+		final String operationSignatureWithoutParameters = operationSignature.replaceAll("\\(.*\\)", "");
+		final int lastPointPos = operationSignatureWithoutParameters.lastIndexOf('.');
+		final String methodName = operationSignatureWithoutParameters.substring(lastPointPos + 1);
+
+		return methodName;
 	}
 
 	@Override
