@@ -69,7 +69,7 @@ public class TestPluginConfigurationRetention extends AbstractKiekerTest {
 						&& (!this.isConfigurationCorrect((Class<? extends AbstractPlugin>) clazz))) {
 					Assert.fail("Class '" + className + "' doesn't export all of its properties.");
 				}
-			} catch (final ClassNotFoundException ex) {
+			} catch (final ClassNotFoundException ex) { // NOPMD (Empty catch block)
 				// Nothing to do here yet
 			}
 		}
