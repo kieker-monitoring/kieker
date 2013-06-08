@@ -33,6 +33,8 @@ import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.common.configuration.Configuration;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 
@@ -45,6 +47,8 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * @since 1.8
  */
 public class TestPluginConfigurationRetention extends AbstractKiekerTest {
+
+	private static final Log LOG = LogFactory.getLog(TestPluginConfigurationRetention.class);
 
 	private static final String DIR_NAME_SOURCES = "src";
 	private static final String PATTERN_JAVA_SOURCE_FILES = ".*java";
@@ -65,12 +69,15 @@ public class TestPluginConfigurationRetention extends AbstractKiekerTest {
 			try {
 				final String className = TestPluginConfigurationRetention.sourceFileToClassName(sourceFile);
 				final Class<?> clazz = this.getClass().getClassLoader().loadClass(className);
-				if (TestPluginConfigurationRetention.doesClassExtendAbstractPlugin(clazz) && !(this.isClassAbstract(clazz))
-						&& (!this.isConfigurationCorrect((Class<? extends AbstractPlugin>) clazz))) {
-					Assert.fail("Class '" + className + "' doesn't export all of its properties.");
+				if (TestPluginConfigurationRetention.doesClassExtendAbstractPlugin(clazz) && !(this.isClassAbstract(clazz))) {
+					LOG.info("Testing class '" + className + "'...");
+					if (!this.isConfigurationCorrect((Class<? extends AbstractPlugin>) clazz)) {
+						Assert.fail("Class '" + className + "' doesn't export all of its properties.");
+					}
 				}
 			} catch (final ClassNotFoundException ex) { // NOPMD (Empty catch block)
 				// Nothing to do here yet
+				LOG.warn("Could not find class", ex);
 			}
 		}
 	}
