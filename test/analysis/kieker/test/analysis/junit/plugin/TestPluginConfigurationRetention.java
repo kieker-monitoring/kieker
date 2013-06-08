@@ -62,11 +62,15 @@ public class TestPluginConfigurationRetention extends AbstractKiekerTest {
 			InvocationTargetException, NoSuchMethodException, SecurityException {
 		final List<File> sourceFiles = TestPluginConfigurationRetention.listJavaSourceFiles();
 		for (final File sourceFile : sourceFiles) {
-			final String className = TestPluginConfigurationRetention.sourceFileToClassName(sourceFile);
-			final Class<?> clazz = this.getClass().getClassLoader().loadClass(className);
-			if (TestPluginConfigurationRetention.doesClassExtendAbstractPlugin(clazz) && !(this.isClassAbstract(clazz))
-					&& (!this.isConfigurationCorrect((Class<? extends AbstractPlugin>) clazz))) {
-				Assert.fail("Class '" + className + "' doesn't export all of its properties.");
+			try {
+				final String className = TestPluginConfigurationRetention.sourceFileToClassName(sourceFile);
+				final Class<?> clazz = this.getClass().getClassLoader().loadClass(className);
+				if (TestPluginConfigurationRetention.doesClassExtendAbstractPlugin(clazz) && !(this.isClassAbstract(clazz))
+						&& (!this.isConfigurationCorrect((Class<? extends AbstractPlugin>) clazz))) {
+					Assert.fail("Class '" + className + "' doesn't export all of its properties.");
+				}
+			} catch (final ClassNotFoundException ex) {
+				// Nothing to do here yet
 			}
 		}
 	}
