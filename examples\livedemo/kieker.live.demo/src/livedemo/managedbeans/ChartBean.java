@@ -29,11 +29,11 @@ import org.primefaces.model.chart.ChartSeries;
 @ViewScoped
 public class ChartBean implements Observer{
 	
-	int numberOfDisplayedEntries = 12;
+	int numberOfDisplayedEntries = 10;
 	final int maxNumberOfDisplayedEntries = 25;
-	int intervallLength = 3; // in seconds
+	int intervallLength = 2; // in seconds
 	final int maxIntervallLength = 60; // in seconds
-	long duration = 3 * 1000000000L; // duration for collecting method response times in nanos (intervallLength * 1.000.000.000)
+	long duration = 2 * 1000000000L; // duration for collecting method response times in nanos (intervallLength * 1.000.000.000)
 	List<Integer> possibleNumberOfDisplayedEntries;
 	List<Integer> possibleIntervallLength;
 	
@@ -71,9 +71,12 @@ public class ChartBean implements Observer{
 		for(int i=10; i<=this.maxNumberOfDisplayedEntries;i++){
 			this.possibleNumberOfDisplayedEntries.add(i);
 		}
-		for(int i=1; i<=this.maxIntervallLength;i++){
-			this.possibleIntervallLength.add(i);
-		}
+		this.possibleIntervallLength.add(1);
+		this.possibleIntervallLength.add(2);
+		this.possibleIntervallLength.add(5);
+		this.possibleIntervallLength.add(10);
+		this.possibleIntervallLength.add(30);
+		this.possibleIntervallLength.add(60);
 	}
 	
 	@PreDestroy

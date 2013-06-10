@@ -7,9 +7,9 @@ import org.primefaces.model.chart.CartesianChartModel;
  */
 public class Model{
 	
-	CartesianChartModel firstModel;
-	CartesianChartModel secondModel;
-	String name;
+	private CartesianChartModel firstModel;
+	private CartesianChartModel secondModel;
+	private String name;
 	
 	public Model(CartesianChartModel model, String name){
 		this.firstModel = model;

@@ -2,6 +2,7 @@
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:p="http://primefaces.org/ui"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
     xmlns:ui="http://java.sun.com/jsf/facelets">
     
 <h:head>
@@ -39,53 +40,56 @@
 
 <h:body class="page">
 	<div id="page" style="background:#FFFFFF">
-    	<div id="header">
+      <div id="header">
         <img src="resources/header_image_small.jpg" width="960" height="125" border="0" usemap="#kiekermenumap" />
         <map name="kiekermenumap">
           <area shape="rect" coords="70,3,350,93" href="http://kieker-monitoring.net" alt="home" title="home" />
         </map>
       </div>	    	
-	 	<div class="menu-header">
+	  	<div class="menu-header">
 	  		<ul id="menu-header_menu" class="menu">
 	  			<li><a href="index.jsf">Main Menu</a></li>
 	  			<li><a href="recordList.jsf">Record List</a></li>
-	  			<li><a style="color:#000000" href="chart.jsf">Method Response Times</a></li>
-<!-- 	       	<li><a href="graph.jsf">Graph</a></li> -->
+	  			<li><a href="chart.jsf">Method Response Times</a></li>
+<!-- 			<li><a href="graph.jsf">Graph</a></li> -->
 		       	<li><a href="systemModel.jsf">System Model</a></li>
 		       	<li><a href="cpu.jsf">CPU and MemSwap</a></li>
+		       	<li><a style="color:#000000" href="cpuAndMemSwap.jsf">CPU</a></li>
 			</ul>
 		</div>
 		<div id="main">
-			<h:form>
-				<p:selectCheckboxMenu id="methodbox" onShow="poll.stop()" onHide="poll.start()" 
-					value="#{chartBean.selectedMethods}" label="Select Methods" 
-					filter="true" filterText="Filter" filterMatchMode="contains">  
-					<f:selectItems value="#{chartBean.availableMethods}" />  
-				</p:selectCheckboxMenu>
-				
-				<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">  
-				<h:outputText value="Intervall length in seconds: " />  
-					<p:selectOneMenu value="#{chartBean.intervallLength}">  
-						<f:selectItems value="#{chartBean.possibleIntervallLength}"/>  
-						<p:ajax update="count,resp" listener="#{chartBean.changeIntervallLength}"/>
-					</p:selectOneMenu>
+			<h:form> 
+				<p:accordionPanel value="#{cpuXYPlotBean.models}" var="model" dynamic="true" multiple="true">
+					<p:tab title="#{model.name}">
+						
+						<p:lineChart id="test" value="#{model.model}" legendPosition="ne" minY="0" maxY="100"
+						   		style="height:300px;margin-top:20px"
+						   		xaxisLabel="Seconds since start" yaxisLabel="Percent"/>
+						<p:poll interval="1" update="test"/>
+					</p:tab>
 					
-	  				<h:outputText value="Number of displayed entries: " />  
-					<p:selectOneMenu value="#{chartBean.numberOfDisplayedEntries}">  
-						<f:selectItems value="#{chartBean.possibleNumberOfDisplayedEntries}"/> 
-					</p:selectOneMenu>
-				</h:panelGrid>
-				
-				<p:lineChart id="count" value="#{chartBean.countingModel}" legendPosition="ne"  
-			    	title="Method Calls Per #{chartBean.intervallLength} Seconds" minY="0" style="height:300px;margin-top:20px"
-			    	xaxisLabel="Time" yaxisLabel="Number of calls"/>
-				
-				<p:barChart id="resp" value="#{chartBean.responsetimeModel}" legendPosition="ne"  
-			    	title="Average Responsetime" minY="0" style="height:300px;margin-top:20px"
-			    	xaxisLabel="Time" yaxisLabel="Responsetime in ms"/>
-		     		
-		     	<p:poll interval="1" widgetVar="poll" update="methodbox" autoStart="true"/>
-				<p:poll interval="1" update="count,resp" />
+				</p:accordionPanel>
+			 	
+			 	<p:dashboard model="#{cpuMeterGaugeBean.dashboardModel}" id="board">			 		 
+			 		<p:panel id="model0" header="KIEKER-DEMO-SVR - 0" toggleable="true">
+						<p:meterGaugeChart title="Total Utilization" value="#{cpuMeterGaugeBean.model0}" style="width:400px;height:250px" 
+					 		label="%" seriesColors="#{cpuMeterGaugeBean.colors}"/>
+					</p:panel>
+					<p:panel id="model1" header="KIEKER-DEMO-SVR - 1" toggleable="true">
+						<p:meterGaugeChart value="#{cpuMeterGaugeBean.model1}" style="width:400px;height:250px" 
+					 		label="%" seriesColors="#{cpuMeterGaugeBean.colors}"/>
+					</p:panel>
+					<p:panel id="model2" header="KIEKER-DEMO-SVR - 2" toggleable="true">
+						<p:meterGaugeChart value="#{cpuMeterGaugeBean.model2}" style="width:400px;height:250px" 
+					 		label="%" seriesColors="#{cpuMeterGaugeBean.colors}"/>
+					</p:panel>
+					<p:panel id="model3" header="KIEKER-DEMO-SVR - 3" toggleable="true">
+						<p:meterGaugeChart value="#{cpuMeterGaugeBean.model3}" style="width:400px;height:250px" 
+					 		label="%" seriesColors="#{cpuMeterGaugeBean.colors}"/>
+					</p:panel>
+				</p:dashboard>
+					
+				<p:poll interval="1" update="model0,model1,model2,model3"/>
 			</h:form>
 		</div>
 		<div id="footer">
@@ -96,6 +100,7 @@
         		</ul>
         	</div>
     	</div>
-	</div>
+	</div>	
+	
 </h:body>
 </html>

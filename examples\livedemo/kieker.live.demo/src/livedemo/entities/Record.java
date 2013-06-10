@@ -1,12 +1,15 @@
 package livedemo.entities;
 
+import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 
 /**
  * @author Bjoern Weissenfels
  */
-public class Record {
+public class Record implements IMonitoringRecord{
 	
+	private static final long serialVersionUID = 4652653198700953697L;
+
 	private final OperationExecutionRecord record;
 	
 	private double responseTime; // in milliseconds, rounded to one decimal
@@ -54,6 +57,36 @@ public class Record {
 
 	public String getShortSignature() {
 		return shortSignature;
+	}
+
+	@Override
+	public int compareTo(IMonitoringRecord otherRecord) {
+		return this.record.compareTo(otherRecord);
+	}
+
+	@Override
+	public long getLoggingTimestamp() {
+		return this.record.getLoggingTimestamp();
+	}
+
+	@Override
+	public Class<?>[] getValueTypes() {
+		return this.record.getValueTypes();
+	}
+
+	@Override
+	public void initFromArray(Object[] arg0) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void setLoggingTimestamp(long timestamp) {
+		this.record.setLoggingTimestamp(timestamp);
+	}
+
+	@Override
+	public Object[] toArray() {
+		return this.record.toArray();
 	}
 	
 }
