@@ -88,27 +88,24 @@ public class CPUMeterGaugeBean {
 	}
 	
 	public MeterGaugeChartModel getModel1(){
-		MeterGaugeChartModel m = this.meterGaugeModels.get(1);
-		if(null != m){
-			return m;
+		if(this.meterGaugeModels.size()>1){
+			return this.meterGaugeModels.get(1);
 		}else{
 			return new MeterGaugeChartModel(0, Arrays.asList((Number) 70,90,100));
 		}
 	}
 	
 	public MeterGaugeChartModel getModel2(){
-		MeterGaugeChartModel m = this.meterGaugeModels.get(2);
-		if(null != m){
-			return m;
+		if(this.meterGaugeModels.size()>2){
+			return this.meterGaugeModels.get(2);
 		}else{
 			return new MeterGaugeChartModel(0, Arrays.asList((Number) 70,90,100));
 		}	
 	}
 	
 	public MeterGaugeChartModel getModel3(){
-		MeterGaugeChartModel m = this.meterGaugeModels.get(3);
-		if(null != m){
-			return m;
+		if(this.meterGaugeModels.size()>3){
+			return this.meterGaugeModels.get(3);
 		}else{
 			return new MeterGaugeChartModel(0, Arrays.asList((Number) 70,90,100));
 		}	
