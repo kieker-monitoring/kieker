@@ -60,6 +60,8 @@ import kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.IPlugin;
 import kieker.analysis.plugin.IPlugin.PluginInputPortReference;
+import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.repository.AbstractRepository;
@@ -543,6 +545,12 @@ public final class MetaModelHandler {
 		for (final Enumeration<?> e = plugin.getCurrentConfiguration().propertyNames(); e.hasMoreElements();) {
 			possibleKeys.add((String) e.nextElement());
 		}
+
+		// Add the keys from the annotation which are not already included
+		for (final Property property : MetaModelHandler.extractAnnotatedProperties(plugin)) {
+			possibleKeys.add(property.name());
+		}
+
 		// Run through all used keys in the given configuration.
 		for (final Enumeration<?> e = configuration.propertyNames(); e.hasMoreElements();) {
 			final String key = (String) e.nextElement();
@@ -551,6 +559,14 @@ public final class MetaModelHandler {
 				throw new AnalysisConfigurationException("Invalid property of '" + plugin.getName() + "' (" + plugin.getPluginName() + ") found: '" + key + "'.");
 			}
 		}
+	}
+
+	private static Property[] extractAnnotatedProperties(final AbstractPlugin plugin) {
+		final Plugin pluginAnnotation = plugin.getClass().getAnnotation(Plugin.class);
+		if (pluginAnnotation != null) {
+			return pluginAnnotation.configuration();
+		}
+		return new Property[0];
 	}
 
 	/**
