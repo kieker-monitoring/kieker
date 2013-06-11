@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
+
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -21,7 +25,7 @@ import kieker.analysis.display.MeterGauge;
  */
 @ManagedBean(name="cpuMeterGaugeBean")
 @ApplicationScoped
-public class CPUMeterGaugeBean {
+public class CPUMeterGaugeBean implements Observer{
 	
 	@ManagedProperty(value = "#{analysisBean}")
 	AnalysisBean analysisBean;
@@ -54,6 +58,12 @@ public class CPUMeterGaugeBean {
 		this.cpuIds = new ArrayList<String>(this.meterGauge.getKeys());
 		Collections.sort(this.cpuIds);
 		this.updateMeterGaugeModels();
+		this.analysisBean.getUpdateThread().addObserver(this);
+	}
+	
+	@PreDestroy
+	public void terminate(){
+		this.analysisBean.getUpdateThread().deleteObserver(this);
 	}
 	
 	public void setAnalysisBean(AnalysisBean analysisBean){
@@ -82,8 +92,6 @@ public class CPUMeterGaugeBean {
 	}
 	
 	public MeterGaugeChartModel getModel0(){
-		this.meterGaugeModels.clear();
-		this.updateMeterGaugeModels();
 		return this.meterGaugeModels.get(0);
 	}
 	
@@ -109,6 +117,12 @@ public class CPUMeterGaugeBean {
 		}else{
 			return new MeterGaugeChartModel(0, Arrays.asList((Number) 70,90,100));
 		}	
+	}
+
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		this.meterGaugeModels.clear();
+		this.updateMeterGaugeModels();
 	}
 
 }

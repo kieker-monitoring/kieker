@@ -62,7 +62,7 @@
 				<p:accordionPanel value="#{cpuXYPlotBean.models}" var="model" dynamic="true" multiple="true">
 					<p:tab title="#{model.name}">
 						
-						<p:lineChart id="test" value="#{model.model}" legendPosition="ne" minY="0" maxY="100"
+						<p:lineChart id="test" value="#{model.model}" legendPosition="ne"
 						   		style="height:300px;margin-top:20px"
 						   		xaxisLabel="Seconds since start" yaxisLabel="Percent"/>
 						<p:poll interval="1" update="test"/>
@@ -70,21 +70,21 @@
 					
 				</p:accordionPanel>
 			 	
-			 	<p:dashboard model="#{cpuMeterGaugeBean.dashboardModel}" id="board">			 		 
+			 	<p:dashboard model="#{cpuMeterGaugeBean.dashboardModel}" disabled="true" id="board">			 		 
 			 		<p:panel id="model0" header="KIEKER-DEMO-SVR - 0" toggleable="true">
-						<p:meterGaugeChart title="Total Utilization" value="#{cpuMeterGaugeBean.model0}" style="width:400px;height:250px" 
+						<p:meterGaugeChart title="Total Utilization" value="#{cpuMeterGaugeBean.model0}" style="width:420px;" 
 					 		label="%" seriesColors="#{cpuMeterGaugeBean.colors}"/>
 					</p:panel>
 					<p:panel id="model1" header="KIEKER-DEMO-SVR - 1" toggleable="true">
-						<p:meterGaugeChart value="#{cpuMeterGaugeBean.model1}" style="width:400px;height:250px" 
+						<p:meterGaugeChart value="#{cpuMeterGaugeBean.model1}"  style="width:420px"
 					 		label="%" seriesColors="#{cpuMeterGaugeBean.colors}"/>
 					</p:panel>
 					<p:panel id="model2" header="KIEKER-DEMO-SVR - 2" toggleable="true">
-						<p:meterGaugeChart value="#{cpuMeterGaugeBean.model2}" style="width:400px;height:250px" 
+						<p:meterGaugeChart value="#{cpuMeterGaugeBean.model2}"  
 					 		label="%" seriesColors="#{cpuMeterGaugeBean.colors}"/>
 					</p:panel>
 					<p:panel id="model3" header="KIEKER-DEMO-SVR - 3" toggleable="true">
-						<p:meterGaugeChart value="#{cpuMeterGaugeBean.model3}" style="width:400px;height:250px" 
+						<p:meterGaugeChart value="#{cpuMeterGaugeBean.model3}"  
 					 		label="%" seriesColors="#{cpuMeterGaugeBean.colors}"/>
 					</p:panel>
 				</p:dashboard>

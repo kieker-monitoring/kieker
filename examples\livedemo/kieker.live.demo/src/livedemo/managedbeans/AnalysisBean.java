@@ -26,11 +26,14 @@ public class AnalysisBean {
 	private final SystemModelRepository systemModelRepository;
 	private final Configuration cpuConfiguration = new Configuration();
 	private final CPUUtilizationDisplayFilter cpuFilter;
+	private final UpdateThread updateThread;
 	
 	public AnalysisBean(){
+		this.updateThread = new UpdateThread(1000);
+		new Thread(this.updateThread).start();
 		this.analysisInstance = new AnalysisController();
 		this.systemModelRepository = new SystemModelRepository(new Configuration(), analysisInstance);
-		this.cpuConfiguration.setProperty(CPUUtilizationDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, "15");
+		this.cpuConfiguration.setProperty(CPUUtilizationDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, "20");
 		this.cpuFilter = new CPUUtilizationDisplayFilter(cpuConfiguration, analysisInstance);
 		try {
 			init();
@@ -41,6 +44,10 @@ public class AnalysisBean {
 		}
 		this.act = new AnalysisControllerThread(analysisInstance);
 		this.act.start();
+	}
+	
+	public UpdateThread getUpdateThread(){
+		return this.updateThread;
 	}
 	
 	public SystemModelRepository getSystemModelRepository(){

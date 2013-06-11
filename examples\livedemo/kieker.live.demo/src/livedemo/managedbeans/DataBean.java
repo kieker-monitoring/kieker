@@ -88,41 +88,7 @@ public class DataBean extends Observable{
 		return this.newMemSwapEntries;
 	}
 	
-	public List<ComponentType> getComponentTypes(){
-		List<ComponentType> ctList = new ArrayList<ComponentType>();
-		Collection<ComponentType> collection = this.startingBean.getSystemModelRepository().getTypeRepositoryFactory().getComponentTypes();
-		ctList.addAll(collection);
-		return ctList;
-	}
 	
-	public List<Operation> getOperations(){
-		List<Operation> opList = new ArrayList<Operation>();
-		Collection<Operation> collection = this.startingBean.getSystemModelRepository().getOperationFactory().getOperations();
-		opList.addAll(collection);
-		return opList;
-	}
-	
-	public List<AssemblyComponent> getAssemblyComponents(){
-		List<AssemblyComponent> acList = new ArrayList<AssemblyComponent>();
-		Collection<AssemblyComponent> collection = this.startingBean.getSystemModelRepository().getAssemblyFactory().getAssemblyComponentInstances();
-		acList.addAll(collection);
-		return acList;
-	}
-	
-	public List<ExecutionContainer> getExecutionContainers(){
-		List<ExecutionContainer> ecList = new ArrayList<ExecutionContainer>();
-		Collection<ExecutionContainer> collection = this.startingBean.getSystemModelRepository().getExecutionEnvironmentFactory().getExecutionContainers();
-		ecList.addAll(collection);
-		return ecList;
-	}
-	
-	public List<AllocationComponent> getDeploymentComponents(){
-		List<AllocationComponent> acList = new ArrayList<AllocationComponent>();
-		Collection<AllocationComponent> collection = this.startingBean.getSystemModelRepository().getAllocationFactory().getAllocationComponentInstances();
-		acList.addAll(collection);
-		return acList;
-	}
-		
 	public synchronized void updateOERList(){
 		ListFilter<OperationExecutionRecord> lcf = this.startingBean.getOERCollectionFilter();
 		List<OperationExecutionRecord> newEntries;
