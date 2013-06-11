@@ -70,14 +70,14 @@ public class TestPluginConfigurationRetention extends AbstractKiekerTest {
 				final String className = TestPluginConfigurationRetention.sourceFileToClassName(sourceFile);
 				final Class<?> clazz = this.getClass().getClassLoader().loadClass(className);
 				if (TestPluginConfigurationRetention.doesClassExtendAbstractPlugin(clazz) && !(this.isClassAbstract(clazz))) {
-					LOG.warn("Testing class '" + className + "'...");
+					// LOG.warn("Testing class '" + className + "'...");
 					if (!this.isConfigurationCorrect((Class<? extends AbstractPlugin>) clazz)) {
 						Assert.fail("Class '" + className + "' doesn't export all of its properties.");
 					}
 				}
 			} catch (final ClassNotFoundException ex) { // NOPMD (Empty catch block)
 				// Nothing to do here yet
-				LOG.warn("Could not find class", ex);
+				// LOG.warn("Could not find class", ex);
 			}
 		}
 	}
@@ -126,6 +126,8 @@ public class TestPluginConfigurationRetention extends AbstractKiekerTest {
 		String className = pathName.substring(0, pathName.length() - 5).replace("\\", ".");
 		final int secondPointPos = className.indexOf('.', 5);
 		className = className.substring(secondPointPos + 1);
+		System.err.println(pathName);
+		System.err.println(className);
 
 		return className;
 	}
