@@ -17,6 +17,7 @@
 package kieker.analysis.plugin.filter.forward;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import kieker.analysis.IProjectContext;
@@ -37,7 +38,7 @@ import kieker.common.record.system.CPUUtilizationRecord;
  * This is a filter which accepts {@link CPUUtilizationRecord} instances and provides different views to visualize them. The incoming records are relayed without any
  * enrichment.
  * 
- * @author Bjoern Weissenfels, Nils Ehmke
+ * @author Bjoern Weissenfels, Nils Christian Ehmke
  * 
  * @since 1.8
  */
@@ -63,7 +64,7 @@ public class CPUUtilizationDisplayFilter extends AbstractFilterPlugin {
 	private static final Log LOG = LogFactory.getLog(CPUUtilizationDisplayFilter.class);
 
 	private static final String TOTAL_UTILIZATION = "totalUtilization";
-	private static final String ILDE = "idle";
+	private static final String IDLE = "idle";
 	private static final String IRQ = "irq";
 	private static final String NICE = "nice";
 	private static final String SYSTEM = "system";
@@ -73,8 +74,6 @@ public class CPUUtilizationDisplayFilter extends AbstractFilterPlugin {
 	private final XYPlot xyplot;
 	private final int numberOfEntries;
 
-	private boolean firstTimeStampSet;
-	private long firstTimeStamp;
 	private final TimeUnit timeunit;
 
 	public CPUUtilizationDisplayFilter(final Configuration configuration, final IProjectContext projectContext) {
@@ -105,25 +104,22 @@ public class CPUUtilizationDisplayFilter extends AbstractFilterPlugin {
 
 	private void updateDisplays(final CPUUtilizationRecord record) {
 		synchronized (this) {
-			if (!this.firstTimeStampSet) {
-				this.firstTimeStampSet = true;
-				this.firstTimeStamp = TimeUnit.SECONDS.convert(record.getLoggingTimestamp(), this.timeunit);
-			}
 
-			// Calculate the time delta in seconds from the first record
-			final long deltaInSeconds = TimeUnit.SECONDS.convert(record.getLoggingTimestamp(), this.timeunit) - this.firstTimeStamp;
+			// Calculate the minutes and seconds of the logging timestamp of the record
+			final Date date = new Date(TimeUnit.MILLISECONDS.convert(record.getLoggingTimestamp(), this.timeunit));
+			final String minutesAndSeconds = date.toString().substring(14, 19);
 
 			final String id = record.getHostname() + " - " + record.getCpuID();
 
 			this.meterGauge.setIntervals(id, Arrays.asList((Number) 70, 90, 100), Arrays.asList("66cc66", "E7E658", "cc6666"));
 			this.meterGauge.setValue(id, record.getTotalUtilization() * 100);
 
-			this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.TOTAL_UTILIZATION, deltaInSeconds, record.getTotalUtilization() * 100);
-			this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.ILDE, deltaInSeconds, record.getIdle() * 100);
-			this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.IRQ, deltaInSeconds, record.getIrq() * 100);
-			this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.NICE, deltaInSeconds, record.getNice() * 100);
-			this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.SYSTEM, deltaInSeconds, record.getSystem() * 100);
-			this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.USER, deltaInSeconds, record.getUser() * 100);
+			this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.TOTAL_UTILIZATION, minutesAndSeconds, record.getTotalUtilization() * 100);
+			this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.IDLE, minutesAndSeconds, record.getIdle() * 100);
+			this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.IRQ, minutesAndSeconds, record.getIrq() * 100);
+			this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.NICE, minutesAndSeconds, record.getNice() * 100);
+			this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.SYSTEM, minutesAndSeconds, record.getSystem() * 100);
+			this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.USER, minutesAndSeconds, record.getUser() * 100);
 		}
 	}
 
