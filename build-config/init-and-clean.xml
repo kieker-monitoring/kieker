@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Kieker (init and clean)" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+<project name="Kieker (init and clean)" basedir=".." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 
+	<property file="build-config/build.properties" />
+	
 	<target name="-init-version" description="Initializes variables based on the Kieker version number">
 		<tstamp />
 		<property name="kieker.name" value="Kieker Framework" />
