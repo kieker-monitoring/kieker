@@ -24,6 +24,9 @@ import org.apache.cxf.helpers.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
+
 /**
  * This JUnit test makes sure that all JUnit tests within Kieker extend the {@link AbstractKiekerTest}. The tests in question will be found using two criteria: They
  * have to be in a package containing the subpackage {@code junit} and their classname has to contain {@code Test}.
@@ -34,7 +37,9 @@ import org.junit.Test;
  */
 public class TestJUnitTestsExtendingAbstractKiekerTest extends AbstractKiekerTest {
 
-	private static final String PATTERN_JUNIT_PACKAGE = "\\junit\\";
+	private static final Log LOG = LogFactory.getLog(TestJUnitTestsExtendingAbstractKiekerTest.class);
+
+	private static final String PATTERN_JUNIT_PACKAGE = File.separator + "junit" + File.separator;
 	private static final String DIR_NAME_TEST = "test";
 	private static final String PATTERN_TEST_SOURCE_FILES = ".*Test.*java";
 
@@ -52,6 +57,7 @@ public class TestJUnitTestsExtendingAbstractKiekerTest extends AbstractKiekerTes
 			if (TestJUnitTestsExtendingAbstractKiekerTest.isSourceFileInJUnitPackage(sourceFile)) {
 				final String className = TestJUnitTestsExtendingAbstractKiekerTest.sourceFileToClassName(sourceFile);
 				final Class<?> clazz = this.getClass().getClassLoader().loadClass(className);
+				LOG.info("Testing class '" + className + "'...");
 				if (!TestJUnitTestsExtendingAbstractKiekerTest.doesClassExtendKiekerAbstractTest(clazz)) {
 					Assert.fail("Class '" + className + "' doesn't extend AbstractKiekerTest");
 				}
