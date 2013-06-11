@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import kieker.analysis.IProjectContext;
+import kieker.analysis.display.PieChart;
 import kieker.analysis.display.XYPlot;
 import kieker.analysis.display.annotation.Display;
 import kieker.analysis.plugin.annotation.InputPort;
@@ -69,6 +70,8 @@ public class MemSwapUtilizationDisplayFilter extends AbstractFilterPlugin {
 	private static final String SWAP_USED = "swapUsed";
 
 	private final XYPlot xyplot;
+	private final PieChart memPieChart;
+	private final PieChart swapPieChart;
 
 	private final int numberOfEntries;
 
@@ -92,6 +95,8 @@ public class MemSwapUtilizationDisplayFilter extends AbstractFilterPlugin {
 
 		// Create the display objects
 		this.xyplot = new XYPlot(this.numberOfEntries);
+		this.memPieChart = new PieChart();
+		this.swapPieChart = new PieChart();
 	}
 
 	@InputPort(name = MemSwapUtilizationDisplayFilter.INPUT_PORT_NAME_EVENTS, eventTypes = { MemSwapUsageRecord.class })
@@ -114,11 +119,27 @@ public class MemSwapUtilizationDisplayFilter extends AbstractFilterPlugin {
 		this.xyplot.setEntry(id + " - " + MemSwapUtilizationDisplayFilter.SWAP_FREE, minutesAndSeconds, record.getSwapFree() * 100);
 		this.xyplot.setEntry(id + " - " + MemSwapUtilizationDisplayFilter.SWAP_TOTAL, minutesAndSeconds, record.getSwapTotal() * 100);
 		this.xyplot.setEntry(id + " - " + MemSwapUtilizationDisplayFilter.SWAP_USED, minutesAndSeconds, record.getSwapUsed() * 100);
+
+		this.memPieChart.setValue(id + " - " + MemSwapUtilizationDisplayFilter.MEM_FREE, record.getMemFree());
+		this.memPieChart.setValue(id + " - " + MemSwapUtilizationDisplayFilter.MEM_USED, record.getMemUsed());
+
+		this.swapPieChart.setValue(id + " - " + MemSwapUtilizationDisplayFilter.SWAP_FREE, record.getSwapFree());
+		this.swapPieChart.setValue(id + " - " + MemSwapUtilizationDisplayFilter.SWAP_USED, record.getSwapUsed());
 	}
 
 	@Display(name = "XYPlot Memory utilization Display")
 	public XYPlot getXYPlot() {
 		return this.xyplot;
+	}
+
+	@Display(name = "PieChart Memory Utilization Display")
+	public PieChart getMemPieChart() {
+		return this.memPieChart;
+	}
+
+	@Display(name = "PieChart Swap Utilization Display")
+	public PieChart getSwapPieChart() {
+		return this.swapPieChart;
 	}
 
 	@Override
