@@ -1036,6 +1036,7 @@ public final class TraceAnalysisTool {
 			}
 		} catch (final Exception exc) { // NOPMD NOCS (IllegalCatchCheck)
 			success = false;
+			LOG.error("An error occured", exc);
 		} finally {
 			System.err.println(""); // NOPMD (System.out)
 			if (!success) {
