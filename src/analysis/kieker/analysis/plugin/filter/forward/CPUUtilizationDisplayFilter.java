@@ -47,11 +47,13 @@ import kieker.common.record.system.CPUUtilizationRecord;
 				name = CPUUtilizationDisplayFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
 				eventTypes = { CPUUtilizationRecord.class },
 				description = "Provides each incoming object"),
-		configuration =
-		@Property(
-				name = CPUUtilizationDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES,
-				defaultValue = CPUUtilizationDisplayFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES,
-				description = "Sets the number of max plot entries per cpu"))
+		configuration = {
+			@Property(
+					name = CPUUtilizationDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES,
+					defaultValue = CPUUtilizationDisplayFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES,
+					description = "Sets the number of max plot entries per cpu"),
+			@Property(name = CPUUtilizationDisplayFilter.CONFIG_PROPERTY_NAME_DISPLAY_WARNING_INTERVALS,
+					defaultValue = CPUUtilizationDisplayFilter.CONFIG_PROPERTY_VALUE_DISPLAY_WARNING_INTERVALS) })
 public class CPUUtilizationDisplayFilter extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME_EVENTS = "inputEvents";
@@ -60,6 +62,9 @@ public class CPUUtilizationDisplayFilter extends AbstractFilterPlugin {
 
 	public static final String CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES = "numberOfEntries";
 	public static final String CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES = "100";
+
+	public static final String CONFIG_PROPERTY_NAME_DISPLAY_WARNING_INTERVALS = "displayWarningIntervals";
+	public static final String CONFIG_PROPERTY_VALUE_DISPLAY_WARNING_INTERVALS = "70|90|100";
 
 	private static final Log LOG = LogFactory.getLog(CPUUtilizationDisplayFilter.class);
 
@@ -72,17 +77,17 @@ public class CPUUtilizationDisplayFilter extends AbstractFilterPlugin {
 
 	private final MeterGauge meterGauge;
 	private final XYPlot xyplot;
+
 	private final int numberOfEntries;
+	private final Number[] warningIntervals;
 
 	private final TimeUnit timeunit;
 
 	public CPUUtilizationDisplayFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
-		// Create the display objects
+		// Read the configuration
 		this.numberOfEntries = configuration.getIntProperty(CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES);
-		this.meterGauge = new MeterGauge();
-		this.xyplot = new XYPlot(this.numberOfEntries);
 
 		final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
 		TimeUnit recordTimeunit;
@@ -93,6 +98,16 @@ public class CPUUtilizationDisplayFilter extends AbstractFilterPlugin {
 			recordTimeunit = TimeUnit.NANOSECONDS;
 		}
 		this.timeunit = recordTimeunit;
+
+		final String[] warningIntervalsAsString = configuration.getStringArrayProperty(CONFIG_PROPERTY_NAME_DISPLAY_WARNING_INTERVALS);
+		this.warningIntervals = new Number[warningIntervalsAsString.length];
+		for (int i = 0; i < warningIntervalsAsString.length; i++) {
+			this.warningIntervals[i] = Long.parseLong(warningIntervalsAsString[i]);
+		}
+
+		// Create the display objects
+		this.meterGauge = new MeterGauge();
+		this.xyplot = new XYPlot(this.numberOfEntries);
 	}
 
 	@InputPort(name = CPUUtilizationDisplayFilter.INPUT_PORT_NAME_EVENTS, eventTypes = { CPUUtilizationRecord.class })
@@ -103,24 +118,21 @@ public class CPUUtilizationDisplayFilter extends AbstractFilterPlugin {
 	}
 
 	private void updateDisplays(final CPUUtilizationRecord record) {
-		synchronized (this) {
+		// Calculate the minutes and seconds of the logging timestamp of the record
+		final Date date = new Date(TimeUnit.MILLISECONDS.convert(record.getLoggingTimestamp(), this.timeunit));
+		final String minutesAndSeconds = date.toString().substring(14, 19);
 
-			// Calculate the minutes and seconds of the logging timestamp of the record
-			final Date date = new Date(TimeUnit.MILLISECONDS.convert(record.getLoggingTimestamp(), this.timeunit));
-			final String minutesAndSeconds = date.toString().substring(14, 19);
+		final String id = record.getHostname() + " - " + record.getCpuID();
 
-			final String id = record.getHostname() + " - " + record.getCpuID();
+		this.meterGauge.setIntervals(id, Arrays.asList(this.warningIntervals), Arrays.asList("66cc66", "E7E658", "cc6666"));
+		this.meterGauge.setValue(id, record.getTotalUtilization() * 100);
 
-			this.meterGauge.setIntervals(id, Arrays.asList((Number) 70, 90, 100), Arrays.asList("66cc66", "E7E658", "cc6666"));
-			this.meterGauge.setValue(id, record.getTotalUtilization() * 100);
-
-			this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.TOTAL_UTILIZATION, minutesAndSeconds, record.getTotalUtilization() * 100);
-			this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.IDLE, minutesAndSeconds, record.getIdle() * 100);
-			this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.IRQ, minutesAndSeconds, record.getIrq() * 100);
-			this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.NICE, minutesAndSeconds, record.getNice() * 100);
-			this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.SYSTEM, minutesAndSeconds, record.getSystem() * 100);
-			this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.USER, minutesAndSeconds, record.getUser() * 100);
-		}
+		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.TOTAL_UTILIZATION, minutesAndSeconds, record.getTotalUtilization() * 100);
+		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.IDLE, minutesAndSeconds, record.getIdle() * 100);
+		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.IRQ, minutesAndSeconds, record.getIrq() * 100);
+		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.NICE, minutesAndSeconds, record.getNice() * 100);
+		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.SYSTEM, minutesAndSeconds, record.getSystem() * 100);
+		this.xyplot.setEntry(id + " - " + CPUUtilizationDisplayFilter.USER, minutesAndSeconds, record.getUser() * 100);
 	}
 
 	@Display(name = "Meter Gauge CPU total utilization Display")
@@ -138,6 +150,7 @@ public class CPUUtilizationDisplayFilter extends AbstractFilterPlugin {
 		final Configuration configuration = new Configuration();
 
 		configuration.setProperty(CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, String.valueOf(this.numberOfEntries));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_DISPLAY_WARNING_INTERVALS, Configuration.toProperty(this.warningIntervals));
 
 		return configuration;
 	}
