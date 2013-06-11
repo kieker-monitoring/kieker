@@ -73,7 +73,7 @@ public class TestJUnitTestsExtendingAbstractKiekerTest extends AbstractKiekerTes
 
 	private static String sourceFileToClassName(final File file) {
 		final String pathName = file.getPath();
-		String className = pathName.substring(0, pathName.length() - 5).replace("\\", ".");
+		String className = pathName.substring(0, pathName.length() - 5).replace(File.separator, ".");
 		final int secondPointPos = className.indexOf('.', 5);
 		className = className.substring(secondPointPos + 1);
 
