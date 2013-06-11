@@ -70,7 +70,7 @@ public class TestPluginConfigurationRetention extends AbstractKiekerTest {
 				final String className = TestPluginConfigurationRetention.sourceFileToClassName(sourceFile);
 				final Class<?> clazz = this.getClass().getClassLoader().loadClass(className);
 				if (TestPluginConfigurationRetention.doesClassExtendAbstractPlugin(clazz) && !(this.isClassAbstract(clazz))) {
-					LOG.info("Testing class '" + className + "'...");
+					LOG.warn("Testing class '" + className + "'...");
 					if (!this.isConfigurationCorrect((Class<? extends AbstractPlugin>) clazz)) {
 						Assert.fail("Class '" + className + "' doesn't export all of its properties.");
 					}
