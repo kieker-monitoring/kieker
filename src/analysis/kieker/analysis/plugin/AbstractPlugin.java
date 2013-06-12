@@ -757,7 +757,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 
 		@Override
 		public void run() {
-			while (!this.terminated) {
+			while (!(this.terminated && this.queue.isEmpty())) {
 				try {
 					final Object data = this.queue.take();
 					this.method.invoke(AbstractPlugin.this, data);
@@ -793,7 +793,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 
 		@Override
 		public void run() {
-			while (!this.terminated) {
+			while (!(this.terminated && this.queue.isEmpty())) {
 				try {
 					final Object data = this.queue.take();
 					// Make sure that deliver sends the data to the queue but this deliver here should do so, but deliver directly.

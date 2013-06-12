@@ -19,6 +19,7 @@ package kieker.analysis.model;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -564,9 +565,33 @@ public final class MetaModelHandler {
 		// Run through all used keys in the given configuration.
 		for (final Enumeration<?> e = configuration.propertyNames(); e.hasMoreElements();) {
 			final String key = (String) e.nextElement();
-			if (!possibleKeys.contains(key) && !(key.equals(AbstractAnalysisComponent.CONFIG_NAME))) {
+			if (!possibleKeys.contains(key)
+					&& (!key.equals(AbstractAnalysisComponent.CONFIG_NAME) && (!key.equals(AbstractPlugin.CONFIG_ASYNC_INPUT_PORTS) && (!key
+							.equals(AbstractPlugin.CONFIG_ASYNC_OUTPUT_PORTS))))) {
 				// Found an invalid key.
 				throw new AnalysisConfigurationException("Invalid property of '" + plugin.getName() + "' (" + plugin.getPluginName() + ") found: '" + key + "'.");
+			}
+		}
+
+		// Make sure that the given asynchronous ports are valid
+		final String[] inputPortNames = plugin.getAllInputPortNames();
+		final String[] outputPortNames = plugin.getAllOutputPortNames();
+		Arrays.sort(inputPortNames);
+		Arrays.sort(outputPortNames);
+
+		final String[] asyncInputPortNames = configuration.getStringArrayProperty(AbstractPlugin.CONFIG_ASYNC_INPUT_PORTS);
+		final String[] asyncOutputPortNames = configuration.getStringArrayProperty(AbstractPlugin.CONFIG_ASYNC_OUTPUT_PORTS);
+
+		for (final String asyncInputPortName : asyncInputPortNames) {
+			if (Arrays.binarySearch(inputPortNames, asyncInputPortName) < 0) {
+				throw new AnalysisConfigurationException("Invalid property of '" + plugin.getName() + "' (" + plugin.getPluginName() + ") found: '"
+						+ AbstractPlugin.CONFIG_ASYNC_INPUT_PORTS + "'.");
+			}
+		}
+		for (final String asyncOutputPortName : asyncOutputPortNames) {
+			if (Arrays.binarySearch(outputPortNames, asyncOutputPortName) < 0) {
+				throw new AnalysisConfigurationException("Invalid property of '" + plugin.getName() + "' (" + plugin.getPluginName() + ") found: '"
+						+ AbstractPlugin.CONFIG_ASYNC_OUTPUT_PORTS + "'.");
 			}
 		}
 	}

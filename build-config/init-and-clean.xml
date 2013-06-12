@@ -102,6 +102,8 @@
 			<fileset dir="${lib.dir}">
 				<include name="javax.jms-*.jar" />
 				<include name="org.eclipse.emf.*.jar" />
+				<include name="framework-libs\spring\spring-core-*.jar" />
+				<include name="rabbitmq-client.jar" />
 			</fileset>
 			<pathelement location="${build.kieker.common.dir}/" />
 			<pathelement location="${build.kieker.analysis.model.dir}/" />

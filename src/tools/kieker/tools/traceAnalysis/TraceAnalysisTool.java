@@ -62,7 +62,6 @@ import kieker.tools.traceAnalysis.filter.IGraphOutputtingFilter;
 import kieker.tools.traceAnalysis.filter.executionRecordTransformation.ExecutionRecordTransformationFilter;
 import kieker.tools.traceAnalysis.filter.flow.EventRecordTraceCounter;
 import kieker.tools.traceAnalysis.filter.flow.TraceEventRecords2ExecutionAndMessageTraceFilter;
-import kieker.tools.traceAnalysis.filter.systemModel.SystemModel2FileFilter;
 import kieker.tools.traceAnalysis.filter.traceFilter.TraceEquivalenceClassFilter;
 import kieker.tools.traceAnalysis.filter.traceFilter.TraceEquivalenceClassFilter.TraceEquivalenceClassModes;
 import kieker.tools.traceAnalysis.filter.traceReconstruction.TraceReconstructionFilter;
@@ -869,14 +868,14 @@ public final class TraceAnalysisTool {
 			}
 
 			if (retVal) {
-				final String systemEntitiesHtmlFn =
-						TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + "system-entities.html";
-				final Configuration systemModel2FileFilterConfig = new Configuration();
-				systemModel2FileFilterConfig.setProperty(SystemModel2FileFilter.CONFIG_PROPERTY_NAME_HTML_OUTPUT_FN, systemEntitiesHtmlFn);
-				final SystemModel2FileFilter systemModel2FileFilter = new SystemModel2FileFilter(systemModel2FileFilterConfig, ANALYSIS_INSTANCE);
+				// final String systemEntitiesHtmlFn =
+				// TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + "system-entities.html";
+				// final Configuration systemModel2FileFilterConfig = new Configuration();
+				// systemModel2FileFilterConfig.setProperty(SystemModel2FileFilter.CONFIG_PROPERTY_NAME_HTML_OUTPUT_FN, systemEntitiesHtmlFn);
+				// final SystemModel2FileFilter systemModel2FileFilter = new SystemModel2FileFilter(systemModel2FileFilterConfig, ANALYSIS_INSTANCE);
 				// note that this plugin is (currently) not connected to any other filters
-				ANALYSIS_INSTANCE.connect(systemModel2FileFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
-						SYSTEM_ENTITY_FACTORY);
+				// ANALYSIS_INSTANCE.connect(systemModel2FileFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
+				// SYSTEM_ENTITY_FACTORY);
 			}
 
 			int numErrorCount = 0;

@@ -416,6 +416,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 			if (this.state != STATE.READY) {
 				throw new IllegalStateException("AnalysisController may be executed only once.");
 			}
+			LOG.info("Starting Analysis");
 			this.state = STATE.RUNNING;
 			this.notifyStateObservers();
 		}
