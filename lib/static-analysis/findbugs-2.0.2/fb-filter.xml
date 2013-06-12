@@ -24,8 +24,8 @@
 	</Match>
 
 	<Match>
-		<Class name="kieker.analysis.AnalysisController" />
-		<Method name="getCurrentConfiguration" params="" returns="kieker.analysis.model.analysisMetaModel.MIProject" />
+		<Class name="kieker.analysis.model.MetaModelHandler" />
+		<Method name="javaToMetaModel" params="java.util.Collection,java.util.Collection,java.util.Collection,java.util.Collection,java.lang.String,kieker.common.configuration.Configuration" returns="kieker.analysis.model.analysisMetaModel.MIProject" />
 		<Bug pattern="REC_CATCH_EXCEPTION" />
 	</Match>
 
@@ -140,6 +140,12 @@
 	<Match>
 		<Class name="kieker.common.logging.LogImplWebguiLogging" />
 		<Method name="addMessage" params="java.lang.String,java.lang.String,java.lang.Throwable" returns="void" />
+		<Bug pattern="RV_RETURN_VALUE_IGNORED" />
+	</Match>
+	
+	<Match>
+		<Class name="kieker.analysis.display.XYPlot" />
+		<Method name="setEntry" params="java.lang.Object, java.lang.Number" returns="void" />
 		<Bug pattern="RV_RETURN_VALUE_IGNORED" />
 	</Match>
 

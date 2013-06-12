@@ -64,8 +64,10 @@ public class OperationExecutionMethodInvocationInterceptor implements MethodInte
 	 * @see org.aopalliance.intercept.MethodInterceptor#invoke(org.aopalliance.intercept.MethodInvocation)
 	 */
 	public Object invoke(final MethodInvocation invocation) throws Throwable { // NOCS (IllegalThrowsCheck)
+		if (!this.monitoringCtrl.isMonitoringEnabled()) {
+			return invocation.proceed();
+		}
 		final String signature = invocation.getMethod().toString();
-
 		if (!this.monitoringCtrl.isProbeActivated(signature)) {
 			return invocation.proceed();
 		}

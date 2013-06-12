@@ -17,7 +17,7 @@
 package kieker.analysis.display;
 
 /**
- * This is a display type used for plain text. It provides methods to modify and read the contained plain text and is thread safe.
+ * This class is currently under development, mostly for test purposes, and not designed for productive deployment.
  * 
  * @author Nils Christian Ehmke
  * 

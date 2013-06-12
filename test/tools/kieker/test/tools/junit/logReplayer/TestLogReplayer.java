@@ -51,6 +51,7 @@ import kieker.test.monitoring.util.NamedListWriter;
  */
 public class TestLogReplayer extends AbstractKiekerTest {
 
+	/** A rule making sure that a temporary folder exists for every test method (which is removed after the test). */
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
 
@@ -58,6 +59,9 @@ public class TestLogReplayer extends AbstractKiekerTest {
 	private volatile List<IMonitoringRecord> recordListFilledByListWriter;
 	private final List<IMonitoringRecord> replayList = new ArrayList<IMonitoringRecord>();
 
+	/**
+	 * Creastes a new instance of this class.
+	 */
 	public TestLogReplayer() {
 		// Adding arbitrary records
 		this.replayList.add(new EmptyRecord());
@@ -73,6 +77,12 @@ public class TestLogReplayer extends AbstractKiekerTest {
 		this.replayList.add(new EmptyRecord());
 	}
 
+	/**
+	 * Performs an initial test setup.
+	 * 
+	 * @throws IOException
+	 *             If the setup failed.
+	 */
 	@Before
 	public void init() throws IOException {
 		this.tmpFolder.create();

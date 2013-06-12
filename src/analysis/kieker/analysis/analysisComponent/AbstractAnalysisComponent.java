@@ -20,8 +20,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import kieker.analysis.IProjectContext;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 
 /**
  * <b>Do not</b> inherit directly from this class! Instead inherit from the class {@link kieker.analysis.plugin.filter.AbstractFilterPlugin},
@@ -38,8 +36,6 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 	 * The name of the property for the name. This should normally only be used by Kieker.
 	 */
 	public static final String CONFIG_NAME = "name-hiddenAndNeverExportedProperty";
-
-	private static final Log LOG = LogFactory.getLog(AbstractAnalysisComponent.class);
 
 	private static final AtomicInteger UNNAMED_COUNTER = new AtomicInteger(0);
 
@@ -64,15 +60,20 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 	 *            The configuration for this component.
 	 * @param projectContext
 	 *            The project context for this component. The component will be registered.
+	 * 
+	 * @throws NullPointerException
+	 *             If configuration or projectContext null
 	 */
 	public AbstractAnalysisComponent(final Configuration configuration, final IProjectContext projectContext) {
-		this.projectContext = projectContext;
-		try {
-			// somewhat dirty hack...
-			configuration.setDefaultConfiguration(this.getDefaultConfiguration());
-		} catch (final IllegalAccessException ex) {
-			LOG.error("Unable to set repository default properties"); // ok to ignore ex here
+		if (null == projectContext) {
+			throw new NullPointerException("Missing projectContext");
 		}
+		if (null == configuration) {
+			throw new NullPointerException("Missing configuration");
+		}
+		this.projectContext = projectContext;
+		// somewhat dirty hack...
+		configuration.setDefaultConfiguration(this.getDefaultConfiguration());
 		this.configuration = configuration;
 
 		// Try to determine the name

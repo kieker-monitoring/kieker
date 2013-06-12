@@ -66,6 +66,9 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	@Around("monitoredConstructor() && this(thisObject) && notWithinKieker()")
 	public Object member2constructor(final Object thisObject, final ProceedingJoinPoint thisJoinPoint, final EnclosingStaticPart thisEnclosingJoinPoint)
 			throws Throwable { // NOCS
+		if (!CTRLINST.isMonitoringEnabled()) {
+			return thisJoinPoint.proceed();
+		}
 		final Signature calleeSig = thisJoinPoint.getSignature();
 		final String callee = this.signatureToLongString(calleeSig);
 		if (!CTRLINST.isProbeActivated(callee)) {
@@ -114,6 +117,9 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	@Around("monitoredConstructor() && !this(java.lang.Object) && notWithinKieker()")
 	public Object static2constructor(final ProceedingJoinPoint thisJoinPoint, final EnclosingStaticPart thisEnclosingJoinPoint)
 			throws Throwable { // NOCS
+		if (!CTRLINST.isMonitoringEnabled()) {
+			return thisJoinPoint.proceed();
+		}
 		final Signature calleeSig = thisJoinPoint.getSignature();
 		final String callee = this.signatureToLongString(calleeSig);
 		if (!CTRLINST.isProbeActivated(callee)) {

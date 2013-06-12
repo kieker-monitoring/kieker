@@ -30,6 +30,8 @@ import kieker.tools.traceAnalysis.systemModel.RootExecutionContainer;
  * @since 1.1
  */
 public class ExecutionEnvironmentRepository extends AbstractSystemSubRepository {
+
+	/** The root execution container. */
 	public static final ExecutionContainer ROOT_EXECUTION_CONTAINER = new RootExecutionContainer();
 
 	private final Map<String, ExecutionContainer> executionContainersByName = new Hashtable<String, ExecutionContainer>(); // NOPMD (UseConcurrentHashMap)

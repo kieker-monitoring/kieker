@@ -37,10 +37,24 @@ public abstract class AbstractTrace {
 		this(-1, NO_TRACE_ID);
 	}
 
+	/**
+	 * This constructor uses the given parameters to initialize the fields of this trace.
+	 * 
+	 * @param traceId
+	 *            The trace ID.
+	 */
 	public AbstractTrace(final long traceId) {
 		this(traceId, NO_TRACE_ID);
 	}
 
+	/**
+	 * This constructor uses the given parameters to initialize the fields of this trace.
+	 * 
+	 * @param traceId
+	 *            The trace ID.
+	 * @param sessionId
+	 *            The session ID.
+	 */
 	public AbstractTrace(final long traceId, final String sessionId) {
 		this.traceInformation = new TraceInformation(traceId, sessionId);
 	}

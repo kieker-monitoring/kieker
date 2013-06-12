@@ -53,7 +53,9 @@ import kieker.common.record.IMonitoringRecord;
 		})
 public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 
+	/** The name of the input port receiving the records. */
 	public static final String INPUT_PORT_NAME_RECORDS = "inputRecords";
+	/** The name of the output port delivering the delayed records. */
 	public static final String OUTPUT_PORT_NAME_RECORDS = "outputRecords";
 
 	/**
@@ -80,8 +82,10 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 
 	private final TimeUnit timeunit;
 
+	private final String strTimerOrigin;
 	private final TimerWithPrecision timer;
 
+	private final long warnOnNegativeSchedTimeOrigin;
 	private final long warnOnNegativeSchedTime;
 
 	private final int numWorkers;
@@ -115,17 +119,18 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 		}
 		this.timeunit = recordTimeunit;
 
-		final String strTimer = configuration.getStringProperty(CONFIG_PROPERTY_NAME_TIMER);
+		this.strTimerOrigin = configuration.getStringProperty(CONFIG_PROPERTY_NAME_TIMER);
 		TimerWithPrecision tmpTimer;
 		try {
-			tmpTimer = TimerWithPrecision.valueOf(strTimer);
+			tmpTimer = TimerWithPrecision.valueOf(this.strTimerOrigin);
 		} catch (final IllegalArgumentException ex) {
-			LOG.warn(strTimer + " is no valid timer precision! Using MILLISECONDS instead.");
+			LOG.warn(this.strTimerOrigin + " is no valid timer precision! Using MILLISECONDS instead.");
 			tmpTimer = TimerWithPrecision.MILLISECONDS;
 		}
 		this.timer = tmpTimer;
 
-		this.warnOnNegativeSchedTime = this.timeunit.convert(this.configuration.getLongProperty(CONFIG_PROPERTY_NAME_WARN_NEGATIVE_DELAY_SECONDS), TimeUnit.SECONDS);
+		this.warnOnNegativeSchedTimeOrigin = this.configuration.getLongProperty(CONFIG_PROPERTY_NAME_WARN_NEGATIVE_DELAY_SECONDS);
+		this.warnOnNegativeSchedTime = this.timeunit.convert(this.warnOnNegativeSchedTimeOrigin, TimeUnit.SECONDS);
 
 		this.numWorkers = configuration.getIntProperty(CONFIG_PROPERTY_NAME_NUM_WORKERS);
 		this.shutdownDelay = this.timeunit.convert(this.configuration.getLongProperty(CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS), TimeUnit.SECONDS);
@@ -135,6 +140,12 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 		this.executor.setContinueExistingPeriodicTasksAfterShutdownPolicy(false);
 	}
 
+	/**
+	 * This method represents the input port of this filter.
+	 * 
+	 * @param monitoringRecord
+	 *            The next monitoring record.
+	 */
 	@InputPort(name = INPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Receives the records to be delayed")
 	public final void inputRecord(final IMonitoringRecord monitoringRecord) {
 		final long currentTime = this.timer.getCurrentTime(this.timeunit);
@@ -203,9 +214,14 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
+
+		configuration.setProperty(CONFIG_PROPERTY_NAME_WARN_NEGATIVE_DELAY_SECONDS, Long.toString(this.warnOnNegativeSchedTimeOrigin));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_NUM_WORKERS, Integer.toString(this.numWorkers));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_TIMER, this.strTimerOrigin);
+
 		configuration
 				.setProperty(CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS, Long.toString(TimeUnit.SECONDS.convert(this.shutdownDelay, this.timeunit)));
+
 		return configuration;
 	}
 

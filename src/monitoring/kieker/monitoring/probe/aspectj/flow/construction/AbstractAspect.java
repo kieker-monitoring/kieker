@@ -58,6 +58,9 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	// HINT: This may be logged multiple times due to super constructor calls...
 	@AfterReturning("monitoredConstructor() && this(thisObject) && notWithinKieker()")
 	public void afterConstruction(final Object thisObject, final JoinPoint.StaticPart jp) {
+		if (!CTRLINST.isMonitoringEnabled()) {
+			return;
+		}
 		final Signature signature = jp.getSignature();
 		if (!CTRLINST.isProbeActivated(this.signatureToLongString(signature))) {
 			return;

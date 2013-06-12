@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Kieker (dist and deploy)"  basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
-    
-    <path id="maven-ant-tasks.classpath" path="lib/maven-ant-tasks-2.1.3.jar" />
+<project name="Kieker (dist and deploy)" basedir=".." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+
+	<property file="build-config/build.properties" />
+	
+	<import file="init-and-clean.xml"/>
+	<import file="compile-and-build.xml"/>
+	<import file="test.xml"/>
+	<import file="quality.xml"/>
+	
+	<path id="maven-ant-tasks.classpath" path="lib/maven-ant-tasks-2.1.3.jar" />
 	<typedef resource="org/apache/maven/artifact/ant/antlib.xml"
 					 uri="antlib:org.apache.maven.artifact.ant"
 					 classpathref="maven-ant-tasks.classpath" />
@@ -78,7 +85,6 @@
 			<include name="${example.javaee.jetty.dir}/**/*" />
 			<exclude name="${example.javaee.jetty.dir}/logs/**/*" />
 			<exclude name="${example.javaee.jetty.dir}/**/kieker*.jar" />
-			<exclude name="${example.javaee.jetty.dir}/**/aspectj*.jar" />
 			<include name=".settings/**/*" />
 			<include name=".checkstyle" />
 			<include name=".classpath" />
@@ -239,7 +245,6 @@
 			<include name="${example.javaee.jetty.dir}/**" />
 			<exclude name="${example.javaee.jetty.dir}/logs/**/*" />
 			<exclude name="${example.javaee.jetty.dir}/**/kieker*.jar" />
-			<exclude name="${example.javaee.jetty.dir}/**/aspectj*.jar" />
 			<exclude name="**/build-eclipse/**" />
 		</patternset>
 		<patternset id="dist_bin_files-binmode">
@@ -257,14 +262,12 @@
 			<tarfileset dir="." prefix="${kieker.dist.name}" filemode="755" defaultexcludes="yes">
 				<patternset refid="dist_bin_files-binmode" />
 			</tarfileset>
-			
+
 			<tarfileset file="${readme.bin.file}" fullpath="${kieker.dist.name}/${readme.file}" />
-			
+
 			<tarfileset file="${kieker.monitoring.default.properties}"
 						fullpath="${kieker.dist.name}/${example.javaee.jetty.dir}/kieker.monitoring.properties" />
-			<tarfileset file="${dist.dir}/${dist.kieker.main.jar}"
-						prefix="${kieker.dist.name}/${example.javaee.jetty.dir}/webapps/jpetstore/WEB-INF/lib" />
-			<tarfileset file="${lib.dir}/aspectjweaver-*"
+			<tarfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
 						prefix="${kieker.dist.name}/${example.javaee.jetty.dir}/webapps/jpetstore/WEB-INF/lib" />
 
 			<!-- Include tailored Eclipse files in the examples -->
@@ -282,7 +285,7 @@
 						fullpath="${kieker.dist.name}/${src.userguide.example.jms.dir}/.classpath" />
 			<tarfileset file="${src.userguide.example.sigar.dir}/.classpath-binrelease.generated"
 						fullpath="${kieker.dist.name}/${src.userguide.example.sigar.dir}/.classpath" />
-			
+
 			<!-- Include the right Kieker libs in the examples -->
 			<tarfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
 						prefix="${kieker.dist.name}/${example.microbenchmark.dir}/lib" />
@@ -321,16 +324,14 @@
 			<zipfileset dir="." prefix="${kieker.dist.name}" filemode="755" defaultexcludes="yes">
 				<patternset refid="dist_bin_files-binmode" />
 			</zipfileset>
-			
+
 			<zipfileset file="${readme.bin.file}" fullpath="${kieker.dist.name}/${readme.file}" />
-			
+
 			<zipfileset file="${kieker.monitoring.default.properties}"
 						fullpath="${kieker.dist.name}/${example.javaee.jetty.dir}/kieker.monitoring.properties" />
-			<zipfileset file="${dist.dir}/${dist.kieker.main.jar}"
+			<zipfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
 						prefix="${kieker.dist.name}/${example.javaee.jetty.dir}/webapps/jpetstore/WEB-INF/lib" />
-			<zipfileset file="${lib.dir}/aspectjweaver-*"
-						prefix="${kieker.dist.name}/${example.javaee.jetty.dir}/webapps/jpetstore/WEB-INF/lib" />
-			
+
 			<!-- Include tailored Eclipse files in the examples -->
 			<zipfileset file="${example.microbenchmark.dir}/.classpath-binrelease.generated"
 						fullpath="${kieker.dist.name}/${example.microbenchmark.dir}/.classpath" />
@@ -346,7 +347,7 @@
 						fullpath="${kieker.dist.name}/${src.userguide.example.jms.dir}/.classpath" />
 			<zipfileset file="${src.userguide.example.sigar.dir}/.classpath-binrelease.generated"
 						fullpath="${kieker.dist.name}/${src.userguide.example.sigar.dir}/.classpath" />
-			
+
 			<!-- Include the right Kieker libs in the examples -->
 			<zipfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
 						prefix="${kieker.dist.name}/${example.microbenchmark.dir}/lib" />
@@ -371,15 +372,14 @@
 		</zip>
 	</target>
 
-        <target name="dist-examples" depends="-update-version.examples" description="Packages the example archives (.zip|.tar.gz) for a release">
+	<target name="dist-examples" depends="-update-version.examples" description="Packages the example archives (.zip|.tar.gz) for a release">
 	</target>
-        
-        <target name="release" depends="build-all,dist-kieker-sources,dist-kieker-binaries,dist-kieker-javadoc,dist-examples,dist-kieker-userguide,dist-maven" description="Packages the release files (calling all dist- targets)">
+
+	<target name="release" depends="build-all,dist-kieker-sources,dist-kieker-binaries,dist-kieker-javadoc,dist-examples,dist-kieker-userguide,dist-maven" description="Packages the release files (calling all dist- targets)">
 		<echo message="Sourceforge release instructions can be found at:" />
 		<echo message="https://sourceforge.net/apps/trac/sourceforge/wiki/Release files for download#Createoreditarelease" />
 		<echo message="" />
 		<echo message="Note that this target executes only on platforms having 'make' and 'sh' installed" />
-		<echo message="Also, in order to run with the source archive, you'll additionally need to extract the 'kieker-${kieker.version}_examples-JavaEEServletContainerExample'.{zip|tar.gz} archive" />
 	</target>
 
 	<target name="release-with-archive-check" depends="release">
@@ -389,8 +389,8 @@
 			<arg value="." />
 		</exec>
 	</target>
-    
-        <!-- http://kieker.uni-kiel.de/trac/ticket/292: add run-tests-integration BEFORE static-analysis -->
+
+	<!-- http://kieker.uni-kiel.de/trac/ticket/292: add run-tests-integration BEFORE static-analysis -->
 	<target name="run-hudson-kieker" depends="build-all,run-tests-junit,static-analysis" description="Ant target used by the Hudson build (includes run-tests-junit,run-tests-integration,static-analysis)" />
 
 </project>

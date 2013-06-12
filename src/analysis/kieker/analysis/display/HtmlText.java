@@ -17,7 +17,7 @@
 package kieker.analysis.display;
 
 /**
- * This is a display type used for html text. It provides methods to modify and read the contained html text and is thread safe.
+ * This is a display type used for html text. This class is currently under development and not designed for productive deployment.
  * 
  * @author Nils Christian Ehmke
  * 

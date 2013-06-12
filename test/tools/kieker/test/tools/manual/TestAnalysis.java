@@ -64,6 +64,7 @@ public final class TestAnalysis {
 		if (TestAnalysis.LOADCONFIG) {
 			try {
 				analysisController = new AnalysisController(new File(TestAnalysis.KAX_FILENAME));
+
 			} catch (final IOException ex) {
 				TestAnalysis.LOG.error("Failed to load " + TestAnalysis.KAX_FILENAME, ex);
 				return;

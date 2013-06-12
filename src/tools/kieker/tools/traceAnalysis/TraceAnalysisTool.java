@@ -407,6 +407,10 @@ public final class TraceAnalysisTool {
 		}
 	}
 
+	/**
+	 * 
+	 * @return false iff an error occurred
+	 */
 	private static boolean dispatchTasks() {
 		boolean retVal = true;
 		int numRequestedTasks = 0;
@@ -878,8 +882,11 @@ public final class TraceAnalysisTool {
 			int numErrorCount = 0;
 			try {
 				ANALYSIS_INSTANCE.run();
-			} catch (final Exception ex) { // NOPMD NOCS (FindBugs reports that Exception is never thrown; but wontfix (#44)!)
-				throw new Exception("Error occured while running analysis", ex);
+				if (ANALYSIS_INSTANCE.getState() != AnalysisController.STATE.TERMINATED) {
+					// Analysis did not terminate successfully
+					retVal = false; // Error message referring to log will be printed later
+					LOG.error("Analysis instance terminated in state other than" + AnalysisController.STATE.TERMINATED + ":" + ANALYSIS_INSTANCE.getState());
+				}
 			} finally {
 				for (final AbstractTraceProcessingFilter c : allTraceProcessingComponents) {
 					numErrorCount += c.getErrorCount();
@@ -908,14 +915,8 @@ public final class TraceAnalysisTool {
 				retVal = TraceAnalysisTool.writeTraceEquivalenceReport(TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix
 						+ Constants.TRACE_ASSEMBLY_EQUIV_CLASSES_FN_PREFIX + ".txt", traceAssemblyEquivClassFilter);
 			}
-
-			if (!retVal) {
-				System.err.println("A task failed"); // NOPMD (System.out)
-			}
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
-			System.err.println("An error occured: " + ex.getMessage()); // NOPMD (System.out)
-			System.err.println(""); // NOPMD (System.out)
-			LOG.error("Exception", ex);
+			LOG.error("An error occured", ex);
 			retVal = false;
 		} finally {
 			if (numRequestedTasks > 0) {
@@ -929,9 +930,6 @@ public final class TraceAnalysisTool {
 					traceEvents2ExecutionAndMessageTraceFilter.printStatusMessage();
 				}
 			}
-
-			System.out.println(""); // NOPMD (System.out)
-			System.out.println("See 'kieker.log' for details"); // NOPMD (System.out)
 		}
 
 		return retVal;
@@ -1022,22 +1020,39 @@ public final class TraceAnalysisTool {
 	 *            The command line arguments.
 	 */
 	public static void main(final String[] args) {
+		boolean success = true;
+
 		try {
+			LOG.info("Argument list: " + Arrays.toString(args));
 			if (!TraceAnalysisTool.parseArgs(args) || !TraceAnalysisTool.initFromArgs()
 					|| !TraceAnalysisTool.assertOutputDirExists() || !TraceAnalysisTool.assertInputDirsExistsAndAreMonitoringLogs()) {
-				System.exit(1);
+				LOG.error("Error parsing arguments");
+				success = false;
 			}
 
-			TraceAnalysisTool.dumpConfiguration();
-
-			if (!TraceAnalysisTool.dispatchTasks()) {
-				System.exit(1);
+			if (success) {
+				TraceAnalysisTool.dumpConfiguration();
+				success = TraceAnalysisTool.dispatchTasks();
 			}
-
 		} catch (final Exception exc) { // NOPMD NOCS (IllegalCatchCheck)
-			System.err.println("An error occured. See 'kieker.log' for details"); // NOPMD (System.out)
-			LOG.error(Arrays.toString(args), exc);
+			success = false;
+			LOG.error("An error occured", exc);
+		} finally {
+			System.err.println(""); // NOPMD (System.out)
+			if (!success) {
+				System.err.println("An error occured"); // NOPMD (System.out)
+			} else {
+				System.err.println("Analysis completed successfully"); // NOPMD (System.out)
+			}
+
+			// Refer to log regardless of whether error occurred or not
+			System.err.println(""); // NOPMD (System.out)
+			System.err.println("See 'kieker.log' for details"); // NOPMD (System.out)
 		}
+
+		if (!success) {
+			System.exit(1);
+		} // else: terminate with success code (0)
 	}
 
 	private static boolean writeTraceEquivalenceReport(final String outputFnPrefixL, final TraceEquivalenceClassFilter traceEquivFilter) throws IOException {

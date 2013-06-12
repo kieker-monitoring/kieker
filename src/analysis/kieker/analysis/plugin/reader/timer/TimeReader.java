@@ -16,7 +16,10 @@
 
 package kieker.analysis.plugin.reader.timer;
 
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -76,10 +79,11 @@ public final class TimeReader extends AbstractReaderPlugin {
 
 	private static final Log LOG = LogFactory.getLog(TimeReader.class);
 
-	private final Object blockObject = new Object();
 	private volatile boolean terminated;
 
 	private final ScheduledExecutorService executorService = new ScheduledThreadPoolExecutor(1);
+	private volatile ScheduledFuture<?> result;
+
 	private final long initialDelay;
 	private final long period;
 	private final boolean blockingRead;
@@ -109,28 +113,25 @@ public final class TimeReader extends AbstractReaderPlugin {
 			recordTimeunit = TimeUnit.NANOSECONDS;
 		}
 		this.timeunit = recordTimeunit;
-
-		this.terminated = true ^ this.blockingRead; // !this.blockingRead
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void terminate(final boolean error) {
-		LOG.info("Shutdown of TimeReader requested.");
+		if (!this.terminated) {
+			LOG.info("Shutdown of TimeReader requested.");
 
-		this.executorService.shutdown();
-		try {
-			this.executorService.awaitTermination(5, TimeUnit.SECONDS);
-
-			// Inform the read method about the termination
-			this.terminated = true;
-			synchronized (this.blockObject) {
-				// Technically notify() is enough, as only exactly one thread is waiting, but otherwise findbugs complains.
-				this.blockObject.notifyAll();
+			this.executorService.shutdown();
+			try {
+				this.terminated = this.executorService.awaitTermination(5, TimeUnit.SECONDS);
+			} catch (final InterruptedException ex) {
+				// ignore
 			}
-		} catch (final InterruptedException ex) {
-
+			if (!this.terminated) {
+				// problems shutting down
+				this.result.cancel(true);
+			}
 		}
 	}
 
@@ -138,19 +139,20 @@ public final class TimeReader extends AbstractReaderPlugin {
 	 * {@inheritDoc}
 	 */
 	public boolean read() {
-		this.executorService.scheduleAtFixedRate(new TimestampEventTask(), this.initialDelay, this.period, TimeUnit.NANOSECONDS);
-
-		// Wait for the termination method to be called (if necessary)
-		synchronized (this.blockObject) {
-			while (!this.terminated) {
-				try {
-					this.blockObject.wait();
-				} catch (final InterruptedException ex) {
-					// This should not happen
-				}
+		this.result = this.executorService.scheduleAtFixedRate(new TimestampEventTask(), this.initialDelay, this.period, TimeUnit.NANOSECONDS);
+		if (this.blockingRead) {
+			try {
+				this.result.get();
+			} catch (final ExecutionException ex) {
+				this.terminate(true);
+				throw new RuntimeException(ex.getCause()); // NOPMD (throw RunTimeException)
+			} catch (final InterruptedException ignore) { // NOPMD (ignore exception)
+				// ignore this one
+			} catch (final CancellationException ignore) { // NOPMD (ignore exception)
+				// ignore this one, too
 			}
 		}
-
+		this.terminate(false);
 		return true;
 	}
 
@@ -187,6 +189,10 @@ public final class TimeReader extends AbstractReaderPlugin {
 	 * @since 1.8
 	 */
 	protected class TimestampEventTask implements Runnable {
+
+		public TimestampEventTask() {
+			// empty default constructor
+		}
 
 		public void run() {
 			TimeReader.this.sendTimestampEvent();

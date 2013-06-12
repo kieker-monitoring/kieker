@@ -267,19 +267,36 @@ public final class Configuration extends Properties {
 	}
 
 	/**
-	 * You should know what you do if you use this method! Currently it is used for a (dirty) hack to implement writers.
+	 * Flattens the Properties hierarchies with this Configuration.
+	 * Afterwards, all Properties will still be present and defaults will be null.
+	 */
+	public final void flattenInPlace() {
+		final Enumeration<?> keys = this.propertyNames();
+		while (keys.hasMoreElements()) {
+			final String property = (String) keys.nextElement();
+			this.setProperty(property, super.getProperty(property));
+		}
+		this.defaults = null; // NOPMD (assign null)
+	}
+
+	/**
+	 * You should know what you do if you use this method!
+	 * Currently it is used for a (dirty) hack to add default configurations to Writers or AnalysisPlugins.
 	 * 
 	 * @param defaultConfiguration
 	 *            The default configuration for this configuration object.
-	 * 
-	 * @throws IllegalAccessException
-	 *             If the default value has already been set.
 	 */
-	public final void setDefaultConfiguration(final Configuration defaultConfiguration) throws IllegalAccessException {
-		if (this.defaults == null) {
-			this.defaults = defaultConfiguration;
+	public final void setDefaultConfiguration(final Configuration defaultConfiguration) {
+		Configuration conf = this;
+		while ((conf.defaults != null) && (conf.defaults instanceof Configuration)) {
+			conf = (Configuration) conf.defaults;
+		}
+		if (conf.defaults == null) {
+			conf.defaults = defaultConfiguration;
 		} else if (defaultConfiguration != null) {
-			throw new IllegalAccessException();
+			// if nothing else works, use the sledge-hammer method
+			this.flattenInPlace();
+			this.defaults = defaultConfiguration;
 		}
 	}
 

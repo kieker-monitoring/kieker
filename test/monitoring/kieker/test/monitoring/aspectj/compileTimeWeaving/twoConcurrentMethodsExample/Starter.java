@@ -89,7 +89,7 @@ public class Starter extends Thread {
 			a += i / 1000;
 		}
 		if ((a % 10000) == 0) {
-			Starter.boolvar = Starter.boolvar ^ true;
+			Starter.boolvar = !Starter.boolvar;
 		}
 	}
 }

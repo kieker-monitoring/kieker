@@ -61,6 +61,9 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 	private volatile Execution exec2_1__crm_getOrders; // NOPMD NOCS (VariableNamingConventions)
 	private volatile Execution exec3_2__catalog_getBook; // NOPMD NOCS (VariableNamingConventions)
 
+	/**
+	 * Default constructor.
+	 */
 	public TestExecutionTraceBookstore() {
 		// empty default constructor
 	}

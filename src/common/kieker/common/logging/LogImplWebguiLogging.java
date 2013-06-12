@@ -156,6 +156,17 @@ public final class LogImplWebguiLogging implements Log {
 	}
 
 	/**
+	 * Delivers an array with the names of all used loggers.
+	 * 
+	 * @return The available log names.
+	 */
+	public static String[] getAvailableLogs() {
+		synchronized (LogImplWebguiLogging.QUEUES) {
+			return QUEUES.keySet().toArray(new String[QUEUES.size()]);
+		}
+	}
+
+	/**
 	 * Delivers an array with all entries of the logger with the given name.
 	 * 
 	 * @param name

@@ -62,6 +62,7 @@ public class TestProbeController extends AbstractKiekerTest {
 
 	private static final String ENCODING = "UTF-8";
 
+	/** A rule making sure that a temporary folder exists for every test method (which is removed after the test). */
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
 
@@ -134,12 +135,16 @@ public class TestProbeController extends AbstractKiekerTest {
 			Assert.assertTrue(ctrl.isProbeActivated("void test.Test()"));
 			ctrl.disableMonitoring();
 			Assert.assertFalse(ctrl.isMonitoringEnabled());
-			Assert.assertFalse(ctrl.isProbeActivated("void test.Test()"));
+			Assert.assertTrue(ctrl.isProbeActivated("void test.Test()"));
 			ctrl.enableMonitoring();
 			Assert.assertTrue(ctrl.isMonitoringEnabled());
 			Assert.assertTrue(ctrl.isProbeActivated("void test.Test()"));
 			ctrl.deactivateProbe("*");
+			Assert.assertTrue(ctrl.isMonitoringEnabled());
 			Assert.assertFalse(ctrl.isProbeActivated("void test.Test()"));
+			ctrl.activateProbe("*");
+			Assert.assertTrue(ctrl.isMonitoringEnabled());
+			Assert.assertTrue(ctrl.isProbeActivated("void test.Test()"));
 			ctrl.terminateMonitoring();
 		}
 		{ // NOCS // adaptive disabled
@@ -152,7 +157,7 @@ public class TestProbeController extends AbstractKiekerTest {
 			Assert.assertTrue(ctrl.isProbeActivated("void test.Test()"));
 			ctrl.disableMonitoring();
 			Assert.assertFalse(ctrl.isMonitoringEnabled());
-			Assert.assertFalse(ctrl.isProbeActivated("void test.Test()"));
+			Assert.assertTrue(ctrl.isProbeActivated("void test.Test()"));
 			ctrl.enableMonitoring();
 			Assert.assertTrue(ctrl.isMonitoringEnabled());
 			Assert.assertTrue(ctrl.isProbeActivated("void test.Test()"));

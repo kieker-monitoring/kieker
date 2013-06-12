@@ -52,6 +52,8 @@ public interface IProbeController {
 	/**
 	 * Tests if a probe is active.
 	 * 
+	 * This test is ignorant of the fact whether monitoring itself is enabled/disabled/terminated.
+	 * 
 	 * @param signature
 	 *            signature of the probe
 	 * @return

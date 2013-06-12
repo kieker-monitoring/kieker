@@ -65,10 +65,20 @@ public final class SignatureFactory {
 				.toString();
 	}
 
+	/**
+	 * Creates a CPU signature.
+	 * 
+	 * @return The signature.
+	 */
 	public static String createCPUSignature() {
 		return PATTERN_PREFIX_CPU;
 	}
 
+	/**
+	 * Creates a mem swap signature.
+	 * 
+	 * @return The signature.
+	 */
 	public static String createMemSwapSignature() {
 		return PATTERN_PREFIX_MEM_SWAP;
 	}
