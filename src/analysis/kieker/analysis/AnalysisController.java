@@ -35,13 +35,6 @@ import kieker.analysis.model.analysisMetaModel.MIDependency;
 import kieker.analysis.model.analysisMetaModel.MIPlugin;
 import kieker.analysis.model.analysisMetaModel.MIProject;
 import kieker.analysis.model.analysisMetaModel.MIRepository;
-<<<<<<< .mine
-import kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelFactory;
-import kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage;
-=======
-
-
->>>>>>> .theirs
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
@@ -337,51 +330,9 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		for (final PluginConnection connection : pluginConnections) {
 			this.connect(connection.getSource(), connection.getOutputName(), connection.getDestination(), connection.getInputName());
 		}
-<<<<<<< .mine
-		// Now we have all plugins. We can start to assemble the wiring.
-		for (final MIPlugin mPlugin : mPlugins) {
-			// Check whether the ports exist and log this if necessary.
-			AnalysisController.checkPorts(mPlugin, pluginMap.get(mPlugin));
-			// //final EList<MIRepositoryConnector> mPluginRPorts = mPlugin.getRepositories();
-			// for (final MIRepositoryConnector mPluginRPort : mPluginRPorts) {
-			// this.connect(pluginMap.get(mPlugin), mPluginRPort.getName(), repositoryMap.get(mPluginRPort.getRepository()));
-			// }
-			final EList<MIOutputPort> mPluginOPorts = mPlugin.getOutputPorts();
-			for (final MIOutputPort mPluginOPort : mPluginOPorts) {
-				final String outputPortName = mPluginOPort.getName();
-				final AbstractPlugin srcPlugin = pluginMap.get(mPlugin);
-				// Get all ports which should be subscribed to this port.
-				final EList<MIInputPort> mSubscribers = mPluginOPort.getSubscribers();
-				for (final MIInputPort mSubscriber : mSubscribers) {
-					// Find the mapping and subscribe
-					final String inputPortName = mSubscriber.getName();
-					final AbstractPlugin dstPlugin = pluginMap.get(mSubscriber.getParent());
-					this.connect(srcPlugin, outputPortName, dstPlugin, inputPortName);
-				}
-			}
-=======
+
 		for (final RepositoryConnection connection : repositoryConnections) {
 			this.connect(connection.getSource(), connection.getOutputName(), connection.getRepository());
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
->>>>>>> .theirs
 		}
 
 		// Remember the mapping!
@@ -454,235 +405,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * {@inheritDoc}
 	 */
 	public final MIProject getCurrentConfiguration() throws AnalysisConfigurationException {
-<<<<<<< .mine
-		try {
-			// Create a factory to create all other model instances.
-			final MAnalysisMetaModelFactory factory = new MAnalysisMetaModelFactory();
-			final MIProject mProject = factory.createProject();
-			mProject.setName(this.projectName);
-			final Map<AbstractPlugin, MIPlugin> pluginMap = new HashMap<AbstractPlugin, MIPlugin>(); // NOPMD (no concurrent access)
-			final Map<AbstractRepository, MIRepository> repositoryMap = new HashMap<AbstractRepository, MIRepository>(); // NOPMD (no concurrent access)
-			// Store the libraries.
-			mProject.getDependencies().addAll(this.dependencies);
-			// Run through all repositories and create the model-counterparts.
-			for (final AbstractRepository repo : this.repos) {
-				final MIRepository mRepo = factory.createRepository();
-				mRepo.setClassname(repo.getClass().getName());
-				mRepo.getProperties().addAll(AnalysisController.convertProperties(repo.getCurrentConfiguration(), factory));
-				mProject.getRepositories().add(mRepo);
-				repositoryMap.put(repo, mRepo);
-			}
-			// Run through all plugins and create the model-counterparts.
-			final List<AbstractPlugin> plugins = new ArrayList<AbstractPlugin>(this.readers);
-			for (final AbstractFilterPlugin filter : this.filters) {
-				plugins.add(filter);
-			}
-			for (final AbstractPlugin plugin : plugins) {
-				MIPlugin mPlugin;
-				if (plugin instanceof AbstractReaderPlugin) {
-					mPlugin = factory.createReader();
-				} else {
-					mPlugin = factory.createFilter();
-				}
-				// Remember the mapping.
-				pluginMap.put(plugin, mPlugin);
-				mPlugin.setClassname(plugin.getClass().getName());
-				mPlugin.setName(plugin.getName());
-				mPlugin.getProperties().addAll(AnalysisController.convertProperties(plugin.getCurrentConfiguration(), factory));
-
-				// Add additional properties containing the asynchronous ports
-				final MIProperty propAsyncInputPorts = factory.createProperty();
-				propAsyncInputPorts.setName(AbstractPlugin.CONFIG_ASYNC_INPUT_PORTS);
-				propAsyncInputPorts.setValue(Configuration.toProperty(plugin.getAllAsynchronousInputPorts()));
-				final MIProperty propAsyncOutputPorts = factory.createProperty();
-				propAsyncOutputPorts.setName(AbstractPlugin.CONFIG_ASYNC_OUTPUT_PORTS);
-				propAsyncOutputPorts.setValue(Configuration.toProperty(plugin.getAllAsynchronousOutputPorts()));
-				mPlugin.getProperties().add(propAsyncOutputPorts);
-				mPlugin.getProperties().add(propAsyncInputPorts);
-
-				// Extract the repositories.
-				for (final Entry<String, AbstractRepository> repoEntry : plugin.getCurrentRepositories().entrySet()) {
-					// Try to find the repository within our map.
-					final AbstractRepository repository = repoEntry.getValue();
-					final MIRepository mRepository = repositoryMap.get(repository);
-					// If it doesn't exist, we have a problem...
-					if (mRepository == null) {
-						throw new AnalysisConfigurationException("Repository '" + repository.getName() + "' (" + repository.getRepositoryName()
-								+ ") not contained in project. Maybe the repository has not been registered.");
-					}
-					// Now the connector.
-					// final MIRepositoryConnector mRepositoryConn = factory.createRepositoryConnector();
-					// mRepositoryConn.setName(repoEntry.getKey());
-					// mRepositoryConn.setRepository(mRepository);
-					// mPlugin.getRepositories().add(mRepositoryConn);
-				}
-				// Create the ports.
-				final String[] outs = plugin.getAllOutputPortNames();
-				for (final String out : outs) {
-					final MIOutputPort mOutputPort = factory.createOutputPort();
-					mOutputPort.setName(out);
-					mPlugin.getOutputPorts().add(mOutputPort);
-				}
-				final String[] ins = plugin.getAllInputPortNames();
-				for (final String in : ins) {
-					final MIInputPort mInputPort = factory.createInputPort();
-					mInputPort.setName(in);
-					((MIFilter) mPlugin).getInputPorts().add(mInputPort);
-				}
-				mProject.getPlugins().add(mPlugin);
-			}
-			// Now connect the plugins.
-			for (final IPlugin plugin : plugins) {
-				final MIPlugin mOutputPlugin = pluginMap.get(plugin);
-				// Check all output ports of the original plugin.
-				for (final String outputPortName : plugin.getAllOutputPortNames()) {
-					// Get the corresponding port of the model counterpart and get also the plugins which are currently connected with the original plugin.
-					final EList<MIInputPort> subscribers = AnalysisController.findOutputPort(mOutputPlugin, outputPortName).getSubscribers();
-					// Run through all connected plugins.
-					for (final PluginInputPortReference subscriber : plugin.getConnectedPlugins(outputPortName)) {
-						final IPlugin subscriberPlugin = subscriber.getPlugin();
-						final MIPlugin mSubscriberPlugin = pluginMap.get(subscriberPlugin);
-						// If it doesn't exist, we have a problem...
-						if (mSubscriberPlugin == null) {
-							throw new AnalysisConfigurationException("Plugin '" + subscriberPlugin.getName() + "' (" + subscriberPlugin.getPluginName()
-									+ ") not contained in project. Maybe the plugin has not been registered.");
-						}
-						final MIInputPort mInputPort = AnalysisController.findInputPort((MIFilter) mSubscriberPlugin, subscriber.getInputPortName());
-						subscribers.add(mInputPort);
-					}
-				}
-			}
-
-			// Now put our global configuration into the model instance
-			final Set<Entry<Object, Object>> properties = this.globalConfiguration.entrySet();
-			for (final Entry<Object, Object> property : properties) {
-				final MIProperty mProperty = factory.createProperty();
-				mProperty.setName((String) property.getKey());
-				mProperty.setValue((String) property.getValue());
-
-				mProject.getProperties().add(mProperty);
-			}
-
-			// We are finished. Return the finished project.
-			return mProject;
-		} catch (final Exception ex) { // NOPMD NOCS (catch any remaining problems)
-			throw new AnalysisConfigurationException("Failed to retrieve current configuration of AnalysisCopntroller.", ex);
-		}
-=======
 		return MetaModelHandler.javaToMetaModel(this.readers, this.filters, this.repos, this.dependencies, this.projectName, this.globalConfiguration);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
->>>>>>> .theirs
 	}
 
 	/**
@@ -795,46 +518,23 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * {@inheritDoc}
 	 */
 	public final void terminate(final boolean error) {
-		try {
-			synchronized (this) {
-				if (this.state != STATE.RUNNING) {
-					return;
-				}
-				this.state = STATE.TERMINATING;
+		synchronized (this) {
+			if (this.state != STATE.RUNNING) {
+				return;
 			}
 			if (error) {
 				LOG.info("Error during analysis. Terminating ...");
+				this.state = STATE.FAILED;
+				this.notifyStateObservers();
 			} else {
 				LOG.info("Terminating analysis.");
-			}
-			for (final AbstractReaderPlugin reader : this.readers) {
-				reader.shutdown(error);
-			}
-			for (final AbstractFilterPlugin filter : this.filters) {
-				filter.shutdown(error);
-			}
-			if (error) {
-				this.state = STATE.FAILED;
-			} else {
 				this.state = STATE.TERMINATED;
+				this.notifyStateObservers();
 			}
-		} catch (final Throwable t) { // NOPMD NOCS (Catch errors and exceptions)
-			// Make sure that neither an exception nor an error can crash the application
-			// Even if the logging or the notify method fails, we have a correct state now!
-			this.state = STATE.FAILED;
-			LOG.error("Error during shutdown.", t);
-		} finally {
-			this.notifyStateObservers();
 		}
-<<<<<<< .mine
 		for (final AbstractReaderPlugin reader : this.readers) {
 			reader.startTerminationSequence(error);
 		}
-=======
-
-
-
->>>>>>> .theirs
 	}
 
 	/**

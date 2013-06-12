@@ -54,7 +54,6 @@ import kieker.analysis.model.analysisMetaModel.MIPlugin;
 import kieker.analysis.model.analysisMetaModel.MIProject;
 import kieker.analysis.model.analysisMetaModel.MIProperty;
 import kieker.analysis.model.analysisMetaModel.MIRepository;
-import kieker.analysis.model.analysisMetaModel.MIRepositoryConnector;
 import kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelFactory;
 import kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage;
 import kieker.analysis.plugin.AbstractPlugin;
@@ -320,6 +319,16 @@ public final class MetaModelHandler {
 					mPlugin = factory.createFilter();
 				}
 
+				// Add additional properties containing the asynchronous ports
+				final MIProperty propAsyncInputPorts = factory.createProperty();
+				propAsyncInputPorts.setName(AbstractPlugin.CONFIG_ASYNC_INPUT_PORTS);
+				propAsyncInputPorts.setValue(Configuration.toProperty(plugin.getAllAsynchronousInputPorts()));
+				final MIProperty propAsyncOutputPorts = factory.createProperty();
+				propAsyncOutputPorts.setName(AbstractPlugin.CONFIG_ASYNC_OUTPUT_PORTS);
+				propAsyncOutputPorts.setValue(Configuration.toProperty(plugin.getAllAsynchronousOutputPorts()));
+				mPlugin.getProperties().add(propAsyncOutputPorts);
+				mPlugin.getProperties().add(propAsyncInputPorts);
+
 				mPlugin.setClassname(plugin.getClass().getName());
 				mPlugin.setName(plugin.getName());
 				mPlugin.getProperties().addAll(MetaModelHandler.convertProperties(plugin.getCurrentConfiguration(), factory));
@@ -335,10 +344,10 @@ public final class MetaModelHandler {
 								+ ") not contained in project. Maybe the repository has not been registered.");
 					}
 					// Now the connector.
-					final MIRepositoryConnector mRepositoryConn = factory.createRepositoryConnector();
-					mRepositoryConn.setName(repoEntry.getKey());
-					mRepositoryConn.setRepository(mRepository);
-					mPlugin.getRepositories().add(mRepositoryConn);
+					// final MIRepositoryConnector mRepositoryConn = factory.createRepositoryConnector();
+					// mRepositoryConn.setName(repoEntry.getKey());
+					// mRepositoryConn.setRepository(mRepository);
+					// mPlugin.getRepositories().add(mRepositoryConn);
 				}
 				// Create the ports.
 				final String[] outs = plugin.getAllOutputPortNames();
@@ -461,10 +470,10 @@ public final class MetaModelHandler {
 		for (final MIPlugin mPlugin : mPlugins) {
 			// Check whether the ports exist and log this if necessary.
 			MetaModelHandler.checkPorts(mPlugin, pluginMap.get(mPlugin));
-			final EList<MIRepositoryConnector> mPluginRPorts = mPlugin.getRepositories();
-			for (final MIRepositoryConnector mPluginRPort : mPluginRPorts) {
-				repositoryConnections.add(new RepositoryConnection(pluginMap.get(mPlugin), repositoryMap.get(mPluginRPort.getRepository()), mPluginRPort.getName()));
-			}
+			// final EList<MIRepositoryConnector> mPluginRPorts = mPlugin.getRepositories();
+			// for (final MIRepositoryConnector mPluginRPort : mPluginRPorts) {
+			// repositoryConnections.add(new RepositoryConnection(pluginMap.get(mPlugin), repositoryMap.get(mPluginRPort.getRepository()), mPluginRPort.getName()));
+			// }
 			final EList<MIOutputPort> mPluginOPorts = mPlugin.getOutputPorts();
 			for (final MIOutputPort mPluginOPort : mPluginOPorts) {
 				final String outputPortName = mPluginOPort.getName();
