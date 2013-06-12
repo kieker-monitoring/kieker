@@ -12,7 +12,7 @@ import org.eclipse.emf.common.util.EList;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.MIPlugin#getRepositoryPorts <em>Repository Ports</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.MIPlugin#getRepositories <em>Repositories</em>}</li>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.MIPlugin#getOutputPorts <em>Output Ports</em>}</li>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.MIPlugin#getDisplays <em>Displays</em>}</li>
  * </ul>
@@ -24,22 +24,20 @@ import org.eclipse.emf.common.util.EList;
  */
 public interface MIPlugin extends MIAnalysisComponent {
 	/**
-	 * Returns the value of the '<em><b>Repository Ports</b></em>' containment reference list.
-	 * The list contents are of type {@link kieker.analysis.model.analysisMetaModel.MIRepositoryPort}.
-	 * It is bidirectional and its opposite is '{@link kieker.analysis.model.analysisMetaModel.MIRepositoryPort#getParent <em>Parent</em>}'.
+	 * Returns the value of the '<em><b>Repositories</b></em>' containment reference list.
+	 * The list contents are of type {@link kieker.analysis.model.analysisMetaModel.MIRepositoryConnector}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Repository Ports</em>' containment reference list isn't clear,
+	 * If the meaning of the '<em>Repositories</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Repository Ports</em>' containment reference list.
-	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getPlugin_RepositoryPorts()
-	 * @see kieker.analysis.model.analysisMetaModel.MIRepositoryPort#getParent
-	 * @model opposite="parent" containment="true"
+	 * @return the value of the '<em>Repositories</em>' containment reference list.
+	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getPlugin_Repositories()
+	 * @model containment="true"
 	 * @generated
 	 */
-	EList<MIRepositoryPort> getRepositoryPorts();
+	EList<MIRepositoryConnector> getRepositories();
 
 	/**
 	 * Returns the value of the '<em><b>Output Ports</b></em>' containment reference list.

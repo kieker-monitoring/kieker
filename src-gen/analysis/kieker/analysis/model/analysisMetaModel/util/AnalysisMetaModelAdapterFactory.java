@@ -108,6 +108,10 @@ public class AnalysisMetaModelAdapterFactory extends AdapterFactoryImpl {
 				return createDependencyAdapter();
 			}
 			@Override
+			public Adapter caseRepositoryConnector(MIRepositoryConnector object) {
+				return createRepositoryConnectorAdapter();
+			}
+			@Override
 			public Adapter caseDisplay(MIDisplay object) {
 				return createDisplayAdapter();
 			}
@@ -122,18 +126,6 @@ public class AnalysisMetaModelAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseAnalysisComponent(MIAnalysisComponent object) {
 				return createAnalysisComponentAdapter();
-			}
-			@Override
-			public Adapter caseRepositoryPort(MIRepositoryPort object) {
-				return createRepositoryPortAdapter();
-			}
-			@Override
-			public Adapter caseRepositoryInputPort(MIRepositoryInputPort object) {
-				return createRepositoryInputPortAdapter();
-			}
-			@Override
-			public Adapter caseAnalysisNode(MIAnalysisNode object) {
-				return createAnalysisNodeAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -296,6 +288,20 @@ public class AnalysisMetaModelAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link kieker.analysis.model.analysisMetaModel.MIRepositoryConnector <em>Repository Connector</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see kieker.analysis.model.analysisMetaModel.MIRepositoryConnector
+	 * @generated
+	 */
+	public Adapter createRepositoryConnectorAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link kieker.analysis.model.analysisMetaModel.MIDisplay <em>Display</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -348,48 +354,6 @@ public class AnalysisMetaModelAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createAnalysisComponentAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link kieker.analysis.model.analysisMetaModel.MIRepositoryPort <em>Repository Port</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see kieker.analysis.model.analysisMetaModel.MIRepositoryPort
-	 * @generated
-	 */
-	public Adapter createRepositoryPortAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link kieker.analysis.model.analysisMetaModel.MIRepositoryInputPort <em>Repository Input Port</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see kieker.analysis.model.analysisMetaModel.MIRepositoryInputPort
-	 * @generated
-	 */
-	public Adapter createRepositoryInputPortAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link kieker.analysis.model.analysisMetaModel.MIAnalysisNode <em>Analysis Node</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisNode
-	 * @generated
-	 */
-	public Adapter createAnalysisNodeAdapter() {
 		return null;
 	}
 

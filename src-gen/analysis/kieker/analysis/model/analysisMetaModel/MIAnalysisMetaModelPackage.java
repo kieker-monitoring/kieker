@@ -136,7 +136,7 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getAnalysisComponent()
 	 * @generated
 	 */
-	int ANALYSIS_COMPONENT = 13;
+	int ANALYSIS_COMPONENT = 14;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -212,13 +212,13 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	int PLUGIN__PROPERTIES = ANALYSIS_COMPONENT__PROPERTIES;
 
 	/**
-	 * The feature id for the '<em><b>Repository Ports</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Repositories</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PLUGIN__REPOSITORY_PORTS = ANALYSIS_COMPONENT_FEATURE_COUNT + 0;
+	int PLUGIN__REPOSITORIES = ANALYSIS_COMPONENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Output Ports</b></em>' containment reference list.
@@ -276,22 +276,13 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	int PORT__EVENT_TYPES = 1;
 
 	/**
-	 * The feature id for the '<em><b>Asynchronous</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORT__ASYNCHRONOUS = 2;
-
-	/**
 	 * The number of structural features of the '<em>Port</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_FEATURE_COUNT = 3;
+	int PORT_FEATURE_COUNT = 2;
 
 	/**
 	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MInputPort <em>Input Port</em>}' class.
@@ -320,15 +311,6 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int INPUT_PORT__EVENT_TYPES = PORT__EVENT_TYPES;
-
-	/**
-	 * The feature id for the '<em><b>Asynchronous</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INPUT_PORT__ASYNCHRONOUS = PORT__ASYNCHRONOUS;
 
 	/**
 	 * The feature id for the '<em><b>Parent</b></em>' container reference.
@@ -375,15 +357,6 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int OUTPUT_PORT__EVENT_TYPES = PORT__EVENT_TYPES;
-
-	/**
-	 * The feature id for the '<em><b>Asynchronous</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OUTPUT_PORT__ASYNCHRONOUS = PORT__ASYNCHRONOUS;
 
 	/**
 	 * The feature id for the '<em><b>Subscribers</b></em>' reference list.
@@ -487,13 +460,13 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	int FILTER__PROPERTIES = PLUGIN__PROPERTIES;
 
 	/**
-	 * The feature id for the '<em><b>Repository Ports</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Repositories</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FILTER__REPOSITORY_PORTS = PLUGIN__REPOSITORY_PORTS;
+	int FILTER__REPOSITORIES = PLUGIN__REPOSITORIES;
 
 	/**
 	 * The feature id for the '<em><b>Output Ports</b></em>' containment reference list.
@@ -569,13 +542,13 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	int READER__PROPERTIES = PLUGIN__PROPERTIES;
 
 	/**
-	 * The feature id for the '<em><b>Repository Ports</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Repositories</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int READER__REPOSITORY_PORTS = PLUGIN__REPOSITORY_PORTS;
+	int READER__REPOSITORIES = PLUGIN__REPOSITORIES;
 
 	/**
 	 * The feature id for the '<em><b>Output Ports</b></em>' containment reference list.
@@ -642,22 +615,13 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	int REPOSITORY__PROPERTIES = ANALYSIS_COMPONENT__PROPERTIES;
 
 	/**
-	 * The feature id for the '<em><b>Input Ports</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REPOSITORY__INPUT_PORTS = ANALYSIS_COMPONENT_FEATURE_COUNT + 0;
-
-	/**
 	 * The number of structural features of the '<em>Repository</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int REPOSITORY_FEATURE_COUNT = ANALYSIS_COMPONENT_FEATURE_COUNT + 1;
+	int REPOSITORY_FEATURE_COUNT = ANALYSIS_COMPONENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MDependency <em>Dependency</em>}' class.
@@ -688,6 +652,43 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	int DEPENDENCY_FEATURE_COUNT = 1;
 
 	/**
+	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MRepositoryConnector <em>Repository Connector</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see kieker.analysis.model.analysisMetaModel.impl.MRepositoryConnector
+	 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getRepositoryConnector()
+	 * @generated
+	 */
+	int REPOSITORY_CONNECTOR = 10;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REPOSITORY_CONNECTOR__NAME = 0;
+
+	/**
+	 * The feature id for the '<em><b>Repository</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REPOSITORY_CONNECTOR__REPOSITORY = 1;
+
+	/**
+	 * The number of structural features of the '<em>Repository Connector</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REPOSITORY_CONNECTOR_FEATURE_COUNT = 2;
+
+	/**
 	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MDisplay <em>Display</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -695,7 +696,7 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getDisplay()
 	 * @generated
 	 */
-	int DISPLAY = 10;
+	int DISPLAY = 11;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -732,7 +733,7 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getView()
 	 * @generated
 	 */
-	int VIEW = 11;
+	int VIEW = 12;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -778,7 +779,7 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getDisplayConnector()
 	 * @generated
 	 */
-	int DISPLAY_CONNECTOR = 12;
+	int DISPLAY_CONNECTOR = 13;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -806,207 +807,6 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISPLAY_CONNECTOR_FEATURE_COUNT = 2;
-
-	/**
-	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MRepositoryPort <em>Repository Port</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see kieker.analysis.model.analysisMetaModel.impl.MRepositoryPort
-	 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getRepositoryPort()
-	 * @generated
-	 */
-	int REPOSITORY_PORT = 14;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REPOSITORY_PORT__NAME = PORT__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Event Types</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REPOSITORY_PORT__EVENT_TYPES = PORT__EVENT_TYPES;
-
-	/**
-	 * The feature id for the '<em><b>Asynchronous</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REPOSITORY_PORT__ASYNCHRONOUS = PORT__ASYNCHRONOUS;
-
-	/**
-	 * The feature id for the '<em><b>Subscribers</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REPOSITORY_PORT__SUBSCRIBERS = PORT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Parent</b></em>' container reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REPOSITORY_PORT__PARENT = PORT_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of structural features of the '<em>Repository Port</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REPOSITORY_PORT_FEATURE_COUNT = PORT_FEATURE_COUNT + 2;
-
-	/**
-	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MRepositoryInputPort <em>Repository Input Port</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see kieker.analysis.model.analysisMetaModel.impl.MRepositoryInputPort
-	 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getRepositoryInputPort()
-	 * @generated
-	 */
-	int REPOSITORY_INPUT_PORT = 15;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REPOSITORY_INPUT_PORT__NAME = PORT__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Event Types</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REPOSITORY_INPUT_PORT__EVENT_TYPES = PORT__EVENT_TYPES;
-
-	/**
-	 * The feature id for the '<em><b>Asynchronous</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REPOSITORY_INPUT_PORT__ASYNCHRONOUS = PORT__ASYNCHRONOUS;
-
-	/**
-	 * The number of structural features of the '<em>Repository Input Port</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REPOSITORY_INPUT_PORT_FEATURE_COUNT = PORT_FEATURE_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MAnalysisNode <em>Analysis Node</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisNode
-	 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getAnalysisNode()
-	 * @generated
-	 */
-	int ANALYSIS_NODE = 16;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ANALYSIS_NODE__NAME = FILTER__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Classname</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ANALYSIS_NODE__CLASSNAME = FILTER__CLASSNAME;
-
-	/**
-	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ANALYSIS_NODE__PROPERTIES = FILTER__PROPERTIES;
-
-	/**
-	 * The feature id for the '<em><b>Repository Ports</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ANALYSIS_NODE__REPOSITORY_PORTS = FILTER__REPOSITORY_PORTS;
-
-	/**
-	 * The feature id for the '<em><b>Output Ports</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ANALYSIS_NODE__OUTPUT_PORTS = FILTER__OUTPUT_PORTS;
-
-	/**
-	 * The feature id for the '<em><b>Displays</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ANALYSIS_NODE__DISPLAYS = FILTER__DISPLAYS;
-
-	/**
-	 * The feature id for the '<em><b>Input Ports</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ANALYSIS_NODE__INPUT_PORTS = FILTER__INPUT_PORTS;
-
-	/**
-	 * The feature id for the '<em><b>Children</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ANALYSIS_NODE__CHILDREN = FILTER_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>Analysis Node</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ANALYSIS_NODE_FEATURE_COUNT = FILTER_FEATURE_COUNT + 1;
 
 
 	/**
@@ -1096,15 +896,15 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	EClass getPlugin();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link kieker.analysis.model.analysisMetaModel.MIPlugin#getRepositoryPorts <em>Repository Ports</em>}'.
+	 * Returns the meta object for the containment reference list '{@link kieker.analysis.model.analysisMetaModel.MIPlugin#getRepositories <em>Repositories</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Repository Ports</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.MIPlugin#getRepositoryPorts()
+	 * @return the meta object for the containment reference list '<em>Repositories</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIPlugin#getRepositories()
 	 * @see #getPlugin()
 	 * @generated
 	 */
-	EReference getPlugin_RepositoryPorts();
+	EReference getPlugin_Repositories();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link kieker.analysis.model.analysisMetaModel.MIPlugin#getOutputPorts <em>Output Ports</em>}'.
@@ -1159,17 +959,6 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getPort_EventTypes();
-
-	/**
-	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.MIPort#isAsynchronous <em>Asynchronous</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Asynchronous</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.MIPort#isAsynchronous()
-	 * @see #getPort()
-	 * @generated
-	 */
-	EAttribute getPort_Asynchronous();
 
 	/**
 	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIInputPort <em>Input Port</em>}'.
@@ -1298,17 +1087,6 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	EClass getRepository();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link kieker.analysis.model.analysisMetaModel.MIRepository#getInputPorts <em>Input Ports</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Input Ports</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.MIRepository#getInputPorts()
-	 * @see #getRepository()
-	 * @generated
-	 */
-	EReference getRepository_InputPorts();
-
-	/**
 	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIDependency <em>Dependency</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1328,6 +1106,38 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getDependency_FilePath();
+
+	/**
+	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIRepositoryConnector <em>Repository Connector</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Repository Connector</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIRepositoryConnector
+	 * @generated
+	 */
+	EClass getRepositoryConnector();
+
+	/**
+	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.MIRepositoryConnector#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIRepositoryConnector#getName()
+	 * @see #getRepositoryConnector()
+	 * @generated
+	 */
+	EAttribute getRepositoryConnector_Name();
+
+	/**
+	 * Returns the meta object for the reference '{@link kieker.analysis.model.analysisMetaModel.MIRepositoryConnector#getRepository <em>Repository</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Repository</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIRepositoryConnector#getRepository()
+	 * @see #getRepositoryConnector()
+	 * @generated
+	 */
+	EReference getRepositoryConnector_Repository();
 
 	/**
 	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIDisplay <em>Display</em>}'.
@@ -1480,69 +1290,6 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	EReference getAnalysisComponent_Properties();
 
 	/**
-	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIRepositoryPort <em>Repository Port</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Repository Port</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.MIRepositoryPort
-	 * @generated
-	 */
-	EClass getRepositoryPort();
-
-	/**
-	 * Returns the meta object for the reference list '{@link kieker.analysis.model.analysisMetaModel.MIRepositoryPort#getSubscribers <em>Subscribers</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Subscribers</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.MIRepositoryPort#getSubscribers()
-	 * @see #getRepositoryPort()
-	 * @generated
-	 */
-	EReference getRepositoryPort_Subscribers();
-
-	/**
-	 * Returns the meta object for the container reference '{@link kieker.analysis.model.analysisMetaModel.MIRepositoryPort#getParent <em>Parent</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the container reference '<em>Parent</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.MIRepositoryPort#getParent()
-	 * @see #getRepositoryPort()
-	 * @generated
-	 */
-	EReference getRepositoryPort_Parent();
-
-	/**
-	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIRepositoryInputPort <em>Repository Input Port</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Repository Input Port</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.MIRepositoryInputPort
-	 * @generated
-	 */
-	EClass getRepositoryInputPort();
-
-	/**
-	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIAnalysisNode <em>Analysis Node</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Analysis Node</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisNode
-	 * @generated
-	 */
-	EClass getAnalysisNode();
-
-	/**
-	 * Returns the meta object for the reference list '{@link kieker.analysis.model.analysisMetaModel.MIAnalysisNode#getChildren <em>Children</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Children</em>'.
-	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisNode#getChildren()
-	 * @see #getAnalysisNode()
-	 * @generated
-	 */
-	EReference getAnalysisNode_Children();
-
-	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1633,12 +1380,12 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 		EClass PLUGIN = eINSTANCE.getPlugin();
 
 		/**
-		 * The meta object literal for the '<em><b>Repository Ports</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Repositories</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference PLUGIN__REPOSITORY_PORTS = eINSTANCE.getPlugin_RepositoryPorts();
+		EReference PLUGIN__REPOSITORIES = eINSTANCE.getPlugin_Repositories();
 
 		/**
 		 * The meta object literal for the '<em><b>Output Ports</b></em>' containment reference list feature.
@@ -1681,14 +1428,6 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PORT__EVENT_TYPES = eINSTANCE.getPort_EventTypes();
-
-		/**
-		 * The meta object literal for the '<em><b>Asynchronous</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PORT__ASYNCHRONOUS = eINSTANCE.getPort_Asynchronous();
 
 		/**
 		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MInputPort <em>Input Port</em>}' class.
@@ -1799,14 +1538,6 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 		EClass REPOSITORY = eINSTANCE.getRepository();
 
 		/**
-		 * The meta object literal for the '<em><b>Input Ports</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference REPOSITORY__INPUT_PORTS = eINSTANCE.getRepository_InputPorts();
-
-		/**
 		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MDependency <em>Dependency</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1823,6 +1554,32 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute DEPENDENCY__FILE_PATH = eINSTANCE.getDependency_FilePath();
+
+		/**
+		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MRepositoryConnector <em>Repository Connector</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see kieker.analysis.model.analysisMetaModel.impl.MRepositoryConnector
+		 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getRepositoryConnector()
+		 * @generated
+		 */
+		EClass REPOSITORY_CONNECTOR = eINSTANCE.getRepositoryConnector();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute REPOSITORY_CONNECTOR__NAME = eINSTANCE.getRepositoryConnector_Name();
+
+		/**
+		 * The meta object literal for the '<em><b>Repository</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference REPOSITORY_CONNECTOR__REPOSITORY = eINSTANCE.getRepositoryConnector_Repository();
 
 		/**
 		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MDisplay <em>Display</em>}' class.
@@ -1943,60 +1700,6 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ANALYSIS_COMPONENT__PROPERTIES = eINSTANCE.getAnalysisComponent_Properties();
-
-		/**
-		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MRepositoryPort <em>Repository Port</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see kieker.analysis.model.analysisMetaModel.impl.MRepositoryPort
-		 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getRepositoryPort()
-		 * @generated
-		 */
-		EClass REPOSITORY_PORT = eINSTANCE.getRepositoryPort();
-
-		/**
-		 * The meta object literal for the '<em><b>Subscribers</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference REPOSITORY_PORT__SUBSCRIBERS = eINSTANCE.getRepositoryPort_Subscribers();
-
-		/**
-		 * The meta object literal for the '<em><b>Parent</b></em>' container reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference REPOSITORY_PORT__PARENT = eINSTANCE.getRepositoryPort_Parent();
-
-		/**
-		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MRepositoryInputPort <em>Repository Input Port</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see kieker.analysis.model.analysisMetaModel.impl.MRepositoryInputPort
-		 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getRepositoryInputPort()
-		 * @generated
-		 */
-		EClass REPOSITORY_INPUT_PORT = eINSTANCE.getRepositoryInputPort();
-
-		/**
-		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MAnalysisNode <em>Analysis Node</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisNode
-		 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getAnalysisNode()
-		 * @generated
-		 */
-		EClass ANALYSIS_NODE = eINSTANCE.getAnalysisNode();
-
-		/**
-		 * The meta object literal for the '<em><b>Children</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ANALYSIS_NODE__CHILDREN = eINSTANCE.getAnalysisNode_Children();
 
 	}
 
