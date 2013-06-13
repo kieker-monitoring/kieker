@@ -74,8 +74,17 @@ public class ConnectorTest extends AbstractKiekerTest {
 		Assert.assertTrue("The number of send records is not equal to TestServiceConnector.SEND_NUMBER_OF_RECORDS",
 				TestServiceConnector.SEND_NUMBER_OF_RECORDS == rows);
 
-		// http://stackoverflow.com/questions/779519/delete-files-recursively-in-java
-		dir.delete(); // deletes the whole directory from path /tmp/kdb/data/
+		// Delete iterativ every element from the created folder above
+		if (dir.exists())
+		{
+			for (final File f : dir.listFiles())
+			{
+				f.delete();
+			}
+			dir.delete();
+		}
+
+		Assert.assertTrue("Directory is not cleaned", path.isEmpty() == true);
 	}
 
 	/**
