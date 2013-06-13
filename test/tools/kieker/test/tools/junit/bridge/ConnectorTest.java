@@ -39,12 +39,7 @@ public class ConnectorTest extends AbstractKiekerTest {
 		final File dir = new File(path);
 		int rows = 0;
 
-		if (dir.mkdir()) {
-			System.out.println(dir + " - konnte erstellt werden.");
-		} else {
-			// TODO make this an assertions
-			System.out.println(dir + " - konnte nicht erstellt werden.");
-		}
+		Assert.assertTrue("Directory could not created", dir.mkdir() == true);
 
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
 		configuration.setProperty("kieker.monitoring.writer.filesystem.AsyncFsWriter.storeInJavaIoTmpdir", "false");
