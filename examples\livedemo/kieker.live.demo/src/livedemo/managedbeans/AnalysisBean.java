@@ -30,7 +30,7 @@ public class AnalysisBean {
 	
 	public AnalysisBean(){
 		this.updateThread = new UpdateThread(1000);
-		new Thread(this.updateThread).start();
+		this.updateThread.start();
 		this.analysisInstance = new AnalysisController();
 		this.systemModelRepository = new SystemModelRepository(new Configuration(), analysisInstance);
 		this.cpuConfiguration.setProperty(CPUUtilizationDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, "20");

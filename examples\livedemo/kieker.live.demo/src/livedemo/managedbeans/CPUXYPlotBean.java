@@ -4,16 +4,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
-
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
 
@@ -25,7 +23,7 @@ import livedemo.entities.Model;
  */
 @ManagedBean(name="cpuXYPlotBean")
 @ApplicationScoped
-public class CPUXYPlotBean {
+public class CPUXYPlotBean implements Observer{
 	
 	@ManagedProperty(value = "#{analysisBean}")
 	AnalysisBean analysisBean;
@@ -35,12 +33,10 @@ public class CPUXYPlotBean {
 	private List<String> cpuIds;
 	private List<Model> models;
 	private int index;
-	private TimeoutThread timeoutThread;
 	
 	public CPUXYPlotBean(){
 		this.models = Collections.synchronizedList(new ArrayList<Model>());
 		this.cpuIds = new ArrayList<String>();
-		this.timeoutThread = new TimeoutThread(this, 1000);
 	}
 	
 	@PostConstruct
@@ -55,7 +51,12 @@ public class CPUXYPlotBean {
 				this.cpuIds.add(id);
 			}
 		}
-		this.timeoutThread.start();
+		this.analysisBean.getUpdateThread().addObserver(this);
+	}
+	
+	@PreDestroy
+	public void terminate(){
+		this.analysisBean.getUpdateThread().deleteObserver(this);
 	}
 	
 	public void setAnalysisBean(AnalysisBean analysisBean){
@@ -66,7 +67,16 @@ public class CPUXYPlotBean {
 		return this.models;
 	}
 	
-	private void computeModels(){
+	private ChartSeries computeModel(String key){
+		Map<Object,Number> data = this.xyPlot.getEntries(key);
+		ChartSeries cpuSeries = new ChartSeries(); 
+		cpuSeries.setLabel(key.substring(index + 2));
+		cpuSeries.setData(data);
+		return cpuSeries;
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
 		this.models.clear();
 		for(String id : this.cpuIds){
 			CartesianChartModel cpuModel = new CartesianChartModel();
@@ -76,47 +86,6 @@ public class CPUXYPlotBean {
 				}
 			}
 			this.models.add(new Model(cpuModel,id));
-		}
-	}
-	
-	private ChartSeries computeModel(String key){
-		Map<Object,Number> data = this.xyPlot.getEntries(key);
-		ChartSeries cpuSeries = new ChartSeries(); 
-		cpuSeries.setLabel(key.substring(index + 2));
-		cpuSeries.setData(data);
-		return cpuSeries;
-	}
-	
-	@PreDestroy
-	public void terminate(){
-		this.timeoutThread.terminate();
-	}
-	
-	private class TimeoutThread extends Thread{
-		
-		private long timeout;
-		private CPUXYPlotBean bean;
-		private boolean stop;
-		
-		public TimeoutThread(CPUXYPlotBean bean, long timeout){
-			this.timeout = timeout;
-			this.bean = bean;
-			this.stop = false;
-		}
-		
-		public void terminate(){
-			this.stop = true;
-		}
-		
-		public void run(){
-			while(!stop){
-				this.bean.computeModels();
-				try {
-					this.wait(timeout);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
 		}
 		
 	}

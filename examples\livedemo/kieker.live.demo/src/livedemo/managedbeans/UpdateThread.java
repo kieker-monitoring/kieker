@@ -3,37 +3,49 @@ package livedemo.managedbeans;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Observable;
 import java.util.Observer;
 
 /**
  * @author Bjoern Weissenfels
  */
-public class UpdateThread extends Observable implements Runnable{
+public class UpdateThread extends Thread{
 	
 	private long timeout;
-	private boolean terminated;
-	private List<Observer> observer;
+	private List<Observer> observers;
+	private volatile boolean terminated;
 	
 	public UpdateThread(long timeout){
 		this.timeout = timeout;
-		this.observer = Collections.synchronizedList(new ArrayList<Observer>());
+		this.observers = Collections.synchronizedList(new ArrayList<Observer>());
 		this.terminated = false;
 	}
 	
 	@Override
 	public void run(){
-		System.out.println("a"+this.observer.size());
 		while(!this.terminated){
-			System.out.println("c"+this.observer.size());
 			try {
-				this.wait(this.timeout);
+				Thread.sleep(timeout);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			System.out.println("d"+this.observer.size());
 			this.notifyObservers();
 		}
+	}
+	
+	private void notifyObservers(){
+		for(Observer o : this.observers){
+			o.update(null, null);
+		}
+	}
+	
+	public void addObserver(Observer observer){
+		if(!this.observers.contains(observer)){
+			this.observers.add(observer);
+		}
+	}
+	
+	public void deleteObserver(Observer observer){
+		this.observers.remove(observer);
 	}
 	
 	public void terminate(){
