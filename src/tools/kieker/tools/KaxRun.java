@@ -40,6 +40,8 @@ import kieker.tools.util.CLIHelpFormatter;
 public final class KaxRun {
 	private static final Log LOG = LogFactory.getLog(KaxRun.class);
 
+	private static final long COOLDOWN_TIME_MS = 5 * 60 * 1000; // 5 Minutes
+
 	/**
 	 * Private constructor to avoid instantiation.
 	 */
@@ -52,32 +54,44 @@ public final class KaxRun {
 	 *            The command line arguments (including the name of the .kax file in question).
 	 */
 	public static final void main(final String[] args) {
-		// create cmdline options
-		final Options options = new Options();
-		final Option inputOption = new Option("i", "input", true, "the analysis project file (.kax) loaded");
-		inputOption.setRequired(true);
-		inputOption.setArgName("filename");
-		options.addOption(inputOption);
+		for (int j = 0; j < 2; j++) {
+			// create cmdline options
+			final Options options = new Options();
+			final Option inputOption = new Option("i", "input", true, "the analysis project file (.kax) loaded");
+			inputOption.setRequired(true);
+			inputOption.setArgName("filename");
+			options.addOption(inputOption);
 
-		// parse cmdline options
-		final String kaxFilename;
-		try {
-			final CommandLineParser parser = new BasicParser();
-			final CommandLine line = parser.parse(options, args);
-			kaxFilename = line.getOptionValue('i');
-		} catch (final ParseException ex) {
-			System.out.println(ex.getMessage()); // NOPMD (System.out)
-			final HelpFormatter formatter = new CLIHelpFormatter();
-			formatter.printHelp(KaxRun.class.getName(), options, true);
-			return;
-		}
+			// parse cmdline options
+			final String kaxFilename;
+			try {
+				final CommandLineParser parser = new BasicParser();
+				final CommandLine line = parser.parse(options, args);
+				kaxFilename = line.getOptionValue('i');
+			} catch (final ParseException ex) {
+				System.out.println(ex.getMessage()); // NOPMD (System.out)
+				final HelpFormatter formatter = new CLIHelpFormatter();
+				formatter.printHelp(KaxRun.class.getName(), options, true);
+				return;
+			}
 
-		// start tool
-		try {
-			final AnalysisController ctrl = new AnalysisController(new File(kaxFilename));
-			ctrl.run();
-		} catch (final Exception ex) { // NOPMD NOCS (log all errors)
-			LOG.error("Error", ex);
+			// start tool
+			try {
+				final AnalysisController ctrl = new AnalysisController(new File(kaxFilename));
+				ctrl.run();
+			} catch (final Exception ex) { // NOPMD NOCS (log all errors)
+				LOG.error("Error", ex);
+			}
+
+			if (j == 0) {
+				LOG.info("Begin of cooldown phase");
+				try {
+					Thread.sleep(COOLDOWN_TIME_MS);
+				} catch (final InterruptedException ex) {
+					LOG.error("Interrupted Exception", ex);
+				}
+				LOG.info("End of cooldown phase");
+			}
 		}
 	}
 }
