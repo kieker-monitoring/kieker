@@ -53,8 +53,6 @@ import kieker.common.logging.LogFactory;
 					defaultValue = ListCollectionFilter.CONFIG_PROPERTY_VALUE_LIST_FULL_BEHAVIOR,
 					description = "Determines what happens to new objects when the list is full.") })
 public class ListCollectionFilter<T> extends AbstractFilterPlugin {
-
-	private static final Log LOG = LogFactory.getLog(ListCollectionFilter.class);
 	/** The name of the input port for the incoming objects. */
 	public static final String INPUT_PORT_NAME = "inputObject";
 	/** The name of the output port for the forwared objects. */
@@ -69,6 +67,8 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 	public static final String LIST_FULL_BEHAVIOR_DROP_OLDEST = "dropOldest";
 	public static final String LIST_FULL_BEHAVIOR_IGNORE = "ignore";
 	public static final String LIST_FULL_BEHAVIOR_ERROR = "error";
+
+	private static final Log LOG = LogFactory.getLog(ListCollectionFilter.class);
 
 	private final int numberOfEntries;
 	private final String listFullBehavior;
