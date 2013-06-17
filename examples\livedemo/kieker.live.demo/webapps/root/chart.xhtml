@@ -52,17 +52,17 @@
 	  			<li><a style="color:#000000" href="chart.jsf">Method Response Times</a></li>
 <!-- 	       	<li><a href="graph.jsf">Graph</a></li> -->
 		       	<li><a href="systemModel.jsf">System Model</a></li>
-		       	<li><a href="cpu.jsf">CPU and MemSwap</a></li>
+		       	<li><a href="cpuAndMemSwap.jsf">CPU and MemSwap</a></li>
 			</ul>
 		</div>
 		<div id="main">
 			<h:form>
 				<p:selectCheckboxMenu id="methodbox" onShow="poll.stop()" onHide="poll.start()" 
-					value="#{chartBean.selectedMethods}" label="Select Methods" 
+					value="#{methodResponsetimeBean.selectedMethods}" label="Select Methods" 
 					filter="true" filterText="Filter" filterMatchMode="contains">  
-					<f:selectItems value="#{chartBean.availableMethods}" />  
+					<f:selectItems value="#{methodResponsetimeBean.availableMethods}" />  
 				</p:selectCheckboxMenu>
-				
+				<!-- 
 				<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">  
 				<h:outputText value="Intervall length in seconds: " />  
 					<p:selectOneMenu value="#{chartBean.intervallLength}">  
@@ -75,17 +75,17 @@
 						<f:selectItems value="#{chartBean.possibleNumberOfDisplayedEntries}"/> 
 					</p:selectOneMenu>
 				</h:panelGrid>
-				
-				<p:lineChart id="count" value="#{chartBean.countingModel}" legendPosition="ne"  
-			    	title="Method Calls Per #{chartBean.intervallLength} Seconds" minY="0" style="height:300px;margin-top:20px"
+				 
+				<p:lineChart id="count" value="#{methodResponsetimeBean.responsetimeModel}" legendPosition="ne"  
+			    	title="Method Calls" minY="0" style="height:300px;margin-top:20px"
 			    	xaxisLabel="Time" yaxisLabel="Number of calls"/>
-				
-				<p:barChart id="resp" value="#{chartBean.responsetimeModel}" legendPosition="ne"  
+				-->
+				<p:barChart id="resp" value="#{methodResponsetimeBean.responsetimeModel}" legendPosition="ne"  
 			    	title="Average Responsetime" minY="0" style="height:300px;margin-top:20px"
 			    	xaxisLabel="Time" yaxisLabel="Responsetime in ms"/>
-		     		
+		     	 	
 		     	<p:poll interval="1" widgetVar="poll" update="methodbox" autoStart="true"/>
-				<p:poll interval="1" update="count,resp" />
+				<p:poll interval="1" update="resp" />
 			</h:form>
 		</div>
 		<div id="footer">

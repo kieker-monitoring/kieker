@@ -1,7 +1,6 @@
 package livedemo.managedbeans;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Observable;
@@ -19,6 +18,7 @@ import org.primefaces.model.DefaultDashboardModel;
 import org.primefaces.model.chart.MeterGaugeChartModel;
 
 import kieker.analysis.display.MeterGauge;
+import livedemo.entities.Model;
 
 /**
  * @author Bjoern Weissenfels
@@ -28,10 +28,10 @@ import kieker.analysis.display.MeterGauge;
 public class CPUMeterGaugeBean implements Observer{
 	
 	@ManagedProperty(value = "#{analysisBean}")
-	AnalysisBean analysisBean;
+	private AnalysisBean analysisBean;
 	
 	private MeterGauge meterGauge;
-	private List<MeterGaugeChartModel> meterGaugeModels;
+	private List<Model<MeterGaugeChartModel>> meterGaugeModels;
 	
 	private List<String> cpuIds;
 	private final String colors = "66cc66, E7E658, cc6666";
@@ -40,16 +40,10 @@ public class CPUMeterGaugeBean implements Observer{
 	private DashboardColumn column2;
 	
 	public CPUMeterGaugeBean(){
-		this.meterGaugeModels = Collections.synchronizedList(new ArrayList<MeterGaugeChartModel>());
+		this.meterGaugeModels = Collections.synchronizedList(new ArrayList<Model<MeterGaugeChartModel>>());
 		this.dashboardModel = new DefaultDashboardModel();
 		this.column1 = new DefaultDashboardColumn();  
-        this.column2 = new DefaultDashboardColumn(); 
-        this.column1.addWidget("model0");
-        this.column2.addWidget("model1");
-        this.column1.addWidget("model2");
-        this.column2.addWidget("model3");
-        this.dashboardModel.addColumn(column1);
-        this.dashboardModel.addColumn(column2);
+        this.column2 = new DefaultDashboardColumn();
 	}
 	
 	@PostConstruct
@@ -58,6 +52,16 @@ public class CPUMeterGaugeBean implements Observer{
 		this.cpuIds = new ArrayList<String>(this.meterGauge.getKeys());
 		Collections.sort(this.cpuIds);
 		this.updateMeterGaugeModels();
+		this.column1.addWidget("test");
+		for(int i=0; i < this.cpuIds.size(); i+=2){
+			this.column1.addWidget("model" + i);
+			if(this.cpuIds.size() > i+1){
+				this.column2.addWidget("model" + (i+1));
+			}
+			
+		}
+		this.dashboardModel.addColumn(column1);
+        this.dashboardModel.addColumn(column2);
 		this.analysisBean.getUpdateThread().addObserver(this);
 	}
 	
@@ -74,10 +78,7 @@ public class CPUMeterGaugeBean implements Observer{
 		return this.dashboardModel;
 	}
 	
-	//not used yet
-	public List<MeterGaugeChartModel> getMeterGaugeModels(){
-		this.meterGaugeModels.clear();
-		this.updateMeterGaugeModels();
+	public List<Model<MeterGaugeChartModel>> getMeterGaugeModels(){
 		return this.meterGaugeModels;
 	}
 	
@@ -87,36 +88,13 @@ public class CPUMeterGaugeBean implements Observer{
 	
 	private void updateMeterGaugeModels(){
 		for(String id : this.cpuIds){
-			this.meterGaugeModels.add(new MeterGaugeChartModel(this.meterGauge.getValue(id), this.meterGauge.getIntervals(id)));
+			MeterGaugeChartModel meterGaugeChartModel = new MeterGaugeChartModel(this.meterGauge.getValue(id), this.meterGauge.getIntervals(id));
+			Model<MeterGaugeChartModel> model = new Model<MeterGaugeChartModel>(meterGaugeChartModel, id);
+			String value = id.substring(id.length() - 1);
+			model.addId("model" + value);
+			model.addId("test" + value);
+			this.meterGaugeModels.add(model);
 		}
-	}
-	
-	public MeterGaugeChartModel getModel0(){
-		return this.meterGaugeModels.get(0);
-	}
-	
-	public MeterGaugeChartModel getModel1(){
-		if(this.meterGaugeModels.size()>1){
-			return this.meterGaugeModels.get(1);
-		}else{
-			return new MeterGaugeChartModel(0, Arrays.asList((Number) 70,90,100));
-		}
-	}
-	
-	public MeterGaugeChartModel getModel2(){
-		if(this.meterGaugeModels.size()>2){
-			return this.meterGaugeModels.get(2);
-		}else{
-			return new MeterGaugeChartModel(0, Arrays.asList((Number) 70,90,100));
-		}	
-	}
-	
-	public MeterGaugeChartModel getModel3(){
-		if(this.meterGaugeModels.size()>3){
-			return this.meterGaugeModels.get(3);
-		}else{
-			return new MeterGaugeChartModel(0, Arrays.asList((Number) 70,90,100));
-		}	
 	}
 
 	@Override

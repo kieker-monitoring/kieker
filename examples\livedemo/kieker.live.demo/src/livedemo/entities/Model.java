@@ -1,41 +1,29 @@
 package livedemo.entities;
 
-import org.primefaces.model.chart.CartesianChartModel;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Bjoern Weissenfels
  */
-public class Model{
+public class Model<T>{
 	
-	private CartesianChartModel firstModel;
-	private CartesianChartModel secondModel;
+	private T model;
 	private String name;
+	private List<String> ids;
 	
-	public Model(CartesianChartModel model, String name){
-		this.firstModel = model;
+	public Model(T model, String name){
+		this.model = model;
 		this.name = name;
+		this.ids = new ArrayList<String>();
 	}
 	
-	public Model(CartesianChartModel firstModel, CartesianChartModel secondModel, String name){
-		this.firstModel = firstModel;
-		this.secondModel = secondModel;
-		this.name = name;
+	public T getModel(){
+		return this.model;
 	}
 	
-	public CartesianChartModel getModel(){
-		return this.firstModel;
-	}
-	
-	public void setModel(CartesianChartModel model){
-		this.firstModel = model;
-	}
-	
-	public CartesianChartModel getSecondModel(){
-		return this.secondModel;
-	}
-	
-	public void setSecondModel(CartesianChartModel model){
-		this.secondModel = model;
+	public void setModel(T model){
+		this.model = model;
 	}
 	
 	public String getName(){
@@ -44,6 +32,18 @@ public class Model{
 	
 	public void setName(String name){
 		this.name = name;
+	}
+
+	public List<String> getIds() {
+		return ids;
+	}
+
+	public void setIds(List<String> ids) {
+		this.ids = ids;
+	}
+	
+	public void addId(String id){
+		this.ids.add(id);
 	}
 
 }

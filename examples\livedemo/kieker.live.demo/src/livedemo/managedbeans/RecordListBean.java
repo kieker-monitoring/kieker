@@ -1,5 +1,6 @@
 package livedemo.managedbeans;
 
+import java.util.Collections;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -14,18 +15,21 @@ import livedemo.entities.Record;
 @ViewScoped
 public class RecordListBean{
 	
-	boolean firstCall;
-	boolean freeze;
-	String freezeButton;
-	String updateForm;
-	@ManagedProperty(value = "#{dataBean}")
-	DataBean dataBean;
+	@ManagedProperty(value = "#{analysisBean}")
+	private AnalysisBean analysisBean;
+	
+	private boolean freeze;
+	private String freezeButton;
+	private String updateForm;
 	
 	public RecordListBean(){
-		this.firstCall = true;
 		this.freeze = false;
 		this.freezeButton = "freeze";
 		this.updateForm = "rec";
+	}
+	
+	public void setAnalysisBean(AnalysisBean analysisBean){
+		this.analysisBean = analysisBean;
 	}
 	
 	public String freeze(){
@@ -49,13 +53,10 @@ public class RecordListBean{
 		return this.freezeButton;
 	}
 	
-	public void setDataBean(DataBean dataBean){
-		this.dataBean = dataBean;
-	}
-	
 	public List<Record> getRecords(){
-		this.dataBean.updateOERList();
-		return this.dataBean.getLastRecords();
+		List<Record> list = this.analysisBean.getRecordListFilter().getList();
+		Collections.reverse(list);
+		return list;
 	}
 
 }

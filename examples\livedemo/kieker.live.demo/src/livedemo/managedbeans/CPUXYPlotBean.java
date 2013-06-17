@@ -26,16 +26,16 @@ import livedemo.entities.Model;
 public class CPUXYPlotBean implements Observer{
 	
 	@ManagedProperty(value = "#{analysisBean}")
-	AnalysisBean analysisBean;
+	private AnalysisBean analysisBean;
 	
 	private XYPlot xyPlot;
 	private List<String> keys;
 	private List<String> cpuIds;
-	private List<Model> models;
+	private List<Model<CartesianChartModel>> models;
 	private int index;
 	
 	public CPUXYPlotBean(){
-		this.models = Collections.synchronizedList(new ArrayList<Model>());
+		this.models = Collections.synchronizedList(new ArrayList<Model<CartesianChartModel>>());
 		this.cpuIds = new ArrayList<String>();
 	}
 	
@@ -51,6 +51,7 @@ public class CPUXYPlotBean implements Observer{
 				this.cpuIds.add(id);
 			}
 		}
+		this.updateModel();
 		this.analysisBean.getUpdateThread().addObserver(this);
 	}
 	
@@ -63,7 +64,7 @@ public class CPUXYPlotBean implements Observer{
 		this.analysisBean = analysisBean;
 	}
 	
-	public List<Model> getModels(){
+	public List<Model<CartesianChartModel>> getModels(){
 		return this.models;
 	}
 	
@@ -74,10 +75,8 @@ public class CPUXYPlotBean implements Observer{
 		cpuSeries.setData(data);
 		return cpuSeries;
 	}
-
-	@Override
-	public void update(Observable o, Object arg) {
-		this.models.clear();
+	
+	private void updateModel(){
 		for(String id : this.cpuIds){
 			CartesianChartModel cpuModel = new CartesianChartModel();
 			for(String key : this.keys){
@@ -85,8 +84,14 @@ public class CPUXYPlotBean implements Observer{
 					cpuModel.addSeries(this.computeModel(key));
 				}
 			}
-			this.models.add(new Model(cpuModel,id));
+			this.models.add(new Model<CartesianChartModel>(cpuModel,id));
 		}
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		this.models.clear();
+		this.updateModel();
 		
 	}
 

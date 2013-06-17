@@ -53,43 +53,48 @@
 	  			<li><a href="chart.jsf">Method Response Times</a></li>
 <!-- 			<li><a href="graph.jsf">Graph</a></li> -->
 		       	<li><a href="systemModel.jsf">System Model</a></li>
-		       	<li><a href="cpu.jsf">CPU and MemSwap</a></li>
-		       	<li><a style="color:#000000" href="cpuAndMemSwap.jsf">CPU</a></li>
+		       	<li><a style="color:#000000" href="cpuAndMemSwap.jsf">CPU And MEMSWAP</a></li>
 			</ul>
 		</div>
 		<div id="main">
-			<h:form> 
+			<h:form id="form"> 
 				<p:accordionPanel value="#{cpuXYPlotBean.models}" var="model" dynamic="true" multiple="true">
 					<p:tab title="#{model.name}">
-						
 						<p:lineChart id="test" value="#{model.model}" legendPosition="ne"
 						   		style="height:300px;margin-top:20px"
-						   		xaxisLabel="Seconds since start" yaxisLabel="Percent"/>
+						   		xaxisLabel="Time" yaxisLabel="Percent"/>
 						<p:poll interval="1" update="test"/>
 					</p:tab>
-					
 				</p:accordionPanel>
-			 	
-			 	<p:dashboard model="#{cpuMeterGaugeBean.dashboardModel}" disabled="true" id="board">			 		 
-			 		<p:panel id="model0" header="KIEKER-DEMO-SVR - 0" toggleable="true">
-						<p:meterGaugeChart title="Total Utilization" value="#{cpuMeterGaugeBean.model0}" style="width:420px;" 
-					 		label="%" seriesColors="#{cpuMeterGaugeBean.colors}"/>
-					</p:panel>
-					<p:panel id="model1" header="KIEKER-DEMO-SVR - 1" toggleable="true">
-						<p:meterGaugeChart value="#{cpuMeterGaugeBean.model1}"  style="width:420px"
-					 		label="%" seriesColors="#{cpuMeterGaugeBean.colors}"/>
-					</p:panel>
-					<p:panel id="model2" header="KIEKER-DEMO-SVR - 2" toggleable="true">
-						<p:meterGaugeChart value="#{cpuMeterGaugeBean.model2}"  
-					 		label="%" seriesColors="#{cpuMeterGaugeBean.colors}"/>
-					</p:panel>
-					<p:panel id="model3" header="KIEKER-DEMO-SVR - 3" toggleable="true">
-						<p:meterGaugeChart value="#{cpuMeterGaugeBean.model3}"  
-					 		label="%" seriesColors="#{cpuMeterGaugeBean.colors}"/>
-					</p:panel>
+				
+				<p:accordionPanel dynamic="true" multiple="true" activeIndex="0,1">
+					<p:tab title="#{memSwapBean.memModel.name}">
+						<p:barChart id="mem" value="#{memSwapBean.memModel.model}" legendPosition="ne"
+						   		style="height:200px;margin-top:20px" stacked="true"
+						   		xaxisLabel="Time" yaxisLabel="MB"/>
+						<p:poll interval="1" update="mem"/>
+					</p:tab>
+					<p:tab title="#{memSwapBean.swapModel.name}">	
+						<p:barChart id="swap" value="#{memSwapBean.swapModel.model}" legendPosition="ne"
+						   		style="height:200px;margin-top:20px" stacked="true"
+						   		xaxisLabel="Time" yaxisLabel="MB"/>
+						<p:poll interval="1" update="swap"/>
+					</p:tab>
+				</p:accordionPanel>
+				
+				<p:dashboard model="#{cpuMeterGaugeBean.dashboardModel}" disabled="true" id="board">
+					<c:forEach items="#{cpuMeterGaugeBean.meterGaugeModels}" var="model">
+						<p:panel id="#{model.ids[0]}" header="#{model.name} : Total Utilization" toggleable="true">
+							<p:meterGaugeChart id="#{model.ids[1]}" value="#{model.model}" style="width:420px;height:250px" 
+					 			label="%" seriesColors="#{cpuMeterGaugeBean.colors}"/>
+					 		<p:poll interval="1" update="#{model.ids[1]}"/>
+						</p:panel>
+					</c:forEach>
 				</p:dashboard>
-					
-				<p:poll interval="1" update="model0,model1,model2,model3"/>
+				
+				
+				
+				
 			</h:form>
 		</div>
 		<div id="footer">
