@@ -23,6 +23,7 @@ import java.util.concurrent.ConcurrentMap;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.AbstractPlugin;
+import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.controlflow.OperationExecutionRecord;
@@ -144,7 +145,12 @@ public final class DependencyGraphTestUtil {
 
 		final ExecutionRecordTransformationFilter transformationFilter = new ExecutionRecordTransformationFilter(new Configuration(), analysisController);
 		final TraceReconstructionFilter traceReconstructionFilter = new TraceReconstructionFilter(new Configuration(), analysisController);
-		final GraphReceiverPlugin graphReceiver = new GraphReceiverPlugin(new Configuration(), analysisController);
+
+		// Correct the behavior of the extended list filter as properties are not inherited.
+		final Configuration graphReceiverConfiguration = new Configuration();
+		graphReceiverConfiguration.setProperty(ListCollectionFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES,
+				ListCollectionFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES);
+		final GraphReceiverPlugin graphReceiver = new GraphReceiverPlugin(graphReceiverConfiguration, analysisController);
 
 		// Connect repositories
 		analysisController.connect(transformationFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemModelRepository);
