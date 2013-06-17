@@ -48,6 +48,8 @@ public class SystemModelRepository extends AbstractRepository {
 	public static final Execution ROOT_EXECUTION =
 			new Execution(OperationRepository.ROOT_OPERATION, AllocationRepository.ROOT_ALLOCATION_COMPONENT, -1, "-1", -1, -1, -1, -1, false);
 
+	public static final String ROOT_NODE_LABEL = "'Entry'";
+
 	private static final String ENCODING = "UTF-8";
 
 	private final TypeRepository typeRepositoryFactory;
