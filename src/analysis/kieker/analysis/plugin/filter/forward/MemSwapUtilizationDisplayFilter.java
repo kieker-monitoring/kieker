@@ -113,12 +113,12 @@ public class MemSwapUtilizationDisplayFilter extends AbstractFilterPlugin {
 
 		final String id = record.getHostname();
 
-		this.xyplot.setEntry(id + " - " + MemSwapUtilizationDisplayFilter.MEM_FREE, minutesAndSeconds, record.getMemFree() * 100);
-		this.xyplot.setEntry(id + " - " + MemSwapUtilizationDisplayFilter.MEM_TOTAL, minutesAndSeconds, record.getMemTotal() * 100);
-		this.xyplot.setEntry(id + " - " + MemSwapUtilizationDisplayFilter.MEM_USED, minutesAndSeconds, record.getMemUsed() * 100);
-		this.xyplot.setEntry(id + " - " + MemSwapUtilizationDisplayFilter.SWAP_FREE, minutesAndSeconds, record.getSwapFree() * 100);
-		this.xyplot.setEntry(id + " - " + MemSwapUtilizationDisplayFilter.SWAP_TOTAL, minutesAndSeconds, record.getSwapTotal() * 100);
-		this.xyplot.setEntry(id + " - " + MemSwapUtilizationDisplayFilter.SWAP_USED, minutesAndSeconds, record.getSwapUsed() * 100);
+		this.xyplot.setEntry(id + " - " + MemSwapUtilizationDisplayFilter.MEM_FREE, minutesAndSeconds, record.getMemFree() / 1048576);
+		this.xyplot.setEntry(id + " - " + MemSwapUtilizationDisplayFilter.MEM_TOTAL, minutesAndSeconds, record.getMemTotal() / 1048576);
+		this.xyplot.setEntry(id + " - " + MemSwapUtilizationDisplayFilter.MEM_USED, minutesAndSeconds, record.getMemUsed() / 1048576);
+		this.xyplot.setEntry(id + " - " + MemSwapUtilizationDisplayFilter.SWAP_FREE, minutesAndSeconds, record.getSwapFree() / 1048576);
+		this.xyplot.setEntry(id + " - " + MemSwapUtilizationDisplayFilter.SWAP_TOTAL, minutesAndSeconds, record.getSwapTotal() / 1048576);
+		this.xyplot.setEntry(id + " - " + MemSwapUtilizationDisplayFilter.SWAP_USED, minutesAndSeconds, record.getSwapUsed() / 1048576);
 
 		this.memPieChart.setValue(id + " - " + MemSwapUtilizationDisplayFilter.MEM_FREE, record.getMemFree());
 		this.memPieChart.setValue(id + " - " + MemSwapUtilizationDisplayFilter.MEM_USED, record.getMemUsed());

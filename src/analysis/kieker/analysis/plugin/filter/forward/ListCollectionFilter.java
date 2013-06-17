@@ -25,6 +25,7 @@ import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 
@@ -40,13 +41,22 @@ import kieker.common.configuration.Configuration;
  */
 @Plugin(programmaticOnly = true,
 		description = "A filter collecting incoming objects in a list (mostly used in testing scenarios)",
-		outputPorts = @OutputPort(name = ListCollectionFilter.OUTPUT_PORT_NAME, eventTypes = { Object.class }, description = "Provides each incoming object"))
+		outputPorts = @OutputPort(name = ListCollectionFilter.OUTPUT_PORT_NAME, eventTypes = { Object.class }, description = "Provides each incoming object"),
+		configuration = @Property(
+				name = ListCollectionFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES,
+				defaultValue = ListCollectionFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES,
+				description = "Sets the number of stored values."))
 public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 
 	/** The name of the input port for the incoming objects. */
 	public static final String INPUT_PORT_NAME = "inputObject";
 	/** The name of the output port for the forwared objects. */
 	public static final String OUTPUT_PORT_NAME = "outputObjects";
+
+	public static final String CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES = "numberOfEntries";
+	public static final String CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES = "100";
+
+	private final int numberOfEntries;
 
 	private final List<T> list = Collections.synchronizedList(new ArrayList<T>());
 
@@ -60,6 +70,9 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 	 */
 	public ListCollectionFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
+
+		// Read the configuration
+		this.numberOfEntries = configuration.getIntProperty(CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES);
 	}
 
 	/**
@@ -70,8 +83,11 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 	 */
 	@InputPort(name = ListCollectionFilter.INPUT_PORT_NAME)
 	@SuppressWarnings("unchecked")
-	public void input(final Object data) {
+	public synchronized void input(final Object data) {
 		this.list.add((T) data);
+		if (this.list.size() > this.numberOfEntries) {
+			this.list.remove(0);
+		}
 		super.deliver(OUTPUT_PORT_NAME, data);
 	}
 
