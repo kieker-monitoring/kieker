@@ -166,13 +166,22 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	int ANALYSIS_COMPONENT__PROPERTIES = 2;
 
 	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANALYSIS_COMPONENT__ID = 3;
+
+	/**
 	 * The number of structural features of the '<em>Analysis Component</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANALYSIS_COMPONENT_FEATURE_COUNT = 3;
+	int ANALYSIS_COMPONENT_FEATURE_COUNT = 4;
 
 	/**
 	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MPlugin <em>Plugin</em>}' class.
@@ -210,6 +219,15 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int PLUGIN__PROPERTIES = ANALYSIS_COMPONENT__PROPERTIES;
+
+	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PLUGIN__ID = ANALYSIS_COMPONENT__ID;
 
 	/**
 	 * The feature id for the '<em><b>Repositories</b></em>' containment reference list.
@@ -276,13 +294,22 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	int PORT__EVENT_TYPES = 1;
 
 	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__ID = 2;
+
+	/**
 	 * The number of structural features of the '<em>Port</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_FEATURE_COUNT = 2;
+	int PORT_FEATURE_COUNT = 3;
 
 	/**
 	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MInputPort <em>Input Port</em>}' class.
@@ -311,6 +338,15 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int INPUT_PORT__EVENT_TYPES = PORT__EVENT_TYPES;
+
+	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INPUT_PORT__ID = PORT__ID;
 
 	/**
 	 * The feature id for the '<em><b>Parent</b></em>' container reference.
@@ -357,6 +393,15 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int OUTPUT_PORT__EVENT_TYPES = PORT__EVENT_TYPES;
+
+	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OUTPUT_PORT__ID = PORT__ID;
 
 	/**
 	 * The feature id for the '<em><b>Subscribers</b></em>' reference list.
@@ -460,6 +505,15 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	int FILTER__PROPERTIES = PLUGIN__PROPERTIES;
 
 	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FILTER__ID = PLUGIN__ID;
+
+	/**
 	 * The feature id for the '<em><b>Repositories</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -542,6 +596,15 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	int READER__PROPERTIES = PLUGIN__PROPERTIES;
 
 	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int READER__ID = PLUGIN__ID;
+
+	/**
 	 * The feature id for the '<em><b>Repositories</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -615,6 +678,15 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	int REPOSITORY__PROPERTIES = ANALYSIS_COMPONENT__PROPERTIES;
 
 	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REPOSITORY__ID = ANALYSIS_COMPONENT__ID;
+
+	/**
 	 * The number of structural features of the '<em>Repository</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -680,13 +752,22 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	int REPOSITORY_CONNECTOR__REPOSITORY = 1;
 
 	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REPOSITORY_CONNECTOR__ID = 2;
+
+	/**
 	 * The number of structural features of the '<em>Repository Connector</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int REPOSITORY_CONNECTOR_FEATURE_COUNT = 2;
+	int REPOSITORY_CONNECTOR_FEATURE_COUNT = 3;
 
 	/**
 	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MDisplay <em>Display</em>}' class.
@@ -717,13 +798,22 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	int DISPLAY__PARENT = 1;
 
 	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISPLAY__ID = 2;
+
+	/**
 	 * The number of structural features of the '<em>Display</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DISPLAY_FEATURE_COUNT = 2;
+	int DISPLAY_FEATURE_COUNT = 3;
 
 	/**
 	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MView <em>View</em>}' class.
@@ -763,13 +853,22 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	int VIEW__DISPLAY_CONNECTORS = 2;
 
 	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VIEW__ID = 3;
+
+	/**
 	 * The number of structural features of the '<em>View</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VIEW_FEATURE_COUNT = 3;
+	int VIEW_FEATURE_COUNT = 4;
 
 	/**
 	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MDisplayConnector <em>Display Connector</em>}' class.
@@ -800,13 +899,22 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	int DISPLAY_CONNECTOR__DISPLAY = 1;
 
 	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISPLAY_CONNECTOR__ID = 2;
+
+	/**
 	 * The number of structural features of the '<em>Display Connector</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DISPLAY_CONNECTOR_FEATURE_COUNT = 2;
+	int DISPLAY_CONNECTOR_FEATURE_COUNT = 3;
 
 
 	/**
@@ -959,6 +1067,17 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getPort_EventTypes();
+
+	/**
+	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.MIPort#getId <em>Id</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Id</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIPort#getId()
+	 * @see #getPort()
+	 * @generated
+	 */
+	EAttribute getPort_Id();
 
 	/**
 	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIInputPort <em>Input Port</em>}'.
@@ -1140,6 +1259,17 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	EReference getRepositoryConnector_Repository();
 
 	/**
+	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.MIRepositoryConnector#getId <em>Id</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Id</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIRepositoryConnector#getId()
+	 * @see #getRepositoryConnector()
+	 * @generated
+	 */
+	EAttribute getRepositoryConnector_Id();
+
+	/**
 	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIDisplay <em>Display</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1170,6 +1300,17 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getDisplay_Parent();
+
+	/**
+	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.MIDisplay#getId <em>Id</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Id</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIDisplay#getId()
+	 * @see #getDisplay()
+	 * @generated
+	 */
+	EAttribute getDisplay_Id();
 
 	/**
 	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIView <em>View</em>}'.
@@ -1215,6 +1356,17 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	EReference getView_DisplayConnectors();
 
 	/**
+	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.MIView#getId <em>Id</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Id</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIView#getId()
+	 * @see #getView()
+	 * @generated
+	 */
+	EAttribute getView_Id();
+
+	/**
 	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIDisplayConnector <em>Display Connector</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1245,6 +1397,17 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getDisplayConnector_Display();
+
+	/**
+	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.MIDisplayConnector#getId <em>Id</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Id</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIDisplayConnector#getId()
+	 * @see #getDisplayConnector()
+	 * @generated
+	 */
+	EAttribute getDisplayConnector_Id();
 
 	/**
 	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIAnalysisComponent <em>Analysis Component</em>}'.
@@ -1288,6 +1451,17 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getAnalysisComponent_Properties();
+
+	/**
+	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.MIAnalysisComponent#getId <em>Id</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Id</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisComponent#getId()
+	 * @see #getAnalysisComponent()
+	 * @generated
+	 */
+	EAttribute getAnalysisComponent_Id();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -1428,6 +1602,14 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PORT__EVENT_TYPES = eINSTANCE.getPort_EventTypes();
+
+		/**
+		 * The meta object literal for the '<em><b>Id</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT__ID = eINSTANCE.getPort_Id();
 
 		/**
 		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MInputPort <em>Input Port</em>}' class.
@@ -1582,6 +1764,14 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 		EReference REPOSITORY_CONNECTOR__REPOSITORY = eINSTANCE.getRepositoryConnector_Repository();
 
 		/**
+		 * The meta object literal for the '<em><b>Id</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute REPOSITORY_CONNECTOR__ID = eINSTANCE.getRepositoryConnector_Id();
+
+		/**
 		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MDisplay <em>Display</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1606,6 +1796,14 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 		 * @generated
 		 */
 		EReference DISPLAY__PARENT = eINSTANCE.getDisplay_Parent();
+
+		/**
+		 * The meta object literal for the '<em><b>Id</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DISPLAY__ID = eINSTANCE.getDisplay_Id();
 
 		/**
 		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MView <em>View</em>}' class.
@@ -1642,6 +1840,14 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 		EReference VIEW__DISPLAY_CONNECTORS = eINSTANCE.getView_DisplayConnectors();
 
 		/**
+		 * The meta object literal for the '<em><b>Id</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VIEW__ID = eINSTANCE.getView_Id();
+
+		/**
 		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MDisplayConnector <em>Display Connector</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1666,6 +1872,14 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 		 * @generated
 		 */
 		EReference DISPLAY_CONNECTOR__DISPLAY = eINSTANCE.getDisplayConnector_Display();
+
+		/**
+		 * The meta object literal for the '<em><b>Id</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DISPLAY_CONNECTOR__ID = eINSTANCE.getDisplayConnector_Id();
 
 		/**
 		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MAnalysisComponent <em>Analysis Component</em>}' class.
@@ -1700,6 +1914,14 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ANALYSIS_COMPONENT__PROPERTIES = eINSTANCE.getAnalysisComponent_Properties();
+
+		/**
+		 * The meta object literal for the '<em><b>Id</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ANALYSIS_COMPONENT__ID = eINSTANCE.getAnalysisComponent_Id();
 
 	}
 
