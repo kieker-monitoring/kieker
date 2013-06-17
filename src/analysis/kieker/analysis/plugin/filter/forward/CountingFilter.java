@@ -16,19 +16,14 @@
 
 package kieker.analysis.plugin.filter.forward;
 
-import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicLong;
 
 import kieker.analysis.IProjectContext;
-import kieker.analysis.display.Image;
-import kieker.analysis.display.MeterGauge;
-import kieker.analysis.display.PlainText;
-import kieker.analysis.display.XYPlot;
-import kieker.analysis.display.annotation.Display;
-import kieker.analysis.plugin.annotation.InputPort;
-import kieker.analysis.plugin.annotation.OutputPort;
+import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
+import kieker.analysis.port.InputPort;
+import kieker.analysis.port.OutputPort;
 import kieker.common.configuration.Configuration;
 
 /**
@@ -40,47 +35,23 @@ import kieker.common.configuration.Configuration;
  * 
  * @since 1.4
  */
-@Plugin(
-		description = "A filter counting the elements flowing through this filter",
-		outputPorts = {
-			@OutputPort(name = CountingFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, eventTypes = { Object.class }, description = "Provides each incoming object"),
-			@OutputPort(name = CountingFilter.OUTPUT_PORT_NAME_COUNT, eventTypes = { Long.class }, description = "Provides the current object count")
-		})
+@Plugin(description = "A filter counting the elements flowing through this filter")
 public final class CountingFilter extends AbstractFilterPlugin {
-
-	/**
-	 * The name of the input port receiving the incoming events.
-	 */
-	public static final String INPUT_PORT_NAME_EVENTS = "inputEvents";
-
-	/**
-	 * The name of the output port passing the incoming events.
-	 */
-	public static final String OUTPUT_PORT_NAME_RELAYED_EVENTS = "relayedEvents";
-	/**
-	 * The name of the output port which delivers the current counter value.
-	 */
-	public static final String OUTPUT_PORT_NAME_COUNT = "currentEventCount";
 
 	private final AtomicLong counter = new AtomicLong();
 
 	private volatile long timeStampOfInitialization;
 
-	private final PlainText plainText = new PlainText();
-	private final MeterGauge meterGauge = new MeterGauge();
-	private final XYPlot xyPlot = new XYPlot(50);
-	private final Image image = new Image();
+	private final OutputPort currentEventCountOutputPort;
+	private final OutputPort relayedEventsOutputPort;
+	private final InputPort incomingEventsInputPort;
 
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * @param projectContext
-	 *            The project context for this component.
-	 */
-	public CountingFilter(final Configuration configuration, final IProjectContext projectContext) {
+	public CountingFilter(final Configuration configuration, final IProjectContext projectContext) throws AnalysisConfigurationException {
 		super(configuration, projectContext);
+
+		this.relayedEventsOutputPort = new OutputPort(new Class<?>[] { Object.class });
+		this.currentEventCountOutputPort = new OutputPort(new Class<?>[] { Long.class });
+		this.incomingEventsInputPort = new InputPort(new Class<?>[] { Object.class }, this, "inputEvent");
 	}
 
 	/**
@@ -106,46 +77,21 @@ public final class CountingFilter extends AbstractFilterPlugin {
 	 * @param event
 	 *            The next event.
 	 */
-	@InputPort(name = INPUT_PORT_NAME_EVENTS, eventTypes = { Object.class }, description = "Receives incoming objects to be counted and forwarded")
 	public final void inputEvent(final Object event) {
 		final Long count = CountingFilter.this.counter.incrementAndGet();
 
-		this.updateDisplays();
-
-		super.deliver(OUTPUT_PORT_NAME_RELAYED_EVENTS, event);
-		super.deliver(OUTPUT_PORT_NAME_COUNT, count);
+		this.relayedEventsOutputPort.deliver(event);
+		this.currentEventCountOutputPort.deliver(count);
 	}
 
-	private void updateDisplays() {
-		// Meter gauge
-		this.meterGauge.setIntervals("", Arrays.asList((Number) 10, 20, 40, 100), Arrays.asList("66cc66, 93b75f, E7E658, cc6666"));
-		this.meterGauge.setValue("", this.counter);
+	@kieker.analysis.plugin.annotation.OutputPort
+	public final OutputPort getRelayedEventsOutputPort() {
+		return this.relayedEventsOutputPort;
+	}
 
-		// XY Plot
-		final long timeStampDeltaInSeconds = (System.currentTimeMillis() - this.timeStampOfInitialization) / 1000;
-		this.xyPlot.setEntry("", timeStampDeltaInSeconds, this.counter.get());
-
-		// Plain text
-		this.plainText.setText(Long.toString(this.counter.get()));
-
-		// Image
-
-		// final String value = Long.toString(this.counter.get());
-		// final int width = this.image.getImage().getWidth();
-		// final int height = this.image.getImage().getHeight();
-		// final Graphics2D g = this.image.getGraphics();
-		//
-		// g.setFont(g.getFont().deriveFont(20.0f));
-		//
-		// g.setColor(Color.white);
-		// g.fillRect(0, 0, width - 1, height - 1);
-		// g.setColor(Color.gray);
-		// g.drawRect(0, 0, width - 2, height - 2);
-		//
-		// final Rectangle2D bounds = g.getFontMetrics().getStringBounds(value, g);
-		//
-		// g.drawString(value, (int) (width - bounds.getWidth()) / 2, (int) (height - bounds.getHeight()) / 2);
-
+	@kieker.analysis.plugin.annotation.InputPort
+	public final InputPort getIncomingEventsInputPort() {
+		return this.incomingEventsInputPort;
 	}
 
 	@Override
@@ -156,26 +102,6 @@ public final class CountingFilter extends AbstractFilterPlugin {
 		} else {
 			return false;
 		}
-	}
-
-	@Display(name = "Visual Counter Display")
-	public final Image imageDisplay() {
-		return this.image;
-	}
-
-	@Display(name = "Counter Display")
-	public final PlainText plainTextDisplay() {
-		return this.plainText;
-	}
-
-	@Display(name = "XYPlot Counter Display")
-	public final XYPlot xyPlotDisplay() {
-		return this.xyPlot;
-	}
-
-	@Display(name = "Meter Gauge Counter Display")
-	public final MeterGauge meterGaugeDisplay() {
-		return this.meterGauge;
 	}
 
 }
