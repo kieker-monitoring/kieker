@@ -66,7 +66,7 @@ ${TRACE_ANALYSIS_SH} \
 
 
 # Should be enabled only if the reference pdfs shall be created (otherwise the release test script is broken):
-${FILE_CONVERTER_SH} "./${OUTDIR}" pdf
-for f in "./${OUTDIR}"/*.pdf; do
-    pdfcrop "$f"
-done
+#${FILE_CONVERTER_SH} "./${OUTDIR}" pdf
+#for f in "./${OUTDIR}"/*.pdf; do
+#    pdfcrop "$f"
+#done
