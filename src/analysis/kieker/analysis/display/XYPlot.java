@@ -66,6 +66,12 @@ public class XYPlot extends AbstractDisplay {
 		}
 	}
 
+	/**
+	 * A helper class representing a simple LRU cache with fixed size.
+	 * 
+	 * @author Nils Christian Ehmke
+	 * @since 1.8
+	 */
 	private static class CacheMap extends LinkedHashMap<Object, Number> {
 
 		private static final long serialVersionUID = 1L;

@@ -190,10 +190,16 @@ public final class TimeReader extends AbstractReaderPlugin {
 	 */
 	protected class TimestampEventTask implements Runnable {
 
+		/**
+		 * Creates a new task.
+		 */
 		public TimestampEventTask() {
 			// empty default constructor
 		}
 
+		/**
+		 * Executes the task.
+		 */
 		public void run() {
 			TimeReader.this.sendTimestampEvent();
 		}
