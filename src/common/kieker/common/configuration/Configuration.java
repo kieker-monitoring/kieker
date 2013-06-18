@@ -219,10 +219,10 @@ public final class Configuration extends Properties {
 
 		// resolve ., .., and //
 		for (final String component : components) {
-			if ((".").equals(component)) {
+			if (".".equals(component)) {
 				continue;
-			} else if (component.equals("..")) {
-				if (!path.isEmpty() && !("..").equals(path.getLast())) {
+			} else if ("..".equals(component)) {
+				if (!path.isEmpty() && !"..".equals(path.getLast())) {
 					path.removeLast();
 				} else {
 					path.add("..");
@@ -253,7 +253,7 @@ public final class Configuration extends Properties {
 		while (result.startsWith("/../")) {
 			result = result.substring(3);
 		}
-		if (("/..").equals(result)) {
+		if ("/..".equals(result)) {
 			result = "/";
 		} else if ("".equals(result)) {
 			result = "";
