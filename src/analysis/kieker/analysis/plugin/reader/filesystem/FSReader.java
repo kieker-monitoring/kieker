@@ -108,7 +108,9 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 		// start all reader
 		int notInitializesReaders = 0;
 		for (final String inputDirFn : this.inputDirs) {
-			final File inputDir = new File(inputDirFn);
+			// Make sure that white spaces in paths are handled correctly
+			final File inputDir = new File(inputDirFn.replaceAll("%20", " "));
+
 			final Thread readerThread;
 			if (inputDir.isDirectory()) {
 				readerThread = new Thread(new FSDirectoryReader(inputDir, this, this.ignoreUnknownRecordTypes));
