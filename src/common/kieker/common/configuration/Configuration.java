@@ -208,7 +208,7 @@ public final class Configuration extends Properties {
 	 */
 	public static final String convertToPath(final String pathname) {
 		if (pathname.length() == 0) {
-			return ".";
+			return pathname;
 		}
 
 		final String workingPathname = pathname.replace('\\', '/');
@@ -244,7 +244,9 @@ public final class Configuration extends Properties {
 		for (int i = 0; i < (numberPathElements - 1); i++) {
 			sb.append(pathIter.next()).append('/');
 		}
-		sb.append(pathIter.next());
+		if (pathIter.hasNext()) {
+			sb.append(pathIter.next());
+		}
 
 		String result = sb.toString();
 
@@ -254,7 +256,7 @@ public final class Configuration extends Properties {
 		if (result.equals("/..")) {
 			result = "/";
 		} else if ("".equals(result)) {
-			result = ".";
+			result = "";
 		}
 
 		return result;
