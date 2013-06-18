@@ -26,6 +26,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
  * <ul>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MDisplay#getName <em>Name</em>}</li>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MDisplay#getParent <em>Parent</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MDisplay#getId <em>Id</em>}</li>
  * </ul>
  * </p>
  *
@@ -51,6 +52,26 @@ public class MDisplay extends EObjectImpl implements MIDisplay {
 	 * @ordered
 	 */
 	protected String name = NAME_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getId() <em>Id</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getId()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String ID_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getId() <em>Id</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getId()
+	 * @generated
+	 * @ordered
+	 */
+	protected String id = ID_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -138,6 +159,27 @@ public class MDisplay extends EObjectImpl implements MIDisplay {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getId() {
+		return id;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setId(String newId) {
+		String oldId = id;
+		id = newId;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, MIAnalysisMetaModelPackage.DISPLAY__ID, oldId, id));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -189,6 +231,8 @@ public class MDisplay extends EObjectImpl implements MIDisplay {
 				return getName();
 			case MIAnalysisMetaModelPackage.DISPLAY__PARENT:
 				return getParent();
+			case MIAnalysisMetaModelPackage.DISPLAY__ID:
+				return getId();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -206,6 +250,9 @@ public class MDisplay extends EObjectImpl implements MIDisplay {
 				return;
 			case MIAnalysisMetaModelPackage.DISPLAY__PARENT:
 				setParent((MIPlugin)newValue);
+				return;
+			case MIAnalysisMetaModelPackage.DISPLAY__ID:
+				setId((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -225,6 +272,9 @@ public class MDisplay extends EObjectImpl implements MIDisplay {
 			case MIAnalysisMetaModelPackage.DISPLAY__PARENT:
 				setParent((MIPlugin)null);
 				return;
+			case MIAnalysisMetaModelPackage.DISPLAY__ID:
+				setId(ID_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -241,6 +291,8 @@ public class MDisplay extends EObjectImpl implements MIDisplay {
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case MIAnalysisMetaModelPackage.DISPLAY__PARENT:
 				return getParent() != null;
+			case MIAnalysisMetaModelPackage.DISPLAY__ID:
+				return ID_EDEFAULT == null ? id != null : !ID_EDEFAULT.equals(id);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -257,6 +309,8 @@ public class MDisplay extends EObjectImpl implements MIDisplay {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
 		result.append(name);
+		result.append(", id: ");
+		result.append(id);
 		result.append(')');
 		return result.toString();
 	}
