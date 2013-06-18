@@ -65,7 +65,7 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 
 	private static final Log LOG = LogFactory.getLog(ListCollectionFilter.class);
 
-	private final LinkedList<T> list; // NOCS (we actually need LinkedLIst here, no good interface is provided)
+	private final LinkedList<T> list; // NOCS NOPMD (we actually need LinkedLIst here, no good interface is provided)
 
 	private final int maxNumberOfEntries;
 	private final boolean unboundedList;
@@ -75,6 +75,7 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 	 * An enum for all possible list full behaviors.
 	 * 
 	 * @author Jan Waller
+	 * @since 1.8
 	 */
 	public enum ListFullBehavior {
 		dropOldest, ignore, error;
@@ -145,7 +146,7 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 					if (this.maxNumberOfEntries > this.list.size()) {
 						this.list.add(data);
 					} else {
-						throw new RuntimeException("Too many records for ListCollectionFilter, it was initialized with capacity: " + this.maxNumberOfEntries);
+						throw new RuntimeException("Too many records for ListCollectionFilter, it was initialized with capacity: " + this.maxNumberOfEntries); // NOPMD
 					}
 				}
 				break;
