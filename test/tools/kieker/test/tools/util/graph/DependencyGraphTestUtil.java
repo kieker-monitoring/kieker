@@ -148,7 +148,7 @@ public final class DependencyGraphTestUtil {
 
 		// Correct the behavior of the extended list filter as properties are not inherited.
 		final Configuration graphReceiverConfiguration = new Configuration();
-		graphReceiverConfiguration.setProperty(ListCollectionFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES,
+		graphReceiverConfiguration.setProperty(ListCollectionFilter.CONFIG_PROPERTY_NAME_MAX_NUMBER_OF_ENTRIES,
 				ListCollectionFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES);
 		final GraphReceiverPlugin graphReceiver = new GraphReceiverPlugin(graphReceiverConfiguration, analysisController);
 

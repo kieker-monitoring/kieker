@@ -16,8 +16,6 @@
 
 package kieker.analysis.plugin.filter.forward;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -38,7 +36,7 @@ import kieker.common.logging.LogFactory;
  * @param <T>
  *            The type of the list.
  * 
- * @author Nils Ehmke, Jan Waller
+ * @author Nils Ehmke, Jan Waller, Bjoern Weissenfels
  * 
  * @since 1.6
  */
@@ -46,33 +44,41 @@ import kieker.common.logging.LogFactory;
 		description = "A filter collecting incoming objects in a list (mostly used in testing scenarios)",
 		outputPorts = @OutputPort(name = ListCollectionFilter.OUTPUT_PORT_NAME, eventTypes = { Object.class }, description = "Provides each incoming object"),
 		configuration = {
-			@Property(name = ListCollectionFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES,
+			@Property(name = ListCollectionFilter.CONFIG_PROPERTY_NAME_MAX_NUMBER_OF_ENTRIES,
 					defaultValue = ListCollectionFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES,
-					description = "Sets the number of stored values."),
+					description = "Sets the maximum number of stored values."),
 			@Property(name = ListCollectionFilter.CONFIG_PROPERTY_NAME_LIST_FULL_BEHAVIOR,
 					defaultValue = ListCollectionFilter.CONFIG_PROPERTY_VALUE_LIST_FULL_BEHAVIOR,
 					description = "Determines what happens to new objects when the list is full.") })
 public class ListCollectionFilter<T> extends AbstractFilterPlugin {
+
 	/** The name of the input port for the incoming objects. */
 	public static final String INPUT_PORT_NAME = "inputObject";
-	/** The name of the output port for the forwared objects. */
+	/** The name of the output port for the forwarded objects. */
 	public static final String OUTPUT_PORT_NAME = "outputObjects";
 
-	public static final String CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES = "numberOfEntries";
+	public static final String CONFIG_PROPERTY_NAME_MAX_NUMBER_OF_ENTRIES = "maxNumberOfEntries";
 	public static final String CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES = "-1"; // unlimited per default
 
 	public static final String CONFIG_PROPERTY_NAME_LIST_FULL_BEHAVIOR = "listFullBehavior";
-	public static final String CONFIG_PROPERTY_VALUE_LIST_FULL_BEHAVIOR = "dropOldest";
-
-	public static final String LIST_FULL_BEHAVIOR_DROP_OLDEST = "dropOldest";
-	public static final String LIST_FULL_BEHAVIOR_IGNORE = "ignore";
-	public static final String LIST_FULL_BEHAVIOR_ERROR = "error";
+	public static final String CONFIG_PROPERTY_VALUE_LIST_FULL_BEHAVIOR = "dropOldest"; // must really be a String here
 
 	private static final Log LOG = LogFactory.getLog(ListCollectionFilter.class);
 
-	private final int numberOfEntries;
-	private final String listFullBehavior;
-	private final List<T> list;
+	private final LinkedList<T> list; // NOCS (we actually need LinkedLIst here, no good interface is provided)
+
+	private final int maxNumberOfEntries;
+	private final boolean unboundedList;
+	private final ListFullBehavior listFullBehavior;
+
+	/**
+	 * An enum for all possible list full behaviors.
+	 * 
+	 * @author Jan Waller
+	 */
+	public enum ListFullBehavior {
+		dropOldest, ignore, error;
+	}
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -86,17 +92,23 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 		super(configuration, projectContext);
 
 		// Read the configuration
-		this.numberOfEntries = configuration.getIntProperty(CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES);
-		this.listFullBehavior = configuration.getStringProperty(CONFIG_PROPERTY_NAME_LIST_FULL_BEHAVIOR);
-		if (this.numberOfEntries == -1) {
-			this.list = Collections.synchronizedList(new ArrayList<T>());
+		this.maxNumberOfEntries = configuration.getIntProperty(CONFIG_PROPERTY_NAME_MAX_NUMBER_OF_ENTRIES);
+		if (this.maxNumberOfEntries < 0) {
+			this.unboundedList = true;
 		} else {
-			if (LIST_FULL_BEHAVIOR_DROP_OLDEST.equals(this.listFullBehavior)) {
-				this.list = Collections.synchronizedList(new LinkedList<T>());
-			} else {
-				this.list = Collections.synchronizedList(new ArrayList<T>());
-			}
+			this.unboundedList = false;
 		}
+		final String strListFullBehavior = configuration.getStringProperty(CONFIG_PROPERTY_NAME_LIST_FULL_BEHAVIOR);
+		ListFullBehavior tmpListFullBehavior;
+		try {
+			tmpListFullBehavior = ListFullBehavior.valueOf(strListFullBehavior);
+		} catch (final IllegalArgumentException ex) {
+			LOG.warn(strListFullBehavior + " is no valid list full behavior! Using 'ignore' instead.");
+			tmpListFullBehavior = ListFullBehavior.ignore;
+		}
+		this.listFullBehavior = tmpListFullBehavior;
+
+		this.list = new LinkedList<T>();
 	}
 
 	/**
@@ -106,26 +118,40 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 	 *            The next element.
 	 */
 	@InputPort(name = ListCollectionFilter.INPUT_PORT_NAME)
-	@SuppressWarnings("unchecked")
-	public synchronized void input(final Object data) {
-		if (this.numberOfEntries == -1) {
-			this.list.add((T) data);
+	public void input(final T data) {
+		if (this.unboundedList) {
+			synchronized (this.list) {
+				this.list.add(data);
+			}
 		} else {
-			if (LIST_FULL_BEHAVIOR_DROP_OLDEST.equals(this.listFullBehavior)) {
-				this.list.add((T) data);
-				if (this.numberOfEntries < this.size()) {
-					((LinkedList<T>) this.list).removeFirst();
+			switch (this.listFullBehavior) {
+			case dropOldest:
+				synchronized (this.list) {
+					this.list.add(data);
+					if (this.list.size() > this.maxNumberOfEntries) {
+						this.list.removeFirst();
+					}
 				}
-			} else if (LIST_FULL_BEHAVIOR_IGNORE.equals(this.listFullBehavior)) {
-				if (this.numberOfEntries > this.size()) {
-					this.list.add((T) data);
+				break;
+			case ignore:
+				synchronized (this.list) {
+					if (this.maxNumberOfEntries > this.list.size()) {
+						this.list.add(data);
+					}
 				}
-			} else if (LIST_FULL_BEHAVIOR_ERROR.equals(this.listFullBehavior)) {
-				if (this.numberOfEntries > this.size()) {
-					this.list.add((T) data);
-				} else {
-					LOG.error("Too many records for ListCollectionFilter, it was initialized with capacity: " + this.numberOfEntries);
+				break;
+			case error:
+				synchronized (this.list) {
+					if (this.maxNumberOfEntries > this.list.size()) {
+						this.list.add(data);
+					} else {
+						throw new RuntimeException("Too many records for ListCollectionFilter, it was initialized with capacity: " + this.maxNumberOfEntries);
+					}
 				}
+				break;
+			default:
+				// should not happen
+				break;
 			}
 		}
 		super.deliver(OUTPUT_PORT_NAME, data);
@@ -135,19 +161,24 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 	 * Clears the list.
 	 */
 	public void clear() {
-		this.list.clear();
+		synchronized (this.list) {
+			this.list.clear();
+		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<T> getList() {
-		return new CopyOnWriteArrayList<T>((T[]) this.list.toArray());
+		synchronized (this.list) {
+			return new CopyOnWriteArrayList<T>(this.list);
+		}
 	}
 
 	/**
 	 * @return The current number of collected objects.
 	 */
 	public int size() {
-		return this.list.size();
+		synchronized (this.list) {
+			return this.list.size();
+		}
 	}
 
 	/**
@@ -156,9 +187,8 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, String.valueOf(this.numberOfEntries));
-		configuration.setProperty(CONFIG_PROPERTY_NAME_LIST_FULL_BEHAVIOR, this.listFullBehavior);
+		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_NUMBER_OF_ENTRIES, String.valueOf(this.maxNumberOfEntries));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_LIST_FULL_BEHAVIOR, this.listFullBehavior.name());
 		return configuration;
 	}
-
 }
