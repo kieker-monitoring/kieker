@@ -221,7 +221,7 @@ public final class Configuration extends Properties {
 		for (final String component : components) {
 			if (".".equals(component)) {
 				continue;
-			} else if (component.isEmpty()) {
+			} else if ("".equals(component)) {
 				// Drop empty elements
 				continue;
 			} else if ("..".equals(component)) {
