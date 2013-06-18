@@ -106,6 +106,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	 */
 	public boolean read() {
 		// start all reader
+		int notInitializesReaders = 0;
 		for (final String inputDirFn : this.inputDirs) {
 			final File inputDir = new File(inputDirFn);
 			final Thread readerThread;
@@ -115,13 +116,14 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 				readerThread = new Thread(new FSZipReader(inputDir, this, this.ignoreUnknownRecordTypes));
 			} else {
 				LOG.warn("Invalid Directory or filename (no Kieker log): " + inputDirFn);
+				notInitializesReaders++;
 				continue;
 			}
 			readerThread.setDaemon(true);
 			readerThread.start();
 		}
 		// consume incoming records
-		int readingReaders = this.inputDirs.length;
+		int readingReaders = this.inputDirs.length - notInitializesReaders;
 		while (readingReaders > 0) {
 			synchronized (this.recordQueue) { // with newMonitoringRecord()
 				while (this.recordQueue.size() < readingReaders) {
