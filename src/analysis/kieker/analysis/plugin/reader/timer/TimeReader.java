@@ -65,16 +65,24 @@ import kieker.common.record.misc.TimestampRecord;
 		})
 public final class TimeReader extends AbstractReaderPlugin {
 
+	/** The name of the output port for the timestamps. */
 	public static final String OUTPUT_PORT_NAME_TIMESTAMPS = "timestamps";
+	/** The name of the output port for the timestamp records. */
 	public static final String OUTPUT_PORT_NAME_TIMESTAMP_RECORDS = "timestampRecords";
 
+	/** The name of the property determining the update interval in nanoseconds. */
 	public static final String CONFIG_PROPERTY_NAME_UPDATE_INTERVAL_NS = "updateIntervalNS";
+	/** The default value for the update interval (1 second). */
 	public static final String CONFIG_PROPERTY_VALUE_UPDATE_INTERVAL_NS = "1000000000";
 
+	/** The name of the property determining the initial delay in nanoseconds. */
 	public static final String CONFIG_PROPERTY_NAME_DELAY_NS = "delayNS";
+	/** The default value for the initial delay (0 seconds). */
 	public static final String CONFIG_PROPERTY_VALUE_DELAY_NS = "0";
 
+	/** The name of the property determining whether the read method of this reader is blocking or not. */
 	public static final String CONFIG_PROPERTY_NAME_BLOCKING_READ = "blockingRead";
+	/** The default value for the blocking read mode. */
 	public static final String CONFIG_PROPERTY_VALUE_BLOCKING_READ = "true";
 
 	private static final Log LOG = LogFactory.getLog(TimeReader.class);

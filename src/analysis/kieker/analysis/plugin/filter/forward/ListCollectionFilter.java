@@ -36,7 +36,7 @@ import kieker.common.logging.LogFactory;
  * @param <T>
  *            The type of the list.
  * 
- * @author Nils Ehmke, Jan Waller, Bjoern Weissenfels
+ * @author Nils Christian Ehmke, Jan Waller, Bjoern Weissenfels
  * 
  * @since 1.6
  */
@@ -57,10 +57,14 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 	/** The name of the output port for the forwarded objects. */
 	public static final String OUTPUT_PORT_NAME = "outputObjects";
 
+	/** The name of the property determining the maximal number of allowed entries. */
 	public static final String CONFIG_PROPERTY_NAME_MAX_NUMBER_OF_ENTRIES = "maxNumberOfEntries";
+	/** The default value for the maximal number of allowed entries (unlimited. */
 	public static final String CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES = "-1"; // unlimited per default
 
+	/** The name of the property determining the behavior of a full list. */
 	public static final String CONFIG_PROPERTY_NAME_LIST_FULL_BEHAVIOR = "listFullBehavior";
+	/** The default value for the behavior of a full list (drop oldest). */
 	public static final String CONFIG_PROPERTY_VALUE_LIST_FULL_BEHAVIOR = "dropOldest"; // must really be a String here
 
 	private static final Log LOG = LogFactory.getLog(ListCollectionFilter.class);
@@ -78,7 +82,12 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 	 * @since 1.8
 	 */
 	public enum ListFullBehavior {
-		dropOldest, ignore, error;
+		/** Drops the oldest entry. */
+		dropOldest,
+		/** Ignores the given entry. */
+		ignore,
+		/** Throws a runtime exception. */
+		error;
 	}
 
 	/**
@@ -146,7 +155,8 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 					if (this.maxNumberOfEntries > this.list.size()) {
 						this.list.add(data);
 					} else {
-						throw new RuntimeException("Too many records for ListCollectionFilter, it was initialized with capacity: " + this.maxNumberOfEntries); // NOPMD
+						throw new RuntimeException("Too many records for ListCollectionFilter, it was initialized with capacity: " // NOPMD
+								+ this.maxNumberOfEntries); // NOPMD
 					}
 				}
 				break;
@@ -167,6 +177,11 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 		}
 	}
 
+	/**
+	 * Delivers a copy of the internal list.
+	 * 
+	 * @return The content of the internal list.
+	 */
 	public List<T> getList() {
 		synchronized (this.list) {
 			return new CopyOnWriteArrayList<T>(this.list);
@@ -188,8 +203,10 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
+
 		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_NUMBER_OF_ENTRIES, String.valueOf(this.maxNumberOfEntries));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_LIST_FULL_BEHAVIOR, this.listFullBehavior.name());
+
 		return configuration;
 	}
 }

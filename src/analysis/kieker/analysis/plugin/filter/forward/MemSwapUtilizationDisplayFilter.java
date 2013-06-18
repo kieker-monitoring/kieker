@@ -53,11 +53,15 @@ import kieker.common.record.system.MemSwapUsageRecord;
 				description = "Sets the number of max plot entries per record entry"))
 public class MemSwapUtilizationDisplayFilter extends AbstractFilterPlugin {
 
+	/** The name of the input port receiving incoming events. */
 	public static final String INPUT_PORT_NAME_EVENTS = "inputEvents";
 
+	/** The name of the output port delivering the relayed events. */
 	public static final String OUTPUT_PORT_NAME_RELAYED_EVENTS = "relayedEvents";
 
+	/** The name of the property determining the number of entries per series in the plot. */
 	public static final String CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES = "numberOfEntries";
+	/** The default value for the number of entries per series in the plot (100). */
 	public static final String CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES = "100";
 
 	private static final Log LOG = LogFactory.getLog(MemSwapUtilizationDisplayFilter.class);
@@ -77,6 +81,14 @@ public class MemSwapUtilizationDisplayFilter extends AbstractFilterPlugin {
 
 	private final TimeUnit timeunit;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this filter.
+	 * @param projectContext
+	 *            The project context for this filter.
+	 */
 	public MemSwapUtilizationDisplayFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
@@ -99,6 +111,12 @@ public class MemSwapUtilizationDisplayFilter extends AbstractFilterPlugin {
 		this.swapPieChart = new PieChart();
 	}
 
+	/**
+	 * This method represents the input port receiving the incoming events.
+	 * 
+	 * @param record
+	 *            The record to display and relay.
+	 */
 	@InputPort(name = MemSwapUtilizationDisplayFilter.INPUT_PORT_NAME_EVENTS, eventTypes = { MemSwapUsageRecord.class })
 	public void input(final MemSwapUsageRecord record) {
 		this.updateDisplays(record);

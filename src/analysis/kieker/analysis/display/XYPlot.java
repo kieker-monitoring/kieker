@@ -35,11 +35,25 @@ public class XYPlot extends AbstractDisplay {
 	private final ConcurrentMap<String, CacheMap> entries;
 	private final int maxEntriesPerSeries;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param maxEntriesPerSeries
+	 *            The maximal number of allowed entries per series in this plot.
+	 */
 	public XYPlot(final int maxEntriesPerSeries) {
 		this.entries = new ConcurrentHashMap<String, CacheMap>();
 		this.maxEntriesPerSeries = maxEntriesPerSeries;
 	}
 
+	/**
+	 * Delivers the entries for the given series.
+	 * 
+	 * @param key
+	 *            The name of the series.
+	 * 
+	 * @return A map with the series entries.
+	 */
 	public Map<Object, Number> getEntries(final String key) {
 		synchronized (this.entries.get(key)) {
 			return Collections.unmodifiableMap(this.entries.get(key));
@@ -50,6 +64,16 @@ public class XYPlot extends AbstractDisplay {
 		return this.entries.keySet();
 	}
 
+	/**
+	 * Sets a value for the given series.
+	 * 
+	 * @param key
+	 *            The name of the series to modify.
+	 * @param x
+	 *            The x value.
+	 * @param y
+	 *            The y value.
+	 */
 	public void setEntry(final String key, final Object x, final Number y) {
 		final CacheMap newCacheMap = new CacheMap(this.maxEntriesPerSeries);
 		final CacheMap oldCacheMap = this.entries.putIfAbsent(key, newCacheMap);
