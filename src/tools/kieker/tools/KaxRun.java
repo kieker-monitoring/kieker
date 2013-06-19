@@ -38,9 +38,8 @@ import kieker.tools.util.CLIHelpFormatter;
  * @since 1.5
  */
 public final class KaxRun {
-	private static final Log LOG = LogFactory.getLog(KaxRun.class);
 
-	private static final long COOLDOWN_TIME_MS = 5 * 60 * 1000; // 5 Minutes
+	private static final Log LOG = LogFactory.getLog(KaxRun.class);
 
 	/**
 	 * Private constructor to avoid instantiation.
@@ -84,13 +83,7 @@ public final class KaxRun {
 			}
 
 			if (j == 0) {
-				LOG.info("Begin of cooldown phase");
-				try {
-					Thread.sleep(COOLDOWN_TIME_MS);
-				} catch (final InterruptedException ex) {
-					LOG.error("Interrupted Exception", ex);
-				}
-				LOG.info("End of cooldown phase");
+				LOG.info("Begin of experiment");
 			}
 		}
 	}

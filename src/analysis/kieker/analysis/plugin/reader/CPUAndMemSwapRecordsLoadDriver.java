@@ -5,8 +5,6 @@ import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.system.CPUUtilizationRecord;
 import kieker.common.record.system.MemSwapUsageRecord;
@@ -31,9 +29,6 @@ public class CPUAndMemSwapRecordsLoadDriver extends AbstractReaderPlugin {
 	public static final java.lang.String CONFIG_PROPERTY_NAME_NUMBER_CPUS = "numberCPUs";
 	public static final java.lang.String CONFIG_PROPERTY_VALUE_NUMBER_CPUS = "4";
 
-	private static final Log LOG = LogFactory.getLog(CPUAndMemSwapRecordsLoadDriver.class);
-	private static final long COOLDOWN_TIME_MS = 5 * 60 * 1000; // 5 Minutes
-
 	private final long numberDataSets;
 	private final int numberCPUs;
 
@@ -45,24 +40,11 @@ public class CPUAndMemSwapRecordsLoadDriver extends AbstractReaderPlugin {
 	}
 
 	public boolean read() {
-		for (int j = 0; j < 2; j++) {
-			for (long i = 0; i < this.numberDataSets; i++) {
-				for (int cpuID = 0; cpuID < this.numberCPUs; cpuID++) {
-					super.deliver(OUTPUT_PORT_NAME_RECORDS, this.createNextCPURecord(cpuID, i));
-				}
-				super.deliver(OUTPUT_PORT_NAME_RECORDS, this.createNextMemSwapRecord(i));
+		for (long i = 0; i < this.numberDataSets; i++) {
+			for (int cpuID = 0; cpuID < this.numberCPUs; cpuID++) {
+				super.deliver(OUTPUT_PORT_NAME_RECORDS, this.createNextCPURecord(cpuID, i));
 			}
-
-			// Begin a cooldown phase before starting with the next records
-			if (j == 0) {
-				LOG.info("Begin of cooldown phase");
-				try {
-					Thread.sleep(COOLDOWN_TIME_MS);
-				} catch (final InterruptedException ex) {
-					LOG.error("Interrupted Exception", ex);
-				}
-				LOG.info("End of cooldown phase");
-			}
+			super.deliver(OUTPUT_PORT_NAME_RECORDS, this.createNextMemSwapRecord(i));
 		}
 
 		return true;
