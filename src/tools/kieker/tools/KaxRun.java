@@ -53,7 +53,8 @@ public final class KaxRun {
 	 *            The command line arguments (including the name of the .kax file in question).
 	 */
 	public static final void main(final String[] args) {
-		for (int j = 0; j < 2; j++) {
+		for (int j = 0; j < 5; j++) {
+			LOG.info("Begin of experiment (" + i + ")");
 			// create cmdline options
 			final Options options = new Options();
 			final Option inputOption = new Option("i", "input", true, "the analysis project file (.kax) loaded");
@@ -80,10 +81,6 @@ public final class KaxRun {
 				ctrl.run();
 			} catch (final Exception ex) { // NOPMD NOCS (log all errors)
 				LOG.error("Error", ex);
-			}
-
-			if (j == 0) {
-				LOG.info("Begin of experiment");
 			}
 		}
 	}
