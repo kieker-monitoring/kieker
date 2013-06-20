@@ -9,8 +9,10 @@ import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.CPUUtilizationDisplayFilter;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.filter.forward.MemSwapUtilizationDisplayFilter;
+import kieker.analysis.plugin.filter.forward.MethodAndComponentFlowDisplayFilter;
 import kieker.analysis.plugin.filter.select.TypeFilter;
 import kieker.analysis.plugin.reader.jmx.JMXReader;
+import kieker.analysis.plugin.reader.timer.TimeReader;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.executionRecordTransformation.ExecutionRecordTransformationFilter;
@@ -27,8 +29,9 @@ import livedemo.filter.OER2RecordFilter;
 public class AnalysisBean {
 	
 	private final String numberOfCpuAndMemSwapEntries = "20";
-	private final String numberOfRecordListEntries = "100";
-	private final String numberOfResponsetimeEntries = "200";
+	private final String numberOfRecordListEntries = "50";
+	private final String numberOfResponsetimeEntries = "20";
+	private final String timeReaderUpdateIntervallNS = "2000000000";
 	
 	private final AnalysisController analysisInstance;
 	private final AnalysisControllerThread act;
@@ -39,6 +42,7 @@ public class AnalysisBean {
 	private final MemSwapUtilizationDisplayFilter memSwapFilter;
 	private final ListCollectionFilter<Record> recordListFilter;
 	private final MethodResponsetimeDisplayFilter responsetimeFilter;
+	private final MethodAndComponentFlowDisplayFilter tagCloudFilter;
 	
 	
 	public AnalysisBean(){
@@ -58,12 +62,16 @@ public class AnalysisBean {
 		this.memSwapFilter = new MemSwapUtilizationDisplayFilter(memSwapConfiguration, analysisInstance);
 		
 		Configuration recordListConfiguration = new Configuration();
-		recordListConfiguration.setProperty(MemSwapUtilizationDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, this.numberOfRecordListEntries);
+		recordListConfiguration.setProperty(ListCollectionFilter.CONFIG_PROPERTY_NAME_MAX_NUMBER_OF_ENTRIES, this.numberOfRecordListEntries);
+		recordListConfiguration.setProperty(ListCollectionFilter.CONFIG_PROPERTY_NAME_LIST_FULL_BEHAVIOR, "dropOldest");
 		this.recordListFilter = new ListCollectionFilter<Record>(recordListConfiguration, analysisInstance);
 		
 		Configuration responsetimeConfiguration = new Configuration();
-		responsetimeConfiguration.setProperty(MemSwapUtilizationDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, this.numberOfResponsetimeEntries);
+		responsetimeConfiguration.setProperty(MethodResponsetimeDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, this.numberOfResponsetimeEntries);
+		responsetimeConfiguration.setProperty(MethodResponsetimeDisplayFilter.CONFIG_PROPERTY_NAME_RESPONSETIME_TIMEUNIT, "MILLISECONDS");
 		this.responsetimeFilter = new MethodResponsetimeDisplayFilter(responsetimeConfiguration, analysisInstance);
+		
+		this.tagCloudFilter = new MethodAndComponentFlowDisplayFilter(new Configuration(), analysisInstance);
 		
 		try {
 			init();
@@ -80,6 +88,10 @@ public class AnalysisBean {
 		final Configuration jmxReaderConfig = new Configuration();
 		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_SILENT, "true");
 		final JMXReader reader = new JMXReader(jmxReaderConfig, analysisInstance);
+		
+		Configuration timeReaderConfig = new Configuration();
+		timeReaderConfig.setProperty(TimeReader.CONFIG_PROPERTY_NAME_UPDATE_INTERVAL_NS, this.timeReaderUpdateIntervallNS);
+		final TimeReader timeReader = new TimeReader(timeReaderConfig, analysisInstance);
 
 		final Configuration typeFilter1Config = new Configuration();
 		typeFilter1Config.setProperty(TypeFilter.CONFIG_PROPERTY_NAME_TYPES, "kieker.common.record.controlflow.OperationExecutionRecord");
@@ -99,25 +111,37 @@ public class AnalysisBean {
 	
 		analysisInstance.connect(reader, JMXReader.OUTPUT_PORT_NAME_RECORDS,
 				typeFilter1, TypeFilter.INPUT_PORT_NAME_EVENTS);
+		
 		analysisInstance.connect(typeFilter1, TypeFilter.OUTPUT_PORT_NAME_TYPE_MATCH,
-				responsetimeFilter, MethodResponsetimeDisplayFilter.INPUT_PORT_NAME_EVENTS);
-		analysisInstance.connect(responsetimeFilter, MethodResponsetimeDisplayFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
+				responsetimeFilter, MethodResponsetimeDisplayFilter.INPUT_PORT_NAME_RECORDS);
+		
+		analysisInstance.connect(timeReader, TimeReader.OUTPUT_PORT_NAME_TIMESTAMPS,
+				responsetimeFilter, MethodResponsetimeDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS);
+		
+		analysisInstance.connect(typeFilter1, TypeFilter.OUTPUT_PORT_NAME_TYPE_MATCH,
+				tagCloudFilter, MethodAndComponentFlowDisplayFilter.INPUT_PORT_NAME_EVENTS);
+		
+		analysisInstance.connect(typeFilter1, TypeFilter.OUTPUT_PORT_NAME_TYPE_MATCH,
 				oer2RecordFilter, OER2RecordFilter.INPUT_PORT_NAME);
+		
 		analysisInstance.connect(oer2RecordFilter, OER2RecordFilter.OUTPUT_PORT_NAME,
 				recordListFilter, ListCollectionFilter.INPUT_PORT_NAME);
 		
 		analysisInstance.connect(typeFilter1, TypeFilter.OUTPUT_PORT_NAME_TYPE_MISMATCH,
 				typeFilter2, TypeFilter.INPUT_PORT_NAME_EVENTS);
+		
 		analysisInstance.connect(typeFilter2, TypeFilter.OUTPUT_PORT_NAME_TYPE_MATCH, 
 				cpuFilter, CPUUtilizationDisplayFilter.INPUT_PORT_NAME_EVENTS);
 		
 		analysisInstance.connect(typeFilter2, TypeFilter.OUTPUT_PORT_NAME_TYPE_MISMATCH,
 				typeFilter3, TypeFilter.INPUT_PORT_NAME_EVENTS);
+		
 		analysisInstance.connect(typeFilter3, TypeFilter.OUTPUT_PORT_NAME_TYPE_MATCH,
 				memSwapFilter, MemSwapUtilizationDisplayFilter.INPUT_PORT_NAME_EVENTS);
 				
 		analysisInstance.connect(reader, JMXReader.OUTPUT_PORT_NAME_RECORDS, ertf, 
 				ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
+		
 		analysisInstance.connect(ertf, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, 
 				systemModelRepository);
 	}
@@ -144,6 +168,10 @@ public class AnalysisBean {
 	
 	public MethodResponsetimeDisplayFilter getMethodResponsetimeDisplayFilter(){
 		return this.responsetimeFilter;
+	}
+	
+	public MethodAndComponentFlowDisplayFilter getTagCloudFilter(){
+		return this.tagCloudFilter;
 	}
 
 }

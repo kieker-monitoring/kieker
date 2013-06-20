@@ -3,7 +3,6 @@ package livedemo.managedbeans;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -22,7 +21,7 @@ import kieker.tools.traceAnalysis.systemModel.Operation;
 public class SystemModelBean {
 	
 	@ManagedProperty(value = "#{analysisBean}")
-	AnalysisBean analysisBean;
+	private AnalysisBean analysisBean;
 	
 	public SystemModelBean(){
 	}
