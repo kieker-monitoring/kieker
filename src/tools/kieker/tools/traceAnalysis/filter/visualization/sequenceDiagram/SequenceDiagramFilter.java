@@ -17,8 +17,8 @@
 package kieker.tools.traceAnalysis.filter.visualization.sequenceDiagram;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -366,7 +366,8 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 	 */
 	public static void writePicForMessageTrace(final MessageTrace msgTrace, final SDModes sdMode,
 			final String outputFilename, final boolean shortLabels) throws FileNotFoundException, UnsupportedEncodingException {
-		final PrintStream ps = new PrintStream(new FileOutputStream(outputFilename), false, ENCODING);
+		// final PrintStream ps = new PrintStream(new FileOutputStream(outputFilename), false, ENCODING);
+		final PrintStream ps = new PrintStream(new ByteArrayOutputStream(), false, ENCODING);
 		SequenceDiagramFilter.picFromMessageTrace(msgTrace, sdMode, ps, shortLabels);
 		ps.flush();
 		ps.close();
