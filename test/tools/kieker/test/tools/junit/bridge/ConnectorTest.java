@@ -12,6 +12,8 @@ import org.junit.rules.TemporaryFolder;
 
 import kieker.common.configuration.Configuration;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.writer.filesystem.AbstractAsyncFSWriter;
+import kieker.monitoring.writer.filesystem.AsyncFsWriter;
 import kieker.tools.bridge.ServiceContainer;
 
 import kieker.test.common.junit.AbstractKiekerTest;
@@ -47,8 +49,17 @@ public class ConnectorTest extends AbstractKiekerTest {
 		// Assert.assertTrue("Directory could not created", dir.mkdir() == false);
 
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
+
+		final String writer = AsyncFsWriter.class.getName();
+		configuration.setProperty(writer + '.' + AbstractAsyncFSWriter.CONFIG_MAXENTRIESINFILE, "1");
+		// TODO comment: why 2 * SEND_
+		configuration.setProperty(writer + '.' + AbstractAsyncFSWriter.CONFIG_MAXLOGFILES, String.valueOf(TestServiceConnector.SEND_NUMBER_OF_RECORDS * 2));
+		configuration.setProperty(writer + '.' + AbstractAsyncFSWriter.CONFIG_MAXLOGSIZE, "-1");
+		// TODO nutze Konstanten aus AbstractAsyncFSWriter
 		configuration.setProperty("kieker.monitoring.writer.filesystem.AsyncFsWriter.storeInJavaIoTmpdir", "false");
 		configuration.setProperty("kieker.monitoring.writer.filesystem.AsyncFsWriter.customStoragePath", path.getAbsolutePath());
+		// TODO get configuration from kieker.test.monitoring.junit.writer.filesystem.TestLogRotationMaxLogFilesAyncFsWriter
+		// set max file size to 1 record
 
 		final ServiceContainer serviceContainer = new ServiceContainer(configuration,
 				new TestServiceConnector(this));
@@ -58,6 +69,9 @@ public class ConnectorTest extends AbstractKiekerTest {
 			System.out.println("Something went wrong: " + e.getStackTrace());
 			e.printStackTrace();
 		}
+
+		// TODO check number of written records like in kieker.test.monitoring.junit.writer.filesystem.AbstractTestLogRotationMaxLogFiles.checkMaxLogFiles
+		// final File[] logDirs = new File(this.tmpFolder.getRoot().getCanonicalPath()).listFiles();
 
 		// check number of lines in Kieker record file
 		try {
