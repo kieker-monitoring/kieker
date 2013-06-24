@@ -77,7 +77,7 @@ public class JMSClientConnector implements IServiceConnector {
 		this.uri = uri;
 	}
 
-	public IMonitoringRecord deserialize() throws Exception {
+	public IMonitoringRecord deserializeNextRecord() throws Exception {
 		final Message message = this.consumer.receive();
 		if (message != null) {
 			if (message instanceof BytesMessage) {

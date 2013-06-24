@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kiekerMonitoringController-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package kieker.tools.bridge;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
@@ -35,16 +35,16 @@ public class ServiceContainer {
 
 	// TODO: is concurrent access possible to any of these variables? (seems so!) -> volatile, other data structures, ...
 
-	protected boolean active; // is true when the service is running
-	protected long recordCount; // counter for received records
+	protected volatile boolean active; // is true when the service is running
 
+	private static final long DEFAULT_LISTENER_UPDATE_INTERVAL = 100L;
+
+	private final Collection<IServiceListener> listeners = new CopyOnWriteArrayList<IServiceListener>();
+	private final IMonitoringController kiekerMonitoringController;
 	private final IServiceConnector service;
 
-	private final Configuration configuration;
-	private final Collection<IServiceListener> listeners;
-	private long listenerUpdateInterval;
-	private IMonitoringController kieker;
-	private boolean respawn;
+	private volatile boolean respawn;
+	private volatile long listenerUpdateInterval = DEFAULT_LISTENER_UPDATE_INTERVAL;
 
 	/**
 	 * @param configuration
@@ -52,11 +52,9 @@ public class ServiceContainer {
 	 * @param service
 	 *            A service component to handle incoming data
 	 */
-	public ServiceContainer(final Configuration configuration, final IServiceConnector service) {
-		this.setRespawn(false);
-		this.configuration = configuration;
-		this.listeners = new ArrayList<IServiceListener>();
-		this.listenerUpdateInterval = 100; // TODO: extract as constant DEFAULT INTERVAL or smthg.
+	public ServiceContainer(final Configuration configuration, final IServiceConnector service, final boolean respawn) {
+		this.kiekerMonitoringController = MonitoringController.createInstance(configuration);
+		this.respawn = respawn;
 		this.service = service;
 	}
 
@@ -66,29 +64,29 @@ public class ServiceContainer {
 	 * @throws Exception
 	 *             is may throw a wide range of exceptions, depending on the implementation of deserialize()
 	 */
-	// TODO: maybe wrap all possible Exception into a custom one and throw taht one?
+	// TODO: maybe wrap all possible Exception into a custom one and throw that one?
 	public void run() throws Exception {
-		this.kieker = MonitoringController.createInstance(this.configuration);
 		do {
+			this.updateState("Starting service container.");
+			long recordCounter = 0;
 			this.service.setup();
 			this.active = true;
-			this.recordCount = 0;
 			while (this.active) {
-				final IMonitoringRecord record = this.service.deserialize();
-				if (null != record) {
-					this.kieker.newMonitoringRecord(record);
-					this.recordCount++;
-					if ((this.recordCount % this.listenerUpdateInterval) == 0) {
-						this.updateState(null); // TODO: null as message?
+				final IMonitoringRecord record = this.service.deserializeNextRecord();
+				if (null != record) { // TODO: Throw Exception instead of using if
+					this.kiekerMonitoringController.newMonitoringRecord(record);
+					if ((++recordCounter % this.listenerUpdateInterval) == 0) {
+						this.updateState(this.listenerUpdateInterval + " records received.");
 					}
 				} else {
 					this.active = false;
 				}
 			}
-			this.updateState(null); // TODO: null as message?
+			this.updateState("Shutting service container down.");
 			this.service.close();
 		} while (this.respawn);
-		this.kieker.terminateMonitoring();
+
+		this.kiekerMonitoringController.terminateMonitoring();
 	}
 
 	/**
@@ -99,10 +97,10 @@ public class ServiceContainer {
 	 *             transport exception from inner source
 	 */
 	public void shutdown() throws Exception {
-		this.respawn = false;
 		this.active = false;
+		this.respawn = false;
 		this.service.close(); // TODO: also called by main loop? also main loop might still access structures once?
-		this.kieker.terminateMonitoring(); // TODO: also called by main loop? also main loop might still access structures once?
+		this.kiekerMonitoringController.terminateMonitoring(); // TODO: also called by main loop? also main loop might still access structures once?
 	}
 
 	/**
@@ -113,7 +111,7 @@ public class ServiceContainer {
 	 */
 	private void updateState(final String message) {
 		for (final IServiceListener listener : this.listeners) {
-			listener.handleEvent(this.recordCount, message);
+			listener.handleEvent(this.kiekerMonitoringController.getNumberOfInserts(), message);
 		}
 	}
 
@@ -138,14 +136,10 @@ public class ServiceContainer {
 	}
 
 	public long getRecordCount() {
-		return this.recordCount;
+		return this.kiekerMonitoringController.getNumberOfInserts();
 	}
 
 	public boolean isRespawn() {
 		return this.respawn;
-	}
-
-	public void setRespawn(final boolean respawn) {
-		this.respawn = respawn;
 	}
 }

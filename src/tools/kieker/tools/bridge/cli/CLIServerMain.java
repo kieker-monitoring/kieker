@@ -18,16 +18,15 @@ package kieker.tools.bridge.cli;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.GnuParser;
@@ -37,6 +36,8 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
 import kieker.common.configuration.Configuration;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.tools.bridge.IServiceListener;
@@ -51,6 +52,8 @@ import kieker.tools.bridge.connector.ServiceConnectorFactory;
  * @since 1.8
  */
 public final class CLIServerMain {
+
+	private static final Log LOG = LogFactory.getLog(CLIServerMain.class);
 
 	private static boolean verbose;
 	private static boolean stats;
@@ -70,14 +73,12 @@ public final class CLIServerMain {
 	 * @param args
 	 *            command line arguments
 	 */
-	// TODO: the used format for CLI should be the same as for the rest of teh Kieker tools.
+	// TODO: the used format for CLI should be the same as for the rest of the Kieker tools.
 	public static void main(final String[] args) {
 		CLIServerMain.declareOptions();
 		try {
 			// parse the command line arguments
 			commandLine = new GnuParser().parse(options, args);
-
-			Map<Integer, Class<IMonitoringRecord>> recordMap = null;
 
 			// verbosity setup
 			verbose = commandLine.hasOption("v");
@@ -86,20 +87,19 @@ public final class CLIServerMain {
 			stats = commandLine.hasOption("s");
 
 			// Find libraries and setup mapping
-			recordMap = CLIServerMain.createRecordMap();
+			final Map<Integer, Class<IMonitoringRecord>> recordMap = CLIServerMain.createRecordMap();
 
 			// Kieker setup
 			Configuration configuration = null;
-			if (commandLine.hasOption("k")) {
-				configuration = ConfigurationFactory.createConfigurationFromFile(commandLine.getOptionValue("k"));
+			if (commandLine.hasOption("c")) {
+				configuration = ConfigurationFactory.createConfigurationFromFile(commandLine.getOptionValue("c"));
 			} else {
-				// TODO: this does not allow for, e.g., command line parameters passed to Kieker
-				configuration = ConfigurationFactory.createDefaultConfiguration();
+				configuration = ConfigurationFactory.createSingletonConfiguration();
 			}
 
 			// start service depending on type
 			if (commandLine.hasOption("type")) {
-				CLIServerMain.runService(new ServiceContainer(configuration, CLIServerMain.createService(recordMap)));
+				CLIServerMain.runService(new ServiceContainer(configuration, CLIServerMain.createService(recordMap), false));
 			}
 		} catch (final ParseException exp) {
 			// oops, something went wrong
@@ -120,6 +120,7 @@ public final class CLIServerMain {
 			service.addListener(new IServiceListener() {
 
 				public void handleEvent(final long count, final String message) {
+					// TODO: Consider using a logger instead of System.out
 					System.out.print("Received " + count + " records\r");
 					if (message != null) {
 						System.out.println("\n" + message);
@@ -142,9 +143,9 @@ public final class CLIServerMain {
 				System.out.println("TCP server stopped.");
 			}
 			if (stats) {
-				System.out.println("Execution time: " + deltaTime + " ns  " + (deltaTime / 1000000000) + " s");
+				System.out.println("Execution time: " + deltaTime + " ns  " + TimeUnit.SECONDS.convert(deltaTime, TimeUnit.NANOSECONDS) + " s");
 				System.out.println("Time per records: " + (deltaTime / service.getRecordCount()) + " ns/r");
-				System.out.println("Records per second: " + ((service.getRecordCount()) / ((double) deltaTime / 1000000000)));
+				System.out.println("Records per second: " + (service.getRecordCount() / (double) TimeUnit.SECONDS.convert(deltaTime, TimeUnit.NANOSECONDS)));
 			}
 		} catch (final Exception e) { // NOCS
 			System.err.println("CLIServerMain cannot start. Cause: " + e.getMessage());
@@ -343,24 +344,24 @@ public final class CLIServerMain {
 	 *            the path of the mapping file.
 	 * 
 	 * @return a complete IMonitoringRecord to id mapping
+	 * @throws IOException
+	 *             If one or more of the given library URLs is somehow invalid or one of the given files could not be accessed.
 	 */
 	@SuppressWarnings("unchecked")
-	private static Map<Integer, Class<IMonitoringRecord>> readMapping(final String[] libraries, final String filename) {
-		final Map<Integer, Class<IMonitoringRecord>> map = new HashMap<Integer, Class<IMonitoringRecord>>();
+	private static Map<Integer, Class<IMonitoringRecord>> readMapping(final String[] libraries, final String filename) throws IOException {
+		final Map<Integer, Class<IMonitoringRecord>> map = new ConcurrentHashMap<Integer, Class<IMonitoringRecord>>();
 		final URL[] urls = new URL[libraries.length];
 		for (int i = 0; i < libraries.length; i++) {
-			try {
-				urls[i] = new File(libraries[i]).toURI().toURL();
-			} catch (final MalformedURLException e) {
-				System.err.println(libraries[i] + " is not a valid URL");
-				System.exit(3); // TODO: are exit codes documented somewhere?
-			}
+			urls[i] = new File(libraries[i]).toURI().toURL();
 		}
-
+		// TODO: Consider using Privileged Action instead
 		final URLClassLoader classLoader = new URLClassLoader(urls, CLIServerMain.class.getClassLoader());
 
+		BufferedReader in = null;
 		try {
-			final BufferedReader in = new BufferedReader(new FileReader(filename));
+			// TODO: Use the correct encoding
+			in = new BufferedReader(new FileReader(filename));
+
 			String line = null;
 			do {
 				try {
@@ -368,25 +369,20 @@ public final class CLIServerMain {
 					if (line != null) {
 						final String[] pair = line.split("=");
 						if (pair.length == 2) {
-							final Class<?> clazz = classLoader.loadClass(pair[1]);
-							map.put(Integer.parseInt(pair[0]), (Class<IMonitoringRecord>) clazz);
+							// TODO: Add comment about unchecked typecast here
+							map.put(Integer.parseInt(pair[0]), (Class<IMonitoringRecord>) classLoader.loadClass(pair[1]));
 						}
 					}
-				} catch (final IOException e) {
-					System.err.println("Mapping file \"" + filename + "\" read error. " + e.getMessage());
-					System.exit(2);
 				} catch (final ClassNotFoundException e) {
-					System.err.println(e.getMessage());
+					LOG.warn("Could not load class", e);
 				}
 			} while (line != null);
-			in.close();
-		} catch (final FileNotFoundException e) {
-			System.err.println("Mapping file \"" + filename + "\" not found.");
-			System.exit(1);
-		} catch (final IOException e) {
-			System.err.println("Mapping file \"" + filename + "\" read error. " + e.getMessage());
-			System.exit(2);
+		} finally {
+			if (in != null) {
+				in.close();
+			}
 		}
+
 		return map;
 	}
 
@@ -429,7 +425,7 @@ public final class CLIServerMain {
 		options.addOption(option);
 
 		// kieker configuration file
-		option = new Option("k", "kieker", true, "kieker configuration file");
+		option = new Option("c", "kieker", true, "kieker configuration file");
 		option.setArgName("configuration");
 		options.addOption(option);
 

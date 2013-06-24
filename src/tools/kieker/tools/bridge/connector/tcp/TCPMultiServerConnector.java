@@ -85,7 +85,7 @@ public class TCPMultiServerConnector extends AbstractTCPConnector {
 		this.serverSocket.close();
 	}
 
-	public IMonitoringRecord deserialize() throws Exception {
+	public IMonitoringRecord deserializeNextRecord() throws Exception {
 		return this.recordQueue.take();
 	}
 

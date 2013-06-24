@@ -36,7 +36,7 @@ public interface IServiceConnector {
 	 * 
 	 * @since 1.8
 	 */
-	IMonitoringRecord deserialize() throws Exception;
+	IMonitoringRecord deserializeNextRecord() throws Exception;
 
 	/**
 	 * Called to setup the channel to read record information.

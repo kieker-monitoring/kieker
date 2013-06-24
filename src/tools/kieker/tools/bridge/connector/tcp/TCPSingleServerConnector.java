@@ -75,7 +75,7 @@ public class TCPSingleServerConnector extends AbstractTCPConnector {
 	 *             IOException when an unknown id is received which cannot be mapped to an IMonitoringRecord
 	 */
 
-	public IMonitoringRecord deserialize() throws Exception {
+	public IMonitoringRecord deserializeNextRecord() throws Exception {
 		// read structure ID
 		try {
 			final Integer id = this.in.readInt();
@@ -121,7 +121,7 @@ public class TCPSingleServerConnector extends AbstractTCPConnector {
 						values[i] = new String(this.buffer, 0, bufLen, "UTF-8");
 					} else { // reference types
 						// TODO the following code is non standard and will not work
-						values[i] = this.deserialize();
+						values[i] = this.deserializeNextRecord();
 					}
 					i++;
 				}

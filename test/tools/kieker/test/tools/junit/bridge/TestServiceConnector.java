@@ -19,7 +19,7 @@ public class TestServiceConnector implements IServiceConnector {
 		this.unitTest = unitTest;
 	}
 
-	public IMonitoringRecord deserialize() throws Exception {
+	public IMonitoringRecord deserializeNextRecord() throws Exception {
 		if (this.count < SEND_NUMBER_OF_RECORDS) {
 			this.unitTest.deserializeCalled();
 			this.count++;
