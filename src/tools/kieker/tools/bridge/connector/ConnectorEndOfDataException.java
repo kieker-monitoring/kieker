@@ -9,6 +9,11 @@ package kieker.tools.bridge.connector;
  */
 public class ConnectorEndOfDataException extends Exception {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3984491886499581526L;
+
 	public ConnectorEndOfDataException(final String message) {
 		super(message);
 	}

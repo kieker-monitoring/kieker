@@ -23,7 +23,7 @@ import java.util.Map;
 import org.apache.activemq.broker.BrokerService;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.tools.bridge.ConnectorDataTransmissionException;
+import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 
 /**
  * 

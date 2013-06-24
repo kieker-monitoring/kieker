@@ -17,7 +17,6 @@
 package kieker.tools.bridge.connector;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.tools.bridge.ConnectorDataTransmissionException;
 
 
 /**

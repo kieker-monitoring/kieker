@@ -40,9 +40,9 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.tools.bridge.ConnectorDataTransmissionException;
 import kieker.tools.bridge.IServiceListener;
 import kieker.tools.bridge.ServiceContainer;
+import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.IServiceConnector;
 import kieker.tools.bridge.connector.ServiceConnectorFactory;
 

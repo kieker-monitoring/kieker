@@ -23,8 +23,8 @@ import java.net.ServerSocket;
 import java.util.Map;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.tools.bridge.ConnectorDataTransmissionException;
 import kieker.tools.bridge.LookupEntity;
+import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.ConnectorEndOfDataException;
 
 /**

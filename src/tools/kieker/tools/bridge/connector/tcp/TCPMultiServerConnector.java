@@ -26,8 +26,8 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.tools.bridge.ConnectorDataTransmissionException;
 import kieker.tools.bridge.LookupEntity;
+import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.ConnectorEndOfDataException;
 
 /**
@@ -75,7 +75,8 @@ public class TCPMultiServerConnector extends AbstractTCPConnector {
 					try {
 						while (TCPMultiServerConnector.this.active) {
 							// TODO is this broke or does this work and why? It seams to be ugly!!
-							new ServiceThread(TCPMultiServerConnector.this.serverSocket.accept());
+							new ServiceThread(TCPMultiServerConnector.this.serverSocket.accept(),
+									TCPMultiServerConnector.this);
 						}
 					} catch (final IOException e) {
 						TCPMultiServerConnector.this.active = false;
@@ -118,35 +119,36 @@ public class TCPMultiServerConnector extends AbstractTCPConnector {
 		private final Socket socket;
 		private final byte[] buffer = new byte[BUF_LEN];
 
+		private final TCPMultiServerConnector parent;
+
 		/**
 		 * Create a service thread.
 		 * 
 		 * @param socket
 		 *            service socket
 		 */
-		public ServiceThread(final Socket socket) {
+		public ServiceThread(final Socket socket, final TCPMultiServerConnector parent) {
 			this.socket = socket;
+			this.parent = parent;
 		}
 
 		public void run() {
-			// CHECKSTYLE:OFF checkstyle does not understand that recordQueue is from the outer class
-			while (TCPMultiServerConnector.this.active) {
+			while (this.parent.active) {
 				try {
 					this.in = new DataInputStream(this.socket.getInputStream());
-					TCPMultiServerConnector.this.recordQueue.put(this.deserialize());
+					this.parent.recordQueue.put(this.deserialize());
 				} catch (final IOException e) {
-					TCPMultiServerConnector.this.active = false;
+					this.parent.active = false;
 					System.out.println("Listener " + Thread.currentThread().getId() + " died. Cause " + e.getMessage());
 				} catch (final InterruptedException e) {
-					TCPMultiServerConnector.this.active = false;
+					this.parent.active = false;
 					System.out.println("Listener " + Thread.currentThread().getId() + " died. Cause " + e.getMessage());
 					// deserialize does return Exception, therefore at the moment checkstyle has to accept this.
 				} catch (final Exception e) {
-					TCPMultiServerConnector.this.active = false;
+					this.parent.active = false;
 					System.out.println("Listener " + Thread.currentThread().getId() + " died. Cause " + e.getMessage());
 				}
 			}
-			// CHECKSTYLE:ON
 			try {
 				this.socket.close();
 			} catch (final IOException e) {

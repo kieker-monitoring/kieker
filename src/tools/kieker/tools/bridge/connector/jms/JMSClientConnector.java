@@ -37,8 +37,8 @@ import javax.jms.TextMessage;
 import org.apache.activemq.ActiveMQConnectionFactory;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.tools.bridge.ConnectorDataTransmissionException;
 import kieker.tools.bridge.LookupEntity;
+import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.ConnectorEndOfDataException;
 import kieker.tools.bridge.connector.IServiceConnector;
 
