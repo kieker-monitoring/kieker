@@ -17,6 +17,8 @@
 package kieker.tools.bridge.connector;
 
 import kieker.common.record.IMonitoringRecord;
+import kieker.tools.bridge.ConnectorDataTransmissionException;
+
 
 /**
  * 
@@ -26,35 +28,36 @@ import kieker.common.record.IMonitoringRecord;
  */
 public interface IServiceConnector {
 
-	// TODO: errors should throw exceptions not deliver null, also avoid Exception, use subsets of it!
 	/**
 	 * The deserialize method reads source data and returns an {@link IMonitoringRecord}.
 	 * 
 	 * @return A {@link IMonitoringRecord} or null on read error or end of line.
-	 * @throws Exception
-	 *             may be caused by a read error or an unknown record id.
+	 * @throws ConnectorDataTransmissionException
+	 *             if a read error or an unknown record id occurs
+	 * @throws ConnectorEndOfDataException
+	 *             if the transmission is terminated or otherwise signaled that the last record has been received.
 	 * 
 	 * @since 1.8
 	 */
-	IMonitoringRecord deserializeNextRecord() throws Exception;
+	IMonitoringRecord deserializeNextRecord() throws ConnectorDataTransmissionException, ConnectorEndOfDataException;
 
 	/**
 	 * Called to setup the channel to read record information.
 	 * 
-	 * @throws Exception
+	 * @throws ConnectorDataTransmissionException
 	 *             when an error occurred setting up the record source.
 	 * 
 	 * @since 1.8
 	 */
-	void setup() throws Exception;
+	void setup() throws ConnectorDataTransmissionException;
 
 	/**
 	 * Called to close the previously setup record source.
 	 * 
-	 * @throws Exception
+	 * @throws ConnectorDataTransmissionException
 	 *             when an error occurred during connection close.
 	 * 
 	 * @since 1.8
 	 */
-	void close() throws Exception;
+	void close() throws ConnectorDataTransmissionException;
 }

@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import kieker.common.record.IMonitoringRecord;
+import kieker.tools.bridge.ConnectorDataTransmissionException;
 import kieker.tools.bridge.LookupEntity;
 import kieker.tools.bridge.connector.IServiceConnector;
 
@@ -32,6 +33,8 @@ import kieker.tools.bridge.connector.IServiceConnector;
  * @since 1.8
  */
 public abstract class AbstractTCPConnector implements IServiceConnector {
+
+	private static String TYPES = "TYPES";
 
 	protected Map<Integer, LookupEntity> lookupEntityMap;
 
@@ -49,20 +52,32 @@ public abstract class AbstractTCPConnector implements IServiceConnector {
 		this.recordMap = recordMap;
 	}
 
-	public void setup() throws Exception {
+	public void setup() throws ConnectorDataTransmissionException {
 		this.lookupEntityMap = new HashMap<Integer, LookupEntity>();
 		for (final int key : this.recordMap.keySet()) {
 			final Class<IMonitoringRecord> type = this.recordMap.get(key);
 
-			final Field parameterTypesField = type.getDeclaredField("TYPES");
-			java.security.AccessController.doPrivileged(new PrivilegedAction<Object>() {
-				public Object run() {
-					parameterTypesField.setAccessible(true);
-					return null;
-				}
-			});
-			final LookupEntity entity = new LookupEntity(type.getConstructor(Object[].class), (Class<?>[]) parameterTypesField.get(null));
-			this.lookupEntityMap.put(key, entity);
+			try {
+				final Field parameterTypesField = type.getDeclaredField(TYPES);
+				java.security.AccessController.doPrivileged(new PrivilegedAction<Object>() {
+					public Object run() {
+						parameterTypesField.setAccessible(true);
+						return null;
+					}
+				});
+				final LookupEntity entity = new LookupEntity(type.getConstructor(Object[].class), (Class<?>[]) parameterTypesField.get(null));
+				this.lookupEntityMap.put(key, entity);
+			} catch (final NoSuchFieldException e) {
+				throw new ConnectorDataTransmissionException("Field " + TYPES + " does not exist.", e);
+			} catch (final SecurityException e) {
+				throw new ConnectorDataTransmissionException("Security exception.", e);
+			} catch (final NoSuchMethodException e) {
+				throw new ConnectorDataTransmissionException("Method not found. Should not occur, as we are not looking for any method.", e);
+			} catch (final IllegalArgumentException e) {
+				throw new ConnectorDataTransmissionException(e.getMessage(), e);
+			} catch (final IllegalAccessException e) {
+				throw new ConnectorDataTransmissionException(e.getMessage(), e);
+			}
 		}
 	}
 

@@ -23,6 +23,7 @@ import java.util.Map;
 import org.apache.activemq.broker.BrokerService;
 
 import kieker.common.record.IMonitoringRecord;
+import kieker.tools.bridge.ConnectorDataTransmissionException;
 
 /**
  * 
@@ -52,17 +53,26 @@ public class JMSEmbeddedConnector extends JMSClientConnector {
 	}
 
 	@Override
-	public void setup() throws Exception {
+	public void setup() throws ConnectorDataTransmissionException {
 		this.broker = new BrokerService();
 		this.broker.setUseJmx(true);
-		this.broker.addConnector("tcp://localhost:" + this.port);
-		this.broker.start();
-		super.setup();
+		try {
+			this.broker.addConnector("tcp://localhost:" + this.port);
+			this.broker.start();
+			super.setup();
+		} catch (final Exception e) {
+			throw new ConnectorDataTransmissionException(e.getMessage(), e);
+		}
+
 	}
 
 	@Override
-	public void close() throws Exception {
-		super.close();
-		this.broker.stop();
+	public void close() throws ConnectorDataTransmissionException {
+		try {
+			super.close();
+			this.broker.stop();
+		} catch (final Exception e) {
+			throw new ConnectorDataTransmissionException(e.getMessage(), e);
+		}
 	}
 }

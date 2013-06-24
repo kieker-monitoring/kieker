@@ -2,6 +2,8 @@ package kieker.test.tools.junit.bridge;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
+import kieker.tools.bridge.ConnectorDataTransmissionException;
+import kieker.tools.bridge.connector.ConnectorEndOfDataException;
 import kieker.tools.bridge.connector.IServiceConnector;
 
 /**
@@ -19,7 +21,7 @@ public class TestServiceConnector implements IServiceConnector {
 		this.unitTest = unitTest;
 	}
 
-	public IMonitoringRecord deserializeNextRecord() throws Exception {
+	public IMonitoringRecord deserializeNextRecord() throws ConnectorDataTransmissionException, ConnectorEndOfDataException {
 		if (this.count < SEND_NUMBER_OF_RECORDS) {
 			this.unitTest.deserializeCalled();
 			this.count++;
@@ -27,7 +29,7 @@ public class TestServiceConnector implements IServiceConnector {
 					OperationExecutionRecord.NO_HOSTNAME, OperationExecutionRecord.NO_EOI_ESS,
 					OperationExecutionRecord.NO_EOI_ESS);
 		} else {
-			return null;
+			throw new ConnectorEndOfDataException("End of data reached");
 		}
 	}
 
@@ -35,7 +37,7 @@ public class TestServiceConnector implements IServiceConnector {
 	 * This method start setupCalled() in the ConnectorTest to look
 	 * for if the setup will be called in the correct way.
 	 */
-	public void setup() throws Exception {
+	public void setup() throws ConnectorDataTransmissionException {
 		this.unitTest.setupCalled();
 	}
 
@@ -43,7 +45,7 @@ public class TestServiceConnector implements IServiceConnector {
 	 * This method does the same thing like the method above but do everything
 	 * with the closeCalled() method.
 	 */
-	public void close() throws Exception {
+	public void close() throws ConnectorDataTransmissionException {
 		this.unitTest.closeCalled();
 	}
 

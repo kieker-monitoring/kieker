@@ -18,11 +18,14 @@ package kieker.tools.bridge.connector.tcp;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.ServerSocket;
 import java.util.Map;
 
 import kieker.common.record.IMonitoringRecord;
+import kieker.tools.bridge.ConnectorDataTransmissionException;
 import kieker.tools.bridge.LookupEntity;
+import kieker.tools.bridge.connector.ConnectorEndOfDataException;
 
 /**
  * 
@@ -55,15 +58,25 @@ public class TCPSingleServerConnector extends AbstractTCPConnector {
 	}
 
 	@Override
-	public void setup() throws Exception {
+	public void setup() throws ConnectorDataTransmissionException {
 		super.setup();
-		this.serverSocket = new ServerSocket(this.port);
-		this.in = new DataInputStream(this.serverSocket.accept().getInputStream());
+		try {
+			this.serverSocket = new ServerSocket(this.port);
+			this.in = new DataInputStream(this.serverSocket.accept().getInputStream());
+		} catch (final IOException e) {
+			throw new ConnectorDataTransmissionException(e.getMessage(), e);
+		}
+
 	}
 
-	public void close() throws Exception {
-		this.in.close();
-		this.serverSocket.close();
+	public void close() throws ConnectorDataTransmissionException {
+		try {
+			this.in.close();
+			this.serverSocket.close();
+		} catch (final IOException e) {
+			throw new ConnectorDataTransmissionException(e.getMessage(), e);
+		}
+
 	}
 
 	/**
@@ -75,7 +88,7 @@ public class TCPSingleServerConnector extends AbstractTCPConnector {
 	 *             IOException when an unknown id is received which cannot be mapped to an IMonitoringRecord
 	 */
 
-	public IMonitoringRecord deserializeNextRecord() throws Exception {
+	public IMonitoringRecord deserializeNextRecord() throws ConnectorDataTransmissionException, ConnectorEndOfDataException {
 		// read structure ID
 		try {
 			final Integer id = this.in.readInt();
@@ -131,11 +144,19 @@ public class TCPSingleServerConnector extends AbstractTCPConnector {
 				throw new IOException("Record type " + id + " is not registered.");
 			}
 		} catch (final java.net.SocketException e) {
-			// this means the client stopped sending, stop service and leave.
-			return null;
+			throw new ConnectorEndOfDataException("End of stream", e);
 		} catch (final java.io.EOFException e) {
-			// interruption, client may have died unexpectedly
-			return null;
+			throw new ConnectorEndOfDataException("End of stream", e);
+		} catch (final IOException e) {
+			throw new ConnectorDataTransmissionException("Read error", e);
+		} catch (final InstantiationException e) {
+			throw new ConnectorDataTransmissionException("Instantiation error", e);
+		} catch (final IllegalAccessException e) {
+			throw new ConnectorDataTransmissionException("Access to fields are restricted", e);
+		} catch (final IllegalArgumentException e) {
+			throw new ConnectorDataTransmissionException(e.getMessage(), e);
+		} catch (final InvocationTargetException e) {
+			throw new ConnectorDataTransmissionException(e.getMessage(), e);
 		}
 	}
 

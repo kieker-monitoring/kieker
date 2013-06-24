@@ -62,7 +62,7 @@ public class ConnectorTest extends AbstractKiekerTest {
 		// set max file size to 1 record
 
 		final ServiceContainer serviceContainer = new ServiceContainer(configuration,
-				new TestServiceConnector(this));
+				new TestServiceConnector(this), false);
 		try {
 			serviceContainer.run();
 		} catch (final Exception e) {

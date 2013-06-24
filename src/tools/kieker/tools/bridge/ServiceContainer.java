@@ -20,9 +20,9 @@ import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import kieker.common.configuration.Configuration;
-import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
+import kieker.tools.bridge.connector.ConnectorEndOfDataException;
 import kieker.tools.bridge.connector.IServiceConnector;
 
 /**
@@ -32,8 +32,6 @@ import kieker.tools.bridge.connector.IServiceConnector;
  * @since 1.8
  */
 public class ServiceContainer {
-
-	// TODO: is concurrent access possible to any of these variables? (seems so!) -> volatile, other data structures, ...
 
 	protected volatile boolean active; // is true when the service is running
 
@@ -64,21 +62,19 @@ public class ServiceContainer {
 	 * @throws Exception
 	 *             is may throw a wide range of exceptions, depending on the implementation of deserialize()
 	 */
-	// TODO: maybe wrap all possible Exception into a custom one and throw that one?
-	public void run() throws Exception {
+	public void run() throws ConnectorDataTransmissionException {
 		do {
 			this.updateState("Starting service container.");
 			long recordCounter = 0;
 			this.service.setup();
 			this.active = true;
 			while (this.active) {
-				final IMonitoringRecord record = this.service.deserializeNextRecord();
-				if (null != record) { // TODO: Throw Exception instead of using if
-					this.kiekerMonitoringController.newMonitoringRecord(record);
+				try {
+					this.kiekerMonitoringController.newMonitoringRecord(this.service.deserializeNextRecord());
 					if ((++recordCounter % this.listenerUpdateInterval) == 0) {
 						this.updateState(this.listenerUpdateInterval + " records received.");
 					}
-				} else {
+				} catch (final ConnectorEndOfDataException e) {
 					this.active = false;
 				}
 			}

@@ -18,6 +18,7 @@ package kieker.tools.bridge.connector.tcp;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Map;
@@ -25,7 +26,9 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 import kieker.common.record.IMonitoringRecord;
+import kieker.tools.bridge.ConnectorDataTransmissionException;
 import kieker.tools.bridge.LookupEntity;
+import kieker.tools.bridge.connector.ConnectorEndOfDataException;
 
 /**
  * 
@@ -59,34 +62,48 @@ public class TCPMultiServerConnector extends AbstractTCPConnector {
 	}
 
 	@Override
-	public void setup() throws Exception {
+	public void setup() throws ConnectorDataTransmissionException {
 		super.setup();
 		this.recordQueue = new ArrayBlockingQueue<IMonitoringRecord>(QUEUE_CAPACITY);
-		this.serverSocket = new ServerSocket(this.port);
-		new Runnable() {
+		try {
+			this.serverSocket = new ServerSocket(this.port);
+			final Runnable server = new Runnable() {
 
-			public void run() {
-				// accept client connections
-				// CHECKSTYLE:OFF checkstyle does not understand that serverSocket and active are from the outer class
-				try {
-					while (TCPMultiServerConnector.this.active) {
-						new ServiceThread(TCPMultiServerConnector.this.serverSocket.accept());
+				public void run() {
+					// accept client connections
+					// CHECKSTYLE:OFF checkstyle does not understand that serverSocket and active are from the outer class
+					try {
+						while (TCPMultiServerConnector.this.active) {
+							// TODO is this broke or does this work and why? It seams to be ugly!!
+							new ServiceThread(TCPMultiServerConnector.this.serverSocket.accept());
+						}
+					} catch (final IOException e) {
+						TCPMultiServerConnector.this.active = false;
 					}
-				} catch (final IOException e) {
-					TCPMultiServerConnector.this.active = false;
+					// CHECKSTYLE:ON
 				}
-				// CHECKSTYLE:ON
-			}
-		};
+			};
+			server.run();
+		} catch (final IOException e1) {
+			throw new ConnectorDataTransmissionException("Cannot open server socket at port " + this.port, e1);
+		}
 	}
 
-	public void close() throws Exception {
+	public void close() throws ConnectorDataTransmissionException {
 		this.active = false;
-		this.serverSocket.close();
+		try {
+			this.serverSocket.close();
+		} catch (final IOException e) {
+			throw new ConnectorDataTransmissionException("Cannot close server socket.", e);
+		}
 	}
 
-	public IMonitoringRecord deserializeNextRecord() throws Exception {
-		return this.recordQueue.take();
+	public IMonitoringRecord deserializeNextRecord() throws ConnectorDataTransmissionException, ConnectorEndOfDataException {
+		try {
+			return this.recordQueue.take();
+		} catch (final InterruptedException e) {
+			throw new ConnectorDataTransmissionException(e.getMessage(), e);
+		}
 	}
 
 	/**
@@ -144,7 +161,7 @@ public class TCPMultiServerConnector extends AbstractTCPConnector {
 		 * @throws Exception
 		 *             throws IOException when unknown record ID is read.
 		 */
-		private IMonitoringRecord deserialize() throws Exception {
+		private IMonitoringRecord deserialize() throws ConnectorDataTransmissionException, ConnectorEndOfDataException {
 			try {
 				final Integer id = this.in.readInt();
 				final LookupEntity recordProperty = TCPMultiServerConnector.this.lookupEntityMap.get(id);
@@ -199,11 +216,19 @@ public class TCPMultiServerConnector extends AbstractTCPConnector {
 					throw new IOException("Record type " + id + " is not registered.");
 				}
 			} catch (final java.net.SocketException e) {
-				// this means the client stopped sending, stop service and leave.
-				return null;
+				throw new ConnectorEndOfDataException("End of stream", e);
 			} catch (final java.io.EOFException e) {
-				// interruption, client may have died unexpectedly
-				return null;
+				throw new ConnectorEndOfDataException("End of stream", e);
+			} catch (final IOException e) {
+				throw new ConnectorDataTransmissionException("Read error", e);
+			} catch (final InstantiationException e) {
+				throw new ConnectorDataTransmissionException("Instantiation error", e);
+			} catch (final IllegalAccessException e) {
+				throw new ConnectorDataTransmissionException("Access to fields are restricted", e);
+			} catch (final IllegalArgumentException e) {
+				throw new ConnectorDataTransmissionException(e.getMessage(), e);
+			} catch (final InvocationTargetException e) {
+				throw new ConnectorDataTransmissionException(e.getMessage(), e);
 			}
 		}
 	}

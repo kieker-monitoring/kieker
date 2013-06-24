@@ -28,8 +28,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
@@ -40,6 +40,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.tools.bridge.ConnectorDataTransmissionException;
 import kieker.tools.bridge.IServiceListener;
 import kieker.tools.bridge.ServiceContainer;
 import kieker.tools.bridge.connector.IServiceConnector;
@@ -53,7 +54,43 @@ import kieker.tools.bridge.connector.ServiceConnectorFactory;
  */
 public final class CLIServerMain {
 
-	private static final Log LOG = LogFactory.getLog(CLIServerMain.class);
+	protected static final Log LOG = LogFactory.getLog(CLIServerMain.class);
+
+	private static final String CMD_TYPE = "t";
+	private static final String CMD_TYPE_LONG = "type";
+
+	private static final String CMD_HOST = "h";
+	private static final String CMD_HOST_LONG = "host";
+
+	private static final String CMD_PORT = "p";
+	private static final String CMD_PORT_LONG = "port";
+
+	private static final String CMD_USER = "u";
+	private static final String CMD_USER_LONG = "user";
+
+	private static final String CMD_PASSWORD = "w";
+	private static final String CMD_PASSWORD_LONG = "password";
+
+	private static final String CMD_URL = "l";
+	private static final String CMD_URL_LONG = "url";
+
+	private static final String CMD_KIEKER_CONFIGURATION = "c";
+	private static final String CMD_KIEKER_CONFIGURATION_LONG = "configuration";
+
+	private static final String CMD_LIBRARIES = "L";
+	private static final String CMD_LIBRARIES_LONG = "libraries";
+
+	private static final String CMD_DAEMON = "d";
+	private static final String CMD_DAEMON_LONG = "daemon";
+
+	private static final String CMD_STATS = "s";
+	private static final String CMD_STATS_LONG = "stats";
+
+	private static final String CMD_VERBOSE = "v";
+	private static final String CMD_VERBOSE_LONG = "verbose";
+
+	private static String CMD_MAP_FILE = "m";
+	private static String CMD_MAP_FILE_LONG = "map";
 
 	private static boolean verbose;
 	private static boolean stats;
@@ -73,18 +110,17 @@ public final class CLIServerMain {
 	 * @param args
 	 *            command line arguments
 	 */
-	// TODO: the used format for CLI should be the same as for the rest of the Kieker tools.
 	public static void main(final String[] args) {
 		CLIServerMain.declareOptions();
 		try {
 			// parse the command line arguments
-			commandLine = new GnuParser().parse(options, args);
+			commandLine = new BasicParser().parse(options, args);
 
 			// verbosity setup
-			verbose = commandLine.hasOption("v");
+			verbose = commandLine.hasOption(CMD_VERBOSE);
 
 			// statistics
-			stats = commandLine.hasOption("s");
+			stats = commandLine.hasOption(CMD_STATS);
 
 			// Find libraries and setup mapping
 			final Map<Integer, Class<IMonitoringRecord>> recordMap = CLIServerMain.createRecordMap();
@@ -98,12 +134,17 @@ public final class CLIServerMain {
 			}
 
 			// start service depending on type
-			if (commandLine.hasOption("type")) {
+			if (commandLine.hasOption(CMD_TYPE)) {
 				CLIServerMain.runService(new ServiceContainer(configuration, CLIServerMain.createService(recordMap), false));
 			}
-		} catch (final ParseException exp) {
-			// oops, something went wrong
-			CLIServerMain.usage("Parsing failed.  Reason: " + exp.getMessage(), 20);
+		} catch (final ParseException e) {
+			CLIServerMain.usage("Parsing failed.  Reason: " + e.getMessage(), 20);
+		} catch (final IOException e) {
+			CLIServerMain.usage("Mapping file read error: " + e.getMessage(), 1);
+		} catch (final CLIConfigurationErrorException e) {
+			CLIServerMain.usage("Configuration error: " + e.getMessage(), 6);
+		} catch (final ConnectorDataTransmissionException e) {
+			CLIServerMain.usage("Communication error: " + e.getMessage(), 2);
 		}
 	}
 
@@ -112,43 +153,36 @@ public final class CLIServerMain {
 	 * 
 	 * @param service
 	 *            The service to be executed
+	 * @throws ConnectorDataTransmissionException
+	 *             if an error occured during connector operations
 	 */
-	private static void runService(final ServiceContainer service) {
+	private static void runService(final ServiceContainer service) throws ConnectorDataTransmissionException {
 		if (verbose) {
-			final String updateInterval = commandLine.getOptionValue("v");
+			final String updateInterval = commandLine.getOptionValue(CMD_VERBOSE);
 			service.setListenerUpdateInterval((updateInterval != null) ? Integer.parseInt(updateInterval) : 100);
 			service.addListener(new IServiceListener() {
-
 				public void handleEvent(final long count, final String message) {
-					// TODO: Consider using a logger instead of System.out
-					System.out.print("Received " + count + " records\r");
-					if (message != null) {
-						System.out.println("\n" + message);
-					}
+					LOG.info("Received " + count + " records");
 				}
-
 			});
 		}
 
-		try {
-			if (stats) {
-				startTime = System.nanoTime();
-			}
-			// run the service
-			service.run();
-			if (stats) {
-				deltaTime = System.nanoTime() - startTime;
-			}
-			if (verbose) {
-				System.out.println("TCP server stopped.");
-			}
-			if (stats) {
-				System.out.println("Execution time: " + deltaTime + " ns  " + TimeUnit.SECONDS.convert(deltaTime, TimeUnit.NANOSECONDS) + " s");
-				System.out.println("Time per records: " + (deltaTime / service.getRecordCount()) + " ns/r");
-				System.out.println("Records per second: " + (service.getRecordCount() / (double) TimeUnit.SECONDS.convert(deltaTime, TimeUnit.NANOSECONDS)));
-			}
-		} catch (final Exception e) { // NOCS
-			System.err.println("CLIServerMain cannot start. Cause: " + e.getMessage());
+		if (stats) {
+			startTime = System.nanoTime();
+		}
+		// run the service
+		service.run();
+
+		if (stats) {
+			deltaTime = System.nanoTime() - startTime;
+		}
+		if (verbose) {
+			System.out.println("TCP server stopped.");
+		}
+		if (stats) {
+			System.out.println("Execution time: " + deltaTime + " ns  " + TimeUnit.SECONDS.convert(deltaTime, TimeUnit.NANOSECONDS) + " s");
+			System.out.println("Time per records: " + (deltaTime / service.getRecordCount()) + " ns/r");
+			System.out.println("Records per second: " + (service.getRecordCount() / (double) TimeUnit.SECONDS.convert(deltaTime, TimeUnit.NANOSECONDS)));
 		}
 	}
 
@@ -156,24 +190,27 @@ public final class CLIServerMain {
 	 * Create a record map of classes implementing IMonitoringRecord interface out of libraries with such classes and a textual mapping file.
 	 * 
 	 * @return A record map. null is never returned as a call of usage terminates the program.
+	 * @throws IOException
+	 *             if an error occured reading the mapping file
+	 * @throws CLIConfigurationErrorException
+	 *             if a configuration error occured
 	 */
-	private static Map<Integer, Class<IMonitoringRecord>> createRecordMap() {
-		Map<Integer, Class<IMonitoringRecord>> recordMap = null;
+	private static Map<Integer, Class<IMonitoringRecord>> createRecordMap() throws IOException, CLIConfigurationErrorException {
 		if (commandLine.hasOption("L")) {
 			final String[] libraries = commandLine.getOptionValues("L");
 
-			if (commandLine.hasOption("m")) {
-				recordMap = CLIServerMain.readMapping(libraries, commandLine.getOptionValue("m"));
+			if (commandLine.hasOption(CMD_MAP_FILE)) {
+				final Map<Integer, Class<IMonitoringRecord>> recordMap = CLIServerMain.readMapping(libraries, commandLine.getOptionValue(CMD_MAP_FILE));
 				if (recordMap.size() == 0) {
-					CLIServerMain.usage("At least one mapping must be specified in the mapping file.", 5);
+					throw new CLIConfigurationErrorException("At least one mapping must be specified in the mapping file.");
 				}
+				return recordMap;
 			} else {
-				CLIServerMain.usage("Mapping file is required.", 5);
+				throw new CLIConfigurationErrorException("Mapping file is required.");
 			}
 		} else {
-			CLIServerMain.usage("At least one library reference is required.", 5);
+			throw new CLIConfigurationErrorException("At least one library reference is required.");
 		}
-		return recordMap;
 	}
 
 	/**
@@ -183,8 +220,10 @@ public final class CLIServerMain {
 	 *            the map for ids to Kieker records
 	 * 
 	 * @return a reference to an ServiceContainer
+	 * @throws CLIConfigurationErrorException
+	 *             if an error occured in setting up a connector or if an unknown service connector was specified
 	 */
-	private static IServiceConnector createService(final Map<Integer, Class<IMonitoringRecord>> recordList) {
+	private static IServiceConnector createService(final Map<Integer, Class<IMonitoringRecord>> recordList) throws CLIConfigurationErrorException {
 		if ("tcp-client".equals(commandLine.getOptionValue("type"))) {
 			return CLIServerMain.createTCPClientService(recordList);
 		} else if ("tcp-single-server".equals(commandLine.getOptionValue("type"))) {
@@ -196,8 +235,7 @@ public final class CLIServerMain {
 		} else if ("jms-embedded".equals(commandLine.getOptionValue("type"))) {
 			return CLIServerMain.createJMSEmbeddedService(recordList);
 		} else {
-			CLIServerMain.usage("Unknown service type: '" + commandLine.getOptionValue("type") + "'", 10);
-			return null; // TODO: null as error? should AT LEAST be documented
+			throw new CLIConfigurationErrorException("Unknown service type: '" + commandLine.getOptionValue("type") + "'");
 		}
 	}
 
@@ -208,19 +246,19 @@ public final class CLIServerMain {
 	 *            the map for ids to Kieker records
 	 * 
 	 * @return a reference to an ServiceContainer
+	 * @throws CLIConfigurationErrorException
+	 *             if no port was specified for the embedded JMS server or the generated URI is malformed
 	 */
-	private static IServiceConnector createJMSEmbeddedService(final Map<Integer, Class<IMonitoringRecord>> recordList) {
+	private static IServiceConnector createJMSEmbeddedService(final Map<Integer, Class<IMonitoringRecord>> recordList) throws CLIConfigurationErrorException {
 		if (commandLine.hasOption("port")) {
 			final int port = Integer.parseInt(commandLine.getOptionValue("port"));
 			try {
 				return ServiceConnectorFactory.createJMSEmbeddedServiceConnector(recordList, port);
 			} catch (final URISyntaxException e) {
-				CLIServerMain.usage("JMS service cannot be started. URI problem.", 10);
-				return null;
+				throw new CLIConfigurationErrorException("JMS service cannot be started. URI problem.", e);
 			}
 		} else {
-			CLIServerMain.usage("Missing port for embedded server.", 10);
-			return null; // TODO: null as error? should AT LEAST be documented
+			throw new CLIConfigurationErrorException("Missing port for embedded server.");
 		}
 	}
 
@@ -231,20 +269,20 @@ public final class CLIServerMain {
 	 *            the map for ids to Kieker records
 	 * 
 	 * @return a reference to an ServiceContainer
+	 * @throws CLIConfigurationErrorException
+	 *             if no JMS service URL was specified
 	 */
-	private static IServiceConnector createJMSService(final Map<Integer, Class<IMonitoringRecord>> recordList) {
+	private static IServiceConnector createJMSService(final Map<Integer, Class<IMonitoringRecord>> recordList) throws CLIConfigurationErrorException {
 		final String username = commandLine.hasOption("u") ? commandLine.getOptionValue("u") : null;
 		final String password = commandLine.hasOption("w") ? commandLine.getOptionValue("w") : null;
 		if (commandLine.hasOption("url")) {
 			try {
 				return ServiceConnectorFactory.createJMSServiceConnector(recordList, username, password, new URI(commandLine.getOptionValue("url")));
 			} catch (final URISyntaxException e) {
-				CLIServerMain.usage(commandLine.getOptionValue("url") + " is not a valid URI. JMS service cannot be started.", 10);
-				return null;
+				throw new CLIConfigurationErrorException(commandLine.getOptionValue("url") + " is not a valid URI. JMS service cannot be started.", e);
 			}
 		} else {
-			CLIServerMain.usage("Missing URL for JMS service", 10);
-			return null; // TODO: null as error? should AT LEAST be documented
+			throw new CLIConfigurationErrorException("Missing URL for JMS service");
 		}
 	}
 
@@ -255,8 +293,10 @@ public final class CLIServerMain {
 	 *            the map for ids to Kieker records
 	 * 
 	 * @return a reference to an ServiceContainer
+	 * @throws CLIConfigurationErrorException
+	 *             if no server port was specified
 	 */
-	private static IServiceConnector createTCPSingleServerService(final Map<Integer, Class<IMonitoringRecord>> recordList) {
+	private static IServiceConnector createTCPSingleServerService(final Map<Integer, Class<IMonitoringRecord>> recordList) throws CLIConfigurationErrorException {
 		if (commandLine.hasOption("port")) {
 			final int port = Integer.parseInt(commandLine.getOptionValue("port"));
 			final IServiceConnector service = ServiceConnectorFactory.createTCPSingleServerServiceConnector(recordList, port);
@@ -265,8 +305,7 @@ public final class CLIServerMain {
 			}
 			return service;
 		} else {
-			CLIServerMain.usage("Missing port for tcp server", 10);
-			return null; // TODO: null as error? should AT LEAST be documented
+			throw new CLIConfigurationErrorException("Missing port for tcp server");
 		}
 	}
 
@@ -277,8 +316,10 @@ public final class CLIServerMain {
 	 *            the map for ids to Kieker records
 	 * 
 	 * @return a reference to an ServiceContainer
+	 * @throws CLIConfigurationErrorException
+	 *             if no server port was specified
 	 */
-	private static IServiceConnector createTCPMultiServerService(final Map<Integer, Class<IMonitoringRecord>> recordList) {
+	private static IServiceConnector createTCPMultiServerService(final Map<Integer, Class<IMonitoringRecord>> recordList) throws CLIConfigurationErrorException {
 		if (commandLine.hasOption("port")) {
 			final int port = Integer.parseInt(commandLine.getOptionValue("port"));
 			final IServiceConnector service = ServiceConnectorFactory.createTCPMultiServerServiceConnector(recordList, port);
@@ -287,8 +328,7 @@ public final class CLIServerMain {
 			}
 			return service;
 		} else {
-			CLIServerMain.usage("Missing port for tcp server", 10);
-			return null; // TODO: null as error? should AT LEAST be documented
+			throw new CLIConfigurationErrorException("Missing port for tcp server");
 		}
 	}
 
@@ -299,24 +339,25 @@ public final class CLIServerMain {
 	 *            the map for ids to Kieker records
 	 * 
 	 * @return a reference to an ServiceContainer
+	 * @throws CLIConfigurationErrorException
+	 *             if a host name or port is missing for the client
 	 */
-	private static IServiceConnector createTCPClientService(final Map<Integer, Class<IMonitoringRecord>> recordList) {
+	private static IServiceConnector createTCPClientService(final Map<Integer, Class<IMonitoringRecord>> recordList) throws CLIConfigurationErrorException {
 		if (commandLine.hasOption("port")) {
 			if (commandLine.hasOption("host")) {
 				final int port = Integer.parseInt(commandLine.getOptionValue("port"));
 				final String hostname = commandLine.getOptionValue("host");
 				final IServiceConnector service = ServiceConnectorFactory.createTCPClientServiceConnector(recordList, hostname, port);
 				if (verbose) {
-					System.out.println("TCP client connected to " + hostname + ":" + port);
+					LOG.info("TCP client connected to " + hostname + ":" + port);
 				}
 				return service;
 			} else {
-				CLIServerMain.usage("Missing hostname for tcp client", 10);
+				throw new CLIConfigurationErrorException("Missing hostname for tcp client");
 			}
 		} else {
-			CLIServerMain.usage("Missing port for tcp client", 10);
+			throw new CLIConfigurationErrorException("Missing port for tcp client");
 		}
-		return null; // TODO: null as error? should AT LEAST be documented
 	}
 
 	/**
@@ -369,7 +410,8 @@ public final class CLIServerMain {
 					if (line != null) {
 						final String[] pair = line.split("=");
 						if (pair.length == 2) {
-							// TODO: Add comment about unchecked typecast here
+							// loadClass returns objects of type Class<?> while we only accept Class<IMonitoringRecord> at the moment. This causes an warning which
+							// is suppressed by the SuppressWarning annotation.
 							map.put(Integer.parseInt(pair[0]), (Class<IMonitoringRecord>) classLoader.loadClass(pair[1]));
 						}
 					}
@@ -396,48 +438,48 @@ public final class CLIServerMain {
 		Option option;
 
 		// Type selection
-		option = new Option("t", "type", true, "select the service type: tcp-client, tcp-server, tcp-single-server, jms-client, jms-embedded");
+		option = new Option(CMD_TYPE, CMD_TYPE_LONG, true, "select the service type: tcp-client, tcp-server, tcp-single-server, jms-client, jms-embedded");
 		option.setArgName("type");
 		option.setRequired(true);
 		options.addOption(option);
 
 		// TCP client
-		option = new Option("h", "host", true, "connect to server named <hostname>");
+		option = new Option(CMD_HOST, CMD_HOST_LONG, true, "connect to server named <hostname>");
 		option.setArgName("hostname");
 		options.addOption(option);
 
 		// TCP server
-		option = new Option("p", "port", true, "listen at port (tcp-server or jms-embedded) or connect to port (tcp-client)");
+		option = new Option(CMD_PORT, CMD_PORT_LONG, true, "listen at port (tcp-server or jms-embedded) or connect to port (tcp-client)");
 		option.setArgName("number");
 		option.setType(Number.class);
 		options.addOption(option);
 
 		// JMS client
-		option = new Option("u", "user", true, "user name for a JMS service");
+		option = new Option(CMD_USER, CMD_USER_LONG, true, "user name for a JMS service");
 		option.setArgName("username");
 		options.addOption(option);
-		option = new Option("w", "password", true, "password for a JMS service");
+		option = new Option(CMD_PASSWORD, CMD_PASSWORD_LONG, true, "password for a JMS service");
 		option.setArgName("password");
 		options.addOption(option);
-		option = new Option("l", "url", true, "URL for JMS server");
+		option = new Option(CMD_URL, CMD_URL_LONG, true, "URL for JMS server");
 		option.setArgName("jms-url");
 		option.setType(URL.class);
 		options.addOption(option);
 
 		// kieker configuration file
-		option = new Option("c", "kieker", true, "kieker configuration file");
+		option = new Option(CMD_KIEKER_CONFIGURATION, CMD_KIEKER_CONFIGURATION_LONG, true, "kieker configuration file");
 		option.setArgName("configuration");
 		options.addOption(option);
 
 		// mapping file for TCP and JMS
-		option = new Option("m", "map", true, "Class name to id (integer or string) mapping");
+		option = new Option(CMD_MAP_FILE, CMD_MAP_FILE_LONG, true, "Class name to id (integer or string) mapping");
 		option.setArgName("map-file");
 		option.setType(File.class);
 		option.setRequired(true);
 		options.addOption(option);
 
 		// libraries
-		option = new Option("L", "libraries", true, "List of library paths separated by " + File.pathSeparatorChar);
+		option = new Option(CMD_LIBRARIES, CMD_LIBRARIES_LONG, true, "List of library paths separated by " + File.pathSeparatorChar);
 		option.setArgName("paths");
 		option.setType(File.class);
 		option.setRequired(true);
@@ -445,18 +487,18 @@ public final class CLIServerMain {
 		options.addOption(option);
 
 		// verbose
-		option = new Option("v", "verbose", true, "output processing information");
+		option = new Option(CMD_VERBOSE, CMD_VERBOSE_LONG, true, "output processing information");
 		option.setRequired(false);
 		option.setOptionalArg(true);
 		options.addOption(option);
 
 		// statistics
-		option = new Option("s", "stats", false, "output performance statistics");
+		option = new Option(CMD_STATS, CMD_STATS_LONG, false, "output performance statistics");
 		option.setRequired(false);
 		options.addOption(option);
 
 		// daemon mode
-		option = new Option("d", "daemon", false, "detach from console; TCP server allows multiple connections");
+		option = new Option(CMD_DAEMON, CMD_DAEMON_LONG, false, "detach from console; TCP server allows multiple connections");
 		option.setRequired(false);
 		options.addOption(option);
 
