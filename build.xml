@@ -123,7 +123,7 @@
 			<fileset dir="${lib.dir}">
 				<include name="commons-cli-*.jar" />
 				<include name="jgraphx-*.jar" />
-				<include name="activemq-core-5.7.0.jar" />
+				<include name="activemq-core-5.4.3.jar" />
 				<include name="javax.jms-1.1.jar" />
 			</fileset>
 			<pathelement location="${build.kieker.common.dir}/" />
