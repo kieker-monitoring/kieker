@@ -143,8 +143,10 @@ public class TCPMultiServerConnector extends AbstractTCPConnector {
 				} catch (final InterruptedException e) {
 					this.parent.active = false;
 					System.out.println("Listener " + Thread.currentThread().getId() + " died. Cause " + e.getMessage());
-					// deserialize does return Exception, therefore at the moment checkstyle has to accept this.
-				} catch (final Exception e) {
+				} catch (final ConnectorDataTransmissionException e) {
+					this.parent.active = false;
+					System.out.println("Listener " + Thread.currentThread().getId() + " died. Cause " + e.getMessage());
+				} catch (final ConnectorEndOfDataException e) {
 					this.parent.active = false;
 					System.out.println("Listener " + Thread.currentThread().getId() + " died. Cause " + e.getMessage());
 				}
@@ -175,9 +177,7 @@ public class TCPMultiServerConnector extends AbstractTCPConnector {
 						if (boolean.class.equals(parameterType)) {
 							values[i] = this.in.readBoolean();
 						} else if (Boolean.class.equals(parameterType)) {
-							// CHECKSTYLE:OFF would be a great idea to forbid Boolean, but could appear in IMonitoringRecords
-							values[i] = new Boolean(this.in.readBoolean());
-							// CHECKSTYLE:ON
+							values[i] = Boolean.valueOf(this.in.readBoolean());
 						} else if (byte.class.equals(parameterType)) {
 							values[i] = this.in.readByte();
 						} else if (Byte.class.equals(parameterType)) {

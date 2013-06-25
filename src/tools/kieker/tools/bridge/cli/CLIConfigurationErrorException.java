@@ -18,8 +18,8 @@ package kieker.tools.bridge.cli;
 import java.net.URISyntaxException;
 
 /**
- * @author rju
- * 
+ * @author Reiner Jung
+ * @since 1.8
  */
 public class CLIConfigurationErrorException extends Exception {
 

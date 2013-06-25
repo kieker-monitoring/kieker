@@ -23,6 +23,7 @@ import kieker.tools.bridge.connector.IServiceConnector;
 
 /**
  * @author Pascale Brandt
+ * @since 1.8
  */
 
 public class TestServiceConnector implements IServiceConnector {

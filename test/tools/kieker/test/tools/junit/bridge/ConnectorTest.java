@@ -36,6 +36,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Pascale Brandt
+ * @since 1.8
  */
 public class ConnectorTest extends AbstractKiekerTest {
 
@@ -109,16 +110,13 @@ public class ConnectorTest extends AbstractKiekerTest {
 				TestServiceConnector.SEND_NUMBER_OF_RECORDS == rows);
 
 		// Delete iterativ every element from the created folder above
-		/*
-		 * if (dir.exists())
-		 * {
-		 * for (final File f : dir.listFiles())
-		 * {
-		 * f.delete();
-		 * }
-		 * dir.delete();
-		 * }
-		 */
+
+		// if (dir.exists()) {
+		// for (final File f : dir.listFiles()) {
+		// f.delete();
+		// }
+		// dir.delete();
+		// }
 
 		Assert.assertTrue("Directory is not cleaned", this.tmpFolder.getRoot().exists());
 	}

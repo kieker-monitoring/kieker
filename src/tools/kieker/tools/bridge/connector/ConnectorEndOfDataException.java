@@ -16,8 +16,8 @@
 package kieker.tools.bridge.connector;
 
 /**
- * @author rju
- * 
+ * @author Reiner Jung
+ * @since 1.8
  */
 public class ConnectorEndOfDataException extends Exception {
 

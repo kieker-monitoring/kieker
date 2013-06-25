@@ -107,9 +107,7 @@ public class TCPClientConnector extends AbstractTCPConnector {
 					if (boolean.class.equals(parameterType)) {
 						values[i] = this.in.readBoolean();
 					} else if (Boolean.class.equals(parameterType)) {
-						// CHECKSTYLE:OFF would be a great idea to forbid Boolean, but could appear in IMonitoringRecords
-						values[i] = new Boolean(this.in.readBoolean());
-						// CHECKSTYLE:ON
+						values[i] = Boolean.valueOf(this.in.readBoolean());
 					} else if (byte.class.equals(parameterType)) {
 						values[i] = this.in.readByte();
 					} else if (Byte.class.equals(parameterType)) {

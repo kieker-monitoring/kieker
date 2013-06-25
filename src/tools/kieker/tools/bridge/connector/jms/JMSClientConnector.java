@@ -125,7 +125,7 @@ public class JMSClientConnector implements IServiceConnector {
 					if (boolean.class.equals(parameterType)) {
 						values[i] = message.readBoolean();
 					} else if (Boolean.class.equals(parameterType)) {
-						values[i] = message.readBoolean() ? Boolean.TRUE : Boolean.FALSE;
+						values[i] = Boolean.valueOf(message.readBoolean());
 					} else if (byte.class.equals(parameterType)) {
 						values[i] = message.readByte();
 					} else if (Byte.class.equals(parameterType)) {
@@ -200,7 +200,7 @@ public class JMSClientConnector implements IServiceConnector {
 					if (boolean.class.equals(parameterType)) {
 						values[i] = "t".equals(attributes[i + 1]);
 					} else if (parameterType.equals(Boolean.class)) {
-						values[i] = attributes[i + 1].equals("t") ? Boolean.TRUE : Boolean.FALSE;
+						values[i] = Boolean.valueOf("t".equals(attributes[i + 1]));
 					} else if (byte.class.equals(parameterType)) {
 						values[i] = Byte.parseByte(attributes[i + 1]);
 					} else if (Byte.class.equals(parameterType)) {
