@@ -109,7 +109,8 @@ public class TCPMultiServerConnector extends AbstractTCPConnector {
 
 	/**
 	 * 
-	 * @author rju
+	 * @author Reiner Jung
+	 * @since 1.8
 	 * 
 	 */
 	class ServiceThread implements Runnable {
