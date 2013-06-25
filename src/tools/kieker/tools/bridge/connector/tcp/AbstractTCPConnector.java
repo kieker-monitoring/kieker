@@ -34,7 +34,7 @@ import kieker.tools.bridge.connector.IServiceConnector;
  */
 public abstract class AbstractTCPConnector implements IServiceConnector {
 
-	private static String TYPES = "TYPES";
+	private static final String TYPES = "TYPES";
 
 	protected Map<Integer, LookupEntity> lookupEntityMap;
 
@@ -52,7 +52,7 @@ public abstract class AbstractTCPConnector implements IServiceConnector {
 		this.recordMap = recordMap;
 	}
 
-	public void setup() throws ConnectorDataTransmissionException {
+	public void initialize() throws ConnectorDataTransmissionException {
 		this.lookupEntityMap = new HashMap<Integer, LookupEntity>();
 		for (final int key : this.recordMap.keySet()) {
 			final Class<IMonitoringRecord> type = this.recordMap.get(key);

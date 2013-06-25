@@ -252,7 +252,7 @@ public class JMSClientConnector implements IServiceConnector {
 
 	}
 
-	public void setup() throws ConnectorDataTransmissionException {
+	public void initialize() throws ConnectorDataTransmissionException {
 		// setup value lookup
 		this.lookupEntityMap = new HashMap<Integer, LookupEntity>();
 		for (final int key : this.recordMap.keySet()) {

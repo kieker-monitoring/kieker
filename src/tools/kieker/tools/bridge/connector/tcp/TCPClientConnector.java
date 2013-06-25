@@ -63,8 +63,8 @@ public class TCPClientConnector extends AbstractTCPConnector {
 	}
 
 	@Override
-	public void setup() throws ConnectorDataTransmissionException {
-		super.setup();
+	public void initialize() throws ConnectorDataTransmissionException {
+		super.initialize();
 		try {
 			this.socket = new Socket(this.hostname, this.port);
 			this.in = new DataInputStream(this.socket.getInputStream());
@@ -107,7 +107,7 @@ public class TCPClientConnector extends AbstractTCPConnector {
 					if (boolean.class.equals(parameterType)) {
 						values[i] = this.in.readBoolean();
 					} else if (Boolean.class.equals(parameterType)) {
-						// CHECKSTYLE:OFF would be a great idea, however could be present in a IMonitoringRecord
+						// CHECKSTYLE:OFF would be a great idea to forbid Boolean, but could appear in IMonitoringRecords
 						values[i] = new Boolean(this.in.readBoolean());
 						// CHECKSTYLE:ON
 					} else if (byte.class.equals(parameterType)) {

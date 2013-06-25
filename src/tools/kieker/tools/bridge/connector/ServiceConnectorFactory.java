@@ -21,8 +21,8 @@ import java.net.URISyntaxException;
 import java.util.Map;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.tools.bridge.connector.jms.JMSEmbeddedConnector;
 import kieker.tools.bridge.connector.jms.JMSClientConnector;
+import kieker.tools.bridge.connector.jms.JMSEmbeddedConnector;
 import kieker.tools.bridge.connector.tcp.TCPClientConnector;
 import kieker.tools.bridge.connector.tcp.TCPMultiServerConnector;
 import kieker.tools.bridge.connector.tcp.TCPSingleServerConnector;
@@ -36,6 +36,11 @@ import kieker.tools.bridge.connector.tcp.TCPSingleServerConnector;
  * @since 1.8
  */
 public final class ServiceConnectorFactory {
+
+	// TODO checkstyle wants this! What is the purpose of that?
+	private ServiceConnectorFactory() {
+
+	}
 
 	/**
 	 * 

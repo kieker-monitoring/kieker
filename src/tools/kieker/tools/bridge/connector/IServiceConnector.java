@@ -18,7 +18,6 @@ package kieker.tools.bridge.connector;
 
 import kieker.common.record.IMonitoringRecord;
 
-
 /**
  * 
  * 
@@ -41,14 +40,14 @@ public interface IServiceConnector {
 	IMonitoringRecord deserializeNextRecord() throws ConnectorDataTransmissionException, ConnectorEndOfDataException;
 
 	/**
-	 * Called to setup the channel to read record information.
+	 * Called to initialize the channel to read record information.
 	 * 
 	 * @throws ConnectorDataTransmissionException
 	 *             when an error occurred setting up the record source.
 	 * 
 	 * @since 1.8
 	 */
-	void setup() throws ConnectorDataTransmissionException;
+	void initialize() throws ConnectorDataTransmissionException;
 
 	/**
 	 * Called to close the previously setup record source.

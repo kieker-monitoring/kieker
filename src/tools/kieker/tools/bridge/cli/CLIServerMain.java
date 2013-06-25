@@ -89,8 +89,8 @@ public final class CLIServerMain {
 	private static final String CMD_VERBOSE = "v";
 	private static final String CMD_VERBOSE_LONG = "verbose";
 
-	private static String CMD_MAP_FILE = "m";
-	private static String CMD_MAP_FILE_LONG = "map";
+	private static final String CMD_MAP_FILE = "m";
+	private static final String CMD_MAP_FILE_LONG = "map";
 
 	private static boolean verbose;
 	private static boolean stats;
@@ -158,8 +158,9 @@ public final class CLIServerMain {
 	 */
 	private static void runService(final ServiceContainer service) throws ConnectorDataTransmissionException {
 		if (verbose) {
-			final String updateInterval = commandLine.getOptionValue(CMD_VERBOSE);
-			service.setListenerUpdateInterval((updateInterval != null) ? Integer.parseInt(updateInterval) : 100);
+			final String updateIntervalParam = commandLine.getOptionValue(CMD_VERBOSE);
+			service.setListenerUpdateInterval((updateIntervalParam != null) ? Long.parseLong(updateIntervalParam)
+					: ServiceContainer.DEFAULT_LISTENER_UPDATE_INTERVAL);
 			service.addListener(new IServiceListener() {
 				public void handleEvent(final long count, final String message) {
 					LOG.info("Received " + count + " records");

@@ -53,17 +53,16 @@ public class JMSEmbeddedConnector extends JMSClientConnector {
 	}
 
 	@Override
-	public void setup() throws ConnectorDataTransmissionException {
+	public void initialize() throws ConnectorDataTransmissionException {
 		this.broker = new BrokerService();
 		this.broker.setUseJmx(true);
 		try {
 			this.broker.addConnector("tcp://localhost:" + this.port);
 			this.broker.start();
-			super.setup();
+			super.initialize();
 		} catch (final Exception e) {
 			throw new ConnectorDataTransmissionException(e.getMessage(), e);
 		}
-
 	}
 
 	@Override

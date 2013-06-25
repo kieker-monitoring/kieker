@@ -34,9 +34,9 @@ import kieker.tools.bridge.connector.IServiceConnector;
  */
 public class ServiceContainer {
 
-	protected volatile boolean active; // is true when the service is running
+	public static final long DEFAULT_LISTENER_UPDATE_INTERVAL = 100L;
 
-	private static final long DEFAULT_LISTENER_UPDATE_INTERVAL = 100L;
+	protected volatile boolean active; // is true when the service is running
 
 	private final Collection<IServiceListener> listeners = new CopyOnWriteArrayList<IServiceListener>();
 	private final IMonitoringController kiekerMonitoringController;
@@ -50,6 +50,8 @@ public class ServiceContainer {
 	 *            A configuration object for Kieker monitoring
 	 * @param service
 	 *            A service component to handle incoming data
+	 * @param respawn
+	 *            Respawn the connector if it fails
 	 */
 	public ServiceContainer(final Configuration configuration, final IServiceConnector service, final boolean respawn) {
 		this.kiekerMonitoringController = MonitoringController.createInstance(configuration);
@@ -60,14 +62,14 @@ public class ServiceContainer {
 	/**
 	 * Main loop of the Kieker bridge.
 	 * 
-	 * @throws Exception
-	 *             is may throw a wide range of exceptions, depending on the implementation of deserialize()
+	 * @throws ConnectorDataTransmissionException
+	 *             if deserializeNextRecord exits with a ConnectorDataTransmissionException
 	 */
 	public void run() throws ConnectorDataTransmissionException {
 		do {
 			this.updateState("Starting service container.");
 			long recordCounter = 0;
-			this.service.setup();
+			this.service.initialize();
 			this.active = true;
 			while (this.active) {
 				try {

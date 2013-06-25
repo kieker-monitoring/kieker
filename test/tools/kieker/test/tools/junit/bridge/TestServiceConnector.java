@@ -37,7 +37,7 @@ public class TestServiceConnector implements IServiceConnector {
 	 * This method start setupCalled() in the ConnectorTest to look
 	 * for if the setup will be called in the correct way.
 	 */
-	public void setup() throws ConnectorDataTransmissionException {
+	public void initialize() throws ConnectorDataTransmissionException {
 		this.unitTest.setupCalled();
 	}
 
