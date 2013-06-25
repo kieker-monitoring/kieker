@@ -1,3 +1,18 @@
+/***************************************************************************
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
 package kieker.test.tools.junit.bridge;
 
 import java.io.BufferedReader;
@@ -15,22 +30,22 @@ import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.writer.filesystem.AbstractAsyncFSWriter;
 import kieker.monitoring.writer.filesystem.AsyncFsWriter;
 import kieker.tools.bridge.ServiceContainer;
+import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Pascale Brandt
  */
-
 public class ConnectorTest extends AbstractKiekerTest {
 
 	private boolean setup = false;
 	private boolean close = false;
 
-	public ConnectorTest() {}
-
 	@Rule
-	public final TemporaryFolder tmpFolder = new TemporaryFolder();
+	private final TemporaryFolder tmpFolder = new TemporaryFolder();
+
+	public ConnectorTest() {}
 
 	@Test
 	public void firstTest() throws IOException {
@@ -65,7 +80,7 @@ public class ConnectorTest extends AbstractKiekerTest {
 				new TestServiceConnector(this), false);
 		try {
 			serviceContainer.run();
-		} catch (final Exception e) {
+		} catch (final ConnectorDataTransmissionException e) {
 			System.out.println("Something went wrong: " + e.getStackTrace());
 			e.printStackTrace();
 		}
@@ -105,7 +120,7 @@ public class ConnectorTest extends AbstractKiekerTest {
 		 * }
 		 */
 
-		Assert.assertTrue("Directory is not cleaned", this.tmpFolder.getRoot().exists() == true);
+		Assert.assertTrue("Directory is not cleaned", this.tmpFolder.getRoot().exists());
 	}
 
 	/**
@@ -113,18 +128,18 @@ public class ConnectorTest extends AbstractKiekerTest {
 	 * If that is not the case the error should throw an exception which has to be catched.
 	 */
 	public void setupCalled() {
-		Assert.assertTrue("Connector's setup() method was called more than once.", this.setup == false);
+		Assert.assertTrue("Connector's setup() method was called more than once.", !this.setup);
 		this.setup = true;
 		this.close = false;
 	}
 
 	public void deserializeCalled() {
-		Assert.assertTrue("Connector's deserialize() method called before setup() was called.", this.setup == true);
+		Assert.assertTrue("Connector's deserialize() method called before setup() was called.", this.setup);
 	}
 
 	public void closeCalled() {
-		Assert.assertTrue("Connector's close() method was called before setup() was called.", this.setup == true);
-		Assert.assertTrue("Connector's close() method was called more than once.", this.close == false);
+		Assert.assertTrue("Connector's close() method was called before setup() was called.", this.setup);
+		Assert.assertTrue("Connector's close() method was called more than once.", !this.close);
 		this.close = true;
 		this.setup = false;
 	}
