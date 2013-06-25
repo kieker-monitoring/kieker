@@ -111,27 +111,27 @@ public class TCPClientConnector extends AbstractTCPConnector {
 					} else if (byte.class.equals(parameterType)) {
 						values[i] = this.in.readByte();
 					} else if (Byte.class.equals(parameterType)) {
-						values[i] = new Byte(this.in.readByte());
+						values[i] = Byte.valueOf(this.in.readByte());
 					} else if (short.class.equals(parameterType)) {
 						values[i] = this.in.readShort();
 					} else if (Short.class.equals(parameterType)) {
-						values[i] = new Short(this.in.readShort());
+						values[i] = Short.valueOf(this.in.readShort());
 					} else if (int.class.equals(parameterType)) {
 						values[i] = this.in.readInt();
 					} else if (Integer.class.equals(parameterType)) {
-						values[i] = new Integer(this.in.readInt());
+						values[i] = Integer.valueOf(this.in.readInt());
 					} else if (long.class.equals(parameterType)) {
 						values[i] = this.in.readLong();
 					} else if (Long.class.equals(parameterType)) {
-						values[i] = new Long(this.in.readLong());
+						values[i] = Long.valueOf(this.in.readLong());
 					} else if (float.class.equals(parameterType)) {
 						values[i] = this.in.readFloat();
 					} else if (Float.class.equals(parameterType)) {
-						values[i] = new Float(this.in.readFloat());
+						values[i] = Float.valueOf(this.in.readFloat());
 					} else if (double.class.equals(parameterType)) {
 						values[i] = this.in.readDouble();
 					} else if (Double.class.equals(parameterType)) {
-						values[i] = new Double(this.in.readDouble());
+						values[i] = Double.valueOf(this.in.readDouble());
 					} else if (String.class.equals(parameterType)) {
 						final int bufLen = this.in.readInt();
 						this.in.read(this.buffer, 0, bufLen);

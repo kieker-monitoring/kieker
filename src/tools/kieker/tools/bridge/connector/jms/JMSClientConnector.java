@@ -129,27 +129,27 @@ public class JMSClientConnector implements IServiceConnector {
 					} else if (byte.class.equals(parameterType)) {
 						values[i] = message.readByte();
 					} else if (Byte.class.equals(parameterType)) {
-						values[i] = new Byte(message.readByte());
+						values[i] = Byte.valueOf(message.readByte());
 					} else if (short.class.equals(parameterType)) {
 						values[i] = message.readShort();
 					} else if (Short.class.equals(parameterType)) {
-						values[i] = new Short(message.readShort());
+						values[i] = Short.valueOf(message.readShort());
 					} else if (int.class.equals(parameterType)) {
 						values[i] = message.readInt();
 					} else if (Integer.class.equals(parameterType)) {
-						values[i] = new Integer(message.readInt());
+						values[i] = Integer.valueOf(message.readInt());
 					} else if (long.class.equals(parameterType)) {
 						values[i] = message.readLong();
 					} else if (Long.class.equals(parameterType)) {
-						values[i] = new Long(message.readLong());
+						values[i] = Long.valueOf(message.readLong());
 					} else if (float.class.equals(parameterType)) {
 						values[i] = message.readFloat();
 					} else if (Float.class.equals(parameterType)) {
-						values[i] = new Float(message.readFloat());
+						values[i] = Float.valueOf(message.readFloat());
 					} else if (double.class.equals(parameterType)) {
 						values[i] = message.readDouble();
 					} else if (Double.class.equals(parameterType)) {
-						values[i] = new Double(message.readDouble());
+						values[i] = Double.valueOf(message.readDouble());
 					} else if (String.class.equals(parameterType)) {
 						final int bufLen = message.readInt();
 						message.readBytes(this.buffer, bufLen);

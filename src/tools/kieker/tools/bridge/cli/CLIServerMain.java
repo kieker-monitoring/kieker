@@ -54,7 +54,7 @@ import kieker.tools.bridge.connector.ServiceConnectorFactory;
  */
 public final class CLIServerMain {
 
-	protected static final Log LOG = LogFactory.getLog(CLIServerMain.class);
+	public static final Log LOG = LogFactory.getLog(CLIServerMain.class);
 
 	private static final String CMD_TYPE = "t";
 	private static final String CMD_TYPE_LONG = "type";

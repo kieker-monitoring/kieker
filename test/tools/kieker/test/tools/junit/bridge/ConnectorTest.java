@@ -82,7 +82,7 @@ public class ConnectorTest extends AbstractKiekerTest {
 		try {
 			serviceContainer.run();
 		} catch (final ConnectorDataTransmissionException e) {
-			System.out.println("Something went wrong: " + e.getStackTrace());
+			System.out.println("Something went wrong: " + e.getMessage());
 			e.printStackTrace();
 		}
 
@@ -93,9 +93,8 @@ public class ConnectorTest extends AbstractKiekerTest {
 		try {
 			final FileReader fr = new FileReader("");
 			final BufferedReader br = new BufferedReader(fr);
-			final String line = br.readLine();
 
-			while (line != null) {
+			while (br.readLine() != null) {
 				rows++;
 			}
 			rows = rows - 1;
