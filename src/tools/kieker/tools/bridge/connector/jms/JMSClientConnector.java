@@ -193,8 +193,12 @@ public class JMSClientConnector implements IServiceConnector {
 						values[i] = Double.valueOf(message.readDouble());
 					} else if (String.class.equals(parameterType)) {
 						final int bufLen = message.readInt();
-						message.readBytes(this.buffer, bufLen);
-						values[i] = new String(this.buffer, 0, bufLen, "UTF-8");
+						final int resultLen = message.readBytes(this.buffer, bufLen);
+						if (resultLen == bufLen) {
+							values[i] = new String(this.buffer, 0, bufLen, "UTF-8");
+						} else {
+							throw new ConnectorDataTransmissionException(bufLen + " bytes expected, but only " + resultLen + " bytes received.");
+						}
 					} else { // reference types
 						throw new ConnectorDataTransmissionException("References are not yet supported.");
 					}

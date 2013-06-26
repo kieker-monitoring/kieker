@@ -134,8 +134,12 @@ public class TCPClientConnector extends AbstractTCPConnector {
 						values[i] = Double.valueOf(this.in.readDouble());
 					} else if (String.class.equals(parameterType)) {
 						final int bufLen = this.in.readInt();
-						this.in.read(this.buffer, 0, bufLen);
-						values[i] = new String(this.buffer, 0, bufLen, "UTF-8");
+						final int resultLen = this.in.read(this.buffer, 0, bufLen);
+						if (resultLen == bufLen) {
+							values[i] = new String(this.buffer, 0, bufLen, "UTF-8");
+						} else {
+							throw new ConnectorDataTransmissionException(bufLen + " bytes expected, but only " + resultLen + " bytes received.");
+						}
 					} else { // reference types
 						throw new ConnectorDataTransmissionException("References are not yet supported.");
 					}
@@ -161,5 +165,4 @@ public class TCPClientConnector extends AbstractTCPConnector {
 			throw new ConnectorDataTransmissionException(e.getMessage(), e);
 		}
 	}
-
 }
