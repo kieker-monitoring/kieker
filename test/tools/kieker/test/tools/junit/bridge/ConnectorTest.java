@@ -15,9 +15,7 @@
  ***************************************************************************/
 package kieker.test.tools.junit.bridge;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 
 import org.junit.Assert;
@@ -40,8 +38,8 @@ import kieker.test.common.junit.AbstractKiekerTest;
  */
 public class ConnectorTest extends AbstractKiekerTest {
 
-	private boolean setup = false;
-	private boolean close = false;
+	private boolean setup = false; // NOPMD
+	private boolean close = false; // NOPMD
 
 	@Rule
 	private final TemporaryFolder tmpFolder = new TemporaryFolder();
@@ -49,15 +47,19 @@ public class ConnectorTest extends AbstractKiekerTest {
 	/**
 	 * Nothing to initialize.
 	 */
-	public ConnectorTest() {}
+	public ConnectorTest() {
+		// Why do we need this?
+	}
 
 	/**
 	 * Test the ServiceContainer.
 	 * 
 	 * @throws IOException
+	 * @throws ConnectorDataTransmissionException
+	 *             if an exception occurs in ServiceContainer or the TestServiceConnector
 	 */
 	@Test
-	public void testServiceContainer() throws IOException {
+	public void testServiceContainer() throws IOException, ConnectorDataTransmissionException {
 
 		/**
 		 * 1st parameter: Configuration is in CLIServerMain
@@ -68,7 +70,7 @@ public class ConnectorTest extends AbstractKiekerTest {
 		 */
 
 		final File path = this.tmpFolder.getRoot();
-		int rows = 0;
+		final int rows = 0;
 
 		// Assert.assertTrue("Directory could not created", dir.mkdir() == false);
 
@@ -87,31 +89,11 @@ public class ConnectorTest extends AbstractKiekerTest {
 
 		final ServiceContainer serviceContainer = new ServiceContainer(configuration,
 				new TestServiceConnector(this), false);
-		try {
-			serviceContainer.run();
-		} catch (final ConnectorDataTransmissionException e) {
-			System.out.println("Something went wrong: " + e.getMessage());
-			e.printStackTrace();
-		}
+
+		serviceContainer.run();
 
 		// TODO check number of written records like in kieker.test.monitoring.junit.writer.filesystem.AbstractTestLogRotationMaxLogFiles.checkMaxLogFiles
 		// final File[] logDirs = new File(this.tmpFolder.getRoot().getCanonicalPath()).listFiles();
-
-		// check number of lines in Kieker record file
-		try {
-			final FileReader fr = new FileReader("");
-			final BufferedReader br = new BufferedReader(fr);
-
-			while (br.readLine() != null) {
-				rows++;
-			}
-			rows = rows - 1;
-			br.close();
-
-		} catch (final IOException e) {
-			System.out.println(e.getMessage());
-
-		}
 
 		Assert.assertTrue("The number of send records is not equal to TestServiceConnector.SEND_NUMBER_OF_RECORDS",
 				TestServiceConnector.SEND_NUMBER_OF_RECORDS == rows);

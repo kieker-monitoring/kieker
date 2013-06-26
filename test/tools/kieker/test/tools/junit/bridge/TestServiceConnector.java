@@ -31,7 +31,7 @@ public class TestServiceConnector implements IServiceConnector {
 	public static final int SEND_NUMBER_OF_RECORDS = 20;
 
 	private final ConnectorTest unitTest;
-	private int count = 0;
+	private int count = 0; // NOPMD
 
 	public TestServiceConnector(final ConnectorTest unitTest) {
 		this.unitTest = unitTest;
