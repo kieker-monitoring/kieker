@@ -20,6 +20,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
 
 import javax.jms.BytesMessage;
 import javax.jms.Connection;
@@ -50,7 +51,7 @@ public class JMSClientConnector implements IServiceConnector {
 
 	private static final int BUF_LEN = 65536;
 
-	private final Map<Integer, Class<IMonitoringRecord>> recordMap;
+	private final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordMap;
 	private final String username;
 	private final String password;
 	private final URI uri;
@@ -70,7 +71,7 @@ public class JMSClientConnector implements IServiceConnector {
 	 * @param uri
 	 *            JMSService URI
 	 */
-	public JMSClientConnector(final Map<Integer, Class<IMonitoringRecord>> recordMap, final String username, final String password, final URI uri) {
+	public JMSClientConnector(final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordMap, final String username, final String password, final URI uri) {
 		this.recordMap = recordMap;
 		this.username = username;
 		this.password = password;

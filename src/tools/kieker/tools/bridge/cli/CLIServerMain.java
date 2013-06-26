@@ -25,8 +25,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.security.AccessController;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.cli.BasicParser;
@@ -49,7 +49,7 @@ import kieker.tools.bridge.connector.ServiceConnectorFactory;
 import kieker.tools.util.CLIHelpFormatter;
 
 /**
- * The command line server of the KDB
+ * The command line server of the KDB.
  * 
  * @author Reiner Jung
  * @since 1.8
@@ -143,7 +143,7 @@ public final class CLIServerMain {
 			}
 
 			// Find libraries and setup mapping
-			final Map<Integer, Class<IMonitoringRecord>> recordMap = CLIServerMain.createRecordMap();
+			final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordMap = CLIServerMain.createRecordMap();
 
 			// Kieker setup
 			Configuration configuration = null;
@@ -254,13 +254,13 @@ public final class CLIServerMain {
 	 * @throws CLIConfigurationErrorException
 	 *             if a configuration error occured
 	 */
-	private static Map<Integer, Class<IMonitoringRecord>> createRecordMap() throws IOException, CLIConfigurationErrorException {
+	private static ConcurrentMap<Integer, Class<IMonitoringRecord>> createRecordMap() throws IOException, CLIConfigurationErrorException {
 		if (commandLine.hasOption("L")) {
 			final String[] libraries = commandLine.getOptionValues("L");
 
 			if (commandLine.hasOption(CMD_MAP_FILE)) {
-				final Map<Integer, Class<IMonitoringRecord>> recordMap = CLIServerMain.readMapping(libraries, commandLine.getOptionValue(CMD_MAP_FILE));
-				if (recordMap.size() == 0) {
+				final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordMap = CLIServerMain.readMapping(libraries, commandLine.getOptionValue(CMD_MAP_FILE));
+				if (recordMap.isEmpty()) {
 					throw new CLIConfigurationErrorException("At least one mapping must be specified in the mapping file.");
 				}
 				return recordMap;
@@ -275,24 +275,24 @@ public final class CLIServerMain {
 	/**
 	 * Interpret command line type option.
 	 * 
-	 * @param recordList
+	 * @param recordMap
 	 *            the map for ids to Kieker records
 	 * 
 	 * @return a reference to an ServiceContainer
 	 * @throws CLIConfigurationErrorException
 	 *             if an error occured in setting up a connector or if an unknown service connector was specified
 	 */
-	private static IServiceConnector createService(final Map<Integer, Class<IMonitoringRecord>> recordList) throws CLIConfigurationErrorException {
+	private static IServiceConnector createService(final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordMap) throws CLIConfigurationErrorException {
 		if ("tcp-client".equals(commandLine.getOptionValue("type"))) {
-			return CLIServerMain.createTCPClientService(recordList);
+			return CLIServerMain.createTCPClientService(recordMap);
 		} else if ("tcp-single-server".equals(commandLine.getOptionValue("type"))) {
-			return CLIServerMain.createTCPSingleServerService(recordList);
+			return CLIServerMain.createTCPSingleServerService(recordMap);
 		} else if ("tcp-server".equals(commandLine.getOptionValue("type"))) {
-			return CLIServerMain.createTCPMultiServerService(recordList);
+			return CLIServerMain.createTCPMultiServerService(recordMap);
 		} else if ("jms-client".equals(commandLine.getOptionValue("type"))) {
-			return CLIServerMain.createJMSService(recordList);
+			return CLIServerMain.createJMSService(recordMap);
 		} else if ("jms-embedded".equals(commandLine.getOptionValue("type"))) {
-			return CLIServerMain.createJMSEmbeddedService(recordList);
+			return CLIServerMain.createJMSEmbeddedService(recordMap);
 		} else {
 			throw new CLIConfigurationErrorException("Unknown service type: '" + commandLine.getOptionValue("type") + "'");
 		}
@@ -308,7 +308,8 @@ public final class CLIServerMain {
 	 * @throws CLIConfigurationErrorException
 	 *             if no port was specified for the embedded JMS server or the generated URI is malformed
 	 */
-	private static IServiceConnector createJMSEmbeddedService(final Map<Integer, Class<IMonitoringRecord>> recordList) throws CLIConfigurationErrorException {
+	private static IServiceConnector createJMSEmbeddedService(final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordList)
+			throws CLIConfigurationErrorException {
 		if (commandLine.hasOption("port")) {
 			final int port = Integer.parseInt(commandLine.getOptionValue("port"));
 			try {
@@ -331,7 +332,7 @@ public final class CLIServerMain {
 	 * @throws CLIConfigurationErrorException
 	 *             if no JMS service URL was specified
 	 */
-	private static IServiceConnector createJMSService(final Map<Integer, Class<IMonitoringRecord>> recordList) throws CLIConfigurationErrorException {
+	private static IServiceConnector createJMSService(final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordList) throws CLIConfigurationErrorException {
 		final String username = commandLine.hasOption("u") ? commandLine.getOptionValue("u") : null;
 		final String password = commandLine.hasOption("w") ? commandLine.getOptionValue("w") : null;
 		if (commandLine.hasOption("url")) {
@@ -355,7 +356,8 @@ public final class CLIServerMain {
 	 * @throws CLIConfigurationErrorException
 	 *             if no server port was specified
 	 */
-	private static IServiceConnector createTCPSingleServerService(final Map<Integer, Class<IMonitoringRecord>> recordList) throws CLIConfigurationErrorException {
+	private static IServiceConnector createTCPSingleServerService(final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordList)
+			throws CLIConfigurationErrorException {
 		if (commandLine.hasOption("port")) {
 			final int port = Integer.parseInt(commandLine.getOptionValue("port"));
 			final IServiceConnector connector = ServiceConnectorFactory.createTCPSingleServerServiceConnector(recordList, port);
@@ -378,7 +380,8 @@ public final class CLIServerMain {
 	 * @throws CLIConfigurationErrorException
 	 *             if no server port was specified
 	 */
-	private static IServiceConnector createTCPMultiServerService(final Map<Integer, Class<IMonitoringRecord>> recordList) throws CLIConfigurationErrorException {
+	private static IServiceConnector createTCPMultiServerService(final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordList)
+			throws CLIConfigurationErrorException {
 		if (commandLine.hasOption("port")) {
 			final int port = Integer.parseInt(commandLine.getOptionValue("port"));
 			final IServiceConnector connector = ServiceConnectorFactory.createTCPMultiServerServiceConnector(recordList, port);
@@ -401,7 +404,7 @@ public final class CLIServerMain {
 	 * @throws CLIConfigurationErrorException
 	 *             if a host name or port is missing for the client
 	 */
-	private static IServiceConnector createTCPClientService(final Map<Integer, Class<IMonitoringRecord>> recordList) throws CLIConfigurationErrorException {
+	private static IServiceConnector createTCPClientService(final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordList) throws CLIConfigurationErrorException {
 		if (commandLine.hasOption("port")) {
 			if (commandLine.hasOption("host")) {
 				final int port = Integer.parseInt(commandLine.getOptionValue("port"));
@@ -446,8 +449,8 @@ public final class CLIServerMain {
 	 *             If one or more of the given library URLs is somehow invalid or one of the given files could not be accessed.
 	 */
 	@SuppressWarnings("unchecked")
-	private static Map<Integer, Class<IMonitoringRecord>> readMapping(final String[] libraries, final String filename) throws IOException {
-		final Map<Integer, Class<IMonitoringRecord>> map = new ConcurrentHashMap<Integer, Class<IMonitoringRecord>>();
+	private static ConcurrentMap<Integer, Class<IMonitoringRecord>> readMapping(final String[] libraries, final String filename) throws IOException {
+		final ConcurrentMap<Integer, Class<IMonitoringRecord>> map = new ConcurrentHashMap<Integer, Class<IMonitoringRecord>>();
 		final URL[] urls = new URL[libraries.length];
 		for (int i = 0; i < libraries.length; i++) {
 			urls[i] = new File(libraries[i]).toURI().toURL();

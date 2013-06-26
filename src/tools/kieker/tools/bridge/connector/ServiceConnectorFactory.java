@@ -20,8 +20,8 @@ import java.lang.reflect.Field;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.PrivilegedAction;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.tools.bridge.LookupEntity;
@@ -60,7 +60,7 @@ public final class ServiceConnectorFactory {
 	 *            URL to access the JMS service and queue
 	 * @return Returns a connector instance
 	 */
-	public static IServiceConnector createJMSServiceConnector(final Map<Integer, Class<IMonitoringRecord>> recordMap,
+	public static IServiceConnector createJMSServiceConnector(final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordMap,
 			final String username, final String password, final URI url) {
 		return new JMSClientConnector(recordMap, username, password, url);
 	}
@@ -74,8 +74,9 @@ public final class ServiceConnectorFactory {
 	 *            Port for the JMS service to create
 	 * @return Returns a connector instance
 	 * @throws URISyntaxException
+	 *             if an internal error occurred
 	 */
-	public static IServiceConnector createJMSEmbeddedServiceConnector(final Map<Integer, Class<IMonitoringRecord>> recordMap, final int port)
+	public static IServiceConnector createJMSEmbeddedServiceConnector(final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordMap, final int port)
 			throws URISyntaxException {
 		return new JMSEmbeddedConnector(recordMap, port);
 	}
@@ -89,7 +90,7 @@ public final class ServiceConnectorFactory {
 	 *            Port the TCP server listens to
 	 * @return Returns a connector instance
 	 */
-	public static IServiceConnector createTCPSingleServerServiceConnector(final Map<Integer, Class<IMonitoringRecord>> recordMap, final int port) {
+	public static IServiceConnector createTCPSingleServerServiceConnector(final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordMap, final int port) {
 		return new TCPSingleServerConnector(recordMap, port);
 	}
 
@@ -102,7 +103,7 @@ public final class ServiceConnectorFactory {
 	 *            Port the TCP server listens to
 	 * @return Returns a connector instance
 	 */
-	public static IServiceConnector createTCPMultiServerServiceConnector(final Map<Integer, Class<IMonitoringRecord>> recordMap, final int port) {
+	public static IServiceConnector createTCPMultiServerServiceConnector(final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordMap, final int port) {
 		return new TCPMultiServerConnector(recordMap, port);
 	}
 
@@ -117,12 +118,23 @@ public final class ServiceConnectorFactory {
 	 *            Port of the remote service
 	 * @return Returns a connector instance
 	 */
-	public static IServiceConnector createTCPClientServiceConnector(final Map<Integer, Class<IMonitoringRecord>> recordMap, final String hostname, final int port) {
+	public static IServiceConnector createTCPClientServiceConnector(final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordMap, final String hostname,
+			final int port) {
 		return new TCPClientConnector(recordMap, hostname, port);
 	}
 
-	public static Map<Integer, LookupEntity> createLookupEntityMap(final Map<Integer, Class<IMonitoringRecord>> recordMap) throws ConnectorDataTransmissionException {
-		final Map<Integer, LookupEntity> lookupEntityMap = new ConcurrentHashMap<Integer, LookupEntity>();
+	/**
+	 * Calculates the lookup table from the record map.
+	 * 
+	 * @param recordMap
+	 *            A map containing ids and IMonitoringRecord types
+	 * @return A map containing record ids referencing constructor and field information
+	 * @throws ConnectorDataTransmissionException
+	 *             if the lookup table compilation fails
+	 */
+	public static ConcurrentMap<Integer, LookupEntity> createLookupEntityMap(final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordMap)
+			throws ConnectorDataTransmissionException {
+		final ConcurrentMap<Integer, LookupEntity> lookupEntityMap = new ConcurrentHashMap<Integer, LookupEntity>();
 		for (final int key : recordMap.keySet()) {
 			final Class<IMonitoringRecord> type = recordMap.get(key);
 

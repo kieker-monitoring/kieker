@@ -46,10 +46,18 @@ public class ConnectorTest extends AbstractKiekerTest {
 	@Rule
 	private final TemporaryFolder tmpFolder = new TemporaryFolder();
 
+	/**
+	 * Nothing to initialize.
+	 */
 	public ConnectorTest() {}
 
+	/**
+	 * Test the ServiceContainer.
+	 * 
+	 * @throws IOException
+	 */
 	@Test
-	public void firstTest() throws IOException {
+	public void testServiceContainer() throws IOException {
 
 		/**
 		 * 1st parameter: Configuration is in CLIServerMain

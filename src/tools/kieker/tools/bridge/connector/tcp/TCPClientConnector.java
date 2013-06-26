@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.tools.bridge.LookupEntity;
@@ -56,7 +56,7 @@ public class TCPClientConnector extends AbstractTCPConnector {
 	 * @param port
 	 *            port number where this service connects to
 	 */
-	public TCPClientConnector(final Map<Integer, Class<IMonitoringRecord>> recordMap, final String hostname, final int port) {
+	public TCPClientConnector(final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordMap, final String hostname, final int port) {
 		super(recordMap);
 		this.port = port;
 		this.hostname = hostname;

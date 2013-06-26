@@ -18,7 +18,7 @@ package kieker.tools.bridge.connector.jms;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
 
 import org.apache.activemq.broker.BrokerService;
 
@@ -38,16 +38,14 @@ public class JMSEmbeddedConnector extends JMSClientConnector {
 	/**
 	 * Construct a new JMS service consumer and an embedded JMS service.
 	 * 
-	 * @param configuration
-	 *            Kieker configuration object
-	 * @param lookupEntityMap
+	 * @param recordMap
 	 *            IMonitoringRecord id map
 	 * @param port
 	 *            Port the JMS service is listening to
 	 * @throws URISyntaxException
 	 *             if the URI is malformed. Most likely will not happen.
 	 */
-	public JMSEmbeddedConnector(final Map<Integer, Class<IMonitoringRecord>> recordMap, final int port) throws URISyntaxException {
+	public JMSEmbeddedConnector(final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordMap, final int port) throws URISyntaxException {
 		super(recordMap, null, null, new URI("tcp://localhost:" + port));
 		this.port = port;
 	}

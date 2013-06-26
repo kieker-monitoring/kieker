@@ -16,7 +16,7 @@
 
 package kieker.tools.bridge.connector.tcp;
 
-import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.tools.bridge.LookupEntity;
@@ -32,9 +32,9 @@ import kieker.tools.bridge.connector.ServiceConnectorFactory;
  */
 public abstract class AbstractTCPConnector implements IServiceConnector {
 
-	protected Map<Integer, LookupEntity> lookupEntityMap;
+	protected ConcurrentMap<Integer, LookupEntity> lookupEntityMap;
 
-	private final Map<Integer, Class<IMonitoringRecord>> recordMap;
+	private final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordMap;
 
 	/**
 	 * AbstractTCPService constructor.
@@ -44,7 +44,7 @@ public abstract class AbstractTCPConnector implements IServiceConnector {
 	 * @param recordMap
 	 *            IMonitoringRecord to id map
 	 */
-	public AbstractTCPConnector(final Map<Integer, Class<IMonitoringRecord>> recordMap) {
+	public AbstractTCPConnector(final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordMap) {
 		this.recordMap = recordMap;
 	}
 

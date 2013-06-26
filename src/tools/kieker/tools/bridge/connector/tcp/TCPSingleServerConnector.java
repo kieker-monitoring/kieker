@@ -20,7 +20,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.ServerSocket;
-import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.tools.bridge.LookupEntity;
@@ -52,7 +52,7 @@ public class TCPSingleServerConnector extends AbstractTCPConnector {
 	 * @param port
 	 *            Port the server listens to
 	 */
-	public TCPSingleServerConnector(final Map<Integer, Class<IMonitoringRecord>> recordList, final int port) {
+	public TCPSingleServerConnector(final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordList, final int port) {
 		super(recordList);
 		this.port = port;
 	}

@@ -29,16 +29,16 @@ public class PrivilegedClassLoaderAction implements PrivilegedAction<URLClassLoa
 	/**
 	 * The list of libraries used to create the class loader.
 	 */
-	private final URL[] libs;
+	private final URL[] urls;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
-	 * @param libs
+	 * @param urls
 	 *            The list of libraries used to create the class loader.
 	 */
-	public PrivilegedClassLoaderAction(final URL[] libs) {
-		this.libs = libs;
+	public PrivilegedClassLoaderAction(final URL[] urls) {
+		this.urls = urls;
 	}
 
 	/**
@@ -47,7 +47,7 @@ public class PrivilegedClassLoaderAction implements PrivilegedAction<URLClassLoa
 	 * @return The class loader.
 	 */
 	public URLClassLoader run() {
-		return new URLClassLoader(this.libs, CLIServerMain.class.getClassLoader());
+		return new URLClassLoader(this.urls, CLIServerMain.class.getClassLoader());
 	}
 
 }

@@ -21,9 +21,9 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentMap;
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -57,7 +57,7 @@ public class TCPMultiServerConnector extends AbstractTCPConnector {
 	 * @param port
 	 *            TCP port the service listens to
 	 */
-	public TCPMultiServerConnector(final Map<Integer, Class<IMonitoringRecord>> recordMap, final int port) {
+	public TCPMultiServerConnector(final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordMap, final int port) {
 		super(recordMap);
 		this.port = port;
 		this.active = true;
