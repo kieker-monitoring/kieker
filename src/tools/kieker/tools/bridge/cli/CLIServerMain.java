@@ -59,7 +59,7 @@ public final class CLIServerMain {
 	/**
 	 * The logger used in the server.
 	 */
-	public static final Log LOG = LogFactory.getLog(CLIServerMain.class);
+	static final Log LOG = LogFactory.getLog(CLIServerMain.class);
 
 	private static final String CMD_TYPE = "t";
 	private static final String CMD_TYPE_LONG = "type";

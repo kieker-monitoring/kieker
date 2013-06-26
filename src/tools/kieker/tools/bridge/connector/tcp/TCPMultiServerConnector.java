@@ -128,7 +128,7 @@ public class TCPMultiServerConnector extends AbstractTCPConnector {
 	class ServiceThread implements Runnable {
 		private static final int BUF_LEN = 65536;
 
-		public final Log LOG = LogFactory.getLog(ServiceThread.class);
+		private final Log LOG = LogFactory.getLog(ServiceThread.class);
 
 		private final Socket socket;
 		private final byte[] buffer = new byte[BUF_LEN];
