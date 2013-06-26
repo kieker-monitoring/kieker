@@ -71,17 +71,15 @@ public class TCPMultiServerConnector extends AbstractTCPConnector {
 
 				public void run() {
 					// accept client connections
-					// CHECKSTYLE:OFF checkstyle does not understand that serverSocket and active are from the outer class
 					try {
-						while (TCPMultiServerConnector.this.active) {
+						while (TCPMultiServerConnector.this.isActive()) {
 							// TODO is this broke or does this work and why? It seams to be ugly!!
 							new ServiceThread(TCPMultiServerConnector.this.serverSocket.accept(),
 									TCPMultiServerConnector.this);
 						}
 					} catch (final IOException e) {
-						TCPMultiServerConnector.this.active = false;
+						TCPMultiServerConnector.this.setActive(false);
 					}
-					// CHECKSTYLE:ON
 				}
 			};
 			server.run();
@@ -105,6 +103,18 @@ public class TCPMultiServerConnector extends AbstractTCPConnector {
 		} catch (final InterruptedException e) {
 			throw new ConnectorDataTransmissionException(e.getMessage(), e);
 		}
+	}
+
+	public BlockingQueue<IMonitoringRecord> getRecordQueue() {
+		return this.recordQueue;
+	}
+
+	public boolean isActive() {
+		return this.active;
+	}
+
+	public void setActive(final boolean active) {
+		this.active = active;
 	}
 
 	/**
@@ -134,21 +144,21 @@ public class TCPMultiServerConnector extends AbstractTCPConnector {
 		}
 
 		public void run() {
-			while (this.parent.active) {
+			while (this.parent.isActive()) {
 				try {
 					this.in = new DataInputStream(this.socket.getInputStream());
-					this.parent.recordQueue.put(this.deserialize());
+					this.parent.getRecordQueue().put(this.deserialize());
 				} catch (final IOException e) {
-					this.parent.active = false;
+					this.parent.setActive(false);
 					System.out.println("Listener " + Thread.currentThread().getId() + " died. Cause " + e.getMessage());
 				} catch (final InterruptedException e) {
-					this.parent.active = false;
+					this.parent.setActive(false);
 					System.out.println("Listener " + Thread.currentThread().getId() + " died. Cause " + e.getMessage());
 				} catch (final ConnectorDataTransmissionException e) {
-					this.parent.active = false;
+					this.parent.setActive(false);
 					System.out.println("Listener " + Thread.currentThread().getId() + " died. Cause " + e.getMessage());
 				} catch (final ConnectorEndOfDataException e) {
-					this.parent.active = false;
+					this.parent.setActive(false);
 					System.out.println("Listener " + Thread.currentThread().getId() + " died. Cause " + e.getMessage());
 				}
 			}
@@ -171,10 +181,10 @@ public class TCPMultiServerConnector extends AbstractTCPConnector {
 				final Integer id = this.in.readInt();
 				final LookupEntity recordProperty = TCPMultiServerConnector.this.lookupEntityMap.get(id);
 				if (recordProperty != null) {
-					final Object[] values = new Object[recordProperty.parameterTypes.length];
+					final Object[] values = new Object[recordProperty.getParameterTypes().length];
 
-					int i = 0;
-					for (final Class<?> parameterType : recordProperty.parameterTypes) {
+					for (int i = 0; i < recordProperty.getParameterTypes().length; i++) {
+						final Class<?> parameterType = recordProperty.getParameterTypes()[i];
 						if (boolean.class.equals(parameterType)) {
 							values[i] = this.in.readBoolean();
 						} else if (Boolean.class.equals(parameterType)) {
@@ -208,13 +218,11 @@ public class TCPMultiServerConnector extends AbstractTCPConnector {
 							this.in.read(this.buffer, 0, bufLen);
 							values[i] = new String(this.buffer, 0, bufLen, "UTF-8");
 						} else { // reference types
-							// TODO the following code is non standard and will not work
-							values[i] = this.deserialize();
+							throw new ConnectorDataTransmissionException("References are not yet supported.");
 						}
-						i++;
 					}
 
-					return recordProperty.constructor.newInstance(new Object[] { values });
+					return recordProperty.getConstructor().newInstance(values);
 				} else {
 					throw new IOException("Record type " + id + " is not registered.");
 				}

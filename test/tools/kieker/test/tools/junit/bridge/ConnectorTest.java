@@ -68,12 +68,12 @@ public class ConnectorTest extends AbstractKiekerTest {
 
 		final String writer = AsyncFsWriter.class.getName();
 		configuration.setProperty(writer + '.' + AbstractAsyncFSWriter.CONFIG_MAXENTRIESINFILE, "1");
-		// TODO comment: why 2 * SEND_
+		// The maximal size of the log file must be greater than the expected number of log entries to ensure, that the framework allows to write more records, which
+		// we then can detect as failures. Otherwise writing more than expected records would be hindered by the framework itself.
 		configuration.setProperty(writer + '.' + AbstractAsyncFSWriter.CONFIG_MAXLOGFILES, String.valueOf(TestServiceConnector.SEND_NUMBER_OF_RECORDS * 2));
 		configuration.setProperty(writer + '.' + AbstractAsyncFSWriter.CONFIG_MAXLOGSIZE, "-1");
-		// TODO nutze Konstanten aus AbstractAsyncFSWriter
-		configuration.setProperty("kieker.monitoring.writer.filesystem.AsyncFsWriter.storeInJavaIoTmpdir", "false");
-		configuration.setProperty("kieker.monitoring.writer.filesystem.AsyncFsWriter.customStoragePath", path.getAbsolutePath());
+		configuration.setProperty(writer + '.' + AbstractAsyncFSWriter.CONFIG_TEMP, "false");
+		configuration.setProperty(writer + '.' + AbstractAsyncFSWriter.CONFIG_PATH, path.getAbsolutePath());
 		// TODO get configuration from kieker.test.monitoring.junit.writer.filesystem.TestLogRotationMaxLogFilesAyncFsWriter
 		// set max file size to 1 record
 

@@ -15,37 +15,39 @@
  ***************************************************************************/
 package kieker.tools.bridge.cli;
 
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.security.PrivilegedAction;
+
 /**
- * This exception is used to encapsulate exceptions which occur during configuration in the CLI-server.
- * 
  * @author Reiner Jung
- * @since 1.8
+ * @author Nils Ehmke
+ * 
  */
-public class CLIConfigurationErrorException extends Exception {
+public class PrivilegedClassLoaderAction implements PrivilegedAction<URLClassLoader> {
 
 	/**
-	 * 
+	 * The list of libraries used to create the class loader.
 	 */
-	private static final long serialVersionUID = 1187180806531494898L;
+	private final URL[] libs;
 
 	/**
+	 * Creates a new instance of this class using the given parameters.
 	 * 
-	 * @param message
-	 *            The message to explain the exception
+	 * @param libs
+	 *            The list of libraries used to create the class loader.
 	 */
-	public CLIConfigurationErrorException(final String message) {
-		super(message);
+	public PrivilegedClassLoaderAction(final URL[] libs) {
+		this.libs = libs;
 	}
 
 	/**
+	 * Runs the action.
 	 * 
-	 * @param message
-	 *            The message to explain the exception
-	 * @param exception
-	 *            The exception which caused this exception
+	 * @return The class loader.
 	 */
-	public CLIConfigurationErrorException(final String message, final Exception exception) {
-		super(message, exception);
+	public URLClassLoader run() {
+		return new URLClassLoader(this.libs, CLIServerMain.class.getClassLoader());
 	}
 
 }

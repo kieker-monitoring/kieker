@@ -16,39 +16,49 @@
 
 package kieker.tools.bridge.connector;
 
+import java.lang.reflect.Field;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.PrivilegedAction;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import kieker.common.record.IMonitoringRecord;
+import kieker.tools.bridge.LookupEntity;
 import kieker.tools.bridge.connector.jms.JMSClientConnector;
 import kieker.tools.bridge.connector.jms.JMSEmbeddedConnector;
 import kieker.tools.bridge.connector.tcp.TCPClientConnector;
 import kieker.tools.bridge.connector.tcp.TCPMultiServerConnector;
 import kieker.tools.bridge.connector.tcp.TCPSingleServerConnector;
 
-// TODO: add documentation
-
 /**
- * 
+ * This factory is an attempt to simplify the instantiation of new
+ * connector types. However, we need to re-think this and move configuration to the Kieker configuration.
  * 
  * @author Reiner Jung
  * @since 1.8
  */
 public final class ServiceConnectorFactory {
 
-	// TODO checkstyle wants this! What is the purpose of that?
+	private static final String TYPES = "TYPES";
+
+	// checkstyle wants this! What is the purpose of that?
 	private ServiceConnectorFactory() {
 
 	}
 
 	/**
+	 * Create a JMS service connector.
 	 * 
 	 * @param recordMap
+	 *            map containing ids for types and types for the deserializer
 	 * @param username
+	 *            JMS service user name
 	 * @param password
+	 *            JMS service password
 	 * @param url
-	 * @return
+	 *            URL to access the JMS service and queue
+	 * @return Returns a connector instance
 	 */
 	public static IServiceConnector createJMSServiceConnector(final Map<Integer, Class<IMonitoringRecord>> recordMap,
 			final String username, final String password, final URI url) {
@@ -56,10 +66,13 @@ public final class ServiceConnectorFactory {
 	}
 
 	/**
+	 * Create a JMS service connector and an embedded JMS service.
 	 * 
 	 * @param recordMap
+	 *            map containing ids for types and types for the deserializer
 	 * @param port
-	 * @return
+	 *            Port for the JMS service to create
+	 * @return Returns a connector instance
 	 * @throws URISyntaxException
 	 */
 	public static IServiceConnector createJMSEmbeddedServiceConnector(final Map<Integer, Class<IMonitoringRecord>> recordMap, final int port)
@@ -68,33 +81,73 @@ public final class ServiceConnectorFactory {
 	}
 
 	/**
+	 * Create a TCP server connector which can handle only one incoming connection for records.
 	 * 
 	 * @param recordMap
+	 *            map containing ids for types and types for the deserializer
 	 * @param port
-	 * @return
+	 *            Port the TCP server listens to
+	 * @return Returns a connector instance
 	 */
 	public static IServiceConnector createTCPSingleServerServiceConnector(final Map<Integer, Class<IMonitoringRecord>> recordMap, final int port) {
 		return new TCPSingleServerConnector(recordMap, port);
 	}
 
 	/**
+	 * Create a TCP server connector which can handle multiple incoming connection for records.
 	 * 
 	 * @param recordMap
+	 *            map containing ids for types and types for the deserializer
 	 * @param port
-	 * @return
+	 *            Port the TCP server listens to
+	 * @return Returns a connector instance
 	 */
 	public static IServiceConnector createTCPMultiServerServiceConnector(final Map<Integer, Class<IMonitoringRecord>> recordMap, final int port) {
 		return new TCPMultiServerConnector(recordMap, port);
 	}
 
 	/**
+	 * Create a TCP client connector which connects itself to a record source.
 	 * 
 	 * @param recordMap
+	 *            map containing ids for types and types for the deserializer
 	 * @param hostname
+	 *            Hostname or IP address where the client connects to
 	 * @param port
-	 * @return
+	 *            Port of the remote service
+	 * @return Returns a connector instance
 	 */
 	public static IServiceConnector createTCPClientServiceConnector(final Map<Integer, Class<IMonitoringRecord>> recordMap, final String hostname, final int port) {
 		return new TCPClientConnector(recordMap, hostname, port);
+	}
+
+	public static Map<Integer, LookupEntity> createLookupEntityMap(final Map<Integer, Class<IMonitoringRecord>> recordMap) throws ConnectorDataTransmissionException {
+		final Map<Integer, LookupEntity> lookupEntityMap = new ConcurrentHashMap<Integer, LookupEntity>();
+		for (final int key : recordMap.keySet()) {
+			final Class<IMonitoringRecord> type = recordMap.get(key);
+
+			try {
+				final Field parameterTypesField = type.getDeclaredField(TYPES);
+				java.security.AccessController.doPrivileged(new PrivilegedAction<Object>() {
+					public Object run() {
+						parameterTypesField.setAccessible(true);
+						return null;
+					}
+				});
+				final LookupEntity entity = new LookupEntity(type.getConstructor(Object[].class), (Class<?>[]) parameterTypesField.get(null));
+				lookupEntityMap.put(key, entity);
+			} catch (final NoSuchFieldException e) {
+				throw new ConnectorDataTransmissionException("Field " + TYPES + " does not exist.", e);
+			} catch (final SecurityException e) {
+				throw new ConnectorDataTransmissionException("Security exception.", e);
+			} catch (final NoSuchMethodException e) {
+				throw new ConnectorDataTransmissionException("Method not found. Should not occur, as we are not looking for any method.", e);
+			} catch (final IllegalArgumentException e) {
+				throw new ConnectorDataTransmissionException(e.getMessage(), e);
+			} catch (final IllegalAccessException e) {
+				throw new ConnectorDataTransmissionException(e.getMessage(), e);
+			}
+		}
+		return lookupEntityMap;
 	}
 }

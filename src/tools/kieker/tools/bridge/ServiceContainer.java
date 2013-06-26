@@ -34,9 +34,16 @@ import kieker.tools.bridge.connector.IServiceConnector;
  */
 public class ServiceContainer {
 
+	/**
+	 * Update interval for the process listener. The process listener is
+	 * mainly used in verbose mode or in UI applications utilizing a ServiceContainer.
+	 */
 	public static final long DEFAULT_LISTENER_UPDATE_INTERVAL = 100L;
 
-	protected volatile boolean active; // is true when the service is running
+	/**
+	 * Is true when the service is running.
+	 */
+	protected volatile boolean active;
 
 	private final Collection<IServiceListener> listeners = new CopyOnWriteArrayList<IServiceListener>();
 	private final IMonitoringController kiekerMonitoringController;
@@ -89,17 +96,18 @@ public class ServiceContainer {
 	}
 
 	/**
-	 * Safely end bridge loop. This routine should only be called from a signal handler or similar
-	 * construct, as the run method waits for IO.
+	 * Safely end bridge loop. This routine should only be called from the shutdown hook thread
+	 * in the main part of a server. In other cases it will result in strange runtime errors.
 	 * 
-	 * @throws Exception
-	 *             transport exception from inner source
+	 * @throws ConnectorDataTransmissionException
+	 *             An error occurred during data transmission and in this particular case
+	 *             while closing the data transmission.
 	 */
-	public void shutdown() throws Exception {
+	public void shutdown() throws ConnectorDataTransmissionException {
 		this.active = false;
 		this.respawn = false;
-		this.service.close(); // TODO: also called by main loop? also main loop might still access structures once?
-		this.kiekerMonitoringController.terminateMonitoring(); // TODO: also called by main loop? also main loop might still access structures once?
+		this.service.close();
+		this.kiekerMonitoringController.terminateMonitoring();
 	}
 
 	/**

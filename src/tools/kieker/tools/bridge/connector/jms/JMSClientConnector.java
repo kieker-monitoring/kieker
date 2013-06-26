@@ -17,11 +17,8 @@
 package kieker.tools.bridge.connector.jms;
 
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
-import java.security.PrivilegedAction;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.jms.BytesMessage;
@@ -41,9 +38,10 @@ import kieker.tools.bridge.LookupEntity;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.ConnectorEndOfDataException;
 import kieker.tools.bridge.connector.IServiceConnector;
+import kieker.tools.bridge.connector.ServiceConnectorFactory;
 
 /**
- * 
+ * Implements a connector for JMS which supports text and binary messages.
  * 
  * @author Reiner Jung
  * @since 1.8
@@ -65,8 +63,6 @@ public class JMSClientConnector implements IServiceConnector {
 	/**
 	 * @param recordMap
 	 *            map from type ids to class types
-	 * @param lookupEntityMap
-	 *            IMonitoringRecord to id map
 	 * @param username
 	 *            JMSService login user name
 	 * @param password
@@ -81,6 +77,52 @@ public class JMSClientConnector implements IServiceConnector {
 		this.uri = uri;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.tools.bridge.connector.IServiceConnector#initialize()
+	 */
+	public void initialize() throws ConnectorDataTransmissionException {
+		// setup value lookup
+		this.lookupEntityMap = ServiceConnectorFactory.createLookupEntityMap(this.recordMap);
+		try {
+			// setup connection
+			ConnectionFactory factory;
+			if ((this.username != null) && (this.password != null)) {
+				factory = new ActiveMQConnectionFactory(this.username, this.password, this.uri);
+			} else {
+				factory = new ActiveMQConnectionFactory(this.uri);
+			}
+			this.connection = factory.createConnection();
+
+			final Session session = this.connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+			final Destination destination = session.createQueue("de.cau.cs.se.kieker.service");
+			this.consumer = session.createConsumer(destination);
+
+			this.connection.start();
+		} catch (final JMSException e) {
+			throw new ConnectorDataTransmissionException(e.getMessage(), e);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.tools.bridge.connector.IServiceConnector#close()
+	 */
+	public void close() throws ConnectorDataTransmissionException {
+		try {
+			this.connection.stop();
+		} catch (final JMSException e) {
+			throw new ConnectorDataTransmissionException(e.getMessage(), e);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.tools.bridge.connector.IServiceConnector#deserializeNextRecord()
+	 */
 	public IMonitoringRecord deserializeNextRecord() throws ConnectorDataTransmissionException, ConnectorEndOfDataException {
 		Message message;
 		try {
@@ -89,7 +131,6 @@ public class JMSClientConnector implements IServiceConnector {
 				if (message instanceof BytesMessage) {
 					return this.deserialize((BytesMessage) message);
 				} else if (message instanceof TextMessage) {
-					// TODO support ; escaping
 					return this.deserialize(((TextMessage) message).getText().split(";"));
 				} else {
 					throw new ConnectorDataTransmissionException("Unsupported message type " + message.getClass().getCanonicalName());
@@ -118,10 +159,10 @@ public class JMSClientConnector implements IServiceConnector {
 			id = message.readInt();
 			final LookupEntity recordProperty = this.lookupEntityMap.get(id);
 			if (recordProperty != null) {
-				final Object[] values = new Object[recordProperty.parameterTypes.length];
+				final Object[] values = new Object[recordProperty.getParameterTypes().length];
 
-				int i = 0;
-				for (final Class<?> parameterType : recordProperty.parameterTypes) {
+				for (int i = 0; i < recordProperty.getParameterTypes().length; i++) {
+					final Class<?> parameterType = recordProperty.getParameterTypes()[i];
 					if (boolean.class.equals(parameterType)) {
 						values[i] = message.readBoolean();
 					} else if (Boolean.class.equals(parameterType)) {
@@ -157,9 +198,8 @@ public class JMSClientConnector implements IServiceConnector {
 					} else { // reference types
 						throw new ConnectorDataTransmissionException("References are not yet supported.");
 					}
-					i++; // TODO: use a real for loop and access both arrays with the index?
 				}
-				return recordProperty.constructor.newInstance(new Object[] { values }); // TODO: why repack the array?
+				return recordProperty.getConstructor().newInstance(values);
 			} else {
 				throw new ConnectorDataTransmissionException("Record type " + id + " is not registered.");
 			}
@@ -193,10 +233,10 @@ public class JMSClientConnector implements IServiceConnector {
 			final Integer id = Integer.parseInt(attributes[0]);
 			final LookupEntity recordProperty = this.lookupEntityMap.get(id);
 			if (recordProperty != null) {
-				final Object[] values = new Object[recordProperty.parameterTypes.length];
+				final Object[] values = new Object[recordProperty.getParameterTypes().length];
 
-				int i = 0;
-				for (final Class<?> parameterType : recordProperty.parameterTypes) {
+				for (int i = 0; i < recordProperty.getParameterTypes().length; i++) {
+					final Class<?> parameterType = recordProperty.getParameterTypes()[i];
 					if (boolean.class.equals(parameterType)) {
 						values[i] = "t".equals(attributes[i + 1]);
 					} else if (parameterType.equals(Boolean.class)) {
@@ -228,12 +268,11 @@ public class JMSClientConnector implements IServiceConnector {
 					} else if (String.class.equals(parameterType)) {
 						values[i] = attributes[i + 1];
 					} else { // reference types
-						throw new ConnectorDataTransmissionException("References are not yet supported."); // TODO see above ...
+						throw new ConnectorDataTransmissionException("References are not yet supported.");
 					}
-					i++; // TODO see above ...
 				}
 				try {
-					return recordProperty.constructor.newInstance(new Object[] { values });
+					return recordProperty.getConstructor().newInstance(values);
 				} catch (final InstantiationException e) {
 					throw new ConnectorDataTransmissionException(e.getMessage(), e);
 				} catch (final IllegalAccessException e) {
@@ -250,62 +289,5 @@ public class JMSClientConnector implements IServiceConnector {
 			throw new ConnectorDataTransmissionException("Record structure is corrupt");
 		}
 
-	}
-
-	public void initialize() throws ConnectorDataTransmissionException {
-		// setup value lookup
-		this.lookupEntityMap = new HashMap<Integer, LookupEntity>();
-		for (final int key : this.recordMap.keySet()) {
-			final Class<IMonitoringRecord> type = this.recordMap.get(key);
-			// TODO: use existing methods?
-			try {
-				final Field parameterTypesField = type.getDeclaredField("TYPES");
-				java.security.AccessController.doPrivileged(new PrivilegedAction<Object>() {
-					public Object run() {
-						parameterTypesField.setAccessible(true);
-						return null;
-					}
-				});
-
-				final LookupEntity entity = new LookupEntity(type.getConstructor(Object[].class), (Class<?>[]) parameterTypesField.get(null));
-				this.lookupEntityMap.put(key, entity);
-
-				// setup connection
-				ConnectionFactory factory;
-				if ((this.username != null) && (this.password != null)) {
-					factory = new ActiveMQConnectionFactory(this.username, this.password, this.uri);
-				} else {
-					factory = new ActiveMQConnectionFactory(this.uri);
-				}
-				this.connection = factory.createConnection();
-
-				final Session session = this.connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-				final Destination destination = session.createQueue("de.cau.cs.se.kieker.service");
-				this.consumer = session.createConsumer(destination);
-
-				this.connection.start();
-			} catch (final NoSuchFieldException e) {
-				throw new ConnectorDataTransmissionException(e.getMessage(), e);
-			} catch (final SecurityException e) {
-				throw new ConnectorDataTransmissionException(e.getMessage(), e);
-			} catch (final NoSuchMethodException e) {
-				throw new ConnectorDataTransmissionException(e.getMessage(), e);
-			} catch (final IllegalArgumentException e) {
-				throw new ConnectorDataTransmissionException(e.getMessage(), e);
-			} catch (final IllegalAccessException e) {
-				throw new ConnectorDataTransmissionException(e.getMessage(), e);
-			} catch (final JMSException e) {
-				throw new ConnectorDataTransmissionException(e.getMessage(), e);
-			}
-		}
-
-	}
-
-	public void close() throws ConnectorDataTransmissionException {
-		try {
-			this.connection.stop();
-		} catch (final JMSException e) {
-			throw new ConnectorDataTransmissionException(e.getMessage(), e);
-		}
 	}
 }

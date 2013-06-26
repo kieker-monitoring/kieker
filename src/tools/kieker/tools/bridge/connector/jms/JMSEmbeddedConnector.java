@@ -60,9 +60,8 @@ public class JMSEmbeddedConnector extends JMSClientConnector {
 			this.broker.addConnector("tcp://localhost:" + this.port);
 			this.broker.start();
 			super.initialize();
-			// CHECKSTYLE:OFF IllegalCatch - Exception cannot be avoided as the broker actually throws this.
-		} catch (final Exception e) {
-			// CHECKSTYLE:ON
+			// Exception cannot be avoided as the broker actually throws this.
+		} catch (final Exception e) { // NOCS
 			throw new ConnectorDataTransmissionException(e.getMessage(), e);
 		}
 	}
@@ -72,9 +71,8 @@ public class JMSEmbeddedConnector extends JMSClientConnector {
 		try {
 			super.close();
 			this.broker.stop();
-			// CHECKSTYLE:OFF IllegalCatch - Exception cannot be avoided as the broker actually throws this.
-		} catch (final Exception e) {
-			// CHECKSTYLE:ON
+			// Exception cannot be avoided as the broker actually throws this.
+		} catch (final Exception e) { // NOCS
 			throw new ConnectorDataTransmissionException(e.getMessage(), e);
 		}
 	}

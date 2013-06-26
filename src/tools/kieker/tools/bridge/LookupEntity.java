@@ -27,17 +27,15 @@ import kieker.common.record.IMonitoringRecord;
  * @since 1.8
  */
 public final class LookupEntity {
-	// TODO: there should be no real speedup compared to getter/setter (or is here anything special at work?)
-
 	/**
 	 * List of parameter types for a given IMonitoringRecord.
 	 */
-	public final Class<?>[] parameterTypes; // NOCS (for speedup reasons these properties are public)
+	private final Class<?>[] parameterTypes; // NOCS (for speedup reasons these properties are public)
 
 	/**
 	 * Constructor for an IMonitoringRecord class.
 	 */
-	public final Constructor<? extends IMonitoringRecord> constructor; // NOCS (for speedup reasons these properties are public)
+	private final Constructor<? extends IMonitoringRecord> constructor; // NOCS (for speedup reasons these properties are public)
 
 	/**
 	 * Construct one new LookupEntry.
@@ -51,4 +49,13 @@ public final class LookupEntity {
 		this.parameterTypes = parameterTypes;
 		this.constructor = constructor;
 	}
+
+	public Class<?>[] getParameterTypes() {
+		return this.parameterTypes;
+	}
+
+	public Constructor<? extends IMonitoringRecord> getConstructor() {
+		return this.constructor;
+	}
+
 }

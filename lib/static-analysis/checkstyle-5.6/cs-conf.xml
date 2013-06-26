@@ -14,14 +14,7 @@
         <property name="checkFormat" value=".*"/>
         <property name="influenceFormat" value="0"/>
     </module>
-    
-    <!--  Allows to disable checkstyle for special sections -->
-    <module name="SuppressionCommentFilter">
-    	<property name="offCommentFormat" value="CHECKSTYLE:OFF ([\w\|]+)"/>
-    	<property name="onCommentFormat" value="CHECKSTYLE:ON ([\w\|]+)"/>
-    	<property name="checkFormat" value="$1"/>
-	</module>
-
+   
     <!--
       If you set the basedir property below, then all reported file
       names will be relative to the specified directory. See

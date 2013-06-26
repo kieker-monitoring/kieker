@@ -24,6 +24,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.security.AccessController;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -45,15 +46,19 @@ import kieker.tools.bridge.ServiceContainer;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.IServiceConnector;
 import kieker.tools.bridge.connector.ServiceConnectorFactory;
+import kieker.tools.util.CLIHelpFormatter;
 
 /**
- * 
+ * The command line server of the KDB
  * 
  * @author Reiner Jung
  * @since 1.8
  */
 public final class CLIServerMain {
 
+	/**
+	 * The logger used in the server.
+	 */
 	public static final Log LOG = LogFactory.getLog(CLIServerMain.class);
 
 	private static final String CMD_TYPE = "t";
@@ -92,6 +97,10 @@ public final class CLIServerMain {
 	private static final String CMD_MAP_FILE = "m";
 	private static final String CMD_MAP_FILE_LONG = "map";
 
+	private static final String DAEMON_FILE = "daemon.pidfile";
+
+	private static final String JAVA_TMP_DIR = "java.io.tmpdir";
+
 	private static boolean verbose;
 	private static boolean stats;
 	private static long startTime;
@@ -100,17 +109,21 @@ public final class CLIServerMain {
 	private static Options options;
 	private static CommandLine commandLine;
 
+	private static URLClassLoader classLoader;
+	private static ServiceContainer container;
+
 	private CLIServerMain() {
 		// private default constructor
 	}
 
 	/**
-	 * CLS server main.
+	 * CLI server main.
 	 * 
 	 * @param args
 	 *            command line arguments
 	 */
 	public static void main(final String[] args) {
+		int exitCode = 0;
 		CLIServerMain.declareOptions();
 		try {
 			// parse the command line arguments
@@ -121,6 +134,13 @@ public final class CLIServerMain {
 
 			// statistics
 			stats = commandLine.hasOption(CMD_STATS);
+
+			// daemon mode
+			if (commandLine.hasOption(CMD_DAEMON)) {
+				System.out.close();
+				System.err.close();
+				CLIServerMain.getPidFile().deleteOnExit();
+			}
 
 			// Find libraries and setup mapping
 			final Map<Integer, Class<IMonitoringRecord>> recordMap = CLIServerMain.createRecordMap();
@@ -135,33 +155,46 @@ public final class CLIServerMain {
 
 			// start service depending on type
 			if (commandLine.hasOption(CMD_TYPE)) {
-				CLIServerMain.runService(new ServiceContainer(configuration, CLIServerMain.createService(recordMap), false));
+				container = new ServiceContainer(configuration, CLIServerMain.createService(recordMap), false);
+				CLIServerMain.runService();
 			}
 		} catch (final ParseException e) {
-			CLIServerMain.usage("Parsing failed.  Reason: " + e.getMessage(), 20);
+			CLIServerMain.usage("Parsing failed.  Reason: " + e.getMessage());
+			exitCode = 4;
 		} catch (final IOException e) {
-			CLIServerMain.usage("Mapping file read error: " + e.getMessage(), 1);
+			CLIServerMain.usage("Mapping file read error: " + e.getMessage());
+			exitCode = 1;
 		} catch (final CLIConfigurationErrorException e) {
-			CLIServerMain.usage("Configuration error: " + e.getMessage(), 6);
+			CLIServerMain.usage("Configuration error: " + e.getMessage());
+			exitCode = 2;
 		} catch (final ConnectorDataTransmissionException e) {
-			CLIServerMain.usage("Communication error: " + e.getMessage(), 2);
+			CLIServerMain.usage("Communication error: " + e.getMessage());
+			exitCode = 3;
+		} finally {
+			if (classLoader != null) {
+				try {
+					classLoader.close();
+				} catch (final IOException e) {
+					LOG.error("Classloader failed on close.");
+					exitCode = 5;
+				}
+			}
 		}
+		System.exit(exitCode);
 	}
 
 	/**
 	 * Execute the bridge service.
 	 * 
-	 * @param service
-	 *            The service to be executed
 	 * @throws ConnectorDataTransmissionException
 	 *             if an error occured during connector operations
 	 */
-	private static void runService(final ServiceContainer service) throws ConnectorDataTransmissionException {
+	private static void runService() throws ConnectorDataTransmissionException {
 		if (verbose) {
 			final String updateIntervalParam = commandLine.getOptionValue(CMD_VERBOSE);
-			service.setListenerUpdateInterval((updateIntervalParam != null) ? Long.parseLong(updateIntervalParam)
+			container.setListenerUpdateInterval((updateIntervalParam != null) ? Long.parseLong(updateIntervalParam)
 					: ServiceContainer.DEFAULT_LISTENER_UPDATE_INTERVAL);
-			service.addListener(new IServiceListener() {
+			container.addListener(new IServiceListener() {
 				public void handleEvent(final long count, final String message) {
 					LOG.info("Received " + count + " records");
 				}
@@ -171,20 +204,37 @@ public final class CLIServerMain {
 		if (stats) {
 			startTime = System.nanoTime();
 		}
+
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			@Override
+			public void run() {
+				try {
+					CLIServerMain.shutdown();
+				} catch (final ConnectorDataTransmissionException e) {
+					LOG.error("Graceful shutdown failed.");
+					LOG.error("Cause " + e.getMessage());
+				}
+			}
+		});
+
 		// run the service
-		service.run();
+		container.run();
 
 		if (stats) {
 			deltaTime = System.nanoTime() - startTime;
 		}
 		if (verbose) {
-			System.out.println("TCP server stopped.");
+			LOG.info("Server stopped.");
 		}
 		if (stats) {
-			System.out.println("Execution time: " + deltaTime + " ns  " + TimeUnit.SECONDS.convert(deltaTime, TimeUnit.NANOSECONDS) + " s");
-			System.out.println("Time per records: " + (deltaTime / service.getRecordCount()) + " ns/r");
-			System.out.println("Records per second: " + (service.getRecordCount() / (double) TimeUnit.SECONDS.convert(deltaTime, TimeUnit.NANOSECONDS)));
+			LOG.info("Execution time: " + deltaTime + " ns  " + TimeUnit.SECONDS.convert(deltaTime, TimeUnit.NANOSECONDS) + " s");
+			LOG.info("Time per records: " + (deltaTime / container.getRecordCount()) + " ns/r");
+			LOG.info("Records per second: " + (container.getRecordCount() / (double) TimeUnit.SECONDS.convert(deltaTime, TimeUnit.NANOSECONDS)));
 		}
+	}
+
+	protected static void shutdown() throws ConnectorDataTransmissionException {
+		container.shutdown();
 	}
 
 	/**
@@ -300,11 +350,11 @@ public final class CLIServerMain {
 	private static IServiceConnector createTCPSingleServerService(final Map<Integer, Class<IMonitoringRecord>> recordList) throws CLIConfigurationErrorException {
 		if (commandLine.hasOption("port")) {
 			final int port = Integer.parseInt(commandLine.getOptionValue("port"));
-			final IServiceConnector service = ServiceConnectorFactory.createTCPSingleServerServiceConnector(recordList, port);
+			final IServiceConnector connector = ServiceConnectorFactory.createTCPSingleServerServiceConnector(recordList, port);
 			if (verbose) {
-				System.out.println("TCP server listening at " + port);
+				LOG.info("TCP server listening at " + port);
 			}
-			return service;
+			return connector;
 		} else {
 			throw new CLIConfigurationErrorException("Missing port for tcp server");
 		}
@@ -323,11 +373,11 @@ public final class CLIServerMain {
 	private static IServiceConnector createTCPMultiServerService(final Map<Integer, Class<IMonitoringRecord>> recordList) throws CLIConfigurationErrorException {
 		if (commandLine.hasOption("port")) {
 			final int port = Integer.parseInt(commandLine.getOptionValue("port"));
-			final IServiceConnector service = ServiceConnectorFactory.createTCPMultiServerServiceConnector(recordList, port);
+			final IServiceConnector connector = ServiceConnectorFactory.createTCPMultiServerServiceConnector(recordList, port);
 			if (verbose) {
-				System.out.println("TCP server listening at " + port);
+				LOG.info("TCP server listening at " + port);
 			}
-			return service;
+			return connector;
 		} else {
 			throw new CLIConfigurationErrorException("Missing port for tcp server");
 		}
@@ -348,11 +398,11 @@ public final class CLIServerMain {
 			if (commandLine.hasOption("host")) {
 				final int port = Integer.parseInt(commandLine.getOptionValue("port"));
 				final String hostname = commandLine.getOptionValue("host");
-				final IServiceConnector service = ServiceConnectorFactory.createTCPClientServiceConnector(recordList, hostname, port);
+				final IServiceConnector connector = ServiceConnectorFactory.createTCPClientServiceConnector(recordList, hostname, port);
 				if (verbose) {
 					LOG.info("TCP client connected to " + hostname + ":" + port);
 				}
-				return service;
+				return connector;
 			} else {
 				throw new CLIConfigurationErrorException("Missing hostname for tcp client");
 			}
@@ -369,12 +419,10 @@ public final class CLIServerMain {
 	 * @param code
 	 *            the exit code
 	 */
-	private static void usage(final String message, final int code) {
-		System.err.println(message);
-		// TODO: we have a custom formatted HelpFormatter somewhere.
-		final HelpFormatter formatter = new HelpFormatter();
+	private static void usage(final String message) {
+		LOG.error(message);
+		final HelpFormatter formatter = new CLIHelpFormatter();
 		formatter.printHelp("cli-kieker-service", options, true);
-		System.exit(code);
 	}
 
 	/**
@@ -396,12 +444,12 @@ public final class CLIServerMain {
 		for (int i = 0; i < libraries.length; i++) {
 			urls[i] = new File(libraries[i]).toURI().toURL();
 		}
-		// TODO: Consider using Privileged Action instead
-		final URLClassLoader classLoader = new URLClassLoader(urls, CLIServerMain.class.getClassLoader());
+
+		final PrivilegedClassLoaderAction action = new PrivilegedClassLoaderAction(urls);
+		classLoader = AccessController.doPrivileged(action);
 
 		BufferedReader in = null;
 		try {
-			// TODO: Use the correct encoding
 			in = new BufferedReader(new FileReader(filename));
 
 			String line = null;
@@ -504,5 +552,23 @@ public final class CLIServerMain {
 		options.addOption(option);
 
 		return options;
+	}
+
+	private static File getPidFile() throws IOException {
+		File pidFile = null;
+		if (System.getProperty(DAEMON_FILE) != null) {
+			pidFile = new File(System.getProperty(DAEMON_FILE));
+		} else {
+			if (new File(System.getProperty(JAVA_TMP_DIR)).exists()) {
+				pidFile = new File(System.getProperty(JAVA_TMP_DIR) + "/kdb.pid");
+			} else {
+				throw new IOException("Java temp directory " + System.getProperty(JAVA_TMP_DIR) + " does not exist.");
+			}
+		}
+		if (pidFile.exists()) {
+			throw new IOException("PID file " + pidFile.getCanonicalPath() + " already exists, indicating the service is already running.");
+		}
+
+		return pidFile;
 	}
 }

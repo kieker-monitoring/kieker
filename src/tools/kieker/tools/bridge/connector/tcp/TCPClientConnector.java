@@ -100,10 +100,10 @@ public class TCPClientConnector extends AbstractTCPConnector {
 			final Integer id = this.in.readInt();
 			final LookupEntity recordProperty = this.lookupEntityMap.get(id);
 			if (recordProperty != null) {
-				final Object[] values = new Object[recordProperty.parameterTypes.length];
+				final Object[] values = new Object[recordProperty.getParameterTypes().length];
 
-				int i = 0;
-				for (final Class<?> parameterType : recordProperty.parameterTypes) {
+				for (int i = 0; i < recordProperty.getParameterTypes().length; i++) {
+					final Class<?> parameterType = recordProperty.getParameterTypes()[i];
 					if (boolean.class.equals(parameterType)) {
 						values[i] = this.in.readBoolean();
 					} else if (Boolean.class.equals(parameterType)) {
@@ -137,13 +137,11 @@ public class TCPClientConnector extends AbstractTCPConnector {
 						this.in.read(this.buffer, 0, bufLen);
 						values[i] = new String(this.buffer, 0, bufLen, "UTF-8");
 					} else { // reference types
-						// TODO the following code is non standard and will not work
-						values[i] = this.deserializeNextRecord();
+						throw new ConnectorDataTransmissionException("References are not yet supported.");
 					}
-					i++;
 				}
 
-				return recordProperty.constructor.newInstance(new Object[] { values });
+				return recordProperty.getConstructor().newInstance(new Object[] { values });
 			} else {
 				throw new IOException("Record type " + id + " is not registered.");
 			}
