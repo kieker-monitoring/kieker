@@ -22,7 +22,7 @@ import java.security.PrivilegedAction;
 /**
  * @author Reiner Jung
  * @author Nils Ehmke
- * 
+ * @since 1.8
  */
 public class PrivilegedClassLoaderAction implements PrivilegedAction<URLClassLoader> {
 

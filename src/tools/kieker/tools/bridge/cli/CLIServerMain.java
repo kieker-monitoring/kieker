@@ -235,6 +235,12 @@ public final class CLIServerMain {
 		}
 	}
 
+	/**
+	 * Hook for the shutdwon thread so it can access the container's shutdown routine.
+	 * 
+	 * @throws ConnectorDataTransmissionException
+	 *             if any internal shutdown calls fail
+	 */
 	protected static void shutdown() throws ConnectorDataTransmissionException {
 		container.shutdown();
 	}
@@ -556,6 +562,13 @@ public final class CLIServerMain {
 		return options;
 	}
 
+	/**
+	 * Check for pid file.
+	 * 
+	 * @return A pid file object
+	 * @throws IOException
+	 *             if file definition fails or the file already exists
+	 */
 	private static File getPidFile() throws IOException {
 		File pidFile = null;
 		if (System.getProperty(DAEMON_FILE) != null) {
