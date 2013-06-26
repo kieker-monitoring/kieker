@@ -171,14 +171,15 @@ public final class CLIServerMain {
 			CLIServerMain.usage("Communication error: " + e.getMessage());
 			exitCode = 3;
 		} finally {
-			if (classLoader != null) {
-				try {
-					classLoader.close();
-				} catch (final IOException e) {
-					LOG.error("Classloader failed on close.");
-					exitCode = 5;
-				}
-			}
+			// The URLClassLoader does not have a close method in Java 1.5
+			// if (classLoader != null) {
+			// try {
+			// classLoader.close();
+			// } catch (final IOException e) {
+			// LOG.error("Classloader failed on close.");
+			// exitCode = 5;
+			// }
+			// }
 		}
 		System.exit(exitCode);
 	}
