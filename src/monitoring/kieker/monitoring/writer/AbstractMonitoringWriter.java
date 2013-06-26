@@ -31,8 +31,9 @@ import kieker.monitoring.core.controller.IMonitoringController;
 public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 	private static final Log LOG = LogFactory.getLog(AbstractMonitoringWriter.class);
 
-	private final Configuration configuration;
 	protected IMonitoringController monitoringController;
+
+	private final Configuration configuration;
 
 	/**
 	 * 

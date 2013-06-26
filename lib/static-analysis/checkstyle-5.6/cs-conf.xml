@@ -14,6 +14,13 @@
         <property name="checkFormat" value=".*"/>
         <property name="influenceFormat" value="0"/>
     </module>
+    
+    <!--  Allows to disable checkstyle for special sections -->
+    <module name="SuppressionCommentFilter">
+    	<property name="offCommentFormat" value="CHECKSTYLE:OFF ([\w\|]+)"/>
+    	<property name="onCommentFormat" value="CHECKSTYLE:ON ([\w\|]+)"/>
+    	<property name="checkFormat" value="$1"/>
+	</module>
 
     <!--
       If you set the basedir property below, then all reported file
@@ -353,7 +360,7 @@
 
         <!-- Detects inline conditionals. !-->
         <!-- See http://checkstyle.sf.net/config_coding.html !-->
-        <module name="AvoidInlineConditionals"/>
+        <!-- <module name="AvoidInlineConditionals"/> -->
 
         <!-- Checks that classes that define a covariant equals() method also override method equals(java.lang.Object). !-->
         <!-- See http://checkstyle.sf.net/config_coding.html !-->
@@ -1230,7 +1237,7 @@
             <property name="allowEmptyConstructors" value="true"/>
             <property name="allowEmptyMethods"      value="true"/>
         </module>
-
+        
     </module>
 
 </module>
