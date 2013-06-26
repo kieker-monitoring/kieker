@@ -106,7 +106,7 @@ public class TCPSingleServerConnector extends AbstractTCPConnector {
 						values[i] = this.in.readByte();
 					} else if (Byte.class.equals(parameterType)) {
 						values[i] = Byte.valueOf(this.in.readByte());
-					} else if (short.class.equals(parameterType)) {
+					} else if (short.class.equals(parameterType)) { // NOPMD
 						values[i] = this.in.readShort();
 					} else if (Short.class.equals(parameterType)) {
 						values[i] = Short.valueOf(this.in.readShort());

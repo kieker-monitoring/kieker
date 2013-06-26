@@ -171,7 +171,7 @@ public class JMSClientConnector implements IServiceConnector {
 						values[i] = message.readByte();
 					} else if (Byte.class.equals(parameterType)) {
 						values[i] = Byte.valueOf(message.readByte());
-					} else if (short.class.equals(parameterType)) {
+					} else if (short.class.equals(parameterType)) { // NOPMD
 						values[i] = message.readShort();
 					} else if (Short.class.equals(parameterType)) {
 						values[i] = Short.valueOf(message.readShort());
@@ -249,7 +249,7 @@ public class JMSClientConnector implements IServiceConnector {
 						values[i] = Byte.parseByte(attributes[i + 1]);
 					} else if (Byte.class.equals(parameterType)) {
 						values[i] = Byte.valueOf(Byte.parseByte(attributes[i + 1]));
-					} else if (short.class.equals(parameterType)) {
+					} else if (short.class.equals(parameterType)) { // NOPMD
 						values[i] = Short.parseShort(attributes[i + 1]);
 					} else if (Short.class.equals(parameterType)) {
 						values[i] = Short.valueOf(Short.parseShort(attributes[i + 1]));

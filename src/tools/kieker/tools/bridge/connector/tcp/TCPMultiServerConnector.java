@@ -25,6 +25,8 @@ import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.tools.bridge.LookupEntity;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
@@ -126,6 +128,8 @@ public class TCPMultiServerConnector extends AbstractTCPConnector {
 	class ServiceThread implements Runnable {
 		private static final int BUF_LEN = 65536;
 
+		public final Log LOG = LogFactory.getLog(ServiceThread.class);
+
 		private final Socket socket;
 		private final byte[] buffer = new byte[BUF_LEN];
 
@@ -150,20 +154,19 @@ public class TCPMultiServerConnector extends AbstractTCPConnector {
 						this.parent.getRecordQueue().put(this.deserialize(in));
 					} catch (final InterruptedException e) {
 						this.parent.setActive(false);
-						System.out.println("Listener " + Thread.currentThread().getId() + " died. Cause " + e.getMessage());
+						this.LOG.warn("Listener " + Thread.currentThread().getId() + " died. Cause " + e.getMessage());
 					} catch (final ConnectorDataTransmissionException e) {
 						this.parent.setActive(false);
-						System.out.println("Listener " + Thread.currentThread().getId() + " died. Cause " + e.getMessage());
+						this.LOG.warn("Listener " + Thread.currentThread().getId() + " died. Cause " + e.getMessage());
 					} catch (final ConnectorEndOfDataException e) {
 						this.parent.setActive(false);
-						System.out.println("Listener " + Thread.currentThread().getId() + " died. Cause " + e.getMessage());
+						this.LOG.warn("Listener " + Thread.currentThread().getId() + " died. Cause " + e.getMessage());
 					}
 				}
 				in.close();
 				this.socket.close();
 			} catch (final IOException e) {
-				this.parent.setActive(false);
-				// ignore, as server is shutting down anyway.
+				this.LOG.warn("IO exception occurred. Cause " + e.getMessage());
 			}
 		}
 
@@ -193,7 +196,7 @@ public class TCPMultiServerConnector extends AbstractTCPConnector {
 							values[i] = in.readByte();
 						} else if (Byte.class.equals(parameterType)) {
 							values[i] = Byte.valueOf(in.readByte());
-						} else if (short.class.equals(parameterType)) {
+						} else if (short.class.equals(parameterType)) { // NOPMD
 							values[i] = in.readShort();
 						} else if (Short.class.equals(parameterType)) {
 							values[i] = Short.valueOf(in.readShort());
