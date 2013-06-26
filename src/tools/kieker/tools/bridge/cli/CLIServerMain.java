@@ -333,8 +333,8 @@ public final class CLIServerMain {
 	 *             if no JMS service URL was specified
 	 */
 	private static IServiceConnector createJMSService(final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordList) throws CLIConfigurationErrorException {
-		final String username = commandLine.hasOption("u") ? commandLine.getOptionValue("u") : null;
-		final String password = commandLine.hasOption("w") ? commandLine.getOptionValue("w") : null;
+		final String username = commandLine.hasOption("u") ? commandLine.getOptionValue("u") : null; // NOPMD
+		final String password = commandLine.hasOption("w") ? commandLine.getOptionValue("w") : null; // NOPMD
 		if (commandLine.hasOption("url")) {
 			try {
 				return ServiceConnectorFactory.createJMSServiceConnector(recordList, username, password, new URI(commandLine.getOptionValue("url")));

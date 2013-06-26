@@ -59,7 +59,7 @@ public class JMSEmbeddedConnector extends JMSClientConnector {
 			this.broker.start();
 			super.initialize();
 			// Exception cannot be avoided as the broker actually throws this.
-		} catch (final Exception e) { // NOCS
+		} catch (final Exception e) { // NOCS, NOPMD
 			throw new ConnectorDataTransmissionException(e.getMessage(), e);
 		}
 	}
@@ -70,7 +70,7 @@ public class JMSEmbeddedConnector extends JMSClientConnector {
 			super.close();
 			this.broker.stop();
 			// Exception cannot be avoided as the broker actually throws this.
-		} catch (final Exception e) { // NOCS
+		} catch (final Exception e) { // NOCS, NOPMD
 			throw new ConnectorDataTransmissionException(e.getMessage(), e);
 		}
 	}

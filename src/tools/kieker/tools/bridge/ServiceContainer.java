@@ -75,13 +75,12 @@ public class ServiceContainer {
 	public void run() throws ConnectorDataTransmissionException {
 		do {
 			this.updateState("Starting service container.");
-			long recordCounter = 0;
 			this.service.initialize();
 			this.active = true;
 			while (this.active) {
 				try {
 					this.kiekerMonitoringController.newMonitoringRecord(this.service.deserializeNextRecord());
-					if ((++recordCounter % this.listenerUpdateInterval) == 0) {
+					if ((this.kiekerMonitoringController.getNumberOfInserts() % this.listenerUpdateInterval) == 0) {
 						this.updateState(this.listenerUpdateInterval + " records received.");
 					}
 				} catch (final ConnectorEndOfDataException e) {
