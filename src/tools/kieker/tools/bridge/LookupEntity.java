@@ -21,7 +21,8 @@ import java.lang.reflect.Constructor;
 import kieker.common.record.IMonitoringRecord;
 
 /**
- * 
+ * Lookup entity for a record id to a monitoring record. To avoid too many lookups and queries,
+ * this map record contains a constructor reference and an array containing the field descriptions.
  * 
  * @author Reiner Jung
  * @since 1.8
@@ -30,12 +31,12 @@ public final class LookupEntity {
 	/**
 	 * List of parameter types for a given IMonitoringRecord.
 	 */
-	private final Class<?>[] parameterTypes; // NOCS (for speedup reasons these properties are public)
+	private final Class<?>[] parameterTypes;
 
 	/**
 	 * Constructor for an IMonitoringRecord class.
 	 */
-	private final Constructor<? extends IMonitoringRecord> constructor; // NOCS (for speedup reasons these properties are public)
+	private final Constructor<? extends IMonitoringRecord> constructor;
 
 	/**
 	 * Construct one new LookupEntry.

@@ -244,27 +244,27 @@ public class JMSClientConnector implements IServiceConnector {
 					} else if (byte.class.equals(parameterType)) {
 						values[i] = Byte.parseByte(attributes[i + 1]);
 					} else if (Byte.class.equals(parameterType)) {
-						values[i] = new Byte(Byte.parseByte(attributes[i + 1]));
+						values[i] = Byte.valueOf(Byte.parseByte(attributes[i + 1]));
 					} else if (short.class.equals(parameterType)) {
 						values[i] = Short.parseShort(attributes[i + 1]);
 					} else if (Short.class.equals(parameterType)) {
-						values[i] = new Short(Short.parseShort(attributes[i + 1]));
+						values[i] = Short.valueOf(Short.parseShort(attributes[i + 1]));
 					} else if (int.class.equals(parameterType)) {
 						values[i] = Integer.parseInt(attributes[i + 1]);
 					} else if (Integer.class.equals(parameterType)) {
-						values[i] = new Integer(Integer.parseInt(attributes[i + 1]));
+						values[i] = Integer.valueOf(Integer.parseInt(attributes[i + 1]));
 					} else if (long.class.equals(parameterType)) {
 						values[i] = Long.parseLong(attributes[i + 1]);
 					} else if (Long.class.equals(parameterType)) {
-						values[i] = new Long(Long.parseLong(attributes[i + 1]));
+						values[i] = Long.valueOf(Long.parseLong(attributes[i + 1]));
 					} else if (float.class.equals(parameterType)) {
 						values[i] = Float.parseFloat(attributes[i + 1]);
 					} else if (Float.class.equals(parameterType)) {
-						values[i] = new Float(Float.parseFloat(attributes[i + 1]));
+						values[i] = Float.valueOf(Float.parseFloat(attributes[i + 1]));
 					} else if (double.class.equals(parameterType)) {
 						values[i] = Double.parseDouble(attributes[i + 1]);
 					} else if (Double.class.equals(parameterType)) {
-						values[i] = new Double(Double.parseDouble(attributes[i + 1]));
+						values[i] = Double.valueOf(Double.parseDouble(attributes[i + 1]));
 					} else if (String.class.equals(parameterType)) {
 						values[i] = attributes[i + 1];
 					} else { // reference types
