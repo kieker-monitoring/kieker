@@ -46,9 +46,9 @@ public final class LookupEntity {
 	 * @param parameterTypes
 	 *            monitoring record property type list
 	 */
-	public LookupEntity(final Constructor<? extends IMonitoringRecord> constructor, final Class<?>[] parameterTypes) {
-		this.parameterTypes = parameterTypes; // NOPMD
-		this.constructor = constructor; // NOPMD
+	public LookupEntity(final Constructor<? extends IMonitoringRecord> constructor, final Class<?>[] parameterTypes) { // NOPMD
+		this.parameterTypes = parameterTypes;
+		this.constructor = constructor;
 	}
 
 	public Class<?>[] getParameterTypes() {

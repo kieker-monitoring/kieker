@@ -37,7 +37,7 @@ public class PrivilegedClassLoaderAction implements PrivilegedAction<URLClassLoa
 	 * @param urls
 	 *            The list of libraries used to create the class loader.
 	 */
-	public PrivilegedClassLoaderAction(final URL[] urls) {
+	public PrivilegedClassLoaderAction(final URL[] urls) { // NOPMND
 		this.urls = urls;
 	}
 
