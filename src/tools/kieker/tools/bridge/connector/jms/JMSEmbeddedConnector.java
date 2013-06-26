@@ -26,7 +26,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 
 /**
- * 
+ * a yes broken JMSClient with an embedded JMS server
  * 
  * @author Reiner Jung
  * @since 1.8
@@ -50,6 +50,11 @@ public class JMSEmbeddedConnector extends JMSClientConnector {
 		this.port = port;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.tools.bridge.connector.jms.JMSClientConnector#initialize()
+	 */
 	@Override
 	public void initialize() throws ConnectorDataTransmissionException {
 		this.broker = new BrokerService();
@@ -64,6 +69,11 @@ public class JMSEmbeddedConnector extends JMSClientConnector {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.tools.bridge.connector.jms.JMSClientConnector#close()
+	 */
 	@Override
 	public void close() throws ConnectorDataTransmissionException {
 		try {

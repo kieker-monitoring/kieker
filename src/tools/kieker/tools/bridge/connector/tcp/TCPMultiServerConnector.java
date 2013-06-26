@@ -27,7 +27,7 @@ import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.ConnectorEndOfDataException;
 
 /**
- * 
+ * TCP server connector supporting multiple clients.
  * 
  * @author Reiner Jung
  * @since 1.8
@@ -57,6 +57,11 @@ public class TCPMultiServerConnector extends AbstractTCPConnector {
 		this.active = true;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.tools.bridge.connector.tcp.AbstractTCPConnector#initialize()
+	 */
 	@Override
 	public void initialize() throws ConnectorDataTransmissionException {
 		super.initialize();
@@ -86,6 +91,11 @@ public class TCPMultiServerConnector extends AbstractTCPConnector {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.tools.bridge.connector.IServiceConnector#close()
+	 */
 	public void close() throws ConnectorDataTransmissionException {
 		this.active = false;
 		try {
@@ -95,6 +105,11 @@ public class TCPMultiServerConnector extends AbstractTCPConnector {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.tools.bridge.connector.IServiceConnector#deserializeNextRecord()
+	 */
 	public IMonitoringRecord deserializeNextRecord() throws ConnectorDataTransmissionException, ConnectorEndOfDataException {
 		try {
 			return this.recordQueue.take();

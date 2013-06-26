@@ -19,7 +19,7 @@ package kieker.tools.bridge.connector;
 import kieker.common.record.IMonitoringRecord;
 
 /**
- * 
+ * Generic interface for every servcie connector.
  * 
  * @author Reiner Jung
  * @since 1.8

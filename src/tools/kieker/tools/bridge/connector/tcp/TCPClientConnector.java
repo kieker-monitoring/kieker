@@ -29,7 +29,7 @@ import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.ConnectorEndOfDataException;
 
 /**
- * 
+ * Connects to a remote record source.
  * 
  * @author Reiner Jung
  * @since 1.8

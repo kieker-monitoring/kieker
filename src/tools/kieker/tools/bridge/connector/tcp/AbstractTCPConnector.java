@@ -32,6 +32,9 @@ import kieker.tools.bridge.connector.ServiceConnectorFactory;
  */
 public abstract class AbstractTCPConnector implements IServiceConnector {
 
+	/**
+	 * Map containing record ids and the assigned constructor and field type list
+	 */
 	protected ConcurrentMap<Integer, LookupEntity> lookupEntityMap;
 
 	private final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordMap;
@@ -39,8 +42,6 @@ public abstract class AbstractTCPConnector implements IServiceConnector {
 	/**
 	 * AbstractTCPService constructor.
 	 * 
-	 * @param configuration
-	 *            Kieker configuration
 	 * @param recordMap
 	 *            IMonitoringRecord to id map
 	 */
@@ -48,6 +49,11 @@ public abstract class AbstractTCPConnector implements IServiceConnector {
 		this.recordMap = recordMap;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.tools.bridge.connector.IServiceConnector#initialize()
+	 */
 	public void initialize() throws ConnectorDataTransmissionException {
 		this.lookupEntityMap = ServiceConnectorFactory.createLookupEntityMap(this.recordMap);
 	}

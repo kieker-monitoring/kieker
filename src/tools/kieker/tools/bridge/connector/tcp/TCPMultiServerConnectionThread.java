@@ -39,7 +39,7 @@ import kieker.tools.bridge.connector.ConnectorEndOfDataException;
 public class TCPMultiServerConnectionThread implements Runnable {
 	private static final int BUF_LEN = 65536;
 
-	private final static Log LOG = LogFactory.getLog(TCPMultiServerConnectionThread.class);
+	private static final Log LOG = LogFactory.getLog(TCPMultiServerConnectionThread.class);
 
 	private final Socket socket;
 	private final byte[] buffer = new byte[BUF_LEN];
@@ -68,6 +68,11 @@ public class TCPMultiServerConnectionThread implements Runnable {
 		this.parent = parent;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Runnable#run()
+	 */
 	public void run() {
 		try {
 			final DataInputStream in = new DataInputStream(this.socket.getInputStream());

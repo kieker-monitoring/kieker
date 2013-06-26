@@ -28,7 +28,7 @@ import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.ConnectorEndOfDataException;
 
 /**
- * 
+ * TCP server connector supporting one client.
  * 
  * @author Reiner Jung
  * @since 1.8
@@ -57,6 +57,11 @@ public class TCPSingleServerConnector extends AbstractTCPConnector {
 		this.port = port;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.tools.bridge.connector.tcp.AbstractTCPConnector#initialize()
+	 */
 	@Override
 	public void initialize() throws ConnectorDataTransmissionException {
 		super.initialize();
@@ -69,6 +74,11 @@ public class TCPSingleServerConnector extends AbstractTCPConnector {
 
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see kieker.tools.bridge.connector.IServiceConnector#close()
+	 */
 	public void close() throws ConnectorDataTransmissionException {
 		try {
 			this.in.close();
@@ -84,10 +94,11 @@ public class TCPSingleServerConnector extends AbstractTCPConnector {
 	 * 
 	 * @return the de-serialized IMonitoringRecord object or null if the stream was terminated by the client.
 	 * 
-	 * @throws Exception
-	 *             IOException when an unknown id is received which cannot be mapped to an IMonitoringRecord
+	 * @throws ConnectorDataTransmissionException
+	 *             if an unknown id is received which cannot be mapped to an IMonitoringRecord
+	 * @throws ConnectorEndOfDataException
+	 *             if the end of the data stream is reached
 	 */
-
 	public IMonitoringRecord deserializeNextRecord() throws ConnectorDataTransmissionException, ConnectorEndOfDataException {
 		// read structure ID
 		try {

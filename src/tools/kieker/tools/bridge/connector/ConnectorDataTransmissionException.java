@@ -16,22 +16,36 @@
 package kieker.tools.bridge.connector;
 
 /**
+ * Exception to box any Exception in a connector during data transmission and related tasks.
+ * 
  * @author Reiner Jung
  * @since 1.8
  */
 public class ConnectorDataTransmissionException extends Exception {
 
 	/**
-	 * 
+	 * serial number of the type
 	 */
 	private static final long serialVersionUID = -7621182316652816606L;
 
-	public ConnectorDataTransmissionException(final String message, final Exception e) {
-		super(message, e);
-	}
-
+	/**
+	 * 
+	 * @param message
+	 *            The message to explain the exception
+	 */
 	public ConnectorDataTransmissionException(final String message) {
 		super(message);
+	}
+
+	/**
+	 * 
+	 * @param message
+	 *            The message to explain the exception
+	 * @param exception
+	 *            The exception which caused this exception
+	 */
+	public ConnectorDataTransmissionException(final String message, final Exception e) {
+		super(message, e);
 	}
 
 }

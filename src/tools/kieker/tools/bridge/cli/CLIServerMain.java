@@ -404,7 +404,8 @@ public final class CLIServerMain {
 	 * @throws CLIConfigurationErrorException
 	 *             if a host name or port is missing for the client
 	 */
-	private static IServiceConnector createTCPClientService(final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordList) throws CLIConfigurationErrorException {
+	private static IServiceConnector createTCPClientService(final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordList)
+			throws CLIConfigurationErrorException {
 		if (commandLine.hasOption("port")) {
 			if (commandLine.hasOption("host")) {
 				final int port = Integer.parseInt(commandLine.getOptionValue("port"));

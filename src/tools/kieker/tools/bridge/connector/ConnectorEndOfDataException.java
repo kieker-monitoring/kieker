@@ -16,20 +16,34 @@
 package kieker.tools.bridge.connector;
 
 /**
+ * Used to indicate to the ServiceContainer that the connector has terminated due to end of data.
+ * 
  * @author Reiner Jung
  * @since 1.8
  */
 public class ConnectorEndOfDataException extends Exception {
 
 	/**
-	 * 
+	 * serial number of the type
 	 */
 	private static final long serialVersionUID = 3984491886499581526L;
 
+	/**
+	 * 
+	 * @param message
+	 *            The message to explain the exception
+	 */
 	public ConnectorEndOfDataException(final String message) {
 		super(message);
 	}
 
+	/**
+	 * 
+	 * @param message
+	 *            The message to explain the exception
+	 * @param exception
+	 *            The exception which caused this exception
+	 */
 	public ConnectorEndOfDataException(final String message, final Exception e) {
 		super(message, e);
 	}

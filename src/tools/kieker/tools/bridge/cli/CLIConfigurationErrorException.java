@@ -24,7 +24,7 @@ package kieker.tools.bridge.cli;
 public class CLIConfigurationErrorException extends Exception {
 
 	/**
-	 * 
+	 * serial number for the type
 	 */
 	private static final long serialVersionUID = 1187180806531494898L;
 
