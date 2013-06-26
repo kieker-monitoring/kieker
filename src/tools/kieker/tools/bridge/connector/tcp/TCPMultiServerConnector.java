@@ -126,7 +126,6 @@ public class TCPMultiServerConnector extends AbstractTCPConnector {
 	class ServiceThread implements Runnable {
 		private static final int BUF_LEN = 65536;
 
-		private DataInputStream in;
 		private final Socket socket;
 		private final byte[] buffer = new byte[BUF_LEN];
 
@@ -144,27 +143,26 @@ public class TCPMultiServerConnector extends AbstractTCPConnector {
 		}
 
 		public void run() {
-			while (this.parent.isActive()) {
-				try {
-					this.in = new DataInputStream(this.socket.getInputStream());
-					this.parent.getRecordQueue().put(this.deserialize());
-				} catch (final IOException e) {
-					this.parent.setActive(false);
-					System.out.println("Listener " + Thread.currentThread().getId() + " died. Cause " + e.getMessage());
-				} catch (final InterruptedException e) {
-					this.parent.setActive(false);
-					System.out.println("Listener " + Thread.currentThread().getId() + " died. Cause " + e.getMessage());
-				} catch (final ConnectorDataTransmissionException e) {
-					this.parent.setActive(false);
-					System.out.println("Listener " + Thread.currentThread().getId() + " died. Cause " + e.getMessage());
-				} catch (final ConnectorEndOfDataException e) {
-					this.parent.setActive(false);
-					System.out.println("Listener " + Thread.currentThread().getId() + " died. Cause " + e.getMessage());
-				}
-			}
 			try {
+				final DataInputStream in = new DataInputStream(this.socket.getInputStream());
+				while (this.parent.isActive()) {
+					try {
+						this.parent.getRecordQueue().put(this.deserialize(in));
+					} catch (final InterruptedException e) {
+						this.parent.setActive(false);
+						System.out.println("Listener " + Thread.currentThread().getId() + " died. Cause " + e.getMessage());
+					} catch (final ConnectorDataTransmissionException e) {
+						this.parent.setActive(false);
+						System.out.println("Listener " + Thread.currentThread().getId() + " died. Cause " + e.getMessage());
+					} catch (final ConnectorEndOfDataException e) {
+						this.parent.setActive(false);
+						System.out.println("Listener " + Thread.currentThread().getId() + " died. Cause " + e.getMessage());
+					}
+				}
+				in.close();
 				this.socket.close();
 			} catch (final IOException e) {
+				this.parent.setActive(false);
 				// ignore, as server is shutting down anyway.
 			}
 		}
@@ -172,13 +170,15 @@ public class TCPMultiServerConnector extends AbstractTCPConnector {
 		/**
 		 * Deserialize a received record.
 		 * 
+		 * @param in
+		 * 
 		 * @return a new IMonitoringRecord
 		 * @throws Exception
 		 *             throws IOException when unknown record ID is read.
 		 */
-		private IMonitoringRecord deserialize() throws ConnectorDataTransmissionException, ConnectorEndOfDataException {
+		private IMonitoringRecord deserialize(final DataInputStream in) throws ConnectorDataTransmissionException, ConnectorEndOfDataException {
 			try {
-				final Integer id = this.in.readInt();
+				final Integer id = in.readInt();
 				final LookupEntity recordProperty = TCPMultiServerConnector.this.lookupEntityMap.get(id);
 				if (recordProperty != null) {
 					final Object[] values = new Object[recordProperty.getParameterTypes().length];
@@ -186,36 +186,36 @@ public class TCPMultiServerConnector extends AbstractTCPConnector {
 					for (int i = 0; i < recordProperty.getParameterTypes().length; i++) {
 						final Class<?> parameterType = recordProperty.getParameterTypes()[i];
 						if (boolean.class.equals(parameterType)) {
-							values[i] = this.in.readBoolean();
+							values[i] = in.readBoolean();
 						} else if (Boolean.class.equals(parameterType)) {
-							values[i] = Boolean.valueOf(this.in.readBoolean());
+							values[i] = Boolean.valueOf(in.readBoolean());
 						} else if (byte.class.equals(parameterType)) {
-							values[i] = this.in.readByte();
+							values[i] = in.readByte();
 						} else if (Byte.class.equals(parameterType)) {
-							values[i] = Byte.valueOf(this.in.readByte());
+							values[i] = Byte.valueOf(in.readByte());
 						} else if (short.class.equals(parameterType)) {
-							values[i] = this.in.readShort();
+							values[i] = in.readShort();
 						} else if (Short.class.equals(parameterType)) {
-							values[i] = Short.valueOf(this.in.readShort());
+							values[i] = Short.valueOf(in.readShort());
 						} else if (int.class.equals(parameterType)) {
-							values[i] = this.in.readInt();
+							values[i] = in.readInt();
 						} else if (Integer.class.equals(parameterType)) {
-							values[i] = Integer.valueOf(this.in.readInt());
+							values[i] = Integer.valueOf(in.readInt());
 						} else if (long.class.equals(parameterType)) {
-							values[i] = this.in.readLong();
+							values[i] = in.readLong();
 						} else if (Long.class.equals(parameterType)) {
-							values[i] = Long.valueOf(this.in.readLong());
+							values[i] = Long.valueOf(in.readLong());
 						} else if (float.class.equals(parameterType)) {
-							values[i] = this.in.readFloat();
+							values[i] = in.readFloat();
 						} else if (Float.class.equals(parameterType)) {
-							values[i] = Float.valueOf(this.in.readFloat());
+							values[i] = Float.valueOf(in.readFloat());
 						} else if (double.class.equals(parameterType)) {
-							values[i] = this.in.readDouble();
+							values[i] = in.readDouble();
 						} else if (Double.class.equals(parameterType)) {
-							values[i] = Double.valueOf(this.in.readDouble());
+							values[i] = Double.valueOf(in.readDouble());
 						} else if (String.class.equals(parameterType)) {
-							final int bufLen = this.in.readInt();
-							final int resultLen = this.in.read(this.buffer, 0, bufLen);
+							final int bufLen = in.readInt();
+							final int resultLen = in.read(this.buffer, 0, bufLen);
 							if (resultLen == bufLen) {
 								values[i] = new String(this.buffer, 0, bufLen, "UTF-8");
 							} else {
