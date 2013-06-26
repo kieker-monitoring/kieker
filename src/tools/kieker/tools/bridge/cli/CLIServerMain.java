@@ -59,7 +59,7 @@ public final class CLIServerMain {
 	/**
 	 * The logger used in the server.
 	 */
-	static final Log LOG = LogFactory.getLog(CLIServerMain.class);
+	private static final Log LOG = LogFactory.getLog(CLIServerMain.class);
 
 	private static final String CMD_TYPE = "t";
 	private static final String CMD_TYPE_LONG = "type";
@@ -198,7 +198,7 @@ public final class CLIServerMain {
 					: ServiceContainer.DEFAULT_LISTENER_UPDATE_INTERVAL);
 			container.addListener(new IServiceListener() {
 				public void handleEvent(final long count, final String message) {
-					LOG.info("Received " + count + " records");
+					CLIServerMain.getLog().info("Received " + count + " records");
 				}
 			});
 		}
@@ -213,8 +213,8 @@ public final class CLIServerMain {
 				try {
 					CLIServerMain.shutdown();
 				} catch (final ConnectorDataTransmissionException e) {
-					LOG.error("Graceful shutdown failed.");
-					LOG.error("Cause " + e.getMessage());
+					CLIServerMain.getLog().error("Graceful shutdown failed.");
+					CLIServerMain.getLog().error("Cause " + e.getMessage());
 				}
 			}
 		});
@@ -226,12 +226,12 @@ public final class CLIServerMain {
 			deltaTime = System.nanoTime() - startTime;
 		}
 		if (verbose) {
-			LOG.info("Server stopped.");
+			CLIServerMain.getLog().info("Server stopped.");
 		}
 		if (stats) {
-			LOG.info("Execution time: " + deltaTime + " ns  " + TimeUnit.SECONDS.convert(deltaTime, TimeUnit.NANOSECONDS) + " s");
-			LOG.info("Time per records: " + (deltaTime / container.getRecordCount()) + " ns/r");
-			LOG.info("Records per second: " + (container.getRecordCount() / (double) TimeUnit.SECONDS.convert(deltaTime, TimeUnit.NANOSECONDS)));
+			CLIServerMain.getLog().info("Execution time: " + deltaTime + " ns  " + TimeUnit.SECONDS.convert(deltaTime, TimeUnit.NANOSECONDS) + " s");
+			CLIServerMain.getLog().info("Time per records: " + (deltaTime / container.getRecordCount()) + " ns/r");
+			CLIServerMain.getLog().info("Records per second: " + (container.getRecordCount() / (double) TimeUnit.SECONDS.convert(deltaTime, TimeUnit.NANOSECONDS)));
 		}
 	}
 
@@ -362,7 +362,7 @@ public final class CLIServerMain {
 			final int port = Integer.parseInt(commandLine.getOptionValue("port"));
 			final IServiceConnector connector = ServiceConnectorFactory.createTCPSingleServerServiceConnector(recordList, port);
 			if (verbose) {
-				LOG.info("TCP server listening at " + port);
+				CLIServerMain.getLog().info("TCP server listening at " + port);
 			}
 			return connector;
 		} else {
@@ -386,7 +386,7 @@ public final class CLIServerMain {
 			final int port = Integer.parseInt(commandLine.getOptionValue("port"));
 			final IServiceConnector connector = ServiceConnectorFactory.createTCPMultiServerServiceConnector(recordList, port);
 			if (verbose) {
-				LOG.info("TCP server listening at " + port);
+				CLIServerMain.getLog().info("TCP server listening at " + port);
 			}
 			return connector;
 		} else {
@@ -411,7 +411,7 @@ public final class CLIServerMain {
 				final String hostname = commandLine.getOptionValue("host");
 				final IServiceConnector connector = ServiceConnectorFactory.createTCPClientServiceConnector(recordList, hostname, port);
 				if (verbose) {
-					LOG.info("TCP client connected to " + hostname + ":" + port);
+					CLIServerMain.getLog().info("TCP client connected to " + hostname + ":" + port);
 				}
 				return connector;
 			} else {
@@ -431,7 +431,7 @@ public final class CLIServerMain {
 	 *            the exit code
 	 */
 	private static void usage(final String message) {
-		LOG.error(message);
+		CLIServerMain.getLog().error(message);
 		final HelpFormatter formatter = new CLIHelpFormatter();
 		formatter.printHelp("cli-kieker-service", options, true);
 	}
@@ -476,7 +476,7 @@ public final class CLIServerMain {
 						}
 					}
 				} catch (final ClassNotFoundException e) {
-					LOG.warn("Could not load class", e);
+					CLIServerMain.getLog().warn("Could not load class", e);
 				}
 			} while (line != null);
 		} finally {
@@ -588,5 +588,14 @@ public final class CLIServerMain {
 		}
 
 		return pidFile;
+	}
+
+	/**
+	 * Return the logger.
+	 * 
+	 * @return Returns the logger
+	 */
+	public static Log getLog() {
+		return LOG;
 	}
 }
