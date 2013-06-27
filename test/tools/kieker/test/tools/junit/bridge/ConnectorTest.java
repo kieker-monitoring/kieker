@@ -38,11 +38,11 @@ import kieker.test.common.junit.AbstractKiekerTest;
  */
 public class ConnectorTest extends AbstractKiekerTest {
 
-	private boolean setup = false; // NOPMD
-	private boolean close = false; // NOPMD
-
+	/**
+	 * Folder for temporary data. Is used to delete every generated file after the test completed.
+	 */
 	@Rule
-	private final TemporaryFolder tmpFolder = new TemporaryFolder();
+	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS recommends that this is private. JUnit test wants this public.
 
 	/**
 	 * Nothing to initialize.
@@ -55,6 +55,7 @@ public class ConnectorTest extends AbstractKiekerTest {
 	 * Test the ServiceContainer.
 	 * 
 	 * @throws IOException
+	 *             if an IO error occurs
 	 * @throws ConnectorDataTransmissionException
 	 *             if an exception occurs in ServiceContainer or the TestServiceConnector
 	 */
@@ -70,9 +71,6 @@ public class ConnectorTest extends AbstractKiekerTest {
 		 */
 
 		final File path = this.tmpFolder.getRoot();
-		final int rows = 0;
-
-		// Assert.assertTrue("Directory could not created", dir.mkdir() == false);
 
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
 
@@ -83,52 +81,33 @@ public class ConnectorTest extends AbstractKiekerTest {
 		configuration.setProperty(writer + '.' + AbstractAsyncFSWriter.CONFIG_MAXLOGFILES, String.valueOf(TestServiceConnector.SEND_NUMBER_OF_RECORDS * 2));
 		configuration.setProperty(writer + '.' + AbstractAsyncFSWriter.CONFIG_MAXLOGSIZE, "-1");
 		configuration.setProperty(writer + '.' + AbstractAsyncFSWriter.CONFIG_TEMP, "false");
-		configuration.setProperty(writer + '.' + AbstractAsyncFSWriter.CONFIG_PATH, path.getAbsolutePath());
-		// TODO get configuration from kieker.test.monitoring.junit.writer.filesystem.TestLogRotationMaxLogFilesAyncFsWriter
-		// set max file size to 1 record
+		configuration.setProperty(writer + '.' + AbstractAsyncFSWriter.CONFIG_PATH, path.getCanonicalPath());
 
+		// Create the service container and deploy the TestServiceConnector.
 		final ServiceContainer serviceContainer = new ServiceContainer(configuration,
-				new TestServiceConnector(this), false);
+				new TestServiceConnector(), false);
 
+		// Run the service
 		serviceContainer.run();
 
-		// TODO check number of written records like in kieker.test.monitoring.junit.writer.filesystem.AbstractTestLogRotationMaxLogFiles.checkMaxLogFiles
-		// final File[] logDirs = new File(this.tmpFolder.getRoot().getCanonicalPath()).listFiles();
+		// Check number of written records.
+		// logDirs should contain one Kieker records folders.
+		final File[] logDirs = new File(this.tmpFolder.getRoot().getCanonicalPath()).listFiles();
+		Assert.assertEquals("Should contain one folder.", 1, logDirs.length);
+		Assert.assertTrue("The first entry must be the kieker directory.", logDirs[0].isDirectory());
 
-		Assert.assertTrue("The number of send records is not equal to TestServiceConnector.SEND_NUMBER_OF_RECORDS",
-				TestServiceConnector.SEND_NUMBER_OF_RECORDS == rows);
+		// enter that folder and count the number of files.
+		final int numberOfLogFiles = new File(logDirs[0].getCanonicalPath()).listFiles().length;
 
-		// Delete iterativ every element from the created folder above
+		// The result contains 20 data records, 1 record containing the version field and 1 kieker map file
+		Assert.assertEquals("The number of send records is not equal to TestServiceConnector.SEND_NUMBER_OF_RECORDS",
+				TestServiceConnector.SEND_NUMBER_OF_RECORDS + 2, numberOfLogFiles);
 
-		// if (dir.exists()) {
-		// for (final File f : dir.listFiles()) {
-		// f.delete();
-		// }
-		// dir.delete();
-		// }
+		// now dump the temporary folder and all its content
+		this.tmpFolder.delete();
 
-		Assert.assertTrue("Directory is not cleaned", this.tmpFolder.getRoot().exists());
-	}
-
-	/**
-	 * The following three methods test if the setup, deserialize and close method is getting called.
-	 * If that is not the case the error should throw an exception which has to be catched.
-	 */
-	public void setupCalled() {
-		Assert.assertTrue("Connector's setup() method was called more than once.", !this.setup);
-		this.setup = true;
-		this.close = false;
-	}
-
-	public void deserializeCalled() {
-		Assert.assertTrue("Connector's deserialize() method called before setup() was called.", this.setup);
-	}
-
-	public void closeCalled() {
-		Assert.assertTrue("Connector's close() method was called before setup() was called.", this.setup);
-		Assert.assertTrue("Connector's close() method was called more than once.", !this.close);
-		this.close = true;
-		this.setup = false;
+		// Assert that the tempfolder does NOT exist (hey this is just for the paranoid, actually we are testing here Java API)
+		Assert.assertFalse("Directory is not cleaned.", this.tmpFolder.getRoot().exists());
 	}
 
 }

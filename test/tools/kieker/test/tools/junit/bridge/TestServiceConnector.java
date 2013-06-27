@@ -15,6 +15,8 @@
  ***************************************************************************/
 package kieker.test.tools.junit.bridge;
 
+import org.junit.Assert;
+
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
@@ -28,18 +30,34 @@ import kieker.tools.bridge.connector.IServiceConnector;
 
 public class TestServiceConnector implements IServiceConnector {
 
+	/**
+	 * Number of messages to be send in this test.
+	 */
 	public static final int SEND_NUMBER_OF_RECORDS = 20;
 
-	private final ConnectorTest unitTest;
 	private int count = 0; // NOPMD
 
-	public TestServiceConnector(final ConnectorTest unitTest) {
-		this.unitTest = unitTest;
-	}
+	private boolean initialize = false; // NOPMD
+	private boolean close = false; // NOPMD
 
+	/**
+	 * Construct the test connector.
+	 */
+	public TestServiceConnector() {}
+
+	/**
+	 * The assertions check whether the method is called after initialize() and beforE() close.
+	 * 
+	 * @throws ConnectorDataTransmissionException
+	 *             never, this is just API compatibility
+	 * @throws ConnectorEndOfDataException
+	 *             when called more than END_NUMBER_OF_RECORDS times.
+	 * @return Returns an IMontoringRecord.
+	 */
 	public IMonitoringRecord deserializeNextRecord() throws ConnectorDataTransmissionException, ConnectorEndOfDataException {
+		Assert.assertTrue("Connector's deserializeNextRecord() method called before initialize() was called.", this.initialize);
+		Assert.assertFalse("Connector's deserializeNextRecord() method called after close() was called.", this.close);
 		if (this.count < SEND_NUMBER_OF_RECORDS) {
-			this.unitTest.deserializeCalled();
 			this.count++;
 			return new OperationExecutionRecord("kieker.bridge", OperationExecutionRecord.NO_SESSION_ID, 1, 0, 0,
 					OperationExecutionRecord.NO_HOSTNAME, OperationExecutionRecord.NO_EOI_ESS,
@@ -50,19 +68,30 @@ public class TestServiceConnector implements IServiceConnector {
 	}
 
 	/**
-	 * This method start setupCalled() in the ConnectorTest to look
-	 * for if the setup will be called in the correct way.
+	 * Initialize the connector. The assertions checks whether initialize() is called in the right order.
+	 * Meaning it is called first, or after a close() call.
+	 * If not, the assertion throws an AssertionError.
+	 * 
+	 * @throws ConnectorDataTransmissionException
+	 *             never, this is just API compatibility
 	 */
 	public void initialize() throws ConnectorDataTransmissionException {
-		this.unitTest.setupCalled();
+		// assert that initialize is false
+		Assert.assertFalse("Connector's initialize() method was called more than once.", this.initialize);
+		this.initialize = true;
+		this.close = false;
 	}
 
 	/**
-	 * This method does the same thing like the method above but do everything
-	 * with the closeCalled() method.
+	 * Close the connector. The assertions checks whether close() is called in the right order.
+	 * Meaning it is called after initialize() and then only once.
+	 * 
+	 * @throws ConnectorDataTransmissionException
+	 *             never, this is just API compatibility
 	 */
 	public void close() throws ConnectorDataTransmissionException {
-		this.unitTest.closeCalled();
+		Assert.assertTrue("Connector's close() method was called before initialite() was called.", this.initialize);
+		Assert.assertTrue("Connector's close() method was called more than once.", !this.close);
 	}
 
 }

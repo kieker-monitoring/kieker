@@ -274,14 +274,29 @@
 	</Match>
 
 	<Match>
-		<Class name="kieker.examples.userguide.ch3and4bookstore.PipeData" />
+	    <Class name="kieker.examples.userguide.ch3and4bookstore.PipeData" />
 		<!--<Method name="getRecordData" params="" returns="java.lang.Object[]" />-->
+		<Bug pattern="EI_EXPOSE_REP" />
+	</Match>
+	
+	<Match>
+	    <Class name="kieker.tools.bridge.LookupEntity" />
 		<Bug pattern="EI_EXPOSE_REP" />
 	</Match>
 
 	<Match>
 		<Class name="kieker.examples.userguide.ch3and4bookstore.PipeData" />
     <!--<Method name="&lt;init&gt;" params="long, java.lang.Object[], java.lang.Class" returns="void" />-->
+		<Bug pattern="EI_EXPOSE_REP2" />
+	</Match>
+	
+	<Match>
+   	    <Class name="kieker.tools.bridge.LookupEntity" />
+		<Bug pattern="EI_EXPOSE_REP2" />
+	</Match>
+	
+	<Match>
+   	    <Class name="kieker.tools.bridge.cli.PrivilegedClassLoaderAction" />
 		<Bug pattern="EI_EXPOSE_REP2" />
 	</Match>
 

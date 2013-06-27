@@ -103,7 +103,11 @@ public class TCPMultiServerConnector extends AbstractTCPConnector {
 		// check if the record queue is empty. If be graceful
 		if (!this.recordQueue.isEmpty()) {
 			try {
-				this.wait(SHUTDOWN_TIMEOUT);
+				int retries = 0;
+				while ((retries < 5) && !this.recordQueue.isEmpty()) {
+					this.wait(SHUTDOWN_TIMEOUT);
+					retries++;
+				}
 			} catch (final InterruptedException e) {
 				throw new ConnectorDataTransmissionException("Interrupted while waitig for queue cleanup.", e);
 			}
@@ -121,13 +125,14 @@ public class TCPMultiServerConnector extends AbstractTCPConnector {
 	 *             if the record reading is interrupted
 	 * @throws ConnectorEndOfDataException
 	 *             if end of all data streams are reached
+	 * @return one IMonitoringRecord per call
 	 */
 	public IMonitoringRecord deserializeNextRecord() throws ConnectorDataTransmissionException, ConnectorEndOfDataException {
 		try {
 			return this.recordQueue.take();
 		} catch (final InterruptedException e) {
 			if (this.recordQueue.isEmpty()) {
-				throw new ConnectorEndOfDataException("End of all streams reached");
+				throw new ConnectorEndOfDataException("End of all streams reached", e);
 			} else {
 				throw new ConnectorDataTransmissionException(e.getMessage(), e);
 			}
