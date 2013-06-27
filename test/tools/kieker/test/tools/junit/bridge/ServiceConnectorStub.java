@@ -19,16 +19,19 @@ import org.junit.Assert;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
+import kieker.tools.bridge.ServiceContainer;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.ConnectorEndOfDataException;
 import kieker.tools.bridge.connector.IServiceConnector;
 
 /**
+ * Simulates a connector to test the use of the API by the {@link ServiceContainer}.
+ * 
  * @author Pascale Brandt
  * @since 1.8
  */
 
-public class TestServiceConnector implements IServiceConnector {
+public class ServiceConnectorStub implements IServiceConnector {
 
 	/**
 	 * Number of messages to be send in this test.
@@ -43,7 +46,7 @@ public class TestServiceConnector implements IServiceConnector {
 	/**
 	 * Construct the test connector.
 	 */
-	public TestServiceConnector() {}
+	public ServiceConnectorStub() {} // NOPMD
 
 	/**
 	 * The assertions check whether the method is called after initialize() and beforE() close.

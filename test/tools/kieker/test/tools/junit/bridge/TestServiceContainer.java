@@ -29,14 +29,18 @@ import kieker.monitoring.writer.filesystem.AbstractAsyncFSWriter;
 import kieker.monitoring.writer.filesystem.AsyncFsWriter;
 import kieker.tools.bridge.ServiceContainer;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
+import kieker.tools.bridge.connector.IServiceConnector;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
- * @author Pascale Brandt
+ * Test the {@link ServiceContainer} for the proper use of the {@link IServiceConnector} interface.
+ * 
+ * @author Pascale Brandt, Reiner Jung
+ * 
  * @since 1.8
  */
-public class ConnectorTest extends AbstractKiekerTest {
+public class TestServiceContainer extends AbstractKiekerTest {
 
 	/**
 	 * Folder for temporary data. Is used to delete every generated file after the test completed.
@@ -47,12 +51,10 @@ public class ConnectorTest extends AbstractKiekerTest {
 	/**
 	 * Nothing to initialize.
 	 */
-	public ConnectorTest() {
-		// Why do we need this?
-	}
+	public TestServiceContainer() {} // NOPMD
 
 	/**
-	 * Test the ServiceContainer.
+	 * Test the {@link IServiceConnector} interface.
 	 * 
 	 * @throws IOException
 	 *             if an IO error occurs
@@ -60,7 +62,7 @@ public class ConnectorTest extends AbstractKiekerTest {
 	 *             if an exception occurs in ServiceContainer or the TestServiceConnector
 	 */
 	@Test
-	public void testServiceContainer() throws IOException, ConnectorDataTransmissionException {
+	public void testServiceConnectorInterface() throws IOException, ConnectorDataTransmissionException {
 
 		/**
 		 * 1st parameter: Configuration is in CLIServerMain
@@ -78,14 +80,14 @@ public class ConnectorTest extends AbstractKiekerTest {
 		configuration.setProperty(writer + '.' + AbstractAsyncFSWriter.CONFIG_MAXENTRIESINFILE, "1");
 		// The maximal size of the log file must be greater than the expected number of log entries to ensure, that the framework allows to write more records, which
 		// we then can detect as failures. Otherwise writing more than expected records would be hindered by the framework itself.
-		configuration.setProperty(writer + '.' + AbstractAsyncFSWriter.CONFIG_MAXLOGFILES, String.valueOf(TestServiceConnector.SEND_NUMBER_OF_RECORDS * 2));
+		configuration.setProperty(writer + '.' + AbstractAsyncFSWriter.CONFIG_MAXLOGFILES, String.valueOf(ServiceConnectorStub.SEND_NUMBER_OF_RECORDS * 2));
 		configuration.setProperty(writer + '.' + AbstractAsyncFSWriter.CONFIG_MAXLOGSIZE, "-1");
 		configuration.setProperty(writer + '.' + AbstractAsyncFSWriter.CONFIG_TEMP, "false");
 		configuration.setProperty(writer + '.' + AbstractAsyncFSWriter.CONFIG_PATH, path.getCanonicalPath());
 
 		// Create the service container and deploy the TestServiceConnector.
 		final ServiceContainer serviceContainer = new ServiceContainer(configuration,
-				new TestServiceConnector(), false);
+				new ServiceConnectorStub(), false);
 
 		// Run the service
 		serviceContainer.run();
@@ -101,7 +103,7 @@ public class ConnectorTest extends AbstractKiekerTest {
 
 		// The result contains 20 data records, 1 record containing the version field and 1 kieker map file
 		Assert.assertEquals("The number of send records is not equal to TestServiceConnector.SEND_NUMBER_OF_RECORDS",
-				TestServiceConnector.SEND_NUMBER_OF_RECORDS + 2, numberOfLogFiles);
+				ServiceConnectorStub.SEND_NUMBER_OF_RECORDS + 2, numberOfLogFiles);
 
 		// now dump the temporary folder and all its content
 		this.tmpFolder.delete();
