@@ -50,7 +50,7 @@ public interface IServiceConnector {
 	void initialize() throws ConnectorDataTransmissionException;
 
 	/**
-	 * Called to close the previously setup record source.
+	 * Called to close the previously initialize record source.
 	 * 
 	 * @throws ConnectorDataTransmissionException
 	 *             when an error occurred during connection close.

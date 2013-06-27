@@ -152,7 +152,7 @@ public class TCPSingleServerConnector extends AbstractTCPConnector {
 
 				return recordProperty.getConstructor().newInstance(values);
 			} else {
-				throw new IOException("Record type " + id + " is not registered.");
+				throw new ConnectorDataTransmissionException("Record type " + id + " is not registered.");
 			}
 		} catch (final java.net.SocketException e) {
 			throw new ConnectorEndOfDataException("End of stream", e);

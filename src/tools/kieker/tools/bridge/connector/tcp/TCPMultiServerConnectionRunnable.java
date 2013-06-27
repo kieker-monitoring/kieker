@@ -36,10 +36,10 @@ import kieker.tools.bridge.connector.ConnectorEndOfDataException;
  * @since 1.8
  * 
  */
-public class TCPMultiServerConnectionThread implements Runnable {
+public class TCPMultiServerConnectionRunnable implements Runnable {
 	private static final int BUF_LEN = 65536;
 
-	private static final Log LOG = LogFactory.getLog(TCPMultiServerConnectionThread.class);
+	private static final Log LOG = LogFactory.getLog(TCPMultiServerConnectionRunnable.class);
 
 	private final Socket socket;
 	private final byte[] buffer = new byte[BUF_LEN];
@@ -48,24 +48,26 @@ public class TCPMultiServerConnectionThread implements Runnable {
 
 	private final BlockingQueue<IMonitoringRecord> recordQueue;
 
-	private final TCPMultiServerConnector parent;
+	private boolean active;
 
 	/**
 	 * Create a service thread.
 	 * 
 	 * @param socket
 	 *            service socket
-	 * @param tcpMultiServerConnector
+	 * @param tcpMultiServerPortListenerRunnable
+	 *            Reference to the connector to be able to read its active field.
+	 * @param lookupEntityMap
+	 *            map for constructor and parameter fields of records combined with the record id
 	 * @param recordQueue
+	 *            Queue of the server to retrieve all deserialized records
 	 */
-	public TCPMultiServerConnectionThread(final Socket socket,
-			final TCPMultiServerConnector parent,
+	public TCPMultiServerConnectionRunnable(final Socket socket,
 			final ConcurrentMap<Integer, LookupEntity> lookupEntityMap,
 			final BlockingQueue<IMonitoringRecord> recordQueue) {
 		this.socket = socket;
 		this.lookupEntityMap = lookupEntityMap;
 		this.recordQueue = recordQueue;
-		this.parent = parent;
 	}
 
 	/*
@@ -74,25 +76,27 @@ public class TCPMultiServerConnectionThread implements Runnable {
 	 * @see java.lang.Runnable#run()
 	 */
 	public void run() {
+		this.active = true;
 		try {
 			final DataInputStream in = new DataInputStream(this.socket.getInputStream());
-			while (this.parent.isActive()) {
+			while (this.active) {
 				try {
 					this.recordQueue.put(this.deserialize(in));
 				} catch (final InterruptedException e) {
-					this.parent.setActive(false);
+					this.active = false;
 					LOG.warn("Listener " + Thread.currentThread().getId() + " died. Cause " + e.getMessage());
 				} catch (final ConnectorDataTransmissionException e) {
-					this.parent.setActive(false);
+					this.active = false;
 					LOG.warn("Listener " + Thread.currentThread().getId() + " died. Cause " + e.getMessage());
 				} catch (final ConnectorEndOfDataException e) {
-					this.parent.setActive(false);
+					this.active = false;
 					LOG.warn("Listener " + Thread.currentThread().getId() + " died. Cause " + e.getMessage());
 				}
 			}
 			in.close();
 			this.socket.close();
 		} catch (final IOException e) {
+			this.active = false;
 			LOG.warn("IO exception occurred. Cause " + e.getMessage());
 		}
 	}
@@ -176,4 +180,13 @@ public class TCPMultiServerConnectionThread implements Runnable {
 			throw new ConnectorDataTransmissionException(e.getMessage(), e);
 		}
 	}
+
+	public boolean isActive() {
+		return this.active;
+	}
+
+	public void setActive(final boolean active) {
+		this.active = active;
+	}
+
 }

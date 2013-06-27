@@ -27,7 +27,7 @@ import kieker.tools.bridge.connector.ConnectorEndOfDataException;
 import kieker.tools.bridge.connector.IServiceConnector;
 
 /**
- * 
+ * Container for the Kieker Data Bridge handling the startup and shutdown of Kieker and the service connector.
  * 
  * @author Reiner Jung
  * @since 1.8

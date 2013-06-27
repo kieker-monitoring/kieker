@@ -17,10 +17,12 @@
 package kieker.tools.bridge.connector.tcp;
 
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
@@ -36,12 +38,13 @@ public class TCPMultiServerConnector extends AbstractTCPConnector {
 
 	private static final int QUEUE_CAPACITY = 10;
 
+	private static final int NUMBER_OF_THREADS = 10;
+
+	private static final long SHUTDOWN_TIMEOUT = 20L;
+
 	private final int port;
 	private BlockingQueue<IMonitoringRecord> recordQueue;
-
-	private ServerSocket serverSocket;
-
-	private boolean active;
+	private ExecutorService executor;
 
 	/**
 	 * Construct new TCPMultiServerService.
@@ -54,7 +57,6 @@ public class TCPMultiServerConnector extends AbstractTCPConnector {
 	public TCPMultiServerConnector(final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordMap, final int port) {
 		super(recordMap);
 		this.port = port;
-		this.active = true;
 	}
 
 	/*
@@ -65,65 +67,71 @@ public class TCPMultiServerConnector extends AbstractTCPConnector {
 	@Override
 	public void initialize() throws ConnectorDataTransmissionException {
 		super.initialize();
+		// do not move, in future these properties will be handled by the kieker configuration
 		this.recordQueue = new ArrayBlockingQueue<IMonitoringRecord>(QUEUE_CAPACITY);
-		try {
-			this.serverSocket = new ServerSocket(this.port);
-			final Runnable server = new Runnable() {
+		this.executor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
-				public void run() {
-					// accept client connections
-					try {
-						while (TCPMultiServerConnector.this.isActive()) {
-							// TODO is this broke or does this work and why? It seams to be ugly!!
-							new TCPMultiServerConnectionThread(TCPMultiServerConnector.this.serverSocket.accept(),
-									TCPMultiServerConnector.this,
-									TCPMultiServerConnector.this.lookupEntityMap,
-									TCPMultiServerConnector.this.recordQueue);
-						}
-					} catch (final IOException e) {
-						TCPMultiServerConnector.this.setActive(false);
-					}
-				}
-			};
-			server.run();
-		} catch (final IOException e1) {
-			throw new ConnectorDataTransmissionException("Cannot open server socket at port " + this.port, e1);
+		// The port listener must run in its own thread to accept new connections
+		try {
+			this.executor.execute(new TCPMultiServerPortListenerRunnable(this.port, this.recordQueue,
+					this.lookupEntityMap, this.executor));
+		} catch (final IOException e) {
+			throw new ConnectorDataTransmissionException("Failed to open server socket", e);
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * Stop all service threads to handle TCP communication and empty the record queue.
 	 * 
-	 * @see kieker.tools.bridge.connector.IServiceConnector#close()
+	 * @throws ConnectorDataTransmissionException
+	 *             if the thread shutdown is interrupted or fails, the graceful wait to empty the queue
+	 *             fails or the queue is not emptied after a waiting period
 	 */
 	public void close() throws ConnectorDataTransmissionException {
-		this.active = false;
+		for (final Runnable runnable : this.executor.shutdownNow()) {
+			if (runnable instanceof TCPMultiServerPortListenerRunnable) {
+				((TCPMultiServerPortListenerRunnable) runnable).setActive(false);
+			} else if (runnable instanceof TCPMultiServerConnectionRunnable) {
+				((TCPMultiServerConnectionRunnable) runnable).setActive(false);
+			}
+		}
 		try {
-			this.serverSocket.close();
-		} catch (final IOException e) {
-			throw new ConnectorDataTransmissionException("Cannot close server socket.", e);
+			this.executor.awaitTermination(SHUTDOWN_TIMEOUT, TimeUnit.SECONDS);
+		} catch (final InterruptedException e) {
+			throw new ConnectorDataTransmissionException("Server shutdown failed.", e);
+		}
+		// check if the record queue is empty. If be graceful
+		if (!this.recordQueue.isEmpty()) {
+			try {
+				this.wait(SHUTDOWN_TIMEOUT);
+			} catch (final InterruptedException e) {
+				throw new ConnectorDataTransmissionException("Interrupted while waitig for queue cleanup.", e);
+			}
+			if (!this.recordQueue.isEmpty()) {
+				throw new ConnectorDataTransmissionException("Failed to store all received records.");
+			}
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * Implements the deserializeNextRecord interface. Fetches deserialized data from the recordQeue
+	 * which is filled by the connection listener threads.
 	 * 
-	 * @see kieker.tools.bridge.connector.IServiceConnector#deserializeNextRecord()
+	 * @throws ConnectorDataTransmissionException
+	 *             if the record reading is interrupted
+	 * @throws ConnectorEndOfDataException
+	 *             if end of all data streams are reached
 	 */
 	public IMonitoringRecord deserializeNextRecord() throws ConnectorDataTransmissionException, ConnectorEndOfDataException {
 		try {
 			return this.recordQueue.take();
 		} catch (final InterruptedException e) {
-			throw new ConnectorDataTransmissionException(e.getMessage(), e);
+			if (this.recordQueue.isEmpty()) {
+				throw new ConnectorEndOfDataException("End of all streams reached");
+			} else {
+				throw new ConnectorDataTransmissionException(e.getMessage(), e);
+			}
 		}
-	}
-
-	public boolean isActive() {
-		return this.active;
-	}
-
-	public void setActive(final boolean active) {
-		this.active = active;
 	}
 
 }
