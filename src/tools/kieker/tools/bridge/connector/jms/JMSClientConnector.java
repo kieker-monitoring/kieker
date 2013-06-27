@@ -126,6 +126,8 @@ public class JMSClientConnector implements IServiceConnector {
 	/**
 	 * Fetch a text or binary message from the JMS queue and use the correct deserializer for the received message.
 	 * 
+	 * @return One new IMonitoringRecord
+	 * 
 	 * @throws ConnectorDataTransmissionException
 	 *             if the message type is neither binary nor text, or if a JMSException occurs
 	 * @throws ConnectorEndOfDataException
