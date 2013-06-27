@@ -19,13 +19,12 @@ import org.junit.Assert;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.tools.bridge.ServiceContainer;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.ConnectorEndOfDataException;
 import kieker.tools.bridge.connector.IServiceConnector;
 
 /**
- * Simulates a connector to test the use of the API by the {@link ServiceContainer}.
+ * Simulates a connector to test the use of the API by the {@link kieker.tools.bridge.ServiceContainer}.
  * 
  * @author Pascale Brandt
  * @since 1.8

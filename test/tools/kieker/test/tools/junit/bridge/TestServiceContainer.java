@@ -29,12 +29,11 @@ import kieker.monitoring.writer.filesystem.AbstractAsyncFSWriter;
 import kieker.monitoring.writer.filesystem.AsyncFsWriter;
 import kieker.tools.bridge.ServiceContainer;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
-import kieker.tools.bridge.connector.IServiceConnector;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
- * Test the {@link ServiceContainer} for the proper use of the {@link IServiceConnector} interface.
+ * Test the {@link ServiceContainer} for the proper use of the {@link kieker.tools.bridge.connector.IServiceConnector} interface.
  * 
  * @author Pascale Brandt, Reiner Jung
  * 
@@ -54,7 +53,7 @@ public class TestServiceContainer extends AbstractKiekerTest {
 	public TestServiceContainer() {} // NOPMD
 
 	/**
-	 * Test the {@link IServiceConnector} interface.
+	 * Test the {@link kieker.tools.bridge.connector.IServiceConnector} interface.
 	 * 
 	 * @throws IOException
 	 *             if an IO error occurs
