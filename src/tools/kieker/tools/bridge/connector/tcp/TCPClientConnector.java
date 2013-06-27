@@ -62,6 +62,12 @@ public class TCPClientConnector extends AbstractTCPConnector {
 		this.hostname = hostname;
 	}
 
+	/**
+	 * Create the connection to a remote service providing records.
+	 * 
+	 * @throws ConnectorDataTransmissionException
+	 *             if the given host or IP cannot be found, or an IOException occurs
+	 */
 	@Override
 	public void initialize() throws ConnectorDataTransmissionException {
 		super.initialize();
@@ -76,6 +82,12 @@ public class TCPClientConnector extends AbstractTCPConnector {
 
 	}
 
+	/**
+	 * Closes the data stream and socket.
+	 * 
+	 * @throws ConnectorDataTransmissionException
+	 *             if an IOException occurs during the close operation
+	 */
 	public void close() throws ConnectorDataTransmissionException {
 		try {
 			this.in.close();
@@ -90,10 +102,11 @@ public class TCPClientConnector extends AbstractTCPConnector {
 	 * 
 	 * @return the de-serialized IMonitoringRecord object or null if the stream was terminated by the client.
 	 * 
-	 * @throws Exception
-	 *             when a record is received that ID is unknown (IOException).
+	 * @throws ConnectorDataTransmissionException
+	 *             when a record is received that ID is unknown or the deserialization fails
+	 * @throws ConnectorEndOfDataException
+	 *             when the other end hung up or the data stream ends of another reason
 	 */
-
 	public IMonitoringRecord deserializeNextRecord() throws ConnectorDataTransmissionException, ConnectorEndOfDataException {
 		// read structure ID
 		try {
@@ -147,7 +160,7 @@ public class TCPClientConnector extends AbstractTCPConnector {
 
 				return recordProperty.getConstructor().newInstance(new Object[] { values });
 			} else {
-				throw new IOException("Record type " + id + " is not registered.");
+				throw new ConnectorDataTransmissionException("Record type " + id + " is not registered.");
 			}
 		} catch (final java.net.SocketException e) {
 			throw new ConnectorEndOfDataException("End of stream", e);

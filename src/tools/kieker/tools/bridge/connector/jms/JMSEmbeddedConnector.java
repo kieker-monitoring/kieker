@@ -26,7 +26,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 
 /**
- * a yes broken JMSClient with an embedded JMS server
+ * a yes broken JMSClient with an embedded JMS server.
  * 
  * @author Reiner Jung
  * @since 1.8

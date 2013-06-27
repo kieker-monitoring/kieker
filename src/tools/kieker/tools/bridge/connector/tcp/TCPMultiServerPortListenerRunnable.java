@@ -25,6 +25,9 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.tools.bridge.LookupEntity;
 
 /**
+ * Runnable class implementing a thread listening for an incoming connection for monitoring data.
+ * It then starts a connection thread handling the actual data transmissions.
+ * 
  * @author Reiner Jung
  * @since 1.8
  */
@@ -36,6 +39,20 @@ public class TCPMultiServerPortListenerRunnable implements Runnable {
 	private final ConcurrentMap<Integer, LookupEntity> lookupEntityMap;
 	private final ExecutorService executor;
 
+	/**
+	 * Create a listener for the incoming port of the multi server.
+	 * 
+	 * @param port
+	 *            IP port to listen to
+	 * @param recordQueue
+	 *            the central queue for incoming data records
+	 * @param lookupEntityMap
+	 *            lookup map for IMonitoringRecord types
+	 * @param executor
+	 *            the thread pool
+	 * @throws IOException
+	 *             when no server socket can be created
+	 */
 	public TCPMultiServerPortListenerRunnable(final int port, final BlockingQueue<IMonitoringRecord> recordQueue,
 			final ConcurrentMap<Integer, LookupEntity> lookupEntityMap, final ExecutorService executor) throws IOException {
 		this.recordQueue = recordQueue;
@@ -44,6 +61,9 @@ public class TCPMultiServerPortListenerRunnable implements Runnable {
 		this.executor = executor;
 	}
 
+	/**
+	 * Main loop of the port listener.
+	 */
 	public void run() {
 		try {
 			while (this.active) {

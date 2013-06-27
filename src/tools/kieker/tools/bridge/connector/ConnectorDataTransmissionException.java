@@ -24,11 +24,12 @@ package kieker.tools.bridge.connector;
 public class ConnectorDataTransmissionException extends Exception {
 
 	/**
-	 * serial number of the type
+	 * serial number of the type.
 	 */
 	private static final long serialVersionUID = -7621182316652816606L;
 
 	/**
+	 * Create an exception without an exception trail.
 	 * 
 	 * @param message
 	 *            The message to explain the exception
@@ -38,14 +39,15 @@ public class ConnectorDataTransmissionException extends Exception {
 	}
 
 	/**
+	 * Create an exception with an exception trail.
 	 * 
 	 * @param message
 	 *            The message to explain the exception
 	 * @param exception
 	 *            The exception which caused this exception
 	 */
-	public ConnectorDataTransmissionException(final String message, final Exception e) {
-		super(message, e);
+	public ConnectorDataTransmissionException(final String message, final Exception exception) {
+		super(message, exception);
 	}
 
 }

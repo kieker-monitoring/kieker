@@ -25,7 +25,7 @@ import kieker.tools.bridge.connector.IServiceConnector;
 import kieker.tools.bridge.connector.ServiceConnectorFactory;
 
 /**
- * 
+ * Generic abstract connector used in all TCP services.
  * 
  * @author Reiner Jung
  * @since 1.8
@@ -33,7 +33,7 @@ import kieker.tools.bridge.connector.ServiceConnectorFactory;
 public abstract class AbstractTCPConnector implements IServiceConnector {
 
 	/**
-	 * Map containing record ids and the assigned constructor and field type list
+	 * Map containing record ids and the assigned constructor and field type list.
 	 */
 	protected ConcurrentMap<Integer, LookupEntity> lookupEntityMap;
 
@@ -49,10 +49,11 @@ public abstract class AbstractTCPConnector implements IServiceConnector {
 		this.recordMap = recordMap;
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * Common part for the initialization of all TCP connectors.
 	 * 
-	 * @see kieker.tools.bridge.connector.IServiceConnector#initialize()
+	 * @throws ConnectorDataTransmissionException
+	 *             if createLookupEntityMap() throws it
 	 */
 	public void initialize() throws ConnectorDataTransmissionException {
 		this.lookupEntityMap = ServiceConnectorFactory.createLookupEntityMap(this.recordMap);

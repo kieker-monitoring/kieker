@@ -45,8 +45,6 @@ public class TCPSingleServerConnector extends AbstractTCPConnector {
 	/**
 	 * Construct TCPSingleService.
 	 * 
-	 * @param configuration
-	 *            Kieker configuration object
 	 * @param recordList
 	 *            map of IMonitoringRecords to ids
 	 * @param port
@@ -57,10 +55,11 @@ public class TCPSingleServerConnector extends AbstractTCPConnector {
 		this.port = port;
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * Initializes a server socket and data stream for a single connection.
 	 * 
-	 * @see kieker.tools.bridge.connector.tcp.AbstractTCPConnector#initialize()
+	 * @throws ConnectorDataTransmissionException
+	 *             it the socket could not be established
 	 */
 	@Override
 	public void initialize() throws ConnectorDataTransmissionException {
@@ -74,10 +73,11 @@ public class TCPSingleServerConnector extends AbstractTCPConnector {
 
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * Close the server connection.
 	 * 
-	 * @see kieker.tools.bridge.connector.IServiceConnector#close()
+	 * @throws ConnectorDataTransmissionException
+	 *             if the closing fails
 	 */
 	public void close() throws ConnectorDataTransmissionException {
 		try {

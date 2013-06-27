@@ -55,8 +55,6 @@ public class TCPMultiServerConnectionRunnable implements Runnable {
 	 * 
 	 * @param socket
 	 *            service socket
-	 * @param tcpMultiServerPortListenerRunnable
-	 *            Reference to the connector to be able to read its active field.
 	 * @param lookupEntityMap
 	 *            map for constructor and parameter fields of records combined with the record id
 	 * @param recordQueue
@@ -70,10 +68,8 @@ public class TCPMultiServerConnectionRunnable implements Runnable {
 		this.recordQueue = recordQueue;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Runnable#run()
+	/**
+	 * Main loop of the connection runnable.
 	 */
 	public void run() {
 		this.active = true;
@@ -105,6 +101,7 @@ public class TCPMultiServerConnectionRunnable implements Runnable {
 	 * Deserialize a received record.
 	 * 
 	 * @param in
+	 *            the input data stream
 	 * 
 	 * @return a new IMonitoringRecord
 	 * @throws Exception

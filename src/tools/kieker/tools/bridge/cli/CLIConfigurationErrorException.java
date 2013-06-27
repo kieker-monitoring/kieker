@@ -24,11 +24,12 @@ package kieker.tools.bridge.cli;
 public class CLIConfigurationErrorException extends Exception {
 
 	/**
-	 * serial number for the type
+	 * serial number for the type.
 	 */
 	private static final long serialVersionUID = 1187180806531494898L;
 
 	/**
+	 * Create an exception without an exception trail.
 	 * 
 	 * @param message
 	 *            The message to explain the exception
@@ -38,6 +39,7 @@ public class CLIConfigurationErrorException extends Exception {
 	}
 
 	/**
+	 * Create an exception with an exception trail.
 	 * 
 	 * @param message
 	 *            The message to explain the exception

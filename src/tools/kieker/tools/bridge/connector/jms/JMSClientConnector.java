@@ -51,6 +51,8 @@ public class JMSClientConnector implements IServiceConnector {
 
 	private static final int BUF_LEN = 65536;
 
+	private static final String KIEKER_DATA_BRIDGE_READ_QUEUE = "kieker.tools.bridge";
+
 	private final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordMap;
 	private final String username;
 	private final String password;
@@ -78,10 +80,11 @@ public class JMSClientConnector implements IServiceConnector {
 		this.uri = uri;
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * Initialize the JMS connection to read from a JMS queue.
 	 * 
-	 * @see kieker.tools.bridge.connector.IServiceConnector#initialize()
+	 * @throws ConnectorDataTransmissionException
+	 *             if any JMSException occurs
 	 */
 	public void initialize() throws ConnectorDataTransmissionException {
 		// setup value lookup
@@ -97,7 +100,7 @@ public class JMSClientConnector implements IServiceConnector {
 			this.connection = factory.createConnection();
 
 			final Session session = this.connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-			final Destination destination = session.createQueue("de.cau.cs.se.kieker.service");
+			final Destination destination = session.createQueue(KIEKER_DATA_BRIDGE_READ_QUEUE);
 			this.consumer = session.createConsumer(destination);
 
 			this.connection.start();
@@ -106,10 +109,11 @@ public class JMSClientConnector implements IServiceConnector {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * Close the JMS connection.
 	 * 
-	 * @see kieker.tools.bridge.connector.IServiceConnector#close()
+	 * @throws ConnectorDataTransmissionException
+	 *             if any JMSException occurs
 	 */
 	public void close() throws ConnectorDataTransmissionException {
 		try {
@@ -119,10 +123,13 @@ public class JMSClientConnector implements IServiceConnector {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * Fetch a text or binary message from the JMS queue and use the correct deserializer for the received message.
 	 * 
-	 * @see kieker.tools.bridge.connector.IServiceConnector#deserializeNextRecord()
+	 * @throws ConnectorDataTransmissionException
+	 *             if the message type is neither binary nor text, or if a JMSException occurs
+	 * @throws ConnectorEndOfDataException
+	 *             if the received message is null indicating that the consumer is closed
 	 */
 	public IMonitoringRecord deserializeNextRecord() throws ConnectorDataTransmissionException, ConnectorEndOfDataException {
 		Message message;
