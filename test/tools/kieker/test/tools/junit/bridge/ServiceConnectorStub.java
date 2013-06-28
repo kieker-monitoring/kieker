@@ -32,11 +32,6 @@ import kieker.tools.bridge.connector.IServiceConnector;
 
 public class ServiceConnectorStub implements IServiceConnector {
 
-	/**
-	 * Number of messages to be send in this test.
-	 */
-	public static final int SEND_NUMBER_OF_RECORDS = 20;
-
 	private int count = 0; // NOPMD
 
 	private boolean initialize = false; // NOPMD
@@ -59,7 +54,7 @@ public class ServiceConnectorStub implements IServiceConnector {
 	public IMonitoringRecord deserializeNextRecord() throws ConnectorDataTransmissionException, ConnectorEndOfDataException {
 		Assert.assertTrue("Connector's deserializeNextRecord() method called before initialize() was called.", this.initialize);
 		Assert.assertFalse("Connector's deserializeNextRecord() method called after close() was called.", this.close);
-		if (this.count < SEND_NUMBER_OF_RECORDS) {
+		if (this.count < ConfigurationParameters.SEND_NUMBER_OF_RECORDS) {
 			this.count++;
 			return new OperationExecutionRecord("kieker.bridge", OperationExecutionRecord.NO_SESSION_ID, 1, 0, 0,
 					OperationExecutionRecord.NO_HOSTNAME, OperationExecutionRecord.NO_EOI_ESS,
