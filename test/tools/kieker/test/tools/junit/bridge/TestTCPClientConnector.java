@@ -15,9 +15,7 @@
  ***************************************************************************/
 package kieker.test.tools.junit.bridge;
 
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
@@ -33,52 +31,26 @@ import kieker.tools.bridge.connector.tcp.TCPClientConnector;
  */
 public class TestTCPClientConnector {
 
-	private TCPClientConnector connector;
-
 	/**
-	 * Create a remote server where the TCPClientConnector can connect to.
+	 * Test all methods of {@link kieker.tools.bridge.connector.tcp.TCPClientConnector}.
+	 * Testing single methods do not work, as the connector is stateful.
 	 */
-	@BeforeClass
-	public void setUpClass() {
-		// Start the runnable with a thread http://javarevisited.blogspot.de/2011/02/how-to-implement-thread-in-java.html
+	@Test
+	public void testTCPClientConnector() {
+		// Start the runnable with a thread (see http://javarevisited.blogspot.de/2011/02/how-to-implement-thread-in-java.html)
 		// setup connector, requires a record map
-		this.connector = new TCPClientConnector(null/* requires a record map */, ConfigurationParameters.HOSTNAME, ConfigurationParameters.PORT);
-	}
-
-	/**
-	 * Stop the remote server.
-	 */
-	@AfterClass
-	public void tearDownClass() {
-		// check if thread has terminated http://stackoverflow.com/questions/5910548/how-to-check-if-thread-is-terminated
-	}
-
-	/**
-	 * Test method for {@link kieker.tools.bridge.connector.tcp.TCPClientConnector#initialize()}.
-	 */
-	@Test
-	public void testInitialize() {
+		final TCPClientConnector connector = new TCPClientConnector(null/* requires a record map */, ConfigurationParameters.HOSTNAME, ConfigurationParameters.PORT);
 		// just call initialize once
-	}
 
-	/**
-	 * Test method for {@link kieker.tools.bridge.connector.tcp.TCPClientConnector#deserializeNextRecord()}.
-	 */
-	@Test
-	public void testDeserializeNextRecord() {
 		// just call deserializeNextRecord SEND_NUMBER_OF_RECORDS
-	}
 
-	/**
-	 * Test method for {@link kieker.tools.bridge.connector.tcp.TCPClientConnector#close()}.
-	 */
-	@Test
-	public void testClose() {
 		// just call close once
 		try {
-			this.connector.close();
+			connector.close();
 		} catch (final ConnectorDataTransmissionException e) {
 			Assert.fail(e.getMessage());
 		}
+		// check if thread has terminated http://stackoverflow.com/questions/5910548/how-to-check-if-thread-is-terminated
 	}
+
 }
