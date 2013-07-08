@@ -3,9 +3,6 @@ package livedemo.entities;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import kieker.common.record.system.CPUUtilizationRecord;
-import kieker.common.record.system.MemSwapUsageRecord;
-
 /**
  * @author Bjoern Weissenfels
  */

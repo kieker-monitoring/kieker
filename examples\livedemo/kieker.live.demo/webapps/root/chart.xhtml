@@ -57,8 +57,11 @@
 		</div>
 		<div id="main">
 			<h:form>
-				 
-				<p:commandButton value="Select Methods" onclick="dlg2.show();" type="button"/>
+				<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+					<p:commandButton value="Select Methods" onclick="dlg2.show();" type="button"/>
+					<p:selectBooleanButton value="#{methodResponsetimeBean.selectButton}" onLabel="Select All" 
+						offLabel="Select None" valueChangeListener="#{methodResponsetimeBean.onChange}"/>
+				</h:panelGrid>
 				
 				<p:dialog id="dialog" header="Select Methods" widgetVar="dlg2" onShow="poll.stop()" onHide="poll.start()">
 					<p:selectManyCheckbox id="methodbox" value="#{methodResponsetimeBean.selectedMethods}" 
@@ -68,14 +71,14 @@
 				</p:dialog>
 				
 				<p:lineChart id="count" value="#{methodResponsetimeBean.countingModel}" legendPosition="ne"  
-			    	title="Method Calls" minY="0" style="height:300px;margin-top:20px"
-			    	xaxisLabel="Time" yaxisLabel="Number of calls per Intervall"/>
+			    	title="Method Calls" minY="0" maxY="#{methodResponsetimeBean.maxY}" style="height:300px;margin-top:20px"
+			    	xaxisLabel="Time" yaxisLabel="Number of calls per 2 Seconds"/>
 				 
 				<p:barChart id="resp" value="#{methodResponsetimeBean.responsetimeModel}" legendPosition="ne"  
 			    	title="Average Responsetime" minY="0" style="height:300px;margin-top:20px"
 			    	xaxisLabel="Time" yaxisLabel="Responsetime in ms"/>
 		     	  	
-		     	<p:poll interval="1" widgetVar="poll" update="dialog" autoStart="true"/>
+		     	<p:poll interval="2" widgetVar="poll" update="dialog" autoStart="true"/>
 				<p:poll interval="1" update="count,resp" />
 			</h:form>
 		</div>

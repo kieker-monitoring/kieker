@@ -1,6 +1,7 @@
 package livedemo.managedbeans;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
@@ -11,6 +12,7 @@ import javax.annotation.PreDestroy;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.event.ValueChangeEvent;
 
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
@@ -29,6 +31,8 @@ public class MethodResponsetimeBean implements Observer {
 	
 	private final List<String> availableMethods;
 	private List<String> selectedMethods;
+	private int maxY;
+	private boolean selectButton = true;
 	
 	private XYPlot methodResponsetimeXYplot;
 	private XYPlot methodCallsXYplot;
@@ -36,10 +40,11 @@ public class MethodResponsetimeBean implements Observer {
 	private final CartesianChartModel countingModel;
 	private final Map<String, String> longToShortSignatures;
 	private final Map<String, String> shortToLongSignatures;
-	
+
 	public MethodResponsetimeBean(){
 		this.availableMethods = new ArrayList<String>();
 		this.selectedMethods = new ArrayList<String>();
+		this.maxY = 1;
 		this.responsetimeModel = new CartesianChartModel();
 		this.countingModel = new CartesianChartModel();
 		this.longToShortSignatures = new ConcurrentHashMap<String, String>();
@@ -71,6 +76,15 @@ public class MethodResponsetimeBean implements Observer {
 		this.analysisBean = analysisBean;
 	}
 	
+	public void onChange(ValueChangeEvent event){
+		System.out.println(this.selectButton);
+		if(this.selectButton){
+			this.selectedMethods = this.availableMethods;
+		}else{
+			this.selectedMethods.clear();
+		}
+	}
+	
 	public List<String> getAvailableMethods() {
 		return availableMethods;
 	}
@@ -94,6 +108,22 @@ public class MethodResponsetimeBean implements Observer {
 		return this.countingModel;
 	}
 	
+	public void setMaxY(int maxY) {
+		this.maxY = maxY;
+	}
+
+	public int getMaxY() {
+		return maxY;
+	}
+
+	public void setSelectButton(boolean selectButton) {
+		this.selectButton = selectButton;
+	}
+
+	public boolean isSelectButton() {
+		return selectButton;
+	}
+
 	private String createShortSignature(String signature){
 		String[] array = signature.split("\\(");
 		array = array[0].split("\\.");
@@ -120,9 +150,19 @@ public class MethodResponsetimeBean implements Observer {
 			ChartSeries countings = new ChartSeries();
 			countings.setLabel(shortSignature);
 			Map<Object, Number> countMap = this.methodCallsXYplot.getEntries(signature);
+			this.maxY = this.calculateMaxY(countMap.values());
 			countings.setData(countMap);
 			this.countingModel.addSeries(countings);
 		}
+	}
+	
+	private int calculateMaxY(Collection<Number> numbers){
+		int max = 1;
+		for(Number n : numbers){
+			max = Math.max(max, n.intValue());
+		}
+		max = max + 4 - max % 4;
+		return max;
 	}
 	
 	@Override

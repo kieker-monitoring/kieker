@@ -10,8 +10,8 @@ import javax.faces.bean.ManagedProperty;
 
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
+import org.primefaces.model.chart.PieChartModel;
 
-import kieker.analysis.display.PieChart;
 import kieker.analysis.display.XYPlot;
 import livedemo.entities.Model;
 
@@ -26,22 +26,20 @@ public class MemSwapBean implements Observer {
 	private AnalysisBean analysisBean;
 	
 	private XYPlot xyplot;
-	private PieChart memPieChart;
-	private PieChart swapPieChart;
 	private Model<CartesianChartModel> memModel;
 	private Model<CartesianChartModel> swapModel;
+	private final PieChartModel memPieChartModel;
 	
 	public MemSwapBean(){
 		this.memModel = new Model<CartesianChartModel>(new CartesianChartModel(), "KIEKER-DEMO-SVR - MEM");
 		this.swapModel = new Model<CartesianChartModel>(new CartesianChartModel(), "KIEKER-DEMO-SVR - SWAP");
+		this.memPieChartModel = new PieChartModel();
 	}
 	
 	@PostConstruct
 	public void init(){
 		this.xyplot = this.analysisBean.getMemSwapUtilizationDisplayFilter().getXYPlot();
-		this.memPieChart = this.analysisBean.getMemSwapUtilizationDisplayFilter().getMemPieChart();
-		this.swapPieChart = this.analysisBean.getMemSwapUtilizationDisplayFilter().getSwapPieChart();
-		this.updateModel();
+		this.updateXYPlot();
 		String key = this.xyplot.getKeys().iterator().next();
 		int index = key.lastIndexOf('-');
 		String hostname = key.substring(0, index - 1);
@@ -54,6 +52,10 @@ public class MemSwapBean implements Observer {
 		this.analysisBean = analysisBean;
 	}
 	
+	public PieChartModel getMemPieChartModel() {
+		return memPieChartModel;
+	}
+
 	public Model<CartesianChartModel> getMemModel(){
 		return this.memModel;
 	}
@@ -62,7 +64,7 @@ public class MemSwapBean implements Observer {
 		return this.swapModel;
 	}
 	
-	private void updateModel(){
+	private void updateXYPlot(){
 		CartesianChartModel mem = new CartesianChartModel();
 		CartesianChartModel swap = new CartesianChartModel();
 		for(String key : this.xyplot.getKeys()){ // key = hostname - memFree|memTotal|memUsed|swapFree|...
@@ -91,9 +93,9 @@ public class MemSwapBean implements Observer {
 		this.memModel.setModel(mem);
 		this.swapModel.setModel(swap);
 	}
-
+	
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		this.updateModel();		
+		this.updateXYPlot();
 	}
 }

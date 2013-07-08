@@ -10,7 +10,7 @@ import java.util.Observer;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.faces.bean.ApplicationScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 
@@ -24,7 +24,7 @@ import livedemo.entities.Model;
  * @author Bjoern Weissenfels
  */
 @ManagedBean(name="cpuXYPlotBean")
-@ApplicationScoped
+@ViewScoped
 public class CPUXYPlotBean implements Observer{
 	
 	@ManagedProperty(value = "#{analysisBean}")
@@ -37,12 +37,14 @@ public class CPUXYPlotBean implements Observer{
 	private int index;
 	
 	private final List<String> availableAttributes = Arrays.asList("idle","irq","nice","system","totalUtilization","user");
-	private List<String> selectedAttributes = Arrays.asList("idle","totalUtilization");
-	
+	private List<String> selectedAttributes;// = Arrays.asList("idle","totalUtilization");
+
 	public CPUXYPlotBean(){
 		this.models = Collections.synchronizedList(new ArrayList<Model<CartesianChartModel>>());
 		this.cpuIds = new ArrayList<String>();
 		this.selectedAttributes = new ArrayList<String>();
+		this.selectedAttributes.add("idle");
+		this.selectedAttributes.add("totalUtilization");
 	}
 	
 	@PostConstruct
@@ -99,6 +101,7 @@ public class CPUXYPlotBean implements Observer{
 	}
 	
 	private void updateModel(){
+		this.models.clear();
 		for(String id : this.cpuIds){ // id = hostname - cpuId
 			CartesianChartModel cpuModel = new CartesianChartModel();
 			for(String key : this.keys){ // key = hostname - cpuId - idle
@@ -117,7 +120,6 @@ public class CPUXYPlotBean implements Observer{
 
 	@Override
 	public void update(Observable o, Object arg) {
-		this.models.clear();
 		this.updateModel();
 		
 	}

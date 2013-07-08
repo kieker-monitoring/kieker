@@ -111,27 +111,27 @@ public class MethodResponsetimeDisplayFilter extends AbstractFilterPlugin {
 	}
 	
 	@InputPort(name = MethodResponsetimeDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS, eventTypes = { Long.class })
-	public synchronized void inputTimeEvents(final long timestamp){
+	public synchronized void inputTimeEvents(final Long timestamp){
 		// Calculate the minutes and seconds of the logging timestamp of the record
 		final Date date = new Date(TimeUnit.MILLISECONDS.convert(timestamp, this.timeunit));
 		final String minutesAndSeconds = date.toString().substring(14, 19);
 				
 		for(String key : this.methodResponsetimeXYplot.getKeys()){
 			if(this.signatureResponsetimeMap.containsKey(key)){
-				Pair<Long, Integer> p = this.signatureResponsetimeMap.get(key);
-				long averageResponsetime = p.getFirst() / p.getLast(); 
+				Pair<Long, Integer> pair = this.signatureResponsetimeMap.get(key);
+				long averageResponsetime = pair.getFirst() / pair.getLast(); 
 				this.methodResponsetimeXYplot.setEntry(key, minutesAndSeconds, this.convertFromNanosToMillis(averageResponsetime));
-				this.methodCallsXYplot.setEntry(key, minutesAndSeconds, p.getLast());
+				this.methodCallsXYplot.setEntry(key, minutesAndSeconds, pair.getLast());
 			}else{
 				this.methodResponsetimeXYplot.setEntry(key, minutesAndSeconds, 0);
 				this.methodCallsXYplot.setEntry(key, minutesAndSeconds, 0);
 			}
 		}
 		for(String newKey : this.newSignatures.keySet()){
-			Pair<Long, Integer> p = this.newSignatures.get(newKey);
-			long averageResponsetime = p.getFirst() / p.getLast(); 
+			Pair<Long, Integer> pair = this.newSignatures.get(newKey);
+			long averageResponsetime = pair.getFirst() / pair.getLast(); 
 			this.methodResponsetimeXYplot.setEntry(newKey, minutesAndSeconds, this.convertFromNanosToMillis(averageResponsetime));
-			this.methodCallsXYplot.setEntry(newKey, minutesAndSeconds, p.getLast());
+			this.methodCallsXYplot.setEntry(newKey, minutesAndSeconds, pair.getLast());
 		}
 		
 		this.signatureResponsetimeMap.clear();
