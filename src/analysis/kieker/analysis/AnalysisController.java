@@ -401,6 +401,11 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		plugin.connect(repositoryPort, repository); // throws AnalysisConfigurationException
 	}
 
+	public void connect(final AbstractPlugin src, final String repositoryOutputPortName, final AbstractRepository repository, final String repositoryInputPortName)
+			throws IllegalStateException, AnalysisConfigurationException {
+		AbstractPlugin.connect(src, repositoryOutputPortName, repository, repositoryInputPortName);
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -818,4 +823,5 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		 */
 		public void update(final AnalysisController controller, final STATE state);
 	}
+
 }

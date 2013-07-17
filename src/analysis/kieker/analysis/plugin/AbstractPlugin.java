@@ -45,6 +45,8 @@ import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
+import kieker.analysis.plugin.annotation.RepositoryInputPort;
+import kieker.analysis.plugin.annotation.RepositoryOutputPort;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.analysis.plugin.metasignal.InitializationSignal;
 import kieker.analysis.plugin.metasignal.MetaSignal;
@@ -73,6 +75,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	private static final Log LOG = LogFactory.getLog(AbstractPlugin.class);
 
 	private final ConcurrentHashMap<String, ConcurrentLinkedQueue<PluginInputPortReference>> registeredMethods;
+	private final ConcurrentHashMap<String, ConcurrentLinkedQueue<RepositoryInputPortReference>> registeredRepositoryMethods;
 	private final ConcurrentHashMap<String, AbstractRepository> registeredRepositories;
 	private final Map<String, RepositoryPort> repositoryPorts;
 	private final Map<String, OutputPort> outputPorts;
@@ -162,6 +165,12 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		for (final OutputPort outputPort : annotation.outputPorts()) {
 			this.registeredMethods.put(outputPort.name(), new ConcurrentLinkedQueue<PluginInputPortReference>());
 		}
+
+		this.registeredRepositoryMethods = new ConcurrentHashMap<String, ConcurrentLinkedQueue<RepositoryInputPortReference>>();
+		for (final RepositoryOutputPort outputPort : annotation.repositoryOutputPorts()) {
+			this.registeredRepositoryMethods.put(outputPort.name(), new ConcurrentLinkedQueue<IPlugin.RepositoryInputPortReference>());
+		}
+
 		// and a List for every incoming and outgoing plugin
 		this.incomingPlugins = new ArrayList<AbstractPlugin>(1); // usually only one incoming
 		this.outgoingPlugins = new ArrayList<AbstractPlugin>(1); // usually only one outgoing
@@ -285,6 +294,43 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		return true;
 	}
 
+	protected void deliverWithoutReturnTypeToRepository(final String outputPortName, final Object value) {
+		final ConcurrentLinkedQueue<RepositoryInputPortReference> registeredMethodsOfPort = this.registeredRepositoryMethods.get(outputPortName);
+		for (final RepositoryInputPortReference inputPort : registeredMethodsOfPort) {
+			try {
+				inputPort.getInputPortMethod().invoke(inputPort.getRepository(), value);
+			} catch (final IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (final IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (final InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	protected Object deliverWithReturnTypeToRepository(final String outputPortName, final Object... values) {
+		final ConcurrentLinkedQueue<RepositoryInputPortReference> registeredMethodsOfPort = this.registeredRepositoryMethods.get(outputPortName);
+		for (final RepositoryInputPortReference inputPort : registeredMethodsOfPort) {
+			try {
+				return inputPort.getInputPortMethod().invoke(inputPort.getRepository(), values);
+			} catch (final IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (final IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (final InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+
 	private boolean processMetaSignal(final MetaSignal data) {
 		AbstractPlugin.LOG.info("Plugin " + this.getName() + " received meta signal (" + data + ")");
 
@@ -333,6 +379,27 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			}
 			this.registeredRepositories.put(reponame, repository);
 		}
+	}
+
+	public static final void connect(final AbstractPlugin src, final String repositoryOutputPortName, final AbstractRepository repository,
+			final String repositoryInputPortName) throws AnalysisConfigurationException {
+		// Connect the ports.
+		for (final Method m : repository.getClass().getMethods()) {
+			final RepositoryInputPort ip = m.getAnnotation(RepositoryInputPort.class);
+			if ((ip != null) && ip.name().equals(repositoryInputPortName)) {
+				java.security.AccessController.doPrivileged(new PrivilegedAction<Object>() {
+					public Object run() {
+						m.setAccessible(true);
+						return null;
+					}
+				});
+				src.registeredRepositoryMethods.get(repositoryOutputPortName).add(new RepositoryInputPortReference(repository, repositoryInputPortName, m));
+
+				return;
+			}
+		}
+		throw new AnalysisConfigurationException("Failed to connect plugin '" + src.getName() + "' (" + src.getPluginName() + ") to repository '"
+				+ repository.getName() + "' (" + repository.getRepositoryName() + ").");
 	}
 
 	/**
@@ -413,10 +480,10 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		}
 
 		// Make sure that components within containers are only connected to components within the same container
-		// if (src.containerComponent != dst.containerComponent) {
-		// LOG.warn("Components are contained in different containers.");
-		// return false;
-		// }
+		if (src.containerComponent != dst.containerComponent) {
+			LOG.warn("Components are contained in different containers.");
+			return false;
+		}
 
 		// Second step: Check whether the ports exist.
 		final OutputPort outputPort = src.outputPorts.get(output);

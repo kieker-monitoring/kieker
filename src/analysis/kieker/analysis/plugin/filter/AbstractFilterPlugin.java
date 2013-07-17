@@ -66,4 +66,5 @@ public abstract class AbstractFilterPlugin extends AbstractPlugin implements IFi
 	public void terminate(final boolean error) { // NOPMD (default implementation)
 		// do nothing
 	}
+
 }

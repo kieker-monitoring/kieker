@@ -22,6 +22,7 @@ import java.util.Map;
 import kieker.analysis.analysisComponent.IAnalysisComponent;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.repository.AbstractRepository;
+import kieker.analysis.repository.IRepository;
 import kieker.common.configuration.Configuration;
 
 /**
@@ -242,6 +243,31 @@ public interface IPlugin extends IAnalysisComponent {
 		 * 
 		 * @return The current value of the attribute.
 		 */
+		public final String getInputPortName() {
+			return this.inputPortName;
+		}
+	}
+
+	public static final class RepositoryInputPortReference {
+
+		private final IRepository repository;
+		private final String inputPortName;
+		private final Method inputPortMethod;
+
+		public RepositoryInputPortReference(final IRepository repository, final String inputPortName, final Method inputPortMethod) {
+			this.repository = repository;
+			this.inputPortName = inputPortName;
+			this.inputPortMethod = inputPortMethod;
+		}
+
+		public final IRepository getRepository() {
+			return this.repository;
+		}
+
+		public final Method getInputPortMethod() {
+			return this.inputPortMethod;
+		}
+
 		public final String getInputPortName() {
 			return this.inputPortName;
 		}

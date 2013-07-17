@@ -20,6 +20,7 @@ import java.io.PrintStream;
 
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.RepositoryOutputPort;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
@@ -39,10 +40,53 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * 
  * @since 1.2
  */
-@Plugin(repositoryPorts = { @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class) })
+@Plugin(repositoryPorts = { @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class) },
+		repositoryOutputPorts = {
+			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_LOOKUP_COMPONENT_TYPE_BY_NAME),
+			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_CREATE_AND_REGISTER_COMPONENT_TYPE),
+			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_GET_COMPONENT_TYPES),
+			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_LOOKUP_ALLOCATION_COMPONENT_INSTANCE_BY_NAME),
+			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_CREATE_AND_REGISTER_ALLOCATION_COMPONENT_INSTANCE),
+			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_LOOKUP_IOERATION_BY_NAME),
+			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_CREATE_AND_REGISTER_OPERATION),
+			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_GET_OPERATIONS),
+			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_LOOKUP_ASSEMBLY_COMPONENT_BY_ID),
+			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_LOOKUP_ASSEMBLY_COMPONENT_INSTANCE_BY_NAME),
+			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_CREATE_AND_REGISTER_ASSEMBLY_COMPONENT_INSTANCE),
+			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_GET_ASSEMBLY_COMPONENT_INSTANCES),
+			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_LOOKUP_EXECUTION_CONTAINER_BY_NAME),
+			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_LOOKUP_EXECUTION_CONTAINER_BY_ID),
+			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_GET_EXECUTION_CONTAINERS),
+			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_GET_PAIRS),
+			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_GET_PAIR_BY_ID),
+			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_GET_PAIR_INSTANCE_BY_PAIR),
+			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_CREATE_AND_REGISTER_EXECUTION_CONTAINER),
+			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_GET_ROOT_EXECUTION)
+		})
 public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 	/** The name of the repository port for the system model repository. */
 	public static final String REPOSITORY_PORT_NAME_SYSTEM_MODEL = "systemModelRepository";
+
+	public static final String REPOSITORY_OUTPUT_PORT_LOOKUP_COMPONENT_TYPE_BY_NAME = "lookupComponentTypeByNamedIdentifier";
+	public static final String REPOSITORY_OUTPUT_PORT_CREATE_AND_REGISTER_COMPONENT_TYPE = "createAndRegisterComponentType";
+	public static final String REPOSITORY_OUTPUT_PORT_GET_COMPONENT_TYPES = "getComponentTypes";
+	public static final String REPOSITORY_OUTPUT_PORT_LOOKUP_ALLOCATION_COMPONENT_INSTANCE_BY_NAME = "lookupAllocationComponentInstanceByNamedIdentifier";
+	public static final String REPOSITORY_OUTPUT_PORT_CREATE_AND_REGISTER_ALLOCATION_COMPONENT_INSTANCE = "createAndRegisterAllocationComponentInstance";
+	public static final String REPOSITORY_OUTPUT_PORT_LOOKUP_IOERATION_BY_NAME = "lookupOperationByNamedIdentifier";
+	public static final String REPOSITORY_OUTPUT_PORT_CREATE_AND_REGISTER_OPERATION = "createAndRegisterOperation";
+	public static final String REPOSITORY_OUTPUT_PORT_GET_OPERATIONS = "getOperations";
+	public static final String REPOSITORY_OUTPUT_PORT_LOOKUP_ASSEMBLY_COMPONENT_BY_ID = "lookupAssemblyComponentById";
+	public static final String REPOSITORY_OUTPUT_PORT_LOOKUP_ASSEMBLY_COMPONENT_INSTANCE_BY_NAME = "lookupAssemblyComponentInstanceByNamedIdentifier";
+	public static final String REPOSITORY_OUTPUT_PORT_CREATE_AND_REGISTER_ASSEMBLY_COMPONENT_INSTANCE = "createAndRegisterAssemblyComponentInstance";
+	public static final String REPOSITORY_OUTPUT_PORT_GET_ASSEMBLY_COMPONENT_INSTANCES = "getAssemblyComponentInstances";
+	public static final String REPOSITORY_OUTPUT_PORT_LOOKUP_EXECUTION_CONTAINER_BY_NAME = "lookupExecutionContainerByNamedIdentifier";
+	public static final String REPOSITORY_OUTPUT_PORT_LOOKUP_EXECUTION_CONTAINER_BY_ID = "lookupExecutionContainerByContainerId";
+	public static final String REPOSITORY_OUTPUT_PORT_GET_EXECUTION_CONTAINERS = "getExecutionContainers";
+	public static final String REPOSITORY_OUTPUT_PORT_GET_PAIRS = "getPairs";
+	public static final String REPOSITORY_OUTPUT_PORT_GET_PAIR_BY_ID = "getPairById";
+	public static final String REPOSITORY_OUTPUT_PORT_GET_PAIR_INSTANCE_BY_PAIR = "getPairInstanceByPair";
+	public static final String REPOSITORY_OUTPUT_PORT_CREATE_AND_REGISTER_EXECUTION_CONTAINER = "createAndRegisterExecutionContainer";
+	public static final String REPOSITORY_OUTPUT_PORT_GET_ROOT_EXECUTION = "getRootExecution";
 
 	// Please leave the logger here, because the "composition" above is used in the user guide
 	private static final Log LOG = LogFactory.getLog(AbstractTraceAnalysisFilter.class);
@@ -71,67 +115,69 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 		super(configuration, projectContext);
 	}
 
-	public static final Execution createExecutionByEntityNames(final SystemModelRepository systemModelRepository,
+	public final Execution createExecutionByEntityNames(final SystemModelRepository systemModelRepository,
 			final String executionContainerName, final String assemblyComponentTypeName, final String componentTypeName,
 			final Signature operationSignature, final long traceId, final String sessionId, final int eoi, final int ess,
 			final long tin, final long tout, final boolean assumed) {
 		final String allocationComponentName = new StringBuilder(executionContainerName).append("::").append(assemblyComponentTypeName).toString();
 		final String operationFactoryName = new StringBuilder(componentTypeName).append(".").append(operationSignature).toString();
 
-		AllocationComponent allocInst = systemModelRepository.getAllocationFactory()
-				.lookupAllocationComponentInstanceByNamedIdentifier(allocationComponentName);
+		AllocationComponent allocInst = (AllocationComponent) super.deliverWithReturnTypeToRepository(
+				REPOSITORY_OUTPUT_PORT_LOOKUP_ALLOCATION_COMPONENT_INSTANCE_BY_NAME, allocationComponentName);
 		if (allocInst == null) { // Allocation component instance doesn't exist
-			AssemblyComponent assemblyComponent = systemModelRepository.getAssemblyFactory()
-					.lookupAssemblyComponentInstanceByNamedIdentifier(assemblyComponentTypeName);
+			AssemblyComponent assemblyComponent = (AssemblyComponent) super.deliverWithReturnTypeToRepository(
+					REPOSITORY_OUTPUT_PORT_LOOKUP_ASSEMBLY_COMPONENT_INSTANCE_BY_NAME, assemblyComponentTypeName);
 			if (assemblyComponent == null) { // assembly instance doesn't exist
-				ComponentType componentType = systemModelRepository.getTypeRepositoryFactory().lookupComponentTypeByNamedIdentifier(assemblyComponentTypeName);
+				ComponentType componentType = (ComponentType) super.deliverWithReturnTypeToRepository(REPOSITORY_OUTPUT_PORT_LOOKUP_COMPONENT_TYPE_BY_NAME,
+						assemblyComponentTypeName);
 				if (componentType == null) { // NOPMD NOCS (NestedIf)
 					// Component type doesn't exist
-					componentType = systemModelRepository.getTypeRepositoryFactory().createAndRegisterComponentType(assemblyComponentTypeName,
+					componentType = (ComponentType) super.deliverWithReturnTypeToRepository(REPOSITORY_OUTPUT_PORT_CREATE_AND_REGISTER_COMPONENT_TYPE,
+							assemblyComponentTypeName,
 							assemblyComponentTypeName);
 				}
-				assemblyComponent = systemModelRepository.getAssemblyFactory()
-						.createAndRegisterAssemblyComponentInstance(assemblyComponentTypeName, componentType);
+				assemblyComponent = (AssemblyComponent) super.deliverWithReturnTypeToRepository(
+						REPOSITORY_OUTPUT_PORT_CREATE_AND_REGISTER_ASSEMBLY_COMPONENT_INSTANCE, assemblyComponentTypeName, componentType);
 			}
-			ExecutionContainer execContainer = systemModelRepository.getExecutionEnvironmentFactory()
-					.lookupExecutionContainerByNamedIdentifier(executionContainerName);
+			ExecutionContainer execContainer = (ExecutionContainer) super.deliverWithReturnTypeToRepository(
+					REPOSITORY_OUTPUT_PORT_LOOKUP_EXECUTION_CONTAINER_BY_NAME, executionContainerName);
 			if (execContainer == null) { // doesn't exist, yet
-				execContainer = systemModelRepository.getExecutionEnvironmentFactory()
-						.createAndRegisterExecutionContainer(executionContainerName, executionContainerName);
+				execContainer = (ExecutionContainer) super.deliverWithReturnTypeToRepository(REPOSITORY_OUTPUT_PORT_CREATE_AND_REGISTER_EXECUTION_CONTAINER,
+						executionContainerName, executionContainerName);
 			}
-			allocInst = systemModelRepository.getAllocationFactory()
-					.createAndRegisterAllocationComponentInstance(allocationComponentName, assemblyComponent, execContainer);
+			allocInst = (AllocationComponent) super.deliverWithReturnTypeToRepository(REPOSITORY_OUTPUT_PORT_CREATE_AND_REGISTER_ALLOCATION_COMPONENT_INSTANCE,
+					allocationComponentName, assemblyComponent, execContainer);
 		}
 
-		Operation op = systemModelRepository.getOperationFactory().lookupOperationByNamedIdentifier(operationFactoryName);
+		Operation op = (Operation) super.deliverWithReturnTypeToRepository(REPOSITORY_OUTPUT_PORT_LOOKUP_IOERATION_BY_NAME, operationFactoryName);
 		if (op == null) { // Operation doesn't exist
-			op = systemModelRepository.getOperationFactory()
-					.createAndRegisterOperation(operationFactoryName, allocInst.getAssemblyComponent().getType(), operationSignature);
+			op = (Operation) super.deliverWithReturnTypeToRepository(REPOSITORY_OUTPUT_PORT_CREATE_AND_REGISTER_OPERATION, operationFactoryName, allocInst
+					.getAssemblyComponent().getType(), operationSignature);
 			allocInst.getAssemblyComponent().getType().addOperation(op);
 		}
 
 		return new Execution(op, allocInst, traceId, sessionId, eoi, ess, tin, tout, assumed);
 	}
 
-	public static final Execution createExecutionByEntityNames(final SystemModelRepository systemModelRepository,
+	public final Execution createExecutionByEntityNames(final SystemModelRepository systemModelRepository,
 			final String executionContainerName, final String assemblyComponentTypeName,
 			final Signature operationSignature, final long traceId, final String sessionId, final int eoi, final int ess,
 			final long tin, final long tout, final boolean assumed) {
-		return AbstractTraceAnalysisFilter.createExecutionByEntityNames(systemModelRepository, executionContainerName, assemblyComponentTypeName,
+		return this.createExecutionByEntityNames(systemModelRepository, executionContainerName, assemblyComponentTypeName,
 				assemblyComponentTypeName, operationSignature, traceId, sessionId, eoi, ess, tin, tout, assumed);
 	}
 
 	protected final Execution createExecutionByEntityNames(final String executionContainerName, final String assemblyComponentTypeName,
 			final String componentTypeName, final Signature operationSignature, final long traceId, final String sessionId, final int eoi, final int ess,
 			final long tin, final long tout, final boolean assumed) {
-		return AbstractTraceAnalysisFilter.createExecutionByEntityNames(this.getSystemEntityFactory(), executionContainerName, assemblyComponentTypeName,
+		return this.createExecutionByEntityNames(this.getSystemEntityFactory(), executionContainerName, assemblyComponentTypeName,
 				componentTypeName, operationSignature, traceId, sessionId, eoi, ess, tin, tout, assumed);
 	}
 
 	protected final Execution createExecutionByEntityNames(final String executionContainerName, final String assemblyComponentTypeName,
 			final Signature operationSignature, final long traceId, final String sessionId, final int eoi, final int ess,
 			final long tin, final long tout, final boolean assumed) {
-		return AbstractTraceAnalysisFilter.createExecutionByEntityNames(this.getSystemEntityFactory(), executionContainerName, assemblyComponentTypeName,
+		return this.createExecutionByEntityNames(this.getSystemEntityFactory(), executionContainerName, assemblyComponentTypeName,
 				assemblyComponentTypeName, operationSignature, traceId, sessionId, eoi, ess, tin, tout, assumed);
 	}
 

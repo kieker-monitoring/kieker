@@ -130,6 +130,9 @@ public interface IAnalysisController extends IProjectContext {
 	public void connect(final AbstractPlugin plugin, final String repositoryPort, final AbstractRepository repository) throws IllegalStateException,
 			AnalysisConfigurationException;
 
+	public void connect(final AbstractPlugin src, final String repositoryOutputPortName, final AbstractRepository repository, final String repositoryInputPortName)
+			throws IllegalStateException, AnalysisConfigurationException;
+
 	/**
 	 * Starts an {@link AnalysisController} instance.
 	 * The method returns after all configured readers finished reading and all analysis plug-ins terminated
