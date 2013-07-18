@@ -23,6 +23,7 @@ import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
+import kieker.analysis.plugin.annotation.RepositoryOutputPort;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.analysis.plugin.filter.flow.TraceEventRecords;
 import kieker.common.configuration.Configuration;
@@ -70,6 +71,9 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 		configuration = {
 			@Property(name = TraceEventRecords2ExecutionAndMessageTraceFilter.CONFIG_ENHANCE_JAVA_CONSTRUCTORS, defaultValue = "true"),
 			@Property(name = TraceEventRecords2ExecutionAndMessageTraceFilter.CONFIG_ENHANCE_CALL_DETECTION, defaultValue = "true")
+		},
+		repositoryOutputPorts = {
+			@RepositoryOutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.REPOSITORY_OUTPUT_PORT_GET_ROOT_EXECUTION)
 		})
 public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTraceProcessingFilter {
 
@@ -82,6 +86,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 	public static final String OUTPUT_PORT_NAME_MESSAGE_TRACE = "messageTrace";
 	/** This is the name of the output port delivering invalid traces. */
 	public static final String OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE = "invalidTrace";
+
+	public static final String REPOSITORY_OUTPUT_PORT_GET_ROOT_EXECUTION = "getRootExecution";
 
 	public static final String CONFIG_ENHANCE_JAVA_CONSTRUCTORS = "enhanceJavaConstructors";
 	public static final String CONFIG_ENHANCE_CALL_DETECTION = "enhanceCallDetection";
@@ -174,7 +180,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 		}
 		super.deliver(OUTPUT_PORT_NAME_EXECUTION_TRACE, executionTrace);
 		try {
-			super.deliver(OUTPUT_PORT_NAME_MESSAGE_TRACE, executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION));
+			super.deliver(OUTPUT_PORT_NAME_MESSAGE_TRACE,
+					executionTrace.toMessageTrace((Execution) super.deliverWithReturnTypeToRepository(REPOSITORY_OUTPUT_PORT_GET_ROOT_EXECUTION)));
 			super.reportSuccess(executionTrace.getTraceId());
 		} catch (final InvalidTraceException ex) {
 			LOG.warn("Failed to convert to message trace: " + ex.getMessage()); // do not pass 'ex' to LOG.warn because this makes the output verbose (#584)
