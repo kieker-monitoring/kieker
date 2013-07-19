@@ -331,9 +331,9 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 			this.connect(connection.getSource(), connection.getOutputName(), connection.getDestination(), connection.getInputName());
 		}
 
-		for (final RepositoryConnection connection : repositoryConnections) {
-			this.connect(connection.getSource(), connection.getOutputName(), connection.getRepository());
-		}
+		// for (final RepositoryConnection connection : repositoryConnections) {
+		// this.connect(connection.getSource(), connection.getOutputName(), connection.getRepository());
+		// }
 
 		// Remember the mapping!
 		this.pluginModelMap = pluginMap;
@@ -381,26 +381,6 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		AbstractPlugin.connect(src, outputPortName, dst, inputPortName); // throws AnalysisConfigurationException
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public final void connect(final AbstractPlugin plugin, final String repositoryPort, final AbstractRepository repository)
-			throws IllegalStateException, AnalysisConfigurationException {
-		if (this.state != STATE.READY) {
-			throw new IllegalStateException("Unable to connect repositories after starting analysis.");
-		}
-		// Make sure that the plugin is registered.
-		if (!(this.filters.contains(plugin) || this.readers.contains(plugin))) {
-			throw new AnalysisConfigurationException("The plugin '" + plugin.getName() + "' (" + plugin.getPluginName() + ") is not registered.");
-		}
-		// Make sure that the repository is registered.
-		if (!this.repos.contains(repository)) {
-			throw new AnalysisConfigurationException("The repository '" + repository.getName() + "' (" + repository.getRepositoryName() + ") is not registered.");
-		}
-		// Use the method of AbstractPlugin (This should be the only allowed call to this method) to check the connections.
-		plugin.connect(repositoryPort, repository); // throws AnalysisConfigurationException
-	}
-
 	public void connect(final AbstractPlugin src, final String repositoryOutputPortName, final AbstractRepository repository, final String repositoryInputPortName)
 			throws IllegalStateException, AnalysisConfigurationException {
 		AbstractPlugin.connect(src, repositoryOutputPortName, repository, repositoryInputPortName);
@@ -432,11 +412,6 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		}
 		// Call init() method of all plug-ins.
 		for (final AbstractReaderPlugin reader : this.readers) {
-			// Make also sure that all repository ports of all plugins are connected.
-			if (!reader.areAllRepositoryPortsConnected()) {
-				this.terminate(true);
-				throw new AnalysisConfigurationException("Reader '" + reader.getName() + "' (" + reader.getPluginName() + ") has unconnected repositories.");
-			}
 			reader.startInitializationSequence();
 			if (!reader.start()) {
 				this.terminate(true);
@@ -445,11 +420,6 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		}
 
 		for (final AbstractFilterPlugin filter : this.filters) {
-			// Make also sure that all repository ports of all plugins are connected.
-			if (!filter.areAllRepositoryPortsConnected()) {
-				this.terminate(true);
-				throw new AnalysisConfigurationException("Plugin '" + filter.getName() + "' (" + filter.getPluginName() + ") has unconnected repositories.");
-			}
 			if (!filter.start()) {
 				this.terminate(true);
 				throw new AnalysisConfigurationException("Plugin '" + filter.getName() + "' (" + filter.getPluginName() + ") failed to initialize.");

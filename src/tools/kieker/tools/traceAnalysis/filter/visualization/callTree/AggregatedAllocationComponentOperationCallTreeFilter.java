@@ -18,9 +18,8 @@ package kieker.tools.traceAnalysis.filter.visualization.callTree;
 
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.Plugin;
-import kieker.analysis.plugin.annotation.RepositoryPort;
+import kieker.analysis.plugin.annotation.RepositoryOutputPort;
 import kieker.common.configuration.Configuration;
-import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.visualization.graph.IOriginRetentionPolicy;
 import kieker.tools.traceAnalysis.filter.visualization.graph.NoOriginRetentionPolicy;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
@@ -29,7 +28,6 @@ import kieker.tools.traceAnalysis.systemModel.Operation;
 import kieker.tools.traceAnalysis.systemModel.SynchronousCallMessage;
 import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.AllocationComponentOperationPairFactory;
-import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationPair;
 
 /**
@@ -38,10 +36,10 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
  * @since 1.1
  */
 @Plugin(description = "Uses the incoming data to enrich the connected repository with data for the aggregated allocation component operation call tree",
-		repositoryPorts = {
-			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
-		})
+		repositoryOutputPorts = @RepositoryOutputPort(name = AggregatedAllocationComponentOperationCallTreeFilter.REPOSITORY_OUTPUT_PORT_GET_PAIR_INSTANCE_BY_PAIR))
 public class AggregatedAllocationComponentOperationCallTreeFilter extends AbstractAggregatedCallTreeFilter<AllocationComponentOperationPair> {
+
+	public static final String REPOSITORY_OUTPUT_PORT_GET_PAIR_INSTANCE_BY_PAIR = "getPairInstanceByPair";
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -72,8 +70,8 @@ public class AggregatedAllocationComponentOperationCallTreeFilter extends Abstra
 	protected AllocationComponentOperationPair concreteCreatePair(final SynchronousCallMessage callMsg) {
 		final AllocationComponent allocationComponent = callMsg.getReceivingExecution().getAllocationComponent();
 		final Operation op = callMsg.getReceivingExecution().getOperation();
-		final AllocationComponentOperationPair destination = AggregatedAllocationComponentOperationCallTreeFilter.this.getSystemEntityFactory()
-				.getAllocationPairFactory().getPairInstanceByPair(allocationComponent, op); // will never be null!
+		final AllocationComponentOperationPair destination = (AllocationComponentOperationPair) super.deliverWithReturnTypeToRepository(
+				REPOSITORY_OUTPUT_PORT_GET_PAIR_INSTANCE_BY_PAIR, allocationComponent, op); // will never be null!
 		return destination;
 	}
 }

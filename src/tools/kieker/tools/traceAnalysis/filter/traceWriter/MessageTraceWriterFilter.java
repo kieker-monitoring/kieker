@@ -24,12 +24,9 @@ import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
-import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
-import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
-import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * 
@@ -38,9 +35,6 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * @since 1.2
  */
 @Plugin(description = "A filter allowing to write the incoming MessageTraces into a configured file",
-		repositoryPorts = {
-			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
-		},
 		configuration = {
 			@Property(name = MessageTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN, defaultValue = "messageTraces-yyyyMMdd-HHmmssSSS.txt")
 		})

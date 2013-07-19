@@ -336,21 +336,23 @@ public final class MetaModelHandler {
 				mPlugin.getProperties().addAll(MetaModelHandler.convertProperties(plugin.getCurrentConfiguration(), factory));
 
 				// Extract the repositories.
-				for (final Entry<String, AbstractRepository> repoEntry : plugin.getCurrentRepositories().entrySet()) {
-					// Try to find the repository within our map.
-					final AbstractRepository repository = repoEntry.getValue();
-					final MIRepository mRepository = repositoryMap.get(repository);
-					// If it doesn't exist, we have a problem...
-					if (mRepository == null) {
-						throw new AnalysisConfigurationException("Repository '" + repository.getName() + "' (" + repository.getRepositoryName()
-								+ ") not contained in project. Maybe the repository has not been registered.");
-					}
-					// Now the connector.
-					final MIRepositoryConnector mRepositoryConn = factory.createRepositoryConnector();
-					mRepositoryConn.setName(repoEntry.getKey());
-					mRepositoryConn.setRepository(mRepository);
-					mPlugin.getRepositories().add(mRepositoryConn);
-				}
+				/*
+				 * for (final Entry<String, AbstractRepository> repoEntry : plugin.getCurrentRepositories().entrySet()) {
+				 * // Try to find the repository within our map.
+				 * final AbstractRepository repository = repoEntry.getValue();
+				 * final MIRepository mRepository = repositoryMap.get(repository);
+				 * // If it doesn't exist, we have a problem...
+				 * if (mRepository == null) {
+				 * throw new AnalysisConfigurationException("Repository '" + repository.getName() + "' (" + repository.getRepositoryName()
+				 * + ") not contained in project. Maybe the repository has not been registered.");
+				 * }
+				 * // Now the connector.
+				 * final MIRepositoryConnector mRepositoryConn = factory.createRepositoryConnector();
+				 * mRepositoryConn.setName(repoEntry.getKey());
+				 * mRepositoryConn.setRepository(mRepository);
+				 * mPlugin.getRepositories().add(mRepositoryConn);
+				 * }
+				 */
 				// Create the ports.
 				final String[] outs = plugin.getAllOutputPortNames();
 				for (final String out : outs) {

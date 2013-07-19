@@ -24,7 +24,6 @@ import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryOutputPort;
-import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.analysis.plugin.filter.flow.TraceEventRecords;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -43,14 +42,12 @@ import kieker.common.record.flow.trace.operation.constructor.BeforeConstructorEv
 import kieker.common.record.flow.trace.operation.constructor.CallConstructorEvent;
 import kieker.common.util.signature.ClassOperationSignaturePair;
 import kieker.common.util.signature.Signature;
-import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.traceReconstruction.InvalidTraceException;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.InvalidExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
-import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * @author Andre van Hoorn, Holger Knoche, Jan Waller
@@ -65,9 +62,6 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 					description = "Outputs transformed message traces", eventTypes = { MessageTrace.class }),
 			@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE,
 					description = "Invalid Execution Traces", eventTypes = { InvalidExecutionTrace.class }) },
-		repositoryPorts = {
-			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
-		},
 		configuration = {
 			@Property(name = TraceEventRecords2ExecutionAndMessageTraceFilter.CONFIG_ENHANCE_JAVA_CONSTRUCTORS, defaultValue = "true"),
 			@Property(name = TraceEventRecords2ExecutionAndMessageTraceFilter.CONFIG_ENHANCE_CALL_DETECTION, defaultValue = "true")
@@ -138,8 +132,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 		}
 		final long traceId = trace.getTraceId();
 		final ExecutionTrace executionTrace = new ExecutionTrace(traceId, trace.getSessionId());
-		final TraceEventRecordHandler traceEventRecordHandler = new TraceEventRecordHandler(trace, executionTrace, this.getSystemEntityFactory(),
-				this.enhanceJavaConstructors, this.enhanceCallDetection);
+		final TraceEventRecordHandler traceEventRecordHandler = new TraceEventRecordHandler(trace, executionTrace, this.enhanceJavaConstructors,
+				this.enhanceCallDetection);
 		int expectedOrderIndex = -1;
 		for (final AbstractTraceEvent event : traceEventRecords.getTraceEvents()) {
 			expectedOrderIndex += 1; // increment in each iteration -> 0 is the first real value
@@ -195,7 +189,6 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 	 * @author Andre van Hoorn, Holger Knoche, Jan Waller
 	 */
 	private class TraceEventRecordHandler {
-		private final SystemModelRepository systemModelRepository;
 		private final Trace trace;
 		private final ExecutionTrace executionTrace;
 		private final Stack<AbstractTraceEvent> eventStack = new Stack<AbstractTraceEvent>();
@@ -206,11 +199,10 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 
 		private int orderindex;
 
-		public TraceEventRecordHandler(final Trace trace, final ExecutionTrace executionTrace, final SystemModelRepository systemModelRepository,
-				final boolean enhanceJavaConstructors, final boolean enhanceCallDetection) {
+		public TraceEventRecordHandler(final Trace trace, final ExecutionTrace executionTrace, final boolean enhanceJavaConstructors,
+				final boolean enhanceCallDetection) {
 			this.trace = trace;
 			this.executionTrace = executionTrace;
-			this.systemModelRepository = systemModelRepository;
 			this.enhanceJavaConstructors = enhanceJavaConstructors;
 			this.enhanceCallDetection = enhanceCallDetection;
 		}
@@ -244,7 +236,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 			} else {
 				executionContext = classSignature;
 			}
-			final Execution execution = TraceEventRecords2ExecutionAndMessageTraceFilter.this.createExecutionByEntityNames(this.systemModelRepository,
+			final Execution execution = TraceEventRecords2ExecutionAndMessageTraceFilter.this.createExecutionByEntityNames(
 					hostname,
 					executionContext,
 					fqComponentNameSignaturePair.getFqClassname(), fqComponentNameSignaturePair.getSignature(),

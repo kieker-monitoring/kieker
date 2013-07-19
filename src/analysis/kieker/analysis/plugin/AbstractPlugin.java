@@ -22,9 +22,7 @@ import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +45,6 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryInputPort;
 import kieker.analysis.plugin.annotation.RepositoryOutputPort;
-import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.analysis.plugin.metasignal.InitializationSignal;
 import kieker.analysis.plugin.metasignal.MetaSignal;
 import kieker.analysis.plugin.metasignal.TerminationSignal;
@@ -76,8 +73,6 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 
 	private final ConcurrentHashMap<String, ConcurrentLinkedQueue<PluginInputPortReference>> registeredMethods;
 	private final ConcurrentHashMap<String, ConcurrentLinkedQueue<RepositoryInputPortReference>> registeredRepositoryMethods;
-	private final ConcurrentHashMap<String, AbstractRepository> registeredRepositories;
-	private final Map<String, RepositoryPort> repositoryPorts;
 	private final Map<String, OutputPort> outputPorts;
 	private final Map<String, InputPort> inputPorts;
 
@@ -111,15 +106,9 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		Arrays.sort(asyncInputPorts);
 		Arrays.sort(asyncOutputPorts);
 
-		// Get all repository and output ports.
-		this.repositoryPorts = new ConcurrentHashMap<String, RepositoryPort>();
+		// Get all output ports.
 		this.outputPorts = new ConcurrentHashMap<String, OutputPort>();
 		final Plugin annotation = this.getClass().getAnnotation(Plugin.class);
-		for (final RepositoryPort repoPort : annotation.repositoryPorts()) {
-			if (this.repositoryPorts.put(repoPort.name(), repoPort) != null) {
-				LOG.error("Two RepositoryPorts use the same name: " + repoPort.name());
-			}
-		}
 		for (final OutputPort outputPort : annotation.outputPorts()) {
 			if (this.outputPorts.put(outputPort.name(), outputPort) != null) {
 				LOG.error("Two OutputPorts use the same name: " + outputPort.name());
@@ -158,7 +147,6 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 				}
 			}
 		}
-		this.registeredRepositories = new ConcurrentHashMap<String, AbstractRepository>(this.repositoryPorts.size());
 
 		// Now create a linked queue for every output port of the class, to store the registered methods.
 		this.registeredMethods = new ConcurrentHashMap<String, ConcurrentLinkedQueue<PluginInputPortReference>>();
@@ -351,34 +339,6 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		}
 
 		return true;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public final void connect(final String reponame, final AbstractRepository repository) throws AnalysisConfigurationException {
-		if (this.state != STATE.READY) {
-			throw new AnalysisConfigurationException("Plugin: " + this.getClass().getName() + " final not in " + STATE.READY + " this.state, but final in state "
-					+ this.state + ".");
-		}
-		final RepositoryPort port = this.repositoryPorts.get(reponame);
-		if (port == null) {
-			throw new AnalysisConfigurationException("Failed to connect plugin '" + this.getName() + "' (" + this.getPluginName() + ") to repository '"
-					+ repository.getName() + "' (" + repository.getRepositoryName() + "). Unknown repository port: " + reponame);
-		}
-		final Class<? extends AbstractRepository> repositoryType = port.repositoryType();
-		if (!repositoryType.isAssignableFrom(repository.getClass())) {
-			throw new AnalysisConfigurationException("Failed to connect plugin '" + this.getName() + "' (" + this.getPluginName() + ") to repository '"
-					+ repository.getName() + "' (" + repository.getRepositoryName() + "). Expected RepositoryType: " + repositoryType.getName() + " Found: "
-					+ repository.getClass().getName());
-		}
-		synchronized (this) {
-			if (this.registeredRepositories.containsKey(reponame)) {
-				throw new AnalysisConfigurationException("Failed to connect plugin '" + this.getName() + "' (" + this.getPluginName() + ") to repository '"
-						+ repository.getName() + "' (" + repository.getRepositoryName() + "). RepositoryPort already connected: " + reponame);
-			}
-			this.registeredRepositories.put(reponame, repository);
-		}
 	}
 
 	public static final void connect(final AbstractPlugin src, final String repositoryOutputPortName, final AbstractRepository repository,
@@ -577,41 +537,6 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	}
 
 	/**
-	 * This method checks whether all repository ports of the current plugin are connected.
-	 * 
-	 * @return true if and only if all plugin ports (defined in the annotation) are connected to a repository.
-	 */
-	public final boolean areAllRepositoryPortsConnected() {
-		// Run through all port names and check them.
-		final Iterator<String> repositoryNameIter = this.repositoryPorts.keySet().iterator();
-		while (repositoryNameIter.hasNext()) {
-			if (!this.registeredRepositories.containsKey(repositoryNameIter.next())) {
-				// The current port is not connected.
-				return false;
-			}
-		}
-		return true;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public final Map<String, AbstractRepository> getCurrentRepositories() {
-		return Collections.unmodifiableMap(this.registeredRepositories);
-	}
-
-	/**
-	 * Delivers the registered repository for the given name or null, if it doesn't exist.
-	 * 
-	 * @param reponame
-	 *            The name (key) of the repository.
-	 * @return The registered repository instance.
-	 */
-	protected final AbstractRepository getRepository(final String reponame) {
-		return this.registeredRepositories.get(reponame);
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	public final String[] getAllOutputPortNames() {
@@ -649,18 +574,6 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			}
 		}
 		return displayNames.toArray(new String[displayNames.size()]);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public final String[] getAllRepositoryPortNames() {
-		final List<String> repositoryNames = new LinkedList<String>();
-		final Plugin annotation = this.getClass().getAnnotation(Plugin.class);
-		for (final RepositoryPort repositoryPort : annotation.repositoryPorts()) {
-			repositoryNames.add(repositoryPort.name());
-		}
-		return repositoryNames.toArray(new String[repositoryNames.size()]);
 	}
 
 	/**

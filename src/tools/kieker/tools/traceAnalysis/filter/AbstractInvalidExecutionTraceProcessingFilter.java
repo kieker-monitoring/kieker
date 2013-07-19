@@ -18,9 +18,7 @@ package kieker.tools.traceAnalysis.filter;
 
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.Plugin;
-import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
-import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * This is an abstract base for filters processing invalid execution traces.
@@ -29,7 +27,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * 
  * @since 1.2
  */
-@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
+@Plugin
 public abstract class AbstractInvalidExecutionTraceProcessingFilter extends AbstractTraceProcessingFilter {
 
 	/**

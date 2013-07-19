@@ -21,7 +21,6 @@ import java.io.PrintStream;
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryOutputPort;
-import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -40,29 +39,28 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * 
  * @since 1.2
  */
-@Plugin(repositoryPorts = { @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class) },
-		repositoryOutputPorts = {
-			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_LOOKUP_COMPONENT_TYPE_BY_NAME),
-			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_CREATE_AND_REGISTER_COMPONENT_TYPE),
-			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_GET_COMPONENT_TYPES),
-			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_LOOKUP_ALLOCATION_COMPONENT_INSTANCE_BY_NAME),
-			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_CREATE_AND_REGISTER_ALLOCATION_COMPONENT_INSTANCE),
-			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_LOOKUP_IOERATION_BY_NAME),
-			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_CREATE_AND_REGISTER_OPERATION),
-			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_GET_OPERATIONS),
-			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_LOOKUP_ASSEMBLY_COMPONENT_BY_ID),
-			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_LOOKUP_ASSEMBLY_COMPONENT_INSTANCE_BY_NAME),
-			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_CREATE_AND_REGISTER_ASSEMBLY_COMPONENT_INSTANCE),
-			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_GET_ASSEMBLY_COMPONENT_INSTANCES),
-			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_LOOKUP_EXECUTION_CONTAINER_BY_NAME),
-			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_LOOKUP_EXECUTION_CONTAINER_BY_ID),
-			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_GET_EXECUTION_CONTAINERS),
-			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_GET_PAIRS),
-			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_GET_PAIR_BY_ID),
-			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_GET_PAIR_INSTANCE_BY_PAIR),
-			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_CREATE_AND_REGISTER_EXECUTION_CONTAINER),
-			@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_GET_ROOT_EXECUTION)
-		})
+@Plugin(repositoryOutputPorts = {
+	@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_LOOKUP_COMPONENT_TYPE_BY_NAME),
+	@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_CREATE_AND_REGISTER_COMPONENT_TYPE),
+	@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_GET_COMPONENT_TYPES),
+	@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_LOOKUP_ALLOCATION_COMPONENT_INSTANCE_BY_NAME),
+	@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_CREATE_AND_REGISTER_ALLOCATION_COMPONENT_INSTANCE),
+	@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_LOOKUP_IOERATION_BY_NAME),
+	@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_CREATE_AND_REGISTER_OPERATION),
+	@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_GET_OPERATIONS),
+	@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_LOOKUP_ASSEMBLY_COMPONENT_BY_ID),
+	@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_LOOKUP_ASSEMBLY_COMPONENT_INSTANCE_BY_NAME),
+	@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_CREATE_AND_REGISTER_ASSEMBLY_COMPONENT_INSTANCE),
+	@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_GET_ASSEMBLY_COMPONENT_INSTANCES),
+	@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_LOOKUP_EXECUTION_CONTAINER_BY_NAME),
+	@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_LOOKUP_EXECUTION_CONTAINER_BY_ID),
+	@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_GET_EXECUTION_CONTAINERS),
+	@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_GET_PAIRS),
+	@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_GET_PAIR_BY_ID),
+	@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_GET_PAIR_INSTANCE_BY_PAIR),
+	@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_CREATE_AND_REGISTER_EXECUTION_CONTAINER),
+	@RepositoryOutputPort(name = AbstractTraceAnalysisFilter.REPOSITORY_OUTPUT_PORT_GET_ROOT_EXECUTION)
+})
 public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 	/** The name of the repository port for the system model repository. */
 	public static final String REPOSITORY_PORT_NAME_SYSTEM_MODEL = "systemModelRepository";
@@ -170,14 +168,14 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 	protected final Execution createExecutionByEntityNames(final String executionContainerName, final String assemblyComponentTypeName,
 			final String componentTypeName, final Signature operationSignature, final long traceId, final String sessionId, final int eoi, final int ess,
 			final long tin, final long tout, final boolean assumed) {
-		return this.createExecutionByEntityNames(this.getSystemEntityFactory(), executionContainerName, assemblyComponentTypeName,
+		return this.createExecutionByEntityNames(executionContainerName, assemblyComponentTypeName,
 				componentTypeName, operationSignature, traceId, sessionId, eoi, ess, tin, tout, assumed);
 	}
 
 	protected final Execution createExecutionByEntityNames(final String executionContainerName, final String assemblyComponentTypeName,
 			final Signature operationSignature, final long traceId, final String sessionId, final int eoi, final int ess,
 			final long tin, final long tout, final boolean assumed) {
-		return this.createExecutionByEntityNames(this.getSystemEntityFactory(), executionContainerName, assemblyComponentTypeName,
+		return this.createExecutionByEntityNames(executionContainerName, assemblyComponentTypeName,
 				assemblyComponentTypeName, operationSignature, traceId, sessionId, eoi, ess, tin, tout, assumed);
 	}
 
@@ -195,18 +193,6 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 		for (final String l : lines) {
 			this.stdOutPrintln(l);
 		}
-	}
-
-	public final SystemModelRepository getSystemEntityFactory() {
-		if (this.systemEntityFactory == null) {
-			this.systemEntityFactory = (SystemModelRepository)
-					this.getRepository(REPOSITORY_PORT_NAME_SYSTEM_MODEL);
-		}
-		if (this.systemEntityFactory == null) {
-			LOG.error("Failed to connect to system model repository via repository port '"
-					+ REPOSITORY_PORT_NAME_SYSTEM_MODEL + "' (not connected?)");
-		}
-		return this.systemEntityFactory;
 	}
 
 	/**

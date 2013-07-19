@@ -25,7 +25,6 @@ import kieker.analysis.IProjectContext;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
-import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.filter.IGraphOutputtingFilter;
 import kieker.tools.traceAnalysis.filter.visualization.AbstractGraphFilter;
@@ -56,7 +55,6 @@ import kieker.tools.traceAnalysis.systemModel.TraceInformation;
  */
 @Plugin(name = "Trace coloring filter",
 		description = "Colors graph elements that can uniquely associated to a trace according to the color repository",
-		repositoryPorts = @RepositoryPort(name = TraceColoringFilter.COLOR_REPOSITORY_PORT_NAME, repositoryType = TraceColorRepository.class),
 		outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH, eventTypes = { AbstractGraph.class }))
 public class TraceColoringFilter<V extends AbstractVertex<V, E, TraceInformation>, E extends AbstractEdge<V, E, TraceInformation>> extends
 		AbstractGraphFilter<AbstractGraph<V, E, TraceInformation>, V, E, TraceInformation> implements IGraphVisitor<V, E> {
@@ -83,10 +81,10 @@ public class TraceColoringFilter<V extends AbstractVertex<V, E, TraceInformation
 	}
 
 	private void initialize() {
-		final TraceColorRepository colorRepository = (TraceColorRepository) super.getRepository(COLOR_REPOSITORY_PORT_NAME);
-		this.colorMap = colorRepository.getColorMap();
-		this.defaultColor = colorRepository.getDefaultColor();
-		this.collisionColor = colorRepository.getCollisionColor();
+		// final TraceColorRepository colorRepository = (TraceColorRepository) super.getRepository(COLOR_REPOSITORY_PORT_NAME);
+		// this.colorMap = colorRepository.getColorMap();
+		// this.defaultColor = colorRepository.getDefaultColor();
+		// this.collisionColor = colorRepository.getCollisionColor();
 	}
 
 	private void handleGraphElement(final AbstractGraphElement<TraceInformation> element) {
@@ -149,12 +147,12 @@ public class TraceColoringFilter<V extends AbstractVertex<V, E, TraceInformation
 	 */
 	@Override
 	protected IOriginRetentionPolicy getDesiredOriginRetentionPolicy() throws AnalysisConfigurationException {
-		final TraceColorRepository colorRepository = (TraceColorRepository) super.getRepository(COLOR_REPOSITORY_PORT_NAME);
+		// final TraceColorRepository colorRepository = (TraceColorRepository) super.getRepository(COLOR_REPOSITORY_PORT_NAME);
 
 		final Set<TraceInformation> desiredTraces = new HashSet<TraceInformation>();
-		for (final Long traceId : colorRepository.getColorMap().keySet()) {
-			desiredTraces.add(new TraceInformation(traceId, null));
-		}
+		// for (final Long traceId : colorRepository.getColorMap().keySet()) {
+		// desiredTraces.add(new TraceInformation(traceId, null));
+		// }
 
 		return SpecificOriginRetentionPolicy.createInstance(desiredTraces);
 	}

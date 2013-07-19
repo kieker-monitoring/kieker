@@ -17,11 +17,8 @@ package kieker.analysis.plugin;
 
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Map;
 
 import kieker.analysis.analysisComponent.IAnalysisComponent;
-import kieker.analysis.exception.AnalysisConfigurationException;
-import kieker.analysis.repository.AbstractRepository;
 import kieker.analysis.repository.IRepository;
 import kieker.common.configuration.Configuration;
 
@@ -99,30 +96,6 @@ public interface IPlugin extends IAnalysisComponent {
 	public abstract String getName();
 
 	/**
-	 * Connects the given repository to this plugin via the given name. <b>DO NOT USE THIS METHOD!</b> Use <code>AnalysisController.connect</code> instead!
-	 * 
-	 * @param name
-	 *            The name of the port to connect the repository.
-	 * @param repo
-	 *            The repository which should be used.
-	 * @throws AnalysisConfigurationException
-	 *             if the repository-port is invalid, the repository itself is incompatible or the port is already used.
-	 * 
-	 * @since 1.5
-	 */
-	public abstract void connect(final String name, final AbstractRepository repo) throws AnalysisConfigurationException;
-
-	/**
-	 * This method delivers an array of {@code AbstractRepository} containing the current repositories of this instance. In other words: The constructor should
-	 * be able to use the given object to initialize a new instance of this class with the same intern properties.
-	 * 
-	 * @return An (possible empty) array of repositories.
-	 * 
-	 * @since 1.5
-	 */
-	public abstract Map<String, AbstractRepository> getCurrentRepositories();
-
-	/**
 	 * Delivers an array containing all output port names.
 	 * 
 	 * @return An array with all available output port names.
@@ -148,15 +121,6 @@ public interface IPlugin extends IAnalysisComponent {
 	 * @since 1.6
 	 */
 	public abstract String[] getAllDisplayNames();
-
-	/**
-	 * Delivers an array containing all repository port names.
-	 * 
-	 * @return An array with all available repository port names.
-	 * 
-	 * @since 1.7
-	 */
-	public abstract String[] getAllRepositoryPortNames();
 
 	/**
 	 * Delivers the plugins with their ports which are connected with the given output port.

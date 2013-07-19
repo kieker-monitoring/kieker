@@ -23,12 +23,11 @@ import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
-import kieker.analysis.plugin.annotation.RepositoryPort;
+import kieker.analysis.plugin.annotation.RepositoryOutputPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
-import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.traceReconstruction.TraceProcessingException;
 import kieker.tools.traceAnalysis.filter.visualization.callTree.AbstractCallTreeFilter.IPairFactory;
 import kieker.tools.traceAnalysis.filter.visualization.graph.NoOriginRetentionPolicy;
@@ -38,7 +37,6 @@ import kieker.tools.traceAnalysis.systemModel.Operation;
 import kieker.tools.traceAnalysis.systemModel.SynchronousCallMessage;
 import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.AllocationComponentOperationPairFactory;
-import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationPair;
 
 /**
@@ -53,16 +51,18 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
  * @since 1.1
  */
 @Plugin(description = "A filter allowing to write the incoming data into a calling tree",
-		repositoryPorts = {
-			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
-		},
 		configuration = {
 			@Property(name = TraceCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS,
 					defaultValue = TraceCallTreeFilter.CONFIG_PROPERTY_VALUE_SHORT_LABELS_DEFAULT),
 			@Property(name = TraceCallTreeFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILENAME,
 					defaultValue = TraceCallTreeFilter.CONFIG_PROPERTY_VALUE_OUTPUT_FILENAME_DEFAULT)
-		})
+		},
+		repositoryOutputPorts =
+		@RepositoryOutputPort(name = TraceCallTreeFilter.REPOSITORY_OUTPUT_PORT_GET_PAIR_INSTANCE_BY_PAIR))
 public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
+
+	public static final String REPOSITORY_OUTPUT_PORT_GET_PAIR_INSTANCE_BY_PAIR = "getPairInstanceByPair";
+
 	/** This is the name of the property determining the output file name. */
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FILENAME = "dotOutputFn";
 	/** This is the name of the property determining whether to use short labels or not. */
@@ -133,8 +133,8 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 				public AllocationComponentOperationPair createPair(final SynchronousCallMessage callMsg) {
 					final AllocationComponent allocationComponent = callMsg.getReceivingExecution().getAllocationComponent();
 					final Operation op = callMsg.getReceivingExecution().getOperation();
-					final AllocationComponentOperationPair destination = TraceCallTreeFilter.this.getSystemEntityFactory().getAllocationPairFactory()
-							.getPairInstanceByPair(allocationComponent, op); // will never be null!
+					final AllocationComponentOperationPair destination = (AllocationComponentOperationPair) TraceCallTreeFilter.super
+							.deliverWithReturnTypeToRepository(REPOSITORY_OUTPUT_PORT_GET_PAIR_INSTANCE_BY_PAIR, allocationComponent, op); // will never be null!
 					return destination;
 				}
 			}, mt, TraceCallTreeFilter.this.dotOutputFn + "-" + mt.getTraceId() + ".dot", false, TraceCallTreeFilter.this.shortLabels); // no weights

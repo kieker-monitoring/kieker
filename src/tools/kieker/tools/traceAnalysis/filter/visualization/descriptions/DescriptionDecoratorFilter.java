@@ -21,7 +21,6 @@ import java.util.Map;
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
-import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.filter.IGraphOutputtingFilter;
 import kieker.tools.traceAnalysis.filter.visualization.AbstractGraphFilter;
@@ -31,7 +30,6 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph.IGrap
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractPayloadedVertex;
 import kieker.tools.traceAnalysis.filter.visualization.graph.IOriginRetentionPolicy;
 import kieker.tools.traceAnalysis.filter.visualization.graph.NoOriginRetentionPolicy;
-import kieker.tools.traceAnalysis.repository.DescriptionRepository;
 import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
 
 /**
@@ -50,7 +48,6 @@ import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
  */
 @Plugin(name = "",
 		description = "This filter attaches decorations to graph entities",
-		repositoryPorts = @RepositoryPort(name = DescriptionDecoratorFilter.DESCRIPTION_REPOSITORY_PORT_NAME, repositoryType = DescriptionRepository.class),
 		outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH, eventTypes = { AbstractGraph.class }))
 public class DescriptionDecoratorFilter<V extends AbstractPayloadedVertex<V, E, O, ISystemModelElement>, E extends AbstractEdge<V, E, O>, O> extends
 		AbstractGraphFilter<AbstractGraph<V, E, O>, V, E, O> implements IGraphVisitor<V, E> {
@@ -95,8 +92,8 @@ public class DescriptionDecoratorFilter<V extends AbstractPayloadedVertex<V, E, 
 	}
 
 	private void initialize() {
-		final DescriptionRepository repository = (DescriptionRepository) this.getRepository(DESCRIPTION_REPOSITORY_PORT_NAME);
-		this.decorationsMap = repository.getDescriptionMap();
+		// final DescriptionRepository repository = (DescriptionRepository) this.getRepository(DESCRIPTION_REPOSITORY_PORT_NAME);
+		// this.decorationsMap = repository.getDescriptionMap();
 	}
 
 	@Override
