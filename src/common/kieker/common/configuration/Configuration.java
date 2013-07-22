@@ -213,6 +213,8 @@ public final class Configuration extends Properties {
 
 		final String workingPathname = pathname.replace('\\', '/');
 
+		final boolean endsWithSlash = workingPathname.charAt(workingPathname.length() - 1) == '/';
+
 		// split the path apart
 		final String[] components = workingPathname.replace('\\', '/').split("/");
 		final LinkedList<String> path = new LinkedList<String>(); // NOCS NOPMD
@@ -249,6 +251,9 @@ public final class Configuration extends Properties {
 		}
 		if (pathIter.hasNext()) {
 			sb.append(pathIter.next());
+		}
+		if (endsWithSlash) {
+			sb.append('/');
 		}
 
 		String result = sb.toString();
