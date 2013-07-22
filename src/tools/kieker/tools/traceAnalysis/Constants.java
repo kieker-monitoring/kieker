@@ -73,6 +73,8 @@ public final class Constants {
 	public static final String CMD_OPT_NAME_TASK_PRINTMSGTRACES = "print-Message-Traces";
 	/** Command whether to print execution traces or not. */
 	public static final String CMD_OPT_NAME_TASK_PRINTEXECTRACES = "print-Execution-Traces";
+	/** Command whether to print the system model or not. */
+	public static final String CMD_OPT_NAME_TASK_PRINTSYSTEMMODEL = "print-System-Model";
 	/** Command whether to print invalid execution traces or not. */
 	public static final String CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES = "print-invalid-Execution-Traces";
 	public static final String CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT = "print-Deployment-Equivalence-Classes";
@@ -191,6 +193,8 @@ public final class Constants {
 				.withDescription("Save execution trace representations of valid traces (.txt)").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES).hasArg(false)
 				.withDescription("Save a execution trace representations of invalid trace artifacts (.txt)").create());
+		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PRINTSYSTEMMODEL).hasArg(false)
+				.withDescription("Save a representation of the internal system model (.html)").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT).hasArg(false)
 				.withDescription("Output an overview about the deployment-level trace equivalence classes").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_ASSEMBLYEQUIVCLASSREPORT).hasArg(false)
