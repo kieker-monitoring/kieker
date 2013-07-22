@@ -22,12 +22,15 @@ import java.util.concurrent.TimeUnit;
 
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.filter.AbstractGraphProducingFilter;
+import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
+import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * Refactored copy from LogAnalysis-legacy tool.
@@ -38,7 +41,7 @@ import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
  * 
  * @since 1.1
  */
-@Plugin
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public abstract class AbstractDependencyGraphFilter<T extends ISystemModelElement> extends AbstractGraphProducingFilter<AbstractDependencyGraph<T>> {
 	private static final Log LOG = LogFactory.getLog(AbstractDependencyGraphFilter.class);
 

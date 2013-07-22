@@ -20,11 +20,13 @@ import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.util.signature.ClassOperationSignaturePair;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.systemModel.Execution;
+import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * Transforms {@link OperationExecutionRecord}s into {@link Execution} objects.<br>
@@ -40,6 +42,9 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
 		outputPorts = {
 			@OutputPort(name = ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME_EXECUTIONS, description = "Provides transformed executions",
 					eventTypes = { Execution.class })
+		},
+		repositoryPorts = {
+			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
 		})
 public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisFilter {
 	// private static final Log LOG = LogFactory.getLog(ExecutionRecordTransformationFilter.class);

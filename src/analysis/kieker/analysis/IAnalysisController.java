@@ -111,6 +111,25 @@ public interface IAnalysisController extends IProjectContext {
 	public void connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst,
 			final String inputPortName) throws IllegalStateException, AnalysisConfigurationException;
 
+	/**
+	 * Connects the given repository to this plugin via the given name.
+	 * 
+	 * @param plugin
+	 *            The plugin to be connected.
+	 * @param repositoryPort
+	 *            The name of the port to connect the repository.
+	 * @param repository
+	 *            The repository which should be used.
+	 * @throws IllegalStateException
+	 *             If this instance has already been started or has already been terminated.
+	 * @throws AnalysisConfigurationException
+	 *             If the port names or the given objects are invalid or not compatible.
+	 * 
+	 * @since 1.7
+	 */
+	public void connect(final AbstractPlugin plugin, final String repositoryPort, final AbstractRepository repository) throws IllegalStateException,
+			AnalysisConfigurationException;
+
 	public void connect(final AbstractPlugin src, final String repositoryOutputPortName, final AbstractRepository repository, final String repositoryInputPortName)
 			throws IllegalStateException, AnalysisConfigurationException;
 

@@ -73,6 +73,13 @@ public @interface Plugin {
 	 */
 	OutputPort[] outputPorts() default {};
 
+	/**
+	 * The output ports which the current plugin has.
+	 * 
+	 * @return The output ports of this annotation.
+	 */
+	RepositoryPort[] repositoryPorts() default {};
+
 	RepositoryOutputPort[] repositoryOutputPorts() default {};
 
 	/**

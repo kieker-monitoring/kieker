@@ -19,8 +19,10 @@ package kieker.tools.traceAnalysis.filter;
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
+import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * This is an abstract base for components which process message traces.
@@ -29,7 +31,7 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
  * 
  * @since 1.1
  */
-@Plugin
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public abstract class AbstractMessageTraceProcessingFilter extends AbstractTraceProcessingFilter {
 
 	/** The name of the input port receiving the message traces. */

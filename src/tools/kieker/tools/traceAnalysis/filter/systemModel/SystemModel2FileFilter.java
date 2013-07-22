@@ -22,6 +22,7 @@ import java.io.IOException;
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
+import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -38,6 +39,9 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  */
 @Plugin(
 		description = "Prints the contents of a connected SystemModelRepository to an HTML file",
+		repositoryPorts = {
+			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
+		},
 		configuration = {
 			@Property(name = SystemModel2FileFilter.CONFIG_PROPERTY_NAME_HTML_OUTPUT_FN, defaultValue = SystemModel2FileFilter.DEFAULT_HTML_OUTPUT_FN)
 		})
@@ -98,6 +102,7 @@ public class SystemModel2FileFilter extends AbstractTraceAnalysisFilter {
 				final File outputFileHTML = new File(this.outputFnHTML);
 				outputFnHTMLCanonical = outputFileHTML.getCanonicalPath(); // may throw IOExecption
 
+				final SystemModelRepository sysModelRepo = super.getSystemEntityFactory();
 				if (sysModelRepo == null) {
 					final String errorMsg = "Failed to get system model repository";
 					LOG.error(errorMsg);

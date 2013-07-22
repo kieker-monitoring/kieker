@@ -20,9 +20,11 @@ import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.Constants;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
+import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.IGraphOutputtingFilter;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
@@ -31,6 +33,7 @@ import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.SynchronousReplyMessage;
 import kieker.tools.traceAnalysis.systemModel.repository.ExecutionEnvironmentRepository;
+import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * Refactored copy from LogAnalysis-legacy tool<br>
@@ -42,7 +45,8 @@ import kieker.tools.traceAnalysis.systemModel.repository.ExecutionEnvironmentRep
  * 
  * @since 1.1
  */
-@Plugin(outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH, eventTypes = { AbstractGraph.class }))
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class),
+		outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH, eventTypes = { AbstractGraph.class }))
 public class ContainerDependencyGraphFilter extends AbstractDependencyGraphFilter<ExecutionContainer> {
 
 	private static final String CONFIGURATION_NAME = Constants.PLOTCONTAINERDEPGRAPH_COMPONENT_NAME;

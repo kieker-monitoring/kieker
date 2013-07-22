@@ -20,10 +20,11 @@ import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
-import kieker.analysis.plugin.annotation.RepositoryOutputPort;
+import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.Constants;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
+import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.IGraphOutputtingFilter;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
@@ -32,8 +33,10 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.Operation;
 import kieker.tools.traceAnalysis.systemModel.SynchronousReplyMessage;
 import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubRepository;
+import kieker.tools.traceAnalysis.systemModel.repository.AssemblyComponentOperationPairFactory;
 import kieker.tools.traceAnalysis.systemModel.repository.AssemblyRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.OperationRepository;
+import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPair;
 
 /**
@@ -45,13 +48,11 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
  * 
  * @since 1.2
  */
-@Plugin(outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH, eventTypes = { AbstractGraph.class }),
-		repositoryOutputPorts = @RepositoryOutputPort(name = OperationDependencyGraphAssemblyFilter.REPOSITORY_OUTPUT_PORT_GET_PAIR_INSTANCE_BY_PAIR))
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class),
+		outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH, eventTypes = { AbstractGraph.class }))
 public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGraphFilter<AssemblyComponentOperationPair> {
 
 	private static final String CONFIGURATION_NAME = Constants.PLOTASSEMBLYOPERATIONDEPGRAPH_COMPONENT_NAME;
-
-	public static final String REPOSITORY_OUTPUT_PORT_GET_PAIR_INSTANCE_BY_PAIR = "getPairInstanceByPair";
 
 	/**
 	 * Creates a new filter using the given parameters.
@@ -86,22 +87,20 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 			final Operation senderOperation = m.getSendingExecution().getOperation();
 			final Operation receiverOperation = m.getReceivingExecution().getOperation();
 			// The following two get-calls to the factory return s.th. in either case
-			// final AssemblyComponentOperationPairFactory pairFactory = this.getSystemEntityFactory().getAssemblyPairFactory();
+			final AssemblyComponentOperationPairFactory pairFactory = this.getSystemEntityFactory().getAssemblyPairFactory();
 
 			final AssemblyComponentOperationPair senderPair;
 			if (senderOperation.getId() == rootOperationId) {
 				senderPair = this.getGraph().getRootNode().getEntity();
 			} else {
-				senderPair = (AssemblyComponentOperationPair) super.deliverWithReturnTypeToRepository(REPOSITORY_OUTPUT_PORT_GET_PAIR_INSTANCE_BY_PAIR,
-						senderComponent, senderOperation);
+				senderPair = pairFactory.getPairInstanceByPair(senderComponent, senderOperation);
 			}
 
 			final AssemblyComponentOperationPair receiverPair;
 			if (receiverOperation.getId() == rootOperationId) {
 				receiverPair = this.getGraph().getRootNode().getEntity();
 			} else {
-				receiverPair = (AssemblyComponentOperationPair) super.deliverWithReturnTypeToRepository(REPOSITORY_OUTPUT_PORT_GET_PAIR_INSTANCE_BY_PAIR,
-						receiverComponent, receiverOperation);
+				receiverPair = pairFactory.getPairInstanceByPair(receiverComponent, receiverOperation);
 			}
 
 			DependencyGraphNode<AssemblyComponentOperationPair> senderNode = this.getGraph().getNode(senderPair.getId());

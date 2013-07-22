@@ -26,15 +26,16 @@ import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
-import kieker.analysis.plugin.annotation.RepositoryOutputPort;
+import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.filter.AbstractExecutionTraceProcessingFilter;
+import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.traceReconstruction.InvalidTraceException;
-import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
+import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * @author Andre van Hoorn
@@ -48,14 +49,16 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 			@OutputPort(name = TraceEquivalenceClassFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE_REPRESENTATIVES, description = "Execution Traces",
 					eventTypes = { ExecutionTrace.class })
 		},
+		repositoryPorts = {
+			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
+		},
 		configuration =
 		@Property(
 				name = TraceEquivalenceClassFilter.CONFIG_PROPERTY_NAME_EQUIVALENCE_MODE,
 				description = "The trace equivalence criteria: DISABLED (default value), ASSEMBLY (assembly-level equivalence), or ALLOCATION"
 						+ " (allocation-level equivalence)",
-				defaultValue = "DISABLED"), // one of TraceEquivalenceClassFilter.TraceEquivalenceClassModes
-		repositoryOutputPorts =
-		@RepositoryOutputPort(name = TraceEquivalenceClassFilter.REPOSITORY_OUTPUT_PORT_GET_ROOT_EXECUTION))
+				defaultValue = "DISABLED") // one of TraceEquivalenceClassFilter.TraceEquivalenceClassModes
+)
 public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessingFilter {
 
 	/** This is the name of the input port receiving new execution traces. */
@@ -63,8 +66,6 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 
 	public static final String OUTPUT_PORT_NAME_MESSAGE_TRACE_REPRESENTATIVES = "messageTraceRepresentatives";
 	public static final String OUTPUT_PORT_NAME_EXECUTION_TRACE_REPRESENTATIVES = "executionTraceRepresentatives";
-
-	public static final String REPOSITORY_OUTPUT_PORT_GET_ROOT_EXECUTION = "getRootExecution";
 
 	/** This is the name of the property determining the equivalence mode. */
 	public static final String CONFIG_PROPERTY_NAME_EQUIVALENCE_MODE = "equivalenceMode";
@@ -136,8 +137,7 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 		try {
 			if (this.equivalenceMode == TraceEquivalenceClassModes.DISABLED) {
 				super.deliver(OUTPUT_PORT_NAME_EXECUTION_TRACE_REPRESENTATIVES, et);
-				super.deliver(OUTPUT_PORT_NAME_MESSAGE_TRACE_REPRESENTATIVES, et.toMessageTrace(
-						(Execution) super.deliverWithReturnTypeToRepository(REPOSITORY_OUTPUT_PORT_GET_ROOT_EXECUTION)));
+				super.deliver(OUTPUT_PORT_NAME_MESSAGE_TRACE_REPRESENTATIVES, et.toMessageTrace(SystemModelRepository.ROOT_EXECUTION));
 			} else { // mode is ASSEMBLY or ALLOCATION
 				final AbstractExecutionTraceHashContainer polledTraceHashContainer;
 				if (this.equivalenceMode == TraceEquivalenceClassModes.ASSEMBLY) {
@@ -156,7 +156,7 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 					this.eTracesEquivClassesMap.put(polledTraceHashContainer, numOccurences);
 					super.deliver(OUTPUT_PORT_NAME_EXECUTION_TRACE_REPRESENTATIVES, et);
 					super.deliver(OUTPUT_PORT_NAME_MESSAGE_TRACE_REPRESENTATIVES,
-							et.toMessageTrace((Execution) super.deliverWithReturnTypeToRepository(REPOSITORY_OUTPUT_PORT_GET_ROOT_EXECUTION)));
+							et.toMessageTrace(SystemModelRepository.ROOT_EXECUTION));
 				} else {
 					numOccurences.incrementAndGet();
 				}

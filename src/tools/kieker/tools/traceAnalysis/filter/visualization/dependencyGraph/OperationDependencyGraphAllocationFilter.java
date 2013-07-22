@@ -20,10 +20,11 @@ import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
-import kieker.analysis.plugin.annotation.RepositoryOutputPort;
+import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.Constants;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
+import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.IGraphOutputtingFilter;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
@@ -32,8 +33,10 @@ import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.Operation;
 import kieker.tools.traceAnalysis.systemModel.SynchronousReplyMessage;
 import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubRepository;
+import kieker.tools.traceAnalysis.systemModel.repository.AllocationComponentOperationPairFactory;
 import kieker.tools.traceAnalysis.systemModel.repository.AllocationRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.OperationRepository;
+import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationPair;
 
 /**
@@ -46,13 +49,11 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
  * 
  * @since 1.1
  */
-@Plugin(outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH, eventTypes = { AbstractGraph.class }),
-		repositoryOutputPorts = @RepositoryOutputPort(name = OperationDependencyGraphAllocationFilter.REPOSITORY_OUTPUT_PORT_GET_PAIR_INSTANCE_BY_PAIR))
+@Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class),
+		outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH, eventTypes = { AbstractGraph.class }))
 public class OperationDependencyGraphAllocationFilter extends AbstractDependencyGraphFilter<AllocationComponentOperationPair> {
 
 	private static final String CONFIGURATION_NAME = Constants.PLOTALLOCATIONOPERATIONDEPGRAPH_COMPONENT_NAME;
-
-	public static final String REPOSITORY_OUTPUT_PORT_GET_PAIR_INSTANCE_BY_PAIR = "getPairInstanceByPair";
 
 	/**
 	 * Creates a new filter using the given parameters.
@@ -84,22 +85,20 @@ public class OperationDependencyGraphAllocationFilter extends AbstractDependency
 			final Operation senderOperation = m.getSendingExecution().getOperation();
 			final Operation receiverOperation = m.getReceivingExecution().getOperation();
 			// The following two get-calls to the factory return s.th. in either case
-			// final AllocationComponentOperationPairFactory pairFactory = this.getSystemEntityFactory().getAllocationPairFactory();
+			final AllocationComponentOperationPairFactory pairFactory = this.getSystemEntityFactory().getAllocationPairFactory();
 
 			AllocationComponentOperationPair senderPair;
 			if (senderOperation.getId() == rootOperationId) {
 				senderPair = this.getGraph().getRootNode().getEntity();
 			} else {
-				senderPair = (AllocationComponentOperationPair) super.deliverWithReturnTypeToRepository(REPOSITORY_OUTPUT_PORT_GET_PAIR_INSTANCE_BY_PAIR,
-						senderComponent, senderOperation);
+				senderPair = pairFactory.getPairInstanceByPair(senderComponent, senderOperation);
 			}
 
 			AllocationComponentOperationPair receiverPair;
 			if (receiverOperation.getId() == rootOperationId) {
 				receiverPair = this.getGraph().getRootNode().getEntity();
 			} else {
-				receiverPair = (AllocationComponentOperationPair) super.deliverWithReturnTypeToRepository(REPOSITORY_OUTPUT_PORT_GET_PAIR_INSTANCE_BY_PAIR,
-						receiverComponent, receiverOperation);
+				receiverPair = pairFactory.getPairInstanceByPair(receiverComponent, receiverOperation);
 			}
 
 			DependencyGraphNode<AllocationComponentOperationPair> senderNode = this.getGraph().getNode(senderPair

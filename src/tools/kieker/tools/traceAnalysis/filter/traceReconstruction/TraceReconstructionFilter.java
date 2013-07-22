@@ -29,16 +29,18 @@ import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
-import kieker.analysis.plugin.annotation.RepositoryOutputPort;
+import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.executionRecordTransformation.ExecutionEventProcessingException;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.InvalidExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
+import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.tools.util.LoggingTimestampConverter;
 
 /**
@@ -55,20 +57,19 @@ import kieker.tools.util.LoggingTimestampConverter;
 			@OutputPort(name = TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, description = "Invalid Execution Traces",
 					eventTypes = { InvalidExecutionTrace.class })
 		},
+		repositoryPorts = {
+			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
+		},
 		configuration = {
 			@Property(name = TraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, defaultValue = TraceReconstructionFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
 			@Property(name = TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION,
 					defaultValue = TraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TRACE_DURATION),
 			@Property(name = TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES, defaultValue = "true")
-		},
-		repositoryOutputPorts =
-		@RepositoryOutputPort(name = TraceReconstructionFilter.REPOSITORY_OUTPUT_PORT_GET_ROOT_EXECUTION))
+		})
 public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 
 	/** This is the name of the input port receiving new executions. */
 	public static final String INPUT_PORT_NAME_EXECUTIONS = "executions";
-
-	public static final String REPOSITORY_OUTPUT_PORT_GET_ROOT_EXECUTION = "getRootExecution";
 
 	/** This is the name of the output port delivering the reconstructed message traces. */
 	public static final String OUTPUT_PORT_NAME_MESSAGE_TRACE = "messageTraces";
@@ -260,7 +261,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 		final long curTraceId = executionTrace.getTraceId();
 		try {
 			// If the polled trace is invalid, the following method toMessageTrace(..) throws an exception
-			final MessageTrace mt = executionTrace.toMessageTrace((Execution) super.deliverWithReturnTypeToRepository(REPOSITORY_OUTPUT_PORT_GET_ROOT_EXECUTION));
+			final MessageTrace mt = executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
 
 			// Transformation successful and the trace is for itself valid. However, this trace may actually contain the [0,0] execution and thus complete a trace
 			// that has timed out before and has thus been considered an invalid trace.

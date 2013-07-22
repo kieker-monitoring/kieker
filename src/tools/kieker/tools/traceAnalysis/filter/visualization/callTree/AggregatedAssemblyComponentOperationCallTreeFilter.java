@@ -18,8 +18,9 @@ package kieker.tools.traceAnalysis.filter.visualization.callTree;
 
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.Plugin;
-import kieker.analysis.plugin.annotation.RepositoryOutputPort;
+import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
+import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.visualization.graph.IOriginRetentionPolicy;
 import kieker.tools.traceAnalysis.filter.visualization.graph.NoOriginRetentionPolicy;
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
@@ -28,6 +29,7 @@ import kieker.tools.traceAnalysis.systemModel.Operation;
 import kieker.tools.traceAnalysis.systemModel.SynchronousCallMessage;
 import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.AssemblyComponentOperationPairFactory;
+import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPair;
 
 /**
@@ -36,11 +38,10 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
  * @since 1.1
  */
 @Plugin(description = "Uses the incoming data to enrich the connected repository with data for the aggregated assembly component operation call tree",
-		repositoryOutputPorts =
-		@RepositoryOutputPort(name = AggregatedAssemblyComponentOperationCallTreeFilter.REPOSITORY_OUTPUT_PORT_GET_PAIR_INSTANCE_BY_PAIR))
+		repositoryPorts = {
+			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
+		})
 public class AggregatedAssemblyComponentOperationCallTreeFilter extends AbstractAggregatedCallTreeFilter<AssemblyComponentOperationPair> {
-
-	public static final String REPOSITORY_OUTPUT_PORT_GET_PAIR_INSTANCE_BY_PAIR = "getPairInstanceByPair";
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -74,7 +75,7 @@ public class AggregatedAssemblyComponentOperationCallTreeFilter extends Abstract
 	protected AssemblyComponentOperationPair concreteCreatePair(final SynchronousCallMessage callMsg) {
 		final AssemblyComponent assemblyComponent = callMsg.getReceivingExecution().getAllocationComponent().getAssemblyComponent();
 		final Operation op = callMsg.getReceivingExecution().getOperation();
-		return (AssemblyComponentOperationPair) super.deliverWithReturnTypeToRepository(REPOSITORY_OUTPUT_PORT_GET_PAIR_INSTANCE_BY_PAIR, assemblyComponent, op);
+		return this.getSystemEntityFactory().getAssemblyPairFactory().getPairInstanceByPair(assemblyComponent, op);
 	}
 }
 
