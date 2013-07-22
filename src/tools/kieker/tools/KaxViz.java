@@ -110,7 +110,7 @@ public final class KaxViz extends JFrame {
 	private final transient MIProject mProject;
 
 	public KaxViz(final String filename, final MIProject mProject, final String outFilename) {
-		super(mProject.getName() + " (" + filename + ((null != outFilename) ? " -> " + outFilename : "") + ")"); // NOCS
+		super(((mProject.getName() != null) ? (mProject.getName() + " ") : "") + "(" + filename + ((null != outFilename) ? " -> " + outFilename : "") + ")"); // NOCS
 		this.mProject = mProject;
 
 		// // Menu
