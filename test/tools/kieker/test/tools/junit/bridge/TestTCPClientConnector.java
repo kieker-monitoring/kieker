@@ -22,7 +22,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.tcp.TCPClientConnector;
 
@@ -47,7 +46,9 @@ public class TestTCPClientConnector {
 		firstThread.start();
 		// setup connector, requires a record map
 		final ConcurrentMap<Integer, Class<IMonitoringRecord>> map = new ConcurrentHashMap<Integer, Class<IMonitoringRecord>>();
-		map.put(1, (Class<IMonitoringRecord>) OperationExecutionRecord.class); // /Kieker/src/common/kieker/common/record/controlflow/OperationExecutionRecord.java
+
+		final Class<IMonitoringRecord> recordType = (Class<IMonitoringRecord>) kieker.common.record.controlflow.OperationExecutionRecord.class;
+		map.put(1, recordType);
 
 		final TCPClientConnector connector = new TCPClientConnector(null/* requires a record map */, ConfigurationParameters.HOSTNAME, ConfigurationParameters.PORT);
 		// just call initialize once

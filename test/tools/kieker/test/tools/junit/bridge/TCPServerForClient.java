@@ -25,24 +25,22 @@ import org.junit.Assert;
 /**
  * TCP server to test the TCPClientConnector
  * 
- * @author Reiner Jung, Pascale Brandt
+ * @author Reiner Jung
  * 
  */
 public class TCPServerForClient implements Runnable {
 
-	public void run() {
-		final String clientSentence;
-		final String capitalizedSentence;
-		ServerSocket welcomeSocket;
-		final String testOperationSignature = "Signatur";
-		final String testSessionId = "Sessions";
-		final long testTraceId = 4;
-		final long testTin = 2;
-		final long testTout = 13;
-		final String testHostName = "Kieker";
-		final int testEoi = 10;
-		final int testEss = 9;
+	final String testOperationSignature = "Signatur";
+	final String testSessionId = "Sessions";
+	final long testTraceId = 4;
+	final long testTin = 2;
+	final long testTout = 13;
+	final String testHostName = "Kieker";
+	final int testEoi = 10;
+	final int testEss = 9;
 
+	public void run() {
+		ServerSocket welcomeSocket;
 		try {
 			welcomeSocket = new ServerSocket(6789);
 			final Socket connectionSocket = welcomeSocket.accept();
@@ -50,24 +48,25 @@ public class TCPServerForClient implements Runnable {
 
 			for (int i = 0; i < 21; i++) {
 				outToClient.writeInt(1); // ID of test record type
-				outToClient.writeInt(testOperationSignature.length());
-				outToClient.writeChars(testOperationSignature);
-				outToClient.writeInt(testSessionId.length());
-				outToClient.writeChars(testSessionId);
-				outToClient.writeLong(testTraceId);
-				outToClient.writeLong(testTin);
-				outToClient.writeLong(testTout);
-				outToClient.writeInt(testHostName.length());
-				outToClient.writeChars(testHostName);
-				outToClient.writeInt(testEoi);
-				outToClient.writeInt(testEss);
+				outToClient.writeInt(this.testOperationSignature.length());
+				outToClient.writeChars(this.testOperationSignature);
+				outToClient.writeInt(this.testSessionId.length());
+				outToClient.writeChars(this.testSessionId);
+				outToClient.writeLong(this.testTraceId);
+				outToClient.writeLong(this.testTin);
+				outToClient.writeLong(this.testTout);
+				outToClient.writeInt(this.testHostName.length());
+				outToClient.writeChars(this.testHostName);
+				outToClient.writeInt(this.testEoi);
+				outToClient.writeInt(this.testEss);
 			}
 			connectionSocket.close();
 			welcomeSocket.close();
 
 		} catch (final IOException e) {
 			e.printStackTrace();
-			Assert.assertTrue("Connection to Server failed", false);
 		}
+		Assert.assertTrue("Connection to Server failed", false);
 	}
+
 }
