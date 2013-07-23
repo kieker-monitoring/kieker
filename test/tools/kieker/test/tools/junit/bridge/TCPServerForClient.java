@@ -15,14 +15,12 @@
  ***************************************************************************/
 package kieker.test.tools.junit.bridge;
 
-import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 /**
  * TCP server to test the TCPClientConnector
@@ -30,28 +28,43 @@ import junit.framework.Assert;
  * @author Reiner Jung, Pascale Brandt
  * 
  */
-@SuppressWarnings("deprecation")
 public class TCPServerForClient implements Runnable {
 
 	public void run() {
-		String clientSentence;
-		String capitalizedSentence;
+		final String clientSentence;
+		final String capitalizedSentence;
 		ServerSocket welcomeSocket;
+		final String testOperationSignature = "Signatur";
+		final String testSessionId = "Sessions";
+		final long testTraceId = 4;
+		final long testTin = 2;
+		final long testTout = 13;
+		final String testHostName = "Kieker";
+		final int testEoi = 10;
+		final int testEss = 9;
 
 		try {
 			welcomeSocket = new ServerSocket(6789);
+			final Socket connectionSocket = welcomeSocket.accept();
+			final DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
 
-			while (true)
-			{
-				final Socket connectionSocket = welcomeSocket.accept();
-				final BufferedReader inFromClient =
-						new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
-				final DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
-				clientSentence = inFromClient.readLine();
-				System.out.println("Received: " + clientSentence);
-				capitalizedSentence = clientSentence.toUpperCase() + '\n';
-				outToClient.writeBytes(capitalizedSentence);
+			for (int i = 0; i < 21; i++) {
+				outToClient.writeInt(1); // ID of test record type
+				outToClient.writeInt(testOperationSignature.length());
+				outToClient.writeChars(testOperationSignature);
+				outToClient.writeInt(testSessionId.length());
+				outToClient.writeChars(testSessionId);
+				outToClient.writeLong(testTraceId);
+				outToClient.writeLong(testTin);
+				outToClient.writeLong(testTout);
+				outToClient.writeInt(testHostName.length());
+				outToClient.writeChars(testHostName);
+				outToClient.writeInt(testEoi);
+				outToClient.writeInt(testEss);
 			}
+			connectionSocket.close();
+			welcomeSocket.close();
+
 		} catch (final IOException e) {
 			e.printStackTrace();
 			Assert.assertTrue("Connection to Server failed", false);
