@@ -15,16 +15,46 @@
  ***************************************************************************/
 package kieker.test.tools.junit.bridge;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+import junit.framework.Assert;
+
 /**
  * TCP server to test the TCPClientConnector
  * 
- * @author Reiner Jung
+ * @author Reiner Jung, Pascale Brandt
  * 
  */
+@SuppressWarnings("deprecation")
 public class TCPServerForClient implements Runnable {
 
 	public void run() {
-		// server implementation goes here
-	}
+		String clientSentence;
+		String capitalizedSentence;
+		ServerSocket welcomeSocket;
 
+		try {
+			welcomeSocket = new ServerSocket(6789);
+
+			while (true)
+			{
+				final Socket connectionSocket = welcomeSocket.accept();
+				final BufferedReader inFromClient =
+						new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
+				final DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
+				clientSentence = inFromClient.readLine();
+				System.out.println("Received: " + clientSentence);
+				capitalizedSentence = clientSentence.toUpperCase() + '\n';
+				outToClient.writeBytes(capitalizedSentence);
+			}
+		} catch (final IOException e) {
+			e.printStackTrace();
+			Assert.assertTrue("Connection to Server failed", false);
+		}
+	}
 }
