@@ -365,6 +365,7 @@ function check_bin_archive {
 		(cat "${REFERENCE_OUTPUT_DIR}/$f" | sort) > right.tmp
 		if test "$f" = "traceDeploymentEquivClasses.txt" || test "$f" = "traceAssemblyEquivClasses.txt"; then
 			# only the basic test already performed because the assignment to classes is not deterministic
+			echo "OK"
 			continue;
 		fi
 		if ! diff --context=5	 left.tmp right.tmp; then
