@@ -41,6 +41,8 @@ public class TestConfigurationPath extends AbstractKiekerTest {
 		"out/containerDependencyGraph.dot", "out/containerDependencyGraph.dot",
 		"out" + File.separator + File.separator + "containerDependencyGraph.dot", "out/containerDependencyGraph.dot",
 		"out/", "out/",
+		"/", "/",
+		"././", "",
 	};
 
 	/**

@@ -216,7 +216,7 @@ public final class Configuration extends Properties {
 		final boolean endsWithSlash = workingPathname.charAt(workingPathname.length() - 1) == '/';
 
 		// split the path apart
-		final String[] components = workingPathname.replace('\\', '/').split("/");
+		final String[] components = workingPathname.split("/");
 		final LinkedList<String> path = new LinkedList<String>(); // NOCS NOPMD
 
 		// resolve ., .., and //
@@ -252,7 +252,9 @@ public final class Configuration extends Properties {
 		if (pathIter.hasNext()) {
 			sb.append(pathIter.next());
 		}
-		if (endsWithSlash) {
+		if (endsWithSlash
+				&& (sb.length() != 0) // not if the path is now empty
+				&& ((sb.length() != 1) || (sb.charAt(0) != '/'))) { // not if the path is now '/'
 			sb.append('/');
 		}
 
@@ -263,8 +265,6 @@ public final class Configuration extends Properties {
 		}
 		if ("/..".equals(result)) {
 			result = "/";
-		} else if ("".equals(result)) {
-			result = "";
 		}
 
 		return result;

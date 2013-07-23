@@ -280,7 +280,7 @@ function check_src_archive {
 	assert_file_NOT_exists "dist/kieker-monitoring-servlet-"*".war"
 
 	# check bytecode version of classes contained in jar
-	echo -n "Making sure that bytecode version of class in jar is 49.0 (Java 1.5)"
+	echo "Making sure that bytecode version of class in jar is 49.0 (Java 1.5)"
 	MAIN_JAR=$(ls "dist/kieker-"*".jar" | grep -v emf | grep -v aspectj)
 	assert_file_exists_regular ${MAIN_JAR}
 	VERSION_CLASS=$(find build -name "Version.class")
@@ -356,15 +356,15 @@ function check_bin_archive {
 	fi
 	for f in $(ls "${REFERENCE_OUTPUT_DIR}" | egrep "(dot$|pic$|html$|txt$)"); do 
 		echo -n "Comparing to reference file $f ... "
+    if test -z "$f"; then
+      echo "File $f does not exist or is empty"
+			exit 1;
+		fi
 		# Note that this is a hack because sometimes the line order differs
 		(cat "$f" | sort) > left.tmp
 		(cat "${REFERENCE_OUTPUT_DIR}/$f" | sort) > right.tmp
 		if test "$f" = "traceDeploymentEquivClasses.txt" || test "$f" = "traceAssemblyEquivClasses.txt"; then
-			# only a basic test because the assignment to classes is not deterministic
-			if test -z "$f"; then
-				echo "File $f does not exist or is empty"
-				exit 1;
-			fi
+			# only the basic test already performed because the assignment to classes is not deterministic
 			continue;
 		fi
 		if ! diff --context=5	 left.tmp right.tmp; then
