@@ -15,9 +15,14 @@
  ***************************************************************************/
 package kieker.test.tools.junit.bridge;
 
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
 import org.junit.Assert;
 import org.junit.Test;
 
+import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.tcp.TCPClientConnector;
 
@@ -37,8 +42,13 @@ public class TestTCPClientConnector {
 	 */
 	@Test
 	public void testTCPClientConnector() {
-		// Start the runnable with a thread (see http://javarevisited.blogspot.de/2011/02/how-to-implement-thread-in-java.html)
+
+		final Thread firstThread = new Thread(new TCPServerForClient(), "T1");
+		firstThread.start();
 		// setup connector, requires a record map
+		final ConcurrentMap<Integer, Class<IMonitoringRecord>> map = new ConcurrentHashMap<Integer, Class<IMonitoringRecord>>();
+		map.put(1, (Class<IMonitoringRecord>) OperationExecutionRecord.class); // /Kieker/src/common/kieker/common/record/controlflow/OperationExecutionRecord.java
+
 		final TCPClientConnector connector = new TCPClientConnector(null/* requires a record map */, ConfigurationParameters.HOSTNAME, ConfigurationParameters.PORT);
 		// just call initialize once
 
