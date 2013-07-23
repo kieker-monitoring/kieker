@@ -45,7 +45,7 @@ public class JMSEmbeddedConnector extends JMSClientConnector {
 	 * @throws URISyntaxException
 	 *             if the URI is malformed. Most likely will not happen.
 	 */
-	public JMSEmbeddedConnector(final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordMap, final int port) throws URISyntaxException {
+	public JMSEmbeddedConnector(final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordMap, final int port) throws URISyntaxException {
 		super(recordMap, null, null, new URI("tcp://localhost:" + port));
 		this.port = port;
 	}

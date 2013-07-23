@@ -60,7 +60,7 @@ public final class ServiceConnectorFactory {
 	 *            URL to access the JMS service and queue
 	 * @return Returns a connector instance
 	 */
-	public static IServiceConnector createJMSServiceConnector(final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordMap,
+	public static IServiceConnector createJMSServiceConnector(final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordMap,
 			final String username, final String password, final URI url) {
 		return new JMSClientConnector(recordMap, username, password, url);
 	}
@@ -76,7 +76,7 @@ public final class ServiceConnectorFactory {
 	 * @throws URISyntaxException
 	 *             if an internal error occurred
 	 */
-	public static IServiceConnector createJMSEmbeddedServiceConnector(final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordMap, final int port)
+	public static IServiceConnector createJMSEmbeddedServiceConnector(final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordMap, final int port)
 			throws URISyntaxException {
 		return new JMSEmbeddedConnector(recordMap, port);
 	}
@@ -90,7 +90,7 @@ public final class ServiceConnectorFactory {
 	 *            Port the TCP server listens to
 	 * @return Returns a connector instance
 	 */
-	public static IServiceConnector createTCPSingleServerServiceConnector(final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordMap, final int port) {
+	public static IServiceConnector createTCPSingleServerServiceConnector(final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordMap, final int port) {
 		return new TCPSingleServerConnector(recordMap, port);
 	}
 
@@ -103,7 +103,7 @@ public final class ServiceConnectorFactory {
 	 *            Port the TCP server listens to
 	 * @return Returns a connector instance
 	 */
-	public static IServiceConnector createTCPMultiServerServiceConnector(final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordMap, final int port) {
+	public static IServiceConnector createTCPMultiServerServiceConnector(final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordMap, final int port) {
 		return new TCPMultiServerConnector(recordMap, port);
 	}
 
@@ -118,7 +118,8 @@ public final class ServiceConnectorFactory {
 	 *            Port of the remote service
 	 * @return Returns a connector instance
 	 */
-	public static IServiceConnector createTCPClientServiceConnector(final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordMap, final String hostname,
+	public static IServiceConnector createTCPClientServiceConnector(final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordMap,
+			final String hostname,
 			final int port) {
 		return new TCPClientConnector(recordMap, hostname, port);
 	}
@@ -132,11 +133,11 @@ public final class ServiceConnectorFactory {
 	 * @throws ConnectorDataTransmissionException
 	 *             if the lookup table compilation fails
 	 */
-	public static ConcurrentMap<Integer, LookupEntity> createLookupEntityMap(final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordMap)
+	public static ConcurrentMap<Integer, LookupEntity> createLookupEntityMap(final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordMap)
 			throws ConnectorDataTransmissionException {
 		final ConcurrentMap<Integer, LookupEntity> lookupEntityMap = new ConcurrentHashMap<Integer, LookupEntity>();
 		for (final int key : recordMap.keySet()) {
-			final Class<IMonitoringRecord> type = recordMap.get(key);
+			final Class<? extends IMonitoringRecord> type = recordMap.get(key);
 
 			try {
 				final Field parameterTypesField = type.getDeclaredField(TYPES);

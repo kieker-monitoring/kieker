@@ -53,7 +53,7 @@ public class JMSClientConnector implements IServiceConnector {
 
 	private static final String KIEKER_DATA_BRIDGE_READ_QUEUE = "kieker.tools.bridge";
 
-	private final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordMap;
+	private final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordMap;
 	private final String username;
 	private final String password;
 	private final URI uri;
@@ -73,7 +73,7 @@ public class JMSClientConnector implements IServiceConnector {
 	 * @param uri
 	 *            JMSService URI
 	 */
-	public JMSClientConnector(final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordMap, final String username, final String password, final URI uri) {
+	public JMSClientConnector(final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordMap, final String username, final String password, final URI uri) {
 		this.recordMap = recordMap;
 		this.username = username;
 		this.password = password;

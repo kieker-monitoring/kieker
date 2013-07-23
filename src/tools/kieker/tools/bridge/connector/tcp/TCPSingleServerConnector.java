@@ -50,7 +50,7 @@ public class TCPSingleServerConnector extends AbstractTCPConnector {
 	 * @param port
 	 *            Port the server listens to
 	 */
-	public TCPSingleServerConnector(final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordList, final int port) {
+	public TCPSingleServerConnector(final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordList, final int port) {
 		super(recordList);
 		this.port = port;
 	}

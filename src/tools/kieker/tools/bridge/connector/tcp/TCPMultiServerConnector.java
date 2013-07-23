@@ -54,7 +54,7 @@ public class TCPMultiServerConnector extends AbstractTCPConnector {
 	 * @param port
 	 *            TCP port the service listens to
 	 */
-	public TCPMultiServerConnector(final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordMap, final int port) {
+	public TCPMultiServerConnector(final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordMap, final int port) {
 		super(recordMap);
 		this.port = port;
 	}

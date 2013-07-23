@@ -37,7 +37,7 @@ public abstract class AbstractTCPConnector implements IServiceConnector {
 	 */
 	protected ConcurrentMap<Integer, LookupEntity> lookupEntityMap;
 
-	private final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordMap;
+	private final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordMap;
 
 	/**
 	 * AbstractTCPService constructor.
@@ -45,7 +45,7 @@ public abstract class AbstractTCPConnector implements IServiceConnector {
 	 * @param recordMap
 	 *            IMonitoringRecord to id map
 	 */
-	public AbstractTCPConnector(final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordMap) {
+	public AbstractTCPConnector(final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordMap) {
 		this.recordMap = recordMap;
 	}
 

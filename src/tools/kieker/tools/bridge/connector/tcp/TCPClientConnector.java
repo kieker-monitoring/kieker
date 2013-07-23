@@ -56,7 +56,7 @@ public class TCPClientConnector extends AbstractTCPConnector {
 	 * @param port
 	 *            port number where this service connects to
 	 */
-	public TCPClientConnector(final ConcurrentMap<Integer, Class<IMonitoringRecord>> recordMap, final String hostname, final int port) {
+	public TCPClientConnector(final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordMap, final String hostname, final int port) {
 		super(recordMap);
 		this.port = port;
 		this.hostname = hostname;
