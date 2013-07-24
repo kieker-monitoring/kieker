@@ -83,12 +83,9 @@ public class TestTCPClientConnector {
 
 		// Call close() once
 		try {
-			Thread.sleep(3000);
 			connector.close();
 		} catch (final ConnectorDataTransmissionException e) {
 			Assert.fail(e.getMessage());
-		} catch (final InterruptedException e) {
-			e.printStackTrace();
 		}
 	}
 
