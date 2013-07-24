@@ -64,6 +64,8 @@ public class TCPServerForClient implements Runnable {
 				outToClient.writeInt(TestTCPConfiguration.testEoi);
 				outToClient.writeInt(TestTCPConfiguration.testEss);
 			}
+
+			// hold closing before not everything is received at the client
 			try {
 				Thread.sleep(3000);
 			} catch (final InterruptedException e) {
