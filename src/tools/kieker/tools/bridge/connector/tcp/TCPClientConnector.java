@@ -147,12 +147,8 @@ public class TCPClientConnector extends AbstractTCPConnector {
 						values[i] = Double.valueOf(this.in.readDouble());
 					} else if (String.class.equals(parameterType)) {
 						final int bufLen = this.in.readInt();
-						final int resultLen = this.in.read(this.buffer, 0, bufLen);
-						if (resultLen == bufLen) {
-							values[i] = new String(this.buffer, 0, bufLen, "UTF-8");
-						} else {
-							throw new ConnectorDataTransmissionException(bufLen + " bytes expected, but only " + resultLen + " bytes received.");
-						}
+						this.in.readFully(this.buffer, 0, bufLen);
+						values[i] = new String(this.buffer, 0, bufLen, "UTF-8");
 					} else { // reference types
 						throw new ConnectorDataTransmissionException("References are not yet supported.");
 					}
@@ -165,7 +161,7 @@ public class TCPClientConnector extends AbstractTCPConnector {
 		} catch (final java.net.SocketException e) {
 			throw new ConnectorEndOfDataException("End of stream", e);
 		} catch (final java.io.EOFException e) {
-			throw new ConnectorEndOfDataException("End of stream", e);
+			throw new ConnectorEndOfDataException("End of stream during an read operation", e);
 		} catch (final IOException e) {
 			throw new ConnectorDataTransmissionException("Read error", e);
 		} catch (final InstantiationException e) {

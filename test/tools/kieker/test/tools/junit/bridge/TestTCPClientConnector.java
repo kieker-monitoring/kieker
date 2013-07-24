@@ -27,8 +27,6 @@ import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.ConnectorEndOfDataException;
 import kieker.tools.bridge.connector.tcp.TCPClientConnector;
 
-import kieker.test.tools.junit.bridge.TCPServerForClient.TestTCPConfiguration;
-
 /**
  * Test the TCPClientConnector, by creating a TCP server, which provides Kieker IMonitoringRecords to the connector.
  * This test class starts the server, which will then wait for a connection from the client. After connection is sends
@@ -38,6 +36,13 @@ import kieker.test.tools.junit.bridge.TCPServerForClient.TestTCPConfiguration;
  * 
  */
 public class TestTCPClientConnector {
+
+	/**
+	 * Default constructor
+	 */
+	public TestTCPClientConnector() {
+		// empty constructor
+	}
 
 	/**
 	 * Test all methods of {@link kieker.tools.bridge.connector.tcp.TCPClientConnector}.
@@ -62,24 +67,18 @@ public class TestTCPClientConnector {
 			Assert.assertTrue("Mistake in initialize \n" + e.getMessage() + "\n" + ConfigurationParameters.PORT, false);
 		}
 
-		try {
-			Thread.sleep(10000);
-		} catch (final InterruptedException e1) {
-			e1.printStackTrace();
-		}
-
 		// Call deserialize()
 		for (int i = 0; i < ConfigurationParameters.SEND_NUMBER_OF_RECORDS; i++) {
 			try {
 				final OperationExecutionRecord record = (OperationExecutionRecord) connector.deserializeNextRecord();
-				Assert.assertEquals("Tin is not equal", record.getTin(), TestTCPConfiguration.testTin);
-				Assert.assertEquals("Tout is not equal", record.getTout(), TestTCPConfiguration.testTout);
-				Assert.assertEquals("TraceId is not equal", record.getTraceId(), TestTCPConfiguration.testTraceId);
-				Assert.assertEquals("Eoi is not equal", record.getEoi(), TestTCPConfiguration.testEoi);
-				Assert.assertEquals("Ess is not equal", record.getEss(), TestTCPConfiguration.testEss);
-				Assert.assertEquals("Hostname is not equal", record.getHostname(), TestTCPConfiguration.testHostName);
-				Assert.assertEquals("OperationSignature is not equal", record.getOperationSignature(), TestTCPConfiguration.testOperationSignature);
-				Assert.assertEquals("SessionId is not equal", record.getSessionId(), TestTCPConfiguration.testSessionId);
+				Assert.assertEquals("Tin is not equal", record.getTin(), ConfigurationParameters.testTin);
+				Assert.assertEquals("Tout is not equal", record.getTout(), ConfigurationParameters.testTout);
+				Assert.assertEquals("TraceId is not equal", record.getTraceId(), ConfigurationParameters.testTraceId);
+				Assert.assertEquals("Eoi is not equal", record.getEoi(), ConfigurationParameters.testEoi);
+				Assert.assertEquals("Ess is not equal", record.getEss(), ConfigurationParameters.testEss);
+				Assert.assertEquals("Hostname is not equal", record.getHostname(), ConfigurationParameters.testHostName);
+				Assert.assertEquals("OperationSignature is not equal", record.getOperationSignature(), ConfigurationParameters.TEST_OPERATION_SIGNATURE);
+				Assert.assertEquals("SessionId is not equal", record.getSessionId(), ConfigurationParameters.testSessionId);
 			} catch (final ConnectorDataTransmissionException e) {
 				Assert.assertTrue("Mistake in Deserialize \n" + e.getMessage(), false);
 			} catch (final ConnectorEndOfDataException e) {

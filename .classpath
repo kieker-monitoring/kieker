@@ -87,6 +87,5 @@
 	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/cglib-2.2.jar"/>
 	<classpathentry kind="lib" path="lib/static-analysis/checkstyle-5.6/lib/checkstyle-all.jar"/>
 	<classpathentry kind="lib" path="lib/activemq-core-5.4.3.jar"/>
-	<classpathentry kind="lib" path="/Users/pascalebrandt/Downloads/junit-4.11.jar"/>
 	<classpathentry kind="output" path="build-eclipse"/>
 </classpath>

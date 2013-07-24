@@ -30,19 +30,6 @@ import org.junit.Assert;
  */
 public class TCPServerForClient implements Runnable {
 
-	public class TestTCPConfiguration {
-
-		public static final String testOperationSignature = "Signatur";
-		public static final String testSessionId = "Sessions";
-		public static final long testTraceId = 4;
-		public static final long testTin = 2;
-		public static final long testTout = 13;
-		public static final String testHostName = "Kieker";
-		public static final int testEoi = 10;
-		public static final int testEss = 9;
-
-	}
-
 	public void run() {
 		ServerSocket welcomeSocket;
 		try {
@@ -52,25 +39,19 @@ public class TCPServerForClient implements Runnable {
 
 			for (int i = 0; i < ConfigurationParameters.SEND_NUMBER_OF_RECORDS; i++) {
 				outToClient.writeInt(1); // ID of test record type
-				outToClient.writeInt(TestTCPConfiguration.testOperationSignature.length());
-				outToClient.writeBytes(TestTCPConfiguration.testOperationSignature);
-				outToClient.writeInt(TestTCPConfiguration.testSessionId.length());
-				outToClient.writeBytes(TestTCPConfiguration.testSessionId);
-				outToClient.writeLong(TestTCPConfiguration.testTraceId);
-				outToClient.writeLong(TestTCPConfiguration.testTin);
-				outToClient.writeLong(TestTCPConfiguration.testTout);
-				outToClient.writeInt(TestTCPConfiguration.testHostName.length());
-				outToClient.writeBytes(TestTCPConfiguration.testHostName);
-				outToClient.writeInt(TestTCPConfiguration.testEoi);
-				outToClient.writeInt(TestTCPConfiguration.testEss);
+				outToClient.writeInt(ConfigurationParameters.TEST_OPERATION_SIGNATURE.length());
+				outToClient.writeBytes(ConfigurationParameters.TEST_OPERATION_SIGNATURE);
+				outToClient.writeInt(ConfigurationParameters.testSessionId.length());
+				outToClient.writeBytes(ConfigurationParameters.testSessionId);
+				outToClient.writeLong(ConfigurationParameters.testTraceId);
+				outToClient.writeLong(ConfigurationParameters.testTin);
+				outToClient.writeLong(ConfigurationParameters.testTout);
+				outToClient.writeInt(ConfigurationParameters.testHostName.length());
+				outToClient.writeBytes(ConfigurationParameters.testHostName);
+				outToClient.writeInt(ConfigurationParameters.testEoi);
+				outToClient.writeInt(ConfigurationParameters.testEss);
 			}
 
-			// hold closing before not everything is received at the client
-			try {
-				Thread.sleep(3000);
-			} catch (final InterruptedException e) {
-				e.printStackTrace();
-			}
 			connectionSocket.close();
 			welcomeSocket.close();
 
