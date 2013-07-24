@@ -62,6 +62,12 @@ public class TestTCPClientConnector {
 			Assert.assertTrue("Mistake in initialize \n" + e.getMessage() + "\n" + ConfigurationParameters.PORT, false);
 		}
 
+		try {
+			Thread.sleep(10000);
+		} catch (final InterruptedException e1) {
+			e1.printStackTrace();
+		}
+
 		// Call deserialize()
 		for (int i = 0; i < ConfigurationParameters.SEND_NUMBER_OF_RECORDS; i++) {
 			try {
@@ -82,11 +88,11 @@ public class TestTCPClientConnector {
 		}
 
 		// Call close() once
+
 		try {
 			connector.close();
 		} catch (final ConnectorDataTransmissionException e) {
 			Assert.fail(e.getMessage());
 		}
 	}
-
 }
