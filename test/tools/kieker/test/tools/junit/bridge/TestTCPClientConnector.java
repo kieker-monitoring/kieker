@@ -24,6 +24,7 @@ import org.junit.Test;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
+import kieker.tools.bridge.connector.ConnectorEndOfDataException;
 import kieker.tools.bridge.connector.tcp.TCPClientConnector;
 
 /**
@@ -51,11 +52,26 @@ public class TestTCPClientConnector {
 		map.put(1, OperationExecutionRecord.class);
 
 		final TCPClientConnector connector = new TCPClientConnector(map, ConfigurationParameters.HOSTNAME, ConfigurationParameters.PORT);
-		// just call initialize once
 
-		// just call deserializeNextRecord SEND_NUMBER_OF_RECORDS
+		// Call initialize() once
+		try {
+			connector.initialize();
+		} catch (final ConnectorDataTransmissionException e) {
+			Assert.assertTrue("Could not load initialize", false);
+		}
 
-		// just call close once
+		// Call deserialize()
+		for (int i = 0; i < 21; i++) {
+			try {
+				connector.deserializeNextRecord();
+			} catch (final ConnectorDataTransmissionException e) {
+				e.printStackTrace();
+			} catch (final ConnectorEndOfDataException e) {
+				e.printStackTrace();
+			}
+		}
+
+		// Call close() once
 		try {
 			connector.close();
 		} catch (final ConnectorDataTransmissionException e) {
