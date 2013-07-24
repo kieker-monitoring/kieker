@@ -30,14 +30,18 @@ import org.junit.Assert;
  */
 public class TCPServerForClient implements Runnable {
 
-	final String testOperationSignature = "Signatur";
-	final String testSessionId = "Sessions";
-	final long testTraceId = 4;
-	final long testTin = 2;
-	final long testTout = 13;
-	final String testHostName = "Kieker";
-	final int testEoi = 10;
-	final int testEss = 9;
+	public class TestTCPConfiguration {
+
+		public static final String testOperationSignature = "Signatur";
+		public static final String testSessionId = "Sessions";
+		public static final long testTraceId = 4;
+		public static final long testTin = 2;
+		public static final long testTout = 13;
+		public static final String testHostName = "Kieker";
+		public static final int testEoi = 10;
+		public static final int testEss = 9;
+
+	}
 
 	public void run() {
 		ServerSocket welcomeSocket;
@@ -48,17 +52,17 @@ public class TCPServerForClient implements Runnable {
 
 			for (int i = 0; i < ConfigurationParameters.SEND_NUMBER_OF_RECORDS; i++) {
 				outToClient.writeInt(1); // ID of test record type
-				outToClient.writeInt(this.testOperationSignature.length());
-				outToClient.writeChars(this.testOperationSignature);
-				outToClient.writeInt(this.testSessionId.length());
-				outToClient.writeChars(this.testSessionId);
-				outToClient.writeLong(this.testTraceId);
-				outToClient.writeLong(this.testTin);
-				outToClient.writeLong(this.testTout);
-				outToClient.writeInt(this.testHostName.length());
-				outToClient.writeChars(this.testHostName);
-				outToClient.writeInt(this.testEoi);
-				outToClient.writeInt(this.testEss);
+				outToClient.writeInt(TestTCPConfiguration.testOperationSignature.length());
+				outToClient.writeBytes(TestTCPConfiguration.testOperationSignature);
+				outToClient.writeInt(TestTCPConfiguration.testSessionId.length());
+				outToClient.writeBytes(TestTCPConfiguration.testSessionId);
+				outToClient.writeLong(TestTCPConfiguration.testTraceId);
+				outToClient.writeLong(TestTCPConfiguration.testTin);
+				outToClient.writeLong(TestTCPConfiguration.testTout);
+				outToClient.writeInt(TestTCPConfiguration.testHostName.length());
+				outToClient.writeBytes(TestTCPConfiguration.testHostName);
+				outToClient.writeInt(TestTCPConfiguration.testEoi);
+				outToClient.writeInt(TestTCPConfiguration.testEss);
 			}
 			connectionSocket.close();
 			welcomeSocket.close();
