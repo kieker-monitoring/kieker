@@ -46,7 +46,7 @@ public class TCPServerForClient implements Runnable {
 			final Socket connectionSocket = welcomeSocket.accept();
 			final DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
 
-			for (int i = 0; i < 21; i++) {
+			for (int i = 0; i < ConfigurationParameters.SEND_NUMBER_OF_RECORDS; i++) {
 				outToClient.writeInt(1); // ID of test record type
 				outToClient.writeInt(this.testOperationSignature.length());
 				outToClient.writeChars(this.testOperationSignature);
@@ -64,9 +64,9 @@ public class TCPServerForClient implements Runnable {
 			welcomeSocket.close();
 
 		} catch (final IOException e) {
-			e.printStackTrace();
+			Assert.assertTrue("Connection to Server failed" + e.getMessage(), false);
 		}
-		Assert.assertTrue("Connection to Server failed", false);
+
 	}
 
 }
