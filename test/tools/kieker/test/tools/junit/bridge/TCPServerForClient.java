@@ -64,6 +64,11 @@ public class TCPServerForClient implements Runnable {
 				outToClient.writeInt(TestTCPConfiguration.testEoi);
 				outToClient.writeInt(TestTCPConfiguration.testEss);
 			}
+			try {
+				Thread.sleep(3000);
+			} catch (final InterruptedException e) {
+				e.printStackTrace();
+			}
 			connectionSocket.close();
 			welcomeSocket.close();
 
