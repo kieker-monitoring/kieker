@@ -27,6 +27,8 @@ import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.ConnectorEndOfDataException;
 import kieker.tools.bridge.connector.tcp.TCPClientConnector;
 
+import kieker.test.tools.junit.bridge.TCPServerForClient.TestTCPConfiguration;
+
 /**
  * Test the TCPClientConnector, by creating a TCP server, which provides Kieker IMonitoringRecords to the connector.
  * This test class starts the server, which will then wait for a connection from the client. After connection is sends
@@ -63,7 +65,15 @@ public class TestTCPClientConnector {
 		// Call deserialize()
 		for (int i = 0; i < ConfigurationParameters.SEND_NUMBER_OF_RECORDS; i++) {
 			try {
-				connector.deserializeNextRecord();
+				final OperationExecutionRecord record = (OperationExecutionRecord) connector.deserializeNextRecord();
+				Assert.assertEquals("Tin is not equal", record.getTin(), TestTCPConfiguration.testTin);
+				Assert.assertEquals("Tout is not equal", record.getTout(), TestTCPConfiguration.testTout);
+				Assert.assertEquals("TraceId is not equal", record.getTraceId(), TestTCPConfiguration.testTraceId);
+				Assert.assertEquals("Eoi is not equal", record.getEoi(), TestTCPConfiguration.testEoi);
+				Assert.assertEquals("Ess is not equal", record.getEss(), TestTCPConfiguration.testEss);
+				Assert.assertEquals("Hostname is not equal", record.getHostname(), TestTCPConfiguration.testHostName);
+				Assert.assertEquals("OperationSignature is not equal", record.getOperationSignature(), TestTCPConfiguration.testOperationSignature);
+				Assert.assertEquals("SessionId is not equal", record.getSessionId(), TestTCPConfiguration.testSessionId);
 			} catch (final ConnectorDataTransmissionException e) {
 				Assert.assertTrue("Mistake in Deserialize \n" + e.getMessage(), false);
 			} catch (final ConnectorEndOfDataException e) {
