@@ -59,7 +59,7 @@ public class TestTCPClientConnector {
 		try {
 			connector.initialize();
 		} catch (final ConnectorDataTransmissionException e) {
-			Assert.assertTrue("Could not load initialize \n" + e.getMessage() + "\n" + ConfigurationParameters.PORT, false);
+			Assert.assertTrue("Mistake in initialize \n" + e.getMessage() + "\n" + ConfigurationParameters.PORT, false);
 		}
 
 		// Call deserialize()
@@ -83,11 +83,13 @@ public class TestTCPClientConnector {
 
 		// Call close() once
 		try {
+			Thread.sleep(3000);
 			connector.close();
 		} catch (final ConnectorDataTransmissionException e) {
 			Assert.fail(e.getMessage());
+		} catch (final InterruptedException e) {
+			e.printStackTrace();
 		}
-		// check if thread has terminated http://stackoverflow.com/questions/5910548/how-to-check-if-thread-is-terminated
 	}
 
 }
