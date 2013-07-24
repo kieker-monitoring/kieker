@@ -104,6 +104,9 @@ public class TestServiceContainer extends AbstractKiekerTest {
 		Assert.assertEquals("The number of send records is not equal to TestServiceConnector.SEND_NUMBER_OF_RECORDS",
 				ConfigurationParameters.SEND_NUMBER_OF_RECORDS + 2, numberOfLogFiles);
 
+		// TODO Why are you removing the tmpFolder and even check the delete operation? It is a rule which makes sure that the temp folder is created and deleted
+		// automatically. (Nils)
+
 		// now dump the temporary folder and all its content
 		this.tmpFolder.delete();
 
