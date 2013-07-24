@@ -473,7 +473,8 @@ public final class CLIServerMain {
 					if (line != null) {
 						final String[] pair = line.split("=");
 						if (pair.length == 2) {
-							// loadClass returns objects of type Class<?> while we only accept Class<IMonitoringRecord> at the moment. This causes an warning which
+							// loadClass returns objects of type Class<?> while we only accept Class<? extends IMonitoringRecord> at the moment. This causes an
+							// warning which
 							// is suppressed by the SuppressWarning annotation.
 							map.put(Integer.parseInt(pair[0]), (Class<IMonitoringRecord>) classLoader.loadClass(pair[1]));
 						}

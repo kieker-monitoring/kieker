@@ -21,7 +21,10 @@ package kieker.test.tools.junit.bridge;
  * @author Reiner Jung
  * 
  */
-public class ConfigurationParameters {
+public final class ConfigurationParameters {
+
+	private ConfigurationParameters() {}
+
 	/**
 	 * Number of messages to be send in this test.
 	 */
