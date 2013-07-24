@@ -23,7 +23,10 @@ package kieker.test.tools.junit.bridge;
  */
 public final class ConfigurationParameters {
 
-	private ConfigurationParameters() {}
+	/**
+	 * The port for all TCP and JMS connections in the tests.
+	 */
+	public static final int PORT = 32444;
 
 	/**
 	 * Number of messages to be send in this test.
@@ -35,8 +38,6 @@ public final class ConfigurationParameters {
 	 */
 	public static final String HOSTNAME = "localhost";
 
-	/**
-	 * The port for all TCP and JMS connections in the tests.
-	 */
-	public static final int PORT = 32444;
+	private ConfigurationParameters() {}
+
 }
