@@ -71,14 +71,14 @@ public class TestTCPClientConnector {
 		for (int i = 0; i < ConfigurationParameters.SEND_NUMBER_OF_RECORDS; i++) {
 			try {
 				final OperationExecutionRecord record = (OperationExecutionRecord) connector.deserializeNextRecord();
-				Assert.assertEquals("Tin is not equal", record.getTin(), ConfigurationParameters.testTin);
-				Assert.assertEquals("Tout is not equal", record.getTout(), ConfigurationParameters.testTout);
-				Assert.assertEquals("TraceId is not equal", record.getTraceId(), ConfigurationParameters.testTraceId);
-				Assert.assertEquals("Eoi is not equal", record.getEoi(), ConfigurationParameters.testEoi);
-				Assert.assertEquals("Ess is not equal", record.getEss(), ConfigurationParameters.testEss);
-				Assert.assertEquals("Hostname is not equal", record.getHostname(), ConfigurationParameters.testHostName);
+				Assert.assertEquals("Tin is not equal", record.getTin(), ConfigurationParameters.TEST_TIN);
+				Assert.assertEquals("Tout is not equal", record.getTout(), ConfigurationParameters.TEST_TOUT);
+				Assert.assertEquals("TraceId is not equal", record.getTraceId(), ConfigurationParameters.TEST_TRACE_ID);
+				Assert.assertEquals("Eoi is not equal", record.getEoi(), ConfigurationParameters.TEST_EOI);
+				Assert.assertEquals("Ess is not equal", record.getEss(), ConfigurationParameters.TEST_ESS);
+				Assert.assertEquals("Hostname is not equal", record.getHostname(), ConfigurationParameters.TEST_HOSTNAME);
 				Assert.assertEquals("OperationSignature is not equal", record.getOperationSignature(), ConfigurationParameters.TEST_OPERATION_SIGNATURE);
-				Assert.assertEquals("SessionId is not equal", record.getSessionId(), ConfigurationParameters.testSessionId);
+				Assert.assertEquals("SessionId is not equal", record.getSessionId(), ConfigurationParameters.TEST_SESSION_ID);
 			} catch (final ConnectorDataTransmissionException e) {
 				Assert.assertTrue("Mistake in Deserialize \n" + e.getMessage(), false);
 			} catch (final ConnectorEndOfDataException e) {

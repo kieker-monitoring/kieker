@@ -41,15 +41,15 @@ public class TCPServerForClient implements Runnable {
 				outToClient.writeInt(1); // ID of test record type
 				outToClient.writeInt(ConfigurationParameters.TEST_OPERATION_SIGNATURE.length());
 				outToClient.writeBytes(ConfigurationParameters.TEST_OPERATION_SIGNATURE);
-				outToClient.writeInt(ConfigurationParameters.testSessionId.length());
-				outToClient.writeBytes(ConfigurationParameters.testSessionId);
-				outToClient.writeLong(ConfigurationParameters.testTraceId);
-				outToClient.writeLong(ConfigurationParameters.testTin);
-				outToClient.writeLong(ConfigurationParameters.testTout);
-				outToClient.writeInt(ConfigurationParameters.testHostName.length());
-				outToClient.writeBytes(ConfigurationParameters.testHostName);
-				outToClient.writeInt(ConfigurationParameters.testEoi);
-				outToClient.writeInt(ConfigurationParameters.testEss);
+				outToClient.writeInt(ConfigurationParameters.TEST_SESSION_ID.length());
+				outToClient.writeBytes(ConfigurationParameters.TEST_SESSION_ID);
+				outToClient.writeLong(ConfigurationParameters.TEST_TRACE_ID);
+				outToClient.writeLong(ConfigurationParameters.TEST_TIN);
+				outToClient.writeLong(ConfigurationParameters.TEST_TOUT);
+				outToClient.writeInt(ConfigurationParameters.TEST_HOSTNAME.length());
+				outToClient.writeBytes(ConfigurationParameters.TEST_HOSTNAME);
+				outToClient.writeInt(ConfigurationParameters.TEST_EOI);
+				outToClient.writeInt(ConfigurationParameters.TEST_ESS);
 			}
 
 			connectionSocket.close();

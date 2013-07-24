@@ -39,13 +39,13 @@ public final class ConfigurationParameters {
 	public static final String HOSTNAME = "localhost";
 
 	public static final String TEST_OPERATION_SIGNATURE = "Signature";
-	public static final String testSessionId = "Sessions";
-	public static final long testTraceId = 4;
-	public static final long testTin = 2;
-	public static final long testTout = 13;
-	public static final String testHostName = "Kieker";
-	public static final int testEoi = 10;
-	public static final int testEss = 9;
+	public static final String TEST_SESSION_ID = "Sessions";
+	public static final long TEST_TRACE_ID = 4;
+	public static final long TEST_TIN = 2;
+	public static final long TEST_TOUT = 13;
+	public static final String TEST_HOSTNAME = "Kieker";
+	public static final int TEST_EOI = 10;
+	public static final int TEST_ESS = 9;
 
 	private ConfigurationParameters() {}
 
