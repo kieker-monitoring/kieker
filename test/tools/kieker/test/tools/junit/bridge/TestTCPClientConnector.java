@@ -31,7 +31,7 @@ import kieker.tools.bridge.connector.tcp.TCPClientConnector;
  * This test class starts the server, which will then wait for a connection from the client. After connection is sends
  * SEND_NUMBER_OF_RECORDS records and terminates the connection.
  * 
- * @author Reiner Jung
+ * @author Reiner Jung, Pascale Brandt
  * 
  */
 public class TestTCPClientConnector {

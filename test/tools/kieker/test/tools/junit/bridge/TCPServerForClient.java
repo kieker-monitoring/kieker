@@ -25,7 +25,7 @@ import org.junit.Assert;
 /**
  * TCP server to test the TCPClientConnector
  * 
- * @author Reiner Jung
+ * @author Reiner Jung, Pascale Brandt
  * 
  */
 public class TCPServerForClient implements Runnable {
