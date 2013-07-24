@@ -42,7 +42,7 @@ public class TCPServerForClient implements Runnable {
 	public void run() {
 		ServerSocket welcomeSocket;
 		try {
-			welcomeSocket = new ServerSocket(6789);
+			welcomeSocket = new ServerSocket(ConfigurationParameters.PORT);
 			final Socket connectionSocket = welcomeSocket.accept();
 			final DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
 
