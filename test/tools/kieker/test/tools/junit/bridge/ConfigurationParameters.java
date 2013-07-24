@@ -38,6 +38,7 @@ public final class ConfigurationParameters {
 	 */
 	public static final String HOSTNAME = "localhost";
 
+	public static final int ID = 1;
 	public static final String TEST_OPERATION_SIGNATURE = "Signature";
 	public static final String TEST_SESSION_ID = "Sessions";
 	public static final long TEST_TRACE_ID = 4;
