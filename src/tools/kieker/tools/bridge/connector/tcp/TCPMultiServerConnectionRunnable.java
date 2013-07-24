@@ -37,6 +37,7 @@ import kieker.tools.bridge.connector.ConnectorEndOfDataException;
  * 
  */
 public class TCPMultiServerConnectionRunnable implements Runnable {
+	// TODO Consider to make the buffer length variable by configuration. Otherwise: Why is this an appropriate size? (Nils)
 	private static final int BUF_LEN = 65536;
 
 	private static final Log LOG = LogFactory.getLog(TCPMultiServerConnectionRunnable.class);
@@ -47,7 +48,7 @@ public class TCPMultiServerConnectionRunnable implements Runnable {
 	private final ConcurrentMap<Integer, LookupEntity> lookupEntityMap;
 
 	private final BlockingQueue<IMonitoringRecord> recordQueue;
-
+	// TODO The active flag should be volatile, as the setActive method could probably be called from another thread (Nils)
 	private boolean active;
 
 	/**

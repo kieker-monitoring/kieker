@@ -34,9 +34,11 @@ import kieker.tools.bridge.connector.ConnectorEndOfDataException;
  * @since 1.8
  */
 public class TCPSingleServerConnector extends AbstractTCPConnector {
+	// TODO Consider to make the buffer length variable by configuration. Otherwise: Why is this an appropriate size? (Nils)
 	private static final int BUF_LEN = 65536;
 
 	private final int port;
+	// TODO Could some of the methods within this connector being called from another thread? In this case consider at least to make those fields volatile (Nils)
 	private ServerSocket serverSocket;
 	private DataInputStream in;
 

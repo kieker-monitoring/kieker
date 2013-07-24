@@ -35,7 +35,7 @@ import kieker.tools.bridge.connector.ConnectorEndOfDataException;
  * @since 1.8
  */
 public class TCPClientConnector extends AbstractTCPConnector {
-
+	// TODO Consider to make the buffer length variable by configuration. Otherwise: Why is this an appropriate size? (Nils)
 	private static final int BUF_LEN = 65536;
 
 	private final int port;

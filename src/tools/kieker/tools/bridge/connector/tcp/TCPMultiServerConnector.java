@@ -43,6 +43,8 @@ public class TCPMultiServerConnector extends AbstractTCPConnector {
 	private static final long SHUTDOWN_TIMEOUT = 20L;
 
 	private final int port;
+	// TODO Could some of the methods within this connector being called from another thread? In this case consider at least to make those fields volatile. You could
+	// also consider to make those final and initialize them here. (Nils)
 	private BlockingQueue<IMonitoringRecord> recordQueue;
 	private ExecutorService executor;
 
