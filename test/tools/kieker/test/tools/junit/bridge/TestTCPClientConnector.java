@@ -57,17 +57,17 @@ public class TestTCPClientConnector {
 		try {
 			connector.initialize();
 		} catch (final ConnectorDataTransmissionException e) {
-			Assert.assertTrue("Could not load initialize", false);
+			Assert.assertTrue("Could not load initialize \n" + e.getMessage() + "\n" + ConfigurationParameters.PORT, false);
 		}
 
 		// Call deserialize()
-		for (int i = 0; i < 21; i++) {
+		for (int i = 0; i < ConfigurationParameters.SEND_NUMBER_OF_RECORDS; i++) {
 			try {
 				connector.deserializeNextRecord();
 			} catch (final ConnectorDataTransmissionException e) {
-				e.printStackTrace();
+				Assert.assertTrue("Mistake in Deserialize \n" + e.getMessage(), false);
 			} catch (final ConnectorEndOfDataException e) {
-				e.printStackTrace();
+				Assert.assertTrue("Connector has not terminated" + e.getMessage(), false);
 			}
 		}
 
