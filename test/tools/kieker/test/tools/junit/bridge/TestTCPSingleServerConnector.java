@@ -4,6 +4,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import org.junit.Assert;
+import org.junit.Test;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
@@ -20,6 +21,7 @@ public class TestTCPSingleServerConnector {
 		// empty constructor
 	}
 
+	@Test
 	public void testTCPSingleServerConnector() {
 
 		final Thread firstThread = new Thread(new TCPClientforServer(), "T1");
