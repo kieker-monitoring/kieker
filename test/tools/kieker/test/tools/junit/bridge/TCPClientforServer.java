@@ -38,9 +38,11 @@ public class TCPClientforServer implements Runnable {
 					connectionSocket.close();
 
 				} catch (final IOException e) {
+					// TODO I suggest to use Assert.fail(...) instead (Nils)
 					Assert.assertTrue("Sending data to server failed. " + e.getMessage(), false);
 				}
 			} catch (final UnknownHostException e) {
+				// TODO I suggest to use Assert.fail(...) instead (Nils)
 				Assert.assertTrue("Unknown host " + e.getMessage(), false);
 			} catch (final IOException e) {
 				try {

@@ -44,6 +44,7 @@ public class TestTCPSingleServerConnector {
 		for (int i = 0; i < ConfigurationParameters.SEND_NUMBER_OF_RECORDS; i++) {
 			try {
 				final OperationExecutionRecord record = (OperationExecutionRecord) connector.deserializeNextRecord();
+				// TODO I assume you swapped the expected and the actual value here (Nils)
 				Assert.assertEquals("Tin is not equal", record.getTin(), ConfigurationParameters.TEST_TIN);
 				Assert.assertEquals("Tout is not equal", record.getTout(), ConfigurationParameters.TEST_TOUT);
 				Assert.assertEquals("TraceId is not equal", record.getTraceId(), ConfigurationParameters.TEST_TRACE_ID);
@@ -53,8 +54,10 @@ public class TestTCPSingleServerConnector {
 				Assert.assertEquals("OperationSignature is not equal", record.getOperationSignature(), ConfigurationParameters.TEST_OPERATION_SIGNATURE);
 				Assert.assertEquals("SessionId is not equal", record.getSessionId(), ConfigurationParameters.TEST_SESSION_ID);
 			} catch (final ConnectorDataTransmissionException e) {
+				// TODO I suggest to use Assert.fail(...) instead (Nils)
 				Assert.assertTrue("Mistake in Deserialize \n" + e.getMessage(), false);
 			} catch (final ConnectorEndOfDataException e) {
+				// TODO I suggest to use Assert.fail(...) instead (Nils)
 				Assert.assertTrue("Connector has not terminated" + e.getMessage(), false);
 			}
 		}

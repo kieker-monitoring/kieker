@@ -71,6 +71,7 @@ public class TestTCPClientConnector {
 		for (int i = 0; i < ConfigurationParameters.SEND_NUMBER_OF_RECORDS; i++) {
 			try {
 				final OperationExecutionRecord record = (OperationExecutionRecord) connector.deserializeNextRecord();
+				// TODO I assume you swapped the expected and the actual value here (Nils)
 				Assert.assertEquals("Tin is not equal", record.getTin(), ConfigurationParameters.TEST_TIN);
 				Assert.assertEquals("Tout is not equal", record.getTout(), ConfigurationParameters.TEST_TOUT);
 				Assert.assertEquals("TraceId is not equal", record.getTraceId(), ConfigurationParameters.TEST_TRACE_ID);

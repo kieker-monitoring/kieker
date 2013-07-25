@@ -56,6 +56,7 @@ public class TCPServerForClient implements Runnable {
 			welcomeSocket.close();
 
 		} catch (final IOException e) {
+			// TODO I suggest to use Assert.fail(...) instead (Nils)
 			Assert.assertTrue("Connection to Server failed" + e.getMessage(), false);
 		}
 
