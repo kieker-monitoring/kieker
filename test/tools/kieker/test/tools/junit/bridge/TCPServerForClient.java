@@ -57,6 +57,7 @@ public class TCPServerForClient implements Runnable {
 
 		} catch (final IOException e) {
 			// TODO I suggest to use Assert.fail(...) instead (Nils)
+			// TODO Even better to just throw unexpected exceptions within tests ...
 			Assert.assertTrue("Connection to Server failed" + e.getMessage(), false);
 		}
 

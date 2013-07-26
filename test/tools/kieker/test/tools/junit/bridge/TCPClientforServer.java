@@ -39,10 +39,12 @@ public class TCPClientforServer implements Runnable {
 
 				} catch (final IOException e) {
 					// TODO I suggest to use Assert.fail(...) instead (Nils)
+					// TODO Even better to just throw unexpected exceptions within tests ... (but be careful not to catch it below
 					Assert.assertTrue("Sending data to server failed. " + e.getMessage(), false);
 				}
 			} catch (final UnknownHostException e) {
 				// TODO I suggest to use Assert.fail(...) instead (Nils)
+				// TODO Even better to just throw unexpected exceptions within tests ...
 				Assert.assertTrue("Unknown host " + e.getMessage(), false);
 			} catch (final IOException e) {
 				try {

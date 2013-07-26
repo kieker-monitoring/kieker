@@ -80,6 +80,7 @@ public class TCPMultiServerConnectionRunnable implements Runnable {
 				try {
 					this.recordQueue.put(this.deserialize(in));
 					// TODO Consider to send also the exception itself to the logger in the following (Nils)
+					// TODO instead of adding the cause by hand, let the logger handle this (Jan)
 				} catch (final InterruptedException e) {
 					this.active = false;
 					LOG.warn("Listener " + Thread.currentThread().getId() + " died. Cause " + e.getMessage());
