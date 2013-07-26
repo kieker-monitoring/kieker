@@ -130,6 +130,15 @@ public interface MIAnalysisMetaModelFactory extends EFactory {
 	MIDisplayConnector createDisplayConnector();
 
 	/**
+	 * Returns a new object of class '<em>Analysis Node</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Analysis Node</em>'.
+	 * @generated
+	 */
+	MIAnalysisNode createAnalysisNode();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

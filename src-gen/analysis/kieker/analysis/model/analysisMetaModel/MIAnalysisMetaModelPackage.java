@@ -120,13 +120,22 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	int PROJECT__PROPERTIES = 5;
 
 	/**
+	 * The feature id for the '<em><b>Nodes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROJECT__NODES = 6;
+
+	/**
 	 * The number of structural features of the '<em>Project</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PROJECT_FEATURE_COUNT = 6;
+	int PROJECT_FEATURE_COUNT = 7;
 
 	/**
 	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MAnalysisComponent <em>Analysis Component</em>}' class.
@@ -810,6 +819,116 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link kieker.analysis.model.analysisMetaModel.impl.MAnalysisNode <em>Analysis Node</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisNode
+	 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getAnalysisNode()
+	 * @generated
+	 */
+	int ANALYSIS_NODE = 15;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANALYSIS_NODE__NAME = FILTER__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Classname</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANALYSIS_NODE__CLASSNAME = FILTER__CLASSNAME;
+
+	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANALYSIS_NODE__PROPERTIES = FILTER__PROPERTIES;
+
+	/**
+	 * The feature id for the '<em><b>Repositories</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANALYSIS_NODE__REPOSITORIES = FILTER__REPOSITORIES;
+
+	/**
+	 * The feature id for the '<em><b>Output Ports</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANALYSIS_NODE__OUTPUT_PORTS = FILTER__OUTPUT_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Displays</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANALYSIS_NODE__DISPLAYS = FILTER__DISPLAYS;
+
+	/**
+	 * The feature id for the '<em><b>Input Ports</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANALYSIS_NODE__INPUT_PORTS = FILTER__INPUT_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Contained Plugins</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANALYSIS_NODE__CONTAINED_PLUGINS = FILTER_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Contained Repositories</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANALYSIS_NODE__CONTAINED_REPOSITORIES = FILTER_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Node Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANALYSIS_NODE__NODE_NAME = FILTER_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>Analysis Node</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANALYSIS_NODE_FEATURE_COUNT = FILTER_FEATURE_COUNT + 3;
+
+
+	/**
 	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIProject <em>Project</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -884,6 +1003,17 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getProject_Properties();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link kieker.analysis.model.analysisMetaModel.MIProject#getNodes <em>Nodes</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Nodes</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIProject#getNodes()
+	 * @see #getProject()
+	 * @generated
+	 */
+	EReference getProject_Nodes();
 
 	/**
 	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIPlugin <em>Plugin</em>}'.
@@ -1290,6 +1420,49 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	EReference getAnalysisComponent_Properties();
 
 	/**
+	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIAnalysisNode <em>Analysis Node</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Analysis Node</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisNode
+	 * @generated
+	 */
+	EClass getAnalysisNode();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link kieker.analysis.model.analysisMetaModel.MIAnalysisNode#getContainedPlugins <em>Contained Plugins</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Contained Plugins</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisNode#getContainedPlugins()
+	 * @see #getAnalysisNode()
+	 * @generated
+	 */
+	EReference getAnalysisNode_ContainedPlugins();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link kieker.analysis.model.analysisMetaModel.MIAnalysisNode#getContainedRepositories <em>Contained Repositories</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Contained Repositories</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisNode#getContainedRepositories()
+	 * @see #getAnalysisNode()
+	 * @generated
+	 */
+	EReference getAnalysisNode_ContainedRepositories();
+
+	/**
+	 * Returns the meta object for the attribute '{@link kieker.analysis.model.analysisMetaModel.MIAnalysisNode#getNodeName <em>Node Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Node Name</em>'.
+	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisNode#getNodeName()
+	 * @see #getAnalysisNode()
+	 * @generated
+	 */
+	EAttribute getAnalysisNode_NodeName();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1368,6 +1541,14 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PROJECT__PROPERTIES = eINSTANCE.getProject_Properties();
+
+		/**
+		 * The meta object literal for the '<em><b>Nodes</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PROJECT__NODES = eINSTANCE.getProject_Nodes();
 
 		/**
 		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MPlugin <em>Plugin</em>}' class.
@@ -1700,6 +1881,40 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ANALYSIS_COMPONENT__PROPERTIES = eINSTANCE.getAnalysisComponent_Properties();
+
+		/**
+		 * The meta object literal for the '{@link kieker.analysis.model.analysisMetaModel.impl.MAnalysisNode <em>Analysis Node</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisNode
+		 * @see kieker.analysis.model.analysisMetaModel.impl.MAnalysisMetaModelPackage#getAnalysisNode()
+		 * @generated
+		 */
+		EClass ANALYSIS_NODE = eINSTANCE.getAnalysisNode();
+
+		/**
+		 * The meta object literal for the '<em><b>Contained Plugins</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ANALYSIS_NODE__CONTAINED_PLUGINS = eINSTANCE.getAnalysisNode_ContainedPlugins();
+
+		/**
+		 * The meta object literal for the '<em><b>Contained Repositories</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ANALYSIS_NODE__CONTAINED_REPOSITORIES = eINSTANCE.getAnalysisNode_ContainedRepositories();
+
+		/**
+		 * The meta object literal for the '<em><b>Node Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ANALYSIS_NODE__NODE_NAME = eINSTANCE.getAnalysisNode_NodeName();
 
 	}
 

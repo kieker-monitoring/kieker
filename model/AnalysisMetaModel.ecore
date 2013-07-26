@@ -14,6 +14,8 @@
         eType="#//View" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
         eType="#//Property" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" upperBound="-1"
+        eType="#//AnalysisNode" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Plugin" abstract="true" eSuperTypes="#//AnalysisComponent">
     <eStructuralFeatures xsi:type="ecore:EReference" name="repositories" upperBound="-1"
@@ -79,5 +81,13 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
         eType="#//Property" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AnalysisNode" eSuperTypes="#//Filter">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containedPlugins" upperBound="-1"
+        eType="#//Plugin" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containedRepositories"
+        upperBound="-1" eType="#//Repository" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nodeName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
 </ecore:EPackage>

@@ -32,4 +32,5 @@ public @interface RepositoryOutputPort {
 	 */
 	Class<?>[] eventTypes() default {};
 
+	boolean internalUseOnly() default false;
 }

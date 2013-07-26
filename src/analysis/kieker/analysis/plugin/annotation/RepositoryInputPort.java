@@ -33,4 +33,6 @@ public @interface RepositoryInputPort {
 	Class<?>[] eventTypes() default {};
 
 	Class<?> returnType() default Void.class;
+
+	boolean internalUseOnly() default false;
 }

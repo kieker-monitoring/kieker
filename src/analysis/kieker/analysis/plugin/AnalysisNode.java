@@ -35,7 +35,6 @@ import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
-import kieker.analysis.plugin.annotation.RepositoryOutputPort;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -48,12 +47,12 @@ import kieker.common.logging.LogFactory;
  */
 @Plugin(
 		outputPorts = {
-			@OutputPort(name = "out", eventTypes = Object.class),
-			@OutputPort(name = "internalOutputPort", eventTypes = Object.class, internalUseOnly = true) },
-		repositoryOutputPorts = {
-			@RepositoryOutputPort(name = "repoOut"),
-			@RepositoryOutputPort(name = "internalRepositoriyOutputPort")
-		},
+			@OutputPort(name = AnalysisNode.OUTPUT_PORT_NAME_EVENTS, eventTypes = Object.class),
+			@OutputPort(name = AnalysisNode.INTERNAL_OUTPUT_PORT_NAME_EVENTS, eventTypes = Object.class, internalUseOnly = true) },
+		// repositoryOutputPorts = {
+		// @RepositoryOutputPort(name = AnalysisNode.REPOSITORY_OUTPUT_PORT_NAME_EVENTS),
+		// @RepositoryOutputPort(name = AnalysisNode.INTERNAL_REPOSITORY_OUTPUT_PORT_NAME_EVENTS, internalUseOnly = true),
+		// },
 		configuration = {
 			@Property(name = AnalysisNode.CONFIG_PROPERTY_NAME_MOM_SERVER, defaultValue = "localhost"),
 			@Property(name = AnalysisNode.CONFIG_PROPERTY_NAME_DISTRIBUTED, defaultValue = "false"),
@@ -65,9 +64,13 @@ public class AnalysisNode extends AbstractFilterPlugin {
 	public static final String CONFIG_PROPERTY_NAME_DISTRIBUTED = "distributed";
 	public static final String CONFIG_PROPERTY_NAME_NODE_NAME = "nodeName";
 
+	// public static final String REPOSITORY_INPUT_PORT_NAME_EVENTS = "receivedRepositoryEvents";
+	// public static final String REPOSITORY_OUTPUT_PORT_NAME_EVENTS = "sentRepositoryEvents";
 	public static final String INPUT_PORT_NAME_EVENTS = "receivedEvents";
 	public static final String OUTPUT_PORT_NAME_EVENTS = "sentEvents";
 
+	// protected static final String INTERNAL_REPOSITORY_INPUT_PORT_NAME_EVENTS = "internalRepositoryInputPort";
+	// protected static final String INTERNAL_REPOSITORY_OUTPUT_PORT_NAME_EVENTS = "internalRepositoryOutputPort";
 	protected static final String INTERNAL_INPUT_PORT_NAME_EVENTS = "internalInputPort";
 	protected static final String INTERNAL_OUTPUT_PORT_NAME_EVENTS = "internalOutputPort";
 
@@ -170,6 +173,20 @@ public class AnalysisNode extends AbstractFilterPlugin {
 		return (T) concreteComponent;
 	}
 
+	// @RepositoryInputPort(name = REPOSITORY_INPUT_PORT_NAME_EVENTS)
+	// public final void repositoryInputPort(final Object data) {
+	// super.deliverWithoutReturnTypeToRepository(INTERNAL_REPOSITORY_OUTPUT_PORT_NAME_EVENTS, data);
+	// }
+
+	// @RepositoryInputPort(name = INTERNAL_REPOSITORY_INPUT_PORT_NAME_EVENTS, internalUseOnly = true)
+	// public final void internalRepositoryInputPort(final Object data) {
+	// If this node is configured for distributed access, we have to send the message to the MOM as well.
+	// if (this.distributed) {
+	// this.repositorySendQueue.add(data);
+	// }
+	// super.deliver(OUTPUT_PORT_NAME_EVENTS, data);
+	// }
+
 	@InputPort(name = INPUT_PORT_NAME_EVENTS, eventTypes = Object.class)
 	public final void inputPort(final Object data) {
 		super.deliver(INTERNAL_OUTPUT_PORT_NAME_EVENTS, data);
@@ -183,6 +200,16 @@ public class AnalysisNode extends AbstractFilterPlugin {
 		}
 		super.deliver(OUTPUT_PORT_NAME_EVENTS, data);
 	}
+
+	// public final void connectWithRepositoryOutput(final AbstractPlugin component, final String outputPortName) throws IllegalStateException,
+	// AnalysisConfigurationException {
+	// ((AnalysisController) this.projectContext).connect(component, outputPortName, this, INTERNAL_REPOSITORY_INPUT_PORT_NAME_EVENTS);
+	// }
+
+	// public final void connectWithRepositoryInput(final AbstractRepository component, final String inputPortName) throws IllegalStateException,
+	// AnalysisConfigurationException {
+	// ((AnalysisController) this.projectContext).connect(this, INTERNAL_REPOSITORY_OUTPUT_PORT_NAME_EVENTS, component, inputPortName);
+	// }
 
 	public final void connectWithOutput(final AbstractPlugin component, final String outputPortName) throws IllegalStateException, AnalysisConfigurationException {
 		((AnalysisController) this.projectContext).connect(component, outputPortName, this, INTERNAL_INPUT_PORT_NAME_EVENTS);
