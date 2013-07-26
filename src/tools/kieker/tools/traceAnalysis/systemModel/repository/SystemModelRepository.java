@@ -23,18 +23,15 @@ import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 
 import kieker.analysis.IProjectContext;
-import kieker.analysis.plugin.annotation.RepositoryInputPort;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.analysis.repository.annotation.Repository;
 import kieker.common.configuration.Configuration;
-import kieker.common.util.signature.Signature;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
 import kieker.tools.traceAnalysis.systemModel.ComponentType;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
 import kieker.tools.traceAnalysis.systemModel.Operation;
-import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationPair;
 
 /**
  * This repository is a model manager for the Kieker's component model. It consists of multiple "sub"repositories.
@@ -48,7 +45,7 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
 		description = "Model manager for Kieker's component model ")
 public class SystemModelRepository extends AbstractRepository {
 
-	private static final Execution ROOT_EXECUTION =
+	public static final Execution ROOT_EXECUTION =
 			new Execution(OperationRepository.ROOT_OPERATION, AllocationRepository.ROOT_ALLOCATION_COMPONENT, -1, "-1", -1, -1, -1, -1, false);
 
 	public static final String REPOSITORY_INPUT_PORT_LOOKUP_COMPONENT_TYPE_BY_NAME = "lookupComponentTypeByNamedIdentifier";
@@ -239,105 +236,42 @@ public class SystemModelRepository extends AbstractRepository {
 		ps.close();
 	}
 
-	@RepositoryInputPort(name = REPOSITORY_INPUT_PORT_LOOKUP_COMPONENT_TYPE_BY_NAME)
-	public final ComponentType lookupComponentTypeByNamedIdentifier(final String namedIdentifier) {
-		return this.typeRepositoryFactory.lookupComponentTypeByNamedIdentifier(namedIdentifier);
+	public final AllocationRepository getAllocationFactory() {
+		return this.allocationFactory;
 	}
 
-	@RepositoryInputPort(name = REPOSITORY_INPUT_PORT_CREATE_AND_REGISTER_COMPONENT_TYPE)
-	public final ComponentType createAndRegisterComponentType(final String namedIdentifier, final String fullqualifiedName) {
-		return this.typeRepositoryFactory.createAndRegisterComponentType(namedIdentifier, fullqualifiedName);
+	public final AssemblyRepository getAssemblyFactory() {
+		return this.assemblyFactory;
 	}
 
-	@RepositoryInputPort(name = REPOSITORY_INPUT_PORT_GET_COMPONENT_TYPES)
-	public final Collection<ComponentType> getComponentTypes() {
-		return this.typeRepositoryFactory.getComponentTypes();
+	public final ExecutionEnvironmentRepository getExecutionEnvironmentFactory() {
+		return this.executionEnvironmentFactory;
 	}
 
-	@RepositoryInputPort(name = REPOSITORY_INPUT_PORT_LOOKUP_ALLOCATION_COMPONENT_INSTANCE_BY_NAME)
-	public final AllocationComponent lookupAllocationComponentInstanceByNamedIdentifier(final String namedIdentifier) {
-		return this.allocationFactory.lookupAllocationComponentInstanceByNamedIdentifier(namedIdentifier);
+	/**
+	 * Delivering the factory managing the available operations.
+	 * 
+	 * @return The operation factory.
+	 */
+	public final OperationRepository getOperationFactory() {
+		return this.operationFactory;
 	}
 
-	@RepositoryInputPort(name = REPOSITORY_INPUT_PORT_CREATE_AND_REGISTER_ALLOCATION_COMPONENT_INSTANCE)
-	public final AllocationComponent createAndRegisterAllocationComponentInstance(final String namedIdentifier, final AssemblyComponent assemblyComponentInstance,
-			final ExecutionContainer executionContainer) {
-		return this.allocationFactory.createAndRegisterAllocationComponentInstance(namedIdentifier, assemblyComponentInstance, executionContainer);
+	/**
+	 * Delivering the factory managing the available component types.
+	 * 
+	 * @return The types factory.
+	 */
+	public final TypeRepository getTypeRepositoryFactory() {
+		return this.typeRepositoryFactory;
 	}
 
-	@RepositoryInputPort(name = REPOSITORY_INPUT_PORT_LOOKUP_IOERATION_BY_NAME)
-	public final Operation lookupOperationByNamedIdentifier(final String namedIdentifier) {
-		return this.operationFactory.lookupOperationByNamedIdentifier(namedIdentifier);
+	public AllocationComponentOperationPairFactory getAllocationPairFactory() {
+		return this.allocationPairFactory;
 	}
 
-	@RepositoryInputPort(name = REPOSITORY_INPUT_PORT_CREATE_AND_REGISTER_OPERATION)
-	public final Operation createAndRegisterOperation(final String namedIdentifier, final ComponentType componentType, final Signature signature) {
-		return this.operationFactory.createAndRegisterOperation(namedIdentifier, componentType, signature);
-	}
-
-	@RepositoryInputPort(name = REPOSITORY_INPUT_PORT_GET_OPERATIONS)
-	public final Collection<Operation> getOperations() {
-		return this.operationFactory.getOperations();
-	}
-
-	@RepositoryInputPort(name = REPOSITORY_INPUT_PORT_LOOKUP_ASSEMBLY_COMPONENT_BY_ID)
-	public final AssemblyComponent lookupAssemblyComponentById(final int containerId) {
-		return this.assemblyFactory.lookupAssemblyComponentById(containerId);
-	}
-
-	@RepositoryInputPort(name = REPOSITORY_INPUT_PORT_LOOKUP_ASSEMBLY_COMPONENT_INSTANCE_BY_NAME)
-	public final AssemblyComponent lookupAssemblyComponentInstanceByNamedIdentifier(final String namedIdentifier) {
-		return this.assemblyFactory.lookupAssemblyComponentInstanceByNamedIdentifier(namedIdentifier);
-	}
-
-	@RepositoryInputPort(name = REPOSITORY_INPUT_PORT_CREATE_AND_REGISTER_ASSEMBLY_COMPONENT_INSTANCE)
-	public final AssemblyComponent createAndRegisterAssemblyComponentInstance(final String namedIdentifier, final ComponentType componentType) {
-		return this.assemblyFactory.createAndRegisterAssemblyComponentInstance(namedIdentifier, componentType);
-	}
-
-	@RepositoryInputPort(name = REPOSITORY_INPUT_PORT_GET_ASSEMBLY_COMPONENT_INSTANCES)
-	public final Collection<AssemblyComponent> getAssemblyComponentInstances() {
-		return this.assemblyFactory.getAssemblyComponentInstances();
-	}
-
-	@RepositoryInputPort(name = REPOSITORY_INPUT_PORT_LOOKUP_EXECUTION_CONTAINER_BY_NAME)
-	public final ExecutionContainer lookupExecutionContainerByNamedIdentifier(final String namedIdentifier) {
-		return this.executionEnvironmentFactory.lookupExecutionContainerByNamedIdentifier(namedIdentifier);
-	}
-
-	@RepositoryInputPort(name = REPOSITORY_INPUT_PORT_LOOKUP_EXECUTION_CONTAINER_BY_ID)
-	public final ExecutionContainer lookupExecutionContainerByContainerId(final int containerId) {
-		return this.executionEnvironmentFactory.lookupExecutionContainerByContainerId(containerId);
-	}
-
-	@RepositoryInputPort(name = REPOSITORY_INPUT_PORT_CREATE_AND_REGISTER_EXECUTION_CONTAINER)
-	public final ExecutionContainer createAndRegisterExecutionContainer(final String namedIdentifier, final String name) {
-		return this.executionEnvironmentFactory.createAndRegisterExecutionContainer(namedIdentifier, name);
-	}
-
-	@RepositoryInputPort(name = REPOSITORY_INPUT_PORT_GET_EXECUTION_CONTAINERS)
-	public final Collection<ExecutionContainer> getExecutionContainers() {
-		return this.executionEnvironmentFactory.getExecutionContainers();
-	}
-
-	@RepositoryInputPort(name = REPOSITORY_INPUT_PORT_GET_PAIR_INSTANCE_BY_PAIR)
-	public final AllocationComponentOperationPair getPairInstanceByPair(final AllocationComponent allocationComponent, final Operation operation) {
-		return this.allocationPairFactory.getPairInstanceByPair(allocationComponent, operation);
-	}
-
-	@RepositoryInputPort(name = REPOSITORY_INPUT_PORT_GET_PAIR_BY_ID)
-	public final AllocationComponentOperationPair getPairById(final int id) {
-		return this.allocationPairFactory.getPairById(id);
-	}
-
-	@RepositoryInputPort(name = REPOSITORY_INPUT_PORT_GET_PAIRS)
-	public final Collection<AllocationComponentOperationPair> getPairs() {
-		return this.allocationPairFactory.getPairs();
-	}
-
-	@RepositoryInputPort(name = REPOSITORY_INPUT_PORT_GET_ROOT_EXECUTION)
-	public final Execution getRootExecution() {
-		return ROOT_EXECUTION;
+	public AssemblyComponentOperationPairFactory getAssemblyPairFactory() {
+		return this.assemblyPairFactory;
 	}
 
 	@Override

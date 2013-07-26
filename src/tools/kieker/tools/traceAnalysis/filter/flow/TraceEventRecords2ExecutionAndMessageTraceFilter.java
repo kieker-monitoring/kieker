@@ -187,7 +187,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 	 * 
 	 * @author Andre van Hoorn, Holger Knoche, Jan Waller
 	 */
-	private class TraceEventRecordHandler {
+	private static class TraceEventRecordHandler {
 		private final SystemModelRepository systemModelRepository;
 		private final Trace trace;
 		private final ExecutionTrace executionTrace;
@@ -237,7 +237,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 			} else {
 				executionContext = classSignature;
 			}
-			final Execution execution = TraceEventRecords2ExecutionAndMessageTraceFilter.this.createExecutionByEntityNames(this.systemModelRepository,
+			final Execution execution = AbstractTraceAnalysisFilter.createExecutionByEntityNames(this.systemModelRepository,
 					hostname,
 					executionContext,
 					fqComponentNameSignaturePair.getFqClassname(), fqComponentNameSignaturePair.getSignature(),
