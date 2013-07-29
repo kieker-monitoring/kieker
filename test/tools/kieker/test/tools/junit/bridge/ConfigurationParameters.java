@@ -48,6 +48,11 @@ public final class ConfigurationParameters {
 	public static final int TEST_EOI = 10;
 	public static final int TEST_ESS = 9;
 
+	/**
+	 * The number of started threads
+	 */
+	public static final int STARTED_CLIENTS = 5;
+
 	private ConfigurationParameters() {}
 
 }
