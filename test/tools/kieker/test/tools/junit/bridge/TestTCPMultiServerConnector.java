@@ -78,11 +78,9 @@ public class TestTCPMultiServerConnector {
 					Assert.assertEquals("OperationSignature is not equal", record.getOperationSignature(), ConfigurationParameters.TEST_OPERATION_SIGNATURE);
 					Assert.assertEquals("SessionId is not equal", record.getSessionId(), ConfigurationParameters.TEST_SESSION_ID);
 				} catch (final ConnectorDataTransmissionException e) {
-					// TODO I suggest to use Assert.fail(...) instead (Nils)
-					Assert.assertTrue("Mistake in Deserialize \n" + e.getMessage(), false);
+					Assert.fail("Mistake in Deserialize " + e.getMessage());
 				} catch (final ConnectorEndOfDataException e) {
-					// TODO I suggest to use Assert.fail(...) instead (Nils)
-					Assert.assertTrue("Connector has not terminated" + e.getMessage(), false);
+					Assert.fail("Connector has not terminated" + e.getMessage());
 				}
 			}
 
