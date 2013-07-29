@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,21 +27,38 @@ import kieker.monitoring.core.controller.IMonitoringController;
 
 /**
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.3
  */
 public abstract class AbstractAsyncThread extends Thread {
 	private static final Log LOG = LogFactory.getLog(AbstractAsyncThread.class);
 	private static final IMonitoringRecord END_OF_MONITORING_MARKER = new EmptyRecord();
-
+	/** The monitoring controller for the current monitoring session. */
 	protected final IMonitoringController monitoringController;
 	private final BlockingQueue<IMonitoringRecord> writeQueue;
 	private boolean finished; // only accessed in synchronized blocks
 	private CountDownLatch shutdownLatch; // only accessed in synchronized blocks
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param monitoringController
+	 *            The monitoring controller for the current monitoring session.
+	 * @param writeQueue
+	 *            The queue containing the records (and the potential {@code end of monitoring} marker).
+	 */
 	public AbstractAsyncThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue) {
 		this.writeQueue = writeQueue;
 		this.monitoringController = monitoringController;
 	}
 
+	/**
+	 * Initializes the shutdown of this thread if necessary. The method returns immediately in every case and counts the latch down eventually (assuming that no
+	 * exception occurs).
+	 * 
+	 * @param cdl
+	 *            The latch which will be count down once the thread has been terminated.
+	 */
 	public final void initShutdown(final CountDownLatch cdl) {
 		synchronized (this) {
 			this.shutdownLatch = cdl;
@@ -56,6 +73,11 @@ public abstract class AbstractAsyncThread extends Thread {
 		}
 	}
 
+	/**
+	 * Can be used to determine whether the thread is in the finished state or not.
+	 * 
+	 * @return true iff the thread has set the finished flag.
+	 */
 	public final boolean isFinished() {
 		synchronized (this) { // may not be necessary, but doesn't really hurt here
 			return this.finished;
@@ -124,7 +146,6 @@ public abstract class AbstractAsyncThread extends Thread {
 	 * 
 	 * @return the information string.
 	 */
-
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder();
@@ -134,7 +155,19 @@ public abstract class AbstractAsyncThread extends Thread {
 		return sb.toString();
 	}
 
+	/**
+	 * Inheriting classes should implement this method to consume the given record by, for example, sending it to a JMS client or by writing it to the file sysytem.
+	 * 
+	 * @param monitoringRecord
+	 *            The record to consume.
+	 * 
+	 * @throws Exception
+	 *             Indicates that something went wrong during the consumption.
+	 */
 	protected abstract void consume(final IMonitoringRecord monitoringRecord) throws Exception;
 
+	/**
+	 * Inheriting classes should implement this method to do some cleanup work like, for example, closing open connections.
+	 */
 	protected abstract void cleanup();
 }

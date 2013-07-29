@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
  * 
  * @author Holger Knoche
  * 
+ * @since 1.6
  */
 public class ComponentAssemblyDependencyGraphFormatter extends AbstractComponentDependencyGraphFormatter<ComponentAssemblyDependencyGraph> {
 
@@ -55,6 +56,9 @@ public class ComponentAssemblyDependencyGraphFormatter extends AbstractComponent
 		return DEFAULT_FILE_NAME;
 	}
 
+	/**
+	 * @author Holger Knoche
+	 */
 	private static class FormatterVisitor extends AbstractDependencyGraphFormatterVisitor<AssemblyComponent> {
 
 		public FormatterVisitor(final StringBuilder builder, final boolean includeWeights, final boolean plotLoops, final boolean useShortLabels) {
@@ -92,8 +96,7 @@ public class ComponentAssemblyDependencyGraphFormatter extends AbstractComponent
 						DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
 						null, // imagefilename
 						null, // misc
-						null // tooltip
-						));
+						null)); // tooltip
 			} else {
 				this.builder.append(DotFactory.createNode("", AbstractDependencyGraphFormatter.createNodeId(vertex),
 						this.createNodeLabel(vertex, component), // NOCS
@@ -105,8 +108,7 @@ public class ComponentAssemblyDependencyGraphFormatter extends AbstractComponent
 						DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
 						null, // imagefilename
 						null, // misc
-						vertex.getDescription() // tooltip
-						));
+						vertex.getDescription())); // tooltip
 			}
 
 			this.builder.append("\n");

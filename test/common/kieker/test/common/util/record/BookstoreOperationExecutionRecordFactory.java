@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,31 +22,42 @@ import java.util.List;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 
 /**
- * Provides some constants for the bookstore example, including class names,
- * operation signatures etc., as well as methods returning (valid and invalid)
- * bookstore traces.
+ * Provides some constants for the bookstore example, including class names, operation signatures etc., as well as methods returning (valid and invalid) bookstore
+ * traces.
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.5
  */
 public final class BookstoreOperationExecutionRecordFactory {
+	/** The name of the Bookstore package. */
 	public static final String PACKAGE_BOOKSTORE_APP = "bookstore";
 
+	/** The simple name of the Bookstore class. */
 	public static final String SIMPLE_CLASS_BOOKSTORE = "Bookstore";
+	/** The simple name of the Catalog class. */
 	public static final String SIMPLE_CLASS_CATALOG = "Catalog";
+	/** The simple name of the CRM class. */
 	public static final String SIMPLE_CLASS_CRM = "CRM";
 
+	/** The fully qualified name of the Bookstore class. */
 	public static final String FQ_CLASS_BOOKSTORE =
 			BookstoreOperationExecutionRecordFactory.PACKAGE_BOOKSTORE_APP
 					+ "." + BookstoreOperationExecutionRecordFactory.SIMPLE_CLASS_BOOKSTORE;
+	/** The fully qualified name of the Catalog class. */
 	public static final String FQ_CLASS_CATALOG = BookstoreOperationExecutionRecordFactory.PACKAGE_BOOKSTORE_APP
 			+ "." + BookstoreOperationExecutionRecordFactory.SIMPLE_CLASS_CATALOG;
+	/** The fully qualified name of the CRM class. */
 	public static final String FQ_CLASS_CRM = BookstoreOperationExecutionRecordFactory.PACKAGE_BOOKSTORE_APP
 			+ "." + BookstoreOperationExecutionRecordFactory.SIMPLE_CLASS_CRM;
 
+	/** The modifier of the {@code searchBook} method of the Bookstore. */
 	public static final String OP_MODIFIER_BOOKSTORE_SEARCH_BOOK = "public";
+	/** The return type of the {@code searchBook} method of the Bookstore. */
 	public static final String OP_RETTYPE_BOOKSTORE_SEARCH_BOOK = "Book";
+	/** The name of the {@code searchBook} method of the Bookstore. */
 	public static final String OP_NAME_BOOKSTORE_SEARCH_BOOK = "searchBook";
+	/** The argument type of the {@code searchBook} method of the Bookstore. */
 	public static final String OP_ARGTYPE_BOOKSTORE_SEARCH_BOOK = "long";
 	public static final String OP_FQNAME_BOOKSTORE_SEARCH_BOOK =
 			BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE + "." + BookstoreOperationExecutionRecordFactory.OP_NAME_BOOKSTORE_SEARCH_BOOK;
@@ -54,8 +65,11 @@ public final class BookstoreOperationExecutionRecordFactory {
 			BookstoreOperationExecutionRecordFactory.OP_NAME_BOOKSTORE_SEARCH_BOOK + "("
 					+ BookstoreOperationExecutionRecordFactory.OP_ARGTYPE_BOOKSTORE_SEARCH_BOOK + ")";
 
+	/** The modifier of the {@code getBook} method of the Catalog. */
 	public static final String OP_MODIFIER_CATALOG_GET_BOOK = "private";
+	/** The return type of the {@code getBook} method of the Catalog. */
 	public static final String OP_RETTYPE_CATALOG_GET_BOOK = "Book";
+	/** The name of the {@code getBook} method of the Catalog. */
 	public static final String OP_NAME_CATALOG_GET_BOOK = "getBook";
 	public static final String OP_ARGTYPE_CATALOG_GET_BOOK = "long";
 	public static final String OP_FQNAME_CATALOG_GET_BOOK =
@@ -104,49 +118,58 @@ public final class BookstoreOperationExecutionRecordFactory {
 	private BookstoreOperationExecutionRecordFactory() {}
 
 	/**
-	 * Returns the ordered List of {@link OperationExecutionRecord}s for the "well-known" bookstore trace with
-	 * short operation signatures, i.e., class name and operation without modifiers, return type, args etc.
+	 * Returns the ordered List of {@link OperationExecutionRecord}s for the "well-known" bookstore trace with short operation signatures, i.e., class name and
+	 * operation without modifiers, return type, args etc.
 	 * Example: <code>Catalog.searchBook</code>.
 	 * 
 	 * @param sessionId
+	 *            The session ID.
 	 * @param traceId
-	 * @return
+	 *            The trace ID.
+	 * 
+	 * @return The list of operation execution records.
 	 */
 	public static List<OperationExecutionRecord> genValidBookstoreTraceFullSignature(final String sessionId, final long traceId) {
 		final String hostname = "srv9786";
 
-		final List<OperationExecutionRecord> retList = new ArrayList<OperationExecutionRecord>(/* # executions: */4);
+		final List<OperationExecutionRecord> retList = new ArrayList<OperationExecutionRecord>(4); // 4 executions
 
-		final OperationExecutionRecord exec0_0__bookstore_searchBook = // NOCS (LocalFinalVariableNameCheck)
-		new OperationExecutionRecord(
+		final OperationExecutionRecord exec0_0__bookstore_searchBook = new OperationExecutionRecord( // NOCS (LocalFinalVariableNameCheck)
 				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
-				sessionId, traceId, /* tin: */1, /* tout: */10,
+				sessionId, traceId,
+				1, // tin
+				10, // tout
 				hostname,
 				BookstoreOperationExecutionRecordFactory.EXEC0_0__BOOKSTORE_SEARCHBOOK_EOI,
 				BookstoreOperationExecutionRecordFactory.EXEC0_0__BOOKSTORE_SEARCHBOOK_ESS);
 		retList.add(exec0_0__bookstore_searchBook);
 
-		final OperationExecutionRecord exec1_1__catalog_getBook = // NOCS (LocalFinalVariableNameCheck)
-		new OperationExecutionRecord(
+		final OperationExecutionRecord exec1_1__catalog_getBook = new OperationExecutionRecord( // NOCS (LocalFinalVariableNameCheck)
 				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK,
-				sessionId, traceId, /* tin: */2, /* tout: */4,
+				sessionId, traceId,
+				2, // tin
+				4, // tout
 				hostname,
 				BookstoreOperationExecutionRecordFactory.EXEC1_1__CATALOG_GETBOOK_EOI,
 				BookstoreOperationExecutionRecordFactory.EXEC0_0__BOOKSTORE_SEARCHBOOK_ESS);
 		retList.add(exec1_1__catalog_getBook);
 
-		final OperationExecutionRecord exec2_1__crm_getOrders = // NOCS (LocalFinalVariableNameCheck)
-		new OperationExecutionRecord(
+		final OperationExecutionRecord exec2_1__crm_getOrders = new OperationExecutionRecord( // NOCS (LocalFinalVariableNameCheck)
 				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CRM_GET_ORDERS,
-				sessionId, traceId, /* tin: */5, /* tout: */8, hostname,
+				sessionId, traceId,
+				5, // tin
+				8, // tout
+				hostname,
 				BookstoreOperationExecutionRecordFactory.EXEC2_1__CRM_GETORDERS_EOI,
 				BookstoreOperationExecutionRecordFactory.EXEC2_1__CRM_GETORDERS_ESS);
 		retList.add(exec2_1__crm_getOrders);
 
-		final OperationExecutionRecord exec3_2__catalog_getBook = // NOCS (LocalFinalVariableNameCheck)
-		new OperationExecutionRecord(
+		final OperationExecutionRecord exec3_2__catalog_getBook = new OperationExecutionRecord( // NOCS (LocalFinalVariableNameCheck)
 				BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK,
-				sessionId, traceId, /* tin: */6, /* tout: */7, hostname,
+				sessionId, traceId,
+				6, // tin
+				7, // tout
+				hostname,
 				BookstoreOperationExecutionRecordFactory.EXEC3_2__CATALOG_GETBOOK_EOI,
 				BookstoreOperationExecutionRecordFactory.EXEC3_2__CATALOG_GETBOOK_ESS);
 		retList.add(exec3_2__catalog_getBook);

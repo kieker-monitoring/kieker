@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,24 +28,27 @@ import kieker.monitoring.core.controller.MonitoringController;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public enum TraceRegistry { // Singleton (Effective Java #3)
+	/** The singleton instance. */
 	INSTANCE;
 
 	private static final Log LOG = LogFactory.getLog(TraceRegistry.class); // NOPMD (enum logger)
 
 	private final AtomicInteger nextTraceId = new AtomicInteger(0);
 	private final long unique = MonitoringController.getInstance().isDebug() ? 0 : ((long) new SecureRandom().nextInt()) << 32; // NOCS
-	/** the hostname is final after the instantiation of the monitoring controller */
+	/** the hostname is final after the instantiation of the monitoring controller. */
 	private final String hostname = MonitoringController.getInstance().getHostname();
 
-	/** the current trace; null if new trace */
+	/** the current trace; null if new trace. */
 	private final ThreadLocal<Trace> traceStorage = new ThreadLocal<Trace>();
 
-	/** used to store the stack of enclosing traces; null if no sub trace created yet */
+	/** used to store the stack of enclosing traces; null if no sub trace created yet. */
 	private final ThreadLocal<Stack<Trace>> enclosingTraceStack = new ThreadLocal<Stack<Trace>>();
 
-	/** store the parent Trace */
+	/** store the parent Trace. */
 	private final WeakHashMap<Thread, TracePoint> parentTrace = new WeakHashMap<Thread, TracePoint>();
 
 	private final long getId() {
@@ -91,7 +94,7 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 			parentOrderId = tp.orderId;
 		} else if (enclosingTrace != null) { // we create a sub trace without a known split point
 			parentTraceId = enclosingTrace.getTraceId();
-			parentOrderId = -1; // TODO: should we instead get the last orderId?
+			parentOrderId = -1; // we could instead get the last orderId ... But this would make it harder to distinguish from known split points
 		} else { // we create a new trace without a parent
 			parentTraceId = traceId;
 			parentOrderId = -1;
@@ -121,16 +124,6 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 		}
 	}
 
-	private static final class TracePoint {
-		public final long traceId; // NOCS (public no setters or getters)
-		public final int orderId; // NOCS (public no setters or getters)
-
-		public TracePoint(final long traceId, final int orderId) {
-			this.traceId = traceId;
-			this.orderId = orderId;
-		}
-	}
-
 	private final TracePoint getAndRemoveParentTraceId(final Thread t) {
 		synchronized (this) {
 			return this.parentTrace.remove(t);
@@ -151,6 +144,19 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 	public final void setParentTraceId(final Thread t, final long traceId, final int orderId) {
 		synchronized (this) {
 			this.parentTrace.put(t, new TracePoint(traceId, orderId));
+		}
+	}
+
+	/**
+	 * @author Jan Waller
+	 */
+	private static final class TracePoint {
+		public final long traceId; // NOCS (public no setters or getters)
+		public final int orderId; // NOCS (public no setters or getters)
+
+		public TracePoint(final long traceId, final int orderId) {
+			this.traceId = traceId;
+			this.orderId = orderId;
 		}
 	}
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,12 +24,20 @@ import kieker.monitoring.core.registry.Registry;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public final class RegistryController extends AbstractController implements IRegistryController {
 	private static final Log LOG = LogFactory.getLog(RegistryController.class);
 
 	private final IRegistry<String> stringRegistry;
 
+	/**
+	 * Creates a new instance of this class using the given configuration to initialize the class.
+	 * 
+	 * @param configuration
+	 *            The configuration used to initialize this controller.
+	 */
 	protected RegistryController(final Configuration configuration) {
 		super(configuration);
 		this.stringRegistry = new Registry<String>();
@@ -56,6 +64,9 @@ public final class RegistryController extends AbstractController implements IReg
 		return sb.toString();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final int getIdForString(final String string) {
 		return this.stringRegistry.get(string);
 	}

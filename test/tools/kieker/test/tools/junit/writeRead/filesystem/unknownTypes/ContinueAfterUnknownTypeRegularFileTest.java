@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ import kieker.monitoring.writer.filesystem.AsyncFsWriter;
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.5
  */
 public class ContinueAfterUnknownTypeRegularFileTest extends AbstractUnknownTypeTest { // NOPMD NOCS (TestClassWithoutTestCases)
 	@Override
@@ -42,7 +43,6 @@ public class ContinueAfterUnknownTypeRegularFileTest extends AbstractUnknownType
 	@Override
 	protected void refineWriterConfiguration(final Configuration config, final int numRecordsWritten) {
 		config.setProperty(this.getClass().getName() + "." + AsyncFsWriter.CONFIG_FLUSH, Boolean.TRUE.toString());
-		// TODO: additional configuration parameters
 		LogImplJUnit.disableThrowable(MonitoringRecordException.class);
 	}
 
@@ -57,6 +57,9 @@ public class ContinueAfterUnknownTypeRegularFileTest extends AbstractUnknownType
 
 	/**
 	 * Here, we make sure that the reader aborts on the first occurrence of an unknown type.
+	 * 
+	 * @param config
+	 *            The configuration to modify.
 	 */
 	@Override
 	protected void refineFSReaderConfiguration(final Configuration config) {

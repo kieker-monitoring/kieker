@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,27 +16,25 @@
 
 package kieker.tools.traceAnalysis.filter.traceWriter;
 
-import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.PrintStream;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
-import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.filter.AbstractInvalidExecutionTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.systemModel.InvalidExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
- * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.2
  */
 @Plugin(description = "A filter allowing to write the incoming InvalidExecutionTraces into a configured file",
 		repositoryPorts = {
@@ -47,22 +45,32 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 		})
 public class InvalidExecutionTraceWriterFilter extends AbstractInvalidExecutionTraceProcessingFilter {
 
+	/** This is the name of the input port receiving new (invalid) execution traces. */
 	public static final String INPUT_PORT_NAME_INVALID_EXECUTION_TRACES = "invalidExecutionTraces";
-
+	/** The name of the configuration determining the output file name. */
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FN = "outputFn";
-
-	private static final Log LOG = LogFactory.getLog(InvalidExecutionTraceWriterFilter.class);
 
 	private static final String ENCODING = "UTF-8";
 
 	private final String outputFn;
-	private final BufferedWriter ps;
+	private final PrintStream ps;
 
-	public InvalidExecutionTraceWriterFilter(final Configuration configuration)
-			throws IOException {
-		super(configuration);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @throws IOException
+	 *             If the write stream could not be prepared.
+	 */
+	public InvalidExecutionTraceWriterFilter(final Configuration configuration, final IProjectContext projectContext) throws IOException {
+		super(configuration, projectContext);
+
 		this.outputFn = configuration.getStringProperty(CONFIG_PROPERTY_NAME_OUTPUT_FN);
-		this.ps = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.outputFn), ENCODING));
+		this.ps = new PrintStream(new FileOutputStream(this.outputFn), false, ENCODING);
 	}
 
 	@Override
@@ -72,14 +80,13 @@ public class InvalidExecutionTraceWriterFilter extends AbstractInvalidExecutionT
 		this.stdOutPrintln("Wrote " + numTraces + " execution trace artifact" + (numTraces > 1 ? "s" : "") + " to file '" + this.outputFn + "'"); // NOCS
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void terminate(final boolean error) {
 		if (this.ps != null) {
-			try {
-				this.ps.close();
-			} catch (final IOException ex) {
-				LOG.error("IOException while terminating", ex);
-			}
+			this.ps.close();
 		}
 	}
 
@@ -88,25 +95,27 @@ public class InvalidExecutionTraceWriterFilter extends AbstractInvalidExecutionT
 		return INPUT_PORT_NAME_INVALID_EXECUTION_TRACES;
 	}
 
+	/**
+	 * This method represents the input port of this filter.
+	 * 
+	 * @param et
+	 *            The next execution trace.
+	 */
 	@InputPort(
 			name = INPUT_PORT_NAME_INVALID_EXECUTION_TRACES,
 			description = "Receives the invalid execution traces to be written", eventTypes = { InvalidExecutionTrace.class })
 	public void newInvalidExecutionTrace(final InvalidExecutionTrace et) {
-		try {
-			InvalidExecutionTraceWriterFilter.this.ps.append(et.getInvalidExecutionTraceArtifacts().toString()).append(AbstractFilterPlugin.SYSTEM_NEWLINE_STRING);
-			InvalidExecutionTraceWriterFilter.this.reportSuccess(et.getInvalidExecutionTraceArtifacts().getTraceId());
-		} catch (final IOException ex) {
-			InvalidExecutionTraceWriterFilter.this.reportError(et.getInvalidExecutionTraceArtifacts().getTraceId());
-			LOG.error("IOException", ex);
-		}
+		InvalidExecutionTraceWriterFilter.this.ps.println(et.getInvalidExecutionTraceArtifacts().toString());
+		InvalidExecutionTraceWriterFilter.this.reportSuccess(et.getInvalidExecutionTraceArtifacts().getTraceId());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-
 		configuration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_FN, this.outputFn);
-
 		return configuration;
 	}
-
 }

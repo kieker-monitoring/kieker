@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +19,18 @@ package kieker.common.namedRecordPipe;
 import kieker.common.record.IMonitoringRecord;
 
 /**
+ * This is a simple interface for a reader that works on a pipe.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.3
  */
 public interface IPipeReader {
+
 	/**
 	 * Called to notify the reader that the pipe is closed.
+	 * 
+	 * @since 1.3
 	 */
 	public void notifyPipeClosed();
 
@@ -34,6 +40,8 @@ public interface IPipeReader {
 	 * @param record
 	 *            the record.
 	 * @return true on success; false in case of an error.
+	 * 
+	 * @since 1.5
 	 */
 	public abstract boolean newMonitoringRecord(IMonitoringRecord record);
 }

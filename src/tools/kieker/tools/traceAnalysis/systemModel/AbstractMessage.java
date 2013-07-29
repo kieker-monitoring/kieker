@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,14 @@
 
 package kieker.tools.traceAnalysis.systemModel;
 
+import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
+
 /**
+ * An abstract base for messages which can later be used and combined in a {@link kieker.tools.traceAnalysis.systemModel.MessageTrace}.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 0.95a
  */
 public abstract class AbstractMessage {
 
@@ -26,20 +31,45 @@ public abstract class AbstractMessage {
 	private final Execution sendingExecution;
 	private final Execution receivingExecution;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param timestamp
+	 *            The timestamp of the message.
+	 * @param sendingExecution
+	 *            The {@link Execution} object which sent the message.
+	 * @param receivingExecution
+	 *            The {@link Execution} object which received the message.
+	 */
 	public AbstractMessage(final long timestamp, final Execution sendingExecution, final Execution receivingExecution) {
 		this.timestamp = timestamp;
 		this.sendingExecution = sendingExecution;
 		this.receivingExecution = receivingExecution;
 	}
 
+	/**
+	 * Delivers the object which received the message.
+	 * 
+	 * @return The receiving object.
+	 */
 	public final Execution getReceivingExecution() {
 		return this.receivingExecution;
 	}
 
+	/**
+	 * Delivers the object which sent the message.
+	 * 
+	 * @return The sending object.
+	 */
 	public final Execution getSendingExecution() {
 		return this.sendingExecution;
 	}
 
+	/**
+	 * Delivers the timestamp at which the message was created.
+	 * 
+	 * @return The timestamp of the message.
+	 */
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
@@ -57,13 +87,13 @@ public abstract class AbstractMessage {
 		strBuild.append(this.timestamp);
 		strBuild.append(' ');
 		if (this.getSendingExecution().getOperation().getId() == Operation.ROOT_OPERATION_ID) {
-			strBuild.append('$');
+			strBuild.append(SystemModelRepository.ROOT_NODE_LABEL);
 		} else {
 			strBuild.append(this.getSendingExecution());
 		}
 		strBuild.append(" --> ");
 		if (this.getReceivingExecution().getOperation().getId() == Operation.ROOT_OPERATION_ID) {
-			strBuild.append('$');
+			strBuild.append(SystemModelRepository.ROOT_NODE_LABEL);
 		} else {
 			strBuild.append(this.getReceivingExecution());
 		}

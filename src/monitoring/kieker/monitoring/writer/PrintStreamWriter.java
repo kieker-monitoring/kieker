@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,8 @@ import kieker.common.record.IMonitoringRecord;
  * A writer that prints incoming records to the specified PrintStream.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public class PrintStreamWriter extends AbstractMonitoringWriter {
 	private static final Log LOG = LogFactory.getLog(PrintStreamWriter.class);
@@ -41,29 +43,44 @@ public class PrintStreamWriter extends AbstractMonitoringWriter {
 
 	private static final String ENCODING = "UTF-8";
 
+	private final String configPrintStreamName;
+
 	private PrintStream printStream;
 
+	/**
+	 * Creates a new instance of this writer.
+	 * 
+	 * @param configuration
+	 *            The configuration which will be used to initialize this writer.
+	 */
 	public PrintStreamWriter(final Configuration configuration) {
 		super(configuration);
+		this.configPrintStreamName = configuration.getStringProperty(STREAM);
 	}
 
 	@Override
 	public void init() throws FileNotFoundException, UnsupportedEncodingException {
-		final String printStreamName = this.configuration.getStringProperty(STREAM);
-		if (CONFIG_STREAM_STDOUT.equals(printStreamName)) {
+
+		if (CONFIG_STREAM_STDOUT.equals(this.configPrintStreamName)) {
 			this.printStream = System.out;
-		} else if (CONFIG_STREAM_STDERR.equals(printStreamName)) {
+		} else if (CONFIG_STREAM_STDERR.equals(this.configPrintStreamName)) {
 			this.printStream = System.err;
 		} else {
-			this.printStream = new PrintStream(new FileOutputStream(printStreamName), false, ENCODING);
+			this.printStream = new PrintStream(new FileOutputStream(this.configPrintStreamName), false, ENCODING);
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean newMonitoringRecord(final IMonitoringRecord record) {
 		this.printStream.println(record.getClass().getSimpleName() + ": " + record.toString());
 		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void terminate() {
 		if ((this.printStream != null) && (this.printStream != System.out) && (this.printStream != System.err)) {
 			this.printStream.close();

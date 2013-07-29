@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,8 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.Color;
  * 
  * @param <G>
  *            The graph type this formatter is for
+ * 
+ * @since 1.6
  */
 public abstract class AbstractGraphFormatter<G extends AbstractGraph<?, ?, ?>> {
 
@@ -38,13 +40,19 @@ public abstract class AbstractGraphFormatter<G extends AbstractGraph<?, ?, ?>> {
 	 * 
 	 * @param graph
 	 *            The graph to format
-	 * @param configuration
-	 *            The configuration to use for formatting
+	 * @param includeWeights
+	 *            Determines whether to include weights or not.
+	 * @param useShortLabels
+	 *            Determines whether to use short labels or not.
+	 * @param plotLoops
+	 *            Determines whether to plot loops or not.
+	 * 
 	 * @return A formatted representation of the graph
 	 */
 	@SuppressWarnings("unchecked")
-	public String createFormattedRepresentation(final AbstractGraph<?, ?, ?> graph, final GraphWriterConfiguration configuration) {
-		return this.formatGraph((G) graph, configuration);
+	public String createFormattedRepresentation(final AbstractGraph<?, ?, ?> graph, final boolean includeWeights, final boolean useShortLabels,
+			final boolean plotLoops) {
+		return this.formatGraph((G) graph, includeWeights, useShortLabels, plotLoops);
 	}
 
 	/**
@@ -52,11 +60,16 @@ public abstract class AbstractGraphFormatter<G extends AbstractGraph<?, ?, ?>> {
 	 * 
 	 * @param graph
 	 *            The input graph to format
-	 * @param configuration
-	 *            The configuration to use for formatting
+	 * @param includeWeights
+	 *            Determines whether to include weights or not.
+	 * @param useShortLabels
+	 *            Determines whether to use short labels or not.
+	 * @param plotLoops
+	 *            Determines whether to plot loops or not.
+	 * 
 	 * @return A textual specification of the input graph
 	 */
-	protected abstract String formatGraph(G graph, GraphWriterConfiguration configuration);
+	protected abstract String formatGraph(G graph, final boolean includeWeights, final boolean useShortLabels, final boolean plotLoops);
 
 	private static String getFormattedDecorations(final AbstractVertex<?, ?, ?> vertex) {
 		synchronized (vertex) {
@@ -89,7 +102,7 @@ public abstract class AbstractGraphFormatter<G extends AbstractGraph<?, ?, ?>> {
 	 * @param vertex
 	 *            The vertex to work with
 	 */
-	protected static void formatDecorations(final StringBuilder builder, final AbstractVertex<?, ?, ?> vertex) {
+	public static void formatDecorations(final StringBuilder builder, final AbstractVertex<?, ?, ?> vertex) {
 		final String decorations = AbstractGraphFormatter.getFormattedDecorations(vertex);
 		if (decorations.length() != 0) { // decorations cannot be null (getFormattedDecorations never returns null)
 			builder.append("\\n");

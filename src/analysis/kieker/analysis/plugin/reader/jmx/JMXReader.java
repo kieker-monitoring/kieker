@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
@@ -42,8 +43,11 @@ import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 
 /**
+ * This is a reader which reads the records from a JMX queue.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.4
  */
 @Plugin(description = "A reader which reads records from a JMX queue",
 		outputPorts = {
@@ -65,16 +69,23 @@ import kieker.common.record.IMonitoringRecord;
 		})
 public final class JMXReader extends AbstractReaderPlugin {
 
+	/** The name of the output port delivering the received records. */
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
 
+	/** The name of the configuration determining the JMX server. */
 	public static final String CONFIG_PROPERTY_NAME_SERVER = "server";
+	/** The name of the configuration determining the JMX port. */
 	public static final String CONFIG_PROPERTY_NAME_PORT = "port";
+	/** The name of the configuration determining the optional service URL. */
 	public static final String CONFIG_PROPERTY_NAME_SERVICEURL = "serviceUrl";
+	/** The name of the configuration determining the JMX domain. */
 	public static final String CONFIG_PROPERTY_NAME_DOMAIN = "domain";
+	/** The name of the configuration determining the logname used by the reader. */
 	public static final String CONFIG_PROPERTY_NAME_LOGNAME = "logname";
+	/** The name of the configuration determining whether the reader silently reconnects on any errors. */
 	public static final String CONFIG_PROPERTY_NAME_SILENT = "silentReconnect";
 
-	private static final Log LOG = LogFactory.getLog(JMXReader.class);
+	static final Log LOG = LogFactory.getLog(JMXReader.class); // NOPMD package for inner class
 
 	final boolean silentreconnect; // NOPMD NOCS (package visible for inner class)
 	private final JMXServiceURL serviceURL;
@@ -85,8 +96,20 @@ public final class JMXReader extends AbstractReaderPlugin {
 	private final int port;
 	private final String server;
 
-	public JMXReader(final Configuration configuation) throws IllegalArgumentException {
-		super(configuation);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @throws IllegalArgumentException
+	 *             If the arguments are invalid.
+	 */
+	public JMXReader(final Configuration configuration, final IProjectContext projectContext) throws IllegalArgumentException {
+		super(configuration, projectContext);
+
 		this.server = this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_SERVER);
 		this.port = this.configuration.getIntProperty(CONFIG_PROPERTY_NAME_PORT);
 		final String tmpServiceURL;
@@ -111,11 +134,17 @@ public final class JMXReader extends AbstractReaderPlugin {
 		this.silentreconnect = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SILENT);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void terminate(final boolean error) {
 		LOG.info("Shutdown of JMXReader requested.");
 		this.unblock();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final boolean read() {
 		if (this.silentreconnect) {
 			return this.read2();
@@ -258,6 +287,14 @@ public final class JMXReader extends AbstractReaderPlugin {
 		this.cdLatch.countDown();
 	}
 
+	final boolean deliverIndirect(final String outputPortName, final Object data) { // NOPMD (package visible for inner class)
+		return super.deliver(outputPortName, data);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 
@@ -271,6 +308,9 @@ public final class JMXReader extends AbstractReaderPlugin {
 		return configuration;
 	}
 
+	/**
+	 * @author Jan waller
+	 */
 	private final class LogNotificationListener implements NotificationListener {
 
 		public LogNotificationListener() {
@@ -278,10 +318,13 @@ public final class JMXReader extends AbstractReaderPlugin {
 		}
 
 		public final void handleNotification(final Notification notification, final Object handback) {
-			JMXReader.super.deliver(OUTPUT_PORT_NAME_RECORDS, notification.getUserData());
+			JMXReader.this.deliverIndirect(OUTPUT_PORT_NAME_RECORDS, notification.getUserData());
 		}
 	}
 
+	/**
+	 * @author Jan waller
+	 */
 	private final class ServerNotificationListener implements NotificationListener {
 
 		/**

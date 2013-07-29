@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,8 @@ import kieker.monitoring.core.IMonitoringRecordReceiver;
  * respective return value.
  * 
  * @author Andre van Hoorn, Jan Waller, Robert von Massow
+ * 
+ * @since 1.3
  */
 public interface IWriterController extends IMonitoringRecordReceiver {
 
@@ -35,6 +37,8 @@ public interface IWriterController extends IMonitoringRecordReceiver {
 	 * @param record
 	 *            the record.
 	 * @return true on success; false in case of an error.
+	 * 
+	 * @since 1.3
 	 */
 	public abstract boolean newMonitoringRecord(IMonitoringRecord record);
 
@@ -43,6 +47,8 @@ public interface IWriterController extends IMonitoringRecordReceiver {
 	 * execution environment.
 	 * 
 	 * @return long
+	 * 
+	 * @since 1.3
 	 */
 	public abstract long getNumberOfInserts();
 }

@@ -56,25 +56,22 @@ public class SessionReconstructionTestUtil {
 		final AnalysisController analysisController = new AnalysisController();
 
 		// Initialize and register the list reader
-		final ListReader<OperationExecutionRecord> listReader = new ListReader<OperationExecutionRecord>(new Configuration());
+		final ListReader<OperationExecutionRecord> listReader = new ListReader<OperationExecutionRecord>(new Configuration(), analysisController);
 		listReader.addAllObjects(records);
-		analysisController.registerReader(listReader);
 
 		// Initialize and register the system model repository
-		final SystemModelRepository systemModelRepository = new SystemModelRepository(new Configuration());
-		analysisController.registerRepository(systemModelRepository);
+		final SystemModelRepository systemModelRepository = new SystemModelRepository(new Configuration(), analysisController);
 
 		// Initialize, register and connect the execution record transformation filter
-		final ExecutionRecordTransformationFilter executionRecordTransformationFilter = new ExecutionRecordTransformationFilter(new Configuration());
-		analysisController.registerFilter(executionRecordTransformationFilter);
+		final ExecutionRecordTransformationFilter executionRecordTransformationFilter = new ExecutionRecordTransformationFilter(new Configuration(),
+				analysisController);
 		analysisController.connect(executionRecordTransformationFilter,
 				AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemModelRepository);
 		analysisController.connect(listReader, ListReader.OUTPUT_PORT_NAME,
 				executionRecordTransformationFilter, ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
 
 		// Initialize, register and connect the trace reconstruction filter
-		final TraceReconstructionFilter traceReconstructionFilter = new TraceReconstructionFilter(new Configuration());
-		analysisController.registerFilter(traceReconstructionFilter);
+		final TraceReconstructionFilter traceReconstructionFilter = new TraceReconstructionFilter(new Configuration(), analysisController);
 		analysisController.connect(traceReconstructionFilter,
 				AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemModelRepository);
 		analysisController.connect(executionRecordTransformationFilter, ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME_EXECUTIONS,
@@ -87,14 +84,14 @@ public class SessionReconstructionTestUtil {
 
 		sessionReconstructionFilterConfiguration.setMaxThinkTime(maxThinkTime);
 
-		final SessionReconstructionFilter sessionReconstructionFilter = new SessionReconstructionFilter(bareSessionReconstructionFilterConfiguration);
-		analysisController.registerFilter(sessionReconstructionFilter);
+		final SessionReconstructionFilter sessionReconstructionFilter = new SessionReconstructionFilter(bareSessionReconstructionFilterConfiguration,
+				analysisController);
 		analysisController.connect(traceReconstructionFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
 				sessionReconstructionFilter, SessionReconstructionFilter.INPUT_PORT_NAME_EXECUTION_TRACES);
 
 		// Initialize, register and connect the list collection filter
-		final ListCollectionFilter<ExecutionTraceBasedSession> listCollectionFilter = new ListCollectionFilter<ExecutionTraceBasedSession>(new Configuration());
-		analysisController.registerFilter(listCollectionFilter);
+		final ListCollectionFilter<ExecutionTraceBasedSession> listCollectionFilter = new ListCollectionFilter<ExecutionTraceBasedSession>(new Configuration(),
+				analysisController);
 		analysisController.connect(sessionReconstructionFilter, SessionReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE_SESSIONS,
 				listCollectionFilter, ListCollectionFilter.INPUT_PORT_NAME);
 

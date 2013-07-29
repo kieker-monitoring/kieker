@@ -21,6 +21,7 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.PriorityQueue;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -40,8 +41,10 @@ import kieker.tools.traceAnalysis.systemModel.MessageTraceBasedSession;
  */
 @Plugin(description = "Reconstructs sessions from execution or message traces",
 		outputPorts = {
-			@OutputPort(name = SessionReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE_SESSIONS, description = "Reconstructed execution trace-based sessions", eventTypes = { ExecutionTraceBasedSession.class }),
-			@OutputPort(name = SessionReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE_SESSIONS, description = "Reconstructed message trace-based sessions", eventTypes = { MessageTraceBasedSession.class })
+			@OutputPort(name = SessionReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE_SESSIONS, description = "Reconstructed execution trace-based sessions",
+					eventTypes = { ExecutionTraceBasedSession.class }),
+			@OutputPort(name = SessionReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE_SESSIONS, description = "Reconstructed message trace-based sessions",
+					eventTypes = { MessageTraceBasedSession.class })
 		},
 		configuration = {
 			@Property(name = SessionReconstructionFilterConfiguration.CONFIGURATION_NAME_MAX_THINK_TIME, defaultValue = "500000")
@@ -78,22 +81,25 @@ public class SessionReconstructionFilter extends AbstractFilterPlugin {
 	private final long maxThinkTime;
 
 	private final Map<String, ExecutionTraceBasedSession> openExecutionBasedSessions = new Hashtable<String, ExecutionTraceBasedSession>();
-	private final PriorityQueue<ExecutionTraceBasedSession> executionSessionTimeoutQueue = new PriorityQueue<ExecutionTraceBasedSession>(DEFAULT_QUEUE_SIZE,
-			new AbstractSessionEndTimestampComparator());
+	private final PriorityQueue<ExecutionTraceBasedSession> executionSessionTimeoutQueue =
+			new PriorityQueue<ExecutionTraceBasedSession>(DEFAULT_QUEUE_SIZE, new AbstractSessionEndTimestampComparator());
 
 	/**
 	 * Creates a new session reconstruction filter using the given configuration.
 	 * 
 	 * @param configuration
-	 *            The configuration to use
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component. The component will be registered.
 	 */
-	public SessionReconstructionFilter(final Configuration configuration) {
-		super(configuration);
+	public SessionReconstructionFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
 
 		this.configuration = new SessionReconstructionFilterConfiguration(configuration);
 		this.maxThinkTime = this.configuration.getMaxThinkTime() * 1000000L;
 	}
 
+	@Override
 	public Configuration getCurrentConfiguration() {
 		return new Configuration(this.configuration.getWrappedConfiguration());
 	}
@@ -179,6 +185,11 @@ public class SessionReconstructionFilter extends AbstractFilterPlugin {
 	}
 
 	private static class AbstractSessionEndTimestampComparator implements Comparator<AbstractSession<?>> {
+
+		// Avoid warning when calling (default) constructor
+		public AbstractSessionEndTimestampComparator() {
+			super();
+		}
 
 		public int compare(final AbstractSession<?> o1, final AbstractSession<?> o2) {
 			final long endTimestamp1 = o1.getEndTimestamp();

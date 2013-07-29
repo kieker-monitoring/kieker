@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,60 +16,197 @@
 
 package kieker.analysis.plugin.filter.forward;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 
 /**
- * @param <T>
+ * This filter collects the incoming objects in a simple synchronized list. It is mostly used for test purposes.
  * 
- * @author Nils Ehmke, Jan Waller
+ * @param <T>
+ *            The type of the list.
+ * 
+ * @author Nils Christian Ehmke, Jan Waller, Bjoern Weissenfels
+ * 
+ * @since 1.6
  */
 @Plugin(programmaticOnly = true,
 		description = "A filter collecting incoming objects in a list (mostly used in testing scenarios)",
-		outputPorts = @OutputPort(name = ListCollectionFilter.OUTPUT_PORT_NAME, eventTypes = { Object.class }, description = "Provides each incoming object"))
+		outputPorts = @OutputPort(name = ListCollectionFilter.OUTPUT_PORT_NAME, eventTypes = { Object.class }, description = "Provides each incoming object"),
+		configuration = {
+			@Property(name = ListCollectionFilter.CONFIG_PROPERTY_NAME_MAX_NUMBER_OF_ENTRIES,
+					defaultValue = ListCollectionFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES,
+					description = "Sets the maximum number of stored values."),
+			@Property(name = ListCollectionFilter.CONFIG_PROPERTY_NAME_LIST_FULL_BEHAVIOR,
+					defaultValue = ListCollectionFilter.CONFIG_PROPERTY_VALUE_LIST_FULL_BEHAVIOR,
+					description = "Determines what happens to new objects when the list is full.") })
 public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 
+	/** The name of the input port for the incoming objects. */
 	public static final String INPUT_PORT_NAME = "inputObject";
+	/** The name of the output port for the forwarded objects. */
 	public static final String OUTPUT_PORT_NAME = "outputObjects";
 
-	private final List<T> list = Collections.synchronizedList(new ArrayList<T>());
+	/** The name of the property determining the maximal number of allowed entries. */
+	public static final String CONFIG_PROPERTY_NAME_MAX_NUMBER_OF_ENTRIES = "maxNumberOfEntries";
+	/** The default value for the maximal number of allowed entries (unlimited. */
+	public static final String CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES = "-1"; // unlimited per default
 
-	public ListCollectionFilter(final Configuration configuration) {
-		super(configuration);
-	}
+	/** The name of the property determining the behavior of a full list. */
+	public static final String CONFIG_PROPERTY_NAME_LIST_FULL_BEHAVIOR = "listFullBehavior";
+	/** The default value for the behavior of a full list (drop oldest). */
+	public static final String CONFIG_PROPERTY_VALUE_LIST_FULL_BEHAVIOR = "dropOldest"; // must really be a String here
 
-	@InputPort(name = ListCollectionFilter.INPUT_PORT_NAME)
-	@SuppressWarnings("unchecked")
-	public void input(final Object data) {
-		this.list.add((T) data);
-		super.deliver(OUTPUT_PORT_NAME, data);
-	}
+	private static final Log LOG = LogFactory.getLog(ListCollectionFilter.class);
 
-	public void clear() {
-		this.list.clear();
-	}
+	private final LinkedList<T> list; // NOCS NOPMD (we actually need LinkedLIst here, no good interface is provided)
 
-	@SuppressWarnings("unchecked")
-	public List<T> getList() {
-		return new CopyOnWriteArrayList<T>((T[]) this.list.toArray());
+	private final int maxNumberOfEntries;
+	private final boolean unboundedList;
+	private final ListFullBehavior listFullBehavior;
+
+	/**
+	 * An enum for all possible list full behaviors.
+	 * 
+	 * @author Jan Waller
+	 * @since 1.8
+	 */
+	public enum ListFullBehavior {
+		/** Drops the oldest entry. */
+		dropOldest,
+		/** Ignores the given entry. */
+		ignore,
+		/** Throws a runtime exception. */
+		error;
 	}
 
 	/**
-	 * Returns the current number of collected objects.
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
 	 */
-	public int size() {
-		return this.list.size();
+	public ListCollectionFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+
+		// Read the configuration
+		this.maxNumberOfEntries = configuration.getIntProperty(CONFIG_PROPERTY_NAME_MAX_NUMBER_OF_ENTRIES);
+		if (this.maxNumberOfEntries < 0) {
+			this.unboundedList = true;
+		} else {
+			this.unboundedList = false;
+		}
+		final String strListFullBehavior = configuration.getStringProperty(CONFIG_PROPERTY_NAME_LIST_FULL_BEHAVIOR);
+		ListFullBehavior tmpListFullBehavior;
+		try {
+			tmpListFullBehavior = ListFullBehavior.valueOf(strListFullBehavior);
+		} catch (final IllegalArgumentException ex) {
+			LOG.warn(strListFullBehavior + " is no valid list full behavior! Using 'ignore' instead.");
+			tmpListFullBehavior = ListFullBehavior.ignore;
+		}
+		this.listFullBehavior = tmpListFullBehavior;
+
+		this.list = new LinkedList<T>();
 	}
 
+	/**
+	 * This method represents the input port.
+	 * 
+	 * @param data
+	 *            The next element.
+	 */
+	@InputPort(name = ListCollectionFilter.INPUT_PORT_NAME)
+	public void input(final T data) {
+		if (this.unboundedList) {
+			synchronized (this.list) {
+				this.list.add(data);
+			}
+		} else {
+			switch (this.listFullBehavior) {
+			case dropOldest:
+				synchronized (this.list) {
+					this.list.add(data);
+					if (this.list.size() > this.maxNumberOfEntries) {
+						this.list.removeFirst();
+					}
+				}
+				break;
+			case ignore:
+				synchronized (this.list) {
+					if (this.maxNumberOfEntries > this.list.size()) {
+						this.list.add(data);
+					}
+				}
+				break;
+			case error:
+				synchronized (this.list) {
+					if (this.maxNumberOfEntries > this.list.size()) {
+						this.list.add(data);
+					} else {
+						throw new RuntimeException("Too many records for ListCollectionFilter, it was initialized with capacity: " // NOPMD
+								+ this.maxNumberOfEntries); // NOPMD
+					}
+				}
+				break;
+			default:
+				// should not happen
+				break;
+			}
+		}
+		super.deliver(OUTPUT_PORT_NAME, data);
+	}
+
+	/**
+	 * Clears the list.
+	 */
+	public void clear() {
+		synchronized (this.list) {
+			this.list.clear();
+		}
+	}
+
+	/**
+	 * Delivers a copy of the internal list.
+	 * 
+	 * @return The content of the internal list.
+	 */
+	public List<T> getList() {
+		synchronized (this.list) {
+			return new CopyOnWriteArrayList<T>(this.list);
+		}
+	}
+
+	/**
+	 * @return The current number of collected objects.
+	 */
+	public int size() {
+		synchronized (this.list) {
+			return this.list.size();
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
-		return new Configuration();
+		final Configuration configuration = new Configuration();
+
+		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_NUMBER_OF_ENTRIES, String.valueOf(this.maxNumberOfEntries));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_LIST_FULL_BEHAVIOR, this.listFullBehavior.name());
+
+		return configuration;
 	}
 }

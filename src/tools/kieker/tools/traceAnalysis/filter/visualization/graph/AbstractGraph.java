@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,8 +29,9 @@ import java.util.Collection;
  *            The type of the graph's edges
  * @param <O>
  *            The type of object from which the graph's elements originate
+ * 
+ * @since 1.6
  */
-
 public abstract class AbstractGraph<V extends AbstractVertex<V, E, O>, E extends AbstractEdge<V, E, O>, O> {
 
 	/**
@@ -84,6 +85,8 @@ public abstract class AbstractGraph<V extends AbstractVertex<V, E, O>, E extends
 	 *            The type of the graph's vertices
 	 * @param <E>
 	 *            The type of the graph's edges
+	 * 
+	 * @since 1.6
 	 */
 	public interface IGraphVisitor<V, E> {
 
@@ -92,6 +95,8 @@ public abstract class AbstractGraph<V extends AbstractVertex<V, E, O>, E extends
 		 * 
 		 * @param vertex
 		 *            The encountered vertex
+		 * 
+		 * @since 1.6
 		 */
 		public void visitVertex(V vertex);
 
@@ -100,6 +105,8 @@ public abstract class AbstractGraph<V extends AbstractVertex<V, E, O>, E extends
 		 * 
 		 * @param edge
 		 *            The encountered edge
+		 * 
+		 * @since 1.6
 		 */
 		public void visitEdge(E edge);
 

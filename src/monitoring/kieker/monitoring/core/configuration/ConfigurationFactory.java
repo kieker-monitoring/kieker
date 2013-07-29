@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,18 +29,21 @@ import kieker.common.logging.LogFactory;
 import kieker.monitoring.core.controller.MonitoringController;
 
 /**
- * A ConfigurationFactory for kieker.monitoring
+ * A ConfigurationFactory for kieker.monitoring.
  * 
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.3
  */
 public final class ConfigurationFactory implements Keys {
 	private static final Log LOG = LogFactory.getLog(ConfigurationFactory.class);
 
+	/**
+	 * Private constructor to avoid instantiation.
+	 */
 	private ConfigurationFactory() {}
 
-	/*
-	 * factory methods
-	 */
+	// factory methods
 
 	/**
 	 * Creates the configuration for the singleton controller instance. Note
@@ -87,7 +90,9 @@ public final class ConfigurationFactory implements Keys {
 	 * the default configuration is returned.
 	 * 
 	 * @param configurationFile
-	 * @return the created Configuration
+	 *            The file which contains the configuration.
+	 * 
+	 * @return The created Configuration
 	 */
 	public static final Configuration createConfigurationFromFile(final String configurationFile) {
 		return ConfigurationFactory.loadConfigurationFromFile(configurationFile, ConfigurationFactory.defaultConfiguration());
@@ -96,7 +101,7 @@ public final class ConfigurationFactory implements Keys {
 	/**
 	 * Returns a properties map with the default configuration.
 	 * 
-	 * @return
+	 * @return The created Configuration
 	 */
 	private static final Configuration defaultConfiguration() {
 		return ConfigurationFactory.loadConfigurationFromResource(Keys.DEFAULT_PROPERTIES_LOCATION_CLASSPATH, null);
@@ -108,8 +113,11 @@ public final class ConfigurationFactory implements Keys {
 	 * the default configuration is returned.
 	 * 
 	 * @param propertiesFn
+	 *            The file which contains the properties.
 	 * @param defaultValues
-	 * @return
+	 *            The configuration containing the default values.
+	 * 
+	 * @return The created Configuration
 	 */
 	private static final Configuration loadConfigurationFromFile(final String propertiesFn, final Configuration defaultValues) {
 		final Configuration properties = new Configuration(defaultValues);
@@ -147,8 +155,11 @@ public final class ConfigurationFactory implements Keys {
 	 * the default configuration is returned.
 	 * 
 	 * @param propertiesFn
+	 *            The resource name which contains the properties.
 	 * @param defaultValues
-	 * @return
+	 *            The configuration containing the default values.
+	 * 
+	 * @return The created Configuration
 	 */
 	private static final Configuration loadConfigurationFromResource(final String propertiesFn, final Configuration defaultValues) {
 		final InputStream is = MonitoringController.class.getClassLoader().getResourceAsStream(propertiesFn);
@@ -173,11 +184,14 @@ public final class ConfigurationFactory implements Keys {
 	}
 
 	/**
-	 * Returns the system properties starting with prefix.
+	 * Returns the system properties starting with the given prefix.
 	 * 
 	 * @param prefix
+	 *            The prefix to search for.
 	 * @param defaultValues
-	 * @return
+	 *            The configuration containing the default values.
+	 * 
+	 * @return The created Configuration
 	 */
 	private static final Configuration getSystemPropertiesStartingWith(final String prefix, final Configuration defaultValues) {
 		final Configuration configuration = new Configuration(defaultValues);

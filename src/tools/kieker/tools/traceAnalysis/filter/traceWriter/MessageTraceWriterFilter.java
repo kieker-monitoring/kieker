@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,16 @@
 
 package kieker.tools.traceAnalysis.filter.traceWriter;
 
-import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.PrintStream;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
-import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
@@ -37,6 +34,8 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 /**
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.2
  */
 @Plugin(description = "A filter allowing to write the incoming MessageTraces into a configured file",
 		repositoryPorts = {
@@ -47,19 +46,30 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 		})
 public class MessageTraceWriterFilter extends AbstractMessageTraceProcessingFilter {
 
+	/** The name of the configuration determining the output file name. */
 	public static final String CONFIG_PROPERTY_NAME_OUTPUT_FN = "outputFn";
-
-	private static final Log LOG = LogFactory.getLog(MessageTraceWriterFilter.class);
 
 	private static final String ENCODING = "UTF-8";
 
 	private final String outputFn;
-	private final BufferedWriter ps;
+	private final PrintStream ps;
 
-	public MessageTraceWriterFilter(final Configuration configuration) throws IOException {
-		super(configuration);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @throws IOException
+	 *             If either the default encoding is not supported or the given file is somehow invalid.
+	 */
+	public MessageTraceWriterFilter(final Configuration configuration, final IProjectContext projectContext) throws IOException {
+		super(configuration, projectContext);
+
 		this.outputFn = this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_OUTPUT_FN);
-		this.ps = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.outputFn), ENCODING));
+		this.ps = new PrintStream(new FileOutputStream(this.outputFn), false, ENCODING);
 	}
 
 	@Override
@@ -69,37 +79,36 @@ public class MessageTraceWriterFilter extends AbstractMessageTraceProcessingFilt
 		this.stdOutPrintln("Wrote " + numTraces + " trace" + (numTraces > 1 ? "s" : "") + " to file '" + this.outputFn + "'"); // NOCS
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void terminate(final boolean error) {
 		if (this.ps != null) {
-			try {
-				this.ps.close();
-			} catch (final IOException ex) {
-				LOG.error("IOException while terminating", ex);
-			}
+			this.ps.close();
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-
 		configuration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_FN, this.outputFn);
-
 		return configuration;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	@InputPort(
 			name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES,
 			description = "Receives message traces to be processed",
 			eventTypes = { MessageTrace.class })
 	public void inputMessageTraces(final MessageTrace mt) {
-		try {
-			MessageTraceWriterFilter.this.ps.append(mt.toString()).append(AbstractFilterPlugin.SYSTEM_NEWLINE_STRING);
-			MessageTraceWriterFilter.this.reportSuccess(mt.getTraceId());
-		} catch (final IOException ex) {
-			LOG.error("IOException", ex);
-			MessageTraceWriterFilter.this.reportError(mt.getTraceId());
-		}
+		MessageTraceWriterFilter.this.ps.println(mt.toString());
+		MessageTraceWriterFilter.this.reportSuccess(mt.getTraceId());
 	}
 }

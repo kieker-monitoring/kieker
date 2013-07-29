@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,14 @@
 
 package kieker.tools.traceAnalysis.filter.executionRecordTransformation;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.common.util.ClassOperationSignaturePair;
+import kieker.common.util.signature.ClassOperationSignaturePair;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
@@ -34,10 +35,13 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * transformed into an instance of {@link Execution}.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 @Plugin(description = "A filter transforming OperationExecutionRecords into Execution objects",
 		outputPorts = {
-			@OutputPort(name = ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME_EXECUTIONS, description = "Provides transformed executions", eventTypes = { Execution.class })
+			@OutputPort(name = ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME_EXECUTIONS, description = "Provides transformed executions",
+					eventTypes = { Execution.class })
 		},
 		repositoryPorts = {
 			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
@@ -45,28 +49,47 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisFilter {
 	// private static final Log LOG = LogFactory.getLog(ExecutionRecordTransformationFilter.class);
 
+	/** This is the name of the input port receiving new operation execution records. */
 	public static final String INPUT_PORT_NAME_RECORDS = "operationExecutionRecords";
 
+	/** This is the name of the output port delivering the transformed executions. */
 	public static final String OUTPUT_PORT_NAME_EXECUTIONS = "transformedExecutions";
 
-	public ExecutionRecordTransformationFilter(final Configuration configuration) {
-		super(configuration);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 */
+	public ExecutionRecordTransformationFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
 	}
 
+	/**
+	 * This method represents the input port, processing incoming operation execution records.
+	 * 
+	 * @param execRec
+	 *            The next operation execution record.
+	 */
 	@InputPort(
 			name = INPUT_PORT_NAME_RECORDS,
 			description = "Receives operation execution records to be transformed",
 			eventTypes = { OperationExecutionRecord.class })
-	public boolean inputOperationExecutionRecords(final OperationExecutionRecord execRec) {
+	public void inputOperationExecutionRecords(final OperationExecutionRecord execRec) {
 		final ClassOperationSignaturePair fqComponentNameSignaturePair = ClassOperationSignaturePair.splitOperationSignatureStr(execRec.getOperationSignature());
 
 		final Execution execution = this.createExecutionByEntityNames(execRec.getHostname(), fqComponentNameSignaturePair.getFqClassname(),
 				fqComponentNameSignaturePair.getSignature(),
 				execRec.getTraceId(), execRec.getSessionId(), execRec.getEoi(), execRec.getEss(), execRec.getTin(), execRec.getTout(), false);
 		super.deliver(OUTPUT_PORT_NAME_EXECUTIONS, execution);
-		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		// filter has no configuration properties

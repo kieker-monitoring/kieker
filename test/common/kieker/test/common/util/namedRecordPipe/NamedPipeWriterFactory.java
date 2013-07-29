@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,8 @@ import kieker.common.record.IMonitoringRecord;
 
 /**
  * @author Andre van Hoorn
+ * 
+ * @since 1.6
  */
 public final class NamedPipeWriterFactory {
 	private static final AtomicInteger NEXT_PIPE_ID = new AtomicInteger(0);
@@ -48,6 +50,7 @@ public final class NamedPipeWriterFactory {
 	 * to a {@link Pipe} with the given name.
 	 * 
 	 * @param pipeName
+	 *            The name of the pipe to use.
 	 * @return the {@link kieker.common.record.IMonitoringRecordReceiver}
 	 */
 	public static final IPipeWriter createAndRegisterNamedPipeRecordWriter(final String pipeName) {

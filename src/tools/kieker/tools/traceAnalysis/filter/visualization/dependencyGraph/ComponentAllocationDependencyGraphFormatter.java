@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,12 +27,14 @@ import kieker.tools.traceAnalysis.filter.visualization.AbstractGraphFormatter;
 import kieker.tools.traceAnalysis.filter.visualization.util.dot.DotFactory;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
+import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * Formatter class for component dependency graphs on the allocation level (see {@link ComponentAllocationDependencyGraph}) .
  * 
  * @author Holger Knoche
  * 
+ * @since 1.6
  */
 public class ComponentAllocationDependencyGraphFormatter extends AbstractComponentDependencyGraphFormatter<ComponentAllocationDependencyGraph> {
 
@@ -71,15 +73,14 @@ public class ComponentAllocationDependencyGraphFormatter extends AbstractCompone
 
 		if (container.isRootContainer()) {
 			builder.append(DotFactory.createNode("", AbstractDependencyGraphFormatter.createNodeId(DependencyGraphNode.ROOT_NODE_ID),
-					DependencyGraphNode.ROOT_NODE_NAME, DotFactory.DOT_SHAPE_NONE, null, // style
+					SystemModelRepository.ROOT_NODE_LABEL, DotFactory.DOT_SHAPE_NONE, null, // style
 					null, // framecolor
 					null, // fillcolor
 					null, // fontcolor
 					DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
 					null, // imagefilename
 					null, // misc
-					null // tooltip
-					));
+					null)); // tooltip
 		} else {
 			builder.append(DotFactory.createCluster("", AbstractDependencyGraphFormatter.createContainerId(container),
 					AbstractDependencyGraphFormatter.STEREOTYPE_EXECUTION_CONTAINER + "\\n" + container.getName(), DotFactory.DOT_SHAPE_BOX, // shape
@@ -88,8 +89,7 @@ public class ComponentAllocationDependencyGraphFormatter extends AbstractCompone
 					DotFactory.DOT_FILLCOLOR_WHITE, // fillcolor
 					null, // fontcolor
 					DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
-					null // misc
-					));
+					null)); // misc
 			// dot code for contained components
 			for (final DependencyGraphNode<AllocationComponent> node : entry.getValue()) {
 				builder.append(DotFactory.createNode("",
@@ -104,8 +104,7 @@ public class ComponentAllocationDependencyGraphFormatter extends AbstractCompone
 						DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
 						null, // imagefilename
 						null, // misc
-						node.getDescription() // tooltip
-						));
+						node.getDescription())); // tooltip
 			}
 			builder.append("}\n");
 		}
@@ -137,6 +136,9 @@ public class ComponentAllocationDependencyGraphFormatter extends AbstractCompone
 		return DEFAULT_FILE_NAME;
 	}
 
+	/**
+	 * @author Holger Knoche
+	 */
 	private static class EdgeFormattingVisitor extends
 			AbstractDependencyGraphFormatterVisitor<AllocationComponent> {
 

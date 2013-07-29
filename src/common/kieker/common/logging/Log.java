@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,8 @@ package kieker.common.logging;
  * </p>
  * 
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public interface Log { // NOCS (Name of Interface)
 
@@ -45,6 +47,8 @@ public interface Log { // NOCS (Name of Interface)
 	 * </p>
 	 * 
 	 * @return true if debug is enabled in the underlying logger.
+	 * 
+	 * @since 1.5
 	 */
 	public boolean isDebugEnabled();
 
@@ -55,6 +59,8 @@ public interface Log { // NOCS (Name of Interface)
 	 * 
 	 * @param message
 	 *            log this message
+	 * 
+	 * @since 1.5
 	 */
 	public void debug(String message);
 
@@ -67,6 +73,8 @@ public interface Log { // NOCS (Name of Interface)
 	 *            log this message
 	 * @param t
 	 *            log this cause
+	 * 
+	 * @since 1.5
 	 */
 	public void debug(String message, Throwable t);
 
@@ -77,6 +85,8 @@ public interface Log { // NOCS (Name of Interface)
 	 * 
 	 * @param message
 	 *            log this message
+	 * 
+	 * @since 1.5
 	 */
 	public void info(String message);
 
@@ -89,6 +99,8 @@ public interface Log { // NOCS (Name of Interface)
 	 *            log this message
 	 * @param t
 	 *            log this cause
+	 * 
+	 * @since 1.5
 	 */
 	public void info(String message, Throwable t);
 
@@ -99,6 +111,8 @@ public interface Log { // NOCS (Name of Interface)
 	 * 
 	 * @param message
 	 *            log this message
+	 * 
+	 * @since 1.5
 	 */
 	public void warn(String message);
 
@@ -111,6 +125,8 @@ public interface Log { // NOCS (Name of Interface)
 	 *            log this message
 	 * @param t
 	 *            log this cause
+	 * 
+	 * @since 1.5
 	 */
 	public void warn(String message, Throwable t);
 
@@ -121,6 +137,8 @@ public interface Log { // NOCS (Name of Interface)
 	 * 
 	 * @param message
 	 *            log this message
+	 * 
+	 * @since 1.5
 	 */
 	public void error(String message);
 
@@ -133,6 +151,8 @@ public interface Log { // NOCS (Name of Interface)
 	 *            log this message
 	 * @param t
 	 *            log this cause
+	 * 
+	 * @since 1.5
 	 */
 	public void error(String message, Throwable t);
 }

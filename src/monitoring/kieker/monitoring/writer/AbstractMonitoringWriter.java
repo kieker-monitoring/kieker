@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,33 +19,29 @@ package kieker.monitoring.writer;
 import java.util.Enumeration;
 
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 
 /**
  * @author Jan Waller, Robert von Massow
+ * 
+ * @since 1.3
  */
 public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
-	private static final Log LOG = LogFactory.getLog(AbstractMonitoringWriter.class);
 
-	protected final Configuration configuration;
+	/** The controller of this writer. */
 	protected IMonitoringController monitoringController;
+	private final Configuration configuration;
 
 	/**
 	 * 
-	 * @param IWriterController
 	 * @param configuration
+	 *            The configuration for this component.
 	 */
 	protected AbstractMonitoringWriter(final Configuration configuration) {
-		try {
-			// somewhat dirty hack...
-			final Configuration defaultConfiguration = this.getDefaultConfiguration(); // NOPMD (overrideable)
-			if (defaultConfiguration != null) {
-				configuration.setDefaultConfiguration(defaultConfiguration);
-			}
-		} catch (final IllegalAccessException ex) {
-			LOG.error("Unable to set writer custom default properties"); // ok to ignore ex here
+		// somewhat dirty hack...
+		final Configuration defaultConfiguration = this.getDefaultConfiguration(); // NOPMD (overrideable)
+		if (defaultConfiguration != null) {
+			configuration.setDefaultConfiguration(defaultConfiguration);
 		}
 		this.configuration = configuration;
 	}
@@ -54,7 +50,7 @@ public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 	 * This method should be overwritten, iff the writer is external to Kieker and
 	 * thus its default configuration is not included in the default config file.
 	 * 
-	 * @return
+	 * @return The configuration object containing the default configuration.
 	 */
 	protected Configuration getDefaultConfiguration() { // NOPMD (default implementation)
 		return null;
@@ -90,15 +86,11 @@ public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 		this.init();
 	}
 
-	public final Configuration getConfiguration() {
-		return this.configuration;
-	}
-
 	/**
-	 * Implementing classes should indicate an initialization
-	 * error by throwing an {@link Exception}.
+	 * Implementing classes should indicate an initialization error by throwing an {@link Exception}.
 	 * 
 	 * @throws Exception
+	 *             If something during the initialization went wrong.
 	 */
 	protected abstract void init() throws Exception;
 }

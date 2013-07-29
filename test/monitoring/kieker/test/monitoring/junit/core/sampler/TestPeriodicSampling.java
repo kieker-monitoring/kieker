@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ import kieker.test.monitoring.util.DefaultConfigurationFactory;
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.3
  */
 public class TestPeriodicSampling extends AbstractKiekerTest { // NOCS
 
@@ -54,8 +55,6 @@ public class TestPeriodicSampling extends AbstractKiekerTest { // NOCS
 		final long period = 1500; // 1500 ms
 		final long offset = 300; // i.e., 1st event after 300 ms
 
-		// TODO: not used
-		// final ScheduledSamplerJob samplerJob =
 		monitoringController.schedulePeriodicSampler(samplingCounter, offset, period, TimeUnit.MILLISECONDS);
 
 		Thread.sleep(3600); // sleep 3.6 seconds
@@ -66,21 +65,21 @@ public class TestPeriodicSampling extends AbstractKiekerTest { // NOCS
 		monitoringController.disableMonitoring();
 
 		Thread.sleep(2000); // sleep 2 seconds while being disabled
-		/* There should be no new trigger events */
+		// There should be no new trigger events
 		final int numEventsWhileDisabled = numTriggers.get() - numEventsBeforeDisabled;
 
 		monitoringController.enableMonitoring();
 
 		Thread.sleep(2000); // sleep 2 seconds while being re-enabled
 
-		/* There should be at least one new trigger event */
+		// There should be at least one new trigger event
 
 		final int numEventsAfterReEnabled = numTriggers.get() - numEventsBeforeDisabled - numEventsWhileDisabled;
 
 		Assert.assertEquals("Unexpected number of triggering events before disabling", 3, numEventsBeforeDisabled);
 		Assert.assertEquals("Unexpected number of triggering events while disabled", 0, numEventsWhileDisabled);
-		Assert.assertTrue("Unexpected at least one triggering events after being re-enabled. Found " + numEventsAfterReEnabled, numEventsAfterReEnabled > 0); // NOCS
-																																								// (MagicNumberCheck)
+		Assert.assertTrue("Unexpected at least one triggering events after being re-enabled. Found " + numEventsAfterReEnabled,
+				numEventsAfterReEnabled > 0); // NOCS (MagicNumberCheck)
 		monitoringController.terminateMonitoring();
 	}
 
@@ -111,7 +110,7 @@ public class TestPeriodicSampling extends AbstractKiekerTest { // NOCS
 
 		Thread.sleep(10000); // sleep another 10 seconds
 
-		/* There should be no new trigger events */
+		// There should be no new trigger events
 
 		final int numEventsAfterRemoval = numTriggers.get();
 

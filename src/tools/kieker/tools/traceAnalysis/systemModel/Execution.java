@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,15 @@
 package kieker.tools.traceAnalysis.systemModel;
 
 /**
+ * This class represents an execution within the trace analysis tool.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 public class Execution {
+
+	/** This constant marks that an execution has no session ID. */
 	public static final String NO_SESSION_ID = "<NOSESSIONID>";
 
 	private final Operation operation;
@@ -38,16 +43,23 @@ public class Execution {
 	 * Creates a new Execution instance.
 	 * 
 	 * @param op
+	 *            The operation of the execution.
 	 * @param allocationComponent
+	 *            The allocation component.
 	 * @param traceId
+	 *            The ID of the trace.
 	 * @param sessionId
+	 *            The ID of the session.
 	 * @param eoi
+	 *            The execution order index.
 	 * @param ess
+	 *            The execution stack size.
 	 * @param tin
+	 *            The timestamp the execution started.
 	 * @param tout
-	 * 
-	 * @throws NullPointerException
-	 *             iff any of the passed objects is null.
+	 *            The timestamp the execution finished.
+	 * @param assumed
+	 *            Determines whether the execution is assumed or not.
 	 */
 	public Execution(final Operation op, final AllocationComponent allocationComponent, final long traceId, final String sessionId, final int eoi, final int ess,
 			final long tin, final long tout, final boolean assumed) {
@@ -76,15 +88,21 @@ public class Execution {
 	 * Creates a new Execution instance. The sessionId is set to a default value.
 	 * 
 	 * @param op
+	 *            The operation of the execution.
 	 * @param allocationComponent
+	 *            The allocation component.
 	 * @param traceId
+	 *            The ID of the trace.
 	 * @param eoi
+	 *            The execution order index.
 	 * @param ess
+	 *            The execution stack size.
 	 * @param tin
+	 *            The timestamp the execution started.
 	 * @param tout
-	 * 
-	 * @throws NullPointerException
-	 *             iff any of the passed objects is null.
+	 *            The timestamp the execution finished.
+	 * @param assumed
+	 *            Determines whether the execution is assumed or not.
 	 */
 	public Execution(final Operation op, final AllocationComponent allocationComponent, final long traceId, final int eoi, final int ess, final long tin,
 			final long tout, final boolean assumed) {
@@ -136,6 +154,11 @@ public class Execution {
 	/**
 	 * Compares this {@link Execution} with the given object with respect to type and fields. All
 	 * fields but the {@link #isAssumed()} are considered for comparison.
+	 * 
+	 * @param obj
+	 *            The object to be compared with this instance.
+	 * 
+	 * @return true if and only if the current object and the given object have equal values.
 	 */
 	@Override
 	public boolean equals(final Object obj) {

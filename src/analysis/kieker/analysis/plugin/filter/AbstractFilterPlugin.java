@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,36 +16,53 @@
 
 package kieker.analysis.plugin.filter;
 
+import kieker.analysis.AnalysisController;
+import kieker.analysis.IProjectContext;
+import kieker.analysis.exception.InvalidProjectContextException;
 import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.common.configuration.Configuration;
 
 /**
- * This class should be used as a base for every analysis plugin used within <i>Kieker</i>.
- * For reader plugins, the class {@link kieker.analysis.plugin.reader.AbstractReaderPlugin} should be used
- * instead.
+ * This class should be used as a base for every analysis plugin used within <i>Kieker</i>. For reader plugins, the class
+ * {@link kieker.analysis.plugin.reader.AbstractReaderPlugin} should be used instead.
  * 
  * @author Nils Christian Ehmke
+ * 
+ * @since 1.5
  */
 @Plugin
 public abstract class AbstractFilterPlugin extends AbstractPlugin implements IFilterPlugin {
 
-	protected static final String SYSTEM_NEWLINE_STRING = System.getProperty("line.separator");
-
 	/**
-	 * The constructor for the plugin. Every plugin must have this constructor.
+	 * Each Plugin requires a constructor with a Configuration object and a IProjectContext.
 	 * 
 	 * @param configuration
-	 *            The configuration to use for this plugin.
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component. The component will be registered.
 	 */
-	public AbstractFilterPlugin(final Configuration configuration) {
-		super(configuration);
+	public AbstractFilterPlugin(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+
+		// Register the filter
+		if (projectContext instanceof AnalysisController) {
+			((AnalysisController) projectContext).registerFilter(this);
+		} else {
+			throw new InvalidProjectContextException("Invalid analysis controller in constructor");
+		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean init() { // NOPMD (default implementation)
 		return true; // do nothing
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void terminate(final boolean error) { // NOPMD (default implementation)
 		// do nothing
 	}

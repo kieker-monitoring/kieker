@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package kieker.analysis.plugin.filter.forward;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -31,26 +32,30 @@ import kieker.common.record.IMonitoringRecord;
 
 /**
  * Forwards incoming {@link IMonitoringRecord}s with delays computed from the {@link kieker.common.record.IMonitoringRecord#getLoggingTimestamp()} value
- * (assumed to be in nanoseconds resolution). For example, after initialization, if records with logging timestamps 3000 and 4500 nanos are received, the
+ * (assumed to be in the configured resolution). For example, after initialization, if records with logging timestamps 3000 and 4500 nanos are received, the
  * first record is forwarded immediately; the second will be forwarded 1500 nanos later.
  * 
+ * @author Andre van Hoorn, Robert von Massow, Jan Waller
  * 
- * @author Andre van Hoorn, Robert von Massow
- * 
+ * @since 1.6
  */
-// TODO: Timer with higher precision (Currently milliseconds)?
 @Plugin(
 		description = "Forwards incoming records with delays computed from the timestamp values",
 		outputPorts = {
-			@OutputPort(name = RealtimeRecordDelayFilter.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Outputs the delayed records")
+			@OutputPort(name = RealtimeRecordDelayFilter.OUTPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class },
+					description = "Outputs the delayed records")
 		},
 		configuration = {
 			@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_NUM_WORKERS, defaultValue = "1"),
-			@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS, defaultValue = "5")
+			@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS, defaultValue = "5"),
+			@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_WARN_NEGATIVE_DELAY_SECONDS, defaultValue = "2"),
+			@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_TIMER, defaultValue = "MILLISECONDS")
 		})
 public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 
+	/** The name of the input port receiving the records. */
 	public static final String INPUT_PORT_NAME_RECORDS = "inputRecords";
+	/** The name of the output port delivering the delayed records. */
 	public static final String OUTPUT_PORT_NAME_RECORDS = "outputRecords";
 
 	/**
@@ -59,84 +64,127 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 	public static final String CONFIG_PROPERTY_NAME_NUM_WORKERS = "numWorkers";
 
 	/**
-	 * The number of additional seconds to wait before execute the termination (after all records have been forwarded)
+	 * The number of additional seconds to wait before execute the termination (after all records have been forwarded).
 	 */
 	public static final String CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS = "additionalShutdownDelaySeconds";
 
+	/**
+	 * The number of seconds of negative scheduling time that produces a warning.
+	 */
+	public static final String CONFIG_PROPERTY_NAME_WARN_NEGATIVE_DELAY_SECONDS = "warnOnNegativeSchedTimeSeconds";
+
+	/**
+	 * The precision of the used timer (MILLISECONDS or NANOSECONDS).
+	 */
+	public static final String CONFIG_PROPERTY_NAME_TIMER = "timerPrecision";
+
 	private static final Log LOG = LogFactory.getLog(RealtimeRecordDelayFilter.class);
-	// TODO: Way might want to provide this property as a configuration property
-	private static final long WARN_ON_NEGATIVE_SCHED_TIME_NANOS = TimeUnit.NANOSECONDS.convert(2, TimeUnit.SECONDS);
+
+	private final TimeUnit timeunit;
+
+	private final String strTimerOrigin;
+	private final TimerWithPrecision timer;
+
+	private final long warnOnNegativeSchedTimeOrigin;
+	private final long warnOnNegativeSchedTime;
 
 	private final int numWorkers;
 
 	private final ScheduledThreadPoolExecutor executor;
-	private final long shutdownDelayNanos;
+	private final long shutdownDelay;
 
 	private volatile long startTime = -1;
 	private volatile long firstLoggingTimestamp;
 
-	private volatile long latestSchedulingTimeNanos = -1;
+	private volatile long latestSchedulingTime = -1;
 
-	public RealtimeRecordDelayFilter(final Configuration configuration) {
-		super(configuration);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 */
+	public RealtimeRecordDelayFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+
+		final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
+		TimeUnit recordTimeunit;
+		try {
+			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
+		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
+			LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
+			recordTimeunit = TimeUnit.NANOSECONDS;
+		}
+		this.timeunit = recordTimeunit;
+
+		this.strTimerOrigin = configuration.getStringProperty(CONFIG_PROPERTY_NAME_TIMER);
+		TimerWithPrecision tmpTimer;
+		try {
+			tmpTimer = TimerWithPrecision.valueOf(this.strTimerOrigin);
+		} catch (final IllegalArgumentException ex) {
+			LOG.warn(this.strTimerOrigin + " is no valid timer precision! Using MILLISECONDS instead.");
+			tmpTimer = TimerWithPrecision.MILLISECONDS;
+		}
+		this.timer = tmpTimer;
+
+		this.warnOnNegativeSchedTimeOrigin = this.configuration.getLongProperty(CONFIG_PROPERTY_NAME_WARN_NEGATIVE_DELAY_SECONDS);
+		this.warnOnNegativeSchedTime = this.timeunit.convert(this.warnOnNegativeSchedTimeOrigin, TimeUnit.SECONDS);
+
 		this.numWorkers = configuration.getIntProperty(CONFIG_PROPERTY_NAME_NUM_WORKERS);
-		this.shutdownDelayNanos =
-				TimeUnit.NANOSECONDS.convert(this.configuration.getLongProperty(CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS), TimeUnit.SECONDS);
+		this.shutdownDelay = this.timeunit.convert(this.configuration.getLongProperty(CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS), TimeUnit.SECONDS);
 
 		this.executor = new ScheduledThreadPoolExecutor(this.numWorkers);
 		this.executor.setExecuteExistingDelayedTasksAfterShutdownPolicy(true);
 		this.executor.setContinueExistingPeriodicTasksAfterShutdownPolicy(false);
 	}
 
+	/**
+	 * This method represents the input port of this filter.
+	 * 
+	 * @param monitoringRecord
+	 *            The next monitoring record.
+	 */
 	@InputPort(name = INPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class }, description = "Receives the records to be delayed")
 	public final void inputRecord(final IMonitoringRecord monitoringRecord) {
-		final long currentTimeNanos = this.currentTimeNanos();
+		final long currentTime = this.timer.getCurrentTime(this.timeunit);
 
 		synchronized (this) {
 			if (this.startTime == -1) { // init on first record
 				this.firstLoggingTimestamp = monitoringRecord.getLoggingTimestamp();
-				this.startTime = currentTimeNanos;
+				this.startTime = currentTime;
 			}
 
-			/*
-			 * Compute scheduling time
-			 */
-			long schedTimeNanosFromNow = (monitoringRecord.getLoggingTimestamp() - this.firstLoggingTimestamp) // relative to 1st record
-					- (currentTimeNanos - this.startTime); // substract elapsed time
-			if (schedTimeNanosFromNow < -WARN_ON_NEGATIVE_SCHED_TIME_NANOS) {
-				final long schedTimeSeconds = TimeUnit.SECONDS.convert(schedTimeNanosFromNow, TimeUnit.NANOSECONDS);
-				LOG.warn("negative scheduling time: " + schedTimeNanosFromNow + " (nanos) / " + schedTimeSeconds + " (seconds)-> scheduling with a delay of 0");
+			// Compute scheduling time
+			long schedTimeFromNow = (monitoringRecord.getLoggingTimestamp() - this.firstLoggingTimestamp) // relative to 1st record
+					- (currentTime - this.startTime); // substract elapsed time
+			if (schedTimeFromNow < -this.warnOnNegativeSchedTime) {
+				final long schedTimeSeconds = TimeUnit.SECONDS.convert(schedTimeFromNow, this.timeunit);
+				LOG.warn("negative scheduling time: " + schedTimeFromNow + " (" + this.timeunit.toString() + ") / " + schedTimeSeconds
+						+ " (seconds)-> scheduling with a delay of 0");
 			}
-			if (schedTimeNanosFromNow < 0) {
-				schedTimeNanosFromNow = 0; // i.e., schedule immediately
-			}
-
-			final long absSchedTime = currentTimeNanos + schedTimeNanosFromNow;
-			if (absSchedTime > this.latestSchedulingTimeNanos) {
-				this.latestSchedulingTimeNanos = absSchedTime;
+			if (schedTimeFromNow < 0) {
+				schedTimeFromNow = 0; // i.e., schedule immediately
 			}
 
-			/*
-			 * Schedule
-			 */
+			final long absSchedTime = currentTime + schedTimeFromNow;
+			if (absSchedTime > this.latestSchedulingTime) {
+				this.latestSchedulingTime = absSchedTime;
+			}
+
+			// Schedule
 			this.executor.schedule(new Runnable() {
 
 				public void run() {
-					RealtimeRecordDelayFilter.this.deliver(OUTPUT_PORT_NAME_RECORDS, monitoringRecord);
+					RealtimeRecordDelayFilter.this.deliverIndirect(OUTPUT_PORT_NAME_RECORDS, monitoringRecord);
 				}
-			}, schedTimeNanosFromNow, TimeUnit.NANOSECONDS);
+			}, schedTimeFromNow, this.timeunit);
 		}
 	}
 
-	/**
-	 * Returns the current time in nanoseconds since 1970.
-	 * 
-	 * TODO: Note that we only have a timer resolution of milliseconds here!
-	 * 
-	 * @return
-	 */
-	private long currentTimeNanos() {
-		return TimeUnit.NANOSECONDS.convert(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+	final boolean deliverIndirect(final String outputPortName, final Object data) { // NOPMD package for inner class
+		return this.deliver(outputPortName, data);
 	}
 
 	@Override
@@ -145,7 +193,7 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 
 		if (!error) {
 			long shutdownDelaySecondsFromNow =
-					TimeUnit.SECONDS.convert((this.latestSchedulingTimeNanos - this.currentTimeNanos()) + this.shutdownDelayNanos, TimeUnit.NANOSECONDS);
+					TimeUnit.SECONDS.convert((this.latestSchedulingTime - this.timer.getCurrentTime(this.timeunit)) + this.shutdownDelay, this.timeunit);
 			if (shutdownDelaySecondsFromNow < 0) {
 				shutdownDelaySecondsFromNow = 0;
 			}
@@ -160,11 +208,41 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
+
+		configuration.setProperty(CONFIG_PROPERTY_NAME_WARN_NEGATIVE_DELAY_SECONDS, Long.toString(this.warnOnNegativeSchedTimeOrigin));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_NUM_WORKERS, Integer.toString(this.numWorkers));
-		configuration.setProperty(CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS, Long.toString(this.shutdownDelayNanos));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_TIMER, this.strTimerOrigin);
+
+		configuration
+				.setProperty(CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS, Long.toString(TimeUnit.SECONDS.convert(this.shutdownDelay, this.timeunit)));
+
 		return configuration;
 	}
 
+	/**
+	 * @author Jan Waller
+	 */
+	private static enum TimerWithPrecision {
+		MILLISECONDS {
+			@Override
+			public long getCurrentTime(final TimeUnit timeunit) {
+				return timeunit.convert(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+			}
+
+		},
+		NANOSECONDS {
+			@Override
+			public long getCurrentTime(final TimeUnit timeunit) {
+				return timeunit.convert(System.nanoTime(), TimeUnit.NANOSECONDS);
+			}
+		};
+
+		public abstract long getCurrentTime(TimeUnit timeunit);
+	}
 }

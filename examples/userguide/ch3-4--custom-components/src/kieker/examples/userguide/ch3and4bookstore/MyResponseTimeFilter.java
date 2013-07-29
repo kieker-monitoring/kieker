@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package kieker.examples.userguide.ch3and4bookstore;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -44,10 +45,10 @@ public class MyResponseTimeFilter extends AbstractFilterPlugin {
 
 	private final long rtThresholdNanos; // the configured threshold for this filter instance
 
-	public MyResponseTimeFilter(final Configuration configuration) {
-		super(configuration);
-		this.rtThresholdNanos =
-				configuration.getLongProperty(CONFIG_PROPERTY_NAME_TS_NANOS);
+	public MyResponseTimeFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+
+		this.rtThresholdNanos = configuration.getLongProperty(CONFIG_PROPERTY_NAME_TS_NANOS);
 	}
 
 	public static final String INPUT_PORT_NAME_RESPONSE_TIMES = "newResponseTime";
@@ -64,6 +65,7 @@ public class MyResponseTimeFilter extends AbstractFilterPlugin {
 		}
 	}
 
+	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_TS_NANOS,

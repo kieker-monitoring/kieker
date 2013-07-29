@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
@@ -38,9 +39,17 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * {@link CurrentTimeEventGenerationFilter#inputRecord(kieker.common.record.IMonitoringRecord)}.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.3
  */
-// TODO: Test filter output port OUTPUT_PORT_NAME_CURRENT_TIME_VALUE
-public class TestCurrentTimeEventGeneratorFilter extends AbstractKiekerTest { // NOCS
+public class TestCurrentTimeEventGeneratorFilter extends AbstractKiekerTest {
+
+	/**
+	 * Default constructor.
+	 */
+	public TestCurrentTimeEventGeneratorFilter() {
+		// empty default constructor
+	}
 
 	@Test
 	public void testFirstRecordGeneratesEvent() throws IllegalStateException, AnalysisConfigurationException { // NOPMD (assert in method)
@@ -107,26 +116,29 @@ public class TestCurrentTimeEventGeneratorFilter extends AbstractKiekerTest { //
 	 * @param inputTimestamps
 	 * @param expectedOutputTimerEvents
 	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
+	 *             If the internally assembled analysis is in an invalid state.
 	 */
-	private void compareInputAndOutput(final long timerResolution, final long[] inputTimestamps, final long[] expectedOutputTimerEvents, final boolean rawTimestamp)
-			throws IllegalStateException, AnalysisConfigurationException {
-		final ListReader<Object> reader = new ListReader<Object>(new Configuration());
+	private void compareInputAndOutput(final long timerResolution, final long[] inputTimestamps, final long[] expectedOutputTimerEvents,
+			final boolean rawTimestamp) throws IllegalStateException, AnalysisConfigurationException {
+		final IAnalysisController controller = new AnalysisController();
+
+		final ListReader<Object> reader = new ListReader<Object>(new Configuration(), controller);
 		final Configuration filterConfiguration = new Configuration();
 		filterConfiguration.setProperty(CurrentTimeEventGenerationFilter.CONFIG_PROPERTY_NAME_TIME_RESOLUTION, Long.toString(timerResolution));
-		final CurrentTimeEventGenerationFilter filter = new CurrentTimeEventGenerationFilter(filterConfiguration);
+		final CurrentTimeEventGenerationFilter filter = new CurrentTimeEventGenerationFilter(filterConfiguration, controller);
 
-		final ListCollectionFilter<TimestampRecord> sink = new ListCollectionFilter<TimestampRecord>(new Configuration());
-		final AnalysisController controller = new AnalysisController();
-		controller.registerReader(reader);
-		controller.registerFilter(filter);
-		controller.registerFilter(sink);
+		final ListCollectionFilter<TimestampRecord> sinkRecord = new ListCollectionFilter<TimestampRecord>(new Configuration(), controller);
+		final ListCollectionFilter<Long> sinkLong = new ListCollectionFilter<Long>(new Configuration(), controller);
+
 		if (rawTimestamp) {
 			controller.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, CurrentTimeEventGenerationFilter.INPUT_PORT_NAME_NEW_TIMESTAMP);
 		} else {
 			controller.connect(reader, ListReader.OUTPUT_PORT_NAME, filter, CurrentTimeEventGenerationFilter.INPUT_PORT_NAME_NEW_RECORD);
 		}
-		controller.connect(filter, CurrentTimeEventGenerationFilter.OUTPUT_PORT_NAME_CURRENT_TIME_RECORD, sink, ListCollectionFilter.INPUT_PORT_NAME);
+		controller.connect(filter, CurrentTimeEventGenerationFilter.OUTPUT_PORT_NAME_CURRENT_TIME_RECORD, sinkRecord, ListCollectionFilter.INPUT_PORT_NAME);
+		controller.connect(filter, CurrentTimeEventGenerationFilter.OUTPUT_PORT_NAME_CURRENT_TIME_VALUE, sinkLong, ListCollectionFilter.INPUT_PORT_NAME);
 
 		for (final long timestamp : inputTimestamps) {
 			if (rawTimestamp) { // pass raw timestamp as long
@@ -140,15 +152,18 @@ public class TestCurrentTimeEventGeneratorFilter extends AbstractKiekerTest { //
 
 		controller.run();
 
-		final List<TimestampRecord> listRecords = sink.getList();
-		final long[] receivedTimestampsArr = new long[sink.size()];
+		final List<TimestampRecord> listRecords = sinkRecord.getList();
+		final List<Long> listLongs = sinkLong.getList();
+		final long[] receivedTimestampsArr = new long[listRecords.size()];
+		final long[] receivedRawTimestampsArr = new long[listLongs.size()];
 		for (int i = 0; i < receivedTimestampsArr.length; i++) {
 			receivedTimestampsArr[i] = listRecords.get(i).getTimestamp();
+			receivedRawTimestampsArr[i] = listLongs.get(i);
 		}
 
-		// final Long[] receivedTimestampsArr = dst.getList().toArray(new Long[dst.getList().size()]);
+		Assert.assertArrayEquals(receivedTimestampsArr, receivedRawTimestampsArr);
 
-		if (expectedOutputTimerEvents.length != sink.size()) {
+		if (expectedOutputTimerEvents.length != sinkRecord.size()) {
 			Assert.fail("Mismatach in sequence length while comparing timer event sequences" + "Expected: " + Arrays.toString(expectedOutputTimerEvents)
 					+ " Found: " + Arrays.toString(receivedTimestampsArr));
 		}

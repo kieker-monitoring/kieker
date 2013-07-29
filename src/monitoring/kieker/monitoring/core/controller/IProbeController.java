@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@ import java.util.List;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 public interface IProbeController {
 
@@ -30,6 +32,8 @@ public interface IProbeController {
 	 *            pattern for the probe
 	 * @return
 	 *         true on success
+	 * 
+	 * @since 1.6
 	 */
 	public boolean activateProbe(final String pattern);
 
@@ -40,28 +44,44 @@ public interface IProbeController {
 	 *            pattern for the probe
 	 * @return
 	 *         true on success
+	 * 
+	 * @since 1.6
 	 */
 	public boolean deactivateProbe(final String pattern);
 
 	/**
+	 * Tests if a probe is active.
+	 * 
+	 * This test is ignorant of the fact whether monitoring itself is enabled/disabled/terminated.
+	 * 
 	 * @param signature
 	 *            signature of the probe
 	 * @return
 	 *         true if the probe with this signature is active
+	 * 
+	 * @since 1.6
 	 */
 	public boolean isProbeActivated(final String signature);
 
 	/**
+	 * Overwrites the current list of patterns with a new pattern list.
+	 * 
 	 * @param patternList
 	 *            list of strings with patterns
 	 *            where each string starts either with a + or -
+	 * 
+	 * @since 1.6
 	 */
 	public void setProbePatternList(final List<String> patternList);
 
 	/**
+	 * Returns the current list of patterns with a prefix indicating whether the pattern is active or not.
+	 * 
 	 * @return
 	 *         list of strings with patterns
 	 *         where each string starts either with a + or -
+	 * 
+	 * @since 1.6
 	 */
 	public List<String> getProbePatternList();
 }

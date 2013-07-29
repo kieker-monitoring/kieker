@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,14 +28,18 @@ import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
  * @author Holger Knoche
  * 
  * @param <T>
+ * 
+ * @since 1.6
  */
 public abstract class AbstractDependencyGraphFormatterVisitor<T extends ISystemModelElement> implements
 		IGraphVisitor<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>> {
 
 	protected final StringBuilder builder; // NOPMD (AvoidStringBufferField)
-
+	/** The flag determining whether to include weights or not. */
 	protected final boolean includeWeights;
+	/** The flag determining whether to plot loops or not. */
 	protected final boolean plotLoops;
+	/** The flag determining whether to use short labels or not. */
 	protected final boolean useShortLabels;
 
 	/**
@@ -50,7 +54,8 @@ public abstract class AbstractDependencyGraphFormatterVisitor<T extends ISystemM
 	 * @param useShortLabels
 	 *            Indicates whether short labels should be used
 	 */
-	public AbstractDependencyGraphFormatterVisitor(final StringBuilder builder, final boolean includeWeights, final boolean plotLoops, final boolean useShortLabels) {
+	public AbstractDependencyGraphFormatterVisitor(final StringBuilder builder, final boolean includeWeights, final boolean plotLoops,
+			final boolean useShortLabels) {
 		this.builder = builder;
 		this.includeWeights = includeWeights;
 		this.plotLoops = plotLoops;

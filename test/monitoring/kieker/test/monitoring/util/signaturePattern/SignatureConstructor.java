@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * This helper class allows to easily create multiple signatures for test purposes. The class provides methods to add, for example, modificators and parameters,
+ * before assembling all possible signature variants from those values.
+ * 
  * @author Bjoern Weissenfels, Jan Waller
+ * 
+ * @since 1.6
  */
 public final class SignatureConstructor {
 
@@ -48,10 +53,18 @@ public final class SignatureConstructor {
 	private final List<String> parameterListList = new ArrayList<String>();
 	private final List<String> throwsListList = new ArrayList<String>();
 
+	/**
+	 * Default constructor.
+	 */
 	public SignatureConstructor() {
 		// empty default constructor
 	}
 
+	/**
+	 * This method assembles the signatures based on the content of the fields.
+	 * 
+	 * @return A list containing the signatures.
+	 */
 	public List<String> getSignatures() {
 		if (this.visibilityList.isEmpty()) {
 			this.visibilityList.add(SignatureConstructor.DEFAULT_VISIBILITY);
@@ -139,56 +152,144 @@ public final class SignatureConstructor {
 		return result;
 	}
 
+	/**
+	 * Adds the given string as a visibility modificator.
+	 * 
+	 * @param visibility
+	 *            The visibility modificator.
+	 * 
+	 * @return A reference to {@code this} in order to allow the chaining of the methods.
+	 */
 	public SignatureConstructor addVisibilityVariant(final String visibility) {
 		this.visibilityList.add(visibility);
 		return this;
 	}
 
+	/**
+	 * Adds the given string as an abstract or non abstract variant.
+	 * 
+	 * @param abstractNonAbstract
+	 *            The abstract or non abstract variant.
+	 * 
+	 * @return A reference to {@code this} in order to allow the chaining of the methods.
+	 */
 	public SignatureConstructor addAbstractNonAbstractVariant(final String abstractNonAbstract) {
 		this.abstractNonAbstractList.add(abstractNonAbstract);
 		return this;
 	}
 
+	/**
+	 * Adds the given string as a static or non static variant.
+	 * 
+	 * @param staticNonStatic
+	 *            The static or non static variant.
+	 * 
+	 * @return A reference to {@code this} in order to allow the chaining of the methods.
+	 */
 	public SignatureConstructor addStaticNonStaticVariant(final String staticNonStatic) {
 		this.staticNonStaticList.add(staticNonStatic);
 		return this;
 	}
 
+	/**
+	 * Adds the given string as a final or non final variant.
+	 * 
+	 * @param finalNonFinal
+	 *            The final or non final variant.
+	 * 
+	 * @return A reference to {@code this} in order to allow the chaining of the methods.
+	 */
 	public SignatureConstructor addFinalNonFinalVariant(final String finalNonFinal) {
 		this.finalNonFinalList.add(finalNonFinal);
 		return this;
 	}
 
+	/**
+	 * Adds the given string as a synchronized or non synchronized variant.
+	 * 
+	 * @param synchronizedNonSynchronized
+	 *            The synchronized or non synchronized variant.
+	 * 
+	 * @return A reference to {@code this} in order to allow the chaining of the methods.
+	 */
 	public SignatureConstructor addSynchronizedNonSynchronizedVariant(final String synchronizedNonSynchronized) {
 		this.synchronizedNonSynchronizedList.add(synchronizedNonSynchronized);
 		return this;
 	}
 
+	/**
+	 * Adds the given string as a native or non native variant.
+	 * 
+	 * @param nativeNonNative
+	 *            The native or non native variant.
+	 * 
+	 * @return A reference to {@code this} in order to allow the chaining of the methods.
+	 */
 	public SignatureConstructor addNativeNonNativeVariant(final String nativeNonNative) {
 		this.nativeNonNativeList.add(nativeNonNative);
 		return this;
 	}
 
+	/**
+	 * Adds the given string as a return type.
+	 * 
+	 * @param returnType
+	 *            The return type.
+	 * 
+	 * @return A reference to {@code this} in order to allow the chaining of the methods.
+	 */
 	public SignatureConstructor addreturnTypeVariant(final String returnType) {
 		this.returnTypeList.add(returnType);
 		return this;
 	}
 
+	/**
+	 * Adds the given string as a full qualified class name variant.
+	 * 
+	 * @param fqClassName
+	 *            The full qualified class name.
+	 * 
+	 * @return A reference to {@code this} in order to allow the chaining of the methods.
+	 */
 	public SignatureConstructor addfqClassNameVariant(final String fqClassName) {
 		this.fqClassNameList.add(fqClassName);
 		return this;
 	}
 
+	/**
+	 * Adds the given string as an operation name variant.
+	 * 
+	 * @param operationName
+	 *            The operation name.
+	 * 
+	 * @return A reference to {@code this} in order to allow the chaining of the methods.
+	 */
 	public SignatureConstructor addoperationNameVariant(final String operationName) {
 		this.operationNameList.add(operationName);
 		return this;
 	}
 
+	/**
+	 * Adds the given string as a parameter list variant.
+	 * 
+	 * @param parameterList
+	 *            The parameter list.
+	 * 
+	 * @return A reference to {@code this} in order to allow the chaining of the methods.
+	 */
 	public SignatureConstructor addparameterListVariant(final String parameterList) {
 		this.parameterListList.add(parameterList);
 		return this;
 	}
 
+	/**
+	 * Adds the given string as a throws list variant.
+	 * 
+	 * @param throwsList
+	 *            The throws list.
+	 * 
+	 * @return A reference to {@code this} in order to allow the chaining of the methods.
+	 */
 	public SignatureConstructor addthrowsListVariant(final String throwsList) {
 		this.throwsListList.add(throwsList);
 		return this;

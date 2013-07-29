@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.5
  */
 public class TestOperationExecutionRecordConstructors extends AbstractKiekerTest {
 
@@ -38,7 +39,7 @@ public class TestOperationExecutionRecordConstructors extends AbstractKiekerTest
 	}
 
 	/**
-	 * Tests {@link OperationExecutionRecord#OperationExecutionRecord(String, String, long, long, long, String, int, int)}
+	 * Tests {@link OperationExecutionRecord#OperationExecutionRecord(String, String, long, long, long, String, int, int)}.
 	 */
 	@Test
 	public void testSignatureStringSessionIDTraceIDTinToutEoiEss() { // NOPMD (assert missing)

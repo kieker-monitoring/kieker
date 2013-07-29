@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,35 +17,33 @@
 package kieker.monitoring.timer;
 
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.3
  */
 public abstract class AbstractTimeSource implements ITimeSource {
-	private static final Log LOG = LogFactory.getLog(AbstractTimeSource.class);
 
-	protected final Configuration configuration;
-
+	/**
+	 * This constructor initializes the class using the given configuration.
+	 * 
+	 * @param configuration
+	 *            The configuration for this time source.
+	 */
 	protected AbstractTimeSource(final Configuration configuration) {
-		try {
-			// somewhat dirty hack...
-			final Configuration defaultConfig = this.getDefaultConfiguration(); // NOPMD (overrideable)
-			if (defaultConfig != null) {
-				configuration.setDefaultConfiguration(defaultConfig);
-			}
-		} catch (final IllegalAccessException ex) {
-			LOG.error("Unable to set timer custom default properties"); // ok to ignore ex here
+		// somewhat dirty hack...
+		final Configuration defaultConfig = this.getDefaultConfiguration(); // NOPMD (overrideable)
+		if (defaultConfig != null) {
+			configuration.setDefaultConfiguration(defaultConfig);
 		}
-		this.configuration = configuration;
 	}
 
 	/**
 	 * This method should be overwritten, iff the timer is external to Kieker and
 	 * thus its default configuration is not included in the default config file.
 	 * 
-	 * @return
+	 * @return The configuration object containing the default configuration.
 	 */
 	protected Configuration getDefaultConfiguration() { // NOPMD (default implementation)
 		return null;

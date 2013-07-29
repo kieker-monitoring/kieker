@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
@@ -37,6 +38,8 @@ import kieker.common.record.IMonitoringRecord;
  * A very simple database reader that probably only works for small data sets.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 @Plugin(description = "A reader which reads records from a database",
 		outputPorts = {
@@ -52,10 +55,14 @@ import kieker.common.record.IMonitoringRecord;
 		})
 public class DbReader extends AbstractReaderPlugin {
 
+	/** This is the name of the outport port delivering the records from the database. */
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
 
+	/** The name of the property containing the class name of the driver. */
 	public static final String CONFIG_PROPERTY_NAME_DRIVERCLASSNAME = "DriverClassname";
+	/** The name of the property containing the string to connect to the database. */
 	public static final String CONFIG_PROPERTY_NAME_CONNECTIONSTRING = "ConnectionString";
+	/** The name of the property containing the prefix for the tables to read. */
 	public static final String CONFIG_PROPERTY_NAME_TABLEPREFIX = "TablePrefix";
 
 	private static final Log LOG = LogFactory.getLog(DbReader.class);
@@ -66,8 +73,20 @@ public class DbReader extends AbstractReaderPlugin {
 
 	private volatile boolean running = true;
 
-	public DbReader(final Configuration configuration) throws Exception {
-		super(configuration);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 * 
+	 * @throws Exception
+	 *             If the driver for the database could not be found.
+	 */
+	public DbReader(final Configuration configuration, final IProjectContext projectContext) throws Exception {
+		super(configuration, projectContext);
+
 		this.driverClassname = configuration.getStringProperty(CONFIG_PROPERTY_NAME_DRIVERCLASSNAME);
 		this.connectionString = configuration.getStringProperty(CONFIG_PROPERTY_NAME_CONNECTIONSTRING);
 		this.tablePrefix = configuration.getStringProperty(CONFIG_PROPERTY_NAME_TABLEPREFIX);
@@ -78,6 +97,9 @@ public class DbReader extends AbstractReaderPlugin {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean read() {
 		Connection connection = null;
 		try {
@@ -124,8 +146,22 @@ public class DbReader extends AbstractReaderPlugin {
 		return true;
 	}
 
-	private void table2record(final Connection connection, final String tablename, final Class<? extends IMonitoringRecord> clazz)
-			throws SQLException, MonitoringRecordException {
+	/**
+	 * This method uses the given table to read records and sends them to the output port.
+	 * 
+	 * @param connection
+	 *            The connection to the database which will be used.
+	 * @param tablename
+	 *            The name of the table containing records.
+	 * @param clazz
+	 *            The class of the monitoring records. This will be used to convert the array into the record.
+	 * @throws SQLException
+	 *             If something went wrong during the database access.
+	 * @throws MonitoringRecordException
+	 *             If the data within the table could not be converted into a valid record.
+	 */
+	private void table2record(final Connection connection, final String tablename, final Class<? extends IMonitoringRecord> clazz) throws SQLException,
+			MonitoringRecordException {
 		Statement selectRecord = null;
 		try {
 			selectRecord = connection.createStatement();
@@ -154,11 +190,18 @@ public class DbReader extends AbstractReaderPlugin {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void terminate(final boolean error) {
 		LOG.info("Shutdown of DBReader requested.");
 		this.running = false;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_DRIVERCLASSNAME, this.driverClassname);

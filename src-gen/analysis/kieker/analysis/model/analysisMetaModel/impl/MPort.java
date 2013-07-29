@@ -27,6 +27,7 @@ import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
  * <ul>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MPort#getName <em>Name</em>}</li>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MPort#getEventTypes <em>Event Types</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MPort#getId <em>Id</em>}</li>
  * </ul>
  * </p>
  *
@@ -62,6 +63,26 @@ public abstract class MPort extends EObjectImpl implements MIPort {
 	 * @ordered
 	 */
 	protected EList<String> eventTypes;
+
+	/**
+	 * The default value of the '{@link #getId() <em>Id</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getId()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String ID_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getId() <em>Id</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getId()
+	 * @generated
+	 * @ordered
+	 */
+	protected String id = ID_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -120,6 +141,27 @@ public abstract class MPort extends EObjectImpl implements MIPort {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getId() {
+		return id;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setId(String newId) {
+		String oldId = id;
+		id = newId;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, MIAnalysisMetaModelPackage.PORT__ID, oldId, id));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -127,6 +169,8 @@ public abstract class MPort extends EObjectImpl implements MIPort {
 				return getName();
 			case MIAnalysisMetaModelPackage.PORT__EVENT_TYPES:
 				return getEventTypes();
+			case MIAnalysisMetaModelPackage.PORT__ID:
+				return getId();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -147,6 +191,9 @@ public abstract class MPort extends EObjectImpl implements MIPort {
 				getEventTypes().clear();
 				getEventTypes().addAll((Collection<? extends String>)newValue);
 				return;
+			case MIAnalysisMetaModelPackage.PORT__ID:
+				setId((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -165,6 +212,9 @@ public abstract class MPort extends EObjectImpl implements MIPort {
 			case MIAnalysisMetaModelPackage.PORT__EVENT_TYPES:
 				getEventTypes().clear();
 				return;
+			case MIAnalysisMetaModelPackage.PORT__ID:
+				setId(ID_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -181,6 +231,8 @@ public abstract class MPort extends EObjectImpl implements MIPort {
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case MIAnalysisMetaModelPackage.PORT__EVENT_TYPES:
 				return eventTypes != null && !eventTypes.isEmpty();
+			case MIAnalysisMetaModelPackage.PORT__ID:
+				return ID_EDEFAULT == null ? id != null : !ID_EDEFAULT.equals(id);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -199,6 +251,8 @@ public abstract class MPort extends EObjectImpl implements MIPort {
 		result.append(name);
 		result.append(", eventTypes: ");
 		result.append(eventTypes);
+		result.append(", id: ");
+		result.append(id);
 		result.append(')');
 		return result.toString();
 	}

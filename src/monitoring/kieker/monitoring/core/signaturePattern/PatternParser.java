@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,20 +19,41 @@ package kieker.monitoring.core.signaturePattern;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 /**
- * TODO: review and restructure this class
- * 
  * @author Bjoern Weissenfels, Jan Waller
+ * 
+ * @since 1.6
  */
 public final class PatternParser {
 
+	/**
+	 * Private constructor to avoid initialization.
+	 */
 	private PatternParser() {
 		// private default constructor
 	}
 
+	/**
+	 * Parses the given pattern string and converts it into a {@link Pattern} instance.
+	 * 
+	 * @param strPattern
+	 *            The pattern string to parse.
+	 * @return A corresponding pattern to the given string.
+	 * 
+	 * @throws InvalidPatternException
+	 *             If the given string is not a valid pattern.
+	 */
 	public static final Pattern parseToPattern(final String strPattern) throws InvalidPatternException {
 		final String trimPattern = strPattern.trim();
+		if (trimPattern.charAt(0) == SignatureFactory.PATTERN_PREFIX) {
+			try {
+				return Pattern.compile(trimPattern);
+			} catch (final PatternSyntaxException pse) {
+				throw new InvalidPatternException("Invalid regular expression", pse);
+			}
+		}
 		final StringBuilder sb = new StringBuilder();
 		if ("*".equals(trimPattern)) {
 			sb.append(".*");
@@ -295,7 +316,7 @@ public final class PatternParser {
 		if (modifierList == null) {
 			return "((public|private|protected)\\s)?(abstract\\s)?(static\\s)?(final\\s)?(synchronized\\s)?(native\\s)?";
 		}
-		final Map<String, Integer> allowedModifiersWithOrder = new HashMap<String, Integer>();
+		final Map<String, Integer> allowedModifiersWithOrder = new HashMap<String, Integer>(); // NOPMD (no conc. access)
 		allowedModifiersWithOrder.put("public", 0);
 		allowedModifiersWithOrder.put("private", 0);
 		allowedModifiersWithOrder.put("protected", 0);

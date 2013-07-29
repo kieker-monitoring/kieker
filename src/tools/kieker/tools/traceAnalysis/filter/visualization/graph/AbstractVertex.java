@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,8 +32,9 @@ import java.util.concurrent.ConcurrentHashMap;
  *            The type of the graph's edges
  * @param <O>
  *            The type of object from which the graph's elements originate
+ * 
+ * @since 1.6
  */
-
 public abstract class AbstractVertex<V extends AbstractVertex<V, E, O>, E extends AbstractEdge<V, E, O>, O> extends AbstractGraphElement<O> {
 
 	private final Map<Class<? extends AbstractVertexDecoration>, AbstractVertexDecoration> decorations = new ConcurrentHashMap<Class<? extends AbstractVertexDecoration>, AbstractVertexDecoration>(); // NOPMD(UseConcurrentHashMap)//NOCS

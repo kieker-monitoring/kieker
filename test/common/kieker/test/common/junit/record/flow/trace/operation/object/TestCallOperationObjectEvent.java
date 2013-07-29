@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,8 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.6
  */
 public class TestCallOperationObjectEvent extends AbstractKiekerTest {
 
@@ -38,6 +40,9 @@ public class TestCallOperationObjectEvent extends AbstractKiekerTest {
 	private static final int CALLER_OBJECT_ID = 42;
 	private static final int CALLEE_OBJECT_ID = 666;
 
+	/**
+	 * Default constructor.
+	 */
 	public TestCallOperationObjectEvent() {
 		// empty default constructor
 	}

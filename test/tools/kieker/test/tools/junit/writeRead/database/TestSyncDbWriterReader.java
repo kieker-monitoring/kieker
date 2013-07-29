@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,13 @@ import kieker.monitoring.writer.database.SyncDbWriter;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public final class TestSyncDbWriterReader extends AbstractTestDbWriterReader { // NOPMD (TestClassWithoutTestCases)
-
+	/**
+	 * Default constructor.
+	 */
 	public TestSyncDbWriterReader() {
 		// empty default constructor
 	}
@@ -34,6 +38,7 @@ public final class TestSyncDbWriterReader extends AbstractTestDbWriterReader { /
 	@Override
 	protected IMonitoringController createController(final int numRecordsWritten) throws Exception {
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
+		config.setProperty(ConfigurationFactory.METADATA, "false");
 		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, SyncDbWriter.class.getName());
 		config.setProperty(SyncDbWriter.CONFIG_DRIVERCLASSNAME, DRIVERCLASSNAME);
 		config.setProperty(SyncDbWriter.CONFIG_CONNECTIONSTRING, this.getConnectionString() + ";create=true");

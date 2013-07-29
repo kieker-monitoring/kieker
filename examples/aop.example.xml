@@ -1,22 +1,26 @@
 <!DOCTYPE aspectj PUBLIC "-//AspectJ//DTD//EN" "http://www.aspectj.org/dtd/aspectj_1_5_0.dtd">
 
 <aspectj>
-	<weaver options=""> <!-- options="-verbose -showWeaveInfo" -->
+	<weaver options=""> <!-- options="-verbose -showWeaveInfo -Xjoinpoints:synchronization" -->
 
 		<!-- Use the exclude/include directives to specify which classes are (not) to be considered for weaving.
 		     Some examples are given below. -->
 
-		<!-- instrument the kieker.tests -->
-		<include within="kieker.tests..*" />
-
 		<!-- Use * to consider all classes. In this case, you typically need some additional excludes. -->
-		<!-- <include within="*"/> -->
-		<!-- This would cause problems with * ?!? -->
+		<include within="*"/>
+
+		<!-- The monitoring solution used within in Kieker must not be monitored! -->
 		<!-- <exclude within="org.apache.commons.logging..*" />  -->
+		<!-- <exclude within="org.slf4j..*" />  -->
+		<!-- <exclude within="java.util.logging..*" />  -->
+		<!-- <exclude within="org.apache.log4j..*" />  -->
+
+		<!-- instrument the kieker.tests -->
+		<!-- <include within="kieker.tests..*" /> -->
 
 		<!-- Example instrumentation for the iBATIS JPetStore -->
-		<!--<include within="com.ibatis.jpetstore..*"/> -->
-		<!--<include within="org.apache.struts.action.ActionServlet" /> -->
+		<!-- <include within="com.ibatis.jpetstore..*"/> -->
+		<!-- <include within="org.apache.struts.action.ActionServlet" /> -->
 
 		<!-- Example instrumentation for Sun's Java Pet Store -->
 		<!-- <include within="com.sun.j2ee.blueprints..*"/> -->
@@ -26,25 +30,26 @@
 		<!-- Instrumentation of the dacapo eclipse benchmark -->
 		<!-- <include within="org.eclipse..*"/> -->
 
-		<!-- include this to avoid using ajc to compile the probes -->
-		<!--<include within="kieker.monitoring.probe.aspectj..*"/> -->
+		<!-- include this to enable javac compilation (instead of ajc) of the probes -->
+		<!-- <include within="kieker.monitoring.probe.aspectj..*"/> -->
 	</weaver>
 
 	<aspects>
 		<!-- Use the aspect directives to specify the aspect(s) to use (typically only one). -->
 
-		<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectAnnotation" />
-		<!--<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectAnnotationServlet"/> -->
-		<!--<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFull"/> -->
-		<!--<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFullNoGetterAndSetter"/> -->
-		<!--<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFullServlet"/> -->
-		<!--<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFullNoGetterAndSetterServlet"/> -->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectAnnotation"/> -->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectAnnotationServlet"/> -->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFull"/> -->
+		<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFullNoGetterAndSetter"/>
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFullServlet"/> -->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFullNoGetterAndSetterServlet"/> -->
 		
 		<!-- KiekerFlow Aspects -->
 		<!-- ################## -->
 		
 		<!-- Concurrency -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.concurrency.ThreadingAspect" /> -->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.concurrency.SynchronizedAspect" /> -->
 		
 		<!-- Construction -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.construction.FullInstrumentation" /> -->

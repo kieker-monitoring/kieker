@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,22 +17,22 @@
 package kieker.tools.traceAnalysis.systemModel;
 
 import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubRepository;
+import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * Specific subtype for the root execution container.
  * 
  * @author Holger Knoche
  * 
+ * @since 1.6
  */
 public class RootExecutionContainer extends ExecutionContainer {
-
-	private static final String ROOT_EXECUTION_CONTAINER_NAME = "$";
 
 	/**
 	 * Creates a new root execution container.
 	 */
 	public RootExecutionContainer() {
-		super(AbstractSystemSubRepository.ROOT_ELEMENT_ID, null, ROOT_EXECUTION_CONTAINER_NAME);
+		super(AbstractSystemSubRepository.ROOT_ELEMENT_ID, null, SystemModelRepository.ROOT_NODE_LABEL);
 	}
 
 	@Override

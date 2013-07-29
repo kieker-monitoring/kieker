@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 import kieker.common.configuration.Configuration;
@@ -38,6 +38,8 @@ import kieker.monitoring.writer.AbstractMonitoringWriter;
  * Warning! This class is an academic prototype and not intended for usage in any critical system.
  * 
  * @author Jan Waller
+ * 
+ * @since < 0.9
  */
 public final class SyncDbWriter extends AbstractMonitoringWriter {
 	private static final String PREFIX = SyncDbWriter.class.getName() + ".";
@@ -51,10 +53,21 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 	private final Connection connection;
 	private final DBWriterHelper helper;
 
-	private final Map<Class<? extends IMonitoringRecord>, PreparedStatement> recordTypeInformation = new ConcurrentHashMap<Class<? extends IMonitoringRecord>, PreparedStatement>(); // NOPMD
+	private final ConcurrentMap<Class<? extends IMonitoringRecord>, PreparedStatement> recordTypeInformation =
+			new ConcurrentHashMap<Class<? extends IMonitoringRecord>, PreparedStatement>();
 
 	private final AtomicLong recordId = new AtomicLong();
 
+	/**
+	 * 
+	 * Creates a new instance of this class using the given parameter.
+	 * 
+	 * @param configuration
+	 *            The configuration which will be used to initialize this writer.
+	 * 
+	 * @throws Exception
+	 *             If the constructor failed to establish a connection to the database.
+	 */
 	public SyncDbWriter(final Configuration configuration) throws Exception {
 		super(configuration);
 		try {
@@ -78,6 +91,9 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 		// nothing to do
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
 		final Class<? extends IMonitoringRecord> recordClass = record.getClass();
 		final String recordClassName = recordClass.getSimpleName();
@@ -101,8 +117,13 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 				final PreparedStatement preparedStatement = this.connection.prepareStatement("INSERT INTO " + tableName + " VALUES (" + sb.toString() + ")");
 				this.recordTypeInformation.put(recordClass, preparedStatement);
 			} catch (final SQLException ex) {
-				LOG.error("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
-				return false;
+				if (null == ex.getSQLState()) { // probably an exception by Kieker
+					LOG.error("Unable to log records of type " + recordClass.getName() + ": " + ex.getMessage());
+					return true; // we ignore this kind of error
+				} else {
+					LOG.error("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
+					return false;
+				}
 			}
 		}
 		try {
@@ -125,6 +146,9 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void terminate() {
 		try {
 			// close all prepared statements

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +19,24 @@ package kieker.tools.traceAnalysis.systemModel;
 /**
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 public class AssemblyComponent implements ISystemModelElement {
 	private final int id;
 	private final String name;
 	private final ComponentType type;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param id
+	 *            The ID of this assembly component.
+	 * @param name
+	 *            The name of this component.
+	 * @param type
+	 *            The type of this component.
+	 */
 	public AssemblyComponent(final int id, final String name, final ComponentType type) {
 		this.id = id;
 		this.name = name;

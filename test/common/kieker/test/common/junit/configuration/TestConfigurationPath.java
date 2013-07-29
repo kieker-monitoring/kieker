@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 
 package kieker.test.common.junit.configuration;
 
+import java.io.File;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -25,6 +27,8 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 public class TestConfigurationPath extends AbstractKiekerTest {
 
@@ -34,8 +38,16 @@ public class TestConfigurationPath extends AbstractKiekerTest {
 		"./x", "x",
 		"../x\\y\\.././x", "../x/x",
 		"C:\\Temp\\x.txt", "C:/Temp/x.txt",
+		"out/containerDependencyGraph.dot", "out/containerDependencyGraph.dot",
+		"out" + File.separator + File.separator + "containerDependencyGraph.dot", "out/containerDependencyGraph.dot",
+		"out/", "out/",
+		"/", "/",
+		"././", "",
 	};
 
+	/**
+	 * Default constructor.
+	 */
 	public TestConfigurationPath() {
 		// empty default constructor
 	}
@@ -47,4 +59,5 @@ public class TestConfigurationPath extends AbstractKiekerTest {
 			Assert.assertEquals(paths[i + 1], Configuration.convertToPath(paths[i]));
 		}
 	}
+
 }

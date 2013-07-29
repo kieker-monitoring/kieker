@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,11 @@ import kieker.tools.traceAnalysis.systemModel.ISystemModelElement;
 import kieker.tools.traceAnalysis.systemModel.Operation;
 
 /**
+ * This class represents a pair consisting of an {@link Operation} and an {@link AllocationComponent}.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 public class AllocationComponentOperationPair implements ISystemModelElement {
 	private final int id;
@@ -30,6 +33,16 @@ public class AllocationComponentOperationPair implements ISystemModelElement {
 
 	private final AllocationComponent allocationComponent;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param id
+	 *            The ID of this pair.
+	 * @param operation
+	 *            The operation.
+	 * @param allocationComponent
+	 *            The allocation component.
+	 */
 	public AllocationComponentOperationPair(final int id, final Operation operation, final AllocationComponent allocationComponent) {
 		this.id = id;
 		this.operation = operation;

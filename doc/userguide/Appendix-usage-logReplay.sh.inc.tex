@@ -1,13 +1,23 @@
 usage: kieker.tools.logReplayer.FilesystemLogReplayerStarter
- -i,--inputdirs <dir1 ... dirN>                      Log directories to read data from
-    --ignore-records-after-date <yyyyMMdd-HHmmss>    Records logged after this date
-                                                     (UTC timezone) are ignored
-                                                     (disabled by default).
-    --ignore-records-before-date <yyyyMMdd-HHmmss>   Records logged before this date 
-                                                     (UTC timezone) are ignored
-                                                     (disabled by default).
- -k,--keep-logging-timestamps <true|false>           Replay the original logging 
-                                                     timestamps (defaults to true)?)
- -n,--realtime-worker-threads <num>                  Number of worker threads used in
-                                                     realtime mode (defaults to 1).
- -r,--realtime <true|false>                          Replay log data in realtime?
+ --c,--monitoring.configuration <\path\to\monitoring.properties>
+        Configuration to use for the Kieker monitoring instance
+
+ --i,--inputdirs <dir1 ... dirN>
+        Log directories to read data from
+
+    --ignore-records-after-date <yyyyMMdd-HHmmss>
+        Records logged after this date (UTC timezone) are ignored
+        (disabled by default).
+
+    --ignore-records-before-date <yyyyMMdd-HHmmss>
+        Records logged before this date (UTC timezone) are ignored
+        (disabled by default).
+
+ --k,--keep-logging-timestamps <true|false>
+        Replay the original logging timestamps (defaults to true)?)
+
+ --n,--realtime-worker-threads <num>
+        Number of worker threads used in realtime mode (defaults to 1).
+
+ --r,--realtime <true|false>
+        Replay log data in realtime?. 

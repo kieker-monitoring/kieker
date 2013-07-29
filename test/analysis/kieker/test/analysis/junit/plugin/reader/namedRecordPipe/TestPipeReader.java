@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,38 +35,37 @@ import kieker.test.common.util.namedRecordPipe.NamedPipeWriterFactory;
  * A simple test for the class <code>PipeReader</code>.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.4
  */
 public class TestPipeReader extends AbstractKiekerTest { // NOCS (MissingCtorCheck)
 	// private static final Log log = LogFactory.getLog(TestPipeReader.class);
 
 	@Test
 	public void testNamedPipeReaderReceivesFromPipe() throws IllegalStateException, AnalysisConfigurationException {
+		// the analysis controller
+		final AnalysisController analysis = new AnalysisController();
+
 		// the pipe
 		final String pipeName = NamedPipeWriterFactory.createPipeName();
 
 		// the reader
 		final Configuration readerConfiguration = new Configuration();
 		readerConfiguration.setProperty(PipeReader.CONFIG_PROPERTY_NAME_PIPENAME, pipeName);
-		final PipeReader pipeReader = new PipeReader(readerConfiguration);
+		final PipeReader pipeReader = new PipeReader(readerConfiguration, analysis);
 
 		// the consumer
 		final Configuration countinConfiguration = new Configuration();
-		final CountingFilter countingFilter = new CountingFilter(countinConfiguration);
+		final CountingFilter countingFilter = new CountingFilter(countinConfiguration, analysis);
 
 		// the writer
 		final IPipeWriter writer = NamedPipeWriterFactory.createAndRegisterNamedPipeRecordWriter(pipeName);
 
-		// the analysis controller
-		final AnalysisController analysis = new AnalysisController();
-		analysis.registerReader(pipeReader);
-		analysis.registerFilter(countingFilter);
 		analysis.connect(pipeReader, PipeReader.OUTPUT_PORT_NAME_RECORDS, countingFilter, CountingFilter.INPUT_PORT_NAME_EVENTS);
 
 		final AnalysisControllerThread analysisThread = new AnalysisControllerThread(analysis);
 		analysisThread.start(); // start asynchronously
-		/*
-		 * Send 7 dummy records
-		 */
+		// Send 7 dummy records
 		final int numRecordsToSend = 7;
 		for (int i = 0; i < numRecordsToSend; i++) {
 			writer.newMonitoringRecord(new EmptyRecord());
@@ -75,9 +74,7 @@ public class TestPipeReader extends AbstractKiekerTest { // NOCS (MissingCtorChe
 		analysisThread.terminate();
 		Assert.assertEquals(AnalysisController.STATE.TERMINATED, analysis.getState());
 
-		/*
-		 * Make sure that numRecordsToSend where read.
-		 */
+		// Make sure that numRecordsToSend where read.
 		Assert.assertEquals("Unexpected number of records received", numRecordsToSend, countingFilter.getMessageCount());
 	}
 }

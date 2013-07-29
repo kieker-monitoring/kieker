@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package kieker.tools.traceAnalysis.systemModel;
 
 import kieker.tools.traceAnalysis.systemModel.repository.AbstractSystemSubRepository;
+import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.tools.traceAnalysis.systemModel.repository.TypeRepository;
 
 /**
@@ -24,16 +25,16 @@ import kieker.tools.traceAnalysis.systemModel.repository.TypeRepository;
  * 
  * @author Holger Knoche
  * 
+ * @since 1.6
+ * 
  */
 public class RootAssemblyComponent extends AssemblyComponent {
-
-	private static final String ROOT_COMPONENT_NAME = "$";
 
 	/**
 	 * Creates a new root assembly component.
 	 */
 	public RootAssemblyComponent() {
-		super(AbstractSystemSubRepository.ROOT_ELEMENT_ID, ROOT_COMPONENT_NAME, TypeRepository.ROOT_COMPONENT);
+		super(AbstractSystemSubRepository.ROOT_ELEMENT_ID, SystemModelRepository.ROOT_NODE_LABEL, TypeRepository.ROOT_COMPONENT);
 	}
 
 	@Override

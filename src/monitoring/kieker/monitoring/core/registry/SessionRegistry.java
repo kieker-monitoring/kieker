@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,11 @@ package kieker.monitoring.core.registry;
 
 /**
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.3
  */
 public enum SessionRegistry { // Singleton (Effective Java #3)
+	/** The singleton instance. */
 	INSTANCE;
 
 	private final ThreadLocal<String> threadLocalSessionId = new ThreadLocal<String>();
@@ -29,6 +32,9 @@ public enum SessionRegistry { // Singleton (Effective Java #3)
 	/**
 	 * Used by the spring aspect to explicitly register a sessionid that is to be collected within a servlet method (that knows the request object).
 	 * The thread is responsible for invalidating the stored curTraceId using the method unsetThreadLocalSessionId()!
+	 * 
+	 * @param sessionId
+	 *            The session ID.
 	 */
 	public final void storeThreadLocalSessionId(final String sessionId) {
 		this.threadLocalSessionId.set(sessionId);

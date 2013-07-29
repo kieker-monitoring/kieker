@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package kieker.tools.traceAnalysis.filter.flow;
 
 import java.util.Stack;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -39,23 +40,30 @@ import kieker.common.record.flow.trace.operation.constructor.AfterConstructorEve
 import kieker.common.record.flow.trace.operation.constructor.AfterConstructorFailedEvent;
 import kieker.common.record.flow.trace.operation.constructor.BeforeConstructorEvent;
 import kieker.common.record.flow.trace.operation.constructor.CallConstructorEvent;
-import kieker.common.util.ClassOperationSignaturePair;
-import kieker.common.util.Signature;
+import kieker.common.util.signature.ClassOperationSignaturePair;
+import kieker.common.util.signature.Signature;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.traceReconstruction.InvalidTraceException;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
+import kieker.tools.traceAnalysis.systemModel.InvalidExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * @author Andre van Hoorn, Holger Knoche, Jan Waller
+ * 
+ * @since 1.6
  */
 @Plugin(description = "Transforms incoming TraceEventRecords into execution and message traces",
 		outputPorts = {
-			@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE, description = "Outputs transformed execution traces", eventTypes = { ExecutionTrace.class }),
-			@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE, description = "Outputs transformed message traces", eventTypes = { MessageTrace.class }) },
+			@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
+					description = "Outputs transformed execution traces", eventTypes = { ExecutionTrace.class }),
+			@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+					description = "Outputs transformed message traces", eventTypes = { MessageTrace.class }),
+			@OutputPort(name = TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE,
+					description = "Invalid Execution Traces", eventTypes = { InvalidExecutionTrace.class }) },
 		repositoryPorts = {
 			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
 		},
@@ -65,24 +73,43 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 		})
 public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTraceProcessingFilter {
 
+	/** This is the name of the input port receiving new trace events. */
 	public static final String INPUT_PORT_NAME_EVENT_TRACE = "traceEvents";
+
+	/** This is the name of the output port delivering the execution traces. */
 	public static final String OUTPUT_PORT_NAME_EXECUTION_TRACE = "executionTrace";
+	/** This is the name of the output port delivering the message traces. */
 	public static final String OUTPUT_PORT_NAME_MESSAGE_TRACE = "messageTrace";
+	/** This is the name of the output port delivering invalid traces. */
+	public static final String OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE = "invalidTrace";
 
 	public static final String CONFIG_ENHANCE_JAVA_CONSTRUCTORS = "enhanceJavaConstructors";
 	public static final String CONFIG_ENHANCE_CALL_DETECTION = "enhanceCallDetection";
 
-	private static final Log LOG = LogFactory.getLog(TraceEventRecords2ExecutionAndMessageTraceFilter.class);
+	static final Log LOG = LogFactory.getLog(TraceEventRecords2ExecutionAndMessageTraceFilter.class); // NOPMD package for inner class
 
 	private final boolean enhanceJavaConstructors;
 	private final boolean enhanceCallDetection;
 
-	public TraceEventRecords2ExecutionAndMessageTraceFilter(final Configuration configuration) {
-		super(configuration);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 */
+	public TraceEventRecords2ExecutionAndMessageTraceFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+
 		this.enhanceJavaConstructors = configuration.getBooleanProperty(CONFIG_ENHANCE_JAVA_CONSTRUCTORS);
 		this.enhanceCallDetection = configuration.getBooleanProperty(CONFIG_ENHANCE_CALL_DETECTION);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_ENHANCE_JAVA_CONSTRUCTORS, String.valueOf(this.enhanceJavaConstructors));
@@ -90,6 +117,12 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 		return configuration;
 	}
 
+	/**
+	 * This method represents the input port, processing incoming trace event records.
+	 * 
+	 * @param traceEventRecords
+	 *            The next trace event record.
+	 */
 	@InputPort(name = INPUT_PORT_NAME_EVENT_TRACE, description = "Receives TraceEvents to be transformed", eventTypes = { TraceEventRecords.class })
 	public void inputTraceEvents(final TraceEventRecords traceEventRecords) {
 		final Trace trace = traceEventRecords.getTrace();
@@ -118,20 +151,17 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 				} else if (AfterOperationEvent.class.equals(event.getClass())) {
 					traceEventRecordHandler.handleAfterOperationEvent((AfterOperationEvent) event);
 				} else if (AfterOperationFailedEvent.class.equals(event.getClass())) {
-					// TODO: use an own handler?
-					traceEventRecordHandler.handleAfterOperationEvent((AfterOperationFailedEvent) event);
+					traceEventRecordHandler.handleAfterOperationFailedEvent((AfterOperationFailedEvent) event);
 				} else if (BeforeConstructorEvent.class.equals(event.getClass())) {
 					traceEventRecordHandler.handleBeforeConstructorEvent((BeforeConstructorEvent) event);
 				} else if (AfterConstructorEvent.class.equals(event.getClass())) {
 					traceEventRecordHandler.handleAfterConstructorEvent((AfterConstructorEvent) event);
 				} else if (AfterConstructorFailedEvent.class.equals(event.getClass())) {
-					// TODO: use an own handler?
-					traceEventRecordHandler.handleAfterConstructorEvent((AfterConstructorFailedEvent) event);
+					traceEventRecordHandler.handleAfterConstructorFailedEvent((AfterConstructorFailedEvent) event);
 				} else if (CallOperationEvent.class.equals(event.getClass())) {
 					traceEventRecordHandler.handleCallOperationEvent((CallOperationEvent) event);
 				} else if (CallConstructorEvent.class.equals(event.getClass())) {
-					// TODO: use an own handler?
-					traceEventRecordHandler.handleCallOperationEvent((CallConstructorEvent) event);
+					traceEventRecordHandler.handleCallConstructorEvent((CallConstructorEvent) event);
 				} else if (SplitEvent.class.equals(event.getClass())) {
 					LOG.warn("Events of type 'SplitEvent' are currently not handled and ignored.");
 				} else {
@@ -148,7 +178,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 			super.reportSuccess(executionTrace.getTraceId());
 		} catch (final InvalidTraceException ex) {
 			LOG.warn("Failed to convert to message trace: " + ex.getMessage()); // do not pass 'ex' to LOG.warn because this makes the output verbose (#584)
-			// TODO: send to new output port for defect traces
+			super.deliver(OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, executionTrace);
 		}
 	}
 
@@ -178,6 +208,11 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 			this.enhanceCallDetection = enhanceCallDetection;
 		}
 
+		/**
+		 * This method delivers the object on top of the stack without removing it, if it exists and null otherwise.
+		 * 
+		 * @return The object on top if it exists or null otherwise.
+		 */
 		private AbstractTraceEvent peekEvent() {
 			if (this.eventStack.isEmpty()) {
 				return null;
@@ -192,8 +227,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 		}
 
 		private void finishExecution(final String operationSignature, final String classSignature, final long traceId, final String sessionId,
-				final String hostname, final int eoi, final int ess, final long tin, final long tout, final boolean assumed, final boolean constructor)
-				throws InvalidTraceException {
+				final String hostname, final int eoi, final int ess, final long tin, final long tout, final boolean assumed, final boolean constructor) throws
+				InvalidTraceException {
 			final ClassOperationSignaturePair fqComponentNameSignaturePair = ClassOperationSignaturePair.splitOperationSignatureStr(operationSignature,
 					constructor && this.enhanceJavaConstructors);
 			final String executionContext;
@@ -348,13 +383,25 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 			this.handleAfterEvent(afterOperationEvent, BeforeOperationEvent.class, CallOperationEvent.class);
 		}
 
+		public void handleAfterOperationFailedEvent(final AfterOperationFailedEvent afterOperationEvent) throws InvalidTraceException {
+			this.handleAfterEvent(afterOperationEvent, BeforeOperationEvent.class, CallOperationEvent.class);
+		}
+
 		public void handleAfterConstructorEvent(final AfterConstructorEvent afterConstructorEvent) throws InvalidTraceException {
+			this.handleAfterEvent(afterConstructorEvent, BeforeConstructorEvent.class, CallConstructorEvent.class);
+		}
+
+		public void handleAfterConstructorFailedEvent(final AfterConstructorFailedEvent afterConstructorEvent) throws InvalidTraceException {
 			this.handleAfterEvent(afterConstructorEvent, BeforeConstructorEvent.class, CallConstructorEvent.class);
 		}
 
 		public void handleCallOperationEvent(final CallOperationEvent callOperationEvent) throws InvalidTraceException {
 			this.closeOpenCalls(callOperationEvent);
 			this.registerExecution(callOperationEvent);
+		}
+
+		public void handleCallConstructorEvent(final CallConstructorEvent callConstructorEvent) throws InvalidTraceException {
+			this.handleCallOperationEvent(callConstructorEvent);
 		}
 
 		/**
@@ -364,6 +411,14 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 			private final int eoi;
 			private final int ess;
 
+			/**
+			 * Creates a new instance of this class using the given parameters.
+			 * 
+			 * @param executionIndex
+			 *            The execution order index.
+			 * @param stackDepth
+			 *            The execution stack size.
+			 */
 			public ExecutionInformation(final int executionIndex, final int stackDepth) {
 				this.eoi = executionIndex;
 				this.ess = stackDepth;

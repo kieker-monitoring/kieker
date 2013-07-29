@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,13 +46,15 @@ import kieker.monitoring.writer.filesystem.AsyncFsWriter;
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
- * Tests the {@link kieker.monitoring.probe.spring.executions.OperationExecutionMethodInvocationInterceptor}
+ * Tests the {@link kieker.monitoring.probe.spring.executions.OperationExecutionMethodInvocationInterceptor}.
  * 
  * @author Andre van Hoorn
  * 
+ * @since 1.5
  */
 public abstract class AbstractTestSpringMethodInterceptor extends AbstractKiekerTest { // NOPMD (AbstractClassWithoutAbstractMethod)
 
+	/** A rule making sure that a temporary folder exists for every test method (which is removed after the test). */
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
 
@@ -67,6 +69,7 @@ public abstract class AbstractTestSpringMethodInterceptor extends AbstractKieker
 
 	/**
 	 * @param interceptorIsEntryPoint
+	 *            Whether the interceptor is an entry point or not.
 	 */
 	public AbstractTestSpringMethodInterceptor(final boolean interceptorIsEntryPoint) {
 		this.interceptorIsEntryPoint = interceptorIsEntryPoint;
@@ -88,7 +91,6 @@ public abstract class AbstractTestSpringMethodInterceptor extends AbstractKieker
 
 	@After
 	public void cleanup() {
-		// TODO: unset session ID
 		this.controlFlowRegistry.unsetThreadLocalEOI();
 		this.controlFlowRegistry.unsetThreadLocalESS();
 		this.controlFlowRegistry.unsetThreadLocalTraceId();
@@ -189,6 +191,7 @@ public abstract class AbstractTestSpringMethodInterceptor extends AbstractKieker
 	 * 
 	 * @author Andre van Hoorn
 	 * 
+	 * @since 1.5
 	 */
 	class BasicMethodInvocation implements MethodInvocation {
 		private final Method myMethod;
@@ -287,6 +290,8 @@ public abstract class AbstractTestSpringMethodInterceptor extends AbstractKieker
 
 	/**
 	 * @author Andre van Hoorn
+	 * 
+	 * @since 1.5
 	 */
 	public abstract static class AbstractPseudoComponent { // NOPMD (AbstractClassWithoutAbstractMethod)
 		private final String pseudoMethodName;
@@ -302,34 +307,50 @@ public abstract class AbstractTestSpringMethodInterceptor extends AbstractKieker
 
 	/**
 	 * @author Andre van Hoorn
+	 * 
+	 * @since 1.5
 	 */
 	public static final class Bookstore extends AbstractPseudoComponent { // NOPMD (TestClassWithoutTestCases, reported because classname ends with "Test")
 		Bookstore() {
 			super("searchBook");
 		}
 
+		/**
+		 * Searches a book (dummy method).
+		 */
 		public void searchBook() {} // NOPMD (UncommentedEmptyMethod)
 	}
 
 	/**
 	 * @author Andre van Hoorn
+	 * 
+	 * @since 1.5
 	 */
 	public static final class CRM extends AbstractPseudoComponent { // NOPMD (TestClassWithoutTestCases, reported because classname ends with "Test")
 		CRM() {
 			super("getOffers");
 		}
 
+		/**
+		 * Delivers the offers (dummy method).
+		 */
 		public void getOffers() {} // NOPMD (UncommentedEmptyMethod)
 	}
 
 	/**
 	 * @author Andre van Hoorn
+	 * 
+	 * @since 1.5
 	 */
 	public static final class Catalog extends AbstractPseudoComponent { // NOPMD (TestClassWithoutTestCases, reported because classname ends with "Test")
+
 		Catalog() {
 			super("getBook");
 		}
 
+		/**
+		 * Delivers a book (dummy method).
+		 */
 		public void getBook() {} // NOPMD (UncommentedEmptyMethod)
 	}
 

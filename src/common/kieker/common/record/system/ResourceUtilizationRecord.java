@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,8 @@ import kieker.common.record.IMonitoringRecord;
 
 /**
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.3
  */
 public final class ResourceUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
 	private static final long serialVersionUID = 8412442607068036054L;
@@ -56,10 +58,16 @@ public final class ResourceUtilizationRecord extends AbstractMonitoringRecord im
 	private final double utilization;
 
 	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
 	 * @param timestamp
+	 *            The timestamp for the record.
 	 * @param hostname
+	 *            The hostname (the resource belongs to) for the record.
 	 * @param resourceName
+	 *            The name of the resource.
 	 * @param utilization
+	 *            The value of utilization. The value should be in the range <code>[0,1]</code>
 	 */
 	public ResourceUtilizationRecord(final long timestamp, final String hostname, final String resourceName, final double utilization) {
 		this.timestamp = timestamp;
@@ -68,6 +76,12 @@ public final class ResourceUtilizationRecord extends AbstractMonitoringRecord im
 		this.utilization = utilization;
 	}
 
+	/**
+	 * This constructor converts the given array into a record. It is recommended to use the array which is the result of a call to {@link #toArray()}.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 */
 	public ResourceUtilizationRecord(final Object[] values) { // NOPMD (values stored directly)
 		AbstractMonitoringRecord.checkArray(values, TYPES);
 		this.timestamp = (Long) values[0];
@@ -76,15 +90,26 @@ public final class ResourceUtilizationRecord extends AbstractMonitoringRecord im
 		this.utilization = (Double) values[3];
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Object[] toArray() {
 		return new Object[] { this.timestamp, this.hostname, this.resourceName, this.utilization, };
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
+	 */
 	@Deprecated
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Class<?>[] getValueTypes() {
 		return TYPES.clone();
 	}

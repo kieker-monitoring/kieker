@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,12 +29,16 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
  *         2009/02/20: Reduced text length
  *         2008/10/20: Initial version
  * 
+ * @since 0.91
  */
 public class Starter extends Thread {
 
 	private static volatile boolean boolvar = true;
 	private final Random random = new Random();
 
+	/**
+	 * Creates a new instance of this class.
+	 */
 	public Starter() {
 		// nothing to do
 	}
@@ -64,6 +68,12 @@ public class Starter extends Thread {
 		}
 	}
 
+	/**
+	 * A simple wrapper method for {@link Thread#sleep(long)}.
+	 * 
+	 * @param sleeptime
+	 *            The time to sleep in milliseconds.
+	 */
 	@OperationExecutionMonitoringProbe
 	public void waitP(final long sleeptime) {
 		try {
@@ -79,7 +89,7 @@ public class Starter extends Thread {
 			a += i / 1000;
 		}
 		if ((a % 10000) == 0) {
-			Starter.boolvar = Starter.boolvar ^ true;
+			Starter.boolvar = !Starter.boolvar;
 		}
 	}
 }

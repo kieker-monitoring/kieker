@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,11 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
+ * This class is a container for a whole trace of messages (represented as actual instances of {@link AbstractMessage}).
+ * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 public class MessageTrace extends AbstractTrace {
 
@@ -34,7 +38,7 @@ public class MessageTrace extends AbstractTrace {
 	 * Creates a new message trace from the given data.
 	 * 
 	 * @param traceId
-	 *            The trace ID for this message trace
+	 *            The ID for this message trace
 	 * @param seq
 	 *            The messages contained in this message trace
 	 */
@@ -46,11 +50,11 @@ public class MessageTrace extends AbstractTrace {
 	 * Creates a new message trace from the given data.
 	 * 
 	 * @param traceId
-	 *            The trace ID for this message trace
+	 *            The ID for this trace.
 	 * @param sessionId
-	 *            The session ID for this message trace
+	 *            The ID of the current session.
 	 * @param seq
-	 *            The messages contained in this message trace
+	 *            The list of messages this trace consists of.
 	 */
 	public MessageTrace(final long traceId, final String sessionId, final List<AbstractMessage> seq) {
 		super(traceId, sessionId);
@@ -97,7 +101,6 @@ public class MessageTrace extends AbstractTrace {
 	// Explicit delegation to super method to make FindBugs happy
 	@Override
 	public int hashCode() { // NOPMD (forward hashcode)
-		// TODO either this or equals might not be correct! both should consider traceId
 		return super.hashCode();
 	}
 
@@ -121,6 +124,7 @@ public class MessageTrace extends AbstractTrace {
 		}
 		final MessageTrace other = (MessageTrace) obj;
 
+		// this usually includes checks for the trace ids
 		return this.messages.equals(other.messages);
 	}
 }

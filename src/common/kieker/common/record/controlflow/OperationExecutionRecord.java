@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,8 @@ import kieker.common.record.IMonitoringRecord;
 
 /**
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 0.91
  */
 public final class OperationExecutionRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
 
@@ -50,7 +52,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	public static final int NO_EOI_ESS = -1;
 
 	/**
-	 * This field should not be exported, because it makes little sense to have no associated operation
+	 * This field should not be exported, because it makes little sense to have no associated operation.
 	 */
 	private static final String NO_OPERATION_SIGNATURE = "noOperation";
 
@@ -79,7 +81,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	 * Creates a new {@link OperationExecutionRecord} with the given parameters.
 	 * 
 	 * @param operationSignature
-	 *            an operation string, as defined in {@link kieker.common.util.ClassOperationSignaturePair#splitOperationSignatureStr(String)}.
+	 *            an operation string, as defined in {@link kieker.common.util.signature.ClassOperationSignaturePair#splitOperationSignatureStr(String)}.
 	 * @param sessionId
 	 *            the session ID; must not be null, use {@link #NO_SESSION_ID} if no session ID desired.
 	 * @param traceId
@@ -107,6 +109,12 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 		this.ess = ess;
 	}
 
+	/**
+	 * This constructor converts the given array into a record. It is recommended to use the array which is the result of a call to {@link #toArray()}.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 */
 	public OperationExecutionRecord(final Object[] values) { // NOPMD (values stored directly)
 		AbstractMonitoringRecord.checkArray(values, TYPES); // throws IllegalArgumentException
 		this.operationSignature = (String) values[0];
@@ -119,6 +127,9 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 		this.ess = (Integer) values[7];
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final Object[] toArray() {
 		return new Object[] {
 			this.operationSignature,
@@ -131,11 +142,19 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 			this.ess, };
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
+	 */
 	@Deprecated
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Class<?>[] getValueTypes() {
 		return TYPES.clone();
 	}

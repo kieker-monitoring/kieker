@@ -14,9 +14,9 @@
    height="176.18774"
    id="svg4056"
    sodipodi:version="0.32"
-   inkscape:version="0.48.1 r9760"
+   inkscape:version="0.48.4 r9939"
    version="1.0"
-   sodipodi:docname="kiekerComponentDiagram-woCloud-bw-w-record-newNames-withTraceAnalysis-colors.svg"
+   sodipodi:docname="kiekerComponentDiagram-woCloud-bw-w-record-newNames-withTraceAnalysis-colors.pdf"
    inkscape:output_extension="org.inkscape.output.svg.inkscape">
   <defs
      id="defs4058">
@@ -4180,16 +4180,16 @@
      objecttolerance="10"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.7723245"
-     inkscape:cx="254.32322"
-     inkscape:cy="99.154963"
+     inkscape:zoom="10.025781"
+     inkscape:cx="313.0497"
+     inkscape:cy="19.140737"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1366"
-     inkscape:window-height="713"
-     inkscape:window-x="-4"
-     inkscape:window-y="32"
+     inkscape:window-width="1920"
+     inkscape:window-height="1005"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
      showguides="true"
      inkscape:guide-bbox="true"
      inkscape:window-maximized="1"
@@ -4213,7 +4213,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -4251,30 +4251,14 @@
        height="170.74117"
        x="655.80505"
        y="744.66492" />
-    <rect
-       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-opacity:1"
-       id="rect6433-2-7"
-       width="68.822563"
-       height="30.521313"
-       x="672.28949"
-       y="772.67542" />
-    <rect
-       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-opacity:1"
-       id="rect6433-2-0"
-       width="68.822563"
-       height="30.521313"
-       x="670.58081"
-       y="774.73505" />
-    <text
-       x="625"
-       space="preserve"
-       y="275.13791"
-       font-weight="bold"
-       clip-path="url(#clipPath1-49-8)"
-       id="text5771-4-7"
-       style="font-size:17.86172485000000165px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial Bold"
-       transform="matrix(0.5038707,0,0,0.5038707,354.96347,617.11004)"
-       sodipodi:linespacing="125%">Kieker.Analysis</text>
+    <path
+       d="m 667,362 0,12.01902"
+       clip-path="url(#clipPath1-28-8-0-4)"
+       id="path2968-2-2-4-0"
+       style="font-size:11px;font-style:normal;font-weight:bold;fill:none;stroke:#000000;stroke-width:1.98463619;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
+       transform="matrix(-0.5038707,0,0,0.5038707,1054.9486,689.3557)"
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0" />
     <g
        id="g5104-1-3-1"
        transform="matrix(-1,0,0,-1,1339.9801,1488.3749)"
@@ -4307,6 +4291,80 @@
            inkscape:connector-curvature="0" />
       </g>
     </g>
+    <g
+       id="g3753"
+       transform="translate(-93.380386,36.087484)">
+      <rect
+         y="839.93719"
+         x="765.66956"
+         height="30.521313"
+         width="68.822563"
+         id="rect6433-2-7-1"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+      <rect
+         y="841.99683"
+         x="763.96088"
+         height="30.521313"
+         width="68.822563"
+         id="rect6433-2-0-7"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+      <rect
+         y="844.05646"
+         x="762.25214"
+         height="30.521313"
+         width="68.822563"
+         id="rect6433-2-4"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-opacity:1" />
+      <g
+         transform="translate(346.41267,114.99241)"
+         id="g4354-8-0">
+        <rect
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.76582676;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           id="rect5826-30-7-3-4-9-9"
+           width="5.832706"
+           height="9.403841"
+           x="475.3605"
+           y="733.04785" />
+        <rect
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.76582676;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           id="rect5840-30-5-3-4-2-4"
+           width="6.2136288"
+           height="2.1021991"
+           x="472.04565"
+           y="734.83673" />
+        <rect
+           style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.76599997;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           id="rect5840-96-9-3-3-4-23-8"
+           width="6.2136288"
+           height="2.1021991"
+           x="472.04565"
+           y="738.6474" />
+      </g>
+    </g>
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-opacity:1"
+       id="rect6433-2-7"
+       width="68.822563"
+       height="30.521313"
+       x="672.28949"
+       y="772.67542" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-opacity:1"
+       id="rect6433-2-0"
+       width="68.822563"
+       height="30.521313"
+       x="670.58081"
+       y="774.73505" />
+    <text
+       x="625"
+       space="preserve"
+       y="275.13791"
+       font-weight="bold"
+       clip-path="url(#clipPath1-49-8)"
+       id="text5771-4-7"
+       style="font-size:17.86172485000000165px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial Bold"
+       transform="matrix(0.5038707,0,0,0.5038707,354.96347,617.11004)"
+       sodipodi:linespacing="125%">Kieker.Analysis</text>
     <rect
        style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-opacity:1"
        id="rect6433-2"
@@ -4358,7 +4416,7 @@
     </g>
     <g
        id="g5104-1-1"
-       transform="matrix(0,1,1,0,120.31106,188.86492)"
+       transform="matrix(0,1,1,0,120.31106,186.86492)"
        style="stroke-width:1;stroke-miterlimit:8;stroke-dasharray:none">
       <path
          sodipodi:nodetypes="cc"
@@ -4494,13 +4552,6 @@
          id="rect5840-96-9-3-3-4-2-8"
          style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.76599997;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" />
     </g>
-    <rect
-       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-opacity:1"
-       id="rect6433-7-4-9"
-       width="68.822563"
-       height="30.521313"
-       x="668.87207"
-       y="880.14417" />
     <text
        xml:space="preserve"
        style="font-size:8px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial Bold"
@@ -4518,14 +4569,6 @@
          y="902.42633"
          style="font-size:8px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial Bold"
          id="tspan4352-3-5-7">Reader</tspan></text>
-    <path
-       d="m 667,362 0,12.01902"
-       clip-path="url(#clipPath1-28-8-0-4)"
-       id="path2968-2-2-4-0"
-       style="font-size:11px;font-style:normal;font-weight:bold;fill:none;stroke:#000000;stroke-width:1.98463619;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
-       transform="matrix(-0.5038707,0,0,0.5038707,1054.9486,691.3557)"
-       sodipodi:nodetypes="cc"
-       inkscape:connector-curvature="0" />
     <circle
        d="m 673,355.5 c 0,4.14214 -3.35786,7.5 -7.5,7.5 -4.14214,0 -7.5,-3.35786 -7.5,-7.5 0,-4.14214 3.35786,-7.5 7.5,-7.5 4.14214,0 7.5,3.35786 7.5,7.5 z"
        r="7.5"
@@ -4538,7 +4581,7 @@
        sodipodi:rx="7.5"
        sodipodi:ry="7.5"
        style="font-size:11px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1.98463619;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
-       transform="matrix(-0.5038707,0,0,0.5038707,1054.1927,691.3557)" />
+       transform="matrix(-0.5038707,0,0,0.5038707,1054.1927,689.3557)" />
     <g
        id="g4354-3-8-8"
        transform="translate(253.03255,151.08012)">

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 
 package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
+import java.util.concurrent.TimeUnit;
+
 import kieker.tools.traceAnalysis.Constants;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 
@@ -24,6 +26,7 @@ import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
  * 
  * @author Holger Knoche
  * 
+ * @since 1.5
  */
 public abstract class AbstractNodeDecorator {
 
@@ -51,7 +54,9 @@ public abstract class AbstractNodeDecorator {
 	 *            The source node sending the message
 	 * @param targetNode
 	 *            The target node receiving the message
+	 * @param timeunit
+	 *            The time unit which determines how to interpret times.
 	 */
-	public abstract void processMessage(AbstractMessage message, DependencyGraphNode<?> sourceNode, DependencyGraphNode<?> targetNode);
+	public abstract void processMessage(AbstractMessage message, DependencyGraphNode<?> sourceNode, DependencyGraphNode<?> targetNode, final TimeUnit timeunit);
 
 }

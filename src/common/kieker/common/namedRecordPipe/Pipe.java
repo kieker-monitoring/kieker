@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,11 @@ import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 
 /**
+ * This implementation represents a simple pipe that can be used by readers and writers to transfer monitoring records.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.3
  */
 public final class Pipe {
 	private static final Log LOG = LogFactory.getLog(Pipe.class);
@@ -31,10 +34,22 @@ public final class Pipe {
 	private volatile IPipeReader pipeReader;
 	private volatile boolean closed;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param name
+	 *            The name of the pipe.
+	 */
 	public Pipe(final String name) {
 		this.name = name;
 	}
 
+	/**
+	 * Sets the pipe reader to a new value. The pipe reader will be informed about new records.
+	 * 
+	 * @param pipeReader
+	 *            The new pipe reader.
+	 */
 	public void setPipeReader(final IPipeReader pipeReader) {
 		this.pipeReader = pipeReader;
 		if (LOG.isDebugEnabled()) {
@@ -42,14 +57,22 @@ public final class Pipe {
 		}
 	}
 
+	/**
+	 * Delivers the name of this pipe.
+	 * 
+	 * @return The name of the pipe.
+	 */
 	public String getName() {
 		return this.name;
 	}
 
 	/**
-	 * Passe the monitoring record to the registered pipe reader.
+	 * Passes the monitoring record to the registered pipe reader.
 	 * 
 	 * @param monitoringRecord
+	 *            The monitoring record to write into the pipe.
+	 * 
+	 * @return true on success; false otherwise.
 	 */
 	public boolean writeMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 		if (this.closed) {
@@ -64,6 +87,9 @@ public final class Pipe {
 		return this.pipeReader.newMonitoringRecord(monitoringRecord);
 	}
 
+	/**
+	 * This method closes the pipe and notifies the pipe reader about this event as well.
+	 */
 	public void close() {
 		this.closed = true;
 		if (this.pipeReader != null) {

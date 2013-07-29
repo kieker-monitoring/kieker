@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,30 +35,44 @@ import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public abstract class AbstractTestDbWriterReader extends AbstractWriterReaderTest {
 
+	/** This constant defines the name of the used driver class (fully qualified). */
 	public static final String DRIVERCLASSNAME = "org.apache.derby.jdbc.EmbeddedDriver";
+	/** This constant is used as a prefix for the tables. */
 	public static final String TABLEPREFIX = "kieker";
 
+	/** A rule making sure that a temporary folder exists for every test method (which is removed after the test). */
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
 
+	/**
+	 * Assembles and delivers full the connection string.
+	 * 
+	 * @return A connection string to connect to the database.
+	 * 
+	 * @throws IOException
+	 *             If an I/O error occurs.
+	 */
 	public String getConnectionString() throws IOException {
 		return "jdbc:derby:" + this.tmpFolder.getRoot().getCanonicalPath() + "/KIEKER;user=DBUSER;password=DBPASS";
 	}
 
 	@Override
 	protected List<IMonitoringRecord> readEvents() throws Exception {
+		final AnalysisController analysisController = new AnalysisController();
+
 		final Configuration dbReaderConfig = new Configuration();
 		dbReaderConfig.setProperty(DbReader.CONFIG_PROPERTY_NAME_DRIVERCLASSNAME, DRIVERCLASSNAME);
 		dbReaderConfig.setProperty(DbReader.CONFIG_PROPERTY_NAME_CONNECTIONSTRING, this.getConnectionString());
 		dbReaderConfig.setProperty(DbReader.CONFIG_PROPERTY_NAME_TABLEPREFIX, TABLEPREFIX);
-		final DbReader dbReader = new DbReader(dbReaderConfig);
-		final ListCollectionFilter<IMonitoringRecord> sinkFilter = new ListCollectionFilter<IMonitoringRecord>(new Configuration());
-		final AnalysisController analysisController = new AnalysisController();
-		analysisController.registerReader(dbReader);
-		analysisController.registerFilter(sinkFilter);
+
+		final DbReader dbReader = new DbReader(dbReaderConfig, analysisController);
+		final ListCollectionFilter<IMonitoringRecord> sinkFilter = new ListCollectionFilter<IMonitoringRecord>(new Configuration(), analysisController);
+
 		analysisController.connect(dbReader, DbReader.OUTPUT_PORT_NAME_RECORDS, sinkFilter, ListCollectionFilter.INPUT_PORT_NAME);
 		analysisController.run();
 		return sinkFilter.getList();
@@ -66,7 +80,7 @@ public abstract class AbstractTestDbWriterReader extends AbstractWriterReaderTes
 
 	@Override
 	protected void inspectRecords(final List<IMonitoringRecord> eventsPassedToController, final List<IMonitoringRecord> eventsFromMonitoringLog) throws Exception {
-		// TODO currently the reader screws the order completely
+		// the reader screws the order completely, so we have to sort for the test
 		final IMonitoringRecord[] eventsPassed = eventsPassedToController.toArray(new IMonitoringRecord[eventsPassedToController.size()]);
 		Arrays.sort(eventsPassed);
 		final IMonitoringRecord[] eventsFrom = eventsFromMonitoringLog.toArray(new IMonitoringRecord[eventsFromMonitoringLog.size()]);

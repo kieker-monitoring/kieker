@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,6 +42,8 @@ import kieker.monitoring.writer.AbstractAsyncWriter;
 /**
  * 
  * @author Matthias Rohr, Andre van Hoorn, Jan Waller
+ * 
+ * @since 0.95a
  */
 public final class AsyncJMSWriter extends AbstractAsyncWriter {
 	private static final String PREFIX = AsyncJMSWriter.class.getName() + ".";
@@ -51,15 +53,31 @@ public final class AsyncJMSWriter extends AbstractAsyncWriter {
 	public static final String CONFIG_FACTORYLOOKUPNAME = PREFIX + "FactoryLookupName"; // NOCS (afterPREFIX)
 	public static final String CONFIG_MESSAGETTL = PREFIX + "MessageTimeToLive"; // NOCS (afterPREFIX)
 
+	private final String configContextFactoryType;
+	private final String configProviderUrl;
+	private final String configFactoryLookupName;
+	private final String configTopic;
+	private final long configMessageTimeToLive;
+
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this writer.
+	 */
 	public AsyncJMSWriter(final Configuration configuration) {
 		super(configuration);
+		this.configContextFactoryType = configuration.getStringProperty(CONFIG_CONTEXTFACTORYTYPE);
+		this.configProviderUrl = configuration.getStringProperty(CONFIG_PROVIDERURL);
+		this.configFactoryLookupName = configuration.getStringProperty(CONFIG_FACTORYLOOKUPNAME);
+		this.configTopic = configuration.getStringProperty(CONFIG_TOPIC);
+		this.configMessageTimeToLive = configuration.getLongProperty(CONFIG_MESSAGETTL);
 	}
 
 	@Override
 	protected void init() throws Exception {
-		this.addWorker(new JMSWriterThread(this.monitoringController, this.blockingQueue, this.configuration.getStringProperty(CONFIG_CONTEXTFACTORYTYPE),
-				this.configuration.getStringProperty(CONFIG_PROVIDERURL), this.configuration.getStringProperty(CONFIG_FACTORYLOOKUPNAME), this.configuration
-						.getStringProperty(CONFIG_TOPIC), this.configuration.getLongProperty(CONFIG_MESSAGETTL)));
+		this.addWorker(new JMSWriterThread(this.monitoringController, this.blockingQueue, this.configContextFactoryType,
+				this.configProviderUrl, this.configFactoryLookupName, this.configTopic, this.configMessageTimeToLive));
 	}
 }
 
@@ -72,6 +90,8 @@ public final class AsyncJMSWriter extends AbstractAsyncWriter {
  * History: 2008-09-13: Initial prototype
  * 
  * @author Matthias Rohr, Jan Waller
+ * 
+ * @since < 0.9
  */
 final class JMSWriterThread extends AbstractAsyncThread {
 	private static final Log LOG = LogFactory.getLog(JMSWriterThread.class);
@@ -106,9 +126,7 @@ final class JMSWriterThread extends AbstractAsyncThread {
 
 			Destination destination;
 			try {
-				/*
-				 * As a first step, try a JNDI lookup (this seems to fail with ActiveMQ /HornetQ sometimes)
-				 */
+				// As a first step, try a JNDI lookup (this seems to fail with ActiveMQ /HornetQ sometimes)
 				destination = (Destination) context.lookup(topic);
 			} catch (final NameNotFoundException exc) {
 				// JNDI lookup failed, try manual creation (this seems to fail with ActiveMQ/HornetQ sometimes)

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,9 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 public final class MonitoredClass {
 	private final ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
 
+	/**
+	 * Default constructor.
+	 */
 	public MonitoredClass() {
 		// empty default constructor
 	}
@@ -37,10 +40,10 @@ public final class MonitoredClass {
 			return this.monitoredMethod(methodTime, recDepth - 1);
 		} else {
 			final long exitTime = this.threadMXBean.getCurrentThreadUserTime() + methodTime;
-			long currentTime = this.threadMXBean.getCurrentThreadUserTime();
-			while (currentTime < exitTime) {
+			long currentTime;
+			do {
 				currentTime = this.threadMXBean.getCurrentThreadUserTime();
-			}
+			} while (currentTime < exitTime);
 			return currentTime;
 		}
 	}

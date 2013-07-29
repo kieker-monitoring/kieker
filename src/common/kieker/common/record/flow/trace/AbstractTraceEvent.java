@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,8 @@ import kieker.common.record.flow.ITraceRecord;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.5
  */
 public abstract class AbstractTraceEvent extends AbstractEvent implements ITraceRecord {
 	private static final long serialVersionUID = 1L;
@@ -28,12 +30,30 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 	private final long traceId;
 	private final int orderIndex;
 
+	/**
+	 * This constructor uses the given parameters to initialize the fields of this record.
+	 * 
+	 * @param timestamp
+	 *            The timestamp.
+	 * @param traceId
+	 *            The trace ID.
+	 * @param orderIndex
+	 *            the order index.
+	 */
 	public AbstractTraceEvent(final long timestamp, final long traceId, final int orderIndex) {
 		super(timestamp);
 		this.traceId = traceId;
 		this.orderIndex = orderIndex;
 	}
 
+	/**
+	 * This constructor uses the given array to initialize the fields of this record.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 * @param valueTypes
+	 *            The types of the elements in the first array.
+	 */
 	protected AbstractTraceEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes); // values[0]
 		this.traceId = (Long) values[1];

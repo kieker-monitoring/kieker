@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,9 +31,12 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 public abstract class AbstractTestLogRotationMaxLogSize extends AbstractKiekerTest {
 
+	/** A rule making sure that a temporary folder exists for every test method (which is removed after the test). */
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (Rule has to be public)
 
@@ -43,46 +46,109 @@ public abstract class AbstractTestLogRotationMaxLogSize extends AbstractKiekerTe
 		this.bytesPerRecord = bytesPerRecord;
 	}
 
+	/**
+	 * A test for the maximal log size of the log rotation
+	 * .
+	 * 
+	 * @throws IOException
+	 *             If something went wrong while writing the log.
+	 */
 	@Test
 	public final void testMaxLogSizeUnlimited1() throws IOException { // NOPMD (assert in checkMaxLogFiles)
 		this.checkMaxLogSize(-1, 2, 512);
 	}
 
+	/**
+	 * A test for the maximal log size of the log rotation
+	 * .
+	 * 
+	 * @throws IOException
+	 *             If something went wrong while writing the log.
+	 */
 	@Test
 	public final void testMaxLogSizeUnlimited0() throws IOException { // NOPMD (assert in checkMaxLogFiles)
 		this.checkMaxLogSize(0, 1, 1024);
 	}
 
+	/**
+	 * A test for the maximal log size of the log rotation
+	 * .
+	 * 
+	 * @throws IOException
+	 *             If something went wrong while writing the log.
+	 */
 	@Test
 	public final void testMaxLogSizeLimited1m8w4r() throws IOException { // NOPMD (assert in checkMaxLogFiles)
 		this.checkMaxLogSize(1, 2, 256);
 	}
 
+	/**
+	 * A test for the maximal log size of the log rotation
+	 * .
+	 * 
+	 * @throws IOException
+	 *             If something went wrong while writing the log.
+	 */
 	@Test
 	public final void testMaxLogSizeLimited1m4w4r() throws IOException { // NOPMD (assert in checkMaxLogFiles)
 		this.checkMaxLogSize(1, 1, 256);
 	}
 
+	/**
+	 * A test for the maximal log size of the log rotation
+	 * .
+	 * 
+	 * @throws IOException
+	 *             If something went wrong while writing the log.
+	 */
 	@Test
 	public final void testMaxLogSizeLimited1m1w1r() throws IOException { // NOPMD (assert in checkMaxLogFiles)
 		this.checkMaxLogSize(1, 1, 1024);
 	}
 
+	/**
+	 * A test for the maximal log size of the log rotation
+	 * .
+	 * 
+	 * @throws IOException
+	 *             If something went wrong while writing the log.
+	 */
 	@Test
 	public final void testMaxLogSizeLimited4m2w2r() throws IOException { // NOPMD (assert in checkMaxLogFiles)
 		this.checkMaxLogSize(4, 1, 512);
 	}
 
+	/**
+	 * A test for the maximal log size of the log rotation
+	 * .
+	 * 
+	 * @throws IOException
+	 *             If something went wrong while writing the log.
+	 */
 	@Test
 	public final void testMaxLogSizeLimited4m8w8r() throws IOException { // NOPMD (assert in checkMaxLogFiles)
 		this.checkMaxLogSize(4, 4, 512);
 	}
 
+	/**
+	 * A test for the maximal log size of the log rotation
+	 * .
+	 * 
+	 * @throws IOException
+	 *             If something went wrong while writing the log.
+	 */
 	@Test
 	public final void testMaxLogSizeLimited4m10w8r() throws IOException { // NOPMD (assert in checkMaxLogFiles)
 		this.checkMaxLogSize(4, 5, 512);
 	}
 
+	/**
+	 * A test for the maximal log size of the log rotation
+	 * .
+	 * 
+	 * @throws IOException
+	 *             If something went wrong while writing the log.
+	 */
 	@Test
 	public final void testMaxLogSizeLimited4m1w1r() throws IOException { // NOPMD (assert in checkMaxLogFiles)
 		this.checkMaxLogSize(4, 5, 5 * 1024);
@@ -127,11 +193,13 @@ public abstract class AbstractTestLogRotationMaxLogSize extends AbstractKiekerTe
 	protected abstract IMonitoringController createController(final String path, final int maxEntriesInFile, final int maxLogSize);
 
 	/**
-	 * Integer division rounding up!
+	 * This is a simple integer division which rounds up.
 	 * 
 	 * @param num
+	 *            The dividend of the operation.
 	 * @param div
-	 * @return
+	 *            The divisor of the operation.
+	 * @return The quotient of the given parameters, but rounded up.
 	 */
 	private static final int div(final int num, final int div) {
 		return ((num + div) - 1) / div;

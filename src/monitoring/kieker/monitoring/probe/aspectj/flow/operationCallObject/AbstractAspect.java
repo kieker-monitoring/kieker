@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,8 @@ import kieker.monitoring.timer.ITimeSource;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 @Aspect
 public abstract class AbstractAspect extends AbstractAspectJProbe {
@@ -40,14 +42,19 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
 	private static final TraceRegistry TRACEREGISTRY = TraceRegistry.INSTANCE;
 
+	/**
+	 * This is the pointcut for the monitored operations. Inheriting classes should extend this pointcut to make sure that the correct joint points will be detected.
+	 */
 	@Pointcut
 	public abstract void monitoredOperation();
 
-	// TODO: the detection of the caller with EnclosingStaticPart might be wrong!
 	@Around("monitoredOperation() && this(thisObject) && target(targetObject) && notWithinKieker()")
 	public Object member2memberOperation(final Object thisObject, final Object targetObject, final ProceedingJoinPoint thisJoinPoint,
 			final EnclosingStaticPart thisEnclosingJoinPoint) throws Throwable { // NOCS
-		final String callee = thisJoinPoint.getSignature().toLongString();
+		if (!CTRLINST.isMonitoringEnabled()) {
+			return thisJoinPoint.proceed();
+		}
+		final String callee = this.signatureToLongString(thisJoinPoint.getSignature());
 		if (!CTRLINST.isProbeActivated(callee)) {
 			return thisJoinPoint.proceed();
 		}
@@ -60,7 +67,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		}
 		final long traceId = trace.getTraceId();
 		// caller
-		final String caller = thisEnclosingJoinPoint.getSignature().toLongString();
+		final String caller = this.signatureToLongString(thisEnclosingJoinPoint.getSignature());
 		final String callerClazz = thisObject.getClass().getName();
 		final int callerObject = System.identityHashCode(thisObject);
 		// callee
@@ -84,7 +91,10 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	@Around("monitoredOperation() && !this(java.lang.Object) && target(targetObject) && notWithinKieker()")
 	public Object static2memberOperation(final Object targetObject, final ProceedingJoinPoint thisJoinPoint, final EnclosingStaticPart thisEnclosingJoinPoint)
 			throws Throwable { // NOCS
-		final String callee = thisJoinPoint.getSignature().toLongString();
+		if (!CTRLINST.isMonitoringEnabled()) {
+			return thisJoinPoint.proceed();
+		}
+		final String callee = this.signatureToLongString(thisJoinPoint.getSignature());
 		if (!CTRLINST.isProbeActivated(callee)) {
 			return thisJoinPoint.proceed();
 		}
@@ -98,7 +108,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final long traceId = trace.getTraceId();
 		// caller
 		final Signature callerSig = thisEnclosingJoinPoint.getSignature();
-		final String caller = callerSig.toLongString();
+		final String caller = this.signatureToLongString(callerSig);
 		final String callerClazz = callerSig.getDeclaringTypeName();
 		// callee
 		final String calleeClazz = targetObject.getClass().getName();
@@ -121,8 +131,11 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	@Around("monitoredOperation() && this(thisObject) && !target(java.lang.Object) && notWithinKieker()")
 	public Object member2staticOperation(final Object thisObject, final ProceedingJoinPoint thisJoinPoint,
 			final EnclosingStaticPart thisEnclosingJoinPoint) throws Throwable { // NOCS
+		if (!CTRLINST.isMonitoringEnabled()) {
+			return thisJoinPoint.proceed();
+		}
 		final Signature calleeSig = thisJoinPoint.getSignature();
-		final String callee = calleeSig.toLongString();
+		final String callee = this.signatureToLongString(calleeSig);
 		if (!CTRLINST.isProbeActivated(callee)) {
 			return thisJoinPoint.proceed();
 		}
@@ -135,7 +148,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		}
 		final long traceId = trace.getTraceId();
 		// caller
-		final String caller = thisEnclosingJoinPoint.getSignature().toLongString();
+		final String caller = this.signatureToLongString(thisEnclosingJoinPoint.getSignature());
 		final String callerClazz = thisObject.getClass().getName();
 		final int callerObject = System.identityHashCode(thisObject);
 		// callee
@@ -158,8 +171,11 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	@Around("monitoredOperation() && !this(java.lang.Object) && !target(java.lang.Object) && notWithinKieker()")
 	public Object static2staticOperation(final ProceedingJoinPoint thisJoinPoint, final EnclosingStaticPart thisEnclosingJoinPoint)
 			throws Throwable { // NOCS
+		if (!CTRLINST.isMonitoringEnabled()) {
+			return thisJoinPoint.proceed();
+		}
 		final Signature calleeSig = thisJoinPoint.getSignature();
-		final String callee = calleeSig.toLongString();
+		final String callee = this.signatureToLongString(calleeSig);
 		if (!CTRLINST.isProbeActivated(callee)) {
 			return thisJoinPoint.proceed();
 		}
@@ -173,7 +189,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final long traceId = trace.getTraceId();
 		// caller
 		final Signature callerSig = thisEnclosingJoinPoint.getSignature();
-		final String caller = callerSig.toLongString();
+		final String caller = this.signatureToLongString(callerSig);
 		final String callerClazz = callerSig.getDeclaringTypeName();
 		// callee
 		final String calleeClazz = calleeSig.getDeclaringTypeName();

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package kieker.tools.logReplayer;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -33,19 +34,22 @@ import org.apache.commons.cli.ParseException;
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.tools.util.CLIHelpFormatter;
 
 /**
  * Command-line tool for replaying a filesystem monitoring log using the {@link FilesystemLogReplayer}.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 0.95a
  */
-@SuppressWarnings("static-access")
+@SuppressWarnings({ "static-access", "static" })
 public final class FilesystemLogReplayerStarter {
 	private static final Log LOG = LogFactory.getLog(FilesystemLogReplayerStarter.class);
 
 	private static CommandLine cmdl;
 	private static final CommandLineParser CMDL_PARSER = new BasicParser();
-	private static final HelpFormatter CMD_HELP_FORMATTER = new HelpFormatter();
+	private static final HelpFormatter CMD_HELP_FORMATTER = new CLIHelpFormatter();
 	private static final Options CMDL_OPTS = new Options();
 	private static final String CMD_OPT_NAME_MONITORING_CONFIGURATION = "monitoring.configuration";
 	private static final String CMD_OPT_NAME_INPUTDIRS = "inputdirs";
@@ -68,7 +72,9 @@ public final class FilesystemLogReplayerStarter {
 	private static long ignoreRecordsBeforeTimestamp = FilesystemLogReplayer.MIN_TIMESTAMP;
 	private static long ignoreRecordsAfterTimestamp = FilesystemLogReplayer.MAX_TIMESTAMP;
 
-	// Avoid instantiation by setting the constructor's visibility to private
+	/**
+	 * Avoid instantiation by setting the constructor's visibility to private.
+	 */
 	private FilesystemLogReplayerStarter() {}
 
 	static {
@@ -95,6 +101,13 @@ public final class FilesystemLogReplayerStarter {
 				.withDescription("Records logged after this date (UTC timezone) are ignored (disabled by default).").create());
 	}
 
+	/**
+	 * This method parses the given arguments.
+	 * 
+	 * @param args
+	 *            The command line arguments.
+	 * @return true if and only if the given arguments could be parsed.
+	 */
 	private static boolean parseArgs(final String[] args) {
 		try {
 			FilesystemLogReplayerStarter.cmdl = CMDL_PARSER.parse(CMDL_OPTS, args);
@@ -106,20 +119,28 @@ public final class FilesystemLogReplayerStarter {
 		return true;
 	}
 
+	/**
+	 * This method prints some information on the screen to help the user understand how to use this tool.
+	 */
 	private static void printUsage() {
 		CMD_HELP_FORMATTER.printHelp(FilesystemLogReplayerStarter.class.getName(), CMDL_OPTS);
 	}
 
+	/**
+	 * Initializes the tool with the command line arguments.
+	 * 
+	 * @return true if and only if the tool has been initialized correctly.
+	 */
 	private static boolean initFromArgs() {
 		boolean retVal = true;
 
-		/* 0.) monitoring properties */
+		// 0.) monitoring properties
 		monitoringConfigurationFile = cmdl.getOptionValue(CMD_OPT_NAME_MONITORING_CONFIGURATION);
 
-		/* 1.) init inputDirs */
+		// 1.) init inputDirs
 		FilesystemLogReplayerStarter.inputDirs = FilesystemLogReplayerStarter.cmdl.getOptionValues(CMD_OPT_NAME_INPUTDIRS);
 
-		/* 2.) init keepOriginalLoggingTimestamps */
+		// 2.) init keepOriginalLoggingTimestamps
 		final String keepOriginalLoggingTimestampsOptValStr = FilesystemLogReplayerStarter.cmdl.getOptionValue(
 				CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS, "true");
 		if (!("true".equals(keepOriginalLoggingTimestampsOptValStr) || "false".equals(keepOriginalLoggingTimestampsOptValStr))) {
@@ -131,7 +152,7 @@ public final class FilesystemLogReplayerStarter {
 		LOG.info("Keeping original logging timestamps: "
 				+ (FilesystemLogReplayerStarter.keepOriginalLoggingTimestamps ? "true" : "false")); // NOCS
 
-		/* 3.) init realtimeMode */
+		// 3.) init realtimeMode
 		final String realtimeOptValStr = FilesystemLogReplayerStarter.cmdl.getOptionValue(CMD_OPT_NAME_REALTIME, "false");
 		if (!("true".equals(realtimeOptValStr) || "false".equals(realtimeOptValStr))) {
 			System.out.println("Invalid value for option " + CMD_OPT_NAME_REALTIME + ": '" + realtimeOptValStr + "'"); // NOPMD (System.out)
@@ -139,7 +160,7 @@ public final class FilesystemLogReplayerStarter {
 		}
 		FilesystemLogReplayerStarter.realtimeMode = "true".equals(realtimeOptValStr);
 
-		/* 4.) init numRealtimeWorkerThreads */
+		// 4.) init numRealtimeWorkerThreads
 		final String numRealtimeWorkerThreadsStr = FilesystemLogReplayerStarter.cmdl.getOptionValue(CMD_OPT_NAME_NUM_REALTIME_WORKERS,
 				"1");
 		try {
@@ -158,7 +179,7 @@ public final class FilesystemLogReplayerStarter {
 			retVal = false;
 		}
 
-		/* 5.) init ignoreRecordsBefore/After */
+		// 5.) init ignoreRecordsBefore/After
 		final DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT_PATTERN, Locale.US);
 		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
@@ -187,7 +208,7 @@ public final class FilesystemLogReplayerStarter {
 			return false;
 		}
 
-		/* log configuration */
+		// log configuration
 		if (retVal) {
 			LOG.info("inputDirs: "
 					+ FilesystemLogReplayerStarter.fromStringArrayToDeliminedString(FilesystemLogReplayerStarter.inputDirs, ';'));
@@ -201,8 +222,8 @@ public final class FilesystemLogReplayerStarter {
 		return retVal;
 	}
 
-	// TODO: difference to Arrays.toString(..array.)?
 	private static String fromStringArrayToDeliminedString(final String[] array, final char delimiter) {
+		Arrays.toString(array);
 		final StringBuilder arTostr = new StringBuilder();
 		if (array.length > 0) {
 			arTostr.append(array[0]);
@@ -212,15 +233,20 @@ public final class FilesystemLogReplayerStarter {
 			}
 		}
 		return arTostr.toString();
-
 	}
 
+	/**
+	 * The main method of the tool.
+	 * 
+	 * @param args
+	 *            The command line arguments.
+	 */
 	public static void main(final String[] args) {
 		if (!FilesystemLogReplayerStarter.parseArgs(args) || !FilesystemLogReplayerStarter.initFromArgs()) {
 			System.exit(1);
 		}
 
-		/* Parsed args and initialized variables */
+		// Parsed args and initialized variables
 
 		if (FilesystemLogReplayerStarter.realtimeMode) {
 			LOG.info("Replaying log data in real time");

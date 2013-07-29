@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,10 +26,14 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.IOriginRetentionPol
 import kieker.tools.traceAnalysis.systemModel.MessageTrace;
 
 /**
+ * This is an abstract base for a single node within a call tree.
  * 
  * @param <T>
+ *            The type of the entity to be stored in the node.
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 public abstract class AbstractCallTreeNode<T> extends AbstractVertex<AbstractCallTreeNode<T>, WeightedDirectedCallTreeEdge<T>, MessageTrace> {
 
@@ -40,6 +44,20 @@ public abstract class AbstractCallTreeNode<T> extends AbstractVertex<AbstractCal
 
 	private final List<WeightedDirectedCallTreeEdge<T>> childEdges = Collections.synchronizedList(new ArrayList<WeightedDirectedCallTreeEdge<T>>());
 
+	/**
+	 * This constructor uses the given parameters to initialize the fields of this class.
+	 * 
+	 * @param id
+	 *            The identifier of this node.
+	 * @param entity
+	 *            The content of this node.
+	 * @param rootNode
+	 *            Determines whether this node is the root node or not.
+	 * @param origin
+	 *            The meta data of this node.
+	 * @param originPolicy
+	 *            The origin policy.
+	 */
 	public AbstractCallTreeNode(final int id, final T entity, final boolean rootNode, final MessageTrace origin, final IOriginRetentionPolicy originPolicy) {
 		super(origin, originPolicy);
 		this.id = id;
@@ -47,26 +65,45 @@ public abstract class AbstractCallTreeNode<T> extends AbstractVertex<AbstractCal
 		this.entity = entity;
 	}
 
+	/**
+	 * Delivers the stored entity.
+	 * 
+	 * @return The content of this node.
+	 */
 	public final T getEntity() {
 		return this.entity;
 	}
 
+	/**
+	 * Delivers the child edges.
+	 * 
+	 * @return A collection containing the child edges.
+	 */
 	public final Collection<WeightedDirectedCallTreeEdge<T>> getChildEdges() {
 		return this.childEdges;
 	}
 
-	/** Append edge to *sorted* list of children */
+	/**
+	 * Append edge to *sorted* list of children.
+	 * 
+	 * @param destination
+	 *            The edge to add to the list of children edges.
+	 */
 	protected final void appendChildEdge(final WeightedDirectedCallTreeEdge<T> destination) {
 		this.childEdges.add(destination);
 	}
 
-	// TODO: Dirty hack, Object should be T.
-	public abstract AbstractCallTreeNode<T> newCall(Object destination, MessageTrace origin, IOriginRetentionPolicy originPolicy);
+	public abstract AbstractCallTreeNode<T> newCall(T destination, MessageTrace origin, IOriginRetentionPolicy originPolicy);
 
 	public final int getId() {
 		return this.id;
 	}
 
+	/**
+	 * Tells whether the current node is a root node.
+	 * 
+	 * @return true if and only if the current node has to be interpreted as a root node.
+	 */
 	public final boolean isRootNode() {
 		return this.rootNode;
 	}

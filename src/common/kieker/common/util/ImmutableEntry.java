@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,13 +25,25 @@ import java.util.Map;
  * @author Andre van Hoorn
  * 
  * @param <K>
+ *            The type of the key.
  * @param <V>
+ *            The type of the value.
+ * 
+ * @since 1.6
  */
 public class ImmutableEntry<K, V> implements Map.Entry<K, V> {
 
 	private final K key;
 	private final V value;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param key
+	 *            The key to be stored in the entry.
+	 * @param value
+	 *            The valeu to be stored in the entry.
+	 */
 	public ImmutableEntry(final K key, final V value) {
 		this.key = key;
 		this.value = value;
@@ -45,7 +57,15 @@ public class ImmutableEntry<K, V> implements Map.Entry<K, V> {
 		return this.value;
 	}
 
-	public V setValue(final V arg0) {
+	/**
+	 * This method is not supported, as the entry is immutable.
+	 * 
+	 * @param v
+	 *            The argument. It will be ignored.
+	 * 
+	 * @return Nothing. The method throws an exception.
+	 */
+	public V setValue(final V v) {
 		throw new UnsupportedOperationException("This entry is immutable");
 	}
 

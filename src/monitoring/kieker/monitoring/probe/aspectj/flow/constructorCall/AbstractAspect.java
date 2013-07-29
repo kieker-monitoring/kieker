@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,8 @@ import kieker.monitoring.timer.ITimeSource;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 @Aspect
 public abstract class AbstractAspect extends AbstractAspectJProbe {
@@ -40,16 +42,35 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
 	private static final TraceRegistry TRACEREGISTRY = TraceRegistry.INSTANCE;
 
+	/**
+	 * The pointcut for the monitored constructors. Inheriting classes should extend the pointcut in order to find the correct calls (e.g. all constructors or only
+	 * constructors with specific annotations).
+	 */
 	@Pointcut
 	public abstract void monitoredConstructor();
 
-	// TODO: the detection of the caller with EnclosingStaticPart might be wrong!
-
+	/**
+	 * This is an advice used around calls from members to constructors.
+	 * 
+	 * @param thisObject
+	 *            The caller object.
+	 * @param thisJoinPoint
+	 *            The joint point of the callee.
+	 * @param thisEnclosingJoinPoint
+	 *            The joint point of the caller.
+	 * 
+	 * @return The result of {@code proceed method} of the given joint point.
+	 * 
+	 * @throws Throwable
+	 */
 	@Around("monitoredConstructor() && this(thisObject) && notWithinKieker()")
-	public Object member2constructor(final Object thisObject, final ProceedingJoinPoint thisJoinPoint,
-			final EnclosingStaticPart thisEnclosingJoinPoint) throws Throwable { // NOCS
+	public Object member2constructor(final Object thisObject, final ProceedingJoinPoint thisJoinPoint, final EnclosingStaticPart thisEnclosingJoinPoint)
+			throws Throwable { // NOCS
+		if (!CTRLINST.isMonitoringEnabled()) {
+			return thisJoinPoint.proceed();
+		}
 		final Signature calleeSig = thisJoinPoint.getSignature();
-		final String callee = calleeSig.toLongString();
+		final String callee = this.signatureToLongString(calleeSig);
 		if (!CTRLINST.isProbeActivated(callee)) {
 			return thisJoinPoint.proceed();
 		}
@@ -62,7 +83,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		}
 		final long traceId = trace.getTraceId();
 		// caller
-		final String caller = thisEnclosingJoinPoint.getSignature().toLongString();
+		final String caller = this.signatureToLongString(thisEnclosingJoinPoint.getSignature());
 		final String callerClazz = thisObject.getClass().getName();
 		// callee
 		final String calleeClazz = calleeSig.getDeclaringTypeName();
@@ -81,11 +102,26 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		return retval;
 	}
 
+	/**
+	 * This is an advice used around calls from static elements to constructors.
+	 * 
+	 * @param thisJoinPoint
+	 *            The joint point of the callee.
+	 * @param thisEnclosingJoinPoint
+	 *            The joint point of the caller.
+	 * 
+	 * @return The result of {@code proceed method} of the given joint point.
+	 * 
+	 * @throws Throwable
+	 */
 	@Around("monitoredConstructor() && !this(java.lang.Object) && notWithinKieker()")
 	public Object static2constructor(final ProceedingJoinPoint thisJoinPoint, final EnclosingStaticPart thisEnclosingJoinPoint)
 			throws Throwable { // NOCS
+		if (!CTRLINST.isMonitoringEnabled()) {
+			return thisJoinPoint.proceed();
+		}
 		final Signature calleeSig = thisJoinPoint.getSignature();
-		final String callee = calleeSig.toLongString();
+		final String callee = this.signatureToLongString(calleeSig);
 		if (!CTRLINST.isProbeActivated(callee)) {
 			return thisJoinPoint.proceed();
 		}
@@ -99,7 +135,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final long traceId = trace.getTraceId();
 		// caller
 		final Signature callerSig = thisEnclosingJoinPoint.getSignature();
-		final String caller = callerSig.toLongString();
+		final String caller = this.signatureToLongString(callerSig);
 		final String callerClazz = callerSig.getDeclaringTypeName();
 		// callee
 		final String calleeClazz = calleeSig.getDeclaringTypeName();

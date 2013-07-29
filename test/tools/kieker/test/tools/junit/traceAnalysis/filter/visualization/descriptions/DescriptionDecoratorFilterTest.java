@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,8 +47,9 @@ import kieker.test.tools.util.graph.GraphTestSetup;
 /**
  * Test suite for the description decorator filter.
  * 
- * @author Holger Knoche
+ * @author Holger Knoche, Nils Christian Ehmke
  * 
+ * @since 1.6
  */
 public class DescriptionDecoratorFilterTest extends AbstractKiekerTest {
 
@@ -68,25 +69,34 @@ public class DescriptionDecoratorFilterTest extends AbstractKiekerTest {
 
 	private static GraphTestSetup testSetup;
 
+	/**
+	 * Default constructor.
+	 */
 	public DescriptionDecoratorFilterTest() {
 		// empty default constructor
 	}
 
+	/**
+	 * Initializes the test setup.
+	 * 
+	 * @throws AnalysisConfigurationException
+	 *             If the preparation of the analysis failed.
+	 */
 	@BeforeClass
 	public static void prepareSetup() throws AnalysisConfigurationException {
-		final ComponentDependencyGraphAllocationFilter filter = new ComponentDependencyGraphAllocationFilter(new Configuration());
+		final AnalysisController analysisController = new AnalysisController();
+
+		final ComponentDependencyGraphAllocationFilter filter = new ComponentDependencyGraphAllocationFilter(new Configuration(), analysisController);
 		final String inputPortName = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES;
 		final String repositoryPortName = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL;
 
 		@SuppressWarnings("rawtypes")
-		final DescriptionDecoratorFilter<?, ?, ?> descriptionDecoratorFilter = new DescriptionDecoratorFilter(new Configuration());
-		final DescriptionRepository descriptionRepository = DescriptionDecoratorFilterTest.prepareDescriptionRepository();
+		final DescriptionDecoratorFilter<?, ?, ?> descriptionDecoratorFilter = new DescriptionDecoratorFilter(new Configuration(), analysisController);
+		final DescriptionRepository descriptionRepository = DescriptionDecoratorFilterTest.prepareDescriptionRepository(analysisController);
 
-		testSetup = DependencyGraphTestUtil.prepareEnvironmentForGraphFilterTest(filter, inputPortName, repositoryPortName,
+		testSetup = DependencyGraphTestUtil.prepareEnvironmentForGraphFilterTest(analysisController, filter, inputPortName, repositoryPortName,
 				DescriptionDecoratorFilterTest.createExecutionRecords(), descriptionDecoratorFilter);
 
-		final AnalysisController analysisController = testSetup.getAnalysisController();
-		analysisController.registerRepository(descriptionRepository);
 		analysisController.connect(descriptionDecoratorFilter, DescriptionDecoratorFilter.DESCRIPTION_REPOSITORY_PORT_NAME, descriptionRepository);
 	}
 
@@ -105,14 +115,14 @@ public class DescriptionDecoratorFilterTest extends AbstractKiekerTest {
 		return records;
 	}
 
-	private static DescriptionRepository prepareDescriptionRepository() {
+	private static DescriptionRepository prepareDescriptionRepository(final AnalysisController analysisController) {
 		final ConcurrentMap<String, String> descriptions = new ConcurrentHashMap<String, String>();
 
 		descriptions.put(EXPECTED_ALLOCATION_COMPONENT_NAME_1, DESCRIPTION_1);
 		descriptions.put(EXPECTED_ALLOCATION_COMPONENT_NAME_2, DESCRIPTION_2);
 
 		final DescriptionRepositoryData repositoryData = new DescriptionRepositoryData(descriptions);
-		return new DescriptionRepository(new Configuration(), repositoryData);
+		return new DescriptionRepository(new Configuration(), repositoryData, analysisController);
 	}
 
 	@Test
@@ -124,7 +134,7 @@ public class DescriptionDecoratorFilterTest extends AbstractKiekerTest {
 		Assert.assertEquals(1, graphReceiver.getNumberOfReceivedGraphs());
 
 		// Prepare the produced graph
-		final ComponentAllocationDependencyGraph graph = graphReceiver.<ComponentAllocationDependencyGraph> getFirstGraph(); // NOCS (generic)
+		final ComponentAllocationDependencyGraph graph = graphReceiver.<ComponentAllocationDependencyGraph>getFirstGraph(); // NOCS (generic)
 		final ConcurrentMap<String, DependencyGraphNode<AllocationComponent>> nodeMap = DependencyGraphTestUtil.createNodeLookupTable(graph);
 
 		final DependencyGraphNode<AllocationComponent> component1Node = nodeMap.get(EXPECTED_ALLOCATION_COMPONENT_NAME_1);

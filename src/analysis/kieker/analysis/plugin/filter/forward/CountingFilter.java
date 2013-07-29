@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,14 @@
 
 package kieker.analysis.plugin.filter.forward;
 
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicLong;
 
+import kieker.analysis.IProjectContext;
+import kieker.analysis.display.Image;
+import kieker.analysis.display.MeterGauge;
 import kieker.analysis.display.PlainText;
+import kieker.analysis.display.XYPlot;
 import kieker.analysis.display.annotation.Display;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
@@ -32,6 +37,8 @@ import kieker.common.configuration.Configuration;
  * corresponding method.
  * 
  * @author Jan Waller
+ * 
+ * @since 1.4
  */
 @Plugin(
 		description = "A filter counting the elements flowing through this filter",
@@ -41,44 +48,134 @@ import kieker.common.configuration.Configuration;
 		})
 public final class CountingFilter extends AbstractFilterPlugin {
 
+	/**
+	 * The name of the input port receiving the incoming events.
+	 */
 	public static final String INPUT_PORT_NAME_EVENTS = "inputEvents";
 
+	/**
+	 * The name of the output port passing the incoming events.
+	 */
 	public static final String OUTPUT_PORT_NAME_RELAYED_EVENTS = "relayedEvents";
+	/**
+	 * The name of the output port which delivers the current counter value.
+	 */
 	public static final String OUTPUT_PORT_NAME_COUNT = "currentEventCount";
 
 	private final AtomicLong counter = new AtomicLong();
 
+	private volatile long timeStampOfInitialization;
+
+	private final PlainText plainText = new PlainText();
+	private final MeterGauge meterGauge = new MeterGauge();
+	private final XYPlot xyPlot = new XYPlot(50);
+	private final Image image = new Image();
+
 	/**
-	 * Constructs a {@link CountingFilter}.
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
 	 */
-	public CountingFilter(final Configuration configuration) {
-		super(configuration);
+	public CountingFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public final Configuration getCurrentConfiguration() {
 		return new Configuration();
 	}
 
 	/**
 	 * Returns the number of objects received until now.
+	 * 
+	 * @return The current counter value.
 	 */
 	public final long getMessageCount() {
 		return this.counter.get();
 	}
 
+	/**
+	 * This method represents the input port of this filter.
+	 * 
+	 * @param event
+	 *            The next event.
+	 */
 	@InputPort(name = INPUT_PORT_NAME_EVENTS, eventTypes = { Object.class }, description = "Receives incoming objects to be counted and forwarded")
 	public final void inputEvent(final Object event) {
 		final Long count = CountingFilter.this.counter.incrementAndGet();
+
+		this.updateDisplays();
+
 		super.deliver(OUTPUT_PORT_NAME_RELAYED_EVENTS, event);
 		super.deliver(OUTPUT_PORT_NAME_COUNT, count);
 	}
 
-	/**
-	 * This method is being used to display the currently stored value within this counter.
-	 * It sets the current text within the given instance of {@link PlainText}.
-	 */
-	@Display(name = "Counter Display")
-	public final void countDisplay(final PlainText plainText) {
-		plainText.setText(Long.toString(this.counter.get()));
+	private void updateDisplays() {
+		// Meter gauge
+		this.meterGauge.setIntervals("", Arrays.asList((Number) 10, 20, 40, 100), Arrays.asList("66cc66, 93b75f, E7E658, cc6666"));
+		this.meterGauge.setValue("", this.counter);
+
+		// XY Plot
+		final long timeStampDeltaInSeconds = (System.currentTimeMillis() - this.timeStampOfInitialization) / 1000;
+		this.xyPlot.setEntry("", timeStampDeltaInSeconds, this.counter.get());
+
+		// Plain text
+		this.plainText.setText(Long.toString(this.counter.get()));
+
+		// Image
+
+		// final String value = Long.toString(this.counter.get());
+		// final int width = this.image.getImage().getWidth();
+		// final int height = this.image.getImage().getHeight();
+		// final Graphics2D g = this.image.getGraphics();
+		//
+		// g.setFont(g.getFont().deriveFont(20.0f));
+		//
+		// g.setColor(Color.white);
+		// g.fillRect(0, 0, width - 1, height - 1);
+		// g.setColor(Color.gray);
+		// g.drawRect(0, 0, width - 2, height - 2);
+		//
+		// final Rectangle2D bounds = g.getFontMetrics().getStringBounds(value, g);
+		//
+		// g.drawString(value, (int) (width - bounds.getWidth()) / 2, (int) (height - bounds.getHeight()) / 2);
+
 	}
+
+	@Override
+	public boolean init() {
+		if (super.init()) {
+			this.timeStampOfInitialization = System.currentTimeMillis();
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Display(name = "Visual Counter Display")
+	public final Image imageDisplay() {
+		return this.image;
+	}
+
+	@Display(name = "Counter Display")
+	public final PlainText plainTextDisplay() {
+		return this.plainText;
+	}
+
+	@Display(name = "XYPlot Counter Display")
+	public final XYPlot xyPlotDisplay() {
+		return this.xyPlot;
+	}
+
+	@Display(name = "Meter Gauge Counter Display")
+	public final MeterGauge meterGaugeDisplay() {
+		return this.meterGauge;
+	}
+
 }

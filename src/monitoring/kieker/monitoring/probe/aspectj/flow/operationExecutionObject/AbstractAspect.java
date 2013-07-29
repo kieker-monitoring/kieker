@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,8 @@ import kieker.monitoring.timer.ITimeSource;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 @Aspect
 public abstract class AbstractAspect extends AbstractAspectJProbe {
@@ -41,12 +43,18 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
 	private static final TraceRegistry TRACEREGISTRY = TraceRegistry.INSTANCE;
 
+	/**
+	 * This is the pointcut for the monitored operations. Inheriting classes should extend this pointcut to make sure that the correct joint points will be detected.
+	 */
 	@Pointcut
 	public abstract void monitoredOperation();
 
 	@Around("monitoredOperation() && this(thisObject) && notWithinKieker()")
 	public Object operation(final Object thisObject, final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
-		final String signature = thisJoinPoint.getSignature().toLongString();
+		if (!CTRLINST.isMonitoringEnabled()) {
+			return thisJoinPoint.proceed();
+		}
+		final String signature = this.signatureToLongString(thisJoinPoint.getSignature());
 		if (!CTRLINST.isProbeActivated(signature)) {
 			return thisJoinPoint.proceed();
 		}
@@ -81,10 +89,23 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		return retval;
 	}
 
+	/**
+	 * This advice is used around static operations.
+	 * 
+	 * @param thisJoinPoint
+	 *            The joint point of the advice.
+	 * 
+	 * @return The return value of the joint point's {@code proceed} method.
+	 * 
+	 * @throws Throwable
+	 */
 	@Around("monitoredOperation() && !this(java.lang.Object) && notWithinKieker()")
 	public Object staticOperation(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
+		if (!CTRLINST.isMonitoringEnabled()) {
+			return thisJoinPoint.proceed();
+		}
 		final Signature sig = thisJoinPoint.getSignature();
-		final String signature = sig.toLongString();
+		final String signature = this.signatureToLongString(sig);
 		if (!CTRLINST.isProbeActivated(signature)) {
 			return thisJoinPoint.proceed();
 		}

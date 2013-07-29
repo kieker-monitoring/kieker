@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,16 @@
 
 package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.Constants;
-import kieker.tools.traceAnalysis.filter.AbstractGraphProducingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
+import kieker.tools.traceAnalysis.filter.IGraphOutputtingFilter;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
@@ -44,26 +45,32 @@ import kieker.tools.traceAnalysis.systemModel.util.AssemblyComponentOperationPai
  * This class has exactly one input port named "in". The data which is send to this plugin is not delegated in any way.
  * 
  * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
+ * 
+ * @since 1.2
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class),
-		outputPorts = @OutputPort(name = AbstractGraphProducingFilter.OUTPUT_PORT_NAME_GRAPH, eventTypes = { AbstractGraph.class }))
+		outputPorts = @OutputPort(name = IGraphOutputtingFilter.OUTPUT_PORT_NAME_GRAPH, eventTypes = { AbstractGraph.class }))
 public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGraphFilter<AssemblyComponentOperationPair> {
 
 	private static final String CONFIGURATION_NAME = Constants.PLOTASSEMBLYOPERATIONDEPGRAPH_COMPONENT_NAME;
 
 	/**
-	 * Creates a new instance of this class using the given configuration.
+	 * Creates a new filter using the given parameters.
 	 * 
 	 * @param configuration
-	 *            The configuration used to initialize this instance.
+	 *            The configuration to use.
+	 * @param projectContext
+	 *            The project context to use.
 	 */
-	public OperationDependencyGraphAssemblyFilter(final Configuration configuration) {
-		/* Call the mandatory "default" constructor. */
-		super(configuration, new OperationAssemblyDependencyGraph(new AssemblyComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
+	public OperationDependencyGraphAssemblyFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext, new OperationAssemblyDependencyGraph(new AssemblyComponentOperationPair(AbstractSystemSubRepository.ROOT_ELEMENT_ID,
 				OperationRepository.ROOT_OPERATION,
 				AssemblyRepository.ROOT_ASSEMBLY_COMPONENT)));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	@InputPort(
 			name = AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES,
@@ -79,7 +86,7 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 			final int rootOperationId = OperationRepository.ROOT_OPERATION.getId();
 			final Operation senderOperation = m.getSendingExecution().getOperation();
 			final Operation receiverOperation = m.getReceivingExecution().getOperation();
-			/* The following two get-calls to the factory return s.th. in either case */
+			// The following two get-calls to the factory return s.th. in either case
 			final AssemblyComponentOperationPairFactory pairFactory = this.getSystemEntityFactory().getAssemblyPairFactory();
 
 			final AssemblyComponentOperationPair senderPair;
@@ -134,6 +141,9 @@ public class OperationDependencyGraphAssemblyFilter extends AbstractDependencyGr
 		this.reportSuccess(t.getTraceId());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getConfigurationName() {
 		return CONFIGURATION_NAME;

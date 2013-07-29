@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,17 +17,18 @@
 package kieker.evaluation.benchmark;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.concurrent.CountDownLatch;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 
 import kieker.evaluation.monitoredApplication.MonitoredClass;
+import kieker.tools.util.CLIHelpFormatter;
 
 /**
  * @author Jan Waller
@@ -42,11 +43,19 @@ public final class Benchmark {
 	private static long methodTime = 0;
 	private static int recursionDepth = 0;
 
+	static {
+		try {
+			java.util.logging.LogManager.getLogManager().readConfiguration(Benchmark.class.getClassLoader().getResourceAsStream("META-INF/logging.properties"));
+		} catch (final IOException ex) {
+			java.util.logging.Logger.getAnonymousLogger().log(java.util.logging.Level.SEVERE, "Could not load default logging.properties file", ex);
+		}
+	}
+
 	private Benchmark() {}
 
 	public static void main(final String[] args) throws InterruptedException {
 
-		/* 1. Preparations */
+		// 1. Preparations
 		Benchmark.parseAndInitializeArguments(args);
 
 		System.out.println(" # Experiment run configuration:"); // NOPMD (System.out)
@@ -54,8 +63,9 @@ public final class Benchmark {
 		System.out.println(" # 2. Recursion Depth " + Benchmark.recursionDepth); // NOPMD (System.out)
 		System.out.println(" # 3. Threads " + Benchmark.totalThreads); // NOPMD (System.out)
 		System.out.println(" # 4. Total-Calls " + Benchmark.totalCalls); // NOPMD (System.out)
+		System.out.println(" # 5. Method-Time " + Benchmark.methodTime); // NOPMD (System.out)
 
-		/* 2. Initialize Threads and Classes */
+		// 2. Initialize Threads and Classes
 		final CountDownLatch doneSignal = new CountDownLatch(Benchmark.totalThreads);
 		final MonitoredClass mc = new MonitoredClass();
 		final BenchmarkingThread[] threads = new BenchmarkingThread[Benchmark.totalThreads];
@@ -78,21 +88,23 @@ public final class Benchmark {
 			}
 			Thread.sleep(5000);
 		}
-		/* 3. Starting Threads */
+		System.out.print(" # 6. Starting benchmark ... "); // NOPMD (System.out)
+		// 3. Starting Threads
 		for (int i = 0; i < Benchmark.totalThreads; i++) {
 			threads[i].start();
 		}
 
-		/* 4. Wait for all Threads */
+		// 4. Wait for all Threads
 		try {
 			doneSignal.await();
 		} catch (final InterruptedException e) {
 			e.printStackTrace(); // NOPMD (Stacktrace)
 			System.exit(-1);
 		}
+		System.out.println("done"); // NOPMD (System.out)
 
-		/* 5. Print experiment statistics */
-		System.out.print(" # 5. Writing results ... "); // NOPMD (System.out)
+		// 5. Print experiment statistics
+		System.out.print(" # 7. Writing results ... "); // NOPMD (System.out)
 		// CSV Format: configuration;order_index;Thread-ID;duration_nsec
 		long[] timings;
 		for (int h = 0; h < Benchmark.totalThreads; h++) {
@@ -133,7 +145,7 @@ public final class Benchmark {
 			Benchmark.recursionDepth = Integer.parseInt(cmdl.getOptionValue("recursiondepth"));
 			Benchmark.ps = new PrintStream(new FileOutputStream(Benchmark.outputFn, true), false, Benchmark.ENCODING);
 		} catch (final Exception ex) { // NOCS (e.g., IOException, ParseException, NumberFormatException)
-			new HelpFormatter().printHelp(Benchmark.class.getName(), cmdlOpts);
+			new CLIHelpFormatter().printHelp(Benchmark.class.getName(), cmdlOpts);
 			ex.printStackTrace(); // NOPMD (Stacktrace)
 			System.exit(-1);
 		}

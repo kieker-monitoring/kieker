@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,23 +24,29 @@ import org.aspectj.lang.annotation.Pointcut;
 
 /**
  * @author Jan Waller
+ * 
+ * @since 1.3
  */
 @Aspect
-public final class OperationExecutionAspectAnnotationServlet extends AbstractOperationExecutionAspectServlet {
+public class OperationExecutionAspectAnnotationServlet extends AbstractOperationExecutionAspectServlet {
 
+	/**
+	 * Default constructor.
+	 */
 	public OperationExecutionAspectAnnotationServlet() {
 		// empty default constructor
 	}
 
 	@Override
 	@Pointcut("execution(* *.do*(..)) && args(request,response)")
-	public final void monitoredServlet(final HttpServletRequest request, final HttpServletResponse response) {
+	public void monitoredServlet(final HttpServletRequest request, final HttpServletResponse response) {
 		// Aspect Declaration (MUST be empty)
 	}
 
 	@Override
-	@Pointcut("execution(@kieker.monitoring.annotation.OperationExecutionMonitoringProbe * *(..)) || execution(@kieker.monitoring.annotation.OperationExecutionMonitoringProbe new(..))")
-	public final void monitoredOperation() {
+	@Pointcut("execution(@kieker.monitoring.annotation.OperationExecutionMonitoringProbe * *(..)) || "
+			+ "execution(@kieker.monitoring.annotation.OperationExecutionMonitoringProbe new(..))")
+	public void monitoredOperation() {
 		// Aspect Declaration (MUST be empty)
 	}
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,16 @@
 
 package kieker.analysis.plugin.reader;
 
+import kieker.analysis.plugin.IPlugin;
 
 /**
+ * This is the interface for reader plugins.
+ * 
  * @author Andre van Hoorn
+ * 
+ * @since 0.95a
  */
-public interface IReaderPlugin {
+public interface IReaderPlugin extends IPlugin {
 
 	/**
 	 * Starts the reader. This method is intended to be a blocking operation,
@@ -31,6 +36,8 @@ public interface IReaderPlugin {
 	 * to initiate the termination of this method.
 	 * 
 	 * @return true if reading was successful; false if an error occurred
+	 * 
+	 * @since 1.2
 	 */
 	public boolean read();
 }

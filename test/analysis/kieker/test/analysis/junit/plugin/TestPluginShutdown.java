@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.IAnalysisController;
+import kieker.analysis.IProjectContext;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
@@ -34,38 +36,62 @@ import kieker.common.configuration.Configuration;
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
+ * This is a test to make sure that the plugins are shutdown in the correct order, when the analysis terminates.
+ * 
  * @author Jan Waller
+ * 
+ * @since 1.6
  */
 public final class TestPluginShutdown extends AbstractKiekerTest {
 
-	private static final AtomicInteger SHUTDOWNORDER = new AtomicInteger();
+	static final AtomicInteger SHUTDOWNORDER = new AtomicInteger(); // NOPMD package for inner class
 
+	/**
+	 * Default constructor.
+	 */
 	public TestPluginShutdown() {
 		// nothing to do...
 	}
 
+	/**
+	 * Initializes the test setup.
+	 */
 	@Before
 	public void init() {
 		SHUTDOWNORDER.set(0);
 	}
 
+	/**
+	 * This is a test using only one reader.
+	 * 
+	 * @throws IllegalStateException
+	 *             If the analysis is in an invalid state (should not happen).
+	 * @throws AnalysisConfigurationException
+	 *             If there is a configuration error in the analysis (should not happen).
+	 */
 	@Test
 	public void testOnlyReader() throws IllegalStateException, AnalysisConfigurationException {
-		final AnalysisController ctrl = new AnalysisController();
-		final ShutdownReader r1 = new ShutdownReader(new Configuration());
-		ctrl.registerReader(r1);
+		final IAnalysisController ctrl = new AnalysisController();
+		final ShutdownReader r1 = new ShutdownReader(new Configuration(), ctrl);
 		ctrl.run();
 		Assert.assertEquals(0, r1.shutdownNr);
 		Assert.assertEquals(AnalysisController.STATE.TERMINATED, ctrl.getState());
 	}
 
+	/**
+	 * This is a test using only one reader connected with one filter.
+	 * 
+	 * @throws IllegalStateException
+	 *             If the analysis is in an invalid state (should not happen).
+	 * @throws AnalysisConfigurationException
+	 *             If there is a configuration error in the analysis (should not happen).
+	 */
 	@Test
 	public void testReaderWithConnectedFilter() throws IllegalStateException, AnalysisConfigurationException {
-		final AnalysisController ctrl = new AnalysisController();
-		final ShutdownReader r1 = new ShutdownReader(new Configuration());
-		final ShutdownFilter f1 = new ShutdownFilter(new Configuration());
-		ctrl.registerReader(r1);
-		ctrl.registerFilter(f1);
+		final IAnalysisController ctrl = new AnalysisController();
+		final ShutdownReader r1 = new ShutdownReader(new Configuration(), ctrl);
+		final ShutdownFilter f1 = new ShutdownFilter(new Configuration(), ctrl);
+
 		ctrl.connect(r1, ShutdownReader.OUTPUT_PORT_NAME, f1, ShutdownFilter.INPUT_PORT_NAME);
 		ctrl.run();
 		Assert.assertEquals(0, r1.shutdownNr);
@@ -73,32 +99,43 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 		Assert.assertEquals(AnalysisController.STATE.TERMINATED, ctrl.getState());
 	}
 
+	/**
+	 * This is a test using one reader and one filter.
+	 * 
+	 * @throws IllegalStateException
+	 *             If the analysis is in an invalid state (should not happen).
+	 * @throws AnalysisConfigurationException
+	 *             If there is a configuration error in the analysis (should not happen).
+	 */
 	@Test
 	public void testReaderWithUnconnectedFilter() throws IllegalStateException, AnalysisConfigurationException {
-		final AnalysisController ctrl = new AnalysisController();
-		final ShutdownReader r1 = new ShutdownReader(new Configuration());
-		final ShutdownFilter f1 = new ShutdownFilter(new Configuration());
-		ctrl.registerReader(r1);
-		ctrl.registerFilter(f1);
+		final IAnalysisController ctrl = new AnalysisController();
+		final ShutdownReader r1 = new ShutdownReader(new Configuration(), ctrl);
+		final ShutdownFilter f1 = new ShutdownFilter(new Configuration(), ctrl);
+
 		ctrl.run();
 		Assert.assertEquals(0, r1.shutdownNr);
 		Assert.assertEquals(1, f1.shutdownNr);
 		Assert.assertEquals(AnalysisController.STATE.TERMINATED, ctrl.getState());
 	}
 
+	/**
+	 * This is a test using only one reader but multiple filters.
+	 * 
+	 * @throws IllegalStateException
+	 *             If the analysis is in an invalid state (should not happen).
+	 * @throws AnalysisConfigurationException
+	 *             If there is a configuration error in the analysis (should not happen).
+	 */
 	@Test
 	public void testChainOfFilters() throws IllegalStateException, AnalysisConfigurationException {
-		final AnalysisController ctrl = new AnalysisController();
-		final ShutdownReader r1 = new ShutdownReader(new Configuration());
-		final ShutdownFilter f1 = new ShutdownFilter(new Configuration());
-		final ShutdownFilter f2 = new ShutdownFilter(new Configuration());
-		final ShutdownFilter f3 = new ShutdownFilter(new Configuration());
-		final ShutdownFilter f4 = new ShutdownFilter(new Configuration());
-		ctrl.registerReader(r1);
-		ctrl.registerFilter(f1);
-		ctrl.registerFilter(f2);
-		ctrl.registerFilter(f3);
-		ctrl.registerFilter(f4);
+		final IAnalysisController ctrl = new AnalysisController();
+		final ShutdownReader r1 = new ShutdownReader(new Configuration(), ctrl);
+		final ShutdownFilter f1 = new ShutdownFilter(new Configuration(), ctrl);
+		final ShutdownFilter f2 = new ShutdownFilter(new Configuration(), ctrl);
+		final ShutdownFilter f3 = new ShutdownFilter(new Configuration(), ctrl);
+		final ShutdownFilter f4 = new ShutdownFilter(new Configuration(), ctrl);
+
 		ctrl.connect(r1, ShutdownReader.OUTPUT_PORT_NAME, f1, ShutdownFilter.INPUT_PORT_NAME);
 		ctrl.connect(f1, ShutdownFilter.OUTPUT_PORT_NAME, f2, ShutdownFilter.INPUT_PORT_NAME);
 		ctrl.connect(f2, ShutdownFilter.OUTPUT_PORT_NAME, f3, ShutdownFilter.INPUT_PORT_NAME);
@@ -112,15 +149,21 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 		Assert.assertEquals(AnalysisController.STATE.TERMINATED, ctrl.getState());
 	}
 
+	/**
+	 * This is a test using two readers and one filter.
+	 * 
+	 * @throws IllegalStateException
+	 *             If the analysis is in an invalid state (should not happen).
+	 * @throws AnalysisConfigurationException
+	 *             If there is a configuration error in the analysis (should not happen).
+	 */
 	@Test
 	public void testTwoReadersOneFilter() throws IllegalStateException, AnalysisConfigurationException {
-		final AnalysisController ctrl = new AnalysisController();
-		final ShutdownReader r1 = new ShutdownReader(new Configuration());
-		final ShutdownReader r2 = new ShutdownReader(new Configuration());
-		final ShutdownFilter f1 = new ShutdownFilter(new Configuration());
-		ctrl.registerReader(r1);
-		ctrl.registerReader(r2);
-		ctrl.registerFilter(f1);
+		final IAnalysisController ctrl = new AnalysisController();
+		final ShutdownReader r1 = new ShutdownReader(new Configuration(), ctrl);
+		final ShutdownReader r2 = new ShutdownReader(new Configuration(), ctrl);
+		final ShutdownFilter f1 = new ShutdownFilter(new Configuration(), ctrl);
+
 		ctrl.connect(r1, ShutdownReader.OUTPUT_PORT_NAME, f1, ShutdownFilter.INPUT_PORT_NAME);
 		ctrl.connect(r2, ShutdownReader.OUTPUT_PORT_NAME, f1, ShutdownFilter.INPUT_PORT_NAME);
 		ctrl.run();
@@ -132,20 +175,21 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 
 	/**
 	 * This test would have more than one correct answer!
+	 * 
+	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
+	 * @throws IllegalStateException
+	 *             If the internal analysis is in an invalid state.
 	 */
 	@Test
 	public void testLongWayShortWay() throws IllegalStateException, AnalysisConfigurationException {
-		final AnalysisController ctrl = new AnalysisController();
-		final ShutdownReader r1 = new ShutdownReader(new Configuration());
-		final ShutdownReader r2 = new ShutdownReader(new Configuration());
-		final ShutdownFilter f1 = new ShutdownFilter(new Configuration());
-		final ShutdownFilter f2 = new ShutdownFilter(new Configuration());
-		final ShutdownFilter f3 = new ShutdownFilter(new Configuration());
-		ctrl.registerReader(r1);
-		ctrl.registerReader(r2);
-		ctrl.registerFilter(f1);
-		ctrl.registerFilter(f2);
-		ctrl.registerFilter(f3);
+		final IAnalysisController ctrl = new AnalysisController();
+		final ShutdownReader r1 = new ShutdownReader(new Configuration(), ctrl);
+		final ShutdownReader r2 = new ShutdownReader(new Configuration(), ctrl);
+		final ShutdownFilter f1 = new ShutdownFilter(new Configuration(), ctrl);
+		final ShutdownFilter f2 = new ShutdownFilter(new Configuration(), ctrl);
+		final ShutdownFilter f3 = new ShutdownFilter(new Configuration(), ctrl);
+
 		ctrl.connect(r1, ShutdownReader.OUTPUT_PORT_NAME, f1, ShutdownFilter.INPUT_PORT_NAME);
 		ctrl.connect(r2, ShutdownReader.OUTPUT_PORT_NAME, f3, ShutdownFilter.INPUT_PORT_NAME);
 		ctrl.connect(f1, ShutdownFilter.OUTPUT_PORT_NAME, f2, ShutdownFilter.INPUT_PORT_NAME);
@@ -161,16 +205,19 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 
 	/**
 	 * This test would have more than one correct answer!
+	 * 
+	 * @throws IllegalStateException
+	 *             If the internally assembled analysis is in an invalid state.
+	 * @throws AnalysisConfigurationException
+	 *             If the internally assembled analysis configuration is somehow invalid.
 	 */
 	@Test
 	public void testLoop() throws IllegalStateException, AnalysisConfigurationException {
-		final AnalysisController ctrl = new AnalysisController();
-		final ShutdownReader r1 = new ShutdownReader(new Configuration());
-		final ShutdownFilter f1 = new ShutdownFilter(new Configuration());
-		final ShutdownFilter f2 = new ShutdownFilter(new Configuration());
-		ctrl.registerReader(r1);
-		ctrl.registerFilter(f1);
-		ctrl.registerFilter(f2);
+		final IAnalysisController ctrl = new AnalysisController();
+		final ShutdownReader r1 = new ShutdownReader(new Configuration(), ctrl);
+		final ShutdownFilter f1 = new ShutdownFilter(new Configuration(), ctrl);
+		final ShutdownFilter f2 = new ShutdownFilter(new Configuration(), ctrl);
+
 		ctrl.connect(r1, ShutdownReader.OUTPUT_PORT_NAME, f1, ShutdownFilter.INPUT_PORT_NAME);
 		ctrl.connect(f1, ShutdownFilter.OUTPUT_PORT_NAME, f2, ShutdownFilter.INPUT_PORT_NAME);
 		ctrl.connect(f2, ShutdownFilter.OUTPUT_PORT_NAME, f1, ShutdownFilter.INPUT_PORT_NAME);
@@ -181,24 +228,37 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 		Assert.assertEquals(AnalysisController.STATE.TERMINATED, ctrl.getState());
 	}
 
+	/**
+	 * @author Jan Waller
+	 */
 	@Plugin(programmaticOnly = true, outputPorts = { @OutputPort(name = ShutdownReader.OUTPUT_PORT_NAME) })
 	private static final class ShutdownReader extends AbstractReaderPlugin {
 		public static final String OUTPUT_PORT_NAME = "out";
 
-		private int shutdownNr = -1;
+		int shutdownNr = -1; // NOPMD NOCS package for inner class
 
-		public ShutdownReader(final Configuration configuration) {
-			super(configuration);
+		public ShutdownReader(final Configuration configuration, final IProjectContext projectContext) {
+			super(configuration, projectContext);
 		}
 
+		/**
+		 * {@inheritDoc}
+		 */
 		public void terminate(final boolean error) {
 			this.shutdownNr = SHUTDOWNORDER.getAndIncrement();
 		}
 
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
 		public Configuration getCurrentConfiguration() {
 			return new Configuration();
 		}
 
+		/**
+		 * {@inheritDoc}
+		 */
 		public boolean read() {
 			// don't send anything (else we would fail in loop!)
 			// super.deliver(OUTPUT_PORT_NAME, new Object());
@@ -206,17 +266,21 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 		}
 	}
 
+	/**
+	 * @author Jan Waller
+	 */
 	@Plugin(programmaticOnly = true, outputPorts = { @OutputPort(name = ShutdownFilter.OUTPUT_PORT_NAME) })
 	private static final class ShutdownFilter extends AbstractFilterPlugin {
 		public static final String OUTPUT_PORT_NAME = "out";
 		public static final String INPUT_PORT_NAME = "in";
 
-		private int shutdownNr = -1;
+		int shutdownNr = -1; // NOPMD NOCS package for inner class
 
-		public ShutdownFilter(final Configuration configuration) {
-			super(configuration);
+		public ShutdownFilter(final Configuration configuration, final IProjectContext projectContext) {
+			super(configuration, projectContext);
 		}
 
+		@Override
 		public Configuration getCurrentConfiguration() {
 			return new Configuration();
 		}

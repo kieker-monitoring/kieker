@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package kieker.tools.traceAnalysis.filter.visualization.callTree;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
@@ -32,20 +33,31 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationPair;
 
 /**
- * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 @Plugin(description = "Uses the incoming data to enrich the connected repository with data for the aggregated allocation component operation call tree",
 		repositoryPorts = {
 			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
 		})
-// TODO: don't we have to redefine the configuration properties from the super class here?
 public class AggregatedAllocationComponentOperationCallTreeFilter extends AbstractAggregatedCallTreeFilter<AllocationComponentOperationPair> {
 
-	public AggregatedAllocationComponentOperationCallTreeFilter(final Configuration configuration) {
-		super(configuration);
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this component.
+	 * @param projectContext
+	 *            The project context for this component.
+	 */
+	public AggregatedAllocationComponentOperationCallTreeFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean init() {
 		final boolean success = super.init();
@@ -68,6 +80,8 @@ public class AggregatedAllocationComponentOperationCallTreeFilter extends Abstra
 
 /**
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 class AggregatedAllocationComponentOperationCallTreeNode extends AbstractAggregatedCallTreeNode<AllocationComponentOperationPair> {
 
@@ -77,8 +91,9 @@ class AggregatedAllocationComponentOperationCallTreeNode extends AbstractAggrega
 	}
 
 	@Override
-	public AbstractCallTreeNode<AllocationComponentOperationPair> newCall(final Object dstObj, final MessageTrace origin, final IOriginRetentionPolicy originPolicy) {
-		final AllocationComponentOperationPair destination = (AllocationComponentOperationPair) dstObj;
+	public AbstractCallTreeNode<AllocationComponentOperationPair> newCall(final AllocationComponentOperationPair dstObj, final MessageTrace origin,
+			final IOriginRetentionPolicy originPolicy) {
+		final AllocationComponentOperationPair destination = dstObj;
 		WeightedDirectedCallTreeEdge<AllocationComponentOperationPair> e = this.childMap.get(destination.getId());
 		AbstractCallTreeNode<AllocationComponentOperationPair> n;
 		if (e != null) {

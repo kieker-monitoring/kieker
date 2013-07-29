@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,11 +22,9 @@ import java.util.List;
 import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
 
 /**
- * A simple test and demonstration scenario for Kieker's
- * monitoring component.
+ * A simple test and demonstration scenario for Kieker's monitoring component.
  * 
- * THIS VARIANT IS IDENTICAL TO kieker.tests.compileTimeWeaving.bookstore.Bookstore,
- * but it uses a different Catalog that has a synchronized method. This allows to
+ * THIS VARIANT IS IDENTICAL TO kieker.tests.compileTimeWeaving.bookstore.Bookstore, but it uses a different Catalog that has a synchronized method. This allows to
  * test the (negative) performance influence of synchronized method invocation.
  * 
  * 
@@ -37,33 +35,39 @@ import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
  *         Kieker and publication under an open source licence
  *         2007-04-18: Initial version
  * 
+ * @since 0.91
  */
-
 public class Bookstore extends Thread {
+
+	/** The list of bookstores which will be filled in the main method and consumed by other threads. */
 	public static final List<Bookstore> BOOKSTORE_SCENARIOS = new ArrayList<Bookstore>();
 
 	private static final int NUM_REQUESTS = 5000;
 	private static final int INTER_REQUEST_TIME = 5;
 
+	/**
+	 * Default constructor.
+	 */
 	public Bookstore() {
 		// nothing to do
 	}
 
 	/**
 	 * 
-	 * main is the load driver for the Bookstore. It creates
-	 * request which all request a search from the bookstore.
-	 * A fixed time delay is between two request. Requests
-	 * are likely to overlap, which leads to request processing
-	 * in more than one thread.
+	 * main is the load driver for the Bookstore. It creates request which all request a search from the bookstore. A fixed time delay is between two request.
+	 * Requests are likely to overlap, which leads to request processing in more than one thread.
 	 * 
-	 * Both the number of requests and arrival rate are defined
-	 * by the local variables above the method.
+	 * Both the number of requests and arrival rate are defined by the local variables above the method.
+	 * 
 	 * (default: 100 requests; interRequestTime 5 (millisecs))
 	 * 
-	 * This will be monitored by Kieker, since it has the
+	 * This will be monitored by Kieker, since it has the @OperationExecutionMonitoringProbe() annotation.
 	 * 
-	 * @OperationExecutionMonitoringProbe() annotation.
+	 * @param args
+	 *            The command line arguments. They have currently no effect.
+	 * 
+	 * @throws InterruptedException
+	 *             If the main thread has been interrupted.
 	 */
 	@OperationExecutionMonitoringProbe
 	public static void main(final String[] args) throws InterruptedException {
@@ -94,6 +98,9 @@ public class Bookstore extends Thread {
 		}
 	}
 
+	/**
+	 * Searches for a book.
+	 */
 	@OperationExecutionMonitoringProbe
 	public static void searchBook() {
 		Catalog.getBook(false);
@@ -101,7 +108,10 @@ public class Bookstore extends Thread {
 	}
 
 	/**
-	 * Only encapsulates Thread.sleep()
+	 * This method encapsulates only Thread.sleep().
+	 * 
+	 * @param waittime
+	 *            The time to wait in milliseconds.
 	 */
 	public static void waitabit(final long waittime) {
 		if (waittime > 0) {

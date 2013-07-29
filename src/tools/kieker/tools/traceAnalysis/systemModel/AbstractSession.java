@@ -119,7 +119,13 @@ public abstract class AbstractSession<T extends AbstractTrace> {
 
 	}
 
+	// TODO: Fix warnings for synthetic-accesses (note: do not use the respective getter methods!)
 	private class ModifiableState implements ISessionState<T> {
+
+		// avoid warnings creating objects of this type without an explicit (default) constructor
+		public ModifiableState() {
+			super();
+		}
 
 		public synchronized void addTrace(final T trace) {
 			if (!AbstractSession.this.containedTraces.add(trace)) {

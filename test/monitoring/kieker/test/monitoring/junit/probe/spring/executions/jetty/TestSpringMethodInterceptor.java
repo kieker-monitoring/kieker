@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,6 +43,8 @@ import kieker.test.monitoring.util.NamedListWriter;
 
 /**
  * @author Andre van Hoorn
+ * 
+ * @since 1.5
  */
 public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 	// private static final Log LOG = LogFactory.getLog(TestSpringMethodInterceptor.class);
@@ -50,6 +52,7 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 	private static final String HOSTNAME = "SRV-W4W7E9pN";
 	private static final String CTRLNAME = "MonitoringController-TestSpringMethodInterceptor";
 
+	/** A rule making sure that a temporary folder exists for every test method (which is removed after the test). */
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
 
@@ -65,6 +68,7 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 		this.tmpFolder.create();
 		final String listName = NamedListWriter.FALLBACK_LIST_NAME;
 		this.recordListFilledByListWriter = NamedListWriter.createNamedList(listName);
+		System.setProperty(ConfigurationFactory.METADATA, "false");
 		System.setProperty(ConfigurationFactory.CONTROLLER_NAME, CTRLNAME);
 		System.setProperty(ConfigurationFactory.WRITER_CLASSNAME, NamedListWriter.class.getName());
 		// Doesn't work because property not starting with kieker.monitoring: System.setProperty(NamedListWriter.CONFIG_PROPERTY_NAME_LIST_NAME, this.listName);
@@ -73,11 +77,9 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 		// start the server
 		this.ctx = new FileSystemXmlApplicationContext("test/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/jetty.xml");
 
-		/*
-		 * Note that the Spring interceptor is configure in
-		 * test/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/webapp/WEB-INF/spring/servlet-context.xml
-		 * to only instrument Bookstore.searchBook and Catalog.getBook
-		 */
+		// Note that the Spring interceptor is configure in
+		// test/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/webapp/WEB-INF/spring/servlet-context.xml to only instrument
+		// Bookstore.searchBook and Catalog.getBook
 	}
 
 	@Test
@@ -91,7 +93,7 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 				in = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
 				// final String result = in.readLine(); // the result is currently an empty string.
 			} finally {
-				if (in != null) {
+				if (null != in) {
 					in.close();
 				}
 			}
@@ -108,12 +110,9 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 	private void checkRecordList(final List<IMonitoringRecord> records) {
 		Assert.assertFalse("No records in List", records.isEmpty());
 
-		/*
-		 * Note that the Spring interceptor is configured in
-		 * test/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/webapp/WEB-INF/spring/servlet-context.xml
-		 * to only instrument Bookstore.searchBook and Catalog.getBook
-		 */
-
+		// Note that the Spring interceptor is configured in
+		// test/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/webapp/WEB-INF/spring/servlet-context.xml to only instrument
+		// Bookstore.searchBook and Catalog.getBook
 		for (final IMonitoringRecord record : records) {
 			final OperationExecutionRecord opRec = (OperationExecutionRecord) record;
 
@@ -123,7 +122,7 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 				this.assertSignatureIncludesString(opRec.getOperationSignature(), Bookstore.class.getName());
 				Assert.assertEquals("Unexpected ess", 0, opRec.getEss());
 				break;
-			case 1: // fall through two case 2
+			case 1: // fall through to case 2
 			case 2:
 				this.assertSignatureIncludesString(opRec.getOperationSignature(), Catalog.class.getName());
 				Assert.assertEquals("Unexpected ess", 1, opRec.getEss());
@@ -142,9 +141,10 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 	@After
 	public void cleanup() {
 		if (this.ctx != null) {
-			this.ctx.destroy(); // TODO: is this shutting down the server?
+			this.ctx.destroy();
 		}
 		this.tmpFolder.delete();
+		System.clearProperty(ConfigurationFactory.METADATA);
 		System.clearProperty(ConfigurationFactory.CONTROLLER_NAME);
 		System.clearProperty(ConfigurationFactory.WRITER_CLASSNAME);
 		System.clearProperty(ConfigurationFactory.HOST_NAME);

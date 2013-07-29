@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
  * 
  * @author Holger Knoche
  * 
+ * @since 1.6
  */
 public class ContainerDependencyGraphFormatter extends AbstractDependencyGraphFormatter<ContainerDependencyGraph> {
 
@@ -38,12 +39,13 @@ public class ContainerDependencyGraphFormatter extends AbstractDependencyGraphFo
 		// empty default constructor
 	}
 
-	private static String createExecutionContainerNodeLabel(final ExecutionContainer container) {
+	static String createExecutionContainerNodeLabel(final ExecutionContainer container) { // NOPMD package for outer class
 		return AbstractDependencyGraphFormatter.STEREOTYPE_EXECUTION_CONTAINER + "\\n" + container.getName();
 	}
 
 	@Override
-	protected String formatDependencyGraph(final ContainerDependencyGraph graph, final boolean includeWeights, final boolean useShortLabels, final boolean plotLoops) {
+	protected String formatDependencyGraph(final ContainerDependencyGraph graph, final boolean includeWeights, final boolean useShortLabels,
+			final boolean plotLoops) {
 		final StringBuilder builder = new StringBuilder();
 
 		this.appendGraphHeader(builder);
@@ -58,6 +60,9 @@ public class ContainerDependencyGraphFormatter extends AbstractDependencyGraphFo
 		return DEFAULT_FILE_NAME;
 	}
 
+	/**
+	 * @author Holger Knoche
+	 */
 	private static class FormatterVisitor extends AbstractDependencyGraphFormatterVisitor<ExecutionContainer> {
 
 		public FormatterVisitor(final StringBuilder builder, final boolean includeWeights, final boolean plotLoops, final boolean useShortLabels) {
@@ -79,8 +84,7 @@ public class ContainerDependencyGraphFormatter extends AbstractDependencyGraphFo
 						DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
 						null, // imagefilename
 						null, // misc
-						null // tooltip
-						));
+						null)); // tooltip
 			} else {
 				this.builder.append(DotFactory.createNode("",
 						AbstractDependencyGraphFormatter.createNodeId(vertex),
@@ -93,9 +97,7 @@ public class ContainerDependencyGraphFormatter extends AbstractDependencyGraphFo
 						DotFactory.DOT_DEFAULT_FONTSIZE, // fontsize
 						null, // imagefilename
 						null, // misc
-						vertex.getDescription() // tooltip
-						));
-
+						vertex.getDescription())); // tooltip
 			}
 			this.builder.append("\n");
 		}

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package kieker.examples.userguide.ch3and4bookstore;
 
+import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
@@ -48,11 +49,10 @@ public class MyPipeReader extends AbstractReaderPlugin {
 	private final String pipeName;
 	private volatile MyPipe pipe;
 
-	public MyPipeReader(final Configuration config) {
-		super(config);
+	public MyPipeReader(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
 
-		this.pipeName =
-				config.getStringProperty(MyPipeReader.CONFIG_PROPERTY_NAME_PIPE_NAME);
+		this.pipeName = configuration.getStringProperty(MyPipeReader.CONFIG_PROPERTY_NAME_PIPE_NAME);
 
 		try {
 			this.pipe = MyNamedPipeManager.getInstance().acquirePipe(this.pipeName);
@@ -63,15 +63,15 @@ public class MyPipeReader extends AbstractReaderPlugin {
 
 	public boolean read() {
 		try {
-			/* Wait max. 4 seconds for the next data. */
+			// Wait max. 4 seconds for the next data.
 			PipeData data = this.pipe.poll(4);
 			while (data != null) {
-				/* Create new record, init from received array ... */
+				// Create new record, init from received array ...
 				final IMonitoringRecord record = // throws MonitoringRecordException:
 				AbstractMonitoringRecord.createFromArray(data.getRecordType(),
 						data.getRecordData());
 				record.setLoggingTimestamp(data.getLoggingTimestamp());
-				/* ...and delegate the task of delivering to the super class. */
+				// ...and delegate the task of delivering to the super class.
 				super.deliver(MyPipeReader.OUTPUT_PORT_NAME, record);
 				// next turn
 				data = this.pipe.poll(4);
@@ -82,6 +82,7 @@ public class MyPipeReader extends AbstractReaderPlugin {
 		return true;
 	}
 
+	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration(null);
 

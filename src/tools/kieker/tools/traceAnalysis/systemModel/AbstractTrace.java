@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,11 @@
 package kieker.tools.traceAnalysis.systemModel;
 
 /**
+ * This is the abstract base for a trace (like a message trace e.g.).
+ * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.2
  */
 public abstract class AbstractTrace {
 
@@ -26,8 +30,14 @@ public abstract class AbstractTrace {
 	 */
 	public static final String DEFAULT_SESSION_ID = "N/A";
 
+	/** This constant can be used as an ID to show that the trace has no ID. */
+	public static final String NO_TRACE_ID = "N/A";
+
 	private final TraceInformation traceInformation;
 
+	/**
+	 * Default constructor.
+	 */
 	protected AbstractTrace() {
 		this(-1, DEFAULT_SESSION_ID);
 	}
@@ -73,20 +83,20 @@ public abstract class AbstractTrace {
 	}
 
 	/**
-	 * @return the sessionId
+	 * Delivers the ID of the session.
+	 * 
+	 * @return The session ID.
 	 */
 	public String getSessionId() {
 		return this.traceInformation.getSessionId();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode() {
-		/* On purpose, we are not considering the sessionId here */
+		// On purpose, we are not considering the sessionId here
 		return (int) (this.getTraceId() ^ (this.getTraceId() >>> 32));
 	}
 

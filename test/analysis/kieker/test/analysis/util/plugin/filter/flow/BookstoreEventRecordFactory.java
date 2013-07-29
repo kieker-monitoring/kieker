@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,10 +27,11 @@ import kieker.common.record.flow.trace.operation.CallOperationEvent;
 import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
 
 /**
- * A starter method for this factory is implemented in
- * kieker.test.tools.junit.traceAnalysis.util.BookstoreEventRecordFactoryStarter
+ * A starter method for this factory is implemented in kieker.test.tools.junit.traceAnalysis.util.BookstoreEventRecordFactoryStarter.
  * 
  * @author Andre van Hoorn, Holger Knoche, Jan Waller
+ * 
+ * @since 1.5
  */
 public final class BookstoreEventRecordFactory {
 	// private static final Log LOG = LogFactory.getLog(BookstoreEventRecordFactory.class);
@@ -56,7 +57,12 @@ public final class BookstoreEventRecordFactory {
 	 * @param firstTimestamp
 	 *            timestamp of the earliest event, incremented by 1 for each subsequent event
 	 * @param traceId
-	 * @return
+	 *            The id of the trace.
+	 * @param sessionId
+	 *            The session ID.
+	 * @param hostname
+	 *            The name of the host to be used for the trace.
+	 * @return A Bookstore trace.
 	 */
 	public static TraceEventRecords validSyncTraceBeforeAfterEvents(final long firstTimestamp, final long traceId, final String sessionId,
 			final String hostname) {
@@ -126,7 +132,12 @@ public final class BookstoreEventRecordFactory {
 	 * @param firstTimestamp
 	 *            timestamp of the earliest event, incremented by 1 for each subsequent event
 	 * @param traceId
-	 * @return
+	 *            The trace ID.
+	 * @param sessionId
+	 *            The session ID.
+	 * @param hostname
+	 *            The name of the host.
+	 * @return A Bookstore trace.
 	 */
 	public static TraceEventRecords validSyncTraceAdditionalCallEvents(final long firstTimestamp, final long traceId, final String sessionId,
 			final String hostname) {
@@ -220,7 +231,13 @@ public final class BookstoreEventRecordFactory {
 	 * @param firstTimestamp
 	 *            timestamp of the earliest event, incremented by 1 for each subsequent event
 	 * @param traceId
-	 * @return
+	 *            The trace ID.
+	 * @param sessionId
+	 *            The session ID.
+	 * @param hostname
+	 *            The name of the host.
+	 * 
+	 * @return A Bookstore trace.
 	 */
 	public static TraceEventRecords validSyncTraceAdditionalCallEventsGap(final long firstTimestamp, final long traceId, final String sessionId,
 			final String hostname) {
@@ -316,7 +333,13 @@ public final class BookstoreEventRecordFactory {
 	 * @param firstTimestamp
 	 *            timestamp of the earliest event, incremented by 1 for each subsequent event
 	 * @param traceId
-	 * @return
+	 *            The trace ID.
+	 * @param sessionId
+	 *            The session ID.
+	 * @param hostname
+	 *            The name of the host.
+	 * 
+	 * @return A Bookstore trace.
 	 */
 	public static TraceEventRecords validSyncTraceSimpleEntryCallExit(final long firstTimestamp, final long traceId, final String sessionId,
 			final String hostname) {
@@ -367,7 +390,13 @@ public final class BookstoreEventRecordFactory {
 	 * @param firstTimestamp
 	 *            timestamp of the earliest event, incremented by 1 for each subsequent event
 	 * @param traceId
-	 * @return
+	 *            The ID of the trace.
+	 * @param sessionId
+	 *            The session ID.
+	 * @param hostname
+	 *            The name of the host for the trace.
+	 * 
+	 * @return A Bookstore trace.
 	 */
 	public static TraceEventRecords validSyncTraceSimpleEntryCallReturnCallCallExit(final long firstTimestamp, final long traceId, final String sessionId,
 			final String hostname) {
@@ -400,7 +429,7 @@ public final class BookstoreEventRecordFactory {
 		disturbEvent = new SplitEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call3_2__catalog_getBook, traceId, curOrderIndex++);
 		call2_1__crm_getOrders =
 				new CallOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call2_1__crm_getOrders,
-						/* note that we are using the timestamp of the omitted event here! */
+						// note that we are using the timestamp of the omitted event here!
 						traceId, curOrderIndex++,
 						BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
 						BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
@@ -430,7 +459,13 @@ public final class BookstoreEventRecordFactory {
 	 * @param firstTimestamp
 	 *            timestamp of the earliest event, incremented by 1 for each subsequent event
 	 * @param traceId
-	 * @return
+	 *            The ID of the trace.
+	 * @param sessionId
+	 *            The session ID.
+	 * @param hostname
+	 *            The name of the host for the trace.
+	 * 
+	 * @return A Bookstore trace.
 	 */
 	public static TraceEventRecords validSyncTraceSimpleEntryCallCallExit(final long firstTimestamp, final long traceId, final String sessionId,
 			final String hostname) {
@@ -454,7 +489,7 @@ public final class BookstoreEventRecordFactory {
 						BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE);
 		call2_1__crm_getOrders =
 				new CallOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call2_1__crm_getOrders,
-						/* note that we are using the timestamp of the omitted event here! */
+						// note that we are using the timestamp of the omitted event here!
 						traceId, curOrderIndex++,
 						BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
 						BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,
@@ -498,7 +533,7 @@ public final class BookstoreEventRecordFactory {
 
 		call2_1__crm_getOrders =
 				new CallOperationEvent(firstTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call2_1__crm_getOrders,
-						/* note that we are using the timestamp of the omitted event here! */
+						// note that we are using the timestamp of the omitted event here!
 						traceId, ++curOrderIndex,
 						BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
 						BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE,

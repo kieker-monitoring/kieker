@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,10 +33,13 @@ import kieker.common.record.system.ResourceUtilizationRecord;
 
 /**
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.2
  */
 public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	private static final long serialVersionUID = 1L;
-	private static final ConcurrentMap<String, Class<? extends IMonitoringRecord>> OLD_KIEKERRECORDS = new ConcurrentHashMap<String, Class<? extends IMonitoringRecord>>();
+	private static final ConcurrentMap<String, Class<? extends IMonitoringRecord>> OLD_KIEKERRECORDS =
+			new ConcurrentHashMap<String, Class<? extends IMonitoringRecord>>();
 
 	private volatile long loggingTimestamp = -1;
 
@@ -76,6 +79,11 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	/**
 	 * Provides an ordering of IMonitoringRecords by the loggingTimestamp.
 	 * Classes overriding the implementation should respect this ordering. (see #326)
+	 * 
+	 * @param otherRecord
+	 *            The record to be compared.
+	 * 
+	 * @return -1 if this object is less than, +1 if it is greater than or 0 if it is equal to the specified record.
 	 */
 	public int compareTo(final IMonitoringRecord otherRecord) {
 		final long timedifference = this.loggingTimestamp - otherRecord.getLoggingTimestamp();
@@ -108,6 +116,15 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		return (31 * Arrays.hashCode(this.toArray())) + (int) (this.loggingTimestamp ^ (this.loggingTimestamp >>> 32));
 	}
 
+	/**
+	 * This method checks the given arrays, making sure that they have the same length and that the value elements are compatible with the given value types. If the
+	 * arrays are not compatible, this method throws an {@link IllegalArgumentException}.
+	 * 
+	 * @param values
+	 *            The values.
+	 * @param valueTypes
+	 *            The value types.
+	 */
 	public static final void checkArray(final Object[] values, final Class<?>[] valueTypes) {
 		if (values.length != valueTypes.length) {
 			throw new IllegalArgumentException("Expecting array with " + valueTypes.length + " elements but found " + values.length + " elements.");
@@ -151,6 +168,20 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		}
 	}
 
+	/**
+	 * This helper method converts the given array with string objects into an array containing objects from the specified type. (e.g. via the {@code valueOf}
+	 * methods).
+	 * 
+	 * @param recordFields
+	 *            The array containing the string objects.
+	 * @param valueTypes
+	 *            The array containing the types the new array will have.
+	 * 
+	 * @return An array of objects, converted from the given string array.
+	 * 
+	 * @throws IllegalArgumentException
+	 *             If one or more of the given types are not supported.
+	 */
 	public static final Object[] fromStringArrayToTypedArray(final String[] recordFields, final Class<?>[] valueTypes) throws IllegalArgumentException {
 		if (recordFields.length != valueTypes.length) {
 			throw new IllegalArgumentException("Expected " + valueTypes.length + " record fields, but found " + recordFields.length);
@@ -194,6 +225,17 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		return typedArray;
 	}
 
+	/**
+	 * This method tries to find a monitoring record class with the given name.
+	 * 
+	 * @param classname
+	 *            The name of the class.
+	 * 
+	 * @return A {@link Class} instance corresponding to the given name, if it exists.
+	 * 
+	 * @throws MonitoringRecordException
+	 *             If either a class with the given name could not be found or if the class doesn't implement {@link IMonitoringRecord}.
+	 */
 	public static final Class<? extends IMonitoringRecord> classForName(final String classname) throws MonitoringRecordException {
 		final Class<? extends IMonitoringRecord> clazz = OLD_KIEKERRECORDS.get(classname);
 		if (clazz != null) {
@@ -209,6 +251,18 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		}
 	}
 
+	/**
+	 * This method delivers the types array of the given class, either by finding the declared field (in case of a factory record) or via the {@code getValueTypes}
+	 * method.
+	 * 
+	 * @param clazz
+	 *            The record class.
+	 * 
+	 * @return The value types of the specified record.
+	 * 
+	 * @throws MonitoringRecordException
+	 *             If this method failed to access the value types.
+	 */
 	public static final Class<?>[] typesForClass(final Class<? extends IMonitoringRecord> clazz) throws MonitoringRecordException {
 		try {
 			if (IMonitoringRecord.Factory.class.isAssignableFrom(clazz)) {
@@ -236,6 +290,19 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		}
 	}
 
+	/**
+	 * This method creates a new monitoring record from the given data.
+	 * 
+	 * @param clazz
+	 *            The class of the monitoring record.
+	 * @param values
+	 *            The array which will be used to initialize the fields of the record.
+	 * 
+	 * @return An initialized record instance.
+	 * 
+	 * @throws MonitoringRecordException
+	 *             If this method failed to create the record for some reason.
+	 */
 	public static final IMonitoringRecord createFromArray(final Class<? extends IMonitoringRecord> clazz, final Object[] values) throws MonitoringRecordException {
 		try {
 			if (IMonitoringRecord.Factory.class.isAssignableFrom(clazz)) {
@@ -263,8 +330,8 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		}
 	}
 
-	public static final IMonitoringRecord createFromStringArray(final Class<? extends IMonitoringRecord> clazz, final String[] values)
-			throws MonitoringRecordException {
+	public static final IMonitoringRecord createFromStringArray(final Class<? extends IMonitoringRecord> clazz, final String[] values) throws
+			MonitoringRecordException {
 		try {
 			if (IMonitoringRecord.Factory.class.isAssignableFrom(clazz)) {
 				// Factory interface present

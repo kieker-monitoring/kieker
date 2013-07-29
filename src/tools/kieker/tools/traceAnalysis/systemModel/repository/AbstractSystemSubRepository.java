@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,18 +21,33 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * 
  * @author Andre van Hoorn
+ * 
+ * @since 1.1
  */
 public abstract class AbstractSystemSubRepository { // NOPMD (abstract without abstract)
+
+	/** This constant represents the ID of the root element. */
 	public static final int ROOT_ELEMENT_ID = 0;
 
 	private final AtomicInteger nextId = new AtomicInteger(ROOT_ELEMENT_ID + 1);
 
 	private final SystemModelRepository systemFactory;
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param systemFactory
+	 *            The system factory.
+	 */
 	public AbstractSystemSubRepository(final SystemModelRepository systemFactory) {
 		this.systemFactory = systemFactory;
 	}
 
+	/**
+	 * This method delivers the next ID and increments the ID counter atomically.
+	 * 
+	 * @return The next ID.
+	 */
 	protected final int getAndIncrementNextId() {
 		return this.nextId.getAndIncrement();
 	}

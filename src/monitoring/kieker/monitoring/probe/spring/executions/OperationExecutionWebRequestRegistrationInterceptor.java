@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,28 +23,41 @@ import org.springframework.web.context.request.WebRequestInterceptor;
 import kieker.monitoring.core.registry.SessionRegistry;
 
 /**
- * 
  * @author Andre van Hoorn
+ * 
+ * @since 0.9
  */
-// TODO: We should extend this filter by an optional mode, allowing to log executions; just like the SessionAndTraceRegistrationFilter for Servlets
 public class OperationExecutionWebRequestRegistrationInterceptor implements WebRequestInterceptor {
 
+	/** Stores the singleton instance of the session registry. */
 	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
 
 	// protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
 
+	/**
+	 * Creates a new instance of this class.
+	 */
 	public OperationExecutionWebRequestRegistrationInterceptor() {
 		// nothing to do
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void preHandle(final WebRequest request) throws Exception {
 		SESSION_REGISTRY.storeThreadLocalSessionId(request.getSessionId());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void postHandle(final WebRequest request, final ModelMap map) throws Exception {
 		SESSION_REGISTRY.unsetThreadLocalSessionId();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void afterCompletion(final WebRequest request, final Exception map) throws Exception {
 		// nothing to do
 	}

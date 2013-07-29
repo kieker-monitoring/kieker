@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,8 @@ import kieker.common.record.IMonitoringRecord;
 
 /**
  * @author Andre van Hoorn, Jan Waller
+ * 
+ * @since 1.2
  */
 public final class BranchingRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
 	private static final long serialVersionUID = 1949567386494340839L;
@@ -34,12 +36,28 @@ public final class BranchingRecord extends AbstractMonitoringRecord implements I
 	private final int branchID;
 	private final int branchingOutcome;
 
+	/**
+	 * This constructor uses the given parameters to initialize the fields of the record.
+	 * 
+	 * @param timestamp
+	 *            The time stamp.
+	 * @param branchID
+	 *            The branch ID.
+	 * @param branchingOutcome
+	 *            The branching outcome.
+	 */
 	public BranchingRecord(final long timestamp, final int branchID, final int branchingOutcome) {
 		this.timestamp = timestamp;
 		this.branchID = branchID;
 		this.branchingOutcome = branchingOutcome;
 	}
 
+	/**
+	 * This constructor converts the given array into a record. It is recommended to use the array which is the result of a call to {@link #toArray()}.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 */
 	public BranchingRecord(final Object[] values) { // NOPMD (direct store of values)
 		AbstractMonitoringRecord.checkArray(values, TYPES);
 		this.timestamp = (Long) values[0];
@@ -47,15 +65,26 @@ public final class BranchingRecord extends AbstractMonitoringRecord implements I
 		this.branchingOutcome = (Integer) values[2];
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Object[] toArray() {
 		return new Object[] { this.timestamp, this.branchID, this.branchingOutcome, };
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
+	 */
 	@Deprecated
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Class<?>[] getValueTypes() {
 		return TYPES.clone();
 	}

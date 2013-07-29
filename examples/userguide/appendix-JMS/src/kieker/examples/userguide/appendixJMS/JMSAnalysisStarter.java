@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package kieker.examples.userguide.appendixJMS;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.TeeFilter;
 import kieker.analysis.plugin.reader.jms.JMSReader;
@@ -56,19 +57,17 @@ public final class JMSAnalysisStarter {
 			System.exit(1);
 		}
 
-		final AnalysisController analysisInstance = new AnalysisController();
+		final IAnalysisController analysisInstance = new AnalysisController();
 
 		final Configuration logReaderConfiguration = new Configuration();
 		logReaderConfiguration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_PROVIDERURL, providerUrl);
 		logReaderConfiguration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_FACTORYLOOKUP, connectionFactory);
 		logReaderConfiguration.setProperty(JMSReader.CONFIG_PROPERTY_NAME_DESTINATION, queue);
 
-		final JMSReader logReader = new JMSReader(logReaderConfiguration);
-		analysisInstance.registerReader(logReader);
+		final JMSReader logReader = new JMSReader(logReaderConfiguration, analysisInstance);
 
-		/* Create and register a simple output writer. */
-		final TeeFilter teeFilter = new TeeFilter(new Configuration());
-		analysisInstance.registerFilter(teeFilter);
+		// Create and register a simple output writer.
+		final TeeFilter teeFilter = new TeeFilter(new Configuration(), analysisInstance);
 
 		try {
 			analysisInstance.connect(logReader, JMSReader.OUTPUT_PORT_NAME_RECORDS, teeFilter, TeeFilter.INPUT_PORT_NAME_EVENTS);
