@@ -154,7 +154,7 @@ public class TCPClientConnector extends AbstractTCPConnector {
 					}
 				}
 
-				return recordProperty.getConstructor().newInstance(new Object[] { values });
+				return recordProperty.getConstructor().newInstance(values);
 			} else {
 				throw new ConnectorDataTransmissionException("Record type " + id + " is not registered.");
 			}

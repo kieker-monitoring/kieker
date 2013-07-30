@@ -148,6 +148,7 @@ public class TCPMultiServerConnectionRunnable implements Runnable {
 					} else if (String.class.equals(parameterType)) {
 						final int bufLen = in.readInt();
 						in.readFully(this.buffer, 0, bufLen);
+						values[i] = new String(this.buffer, 0, bufLen, "UTF-8");
 					} else { // reference types
 						throw new ConnectorDataTransmissionException("References are not yet supported.");
 					}

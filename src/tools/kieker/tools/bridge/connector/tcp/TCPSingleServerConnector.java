@@ -30,16 +30,25 @@ import kieker.tools.bridge.connector.ConnectorEndOfDataException;
 /**
  * TCP server connector supporting one client.
  * 
+ * All operations provided by this connector must run in the same thread.
+ * 
  * @author Reiner Jung
  * @since 1.8
  */
 public class TCPSingleServerConnector extends AbstractTCPConnector {
 	// TODO Consider to make the buffer length variable by configuration. Otherwise: Why is this an appropriate size? (Nils)
+	// 64KB should suffice for normal record sizes. However, we might make it configurable in future.
+	// TODO create appropriate ticket for this and similar feature wishes
 	private static final int BUF_LEN = 65536;
 
 	private final int port;
-	// TODO Could some of the methods within this connector being called from another thread? In this case consider at least to make those fields volatile (Nils)
+	/**
+	 * Internal server socket variable
+	 */
 	private ServerSocket serverSocket;
+	/**
+	 * Internal data input stream
+	 */
 	private DataInputStream in;
 
 	private final byte[] buffer = new byte[BUF_LEN];
@@ -148,7 +157,7 @@ public class TCPSingleServerConnector extends AbstractTCPConnector {
 					}
 				}
 
-				return recordProperty.getConstructor().newInstance(new Object[] { values });
+				return recordProperty.getConstructor().newInstance(values);
 			} else {
 				throw new ConnectorDataTransmissionException("Record type " + id + " is not registered.");
 			}

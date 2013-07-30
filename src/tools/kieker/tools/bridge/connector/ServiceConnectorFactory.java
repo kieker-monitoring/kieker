@@ -147,7 +147,8 @@ public final class ServiceConnectorFactory {
 						return null;
 					}
 				});
-				final LookupEntity entity = new LookupEntity(type.getConstructor(Object[].class), (Class<?>[]) parameterTypesField.get(null));
+				final LookupEntity entity = new LookupEntity(type.getConstructor((Class<?>[]) parameterTypesField.get(null)),
+						(Class<?>[]) parameterTypesField.get(null));
 				lookupEntityMap.put(key, entity);
 			} catch (final NoSuchFieldException e) {
 				throw new ConnectorDataTransmissionException("Field " + TYPES + " does not exist.", e);
