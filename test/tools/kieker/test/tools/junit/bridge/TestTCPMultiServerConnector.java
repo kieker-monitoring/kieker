@@ -36,6 +36,8 @@ import kieker.tools.bridge.connector.tcp.TCPMultiServerConnector;
 
 public class TestTCPMultiServerConnector {
 
+	private int countRecords = 0;
+
 	/**
 	 * Default constructor
 	 */
@@ -69,6 +71,7 @@ public class TestTCPMultiServerConnector {
 			try {
 				final OperationExecutionRecord record = (OperationExecutionRecord) connector.deserializeNextRecord();
 				// TODO I assume you swapped the expected and the actual value here (Nils)
+				// you assume correctly
 				Assert.assertEquals("Tin is not equal", record.getTin(), ConfigurationParameters.TEST_TIN);
 				Assert.assertEquals("Tout is not equal", record.getTout(), ConfigurationParameters.TEST_TOUT);
 				Assert.assertEquals("TraceId is not equal", record.getTraceId(), ConfigurationParameters.TEST_TRACE_ID);
@@ -77,15 +80,13 @@ public class TestTCPMultiServerConnector {
 				Assert.assertEquals("Hostname is not equal", record.getHostname(), ConfigurationParameters.TEST_HOSTNAME);
 				Assert.assertEquals("OperationSignature is not equal", record.getOperationSignature(), ConfigurationParameters.TEST_OPERATION_SIGNATURE);
 				Assert.assertEquals("SessionId is not equal", record.getSessionId(), ConfigurationParameters.TEST_SESSION_ID);
+				this.countRecords++;
 			} catch (final ConnectorDataTransmissionException e) {
-				// TODO I suggest to use Assert.fail(...) instead (Nils)
 				Assert.fail("Mistake in Deserialize \n" + e.getMessage());
 			} catch (final ConnectorEndOfDataException e) {
-				// TODO I suggest to use Assert.fail(...) instead (Nils)
 				Assert.fail("Connector has not terminated" + e.getMessage());
 			}
-			ConfigurationParameters.COUNT_RECORDS = ConfigurationParameters.COUNT_RECORDS + 1;
-			System.out.println(ConfigurationParameters.COUNT_RECORDS);
+			System.out.println(this.countRecords);
 		}
 
 		// Call close() once
@@ -96,9 +97,8 @@ public class TestTCPMultiServerConnector {
 			Assert.fail(e.getMessage());
 		}
 
-		// if ((!ConfigurationParameters.SEND_NUMBER_OF_RECORDS * ConfigurationParameters.STARTED_CLIENTS) == ConfigurationParameters.COUNT_RECORDS) {
-		// Assert.fail("Number of send records*started Clients is not equal to number of received records");
-		// }
-
+		Assert.assertEquals("Number of send records is not equal to number of received records",
+				ConfigurationParameters.SEND_NUMBER_OF_RECORDS * ConfigurationParameters.STARTED_CLIENTS,
+				this.countRecords);
 	}
 }

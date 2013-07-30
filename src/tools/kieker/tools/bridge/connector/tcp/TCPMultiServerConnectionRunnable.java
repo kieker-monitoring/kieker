@@ -48,8 +48,8 @@ public class TCPMultiServerConnectionRunnable implements Runnable {
 	private final ConcurrentMap<Integer, LookupEntity> lookupEntityMap;
 
 	private final BlockingQueue<IMonitoringRecord> recordQueue;
-	// TODO The active flag should be volatile, as the setActive method could probably be called from another thread (Nils)
-	private boolean active;
+
+	private volatile boolean active;
 
 	/**
 	 * Create a service thread.
@@ -79,17 +79,15 @@ public class TCPMultiServerConnectionRunnable implements Runnable {
 			while (this.active) {
 				try {
 					this.recordQueue.put(this.deserialize(in));
-					// TODO Consider to send also the exception itself to the logger in the following (Nils)
-					// TODO instead of adding the cause by hand, let the logger handle this (Jan)
 				} catch (final InterruptedException e) {
 					this.active = false;
-					LOG.warn("Listener " + Thread.currentThread().getId() + " died. Cause " + e.getMessage());
+					LOG.warn("Listener " + Thread.currentThread().getId() + " died.", e);
 				} catch (final ConnectorDataTransmissionException e) {
 					this.active = false;
-					LOG.warn("Listener " + Thread.currentThread().getId() + " died. Cause " + e.getMessage());
+					LOG.warn("Listener " + Thread.currentThread().getId() + " died.", e);
 				} catch (final ConnectorEndOfDataException e) {
 					this.active = false;
-					LOG.warn("Listener " + Thread.currentThread().getId() + " died. Cause " + e.getMessage());
+					LOG.warn("Listener " + Thread.currentThread().getId() + " died.", e);
 				}
 			}
 			in.close();
@@ -149,12 +147,7 @@ public class TCPMultiServerConnectionRunnable implements Runnable {
 						values[i] = Double.valueOf(in.readDouble());
 					} else if (String.class.equals(parameterType)) {
 						final int bufLen = in.readInt();
-						final int resultLen = in.read(this.buffer, 0, bufLen);
-						if (resultLen == bufLen) {
-							values[i] = new String(this.buffer, 0, bufLen, "UTF-8");
-						} else {
-							throw new ConnectorDataTransmissionException(bufLen + " bytes expected, but only " + resultLen + " bytes received.");
-						}
+						in.readFully(this.buffer, 0, bufLen);
 					} else { // reference types
 						throw new ConnectorDataTransmissionException("References are not yet supported.");
 					}
