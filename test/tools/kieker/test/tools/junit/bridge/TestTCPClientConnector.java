@@ -71,15 +71,14 @@ public class TestTCPClientConnector {
 		for (int i = 0; i < ConfigurationParameters.SEND_NUMBER_OF_RECORDS; i++) {
 			try {
 				final OperationExecutionRecord record = (OperationExecutionRecord) connector.deserializeNextRecord();
-				// TODO I assume you swapped the expected and the actual value here (Nils)
-				Assert.assertEquals("Tin is not equal", record.getTin(), ConfigurationParameters.TEST_TIN);
-				Assert.assertEquals("Tout is not equal", record.getTout(), ConfigurationParameters.TEST_TOUT);
-				Assert.assertEquals("TraceId is not equal", record.getTraceId(), ConfigurationParameters.TEST_TRACE_ID);
-				Assert.assertEquals("Eoi is not equal", record.getEoi(), ConfigurationParameters.TEST_EOI);
-				Assert.assertEquals("Ess is not equal", record.getEss(), ConfigurationParameters.TEST_ESS);
-				Assert.assertEquals("Hostname is not equal", record.getHostname(), ConfigurationParameters.TEST_HOSTNAME);
-				Assert.assertEquals("OperationSignature is not equal", record.getOperationSignature(), ConfigurationParameters.TEST_OPERATION_SIGNATURE);
-				Assert.assertEquals("SessionId is not equal", record.getSessionId(), ConfigurationParameters.TEST_SESSION_ID);
+				Assert.assertEquals("Tin is not equal", ConfigurationParameters.TEST_TIN, record.getTin());
+				Assert.assertEquals("Tout is not equal", ConfigurationParameters.TEST_TOUT, record.getTout());
+				Assert.assertEquals("TraceId is not equal", ConfigurationParameters.TEST_TRACE_ID, record.getTraceId());
+				Assert.assertEquals("Eoi is not equal", ConfigurationParameters.TEST_EOI, record.getEoi());
+				Assert.assertEquals("Ess is not equal", ConfigurationParameters.TEST_ESS, record.getEss());
+				Assert.assertEquals("Hostname is not equal", ConfigurationParameters.TEST_HOSTNAME, record.getHostname());
+				Assert.assertEquals("OperationSignature is not equal", ConfigurationParameters.TEST_OPERATION_SIGNATURE, record.getOperationSignature());
+				Assert.assertEquals("SessionId is not equal", ConfigurationParameters.TEST_SESSION_ID, record.getSessionId());
 			} catch (final ConnectorDataTransmissionException e) {
 				Assert.fail("Error receiving data: " + e.getMessage());
 			} catch (final ConnectorEndOfDataException e) {
