@@ -53,6 +53,8 @@ public final class ConfigurationParameters {
 	 */
 	public static final int STARTED_CLIENTS = 5;
 
+	public static int COUNT_RECORDS = 0;
+
 	private ConfigurationParameters() {}
 
 }
