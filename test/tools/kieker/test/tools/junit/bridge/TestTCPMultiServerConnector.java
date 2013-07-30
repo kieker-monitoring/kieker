@@ -18,6 +18,8 @@ package kieker.test.tools.junit.bridge;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -36,7 +38,7 @@ import kieker.tools.bridge.connector.tcp.TCPMultiServerConnector;
 
 public class TestTCPMultiServerConnector {
 
-	private int countRecords = 0;
+	private int recordCount = 0;
 
 	/**
 	 * Default constructor
@@ -46,11 +48,10 @@ public class TestTCPMultiServerConnector {
 	}
 
 	@Test
-	public void TestTCPMultiServerConnector() {
-
+	public void testTCPMultiServerConnector() {
+		final ExecutorService executor = Executors.newFixedThreadPool(ConfigurationParameters.STARTED_CLIENTS);
 		for (int j = 0; j < ConfigurationParameters.STARTED_CLIENTS; j++) {
-			final Thread firstThread = new Thread(new TCPClientforServer(), "T" + j);
-			firstThread.start();
+			executor.execute(new TCPClientforServer());
 		}
 
 		final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> map = new ConcurrentHashMap<Integer, Class<? extends IMonitoringRecord>>();
@@ -67,7 +68,7 @@ public class TestTCPMultiServerConnector {
 		}
 
 		// Call deserialize()
-		for (int i = 0; i < ConfigurationParameters.SEND_NUMBER_OF_RECORDS; i++) {
+		for (int i = 0; i < (ConfigurationParameters.STARTED_CLIENTS * ConfigurationParameters.SEND_NUMBER_OF_RECORDS); i++) {
 			try {
 				final OperationExecutionRecord record = (OperationExecutionRecord) connector.deserializeNextRecord();
 				// TODO I assume you swapped the expected and the actual value here (Nils)
@@ -80,16 +81,23 @@ public class TestTCPMultiServerConnector {
 				Assert.assertEquals("Hostname is not equal", record.getHostname(), ConfigurationParameters.TEST_HOSTNAME);
 				Assert.assertEquals("OperationSignature is not equal", record.getOperationSignature(), ConfigurationParameters.TEST_OPERATION_SIGNATURE);
 				Assert.assertEquals("SessionId is not equal", record.getSessionId(), ConfigurationParameters.TEST_SESSION_ID);
-				this.countRecords++;
+				this.recordCount++;
 			} catch (final ConnectorDataTransmissionException e) {
-				Assert.fail("Mistake in Deserialize \n" + e.getMessage());
+				Assert.fail("Error receiving data: " + e.getMessage());
 			} catch (final ConnectorEndOfDataException e) {
-				Assert.fail("Connector has not terminated" + e.getMessage());
+				Assert.fail("Connector has not terminated: " + e.getMessage());
 			}
-			System.out.println(this.countRecords);
 		}
 
 		// Call close() once
+		executor.shutdown();
+		while (!executor.isTerminated()) {
+			try {
+				Thread.sleep(1000);
+			} catch (final InterruptedException e) {
+				Assert.fail(e.getMessage());
+			}
+		}
 
 		try {
 			connector.close();
@@ -99,6 +107,6 @@ public class TestTCPMultiServerConnector {
 
 		Assert.assertEquals("Number of send records is not equal to number of received records",
 				ConfigurationParameters.SEND_NUMBER_OF_RECORDS * ConfigurationParameters.STARTED_CLIENTS,
-				this.countRecords);
+				this.recordCount);
 	}
 }

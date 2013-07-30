@@ -87,7 +87,7 @@ public class TCPMultiServerConnectionRunnable implements Runnable {
 					LOG.warn("Listener " + Thread.currentThread().getId() + " died.", e);
 				} catch (final ConnectorEndOfDataException e) {
 					this.active = false;
-					LOG.warn("Listener " + Thread.currentThread().getId() + " died.", e);
+					LOG.info("Listener " + Thread.currentThread().getId() + " terminated at end of stream.");
 				}
 			}
 			in.close();

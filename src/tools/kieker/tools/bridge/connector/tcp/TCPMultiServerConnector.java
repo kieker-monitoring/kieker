@@ -40,7 +40,7 @@ public class TCPMultiServerConnector extends AbstractTCPConnector {
 
 	private static final int NUMBER_OF_THREADS = 10;
 
-	private static final long SHUTDOWN_TIMEOUT = 20L;
+	private static final long SHUTDOWN_TIMEOUT = 5L;
 
 	private final int port;
 	// TODO Could some of the methods within this connector being called from another thread? In this case consider at least to make those fields volatile. You could
@@ -102,7 +102,7 @@ public class TCPMultiServerConnector extends AbstractTCPConnector {
 		} catch (final InterruptedException e) {
 			throw new ConnectorDataTransmissionException("Server shutdown failed.", e);
 		}
-		// check if the record queue is empty. If be graceful
+		// check if the record queue is empty. If not be graceful
 		if (!this.recordQueue.isEmpty()) {
 			try {
 				int retries = 0;
