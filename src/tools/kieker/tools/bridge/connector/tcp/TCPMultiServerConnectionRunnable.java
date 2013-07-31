@@ -37,7 +37,7 @@ import kieker.tools.bridge.connector.ConnectorEndOfDataException;
  * 
  */
 public class TCPMultiServerConnectionRunnable implements Runnable {
-	// TODO Consider to make the buffer length variable by configuration. Otherwise: Why is this an appropriate size? (Nils)
+	// string buffer size (#1052)
 	private static final int BUF_LEN = 65536;
 
 	private static final Log LOG = LogFactory.getLog(TCPMultiServerConnectionRunnable.class);

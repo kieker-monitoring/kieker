@@ -35,8 +35,8 @@ public class TCPMultiServerPortListenerRunnable implements Runnable {
 
 	private final ServerSocket serverSocket;
 	private final BlockingQueue<IMonitoringRecord> recordQueue;
-	// TODO The active flag should be volatile, as the setActive method could probably be called from another thread (Nils)
-	private boolean active = true;
+
+	private volatile boolean active = true;
 	private final ConcurrentMap<Integer, LookupEntity> lookupEntityMap;
 	private final ExecutorService executor;
 

@@ -33,23 +33,27 @@ import kieker.tools.bridge.connector.tcp.TCPMultiServerConnector;
 public class TestTCPMultiServerConnector extends AbstractConnectorTest {
 
 	/**
-	 * Default constructor
+	 * Default constructor.
 	 */
 	public TestTCPMultiServerConnector() {
 		// empty constructor
 	}
 
+	/**
+	 * Testing a TCP multi server connector
+	 */
 	@Test
 	public void testTCPMultiServerConnector() {
 		// start multiple record providing clients
-		final ExecutorService executor = Executors.newFixedThreadPool(ConfigurationParameters.STARTED_CLIENTS);
-		for (int j = 0; j < ConfigurationParameters.STARTED_CLIENTS; j++) {
+		final ExecutorService executor = Executors.newFixedThreadPool(ConfigurationParameters.NUMBER_OF_TEST_THREADS);
+		for (int j = 0; j < ConfigurationParameters.NUMBER_OF_TEST_THREADS; j++) {
 			executor.execute(new TCPClientforServer(ConfigurationParameters.TCP_MULTI_PORT));
 		}
 
 		// run connector test
-		this.initialize(new TCPMultiServerConnector(this.createRecordMap(), ConfigurationParameters.TCP_MULTI_PORT));
-		this.deserialize(ConfigurationParameters.STARTED_CLIENTS * ConfigurationParameters.SEND_NUMBER_OF_RECORDS);
+		this.setConnector(new TCPMultiServerConnector(this.createRecordMap(), ConfigurationParameters.TCP_MULTI_PORT));
+		this.initialize();
+		this.deserialize(ConfigurationParameters.NUMBER_OF_TEST_THREADS * ConfigurationParameters.SEND_NUMBER_OF_RECORDS);
 
 		// shutdown multiple clients
 		executor.shutdown();
@@ -62,6 +66,6 @@ public class TestTCPMultiServerConnector extends AbstractConnectorTest {
 		}
 
 		// close the test
-		this.close(ConfigurationParameters.STARTED_CLIENTS * ConfigurationParameters.SEND_NUMBER_OF_RECORDS);
+		this.close(ConfigurationParameters.NUMBER_OF_TEST_THREADS * ConfigurationParameters.SEND_NUMBER_OF_RECORDS);
 	}
 }

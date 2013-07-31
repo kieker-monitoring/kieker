@@ -28,12 +28,15 @@ import kieker.tools.bridge.connector.tcp.TCPSingleServerConnector;
 public class TestTCPSingleServerConnector extends AbstractConnectorTest {
 
 	/**
-	 * Default constructor
+	 * Default constructor.
 	 */
 	public TestTCPSingleServerConnector() {
 		// empty constructor
 	}
 
+	/**
+	 * Test a TCP single server connector.
+	 */
 	@Test
 	public void testTCPSingleServerConnector() {
 		// start one client for the test
@@ -41,7 +44,8 @@ public class TestTCPSingleServerConnector extends AbstractConnectorTest {
 		clientThread.start();
 
 		// run test
-		this.initialize(new TCPSingleServerConnector(this.createRecordMap(), ConfigurationParameters.TCP_SINGLE_PORT));
+		this.setConnector(new TCPSingleServerConnector(this.createRecordMap(), ConfigurationParameters.TCP_SINGLE_PORT));
+		this.initialize();
 		this.deserialize(ConfigurationParameters.SEND_NUMBER_OF_RECORDS);
 		this.close(ConfigurationParameters.SEND_NUMBER_OF_RECORDS);
 	}

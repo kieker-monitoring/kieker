@@ -27,10 +27,10 @@ public final class ConfigurationParameters {
 	 * The ports for all TCP and JMS connections in the tests.
 	 */
 	public static final int TCP_CLIENT_PORT = 32443;
-	public static final int TCP_MULTI_PORT = 32444;
-	public static final int TCP_SINGLE_PORT = 32445;
-	public static final int JMS_PORT = 32446;
-	public static final int JMS_EMBEDDED_PORT = 32447;
+	public static final int TCP_MULTI_PORT = 32444; // NOCS
+	public static final int TCP_SINGLE_PORT = 32445; // NOCS
+	public static final int JMS_PORT = 32446; // NOCS
+	public static final int JMS_EMBEDDED_PORT = 32447; // NOCS
 
 	/**
 	 * Number of messages to be send in this test.
@@ -42,20 +42,23 @@ public final class ConfigurationParameters {
 	 */
 	public static final String HOSTNAME = "localhost";
 
+	/**
+	 * Values for test records.
+	 */
 	public static final int TEST_RECORD_ID = 1;
-	public static final String TEST_OPERATION_SIGNATURE = "some.operation.signature(final int a, final int b)";
-	public static final String TEST_SESSION_ID = "Sessions";
-	public static final long TEST_TRACE_ID = 4;
-	public static final long TEST_TIN = 2;
-	public static final long TEST_TOUT = 13;
-	public static final String TEST_HOSTNAME = "Kieker";
-	public static final int TEST_EOI = 10;
-	public static final int TEST_ESS = 9;
+	public static final String TEST_OPERATION_SIGNATURE = "some.operation.signature(final int a, final int b)"; // NOCS
+	public static final String TEST_SESSION_ID = "Sessions"; // NOCS
+	public static final long TEST_TRACE_ID = 4; // NOCS
+	public static final long TEST_TIN = 2; // NOCS
+	public static final long TEST_TOUT = 13; // NOCS
+	public static final String TEST_HOSTNAME = "Kieker"; // NOCS
+	public static final int TEST_EOI = 10; // NOCS
+	public static final int TEST_ESS = 9; // NOCS
 
 	/**
-	 * The number of started threads
+	 * The number of threads to start.
 	 */
-	public static final int STARTED_CLIENTS = 5;
+	public static final int NUMBER_OF_TEST_THREADS = 5;
 
 	private ConfigurationParameters() {}
 

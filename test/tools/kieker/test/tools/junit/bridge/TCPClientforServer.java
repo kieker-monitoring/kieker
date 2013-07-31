@@ -23,6 +23,7 @@ import java.net.UnknownHostException;
 import org.junit.Assert;
 
 /**
+ * Client for the TCP server tests, providing records.
  * 
  * @author Reiner Jung, Pascale Brandt
  * 
@@ -32,10 +33,19 @@ public class TCPClientforServer implements Runnable {
 
 	private final int port;
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param port
+	 *            the server port this client connects to
+	 */
 	public TCPClientforServer(final int port) {
 		this.port = port;
 	}
 
+	/**
+	 * Main run loop.
+	 */
 	public void run() {
 
 		boolean connected = false;

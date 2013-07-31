@@ -36,9 +36,7 @@ import kieker.tools.bridge.connector.ConnectorEndOfDataException;
  * @since 1.8
  */
 public class TCPSingleServerConnector extends AbstractTCPConnector {
-	// TODO Consider to make the buffer length variable by configuration. Otherwise: Why is this an appropriate size? (Nils)
-	// 64KB should suffice for normal record sizes. However, we might make it configurable in future.
-	// TODO create appropriate ticket for this and similar feature wishes
+	// string buffer size (#1052)
 	private static final int BUF_LEN = 65536;
 
 	private final int port;

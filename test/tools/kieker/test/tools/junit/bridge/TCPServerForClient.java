@@ -23,7 +23,7 @@ import java.net.Socket;
 import org.junit.Assert;
 
 /**
- * TCP server to test the TCPClientConnector
+ * TCP server to test the TCPClientConnector.
  * 
  * @author Reiner Jung, Pascale Brandt
  * 
@@ -32,15 +32,24 @@ public class TCPServerForClient implements Runnable {
 
 	private final int port;
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param port
+	 *            the server port of this server
+	 */
 	public TCPServerForClient(final int port) {
 		this.port = port;
 	}
 
+	/**
+	 * Main loop for the server.
+	 */
 	public void run() {
 		try {
-			final ServerSocket welcomeSocket = new ServerSocket(this.port);
+			final ServerSocket serverSocket = new ServerSocket(this.port);
 			try {
-				final Socket connectionSocket = welcomeSocket.accept();
+				final Socket connectionSocket = serverSocket.accept();
 				final DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
 
 				for (int i = 0; i < ConfigurationParameters.SEND_NUMBER_OF_RECORDS; i++) {
@@ -63,7 +72,7 @@ public class TCPServerForClient implements Runnable {
 				// exception catch required, as run cannot have any additional throws
 				Assert.fail("Communication failed: " + e.getMessage());
 			} finally {
-				welcomeSocket.close();
+				serverSocket.close();
 			}
 		} catch (final IOException eServer) {
 			// exception catch required, as run cannot have any additional throws

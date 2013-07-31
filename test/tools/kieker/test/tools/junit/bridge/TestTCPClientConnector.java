@@ -30,7 +30,7 @@ import kieker.tools.bridge.connector.tcp.TCPClientConnector;
 public class TestTCPClientConnector extends AbstractConnectorTest {
 
 	/**
-	 * Default constructor
+	 * Default constructor.
 	 */
 	public TestTCPClientConnector() {
 		// empty constructor
@@ -46,7 +46,8 @@ public class TestTCPClientConnector extends AbstractConnectorTest {
 		final Thread serverThread = new Thread(new TCPServerForClient(ConfigurationParameters.TCP_CLIENT_PORT), "T1");
 		serverThread.start();
 		// test the connector
-		this.initialize(new TCPClientConnector(this.createRecordMap(), ConfigurationParameters.HOSTNAME, ConfigurationParameters.TCP_CLIENT_PORT));
+		this.setConnector(new TCPClientConnector(this.createRecordMap(), ConfigurationParameters.HOSTNAME, ConfigurationParameters.TCP_CLIENT_PORT));
+		this.initialize();
 		this.deserialize(ConfigurationParameters.SEND_NUMBER_OF_RECORDS);
 		this.close(ConfigurationParameters.SEND_NUMBER_OF_RECORDS);
 	}
