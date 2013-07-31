@@ -65,7 +65,7 @@ public class BinaryZipWriterThread extends AbstractZipWriterThread {
 					this.out.writeDouble(0);
 				} else if ((recordTypes[i] == byte.class) || (recordTypes[i] == Byte.class)) {
 					this.out.writeByte(0);
-				} else if ((recordTypes[i] == short.class) || (recordTypes[i] == Short.class)) {
+				} else if ((recordTypes[i] == short.class) || (recordTypes[i] == Short.class)) { // NOPMD
 					this.out.writeShort(0);
 				} else if ((recordTypes[i] == boolean.class) || (recordTypes[i] == Boolean.class)) {
 					this.out.writeBoolean(false);
