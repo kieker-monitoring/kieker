@@ -15,16 +15,8 @@
  ***************************************************************************/
 package kieker.test.tools.junit.bridge;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-
-import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
-import kieker.tools.bridge.connector.ConnectorEndOfDataException;
 import kieker.tools.bridge.connector.tcp.TCPSingleServerConnector;
 
 /**
@@ -33,7 +25,7 @@ import kieker.tools.bridge.connector.tcp.TCPSingleServerConnector;
  * 
  */
 
-public class TestTCPSingleServerConnector {
+public class TestTCPSingleServerConnector extends AbstractConnectorTest {
 
 	/**
 	 * Default constructor
@@ -45,47 +37,11 @@ public class TestTCPSingleServerConnector {
 	@Test
 	public void testTCPSingleServerConnector() {
 
-		final Thread firstThread = new Thread(new TCPClientforServer(), "T1");
+		final Thread firstThread = new Thread(new TCPClientforServer(ConfigurationParameters.TCP_SINGLE_PORT), "T1");
 		firstThread.start();
 
-		final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> map = new ConcurrentHashMap<Integer, Class<? extends IMonitoringRecord>>();
-
-		map.put(1, OperationExecutionRecord.class);
-
-		final TCPSingleServerConnector connector = new TCPSingleServerConnector(map, ConfigurationParameters.PORT);
-
-		// Call initialize
-		try {
-			connector.initialize();
-		} catch (final ConnectorDataTransmissionException e) {
-			Assert.assertTrue("Mistake in initialize \n" + e.getMessage() + "\n" + ConfigurationParameters.PORT, false);
-		}
-
-		// Call deserialize()
-		for (int i = 0; i < ConfigurationParameters.SEND_NUMBER_OF_RECORDS; i++) {
-			try {
-				final OperationExecutionRecord record = (OperationExecutionRecord) connector.deserializeNextRecord();
-				Assert.assertEquals("Tin is not equal", ConfigurationParameters.TEST_TIN, record.getTin());
-				Assert.assertEquals("Tout is not equal", ConfigurationParameters.TEST_TOUT, record.getTout());
-				Assert.assertEquals("TraceId is not equal", ConfigurationParameters.TEST_TRACE_ID, record.getTraceId());
-				Assert.assertEquals("Eoi is not equal", ConfigurationParameters.TEST_EOI, record.getEoi());
-				Assert.assertEquals("Ess is not equal", ConfigurationParameters.TEST_ESS, record.getEss());
-				Assert.assertEquals("Hostname is not equal", ConfigurationParameters.TEST_HOSTNAME, record.getHostname());
-				Assert.assertEquals("OperationSignature is not equal", ConfigurationParameters.TEST_OPERATION_SIGNATURE, record.getOperationSignature());
-				Assert.assertEquals("SessionId is not equal", ConfigurationParameters.TEST_SESSION_ID, record.getSessionId());
-			} catch (final ConnectorDataTransmissionException e) {
-				Assert.fail("Mistake in Deserialize \n" + e.getMessage());
-			} catch (final ConnectorEndOfDataException e) {
-				Assert.fail("Connector has not terminated" + e.getMessage());
-			}
-		}
-
-		// Call close() once
-
-		try {
-			connector.close();
-		} catch (final ConnectorDataTransmissionException e) {
-			Assert.fail(e.getMessage());
-		}
+		this.initialize(new TCPSingleServerConnector(this.createRecordMap(), ConfigurationParameters.TCP_SINGLE_PORT));
+		this.deserialize(ConfigurationParameters.SEND_NUMBER_OF_RECORDS);
+		this.close(ConfigurationParameters.SEND_NUMBER_OF_RECORDS);
 	}
 }

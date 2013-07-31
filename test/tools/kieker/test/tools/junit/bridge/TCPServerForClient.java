@@ -30,10 +30,16 @@ import org.junit.Assert;
  */
 public class TCPServerForClient implements Runnable {
 
+	private final int port;
+
+	public TCPServerForClient(final int port) {
+		this.port = port;
+	}
+
 	public void run() {
 		ServerSocket welcomeSocket;
 		try {
-			welcomeSocket = new ServerSocket(ConfigurationParameters.PORT);
+			welcomeSocket = new ServerSocket(this.port);
 			final Socket connectionSocket = welcomeSocket.accept();
 			final DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
 

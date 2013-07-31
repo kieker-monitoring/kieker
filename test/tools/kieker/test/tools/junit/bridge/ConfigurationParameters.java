@@ -24,9 +24,13 @@ package kieker.test.tools.junit.bridge;
 public final class ConfigurationParameters {
 
 	/**
-	 * The port for all TCP and JMS connections in the tests.
+	 * The ports for all TCP and JMS connections in the tests.
 	 */
-	public static final int PORT = 32444;
+	public static final int TCP_CLIENT_PORT = 32443;
+	public static final int TCP_MULTI_PORT = 32444;
+	public static final int TCP_SINGLE_PORT = 32445;
+	public static final int JMS_PORT = 32446;
+	public static final int JMS_EMBEDDED_PORT = 32447;
 
 	/**
 	 * Number of messages to be send in this test.
@@ -39,7 +43,7 @@ public final class ConfigurationParameters {
 	public static final String HOSTNAME = "localhost";
 
 	public static final int ID = 1;
-	public static final String TEST_OPERATION_SIGNATURE = "Signature";
+	public static final String TEST_OPERATION_SIGNATURE = "some.operation.signature(final int a, final int b)";
 	public static final String TEST_SESSION_ID = "Sessions";
 	public static final long TEST_TRACE_ID = 4;
 	public static final long TEST_TIN = 2;

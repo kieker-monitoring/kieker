@@ -30,13 +30,19 @@ import org.junit.Assert;
 
 public class TCPClientforServer implements Runnable {
 
+	private final int port;
+
+	public TCPClientforServer(final int port) {
+		this.port = port;
+	}
+
 	public void run() {
 
 		boolean connected = false;
 
 		while (!connected) {
 			try {
-				final Socket connectionSocket = new Socket(ConfigurationParameters.HOSTNAME, ConfigurationParameters.PORT);
+				final Socket connectionSocket = new Socket(ConfigurationParameters.HOSTNAME, this.port);
 				connected = true;
 				try {
 					final DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
