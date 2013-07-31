@@ -43,8 +43,8 @@ public class TestTCPClientConnector extends AbstractConnectorTest {
 	@Test
 	public void testTCPClientConnector() {
 		// Start a record providing server for the TCPClientConnector
-		final Thread firstThread = new Thread(new TCPServerForClient(ConfigurationParameters.TCP_CLIENT_PORT), "T1");
-		firstThread.start();
+		final Thread serverThread = new Thread(new TCPServerForClient(ConfigurationParameters.TCP_CLIENT_PORT), "T1");
+		serverThread.start();
 		// test the connector
 		this.initialize(new TCPClientConnector(this.createRecordMap(), ConfigurationParameters.HOSTNAME, ConfigurationParameters.TCP_CLIENT_PORT));
 		this.deserialize(ConfigurationParameters.SEND_NUMBER_OF_RECORDS);

@@ -37,36 +37,38 @@ public class TCPServerForClient implements Runnable {
 	}
 
 	public void run() {
-		ServerSocket welcomeSocket;
 		try {
-			welcomeSocket = new ServerSocket(this.port);
-			final Socket connectionSocket = welcomeSocket.accept();
-			final DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
+			final ServerSocket welcomeSocket = new ServerSocket(this.port);
+			try {
+				final Socket connectionSocket = welcomeSocket.accept();
+				final DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
 
-			for (int i = 0; i < ConfigurationParameters.SEND_NUMBER_OF_RECORDS; i++) {
-				outToClient.writeInt(1); // ID of test record type
-				outToClient.writeInt(ConfigurationParameters.TEST_OPERATION_SIGNATURE.length());
-				outToClient.writeBytes(ConfigurationParameters.TEST_OPERATION_SIGNATURE);
-				outToClient.writeInt(ConfigurationParameters.TEST_SESSION_ID.length());
-				outToClient.writeBytes(ConfigurationParameters.TEST_SESSION_ID);
-				outToClient.writeLong(ConfigurationParameters.TEST_TRACE_ID);
-				outToClient.writeLong(ConfigurationParameters.TEST_TIN);
-				outToClient.writeLong(ConfigurationParameters.TEST_TOUT);
-				outToClient.writeInt(ConfigurationParameters.TEST_HOSTNAME.length());
-				outToClient.writeBytes(ConfigurationParameters.TEST_HOSTNAME);
-				outToClient.writeInt(ConfigurationParameters.TEST_EOI);
-				outToClient.writeInt(ConfigurationParameters.TEST_ESS);
+				for (int i = 0; i < ConfigurationParameters.SEND_NUMBER_OF_RECORDS; i++) {
+					outToClient.writeInt(ConfigurationParameters.TEST_RECORD_ID);
+					outToClient.writeInt(ConfigurationParameters.TEST_OPERATION_SIGNATURE.length());
+					outToClient.writeBytes(ConfigurationParameters.TEST_OPERATION_SIGNATURE);
+					outToClient.writeInt(ConfigurationParameters.TEST_SESSION_ID.length());
+					outToClient.writeBytes(ConfigurationParameters.TEST_SESSION_ID);
+					outToClient.writeLong(ConfigurationParameters.TEST_TRACE_ID);
+					outToClient.writeLong(ConfigurationParameters.TEST_TIN);
+					outToClient.writeLong(ConfigurationParameters.TEST_TOUT);
+					outToClient.writeInt(ConfigurationParameters.TEST_HOSTNAME.length());
+					outToClient.writeBytes(ConfigurationParameters.TEST_HOSTNAME);
+					outToClient.writeInt(ConfigurationParameters.TEST_EOI);
+					outToClient.writeInt(ConfigurationParameters.TEST_ESS);
+				}
+
+				connectionSocket.close();
+			} catch (final IOException e) {
+				// exception catch required, as run cannot have any additional throws
+				Assert.fail("Communication failed: " + e.getMessage());
+			} finally {
+				welcomeSocket.close();
 			}
-
-			connectionSocket.close();
-			welcomeSocket.close();
-
-		} catch (final IOException e) {
-			// TODO I suggest to use Assert.fail(...) instead (Nils)
-			// TODO Even better to just throw unexpected exceptions within tests ...
-			Assert.assertTrue("Connection to Server failed" + e.getMessage(), false);
+		} catch (final IOException eServer) {
+			// exception catch required, as run cannot have any additional throws
+			Assert.fail("Server port not available: " + eServer.getMessage());
 		}
-
 	}
 
 }

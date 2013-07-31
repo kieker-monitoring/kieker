@@ -103,15 +103,6 @@ public class TestServiceContainer extends AbstractKiekerTest {
 		// The result contains 20 data records, 1 record containing the version field and 1 kieker map file
 		Assert.assertEquals("The number of send records is not equal to TestServiceConnector.SEND_NUMBER_OF_RECORDS",
 				ConfigurationParameters.SEND_NUMBER_OF_RECORDS + 2, numberOfLogFiles);
-
-		// TODO Why are you removing the tmpFolder and even check the delete operation? It is a rule which makes sure that the temp folder is created and deleted
-		// automatically. (Nils)
-
-		// now dump the temporary folder and all its content
-		this.tmpFolder.delete();
-
-		// Assert that the tempfolder does NOT exist (hey this is just for the paranoid, actually we are testing here Java API)
-		Assert.assertFalse("Directory is not cleaned.", this.tmpFolder.getRoot().exists());
 	}
 
 }

@@ -48,7 +48,7 @@ public class TCPClientforServer implements Runnable {
 					final DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
 
 					for (int i = 0; i < ConfigurationParameters.SEND_NUMBER_OF_RECORDS; i++) {
-						outToClient.writeInt(1); // ID of test record type
+						outToClient.writeInt(ConfigurationParameters.TEST_RECORD_ID);
 						outToClient.writeInt(ConfigurationParameters.TEST_OPERATION_SIGNATURE.length());
 						outToClient.writeBytes(ConfigurationParameters.TEST_OPERATION_SIGNATURE);
 						outToClient.writeInt(ConfigurationParameters.TEST_SESSION_ID.length());
@@ -65,18 +65,17 @@ public class TCPClientforServer implements Runnable {
 					connectionSocket.close();
 
 				} catch (final IOException e) {
-					// TODO I suggest to use Assert.fail(...) instead (Nils)
-					// TODO Even better to just throw unexpected exceptions within tests ... (but be careful not to catch it below
-					Assert.assertTrue("Sending data to server failed. " + e.getMessage(), false);
+					// exception catch required, as run cannot have any additional throws
+					Assert.fail("Sending data to server failed: " + e.getMessage());
 				}
 			} catch (final UnknownHostException e) {
-				// TODO I suggest to use Assert.fail(...) instead (Nils)
-				// TODO Even better to just throw unexpected exceptions within tests ...
-				Assert.assertTrue("Unknown host " + e.getMessage(), false);
+				Assert.fail("Unknown host " + e.getMessage());
 			} catch (final IOException e) {
+				// polling for the server
 				try {
 					Thread.sleep(1000);
 				} catch (final InterruptedException e1) {
+					// can be ignored
 				}
 			}
 

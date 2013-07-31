@@ -36,10 +36,11 @@ public class TestTCPSingleServerConnector extends AbstractConnectorTest {
 
 	@Test
 	public void testTCPSingleServerConnector() {
+		// start one client for the test
+		final Thread clientThread = new Thread(new TCPClientforServer(ConfigurationParameters.TCP_SINGLE_PORT), "T1");
+		clientThread.start();
 
-		final Thread firstThread = new Thread(new TCPClientforServer(ConfigurationParameters.TCP_SINGLE_PORT), "T1");
-		firstThread.start();
-
+		// run test
 		this.initialize(new TCPSingleServerConnector(this.createRecordMap(), ConfigurationParameters.TCP_SINGLE_PORT));
 		this.deserialize(ConfigurationParameters.SEND_NUMBER_OF_RECORDS);
 		this.close(ConfigurationParameters.SEND_NUMBER_OF_RECORDS);
