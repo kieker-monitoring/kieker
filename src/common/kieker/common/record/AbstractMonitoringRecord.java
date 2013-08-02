@@ -281,6 +281,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 				} else {
 					types = clazz.newInstance().getValueTypes();
 				}
+				CACHED_KIEKERRECORD_TYPES.putIfAbsent(clazz, types);
 				return types;
 			} catch (final SecurityException ex) {
 				throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);

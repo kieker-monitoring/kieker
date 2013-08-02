@@ -59,7 +59,7 @@ public final class RegistryRecord<E> extends AbstractMonitoringRecord implements
 	public RegistryRecord(final Object[] values) {
 		AbstractMonitoringRecord.checkArray(values, TYPES);
 		this.id = (Integer) values[0];
-		this.object = (E) (values[1]);
+		this.object = (E) (values[1]); // NOPMD (direct store)
 	}
 
 	/**
