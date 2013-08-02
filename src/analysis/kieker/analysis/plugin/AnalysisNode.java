@@ -35,7 +35,11 @@ import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
+import kieker.analysis.plugin.annotation.RepositoryInputPort;
+import kieker.analysis.plugin.annotation.RepositoryOutputPort;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
+import kieker.analysis.repository.AbstractRepository;
+import kieker.analysis.repository.IRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -49,10 +53,10 @@ import kieker.common.logging.LogFactory;
 		outputPorts = {
 			@OutputPort(name = AnalysisNode.OUTPUT_PORT_NAME_EVENTS, eventTypes = Object.class),
 			@OutputPort(name = AnalysisNode.INTERNAL_OUTPUT_PORT_NAME_EVENTS, eventTypes = Object.class, internalUseOnly = true) },
-		// repositoryOutputPorts = {
-		// @RepositoryOutputPort(name = AnalysisNode.REPOSITORY_OUTPUT_PORT_NAME_EVENTS),
-		// @RepositoryOutputPort(name = AnalysisNode.INTERNAL_REPOSITORY_OUTPUT_PORT_NAME_EVENTS, internalUseOnly = true),
-		// },
+		repositoryOutputPorts = {
+			@RepositoryOutputPort(name = AnalysisNode.REPOSITORY_OUTPUT_PORT_NAME_EVENTS),
+			@RepositoryOutputPort(name = AnalysisNode.INTERNAL_REPOSITORY_OUTPUT_PORT_NAME_EVENTS, internalUseOnly = true),
+		},
 		configuration = {
 			@Property(name = AnalysisNode.CONFIG_PROPERTY_NAME_MOM_SERVER, defaultValue = "localhost"),
 			@Property(name = AnalysisNode.CONFIG_PROPERTY_NAME_DISTRIBUTED, defaultValue = "false"),
@@ -64,29 +68,36 @@ public class AnalysisNode extends AbstractFilterPlugin {
 	public static final String CONFIG_PROPERTY_NAME_DISTRIBUTED = "distributed";
 	public static final String CONFIG_PROPERTY_NAME_NODE_NAME = "nodeName";
 
-	// public static final String REPOSITORY_INPUT_PORT_NAME_EVENTS = "receivedRepositoryEvents";
-	// public static final String REPOSITORY_OUTPUT_PORT_NAME_EVENTS = "sentRepositoryEvents";
+	public static final String REPOSITORY_INPUT_PORT_NAME_EVENTS = "receivedRepositoryEvents";
+	public static final String REPOSITORY_OUTPUT_PORT_NAME_EVENTS = "sentRepositoryEvents";
 	public static final String INPUT_PORT_NAME_EVENTS = "receivedEvents";
 	public static final String OUTPUT_PORT_NAME_EVENTS = "sentEvents";
 
-	// protected static final String INTERNAL_REPOSITORY_INPUT_PORT_NAME_EVENTS = "internalRepositoryInputPort";
-	// protected static final String INTERNAL_REPOSITORY_OUTPUT_PORT_NAME_EVENTS = "internalRepositoryOutputPort";
+	protected static final String INTERNAL_REPOSITORY_INPUT_PORT_NAME_EVENTS = "internalRepositoryInputPort";
+	protected static final String INTERNAL_REPOSITORY_OUTPUT_PORT_NAME_EVENTS = "internalRepositoryOutputPort";
 	protected static final String INTERNAL_INPUT_PORT_NAME_EVENTS = "internalInputPort";
 	protected static final String INTERNAL_OUTPUT_PORT_NAME_EVENTS = "internalOutputPort";
 
+	protected static final String REPOSITORY_DATA_EXCHANGE_NAME = "net.kieker-monitoring.analysis.data.repository";
 	protected static final String DATA_EXCHANGE_NAME = "net.kieker-monitoring.analysis.data";
 
 	private static final Log LOG = LogFactory.getLog(AnalysisNode.class);
 
+	private final RepositoryReceiverThread repositoryReceiverThread;
+	private final RepositorySenderThread repositorySenderThread;
 	private final ReceiverThread receiverThread;
 	private final SenderThread senderThread;
 	private final BlockingQueue<Object> sendQueue;
+	private final BlockingQueue<Object> repositorySendQueue;
 	private final String name;
 	private final String host;
 	private final boolean distributed;
 	private final Channel receiveChannel;
 	private final Channel sendChannel;
 	private final String receiveQueueName;
+	private final Channel repositoryReceiveChannel;
+	private final Channel repositorySendChannel;
+	private final String repositoryReceiveQueueName;
 
 	public AnalysisNode(final Configuration configuration, final IProjectContext projectContext) throws IOException {
 		super(configuration, projectContext);
@@ -112,6 +123,18 @@ public class AnalysisNode extends AbstractFilterPlugin {
 
 			this.senderThread = new SenderThread();
 			this.receiverThread = new ReceiverThread();
+
+			this.repositoryReceiveChannel = factory.newConnection().createChannel();
+			this.repositoryReceiveChannel.exchangeDeclare(REPOSITORY_DATA_EXCHANGE_NAME, "topic");
+			this.repositoryReceiveQueueName = this.receiveChannel.queueDeclare().getQueue();
+
+			this.repositorySendChannel = factory.newConnection().createChannel();
+			this.repositorySendChannel.exchangeDeclare(REPOSITORY_DATA_EXCHANGE_NAME, "topic");
+
+			this.repositorySendQueue = new LinkedBlockingQueue<Object>();
+
+			this.repositorySenderThread = new RepositorySenderThread();
+			this.repositoryReceiverThread = new RepositoryReceiverThread();
 		} else {
 			this.receiveChannel = null;
 			this.sendChannel = null;
@@ -119,6 +142,12 @@ public class AnalysisNode extends AbstractFilterPlugin {
 			this.sendQueue = null;
 			this.receiverThread = null;
 			this.senderThread = null;
+			this.repositorySendQueue = null;
+			this.repositoryReceiveChannel = null;
+			this.repositoryReceiveQueueName = null;
+			this.repositorySendChannel = null;
+			this.repositorySenderThread = null;
+			this.repositoryReceiverThread = null;
 		}
 	}
 
@@ -128,6 +157,8 @@ public class AnalysisNode extends AbstractFilterPlugin {
 		if (this.distributed) {
 			this.senderThread.start();
 			this.receiverThread.start();
+			this.repositorySenderThread.start();
+			this.repositoryReceiverThread.start();
 		}
 
 		return true;
@@ -139,6 +170,8 @@ public class AnalysisNode extends AbstractFilterPlugin {
 		if (this.distributed) {
 			this.senderThread.terminate();
 			this.receiverThread.terminate();
+			this.repositorySenderThread.terminate();
+			this.repositoryReceiverThread.terminate();
 		}
 	}
 
@@ -173,19 +206,19 @@ public class AnalysisNode extends AbstractFilterPlugin {
 		return (T) concreteComponent;
 	}
 
-	// @RepositoryInputPort(name = REPOSITORY_INPUT_PORT_NAME_EVENTS)
-	// public final void repositoryInputPort(final Object data) {
-	// super.deliverWithoutReturnTypeToRepository(INTERNAL_REPOSITORY_OUTPUT_PORT_NAME_EVENTS, data);
-	// }
+	@RepositoryInputPort(name = REPOSITORY_INPUT_PORT_NAME_EVENTS)
+	public final void repositoryInputPort(final Object data) {
+		super.deliverWithoutReturnTypeToRepository(INTERNAL_REPOSITORY_OUTPUT_PORT_NAME_EVENTS, data);
+	}
 
-	// @RepositoryInputPort(name = INTERNAL_REPOSITORY_INPUT_PORT_NAME_EVENTS, internalUseOnly = true)
-	// public final void internalRepositoryInputPort(final Object data) {
-	// If this node is configured for distributed access, we have to send the message to the MOM as well.
-	// if (this.distributed) {
-	// this.repositorySendQueue.add(data);
-	// }
-	// super.deliver(OUTPUT_PORT_NAME_EVENTS, data);
-	// }
+	@RepositoryInputPort(name = INTERNAL_REPOSITORY_INPUT_PORT_NAME_EVENTS, internalUseOnly = true)
+	public final void internalRepositoryInputPort(final Object data) {
+		// If this node final is configured for final distributed access, we have final to send the final message to the final MOM as well.
+		if (this.distributed) {
+			this.repositorySendQueue.add(data);
+		}
+		super.deliver(OUTPUT_PORT_NAME_EVENTS, data);
+	}
 
 	@InputPort(name = INPUT_PORT_NAME_EVENTS, eventTypes = Object.class)
 	public final void inputPort(final Object data) {
@@ -201,15 +234,15 @@ public class AnalysisNode extends AbstractFilterPlugin {
 		super.deliver(OUTPUT_PORT_NAME_EVENTS, data);
 	}
 
-	// public final void connectWithRepositoryOutput(final AbstractPlugin component, final String outputPortName) throws IllegalStateException,
-	// AnalysisConfigurationException {
-	// ((AnalysisController) this.projectContext).connect(component, outputPortName, this, INTERNAL_REPOSITORY_INPUT_PORT_NAME_EVENTS);
-	// }
+	public final void connectWithRepositoryOutput(final AbstractPlugin component, final String outputPortName) throws IllegalStateException,
+			AnalysisConfigurationException {
+		((AnalysisController) this.projectContext).connect(component, outputPortName, (IRepository) this, INTERNAL_REPOSITORY_INPUT_PORT_NAME_EVENTS);
+	}
 
-	// public final void connectWithRepositoryInput(final AbstractRepository component, final String inputPortName) throws IllegalStateException,
-	// AnalysisConfigurationException {
-	// ((AnalysisController) this.projectContext).connect(this, INTERNAL_REPOSITORY_OUTPUT_PORT_NAME_EVENTS, component, inputPortName);
-	// }
+	public final void connectWithRepositoryInput(final AbstractRepository component, final String inputPortName) throws IllegalStateException,
+			AnalysisConfigurationException {
+		((AnalysisController) this.projectContext).connect(this, INTERNAL_REPOSITORY_OUTPUT_PORT_NAME_EVENTS, component, inputPortName);
+	}
 
 	public final void connectWithOutput(final AbstractPlugin component, final String outputPortName) throws IllegalStateException, AnalysisConfigurationException {
 		((AnalysisController) this.projectContext).connect(component, outputPortName, this, INTERNAL_INPUT_PORT_NAME_EVENTS);
@@ -230,6 +263,35 @@ public class AnalysisNode extends AbstractFilterPlugin {
 		return configuration;
 	}
 
+	class RepositorySenderThread extends Thread {
+
+		private volatile boolean terminated;
+
+		@SuppressWarnings("synthetic-access")
+		@Override
+		public void run() {
+			while (!this.terminated) {
+				try {
+					final Object data = AnalysisNode.this.repositorySendQueue.take();
+					// TODO Replace SerializationUtils
+					AnalysisNode.this.repositorySendChannel.basicPublish(REPOSITORY_DATA_EXCHANGE_NAME, AnalysisNode.this.name, null,
+							SerializationUtils.serialize(data));
+				} catch (final InterruptedException ex) {
+					// We expect this to happen as it is possible that another method wants to terminate this thread.
+					LOG.info("RepositorySenderThread interrupted", ex);
+				} catch (final IOException ex) {
+					LOG.warn("Sending failed", ex);
+				}
+			}
+		}
+
+		public void terminate() {
+			this.terminated = true;
+			this.interrupt();
+		}
+
+	}
+
 	class SenderThread extends Thread {
 
 		private volatile boolean terminated;
@@ -248,6 +310,37 @@ public class AnalysisNode extends AbstractFilterPlugin {
 				} catch (final IOException ex) {
 					LOG.warn("Sending failed", ex);
 				}
+			}
+		}
+
+		public void terminate() {
+			this.terminated = true;
+			this.interrupt();
+		}
+
+	}
+
+	class RepositoryReceiverThread extends Thread {
+
+		private volatile boolean terminated;
+
+		@SuppressWarnings("synthetic-access")
+		@Override
+		public void run() {
+			try {
+				final QueueingConsumer consumer = new QueueingConsumer(AnalysisNode.this.repositoryReceiveChannel);
+				AnalysisNode.this.receiveChannel.basicConsume(AnalysisNode.this.repositoryReceiveQueueName, true, consumer);
+
+				while (!this.terminated) {
+					final QueueingConsumer.Delivery delivery = consumer.nextDelivery();
+					final Object data = SerializationUtils.deserialize(delivery.getBody());
+					AnalysisNode.this.deliverWithoutReturnTypeToRepository(INTERNAL_REPOSITORY_OUTPUT_PORT_NAME_EVENTS, data);
+				}
+			} catch (final InterruptedException ex) {
+				// We expect this to happen as it is possible that another method wants to terminate this thread.
+				LOG.info("RepositoryReceiverThread interrupted", ex);
+			} catch (final IOException ex) {
+				LOG.warn("Receiving failed", ex);
 			}
 		}
 

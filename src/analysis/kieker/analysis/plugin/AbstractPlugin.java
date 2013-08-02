@@ -53,6 +53,7 @@ import kieker.analysis.plugin.metasignal.MetaSignal;
 import kieker.analysis.plugin.metasignal.TerminationSignal;
 import kieker.analysis.plugin.reader.IReaderPlugin;
 import kieker.analysis.repository.AbstractRepository;
+import kieker.analysis.repository.IRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -381,7 +382,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		}
 	}
 
-	public static final void connect(final AbstractPlugin src, final String repositoryOutputPortName, final AbstractRepository repository,
+	public static final void connect(final AbstractPlugin src, final String repositoryOutputPortName, final IRepository repository,
 			final String repositoryInputPortName) throws AnalysisConfigurationException {
 		// Connect the ports.
 		for (final Method m : repository.getClass().getMethods()) {
@@ -480,10 +481,10 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		}
 
 		// Make sure that components within containers are only connected to components within the same container
-		if (src.containerComponent != dst.containerComponent) {
-			LOG.warn("Components are contained in different containers.");
-			return false;
-		}
+		// if (src.containerComponent != dst.containerComponent) {
+		// LOG.warn("Components are contained in different containers.");
+		// return false;
+		// }
 
 		// Second step: Check whether the ports exist.
 		final OutputPort outputPort = src.outputPorts.get(output);

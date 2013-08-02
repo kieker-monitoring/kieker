@@ -41,6 +41,7 @@ import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.plugin.reader.IReaderPlugin;
 import kieker.analysis.repository.AbstractRepository;
+import kieker.analysis.repository.IRepository;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -401,7 +402,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		plugin.connect(repositoryPort, repository); // throws AnalysisConfigurationException
 	}
 
-	public void connect(final AbstractPlugin src, final String repositoryOutputPortName, final AbstractRepository repository, final String repositoryInputPortName)
+	public void connect(final AbstractPlugin src, final String repositoryOutputPortName, final IRepository repository, final String repositoryInputPortName)
 			throws IllegalStateException, AnalysisConfigurationException {
 		AbstractPlugin.connect(src, repositoryOutputPortName, repository, repositoryInputPortName);
 	}

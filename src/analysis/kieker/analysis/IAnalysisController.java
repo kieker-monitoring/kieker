@@ -26,6 +26,7 @@ import kieker.analysis.plugin.AbstractPlugin;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.repository.AbstractRepository;
+import kieker.analysis.repository.IRepository;
 
 /**
  * This is the interface to {@link kieker.analysis.AnalysisController}, allowing not only to access read-methods but also to modify the analysis itself.
@@ -130,7 +131,7 @@ public interface IAnalysisController extends IProjectContext {
 	public void connect(final AbstractPlugin plugin, final String repositoryPort, final AbstractRepository repository) throws IllegalStateException,
 			AnalysisConfigurationException;
 
-	public void connect(final AbstractPlugin src, final String repositoryOutputPortName, final AbstractRepository repository, final String repositoryInputPortName)
+	public void connect(final AbstractPlugin src, final String repositoryOutputPortName, final IRepository repository, final String repositoryInputPortName)
 			throws IllegalStateException, AnalysisConfigurationException;
 
 	/**
