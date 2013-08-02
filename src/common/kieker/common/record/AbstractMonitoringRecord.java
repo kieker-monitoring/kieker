@@ -25,11 +25,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import kieker.common.exception.MonitoringRecordException;
-import kieker.common.record.controlflow.BranchingRecord;
-import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.common.record.system.CPUUtilizationRecord;
-import kieker.common.record.system.MemSwapUsageRecord;
-import kieker.common.record.system.ResourceUtilizationRecord;
 
 /**
  * @author Andre van Hoorn, Jan Waller
@@ -44,12 +39,13 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	private volatile long loggingTimestamp = -1;
 
 	static {
-		OLD_KIEKERRECORDS.put("kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord", OperationExecutionRecord.class);
-		OLD_KIEKERRECORDS.put("kieker.common.record.CPUUtilizationRecord", CPUUtilizationRecord.class);
-		OLD_KIEKERRECORDS.put("kieker.common.record.MemSwapUsageRecord", MemSwapUsageRecord.class);
-		OLD_KIEKERRECORDS.put("kieker.common.record.ResourceUtilizationRecord", ResourceUtilizationRecord.class);
-		OLD_KIEKERRECORDS.put("kieker.common.record.OperationExecutionRecord", OperationExecutionRecord.class);
-		OLD_KIEKERRECORDS.put("kieker.common.record.BranchingRecord", BranchingRecord.class);
+		OLD_KIEKERRECORDS.put("kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord", kieker.common.record.controlflow.OperationExecutionRecord.class);
+		OLD_KIEKERRECORDS.put("kieker.common.record.CPUUtilizationRecord", kieker.common.record.system.CPUUtilizationRecord.class);
+		OLD_KIEKERRECORDS.put("kieker.common.record.MemSwapUsageRecord", kieker.common.record.system.MemSwapUsageRecord.class);
+		OLD_KIEKERRECORDS.put("kieker.common.record.ResourceUtilizationRecord", kieker.common.record.system.ResourceUtilizationRecord.class);
+		OLD_KIEKERRECORDS.put("kieker.common.record.OperationExecutionRecord", kieker.common.record.controlflow.OperationExecutionRecord.class);
+		OLD_KIEKERRECORDS.put("kieker.common.record.BranchingRecord", kieker.common.record.controlflow.BranchingRecord.class);
+		OLD_KIEKERRECORDS.put("kieker.monitoring.core.registry.RegistryRecord", kieker.common.record.misc.RegistryRecord.class);
 	}
 
 	public final long getLoggingTimestamp() {
