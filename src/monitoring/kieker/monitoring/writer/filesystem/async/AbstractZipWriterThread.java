@@ -32,9 +32,9 @@ import java.util.zip.ZipOutputStream;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.misc.RegistryRecord;
 import kieker.common.util.filesystem.FSUtil;
 import kieker.monitoring.core.controller.IMonitoringController;
-import kieker.monitoring.core.registry.RegistryRecord;
 import kieker.monitoring.writer.AbstractAsyncThread;
 import kieker.monitoring.writer.filesystem.map.StringMappingFileWriter;
 
@@ -118,10 +118,11 @@ public abstract class AbstractZipWriterThread extends AbstractAsyncThread {
 		return sb.toString();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected final void consume(final IMonitoringRecord monitoringRecord) throws Exception {
-		if (monitoringRecord instanceof RegistryRecord) {
-			this.mappingFileWriter.write((RegistryRecord) monitoringRecord);
+		if (monitoringRecord instanceof RegistryRecord<?>) {
+			this.mappingFileWriter.write((RegistryRecord<String>) monitoringRecord);
 		} else {
 			if (++this.entriesInCurrentFileCounter > this.maxEntriesInFile) { // NOPMD
 				this.entriesInCurrentFileCounter = 1;

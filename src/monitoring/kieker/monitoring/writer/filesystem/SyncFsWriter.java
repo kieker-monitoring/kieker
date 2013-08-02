@@ -34,8 +34,8 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.misc.RegistryRecord;
 import kieker.common.util.filesystem.FSUtil;
-import kieker.monitoring.core.registry.RegistryRecord;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 import kieker.monitoring.writer.filesystem.map.MappingFileWriter;
 
@@ -164,10 +164,11 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	/**
 	 * {@inheritDoc}
 	 */
+	@SuppressWarnings("unchecked")
 	public final boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-		if (monitoringRecord instanceof RegistryRecord) {
+		if (monitoringRecord instanceof RegistryRecord<?>) {
 			try {
-				this.mappingFileWriter.write((RegistryRecord) monitoringRecord);
+				this.mappingFileWriter.write((RegistryRecord<String>) monitoringRecord);
 			} catch (final IOException ex) {
 				LOG.error("Failed to write monitoring record", ex);
 				return false;

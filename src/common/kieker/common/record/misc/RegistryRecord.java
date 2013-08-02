@@ -14,19 +14,19 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.monitoring.core.registry;
+package kieker.common.record.misc;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 
 /**
- * Internal record type used exclusively by the monitoring subsystem.
+ * Record used to associate Objects (typically Strings) with unique ids.
  * 
  * @author Jan Waller
  * 
  * @since 1.5
  */
-public final class RegistryRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
+public final class RegistryRecord<E> extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
 	private static final long serialVersionUID = 4566332478835872121L;
 	private static final Class<?>[] TYPES = new Class<?>[] {
 		int.class, // id
@@ -34,7 +34,7 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	};
 
 	private final int id;
-	private final Object object;
+	private final E object;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -44,7 +44,7 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	 * @param object
 	 *            The object.
 	 */
-	public RegistryRecord(final int id, final Object object) {
+	public RegistryRecord(final int id, final E object) {
 		this.id = id;
 		this.object = object;
 	}
@@ -55,15 +55,11 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	 * @param values
 	 *            The values for the record.
 	 */
+	@SuppressWarnings("unchecked")
 	public RegistryRecord(final Object[] values) {
-		final Object[] myValues = values.clone(); // to protect object from tampering
-		AbstractMonitoringRecord.checkArray(myValues, TYPES);
-		try {
-			this.id = (Integer) myValues[0];
-			this.object = myValues[1];
-		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
-			throw new IllegalArgumentException("Failed to init record from array.", ex);
-		}
+		AbstractMonitoringRecord.checkArray(values, TYPES);
+		this.id = (Integer) values[0];
+		this.object = (E) (values[1]);
 	}
 
 	/**
@@ -100,7 +96,7 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	/**
 	 * @return the object
 	 */
-	public Object getObject() {
+	public E getObject() {
 		return this.object;
 	}
 }
