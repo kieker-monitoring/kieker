@@ -66,7 +66,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	private final Map<String, OutputPort> outputPorts;
 	private final Map<String, InputPort> inputPorts;
 
-	private final Map<OutputPort, Class<?>[]> outputPortTypes;
+	private final Map<OutputPort, Class<?>[]> outputPortTypes; // NOCS
 
 	// Shutdown mechanism
 	private final List<AbstractPlugin> incomingPlugins;
@@ -88,7 +88,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		// Get all repository and output ports.
 		this.repositoryPorts = new ConcurrentHashMap<String, RepositoryPort>();
 		this.outputPorts = new ConcurrentHashMap<String, OutputPort>();
-		this.outputPortTypes = new ConcurrentHashMap<OutputPort, Class<?>[]>();
+		this.outputPortTypes = new ConcurrentHashMap<OutputPort, Class<?>[]>(); // NOCS
 		final Plugin annotation = this.getClass().getAnnotation(Plugin.class);
 		for (final RepositoryPort repoPort : annotation.repositoryPorts()) {
 			if (this.repositoryPorts.put(repoPort.name(), repoPort) != null) {

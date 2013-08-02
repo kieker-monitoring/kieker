@@ -56,10 +56,10 @@ public final class RegistryRecord<E> extends AbstractMonitoringRecord implements
 	 *            The values for the record.
 	 */
 	@SuppressWarnings("unchecked")
-	public RegistryRecord(final Object[] values) {
+	public RegistryRecord(final Object[] values) { // NOPMD (direct store of E (usually String))
 		AbstractMonitoringRecord.checkArray(values, TYPES);
 		this.id = (Integer) values[0];
-		this.object = (E) (values[1]); // NOPMD (direct store)
+		this.object = (E) (values[1]);
 	}
 
 	/**
