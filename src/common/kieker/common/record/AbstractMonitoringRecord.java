@@ -35,6 +35,8 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	private static final long serialVersionUID = 1L;
 	private static final ConcurrentMap<String, Class<? extends IMonitoringRecord>> CACHED_KIEKERRECORDS =
 			new ConcurrentHashMap<String, Class<? extends IMonitoringRecord>>();
+	private static final ConcurrentMap<Class<? extends IMonitoringRecord>, Class<?>[]> CACHED_KIEKERRECORD_TYPES =
+			new ConcurrentHashMap<Class<? extends IMonitoringRecord>, Class<?>[]>();
 
 	private volatile long loggingTimestamp = -1;
 
@@ -262,29 +264,35 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	 *             If this method failed to access the value types.
 	 */
 	public static final Class<?>[] typesForClass(final Class<? extends IMonitoringRecord> clazz) throws MonitoringRecordException {
-		try {
-			if (IMonitoringRecord.Factory.class.isAssignableFrom(clazz)) {
-				final Field types = clazz.getDeclaredField("TYPES");
-				java.security.AccessController.doPrivileged(new PrivilegedAction<Object>() {
-					public Object run() {
-						types.setAccessible(true);
-						return null;
-					}
-				});
-				return ((Class<?>[]) types.get(null)).clone();
-			} else {
-				return clazz.newInstance().getValueTypes();
+		Class<?>[] types = CACHED_KIEKERRECORD_TYPES.get(clazz);
+		if (types != null) {
+			return types;
+		} else {
+			try {
+				if (IMonitoringRecord.Factory.class.isAssignableFrom(clazz)) {
+					final Field typesField = clazz.getDeclaredField("TYPES");
+					java.security.AccessController.doPrivileged(new PrivilegedAction<Object>() {
+						public Object run() {
+							typesField.setAccessible(true);
+							return null;
+						}
+					});
+					types = ((Class<?>[]) typesField.get(null));
+				} else {
+					types = clazz.newInstance().getValueTypes();
+				}
+				return types;
+			} catch (final SecurityException ex) {
+				throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
+			} catch (final NoSuchFieldException ex) {
+				throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
+			} catch (final IllegalArgumentException ex) {
+				throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
+			} catch (final IllegalAccessException ex) {
+				throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
+			} catch (final InstantiationException ex) {
+				throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
 			}
-		} catch (final SecurityException ex) {
-			throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
-		} catch (final NoSuchFieldException ex) {
-			throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
-		} catch (final IllegalArgumentException ex) {
-			throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
-		} catch (final IllegalAccessException ex) {
-			throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
-		} catch (final InstantiationException ex) {
-			throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
 		}
 	}
 
