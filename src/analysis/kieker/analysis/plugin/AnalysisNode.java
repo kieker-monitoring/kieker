@@ -126,7 +126,7 @@ public class AnalysisNode extends AbstractFilterPlugin {
 
 			this.repositoryReceiveChannel = factory.newConnection().createChannel();
 			this.repositoryReceiveChannel.exchangeDeclare(REPOSITORY_DATA_EXCHANGE_NAME, "topic");
-			this.repositoryReceiveQueueName = this.receiveChannel.queueDeclare().getQueue();
+			this.repositoryReceiveQueueName = this.repositoryReceiveChannel.queueDeclare().getQueue();
 
 			this.repositorySendChannel = factory.newConnection().createChannel();
 			this.repositorySendChannel.exchangeDeclare(REPOSITORY_DATA_EXCHANGE_NAME, "topic");
@@ -153,7 +153,7 @@ public class AnalysisNode extends AbstractFilterPlugin {
 
 	@Override
 	public boolean init() {
-		// Start both threads if necessary
+		// Start all threads if necessary
 		if (this.distributed) {
 			this.senderThread.start();
 			this.receiverThread.start();
@@ -166,7 +166,7 @@ public class AnalysisNode extends AbstractFilterPlugin {
 
 	@Override
 	public void terminate(final boolean error) {
-		// Terminate both threads if necessary
+		// Terminate all threads if necessary
 		if (this.distributed) {
 			this.senderThread.terminate();
 			this.receiverThread.terminate();
@@ -213,7 +213,7 @@ public class AnalysisNode extends AbstractFilterPlugin {
 
 	@RepositoryInputPort(name = INTERNAL_REPOSITORY_INPUT_PORT_NAME_EVENTS, internalUseOnly = true)
 	public final void internalRepositoryInputPort(final Object data) {
-		// If this node final is configured for final distributed access, we have final to send the final message to the final MOM as well.
+		// If this node is configured for distributed access, we have to send the message to the MOM as well.
 		if (this.distributed) {
 			this.repositorySendQueue.add(data);
 		}
@@ -283,6 +283,12 @@ public class AnalysisNode extends AbstractFilterPlugin {
 					LOG.warn("Sending failed", ex);
 				}
 			}
+			try {
+				AnalysisNode.this.repositorySendChannel.close();
+				AnalysisNode.this.repositorySendChannel.getConnection().close();
+			} catch (final IOException ex) {
+				ex.printStackTrace();
+			}
 		}
 
 		public void terminate() {
@@ -311,6 +317,12 @@ public class AnalysisNode extends AbstractFilterPlugin {
 					LOG.warn("Sending failed", ex);
 				}
 			}
+			try {
+				AnalysisNode.this.sendChannel.close();
+				AnalysisNode.this.sendChannel.getConnection().close();
+			} catch (final IOException ex) {
+				ex.printStackTrace();
+			}
 		}
 
 		public void terminate() {
@@ -329,18 +341,26 @@ public class AnalysisNode extends AbstractFilterPlugin {
 		public void run() {
 			try {
 				final QueueingConsumer consumer = new QueueingConsumer(AnalysisNode.this.repositoryReceiveChannel);
-				AnalysisNode.this.receiveChannel.basicConsume(AnalysisNode.this.repositoryReceiveQueueName, true, consumer);
+				AnalysisNode.this.repositoryReceiveChannel.basicConsume(AnalysisNode.this.repositoryReceiveQueueName, true, consumer);
 
 				while (!this.terminated) {
 					final QueueingConsumer.Delivery delivery = consumer.nextDelivery();
 					final Object data = SerializationUtils.deserialize(delivery.getBody());
 					AnalysisNode.this.deliverWithoutReturnTypeToRepository(INTERNAL_REPOSITORY_OUTPUT_PORT_NAME_EVENTS, data);
 				}
+
 			} catch (final InterruptedException ex) {
 				// We expect this to happen as it is possible that another method wants to terminate this thread.
 				LOG.info("RepositoryReceiverThread interrupted", ex);
 			} catch (final IOException ex) {
 				LOG.warn("Receiving failed", ex);
+			}
+
+			try {
+				AnalysisNode.this.repositoryReceiveChannel.abort();
+				AnalysisNode.this.repositoryReceiveChannel.getConnection().close();
+			} catch (final IOException ex) {
+				ex.printStackTrace();
 			}
 		}
 
@@ -367,11 +387,18 @@ public class AnalysisNode extends AbstractFilterPlugin {
 					final Object data = SerializationUtils.deserialize(delivery.getBody());
 					AnalysisNode.this.deliver(INTERNAL_OUTPUT_PORT_NAME_EVENTS, data);
 				}
+
 			} catch (final InterruptedException ex) {
 				// We expect this to happen as it is possible that another method wants to terminate this thread.
 				LOG.info("ReceiverThread interrupted", ex);
 			} catch (final IOException ex) {
 				LOG.warn("Receiving failed", ex);
+			}
+			try {
+				AnalysisNode.this.receiveChannel.close();
+				AnalysisNode.this.receiveChannel.getConnection().close();
+			} catch (final IOException ex) {
+				ex.printStackTrace();
 			}
 		}
 

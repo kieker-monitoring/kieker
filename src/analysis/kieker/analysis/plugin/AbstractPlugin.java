@@ -301,13 +301,10 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			try {
 				inputPort.getInputPortMethod().invoke(inputPort.getRepository(), value);
 			} catch (final IllegalAccessException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (final IllegalArgumentException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (final InvocationTargetException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -319,13 +316,10 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			try {
 				return inputPort.getInputPortMethod().invoke(inputPort.getRepository(), values);
 			} catch (final IllegalAccessException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (final IllegalArgumentException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (final InvocationTargetException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

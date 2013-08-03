@@ -493,7 +493,6 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		} catch (final InterruptedException ex) {
 			LOG.warn("Interrupted while waiting for filters to finish", ex);
 		}
-
 		LOG.info("Analysis terminated");
 	}
 
