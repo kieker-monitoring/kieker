@@ -284,7 +284,8 @@ public final class CLIServerMain {
 	 * @throws CLIConfigurationErrorException
 	 *             if an error occured in setting up a connector or if an unknown service connector was specified
 	 */
-	private static IServiceConnector createService(final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordMap) throws CLIConfigurationErrorException {
+	private static IServiceConnector createService(final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordMap)
+			throws CLIConfigurationErrorException {
 		if ("tcp-client".equals(commandLine.getOptionValue("type"))) {
 			return CLIServerMain.createTCPClientService(recordMap);
 		} else if ("tcp-single-server".equals(commandLine.getOptionValue("type"))) {

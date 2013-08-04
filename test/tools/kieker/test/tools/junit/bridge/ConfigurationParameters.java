@@ -20,6 +20,7 @@ package kieker.test.tools.junit.bridge;
  * 
  * @author Reiner Jung
  * 
+ * @since 1.8
  */
 public final class ConfigurationParameters {
 
@@ -60,6 +61,11 @@ public final class ConfigurationParameters {
 	 */
 	public static final int NUMBER_OF_TEST_THREADS = 5;
 
-	private ConfigurationParameters() {}
+	/**
+	 * Default constructor
+	 */
+	private ConfigurationParameters() {
+
+	}
 
 }

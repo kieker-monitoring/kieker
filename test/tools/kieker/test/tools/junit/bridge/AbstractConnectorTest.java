@@ -27,16 +27,17 @@ import kieker.tools.bridge.connector.ConnectorEndOfDataException;
 import kieker.tools.bridge.connector.IServiceConnector;
 
 /**
- * Abstract class for all connector tests providing three methods for initialization,
+ * Class for all connector tests providing three methods for initialization,
  * record processing and connector termination.
  * 
  * @author Reiner Jung, Pascale Brandt
  * 
+ * @since 1.8
  */
-public abstract class AbstractConnectorTest {
+public class AbstractConnectorTest {
 
 	private IServiceConnector connector;
-	private int recordCount = 0;
+	private int recordCount; // default initialization is 0
 
 	public int getRecordCount() {
 		return this.recordCount;
@@ -63,7 +64,7 @@ public abstract class AbstractConnectorTest {
 	 */
 	protected void initialize() {
 		try {
-			this.connector.initialize();
+			this.connector.initialize(); // NOPMD
 		} catch (final ConnectorDataTransmissionException e) {
 			Assert.fail("Connector initialization failed: " + e.getMessage());
 		}
@@ -77,7 +78,7 @@ public abstract class AbstractConnectorTest {
 	 */
 	protected void close(final int numberOfRecords) {
 		try {
-			this.connector.close();
+			this.connector.close(); // NOPMD
 		} catch (final ConnectorDataTransmissionException e) {
 			Assert.fail("Connector termination failed: " + e.getMessage());
 		}
@@ -95,7 +96,7 @@ public abstract class AbstractConnectorTest {
 	protected void deserialize(final int numberOfRecords) {
 		for (int i = 0; i < numberOfRecords; i++) {
 			try {
-				final OperationExecutionRecord record = (OperationExecutionRecord) this.connector.deserializeNextRecord();
+				final OperationExecutionRecord record = (OperationExecutionRecord) this.connector.deserializeNextRecord(); // NOPMD
 				Assert.assertEquals("Tin is not equal", ConfigurationParameters.TEST_TIN, record.getTin());
 				Assert.assertEquals("Tout is not equal", ConfigurationParameters.TEST_TOUT, record.getTout());
 				Assert.assertEquals("TraceId is not equal", ConfigurationParameters.TEST_TRACE_ID, record.getTraceId());

@@ -27,6 +27,8 @@ import org.junit.Assert;
  * 
  * @author Reiner Jung, Pascale Brandt
  * 
+ * @since 1.8
+ * 
  */
 public class TCPServerForClient implements Runnable {
 

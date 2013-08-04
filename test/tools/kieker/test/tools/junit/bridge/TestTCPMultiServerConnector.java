@@ -26,8 +26,10 @@ import kieker.tools.bridge.connector.tcp.TCPMultiServerConnector;
 
 /**
  * 
+ * 
  * @author Reiner Jung, Pascale Brandt
  * 
+ * @since 1.8
  */
 
 public class TestTCPMultiServerConnector extends AbstractConnectorTest {
@@ -40,7 +42,7 @@ public class TestTCPMultiServerConnector extends AbstractConnectorTest {
 	}
 
 	/**
-	 * Testing a TCP multi server connector
+	 * Testing a TCP multi server connector.
 	 */
 	@Test
 	public void testTCPMultiServerConnector() {

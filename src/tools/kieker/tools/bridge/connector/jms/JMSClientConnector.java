@@ -45,6 +45,7 @@ import kieker.tools.bridge.connector.ServiceConnectorFactory;
  * Implements a connector for JMS which supports text and binary messages.
  * 
  * @author Reiner Jung
+ * 
  * @since 1.8
  */
 public class JMSClientConnector implements IServiceConnector {
@@ -73,7 +74,8 @@ public class JMSClientConnector implements IServiceConnector {
 	 * @param uri
 	 *            JMSService URI
 	 */
-	public JMSClientConnector(final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordMap, final String username, final String password, final URI uri) {
+	public JMSClientConnector(final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordMap,
+			final String username, final String password, final URI uri) {
 		this.recordMap = recordMap;
 		this.username = username;
 		this.password = password;

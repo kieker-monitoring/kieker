@@ -26,6 +26,7 @@ import kieker.tools.bridge.connector.tcp.TCPClientConnector;
  * 
  * @author Reiner Jung, Pascale Brandt
  * 
+ * @since 1.8
  */
 public class TestTCPClientConnector extends AbstractConnectorTest {
 
@@ -41,7 +42,7 @@ public class TestTCPClientConnector extends AbstractConnectorTest {
 	 * Testing single methods do not work, as the connector is stateful.
 	 */
 	@Test
-	public void testTCPClientConnector() {
+	public void testTCPClientConnector() { // NOPMD
 		// Start a record providing server for the TCPClientConnector
 		final Thread serverThread = new Thread(new TCPServerForClient(ConfigurationParameters.TCP_CLIENT_PORT), "T1");
 		serverThread.start();

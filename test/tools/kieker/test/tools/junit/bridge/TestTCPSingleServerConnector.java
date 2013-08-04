@@ -38,7 +38,7 @@ public class TestTCPSingleServerConnector extends AbstractConnectorTest {
 	 * Test a TCP single server connector.
 	 */
 	@Test
-	public void testTCPSingleServerConnector() {
+	public void testTCPSingleServerConnector() { // NOPMD
 		// start one client for the test
 		final Thread clientThread = new Thread(new TCPClientforServer(ConfigurationParameters.TCP_SINGLE_PORT), "T1");
 		clientThread.start();

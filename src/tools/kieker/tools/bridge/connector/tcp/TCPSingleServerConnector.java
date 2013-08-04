@@ -33,6 +33,7 @@ import kieker.tools.bridge.connector.ConnectorEndOfDataException;
  * All operations provided by this connector must run in the same thread.
  * 
  * @author Reiner Jung
+ * 
  * @since 1.8
  */
 public class TCPSingleServerConnector extends AbstractTCPConnector {
@@ -40,12 +41,14 @@ public class TCPSingleServerConnector extends AbstractTCPConnector {
 	private static final int BUF_LEN = 65536;
 
 	private final int port;
+
 	/**
-	 * Internal server socket variable
+	 * Internal server socket variable.
 	 */
 	private ServerSocket serverSocket;
+
 	/**
-	 * Internal data input stream
+	 * Internal data input stream.
 	 */
 	private DataInputStream in;
 

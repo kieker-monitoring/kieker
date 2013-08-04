@@ -90,7 +90,8 @@ public final class ServiceConnectorFactory {
 	 *            Port the TCP server listens to
 	 * @return Returns a connector instance
 	 */
-	public static IServiceConnector createTCPSingleServerServiceConnector(final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordMap, final int port) {
+	public static IServiceConnector createTCPSingleServerServiceConnector(final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordMap,
+			final int port) {
 		return new TCPSingleServerConnector(recordMap, port);
 	}
 
@@ -103,7 +104,8 @@ public final class ServiceConnectorFactory {
 	 *            Port the TCP server listens to
 	 * @return Returns a connector instance
 	 */
-	public static IServiceConnector createTCPMultiServerServiceConnector(final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordMap, final int port) {
+	public static IServiceConnector createTCPMultiServerServiceConnector(final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordMap,
+			final int port) {
 		return new TCPMultiServerConnector(recordMap, port);
 	}
 
