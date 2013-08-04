@@ -1,5 +1,7 @@
 package kieker.analysis.plugin.metasignal;
 
-public class MetaSignal {
+import java.io.Serializable;
+
+public class MetaSignal implements Serializable {
 
 }

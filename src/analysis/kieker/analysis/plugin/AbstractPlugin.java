@@ -216,6 +216,13 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			for (final PluginInputPortReference pluginInputPortReference : registeredMethodsOfPort) {
 				((AbstractPlugin) pluginInputPortReference.getPlugin()).processMetaSignal((MetaSignal) data);
 			}
+
+			// In case of analysis nodes it is possible that we need to send the data to the MOM as well
+			if (this instanceof AnalysisNode) {
+				if (((AnalysisNode) this).isDistributed()) {
+					((AnalysisNode) this).sendQueue.add(data);
+				}
+			}
 		}
 
 		if (((this.state != STATE.RUNNING) && (this.state != STATE.TERMINATING)) || (data == null)) {

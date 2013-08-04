@@ -87,7 +87,7 @@ public class AnalysisNode extends AbstractFilterPlugin {
 	private final RepositorySenderThread repositorySenderThread;
 	private final ReceiverThread receiverThread;
 	private final SenderThread senderThread;
-	private final BlockingQueue<Object> sendQueue;
+	protected final BlockingQueue<Object> sendQueue;
 	private final BlockingQueue<Object> repositorySendQueue;
 	private final String name;
 	private final String host;
@@ -183,6 +183,10 @@ public class AnalysisNode extends AbstractFilterPlugin {
 		}
 	}
 
+	public boolean isDistributed() {
+		return this.distributed;
+	}
+
 	/**
 	 * This method creates a new instance of this given component, registers it with this composite filter and returns it for further actions.
 	 * 
@@ -270,7 +274,7 @@ public class AnalysisNode extends AbstractFilterPlugin {
 		@SuppressWarnings("synthetic-access")
 		@Override
 		public void run() {
-			while (!this.terminated) {
+			while (!(this.terminated && AnalysisNode.this.repositorySendQueue.isEmpty())) {
 				try {
 					final Object data = AnalysisNode.this.repositorySendQueue.take();
 					// TODO Replace SerializationUtils
@@ -305,7 +309,7 @@ public class AnalysisNode extends AbstractFilterPlugin {
 		@SuppressWarnings("synthetic-access")
 		@Override
 		public void run() {
-			while (!this.terminated) {
+			while (!(this.terminated && AnalysisNode.this.sendQueue.isEmpty())) {
 				try {
 					final Object data = AnalysisNode.this.sendQueue.take();
 					// TODO Replace SerializationUtils
