@@ -64,7 +64,7 @@ public class AbstractConnectorTest {
 	 */
 	protected void initialize() {
 		try {
-			this.connector.initialize(); // NOPMD
+			this.connector.initialize();
 		} catch (final ConnectorDataTransmissionException e) {
 			Assert.fail("Connector initialization failed: " + e.getMessage());
 		}
@@ -78,7 +78,7 @@ public class AbstractConnectorTest {
 	 */
 	protected void close(final int numberOfRecords) {
 		try {
-			this.connector.close(); // NOPMD
+			this.connector.close();
 		} catch (final ConnectorDataTransmissionException e) {
 			Assert.fail("Connector termination failed: " + e.getMessage());
 		}
@@ -96,7 +96,7 @@ public class AbstractConnectorTest {
 	protected void deserialize(final int numberOfRecords) {
 		for (int i = 0; i < numberOfRecords; i++) {
 			try {
-				final OperationExecutionRecord record = (OperationExecutionRecord) this.connector.deserializeNextRecord(); // NOPMD
+				final OperationExecutionRecord record = (OperationExecutionRecord) this.connector.deserializeNextRecord();
 				Assert.assertEquals("Tin is not equal", ConfigurationParameters.TEST_TIN, record.getTin());
 				Assert.assertEquals("Tout is not equal", ConfigurationParameters.TEST_TOUT, record.getTout());
 				Assert.assertEquals("TraceId is not equal", ConfigurationParameters.TEST_TRACE_ID, record.getTraceId());
