@@ -83,7 +83,7 @@ public final class RegistryRecord<E> extends AbstractMonitoringRecord implements
 	 * {@inheritDoc}
 	 */
 	public Class<?>[] getValueTypes() {
-		return TYPES.clone();
+		return TYPES;
 	}
 
 	/**

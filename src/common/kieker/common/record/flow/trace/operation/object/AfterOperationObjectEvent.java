@@ -97,7 +97,7 @@ public class AfterOperationObjectEvent extends AfterOperationEvent implements IO
 	 */
 	@Override
 	public Class<?>[] getValueTypes() {
-		return TYPES.clone();
+		return TYPES;
 	}
 
 	public int getObjectId() {

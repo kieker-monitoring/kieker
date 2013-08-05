@@ -102,7 +102,7 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 	 */
 	@Override
 	public Class<?>[] getValueTypes() {
-		return TYPES.clone();
+		return TYPES;
 	}
 
 	public final String getCause() {

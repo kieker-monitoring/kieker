@@ -82,6 +82,6 @@ public class BeforeOperationEvent extends AbstractOperationEvent {
 	 * {@inheritDoc}
 	 */
 	public Class<?>[] getValueTypes() {
-		return TYPES.clone();
+		return TYPES;
 	}
 }
