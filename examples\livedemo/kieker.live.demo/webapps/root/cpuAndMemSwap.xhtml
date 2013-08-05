@@ -59,8 +59,8 @@
 		</div>
 		<div id="main">
 			<h:form id="form"> 
-			 
-			 	<p:commandButton value="Select Attributes" onclick="dlg.show();" type="button"/>
+			
+				<p:commandButton value="Select Attributes" onclick="dlg.show();" type="button"/>
 				 
 				<p:dialog header="Select Attributes" widgetVar="dlg">
 					<p:selectManyCheckbox value="#{cpuXYPlotBean.selectedAttributes}" 
@@ -73,7 +73,7 @@
 					<p:tab title="#{model.name}">
 						<p:lineChart id="responsetime" value="#{model.model}" legendPosition="ne"
 						   		style="height:300px;margin-top:20px" minY="0" maxY="100"
-						   		xaxisAngle="30" xaxisLabel="Time" yaxisLabel="Percent"/>
+						   		xaxisLabel="Time" yaxisLabel="Percent"/>
 						<p:poll interval="1" update="responsetime"/>
 					</p:tab>
 				</p:accordionPanel>
@@ -81,7 +81,7 @@
 				<p:accordionPanel dynamic="true" multiple="true" activeIndex="0,1">
 					<p:tab title="#{memSwapBean.memModel.name}">
 						<p:barChart id="mem" value="#{memSwapBean.memModel.model}" legendPosition="ne"
-					   		xaxisAngle="30" style="height:200px;margin-top:20px" stacked="true"
+					   		style="height:200px;margin-top:20px" stacked="true"
 					   		xaxisLabel="Time" yaxisLabel="MB"/>
 						<p:poll interval="1" update="mem"/>
 					</p:tab>
@@ -92,19 +92,17 @@
 						<p:poll interval="1" update="swap"/>
 					</p:tab>
 				</p:accordionPanel>
-				
+				<!-- 
 				<h:panelGrid id="grid" columns="2" columnClasses="colStyle" style="width:100%;margin-bottom:10px" cellpadding="5">
-					<ui:repeat value="#{cpuMeterGaugeBean.meterGaugeModels}" var="model">
-						<p:panel header="#{model.name} : Total Utilization" toggleable="true" >
+					<c:forEach items="#{cpuMeterGaugeBean.meterGaugeModels}" var="model">
+						<p:panel header="#{model.name} : Total Utilization" toggleable="false" >
 							<p:meterGaugeChart value="#{model.model}"  
 					 			label="%" seriesColors="#{cpuMeterGaugeBean.colors}"/>
 						</p:panel>
-					</ui:repeat>
-					<p:panel header="KIEKER-DEMO-SRV - MEM" toggleable="true" >
-						<p:pieChart value="#{memSwapBean.memPieChartModel}" legendPosition="e"/>
-					</p:panel> 
+					</c:forEach>
 				</h:panelGrid>
 				<p:poll interval="1" update="grid"/>
+				 -->
 			</h:form>
 		</div>
 		<div id="footer">

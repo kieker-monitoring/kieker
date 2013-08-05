@@ -77,9 +77,9 @@ public class MethodResponsetimeBean implements Observer {
 	}
 	
 	public void onChange(ValueChangeEvent event){
-		System.out.println(this.selectButton);
 		if(this.selectButton){
-			this.selectedMethods = this.availableMethods;
+			this.selectedMethods.clear();
+			this.selectedMethods.addAll(availableMethods);
 		}else{
 			this.selectedMethods.clear();
 		}
@@ -92,7 +92,7 @@ public class MethodResponsetimeBean implements Observer {
 	public void setSelectedMethods(List<String> selectedMethods){
 		this.selectedMethods = selectedMethods;
 	}
-
+	
 	public List<String> getSelectedMethods() {
 		if(this.selectedMethods.isEmpty() && !this.availableMethods.isEmpty()){
 			this.selectedMethods.add(this.availableMethods.get(0));
@@ -184,5 +184,5 @@ public class MethodResponsetimeBean implements Observer {
 		}
 		
 	}
-
+	
 }

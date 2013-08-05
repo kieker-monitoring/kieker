@@ -73,7 +73,7 @@ public class CPUXYPlotBean implements Observer{
 	}
 	
 	public List<String> getAvailableAttributes() {
-		return availableAttributes;
+		return this.availableAttributes;
 	}
 
 	public List<String> getSelectedAttributes() {
@@ -106,7 +106,7 @@ public class CPUXYPlotBean implements Observer{
 			CartesianChartModel cpuModel = new CartesianChartModel();
 			for(String key : this.keys){ // key = hostname - cpuId - idle
 				if(key.substring(0, this.index - 1).equals(id)){
-					for(String attribute : this.selectedAttributes){
+					for(String attribute : this.getSelectedAttributes()){
 						if(key.substring(index + 2).equals(attribute)){
 							cpuModel.addSeries(this.computeModel(key, attribute));
 						}

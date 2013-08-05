@@ -10,7 +10,6 @@ import javax.faces.bean.ManagedProperty;
 
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
-import org.primefaces.model.chart.PieChartModel;
 
 import kieker.analysis.display.XYPlot;
 import livedemo.entities.Model;
@@ -28,12 +27,10 @@ public class MemSwapBean implements Observer {
 	private XYPlot xyplot;
 	private Model<CartesianChartModel> memModel;
 	private Model<CartesianChartModel> swapModel;
-	private final PieChartModel memPieChartModel;
 	
 	public MemSwapBean(){
 		this.memModel = new Model<CartesianChartModel>(new CartesianChartModel(), "KIEKER-DEMO-SVR - MEM");
 		this.swapModel = new Model<CartesianChartModel>(new CartesianChartModel(), "KIEKER-DEMO-SVR - SWAP");
-		this.memPieChartModel = new PieChartModel();
 	}
 	
 	@PostConstruct
@@ -50,10 +47,6 @@ public class MemSwapBean implements Observer {
 	
 	public void setAnalysisBean(AnalysisBean analysisBean){
 		this.analysisBean = analysisBean;
-	}
-	
-	public PieChartModel getMemPieChartModel() {
-		return memPieChartModel;
 	}
 
 	public Model<CartesianChartModel> getMemModel(){
