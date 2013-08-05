@@ -303,7 +303,8 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	 * @throws MonitoringRecordException
 	 *             If this method failed to create the record for some reason.
 	 */
-	public static final IMonitoringRecord createFromArray(final Class<? extends IMonitoringRecord> clazz, final Object[] values) throws MonitoringRecordException {
+	public static final IMonitoringRecord createFromArray(final Class<? extends IMonitoringRecord> clazz, final Object[] values) throws MonitoringRecordException
+	{
 		try {
 			if (IMonitoringRecord.Factory.class.isAssignableFrom(clazz)) {
 				// Factory interface present
