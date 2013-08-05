@@ -111,7 +111,7 @@ public final class ResourceUtilizationRecord extends AbstractMonitoringRecord im
 	 * {@inheritDoc}
 	 */
 	public Class<?>[] getValueTypes() {
-		return TYPES;
+		return TYPES; // NOPMD
 	}
 
 	/**

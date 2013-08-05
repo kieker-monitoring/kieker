@@ -80,6 +80,6 @@ public class AfterConstructorEvent extends AfterOperationEvent {
 
 	@Override
 	public Class<?>[] getValueTypes() {
-		return TYPES;
+		return TYPES; // NOPMD
 	}
 }

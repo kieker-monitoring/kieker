@@ -102,7 +102,7 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 	 */
 	@Override
 	public Class<?>[] getValueTypes() {
-		return TYPES;
+		return TYPES; // NOPMD
 	}
 
 	public final String getCause() {

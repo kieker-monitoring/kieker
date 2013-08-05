@@ -72,7 +72,7 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent {
 	}
 
 	public Class<?>[] getValueTypes() {
-		return TYPES;
+		return TYPES; // NOPMD
 	}
 
 	public final int getLockId() {

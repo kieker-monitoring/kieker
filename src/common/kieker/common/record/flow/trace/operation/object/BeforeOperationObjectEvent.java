@@ -97,7 +97,7 @@ public class BeforeOperationObjectEvent extends BeforeOperationEvent implements 
 	 */
 	@Override
 	public Class<?>[] getValueTypes() {
-		return TYPES;
+		return TYPES; // NOPMD
 	}
 
 	public int getObjectId() {

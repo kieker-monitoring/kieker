@@ -178,7 +178,7 @@ public final class CPUUtilizationRecord extends AbstractMonitoringRecord impleme
 	 * {@inheritDoc}
 	 */
 	public Class<?>[] getValueTypes() {
-		return TYPES;
+		return TYPES; // NOPMD
 	}
 
 	/**

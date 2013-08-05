@@ -134,7 +134,7 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 	 * {@inheritDoc}
 	 */
 	public Class<?>[] getValueTypes() {
-		return TYPES;
+		return TYPES; // NOPMD
 	}
 
 	/**

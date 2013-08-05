@@ -86,7 +86,7 @@ public class JoinEvent extends AbstractTraceEvent {
 	 * {@inheritDoc}
 	 */
 	public Class<?>[] getValueTypes() {
-		return TYPES;
+		return TYPES; // NOPMD
 	}
 
 	public long getJoinedTraceId() {
