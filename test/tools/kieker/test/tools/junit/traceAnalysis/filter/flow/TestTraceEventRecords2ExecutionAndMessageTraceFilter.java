@@ -85,9 +85,9 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 		// this.exec0_0__bookstore_searchBook_assumed =
 		// this.bookstoreExecutionFactory.createBookstoreExecution_exec0_0__bookstore_searchBook(TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID,
 		// TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.HOSTNAME,
-		// /* tin: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry0_0__bookstore_searchBook,
-		// /* tout: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook,
-		// /* assumed: */true);
+		// initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_entry0_0__bookstore_searchBook, // tin
+		// initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_exit0_0__bookstore_searchBook, // tout
+		// true);// assumed
 
 		this.exec1_1__catalog_getBook =
 				this.bookstoreExecutionFactory.createBookstoreExecution_exec1_1__catalog_getBook(TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID,
@@ -448,7 +448,6 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 	 * @return
 	 * @throws InvalidTraceException
 	 */
-	// see ticket: https://kieker.uni-kiel.de/trac/ticket/595
 	private ExecutionTrace genValidSyncTraceSimpleCallCall() throws InvalidTraceException {
 		// Create an Execution Trace and add Executions in arbitrary order
 		final ExecutionTrace executionTrace = new ExecutionTrace(TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID,
@@ -461,21 +460,21 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 				this.bookstoreExecutionFactory.createBookstoreExecution_crm_getOrders(
 						TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID,
 						TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.HOSTNAME,
-						/* The assumed entry timestamp is the exit timestamp of the previous call */
-						/* tin: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call2_1__crm_getOrders,
-						/*
-						 * We will only have a (before) call to CRM.getOrder(..), hence the assumed return timestamp is
-						 * the return time of the wrapping Bookstore.searchBook(..) execution:
-						 */
-						/* tout: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call3_2__catalog_getBook,
-						/* eoi: */0, /* ess: */0, true));
+						// The assumed entry timestamp is the exit timestamp of the previous call
+						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call2_1__crm_getOrders, // tin
+						// We will only have a (before) call to CRM.getOrder(..), hence the assumed return timestamp is the return time of the wrapping
+						// Bookstore.searchBook(..) execution:
+						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call3_2__catalog_getBook, // tout
+						0, // eois
+						0, // ess
+						true));
 		executionTrace.add(
 				this.bookstoreExecutionFactory.createBookstoreExecution_catalog_getBook(
 						TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID,
 						TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.HOSTNAME,
-						/* tin: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call3_2__catalog_getBook,
-						/* tout: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call3_2__catalog_getBook,
-						/* eoi: */1, /* ess: */1, true));
+						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call3_2__catalog_getBook, // tin
+						initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call3_2__catalog_getBook, // tout
+						1, 1, true));
 
 		// just to make sure that this trace is valid
 		executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
