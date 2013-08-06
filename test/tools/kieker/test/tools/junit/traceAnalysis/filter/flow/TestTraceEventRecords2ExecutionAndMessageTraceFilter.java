@@ -449,62 +449,51 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 	 * @throws InvalidTraceException
 	 */
 	// see ticket: https://kieker.uni-kiel.de/trac/ticket/595
-	// private ExecutionTrace genValidSyncTraceSimpleCallCall() throws InvalidTraceException {
-	// /*
-	// * Create an Execution Trace and add Executions in
-	// * arbitrary order
-	// */
-	// final ExecutionTrace executionTrace =
-	// new ExecutionTrace(TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID);
-	//
-	// final long initialTimestamp = this.exec0_0__bookstore_searchBook.getTin();
-	//
-	// /* Manually create Executions for a trace */
-	// executionTrace.add(
-	// this.bookstoreExecutionFactory.createBookstoreExecution_exec0_0__bookstore_searchBook(TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID,
-	// TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.HOSTNAME,
-	// /* tin: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call2_1__crm_getOrders,
-	// /* tout: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call3_2__catalog_getBook));
-	// executionTrace.add(
-	// this.bookstoreExecutionFactory.createBookstoreExecution_crm_getOrders(
-	// TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID,
-	// TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.HOSTNAME,
-	// /* The assumed entry timestamp is the exit timestamp of the previous call */
-	// /* tin: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call2_1__crm_getOrders,
-	// /*
-	// * We will only have a (before) call to CRM.getOrder(..), hence the assumed return timestamp is
-	// * the return time of the wrapping Bookstore.searchBook(..) execution:
-	// */
-	// /* tout: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call3_2__catalog_getBook,
-	// /* eoi: */1, /* ess: */1));
-	// executionTrace.add(
-	// this.bookstoreExecutionFactory.createBookstoreExecution_catalog_getBook(
-	// TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID,
-	// TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.HOSTNAME,
-	// /* tin: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call3_2__catalog_getBook,
-	// /* tout: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call3_2__catalog_getBook,
-	// /* eoi: */2, /* ess: */2));
-	//
-	// // just to make sure that this trace is valid
-	// executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
-	//
-	// return executionTrace;
-	// }
-	//
-	// @Test
-	// public void testValidSyncTraceSimpleCallCall() throws InvalidTraceException, IllegalStateException, AnalysisConfigurationException { // NOPMD
-	//
-	// /*
-	// * Create an EventRecordTrace, containing only Before- and AfterOperation events.
-	// */
-	// final TraceEventRecords traceEvents =
-	// BookstoreEventRecordFactory.validSyncTraceSimpleCallCall(this.exec0_0__bookstore_searchBook.getTin(),
-	// TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID,
-	// TestTraceEventRecords2ExecutionAndMessageTraceFilter.HOSTNAME);
-	// final ExecutionTrace expectedExecutionTrace = this.genValidSyncTraceSimpleCallCall();
-	//
-	// this.checkTrace(traceEvents, expectedExecutionTrace);
-	// }
+	private ExecutionTrace genValidSyncTraceSimpleCallCall() throws InvalidTraceException {
+		// Create an Execution Trace and add Executions in arbitrary order
+		final ExecutionTrace executionTrace = new ExecutionTrace(TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID,
+				TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID);
+
+		final long initialTimestamp = this.exec0_0__bookstore_searchBook.getTin();
+
+		// Manually create Executions for a trace
+		executionTrace.add(
+				this.bookstoreExecutionFactory.createBookstoreExecution_crm_getOrders(
+						TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID,
+						TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.HOSTNAME,
+						/* The assumed entry timestamp is the exit timestamp of the previous call */
+						/* tin: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call2_1__crm_getOrders,
+						/*
+						 * We will only have a (before) call to CRM.getOrder(..), hence the assumed return timestamp is
+						 * the return time of the wrapping Bookstore.searchBook(..) execution:
+						 */
+						/* tout: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call3_2__catalog_getBook,
+						/* eoi: */0, /* ess: */0, true));
+		executionTrace.add(
+				this.bookstoreExecutionFactory.createBookstoreExecution_catalog_getBook(
+						TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID,
+						TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.HOSTNAME,
+						/* tin: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call3_2__catalog_getBook,
+						/* tout: */initialTimestamp + BookstoreEventRecordFactory.TSTAMP_OFFSET_call3_2__catalog_getBook,
+						/* eoi: */1, /* ess: */1, true));
+
+		// just to make sure that this trace is valid
+		executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
+
+		return executionTrace;
+	}
+
+	@Test
+	public void testValidSyncTraceSimpleCallCall() throws InvalidTraceException, IllegalStateException, AnalysisConfigurationException { // NOPMD
+		// Create an EventRecordTrace, containing only CallOperation events.
+		final TraceEventRecords traceEvents =
+				BookstoreEventRecordFactory.validSyncTraceSimpleCallCall(this.exec0_0__bookstore_searchBook.getTin(),
+						TestTraceEventRecords2ExecutionAndMessageTraceFilter.TRACE_ID, TestTraceEventRecords2ExecutionAndMessageTraceFilter.SESSION_ID,
+						TestTraceEventRecords2ExecutionAndMessageTraceFilter.HOSTNAME);
+		final ExecutionTrace expectedExecutionTrace = this.genValidSyncTraceSimpleCallCall();
+
+		this.checkTrace(traceEvents, expectedExecutionTrace);
+	}
 
 	/**
 	 * 
