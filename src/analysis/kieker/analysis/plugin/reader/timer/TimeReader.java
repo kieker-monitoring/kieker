@@ -86,16 +86,16 @@ public final class TimeReader extends AbstractReaderPlugin {
 	public static final String CONFIG_PROPERTY_VALUE_NUMBER_IMPULSES = "0";
 
 	/** A value for the number of impulses. It makes sure that the reader emits an infinite amount of signals. */
-	public static final long INFINITE_EMITS = 0;
+	public static final long INFINITE_EMITS = 0L;
 
 	private static final Log LOG = LogFactory.getLog(TimeReader.class);
+
+	protected final CountDownLatch impulseEmitLatch = new CountDownLatch(1);
 
 	private volatile boolean terminated;
 
 	private final ScheduledExecutorService executorService = new ScheduledThreadPoolExecutor(1);
 	private volatile ScheduledFuture<?> result;
-
-	private final CountDownLatch impulseEmitLatch = new CountDownLatch(1);
 
 	private final long initialDelay;
 	private final long period;
@@ -112,7 +112,6 @@ public final class TimeReader extends AbstractReaderPlugin {
 	 */
 	public TimeReader(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
-
 		this.initialDelay = configuration.getLongProperty(CONFIG_PROPERTY_NAME_DELAY_NS);
 		this.period = configuration.getLongProperty(CONFIG_PROPERTY_NAME_UPDATE_INTERVAL_NS);
 		this.numberImpulses = configuration.getLongProperty(CONFIG_PROPERTY_NAME_NUMBER_IMPULSES);
@@ -134,7 +133,6 @@ public final class TimeReader extends AbstractReaderPlugin {
 	public void terminate(final boolean error) {
 		if (!this.terminated) {
 			LOG.info("Shutdown of TimeReader requested.");
-
 			this.executorService.shutdown();
 			try {
 				this.terminated = this.executorService.awaitTermination(5, TimeUnit.SECONDS);
@@ -152,8 +150,7 @@ public final class TimeReader extends AbstractReaderPlugin {
 	 * {@inheritDoc}
 	 */
 	public boolean read() {
-		this.result = this.executorService.scheduleAtFixedRate(new TimestampEventTask(), this.initialDelay, this.period, TimeUnit.NANOSECONDS);
-
+		this.result = this.executorService.scheduleAtFixedRate(new TimestampEventTask(this.numberImpulses), this.initialDelay, this.period, TimeUnit.NANOSECONDS);
 		try {
 			if (this.numberImpulses == INFINITE_EMITS) {
 				this.result.get();
@@ -168,7 +165,6 @@ public final class TimeReader extends AbstractReaderPlugin {
 		} catch (final CancellationException ignore) { // NOPMD (ignore exception)
 			// ignore this one, too
 		}
-
 		this.terminate(false);
 		return true;
 	}
@@ -176,11 +172,9 @@ public final class TimeReader extends AbstractReaderPlugin {
 	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-
 		configuration.setProperty(CONFIG_PROPERTY_NAME_DELAY_NS, Long.toString(this.initialDelay));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_UPDATE_INTERVAL_NS, Long.toString(this.period));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_NUMBER_IMPULSES, Long.toString(this.numberImpulses));
-
 		return configuration;
 	}
 
@@ -188,14 +182,9 @@ public final class TimeReader extends AbstractReaderPlugin {
 	 * Sends the current system time as a new timestamp event.
 	 */
 	protected void sendTimestampEvent() {
-		final long timestamp = this.convertTimestamp(System.nanoTime());
-
+		final long timestamp = this.timeunit.convert(System.nanoTime(), TimeUnit.NANOSECONDS);
 		super.deliver(OUTPUT_PORT_NAME_TIMESTAMPS, timestamp);
 		super.deliver(OUTPUT_PORT_NAME_TIMESTAMP_RECORDS, new TimestampRecord(timestamp));
-	}
-
-	private long convertTimestamp(final long timestampNS) {
-		return this.timeunit.convert(timestampNS, TimeUnit.NANOSECONDS);
 	}
 
 	/**
@@ -206,38 +195,31 @@ public final class TimeReader extends AbstractReaderPlugin {
 	 * @since 1.8
 	 */
 	protected class TimestampEventTask implements Runnable {
-
-		private long numberEmittedImpulses = 0;
+		private final boolean infinite;
+		private volatile long numberImpulses;
 
 		/**
 		 * Creates a new task.
 		 */
-		public TimestampEventTask() {
-			// empty default constructor
+		public TimestampEventTask(final long numberImpulses) {
+			this.numberImpulses = numberImpulses;
+			if (numberImpulses == 0) {
+				this.infinite = true;
+			} else {
+				this.infinite = false;
+			}
 		}
 
 		/**
 		 * Executes the task.
 		 */
 		public void run() {
-			if (this.emitMoreImpulses()) {
+			if (this.infinite || (this.numberImpulses > 0)) {
 				TimeReader.this.sendTimestampEvent();
-				this.checkEmittedImpulses();
-			}
-		}
-
-		private boolean emitMoreImpulses() {
-			return (TimeReader.this.numberImpulses == INFINITE_EMITS) || (this.numberEmittedImpulses < TimeReader.this.numberImpulses);
-		}
-
-		private void checkEmittedImpulses() {
-			if (TimeReader.this.numberImpulses != INFINITE_EMITS) {
-				this.numberEmittedImpulses++;
-				if (this.numberEmittedImpulses == TimeReader.this.numberImpulses) {
+				if (!this.infinite && (0 == --this.numberImpulses)) {
 					TimeReader.this.impulseEmitLatch.countDown();
 				}
 			}
 		}
-
 	}
 }
