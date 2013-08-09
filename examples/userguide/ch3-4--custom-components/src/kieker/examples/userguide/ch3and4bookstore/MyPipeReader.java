@@ -66,9 +66,10 @@ public class MyPipeReader extends AbstractReaderPlugin {
 			// Wait max. 4 seconds for the next data.
 			PipeData data = this.pipe.poll(4);
 			while (data != null) {
+				final Class<?>[] parameterTypes = AbstractMonitoringRecord.typesForClass(data.getRecordType());
 				// Create new record, init from received array ...
 				final IMonitoringRecord record = // throws MonitoringRecordException:
-				AbstractMonitoringRecord.createFromArray(data.getRecordType(),
+				AbstractMonitoringRecord.createFromArray(data.getRecordType().getConstructor(parameterTypes),
 						data.getRecordData());
 				record.setLoggingTimestamp(data.getLoggingTimestamp());
 				// ...and delegate the task of delivering to the super class.

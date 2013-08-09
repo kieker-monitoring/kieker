@@ -17,6 +17,7 @@
 package kieker.analysis.plugin.filter.forward;
 
 import java.lang.ref.SoftReference;
+import java.lang.reflect.Constructor;
 import java.util.concurrent.locks.ReentrantLock;
 
 import kieker.analysis.IProjectContext;
@@ -131,11 +132,20 @@ public final class StringBufferFilter extends AbstractFilterPlugin {
 			}
 			if (stringBuffered) {
 				try {
-					final IMonitoringRecord newRecord = AbstractMonitoringRecord.createFromArray((Class<? extends IMonitoringRecord>) object.getClass(), objects);
+					// temporary - for this case a cache would be better
+					final Class<? extends IMonitoringRecord> clazz = (Class<? extends IMonitoringRecord>) object.getClass();
+					final Class<?>[] typeArray = AbstractMonitoringRecord.typesForClass(clazz);
+					final Constructor<? extends IMonitoringRecord> constructor = clazz.getConstructor(typeArray);
+
+					final IMonitoringRecord newRecord = AbstractMonitoringRecord.createFromArray(constructor, objects);
 					newRecord.setLoggingTimestamp(((IMonitoringRecord) object).getLoggingTimestamp());
 					super.deliver(StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, newRecord);
 				} catch (final MonitoringRecordException ex) {
 					LOG.warn("Failed to recreate buffered monitoring record: " + object.toString(), ex);
+				} catch (final NoSuchMethodException e) {
+					LOG.warn("Failed to recreate buffered monitoring record: " + object.toString(), e);
+				} catch (final SecurityException e) {
+					LOG.warn("Failed to recreate buffered monitoring record: " + object.toString(), e);
 				}
 			} else {
 				super.deliver(StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, object);

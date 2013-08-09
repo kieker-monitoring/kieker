@@ -24,6 +24,7 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -317,6 +318,7 @@ final class FSDirectoryReader implements Runnable {
 
 				final Class<? extends IMonitoringRecord> clazz = AbstractMonitoringRecord.classForName(classname);
 				final Class<?>[] typeArray = AbstractMonitoringRecord.typesForClass(clazz);
+				final Constructor<? extends IMonitoringRecord> constructor = clazz.getConstructor(typeArray);
 
 				// read record
 				final long loggingTimestamp = in.readLong(); // NOPMD (must be read here!)
@@ -356,7 +358,7 @@ final class FSDirectoryReader implements Runnable {
 						objectArray[idx] = null;
 					}
 				}
-				final IMonitoringRecord record = AbstractMonitoringRecord.createFromArray(clazz, objectArray);
+				final IMonitoringRecord record = AbstractMonitoringRecord.createFromArray(constructor, objectArray);
 				record.setLoggingTimestamp(loggingTimestamp);
 				if (!this.recordReceiver.newMonitoringRecord(record)) {
 					this.terminated = true;

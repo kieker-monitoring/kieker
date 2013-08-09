@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -184,6 +185,7 @@ public final class FSZipReader implements Runnable {
 
 				final Class<? extends IMonitoringRecord> clazz = AbstractMonitoringRecord.classForName(classname);
 				final Class<?>[] typeArray = AbstractMonitoringRecord.typesForClass(clazz);
+				final Constructor<? extends IMonitoringRecord> constructor = clazz.getConstructor(typeArray);
 
 				// read record
 				final long loggingTimestamp = input.readLong(); // NOPMD (must be read here!)
@@ -223,7 +225,7 @@ public final class FSZipReader implements Runnable {
 						objectArray[idx] = null;
 					}
 				}
-				final IMonitoringRecord record = AbstractMonitoringRecord.createFromArray(clazz, objectArray);
+				final IMonitoringRecord record = AbstractMonitoringRecord.createFromArray(constructor, objectArray);
 				record.setLoggingTimestamp(loggingTimestamp);
 				if (!this.recordReceiver.newMonitoringRecord(record)) {
 					this.terminated = true;

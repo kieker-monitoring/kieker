@@ -16,6 +16,7 @@
 
 package kieker.analysis.plugin.reader.database;
 
+import java.lang.reflect.Constructor;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -164,6 +165,8 @@ public class DbReader extends AbstractReaderPlugin {
 			MonitoringRecordException {
 		Statement selectRecord = null;
 		try {
+			final Class<?>[] typeArray = AbstractMonitoringRecord.typesForClass(clazz);
+			final Constructor<? extends IMonitoringRecord> constructor = clazz.getConstructor(typeArray);
 			selectRecord = connection.createStatement();
 			ResultSet records = null;
 			try {
@@ -174,7 +177,7 @@ public class DbReader extends AbstractReaderPlugin {
 					for (int i = 0; i < size; i++) {
 						recordValues[i] = records.getObject(i + 3);
 					}
-					final IMonitoringRecord record = AbstractMonitoringRecord.createFromArray(clazz, recordValues);
+					final IMonitoringRecord record = AbstractMonitoringRecord.createFromArray(constructor, recordValues);
 					record.setLoggingTimestamp(records.getLong(2));
 					super.deliver(OUTPUT_PORT_NAME_RECORDS, record);
 				}
@@ -183,6 +186,10 @@ public class DbReader extends AbstractReaderPlugin {
 					records.close();
 				}
 			}
+		} catch (final NoSuchMethodException e) {
+			throw new MonitoringRecordException("Record constructor not found.", e);
+		} catch (final SecurityException e) {
+			throw new MonitoringRecordException("Access to record constructor denied.", e);
 		} finally {
 			if (selectRecord != null) {
 				selectRecord.close();

@@ -298,8 +298,8 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	/**
 	 * This method creates a new monitoring record from the given data.
 	 * 
-	 * @param clazz
-	 *            The class of the monitoring record.
+	 * @param constructor
+	 *            The constructor for the class of the monitoring record.
 	 * @param values
 	 *            The array which will be used to initialize the fields of the record.
 	 * 
@@ -308,30 +308,20 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	 * @throws MonitoringRecordException
 	 *             If this method failed to create the record for some reason.
 	 */
-	public static final IMonitoringRecord createFromArray(final Class<? extends IMonitoringRecord> clazz, final Object[] values) throws MonitoringRecordException {
+	public static final IMonitoringRecord createFromArray(final Constructor<? extends IMonitoringRecord> constructor, final Object[] values)
+			throws MonitoringRecordException {
 		try {
-			if (IMonitoringRecord.Factory.class.isAssignableFrom(clazz)) {
-				// Factory interface present
-				final Constructor<? extends IMonitoringRecord> constructor = clazz.getConstructor(Object[].class);
-				return constructor.newInstance((Object) values);
-			} else {
-				// try ordinary method
-				final IMonitoringRecord record = clazz.newInstance();
-				record.initFromArray(values);
-				return record;
-			}
+			return constructor.newInstance(values);
 		} catch (final SecurityException ex) {
-			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
-		} catch (final NoSuchMethodException ex) {
-			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
+			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + constructor.getName(), ex);
 		} catch (final IllegalArgumentException ex) {
-			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
+			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + constructor.getName(), ex);
 		} catch (final InstantiationException ex) {
-			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
+			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + constructor.getName(), ex);
 		} catch (final IllegalAccessException ex) {
-			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
+			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + constructor.getName(), ex);
 		} catch (final InvocationTargetException ex) {
-			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
+			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + constructor.getName(), ex);
 		}
 	}
 
