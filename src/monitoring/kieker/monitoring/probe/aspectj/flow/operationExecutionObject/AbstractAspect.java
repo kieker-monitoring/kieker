@@ -54,7 +54,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return thisJoinPoint.proceed();
 		}
-		final String signature = this.signatureToLongString(thisJoinPoint.getSignature());
+		final String signature = AbstractAspectJProbe.signatureToLongString(thisJoinPoint.getSignature());
 		if (!CTRLINST.isProbeActivated(signature)) {
 			return thisJoinPoint.proceed();
 		}
@@ -105,7 +105,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			return thisJoinPoint.proceed();
 		}
 		final Signature sig = thisJoinPoint.getSignature();
-		final String signature = this.signatureToLongString(sig);
+		final String signature = AbstractAspectJProbe.signatureToLongString(sig);
 		if (!CTRLINST.isProbeActivated(signature)) {
 			return thisJoinPoint.proceed();
 		}

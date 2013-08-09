@@ -62,7 +62,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			return;
 		}
 		final Signature signature = jp.getSignature();
-		if (!CTRLINST.isProbeActivated(this.signatureToLongString(signature))) {
+		if (!CTRLINST.isProbeActivated(AbstractAspectJProbe.signatureToLongString(signature))) {
 			return;
 		}
 		// common fields

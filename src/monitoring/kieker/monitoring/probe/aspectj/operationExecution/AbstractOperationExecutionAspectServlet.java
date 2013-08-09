@@ -27,6 +27,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.SessionRegistry;
+import kieker.monitoring.probe.aspectj.AbstractAspectJProbe;
 
 /**
  * @author Andre van Hoorn, Jan Waller
@@ -47,7 +48,7 @@ public abstract class AbstractOperationExecutionAspectServlet extends AbstractOp
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return thisJoinPoint.proceed();
 		}
-		if (!CTRLINST.isProbeActivated(this.signatureToLongString(thisJoinPoint.getSignature()))) {
+		if (!CTRLINST.isProbeActivated(AbstractAspectJProbe.signatureToLongString(thisJoinPoint.getSignature()))) {
 			return thisJoinPoint.proceed();
 		}
 		final HttpServletRequest req = (HttpServletRequest) thisJoinPoint.getArgs()[0];
