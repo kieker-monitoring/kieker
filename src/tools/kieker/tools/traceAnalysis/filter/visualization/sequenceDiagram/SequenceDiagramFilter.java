@@ -287,7 +287,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 			LOG.error("Invalid mode: " + sdMode);
 		}
 
-		ps.print("step()" + "\n");
+		ps.print("step();" + "\n");
 		ps.print("active(" + rootDotId + ");" + "\n");
 		boolean first = true;
 		for (final AbstractMessage me : messages) {
