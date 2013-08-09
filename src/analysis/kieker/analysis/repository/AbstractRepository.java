@@ -48,7 +48,7 @@ public abstract class AbstractRepository extends AbstractAnalysisComponent imple
 		// Register the repository
 		if (projectContext instanceof AnalysisController) {
 			((AnalysisController) projectContext).registerRepository(this);
-		} else if (projectContext != null) {
+		} else {
 			throw new InvalidProjectContextException("Invalid analysis controller in constructor");
 		}
 	}

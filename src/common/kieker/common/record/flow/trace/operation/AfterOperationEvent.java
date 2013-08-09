@@ -82,6 +82,6 @@ public class AfterOperationEvent extends AbstractOperationEvent {
 	 * {@inheritDoc}
 	 */
 	public Class<?>[] getValueTypes() {
-		return TYPES.clone();
+		return TYPES; // NOPMD
 	}
 }

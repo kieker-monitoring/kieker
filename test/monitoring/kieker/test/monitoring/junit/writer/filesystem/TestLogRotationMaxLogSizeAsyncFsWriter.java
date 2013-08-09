@@ -32,6 +32,9 @@ import kieker.monitoring.writer.filesystem.AsyncFsWriter;
  */
 public class TestLogRotationMaxLogSizeAsyncFsWriter extends AbstractTestLogRotationMaxLogSize {
 
+	/**
+	 * Default constructor.
+	 */
 	public TestLogRotationMaxLogSizeAsyncFsWriter() {
 		super(3 + new EmptyRecord().toString().length() + System.getProperty("line.separator").length());
 	}

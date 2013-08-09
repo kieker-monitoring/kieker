@@ -61,7 +61,7 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 	 * Creates a new instance of this class.
 	 */
 	public TestTraceReconstructionFilter() {
-		final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration(), null);
+		final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration(), new AnalysisController());
 		final ExecutionFactory executionFactory = new ExecutionFactory(systemEntityFactory);
 
 		// Manually create Executions for a trace

@@ -34,7 +34,7 @@ import kieker.common.record.IMonitoringRecord;
 /**
  * This filter has exactly one input port and one output port.
  * 
- * Every record received is cloned and each detected String is buffered in a shared area in order so save memory.
+ * Every record received is cloned and each detected String is buffered in a shared area in order to save memory.
  * 
  * @author Jan Waller
  * 

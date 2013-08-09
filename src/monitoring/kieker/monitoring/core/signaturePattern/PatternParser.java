@@ -35,6 +35,16 @@ public final class PatternParser {
 		// private default constructor
 	}
 
+	/**
+	 * Parses the given pattern string and converts it into a {@link Pattern} instance.
+	 * 
+	 * @param strPattern
+	 *            The pattern string to parse.
+	 * @return A corresponding pattern to the given string.
+	 * 
+	 * @throws InvalidPatternException
+	 *             If the given string is not a valid pattern.
+	 */
 	public static final Pattern parseToPattern(final String strPattern) throws InvalidPatternException {
 		final String trimPattern = strPattern.trim();
 		if (trimPattern.charAt(0) == SignatureFactory.PATTERN_PREFIX) {

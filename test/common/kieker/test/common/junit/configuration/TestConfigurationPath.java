@@ -16,6 +16,8 @@
 
 package kieker.test.common.junit.configuration;
 
+import java.io.File;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -36,6 +38,11 @@ public class TestConfigurationPath extends AbstractKiekerTest {
 		"./x", "x",
 		"../x\\y\\.././x", "../x/x",
 		"C:\\Temp\\x.txt", "C:/Temp/x.txt",
+		"out/containerDependencyGraph.dot", "out/containerDependencyGraph.dot",
+		"out" + File.separator + File.separator + "containerDependencyGraph.dot", "out/containerDependencyGraph.dot",
+		"out/", "out/",
+		"/", "/",
+		"././", "",
 	};
 
 	/**
@@ -52,4 +59,5 @@ public class TestConfigurationPath extends AbstractKiekerTest {
 			Assert.assertEquals(paths[i + 1], Configuration.convertToPath(paths[i]));
 		}
 	}
+
 }

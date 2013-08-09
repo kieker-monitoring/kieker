@@ -32,6 +32,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MAnalysisComponent#getName <em>Name</em>}</li>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MAnalysisComponent#getClassname <em>Classname</em>}</li>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MAnalysisComponent#getProperties <em>Properties</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MAnalysisComponent#getId <em>Id</em>}</li>
  * </ul>
  * </p>
  *
@@ -87,6 +88,26 @@ public abstract class MAnalysisComponent extends EObjectImpl implements MIAnalys
 	 * @ordered
 	 */
 	protected EList<MIProperty> properties;
+
+	/**
+	 * The default value of the '{@link #getId() <em>Id</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getId()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String ID_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getId() <em>Id</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getId()
+	 * @generated
+	 * @ordered
+	 */
+	protected String id = ID_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -166,6 +187,27 @@ public abstract class MAnalysisComponent extends EObjectImpl implements MIAnalys
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getId() {
+		return id;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setId(String newId) {
+		String oldId = id;
+		id = newId;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, MIAnalysisMetaModelPackage.ANALYSIS_COMPONENT__ID, oldId, id));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -189,6 +231,8 @@ public abstract class MAnalysisComponent extends EObjectImpl implements MIAnalys
 				return getClassname();
 			case MIAnalysisMetaModelPackage.ANALYSIS_COMPONENT__PROPERTIES:
 				return getProperties();
+			case MIAnalysisMetaModelPackage.ANALYSIS_COMPONENT__ID:
+				return getId();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -212,6 +256,9 @@ public abstract class MAnalysisComponent extends EObjectImpl implements MIAnalys
 				getProperties().clear();
 				getProperties().addAll((Collection<? extends MIProperty>)newValue);
 				return;
+			case MIAnalysisMetaModelPackage.ANALYSIS_COMPONENT__ID:
+				setId((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -233,6 +280,9 @@ public abstract class MAnalysisComponent extends EObjectImpl implements MIAnalys
 			case MIAnalysisMetaModelPackage.ANALYSIS_COMPONENT__PROPERTIES:
 				getProperties().clear();
 				return;
+			case MIAnalysisMetaModelPackage.ANALYSIS_COMPONENT__ID:
+				setId(ID_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -251,6 +301,8 @@ public abstract class MAnalysisComponent extends EObjectImpl implements MIAnalys
 				return CLASSNAME_EDEFAULT == null ? classname != null : !CLASSNAME_EDEFAULT.equals(classname);
 			case MIAnalysisMetaModelPackage.ANALYSIS_COMPONENT__PROPERTIES:
 				return properties != null && !properties.isEmpty();
+			case MIAnalysisMetaModelPackage.ANALYSIS_COMPONENT__ID:
+				return ID_EDEFAULT == null ? id != null : !ID_EDEFAULT.equals(id);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -269,6 +321,8 @@ public abstract class MAnalysisComponent extends EObjectImpl implements MIAnalys
 		result.append(name);
 		result.append(", classname: ");
 		result.append(classname);
+		result.append(", id: ");
+		result.append(id);
 		result.append(')');
 		return result.toString();
 	}

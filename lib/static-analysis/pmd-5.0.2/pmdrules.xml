@@ -53,6 +53,7 @@
     <exclude name="UseProperClassLoader"/>
     <exclude name="UselessParentheses"/>
     <exclude name="UseVarargs"/>
+	<exclude name="BooleanInversion"/>
     <!-- Currently buggy! Should be reenabled! -->
     <exclude name="PrematureDeclaration"/>
   </rule>

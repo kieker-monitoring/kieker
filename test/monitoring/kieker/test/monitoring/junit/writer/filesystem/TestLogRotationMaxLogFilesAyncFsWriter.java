@@ -30,6 +30,9 @@ import kieker.monitoring.writer.filesystem.AsyncFsWriter;
  */
 public class TestLogRotationMaxLogFilesAyncFsWriter extends AbstractTestLogRotationMaxLogFiles {
 
+	/**
+	 * Default constructor.
+	 */
 	public TestLogRotationMaxLogFilesAyncFsWriter() {
 		// empty default constructor
 	}

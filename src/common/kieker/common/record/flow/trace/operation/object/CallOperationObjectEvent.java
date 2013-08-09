@@ -116,7 +116,7 @@ public final class CallOperationObjectEvent extends CallOperationEvent implement
 	 */
 	@Override
 	public Class<?>[] getValueTypes() {
-		return TYPES.clone();
+		return TYPES; // NOPMD
 	}
 
 	/**

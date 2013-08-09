@@ -185,11 +185,14 @@ function assert_files_exist_src {
 	assert_file_NOT_exists "examples/userguide/appendix-JMS/lib/*.jar"
 	assert_file_NOT_exists "examples/userguide/appendix-Sigar/lib/*.jar"
 	
-	assert_file_NOT_exists "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/classes/META-INF/kieker.monitoring.properties"
-	assert_file_NOT_exists "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/aspectjweaver-*"
 	assert_file_NOT_exists "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/kieker-*.jar"
 	assert_file_exists_regular "build.xml"
-	assert_file_exists_regular "build.properties"
+	assert_file_exists_regular "build-config/build.properties"
+	assert_file_exists_regular "build-config/compile-and-build.xml"
+	assert_file_exists_regular "build-config/dist-and-deploy.xml"
+	assert_file_exists_regular "build-config/init-and-clean.xml"
+	assert_file_exists_regular "build-config/quality.xml"
+	assert_file_exists_regular "build-config/test.xml"
 	assert_file_exists_regular "kieker-eclipse.importorder"
 	assert_file_exists_regular "kieker-eclipse-cleanup.xml"
 	assert_file_exists_regular "kieker-eclipse-formatter.xml"
@@ -228,8 +231,7 @@ function assert_files_exist_bin {
 	assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/sigar-"*".lib"
 	
 	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/kieker.monitoring.properties"
-	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/aspectjweaver-"*
-	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/kieker-"*".jar"
+	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/kieker-"*"_aspectj.jar"
 	assert_file_NOT_exists "lib/static-analysis/"
 	assert_file_NOT_exists "dist/release/"
 	assert_file_NOT_exists "bin/dev/"
@@ -278,7 +280,7 @@ function check_src_archive {
 	assert_file_NOT_exists "dist/kieker-monitoring-servlet-"*".war"
 
 	# check bytecode version of classes contained in jar
-	echo -n "Making sure that bytecode version of class in jar is 49.0 (Java 1.5)"
+	echo "Making sure that bytecode version of class in jar is 49.0 (Java 1.5)"
 	MAIN_JAR=$(ls "dist/kieker-"*".jar" | grep -v emf | grep -v aspectj)
 	assert_file_exists_regular ${MAIN_JAR}
 	VERSION_CLASS=$(find build -name "Version.class")
@@ -354,15 +356,16 @@ function check_bin_archive {
 	fi
 	for f in $(ls "${REFERENCE_OUTPUT_DIR}" | egrep "(dot$|pic$|html$|txt$)"); do 
 		echo -n "Comparing to reference file $f ... "
+    if test -z "$f"; then
+      echo "File $f does not exist or is empty"
+			exit 1;
+		fi
 		# Note that this is a hack because sometimes the line order differs
 		(cat "$f" | sort) > left.tmp
 		(cat "${REFERENCE_OUTPUT_DIR}/$f" | sort) > right.tmp
 		if test "$f" = "traceDeploymentEquivClasses.txt" || test "$f" = "traceAssemblyEquivClasses.txt"; then
-			# only a basic test because the assignment to classes is not deterministic
-			if test -z "$f"; then
-				echo "File $f does not exist or is empty"
-				exit 1;
-			fi
+			# only the basic test already performed because the assignment to classes is not deterministic
+			echo "OK"
 			continue;
 		fi
 		if ! diff --context=5	 left.tmp right.tmp; then
@@ -415,7 +418,7 @@ function assert_no_common_files_in_archives {
 ## "main" 
 ##
 
-aspectjversion="$(grep "lib.aspectj.version=" build.properties | sed s/.*=//g)"
+aspectjversion="$(grep "lib.aspectj.version=" build-config/build.properties | sed s/.*=//g)"
 
 assert_dir_exists ${BASE_TMP_DIR}
 change_dir "${BASE_TMP_DIR}"

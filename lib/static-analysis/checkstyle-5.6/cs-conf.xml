@@ -14,7 +14,7 @@
         <property name="checkFormat" value=".*"/>
         <property name="influenceFormat" value="0"/>
     </module>
-   
+
     <!--
       If you set the basedir property below, then all reported file
       names will be relative to the specified directory. See
@@ -174,21 +174,21 @@
         <!-- KIEKER -->
         <property name="tabWidth" value="4"/>
         <!-- KIEKER -->
-        <module name="kieker.test.common.cs.AnalysisComponentConstructorCheck">
+        <module name="kieker.test.tools.cs.AnalysisComponentConstructorCheck">
             <property name="ignoreAbstractClasses" value="true"/>
             <property name="severity" value="${checkstyle.ignoreCustomKieker}" default="ignore"/>
         </module>
-        <module name="kieker.test.common.cs.MonitoringRecordFactoryConventionCheck">
+        <module name="kieker.test.tools.cs.MonitoringRecordFactoryConventionCheck">
             <property name="ignoreAbstractClasses" value="true"/>
             <property name="severity" value="${checkstyle.ignoreCustomKieker}" default="ignore"/>
         </module>
-        <module name="kieker.test.common.cs.MissingSinceTagCheck">
+        <module name="kieker.test.tools.cs.MissingSinceTagCheck">
             <property name="severity" value="${checkstyle.ignoreCustomKieker}" default="ignore"/>
         </module>
-        <module name="kieker.test.common.cs.NotAllowedSinceTagCheck">
+        <module name="kieker.test.tools.cs.NotAllowedSinceTagCheck">
             <property name="severity" value="${checkstyle.ignoreCustomKieker}" default="ignore"/>
         </module>
-		<module name="kieker.test.common.cs.NoBlockCommentsCheck">
+        <module name="kieker.test.tools.cs.NoBlockCommentsCheck">
             <property name="severity" value="${checkstyle.ignoreCustomKieker}" default="ignore"/>
         </module>
         <module name="FileContentsHolder"/>
@@ -353,7 +353,7 @@
 
         <!-- Detects inline conditionals. !-->
         <!-- See http://checkstyle.sf.net/config_coding.html !-->
-        <!-- <module name="AvoidInlineConditionals"/> -->
+        <module name="AvoidInlineConditionals"/>
 
         <!-- Checks that classes that define a covariant equals() method also override method equals(java.lang.Object). !-->
         <!-- See http://checkstyle.sf.net/config_coding.html !-->
@@ -1230,7 +1230,7 @@
             <property name="allowEmptyConstructors" value="true"/>
             <property name="allowEmptyMethods"      value="true"/>
         </module>
-        
+
     </module>
 
 </module>

@@ -22,6 +22,7 @@ package kieker.monitoring.core.registry;
  * @since 1.3
  */
 public enum SessionRegistry { // Singleton (Effective Java #3)
+	/** The singleton instance. */
 	INSTANCE;
 
 	private final ThreadLocal<String> threadLocalSessionId = new ThreadLocal<String>();

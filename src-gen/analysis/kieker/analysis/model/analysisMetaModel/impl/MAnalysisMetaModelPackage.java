@@ -331,6 +331,15 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getPort_Id() {
+		return (EAttribute)portEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getInputPort() {
 		return inputPortEClass;
 	}
@@ -484,6 +493,15 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getRepositoryConnector_Id() {
+		return (EAttribute)repositoryConnectorEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getDisplay() {
 		return displayEClass;
 	}
@@ -504,6 +522,15 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	 */
 	public EReference getDisplay_Parent() {
 		return (EReference)displayEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getDisplay_Id() {
+		return (EAttribute)displayEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -547,6 +574,15 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getView_Id() {
+		return (EAttribute)viewEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getDisplayConnector() {
 		return displayConnectorEClass;
 	}
@@ -567,6 +603,15 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	 */
 	public EReference getDisplayConnector_Display() {
 		return (EReference)displayConnectorEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getDisplayConnector_Id() {
+		return (EAttribute)displayConnectorEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -603,6 +648,15 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	 */
 	public EReference getAnalysisComponent_Properties() {
 		return (EReference)analysisComponentEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getAnalysisComponent_Id() {
+		return (EAttribute)analysisComponentEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -649,6 +703,7 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 		portEClass = createEClass(PORT);
 		createEAttribute(portEClass, PORT__NAME);
 		createEAttribute(portEClass, PORT__EVENT_TYPES);
+		createEAttribute(portEClass, PORT__ID);
 
 		inputPortEClass = createEClass(INPUT_PORT);
 		createEReference(inputPortEClass, INPUT_PORT__PARENT);
@@ -674,24 +729,29 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 		repositoryConnectorEClass = createEClass(REPOSITORY_CONNECTOR);
 		createEAttribute(repositoryConnectorEClass, REPOSITORY_CONNECTOR__NAME);
 		createEReference(repositoryConnectorEClass, REPOSITORY_CONNECTOR__REPOSITORY);
+		createEAttribute(repositoryConnectorEClass, REPOSITORY_CONNECTOR__ID);
 
 		displayEClass = createEClass(DISPLAY);
 		createEAttribute(displayEClass, DISPLAY__NAME);
 		createEReference(displayEClass, DISPLAY__PARENT);
+		createEAttribute(displayEClass, DISPLAY__ID);
 
 		viewEClass = createEClass(VIEW);
 		createEAttribute(viewEClass, VIEW__NAME);
 		createEAttribute(viewEClass, VIEW__DESCRIPTION);
 		createEReference(viewEClass, VIEW__DISPLAY_CONNECTORS);
+		createEAttribute(viewEClass, VIEW__ID);
 
 		displayConnectorEClass = createEClass(DISPLAY_CONNECTOR);
 		createEAttribute(displayConnectorEClass, DISPLAY_CONNECTOR__NAME);
 		createEReference(displayConnectorEClass, DISPLAY_CONNECTOR__DISPLAY);
+		createEAttribute(displayConnectorEClass, DISPLAY_CONNECTOR__ID);
 
 		analysisComponentEClass = createEClass(ANALYSIS_COMPONENT);
 		createEAttribute(analysisComponentEClass, ANALYSIS_COMPONENT__NAME);
 		createEAttribute(analysisComponentEClass, ANALYSIS_COMPONENT__CLASSNAME);
 		createEReference(analysisComponentEClass, ANALYSIS_COMPONENT__PROPERTIES);
+		createEAttribute(analysisComponentEClass, ANALYSIS_COMPONENT__ID);
 	}
 
 	/**
@@ -746,6 +806,7 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 		initEClass(portEClass, MIPort.class, "Port", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getPort_Name(), ecorePackage.getEString(), "name", null, 1, 1, MIPort.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_EventTypes(), ecorePackage.getEString(), "eventTypes", null, 1, -1, MIPort.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPort_Id(), ecorePackage.getEString(), "id", null, 1, 1, MIPort.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
 
 		initEClass(inputPortEClass, MIInputPort.class, "InputPort", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getInputPort_Parent(), this.getFilter(), this.getFilter_InputPorts(), "parent", null, 1, 1, MIInputPort.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -771,24 +832,29 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 		initEClass(repositoryConnectorEClass, MIRepositoryConnector.class, "RepositoryConnector", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getRepositoryConnector_Name(), ecorePackage.getEString(), "name", null, 1, 1, MIRepositoryConnector.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getRepositoryConnector_Repository(), this.getRepository(), null, "repository", null, 1, 1, MIRepositoryConnector.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRepositoryConnector_Id(), ecorePackage.getEString(), "id", null, 1, 1, MIRepositoryConnector.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
 
 		initEClass(displayEClass, MIDisplay.class, "Display", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getDisplay_Name(), ecorePackage.getEString(), "name", null, 1, 1, MIDisplay.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getDisplay_Parent(), this.getPlugin(), this.getPlugin_Displays(), "parent", null, 1, 1, MIDisplay.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDisplay_Id(), ecorePackage.getEString(), "id", null, 1, 1, MIDisplay.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
 
 		initEClass(viewEClass, MIView.class, "View", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getView_Name(), ecorePackage.getEString(), "name", null, 1, 1, MIView.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getView_Description(), ecorePackage.getEString(), "description", null, 0, 1, MIView.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getView_DisplayConnectors(), this.getDisplayConnector(), null, "displayConnectors", null, 0, -1, MIView.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getView_Id(), ecorePackage.getEString(), "id", null, 1, 1, MIView.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
 
 		initEClass(displayConnectorEClass, MIDisplayConnector.class, "DisplayConnector", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getDisplayConnector_Name(), ecorePackage.getEString(), "name", null, 1, 1, MIDisplayConnector.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getDisplayConnector_Display(), this.getDisplay(), null, "display", null, 1, 1, MIDisplayConnector.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDisplayConnector_Id(), ecorePackage.getEString(), "id", null, 1, 1, MIDisplayConnector.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
 
 		initEClass(analysisComponentEClass, MIAnalysisComponent.class, "AnalysisComponent", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getAnalysisComponent_Name(), ecorePackage.getEString(), "name", null, 1, 1, MIAnalysisComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getAnalysisComponent_Classname(), ecorePackage.getEString(), "classname", null, 1, 1, MIAnalysisComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAnalysisComponent_Properties(), this.getProperty(), null, "properties", null, 0, -1, MIAnalysisComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAnalysisComponent_Id(), ecorePackage.getEString(), "id", null, 1, 1, MIAnalysisComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

@@ -66,7 +66,9 @@ public final class TraceIdFilter extends AbstractFilterPlugin {
 	/** The name of the output port delivering the records with the non matching IDs. */
 	public static final String OUTPUT_PORT_NAME_MISMATCH = "recordsNotMatchingId";
 
+	/** The name of the property determining whether to accept all traces, regardless of the given trace IDs. */
 	public static final String CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES = "acceptAllTraces";
+	/** The name of the property determining which trace IDs should be accepted by this filter. */
 	public static final String CONFIG_PROPERTY_NAME_SELECTED_TRACES = "selectedTraceIds";
 
 	private final boolean acceptAllTraces;

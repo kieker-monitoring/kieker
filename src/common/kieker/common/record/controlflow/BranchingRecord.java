@@ -36,6 +36,16 @@ public final class BranchingRecord extends AbstractMonitoringRecord implements I
 	private final int branchID;
 	private final int branchingOutcome;
 
+	/**
+	 * This constructor uses the given parameters to initialize the fields of the record.
+	 * 
+	 * @param timestamp
+	 *            The time stamp.
+	 * @param branchID
+	 *            The branch ID.
+	 * @param branchingOutcome
+	 *            The branching outcome.
+	 */
 	public BranchingRecord(final long timestamp, final int branchID, final int branchingOutcome) {
 		this.timestamp = timestamp;
 		this.branchID = branchID;
@@ -76,7 +86,7 @@ public final class BranchingRecord extends AbstractMonitoringRecord implements I
 	 * {@inheritDoc}
 	 */
 	public Class<?>[] getValueTypes() {
-		return TYPES.clone();
+		return TYPES; // NOPMD
 	}
 
 	/**

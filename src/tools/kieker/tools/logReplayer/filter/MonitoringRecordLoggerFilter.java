@@ -92,13 +92,9 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 		}
 		// flatten submitted properties
 		final Configuration flatConfiguration = configuration.flatten();
-		// save before adding the defaults
+		// just remember this configuration without the added MonitoringController configuration
 		this.configuration = (Configuration) flatConfiguration.clone();
-		try {
-			flatConfiguration.setDefaultConfiguration(controllerConfiguration);
-		} catch (final IllegalAccessException ex) {
-			throw new RuntimeException(ex); // NOPMD(cannot happen (due to flatten)!)
-		}
+		flatConfiguration.setDefaultConfiguration(controllerConfiguration);
 		this.monitoringController = MonitoringController.createInstance(flatConfiguration);
 	}
 

@@ -2,6 +2,31 @@
 	<!-- Example: http://findbugs.sourceforge.net/manual/filter.html#d0e2103 -->
 
 	<Match>
+		<Package name="~kieker\.common\.record.*" />
+		<Bug pattern="EI_EXPOSE_REP" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.analysis.plugin.IPlugin$PluginInputPortReference" />
+		<Bug pattern="EI_EXPOSE_REP2" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.analysis.plugin.IPlugin$PluginInputPortReference" />
+		<Bug pattern="EI_EXPOSE_REP" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.monitoring.probe.aspectj.AbstractAspectJProbe" />
+		<Bug pattern="RV_RETURN_VALUE_OF_PUTIFABSENT_IGNORED" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.common.record.AbstractMonitoringRecord" />
+		<Bug pattern="RV_RETURN_VALUE_OF_PUTIFABSENT_IGNORED" />
+	</Match>
+
+	<Match>
 		<Class name="kieker.test.monitoring.junit.probe.spring.executions.jetty.TestSpringMethodInterceptor" />
 		<Method name="testIt" params="" returns="void" />
 		<Bug pattern="NP_LOAD_OF_KNOWN_NULL_VALUE" />
@@ -24,8 +49,8 @@
 	</Match>
 
 	<Match>
-		<Class name="kieker.analysis.AnalysisController" />
-		<Method name="getCurrentConfiguration" params="" returns="kieker.analysis.model.analysisMetaModel.MIProject" />
+		<Class name="kieker.analysis.model.MetaModelHandler" />
+		<Method name="javaToMetaModel" params="java.util.Collection,java.util.Collection,java.util.Collection,java.util.Collection,java.lang.String,kieker.common.configuration.Configuration" returns="kieker.analysis.model.analysisMetaModel.MIProject" />
 		<Bug pattern="REC_CATCH_EXCEPTION" />
 	</Match>
 
@@ -140,6 +165,12 @@
 	<Match>
 		<Class name="kieker.common.logging.LogImplWebguiLogging" />
 		<Method name="addMessage" params="java.lang.String,java.lang.String,java.lang.Throwable" returns="void" />
+		<Bug pattern="RV_RETURN_VALUE_IGNORED" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.analysis.display.XYPlot" />
+		<Method name="setEntry" params="java.lang.Object, java.lang.Number" returns="void" />
 		<Bug pattern="RV_RETURN_VALUE_IGNORED" />
 	</Match>
 
@@ -274,29 +305,29 @@
 	</Match>
 
 	<Match>
-	    <Class name="kieker.examples.userguide.ch3and4bookstore.PipeData" />
+		<Class name="kieker.examples.userguide.ch3and4bookstore.PipeData" />
 		<!--<Method name="getRecordData" params="" returns="java.lang.Object[]" />-->
 		<Bug pattern="EI_EXPOSE_REP" />
 	</Match>
-	
+
 	<Match>
-	    <Class name="kieker.tools.bridge.LookupEntity" />
+			<Class name="kieker.tools.bridge.LookupEntity" />
 		<Bug pattern="EI_EXPOSE_REP" />
 	</Match>
 
 	<Match>
 		<Class name="kieker.examples.userguide.ch3and4bookstore.PipeData" />
-    <!--<Method name="&lt;init&gt;" params="long, java.lang.Object[], java.lang.Class" returns="void" />-->
+		<!--<Method name="&lt;init&gt;" params="long, java.lang.Object[], java.lang.Class" returns="void" />-->
 		<Bug pattern="EI_EXPOSE_REP2" />
 	</Match>
-	
+
 	<Match>
-   	    <Class name="kieker.tools.bridge.LookupEntity" />
+		<Class name="kieker.tools.bridge.LookupEntity" />
 		<Bug pattern="EI_EXPOSE_REP2" />
 	</Match>
-	
+
 	<Match>
-   	    <Class name="kieker.tools.bridge.cli.PrivilegedClassLoaderAction" />
+				<Class name="kieker.tools.bridge.cli.PrivilegedClassLoaderAction" />
 		<Bug pattern="EI_EXPOSE_REP2" />
 	</Match>
 

@@ -17,7 +17,7 @@
 package kieker.analysis.display;
 
 /**
- * This is the abstract class which should be the base class for all other display types.
+ * This class is currently under development, mostly for test purposes, and not designed for productive deployment.
  * 
  * @author Nils Christian Ehmke
  * 
@@ -31,4 +31,5 @@ public abstract class AbstractDisplay { // NOPMD (remove when abstract methods a
 	public AbstractDisplay() {
 		// No code necessary
 	}
+
 }

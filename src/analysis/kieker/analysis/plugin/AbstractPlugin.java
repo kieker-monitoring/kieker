@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.IProjectContext;
@@ -61,11 +60,13 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 
 	private static final Log LOG = LogFactory.getLog(AbstractPlugin.class);
 
-	private final ConcurrentHashMap<String, ConcurrentLinkedQueue<PluginInputPortReference>> registeredMethods;
+	private final ConcurrentHashMap<String, List<PluginInputPortReference>> registeredMethods;
 	private final ConcurrentHashMap<String, AbstractRepository> registeredRepositories;
 	private final Map<String, RepositoryPort> repositoryPorts;
 	private final Map<String, OutputPort> outputPorts;
 	private final Map<String, InputPort> inputPorts;
+
+	private final Map<OutputPort, Class<?>[]> outputPortTypes; // NOCS
 
 	// Shutdown mechanism
 	private final List<AbstractPlugin> incomingPlugins;
@@ -87,6 +88,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		// Get all repository and output ports.
 		this.repositoryPorts = new ConcurrentHashMap<String, RepositoryPort>();
 		this.outputPorts = new ConcurrentHashMap<String, OutputPort>();
+		this.outputPortTypes = new ConcurrentHashMap<OutputPort, Class<?>[]>(); // NOCS
 		final Plugin annotation = this.getClass().getAnnotation(Plugin.class);
 		for (final RepositoryPort repoPort : annotation.repositoryPorts()) {
 			if (this.repositoryPorts.put(repoPort.name(), repoPort) != null) {
@@ -97,6 +99,11 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			if (this.outputPorts.put(outputPort.name(), outputPort) != null) {
 				LOG.error("Two OutputPorts use the same name: " + outputPort.name());
 			}
+			Class<?>[] outTypes = outputPort.eventTypes();
+			if (outTypes.length == 0) {
+				outTypes = new Class<?>[] { Object.class };
+			}
+			this.outputPortTypes.put(outputPort, outTypes);
 		}
 		// Get all input ports.
 		this.inputPorts = new ConcurrentHashMap<String, InputPort>();
@@ -130,9 +137,9 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		this.registeredRepositories = new ConcurrentHashMap<String, AbstractRepository>(this.repositoryPorts.size());
 
 		// Now create a linked queue for every output port of the class, to store the registered methods.
-		this.registeredMethods = new ConcurrentHashMap<String, ConcurrentLinkedQueue<PluginInputPortReference>>();
+		this.registeredMethods = new ConcurrentHashMap<String, List<PluginInputPortReference>>();
 		for (final OutputPort outputPort : annotation.outputPorts()) {
-			this.registeredMethods.put(outputPort.name(), new ConcurrentLinkedQueue<PluginInputPortReference>());
+			this.registeredMethods.put(outputPort.name(), new ArrayList<PluginInputPortReference>(1));
 		}
 		// and a List for every incoming and outgoing plugin
 		this.incomingPlugins = new ArrayList<AbstractPlugin>(1); // usually only one incoming
@@ -165,10 +172,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		}
 
 		// Second step: Check whether the data fits the event types.
-		Class<?>[] outTypes = outputPort.eventTypes();
-		if (outTypes.length == 0) {
-			outTypes = new Class<?>[] { Object.class };
-		}
+		final Class<?>[] outTypes = this.outputPortTypes.get(outputPort);
 		boolean outTypeMatch = false;
 		for (final Class<?> eventType : outTypes) {
 			if (eventType.isInstance(data)) {
@@ -181,7 +185,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		}
 
 		// Third step: Send everything to the registered ports.
-		final ConcurrentLinkedQueue<PluginInputPortReference> registeredMethodsOfPort = this.registeredMethods.get(outputPortName);
+		final List<PluginInputPortReference> registeredMethodsOfPort = this.registeredMethods.get(outputPortName);
 
 		for (final PluginInputPortReference pluginInputPortReference : registeredMethodsOfPort) {
 			// Check whether the data fits the event types.

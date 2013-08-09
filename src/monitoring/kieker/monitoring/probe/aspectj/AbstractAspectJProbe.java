@@ -17,6 +17,8 @@
 package kieker.monitoring.probe.aspectj;
 
 import java.lang.reflect.Modifier;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Aspect;
@@ -33,6 +35,8 @@ import kieker.monitoring.probe.IMonitoringProbe;
  */
 @Aspect
 public abstract class AbstractAspectJProbe implements IMonitoringProbe {
+
+	private static final ConcurrentMap<Signature, String> SIGNATURE_CACHE = new ConcurrentHashMap<Signature, String>();
 
 	// Pointcuts should not be final!
 
@@ -68,58 +72,65 @@ public abstract class AbstractAspectJProbe implements IMonitoringProbe {
 	 *            an AspectJ Signature
 	 * @return LongString representation of the signature
 	 */
-	protected String signatureToLongString(final Signature sig) {
-		if (sig instanceof MethodSignature) {
-			final MethodSignature signature = (MethodSignature) sig;
-			final StringBuilder sb = new StringBuilder(256);
-			// modifiers
-			final String modString = Modifier.toString(signature.getModifiers());
-			sb.append(modString);
-			if (modString.length() > 0) {
-				sb.append(' ');
-			}
-			// return
-			this.addType(sb, signature.getReturnType());
-			sb.append(' ');
-			// component
-			sb.append(signature.getDeclaringTypeName());
-			sb.append('.');
-			// name
-			sb.append(signature.getName());
-			// parameters
-			sb.append('(');
-			this.addTypeList(sb, signature.getParameterTypes());
-			sb.append(')');
-			// throws
-			// this.addTypeList(sb, signature.getExceptionTypes());
-			return sb.toString();
-		} else if (sig instanceof ConstructorSignature) {
-			final ConstructorSignature signature = (ConstructorSignature) sig;
-			final StringBuilder sb = new StringBuilder(256);
-			// modifiers
-			final String modString = Modifier.toString(signature.getModifiers());
-			sb.append(modString);
-			if (modString.length() > 0) {
-				sb.append(' ');
-			}
-			// component
-			sb.append(signature.getDeclaringTypeName());
-			sb.append('.');
-			// name
-			sb.append(signature.getName());
-			// parameters
-			sb.append('(');
-			this.addTypeList(sb, signature.getParameterTypes());
-			sb.append(')');
-			// throws
-			// this.addTypeList(sb, signature.getExceptionTypes());
-			return sb.toString();
+	protected static String signatureToLongString(final Signature sig) {
+		String signatureString = SIGNATURE_CACHE.get(sig);
+		if (null != signatureString) {
+			return signatureString;
 		} else {
-			return sig.toLongString();
+			if (sig instanceof MethodSignature) {
+				final MethodSignature signature = (MethodSignature) sig;
+				final StringBuilder sb = new StringBuilder(256);
+				// modifiers
+				final String modString = Modifier.toString(signature.getModifiers());
+				sb.append(modString);
+				if (modString.length() > 0) {
+					sb.append(' ');
+				}
+				// return
+				AbstractAspectJProbe.addType(sb, signature.getReturnType());
+				sb.append(' ');
+				// component
+				sb.append(signature.getDeclaringTypeName());
+				sb.append('.');
+				// name
+				sb.append(signature.getName());
+				// parameters
+				sb.append('(');
+				AbstractAspectJProbe.addTypeList(sb, signature.getParameterTypes());
+				sb.append(')');
+				// throws
+				// this.addTypeList(sb, signature.getExceptionTypes());
+				signatureString = sb.toString();
+			} else if (sig instanceof ConstructorSignature) {
+				final ConstructorSignature signature = (ConstructorSignature) sig;
+				final StringBuilder sb = new StringBuilder(256);
+				// modifiers
+				final String modString = Modifier.toString(signature.getModifiers());
+				sb.append(modString);
+				if (modString.length() > 0) {
+					sb.append(' ');
+				}
+				// component
+				sb.append(signature.getDeclaringTypeName());
+				sb.append('.');
+				// name
+				sb.append(signature.getName());
+				// parameters
+				sb.append('(');
+				AbstractAspectJProbe.addTypeList(sb, signature.getParameterTypes());
+				sb.append(')');
+				// throws
+				// this.addTypeList(sb, signature.getExceptionTypes());
+				signatureString = sb.toString();
+			} else {
+				signatureString = sig.toLongString();
+			}
 		}
+		SIGNATURE_CACHE.putIfAbsent(sig, signatureString);
+		return signatureString;
 	}
 
-	private final StringBuilder addTypeList(final StringBuilder sb, final Class<?>[] clazzes) {
+	private static final StringBuilder addTypeList(final StringBuilder sb, final Class<?>[] clazzes) {
 		if (null != clazzes) {
 			boolean first = true;
 			for (final Class<?> clazz : clazzes) {
@@ -128,18 +139,18 @@ public abstract class AbstractAspectJProbe implements IMonitoringProbe {
 				} else {
 					sb.append(", ");
 				}
-				this.addType(sb, clazz);
+				AbstractAspectJProbe.addType(sb, clazz);
 			}
 		}
 		return sb;
 	}
 
-	private final StringBuilder addType(final StringBuilder sb, final Class<?> clazz) {
+	private static final StringBuilder addType(final StringBuilder sb, final Class<?> clazz) {
 		if (null == clazz) {
 			sb.append("ANONYMOUS");
 		} else if (clazz.isArray()) {
 			final Class<?> componentType = clazz.getComponentType();
-			this.addType(sb, componentType);
+			AbstractAspectJProbe.addType(sb, componentType);
 			sb.append("[]");
 		} else {
 			sb.append(clazz.getName());

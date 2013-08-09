@@ -292,7 +292,7 @@ to its two output ports declared in the \class{@Plugin} annotation.
 \pagebreak
 
 \setJavaCodeListing
-\lstinputlisting[firstline=65, firstnumber=65, lastline=71, caption={Plugin sending events to output ports}, label=listing:MyResponseTimeFilterDelivers]%
+\lstinputlisting[firstline=61, firstnumber=61, lastline=65, caption={Plugin sending events to output ports}, label=listing:MyResponseTimeFilterDelivers]%
 {\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyResponseTimeFilter.java}
 
 Listing~\ref{listing:MyResponseTimeFilterPluginAnnotationOutputs} shows also how %
@@ -358,7 +358,7 @@ configuration and connects to the named pipe. Optionally, the reader can overrid
 and forwards these to its output port.
 
 \setJavaCodeListing
-\lstinputlisting[firstline=69, firstnumber=69, lastline=88, caption={Example reader's \method{read} method}, label=listing:MyPipeReaderRead]%
+\lstinputlisting[firstline=64, firstnumber=64, lastline=83, caption={Example reader's \method{read} method}, label=listing:MyPipeReaderRead]%
 {\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeReader.java}
 
 \subsection{Developing Filter Plugins}\label{sec:analysis:filters}
@@ -369,7 +369,7 @@ In addition to providing meta information, including output ports, via the %
 (Section~\ref{sec:analysis:pluginAnnotation}), as well as implementing a constructor %
 and the getter for handling the \class{Configuration} (Section~\ref{sec:analysis:configuration}), %
 filters may override the methods \method{init} and %
-\method{terminate} methods, implementing initialization and cleanup tasks. %
+\method{terminate}, implementing initialization and cleanup tasks. %
 The \class{@Plugin} annotation of the example filter \class{MyResponseTimeFilter} %
 was shown in Listing~\ref{listing:MyResponseTimeFilterPluginAnnotationOutputs} already.
 
@@ -386,12 +386,12 @@ Section~\ref{sec:analysis:programmaticCreation}. %
 Listing~\ref{listing:MyResponseTimeFilterInputPort} shows the declaration %
 of the input port provided by the example plugin \class{MyResponseTimeFilter}. %
 The body of this method was shown in Listing~%
-\ref{listing:MyResponseTimeFilterPluginAnnotationOutputs} already.
+\ref{listing:MyResponseTimeFilterDelivers} already.
 
 % \pagebreak
 
 \setJavaCodeListing
-\lstinputlisting[firstline=61, firstnumber=61, lastline=65, caption={@InputPort annotation for the example plugin's input method}, label=listing:MyResponseTimeFilterInputPort]%
+\lstinputlisting[firstline=56, firstnumber=56, lastline=60, caption={@InputPort annotation for the example plugin's input method}, label=listing:MyResponseTimeFilterInputPort]%
 {\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyResponseTimeFilter.java}
 
 \subsection{Developing and Accessing Required Repositories}\label{sec:analysis:repositories}
@@ -427,6 +427,6 @@ connection of repositories to readers and filters. %
 method provided by the super class, as shown in Listing~\ref{listing:RepositoryAccess}. %
 
 \setJavaCodeListing
-\lstinputlisting[firstline=169, firstnumber=169, lastline=170, caption={Accessing a repository within a plugin}, label=listing:RepositoryAccess]%
+\lstinputlisting[firstline=156, firstnumber=156, lastline=157, caption={Accessing a repository within a plugin}, label=listing:RepositoryAccess]%
 {../../src/tools/kieker/tools/traceAnalysis/filter/AbstractTraceAnalysisFilter.java}
 

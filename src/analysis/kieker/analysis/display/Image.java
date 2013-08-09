@@ -16,14 +16,19 @@
 
 package kieker.analysis.display;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+
 /**
- * This is a display type used for images. It is thread safe.
+ * his class is currently under development, mostly for test purposes, and not designed for productive deployment.
  * 
  * @author Nils Christian Ehmke
  * 
  * @since 1.6
  */
 public class Image extends AbstractDisplay {
+
+	private final BufferedImage internalImage = new BufferedImage(200, 200, BufferedImage.TYPE_INT_RGB);
 
 	/**
 	 * Creates a new instance of this class.
@@ -32,4 +37,11 @@ public class Image extends AbstractDisplay {
 		// No code necessary
 	}
 
+	public BufferedImage getImage() {
+		return this.internalImage;
+	}
+
+	public Graphics2D getGraphics() {
+		return this.internalImage.createGraphics();
+	}
 }

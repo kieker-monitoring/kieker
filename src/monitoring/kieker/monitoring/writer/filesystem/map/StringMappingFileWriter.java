@@ -18,8 +18,8 @@ package kieker.monitoring.writer.filesystem.map;
 
 import java.io.IOException;
 
+import kieker.common.record.misc.RegistryRecord;
 import kieker.common.util.filesystem.FSUtil;
-import kieker.monitoring.core.registry.RegistryRecord;
 
 /**
  * @author Andre van Hoorn, Jan Waller
@@ -46,13 +46,13 @@ public final class StringMappingFileWriter {
 	 * @throws IOException
 	 *             Should not happen under normal circumstances.
 	 */
-	public final void write(final RegistryRecord hashRecord) throws IOException {
+	public final void write(final RegistryRecord<String> hashRecord) throws IOException {
 		synchronized (this.sb) {
 			final StringBuilder sbl = this.sb;
 			sbl.append('$');
 			sbl.append(hashRecord.getId());
 			sbl.append('=');
-			sbl.append(FSUtil.encodeNewline(String.valueOf(hashRecord.getObject())));
+			sbl.append(FSUtil.encodeNewline(hashRecord.getObject()));
 			sbl.append('\n');
 		}
 	}
