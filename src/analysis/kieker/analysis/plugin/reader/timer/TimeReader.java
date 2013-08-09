@@ -82,7 +82,7 @@ public final class TimeReader extends AbstractReaderPlugin {
 
 	/** The name of the property determining the number of impulses to emit. */
 	public static final String CONFIG_PROPERTY_NAME_NUMBER_IMPULSES = "numberImpulses";
-	/** The default value for number of impulses (infinite) */
+	/** The default value for number of impulses (infinite). */
 	public static final String CONFIG_PROPERTY_VALUE_NUMBER_IMPULSES = "0";
 
 	/** A value for the number of impulses. It makes sure that the reader emits an infinite amount of signals. */
@@ -90,7 +90,7 @@ public final class TimeReader extends AbstractReaderPlugin {
 
 	private static final Log LOG = LogFactory.getLog(TimeReader.class);
 
-	protected final CountDownLatch impulseEmitLatch = new CountDownLatch(1);
+	final CountDownLatch impulseEmitLatch = new CountDownLatch(1); // NOCS (package visible)
 
 	private volatile boolean terminated;
 
@@ -200,6 +200,9 @@ public final class TimeReader extends AbstractReaderPlugin {
 
 		/**
 		 * Creates a new task.
+		 * 
+		 * @param numberImpulses
+		 *            0 = infinite
 		 */
 		public TimestampEventTask(final long numberImpulses) {
 			this.numberImpulses = numberImpulses;
@@ -216,7 +219,7 @@ public final class TimeReader extends AbstractReaderPlugin {
 		public void run() {
 			if (this.infinite || (this.numberImpulses > 0)) {
 				TimeReader.this.sendTimestampEvent();
-				if (!this.infinite && (0 == --this.numberImpulses)) {
+				if (!this.infinite && (0 == --this.numberImpulses)) { // NOPMD
 					TimeReader.this.impulseEmitLatch.countDown();
 				}
 			}

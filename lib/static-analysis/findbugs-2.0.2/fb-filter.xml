@@ -17,6 +17,11 @@
 	</Match>
 	
 	<Match>
+		<Class name="kieker.monitoring.probe.aspectj.AbstractAspectJProbe" />
+		<Bug pattern="RV_RETURN_VALUE_OF_PUTIFABSENT_IGNORED" />
+	</Match>
+	
+	<Match>
 		<Class name="kieker.common.record.AbstractMonitoringRecord" />
 		<Bug pattern="RV_RETURN_VALUE_OF_PUTIFABSENT_IGNORED" />
 	</Match>
