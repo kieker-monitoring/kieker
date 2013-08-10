@@ -195,7 +195,7 @@ public final class CLIServerMain {
 	private static void runService() throws ConnectorDataTransmissionException {
 		if (verbose) {
 			final String updateIntervalParam = commandLine.getOptionValue(CMD_VERBOSE);
-			container.setListenerUpdateInterval((updateIntervalParam != null) ? Long.parseLong(updateIntervalParam)
+			container.setListenerUpdateInterval((updateIntervalParam != null) ? Long.parseLong(updateIntervalParam) // NOCS
 					: ServiceContainer.DEFAULT_LISTENER_UPDATE_INTERVAL); // NOCS
 			container.addListener(new IServiceListener() {
 				public void handleEvent(final long count, final String message) {
