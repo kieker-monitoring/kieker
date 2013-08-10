@@ -26,6 +26,8 @@ import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.ConnectorEndOfDataException;
 import kieker.tools.bridge.connector.IServiceConnector;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 /**
  * Class for all connector tests providing three methods for initialization,
  * record processing and connector termination.
