@@ -196,7 +196,7 @@ public final class CLIServerMain {
 		if (verbose) {
 			final String updateIntervalParam = commandLine.getOptionValue(CMD_VERBOSE);
 			container.setListenerUpdateInterval((updateIntervalParam != null) ? Long.parseLong(updateIntervalParam)
-					: ServiceContainer.DEFAULT_LISTENER_UPDATE_INTERVAL);
+					: ServiceContainer.DEFAULT_LISTENER_UPDATE_INTERVAL); // NOCS
 			container.addListener(new IServiceListener() {
 				public void handleEvent(final long count, final String message) {
 					CLIServerMain.getLog().info("Received " + count + " records");
@@ -337,8 +337,8 @@ public final class CLIServerMain {
 	 */
 	private static IServiceConnector createJMSService(final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordList)
 			throws CLIConfigurationErrorException {
-		final String username = commandLine.hasOption("u") ? commandLine.getOptionValue("u") : null; // NOPMD
-		final String password = commandLine.hasOption("w") ? commandLine.getOptionValue("w") : null; // NOPMD
+		final String username = commandLine.hasOption("u") ? commandLine.getOptionValue("u") : null; // NOPMD NOCS
+		final String password = commandLine.hasOption("w") ? commandLine.getOptionValue("w") : null; // NOPMD NOCS
 		if (commandLine.hasOption("url")) {
 			try {
 				return ServiceConnectorFactory.createJMSServiceConnector(recordList, username, password, new URI(commandLine.getOptionValue("url")));
