@@ -34,7 +34,7 @@ import kieker.tools.bridge.connector.IServiceConnector;
  * 
  * @since 1.8
  */
-public abstract class AbstractConnectorTest {
+public abstract class AbstractConnectorTest extends AbstractKiekerTest {
 
 	private IServiceConnector connector;
 	private int recordCount; // default initialization is 0
