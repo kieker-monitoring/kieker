@@ -18,12 +18,15 @@ package kieker.tools.bridge.connector.tcp;
 
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.net.ServerSocket;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.tools.bridge.LookupEntity;
+import kieker.common.record.IRecord;
+import kieker.common.record.MonitoringRecordFactory;
+import kieker.common.record.control.StringMapRecord;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.ConnectorEndOfDataException;
 
@@ -37,8 +40,6 @@ import kieker.tools.bridge.connector.ConnectorEndOfDataException;
  * @since 1.8
  */
 public class TCPSingleServerConnector extends AbstractTCPConnector {
-	// string buffer size (#1052)
-	private static final int BUF_LEN = 65536;
 
 	private final int port;
 
@@ -47,12 +48,11 @@ public class TCPSingleServerConnector extends AbstractTCPConnector {
 	 */
 	private ServerSocket serverSocket;
 
-	/**
-	 * Internal data input stream.
-	 */
+	/** Internal data input stream. */
 	private DataInputStream in;
-
-	private final byte[] buffer = new byte[BUF_LEN];
+	/** normal hashmap is sufficient, as TCPClientConnector is not multi-threaded */
+	private final Map<Integer, String> stringMap = new HashMap<Integer, String>();
+	private final byte[] buffer = new byte[MonitoringRecordFactory.MAX_BUFFER_SIZE];
 
 	/**
 	 * Construct TCPSingleService.
@@ -112,70 +112,14 @@ public class TCPSingleServerConnector extends AbstractTCPConnector {
 	 *             if the end of the data stream is reached
 	 */
 	public IMonitoringRecord deserializeNextRecord() throws ConnectorDataTransmissionException, ConnectorEndOfDataException {
-		// read structure ID
-		try {
-			final Integer id = this.in.readInt();
-			final LookupEntity recordProperty = this.lookupEntityMap.get(id);
-			if (recordProperty != null) {
-				final Object[] values = new Object[recordProperty.getParameterTypes().length];
-
-				for (int i = 0; i < recordProperty.getParameterTypes().length; i++) {
-					final Class<?> parameterType = recordProperty.getParameterTypes()[i];
-					if (boolean.class.equals(parameterType)) {
-						values[i] = this.in.readBoolean();
-					} else if (Boolean.class.equals(parameterType)) {
-						values[i] = Boolean.valueOf(this.in.readBoolean());
-					} else if (byte.class.equals(parameterType)) {
-						values[i] = this.in.readByte();
-					} else if (Byte.class.equals(parameterType)) {
-						values[i] = Byte.valueOf(this.in.readByte());
-					} else if (short.class.equals(parameterType)) { // NOPMD
-						values[i] = this.in.readShort();
-					} else if (Short.class.equals(parameterType)) {
-						values[i] = Short.valueOf(this.in.readShort());
-					} else if (int.class.equals(parameterType)) {
-						values[i] = this.in.readInt();
-					} else if (Integer.class.equals(parameterType)) {
-						values[i] = Integer.valueOf(this.in.readInt());
-					} else if (long.class.equals(parameterType)) {
-						values[i] = this.in.readLong();
-					} else if (Long.class.equals(parameterType)) {
-						values[i] = Long.valueOf(this.in.readLong());
-					} else if (float.class.equals(parameterType)) {
-						values[i] = this.in.readFloat();
-					} else if (Float.class.equals(parameterType)) {
-						values[i] = Float.valueOf(this.in.readFloat());
-					} else if (double.class.equals(parameterType)) {
-						values[i] = this.in.readDouble();
-					} else if (Double.class.equals(parameterType)) {
-						values[i] = Double.valueOf(this.in.readDouble());
-					} else if (String.class.equals(parameterType)) {
-						final int bufLen = this.in.readInt();
-						this.in.readFully(this.buffer, 0, bufLen);
-						values[i] = new String(this.buffer, 0, bufLen, "UTF-8");
-					} else { // reference types
-						throw new ConnectorDataTransmissionException("References are not yet supported.");
-					}
-				}
-
-				return recordProperty.getConstructor().newInstance(values);
-			} else {
-				throw new ConnectorDataTransmissionException("Record type " + id + " is not registered.");
+		final IRecord record = MonitoringRecordFactory.derserializeRecordFromStream(this.in, this.buffer, this.lookupEntityMap, this.stringMap);
+		if (record instanceof IMonitoringRecord) {
+			return (IMonitoringRecord) record;
+		} else {
+			if (record instanceof StringMapRecord) {
+				this.stringMap.put(((StringMapRecord) record).getKey(), ((StringMapRecord) record).getString());
 			}
-		} catch (final java.net.SocketException e) {
-			throw new ConnectorEndOfDataException("End of stream", e);
-		} catch (final java.io.EOFException e) {
-			throw new ConnectorEndOfDataException("End of stream during an read operation", e);
-		} catch (final IOException e) {
-			throw new ConnectorDataTransmissionException("Read error", e);
-		} catch (final InstantiationException e) {
-			throw new ConnectorDataTransmissionException("Instantiation error", e);
-		} catch (final IllegalAccessException e) {
-			throw new ConnectorDataTransmissionException("Access to fields are restricted", e);
-		} catch (final IllegalArgumentException e) {
-			throw new ConnectorDataTransmissionException(e.getMessage(), e);
-		} catch (final InvocationTargetException e) {
-			throw new ConnectorDataTransmissionException(e.getMessage(), e);
+			return this.deserializeNextRecord();
 		}
 	}
 }

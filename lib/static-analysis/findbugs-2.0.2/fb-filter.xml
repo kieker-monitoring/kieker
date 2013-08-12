@@ -311,7 +311,7 @@
 	</Match>
 
 	<Match>
-			<Class name="kieker.tools.bridge.LookupEntity" />
+			<Class name="kieker.common.record.LookupEntity" />
 		<Bug pattern="EI_EXPOSE_REP" />
 	</Match>
 
@@ -322,7 +322,7 @@
 	</Match>
 
 	<Match>
-		<Class name="kieker.tools.bridge.LookupEntity" />
+		<Class name="kieker.common.record.LookupEntity" />
 		<Bug pattern="EI_EXPOSE_REP2" />
 	</Match>
 

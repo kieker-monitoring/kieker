@@ -14,11 +14,10 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.bridge;
+package kieker.common.record;
 
 import java.lang.reflect.Constructor;
 
-import kieker.common.record.IMonitoringRecord;
 
 /**
  * Lookup entity for a record id to a monitoring record. To avoid too many lookups and queries,

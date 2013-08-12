@@ -18,8 +18,9 @@ package kieker.tools.bridge.connector.tcp;
 
 import java.util.concurrent.ConcurrentMap;
 
+import kieker.common.exception.MonitoringRecordException;
 import kieker.common.record.IMonitoringRecord;
-import kieker.tools.bridge.LookupEntity;
+import kieker.common.record.LookupEntity;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.IServiceConnector;
 import kieker.tools.bridge.connector.ServiceConnectorFactory;
@@ -56,6 +57,10 @@ public abstract class AbstractTCPConnector implements IServiceConnector {
 	 *             if createLookupEntityMap() throws it
 	 */
 	public void initialize() throws ConnectorDataTransmissionException {
-		this.lookupEntityMap = ServiceConnectorFactory.createLookupEntityMap(this.recordMap);
+		try {
+			this.lookupEntityMap = ServiceConnectorFactory.createLookupEntityMap(this.recordMap);
+		} catch (final MonitoringRecordException e) {
+			throw new ConnectorDataTransmissionException("MonitoringRecord mappings creation failed.", e);
+		}
 	}
 }

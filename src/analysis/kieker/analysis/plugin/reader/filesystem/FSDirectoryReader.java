@@ -24,7 +24,6 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -37,6 +36,8 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.LookupEntity;
+import kieker.common.record.MonitoringRecordFactory;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.util.filesystem.BinaryCompressionMethod;
 import kieker.common.util.filesystem.FSUtil;
@@ -53,7 +54,7 @@ final class FSDirectoryReader implements Runnable {
 
 	String filePrefix = FSUtil.FILE_PREFIX; // NOPMD NOCS (package visible for inner class)
 
-	private final Map<Integer, String> stringRegistry = new HashMap<Integer, String>(); // NOPMD (no synchronization needed)
+	private final Map<Integer, LookupEntity> lookupEntityMap = new HashMap<Integer, LookupEntity>(); // NOPMD (no synchronization needed)
 
 	private final IMonitoringRecordReceiver recordReceiver;
 	private final File inputDir;
@@ -62,6 +63,10 @@ final class FSDirectoryReader implements Runnable {
 	private final boolean ignoreUnknownRecordTypes;
 	// This set of classes is used to filter only records of a specific type. The value null means all record types are read.
 	private final Set<String> unknownTypesObserved = new HashSet<String>();
+
+	private final Map<Integer, String> stringMap = new HashMap<Integer, String>();
+
+	private final byte[] buffer = new byte[MonitoringRecordFactory.MAX_BUFFER_SIZE];
 
 	/**
 	 * Creates a new instance of this class.
@@ -178,13 +183,16 @@ final class FSDirectoryReader implements Runnable {
 					LOG.error("Error reading mapping file, id must be integer", ex);
 					continue; // continue on errors
 				}
-				final String prevVal = this.stringRegistry.put(id, value);
+
+				final LookupEntity prevVal = this.lookupEntityMap.put(id, MonitoringRecordFactory.createLookupEntity(AbstractMonitoringRecord.classForName(value)));
 				if (prevVal != null) {
 					LOG.error("Found addional entry for id='" + id + "', old value was '" + prevVal + "' new value is '" + value + "'");
 				}
 			}
 		} catch (final IOException ex) {
 			LOG.error("Error reading mapping file", ex);
+		} catch (final MonitoringRecordException ex) {
+			LOG.error("Error occured during LookupEntity construction", ex);
 		} finally {
 			if (in != null) {
 				try {
@@ -222,7 +230,8 @@ final class FSDirectoryReader implements Runnable {
 							continue; // skip this record
 						}
 						final Integer id = Integer.valueOf(recordFields[0].substring(1));
-						final String classname = this.stringRegistry.get(id);
+						// TODO hey this is hacked
+						final String classname = this.lookupEntityMap.get(id).getConstructor().getDeclaringClass().getCanonicalName();
 						if (classname == null) {
 							LOG.error("Missing classname mapping for record type id " + "'" + id + "'");
 							continue; // skip this record
@@ -310,55 +319,12 @@ final class FSDirectoryReader implements Runnable {
 				} catch (final EOFException eof) {
 					break; // we are finished
 				}
-				final String classname = this.stringRegistry.get(id);
-				if (classname == null) {
-					LOG.error("Missing classname mapping for record type id " + "'" + id + "'");
-					break; // we can't easily recover on errors
-				}
-
-				final Class<? extends IMonitoringRecord> clazz = AbstractMonitoringRecord.classForName(classname);
-				final Class<?>[] typeArray = AbstractMonitoringRecord.typesForClass(clazz);
-				final Constructor<? extends IMonitoringRecord> constructor = clazz.getConstructor(typeArray);
 
 				// read record
 				final long loggingTimestamp = in.readLong(); // NOPMD (must be read here!)
-				final Object[] objectArray = new Object[typeArray.length];
-				int idx = -1;
-				for (final Class<?> type : typeArray) {
-					idx++;
-					if (type == String.class) {
-						final Integer strId = in.readInt();
-						final String str = this.stringRegistry.get(strId);
-						if (str == null) {
-							LOG.error("No String mapping found for id " + strId.toString());
-							objectArray[idx] = "";
-						} else {
-							objectArray[idx] = str;
-						}
-					} else if ((type == int.class) || (type == Integer.class)) {
-						objectArray[idx] = in.readInt();
-					} else if ((type == long.class) || (type == Long.class)) {
-						objectArray[idx] = in.readLong();
-					} else if ((type == float.class) || (type == Float.class)) {
-						objectArray[idx] = in.readFloat();
-					} else if ((type == double.class) || (type == Double.class)) {
-						objectArray[idx] = in.readDouble();
-					} else if ((type == byte.class) || (type == Byte.class)) {
-						objectArray[idx] = in.readByte();
-					} else if ((type == short.class) || (type == Short.class)) { // NOPMD (short)
-						objectArray[idx] = in.readShort();
-					} else if ((type == boolean.class) || (type == Boolean.class)) {
-						objectArray[idx] = in.readBoolean();
-					} else {
-						if (in.readByte() != 0) {
-							LOG.error("Unexpected value for unsupported type: " + clazz.getName());
-							return; // breaking error (break would not terminate the correct loop)
-						}
-						LOG.warn("Unsupported type: " + clazz.getName());
-						objectArray[idx] = null;
-					}
-				}
-				final IMonitoringRecord record = AbstractMonitoringRecord.createFromArray(constructor, objectArray);
+				final IMonitoringRecord record = (IMonitoringRecord) MonitoringRecordFactory.derserializeRecordFromStream(in, this.buffer, this.lookupEntityMap,
+						this.stringMap);
+
 				record.setLoggingTimestamp(loggingTimestamp);
 				if (!this.recordReceiver.newMonitoringRecord(record)) {
 					this.terminated = true;

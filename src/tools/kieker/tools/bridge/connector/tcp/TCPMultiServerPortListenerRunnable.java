@@ -18,11 +18,12 @@ package kieker.tools.bridge.connector.tcp;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.tools.bridge.LookupEntity;
+import kieker.common.record.LookupEntity;
 
 /**
  * Runnable class implementing a thread listening for an incoming connection for monitoring data.
@@ -39,6 +40,7 @@ public class TCPMultiServerPortListenerRunnable implements Runnable {
 	private volatile boolean active = true;
 	private final ConcurrentMap<Integer, LookupEntity> lookupEntityMap;
 	private final ExecutorService executor;
+	private final ConcurrentMap<Integer, String> stringMap = new ConcurrentHashMap<Integer, String>();
 
 	/**
 	 * Create a listener for the incoming port of the multi server.
@@ -71,6 +73,7 @@ public class TCPMultiServerPortListenerRunnable implements Runnable {
 				// await client connections and start a connection handler
 				this.executor.execute(new TCPMultiServerConnectionRunnable(this.serverSocket.accept(),
 						this.lookupEntityMap,
+						this.stringMap,
 						this.recordQueue));
 			}
 			this.serverSocket.close();

@@ -16,7 +16,6 @@
 
 package kieker.common.record;
 
-import java.io.Serializable;
 
 /**
  * All Kieker monitoring records have to implement this minimal interface.
@@ -31,7 +30,7 @@ import java.io.Serializable;
  * 
  * @since 1.2
  */
-public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringRecord> {
+public interface IMonitoringRecord extends IRecord, Comparable<IMonitoringRecord> {
 
 	/**
 	 * Delivers the current timestamp of the record.

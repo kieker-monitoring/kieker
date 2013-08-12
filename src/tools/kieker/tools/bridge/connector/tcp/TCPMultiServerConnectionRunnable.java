@@ -17,7 +17,6 @@ package kieker.tools.bridge.connector.tcp;
 
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentMap;
@@ -25,7 +24,10 @@ import java.util.concurrent.ConcurrentMap;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
-import kieker.tools.bridge.LookupEntity;
+import kieker.common.record.IRecord;
+import kieker.common.record.LookupEntity;
+import kieker.common.record.MonitoringRecordFactory;
+import kieker.common.record.control.StringMapRecord;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.ConnectorEndOfDataException;
 
@@ -37,19 +39,18 @@ import kieker.tools.bridge.connector.ConnectorEndOfDataException;
  * 
  */
 public class TCPMultiServerConnectionRunnable implements Runnable {
-	// string buffer size (#1052)
-	private static final int BUF_LEN = 65536;
-
 	private static final Log LOG = LogFactory.getLog(TCPMultiServerConnectionRunnable.class);
 
 	private final Socket socket;
-	private final byte[] buffer = new byte[BUF_LEN];
+	private final byte[] buffer = new byte[MonitoringRecordFactory.MAX_BUFFER_SIZE];
 
 	private final ConcurrentMap<Integer, LookupEntity> lookupEntityMap;
 
 	private final BlockingQueue<IMonitoringRecord> recordQueue;
 
 	private volatile boolean active;
+
+	private final ConcurrentMap<Integer, String> stringMap;
 
 	/**
 	 * Create a service thread.
@@ -63,9 +64,11 @@ public class TCPMultiServerConnectionRunnable implements Runnable {
 	 */
 	public TCPMultiServerConnectionRunnable(final Socket socket,
 			final ConcurrentMap<Integer, LookupEntity> lookupEntityMap,
+			final ConcurrentMap<Integer, String> stringMap,
 			final BlockingQueue<IMonitoringRecord> recordQueue) {
 		this.socket = socket;
 		this.lookupEntityMap = lookupEntityMap;
+		this.stringMap = stringMap;
 		this.recordQueue = recordQueue;
 	}
 
@@ -101,77 +104,22 @@ public class TCPMultiServerConnectionRunnable implements Runnable {
 	/**
 	 * Deserialize a received record.
 	 * 
-	 * @param in
+	 * @param input
 	 *            the input data stream
 	 * 
 	 * @return a new IMonitoringRecord
 	 * @throws Exception
 	 *             throws IOException when unknown record ID is read.
 	 */
-	private IMonitoringRecord deserialize(final DataInputStream in) throws ConnectorDataTransmissionException, ConnectorEndOfDataException {
-		try {
-			final Integer id = in.readInt();
-			final LookupEntity recordProperty = this.lookupEntityMap.get(id);
-			if (recordProperty != null) {
-				final Object[] values = new Object[recordProperty.getParameterTypes().length];
-
-				for (int i = 0; i < recordProperty.getParameterTypes().length; i++) {
-					final Class<?> parameterType = recordProperty.getParameterTypes()[i];
-					if (boolean.class.equals(parameterType)) {
-						values[i] = in.readBoolean();
-					} else if (Boolean.class.equals(parameterType)) {
-						values[i] = Boolean.valueOf(in.readBoolean());
-					} else if (byte.class.equals(parameterType)) {
-						values[i] = in.readByte();
-					} else if (Byte.class.equals(parameterType)) {
-						values[i] = Byte.valueOf(in.readByte());
-					} else if (short.class.equals(parameterType)) { // NOPMD
-						values[i] = in.readShort();
-					} else if (Short.class.equals(parameterType)) {
-						values[i] = Short.valueOf(in.readShort());
-					} else if (int.class.equals(parameterType)) {
-						values[i] = in.readInt();
-					} else if (Integer.class.equals(parameterType)) {
-						values[i] = Integer.valueOf(in.readInt());
-					} else if (long.class.equals(parameterType)) {
-						values[i] = in.readLong();
-					} else if (Long.class.equals(parameterType)) {
-						values[i] = Long.valueOf(in.readLong());
-					} else if (float.class.equals(parameterType)) {
-						values[i] = in.readFloat();
-					} else if (Float.class.equals(parameterType)) {
-						values[i] = Float.valueOf(in.readFloat());
-					} else if (double.class.equals(parameterType)) {
-						values[i] = in.readDouble();
-					} else if (Double.class.equals(parameterType)) {
-						values[i] = Double.valueOf(in.readDouble());
-					} else if (String.class.equals(parameterType)) {
-						final int bufLen = in.readInt();
-						in.readFully(this.buffer, 0, bufLen);
-						values[i] = new String(this.buffer, 0, bufLen, "UTF-8");
-					} else { // reference types
-						throw new ConnectorDataTransmissionException("References are not yet supported.");
-					}
-				}
-
-				return recordProperty.getConstructor().newInstance(values);
-			} else {
-				throw new IOException("Record type " + id + " is not registered.");
+	private IMonitoringRecord deserialize(final DataInputStream input) throws ConnectorDataTransmissionException, ConnectorEndOfDataException {
+		final IRecord record = MonitoringRecordFactory.derserializeRecordFromStream(input, this.buffer, this.lookupEntityMap, this.stringMap);
+		if (record instanceof IMonitoringRecord) {
+			return (IMonitoringRecord) record;
+		} else {
+			if (record instanceof StringMapRecord) {
+				this.stringMap.put(((StringMapRecord) record).getKey(), ((StringMapRecord) record).getString());
 			}
-		} catch (final java.net.SocketException e) {
-			throw new ConnectorEndOfDataException("End of stream", e);
-		} catch (final java.io.EOFException e) {
-			throw new ConnectorEndOfDataException("End of stream", e);
-		} catch (final IOException e) {
-			throw new ConnectorDataTransmissionException("Read error", e);
-		} catch (final InstantiationException e) {
-			throw new ConnectorDataTransmissionException("Instantiation error", e);
-		} catch (final IllegalAccessException e) {
-			throw new ConnectorDataTransmissionException("Access to fields are restricted", e);
-		} catch (final IllegalArgumentException e) {
-			throw new ConnectorDataTransmissionException(e.getMessage(), e);
-		} catch (final InvocationTargetException e) {
-			throw new ConnectorDataTransmissionException(e.getMessage(), e);
+			return this.deserialize(input);
 		}
 	}
 
