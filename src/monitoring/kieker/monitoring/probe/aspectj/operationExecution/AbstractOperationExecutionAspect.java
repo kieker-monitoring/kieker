@@ -58,7 +58,7 @@ public abstract class AbstractOperationExecutionAspect extends AbstractAspectJPr
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return thisJoinPoint.proceed();
 		}
-		final String signature = AbstractAspectJProbe.signatureToLongString(thisJoinPoint.getSignature());
+		final String signature = this.signatureToLongString(thisJoinPoint.getSignature());
 		if (!CTRLINST.isProbeActivated(signature)) {
 			return thisJoinPoint.proceed();
 		}
