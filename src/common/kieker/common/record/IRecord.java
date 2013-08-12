@@ -21,7 +21,7 @@ import java.io.Serializable;
 /**
  * Generic record marker interface for all record types in Kieker.
  * 
- * @author Reiner jung
+ * @author Reiner Jung
  * 
  */
 public interface IRecord extends Serializable {
