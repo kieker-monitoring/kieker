@@ -19,6 +19,7 @@ package kieker.analysis.plugin;
 import java.lang.reflect.Constructor;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.jms.BytesMessage;
 import javax.jms.Connection;
@@ -89,6 +90,8 @@ public class AnalysisNode extends AbstractFilterPlugin {
 	protected static final String DATA_TOPIC_TEMPLATE = "net.kieker-monitoring.analysis.data.%s";
 
 	private static final Log LOG = LogFactory.getLog(AnalysisNode.class);
+
+	private final AtomicInteger activeConnectionThreads = new AtomicInteger(4);
 
 	private final RepositoryReceiverThread repositoryReceiverThread;
 	private final RepositorySenderThread repositorySenderThread;
@@ -173,13 +176,6 @@ public class AnalysisNode extends AbstractFilterPlugin {
 			this.receiverThread.terminate();
 			this.repositorySenderThread.terminate();
 			this.repositoryReceiverThread.terminate();
-
-			try {
-				this.distributedConnection.stop();
-				this.distributedConnection.close();
-			} catch (final JMSException ex) {
-				ex.printStackTrace();
-			}
 		}
 	}
 
@@ -321,6 +317,16 @@ public class AnalysisNode extends AbstractFilterPlugin {
 					LOG.warn("Sending failed", ex);
 				}
 			}
+
+			// Check whether this thread is the last one
+			if (AnalysisNode.this.activeConnectionThreads.decrementAndGet() == 0) {
+				try {
+					AnalysisNode.this.distributedConnection.stop();
+					AnalysisNode.this.distributedConnection.close();
+				} catch (final JMSException ex) {
+					ex.printStackTrace();
+				}
+			}
 		}
 
 		public void terminate() {
@@ -359,6 +365,16 @@ public class AnalysisNode extends AbstractFilterPlugin {
 					LOG.warn("Sending failed", ex);
 				}
 			}
+
+			// Check whether this thread is the last one
+			if (AnalysisNode.this.activeConnectionThreads.decrementAndGet() == 0) {
+				try {
+					AnalysisNode.this.distributedConnection.stop();
+					AnalysisNode.this.distributedConnection.close();
+				} catch (final JMSException ex) {
+					ex.printStackTrace();
+				}
+			}
 		}
 
 		public void terminate() {
@@ -390,6 +406,16 @@ public class AnalysisNode extends AbstractFilterPlugin {
 			} catch (final JMSException ex) {
 				LOG.warn("Receiving failed", ex);
 			}
+
+			// Check whether this thread is the last one
+			if (AnalysisNode.this.activeConnectionThreads.decrementAndGet() == 0) {
+				try {
+					AnalysisNode.this.distributedConnection.stop();
+					AnalysisNode.this.distributedConnection.close();
+				} catch (final JMSException ex) {
+					ex.printStackTrace();
+				}
+			}
 		}
 
 		public void terminate() {
@@ -415,12 +441,21 @@ public class AnalysisNode extends AbstractFilterPlugin {
 					final Object data = SerializationUtils.deserialize(buff);
 					AnalysisNode.this.deliver(INTERNAL_OUTPUT_PORT_NAME_EVENTS, data);
 				}
-
 			} catch (final InterruptedException ex) {
 				// We expect this to happen as it is possible that another method wants to terminate this thread.
 				LOG.info("ReceiverThread interrupted", ex);
 			} catch (final JMSException ex) {
 				LOG.warn("Receiving failed", ex);
+			}
+
+			// Check whether this thread is the last one
+			if (AnalysisNode.this.activeConnectionThreads.decrementAndGet() == 0) {
+				try {
+					AnalysisNode.this.distributedConnection.stop();
+					AnalysisNode.this.distributedConnection.close();
+				} catch (final JMSException ex) {
+					ex.printStackTrace();
+				}
 			}
 		}
 

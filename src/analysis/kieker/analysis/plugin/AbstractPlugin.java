@@ -217,12 +217,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 				((AbstractPlugin) pluginInputPortReference.getPlugin()).processMetaSignal((MetaSignal) data);
 			}
 
-			// In case of analysis nodes it is possible that we need to send the data to the MOM as well
-			if (this instanceof AnalysisNode) {
-				if (((AnalysisNode) this).isDistributed()) {
-					((AnalysisNode) this).sendQueue.add(data);
-				}
-			}
+			return true;
 		}
 
 		if (((this.state != STATE.RUNNING) && (this.state != STATE.TERMINATING)) || (data == null)) {
@@ -342,7 +337,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			this.metaSignalCounter--;
 		}
 
-		if ((this.metaSignalCounter == 0) || ((data instanceof TerminationSignal) && ((TerminationSignal) data).isError())) {
+		if ((this.metaSignalCounter == 0) || (data instanceof TerminationSignal)) {
 			// Time to shut this filter down!
 			this.shutdown(((TerminationSignal) data).isError());
 		}
@@ -350,6 +345,13 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		// Forward the meta signal!
 		for (final String outputPort : this.getAllOutputPortNames()) {
 			this.deliver(outputPort, data, false);
+		}
+
+		// In case of analysis nodes it is possible that we need to send the data to the MOM as well
+		if (this instanceof AnalysisNode) {
+			if (((AnalysisNode) this).isDistributed()) {
+				((AnalysisNode) this).sendQueue.add(data);
+			}
 		}
 
 		return true;
