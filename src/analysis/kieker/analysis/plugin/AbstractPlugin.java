@@ -32,12 +32,9 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
-<<<<<<< HEAD
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
-=======
->>>>>>> master
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.IProjectContext;
@@ -78,12 +75,8 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 
 	private static final Log LOG = LogFactory.getLog(AbstractPlugin.class);
 
-<<<<<<< HEAD
-	private final ConcurrentHashMap<String, ConcurrentLinkedQueue<PluginInputPortReference>> registeredMethods;
 	private final ConcurrentHashMap<String, ConcurrentLinkedQueue<RepositoryInputPortReference>> registeredRepositoryMethods;
-=======
 	private final ConcurrentHashMap<String, List<PluginInputPortReference>> registeredMethods;
->>>>>>> master
 	private final ConcurrentHashMap<String, AbstractRepository> registeredRepositories;
 	private final Map<String, RepositoryPort> repositoryPorts;
 	private final Map<String, OutputPort> outputPorts;
@@ -226,7 +219,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 
 		// Is this a meta signal?
 		if (data instanceof MetaSignal) {
-			final ConcurrentLinkedQueue<PluginInputPortReference> registeredMethodsOfPort = this.registeredMethods.get(outputPortName);
+			final List<PluginInputPortReference> registeredMethodsOfPort = this.registeredMethods.get(outputPortName);
 
 			for (final PluginInputPortReference pluginInputPortReference : registeredMethodsOfPort) {
 				((AbstractPlugin) pluginInputPortReference.getPlugin()).processMetaSignal((MetaSignal) data);
