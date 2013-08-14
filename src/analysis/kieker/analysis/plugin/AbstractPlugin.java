@@ -217,17 +217,6 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			return true;
 		}
 
-		// Is this a meta signal?
-		if (data instanceof MetaSignal) {
-			final List<PluginInputPortReference> registeredMethodsOfPort = this.registeredMethods.get(outputPortName);
-
-			for (final PluginInputPortReference pluginInputPortReference : registeredMethodsOfPort) {
-				((AbstractPlugin) pluginInputPortReference.getPlugin()).processMetaSignal((MetaSignal) data);
-			}
-
-			return true;
-		}
-
 		if (((this.state != STATE.RUNNING) && (this.state != STATE.TERMINATING)) || (data == null)) {
 			return false;
 		}
@@ -333,7 +322,20 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		return null;
 	}
 
-	private boolean processMetaSignal(final MetaSignal data) {
+	protected void sendMetaSignal(final MetaSignal metaSignal) {
+		// In case of analysis nodes it is possible that we need to send the data to the MOM as well
+		if (this instanceof AnalysisNode) {
+			if (((AnalysisNode) this).isDistributed()) {
+				((AnalysisNode) this).sendQueue.add(metaSignal);
+			}
+		}
+
+		for (final AbstractPlugin outgoingPlugin : this.outgoingPlugins) {
+			outgoingPlugin.processAndDelayMetaSignal(metaSignal);
+		}
+	}
+
+	protected boolean processAndDelayMetaSignal(final MetaSignal data) {
 		AbstractPlugin.LOG.info("Plugin " + this.getName() + " received meta signal (" + data + ")");
 
 		if (data instanceof InitializationSignal) {
@@ -342,20 +344,26 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			this.metaSignalCounter--;
 		}
 
-		if ((this.metaSignalCounter == 0) || (data instanceof TerminationSignal)) {
+		if (this.metaSignalCounter == 0) {
 			// Time to shut this filter down!
 			this.shutdown(((TerminationSignal) data).isError());
 		}
 
-		// Forward the meta signal!
-		for (final String outputPort : this.getAllOutputPortNames()) {
-			this.deliver(outputPort, data, false);
-		}
+		this.sendMetaSignal(data);
 
-		// In case of analysis nodes it is possible that we need to send the data to the MOM as well
-		if (this instanceof AnalysisNode) {
-			if (((AnalysisNode) this).isDistributed()) {
-				((AnalysisNode) this).sendQueue.add(data);
+		if (this.metaSignalCounter == 0) {
+			// The threads for the asynchronous and distributed connections have to wait until the meta signals are within the queues.
+			try {
+				this.shutdownAsynchronousPorts();
+			} catch (final InterruptedException ex) {
+				LOG.warn("Interrupted while waiting for asynchronous ports to finish.");
+			}
+			if (this instanceof AnalysisNode) {
+				try {
+					((AnalysisNode) this).shutdownDistributedPorts();
+				} catch (final InterruptedException ex) {
+					LOG.warn("Interrupted while waiting for distributed ports to finish.");
+				}
 			}
 		}
 
@@ -748,11 +756,6 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 
 		// when we arrive here, all incoming plugins are terminated!
 		this.terminate(error);
-		try {
-			this.shutdownAsynchronousPorts();
-		} catch (final InterruptedException ex) {
-			LOG.warn("Interrupted while waiting for asynchronous ports to finish.");
-		}
 
 		((AnalysisController) this.projectContext).notifyFilterTermination(this);
 	}
@@ -815,10 +818,10 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 
 	private class ReceivingThread extends Thread {
 
+		private final Object TERMINATION_TOKEN = new Object();
+
 		private final BlockingQueue<Object> queue;
 		private final Method method;
-
-		private volatile boolean terminated;
 
 		public ReceivingThread(final BlockingQueue<Object> queue, final Method method) {
 			this.queue = queue;
@@ -833,10 +836,16 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 
 		@Override
 		public void run() {
-			while (!(this.terminated && this.queue.isEmpty())) {
+			while (true) {
 				try {
 					final Object data = this.queue.take();
-					this.method.invoke(AbstractPlugin.this, data);
+					if (data == this.TERMINATION_TOKEN) {
+						return;
+					} else if (data instanceof MetaSignal) {
+						AbstractPlugin.this.processAndDelayMetaSignal((MetaSignal) data);
+					} else {
+						this.method.invoke(AbstractPlugin.this, data);
+					}
 				} catch (final InterruptedException ex) {
 					LOG.info("ReceiverThread interrupted", ex);
 				} catch (final IllegalAccessException e) {
@@ -850,17 +859,17 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		}
 
 		public void terminate() {
-			this.terminated = true;
-			this.interrupt();
+			this.queue.add(this.TERMINATION_TOKEN);
 		}
 
 	}
 
 	private class SendingThread extends Thread {
 
+		private final Object TERMINATION_TOKEN = new Object();
+
 		private final BlockingQueue<Object> queue;
 		private final String outputPortName;
-		private volatile boolean terminated;
 
 		public SendingThread(final BlockingQueue<Object> queue, final String outputPortName) {
 			this.queue = queue;
@@ -869,11 +878,15 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 
 		@Override
 		public void run() {
-			while (!(this.terminated && this.queue.isEmpty())) {
+			while (true) {
 				try {
 					final Object data = this.queue.take();
-					// Make sure that deliver sends the data to the queue but this deliver here should do so, but deliver directly.
-					AbstractPlugin.this.deliver(this.outputPortName, data, false);
+					if (data == this.TERMINATION_TOKEN) {
+						return;
+					} else {
+						// Make sure that deliver sends the data to the queue but this deliver here should do so, but deliver directly.
+						AbstractPlugin.this.deliver(this.outputPortName, data, false);
+					}
 				} catch (final InterruptedException ex) {
 					LOG.info("SendingThread interrupted", ex);
 				}
@@ -881,8 +894,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		}
 
 		public void terminate() {
-			this.terminated = true;
-			this.interrupt();
+			this.queue.add(this.TERMINATION_TOKEN);
 		}
 	}
 

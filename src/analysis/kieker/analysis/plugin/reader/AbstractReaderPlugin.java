@@ -55,6 +55,21 @@ public abstract class AbstractReaderPlugin extends AbstractPlugin implements IRe
 		}
 	}
 
+	public final void startRead() {
+		this.beforeRead();
+		this.read();
+		this.shutdown(false);
+		this.afterRead();
+	}
+
+	private void beforeRead() {
+		this.sendMetaSignal(new InitializationSignal());
+	}
+
+	private void afterRead() {
+		this.sendMetaSignal(new TerminationSignal(false));
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -62,23 +77,4 @@ public abstract class AbstractReaderPlugin extends AbstractPlugin implements IRe
 		return true;
 	}
 
-	public final void startInitializationSequence() {
-		if (this.getState() != STATE.RUNNING) {
-			for (final String outputPort : this.getAllOutputPortNames()) {
-				super.deliver(outputPort, new InitializationSignal());
-			}
-		}
-	}
-
-	public final void startTerminationSequence(final boolean error) {
-		if ((this.getState() != STATE.READY) && (this.getState() != STATE.RUNNING)) {
-			return;
-		}
-
-		this.shutdown(error);
-
-		for (final String outputPort : this.getAllOutputPortNames()) {
-			super.deliver(outputPort, new TerminationSignal(error));
-		}
-	}
 }

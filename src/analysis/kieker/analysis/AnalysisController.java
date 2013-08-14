@@ -427,10 +427,10 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 			this.notifyStateObservers();
 		}
 		// Make sure that a log reader exists.
-		if (this.readers.size() == 0) {
-			this.terminate(true);
-			throw new AnalysisConfigurationException("No log reader registered.");
-		}
+		// /if (this.readers.size() == 0) {
+		// this.terminate(true);
+		// throw new AnalysisConfigurationException("No log reader registered.");
+		// }
 		// Call init() method of all plug-ins.
 		for (final AbstractReaderPlugin reader : this.readers) {
 			// Make also sure that all repository ports of all plugins are connected.
@@ -438,7 +438,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 				this.terminate(true);
 				throw new AnalysisConfigurationException("Reader '" + reader.getName() + "' (" + reader.getPluginName() + ") has unconnected repositories.");
 			}
-			reader.startInitializationSequence();
+			// reader.startInitializationSequence();
 			if (!reader.start()) {
 				this.terminate(true);
 				throw new AnalysisConfigurationException("Reader '" + reader.getName() + "' (" + reader.getPluginName() + ") failed to initialize.");
@@ -463,11 +463,12 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 			new Thread(new Runnable() {
 				public void run() {
 					try {
-						if (!reader.read()) {
-							// here we started and won't throw any exceptions!
-							LOG.error("Calling read() on Reader '" + reader.getName() + "' (" + reader.getPluginName() + ")  returned false.");
-							AnalysisController.this.terminate(true);
-						}
+						reader.startRead();
+						// if (!reader.read()) {
+						// here we started and won't throw any exceptions!
+						// LOG.error("Calling read() on Reader '" + reader.getName() + "' (" + reader.getPluginName() + ")  returned false.");
+						// AnalysisController.this.terminate(true);
+						// }
 					} catch (final Throwable t) { // NOPMD NOCS (we also want errors)
 						LOG.error("Exception while reading on Reader '" + reader.getName() + "' (" + reader.getPluginName() + ").", t);
 						AnalysisController.this.terminate(true);
@@ -493,6 +494,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		} catch (final InterruptedException ex) {
 			LOG.warn("Interrupted while waiting for filters to finish", ex);
 		}
+
 		LOG.info("Analysis terminated");
 	}
 
@@ -539,7 +541,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 			}
 		}
 		for (final AbstractReaderPlugin reader : this.readers) {
-			reader.startTerminationSequence(error);
+			// reader.startTerminationSequence(error);
 		}
 	}
 

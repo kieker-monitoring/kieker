@@ -46,6 +46,7 @@ import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryInputPort;
 import kieker.analysis.plugin.annotation.RepositoryOutputPort;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
+import kieker.analysis.plugin.metasignal.MetaSignal;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.analysis.repository.IRepository;
 import kieker.common.configuration.Configuration;
@@ -104,8 +105,8 @@ public class AnalysisNode extends AbstractFilterPlugin {
 	private final boolean distributed;
 	private final Connection distributedConnection;
 	private final Session distributedSession;
-	private final BlockingQueue<Message> receiverQueue;
-	private final BlockingQueue<Message> repositoryReceiverQueue;
+	private final BlockingQueue<Object> receiverQueue;
+	private final BlockingQueue<Object> repositoryReceiverQueue;
 
 	public AnalysisNode(final Configuration configuration, final IProjectContext projectContext) throws Exception {
 		super(configuration, projectContext);
@@ -123,8 +124,8 @@ public class AnalysisNode extends AbstractFilterPlugin {
 
 			this.sendQueue = new LinkedBlockingQueue<Object>();
 			this.repositorySendQueue = new LinkedBlockingQueue<Object>();
-			this.receiverQueue = new LinkedBlockingQueue<Message>();
-			this.repositoryReceiverQueue = new LinkedBlockingQueue<Message>();
+			this.receiverQueue = new LinkedBlockingQueue<Object>();
+			this.repositoryReceiverQueue = new LinkedBlockingQueue<Object>();
 
 			this.senderThread = new SenderThread();
 			this.receiverThread = new ReceiverThread();
@@ -168,14 +169,19 @@ public class AnalysisNode extends AbstractFilterPlugin {
 		return true;
 	}
 
-	@Override
-	public void terminate(final boolean error) {
+	protected void shutdownDistributedPorts() throws InterruptedException {
 		// Terminate all threads if necessary
 		if (this.distributed) {
 			this.senderThread.terminate();
 			this.receiverThread.terminate();
 			this.repositorySenderThread.terminate();
 			this.repositoryReceiverThread.terminate();
+
+			// Avoid the joins as this can block the node
+			// this.senderThread.join();
+			// this.receiverThread.join();
+			// this.repositorySenderThread.join();
+			// this.repositoryReceiverThread.join();
 		}
 	}
 
@@ -288,9 +294,22 @@ public class AnalysisNode extends AbstractFilterPlugin {
 		return configuration;
 	}
 
+	private void shutdownDistributedConnection() {
+		// Check whether this thread is the last one
+		if (AnalysisNode.this.activeConnectionThreads.decrementAndGet() == 0) {
+			try {
+				AnalysisNode.this.distributedConnection.stop();
+				AnalysisNode.this.distributedConnection.close();
+			} catch (final JMSException ex) {
+				ex.printStackTrace();
+			}
+		}
+	}
+
 	class RepositorySenderThread extends Thread {
 
-		private volatile boolean terminated;
+		private final Object TERMINATION_TOKEN = new Object();
+
 		private final Topic topic;
 		private final MessageProducer publisher;
 
@@ -303,42 +322,39 @@ public class AnalysisNode extends AbstractFilterPlugin {
 		@SuppressWarnings("synthetic-access")
 		@Override
 		public void run() {
-			while (!(this.terminated && AnalysisNode.this.repositorySendQueue.isEmpty())) {
-				try {
+			try {
+				while (true) {
 					final Object data = AnalysisNode.this.repositorySendQueue.take();
-					// TODO Replace SerializationUtils
-					final BytesMessage bytesMessage = AnalysisNode.this.distributedSession.createBytesMessage();
-					bytesMessage.writeBytes(SerializationUtils.serialize(data));
-					this.publisher.send(bytesMessage);
-				} catch (final InterruptedException ex) {
-					// We expect this to happen as it is possible that another method wants to terminate this thread.
-					LOG.info("RepositorySenderThread interrupted", ex);
-				} catch (final JMSException ex) {
-					LOG.warn("Sending failed", ex);
-				}
-			}
 
-			// Check whether this thread is the last one
-			if (AnalysisNode.this.activeConnectionThreads.decrementAndGet() == 0) {
-				try {
-					AnalysisNode.this.distributedConnection.stop();
-					AnalysisNode.this.distributedConnection.close();
-				} catch (final JMSException ex) {
-					ex.printStackTrace();
+					if (data == this.TERMINATION_TOKEN) {
+						AnalysisNode.this.shutdownDistributedConnection();
+						return;
+					} else {
+						try {
+							final BytesMessage bytesMessage = AnalysisNode.this.distributedSession.createBytesMessage();
+							bytesMessage.writeBytes(SerializationUtils.serialize(data));
+							this.publisher.send(bytesMessage);
+						} catch (final JMSException ex) {
+							LOG.warn("Sending failed", ex);
+						}
+					}
 				}
+			} catch (final InterruptedException ex) {
+				// We expect this to happen as it is possible that another method wants to terminate this thread.
+				LOG.info("RepositorySenderThread interrupted", ex);
 			}
 		}
 
 		public void terminate() {
-			this.terminated = true;
-			this.interrupt();
+			AnalysisNode.this.repositorySendQueue.add(this.TERMINATION_TOKEN);
 		}
 
 	}
 
 	class SenderThread extends Thread {
 
-		private volatile boolean terminated;
+		private final Object TERMINATION_TOKEN = new Object();
+
 		private final Topic topic;
 		private final MessageProducer publisher;
 
@@ -351,118 +367,114 @@ public class AnalysisNode extends AbstractFilterPlugin {
 		@SuppressWarnings("synthetic-access")
 		@Override
 		public void run() {
-			while (!(this.terminated && AnalysisNode.this.sendQueue.isEmpty())) {
-				try {
+			try {
+				while (true) {
 					final Object data = AnalysisNode.this.sendQueue.take();
-					// TODO Replace SerializationUtils
-					final BytesMessage bytesMessage = AnalysisNode.this.distributedSession.createBytesMessage();
-					bytesMessage.writeBytes(SerializationUtils.serialize(data));
-					this.publisher.send(bytesMessage);
-				} catch (final InterruptedException ex) {
-					// We expect this to happen as it is possible that another method wants to terminate this thread.
-					LOG.info("SenderThread interrupted", ex);
-				} catch (final JMSException ex) {
-					LOG.warn("Sending failed", ex);
-				}
-			}
 
-			// Check whether this thread is the last one
-			if (AnalysisNode.this.activeConnectionThreads.decrementAndGet() == 0) {
-				try {
-					AnalysisNode.this.distributedConnection.stop();
-					AnalysisNode.this.distributedConnection.close();
-				} catch (final JMSException ex) {
-					ex.printStackTrace();
+					if (data == this.TERMINATION_TOKEN) {
+						AnalysisNode.this.shutdownDistributedConnection();
+						return;
+					} else {
+						try {
+							final BytesMessage bytesMessage = AnalysisNode.this.distributedSession.createBytesMessage();
+							bytesMessage.writeBytes(SerializationUtils.serialize(data));
+							this.publisher.send(bytesMessage);
+						} catch (final JMSException ex) {
+							LOG.warn("Sending failed", ex);
+						}
+					}
 				}
+			} catch (final InterruptedException ex) {
+				// We expect this to happen as it is possible that another method wants to terminate this thread.
+				LOG.info("SenderThread interrupted", ex);
 			}
 		}
 
 		public void terminate() {
-			this.terminated = true;
-			this.interrupt();
+			AnalysisNode.this.sendQueue.add(this.TERMINATION_TOKEN);
 		}
 
 	}
 
 	class RepositoryReceiverThread extends Thread {
 
-		private volatile boolean terminated;
+		private final Object TERMINATION_TOKEN = new Object();
 
 		@SuppressWarnings("synthetic-access")
 		@Override
 		public void run() {
 			try {
-				while (!(this.terminated && AnalysisNode.this.repositoryReceiverQueue.isEmpty())) {
-					final BytesMessage byteMessage = (BytesMessage) AnalysisNode.this.repositoryReceiverQueue.take();
-					final byte[] buff = new byte[(int) byteMessage.getBodyLength()];
-					byteMessage.readBytes(buff);
+				while (true) {
+					final Object data = AnalysisNode.this.repositoryReceiverQueue.take();
+					if (data == this.TERMINATION_TOKEN) {
+						AnalysisNode.this.shutdownDistributedConnection();
+						return;
+					} else {
+						try {
+							final BytesMessage byteMessage = (BytesMessage) data;
+							final byte[] buff = new byte[(int) byteMessage.getBodyLength()];
+							byteMessage.readBytes(buff);
 
-					final Object data = SerializationUtils.deserialize(buff);
-					AnalysisNode.this.deliverWithoutReturnTypeToRepository(INTERNAL_REPOSITORY_OUTPUT_PORT_NAME_EVENTS, data);
+							final Object content = SerializationUtils.deserialize(buff);
+							AnalysisNode.this.deliverWithoutReturnTypeToRepository(INTERNAL_REPOSITORY_OUTPUT_PORT_NAME_EVENTS, content);
+						} catch (final JMSException ex) {
+							LOG.warn("Receiving failed", ex);
+						}
+					}
 				}
 			} catch (final InterruptedException ex) {
 				// We expect this to happen as it is possible that another method wants to terminate this thread.
 				LOG.info("RepositoryReceiverThread interrupted", ex);
-			} catch (final JMSException ex) {
-				LOG.warn("Receiving failed", ex);
-			}
-
-			// Check whether this thread is the last one
-			if (AnalysisNode.this.activeConnectionThreads.decrementAndGet() == 0) {
-				try {
-					AnalysisNode.this.distributedConnection.stop();
-					AnalysisNode.this.distributedConnection.close();
-				} catch (final JMSException ex) {
-					ex.printStackTrace();
-				}
 			}
 		}
 
 		public void terminate() {
-			this.terminated = true;
-			this.interrupt();
+			AnalysisNode.this.repositoryReceiverQueue.add(this.TERMINATION_TOKEN);
 		}
 
 	}
 
 	class ReceiverThread extends Thread {
 
-		private volatile boolean terminated;
+		private final Object TERMINATION_TOKEN = new Object();
 
 		@SuppressWarnings("synthetic-access")
 		@Override
 		public void run() {
 			try {
-				while (!(this.terminated && AnalysisNode.this.receiverQueue.isEmpty())) {
-					final BytesMessage byteMessage = (BytesMessage) AnalysisNode.this.receiverQueue.take();
-					final byte[] buff = new byte[(int) byteMessage.getBodyLength()];
-					byteMessage.readBytes(buff);
+				while (true) {
+					final Object data = AnalysisNode.this.receiverQueue.take();
 
-					final Object data = SerializationUtils.deserialize(buff);
-					AnalysisNode.this.deliver(INTERNAL_OUTPUT_PORT_NAME_EVENTS, data);
+					if (data == this.TERMINATION_TOKEN) {
+						AnalysisNode.this.shutdownDistributedConnection();
+						return;
+					} else {
+						try {
+							final BytesMessage byteMessage = (BytesMessage) data;
+							final byte[] buff = new byte[(int) byteMessage.getBodyLength()];
+							byteMessage.readBytes(buff);
+
+							final Object content = SerializationUtils.deserialize(buff);
+							if (content instanceof MetaSignal) {
+								AnalysisNode.this.processAndDelayMetaSignal((MetaSignal) content);
+							} else {
+								AnalysisNode.this.deliver(INTERNAL_OUTPUT_PORT_NAME_EVENTS, content);
+							}
+						} catch (final JMSException ex) {
+							LOG.warn("Receiving failed", ex);
+						}
+					}
 				}
 			} catch (final InterruptedException ex) {
 				// We expect this to happen as it is possible that another method wants to terminate this thread.
 				LOG.info("ReceiverThread interrupted", ex);
-			} catch (final JMSException ex) {
-				LOG.warn("Receiving failed", ex);
-			}
-
-			// Check whether this thread is the last one
-			if (AnalysisNode.this.activeConnectionThreads.decrementAndGet() == 0) {
-				try {
-					AnalysisNode.this.distributedConnection.stop();
-					AnalysisNode.this.distributedConnection.close();
-				} catch (final JMSException ex) {
-					ex.printStackTrace();
-				}
 			}
 		}
 
 		public void terminate() {
-			this.terminated = true;
-			this.interrupt();
+			AnalysisNode.this.receiverQueue.add(this.TERMINATION_TOKEN);
 		}
 
 	}
+
 }

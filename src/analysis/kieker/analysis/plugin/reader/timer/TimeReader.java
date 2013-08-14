@@ -183,6 +183,7 @@ public final class TimeReader extends AbstractReaderPlugin {
 	 */
 	protected void sendTimestampEvent() {
 		final long timestamp = this.timeunit.convert(System.nanoTime(), TimeUnit.NANOSECONDS);
+
 		super.deliver(OUTPUT_PORT_NAME_TIMESTAMPS, timestamp);
 		super.deliver(OUTPUT_PORT_NAME_TIMESTAMP_RECORDS, new TimestampRecord(timestamp));
 	}
