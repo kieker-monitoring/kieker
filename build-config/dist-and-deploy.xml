@@ -228,6 +228,7 @@
 			<include name="${dist.dir}/*.war" />
 			<include name="${lib.dir}/**/*" />
 			<exclude name="${lib.dir}/static-analysis/" />
+			<exclude name="${lib.dir}/detect-dependency-updates/" />
 			<!-- exclude some src only libraries begin -->
 			<exclude name="${lib.dir}/aspectjtools-*" />
 			<exclude name="${lib.dir}/maven-ant-tasks-*" />

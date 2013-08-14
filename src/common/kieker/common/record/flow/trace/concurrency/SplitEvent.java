@@ -62,7 +62,10 @@ public final class SplitEvent extends AbstractTraceEvent {
 		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), };
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public final Class<?>[] getValueTypes() {
-		return TYPES.clone();
+		return TYPES; // NOPMD
 	}
 }

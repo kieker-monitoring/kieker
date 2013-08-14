@@ -2,6 +2,31 @@
 	<!-- Example: http://findbugs.sourceforge.net/manual/filter.html#d0e2103 -->
 
 	<Match>
+		<Package name="~kieker\.common\.record.*" />
+		<Bug pattern="EI_EXPOSE_REP" />
+	</Match>
+	
+	<Match>
+		<Class name="kieker.analysis.plugin.IPlugin$PluginInputPortReference" />
+		<Bug pattern="EI_EXPOSE_REP2" />
+	</Match>
+	
+	<Match>
+		<Class name="kieker.analysis.plugin.IPlugin$PluginInputPortReference" />
+		<Bug pattern="EI_EXPOSE_REP" />
+	</Match>
+	
+	<Match>
+		<Class name="kieker.monitoring.probe.aspectj.AbstractAspectJProbe" />
+		<Bug pattern="RV_RETURN_VALUE_OF_PUTIFABSENT_IGNORED" />
+	</Match>
+	
+	<Match>
+		<Class name="kieker.common.record.AbstractMonitoringRecord" />
+		<Bug pattern="RV_RETURN_VALUE_OF_PUTIFABSENT_IGNORED" />
+	</Match>
+	
+	<Match>
 		<Class name="kieker.test.monitoring.junit.probe.spring.executions.jetty.TestSpringMethodInterceptor" />
 		<Method name="testIt" params="" returns="void" />
 		<Bug pattern="NP_LOAD_OF_KNOWN_NULL_VALUE" />

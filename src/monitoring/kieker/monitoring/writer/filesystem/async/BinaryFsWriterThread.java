@@ -60,19 +60,19 @@ public class BinaryFsWriterThread extends AbstractFsWriterThread {
 				final Class<?>[] recordTypes = monitoringRecord.getValueTypes();
 				if (recordTypes[i] == String.class) {
 					this.out.writeInt(this.monitoringController.getIdForString(""));
-				} else if (recordTypes[i] == Integer.class) {
+				} else if ((recordTypes[i] == int.class) || (recordTypes[i] == Integer.class)) {
 					this.out.writeInt(0);
-				} else if (recordTypes[i] == Long.class) {
+				} else if ((recordTypes[i] == long.class) || (recordTypes[i] == Long.class)) {
 					this.out.writeLong(0L);
-				} else if (recordTypes[i] == Float.class) {
+				} else if ((recordTypes[i] == float.class) || (recordTypes[i] == Float.class)) {
 					this.out.writeFloat(0);
-				} else if (recordTypes[i] == Double.class) {
+				} else if ((recordTypes[i] == double.class) || (recordTypes[i] == Double.class)) {
 					this.out.writeDouble(0);
-				} else if (recordTypes[i] == Byte.class) {
+				} else if ((recordTypes[i] == byte.class) || (recordTypes[i] == Byte.class)) {
 					this.out.writeByte(0);
-				} else if (recordTypes[i] == Short.class) {
+				} else if ((recordTypes[i] == short.class) || (recordTypes[i] == Short.class)) { // NOPMD
 					this.out.writeShort(0);
-				} else if (recordTypes[i] == Boolean.class) {
+				} else if ((recordTypes[i] == boolean.class) || (recordTypes[i] == Boolean.class)) {
 					this.out.writeBoolean(false);
 				} else {
 					LOG.warn("Record with unsupported recordField of type " + recordFields[i].getClass());

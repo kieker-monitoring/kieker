@@ -132,7 +132,7 @@ public final class KiekerMetadataRecord extends AbstractMonitoringRecord impleme
 	 * {@inheritDoc}
 	 */
 	public Class<?>[] getValueTypes() {
-		return TYPES.clone();
+		return TYPES; // NOPMD
 	}
 
 	/**

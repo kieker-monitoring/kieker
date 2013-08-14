@@ -1,5 +1,5 @@
 digraph G {
-0[label ="$",shape=none];
+0[label ="'Entry'",shape=none];
 1[label ="@3:..Bookstore\n.searchBook()",shape=none];
 2[label ="@1:..Catalog\n.getBook(..)",shape=none];
 3[label ="@2:..CRM\n.getOffers()",shape=none];

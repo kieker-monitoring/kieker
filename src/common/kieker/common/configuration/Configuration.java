@@ -16,9 +16,9 @@
 
 package kieker.common.configuration;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Properties;
 
 import kieker.common.logging.Log;
@@ -198,21 +198,76 @@ public final class Configuration extends Properties {
 	}
 
 	/**
-	 * Tries to simplify a given filesystem path.
-	 * E.g., test/../x/y/./z/a/../x -> x/y/z/x
+	 * Based upon Guava 14.0.1 (Chris Nokleberg, Colin Decker). Guava is licensed under "The Apache Software License, Version 2.0".<br>
+	 * </br>
+	 * Simplifies a given file system path.
 	 * 
-	 * @param path
+	 * @param pathname
 	 *            The path to be simplified.
-	 * 
 	 * @return A simplified version of the given path.
 	 */
-	public static final String convertToPath(final String path) {
-		try {
-			return new URI(null, null, null, -1, path.replace('\\', '/'), null, null).normalize().toASCIIString();
-		} catch (final URISyntaxException ex) {
-			LOG.warn("Failed to parse path: " + path, ex);
-			return path;
+	public static final String convertToPath(final String pathname) {
+		if (pathname.length() == 0) {
+			return pathname;
 		}
+
+		final String workingPathname = pathname.replace('\\', '/');
+
+		final boolean endsWithSlash = workingPathname.charAt(workingPathname.length() - 1) == '/';
+
+		// split the path apart
+		final String[] components = workingPathname.split("/");
+		final LinkedList<String> path = new LinkedList<String>(); // NOCS NOPMD
+
+		// resolve ., .., and //
+		for (final String component : components) {
+			if (".".equals(component)) {
+				continue;
+			} else if ("".equals(component)) {
+				// Drop empty elements
+				continue;
+			} else if ("..".equals(component)) {
+				if (!path.isEmpty() && !"..".equals(path.getLast())) {
+					path.removeLast();
+				} else {
+					path.add("..");
+				}
+			} else {
+				path.add(component);
+			}
+		}
+
+		// put it back together
+		final StringBuilder sb = new StringBuilder();
+
+		if (workingPathname.charAt(0) == '/') {
+			sb.append('/');
+		}
+
+		final int numberPathElements = path.size();
+		final Iterator<String> pathIter = path.iterator();
+		for (int i = 0; i < (numberPathElements - 1); i++) {
+			sb.append(pathIter.next()).append('/');
+		}
+		if (pathIter.hasNext()) {
+			sb.append(pathIter.next());
+		}
+		if (endsWithSlash
+				&& (sb.length() != 0) // not if the path is now empty
+				&& ((sb.length() != 1) || (sb.charAt(0) != '/'))) { // not if the path is now '/'
+			sb.append('/');
+		}
+
+		String result = sb.toString();
+
+		while (result.startsWith("/../")) {
+			result = result.substring(3);
+		}
+		if ("/..".equals(result)) {
+			result = "/";
+		}
+
+		return result;
 	}
 
 	/**

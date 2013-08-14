@@ -49,6 +49,8 @@ import kieker.common.util.ImmutableEntry;
 		description = "A filter computing the throughput in terms of the number of events received per time unit",
 		outputPorts = {
 			@OutputPort(name = CountingThroughputFilter.OUTPUT_PORT_NAME_RELAYED_OBJECTS, eventTypes = { Object.class },
+					description = "Provides each incoming object"),
+			@OutputPort(name = CountingThroughputFilter.OUTPUT_PORT_NAME_THROUGHPUT, eventTypes = { Long.class },
 					description = "Provides each incoming object")
 		},
 		configuration = {
@@ -74,6 +76,10 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 	 * The name of the output port delivering the received objects.
 	 */
 	public static final String OUTPUT_PORT_NAME_RELAYED_OBJECTS = "relayedEvents";
+	/**
+	 * The name of the output port delivering the received objects.
+	 */
+	public static final String OUTPUT_PORT_NAME_THROUGHPUT = "throughput";
 
 	/** The name of the property determining the time unit. */
 	public static final String CONFIG_PROPERTY_NAME_TIMEUNIT = "timeunit";
@@ -168,17 +174,16 @@ public final class CountingThroughputFilter extends AbstractFilterPlugin {
 			// Check if we need to close the current interval.
 			if (endOfTimestampsInterval > this.lastTimestampInCurrentInterval) {
 				if (this.firstTimestampInCurrentInterval >= 0) { // don't do this for the first record (only used for initialization of variables)
-					this.eventCountsPerInterval.add(
-							new ImmutableEntry<Long, Long>(
-									this.lastTimestampInCurrentInterval + 1,
-									this.currentCountForCurrentInterval.get()));
+					final long count = this.currentCountForCurrentInterval.get();
+					super.deliver(OUTPUT_PORT_NAME_THROUGHPUT, count);
+					this.eventCountsPerInterval.add(new ImmutableEntry<Long, Long>(this.lastTimestampInCurrentInterval + 1, count));
 
 					long numIntervalsElapsed = 1; // refined below
 					numIntervalsElapsed = (endOfTimestampsInterval - this.lastTimestampInCurrentInterval) / this.intervalSize;
 					if (numIntervalsElapsed > 1) { // NOPMD (AvoidDeeplyNestedIfStmts)
 						for (int i = 1; i < numIntervalsElapsed; i++) {
-							this.eventCountsPerInterval.add(
-									new ImmutableEntry<Long, Long>((this.lastTimestampInCurrentInterval + (i * this.intervalSize)) + 1, 0L));
+							super.deliver(OUTPUT_PORT_NAME_THROUGHPUT, 0L); // do we really want to send this?
+							this.eventCountsPerInterval.add(new ImmutableEntry<Long, Long>((this.lastTimestampInCurrentInterval + (i * this.intervalSize)) + 1, 0L));
 						}
 					}
 

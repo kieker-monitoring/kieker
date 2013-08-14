@@ -31,6 +31,9 @@ public class PieChart extends AbstractDisplay {
 
 	private final Map<String, Number> valueMap;
 
+	/**
+	 * Creates a new instance of this class.
+	 */
 	public PieChart() {
 		this.valueMap = new ConcurrentHashMap<String, Number>();
 	}

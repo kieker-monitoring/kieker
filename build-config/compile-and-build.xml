@@ -312,56 +312,6 @@
 		</javac>
 	</target>
 
-	<target name="-compile-tests-compileTimeWeaving-bookstore" depends="-compile-kieker.monitoring" description="Compiles the sources of the compile-time-weaving tests">
-		<path id="kieker.test-compileTimeWeaving-bookstore-compile-classpath">
-			<fileset dir="${lib.dir}">
-				<include name="aspectjrt-*.jar" />
-				<include name="javax.servlet-*.jar" />
-			</fileset>
-			<pathelement location="${build.tests.dir}/" />
-			<fileset dir="${dist.dir}">
-				<include name="${dist.kieker.main.jar}" />
-			</fileset>
-		</path>
-
-		<delete dir="${tmp.dir}/aspects/" />
-		<mkdir dir="${tmp.dir}/aspects/" />
-		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectj/operationExecution/AbstractOperationExecutionAspect.java" todir="${tmp.dir}/aspects/" />
-		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectj/operationExecution/AbstractOperationExecutionAspectServlet.java" todir="${tmp.dir}/aspects/" />
-		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectj/operationExecution/${TestAspect}" todir="${tmp.dir}/aspects/" />
-		<iajc destdir="${build.tests.dir}" source="1.5" target="1.5" verbose="true" classpathref="kieker.test-compileTimeWeaving-bookstore-compile-classpath">
-			<sourceroots>
-				<pathelement location="${test.kieker.monitoring.dir}/kieker/test/monitoring/aspectj/compileTimeWeaving/bookstore/" />
-				<pathelement location="${tmp.dir}/aspects/" />
-			</sourceroots>
-		</iajc>
-	</target>
-
-	<target name="-compile-tests-compileTimeWeaving-twoConcurrentMethodsExample" depends="-compile-kieker.monitoring" description="Compiles the sources of the compile-time-weaving test with concurrency">
-		<path id="kieker.test-compileTimeWeaving-twoConcurrentMethodsExample-compile-classpath">
-			<fileset dir="${lib.dir}">
-				<include name="aspectjrt-*.jar" />
-				<include name="javax.servlet-*.jar" />
-			</fileset>
-			<pathelement location="${build.tests.dir}/" />
-			<fileset dir="${dist.dir}">
-				<include name="${dist.kieker.main.jar}" />
-			</fileset>
-		</path>
-
-		<delete dir="${tmp.dir}/aspects/" />
-		<mkdir dir="${tmp.dir}/aspects/" />
-		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectj/operationExecution/AbstractOperationExecutionAspect.java" todir="${tmp.dir}/aspects/" />
-		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectj/operationExecution/AbstractOperationExecutionAspectServlet.java" todir="${tmp.dir}/aspects/" />
-		<copy file="${src.kieker.monitoring.dir}/kieker/monitoring/probe/aspectj/operationExecution/${TestAspect}" todir="${tmp.dir}/aspects/" />
-		<iajc destdir="${build.tests.dir}" source="1.5" target="1.5" verbose="true" classpathref="kieker.test-compileTimeWeaving-twoConcurrentMethodsExample-compile-classpath">
-			<sourceroots>
-				<pathelement location="${test.kieker.monitoring.dir}/kieker/test/monitoring/aspectj/compileTimeWeaving/twoConcurrentMethodsExample/" />
-				<pathelement location="${tmp.dir}/aspects/" />
-			</sourceroots>
-		</iajc>
-	</target>
-
 	<target name="compile-tests" depends="-compile-tests-common,-compile-tests-analysis,-compile-tests-monitoring,-compile-tests-tools" description="Compile the tests for the Kieker components">
 	</target>
 

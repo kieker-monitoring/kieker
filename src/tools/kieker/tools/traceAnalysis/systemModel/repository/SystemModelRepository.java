@@ -48,26 +48,7 @@ public class SystemModelRepository extends AbstractRepository {
 	public static final Execution ROOT_EXECUTION =
 			new Execution(OperationRepository.ROOT_OPERATION, AllocationRepository.ROOT_ALLOCATION_COMPONENT, -1, "-1", -1, -1, -1, -1, false);
 
-	public static final String REPOSITORY_INPUT_PORT_LOOKUP_COMPONENT_TYPE_BY_NAME = "lookupComponentTypeByNamedIdentifier";
-	public static final String REPOSITORY_INPUT_PORT_CREATE_AND_REGISTER_COMPONENT_TYPE = "createAndRegisterComponentType";
-	public static final String REPOSITORY_INPUT_PORT_GET_COMPONENT_TYPES = "getComponentTypes";
-	public static final String REPOSITORY_INPUT_PORT_LOOKUP_ALLOCATION_COMPONENT_INSTANCE_BY_NAME = "lookupAllocationComponentInstanceByNamedIdentifier";
-	public static final String REPOSITORY_INPUT_PORT_CREATE_AND_REGISTER_ALLOCATION_COMPONENT_INSTANCE = "createAndRegisterAllocationComponentInstance";
-	public static final String REPOSITORY_INPUT_PORT_LOOKUP_IOERATION_BY_NAME = "lookupOperationByNamedIdentifier";
-	public static final String REPOSITORY_INPUT_PORT_CREATE_AND_REGISTER_OPERATION = "createAndRegisterOperation";
-	public static final String REPOSITORY_INPUT_PORT_GET_OPERATIONS = "getOperations";
-	public static final String REPOSITORY_INPUT_PORT_LOOKUP_ASSEMBLY_COMPONENT_BY_ID = "lookupAssemblyComponentById";
-	public static final String REPOSITORY_INPUT_PORT_LOOKUP_ASSEMBLY_COMPONENT_INSTANCE_BY_NAME = "lookupAssemblyComponentInstanceByNamedIdentifier";
-	public static final String REPOSITORY_INPUT_PORT_CREATE_AND_REGISTER_ASSEMBLY_COMPONENT_INSTANCE = "createAndRegisterAssemblyComponentInstance";
-	public static final String REPOSITORY_INPUT_PORT_GET_ASSEMBLY_COMPONENT_INSTANCES = "getAssemblyComponentInstances";
-	public static final String REPOSITORY_INPUT_PORT_LOOKUP_EXECUTION_CONTAINER_BY_NAME = "lookupExecutionContainerByNamedIdentifier";
-	public static final String REPOSITORY_INPUT_PORT_LOOKUP_EXECUTION_CONTAINER_BY_ID = "lookupExecutionContainerByContainerId";
-	public static final String REPOSITORY_INPUT_PORT_GET_EXECUTION_CONTAINERS = "getExecutionContainers";
-	public static final String REPOSITORY_INPUT_PORT_GET_PAIRS = "getPairs";
-	public static final String REPOSITORY_INPUT_PORT_GET_PAIR_BY_ID = "getPairById";
-	public static final String REPOSITORY_INPUT_PORT_GET_PAIR_INSTANCE_BY_PAIR = "getPairInstanceByPair";
-	public static final String REPOSITORY_INPUT_PORT_CREATE_AND_REGISTER_EXECUTION_CONTAINER = "createAndRegisterExecutionContainer";
-	public static final String REPOSITORY_INPUT_PORT_GET_ROOT_EXECUTION = "getRootExecution";
+	public static final String ROOT_NODE_LABEL = "'Entry'";
 
 	private static final String ENCODING = "UTF-8";
 
@@ -97,6 +78,44 @@ public class SystemModelRepository extends AbstractRepository {
 		this.operationFactory = new OperationRepository(this);
 		this.allocationPairFactory = new AllocationComponentOperationPairFactory(this);
 		this.assemblyPairFactory = new AssemblyComponentOperationPairFactory(this);
+	}
+
+	public final AllocationRepository getAllocationFactory() {
+		return this.allocationFactory;
+	}
+
+	public final AssemblyRepository getAssemblyFactory() {
+		return this.assemblyFactory;
+	}
+
+	public final ExecutionEnvironmentRepository getExecutionEnvironmentFactory() {
+		return this.executionEnvironmentFactory;
+	}
+
+	/**
+	 * Delivering the factory managing the available operations.
+	 * 
+	 * @return The operation factory.
+	 */
+	public final OperationRepository getOperationFactory() {
+		return this.operationFactory;
+	}
+
+	/**
+	 * Delivering the factory managing the available component types.
+	 * 
+	 * @return The types factory.
+	 */
+	public final TypeRepository getTypeRepositoryFactory() {
+		return this.typeRepositoryFactory;
+	}
+
+	public AllocationComponentOperationPairFactory getAllocationPairFactory() {
+		return this.allocationPairFactory;
+	}
+
+	public AssemblyComponentOperationPairFactory getAssemblyPairFactory() {
+		return this.assemblyPairFactory;
 	}
 
 	private static enum EntityType {
@@ -234,44 +253,6 @@ public class SystemModelRepository extends AbstractRepository {
 		ps.println("</body></html>");
 		ps.flush();
 		ps.close();
-	}
-
-	public final AllocationRepository getAllocationFactory() {
-		return this.allocationFactory;
-	}
-
-	public final AssemblyRepository getAssemblyFactory() {
-		return this.assemblyFactory;
-	}
-
-	public final ExecutionEnvironmentRepository getExecutionEnvironmentFactory() {
-		return this.executionEnvironmentFactory;
-	}
-
-	/**
-	 * Delivering the factory managing the available operations.
-	 * 
-	 * @return The operation factory.
-	 */
-	public final OperationRepository getOperationFactory() {
-		return this.operationFactory;
-	}
-
-	/**
-	 * Delivering the factory managing the available component types.
-	 * 
-	 * @return The types factory.
-	 */
-	public final TypeRepository getTypeRepositoryFactory() {
-		return this.typeRepositoryFactory;
-	}
-
-	public AllocationComponentOperationPairFactory getAllocationPairFactory() {
-		return this.allocationPairFactory;
-	}
-
-	public AssemblyComponentOperationPairFactory getAssemblyPairFactory() {
-		return this.assemblyPairFactory;
 	}
 
 	@Override

@@ -169,17 +169,21 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 				}
 			} catch (final InvalidTraceException ex) {
 				LOG.error("Failed to reconstruct trace.", ex);
+				super.deliver(OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, new InvalidExecutionTrace(executionTrace));
 				return;
 			}
 		}
-		super.deliver(OUTPUT_PORT_NAME_EXECUTION_TRACE, executionTrace);
 		try {
-			super.deliver(OUTPUT_PORT_NAME_MESSAGE_TRACE, executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION));
+			traceEventRecordHandler.finish();
+			final MessageTrace messageTrace = executionTrace.toMessageTrace(SystemModelRepository.ROOT_EXECUTION);
+			super.deliver(OUTPUT_PORT_NAME_EXECUTION_TRACE, executionTrace);
+			super.deliver(OUTPUT_PORT_NAME_MESSAGE_TRACE, messageTrace);
 			super.reportSuccess(executionTrace.getTraceId());
 		} catch (final InvalidTraceException ex) {
 			LOG.warn("Failed to convert to message trace: " + ex.getMessage()); // do not pass 'ex' to LOG.warn because this makes the output verbose (#584)
-			super.deliver(OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, executionTrace);
+			super.deliver(OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, new InvalidExecutionTrace(executionTrace));
 		}
+
 	}
 
 	/**
@@ -206,6 +210,43 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 			this.systemModelRepository = systemModelRepository;
 			this.enhanceJavaConstructors = enhanceJavaConstructors;
 			this.enhanceCallDetection = enhanceCallDetection;
+		}
+
+		/**
+		 * Finished the current execution. All open executions are finished and correctly added (if possible).
+		 * 
+		 * @throws InvalidTraceException
+		 */
+		public void finish() throws InvalidTraceException {
+			final Stack<AbstractTraceEvent> tmpEventStack = new Stack<AbstractTraceEvent>();
+			final Stack<ExecutionInformation> tmpExecutionStack = new Stack<ExecutionInformation>();
+			if (!this.eventStack.isEmpty()) {
+				final long lastTimeStamp = this.eventStack.peek().getTimestamp();
+				while (!this.eventStack.isEmpty()) { // reverse order
+					tmpEventStack.push(this.eventStack.pop());
+					tmpExecutionStack.push(this.executionStack.pop());
+				}
+				while (!tmpEventStack.isEmpty()) { // create executions (in reverse order)
+					final AbstractTraceEvent currentEvent = tmpEventStack.pop();
+					final ExecutionInformation executionInformation = tmpExecutionStack.pop();
+					if (currentEvent instanceof CallOperationEvent) {
+						this.finishExecution(
+								((CallOperationEvent) currentEvent).getCalleeOperationSignature(),
+								((CallOperationEvent) currentEvent).getCalleeClassSignature(),
+								this.trace.getTraceId(),
+								this.trace.getSessionId(),
+								this.trace.getHostname(),
+								executionInformation.getEoi(),
+								executionInformation.getEss(),
+								currentEvent.getTimestamp(),
+								lastTimeStamp,
+								true, currentEvent instanceof CallConstructorEvent);
+					} else {
+						throw new InvalidTraceException("Only CallOperationEvents are expected to be remaining, but found: "
+								+ currentEvent.getClass().getSimpleName());
+					}
+				}
+			}
 		}
 
 		/**

@@ -208,7 +208,7 @@ public interface IPlugin extends IAnalysisComponent {
 			this.plugin = plugin;
 			this.inputPortName = inputPortName;
 			this.inputPortMethod = inputPortMethod;
-			this.eventTypes = eventTypes.clone();
+			this.eventTypes = eventTypes;
 		}
 
 		/**
@@ -235,7 +235,7 @@ public interface IPlugin extends IAnalysisComponent {
 		 * @return The current value of the attribute.
 		 */
 		public final Class<?>[] getEventTypes() {
-			return this.eventTypes.clone();
+			return this.eventTypes;
 		}
 
 		/**

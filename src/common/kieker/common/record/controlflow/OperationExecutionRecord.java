@@ -156,7 +156,7 @@ public final class OperationExecutionRecord extends AbstractMonitoringRecord imp
 	 * {@inheritDoc}
 	 */
 	public Class<?>[] getValueTypes() {
-		return TYPES.clone();
+		return TYPES; // NOPMD
 	}
 
 	/**

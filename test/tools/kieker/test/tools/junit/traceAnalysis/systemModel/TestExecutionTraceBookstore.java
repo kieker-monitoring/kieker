@@ -302,7 +302,7 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 		Assert.assertEquals(msgArray.length, this.numExecutions * 2);
 
 		int curIdx = 0;
-		{ // 1.: [0,0].Call $->bookstore.searchBook(..) // NOCS
+		{ // 1.: [0,0].Call #->bookstore.searchBook(..) // NOCS
 			final AbstractMessage call0_0___root__bookstore_searchBook = msgArray[curIdx++]; // NOCS
 			Assert.assertTrue("Message is not a call", call0_0___root__bookstore_searchBook instanceof SynchronousCallMessage);
 			Assert.assertEquals("Sending execution is not root execution", call0_0___root__bookstore_searchBook.getSendingExecution(),

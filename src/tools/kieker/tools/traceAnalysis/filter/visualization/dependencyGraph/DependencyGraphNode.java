@@ -43,7 +43,6 @@ public class DependencyGraphNode<T extends ISystemModelElement> extends
 		AbstractPayloadedVertex<DependencyGraphNode<T>, WeightedBidirectionalDependencyGraphEdge<T>, TraceInformation, T> {
 
 	public static final int ROOT_NODE_ID = AbstractSystemSubRepository.ROOT_ELEMENT_ID;
-	public static final String ROOT_NODE_NAME = "$";
 
 	private final int id;
 	private final Map<Integer, WeightedBidirectionalDependencyGraphEdge<T>> incomingDependencies = new ConcurrentHashMap<Integer, WeightedBidirectionalDependencyGraphEdge<T>>(); // NOPMD(UseConcurrentHashMap)//NOCS

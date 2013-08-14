@@ -37,6 +37,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.XMIResource;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
@@ -302,6 +303,7 @@ public final class MetaModelHandler {
 			// Run through all repositories and create the model counterparts.
 			for (final AbstractRepository repository : repositories) {
 				final MIRepository mRepository = factory.createRepository();
+				mRepository.setId(EcoreUtil.generateUUID());
 				mRepository.setClassname(repository.getClass().getName());
 				mRepository.getProperties().addAll(MetaModelHandler.convertProperties(repository.getCurrentConfiguration(), factory));
 				mProject.getRepositories().add(mRepository);
@@ -320,6 +322,7 @@ public final class MetaModelHandler {
 				} else {
 					mPlugin = factory.createFilter();
 				}
+				mPlugin.setId(EcoreUtil.generateUUID());
 
 				// Add additional properties containing the asynchronous ports
 				final MIProperty propAsyncInputPorts = factory.createProperty();
@@ -347,6 +350,7 @@ public final class MetaModelHandler {
 					}
 					// Now the connector.
 					final MIRepositoryConnector mRepositoryConn = factory.createRepositoryConnector();
+					mRepositoryConn.setId(EcoreUtil.generateUUID());
 					mRepositoryConn.setName(repoEntry.getKey());
 					mRepositoryConn.setRepository(mRepository);
 					mPlugin.getRepositories().add(mRepositoryConn);
@@ -355,12 +359,14 @@ public final class MetaModelHandler {
 				final String[] outs = plugin.getAllOutputPortNames();
 				for (final String out : outs) {
 					final MIOutputPort mOutputPort = factory.createOutputPort();
+					mOutputPort.setId(EcoreUtil.generateUUID());
 					mOutputPort.setName(out);
 					mPlugin.getOutputPorts().add(mOutputPort);
 				}
 				final String[] ins = plugin.getAllInputPortNames();
 				for (final String in : ins) {
 					final MIInputPort mInputPort = factory.createInputPort();
+					mInputPort.setId(EcoreUtil.generateUUID());
 					mInputPort.setName(in);
 					((MIFilter) mPlugin).getInputPorts().add(mInputPort);
 				}

@@ -34,6 +34,8 @@ import kieker.common.logging.LogFactory;
  * Depending on the value of the {@link Configuration} variable {@value #CONFIG_PROPERTY_NAME_AWAIT_TERMINATION},
  * either the {@link #read()} method returns immediately, or awaits a termination via {@link kieker.analysis.AnalysisController#terminate()}.
  * 
+ * Additions after this reader starts reading are ignored.
+ * 
  * @param <T>
  * 
  * @author Andre van Hoorn, Jan Waller

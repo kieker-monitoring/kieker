@@ -82,8 +82,11 @@ public class JoinEvent extends AbstractTraceEvent {
 		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getJoinedTraceId(), };
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Class<?>[] getValueTypes() {
-		return TYPES.clone();
+		return TYPES; // NOPMD
 	}
 
 	public long getJoinedTraceId() {

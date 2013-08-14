@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <ul>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MRepositoryConnector#getName <em>Name</em>}</li>
  *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MRepositoryConnector#getRepository <em>Repository</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MRepositoryConnector#getId <em>Id</em>}</li>
  * </ul>
  * </p>
  *
@@ -58,6 +59,26 @@ public class MRepositoryConnector extends EObjectImpl implements MIRepositoryCon
 	 * @ordered
 	 */
 	protected MIRepository repository;
+
+	/**
+	 * The default value of the '{@link #getId() <em>Id</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getId()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String ID_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getId() <em>Id</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getId()
+	 * @generated
+	 * @ordered
+	 */
+	protected String id = ID_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -142,6 +163,27 @@ public class MRepositoryConnector extends EObjectImpl implements MIRepositoryCon
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getId() {
+		return id;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setId(String newId) {
+		String oldId = id;
+		id = newId;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR__ID, oldId, id));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -150,6 +192,8 @@ public class MRepositoryConnector extends EObjectImpl implements MIRepositoryCon
 			case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR__REPOSITORY:
 				if (resolve) return getRepository();
 				return basicGetRepository();
+			case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR__ID:
+				return getId();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -167,6 +211,9 @@ public class MRepositoryConnector extends EObjectImpl implements MIRepositoryCon
 				return;
 			case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR__REPOSITORY:
 				setRepository((MIRepository)newValue);
+				return;
+			case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR__ID:
+				setId((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -186,6 +233,9 @@ public class MRepositoryConnector extends EObjectImpl implements MIRepositoryCon
 			case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR__REPOSITORY:
 				setRepository((MIRepository)null);
 				return;
+			case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR__ID:
+				setId(ID_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -202,6 +252,8 @@ public class MRepositoryConnector extends EObjectImpl implements MIRepositoryCon
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR__REPOSITORY:
 				return repository != null;
+			case MIAnalysisMetaModelPackage.REPOSITORY_CONNECTOR__ID:
+				return ID_EDEFAULT == null ? id != null : !ID_EDEFAULT.equals(id);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -218,6 +270,8 @@ public class MRepositoryConnector extends EObjectImpl implements MIRepositoryCon
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
 		result.append(name);
+		result.append(", id: ");
+		result.append(id);
 		result.append(')');
 		return result.toString();
 	}

@@ -27,6 +27,9 @@ import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.util.signature.ClassOperationSignaturePair;
 
 /**
+ * This is a filter which accepts {@link OperationExecutionRecord} instances and provides different views to visualize them. The incoming records are relayed
+ * without any enrichment.
+ * 
  * @author Nils Christian Ehmke
  * 
  * @since 1.8
@@ -38,16 +41,32 @@ import kieker.common.util.signature.ClassOperationSignaturePair;
 				description = "Provides each incoming object"))
 public class MethodAndComponentFlowDisplayFilter extends AbstractFilterPlugin {
 
+	/** The name of the input port accepting incoming events. */
 	public static final String INPUT_PORT_NAME_EVENTS = "inputEvents";
+	/** The name of the output port delivering the relayed events. */
 	public static final String OUTPUT_PORT_NAME_RELAYED_EVENTS = "relayedEvents";
 
 	private final TagCloud methodTagCloud = new TagCloud();
 	private final TagCloud componentTagCloud = new TagCloud();
 
+	/**
+	 * Creates a new instance of this class using the given parameters.
+	 * 
+	 * @param configuration
+	 *            The configuration for this filter.
+	 * @param projectContext
+	 *            The project context for this filter.
+	 */
 	public MethodAndComponentFlowDisplayFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 	}
 
+	/**
+	 * This method represents the input port receiving the incoming events.
+	 * 
+	 * @param record
+	 *            The record to display and relay.
+	 */
 	@InputPort(name = MethodAndComponentFlowDisplayFilter.INPUT_PORT_NAME_EVENTS, eventTypes = { OperationExecutionRecord.class })
 	public void input(final OperationExecutionRecord record) {
 		final String shortClassName = ClassOperationSignaturePair.splitOperationSignatureStr(record.getOperationSignature()).getSimpleClassname();
@@ -72,11 +91,21 @@ public class MethodAndComponentFlowDisplayFilter extends AbstractFilterPlugin {
 		return new Configuration();
 	}
 
+	/**
+	 * This method represents a display for a method tag cloud.
+	 * 
+	 * @return The display object for the method tag cloud.
+	 */
 	@Display(name = "Method Tag Cloud Display")
 	public TagCloud methodTagCloudDisplay() {
 		return this.methodTagCloud;
 	}
 
+	/**
+	 * This method represents a display for a component tag cloud.
+	 * 
+	 * @return The display object for the component tag cloud.
+	 */
 	@Display(name = "Component Tag Cloud Display")
 	public TagCloud componentTagCloudDisplay() {
 		return this.componentTagCloud;

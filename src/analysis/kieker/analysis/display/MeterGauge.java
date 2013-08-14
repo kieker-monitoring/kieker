@@ -43,11 +43,30 @@ public class MeterGauge extends AbstractDisplay {
 		this.valueMap = new ConcurrentHashMap<String, Number>();
 	}
 
+	/**
+	 * Sets the intervals for the colors of the meter gauge with the given name.
+	 * 
+	 * @param key
+	 *            The name of the meter gauge "series".
+	 * @param intervals
+	 *            The intervals for the colors.
+	 * @param colors
+	 *            The colors of the intervals. It is assumed that the size of this list is the same as the one for the intervals. The colors are given as html string
+	 *            (e.g., FF000).
+	 */
 	public void setIntervals(final String key, final List<Number> intervals, final List<String> colors) {
 		this.intervalMap.put(key, intervals);
 		this.intervalColorMap.put(key, colors);
 	}
 
+	/**
+	 * Sets the value for the given meter gauge "series".
+	 * 
+	 * @param key
+	 *            The name of the meter gauge "series".
+	 * @param value
+	 *            The new value for the meter gauge.
+	 */
 	public void setValue(final String key, final Number value) {
 		this.valueMap.put(key, value);
 	}
