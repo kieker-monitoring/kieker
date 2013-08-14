@@ -103,7 +103,8 @@
 				<include name="javax.jms-*.jar" />
 				<include name="org.eclipse.emf.*.jar" />
 				<include name="framework-libs\spring\spring-core-*.jar" />
-				<include name="rabbitmq-client.jar" />
+				<include name="geronimo-j2ee-management_1.1_spec-1.0.1.jar" />
+				<include name="activemq-client-5.8.0.jar" />
 			</fileset>
 			<pathelement location="${build.kieker.common.dir}/" />
 			<pathelement location="${build.kieker.analysis.model.dir}/" />
