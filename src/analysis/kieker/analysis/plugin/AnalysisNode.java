@@ -132,6 +132,10 @@ public class AnalysisNode extends AbstractFilterPlugin {
 
 			this.repositorySenderThread = new RepositorySenderThread();
 			this.repositoryReceiverThread = new RepositoryReceiverThread();
+
+			// The termination method has to wait for four additional threads
+			this.asyncThreadCounter.addAndGet(4);
+			this.activeThreads = true;
 		} else {
 			this.distributedConnection = null;
 			this.distributedSession = null;
@@ -176,12 +180,6 @@ public class AnalysisNode extends AbstractFilterPlugin {
 			this.receiverThread.terminate();
 			this.repositorySenderThread.terminate();
 			this.repositoryReceiverThread.terminate();
-
-			// Avoid the joins as this can block the node
-			// this.senderThread.join();
-			// this.receiverThread.join();
-			// this.repositorySenderThread.join();
-			// this.repositoryReceiverThread.join();
 		}
 	}
 
@@ -327,8 +325,7 @@ public class AnalysisNode extends AbstractFilterPlugin {
 					final Object data = AnalysisNode.this.repositorySendQueue.take();
 
 					if (data == this.TERMINATION_TOKEN) {
-						AnalysisNode.this.shutdownDistributedConnection();
-						return;
+						break;
 					} else {
 						try {
 							final BytesMessage bytesMessage = AnalysisNode.this.distributedSession.createBytesMessage();
@@ -339,6 +336,8 @@ public class AnalysisNode extends AbstractFilterPlugin {
 						}
 					}
 				}
+				AnalysisNode.this.shutdownDistributedConnection();
+				AnalysisNode.this.shutdownAsynchronousConnection();
 			} catch (final InterruptedException ex) {
 				// We expect this to happen as it is possible that another method wants to terminate this thread.
 				LOG.info("RepositorySenderThread interrupted", ex);
@@ -372,8 +371,7 @@ public class AnalysisNode extends AbstractFilterPlugin {
 					final Object data = AnalysisNode.this.sendQueue.take();
 
 					if (data == this.TERMINATION_TOKEN) {
-						AnalysisNode.this.shutdownDistributedConnection();
-						return;
+						break;
 					} else {
 						try {
 							final BytesMessage bytesMessage = AnalysisNode.this.distributedSession.createBytesMessage();
@@ -384,6 +382,8 @@ public class AnalysisNode extends AbstractFilterPlugin {
 						}
 					}
 				}
+				AnalysisNode.this.shutdownDistributedConnection();
+				AnalysisNode.this.shutdownAsynchronousConnection();
 			} catch (final InterruptedException ex) {
 				// We expect this to happen as it is possible that another method wants to terminate this thread.
 				LOG.info("SenderThread interrupted", ex);
@@ -407,8 +407,7 @@ public class AnalysisNode extends AbstractFilterPlugin {
 				while (true) {
 					final Object data = AnalysisNode.this.repositoryReceiverQueue.take();
 					if (data == this.TERMINATION_TOKEN) {
-						AnalysisNode.this.shutdownDistributedConnection();
-						return;
+						break;
 					} else {
 						try {
 							final BytesMessage byteMessage = (BytesMessage) data;
@@ -422,6 +421,8 @@ public class AnalysisNode extends AbstractFilterPlugin {
 						}
 					}
 				}
+				AnalysisNode.this.shutdownDistributedConnection();
+				AnalysisNode.this.shutdownAsynchronousConnection();
 			} catch (final InterruptedException ex) {
 				// We expect this to happen as it is possible that another method wants to terminate this thread.
 				LOG.info("RepositoryReceiverThread interrupted", ex);
@@ -446,8 +447,7 @@ public class AnalysisNode extends AbstractFilterPlugin {
 					final Object data = AnalysisNode.this.receiverQueue.take();
 
 					if (data == this.TERMINATION_TOKEN) {
-						AnalysisNode.this.shutdownDistributedConnection();
-						return;
+						break;
 					} else {
 						try {
 							final BytesMessage byteMessage = (BytesMessage) data;
@@ -465,6 +465,8 @@ public class AnalysisNode extends AbstractFilterPlugin {
 						}
 					}
 				}
+				AnalysisNode.this.shutdownDistributedConnection();
+				AnalysisNode.this.shutdownAsynchronousConnection();
 			} catch (final InterruptedException ex) {
 				// We expect this to happen as it is possible that another method wants to terminate this thread.
 				LOG.info("ReceiverThread interrupted", ex);

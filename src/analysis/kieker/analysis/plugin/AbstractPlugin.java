@@ -35,6 +35,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.IProjectContext;
@@ -96,6 +97,9 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	private final ConcurrentHashMap<String, BlockingQueue<Object>> receivingQueues = new ConcurrentHashMap<String, BlockingQueue<Object>>();
 	private final Collection<ReceivingThread> receivingThreads = new CopyOnWriteArrayList<ReceivingThread>();
 
+	protected volatile boolean activeThreads;
+	protected final AtomicInteger asyncThreadCounter;
+
 	/**
 	 * Each Plugin requires a constructor with a Configuration object and a IProjectContext.
 	 * 
@@ -113,6 +117,10 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		final String[] asyncOutputPorts = configuration.getStringArrayProperty(CONFIG_ASYNC_OUTPUT_PORTS);
 		Arrays.sort(asyncInputPorts);
 		Arrays.sort(asyncOutputPorts);
+
+		// Find out how many threads we will have
+		this.asyncThreadCounter = new AtomicInteger(asyncInputPorts.length + asyncOutputPorts.length);
+		this.activeThreads = (asyncInputPorts.length + asyncOutputPorts.length) > 0;
 
 		// Get all repository and output ports.
 		this.repositoryPorts = new ConcurrentHashMap<String, RepositoryPort>();
@@ -234,7 +242,8 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 
 		// Second step: Check whether the data fits the event types.
 		final Class<?>[] outTypes = this.outputPortTypes.get(outputPort);
-		boolean outTypeMatch = false;
+		// Meta signals are always allowed
+		boolean outTypeMatch = (data instanceof MetaSignal);
 		for (final Class<?> eventType : outTypes) {
 			if (eventType.isInstance(data)) {
 				outTypeMatch = true;
@@ -255,7 +264,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 				eventTypes = new Class<?>[] { Object.class };
 			}
 			for (final Class<?> eventType : eventTypes) {
-				if (eventType.isAssignableFrom(data.getClass())) { // data instanceof eventType
+				if (eventType.isAssignableFrom(data.getClass()) || (data instanceof MetaSignal)) { // data instanceof eventType
 					// Check whether we have to send the data asynchronously for this input port
 					final AbstractPlugin receivingPlugin = (AbstractPlugin) pluginInputPortReference.getPlugin();
 					final Queue<Object> receivingQueue = receivingPlugin.receivingQueues.get(pluginInputPortReference.getInputPortName());
@@ -263,7 +272,10 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 						receivingQueue.add(data);
 						break;
 					}
-
+					if (data instanceof MetaSignal) {
+						receivingPlugin.processAndDelayMetaSignal((MetaSignal) data);
+						break;
+					}
 					try {
 						pluginInputPortReference.getInputPortMethod().invoke(pluginInputPortReference.getPlugin(), data);
 					} catch (final InvocationTargetException e) {
@@ -330,8 +342,8 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			}
 		}
 
-		for (final AbstractPlugin outgoingPlugin : this.outgoingPlugins) {
-			outgoingPlugin.processAndDelayMetaSignal(metaSignal);
+		for (final String outputPort : this.outputPorts.keySet()) {
+			this.deliver(outputPort, metaSignal);
 		}
 	}
 
@@ -365,6 +377,10 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 					LOG.warn("Interrupted while waiting for distributed ports to finish.");
 				}
 			}
+		}
+
+		if (!this.activeThreads && (data instanceof TerminationSignal)) {
+			((AnalysisController) this.projectContext).notifyFilterTermination(this);
 		}
 
 		return true;
@@ -730,12 +746,11 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	private void shutdownAsynchronousPorts() throws InterruptedException {
 		for (final ReceivingThread t : this.receivingThreads) {
 			t.terminate();
-			t.join();
 		}
 		for (final SendingThread t : this.sendingThreads) {
 			t.terminate();
-			t.join();
 		}
+		// As a join would block the plugin, we wait within the AnalysisController.
 	}
 
 	/**
@@ -756,8 +771,6 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 
 		// when we arrive here, all incoming plugins are terminated!
 		this.terminate(error);
-
-		((AnalysisController) this.projectContext).notifyFilterTermination(this);
 	}
 
 	/**
@@ -816,6 +829,13 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		// Do nothing by default
 	}
 
+	protected void shutdownAsynchronousConnection() {
+		// If this is the last thread which has been terminated, we notify the AC.
+		if (AbstractPlugin.this.asyncThreadCounter.decrementAndGet() == 0) {
+			((AnalysisController) AbstractPlugin.this.projectContext).notifyFilterTermination(AbstractPlugin.this);
+		}
+	}
+
 	private class ReceivingThread extends Thread {
 
 		private final Object TERMINATION_TOKEN = new Object();
@@ -840,7 +860,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 				try {
 					final Object data = this.queue.take();
 					if (data == this.TERMINATION_TOKEN) {
-						return;
+						break;
 					} else if (data instanceof MetaSignal) {
 						AbstractPlugin.this.processAndDelayMetaSignal((MetaSignal) data);
 					} else {
@@ -856,6 +876,8 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 					e.printStackTrace();
 				}
 			}
+
+			AbstractPlugin.this.shutdownAsynchronousConnection();
 		}
 
 		public void terminate() {
@@ -882,7 +904,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 				try {
 					final Object data = this.queue.take();
 					if (data == this.TERMINATION_TOKEN) {
-						return;
+						break;
 					} else {
 						// Make sure that deliver sends the data to the queue but this deliver here should do so, but deliver directly.
 						AbstractPlugin.this.deliver(this.outputPortName, data, false);
@@ -891,6 +913,8 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 					LOG.info("SendingThread interrupted", ex);
 				}
 			}
+
+			AbstractPlugin.this.shutdownAsynchronousConnection();
 		}
 
 		public void terminate() {
