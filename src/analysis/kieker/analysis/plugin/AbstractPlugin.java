@@ -379,7 +379,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			}
 		}
 
-		if (!this.activeThreads && (data instanceof TerminationSignal)) {
+		if (!this.activeThreads && (data instanceof TerminationSignal) && (this.metaSignalCounter == 0)) {
 			((AnalysisController) this.projectContext).notifyFilterTermination(this);
 		}
 
