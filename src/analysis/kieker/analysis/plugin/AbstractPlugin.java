@@ -202,7 +202,8 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	private void setInputPortToAsynchronousMode(final String inputPortName, final Method method) {
 		final BlockingQueue<Object> newQueue = new LinkedBlockingQueue<Object>();
 		this.receivingQueues.put(inputPortName, newQueue);
-		this.receivingThreads.add(new ReceivingThread(newQueue, method));
+		final boolean outerPort = !((this instanceof AnalysisNode) && (inputPortName.equals(AnalysisNode.INTERNAL_INPUT_PORT_NAME_EVENTS)));
+		this.receivingThreads.add(new ReceivingThread(newQueue, method, outerPort));
 	}
 
 	/**
@@ -273,7 +274,14 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 						break;
 					}
 					if (data instanceof MetaSignal) {
-						receivingPlugin.processAndDelayMetaSignal((MetaSignal) data);
+						boolean signalFromOutside = true;
+						if (receivingPlugin instanceof AnalysisNode) {
+							final String inputPortName = pluginInputPortReference.getInputPortName();
+							if (inputPortName.equals(AnalysisNode.INTERNAL_INPUT_PORT_NAME_EVENTS)) {
+								signalFromOutside = false;
+							}
+						}
+						receivingPlugin.processAndDelayMetaSignal((MetaSignal) data, signalFromOutside);
 						break;
 					}
 					try {
@@ -334,20 +342,13 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		return null;
 	}
 
-	protected void sendMetaSignal(final MetaSignal metaSignal) {
-		// In case of analysis nodes it is possible that we need to send the data to the MOM as well
-		if (this instanceof AnalysisNode) {
-			if (((AnalysisNode) this).isDistributed()) {
-				((AnalysisNode) this).sendQueue.add(metaSignal);
-			}
-		}
-
+	protected void sendMetaSignal(final MetaSignal metaSignal, final boolean signalFromOutside) {
 		for (final String outputPort : this.outputPorts.keySet()) {
 			this.deliver(outputPort, metaSignal);
 		}
 	}
 
-	protected boolean processAndDelayMetaSignal(final MetaSignal data) {
+	protected boolean processAndDelayMetaSignal(final MetaSignal data, final boolean signalFromOutside) {
 		AbstractPlugin.LOG.info("Plugin " + this.getName() + " received meta signal (" + data + ")");
 
 		if (data instanceof InitializationSignal) {
@@ -361,7 +362,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			this.shutdown(((TerminationSignal) data).isError());
 		}
 
-		this.sendMetaSignal(data);
+		this.sendMetaSignal(data, signalFromOutside);
 
 		if (this.metaSignalCounter == 0) {
 			// The threads for the asynchronous and distributed connections have to wait until the meta signals are within the queues.
@@ -841,11 +842,13 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 		private final Object TERMINATION_TOKEN = new Object();
 
 		private final BlockingQueue<Object> queue;
+		private final boolean outerPort;
 		private final Method method;
 
-		public ReceivingThread(final BlockingQueue<Object> queue, final Method method) {
+		public ReceivingThread(final BlockingQueue<Object> queue, final Method method, final boolean outerPort) {
 			this.queue = queue;
 			this.method = method;
+			this.outerPort = outerPort;
 			java.security.AccessController.doPrivileged(new PrivilegedAction<Object>() {
 				public Object run() {
 					ReceivingThread.this.method.setAccessible(true);
@@ -862,7 +865,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 					if (data == this.TERMINATION_TOKEN) {
 						break;
 					} else if (data instanceof MetaSignal) {
-						AbstractPlugin.this.processAndDelayMetaSignal((MetaSignal) data);
+						AbstractPlugin.this.processAndDelayMetaSignal((MetaSignal) data, this.outerPort);
 					} else {
 						this.method.invoke(AbstractPlugin.this, data);
 					}

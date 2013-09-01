@@ -63,11 +63,11 @@ public abstract class AbstractReaderPlugin extends AbstractPlugin implements IRe
 	}
 
 	private void beforeRead() {
-		this.sendMetaSignal(new InitializationSignal());
+		this.sendMetaSignal(new InitializationSignal(), true);
 	}
 
 	private void afterRead() {
-		this.sendMetaSignal(new TerminationSignal(false));
+		this.sendMetaSignal(new TerminationSignal(false), true);
 	}
 
 	/**

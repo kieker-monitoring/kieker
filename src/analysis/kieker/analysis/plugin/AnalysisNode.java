@@ -183,6 +183,22 @@ public class AnalysisNode extends AbstractFilterPlugin {
 		}
 	}
 
+	@Override
+	protected void sendMetaSignal(final MetaSignal metaSignal, final boolean signalFromOutside) {
+		if (signalFromOutside) {
+			super.deliver(INTERNAL_OUTPUT_PORT_NAME_EVENTS, metaSignal);
+		} else {
+			// In case of analysis nodes it is possible that we need to send the data to the MOM as well
+			if (this.isDistributed()) {
+				this.sendQueue.add(metaSignal);
+			}
+
+			super.deliver(OUTPUT_PORT_NAME_EVENTS, metaSignal);
+		}
+
+		// super.sendMetaSignal(metaSignal);
+	}
+
 	public final void connect(final String predecessorNode) throws Exception, AnalysisConfigurationException {
 		if (this.distributed) {
 			final Topic dataTopic = this.distributedSession.createTopic(String.format(DATA_TOPIC_TEMPLATE, predecessorNode));
@@ -456,7 +472,7 @@ public class AnalysisNode extends AbstractFilterPlugin {
 
 							final Object content = SerializationUtils.deserialize(buff);
 							if (content instanceof MetaSignal) {
-								AnalysisNode.this.processAndDelayMetaSignal((MetaSignal) content);
+								AnalysisNode.this.processAndDelayMetaSignal((MetaSignal) content, true);
 							} else {
 								AnalysisNode.this.deliver(INTERNAL_OUTPUT_PORT_NAME_EVENTS, content);
 							}
