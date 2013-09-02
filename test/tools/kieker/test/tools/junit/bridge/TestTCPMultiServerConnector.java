@@ -22,6 +22,10 @@ import java.util.concurrent.Executors;
 import org.junit.Assert;
 import org.junit.Test;
 
+import kieker.common.configuration.Configuration;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
+import kieker.tools.bridge.connector.tcp.TCPClientConnector;
 import kieker.tools.bridge.connector.tcp.TCPMultiServerConnector;
 
 /**
@@ -43,17 +47,22 @@ public class TestTCPMultiServerConnector extends AbstractConnectorTest {
 
 	/**
 	 * Testing a TCP multi server connector.
+	 * 
+	 * @throws ConnectorDataTransmissionException
+	 *             on lookup failure for the test record
 	 */
 	@Test
-	public void testTCPMultiServerConnector() {
+	public void testTCPMultiServerConnector() throws ConnectorDataTransmissionException {
 		// start multiple record providing clients
 		final ExecutorService executor = Executors.newFixedThreadPool(ConfigurationParameters.NUMBER_OF_TEST_THREADS);
 		for (int j = 0; j < ConfigurationParameters.NUMBER_OF_TEST_THREADS; j++) {
 			executor.execute(new TCPClientforServer(ConfigurationParameters.TCP_MULTI_PORT));
 		}
 
-		// run connector test
-		this.setConnector(new TCPMultiServerConnector(this.createRecordMap(), ConfigurationParameters.TCP_MULTI_PORT));
+		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
+		configuration.setProperty(TCPClientConnector.PORT, String.valueOf(ConfigurationParameters.TCP_MULTI_PORT));
+		// test the connector
+		this.setConnector(new TCPMultiServerConnector(configuration, this.createLookupEntityMap()));
 		this.initialize();
 		this.deserialize(ConfigurationParameters.NUMBER_OF_TEST_THREADS * ConfigurationParameters.SEND_NUMBER_OF_RECORDS);
 

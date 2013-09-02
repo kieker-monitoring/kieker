@@ -16,13 +16,12 @@
 
 package kieker.tools.bridge.connector.jms;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.concurrent.ConcurrentMap;
 
 import org.apache.activemq.broker.BrokerService;
 
-import kieker.common.record.IMonitoringRecord;
+import kieker.common.configuration.Configuration;
+import kieker.tools.bridge.LookupEntity;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 
 /**
@@ -32,22 +31,26 @@ import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
  * @since 1.8
  */
 public class JMSEmbeddedConnector extends JMSClientConnector {
+
+	public static final String PORT = JMSEmbeddedConnector.class.getCanonicalName() + ".port";
+
 	private BrokerService broker;
 	private final int port;
 
 	/**
 	 * Construct a new JMS service consumer and an embedded JMS service.
 	 * 
-	 * @param recordMap
-	 *            IMonitoringRecord id map
-	 * @param port
-	 *            Port the JMS service is listening to
-	 * @throws URISyntaxException
-	 *             if the URI is malformed. Most likely will not happen.
+	 * @param configuration
+	 *            Kieker configuration including setup for connectors
+	 * 
+	 * @param lookupEntityMap
+	 *            IMonitoringRecord constructor and TYPES-array to id map
+	 * @throws ConnectorDataTransmissionException
 	 */
-	public JMSEmbeddedConnector(final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordMap, final int port) throws URISyntaxException {
-		super(recordMap, null, null, new URI("tcp://localhost:" + port));
-		this.port = port;
+	public JMSEmbeddedConnector(final Configuration configuration, final ConcurrentMap<Integer, LookupEntity> lookupEntityMap) {
+		super(configuration, lookupEntityMap);
+		this.port = this.configuration.getIntProperty(JMSEmbeddedConnector.PORT);
+		this.configuration.setProperty(JMSClientConnector.class.getCanonicalName() + ".uri", "tcp://localhost:" + this.port);
 	}
 
 	/*

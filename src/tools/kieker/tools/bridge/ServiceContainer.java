@@ -58,7 +58,7 @@ public class ServiceContainer {
 	 * @param service
 	 *            A service component to handle incoming data
 	 * @param respawn
-	 *            Respawn the connector if it fails
+	 *            Respawn the connector if it fails (this construct is debatable it should be handled by the connector itself)
 	 */
 	public ServiceContainer(final Configuration configuration, final IServiceConnector service, final boolean respawn) {
 		this.kiekerMonitoringController = MonitoringController.createInstance(configuration);

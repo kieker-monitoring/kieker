@@ -22,8 +22,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.ServerSocket;
 import java.util.concurrent.ConcurrentMap;
 
+import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.tools.bridge.LookupEntity;
+import kieker.tools.bridge.connector.AbstractConnector;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.ConnectorEndOfDataException;
 
@@ -36,7 +38,11 @@ import kieker.tools.bridge.connector.ConnectorEndOfDataException;
  * 
  * @since 1.8
  */
-public class TCPSingleServerConnector extends AbstractTCPConnector {
+public class TCPSingleServerConnector extends AbstractConnector {
+
+	/** Constant holding the name of the port configuration property. */
+	public static final String PORT = TCPSingleServerConnector.class.getCanonicalName() + ".port";
+
 	// string buffer size (#1052)
 	private static final int BUF_LEN = 65536;
 
@@ -55,16 +61,17 @@ public class TCPSingleServerConnector extends AbstractTCPConnector {
 	private final byte[] buffer = new byte[BUF_LEN];
 
 	/**
-	 * Construct TCPSingleService.
+	 * Create a TCPSingleServerConnector.
 	 * 
-	 * @param recordList
-	 *            map of IMonitoringRecords to ids
-	 * @param port
-	 *            Port the server listens to
+	 * @param configuration
+	 *            Kieker configuration including setup for connectors
+	 * 
+	 * @param lookupEntityMap
+	 *            IMonitoringRecord constructor and TYPES-array to id map
 	 */
-	public TCPSingleServerConnector(final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordList, final int port) {
-		super(recordList);
-		this.port = port;
+	public TCPSingleServerConnector(final Configuration configuration, final ConcurrentMap<Integer, LookupEntity> lookupEntityMap) {
+		super(configuration, lookupEntityMap);
+		this.port = this.configuration.getIntProperty(TCPSingleServerConnector.PORT);
 	}
 
 	/**
@@ -73,9 +80,7 @@ public class TCPSingleServerConnector extends AbstractTCPConnector {
 	 * @throws ConnectorDataTransmissionException
 	 *             it the socket could not be established
 	 */
-	@Override
 	public void initialize() throws ConnectorDataTransmissionException {
-		super.initialize();
 		try {
 			this.serverSocket = new ServerSocket(this.port);
 			this.in = new DataInputStream(this.serverSocket.accept().getInputStream());

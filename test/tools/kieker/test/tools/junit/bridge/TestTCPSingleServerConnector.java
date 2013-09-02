@@ -17,12 +17,16 @@ package kieker.test.tools.junit.bridge;
 
 import org.junit.Test;
 
+import kieker.common.configuration.Configuration;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
+import kieker.tools.bridge.connector.tcp.TCPClientConnector;
 import kieker.tools.bridge.connector.tcp.TCPSingleServerConnector;
 
 /**
  * 
  * @author Reiner Jung, Pascale Brandt
- *
+ * 
  * @since 1.8
  */
 
@@ -37,15 +41,20 @@ public class TestTCPSingleServerConnector extends AbstractConnectorTest {
 
 	/**
 	 * Test a TCP single server connector.
+	 * 
+	 * @throws ConnectorDataTransmissionException
+	 *             on lookup failure for the test record
 	 */
 	@Test
-	public void testTCPSingleServerConnector() { // NOPMD
+	public void testTCPSingleServerConnector() throws ConnectorDataTransmissionException { // NOPMD
 		// start one client for the test
 		final Thread clientThread = new Thread(new TCPClientforServer(ConfigurationParameters.TCP_SINGLE_PORT), "T1");
 		clientThread.start();
 
-		// run test
-		this.setConnector(new TCPSingleServerConnector(this.createRecordMap(), ConfigurationParameters.TCP_SINGLE_PORT));
+		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
+		configuration.setProperty(TCPClientConnector.PORT, String.valueOf(ConfigurationParameters.TCP_SINGLE_PORT));
+		// test the connector
+		this.setConnector(new TCPSingleServerConnector(configuration, this.createLookupEntityMap()));
 		this.initialize();
 		this.deserialize(ConfigurationParameters.SEND_NUMBER_OF_RECORDS);
 		this.close(ConfigurationParameters.SEND_NUMBER_OF_RECORDS);

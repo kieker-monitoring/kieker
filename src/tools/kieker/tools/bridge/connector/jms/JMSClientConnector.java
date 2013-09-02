@@ -19,7 +19,7 @@ package kieker.tools.bridge.connector.jms;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
-import java.util.Map;
+import java.net.URISyntaxException;
 import java.util.concurrent.ConcurrentMap;
 
 import javax.jms.BytesMessage;
@@ -34,12 +34,13 @@ import javax.jms.TextMessage;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 
+import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.tools.bridge.LookupEntity;
+import kieker.tools.bridge.connector.AbstractConnector;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.ConnectorEndOfDataException;
 import kieker.tools.bridge.connector.IServiceConnector;
-import kieker.tools.bridge.connector.ServiceConnectorFactory;
 
 /**
  * Implements a connector for JMS which supports text and binary messages.
@@ -48,38 +49,42 @@ import kieker.tools.bridge.connector.ServiceConnectorFactory;
  * 
  * @since 1.8
  */
-public class JMSClientConnector implements IServiceConnector {
+public class JMSClientConnector extends AbstractConnector implements IServiceConnector {
+
+	/** Property name for the configuration user name property. */
+	public static final String USERNAME = JMSClientConnector.class.getCanonicalName() + ".username";
+	/** Property name for the configuration password property. */
+	public static final String PASSWORD = JMSClientConnector.class.getCanonicalName() + ".password";
+	/** Property name for the configuration service URI property. */
+	public static final String URI = JMSClientConnector.class.getCanonicalName() + ".uri";
+	/** Default KDB queue name. */
+	public static final String KIEKER_DATA_BRIDGE_READ_QUEUE = "kieker.tools.bridge";
 
 	private static final int BUF_LEN = 65536;
 
-	private static final String KIEKER_DATA_BRIDGE_READ_QUEUE = "kieker.tools.bridge";
-
-	private final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordMap;
 	private final String username;
 	private final String password;
-	private final URI uri;
+	private final String uri;
 
 	private MessageConsumer consumer;
-	private Map<Integer, LookupEntity> lookupEntityMap;
 	private final byte[] buffer = new byte[BUF_LEN];
 	private Connection connection;
 
 	/**
-	 * @param recordMap
-	 *            map from type ids to class types
-	 * @param username
-	 *            JMSService login user name
-	 * @param password
-	 *            JMSService login password
-	 * @param uri
-	 *            JMSService URI
+	 * Create a JMSClientConnector.
+	 * 
+	 * @param configuration
+	 *            Kieker configuration including setup for connectors
+	 * 
+	 * @param lookupEntityMap
+	 *            IMonitoringRecord constructor and TYPES-array to id map
+	 * @throws ConnectorDataTransmissionException
 	 */
-	public JMSClientConnector(final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordMap,
-			final String username, final String password, final URI uri) {
-		this.recordMap = recordMap;
-		this.username = username;
-		this.password = password;
-		this.uri = uri;
+	public JMSClientConnector(final Configuration configuration, final ConcurrentMap<Integer, LookupEntity> lookupEntityMap) {
+		super(configuration, lookupEntityMap);
+		this.username = this.configuration.getStringProperty(JMSClientConnector.USERNAME);
+		this.password = this.configuration.getStringProperty(JMSClientConnector.PASSWORD);
+		this.uri = this.configuration.getStringProperty(JMSClientConnector.URI);
 	}
 
 	/**
@@ -89,15 +94,13 @@ public class JMSClientConnector implements IServiceConnector {
 	 *             if any JMSException occurs
 	 */
 	public void initialize() throws ConnectorDataTransmissionException {
-		// setup value lookup
-		this.lookupEntityMap = ServiceConnectorFactory.createLookupEntityMap(this.recordMap);
 		try {
 			// setup connection
 			ConnectionFactory factory;
 			if ((this.username != null) && (this.password != null)) {
-				factory = new ActiveMQConnectionFactory(this.username, this.password, this.uri);
+				factory = new ActiveMQConnectionFactory(this.username, this.password, new URI(this.uri));
 			} else {
-				factory = new ActiveMQConnectionFactory(this.uri);
+				factory = new ActiveMQConnectionFactory(new URI(this.uri));
 			}
 			this.connection = factory.createConnection();
 
@@ -108,6 +111,8 @@ public class JMSClientConnector implements IServiceConnector {
 			this.connection.start();
 		} catch (final JMSException e) {
 			throw new ConnectorDataTransmissionException(e.getMessage(), e);
+		} catch (final URISyntaxException e) {
+			throw new ConnectorDataTransmissionException("URI for queue.", e);
 		}
 	}
 

@@ -17,6 +17,9 @@ package kieker.test.tools.junit.bridge;
 
 import org.junit.Test;
 
+import kieker.common.configuration.Configuration;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.tcp.TCPClientConnector;
 
 /**
@@ -40,14 +43,20 @@ public class TestTCPClientConnector extends AbstractConnectorTest {
 	/**
 	 * Test all methods of {@link kieker.tools.bridge.connector.tcp.TCPClientConnector}.
 	 * Testing single methods do not work, as the connector is stateful.
+	 * 
+	 * @throws ConnectorDataTransmissionException
+	 *             on lookup failure for the test record
 	 */
 	@Test
-	public void testTCPClientConnector() { // NOPMD
+	public void testTCPClientConnector() throws ConnectorDataTransmissionException { // NOPMD
 		// Start a record providing server for the TCPClientConnector
 		final Thread serverThread = new Thread(new TCPServerForClient(ConfigurationParameters.TCP_CLIENT_PORT), "T1");
 		serverThread.start();
+		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
+		configuration.setProperty(TCPClientConnector.HOSTNAME, ConfigurationParameters.HOSTNAME);
+		configuration.setProperty(TCPClientConnector.PORT, String.valueOf(ConfigurationParameters.TCP_CLIENT_PORT));
 		// test the connector
-		this.setConnector(new TCPClientConnector(this.createRecordMap(), ConfigurationParameters.HOSTNAME, ConfigurationParameters.TCP_CLIENT_PORT));
+		this.setConnector(new TCPClientConnector(configuration, this.createLookupEntityMap()));
 		this.initialize();
 		this.deserialize(ConfigurationParameters.SEND_NUMBER_OF_RECORDS);
 		this.close(ConfigurationParameters.SEND_NUMBER_OF_RECORDS);
