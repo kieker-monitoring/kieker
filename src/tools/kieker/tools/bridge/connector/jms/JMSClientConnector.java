@@ -40,7 +40,6 @@ import kieker.tools.bridge.LookupEntity;
 import kieker.tools.bridge.connector.AbstractConnector;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.ConnectorEndOfDataException;
-import kieker.tools.bridge.connector.IServiceConnector;
 
 /**
  * Implements a connector for JMS which supports text and binary messages.
@@ -49,7 +48,7 @@ import kieker.tools.bridge.connector.IServiceConnector;
  * 
  * @since 1.8
  */
-public class JMSClientConnector extends AbstractConnector implements IServiceConnector {
+public class JMSClientConnector extends AbstractConnector {
 
 	/** Property name for the configuration user name property. */
 	public static final String USERNAME = JMSClientConnector.class.getCanonicalName() + ".username";
