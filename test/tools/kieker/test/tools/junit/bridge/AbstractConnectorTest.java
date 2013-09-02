@@ -22,9 +22,11 @@ import org.junit.Assert;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
+import kieker.tools.bridge.LookupEntity;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.ConnectorEndOfDataException;
 import kieker.tools.bridge.connector.IServiceConnector;
+import kieker.tools.bridge.connector.ServiceConnectorFactory;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 
@@ -50,15 +52,17 @@ public abstract class AbstractConnectorTest extends AbstractKiekerTest {
 	}
 
 	/**
-	 * Create the test record map.
+	 * Create the test lookup entity map.
 	 * 
-	 * @return the record map
+	 * @return a lookup entity map
+	 * @throws ConnectorDataTransmissionException
+	 *             if record lookup fails
 	 */
-	protected ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> createRecordMap() {
+	protected final ConcurrentMap<Integer, LookupEntity> createLookupEntityMap() throws ConnectorDataTransmissionException {
 		final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> map = new ConcurrentHashMap<Integer, Class<? extends IMonitoringRecord>>();
 		map.put(ConfigurationParameters.TEST_RECORD_ID, OperationExecutionRecord.class);
 
-		return map;
+		return ServiceConnectorFactory.createLookupEntityMap(map);
 	}
 
 	/**

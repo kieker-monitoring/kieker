@@ -23,8 +23,10 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.concurrent.ConcurrentMap;
 
+import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.tools.bridge.LookupEntity;
+import kieker.tools.bridge.connector.AbstractConnector;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.ConnectorEndOfDataException;
 
@@ -34,7 +36,14 @@ import kieker.tools.bridge.connector.ConnectorEndOfDataException;
  * @author Reiner Jung
  * @since 1.8
  */
-public class TCPClientConnector extends AbstractTCPConnector {
+public class TCPClientConnector extends AbstractConnector {
+
+	/** Property name for the host name of the record source. */
+	public static final String HOSTNAME = TCPClientConnector.class.getCanonicalName() + ".hostname";
+
+	/** Property name for the port of the record source. */
+	public static final String PORT = TCPClientConnector.class.getCanonicalName() + ".port";
+
 	// string buffer size (#1052)
 	private static final int BUF_LEN = 65536;
 
@@ -47,19 +56,18 @@ public class TCPClientConnector extends AbstractTCPConnector {
 	private DataInputStream in;
 
 	/**
-	 * Construct a new TCPClientService.
+	 * Create a TCPClientConnector.
 	 * 
-	 * @param recordMap
-	 *            IMonitoring to id map
-	 * @param hostname
-	 *            host this service connects to
-	 * @param port
-	 *            port number where this service connects to
+	 * @param configuration
+	 *            Kieker configuration including setup for connectors
+	 * 
+	 * @param lookupEntityMap
+	 *            IMonitoringRecord constructor and TYPES-array to id map
 	 */
-	public TCPClientConnector(final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordMap, final String hostname, final int port) {
-		super(recordMap);
-		this.port = port;
-		this.hostname = hostname;
+	public TCPClientConnector(final Configuration configuration, final ConcurrentMap<Integer, LookupEntity> lookupEntityMap) {
+		super(configuration, lookupEntityMap);
+		this.hostname = this.configuration.getStringProperty(TCPClientConnector.HOSTNAME);
+		this.port = this.configuration.getIntProperty(TCPClientConnector.PORT);
 	}
 
 	/**
@@ -68,9 +76,7 @@ public class TCPClientConnector extends AbstractTCPConnector {
 	 * @throws ConnectorDataTransmissionException
 	 *             if the given host or IP cannot be found, or an IOException occurs
 	 */
-	@Override
 	public void initialize() throws ConnectorDataTransmissionException {
-		super.initialize();
 		try {
 			this.socket = new Socket(this.hostname, this.port);
 			this.in = new DataInputStream(this.socket.getInputStream());

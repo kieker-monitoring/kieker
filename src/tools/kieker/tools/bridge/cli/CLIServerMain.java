@@ -21,11 +21,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.security.AccessController;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
@@ -36,6 +36,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.reflections.Reflections;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
@@ -43,10 +44,16 @@ import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.tools.bridge.IServiceListener;
+import kieker.tools.bridge.LookupEntity;
 import kieker.tools.bridge.ServiceContainer;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.IServiceConnector;
 import kieker.tools.bridge.connector.ServiceConnectorFactory;
+import kieker.tools.bridge.connector.jms.JMSClientConnector;
+import kieker.tools.bridge.connector.jms.JMSEmbeddedConnector;
+import kieker.tools.bridge.connector.tcp.TCPClientConnector;
+import kieker.tools.bridge.connector.tcp.TCPMultiServerConnector;
+import kieker.tools.bridge.connector.tcp.TCPSingleServerConnector;
 import kieker.tools.util.CLIHelpFormatter;
 
 /**
@@ -102,6 +109,8 @@ public final class CLIServerMain {
 
 	private static final String JAVA_TMP_DIR = "java.io.tmpdir";
 
+	private static final String CLI_CONNECTOR = "kieker.tools.bridge.connector";
+
 	private static boolean verbose;
 	private static boolean stats;
 	private static long startTime;
@@ -124,6 +133,8 @@ public final class CLIServerMain {
 	 *            command line arguments
 	 */
 	public static void main(final String[] args) {
+		Configuration configuration;
+
 		int exitCode = 0;
 		CLIServerMain.declareOptions();
 		try {
@@ -144,21 +155,51 @@ public final class CLIServerMain {
 			}
 
 			// Find libraries and setup mapping
-			final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordMap = CLIServerMain.createRecordMap();
+			final ConcurrentMap<Integer, LookupEntity> lookupEntityMap = ServiceConnectorFactory.createLookupEntityMap(CLIServerMain.createRecordMap());
 
 			// Kieker setup
-			Configuration configuration = null;
-			if (commandLine.hasOption("c")) {
+			if (commandLine.hasOption(CMD_KIEKER_CONFIGURATION)) {
 				configuration = ConfigurationFactory.createConfigurationFromFile(commandLine.getOptionValue("c"));
 			} else {
 				configuration = ConfigurationFactory.createSingletonConfiguration();
 			}
 
-			// start service depending on type
-			if (commandLine.hasOption(CMD_TYPE)) {
-				container = new ServiceContainer(configuration, CLIServerMain.createService(recordMap), false);
-				CLIServerMain.runService();
+			// reconfigure kieker configuration
+			if (commandLine.hasOption(CMD_PORT)) {
+				configuration.setProperty(JMSEmbeddedConnector.PORT, commandLine.getOptionValue(CMD_PORT));
+				configuration.setProperty(TCPSingleServerConnector.PORT, commandLine.getOptionValue(CMD_PORT));
+				configuration.setProperty(TCPMultiServerConnector.PORT, commandLine.getOptionValue(CMD_PORT));
+				configuration.setProperty(TCPClientConnector.PORT, commandLine.getOptionValue(CMD_PORT));
 			}
+			if (commandLine.hasOption(CMD_HOST)) {
+				configuration.setProperty(TCPClientConnector.HOSTNAME, commandLine.getOptionValue(CMD_HOST));
+			}
+			if (commandLine.hasOption(CMD_USER)) {
+				configuration.setProperty(JMSClientConnector.USERNAME, commandLine.getOptionValue(CMD_USER));
+			}
+			if (commandLine.hasOption(CMD_PASSWORD)) {
+				configuration.setProperty(JMSClientConnector.PASSWORD, commandLine.getOptionValue(CMD_PASSWORD));
+			}
+			if (commandLine.hasOption(CMD_URL)) {
+				configuration.setProperty(JMSClientConnector.URI, commandLine.getOptionValue(CMD_URL));
+			}
+			if (commandLine.hasOption(CMD_TYPE)) {
+				final Reflections reflections = new Reflections("kieker.tools.bridge.connector");
+				final Set<Class<?>> connectors = reflections.getTypesAnnotatedWith(kieker.tools.bridge.connector.CMDConnectorProperty.class);
+
+				for (final Class<?> connector : connectors) {
+					if (connector.getAnnotation(kieker.tools.bridge.connector.CMDConnectorProperty.class).cmdName().equals(commandLine.getOptionValue(CMD_TYPE))) {
+						configuration.setProperty(CLI_CONNECTOR, connector.getCanonicalName());
+						break;
+					}
+				}
+			}
+
+			// start service depending on type
+			final IServiceConnector connector = CLIServerMain.createService(configuration, lookupEntityMap);
+			CLIServerMain.getLog().info("Service " + connector.getClass().getAnnotation(kieker.tools.bridge.connector.CMDConnectorProperty.class).name());
+			CLIServerMain.runService(configuration, connector);
+
 		} catch (final ParseException e) {
 			CLIServerMain.usage("Parsing failed.  Reason: " + e.getMessage());
 			exitCode = 4;
@@ -189,10 +230,12 @@ public final class CLIServerMain {
 	/**
 	 * Execute the bridge service.
 	 * 
+	 * @param connector
+	 * 
 	 * @throws ConnectorDataTransmissionException
 	 *             if an error occured during connector operations
 	 */
-	private static void runService() throws ConnectorDataTransmissionException {
+	private static void runService(final Configuration configuration, final IServiceConnector connector) throws ConnectorDataTransmissionException {
 		if (verbose) {
 			final String updateIntervalParam = commandLine.getOptionValue(CMD_VERBOSE);
 			container.setListenerUpdateInterval((updateIntervalParam != null) ? Long.parseLong(updateIntervalParam) // NOCS
@@ -221,6 +264,7 @@ public final class CLIServerMain {
 		});
 
 		// run the service
+		container = new ServiceContainer(configuration, connector, false);
 		container.run();
 
 		if (stats) {
@@ -277,153 +321,53 @@ public final class CLIServerMain {
 	/**
 	 * Interpret command line type option.
 	 * 
-	 * @param recordMap
+	 * @param lookupEntityMap
 	 *            the map for ids to Kieker records
 	 * 
 	 * @return a reference to an ServiceContainer
 	 * @throws CLIConfigurationErrorException
 	 *             if an error occured in setting up a connector or if an unknown service connector was specified
+	 * @throws ConnectorDataTransmissionException
 	 */
-	private static IServiceConnector createService(final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordMap)
-			throws CLIConfigurationErrorException {
-		if ("tcp-client".equals(commandLine.getOptionValue("type"))) {
-			return CLIServerMain.createTCPClientService(recordMap);
-		} else if ("tcp-single-server".equals(commandLine.getOptionValue("type"))) {
-			return CLIServerMain.createTCPSingleServerService(recordMap);
-		} else if ("tcp-server".equals(commandLine.getOptionValue("type"))) {
-			return CLIServerMain.createTCPMultiServerService(recordMap);
-		} else if ("jms-client".equals(commandLine.getOptionValue("type"))) {
-			return CLIServerMain.createJMSService(recordMap);
-		} else if ("jms-embedded".equals(commandLine.getOptionValue("type"))) {
-			return CLIServerMain.createJMSEmbeddedService(recordMap);
-		} else {
-			throw new CLIConfigurationErrorException("Unknown service type: '" + commandLine.getOptionValue("type") + "'");
+	private static IServiceConnector createService(final Configuration configuration, final ConcurrentMap<Integer, LookupEntity> lookupEntityMap)
+			throws CLIConfigurationErrorException, ConnectorDataTransmissionException {
+		try {
+			return CLIServerMain.createConnector(ClassLoader.getSystemClassLoader().loadClass(configuration.getStringProperty(CLI_CONNECTOR)), configuration,
+					lookupEntityMap);
+		} catch (final ClassNotFoundException e) {
+			throw new CLIConfigurationErrorException("Specified bridge connector " + configuration.getStringProperty(CLI_CONNECTOR) + " not found.", e);
 		}
 	}
 
 	/**
-	 * Create a JMSEmbeddedService.
+	 * Create a connector instance for the given class.
 	 * 
-	 * @param recordList
-	 *            the map for ids to Kieker records
-	 * 
-	 * @return a reference to an ServiceContainer
+	 * @param connector
+	 *            the connector class
+	 * @param configuration
+	 *            configuration for the connector
+	 * @param lookupEntityMap
+	 *            lookup map
+	 * @return o connector instance
 	 * @throws CLIConfigurationErrorException
-	 *             if no port was specified for the embedded JMS server or the generated URI is malformed
+	 *             when the instantiation fails
 	 */
-	private static IServiceConnector createJMSEmbeddedService(final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordList)
-			throws CLIConfigurationErrorException {
-		if (commandLine.hasOption("port")) {
-			final int port = Integer.parseInt(commandLine.getOptionValue("port"));
-			try {
-				return ServiceConnectorFactory.createJMSEmbeddedServiceConnector(recordList, port);
-			} catch (final URISyntaxException e) {
-				throw new CLIConfigurationErrorException("JMS service cannot be started. URI problem.", e);
-			}
-		} else {
-			throw new CLIConfigurationErrorException("Missing port for embedded server.");
-		}
-	}
-
-	/**
-	 * Create a JMSService.
-	 * 
-	 * @param recordList
-	 *            the map for ids to Kieker records
-	 * 
-	 * @return a reference to an ServiceContainer
-	 * @throws CLIConfigurationErrorException
-	 *             if no JMS service URL was specified
-	 */
-	private static IServiceConnector createJMSService(final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordList)
-			throws CLIConfigurationErrorException {
-		final String username = commandLine.hasOption("u") ? commandLine.getOptionValue("u") : null; // NOPMD NOCS
-		final String password = commandLine.hasOption("w") ? commandLine.getOptionValue("w") : null; // NOPMD NOCS
-		if (commandLine.hasOption("url")) {
-			try {
-				return ServiceConnectorFactory.createJMSServiceConnector(recordList, username, password, new URI(commandLine.getOptionValue("url")));
-			} catch (final URISyntaxException e) {
-				throw new CLIConfigurationErrorException(commandLine.getOptionValue("url") + " is not a valid URI. JMS service cannot be started.", e);
-			}
-		} else {
-			throw new CLIConfigurationErrorException("Missing URL for JMS service");
-		}
-	}
-
-	/**
-	 * Create a TCPSingleServerService.
-	 * 
-	 * @param recordList
-	 *            the map for ids to Kieker records
-	 * 
-	 * @return a reference to an ServiceContainer
-	 * @throws CLIConfigurationErrorException
-	 *             if no server port was specified
-	 */
-	private static IServiceConnector createTCPSingleServerService(final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordList)
-			throws CLIConfigurationErrorException {
-		if (commandLine.hasOption("port")) {
-			final int port = Integer.parseInt(commandLine.getOptionValue("port"));
-			final IServiceConnector connector = ServiceConnectorFactory.createTCPSingleServerServiceConnector(recordList, port);
-			if (verbose) {
-				CLIServerMain.getLog().info("TCP server listening at " + port);
-			}
-			return connector;
-		} else {
-			throw new CLIConfigurationErrorException("Missing port for tcp server");
-		}
-	}
-
-	/**
-	 * Create a TCPMultiServerService.
-	 * 
-	 * @param recordList
-	 *            the map for ids to Kieker records
-	 * 
-	 * @return a reference to an ServiceContainer
-	 * @throws CLIConfigurationErrorException
-	 *             if no server port was specified
-	 */
-	private static IServiceConnector createTCPMultiServerService(final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordList)
-			throws CLIConfigurationErrorException {
-		if (commandLine.hasOption("port")) {
-			final int port = Integer.parseInt(commandLine.getOptionValue("port"));
-			final IServiceConnector connector = ServiceConnectorFactory.createTCPMultiServerServiceConnector(recordList, port);
-			if (verbose) {
-				CLIServerMain.getLog().info("TCP server listening at " + port);
-			}
-			return connector;
-		} else {
-			throw new CLIConfigurationErrorException("Missing port for tcp server");
-		}
-	}
-
-	/**
-	 * Create a TCPCLientService.
-	 * 
-	 * @param recordList
-	 *            the map for ids to Kieker records
-	 * 
-	 * @return a reference to an ServiceContainer
-	 * @throws CLIConfigurationErrorException
-	 *             if a host name or port is missing for the client
-	 */
-	private static IServiceConnector createTCPClientService(final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordList)
-			throws CLIConfigurationErrorException {
-		if (commandLine.hasOption("port")) {
-			if (commandLine.hasOption("host")) {
-				final int port = Integer.parseInt(commandLine.getOptionValue("port"));
-				final String hostname = commandLine.getOptionValue("host");
-				final IServiceConnector connector = ServiceConnectorFactory.createTCPClientServiceConnector(recordList, hostname, port);
-				if (verbose) {
-					CLIServerMain.getLog().info("TCP client connected to " + hostname + ":" + port);
-				}
-				return connector;
-			} else {
-				throw new CLIConfigurationErrorException("Missing hostname for tcp client");
-			}
-		} else {
-			throw new CLIConfigurationErrorException("Missing port for tcp client");
+	private static IServiceConnector createConnector(final Class<?> connector, final Configuration configuration,
+			final ConcurrentMap<Integer, LookupEntity> lookupEntityMap) throws CLIConfigurationErrorException {
+		try {
+			return (IServiceConnector) connector.getConstructor(Configuration.class, ConcurrentMap.class).newInstance(configuration, lookupEntityMap);
+		} catch (final IllegalArgumentException e) {
+			throw new CLIConfigurationErrorException("Broken implementation of the selected connector " + connector.getCanonicalName(), e);
+		} catch (final SecurityException e) {
+			throw new CLIConfigurationErrorException("Cannot access included classes " + connector.getCanonicalName(), e);
+		} catch (final InstantiationException e) {
+			throw new CLIConfigurationErrorException("Instantiation failed for " + connector.getCanonicalName(), e);
+		} catch (final IllegalAccessException e) {
+			throw new CLIConfigurationErrorException("Access prohibited to class " + connector.getCanonicalName(), e);
+		} catch (final InvocationTargetException e) {
+			throw new CLIConfigurationErrorException("Broken implementation of the selected connector " + connector.getCanonicalName(), e);
+		} catch (final NoSuchMethodException e) {
+			throw new CLIConfigurationErrorException("Broken implementation of the selected connector " + connector.getCanonicalName(), e);
 		}
 	}
 

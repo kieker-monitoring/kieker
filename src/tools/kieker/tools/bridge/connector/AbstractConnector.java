@@ -14,15 +14,12 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.bridge.connector.tcp;
+package kieker.tools.bridge.connector;
 
 import java.util.concurrent.ConcurrentMap;
 
-import kieker.common.record.IMonitoringRecord;
+import kieker.common.configuration.Configuration;
 import kieker.tools.bridge.LookupEntity;
-import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
-import kieker.tools.bridge.connector.IServiceConnector;
-import kieker.tools.bridge.connector.ServiceConnectorFactory;
 
 /**
  * Generic abstract connector used in all TCP services.
@@ -30,32 +27,28 @@ import kieker.tools.bridge.connector.ServiceConnectorFactory;
  * @author Reiner Jung
  * @since 1.8
  */
-public abstract class AbstractTCPConnector implements IServiceConnector {
+public abstract class AbstractConnector implements IServiceConnector {
 
 	/**
 	 * Map containing record ids and the assigned constructor and field type list.
 	 */
 	protected ConcurrentMap<Integer, LookupEntity> lookupEntityMap;
-
-	private final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordMap;
+	/**
+	 * general configuration object used for the connector.
+	 */
+	protected Configuration configuration;
 
 	/**
 	 * AbstractTCPService constructor.
 	 * 
-	 * @param recordMap
-	 *            IMonitoringRecord to id map
+	 * @param configuration
+	 *            Kieker configuration including setup for connectors
+	 * @param lookupEntityMap
+	 *            IMonitoringRecord constructor and TYPES-array to id map
 	 */
-	public AbstractTCPConnector(final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordMap) {
-		this.recordMap = recordMap;
+	public AbstractConnector(final Configuration configuration, final ConcurrentMap<Integer, LookupEntity> lookupEntityMap) {
+		this.lookupEntityMap = lookupEntityMap;
+		this.configuration = configuration;
 	}
 
-	/**
-	 * Common part for the initialization of all TCP connectors.
-	 * 
-	 * @throws ConnectorDataTransmissionException
-	 *             if createLookupEntityMap() throws it
-	 */
-	public void initialize() throws ConnectorDataTransmissionException {
-		this.lookupEntityMap = ServiceConnectorFactory.createLookupEntityMap(this.recordMap);
-	}
 }
