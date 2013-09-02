@@ -25,7 +25,6 @@ import org.junit.Test;
 import kieker.common.configuration.Configuration;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
-import kieker.tools.bridge.connector.tcp.TCPClientConnector;
 import kieker.tools.bridge.connector.tcp.TCPMultiServerConnector;
 
 /**
@@ -60,7 +59,7 @@ public class TestTCPMultiServerConnector extends AbstractConnectorTest {
 		}
 
 		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
-		configuration.setProperty(TCPClientConnector.PORT, String.valueOf(ConfigurationParameters.TCP_MULTI_PORT));
+		configuration.setProperty(TCPMultiServerConnector.PORT, String.valueOf(ConfigurationParameters.TCP_MULTI_PORT));
 		// test the connector
 		this.setConnector(new TCPMultiServerConnector(configuration, this.createLookupEntityMap()));
 		this.initialize();

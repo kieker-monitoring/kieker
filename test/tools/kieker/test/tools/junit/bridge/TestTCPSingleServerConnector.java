@@ -20,7 +20,6 @@ import org.junit.Test;
 import kieker.common.configuration.Configuration;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
-import kieker.tools.bridge.connector.tcp.TCPClientConnector;
 import kieker.tools.bridge.connector.tcp.TCPSingleServerConnector;
 
 /**
@@ -52,7 +51,7 @@ public class TestTCPSingleServerConnector extends AbstractConnectorTest {
 		clientThread.start();
 
 		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
-		configuration.setProperty(TCPClientConnector.PORT, String.valueOf(ConfigurationParameters.TCP_SINGLE_PORT));
+		configuration.setProperty(TCPSingleServerConnector.PORT, String.valueOf(ConfigurationParameters.TCP_SINGLE_PORT));
 		// test the connector
 		this.setConnector(new TCPSingleServerConnector(configuration, this.createLookupEntityMap()));
 		this.initialize();
