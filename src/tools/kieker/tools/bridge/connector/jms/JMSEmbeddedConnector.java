@@ -32,6 +32,7 @@ import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
  */
 public class JMSEmbeddedConnector extends JMSClientConnector {
 
+	/** Property name for the configuration property for the port of the embedded JMS server. */
 	public static final String PORT = JMSEmbeddedConnector.class.getCanonicalName() + ".port";
 
 	private BrokerService broker;
