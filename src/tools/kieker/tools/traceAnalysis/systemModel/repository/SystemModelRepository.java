@@ -182,13 +182,13 @@ public class SystemModelRepository extends AbstractRepository {
 	public void saveSystemToHTMLFile(final String outputFn) throws FileNotFoundException, UnsupportedEncodingException {
 		final PrintStream ps = new PrintStream(new FileOutputStream(outputFn), false, ENCODING);
 		ps.println("<html><head><title>System Model Reconstructed by Kieker.TraceAnalysis</title>");
-		ps.println("<style type=\"text/css\">\n" + "" +
-				".colTitle {font-size: 11px; background: linear-gradient(to bottom, #FDFDFD, #DDDDDD) transparent }\n" +
-				".cell {font-family: monospace; font-size: 10px; font-family: inherited}\n" +
-				".tabTitle {padding: 4px 4px; font-size: 12px; background: linear-gradient(to bottom, #FFFFFF, #CCEEFF) transparent; border: 1px solid #4DC4FF;" +
-				"color: #333399}\n" +
-				".tab {border-collapse: collapse;  border: 1px solid #9D9D9D; font-family: \"Segoe UI\", \"Verdana\", \"Arial\", sans-serif}\n" +
-				".space{padding: 4px 10px;}\n" + "</style>");
+		ps.println("<style type=\"text/css\">\n" + ""
+				+ ".colTitle {font-size: 11px; background: linear-gradient(to bottom, #FDFDFD, #DDDDDD) transparent }\n"
+				+ ".cell {font-family: monospace; font-size: 10px; font-family: inherited}\n"
+				+ ".tabTitle {padding: 4px 4px; font-size: 12px; background: linear-gradient(to bottom, #FFFFFF, #CCEEFF) transparent; border: 1px solid #4DC4FF;"
+				+ "color: #333399}\n"
+				+ ".tab {border-collapse: collapse;  border: 1px solid #9D9D9D; font-family: \"Segoe UI\", \"Verdana\", \"Arial\", sans-serif}\n"
+				+ ".space{padding: 4px 10px;}\n" + "</style>");
 		ps.println("</head><body>");
 		this.htmlHSpace(ps, 10);
 		this.printOpenHtmlTable(ps, "Component Types", new String[] { "ID", "Package", "Name", "Operations" });
