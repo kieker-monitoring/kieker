@@ -27,6 +27,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.tools.bridge.LookupEntity;
 import kieker.tools.bridge.connector.AbstractConnector;
+import kieker.tools.bridge.connector.CMDConnectorProperty;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.ConnectorEndOfDataException;
 
@@ -36,6 +37,7 @@ import kieker.tools.bridge.connector.ConnectorEndOfDataException;
  * @author Reiner Jung
  * @since 1.8
  */
+@CMDConnectorProperty(cmdName = "tcp-client", name = "TCP Client Connector", description = "connector for remote TCP record sources.")
 public class TCPClientConnector extends AbstractConnector {
 
 	/** Property name for the host name of the record source. */
