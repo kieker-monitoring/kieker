@@ -37,8 +37,6 @@ import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.filter.forward.RealtimeRecordDelayFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.common.util.ImmutableEntry;
@@ -54,13 +52,13 @@ import kieker.test.common.junit.AbstractKiekerTest;
  */
 public class TestRealtimeRecordDelayFilter extends AbstractKiekerTest {
 
-	private static final Log LOG = LogFactory.getLog(TestRealtimeRecordDelayFilter.class);
+	// private static final Log LOG = LogFactory.getLog(TestRealtimeRecordDelayFilter.class);
 
 	private static final long INTERVAL_SIZE_NANOS = TimeUnit.NANOSECONDS.convert(5, TimeUnit.SECONDS);
 
 	private static final long START_TIME_SECONDS = 246561L;
 	private static final long[] EVENT_TIME_OFFSETS_SECONDS = { 0, 1, 2, 7, 17, 19 }; // relative to the start time
-	private static final List<Entry<Long, Long>> EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS = new ArrayList<Entry<Long, Long>>(); // intervals relative to start time
+	private static final List<Long> EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS = new ArrayList<Long>(); // intervals relative to start time
 	private IAnalysisController analysisController;
 
 	/**
@@ -87,10 +85,10 @@ public class TestRealtimeRecordDelayFilter extends AbstractKiekerTest {
 	private ListCollectionFilter<EmptyRecord> sinkPlugin;
 
 	static {
-		EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.add(new ImmutableEntry<Long, Long>((long) 5, (long) 3)); // i.e., in interval (0,5(
-		EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.add(new ImmutableEntry<Long, Long>((long) 10, (long) 1)); // i.e., in interval (5,10(
-		EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.add(new ImmutableEntry<Long, Long>((long) 15, (long) 0)); // i.e., in interval (10,15(
-		EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.add(new ImmutableEntry<Long, Long>((long) 20, (long) 2)); // i.e., in interval (15,20(
+		EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.add(3l); // i.e., in interval (0,5(
+		EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.add(1l); // i.e., in interval (5,10(
+		EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.add(0l); // i.e., in interval (10,15(
+		EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.add(2l); // i.e., in interval (15,20(
 	}
 
 	/**
@@ -172,7 +170,7 @@ public class TestRealtimeRecordDelayFilter extends AbstractKiekerTest {
 		final long filterStartTimeNanos = throughputListFromFilterAndCurrentInterval.get(0).getKey() - this.throughputFilter.getIntervalSize();
 
 		// Init array with worst-case size! (we actually expect an array of EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.size())
-		final long[] counts = new long[(int) this.countingFilterReader.getMessageCount()];
+		final Long[] counts = new Long[(int) this.countingFilterReader.getMessageCount()];
 		for (final Entry<Long, Long> countAtIntervalEnd : throughputListFromFilterAndCurrentInterval) {
 			// relative to filter start time:
 			final long curIntervalEndOffsetNanos = countAtIntervalEnd.getKey() - filterStartTimeNanos;
@@ -182,7 +180,11 @@ public class TestRealtimeRecordDelayFilter extends AbstractKiekerTest {
 			counts[curCountIdx] = curCount;
 		}
 
-		LOG.info(Arrays.toString(counts));
+		final int maxArrayLength = Math.max(counts.length, EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.size());
+		final Long[] expectedArrAdoptedLength = Arrays.copyOf(EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.toArray(new Long[0]), maxArrayLength);
+		final Long[] actualArrAdoptedLength = Arrays.copyOf(counts, maxArrayLength);
+
+		Assert.assertArrayEquals("Unexpected throughput", expectedArrAdoptedLength, actualArrAdoptedLength);
 	}
 
 	private final void checkRelayedRecords() {
