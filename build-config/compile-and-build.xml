@@ -298,7 +298,6 @@
 			<fileset dir="${lib.dir}">
 				<include name="hamcrest-core-*.jar" />
 				<include name="junit-*.jar" />
-				<include name="activemq-libs/*.jar" /> <!-- needed for the JMSReader/writer test -->
 			</fileset>
 			<fileset dir="${dist.dir}">
 				<include name="${dist.kieker.main.jar}" />
