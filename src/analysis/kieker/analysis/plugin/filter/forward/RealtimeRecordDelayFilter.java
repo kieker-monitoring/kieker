@@ -51,7 +51,7 @@ import kieker.common.record.IMonitoringRecord;
 			@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS, defaultValue = "5"),
 			@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_WARN_NEGATIVE_DELAY_SECONDS, defaultValue = "2"),
 			@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_TIMER, defaultValue = "MILLISECONDS"),
-			@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_ACCELERATION_FACTOR, defaultValue = "1"), // CONFIG_PROPERTY_ACCELERATION_FACTOR_DEFAULT
+			@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_ACCELERATION_FACTOR, defaultValue = "1") // CONFIG_PROPERTY_ACCELERATION_FACTOR_DEFAULT
 		})
 public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 
