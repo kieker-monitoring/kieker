@@ -335,8 +335,16 @@ function check_src_archive {
 		exit 1
 	fi
 
-	# now execute junt tests (which compiles the sources again ...)
+	# Run static analysis tools (which compiles the sources again ...)
 	run_ant static-analysis
+
+	# Making sure that no JavaDoc warnings reported by the `javadoc` tool
+	echo -n "Making sure that no JavaDoc warnings (ignoring generated sources) ..."
+	if (ant dist-kieker-javadoc | grep "warning -" | grep -v "src-gen"); then 
+	    echo "One or more JavaDoc warnings"
+	    exit 1
+	fi
+	echo "OK"
 }
 
 function check_bin_archive {

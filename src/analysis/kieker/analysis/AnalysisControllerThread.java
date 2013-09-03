@@ -24,7 +24,7 @@ import kieker.common.logging.LogFactory;
 
 /**
  * Allows spawn the execution of an {@link AnalysisController} into a separate {@link Thread}. The thread with the {@link AnalysisController} instance
- * provided in the constructor {@link #AnalysisControllerThread(AnalysisController)} is started by calling the {@link #start()} method. The analysis can be
+ * provided in the constructor {@link #AnalysisControllerThread(IAnalysisController)} is started by calling the {@link #start()} method. The analysis can be
  * terminated by calling the {@link #terminate()} method which delegates the call to the {@link kieker.analysis.AnalysisController#terminate()} method.
  * 
  * @author Andre van Hoorn, Jan Waller
