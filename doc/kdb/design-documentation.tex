@@ -1,0 +1,58 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{makeidx}
+\textwidth = 440 pt
+\oddsidemargin = 10 pt
+\title{KDB - Documentation}
+\author{Written by Pascale Brandt \\ Orignial text by Reiner Jung}
+\date{April 2013}
+\makeindex
+\begin{document}
+
+\maketitle
+\printindex
+\section{Introduction}  
+\begin{enumerate}
+
+
+\item The Kieker Data Bridge
+
+\begin{itemize}
+\item[-] The Kieker Data Bridge is designed to suppot a wide range of 			monitoring sources.
+\item[-] Allows to add monitoring to any language and be extensible concerning the means of data passing.	
+\item[-] Integration in any or other Java Applications it comprised a library which provides all the functionality and two service implementations.\newline
+Additional there are a command line application and a Eclipse plugin.
+\end{itemize}
+
+\item The Kieker Data Bridge Core
+
+
+\begin{itemize}
+\item[-] The core is the class ServiceContainer in the KDB because it provides central service hooks for Kieker and a main loop.\newline
+That is implemented by the run()-method for retrieving records and storing them with a Kieker MonitoringWriter
+\item[-] The constructor takes two parameter, first is a Kieker configuration object and the second ist a service connector. \newline
+The Kieker confoguration you cann setup the Kieker MonitoringWriter\newline
+And the service connector is conforming to the iServiceConnector interface which defines three hooks for a service connector. This provides a connector setup, a connector shutdown and last but not least a record receiver method.\newline
+In summary they are:\newline
+
+\begin{enumerate}
+\item \underline{setup()} is used to setup a data source.\newline
+\item \underline{close()} is used to close and cleanup the source connection.
+\item \underline{deserialize()} is empleyed to retrieve and deserialize data from a data source.\newline
+\end{enumerate}
+
+\item[-] The user might want to know what is going on, therefore is the ServiceContainer which provides a listener registration for IServiceListener.\newline
+\end{itemize}
+
+\item Different connection realizations\newline
+
+\begin{itemize}
+\item[-] The Kieker Data Bridge supports five different connection realizations:The Kieker Data Bridge supports five different connection realizations:\newline
+\item[-] 1: For one incoming connection from a client providing monitoring recors it can act a a service waiting.\newline
+\item[-] 2: It can be run as a service allowing multiple sources to connect and reconnect.\newline
+\item[-] 3: It can connect itself to a monitoring record provider by acting as a client.\newline
+\item[-] 4: Alike JMS listener. And last but not least,\newline
+\item[-] 5: As the setup of a JMS messaging queue might be difficult, it can provide one itself and auto-connect to it.\newline
+\end{itemize}
+
+\end{enumerate}
+\end{document}

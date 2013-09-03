@@ -262,6 +262,11 @@
 	</Match>
 
 	<Match>
+		<Class name="kieker.test.tools.junit.bridge.AbstractConnectorTest" />
+		<Bug pattern="UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" />
+	</Match>
+	
+	<Match>
 		<Class name="kieker.tools.KaxViz" />
 		<Method name="main" params="java.lang.String[]" returns="void" />
 		<Bug pattern="REC_CATCH_EXCEPTION" />
@@ -308,7 +313,22 @@
 	</Match>
 
 	<Match>
+		<Class name="kieker.tools.bridge.LookupEntity" />
+		<Bug pattern="EI_EXPOSE_REP" />
+	</Match>
+
+	<Match>
 		<Class name="kieker.examples.userguide.ch3and4bookstore.PipeData" />
+		<Bug pattern="EI_EXPOSE_REP2" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.tools.bridge.LookupEntity" />
+		<Bug pattern="EI_EXPOSE_REP2" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.tools.bridge.cli.PrivilegedClassLoaderAction" />
 		<Bug pattern="EI_EXPOSE_REP2" />
 	</Match>
 
