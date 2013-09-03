@@ -23,7 +23,7 @@ import java.lang.annotation.RetentionPolicy;
  * @since 1.8
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface CMDConnectorProperty {
+public @interface ConnectorProperty {
 	/** name used in tooling */
 	String name();
 

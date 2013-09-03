@@ -38,7 +38,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.tools.bridge.LookupEntity;
 import kieker.tools.bridge.connector.AbstractConnector;
-import kieker.tools.bridge.connector.CMDConnectorProperty;
+import kieker.tools.bridge.connector.ConnectorProperty;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.ConnectorEndOfDataException;
 
@@ -49,7 +49,7 @@ import kieker.tools.bridge.connector.ConnectorEndOfDataException;
  * 
  * @since 1.8
  */
-@CMDConnectorProperty(cmdName = "jms-client", name = "JMS Client Connector", description = "JMS Client to receive records from a JMS queue.")
+@ConnectorProperty(cmdName = "jms-client", name = "JMS Client Connector", description = "JMS Client to receive records from a JMS queue.")
 public class JMSClientConnector extends AbstractConnector {
 
 	/** Property name for the configuration user name property. */

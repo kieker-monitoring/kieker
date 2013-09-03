@@ -185,10 +185,10 @@ public final class CLIServerMain {
 			}
 			if (commandLine.hasOption(CMD_TYPE)) {
 				final Reflections reflections = new Reflections("kieker.tools.bridge.connector");
-				final Set<Class<?>> connectors = reflections.getTypesAnnotatedWith(kieker.tools.bridge.connector.CMDConnectorProperty.class);
+				final Set<Class<?>> connectors = reflections.getTypesAnnotatedWith(kieker.tools.bridge.connector.ConnectorProperty.class);
 
 				for (final Class<?> connector : connectors) {
-					if (connector.getAnnotation(kieker.tools.bridge.connector.CMDConnectorProperty.class).cmdName().equals(commandLine.getOptionValue(CMD_TYPE))) {
+					if (connector.getAnnotation(kieker.tools.bridge.connector.ConnectorProperty.class).cmdName().equals(commandLine.getOptionValue(CMD_TYPE))) {
 						configuration.setProperty(CLI_CONNECTOR, connector.getCanonicalName());
 						break;
 					}
@@ -197,7 +197,7 @@ public final class CLIServerMain {
 
 			// start service depending on type
 			final IServiceConnector connector = CLIServerMain.createService(configuration, lookupEntityMap);
-			CLIServerMain.getLog().info("Service " + connector.getClass().getAnnotation(kieker.tools.bridge.connector.CMDConnectorProperty.class).name());
+			CLIServerMain.getLog().info("Service " + connector.getClass().getAnnotation(kieker.tools.bridge.connector.ConnectorProperty.class).name());
 			CLIServerMain.runService(configuration, connector);
 
 		} catch (final ParseException e) {
