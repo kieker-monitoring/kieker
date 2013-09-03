@@ -90,7 +90,7 @@ public final class TimeReader extends AbstractReaderPlugin {
 
 	private static final Log LOG = LogFactory.getLog(TimeReader.class);
 
-	final CountDownLatch impulseEmitLatch = new CountDownLatch(1); // NOCS (package visible)
+	final CountDownLatch impulseEmitLatch = new CountDownLatch(1); // NOCS NOPMD (package visible)
 
 	private volatile boolean terminated;
 

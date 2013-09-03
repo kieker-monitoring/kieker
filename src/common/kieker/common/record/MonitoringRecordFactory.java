@@ -22,6 +22,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
 import java.security.PrivilegedAction;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import javax.jms.BytesMessage;
 import javax.jms.JMSException;
@@ -182,6 +184,24 @@ public class MonitoringRecordFactory {
 		} catch (final IllegalAccessException e) {
 			throw new MonitoringRecordException(e.getMessage(), e);
 		}
+	}
+
+	/**
+	 * Create a complete lookup entity map.
+	 * 
+	 * @param createRecordMap
+	 * @return
+	 * @throws MonitoringRecordException
+	 */
+	public static ConcurrentMap<Integer, LookupEntity> createLookupEntityMap(final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordMap)
+			throws MonitoringRecordException {
+		final ConcurrentMap<Integer, LookupEntity> lookupMap = new ConcurrentHashMap<Integer, LookupEntity>();
+		for (final int key : recordMap.keySet()) {
+			final Class<? extends IMonitoringRecord> clazz = recordMap.get(key);
+			lookupMap.put(key, MonitoringRecordFactory.createLookupEntity(clazz));
+		}
+
+		return lookupMap;
 	}
 
 	/**

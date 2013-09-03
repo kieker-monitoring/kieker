@@ -36,7 +36,7 @@ import kieker.monitoring.probe.IMonitoringProbe;
 @Aspect
 public abstract class AbstractAspectJProbe implements IMonitoringProbe {
 
-	private static final ConcurrentMap<Signature, String> SIGNATURE_CACHE = new ConcurrentHashMap<Signature, String>();
+	private final ConcurrentMap<Signature, String> signatureCache = new ConcurrentHashMap<Signature, String>();
 
 	// Pointcuts should not be final!
 
@@ -72,8 +72,8 @@ public abstract class AbstractAspectJProbe implements IMonitoringProbe {
 	 *            an AspectJ Signature
 	 * @return LongString representation of the signature
 	 */
-	protected static String signatureToLongString(final Signature sig) {
-		String signatureString = SIGNATURE_CACHE.get(sig);
+	protected String signatureToLongString(final Signature sig) {
+		String signatureString = this.signatureCache.get(sig);
 		if (null != signatureString) {
 			return signatureString;
 		} else {
@@ -87,7 +87,7 @@ public abstract class AbstractAspectJProbe implements IMonitoringProbe {
 					sb.append(' ');
 				}
 				// return
-				AbstractAspectJProbe.addType(sb, signature.getReturnType());
+				this.addType(sb, signature.getReturnType());
 				sb.append(' ');
 				// component
 				sb.append(signature.getDeclaringTypeName());
@@ -96,7 +96,7 @@ public abstract class AbstractAspectJProbe implements IMonitoringProbe {
 				sb.append(signature.getName());
 				// parameters
 				sb.append('(');
-				AbstractAspectJProbe.addTypeList(sb, signature.getParameterTypes());
+				this.addTypeList(sb, signature.getParameterTypes());
 				sb.append(')');
 				// throws
 				// this.addTypeList(sb, signature.getExceptionTypes());
@@ -117,7 +117,7 @@ public abstract class AbstractAspectJProbe implements IMonitoringProbe {
 				sb.append(signature.getName());
 				// parameters
 				sb.append('(');
-				AbstractAspectJProbe.addTypeList(sb, signature.getParameterTypes());
+				this.addTypeList(sb, signature.getParameterTypes());
 				sb.append(')');
 				// throws
 				// this.addTypeList(sb, signature.getExceptionTypes());
@@ -126,11 +126,11 @@ public abstract class AbstractAspectJProbe implements IMonitoringProbe {
 				signatureString = sig.toLongString();
 			}
 		}
-		SIGNATURE_CACHE.putIfAbsent(sig, signatureString);
+		this.signatureCache.putIfAbsent(sig, signatureString);
 		return signatureString;
 	}
 
-	private static final StringBuilder addTypeList(final StringBuilder sb, final Class<?>[] clazzes) {
+	private final StringBuilder addTypeList(final StringBuilder sb, final Class<?>[] clazzes) {
 		if (null != clazzes) {
 			boolean first = true;
 			for (final Class<?> clazz : clazzes) {
@@ -139,18 +139,18 @@ public abstract class AbstractAspectJProbe implements IMonitoringProbe {
 				} else {
 					sb.append(", ");
 				}
-				AbstractAspectJProbe.addType(sb, clazz);
+				this.addType(sb, clazz);
 			}
 		}
 		return sb;
 	}
 
-	private static final StringBuilder addType(final StringBuilder sb, final Class<?> clazz) {
+	private final StringBuilder addType(final StringBuilder sb, final Class<?> clazz) {
 		if (null == clazz) {
 			sb.append("ANONYMOUS");
 		} else if (clazz.isArray()) {
 			final Class<?> componentType = clazz.getComponentType();
-			AbstractAspectJProbe.addType(sb, componentType);
+			this.addType(sb, componentType);
 			sb.append("[]");
 		} else {
 			sb.append(clazz.getName());

@@ -23,12 +23,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
+import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IRecord;
+import kieker.common.record.LookupEntity;
 import kieker.common.record.MonitoringRecordFactory;
 import kieker.common.record.control.StringMapRecord;
+import kieker.tools.bridge.connector.AbstractConnector;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.ConnectorEndOfDataException;
+import kieker.tools.bridge.connector.ConnectorProperty;
 
 /**
  * TCP server connector supporting one client.
@@ -39,7 +43,12 @@ import kieker.tools.bridge.connector.ConnectorEndOfDataException;
  * 
  * @since 1.8
  */
-public class TCPSingleServerConnector extends AbstractTCPConnector {
+@ConnectorProperty(cmdName = "tcp-single-server", name = "TCP Single Server Connector",
+		description = "TCP server for binary Kieker records. Accepts only one connection.")
+public class TCPSingleServerConnector extends AbstractConnector {
+
+	/** Constant holding the name of the port configuration property. */
+	public static final String PORT = TCPSingleServerConnector.class.getCanonicalName() + ".port";
 
 	private final int port;
 
@@ -55,16 +64,17 @@ public class TCPSingleServerConnector extends AbstractTCPConnector {
 	private final byte[] buffer = new byte[MonitoringRecordFactory.MAX_BUFFER_SIZE];
 
 	/**
-	 * Construct TCPSingleService.
+	 * Create a TCPSingleServerConnector.
 	 * 
-	 * @param recordList
-	 *            map of IMonitoringRecords to ids
-	 * @param port
-	 *            Port the server listens to
+	 * @param configuration
+	 *            Kieker configuration including setup for connectors
+	 * 
+	 * @param lookupEntityMap
+	 *            IMonitoringRecord constructor and TYPES-array to id map
 	 */
-	public TCPSingleServerConnector(final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordList, final int port) {
-		super(recordList);
-		this.port = port;
+	public TCPSingleServerConnector(final Configuration configuration, final ConcurrentMap<Integer, LookupEntity> lookupEntityMap) {
+		super(configuration, lookupEntityMap);
+		this.port = this.configuration.getIntProperty(TCPSingleServerConnector.PORT);
 	}
 
 	/**
@@ -73,9 +83,7 @@ public class TCPSingleServerConnector extends AbstractTCPConnector {
 	 * @throws ConnectorDataTransmissionException
 	 *             it the socket could not be established
 	 */
-	@Override
 	public void initialize() throws ConnectorDataTransmissionException {
-		super.initialize();
 		try {
 			this.serverSocket = new ServerSocket(this.port);
 			this.in = new DataInputStream(this.serverSocket.accept().getInputStream());

@@ -24,12 +24,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
+import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.IRecord;
+import kieker.common.record.LookupEntity;
 import kieker.common.record.MonitoringRecordFactory;
 import kieker.common.record.control.StringMapRecord;
+import kieker.tools.bridge.connector.AbstractConnector;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.ConnectorEndOfDataException;
+import kieker.tools.bridge.connector.ConnectorProperty;
 
 /**
  * Connects to a remote record source.
@@ -37,7 +41,14 @@ import kieker.tools.bridge.connector.ConnectorEndOfDataException;
  * @author Reiner Jung
  * @since 1.8
  */
-public class TCPClientConnector extends AbstractTCPConnector {
+@ConnectorProperty(cmdName = "tcp-client", name = "TCP Client Connector", description = "connector for remote TCP record sources.")
+public class TCPClientConnector extends AbstractConnector {
+
+	/** Property name for the host name of the record source. */
+	public static final String HOSTNAME = TCPClientConnector.class.getCanonicalName() + ".hostname";
+
+	/** Property name for the port of the record source. */
+	public static final String PORT = TCPClientConnector.class.getCanonicalName() + ".port";
 
 	private final int port;
 	private final String hostname;
@@ -49,19 +60,18 @@ public class TCPClientConnector extends AbstractTCPConnector {
 	private final byte[] buffer = new byte[MonitoringRecordFactory.MAX_BUFFER_SIZE];
 
 	/**
-	 * Construct a new TCPClientService.
+	 * Create a TCPClientConnector.
 	 * 
-	 * @param recordMap
-	 *            IMonitoring to id map
-	 * @param hostname
-	 *            host this service connects to
-	 * @param port
-	 *            port number where this service connects to
+	 * @param configuration
+	 *            Kieker configuration including setup for connectors
+	 * 
+	 * @param lookupEntityMap
+	 *            IMonitoringRecord constructor and TYPES-array to id map
 	 */
-	public TCPClientConnector(final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordMap, final String hostname, final int port) {
-		super(recordMap);
-		this.port = port;
-		this.hostname = hostname;
+	public TCPClientConnector(final Configuration configuration, final ConcurrentMap<Integer, LookupEntity> lookupEntityMap) {
+		super(configuration, lookupEntityMap);
+		this.hostname = this.configuration.getStringProperty(TCPClientConnector.HOSTNAME);
+		this.port = this.configuration.getIntProperty(TCPClientConnector.PORT);
 	}
 
 	/**
@@ -70,9 +80,7 @@ public class TCPClientConnector extends AbstractTCPConnector {
 	 * @throws ConnectorDataTransmissionException
 	 *             if the given host or IP cannot be found, or an IOException occurs
 	 */
-	@Override
 	public void initialize() throws ConnectorDataTransmissionException {
-		super.initialize();
 		try {
 			this.socket = new Socket(this.hostname, this.port);
 			this.in = new DataInputStream(this.socket.getInputStream());

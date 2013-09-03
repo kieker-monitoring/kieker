@@ -24,9 +24,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.LookupEntity;
+import kieker.tools.bridge.connector.AbstractConnector;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.ConnectorEndOfDataException;
+import kieker.tools.bridge.connector.ConnectorProperty;
 
 /**
  * TCP server connector supporting multiple clients.
@@ -34,7 +38,12 @@ import kieker.tools.bridge.connector.ConnectorEndOfDataException;
  * @author Reiner Jung
  * @since 1.8
  */
-public class TCPMultiServerConnector extends AbstractTCPConnector {
+@ConnectorProperty(cmdName = "tcp-server", name = "TCP Multi Server Connector",
+		description = "TCP server for binary Kieker records. Accepts multiple connections.")
+public class TCPMultiServerConnector extends AbstractConnector {
+
+	/** Constant holds name for the port property . */
+	public static final String PORT = TCPMultiServerConnector.class.getCanonicalName() + ".port";
 
 	private static final int QUEUE_CAPACITY = 10;
 
@@ -45,30 +54,33 @@ public class TCPMultiServerConnector extends AbstractTCPConnector {
 	private final int port;
 
 	private volatile BlockingQueue<IMonitoringRecord> recordQueue;
-	// executor pool for connection handling threads. Is only accessed in this thread.
+
+	/** executor pool for connection handling threads. Is only accessed in this thread. */
 	private ExecutorService executor;
 
 	/**
-	 * Construct new TCPMultiServerService.
+	 * Create a TCPMultiServerConnector.
 	 * 
-	 * @param recordMap
-	 *            IMonitoringRecord to id map
-	 * @param port
-	 *            TCP port the service listens to
+	 * @param configuration
+	 *            Kieker configuration including setup for connectors
+	 * 
+	 * @param lookupEntityMap
+	 *            IMonitoringRecord constructor and TYPES-array to id map
 	 */
-	public TCPMultiServerConnector(final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> recordMap, final int port) {
-		super(recordMap);
-		this.port = port;
+	public TCPMultiServerConnector(final Configuration configuration, final ConcurrentMap<Integer, LookupEntity> lookupEntityMap) {
+		super(configuration, lookupEntityMap);
+		this.port = this.configuration.getIntProperty(TCPMultiServerConnector.PORT);
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * Initializes internal queues and an executor pool for communication.
 	 * 
 	 * @see kieker.tools.bridge.connector.tcp.AbstractTCPConnector#initialize()
+	 * 
+	 * @throws ConnectorDataTransmissionException
+	 *             when the server socket cannot be acquired
 	 */
-	@Override
 	public void initialize() throws ConnectorDataTransmissionException {
-		super.initialize();
 		// do not move, in future these properties will be handled by the kieker configuration
 		this.recordQueue = new ArrayBlockingQueue<IMonitoringRecord>(QUEUE_CAPACITY);
 		this.executor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);

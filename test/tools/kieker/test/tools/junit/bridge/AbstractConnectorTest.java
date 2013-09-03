@@ -20,11 +20,16 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.junit.Assert;
 
+import kieker.common.exception.MonitoringRecordException;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.LookupEntity;
+import kieker.common.record.MonitoringRecordFactory;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.ConnectorEndOfDataException;
 import kieker.tools.bridge.connector.IServiceConnector;
+
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * Class for all connector tests providing three methods for initialization,
@@ -34,7 +39,7 @@ import kieker.tools.bridge.connector.IServiceConnector;
  * 
  * @since 1.8
  */
-public abstract class AbstractConnectorTest {
+public abstract class AbstractConnectorTest extends AbstractKiekerTest {
 
 	private IServiceConnector connector;
 	private int recordCount; // default initialization is 0
@@ -48,15 +53,21 @@ public abstract class AbstractConnectorTest {
 	}
 
 	/**
-	 * Create the test record map.
+	 * Create the test lookup entity map.
 	 * 
-	 * @return the record map
+	 * @return a lookup entity map
+	 * @throws ConnectorDataTransmissionException
+	 *             if record lookup fails
 	 */
-	protected ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> createRecordMap() {
+	protected final ConcurrentMap<Integer, LookupEntity> createLookupEntityMap() throws ConnectorDataTransmissionException {
 		final ConcurrentMap<Integer, Class<? extends IMonitoringRecord>> map = new ConcurrentHashMap<Integer, Class<? extends IMonitoringRecord>>();
 		map.put(ConfigurationParameters.TEST_RECORD_ID, OperationExecutionRecord.class);
 
-		return map;
+		try {
+			return MonitoringRecordFactory.createLookupEntityMap(map);
+		} catch (final MonitoringRecordException e) {
+			throw new ConnectorDataTransmissionException("Record map error.", e);
+		}
 	}
 
 	/**

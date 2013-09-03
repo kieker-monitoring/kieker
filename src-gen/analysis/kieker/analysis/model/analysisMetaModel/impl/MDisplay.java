@@ -120,7 +120,7 @@ public class MDisplay extends EObjectImpl implements MIDisplay {
 	 */
 	public MIPlugin getParent() {
 		if (eContainerFeatureID() != MIAnalysisMetaModelPackage.DISPLAY__PARENT) return null;
-		return (MIPlugin)eContainer();
+		return (MIPlugin)eInternalContainer();
 	}
 
 	/**
