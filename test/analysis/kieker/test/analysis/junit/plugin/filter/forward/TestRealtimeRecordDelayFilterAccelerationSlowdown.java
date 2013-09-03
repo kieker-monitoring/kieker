@@ -26,15 +26,15 @@ public class TestRealtimeRecordDelayFilterAccelerationSlowdown extends AbstractT
 
 	// Note for the following array that by considering a slow down by 50%, the actual array is
 	// {0, 4, 12, 14, 18}
-	private static final long[] EVENT_TIME_OFFSETS_SECONDS = { 0l, 2l, 6l, 7l, 9l };
+	private static final long[] EVENT_TIME_OFFSETS_SECONDS = { 0L, 2L, 6L, 7L, 9L };
 
 	// intervals of length INTERVAL_SIZE_NANOS relative to start time
 	private static final long[] EXPECTED_THROUGHPUT_LIST_OFFSET_SECS_INTERVAL_5SECS =
 	{
-		2l, // i.e., in interval (0,5(
-		0l, // i.e., in interval (5,10(
-		2l, // i.e., in interval (10,15(
-		1l, // i.e., in interval (15,20(
+		2L, // i.e., in interval (0,5(
+		0L, // i.e., in interval (5,10(
+		2L, // i.e., in interval (10,15(
+		1L, // i.e., in interval (15,20(
 	};
 
 	public TestRealtimeRecordDelayFilterAccelerationSlowdown() {

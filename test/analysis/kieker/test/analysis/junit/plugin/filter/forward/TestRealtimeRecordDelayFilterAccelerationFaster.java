@@ -26,15 +26,14 @@ public class TestRealtimeRecordDelayFilterAccelerationFaster extends AbstractTes
 
 	// Note for the following array that by considering the double speed, the actual array is
 	// { 0, 2, 6, 7, 9, 11 }
-	private static final long[] EVENT_TIME_OFFSETS_SECONDS = { 0l, 4l, 12l, 14l, 18l, 22l };
+	private static final long[] EVENT_TIME_OFFSETS_SECONDS = { 0L, 4L, 12L, 14L, 18L, 22L };
 
 	// intervals of length INTERVAL_SIZE_NANOS relative to start time
 	private static final long[] EXPECTED_THROUGHPUT_LIST_OFFSET_SECS_INTERVAL_5SECS =
 	{
-		2l, // i.e., in interval (0,5(
-		3l, // i.e., in interval (5,10(
-		1l, // i.e., in interval (10,15(
-	// 0l, // i.e., in interval (15,20(
+		2L, // i.e., in interval (0,5(
+		3L, // i.e., in interval (5,10(
+		1L, // i.e., in interval (10,15(
 	};
 
 	public TestRealtimeRecordDelayFilterAccelerationFaster() {

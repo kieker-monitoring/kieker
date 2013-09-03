@@ -247,6 +247,12 @@
 	</Match>
 
 	<Match>
+		<Class
+			name="kieker.test.analysis.junit.plugin.filter.select.AbstractTestRealtimeRecordDelayFilter" />
+		<Bug pattern="UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" />
+	</Match>
+
+	<Match>
 		<Class name="kieker.test.monitoring.junit.core.sampler.TestPeriodicSampling$1" />
 		<Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON" />
 	</Match>

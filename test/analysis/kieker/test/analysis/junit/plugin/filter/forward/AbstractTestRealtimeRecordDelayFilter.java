@@ -49,7 +49,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * 
  * @since 1.6
  */
-public class AbstractTestRealtimeRecordDelayFilter extends AbstractKiekerTest {
+public abstract class AbstractTestRealtimeRecordDelayFilter extends AbstractKiekerTest {
 
 	// private static final Log LOG = LogFactory.getLog(TestRealtimeRecordDelayFilter.class);
 
@@ -98,8 +98,8 @@ public class AbstractTestRealtimeRecordDelayFilter extends AbstractKiekerTest {
 	 */
 	public AbstractTestRealtimeRecordDelayFilter(final long[] eventTimeOffsetsSeconds, final long[] expectedThroughputListOffsetSecondsInterval5Secs,
 			final double accelerationFactor) {
-		this.eventTimeOffsetsSeconds = eventTimeOffsetsSeconds;
-		this.expectedThroughputListOffsetSecondsInterval5Secs = expectedThroughputListOffsetSecondsInterval5Secs;
+		this.eventTimeOffsetsSeconds = eventTimeOffsetsSeconds.clone();
+		this.expectedThroughputListOffsetSecondsInterval5Secs = expectedThroughputListOffsetSecondsInterval5Secs.clone();
 		this.accelerationFactor = accelerationFactor;
 	}
 
