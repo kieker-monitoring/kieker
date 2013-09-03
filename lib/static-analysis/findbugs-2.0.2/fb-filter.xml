@@ -248,7 +248,7 @@
 
 	<Match>
 		<Class
-			name="kieker.test.analysis.junit.plugin.filter.select.AbstractTestRealtimeRecordDelayFilter" />
+			name="kieker.test.analysis.junit.plugin.filter.forward.AbstractTestRealtimeRecordDelayFilter" />
 		<Bug pattern="UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" />
 	</Match>
 
