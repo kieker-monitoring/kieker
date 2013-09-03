@@ -22,6 +22,8 @@ import java.net.UnknownHostException;
 
 import org.junit.Assert;
 
+import kieker.common.record.MonitoringRecordFactory;
+
 /**
  * Client for the TCP server tests, providing records.
  * 
@@ -56,21 +58,22 @@ public class TCPClientforServer implements Runnable {
 				final Socket connectionSocket = new Socket(ConfigurationParameters.HOSTNAME, this.port);
 				connected = true;
 				try {
-					final DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
+					final DataOutputStream out = new DataOutputStream(connectionSocket.getOutputStream());
 
+					// write initially one String message hostname
+					this.writeStringMessage(out, ConfigurationParameters.TEST_HOSTNAME, 1);
+					this.writeStringMessage(out, ConfigurationParameters.TEST_OPERATION_SIGNATURE, 2);
+					this.writeStringMessage(out, ConfigurationParameters.TEST_SESSION_ID, 3);
 					for (int i = 0; i < ConfigurationParameters.SEND_NUMBER_OF_RECORDS; i++) {
-						outToClient.writeInt(ConfigurationParameters.TEST_RECORD_ID);
-						outToClient.writeInt(ConfigurationParameters.TEST_OPERATION_SIGNATURE.length());
-						outToClient.writeBytes(ConfigurationParameters.TEST_OPERATION_SIGNATURE);
-						outToClient.writeInt(ConfigurationParameters.TEST_SESSION_ID.length());
-						outToClient.writeBytes(ConfigurationParameters.TEST_SESSION_ID);
-						outToClient.writeLong(ConfigurationParameters.TEST_TRACE_ID);
-						outToClient.writeLong(ConfigurationParameters.TEST_TIN);
-						outToClient.writeLong(ConfigurationParameters.TEST_TOUT);
-						outToClient.writeInt(ConfigurationParameters.TEST_HOSTNAME.length());
-						outToClient.writeBytes(ConfigurationParameters.TEST_HOSTNAME);
-						outToClient.writeInt(ConfigurationParameters.TEST_EOI);
-						outToClient.writeInt(ConfigurationParameters.TEST_ESS);
+						out.writeInt(ConfigurationParameters.TEST_RECORD_ID);
+						out.writeInt(2); // string id TEST_OPERATION_SIGNATURE
+						out.writeInt(3); // string id TEST_SESSION_ID
+						out.writeLong(ConfigurationParameters.TEST_TRACE_ID);
+						out.writeLong(ConfigurationParameters.TEST_TIN);
+						out.writeLong(ConfigurationParameters.TEST_TOUT);
+						out.writeInt(1); // string id TEST_HOSTNAME
+						out.writeInt(ConfigurationParameters.TEST_EOI);
+						out.writeInt(ConfigurationParameters.TEST_ESS);
 					}
 
 					connectionSocket.close();
@@ -91,6 +94,13 @@ public class TCPClientforServer implements Runnable {
 			}
 
 		}
+	}
+
+	private void writeStringMessage(final DataOutputStream out, final String string, final int id) throws IOException {
+		out.writeInt(MonitoringRecordFactory.STRING_MAP_ID);
+		out.writeInt(id);
+		out.writeInt(string.length());
+		out.writeBytes(string);
 	}
 
 }

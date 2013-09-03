@@ -84,7 +84,8 @@ public class MonitoringRecordFactory {
 					final int key = input.readInt();
 					final int length = input.readInt();
 					input.readFully(buffer, 0, length);
-					return new StringMapRecord(key, new String(buffer, Charset.forName("UTF-8")));
+					buffer[length] = 0;
+					return new StringMapRecord(key, new String(buffer, 0, length, Charset.forName("UTF-8")));
 				} else {
 					throw new ConnectorDataTransmissionException("Unknown system record type " + id);
 				}
@@ -123,7 +124,8 @@ public class MonitoringRecordFactory {
 						} else if (Double.class.equals(parameterType)) {
 							values[i] = input.readDouble();
 						} else if (String.class.equals(parameterType)) {
-							values[i] = stringMap.get(input.readInt());
+							final int key = input.readInt();
+							values[i] = stringMap.get(key);
 						} else { // reference types
 							throw new ConnectorDataTransmissionException("References are not yet supported.");
 						}
