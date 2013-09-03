@@ -19,6 +19,7 @@
 				<include name="framework-libs/javax.servlet-*.jar" /> <!-- needed for the cxf, spring? tests -->
 				<include name="framework-libs/cxf/*.jar" /> <!-- needed for the cxf tests -->
 				<include name="framework-libs/spring/*.jar" /> <!-- needed for the spring tests -->
+				<include name="activemq-libs/*.jar" /> <!-- needed for the JMSReader/writer test -->
 				<include name="javax.jms-*.jar" /> 	<!-- Needed for TestPluginConfigurationRetention. -->
 				<include name="commons-cli-*.jar" /> <!-- Needed for TestPluginConfigurationRetention. -->
 			</fileset>
