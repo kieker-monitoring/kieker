@@ -24,9 +24,9 @@ package kieker.test.analysis.junit.plugin.filter.forward;
  */
 public class TestRealtimeRecordDelayFilterNoAcceleration extends AbstractTestRealtimeRecordDelayFilter {
 
-	private static final Long[] EVENT_TIME_OFFSETS_SECONDS = { 0l, 1l, 2l, 7l, 17l, 19l }; // relative to the start time
+	private static final long[] EVENT_TIME_OFFSETS_SECONDS = { 0l, 1l, 2l, 7l, 17l, 19l }; // relative to the start time
 	// intervals of length INTERVAL_SIZE_NANOS relative to start time
-	private static final Long[] EXPECTED_THROUGHPUT_LIST_OFFSET_SECS_INTERVAL_5SECS =
+	private static final long[] EXPECTED_THROUGHPUT_LIST_OFFSET_SECS_INTERVAL_5SECS =
 	{
 		3l, // i.e., in interval (0,5(
 		1l, // i.e., in interval (5,10(

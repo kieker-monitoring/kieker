@@ -17,7 +17,6 @@
 package kieker.test.analysis.junit.plugin.filter.forward;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -57,9 +56,9 @@ public class AbstractTestRealtimeRecordDelayFilter extends AbstractKiekerTest {
 	private static final long INTERVAL_SIZE_NANOS = TimeUnit.NANOSECONDS.convert(5, TimeUnit.SECONDS);
 
 	private static final long START_TIME_SECONDS = 246561L;
-	private final Long[] eventTimeOffsetsSeconds;
+	private final long[] eventTimeOffsetsSeconds;
 	// intervals of length INTERVAL_SIZE_NANOS relative to start time
-	private final Long[] expectedThroughputListOffsetSecondsInterval5Secs;
+	private final long[] expectedThroughputListOffsetSecondsInterval5Secs;
 
 	private final double accelerationFactor;
 
@@ -97,7 +96,7 @@ public class AbstractTestRealtimeRecordDelayFilter extends AbstractKiekerTest {
 	 * @param acceleration
 	 *            factor to be passed to the {@link RealtimeRecordDelayFilter}
 	 */
-	public AbstractTestRealtimeRecordDelayFilter(final Long[] eventTimeOffsetsSeconds, final Long[] expectedThroughputListOffsetSecondsInterval5Secs,
+	public AbstractTestRealtimeRecordDelayFilter(final long[] eventTimeOffsetsSeconds, final long[] expectedThroughputListOffsetSecondsInterval5Secs,
 			final double accelerationFactor) {
 		this.eventTimeOffsetsSeconds = eventTimeOffsetsSeconds;
 		this.expectedThroughputListOffsetSecondsInterval5Secs = expectedThroughputListOffsetSecondsInterval5Secs;
@@ -178,7 +177,7 @@ public class AbstractTestRealtimeRecordDelayFilter extends AbstractKiekerTest {
 		final long filterStartTimeNanos = throughputListFromFilterAndCurrentInterval.get(0).getKey() - this.throughputFilter.getIntervalSize();
 
 		// Init array with worst-case size! (we actually expect an array of EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.size())
-		final Long[] counts = new Long[(int) this.countingFilterReader.getMessageCount()];
+		final long[] counts = new long[(int) this.countingFilterReader.getMessageCount()];
 		for (final Entry<Long, Long> countAtIntervalEnd : throughputListFromFilterAndCurrentInterval) {
 			// relative to filter start time:
 			final long curIntervalEndOffsetNanos = countAtIntervalEnd.getKey() - filterStartTimeNanos;
@@ -189,8 +188,11 @@ public class AbstractTestRealtimeRecordDelayFilter extends AbstractKiekerTest {
 		}
 
 		final int maxArrayLength = Math.max(counts.length, this.expectedThroughputListOffsetSecondsInterval5Secs.length);
-		final Long[] expectedArrAdoptedLength = Arrays.copyOf(this.expectedThroughputListOffsetSecondsInterval5Secs, maxArrayLength);
-		final Long[] actualArrAdoptedLength = Arrays.copyOf(counts, maxArrayLength);
+		final long[] expectedArrAdoptedLength = new long[maxArrayLength];
+		System.arraycopy(this.expectedThroughputListOffsetSecondsInterval5Secs, 0, expectedArrAdoptedLength, 0,
+				this.expectedThroughputListOffsetSecondsInterval5Secs.length);
+		final long[] actualArrAdoptedLength = new long[maxArrayLength];
+		System.arraycopy(counts, 0, actualArrAdoptedLength, 0, counts.length);
 
 		Assert.assertArrayEquals("Unexpected throughput", expectedArrAdoptedLength, actualArrAdoptedLength);
 	}
