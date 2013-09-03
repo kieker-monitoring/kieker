@@ -24,7 +24,7 @@ import kieker.common.record.IMonitoringRecord;
  * 
  * @since 1.3
  */
-public final class CPUUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
+public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
 	private static final long serialVersionUID = 229860008090066333L;
 	private static final Class<?>[] TYPES = {
 		long.class,

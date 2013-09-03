@@ -21,7 +21,7 @@ package kieker.common.record.flow.trace.concurrency.monitor;
  * 
  * @since 1.8
  */
-public final class MonitorEntryEvent extends AbstractMonitorEvent {
+public class MonitorEntryEvent extends AbstractMonitorEvent {
 	private static final long serialVersionUID = 2423482501599847228L;
 	private static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp

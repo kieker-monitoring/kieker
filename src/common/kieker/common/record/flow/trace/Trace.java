@@ -25,7 +25,7 @@ import kieker.common.record.flow.IFlowRecord;
  * 
  * @since 1.5
  */
-public final class Trace extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IFlowRecord {
+public class Trace extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IFlowRecord {
 
 	/**
 	 * Constant to be used if no sessionId required.

@@ -23,7 +23,7 @@ import kieker.common.record.flow.trace.operation.CallOperationEvent;
  * 
  * @since 1.6
  */
-public final class CallConstructorEvent extends CallOperationEvent {
+public class CallConstructorEvent extends CallOperationEvent {
 	private static final long serialVersionUID = -997689498521033735L;
 	private static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp

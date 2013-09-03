@@ -23,7 +23,7 @@ import kieker.common.record.flow.trace.AbstractTraceEvent;
  * 
  * @since 1.5
  */
-public final class SplitEvent extends AbstractTraceEvent {
+public class SplitEvent extends AbstractTraceEvent {
 	private static final long serialVersionUID = -4454625562107999414L;
 	private static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp

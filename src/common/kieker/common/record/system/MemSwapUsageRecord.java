@@ -27,7 +27,7 @@ import kieker.common.record.IMonitoringRecord;
  * 
  * @since 1.3
  */
-public final class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
+public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
 
 	/** A constant which can be used as a default value for non existing fields of the record. */
 	public static final String DEFAULT_VALUE = "N/A";
