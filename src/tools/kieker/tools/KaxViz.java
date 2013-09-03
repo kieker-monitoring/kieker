@@ -41,6 +41,9 @@ import com.mxgraph.model.mxGeometry;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.util.mxCellRenderer;
 import com.mxgraph.util.mxConstants;
+import com.mxgraph.util.mxEvent;
+import com.mxgraph.util.mxEventObject;
+import com.mxgraph.util.mxEventSource.mxIEventListener;
 import com.mxgraph.util.mxPoint;
 import com.mxgraph.util.mxUtils;
 import com.mxgraph.util.mxXmlUtils;
@@ -176,14 +179,14 @@ public final class KaxViz extends JFrame {
 		this.graph.setExtendParentsOnAdd(false); // true
 		// graph.setResetViewOnRootChange(true); // true
 		// graph.setResetEdgesOnResize(false); // false
-		// graph.setResetEdgesOnMove(false); // false
+		// graph.setResetEdgesOnMove(true); // false
 		this.graph.setResetEdgesOnConnect(false); // true
 		// graph.setAllowLoops(false); // false
 		// graph.setMultiplicities(null); // null
 		// graph.setDefaultLoopStyle(mxEdgeStyle.Loop); // mxEdgeStyle.Loop
 		// graph.setMultigraph(true); // true
 		// graph.setConnectableEdges(false); // false
-		// graph.setAllowDanglingEdges(false); // false
+		this.graph.setAllowDanglingEdges(false); // false
 		// graph.setCloneInvalidEdges(false); // false
 		this.graph.setDisconnectOnMove(false); // true
 		// graph.setLabelsVisible(true); // true
@@ -203,6 +206,13 @@ public final class KaxViz extends JFrame {
 
 		// add the actual graph
 		this.displayGraph();
+
+		// repaint fix
+		this.graph.addListener(mxEvent.CELLS_MOVED, new mxIEventListener() {
+			public void invoke(final Object sender, final mxEventObject evt) {
+				KaxViz.this.graph.repaint();
+			}
+		});
 	}
 
 	private void displayGraph() {
@@ -269,8 +279,7 @@ public final class KaxViz extends JFrame {
 	}
 
 	// final void autoGraphLayout() {
-	// final mxGraph graph = this.graph;
-	// new mxHierarchicalLayout(graph).execute(graph.getDefaultParent());
+	// new mxOrthogonalLayout(this.graph).execute(this.graph.getDefaultParent());
 	// }
 
 	private final Map<String, mxCell> createInputPorts(final MIFilter plugin, final mxCell vertex) {
