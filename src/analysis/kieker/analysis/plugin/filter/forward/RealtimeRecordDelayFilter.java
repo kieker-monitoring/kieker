@@ -33,7 +33,8 @@ import kieker.common.record.IMonitoringRecord;
 /**
  * Forwards incoming {@link IMonitoringRecord}s with delays computed from the {@link kieker.common.record.IMonitoringRecord#getLoggingTimestamp()} value
  * (assumed to be in the configured resolution). For example, after initialization, if records with logging timestamps 3000 and 4500 nanos are received, the
- * first record is forwarded immediately; the second will be forwarded 1500 nanos later.
+ * first record is forwarded immediately; the second will be forwarded 1500 nanos later. The acceleration factor can be used to accelerate/slow down the
+ * replay (default 1.0, which means no acceleration/slow down).
  * 
  * @author Andre van Hoorn, Robert von Massow, Jan Waller
  * 
@@ -49,7 +50,8 @@ import kieker.common.record.IMonitoringRecord;
 			@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_NUM_WORKERS, defaultValue = "1"),
 			@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS, defaultValue = "5"),
 			@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_WARN_NEGATIVE_DELAY_SECONDS, defaultValue = "2"),
-			@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_TIMER, defaultValue = "MILLISECONDS")
+			@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_TIMER, defaultValue = "MILLISECONDS"),
+			@Property(name = RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_ACCELERATION_FACTOR, defaultValue = "1"), // CONFIG_PROPERTY_ACCELERATION_FACTOR_DEFAULT
 		})
 public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 
@@ -78,12 +80,21 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 	 */
 	public static final String CONFIG_PROPERTY_NAME_TIMER = "timerPrecision";
 
+	/**
+	 * Factor to use for accelerating/slowing down the replay.
+	 */
+	public static final String CONFIG_PROPERTY_NAME_ACCELERATION_FACTOR = "accelerationFactor";
+
+	public static final double CONFIG_PROPERTY_ACCELERATION_FACTOR_DEFAULT = 1;
+
 	private static final Log LOG = LogFactory.getLog(RealtimeRecordDelayFilter.class);
 
 	private final TimeUnit timeunit;
 
 	private final String strTimerOrigin;
 	private final TimerWithPrecision timer;
+
+	private final double accelerationFactor;
 
 	private final long warnOnNegativeSchedTimeOrigin;
 	private final long warnOnNegativeSchedTime;
@@ -129,6 +140,13 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 		}
 		this.timer = tmpTimer;
 
+		double accelerationFactorTmp = configuration.getDoubleProperty(CONFIG_PROPERTY_NAME_ACCELERATION_FACTOR);
+		if (accelerationFactorTmp <= 0.0) {
+			LOG.warn("Acceleration factor must be > 0. Using default: " + CONFIG_PROPERTY_ACCELERATION_FACTOR_DEFAULT);
+			accelerationFactorTmp = 1;
+		}
+		this.accelerationFactor = accelerationFactorTmp;
+
 		this.warnOnNegativeSchedTimeOrigin = this.configuration.getLongProperty(CONFIG_PROPERTY_NAME_WARN_NEGATIVE_DELAY_SECONDS);
 		this.warnOnNegativeSchedTime = this.timeunit.convert(this.warnOnNegativeSchedTimeOrigin, TimeUnit.SECONDS);
 
@@ -156,9 +174,10 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 				this.startTime = currentTime;
 			}
 
-			// Compute scheduling time
+			// Compute scheduling time (without acceleration)
 			long schedTimeFromNow = (monitoringRecord.getLoggingTimestamp() - this.firstLoggingTimestamp) // relative to 1st record
-					- (currentTime - this.startTime); // substract elapsed time
+					- (currentTime - this.startTime); // subtract elapsed time
+			schedTimeFromNow /= this.accelerationFactor;
 			if (schedTimeFromNow < -this.warnOnNegativeSchedTime) {
 				final long schedTimeSeconds = TimeUnit.SECONDS.convert(schedTimeFromNow, this.timeunit);
 				LOG.warn("negative scheduling time: " + schedTimeFromNow + " (" + this.timeunit.toString() + ") / " + schedTimeSeconds
@@ -218,6 +237,7 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 		configuration.setProperty(CONFIG_PROPERTY_NAME_WARN_NEGATIVE_DELAY_SECONDS, Long.toString(this.warnOnNegativeSchedTimeOrigin));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_NUM_WORKERS, Integer.toString(this.numWorkers));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_TIMER, this.strTimerOrigin);
+		configuration.setProperty(CONFIG_PROPERTY_NAME_ACCELERATION_FACTOR, Double.toString(this.accelerationFactor));
 
 		configuration
 				.setProperty(CONFIG_PROPERTY_NAME_ADDITIONAL_SHUTDOWN_DELAY_SECONDS, Long.toString(TimeUnit.SECONDS.convert(this.shutdownDelay, this.timeunit)));

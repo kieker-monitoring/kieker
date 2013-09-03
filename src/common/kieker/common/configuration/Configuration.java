@@ -118,6 +118,23 @@ public final class Configuration extends Properties {
 	}
 
 	/**
+	 * Reads the given property from the configuration and interprets it as a double.
+	 * 
+	 * @param key
+	 *            The key of the property.
+	 * @return A long with the value of the given property or null, if the property does not exist.
+	 */
+	public final double getDoubleProperty(final String key) {
+		final String s = this.getStringProperty(key);
+		try {
+			return Double.parseDouble(s);
+		} catch (final NumberFormatException ex) {
+			LOG.warn("Error parsing configuration property '" + key + "', found value '" + s + "', using default value 0"); // ignore ex
+			return 0.0;
+		}
+	}
+
+	/**
 	 * Reads the given property from the configuration and interprets it as a path.
 	 * 
 	 * @param key
