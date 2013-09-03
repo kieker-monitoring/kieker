@@ -28,9 +28,9 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.tools.bridge.LookupEntity;
 import kieker.tools.bridge.connector.AbstractConnector;
-import kieker.tools.bridge.connector.ConnectorProperty;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.ConnectorEndOfDataException;
+import kieker.tools.bridge.connector.ConnectorProperty;
 
 /**
  * TCP server connector supporting multiple clients.

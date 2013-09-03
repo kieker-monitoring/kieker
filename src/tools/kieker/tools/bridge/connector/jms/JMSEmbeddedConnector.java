@@ -22,8 +22,8 @@ import org.apache.activemq.broker.BrokerService;
 
 import kieker.common.configuration.Configuration;
 import kieker.tools.bridge.LookupEntity;
-import kieker.tools.bridge.connector.ConnectorProperty;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
+import kieker.tools.bridge.connector.ConnectorProperty;
 
 /**
  * a yes broken JMSClient with an embedded JMS server.
