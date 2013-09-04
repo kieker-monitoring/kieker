@@ -28,7 +28,6 @@ import kieker.tools.bridge.connector.tcp.TCPSingleServerConnector;
  * 
  * @since 1.8
  */
-
 public class TestTCPSingleServerConnector extends AbstractConnectorTest {
 
 	/**
