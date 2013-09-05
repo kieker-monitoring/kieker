@@ -202,6 +202,10 @@ public class ExecutionTrace extends AbstractTrace {
 	/**
 	 * Returns a sorted set (unmodifiable) of {@link Execution}s in this trace.
 	 * 
+	 * Note that the returned data structure is the (wrapped )internal data structure of this {@link ExecutionTrace} object, to which further elements may be added
+	 * by the {@link ExecutionTrace#add(Execution)} method. Consider to create a copy of the returned list, while synchronizing on this (i.e., the
+	 * {@link ExecutionTrace}) object.
+	 * 
 	 * @return the sorted set of {@link Execution}s in this trace
 	 */
 	public final SortedSet<Execution> getTraceAsSortedExecutionSet() {
