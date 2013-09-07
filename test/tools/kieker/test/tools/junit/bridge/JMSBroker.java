@@ -44,7 +44,7 @@ public class JMSBroker implements Runnable {
 		try {
 			broker.addConnector(ConfigurationParameters.JMS_URI);
 			broker.start();
-		} catch (final Exception e) { // NOCS
+		} catch (final Exception e) { // NOCS NOPMD -- the framework uses Exception :-(
 			Assert.fail("Broker startup failed. " + e.getMessage());
 		}
 	}

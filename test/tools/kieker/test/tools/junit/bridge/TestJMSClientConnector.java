@@ -31,7 +31,7 @@ import kieker.tools.bridge.connector.jms.JMSClientConnector;
 public class TestJMSClientConnector extends AbstractConnectorTest {
 
 	/**
-	 * 
+	 * Empty constructor to satisfy coding style.
 	 */
 	public TestJMSClientConnector() {
 
