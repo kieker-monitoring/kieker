@@ -43,11 +43,11 @@ public final class ConfigurationParameters {
 	 */
 	public static final String HOSTNAME = "localhost";
 
-	/** JMS test user name */
+	/** JMS test user name. */
 	public static final String JMS_USERNAME = "testuser";
-	/** JMS test user password */
+	/** JMS test user password. */
 	public static final String JMS_PASSWORD = "testpw";
-	/** JMS test URI */
+	/** JMS test URI. */
 	public static final String JMS_URI = "tcp://localhost:" + JMS_PORT;
 
 	/**

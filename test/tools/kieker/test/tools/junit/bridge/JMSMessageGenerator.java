@@ -39,9 +39,19 @@ import kieker.tools.bridge.connector.jms.JMSClientConnector;
  */
 public class JMSMessageGenerator implements Runnable {
 
+	/**
+	 * Empty constructor.
+	 */
+	public JMSMessageGenerator() {
+
+	}
+
 	private Connection connection;
 	private MessageProducer producer;
 
+	/**
+	 * General run method for the message generator.
+         */
 	public void run() {
 		this.initialize();
 		this.sendRecords();
@@ -69,15 +79,15 @@ public class JMSMessageGenerator implements Runnable {
 	}
 
 	private void sendRecords() {
-		final String messageText = ConfigurationParameters.TEST_RECORD_ID + ";" +
-				ConfigurationParameters.TEST_OPERATION_SIGNATURE + ";" +
-				ConfigurationParameters.TEST_SESSION_ID + ";" +
-				ConfigurationParameters.TEST_TRACE_ID + ";" +
-				ConfigurationParameters.TEST_TIN + ";" +
-				ConfigurationParameters.TEST_TOUT + ";" +
-				ConfigurationParameters.TEST_HOSTNAME + ";" +
-				ConfigurationParameters.TEST_EOI + ";" +
-				ConfigurationParameters.TEST_ESS;
+		final String messageText = ConfigurationParameters.TEST_RECORD_ID 
+				+ ";" +	ConfigurationParameters.TEST_OPERATION_SIGNATURE
+				+ ";" + ConfigurationParameters.TEST_SESSION_ID 
+				+ ";" +	ConfigurationParameters.TEST_TRACE_ID
+				+ ";" + ConfigurationParameters.TEST_TIN
+				+ ";" + ConfigurationParameters.TEST_TOUT
+				+ ";" + ConfigurationParameters.TEST_HOSTNAME
+				+ ";" + ConfigurationParameters.TEST_EOI
+				+ ";" + ConfigurationParameters.TEST_ESS;
 
 		for (int i = 0; i < ConfigurationParameters.SEND_NUMBER_OF_RECORDS; i++) {
 			try {

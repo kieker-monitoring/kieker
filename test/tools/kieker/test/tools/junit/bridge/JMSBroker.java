@@ -28,10 +28,14 @@ import kieker.tools.bridge.connector.jms.JMSClientConnector;
  */
 public class JMSBroker implements Runnable {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Runnable#run()
+	/**
+         * Empty constructor.
+         */
+	public JMSBroker() {
+	}
+
+	/**
+	 * Runnable run method for the test JMSBroker.
 	 */
 	public void run() {
 		final BrokerService broker = new BrokerService();
