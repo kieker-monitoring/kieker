@@ -45,17 +45,12 @@ import kieker.common.util.filesystem.FSUtil;
 			@Property(name = FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, defaultValue = ".",
 					description = "The name of the input dirs used to read data (multiple dirs are separated by |)."),
 			@Property(name = FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, defaultValue = "false",
-					description = "Ignore unknown records? Aborts if encountered and value is false."),
-			@Property(name = FSReader.CONFIG_PROPERTY_NAME_COOLDOWN_TIME_MS,
-					defaultValue = FSReader.CONFIG_PROPERTY_VALUE_COOLDOWN_TIME_MS)
+					description = "Ignore unknown records? Aborts if encountered and value is false.")
 		})
 public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordReceiver {
 
 	/** The name of the output port delivering the record read by this plugin. */
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
-
-	public static final java.lang.String CONFIG_PROPERTY_NAME_COOLDOWN_TIME_MS = "cooldownTimeMS";
-	public static final java.lang.String CONFIG_PROPERTY_VALUE_COOLDOWN_TIME_MS = "1000";
 
 	/** The name of the configuration determining the input directories for this plugin. */
 	public static final String CONFIG_PROPERTY_NAME_INPUTDIRS = "inputDirs";
@@ -73,7 +68,6 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	private final PriorityQueue<IMonitoringRecord> recordQueue;
 
 	private volatile boolean running = true;
-	private final long cooldownTimeMS;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -97,7 +91,6 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 		}
 		this.recordQueue = new PriorityQueue<IMonitoringRecord>(nDirs);
 		this.ignoreUnknownRecordTypes = this.configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES);
-		this.cooldownTimeMS = configuration.getLongProperty(CONFIG_PROPERTY_NAME_COOLDOWN_TIME_MS);
 	}
 
 	/**
@@ -112,61 +105,47 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	 * {@inheritDoc}
 	 */
 	public boolean read() {
-		for (int repeat = 0; repeat < 5; repeat++) {
-			if (repeat == 4) {
-				LOG.info("Begin of experiment");
-			}
+		// start all reader
+		int notInitializesReaders = 0;
+		for (final String inputDirFn : this.inputDirs) {
+			// Make sure that white spaces in paths are handled correctly
+			final File inputDir = new File(inputDirFn);
 
-			// start all reader
-			int notInitializesReaders = 0;
-			for (final String inputDirFn : this.inputDirs) {
-				// Make sure that white spaces in paths are handled correctly
-				final File inputDir = new File(inputDirFn);
-
-				final Thread readerThread;
-				if (inputDir.isDirectory()) {
-					readerThread = new Thread(new FSDirectoryReader(inputDir, this, this.ignoreUnknownRecordTypes));
-				} else if (inputDir.isFile() && inputDirFn.endsWith(FSUtil.ZIP_FILE_EXTENSION)) {
-					readerThread = new Thread(new FSZipReader(inputDir, this, this.ignoreUnknownRecordTypes));
-				} else {
-					LOG.warn("Invalid Directory or filename (no Kieker log): " + inputDirFn);
-					notInitializesReaders++;
-					continue;
-				}
-				readerThread.setDaemon(true);
-				readerThread.start();
+			final Thread readerThread;
+			if (inputDir.isDirectory()) {
+				readerThread = new Thread(new FSDirectoryReader(inputDir, this, this.ignoreUnknownRecordTypes));
+			} else if (inputDir.isFile() && inputDirFn.endsWith(FSUtil.ZIP_FILE_EXTENSION)) {
+				readerThread = new Thread(new FSZipReader(inputDir, this, this.ignoreUnknownRecordTypes));
+			} else {
+				LOG.warn("Invalid Directory or filename (no Kieker log): " + inputDirFn);
+				notInitializesReaders++;
+				continue;
 			}
-			// consume incoming records
-			int readingReaders = this.inputDirs.length - notInitializesReaders;
-			while (readingReaders > 0) {
-				synchronized (this.recordQueue) { // with newMonitoringRecord()
-					while (this.recordQueue.size() < readingReaders) {
-						try {
-							this.recordQueue.wait();
-						} catch (final InterruptedException ex) {
-							// ignore InterruptedException
-						}
+			readerThread.setDaemon(true);
+			readerThread.start();
+		}
+		// consume incoming records
+		int readingReaders = this.inputDirs.length - notInitializesReaders;
+		while (readingReaders > 0) {
+			synchronized (this.recordQueue) { // with newMonitoringRecord()
+				while (this.recordQueue.size() < readingReaders) {
+					try {
+						this.recordQueue.wait();
+					} catch (final InterruptedException ex) {
+						// ignore InterruptedException
 					}
 				}
-				final IMonitoringRecord record = this.recordQueue.remove();
-				synchronized (record) { // with newMonitoringRecord()
-					record.notifyAll();
-				}
-				if (record == EOF) { // NOPMD (CompareObjectsWithEquals)
-					readingReaders--;
-				} else {
-					super.deliver(OUTPUT_PORT_NAME_RECORDS, record);
-				}
 			}
-			if (repeat != 4) {
-				try {
-					Thread.sleep(this.cooldownTimeMS);
-				} catch (final InterruptedException ex) {
-					LOG.error("Reader interrupted", ex);
-				}
+			final IMonitoringRecord record = this.recordQueue.remove();
+			synchronized (record) { // with newMonitoringRecord()
+				record.notifyAll();
+			}
+			if (record == EOF) { // NOPMD (CompareObjectsWithEquals)
+				readingReaders--;
+			} else {
+				super.deliver(OUTPUT_PORT_NAME_RECORDS, record);
 			}
 		}
-
 		return true;
 	}
 
