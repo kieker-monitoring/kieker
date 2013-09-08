@@ -123,7 +123,7 @@ public final class TypeFilter extends AbstractFilterPlugin {
 		for (final Class<?> clazz : this.acceptedClasses) {
 			if (clazz.isAssignableFrom(eventClass)) {
 				super.deliver(OUTPUT_PORT_NAME_TYPE_MATCH, event);
-				break; // only deliver once!
+				return; // only deliver once!
 			}
 		}
 		super.deliver(OUTPUT_PORT_NAME_TYPE_MISMATCH, event);
