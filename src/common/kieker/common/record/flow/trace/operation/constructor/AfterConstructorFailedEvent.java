@@ -95,7 +95,7 @@ public class AfterConstructorFailedEvent extends AfterConstructorEvent implement
 
 	@Override
 	public Class<?>[] getValueTypes() {
-		return TYPES; // NOPMD
+		return TYPES.clone();
 	}
 
 	public final String getCause() {

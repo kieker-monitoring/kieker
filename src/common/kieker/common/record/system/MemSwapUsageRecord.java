@@ -134,7 +134,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	 * {@inheritDoc}
 	 */
 	public Class<?>[] getValueTypes() {
-		return TYPES; // NOPMD
+		return TYPES.clone();
 	}
 
 	/**

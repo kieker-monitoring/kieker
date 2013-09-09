@@ -98,7 +98,7 @@ public class ConstructionEvent extends AbstractTraceEvent implements IObjectReco
 	 * {@inheritDoc}
 	 */
 	public Class<?>[] getValueTypes() {
-		return TYPES; // NOPMD
+		return TYPES.clone();
 	}
 
 	public final String getClassSignature() {

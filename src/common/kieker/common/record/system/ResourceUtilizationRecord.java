@@ -111,7 +111,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	 * {@inheritDoc}
 	 */
 	public Class<?>[] getValueTypes() {
-		return TYPES; // NOPMD
+		return TYPES.clone();
 	}
 
 	/**

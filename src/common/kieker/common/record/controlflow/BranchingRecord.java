@@ -86,7 +86,7 @@ public final class BranchingRecord extends AbstractMonitoringRecord implements I
 	 * {@inheritDoc}
 	 */
 	public Class<?>[] getValueTypes() {
-		return TYPES; // NOPMD
+		return TYPES.clone();
 	}
 
 	/**

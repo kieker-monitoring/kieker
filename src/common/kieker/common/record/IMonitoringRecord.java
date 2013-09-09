@@ -86,7 +86,7 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	/**
 	 * This method should deliver an array with the classes of the single values for the record.
 	 * 
-	 * @return The types of the values. This returned array should be treated readonly.
+	 * @return The types of the values.
 	 * 
 	 * @see #toArray()
 	 * 

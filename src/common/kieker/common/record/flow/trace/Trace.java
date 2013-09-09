@@ -117,7 +117,7 @@ public class Trace extends AbstractMonitoringRecord implements IMonitoringRecord
 	 * {@inheritDoc}
 	 */
 	public final Class<?>[] getValueTypes() {
-		return TYPES; // NOPMD
+		return TYPES.clone();
 	}
 
 	/**

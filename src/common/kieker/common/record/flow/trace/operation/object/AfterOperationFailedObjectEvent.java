@@ -101,7 +101,7 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 	 */
 	@Override
 	public Class<?>[] getValueTypes() {
-		return TYPES; // NOPMD
+		return TYPES.clone();
 	}
 
 	public int getObjectId() {

@@ -116,7 +116,7 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 	 */
 	@Override
 	public Class<?>[] getValueTypes() {
-		return TYPES; // NOPMD
+		return TYPES.clone();
 	}
 
 	/**

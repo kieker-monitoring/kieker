@@ -66,6 +66,6 @@ public class SplitEvent extends AbstractTraceEvent {
 	 * {@inheritDoc}
 	 */
 	public final Class<?>[] getValueTypes() {
-		return TYPES; // NOPMD
+		return TYPES.clone();
 	}
 }

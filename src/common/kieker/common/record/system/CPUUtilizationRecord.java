@@ -178,7 +178,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	 * {@inheritDoc}
 	 */
 	public Class<?>[] getValueTypes() {
-		return TYPES; // NOPMD
+		return TYPES.clone();
 	}
 
 	/**

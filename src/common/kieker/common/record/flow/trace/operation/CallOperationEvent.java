@@ -109,7 +109,7 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	 * {@inheritDoc}
 	 */
 	public Class<?>[] getValueTypes() {
-		return TYPES; // NOPMD
+		return TYPES.clone();
 	}
 
 	public final String getCallerOperationSignature() {

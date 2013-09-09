@@ -97,7 +97,7 @@ public class BeforeOperationObjectEvent extends BeforeOperationEvent implements 
 	 */
 	@Override
 	public Class<?>[] getValueTypes() {
-		return TYPES; // NOPMD
+		return TYPES.clone();
 	}
 
 	public int getObjectId() {

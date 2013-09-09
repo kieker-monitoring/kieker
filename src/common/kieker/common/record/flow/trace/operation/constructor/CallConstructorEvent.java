@@ -90,6 +90,6 @@ public class CallConstructorEvent extends CallOperationEvent {
 
 	@Override
 	public Class<?>[] getValueTypes() {
-		return TYPES; // NOPMD
+		return TYPES.clone();
 	}
 }
