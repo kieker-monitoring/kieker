@@ -33,19 +33,19 @@ import kieker.common.exception.MonitoringRecordException;
  */
 public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	private static final long serialVersionUID = 1L;
-	private static final ConcurrentMap<String, Class<? extends IMonitoringRecord>> CACHED_KIEKERRECORDS = new ConcurrentHashMap<String, Class<? extends IMonitoringRecord>>(); // NOCS
-	private static final ConcurrentMap<Class<? extends IMonitoringRecord>, Class<?>[]> CACHED_KIEKERRECORD_TYPES = new ConcurrentHashMap<Class<? extends IMonitoringRecord>, Class<?>[]>(); // NOCS
+	private static final ConcurrentMap<String, Class<? extends IMonitoringRecord>> OLD_KIEKERRECORDS =
+			new ConcurrentHashMap<String, Class<? extends IMonitoringRecord>>();
 
 	private volatile long loggingTimestamp = -1;
 
 	static {
-		CACHED_KIEKERRECORDS.put("kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord", kieker.common.record.controlflow.OperationExecutionRecord.class);
-		CACHED_KIEKERRECORDS.put("kieker.common.record.CPUUtilizationRecord", kieker.common.record.system.CPUUtilizationRecord.class);
-		CACHED_KIEKERRECORDS.put("kieker.common.record.MemSwapUsageRecord", kieker.common.record.system.MemSwapUsageRecord.class);
-		CACHED_KIEKERRECORDS.put("kieker.common.record.ResourceUtilizationRecord", kieker.common.record.system.ResourceUtilizationRecord.class);
-		CACHED_KIEKERRECORDS.put("kieker.common.record.OperationExecutionRecord", kieker.common.record.controlflow.OperationExecutionRecord.class);
-		CACHED_KIEKERRECORDS.put("kieker.common.record.BranchingRecord", kieker.common.record.controlflow.BranchingRecord.class);
-		CACHED_KIEKERRECORDS.put("kieker.monitoring.core.registry.RegistryRecord", kieker.common.record.misc.RegistryRecord.class);
+		OLD_KIEKERRECORDS.put("kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord", kieker.common.record.controlflow.OperationExecutionRecord.class);
+		OLD_KIEKERRECORDS.put("kieker.common.record.CPUUtilizationRecord", kieker.common.record.system.CPUUtilizationRecord.class);
+		OLD_KIEKERRECORDS.put("kieker.common.record.MemSwapUsageRecord", kieker.common.record.system.MemSwapUsageRecord.class);
+		OLD_KIEKERRECORDS.put("kieker.common.record.ResourceUtilizationRecord", kieker.common.record.system.ResourceUtilizationRecord.class);
+		OLD_KIEKERRECORDS.put("kieker.common.record.OperationExecutionRecord", kieker.common.record.controlflow.OperationExecutionRecord.class);
+		OLD_KIEKERRECORDS.put("kieker.common.record.BranchingRecord", kieker.common.record.controlflow.BranchingRecord.class);
+		OLD_KIEKERRECORDS.put("kieker.monitoring.core.registry.RegistryRecord", kieker.common.record.misc.RegistryRecord.class);
 	}
 
 	public final long getLoggingTimestamp() {
@@ -233,14 +233,12 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	 *             If either a class with the given name could not be found or if the class doesn't implement {@link IMonitoringRecord}.
 	 */
 	public static final Class<? extends IMonitoringRecord> classForName(final String classname) throws MonitoringRecordException {
-		Class<? extends IMonitoringRecord> clazz = CACHED_KIEKERRECORDS.get(classname);
+		final Class<? extends IMonitoringRecord> clazz = OLD_KIEKERRECORDS.get(classname);
 		if (clazz != null) {
 			return clazz;
 		} else {
 			try {
-				clazz = Class.forName(classname).asSubclass(IMonitoringRecord.class);
-				CACHED_KIEKERRECORDS.putIfAbsent(classname, clazz);
-				return clazz;
+				return Class.forName(classname).asSubclass(IMonitoringRecord.class);
 			} catch (final ClassNotFoundException ex) {
 				throw new MonitoringRecordException("Failed to get record type of name " + classname, ex);
 			} catch (final ClassCastException ex) {
@@ -262,36 +260,29 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	 *             If this method failed to access the value types.
 	 */
 	public static final Class<?>[] typesForClass(final Class<? extends IMonitoringRecord> clazz) throws MonitoringRecordException {
-		Class<?>[] types = CACHED_KIEKERRECORD_TYPES.get(clazz);
-		if (types != null) {
-			return types;
-		} else {
-			try {
-				if (IMonitoringRecord.Factory.class.isAssignableFrom(clazz)) {
-					final Field typesField = clazz.getDeclaredField("TYPES");
-					java.security.AccessController.doPrivileged(new PrivilegedAction<Object>() {
-						public Object run() {
-							typesField.setAccessible(true);
-							return null;
-						}
-					});
-					types = (Class<?>[]) typesField.get(null);
-				} else {
-					types = clazz.newInstance().getValueTypes();
-				}
-				CACHED_KIEKERRECORD_TYPES.putIfAbsent(clazz, types);
-				return types;
-			} catch (final SecurityException ex) {
-				throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
-			} catch (final NoSuchFieldException ex) {
-				throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
-			} catch (final IllegalArgumentException ex) {
-				throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
-			} catch (final IllegalAccessException ex) {
-				throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
-			} catch (final InstantiationException ex) {
-				throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
+		try {
+			if (IMonitoringRecord.Factory.class.isAssignableFrom(clazz)) {
+				final Field types = clazz.getDeclaredField("TYPES");
+				java.security.AccessController.doPrivileged(new PrivilegedAction<Object>() {
+					public Object run() {
+						types.setAccessible(true);
+						return null;
+					}
+				});
+				return ((Class<?>[]) types.get(null)).clone();
+			} else {
+				return clazz.newInstance().getValueTypes();
 			}
+		} catch (final SecurityException ex) {
+			throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
+		} catch (final NoSuchFieldException ex) {
+			throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
+		} catch (final IllegalArgumentException ex) {
+			throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
+		} catch (final IllegalAccessException ex) {
+			throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
+		} catch (final InstantiationException ex) {
+			throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
 		}
 	}
 
