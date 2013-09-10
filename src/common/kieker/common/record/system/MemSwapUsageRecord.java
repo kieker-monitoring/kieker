@@ -34,7 +34,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	public static final String DEFAULT_VALUE = "N/A";
 
 	private static final long serialVersionUID = 8072422694598002383L;
-	private static final Class<?>[] TYPES = {
+	public static final Class<?>[] TYPES = {
 		long.class,
 		String.class,
 		long.class,

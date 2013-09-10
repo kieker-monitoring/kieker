@@ -27,7 +27,7 @@ import kieker.common.util.Bits;
  */
 public class CallOperationEvent extends AbstractOperationEvent implements ICallRecord {
 	private static final long serialVersionUID = 1193776099551467929L;
-	private static final Class<?>[] TYPES = {
+	public static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
 		int.class, // TraceEvent.orderIndex

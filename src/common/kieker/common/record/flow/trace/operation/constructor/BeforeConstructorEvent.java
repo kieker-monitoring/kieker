@@ -25,7 +25,7 @@ import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
  */
 public class BeforeConstructorEvent extends BeforeOperationEvent {
 	private static final long serialVersionUID = 6255387982554604813L;
-	private static final Class<?>[] TYPES = {
+	public static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
 		int.class, // TraceEvent.orderIndex

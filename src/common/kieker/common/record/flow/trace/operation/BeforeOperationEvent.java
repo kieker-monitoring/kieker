@@ -25,7 +25,7 @@ import kieker.common.util.Bits;
  */
 public class BeforeOperationEvent extends AbstractOperationEvent {
 	private static final long serialVersionUID = -129094268144134877L;
-	private static final Class<?>[] TYPES = {
+	public static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
 		int.class, // TraceEvent.orderIndex

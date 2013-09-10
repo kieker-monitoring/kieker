@@ -58,7 +58,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	private static final String NO_OPERATION_SIGNATURE = "noOperation";
 
 	private static final long serialVersionUID = 8028082734210614968L;
-	private static final Class<?>[] TYPES = {
+	public static final Class<?>[] TYPES = {
 		String.class, // operationSignature
 		String.class, // sessionId
 		long.class, // traceId

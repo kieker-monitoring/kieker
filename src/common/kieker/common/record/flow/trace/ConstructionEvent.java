@@ -26,7 +26,7 @@ import kieker.common.util.Bits;
  */
 public class ConstructionEvent extends AbstractTraceEvent implements IObjectRecord {
 	private static final long serialVersionUID = -7484030624827825815L;
-	private static final Class<?>[] TYPES = {
+	public static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
 		int.class, // TraceEvent.orderIndex

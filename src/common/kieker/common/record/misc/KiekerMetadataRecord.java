@@ -51,7 +51,7 @@ public final class KiekerMetadataRecord extends AbstractMonitoringRecord impleme
 	public static final String NO_TIMEUNIT = "NANOSECONDS";
 
 	private static final long serialVersionUID = 6867244598532769180L;
-	private static final Class<?>[] TYPES = {
+	public static final Class<?>[] TYPES = {
 		String.class, // version
 		String.class, // controllerName
 		String.class, // hostname

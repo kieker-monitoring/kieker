@@ -95,8 +95,8 @@
      id="namedview194"
      showgrid="false"
      inkscape:zoom="2.1439999"
-     inkscape:cx="270.53808"
-     inkscape:cy="100.71421"
+     inkscape:cx="328.62964"
+     inkscape:cy="49.221063"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
@@ -779,12 +779,12 @@
      id="text166-7"
      style="font-size:10px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial">+ MyResponseTimeRecord ( values : Object [3] )</text>
   <text
-     x="261.25296"
+     x="261.0137"
      y="102.46136"
      clip-path="none"
      xml:space="preserve"
      id="text158-6"
-     style="font-size:10px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial">- TYPES : Class&lt;?&gt;[] {...}</text>
+     style="font-size:10px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial">+ TYPES : Class&lt;?&gt;[] {...}</text>
   <polygon
      clip-path="url(#clipPath30-1)"
      points="240,30 240,40 230,35 "

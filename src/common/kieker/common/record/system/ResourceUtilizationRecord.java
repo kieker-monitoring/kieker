@@ -30,7 +30,7 @@ import kieker.common.util.Bits;
  */
 public class ResourceUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
 	private static final long serialVersionUID = 8412442607068036054L;
-	private static final Class<?>[] TYPES = {
+	public static final Class<?>[] TYPES = {
 		long.class,
 		String.class,
 		String.class,

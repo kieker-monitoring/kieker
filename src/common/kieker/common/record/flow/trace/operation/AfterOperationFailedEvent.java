@@ -32,7 +32,7 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 	public static final String NO_CAUSE = "<no-cause>";
 
 	private static final long serialVersionUID = 6968286882927488605L;
-	private static final Class<?>[] TYPES = {
+	public static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
 		int.class, // TraceEvent.orderIndex

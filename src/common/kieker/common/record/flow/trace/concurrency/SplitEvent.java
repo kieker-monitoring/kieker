@@ -26,7 +26,7 @@ import kieker.common.util.Bits;
  */
 public class SplitEvent extends AbstractTraceEvent {
 	private static final long serialVersionUID = -4454625562107999414L;
-	private static final Class<?>[] TYPES = {
+	public static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
 		int.class, // TraceEvent.orderIndex
