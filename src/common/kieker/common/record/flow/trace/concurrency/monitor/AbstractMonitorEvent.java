@@ -68,7 +68,7 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent {
 	 * {@inheritDoc}
 	 */
 	public Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.lockId, };
+		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getLockId(), };
 	}
 
 	public Class<?>[] getValueTypes() {

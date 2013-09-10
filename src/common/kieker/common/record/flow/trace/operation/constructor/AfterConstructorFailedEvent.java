@@ -90,7 +90,7 @@ public class AfterConstructorFailedEvent extends AfterConstructorEvent implement
 
 	@Override
 	public Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getOperationSignature(), this.getClassSignature(), this.cause, };
+		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getOperationSignature(), this.getClassSignature(), this.getCause(), };
 	}
 
 	@Override

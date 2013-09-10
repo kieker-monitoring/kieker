@@ -60,7 +60,7 @@ public class TimestampRecord extends AbstractMonitoringRecord implements IMonito
 	 * {@inheritDoc}
 	 */
 	public Object[] toArray() {
-		return new Object[] { this.timestamp, };
+		return new Object[] { this.getTimestamp(), };
 	}
 
 	/**

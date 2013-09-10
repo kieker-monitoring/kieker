@@ -132,14 +132,14 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	 */
 	public Object[] toArray() {
 		return new Object[] {
-			this.operationSignature,
-			this.sessionId,
-			this.traceId,
-			this.tin,
-			this.tout,
-			this.hostname,
-			this.eoi,
-			this.ess, };
+			this.getOperationSignature(),
+			this.getSessionId(),
+			this.getTraceId(),
+			this.getTin(),
+			this.getTout(),
+			this.getHostname(),
+			this.getEoi(),
+			this.getEss(), };
 	}
 
 	/**

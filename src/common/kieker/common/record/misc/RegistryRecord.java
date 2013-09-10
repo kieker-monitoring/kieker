@@ -66,7 +66,7 @@ public final class RegistryRecord<E> extends AbstractMonitoringRecord implements
 	 * {@inheritDoc}
 	 */
 	public Object[] toArray() {
-		return new Object[] { this.id, this.object };
+		return new Object[] { this.getId(), this.getObject() };
 	}
 
 	/**

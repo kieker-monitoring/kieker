@@ -69,7 +69,7 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	 * {@inheritDoc}
 	 */
 	public Object[] toArray() {
-		return new Object[] { this.timestamp, this.branchID, this.branchingOutcome, };
+		return new Object[] { this.getTimestamp(), this.getBranchID(), this.getBranchingOutcome(), };
 	}
 
 	/**

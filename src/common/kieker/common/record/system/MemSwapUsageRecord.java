@@ -117,7 +117,8 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	 * {@inheritDoc}
 	 */
 	public Object[] toArray() {
-		return new Object[] { this.timestamp, this.hostname, this.memTotal, this.memUsed, this.memFree, this.swapTotal, this.swapUsed, this.swapFree, };
+		return new Object[] { this.getTimestamp(), this.getHostname(), this.getMemTotal(), this.getMemUsed(), this.getMemFree(), this.getSwapTotal(),
+			this.getSwapUsed(), this.getSwapFree(), };
 	}
 
 	/**

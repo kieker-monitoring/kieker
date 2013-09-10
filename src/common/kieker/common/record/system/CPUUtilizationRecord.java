@@ -161,7 +161,8 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	 * {@inheritDoc}
 	 */
 	public Object[] toArray() {
-		return new Object[] { this.timestamp, this.hostname, this.cpuID, this.user, this.system, this.wait, this.nice, this.irq, this.totalUtilization, this.idle, };
+		return new Object[] { this.getTimestamp(), this.getHostname(), this.getCpuID(), this.getUser(), this.getSystem(), this.getWait(), this.getNice(),
+			this.getIrq(), this.getTotalUtilization(), this.getIdle(), };
 	}
 
 	/**

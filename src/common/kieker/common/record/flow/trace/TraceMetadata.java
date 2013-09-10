@@ -110,7 +110,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	 * {@inheritDoc}
 	 */
 	public Object[] toArray() {
-		return new Object[] { this.traceId, this.threadId, this.sessionId, this.hostname, this.parentTraceId, this.parentOrderId, };
+		return new Object[] { this.getTraceId(), this.getThreadId(), this.getSessionId(), this.getHostname(), this.getParentTraceId(), this.getParentOrderId(), };
 	}
 
 	/**

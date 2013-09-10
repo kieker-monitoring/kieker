@@ -94,7 +94,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	 * {@inheritDoc}
 	 */
 	public Object[] toArray() {
-		return new Object[] { this.timestamp, this.hostname, this.resourceName, this.utilization, };
+		return new Object[] { this.getTimestamp(), this.getHostname(), this.getResourceName(), this.getUtilization(), };
 	}
 
 	/**

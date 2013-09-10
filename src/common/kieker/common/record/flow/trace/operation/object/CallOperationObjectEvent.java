@@ -108,7 +108,7 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(),
 			this.getCallerOperationSignature(), this.getCallerClassSignature(),
 			this.getCalleeOperationSignature(), this.getCalleeClassSignature(),
-			this.callerObjectId, this.calleeObjectId, };
+			this.getCallerObjectId(), this.getCalleeObjectId(), };
 	}
 
 	/**

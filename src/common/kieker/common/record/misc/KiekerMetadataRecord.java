@@ -124,8 +124,8 @@ public final class KiekerMetadataRecord extends AbstractMonitoringRecord impleme
 	 * {@inheritDoc}
 	 */
 	public Object[] toArray() {
-		return new Object[] { this.version, this.controllerName, this.hostname, this.experimentId, this.debugMode, this.timeOffset, this.timeUnit,
-			this.numberOfRecords, };
+		return new Object[] { this.getVersion(), this.getControllerName(), this.getHostname(), this.getExperimentId(), this.isDebugMode(), this.getTimeOffset(),
+			this.getTimeUnit(), this.getNumberOfRecords(), };
 	}
 
 	/**
