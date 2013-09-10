@@ -124,7 +124,7 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 	 * 
 	 * @return The ID of the caller.
 	 */
-	public int getObjectId() {
+	public final int getObjectId() {
 		return this.callerObjectId;
 	}
 

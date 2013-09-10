@@ -19,7 +19,7 @@ package kieker.analysis.plugin.filter.flow;
 import java.util.Arrays;
 
 import kieker.common.record.flow.trace.AbstractTraceEvent;
-import kieker.common.record.flow.trace.Trace;
+import kieker.common.record.flow.trace.TraceMetadata;
 
 /**
  * @author Jan Waller
@@ -27,7 +27,7 @@ import kieker.common.record.flow.trace.Trace;
  * @since 1.5
  */
 public final class TraceEventRecords {
-	private final Trace trace;
+	private final TraceMetadata trace;
 	private final AbstractTraceEvent[] traceEvents;
 
 	/**
@@ -38,7 +38,7 @@ public final class TraceEventRecords {
 	 * @param traceEvents
 	 *            The trace events to be stored in this object.
 	 */
-	public TraceEventRecords(final Trace trace, final AbstractTraceEvent[] traceEvents) { // NOPMD (stored directly)
+	public TraceEventRecords(final TraceMetadata trace, final AbstractTraceEvent[] traceEvents) { // NOPMD (stored directly)
 		this.trace = trace;
 		this.traceEvents = traceEvents;
 	}
@@ -48,7 +48,7 @@ public final class TraceEventRecords {
 	 * 
 	 * @return The traces currently stored in this object.
 	 */
-	public Trace getTrace() {
+	public TraceMetadata getTrace() {
 		return this.trace;
 	}
 

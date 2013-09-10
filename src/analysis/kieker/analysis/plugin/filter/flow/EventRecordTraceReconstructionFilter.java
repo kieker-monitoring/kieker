@@ -37,7 +37,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.flow.IFlowRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
-import kieker.common.record.flow.trace.Trace;
+import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
@@ -157,13 +157,13 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	@InputPort(
 			name = INPUT_PORT_NAME_TRACE_RECORDS,
 			description = "Reconstruct traces from incoming flow records",
-			eventTypes = { Trace.class, AbstractTraceEvent.class })
+			eventTypes = { TraceMetadata.class, AbstractTraceEvent.class })
 	public void newEvent(final IFlowRecord record) {
 		final Long traceId;
 		TraceBuffer traceBuffer;
 		final long loggingTimestamp;
-		if (record instanceof Trace) {
-			traceId = ((Trace) record).getTraceId();
+		if (record instanceof TraceMetadata) {
+			traceId = ((TraceMetadata) record).getTraceId();
 			traceBuffer = this.traceId2trace.get(traceId);
 			if (traceBuffer == null) { // first record for this id!
 				synchronized (this) {
@@ -174,7 +174,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 					}
 				}
 			}
-			traceBuffer.setTrace((Trace) record);
+			traceBuffer.setTrace((TraceMetadata) record);
 			loggingTimestamp = -1;
 		} else if (record instanceof AbstractTraceEvent) {
 			traceId = ((AbstractTraceEvent) record).getTraceId();
@@ -267,7 +267,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		private static final Log LOG = LogFactory.getLog(TraceBuffer.class);
 		private static final Comparator<AbstractTraceEvent> COMPARATOR = new TraceEventComperator();
 
-		private Trace trace;
+		private TraceMetadata trace;
 		private final SortedSet<AbstractTraceEvent> events = new TreeSet<AbstractTraceEvent>(COMPARATOR);
 
 		private boolean closeable;
@@ -324,7 +324,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 			}
 		}
 
-		public void setTrace(final Trace trace) {
+		public void setTrace(final TraceMetadata trace) {
 			final long myTraceId = trace.getTraceId();
 			synchronized (this) {
 				if (this.traceId == -1) {

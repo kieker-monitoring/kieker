@@ -100,7 +100,7 @@ public class AfterOperationObjectEvent extends AfterOperationEvent implements IO
 		return TYPES; // NOPMD
 	}
 
-	public int getObjectId() {
+	public final int getObjectId() {
 		return this.objectId;
 	}
 }

@@ -19,7 +19,7 @@ package kieker.test.common.junit.record.flow.trace;
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.common.record.flow.trace.Trace;
+import kieker.common.record.flow.trace.TraceMetadata;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 
@@ -45,7 +45,7 @@ public class TestTrace extends AbstractKiekerTest {
 	}
 
 	/**
-	 * Tests the constructor and toArray(..) methods of {@link Trace}.
+	 * Tests the constructor and toArray(..) methods of {@link TraceMetadata}.
 	 * 
 	 * Assert that a record instance trace1 equals an instance event2 created by serializing trace1 to an array trace1Array
 	 * and using trace1Array to construct trace2. This ignores a set loggingTimestamp!
@@ -53,7 +53,7 @@ public class TestTrace extends AbstractKiekerTest {
 	@Test
 	public void testSerializeDeserializeEquals() {
 
-		final Trace trace1 = new Trace(TRACE_ID, THREAD_ID, SESSION_ID, HOSTNAME, PARENT_TRACE_ID, PARENT_ORDER_ID);
+		final TraceMetadata trace1 = new TraceMetadata(TRACE_ID, THREAD_ID, SESSION_ID, HOSTNAME, PARENT_TRACE_ID, PARENT_ORDER_ID);
 
 		Assert.assertEquals("Unexpected trace ID", TRACE_ID, trace1.getTraceId());
 		Assert.assertEquals("Unexpected thread ID", THREAD_ID, trace1.getThreadId());
@@ -64,7 +64,7 @@ public class TestTrace extends AbstractKiekerTest {
 
 		final Object[] trace1Array = trace1.toArray();
 
-		final Trace trace2 = new Trace(trace1Array);
+		final TraceMetadata trace2 = new TraceMetadata(trace1Array);
 
 		Assert.assertEquals(trace1, trace2);
 		Assert.assertEquals(0, trace1.compareTo(trace2));

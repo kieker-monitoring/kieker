@@ -19,7 +19,7 @@ package kieker.monitoring.probe.aspectj.flow.concurrency;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 
-import kieker.common.record.flow.trace.Trace;
+import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.concurrency.SplitEvent;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
@@ -60,7 +60,7 @@ public class ThreadingAspect extends AbstractAspectJProbe {
 		if (!CTRLINST.isProbeActivated("public synchronized void java.lang.Thread.start()")) {
 			return;
 		}
-		final Trace trace = TRACEREGISTRY.getTrace();
+		final TraceMetadata trace = TRACEREGISTRY.getTrace();
 		if (trace != null) { // ignore split if not inside of a trace!
 			final long traceId = trace.getTraceId();
 			final int orderId = trace.getNextOrderId();

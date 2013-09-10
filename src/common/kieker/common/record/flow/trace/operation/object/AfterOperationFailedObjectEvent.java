@@ -104,7 +104,7 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 		return TYPES; // NOPMD
 	}
 
-	public int getObjectId() {
+	public final int getObjectId() {
 		return this.objectId;
 	}
 }

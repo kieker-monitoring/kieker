@@ -130,7 +130,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	/**
 	 * {@inheritDoc}
 	 */
-	public final Object[] toArray() {
+	public Object[] toArray() {
 		return new Object[] {
 			this.operationSignature,
 			this.sessionId,
@@ -148,7 +148,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Deprecated
-	public void initFromArray(final Object[] values) {
+	public final void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -169,7 +169,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	/**
 	 * @return the operationSignature
 	 */
-	public String getOperationSignature() {
+	public final String getOperationSignature() {
 		return this.operationSignature;
 	}
 

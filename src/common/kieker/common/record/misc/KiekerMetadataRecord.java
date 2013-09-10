@@ -141,39 +141,39 @@ public final class KiekerMetadataRecord extends AbstractMonitoringRecord impleme
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Deprecated
-	public void initFromArray(final Object[] values) {
+	public final void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
 
-	public String getVersion() {
+	public final String getVersion() {
 		return this.version;
 	}
 
-	public String getControllerName() {
+	public final String getControllerName() {
 		return this.controllerName;
 	}
 
-	public String getHostname() {
+	public final String getHostname() {
 		return this.hostname;
 	}
 
-	public int getExperimentId() {
+	public final int getExperimentId() {
 		return this.experimentId;
 	}
 
-	public boolean isDebugMode() {
+	public final boolean isDebugMode() {
 		return this.debugMode;
 	}
 
-	public long getTimeOffset() {
+	public final long getTimeOffset() {
 		return this.timeOffset;
 	}
 
-	public String getTimeUnit() {
+	public final String getTimeUnit() {
 		return this.timeUnit;
 	}
 
-	public long getNumberOfRecords() {
+	public final long getNumberOfRecords() {
 		return this.numberOfRecords;
 	}
 

@@ -126,7 +126,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Deprecated
-	public void initFromArray(final Object[] values) {
+	public final void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
 

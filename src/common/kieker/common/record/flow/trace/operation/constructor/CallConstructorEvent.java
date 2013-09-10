@@ -80,16 +80,4 @@ public class CallConstructorEvent extends CallOperationEvent {
 	protected CallConstructorEvent(final Object[] values, final Class<?>[] types) {
 		super(values, types); // values[0..6]
 	}
-
-	@Override
-	public Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(),
-			this.getCallerOperationSignature(), this.getCallerClassSignature(),
-			this.getCalleeOperationSignature(), this.getCalleeClassSignature(), };
-	}
-
-	@Override
-	public Class<?>[] getValueTypes() {
-		return TYPES; // NOPMD
-	}
 }

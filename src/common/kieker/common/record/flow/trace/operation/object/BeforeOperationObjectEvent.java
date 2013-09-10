@@ -100,7 +100,7 @@ public class BeforeOperationObjectEvent extends BeforeOperationEvent implements 
 		return TYPES; // NOPMD
 	}
 
-	public int getObjectId() {
+	public final int getObjectId() {
 		return this.objectId;
 	}
 }

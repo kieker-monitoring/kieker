@@ -89,7 +89,7 @@ public class JoinEvent extends AbstractTraceEvent {
 		return TYPES; // NOPMD
 	}
 
-	public long getJoinedTraceId() {
+	public final long getJoinedTraceId() {
 		return this.joinedTraceId;
 	}
 }

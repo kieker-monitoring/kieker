@@ -72,14 +72,4 @@ public class AfterConstructorEvent extends AfterOperationEvent {
 	protected AfterConstructorEvent(final Object[] values, final Class<?>[] types) {
 		super(values, types); // values[0..4]
 	}
-
-	@Override
-	public Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getOperationSignature(), this.getClassSignature(), };
-	}
-
-	@Override
-	public Class<?>[] getValueTypes() {
-		return TYPES; // NOPMD
-	}
 }

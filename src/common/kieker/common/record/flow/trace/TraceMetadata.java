@@ -25,7 +25,7 @@ import kieker.common.record.flow.IFlowRecord;
  * 
  * @since 1.5
  */
-public class Trace extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IFlowRecord {
+public class TraceMetadata extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IFlowRecord {
 
 	/**
 	 * Constant to be used if no sessionId required.
@@ -81,7 +81,7 @@ public class Trace extends AbstractMonitoringRecord implements IMonitoringRecord
 	 * @param parentOrderId
 	 *            the order index within the parent trace; use {@link #NO_PARENT_ORDER_INDEX} if not desired.
 	 */
-	public Trace(final long traceId, final long threadId, final String sessionId, final String hostname, final long parentTraceId, final int parentOrderId) {
+	public TraceMetadata(final long traceId, final long threadId, final String sessionId, final String hostname, final long parentTraceId, final int parentOrderId) {
 		this.traceId = traceId;
 		this.threadId = threadId;
 		this.sessionId = (sessionId == null) ? NO_SESSION_ID : sessionId; // NOCS
@@ -96,7 +96,7 @@ public class Trace extends AbstractMonitoringRecord implements IMonitoringRecord
 	 * @param values
 	 *            The array containing the values for the fields of this class. This should normally be the array resulting in a call to {@link #toArray()}.
 	 */
-	public Trace(final Object[] values) { // NOPMD (values stored directly)
+	public TraceMetadata(final Object[] values) { // NOPMD (values stored directly)
 		AbstractMonitoringRecord.checkArray(values, TYPES);
 		this.traceId = (Long) values[0];
 		this.threadId = (Long) values[1];
@@ -109,14 +109,14 @@ public class Trace extends AbstractMonitoringRecord implements IMonitoringRecord
 	/**
 	 * {@inheritDoc}
 	 */
-	public final Object[] toArray() {
+	public Object[] toArray() {
 		return new Object[] { this.traceId, this.threadId, this.sessionId, this.hostname, this.parentTraceId, this.parentOrderId, };
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public final Class<?>[] getValueTypes() {
+	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
 

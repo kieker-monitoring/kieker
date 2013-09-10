@@ -27,7 +27,6 @@ import kieker.common.record.IMonitoringRecord;
  * @since 0.95a
  */
 public final class EmptyRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-
 	private static final long serialVersionUID = -9106270301270791630L;
 
 	private static final Class<?>[] TYPES = {};
@@ -62,7 +61,7 @@ public final class EmptyRecord extends AbstractMonitoringRecord implements IMoni
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Deprecated
-	public void initFromArray(final Object[] values) {
+	public final void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
 

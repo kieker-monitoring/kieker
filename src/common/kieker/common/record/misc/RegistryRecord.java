@@ -75,7 +75,7 @@ public final class RegistryRecord<E> extends AbstractMonitoringRecord implements
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Deprecated
-	public void initFromArray(final Object[] values) {
+	public final void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -89,14 +89,14 @@ public final class RegistryRecord<E> extends AbstractMonitoringRecord implements
 	/**
 	 * @return the id
 	 */
-	public int getId() {
+	public final int getId() {
 		return this.id;
 	}
 
 	/**
 	 * @return the object
 	 */
-	public E getObject() {
+	public final E getObject() {
 		return this.object;
 	}
 }

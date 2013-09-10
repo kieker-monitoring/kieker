@@ -58,14 +58,14 @@ public class SplitEvent extends AbstractTraceEvent {
 	/**
 	 * {@inheritDoc}
 	 */
-	public final Object[] toArray() {
+	public Object[] toArray() {
 		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), };
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public final Class<?>[] getValueTypes() {
+	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
 }
