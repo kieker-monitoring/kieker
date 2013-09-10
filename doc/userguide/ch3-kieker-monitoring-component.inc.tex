@@ -246,7 +246,7 @@ are used for serialization and deserialization of the monitoring data contained 
 in the record. Alternatively---in order to support the definition of immutable record types---the %
 marker interface \class{IMonitoringRecord.Factory} needs to be implemented, requiring the %
 implementation of (i)~the \method{toArray} method (as before), (ii)~a %
-constructor accepting a values array, and (iii)~a public static \method{TYPES} %
+constructor accepting a values array, and (iii)~a private static \method{TYPES} %
 field. The method \method{setLoggingTimestamp} is used by the monitoring controller to %
 store the date and time when a record is received by the controller. %
 The method \method{getLoggingTimestamp} can be used during analysis to retrieve %
@@ -272,7 +272,7 @@ class \class{AbstractMonitoringRecord}, and a custom monitoring record type %
 \begin{enumerate}
 \item Override the methods \method{initFromArray}, \method{toArray}, \method{getValueTypes}
 \item For immutable record types: implement \class{IMonitoringRecord.Factory}, a constructor %
-with a single \class{Class<?>[]} argument, and a public static \method{TYPES} field. %
+with a single \class{Object[]} argument, and a private static \method{TYPES} field. %
 In this case, \method{initFromArray} (which is not called by the framework then) should %
 throw an \class{UnsupportedOperationException}.
 \end{enumerate}

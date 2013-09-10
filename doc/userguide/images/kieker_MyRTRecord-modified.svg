@@ -25,7 +25,7 @@
    height="204.86438"
    font-weight="normal"
    id="svg2"
-   inkscape:version="0.48.1 r9760"
+   inkscape:version="0.48.4 r9939"
    sodipodi:docname="kieker_MyRTRecord-modified.svg"
    style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog">
   <line
@@ -77,7 +77,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -90,15 +90,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1280"
-     inkscape:window-height="1004"
+     inkscape:window-width="1920"
+     inkscape:window-height="1018"
      id="namedview194"
      showgrid="false"
      inkscape:zoom="2.1439999"
-     inkscape:cx="386.38986"
-     inkscape:cy="159.82372"
-     inkscape:window-x="1276"
-     inkscape:window-y="-3"
+     inkscape:cx="270.53808"
+     inkscape:cy="100.71421"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2"
      fit-margin-top="0"
@@ -779,12 +779,12 @@
      id="text166-7"
      style="font-size:10px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial">+ MyResponseTimeRecord ( values : Object [3] )</text>
   <text
-     x="261.0137"
+     x="261.25296"
      y="102.46136"
      clip-path="none"
      xml:space="preserve"
      id="text158-6"
-     style="font-size:10px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial">+ TYPES : Class&lt;?&gt;[] {...}</text>
+     style="font-size:10px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial">- TYPES : Class&lt;?&gt;[] {...}</text>
   <polygon
      clip-path="url(#clipPath30-1)"
      points="240,30 240,40 230,35 "
