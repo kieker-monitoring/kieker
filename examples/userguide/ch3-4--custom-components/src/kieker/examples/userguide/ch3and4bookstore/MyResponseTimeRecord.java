@@ -50,23 +50,23 @@ public class MyResponseTimeRecord extends AbstractMonitoringRecord
 		throw new UnsupportedOperationException();
 	}
 
-	public final Object[] toArray() {
-		return new Object[] { this.className, this.methodName, this.responseTimeNanos };
+	public Object[] toArray() {
+		return new Object[] { this.getClassName(), this.getMethodName(), this.getResponseTimeNanos() };
 	}
 
 	public Class<?>[] getValueTypes() {
 		return MyResponseTimeRecord.TYPES.clone();
 	}
 
-	public String getClassName() {
+	public final String getClassName() {
 		return this.className;
 	}
 
-	public String getMethodName() {
+	public final String getMethodName() {
 		return this.methodName;
 	}
 
-	public long getResponseTimeNanos() {
+	public final long getResponseTimeNanos() {
 		return this.responseTimeNanos;
 	}
 
