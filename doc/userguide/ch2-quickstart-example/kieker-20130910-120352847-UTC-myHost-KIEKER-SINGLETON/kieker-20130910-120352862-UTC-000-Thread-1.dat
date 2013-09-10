@@ -1,4 +1,4 @@
-$0;1378814632852912850;1.8-SNAPSHOT;KIEKER-SINGLETON;Desktop;1;false;0;NANOSECONDS;1
+$0;1378814632852912850;1.8-SNAPSHOT;KIEKER-SINGLETON;myHost;1;false;0;NANOSECONDS;1
 $1;1378814632852360525;public void kieker.examples.userguide.ch2bookstore.manual.Catalog.getBook(boolean);<no-session-id>;-1;1378814632849896821;1378814632852105483;myHost;-1;-1
 $1;1378814632867753633;public void kieker.examples.userguide.ch2bookstore.manual.Catalog.getBook(boolean);<no-session-id>;-1;1378814632852970771;1378814632867681312;myHost;-1;-1
 $1;1378814632869662451;public void kieker.examples.userguide.ch2bookstore.manual.Catalog.getBook(boolean);<no-session-id>;-1;1378814632867836834;1378814632869649011;myHost;-1;-1
