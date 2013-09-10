@@ -9,11 +9,11 @@ BINDIR=bin/
 BASEDIR=
 
 SLEEPTIME=30            ## 30
-NUM_LOOPS=30            ## 10
+NUM_LOOPS=10            ## 10
 THREADS=1               ## 1
 MAXRECURSIONDEPTH=10    ## 10
 TOTALCALLS=20000000     ## 2000000
-METHODTIME=0            ## 500000
+METHODTIME=1            ## 500000
 
 TIME=`expr ${METHODTIME} \* ${TOTALCALLS} / 1000000000 \* 4 \* ${MAXRECURSIONDEPTH} \* ${NUM_LOOPS} + ${SLEEPTIME} \* 4 \* ${NUM_LOOPS}  \* ${MAXRECURSIONDEPTH}`
 echo "Experiment will take circa ${TIME} seconds."
@@ -47,8 +47,8 @@ JAVAARGS_NOINSTR="${JAVAARGS}"
 JAVAARGS_LTW="${JAVAARGS} -javaagent:${BASEDIR}lib/kieker-1.8-SNAPSHOT_aspectj.jar -Dorg.aspectj.weaver.showWeaveInfo=false -Daj.weaving.verbose=false"
 JAVAARGS_KIEKER_DEACTV="${JAVAARGS_LTW} -Dkieker.monitoring.adaptiveMonitoring.configFile=META-INF/kieker.monitoring.adaptiveMonitoring.disabled.conf -Dkieker.monitoring.writer=kieker.monitoring.writer.DummyWriter"
 JAVAARGS_KIEKER_NOLOGGING="${JAVAARGS_LTW} -Dkieker.monitoring.writer=kieker.monitoring.writer.DummyWriter"
-#JAVAARGS_KIEKER_LOGGING="${JAVAARGS_LTW} -Dkieker.monitoring.writer=kieker.monitoring.writer.filesystem.AsyncFsWriter -Dkieker.monitoring.writer.filesystem.AsyncFsWriter.customStoragePath=${BASEDIR}tmp"
-JAVAARGS_KIEKER_LOGGING="${JAVAARGS_LTW} -Dkieker.monitoring.writer=kieker.monitoring.writer.filesystem.AsyncBinaryFsWriter -Dkieker.monitoring.writer.filesystem.AsyncBinaryFsWriter.customStoragePath=${BASEDIR}tmp"
+#JAVAARGS_KIEKER_LOGGING="${JAVAARGS_LTW} -Dkieker.monitoring.writer=kieker.monitoring.writer.filesystem.AsyncFsWriter -Dkieker.monitoring.writer.filesystem.AsyncFsWriter.storeInJavaIoTmpdir=false -Dkieker.monitoring.writer.filesystem.AsyncFsWriter.customStoragePath=${BASEDIR}tmp"
+JAVAARGS_KIEKER_LOGGING="${JAVAARGS_LTW} -Dkieker.monitoring.writer=kieker.monitoring.writer.filesystem.AsyncBinaryFsWriter -Dkieker.monitoring.writer.filesystem.AsyncBinaryFsWriter.storeInJavaIoTmpdir=false -Dkieker.monitoring.writer.filesystem.AsyncBinaryFsWriter.customStoragePath=${BASEDIR}tmp"
 
 ## Write configuration
 uname -a >${RESULTSDIR}configuration.txt
@@ -70,42 +70,39 @@ sync
 for ((i=1;i<=${NUM_LOOPS};i+=1)); do
     echo "## Starting iteration ${i}/${NUM_LOOPS}"
 
-    for ((j=1;j<=${MAXRECURSIONDEPTH};j+=1)); do
-        echo "# Starting recursion ${i}.${j}/${MAXRECURSIONDEPTH}"
-
         # 1 No instrumentation
         echo " # ${i}.1 No instrumentation"
-        mpstat 1 > ${RESULTSDIR}stat/mpstat-${i}-${j}-1.txt &
-        vmstat 1 > ${RESULTSDIR}stat/vmstat-${i}-${j}-1.txt &
-        iostat -xn 10 > ${RESULTSDIR}stat/iostat-${i}-${j}-1.txt &
+        mpstat 1 > ${RESULTSDIR}stat/mpstat-${i}-${MAXRECURSIONDEPTH}-1.txt &
+        vmstat 1 > ${RESULTSDIR}stat/vmstat-${i}-${MAXRECURSIONDEPTH}-1.txt &
+        iostat -xn 10 > ${RESULTSDIR}stat/iostat-${i}-${MAXRECURSIONDEPTH}-1.txt &
         ${BINDJAVA}java  ${JAVAARGS_NOINSTR} ${JAR} \
-            --output-filename ${RESULTSFN}-${i}-${j}-1.csv \
+            --output-filename ${RESULTSFN}-${i}-${MAXRECURSIONDEPTH}-1.csv \
             --totalcalls ${TOTALCALLS} \
             --methodtime ${METHODTIME} \
             --totalthreads ${THREADS} \
-            --recursiondepth ${j}
+            --recursiondepth ${MAXRECURSIONDEPTH}
         kill %mpstat
         kill %vmstat
         kill %iostat
-        [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot-${i}-${j}-1.log
+        [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot-${i}-${MAXRECURSIONDEPTH}-1.log
         sync
         sleep ${SLEEPTIME}
 
         # 2 Deactivated probe
         echo " # ${i}.2 Deactivated probe"
-        mpstat 1 > ${RESULTSDIR}stat/mpstat-${i}-${j}-2.txt &
-        vmstat 1 > ${RESULTSDIR}stat/vmstat-${i}-${j}-2.txt &
-        iostat -xn 10 > ${RESULTSDIR}stat/iostat-${i}-${j}-2.txt &
+        mpstat 1 > ${RESULTSDIR}stat/mpstat-${i}-${MAXRECURSIONDEPTH}-2.txt &
+        vmstat 1 > ${RESULTSDIR}stat/vmstat-${i}-${MAXRECURSIONDEPTH}-2.txt &
+        iostat -xn 10 > ${RESULTSDIR}stat/iostat-${i}-${MAXRECURSIONDEPTH}-2.txt &
         ${BINDJAVA}java  ${JAVAARGS_KIEKER_DEACTV} ${JAR} \
-            --output-filename ${RESULTSFN}-${i}-${j}-2.csv \
+            --output-filename ${RESULTSFN}-${i}-${MAXRECURSIONDEPTH}-2.csv \
             --totalcalls ${TOTALCALLS} \
             --methodtime ${METHODTIME} \
             --totalthreads ${THREADS} \
-            --recursiondepth ${j}
+            --recursiondepth ${MAXRECURSIONDEPTH}
         kill %mpstat
         kill %vmstat
         kill %iostat
-        [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot-${i}-${j}-2.log
+        [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot-${i}-${MAXRECURSIONDEPTH}-2.log
         echo >>${BASEDIR}kieker.log
         echo >>${BASEDIR}kieker.log
         sync
@@ -113,19 +110,19 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
 
         # 3 No logging
         echo " # ${i}.3 No logging (null writer)"
-        mpstat 1 > ${RESULTSDIR}stat/mpstat-${i}-${j}-3.txt &
-        vmstat 1 > ${RESULTSDIR}stat/vmstat-${i}-${j}-3.txt &
-        iostat -xn 10 > ${RESULTSDIR}stat/iostat-${i}-${j}-3.txt &
+        mpstat 1 > ${RESULTSDIR}stat/mpstat-${i}-${MAXRECURSIONDEPTH}-3.txt &
+        vmstat 1 > ${RESULTSDIR}stat/vmstat-${i}-${MAXRECURSIONDEPTH}-3.txt &
+        iostat -xn 10 > ${RESULTSDIR}stat/iostat-${i}-${MAXRECURSIONDEPTH}-3.txt &
         ${BINDJAVA}java  ${JAVAARGS_KIEKER_NOLOGGING} ${JAR} \
-            --output-filename ${RESULTSFN}-${i}-${j}-3.csv \
+            --output-filename ${RESULTSFN}-${i}-${MAXRECURSIONDEPTH}-3.csv \
             --totalcalls ${TOTALCALLS} \
             --methodtime ${METHODTIME} \
             --totalthreads ${THREADS} \
-            --recursiondepth ${j}
+            --recursiondepth ${MAXRECURSIONDEPTH}
         kill %mpstat
         kill %vmstat
         kill %iostat
-        [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot-${i}-${j}-3.log
+        [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot-${i}-${MAXRECURSIONDEPTH}-3.log
         echo >>${BASEDIR}kieker.log
         echo >>${BASEDIR}kieker.log
         sync
@@ -133,27 +130,25 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
 
         # 4 Logging
         echo " # ${i}.4 Logging"
-        mpstat 1 > ${RESULTSDIR}stat/mpstat-${i}-${j}-4.txt &
-        vmstat 1 > ${RESULTSDIR}stat/vmstat-${i}-${j}-4.txt &
-        iostat -xn 10 > ${RESULTSDIR}stat/iostat-${i}-${j}-4.txt &
+        mpstat 1 > ${RESULTSDIR}stat/mpstat-${i}-${MAXRECURSIONDEPTH}-4.txt &
+        vmstat 1 > ${RESULTSDIR}stat/vmstat-${i}-${MAXRECURSIONDEPTH}-4.txt &
+        iostat -xn 10 > ${RESULTSDIR}stat/iostat-${i}-${MAXRECURSIONDEPTH}-4.txt &
         ${BINDJAVA}java  ${JAVAARGS_KIEKER_LOGGING} ${JAR} \
-            --output-filename ${RESULTSFN}-${i}-${j}-4.csv \
+            --output-filename ${RESULTSFN}-${i}-${MAXRECURSIONDEPTH}-4.csv \
             --totalcalls ${TOTALCALLS} \
             --methodtime ${METHODTIME} \
             --totalthreads ${THREADS} \
-            --recursiondepth ${j}
+            --recursiondepth ${MAXRECURSIONDEPTH}
         kill %mpstat
         kill %vmstat
         kill %iostat
         mkdir -p ${RESULTSDIR}kiekerlog/
         mv ${BASEDIR}tmp/kieker-* ${RESULTSDIR}kiekerlog/
-        [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot-${i}-${j}-4.log
+        [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot-${i}-${MAXRECURSIONDEPTH}-4.log
         echo >>${BASEDIR}kieker.log
         echo >>${BASEDIR}kieker.log
         sync
         sleep ${SLEEPTIME}
-    
-    done
 
 done
 tar cf ${RESULTSDIR}kiekerlog.tar ${RESULTSDIR}kiekerlog
