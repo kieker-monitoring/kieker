@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.plugin.filter.forward;
+package kieker.analysis.plugin.filter.sink;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -25,7 +25,6 @@ import kieker.analysis.display.MeterGauge;
 import kieker.analysis.display.XYPlot;
 import kieker.analysis.display.annotation.Display;
 import kieker.analysis.plugin.annotation.InputPort;
-import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
@@ -35,30 +34,22 @@ import kieker.common.logging.LogFactory;
 import kieker.common.record.system.CPUUtilizationRecord;
 
 /**
- * This is a filter which accepts {@link CPUUtilizationRecord} instances and provides different views to visualize them. The incoming records are relayed without any
- * enrichment.
+ * This is a filter which accepts {@link CPUUtilizationRecord} instances and provides different views to visualize them.
  * 
  * @author Bjoern Weissenfels, Nils Christian Ehmke
  * 
  * @since 1.8
  */
-@Plugin(outputPorts =
-		@OutputPort(
-				name = CPUUtilizationDisplayFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
-				eventTypes = { CPUUtilizationRecord.class },
-				description = "Provides each incoming object"),
-		configuration = {
-			@Property(
-					name = CPUUtilizationDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES,
-					defaultValue = CPUUtilizationDisplayFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES,
-					description = "Sets the number of max plot entries per cpu"),
-			@Property(name = CPUUtilizationDisplayFilter.CONFIG_PROPERTY_NAME_DISPLAY_WARNING_INTERVALS,
-					defaultValue = CPUUtilizationDisplayFilter.CONFIG_PROPERTY_VALUE_DISPLAY_WARNING_INTERVALS) })
+@Plugin(configuration = {
+	@Property(
+			name = CPUUtilizationDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES,
+			defaultValue = CPUUtilizationDisplayFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES,
+			description = "Sets the number of max plot entries per cpu"),
+	@Property(name = CPUUtilizationDisplayFilter.CONFIG_PROPERTY_NAME_DISPLAY_WARNING_INTERVALS,
+			defaultValue = CPUUtilizationDisplayFilter.CONFIG_PROPERTY_VALUE_DISPLAY_WARNING_INTERVALS) })
 public class CPUUtilizationDisplayFilter extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME_EVENTS = "inputEvents";
-
-	public static final String OUTPUT_PORT_NAME_RELAYED_EVENTS = "relayedEvents";
 
 	public static final String CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES = "numberOfEntries";
 	public static final String CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES = "100";
@@ -113,8 +104,6 @@ public class CPUUtilizationDisplayFilter extends AbstractFilterPlugin {
 	@InputPort(name = CPUUtilizationDisplayFilter.INPUT_PORT_NAME_EVENTS, eventTypes = { CPUUtilizationRecord.class })
 	public void input(final CPUUtilizationRecord record) {
 		this.updateDisplays(record);
-
-		super.deliver(OUTPUT_PORT_NAME_RELAYED_EVENTS, record);
 	}
 
 	private void updateDisplays(final CPUUtilizationRecord record) {

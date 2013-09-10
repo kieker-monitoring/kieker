@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.plugin.filter.forward;
+package kieker.analysis.plugin.filter.sink;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -24,7 +24,6 @@ import kieker.analysis.display.PieChart;
 import kieker.analysis.display.XYPlot;
 import kieker.analysis.display.annotation.Display;
 import kieker.analysis.plugin.annotation.InputPort;
-import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
@@ -34,19 +33,13 @@ import kieker.common.logging.LogFactory;
 import kieker.common.record.system.MemSwapUsageRecord;
 
 /**
- * This is a filter which accepts {@link MemSwapUsageRecord} instances and provides different views to visualize them. The incoming records are relayed without any
- * enrichment.
+ * This is a filter which accepts {@link MemSwapUsageRecord} instances and provides different views to visualize them.
  * 
  * @author Bjoern Weissenfels, Nils Christian Ehmke
  * 
  * @since 1.8
  */
-@Plugin(outputPorts =
-		@OutputPort(
-				name = MemSwapUtilizationDisplayFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
-				eventTypes = { MemSwapUsageRecord.class },
-				description = "Provides each incoming object"),
-		configuration =
+@Plugin(configuration =
 		@Property(
 				name = MemSwapUtilizationDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES,
 				defaultValue = MemSwapUtilizationDisplayFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES,
@@ -55,9 +48,6 @@ public class MemSwapUtilizationDisplayFilter extends AbstractFilterPlugin {
 
 	/** The name of the input port receiving incoming events. */
 	public static final String INPUT_PORT_NAME_EVENTS = "inputEvents";
-
-	/** The name of the output port delivering the relayed events. */
-	public static final String OUTPUT_PORT_NAME_RELAYED_EVENTS = "relayedEvents";
 
 	/** The name of the property determining the number of entries per series in the plot. */
 	public static final String CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES = "numberOfEntries";
@@ -120,8 +110,6 @@ public class MemSwapUtilizationDisplayFilter extends AbstractFilterPlugin {
 	@InputPort(name = MemSwapUtilizationDisplayFilter.INPUT_PORT_NAME_EVENTS, eventTypes = { MemSwapUsageRecord.class })
 	public void input(final MemSwapUsageRecord record) {
 		this.updateDisplays(record);
-
-		super.deliver(OUTPUT_PORT_NAME_RELAYED_EVENTS, record);
 	}
 
 	private void updateDisplays(final MemSwapUsageRecord record) {
