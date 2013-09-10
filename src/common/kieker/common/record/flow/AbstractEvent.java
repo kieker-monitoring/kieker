@@ -62,6 +62,16 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
+	 */
+	@Deprecated
+	public final void initFromByteArray(final byte[] values) {
+		throw new UnsupportedOperationException();
+	}
+
 	public final long getTimestamp() {
 		return this.timestamp;
 	}

@@ -18,6 +18,7 @@ package kieker.common.record.misc;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.Bits;
 
 /**
  * Record used to associate Objects (typically Strings) with unique ids.
@@ -71,11 +72,31 @@ public final class RegistryRecord<E> extends AbstractMonitoringRecord implements
 
 	/**
 	 * {@inheritDoc}
+	 */
+	public byte[] toByteArray() {
+		final byte[] arr = new byte[4 + 8];
+		Bits.putInt(arr, 0, this.getId());
+		Bits.putString(arr, 8, this.getObject().toString()); // FIXME
+		return arr;
+	}
+
+	/**
+	 * {@inheritDoc}
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Deprecated
 	public final void initFromArray(final Object[] values) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
+	 */
+	@Deprecated
+	public final void initFromByteArray(final byte[] values) {
 		throw new UnsupportedOperationException();
 	}
 

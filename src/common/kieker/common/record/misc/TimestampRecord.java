@@ -18,6 +18,7 @@ package kieker.common.record.misc;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.Bits;
 
 /**
  * Record type which can be used to store a timestamp.
@@ -65,11 +66,30 @@ public class TimestampRecord extends AbstractMonitoringRecord implements IMonito
 
 	/**
 	 * {@inheritDoc}
+	 */
+	public byte[] toByteArray() {
+		final byte[] arr = new byte[8];
+		Bits.putLong(arr, 0, this.getTimestamp());
+		return arr;
+	}
+
+	/**
+	 * {@inheritDoc}
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Deprecated
 	public final void initFromArray(final Object[] values) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
+	 */
+	@Deprecated
+	public final void initFromByteArray(final byte[] values) {
 		throw new UnsupportedOperationException();
 	}
 

@@ -18,6 +18,7 @@ package kieker.common.record.controlflow;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.Bits;
 
 /**
  * @author Andre van Hoorn, Jan Waller
@@ -74,11 +75,32 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 
 	/**
 	 * {@inheritDoc}
+	 */
+	public byte[] toByteArray() {
+		final byte[] arr = new byte[8 + 4 + 4];
+		Bits.putLong(arr, 0, this.getTimestamp());
+		Bits.putInt(arr, 8, this.getBranchID());
+		Bits.putInt(arr, 8 + 4, this.getBranchingOutcome());
+		return arr;
+	}
+
+	/**
+	 * {@inheritDoc}
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Deprecated
 	public final void initFromArray(final Object[] values) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
+	 */
+	@Deprecated
+	public final void initFromByteArray(final byte[] values) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -109,4 +131,5 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	public final int getBranchingOutcome() {
 		return this.branchingOutcome;
 	}
+
 }

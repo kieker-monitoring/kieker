@@ -18,6 +18,7 @@ package kieker.common.record.flow.trace.operation;
 
 import kieker.common.record.flow.ICallRecord;
 import kieker.common.record.flow.IOperationRecord;
+import kieker.common.util.Bits;
 
 /**
  * @author Andre van Hoorn, Holger Knoche, Jan Waller
@@ -103,6 +104,21 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(),
 			this.getCallerOperationSignature(), this.getCallerClassSignature(),
 			this.getCalleeOperationSignature(), this.getCalleeClassSignature(), };
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public byte[] toByteArray() {
+		final byte[] arr = new byte[8 + 8 + 4 + 8 + 8 + 8 + 8];
+		Bits.putLong(arr, 0, this.getTimestamp());
+		Bits.putLong(arr, 8, this.getTraceId());
+		Bits.putInt(arr, 8 + 8, this.getOrderIndex());
+		Bits.putString(arr, 8 + 8 + 4, this.getCallerOperationSignature());
+		Bits.putString(arr, 8 + 8 + 4 + 8, this.getCallerClassSignature());
+		Bits.putString(arr, 8 + 8 + 4 + 8 + 8, this.getCalleeOperationSignature());
+		Bits.putString(arr, 8 + 8 + 4 + 8 + 8 + 8, this.getCalleeClassSignature());
+		return arr;
 	}
 
 	/**

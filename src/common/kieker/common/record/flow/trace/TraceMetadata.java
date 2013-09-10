@@ -19,6 +19,7 @@ package kieker.common.record.flow.trace;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.IFlowRecord;
+import kieker.common.util.Bits;
 
 /**
  * @author Jan Waller
@@ -122,11 +123,35 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 
 	/**
 	 * {@inheritDoc}
+	 */
+	public byte[] toByteArray() {
+		final byte[] arr = new byte[8 + 8 + 8 + 8 + 8 + 4];
+		Bits.putLong(arr, 0, this.getTraceId());
+		Bits.putLong(arr, 8, this.getThreadId());
+		Bits.putString(arr, 8 + 8, this.getSessionId());
+		Bits.putString(arr, 8 + 8 + 8, this.getHostname());
+		Bits.putLong(arr, 8 + 8 + 8 + 8, this.getParentTraceId());
+		Bits.putInt(arr, 8 + 8 + 8 + 8 + 8, this.getParentOrderId());
+		return arr;
+	}
+
+	/**
+	 * {@inheritDoc}
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Deprecated
 	public final void initFromArray(final Object[] values) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
+	 */
+	@Deprecated
+	public final void initFromByteArray(final byte[] values) {
 		throw new UnsupportedOperationException();
 	}
 

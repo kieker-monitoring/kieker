@@ -57,11 +57,28 @@ public final class EmptyRecord extends AbstractMonitoringRecord implements IMoni
 
 	/**
 	 * {@inheritDoc}
+	 */
+	public byte[] toByteArray() {
+		return new byte[0];
+	}
+
+	/**
+	 * {@inheritDoc}
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Deprecated
 	public final void initFromArray(final Object[] values) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
+	 */
+	@Deprecated
+	public final void initFromByteArray(final byte[] values) {
 		throw new UnsupportedOperationException();
 	}
 

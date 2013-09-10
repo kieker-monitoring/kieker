@@ -18,6 +18,7 @@ package kieker.common.record.misc;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.Bits;
 import kieker.common.util.Version;
 
 /**
@@ -131,6 +132,22 @@ public final class KiekerMetadataRecord extends AbstractMonitoringRecord impleme
 	/**
 	 * {@inheritDoc}
 	 */
+	public byte[] toByteArray() {
+		final byte[] arr = new byte[8 + 8 + 8 + 4 + 1 + 8 + 8 + 8];
+		Bits.putString(arr, 0, this.getVersion());
+		Bits.putString(arr, 8, this.getControllerName());
+		Bits.putString(arr, 8 + 8, this.getHostname());
+		Bits.putInt(arr, 8 + 8 + 8, this.getExperimentId());
+		Bits.putBoolean(arr, 8 + 8 + 8 + 4, this.isDebugMode());
+		Bits.putLong(arr, 8 + 8 + 8 + 4 + 1, this.getTimeOffset());
+		Bits.putString(arr, 8 + 8 + 8 + 4 + 1 + 8, this.getTimeUnit());
+		Bits.putLong(arr, 8 + 8 + 8 + 4 + 1 + 8 + 8, this.getNumberOfRecords());
+		return arr;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
@@ -142,6 +159,16 @@ public final class KiekerMetadataRecord extends AbstractMonitoringRecord impleme
 	 */
 	@Deprecated
 	public final void initFromArray(final Object[] values) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
+	 */
+	@Deprecated
+	public final void initFromByteArray(final byte[] values) {
 		throw new UnsupportedOperationException();
 	}
 

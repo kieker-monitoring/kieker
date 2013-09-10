@@ -21,6 +21,7 @@ package kieker.common.record.system;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.Bits;
 
 /**
  * @author Andre van Hoorn, Jan Waller
@@ -123,11 +124,37 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 
 	/**
 	 * {@inheritDoc}
+	 */
+	public byte[] toByteArray() {
+		final byte[] arr = new byte[8 + 8 + 8 + 8 + 8 + 8 + 8 + 8];
+		Bits.putLong(arr, 0, this.getTimestamp());
+		Bits.putString(arr, 8, this.getHostname());
+		Bits.putLong(arr, 8 + 8, this.getMemTotal());
+		Bits.putLong(arr, 8 + 8 + 8, this.getMemUsed());
+		Bits.putLong(arr, 8 + 8 + 8 + 8, this.getMemFree());
+		Bits.putLong(arr, 8 + 8 + 8 + 8 + 8, this.getSwapTotal());
+		Bits.putLong(arr, 8 + 8 + 8 + 8 + 8 + 8, this.getSwapUsed());
+		Bits.putLong(arr, 8 + 8 + 8 + 8 + 8 + 8 + 8, this.getSwapFree());
+		return arr;
+	}
+
+	/**
+	 * {@inheritDoc}
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Deprecated
 	public final void initFromArray(final Object[] values) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
+	 */
+	@Deprecated
+	public final void initFromByteArray(final byte[] values) {
 		throw new UnsupportedOperationException();
 	}
 

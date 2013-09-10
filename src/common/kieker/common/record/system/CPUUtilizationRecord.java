@@ -18,6 +18,7 @@ package kieker.common.record.system;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.Bits;
 
 /**
  * @author Andre van Hoorn, Jan Waller
@@ -167,11 +168,39 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 
 	/**
 	 * {@inheritDoc}
+	 */
+	public byte[] toByteArray() {
+		final byte[] arr = new byte[8 + 8 + 8 + 8 + 8 + 8 + 8 + 8 + 8 + 8];
+		Bits.putLong(arr, 0, this.getTimestamp());
+		Bits.putString(arr, 8, this.getHostname());
+		Bits.putString(arr, 8 + 8, this.getCpuID());
+		Bits.putDouble(arr, 8 + 8 + 8, this.getUser());
+		Bits.putDouble(arr, 8 + 8 + 8 + 8, this.getSystem());
+		Bits.putDouble(arr, 8 + 8 + 8 + 8 + 8, this.getWait());
+		Bits.putDouble(arr, 8 + 8 + 8 + 8 + 8 + 8, this.getNice());
+		Bits.putDouble(arr, 8 + 8 + 8 + 8 + 8 + 8 + 8, this.getIrq());
+		Bits.putDouble(arr, 8 + 8 + 8 + 8 + 8 + 8 + 8 + 8, this.getTotalUtilization());
+		Bits.putDouble(arr, 8 + 8 + 8 + 8 + 8 + 8 + 8 + 8 + 8, this.getIdle());
+		return arr;
+	}
+
+	/**
+	 * {@inheritDoc}
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Deprecated
 	public final void initFromArray(final Object[] values) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
+	 */
+	@Deprecated
+	public final void initFromByteArray(final byte[] values) {
 		throw new UnsupportedOperationException();
 	}
 

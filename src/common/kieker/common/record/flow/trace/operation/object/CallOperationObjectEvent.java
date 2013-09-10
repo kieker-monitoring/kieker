@@ -18,6 +18,7 @@ package kieker.common.record.flow.trace.operation.object;
 
 import kieker.common.record.flow.ICallObjectRecord;
 import kieker.common.record.flow.trace.operation.CallOperationEvent;
+import kieker.common.util.Bits;
 
 /**
  * @author Jan Waller
@@ -109,6 +110,24 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 			this.getCallerOperationSignature(), this.getCallerClassSignature(),
 			this.getCalleeOperationSignature(), this.getCalleeClassSignature(),
 			this.getCallerObjectId(), this.getCalleeObjectId(), };
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public byte[] toByteArray() {
+		final byte[] arr = new byte[8 + 8 + 4 + 8 + 8 + 8 + 8 + 4 + 4];
+		Bits.putLong(arr, 0, this.getTimestamp());
+		Bits.putLong(arr, 8, this.getTraceId());
+		Bits.putInt(arr, 8 + 8, this.getOrderIndex());
+		Bits.putString(arr, 8 + 8 + 4, this.getCallerOperationSignature());
+		Bits.putString(arr, 8 + 8 + 4 + 8, this.getCallerClassSignature());
+		Bits.putString(arr, 8 + 8 + 4 + 8 + 8, this.getCalleeOperationSignature());
+		Bits.putString(arr, 8 + 8 + 4 + 8 + 8 + 8, this.getCalleeClassSignature());
+		Bits.putInt(arr, 8 + 8 + 4 + 8 + 8 + 8 + 8, this.getCallerObjectId());
+		Bits.putInt(arr, 8 + 8 + 4 + 8 + 8 + 8 + 8 + 4, this.getCalleeObjectId());
+		return arr;
 	}
 
 	/**

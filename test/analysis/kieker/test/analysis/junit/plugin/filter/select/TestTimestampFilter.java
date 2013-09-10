@@ -50,6 +50,10 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 		public Class<?>[] getValueTypes() {
 			return new Class<?>[] { long.class, long.class, int.class, };
 		}
+
+		public byte[] toByteArray() {
+			return new byte[] {}; // not used here, so not implemented!
+		}
 	};
 
 	private ListReader<AbstractTraceEvent> reader;

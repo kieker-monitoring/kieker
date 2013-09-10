@@ -53,6 +53,15 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	public void setLoggingTimestamp(long timestamp);
 
 	/**
+	 * This method should deliver an byte array containing the content of the record. It should be possible to convert this array later into a record again.
+	 * 
+	 * @return An byte array with the values of the record.
+	 * 
+	 * @since 1.8
+	 */
+	public byte[] toByteArray();
+
+	/**
 	 * This method should deliver an array containing the content of the record. It should be possible to convert this array later into a record again.
 	 * 
 	 * @return An array with the values of the record.
@@ -72,6 +81,16 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * @since 1.5
 	 */
 	public String toString();
+
+	/**
+	 * This method should initialize the record based on the given values. The array should be one of those resulting from a call to {@link #toByteArray()}.
+	 * 
+	 * @param values
+	 *            The values for the record.
+	 * 
+	 * @since 1.8
+	 */
+	public void initFromByteArray(byte[] values);
 
 	/**
 	 * This method should initialize the record based on the given values. The array should be one of those resulting from a call to {@link #toArray()}.
@@ -104,7 +123,7 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * <ul>
 	 * <li>a constructor accepting a single Object[] as argument.
 	 * <li>a <code>private static final Class&lt;?&gt;[] TYPES</code> specifying the types of the records, usually returned via {@link #getValueTypes()}.
-	 * <li>the {@link #initFromArray(Object[])} method does not have to be implemented
+	 * <li>the {@link #initFromArray(Object[])} and {@link #initFromByteArray(byte[])} methods do not have to be implemented
 	 * </ul>
 	 * 
 	 * @since 1.5

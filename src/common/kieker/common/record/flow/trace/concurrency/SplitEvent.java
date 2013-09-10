@@ -17,6 +17,7 @@
 package kieker.common.record.flow.trace.concurrency;
 
 import kieker.common.record.flow.trace.AbstractTraceEvent;
+import kieker.common.util.Bits;
 
 /**
  * @author Jan Waller
@@ -60,6 +61,17 @@ public class SplitEvent extends AbstractTraceEvent {
 	 */
 	public Object[] toArray() {
 		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), };
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public byte[] toByteArray() {
+		final byte[] arr = new byte[8 + 8 + 4];
+		Bits.putLong(arr, 0, this.getTimestamp());
+		Bits.putLong(arr, 8, this.getTraceId());
+		Bits.putInt(arr, 8 + 8, this.getOrderIndex());
+		return arr;
 	}
 
 	/**

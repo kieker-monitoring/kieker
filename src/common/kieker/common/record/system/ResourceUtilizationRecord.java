@@ -21,6 +21,7 @@ package kieker.common.record.system;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.Bits;
 
 /**
  * @author Andre van Hoorn, Jan Waller
@@ -99,11 +100,33 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 
 	/**
 	 * {@inheritDoc}
+	 */
+	public byte[] toByteArray() {
+		final byte[] arr = new byte[8 + 8 + 8 + 8];
+		Bits.putLong(arr, 0, this.getTimestamp());
+		Bits.putString(arr, 8, this.getHostname());
+		Bits.putString(arr, 8 + 8, this.getResourceName());
+		Bits.putDouble(arr, 8 + 8 + 8, this.getUtilization());
+		return arr;
+	}
+
+	/**
+	 * {@inheritDoc}
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Deprecated
 	public final void initFromArray(final Object[] values) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
+	 */
+	@Deprecated
+	public final void initFromByteArray(final byte[] values) {
 		throw new UnsupportedOperationException();
 	}
 

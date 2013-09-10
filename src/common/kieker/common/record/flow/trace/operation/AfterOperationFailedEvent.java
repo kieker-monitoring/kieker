@@ -17,6 +17,7 @@
 package kieker.common.record.flow.trace.operation;
 
 import kieker.common.record.flow.IExceptionRecord;
+import kieker.common.util.Bits;
 
 /**
  * @author Jan Waller
@@ -95,6 +96,21 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 	public Object[] toArray() {
 		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getOperationSignature(), this.getClassSignature(),
 			this.getCause(), };
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public byte[] toByteArray() {
+		final byte[] arr = new byte[8 + 8 + 4 + 8 + 8 + 8];
+		Bits.putLong(arr, 0, this.getTimestamp());
+		Bits.putLong(arr, 8, this.getTraceId());
+		Bits.putInt(arr, 8 + 8, this.getOrderIndex());
+		Bits.putString(arr, 8 + 8 + 4, this.getOperationSignature());
+		Bits.putString(arr, 8 + 8 + 4 + 8, this.getClassSignature());
+		Bits.putString(arr, 8 + 8 + 4 + 8 + 8, this.getCause());
+		return arr;
 	}
 
 	/**

@@ -17,6 +17,7 @@
 package kieker.common.record.flow.trace.concurrency.monitor;
 
 import kieker.common.record.flow.trace.AbstractTraceEvent;
+import kieker.common.util.Bits;
 
 /**
  * @author Jan Waller
@@ -69,6 +70,18 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent {
 	 */
 	public Object[] toArray() {
 		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getLockId(), };
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public byte[] toByteArray() {
+		final byte[] arr = new byte[8 + 8 + 4 + 4];
+		Bits.putLong(arr, 0, this.getTimestamp());
+		Bits.putLong(arr, 8, this.getTraceId());
+		Bits.putInt(arr, 8 + 8, this.getOrderIndex());
+		Bits.putInt(arr, 8 + 8 + 4, this.getLockId());
+		return arr;
 	}
 
 	public Class<?>[] getValueTypes() {
