@@ -190,6 +190,11 @@ and structures discovered while processing the incoming monitoring data. %
 The development and use of repositories is detailed in Section~%
 \ref{sec:analysis:repositories}. %
 
+When using components of the \KiekerTraceAnalysis{}, make sure that write access to the %
+\class{SystemModelRepository} is only triggered by readers. Some filters are terminated %
+after the readers and expect the repository to be in a completed state.
+
+
 \section{Developing Analysis Plugins and Repositories}\label{sec:analysis:plugins}
 
 When implementing analysis plugins (i.e., readers or filters) and repositories, %
