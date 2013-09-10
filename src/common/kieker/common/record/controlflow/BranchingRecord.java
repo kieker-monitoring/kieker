@@ -24,7 +24,7 @@ import kieker.common.record.IMonitoringRecord;
  * 
  * @since 1.2
  */
-public final class BranchingRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
+public class BranchingRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
 	private static final long serialVersionUID = 1949567386494340839L;
 	private static final Class<?>[] TYPES = {
 		long.class, // timestamp

@@ -24,7 +24,7 @@ import kieker.common.record.IMonitoringRecord;
  * 
  * @since 0.91
  */
-public final class OperationExecutionRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
+public class OperationExecutionRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
 
 	/**
 	 * Constant to be used if no hostname required.
