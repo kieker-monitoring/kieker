@@ -26,7 +26,6 @@ import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
-import kieker.analysis.plugin.reader.timer.TimeReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -56,11 +55,11 @@ public class AnalysisThroughputFilter extends AbstractFilterPlugin {
 	/** The name of the output port delivering the received objects. */
 	public static final String OUTPUT_PORT_NAME_THROUGHPUT = "throughput";
 
-	private static final Log LOG = LogFactory.getLog(TimeReader.class);
+	private static final Log LOG = LogFactory.getLog(AnalysisThroughputFilter.class);
 
 	private final AtomicLong counter = new AtomicLong();
 
-	private final PlainText plainTextDisplay = new PlainText();
+	private final PlainText plainTextDisplayObject = new PlainText();
 	private final TimeUnit timeunit;
 	private volatile long lastTimestamp;
 
@@ -99,13 +98,13 @@ public class AnalysisThroughputFilter extends AbstractFilterPlugin {
 		sb.append(duration);
 		sb.append(' ');
 		sb.append(this.timeunit.toString());
-		this.plainTextDisplay.setText(sb.toString());
+		this.plainTextDisplayObject.setText(sb.toString());
 		super.deliver(OUTPUT_PORT_NAME_THROUGHPUT, this.counter);
 		this.lastTimestamp = timestamp;
 	}
 
 	@Display(name = "Throughput Display")
 	public final PlainText plainTextDisplay() {
-		return this.plainTextDisplay;
+		return this.plainTextDisplayObject;
 	}
 }
