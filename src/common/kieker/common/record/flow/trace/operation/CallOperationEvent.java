@@ -100,6 +100,7 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object[] toArray() {
 		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(),
 			this.getCallerOperationSignature(), this.getCallerClassSignature(),
@@ -109,6 +110,7 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public byte[] toByteArray() {
 		final byte[] arr = new byte[8 + 8 + 4 + 8 + 8 + 8 + 8];
 		Bits.putLong(arr, 0, this.getTimestamp());
@@ -124,6 +126,7 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}

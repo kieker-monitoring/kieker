@@ -16,6 +16,7 @@
 
 package kieker.common.record.flow.trace.operation.constructor;
 
+import kieker.common.record.flow.IConstructorRecord;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 
 /**
@@ -23,15 +24,9 @@ import kieker.common.record.flow.trace.operation.AfterOperationEvent;
  * 
  * @since 1.6
  */
-public class AfterConstructorEvent extends AfterOperationEvent {
+public class AfterConstructorEvent extends AfterOperationEvent implements IConstructorRecord {
 	private static final long serialVersionUID = 5346337856547267118L;
-	public static final Class<?>[] TYPES = {
-		long.class, // Event.timestamp
-		long.class, // TraceEvent.traceId
-		int.class, // TraceEvent.orderIndex
-		String.class, // OperationEvent.operationSignature
-		String.class, // OperationEvent.classSignature
-	};
+	public static final Class<?>[] TYPES = AfterOperationEvent.TYPES;
 
 	/**
 	 * This constructor initializes the fields of the record using the given parameters.

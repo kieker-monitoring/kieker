@@ -18,6 +18,7 @@ package kieker.common.record.flow.trace.operation;
 
 import kieker.common.record.flow.IOperationRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
+import kieker.common.util.Bits;
 
 /**
  * @author Jan Waller
@@ -26,6 +27,13 @@ import kieker.common.record.flow.trace.AbstractTraceEvent;
  */
 public abstract class AbstractOperationEvent extends AbstractTraceEvent implements IOperationRecord {
 	private static final long serialVersionUID = 1L;
+	public static final Class<?>[] TYPES = {
+		long.class, // Event.timestamp
+		long.class, // TraceEvent.traceId
+		int.class, // TraceEvent.orderIndex
+		String.class, // OperationEvent.operationSignature
+		String.class, // OperationEvent.classSignature
+	};
 
 	/**
 	 * This field should not be exported, because it makes little sense to have no associated class.
@@ -68,6 +76,33 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 		super(values, valueTypes); // values[0..2]
 		this.operationSignature = (String) values[3];
 		this.classSignature = (String) values[4];
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public Object[] toArray() {
+		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getOperationSignature(), this.getClassSignature(), };
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public byte[] toByteArray() {
+		final byte[] arr = new byte[8 + 8 + 4 + 8 + 8];
+		Bits.putLong(arr, 0, this.getTimestamp());
+		Bits.putLong(arr, 8, this.getTraceId());
+		Bits.putInt(arr, 8 + 8, this.getOrderIndex());
+		Bits.putString(arr, 8 + 8 + 4, this.getOperationSignature());
+		Bits.putString(arr, 8 + 8 + 4 + 8, this.getClassSignature());
+		return arr;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public Class<?>[] getValueTypes() {
+		return TYPES; // NOPMD
 	}
 
 	public final String getOperationSignature() {

@@ -19,7 +19,6 @@ package kieker.common.record;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.security.PrivilegedAction;
 import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -270,12 +269,6 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 			try {
 				if (IMonitoringRecord.Factory.class.isAssignableFrom(clazz)) {
 					final Field typesField = clazz.getDeclaredField("TYPES");
-					java.security.AccessController.doPrivileged(new PrivilegedAction<Object>() {
-						public Object run() {
-							typesField.setAccessible(true);
-							return null;
-						}
-					});
 					types = (Class<?>[]) typesField.get(null);
 				} else {
 					types = clazz.newInstance().getValueTypes();
@@ -343,12 +336,6 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 				// Factory interface present
 				final Constructor<? extends IMonitoringRecord> constructor = clazz.getConstructor(Object[].class);
 				final Field types = clazz.getDeclaredField("TYPES");
-				java.security.AccessController.doPrivileged(new PrivilegedAction<Object>() {
-					public Object run() {
-						types.setAccessible(true);
-						return null;
-					}
-				});
 				return constructor.newInstance((Object) AbstractMonitoringRecord.fromStringArrayToTypedArray(values, (Class<?>[]) types.get(null)));
 			} else {
 				// try ordinary method

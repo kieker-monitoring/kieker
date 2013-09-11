@@ -16,32 +16,17 @@
 
 package kieker.common.record.flow.trace.operation.constructor;
 
-import kieker.common.record.flow.IExceptionRecord;
-import kieker.common.util.Bits;
+import kieker.common.record.flow.IConstructorRecord;
+import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
 
 /**
  * @author Jan Waller
  * 
  * @since 1.6
  */
-public class AfterConstructorFailedEvent extends AfterConstructorEvent implements IExceptionRecord {
-
-	/**
-	 * Constant to be used if no cause required.
-	 */
-	public static final String NO_CAUSE = "<no-cause>";
-
+public class AfterConstructorFailedEvent extends AfterOperationFailedEvent implements IConstructorRecord {
 	private static final long serialVersionUID = 148777586227402929L;
-	public static final Class<?>[] TYPES = {
-		long.class, // Event.timestamp
-		long.class, // TraceEvent.traceId
-		int.class, // TraceEvent.orderIndex
-		String.class, // OperationEvent.operationSignature
-		String.class, // OperationEvent.classSignature
-		String.class, // Exception
-	};
-
-	private final String cause;
+	public static final Class<?>[] TYPES = AfterOperationFailedEvent.TYPES;
 
 	/**
 	 * This constructor initializes the fields of the record using the given parameters.
@@ -61,8 +46,7 @@ public class AfterConstructorFailedEvent extends AfterConstructorEvent implement
 	 */
 	public AfterConstructorFailedEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature,
 			final String cause) {
-		super(timestamp, traceId, orderIndex, operationSignature, classSignature);
-		this.cause = (cause == null) ? NO_CAUSE : cause; // NOCS
+		super(timestamp, traceId, orderIndex, operationSignature, classSignature, cause);
 	}
 
 	/**
@@ -72,8 +56,7 @@ public class AfterConstructorFailedEvent extends AfterConstructorEvent implement
 	 *            The values for the record.
 	 */
 	public AfterConstructorFailedEvent(final Object[] values) { // NOPMD (values stored directly)
-		super(values, TYPES); // values[0..4]
-		this.cause = (String) values[5];
+		super(values, TYPES); // values[0..5]
 	}
 
 	/**
@@ -86,35 +69,5 @@ public class AfterConstructorFailedEvent extends AfterConstructorEvent implement
 	 */
 	protected AfterConstructorFailedEvent(final Object[] values, final Class<?>[] types) { // NOPMD (values stored directly)
 		super(values, types); // values[0..4]
-		this.cause = (String) values[5];
-	}
-
-	@Override
-	public Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getOperationSignature(), this.getClassSignature(), this.getCause(), };
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public byte[] toByteArray() {
-		final byte[] arr = new byte[8 + 8 + 4 + 8 + 8 + 8];
-		Bits.putLong(arr, 0, this.getTimestamp());
-		Bits.putLong(arr, 8, this.getTraceId());
-		Bits.putInt(arr, 8 + 8, this.getOrderIndex());
-		Bits.putString(arr, 8 + 8 + 4, this.getOperationSignature());
-		Bits.putString(arr, 8 + 8 + 4 + 8, this.getClassSignature());
-		Bits.putString(arr, 8 + 8 + 4 + 8 + 8, this.getCause());
-		return arr;
-	}
-
-	@Override
-	public Class<?>[] getValueTypes() {
-		return TYPES; // NOPMD
-	}
-
-	public final String getCause() {
-		return this.cause;
 	}
 }
