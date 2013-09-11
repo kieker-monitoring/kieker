@@ -16,8 +16,13 @@
 
 package kieker.common.record.flow.trace.concurrency.monitor;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.flow.trace.AbstractTraceEvent;
-import kieker.common.util.Bits;
+import kieker.common.util.IString4UniqueId;
+import kieker.common.util.IUniqueId4String;
 
 /**
  * @author Jan Waller
@@ -25,7 +30,7 @@ import kieker.common.util.Bits;
  * @since 1.8
  */
 public abstract class AbstractMonitorEvent extends AbstractTraceEvent {
-
+	public static final int SIZE = 24;
 	public static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
@@ -68,6 +73,20 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent {
 	}
 
 	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public AbstractMonitorEvent(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+		super(buffer, stringRegistry);
+		this.lockId = buffer.getInt();
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public Object[] toArray() {
@@ -77,17 +96,22 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent {
 	/**
 	 * {@inheritDoc}
 	 */
-	public byte[] toByteArray() {
-		final byte[] arr = new byte[8 + 8 + 4 + 4];
-		Bits.putLong(arr, 0, this.getTimestamp());
-		Bits.putLong(arr, 8, this.getTraceId());
-		Bits.putInt(arr, 8 + 8, this.getOrderIndex());
-		Bits.putInt(arr, 8 + 8 + 4, this.getLockId());
-		return arr;
+	public void writeBytes(final ByteBuffer buffer, final IUniqueId4String stringRegistry) throws BufferOverflowException {
+		buffer.putLong(this.getTimestamp());
+		buffer.putLong(this.getTraceId());
+		buffer.putInt(this.getOrderIndex());
+		buffer.putInt(this.getLockId());
 	}
 
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public int getSize() {
+		return SIZE;
 	}
 
 	public final int getLockId() {

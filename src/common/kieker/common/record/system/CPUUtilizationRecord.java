@@ -16,17 +16,22 @@
 
 package kieker.common.record.system;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.util.Bits;
+import kieker.common.util.IString4UniqueId;
+import kieker.common.util.IUniqueId4String;
 
 /**
  * @author Andre van Hoorn, Jan Waller
  * 
  * @since 1.3
  */
-public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-
+public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
+	public static final int SIZE = 72;
 	public static final Class<?>[] TYPES = {
 		long.class,
 		String.class,
@@ -40,7 +45,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 		double.class,
 	};
 
-	private static final long serialVersionUID = 229860008090066333L;
+	private static final long serialVersionUID = -6855133162344169157L;
 
 	private static final String DEFAULT_VALUE = "N/A";
 
@@ -162,6 +167,28 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	}
 
 	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public CPUUtilizationRecord(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+		this.timestamp = buffer.getLong();
+		this.hostname = stringRegistry.getStringForId(buffer.getInt());
+		this.cpuID = stringRegistry.getStringForId(buffer.getInt());
+		this.user = buffer.getDouble();
+		this.system = buffer.getDouble();
+		this.wait = buffer.getDouble();
+		this.nice = buffer.getDouble();
+		this.irq = buffer.getDouble();
+		this.totalUtilization = buffer.getDouble();
+		this.idle = buffer.getDouble();
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public Object[] toArray() {
@@ -172,19 +199,17 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	/**
 	 * {@inheritDoc}
 	 */
-	public byte[] toByteArray() {
-		final byte[] arr = new byte[8 + 8 + 8 + 8 + 8 + 8 + 8 + 8 + 8 + 8];
-		Bits.putLong(arr, 0, this.getTimestamp());
-		Bits.putString(arr, 8, this.getHostname());
-		Bits.putString(arr, 8 + 8, this.getCpuID());
-		Bits.putDouble(arr, 8 + 8 + 8, this.getUser());
-		Bits.putDouble(arr, 8 + 8 + 8 + 8, this.getSystem());
-		Bits.putDouble(arr, 8 + 8 + 8 + 8 + 8, this.getWait());
-		Bits.putDouble(arr, 8 + 8 + 8 + 8 + 8 + 8, this.getNice());
-		Bits.putDouble(arr, 8 + 8 + 8 + 8 + 8 + 8 + 8, this.getIrq());
-		Bits.putDouble(arr, 8 + 8 + 8 + 8 + 8 + 8 + 8 + 8, this.getTotalUtilization());
-		Bits.putDouble(arr, 8 + 8 + 8 + 8 + 8 + 8 + 8 + 8 + 8, this.getIdle());
-		return arr;
+	public void writeBytes(final ByteBuffer buffer, final IUniqueId4String stringRegistry) throws BufferOverflowException {
+		buffer.putLong(this.getTimestamp());
+		buffer.putInt(stringRegistry.getIdForString(this.getHostname()));
+		buffer.putInt(stringRegistry.getIdForString(this.getCpuID()));
+		buffer.putDouble(this.getUser());
+		buffer.putDouble(this.getSystem());
+		buffer.putDouble(this.getWait());
+		buffer.putDouble(this.getNice());
+		buffer.putDouble(this.getIrq());
+		buffer.putDouble(this.getTotalUtilization());
+		buffer.putDouble(this.getIdle());
 	}
 
 	/**
@@ -200,10 +225,10 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
 	@Deprecated
-	public final void initFromByteArray(final byte[] values) {
+	public final void initFromBytes(final ByteBuffer buffer) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 
@@ -212,6 +237,13 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	 */
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public int getSize() {
+		return SIZE;
 	}
 
 	/**

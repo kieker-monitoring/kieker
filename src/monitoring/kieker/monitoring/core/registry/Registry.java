@@ -329,7 +329,7 @@ public final class Registry<E> implements IRegistry<E> {
 						tab[index] = new HashEntry<E>(value, hash, id, first);
 						this.count = c; // write-volatile
 						if (this.recordReceiver != null) { // NOPMD NOCS (nested if)
-							this.recordReceiver.newMonitoringRecord(new RegistryRecord<E>(id, value));
+							this.recordReceiver.newMonitoringRecord(new RegistryRecord(id, (String) value));
 						}
 						return id; // return new id
 					}

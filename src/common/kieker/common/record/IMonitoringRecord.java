@@ -17,6 +17,11 @@
 package kieker.common.record;
 
 import java.io.Serializable;
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
+import kieker.common.util.IUniqueId4String;
 
 /**
  * All Kieker monitoring records have to implement this minimal interface.
@@ -53,24 +58,6 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	public void setLoggingTimestamp(long timestamp);
 
 	/**
-	 * This method should deliver an byte array containing the content of the record. It should be possible to convert this array later into a record again.
-	 * 
-	 * @return An byte array with the values of the record.
-	 * 
-	 * @since 1.8
-	 */
-	public byte[] toByteArray();
-
-	/**
-	 * This method should deliver an array containing the content of the record. It should be possible to convert this array later into a record again.
-	 * 
-	 * @return An array with the values of the record.
-	 * 
-	 * @since 1.2
-	 */
-	public Object[] toArray();
-
-	/**
 	 * Creates a string representation of this record.<br/>
 	 * <br/>
 	 * 
@@ -83,14 +70,41 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	public String toString();
 
 	/**
-	 * This method should initialize the record based on the given values. The array should be one of those resulting from a call to {@link #toByteArray()}.
+	 * This method should deliver an array containing the content of the record. It should be possible to convert this array later into a record again.
 	 * 
-	 * @param values
-	 *            The values for the record.
+	 * @return An array with the values of the record.
+	 * 
+	 * @since 1.2
+	 */
+	public Object[] toArray();
+
+	/**
+	 * This method should deliver an byte array containing the content of the record. It should be possible to convert this array later into a record again.
+	 * 
+	 * @param buffer
+	 *            The used ByteBuffer with sufficient capacity
+	 * @param stringRegistry
+	 *            Usually the associated MonitoringController
+	 * 
+	 * @throws BufferOverflowException
+	 *             if buffer not sufficient
 	 * 
 	 * @since 1.8
 	 */
-	public void initFromByteArray(byte[] values);
+	public void writeBytes(ByteBuffer buffer, IUniqueId4String stringRegistry) throws BufferOverflowException;
+
+	/**
+	 * This method should initialize the record based on the given values. The array should be one of those resulting from a call to {@link #toByteArray()}.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 * 
+	 * @since 1.8
+	 */
+	public void initFromBytes(ByteBuffer buffer) throws BufferUnderflowException;
 
 	/**
 	 * This method should initialize the record based on the given values. The array should be one of those resulting from a call to {@link #toArray()}.
@@ -114,6 +128,15 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	public Class<?>[] getValueTypes();
 
 	/**
+	 * This method should deliver the size of a binary representation of this record.
+	 * 
+	 * @return The size.
+	 * 
+	 * @since 1.8
+	 */
+	public int getSize();
+
+	/**
 	 * Any record that implements this interface has to conform to certain specifications.
 	 * 
 	 * <p>
@@ -122,13 +145,32 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * 
 	 * <ul>
 	 * <li>a constructor accepting a single Object[] as argument.
-	 * <li>a <code>private static final Class&lt;?&gt;[] TYPES</code> specifying the types of the records, usually returned via {@link #getValueTypes()}.
-	 * <li>the {@link #initFromArray(Object[])} and {@link #initFromByteArray(byte[])} methods do not have to be implemented
+	 * <li>a <code>public static final Class&lt;?&gt;[] TYPES</code> specifying the types of the records, usually returned via {@link #getValueTypes()}.
+	 * <li>the {@link #initFromArray(Object[])} method does not have to be implemented
 	 * </ul>
 	 * 
 	 * @since 1.5
 	 */
 	public static interface Factory { // NOCS (name)
+		// empty marker interface
+	}
+
+	/**
+	 * Any record that implements this interface has to conform to certain specifications.
+	 * 
+	 * <p>
+	 * These records can use final fields and thus provide better performance.
+	 * </p>
+	 * 
+	 * <ul>
+	 * <li>a constructor accepting a ByteBuffer and a IString4UniqueId as arguments possibly throwing BufferUnderflowException.
+	 * <li>a <code>public static final int SIZE</code> specifying the binary size of the record, usually returned via {@link #getSize()}.
+	 * <li>the {@link #initFromByteArray(byte[])} method does not have to be implemented
+	 * </ul>
+	 * 
+	 * @since 1.8
+	 */
+	public static interface BinaryFactory { // NOCS (name)
 		// empty marker interface
 	}
 }

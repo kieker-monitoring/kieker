@@ -16,16 +16,20 @@
 
 package kieker.examples.userguide.ch3and4bookstore;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.util.Bits;
+import kieker.common.util.IString4UniqueId;
+import kieker.common.util.IUniqueId4String;
 
-public class MyResponseTimeRecord extends AbstractMonitoringRecord
-		implements IMonitoringRecord.Factory {
+public class MyResponseTimeRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
+	public static final int SIZE = 16;
+	public static final Class<?>[] TYPES = { String.class, String.class, long.class, };
 
-	public static final Class<?>[] TYPES = { String.class, String.class, long.class };
-
-	private static final long serialVersionUID = 1775L;
+	private static final long serialVersionUID = 7837873751833770201L;
 
 	// Attributes storing the actual monitoring data:
 	private final String className;
@@ -46,36 +50,40 @@ public class MyResponseTimeRecord extends AbstractMonitoringRecord
 		this.responseTimeNanos = (Long) values[2];
 	}
 
+	public MyResponseTimeRecord(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+		this.className = stringRegistry.getStringForId(buffer.getInt());
+		this.methodName = stringRegistry.getStringForId(buffer.getInt());
+		this.responseTimeNanos = buffer.getLong();
+	}
+
 	@Deprecated
 	// Will not be used because the record implements IMonitoringRecord.Factory
 	public final void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
-	 */
 	@Deprecated
-	public final void initFromByteArray(final byte[] values) {
+	// Will not be used because the record implements IMonitoringRecord.BinaryFactory
+	public final void initFromBytes(final ByteBuffer buffer) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 
 	public Object[] toArray() {
-		return new Object[] { this.getClassName(), this.getMethodName(), this.getResponseTimeNanos() };
+		return new Object[] { this.getClassName(), this.getMethodName(), this.getResponseTimeNanos(), };
 	}
 
-	public byte[] toByteArray() {
-		final byte[] arr = new byte[8 + 8 + 8];
-		Bits.putString(arr, 0, this.getClassName());
-		Bits.putString(arr, 8, this.getMethodName());
-		Bits.putLong(arr, 8 + 8, this.getResponseTimeNanos());
-		return arr;
+	public void writeBytes(final ByteBuffer buffer, final IUniqueId4String stringRegistry) throws BufferOverflowException {
+		buffer.putInt(stringRegistry.getIdForString(this.getClassName()));
+		buffer.putInt(stringRegistry.getIdForString(this.getMethodName()));
+		buffer.putLong(this.getResponseTimeNanos());
 	}
 
 	public Class<?>[] getValueTypes() {
-		return MyResponseTimeRecord.TYPES.clone();
+		return MyResponseTimeRecord.TYPES;
+	}
+
+	public int getSize() {
+		return SIZE;
 	}
 
 	public final String getClassName() {
@@ -89,5 +97,4 @@ public class MyResponseTimeRecord extends AbstractMonitoringRecord
 	public final long getResponseTimeNanos() {
 		return this.responseTimeNanos;
 	}
-
 }

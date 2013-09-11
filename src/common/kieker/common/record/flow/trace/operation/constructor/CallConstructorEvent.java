@@ -16,8 +16,12 @@
 
 package kieker.common.record.flow.trace.operation.constructor;
 
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.flow.IConstructorRecord;
 import kieker.common.record.flow.trace.operation.CallOperationEvent;
+import kieker.common.util.IString4UniqueId;
 
 /**
  * @author Jan Waller
@@ -25,10 +29,10 @@ import kieker.common.record.flow.trace.operation.CallOperationEvent;
  * @since 1.6
  */
 public class CallConstructorEvent extends CallOperationEvent implements IConstructorRecord {
-
+	public static final int SIZE = CallOperationEvent.SIZE;
 	public static final Class<?>[] TYPES = CallOperationEvent.TYPES;
 
-	private static final long serialVersionUID = -997689498521033735L;
+	private static final long serialVersionUID = -2264901642077299543L;
 
 	/**
 	 * This constructor uses the given parameters to initialize the fields of this record.
@@ -74,5 +78,18 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 	 */
 	protected CallConstructorEvent(final Object[] values, final Class<?>[] types) {
 		super(values, types); // values[0..6]
+	}
+
+	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public CallConstructorEvent(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+		super(buffer, stringRegistry);
 	}
 }

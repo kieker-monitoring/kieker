@@ -19,20 +19,22 @@
  */
 package kieker.common.record.system;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.util.Bits;
+import kieker.common.util.IString4UniqueId;
+import kieker.common.util.IUniqueId4String;
 
 /**
  * @author Andre van Hoorn, Jan Waller
  * 
  * @since 1.3
  */
-public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-
-	/** A constant which can be used as a default value for non existing fields of the record. */
-	public static final String DEFAULT_VALUE = "N/A";
-
+public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
+	public static final int SIZE = 60;
 	public static final Class<?>[] TYPES = {
 		long.class,
 		String.class,
@@ -44,7 +46,10 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 		long.class,
 	};
 
-	private static final long serialVersionUID = 8072422694598002383L;
+	/** A constant which can be used as a default value for non existing fields of the record. */
+	public static final String DEFAULT_VALUE = "N/A";
+
+	private static final long serialVersionUID = -2159074202253748453L;
 
 	private final long memUsed;
 	private final long memFree;
@@ -116,6 +121,26 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	}
 
 	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public MemSwapUsageRecord(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+		this.timestamp = buffer.getLong();
+		this.hostname = stringRegistry.getStringForId(buffer.getInt());
+		this.memTotal = buffer.getLong();
+		this.memUsed = buffer.getLong();
+		this.memFree = buffer.getLong();
+		this.swapTotal = buffer.getLong();
+		this.swapUsed = buffer.getLong();
+		this.swapFree = buffer.getLong();
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public Object[] toArray() {
@@ -126,17 +151,15 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	/**
 	 * {@inheritDoc}
 	 */
-	public byte[] toByteArray() {
-		final byte[] arr = new byte[8 + 8 + 8 + 8 + 8 + 8 + 8 + 8];
-		Bits.putLong(arr, 0, this.getTimestamp());
-		Bits.putString(arr, 8, this.getHostname());
-		Bits.putLong(arr, 8 + 8, this.getMemTotal());
-		Bits.putLong(arr, 8 + 8 + 8, this.getMemUsed());
-		Bits.putLong(arr, 8 + 8 + 8 + 8, this.getMemFree());
-		Bits.putLong(arr, 8 + 8 + 8 + 8 + 8, this.getSwapTotal());
-		Bits.putLong(arr, 8 + 8 + 8 + 8 + 8 + 8, this.getSwapUsed());
-		Bits.putLong(arr, 8 + 8 + 8 + 8 + 8 + 8 + 8, this.getSwapFree());
-		return arr;
+	public void writeBytes(final ByteBuffer buffer, final IUniqueId4String stringRegistry) throws BufferOverflowException {
+		buffer.putLong(this.getTimestamp());
+		buffer.putInt(stringRegistry.getIdForString(this.getHostname()));
+		buffer.putLong(this.getMemTotal());
+		buffer.putLong(this.getMemUsed());
+		buffer.putLong(this.getMemFree());
+		buffer.putLong(this.getSwapTotal());
+		buffer.putLong(this.getSwapUsed());
+		buffer.putLong(this.getSwapFree());
 	}
 
 	/**
@@ -152,10 +175,10 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
 	@Deprecated
-	public final void initFromByteArray(final byte[] values) {
+	public final void initFromBytes(final ByteBuffer buffer) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 
@@ -164,6 +187,13 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	 */
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public int getSize() {
+		return SIZE;
 	}
 
 	/**

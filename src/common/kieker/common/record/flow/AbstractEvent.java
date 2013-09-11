@@ -16,15 +16,19 @@
 
 package kieker.common.record.flow;
 
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.IString4UniqueId;
 
 /**
  * @author Jan Waller
  * 
  * @since 1.5
  */
-public abstract class AbstractEvent extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IEventRecord {
+public abstract class AbstractEvent extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory, IEventRecord {
 	private static final long serialVersionUID = 1L;
 
 	private final long timestamp;
@@ -53,6 +57,19 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 	}
 
 	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public AbstractEvent(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+		this.timestamp = buffer.getLong();
+	}
+
+	/**
 	 * {@inheritDoc}
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
@@ -65,10 +82,10 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
 	@Deprecated
-	public final void initFromByteArray(final byte[] values) {
+	public void initFromBytes(final ByteBuffer buffer) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 

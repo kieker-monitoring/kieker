@@ -16,9 +16,14 @@
 
 package kieker.common.record.flow.trace.operation;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.flow.IOperationRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
-import kieker.common.util.Bits;
+import kieker.common.util.IString4UniqueId;
+import kieker.common.util.IUniqueId4String;
 
 /**
  * @author Jan Waller
@@ -26,7 +31,7 @@ import kieker.common.util.Bits;
  * @since 1.5
  */
 public abstract class AbstractOperationEvent extends AbstractTraceEvent implements IOperationRecord {
-
+	public static final int SIZE = 28;
 	public static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
@@ -81,6 +86,21 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 	}
 
 	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public AbstractOperationEvent(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+		super(buffer, stringRegistry);
+		this.operationSignature = stringRegistry.getStringForId(buffer.getInt());
+		this.classSignature = stringRegistry.getStringForId(buffer.getInt());
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public Object[] toArray() {
@@ -90,14 +110,12 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 	/**
 	 * {@inheritDoc}
 	 */
-	public byte[] toByteArray() {
-		final byte[] arr = new byte[8 + 8 + 4 + 8 + 8];
-		Bits.putLong(arr, 0, this.getTimestamp());
-		Bits.putLong(arr, 8, this.getTraceId());
-		Bits.putInt(arr, 8 + 8, this.getOrderIndex());
-		Bits.putString(arr, 8 + 8 + 4, this.getOperationSignature());
-		Bits.putString(arr, 8 + 8 + 4 + 8, this.getClassSignature());
-		return arr;
+	public void writeBytes(final ByteBuffer buffer, final IUniqueId4String stringRegistry) throws BufferOverflowException {
+		buffer.putLong(this.getTimestamp());
+		buffer.putLong(this.getTraceId());
+		buffer.putInt(this.getOrderIndex());
+		buffer.putInt(stringRegistry.getIdForString(this.getOperationSignature()));
+		buffer.putInt(stringRegistry.getIdForString(this.getClassSignature()));
 	}
 
 	/**
@@ -105,6 +123,13 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 	 */
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public int getSize() {
+		return SIZE;
 	}
 
 	public final String getOperationSignature() {

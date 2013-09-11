@@ -16,16 +16,32 @@
 
 package kieker.common.record.controlflow;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.util.Bits;
+import kieker.common.util.IString4UniqueId;
+import kieker.common.util.IUniqueId4String;
 
 /**
  * @author Andre van Hoorn, Jan Waller
  * 
  * @since 0.91
  */
-public class OperationExecutionRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
+public class OperationExecutionRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
+	public static final int SIZE = 44;
+	public static final Class<?>[] TYPES = {
+		String.class, // operationSignature
+		String.class, // sessionId
+		long.class, // traceId
+		long.class, // tin
+		long.class, // tout
+		String.class, // hostname
+		int.class, // eoi
+		int.class, // ess
+	};
 
 	/**
 	 * Constant to be used if no hostname required.
@@ -52,23 +68,12 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	 */
 	public static final int NO_EOI_ESS = -1;
 
-	public static final Class<?>[] TYPES = {
-		String.class, // operationSignature
-		String.class, // sessionId
-		long.class, // traceId
-		long.class, // tin
-		long.class, // tout
-		String.class, // hostname
-		int.class, // eoi
-		int.class, // ess
-	};
-
 	/**
 	 * This field should not be exported, because it makes little sense to have no associated operation.
 	 */
 	private static final String NO_OPERATION_SIGNATURE = "noOperation";
 
-	private static final long serialVersionUID = 8028082734210614968L;
+	private static final long serialVersionUID = 733578834225565988L;
 
 	private final String hostname;
 	private final String operationSignature;
@@ -130,6 +135,26 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	}
 
 	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public OperationExecutionRecord(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+		this.operationSignature = stringRegistry.getStringForId(buffer.getInt());
+		this.sessionId = stringRegistry.getStringForId(buffer.getInt());
+		this.traceId = buffer.getLong();
+		this.tin = buffer.getLong();
+		this.tout = buffer.getLong();
+		this.hostname = stringRegistry.getStringForId(buffer.getInt());
+		this.eoi = buffer.getInt();
+		this.ess = buffer.getInt();
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public Object[] toArray() {
@@ -147,17 +172,15 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	/**
 	 * {@inheritDoc}
 	 */
-	public byte[] toByteArray() {
-		final byte[] arr = new byte[8 + 8 + 8 + 8 + 8 + 8 + 4 + 4];
-		Bits.putString(arr, 0, this.getOperationSignature());
-		Bits.putString(arr, 8, this.getSessionId());
-		Bits.putLong(arr, 8 + 8, this.getTraceId());
-		Bits.putLong(arr, 8 + 8 + 8, this.getTin());
-		Bits.putLong(arr, 8 + 8 + 8 + 8, this.getTout());
-		Bits.putString(arr, 8 + 8 + 8 + 8 + 8, this.getHostname());
-		Bits.putInt(arr, 8 + 8 + 8 + 8 + 8 + 8, this.getEoi());
-		Bits.putInt(arr, 8 + 8 + 8 + 8 + 8 + 8 + 4, this.getEss());
-		return arr;
+	public void writeBytes(final ByteBuffer buffer, final IUniqueId4String stringRegistry) throws BufferOverflowException {
+		buffer.putInt(stringRegistry.getIdForString(this.getOperationSignature()));
+		buffer.putInt(stringRegistry.getIdForString(this.getSessionId()));
+		buffer.putLong(this.getTraceId());
+		buffer.putLong(this.getTin());
+		buffer.putLong(this.getTout());
+		buffer.putInt(stringRegistry.getIdForString(this.getHostname()));
+		buffer.putInt(this.getEoi());
+		buffer.putInt(this.getEss());
 	}
 
 	/**
@@ -173,10 +196,10 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
 	@Deprecated
-	public final void initFromByteArray(final byte[] values) {
+	public final void initFromBytes(final ByteBuffer buffer) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 
@@ -185,6 +208,13 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	 */
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public int getSize() {
+		return SIZE;
 	}
 
 	/**

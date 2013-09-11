@@ -79,9 +79,10 @@ final class TCPWriterThread extends AbstractAsyncThread {
 
 	@Override
 	protected void consume(final IMonitoringRecord monitoringRecord) throws Exception {
+		// FIXME: check for enough space SIZE + 4 + 8
 		this.buffer.putInt(this.monitoringController.getIdForString(monitoringRecord.getClass().getName()));
 		this.buffer.putLong(monitoringRecord.getLoggingTimestamp());
-		this.buffer.put(monitoringRecord.toByteArray());
+		monitoringRecord.writeBytes(this.buffer, this.monitoringController);
 		// FIXME: actually write something
 	}
 

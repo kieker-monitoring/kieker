@@ -166,9 +166,9 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	 */
 	@SuppressWarnings("unchecked")
 	public final boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-		if (monitoringRecord instanceof RegistryRecord<?>) {
+		if (monitoringRecord instanceof RegistryRecord) {
 			try {
-				this.mappingFileWriter.write((RegistryRecord<String>) monitoringRecord);
+				this.mappingFileWriter.write((RegistryRecord) monitoringRecord);
 			} catch (final IOException ex) {
 				LOG.error("Failed to write monitoring record", ex);
 				return false;

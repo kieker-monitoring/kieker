@@ -16,9 +16,14 @@
 
 package kieker.common.record.flow.trace.operation.object;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.flow.ICallObjectRecord;
 import kieker.common.record.flow.trace.operation.CallOperationEvent;
-import kieker.common.util.Bits;
+import kieker.common.util.IString4UniqueId;
+import kieker.common.util.IUniqueId4String;
 
 /**
  * @author Jan Waller
@@ -26,7 +31,7 @@ import kieker.common.util.Bits;
  * @since 1.6
  */
 public class CallOperationObjectEvent extends CallOperationEvent implements ICallObjectRecord {
-
+	public static final int SIZE = 44;
 	public static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
@@ -39,7 +44,7 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 		int.class, // Callee objectId
 	};
 
-	private static final long serialVersionUID = 5099289901643589844L;
+	private static final long serialVersionUID = 9070671586075257618L;
 
 	private final int callerObjectId;
 	private final int calleeObjectId;
@@ -104,6 +109,21 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 	}
 
 	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public CallOperationObjectEvent(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+		super(buffer, stringRegistry);
+		this.callerObjectId = buffer.getInt();
+		this.calleeObjectId = buffer.getInt();
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -118,18 +138,16 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 	 * {@inheritDoc}
 	 */
 	@Override
-	public byte[] toByteArray() {
-		final byte[] arr = new byte[8 + 8 + 4 + 8 + 8 + 8 + 8 + 4 + 4];
-		Bits.putLong(arr, 0, this.getTimestamp());
-		Bits.putLong(arr, 8, this.getTraceId());
-		Bits.putInt(arr, 8 + 8, this.getOrderIndex());
-		Bits.putString(arr, 8 + 8 + 4, this.getCallerOperationSignature());
-		Bits.putString(arr, 8 + 8 + 4 + 8, this.getCallerClassSignature());
-		Bits.putString(arr, 8 + 8 + 4 + 8 + 8, this.getCalleeOperationSignature());
-		Bits.putString(arr, 8 + 8 + 4 + 8 + 8 + 8, this.getCalleeClassSignature());
-		Bits.putInt(arr, 8 + 8 + 4 + 8 + 8 + 8 + 8, this.getCallerObjectId());
-		Bits.putInt(arr, 8 + 8 + 4 + 8 + 8 + 8 + 8 + 4, this.getCalleeObjectId());
-		return arr;
+	public void writeBytes(final ByteBuffer buffer, final IUniqueId4String stringRegistry) throws BufferOverflowException {
+		buffer.putLong(this.getTimestamp());
+		buffer.putLong(this.getTraceId());
+		buffer.putInt(this.getOrderIndex());
+		buffer.putInt(stringRegistry.getIdForString(this.getCallerOperationSignature()));
+		buffer.putInt(stringRegistry.getIdForString(this.getCallerClassSignature()));
+		buffer.putInt(stringRegistry.getIdForString(this.getCalleeOperationSignature()));
+		buffer.putInt(stringRegistry.getIdForString(this.getCalleeClassSignature()));
+		buffer.putInt(this.getCallerObjectId());
+		buffer.putInt(this.getCalleeObjectId());
 	}
 
 	/**
@@ -138,6 +156,14 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int getSize() {
+		return SIZE;
 	}
 
 	/**

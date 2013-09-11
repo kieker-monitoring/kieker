@@ -16,16 +16,21 @@
 
 package kieker.common.record.flow.trace.operation;
 
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
+import kieker.common.util.IString4UniqueId;
+
 /**
  * @author Jan Waller
  * 
  * @since 1.6
  */
 public class AfterOperationEvent extends AbstractOperationEvent {
-
+	public static final int SIZE = AbstractOperationEvent.SIZE;
 	public static final Class<?>[] TYPES = AbstractOperationEvent.TYPES;
 
-	private static final long serialVersionUID = -1072024765497556058L;
+	private static final long serialVersionUID = 99591136099208296L;
 
 	/**
 	 * This constructor initializes the fields of the record using the given parameters.
@@ -65,5 +70,18 @@ public class AfterOperationEvent extends AbstractOperationEvent {
 	 */
 	protected AfterOperationEvent(final Object[] values, final Class<?>[] types) {
 		super(values, types); // values[0..4]
+	}
+
+	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public AfterOperationEvent(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+		super(buffer, stringRegistry);
 	}
 }

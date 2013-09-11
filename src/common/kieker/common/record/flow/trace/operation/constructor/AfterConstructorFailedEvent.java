@@ -16,8 +16,12 @@
 
 package kieker.common.record.flow.trace.operation.constructor;
 
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.flow.IConstructorRecord;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
+import kieker.common.util.IString4UniqueId;
 
 /**
  * @author Jan Waller
@@ -25,10 +29,10 @@ import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
  * @since 1.6
  */
 public class AfterConstructorFailedEvent extends AfterOperationFailedEvent implements IConstructorRecord {
-
+	public static final int SIZE = AfterOperationFailedEvent.SIZE;
 	public static final Class<?>[] TYPES = AfterOperationFailedEvent.TYPES;
 
-	private static final long serialVersionUID = 148777586227402929L;
+	private static final long serialVersionUID = 4071756393780340409L;
 
 	/**
 	 * This constructor initializes the fields of the record using the given parameters.
@@ -71,5 +75,18 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 	 */
 	protected AfterConstructorFailedEvent(final Object[] values, final Class<?>[] types) { // NOPMD (values stored directly)
 		super(values, types); // values[0..4]
+	}
+
+	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public AfterConstructorFailedEvent(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+		super(buffer, stringRegistry);
 	}
 }

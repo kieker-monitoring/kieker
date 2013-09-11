@@ -16,24 +16,29 @@
 
 package kieker.common.record.controlflow;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.util.Bits;
+import kieker.common.util.IString4UniqueId;
+import kieker.common.util.IUniqueId4String;
 
 /**
  * @author Andre van Hoorn, Jan Waller
  * 
  * @since 1.2
  */
-public class BranchingRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-
+public class BranchingRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
+	public static final int SIZE = 16;
 	public static final Class<?>[] TYPES = {
 		long.class, // timestamp
 		int.class, // branchId
 		int.class, // branchingOutcome
 	};
 
-	private static final long serialVersionUID = 1949567386494340839L;
+	private static final long serialVersionUID = 361952208062069707L;
 
 	private final long timestamp;
 	private final int branchID;
@@ -69,6 +74,21 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	}
 
 	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public BranchingRecord(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+		this.timestamp = buffer.getLong();
+		this.branchID = buffer.getInt();
+		this.branchingOutcome = buffer.getInt();
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public Object[] toArray() {
@@ -78,12 +98,10 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	/**
 	 * {@inheritDoc}
 	 */
-	public byte[] toByteArray() {
-		final byte[] arr = new byte[8 + 4 + 4];
-		Bits.putLong(arr, 0, this.getTimestamp());
-		Bits.putInt(arr, 8, this.getBranchID());
-		Bits.putInt(arr, 8 + 4, this.getBranchingOutcome());
-		return arr;
+	public void writeBytes(final ByteBuffer buffer, final IUniqueId4String stringRegistry) throws BufferOverflowException {
+		buffer.putLong(this.getTimestamp());
+		buffer.putInt(this.getBranchID());
+		buffer.putInt(this.getBranchingOutcome());
 	}
 
 	/**
@@ -99,10 +117,10 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
 	@Deprecated
-	public final void initFromByteArray(final byte[] values) {
+	public final void initFromBytes(final ByteBuffer buffer) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 
@@ -111,6 +129,13 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	 */
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public int getSize() {
+		return SIZE;
 	}
 
 	/**
@@ -133,5 +158,4 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	public final int getBranchingOutcome() {
 		return this.branchingOutcome;
 	}
-
 }

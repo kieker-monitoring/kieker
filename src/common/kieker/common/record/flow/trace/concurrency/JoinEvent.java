@@ -16,8 +16,13 @@
 
 package kieker.common.record.flow.trace.concurrency;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.flow.trace.AbstractTraceEvent;
-import kieker.common.util.Bits;
+import kieker.common.util.IString4UniqueId;
+import kieker.common.util.IUniqueId4String;
 
 /**
  * @author Jan Waller
@@ -25,7 +30,7 @@ import kieker.common.util.Bits;
  * @since 1.8
  */
 public class JoinEvent extends AbstractTraceEvent {
-
+	public static final int SIZE = 28;
 	public static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
@@ -33,7 +38,7 @@ public class JoinEvent extends AbstractTraceEvent {
 		long.class, // joined traceId
 	};
 
-	private static final long serialVersionUID = 8348010228570530470L;
+	private static final long serialVersionUID = -1563708328738468792L;
 
 	private final long joinedTraceId;
 
@@ -79,6 +84,20 @@ public class JoinEvent extends AbstractTraceEvent {
 	}
 
 	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public JoinEvent(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+		super(buffer, stringRegistry);
+		this.joinedTraceId = buffer.getLong();
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public Object[] toArray() {
@@ -88,13 +107,11 @@ public class JoinEvent extends AbstractTraceEvent {
 	/**
 	 * {@inheritDoc}
 	 */
-	public byte[] toByteArray() {
-		final byte[] arr = new byte[8 + 8 + 4 + 8];
-		Bits.putLong(arr, 0, this.getTimestamp());
-		Bits.putLong(arr, 8, this.getTraceId());
-		Bits.putInt(arr, 8 + 8, this.getOrderIndex());
-		Bits.putLong(arr, 8 + 8 + 4, this.getJoinedTraceId());
-		return arr;
+	public void writeBytes(final ByteBuffer buffer, final IUniqueId4String stringRegistry) throws BufferOverflowException {
+		buffer.putLong(this.getTimestamp());
+		buffer.putLong(this.getTraceId());
+		buffer.putInt(this.getOrderIndex());
+		buffer.putLong(this.getJoinedTraceId());
 	}
 
 	/**
@@ -102,6 +119,13 @@ public class JoinEvent extends AbstractTraceEvent {
 	 */
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public int getSize() {
+		return SIZE;
 	}
 
 	public final long getJoinedTraceId() {

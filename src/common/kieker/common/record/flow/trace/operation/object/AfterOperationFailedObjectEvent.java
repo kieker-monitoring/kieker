@@ -16,9 +16,14 @@
 
 package kieker.common.record.flow.trace.operation.object;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.flow.IObjectRecord;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
-import kieker.common.util.Bits;
+import kieker.common.util.IString4UniqueId;
+import kieker.common.util.IUniqueId4String;
 
 /**
  * @author Jan Waller
@@ -26,7 +31,7 @@ import kieker.common.util.Bits;
  * @since 1.6
  */
 public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent implements IObjectRecord {
-
+	public static final int SIZE = 36;
 	public static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
@@ -37,7 +42,7 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 		int.class, // objectId
 	};
 
-	private static final long serialVersionUID = 8956196561578879420L;
+	private static final long serialVersionUID = -2329201498617811437L;
 
 	private final int objectId;
 
@@ -90,6 +95,20 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 	}
 
 	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public AfterOperationFailedObjectEvent(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+		super(buffer, stringRegistry);
+		this.objectId = buffer.getInt();
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -102,16 +121,14 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 	 * {@inheritDoc}
 	 */
 	@Override
-	public byte[] toByteArray() {
-		final byte[] arr = new byte[8 + 8 + 4 + 8 + 8 + 8 + 4];
-		Bits.putLong(arr, 0, this.getTimestamp());
-		Bits.putLong(arr, 8, this.getTraceId());
-		Bits.putInt(arr, 8 + 8, this.getOrderIndex());
-		Bits.putString(arr, 8 + 8 + 4, this.getOperationSignature());
-		Bits.putString(arr, 8 + 8 + 4 + 8, this.getClassSignature());
-		Bits.putString(arr, 8 + 8 + 4 + 8 + 8, this.getCause());
-		Bits.putInt(arr, 8 + 8 + 4 + 8 + 8 + 8, this.getObjectId());
-		return arr;
+	public void writeBytes(final ByteBuffer buffer, final IUniqueId4String stringRegistry) throws BufferOverflowException {
+		buffer.putLong(this.getTimestamp());
+		buffer.putLong(this.getTraceId());
+		buffer.putInt(this.getOrderIndex());
+		buffer.putInt(stringRegistry.getIdForString(this.getOperationSignature()));
+		buffer.putInt(stringRegistry.getIdForString(this.getClassSignature()));
+		buffer.putInt(stringRegistry.getIdForString(this.getCause()));
+		buffer.putInt(this.getObjectId());
 	}
 
 	/**
@@ -120,6 +137,14 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int getSize() {
+		return SIZE;
 	}
 
 	public final int getObjectId() {

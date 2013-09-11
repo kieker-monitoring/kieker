@@ -19,17 +19,22 @@
  */
 package kieker.common.record.system;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.util.Bits;
+import kieker.common.util.IString4UniqueId;
+import kieker.common.util.IUniqueId4String;
 
 /**
  * @author Andre van Hoorn, Jan Waller
  * 
  * @since 1.3
  */
-public class ResourceUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-
+public class ResourceUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
+	public static final int SIZE = 24;
 	public static final Class<?>[] TYPES = {
 		long.class,
 		String.class,
@@ -37,7 +42,8 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 		double.class,
 	};
 
-	private static final long serialVersionUID = 8412442607068036054L;
+	private static final long serialVersionUID = 3633890084086058413L;
+
 	private static final String DEFAULT_VALUE = "N/A";
 
 	/**
@@ -94,6 +100,22 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	}
 
 	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public ResourceUtilizationRecord(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+		this.timestamp = buffer.getLong();
+		this.hostname = stringRegistry.getStringForId(buffer.getInt());
+		this.resourceName = stringRegistry.getStringForId(buffer.getInt());
+		this.utilization = buffer.getDouble();
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public Object[] toArray() {
@@ -103,13 +125,11 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	/**
 	 * {@inheritDoc}
 	 */
-	public byte[] toByteArray() {
-		final byte[] arr = new byte[8 + 8 + 8 + 8];
-		Bits.putLong(arr, 0, this.getTimestamp());
-		Bits.putString(arr, 8, this.getHostname());
-		Bits.putString(arr, 8 + 8, this.getResourceName());
-		Bits.putDouble(arr, 8 + 8 + 8, this.getUtilization());
-		return arr;
+	public void writeBytes(final ByteBuffer buffer, final IUniqueId4String stringRegistry) throws BufferOverflowException {
+		buffer.putLong(this.getTimestamp());
+		buffer.putInt(stringRegistry.getIdForString(this.getHostname()));
+		buffer.putInt(stringRegistry.getIdForString(this.getResourceName()));
+		buffer.putDouble(this.getUtilization());
 	}
 
 	/**
@@ -125,10 +145,10 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
 	@Deprecated
-	public final void initFromByteArray(final byte[] values) {
+	public final void initFromBytes(final ByteBuffer buffer) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 
@@ -137,6 +157,13 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	 */
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public int getSize() {
+		return SIZE;
 	}
 
 	/**

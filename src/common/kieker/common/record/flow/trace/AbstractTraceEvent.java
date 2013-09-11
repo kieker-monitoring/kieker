@@ -16,8 +16,12 @@
 
 package kieker.common.record.flow.trace;
 
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.flow.AbstractEvent;
 import kieker.common.record.flow.ITraceRecord;
+import kieker.common.util.IString4UniqueId;
 
 /**
  * @author Jan Waller
@@ -58,6 +62,21 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 		super(values, valueTypes); // values[0]
 		this.traceId = (Long) values[1];
 		this.orderIndex = (Integer) values[2];
+	}
+
+	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public AbstractTraceEvent(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+		super(buffer, stringRegistry);
+		this.traceId = buffer.getLong();
+		this.orderIndex = buffer.getInt();
 	}
 
 	public final long getTraceId() {

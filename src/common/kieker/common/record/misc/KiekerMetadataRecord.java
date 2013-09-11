@@ -16,9 +16,14 @@
 
 package kieker.common.record.misc;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.util.Bits;
+import kieker.common.util.IString4UniqueId;
+import kieker.common.util.IUniqueId4String;
 import kieker.common.util.Version;
 
 /**
@@ -28,28 +33,8 @@ import kieker.common.util.Version;
  * 
  * @since 1.7
  */
-public final class KiekerMetadataRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-
-	/**
-	 * Constant to be used if no value available.
-	 */
-	public static final String NO_CONTROLLERNAME = "<no-controller-name>";
-
-	/**
-	 * Constant to be used if no value available.
-	 */
-	public static final String NO_HOSTNAME = "<no-hostname>";
-
-	/**
-	 * Constant to be used if no value available.
-	 */
-	public static final String NO_TIMESOURCE = "<no-timesource>";
-
-	/**
-	 * Constant to be used if no value available.
-	 */
-	public static final String NO_TIMEUNIT = "NANOSECONDS";
-
+public final class KiekerMetadataRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
+	public static final int SIZE = 37;
 	public static final Class<?>[] TYPES = {
 		String.class, // version
 		String.class, // controllerName
@@ -61,7 +46,16 @@ public final class KiekerMetadataRecord extends AbstractMonitoringRecord impleme
 		long.class, // numberOfRecords
 	};
 
-	private static final long serialVersionUID = 6867244598532769180L;
+	/** Constant to be used if no value available. */
+	public static final String NO_CONTROLLERNAME = "<no-controller-name>";
+	/** Constant to be used if no value available. */
+	public static final String NO_HOSTNAME = "<no-hostname>";
+	/** Constant to be used if no value available. */
+	public static final String NO_TIMESOURCE = "<no-timesource>";
+	/** Constant to be used if no value available. */
+	public static final String NO_TIMEUNIT = "NANOSECONDS";
+
+	private static final long serialVersionUID = -6178606977837444960L;
 
 	private final String version;
 	private final String controllerName;
@@ -123,6 +117,26 @@ public final class KiekerMetadataRecord extends AbstractMonitoringRecord impleme
 	}
 
 	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public KiekerMetadataRecord(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+		this.version = stringRegistry.getStringForId(buffer.getInt());
+		this.controllerName = stringRegistry.getStringForId(buffer.getInt());
+		this.hostname = stringRegistry.getStringForId(buffer.getInt());
+		this.experimentId = buffer.getInt();
+		this.debugMode = buffer.get() != 0;
+		this.timeOffset = buffer.getLong();
+		this.timeUnit = stringRegistry.getStringForId(buffer.getInt());
+		this.numberOfRecords = buffer.getLong();
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public Object[] toArray() {
@@ -133,24 +147,15 @@ public final class KiekerMetadataRecord extends AbstractMonitoringRecord impleme
 	/**
 	 * {@inheritDoc}
 	 */
-	public byte[] toByteArray() {
-		final byte[] arr = new byte[8 + 8 + 8 + 4 + 1 + 8 + 8 + 8];
-		Bits.putString(arr, 0, this.getVersion());
-		Bits.putString(arr, 8, this.getControllerName());
-		Bits.putString(arr, 8 + 8, this.getHostname());
-		Bits.putInt(arr, 8 + 8 + 8, this.getExperimentId());
-		Bits.putBoolean(arr, 8 + 8 + 8 + 4, this.isDebugMode());
-		Bits.putLong(arr, 8 + 8 + 8 + 4 + 1, this.getTimeOffset());
-		Bits.putString(arr, 8 + 8 + 8 + 4 + 1 + 8, this.getTimeUnit());
-		Bits.putLong(arr, 8 + 8 + 8 + 4 + 1 + 8 + 8, this.getNumberOfRecords());
-		return arr;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public Class<?>[] getValueTypes() {
-		return TYPES; // NOPMD
+	public void writeBytes(final ByteBuffer buffer, final IUniqueId4String stringRegistry) throws BufferOverflowException {
+		buffer.putInt(stringRegistry.getIdForString(this.getVersion()));
+		buffer.putInt(stringRegistry.getIdForString(this.getControllerName()));
+		buffer.putInt(stringRegistry.getIdForString(this.getHostname()));
+		buffer.putInt(this.getExperimentId());
+		buffer.put((byte) (this.isDebugMode() ? 1 : 0));
+		buffer.putLong(this.getTimeOffset());
+		buffer.putInt(stringRegistry.getIdForString(this.getTimeUnit()));
+		buffer.putLong(this.getNumberOfRecords());
 	}
 
 	/**
@@ -166,11 +171,25 @@ public final class KiekerMetadataRecord extends AbstractMonitoringRecord impleme
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
 	@Deprecated
-	public final void initFromByteArray(final byte[] values) {
+	public final void initFromBytes(final ByteBuffer buffer) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public Class<?>[] getValueTypes() {
+		return TYPES; // NOPMD
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public int getSize() {
+		return SIZE;
 	}
 
 	public final String getVersion() {

@@ -14,27 +14,24 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.monitoring.core.controller;
-
-import kieker.common.util.IUniqueId4String;
+package kieker.common.util;
 
 /**
  * @author Jan Waller
  * 
- * @since 1.5
+ * @since 1.8
  */
-public interface IRegistryController extends IUniqueId4String {
+public interface IString4UniqueId {
 
-	// from IUniqueStringId
-	// /**
-	// * Gets a unique id for a string.
-	// *
-	// * @param string
-	// * the string
-	// * @return
-	// * the unique id
-	// *
-	// * @since 1.5
-	// */
-	// public abstract int getIdForString(final String string);
+	/**
+	 * Gets a String for a unique id.
+	 * 
+	 * @param id
+	 *            the unique id
+	 * @return
+	 *         the string
+	 * 
+	 * @since 1.8
+	 */
+	public String getStringForId(final int id); // FIXME: what to do if not found?
 }

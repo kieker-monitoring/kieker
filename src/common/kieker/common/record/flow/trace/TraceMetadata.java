@@ -16,38 +16,23 @@
 
 package kieker.common.record.flow.trace;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.IFlowRecord;
-import kieker.common.util.Bits;
+import kieker.common.util.IString4UniqueId;
+import kieker.common.util.IUniqueId4String;
 
 /**
  * @author Jan Waller
  * 
  * @since 1.5
  */
-public class TraceMetadata extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IFlowRecord {
-
-	/**
-	 * Constant to be used if no sessionId required.
-	 */
-	public static final String NO_SESSION_ID = "<no-session-id>";
-
-	/**
-	 * Constant to be used if no hostname required.
-	 */
-	public static final String NO_HOSTNAME = "<default-host>";
-
-	/**
-	 * Constant to be used if no trace parent ID required.
-	 */
-	public static final long NO_PARENT_TRACEID = -1;
-
-	/**
-	 * Constant to be used if no trace parent order index required.
-	 */
-	public static final int NO_PARENT_ORDER_INDEX = -1;
-
+public class TraceMetadata extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory, IFlowRecord {
+	public static final int SIZE = 36;
 	public static final Class<?>[] TYPES = {
 		long.class, // traceId
 		long.class, // threadId
@@ -57,7 +42,16 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 		int.class, // parentOrderId
 	};
 
-	private static final long serialVersionUID = -4734457252539987221L;
+	/** Constant to be used if no sessionId required. */
+	public static final String NO_SESSION_ID = "<no-session-id>";
+	/** Constant to be used if no hostname required. */
+	public static final String NO_HOSTNAME = "<default-host>";
+	/** Constant to be used if no trace parent ID required. */
+	public static final long NO_PARENT_TRACEID = -1;
+	/** Constant to be used if no trace parent order index required. */
+	public static final int NO_PARENT_ORDER_INDEX = -1;
+
+	private static final long serialVersionUID = 5676916633570574411L;
 
 	private final long traceId;
 	private final long threadId;
@@ -109,6 +103,24 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	}
 
 	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public TraceMetadata(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+		this.traceId = buffer.getLong();
+		this.threadId = buffer.getLong();
+		this.sessionId = stringRegistry.getStringForId(buffer.getInt());
+		this.hostname = stringRegistry.getStringForId(buffer.getInt());
+		this.parentTraceId = buffer.getLong();
+		this.parentOrderId = buffer.getInt();
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public Object[] toArray() {
@@ -118,22 +130,13 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	/**
 	 * {@inheritDoc}
 	 */
-	public Class<?>[] getValueTypes() {
-		return TYPES; // NOPMD
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public byte[] toByteArray() {
-		final byte[] arr = new byte[8 + 8 + 8 + 8 + 8 + 4];
-		Bits.putLong(arr, 0, this.getTraceId());
-		Bits.putLong(arr, 8, this.getThreadId());
-		Bits.putString(arr, 8 + 8, this.getSessionId());
-		Bits.putString(arr, 8 + 8 + 8, this.getHostname());
-		Bits.putLong(arr, 8 + 8 + 8 + 8, this.getParentTraceId());
-		Bits.putInt(arr, 8 + 8 + 8 + 8 + 8, this.getParentOrderId());
-		return arr;
+	public void writeBytes(final ByteBuffer buffer, final IUniqueId4String stringRegistry) throws BufferOverflowException {
+		buffer.putLong(this.getTraceId());
+		buffer.putLong(this.getThreadId());
+		buffer.putInt(stringRegistry.getIdForString(this.getSessionId()));
+		buffer.putInt(stringRegistry.getIdForString(this.getHostname()));
+		buffer.putLong(this.getParentTraceId());
+		buffer.putInt(this.getParentOrderId());
 	}
 
 	/**
@@ -149,11 +152,25 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
 	@Deprecated
-	public final void initFromByteArray(final byte[] values) {
+	public final void initFromBytes(final ByteBuffer buffer) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public Class<?>[] getValueTypes() {
+		return TYPES; // NOPMD
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public int getSize() {
+		return SIZE;
 	}
 
 	public final long getTraceId() {

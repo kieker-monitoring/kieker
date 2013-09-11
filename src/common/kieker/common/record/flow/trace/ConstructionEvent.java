@@ -16,8 +16,13 @@
 
 package kieker.common.record.flow.trace;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.flow.IObjectRecord;
-import kieker.common.util.Bits;
+import kieker.common.util.IString4UniqueId;
+import kieker.common.util.IUniqueId4String;
 
 /**
  * @author Jan Waller
@@ -25,7 +30,7 @@ import kieker.common.util.Bits;
  * @since 1.5
  */
 public class ConstructionEvent extends AbstractTraceEvent implements IObjectRecord {
-
+	public static final int SIZE = 28;
 	public static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
@@ -34,12 +39,10 @@ public class ConstructionEvent extends AbstractTraceEvent implements IObjectReco
 		int.class, // objectId
 	};
 
-	private static final long serialVersionUID = -7484030624827825815L;
-
-	/**
-	 * This field should not be exported, because it makes little sense to have no associated class.
-	 */
+	/** This field should not be exported, because it makes little sense to have no associated class. */
 	private static final String NO_CLASSNAME = "<no-classname>";
+
+	private static final long serialVersionUID = -8575921293755671749L;
 
 	private final String classSignature;
 	private final int objectId;
@@ -91,6 +94,21 @@ public class ConstructionEvent extends AbstractTraceEvent implements IObjectReco
 	}
 
 	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public ConstructionEvent(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+		super(buffer, stringRegistry);
+		this.classSignature = stringRegistry.getStringForId(buffer.getInt());
+		this.objectId = buffer.getInt();
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public Object[] toArray() {
@@ -100,14 +118,12 @@ public class ConstructionEvent extends AbstractTraceEvent implements IObjectReco
 	/**
 	 * {@inheritDoc}
 	 */
-	public byte[] toByteArray() {
-		final byte[] arr = new byte[8 + 8 + 4 + 8 + 4];
-		Bits.putLong(arr, 0, this.getTimestamp());
-		Bits.putLong(arr, 8, this.getTraceId());
-		Bits.putInt(arr, 8 + 8, this.getOrderIndex());
-		Bits.putString(arr, 8 + 8 + 4, this.getClassSignature());
-		Bits.putInt(arr, 8 + 8 + 4 + 8, this.getObjectId());
-		return arr;
+	public void writeBytes(final ByteBuffer buffer, final IUniqueId4String stringRegistry) throws BufferOverflowException {
+		buffer.putLong(this.getTimestamp());
+		buffer.putLong(this.getTraceId());
+		buffer.putInt(this.getOrderIndex());
+		buffer.putInt(stringRegistry.getIdForString(this.getClassSignature()));
+		buffer.putInt(this.getObjectId());
 	}
 
 	/**
@@ -115,6 +131,13 @@ public class ConstructionEvent extends AbstractTraceEvent implements IObjectReco
 	 */
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public int getSize() {
+		return SIZE;
 	}
 
 	public final String getClassSignature() {

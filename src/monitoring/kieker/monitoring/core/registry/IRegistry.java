@@ -77,6 +77,8 @@ public interface IRegistry<E> {
 	/**
 	 * Enables logging of newly registered objects.
 	 * 
+	 * Must only be called for E == String
+	 * 
 	 * @param recordReceiver
 	 *            the IMonitoringRecordReceiver logged to
 	 * 
