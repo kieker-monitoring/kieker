@@ -28,11 +28,13 @@ import kieker.common.util.Bits;
  * @since 1.5
  */
 public final class RegistryRecord<E> extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-	private static final long serialVersionUID = 4566332478835872121L;
+
 	public static final Class<?>[] TYPES = new Class<?>[] {
 		int.class, // id
 		Object.class, // object
 	};
+
+	private static final long serialVersionUID = 4566332478835872121L;
 
 	private final int id;
 	private final E object;

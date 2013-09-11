@@ -26,7 +26,7 @@ import kieker.common.util.Bits;
  * @since 1.6
  */
 public class CallOperationObjectEvent extends CallOperationEvent implements ICallObjectRecord {
-	private static final long serialVersionUID = 5099289901643589844L;
+
 	public static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
@@ -38,6 +38,8 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 		int.class, // Caller objectId
 		int.class, // Callee objectId
 	};
+
+	private static final long serialVersionUID = 5099289901643589844L;
 
 	private final int callerObjectId;
 	private final int calleeObjectId;

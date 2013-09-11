@@ -28,10 +28,12 @@ import kieker.common.util.Bits;
  * @since 1.5
  */
 public class TimestampRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-	private static final long serialVersionUID = 4673929935358689920L;
+
 	public static final Class<?>[] TYPES = {
 		long.class, // timestamp
 	};
+
+	private static final long serialVersionUID = 4673929935358689920L;
 
 	private final long timestamp;
 

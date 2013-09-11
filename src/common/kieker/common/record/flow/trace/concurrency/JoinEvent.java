@@ -25,13 +25,15 @@ import kieker.common.util.Bits;
  * @since 1.8
  */
 public class JoinEvent extends AbstractTraceEvent {
-	private static final long serialVersionUID = 8348010228570530470L;
+
 	public static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
 		int.class, // TraceEvent.orderIndex
 		long.class, // joined traceId
 	};
+
+	private static final long serialVersionUID = 8348010228570530470L;
 
 	private final long joinedTraceId;
 

@@ -27,9 +27,10 @@ import kieker.common.record.IMonitoringRecord;
  * @since 0.95a
  */
 public final class EmptyRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-	private static final long serialVersionUID = -9106270301270791630L;
 
 	public static final Class<?>[] TYPES = {};
+
+	private static final long serialVersionUID = -9106270301270791630L;
 
 	/**
 	 * Creates a new instance of this class.

@@ -26,7 +26,7 @@ import kieker.common.util.Bits;
  * @since 1.5
  */
 public class CallOperationEvent extends AbstractOperationEvent implements ICallRecord {
-	private static final long serialVersionUID = 1193776099551467929L;
+
 	public static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
@@ -36,6 +36,8 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 		String.class, // calleeOperationSignature
 		String.class, // calleeClassSiganture
 	};
+
+	private static final long serialVersionUID = 1193776099551467929L;
 
 	/**
 	 * This field should not be exported, because it makes little sense to have no associated class.

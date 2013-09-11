@@ -26,7 +26,7 @@ import kieker.common.util.Bits;
  * @since 1.5
  */
 public abstract class AbstractOperationEvent extends AbstractTraceEvent implements IOperationRecord {
-	private static final long serialVersionUID = 1L;
+
 	public static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
@@ -34,6 +34,8 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 		String.class, // OperationEvent.operationSignature
 		String.class, // OperationEvent.classSignature
 	};
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * This field should not be exported, because it makes little sense to have no associated class.

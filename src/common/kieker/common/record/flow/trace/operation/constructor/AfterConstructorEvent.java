@@ -25,8 +25,10 @@ import kieker.common.record.flow.trace.operation.AfterOperationEvent;
  * @since 1.6
  */
 public class AfterConstructorEvent extends AfterOperationEvent implements IConstructorRecord {
-	private static final long serialVersionUID = 5346337856547267118L;
+
 	public static final Class<?>[] TYPES = AfterOperationEvent.TYPES;
+
+	private static final long serialVersionUID = 5346337856547267118L;
 
 	/**
 	 * This constructor initializes the fields of the record using the given parameters.

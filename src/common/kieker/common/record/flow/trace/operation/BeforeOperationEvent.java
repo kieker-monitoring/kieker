@@ -22,8 +22,10 @@ package kieker.common.record.flow.trace.operation;
  * @since 1.5
  */
 public class BeforeOperationEvent extends AbstractOperationEvent {
-	private static final long serialVersionUID = -129094268144134877L;
+
 	public static final Class<?>[] TYPES = AbstractOperationEvent.TYPES;
+
+	private static final long serialVersionUID = -129094268144134877L;
 
 	/**
 	 * This constructor uses the given parameters to initialize the fields of this record.

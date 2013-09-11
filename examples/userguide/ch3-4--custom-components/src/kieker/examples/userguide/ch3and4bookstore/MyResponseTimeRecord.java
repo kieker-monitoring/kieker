@@ -23,8 +23,9 @@ import kieker.common.util.Bits;
 public class MyResponseTimeRecord extends AbstractMonitoringRecord
 		implements IMonitoringRecord.Factory {
 
-	private static final long serialVersionUID = 1775L;
 	public static final Class<?>[] TYPES = { String.class, String.class, long.class };
+
+	private static final long serialVersionUID = 1775L;
 
 	// Attributes storing the actual monitoring data:
 	private final String className;

@@ -29,13 +29,15 @@ import kieker.common.util.Bits;
  * @since 1.3
  */
 public class ResourceUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-	private static final long serialVersionUID = 8412442607068036054L;
+
 	public static final Class<?>[] TYPES = {
 		long.class,
 		String.class,
 		String.class,
 		double.class,
 	};
+
+	private static final long serialVersionUID = 8412442607068036054L;
 	private static final String DEFAULT_VALUE = "N/A";
 
 	/**

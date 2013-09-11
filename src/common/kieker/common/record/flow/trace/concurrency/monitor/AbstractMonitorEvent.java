@@ -25,13 +25,15 @@ import kieker.common.util.Bits;
  * @since 1.8
  */
 public abstract class AbstractMonitorEvent extends AbstractTraceEvent {
-	private static final long serialVersionUID = -1L;
+
 	public static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
 		int.class, // TraceEvent.orderIndex
 		int.class, // lockId
 	};
+
+	private static final long serialVersionUID = -1L;
 
 	private final int lockId;
 

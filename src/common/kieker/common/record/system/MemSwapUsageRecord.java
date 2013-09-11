@@ -33,7 +33,6 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	/** A constant which can be used as a default value for non existing fields of the record. */
 	public static final String DEFAULT_VALUE = "N/A";
 
-	private static final long serialVersionUID = 8072422694598002383L;
 	public static final Class<?>[] TYPES = {
 		long.class,
 		String.class,
@@ -44,6 +43,8 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 		long.class,
 		long.class,
 	};
+
+	private static final long serialVersionUID = 8072422694598002383L;
 
 	private final long memUsed;
 	private final long memFree;

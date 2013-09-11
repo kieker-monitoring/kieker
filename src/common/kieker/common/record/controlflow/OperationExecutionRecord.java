@@ -52,12 +52,6 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	 */
 	public static final int NO_EOI_ESS = -1;
 
-	/**
-	 * This field should not be exported, because it makes little sense to have no associated operation.
-	 */
-	private static final String NO_OPERATION_SIGNATURE = "noOperation";
-
-	private static final long serialVersionUID = 8028082734210614968L;
 	public static final Class<?>[] TYPES = {
 		String.class, // operationSignature
 		String.class, // sessionId
@@ -68,6 +62,13 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 		int.class, // eoi
 		int.class, // ess
 	};
+
+	/**
+	 * This field should not be exported, because it makes little sense to have no associated operation.
+	 */
+	private static final String NO_OPERATION_SIGNATURE = "noOperation";
+
+	private static final long serialVersionUID = 8028082734210614968L;
 
 	private final String hostname;
 	private final String operationSignature;

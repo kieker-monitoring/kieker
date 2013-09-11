@@ -25,8 +25,10 @@ import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
  * @since 1.6
  */
 public class BeforeConstructorEvent extends BeforeOperationEvent implements IConstructorRecord {
-	private static final long serialVersionUID = 6255387982554604813L;
+
 	public static final Class<?>[] TYPES = BeforeOperationEvent.TYPES;
+
+	private static final long serialVersionUID = 6255387982554604813L;
 
 	/**
 	 * This constructor uses the given parameters to initialize the fields of this record.

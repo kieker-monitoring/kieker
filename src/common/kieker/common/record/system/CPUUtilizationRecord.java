@@ -26,7 +26,7 @@ import kieker.common.util.Bits;
  * @since 1.3
  */
 public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-	private static final long serialVersionUID = 229860008090066333L;
+
 	public static final Class<?>[] TYPES = {
 		long.class,
 		String.class,
@@ -39,6 +39,9 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 		double.class,
 		double.class,
 	};
+
+	private static final long serialVersionUID = 229860008090066333L;
+
 	private static final String DEFAULT_VALUE = "N/A";
 
 	/**

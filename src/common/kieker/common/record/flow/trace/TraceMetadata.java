@@ -48,7 +48,6 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	 */
 	public static final int NO_PARENT_ORDER_INDEX = -1;
 
-	private static final long serialVersionUID = -4734457252539987221L;
 	public static final Class<?>[] TYPES = {
 		long.class, // traceId
 		long.class, // threadId
@@ -57,6 +56,8 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 		long.class, // parentTraceId
 		int.class, // parentOrderId
 	};
+
+	private static final long serialVersionUID = -4734457252539987221L;
 
 	private final long traceId;
 	private final long threadId;

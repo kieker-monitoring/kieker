@@ -25,8 +25,10 @@ import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
  * @since 1.6
  */
 public class AfterConstructorFailedEvent extends AfterOperationFailedEvent implements IConstructorRecord {
-	private static final long serialVersionUID = 148777586227402929L;
+
 	public static final Class<?>[] TYPES = AfterOperationFailedEvent.TYPES;
+
+	private static final long serialVersionUID = 148777586227402929L;
 
 	/**
 	 * This constructor initializes the fields of the record using the given parameters.

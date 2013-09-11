@@ -25,8 +25,10 @@ import kieker.common.record.flow.trace.operation.CallOperationEvent;
  * @since 1.6
  */
 public class CallConstructorEvent extends CallOperationEvent implements IConstructorRecord {
-	private static final long serialVersionUID = -997689498521033735L;
+
 	public static final Class<?>[] TYPES = CallOperationEvent.TYPES;
+
+	private static final long serialVersionUID = -997689498521033735L;
 
 	/**
 	 * This constructor uses the given parameters to initialize the fields of this record.

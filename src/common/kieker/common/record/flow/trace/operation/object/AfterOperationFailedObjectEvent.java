@@ -27,7 +27,6 @@ import kieker.common.util.Bits;
  */
 public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent implements IObjectRecord {
 
-	private static final long serialVersionUID = 8956196561578879420L;
 	public static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
@@ -37,6 +36,8 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 		String.class, // AfterOperationFailedEvent.Exception
 		int.class, // objectId
 	};
+
+	private static final long serialVersionUID = 8956196561578879420L;
 
 	private final int objectId;
 

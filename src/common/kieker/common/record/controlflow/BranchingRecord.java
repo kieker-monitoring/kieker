@@ -26,12 +26,14 @@ import kieker.common.util.Bits;
  * @since 1.2
  */
 public class BranchingRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-	private static final long serialVersionUID = 1949567386494340839L;
+
 	public static final Class<?>[] TYPES = {
 		long.class, // timestamp
 		int.class, // branchId
 		int.class, // branchingOutcome
 	};
+
+	private static final long serialVersionUID = 1949567386494340839L;
 
 	private final long timestamp;
 	private final int branchID;
