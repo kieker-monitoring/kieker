@@ -71,6 +71,7 @@ public final class Benchmark {
 		final BenchmarkingThread[] threads = new BenchmarkingThread[Benchmark.totalThreads];
 		for (int i = 0; i < Benchmark.totalThreads; i++) {
 			threads[i] = new BenchmarkingThread(mc, Benchmark.totalCalls, Benchmark.methodTime, Benchmark.recursionDepth, doneSignal);
+			threads[i].setName(String.valueOf(i + 1));
 		}
 		for (int l = 0; l < 4; l++) {
 			{ // NOCS (reserve mem only within the block)
