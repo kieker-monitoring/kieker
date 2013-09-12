@@ -152,7 +152,7 @@ public final class KiekerMetadataRecord extends AbstractMonitoringRecord impleme
 		buffer.putInt(stringRegistry.getIdForString(this.getControllerName()));
 		buffer.putInt(stringRegistry.getIdForString(this.getHostname()));
 		buffer.putInt(this.getExperimentId());
-		buffer.put((byte) (this.isDebugMode() ? 1 : 0));
+		buffer.put((byte) (this.isDebugMode() ? 1 : 0)); // NOCS
 		buffer.putLong(this.getTimeOffset());
 		buffer.putInt(stringRegistry.getIdForString(this.getTimeUnit()));
 		buffer.putLong(this.getNumberOfRecords());

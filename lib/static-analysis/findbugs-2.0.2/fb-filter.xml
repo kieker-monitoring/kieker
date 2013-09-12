@@ -5,6 +5,11 @@
 		<Package name="~kieker\.common\.record.*" />
 		<Bug pattern="EI_EXPOSE_REP" />
 	</Match>
+	
+	<Match>
+		<Class name="kieker.common.record.misc.RegistryRecord" />
+		<Bug pattern="DM_DEFAULT_ENCODING" />
+	</Match>
 
 	<Match>
 		<Class name="kieker.analysis.plugin.IPlugin$PluginInputPortReference" />

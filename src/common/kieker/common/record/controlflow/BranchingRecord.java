@@ -82,7 +82,7 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public BranchingRecord(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+	public BranchingRecord(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException { // NOPMD
 		this.timestamp = buffer.getLong();
 		this.branchID = buffer.getInt();
 		this.branchingOutcome = buffer.getInt();

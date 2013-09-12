@@ -64,7 +64,7 @@ public final class EmptyRecord extends AbstractMonitoringRecord implements IMoni
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public EmptyRecord(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+	public EmptyRecord(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException { // NOPMD
 		// nothing to do
 	}
 

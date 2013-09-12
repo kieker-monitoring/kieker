@@ -73,7 +73,7 @@ public class TimestampRecord extends AbstractMonitoringRecord implements IMonito
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public TimestampRecord(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+	public TimestampRecord(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException { // NOPMD
 		this.timestamp = buffer.getLong();
 	}
 

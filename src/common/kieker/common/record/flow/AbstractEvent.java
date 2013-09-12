@@ -65,7 +65,7 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public AbstractEvent(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+	public AbstractEvent(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException { // NOPMD
 		this.timestamp = buffer.getLong();
 	}
 

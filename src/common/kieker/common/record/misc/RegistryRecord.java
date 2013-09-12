@@ -97,7 +97,7 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public RegistryRecord(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+	public RegistryRecord(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException { // NOPMD
 		this.id = buffer.getInt();
 		this.strBytes = new byte[buffer.getInt()];
 		buffer.get(this.strBytes);
@@ -105,7 +105,7 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 		try {
 			str = new String(this.strBytes, ENCODING);
 		} catch (final UnsupportedEncodingException e) {
-			str = new String(this.strBytes);
+			str = new String(this.strBytes); // NOPMD
 		}
 		this.string = str;
 	}
