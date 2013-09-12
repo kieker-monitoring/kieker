@@ -64,7 +64,7 @@ public class MyResponseTimeRecord extends AbstractMonitoringRecord implements IM
 
 	@Deprecated
 	// Will not be used because the record implements IMonitoringRecord.BinaryFactory
-	public final void initFromBytes(final ByteBuffer buffer) throws BufferUnderflowException {
+	public final void initFromBytes(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 
