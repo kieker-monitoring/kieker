@@ -150,7 +150,7 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * <ul>
 	 * <li>a constructor accepting a single Object[] as argument.
 	 * <li>a <code>public static final Class&lt;?&gt;[] TYPES</code> specifying the types of the records, usually returned via {@link #getValueTypes()}.
-	 * <li>the {@link IMonitoringRecord#initFromArray(Object[])} method does not have to be implemented
+	 * <li>the {@link initFromArray(Object[])} method does not have to be implemented
 	 * </ul>
 	 * 
 	 * @since 1.5
@@ -169,7 +169,7 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * <ul>
 	 * <li>a constructor accepting a ByteBuffer and a IString4UniqueId as arguments possibly throwing BufferUnderflowException.
 	 * <li>a <code>public static final int SIZE</code> specifying the binary size of the record, usually returned via {@link #getSize()}.
-	 * <li>the {@link IMonitoringRecord#initFromBytes(ByteBuffer, IString4UniqueId)} method does not have to be implemented
+	 * <li>the {@link initFromBytes(ByteBuffer, IString4UniqueId)} method does not have to be implemented
 	 * </ul>
 	 * 
 	 * @since 1.8

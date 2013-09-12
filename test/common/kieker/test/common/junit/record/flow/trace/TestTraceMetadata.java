@@ -16,19 +16,22 @@
 
 package kieker.test.common.junit.record.flow.trace;
 
+import java.nio.ByteBuffer;
+
 import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.flow.trace.TraceMetadata;
 
 import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.common.util.record.StringRegistry;
 
 /**
  * @author Jan Waller
  * 
  * @since 1.6
  */
-public class TestTrace extends AbstractKiekerTest {
+public class TestTraceMetadata extends AbstractKiekerTest {
 
 	private static final long TRACE_ID = 23444L;
 	private static final long THREAD_ID = 2389L;
@@ -40,7 +43,7 @@ public class TestTrace extends AbstractKiekerTest {
 	/**
 	 * Default constructor.
 	 */
-	public TestTrace() {
+	public TestTraceMetadata() {
 		// empty default constructor
 	}
 
@@ -65,6 +68,32 @@ public class TestTrace extends AbstractKiekerTest {
 		final Object[] trace1Array = trace1.toArray();
 
 		final TraceMetadata trace2 = new TraceMetadata(trace1Array);
+
+		Assert.assertEquals(trace1, trace2);
+		Assert.assertEquals(0, trace1.compareTo(trace2));
+	}
+
+	/**
+	 * Tests the constructor and writeBytes(..) methods of {@link TraceMetadata}.
+	 */
+	@Test
+	public void testSerializeDeserializeBinaryEquals() {
+
+		final TraceMetadata trace1 = new TraceMetadata(TRACE_ID, THREAD_ID, SESSION_ID, HOSTNAME, PARENT_TRACE_ID, PARENT_ORDER_ID);
+
+		Assert.assertEquals("Unexpected trace ID", TRACE_ID, trace1.getTraceId());
+		Assert.assertEquals("Unexpected thread ID", THREAD_ID, trace1.getThreadId());
+		Assert.assertEquals("Unexpected session ID", SESSION_ID, trace1.getSessionId());
+		Assert.assertEquals("Unexpected hostname", HOSTNAME, trace1.getHostname());
+		Assert.assertEquals("Unexpected parent trace ID", PARENT_TRACE_ID, trace1.getParentTraceId());
+		Assert.assertEquals("Unexpected parent order ID", PARENT_ORDER_ID, trace1.getParentOrderId());
+
+		final StringRegistry stringRegistry = new StringRegistry();
+		final ByteBuffer buffer = ByteBuffer.allocate(trace1.getSize());
+		trace1.writeBytes(buffer, stringRegistry);
+		buffer.flip();
+
+		final TraceMetadata trace2 = new TraceMetadata(buffer, stringRegistry);
 
 		Assert.assertEquals(trace1, trace2);
 		Assert.assertEquals(0, trace1.compareTo(trace2));

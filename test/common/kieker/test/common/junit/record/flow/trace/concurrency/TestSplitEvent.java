@@ -16,12 +16,15 @@
 
 package kieker.test.common.junit.record.flow.trace.concurrency;
 
+import java.nio.ByteBuffer;
+
 import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.flow.trace.concurrency.SplitEvent;
 
 import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.common.util.record.StringRegistry;
 
 /**
  * @author Jan Waller
@@ -59,6 +62,29 @@ public class TestSplitEvent extends AbstractKiekerTest {
 		final Object[] event1Array = event1.toArray();
 
 		final SplitEvent event2 = new SplitEvent(event1Array);
+
+		Assert.assertEquals(event1, event2);
+		Assert.assertEquals(0, event1.compareTo(event2));
+	}
+
+	/**
+	 * Tests the constructor and writeBytes(..) methods of {@link SplitEvent}.
+	 */
+	@Test
+	public void testSerializeDeserializeBinaryEquals() {
+
+		final SplitEvent event1 = new SplitEvent(TSTAMP, TRACE_ID, ORDER_INDEX);
+
+		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
+		Assert.assertEquals("Unexpected trace ID", TRACE_ID, event1.getTraceId());
+		Assert.assertEquals("Unexpected order index", ORDER_INDEX, event1.getOrderIndex());
+
+		final StringRegistry stringRegistry = new StringRegistry();
+		final ByteBuffer buffer = ByteBuffer.allocate(event1.getSize());
+		event1.writeBytes(buffer, stringRegistry);
+		buffer.flip();
+
+		final SplitEvent event2 = new SplitEvent(buffer, stringRegistry);
 
 		Assert.assertEquals(event1, event2);
 		Assert.assertEquals(0, event1.compareTo(event2));

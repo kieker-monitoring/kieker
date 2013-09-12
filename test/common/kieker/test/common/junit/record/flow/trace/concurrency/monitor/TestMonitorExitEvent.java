@@ -16,12 +16,15 @@
 
 package kieker.test.common.junit.record.flow.trace.concurrency.monitor;
 
+import java.nio.ByteBuffer;
+
 import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.flow.trace.concurrency.monitor.MonitorExitEvent;
 
 import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.common.util.record.StringRegistry;
 
 /**
  * @author Jan Waller
@@ -61,6 +64,30 @@ public class TestMonitorExitEvent extends AbstractKiekerTest {
 		final Object[] event1Array = event1.toArray();
 
 		final MonitorExitEvent event2 = new MonitorExitEvent(event1Array);
+
+		Assert.assertEquals(event1, event2);
+		Assert.assertEquals(0, event1.compareTo(event2));
+	}
+
+	/**
+	 * Tests the constructor and writeBytes(..) methods of {@link MonitorExitEvent}.
+	 */
+	@Test
+	public void testSerializeDeserializeBinaryEquals() {
+
+		final MonitorExitEvent event1 = new MonitorExitEvent(TSTAMP, TRACE_ID, ORDER_INDEX, LOCK_ID);
+
+		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
+		Assert.assertEquals("Unexpected trace ID", TRACE_ID, event1.getTraceId());
+		Assert.assertEquals("Unexpected order index", ORDER_INDEX, event1.getOrderIndex());
+		Assert.assertEquals("Unexpected lock id", LOCK_ID, event1.getLockId());
+
+		final StringRegistry stringRegistry = new StringRegistry();
+		final ByteBuffer buffer = ByteBuffer.allocate(event1.getSize());
+		event1.writeBytes(buffer, stringRegistry);
+		buffer.flip();
+
+		final MonitorExitEvent event2 = new MonitorExitEvent(buffer, stringRegistry);
 
 		Assert.assertEquals(event1, event2);
 		Assert.assertEquals(0, event1.compareTo(event2));

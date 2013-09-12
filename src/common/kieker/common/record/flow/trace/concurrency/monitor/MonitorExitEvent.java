@@ -16,6 +16,11 @@
 
 package kieker.common.record.flow.trace.concurrency.monitor;
 
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
+import kieker.common.util.IString4UniqueId;
+
 /**
  * @author Jan Waller
  * 
@@ -51,5 +56,18 @@ public class MonitorExitEvent extends AbstractMonitorEvent {
 	 */
 	public MonitorExitEvent(final Object[] values) {
 		super(values, TYPES); // values[0..3]
+	}
+
+	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public MonitorExitEvent(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+		super(buffer, stringRegistry);
 	}
 }

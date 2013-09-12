@@ -16,12 +16,15 @@
 
 package kieker.test.common.junit.record.flow.trace.operation;
 
+import java.nio.ByteBuffer;
+
 import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.flow.trace.operation.CallOperationEvent;
 
 import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.common.util.record.StringRegistry;
 
 /**
  * @author Andre van Hoorn, Jan Waller
@@ -69,6 +72,37 @@ public class TestOperationCallEvent extends AbstractKiekerTest {
 		final Object[] event1Array = event1.toArray();
 
 		final CallOperationEvent event2 = new CallOperationEvent(event1Array);
+
+		Assert.assertEquals(event1, event2);
+		Assert.assertEquals(0, event1.compareTo(event2));
+		Assert.assertTrue(event1.refersToSameOperationAs(event2));
+		Assert.assertTrue(event1.refersToSameOperationAs(event2));
+	}
+
+	/**
+	 * Tests the constructor and writeBytes(..) methods of {@link OperationCallEvent}.
+	 */
+	@Test
+	public void testSerializeDeserializeBinaryEquals() {
+
+		final CallOperationEvent event1 =
+				new CallOperationEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CALLER_OPERATION_SIGNATURE, FQ_CALLER_CLASSNAME,
+						FQ_CALLEE_OPERATION_SIGNATURE, FQ_CALLEE_CLASSNAME);
+
+		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
+		Assert.assertEquals("Unexpected trace ID", TRACE_ID, event1.getTraceId());
+		Assert.assertEquals("Unexpected order index", ORDER_INDEX, event1.getOrderIndex());
+		Assert.assertEquals("Unexpected caller operation name", FQ_CALLER_OPERATION_SIGNATURE, event1.getCallerOperationSignature());
+		Assert.assertEquals("Unexpected caller class name", FQ_CALLER_CLASSNAME, event1.getCallerClassSignature());
+		Assert.assertEquals("Unexpected callee operation name", FQ_CALLEE_OPERATION_SIGNATURE, event1.getCalleeOperationSignature());
+		Assert.assertEquals("Unexpected callee class name", FQ_CALLEE_CLASSNAME, event1.getCalleeClassSignature());
+
+		final StringRegistry stringRegistry = new StringRegistry();
+		final ByteBuffer buffer = ByteBuffer.allocate(event1.getSize());
+		event1.writeBytes(buffer, stringRegistry);
+		buffer.flip();
+
+		final CallOperationEvent event2 = new CallOperationEvent(buffer, stringRegistry);
 
 		Assert.assertEquals(event1, event2);
 		Assert.assertEquals(0, event1.compareTo(event2));
