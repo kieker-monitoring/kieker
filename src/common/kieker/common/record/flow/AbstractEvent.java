@@ -85,7 +85,7 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
 	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer) throws BufferUnderflowException {
+	public void initFromBytes(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 

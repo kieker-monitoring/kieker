@@ -21,6 +21,7 @@ import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
+import kieker.common.util.IString4UniqueId;
 import kieker.common.util.IUniqueId4String;
 
 /**
@@ -94,17 +95,20 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	public void writeBytes(ByteBuffer buffer, IUniqueId4String stringRegistry) throws BufferOverflowException;
 
 	/**
-	 * This method should initialize the record based on the given values. The array should be one of those resulting from a call to {@link #toByteArray()}.
+	 * This method should initialize the record based on the given values. The array should be one of those resulting from a call to
+	 * {@link #writeBytes(ByteBuffer, IUniqueId4String)}.
 	 * 
 	 * @param buffer
 	 *            The bytes for the record.
+	 * @param stringRegistry
+	 *            The Registry storing the strings.
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 * 
 	 * @since 1.8
 	 */
-	public void initFromBytes(ByteBuffer buffer) throws BufferUnderflowException;
+	public void initFromBytes(ByteBuffer buffer, IString4UniqueId stringRegistry) throws BufferUnderflowException;
 
 	/**
 	 * This method should initialize the record based on the given values. The array should be one of those resulting from a call to {@link #toArray()}.
@@ -146,7 +150,7 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * <ul>
 	 * <li>a constructor accepting a single Object[] as argument.
 	 * <li>a <code>public static final Class&lt;?&gt;[] TYPES</code> specifying the types of the records, usually returned via {@link #getValueTypes()}.
-	 * <li>the {@link #initFromArray(Object[])} method does not have to be implemented
+	 * <li>the {@link IMonitoringRecord#initFromArray(Object[])} method does not have to be implemented
 	 * </ul>
 	 * 
 	 * @since 1.5
@@ -165,7 +169,7 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * <ul>
 	 * <li>a constructor accepting a ByteBuffer and a IString4UniqueId as arguments possibly throwing BufferUnderflowException.
 	 * <li>a <code>public static final int SIZE</code> specifying the binary size of the record, usually returned via {@link #getSize()}.
-	 * <li>the {@link #initFromByteArray(byte[])} method does not have to be implemented
+	 * <li>the {@link IMonitoringRecord#initFromBytes(ByteBuffer, IString4UniqueId)} method does not have to be implemented
 	 * </ul>
 	 * 
 	 * @since 1.8

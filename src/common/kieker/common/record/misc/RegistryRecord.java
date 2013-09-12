@@ -142,7 +142,7 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
 	@Deprecated
-	public final void initFromBytes(final ByteBuffer buffer) throws BufferUnderflowException {
+	public final void initFromBytes(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 
