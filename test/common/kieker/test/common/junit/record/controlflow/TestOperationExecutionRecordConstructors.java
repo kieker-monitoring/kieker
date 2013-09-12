@@ -16,6 +16,8 @@
 
 package kieker.test.common.junit.record.controlflow;
 
+import java.nio.ByteBuffer;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -23,6 +25,7 @@ import kieker.common.record.controlflow.OperationExecutionRecord;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
+import kieker.test.common.util.record.StringRegistry;
 
 /**
  * Creates {@link OperationExecutionRecord}s via the available constructors and
@@ -61,6 +64,7 @@ public class TestOperationExecutionRecordConstructors extends AbstractKiekerTest
 		this.checkSessionId(opExecutionRecord, sessionId);
 
 		this.checkToFromArrayAllFields(opExecutionRecord);
+		this.checkToFromBinaryAllFields(opExecutionRecord);
 	}
 
 	private void checkSessionId(final OperationExecutionRecord opExecutionRecord, final String expectedSessionId) {
@@ -89,7 +93,23 @@ public class TestOperationExecutionRecordConstructors extends AbstractKiekerTest
 		final Object[] serializedRecord = opExecutionRecord.toArray();
 		final OperationExecutionRecord deserializedRecord = new OperationExecutionRecord(serializedRecord);
 
-		Assert.assertEquals("Records not equal", opExecutionRecord, deserializedRecord);
+		Assert.assertEquals("Records not equal (array)", opExecutionRecord, deserializedRecord);
+
+		this.checkEoiEss(deserializedRecord, opExecutionRecord.getEoi(), opExecutionRecord.getEss());
+		this.checkHostName(deserializedRecord, opExecutionRecord.getHostname());
+		this.checkSessionId(deserializedRecord, opExecutionRecord.getSessionId());
+		this.checkTinTout(deserializedRecord, opExecutionRecord.getTin(), opExecutionRecord.getTout());
+		this.checkTraceId(deserializedRecord, opExecutionRecord.getTraceId());
+	}
+
+	private void checkToFromBinaryAllFields(final OperationExecutionRecord opExecutionRecord) {
+		final StringRegistry stringRegistry = new StringRegistry();
+		final ByteBuffer buffer = ByteBuffer.allocate(OperationExecutionRecord.SIZE);
+		opExecutionRecord.writeBytes(buffer, stringRegistry);
+		buffer.flip();
+		final OperationExecutionRecord deserializedRecord = new OperationExecutionRecord(buffer, stringRegistry);
+
+		Assert.assertEquals("Records not equal (binary)", opExecutionRecord, deserializedRecord);
 
 		this.checkEoiEss(deserializedRecord, opExecutionRecord.getEoi(), opExecutionRecord.getEss());
 		this.checkHostName(deserializedRecord, opExecutionRecord.getHostname());
