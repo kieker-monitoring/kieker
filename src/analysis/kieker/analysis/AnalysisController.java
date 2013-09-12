@@ -383,6 +383,9 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to connect repositories after starting analysis.");
 		}
+		if (repository == null) {
+			throw new AnalysisConfigurationException("Plugin '" + plugin.getName() + "' (" + plugin.getPluginName() + ") has unconnected repositories.");
+		}
 		// Make sure that the plugin is registered.
 		if (!(this.filters.contains(plugin) || this.readers.contains(plugin))) {
 			throw new AnalysisConfigurationException("The plugin '" + plugin.getName() + "' (" + plugin.getPluginName() + ") is not registered.");
