@@ -70,7 +70,7 @@ public final class TCPReader extends AbstractReaderPlugin {
 
 	private final int port1;
 	private final int port2;
-	final ILookup<String> stringRegistry = new Lookup<String>();
+	private final ILookup<String> stringRegistry = new Lookup<String>();
 
 	public TCPReader(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
@@ -154,14 +154,20 @@ public final class TCPReader extends AbstractReaderPlugin {
 
 }
 
+/**
+ * 
+ * @author Jan Waller
+ * 
+ * @since 1.8
+ */
 class TCPStringReader extends Thread {
 
 	private static final int MESSAGE_BUFFER_SIZE = 65535;
 
-	private static final Log LOG = LogFactory.getLog(TCPReader.class);
+	private static final Log LOG = LogFactory.getLog(TCPStringReader.class);
 
 	private final int port;
-	final ILookup<String> stringRegistry;
+	private final ILookup<String> stringRegistry;
 
 	public TCPStringReader(final int port, final ILookup<String> stringRegistry) {
 		this.port = port;

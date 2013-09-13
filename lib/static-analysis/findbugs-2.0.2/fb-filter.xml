@@ -191,7 +191,13 @@
 	</Match>
 
 	<Match>
-		<Class name="kieker.monitoring.core.registry.Registry" />
+		<Class name="kieker.common.util.registry.Lookup" />
+		<Field name="eArrayCached" />
+		<Bug pattern="VO_VOLATILE_REFERENCE_TO_ARRAY" />
+	</Match>
+	
+	<Match>
+		<Class name="kieker.common.util.registry.Registry" />
 		<Field name="eArrayCached" />
 		<Bug pattern="VO_VOLATILE_REFERENCE_TO_ARRAY" />
 	</Match>

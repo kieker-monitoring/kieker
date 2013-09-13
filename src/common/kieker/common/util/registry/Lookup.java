@@ -27,7 +27,7 @@ package kieker.common.util.registry;
  */
 public final class Lookup<E> implements ILookup<E> {
 
-	private volatile transient E[] array;
+	private transient volatile E[] array;
 
 	@SuppressWarnings("unchecked")
 	public Lookup() {

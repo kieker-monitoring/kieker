@@ -45,8 +45,8 @@ public class BasicTCPWriterReaderTest extends AbstractWriterReaderTest { // NOPM
 	private static final String PORT2 = "10334";
 
 	private volatile ListCollectionFilter<IMonitoringRecord> sinkFilter = null; // NOPMD (init for findbugs)
-	private volatile AnalysisController analysisController;
-	private volatile AnalysisControllerThread analysisThread;
+	private volatile AnalysisController analysisController = null; // NOPMD (init for findbugs)
+	private volatile AnalysisControllerThread analysisThread = null; // NOPMD (init for findbugs)
 
 	@Override
 	protected IMonitoringController createController(final int numRecordsWritten) throws IllegalStateException, AnalysisConfigurationException, InterruptedException {
