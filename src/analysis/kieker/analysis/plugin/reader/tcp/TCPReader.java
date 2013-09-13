@@ -18,6 +18,7 @@ package kieker.analysis.plugin.reader.tcp;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
@@ -81,7 +82,6 @@ public final class TCPReader extends AbstractReaderPlugin {
 	@Override
 	public boolean init() {
 		final TCPStringReader tcpStringReader = new TCPStringReader(this.port2, this.stringRegistry);
-		// tcpStringReader.setDaemon(true);
 		tcpStringReader.start();
 		return super.init();
 	}
@@ -106,26 +106,29 @@ public final class TCPReader extends AbstractReaderPlugin {
 			final SocketChannel socketChannel = serversocket.accept();
 			final ByteBuffer buffer = ByteBuffer.allocateDirect(MESSAGE_BUFFER_SIZE);
 			while (socketChannel.read(buffer) != -1) {
-				// System.out.println("Reading ...");
 				buffer.flip();
-				while (buffer.hasRemaining()) {
-					// TODO: what if the message is not completely within the buffer (try catch BufferUnderflowException)
-					final int clazzid = buffer.getInt();
-					// System.out.println("ClassId: " + clazzid);
-					final long loggingTimestamp = buffer.getLong();
-					final IMonitoringRecord record;
-					try {
-						final String str = this.stringRegistry.get(clazzid);
-						// System.out.println("Class: " + str);
-						record = AbstractMonitoringRecord.createFromByteBuffer(str, buffer, this.stringRegistry);
-						record.setLoggingTimestamp(loggingTimestamp);
-						// System.out.println("Deliver record: " + record.getClass().getName() + " : " + record.toString());
-						super.deliver(OUTPUT_PORT_NAME_RECORDS, record);
-					} catch (final MonitoringRecordException ex) {
-						LOG.error("Failed to create record.", ex);
+				// System.out.println("Reading, remaining:" + buffer.remaining());
+				try {
+					while (buffer.hasRemaining()) {
+						buffer.mark();
+						final int clazzid = buffer.getInt();
+						final long loggingTimestamp = buffer.getLong();
+						final IMonitoringRecord record;
+						try {
+							final String str = this.stringRegistry.get(clazzid);
+							record = AbstractMonitoringRecord.createFromByteBuffer(str, buffer, this.stringRegistry);
+							record.setLoggingTimestamp(loggingTimestamp);
+							super.deliver(OUTPUT_PORT_NAME_RECORDS, record);
+						} catch (final MonitoringRecordException ex) {
+							LOG.error("Failed to create record.", ex);
+						}
 					}
+					buffer.clear();
+				} catch (final BufferUnderflowException ex) {
+					buffer.reset();
+					// System.out.println("Underflow, remaining:" + buffer.remaining());
+					buffer.compact();
 				}
-				buffer.clear();
 			}
 			// System.out.println("Channel closing...");
 			socketChannel.close();
@@ -188,14 +191,17 @@ class TCPStringReader extends Thread {
 			final ByteBuffer buffer = ByteBuffer.allocateDirect(MESSAGE_BUFFER_SIZE);
 			while (socketChannel.read(buffer) != -1) {
 				buffer.flip();
-				while (buffer.hasRemaining()) {
-					// TODO: what if the message is not completely within the buffer (try catch BufferUnderflowException)
-					// System.out.println("Reading from StringChannel ...");
-					RegistryRecord.registerRecordInRegistry(buffer, this.stringRegistry);
+				try {
+					while (buffer.hasRemaining()) {
+						buffer.mark();
+						RegistryRecord.registerRecordInRegistry(buffer, this.stringRegistry);
+					}
+					buffer.clear();
+				} catch (final BufferUnderflowException ex) {
+					buffer.reset();
+					buffer.compact();
 				}
-				buffer.clear();
 			}
-			// System.out.println("StringChannel closing...");
 			socketChannel.close();
 			// END also loop this one?
 		} catch (final IOException ex) {
