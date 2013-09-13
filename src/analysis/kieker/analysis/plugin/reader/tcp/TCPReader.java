@@ -52,7 +52,7 @@ import kieker.common.util.registry.Lookup;
 			@Property(name = TCPReader.CONFIG_PROPERTY_NAME_PORT1, defaultValue = "10133",
 					description = "The first port of the server used for the TCP connection."),
 			@Property(name = TCPReader.CONFIG_PROPERTY_NAME_PORT2, defaultValue = "10134",
-					description = "The second port of the server used for the TCP connection."),
+					description = "The second port of the server used for the TCP connection.")
 		})
 public final class TCPReader extends AbstractReaderPlugin {
 
