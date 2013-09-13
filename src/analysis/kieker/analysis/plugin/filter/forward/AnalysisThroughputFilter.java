@@ -99,7 +99,7 @@ public class AnalysisThroughputFilter extends AbstractFilterPlugin {
 		sb.append(' ');
 		sb.append(this.timeunit.toString());
 		this.plainTextDisplayObject.setText(sb.toString());
-		super.deliver(OUTPUT_PORT_NAME_THROUGHPUT, this.counter);
+		super.deliver(OUTPUT_PORT_NAME_THROUGHPUT, this.counter.get());
 		this.lastTimestamp = timestamp;
 	}
 

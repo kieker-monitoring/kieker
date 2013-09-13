@@ -94,8 +94,8 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	public void writeBytes(ByteBuffer buffer, IRegistry<String> stringRegistry) throws BufferOverflowException;
 
 	/**
-	 * This method should initialize the record based on the given values. The array should be one of those resulting from a call to {@link #writeBytes(ByteBuffer,
-	 * IRegistry<String>)}.
+	 * This method should initialize the record based on the given values. The array should be one of those resulting from a call to
+	 * {@link #writeBytes(ByteBuffer, IRegistry)}.
 	 * 
 	 * @param buffer
 	 *            The bytes for the record.
@@ -168,7 +168,7 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * <ul>
 	 * <li>a constructor accepting a ByteBuffer and a IRegistry<String> as arguments possibly throwing BufferUnderflowException.
 	 * <li>a <code>public static final int SIZE</code> specifying the binary size of the record, usually returned via {@link #getSize()}.
-	 * <li>the {@link #initFromBytes(ByteBuffer, IRegistry<String>)} method does not have to be implemented
+	 * <li>the {@link #initFromBytes(ByteBuffer, IRegistry)} method does not have to be implemented
 	 * </ul>
 	 * 
 	 * @since 1.8
