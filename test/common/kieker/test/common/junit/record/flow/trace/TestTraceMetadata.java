@@ -22,9 +22,10 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.flow.trace.TraceMetadata;
+import kieker.common.util.registry.IRegistry;
+import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.common.util.record.StringRegistry;
 
 /**
  * @author Jan Waller
@@ -88,7 +89,7 @@ public class TestTraceMetadata extends AbstractKiekerTest {
 		Assert.assertEquals("Unexpected parent trace ID", PARENT_TRACE_ID, trace1.getParentTraceId());
 		Assert.assertEquals("Unexpected parent order ID", PARENT_ORDER_ID, trace1.getParentOrderId());
 
-		final StringRegistry stringRegistry = new StringRegistry();
+		final IRegistry<String> stringRegistry = new Registry<String>();
 		final ByteBuffer buffer = ByteBuffer.allocate(trace1.getSize());
 		trace1.writeBytes(buffer, stringRegistry);
 		buffer.flip();

@@ -22,8 +22,7 @@ import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.util.IString4UniqueId;
-import kieker.common.util.IUniqueId4String;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * This class represents an (always) empty record.
@@ -64,7 +63,7 @@ public final class EmptyRecord extends AbstractMonitoringRecord implements IMoni
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public EmptyRecord(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException { // NOPMD
+	public EmptyRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException { // NOPMD
 		// nothing to do
 	}
 
@@ -78,7 +77,7 @@ public final class EmptyRecord extends AbstractMonitoringRecord implements IMoni
 	/**
 	 * {@inheritDoc}
 	 */
-	public void writeBytes(final ByteBuffer buffer, final IUniqueId4String stringRegistry) throws BufferOverflowException {
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		// nothing to do
 	}
 
@@ -98,7 +97,7 @@ public final class EmptyRecord extends AbstractMonitoringRecord implements IMoni
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
 	@Deprecated
-	public final void initFromBytes(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+	public final void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 

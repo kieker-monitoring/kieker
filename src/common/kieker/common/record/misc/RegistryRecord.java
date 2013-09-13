@@ -23,8 +23,8 @@ import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.util.IString4UniqueId;
-import kieker.common.util.IUniqueId4String;
+import kieker.common.util.registry.ILookup;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * Record used to associate Objects (typically Strings) with unique ids.
@@ -97,7 +97,7 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public RegistryRecord(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException { // NOPMD
+	public RegistryRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException { // NOPMD
 		this.id = buffer.getInt();
 		this.strBytes = new byte[buffer.getInt()];
 		buffer.get(this.strBytes);
@@ -120,7 +120,7 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	/**
 	 * {@inheritDoc}
 	 */
-	public void writeBytes(final ByteBuffer buffer, final IUniqueId4String stringRegistry) throws BufferOverflowException {
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putInt(this.getId());
 		buffer.putInt(this.getString().length());
 		buffer.put(this.strBytes);
@@ -142,7 +142,7 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
 	@Deprecated
-	public final void initFromBytes(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+	public final void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 
@@ -172,5 +172,18 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	 */
 	public final String getString() {
 		return this.string;
+	}
+
+	public static final void registerRecordInRegistry(final ByteBuffer buffer, final ILookup<String> stringRegistry) throws BufferOverflowException {
+		final int id = buffer.getInt();
+		final byte[] strBytes = new byte[buffer.getInt()];
+		buffer.get(strBytes);
+		String string;
+		try {
+			string = new String(strBytes, ENCODING);
+		} catch (final UnsupportedEncodingException e) {
+			string = new String(strBytes); // NOPMD
+		}
+		stringRegistry.set(string, id);
 	}
 }

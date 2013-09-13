@@ -23,8 +23,7 @@ import java.nio.ByteBuffer;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.IFlowRecord;
-import kieker.common.util.IString4UniqueId;
-import kieker.common.util.IUniqueId4String;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Jan Waller
@@ -111,11 +110,11 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public TraceMetadata(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+	public TraceMetadata(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		this.traceId = buffer.getLong();
 		this.threadId = buffer.getLong();
-		this.sessionId = stringRegistry.getStringForId(buffer.getInt());
-		this.hostname = stringRegistry.getStringForId(buffer.getInt());
+		this.sessionId = stringRegistry.get(buffer.getInt());
+		this.hostname = stringRegistry.get(buffer.getInt());
 		this.parentTraceId = buffer.getLong();
 		this.parentOrderId = buffer.getInt();
 	}
@@ -130,11 +129,11 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	/**
 	 * {@inheritDoc}
 	 */
-	public void writeBytes(final ByteBuffer buffer, final IUniqueId4String stringRegistry) throws BufferOverflowException {
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putLong(this.getTraceId());
 		buffer.putLong(this.getThreadId());
-		buffer.putInt(stringRegistry.getIdForString(this.getSessionId()));
-		buffer.putInt(stringRegistry.getIdForString(this.getHostname()));
+		buffer.putInt(stringRegistry.get(this.getSessionId()));
+		buffer.putInt(stringRegistry.get(this.getHostname()));
 		buffer.putLong(this.getParentTraceId());
 		buffer.putInt(this.getParentOrderId());
 	}
@@ -155,7 +154,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
 	@Deprecated
-	public final void initFromBytes(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+	public final void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 

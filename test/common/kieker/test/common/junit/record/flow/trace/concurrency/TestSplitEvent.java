@@ -22,9 +22,10 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.flow.trace.concurrency.SplitEvent;
+import kieker.common.util.registry.IRegistry;
+import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.common.util.record.StringRegistry;
 
 /**
  * @author Jan Waller
@@ -79,7 +80,7 @@ public class TestSplitEvent extends AbstractKiekerTest {
 		Assert.assertEquals("Unexpected trace ID", TRACE_ID, event1.getTraceId());
 		Assert.assertEquals("Unexpected order index", ORDER_INDEX, event1.getOrderIndex());
 
-		final StringRegistry stringRegistry = new StringRegistry();
+		final IRegistry<String> stringRegistry = new Registry<String>();
 		final ByteBuffer buffer = ByteBuffer.allocate(event1.getSize());
 		event1.writeBytes(buffer, stringRegistry);
 		buffer.flip();

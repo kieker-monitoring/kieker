@@ -22,10 +22,11 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.controlflow.OperationExecutionRecord;
+import kieker.common.util.registry.IRegistry;
+import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
-import kieker.test.common.util.record.StringRegistry;
 
 /**
  * Creates {@link OperationExecutionRecord}s via the available constructors and
@@ -103,7 +104,7 @@ public class TestOperationExecutionRecordConstructors extends AbstractKiekerTest
 	}
 
 	private void checkToFromBinaryAllFields(final OperationExecutionRecord opExecutionRecord) {
-		final StringRegistry stringRegistry = new StringRegistry();
+		final IRegistry<String> stringRegistry = new Registry<String>();
 		final ByteBuffer buffer = ByteBuffer.allocate(OperationExecutionRecord.SIZE);
 		opExecutionRecord.writeBytes(buffer, stringRegistry);
 		buffer.flip();

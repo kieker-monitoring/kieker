@@ -22,8 +22,7 @@ import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.util.IString4UniqueId;
-import kieker.common.util.IUniqueId4String;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Andre van Hoorn, Jan Waller
@@ -82,7 +81,7 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public BranchingRecord(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException { // NOPMD
+	public BranchingRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException { // NOPMD
 		this.timestamp = buffer.getLong();
 		this.branchID = buffer.getInt();
 		this.branchingOutcome = buffer.getInt();
@@ -98,7 +97,7 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	/**
 	 * {@inheritDoc}
 	 */
-	public void writeBytes(final ByteBuffer buffer, final IUniqueId4String stringRegistry) throws BufferOverflowException {
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putLong(this.getTimestamp());
 		buffer.putInt(this.getBranchID());
 		buffer.putInt(this.getBranchingOutcome());
@@ -120,7 +119,7 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
 	@Deprecated
-	public final void initFromBytes(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+	public final void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 

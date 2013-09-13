@@ -22,9 +22,10 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.flow.trace.operation.constructor.BeforeConstructorEvent;
+import kieker.common.util.registry.IRegistry;
+import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.common.util.record.StringRegistry;
 
 /**
  * @author Jan Waller
@@ -88,7 +89,7 @@ public class TestBeforeConstructorEvent extends AbstractKiekerTest {
 		Assert.assertEquals("Unexpected class name", FQ_CLASSNAME, event1.getClassSignature());
 		Assert.assertEquals("Unexpected operation signature", FQ_OPERATION_SIGNATURE, event1.getOperationSignature());
 
-		final StringRegistry stringRegistry = new StringRegistry();
+		final IRegistry<String> stringRegistry = new Registry<String>();
 		final ByteBuffer buffer = ByteBuffer.allocate(event1.getSize());
 		event1.writeBytes(buffer, stringRegistry);
 		buffer.flip();

@@ -22,8 +22,7 @@ import java.nio.ByteBuffer;
 
 import kieker.common.record.flow.ICallRecord;
 import kieker.common.record.flow.IOperationRecord;
-import kieker.common.util.IString4UniqueId;
-import kieker.common.util.IUniqueId4String;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Andre van Hoorn, Holger Knoche, Jan Waller
@@ -111,10 +110,10 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public CallOperationEvent(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+	public CallOperationEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		super(buffer, stringRegistry);
-		this.calleeOperationSignature = stringRegistry.getStringForId(buffer.getInt());
-		this.calleeClassSignature = stringRegistry.getStringForId(buffer.getInt());
+		this.calleeOperationSignature = stringRegistry.get(buffer.getInt());
+		this.calleeClassSignature = stringRegistry.get(buffer.getInt());
 	}
 
 	/**
@@ -131,14 +130,14 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IUniqueId4String stringRegistry) throws BufferOverflowException {
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putLong(this.getTimestamp());
 		buffer.putLong(this.getTraceId());
 		buffer.putInt(this.getOrderIndex());
-		buffer.putInt(stringRegistry.getIdForString(this.getCallerOperationSignature()));
-		buffer.putInt(stringRegistry.getIdForString(this.getCallerClassSignature()));
-		buffer.putInt(stringRegistry.getIdForString(this.getCalleeOperationSignature()));
-		buffer.putInt(stringRegistry.getIdForString(this.getCalleeClassSignature()));
+		buffer.putInt(stringRegistry.get(this.getCallerOperationSignature()));
+		buffer.putInt(stringRegistry.get(this.getCallerClassSignature()));
+		buffer.putInt(stringRegistry.get(this.getCalleeOperationSignature()));
+		buffer.putInt(stringRegistry.get(this.getCalleeClassSignature()));
 	}
 
 	/**

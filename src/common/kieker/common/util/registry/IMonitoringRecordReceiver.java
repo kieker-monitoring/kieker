@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.monitoring.core;
+package kieker.common.util.registry;
 
 import kieker.common.record.IMonitoringRecord;
 

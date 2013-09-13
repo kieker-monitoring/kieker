@@ -21,7 +21,7 @@ import java.nio.ByteBuffer;
 
 import kieker.common.record.flow.IConstructorRecord;
 import kieker.common.record.flow.trace.operation.CallOperationEvent;
-import kieker.common.util.IString4UniqueId;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Jan Waller
@@ -89,7 +89,7 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public CallConstructorEvent(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+	public CallConstructorEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		super(buffer, stringRegistry);
 	}
 }

@@ -14,14 +14,13 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.monitoring.core.registry;
+package kieker.common.util.registry;
 
 import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
 import kieker.common.record.misc.RegistryRecord;
-import kieker.monitoring.core.IMonitoringRecordReceiver;
 
 /**
  * A simple registry to assign unique ids to objects.
@@ -139,10 +138,19 @@ public final class Registry<E> implements IRegistry<E> {
 	 * {@inheritDoc}
 	 */
 	public final E get(final int id) {
-		if (id > this.nextId.get()) {
+		final int capacity = this.nextId.get();
+		if (id > capacity) {
 			return null;
 		}
-		return this.getAll()[id];
+		if (this.eArrayCached.length != capacity) { // volatile read
+			@SuppressWarnings("unchecked")
+			final E[] eArray = (E[]) new Object[capacity];
+			for (final Segment<E> segment : this.segments) {
+				segment.insertIntoArray(eArray);
+			}
+			this.eArrayCached = eArray; // volatile write
+		}
+		return this.eArrayCached[id];
 	}
 
 	/**

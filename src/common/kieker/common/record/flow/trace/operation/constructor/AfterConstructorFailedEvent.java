@@ -21,7 +21,7 @@ import java.nio.ByteBuffer;
 
 import kieker.common.record.flow.IConstructorRecord;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
-import kieker.common.util.IString4UniqueId;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Jan Waller
@@ -86,7 +86,7 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public AfterConstructorFailedEvent(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+	public AfterConstructorFailedEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		super(buffer, stringRegistry);
 	}
 }

@@ -14,9 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.monitoring.core.registry;
-
-import kieker.monitoring.core.IMonitoringRecordReceiver;
+package kieker.common.util.registry;
 
 /**
  * A generic interface to assign unique IDs to objects.

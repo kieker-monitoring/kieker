@@ -22,8 +22,7 @@ import java.nio.ByteBuffer;
 
 import kieker.common.record.flow.IObjectRecord;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
-import kieker.common.util.IString4UniqueId;
-import kieker.common.util.IUniqueId4String;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Jan Waller
@@ -100,7 +99,7 @@ public class AfterOperationObjectEvent extends AfterOperationEvent implements IO
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public AfterOperationObjectEvent(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+	public AfterOperationObjectEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		super(buffer, stringRegistry);
 		this.objectId = buffer.getInt();
 	}
@@ -118,12 +117,12 @@ public class AfterOperationObjectEvent extends AfterOperationEvent implements IO
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IUniqueId4String stringRegistry) throws BufferOverflowException {
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putLong(this.getTimestamp());
 		buffer.putLong(this.getTraceId());
 		buffer.putInt(this.getOrderIndex());
-		buffer.putInt(stringRegistry.getIdForString(this.getOperationSignature()));
-		buffer.putInt(stringRegistry.getIdForString(this.getClassSignature()));
+		buffer.putInt(stringRegistry.get(this.getOperationSignature()));
+		buffer.putInt(stringRegistry.get(this.getClassSignature()));
 		buffer.putInt(this.getObjectId());
 	}
 

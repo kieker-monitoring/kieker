@@ -22,9 +22,10 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.flow.trace.operation.object.AfterOperationFailedObjectEvent;
+import kieker.common.util.registry.IRegistry;
+import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.common.util.record.StringRegistry;
 
 /**
  * @author Jan Waller
@@ -94,7 +95,7 @@ public class TestAfterOperationFailedObjectEvent extends AbstractKiekerTest {
 		Assert.assertEquals("Unexpected cause", CAUSE, event1.getCause());
 		Assert.assertEquals("Unexpected object id", OBJECT_ID, event1.getObjectId());
 
-		final StringRegistry stringRegistry = new StringRegistry();
+		final IRegistry<String> stringRegistry = new Registry<String>();
 		final ByteBuffer buffer = ByteBuffer.allocate(event1.getSize());
 		event1.writeBytes(buffer, stringRegistry);
 		buffer.flip();

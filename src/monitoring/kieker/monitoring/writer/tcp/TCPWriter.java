@@ -26,6 +26,8 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.misc.RegistryRecord;
+import kieker.common.util.registry.IRegistry;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.writer.AbstractAsyncThread;
 import kieker.monitoring.writer.AbstractAsyncWriter;
@@ -36,24 +38,30 @@ import kieker.monitoring.writer.AbstractAsyncWriter;
  * 
  * @since 1.8
  */
-public class TCPWriter extends AbstractAsyncWriter {
+public final class TCPWriter extends AbstractAsyncWriter {
 	private static final String PREFIX = TCPWriter.class.getName() + ".";
 	public static final String CONFIG_HOSTNAME = PREFIX + "hostname"; // NOCS (afterPREFIX)
-	public static final String CONFIG_PORT = PREFIX + "port"; // NOCS (afterPREFIX)
+	public static final String CONFIG_PORT1 = PREFIX + "port1"; // NOCS (afterPREFIX)
+	public static final String CONFIG_PORT2 = PREFIX + "port2"; // NOCS (afterPREFIX)
+	public static final String CONFIG_BUFFERSIZE = PREFIX + "bufferSize"; // NOCS (afterPREFIX)
 
 	private final String hostname;
-	private final int port;
+	private final int port1;
+	private final int port2;
+	private final int bufferSize;
 
-	protected TCPWriter(final Configuration configuration) {
+	public TCPWriter(final Configuration configuration) {
 		super(configuration);
 		this.hostname = configuration.getStringProperty(CONFIG_HOSTNAME);
-		this.port = configuration.getIntProperty(CONFIG_PORT);
+		this.port1 = configuration.getIntProperty(CONFIG_PORT1);
+		this.port2 = configuration.getIntProperty(CONFIG_PORT2);
+		// should be check for buffers too small for a single record?
+		this.bufferSize = configuration.getIntProperty(CONFIG_BUFFERSIZE);
 	}
 
 	@Override
 	protected void init() throws Exception {
-		this.addWorker(new TCPWriterThread(this.monitoringController, this.blockingQueue, this.hostname, this.port));
-
+		this.addWorker(new TCPWriterThread(this.monitoringController, this.blockingQueue, this.hostname, this.port1, this.port2, this.bufferSize));
 	}
 }
 
@@ -66,30 +74,52 @@ public class TCPWriter extends AbstractAsyncWriter {
 final class TCPWriterThread extends AbstractAsyncThread {
 	private static final Log LOG = LogFactory.getLog(TCPWriterThread.class);
 
-	private static final int MESSAGE_BUFFER_SIZE = 65536;
-	private final SocketChannel socketChannel;
-	private final ByteBuffer buffer;
+	private final SocketChannel socketChannelRecords;
+	private final SocketChannel socketChannelStrings;
+	private final ByteBuffer byteBuffer;
+	private final IRegistry<String> stringRegistry;
 
-	public TCPWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue, final String hostname, final int port)
-			throws IOException {
+	public TCPWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue, final String hostname,
+			final int port1, final int port2, final int bufferSize) throws IOException {
 		super(monitoringController, writeQueue);
-		this.buffer = ByteBuffer.allocateDirect(MESSAGE_BUFFER_SIZE);
-		this.socketChannel = SocketChannel.open(new InetSocketAddress(hostname, port));
+		this.byteBuffer = ByteBuffer.allocateDirect(bufferSize);
+		this.socketChannelRecords = SocketChannel.open(new InetSocketAddress(hostname, port1));
+		this.socketChannelStrings = SocketChannel.open(new InetSocketAddress(hostname, port2));
+		this.stringRegistry = this.monitoringController.getStringRegistry();
 	}
 
 	@Override
 	protected void consume(final IMonitoringRecord monitoringRecord) throws Exception {
-		// FIXME: check for enough space SIZE + 4 + 8
-		this.buffer.putInt(this.monitoringController.getIdForString(monitoringRecord.getClass().getName()));
-		this.buffer.putLong(monitoringRecord.getLoggingTimestamp());
-		monitoringRecord.writeBytes(this.buffer, this.monitoringController);
-		// FIXME: actually write something
+		if (monitoringRecord instanceof RegistryRecord) {
+			final int size = monitoringRecord.getSize();
+			final ByteBuffer buffer = ByteBuffer.allocateDirect(size);
+			monitoringRecord.writeBytes(buffer, this.stringRegistry);
+			buffer.flip();
+			this.socketChannelStrings.write(buffer);
+		} else {
+			final ByteBuffer buffer = this.byteBuffer;
+			if ((monitoringRecord.getSize() + 4 + 8) > buffer.remaining()) {
+				buffer.flip();
+				this.socketChannelRecords.write(buffer);
+				buffer.clear();
+			}
+			buffer.putInt(this.monitoringController.getUniqueIdForString(monitoringRecord.getClass().getName()));
+			buffer.putLong(monitoringRecord.getLoggingTimestamp());
+			monitoringRecord.writeBytes(buffer, this.stringRegistry);
+		}
 	}
 
 	@Override
 	protected void cleanup() {
 		try {
-			this.socketChannel.close();
+			this.byteBuffer.flip();
+			this.socketChannelRecords.write(this.byteBuffer);
+			this.socketChannelRecords.close();
+		} catch (final IOException ex) {
+			LOG.error("Error closing connection", ex);
+		}
+		try {
+			this.socketChannelStrings.close();
 		} catch (final IOException ex) {
 			LOG.error("Error closing connection", ex);
 		}

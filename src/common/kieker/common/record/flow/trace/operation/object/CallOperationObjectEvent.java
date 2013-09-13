@@ -22,8 +22,7 @@ import java.nio.ByteBuffer;
 
 import kieker.common.record.flow.ICallObjectRecord;
 import kieker.common.record.flow.trace.operation.CallOperationEvent;
-import kieker.common.util.IString4UniqueId;
-import kieker.common.util.IUniqueId4String;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Jan Waller
@@ -117,7 +116,7 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public CallOperationObjectEvent(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+	public CallOperationObjectEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		super(buffer, stringRegistry);
 		this.callerObjectId = buffer.getInt();
 		this.calleeObjectId = buffer.getInt();
@@ -138,14 +137,14 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IUniqueId4String stringRegistry) throws BufferOverflowException {
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putLong(this.getTimestamp());
 		buffer.putLong(this.getTraceId());
 		buffer.putInt(this.getOrderIndex());
-		buffer.putInt(stringRegistry.getIdForString(this.getCallerOperationSignature()));
-		buffer.putInt(stringRegistry.getIdForString(this.getCallerClassSignature()));
-		buffer.putInt(stringRegistry.getIdForString(this.getCalleeOperationSignature()));
-		buffer.putInt(stringRegistry.getIdForString(this.getCalleeClassSignature()));
+		buffer.putInt(stringRegistry.get(this.getCallerOperationSignature()));
+		buffer.putInt(stringRegistry.get(this.getCallerClassSignature()));
+		buffer.putInt(stringRegistry.get(this.getCalleeOperationSignature()));
+		buffer.putInt(stringRegistry.get(this.getCalleeClassSignature()));
 		buffer.putInt(this.getCallerObjectId());
 		buffer.putInt(this.getCalleeObjectId());
 	}

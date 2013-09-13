@@ -21,8 +21,7 @@ import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
-import kieker.common.util.IString4UniqueId;
-import kieker.common.util.IUniqueId4String;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * All Kieker monitoring records have to implement this minimal interface.
@@ -92,11 +91,11 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * 
 	 * @since 1.8
 	 */
-	public void writeBytes(ByteBuffer buffer, IUniqueId4String stringRegistry) throws BufferOverflowException;
+	public void writeBytes(ByteBuffer buffer, IRegistry<String> stringRegistry) throws BufferOverflowException;
 
 	/**
-	 * This method should initialize the record based on the given values. The array should be one of those resulting from a call to
-	 * {@link #writeBytes(ByteBuffer, IUniqueId4String)}.
+	 * This method should initialize the record based on the given values. The array should be one of those resulting from a call to {@link #writeBytes(ByteBuffer,
+	 * IRegistry<String>)}.
 	 * 
 	 * @param buffer
 	 *            The bytes for the record.
@@ -108,7 +107,7 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * 
 	 * @since 1.8
 	 */
-	public void initFromBytes(ByteBuffer buffer, IString4UniqueId stringRegistry) throws BufferUnderflowException;
+	public void initFromBytes(ByteBuffer buffer, IRegistry<String> stringRegistry) throws BufferUnderflowException;
 
 	/**
 	 * This method should initialize the record based on the given values. The array should be one of those resulting from a call to {@link #toArray()}.
@@ -167,9 +166,9 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * </p>
 	 * 
 	 * <ul>
-	 * <li>a constructor accepting a ByteBuffer and a IString4UniqueId as arguments possibly throwing BufferUnderflowException.
+	 * <li>a constructor accepting a ByteBuffer and a IRegistry<String> as arguments possibly throwing BufferUnderflowException.
 	 * <li>a <code>public static final int SIZE</code> specifying the binary size of the record, usually returned via {@link #getSize()}.
-	 * <li>the {@link #initFromBytes(ByteBuffer, IString4UniqueId)} method does not have to be implemented
+	 * <li>the {@link #initFromBytes(ByteBuffer, IRegistry<String>)} method does not have to be implemented
 	 * </ul>
 	 * 
 	 * @since 1.8

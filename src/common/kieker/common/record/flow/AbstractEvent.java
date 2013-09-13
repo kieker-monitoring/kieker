@@ -21,7 +21,7 @@ import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.util.IString4UniqueId;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Jan Waller
@@ -65,7 +65,7 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public AbstractEvent(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException { // NOPMD
+	public AbstractEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException { // NOPMD
 		this.timestamp = buffer.getLong();
 	}
 
@@ -85,7 +85,7 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
 	@Deprecated
-	public void initFromBytes(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 

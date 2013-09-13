@@ -22,8 +22,7 @@ import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.util.IString4UniqueId;
-import kieker.common.util.IUniqueId4String;
+import kieker.common.util.registry.IRegistry;
 
 public class MyResponseTimeRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 	public static final int SIZE = 16;
@@ -50,9 +49,9 @@ public class MyResponseTimeRecord extends AbstractMonitoringRecord implements IM
 		this.responseTimeNanos = (Long) values[2];
 	}
 
-	public MyResponseTimeRecord(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
-		this.className = stringRegistry.getStringForId(buffer.getInt());
-		this.methodName = stringRegistry.getStringForId(buffer.getInt());
+	public MyResponseTimeRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		this.className = stringRegistry.get(buffer.getInt());
+		this.methodName = stringRegistry.get(buffer.getInt());
 		this.responseTimeNanos = buffer.getLong();
 	}
 
@@ -64,7 +63,7 @@ public class MyResponseTimeRecord extends AbstractMonitoringRecord implements IM
 
 	@Deprecated
 	// Will not be used because the record implements IMonitoringRecord.BinaryFactory
-	public final void initFromBytes(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+	public final void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 
@@ -72,9 +71,9 @@ public class MyResponseTimeRecord extends AbstractMonitoringRecord implements IM
 		return new Object[] { this.getClassName(), this.getMethodName(), this.getResponseTimeNanos(), };
 	}
 
-	public void writeBytes(final ByteBuffer buffer, final IUniqueId4String stringRegistry) throws BufferOverflowException {
-		buffer.putInt(stringRegistry.getIdForString(this.getClassName()));
-		buffer.putInt(stringRegistry.getIdForString(this.getMethodName()));
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		buffer.putInt(stringRegistry.get(this.getClassName()));
+		buffer.putInt(stringRegistry.get(this.getMethodName()));
 		buffer.putLong(this.getResponseTimeNanos());
 	}
 

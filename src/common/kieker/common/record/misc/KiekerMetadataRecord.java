@@ -22,9 +22,8 @@ import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.util.IString4UniqueId;
-import kieker.common.util.IUniqueId4String;
 import kieker.common.util.Version;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * This records collects metadata for the monitoring session.
@@ -125,14 +124,14 @@ public final class KiekerMetadataRecord extends AbstractMonitoringRecord impleme
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public KiekerMetadataRecord(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
-		this.version = stringRegistry.getStringForId(buffer.getInt());
-		this.controllerName = stringRegistry.getStringForId(buffer.getInt());
-		this.hostname = stringRegistry.getStringForId(buffer.getInt());
+	public KiekerMetadataRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		this.version = stringRegistry.get(buffer.getInt());
+		this.controllerName = stringRegistry.get(buffer.getInt());
+		this.hostname = stringRegistry.get(buffer.getInt());
 		this.experimentId = buffer.getInt();
 		this.debugMode = buffer.get() != 0;
 		this.timeOffset = buffer.getLong();
-		this.timeUnit = stringRegistry.getStringForId(buffer.getInt());
+		this.timeUnit = stringRegistry.get(buffer.getInt());
 		this.numberOfRecords = buffer.getLong();
 	}
 
@@ -147,14 +146,14 @@ public final class KiekerMetadataRecord extends AbstractMonitoringRecord impleme
 	/**
 	 * {@inheritDoc}
 	 */
-	public void writeBytes(final ByteBuffer buffer, final IUniqueId4String stringRegistry) throws BufferOverflowException {
-		buffer.putInt(stringRegistry.getIdForString(this.getVersion()));
-		buffer.putInt(stringRegistry.getIdForString(this.getControllerName()));
-		buffer.putInt(stringRegistry.getIdForString(this.getHostname()));
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		buffer.putInt(stringRegistry.get(this.getVersion()));
+		buffer.putInt(stringRegistry.get(this.getControllerName()));
+		buffer.putInt(stringRegistry.get(this.getHostname()));
 		buffer.putInt(this.getExperimentId());
 		buffer.put((byte) (this.isDebugMode() ? 1 : 0)); // NOCS
 		buffer.putLong(this.getTimeOffset());
-		buffer.putInt(stringRegistry.getIdForString(this.getTimeUnit()));
+		buffer.putInt(stringRegistry.get(this.getTimeUnit()));
 		buffer.putLong(this.getNumberOfRecords());
 	}
 
@@ -174,7 +173,7 @@ public final class KiekerMetadataRecord extends AbstractMonitoringRecord impleme
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
 	@Deprecated
-	public final void initFromBytes(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+	public final void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 

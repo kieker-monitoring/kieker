@@ -21,7 +21,7 @@ import java.nio.ByteBuffer;
 
 import kieker.common.record.flow.IConstructorRecord;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
-import kieker.common.util.IString4UniqueId;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Jan Waller
@@ -83,7 +83,7 @@ public class BeforeConstructorEvent extends BeforeOperationEvent implements ICon
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public BeforeConstructorEvent(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+	public BeforeConstructorEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		super(buffer, stringRegistry);
 	}
 }

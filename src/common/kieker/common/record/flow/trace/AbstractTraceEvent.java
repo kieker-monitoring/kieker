@@ -21,7 +21,7 @@ import java.nio.ByteBuffer;
 
 import kieker.common.record.flow.AbstractEvent;
 import kieker.common.record.flow.ITraceRecord;
-import kieker.common.util.IString4UniqueId;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Jan Waller
@@ -73,7 +73,7 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public AbstractTraceEvent(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+	public AbstractTraceEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		super(buffer, stringRegistry);
 		this.traceId = buffer.getLong();
 		this.orderIndex = buffer.getInt();

@@ -14,31 +14,31 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.common.util.record;
-
-import kieker.common.util.IString4UniqueId;
-import kieker.common.util.IUniqueId4String;
-import kieker.monitoring.core.registry.IRegistry;
-import kieker.monitoring.core.registry.Registry;
+package kieker.common.util.registry;
 
 /**
+ * A generic interface to query registered unique IDs of objects.
+ * 
+ * @param <E>
+ *            the type of the objects
+ * 
  * @author Jan Waller
  * 
  * @since 1.8
  */
-public final class StringRegistry implements IString4UniqueId, IUniqueId4String {
+public interface ILookup<E> extends IRegistry<E> {
 
-	private final IRegistry<String> registry;
-
-	public StringRegistry() {
-		this.registry = new Registry<String>();
-	}
-
-	public int getIdForString(final String string) {
-		return this.registry.get(string);
-	}
-
-	public String getStringForId(final int id) {
-		return this.registry.get(id);
-	}
+	/**
+	 * Registers the object with the unique id.
+	 * 
+	 * @param value
+	 *            the object
+	 * @param id
+	 *            the unique id
+	 * @return
+	 *         false on duplicate id
+	 * 
+	 * @since 1.8
+	 */
+	public boolean set(final E value, final int id);
 }

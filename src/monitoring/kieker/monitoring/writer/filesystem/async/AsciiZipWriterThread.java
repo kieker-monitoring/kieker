@@ -48,7 +48,7 @@ public class AsciiZipWriterThread extends AbstractZipWriterThread {
 		final Object[] recordFields = monitoringRecord.toArray();
 		final StringBuilder sb = new StringBuilder(256);
 		sb.append('$');
-		sb.append(this.monitoringController.getIdForString(monitoringRecord.getClass().getName()));
+		sb.append(this.monitoringController.getUniqueIdForString(monitoringRecord.getClass().getName()));
 		sb.append(';');
 		sb.append(monitoringRecord.getLoggingTimestamp());
 		for (final Object recordField : recordFields) {

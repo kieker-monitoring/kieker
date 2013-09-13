@@ -19,11 +19,14 @@ package kieker.common.record;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import kieker.common.exception.MonitoringRecordException;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Andre van Hoorn, Jan Waller
@@ -312,6 +315,35 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 				// try ordinary method
 				final IMonitoringRecord record = clazz.newInstance();
 				record.initFromArray(values);
+				return record;
+			}
+		} catch (final SecurityException ex) {
+			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
+		} catch (final NoSuchMethodException ex) {
+			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
+		} catch (final IllegalArgumentException ex) {
+			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
+		} catch (final InstantiationException ex) {
+			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
+		} catch (final IllegalAccessException ex) {
+			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
+		} catch (final InvocationTargetException ex) {
+			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
+		}
+	}
+
+	public static final IMonitoringRecord createFromByteBuffer(final String clazzname, final ByteBuffer buffer, final IRegistry<String> stringRegistry)
+			throws MonitoringRecordException, BufferUnderflowException {
+		final Class<? extends IMonitoringRecord> clazz = AbstractMonitoringRecord.classForName(clazzname);
+		try {
+			if (IMonitoringRecord.BinaryFactory.class.isAssignableFrom(clazz)) {
+				// Factory interface present
+				final Constructor<? extends IMonitoringRecord> constructor = clazz.getConstructor(ByteBuffer.class, IRegistry.class);
+				return constructor.newInstance(buffer, stringRegistry);
+			} else {
+				// try ordinary method
+				final IMonitoringRecord record = clazz.newInstance();
+				record.initFromBytes(buffer, stringRegistry);
 				return record;
 			}
 		} catch (final SecurityException ex) {

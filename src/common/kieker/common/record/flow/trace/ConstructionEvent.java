@@ -21,8 +21,7 @@ import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
 import kieker.common.record.flow.IObjectRecord;
-import kieker.common.util.IString4UniqueId;
-import kieker.common.util.IUniqueId4String;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Jan Waller
@@ -102,9 +101,9 @@ public class ConstructionEvent extends AbstractTraceEvent implements IObjectReco
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public ConstructionEvent(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+	public ConstructionEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		super(buffer, stringRegistry);
-		this.classSignature = stringRegistry.getStringForId(buffer.getInt());
+		this.classSignature = stringRegistry.get(buffer.getInt());
 		this.objectId = buffer.getInt();
 	}
 
@@ -118,11 +117,11 @@ public class ConstructionEvent extends AbstractTraceEvent implements IObjectReco
 	/**
 	 * {@inheritDoc}
 	 */
-	public void writeBytes(final ByteBuffer buffer, final IUniqueId4String stringRegistry) throws BufferOverflowException {
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putLong(this.getTimestamp());
 		buffer.putLong(this.getTraceId());
 		buffer.putInt(this.getOrderIndex());
-		buffer.putInt(stringRegistry.getIdForString(this.getClassSignature()));
+		buffer.putInt(stringRegistry.get(this.getClassSignature()));
 		buffer.putInt(this.getObjectId());
 	}
 

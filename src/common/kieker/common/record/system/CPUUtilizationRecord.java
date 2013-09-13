@@ -22,8 +22,7 @@ import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.util.IString4UniqueId;
-import kieker.common.util.IUniqueId4String;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Andre van Hoorn, Jan Waller
@@ -175,10 +174,10 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public CPUUtilizationRecord(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+	public CPUUtilizationRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		this.timestamp = buffer.getLong();
-		this.hostname = stringRegistry.getStringForId(buffer.getInt());
-		this.cpuID = stringRegistry.getStringForId(buffer.getInt());
+		this.hostname = stringRegistry.get(buffer.getInt());
+		this.cpuID = stringRegistry.get(buffer.getInt());
 		this.user = buffer.getDouble();
 		this.system = buffer.getDouble();
 		this.wait = buffer.getDouble();
@@ -199,10 +198,10 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	/**
 	 * {@inheritDoc}
 	 */
-	public void writeBytes(final ByteBuffer buffer, final IUniqueId4String stringRegistry) throws BufferOverflowException {
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putLong(this.getTimestamp());
-		buffer.putInt(stringRegistry.getIdForString(this.getHostname()));
-		buffer.putInt(stringRegistry.getIdForString(this.getCpuID()));
+		buffer.putInt(stringRegistry.get(this.getHostname()));
+		buffer.putInt(stringRegistry.get(this.getCpuID()));
 		buffer.putDouble(this.getUser());
 		buffer.putDouble(this.getSystem());
 		buffer.putDouble(this.getWait());
@@ -228,7 +227,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
 	@Deprecated
-	public final void initFromBytes(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+	public final void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 

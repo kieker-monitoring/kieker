@@ -22,9 +22,10 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.flow.trace.operation.CallOperationEvent;
+import kieker.common.util.registry.IRegistry;
+import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.common.util.record.StringRegistry;
 
 /**
  * @author Andre van Hoorn, Jan Waller
@@ -97,7 +98,7 @@ public class TestOperationCallEvent extends AbstractKiekerTest {
 		Assert.assertEquals("Unexpected callee operation name", FQ_CALLEE_OPERATION_SIGNATURE, event1.getCalleeOperationSignature());
 		Assert.assertEquals("Unexpected callee class name", FQ_CALLEE_CLASSNAME, event1.getCalleeClassSignature());
 
-		final StringRegistry stringRegistry = new StringRegistry();
+		final IRegistry<String> stringRegistry = new Registry<String>();
 		final ByteBuffer buffer = ByteBuffer.allocate(event1.getSize());
 		event1.writeBytes(buffer, stringRegistry);
 		buffer.flip();

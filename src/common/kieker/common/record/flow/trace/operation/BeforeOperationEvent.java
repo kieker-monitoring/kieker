@@ -19,7 +19,7 @@ package kieker.common.record.flow.trace.operation;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
-import kieker.common.util.IString4UniqueId;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Jan Waller
@@ -81,7 +81,7 @@ public class BeforeOperationEvent extends AbstractOperationEvent {
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public BeforeOperationEvent(final ByteBuffer buffer, final IString4UniqueId stringRegistry) throws BufferUnderflowException {
+	public BeforeOperationEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		super(buffer, stringRegistry);
 	}
 }
