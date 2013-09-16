@@ -167,7 +167,7 @@ configs.loop=${NUM_LOOPS}
 configs.recursion=c(${RECURSIONDEPTH})
 results.count=${TOTALCALLS}
 tsconf.min=0
-tsconf.max=50
+tsconf.max=100
 source("${RSCRIPTDIR}timeseries.r")
 EOF
 # Timeseries-Average
@@ -178,8 +178,26 @@ configs.loop=${NUM_LOOPS}
 configs.recursion=c(${RECURSIONDEPTH})
 results.count=${TOTALCALLS}
 tsconf.min=0
-tsconf.max=50
+tsconf.max=100
 source("${RSCRIPTDIR}timeseries-average.r")
+EOF
+# Throughput
+R --vanilla --silent <<EOF
+results_fn="${RAWFN}"
+output_fn="${RESULTSDIR}results-throughput.pdf"
+configs.loop=${NUM_LOOPS}
+configs.recursion=c(${RECURSIONDEPTH})
+results.count=${TOTALCALLS}
+source("${RSCRIPTDIR}throughput.r")
+EOF
+# Throughput-Average
+R --vanilla --silent <<EOF
+results_fn="${RAWFN}"
+output_fn="${RESULTSDIR}results-throughput-average.pdf"
+configs.loop=${NUM_LOOPS}
+configs.recursion=c(${RECURSIONDEPTH})
+results.count=${TOTALCALLS}
+source("${RSCRIPTDIR}throughput-average.r")
 EOF
 # Bars
 R --vanilla --silent <<EOF
@@ -191,6 +209,7 @@ configs.recursion=c(${RECURSIONDEPTH})
 results.count=${TOTALCALLS}
 results.skip=${TOTALCALLS}/2
 bars.minval=${METHODTIME}
+bars.maxval=${METHODTIME}+100
 source("${RSCRIPTDIR}bar.r")
 EOF
 
