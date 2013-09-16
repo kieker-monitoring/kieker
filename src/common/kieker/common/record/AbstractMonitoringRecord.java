@@ -357,8 +357,9 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		} catch (final IllegalAccessException ex) {
 			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
 		} catch (final InvocationTargetException ex) {
-			if (ex.getCause() instanceof BufferUnderflowException) {
-				throw (BufferUnderflowException) ex.getCause();
+			final Throwable cause = ex.getCause();
+			if (cause instanceof BufferUnderflowException) {
+				throw (BufferUnderflowException) cause;
 			}
 			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
 		}

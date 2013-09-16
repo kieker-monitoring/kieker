@@ -30,8 +30,12 @@ import kieker.monitoring.writer.tcp.TCPWriter;
  * @since 1.8
  */
 public final class TestTCPWriter {
-	public static void main(final String[] args) {
 
+	private TestTCPWriter() {
+		// Private constructor to calm PMD
+	}
+
+	public static void main(final String[] args) {
 		final Configuration monitoringConfig = ConfigurationFactory.createDefaultConfiguration();
 		monitoringConfig.setProperty(ConfigurationFactory.WRITER_CLASSNAME, TCPWriter.class.getName());
 		monitoringConfig.setProperty(TCPWriter.class.getName() + "." + AbstractAsyncWriter.CONFIG_BEHAVIOR, "1");
@@ -41,4 +45,5 @@ public final class TestTCPWriter {
 			ctrl.newMonitoringRecord(new EmptyRecord());
 		}
 	}
+
 }
