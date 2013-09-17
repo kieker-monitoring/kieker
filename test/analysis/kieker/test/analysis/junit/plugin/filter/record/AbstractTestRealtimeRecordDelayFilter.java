@@ -14,12 +14,10 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.analysis.junit.plugin.filter.forward;
+package kieker.test.analysis.junit.plugin.filter.record;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
@@ -30,11 +28,12 @@ import org.junit.Test;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
+import kieker.analysis.plugin.filter.forward.AnalysisThroughputFilter;
 import kieker.analysis.plugin.filter.forward.CountingFilter;
-import kieker.analysis.plugin.filter.forward.CountingThroughputFilter;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
-import kieker.analysis.plugin.filter.realtime.RealtimeRecordDelayFilter;
+import kieker.analysis.plugin.filter.record.RealtimeRecordDelayFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
+import kieker.analysis.plugin.reader.timer.TimeReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
@@ -51,10 +50,6 @@ import kieker.test.common.junit.AbstractKiekerTest;
  */
 public abstract class AbstractTestRealtimeRecordDelayFilter extends AbstractKiekerTest {
 
-	// private static final Log LOG = LogFactory.getLog(TestRealtimeRecordDelayFilter.class);
-
-	private static final long INTERVAL_SIZE_NANOS = TimeUnit.NANOSECONDS.convert(5, TimeUnit.SECONDS);
-
 	private static final long START_TIME_SECONDS = 246561L;
 	private final long[] eventTimeOffsetsSeconds;
 	// intervals of length INTERVAL_SIZE_NANOS relative to start time
@@ -64,13 +59,14 @@ public abstract class AbstractTestRealtimeRecordDelayFilter extends AbstractKiek
 
 	private IAnalysisController analysisController;
 
-	/**
-	 * List of all {@link EmptyRecord}s to be read by the {@link #simpleListReader}.
-	 */
+	/** List of all {@link EmptyRecord}s to be read by the {@link #simpleListReader}. */
 	private final List<EmptyRecord> inputRecords = new ArrayList<EmptyRecord>();
 
 	/** Provides the list of {@link IMonitoringRecord}s to be delayed. */
 	private ListReader<IMonitoringRecord> simpleListReader;
+
+	/** The used Timer */
+	private TimeReader timeReader;
 
 	/** The filter actually tested. */
 	private RealtimeRecordDelayFilter delayFilter; // NOPMD (SingularField) // We want to have all filters declared here
@@ -82,10 +78,13 @@ public abstract class AbstractTestRealtimeRecordDelayFilter extends AbstractKiek
 	private CountingFilter countingFilterDelayed;
 
 	/** Records the number of records provided by the {@link RealtimeRecordDelayFilter}. */
-	private CountingThroughputFilter throughputFilter;
+	private AnalysisThroughputFilter throughputFilter;
 
 	/** Simply collects all delayed {@link IMonitoringRecord}s. */
 	private ListCollectionFilter<EmptyRecord> sinkPlugin;
+
+	/** Simply collects all throughputs. */
+	private ListCollectionFilter<Long> sinkThroughput;
 
 	/**
 	 * 
@@ -113,6 +112,13 @@ public abstract class AbstractTestRealtimeRecordDelayFilter extends AbstractKiek
 		readerConfiguration.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.FALSE.toString());
 		this.simpleListReader = new ListReader<IMonitoringRecord>(readerConfiguration, this.analysisController);
 
+		// Timer
+		final Configuration timerConfig = new Configuration();
+		timerConfig.setProperty(TimeReader.CONFIG_PROPERTY_NAME_DELAY_NS, "5000000000");
+		timerConfig.setProperty(TimeReader.CONFIG_PROPERTY_NAME_UPDATE_INTERVAL_NS, "5000000000");
+		timerConfig.setProperty(TimeReader.CONFIG_PROPERTY_NAME_NUMBER_IMPULSES, String.valueOf(this.expectedThroughputListOffsetSecondsInterval5Secs.length));
+		this.timeReader = new TimeReader(timerConfig, this.analysisController);
+
 		// Counting filter (before delay)
 		this.countingFilterReader = new CountingFilter(new Configuration(), this.analysisController);
 		this.analysisController.connect(this.simpleListReader, ListReader.OUTPUT_PORT_NAME,
@@ -127,19 +133,25 @@ public abstract class AbstractTestRealtimeRecordDelayFilter extends AbstractKiek
 
 		// The CountingThroughputFilter to be tested
 		final Configuration throughputFilterConfiguration = new Configuration();
-		throughputFilterConfiguration.setProperty(CountingThroughputFilter.CONFIG_PROPERTY_NAME_INTERVAL_SIZE, Long.toString(INTERVAL_SIZE_NANOS));
-		// We use the following property because this is way easier to test:
-		throughputFilterConfiguration.setProperty(CountingThroughputFilter.CONFIG_PROPERTY_NAME_INTERVALS_BASED_ON_1ST_TSTAMP, Boolean.TRUE.toString());
-		this.throughputFilter = new CountingThroughputFilter(throughputFilterConfiguration, this.analysisController);
+		this.throughputFilter = new AnalysisThroughputFilter(throughputFilterConfiguration, this.analysisController);
 		this.analysisController.connect(this.delayFilter, RealtimeRecordDelayFilter.OUTPUT_PORT_NAME_RECORDS,
-				this.throughputFilter, CountingThroughputFilter.INPUT_PORT_NAME_OBJECTS); // NOT: INPUT_PORT_NAME_RECORDS because we need "real time"
+				this.throughputFilter, AnalysisThroughputFilter.INPUT_PORT_NAME_OBJECTS);
+		this.analysisController.connect(this.timeReader, TimeReader.OUTPUT_PORT_NAME_TIMESTAMPS,
+				this.throughputFilter, AnalysisThroughputFilter.INPUT_PORT_NAME_TIME);
+
+		// Throughput sink
+		this.sinkThroughput = new ListCollectionFilter<Long>(new Configuration(), this.analysisController);
+		this.analysisController.connect(this.throughputFilter, AnalysisThroughputFilter.OUTPUT_PORT_NAME_THROUGHPUT,
+				this.sinkThroughput, ListCollectionFilter.INPUT_PORT_NAME);
+		// final TeeFilter tf = new TeeFilter(new Configuration(), this.analysisController);
+		// this.analysisController.connect(this.sinkThroughput, ListCollectionFilter.OUTPUT_PORT_NAME, tf, TeeFilter.INPUT_PORT_NAME_EVENTS);
 
 		// Counting filter (after delay)
 		this.countingFilterDelayed = new CountingFilter(new Configuration(), this.analysisController);
-		this.analysisController.connect(this.throughputFilter, CountingThroughputFilter.OUTPUT_PORT_NAME_RELAYED_OBJECTS,
+		this.analysisController.connect(this.throughputFilter, AnalysisThroughputFilter.OUTPUT_PORT_NAME_RELAYED_OBJECTS,
 				this.countingFilterDelayed, CountingFilter.INPUT_PORT_NAME_EVENTS);
 
-		// Sink plugin
+		// Sink
 		this.sinkPlugin = new ListCollectionFilter<EmptyRecord>(new Configuration(), this.analysisController);
 		this.analysisController.connect(this.countingFilterDelayed, CountingFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
 				this.sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
@@ -166,35 +178,12 @@ public abstract class AbstractTestRealtimeRecordDelayFilter extends AbstractKiek
 	}
 
 	private final void checkTiming() throws InterruptedException {
-		final Collection<Entry<Long, Long>> throughputListFromFilter = this.throughputFilter.getCountsPerInterval();
-		final List<Entry<Long, Long>> throughputListFromFilterAndCurrentInterval = new ArrayList<Map.Entry<Long, Long>>();
-		{ // We'll need to append the value for the current (pending) interval // NOCS (nested block)
-			throughputListFromFilterAndCurrentInterval.addAll(throughputListFromFilter);
-			throughputListFromFilterAndCurrentInterval.add(new ImmutableEntry<Long, Long>(
-					this.throughputFilter.getLastTimestampInCurrentInterval() + 1, this.throughputFilter.getCurrentCountForCurrentInterval()));
+		final List<Long> throughput = this.sinkThroughput.getList();
+		final long[] actualArray = new long[throughput.size()];
+		for (int i = 0; i < actualArray.length; i++) {
+			actualArray[i] = throughput.get(i);
 		}
-
-		final long filterStartTimeNanos = throughputListFromFilterAndCurrentInterval.get(0).getKey() - this.throughputFilter.getIntervalSize();
-
-		// Init array with worst-case size! (we actually expect an array of EXPECTED_THROUGHPUT_LIST_OFFSET_SECONDS.size())
-		final long[] counts = new long[(int) this.countingFilterReader.getMessageCount()];
-		for (final Entry<Long, Long> countAtIntervalEnd : throughputListFromFilterAndCurrentInterval) {
-			// relative to filter start time:
-			final long curIntervalEndOffsetNanos = countAtIntervalEnd.getKey() - filterStartTimeNanos;
-			final long curCount = countAtIntervalEnd.getValue();
-			// Example: First value for interval size 500: (500-1) / 500 = 0:
-			final int curCountIdx = (int) ((curIntervalEndOffsetNanos - 1) / this.throughputFilter.getIntervalSize());
-			counts[curCountIdx] = curCount;
-		}
-
-		final int maxArrayLength = Math.max(counts.length, this.expectedThroughputListOffsetSecondsInterval5Secs.length);
-		final long[] expectedArrAdoptedLength = new long[maxArrayLength];
-		System.arraycopy(this.expectedThroughputListOffsetSecondsInterval5Secs, 0, expectedArrAdoptedLength, 0,
-				this.expectedThroughputListOffsetSecondsInterval5Secs.length);
-		final long[] actualArrAdoptedLength = new long[maxArrayLength];
-		System.arraycopy(counts, 0, actualArrAdoptedLength, 0, counts.length);
-
-		Assert.assertArrayEquals("Unexpected throughput", expectedArrAdoptedLength, actualArrAdoptedLength);
+		Assert.assertArrayEquals("Unexpected throughput", actualArray, this.expectedThroughputListOffsetSecondsInterval5Secs);
 	}
 
 	private final void checkRelayedRecords() {

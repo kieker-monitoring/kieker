@@ -48,7 +48,7 @@ public class AnalysisThroughputFilter extends AbstractFilterPlugin {
 
 	/** The name of the input port receiving other objects. */
 	public static final String INPUT_PORT_NAME_OBJECTS = "inputObjects";
-	/** The name of the input port receiving other objects. */
+	/** The name of the input port receiving timestamps. */
 	public static final String INPUT_PORT_NAME_TIME = "inputTime";
 	/** The name of the output port delivering the received objects. */
 	public static final String OUTPUT_PORT_NAME_RELAYED_OBJECTS = "relayedEvents";
@@ -83,7 +83,7 @@ public class AnalysisThroughputFilter extends AbstractFilterPlugin {
 	}
 
 	@InputPort(name = INPUT_PORT_NAME_OBJECTS, eventTypes = { Object.class }, description = "Receives incoming objects to calculate the throughput")
-	public final void inputRecord(final Object object) {
+	public final void inputObjects(final Object object) {
 		this.counter.incrementAndGet();
 		super.deliver(OUTPUT_PORT_NAME_RELAYED_OBJECTS, object);
 	}

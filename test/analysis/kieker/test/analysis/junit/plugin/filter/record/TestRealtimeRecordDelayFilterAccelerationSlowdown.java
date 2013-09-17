@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.analysis.junit.plugin.filter.forward;
+package kieker.test.analysis.junit.plugin.filter.record;
 
 /**
  * 
@@ -22,19 +22,22 @@ package kieker.test.analysis.junit.plugin.filter.forward;
  * 
  * @since 1.7
  */
-public class TestRealtimeRecordDelayFilterNoAcceleration extends AbstractTestRealtimeRecordDelayFilter {
+public class TestRealtimeRecordDelayFilterAccelerationSlowdown extends AbstractTestRealtimeRecordDelayFilter {
 
-	private static final long[] EVENT_TIME_OFFSETS_SECONDS = { 0L, 1L, 2L, 7L, 17L, 19L }; // relative to the start time
+	// Note for the following array that by considering a slow down by 50%, the actual array is
+	// {0, 4, 12, 14, 18}
+	private static final long[] EVENT_TIME_OFFSETS_SECONDS = { 0L, 2L, 6L, 7L, 9L };
+
 	// intervals of length INTERVAL_SIZE_NANOS relative to start time
 	private static final long[] EXPECTED_THROUGHPUT_LIST_OFFSET_SECS_INTERVAL_5SECS =
 	{
-		3L, // i.e., in interval (0,5(
-		1L, // i.e., in interval (5,10(
-		0L, // i.e., in interval (10,15(
-		2L, // i.e., in interval (15,20(
+		2L, // i.e., in interval (0,5(
+		0L, // i.e., in interval (5,10(
+		2L, // i.e., in interval (10,15(
+		1L, // i.e., in interval (15,20(
 	};
 
-	public TestRealtimeRecordDelayFilterNoAcceleration() {
-		super(EVENT_TIME_OFFSETS_SECONDS, EXPECTED_THROUGHPUT_LIST_OFFSET_SECS_INTERVAL_5SECS, 1); // 1 = no acceleration/slow down
+	public TestRealtimeRecordDelayFilterAccelerationSlowdown() {
+		super(EVENT_TIME_OFFSETS_SECONDS, EXPECTED_THROUGHPUT_LIST_OFFSET_SECS_INTERVAL_5SECS, 0.5); // 0.5 = slow down by 50%
 	}
 }
