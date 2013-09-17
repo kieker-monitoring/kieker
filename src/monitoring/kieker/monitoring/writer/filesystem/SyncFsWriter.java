@@ -42,7 +42,7 @@ import kieker.monitoring.writer.filesystem.map.MappingFileWriter;
 /**
  * Simple class to store monitoring data in the file system. Although a buffered
  * writer is used, outliers (delays of 1000 ms) occur from time to time if many
- * monitoring events have to be writen. We believe that outliers result from a
+ * monitoring events have to be written. We believe that outliers result from a
  * flush on the buffer of the writer.
  * 
  * A more sophisticated writer to store data in the file system is the
@@ -64,12 +64,12 @@ import kieker.monitoring.writer.filesystem.map.MappingFileWriter;
 public final class SyncFsWriter extends AbstractMonitoringWriter {
 	private static final String PREFIX = SyncFsWriter.class.getName() + ".";
 	public static final String CONFIG_PATH = PREFIX + "customStoragePath"; // NOCS (afterPREFIX)
-	public static final String CONFIG_TEMP = PREFIX + "storeInJavaIoTmpdir"; // NOCS (afterPREFIX)
 	public static final String CONFIG_MAXENTRIESINFILE = PREFIX + "maxEntriesInFile"; // NOCS (afterPREFIX)
 	public static final String CONFIG_MAXLOGSIZE = PREFIX + "maxLogSize"; // NOCS (afterPREFIX)
 	public static final String CONFIG_MAXLOGFILES = PREFIX + "maxLogFiles"; // NOCS (afterPREFIX)
 	public static final String CONFIG_FLUSH = PREFIX + "flush"; // NOCS (afterPREFIX)
 	public static final String CONFIG_BUFFER = PREFIX + "bufferSize"; // NOCS (afterPREFIX)
+	private static final String CONFIG_TEMP = PREFIX + "storeInJavaIoTmpdir"; // NOCS (afterPREFIX)
 
 	private static final Log LOG = LogFactory.getLog(SyncFsWriter.class);
 
@@ -130,11 +130,12 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		this.dateFormat = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
 		this.dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 		// Determine path
-		String pathTmp;
 		if (configuration.getBooleanProperty(CONFIG_TEMP)) {
+			LOG.warn("Using deprecated configuration property " + CONFIG_TEMP + ". Instead use empty value for " + CONFIG_PATH);
+		}
+		String pathTmp = configuration.getStringProperty(CONFIG_PATH);
+		if (pathTmp.length() == 0) {
 			pathTmp = System.getProperty("java.io.tmpdir");
-		} else {
-			pathTmp = configuration.getStringProperty(CONFIG_PATH);
 		}
 		if (!(new File(pathTmp)).isDirectory()) {
 			throw new IllegalArgumentException("'" + pathTmp + "' is not a directory.");
