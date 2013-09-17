@@ -44,11 +44,13 @@ public final class TCPWriter extends AbstractAsyncWriter {
 	public static final String CONFIG_PORT1 = PREFIX + "port1"; // NOCS (afterPREFIX)
 	public static final String CONFIG_PORT2 = PREFIX + "port2"; // NOCS (afterPREFIX)
 	public static final String CONFIG_BUFFERSIZE = PREFIX + "bufferSize"; // NOCS (afterPREFIX)
+	public static final String CONFIG_FLUSH = PREFIX + "flush"; // NOCS (afterPREFIX)
 
 	private final String hostname;
 	private final int port1;
 	private final int port2;
 	private final int bufferSize;
+	private final boolean flush;
 
 	public TCPWriter(final Configuration configuration) {
 		super(configuration);
@@ -57,11 +59,12 @@ public final class TCPWriter extends AbstractAsyncWriter {
 		this.port2 = configuration.getIntProperty(CONFIG_PORT2);
 		// should be check for buffers too small for a single record?
 		this.bufferSize = configuration.getIntProperty(CONFIG_BUFFERSIZE);
+		this.flush = configuration.getBooleanProperty(CONFIG_FLUSH);
 	}
 
 	@Override
 	protected void init() throws Exception {
-		this.addWorker(new TCPWriterThread(this.monitoringController, this.blockingQueue, this.hostname, this.port1, this.port2, this.bufferSize));
+		this.addWorker(new TCPWriterThread(this.monitoringController, this.blockingQueue, this.hostname, this.port1, this.port2, this.bufferSize, this.flush));
 	}
 }
 
@@ -78,14 +81,16 @@ final class TCPWriterThread extends AbstractAsyncThread {
 	private final SocketChannel socketChannelStrings;
 	private final ByteBuffer byteBuffer;
 	private final IRegistry<String> stringRegistry;
+	private final boolean flush;
 
 	public TCPWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue, final String hostname,
-			final int port1, final int port2, final int bufferSize) throws IOException {
+			final int port1, final int port2, final int bufferSize, final boolean flush) throws IOException {
 		super(monitoringController, writeQueue);
 		this.byteBuffer = ByteBuffer.allocateDirect(bufferSize);
 		this.socketChannelRecords = SocketChannel.open(new InetSocketAddress(hostname, port1));
 		this.socketChannelStrings = SocketChannel.open(new InetSocketAddress(hostname, port2));
 		this.stringRegistry = this.monitoringController.getStringRegistry();
+		this.flush = flush;
 	}
 
 	@Override
@@ -106,6 +111,11 @@ final class TCPWriterThread extends AbstractAsyncThread {
 			buffer.putInt(this.monitoringController.getUniqueIdForString(monitoringRecord.getClass().getName()));
 			buffer.putLong(monitoringRecord.getLoggingTimestamp());
 			monitoringRecord.writeBytes(buffer, this.stringRegistry);
+			if (this.flush) {
+				buffer.flip();
+				this.socketChannelRecords.write(buffer);
+				buffer.clear();
+			}
 		}
 	}
 
