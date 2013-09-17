@@ -72,7 +72,7 @@ public class MonitoringThroughputFilter extends AbstractFilterPlugin {
 	private final long intervalSize;
 
 	private volatile long currentInterval = -1;
-	private volatile long recordsInInterval = 0;
+	private volatile long recordsInInterval;
 
 	public MonitoringThroughputFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
@@ -122,7 +122,7 @@ public class MonitoringThroughputFilter extends AbstractFilterPlugin {
 				this.currentInterval = interval;
 				this.recordsInInterval = 0;
 			}
-			this.recordsInInterval++;
+			this.recordsInInterval = this.recordsInInterval + 1;
 		}
 		super.deliver(OUTPUT_PORT_NAME_RELAYED_RECORDS, record);
 	}

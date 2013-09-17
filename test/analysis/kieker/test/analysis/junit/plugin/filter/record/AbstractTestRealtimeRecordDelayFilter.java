@@ -57,34 +57,28 @@ public abstract class AbstractTestRealtimeRecordDelayFilter extends AbstractKiek
 
 	private final double accelerationFactor;
 
-	private IAnalysisController analysisController;
+	private IAnalysisController analysisController = null; // NOCS NOPMD
 
 	/** List of all {@link EmptyRecord}s to be read by the {@link #simpleListReader}. */
 	private final List<EmptyRecord> inputRecords = new ArrayList<EmptyRecord>();
 
 	/** Provides the list of {@link IMonitoringRecord}s to be delayed. */
-	private ListReader<IMonitoringRecord> simpleListReader;
-
-	/** The used Timer */
-	private TimeReader timeReader;
+	private ListReader<IMonitoringRecord> simpleListReader = null; // NOCS NOPMD
 
 	/** The filter actually tested. */
-	private RealtimeRecordDelayFilter delayFilter; // NOPMD (SingularField) // We want to have all filters declared here
+	private RealtimeRecordDelayFilter delayFilter = null; // NOCS NOPMD
 
 	/** Provides the (current) number of {@link IMonitoringRecord}s provided by the {@link #simpleListReader}. */
-	private CountingFilter countingFilterReader;
+	private CountingFilter countingFilterReader = null; // NOCS NOPMD
 
 	/** Provides the (current) number of {@link IMonitoringRecord}s provided by the {@link #delayFilter}. */
-	private CountingFilter countingFilterDelayed;
-
-	/** Records the number of records provided by the {@link RealtimeRecordDelayFilter}. */
-	private AnalysisThroughputFilter throughputFilter;
+	private CountingFilter countingFilterDelayed = null; // NOCS NOPMD
 
 	/** Simply collects all delayed {@link IMonitoringRecord}s. */
-	private ListCollectionFilter<EmptyRecord> sinkPlugin;
+	private ListCollectionFilter<EmptyRecord> sinkPlugin = null; // NOCS NOPMD
 
 	/** Simply collects all throughputs. */
-	private ListCollectionFilter<Long> sinkThroughput;
+	private ListCollectionFilter<Long> sinkThroughput = null; // NOCS NOPMD
 
 	/**
 	 * 
@@ -117,7 +111,7 @@ public abstract class AbstractTestRealtimeRecordDelayFilter extends AbstractKiek
 		timerConfig.setProperty(TimeReader.CONFIG_PROPERTY_NAME_DELAY_NS, "5000000000");
 		timerConfig.setProperty(TimeReader.CONFIG_PROPERTY_NAME_UPDATE_INTERVAL_NS, "5000000000");
 		timerConfig.setProperty(TimeReader.CONFIG_PROPERTY_NAME_NUMBER_IMPULSES, String.valueOf(this.expectedThroughputListOffsetSecondsInterval5Secs.length));
-		this.timeReader = new TimeReader(timerConfig, this.analysisController);
+		final TimeReader timeReader = new TimeReader(timerConfig, this.analysisController);
 
 		// Counting filter (before delay)
 		this.countingFilterReader = new CountingFilter(new Configuration(), this.analysisController);
@@ -133,22 +127,22 @@ public abstract class AbstractTestRealtimeRecordDelayFilter extends AbstractKiek
 
 		// The CountingThroughputFilter to be tested
 		final Configuration throughputFilterConfiguration = new Configuration();
-		this.throughputFilter = new AnalysisThroughputFilter(throughputFilterConfiguration, this.analysisController);
+		final AnalysisThroughputFilter throughputFilter = new AnalysisThroughputFilter(throughputFilterConfiguration, this.analysisController);
 		this.analysisController.connect(this.delayFilter, RealtimeRecordDelayFilter.OUTPUT_PORT_NAME_RECORDS,
-				this.throughputFilter, AnalysisThroughputFilter.INPUT_PORT_NAME_OBJECTS);
-		this.analysisController.connect(this.timeReader, TimeReader.OUTPUT_PORT_NAME_TIMESTAMPS,
-				this.throughputFilter, AnalysisThroughputFilter.INPUT_PORT_NAME_TIME);
+				throughputFilter, AnalysisThroughputFilter.INPUT_PORT_NAME_OBJECTS);
+		this.analysisController.connect(timeReader, TimeReader.OUTPUT_PORT_NAME_TIMESTAMPS,
+				throughputFilter, AnalysisThroughputFilter.INPUT_PORT_NAME_TIME);
 
 		// Throughput sink
 		this.sinkThroughput = new ListCollectionFilter<Long>(new Configuration(), this.analysisController);
-		this.analysisController.connect(this.throughputFilter, AnalysisThroughputFilter.OUTPUT_PORT_NAME_THROUGHPUT,
+		this.analysisController.connect(throughputFilter, AnalysisThroughputFilter.OUTPUT_PORT_NAME_THROUGHPUT,
 				this.sinkThroughput, ListCollectionFilter.INPUT_PORT_NAME);
 		// final TeeFilter tf = new TeeFilter(new Configuration(), this.analysisController);
 		// this.analysisController.connect(this.sinkThroughput, ListCollectionFilter.OUTPUT_PORT_NAME, tf, TeeFilter.INPUT_PORT_NAME_EVENTS);
 
 		// Counting filter (after delay)
 		this.countingFilterDelayed = new CountingFilter(new Configuration(), this.analysisController);
-		this.analysisController.connect(this.throughputFilter, AnalysisThroughputFilter.OUTPUT_PORT_NAME_RELAYED_OBJECTS,
+		this.analysisController.connect(throughputFilter, AnalysisThroughputFilter.OUTPUT_PORT_NAME_RELAYED_OBJECTS,
 				this.countingFilterDelayed, CountingFilter.INPUT_PORT_NAME_EVENTS);
 
 		// Sink

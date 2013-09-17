@@ -200,7 +200,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 							this.listOfLogFiles.add(new FileNameSize(filename));
 							if ((this.maxLogFiles > 0) && (this.listOfLogFiles.size() > this.maxLogFiles)) { // too many files (at most one!)
 								final FileNameSize removeFile = this.listOfLogFiles.removeFirst();
-								if (!new File(removeFile.name).delete()) { // NOCS (nested if)
+								if (!new File(removeFile.name).delete()) { // NOCS NOPMD (nested if)
 									throw new IOException("Failed to delete file " + removeFile.name);
 								}
 								this.totalLogSize -= removeFile.size;
@@ -208,7 +208,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 							if (this.maxLogSize > 0) {
 								while ((this.listOfLogFiles.size() > 1) && (this.totalLogSize > this.maxLogSize)) {
 									final FileNameSize removeFile = this.listOfLogFiles.removeFirst();
-									if (!new File(removeFile.name).delete()) { // NOCS (nested if)
+									if (!new File(removeFile.name).delete()) { // NOCS NOPMD (nested if)
 										throw new IOException("Failed to delete file " + removeFile.name);
 									}
 									this.totalLogSize -= removeFile.size;
