@@ -57,28 +57,28 @@ public abstract class AbstractTestRealtimeRecordDelayFilter extends AbstractKiek
 
 	private final double accelerationFactor;
 
-	private IAnalysisController analysisController = null; // NOCS NOPMD
+	private IAnalysisController analysisController;
 
 	/** List of all {@link EmptyRecord}s to be read by the {@link #simpleListReader}. */
 	private final List<EmptyRecord> inputRecords = new ArrayList<EmptyRecord>();
 
 	/** Provides the list of {@link IMonitoringRecord}s to be delayed. */
-	private ListReader<IMonitoringRecord> simpleListReader = null; // NOCS NOPMD
+	private ListReader<IMonitoringRecord> simpleListReader;
 
 	/** The filter actually tested. */
-	private RealtimeRecordDelayFilter delayFilter = null; // NOCS NOPMD
+	private RealtimeRecordDelayFilter delayFilter;
 
 	/** Provides the (current) number of {@link IMonitoringRecord}s provided by the {@link #simpleListReader}. */
-	private CountingFilter countingFilterReader = null; // NOCS NOPMD
+	private CountingFilter countingFilterReader;
 
 	/** Provides the (current) number of {@link IMonitoringRecord}s provided by the {@link #delayFilter}. */
-	private CountingFilter countingFilterDelayed = null; // NOCS NOPMD
+	private CountingFilter countingFilterDelayed;
 
 	/** Simply collects all delayed {@link IMonitoringRecord}s. */
-	private ListCollectionFilter<EmptyRecord> sinkPlugin = null; // NOCS NOPMD
+	private ListCollectionFilter<EmptyRecord> sinkPlugin;
 
 	/** Simply collects all throughputs. */
-	private ListCollectionFilter<Long> sinkThroughput = null; // NOCS NOPMD
+	private ListCollectionFilter<Long> sinkThroughput;
 
 	/**
 	 * 

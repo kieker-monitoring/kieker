@@ -246,21 +246,13 @@
 	</Match>
 
 	<Match>
-		<Class name="kieker.test.analysis.junit.plugin.filter.forward.TestCountingThroughputFilter" />
-		<Method name="doTheTest" params="" returns="void" />
+		<Class name="~kieker.test.*" />
 		<Bug pattern="UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" />
 	</Match>
 
 	<Match>
-		<Class
-			name="kieker.test.analysis.junit.plugin.filter.select.TestTimestampFilter" />
-		<Bug pattern="UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" />
-	</Match>
-
-	<Match>
-		<Class
-			name="kieker.test.analysis.junit.plugin.filter.forward.AbstractTestRealtimeRecordDelayFilter" />
-		<Bug pattern="UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" />
+		<Class name="kieker.analysis.plugin.filter.record.MonitoringThroughputFilter" />
+		<Bug pattern="VO_VOLATILE_INCREMENT" />
 	</Match>
 
 	<Match>
