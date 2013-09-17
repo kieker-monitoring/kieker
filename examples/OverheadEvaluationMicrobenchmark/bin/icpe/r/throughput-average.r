@@ -6,8 +6,8 @@
 
 #configs.loop=10
 #configs.recursion=c(10)
-configs.labels=c("No Probe","Deactivated Probe","Collecting Data","Writing Data")
-configs.colors=c("black","red","blue","green")
+#configs.labels=c("No Probe","Deactivated Probe","Collecting Data","Writing Data")
+#configs.colors=c("black","red","blue","green")
 configs.count=length(configs.labels)
 
 ## We assume same amount of data in each category
@@ -18,9 +18,10 @@ buckets.size=results.count/buckets.count
 pdf(output_fn, width=10, height=6.25, paper="special")
 
 for (cr in configs.recursion) {
-  results.ts = matrix(nrow=configs.count,ncol=buckets.count,byrow=TRUE,dimnames=list(configs.labels,c(1:buckets.count)))
+  results.ts <- array(dim=c(buckets.count,configs.count))
   if (exists("results.temp")) rm(results.temp)
   for (cc in (1:configs.count)) {
+    results.bucket <- array(dim=c(buckets.count))
     for (cl in (1:configs.loop)) {
       results_fn_temp=paste(results_fn, "-", cl, "-", cr, "-", cc, ".csv", sep="")
       results=read.csv2(results_fn_temp,quote="",colClasses=c("NULL","numeric"),comment.char="",col.names=c("thread_id","duration_nsec"),nrows=results.count)
@@ -34,16 +35,12 @@ for (cr in configs.recursion) {
     results = rowMeans(results.temp)
     rm(results.temp)
     for (ci in (1:buckets.count)) {
-      results.ts[cc,ci] <- (buckets.size * 1000*1000) / sum(results[(((ci-1)*buckets.size)+1):(ci*buckets.size)])
+      results.bucket[ci] <- (buckets.size * 1000*1000) / sum(results[(((ci-1)*buckets.size)+1):(ci*buckets.size)])
     }
-    rm(results)
+    results.ts[,cc]=ts(results.bucket,end=results.count,deltat=buckets.size)
+    rm(results,results.bucket)
   }
-  ts.plot(
-    ts(results.ts[1,],end=results.count,deltat=buckets.size),
-    ts(results.ts[2,],end=results.count,deltat=buckets.size),
-    ts(results.ts[3,],end=results.count,deltat=buckets.size),
-    ts(results.ts[4,],end=results.count,deltat=buckets.size),
-    gpars=list(col=configs.colors,xlab="Executions"))
+  ts.plot(results.ts,gpars=list(col=configs.colors,xlab="Executions"))
   legend("topright",inset=c(0.01,0.01),legend=c(rev(configs.labels)),lty="solid",col=rev(configs.colors),bg="white",title="Mean throughput of ...",ncol=2)
   title(main=paste("Recursion Depth: ", cr),ylab="Throughput (op/s)")
 }

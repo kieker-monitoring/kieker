@@ -8,7 +8,7 @@
 configs.threads=1
 #configs.loop=10
 #configs.recursion=c(10)
-configs.labels=c("No Probe","Inactive Probe","Collecting Data","Writing Data")
+#configs.labels=c("No Probe","Inactive Probe","Collecting Data","Writing Data")
 configs.count=length(configs.labels)
 #results.count=2000000
 #results.skip=1000000

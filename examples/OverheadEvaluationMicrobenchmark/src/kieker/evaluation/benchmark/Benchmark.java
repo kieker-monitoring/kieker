@@ -42,6 +42,7 @@ public final class Benchmark {
 	private static int totalCalls = 0;
 	private static long methodTime = 0;
 	private static int recursionDepth = 0;
+	private static boolean quickstart = false;
 
 	static {
 		try {
@@ -73,21 +74,23 @@ public final class Benchmark {
 			threads[i] = new BenchmarkingThread(mc, Benchmark.totalCalls, Benchmark.methodTime, Benchmark.recursionDepth, doneSignal);
 			threads[i].setName(String.valueOf(i + 1));
 		}
-		for (int l = 0; l < 4; l++) {
-			{ // NOCS (reserve mem only within the block)
-				final long freeMemChunks = Runtime.getRuntime().freeMemory() >> 27;
-				// System.out.println("Free-Mem: " + Runtime.getRuntime().freeMemory());
-				final int memSize = 128 * 1024 * 128; // memSize * 8 = total Bytes -> 128MB
-				for (int j = 0; j < freeMemChunks; j++) {
-					final long[] grabMemory = new long[memSize];
-					for (int i = 0; i < memSize; i++) {
-						grabMemory[i] = System.nanoTime();
+		if (!quickstart) {
+			for (int l = 0; l < 4; l++) {
+				{ // NOCS (reserve mem only within the block)
+					final long freeMemChunks = Runtime.getRuntime().freeMemory() >> 27;
+					// System.out.println("Free-Mem: " + Runtime.getRuntime().freeMemory());
+					final int memSize = 128 * 1024 * 128; // memSize * 8 = total Bytes -> 128MB
+					for (int j = 0; j < freeMemChunks; j++) {
+						final long[] grabMemory = new long[memSize];
+						for (int i = 0; i < memSize; i++) {
+							grabMemory[i] = System.nanoTime();
+						}
 					}
+					// System.out.println("done grabbing memory...");
+					// System.out.println("Free-Mem: " + Runtime.getRuntime().freeMemory());
 				}
-				// System.out.println("done grabbing memory...");
-				// System.out.println("Free-Mem: " + Runtime.getRuntime().freeMemory());
+				Thread.sleep(5000);
 			}
-			Thread.sleep(5000);
 		}
 		System.out.print(" # 6. Starting benchmark ... "); // NOPMD (System.out)
 		// 3. Starting Threads
@@ -135,6 +138,7 @@ public final class Benchmark {
 				.withDescription("Depth of Recursion performed.").withValueSeparator('=').create("d"));
 		cmdlOpts.addOption(OptionBuilder.withLongOpt("output-filename").withArgName("filename").hasArg(true).isRequired(true)
 				.withDescription("Filename of results file. Output is appended if file exists.").withValueSeparator('=').create("o"));
+		cmdlOpts.addOption(OptionBuilder.withLongOpt("quickstart").isRequired(false).withDescription("Skips initial Garbage Collection.").create("q"));
 		try {
 			CommandLine cmdl = null;
 			final CommandLineParser cmdlParser = new BasicParser();
@@ -144,6 +148,7 @@ public final class Benchmark {
 			Benchmark.methodTime = Integer.parseInt(cmdl.getOptionValue("methodtime"));
 			Benchmark.totalThreads = Integer.parseInt(cmdl.getOptionValue("totalthreads"));
 			Benchmark.recursionDepth = Integer.parseInt(cmdl.getOptionValue("recursiondepth"));
+			Benchmark.quickstart = cmdl.hasOption("quickstart");
 			Benchmark.ps = new PrintStream(new FileOutputStream(Benchmark.outputFn, true), false, Benchmark.ENCODING);
 		} catch (final Exception ex) { // NOCS (e.g., IOException, ParseException, NumberFormatException)
 			new CLIHelpFormatter().printHelp(Benchmark.class.getName(), cmdlOpts);
