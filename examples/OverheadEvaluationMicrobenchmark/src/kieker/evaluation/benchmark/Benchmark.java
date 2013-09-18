@@ -16,6 +16,7 @@
 
 package kieker.evaluation.benchmark;
 
+import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -24,11 +25,11 @@ import java.util.concurrent.CountDownLatch;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 
 import kieker.evaluation.monitoredApplication.MonitoredClass;
-import kieker.tools.util.CLIHelpFormatter;
 
 /**
  * @author Jan Waller
@@ -149,9 +150,9 @@ public final class Benchmark {
 			Benchmark.totalThreads = Integer.parseInt(cmdl.getOptionValue("totalthreads"));
 			Benchmark.recursionDepth = Integer.parseInt(cmdl.getOptionValue("recursiondepth"));
 			Benchmark.quickstart = cmdl.hasOption("quickstart");
-			Benchmark.ps = new PrintStream(new FileOutputStream(Benchmark.outputFn, true), false, Benchmark.ENCODING);
+			Benchmark.ps = new PrintStream(new BufferedOutputStream(new FileOutputStream(Benchmark.outputFn, true), 8192 * 8), false, Benchmark.ENCODING);
 		} catch (final Exception ex) { // NOCS (e.g., IOException, ParseException, NumberFormatException)
-			new CLIHelpFormatter().printHelp(Benchmark.class.getName(), cmdlOpts);
+			new HelpFormatter().printHelp(Benchmark.class.getName(), cmdlOpts);
 			ex.printStackTrace(); // NOPMD (Stacktrace)
 			System.exit(-1);
 		}

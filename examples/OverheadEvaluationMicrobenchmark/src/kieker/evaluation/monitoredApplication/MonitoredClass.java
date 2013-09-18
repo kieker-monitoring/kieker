@@ -19,8 +19,6 @@ package kieker.evaluation.monitoredApplication;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
 
-import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
-
 /**
  * @author Jan Waller
  */
@@ -34,7 +32,6 @@ public final class MonitoredClass {
 		// empty default constructor
 	}
 
-	@OperationExecutionMonitoringProbe
 	public final long monitoredMethod(final long methodTime, final int recDepth) {
 		if (recDepth > 1) {
 			return this.monitoredMethod(methodTime, recDepth - 1);
