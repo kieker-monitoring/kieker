@@ -19,11 +19,6 @@ MOREPARAMS=""
 TIME=`expr ${METHODTIME} \* ${TOTALCALLS} / 1000000000 \* 4 \* ${RECURSIONDEPTH} \* ${NUM_LOOPS} + ${SLEEPTIME} \* 4 \* ${NUM_LOOPS}  \* ${RECURSIONDEPTH} + 50 \* ${TOTALCALLS} / 1000000000 \* 4 \* ${RECURSIONDEPTH} \* ${NUM_LOOPS} `
 echo "Experiment will take circa ${TIME} seconds."
 
-# determine correct classpath separator
-CPSEPCHAR=":" # default :, ; for windows
-if [ ! -z "$(uname | grep -i WIN)" ]; then CPSEPCHAR=";"; fi
-# echo "Classpath separator: '${CPSEPCHAR}'"
-
 echo "Removing and recreating '$RESULTSDIR'"
 (rm -rf ${RESULTSDIR}) && mkdir ${RESULTSDIR}
 mkdir ${RESULTSDIR}stat/
@@ -41,7 +36,7 @@ JAVAARGS="${JAVAARGS} -verbose:gc -XX:+PrintCompilation"
 #JAVAARGS="${JAVAARGS} -XX:+PrintInlining"
 #JAVAARGS="${JAVAARGS} -XX:+UnlockDiagnosticVMOptions -XX:+LogCompilation"
 #JAVAARGS="${JAVAARGS} -Djava.compiler=NONE"
-JAR="-jar dist/OverheadEvaluationMicrobenchmark.jar"
+JAR="-jar dist/OverheadEvaluationMicrobenchmarkKieker.jar"
 
 JAVAARGS_NOINSTR="${JAVAARGS}"
 JAVAARGS_LTW="${JAVAARGS} -javaagent:${BASEDIR}lib/kieker-1.8-SNAPSHOT_aspectj.jar -Dorg.aspectj.weaver.showWeaveInfo=false -Daj.weaving.verbose=false -Dkieker.monitoring.adaptiveMonitoring.enabled=false -Dorg.aspectj.weaver.loadtime.configuration=META-INF/kieker.aop.xml"
@@ -67,7 +62,6 @@ echo "RECURSIONDEPTH=${RECURSIONDEPTH}" >>${RESULTSDIR}configuration.txt
 sync
 
 ## Execute Benchmark
-
 for ((i=1;i<=${NUM_LOOPS};i+=1)); do
     j=${RECURSIONDEPTH}
     k=0
@@ -229,8 +223,8 @@ results_fn="${RAWFN}"
 output_fn="${RESULTSDIR}results-timeseries.pdf"
 configs.loop=${NUM_LOOPS}
 configs.recursion=c(${RECURSIONDEPTH})
-configs.labels=c("No Probe","Deactivated Probe","Collecting Data","Collecting Data (Async)","Writer1","Writer2","Writer3")
-configs.colors=c("black","red","blue","green","yellow","purple","pink")
+configs.labels=c("No Probe","Deactivated Probe","Collecting Data","Writer1","Writer2","Writer3")
+configs.colors=c("black","red","blue","green","purple","pink")
 results.count=${TOTALCALLS}
 tsconf.min=0
 tsconf.max=200
@@ -242,8 +236,8 @@ results_fn="${RAWFN}"
 output_fn="${RESULTSDIR}results-timeseries-average.pdf"
 configs.loop=${NUM_LOOPS}
 configs.recursion=c(${RECURSIONDEPTH})
-configs.labels=c("No Probe","Deactivated Probe","Collecting Data","Collecting Data (Async)","Writer1","Writer2","Writer3")
-configs.colors=c("black","red","blue","green","yellow","purple","pink")
+configs.labels=c("No Probe","Deactivated Probe","Collecting Data","Writer1","Writer2","Writer3")
+configs.colors=c("black","red","blue","green","purple","pink")
 results.count=${TOTALCALLS}
 tsconf.min=0
 tsconf.max=200
@@ -255,8 +249,8 @@ results_fn="${RAWFN}"
 output_fn="${RESULTSDIR}results-throughput.pdf"
 configs.loop=${NUM_LOOPS}
 configs.recursion=c(${RECURSIONDEPTH})
-configs.labels=c("No Probe","Deactivated Probe","Collecting Data","Collecting Data (Async)","Writer1","Writer2","Writer3")
-configs.colors=c("black","red","blue","green","yellow","purple","pink")
+configs.labels=c("No Probe","Deactivated Probe","Collecting Data","Writer1","Writer2","Writer3")
+configs.colors=c("black","red","blue","green","purple","pink")
 results.count=${TOTALCALLS}
 source("${RSCRIPTDIR}throughput.r")
 EOF
@@ -266,8 +260,8 @@ results_fn="${RAWFN}"
 output_fn="${RESULTSDIR}results-throughput-average.pdf"
 configs.loop=${NUM_LOOPS}
 configs.recursion=c(${RECURSIONDEPTH})
-configs.labels=c("No Probe","Deactivated Probe","Collecting Data","Collecting Data (Async)","Writer1","Writer2","Writer3")
-configs.colors=c("black","red","blue","green","yellow","purple","pink")
+configs.labels=c("No Probe","Deactivated Probe","Collecting Data","Writer1","Writer2","Writer3")
+configs.colors=c("black","red","blue","green","purple","pink")
 results.count=${TOTALCALLS}
 source("${RSCRIPTDIR}throughput-average.r")
 EOF
@@ -278,7 +272,7 @@ output_fn="${RESULTSDIR}results-bars.pdf"
 outtxt_fn="${RESULTSDIR}results-text.txt"
 configs.loop=${NUM_LOOPS}
 configs.recursion=c(${RECURSIONDEPTH})
-configs.labels=c("No Probe","Deactivated Probe","Collecting Data","Collecting Data (Async)","Writer1","Writer2","Writer3")
+configs.labels=c("No Probe","Deactivated Probe","Collecting Data","Writer1","Writer2","Writer3")
 results.count=${TOTALCALLS}
 results.skip=${TOTALCALLS}/2
 bars.minval=${METHODTIME}
