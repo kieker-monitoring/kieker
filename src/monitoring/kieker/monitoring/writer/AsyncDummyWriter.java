@@ -32,7 +32,7 @@ import kieker.monitoring.core.controller.IMonitoringController;
 public class AsyncDummyWriter extends AbstractAsyncWriter {
 	public AsyncDummyWriter(final Configuration configuration) {
 		super(configuration);
-		// noting else to do here
+		// nothing else to do here
 	}
 
 	@Override
@@ -57,11 +57,11 @@ class AsyncDummyWriterThread extends AbstractAsyncThread {
 
 	@Override
 	protected void consume(final IMonitoringRecord monitoringRecord) throws Exception {
-		return;
+		// nothing to do here
 	}
 
 	@Override
 	protected void cleanup() {
-		// noting to clean up
+		// nothing to clean up
 	}
 }

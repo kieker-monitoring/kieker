@@ -43,8 +43,8 @@ print the received records to the standard output stream.
 % other analysis plugins can be registered. %
 
 \begin{figure}\centering
-\includegraphics[width=0.95\textwidth]{images/kieker_AnalysisControlleruserguide-modified}
-\caption{Class diagram showing important \KiekerAnalysisPart{} classes and their relationship}
+\includegraphics[width=\textwidth]{images/kieker_AnalysisControlleruserguide-modified}
+\caption{Class diagram showing important \KiekerAnalysisPart{} types and their relationship}
 \label{fig:analysisController:classdiagram}
 \end{figure}
 
@@ -189,6 +189,11 @@ a component-based system model representing architectural entities %
 and structures discovered while processing the incoming monitoring data. %
 The development and use of repositories is detailed in Section~%
 \ref{sec:analysis:repositories}. %
+
+When using components of the \KiekerTraceAnalysis{}, make sure that write access to the %
+\class{SystemModelRepository} is only triggered by readers. Some filters are terminated %
+after the readers and expect the repository to be in a completed state.
+
 
 \section{Developing Analysis Plugins and Repositories}\label{sec:analysis:plugins}
 

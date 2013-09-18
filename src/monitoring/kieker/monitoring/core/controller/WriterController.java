@@ -107,7 +107,7 @@ public final class WriterController extends AbstractController implements IWrite
 	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
 		try {
 			// fast lane for RegistryRecords (these must always be delivered!)
-			if (!(record instanceof RegistryRecord<?>)) {
+			if (!(record instanceof RegistryRecord)) {
 				final IMonitoringController monitoringController = super.monitoringController;
 				if (!monitoringController.isMonitoringEnabled()) { // enabled and not terminated
 					return false;

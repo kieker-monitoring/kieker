@@ -16,9 +16,14 @@
 
 package kieker.common.record.misc;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.Version;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * This records collects metadata for the monitoring session.
@@ -27,30 +32,9 @@ import kieker.common.util.Version;
  * 
  * @since 1.7
  */
-public final class KiekerMetadataRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-
-	/**
-	 * Constant to be used if no value available.
-	 */
-	public static final String NO_CONTROLLERNAME = "<no-controller-name>";
-
-	/**
-	 * Constant to be used if no value available.
-	 */
-	public static final String NO_HOSTNAME = "<no-hostname>";
-
-	/**
-	 * Constant to be used if no value available.
-	 */
-	public static final String NO_TIMESOURCE = "<no-timesource>";
-
-	/**
-	 * Constant to be used if no value available.
-	 */
-	public static final String NO_TIMEUNIT = "NANOSECONDS";
-
-	private static final long serialVersionUID = 6867244598532769180L;
-	private static final Class<?>[] TYPES = {
+public final class KiekerMetadataRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
+	public static final int SIZE = 37;
+	public static final Class<?>[] TYPES = {
 		String.class, // version
 		String.class, // controllerName
 		String.class, // hostname
@@ -60,6 +44,17 @@ public final class KiekerMetadataRecord extends AbstractMonitoringRecord impleme
 		String.class, // timeUnit
 		long.class, // numberOfRecords
 	};
+
+	/** Constant to be used if no value available. */
+	public static final String NO_CONTROLLERNAME = "<no-controller-name>";
+	/** Constant to be used if no value available. */
+	public static final String NO_HOSTNAME = "<no-hostname>";
+	/** Constant to be used if no value available. */
+	public static final String NO_TIMESOURCE = "<no-timesource>";
+	/** Constant to be used if no value available. */
+	public static final String NO_TIMEUNIT = "NANOSECONDS";
+
+	private static final long serialVersionUID = -6178606977837444960L;
 
 	private final String version;
 	private final String controllerName;
@@ -121,11 +116,65 @@ public final class KiekerMetadataRecord extends AbstractMonitoringRecord impleme
 	}
 
 	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public KiekerMetadataRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		this.version = stringRegistry.get(buffer.getInt());
+		this.controllerName = stringRegistry.get(buffer.getInt());
+		this.hostname = stringRegistry.get(buffer.getInt());
+		this.experimentId = buffer.getInt();
+		this.debugMode = buffer.get() != 0;
+		this.timeOffset = buffer.getLong();
+		this.timeUnit = stringRegistry.get(buffer.getInt());
+		this.numberOfRecords = buffer.getLong();
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public Object[] toArray() {
-		return new Object[] { this.version, this.controllerName, this.hostname, this.experimentId, this.debugMode, this.timeOffset, this.timeUnit,
-			this.numberOfRecords, };
+		return new Object[] { this.getVersion(), this.getControllerName(), this.getHostname(), this.getExperimentId(), this.isDebugMode(), this.getTimeOffset(),
+			this.getTimeUnit(), this.getNumberOfRecords(), };
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		buffer.putInt(stringRegistry.get(this.getVersion()));
+		buffer.putInt(stringRegistry.get(this.getControllerName()));
+		buffer.putInt(stringRegistry.get(this.getHostname()));
+		buffer.putInt(this.getExperimentId());
+		buffer.put((byte) (this.isDebugMode() ? 1 : 0)); // NOCS
+		buffer.putLong(this.getTimeOffset());
+		buffer.putInt(stringRegistry.get(this.getTimeUnit()));
+		buffer.putLong(this.getNumberOfRecords());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
+	 */
+	@Deprecated
+	public final void initFromArray(final Object[] values) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
+	 */
+	@Deprecated
+	public final void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -137,43 +186,40 @@ public final class KiekerMetadataRecord extends AbstractMonitoringRecord impleme
 
 	/**
 	 * {@inheritDoc}
-	 * 
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
-	@Deprecated
-	public void initFromArray(final Object[] values) {
-		throw new UnsupportedOperationException();
+	public int getSize() {
+		return SIZE;
 	}
 
-	public String getVersion() {
+	public final String getVersion() {
 		return this.version;
 	}
 
-	public String getControllerName() {
+	public final String getControllerName() {
 		return this.controllerName;
 	}
 
-	public String getHostname() {
+	public final String getHostname() {
 		return this.hostname;
 	}
 
-	public int getExperimentId() {
+	public final int getExperimentId() {
 		return this.experimentId;
 	}
 
-	public boolean isDebugMode() {
+	public final boolean isDebugMode() {
 		return this.debugMode;
 	}
 
-	public long getTimeOffset() {
+	public final long getTimeOffset() {
 		return this.timeOffset;
 	}
 
-	public String getTimeUnit() {
+	public final String getTimeUnit() {
 		return this.timeUnit;
 	}
 
-	public long getNumberOfRecords() {
+	public final long getNumberOfRecords() {
 		return this.numberOfRecords;
 	}
 

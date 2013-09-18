@@ -18,6 +18,10 @@ Native libraries for other platforms can be downloaded from~\cite{HypericSigarWe
 
 \section{Using the Sigar-Based Samplers}
 
+\WARNBOX{
+	Using a very short sampling period with Sigar ($< 500$ ms) can result in monitoring log entries with NaN values. 
+}
+
 The Sigar API~\cite{HypericSigarWebsite} provides access to a number of system-level inventory and monitoring data, %
 e.g., regarding memory, swap, cpu, file system, and network devices. %
 Kieker includes Sigar-based samplers %
@@ -36,7 +40,7 @@ which creates and registers two Sigar-based peridioc samplers. %
 For reasons of performance and thread-safety, the \class{SigarSamplerFactory} %
 should be used to create instances of the Sigar-based Samplers. 
 
-\pagebreak
+%\pagebreak
 
 \setJavaCodeListing
 \lstinputlisting[firstline=38, lastline=51, firstnumber=38, caption=Excerpt from MonitoringStarter.java, label=listing:sigarSamplerMonitoringStarterExample]{\SigarExampleDir/src/kieker/examples/userguide/appendixSigar/MonitoringStarter.java}
@@ -70,8 +74,8 @@ The execution of the example is performed by the following two steps:\\
 Kieker's console output lists the location of the directory containing the file system %
 monitoring log. The following listing shows an excerpt: %
 
-\enlargethispage{1.5cm}
-
+%\enlargethispage{1.5cm}
+\pagebreak
 \setBashListing
 \begin{lstlisting}
  Writer: 'kieker.monitoring.writer.filesystem.AsyncFsWriter'

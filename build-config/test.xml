@@ -21,6 +21,7 @@
 				<include name="framework-libs/spring/*.jar" /> <!-- needed for the spring tests -->
 				<include name="javax.jms-*.jar" /> 	<!-- Needed for TestPluginConfigurationRetention. -->
 				<include name="commons-cli-*.jar" /> <!-- Needed for TestPluginConfigurationRetention. -->
+				<include name="javax.jms-*.jar" /> <!-- Needed for the JMSReader/Writer test -->
 			</fileset>
 			<fileset dir="${example.javaee.jetty.lib.dir}">
 				<include name="jetty-*.jar" /> <!-- needed for the cxf, spring tests -->

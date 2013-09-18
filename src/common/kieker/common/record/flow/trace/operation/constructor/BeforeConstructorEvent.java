@@ -16,22 +16,23 @@
 
 package kieker.common.record.flow.trace.operation.constructor;
 
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
+import kieker.common.record.flow.IConstructorRecord;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Jan Waller
  * 
  * @since 1.6
  */
-public class BeforeConstructorEvent extends BeforeOperationEvent {
-	private static final long serialVersionUID = 6255387982554604813L;
-	private static final Class<?>[] TYPES = {
-		long.class, // Event.timestamp
-		long.class, // TraceEvent.traceId
-		int.class, // TraceEvent.orderIndex
-		String.class, // OperationEvent.operationSignature
-		String.class, // OperationEvent.classSignature
-	};
+public class BeforeConstructorEvent extends BeforeOperationEvent implements IConstructorRecord {
+	public static final int SIZE = BeforeOperationEvent.SIZE;
+	public static final Class<?>[] TYPES = BeforeOperationEvent.TYPES;
+
+	private static final long serialVersionUID = 3262281927958251845L;
 
 	/**
 	 * This constructor uses the given parameters to initialize the fields of this record.
@@ -73,13 +74,16 @@ public class BeforeConstructorEvent extends BeforeOperationEvent {
 		super(values, types); // values[0..4]
 	}
 
-	@Override
-	public Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getOperationSignature(), this.getClassSignature(), };
-	}
-
-	@Override
-	public Class<?>[] getValueTypes() {
-		return TYPES.clone();
+	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public BeforeConstructorEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		super(buffer, stringRegistry);
 	}
 }

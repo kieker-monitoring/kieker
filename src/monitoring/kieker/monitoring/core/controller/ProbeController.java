@@ -260,6 +260,9 @@ public class ProbeController extends AbstractController implements IProbeControl
 				}
 			}
 		}
+		// Do not forget to remember this default value
+		this.signatureCache.put(signature, true);
+
 		return true; // if nothing matches, the default is true!
 	}
 

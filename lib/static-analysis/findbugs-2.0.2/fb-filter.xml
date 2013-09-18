@@ -5,6 +5,11 @@
 		<Package name="~kieker\.common\.record.*" />
 		<Bug pattern="EI_EXPOSE_REP" />
 	</Match>
+	
+	<Match>
+		<Class name="kieker.common.record.misc.RegistryRecord" />
+		<Bug pattern="DM_DEFAULT_ENCODING" />
+	</Match>
 
 	<Match>
 		<Class name="kieker.analysis.plugin.IPlugin$PluginInputPortReference" />
@@ -186,7 +191,13 @@
 	</Match>
 
 	<Match>
-		<Class name="kieker.monitoring.core.registry.Registry" />
+		<Class name="kieker.common.util.registry.Lookup" />
+		<Field name="array" />
+		<Bug pattern="VO_VOLATILE_REFERENCE_TO_ARRAY" />
+	</Match>
+	
+	<Match>
+		<Class name="kieker.common.util.registry.Registry" />
 		<Field name="eArrayCached" />
 		<Bug pattern="VO_VOLATILE_REFERENCE_TO_ARRAY" />
 	</Match>
@@ -235,21 +246,13 @@
 	</Match>
 
 	<Match>
-		<Class name="kieker.test.analysis.junit.plugin.filter.forward.TestCountingThroughputFilter" />
-		<Method name="doTheTest" params="" returns="void" />
+		<Class name="~kieker.test.*" />
 		<Bug pattern="UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" />
 	</Match>
 
 	<Match>
-		<Class
-			name="kieker.test.analysis.junit.plugin.filter.select.TestTimestampFilter" />
-		<Bug pattern="UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" />
-	</Match>
-
-	<Match>
-		<Class
-			name="kieker.test.analysis.junit.plugin.filter.forward.AbstractTestRealtimeRecordDelayFilter" />
-		<Bug pattern="UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" />
+		<Class name="kieker.analysis.plugin.filter.record.MonitoringThroughputFilter" />
+		<Bug pattern="VO_VOLATILE_INCREMENT" />
 	</Match>
 
 	<Match>
@@ -322,5 +325,12 @@
 		<Package name="~kieker\.analysis\.model\.analysisMetaModel.*" />
 		<Bug pattern="NM_CONFUSING" />
 	</Match>
-
+	
+	<!-- For the public TYPES field of our records. -->
+	<Match>
+		<Class name="~kieker.common.record.*" />
+		<Field name="TYPES" />
+		<Bug pattern="MS_PKGPROTECT, MS_MUTABLE_ARRAY" />
+	</Match>
+	
 </FindBugsFilter>

@@ -16,7 +16,12 @@
 
 package kieker.common.record.flow.trace.concurrency;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.flow.trace.AbstractTraceEvent;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Jan Waller
@@ -24,12 +29,14 @@ import kieker.common.record.flow.trace.AbstractTraceEvent;
  * @since 1.5
  */
 public class SplitEvent extends AbstractTraceEvent {
-	private static final long serialVersionUID = -4454625562107999414L;
-	private static final Class<?>[] TYPES = {
+	public static final int SIZE = 20;
+	public static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
 		int.class, // TraceEvent.orderIndex
 	};
+
+	private static final long serialVersionUID = -9102181356119079902L;
 
 	/**
 	 * This constructor uses the given parameters to initialize the fields of this record.
@@ -56,16 +63,45 @@ public class SplitEvent extends AbstractTraceEvent {
 	}
 
 	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public SplitEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		super(buffer, stringRegistry);
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
-	public final Object[] toArray() {
+	public Object[] toArray() {
 		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), };
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public final Class<?>[] getValueTypes() {
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		buffer.putLong(this.getTimestamp());
+		buffer.putLong(this.getTraceId());
+		buffer.putInt(this.getOrderIndex());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public Class<?>[] getValueTypes() {
 		return TYPES.clone();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public int getSize() {
+		return SIZE;
 	}
 }

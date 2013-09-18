@@ -16,6 +16,9 @@
 
 package kieker.test.analysis.junit.plugin.filter.select;
 
+import java.nio.BufferOverflowException;
+import java.nio.ByteBuffer;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,6 +31,7 @@ import kieker.analysis.plugin.filter.select.TimestampFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
+import kieker.common.util.registry.IRegistry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 
@@ -49,6 +53,14 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 
 		public Class<?>[] getValueTypes() {
 			return new Class<?>[] { long.class, long.class, int.class, };
+		}
+
+		public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+			// not used here
+		}
+
+		public int getSize() {
+			return 8 + 8 + 4;
 		}
 	};
 

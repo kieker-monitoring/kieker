@@ -16,19 +16,21 @@
 
 package kieker.common.record.flow.trace.concurrency.monitor;
 
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
+import kieker.common.util.registry.IRegistry;
+
 /**
  * @author Jan Waller
  * 
  * @since 1.8
  */
 public class MonitorNotifyAllEvent extends AbstractMonitorEvent {
-	private static final long serialVersionUID = 2273412310252016275L;
-	private static final Class<?>[] TYPES = {
-		long.class, // Event.timestamp
-		long.class, // TraceEvent.traceId
-		int.class, // TraceEvent.orderIndex
-		int.class, // AbstractMonitorEvent.lockId
-	};
+	public static final int SIZE = AbstractMonitorEvent.SIZE;
+	public static final Class<?>[] TYPES = AbstractMonitorEvent.TYPES;
+
+	private static final long serialVersionUID = 1611437431802651128L;
 
 	/**
 	 * This constructor uses the given parameters to initialize the fields of this record.
@@ -54,5 +56,18 @@ public class MonitorNotifyAllEvent extends AbstractMonitorEvent {
 	 */
 	public MonitorNotifyAllEvent(final Object[] values) {
 		super(values, TYPES); // values[0..3]
+	}
+
+	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public MonitorNotifyAllEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		super(buffer, stringRegistry);
 	}
 }

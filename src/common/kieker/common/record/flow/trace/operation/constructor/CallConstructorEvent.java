@@ -16,24 +16,23 @@
 
 package kieker.common.record.flow.trace.operation.constructor;
 
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
+import kieker.common.record.flow.IConstructorRecord;
 import kieker.common.record.flow.trace.operation.CallOperationEvent;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Jan Waller
  * 
  * @since 1.6
  */
-public class CallConstructorEvent extends CallOperationEvent {
-	private static final long serialVersionUID = -997689498521033735L;
-	private static final Class<?>[] TYPES = {
-		long.class, // Event.timestamp
-		long.class, // TraceEvent.traceId
-		int.class, // TraceEvent.orderIndex
-		String.class, // OperationEvent.operationSiganture
-		String.class, // OperationEvent.classSignature
-		String.class, // CallOperationEvent.calleeOperationSignature
-		String.class, // CallOperationEvent.calleeClassSiganture
-	};
+public class CallConstructorEvent extends CallOperationEvent implements IConstructorRecord {
+	public static final int SIZE = CallOperationEvent.SIZE;
+	public static final Class<?>[] TYPES = CallOperationEvent.TYPES;
+
+	private static final long serialVersionUID = -2264901642077299543L;
 
 	/**
 	 * This constructor uses the given parameters to initialize the fields of this record.
@@ -81,15 +80,16 @@ public class CallConstructorEvent extends CallOperationEvent {
 		super(values, types); // values[0..6]
 	}
 
-	@Override
-	public Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(),
-			this.getCallerOperationSignature(), this.getCallerClassSignature(),
-			this.getCalleeOperationSignature(), this.getCalleeClassSignature(), };
-	}
-
-	@Override
-	public Class<?>[] getValueTypes() {
-		return TYPES.clone();
+	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public CallConstructorEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		super(buffer, stringRegistry);
 	}
 }

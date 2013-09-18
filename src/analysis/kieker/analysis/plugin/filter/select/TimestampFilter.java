@@ -31,7 +31,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.record.flow.IEventRecord;
 import kieker.common.record.flow.IFlowRecord;
-import kieker.common.record.flow.trace.Trace;
+import kieker.common.record.flow.trace.TraceMetadata;
 
 /**
  * Allows to filter {@link IMonitoringRecord} objects based on their given timestamps.
@@ -176,12 +176,12 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 	 *            The new incoming record.
 	 */
 	@InputPort(name = INPUT_PORT_NAME_FLOW, description = "Receives trace events to be selected by a specific timestamp selector",
-			eventTypes = { IEventRecord.class, Trace.class })
+			eventTypes = { IEventRecord.class, TraceMetadata.class })
 	public final void inputTraceEvent(final IFlowRecord record) {
 		final long timestamp;
 
-		if (record instanceof Trace) {
-			timestamp = ((Trace) record).getLoggingTimestamp();
+		if (record instanceof TraceMetadata) {
+			timestamp = ((TraceMetadata) record).getLoggingTimestamp();
 		} else if (record instanceof IEventRecord) {
 			timestamp = ((IEventRecord) record).getTimestamp();
 		} else {

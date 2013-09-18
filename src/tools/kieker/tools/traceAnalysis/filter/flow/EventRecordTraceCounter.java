@@ -25,7 +25,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
-import kieker.common.record.flow.trace.Trace;
+import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.tools.traceAnalysis.filter.AbstractTraceProcessingFilter;
 
 /**
@@ -100,7 +100,7 @@ public class EventRecordTraceCounter extends AbstractTraceProcessingFilter {
 			LOG.error("Invalid trace: " + invalidTrace);
 		}
 
-		final Trace trace = invalidTrace.getTrace();
+		final TraceMetadata trace = invalidTrace.getTrace();
 		if (trace != null) {
 			super.reportError(invalidTrace.getTrace().getTraceId());
 		} else {

@@ -121,8 +121,8 @@ public abstract class AbstractZipWriterThread extends AbstractAsyncThread {
 	@SuppressWarnings("unchecked")
 	@Override
 	protected final void consume(final IMonitoringRecord monitoringRecord) throws Exception {
-		if (monitoringRecord instanceof RegistryRecord<?>) {
-			this.mappingFileWriter.write((RegistryRecord<String>) monitoringRecord);
+		if (monitoringRecord instanceof RegistryRecord) {
+			this.mappingFileWriter.write((RegistryRecord) monitoringRecord);
 		} else {
 			if (++this.entriesInCurrentFileCounter > this.maxEntriesInFile) { // NOPMD
 				this.entriesInCurrentFileCounter = 1;

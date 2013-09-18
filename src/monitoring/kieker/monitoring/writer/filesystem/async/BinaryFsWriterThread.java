@@ -52,14 +52,14 @@ public class BinaryFsWriterThread extends AbstractFsWriterThread {
 
 	@Override
 	protected void write(final IMonitoringRecord monitoringRecord) throws IOException {
-		this.out.writeInt(this.monitoringController.getIdForString(monitoringRecord.getClass().getName()));
+		this.out.writeInt(this.monitoringController.getUniqueIdForString(monitoringRecord.getClass().getName()));
 		this.out.writeLong(monitoringRecord.getLoggingTimestamp());
 		final Object[] recordFields = monitoringRecord.toArray();
 		for (int i = 0; i < recordFields.length; i++) {
 			if (recordFields[i] == null) {
 				final Class<?>[] recordTypes = monitoringRecord.getValueTypes();
 				if (recordTypes[i] == String.class) {
-					this.out.writeInt(this.monitoringController.getIdForString(""));
+					this.out.writeInt(this.monitoringController.getUniqueIdForString(""));
 				} else if ((recordTypes[i] == int.class) || (recordTypes[i] == Integer.class)) {
 					this.out.writeInt(0);
 				} else if ((recordTypes[i] == long.class) || (recordTypes[i] == Long.class)) {
@@ -79,7 +79,7 @@ public class BinaryFsWriterThread extends AbstractFsWriterThread {
 					this.out.writeByte((byte) 0);
 				}
 			} else if (recordFields[i] instanceof String) {
-				this.out.writeInt(this.monitoringController.getIdForString((String) recordFields[i]));
+				this.out.writeInt(this.monitoringController.getUniqueIdForString((String) recordFields[i]));
 			} else if (recordFields[i] instanceof Integer) {
 				this.out.writeInt((Integer) recordFields[i]);
 			} else if (recordFields[i] instanceof Long) {

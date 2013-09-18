@@ -20,7 +20,7 @@ import kieker.analysis.AnalysisController;
 import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.AbstractPlugin;
-import kieker.analysis.plugin.filter.forward.RealtimeRecordDelayFilter;
+import kieker.analysis.plugin.filter.record.RealtimeRecordDelayFilter;
 import kieker.analysis.plugin.filter.select.TimestampFilter;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;

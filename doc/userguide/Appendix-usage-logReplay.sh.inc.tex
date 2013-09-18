@@ -1,5 +1,10 @@
 usage: kieker.tools.logReplayer.FilesystemLogReplayerStarter
- --c,--monitoring.configuration <\path\to\monitoring.properties>
+ --a,--realtime-acceleration-factor <factor>
+        Factor by which to accelerate (>1.0) or slow down (<1.0) the
+        replay in realtime mode (defaults to 1.0, i.e., no
+        acceleration/slow down).
+
+ --c,--monitoring.configuration </path/to/monitoring.properties>
         Configuration to use for the Kieker monitoring instance
 
  --i,--inputdirs <dir1 ... dirN>
@@ -20,4 +25,4 @@ usage: kieker.tools.logReplayer.FilesystemLogReplayerStarter
         Number of worker threads used in realtime mode (defaults to 1).
 
  --r,--realtime <true|false>
-        Replay log data in realtime?. 
+        Replay log data in realtime?

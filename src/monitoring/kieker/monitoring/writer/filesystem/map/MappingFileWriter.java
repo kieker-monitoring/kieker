@@ -65,7 +65,7 @@ public final class MappingFileWriter {
 	 * @throws IOException
 	 *             If something went wrong during the writing.
 	 */
-	public final void write(final RegistryRecord<String> hashRecord) throws IOException {
+	public final void write(final RegistryRecord hashRecord) throws IOException {
 		synchronized (this.mappingFile) {
 			PrintWriter pw = null;
 			try {
@@ -73,7 +73,7 @@ public final class MappingFileWriter {
 				pw.write('$');
 				pw.write(String.valueOf(hashRecord.getId()));
 				pw.write('=');
-				pw.write(FSUtil.encodeNewline(hashRecord.getObject()));
+				pw.write(FSUtil.encodeNewline(hashRecord.getString()));
 				pw.write('\n');
 				if (pw.checkError()) {
 					throw new IOException("Error writing to mappingFile " + this.mappingFile.toString());

@@ -153,7 +153,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 			case 2: // does nothing if queue is full
 				if (!this.blockingQueue.offer(monitoringRecord)) {
 					// RegistryRecords must always be placed in the queue
-					if (monitoringRecord instanceof RegistryRecord<?>) {
+					if (monitoringRecord instanceof RegistryRecord) {
 						try {
 							this.blockingQueue.put(monitoringRecord);
 						} catch (final InterruptedException ignore) {
