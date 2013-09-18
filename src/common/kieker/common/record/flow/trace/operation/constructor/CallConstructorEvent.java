@@ -30,7 +30,15 @@ import kieker.common.util.registry.IRegistry;
  */
 public class CallConstructorEvent extends CallOperationEvent implements IConstructorRecord {
 	public static final int SIZE = CallOperationEvent.SIZE;
-	public static final Class<?>[] TYPES = CallOperationEvent.TYPES;
+	private static final Class<?>[] TYPES = {
+		long.class, // Event.timestamp
+		long.class, // TraceEvent.traceId
+		int.class, // TraceEvent.orderIndex
+		String.class, // OperationEvent.operationSiganture
+		String.class, // OperationEvent.classSignature
+		String.class, // calleeOperationSignature
+		String.class, // calleeClassSiganture
+	};
 
 	private static final long serialVersionUID = -2264901642077299543L;
 
@@ -91,5 +99,13 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 	 */
 	public CallConstructorEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		super(buffer, stringRegistry);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Class<?>[] getValueTypes() {
+		return TYPES.clone();
 	}
 }

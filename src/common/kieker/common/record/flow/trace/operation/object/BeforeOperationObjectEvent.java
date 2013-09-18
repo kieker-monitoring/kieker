@@ -31,7 +31,7 @@ import kieker.common.util.registry.IRegistry;
  */
 public class BeforeOperationObjectEvent extends BeforeOperationEvent implements IObjectRecord {
 	public static final int SIZE = 32;
-	public static final Class<?>[] TYPES = {
+	private static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
 		int.class, // TraceEvent.orderIndex

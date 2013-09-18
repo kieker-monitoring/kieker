@@ -31,7 +31,7 @@ import kieker.common.util.registry.IRegistry;
  */
 public class BranchingRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 	public static final int SIZE = 16;
-	public static final Class<?>[] TYPES = {
+	private static final Class<?>[] TYPES = {
 		long.class, // timestamp
 		int.class, // branchId
 		int.class, // branchingOutcome

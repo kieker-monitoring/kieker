@@ -30,7 +30,13 @@ import kieker.common.util.registry.IRegistry;
  */
 public class BeforeConstructorEvent extends BeforeOperationEvent implements IConstructorRecord {
 	public static final int SIZE = BeforeOperationEvent.SIZE;
-	public static final Class<?>[] TYPES = BeforeOperationEvent.TYPES;
+	private static final Class<?>[] TYPES = {
+		long.class, // Event.timestamp
+		long.class, // TraceEvent.traceId
+		int.class, // TraceEvent.orderIndex
+		String.class, // OperationEvent.operationSignature
+		String.class, // OperationEvent.classSignature
+	};
 
 	private static final long serialVersionUID = 3262281927958251845L;
 
@@ -85,5 +91,13 @@ public class BeforeConstructorEvent extends BeforeOperationEvent implements ICon
 	 */
 	public BeforeConstructorEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		super(buffer, stringRegistry);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Class<?>[] getValueTypes() {
+		return TYPES.clone();
 	}
 }

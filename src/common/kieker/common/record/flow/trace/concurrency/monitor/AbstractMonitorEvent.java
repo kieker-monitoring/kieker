@@ -30,7 +30,7 @@ import kieker.common.util.registry.IRegistry;
  */
 public abstract class AbstractMonitorEvent extends AbstractTraceEvent {
 	public static final int SIZE = 24;
-	public static final Class<?>[] TYPES = {
+	private static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
 		int.class, // TraceEvent.orderIndex

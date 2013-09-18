@@ -31,7 +31,7 @@ import kieker.common.util.registry.IRegistry;
  */
 public class OperationExecutionRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 	public static final int SIZE = 44;
-	public static final Class<?>[] TYPES = {
+	private static final Class<?>[] TYPES = {
 		String.class, // operationSignature
 		String.class, // sessionId
 		long.class, // traceId

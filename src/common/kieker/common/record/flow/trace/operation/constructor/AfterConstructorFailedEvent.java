@@ -30,7 +30,14 @@ import kieker.common.util.registry.IRegistry;
  */
 public class AfterConstructorFailedEvent extends AfterOperationFailedEvent implements IConstructorRecord {
 	public static final int SIZE = AfterOperationFailedEvent.SIZE;
-	public static final Class<?>[] TYPES = AfterOperationFailedEvent.TYPES;
+	private static final Class<?>[] TYPES = {
+		long.class, // Event.timestamp
+		long.class, // TraceEvent.traceId
+		int.class, // TraceEvent.orderIndex
+		String.class, // OperationEvent.operationSignature
+		String.class, // OperationEvent.classSignature
+		String.class, // Exception
+	};
 
 	private static final long serialVersionUID = 4071756393780340409L;
 
@@ -88,5 +95,13 @@ public class AfterConstructorFailedEvent extends AfterOperationFailedEvent imple
 	 */
 	public AfterConstructorFailedEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		super(buffer, stringRegistry);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Class<?>[] getValueTypes() {
+		return TYPES.clone();
 	}
 }

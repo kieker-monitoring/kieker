@@ -30,7 +30,7 @@ import kieker.common.util.registry.IRegistry;
  */
 public class JoinEvent extends AbstractTraceEvent {
 	public static final int SIZE = 28;
-	public static final Class<?>[] TYPES = {
+	private static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
 		int.class, // TraceEvent.orderIndex

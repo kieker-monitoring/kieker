@@ -21,6 +21,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
+import java.security.PrivilegedAction;
 import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -266,7 +267,13 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		try {
 			if (IMonitoringRecord.Factory.class.isAssignableFrom(clazz)) {
 				final Field types = clazz.getDeclaredField("TYPES");
-				return ((Class<?>[]) types.get(null));
+				java.security.AccessController.doPrivileged(new PrivilegedAction<Object>() {
+					public Object run() {
+						types.setAccessible(true);
+						return null;
+					}
+				});
+				return ((Class<?>[]) types.get(null)).clone();
 			} else {
 				return clazz.newInstance().getValueTypes();
 			}
@@ -363,7 +370,13 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 				// Factory interface present
 				final Constructor<? extends IMonitoringRecord> constructor = clazz.getConstructor(Object[].class);
 				final Field types = clazz.getDeclaredField("TYPES");
-				return constructor.newInstance((Object) AbstractMonitoringRecord.fromStringArrayToTypedArray(values, (Class<?>[]) types.get(null)));
+				java.security.AccessController.doPrivileged(new PrivilegedAction<Object>() {
+					public Object run() {
+						types.setAccessible(true);
+						return null;
+					}
+				});
+				return constructor.newInstance((Object) AbstractMonitoringRecord.fromStringArrayToTypedArray(values, (Class<?>[]) types.get(null)).clone());
 			} else {
 				// try ordinary method
 				final IMonitoringRecord record = clazz.newInstance();

@@ -26,7 +26,7 @@ import kieker.common.util.registry.IRegistry;
 
 public class MyResponseTimeRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 	public static final int SIZE = 16;
-	public static final Class<?>[] TYPES = { String.class, String.class, long.class, };
+	private static final Class<?>[] TYPES = { String.class, String.class, long.class, };
 
 	private static final long serialVersionUID = 7837873751833770201L;
 

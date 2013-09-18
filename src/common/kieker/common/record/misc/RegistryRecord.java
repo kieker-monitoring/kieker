@@ -35,7 +35,7 @@ import kieker.common.util.registry.IRegistry;
  */
 public final class RegistryRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 	public static final int SIZE = 8; // without the String itself!
-	public static final Class<?>[] TYPES = new Class<?>[] {
+	private static final Class<?>[] TYPES = new Class<?>[] {
 		int.class, // id
 		String.class, // object
 	};
