@@ -21,6 +21,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -93,7 +94,8 @@ public final class Benchmark {
 				Thread.sleep(5000);
 			}
 		}
-		System.out.print(" # 6. Starting benchmark ... "); // NOPMD (System.out)
+		final long startTime = System.currentTimeMillis();
+		System.out.print(" # 6. Starting benchmark ..."); // NOPMD (System.out)
 		// 3. Starting Threads
 		for (int i = 0; i < Benchmark.totalThreads; i++) {
 			threads[i].start();
@@ -106,7 +108,8 @@ public final class Benchmark {
 			e.printStackTrace(); // NOPMD (Stacktrace)
 			System.exit(-1);
 		}
-		System.out.println("done"); // NOPMD (System.out)
+		final long totalTime = System.currentTimeMillis() - startTime;
+		System.out.println("done (" + TimeUnit.MILLISECONDS.toSeconds(totalTime) + " s)"); // NOPMD (System.out)
 
 		// 5. Print experiment statistics
 		System.out.print(" # 7. Writing results ... "); // NOPMD (System.out)

@@ -100,7 +100,7 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
     mpstat 1 > ${RESULTSDIR}stat/mpstat-${i}-${j}-${k}.txt &
     vmstat 1 > ${RESULTSDIR}stat/vmstat-${i}-${j}-${k}.txt &
     iostat -xn 10 > ${RESULTSDIR}stat/iostat-${i}-${j}-${k}.txt &
-	${JAVABIN}java -jar explorviz_worker.jar >${RESULTSDIR}worker-${i}-${j}-${k}.log &
+    ${JAVABIN}java -jar explorviz_worker.jar >${RESULTSDIR}worker-${i}-${j}-${k}.log &
     ${JAVABIN}java  ${JAVAARGS_LTW} ${JAR} \
         --output-filename ${RAWFN}-${i}-${j}-${k}.csv \
         --totalcalls ${TOTALCALLS} \
@@ -111,7 +111,7 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
     kill %mpstat
     kill %vmstat
     kill %iostat
-	kill %java
+    kill %java
     rm -rf ${BASEDIR}tmp/kieker-*
     [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot-${i}-${j}-${k}.log
     echo >>${BASEDIR}kieker.log

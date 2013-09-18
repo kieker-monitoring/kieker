@@ -44,10 +44,9 @@ JAVAARGS="${JAVAARGS} -verbose:gc -XX:+PrintCompilation"
 JAR="-jar dist/OverheadEvaluationMicrobenchmark.jar"
 
 JAVAARGS_NOINSTR="${JAVAARGS}"
-JAVAARGS_LTW="${JAVAARGS} -javaagent:${BASEDIR}lib/kieker-1.8-SNAPSHOT_aspectj.jar -Dorg.aspectj.weaver.showWeaveInfo=false -Daj.weaving.verbose=false -Dkieker.monitoring.adaptiveMonitoring.enabled=false"
+JAVAARGS_LTW="${JAVAARGS} -javaagent:${BASEDIR}lib/kieker-1.8-SNAPSHOT_aspectj.jar -Dorg.aspectj.weaver.showWeaveInfo=false -Daj.weaving.verbose=false -Dkieker.monitoring.adaptiveMonitoring.enabled=false -Dorg.aspectj.weaver.loadtime.configuration=META-INF/kieker.aop.xml"
 JAVAARGS_KIEKER_DEACTV="${JAVAARGS_LTW} -Dkieker.monitoring.enabled=false -Dkieker.monitoring.writer=kieker.monitoring.writer.DummyWriter"
-JAVAARGS_KIEKER_NOLOGGING1="${JAVAARGS_LTW} -Dkieker.monitoring.writer=kieker.monitoring.writer.DummyWriter"
-JAVAARGS_KIEKER_NOLOGGING2="${JAVAARGS_LTW} -Dkieker.monitoring.writer=kieker.monitoring.writer.AsyncDummyWriter"
+JAVAARGS_KIEKER_NOLOGGING="${JAVAARGS_LTW} -Dkieker.monitoring.writer=kieker.monitoring.writer.DummyWriter"
 JAVAARGS_KIEKER_LOGGING1="${JAVAARGS_LTW} -Dkieker.monitoring.writer=kieker.monitoring.writer.filesystem.AsyncBinaryFsWriter -Dkieker.monitoring.writer.filesystem.AsyncBinaryFsWriter.customStoragePath=${BASEDIR}tmp -Dkieker.monitoring.writer.filesystem.AsyncBinaryFsWriter.QueueFullBehavior=1"
 JAVAARGS_KIEKER_LOGGING2="${JAVAARGS_LTW} -Dkieker.monitoring.writer=kieker.monitoring.writer.filesystem.AsyncBinaryZipWriter -Dkieker.monitoring.writer.filesystem.AsyncBinaryZipWriter.customStoragePath=${BASEDIR}tmp -Dkieker.monitoring.writer.filesystem.AsyncBinaryZipWriter.QueueFullBehavior=1"
 JAVAARGS_KIEKER_LOGGING3="${JAVAARGS_LTW} -Dkieker.monitoring.writer=kieker.monitoring.writer.filesystem.AsyncFsWriter -Dkieker.monitoring.writer.filesystem.AsyncFsWriter.customStoragePath=${BASEDIR}tmp -Dkieker.monitoring.writer.filesystem.AsyncFsWriter.QueueFullBehavior=1"
@@ -121,37 +120,14 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
     sync
     sleep ${SLEEPTIME}
 
-    # No logging 1
+    # No logging
     k=`expr ${k} + 1`
     echo " # ${i}.${j}.${k} No logging (null writer)"
     echo " # ${i}.${j}.${k} No logging (null writer)" >>${BASEDIR}kieker.log
     mpstat 1 > ${RESULTSDIR}stat/mpstat-${i}-${j}-${k}.txt &
     vmstat 1 > ${RESULTSDIR}stat/vmstat-${i}-${j}-${k}.txt &
     iostat -xn 10 > ${RESULTSDIR}stat/iostat-${i}-${j}-${k}.txt &
-    ${JAVABIN}java  ${JAVAARGS_KIEKER_NOLOGGING1} ${JAR} \
-        --output-filename ${RAWFN}-${i}-${j}-${k}.csv \
-        --totalcalls ${TOTALCALLS} \
-        --methodtime ${METHODTIME} \
-        --totalthreads ${THREADS} \
-        --recursiondepth ${j} \
-        ${MOREPARAMS}
-    kill %mpstat
-    kill %vmstat
-    kill %iostat
-    [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot-${i}-${j}-${k}.log
-    echo >>${BASEDIR}kieker.log
-    echo >>${BASEDIR}kieker.log
-    sync
-    sleep ${SLEEPTIME}
-
-    # No logging 2
-    k=`expr ${k} + 1`
-    echo " # ${i}.${j}.${k} No logging (async null writer)"
-    echo " # ${i}.${j}.${k} No logging (async null writer)" >>${BASEDIR}kieker.log
-    mpstat 1 > ${RESULTSDIR}stat/mpstat-${i}-${j}-${k}.txt &
-    vmstat 1 > ${RESULTSDIR}stat/vmstat-${i}-${j}-${k}.txt &
-    iostat -xn 10 > ${RESULTSDIR}stat/iostat-${i}-${j}-${k}.txt &
-    ${JAVABIN}java  ${JAVAARGS_KIEKER_NOLOGGING2} ${JAR} \
+    ${JAVABIN}java  ${JAVAARGS_KIEKER_NOLOGGING} ${JAR} \
         --output-filename ${RAWFN}-${i}-${j}-${k}.csv \
         --totalcalls ${TOTALCALLS} \
         --methodtime ${METHODTIME} \

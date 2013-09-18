@@ -46,9 +46,9 @@ for (cr in configs.recursion) {
     printvalues["through",cc]=((results.count-results.skip) * 1000*1000) / sum(resultsBIG[(1:length(configs.recursion))[configs.recursion==cr],cc,c(1:(results.count-results.skip))])
   }
   #meanvalues
-  rect(cr-0.3,printvalues["mean",3],cr+0.5,printvalues["mean",4])
-  rect(cr-0.3,printvalues["mean",2],cr+0.5,printvalues["mean",3])
-  rect(cr-0.3,printvalues["mean",1],cr+0.5,printvalues["mean",2])
+  for (cc in (configs.count:2)) {
+    rect(cr-0.3,printvalues["mean",cc-1],cr+0.5,printvalues["mean",cc])
+  }
   rect(cr-0.3,0,cr+0.5,printvalues["mean",1])
   for (cc in (1:configs.count)) {
     lines(c(cr+0.41,cr+0.49),c(printvalues["mean",cc]+printvalues["ci95%",cc],printvalues["mean",cc]+printvalues["ci95%",cc]),col="red")
@@ -56,14 +56,12 @@ for (cr in configs.recursion) {
     lines(c(cr+0.41,cr+0.49),c(printvalues["mean",cc]-printvalues["ci95%",cc],printvalues["mean",cc]-printvalues["ci95%",cc]),col="red")
   }
   #median
-  rect(cr-0.4,printvalues["md50%",3],cr+0.4,printvalues["md50%",4],col="white",border="black")
-  rect(cr-0.4,printvalues["md50%",3],cr+0.4,printvalues["md50%",4],angle=45,density=30)
-  rect(cr-0.4,printvalues["md50%",2],cr+0.4,printvalues["md50%",3],col="white",border="black")
-  rect(cr-0.4,printvalues["md50%",2],cr+0.4,printvalues["md50%",3],angle=135,density=20)
-  rect(cr-0.4,printvalues["md50%",1],cr+0.4,printvalues["md50%",2],col="white",border="black")
-  rect(cr-0.4,printvalues["md50%",1],cr+0.4,printvalues["md50%",2],angle=45,density=10)
+  for (cc in (configs.count:2)) {
+    rect(cr-0.4,printvalues["md50%",cc-1],cr+0.4,printvalues["md50%",cc],col="white",border="black")
+    rect(cr-0.4,printvalues["md50%",cc-1],cr+0.4,printvalues["md50%",cc],angle=45,density=cc*10)
+  }
   rect(cr-0.4,0,cr+0.4,printvalues["md50%",1],col="white",border="black")
-  rect(cr-0.4,0,cr+0.4,printvalues["md50%",1],angle=135,density=5)
+  rect(cr-0.4,0,cr+0.4,printvalues["md50%",1],angle=45,density=10)
   for (cc in (1:configs.count)) {
     lines(c(cr-0.39,cr-0.31),c(printvalues["md75%",cc],printvalues["md75%",cc]),col="red")
     lines(c(cr-0.35,cr-0.35),c(printvalues["md25%",cc],printvalues["md75%",cc]),col="red")
