@@ -69,7 +69,7 @@ public final class ConfigurationParameters {
 	public static final int NUMBER_OF_TEST_THREADS = 5;
 
 	/**
-	 * Default constructor
+	 * Private default constructor for utility class.
 	 */
 	private ConfigurationParameters() {
 

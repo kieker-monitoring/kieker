@@ -25,6 +25,9 @@ import kieker.common.record.IMonitoringRecord;
  * @author Jan Waller
  * 
  * @since 1.5
+ * 
+ * @param <E>
+ *            any object type.
  */
 public final class RegistryRecord<E> extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
 	private static final long serialVersionUID = 4566332478835872121L;
