@@ -34,7 +34,7 @@ public class TestJMSClientConnector extends AbstractConnectorTest {
 	 * Empty constructor to satisfy coding style.
 	 */
 	public TestJMSClientConnector() {
-
+		// Nothing to be done.
 	}
 
 	/**

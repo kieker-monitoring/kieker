@@ -31,7 +31,9 @@ public class JMSBroker implements Runnable {
 	/**
 	 * Empty constructor.
 	 */
-	public JMSBroker() {}
+	public JMSBroker() {
+		// Nothing to be done.
+	}
 
 	/**
 	 * Runnable run method for the test JMSBroker.

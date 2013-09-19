@@ -46,7 +46,7 @@ public class JMSMessageGenerator implements Runnable {
 	 * Empty constructor.
 	 */
 	public JMSMessageGenerator() {
-
+		// Nothing to be done.
 	}
 
 	/**
