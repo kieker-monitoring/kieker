@@ -224,60 +224,46 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 			if (valueTypes[curIdx] == String.class) {
 				typedArray[curIdx] = recordFields[curIdx];
 				continue;
-			}
-			else if (valueTypes[curIdx] == int.class) {
+			} else if (valueTypes[curIdx] == int.class) {
 				typedArray[curIdx] = Integer.valueOf(recordFields[curIdx]);
 				continue;
-			}
-			else if (valueTypes[curIdx] == long.class) {
+			} else if (valueTypes[curIdx] == long.class) {
 				typedArray[curIdx] = Long.valueOf(recordFields[curIdx]);
 				continue;
-			}
-			else if (valueTypes[curIdx] == Integer.class) {
+			} else if (valueTypes[curIdx] == Integer.class) {
 				typedArray[curIdx] = Integer.valueOf(recordFields[curIdx]);
 				continue;
-			}
-			else if (valueTypes[curIdx] == Long.class) {
+			} else if (valueTypes[curIdx] == Long.class) {
 				typedArray[curIdx] = Long.valueOf(recordFields[curIdx]);
 				continue;
-			}
-			else if (valueTypes[curIdx] == float.class) {
+			} else if (valueTypes[curIdx] == float.class) {
 				typedArray[curIdx] = Float.valueOf(recordFields[curIdx]);
 				continue;
-			}
-			else if (valueTypes[curIdx] == Float.class) {
+			} else if (valueTypes[curIdx] == Float.class) {
 				typedArray[curIdx] = Float.valueOf(recordFields[curIdx]);
 				continue;
-			}
-			else if (valueTypes[curIdx] == double.class) {
+			} else if (valueTypes[curIdx] == double.class) {
 				typedArray[curIdx] = Double.valueOf(recordFields[curIdx]);
 				continue;
-			}
-			else if (valueTypes[curIdx] == Double.class) {
+			} else if (valueTypes[curIdx] == Double.class) {
 				typedArray[curIdx] = Double.valueOf(recordFields[curIdx]);
 				continue;
-			}
-			else if (valueTypes[curIdx] == byte.class) {
+			} else if (valueTypes[curIdx] == byte.class) {
 				typedArray[curIdx] = Byte.valueOf(recordFields[curIdx]);
 				continue;
-			}
-			else if (valueTypes[curIdx] == Byte.class) {
+			} else if (valueTypes[curIdx] == Byte.class) {
 				typedArray[curIdx] = Byte.valueOf(recordFields[curIdx]);
 				continue;
-			}
-			else if (valueTypes[curIdx] == short.class) { // NOPMD (short)
+			} else if (valueTypes[curIdx] == short.class) { // NOPMD (short)
 				typedArray[curIdx] = Short.valueOf(recordFields[curIdx]); // NOPMD (short)
 				continue;
-			}
-			else if (valueTypes[curIdx] == Short.class) { // NOPMD (short)
+			} else if (valueTypes[curIdx] == Short.class) { // NOPMD (short)
 				typedArray[curIdx] = Short.valueOf(recordFields[curIdx]); // NOPMD (short)
 				continue;
-			}
-			else if (valueTypes[curIdx] == boolean.class) {
+			} else if (valueTypes[curIdx] == boolean.class) {
 				typedArray[curIdx] = Boolean.valueOf(recordFields[curIdx]);
 				continue;
-			}
-			else if (valueTypes[curIdx] == Boolean.class) {
+			} else if (valueTypes[curIdx] == Boolean.class) {
 				typedArray[curIdx] = Boolean.valueOf(recordFields[curIdx]);
 				continue;
 			}

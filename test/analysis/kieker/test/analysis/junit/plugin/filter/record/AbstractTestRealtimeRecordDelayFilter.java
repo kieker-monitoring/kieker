@@ -65,9 +65,6 @@ public abstract class AbstractTestRealtimeRecordDelayFilter extends AbstractKiek
 	/** Provides the list of {@link IMonitoringRecord}s to be delayed. */
 	private ListReader<IMonitoringRecord> simpleListReader;
 
-	/** The filter actually tested. */
-	private RealtimeRecordDelayFilter delayFilter;
-
 	/** Provides the (current) number of {@link IMonitoringRecord}s provided by the {@link #simpleListReader}. */
 	private CountingFilter countingFilterReader;
 
@@ -121,14 +118,14 @@ public abstract class AbstractTestRealtimeRecordDelayFilter extends AbstractKiek
 		// Delay filter
 		final Configuration delayFilterConfiguration = new Configuration();
 		delayFilterConfiguration.setProperty(RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_ACCELERATION_FACTOR, Double.toString(this.accelerationFactor));
-		this.delayFilter = new RealtimeRecordDelayFilter(delayFilterConfiguration, this.analysisController);
+		final RealtimeRecordDelayFilter delayFilter = new RealtimeRecordDelayFilter(delayFilterConfiguration, this.analysisController);
 		this.analysisController.connect(this.countingFilterReader, CountingFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
-				this.delayFilter, RealtimeRecordDelayFilter.INPUT_PORT_NAME_RECORDS);
+				delayFilter, RealtimeRecordDelayFilter.INPUT_PORT_NAME_RECORDS);
 
 		// The CountingThroughputFilter to be tested
 		final Configuration throughputFilterConfiguration = new Configuration();
 		final AnalysisThroughputFilter throughputFilter = new AnalysisThroughputFilter(throughputFilterConfiguration, this.analysisController);
-		this.analysisController.connect(this.delayFilter, RealtimeRecordDelayFilter.OUTPUT_PORT_NAME_RECORDS,
+		this.analysisController.connect(delayFilter, RealtimeRecordDelayFilter.OUTPUT_PORT_NAME_RECORDS,
 				throughputFilter, AnalysisThroughputFilter.INPUT_PORT_NAME_OBJECTS);
 		this.analysisController.connect(timeReader, TimeReader.OUTPUT_PORT_NAME_TIMESTAMPS,
 				throughputFilter, AnalysisThroughputFilter.INPUT_PORT_NAME_TIME);
