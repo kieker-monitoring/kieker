@@ -30,7 +30,7 @@ import kieker.common.util.registry.IRegistry;
  */
 public class ConstructionEvent extends AbstractTraceEvent implements IObjectRecord {
 	public static final int SIZE = 28;
-	private static final Class<?>[] TYPES = {
+	public static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
 		int.class, // TraceEvent.orderIndex
@@ -129,7 +129,7 @@ public class ConstructionEvent extends AbstractTraceEvent implements IObjectReco
 	 * {@inheritDoc}
 	 */
 	public Class<?>[] getValueTypes() {
-		return TYPES.clone();
+		return TYPES; // NOPMD
 	}
 
 	/**

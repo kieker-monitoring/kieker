@@ -31,7 +31,7 @@ import kieker.common.util.registry.IRegistry;
  */
 public class CallOperationEvent extends AbstractOperationEvent implements ICallRecord {
 	public static final int SIZE = 36;
-	private static final Class<?>[] TYPES = {
+	public static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
 		int.class, // TraceEvent.orderIndex
@@ -145,7 +145,7 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	 */
 	@Override
 	public Class<?>[] getValueTypes() {
-		return TYPES.clone();
+		return TYPES; // NOPMD
 	}
 
 	/**

@@ -34,7 +34,7 @@ import kieker.common.util.registry.IRegistry;
  */
 public final class KiekerMetadataRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 	public static final int SIZE = 37;
-	private static final Class<?>[] TYPES = {
+	public static final Class<?>[] TYPES = {
 		String.class, // version
 		String.class, // controllerName
 		String.class, // hostname
@@ -181,7 +181,7 @@ public final class KiekerMetadataRecord extends AbstractMonitoringRecord impleme
 	 * {@inheritDoc}
 	 */
 	public Class<?>[] getValueTypes() {
-		return TYPES.clone();
+		return TYPES; // NOPMD
 	}
 
 	/**

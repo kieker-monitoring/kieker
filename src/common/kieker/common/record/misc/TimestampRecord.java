@@ -33,7 +33,7 @@ import kieker.common.util.registry.IRegistry;
  */
 public class TimestampRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 	public static final int SIZE = 8;
-	private static final Class<?>[] TYPES = {
+	public static final Class<?>[] TYPES = {
 		long.class, // timestamp
 	};
 
@@ -114,7 +114,7 @@ public class TimestampRecord extends AbstractMonitoringRecord implements IMonito
 	 * {@inheritDoc}
 	 */
 	public Class<?>[] getValueTypes() {
-		return TYPES.clone();
+		return TYPES; // NOPMD
 	}
 
 	/**

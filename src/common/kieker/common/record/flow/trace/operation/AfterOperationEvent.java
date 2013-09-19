@@ -28,13 +28,7 @@ import kieker.common.util.registry.IRegistry;
  */
 public class AfterOperationEvent extends AbstractOperationEvent {
 	public static final int SIZE = AbstractOperationEvent.SIZE;
-	private static final Class<?>[] TYPES = {
-		long.class, // Event.timestamp
-		long.class, // TraceEvent.traceId
-		int.class, // TraceEvent.orderIndex
-		String.class, // OperationEvent.operationSignature
-		String.class, // OperationEvent.classSignature
-	};
+	public static final Class<?>[] TYPES = AbstractOperationEvent.TYPES;
 
 	private static final long serialVersionUID = 99591136099208296L;
 
@@ -89,13 +83,5 @@ public class AfterOperationEvent extends AbstractOperationEvent {
 	 */
 	public AfterOperationEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		super(buffer, stringRegistry);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Class<?>[] getValueTypes() {
-		return TYPES.clone();
 	}
 }

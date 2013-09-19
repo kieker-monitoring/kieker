@@ -34,7 +34,7 @@ import kieker.common.util.registry.IRegistry;
  */
 public class ResourceUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 	public static final int SIZE = 24;
-	private static final Class<?>[] TYPES = {
+	public static final Class<?>[] TYPES = {
 		long.class,
 		String.class,
 		String.class,
@@ -155,7 +155,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	 * {@inheritDoc}
 	 */
 	public Class<?>[] getValueTypes() {
-		return TYPES.clone();
+		return TYPES; // NOPMD
 	}
 
 	/**

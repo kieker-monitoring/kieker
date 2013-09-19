@@ -28,12 +28,7 @@ import kieker.common.util.registry.IRegistry;
  */
 public class MonitorEntryEvent extends AbstractMonitorEvent {
 	public static final int SIZE = AbstractMonitorEvent.SIZE;
-	private static final Class<?>[] TYPES = {
-		long.class, // Event.timestamp
-		long.class, // TraceEvent.traceId
-		int.class, // TraceEvent.orderIndex
-		int.class, // lockId
-	};
+	public static final Class<?>[] TYPES = AbstractMonitorEvent.TYPES;
 
 	private static final long serialVersionUID = -1617764125928748198L;
 
@@ -74,13 +69,5 @@ public class MonitorEntryEvent extends AbstractMonitorEvent {
 	 */
 	public MonitorEntryEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		super(buffer, stringRegistry);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Class<?>[] getValueTypes() {
-		return TYPES.clone();
 	}
 }

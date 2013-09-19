@@ -33,7 +33,7 @@ import kieker.common.util.registry.IRegistry;
  */
 public final class EmptyRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 	public static final int SIZE = 0;
-	private static final Class<?>[] TYPES = {};
+	public static final Class<?>[] TYPES = {};
 
 	private static final long serialVersionUID = -4469595388362639213L;
 
@@ -105,7 +105,7 @@ public final class EmptyRecord extends AbstractMonitoringRecord implements IMoni
 	 * {@inheritDoc}
 	 */
 	public Class<?>[] getValueTypes() {
-		return TYPES.clone();
+		return TYPES; // NOPMD
 	}
 
 	/**

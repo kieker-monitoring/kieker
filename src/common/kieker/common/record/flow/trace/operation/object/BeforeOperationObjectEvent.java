@@ -31,7 +31,7 @@ import kieker.common.util.registry.IRegistry;
  */
 public class BeforeOperationObjectEvent extends BeforeOperationEvent implements IObjectRecord {
 	public static final int SIZE = 32;
-	private static final Class<?>[] TYPES = {
+	public static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
 		int.class, // TraceEvent.orderIndex
@@ -131,7 +131,7 @@ public class BeforeOperationObjectEvent extends BeforeOperationEvent implements 
 	 */
 	@Override
 	public Class<?>[] getValueTypes() {
-		return TYPES.clone();
+		return TYPES; // NOPMD
 	}
 
 	/**
