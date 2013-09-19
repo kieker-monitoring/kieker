@@ -37,6 +37,8 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	private static final long serialVersionUID = 1L;
 	private static final ConcurrentMap<String, Class<? extends IMonitoringRecord>> CACHED_KIEKERRECORDS = new ConcurrentHashMap<String, Class<? extends IMonitoringRecord>>(); // NOCS
 	private static final ConcurrentMap<Class<? extends IMonitoringRecord>, Class<?>[]> CACHED_KIEKERRECORD_TYPES = new ConcurrentHashMap<Class<? extends IMonitoringRecord>, Class<?>[]>(); // NOCS
+	private static final ConcurrentMap<Class<? extends IMonitoringRecord>, Constructor<? extends IMonitoringRecord>> CACHED_KIEKERRECORD_CONSTRUCTORS_OBJECT = new ConcurrentHashMap<Class<? extends IMonitoringRecord>, Constructor<? extends IMonitoringRecord>>(); // NOCS
+	private static final ConcurrentMap<Class<? extends IMonitoringRecord>, Constructor<? extends IMonitoringRecord>> CACHED_KIEKERRECORD_CONSTRUCTORS_BINARY = new ConcurrentHashMap<Class<? extends IMonitoringRecord>, Constructor<? extends IMonitoringRecord>>(); // NOCS
 
 	private volatile long loggingTimestamp = -1;
 
@@ -131,31 +133,63 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		for (int curIdx = 0; curIdx < valueTypes.length; curIdx++) {
 			if (values[curIdx] == null) {
 				throw new IllegalArgumentException("Expecting " + valueTypes[curIdx].getName() + " but found null at position " + curIdx + " of the array.");
-			} else if ((valueTypes[curIdx] == int.class) || (valueTypes[curIdx] == Integer.class)) {
+			} else if (valueTypes[curIdx] == int.class) {
 				if (values[curIdx] instanceof Integer) {
 					continue;
 				}
-			} else if ((valueTypes[curIdx] == long.class) || (valueTypes[curIdx] == Long.class)) {
+			} else if (valueTypes[curIdx] == long.class) {
 				if (values[curIdx] instanceof Long) {
 					continue;
 				}
-			} else if ((valueTypes[curIdx] == float.class) || (valueTypes[curIdx] == Float.class)) {
+			} else if (valueTypes[curIdx] == String.class) {
+				if (values[curIdx] instanceof String) {
+					continue;
+				}
+			} else if (valueTypes[curIdx] == Integer.class) {
+				if (values[curIdx] instanceof Integer) {
+					continue;
+				}
+			} else if (valueTypes[curIdx] == Long.class) {
+				if (values[curIdx] instanceof Long) {
+					continue;
+				}
+			} else if (valueTypes[curIdx] == float.class) {
 				if (values[curIdx] instanceof Float) {
 					continue;
 				}
-			} else if ((valueTypes[curIdx] == double.class) || (valueTypes[curIdx] == Double.class)) {
+			} else if (valueTypes[curIdx] == Float.class) {
+				if (values[curIdx] instanceof Float) {
+					continue;
+				}
+			} else if (valueTypes[curIdx] == double.class) {
 				if (values[curIdx] instanceof Double) {
 					continue;
 				}
-			} else if ((valueTypes[curIdx] == byte.class) || (valueTypes[curIdx] == Byte.class)) {
+			} else if (valueTypes[curIdx] == Double.class) {
+				if (values[curIdx] instanceof Double) {
+					continue;
+				}
+			} else if (valueTypes[curIdx] == byte.class) {
 				if (values[curIdx] instanceof Byte) {
 					continue;
 				}
-			} else if ((valueTypes[curIdx] == short.class) || (valueTypes[curIdx] == Short.class)) { // NOPMD (short)
+			} else if (valueTypes[curIdx] == Byte.class) {
+				if (values[curIdx] instanceof Byte) {
+					continue;
+				}
+			} else if (valueTypes[curIdx] == short.class) { // NOPMD (short)
 				if (values[curIdx] instanceof Short) {
 					continue;
 				}
-			} else if ((valueTypes[curIdx] == boolean.class) || (valueTypes[curIdx] == Boolean.class)) {
+			} else if (valueTypes[curIdx] == Short.class) {
+				if (values[curIdx] instanceof Short) {
+					continue;
+				}
+			} else if (valueTypes[curIdx] == boolean.class) {
+				if (values[curIdx] instanceof Boolean) {
+					continue;
+				}
+			} else if (valueTypes[curIdx] == Boolean.class) {
 				if (values[curIdx] instanceof Boolean) {
 					continue;
 				}
@@ -191,31 +225,59 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 				typedArray[curIdx] = recordFields[curIdx];
 				continue;
 			}
-			if ((valueTypes[curIdx] == int.class) || (valueTypes[curIdx] == Integer.class)) {
+			else if (valueTypes[curIdx] == int.class) {
 				typedArray[curIdx] = Integer.valueOf(recordFields[curIdx]);
 				continue;
 			}
-			if ((valueTypes[curIdx] == long.class) || (valueTypes[curIdx] == Long.class)) {
+			else if (valueTypes[curIdx] == long.class) {
 				typedArray[curIdx] = Long.valueOf(recordFields[curIdx]);
 				continue;
 			}
-			if ((valueTypes[curIdx] == float.class) || (valueTypes[curIdx] == Float.class)) {
+			else if (valueTypes[curIdx] == Integer.class) {
+				typedArray[curIdx] = Integer.valueOf(recordFields[curIdx]);
+				continue;
+			}
+			else if (valueTypes[curIdx] == Long.class) {
+				typedArray[curIdx] = Long.valueOf(recordFields[curIdx]);
+				continue;
+			}
+			else if (valueTypes[curIdx] == float.class) {
 				typedArray[curIdx] = Float.valueOf(recordFields[curIdx]);
 				continue;
 			}
-			if ((valueTypes[curIdx] == double.class) || (valueTypes[curIdx] == Double.class)) {
+			else if (valueTypes[curIdx] == Float.class) {
+				typedArray[curIdx] = Float.valueOf(recordFields[curIdx]);
+				continue;
+			}
+			else if (valueTypes[curIdx] == double.class) {
 				typedArray[curIdx] = Double.valueOf(recordFields[curIdx]);
 				continue;
 			}
-			if ((valueTypes[curIdx] == byte.class) || (valueTypes[curIdx] == Byte.class)) {
+			else if (valueTypes[curIdx] == Double.class) {
+				typedArray[curIdx] = Double.valueOf(recordFields[curIdx]);
+				continue;
+			}
+			else if (valueTypes[curIdx] == byte.class) {
 				typedArray[curIdx] = Byte.valueOf(recordFields[curIdx]);
 				continue;
 			}
-			if ((valueTypes[curIdx] == short.class) || (valueTypes[curIdx] == Short.class)) { // NOPMD (short)
+			else if (valueTypes[curIdx] == Byte.class) {
+				typedArray[curIdx] = Byte.valueOf(recordFields[curIdx]);
+				continue;
+			}
+			else if (valueTypes[curIdx] == short.class) { // NOPMD (short)
 				typedArray[curIdx] = Short.valueOf(recordFields[curIdx]); // NOPMD (short)
 				continue;
 			}
-			if ((valueTypes[curIdx] == boolean.class) || (valueTypes[curIdx] == Boolean.class)) {
+			else if (valueTypes[curIdx] == Short.class) { // NOPMD (short)
+				typedArray[curIdx] = Short.valueOf(recordFields[curIdx]); // NOPMD (short)
+				continue;
+			}
+			else if (valueTypes[curIdx] == boolean.class) {
+				typedArray[curIdx] = Boolean.valueOf(recordFields[curIdx]);
+				continue;
+			}
+			else if (valueTypes[curIdx] == Boolean.class) {
 				typedArray[curIdx] = Boolean.valueOf(recordFields[curIdx]);
 				continue;
 			}
@@ -237,19 +299,17 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	 */
 	public static final Class<? extends IMonitoringRecord> classForName(final String classname) throws MonitoringRecordException {
 		Class<? extends IMonitoringRecord> clazz = CACHED_KIEKERRECORDS.get(classname);
-		if (clazz != null) {
-			return clazz;
-		} else {
+		if (clazz == null) {
 			try {
 				clazz = Class.forName(classname).asSubclass(IMonitoringRecord.class);
 				CACHED_KIEKERRECORDS.putIfAbsent(classname, clazz);
-				return clazz;
 			} catch (final ClassNotFoundException ex) {
 				throw new MonitoringRecordException("Failed to get record type of name " + classname, ex);
 			} catch (final ClassCastException ex) {
 				throw new MonitoringRecordException("Failed to get record type of name " + classname, ex);
 			}
 		}
+		return clazz;
 	}
 
 	/**
@@ -266,9 +326,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	 */
 	public static final Class<?>[] typesForClass(final Class<? extends IMonitoringRecord> clazz) throws MonitoringRecordException {
 		Class<?>[] types = CACHED_KIEKERRECORD_TYPES.get(clazz);
-		if (types != null) {
-			return types;
-		} else {
+		if (types == null) {
 			try {
 				if (IMonitoringRecord.Factory.class.isAssignableFrom(clazz)) {
 					final Field typesField = clazz.getDeclaredField("TYPES");
@@ -277,7 +335,6 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 					types = clazz.newInstance().getValueTypes();
 				}
 				CACHED_KIEKERRECORD_TYPES.putIfAbsent(clazz, types);
-				return types;
 			} catch (final SecurityException ex) {
 				throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
 			} catch (final NoSuchFieldException ex) {
@@ -290,6 +347,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 				throw new MonitoringRecordException("Failed to get types for monitoring record of type " + clazz.getName(), ex);
 			}
 		}
+		return types;
 	}
 
 	/**
@@ -309,7 +367,11 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		try {
 			if (IMonitoringRecord.Factory.class.isAssignableFrom(clazz)) {
 				// Factory interface present
-				final Constructor<? extends IMonitoringRecord> constructor = clazz.getConstructor(Object[].class);
+				Constructor<? extends IMonitoringRecord> constructor = CACHED_KIEKERRECORD_CONSTRUCTORS_OBJECT.get(clazz);
+				if (constructor == null) {
+					constructor = clazz.getConstructor(Object[].class);
+					CACHED_KIEKERRECORD_CONSTRUCTORS_OBJECT.putIfAbsent(clazz, constructor);
+				}
 				return constructor.newInstance((Object) values);
 			} else {
 				// try ordinary method
@@ -338,7 +400,11 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		try {
 			if (IMonitoringRecord.BinaryFactory.class.isAssignableFrom(clazz)) {
 				// Factory interface present
-				final Constructor<? extends IMonitoringRecord> constructor = clazz.getConstructor(ByteBuffer.class, IRegistry.class);
+				Constructor<? extends IMonitoringRecord> constructor = CACHED_KIEKERRECORD_CONSTRUCTORS_BINARY.get(clazz);
+				if (constructor == null) {
+					constructor = clazz.getConstructor(ByteBuffer.class, IRegistry.class);
+					CACHED_KIEKERRECORD_CONSTRUCTORS_BINARY.putIfAbsent(clazz, constructor);
+				}
 				return constructor.newInstance(buffer, stringRegistry);
 			} else {
 				// try ordinary method
@@ -365,14 +431,17 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		}
 	}
 
-	public static final IMonitoringRecord createFromStringArray(final Class<? extends IMonitoringRecord> clazz, final String[] values) throws
-			MonitoringRecordException {
+	public static final IMonitoringRecord createFromStringArray(final Class<? extends IMonitoringRecord> clazz, final String[] values)
+			throws MonitoringRecordException {
 		try {
 			if (IMonitoringRecord.Factory.class.isAssignableFrom(clazz)) {
 				// Factory interface present
-				final Constructor<? extends IMonitoringRecord> constructor = clazz.getConstructor(Object[].class);
-				final Field types = clazz.getDeclaredField("TYPES");
-				return constructor.newInstance((Object) AbstractMonitoringRecord.fromStringArrayToTypedArray(values, (Class<?>[]) types.get(null)));
+				Constructor<? extends IMonitoringRecord> constructor = CACHED_KIEKERRECORD_CONSTRUCTORS_OBJECT.get(clazz);
+				if (constructor == null) {
+					constructor = clazz.getConstructor(Object[].class);
+					CACHED_KIEKERRECORD_CONSTRUCTORS_OBJECT.putIfAbsent(clazz, constructor);
+				}
+				return constructor.newInstance((Object) AbstractMonitoringRecord.fromStringArrayToTypedArray(values, AbstractMonitoringRecord.typesForClass(clazz)));
 			} else {
 				// try ordinary method
 				final IMonitoringRecord record = clazz.newInstance();
@@ -382,8 +451,6 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		} catch (final SecurityException ex) {
 			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
 		} catch (final NoSuchMethodException ex) {
-			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
-		} catch (final NoSuchFieldException ex) {
 			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
 		} catch (final IllegalArgumentException ex) {
 			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);

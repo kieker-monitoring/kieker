@@ -44,7 +44,7 @@ public final class BenchmarkingThread extends Thread {
 
 	public final long[] getTimings() {
 		synchronized (this) {
-			return this.timings.clone();
+			return this.timings;
 		}
 	}
 
