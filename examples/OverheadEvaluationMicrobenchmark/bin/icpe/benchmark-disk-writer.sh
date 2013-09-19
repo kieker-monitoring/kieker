@@ -226,8 +226,8 @@ configs.recursion=c(${RECURSIONDEPTH})
 configs.labels=c("No Probe","Deactivated Probe","Collecting Data","Writer1","Writer2","Writer3")
 configs.colors=c("black","red","blue","green","purple","pink")
 results.count=${TOTALCALLS}
-tsconf.min=0
-tsconf.max=200
+tsconf.min=(${METHODTIME}/1000)
+tsconf.max=(${METHODTIME}/1000)+200
 source("${RSCRIPTDIR}timeseries.r")
 EOF
 # Timeseries-Average
@@ -239,8 +239,8 @@ configs.recursion=c(${RECURSIONDEPTH})
 configs.labels=c("No Probe","Deactivated Probe","Collecting Data","Writer1","Writer2","Writer3")
 configs.colors=c("black","red","blue","green","purple","pink")
 results.count=${TOTALCALLS}
-tsconf.min=0
-tsconf.max=200
+tsconf.min=(${METHODTIME}/1000)
+tsconf.max=(${METHODTIME}/1000)+200
 source("${RSCRIPTDIR}timeseries-average.r")
 EOF
 # Throughput
@@ -275,8 +275,8 @@ configs.recursion=c(${RECURSIONDEPTH})
 configs.labels=c("No Probe","Deactivated Probe","Collecting Data","Writer1","Writer2","Writer3")
 results.count=${TOTALCALLS}
 results.skip=${TOTALCALLS}/2
-bars.minval=${METHODTIME}
-bars.maxval=${METHODTIME}+200
+bars.minval=(${METHODTIME}/1000)
+bars.maxval=(${METHODTIME}/1000)+200
 source("${RSCRIPTDIR}bar.r")
 EOF
 
