@@ -26,6 +26,7 @@
 				<include name="reflections-0.9.9-RC1.jar"/>
 				<include name="geronimo-j2ee-management_1.1_spec-1.0.1.jar"/>
 				<include name="kahadb-5.7.0.jar"/>
+				<include name="slf4j-api-1.7.*.jar"/>
 			</fileset>
 			<fileset dir="${example.javaee.jetty.lib.dir}">
 				<include name="jetty-*.jar" /> <!-- needed for the cxf, spring tests -->
