@@ -39,6 +39,9 @@ import kieker.tools.bridge.connector.jms.JMSClientConnector;
  */
 public class JMSMessageGenerator implements Runnable {
 
+	private Connection connection;
+	private MessageProducer producer;
+
 	/**
 	 * Empty constructor.
 	 */
@@ -46,12 +49,9 @@ public class JMSMessageGenerator implements Runnable {
 
 	}
 
-	private Connection connection;
-	private MessageProducer producer;
-
 	/**
 	 * General run method for the message generator.
-         */
+	 */
 	public void run() {
 		this.initialize();
 		this.sendRecords();
@@ -79,10 +79,10 @@ public class JMSMessageGenerator implements Runnable {
 	}
 
 	private void sendRecords() {
-		final String messageText = ConfigurationParameters.TEST_RECORD_ID 
-				+ ";" +	ConfigurationParameters.TEST_OPERATION_SIGNATURE
-				+ ";" + ConfigurationParameters.TEST_SESSION_ID 
-				+ ";" +	ConfigurationParameters.TEST_TRACE_ID
+		final String messageText = ConfigurationParameters.TEST_RECORD_ID
+				+ ";" + ConfigurationParameters.TEST_OPERATION_SIGNATURE
+				+ ";" + ConfigurationParameters.TEST_SESSION_ID
+				+ ";" + ConfigurationParameters.TEST_TRACE_ID
 				+ ";" + ConfigurationParameters.TEST_TIN
 				+ ";" + ConfigurationParameters.TEST_TOUT
 				+ ";" + ConfigurationParameters.TEST_HOSTNAME
