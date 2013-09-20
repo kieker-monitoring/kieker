@@ -79,7 +79,7 @@
 			<fileset dir="${lib.dir}">
 				<!--<include name="aspectjrt-*.jar" />-->
 				<include name="javax.jms-*.jar" />
-				<include name="disruptor*.jar" />
+				<include name="disruptor-*.jar" />
 				<include name="sigar-*.jar" />
 				<include name="framework-libs/javax.servlet-*.jar" />
 				<include name="framework-libs/cxf/cxf-*.jar" />

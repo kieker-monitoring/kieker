@@ -23,6 +23,7 @@ import java.nio.channels.SocketChannel;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
@@ -35,11 +36,10 @@ import kieker.common.record.misc.RegistryRecord;
 import kieker.common.util.registry.IRegistry;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
-import kieker.monitoring.writer.MonitoringRecordDisruptorEvent;
 
 /**
  * 
- * @author Jan Waller
+ * @author Florian Fittkau, Jan Waller
  * 
  * @since 1.8
  */
@@ -103,7 +103,7 @@ public final class TCPDisruptorWriter extends AbstractMonitoringWriter {
 
 /**
  * 
- * @author Jan Waller
+ * @author Florian Fittkau, Jan Waller
  * 
  * @since 1.8
  */
@@ -166,4 +166,30 @@ final class TCPWriterEventHandler implements EventHandler<MonitoringRecordDisrup
 			}
 		}
 	}
+}
+
+/**
+ * WARNING: This is a mutable object which will be recycled by the RingBuffer.
+ * You must take a copy of data it holds before the framework recycles it.
+ * 
+ * @author Florian Fittkau, Jan Waller
+ * 
+ * @since 1.8
+ */
+final class MonitoringRecordDisruptorEvent {
+	private IMonitoringRecord value;
+
+	public final IMonitoringRecord getValue() {
+		return this.value;
+	}
+
+	public void setValue(final IMonitoringRecord value) {
+		this.value = value;
+	}
+
+	public final static EventFactory<MonitoringRecordDisruptorEvent> EVENT_FACTORY = new EventFactory<MonitoringRecordDisruptorEvent>() {
+		public MonitoringRecordDisruptorEvent newInstance() {
+			return new MonitoringRecordDisruptorEvent();
+		}
+	};
 }

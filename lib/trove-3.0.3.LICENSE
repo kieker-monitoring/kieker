@@ -1,3 +1,21 @@
+ Lesser GNU Public License - LGPL - v2.1
+Project: http://trove.starlight-systems.com/
+Description: Fast data exchange structures.
+License: http://www.gnu.org/licenses/lgpl-2.1.html
+
+
+Two classes (HashFunctions and PrimeFinder) included in Trove are licensed 
+under the following terms: 
+Copyright (c) 1999 CERN - European Organization for Nuclear Research.
+Permission to use, copy, modify, distribute and sell this software and 
+its documentation for any purpose is hereby granted without fee, provided 
+that the above copyright notice appear in all copies and that both that 
+copyright notice and this permission notice appear in supporting documentation. 
+CERN makes no representations about the suitability of this software for any 
+purpose. It is provided "as is" without expressed or implied warranty.
+
+
+
           GNU LESSER GENERAL PUBLIC LICENSE
                Version 2.1, February 1999
 
