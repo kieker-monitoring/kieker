@@ -75,7 +75,7 @@ public class TCPMultiServerConnector extends AbstractConnector {
 	/**
 	 * Initializes internal queues and an executor pool for communication.
 	 * 
-	 * @see kieker.tools.bridge.connector.tcp.AbstractTCPConnector#initialize()
+	 * @see kieker.tools.bridge.connector.AbstractConnector#initialize()
 	 * 
 	 * @throws ConnectorDataTransmissionException
 	 *             when the server socket cannot be acquired
