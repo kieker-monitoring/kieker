@@ -32,9 +32,6 @@ import kieker.common.util.registry.IRegistry;
  * @author Jan Waller
  * 
  * @since 1.5
- * 
- * @param <E>
- *            any object type.
  */
 public final class RegistryRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 	public static final int SIZE = 8; // without the String itself!
