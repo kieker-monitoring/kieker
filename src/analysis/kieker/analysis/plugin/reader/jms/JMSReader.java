@@ -222,23 +222,26 @@ public final class JMSReader extends AbstractReaderPlugin {
 		}
 
 		public void onMessage(final Message jmsMessage) {
-			if (jmsMessage instanceof ObjectMessage) {
-				try {
-					final ObjectMessage om = (ObjectMessage) jmsMessage;
-					final Serializable omo = om.getObject();
-					if ((omo instanceof IMonitoringRecord) && (!JMSReader.this.deliverIndirect(OUTPUT_PORT_NAME_RECORDS, omo))) {
-						LOG.error("deliverRecord returned false");
-					}
-				} catch (final MessageFormatException ex) {
-					LOG.error("Error delivering record", ex);
-				} catch (final JMSException ex) {
-					LOG.error("Error delivering record", ex);
-				} catch (final Exception ex) { // NOPMD NOCS (catch Exception)
-					LOG.error("Error delivering record", ex);
-				}
-
+			if (jmsMessage == null) {
+				LOG.warn("Received null message");
 			} else {
-				LOG.warn("Received message of invalid type: " + jmsMessage.getClass().getName());
+				if (jmsMessage instanceof ObjectMessage) {
+					try {
+						final ObjectMessage om = (ObjectMessage) jmsMessage;
+						final Serializable omo = om.getObject();
+						if ((omo instanceof IMonitoringRecord) && (!JMSReader.this.deliverIndirect(OUTPUT_PORT_NAME_RECORDS, omo))) {
+							LOG.error("deliverRecord returned false");
+						}
+					} catch (final MessageFormatException ex) {
+						LOG.error("Error delivering record", ex);
+					} catch (final JMSException ex) {
+						LOG.error("Error delivering record", ex);
+					} catch (final Exception ex) { // NOPMD NOCS (catch Exception)
+						LOG.error("Error delivering record", ex);
+					}
+				} else {
+					LOG.warn("Received message of invalid type: " + jmsMessage.getClass().getName());
+				}
 			}
 		}
 	}
