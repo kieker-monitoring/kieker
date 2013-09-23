@@ -30,7 +30,6 @@ import javax.jms.MessageFormatException;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.Session;
-import javax.jms.TextMessage;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
@@ -223,10 +222,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 		}
 
 		public void onMessage(final Message jmsMessage) {
-			if (jmsMessage instanceof TextMessage) {
-				final TextMessage text = (TextMessage) jmsMessage;
-				LOG.info("Received text message: " + text);
-			} else {
+			if (jmsMessage instanceof ObjectMessage) {
 				try {
 					final ObjectMessage om = (ObjectMessage) jmsMessage;
 					final Serializable omo = om.getObject();
@@ -240,6 +236,9 @@ public final class JMSReader extends AbstractReaderPlugin {
 				} catch (final Exception ex) { // NOPMD NOCS (catch Exception)
 					LOG.error("Error delivering record", ex);
 				}
+
+			} else {
+				LOG.warn("Received message of invalid type: " + jmsMessage.getClass().getName());
 			}
 		}
 	}
