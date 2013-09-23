@@ -16,19 +16,21 @@
 
 package kieker.evaluation.benchmark;
 
+import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 
 import kieker.evaluation.monitoredApplication.MonitoredClass;
-import kieker.tools.util.CLIHelpFormatter;
 
 /**
  * @author Jan Waller
@@ -42,6 +44,7 @@ public final class Benchmark {
 	private static int totalCalls = 0;
 	private static long methodTime = 0;
 	private static int recursionDepth = 0;
+	private static boolean quickstart = false;
 
 	static {
 		try {
@@ -71,24 +74,28 @@ public final class Benchmark {
 		final BenchmarkingThread[] threads = new BenchmarkingThread[Benchmark.totalThreads];
 		for (int i = 0; i < Benchmark.totalThreads; i++) {
 			threads[i] = new BenchmarkingThread(mc, Benchmark.totalCalls, Benchmark.methodTime, Benchmark.recursionDepth, doneSignal);
+			threads[i].setName(String.valueOf(i + 1));
 		}
-		for (int l = 0; l < 4; l++) {
-			{ // NOCS (reserve mem only within the block)
-				final long freeMemChunks = Runtime.getRuntime().freeMemory() >> 27;
-				// System.out.println("Free-Mem: " + Runtime.getRuntime().freeMemory());
-				final int memSize = 128 * 1024 * 128; // memSize * 8 = total Bytes -> 128MB
-				for (int j = 0; j < freeMemChunks; j++) {
-					final long[] grabMemory = new long[memSize];
-					for (int i = 0; i < memSize; i++) {
-						grabMemory[i] = System.nanoTime();
+		if (!quickstart) {
+			for (int l = 0; l < 4; l++) {
+				{ // NOCS (reserve mem only within the block)
+					final long freeMemChunks = Runtime.getRuntime().freeMemory() >> 27;
+					// System.out.println("Free-Mem: " + Runtime.getRuntime().freeMemory());
+					final int memSize = 128 * 1024 * 128; // memSize * 8 = total Bytes -> 128MB
+					for (int j = 0; j < freeMemChunks; j++) {
+						final long[] grabMemory = new long[memSize];
+						for (int i = 0; i < memSize; i++) {
+							grabMemory[i] = System.nanoTime();
+						}
 					}
+					// System.out.println("done grabbing memory...");
+					// System.out.println("Free-Mem: " + Runtime.getRuntime().freeMemory());
 				}
-				// System.out.println("done grabbing memory...");
-				// System.out.println("Free-Mem: " + Runtime.getRuntime().freeMemory());
+				Thread.sleep(5000);
 			}
-			Thread.sleep(5000);
 		}
-		System.out.print(" # 6. Starting benchmark ... "); // NOPMD (System.out)
+		final long startTime = System.currentTimeMillis();
+		System.out.print(" # 6. Starting benchmark ..."); // NOPMD (System.out)
 		// 3. Starting Threads
 		for (int i = 0; i < Benchmark.totalThreads; i++) {
 			threads[i].start();
@@ -101,7 +108,8 @@ public final class Benchmark {
 			e.printStackTrace(); // NOPMD (Stacktrace)
 			System.exit(-1);
 		}
-		System.out.println("done"); // NOPMD (System.out)
+		final long totalTime = System.currentTimeMillis() - startTime;
+		System.out.println("done (" + TimeUnit.MILLISECONDS.toSeconds(totalTime) + " s)"); // NOPMD (System.out)
 
 		// 5. Print experiment statistics
 		System.out.print(" # 7. Writing results ... "); // NOPMD (System.out)
@@ -134,6 +142,7 @@ public final class Benchmark {
 				.withDescription("Depth of Recursion performed.").withValueSeparator('=').create("d"));
 		cmdlOpts.addOption(OptionBuilder.withLongOpt("output-filename").withArgName("filename").hasArg(true).isRequired(true)
 				.withDescription("Filename of results file. Output is appended if file exists.").withValueSeparator('=').create("o"));
+		cmdlOpts.addOption(OptionBuilder.withLongOpt("quickstart").isRequired(false).withDescription("Skips initial Garbage Collection.").create("q"));
 		try {
 			CommandLine cmdl = null;
 			final CommandLineParser cmdlParser = new BasicParser();
@@ -143,9 +152,10 @@ public final class Benchmark {
 			Benchmark.methodTime = Integer.parseInt(cmdl.getOptionValue("methodtime"));
 			Benchmark.totalThreads = Integer.parseInt(cmdl.getOptionValue("totalthreads"));
 			Benchmark.recursionDepth = Integer.parseInt(cmdl.getOptionValue("recursiondepth"));
-			Benchmark.ps = new PrintStream(new FileOutputStream(Benchmark.outputFn, true), false, Benchmark.ENCODING);
+			Benchmark.quickstart = cmdl.hasOption("quickstart");
+			Benchmark.ps = new PrintStream(new BufferedOutputStream(new FileOutputStream(Benchmark.outputFn, true), 8192 * 8), false, Benchmark.ENCODING);
 		} catch (final Exception ex) { // NOCS (e.g., IOException, ParseException, NumberFormatException)
-			new CLIHelpFormatter().printHelp(Benchmark.class.getName(), cmdlOpts);
+			new HelpFormatter().printHelp(Benchmark.class.getName(), cmdlOpts);
 			ex.printStackTrace(); // NOPMD (Stacktrace)
 			System.exit(-1);
 		}

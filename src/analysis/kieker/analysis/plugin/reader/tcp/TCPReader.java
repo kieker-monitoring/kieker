@@ -115,8 +115,7 @@ public final class TCPReader extends AbstractReaderPlugin {
 						final long loggingTimestamp = buffer.getLong();
 						final IMonitoringRecord record;
 						try { // NOCS (Nested try-catch)
-							final String str = this.stringRegistry.get(clazzid);
-							record = AbstractMonitoringRecord.createFromByteBuffer(str, buffer, this.stringRegistry);
+							record = AbstractMonitoringRecord.createFromByteBuffer(clazzid, buffer, this.stringRegistry);
 							record.setLoggingTimestamp(loggingTimestamp);
 							super.deliver(OUTPUT_PORT_NAME_RECORDS, record);
 						} catch (final MonitoringRecordException ex) {
