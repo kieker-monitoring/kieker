@@ -16,10 +16,14 @@
 
 package kieker.test.common.junit.record.flow.trace.concurrency;
 
+import java.nio.ByteBuffer;
+
 import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.flow.trace.concurrency.JoinEvent;
+import kieker.common.util.registry.IRegistry;
+import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 
@@ -61,6 +65,30 @@ public class TestJoinEvent extends AbstractKiekerTest {
 		final Object[] event1Array = event1.toArray();
 
 		final JoinEvent event2 = new JoinEvent(event1Array);
+
+		Assert.assertEquals(event1, event2);
+		Assert.assertEquals(0, event1.compareTo(event2));
+	}
+
+	/**
+	 * Tests the constructor and writeBytes(..) methods of {@link JoinEvent}.
+	 */
+	@Test
+	public void testSerializeDeserializeBinaryEquals() {
+
+		final JoinEvent event1 = new JoinEvent(TSTAMP, TRACE_ID, ORDER_INDEX, JOINED_TRACE_ID);
+
+		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
+		Assert.assertEquals("Unexpected trace ID", TRACE_ID, event1.getTraceId());
+		Assert.assertEquals("Unexpected order index", ORDER_INDEX, event1.getOrderIndex());
+		Assert.assertEquals("Unexpected joined trace id", JOINED_TRACE_ID, event1.getJoinedTraceId());
+
+		final IRegistry<String> stringRegistry = new Registry<String>();
+		final ByteBuffer buffer = ByteBuffer.allocate(event1.getSize());
+		event1.writeBytes(buffer, stringRegistry);
+		buffer.flip();
+
+		final JoinEvent event2 = new JoinEvent(buffer, stringRegistry);
 
 		Assert.assertEquals(event1, event2);
 		Assert.assertEquals(0, event1.compareTo(event2));

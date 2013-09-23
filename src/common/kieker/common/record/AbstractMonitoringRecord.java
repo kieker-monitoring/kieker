@@ -19,12 +19,14 @@ package kieker.common.record;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.security.PrivilegedAction;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import kieker.common.exception.MonitoringRecordException;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Andre van Hoorn, Jan Waller
@@ -46,6 +48,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		CACHED_KIEKERRECORDS.put("kieker.common.record.OperationExecutionRecord", kieker.common.record.controlflow.OperationExecutionRecord.class);
 		CACHED_KIEKERRECORDS.put("kieker.common.record.BranchingRecord", kieker.common.record.controlflow.BranchingRecord.class);
 		CACHED_KIEKERRECORDS.put("kieker.monitoring.core.registry.RegistryRecord", kieker.common.record.misc.RegistryRecord.class);
+		CACHED_KIEKERRECORDS.put("kieker.common.record.flow.trace.Trace", kieker.common.record.flow.trace.TraceMetadata.class);
 	}
 
 	public final long getLoggingTimestamp() {
@@ -269,12 +272,6 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 			try {
 				if (IMonitoringRecord.Factory.class.isAssignableFrom(clazz)) {
 					final Field typesField = clazz.getDeclaredField("TYPES");
-					java.security.AccessController.doPrivileged(new PrivilegedAction<Object>() {
-						public Object run() {
-							typesField.setAccessible(true);
-							return null;
-						}
-					});
 					types = (Class<?>[]) typesField.get(null);
 				} else {
 					types = clazz.newInstance().getValueTypes();
@@ -335,6 +332,39 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		}
 	}
 
+	public static final IMonitoringRecord createFromByteBuffer(final String clazzname, final ByteBuffer buffer, final IRegistry<String> stringRegistry)
+			throws MonitoringRecordException, BufferUnderflowException {
+		final Class<? extends IMonitoringRecord> clazz = AbstractMonitoringRecord.classForName(clazzname);
+		try {
+			if (IMonitoringRecord.BinaryFactory.class.isAssignableFrom(clazz)) {
+				// Factory interface present
+				final Constructor<? extends IMonitoringRecord> constructor = clazz.getConstructor(ByteBuffer.class, IRegistry.class);
+				return constructor.newInstance(buffer, stringRegistry);
+			} else {
+				// try ordinary method
+				final IMonitoringRecord record = clazz.newInstance();
+				record.initFromBytes(buffer, stringRegistry);
+				return record;
+			}
+		} catch (final SecurityException ex) {
+			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
+		} catch (final NoSuchMethodException ex) {
+			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
+		} catch (final IllegalArgumentException ex) {
+			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
+		} catch (final InstantiationException ex) {
+			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
+		} catch (final IllegalAccessException ex) {
+			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
+		} catch (final InvocationTargetException ex) {
+			final Throwable cause = ex.getCause();
+			if (cause instanceof BufferUnderflowException) {
+				throw (BufferUnderflowException) cause;
+			}
+			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
+		}
+	}
+
 	public static final IMonitoringRecord createFromStringArray(final Class<? extends IMonitoringRecord> clazz, final String[] values) throws
 			MonitoringRecordException {
 		try {
@@ -342,12 +372,6 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 				// Factory interface present
 				final Constructor<? extends IMonitoringRecord> constructor = clazz.getConstructor(Object[].class);
 				final Field types = clazz.getDeclaredField("TYPES");
-				java.security.AccessController.doPrivileged(new PrivilegedAction<Object>() {
-					public Object run() {
-						types.setAccessible(true);
-						return null;
-					}
-				});
 				return constructor.newInstance((Object) AbstractMonitoringRecord.fromStringArrayToTypedArray(values, (Class<?>[]) types.get(null)));
 			} else {
 				// try ordinary method

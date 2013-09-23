@@ -19,22 +19,30 @@
  */
 package kieker.common.record.system;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Andre van Hoorn, Jan Waller
  * 
  * @since 1.3
  */
-public final class ResourceUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-	private static final long serialVersionUID = 8412442607068036054L;
-	private static final Class<?>[] TYPES = {
+public class ResourceUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
+	public static final int SIZE = 24;
+	public static final Class<?>[] TYPES = {
 		long.class,
 		String.class,
 		String.class,
 		double.class,
 	};
+
+	private static final long serialVersionUID = 3633890084086058413L;
+
 	private static final String DEFAULT_VALUE = "N/A";
 
 	/**
@@ -91,10 +99,36 @@ public final class ResourceUtilizationRecord extends AbstractMonitoringRecord im
 	}
 
 	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public ResourceUtilizationRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		this.timestamp = buffer.getLong();
+		this.hostname = stringRegistry.get(buffer.getInt());
+		this.resourceName = stringRegistry.get(buffer.getInt());
+		this.utilization = buffer.getDouble();
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public Object[] toArray() {
-		return new Object[] { this.timestamp, this.hostname, this.resourceName, this.utilization, };
+		return new Object[] { this.getTimestamp(), this.getHostname(), this.getResourceName(), this.getUtilization(), };
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		buffer.putLong(this.getTimestamp());
+		buffer.putInt(stringRegistry.get(this.getHostname()));
+		buffer.putInt(stringRegistry.get(this.getResourceName()));
+		buffer.putDouble(this.getUtilization());
 	}
 
 	/**
@@ -103,7 +137,17 @@ public final class ResourceUtilizationRecord extends AbstractMonitoringRecord im
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Deprecated
-	public void initFromArray(final Object[] values) {
+	public final void initFromArray(final Object[] values) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
+	 */
+	@Deprecated
+	public final void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 
@@ -112,6 +156,13 @@ public final class ResourceUtilizationRecord extends AbstractMonitoringRecord im
 	 */
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public int getSize() {
+		return SIZE;
 	}
 
 	/**

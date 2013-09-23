@@ -22,7 +22,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
-import kieker.common.record.flow.trace.Trace;
+import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.object.AfterOperationFailedObjectEvent;
 import kieker.common.record.flow.trace.operation.object.AfterOperationObjectEvent;
 import kieker.common.record.flow.trace.operation.object.BeforeOperationObjectEvent;
@@ -59,7 +59,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			return thisJoinPoint.proceed();
 		}
 		// common fields
-		Trace trace = TRACEREGISTRY.getTrace();
+		TraceMetadata trace = TRACEREGISTRY.getTrace();
 		final boolean newTrace = trace == null;
 		if (newTrace) {
 			trace = TRACEREGISTRY.registerTrace();
@@ -110,7 +110,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			return thisJoinPoint.proceed();
 		}
 		// common fields
-		Trace trace = TRACEREGISTRY.getTrace();
+		TraceMetadata trace = TRACEREGISTRY.getTrace();
 		final boolean newTrace = trace == null;
 		if (newTrace) {
 			trace = TRACEREGISTRY.registerTrace();

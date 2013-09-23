@@ -46,13 +46,13 @@ public final class StringMappingFileWriter {
 	 * @throws IOException
 	 *             Should not happen under normal circumstances.
 	 */
-	public final void write(final RegistryRecord<String> hashRecord) throws IOException {
+	public final void write(final RegistryRecord hashRecord) throws IOException {
 		synchronized (this.sb) {
 			final StringBuilder sbl = this.sb;
 			sbl.append('$');
 			sbl.append(hashRecord.getId());
 			sbl.append('=');
-			sbl.append(FSUtil.encodeNewline(hashRecord.getObject()));
+			sbl.append(FSUtil.encodeNewline(hashRecord.getString()));
 			sbl.append('\n');
 		}
 	}

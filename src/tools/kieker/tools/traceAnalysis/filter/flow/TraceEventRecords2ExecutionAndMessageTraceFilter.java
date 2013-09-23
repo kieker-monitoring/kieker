@@ -29,7 +29,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
-import kieker.common.record.flow.trace.Trace;
+import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.concurrency.SplitEvent;
 import kieker.common.record.flow.trace.operation.AbstractOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
@@ -125,7 +125,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 	 */
 	@InputPort(name = INPUT_PORT_NAME_EVENT_TRACE, description = "Receives TraceEvents to be transformed", eventTypes = { TraceEventRecords.class })
 	public void inputTraceEvents(final TraceEventRecords traceEventRecords) {
-		final Trace trace = traceEventRecords.getTrace();
+		final TraceMetadata trace = traceEventRecords.getTrace();
 		if (trace == null) {
 			LOG.error("Trace is missing from TraceEvents");
 			return;
@@ -193,7 +193,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 	 */
 	private static class TraceEventRecordHandler {
 		private final SystemModelRepository systemModelRepository;
-		private final Trace trace;
+		private final TraceMetadata trace;
 		private final ExecutionTrace executionTrace;
 		private final Stack<AbstractTraceEvent> eventStack = new Stack<AbstractTraceEvent>();
 		private final Stack<ExecutionInformation> executionStack = new Stack<ExecutionInformation>();
@@ -203,7 +203,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 
 		private int orderindex;
 
-		public TraceEventRecordHandler(final Trace trace, final ExecutionTrace executionTrace, final SystemModelRepository systemModelRepository,
+		public TraceEventRecordHandler(final TraceMetadata trace, final ExecutionTrace executionTrace, final SystemModelRepository systemModelRepository,
 				final boolean enhanceJavaConstructors, final boolean enhanceCallDetection) {
 			this.trace = trace;
 			this.executionTrace = executionTrace;

@@ -44,7 +44,7 @@ import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
 /**
  * @author Jan Waller
  * 
- * @since 1.5
+ * @since 1.8
  */
 public class BasicJMXWriterReaderTest extends AbstractWriterReaderTest { // NOPMD NOCS (TestClassWithoutTestCases)
 

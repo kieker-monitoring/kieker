@@ -41,6 +41,9 @@ public class FilesystemLogReplayer extends AbstractLogReplayer {
 	 *            The name of the monitoring configuration file.
 	 * @param realtimeMode
 	 *            Whether realtime mode should be used.
+	 * @param realtimeAccelerationFactor
+	 *            Determines whether to accelerate (value > 1.0) or slow down (<1.0) the replay in realtime mode by the given factor.
+	 *            Choose a value of 1.0 for "real" realtime mode (i.e., no acceleration/slow down)
 	 * @param keepOriginalLoggingTimestamps
 	 *            Whether to keep the original logging timestamps or not.
 	 * @param numRealtimeWorkerThreads
@@ -52,10 +55,12 @@ public class FilesystemLogReplayer extends AbstractLogReplayer {
 	 * @param inputDirs
 	 *            The array containing the input directories.
 	 */
-	public FilesystemLogReplayer(final String monitoringConfigurationFile, final boolean realtimeMode, final boolean keepOriginalLoggingTimestamps,
+	public FilesystemLogReplayer(final String monitoringConfigurationFile, final boolean realtimeMode, final double realtimeAccelerationFactor,
+			final boolean keepOriginalLoggingTimestamps,
 			final int numRealtimeWorkerThreads, final long ignoreRecordsBeforeTimestamp, final long ignoreRecordsAfterTimestamp,
 			final String[] inputDirs) {
-		super(monitoringConfigurationFile, realtimeMode, keepOriginalLoggingTimestamps, numRealtimeWorkerThreads, ignoreRecordsBeforeTimestamp,
+		super(monitoringConfigurationFile, realtimeMode, realtimeAccelerationFactor, keepOriginalLoggingTimestamps, numRealtimeWorkerThreads,
+				ignoreRecordsBeforeTimestamp,
 				ignoreRecordsAfterTimestamp);
 		// Java 1.5 compatibility
 		this.inputDirs = new String[inputDirs.length];

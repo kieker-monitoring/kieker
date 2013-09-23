@@ -16,12 +16,9 @@
 
 package kieker.analysis.plugin.filter.forward;
 
-import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicLong;
 
 import kieker.analysis.IProjectContext;
-import kieker.analysis.display.Image;
-import kieker.analysis.display.MeterGauge;
 import kieker.analysis.display.PlainText;
 import kieker.analysis.display.XYPlot;
 import kieker.analysis.display.annotation.Display;
@@ -36,7 +33,7 @@ import kieker.common.configuration.Configuration;
  * unchanged objects to the output. The value of the counter can be retrieved by connected to the respective output port using a
  * corresponding method.
  * 
- * @author Jan Waller
+ * @author Jan Waller, Nils Christian Ehmke
  * 
  * @since 1.4
  */
@@ -67,9 +64,7 @@ public final class CountingFilter extends AbstractFilterPlugin {
 	private volatile long timeStampOfInitialization;
 
 	private final PlainText plainText = new PlainText();
-	private final MeterGauge meterGauge = new MeterGauge();
 	private final XYPlot xyPlot = new XYPlot(50);
-	private final Image image = new Image();
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -117,34 +112,12 @@ public final class CountingFilter extends AbstractFilterPlugin {
 	}
 
 	private void updateDisplays() {
-		// Meter gauge
-		this.meterGauge.setIntervals("", Arrays.asList((Number) 10, 20, 40, 100), Arrays.asList("66cc66, 93b75f, E7E658, cc6666"));
-		this.meterGauge.setValue("", this.counter);
-
 		// XY Plot
 		final long timeStampDeltaInSeconds = (System.currentTimeMillis() - this.timeStampOfInitialization) / 1000;
 		this.xyPlot.setEntry("", timeStampDeltaInSeconds, this.counter.get());
 
 		// Plain text
 		this.plainText.setText(Long.toString(this.counter.get()));
-
-		// Image
-
-		// final String value = Long.toString(this.counter.get());
-		// final int width = this.image.getImage().getWidth();
-		// final int height = this.image.getImage().getHeight();
-		// final Graphics2D g = this.image.getGraphics();
-		//
-		// g.setFont(g.getFont().deriveFont(20.0f));
-		//
-		// g.setColor(Color.white);
-		// g.fillRect(0, 0, width - 1, height - 1);
-		// g.setColor(Color.gray);
-		// g.drawRect(0, 0, width - 2, height - 2);
-		//
-		// final Rectangle2D bounds = g.getFontMetrics().getStringBounds(value, g);
-		//
-		// g.drawString(value, (int) (width - bounds.getWidth()) / 2, (int) (height - bounds.getHeight()) / 2);
 
 	}
 
@@ -158,11 +131,6 @@ public final class CountingFilter extends AbstractFilterPlugin {
 		}
 	}
 
-	@Display(name = "Visual Counter Display")
-	public final Image imageDisplay() {
-		return this.image;
-	}
-
 	@Display(name = "Counter Display")
 	public final PlainText plainTextDisplay() {
 		return this.plainText;
@@ -171,11 +139,6 @@ public final class CountingFilter extends AbstractFilterPlugin {
 	@Display(name = "XYPlot Counter Display")
 	public final XYPlot xyPlotDisplay() {
 		return this.xyPlot;
-	}
-
-	@Display(name = "Meter Gauge Counter Display")
-	public final MeterGauge meterGaugeDisplay() {
-		return this.meterGauge;
 	}
 
 }

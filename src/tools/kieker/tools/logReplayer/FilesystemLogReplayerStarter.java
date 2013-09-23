@@ -56,6 +56,7 @@ public final class FilesystemLogReplayerStarter {
 	private static final String CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS = "keep-logging-timestamps";
 	private static final String CMD_OPT_NAME_REALTIME = "realtime";
 	private static final String CMD_OPT_NAME_NUM_REALTIME_WORKERS = "realtime-worker-threads";
+	private static final String CMD_OPT_NAME_REALTIME_ACCELERATION_FACTOR = "realtime-acceleration-factor";
 	private static final String CMD_OPT_NAME_IGNORERECORDSBEFOREDATE = "ignore-records-before-date";
 	private static final String CMD_OPT_NAME_IGNORERECORDSAFTERDATE = "ignore-records-after-date";
 	private static final String DATE_FORMAT_PATTERN = "yyyyMMdd'-'HHmmss";
@@ -68,6 +69,7 @@ public final class FilesystemLogReplayerStarter {
 	private static String[] inputDirs;
 	private static boolean keepOriginalLoggingTimestamps;
 	private static boolean realtimeMode;
+	private static double realtimeAccelerationFactor;
 	private static int numRealtimeWorkerThreads = -1;
 	private static long ignoreRecordsBeforeTimestamp = FilesystemLogReplayer.MIN_TIMESTAMP;
 	private static long ignoreRecordsAfterTimestamp = FilesystemLogReplayer.MAX_TIMESTAMP;
@@ -93,6 +95,14 @@ public final class FilesystemLogReplayerStarter {
 		CMDL_OPTS.addOption(OptionBuilder.withArgName("num").hasArg()
 				.withLongOpt(CMD_OPT_NAME_NUM_REALTIME_WORKERS).isRequired(false)
 				.withDescription("Number of worker threads used in realtime mode (defaults to 1).").withValueSeparator('=').create("n"));
+		CMDL_OPTS.addOption(OptionBuilder
+				.withArgName("factor")
+				.hasArg()
+				.withLongOpt(CMD_OPT_NAME_REALTIME_ACCELERATION_FACTOR)
+				.isRequired(false)
+				.withDescription(
+						"Factor by which to accelerate (>1.0) or slow down (<1.0) the replay in realtime mode (defaults to 1.0, i.e., no acceleration/slow down).")
+				.withValueSeparator('=').create("a"));
 		CMDL_OPTS.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_IGNORERECORDSBEFOREDATE)
 				.withArgName(DATE_FORMAT_PATTERN_CMD_USAGE_HELP).hasArg().isRequired(false)
 				.withDescription("Records logged before this date (UTC timezone) are ignored (disabled by default).").create());
@@ -179,7 +189,26 @@ public final class FilesystemLogReplayerStarter {
 			retVal = false;
 		}
 
-		// 5.) init ignoreRecordsBefore/After
+		// 5.) init realtimeAccelerationFactor
+		final String realtimeAccelerationFactorStr = FilesystemLogReplayerStarter.cmdl.getOptionValue(CMD_OPT_NAME_REALTIME_ACCELERATION_FACTOR,
+				"1");
+		try {
+			FilesystemLogReplayerStarter.realtimeAccelerationFactor = Double.parseDouble(realtimeAccelerationFactorStr);
+		} catch (final NumberFormatException ex) {
+			System.out.println("Invalid value for option " + CMD_OPT_NAME_REALTIME_ACCELERATION_FACTOR + ": '" + numRealtimeWorkerThreadsStr // NOPMD (System.out)
+					+ "'");
+			LOG.error("NumberFormatException: ", ex);
+			retVal = false;
+		}
+		if (FilesystemLogReplayerStarter.numRealtimeWorkerThreads <= 0) {
+			System.out.println("Option value for " + CMD_OPT_NAME_REALTIME_ACCELERATION_FACTOR + " must be > 0; found " // NOPMD (System.out)
+					+ FilesystemLogReplayerStarter.realtimeAccelerationFactor);
+			LOG.error("Invalid specification of " + CMD_OPT_NAME_REALTIME_ACCELERATION_FACTOR + ":"
+					+ FilesystemLogReplayerStarter.realtimeAccelerationFactor);
+			retVal = false;
+		}
+
+		// 6.) init ignoreRecordsBefore/After
 		final DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT_PATTERN, Locale.US);
 		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
@@ -254,9 +283,8 @@ public final class FilesystemLogReplayerStarter {
 			LOG.info("Replaying log data in non-real time");
 		}
 
-		final FilesystemLogReplayer player = new FilesystemLogReplayer(monitoringConfigurationFile, realtimeMode, keepOriginalLoggingTimestamps,
-				numRealtimeWorkerThreads,
-				ignoreRecordsBeforeTimestamp, ignoreRecordsAfterTimestamp, inputDirs);
+		final FilesystemLogReplayer player = new FilesystemLogReplayer(monitoringConfigurationFile, realtimeMode, realtimeAccelerationFactor,
+				keepOriginalLoggingTimestamps, numRealtimeWorkerThreads, ignoreRecordsBeforeTimestamp, ignoreRecordsAfterTimestamp, inputDirs);
 
 		if (!player.replay()) {
 			System.err.println("An error occured"); // NOPMD (System.out)

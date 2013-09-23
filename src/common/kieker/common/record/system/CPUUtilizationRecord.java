@@ -16,17 +16,22 @@
 
 package kieker.common.record.system;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Andre van Hoorn, Jan Waller
  * 
  * @since 1.3
  */
-public final class CPUUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-	private static final long serialVersionUID = 229860008090066333L;
-	private static final Class<?>[] TYPES = {
+public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
+	public static final int SIZE = 72;
+	public static final Class<?>[] TYPES = {
 		long.class,
 		String.class,
 		String.class,
@@ -38,6 +43,9 @@ public final class CPUUtilizationRecord extends AbstractMonitoringRecord impleme
 		double.class,
 		double.class,
 	};
+
+	private static final long serialVersionUID = -6855133162344169157L;
+
 	private static final String DEFAULT_VALUE = "N/A";
 
 	/**
@@ -158,10 +166,49 @@ public final class CPUUtilizationRecord extends AbstractMonitoringRecord impleme
 	}
 
 	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public CPUUtilizationRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		this.timestamp = buffer.getLong();
+		this.hostname = stringRegistry.get(buffer.getInt());
+		this.cpuID = stringRegistry.get(buffer.getInt());
+		this.user = buffer.getDouble();
+		this.system = buffer.getDouble();
+		this.wait = buffer.getDouble();
+		this.nice = buffer.getDouble();
+		this.irq = buffer.getDouble();
+		this.totalUtilization = buffer.getDouble();
+		this.idle = buffer.getDouble();
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public Object[] toArray() {
-		return new Object[] { this.timestamp, this.hostname, this.cpuID, this.user, this.system, this.wait, this.nice, this.irq, this.totalUtilization, this.idle, };
+		return new Object[] { this.getTimestamp(), this.getHostname(), this.getCpuID(), this.getUser(), this.getSystem(), this.getWait(), this.getNice(),
+			this.getIrq(), this.getTotalUtilization(), this.getIdle(), };
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		buffer.putLong(this.getTimestamp());
+		buffer.putInt(stringRegistry.get(this.getHostname()));
+		buffer.putInt(stringRegistry.get(this.getCpuID()));
+		buffer.putDouble(this.getUser());
+		buffer.putDouble(this.getSystem());
+		buffer.putDouble(this.getWait());
+		buffer.putDouble(this.getNice());
+		buffer.putDouble(this.getIrq());
+		buffer.putDouble(this.getTotalUtilization());
+		buffer.putDouble(this.getIdle());
 	}
 
 	/**
@@ -170,7 +217,17 @@ public final class CPUUtilizationRecord extends AbstractMonitoringRecord impleme
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Deprecated
-	public void initFromArray(final Object[] values) {
+	public final void initFromArray(final Object[] values) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
+	 */
+	@Deprecated
+	public final void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 
@@ -179,6 +236,13 @@ public final class CPUUtilizationRecord extends AbstractMonitoringRecord impleme
 	 */
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public int getSize() {
+		return SIZE;
 	}
 
 	/**

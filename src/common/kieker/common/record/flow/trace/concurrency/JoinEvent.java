@@ -16,7 +16,12 @@
 
 package kieker.common.record.flow.trace.concurrency;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.flow.trace.AbstractTraceEvent;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Jan Waller
@@ -24,13 +29,15 @@ import kieker.common.record.flow.trace.AbstractTraceEvent;
  * @since 1.8
  */
 public class JoinEvent extends AbstractTraceEvent {
-	private static final long serialVersionUID = 8348010228570530470L;
-	private static final Class<?>[] TYPES = {
+	public static final int SIZE = 28;
+	public static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
 		int.class, // TraceEvent.orderIndex
 		long.class, // joined traceId
 	};
+
+	private static final long serialVersionUID = -1563708328738468792L;
 
 	private final long joinedTraceId;
 
@@ -76,6 +83,20 @@ public class JoinEvent extends AbstractTraceEvent {
 	}
 
 	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public JoinEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		super(buffer, stringRegistry);
+		this.joinedTraceId = buffer.getLong();
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public Object[] toArray() {
@@ -85,11 +106,28 @@ public class JoinEvent extends AbstractTraceEvent {
 	/**
 	 * {@inheritDoc}
 	 */
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		buffer.putLong(this.getTimestamp());
+		buffer.putLong(this.getTraceId());
+		buffer.putInt(this.getOrderIndex());
+		buffer.putLong(this.getJoinedTraceId());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
 
-	public long getJoinedTraceId() {
+	/**
+	 * {@inheritDoc}
+	 */
+	public int getSize() {
+		return SIZE;
+	}
+
+	public final long getJoinedTraceId() {
 		return this.joinedTraceId;
 	}
 }

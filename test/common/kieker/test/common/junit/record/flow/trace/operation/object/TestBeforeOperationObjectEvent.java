@@ -16,10 +16,14 @@
 
 package kieker.test.common.junit.record.flow.trace.operation.object;
 
+import java.nio.ByteBuffer;
+
 import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.flow.trace.operation.object.BeforeOperationObjectEvent;
+import kieker.common.util.registry.IRegistry;
+import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 
@@ -66,6 +70,34 @@ public class TestBeforeOperationObjectEvent extends AbstractKiekerTest {
 		final Object[] event1Array = event1.toArray();
 
 		final BeforeOperationObjectEvent event2 = new BeforeOperationObjectEvent(event1Array);
+
+		Assert.assertEquals(event1, event2);
+		Assert.assertEquals(0, event1.compareTo(event2));
+		Assert.assertTrue(event1.refersToSameOperationAs(event2));
+	}
+
+	/**
+	 * Tests the constructor and writeBytes(..) methods of {@link BeforeOperationObjectEvent}.
+	 */
+	@Test
+	public void testSerializeDeserializeBinaryEquals() {
+
+		final BeforeOperationObjectEvent event1 =
+				new BeforeOperationObjectEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_OPERATION_SIGNATURE, FQ_CLASSNAME, OBJECT_ID);
+
+		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
+		Assert.assertEquals("Unexpected trace ID", TRACE_ID, event1.getTraceId());
+		Assert.assertEquals("Unexpected order index", ORDER_INDEX, event1.getOrderIndex());
+		Assert.assertEquals("Unexpected class name", FQ_CLASSNAME, event1.getClassSignature());
+		Assert.assertEquals("Unexpected operation signature", FQ_OPERATION_SIGNATURE, event1.getOperationSignature());
+		Assert.assertEquals("Unexpected object id", OBJECT_ID, event1.getObjectId());
+
+		final IRegistry<String> stringRegistry = new Registry<String>();
+		final ByteBuffer buffer = ByteBuffer.allocate(event1.getSize());
+		event1.writeBytes(buffer, stringRegistry);
+		buffer.flip();
+
+		final BeforeOperationObjectEvent event2 = new BeforeOperationObjectEvent(buffer, stringRegistry);
 
 		Assert.assertEquals(event1, event2);
 		Assert.assertEquals(0, event1.compareTo(event2));

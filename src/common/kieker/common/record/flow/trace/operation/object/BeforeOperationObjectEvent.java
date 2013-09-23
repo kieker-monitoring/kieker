@@ -16,8 +16,13 @@
 
 package kieker.common.record.flow.trace.operation.object;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.flow.IObjectRecord;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Jan Waller
@@ -25,8 +30,8 @@ import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
  * @since 1.6
  */
 public class BeforeOperationObjectEvent extends BeforeOperationEvent implements IObjectRecord {
-	private static final long serialVersionUID = -2751765888429165898L;
-	private static final Class<?>[] TYPES = {
+	public static final int SIZE = 32;
+	public static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
 		int.class, // TraceEvent.orderIndex
@@ -34,6 +39,8 @@ public class BeforeOperationObjectEvent extends BeforeOperationEvent implements 
 		String.class, // OperationEvent.classSignature
 		int.class, // objectId
 	};
+
+	private static final long serialVersionUID = -589804991590804902L;
 
 	private final int objectId;
 
@@ -84,6 +91,20 @@ public class BeforeOperationObjectEvent extends BeforeOperationEvent implements 
 	}
 
 	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public BeforeOperationObjectEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		super(buffer, stringRegistry);
+		this.objectId = buffer.getInt();
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -96,11 +117,32 @@ public class BeforeOperationObjectEvent extends BeforeOperationEvent implements 
 	 * {@inheritDoc}
 	 */
 	@Override
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		buffer.putLong(this.getTimestamp());
+		buffer.putLong(this.getTraceId());
+		buffer.putInt(this.getOrderIndex());
+		buffer.putInt(stringRegistry.get(this.getOperationSignature()));
+		buffer.putInt(stringRegistry.get(this.getClassSignature()));
+		buffer.putInt(this.getObjectId());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
 
-	public int getObjectId() {
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int getSize() {
+		return SIZE;
+	}
+
+	public final int getObjectId() {
 		return this.objectId;
 	}
 }

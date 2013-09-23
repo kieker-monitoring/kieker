@@ -16,7 +16,12 @@
 
 package kieker.common.record.flow.trace.operation;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.flow.IExceptionRecord;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Jan Waller
@@ -24,14 +29,8 @@ import kieker.common.record.flow.IExceptionRecord;
  * @since 1.5
  */
 public class AfterOperationFailedEvent extends AfterOperationEvent implements IExceptionRecord {
-
-	/**
-	 * Constant to be used if no cause required.
-	 */
-	public static final String NO_CAUSE = "<no-cause>";
-
-	private static final long serialVersionUID = 6968286882927488605L;
-	private static final Class<?>[] TYPES = {
+	public static final int SIZE = 32;
+	public static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
 		int.class, // TraceEvent.orderIndex
@@ -39,6 +38,11 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 		String.class, // OperationEvent.classSignature
 		String.class, // Exception
 	};
+
+	/** Constant to be used if no cause required. */
+	public static final String NO_CAUSE = "<no-cause>";
+
+	private static final long serialVersionUID = 316421374100611634L;
 
 	private final String cause;
 
@@ -89,6 +93,20 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 	}
 
 	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public AfterOperationFailedEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		super(buffer, stringRegistry);
+		this.cause = stringRegistry.get(buffer.getInt());
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -101,8 +119,29 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 	 * {@inheritDoc}
 	 */
 	@Override
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		buffer.putLong(this.getTimestamp());
+		buffer.putLong(this.getTraceId());
+		buffer.putInt(this.getOrderIndex());
+		buffer.putInt(stringRegistry.get(this.getOperationSignature()));
+		buffer.putInt(stringRegistry.get(this.getClassSignature()));
+		buffer.putInt(stringRegistry.get(this.getCause()));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int getSize() {
+		return SIZE;
 	}
 
 	public final String getCause() {

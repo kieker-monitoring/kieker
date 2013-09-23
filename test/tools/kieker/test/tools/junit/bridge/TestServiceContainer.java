@@ -81,7 +81,6 @@ public class TestServiceContainer extends AbstractKiekerTest {
 		// we then can detect as failures. Otherwise writing more than expected records would be hindered by the framework itself.
 		configuration.setProperty(writer + '.' + AbstractAsyncFSWriter.CONFIG_MAXLOGFILES, String.valueOf(ConfigurationParameters.SEND_NUMBER_OF_RECORDS * 2));
 		configuration.setProperty(writer + '.' + AbstractAsyncFSWriter.CONFIG_MAXLOGSIZE, "-1");
-		configuration.setProperty(writer + '.' + AbstractAsyncFSWriter.CONFIG_TEMP, "false");
 		configuration.setProperty(writer + '.' + AbstractAsyncFSWriter.CONFIG_PATH, path.getCanonicalPath());
 
 		// Create the service container and deploy the TestServiceConnector.

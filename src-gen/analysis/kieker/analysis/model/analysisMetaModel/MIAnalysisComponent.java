@@ -10,17 +10,17 @@ import org.eclipse.emf.ecore.EObject;
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Analysis Component</b></em>'.
  * <!-- end-user-doc -->
- *
+ * 
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.MIAnalysisComponent#getName <em>Name</em>}</li>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.MIAnalysisComponent#getClassname <em>Classname</em>}</li>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.MIAnalysisComponent#getProperties <em>Properties</em>}</li>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.MIAnalysisComponent#getId <em>Id</em>}</li>
+ * <li>{@link kieker.analysis.model.analysisMetaModel.MIAnalysisComponent#getName <em>Name</em>}</li>
+ * <li>{@link kieker.analysis.model.analysisMetaModel.MIAnalysisComponent#getClassname <em>Classname</em>}</li>
+ * <li>{@link kieker.analysis.model.analysisMetaModel.MIAnalysisComponent#getProperties <em>Properties</em>}</li>
+ * <li>{@link kieker.analysis.model.analysisMetaModel.MIAnalysisComponent#getId <em>Id</em>}</li>
  * </ul>
  * </p>
- *
+ * 
  * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getAnalysisComponent()
  * @model abstract="true"
  * @generated
@@ -30,10 +30,10 @@ public interface MIAnalysisComponent extends EObject {
 	 * Returns the value of the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Name</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Name</em>' attribute isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Name</em>' attribute.
 	 * @see #setName(String)
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getAnalysisComponent_Name()
@@ -46,7 +46,9 @@ public interface MIAnalysisComponent extends EObject {
 	 * Sets the value of the '{@link kieker.analysis.model.analysisMetaModel.MIAnalysisComponent#getName <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Name</em>' attribute.
+	 * 
+	 * @param value
+	 *            the new value of the '<em>Name</em>' attribute.
 	 * @see #getName()
 	 * @generated
 	 */
@@ -56,10 +58,10 @@ public interface MIAnalysisComponent extends EObject {
 	 * Returns the value of the '<em><b>Classname</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Classname</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Classname</em>' attribute isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Classname</em>' attribute.
 	 * @see #setClassname(String)
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getAnalysisComponent_Classname()
@@ -72,7 +74,9 @@ public interface MIAnalysisComponent extends EObject {
 	 * Sets the value of the '{@link kieker.analysis.model.analysisMetaModel.MIAnalysisComponent#getClassname <em>Classname</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Classname</em>' attribute.
+	 * 
+	 * @param value
+	 *            the new value of the '<em>Classname</em>' attribute.
 	 * @see #getClassname()
 	 * @generated
 	 */
@@ -83,10 +87,10 @@ public interface MIAnalysisComponent extends EObject {
 	 * The list contents are of type {@link kieker.analysis.model.analysisMetaModel.MIProperty}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Properties</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Properties</em>' containment reference list isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Properties</em>' containment reference list.
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getAnalysisComponent_Properties()
 	 * @model containment="true"
@@ -98,10 +102,10 @@ public interface MIAnalysisComponent extends EObject {
 	 * Returns the value of the '<em><b>Id</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Id</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Id</em>' attribute isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Id</em>' attribute.
 	 * @see #setId(String)
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getAnalysisComponent_Id()
@@ -114,7 +118,9 @@ public interface MIAnalysisComponent extends EObject {
 	 * Sets the value of the '{@link kieker.analysis.model.analysisMetaModel.MIAnalysisComponent#getId <em>Id</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Id</em>' attribute.
+	 * 
+	 * @param value
+	 *            the new value of the '<em>Id</em>' attribute.
 	 * @see #getId()
 	 * @generated
 	 */

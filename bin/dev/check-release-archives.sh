@@ -121,6 +121,37 @@ function assert_file_exists_regular {
 	echo OK
 }
 
+function assert_zip_file_content_exist {
+    echo -n "Asserting zip file '$1' contains the following files: '$2' ..."
+    if ! test -s "$1"; then
+	echo "File '$1' is missing or not a regular file"
+	exit 1
+    fi
+    CONTENTS=$(unzip -l $1)
+    for p in $2; do 
+	if ! (echo ${CONTENTS} | grep -q "$p"); then 
+	    echo "'$p' not found in '$1'"
+	    exit 1
+	fi
+    done
+    echo OK
+}
+
+function assert_zip_file_content_contains {
+    echo -n "Asserting file '$2' in zip file '$1' contains the following pattern: '$3' ..."
+    if ! test -s "$1"; then
+	echo "File '$1' is missing or not a regular file"
+	exit 1
+    fi
+    CONTENT=$(unzip -c $1 $2)
+    if ! (echo ${CONTENT} | grep -q "$3"); then 
+	echo "'$3' not found in '$2' (itself contained in '$1')"
+	exit 1
+    fi
+
+    echo OK
+}
+
 # Asserts the existence of files common to the src and bin releases
 function assert_files_exist_common {
 	assert_dir_exists "bin/"
@@ -205,7 +236,7 @@ function assert_files_exist_src {
 	assert_file_exists_regular "doc/README-src"
 }
 
-# Asserts the existence of files in the bin release
+# Asserts the existence of files in the bin release and some basic checks on the Kieker jars
 function assert_files_exist_bin {
 	assert_files_exist_common
 	assert_file_exists_regular "doc/kieker-"*"_userguide.pdf"
@@ -215,8 +246,12 @@ function assert_files_exist_bin {
 	assert_file_exists_regular "META-INF/kieker.monitoring.adaptiveMonitoring.conf"
 	assert_file_exists_regular ${MAIN_JAR}
 	assert_file_exists_regular "dist/kieker-"*"_aspectj.jar"
+	assert_zip_file_content_exist "dist/kieker-"*"_aspectj.jar" " org/aspectj"
+	assert_zip_file_content_exist "dist/kieker-"*"_aspectj.jar" " aj/"
+	assert_zip_file_content_contains "dist/kieker-"*"_aspectj.jar" "META-INF/MANIFEST.MF" "Premain-Class: org.aspectj.weaver.loadtime.Agent"
 	assert_file_exists_regular "dist/kieker-"*"_emf.jar"
-	
+	assert_zip_file_content_exist "dist/kieker-"*"_emf.jar" " model/"
+	assert_zip_file_content_exist "dist/kieker-"*"_emf.jar" " org/eclipse/"
 	assert_file_exists_regular "examples/OverheadEvaluationMicrobenchmark/lib/kieker-"*"_aspectj.jar"
 	assert_file_exists_regular "examples/OverheadEvaluationMicrobenchmark/lib/commons-cli-"*".jar"
 	assert_file_exists_regular "examples/userguide/ch2--manual-instrumentation/lib/kieker-"*"_emf.jar"
@@ -232,6 +267,7 @@ function assert_files_exist_bin {
 	
 	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/kieker.monitoring.properties"
 	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/kieker-"*"_aspectj.jar"
+	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/kieker-"*"_aspectj.jar.LICENSE"
 	assert_file_NOT_exists "lib/static-analysis/"
 	assert_file_NOT_exists "dist/release/"
 	assert_file_NOT_exists "bin/dev/"
@@ -299,8 +335,16 @@ function check_src_archive {
 		exit 1
 	fi
 
-	# now execute junt tests (which compiles the sources again ...)
+	# Run static analysis tools (which compiles the sources again ...)
 	run_ant static-analysis
+
+	# Making sure that no JavaDoc warnings reported by the `javadoc` tool
+	echo -n "Making sure that no JavaDoc warnings (ignoring generated sources) ..."
+	if (ant dist-kieker-javadoc | grep "warning -" | grep -v "src-gen"); then 
+	    echo "One or more JavaDoc warnings"
+	    exit 1
+	fi
+	echo "OK"
 }
 
 function check_bin_archive {
@@ -427,22 +471,6 @@ BASE_TMP_DIR_ABS=$(pwd)
 change_dir "${BASE_TMP_DIR_ABS}"
 create_subdir_n_cd
 DIR=$(pwd)
-SRCZIP=$(ls ../../dist/release/*_sources.zip)
-assert_file_exists_regular ${SRCZIP}
-check_src_archive "${SRCZIP}"
-rm -rf ${DIR}
-
-change_dir "${BASE_TMP_DIR_ABS}"
-create_subdir_n_cd
-DIR=$(pwd)
-SRCTGZ=$(ls ../../dist/release/*_sources.tar.gz)
-assert_file_exists_regular ${SRCTGZ}
-check_src_archive "${SRCTGZ}"
-rm -rf ${DIR}
-
-change_dir "${BASE_TMP_DIR_ABS}"
-create_subdir_n_cd
-DIR=$(pwd)
 BINZIP=$(ls ../../dist/release/*_binaries.zip)
 assert_file_exists_regular ${BINZIP}
 check_bin_archive "${BINZIP}"
@@ -454,6 +482,22 @@ DIR=$(pwd)
 BINTGZ=$(ls ../../dist/release/*_binaries.tar.gz)
 assert_file_exists_regular ${BINTGZ}
 check_bin_archive "${BINTGZ}"
+rm -rf ${DIR}
+
+change_dir "${BASE_TMP_DIR_ABS}"
+create_subdir_n_cd
+DIR=$(pwd)
+SRCZIP=$(ls ../../dist/release/*_sources.zip)
+assert_file_exists_regular ${SRCZIP}
+check_src_archive "${SRCZIP}"
+rm -rf ${DIR}
+
+change_dir "${BASE_TMP_DIR_ABS}"
+create_subdir_n_cd
+DIR=$(pwd)
+SRCTGZ=$(ls ../../dist/release/*_sources.tar.gz)
+assert_file_exists_regular ${SRCTGZ}
+check_src_archive "${SRCTGZ}"
 rm -rf ${DIR}
 
 # TOOD: check contents of remaining archives

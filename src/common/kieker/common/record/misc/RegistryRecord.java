@@ -16,8 +16,15 @@
 
 package kieker.common.record.misc;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.registry.ILookup;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * Record used to associate Objects (typically Strings) with unique ids.
@@ -29,27 +36,39 @@ import kieker.common.record.IMonitoringRecord;
  * @param <E>
  *            any object type.
  */
-public final class RegistryRecord<E> extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-	private static final long serialVersionUID = 4566332478835872121L;
-	private static final Class<?>[] TYPES = new Class<?>[] {
+public final class RegistryRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
+	public static final int SIZE = 8; // without the String itself!
+	public static final Class<?>[] TYPES = new Class<?>[] {
 		int.class, // id
-		Object.class, // object
+		String.class, // object
 	};
 
+	public static final String ENCODING = "UTF-8";
+
+	private static final long serialVersionUID = -8264706549927546468L;
+
 	private final int id;
-	private final E object;
+	private final String string;
+	private final byte[] strBytes;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
 	 * @param id
 	 *            The ID.
-	 * @param object
-	 *            The object.
+	 * @param string
+	 *            The string.
 	 */
-	public RegistryRecord(final int id, final E object) {
+	public RegistryRecord(final int id, final String string) {
 		this.id = id;
-		this.object = object;
+		this.string = string;
+		byte[] tmpBytes;
+		try {
+			tmpBytes = this.getString().getBytes(ENCODING);
+		} catch (final UnsupportedEncodingException ex) {
+			tmpBytes = this.getString().getBytes();
+		}
+		this.strBytes = tmpBytes;
 	}
 
 	/**
@@ -62,14 +81,52 @@ public final class RegistryRecord<E> extends AbstractMonitoringRecord implements
 	public RegistryRecord(final Object[] values) { // NOPMD (direct store of E (usually String))
 		AbstractMonitoringRecord.checkArray(values, TYPES);
 		this.id = (Integer) values[0];
-		this.object = (E) (values[1]);
+		this.string = (String) (values[1]);
+		byte[] tmpBytes;
+		try {
+			tmpBytes = this.getString().getBytes(ENCODING);
+		} catch (final UnsupportedEncodingException ex) {
+			tmpBytes = this.getString().getBytes();
+		}
+		this.strBytes = tmpBytes;
+	}
+
+	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public RegistryRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException { // NOPMD
+		this.id = buffer.getInt();
+		this.strBytes = new byte[buffer.getInt()];
+		buffer.get(this.strBytes);
+		String str;
+		try {
+			str = new String(this.strBytes, ENCODING);
+		} catch (final UnsupportedEncodingException e) {
+			str = new String(this.strBytes); // NOPMD
+		}
+		this.string = str;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public Object[] toArray() {
-		return new Object[] { this.id, this.object };
+		return new Object[] { this.getId(), this.getString(), };
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		buffer.putInt(this.getId());
+		buffer.putInt(this.getString().length());
+		buffer.put(this.strBytes);
 	}
 
 	/**
@@ -78,7 +135,17 @@ public final class RegistryRecord<E> extends AbstractMonitoringRecord implements
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Deprecated
-	public void initFromArray(final Object[] values) {
+	public final void initFromArray(final Object[] values) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
+	 */
+	@Deprecated
+	public final void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 
@@ -90,16 +157,36 @@ public final class RegistryRecord<E> extends AbstractMonitoringRecord implements
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	public int getSize() {
+		return 4 + 4 + this.strBytes.length;
+	}
+
+	/**
 	 * @return the id
 	 */
-	public int getId() {
+	public final int getId() {
 		return this.id;
 	}
 
 	/**
-	 * @return the object
+	 * @return the string
 	 */
-	public E getObject() {
-		return this.object;
+	public final String getString() {
+		return this.string;
+	}
+
+	public static final void registerRecordInRegistry(final ByteBuffer buffer, final ILookup<String> stringRegistry) throws BufferOverflowException {
+		final int id = buffer.getInt();
+		final byte[] strBytes = new byte[buffer.getInt()];
+		buffer.get(strBytes);
+		String string;
+		try {
+			string = new String(strBytes, ENCODING);
+		} catch (final UnsupportedEncodingException e) {
+			string = new String(strBytes); // NOPMD
+		}
+		stringRegistry.set(string, id);
 	}
 }

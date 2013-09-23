@@ -19,8 +19,8 @@ package kieker.monitoring.core.controller;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.monitoring.core.registry.IRegistry;
-import kieker.monitoring.core.registry.Registry;
+import kieker.common.util.registry.IRegistry;
+import kieker.common.util.registry.Registry;
 
 /**
  * @author Jan Waller
@@ -67,7 +67,21 @@ public final class RegistryController extends AbstractController implements IReg
 	/**
 	 * {@inheritDoc}
 	 */
-	public final int getIdForString(final String string) {
+	public final int getUniqueIdForString(final String string) {
 		return this.stringRegistry.get(string);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getStringForUniqueId(final int id) {
+		return this.stringRegistry.get(id);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public IRegistry<String> getStringRegistry() {
+		return this.stringRegistry;
 	}
 }
