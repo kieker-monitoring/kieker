@@ -13,13 +13,14 @@ import org.eclipse.emf.ecore.EClass;
  * <!-- end-user-doc -->
  * <p>
  * </p>
- *
+ * 
  * @generated
  */
 public class MReader extends MPlugin implements MIReader {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected MReader() {
@@ -29,6 +30,7 @@ public class MReader extends MPlugin implements MIReader {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -36,4 +38,4 @@ public class MReader extends MPlugin implements MIReader {
 		return MIAnalysisMetaModelPackage.Literals.READER;
 	}
 
-} //MReader
+} // MReader

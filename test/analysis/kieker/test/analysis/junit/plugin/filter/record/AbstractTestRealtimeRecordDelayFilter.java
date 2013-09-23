@@ -95,6 +95,7 @@ public abstract class AbstractTestRealtimeRecordDelayFilter extends AbstractKiek
 
 	@Before
 	public void before() throws IllegalStateException, AnalysisConfigurationException {
+
 		// Analysis controller
 		this.analysisController = new AnalysisController();
 
@@ -118,6 +119,7 @@ public abstract class AbstractTestRealtimeRecordDelayFilter extends AbstractKiek
 		// Delay filter
 		final Configuration delayFilterConfiguration = new Configuration();
 		delayFilterConfiguration.setProperty(RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_ACCELERATION_FACTOR, Double.toString(this.accelerationFactor));
+
 		final RealtimeRecordDelayFilter delayFilter = new RealtimeRecordDelayFilter(delayFilterConfiguration, this.analysisController);
 		this.analysisController.connect(this.countingFilterReader, CountingFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
 				delayFilter, RealtimeRecordDelayFilter.INPUT_PORT_NAME_RECORDS);

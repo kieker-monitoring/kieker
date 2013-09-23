@@ -298,6 +298,10 @@
 			<fileset dir="${lib.dir}">
 				<include name="hamcrest-core-*.jar" />
 				<include name="junit-*.jar" />
+				<include name="activemq-core-5.4.3.jar" />
+				<include name="reflections-0.9.9-RC1.jar"/>
+				<include name="geronimo-j2ee-management_1.1_spec-1.0.1.jar"/>
+				<include name="kahadb-5.7.0.jar"/>
 				<include name="javax.jms-*.jar" />
 			</fileset>
 			<fileset dir="${dist.dir}">

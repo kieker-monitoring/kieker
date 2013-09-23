@@ -112,6 +112,13 @@
 				<include name="commons-cli-*.jar" />
 				<include name="jgraphx-*.jar" />
 				<include name="org.eclipse.emf.*.jar" />
+				<!-- Bridge begin -->
+				<include name="activemq-core-5.4.3.jar" />
+				<include name="javax.jms-*.jar" />
+				<include name="reflections-0.9.9-RC1.jar"/>
+				<include name="geronimo-j2ee-management_1.1_spec-1.0.1.jar"/>
+				<include name="kahadb-5.7.0.jar"/>
+				<!-- Bridge end -->
 			</fileset>
 			<pathelement location="${build.kieker.common.dir}/" />
 			<pathelement location="${build.kieker.monitoring.dir}/" />
