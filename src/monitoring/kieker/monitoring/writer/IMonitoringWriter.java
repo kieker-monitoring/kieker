@@ -63,4 +63,6 @@ public interface IMonitoringWriter extends IMonitoringRecordReceiver {
 	 * @since 1.3
 	 */
 	public abstract String toString();
+
+	public abstract boolean newMonitoringRecord(byte[] buffer);
 }

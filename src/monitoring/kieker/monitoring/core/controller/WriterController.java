@@ -138,4 +138,16 @@ public final class WriterController extends AbstractController implements IWrite
 	public final long getNumberOfInserts() {
 		return this.numberOfInserts.longValue();
 	}
+
+	public void newMonitoringRecord(final byte[] buffer) {
+		try {
+			if (!this.monitoringWriter.newMonitoringRecord(buffer)) {
+				LOG.error("Error writing the monitoring data. Will terminate monitoring!");
+				this.terminate();
+			}
+		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
+			LOG.error("Exception detected. Will terminate monitoring", ex);
+			this.terminate();
+		}
+	}
 }

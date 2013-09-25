@@ -51,4 +51,6 @@ public interface IWriterController extends IMonitoringRecordReceiver {
 	 * @since 1.3
 	 */
 	public abstract long getNumberOfInserts();
+
+	public abstract void newMonitoringRecord(byte[] buffer);
 }

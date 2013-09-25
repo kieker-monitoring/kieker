@@ -33,7 +33,6 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.RegistryRecord;
-import kieker.common.util.registry.IRegistry;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 
@@ -51,12 +50,13 @@ public final class TCPDisruptorWriter extends AbstractMonitoringWriter {
 	public static final String CONFIG_BUFFERSIZE = PREFIX + "bufferSize"; // NOCS (afterPREFIX)
 	public static final String CONFIG_FLUSH = PREFIX + "flush"; // NOCS (afterPREFIX)
 
-	private RingBuffer<MonitoringRecordDisruptorEvent> ringBuffer;
-	EventHandler<MonitoringRecordDisruptorEvent>[] eventHandlers;
+	private RingBuffer<ByteBufferDisruptorEvent> ringBuffer;
+	EventHandler<ByteBufferDisruptorEvent>[] eventHandlers;
 	private final String hostname;
 	private final int port1;
 	private final int port2;
 	private final int bufferSize;
+	private final SocketChannel socketChannelStrings;
 
 	@SuppressWarnings("unchecked")
 	public TCPDisruptorWriter(final Configuration configuration) throws IOException {
@@ -65,19 +65,48 @@ public final class TCPDisruptorWriter extends AbstractMonitoringWriter {
 		this.port1 = configuration.getIntProperty(CONFIG_PORT1);
 		this.port2 = configuration.getIntProperty(CONFIG_PORT2);
 		this.bufferSize = configuration.getIntProperty(CONFIG_BUFFERSIZE);
-
+		this.socketChannelStrings = SocketChannel.open(new InetSocketAddress(this.hostname, this.port2));
 	}
 
 	public boolean newMonitoringRecord(final IMonitoringRecord record) {
+		ByteBuffer buffer;
+		if (record instanceof RegistryRecord) {
+			buffer = ByteBuffer.allocateDirect(record.getSize());
+			record.writeBytes(buffer, this.monitoringController.getStringRegistry());
+
+			buffer.flip();
+			try {
+				this.socketChannelStrings.write(buffer);
+			} catch (final IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			buffer = ByteBuffer.allocateDirect(record.getSize() + 4 + 8);
+			buffer.putInt(this.monitoringController.getUniqueIdForString(record.getClass().getName()));
+			buffer.putLong(record.getLoggingTimestamp());
+			record.writeBytes(buffer, this.monitoringController.getStringRegistry());
+			buffer.flip();
+
+			final long hiseq = this.ringBuffer.next();
+			final ByteBufferDisruptorEvent valueEvent = this.ringBuffer.get(hiseq);
+			valueEvent.setValue(buffer);
+			this.ringBuffer.publish(hiseq);
+		}
+
+		return true;
+	}
+
+	@Override
+	public boolean newMonitoringRecord(final byte[] buffer) {
 		final long hiseq = this.ringBuffer.next();
-		final MonitoringRecordDisruptorEvent valueEvent = this.ringBuffer.get(hiseq);
-		valueEvent.setValue(record);
+		final ByteBufferDisruptorEvent valueEvent = this.ringBuffer.get(hiseq);
+		valueEvent.setValue(ByteBuffer.wrap(buffer));
 		this.ringBuffer.publish(hiseq);
 		return true;
 	}
 
 	public void terminate() {
-		for (final EventHandler<MonitoringRecordDisruptorEvent> eventHandler : this.eventHandlers) {
+		for (final EventHandler<ByteBufferDisruptorEvent> eventHandler : this.eventHandlers) {
 			if (eventHandler instanceof TCPWriterEventHandler) {
 				final TCPWriterEventHandler tcpWriterEventHandler = (TCPWriterEventHandler) eventHandler;
 				tcpWriterEventHandler.cleanup();
@@ -89,8 +118,8 @@ public final class TCPDisruptorWriter extends AbstractMonitoringWriter {
 	@Override
 	protected void init() throws Exception {
 		final ExecutorService exec = Executors.newCachedThreadPool();
-		final Disruptor<MonitoringRecordDisruptorEvent> disruptor = new Disruptor<MonitoringRecordDisruptorEvent>(
-				MonitoringRecordDisruptorEvent.EVENT_FACTORY, 32768, exec);
+		final Disruptor<ByteBufferDisruptorEvent> disruptor = new Disruptor<ByteBufferDisruptorEvent>(
+				ByteBufferDisruptorEvent.EVENT_FACTORY, 64, exec);
 
 		this.eventHandlers = new EventHandler[1];
 		this.eventHandlers[0] = new TCPWriterEventHandler(this.monitoringController, this.hostname, this.port1, this.port2, this.bufferSize);
@@ -107,64 +136,25 @@ public final class TCPDisruptorWriter extends AbstractMonitoringWriter {
  * 
  * @since 1.8
  */
-final class TCPWriterEventHandler implements EventHandler<MonitoringRecordDisruptorEvent> {
+final class TCPWriterEventHandler implements EventHandler<ByteBufferDisruptorEvent> {
 	private static final Log LOG = LogFactory.getLog(TCPWriterEventHandler.class);
 
 	private final SocketChannel socketChannelRecords;
-	private final SocketChannel socketChannelStrings;
-	private final ByteBuffer byteBuffer;
 	private final IMonitoringController monitoringController;
-	private final IRegistry<String> stringRegistry;
 
 	public TCPWriterEventHandler(final IMonitoringController monitoringController, final String hostname,
 			final int port1, final int port2, final int bufferSize) throws IOException {
 		this.monitoringController = monitoringController;
-		this.byteBuffer = ByteBuffer.allocateDirect(bufferSize);
 		this.socketChannelRecords = SocketChannel.open(new InetSocketAddress(hostname, port1));
-		this.socketChannelStrings = SocketChannel.open(new InetSocketAddress(hostname, port2));
-		this.stringRegistry = this.monitoringController.getStringRegistry();
 	}
 
 	protected void cleanup() {
-		try {
-			this.byteBuffer.flip();
-			this.socketChannelRecords.write(this.byteBuffer);
-			this.socketChannelRecords.close();
-		} catch (final IOException ex) {
-			LOG.error("Error closing connection", ex);
-		}
-		try {
-			this.socketChannelStrings.close();
-		} catch (final IOException ex) {
-			LOG.error("Error closing connection", ex);
-		}
+
 	}
 
-	public void onEvent(final MonitoringRecordDisruptorEvent event, final long sequence, final boolean endOfBatch) throws Exception {
-		final IMonitoringRecord monitoringRecord = event.getValue();
-
-		if (monitoringRecord instanceof RegistryRecord) {
-			final int size = monitoringRecord.getSize();
-			final ByteBuffer buffer = ByteBuffer.allocateDirect(size);
-			monitoringRecord.writeBytes(buffer, this.stringRegistry);
-			buffer.flip();
-			this.socketChannelStrings.write(buffer);
-		} else {
-			final ByteBuffer buffer = this.byteBuffer;
-			if ((monitoringRecord.getSize() + 4 + 8) > buffer.remaining()) {
-				buffer.flip();
-				this.socketChannelRecords.write(buffer);
-				buffer.clear();
-			}
-			buffer.putInt(this.monitoringController.getUniqueIdForString(monitoringRecord.getClass().getName()));
-			buffer.putLong(monitoringRecord.getLoggingTimestamp());
-			monitoringRecord.writeBytes(buffer, this.stringRegistry);
-			if (endOfBatch) {
-				buffer.flip();
-				this.socketChannelRecords.write(buffer);
-				buffer.clear();
-			}
-		}
+	public void onEvent(final ByteBufferDisruptorEvent event, final long sequence, final boolean endOfBatch) throws Exception {
+		final ByteBuffer buffer = event.getValue();
+		this.socketChannelRecords.write(buffer);
 	}
 }
 
@@ -176,20 +166,20 @@ final class TCPWriterEventHandler implements EventHandler<MonitoringRecordDisrup
  * 
  * @since 1.8
  */
-final class MonitoringRecordDisruptorEvent {
-	private IMonitoringRecord value;
+final class ByteBufferDisruptorEvent {
+	private ByteBuffer value;
 
-	public final IMonitoringRecord getValue() {
+	public final ByteBuffer getValue() {
 		return this.value;
 	}
 
-	public void setValue(final IMonitoringRecord value) {
+	public void setValue(final ByteBuffer value) {
 		this.value = value;
 	}
 
-	public final static EventFactory<MonitoringRecordDisruptorEvent> EVENT_FACTORY = new EventFactory<MonitoringRecordDisruptorEvent>() {
-		public MonitoringRecordDisruptorEvent newInstance() {
-			return new MonitoringRecordDisruptorEvent();
+	public final static EventFactory<ByteBufferDisruptorEvent> EVENT_FACTORY = new EventFactory<ByteBufferDisruptorEvent>() {
+		public ByteBufferDisruptorEvent newInstance() {
+			return new ByteBufferDisruptorEvent();
 		}
 	};
 }

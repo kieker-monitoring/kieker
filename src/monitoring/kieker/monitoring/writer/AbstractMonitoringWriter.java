@@ -93,4 +93,8 @@ public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 	 *             If something during the initialization went wrong.
 	 */
 	protected abstract void init() throws Exception;
+
+	public boolean newMonitoringRecord(final byte[] buffer) {
+		throw new UnsupportedOperationException();
+	}
 }

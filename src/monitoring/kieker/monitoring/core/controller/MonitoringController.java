@@ -311,4 +311,8 @@ public final class MonitoringController extends AbstractController implements IM
 	private static final class LazyHolder { // NOCS
 		static final IMonitoringController INSTANCE = MonitoringController.createInstance(ConfigurationFactory.createSingletonConfiguration()); // NOPMD package
 	}
+
+	public void newMonitoringRecord(final byte[] buffer) {
+		this.writerController.newMonitoringRecord(buffer);
+	}
 }
