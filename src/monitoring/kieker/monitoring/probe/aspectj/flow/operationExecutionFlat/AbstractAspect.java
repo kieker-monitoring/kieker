@@ -108,9 +108,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			final int max = buffer.limit();
 			final byte[] messages = new byte[max];
 			buffer.get(messages, 0, max);
-			System.out.println("before");
 			CTRLINST.newMonitoringRecord(messages);
-			System.out.println("after");
 			buffer.clear();
 		}
 
