@@ -53,6 +53,11 @@ public class DummyWriter extends AbstractMonitoringWriter {
 		return true; // we don't care about incoming records
 	}
 
+	@Override
+	public boolean newMonitoringRecord(final byte[] buffer) {
+		return true;
+	}
+
 	/**
 	 * Terminates the writer.
 	 */
