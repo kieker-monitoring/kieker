@@ -16,8 +16,13 @@
 
 package kieker.tools.traceAnalysis.systemModel;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * This class represents an execution within the trace analysis tool.
+ * 
+ * Note that no assumptions about the {@link TimeUnit} used for the
+ * timestamps are made ({@link Execution#getTin()} and {@link Execution#getTout()}).
  * 
  * @author Andre van Hoorn
  * 
