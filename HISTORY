@@ -5,6 +5,20 @@ http://kieker-monitoring.net) contains details on the changes.
 
 Please refer to the Kieker User Guide for details on using Kieker.
 
+* 1.8 (October 16, 2013)
+- New features (selection)
+  - Data Bridge: Facility to connect Kieker's Java core with other platforms
+  - New reader plugin that provides the current system time in regular intervals
+  - New TCP writer and reader
+  - Acceleration/slow-down factor for real-time replayer
+- Minor changes to the record API 
+  - Additional method for binary (de)serialization
+  - `TYPES` field now public 
+  - Many record types no longer `final` (eases custom extensions)
+- Bug fixes and improvements to code, performance, tests, build scripts, 
+  documentation, examples
+- Various improvements to the WebGUI (see separate `HISTORY` file)
+
 * 1.7 (April 17, 2013)
 - Major changes
   - Adaptive monitoring: extended set of (de)activation patterns to 
