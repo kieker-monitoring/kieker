@@ -246,13 +246,15 @@ The \class{AnalysisController} uses the \method{getCurrentConfiguration} to %
 save the pipe-and-filter configuration. Listing~\ref{listing:MyResponseTimeFilterEventsToOutput} %
 shows how the methods are implemented for the example filter \class{MyResponseTimeFilter}. %
 
+\enlargethispage{1cm}
+
 \setJavaCodeListing
-\lstinputlisting[firstline=74, firstnumber=74, lastline=79, caption={Plugin returning its current configuration}, label=listing:MyResponseTimeFilterEventsToOutput]%
+\lstinputlisting[firstline=69, firstnumber=69, lastline=74, caption={Plugin returning its current configuration}, label=listing:MyResponseTimeFilterEventsToOutput]%
 {\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyResponseTimeFilter.java}
 
 \noindent The declaration of the available properties and their default values within a plugin is shown in section~\ref{sec:analysis:pluginAnnotation}, as this is done with annotations.
 
-\pagebreak
+% \pagebreak
 
 \subsection{@Plugin Annotation and Output Ports}\label{sec:analysis:pluginAnnotation}
 
@@ -294,7 +296,7 @@ output port name and the event to be sent as arguments. Listing~%
 shows how the example filter plugin \class{MyResponseTimeFilter} delivers records %
 to its two output ports declared in the \class{@Plugin} annotation.
 
-\pagebreak
+% \pagebreak
 
 \setJavaCodeListing
 \lstinputlisting[firstline=61, firstnumber=61, lastline=65, caption={Plugin sending events to output ports}, label=listing:MyResponseTimeFilterDelivers]%
@@ -350,7 +352,7 @@ constructor. In this case, the reader reads the pipe name from the %
 configuration and connects to the named pipe. Optionally, the reader can override the 
 \method{init} method.
 
-% \pagebreak
+ \pagebreak
 
 \setJavaCodeListing
 \lstinputlisting[firstline=55, firstnumber=55, lastline=61, caption={Example reader's initialization in the constructor (excerpt)}, label=listing:MyPipeReaderInit]%
@@ -366,6 +368,8 @@ and forwards these to its output port.
 \lstinputlisting[firstline=64, firstnumber=64, lastline=83, caption={Example reader's \method{read} method}, label=listing:MyPipeReaderRead]%
 {\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeReader.java}
 
+\vspace{-0.2cm}
+
 \subsection{Developing Filter Plugins}\label{sec:analysis:filters}
 
 Custom filters must extend the class \class{AbstractFilterPlugin}. %
@@ -377,6 +381,8 @@ filters may override the methods \method{init} and %
 \method{terminate}, implementing initialization and cleanup tasks. %
 The \class{@Plugin} annotation of the example filter \class{MyResponseTimeFilter} %
 was shown in Listing~\ref{listing:MyResponseTimeFilterPluginAnnotationOutputs} already.
+
+\enlargethispage{1cm}
 
 Filters receive events via methods marked with the \class{@InputPort} %
 annotation. These methods must accept a single argument, which has to be %
