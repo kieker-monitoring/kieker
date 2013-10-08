@@ -8,6 +8,7 @@
 	<taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask" />
 
 	<target name="run-tests-junit" depends="compile-tests" description="Runs the JUnit tests">
+		<copy file="${lib.sigar-native.dir}/libsigar-amd64-linux.so" todir="${lib.dir}" />
 		<path id="kieker.test-junit-run-classpath">
 			<fileset dir="${lib.dir}">
 				<include name="hamcrest-core-*.jar" />
@@ -49,8 +50,7 @@
 
 		<junit fork="false" printsummary="yes">
 			<classpath refid="kieker.test-junit-run-classpath" />
-			<sysproperty key="java.library.path" value="${basedir}\lib\sigar-native-libs" />
-					
+								
 			<formatter type="xml" />
 
 			<batchtest fork="true" todir="${tests.junit-results.dir}">
@@ -62,6 +62,7 @@
 			</batchtest>
 		</junit>
 
+		<delete file="${lib.dir}/libsigar-amd64-linux.so"/>
 		<antcall target="-test.junit.report" />
 	</target>
 
