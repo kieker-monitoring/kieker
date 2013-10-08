@@ -57,6 +57,9 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 	private volatile FileSystemXmlApplicationContext ctx;
 	private volatile List<IMonitoringRecord> recordListFilledByListWriter;
 
+	/**
+	 * Default constructor.
+	 */
 	public TestSpringMethodInterceptor() {
 		// empty default constructor
 	}
@@ -83,8 +86,8 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 
 	@Test
 	public void testIt() throws IOException {
-		final IMonitoringController CTRL = MonitoringController.getInstance();
-		Assume.assumeTrue(CTRLNAME.equals(CTRL.getName()));
+		final IMonitoringController monitoringController = MonitoringController.getInstance();
+		Assume.assumeTrue(CTRLNAME.equals(monitoringController.getName()));
 		Assert.assertNotNull(this.ctx);
 
 		final String getBookPattern = "public kieker.test.monitoring.junit.probe.spring.executions.jetty.bookstore.Book kieker.test.monitoring.junit.probe.spring.executions.jetty.bookstore.Catalog.getBook(boolean)";
@@ -96,22 +99,22 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 		Assert.assertEquals("Unexpected size of records. Should be 3, found " + this.recordListFilledByListWriter.size(), 3,
 				this.recordListFilledByListWriter.size());
 
-		CTRL.deactivateProbe(getBookPattern);
+		monitoringController.deactivateProbe(getBookPattern);
 		this.search();
 		Assert.assertEquals("Unexpected size of records. Should be 4, found " + this.recordListFilledByListWriter.size(), 4,
 				this.recordListFilledByListWriter.size());
 
-		CTRL.deactivateProbe(searchBookPattern);
+		monitoringController.deactivateProbe(searchBookPattern);
 		this.search();
 		Assert.assertEquals("Unexpected size of records. Should be 4, found " + this.recordListFilledByListWriter.size(), 4,
 				this.recordListFilledByListWriter.size());
 
-		CTRL.activateProbe(getBookPattern);
+		monitoringController.activateProbe(getBookPattern);
 		this.search();
 		Assert.assertEquals("Unexpected size of records. Should be 6, found " + this.recordListFilledByListWriter.size(), 6,
 				this.recordListFilledByListWriter.size());
 
-		CTRL.activateProbe(searchBookPattern);
+		monitoringController.activateProbe(searchBookPattern);
 		this.search();
 		Assert.assertEquals("Unexpected size of records. Should be 9, found " + this.recordListFilledByListWriter.size(), 9,
 				this.recordListFilledByListWriter.size());

@@ -75,6 +75,13 @@ public class TestCXFClientServerInterceptors extends AbstractKiekerTest {
 
 	private volatile IBookstore client;
 
+	/**
+	 * Default constructor.
+	 */
+	public TestCXFClientServerInterceptors() {
+		// empty default constructor
+	}
+
 	@Before
 	public void prepare() throws Exception {
 		this.listName = TestCXFClientServerInterceptors.class.getName();
@@ -146,8 +153,6 @@ public class TestCXFClientServerInterceptors extends AbstractKiekerTest {
 		this.clientMonitoringController.activateProbe(clientPattern);
 		this.client.searchBook("any");
 		Assert.assertEquals("Unexpected return value", 6, this.recordListFilledByListWriter.size());
-		System.out.println(this.recordListFilledByListWriter);
-
 	}
 
 	@After

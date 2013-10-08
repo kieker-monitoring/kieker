@@ -21,6 +21,7 @@
 				<include name="framework-libs/spring/*.jar" /> <!-- needed for the spring tests -->
 				<include name="javax.jms-*.jar" /> 	<!-- Needed for TestPluginConfigurationRetention. -->
 				<include name="commons-cli-*.jar" /> <!-- Needed for TestPluginConfigurationRetention. -->
+				<include name="sigar-*.jar" />
 
 				<!-- used in tests for bridge JMS connector -->
 				<include name="activemq-core-5.4.3.jar" />
