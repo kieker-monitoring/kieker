@@ -155,8 +155,8 @@ public class TraceAggregationFilter extends AbstractFilterPlugin {
 	/**
 	 * This method is the input port for incoming traces.
 	 * 
-	 * @param record
-	 *            A WorkflowTrace
+	 * @param traceEventRecords
+	 *            incoming TraceEventRecords
 	 */
 	@InputPort(
 			name = INPUT_PORT_NAME_TRACES,
@@ -166,7 +166,6 @@ public class TraceAggregationFilter extends AbstractFilterPlugin {
 		final long timestamp = this.timeunit.convert(System.nanoTime(), TimeUnit.NANOSECONDS);
 		synchronized (this) {
 			TraceAggregationBuffer traceBuffer = this.trace2buffer.get(traceEventRecords);
-			traceBuffer = this.trace2buffer.get(traceEventRecords);
 			if (traceBuffer == null) { // NOCS (DCL)
 				traceBuffer = new TraceAggregationBuffer(timestamp, traceEventRecords);
 				this.trace2buffer.put(traceEventRecords, traceBuffer);
@@ -224,7 +223,7 @@ public class TraceAggregationFilter extends AbstractFilterPlugin {
 		private final long bufferCreatedTimestamp;
 		private final TraceEventRecords aggregatedTrace;
 
-		private int count;
+		private int countOfAggregatedTraces;
 
 		public TraceAggregationBuffer(final long bufferCreatedTimestamp, final TraceEventRecords trace) {
 			this.bufferCreatedTimestamp = bufferCreatedTimestamp;
@@ -232,7 +231,7 @@ public class TraceAggregationFilter extends AbstractFilterPlugin {
 		}
 
 		public void count() {
-			this.count++;
+			this.countOfAggregatedTraces++;
 		}
 
 		public long getBufferCreatedTimestamp() {
@@ -244,7 +243,7 @@ public class TraceAggregationFilter extends AbstractFilterPlugin {
 		}
 
 		public int getCount() {
-			return this.count;
+			return this.countOfAggregatedTraces;
 		}
 	}
 

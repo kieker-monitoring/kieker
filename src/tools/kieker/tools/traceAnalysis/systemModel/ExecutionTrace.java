@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.Stack;
 import java.util.TreeSet;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 import kieker.tools.traceAnalysis.filter.traceReconstruction.InvalidTraceException;
@@ -34,7 +33,7 @@ import kieker.tools.util.LoggingTimestampConverter;
 /**
  * This class is a container for a whole trace of executions (represented as instances of {@link Execution}).
  * 
- * Note that no assumptions about the {@link TimeUnit} used for the
+ * Note that no assumptions about the {@link import java.util.concurrent.TimeUnit;} used for the
  * timestamps are made.
  * 
  * @author Andre van Hoorn
@@ -287,7 +286,7 @@ public class ExecutionTrace extends AbstractTrace {
 	 * Returns the duration of this (possibly incomplete) trace.
 	 * 
 	 * This value is the difference between the maximum tout and the minimum
-	 * tin value. Note that no specific assumptions about the {@link TimeUnit} are made.
+	 * tin value. Note that no specific assumptions about the {@link java.util.concurrent.TimeUnit} are made.
 	 * 
 	 * @return the duration of this trace.
 	 */
