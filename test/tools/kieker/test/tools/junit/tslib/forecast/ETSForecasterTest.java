@@ -20,8 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import junit.framework.Assert;
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 import kieker.tools.tslib.ITimeSeries;
 import kieker.tools.tslib.TimeSeries;
@@ -33,12 +33,23 @@ import kieker.tools.tslib.forecast.ets.ETSForecaster;
  * @author Tillmann Carlos Bielefeld
  * 
  */
-public class ETSForecasterTest extends TestCase {
-	final long startTime = 98890787;
-	final long deltaTimeMillis = 1000;
-	final int confidenceLevel = 90;
-	final int steps = 1;
+public class ETSForecasterTest {
+	private final long startTime = 98890787;
+	private final long deltaTimeMillis = 1000;
+	private final int confidenceLevel = 90;
+	private final int steps = 1;
 
+	/**
+	 * Creates a new instance of this class.
+	 */
+	public ETSForecasterTest() {
+		// Default constructor
+	}
+
+	/**
+	 * Test of the ETSForecaster via Rserve.
+	 */
+	@Test
 	public void testETSPredictor() {
 		final Double[] values = { 1.0, 2.0, 3.0, 4.0 };
 		final List<Double> expectedValues = new ArrayList<Double>(values.length);

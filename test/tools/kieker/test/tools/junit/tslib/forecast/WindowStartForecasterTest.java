@@ -19,8 +19,7 @@ package kieker.test.tools.junit.tslib.forecast;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.logging.Log;
@@ -30,15 +29,23 @@ import kieker.tools.tslib.TimeSeries;
 import kieker.tools.tslib.forecast.IForecastResult;
 import kieker.tools.tslib.forecast.windowstart.WindowStartForecaster;
 
-import kieker.test.common.junit.AbstractKiekerTest;
-
 /**
  * @author Tillmann Carlos Bielefeld
  */
-public class WindowStartForecasterTest extends AbstractKiekerTest {
+public class WindowStartForecasterTest {
 
 	private static final Log LOG = LogFactory.getLog(WindowStartForecasterTest.class);
 
+	/**
+	 * Creates a new instance of this class.
+	 */
+	public WindowStartForecasterTest() {
+		// Default constructor
+	}
+
+	/**
+	 * Test of the WindowStartForecaster for the seasonal pattern of one day.
+	 */
 	@Test
 	public void testWindowOfADay() {
 
@@ -52,7 +59,7 @@ public class WindowStartForecasterTest extends AbstractKiekerTest {
 
 		final TimeSeries<Double> ts = new TimeSeries<Double>(startTime, 60 * 60, TimeUnit.SECONDS);
 		LOG.info("TS so far: " + ts);
-		Assert.assertEquals(new Date(startTime), ts.getStartTime());
+		Assert.assertEquals(startTime, ts.getStartTime());
 
 		Double nextValue = 0.0;
 		for (long insertTime = startTime; insertTime < endTime; insertTime += delta) {
@@ -67,12 +74,12 @@ public class WindowStartForecasterTest extends AbstractKiekerTest {
 
 		final ITimeSeries<Double> forecastSeries = forecast.getForecast();
 		Assert.assertEquals(3, forecastSeries.getPoints().size());
-		Assert.assertEquals(new Date(endTime), ts.getEndTime());
-		Assert.assertEquals(new Date(endTime), forecastSeries.getStartTime());
-		Assert.assertEquals(new Date(endTime + delta), forecastSeries.getPoints().get(0).getTime());
-		Assert.assertEquals(0 * 1.01, forecastSeries.getPoints().get(0).getValue());
-		Assert.assertEquals(1 * 1.01, forecastSeries.getPoints().get(1).getValue());
-		Assert.assertEquals(2 * 1.01, forecastSeries.getPoints().get(2).getValue());
+		Assert.assertEquals(endTime, ts.getEndTime());
+		Assert.assertEquals(endTime, forecastSeries.getStartTime());
+		Assert.assertEquals(endTime + delta, forecastSeries.getPoints().get(0).getTime());
+		Assert.assertEquals(Double.valueOf(0 * 1.01), forecastSeries.getPoints().get(0).getValue());
+		Assert.assertEquals(Double.valueOf(1 * 1.01), forecastSeries.getPoints().get(1).getValue());
+		Assert.assertEquals(Double.valueOf(2 * 1.01), forecastSeries.getPoints().get(2).getValue());
 
 	}
 

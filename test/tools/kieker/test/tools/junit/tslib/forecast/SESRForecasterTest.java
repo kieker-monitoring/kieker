@@ -35,11 +35,27 @@ import kieker.tools.tslib.forecast.ses.SESRForecaster;
  */
 public class SESRForecasterTest {
 
+	/**
+	 * Creates a new instance of this class.
+	 */
+	public SESRForecasterTest() {
+		// Default constructor
+	}
+
+	/**
+	 * Set up of the SESRForecasterTest.
+	 * 
+	 * @throws Exception
+	 *             If excepton is thrown
+	 */
 	@Before
 	public void setUp() throws Exception {
 
 	}
 
+	/**
+	 * Test of the SESRForecaster via Rserve.
+	 */
 	@Test
 	public void test() {
 		final int deltaTime = 1000;
@@ -48,6 +64,9 @@ public class SESRForecasterTest {
 
 		final TimeSeries<Double> ts = new TimeSeries<Double>(startTime, deltaTime,
 				timeUnit);
+		ts.append(1.0);
+		ts.append(2.0);
+		ts.append(3.0);
 		ts.append(1.0);
 		ts.append(2.0);
 		ts.append(3.0);

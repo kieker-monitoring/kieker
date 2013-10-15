@@ -129,6 +129,7 @@
 				<include name="commons-math-*.jar" />
 				<include name="Rsession.jar" />
 				<include name="REngine.jar" />
+				<include name="mongo-*.jar" />
 				<!--<include name="*.jar" />-->
 			</fileset>
 			<pathelement location="${build.kieker.common.dir}/" />

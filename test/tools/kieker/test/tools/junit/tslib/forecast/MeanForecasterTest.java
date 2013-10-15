@@ -16,7 +16,6 @@
 
 package kieker.test.tools.junit.tslib.forecast;
 
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
@@ -46,6 +45,19 @@ public class MeanForecasterTest {
 	private long deltaTime;
 	private Double mean;
 
+	/**
+	 * Creates a new instance of this class.
+	 */
+	public MeanForecasterTest() {
+		// Default constructor
+	}
+
+	/**
+	 * Set up of the MeanForecasterTest.
+	 * 
+	 * @throws Exception
+	 *             If exception appears
+	 */
 	@Before
 	public void setUp() throws Exception {
 		this.deltaTime = 1000;
@@ -56,10 +68,13 @@ public class MeanForecasterTest {
 	}
 
 	/**
+	 * Initiation of the test, setting up the test time series.
+	 * 
 	 * @param timeUnit
+	 *            Used time unit
 	 */
-	private void initForecastWithTimeUnit(final TimeUnit timeUnit) {
-		this.ts = new TimeSeries<Double>(this.startTime, this.deltaTime, timeUnit);
+	private void initForecastWithTimeUnit(final TimeUnit tu) {
+		this.ts = new TimeSeries<Double>(this.startTime, this.deltaTime, tu);
 
 		this.steps = 1;
 		this.mean = new Double(2.0);
@@ -73,26 +88,32 @@ public class MeanForecasterTest {
 		this.lowerSeries = this.forecast.getLower();
 	}
 
+	/**
+	 * Test of the MeanForecater via Rserve.
+	 */
 	@Test
 	public void testForecastStartingIsAccordingToLastAppend() {
 		Assert.assertEquals(this.ts, this.forecaster.getTsOriginal());
 
 		// we added three timepoints, so we must be here:
-		final long expectedStartTime = this.startTime + (this.deltaTime * 4);
-		Assert.assertEquals(new Date(expectedStartTime), this.forecastSeries.getStartTime());
+		final long expectedStartTime = this.startTime + (this.deltaTime * 3);
+		Assert.assertEquals(expectedStartTime, this.forecastSeries.getStartTime());
 	}
 
 	/**
-	 * Compute the starting point with a different time unit
+	 * Compute the starting point with a different time unit.
 	 */
 	@Test
 	public void testForecastStartingIsAccordingToLastAppendSecondsTU() {
 		this.initForecastWithTimeUnit(TimeUnit.SECONDS);
 
-		final long expectedStartTime = this.startTime + TimeUnit.MILLISECONDS.convert(this.deltaTime * 4, TimeUnit.SECONDS);
-		Assert.assertEquals(new Date(expectedStartTime), this.forecastSeries.getStartTime());
+		final long expectedStartTime = this.startTime + TimeUnit.MILLISECONDS.convert(this.deltaTime * 3, TimeUnit.SECONDS);
+		Assert.assertEquals(expectedStartTime, this.forecastSeries.getStartTime());
 	}
 
+	/**
+	 * One step of a mean calculation.
+	 */
 	@Test
 	public void testMeanCalculationOneStep() {
 		Assert.assertEquals(this.steps, this.forecastSeries.size());
@@ -101,6 +122,9 @@ public class MeanForecasterTest {
 		Assert.assertEquals(this.mean, stepFC.getValue());
 	}
 
+	/**
+	 * Test if the correct calculation is done. In this case mean is bigger than the lower bounds.
+	 */
 	@Test
 	public void testLowerCalculationOneStep() {
 		Assert.assertEquals(this.steps, this.lowerSeries.size());
@@ -109,6 +133,9 @@ public class MeanForecasterTest {
 		Assert.assertTrue(this.mean > stepFC.getValue());
 	}
 
+	/**
+	 * Test if the correct calculation is done. In this case mean is smaller than the upper bounds.
+	 */
 	@Test
 	public void testUpperCalculationOneStep() {
 		Assert.assertEquals(this.steps, this.upperSeries.size());

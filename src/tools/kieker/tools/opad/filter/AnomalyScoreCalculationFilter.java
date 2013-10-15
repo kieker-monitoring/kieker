@@ -23,7 +23,7 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.tools.opad.record.IForecastMeasurementPair;
-import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
+import kieker.tools.opad.record.StorableDetectionResult;
 
 /**
  * This filter calculates the anomaly score from the distance of the forecast and the current value.
@@ -33,17 +33,38 @@ import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
  * 
  */
 @Plugin(name = "AnomalyScore Calculation Filter",
-		outputPorts = { @OutputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = AnomalyScoreCalculationFilter.OUTPUT_PORT_ANOMALY_SCORE)
+		outputPorts = { @OutputPort(eventTypes = { StorableDetectionResult.class }, name = AnomalyScoreCalculationFilter.OUTPUT_PORT_ANOMALY_SCORE)
 		})
 public class AnomalyScoreCalculationFilter extends AbstractFilterPlugin {
 
+	/**
+	 * Name of the input port receiving the pair consisting of measurement and forecast.
+	 */
 	public static final String INPUT_PORT_CURRENT_FORECAST_PAIR = "currentforecast";
+
+	/**
+	 * Name of the output port delivering the anomaly score.
+	 */
 	public static final String OUTPUT_PORT_ANOMALY_SCORE = "anomalyscore";
 
+	/**
+	 * Creates a new instance of this class.
+	 * 
+	 * @param configAnomaly
+	 *            Configuration of this filter
+	 * @param projectContext
+	 *            ProjectContext of this filter
+	 */
 	public AnomalyScoreCalculationFilter(final Configuration configAnomaly, final IProjectContext projectContext) {
 		super(configAnomaly, projectContext);
 	}
 
+	/**
+	 * Representing the input port for pairs of measurements and forecasts.
+	 * 
+	 * @param fmp
+	 *            Pair consisting of measurement and forecast
+	 */
 	@InputPort(eventTypes = { IForecastMeasurementPair.class }, name = AnomalyScoreCalculationFilter.INPUT_PORT_CURRENT_FORECAST_PAIR)
 	public void inputForecastAndMeasurement(final IForecastMeasurementPair fmp) {
 		Double score = null;
@@ -59,7 +80,8 @@ public class AnomalyScoreCalculationFilter extends AbstractFilterPlugin {
 			score = Math.abs(difference / sum);
 		}
 
-		super.deliver(OUTPUT_PORT_ANOMALY_SCORE, new NamedDoubleTimeSeriesPoint(fmp.getTime(), score, fmp.getName()));
+		final StorableDetectionResult dr = new StorableDetectionResult(fmp.getName(), fmp.getValue(), fmp.getTime(), fmp.getForecasted(), score);
+		super.deliver(OUTPUT_PORT_ANOMALY_SCORE, dr);
 	}
 
 	@Override

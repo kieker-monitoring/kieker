@@ -29,53 +29,57 @@ import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
-import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.tools.opad.filter.ResponseTimeExtractionFilter;
+import kieker.tools.opad.filter.ExtractionFilter;
+import kieker.tools.opad.record.NamedDoubleRecord;
 import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
 
 /**
- * This Filter creates some OperationExecutionRecords and let them run trough the
- * ResponseTimeExtractionFilter. We assume that the Output corresponds to tin - tout, here:
- * 1002 - 1001 = 1.0
- * 22243 - 4000 = 18243.0
- * 5057 - 4021 = 1036.0
+ * This Filter creates some NamedDoubleRecords and let them run trough the
+ * ExtractionFilter. We assume that the output corresponds to the time unit
+ * converted input timestamp from the incoming record.
  * 
  * @author Tom Frotscher
  * 
  */
-public class ResponseTimeExtractionFilterTest {
+public class ExtractionFilterTest {
 
 	private static final String OP_SIGNATURE_A = "a.A.opA";
-	private static final String SESSION_ID_TEST = "TestId";
-	private static final String HOST_ID_TEST = "TestRechner";
-	private static final long TRACE_ID_TEST = (long) 0.1;
+	private static final String OP_SIGNATURE_B = "b.B.opB";
 	private AnalysisController controller;
 
 	// Variables Mockup OperationExecutionReader
-	private ListReader<OperationExecutionRecord> theReaderOperationExecutionRecords;
+	private ListReader<NamedDoubleRecord> theReaderRecords;
 
 	// Variables ResponsetimeExtractionFilter
-	private ResponseTimeExtractionFilter responsetimeExtr;
+	private ExtractionFilter extraction;
 	private ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPlugin;
 
-	public ResponseTimeExtractionFilterTest() {
+	/**
+	 * Creates an instance of this class.
+	 */
+	public ExtractionFilterTest() {
 		// empty default constructor
 	}
 
-	// HelperMethods Mockup OperationExecutionReader
-	private List<OperationExecutionRecord> createInputEventSetOER() {
-		final List<OperationExecutionRecord> retList = new ArrayList<OperationExecutionRecord>();
-		retList.add(this.createOER(OP_SIGNATURE_A, SESSION_ID_TEST, TRACE_ID_TEST, 1001, 1002));
-		retList.add(this.createOER(OP_SIGNATURE_A, SESSION_ID_TEST, TRACE_ID_TEST, 4000, 22243));
-		retList.add(this.createOER(OP_SIGNATURE_A, SESSION_ID_TEST, TRACE_ID_TEST, 4021, 5057));
+	/**
+	 * Creates inputs with timestamps.
+	 */
+	private List<NamedDoubleRecord> createInputEventSetOER() {
+		final List<NamedDoubleRecord> retList = new ArrayList<NamedDoubleRecord>();
+		retList.add(new NamedDoubleRecord(OP_SIGNATURE_A, 1369127812664L, 10341.94));
+		retList.add(new NamedDoubleRecord(OP_SIGNATURE_B, 1369128812669L, 8341.00));
+		retList.add(new NamedDoubleRecord(OP_SIGNATURE_A, 1369129812674L, 78.26));
 		return retList;
 	}
 
-	private OperationExecutionRecord createOER(final String signature, final String sessionid, final long traceid, final long tin, final long tout) {
-		final OperationExecutionRecord oer = new OperationExecutionRecord(signature, sessionid, traceid, tin, tout, HOST_ID_TEST, -1, -1);
-		return oer;
-	}
-
+	/**
+	 * Sets up the test for the ExtractionFilter.
+	 * 
+	 * @throws IllegalStateException
+	 *             If illegal state
+	 * @throws AnalysisConfigurationException
+	 *             If wrong configuration
+	 */
 	@Before
 	public void setUp() throws IllegalStateException,
 			AnalysisConfigurationException {
@@ -84,14 +88,14 @@ public class ResponseTimeExtractionFilterTest {
 		// Start - Read OperationExecutionRecords
 		final Configuration readerOERConfiguration = new Configuration();
 		readerOERConfiguration.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
-		this.theReaderOperationExecutionRecords = new ListReader<OperationExecutionRecord>(readerOERConfiguration, this.controller);
-		this.theReaderOperationExecutionRecords.addAllObjects(this.createInputEventSetOER());
+		this.theReaderRecords = new ListReader<NamedDoubleRecord>(readerOERConfiguration, this.controller);
+		this.theReaderRecords.addAllObjects(this.createInputEventSetOER());
 		// End - Read OperationExecutionRecords
 
-		// Start - ResponseTimeExtractionFilter Configuration
-		final Configuration responseTimeExtractionConfiguration = new Configuration();
-		// responseTimeExtractionConfiguration.setProperty(ResponseTimeExtractionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, "MICROSECONDS");
-		this.responsetimeExtr = new ResponseTimeExtractionFilter(responseTimeExtractionConfiguration, this.controller);
+		// Start - ExtractionFilter Configuration
+		final Configuration extractionConfiguration = new Configuration();
+		extractionConfiguration.setProperty(ExtractionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, "MILLISECONDS");
+		this.extraction = new ExtractionFilter(extractionConfiguration, this.controller);
 		// End - ResponseTimeExtractionFilter
 
 		// SINK Mock-up
@@ -100,18 +104,23 @@ public class ResponseTimeExtractionFilterTest {
 		// CONNECT the filters
 		// Mock-up Reader (OperationExecutionRecords) -> ResponseTimeExtractionFIlter
 		this.controller
-				.connect(this.theReaderOperationExecutionRecords, ListReader.OUTPUT_PORT_NAME, this.responsetimeExtr,
-						ResponseTimeExtractionFilter.INPUT_PORT_NAME_VALUE);
+				.connect(this.theReaderRecords, ListReader.OUTPUT_PORT_NAME, this.extraction,
+						ExtractionFilter.INPUT_PORT_NAME_VALUE);
 		// ResponseTimeExtractionFilter -> SinkPlugin Mock-up
 		this.controller
-				.connect(this.responsetimeExtr, ResponseTimeExtractionFilter.OUTPUT_PORT_NAME_VALUE, this.sinkPlugin,
+				.connect(this.extraction, ExtractionFilter.OUTPUT_PORT_NAME_VALUE, this.sinkPlugin,
 						ListCollectionFilter.INPUT_PORT_NAME);
 
 		Assert.assertTrue(this.sinkPlugin.getList().isEmpty());
 
 	}
 
-	// Test complete Flow
+	/**
+	 * Test the extraction of the data from ResponseTimeDoubleRecords.
+	 * 
+	 * @throws InterruptedException
+	 *             If interrupted
+	 */
 	@Test
 	public void testResponsetimeOnly() throws InterruptedException {
 
@@ -122,9 +131,16 @@ public class ResponseTimeExtractionFilterTest {
 		thread.terminate();
 
 		Assert.assertEquals(3, this.sinkPlugin.getList().size());
-		Assert.assertEquals(1.0, this.sinkPlugin.getList().get(0).getDoubleValue(), 0);
-		Assert.assertEquals(18243.0, this.sinkPlugin.getList().get(1).getDoubleValue(), 0);
-		Assert.assertEquals(1036.0, this.sinkPlugin.getList().get(2).getDoubleValue(), 0);
+
+		// Test on the timestamp conversion (here as configured to milliseconds
+		Assert.assertEquals(1369127, this.sinkPlugin.getList().get(0).getTime(), 0);
+		Assert.assertEquals(1369128, this.sinkPlugin.getList().get(1).getTime(), 0);
+		Assert.assertEquals(1369129, this.sinkPlugin.getList().get(2).getTime(), 0);
+
+		// Test on the extracted values
+		Assert.assertEquals(10341.94, this.sinkPlugin.getList().get(0).getDoubleValue(), 0);
+		Assert.assertEquals(8341.00, this.sinkPlugin.getList().get(1).getDoubleValue(), 0);
+		Assert.assertEquals(78.26, this.sinkPlugin.getList().get(2).getDoubleValue(), 0);
 
 	}
 }

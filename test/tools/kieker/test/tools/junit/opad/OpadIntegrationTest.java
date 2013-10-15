@@ -29,32 +29,32 @@ import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
-import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.tools.opad.filter.AnomalyDetectionFilter;
 import kieker.tools.opad.filter.AnomalyScoreCalculationFilter;
+import kieker.tools.opad.filter.ExtractionFilter;
 import kieker.tools.opad.filter.ForecastingFilter;
-import kieker.tools.opad.filter.ResponseTimeExtractionFilter;
 import kieker.tools.opad.filter.TimeSeriesPointAggregatorFilter;
 import kieker.tools.opad.filter.UniteMeasurementPairFilter;
-import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
+import kieker.tools.opad.record.NamedDoubleRecord;
+import kieker.tools.opad.record.StorableDetectionResult;
 
 /**
- * This test creates some OperationExecutionRecords and let them run through all currently
- * available OPAD Filter.
+ * This test creates some ResponseTimeDoubleRecords and let them run through all currently
+ * available OPAD Filter. The ResponseTimeDoubleRecords are create as records from different
+ * applications. (Requires MongoDB Connection and also writes to the database because of the
+ * SendAndStoreDetectionResultsFilter)
  * 
  * @author Tom Frotscher
  */
 public class OpadIntegrationTest {
 
 	private static final String OP_SIGNATURE_A = "a.A.opA";
-	private static final String SESSION_ID_TEST = "TestId";
-	private static final String HOST_ID_TEST = "TestPC";
-	private static final long TRACE_ID_TEST = (long) 0.1;
+	private static final String OP_SIGNATURE_B = "b.B.opB";
 
 	private AnalysisController controller;
 
-	// Variables ResponsetimeExtractionFilter
-	private ResponseTimeExtractionFilter responsetimeExtr;
+	// Variables ExtractionFilter
+	private ExtractionFilter extractionFilter;
 
 	// Variables TimeSeriesPointAggregatorFilter
 	private TimeSeriesPointAggregatorFilter aggregationFilter;
@@ -70,11 +70,13 @@ public class OpadIntegrationTest {
 
 	// Variables AnomalyDetectionFilter
 	private AnomalyDetectionFilter anomalyDetectionFilter;
-	private ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPluginIfAnomaly;
-	private ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPluginElse;
 
-	// Variables Mockup OperationExecutionReader
-	private ListReader<OperationExecutionRecord> theReaderOperationExecutionRecords;
+	// Mockup sink
+	private ListCollectionFilter<StorableDetectionResult> sinkPluginIfAnomaly;
+	private ListCollectionFilter<StorableDetectionResult> sinkPluginElse;
+
+	// Variables Mockup Reader
+	private ListReader<NamedDoubleRecord> theReaderNamedDoubleRecord;
 
 	/**
 	 * Creates a new instance of this class.
@@ -83,38 +85,49 @@ public class OpadIntegrationTest {
 		// empty default constructor
 	}
 
-	private List<OperationExecutionRecord> createInputEventSetOER() {
-		final List<OperationExecutionRecord> retList = new ArrayList<OperationExecutionRecord>();
+	private List<NamedDoubleRecord> createInputEventSetOER() {
+		final List<NamedDoubleRecord> retList = new ArrayList<NamedDoubleRecord>();
 		// First Span:
-		retList.add(this.createOER(OP_SIGNATURE_A, SESSION_ID_TEST, TRACE_ID_TEST, 1000000, 1500000));
-		retList.add(this.createOER(OP_SIGNATURE_A, SESSION_ID_TEST, TRACE_ID_TEST, 2300000, 2400000));
-		retList.add(this.createOER(OP_SIGNATURE_A, SESSION_ID_TEST, TRACE_ID_TEST, 2500000, 2600000));
-		retList.add(this.createOER(OP_SIGNATURE_A, SESSION_ID_TEST, TRACE_ID_TEST, 2700000, 2900000));
+		retList.add(new NamedDoubleRecord(OP_SIGNATURE_A, 1500000, 500000));
+		retList.add(new NamedDoubleRecord(OP_SIGNATURE_B, 2200000, 125000));
+		retList.add(new NamedDoubleRecord(OP_SIGNATURE_A, 2400000, 100000));
+		retList.add(new NamedDoubleRecord(OP_SIGNATURE_A, 2600000, 100000));
+		retList.add(new NamedDoubleRecord(OP_SIGNATURE_B, 2500000, 162200));
+		retList.add(new NamedDoubleRecord(OP_SIGNATURE_A, 2900000, 200000));
 		// Second Span:
-		retList.add(this.createOER(OP_SIGNATURE_A, SESSION_ID_TEST, TRACE_ID_TEST, 4100000, 4300000));
-		retList.add(this.createOER(OP_SIGNATURE_A, SESSION_ID_TEST, TRACE_ID_TEST, 4350000, 4400000));
-		retList.add(this.createOER(OP_SIGNATURE_A, SESSION_ID_TEST, TRACE_ID_TEST, 4600000, 4640000));
-		retList.add(this.createOER(OP_SIGNATURE_A, SESSION_ID_TEST, TRACE_ID_TEST, 4800000, 4900000));
-		retList.add(this.createOER(OP_SIGNATURE_A, SESSION_ID_TEST, TRACE_ID_TEST, 4100000, 4900000));
+		retList.add(new NamedDoubleRecord(OP_SIGNATURE_B, 4360000, 620000));
+		retList.add(new NamedDoubleRecord(OP_SIGNATURE_A, 4300000, 200000));
+		retList.add(new NamedDoubleRecord(OP_SIGNATURE_A, 4400000, 50000));
+		retList.add(new NamedDoubleRecord(OP_SIGNATURE_B, 4100000, 70000));
+		retList.add(new NamedDoubleRecord(OP_SIGNATURE_A, 4640000, 40000));
+		retList.add(new NamedDoubleRecord(OP_SIGNATURE_A, 4900000, 100000));
+		retList.add(new NamedDoubleRecord(OP_SIGNATURE_A, 4900000, 800000));
 		// Third Span:
-		retList.add(this.createOER(OP_SIGNATURE_A, SESSION_ID_TEST, TRACE_ID_TEST, 5100000, 5300000));
+		retList.add(new NamedDoubleRecord(OP_SIGNATURE_A, 5300000, 200000));
+		retList.add(new NamedDoubleRecord(OP_SIGNATURE_B, 5350000, 789000));
 		// Fourth Span:
-		retList.add(this.createOER(OP_SIGNATURE_A, SESSION_ID_TEST, TRACE_ID_TEST, 7100000, 7200000));
+		retList.add(new NamedDoubleRecord(OP_SIGNATURE_A, 7200000, 100000));
+		retList.add(new NamedDoubleRecord(OP_SIGNATURE_B, 7300000, 678000));
 		// Fifth Span:
-		retList.add(this.createOER(OP_SIGNATURE_A, SESSION_ID_TEST, TRACE_ID_TEST, 9100000, 9150000));
-		// Sixth Span exceeded: (Anomaly)
-		retList.add(this.createOER(OP_SIGNATURE_A, SESSION_ID_TEST, TRACE_ID_TEST, 800000, 11000000));
+		retList.add(new NamedDoubleRecord(OP_SIGNATURE_B, 9170000, 70866000));
+		retList.add(new NamedDoubleRecord(OP_SIGNATURE_A, 9150000, 50000));
+		// Sixth Span exceeded: (Anomaly A)
+		retList.add(new NamedDoubleRecord(OP_SIGNATURE_B, 11200000, 706000));
+		retList.add(new NamedDoubleRecord(OP_SIGNATURE_A, 11000000, 10200000));
 		// One Span exceeded:
-		retList.add(this.createOER(OP_SIGNATURE_A, SESSION_ID_TEST, TRACE_ID_TEST, 1500000, 15400000));
-
+		retList.add(new NamedDoubleRecord(OP_SIGNATURE_B, 15400000, 13900000));
+		retList.add(new NamedDoubleRecord(OP_SIGNATURE_A, 15400000, 13900000));
 		return retList;
 	}
 
-	private OperationExecutionRecord createOER(final String signature, final String sessionid, final long traceid, final long tin, final long tout) {
-		final OperationExecutionRecord oer = new OperationExecutionRecord(signature, sessionid, traceid, tin, tout, HOST_ID_TEST, -1, -1);
-		return oer;
-	}
-
+	/**
+	 * Setup for the VariateOPADIntegrationTest.
+	 * 
+	 * @throws IllegalStateException
+	 *             If illegal state
+	 * @throws AnalysisConfigurationException
+	 *             If wrong configuration
+	 */
 	@Before
 	public void setUp() throws IllegalStateException,
 			AnalysisConfigurationException {
@@ -123,15 +136,15 @@ public class OpadIntegrationTest {
 		// Start - Read OperationExecutionRecords
 		final Configuration readerOERConfiguration = new Configuration();
 		readerOERConfiguration.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
-		this.theReaderOperationExecutionRecords = new ListReader<OperationExecutionRecord>(readerOERConfiguration, this.controller);
-		this.theReaderOperationExecutionRecords.addAllObjects(this.createInputEventSetOER());
+		this.theReaderNamedDoubleRecord = new ListReader<NamedDoubleRecord>(readerOERConfiguration, this.controller);
+		this.theReaderNamedDoubleRecord.addAllObjects(this.createInputEventSetOER());
 		// End - Read OperationExecutionRecords
 
-		// Start - ResponseTimeExtractionFilter Configuration
-		// ResponseTimeExtractionFilter Configuration
-		final Configuration responseTimeExtractionConfiguration = new Configuration();
-		responseTimeExtractionConfiguration.setProperty(ResponseTimeExtractionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, "NANOSECONDS");
-		this.responsetimeExtr = new ResponseTimeExtractionFilter(responseTimeExtractionConfiguration, this.controller);
+		// Start - ExtractionFilter Configuration
+		// ExtractionFilter Configuration
+		final Configuration extractionConfiguration = new Configuration();
+		extractionConfiguration.setProperty(ExtractionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, "MILLISECONDS");
+		this.extractionFilter = new ExtractionFilter(extractionConfiguration, this.controller);
 		// End - ResponseTimeExtractionFilter
 
 		// Start - TimeSeriesPointAggregatorFilter
@@ -165,31 +178,30 @@ public class OpadIntegrationTest {
 
 		// Start - AnomalyDetectionFilter
 		// AnomalyDetectionFilter Configuration
-		final Configuration configAnomaly = new Configuration();
-		configAnomaly.setProperty(AnomalyDetectionFilter.CONFIG_PROPERTY_THRESHOLD, "0.6");
-		this.anomalyDetectionFilter = new AnomalyDetectionFilter(configAnomaly, this.controller);
-
-		// SINK 1 Mock-up
-		this.sinkPluginIfAnomaly = new ListCollectionFilter<NamedDoubleTimeSeriesPoint>(new Configuration(), this.controller);
-
-		// SINK 2 Mock-up
-		this.sinkPluginElse = new ListCollectionFilter<NamedDoubleTimeSeriesPoint>(new Configuration(), this.controller);
+		final Configuration configAnomalyPre = new Configuration();
+		configAnomalyPre.setProperty(AnomalyDetectionFilter.CONFIG_PROPERTY_THRESHOLD, "0.23");
+		this.anomalyDetectionFilter = new AnomalyDetectionFilter(configAnomalyPre, this.controller);
 		// End - AnomalyDetectionFilter
 
+		// SINK 1
+		this.sinkPluginIfAnomaly = new ListCollectionFilter<StorableDetectionResult>(new Configuration(), this.controller);
+		// SINK 2
+		this.sinkPluginElse = new ListCollectionFilter<StorableDetectionResult>(new Configuration(), this.controller);
+
 		// CONNECT the filters
-		// Mock-up Reader (OperationExecutionRecords) -> ResponseTimeExtractionFilter
+		// Mock-up Reader (NamedDoubleRecords) -> Extraction Input
 		this.controller
-				.connect(this.theReaderOperationExecutionRecords, ListReader.OUTPUT_PORT_NAME, this.responsetimeExtr,
-						ResponseTimeExtractionFilter.INPUT_PORT_NAME_VALUE);
-		// ResponseTimeExtractionFilter -> Aggregator Input
+				.connect(this.theReaderNamedDoubleRecord, ListReader.OUTPUT_PORT_NAME, this.extractionFilter,
+						ExtractionFilter.INPUT_PORT_NAME_VALUE);
+		// ExtractionFilter -> Aggregator Input
 		this.controller
-				.connect(this.responsetimeExtr, ResponseTimeExtractionFilter.OUTPUT_PORT_NAME_VALUE, this.aggregationFilter,
+				.connect(this.extractionFilter, ExtractionFilter.OUTPUT_PORT_NAME_VALUE, this.aggregationFilter,
 						TimeSeriesPointAggregatorFilter.INPUT_PORT_NAME_TSPOINT);
 		// AggregatorFilter -> Forecast Input
 		this.controller
 				.connect(this.aggregationFilter, TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, this.forecasting,
 						ForecastingFilter.INPUT_PORT_NAME_TSPOINT);
-		// Aggregation Filter -> UniteMeasurementPair Measurement Input
+		// Aggregation Filter -> UniteMeasurementPair Input
 		this.controller
 				.connect(this.aggregationFilter, TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, this.uniteFilter,
 						UniteMeasurementPairFilter.INPUT_PORT_NAME_TSPOINT);
@@ -205,19 +217,20 @@ public class OpadIntegrationTest {
 		this.controller
 				.connect(this.scoreCalc, AnomalyScoreCalculationFilter.OUTPUT_PORT_ANOMALY_SCORE, this.anomalyDetectionFilter,
 						AnomalyDetectionFilter.INPUT_PORT_ANOMALY_SCORE);
-		// AnomalyDetection Output -> Mock-up Sinks
-		this.controller
-				.connect(this.anomalyDetectionFilter, AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY, this.sinkPluginIfAnomaly,
-						ListCollectionFilter.INPUT_PORT_NAME);
-		this.controller
-				.connect(this.anomalyDetectionFilter, AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_ELSE, this.sinkPluginElse,
-						ListCollectionFilter.INPUT_PORT_NAME);
-
-		Assert.assertTrue(this.sinkPluginIfAnomaly.getList().isEmpty());
-
+		// AnomalyDetection -> Sinks
+		this.controller.connect(this.anomalyDetectionFilter, AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY,
+				this.sinkPluginIfAnomaly, ListCollectionFilter.INPUT_PORT_NAME);
+		this.controller.connect(this.anomalyDetectionFilter, AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_ELSE,
+				this.sinkPluginElse, ListCollectionFilter.INPUT_PORT_NAME);
 	}
 
-	// Test complete Flow
+	/**
+	 * Starts a complete test flow through all currently available filters. In this case, the NanmedDoubleRecords can
+	 * be from different applications and will still be treated correctly.
+	 * 
+	 * @throws InterruptedException
+	 *             If interrupted
+	 */
 	@Test
 	public void testOpadFlow() throws InterruptedException {
 
@@ -225,11 +238,8 @@ public class OpadIntegrationTest {
 		thread.start();
 		Thread.sleep(2000);
 		thread.terminate();
-
-		System.out.println(this.sinkPluginElse.getList().toString());
-		System.out.println(this.sinkPluginIfAnomaly.getList().toString());
-		// Assert.assertEquals(1, this.sinkPluginIfAnomaly.getList().size());
-		// Assert.assertEquals(2, this.sinkPluginElse.getList().size());
+		Assert.assertEquals(7, this.sinkPluginIfAnomaly.getList().size());
+		Assert.assertEquals(6, this.sinkPluginElse.getList().size());
 
 	}
 

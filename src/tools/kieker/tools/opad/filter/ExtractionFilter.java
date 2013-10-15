@@ -25,34 +25,32 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.record.controlflow.OperationExecutionRecord;
+import kieker.tools.opad.record.NamedDoubleRecord;
 import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
 
 /**
- * An instance of this class extracts the response times from OperationExecutionRecords.
+ * An instance of this class extracts the Data from the incoming Records.
  * 
- * @author Andre van Hoorn
- * 
+ * @author Tom Frotscher
  */
-@Plugin(outputPorts = { @OutputPort(name = ResponseTimeExtractionFilter.OUTPUT_PORT_NAME_VALUE, eventTypes = { NamedDoubleTimeSeriesPoint.class }) },
+@Plugin(outputPorts = { @OutputPort(name = ExtractionFilter.OUTPUT_PORT_NAME_VALUE, eventTypes = { NamedDoubleTimeSeriesPoint.class }) },
 		configuration = {
-			@Property(name = ResponseTimeExtractionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, defaultValue = "NANOSECONDS")
+			@Property(name = ExtractionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, defaultValue = "NANOSECONDS")
 		})
-public class ResponseTimeExtractionFilter extends AbstractFilterPlugin {
-	// private static final Log LOG = LogFactory.getLog(ResponseTimeExtractionFilter.class);
+public class ExtractionFilter extends AbstractFilterPlugin {
 
 	/**
-	 * Name of the input port receiving the OperationExecutionRecords.
+	 * Name of the input port receiving the ResponseTimeDoubleRecords.
 	 */
-	public static final String INPUT_PORT_NAME_VALUE = "inputExecutionRecord";
+	public static final String INPUT_PORT_NAME_VALUE = "inputRecord";
 
 	/**
 	 * Name of the output port delivering the response times.
 	 */
-	public static final String OUTPUT_PORT_NAME_VALUE = "outputResponseTime";
+	public static final String OUTPUT_PORT_NAME_VALUE = "outputData";
 
 	/**
-	 * Name of the property determining the time unit.
+	 * Name of the property determining the time unit of the response times.
 	 */
 	public static final String CONFIG_PROPERTY_NAME_TIMEUNIT = "timeunit";
 
@@ -66,7 +64,7 @@ public class ResponseTimeExtractionFilter extends AbstractFilterPlugin {
 	 * @param projectContext
 	 *            The project context for this component.
 	 */
-	public ResponseTimeExtractionFilter(final Configuration configuration, final IProjectContext projectContext) {
+	public ExtractionFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
 		TimeUnit configTimeunit;
@@ -80,20 +78,15 @@ public class ResponseTimeExtractionFilter extends AbstractFilterPlugin {
 	}
 
 	/**
-	 * This method represents the input port for incoming OperationExecutionRecords. The response time is computed and delivered as
-	 * NamedDoubleTimeSeriesPoint.
+	 * This method represents the input port for incoming Records.
 	 * 
-	 * @param execution
+	 * @param record
+	 *            Incoming Record
 	 */
-	@InputPort(name = INPUT_PORT_NAME_VALUE, eventTypes = { OperationExecutionRecord.class })
-	public void inputExecutionRecord(final OperationExecutionRecord execution) {
-		final long toutMillis = TimeUnit.MILLISECONDS.convert(execution.getTout(), TimeUnit.NANOSECONDS);
-		final long time = toutMillis;
-		// ResponseTime in Nanoseconds
-		final long responseTime = execution.getTout() - execution.getTin();
-		// Convert the Responsetimes from Nanoseconds to Configurable TimeUnit
-		final double responseTimeConfigurableTimeunit = this.timeunit.convert(responseTime, TimeUnit.NANOSECONDS);
-		final NamedDoubleTimeSeriesPoint tspoint = new NamedDoubleTimeSeriesPoint(time, responseTimeConfigurableTimeunit, execution.getOperationSignature());
+	@InputPort(name = INPUT_PORT_NAME_VALUE, eventTypes = { NamedDoubleRecord.class })
+	public void inputExecutionRecord(final NamedDoubleRecord record) {
+		final long timestampMillis = this.timeunit.convert(record.getTimestamp(), TimeUnit.NANOSECONDS);
+		final NamedDoubleTimeSeriesPoint tspoint = new NamedDoubleTimeSeriesPoint(timestampMillis, record.getValue(), record.getApplication());
 		super.deliver(OUTPUT_PORT_NAME_VALUE, tspoint);
 	}
 

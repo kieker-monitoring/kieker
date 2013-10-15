@@ -31,11 +31,11 @@ import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 import kieker.tools.opad.filter.AnomalyScoreCalculationFilter;
 import kieker.tools.opad.record.ForecastMeasurementPair;
-import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
+import kieker.tools.opad.record.StorableDetectionResult;
 
 /**
  * Test for the AnomalyScoreCalculationFilter. Therefore comparing the result of the Filter with some
- * previous calculated Results.
+ * previous manually calculated Results.
  * 
  * @author Tom Frotscher
  * 
@@ -48,14 +48,16 @@ public class AnomalyScoreCalculationFilterTest {
 
 	// Variables AnomalyScoreCalculationFilter
 	private AnomalyScoreCalculationFilter scoreCalc;
-	private ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkAnomalyScore;
+	private ListCollectionFilter<StorableDetectionResult> sinkAnomalyScore;
 	private ListReader<ForecastMeasurementPair> theReaderScoreCalc;
 
+	/**
+	 * Creates a new instance of this class.
+	 */
 	public AnomalyScoreCalculationFilterTest() {
 		// empty default constructor
 	}
 
-	// HelperMethods AnomalyScoreCalculation
 	private ForecastMeasurementPair createFMP(final String name, final Double forecast,
 			final Double measurement) {
 		final ForecastMeasurementPair r = new ForecastMeasurementPair(name, forecast, measurement, System.currentTimeMillis());
@@ -70,6 +72,14 @@ public class AnomalyScoreCalculationFilterTest {
 		return retList;
 	}
 
+	/**
+	 * Set up for the AnomalyScoreCalculationFilterTest.
+	 * 
+	 * @throws IllegalStateException
+	 *             If illegal state
+	 * @throws AnalysisConfigurationException
+	 *             If wrong configuration
+	 */
 	@Before
 	public void setUp() throws IllegalStateException,
 			AnalysisConfigurationException {
@@ -85,7 +95,7 @@ public class AnomalyScoreCalculationFilterTest {
 		this.scoreCalc = new AnomalyScoreCalculationFilter(scoreConfiguration, this.controller);
 
 		// SINK 1
-		this.sinkAnomalyScore = new ListCollectionFilter<NamedDoubleTimeSeriesPoint>(new Configuration(), this.controller);
+		this.sinkAnomalyScore = new ListCollectionFilter<StorableDetectionResult>(new Configuration(), this.controller);
 
 		// CONNECTION
 		this.controller
@@ -94,7 +104,16 @@ public class AnomalyScoreCalculationFilterTest {
 				.connect(this.scoreCalc, AnomalyScoreCalculationFilter.OUTPUT_PORT_ANOMALY_SCORE, this.sinkAnomalyScore, ListCollectionFilter.INPUT_PORT_NAME);
 	}
 
-	// Test for the AnomalyScoreCalculation Filter
+	/**
+	 * Test of the AnomalyScoreCalculationFilter.
+	 * 
+	 * @throws InterruptedException
+	 *             If interrupted
+	 * @throws IllegalStateException
+	 *             If illegal state
+	 * @throws AnalysisConfigurationException
+	 *             If wrong configuration
+	 */
 	@Test
 	public void testAnomalyScoreCalculationOnly() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
 
@@ -103,11 +122,10 @@ public class AnomalyScoreCalculationFilterTest {
 
 		Thread.sleep(1000);
 		thread.terminate();
-
 		Assert.assertEquals(3, this.sinkAnomalyScore.getList().size());
-		Assert.assertTrue(this.sinkAnomalyScore.getList().get(0).getValue().equals(new Double(0.19999999999999996)));
-		Assert.assertTrue(this.sinkAnomalyScore.getList().get(1).getValue().equals(new Double(0.1428571428571429)));
-		Assert.assertTrue(this.sinkAnomalyScore.getList().get(2).getValue().equals(new Double(0.0)));
+		Assert.assertEquals(this.sinkAnomalyScore.getList().get(0).getScore(), 0.19999999999999996, 0);
+		Assert.assertEquals(this.sinkAnomalyScore.getList().get(1).getScore(), 0.1428571428571429, 0);
+		Assert.assertEquals(this.sinkAnomalyScore.getList().get(2).getScore(), 0.0, 0);
 	}
 
 }

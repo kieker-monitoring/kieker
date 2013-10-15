@@ -20,8 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import junit.framework.Assert;
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 import kieker.tools.tslib.ITimeSeries;
 import kieker.tools.tslib.TimeSeries;
@@ -32,13 +32,25 @@ import kieker.tools.tslib.forecast.arima.ARIMA101Forecaster;
  * @author Tillmann Carlos Bielefeld
  * 
  */
-public class ARIMA101ForecasterTest extends TestCase {
-	final long startTime = 98890787;
-	final long deltaTimeMillis = 1000;
-	final int confidenceLevel = 90;
-	final int steps = 1;
+public class ARIMA101ForecasterTest {
 
-	public void testETSPredictor() {
+	private final long startTime = 98890787;
+	private final long deltaTimeMillis = 1000;
+	private final int confidenceLevel = 90;
+	private final int steps = 1;
+
+	/**
+	 * Creates an instance of this class.
+	 */
+	public ARIMA101ForecasterTest() {
+		// Default constructor
+	}
+
+	/**
+	 * Test of the ARIMA101 Forecaster via Rserve.
+	 */
+	@Test
+	public void testARIMAPredictor() {
 		/*
 		 * Test values resulting from this calculation:
 		 * 

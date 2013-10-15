@@ -30,7 +30,7 @@ import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 import kieker.tools.opad.filter.AnomalyDetectionFilter;
-import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
+import kieker.tools.opad.record.StorableDetectionResult;
 
 /**
  * 
@@ -48,30 +48,41 @@ public class AnomalyDetectionFilterTest {
 	private static final String OP_SIGNATURE_A = "a.A.opA";
 
 	// private NameFilter nameFilter;
-	private ListReader<NamedDoubleTimeSeriesPoint> theReader;
+	private ListReader<StorableDetectionResult> theReader;
 	private AnomalyDetectionFilter anomalyDetectionFilter;
 
-	private ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPluginIfAnomaly;
-	private ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPluginElse;
+	private ListCollectionFilter<StorableDetectionResult> sinkPluginIfAnomaly;
+	private ListCollectionFilter<StorableDetectionResult> sinkPluginElse;
 	private AnalysisController controller;
 
+	/**
+	 * Creates a new instance of this class.
+	 */
 	public AnomalyDetectionFilterTest() {
 		// empty default constructor
 	}
 
-	private NamedDoubleTimeSeriesPoint createNDTSP(final String signature, final double value) {
-		final NamedDoubleTimeSeriesPoint r = new NamedDoubleTimeSeriesPoint(System.currentTimeMillis(), value, signature);
+	private StorableDetectionResult createNDTSP(final String signature, final double value) {
+		final StorableDetectionResult r = new StorableDetectionResult(signature, value, System.currentTimeMillis(), value, value);
 		return r;
 	}
 
-	private List<NamedDoubleTimeSeriesPoint> createInputEventSet() {
-		final List<NamedDoubleTimeSeriesPoint> retList = new ArrayList<NamedDoubleTimeSeriesPoint>();
+	private List<StorableDetectionResult> createInputEventSet() {
+		final List<StorableDetectionResult> retList = new ArrayList<StorableDetectionResult>();
 		retList.add(this.createNDTSP(OP_SIGNATURE_A, 0.5));
 		retList.add(this.createNDTSP(OP_SIGNATURE_A, 0.6));
 		retList.add(this.createNDTSP(OP_SIGNATURE_A, 0.7));
 		return retList;
 	}
 
+	/**
+	 * Set up for the AnomalyDetectionFilterTest.
+	 * 
+	 * @throws IllegalStateException
+	 *             If illegal state
+	 * @throws AnalysisConfigurationException
+	 *             If wrong configuration
+	 */
 	@Before
 	public void setUp() throws IllegalStateException, AnalysisConfigurationException {
 		this.controller = new AnalysisController();
@@ -79,7 +90,7 @@ public class AnomalyDetectionFilterTest {
 		// READER
 		final Configuration readerConfiguration = new Configuration();
 		readerConfiguration.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
-		this.theReader = new ListReader<NamedDoubleTimeSeriesPoint>(readerConfiguration, this.controller);
+		this.theReader = new ListReader<StorableDetectionResult>(readerConfiguration, this.controller);
 		this.theReader.addAllObjects(this.createInputEventSet());
 
 		// ANOMALY DETECTION FILTER
@@ -88,10 +99,10 @@ public class AnomalyDetectionFilterTest {
 		this.anomalyDetectionFilter = new AnomalyDetectionFilter(configAnomaly, this.controller);
 
 		// SINK 1
-		this.sinkPluginIfAnomaly = new ListCollectionFilter<NamedDoubleTimeSeriesPoint>(new Configuration(), this.controller);
+		this.sinkPluginIfAnomaly = new ListCollectionFilter<StorableDetectionResult>(new Configuration(), this.controller);
 
 		// SINK 2
-		this.sinkPluginElse = new ListCollectionFilter<NamedDoubleTimeSeriesPoint>(new Configuration(), this.controller);
+		this.sinkPluginElse = new ListCollectionFilter<StorableDetectionResult>(new Configuration(), this.controller);
 
 		// CONNECT the filters
 		this.controller.connect(this.theReader, ListReader.OUTPUT_PORT_NAME,
@@ -104,6 +115,16 @@ public class AnomalyDetectionFilterTest {
 		Assert.assertTrue(this.sinkPluginIfAnomaly.getList().isEmpty());
 	}
 
+	/**
+	 * Test of the AnomalyDetectionFilter.
+	 * 
+	 * @throws InterruptedException
+	 *             If interrupted
+	 * @throws IllegalStateException
+	 *             If illegal state
+	 * @throws AnalysisConfigurationException
+	 *             If wrong configuration
+	 */
 	@Test
 	public void testDetectionOnly() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
 

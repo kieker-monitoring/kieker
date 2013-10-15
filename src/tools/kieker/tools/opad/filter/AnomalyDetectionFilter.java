@@ -23,7 +23,7 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
+import kieker.tools.opad.record.StorableDetectionResult;
 
 /**
  * 
@@ -40,11 +40,11 @@ import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
  */
 @Plugin(name = "AnomalyScore Detection Filter",
 		outputPorts = {
-			@OutputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY),
-			@OutputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_ELSE)
-		},
+			@OutputPort(eventTypes = { StorableDetectionResult.class }, name = AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY),
+			@OutputPort(eventTypes = { StorableDetectionResult.class }, name = AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_ELSE) },
 		configuration = {
-			@Property(name = AnomalyDetectionFilter.CONFIG_PROPERTY_THRESHOLD, defaultValue = "0.5")
+			@Property(name = AnomalyDetectionFilter.CONFIG_PROPERTY_THRESHOLD, defaultValue = "0.5"),
+			@Property(name = AnomalyDetectionFilter.CONFIG_PROPERTY_THRESHOLD_CRITICAL, defaultValue = "0.95")
 		})
 public class AnomalyDetectionFilter extends AbstractFilterPlugin {
 
@@ -65,8 +65,11 @@ public class AnomalyDetectionFilter extends AbstractFilterPlugin {
 
 	/** Name of the property determining the threshold. */
 	public static final String CONFIG_PROPERTY_THRESHOLD = "threshold";
+	/** Name of the property determining a critical threshold. */
+	public static final String CONFIG_PROPERTY_THRESHOLD_CRITICAL = "thresholdcritical";
 
 	private final double threshold;
+	private final double thresholdCritical;
 
 	/**
 	 * Creates a new instance of this class.
@@ -80,12 +83,15 @@ public class AnomalyDetectionFilter extends AbstractFilterPlugin {
 		super(configuration, projectContext);
 		final String sThreshold = super.configuration.getStringProperty(CONFIG_PROPERTY_THRESHOLD);
 		this.threshold = Double.parseDouble(sThreshold);
+		final String sThresholdCritical = super.configuration.getStringProperty(CONFIG_PROPERTY_THRESHOLD_CRITICAL);
+		this.thresholdCritical = Double.parseDouble(sThresholdCritical);
 	}
 
 	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration config = new Configuration();
 		config.setProperty(CONFIG_PROPERTY_THRESHOLD, Double.toString(this.threshold));
+		config.setProperty(CONFIG_PROPERTY_THRESHOLD_CRITICAL, Double.toString(this.thresholdCritical));
 		return new Configuration();
 	}
 
@@ -95,10 +101,14 @@ public class AnomalyDetectionFilter extends AbstractFilterPlugin {
 	 * @param anomalyScore
 	 *            Incoming anomaly score
 	 */
-	@InputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = AnomalyDetectionFilter.INPUT_PORT_ANOMALY_SCORE)
-	public void inputForecastAndMeasurement(final NamedDoubleTimeSeriesPoint anomalyScore) {
-		if (anomalyScore.getDoubleValue() >= this.threshold) {
-			super.deliver(OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY, anomalyScore);
+	@InputPort(eventTypes = { StorableDetectionResult.class }, name = AnomalyDetectionFilter.INPUT_PORT_ANOMALY_SCORE)
+	public void inputForecastAndMeasurement(final StorableDetectionResult anomalyScore) {
+		if (anomalyScore.getScore() >= this.threshold) {
+			if (anomalyScore.getScore() >= this.thresholdCritical) {
+				super.deliver(OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY, anomalyScore);
+			} else {
+				super.deliver(OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY, anomalyScore);
+			}
 		} else {
 			super.deliver(OUTPUT_PORT_ANOMALY_SCORE_ELSE, anomalyScore);
 		}

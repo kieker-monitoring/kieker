@@ -35,6 +35,8 @@ import kieker.tools.opad.record.IForecastMeasurementPair;
 import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
 
 /**
+ * Checks if the forecasts are assigned to the correct real values. Also checks, if a dummy is created for
+ * the first real value, that can not have a calculated forecast.
  * 
  * @author Tom Frotscher
  * 
@@ -42,6 +44,7 @@ import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
 public class UniteMeasurementPairFilterTest {
 
 	private static final String OP_SIGNATURE_A = "a.A.opA";
+	private static final String OP_SIGNATURE_B = "b.B.opB";
 
 	private AnalysisController controller;
 
@@ -51,6 +54,9 @@ public class UniteMeasurementPairFilterTest {
 	private UniteMeasurementPairFilter unite;
 	private ListCollectionFilter<ForecastMeasurementPair> sinkPlugin;
 
+	/**
+	 * Creates a new instance of this class.
+	 */
 	public UniteMeasurementPairFilterTest() {
 		// empty default constructor
 	}
@@ -61,29 +67,40 @@ public class UniteMeasurementPairFilterTest {
 		return r;
 	}
 
-	private IForecastMeasurementPair createFMP(final long d, final double value) {
-		final IForecastMeasurementPair fmp = new ForecastMeasurementPair(OP_SIGNATURE_A, value, 1.0, d);
-		return fmp;
-	}
-
 	private List<NamedDoubleTimeSeriesPoint> createInputEventSetUnite() {
 		final List<NamedDoubleTimeSeriesPoint> retList = new ArrayList<NamedDoubleTimeSeriesPoint>();
 		retList.add(this.createNDTSP(0L, OP_SIGNATURE_A, 0.3));
 		retList.add(this.createNDTSP(5L, OP_SIGNATURE_A, 0.4));
 		retList.add(this.createNDTSP(10L, OP_SIGNATURE_A, 0.5));
 		retList.add(this.createNDTSP(15L, OP_SIGNATURE_A, 0.9));
+		retList.add(this.createNDTSP(0L, OP_SIGNATURE_B, 0.7));
+		retList.add(this.createNDTSP(8L, OP_SIGNATURE_B, 0.3));
+		retList.add(this.createNDTSP(10L, OP_SIGNATURE_B, 0.1));
+		retList.add(this.createNDTSP(17L, OP_SIGNATURE_B, 0.97));
 		return retList;
 	}
 
 	private List<IForecastMeasurementPair> createInputEventSetUniteForecast() {
 		final List<IForecastMeasurementPair> retList = new ArrayList<IForecastMeasurementPair>();
-		retList.add(this.createFMP(5L, 0.35));
-		retList.add(this.createFMP(10L, 0.45));
-		retList.add(this.createFMP(15L, 0.55));
-		retList.add(this.createFMP(20L, 0.95));
+		retList.add(new ForecastMeasurementPair(OP_SIGNATURE_A, 0.35, 1.0, 5L));
+		retList.add(new ForecastMeasurementPair(OP_SIGNATURE_A, 0.45, 1.0, 10L));
+		retList.add(new ForecastMeasurementPair(OP_SIGNATURE_A, 0.55, 1.0, 15L));
+		retList.add(new ForecastMeasurementPair(OP_SIGNATURE_A, 0.95, 1.0, 20L));
+		retList.add(new ForecastMeasurementPair(OP_SIGNATURE_B, 0.31, 1.0, 8L));
+		retList.add(new ForecastMeasurementPair(OP_SIGNATURE_B, 0.46, 1.0, 10L));
+		retList.add(new ForecastMeasurementPair(OP_SIGNATURE_B, 0.55, 1.0, 17L));
+		retList.add(new ForecastMeasurementPair(OP_SIGNATURE_B, 0.95, 1.0, 20L));
 		return retList;
 	}
 
+	/**
+	 * Set up for the VariateUniteFMPFilterTest.
+	 * 
+	 * @throws IllegalStateException
+	 *             If illegal state
+	 * @throws AnalysisConfigurationException
+	 *             If wrong configuration
+	 */
 	@Before
 	public void setUp() throws IllegalStateException,
 			AnalysisConfigurationException {
@@ -117,7 +134,18 @@ public class UniteMeasurementPairFilterTest {
 				ListCollectionFilter.INPUT_PORT_NAME);
 	}
 
-	// Test for the ForeCasting Filter
+	/**
+	 * Test of the VariateUniteFMPFilter. The measurement values and the forecast values have to be brought together
+	 * correctly. Therefore, the measurements and forecasts with corresponding time stamps have to be brought together
+	 * if they are from the same application.
+	 * 
+	 * @throws InterruptedException
+	 *             If interrupted
+	 * @throws IllegalStateException
+	 *             If illegal state
+	 * @throws AnalysisConfigurationException
+	 *             If wrong configuration
+	 */
 	@Test
 	public void testUniteOnly() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
 
@@ -127,27 +155,16 @@ public class UniteMeasurementPairFilterTest {
 		Thread.sleep(2000);
 		thread.terminate();
 
-		Assert.assertEquals(4, this.sinkPlugin.getList().size());
-		System.out.println("--- Paar 1 ---");
-		final double r1 = this.sinkPlugin.getList().get(0).getValue();
-		final double f1 = this.sinkPlugin.getList().get(0).getForecasted();
-		System.out.println(r1 + " und " + f1 + " <-- Dummy");
+		Assert.assertEquals(8, this.sinkPlugin.getList().size());
 
-		System.out.println("--- Paar 2 ---");
-		final double r2 = this.sinkPlugin.getList().get(1).getValue();
-		final double f2 = this.sinkPlugin.getList().get(1).getForecasted();
-		System.out.println(r2 + " und " + f2);
-
-		System.out.println("--- Paar 3 ---");
-		final double r3 = this.sinkPlugin.getList().get(2).getValue();
-		final double f3 = this.sinkPlugin.getList().get(2).getForecasted();
-		System.out.println(r3 + " und " + f3);
-
-		System.out.println("--- Paar 4 ---");
-		final double r4 = this.sinkPlugin.getList().get(3).getValue();
-		final double f4 = this.sinkPlugin.getList().get(3).getForecasted();
-		System.out.println(r4 + " und " + f4);
+		Assert.assertTrue((this.sinkPlugin.getList().get(0).getValue() == 0.3) && (this.sinkPlugin.getList().get(0).getForecasted() == 0.3));
+		Assert.assertTrue((this.sinkPlugin.getList().get(1).getValue() == 0.4) && (this.sinkPlugin.getList().get(1).getForecasted() == 0.35));
+		Assert.assertTrue((this.sinkPlugin.getList().get(2).getValue() == 0.5) && (this.sinkPlugin.getList().get(2).getForecasted() == 0.45));
+		Assert.assertTrue((this.sinkPlugin.getList().get(3).getValue() == 0.9) && (this.sinkPlugin.getList().get(3).getForecasted() == 0.55));
+		Assert.assertTrue((this.sinkPlugin.getList().get(4).getValue() == 0.7) && (this.sinkPlugin.getList().get(4).getForecasted() == 0.7));
+		Assert.assertTrue((this.sinkPlugin.getList().get(5).getValue() == 0.3) && (this.sinkPlugin.getList().get(5).getForecasted() == 0.31));
+		Assert.assertTrue((this.sinkPlugin.getList().get(6).getValue() == 0.1) && (this.sinkPlugin.getList().get(6).getForecasted() == 0.46));
+		Assert.assertTrue((this.sinkPlugin.getList().get(7).getValue() == 0.97) && (this.sinkPlugin.getList().get(7).getForecasted() == 0.55));
 
 	}
-
 }

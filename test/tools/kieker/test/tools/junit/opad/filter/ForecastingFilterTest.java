@@ -30,26 +30,32 @@ import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 import kieker.tools.opad.filter.ForecastingFilter;
+import kieker.tools.opad.record.ForecastMeasurementPair;
 import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
-import kieker.tools.tslib.ITimeSeriesPoint;
-import kieker.tools.tslib.forecast.IForecastResult;
 
 /**
+ * Basically compares the results of the forecaster with previous manually calculated forecasted results.
+ * Currently for the mean forecaster.
  * 
- * @author Tillmann Carlos Bielefeld, Tom Frotscher
+ * @author Tom Frotscher
  * 
  */
 public class ForecastingFilterTest {
 
 	private static final String OP_SIGNATURE_A = "a.A.opA";
+	private static final String OP_SIGNATURE_B = "b.B.opB";
+	private static final String OP_SIGNATURE_C = "c.C.opC";
 
 	private AnalysisController controller;
 
 	// Variables ForecastingFilter
 	private ListReader<NamedDoubleTimeSeriesPoint> theReaderForecast;
 	private ForecastingFilter forecasting;
-	private ListCollectionFilter<IForecastResult<Double>> sinkPlugin;
+	private ListCollectionFilter<ForecastMeasurementPair> sinkPlugin;
 
+	/**
+	 * Creates an instance of this class.
+	 */
 	public ForecastingFilterTest() {
 		// empty default constructor
 	}
@@ -63,11 +69,23 @@ public class ForecastingFilterTest {
 	private List<NamedDoubleTimeSeriesPoint> createInputEventSetForecast() {
 		final List<NamedDoubleTimeSeriesPoint> retList = new ArrayList<NamedDoubleTimeSeriesPoint>();
 		retList.add(this.createNDTSP(OP_SIGNATURE_A, 0.3));
-		retList.add(this.createNDTSP(OP_SIGNATURE_A, 0.4));
+		retList.add(this.createNDTSP(OP_SIGNATURE_B, 0.4));
 		retList.add(this.createNDTSP(OP_SIGNATURE_A, 0.5));
+		retList.add(this.createNDTSP(OP_SIGNATURE_C, 0.5));
+		retList.add(this.createNDTSP(OP_SIGNATURE_B, 0.3));
+		retList.add(this.createNDTSP(OP_SIGNATURE_A, 0.4));
+		retList.add(this.createNDTSP(OP_SIGNATURE_B, 0.5));
 		return retList;
 	}
 
+	/**
+	 * Sets up the controller and configuration for the test of the VariateForecastingFilter.
+	 * 
+	 * @throws IllegalStateException
+	 *             If illegal State
+	 * @throws AnalysisConfigurationException
+	 *             If wrong configuration
+	 */
 	@Before
 	public void setUp() throws IllegalStateException,
 			AnalysisConfigurationException {
@@ -88,17 +106,26 @@ public class ForecastingFilterTest {
 		this.forecasting = new ForecastingFilter(forecastConfiguration, this.controller);
 
 		// SINK 1
-		this.sinkPlugin = new ListCollectionFilter<IForecastResult<Double>>(new Configuration(), this.controller);
+		this.sinkPlugin = new ListCollectionFilter<ForecastMeasurementPair>(new Configuration(), this.controller);
 		Assert.assertTrue(this.sinkPlugin.getList().isEmpty());
 
 		// CONNECTION
 		this.controller.connect(this.theReaderForecast, ListReader.OUTPUT_PORT_NAME, this.forecasting, ForecastingFilter.INPUT_PORT_NAME_TSPOINT);
 		this.controller.connect(this.forecasting,
-				ForecastingFilter.OUTPUT_PORT_NAME_FORECAST, this.sinkPlugin,
+				ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, this.sinkPlugin,
 				ListCollectionFilter.INPUT_PORT_NAME);
 	}
 
-	// Test for the ForeCasting Filter
+	/**
+	 * Test of the Forecasting with incoming measurements of different Applications. This test case is successful for the MEANJAVA Forecaster.
+	 * 
+	 * @throws InterruptedException
+	 *             If interrupted
+	 * @throws IllegalStateException
+	 *             If illegal state
+	 * @throws AnalysisConfigurationException
+	 *             If wrong configuration
+	 */
 	@Test
 	public void testForecastingOnly() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
 
@@ -108,10 +135,21 @@ public class ForecastingFilterTest {
 		Thread.sleep(1000);
 		thread.terminate();
 
-		Assert.assertEquals(3, this.sinkPlugin.getList().size());
-		final IForecastResult<Double> lastresult = this.sinkPlugin.getList().get(2);
-		final ITimeSeriesPoint<Double> nextMeanFC = lastresult.getForecast().getPoints().get(0);
-		Assert.assertEquals(new Double(0.4), nextMeanFC.getValue());
+		Assert.assertEquals(7, this.sinkPlugin.getList().size());
+		// Expected: 0.3 - 0.3 (dummy) Application A
+		Assert.assertEquals(new Double(0.3), this.sinkPlugin.getList().get(0).getForecasted());
+		// Expected: 0.4 - 0.4 (dummy) Application B
+		Assert.assertEquals(new Double(0.4), this.sinkPlugin.getList().get(1).getForecasted());
+		// Expected: (0.3 + 0.5) / 2 = 0.4 Application A
+		Assert.assertEquals(new Double(0.4), this.sinkPlugin.getList().get(2).getForecasted());
+		// Expected: 0.5 = 0.5 (dummy) Application C
+		Assert.assertEquals(new Double(0.5), this.sinkPlugin.getList().get(3).getForecasted());
+		// Expected: (0.4 + 0.3) / 2 = 0.35 Application B
+		Assert.assertEquals(new Double(0.35), this.sinkPlugin.getList().get(4).getForecasted());
+		// Expected: (0.3 + 0.5 + 0.4) / 3 = 0.4 Application A
+		Assert.assertEquals(new Double(0.4), this.sinkPlugin.getList().get(5).getForecasted());
+		// Expected: (0.4 + 0.3 + 0.5) / 3 = 0.4 Application B
+		Assert.assertEquals(new Double(0.4), this.sinkPlugin.getList().get(6).getForecasted());
 
 	}
 

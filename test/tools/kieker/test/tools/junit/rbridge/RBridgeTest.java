@@ -34,21 +34,38 @@ import kieker.tools.util.RBridgeControl;
 public class RBridgeTest {
 	private static final Log LOG = LogFactory.getLog(RBridgeTest.class);
 
+	/**
+	 * Creates a new instance of this class.
+	 */
+	public RBridgeTest() {
+		// Default constructor
+	}
+
+	/**
+	 * Set up of the RBridgeTest.
+	 * 
+	 * @throws Exception
+	 *             If exception is thrown
+	 */
 	@Before
 	public void setUp() throws Exception {}
 
+	/**
+	 * Test of the RBridge, connects to Rserve.
+	 */
 	@Test
 	public void test() {
 
 		final RBridgeControl r = RBridgeControl.getInstance(new File("."));
 
 		r.e("measures <<- c(NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,31.0,41.0,95.0,77.0,29.0,62.0,49.0,NA)");
-		r.e("forecasts <<- c(NA,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,2.8181818181818183,6.0,12.846153846153847,17.428571428571427,18.2,20.9375,22.58823529411765)");
-		r.e("anomalies <<- c(NA,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,0.8333333333333333,0.7446808510638298,0.761768901569187,0.6308623298033282,0.2288135593220339,0.49510173323285606,0.3689400164338537,NA)");
+		r.e("forecasts <<- c(NA,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,2.8181818181818183,"
+				+ "6.0,12.846153846153847,17.428571428571427,18.2,20.9375,22.58823529411765)");
+		r.e("anomalies <<- c(NA,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,0.8333333333333333,0.7446808510638298,"
+				+ "0.761768901569187,0.6308623298033282,0.2288135593220339,0.49510173323285606,0.3689400164338537,NA)");
 		r.e("combined <<- cbind(measures, forecasts, anomalies)");
-		final Object result = r
-				.e("plotAnomaly(combined, '/Users/till/Documents/repositories/uni/thesis-repos/Opad4lsssExperiments/opad4lsss_r/plots/junit_testplot.pdf', 1323437034798, 2000)");
-
+		final Object result = r.e("plotAnomaly(combined, '/Users/tom.frotscher/Documents/ThesisStuff/Plots/junit_testplot.pdf', 1323437034798, 2000)");
+		// final Object result = r.e("plot(combined)");
 		LOG.info(result.toString());
 
 		Assert.assertTrue(result != null);

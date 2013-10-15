@@ -16,6 +16,7 @@
 
 package kieker.tools.opad.filter;
 
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 import kieker.analysis.IProjectContext;
@@ -35,9 +36,9 @@ import kieker.tools.tslib.forecast.IForecastResult;
 import kieker.tools.tslib.forecast.IForecaster;
 
 /**
- * Computes a forecast for every incoming measurement.
+ * Computes a forecast for every incoming measurement from different applications.
  * 
- * @author Tillmann Carlos Bielefeld, Andre van Hoorn
+ * @author Tom Frotscher
  * 
  */
 @Plugin(name = "Forecast Filter", outputPorts = {
@@ -46,7 +47,8 @@ import kieker.tools.tslib.forecast.IForecaster;
 		configuration = {
 			@Property(name = ForecastingFilter.CONFIG_PROPERTY_DELTA_TIME, defaultValue = "1000"),
 			@Property(name = ForecastingFilter.CONFIG_PROPERTY_DELTA_UNIT, defaultValue = "MILLISECONDS"),
-			@Property(name = ForecastingFilter.CONFIG_PROPERTY_FC_METHOD, defaultValue = "MEAN")
+			@Property(name = ForecastingFilter.CONFIG_PROPERTY_FC_METHOD, defaultValue = "MEAN"),
+			@Property(name = ForecastingFilter.CONFIG_PROPERTY_TS_WINDOW_CAPACITY, defaultValue = "60")
 		})
 public class ForecastingFilter extends AbstractFilterPlugin {
 
@@ -54,11 +56,6 @@ public class ForecastingFilter extends AbstractFilterPlugin {
 	 * Name of the input port receiving the measurements.
 	 */
 	public static final String INPUT_PORT_NAME_TSPOINT = "tspoint";
-
-	/**
-	 * Name of the input port receiving the triggers.
-	 */
-	public static final String INPUT_PORT_NAME_TRIGGER = "trigger";
 
 	/**
 	 * Name of the output port delivering the forecasts.
@@ -76,17 +73,17 @@ public class ForecastingFilter extends AbstractFilterPlugin {
 	public static final String CONFIG_PROPERTY_DELTA_UNIT = "deltaunit";
 	/** Name of the property determining the forecasting method. */
 	public static final String CONFIG_PROPERTY_FC_METHOD = "fcmethod";
+	/** Name of the property determining the capacity of the timeseries window. Take value <= 0 for infinite buffersize */
+	public static final String CONFIG_PROPERTY_TS_WINDOW_CAPACITY = "tswcapacity";
 
-	private static final Object TRIGGER = new Object();
-
-	private final ITimeSeries<Double> timeSeriesWindow;
+	private final ConcurrentHashMap<String, ITimeSeries<Double>> applicationForecastingWindow;
+	private final int timeSeriesWindowCapacity;
 	private final ForecastMethod forecastMethod;
-	private NamedDoubleTimeSeriesPoint lastPoint;
 
 	private final long deltat;
 	private final TimeUnit tunit;
 
-	private final IForecaster<Double> forecaster;
+	private IForecaster<Double> forecaster;
 
 	/**
 	 * Creates a new instance of this class.
@@ -99,15 +96,14 @@ public class ForecastingFilter extends AbstractFilterPlugin {
 	public ForecastingFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
+		this.applicationForecastingWindow = new ConcurrentHashMap<String, ITimeSeries<Double>>();
 		this.deltat = configuration.getLongProperty(CONFIG_PROPERTY_DELTA_TIME);
 		this.tunit = TimeUnit.valueOf(configuration
 				.getStringProperty(CONFIG_PROPERTY_DELTA_UNIT));
-
-		this.timeSeriesWindow = new TimeSeries<Double>(System.currentTimeMillis(), this.deltat, this.tunit);
+		this.timeSeriesWindowCapacity = configuration.getIntProperty(CONFIG_PROPERTY_TS_WINDOW_CAPACITY);
 
 		this.forecastMethod = ForecastMethod.valueOf(configuration
 				.getStringProperty(CONFIG_PROPERTY_FC_METHOD));
-		this.forecaster = this.forecastMethod.getForecaster(this.timeSeriesWindow);
 	}
 
 	@Override
@@ -116,6 +112,7 @@ public class ForecastingFilter extends AbstractFilterPlugin {
 		configuration.setProperty(CONFIG_PROPERTY_DELTA_TIME, Long.toString(this.deltat));
 		configuration.setProperty(CONFIG_PROPERTY_DELTA_UNIT, this.tunit.name());
 		configuration.setProperty(CONFIG_PROPERTY_FC_METHOD, this.forecastMethod.name());
+		configuration.setProperty(CONFIG_PROPERTY_TS_WINDOW_CAPACITY, Integer.toString(this.timeSeriesWindowCapacity));
 		return configuration;
 	}
 
@@ -127,31 +124,50 @@ public class ForecastingFilter extends AbstractFilterPlugin {
 	 */
 	@InputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = ForecastingFilter.INPUT_PORT_NAME_TSPOINT)
 	public void inputEvent(final NamedDoubleTimeSeriesPoint input) {
-		this.timeSeriesWindow.append(input.getValue());
+		if (this.checkInitialization(input.getName())) {
+			this.processInput(input, input.getTime(), input.getName());
+		} else {
+			// Initialization of the forecasting variables for a new application
+			this.applicationForecastingWindow.put(input.getName(),
+					new TimeSeries<Double>(System.currentTimeMillis(), this.deltat, this.tunit, this.timeSeriesWindowCapacity));
+			this.processInput(input, input.getTime(), input.getName());
+		}
 
-		this.lastPoint = input;
-
-		this.inputTrigger(TRIGGER);
 	}
 
 	/**
-	 * Represents the input port for triggers. Delivers the forecasting result and a forecasting-measurement-pair.
+	 * Calculating the Forecast and delivers it.
 	 * 
-	 * @param trigger
-	 *            Incoming trigger
+	 * @param input
+	 *            Incoming measurement
+	 * @param timestamp
+	 *            Timestamp of the measurement
+	 * @param name
+	 *            Name of the application of the measurement
 	 */
-	@InputPort(eventTypes = { Object.class }, name = ForecastingFilter.INPUT_PORT_NAME_TRIGGER)
-	public void inputTrigger(final Object trigger) {
-
+	public void processInput(final NamedDoubleTimeSeriesPoint input, final long timestamp, final String name) {
+		final ITimeSeries<Double> actualWindow = this.applicationForecastingWindow.get(name);
+		actualWindow.append(input.getValue());
+		this.forecaster = this.forecastMethod.getForecaster(actualWindow);
 		final IForecastResult<Double> result = this.forecaster.forecast(1);
 		super.deliver(OUTPUT_PORT_NAME_FORECAST, result);
 
 		final ForecastMeasurementPair fmp = new ForecastMeasurementPair(
-				this.lastPoint.getName(),
+				name,
 				result.getForecast().getPoints().get(0).getValue(),
-				this.lastPoint.getValue(),
-				this.lastPoint.getTime());
+				input.getValue(),
+				timestamp);
 		super.deliver(OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, fmp);
+	}
+
+	/**
+	 * Checks if the current application is already known to this filter.
+	 * 
+	 * @param name
+	 *            Application name
+	 */
+	private boolean checkInitialization(final String name) {
+		return this.applicationForecastingWindow.containsKey(name);
 	}
 
 }
