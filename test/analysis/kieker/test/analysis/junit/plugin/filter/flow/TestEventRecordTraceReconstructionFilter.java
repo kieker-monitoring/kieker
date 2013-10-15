@@ -72,7 +72,7 @@ public class TestEventRecordTraceReconstructionFilter extends AbstractKiekerTest
 		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, traceFilter, EventRecordTraceReconstructionFilter.INPUT_PORT_NAME_TRACE_RECORDS);
 		controller.connect(traceFilter, EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID, sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
 
-		reader.addObject(records.getTrace());
+		reader.addObject(records.getTraceMetadata());
 		for (final AbstractTraceEvent e : records.getTraceEvents()) {
 			reader.addObject(e);
 		}
@@ -101,7 +101,7 @@ public class TestEventRecordTraceReconstructionFilter extends AbstractKiekerTest
 		controller.connect(reader, ListReader.OUTPUT_PORT_NAME, traceFilter, EventRecordTraceReconstructionFilter.INPUT_PORT_NAME_TRACE_RECORDS);
 		controller.connect(traceFilter, EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID, sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
 
-		reader.addObject(records.getTrace());
+		reader.addObject(records.getTraceMetadata());
 		for (final AbstractTraceEvent e : records.getTraceEvents()) {
 			reader.addObject(e);
 		}
@@ -132,8 +132,8 @@ public class TestEventRecordTraceReconstructionFilter extends AbstractKiekerTest
 		controller.connect(traceFilter, EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID, sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
 		controller.connect(traceFilter, EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_INVALID, sinkPluginFailed, ListCollectionFilter.INPUT_PORT_NAME);
 
-		reader.addObject(trace1.getTrace());
-		reader.addObject(trace2.getTrace());
+		reader.addObject(trace1.getTraceMetadata());
+		reader.addObject(trace2.getTraceMetadata());
 		final AbstractTraceEvent[] events1 = trace1.getTraceEvents();
 		final AbstractTraceEvent[] events2 = trace2.getTraceEvents();
 		for (int i = 0; i < events1.length; i++) {

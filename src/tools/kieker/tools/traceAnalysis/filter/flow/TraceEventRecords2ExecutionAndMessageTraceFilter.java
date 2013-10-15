@@ -125,7 +125,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 	 */
 	@InputPort(name = INPUT_PORT_NAME_EVENT_TRACE, description = "Receives TraceEvents to be transformed", eventTypes = { TraceEventRecords.class })
 	public void inputTraceEvents(final TraceEventRecords traceEventRecords) {
-		final TraceMetadata trace = traceEventRecords.getTrace();
+		final TraceMetadata trace = traceEventRecords.getTraceMetadata();
 		if (trace == null) {
 			LOG.error("Trace is missing from TraceEvents");
 			return;

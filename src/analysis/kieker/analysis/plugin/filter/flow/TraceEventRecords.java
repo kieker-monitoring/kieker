@@ -30,6 +30,8 @@ public final class TraceEventRecords {
 	private final TraceMetadata trace;
 	private final AbstractTraceEvent[] traceEvents;
 
+	private int count = 1;
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -48,7 +50,7 @@ public final class TraceEventRecords {
 	 * 
 	 * @return The traces currently stored in this object.
 	 */
-	public TraceMetadata getTrace() {
+	public TraceMetadata getTraceMetadata() {
 		return this.trace;
 	}
 
@@ -61,11 +63,25 @@ public final class TraceEventRecords {
 		return this.traceEvents; // NOPMD (internal array exposed)
 	}
 
+	public int getCount() {
+		synchronized (this) {
+			return this.count;
+		}
+	}
+
+	public void setCount(final int count) {
+		synchronized (this) {
+			this.count = count;
+		}
+	}
+
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder(64);
 		sb.append(super.toString());
-		sb.append("\n\tTrace: ");
+		sb.append("\n\tTrace (");
+		sb.append(this.count);
+		sb.append("): ");
 		sb.append(this.trace);
 		for (final AbstractTraceEvent traceEvent : this.traceEvents) {
 			sb.append("\n\t");
@@ -87,7 +103,7 @@ public final class TraceEventRecords {
 	}
 
 	@Override
-	public boolean equals(final Object obj) {
+	public final boolean equals(final Object obj) {
 		if (this == obj) {
 			return true;
 		}

@@ -80,6 +80,14 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	 * The name of the input port receiving the trace records.
 	 */
 	public static final String INPUT_PORT_NAME_TRACE_RECORDS = "traceRecords";
+	/**
+	 * The name of the input port receiving the trace records.
+	 */
+	public static final String INPUT_PORT_NAME_TRACEEVENT_RECORDS = "traceEventRecords";
+	/**
+	 * The name of the input port receiving the trace records.
+	 */
+	public static final String INPUT_PORT_NAME_TIME_EVENT = "timestamps";
 
 	/**
 	 * The name of the property determining the time unit.
@@ -146,6 +154,44 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		this.maxTraceTimeout = this.timeunit.convert(configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT), configTimeunit);
 		this.timeout = !((this.maxTraceTimeout == Long.MAX_VALUE) && (this.maxTraceDuration == Long.MAX_VALUE));
 		this.traceId2trace = new ConcurrentHashMap<Long, TraceBuffer>();
+	}
+
+	/**
+	 * This method is the input port for the timeout.
+	 * 
+	 * @param timestamp
+	 *            The timestamp
+	 */
+	@InputPort(
+			name = INPUT_PORT_NAME_TIME_EVENT,
+			description = "Input port for a periodic time signal",
+			eventTypes = { Long.class })
+	public void newEvent(final Long timestamp) {
+		synchronized (this) {
+			if (this.timeout) {
+				this.processTimeoutQueue(timestamp);
+			}
+		}
+	}
+
+	/**
+	 * This method is the input port for the new events for this filter.
+	 * 
+	 * @param traceEventRecords
+	 *            The new record to handle.
+	 */
+	@InputPort(
+			name = INPUT_PORT_NAME_TRACEEVENT_RECORDS,
+			description = "Reconstruct traces from incoming traces",
+			eventTypes = { TraceEventRecords.class })
+	public void newTraceEventRecord(final TraceEventRecords traceEventRecords) {
+		final TraceMetadata trace = traceEventRecords.getTraceMetadata();
+		if (null != trace) {
+			this.newEvent(trace);
+		}
+		for (final AbstractTraceEvent record : traceEventRecords.getTraceEvents()) {
+			this.newEvent(record);
+		}
 	}
 
 	/**
@@ -390,4 +436,5 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 			}
 		}
 	}
+
 }
