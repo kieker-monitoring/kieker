@@ -33,7 +33,7 @@ import kieker.tools.util.LoggingTimestampConverter;
 /**
  * This class is a container for a whole trace of executions (represented as instances of {@link Execution}).
  * 
- * Note that no assumptions about the {@link java.util.concurrent.TimeUnit;} used for the
+ * Note that no assumptions about the {@link java.util.concurrent.TimeUnit} used for the
  * timestamps are made.
  * 
  * @author Andre van Hoorn
