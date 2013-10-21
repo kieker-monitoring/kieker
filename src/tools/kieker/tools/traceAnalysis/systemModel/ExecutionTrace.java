@@ -297,22 +297,6 @@ public class ExecutionTrace extends AbstractTrace {
 	}
 
 	/**
-	 * Returns the duration of this (possibly incomplete) trace in nanoseconds.
-	 * This value is the difference between the maximum tout and the minimum
-	 * tin value.
-	 * 
-	 * Note that this method simply returns the result of the method getDuration, which
-	 * may return a timestamp in a unit that may not be nanoseconds!
-	 * 
-	 * @return the duration of this trace in nanoseconds.
-	 * @deprecated to be removed in 1.9
-	 */
-	@Deprecated
-	public long getDurationInNanos() {
-		return this.getDuration();
-	}
-
-	/**
 	 * Returns the maximum timestamp value of an execution return in this trace.
 	 * 
 	 * Notice that you should need use this value to reason about the
