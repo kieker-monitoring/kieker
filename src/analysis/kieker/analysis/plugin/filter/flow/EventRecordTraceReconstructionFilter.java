@@ -110,8 +110,6 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	 */
 	public static final String CONFIG_PROPERTY_VALUE_TIMEUNIT = "NANOSECONDS"; // TimeUnit.NANOSECONDS.name()
 
-	private static final Log LOG = LogFactory.getLog(EventRecordTraceReconstructionFilter.class);
-
 	private final TimeUnit timeunit;
 	private final long maxTraceDuration;
 	private final long maxTraceTimeout;
@@ -136,7 +134,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		try {
 			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
 		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
-			LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
+			this.log.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
 			recordTimeunit = TimeUnit.NANOSECONDS;
 		}
 		this.timeunit = recordTimeunit;
@@ -146,7 +144,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		try {
 			configTimeunit = TimeUnit.valueOf(configTimeunitProperty);
 		} catch (final IllegalArgumentException ex) {
-			LOG.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + this.timeunit.name() + " instead.");
+			this.log.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + this.timeunit.name() + " instead.");
 			configTimeunit = this.timeunit;
 		}
 
@@ -310,7 +308,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	 * @author Jan Waller
 	 */
 	private static final class TraceBuffer {
-		private static final Log LOG = LogFactory.getLog(TraceBuffer.class);
+		private static final Log log = LogFactory.getLog(TraceBuffer.class);
 		private static final Comparator<AbstractTraceEvent> COMPARATOR = new TraceEventComperator();
 
 		private TraceMetadata trace;
@@ -339,7 +337,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 				if (this.traceId == -1) {
 					this.traceId = myTraceId;
 				} else if (this.traceId != myTraceId) {
-					LOG.error("Invalid traceId! Expected: " + this.traceId + " but found: " + myTraceId + " in event " + event.toString());
+					log.error("Invalid traceId! Expected: " + this.traceId + " but found: " + myTraceId + " in event " + event.toString());
 					this.damaged = true;
 				}
 				final long loggingTimestamp = event.getTimestamp();
@@ -364,7 +362,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 					this.openEvents--;
 				}
 				if (!this.events.add(event)) {
-					LOG.error("Duplicate entry for orderIndex " + orderIndex + " with traceId " + myTraceId);
+					log.error("Duplicate entry for orderIndex " + orderIndex + " with traceId " + myTraceId);
 					this.damaged = true;
 				}
 			}
@@ -376,13 +374,13 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 				if (this.traceId == -1) {
 					this.traceId = myTraceId;
 				} else if (this.traceId != myTraceId) {
-					LOG.error("Invalid traceId! Expected: " + this.traceId + " but found: " + myTraceId + " in trace " + trace.toString());
+					log.error("Invalid traceId! Expected: " + this.traceId + " but found: " + myTraceId + " in trace " + trace.toString());
 					this.damaged = true;
 				}
 				if (this.trace == null) {
 					this.trace = trace;
 				} else {
-					LOG.error("Duplicate Trace entry for traceId " + myTraceId);
+					log.error("Duplicate Trace entry for traceId " + myTraceId);
 					this.damaged = true;
 				}
 			}

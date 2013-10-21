@@ -30,8 +30,6 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.misc.TimestampRecord;
 
 /**
@@ -88,8 +86,6 @@ public final class TimeReader extends AbstractReaderPlugin {
 	/** A value for the number of impulses. It makes sure that the reader emits an infinite amount of signals. */
 	public static final long INFINITE_EMITS = 0L;
 
-	private static final Log LOG = LogFactory.getLog(TimeReader.class);
-
 	final CountDownLatch impulseEmitLatch = new CountDownLatch(1); // NOCS NOPMD (package visible)
 
 	private volatile boolean terminated;
@@ -121,7 +117,7 @@ public final class TimeReader extends AbstractReaderPlugin {
 		try {
 			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
 		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
-			LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
+			this.log.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
 			recordTimeunit = TimeUnit.NANOSECONDS;
 		}
 		this.timeunit = recordTimeunit;
@@ -132,7 +128,7 @@ public final class TimeReader extends AbstractReaderPlugin {
 	 */
 	public void terminate(final boolean error) {
 		if (!this.terminated) {
-			LOG.info("Shutdown of TimeReader requested.");
+			this.log.info("Shutdown of TimeReader requested.");
 			this.executorService.shutdown();
 			try {
 				this.terminated = this.executorService.awaitTermination(5, TimeUnit.SECONDS);

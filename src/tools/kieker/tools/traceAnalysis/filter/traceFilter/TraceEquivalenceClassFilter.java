@@ -28,8 +28,6 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.filter.AbstractExecutionTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.traceReconstruction.InvalidTraceException;
@@ -73,8 +71,6 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 	/** This constant determines the default equivalence mode (the default value is disabled). */
 	public static final TraceEquivalenceClassModes DEFAULT_EQUIVALENCE_MODE = TraceEquivalenceClassModes.DISABLED;
 
-	private static final Log LOG = LogFactory.getLog(TraceEquivalenceClassFilter.class);
-
 	private final TraceEquivalenceClassModes equivalenceMode;
 
 	/** Representative x # of equivalents. */
@@ -117,7 +113,7 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 		try {
 			extractedEquivalenceMode = TraceEquivalenceClassModes.valueOf(traceEquivalenceCallModeString);
 		} catch (final IllegalArgumentException exc) {
-			LOG.error("Error extracting enum value from String: '" + traceEquivalenceCallModeString + "'", exc);
+			this.log.error("Error extracting enum value from String: '" + traceEquivalenceCallModeString + "'", exc);
 			extractedEquivalenceMode = DEFAULT_EQUIVALENCE_MODE;
 		}
 		return extractedEquivalenceMode;
@@ -145,7 +141,7 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 				} else if (this.equivalenceMode == TraceEquivalenceClassModes.ALLOCATION) {
 					polledTraceHashContainer = new ExecutionTraceHashContainerAllocationEquivalence(et);
 				} else { // just to make sure
-					LOG.error("Invalid trace equivalence mode: " + this.equivalenceMode);
+					this.log.error("Invalid trace equivalence mode: " + this.equivalenceMode);
 					this.reportError(et.getTraceId());
 					return;
 				}
@@ -163,7 +159,7 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 			}
 			this.reportSuccess(et.getTraceId());
 		} catch (final InvalidTraceException ex) {
-			LOG.error("InvalidTraceException: " + ex.getMessage()); // do not pass 'ex' to LOG.error because this makes the output verbose (#584)
+			this.log.error("InvalidTraceException: " + ex.getMessage()); // do not pass 'ex' to LOG.error because this makes the output verbose (#584)
 			this.reportError(et.getTraceId());
 		}
 	}

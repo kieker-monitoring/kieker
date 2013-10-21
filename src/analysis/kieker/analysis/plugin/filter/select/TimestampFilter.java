@@ -25,8 +25,6 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.record.flow.IEventRecord;
@@ -84,8 +82,6 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 	/** The default used lower limit for the records. **/
 	public static final String CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP = "0"; // Long.toString(0)
 
-	private static final Log LOG = LogFactory.getLog(TimestampFilter.class);
-
 	private final TimeUnit timeunit;
 	private final long ignoreBeforeTimestamp;
 	private final long ignoreAfterTimestamp;
@@ -106,7 +102,7 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 		try {
 			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
 		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
-			LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
+			this.log.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
 			recordTimeunit = TimeUnit.NANOSECONDS;
 		}
 		this.timeunit = recordTimeunit;
@@ -116,7 +112,7 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 		try {
 			configTimeunit = TimeUnit.valueOf(configTimeunitProperty);
 		} catch (final IllegalArgumentException ex) {
-			LOG.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + this.timeunit.name() + " instead.");
+			this.log.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + this.timeunit.name() + " instead.");
 			configTimeunit = this.timeunit;
 		}
 

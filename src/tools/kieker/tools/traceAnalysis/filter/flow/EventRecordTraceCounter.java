@@ -22,8 +22,6 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.flow.TraceEventRecords;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.tools.traceAnalysis.filter.AbstractTraceProcessingFilter;
@@ -38,7 +36,7 @@ import kieker.tools.traceAnalysis.filter.AbstractTraceProcessingFilter;
 @Plugin(
 		description = "Counts and reports the number of incoming valid/invalid event record traces",
 		configuration = {
-			@Property(name = EventRecordTraceCounter.CONFIG_PROPERTY_NAME_LOG_INVALID, defaultValue = "true")
+			@Property(name = EventRecordTraceCounter.CONFIG_PROPERTY_NAME_log_INVALID, defaultValue = "true")
 		})
 public class EventRecordTraceCounter extends AbstractTraceProcessingFilter {
 
@@ -48,11 +46,9 @@ public class EventRecordTraceCounter extends AbstractTraceProcessingFilter {
 	public static final String INPUT_PORT_NAME_INVALID = "invalidEventRecordTraces";
 
 	/** This is the name of the configuration determining whether to log invalid traces or not. */
-	public static final String CONFIG_PROPERTY_NAME_LOG_INVALID = "logInvalidTraces";
+	public static final String CONFIG_PROPERTY_NAME_log_INVALID = "logInvalidTraces";
 
 	private static final long TRACE_ID_IF_NONE = -1;
-
-	private static final Log LOG = LogFactory.getLog(EventRecordTraceCounter.class);
 
 	private final boolean logInvalidTraces;
 
@@ -67,13 +63,13 @@ public class EventRecordTraceCounter extends AbstractTraceProcessingFilter {
 	public EventRecordTraceCounter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
-		this.logInvalidTraces = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_LOG_INVALID);
+		this.logInvalidTraces = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_log_INVALID);
 	}
 
 	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration config = new Configuration();
-		config.setProperty(CONFIG_PROPERTY_NAME_LOG_INVALID, Boolean.toString(this.logInvalidTraces));
+		config.setProperty(CONFIG_PROPERTY_NAME_log_INVALID, Boolean.toString(this.logInvalidTraces));
 		return config;
 	}
 
@@ -97,7 +93,7 @@ public class EventRecordTraceCounter extends AbstractTraceProcessingFilter {
 	@InputPort(name = INPUT_PORT_NAME_INVALID, eventTypes = { TraceEventRecords.class }, description = "Receives invalid event record traces")
 	public void inputInvalidTrace(final TraceEventRecords invalidTrace) {
 		if (this.logInvalidTraces) {
-			LOG.error("Invalid trace: " + invalidTrace);
+			this.log.error("Invalid trace: " + invalidTrace);
 		}
 
 		final TraceMetadata trace = invalidTrace.getTraceMetadata();

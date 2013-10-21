@@ -26,8 +26,6 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 
 /**
@@ -87,8 +85,6 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 
 	public static final double CONFIG_PROPERTY_ACCELERATION_FACTOR_DEFAULT = 1;
 
-	private static final Log LOG = LogFactory.getLog(RealtimeRecordDelayFilter.class);
-
 	private final TimeUnit timeunit;
 
 	private final String strTimerOrigin;
@@ -125,7 +121,7 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 		try {
 			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
 		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
-			LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
+			this.log.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
 			recordTimeunit = TimeUnit.NANOSECONDS;
 		}
 		this.timeunit = recordTimeunit;
@@ -135,14 +131,14 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 		try {
 			tmpTimer = TimerWithPrecision.valueOf(this.strTimerOrigin);
 		} catch (final IllegalArgumentException ex) {
-			LOG.warn(this.strTimerOrigin + " is no valid timer precision! Using MILLISECONDS instead.");
+			this.log.warn(this.strTimerOrigin + " is no valid timer precision! Using MILLISECONDS instead.");
 			tmpTimer = TimerWithPrecision.MILLISECONDS;
 		}
 		this.timer = tmpTimer;
 
 		double accelerationFactorTmp = configuration.getDoubleProperty(CONFIG_PROPERTY_NAME_ACCELERATION_FACTOR);
 		if (accelerationFactorTmp <= 0.0) {
-			LOG.warn("Acceleration factor must be > 0. Using default: " + CONFIG_PROPERTY_ACCELERATION_FACTOR_DEFAULT);
+			this.log.warn("Acceleration factor must be > 0. Using default: " + CONFIG_PROPERTY_ACCELERATION_FACTOR_DEFAULT);
 			accelerationFactorTmp = 1;
 		}
 		this.accelerationFactor = accelerationFactorTmp;
@@ -180,7 +176,7 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 			schedTimeFromNow /= this.accelerationFactor;
 			if (schedTimeFromNow < -this.warnOnNegativeSchedTime) {
 				final long schedTimeSeconds = TimeUnit.SECONDS.convert(schedTimeFromNow, this.timeunit);
-				LOG.warn("negative scheduling time: " + schedTimeFromNow + " (" + this.timeunit.toString() + ") / " + schedTimeSeconds
+				this.log.warn("negative scheduling time: " + schedTimeFromNow + " (" + this.timeunit.toString() + ") / " + schedTimeSeconds
 						+ " (seconds)-> scheduling with a delay of 0");
 			}
 			if (schedTimeFromNow < 0) {
@@ -217,12 +213,12 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 				shutdownDelaySecondsFromNow = 0;
 			}
 			try {
-				LOG.info("Awaiting termination delay of " + shutdownDelaySecondsFromNow + " seconds ...");
+				this.log.info("Awaiting termination delay of " + shutdownDelaySecondsFromNow + " seconds ...");
 				if (!this.executor.awaitTermination(shutdownDelaySecondsFromNow, TimeUnit.SECONDS)) {
-					LOG.error("Termination delay triggerred before all scheduled records sent");
+					this.log.error("Termination delay triggerred before all scheduled records sent");
 				}
 			} catch (final InterruptedException e) {
-				LOG.error("Interrupted while awaiting termination delay", e);
+				this.log.error("Interrupted while awaiting termination delay", e);
 			}
 		}
 	}

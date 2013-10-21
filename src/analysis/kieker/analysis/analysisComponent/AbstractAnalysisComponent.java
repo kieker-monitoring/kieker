@@ -20,6 +20,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import kieker.analysis.IProjectContext;
 import kieker.common.configuration.Configuration;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 
 /**
  * <b>Do not</b> inherit directly from this class! Instead inherit from the class {@link kieker.analysis.plugin.filter.AbstractFilterPlugin},
@@ -37,17 +39,16 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 	 */
 	public static final String CONFIG_NAME = "name-hiddenAndNeverExportedProperty";
 
+	protected static final Log LOG = LogFactory.getLog(AbstractAnalysisComponent.class);
+
 	private static final AtomicInteger UNNAMED_COUNTER = new AtomicInteger(0);
 
-	/**
-	 * The project context of this component.
-	 */
+	/** The project context of this component. */
 	protected final IProjectContext projectContext;
-
-	/**
-	 * The current configuration of this component.
-	 */
+	/** The current configuration of this component. */
 	protected final Configuration configuration;
+	/** The log for this component. */
+	protected final Log log;
 
 	private final String name;
 
@@ -80,6 +81,9 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 			tmpName = this.getClass().getSimpleName() + '-' + UNNAMED_COUNTER.incrementAndGet();
 		}
 		this.name = tmpName;
+
+		// As we have now a name, we can create our logger
+		this.log = LogFactory.getLog(AbstractAnalysisComponent.class.getName() + "." + this.name);
 	}
 
 	/**

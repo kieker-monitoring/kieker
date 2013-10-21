@@ -29,8 +29,6 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.system.CPUUtilizationRecord;
 
 /**
@@ -56,8 +54,6 @@ public class CPUUtilizationDisplayFilter extends AbstractFilterPlugin {
 
 	public static final String CONFIG_PROPERTY_NAME_DISPLAY_WARNING_INTERVALS = "displayWarningIntervals";
 	public static final String CONFIG_PROPERTY_VALUE_DISPLAY_WARNING_INTERVALS = "70|90|100";
-
-	private static final Log LOG = LogFactory.getLog(CPUUtilizationDisplayFilter.class);
 
 	private static final String TOTAL_UTILIZATION = "totalUtilization";
 	private static final String IDLE = "idle";
@@ -85,7 +81,7 @@ public class CPUUtilizationDisplayFilter extends AbstractFilterPlugin {
 		try {
 			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
 		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
-			LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
+			this.log.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
 			recordTimeunit = TimeUnit.NANOSECONDS;
 		}
 		this.timeunit = recordTimeunit;

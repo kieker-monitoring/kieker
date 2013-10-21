@@ -27,8 +27,6 @@ import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 
 /**
  * An instance of this class computes the throughput in terms of the number of objects received per time unit.
@@ -55,8 +53,6 @@ public class AnalysisThroughputFilter extends AbstractFilterPlugin {
 	/** The name of the output port delivering the received objects. */
 	public static final String OUTPUT_PORT_NAME_THROUGHPUT = "throughput";
 
-	private static final Log LOG = LogFactory.getLog(AnalysisThroughputFilter.class);
-
 	private final AtomicLong counter = new AtomicLong();
 
 	private final PlainText plainTextDisplayObject = new PlainText();
@@ -71,7 +67,7 @@ public class AnalysisThroughputFilter extends AbstractFilterPlugin {
 		try {
 			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
 		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
-			LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
+			this.log.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
 			recordTimeunit = TimeUnit.NANOSECONDS;
 		}
 		this.timeunit = recordTimeunit;

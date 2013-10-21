@@ -28,8 +28,6 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.system.MemSwapUsageRecord;
 
 /**
@@ -53,8 +51,6 @@ public class MemSwapUtilizationDisplayFilter extends AbstractFilterPlugin {
 	public static final String CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES = "numberOfEntries";
 	/** The default value for the number of entries per series in the plot (100). */
 	public static final String CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES = "100";
-
-	private static final Log LOG = LogFactory.getLog(MemSwapUtilizationDisplayFilter.class);
 
 	private static final String MEM_FREE = "memFree";
 	private static final String MEM_TOTAL = "memTotal";
@@ -90,7 +86,7 @@ public class MemSwapUtilizationDisplayFilter extends AbstractFilterPlugin {
 		try {
 			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
 		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
-			LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
+			this.log.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
 			recordTimeunit = TimeUnit.NANOSECONDS;
 		}
 		this.timeunit = recordTimeunit;
