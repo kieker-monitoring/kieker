@@ -21,11 +21,46 @@
 			\label{fig:KiekerComponentDiagram}
 		\end{figure}
 	
+	\section{Download and Installation}
+		
+		The \Kieker{} download site\footnote{\KiekerDownloadURL{}} provides archives of the binary and source distribution, the Javadoc~API, as well as additional examples. After having downloaded and extracted the archive, you'll find the directory structure and contents shown in Figure~\ref{fig:binary-layout}.
+
+		% Note: The indention is not really necessary, but the tree is easier to understand in the tex-source.
+		\begin{figure}[h!]%[H]
+		\begin{graybox}
+		\dirtree{%
+		  .1 \DirInDirTree{\KiekerDir/}.
+			.2 \DirInDirTree{bin/}\DTcomment{Call scripts for \Kieker{} tools}.
+			  .3 \ldots.
+			.2 \DirInDirTree{dist/}\DTcomment{The \Kieker{} framework libraries}.
+			  .3 \mainJar.
+			  .3 \ldots. %\servletWar.
+			.2 \DirInDirTree{doc/}\DTcomment{}.
+			  .3 kieker-\version\_userguide.pdf\DTcomment{PDF file of this document}.
+			.2 \DirInDirTree{examples/}.
+			  .3 \DirInDirTree{userguide/}\DTcomment{Source code of the examples in this document}.
+								.4 \ldots.
+			.2 \DirInDirTree{lib/}\DTcomment{Libraries required by \Kieker{}}.
+		%       .3 \commonsLoggingJar.
+			  .3 \ldots.
+			.2 \DirInDirTree{META-INF/}\DTcomment{Example configuration files}.
+			  .3 \kiekerMonitoringProperties{}.
+			  .3 \ldots.
+		}
+		\end{graybox}
+		\caption{Directory structure and contents of \Kieker{}'s binary distribution}
+		\label{fig:binary-layout}
+		\end{figure}
+
+		\noindent
+		The Java sources presented in this user guide, as well as pre-compiled binaries, are included in the \file{\exampleDir/} directory. The file \file{\mainJar{}} contains the \KiekerMonitoringPart{} and \KiekerAnalysisPart{} components, as well as the \KiekerTraceAnalysis{} tool. The sample \KiekerMonitoringPart{} configuration file 
+		\file{\kiekerMonitoringProperties{}} will be detailed in Chapter~\ref{chap:componentsMonitoring}. In addition to the \file{\mainJar{}} file, the \file{dist/} directory includes variants of this \file{.jar} files with integrated third-party libraries. Additional information on these \file{.jar} files and when to use them will follow later in this document.
+		
 	\section{Licensing}
 		\Kieker{} is licensed under the Apache License, Version 2.0. You may obtain a copy of the license at \url{http://www.apache.org/licenses/LICENSE-2.0}.
 		
-		The \Kieker{} source and binary release archives include a number of third-party libraries. The \dir{lib/} directory of the release archives contains a \file{.LICENSE} file for each third-party library, pointing to the respective license text.
-	
+		The \Kieker{} source and binary release archives include a number of third-party libraries. The \dir{lib/} directory of the release archives contains a \file{.LICENSE} file for each third-party library, pointing to the respective license text.	
+		
 	\section{Citing Kieker}\label{sec:ch1:citingKieker}
 		When referencing Kieker resources in your publications, we would be happy if you respected the following guide lines:
 
@@ -39,14 +74,7 @@
 		\noindent At \url{http://kieker-monitoring.net/research/publications/} we provide entries for $\mathrm{B\scriptstyle IB}\!$\TeX{} and other bibliography systems.
 
 	\section{Kieker is Recommended by the SPEC Research Group}
-		In 2011, Kieker was reviewed and accepted for distribution as part of the SPEC Research Group's repository of peer-reviewed tools for quantitative system evaluation and analysis. See \url{http://research.spec.org/projects/tools.html} for details.
-	
-	\section{Download and Installation}
+		In 2011, Kieker was reviewed and accepted for distribution as part of the SPEC Research Group's repository of peer-reviewed tools for quantitative system evaluation and analysis. See \url{http://research.spec.org/projects/tools.html} for details.	
 		
 	\section{Outline of this User Guide}
-		The rest of this user guide is structured as followed. Chapter~\ref{chp:Quickstart-Example} contains a short quickstart example. In Chapter~\ref{chp:Kieker-Monitoring} we provide a detailed description of \KiekerMonitoringPart{} and its components, before presenting in Chapter~\ref{chp:Kieker-Analysis} the \KiekerAnalysisPart{} and its important parts. Various tools, which \Kieker{} already provides, can be found in Chapter~\ref{chp:Kieker-Tools}. The \hyperlink{hypertarget:appendix}{Appendix} finally includes additional resources, e.g., how to use the JMS writers and readers. 
-
-		\vspace{1cm}
-
-		% Notify-tag because this could be interesting for the reader.
-		\NOTIFYBOX{The Java sources presented in this user guide, as well as pre-compiled binaries, are included in the \file{\exampleDir/} directory of the \Kieker{} distribution (see Section~\ref{sec:example:downloadInstall}). Also, the example directories can be imported as Eclipse projects.}
+		The rest of this user guide is structured as followed. Chapter~\ref{chp:Quickstart-Example} contains a short quickstart example. In Chapter~\ref{chp:Kieker-Monitoring} we provide a detailed description of \KiekerMonitoringPart{} and its components, before presenting in Chapter~\ref{chp:Kieker-Analysis} the \KiekerAnalysisPart{} and its important parts. Various tools, which \Kieker{} already provides, can be found in Chapter~\ref{chp:Kieker-Tools}. The \hyperlink{hypertarget:appendix}{Appendix} finally includes additional resources, e.g., how to use the JMS writers and readers.

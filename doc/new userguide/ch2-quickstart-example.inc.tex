@@ -1,3 +1,17 @@
 \chapter{Quickstart Example}\label{chp:Quickstart-Example}
+
+	The Bookstore application is a small sample application resembling a simple bookstore with a market-place facility where users can search for books in an online catalog, and subsequently get offers from different book sellers. We use it as an exemplaric application to demonstrate the monitoring and analysis within \Kieker{}. The example without any monitoring or analysis code can be found in the \file{\binaryFileForDownload} file in \dir{\plainBookstoreApplicationDirDistro}. The instrumented bookstore can be found in \dir{\quickstartBookstoreApplicationDirDistro}.
+
 	\section{Monitoring}
+	
+		We use AspectJ \cite{AspectJ-WebSite} to weave the \Kieker{} monitoring code into the Bookstore application during runtime. It is necessary to perform the following steps:
+		\begin{itemize}
+			\setlength{\itemsep}{-2pt}
+			\item Instruct AspectJ to weave \Kieker{}'s monitoring code into the application
+			\item Configure \Kieker{} to write the monitoring logs to the file system
+			\item Start the Bookstore application with Aspectj as a so called Java-Agent 
+		\end{itemize}
+	
 	\section{Analysis}
+	
+		We perform a simple analysis on the monitoring logs, using the filters already provided by \Kieker{}.
