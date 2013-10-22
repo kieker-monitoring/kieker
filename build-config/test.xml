@@ -8,7 +8,6 @@
 	<taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask" />
 
 	<target name="run-tests-junit" depends="compile-tests" description="Runs the JUnit tests">
-		<copy file="${lib.sigar-native.dir}/libsigar-amd64-linux.so" todir="${lib.dir}" />
 		<path id="kieker.test-junit-run-classpath">
 			<fileset dir="${lib.dir}">
 				<include name="hamcrest-core-*.jar" />
@@ -22,8 +21,7 @@
 				<include name="framework-libs/spring/*.jar" /> <!-- needed for the spring tests -->
 				<include name="javax.jms-*.jar" /> 	<!-- Needed for TestPluginConfigurationRetention. -->
 				<include name="commons-cli-*.jar" /> <!-- Needed for TestPluginConfigurationRetention. -->
-				<include name="sigar-*.jar" />
-
+				
 				<!-- used in tests for bridge JMS connector -->
 				<include name="activemq-core-5.4.3.jar" />
 				<include name="reflections-0.9.9-RC1.jar"/>
@@ -31,6 +29,9 @@
 				<include name="kahadb-5.7.0.jar"/>
 				<include name="slf4j-api-1.7.*.jar"/>
 				<include name="javax.jms-*.jar" /> <!-- Needed for the JMSReader/Writer test -->
+			</fileset>
+			<fileset dir="${lib.sigar.dir}">
+				<include name="sigar-*.jar" />
 			</fileset>
 			<fileset dir="${example.javaee.jetty.lib.dir}">
 				<include name="jetty-*.jar" /> <!-- needed for the cxf, spring tests -->
@@ -62,7 +63,6 @@
 			</batchtest>
 		</junit>
 
-		<delete file="${lib.dir}/libsigar-amd64-linux.so"/>
 		<antcall target="-test.junit.report" />
 	</target>
 
