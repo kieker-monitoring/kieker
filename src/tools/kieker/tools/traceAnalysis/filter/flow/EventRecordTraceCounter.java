@@ -36,7 +36,7 @@ import kieker.tools.traceAnalysis.filter.AbstractTraceProcessingFilter;
 @Plugin(
 		description = "Counts and reports the number of incoming valid/invalid event record traces",
 		configuration = {
-			@Property(name = EventRecordTraceCounter.CONFIG_PROPERTY_NAME_log_INVALID, defaultValue = "true")
+			@Property(name = EventRecordTraceCounter.CONFIG_PROPERTY_NAME_LOG_INVALID, defaultValue = "true")
 		})
 public class EventRecordTraceCounter extends AbstractTraceProcessingFilter {
 
@@ -46,7 +46,7 @@ public class EventRecordTraceCounter extends AbstractTraceProcessingFilter {
 	public static final String INPUT_PORT_NAME_INVALID = "invalidEventRecordTraces";
 
 	/** This is the name of the configuration determining whether to log invalid traces or not. */
-	public static final String CONFIG_PROPERTY_NAME_log_INVALID = "logInvalidTraces";
+	public static final String CONFIG_PROPERTY_NAME_LOG_INVALID = "logInvalidTraces";
 
 	private static final long TRACE_ID_IF_NONE = -1;
 
@@ -63,13 +63,13 @@ public class EventRecordTraceCounter extends AbstractTraceProcessingFilter {
 	public EventRecordTraceCounter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
-		this.logInvalidTraces = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_log_INVALID);
+		this.logInvalidTraces = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_LOG_INVALID);
 	}
 
 	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration config = new Configuration();
-		config.setProperty(CONFIG_PROPERTY_NAME_log_INVALID, Boolean.toString(this.logInvalidTraces));
+		config.setProperty(CONFIG_PROPERTY_NAME_LOG_INVALID, Boolean.toString(this.logInvalidTraces));
 		return config;
 	}
 
