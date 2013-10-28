@@ -71,60 +71,8 @@
 			\NOTIFYBOX{
 				For the quickstart example it is assumed that you are already logged into the \KiekerWebGUI{}, either as an user or as an administrator. You should also enable javascript and cookies, as both is necessary for the functionality of the application. 
 			}
-			
-			\noindent
-			After the log in, you see the main page for the project management (Figure~\ref{fig:webgui-project-management-page}). Create a new project by clicking \texttt{File $\to$ New Project}. Enter a name (\texttt{Timer-Example} e.g.) and click \texttt{ok}. The project should now appear in the list. A left click on the name offers various options. For the moment choose \texttt{Analysis Editor}. The browser should navigate to the analysis editor page (Figure~\ref{fig:webgui-analysis-editor-page}).
-			
-			\begin{figure}[h!]
-				\caption{The project management page}
-				\label{fig:webgui-project-management-page}
-			\end{figure}
-
-			\noindent
-			In the analysis editor you should have multiple plugins in the left toolbar available. Search and add the components \texttt{TimeReader} and \texttt{TeeFilter} with a left click to the editor. They should appear in the center of the window. Move them around a little bit and connect the lower port of the \texttt{TimeReader} with the port of the \texttt{TeeFilter} by clicking on them. You should have a structure like in Figure~\ref{fig:webgui-analysis-example} on your screen. Save the project by using \texttt{File $\to$ Save Project}
 		
-			\begin{figure}[h!]
-				\caption{The analysis editor page}
-				\label{fig:webgui-analysis-editor-page}
-			\end{figure}
-			
-			\begin{figure}[h!]
-				\center
-				\includegraphics[width = 0.5\textwidth]{images/kieker-webgui-example.png}
-				
-				\caption{A simple example}
-				\label{fig:webgui-analysis-example}
-			\end{figure}
-			
-			\noindent
-			Now we start our simple analysis. You can change directly to the analysis controller page (Figure~\ref{fig:webgui-analysis-controller-page} ) by using the \texttt{Analysis} button at the top right of the page. Use the buttons \texttt{Instantiate Analysis} and \texttt{Start Analysis} at the bottom of the page to run the analysis. The result of the simple example can be seen in the console output of the web application. The \texttt{TimeReader} sends every second the current timestamp (in nano seconds) to the \texttt{TeeFilter} which prints it to the console output. An example output can be seen in Listing~\ref{lst:webgui-analysis-example}.
-			
-			
-			\begin{figure}[h!]
-				\caption{The analysis controller page}
-				\label{fig:webgui-analysis-controller-page}
-			\end{figure}
-			
-			\setTextListing
-			\begin{lstlisting}[gobble = 8, label=lst:webgui-analysis-example, caption=Execution of the example analysis]
-				TeeFilter(TimestampRecord) -1;211647816548852
-				TeeFilter(TimestampRecord) -1;211648816610293
-				TeeFilter(TimestampRecord) -1;211649816655733
-				TeeFilter(TimestampRecord) -1;211650816734133
-				TeeFilter(TimestampRecord) -1;211651816748213
-			\end{lstlisting}
-			
 		\subsection{Detailed Introduction}
-		
-			In this section we will take a closer look at the \KiekerWebGUI{} and the single pages.
-			
-			\paragraph*{Project Management}
-			
-			This is the default page after the log in and available under \url{http://localhost:8080/Kieker.WebGUI/}. It provides the possibility to add, import, remove, rename, and copy projects. Those options are either available under the \texttt{File} menu or under the context menu, which appears when clicking on a project name. It allows also to navigate to the further pages. Those links are visible in the context menu, but can also used by clicking on the buttons in the top right of the page, when a project has been selected. The only button, which can be always used, even if no project is selected, is the user management button. The available buttons can change, depending on the role of your log in.
-			
-			\paragraph*{User Management}
-			
-			The user management page is available under \url{http://localhost:8080/Kieker.WebGUI/pages/admin/userManagement}, but can only be accessed by administrators. Here it is possible to add, edit, and remove users of the system.
 			
 	\section{Supporting Tools}
 		\subsection{Replay Monitoring Logs}
