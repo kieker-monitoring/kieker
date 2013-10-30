@@ -16,10 +16,13 @@
 
 package kieker.analysis.analysisComponent;
 
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import kieker.analysis.IProjectContext;
 import kieker.common.configuration.Configuration;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 
 /**
  * <b>Do not</b> inherit directly from this class! Instead inherit from the class {@link kieker.analysis.plugin.filter.AbstractFilterPlugin},
@@ -32,22 +35,21 @@ import kieker.common.configuration.Configuration;
  */
 public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 
-	/**
-	 * The name of the property for the name. This should normally only be used by Kieker.
-	 */
+	/** The name of the property for the name. This should normally only be used by Kieker. */
 	public static final String CONFIG_NAME = "name-hiddenAndNeverExportedProperty";
 
 	private static final AtomicInteger UNNAMED_COUNTER = new AtomicInteger(0);
 
-	/**
-	 * The project context of this component.
-	 */
+	/** The project context (usually the analysis controller) of this component. */
 	protected final IProjectContext projectContext;
 
-	/**
-	 * The current configuration of this component.
-	 */
+	/** The current configuration of this component. */
 	protected final Configuration configuration;
+
+	/** The record time unit as provided by the project context. */
+	protected final TimeUnit recordsTimeUnitFromProjectContext;
+
+	private static final Log LOG = LogFactory.getLog(AbstractAnalysisComponent.class);
 
 	private final String name;
 
@@ -80,6 +82,17 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 			tmpName = this.getClass().getSimpleName() + '-' + UNNAMED_COUNTER.incrementAndGet();
 		}
 		this.name = tmpName;
+
+		// Determine the record time unit
+		final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
+		TimeUnit recordTimeunit;
+		try {
+			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
+		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
+			LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
+			recordTimeunit = TimeUnit.NANOSECONDS;
+		}
+		this.recordsTimeUnitFromProjectContext = recordTimeunit;
 	}
 
 	/**

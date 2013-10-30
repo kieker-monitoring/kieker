@@ -29,8 +29,6 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.system.CPUUtilizationRecord;
 
 /**
@@ -57,8 +55,6 @@ public class CPUUtilizationDisplayFilter extends AbstractFilterPlugin {
 	public static final String CONFIG_PROPERTY_NAME_DISPLAY_WARNING_INTERVALS = "displayWarningIntervals";
 	public static final String CONFIG_PROPERTY_VALUE_DISPLAY_WARNING_INTERVALS = "70|90|100";
 
-	private static final Log LOG = LogFactory.getLog(CPUUtilizationDisplayFilter.class);
-
 	private static final String TOTAL_UTILIZATION = "totalUtilization";
 	private static final String IDLE = "idle";
 	private static final String IRQ = "irq";
@@ -72,23 +68,11 @@ public class CPUUtilizationDisplayFilter extends AbstractFilterPlugin {
 	private final int numberOfEntries;
 	private final Number[] warningIntervals;
 
-	private final TimeUnit timeunit;
-
 	public CPUUtilizationDisplayFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
 		// Read the configuration
 		this.numberOfEntries = configuration.getIntProperty(CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES);
-
-		final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
-		TimeUnit recordTimeunit;
-		try {
-			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
-		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
-			LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
-			recordTimeunit = TimeUnit.NANOSECONDS;
-		}
-		this.timeunit = recordTimeunit;
 
 		final String[] warningIntervalsAsString = configuration.getStringArrayProperty(CONFIG_PROPERTY_NAME_DISPLAY_WARNING_INTERVALS);
 		this.warningIntervals = new Number[warningIntervalsAsString.length];
@@ -108,7 +92,7 @@ public class CPUUtilizationDisplayFilter extends AbstractFilterPlugin {
 
 	private void updateDisplays(final CPUUtilizationRecord record) {
 		// Calculate the minutes and seconds of the logging timestamp of the record
-		final Date date = new Date(TimeUnit.MILLISECONDS.convert(record.getLoggingTimestamp(), this.timeunit));
+		final Date date = new Date(TimeUnit.MILLISECONDS.convert(record.getLoggingTimestamp(), super.recordsTimeUnitFromProjectContext));
 		final String minutesAndSeconds = date.toString().substring(14, 19);
 
 		final String id = record.getHostname() + " - " + record.getCpuID();

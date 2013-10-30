@@ -16,7 +16,6 @@
 
 package kieker.analysis.plugin.filter.forward;
 
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 import kieker.analysis.IProjectContext;
@@ -27,8 +26,6 @@ import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 
 /**
  * An instance of this class computes the throughput in terms of the number of objects received per time unit.
@@ -55,26 +52,13 @@ public class AnalysisThroughputFilter extends AbstractFilterPlugin {
 	/** The name of the output port delivering the received objects. */
 	public static final String OUTPUT_PORT_NAME_THROUGHPUT = "throughput";
 
-	private static final Log LOG = LogFactory.getLog(AnalysisThroughputFilter.class);
-
 	private final AtomicLong counter = new AtomicLong();
 
 	private final PlainText plainTextDisplayObject = new PlainText();
-	private final TimeUnit timeunit;
 	private volatile long lastTimestamp;
 
 	public AnalysisThroughputFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
-
-		final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
-		TimeUnit recordTimeunit;
-		try {
-			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
-		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
-			LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
-			recordTimeunit = TimeUnit.NANOSECONDS;
-		}
-		this.timeunit = recordTimeunit;
 	}
 
 	@Override
@@ -97,7 +81,7 @@ public class AnalysisThroughputFilter extends AbstractFilterPlugin {
 		sb.append(" objects within ");
 		sb.append(duration);
 		sb.append(' ');
-		sb.append(this.timeunit.toString());
+		sb.append(super.recordsTimeUnitFromProjectContext.toString());
 		this.plainTextDisplayObject.setText(sb.toString());
 		super.deliver(OUTPUT_PORT_NAME_THROUGHPUT, count);
 		this.lastTimestamp = timestamp;
