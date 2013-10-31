@@ -40,6 +40,7 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
+import kieker.common.logging.Log;
 import kieker.common.record.IMonitoringRecord;
 
 /**
@@ -208,6 +209,10 @@ public final class JMSReader extends AbstractReaderPlugin {
 		return configuration;
 	}
 
+	protected Log getLog() {
+		return super.log;
+	}
+
 	/**
 	 * The MessageListener will read onMessage each time a message comes in.
 	 */
@@ -219,24 +224,24 @@ public final class JMSReader extends AbstractReaderPlugin {
 
 		public void onMessage(final Message jmsMessage) {
 			if (jmsMessage == null) {
-				JMSReader.this.log.warn("Received null message");
+				JMSReader.this.getLog().warn("Received null message");
 			} else {
 				if (jmsMessage instanceof ObjectMessage) {
 					try {
 						final ObjectMessage om = (ObjectMessage) jmsMessage;
 						final Serializable omo = om.getObject();
 						if ((omo instanceof IMonitoringRecord) && (!JMSReader.this.deliverIndirect(OUTPUT_PORT_NAME_RECORDS, omo))) {
-							JMSReader.this.log.error("deliverRecord returned false");
+							JMSReader.this.getLog().error("deliverRecord returned false");
 						}
 					} catch (final MessageFormatException ex) {
-						JMSReader.this.log.error("Error delivering record", ex);
+						JMSReader.this.getLog().error("Error delivering record", ex);
 					} catch (final JMSException ex) {
-						JMSReader.this.log.error("Error delivering record", ex);
+						JMSReader.this.getLog().error("Error delivering record", ex);
 					} catch (final Exception ex) { // NOPMD NOCS (catch Exception)
-						JMSReader.this.log.error("Error delivering record", ex);
+						JMSReader.this.getLog().error("Error delivering record", ex);
 					}
 				} else {
-					JMSReader.this.log.warn("Received message of invalid type: " + jmsMessage.getClass().getName());
+					JMSReader.this.getLog().warn("Received message of invalid type: " + jmsMessage.getClass().getName());
 				}
 			}
 		}

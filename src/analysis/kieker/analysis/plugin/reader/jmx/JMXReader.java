@@ -38,6 +38,7 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
+import kieker.common.logging.Log;
 import kieker.common.record.IMonitoringRecord;
 
 /**
@@ -318,6 +319,10 @@ public final class JMXReader extends AbstractReaderPlugin {
 		}
 	}
 
+	protected Log getLog() {
+		return super.log;
+	}
+
 	/**
 	 * @author Jan waller
 	 */
@@ -334,18 +339,18 @@ public final class JMXReader extends AbstractReaderPlugin {
 			final String notificationType = notification.getType();
 			if (notificationType.equals(JMXConnectionNotification.CLOSED)) {
 				if (!JMXReader.this.silentreconnect) {
-					JMXReader.this.log.info("JMX connection closed.");
+					JMXReader.this.getLog().info("JMX connection closed.");
 				}
 				JMXReader.this.unblock();
 			} else if (notificationType.equals(JMXConnectionNotification.FAILED)) {
 				if (!JMXReader.this.silentreconnect) {
-					JMXReader.this.log.info("JMX connection lost.");
+					JMXReader.this.getLog().info("JMX connection lost.");
 				}
 				JMXReader.this.unblock();
 			} else if (notificationType.equals(JMXConnectionNotification.NOTIFS_LOST)) {
-				JMXReader.this.log.error("Monitoring record lost: " + notification.getMessage());
+				JMXReader.this.getLog().error("Monitoring record lost: " + notification.getMessage());
 			} else { // unknown message
-				JMXReader.this.log.info(notificationType + ": " + notification.getMessage());
+				JMXReader.this.getLog().info(notificationType + ": " + notification.getMessage());
 			}
 		}
 	}

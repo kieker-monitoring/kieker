@@ -29,6 +29,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import kieker.analysis.IProjectContext;
+import kieker.analysis.analysisComponent.AbstractAnalysisComponent;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
@@ -108,14 +109,14 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 			}
 			error = false;
 		} catch (final IOException exc) {
-			SequenceDiagramFilter.LOG.error("Error while reading " + SEQUENCE_PIC_PATH, exc);
+			AbstractAnalysisComponent.LOG.error("Error while reading " + SEQUENCE_PIC_PATH, exc);
 		} finally {
 			try {
 				if (reader != null) {
 					reader.close();
 				}
 			} catch (final IOException ex) {
-				this.log.error("Failed to close input stream", ex);
+				AbstractAnalysisComponent.LOG.error("Failed to close input stream", ex);
 			}
 			if (error) {
 				// sequence.pic must be provided on execution of pic2plot
@@ -280,7 +281,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 				}
 			}
 		} else { // needs to be adjusted if a new mode is introduced
-			this.log.error("Invalid mode: " + sdMode);
+			AbstractAnalysisComponent.LOG.error("Invalid mode: " + sdMode);
 		}
 
 		ps.print("step();" + "\n");
@@ -301,7 +302,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 				senderDotId = "O" + senderComponent.getId();
 				receiverDotId = "O" + receiverComponent.getId();
 			} else { // needs to be adjusted if a new mode is introduced
-				this.log.error("Invalid mode: " + sdMode);
+				AbstractAnalysisComponent.LOG.error("Invalid mode: " + sdMode);
 			}
 
 			if (me instanceof SynchronousCallMessage) {
@@ -329,7 +330,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 				ps.print("rmessage(" + senderDotId + "," + receiverDotId + ", \"\");\n");
 				ps.print("inactive(" + senderDotId + ");\n");
 			} else {
-				this.log.error("Message type not supported: " + me.getClass().getName());
+				AbstractAnalysisComponent.LOG.error("Message type not supported: " + me.getClass().getName());
 			}
 		}
 		ps.print("inactive(" + rootDotId + ");\n");

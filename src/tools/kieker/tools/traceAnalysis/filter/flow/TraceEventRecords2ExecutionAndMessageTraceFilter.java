@@ -19,6 +19,7 @@ package kieker.tools.traceAnalysis.filter.flow;
 import java.util.Stack;
 
 import kieker.analysis.IProjectContext;
+import kieker.analysis.analysisComponent.AbstractAnalysisComponent;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -26,6 +27,7 @@ import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.analysis.plugin.filter.flow.TraceEventRecords;
 import kieker.common.configuration.Configuration;
+import kieker.common.logging.Log;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.concurrency.SplitEvent;
@@ -180,6 +182,10 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 			super.deliver(OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE, new InvalidExecutionTrace(executionTrace));
 		}
 
+	}
+
+	protected static Log getLOG() {
+		return AbstractAnalysisComponent.LOG;
 	}
 
 	/**
@@ -366,8 +372,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 							isConstructor && this.enhanceJavaConstructors).getSignature();
 					if (callSignature.equals(afterSignature)
 							&& callEvent.getCalleeClassSignature().equals(beforeOperationEvent.getClassSignature())) {
-						if (TraceEventRecords2ExecutionAndMessageTraceFilter.this.log.isDebugEnabled()) {
-							TraceEventRecords2ExecutionAndMessageTraceFilter.this.log.debug("Guessed call of \n\t" + callEvent + "\n\t" + beforeOperationEvent);
+						if (TraceEventRecords2ExecutionAndMessageTraceFilter.getLOG().isDebugEnabled()) {
+							TraceEventRecords2ExecutionAndMessageTraceFilter.getLOG().debug("Guessed call of \n\t" + callEvent + "\n\t" + beforeOperationEvent);
 						}
 						return true;
 					}
