@@ -79,12 +79,14 @@
 			<fileset dir="${lib.dir}">
 				<!--<include name="aspectjrt-*.jar" />-->
 				<include name="javax.jms-*.jar" />
-				<include name="sigar-*.jar" />
 				<include name="framework-libs/javax.servlet-*.jar" />
 				<include name="framework-libs/cxf/cxf-*.jar" />
 				<include name="framework-libs/spring/aopalliance-*.jar" />
 				<include name="framework-libs/spring/spring-context-*.jar" />
 				<include name="framework-libs/spring/spring-web*.jar" />
+			</fileset>
+			<fileset dir="${lib.sigar.dir}">
+				<include name="sigar-*.jar" />
 			</fileset>
 			<pathelement location="${build.kieker.common.dir}/" />
 		</path>

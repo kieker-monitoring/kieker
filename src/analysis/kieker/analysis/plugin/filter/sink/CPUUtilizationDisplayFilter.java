@@ -68,23 +68,11 @@ public class CPUUtilizationDisplayFilter extends AbstractFilterPlugin {
 	private final int numberOfEntries;
 	private final Number[] warningIntervals;
 
-	private final TimeUnit timeunit;
-
 	public CPUUtilizationDisplayFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
 		// Read the configuration
 		this.numberOfEntries = configuration.getIntProperty(CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES);
-
-		final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
-		TimeUnit recordTimeunit;
-		try {
-			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
-		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
-			this.log.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
-			recordTimeunit = TimeUnit.NANOSECONDS;
-		}
-		this.timeunit = recordTimeunit;
 
 		final String[] warningIntervalsAsString = configuration.getStringArrayProperty(CONFIG_PROPERTY_NAME_DISPLAY_WARNING_INTERVALS);
 		this.warningIntervals = new Number[warningIntervalsAsString.length];
@@ -104,7 +92,7 @@ public class CPUUtilizationDisplayFilter extends AbstractFilterPlugin {
 
 	private void updateDisplays(final CPUUtilizationRecord record) {
 		// Calculate the minutes and seconds of the logging timestamp of the record
-		final Date date = new Date(TimeUnit.MILLISECONDS.convert(record.getLoggingTimestamp(), this.timeunit));
+		final Date date = new Date(TimeUnit.MILLISECONDS.convert(record.getLoggingTimestamp(), super.recordsTimeUnitFromProjectContext));
 		final String minutesAndSeconds = date.toString().substring(14, 19);
 
 		final String id = record.getHostname() + " - " + record.getCpuID();

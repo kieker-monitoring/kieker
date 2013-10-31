@@ -18,7 +18,6 @@ package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -42,8 +41,6 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public abstract class AbstractDependencyGraphFilter<T extends ISystemModelElement> extends AbstractGraphProducingFilter<AbstractDependencyGraph<T>> {
 
-	private final TimeUnit timeunit;
-
 	private final List<AbstractNodeDecorator> decorators = new ArrayList<AbstractNodeDecorator>();
 
 	/**
@@ -58,17 +55,6 @@ public abstract class AbstractDependencyGraphFilter<T extends ISystemModelElemen
 	 */
 	public AbstractDependencyGraphFilter(final Configuration configuration, final IProjectContext projectContext, final AbstractDependencyGraph<T> graph) {
 		super(configuration, projectContext, graph);
-
-		final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
-		TimeUnit recordTimeunit;
-		try {
-			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
-		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
-			this.log.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
-			recordTimeunit = TimeUnit.NANOSECONDS;
-		}
-		this.timeunit = recordTimeunit;
-
 	}
 
 	/**
@@ -93,7 +79,7 @@ public abstract class AbstractDependencyGraphFilter<T extends ISystemModelElemen
 	 */
 	protected void invokeDecorators(final AbstractMessage message, final DependencyGraphNode<?> sourceNode, final DependencyGraphNode<?> targetNode) {
 		for (final AbstractNodeDecorator currentDecorator : this.decorators) {
-			currentDecorator.processMessage(message, sourceNode, targetNode, this.timeunit);
+			currentDecorator.processMessage(message, sourceNode, targetNode, super.recordsTimeUnitFromProjectContext);
 		}
 	}
 

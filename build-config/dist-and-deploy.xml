@@ -308,9 +308,7 @@
 						prefix="${kieker.dist.name}/${src.userguide.example.sigar.dir}/lib" />
 			<tarfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
 						prefix="${kieker.dist.name}/${src.userguide.example.sigar.dir}/lib" />
-			<tarfileset file="${lib.dir}/sigar-*.jar"
-						prefix="${kieker.dist.name}/${src.userguide.example.sigar.dir}/lib" />
-			<tarfileset file="${lib.sigar-native.dir}/*"
+			<tarfileset file="${lib.sigar.dir}/*"
 						prefix="${kieker.dist.name}/${src.userguide.example.sigar.dir}/lib" />
 		</tar>
 		<gzip zipfile="${release.dir}/${dist.kieker.binBaseName}.tar.gz" src="${release.dir}/${dist.kieker.binBaseName}.tar" />
@@ -370,9 +368,7 @@
 						prefix="${kieker.dist.name}/${src.userguide.example.jms.dir}/lib" />
 			<zipfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
 						prefix="${kieker.dist.name}/${src.userguide.example.sigar.dir}/lib" />
-			<zipfileset file="${lib.dir}/sigar-*.jar"
-						prefix="${kieker.dist.name}/${src.userguide.example.sigar.dir}/lib" />
-			<zipfileset file="${lib.sigar-native.dir}/*"
+			<zipfileset file="${lib.sigar.dir}/*"
 						prefix="${kieker.dist.name}/${src.userguide.example.sigar.dir}/lib" />
 		</zip>
 	</target>

@@ -96,7 +96,6 @@ public final class TimeReader extends AbstractReaderPlugin {
 	private final long initialDelay;
 	private final long period;
 	private final long numberImpulses;
-	private final TimeUnit timeunit;
 
 	/**
 	 * Creates a new timer using the given configuration.
@@ -111,16 +110,6 @@ public final class TimeReader extends AbstractReaderPlugin {
 		this.initialDelay = configuration.getLongProperty(CONFIG_PROPERTY_NAME_DELAY_NS);
 		this.period = configuration.getLongProperty(CONFIG_PROPERTY_NAME_UPDATE_INTERVAL_NS);
 		this.numberImpulses = configuration.getLongProperty(CONFIG_PROPERTY_NAME_NUMBER_IMPULSES);
-
-		final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
-		TimeUnit recordTimeunit;
-		try {
-			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
-		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
-			this.log.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
-			recordTimeunit = TimeUnit.NANOSECONDS;
-		}
-		this.timeunit = recordTimeunit;
 	}
 
 	/**
@@ -178,7 +167,7 @@ public final class TimeReader extends AbstractReaderPlugin {
 	 * Sends the current system time as a new timestamp event.
 	 */
 	protected void sendTimestampEvent() {
-		final long timestamp = this.timeunit.convert(System.nanoTime(), TimeUnit.NANOSECONDS);
+		final long timestamp = super.recordsTimeUnitFromProjectContext.convert(System.nanoTime(), TimeUnit.NANOSECONDS);
 		super.deliver(OUTPUT_PORT_NAME_TIMESTAMPS, timestamp);
 		super.deliver(OUTPUT_PORT_NAME_TIMESTAMP_RECORDS, new TimestampRecord(timestamp));
 	}

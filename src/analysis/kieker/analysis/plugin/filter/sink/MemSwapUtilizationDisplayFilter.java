@@ -65,8 +65,6 @@ public class MemSwapUtilizationDisplayFilter extends AbstractFilterPlugin {
 
 	private final int numberOfEntries;
 
-	private final TimeUnit timeunit;
-
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -80,16 +78,6 @@ public class MemSwapUtilizationDisplayFilter extends AbstractFilterPlugin {
 
 		// Read the configuration
 		this.numberOfEntries = configuration.getIntProperty(CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES);
-
-		final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
-		TimeUnit recordTimeunit;
-		try {
-			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
-		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
-			this.log.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
-			recordTimeunit = TimeUnit.NANOSECONDS;
-		}
-		this.timeunit = recordTimeunit;
 
 		// Create the display objects
 		this.xyplot = new XYPlot(this.numberOfEntries);
@@ -110,7 +98,7 @@ public class MemSwapUtilizationDisplayFilter extends AbstractFilterPlugin {
 
 	private void updateDisplays(final MemSwapUsageRecord record) {
 		// Calculate the minutes and seconds of the logging timestamp of the record
-		final Date date = new Date(TimeUnit.MILLISECONDS.convert(record.getLoggingTimestamp(), this.timeunit));
+		final Date date = new Date(TimeUnit.MILLISECONDS.convert(record.getLoggingTimestamp(), super.recordsTimeUnitFromProjectContext));
 		final String minutesAndSeconds = date.toString().substring(14, 19);
 
 		final String id = record.getHostname();
