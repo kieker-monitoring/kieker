@@ -40,7 +40,7 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 	/** The name of the property for the name. This should normally only be used by Kieker. */
 	public static final String CONFIG_NAME = "name-hiddenAndNeverExportedProperty";
 
-	protected static final Log LOG = LogFactory.getLog(AbstractAnalysisComponent.class);
+	protected static final Log LOG = LogFactory.getLog(AbstractAnalysisComponent.class); // NOPMD (logger for inheriting classes)
 
 	private static final AtomicInteger UNNAMED_COUNTER = new AtomicInteger(0);
 
@@ -50,7 +50,7 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 	/** The current configuration of this component. */
 	protected final Configuration configuration;
 	/** The log for this component. */
-	protected final Log log;
+	protected final Log log; // NOPMD (logger for inheriting classes)
 
 	/** The record time unit as provided by the project context. */
 	protected final TimeUnit recordsTimeUnitFromProjectContext;
@@ -83,7 +83,7 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 		// Get the controller, as we have to register the name
 		final AnalysisController ac;
 		if (projectContext instanceof AnalysisController) {
-			ac = ((AnalysisController) projectContext);
+			ac = (AnalysisController) projectContext;
 		} else {
 			throw new InvalidProjectContextException("Invalid analysis controller in constructor");
 		}
@@ -98,13 +98,13 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 		// As we have now a name, we can create our logger
 		this.log = LogFactory.getLog(AbstractAnalysisComponent.class.getName() + "." + this.name);
 
-		// Try to determine the record time unit
+		// Try the record time unit
 		final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
 		TimeUnit recordTimeunit;
 		try {
 			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
 		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
-			LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
+			this.log.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
 			recordTimeunit = TimeUnit.NANOSECONDS;
 		}
 		this.recordsTimeUnitFromProjectContext = recordTimeunit;

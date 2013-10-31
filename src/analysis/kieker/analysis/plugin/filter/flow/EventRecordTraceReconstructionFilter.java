@@ -300,7 +300,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	 * @author Jan Waller
 	 */
 	private static final class TraceBuffer {
-		private static final Log log = LogFactory.getLog(TraceBuffer.class);
+		private static final Log LOG = LogFactory.getLog(TraceBuffer.class);
 		private static final Comparator<AbstractTraceEvent> COMPARATOR = new TraceEventComperator();
 
 		private TraceMetadata trace;
@@ -329,7 +329,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 				if (this.traceId == -1) {
 					this.traceId = myTraceId;
 				} else if (this.traceId != myTraceId) {
-					log.error("Invalid traceId! Expected: " + this.traceId + " but found: " + myTraceId + " in event " + event.toString());
+					LOG.error("Invalid traceId! Expected: " + this.traceId + " but found: " + myTraceId + " in event " + event.toString());
 					this.damaged = true;
 				}
 				final long loggingTimestamp = event.getTimestamp();
@@ -354,7 +354,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 					this.openEvents--;
 				}
 				if (!this.events.add(event)) {
-					log.error("Duplicate entry for orderIndex " + orderIndex + " with traceId " + myTraceId);
+					LOG.error("Duplicate entry for orderIndex " + orderIndex + " with traceId " + myTraceId);
 					this.damaged = true;
 				}
 			}
@@ -366,13 +366,13 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 				if (this.traceId == -1) {
 					this.traceId = myTraceId;
 				} else if (this.traceId != myTraceId) {
-					log.error("Invalid traceId! Expected: " + this.traceId + " but found: " + myTraceId + " in trace " + trace.toString());
+					LOG.error("Invalid traceId! Expected: " + this.traceId + " but found: " + myTraceId + " in trace " + trace.toString());
 					this.damaged = true;
 				}
 				if (this.trace == null) {
 					this.trace = trace;
 				} else {
-					log.error("Duplicate Trace entry for traceId " + myTraceId);
+					LOG.error("Duplicate Trace entry for traceId " + myTraceId);
 					this.damaged = true;
 				}
 			}

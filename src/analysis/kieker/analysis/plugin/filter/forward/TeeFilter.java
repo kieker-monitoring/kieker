@@ -69,7 +69,7 @@ public final class TeeFilter extends AbstractFilterPlugin {
 	/**
 	 * The value of the stream property which determines that the filter uses the standard log.
 	 */
-	public static final String CONFIG_PROPERTY_VALUE_STREAM_STDlog = "STDlog";
+	public static final String CONFIG_PROPERTY_VALUE_STREAM_STDLOG = "STDlog";
 	/**
 	 * The value of the stream property which determines that the filter doesn't print anything.
 	 */
@@ -101,7 +101,7 @@ public final class TeeFilter extends AbstractFilterPlugin {
 		this.encoding = this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_ENCODING);
 
 		// Decide which stream to be used - but remember the name!
-		if (CONFIG_PROPERTY_VALUE_STREAM_STDlog.equals(printStreamNameConfig)) {
+		if (CONFIG_PROPERTY_VALUE_STREAM_STDLOG.equals(printStreamNameConfig)) {
 			this.printStream = null; // NOPMD (null)
 			this.printStreamName = null; // NOPMD (null)
 			this.active = true;
@@ -151,7 +151,7 @@ public final class TeeFilter extends AbstractFilterPlugin {
 		// We reverse the if-decisions within the constructor.
 		if (this.printStream == null) {
 			if (this.active) {
-				configuration.setProperty(CONFIG_PROPERTY_NAME_STREAM, CONFIG_PROPERTY_VALUE_STREAM_STDlog);
+				configuration.setProperty(CONFIG_PROPERTY_NAME_STREAM, CONFIG_PROPERTY_VALUE_STREAM_STDLOG);
 			} else {
 				configuration.setProperty(CONFIG_PROPERTY_NAME_STREAM, CONFIG_PROPERTY_VALUE_STREAM_NULL);
 			}

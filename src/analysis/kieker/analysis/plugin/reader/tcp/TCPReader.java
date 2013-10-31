@@ -164,7 +164,7 @@ class TCPStringReader extends Thread {
 
 	private static final int MESSAGE_BUFFER_SIZE = 65535;
 
-	private static final Log log = LogFactory.getLog(TCPStringReader.class);
+	private static final Log LOG = LogFactory.getLog(TCPStringReader.class);
 
 	private final int port;
 	private final ILookup<String> stringRegistry;
@@ -180,8 +180,8 @@ class TCPStringReader extends Thread {
 		try {
 			serversocket = ServerSocketChannel.open();
 			serversocket.socket().bind(new InetSocketAddress(this.port));
-			if (log.isDebugEnabled()) {
-				log.debug("Listening on port " + this.port);
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("Listening on port " + this.port);
 			}
 			// BEGIN also loop this one?
 			final SocketChannel socketChannel = serversocket.accept();
@@ -202,14 +202,14 @@ class TCPStringReader extends Thread {
 			socketChannel.close();
 			// END also loop this one?
 		} catch (final IOException ex) {
-			log.error("Error while reading", ex);
+			LOG.error("Error while reading", ex);
 		} finally {
 			if (null != serversocket) {
 				try {
 					serversocket.close();
 				} catch (final IOException e) {
-					if (log.isDebugEnabled()) {
-						log.debug("Failed to close TCP connection!", e);
+					if (LOG.isDebugEnabled()) {
+						LOG.debug("Failed to close TCP connection!", e);
 					}
 				}
 			}

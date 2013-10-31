@@ -305,6 +305,10 @@ public final class JMXReader extends AbstractReaderPlugin {
 		return configuration;
 	}
 
+	protected Log getLog() {
+		return super.log;
+	}
+
 	/**
 	 * @author Jan waller
 	 */
@@ -317,10 +321,6 @@ public final class JMXReader extends AbstractReaderPlugin {
 		public final void handleNotification(final Notification notification, final Object handback) {
 			JMXReader.this.deliverIndirect(OUTPUT_PORT_NAME_RECORDS, notification.getUserData());
 		}
-	}
-
-	protected Log getLog() {
-		return super.log;
 	}
 
 	/**
