@@ -18,7 +18,9 @@ package kieker.analysis.analysisComponent;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import kieker.analysis.AnalysisController;
 import kieker.analysis.IProjectContext;
+import kieker.analysis.exception.InvalidProjectContextException;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -75,9 +77,17 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 		configuration.setDefaultConfiguration(this.getDefaultConfiguration());
 		this.configuration = configuration;
 
+		final AnalysisController ac;
+		// Get the controller, as we have to register the name
+		if (projectContext instanceof AnalysisController) {
+			ac = ((AnalysisController) projectContext);
+		} else {
+			throw new InvalidProjectContextException("Invalid analysis controller in constructor");
+		}
+
 		// Try to determine the name
 		String tmpName = configuration.getStringProperty(CONFIG_NAME);
-		if (tmpName.length() == 0) {
+		while ((tmpName.length() == 0) || !ac.tryRegisterComponentName(tmpName)) {
 			tmpName = this.getClass().getSimpleName() + '-' + UNNAMED_COUNTER.incrementAndGet();
 		}
 		this.name = tmpName;

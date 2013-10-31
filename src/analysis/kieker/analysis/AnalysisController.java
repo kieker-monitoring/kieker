@@ -23,7 +23,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -87,6 +89,8 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	private final Collection<IStateObserver> stateObservers = new CopyOnWriteArrayList<IStateObserver>();
 
 	private final CountDownLatch initializationLatch = new CountDownLatch(1);
+
+	private final Set<String> registeredComponentNames = new CopyOnWriteArraySet<String>();
 
 	/**
 	 * This map is used to store the mapping between a given instance of {@link MIProject} and an actual instantiation of an analysis. It is not modified after
@@ -699,6 +703,18 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	}
 
 	/**
+	 * This method tries to atomically register the given name for a component.
+	 * 
+	 * @param name
+	 *            The component name to register
+	 * 
+	 * @return true if and only if the given name is not already used and could now be registered.
+	 */
+	public boolean tryRegisterComponentName(final String name) {
+		return this.registeredComponentNames.add(name);
+	}
+
+	/**
 	 * This is a wrapper for the {@link AnalysisController} which contains a mapping between the model instances and the actual objects as well. This is necessary if
 	 * one wants to create an analysis based on an instance of {@link MIProject} and needs to map from the model instances to the actual created objects.
 	 * 
@@ -809,4 +825,5 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		 */
 		public void update(final AnalysisController controller, final STATE state);
 	}
+
 }
