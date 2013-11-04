@@ -124,7 +124,7 @@ public final class TimeReader extends AbstractReaderPlugin {
 			} catch (final InterruptedException ex) {
 				// ignore
 			}
-			if (!this.terminated) {
+			if (!this.terminated && (this.result != null)) {
 				// problems shutting down
 				this.result.cancel(true);
 			}
