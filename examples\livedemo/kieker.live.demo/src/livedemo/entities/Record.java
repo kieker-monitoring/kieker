@@ -1,7 +1,12 @@
 package livedemo.entities;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Bjoern Weissenfels
@@ -87,6 +92,26 @@ public class Record implements IMonitoringRecord{
 	@Override
 	public Object[] toArray() {
 		return this.record.toArray();
+	}
+
+	@Override
+	public int getSize() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void initFromBytes(ByteBuffer arg0, IRegistry<String> arg1)
+			throws BufferUnderflowException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void writeBytes(ByteBuffer arg0, IRegistry<String> arg1)
+			throws BufferOverflowException {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
