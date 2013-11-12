@@ -136,7 +136,7 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 	@After
 	public void cleanup() {
 		if (this.ctx != null) {
-			this.ctx.destroy();
+			this.ctx.close();
 		}
 		this.tmpFolder.delete();
 		System.clearProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED);
