@@ -287,9 +287,13 @@
 
 			<!-- Include the right Kieker libs (and licenses) in the examples -->
 			<tarfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
-						prefix="${kieker.dist.name}/${example.javaee.jetty.dir}/webapps/jpetstore/WEB-INF/lib" />
+						prefix="${kieker.dist.name}/${example.javaee.jpetstore.lib.dir}" />
 			<tarfileset file="${license.file}"
-						fullpath="${kieker.dist.name}/${example.javaee.jetty.dir}/webapps/jpetstore/WEB-INF/lib/${dist.kieker.main.aspectj.jar}.LICENSE" />
+						fullpath="${kieker.dist.name}/${example.javaee.jpetstore.lib.dir}/${dist.kieker.main.aspectj.jar}.LICENSE" />
+			<tarfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
+						prefix="${kieker.dist.name}/${example.javaee.demo.lib.dir}" />
+			<tarfileset file="${license.file}"
+						fullpath="${kieker.dist.name}/${example.javaee.demo.lib.dir}/${dist.kieker.main.emf.jar}.LICENSE" />
 			<tarfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
 						prefix="${kieker.dist.name}/${example.microbenchmark.dir}/lib" />
 			<tarfileset file="${lib.dir}/commons-cli-*.jar"
