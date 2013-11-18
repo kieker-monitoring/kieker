@@ -37,23 +37,17 @@ import kieker.common.record.misc.EmptyRecord;
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
- * This test is for the class {@link CountingFilter}.
+ * This test is for the class {@link MonitoringThroughputFilter}.
  * 
  * @author Henry Grow
  * 
- * @since 1.8 ????
+ * @since 1.9
  */
 public class TestMonitoringThroughputFilter extends AbstractKiekerTest {
 
 	private IAnalysisController analysisController;
 
 	private ListReader<EmptyRecord> simpleListReader;
-
-	private MonitoringThroughputFilter monitoringThroughputFilter;
-
-	private CountingFilter uncountedRecordsCountingFilter;
-
-	private CountingFilter relayedRecordsCountingFilter;
 
 	// sink for all relayed records
 	private ListCollectionFilter<Long> sinkPluginRelayedRecords;
@@ -63,8 +57,6 @@ public class TestMonitoringThroughputFilter extends AbstractKiekerTest {
 
 	// sink the count
 	private ListCollectionFilter<Long> sinkPluginCount;
-
-	private Configuration configuration;
 
 	/**
 	 * Default constructor.
@@ -83,43 +75,48 @@ public class TestMonitoringThroughputFilter extends AbstractKiekerTest {
 	 */
 	@Before
 	public void before() throws IllegalStateException, AnalysisConfigurationException {
+		final MonitoringThroughputFilter monitoringThroughputFilter;
+		final CountingFilter relayedRecordsCountingFilter;
+		final CountingFilter uncountedRecordsCountingFilter;
+		final Configuration configuration;
+
 		this.analysisController = new AnalysisController();
 
-		this.configuration = new Configuration();
-		this.configuration.setProperty(MonitoringThroughputFilter.CONFIG_PROPERTY_NAME_INTERVAL_SIZE, "10");
-		this.configuration.setProperty(MonitoringThroughputFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, TimeUnit.NANOSECONDS.name());
+		configuration = new Configuration();
+		configuration.setProperty(MonitoringThroughputFilter.CONFIG_PROPERTY_NAME_INTERVAL_SIZE, "10");
+		configuration.setProperty(MonitoringThroughputFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, TimeUnit.NANOSECONDS.name());
 
 		// ListReader
 		this.simpleListReader = new ListReader<EmptyRecord>(new Configuration(), this.analysisController);
 
 		// MonitoringThroughPut
-		this.monitoringThroughputFilter = new MonitoringThroughputFilter(this.configuration, this.analysisController);
-		this.analysisController.connect(this.simpleListReader, ListReader.OUTPUT_PORT_NAME, this.monitoringThroughputFilter,
+		monitoringThroughputFilter = new MonitoringThroughputFilter(configuration, this.analysisController);
+		this.analysisController.connect(this.simpleListReader, ListReader.OUTPUT_PORT_NAME, monitoringThroughputFilter,
 				MonitoringThroughputFilter.INPUT_PORT_NAME_RECORDS);
 
 		// uncounted Records CountingFilter
-		this.uncountedRecordsCountingFilter = new CountingFilter(this.configuration, this.analysisController);
-		this.analysisController.connect(this.monitoringThroughputFilter, MonitoringThroughputFilter.OUTPUT_PORT_NAME_UNCOUNTED_RECORDS,
-				this.uncountedRecordsCountingFilter, CountingFilter.INPUT_PORT_NAME_EVENTS);
+		uncountedRecordsCountingFilter = new CountingFilter(configuration, this.analysisController);
+		this.analysisController.connect(monitoringThroughputFilter, MonitoringThroughputFilter.OUTPUT_PORT_NAME_UNCOUNTED_RECORDS,
+				uncountedRecordsCountingFilter, CountingFilter.INPUT_PORT_NAME_EVENTS);
 
 		// relayed Records CountingFilter
-		this.relayedRecordsCountingFilter = new CountingFilter(this.configuration, this.analysisController);
-		this.analysisController.connect(this.monitoringThroughputFilter, MonitoringThroughputFilter.OUTPUT_PORT_NAME_RELAYED_RECORDS,
-				this.relayedRecordsCountingFilter, CountingFilter.INPUT_PORT_NAME_EVENTS);
+		relayedRecordsCountingFilter = new CountingFilter(configuration, this.analysisController);
+		this.analysisController.connect(monitoringThroughputFilter, MonitoringThroughputFilter.OUTPUT_PORT_NAME_RELAYED_RECORDS,
+				relayedRecordsCountingFilter, CountingFilter.INPUT_PORT_NAME_EVENTS);
 
 		// sink for uncounted records
-		this.sinkPluginUncountedRecords = new ListCollectionFilter<Long>(this.configuration, this.analysisController);
-		this.analysisController.connect(this.uncountedRecordsCountingFilter, CountingFilter.OUTPUT_PORT_NAME_COUNT,
+		this.sinkPluginUncountedRecords = new ListCollectionFilter<Long>(configuration, this.analysisController);
+		this.analysisController.connect(uncountedRecordsCountingFilter, CountingFilter.OUTPUT_PORT_NAME_COUNT,
 				this.sinkPluginUncountedRecords, ListCollectionFilter.INPUT_PORT_NAME);
 
 		// sink for all relayed records
-		this.sinkPluginRelayedRecords = new ListCollectionFilter<Long>(this.configuration, this.analysisController);
-		this.analysisController.connect(this.relayedRecordsCountingFilter, CountingFilter.OUTPUT_PORT_NAME_COUNT,
+		this.sinkPluginRelayedRecords = new ListCollectionFilter<Long>(configuration, this.analysisController);
+		this.analysisController.connect(relayedRecordsCountingFilter, CountingFilter.OUTPUT_PORT_NAME_COUNT,
 				this.sinkPluginRelayedRecords, ListCollectionFilter.INPUT_PORT_NAME);
 
 		// sink for the count
-		this.sinkPluginCount = new ListCollectionFilter<Long>(this.configuration, this.analysisController);
-		this.analysisController.connect(this.monitoringThroughputFilter, MonitoringThroughputFilter.OUTPUT_PORT_NAME_THROUGHPUT,
+		this.sinkPluginCount = new ListCollectionFilter<Long>(configuration, this.analysisController);
+		this.analysisController.connect(monitoringThroughputFilter, MonitoringThroughputFilter.OUTPUT_PORT_NAME_THROUGHPUT,
 				this.sinkPluginCount, ListCollectionFilter.INPUT_PORT_NAME);
 	}
 
