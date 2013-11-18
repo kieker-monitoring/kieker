@@ -38,6 +38,8 @@ import kieker.common.record.IMonitoringRecord;
 		outputPorts = {
 			@OutputPort(name = MonitoringThroughputFilter.OUTPUT_PORT_NAME_RELAYED_RECORDS, eventTypes = { IMonitoringRecord.class },
 					description = "Provides each incoming record"),
+			@OutputPort(name = MonitoringThroughputFilter.OUTPUT_PORT_NAME_UNCOUNTED_RECORDS, eventTypes = { IMonitoringRecord.class },
+					description = "Provides each not counted record"),
 			@OutputPort(name = MonitoringThroughputFilter.OUTPUT_PORT_NAME_THROUGHPUT, eventTypes = { Long.class },
 					description = "Provides throughput within last interval")
 		},
@@ -53,6 +55,8 @@ public class MonitoringThroughputFilter extends AbstractFilterPlugin {
 	public static final String INPUT_PORT_NAME_RECORDS = "inputRecords";
 	/** The name of the output port delivering the received objects. */
 	public static final String OUTPUT_PORT_NAME_RELAYED_RECORDS = "relayedRecords";
+	/** The name of the output port delivering the uncounted objects. */
+	public static final String OUTPUT_PORT_NAME_UNCOUNTED_RECORDS = "uncountedRecords";
 	/** The name of the output port delivering calculated throughput. */
 	public static final String OUTPUT_PORT_NAME_THROUGHPUT = "throughput";
 
@@ -85,6 +89,7 @@ public class MonitoringThroughputFilter extends AbstractFilterPlugin {
 			configTimeunit = this.timeunit;
 		}
 		this.intervalSize = this.timeunit.convert(configuration.getLongProperty(CONFIG_PROPERTY_NAME_INTERVAL_SIZE), configTimeunit);
+
 	}
 
 	@Override
@@ -101,17 +106,21 @@ public class MonitoringThroughputFilter extends AbstractFilterPlugin {
 		final long timestamp = record.getLoggingTimestamp();
 		final long interval = timestamp / this.intervalSize;
 		synchronized (this) {
-			if (interval > this.currentInterval) { // we enter a new interval
-				if (this.currentInterval != -1) { // close all previous intervals if not the first interval
-					super.deliver(OUTPUT_PORT_NAME_THROUGHPUT, this.recordsInInterval);
-					for (long i = this.currentInterval + 1; i < interval; i++) {
-						super.deliver(OUTPUT_PORT_NAME_THROUGHPUT, 0L);
+			if (interval < this.currentInterval) { // do not count records earlier than the current interval
+				super.deliver(OUTPUT_PORT_NAME_UNCOUNTED_RECORDS, record);
+			} else {
+				if (interval > this.currentInterval) { // we enter a new interval
+					if (this.currentInterval != -1) { // close all previous intervals if not the first interval
+						super.deliver(OUTPUT_PORT_NAME_THROUGHPUT, this.recordsInInterval);
+						for (long i = this.currentInterval + 1; i < interval; i++) {
+							super.deliver(OUTPUT_PORT_NAME_THROUGHPUT, 0L);
+						}
 					}
+					this.currentInterval = interval;
+					this.recordsInInterval = 0;
 				}
-				this.currentInterval = interval;
-				this.recordsInInterval = 0;
+				this.recordsInInterval = this.recordsInInterval + 1;
 			}
-			this.recordsInInterval = this.recordsInInterval + 1;
 		}
 		super.deliver(OUTPUT_PORT_NAME_RELAYED_RECORDS, record);
 	}
