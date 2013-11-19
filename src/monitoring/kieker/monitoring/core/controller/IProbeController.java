@@ -67,8 +67,8 @@ public interface IProbeController {
 	 * Overwrites the current list of patterns with a new pattern list.
 	 * 
 	 * @param patternList
-	 *            list of strings with patterns
-	 *            where each string starts either with a + or -
+	 *            list of strings with patterns where each string starts either with a + or -. The list can be empty (in which case the internal pattern list and the
+	 *            internal cache are cleared) - but not null.
 	 * 
 	 * @since 1.6
 	 */
