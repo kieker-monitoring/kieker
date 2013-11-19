@@ -131,7 +131,7 @@ public class TestMonitoringThroughputFilter extends AbstractKiekerTest {
 	@Test
 	public void testNormal() throws IllegalStateException, AnalysisConfigurationException {
 
-		final ArrayList<EmptyRecord> records = new ArrayList<EmptyRecord>();
+		final List<EmptyRecord> records = new ArrayList<EmptyRecord>();
 
 		// adding 20 records with timestamps from 10 to 29
 		for (long i = 10; i < 30; i++) {
@@ -163,14 +163,14 @@ public class TestMonitoringThroughputFilter extends AbstractKiekerTest {
 
 		Assert.assertEquals(AnalysisController.STATE.TERMINATED, this.analysisController.getState());
 
-		this.testCorrectCount();
+		this.checkCorrectCount();
 
-		this.testCorrectRelayedCount();
+		this.checkCorrectRelayedCount();
 
-		this.testCorrectUncountedCount();
+		this.checkCorrectUncountedCount();
 	}
 
-	private void testCorrectCount() {
+	private void checkCorrectCount() {
 		final List<Long> counts = this.sinkPluginCount.getList();
 		final long firstCount = counts.get(0); // first count of interval
 		Assert.assertEquals("First Count should be 10 at the end of the test, but counted " + firstCount, 10,
@@ -183,14 +183,14 @@ public class TestMonitoringThroughputFilter extends AbstractKiekerTest {
 				thirdCount);
 	}
 
-	private void testCorrectRelayedCount() {
+	private void checkCorrectRelayedCount() {
 		final List<Long> counts = this.sinkPluginRelayedRecords.getList();
 		final long count = counts.get(counts.size() - 1);
 		Assert.assertEquals("Count should be 27 at the end of the test, but counted " + count, 27,
 				count);
 	}
 
-	private void testCorrectUncountedCount() {
+	private void checkCorrectUncountedCount() {
 		final List<Long> counts = this.sinkPluginUncountedRecords.getList();
 		final long count = counts.get(0);
 		Assert.assertEquals("Count should be 1 at the end of the test, but counted " + count, 1,
