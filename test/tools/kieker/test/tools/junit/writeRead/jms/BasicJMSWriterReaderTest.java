@@ -19,9 +19,11 @@ package kieker.test.tools.junit.writeRead.jms;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.AnalysisControllerThread;
+import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.jms.JMSReader;
@@ -92,5 +94,21 @@ public class BasicJMSWriterReaderTest extends AbstractWriterReaderTest { // NOPM
 	@Override
 	protected List<IMonitoringRecord> readEvents() throws AnalysisConfigurationException {
 		return this.sinkFilter.getList();
+	}
+
+	/**
+	 * This test makes sure that the read method of the JMSReader returns true (this was a bug, reported in #758).
+	 */
+	@Test
+	public void testReadReturnsTrue() {
+		final IAnalysisController ac = new AnalysisController();
+
+		final Configuration jmsReaderConfig = new Configuration();
+		jmsReaderConfig.setProperty(JMSReader.CONFIG_PROPERTY_NAME_FACTORYLOOKUP, FakeInitialContextFactory.class.getName());
+		final JMSReader jmsReader = new JMSReader(jmsReaderConfig, ac);
+
+		jmsReader.terminate(false);
+
+		Assert.assertTrue(jmsReader.read());
 	}
 }
