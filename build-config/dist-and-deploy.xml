@@ -86,7 +86,7 @@
 			<exclude name="${example.javaee.jetty.dir}/logs/**/*" />
 			<exclude name="${example.javaee.jetty.dir}/**/kieker*.jar" />
 			<exclude name="${example.javaee.jpetstore.lib.dir}/*sigar*" />
-			<exclude name="${example.javaee.demo.classes.dir}/*" />
+			<exclude name="${example.javaee.demo.classes.dir}/**" />
 			<include name=".settings/**/*" />
 			<include name=".checkstyle" />
 			<include name=".classpath" />
