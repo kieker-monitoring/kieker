@@ -34,9 +34,9 @@ import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.executionRecordTransformation.ExecutionRecordTransformationFilter;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
-import livedemo.entities.Record;
+import livedemo.entities.EnrichedOERecord;
 import livedemo.filter.MethodResponsetimeDisplayFilter;
-import livedemo.filter.OER2RecordFilter;
+import livedemo.filter.OER2EnrichedOERFilter;
 
 /**
  * @author Bjoern Weissenfels
@@ -59,7 +59,7 @@ public class AnalysisBean {
 	private final SystemModelRepository systemModelRepository;
 	private final CPUUtilizationDisplayFilter cpuFilter;
 	private final MemSwapUtilizationDisplayFilter memSwapFilter;
-	private final ListCollectionFilter<Record> recordListFilter;
+	private final ListCollectionFilter<EnrichedOERecord> recordListFilter;
 	private final MethodResponsetimeDisplayFilter responsetimeFilter;
 	private final MethodAndComponentFlowDisplayFilter tagCloudFilter;
 
@@ -82,7 +82,7 @@ public class AnalysisBean {
 		final Configuration recordListConfiguration = new Configuration();
 		recordListConfiguration.setProperty(ListCollectionFilter.CONFIG_PROPERTY_NAME_MAX_NUMBER_OF_ENTRIES, this.numberOfRecordListEntries);
 		recordListConfiguration.setProperty(ListCollectionFilter.CONFIG_PROPERTY_NAME_LIST_FULL_BEHAVIOR, "dropOldest");
-		this.recordListFilter = new ListCollectionFilter<Record>(recordListConfiguration, this.analysisInstance);
+		this.recordListFilter = new ListCollectionFilter<EnrichedOERecord>(recordListConfiguration, this.analysisInstance);
 
 		final Configuration responsetimeConfiguration = new Configuration();
 		responsetimeConfiguration.setProperty(MethodResponsetimeDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, this.numberOfResponsetimeEntries);
@@ -123,7 +123,7 @@ public class AnalysisBean {
 		typeFilter3Config.setProperty(TypeFilter.CONFIG_PROPERTY_NAME_TYPES, "kieker.common.record.system.MemSwapUsageRecord");
 		final TypeFilter typeFilter3 = new TypeFilter(typeFilter3Config, this.analysisInstance);
 
-		final OER2RecordFilter oer2RecordFilter = new OER2RecordFilter(new Configuration(), this.analysisInstance);
+		final OER2EnrichedOERFilter oer2RecordFilter = new OER2EnrichedOERFilter(new Configuration(), this.analysisInstance);
 
 		final ExecutionRecordTransformationFilter ertf = new ExecutionRecordTransformationFilter(new Configuration(), this.analysisInstance);
 
@@ -140,9 +140,9 @@ public class AnalysisBean {
 				this.tagCloudFilter, MethodAndComponentFlowDisplayFilter.INPUT_PORT_NAME_EVENTS);
 
 		this.analysisInstance.connect(typeFilter1, TypeFilter.OUTPUT_PORT_NAME_TYPE_MATCH,
-				oer2RecordFilter, OER2RecordFilter.INPUT_PORT_NAME);
+				oer2RecordFilter, OER2EnrichedOERFilter.INPUT_PORT_NAME);
 
-		this.analysisInstance.connect(oer2RecordFilter, OER2RecordFilter.OUTPUT_PORT_NAME,
+		this.analysisInstance.connect(oer2RecordFilter, OER2EnrichedOERFilter.OUTPUT_PORT_NAME,
 				this.recordListFilter, ListCollectionFilter.INPUT_PORT_NAME);
 
 		this.analysisInstance.connect(typeFilter1, TypeFilter.OUTPUT_PORT_NAME_TYPE_MISMATCH,
@@ -180,7 +180,7 @@ public class AnalysisBean {
 		return this.memSwapFilter;
 	}
 
-	public ListCollectionFilter<Record> getRecordListFilter() {
+	public ListCollectionFilter<EnrichedOERecord> getRecordListFilter() {
 		return this.recordListFilter;
 	}
 

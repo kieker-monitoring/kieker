@@ -24,7 +24,7 @@ import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 
-import livedemo.entities.Record;
+import livedemo.entities.EnrichedOERecord;
 
 /**
  * @author Bjoern Weissenfels
@@ -34,22 +34,43 @@ import livedemo.entities.Record;
 @Plugin(programmaticOnly = true,
 		description = "A filter collecting incoming objects in a list",
 		outputPorts = @OutputPort(
-				name = OER2RecordFilter.OUTPUT_PORT_NAME,
-				eventTypes = { Record.class },
+				name = OER2EnrichedOERFilter.OUTPUT_PORT_NAME,
+				eventTypes = { EnrichedOERecord.class },
 				description = "Provides each incoming object"))
-public class OER2RecordFilter extends AbstractFilterPlugin {
+public class OER2EnrichedOERFilter extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME = "inputObject";
 	public static final String OUTPUT_PORT_NAME = "outputObjects";
 
-	public OER2RecordFilter(final Configuration configuration,
+	public OER2EnrichedOERFilter(final Configuration configuration,
 			final IProjectContext projectContext) {
 		super(configuration, projectContext);
 	}
 
-	@InputPort(name = OER2RecordFilter.INPUT_PORT_NAME)
+	@InputPort(name = OER2EnrichedOERFilter.INPUT_PORT_NAME)
 	public void input(final OperationExecutionRecord record) {
-		this.deliver(OUTPUT_PORT_NAME, new Record(record));
+		final double responseTime = this.computeResponseTime(record);
+		final String shortSignature = this.createShortSignature(record);
+		final String commaSeperatedValues = record.toString();
+		this.deliver(
+				OUTPUT_PORT_NAME,
+				new EnrichedOERecord(record.getOperationSignature(), record.getSessionId(), record.getTraceId(), record.getTin(), record.getTout(), record
+						.getHostname(), record.getEoi(), record.getEss(), responseTime, shortSignature, commaSeperatedValues));
+	}
+
+	private double computeResponseTime(final OperationExecutionRecord record) {
+		double resp = record.getTout() - record.getTin();
+		resp = resp / 1000000; // conversion to milliseconds
+		final double rounded = Math.round(resp * 10) / 10.0; // rounded to one decimal
+		return rounded;
+	}
+
+	private String createShortSignature(final OperationExecutionRecord record) {
+		String[] array = record.getOperationSignature().split("\\(");
+		array = array[0].split("\\.");
+		final int end = array.length;
+		final String result = "..." + array[end - 2] + "." + array[end - 1] + "(...)";
+		return result;
 	}
 
 	@Override

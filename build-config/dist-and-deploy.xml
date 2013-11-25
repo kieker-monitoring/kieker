@@ -85,6 +85,7 @@
 			<include name="${example.javaee.jetty.dir}/**/*" />
 			<exclude name="${example.javaee.jetty.dir}/logs/**/*" />
 			<exclude name="${example.javaee.jetty.dir}/**/kieker*.jar" />
+			<exclude name="${example.javaee.jpetstore.lib.dir}/*sigar*" />
 			<include name=".settings/**/*" />
 			<include name=".checkstyle" />
 			<include name=".classpath" />
@@ -290,10 +291,6 @@
 						prefix="${kieker.dist.name}/${example.javaee.jpetstore.lib.dir}" />
 			<tarfileset file="${license.file}"
 						fullpath="${kieker.dist.name}/${example.javaee.jpetstore.lib.dir}/${dist.kieker.main.aspectj.jar}.LICENSE" />
-			<tarfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
-						prefix="${kieker.dist.name}/${example.javaee.demo.lib.dir}" />
-			<tarfileset file="${license.file}"
-						fullpath="${kieker.dist.name}/${example.javaee.demo.lib.dir}/${dist.kieker.main.emf.jar}.LICENSE" />
 			<tarfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
 						prefix="${kieker.dist.name}/${example.microbenchmark.dir}/lib" />
 			<tarfileset file="${lib.dir}/commons-cli-*.jar"
@@ -312,8 +309,14 @@
 						prefix="${kieker.dist.name}/${src.userguide.example.sigar.dir}/lib" />
 			<tarfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
 						prefix="${kieker.dist.name}/${src.userguide.example.sigar.dir}/lib" />
+			<tarfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
+						prefix="${kieker.dist.name}/${example.javaee.demo.lib.dir}" />
+			<tarfileset file="${license.file}"
+						fullpath="${kieker.dist.name}/${example.javaee.demo.lib.dir}/${dist.kieker.main.emf.jar}.LICENSE" />
 			<tarfileset file="${lib.sigar.dir}/*"
 						prefix="${kieker.dist.name}/${src.userguide.example.sigar.dir}/lib" />
+			<tarfileset file="${lib.sigar.dir}/*"
+						prefix="${kieker.dist.name}/${example.javaee.jpetstore.lib.dir}" />
 		</tar>
 		<gzip zipfile="${release.dir}/${dist.kieker.binBaseName}.tar.gz" src="${release.dir}/${dist.kieker.binBaseName}.tar" />
 		<!-- tar file no longer needed -->
@@ -374,6 +377,14 @@
 						prefix="${kieker.dist.name}/${src.userguide.example.sigar.dir}/lib" />
 			<zipfileset file="${lib.sigar.dir}/*"
 						prefix="${kieker.dist.name}/${src.userguide.example.sigar.dir}/lib" />
+			<zipfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
+						prefix="${kieker.dist.name}/${example.javaee.demo.lib.dir}" />
+			<zipfileset file="${license.file}"
+						fullpath="${kieker.dist.name}/${example.javaee.demo.lib.dir}/${dist.kieker.main.emf.jar}.LICENSE" />
+			<zipfileset file="${lib.sigar.dir}/*"
+						prefix="${kieker.dist.name}/${src.userguide.example.sigar.dir}/lib" />
+			<zipfileset file="${lib.sigar.dir}/*"
+						prefix="${kieker.dist.name}/${example.javaee.jpetstore.lib.dir}" />
 		</zip>
 	</target>
 
