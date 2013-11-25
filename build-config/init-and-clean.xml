@@ -127,6 +127,16 @@
 			<pathelement location="${build.kieker.analysis.dir}/" />
 			<pathelement location="${build.kieker.analysis.model.dir}/" />
 		</path>
+
+		<path id="javaee.demo-compile-classpath">
+			<fileset dir="${example.javaee.demo.lib.dir}">
+				<include name="primefaces-*.jar" />
+				<include name="jsf-api-*.jar" />
+			</fileset>
+			<fileset dir="${dist.dir}">
+				<include name="${dist.kieker.main.jar}" />
+			</fileset>
+		</path>
 	</target>
 
 	<target name="clean-userguide-examples" description="Removes artifacts from previous builds and manually changed configuration files">

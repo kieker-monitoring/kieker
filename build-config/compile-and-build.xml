@@ -60,6 +60,14 @@
 
 	<target name="compile-kieker" depends="-init,-compile-kieker.common,-compile-kieker.monitoring,-compile-kieker.analysis,-compile-kieker.tools" description="Compiles the Kieker sources (calls all 'compile-kieker.*' targets)">
 	</target>
+	
+	<target name="-compile-javaee.demo" depends="-init" description="Compiles the sources of the JavaEE example">
+			<delete dir="${example.javaee.demo.classes.dir}" />
+			<mkdir dir="${example.javaee.demo.classes.dir}" />
+			<javac destDir="${example.javaee.demo.classes.dir}" source="1.5" target="1.5" srcdir="${example.javaee.dir}/src" debug="true" classpathref="javaee.demo-compile-classpath" includeAntRuntime="false">
+				<compilerarg value="-Xlint:all" />
+			</javac>
+	</target>
 
 	<target name="build-kieker.main" depends="-init,compile-kieker" description="Compiles and packages the Kieker Jar file">
 		<jar destfile="${dist.dir}/${dist.kieker.main.jar}">

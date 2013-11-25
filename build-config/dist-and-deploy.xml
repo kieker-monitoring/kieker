@@ -86,6 +86,7 @@
 			<exclude name="${example.javaee.jetty.dir}/logs/**/*" />
 			<exclude name="${example.javaee.jetty.dir}/**/kieker*.jar" />
 			<exclude name="${example.javaee.jpetstore.lib.dir}/*sigar*" />
+			<exclude name="${example.javaee.demo.classes.dir}/*" />
 			<include name=".settings/**/*" />
 			<include name=".checkstyle" />
 			<include name=".classpath" />
@@ -219,7 +220,7 @@
 
 	</target>
 
-	<target name="dist-kieker-binaries" depends="build-all,-build-userguide,-build-userguide-examples,-prepate-userguide-examples-binary-release" description="Packages the binary archives (.zip|.tar.gz) for a release">
+	<target name="dist-kieker-binaries" depends="build-all,-build-userguide,-build-userguide-examples,-prepate-userguide-examples-binary-release,-compile-javaee.demo" description="Packages the binary archives (.zip|.tar.gz) for a release">
 		<patternset id="dist_bin_files-nonbinmode"> <!-- NOTE that the order of includes/excludes seems to have no effect. So be careful with excludes -->
 			<include name="${history.file}" />
 			<include name="${license.file}" />
@@ -247,6 +248,7 @@
 			<include name="${example.javaee.jetty.dir}/**" />
 			<exclude name="${example.javaee.jetty.dir}/logs/**/*" />
 			<exclude name="${example.javaee.jetty.dir}/**/kieker*.jar" />
+			<exclude name="${example.javaee.jpetstore.lib.dir}/*sigar*" />
 			<exclude name="**/build-eclipse/**" />
 		</patternset>
 		<patternset id="dist_bin_files-binmode">
@@ -305,8 +307,6 @@
 						prefix="${kieker.dist.name}/${src.userguide.example.jms.dir}/lib" />
 			<tarfileset file="${lib.dir}/commons-logging-*.jar"
 						prefix="${kieker.dist.name}/${src.userguide.example.jms.dir}/lib" />
-			<tarfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
-						prefix="${kieker.dist.name}/${src.userguide.example.sigar.dir}/lib" />
 			<tarfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
 						prefix="${kieker.dist.name}/${src.userguide.example.sigar.dir}/lib" />
 			<tarfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
@@ -374,8 +374,6 @@
 			<zipfileset file="${lib.dir}/commons-logging-*.jar"
 						prefix="${kieker.dist.name}/${src.userguide.example.jms.dir}/lib" />
 			<zipfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
-						prefix="${kieker.dist.name}/${src.userguide.example.sigar.dir}/lib" />
-			<zipfileset file="${lib.sigar.dir}/*"
 						prefix="${kieker.dist.name}/${src.userguide.example.sigar.dir}/lib" />
 			<zipfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
 						prefix="${kieker.dist.name}/${example.javaee.demo.lib.dir}" />
