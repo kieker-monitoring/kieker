@@ -27,7 +27,7 @@
 	<classpathentry kind="lib" path="lib/derby-10.10.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/geronimo-j2ee-management_1.1_spec-1.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/hamcrest-core-1.3.jar"/>
-	<classpathentry kind="lib" path="lib/javassist.jar"/>
+	<classpathentry kind="lib" path="lib/javassist-3.18.0.jar"/>
 	<classpathentry kind="lib" path="lib/javax.jms-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/jgraphx-2.1.1.0.jar"/>
 	<classpathentry kind="lib" path="lib/junit-4.11.jar"/>
