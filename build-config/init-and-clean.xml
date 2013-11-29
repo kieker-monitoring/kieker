@@ -133,6 +133,9 @@
 				<include name="primefaces-*.jar" />
 				<include name="jsf-api-*.jar" />
 			</fileset>
+			<fileset dir="${example.javaee.jetty.lib.dir}/annotations/">
+				<include name="javax.annotation-*.jar" />
+			</fileset>
 			<fileset dir="${dist.dir}">
 				<include name="${dist.kieker.main.jar}" />
 			</fileset>
