@@ -38,7 +38,7 @@ import kieker.monitoring.timer.ITimeSource;
  * 
  * @since 1.9
  */
-public class FullInstrumentation {
+public class FullInstrumentation { // NOPMD (disl class)
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
 	private static final ITimeSource TIME = CTRLINST.getTimeSource();
 	private static final TraceRegistry TRACEREGISTRY = TraceRegistry.INSTANCE;
