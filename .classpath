@@ -37,6 +37,7 @@
 	<classpathentry kind="lib" path="lib/org.eclipse.emf.ecore_2.9.0.v20130528-0742.jar"/>
 	<classpathentry kind="lib" path="lib/reflections-0.9.9-RC1.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-api-1.7.5.jar"/>
+	<classpathentry kind="lib" path="lib/disl-2.0/disl-server.jar"/>
 	<classpathentry kind="lib" path="lib/framework-libs/cxf/cxf-2.6.9.jar"/>
 	<classpathentry kind="lib" path="lib/framework-libs/cxf/asm-3.3.1.jar"/>
 	<classpathentry kind="lib" path="lib/framework-libs/cxf/geronimo-activation_1.1_spec-1.1.jar"/>

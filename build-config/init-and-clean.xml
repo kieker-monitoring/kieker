@@ -79,6 +79,7 @@
 			<fileset dir="${lib.dir}">
 				<!--<include name="aspectjrt-*.jar" />-->
 				<include name="javax.jms-*.jar" />
+				<include name="disl-*/disl-server.jar" />
 				<include name="framework-libs/javax.servlet-*.jar" />
 				<include name="framework-libs/cxf/cxf-*.jar" />
 				<include name="framework-libs/spring/aopalliance-*.jar" />
