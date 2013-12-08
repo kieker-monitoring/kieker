@@ -55,28 +55,34 @@
 			</ul>
 		</div>
 		<div id="main">
-			<h:form>
-				<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+			<h:form id="form">
+				
+				<h:panelGrid columns="3" style="margin-bottom:10px" cellpadding="5">
 					<p:commandButton value="Select Methods" onclick="dlg2.show();" />
 					<p:selectBooleanButton value="#{methodResponsetimeBean.selectButton}" onLabel="Select All" 
 						offLabel="Select One" valueChangeListener="#{methodResponsetimeBean.onChange}">
 						<p:ajax update="dialog"/>
 					</p:selectBooleanButton>
+					<p:commandButton async="true" id="loadButton" value="Generate Load" disabled="#{jMeterBean.disabled}" actionListener="#{jMeterBean.runJMeter}" />
 				</h:panelGrid>
+				
 				<p:dialog id="dialog" header="Select Methods" widgetVar="dlg2" onShow="poll.stop()" onHide="poll.start()" >
 					<p:selectManyCheckbox id="methodbox" value="#{methodResponsetimeBean.selectedMethods}" 
 						label="Select Methods" layout="pageDirection">  
 						<f:selectItems value="#{methodResponsetimeBean.availableMethods}" />  
 					</p:selectManyCheckbox>
 				</p:dialog>
+				
 				<p:lineChart id="count" value="#{methodResponsetimeBean.countingModel}" legendPosition="ne"  
 			    	title="Method Calls" minY="0" maxY="#{methodResponsetimeBean.maxY}" style="height:300px;margin-top:20px"
 			    	xaxisLabel="Time" yaxisLabel="Number of calls per 2 Seconds"/>
+				
 				<p:barChart id="resp" value="#{methodResponsetimeBean.responsetimeModel}" legendPosition="ne"  
 			    	title="Average Responsetime" minY="0" style="height:300px;margin-top:20px"
 			    	xaxisLabel="Time" yaxisLabel="Responsetime in ms"/>
+		     	
 		     	<p:poll interval="1" widgetVar="poll" update="dialog" autoStart="true"/>
-				<p:poll interval="1" update="count,resp" />
+				<p:poll interval="1" update="count,resp,loadButton" />
 			</h:form>
 		</div>
 		<div id="footer">
