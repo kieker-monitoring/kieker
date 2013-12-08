@@ -52,23 +52,19 @@
 	  			<li><a href="index.jsf">Main Menu</a></li>
 	  			<li><a href="recordList.jsf">Record List</a></li>
 	  			<li><a href="chart.jsf">Method Response Times</a></li>
-<!-- 			<li><a href="graph.jsf">Graph</a></li> -->
 		       	<li><a href="systemModel.jsf">System Model</a></li>
 		       	<li><a style="color:#000000" href="cpuAndMemSwap.jsf">CPU And MEMSWAP</a></li>
 			</ul>
 		</div>
 		<div id="main">
 			<h:form id="form"> 
-			
 				<p:commandButton value="Select Attributes" onclick="dlg.show();" type="button"/>
-				 
 				<p:dialog header="Select Attributes" widgetVar="dlg">
 					<p:selectManyCheckbox value="#{cpuXYPlotBean.selectedAttributes}" 
 						label="Select Methods" layout="pageDirection">  
 						<f:selectItems value="#{cpuXYPlotBean.availableAttributes}" />  
 					</p:selectManyCheckbox>
 				</p:dialog>
-				
 				<p:accordionPanel value="#{cpuXYPlotBean.models}" var="model" dynamic="true" multiple="true">
 					<p:tab title="#{model.name}">
 						<p:lineChart id="responsetime" value="#{model.model}" legendPosition="ne"
@@ -77,7 +73,6 @@
 						<p:poll interval="1" update="responsetime"/>
 					</p:tab>
 				</p:accordionPanel>
-				
 				<p:accordionPanel dynamic="true" multiple="true" activeIndex="0,1">
 					<p:tab title="#{memSwapBean.memModel.name}">
 						<p:barChart id="mem" value="#{memSwapBean.memModel.model}" legendPosition="ne"
@@ -92,17 +87,6 @@
 						<p:poll interval="1" update="swap"/>
 					</p:tab>
 				</p:accordionPanel>
-				<!-- 
-				<h:panelGrid id="grid" columns="2" columnClasses="colStyle" style="width:100%;margin-bottom:10px" cellpadding="5">
-					<c:forEach items="#{cpuMeterGaugeBean.meterGaugeModels}" var="model">
-						<p:panel header="#{model.name} : Total Utilization" toggleable="false" >
-							<p:meterGaugeChart value="#{model.model}"  
-					 			label="%" seriesColors="#{cpuMeterGaugeBean.colors}"/>
-						</p:panel>
-					</c:forEach>
-				</h:panelGrid>
-				<p:poll interval="1" update="grid"/>
-				 -->
 			</h:form>
 		</div>
 		<div id="footer">
@@ -113,7 +97,6 @@
         		</ul>
         	</div>
     	</div>
-	</div>	
-	
+	</div>
 </h:body>
 </html>

@@ -49,7 +49,6 @@
 				<li><a href="index.jsf">Main Menu</a></li>
 	  			<li><a style="color:#000000" href="recordList.jsf">Record List</a></li>
 	  			<li><a href="chart.jsf">Method Response Times</a></li>
-<!-- 	   		<li><a href="graph.jsf">Graph</a></li> -->
 		   		<li><a href="systemModel.jsf">System Model</a></li>
 		 		<li><a href="cpuAndMemSwap.jsf">CPU and MemSwap</a></li>
 			</ul>
@@ -57,24 +56,22 @@
 		<div id="main">
 		 	<h:form id="table">
 				<p:commandButton id="button" update="button,table" value="#{recordBean.freezeButton}" action="#{recordBean.freeze}"/>
-				
 		    	<p:dataTable id="rec" value="#{recordBean.records}" var="record">
 		    		<p:column headerText="Session Id">  
-		            	<h:outputText id="session" value="#{record.operationExecutionRecord.sessionId}" />     	  
+		            	<h:outputText id="session" value="#{record.sessionId}" />     	  
 		            </p:column>
 		    		<p:column headerText="Trace Id">  
-		            	<h:outputText id="trace" value="#{record.operationExecutionRecord.traceId}"/>  
-		            	<p:tooltip for="trace" style="max-width:700px;font-size:10px" value="#{record.wholeRecord}"/>
+		            	<h:outputText id="trace" value="#{record.traceId}"/>  
+		            	<p:tooltip for="trace" style="max-width:700px;font-size:10px" value="#{record.commaSeperatedValues}"/>
 			        </p:column>
 		    	    <p:column headerText="Signature">  
 		        	    <h:outputText id="signature" value="#{record.shortSignature}" />  
-		        	    <p:tooltip for="signature" style="max-width:500px;font-size:10px" value="#{record.operationExecutionRecord.operationSignature}"/>
+		        	    <p:tooltip for="signature" style="max-width:500px;font-size:10px" value="#{record.operationSignature}"/>
 			        </p:column>
 		    	    <p:column headerText="Response Time">  
 		        	    <h:outputText style="float:right" value="#{record.responseTime} ms" /> 
 			        </p:column>
 		    	</p:dataTable>
-		    	
 		    	<p:poll interval="2" update="#{recordBean.updateForm}" />
 			</h:form>
 		</div>

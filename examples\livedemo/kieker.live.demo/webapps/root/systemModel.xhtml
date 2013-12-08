@@ -34,7 +34,6 @@
 		.feature-slider a.active {
 			background-color: #2456a1;
 		}
-		
 		.ui-widget,.ui-widget .ui-widget {
 			font-size: 80% !important;
 		}
@@ -55,7 +54,6 @@
 	  			<li><a href="index.jsf">Main Menu</a></li>
 	  			<li><a href="recordList.jsf">Record List</a></li>
 	  			<li><a href="chart.jsf">Method Response Times</a></li>
-<!-- 	       	<li><a href="graph.jsf">Graph</a></li> -->
 		       	<li><a style="color:#000000" href="systemModel.jsf">System Model</a></li>
 		       	<li><a href="cpuAndMemSwap.jsf">CPU and MemSwap</a></li>
 			</ul>
@@ -70,7 +68,6 @@
 						<p:tagCloud model="#{tagCloudBean.componentModel}" style="width:100%;"/>  
 					</p:panel>
 			    </h:panelGrid>
-			    
 		    	<p:dataTable var="type" id="componentTypes" value="#{systemModelBean.componentTypes}" style="margin-bottom:10px">
 					<f:facet name="header">  
 						Component Types  
@@ -90,7 +87,6 @@
 		        	    </ui:repeat>  
 			        </p:column>
 		    	</p:dataTable>
-					    
 				<p:dataTable var="operation" id="operations" value="#{systemModelBean.operations}" style="margin-bottom:10px">
 		     		<f:facet name="header">  
 		            	Operations  
@@ -113,7 +109,6 @@
 		        	    <h:outputText value="#{operation.signature.returnType}" />  
 			        </p:column>
 		    	</p:dataTable>
-		    	
 		    	<p:dataTable var="assemblyComponent" id="assemblyComponents" value="#{systemModelBean.assemblyComponents}" style="margin-bottom:10px">
 		     		<f:facet name="header">  
 		            	Assembly Components  
@@ -128,7 +123,6 @@
 		        	    <h:outputText value="#{assemblyComponent.type.fullQualifiedName}" />  
 			        </p:column>
 		    	</p:dataTable>
-		    	
 		    	<p:dataTable var="container" id="executionContainers" value="#{systemModelBean.executionContainers}" style="margin-bottom:10px">
 		     		<f:facet name="header">  
 		            	Execution Containers  
@@ -140,7 +134,6 @@
 		        	    <h:outputText value="#{container.name}" />  
 			        </p:column>
 		    	</p:dataTable>
-		    	
 		    	<p:dataTable var="deploymentComponent" id="deploymentComponents" value="#{systemModelBean.deploymentComponents}">
 		     		<f:facet name="header">  
 		            	Deployment Components  
@@ -155,7 +148,6 @@
 		        	    <h:outputText value="#{deploymentComponent.executionContainer.name}" />  
 			        </p:column>
 		    	</p:dataTable>
-			    
 		     	<p:poll interval="2" update="model" />
 		     </h:form>
 	     </div>
@@ -167,7 +159,6 @@
         		</ul>
         	</div>
     	</div>
-	</div>
-             
+	</div>         
 </h:body>
 </html>

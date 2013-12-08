@@ -50,7 +50,6 @@
 	  			<li><a href="index.jsf">Main Menu</a></li>
 	  			<li><a href="recordList.jsf">Record List</a></li>
 	  			<li><a style="color:#000000" href="chart.jsf">Method Response Times</a></li>
-<!-- 	       	<li><a href="graph.jsf">Graph</a></li> -->
 		       	<li><a href="systemModel.jsf">System Model</a></li>
 		       	<li><a href="cpuAndMemSwap.jsf">CPU and MemSwap</a></li>
 			</ul>
@@ -64,22 +63,18 @@
 						<p:ajax update="dialog"/>
 					</p:selectBooleanButton>
 				</h:panelGrid>
-				
 				<p:dialog id="dialog" header="Select Methods" widgetVar="dlg2" onShow="poll.stop()" onHide="poll.start()" >
 					<p:selectManyCheckbox id="methodbox" value="#{methodResponsetimeBean.selectedMethods}" 
 						label="Select Methods" layout="pageDirection">  
 						<f:selectItems value="#{methodResponsetimeBean.availableMethods}" />  
 					</p:selectManyCheckbox>
 				</p:dialog>
-				
 				<p:lineChart id="count" value="#{methodResponsetimeBean.countingModel}" legendPosition="ne"  
 			    	title="Method Calls" minY="0" maxY="#{methodResponsetimeBean.maxY}" style="height:300px;margin-top:20px"
 			    	xaxisLabel="Time" yaxisLabel="Number of calls per 2 Seconds"/>
-				 
 				<p:barChart id="resp" value="#{methodResponsetimeBean.responsetimeModel}" legendPosition="ne"  
 			    	title="Average Responsetime" minY="0" style="height:300px;margin-top:20px"
 			    	xaxisLabel="Time" yaxisLabel="Responsetime in ms"/>
-		     	  	
 		     	<p:poll interval="1" widgetVar="poll" update="dialog" autoStart="true"/>
 				<p:poll interval="1" update="count,resp" />
 			</h:form>

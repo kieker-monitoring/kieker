@@ -1,3 +1,19 @@
+/***************************************************************************
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
 package livedemo.managedbeans;
 
 import java.util.ArrayList;
@@ -7,6 +23,7 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.ConcurrentHashMap;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.faces.bean.ManagedBean;
@@ -21,19 +38,21 @@ import kieker.analysis.display.XYPlot;
 
 /**
  * @author Bjoern Weissenfels
+ * 
+ * @since 1.9
  */
-@ManagedBean(name="methodResponsetimeBean", eager=true)
+@ManagedBean(name = "methodResponsetimeBean", eager = true)
 @ViewScoped
 public class MethodResponsetimeBean implements Observer {
-	
+
 	@ManagedProperty(value = "#{analysisBean}")
 	private AnalysisBean analysisBean;
-	
+
 	private final List<String> availableMethods;
 	private List<String> selectedMethods;
 	private int maxY;
 	private boolean selectButton = true;
-	
+
 	private XYPlot methodResponsetimeXYplot;
 	private XYPlot methodCallsXYplot;
 	private final CartesianChartModel responsetimeModel;
@@ -41,7 +60,7 @@ public class MethodResponsetimeBean implements Observer {
 	private final Map<String, String> longToShortSignatures;
 	private final Map<String, String> shortToLongSignatures;
 
-	public MethodResponsetimeBean(){
+	public MethodResponsetimeBean() {
 		this.availableMethods = new ArrayList<String>();
 		this.selectedMethods = new ArrayList<String>();
 		this.maxY = 1;
@@ -50,14 +69,14 @@ public class MethodResponsetimeBean implements Observer {
 		this.longToShortSignatures = new ConcurrentHashMap<String, String>();
 		this.shortToLongSignatures = new ConcurrentHashMap<String, String>();
 	}
-	
+
 	@PostConstruct
-	public void init(){
+	public void init() {
 		this.methodResponsetimeXYplot = this.analysisBean.getMethodResponsetimeDisplayFilter().getMethodResponsetimeXYPlot();
 		this.methodCallsXYplot = this.analysisBean.getMethodResponsetimeDisplayFilter().getMethodCallsXYPlot();
-		for(String signature : this.methodResponsetimeXYplot.getKeys()){
-			String shortSignature = this.createShortSignature(signature);
-			if(!this.availableMethods.contains(shortSignature)){
+		for (final String signature : this.methodResponsetimeXYplot.getKeys()) {
+			final String shortSignature = this.createShortSignature(signature);
+			if (!this.availableMethods.contains(shortSignature)) {
 				this.availableMethods.add(shortSignature);
 				this.longToShortSignatures.put(signature, shortSignature);
 				this.shortToLongSignatures.put(shortSignature, signature);
@@ -66,123 +85,122 @@ public class MethodResponsetimeBean implements Observer {
 		this.updateModels();
 		this.analysisBean.getUpdateThread().addObserver(this);
 	}
-	
+
 	@PreDestroy
-	public void terminate(){
+	public void terminate() {
 		this.analysisBean.getUpdateThread().deleteObserver(this);
 	}
-	
-	public void setAnalysisBean(AnalysisBean analysisBean){
+
+	public void setAnalysisBean(final AnalysisBean analysisBean) {
 		this.analysisBean = analysisBean;
 	}
-	
-	public void onChange(ValueChangeEvent event){
-		if(this.selectButton){
+
+	public void onChange(final ValueChangeEvent event) {
+		if (this.selectButton) {
 			this.selectedMethods.clear();
-			this.selectedMethods.addAll(availableMethods);
-		}else{
+			this.selectedMethods.addAll(this.availableMethods);
+		} else {
 			this.selectedMethods.clear();
 		}
 	}
-	
+
 	public List<String> getAvailableMethods() {
-		return availableMethods;
+		return this.availableMethods;
 	}
 
-	public void setSelectedMethods(List<String> selectedMethods){
+	public void setSelectedMethods(final List<String> selectedMethods) {
 		this.selectedMethods = selectedMethods;
 	}
-	
+
 	public List<String> getSelectedMethods() {
-		if(this.selectedMethods.isEmpty() && !this.availableMethods.isEmpty()){
+		if (this.selectedMethods.isEmpty() && !this.availableMethods.isEmpty()) {
 			this.selectedMethods.add(this.availableMethods.get(0));
 		}
-		return selectedMethods;
+		return this.selectedMethods;
 	}
 
-	public synchronized CartesianChartModel getResponsetimeModel(){
+	public synchronized CartesianChartModel getResponsetimeModel() {
 		return this.responsetimeModel;
 	}
-	
-	public synchronized CartesianChartModel getCountingModel(){
+
+	public synchronized CartesianChartModel getCountingModel() {
 		return this.countingModel;
 	}
-	
-	public void setMaxY(int maxY) {
+
+	public void setMaxY(final int maxY) {
 		this.maxY = maxY;
 	}
 
 	public int getMaxY() {
-		return maxY;
+		return this.maxY;
 	}
 
-	public void setSelectButton(boolean selectButton) {
+	public void setSelectButton(final boolean selectButton) {
 		this.selectButton = selectButton;
 	}
 
 	public boolean isSelectButton() {
-		return selectButton;
+		return this.selectButton;
 	}
 
-	private String createShortSignature(String signature){
+	private String createShortSignature(final String signature) {
 		String[] array = signature.split("\\(");
 		array = array[0].split("\\.");
-		int end = array.length;
-		String result = "..." + array[end-2] + "." + array[end-1] + "(...)";
+		final int end = array.length;
+		final String result = "..." + array[end - 2] + "." + array[end - 1] + "(...)";
 		return result;
 	}
-	
+
 	@SuppressWarnings("unused")
-	private double convertFromNanosToMillis(long duration){
-		return Math.round(duration/100000.0)/10.0;
+	private double convertFromNanosToMillis(final long duration) {
+		return Math.round(duration / 100000.0) / 10.0;
 	}
-	
-	private synchronized void updateModels(){
-		for(String shortSignature : this.getSelectedMethods()){
-			String signature = this.shortToLongSignatures.get(shortSignature);
-			
-			ChartSeries responsetimes = new ChartSeries();
+
+	private synchronized void updateModels() {
+		for (final String shortSignature : this.getSelectedMethods()) {
+			final String signature = this.shortToLongSignatures.get(shortSignature);
+
+			final ChartSeries responsetimes = new ChartSeries();
 			responsetimes.setLabel(shortSignature);
-			Map<Object, Number> map = this.methodResponsetimeXYplot.getEntries(signature);
+			final Map<Object, Number> map = this.methodResponsetimeXYplot.getEntries(signature);
 			responsetimes.setData(map);
 			this.responsetimeModel.addSeries(responsetimes);
-			
-			ChartSeries countings = new ChartSeries();
+
+			final ChartSeries countings = new ChartSeries();
 			countings.setLabel(shortSignature);
-			Map<Object, Number> countMap = this.methodCallsXYplot.getEntries(signature);
+			final Map<Object, Number> countMap = this.methodCallsXYplot.getEntries(signature);
 			this.maxY = this.calculateMaxY(countMap.values());
 			countings.setData(countMap);
 			this.countingModel.addSeries(countings);
 		}
 	}
-	
-	private int calculateMaxY(Collection<Number> numbers){
+
+	private int calculateMaxY(final Collection<Number> numbers) {
 		int max = 1;
-		for(Number n : numbers){
+		for (final Number n : numbers) {
 			max = Math.max(max, n.intValue());
 		}
-		max = max + 4 - max % 4;
+		max = (max + 4) - (max % 4);
 		return max;
 	}
-	
-	@Override
-	public synchronized void update(Observable o, Object arg) {
+
+	public synchronized void update(final Observable o, final Object arg) {
 		this.responsetimeModel.clear();
 		this.countingModel.clear();
-		
+
 		this.updateModels();
-		
+
 		// look for new methods
-		for(String signature : this.methodResponsetimeXYplot.getKeys()){
-			if(null == this.longToShortSignatures.get(signature)){
-				String shortSignature = this.createShortSignature(signature);
+		for (final String signature : this.methodResponsetimeXYplot.getKeys()) {
+			if (null == this.longToShortSignatures.get(signature)) {
+				final String shortSignature = this.createShortSignature(signature);
 				this.availableMethods.add(shortSignature);
 				this.longToShortSignatures.put(signature, shortSignature);
 				this.shortToLongSignatures.put(shortSignature, signature);
 			}
-			
+
 		}
-		
+
 	}
-	
+
 }
