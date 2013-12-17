@@ -157,6 +157,7 @@ public class MethodResponsetimeBean implements Observer {
 	}
 
 	private synchronized void updateModels() {
+		this.maxY = 4;
 		for (final String shortSignature : this.getSelectedMethods()) {
 			final String signature = this.shortToLongSignatures.get(shortSignature);
 
@@ -169,7 +170,11 @@ public class MethodResponsetimeBean implements Observer {
 			final ChartSeries countings = new ChartSeries();
 			countings.setLabel(shortSignature);
 			final Map<Object, Number> countMap = this.methodCallsXYplot.getEntries(signature);
-			this.maxY = this.calculateMaxY(countMap.values());
+			
+			int max = this.calculateMaxY(countMap.values());
+			if(max > this.maxY){
+				this.maxY = max;
+			}
 			countings.setData(countMap);
 			this.countingModel.addSeries(countings);
 		}

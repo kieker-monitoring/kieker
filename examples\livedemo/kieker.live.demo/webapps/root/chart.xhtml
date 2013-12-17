@@ -63,7 +63,7 @@
 						offLabel="Select One" valueChangeListener="#{methodResponsetimeBean.onChange}">
 						<p:ajax update="dialog"/>
 					</p:selectBooleanButton>
-					<p:commandButton async="true" id="loadButton" value="Generate Load" disabled="#{jMeterBean.disabled}" actionListener="#{jMeterBean.runJMeter}" />
+					<p:commandButton async="true" id="loadButton" value="#{jMeterBean.buttonText}" disabled="#{jMeterBean.disabled}" actionListener="#{jMeterBean.runJMeter}" />
 				</h:panelGrid>
 				
 				<p:dialog id="dialog" header="Select Methods" widgetVar="dlg2" onShow="poll.stop()" onHide="poll.start()" >
