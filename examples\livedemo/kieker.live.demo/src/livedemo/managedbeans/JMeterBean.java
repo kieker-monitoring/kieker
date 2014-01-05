@@ -1,7 +1,5 @@
 package livedemo.managedbeans;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -10,6 +8,8 @@ import javax.annotation.PreDestroy;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
+
+import org.apache.jmeter.JMeter;
 
 /**
  * @author Bjoern Weissenfels
@@ -22,6 +22,7 @@ public class JMeterBean implements Observer{
 	
 	private final long TIMEOUT_IN_MILLIS = 120000;
 	private final String DEFAULT_BUTTON_TEXT = "Generate Load";
+	private final JMeter JMETER = new JMeter();
 	
 	@ManagedProperty(value = "#{analysisBean}")
 	private AnalysisBean analysisBean;
@@ -29,6 +30,7 @@ public class JMeterBean implements Observer{
 	private boolean disabled;
 	private long timestamp;
 	private String buttonText;
+	private String[] arguments;
 	
 	public JMeterBean(){
 		this.disabled = false;
@@ -39,6 +41,13 @@ public class JMeterBean implements Observer{
 	@PostConstruct
 	public void init() {
 		this.analysisBean.getUpdateThread().addObserver(this);
+		String userDir = System.getProperty("user.dir");
+		String fileSeparator = System.getProperty("file.separator");
+		String bin = "webapps" + fileSeparator + "root" + fileSeparator + "WEB-INF" + fileSeparator + "bin";
+		String newUserDir = userDir + fileSeparator + bin;
+		System.setProperty("user.dir", newUserDir);
+		String testplan = bin + fileSeparator + "TestPlan.jmx";
+		this.arguments = new String[]{"-n", "-t", testplan};
 	}
 
 	@PreDestroy
@@ -67,14 +76,7 @@ public class JMeterBean implements Observer{
 				this.timestamp = actualtime + this.TIMEOUT_IN_MILLIS;
 			}
 		}
-		Runtime runtime = Runtime.getRuntime();
-		File dir = new File(new File("").getAbsolutePath()+"/jmeter/bin");
-		try {
-			Process p = runtime.exec("java -jar ApacheJMeter.jar -n -t Testplan.jmx",null,dir);
-			p.waitFor();
-		} catch (IOException | InterruptedException e) {
-			e.printStackTrace();
-		}
+		this.JMETER.start(this.arguments);
 	}
 
 	@Override

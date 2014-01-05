@@ -58,7 +58,11 @@
 		</div>
 		<div id="main">
 			<h:form id="form"> 
-				<p:commandButton value="Select Attributes" onclick="dlg.show();" type="button"/>
+				<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+					<p:commandButton value="Select Attributes" onclick="dlg.show();" type="button"/>
+					<p:commandButton async="true" id="loadButton" value="#{jMeterBean.buttonText}" disabled="#{jMeterBean.disabled}" actionListener="#{jMeterBean.runJMeter}" />
+				</h:panelGrid>
+				<p:poll interval="1" update="loadButton" />
 				<p:dialog header="Select Attributes" widgetVar="dlg">
 					<p:selectManyCheckbox value="#{cpuXYPlotBean.selectedAttributes}" 
 						label="Select Methods" layout="pageDirection">  
