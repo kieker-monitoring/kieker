@@ -46,7 +46,7 @@ public class JMeterBean implements Observer{
 		String bin = "webapps" + fileSeparator + "root" + fileSeparator + "WEB-INF" + fileSeparator + "bin";
 		String newUserDir = userDir + fileSeparator + bin;
 		System.setProperty("user.dir", newUserDir);
-		String testplan = bin + fileSeparator + "TestPlan.jmx";
+		String testplan = bin + fileSeparator + "Testplan.jmx";
 		this.arguments = new String[]{"-n", "-t", testplan};
 	}
 
