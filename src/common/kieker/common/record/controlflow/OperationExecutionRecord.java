@@ -101,7 +101,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	 * @param eoi
 	 *            the execution order index (eoi); use {@link #NO_EOI_ESS} if no eoi desired.
 	 * @param ess
-	 *            the execution order index (ess); use {@link #NO_EOI_ESS} if no ess desired.
+	 *            the execution stack size (ess); use {@link #NO_EOI_ESS} if no ess desired.
 	 */
 	public OperationExecutionRecord(final String operationSignature, final String sessionId, final long traceId, final long tin, final long tout,
 			final String hostname, final int eoi, final int ess) {
