@@ -15,7 +15,6 @@
 	<classpathentry kind="src" path="examples/userguide/ch5--trace-monitoring-aspectj/src"/>
 	<classpathentry kind="src" path="examples/userguide/appendix-JMS/src"/>
 	<classpathentry kind="src" path="examples/userguide/appendix-Sigar/src"/>
-	<classpathentry kind="src" path="examples/OverheadEvaluationMicrobenchmark/src"/>
 	<classpathentry kind="src" path="examples/SPECjEnterprise2010/src"/>
 	<classpathentry kind="src" path="examples/JavaEEServletContainerExample/src"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
