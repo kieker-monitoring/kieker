@@ -273,8 +273,6 @@
 						fullpath="${kieker.dist.name}/${example.javaee.jetty.dir}/kieker.monitoring.properties" />
 
 			<!-- Include tailored Eclipse files in the examples -->
-			<tarfileset file="${example.microbenchmark.dir}/.classpath-binrelease.generated"
-						fullpath="${kieker.dist.name}/${example.microbenchmark.dir}/.classpath" />
 			<tarfileset file="${src.userguide.example.bookstore.dir}/.classpath"
 						fullpath="${kieker.dist.name}/${src.userguide.example.bookstore.dir}/.classpath" /> <!-- leave "as-is" -->
 			<tarfileset file="${src.userguide.example.manual.dir}/.classpath-binrelease.generated"
@@ -293,10 +291,6 @@
 						prefix="${kieker.dist.name}/${example.javaee.jpetstore.lib.dir}" />
 			<tarfileset file="${license.file}"
 						fullpath="${kieker.dist.name}/${example.javaee.jpetstore.lib.dir}/${dist.kieker.main.aspectj.jar}.LICENSE" />
-			<tarfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
-						prefix="${kieker.dist.name}/${example.microbenchmark.dir}/lib" />
-			<tarfileset file="${lib.dir}/commons-cli-*.jar"
-						prefix="${kieker.dist.name}/${example.microbenchmark.dir}/lib" />
 			<tarfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
 						prefix="${kieker.dist.name}/${src.userguide.example.manual.dir}/lib" />
 			<tarfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
@@ -339,8 +333,6 @@
 						fullpath="${kieker.dist.name}/${example.javaee.jetty.dir}/kieker.monitoring.properties" />
 
 			<!-- Include tailored Eclipse files in the examples -->
-			<zipfileset file="${example.microbenchmark.dir}/.classpath-binrelease.generated"
-						fullpath="${kieker.dist.name}/${example.microbenchmark.dir}/.classpath" />
 			<zipfileset file="${src.userguide.example.bookstore.dir}/.classpath"
 						fullpath="${kieker.dist.name}/${src.userguide.example.bookstore.dir}/.classpath" /> <!-- leave "as-is" -->
 			<zipfileset file="${src.userguide.example.manual.dir}/.classpath-binrelease.generated"
@@ -359,10 +351,6 @@
 						prefix="${kieker.dist.name}/${example.javaee.jetty.dir}/webapps/jpetstore/WEB-INF/lib" />
 			<zipfileset file="${license.file}"
 						fullpath="${kieker.dist.name}/${example.javaee.jetty.dir}/webapps/jpetstore/WEB-INF/lib/${dist.kieker.main.aspectj.jar}.LICENSE" />
-			<zipfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
-						prefix="${kieker.dist.name}/${example.microbenchmark.dir}/lib" />
-			<zipfileset file="${lib.dir}/commons-cli-*.jar"
-						prefix="${kieker.dist.name}/${example.microbenchmark.dir}/lib" />
 			<zipfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
 						prefix="${kieker.dist.name}/${src.userguide.example.manual.dir}/lib" />
 			<zipfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"

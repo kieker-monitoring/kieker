@@ -184,7 +184,6 @@ function assert_files_exist_common {
 	assert_file_exists_regular "lib/aspectjrt-${aspectjversion}.jar"
 	assert_file_exists_regular "lib/aspectjweaver-${aspectjversion}.jar"
 	
-	assert_file_exists_regular "examples/OverheadEvaluationMicrobenchmark/.classpath"
 	assert_file_exists_regular "examples/userguide/appendix-JMS/.classpath"
 	assert_file_exists_regular "examples/userguide/ch2--manual-instrumentation/.classpath"
 	assert_file_exists_regular "examples/userguide/ch2--bookstore-application/.classpath"
@@ -208,8 +207,6 @@ function assert_files_exist_src {
 	assert_file_NOT_exists "dist/"
 	assert_file_NOT_exists "META-INF/"
 	
-	assert_file_NOT_exists "examples/OverheadEvaluationMicrobenchmark/lib/*.jar"
-	assert_file_NOT_exists "examples/OverheadEvaluationMicrobenchmark/lib/*.jar"
 	assert_file_NOT_exists "examples/userguide/ch2--manual-instrumentation/lib/*.jar"
 	assert_file_NOT_exists "examples/userguide/ch3-4--custom-components/lib/*.jar"
 	assert_file_NOT_exists "examples/userguide/ch5--trace-monitoring-aspectj/lib/*.jar"
@@ -252,8 +249,6 @@ function assert_files_exist_bin {
 	assert_file_exists_regular "dist/kieker-"*"_emf.jar"
 	assert_zip_file_content_exist "dist/kieker-"*"_emf.jar" " model/"
 	assert_zip_file_content_exist "dist/kieker-"*"_emf.jar" " org/eclipse/"
-	assert_file_exists_regular "examples/OverheadEvaluationMicrobenchmark/lib/kieker-"*"_aspectj.jar"
-	assert_file_exists_regular "examples/OverheadEvaluationMicrobenchmark/lib/commons-cli-"*".jar"
 	assert_file_exists_regular "examples/userguide/ch2--manual-instrumentation/lib/kieker-"*"_emf.jar"
 	assert_file_exists_regular "examples/userguide/ch3-4--custom-components/lib/kieker-"*"_emf.jar"
 	assert_file_exists_regular "examples/userguide/ch5--trace-monitoring-aspectj/lib/kieker-"*"_aspectj.jar"

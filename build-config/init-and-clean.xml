@@ -159,7 +159,6 @@
 
 	<target name="-prepate-userguide-examples-binary-release" depends="-init-version" description="Removes artifacts from previous builds and manually changed configuration files">
 		<!-- Create .classpath variant for binary release(#710) -->
-		<copy file="${example.microbenchmark.dir}/.classpath" tofile="${example.microbenchmark.dir}/.classpath-binrelease.generated" overwrite="true"/>
 		<copy file="${src.userguide.example.manual.dir}/.classpath" tofile="${src.userguide.example.manual.dir}/.classpath-binrelease.generated" overwrite="true"/>
 		<copy file="${src.userguide.example.extended.dir}/.classpath" tofile="${src.userguide.example.extended.dir}/.classpath-binrelease.generated" overwrite="true"/>
 		<copy file="${src.userguide.example.aspectj.dir}/.classpath" tofile="${src.userguide.example.aspectj.dir}/.classpath-binrelease.generated" overwrite="true"/>
@@ -191,7 +190,6 @@
 			<regexp pattern="&lt;classpathentry .*/Kieker&quot;.*"/>
 			<substitution expression="&lt;classpathentry kind=&quot;lib&quot; path=&quot;lib//${dist.kieker.main.aspectj.jar}&quot;/&gt;"/>
 			<fileset dir=".">
-				<include name="${example.microbenchmark.dir}/.classpath-binrelease.generated"/>
 				<include name="${src.userguide.example.aspectj.dir}/.classpath-binrelease.generated"/>
 			</fileset>
 		</replaceregexp>
@@ -201,7 +199,6 @@
 			<regexp pattern="(&lt;classpathentry .*)/Kieker/lib/(.*&quot;.*)"/>
 			<substitution expression="\1lib/\2"/>
 			<fileset dir=".">
-				<include name="${example.microbenchmark.dir}/.classpath-binrelease.generated"/>
 				<include name="${src.userguide.example.aspectj.dir}/.classpath-binrelease.generated"/>
 				<include name="${src.userguide.example.sigar.dir}/.classpath-binrelease.generated"/>
 			</fileset>
@@ -209,12 +206,6 @@
 	</target>
 
 	<target name="-update-version.examples" depends="-init-version" description="Updates the Kieker version in the examples (e.g., in the .classpath files)">
-		<replaceregexp match="kieker-\S*.jar" replace="${dist.kieker.main.aspectj.jar}" flags="g">
-			<fileset dir="${example.microbenchmark.dir}/bin/">
-				<include name="*.sh" />
-		 	</fileset>
-		</replaceregexp>
-
 		<replaceregexp file="${src.userguide.example.bookstore.dir}/start.ini" match="kieker-\S*.jar" replace="${dist.kieker.main.jar}" flags="g" />
 		<replaceregexp file="${src.userguide.example.bookstore.dir}/start.KiekerAspectJActivated.ini" match="kieker-\S*.jar" replace="${dist.kieker.main.jar}" flags="g" />
 		<replaceregexp file="${src.userguide.example.bookstore.dir}/.classpath" match="kieker-\S*.jar" replace="${dist.kieker.main.jar}" flags="g" />
