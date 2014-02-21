@@ -53,7 +53,7 @@ import kieker.monitoring.timer.ITimeSource;
  * {@code
  * <filter>
  *   <filter-name>sessionAndTraceRegistrationFilter</filter-name>
- *   <filter-class>SessionAndTraceRegistrationFilter</filter-class>
+ *   <filter-class>kieker.monitoring.probe.servlet.SessionAndTraceRegistrationFilter</filter-class>
  * </filter>
  * <filter-mapping>
  *   <filter-name>sessionAndTraceRegistrationFilter</filter-name>
