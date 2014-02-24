@@ -1,0 +1,150 @@
+2014/01/15 12:30:05 INFO  - jmeter.util.JMeterUtils: Setting Locale to de_DE 
+2014/01/15 12:30:05 INFO  - jmeter.util.JMeterUtils: Could not find resources for 'de_DE', using 'de' 
+2014/01/15 12:30:05 INFO  - jmeter.JMeter: Copyright (c) 1998-2012 The Apache Software Foundation 
+2014/01/15 12:30:05 INFO  - jmeter.JMeter: Version 2.8 r1393162 
+2014/01/15 12:30:05 INFO  - jmeter.JMeter: java.version=1.7.0_45 
+2014/01/15 12:30:05 INFO  - jmeter.JMeter: java.vm.name=Java HotSpot(TM) 64-Bit Server VM 
+2014/01/15 12:30:05 INFO  - jmeter.JMeter: os.name=Windows 8 
+2014/01/15 12:30:05 INFO  - jmeter.JMeter: os.arch=amd64 
+2014/01/15 12:30:05 INFO  - jmeter.JMeter: os.version=6.2 
+2014/01/15 12:30:05 INFO  - jmeter.JMeter: file.encoding=Cp1252 
+2014/01/15 12:30:05 INFO  - jmeter.JMeter: Default Locale=Deutsch (Deutschland) 
+2014/01/15 12:30:05 INFO  - jmeter.JMeter: JMeter  Locale=Deutsch (Deutschland) 
+2014/01/15 12:30:05 INFO  - jmeter.JMeter: JMeterHome=C:\Users\Nils Christian Ehmke\Documents\Repositories\kieker.examples\kieker.live.demo\webapps\root\WEB-INF 
+2014/01/15 12:30:05 INFO  - jmeter.JMeter: user.dir  =C:\Users\Nils Christian Ehmke\Documents\Repositories\kieker.examples\kieker.live.demo\webapps\root\WEB-INF\bin 
+2014/01/15 12:30:05 INFO  - jmeter.JMeter: PWD       =C:\Users\Nils Christian Ehmke\Documents\Repositories\kieker.examples\kieker.live.demo\webapps\root\WEB-INF\bin 
+2014/01/15 12:30:05 INFO  - jmeter.JMeter: IP: 192.168.48.246 Name: SE-Nils-Ehmke FullName: 192.168.48.246 
+2014/01/15 12:30:05 INFO  - jmeter.services.FileServer: Set new base='C:\Users\Nils Christian Ehmke\Documents\Repositories\kieker.examples\kieker.live.demo\webapps\root\WEB-INF\bin\webapps\root\WEB-INF\bin' 
+2014/01/15 12:30:05 INFO  - jmeter.JMeter: Loading file: webapps\root\WEB-INF\bin\Testplan.jmx 
+2014/01/15 12:30:05 INFO  - jmeter.engine.StandardJMeterEngine: Running the test! 
+2014/01/15 12:30:05 INFO  - jmeter.JMeter: Test starten (1389785405545) 
+2014/01/15 12:30:05 INFO  - jmeter.engine.StandardJMeterEngine: Starting ThreadGroup: 1 : JPetStore Users 
+2014/01/15 12:30:05 INFO  - jmeter.engine.StandardJMeterEngine: Starting 50 threads for group JPetStore Users. 
+2014/01/15 12:30:05 INFO  - jmeter.engine.StandardJMeterEngine: Thread will continue on error 
+2014/01/15 12:30:05 INFO  - jmeter.threads.ThreadGroup: Starting thread group number 1 threads 50 ramp-up 50 perThread 1000.0 delayedStart=false 
+2014/01/15 12:30:05 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-1 
+2014/01/15 12:30:05 INFO  - jmeter.threads.ThreadGroup: Started thread group number 1 
+2014/01/15 12:30:05 INFO  - jmeter.engine.StandardJMeterEngine: All thread groups have been started 
+2014/01/15 12:30:06 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-2 
+2014/01/15 12:30:07 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-2 
+2014/01/15 12:30:07 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-3 
+2014/01/15 12:30:08 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-3 
+2014/01/15 12:30:08 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-4 
+2014/01/15 12:30:09 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-5 
+2014/01/15 12:30:10 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-1 
+2014/01/15 12:30:10 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-6 
+2014/01/15 12:30:11 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-7 
+2014/01/15 12:30:12 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-4 
+2014/01/15 12:30:12 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-8 
+2014/01/15 12:30:13 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-9 
+2014/01/15 12:30:14 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-7 
+2014/01/15 12:30:14 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-6 
+2014/01/15 12:30:14 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-5 
+2014/01/15 12:30:14 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-10 
+2014/01/15 12:30:15 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-9 
+2014/01/15 12:30:15 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-11 
+2014/01/15 12:30:16 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-12 
+2014/01/15 12:30:17 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-8 
+2014/01/15 12:30:17 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-13 
+2014/01/15 12:30:18 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-14 
+2014/01/15 12:30:19 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-14 
+2014/01/15 12:30:19 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-10 
+2014/01/15 12:30:19 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-15 
+2014/01/15 12:30:19 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-12 
+2014/01/15 12:30:20 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-16 
+2014/01/15 12:30:21 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-15 
+2014/01/15 12:30:21 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-17 
+2014/01/15 12:30:22 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-16 
+2014/01/15 12:30:22 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-11 
+2014/01/15 12:30:22 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-18 
+2014/01/15 12:30:23 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-17 
+2014/01/15 12:30:23 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-19 
+2014/01/15 12:30:24 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-13 
+2014/01/15 12:30:24 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-20 
+2014/01/15 12:30:25 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-18 
+2014/01/15 12:30:25 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-21 
+2014/01/15 12:30:26 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-22 
+2014/01/15 12:30:26 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-19 
+2014/01/15 12:30:27 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-20 
+2014/01/15 12:30:27 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-23 
+2014/01/15 12:30:28 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-24 
+2014/01/15 12:30:29 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-21 
+2014/01/15 12:30:29 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-25 
+2014/01/15 12:30:30 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-23 
+2014/01/15 12:30:30 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-25 
+2014/01/15 12:30:30 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-26 
+2014/01/15 12:30:30 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-22 
+2014/01/15 12:30:31 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-27 
+2014/01/15 12:30:32 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-28 
+2014/01/15 12:30:32 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-24 
+2014/01/15 12:30:33 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-29 
+2014/01/15 12:30:34 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-27 
+2014/01/15 12:30:34 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-30 
+2014/01/15 12:30:35 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-31 
+2014/01/15 12:30:35 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-28 
+2014/01/15 12:30:36 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-31 
+2014/01/15 12:30:36 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-32 
+2014/01/15 12:30:37 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-29 
+2014/01/15 12:30:37 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-26 
+2014/01/15 12:30:37 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-33 
+2014/01/15 12:30:38 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-34 
+2014/01/15 12:30:39 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-32 
+2014/01/15 12:30:39 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-30 
+2014/01/15 12:30:39 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-35 
+2014/01/15 12:30:40 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-34 
+2014/01/15 12:30:40 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-36 
+2014/01/15 12:30:41 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-37 
+2014/01/15 12:30:42 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-38 
+2014/01/15 12:30:43 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-33 
+2014/01/15 12:30:43 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-39 
+2014/01/15 12:30:43 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-35 
+2014/01/15 12:30:44 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-40 
+2014/01/15 12:30:44 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-37 
+2014/01/15 12:30:45 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-36 
+2014/01/15 12:30:45 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-41 
+2014/01/15 12:30:45 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-40 
+2014/01/15 12:30:46 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-42 
+2014/01/15 12:30:46 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-38 
+2014/01/15 12:30:46 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-41 
+2014/01/15 12:30:47 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-43 
+2014/01/15 12:30:48 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-44 
+2014/01/15 12:30:49 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-39 
+2014/01/15 12:30:49 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-45 
+2014/01/15 12:30:50 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-46 
+2014/01/15 12:30:50 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-46 
+2014/01/15 12:30:51 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-47 
+2014/01/15 12:30:52 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-42 
+2014/01/15 12:30:52 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-48 
+2014/01/15 12:30:53 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-44 
+2014/01/15 12:30:53 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-45 
+2014/01/15 12:30:53 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-49 
+2014/01/15 12:30:54 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-50 
+2014/01/15 12:30:55 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-48 
+2014/01/15 12:30:55 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-47 
+2014/01/15 12:30:55 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-43 
+2014/01/15 12:30:56 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-49 
+2014/01/15 12:30:59 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-50 
+2014/01/15 12:30:59 INFO  - jmeter.engine.StandardJMeterEngine: Notifying test listeners of end of test 
+2014/01/15 12:32:31 ERROR - jmeter.JMeter: Uncaught exception:  java.lang.ExceptionInInitializerError
+	at org.springframework.web.context.ContextLoaderListener.contextDestroyed(ContextLoaderListener.java:80)
+	at org.eclipse.jetty.server.handler.ContextHandler.doStop(ContextHandler.java:785)
+	at org.eclipse.jetty.servlet.ServletContextHandler.doStop(ServletContextHandler.java:149)
+	at org.eclipse.jetty.webapp.WebAppContext.doStop(WebAppContext.java:506)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.stop(AbstractLifeCycle.java:89)
+	at org.eclipse.jetty.server.handler.HandlerCollection.doStop(HandlerCollection.java:250)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.stop(AbstractLifeCycle.java:89)
+	at org.eclipse.jetty.server.handler.HandlerCollection.doStop(HandlerCollection.java:250)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.stop(AbstractLifeCycle.java:89)
+	at org.eclipse.jetty.server.handler.HandlerWrapper.doStop(HandlerWrapper.java:107)
+	at org.eclipse.jetty.server.Server.doStop(Server.java:340)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.stop(AbstractLifeCycle.java:89)
+	at org.eclipse.jetty.util.thread.ShutdownThread.run(ShutdownThread.java:132)
+Caused by: org.apache.commons.logging.LogConfigurationException: User-specified log class 'org.apache.commons.logging.impl.LogKitLogger' cannot be found or is not useable.
+	at org.apache.commons.logging.impl.LogFactoryImpl.discoverLogImplementation(LogFactoryImpl.java:874)
+	at org.apache.commons.logging.impl.LogFactoryImpl.newInstance(LogFactoryImpl.java:604)
+	at org.apache.commons.logging.impl.LogFactoryImpl.getInstance(LogFactoryImpl.java:336)
+	at org.apache.commons.logging.impl.LogFactoryImpl.getInstance(LogFactoryImpl.java:310)
+	at org.apache.commons.logging.LogFactory.getLog(LogFactory.java:685)
+	at org.springframework.web.context.ContextCleanupListener.<clinit>(ContextCleanupListener.java:43)
+	... 13 more
+

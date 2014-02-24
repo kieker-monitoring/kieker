@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
+  <display-name>kieker.live.demo</display-name>
+  <context-param>
+  	<description>
+  	Vaadin production mode</description>
+  	<param-name>productionMode</param-name>
+  	<param-value>false</param-value>
+  </context-param>
+  <servlet>
+  	<servlet-name>Kieker Live Demo</servlet-name>
+  	<servlet-class>com.vaadin.server.VaadinServlet</servlet-class>
+  	<init-param>
+  		<description>
+  		Vaadin UI class to use</description>
+  		<param-name>UI</param-name>
+  		<param-value>kieker.livedemo.KiekerLiveDemo</param-value>
+  	</init-param>
+  	<init-param>
+  		<description>
+  		Legacy mode to return the value of the property as a string from AbstractProperty.toString()</description>
+  		<param-name>legacyPropertyToString</param-name>
+  		<param-value>false</param-value>
+  	</init-param>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>Kieker Live Demo</servlet-name>
+  	<url-pattern>/*</url-pattern>
+  </servlet-mapping>
+</web-app>

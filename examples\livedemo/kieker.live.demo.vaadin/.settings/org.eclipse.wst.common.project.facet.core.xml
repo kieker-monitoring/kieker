@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faceted-project>
+  <runtime name="Google App Engine"/>
+  <fixed facet="com.vaadin.integration.eclipse.core"/>
+  <fixed facet="java"/>
+  <fixed facet="jst.web"/>
+  <installed facet="java" version="1.7"/>
+  <installed facet="jst.web" version="2.5"/>
+  <installed facet="com.google.appengine.facet" version="1"/>
+  <installed facet="com.vaadin.integration.eclipse.core" version="7.0"/>
+  <installed facet="wst.jsdt.web" version="1.0"/>
+</faceted-project>
