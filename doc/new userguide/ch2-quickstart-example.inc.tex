@@ -1,16 +1,36 @@
 \chapter{Quickstart Example}\label{chp:Quickstart-Example}
 
-	The Bookstore application is a small sample application resembling a simple bookstore with a market-place facility where users can search for books in an online catalog, and subsequently get offers from different book sellers. We use it as an exemplaric application to demonstrate the monitoring and analysis within \Kieker{}. The example without any monitoring or analysis code can be found in the \file{\binaryFileForDownload} file in \dir{\plainBookstoreApplicationDirDistro}. The instrumented bookstore can be found in \dir{\quickstartBookstoreApplicationDirDistro}.
+	As an exemplaric application to demonstrate the monitoring and analysis within \Kieker{}, we introduce the Bookstore application. It is a small sample application resembling a simple bookstore with a market-place facility where users can search for books in an online catalog, and subsequently get offers from different book sellers. The example without any monitoring or analysis code can be found in \dir{\plainBookstoreApplicationDirDistro}. The instrumented bookstore can be found in \dir{\quickstartBookstoreApplicationDirDistro}.
 
 	\section{Monitoring}
 	
-		We use AspectJ \cite{AspectJ-WebSite} to weave the \Kieker{} monitoring code into the Bookstore application during runtime. It is necessary to perform the following steps:
-		\begin{itemize}
+		Before we can start with the actual instrumentation, we have to compile our example.
+		\setBashListing
+		\begin{lstlisting}[gobble=6,caption=Commands to compile the Bookstore]
+			#\lstshellprompt{}# mkdir build
+			#\lstshellprompt{}# javac src/kieker/examples/userguide/ch2bookstore/*.java -d build/
+		\end{lstlisting} 
+
+		\noindent
+		After setting up the example, we use AspectJ \cite{AspectJ-WebSite} to weave the \Kieker{} monitoring code into the Bookstore application during runtime. It is necessary to perform the following steps:
+		\begin{enumerate}
 			\setlength{\itemsep}{-2pt}
 			\item Instruct AspectJ to weave \Kieker{}'s monitoring code into the application
 			\item Configure \Kieker{} to write the monitoring logs to the file system
 			\item Start the Bookstore application with Aspectj as a so called Java-Agent 
-		\end{itemize}
+		\end{enumerate}
+	
+		\noindent
+		For the first two steps, we copy the \dir{META-INF} folder from the root directory into \dir{\plainBookstoreApplicationDirDistro}. This folder contains the necessary configuration files for both AspectJ and \Kieker{}. Additionally we have to copy the \file{dist/\mainJarWeaver} into a new \dir{lib} directory in the directory of the bookstore example. This jar file contains not only \Kieker{}, but AspectJ as well. For the third step we can use the following command.
+		
+		\setBashListing
+		\begin{lstlisting}[gobble=6,caption=Command to run the Bookstore]			
+			#\lstshellprompt{}# java -javaagent:lib/#\mainJarWeaver# -classpath build/
+			    kieker.examples.userguide.ch2bookstore.BookstoreStarter
+		\end{lstlisting} 
+		
+		\noindent
+		By executing the instrumented example, \Kieker{} produces monitoring data (e.g., in \dir{kieker-20140224-152329453-UTC-Laptop-KIEKER}), which can be found in the system's temporary folder.
 	
 	\section{Analysis}
 	
