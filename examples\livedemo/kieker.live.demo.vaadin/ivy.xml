@@ -26,6 +26,9 @@
 		<!-- Push support -->
 		<dependency org="com.vaadin" name="vaadin-push" rev="&vaadin.version;" />
 
+		<!-- Servlet 3.0 API -->
+		<dependency org="javax.servlet" name="javax.servlet-api" rev="3.0.1" conf="nodeploy->default" />
+
 		<!-- Precompiled DefaultWidgetSet -->
 		<dependency org="com.vaadin" name="vaadin-client-compiled"
 			rev="&vaadin.version;" />
@@ -37,5 +40,7 @@
 		<!-- Compiler for custom widget sets. Should not be deployed -->
 		<dependency org="com.vaadin" name="vaadin-client-compiler"
 			rev="&vaadin.version;" conf="widgetset-compile->default" />
+		
+		<dependency org="org.vaadin.addons" name="dcharts-widget" rev="1.7.0" />
 	</dependencies>
 </ivy-module>
