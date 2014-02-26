@@ -17,6 +17,8 @@
 package kieker.monitoring.probe.aspectj;
 
 import java.lang.reflect.Modifier;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Aspect;
@@ -33,6 +35,8 @@ import kieker.monitoring.probe.IMonitoringProbe;
  */
 @Aspect
 public abstract class AbstractAspectJProbe implements IMonitoringProbe {
+
+	private final ConcurrentMap<Signature, String> signatureCache = new ConcurrentHashMap<Signature, String>();
 
 	// Pointcuts should not be final!
 
@@ -69,54 +73,61 @@ public abstract class AbstractAspectJProbe implements IMonitoringProbe {
 	 * @return LongString representation of the signature
 	 */
 	protected String signatureToLongString(final Signature sig) {
-		if (sig instanceof MethodSignature) {
-			final MethodSignature signature = (MethodSignature) sig;
-			final StringBuilder sb = new StringBuilder(256);
-			// modifiers
-			final String modString = Modifier.toString(signature.getModifiers());
-			sb.append(modString);
-			if (modString.length() > 0) {
-				sb.append(' ');
-			}
-			// return
-			this.addType(sb, signature.getReturnType());
-			sb.append(' ');
-			// component
-			sb.append(signature.getDeclaringTypeName());
-			sb.append('.');
-			// name
-			sb.append(signature.getName());
-			// parameters
-			sb.append('(');
-			this.addTypeList(sb, signature.getParameterTypes());
-			sb.append(')');
-			// throws
-			// this.addTypeList(sb, signature.getExceptionTypes());
-			return sb.toString();
-		} else if (sig instanceof ConstructorSignature) {
-			final ConstructorSignature signature = (ConstructorSignature) sig;
-			final StringBuilder sb = new StringBuilder(256);
-			// modifiers
-			final String modString = Modifier.toString(signature.getModifiers());
-			sb.append(modString);
-			if (modString.length() > 0) {
-				sb.append(' ');
-			}
-			// component
-			sb.append(signature.getDeclaringTypeName());
-			sb.append('.');
-			// name
-			sb.append(signature.getName());
-			// parameters
-			sb.append('(');
-			this.addTypeList(sb, signature.getParameterTypes());
-			sb.append(')');
-			// throws
-			// this.addTypeList(sb, signature.getExceptionTypes());
-			return sb.toString();
+		String signatureString = this.signatureCache.get(sig);
+		if (null != signatureString) {
+			return signatureString;
 		} else {
-			return sig.toLongString();
+			if (sig instanceof MethodSignature) {
+				final MethodSignature signature = (MethodSignature) sig;
+				final StringBuilder sb = new StringBuilder(256);
+				// modifiers
+				final String modString = Modifier.toString(signature.getModifiers());
+				sb.append(modString);
+				if (modString.length() > 0) {
+					sb.append(' ');
+				}
+				// return
+				this.addType(sb, signature.getReturnType());
+				sb.append(' ');
+				// component
+				sb.append(signature.getDeclaringTypeName());
+				sb.append('.');
+				// name
+				sb.append(signature.getName());
+				// parameters
+				sb.append('(');
+				this.addTypeList(sb, signature.getParameterTypes());
+				sb.append(')');
+				// throws
+				// this.addTypeList(sb, signature.getExceptionTypes());
+				signatureString = sb.toString();
+			} else if (sig instanceof ConstructorSignature) {
+				final ConstructorSignature signature = (ConstructorSignature) sig;
+				final StringBuilder sb = new StringBuilder(256);
+				// modifiers
+				final String modString = Modifier.toString(signature.getModifiers());
+				sb.append(modString);
+				if (modString.length() > 0) {
+					sb.append(' ');
+				}
+				// component
+				sb.append(signature.getDeclaringTypeName());
+				sb.append('.');
+				// name
+				sb.append(signature.getName());
+				// parameters
+				sb.append('(');
+				this.addTypeList(sb, signature.getParameterTypes());
+				sb.append(')');
+				// throws
+				// this.addTypeList(sb, signature.getExceptionTypes());
+				signatureString = sb.toString();
+			} else {
+				signatureString = sig.toLongString();
+			}
 		}
+		this.signatureCache.putIfAbsent(sig, signatureString);
+		return signatureString;
 	}
 
 	private final StringBuilder addTypeList(final StringBuilder sb, final Class<?>[] clazzes) {

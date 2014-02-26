@@ -18,8 +18,8 @@ package kieker.monitoring.writer.filesystem.map;
 
 import java.io.IOException;
 
+import kieker.common.record.misc.RegistryRecord;
 import kieker.common.util.filesystem.FSUtil;
-import kieker.monitoring.core.registry.RegistryRecord;
 
 /**
  * @author Andre van Hoorn, Jan Waller
@@ -52,7 +52,7 @@ public final class StringMappingFileWriter {
 			sbl.append('$');
 			sbl.append(hashRecord.getId());
 			sbl.append('=');
-			sbl.append(FSUtil.encodeNewline(String.valueOf(hashRecord.getObject())));
+			sbl.append(FSUtil.encodeNewline(hashRecord.getString()));
 			sbl.append('\n');
 		}
 	}

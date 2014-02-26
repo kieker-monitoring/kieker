@@ -16,7 +16,12 @@
 
 package kieker.common.record.flow.trace;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.flow.IObjectRecord;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Jan Waller
@@ -24,8 +29,8 @@ import kieker.common.record.flow.IObjectRecord;
  * @since 1.5
  */
 public class ConstructionEvent extends AbstractTraceEvent implements IObjectRecord {
-	private static final long serialVersionUID = -7484030624827825815L;
-	private static final Class<?>[] TYPES = {
+	public static final int SIZE = 28;
+	public static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
 		int.class, // TraceEvent.orderIndex
@@ -33,10 +38,10 @@ public class ConstructionEvent extends AbstractTraceEvent implements IObjectReco
 		int.class, // objectId
 	};
 
-	/**
-	 * This field should not be exported, because it makes little sense to have no associated class.
-	 */
+	/** This field should not be exported, because it makes little sense to have no associated class. */
 	private static final String NO_CLASSNAME = "<no-classname>";
+
+	private static final long serialVersionUID = -8575921293755671749L;
 
 	private final String classSignature;
 	private final int objectId;
@@ -88,6 +93,21 @@ public class ConstructionEvent extends AbstractTraceEvent implements IObjectReco
 	}
 
 	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public ConstructionEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		super(buffer, stringRegistry);
+		this.classSignature = stringRegistry.get(buffer.getInt());
+		this.objectId = buffer.getInt();
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public Object[] toArray() {
@@ -97,8 +117,26 @@ public class ConstructionEvent extends AbstractTraceEvent implements IObjectReco
 	/**
 	 * {@inheritDoc}
 	 */
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		buffer.putLong(this.getTimestamp());
+		buffer.putLong(this.getTraceId());
+		buffer.putInt(this.getOrderIndex());
+		buffer.putInt(stringRegistry.get(this.getClassSignature()));
+		buffer.putInt(this.getObjectId());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public Class<?>[] getValueTypes() {
-		return TYPES.clone();
+		return TYPES; // NOPMD
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public int getSize() {
+		return SIZE;
 	}
 
 	public final String getClassSignature() {

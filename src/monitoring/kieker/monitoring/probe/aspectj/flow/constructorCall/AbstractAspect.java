@@ -23,7 +23,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
-import kieker.common.record.flow.trace.Trace;
+import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.constructor.CallConstructorEvent;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
@@ -66,13 +66,16 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	@Around("monitoredConstructor() && this(thisObject) && notWithinKieker()")
 	public Object member2constructor(final Object thisObject, final ProceedingJoinPoint thisJoinPoint, final EnclosingStaticPart thisEnclosingJoinPoint)
 			throws Throwable { // NOCS
+		if (!CTRLINST.isMonitoringEnabled()) {
+			return thisJoinPoint.proceed();
+		}
 		final Signature calleeSig = thisJoinPoint.getSignature();
 		final String callee = this.signatureToLongString(calleeSig);
 		if (!CTRLINST.isProbeActivated(callee)) {
 			return thisJoinPoint.proceed();
 		}
 		// common fields
-		Trace trace = TRACEREGISTRY.getTrace();
+		TraceMetadata trace = TRACEREGISTRY.getTrace();
 		final boolean newTrace = trace == null;
 		if (newTrace) {
 			trace = TRACEREGISTRY.registerTrace();
@@ -114,13 +117,16 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	@Around("monitoredConstructor() && !this(java.lang.Object) && notWithinKieker()")
 	public Object static2constructor(final ProceedingJoinPoint thisJoinPoint, final EnclosingStaticPart thisEnclosingJoinPoint)
 			throws Throwable { // NOCS
+		if (!CTRLINST.isMonitoringEnabled()) {
+			return thisJoinPoint.proceed();
+		}
 		final Signature calleeSig = thisJoinPoint.getSignature();
 		final String callee = this.signatureToLongString(calleeSig);
 		if (!CTRLINST.isProbeActivated(callee)) {
 			return thisJoinPoint.proceed();
 		}
 		// common fields
-		Trace trace = TRACEREGISTRY.getTrace();
+		TraceMetadata trace = TRACEREGISTRY.getTrace();
 		final boolean newTrace = trace == null;
 		if (newTrace) {
 			trace = TRACEREGISTRY.registerTrace();

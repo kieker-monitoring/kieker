@@ -45,9 +45,7 @@ public abstract class AbstractTestDbWriterReader extends AbstractWriterReaderTes
 	/** This constant is used as a prefix for the tables. */
 	public static final String TABLEPREFIX = "kieker";
 
-	/**
-	 * A rule making sure that a temporary folder exists for every test method (which is removed after the test).
-	 */
+	/** A rule making sure that a temporary folder exists for every test method (which is removed after the test). */
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
 

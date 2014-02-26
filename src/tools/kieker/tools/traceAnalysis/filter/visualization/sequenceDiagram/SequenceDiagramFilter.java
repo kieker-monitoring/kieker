@@ -29,13 +29,12 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import kieker.analysis.IProjectContext;
+import kieker.analysis.analysisComponent.AbstractAnalysisComponent;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.util.signature.Signature;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
@@ -90,8 +89,6 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 	private static final String SEQUENCE_PIC_CONTENT;
 	private static final String ENCODING = "UTF-8";
 
-	private static final Log LOG = LogFactory.getLog(SequenceDiagramFilter.class);
-
 	private final String outputFnBase;
 	private final boolean shortLabels;
 	private final SDModes sdmode;
@@ -112,14 +109,14 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 			}
 			error = false;
 		} catch (final IOException exc) {
-			LOG.error("Error while reading " + SEQUENCE_PIC_PATH, exc);
+			AbstractAnalysisComponent.LOG.error("Error while reading " + SEQUENCE_PIC_PATH, exc);
 		} finally {
 			try {
 				if (reader != null) {
 					reader.close();
 				}
 			} catch (final IOException ex) {
-				LOG.error("Failed to close input stream", ex);
+				AbstractAnalysisComponent.LOG.error("Failed to close input stream", ex);
 			}
 			if (error) {
 				// sequence.pic must be provided on execution of pic2plot
@@ -185,10 +182,10 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 			SequenceDiagramFilter.this.reportSuccess(((AbstractTrace) mt).getTraceId());
 		} catch (final FileNotFoundException ex) {
 			SequenceDiagramFilter.this.reportError(((AbstractTrace) mt).getTraceId());
-			LOG.error("File not found", ex);
+			this.log.error("File not found", ex);
 		} catch (final UnsupportedEncodingException ex) {
 			SequenceDiagramFilter.this.reportError(((AbstractTrace) mt).getTraceId());
-			LOG.error("Encoding not supported", ex);
+			this.log.error("Encoding not supported", ex);
 		}
 	}
 
@@ -284,10 +281,10 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 				}
 			}
 		} else { // needs to be adjusted if a new mode is introduced
-			LOG.error("Invalid mode: " + sdMode);
+			AbstractAnalysisComponent.LOG.error("Invalid mode: " + sdMode);
 		}
 
-		ps.print("step()" + "\n");
+		ps.print("step();" + "\n");
 		ps.print("active(" + rootDotId + ");" + "\n");
 		boolean first = true;
 		for (final AbstractMessage me : messages) {
@@ -305,7 +302,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 				senderDotId = "O" + senderComponent.getId();
 				receiverDotId = "O" + receiverComponent.getId();
 			} else { // needs to be adjusted if a new mode is introduced
-				LOG.error("Invalid mode: " + sdMode);
+				AbstractAnalysisComponent.LOG.error("Invalid mode: " + sdMode);
 			}
 
 			if (me instanceof SynchronousCallMessage) {
@@ -333,7 +330,7 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 				ps.print("rmessage(" + senderDotId + "," + receiverDotId + ", \"\");\n");
 				ps.print("inactive(" + senderDotId + ");\n");
 			} else {
-				LOG.error("Message type not supported: " + me.getClass().getName());
+				AbstractAnalysisComponent.LOG.error("Message type not supported: " + me.getClass().getName());
 			}
 		}
 		ps.print("inactive(" + rootDotId + ");\n");

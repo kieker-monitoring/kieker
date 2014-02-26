@@ -26,15 +26,13 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.MonitoringRecordException;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 
 /**
  * This filter has exactly one input port and one output port.
  * 
- * Every record received is cloned and each detected String is buffered in a shared area in order so save memory.
+ * Every record received is cloned and each detected String is buffered in a shared area in order to save memory.
  * 
  * @author Jan Waller
  * 
@@ -57,8 +55,6 @@ public final class StringBufferFilter extends AbstractFilterPlugin {
 	private static final double LOAD_FACTOR = 0.75d;
 	private static final int CONCURRENCY_LEVEL = 16;
 	private static final int MAXIMUM_CAPACITY = 1 << 30;
-
-	private static final Log LOG = LogFactory.getLog(StringBufferFilter.class);
 
 	/**
 	 * Mask value for indexing into segments. The upper bits of a key's hash code are used to choose the segment.
@@ -135,7 +131,7 @@ public final class StringBufferFilter extends AbstractFilterPlugin {
 					newRecord.setLoggingTimestamp(((IMonitoringRecord) object).getLoggingTimestamp());
 					super.deliver(StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, newRecord);
 				} catch (final MonitoringRecordException ex) {
-					LOG.warn("Failed to recreate buffered monitoring record: " + object.toString(), ex);
+					this.log.warn("Failed to recreate buffered monitoring record: " + object.toString(), ex);
 				}
 			} else {
 				super.deliver(StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, object);

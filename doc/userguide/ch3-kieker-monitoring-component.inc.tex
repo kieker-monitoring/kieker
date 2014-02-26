@@ -88,9 +88,9 @@ of the \class{MemSwapUsageSampler} which can be used to monitor memory %
 and swap usage employing the Sigar library~\cite{HypericSigarWebsite}. %
 Likewise to other monitoring probes described in this user guide (see for %
 example Sections~\ref{sec:monitoring:probe} and \ref{sec:example:monitoring}),
-it collects the data of interest (lines~58--59), creates a monitoring record~%
-(lines~60--63), and passes this monitoring record to the monitoring controller~%
-(line~64). %
+it collects the data of interest (lines~61--62), creates a monitoring record~%
+(lines~63--66), and passes this monitoring record to the monitoring controller~%
+(line~67). %
 The available Sigar-based samplers for monitoring system-level monitoring %
 data, such as CPU and memory usage, are discussed in Appendix~\ref{appendix:SigarBasedSamplers}. %
 
@@ -157,10 +157,10 @@ shows two screenshots of the MBean access using \class{jconsole}.
 % nie: I forced the figure to be here, as it would otherwise cut the listing in half. 
 \begin{figure}[H]\centering
 \subfigure[Attributes]{%
-\includegraphics[width=0.485\textwidth]{images/jmxbean-monitoringcontroller-attributes.png}
-}
+\includegraphics[scale=0.362]{images/jmxbean-monitoringcontroller-attributes.png} % 0.485\textwidth
+}\hspace{-0.5cm}%
 \subfigure[Operations]{%
-\includegraphics[width=0.485\textwidth]{images/jmxbean-monitoringcontroller-operations.png}
+\includegraphics[scale=0.362]{images/jmxbean-monitoringcontroller-operations.png} % width=0.485\textwidth
 }
 \caption{Screenshots of the \class{jconsole} JMX client accessing the \class{MonitoringController}'s %
 attributes and operations via the MBean interface. %
@@ -272,7 +272,7 @@ class \class{AbstractMonitoringRecord}, and a custom monitoring record type %
 \begin{enumerate}
 \item Override the methods \method{initFromArray}, \method{toArray}, \method{getValueTypes}
 \item For immutable record types: implement \class{IMonitoringRecord.Factory}, a constructor %
-with a single \class{Class<?>[]} argument, and a public static \method{TYPES} field. %
+with a single \class{Object[]} argument, and a public static \method{TYPES} field. %
 In this case, \method{initFromArray} (which is not called by the framework then) should %
 throw an \class{UnsupportedOperationException}.
 \end{enumerate}
@@ -284,6 +284,8 @@ Listing~\ref{listing:MyRecord}, is an example of a custom monitoring record type
 that can be used to monitor response times of method executions. %
 Implementing \class{IMonitoringRecord.Factory}, \class{MyResponseTimeRecord} is %
 an immutable type, i.e., it includes only final fields. %
+
+\enlargethispage{1cm}
 
 % \pagebreak 
 
@@ -305,12 +307,14 @@ shows a similar manual monitoring probe, which uses the monitoring record type %
 
 % Make sure that this listing will be modified, once the sourcecode changes!!!
 % It must show the whole monitoring of the bookstorecall, from getting the first time to persisting of the record!!
-\pagebreak
+% \pagebreak
 \lstinputlisting[firstline=32, lastline=40, firstnumber=32, caption=Excerpt from Bookstore.java, label=listing:cuttingBookstore]{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/Bookstore.java}
 
 \noindent In order to avoid multiple calls to the \method{getInstance} method of the %
 \class{MonitoringController} class, singleton instances should be stored %
 in a final static variable, as shown in Listing~\ref{listing:cuttingBookstore:finalStaticController}.
+
+\enlargethispage{1cm}
 
 \lstinputlisting[firstline=24, lastline=25, firstnumber=24, caption=Singleton instance of the monitoring controller stored in a final static variable (excerpt from Bookstore.java), label=listing:cuttingBookstore:finalStaticController]{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/Bookstore.java}
 
@@ -363,6 +367,8 @@ continuously receiving new monitoring data from an instrumented application pote
 running on another machine. A more detailed description of how to use the \class{AsyncJMSWriter} %
 can be found in Appendix~\ref{appendix:usingJMS}. %
 
+\enlargethispage{1.5cm}
+
 % This is the diagram with the hierarchy of the writers.
 \begin{figure}[H]
 \begin{centering}
@@ -378,14 +384,14 @@ a custom writer \class{MyPipeWriter} which uses a named pipe to %
 write the given records into a buffer located in the memory. The source code of %
 the class \class{MyPipe} is listed in Appendix~\ref{appendix:pipeListings}. %
 
-% \enlargethispage{1cm}
+\enlargethispage{1cm}
 
-\pagebreak
+% \pagebreak
 
 \setJavaCodeListing
 \lstinputlisting[caption=MyPipeWriter.java, label=listing:MyWriter,firstline=23,firstnumber=23]{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeWriter.java}
 
-\pagebreak
+% \pagebreak
 
 \noindent The monitoring writer to be used is selected by the %
 \KiekerMonitoringPart{} configuration property (Section~\ref{chap:componentsMonitoring}) %

@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Kieker (init and clean)" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+<project name="Kieker (init and clean)" basedir=".." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 
+	<property file="build-config/build.properties" />
+	
 	<target name="-init-version" description="Initializes variables based on the Kieker version number">
 		<tstamp />
 		<property name="kieker.name" value="Kieker Framework" />
-		<property name="kieker.version" value="1.8-SNAPSHOT" />
+		<property name="kieker.version" value="1.9-SNAPSHOT" />
 		<property name="year" value="2013" />
 		<property name="copyright" value="Kieker Project" />
 
@@ -77,12 +79,15 @@
 			<fileset dir="${lib.dir}">
 				<!--<include name="aspectjrt-*.jar" />-->
 				<include name="javax.jms-*.jar" />
-				<include name="sigar-*.jar" />
+				<include name="disl-*/disl-server.jar" />
 				<include name="framework-libs/javax.servlet-*.jar" />
 				<include name="framework-libs/cxf/cxf-*.jar" />
 				<include name="framework-libs/spring/aopalliance-*.jar" />
 				<include name="framework-libs/spring/spring-context-*.jar" />
 				<include name="framework-libs/spring/spring-web*.jar" />
+			</fileset>
+			<fileset dir="${lib.sigar.dir}">
+				<include name="sigar-*.jar" />
 			</fileset>
 			<pathelement location="${build.kieker.common.dir}/" />
 		</path>
@@ -109,11 +114,32 @@
 			<fileset dir="${lib.dir}">
 				<include name="commons-cli-*.jar" />
 				<include name="jgraphx-*.jar" />
+				<include name="org.eclipse.emf.*.jar" />
+				<!-- Bridge begin -->
+				<include name="activemq-core-5.4.3.jar" />
+				<include name="javax.jms-*.jar" />
+				<include name="reflections-0.9.9-RC1.jar"/>
+				<include name="geronimo-j2ee-management_1.1_spec-1.0.1.jar"/>
+				<include name="kahadb-5.7.0.jar"/>
+				<!-- Bridge end -->
 			</fileset>
 			<pathelement location="${build.kieker.common.dir}/" />
 			<pathelement location="${build.kieker.monitoring.dir}/" />
 			<pathelement location="${build.kieker.analysis.dir}/" />
 			<pathelement location="${build.kieker.analysis.model.dir}/" />
+		</path>
+
+		<path id="javaee.demo-compile-classpath">
+			<fileset dir="${example.javaee.demo.lib.dir}">
+				<include name="primefaces-*.jar" />
+				<include name="jsf-api-*.jar" />
+			</fileset>
+			<fileset dir="${example.javaee.jetty.lib.dir}/annotations/">
+				<include name="javax.annotation-*.jar" />
+			</fileset>
+			<fileset dir="${dist.dir}">
+				<include name="${dist.kieker.main.jar}" />
+			</fileset>
 		</path>
 	</target>
 
@@ -133,7 +159,6 @@
 
 	<target name="-prepate-userguide-examples-binary-release" depends="-init-version" description="Removes artifacts from previous builds and manually changed configuration files">
 		<!-- Create .classpath variant for binary release(#710) -->
-		<copy file="${example.microbenchmark.dir}/.classpath" tofile="${example.microbenchmark.dir}/.classpath-binrelease.generated" overwrite="true"/>
 		<copy file="${src.userguide.example.manual.dir}/.classpath" tofile="${src.userguide.example.manual.dir}/.classpath-binrelease.generated" overwrite="true"/>
 		<copy file="${src.userguide.example.extended.dir}/.classpath" tofile="${src.userguide.example.extended.dir}/.classpath-binrelease.generated" overwrite="true"/>
 		<copy file="${src.userguide.example.aspectj.dir}/.classpath" tofile="${src.userguide.example.aspectj.dir}/.classpath-binrelease.generated" overwrite="true"/>
@@ -165,7 +190,6 @@
 			<regexp pattern="&lt;classpathentry .*/Kieker&quot;.*"/>
 			<substitution expression="&lt;classpathentry kind=&quot;lib&quot; path=&quot;lib//${dist.kieker.main.aspectj.jar}&quot;/&gt;"/>
 			<fileset dir=".">
-				<include name="${example.microbenchmark.dir}/.classpath-binrelease.generated"/>
 				<include name="${src.userguide.example.aspectj.dir}/.classpath-binrelease.generated"/>
 			</fileset>
 		</replaceregexp>
@@ -175,7 +199,6 @@
 			<regexp pattern="(&lt;classpathentry .*)/Kieker/lib/(.*&quot;.*)"/>
 			<substitution expression="\1lib/\2"/>
 			<fileset dir=".">
-				<include name="${example.microbenchmark.dir}/.classpath-binrelease.generated"/>
 				<include name="${src.userguide.example.aspectj.dir}/.classpath-binrelease.generated"/>
 				<include name="${src.userguide.example.sigar.dir}/.classpath-binrelease.generated"/>
 			</fileset>
@@ -183,12 +206,6 @@
 	</target>
 
 	<target name="-update-version.examples" depends="-init-version" description="Updates the Kieker version in the examples (e.g., in the .classpath files)">
-		<replaceregexp match="kieker-\S*.jar" replace="${dist.kieker.main.aspectj.jar}" flags="g">
-			<fileset dir="${example.microbenchmark.dir}/bin/">
-				<include name="*.sh" />
-		 	</fileset>
-		</replaceregexp>
-
 		<replaceregexp file="${src.userguide.example.bookstore.dir}/start.ini" match="kieker-\S*.jar" replace="${dist.kieker.main.jar}" flags="g" />
 		<replaceregexp file="${src.userguide.example.bookstore.dir}/start.KiekerAspectJActivated.ini" match="kieker-\S*.jar" replace="${dist.kieker.main.jar}" flags="g" />
 		<replaceregexp file="${src.userguide.example.bookstore.dir}/.classpath" match="kieker-\S*.jar" replace="${dist.kieker.main.jar}" flags="g" />

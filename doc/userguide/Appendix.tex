@@ -10,8 +10,9 @@
 
 % \chapter*{Appendix}\label{appendix}
 \phantomsection
+\addtocontents{toc}{\protect\pagebreak}
 \addcontentsline{toc}{chapter}{Appendix}\hypertarget{hypertarget:appendix}{}
-\addtocontents{toc}{\protect\setcounter{tocdepth}{-1}}
+\addtocontents{toc}{\protect\setcounter{tocdepth}{0}}
 
 \chapter{Wrapper scripts}\label{appendix:wrapperScripts}
 \input{Appendix-ch-wrapperScripts.inc}
@@ -34,8 +35,8 @@
 \chapter{Example Console Outputs}\label{appendix:exampleConsoleOutputs}
 \input{Appendix-ch-console-outputs.inc}
 
-\chapter{Ant Scripts}\label{appendix:antScripts}
-\input{Appendix-ch-antScripts.inc}
+% \chapter{Ant Scripts}\label{appendix:antScripts}
+% \input{Appendix-ch-antScripts.inc}
 
 % \chapter{Libraries}\label{appendix:libraries}
 %     The following table shows all libraries which are used by \Kieker\ and explains them briefly. %

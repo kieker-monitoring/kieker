@@ -19,7 +19,7 @@ package kieker.analysis.plugin.filter.flow;
 import java.util.Arrays;
 
 import kieker.common.record.flow.trace.AbstractTraceEvent;
-import kieker.common.record.flow.trace.Trace;
+import kieker.common.record.flow.trace.TraceMetadata;
 
 /**
  * @author Jan Waller
@@ -27,8 +27,10 @@ import kieker.common.record.flow.trace.Trace;
  * @since 1.5
  */
 public final class TraceEventRecords {
-	private final Trace trace;
+	private final TraceMetadata trace;
 	private final AbstractTraceEvent[] traceEvents;
+
+	private int count = 1;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -38,7 +40,7 @@ public final class TraceEventRecords {
 	 * @param traceEvents
 	 *            The trace events to be stored in this object.
 	 */
-	public TraceEventRecords(final Trace trace, final AbstractTraceEvent[] traceEvents) { // NOPMD (stored directly)
+	public TraceEventRecords(final TraceMetadata trace, final AbstractTraceEvent[] traceEvents) { // NOPMD (stored directly)
 		this.trace = trace;
 		this.traceEvents = traceEvents;
 	}
@@ -48,7 +50,7 @@ public final class TraceEventRecords {
 	 * 
 	 * @return The traces currently stored in this object.
 	 */
-	public Trace getTrace() {
+	public TraceMetadata getTraceMetadata() {
 		return this.trace;
 	}
 
@@ -61,11 +63,25 @@ public final class TraceEventRecords {
 		return this.traceEvents; // NOPMD (internal array exposed)
 	}
 
+	public int getCount() {
+		synchronized (this) {
+			return this.count;
+		}
+	}
+
+	public void setCount(final int count) {
+		synchronized (this) {
+			this.count = count;
+		}
+	}
+
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder(64);
 		sb.append(super.toString());
-		sb.append("\n\tTrace: ");
+		sb.append("\n\tTrace (");
+		sb.append(this.count);
+		sb.append("): ");
 		sb.append(this.trace);
 		for (final AbstractTraceEvent traceEvent : this.traceEvents) {
 			sb.append("\n\t");
@@ -87,7 +103,7 @@ public final class TraceEventRecords {
 	}
 
 	@Override
-	public boolean equals(final Object obj) {
+	public final boolean equals(final Object obj) {
 		if (this == obj) {
 			return true;
 		}

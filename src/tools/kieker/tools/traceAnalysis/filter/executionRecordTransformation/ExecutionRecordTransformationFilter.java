@@ -47,7 +47,6 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
 		})
 public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisFilter {
-	// private static final Log LOG = LogFactory.getLog(ExecutionRecordTransformationFilter.class);
 
 	/** This is the name of the input port receiving new operation execution records. */
 	public static final String INPUT_PORT_NAME_RECORDS = "operationExecutionRecords";

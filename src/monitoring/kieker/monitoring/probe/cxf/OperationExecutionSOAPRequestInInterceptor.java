@@ -46,10 +46,14 @@ import kieker.monitoring.timer.ITimeSource;
  */
 public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterceptor implements IMonitoringProbe {
 
+	/** This constant can be used as a session ID for asynchronous traces. */
 	public static final String SESSION_ID_ASYNC_TRACE = "NOSESSION-ASYNCIN";
 
+	/** Stores the singleton instance of the session registry. */
 	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
+	/** Stores the singleton instance of the control flow registry. */
 	protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
+	/** Stores the singleton instance of the SOAP trace registry. */
 	protected static final SOAPTraceRegistry SOAP_REGISTRY = SOAPTraceRegistry.getInstance();
 
 	private static final Log LOG = LogFactory.getLog(OperationExecutionSOAPRequestInInterceptor.class);
@@ -61,6 +65,7 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 	 * differ from Kieker's default timer (SystemNanoTimer).
 	 */
 	protected final IMonitoringController monitoringController;
+	/** The used time source. */
 	protected final ITimeSource timeSource;
 
 	/**
@@ -83,6 +88,9 @@ public class OperationExecutionSOAPRequestInInterceptor extends SoapHeaderInterc
 
 	@Override
 	public void handleMessage(final Message msg) throws Fault {
+		if (!this.monitoringController.isMonitoringEnabled()) {
+			return;
+		}
 		if (!this.monitoringController.isProbeActivated(OperationExecutionSOAPResponseOutInterceptor.SIGNATURE)) {
 			return;
 		}

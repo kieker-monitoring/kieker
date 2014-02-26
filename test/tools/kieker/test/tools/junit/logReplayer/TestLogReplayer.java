@@ -51,6 +51,7 @@ import kieker.test.monitoring.util.NamedListWriter;
  */
 public class TestLogReplayer extends AbstractKiekerTest {
 
+	/** A rule making sure that a temporary folder exists for every test method (which is removed after the test). */
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
 
@@ -58,6 +59,9 @@ public class TestLogReplayer extends AbstractKiekerTest {
 	private volatile List<IMonitoringRecord> recordListFilledByListWriter;
 	private final List<IMonitoringRecord> replayList = new ArrayList<IMonitoringRecord>();
 
+	/**
+	 * Creastes a new instance of this class.
+	 */
 	public TestLogReplayer() {
 		// Adding arbitrary records
 		this.replayList.add(new EmptyRecord());
@@ -73,6 +77,12 @@ public class TestLogReplayer extends AbstractKiekerTest {
 		this.replayList.add(new EmptyRecord());
 	}
 
+	/**
+	 * Performs an initial test setup.
+	 * 
+	 * @throws IOException
+	 *             If the setup failed.
+	 */
 	@Before
 	public void init() throws IOException {
 		this.tmpFolder.create();
@@ -96,6 +106,7 @@ public class TestLogReplayer extends AbstractKiekerTest {
 	public void testIt() {
 		final ListReplayer replayer = new ListReplayer(this.monitoringConfigurationFile.getAbsolutePath(),
 				false, // realtimeMode
+				1.0, // realtimeAccelerationFactor
 				true, // keepOriginalLoggingTimestamps
 				1, // numRealtimeWorkerThreads
 				AbstractLogReplayer.MIN_TIMESTAMP, // ignoreRecordsBeforeTimestamp
@@ -120,10 +131,12 @@ public class TestLogReplayer extends AbstractKiekerTest {
 class ListReplayer extends AbstractLogReplayer { // NOPMD
 	private final List<IMonitoringRecord> replayList = new ArrayList<IMonitoringRecord>();
 
-	public ListReplayer(final String monitoringConfigurationFile, final boolean realtimeMode, final boolean keepOriginalLoggingTimestamps,
+	public ListReplayer(final String monitoringConfigurationFile, final boolean realtimeMode, final double realtimeAccelerationFactor,
+			final boolean keepOriginalLoggingTimestamps,
 			final int numRealtimeWorkerThreads, final long ignoreRecordsBeforeTimestamp, final long ignoreRecordsAfterTimestamp,
 			final List<IMonitoringRecord> replayList) {
-		super(monitoringConfigurationFile, realtimeMode, keepOriginalLoggingTimestamps, numRealtimeWorkerThreads, ignoreRecordsBeforeTimestamp,
+		super(monitoringConfigurationFile, realtimeMode, realtimeAccelerationFactor, keepOriginalLoggingTimestamps, numRealtimeWorkerThreads,
+				ignoreRecordsBeforeTimestamp,
 				ignoreRecordsAfterTimestamp);
 		this.replayList.addAll(replayList);
 	}

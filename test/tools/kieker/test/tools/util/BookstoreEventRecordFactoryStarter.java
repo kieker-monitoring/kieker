@@ -22,7 +22,7 @@ import java.util.List;
 
 import kieker.analysis.plugin.filter.flow.TraceEventRecords;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.flow.trace.Trace;
+import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 
@@ -61,19 +61,19 @@ public final class BookstoreEventRecordFactoryStarter {
 
 		final TraceEventRecords validSyncTraceBeforeAfterEvents =
 				BookstoreEventRecordFactory.validSyncTraceBeforeAfterEvents(firstTimestamp, traceId, sessionId, hostname);
-		allRecords.add(new Trace(traceId, traceId, sessionId, hostname, Trace.NO_PARENT_TRACEID, Trace.NO_PARENT_ORDER_INDEX));
+		allRecords.add(new TraceMetadata(traceId, traceId, sessionId, hostname, TraceMetadata.NO_PARENT_TRACEID, TraceMetadata.NO_PARENT_ORDER_INDEX));
 		allRecords.addAll(Arrays.asList(validSyncTraceBeforeAfterEvents.getTraceEvents()));
 		firstTimestamp += firstTimestampDelta;
 		traceId++;
 		final TraceEventRecords validSyncTraceAdditionalCallEvents =
 				BookstoreEventRecordFactory.validSyncTraceAdditionalCallEvents(firstTimestamp, traceId, sessionId, hostname);
-		allRecords.add(new Trace(traceId, traceId, sessionId, hostname, Trace.NO_PARENT_TRACEID, Trace.NO_PARENT_ORDER_INDEX));
+		allRecords.add(new TraceMetadata(traceId, traceId, sessionId, hostname, TraceMetadata.NO_PARENT_TRACEID, TraceMetadata.NO_PARENT_ORDER_INDEX));
 		allRecords.addAll(Arrays.asList(validSyncTraceAdditionalCallEvents.getTraceEvents()));
 		firstTimestamp += firstTimestampDelta;
 		traceId++;
 		final TraceEventRecords validSyncTraceAdditionalCallEventsGap =
 				BookstoreEventRecordFactory.validSyncTraceAdditionalCallEventsGap(firstTimestamp, traceId, sessionId, hostname);
-		allRecords.add(new Trace(traceId, traceId, sessionId, hostname, Trace.NO_PARENT_TRACEID, Trace.NO_PARENT_ORDER_INDEX));
+		allRecords.add(new TraceMetadata(traceId, traceId, sessionId, hostname, TraceMetadata.NO_PARENT_TRACEID, TraceMetadata.NO_PARENT_ORDER_INDEX));
 		allRecords.addAll(Arrays.asList(validSyncTraceAdditionalCallEventsGap.getTraceEvents()));
 
 		for (final IMonitoringRecord r : allRecords) {

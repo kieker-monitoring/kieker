@@ -49,6 +49,7 @@ public class JMSLogReplayer extends AbstractLogReplayer {
 	public JMSLogReplayer(final String monitoringConfigurationFile, final String jmsProviderUrl, final String jmsDestination, final String jmsFactoryLookupName) {
 		super(monitoringConfigurationFile,
 				false, // realtimeMode
+				1.0, // realtimeAccelerationFactor: any value will do because realtimeMode = false
 				true, // keepOriginalLoggingTimestamps
 				1, // numRealtimeWorkerThreads: any value will do because realtimeMode = false
 				Long.MIN_VALUE,

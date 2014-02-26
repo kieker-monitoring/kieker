@@ -65,6 +65,7 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 	private static final String DEFAULT_EVENTS_HOSTNAME = "srv-D8yzPpiD";
 	private static final int DEFAULT_EVENTS_NUMBER = 5; // just a basic test with (potentially) at bit more than a hand full of records
 
+	/** A rule making sure that a temporary folder exists for every test method (which is removed after the test). */
 	@Rule
 	public final TemporaryFolder tmpFolder = new TemporaryFolder(); // NOCS (@Rule must be public)
 
@@ -80,9 +81,6 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 
 		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, AsyncFsWriter.class.getName());
 
-		final String asyncFsWriterPropertyPrefix = AsyncFsWriter.class.getName() + ".";
-
-		config.setProperty(asyncFsWriterPropertyPrefix + AbstractAsyncFSWriter.CONFIG_TEMP, Boolean.FALSE.toString());
 		config.setProperty(AsyncFsWriter.class.getName() + "." + AbstractAsyncFSWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
 
 		// Write configuration to tmp file

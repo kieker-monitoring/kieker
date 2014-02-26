@@ -20,6 +20,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import kieker.analysis.IProjectContext;
 import kieker.analysis.display.PlainText;
+import kieker.analysis.display.XYPlot;
 import kieker.analysis.display.annotation.Display;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
@@ -32,7 +33,7 @@ import kieker.common.configuration.Configuration;
  * unchanged objects to the output. The value of the counter can be retrieved by connected to the respective output port using a
  * corresponding method.
  * 
- * @author Jan Waller
+ * @author Jan Waller, Nils Christian Ehmke
  * 
  * @since 1.4
  */
@@ -59,6 +60,11 @@ public final class CountingFilter extends AbstractFilterPlugin {
 	public static final String OUTPUT_PORT_NAME_COUNT = "currentEventCount";
 
 	private final AtomicLong counter = new AtomicLong();
+
+	private volatile long timeStampOfInitialization;
+
+	private final PlainText plainText = new PlainText();
+	private final XYPlot xyPlot = new XYPlot(50);
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -98,19 +104,41 @@ public final class CountingFilter extends AbstractFilterPlugin {
 	@InputPort(name = INPUT_PORT_NAME_EVENTS, eventTypes = { Object.class }, description = "Receives incoming objects to be counted and forwarded")
 	public final void inputEvent(final Object event) {
 		final Long count = CountingFilter.this.counter.incrementAndGet();
+
+		this.updateDisplays();
+
 		super.deliver(OUTPUT_PORT_NAME_RELAYED_EVENTS, event);
 		super.deliver(OUTPUT_PORT_NAME_COUNT, count);
 	}
 
-	/**
-	 * This method is being used to display the currently stored value within this counter.
-	 * It sets the current text within the given instance of {@link PlainText}.
-	 * 
-	 * @param plainText
-	 *            The text object to be filled with the current counter value.
-	 */
-	@Display(name = "Counter Display")
-	public final void countDisplay(final PlainText plainText) {
-		plainText.setText(Long.toString(this.counter.get()));
+	private void updateDisplays() {
+		// XY Plot
+		final long timeStampDeltaInSeconds = (System.currentTimeMillis() - this.timeStampOfInitialization) / 1000;
+		this.xyPlot.setEntry("", timeStampDeltaInSeconds, this.counter.get());
+
+		// Plain text
+		this.plainText.setText(Long.toString(this.counter.get()));
+
 	}
+
+	@Override
+	public boolean init() {
+		if (super.init()) {
+			this.timeStampOfInitialization = System.currentTimeMillis();
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Display(name = "Counter Display")
+	public final PlainText plainTextDisplay() {
+		return this.plainText;
+	}
+
+	@Display(name = "XYPlot Counter Display")
+	public final XYPlot xyPlotDisplay() {
+		return this.xyPlot;
+	}
+
 }

@@ -24,7 +24,7 @@ import kieker.common.logging.LogFactory;
 
 /**
  * Allows spawn the execution of an {@link AnalysisController} into a separate {@link Thread}. The thread with the {@link AnalysisController} instance
- * provided in the constructor {@link #AnalysisControllerThread(AnalysisController)} is started by calling the {@link #start()} method. The analysis can be
+ * provided in the constructor {@link #AnalysisControllerThread(IAnalysisController)} is started by calling the {@link #start()} method. The analysis can be
  * terminated by calling the {@link #terminate()} method which delegates the call to the {@link kieker.analysis.AnalysisController#terminate()} method.
  * 
  * @author Andre van Hoorn, Jan Waller
@@ -34,7 +34,7 @@ import kieker.common.logging.LogFactory;
 public final class AnalysisControllerThread extends Thread {
 	private static final Log LOG = LogFactory.getLog(AnalysisControllerThread.class);
 
-	private final AnalysisController analysisController;
+	private final IAnalysisController analysisController;
 	private final CountDownLatch terminationLatch = new CountDownLatch(1);
 
 	/**
@@ -43,7 +43,7 @@ public final class AnalysisControllerThread extends Thread {
 	 * @param analysisController
 	 *            The analysis controller to be managed by this thread.
 	 */
-	public AnalysisControllerThread(final AnalysisController analysisController) {
+	public AnalysisControllerThread(final IAnalysisController analysisController) {
 		super();
 		this.analysisController = analysisController;
 	}
@@ -54,7 +54,10 @@ public final class AnalysisControllerThread extends Thread {
 	@Override
 	public synchronized void start() { // NOPMD (here we net method level synchronization (inheritance))
 		super.start();
-		this.analysisController.awaitInitialization();
+		// If we have a default AnalysisController, we are able to wait for its initialization
+		if (this.analysisController instanceof AnalysisController) {
+			((AnalysisController) this.analysisController).awaitInitialization();
+		}
 	}
 
 	/**

@@ -58,7 +58,7 @@ public final class JMXController extends AbstractController implements IJMXContr
 		Fallback, Sun
 	}
 
-	// The error handling in this block is corrent, see ticket #293
+	// The error handling in this block is correct, see ticket #293
 	protected JMXController(final Configuration configuration) {
 		super(configuration);
 		ObjectName controllerObjectNameTmp = null;
@@ -118,7 +118,7 @@ public final class JMXController extends AbstractController implements IJMXContr
 		this.serverNotificationListener = serverNotificationListenerTmp;
 	}
 
-	// The error handling in this block is corrent, see ticket #293
+	// The error handling in this block is correct, see ticket #293
 
 	@Override
 	protected final void init() {

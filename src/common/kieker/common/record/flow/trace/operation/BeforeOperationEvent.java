@@ -16,20 +16,21 @@
 
 package kieker.common.record.flow.trace.operation;
 
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
+import kieker.common.util.registry.IRegistry;
+
 /**
  * @author Jan Waller
  * 
  * @since 1.5
  */
 public class BeforeOperationEvent extends AbstractOperationEvent {
-	private static final long serialVersionUID = -129094268144134877L;
-	private static final Class<?>[] TYPES = {
-		long.class, // Event.timestamp
-		long.class, // TraceEvent.traceId
-		int.class, // TraceEvent.orderIndex
-		String.class, // OperationEvent.operationSignature
-		String.class, // OperationEvent.classSignature
-	};
+	public static final int SIZE = AbstractOperationEvent.SIZE;
+	public static final Class<?>[] TYPES = AbstractOperationEvent.TYPES;
+
+	private static final long serialVersionUID = 3299019039812563600L;
 
 	/**
 	 * This constructor uses the given parameters to initialize the fields of this record.
@@ -72,16 +73,15 @@ public class BeforeOperationEvent extends AbstractOperationEvent {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
 	 */
-	public Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getOperationSignature(), this.getClassSignature(), };
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public Class<?>[] getValueTypes() {
-		return TYPES.clone();
+	public BeforeOperationEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		super(buffer, stringRegistry);
 	}
 }

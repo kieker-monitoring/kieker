@@ -23,7 +23,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
-import kieker.common.record.flow.trace.Trace;
+import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.CallOperationEvent;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
@@ -52,12 +52,15 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	@Around("monitoredOperation() && this(thisObject) && target(targetObject) && notWithinKieker()")
 	public Object member2memberOperation(final Object thisObject, final Object targetObject, final ProceedingJoinPoint thisJoinPoint,
 			final EnclosingStaticPart thisEnclosingJoinPoint) throws Throwable { // NOCS
+		if (!CTRLINST.isMonitoringEnabled()) {
+			return thisJoinPoint.proceed();
+		}
 		final String callee = this.signatureToLongString(thisJoinPoint.getSignature());
 		if (!CTRLINST.isProbeActivated(callee)) {
 			return thisJoinPoint.proceed();
 		}
 		// common fields
-		Trace trace = TRACEREGISTRY.getTrace();
+		TraceMetadata trace = TRACEREGISTRY.getTrace();
 		final boolean newTrace = trace == null;
 		if (newTrace) {
 			trace = TRACEREGISTRY.registerTrace();
@@ -87,12 +90,15 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	@Around("monitoredOperation() && !this(java.lang.Object) && target(targetObject) && notWithinKieker()")
 	public Object static2memberOperation(final Object targetObject, final ProceedingJoinPoint thisJoinPoint, final EnclosingStaticPart thisEnclosingJoinPoint)
 			throws Throwable { // NOCS
+		if (!CTRLINST.isMonitoringEnabled()) {
+			return thisJoinPoint.proceed();
+		}
 		final String callee = this.signatureToLongString(thisJoinPoint.getSignature());
 		if (!CTRLINST.isProbeActivated(callee)) {
 			return thisJoinPoint.proceed();
 		}
 		// common fields
-		Trace trace = TRACEREGISTRY.getTrace();
+		TraceMetadata trace = TRACEREGISTRY.getTrace();
 		final boolean newTrace = trace == null;
 		if (newTrace) {
 			trace = TRACEREGISTRY.registerTrace();
@@ -124,13 +130,16 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	@Around("monitoredOperation() && this(thisObject) && !target(java.lang.Object) && notWithinKieker()")
 	public Object member2staticOperation(final Object thisObject, final ProceedingJoinPoint thisJoinPoint,
 			final EnclosingStaticPart thisEnclosingJoinPoint) throws Throwable { // NOCS
+		if (!CTRLINST.isMonitoringEnabled()) {
+			return thisJoinPoint.proceed();
+		}
 		final Signature calleeSig = thisJoinPoint.getSignature();
 		final String callee = this.signatureToLongString(calleeSig);
 		if (!CTRLINST.isProbeActivated(callee)) {
 			return thisJoinPoint.proceed();
 		}
 		// common fields
-		Trace trace = TRACEREGISTRY.getTrace();
+		TraceMetadata trace = TRACEREGISTRY.getTrace();
 		final boolean newTrace = trace == null;
 		if (newTrace) {
 			trace = TRACEREGISTRY.registerTrace();
@@ -160,13 +169,16 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	@Around("monitoredOperation() && !this(java.lang.Object) && !target(java.lang.Object) && notWithinKieker()")
 	public Object static2staticOperation(final ProceedingJoinPoint thisJoinPoint, final EnclosingStaticPart thisEnclosingJoinPoint)
 			throws Throwable { // NOCS
+		if (!CTRLINST.isMonitoringEnabled()) {
+			return thisJoinPoint.proceed();
+		}
 		final Signature calleeSig = thisJoinPoint.getSignature();
 		final String callee = this.signatureToLongString(calleeSig);
 		if (!CTRLINST.isProbeActivated(callee)) {
 			return thisJoinPoint.proceed();
 		}
 		// common fields
-		Trace trace = TRACEREGISTRY.getTrace();
+		TraceMetadata trace = TRACEREGISTRY.getTrace();
 		final boolean newTrace = trace == null;
 		if (newTrace) {
 			trace = TRACEREGISTRY.registerTrace();

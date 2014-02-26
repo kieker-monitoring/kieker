@@ -67,6 +67,7 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 	 * Initializes the setup for the test.
 	 * 
 	 * @throws IOException
+	 *             If the setup failed.
 	 */
 	@Before
 	public void setUp() throws IOException {
@@ -78,7 +79,6 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
 
 		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, this.testedWriterClazz.getName());
-		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractAsyncFSWriter.CONFIG_TEMP, Boolean.FALSE.toString());
 		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractAsyncFSWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
 
 		config.setProperty(this.testedWriterClazz.getName() + "." + AbstractAsyncWriter.CONFIG_QUEUESIZE, Integer.toString(numRecordsWritten * 4));
@@ -91,6 +91,14 @@ public abstract class AbstractTestFSWriterReader extends AbstractWriterReaderTes
 		return MonitoringController.createInstance(config);
 	}
 
+	/**
+	 * Inheriting classes should use this method to refine and enrich the configuration of the writer.
+	 * 
+	 * @param config
+	 *            The configuration to refine.
+	 * @param numRecordsWritten
+	 *            The number of written records.
+	 */
 	protected abstract void refineWriterConfiguration(Configuration config, final int numRecordsWritten);
 
 	@Override

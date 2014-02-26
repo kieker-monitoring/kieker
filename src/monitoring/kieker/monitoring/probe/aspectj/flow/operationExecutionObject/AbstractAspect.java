@@ -22,7 +22,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
-import kieker.common.record.flow.trace.Trace;
+import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.object.AfterOperationFailedObjectEvent;
 import kieker.common.record.flow.trace.operation.object.AfterOperationObjectEvent;
 import kieker.common.record.flow.trace.operation.object.BeforeOperationObjectEvent;
@@ -51,12 +51,15 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 
 	@Around("monitoredOperation() && this(thisObject) && notWithinKieker()")
 	public Object operation(final Object thisObject, final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
+		if (!CTRLINST.isMonitoringEnabled()) {
+			return thisJoinPoint.proceed();
+		}
 		final String signature = this.signatureToLongString(thisJoinPoint.getSignature());
 		if (!CTRLINST.isProbeActivated(signature)) {
 			return thisJoinPoint.proceed();
 		}
 		// common fields
-		Trace trace = TRACEREGISTRY.getTrace();
+		TraceMetadata trace = TRACEREGISTRY.getTrace();
 		final boolean newTrace = trace == null;
 		if (newTrace) {
 			trace = TRACEREGISTRY.registerTrace();
@@ -98,13 +101,16 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	 */
 	@Around("monitoredOperation() && !this(java.lang.Object) && notWithinKieker()")
 	public Object staticOperation(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
+		if (!CTRLINST.isMonitoringEnabled()) {
+			return thisJoinPoint.proceed();
+		}
 		final Signature sig = thisJoinPoint.getSignature();
 		final String signature = this.signatureToLongString(sig);
 		if (!CTRLINST.isProbeActivated(signature)) {
 			return thisJoinPoint.proceed();
 		}
 		// common fields
-		Trace trace = TRACEREGISTRY.getTrace();
+		TraceMetadata trace = TRACEREGISTRY.getTrace();
 		final boolean newTrace = trace == null;
 		if (newTrace) {
 			trace = TRACEREGISTRY.registerTrace();

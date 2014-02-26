@@ -28,7 +28,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.registry.RegistryRecord;
+import kieker.common.record.misc.RegistryRecord;
 
 /**
  * @author Jan Waller

@@ -8,15 +8,15 @@ import org.eclipse.emf.common.util.EList;
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Output Port</b></em>'.
  * <!-- end-user-doc -->
- *
+ * 
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.MIOutputPort#getSubscribers <em>Subscribers</em>}</li>
- *   <li>{@link kieker.analysis.model.analysisMetaModel.MIOutputPort#getParent <em>Parent</em>}</li>
+ * <li>{@link kieker.analysis.model.analysisMetaModel.MIOutputPort#getSubscribers <em>Subscribers</em>}</li>
+ * <li>{@link kieker.analysis.model.analysisMetaModel.MIOutputPort#getParent <em>Parent</em>}</li>
  * </ul>
  * </p>
- *
+ * 
  * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getOutputPort()
  * @model
  * @generated
@@ -27,10 +27,10 @@ public interface MIOutputPort extends MIPort {
 	 * The list contents are of type {@link kieker.analysis.model.analysisMetaModel.MIInputPort}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Subscribers</em>' reference list isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Subscribers</em>' reference list isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Subscribers</em>' reference list.
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getOutputPort_Subscribers()
 	 * @model
@@ -43,10 +43,10 @@ public interface MIOutputPort extends MIPort {
 	 * It is bidirectional and its opposite is '{@link kieker.analysis.model.analysisMetaModel.MIPlugin#getOutputPorts <em>Output Ports</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Parent</em>' container reference isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Parent</em>' container reference isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
+	 * 
 	 * @return the value of the '<em>Parent</em>' container reference.
 	 * @see #setParent(MIPlugin)
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getOutputPort_Parent()
@@ -60,7 +60,9 @@ public interface MIOutputPort extends MIPort {
 	 * Sets the value of the '{@link kieker.analysis.model.analysisMetaModel.MIOutputPort#getParent <em>Parent</em>}' container reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Parent</em>' container reference.
+	 * 
+	 * @param value
+	 *            the new value of the '<em>Parent</em>' container reference.
 	 * @see #getParent()
 	 * @generated
 	 */

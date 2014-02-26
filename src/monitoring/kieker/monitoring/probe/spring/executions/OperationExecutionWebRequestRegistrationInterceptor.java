@@ -29,22 +29,35 @@ import kieker.monitoring.core.registry.SessionRegistry;
  */
 public class OperationExecutionWebRequestRegistrationInterceptor implements WebRequestInterceptor {
 
+	/** Stores the singleton instance of the session registry. */
 	protected static final SessionRegistry SESSION_REGISTRY = SessionRegistry.INSTANCE;
 
 	// protected static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
 
+	/**
+	 * Creates a new instance of this class.
+	 */
 	public OperationExecutionWebRequestRegistrationInterceptor() {
 		// nothing to do
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void preHandle(final WebRequest request) throws Exception {
 		SESSION_REGISTRY.storeThreadLocalSessionId(request.getSessionId());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void postHandle(final WebRequest request, final ModelMap map) throws Exception {
 		SESSION_REGISTRY.unsetThreadLocalSessionId();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void afterCompletion(final WebRequest request, final Exception map) throws Exception {
 		// nothing to do
 	}

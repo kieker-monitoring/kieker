@@ -54,6 +54,9 @@ public class CPUsCombinedPercSampler extends AbstractSigarSampler {
 	 * {@inheritDoc}
 	 */
 	public void sample(final IMonitoringController monitoringController) throws SigarException {
+		if (!monitoringController.isMonitoringEnabled()) {
+			return;
+		}
 		if (!monitoringController.isProbeActivated(SignatureFactory.createCPUSignature())) {
 			return;
 		}

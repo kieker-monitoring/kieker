@@ -33,6 +33,9 @@ import kieker.tools.util.LoggingTimestampConverter;
 /**
  * This class is a container for a whole trace of executions (represented as instances of {@link Execution}).
  * 
+ * Note that no assumptions about the {@link java.util.concurrent.TimeUnit} used for the
+ * timestamps are made.
+ * 
  * @author Andre van Hoorn
  * 
  * @since 0.95a
@@ -202,6 +205,11 @@ public class ExecutionTrace extends AbstractTrace {
 	/**
 	 * Returns a sorted set (unmodifiable) of {@link Execution}s in this trace.
 	 * 
+	 * Note that the returned data structure is the (wrapped )internal data structure of this {@link ExecutionTrace} object, to which further elements may be added
+	 * by the {@link kieker.tools.traceAnalysis.systemModel.ExecutionTrace#add(Execution)} method. Consider to create a copy
+	 * of the returned list, while
+	 * synchronizing on this (i.e., the {@link ExecutionTrace}) object.
+	 * 
 	 * @return the sorted set of {@link Execution}s in this trace
 	 */
 	public final SortedSet<Execution> getTraceAsSortedExecutionSet() {
@@ -275,13 +283,14 @@ public class ExecutionTrace extends AbstractTrace {
 	}
 
 	/**
-	 * Returns the duration of this (possible incomplete) trace in nanoseconds.
-	 * This value is the difference between the maximum tout and the minimum
-	 * tin value.
+	 * Returns the duration of this (possibly incomplete) trace.
 	 * 
-	 * @return the duration of this trace in nanoseconds.
+	 * This value is the difference between the maximum tout and the minimum
+	 * tin value. Note that no specific assumptions about the {@link java.util.concurrent.TimeUnit} are made.
+	 * 
+	 * @return the duration of this trace.
 	 */
-	public long getDurationInNanos() {
+	public long getDuration() {
 		synchronized (this) {
 			return this.getMaxTout() - this.minTin;
 		}

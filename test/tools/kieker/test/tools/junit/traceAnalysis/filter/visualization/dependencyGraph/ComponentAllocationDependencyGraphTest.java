@@ -35,6 +35,7 @@ import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.Component
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.DependencyGraphNode;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.ComponentType;
+import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.tools.util.graph.DependencyGraphTestUtil;
@@ -65,7 +66,6 @@ public class ComponentAllocationDependencyGraphTest extends AbstractKiekerTest {
 	private static final String OPERATION_SIGNATURE_1 = TYPE_NAME_1 + "." + OPERATION_NAME_1 + PARAMETERS;
 	private static final String OPERATION_SIGNATURE_2 = TYPE_NAME_2 + "." + OPERATION_NAME_2 + PARAMETERS;
 
-	private static final String ROOT_COMPONENT_NAME = "$";
 	private static final String EXPECTED_ALLOCATION_COMPONENT_NAME_1 = "@1";
 	private static final String EXPECTED_ALLOCATION_COMPONENT_NAME_2 = "@2";
 
@@ -128,7 +128,7 @@ public class ComponentAllocationDependencyGraphTest extends AbstractKiekerTest {
 		Assert.assertEquals(TYPE_NAME_2, type2.getTypeName());
 
 		// Inspect the edges
-		final DependencyGraphNode<AllocationComponent> rootNode = nodeMap.get(ROOT_COMPONENT_NAME);
+		final DependencyGraphNode<AllocationComponent> rootNode = nodeMap.get(SystemModelRepository.ROOT_NODE_LABEL);
 		final DependencyGraphNode<AllocationComponent> type1Node = nodeMap.get(EXPECTED_ALLOCATION_COMPONENT_NAME_1);
 		final DependencyGraphNode<AllocationComponent> type2Node = nodeMap.get(EXPECTED_ALLOCATION_COMPONENT_NAME_2);
 

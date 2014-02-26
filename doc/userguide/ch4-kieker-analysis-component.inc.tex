@@ -43,8 +43,8 @@ print the received records to the standard output stream.
 % other analysis plugins can be registered. %
 
 \begin{figure}\centering
-\includegraphics[width=0.95\textwidth]{images/kieker_AnalysisControlleruserguide-modified}
-\caption{Class diagram showing important \KiekerAnalysisPart{} classes and their relationship}
+\includegraphics[width=\textwidth]{images/kieker_AnalysisControlleruserguide-modified}
+\caption{Class diagram showing important \KiekerAnalysisPart{} types and their relationship}
 \label{fig:analysisController:classdiagram}
 \end{figure}
 
@@ -190,6 +190,11 @@ and structures discovered while processing the incoming monitoring data. %
 The development and use of repositories is detailed in Section~%
 \ref{sec:analysis:repositories}. %
 
+When using components of the \KiekerTraceAnalysis{}, make sure that write access to the %
+\class{SystemModelRepository} is only triggered by readers. Some filters are terminated %
+after the readers and expect the repository to be in a completed state.
+
+
 \section{Developing Analysis Plugins and Repositories}\label{sec:analysis:plugins}
 
 When implementing analysis plugins (i.e., readers or filters) and repositories, %
@@ -241,13 +246,15 @@ The \class{AnalysisController} uses the \method{getCurrentConfiguration} to %
 save the pipe-and-filter configuration. Listing~\ref{listing:MyResponseTimeFilterEventsToOutput} %
 shows how the methods are implemented for the example filter \class{MyResponseTimeFilter}. %
 
+\enlargethispage{1cm}
+
 \setJavaCodeListing
-\lstinputlisting[firstline=74, firstnumber=74, lastline=79, caption={Plugin returning its current configuration}, label=listing:MyResponseTimeFilterEventsToOutput]%
+\lstinputlisting[firstline=69, firstnumber=69, lastline=74, caption={Plugin returning its current configuration}, label=listing:MyResponseTimeFilterEventsToOutput]%
 {\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyResponseTimeFilter.java}
 
 \noindent The declaration of the available properties and their default values within a plugin is shown in section~\ref{sec:analysis:pluginAnnotation}, as this is done with annotations.
 
-\pagebreak
+% \pagebreak
 
 \subsection{@Plugin Annotation and Output Ports}\label{sec:analysis:pluginAnnotation}
 
@@ -289,10 +296,10 @@ output port name and the event to be sent as arguments. Listing~%
 shows how the example filter plugin \class{MyResponseTimeFilter} delivers records %
 to its two output ports declared in the \class{@Plugin} annotation.
 
-\pagebreak
+% \pagebreak
 
 \setJavaCodeListing
-\lstinputlisting[firstline=65, firstnumber=65, lastline=71, caption={Plugin sending events to output ports}, label=listing:MyResponseTimeFilterDelivers]%
+\lstinputlisting[firstline=61, firstnumber=61, lastline=65, caption={Plugin sending events to output ports}, label=listing:MyResponseTimeFilterDelivers]%
 {\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyResponseTimeFilter.java}
 
 Listing~\ref{listing:MyResponseTimeFilterPluginAnnotationOutputs} shows also how %
@@ -345,7 +352,7 @@ constructor. In this case, the reader reads the pipe name from the %
 configuration and connects to the named pipe. Optionally, the reader can override the 
 \method{init} method.
 
-% \pagebreak
+ \pagebreak
 
 \setJavaCodeListing
 \lstinputlisting[firstline=55, firstnumber=55, lastline=61, caption={Example reader's initialization in the constructor (excerpt)}, label=listing:MyPipeReaderInit]%
@@ -358,8 +365,10 @@ configuration and connects to the named pipe. Optionally, the reader can overrid
 and forwards these to its output port.
 
 \setJavaCodeListing
-\lstinputlisting[firstline=69, firstnumber=69, lastline=88, caption={Example reader's \method{read} method}, label=listing:MyPipeReaderRead]%
+\lstinputlisting[firstline=64, firstnumber=64, lastline=83, caption={Example reader's \method{read} method}, label=listing:MyPipeReaderRead]%
 {\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeReader.java}
+
+\vspace{-0.2cm}
 
 \subsection{Developing Filter Plugins}\label{sec:analysis:filters}
 
@@ -369,9 +378,11 @@ In addition to providing meta information, including output ports, via the %
 (Section~\ref{sec:analysis:pluginAnnotation}), as well as implementing a constructor %
 and the getter for handling the \class{Configuration} (Section~\ref{sec:analysis:configuration}), %
 filters may override the methods \method{init} and %
-\method{terminate} methods, implementing initialization and cleanup tasks. %
+\method{terminate}, implementing initialization and cleanup tasks. %
 The \class{@Plugin} annotation of the example filter \class{MyResponseTimeFilter} %
 was shown in Listing~\ref{listing:MyResponseTimeFilterPluginAnnotationOutputs} already.
+
+\enlargethispage{1cm}
 
 Filters receive events via methods marked with the \class{@InputPort} %
 annotation. These methods must accept a single argument, which has to be %
@@ -386,12 +397,12 @@ Section~\ref{sec:analysis:programmaticCreation}. %
 Listing~\ref{listing:MyResponseTimeFilterInputPort} shows the declaration %
 of the input port provided by the example plugin \class{MyResponseTimeFilter}. %
 The body of this method was shown in Listing~%
-\ref{listing:MyResponseTimeFilterPluginAnnotationOutputs} already.
+\ref{listing:MyResponseTimeFilterDelivers} already.
 
 % \pagebreak
 
 \setJavaCodeListing
-\lstinputlisting[firstline=61, firstnumber=61, lastline=65, caption={@InputPort annotation for the example plugin's input method}, label=listing:MyResponseTimeFilterInputPort]%
+\lstinputlisting[firstline=56, firstnumber=56, lastline=60, caption={@InputPort annotation for the example plugin's input method}, label=listing:MyResponseTimeFilterInputPort]%
 {\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyResponseTimeFilter.java}
 
 \subsection{Developing and Accessing Required Repositories}\label{sec:analysis:repositories}
@@ -427,6 +438,6 @@ connection of repositories to readers and filters. %
 method provided by the super class, as shown in Listing~\ref{listing:RepositoryAccess}. %
 
 \setJavaCodeListing
-\lstinputlisting[firstline=169, firstnumber=169, lastline=170, caption={Accessing a repository within a plugin}, label=listing:RepositoryAccess]%
+\lstinputlisting[firstline=156, firstnumber=156, lastline=157, caption={Accessing a repository within a plugin}, label=listing:RepositoryAccess]%
 {../../src/tools/kieker/tools/traceAnalysis/filter/AbstractTraceAnalysisFilter.java}
 

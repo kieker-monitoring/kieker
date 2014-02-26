@@ -48,6 +48,8 @@ public class SystemModelRepository extends AbstractRepository {
 	public static final Execution ROOT_EXECUTION =
 			new Execution(OperationRepository.ROOT_OPERATION, AllocationRepository.ROOT_ALLOCATION_COMPONENT, -1, "-1", -1, -1, -1, -1, false);
 
+	public static final String ROOT_NODE_LABEL = "'Entry'";
+
 	private static final String ENCODING = "UTF-8";
 
 	private final TypeRepository typeRepositoryFactory;
@@ -132,10 +134,12 @@ public class SystemModelRepository extends AbstractRepository {
 		return strBuild.toString();
 	}
 
-	private void printOpenHtmlTable(final PrintStream ps, final String[] columnTitle) {
-		ps.println("<table border=\"1\"><tr>");
+	private void printOpenHtmlTable(final PrintStream ps, final String title, final String[] columnTitle) {
+		ps.println("<table class=\"tab\" border=\"1\">");
+		ps.println("<tr><th class=\"tabTitle\" colspan=\"" + columnTitle.length + "\">" + title + "</th></tr>");
+		ps.println("<tr>");
 		for (final String cell : columnTitle) {
-			ps.println("<th class=\"colTitle\">" + cell + "</th>");
+			ps.println("<th class=\"colTitle space\">" + cell + "</th>");
 		}
 		ps.println("</tr>");
 	}
@@ -143,7 +147,7 @@ public class SystemModelRepository extends AbstractRepository {
 	private void printHtmlTableRow(final PrintStream ps, final String[] cells) {
 		ps.println("<tr class=\"cell\">");
 		for (final String cell : cells) {
-			ps.println("<td>" + ((cell.length() == 0) ? "&nbsp;" : cell) + "</td>"); // NOCS
+			ps.println("<td class=\"space\">" + ((cell.length() == 0) ? "&nbsp;" : cell) + "</td>"); // NOCS
 		}
 		ps.println("</tr>");
 	}
@@ -178,12 +182,16 @@ public class SystemModelRepository extends AbstractRepository {
 	public void saveSystemToHTMLFile(final String outputFn) throws FileNotFoundException, UnsupportedEncodingException {
 		final PrintStream ps = new PrintStream(new FileOutputStream(outputFn), false, ENCODING);
 		ps.println("<html><head><title>System Model Reconstructed by Kieker.TraceAnalysis</title>");
-		ps.println("<style type=\"text/css\">\n" + ".colTitle { font-family:sans; font-size:11px; }\n" + ".cell { font-family:monospace; font-size:10px; }\n"
-				+ "h1 { font-family:sans; font-size:14px; }\n" + "</style>");
+		ps.println("<style type=\"text/css\">\n"
+				+ ".colTitle {font-size: 11px; background: linear-gradient(to bottom, #FDFDFD, #DDDDDD) transparent }\n"
+				+ ".cell {font-family: monospace; font-size: 10px; font-family: inherited}\n"
+				+ ".tabTitle {padding: 4px 4px; font-size: 12px; background: linear-gradient(to bottom, #FFFFFF, #CCEEFF) transparent; border: 1px solid #4DC4FF;"
+				+ "color: #333399}\n"
+				+ ".tab {border-collapse: collapse;  border: 1px solid #9D9D9D; font-family: \"Segoe UI\", \"Verdana\", \"Arial\", sans-serif}\n"
+				+ ".space{padding: 4px 10px;}\n" + "</style>");
 		ps.println("</head><body>");
 		this.htmlHSpace(ps, 10);
-		ps.println("<h1>Component Types</h1>");
-		this.printOpenHtmlTable(ps, new String[] { "ID", "Package", "Name", "Operations" });
+		this.printOpenHtmlTable(ps, "Component Types", new String[] { "ID", "Package", "Name", "Operations" });
 		final Collection<ComponentType> componentTypes = this.typeRepositoryFactory.getComponentTypes();
 		for (final ComponentType type : componentTypes) {
 			final StringBuilder opListBuilder = new StringBuilder();
@@ -199,8 +207,8 @@ public class SystemModelRepository extends AbstractRepository {
 			this.printHtmlTableRow(ps, cells);
 		}
 		this.printCloseHtmlTable(ps);
-		ps.println("<h1>Operations</h1>");
-		this.printOpenHtmlTable(ps, new String[] { "ID", "Component type", "Name", "Parameter types", "Return type" });
+		this.printLinebreak(ps);
+		this.printOpenHtmlTable(ps, "Operations", new String[] { "ID", "Component type", "Name", "Parameter types", "Return type" });
 		final Collection<Operation> operations = this.operationFactory.getOperations();
 		for (final Operation op : operations) {
 			final StringBuilder paramListStrBuild = new StringBuilder();
@@ -213,8 +221,8 @@ public class SystemModelRepository extends AbstractRepository {
 			this.printHtmlTableRow(ps, cells);
 		}
 		this.printCloseHtmlTable(ps);
-		ps.println("<h1>Assembly Components</h1>");
-		this.printOpenHtmlTable(ps, new String[] { "ID", "Name", "Component type" });
+		this.printLinebreak(ps);
+		this.printOpenHtmlTable(ps, "Assembly Components", new String[] { "ID", "Name", "Component type" });
 		final Collection<AssemblyComponent> assemblyComponents = this.assemblyFactory.getAssemblyComponentInstances();
 		for (final AssemblyComponent ac : assemblyComponents) {
 			final String[] cells = new String[] {
@@ -223,8 +231,8 @@ public class SystemModelRepository extends AbstractRepository {
 			this.printHtmlTableRow(ps, cells);
 		}
 		this.printCloseHtmlTable(ps);
-		ps.println("<h1>Execution Containers</h1>");
-		this.printOpenHtmlTable(ps, new String[] { "ID", "Name" });
+		this.printLinebreak(ps);
+		this.printOpenHtmlTable(ps, "Execution Containers", new String[] { "ID", "Name" });
 		final Collection<ExecutionContainer> containers = this.executionEnvironmentFactory.getExecutionContainers();
 		for (final ExecutionContainer container : containers) {
 			final String[] cells = new String[] {
@@ -233,8 +241,8 @@ public class SystemModelRepository extends AbstractRepository {
 			this.printHtmlTableRow(ps, cells);
 		}
 		this.printCloseHtmlTable(ps);
-		ps.println("<h1>Deployment Components</h1>");
-		this.printOpenHtmlTable(ps, new String[] { "ID", "Assembly component", "Execution container" });
+		this.printLinebreak(ps);
+		this.printOpenHtmlTable(ps, "Deployment Components", new String[] { "ID", "Assembly component", "Execution container" });
 		final Collection<AllocationComponent> allocationComponentInstances = this.allocationFactory.getAllocationComponentInstances();
 		for (final AllocationComponent allocationComponent : allocationComponentInstances) {
 			final String[] cells = new String[] {
@@ -251,6 +259,10 @@ public class SystemModelRepository extends AbstractRepository {
 		ps.println("</body></html>");
 		ps.flush();
 		ps.close();
+	}
+
+	private void printLinebreak(final PrintStream ps) {
+		ps.println("<br/>");
 	}
 
 	@Override

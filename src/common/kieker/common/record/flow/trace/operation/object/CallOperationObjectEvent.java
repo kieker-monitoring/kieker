@@ -16,17 +16,22 @@
 
 package kieker.common.record.flow.trace.operation.object;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.flow.ICallObjectRecord;
 import kieker.common.record.flow.trace.operation.CallOperationEvent;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Jan Waller
  * 
  * @since 1.6
  */
-public final class CallOperationObjectEvent extends CallOperationEvent implements ICallObjectRecord {
-	private static final long serialVersionUID = 5099289901643589844L;
-	private static final Class<?>[] TYPES = {
+public class CallOperationObjectEvent extends CallOperationEvent implements ICallObjectRecord {
+	public static final int SIZE = 44;
+	public static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
 		int.class, // TraceEvent.orderIndex
@@ -37,6 +42,8 @@ public final class CallOperationObjectEvent extends CallOperationEvent implement
 		int.class, // Caller objectId
 		int.class, // Callee objectId
 	};
+
+	private static final long serialVersionUID = 9070671586075257618L;
 
 	private final int callerObjectId;
 	private final int calleeObjectId;
@@ -101,6 +108,21 @@ public final class CallOperationObjectEvent extends CallOperationEvent implement
 	}
 
 	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public CallOperationObjectEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		super(buffer, stringRegistry);
+		this.callerObjectId = buffer.getInt();
+		this.calleeObjectId = buffer.getInt();
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -108,7 +130,23 @@ public final class CallOperationObjectEvent extends CallOperationEvent implement
 		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(),
 			this.getCallerOperationSignature(), this.getCallerClassSignature(),
 			this.getCalleeOperationSignature(), this.getCalleeClassSignature(),
-			this.callerObjectId, this.calleeObjectId, };
+			this.getCallerObjectId(), this.getCalleeObjectId(), };
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		buffer.putLong(this.getTimestamp());
+		buffer.putLong(this.getTraceId());
+		buffer.putInt(this.getOrderIndex());
+		buffer.putInt(stringRegistry.get(this.getCallerOperationSignature()));
+		buffer.putInt(stringRegistry.get(this.getCallerClassSignature()));
+		buffer.putInt(stringRegistry.get(this.getCalleeOperationSignature()));
+		buffer.putInt(stringRegistry.get(this.getCalleeClassSignature()));
+		buffer.putInt(this.getCallerObjectId());
+		buffer.putInt(this.getCalleeObjectId());
 	}
 
 	/**
@@ -116,7 +154,15 @@ public final class CallOperationObjectEvent extends CallOperationEvent implement
 	 */
 	@Override
 	public Class<?>[] getValueTypes() {
-		return TYPES.clone();
+		return TYPES; // NOPMD
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int getSize() {
+		return SIZE;
 	}
 
 	/**
@@ -124,7 +170,7 @@ public final class CallOperationObjectEvent extends CallOperationEvent implement
 	 * 
 	 * @return The ID of the caller.
 	 */
-	public int getObjectId() {
+	public final int getObjectId() {
 		return this.callerObjectId;
 	}
 

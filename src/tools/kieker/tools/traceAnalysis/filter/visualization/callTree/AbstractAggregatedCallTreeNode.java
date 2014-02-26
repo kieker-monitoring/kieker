@@ -37,6 +37,20 @@ public abstract class AbstractAggregatedCallTreeNode<T> extends AbstractCallTree
 	/** For faster lookup of existing children. */
 	protected final Map<Integer, WeightedDirectedCallTreeEdge<T>> childMap = new TreeMap<Integer, WeightedDirectedCallTreeEdge<T>>(); // NOPMD (not synchronized)
 
+	/**
+	 * This constructor uses the given parameters to initialize the fields of this class.
+	 * 
+	 * @param id
+	 *            The identifier of this node.
+	 * @param entity
+	 *            The content of this node.
+	 * @param rootNode
+	 *            Determines whether this node is the root node or not.
+	 * @param origin
+	 *            The meta data of this node.
+	 * @param originPolicy
+	 *            The origin policy.
+	 */
 	public AbstractAggregatedCallTreeNode(final int id, final T entity, final boolean rootNode, final MessageTrace origin,
 			final IOriginRetentionPolicy originPolicy) {
 		super(id, entity, rootNode, origin, originPolicy);

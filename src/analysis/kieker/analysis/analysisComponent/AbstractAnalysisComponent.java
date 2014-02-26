@@ -16,9 +16,12 @@
 
 package kieker.analysis.analysisComponent;
 
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import kieker.analysis.AnalysisController;
 import kieker.analysis.IProjectContext;
+import kieker.analysis.exception.InvalidProjectContextException;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -34,24 +37,23 @@ import kieker.common.logging.LogFactory;
  */
 public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 
-	/**
-	 * The name of the property for the name. This should normally only be used by Kieker.
-	 */
+	/** The name of the property for the name. This should normally only be used by Kieker. */
 	public static final String CONFIG_NAME = "name-hiddenAndNeverExportedProperty";
 
-	private static final Log LOG = LogFactory.getLog(AbstractAnalysisComponent.class);
+	protected static final Log LOG = LogFactory.getLog(AbstractAnalysisComponent.class); // NOPMD (logger for inheriting classes)
 
 	private static final AtomicInteger UNNAMED_COUNTER = new AtomicInteger(0);
 
-	/**
-	 * The project context of this component.
-	 */ 
+	/** The project context (usually the analysis controller) of this component. */
 	protected final IProjectContext projectContext;
 
-	/**
-	 * The current configuration of this component.
-	 */
+	/** The current configuration of this component. */
 	protected final Configuration configuration;
+	/** The log for this component. */
+	protected final Log log; // NOPMD (logger for inheriting classes)
+
+	/** The record time unit as provided by the project context. */
+	protected final TimeUnit recordsTimeUnitFromProjectContext;
 
 	private final String name;
 
@@ -62,23 +64,50 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 	 *            The configuration for this component.
 	 * @param projectContext
 	 *            The project context for this component. The component will be registered.
+	 * 
+	 * @throws NullPointerException
+	 *             If configuration or projectContext null
 	 */
 	public AbstractAnalysisComponent(final Configuration configuration, final IProjectContext projectContext) {
-		this.projectContext = projectContext;
-		try {
-			// somewhat dirty hack...
-			configuration.setDefaultConfiguration(this.getDefaultConfiguration());
-		} catch (final IllegalAccessException ex) {
-			LOG.error("Unable to set repository default properties"); // ok to ignore ex here
+		if (null == projectContext) {
+			throw new NullPointerException("Missing projectContext");
 		}
+		if (null == configuration) {
+			throw new NullPointerException("Missing configuration");
+		}
+		this.projectContext = projectContext;
+		// somewhat dirty hack...
+		configuration.setDefaultConfiguration(this.getDefaultConfiguration());
 		this.configuration = configuration;
+
+		// Get the controller, as we have to register the name
+		final AnalysisController ac;
+		if (projectContext instanceof AnalysisController) {
+			ac = (AnalysisController) projectContext;
+		} else {
+			throw new InvalidProjectContextException("Invalid analysis controller in constructor");
+		}
 
 		// Try to determine the name
 		String tmpName = configuration.getStringProperty(CONFIG_NAME);
-		if (tmpName.length() == 0) {
+		while ((tmpName.length() == 0) || !ac.tryRegisterComponentName(tmpName)) {
 			tmpName = this.getClass().getSimpleName() + '-' + UNNAMED_COUNTER.incrementAndGet();
 		}
 		this.name = tmpName;
+
+		// As we have now a name, we can create our logger
+		this.log = LogFactory.getLog(AbstractAnalysisComponent.class.getName() + "." + this.name);
+
+		// Try the record time unit
+		final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
+		TimeUnit recordTimeunit;
+		try {
+			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
+		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
+			this.log.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
+			recordTimeunit = TimeUnit.NANOSECONDS;
+		}
+		this.recordsTimeUnitFromProjectContext = recordTimeunit;
 	}
 
 	/**

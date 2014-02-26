@@ -16,14 +16,19 @@
 
 package kieker.examples.userguide.ch3and4bookstore;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.registry.IRegistry;
 
-public class MyResponseTimeRecord extends AbstractMonitoringRecord
-		implements IMonitoringRecord.Factory {
+public class MyResponseTimeRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
+	public static final int SIZE = 16;
+	public static final Class<?>[] TYPES = { String.class, String.class, long.class, };
 
-	private static final long serialVersionUID = 1775L;
-	private static final Class<?>[] TYPES = { String.class, String.class, long.class };
+	private static final long serialVersionUID = 7837873751833770201L;
 
 	// Attributes storing the actual monitoring data:
 	private final String className;
@@ -44,30 +49,51 @@ public class MyResponseTimeRecord extends AbstractMonitoringRecord
 		this.responseTimeNanos = (Long) values[2];
 	}
 
+	public MyResponseTimeRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		this.className = stringRegistry.get(buffer.getInt());
+		this.methodName = stringRegistry.get(buffer.getInt());
+		this.responseTimeNanos = buffer.getLong();
+	}
+
 	@Deprecated
 	// Will not be used because the record implements IMonitoringRecord.Factory
 	public final void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
 
-	public final Object[] toArray() {
-		return new Object[] { this.className, this.methodName, this.responseTimeNanos };
+	@Deprecated
+	// Will not be used because the record implements IMonitoringRecord.BinaryFactory
+	public final void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		throw new UnsupportedOperationException();
+	}
+
+	public Object[] toArray() {
+		return new Object[] { this.getClassName(), this.getMethodName(), this.getResponseTimeNanos(), };
+	}
+
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		buffer.putInt(stringRegistry.get(this.getClassName()));
+		buffer.putInt(stringRegistry.get(this.getMethodName()));
+		buffer.putLong(this.getResponseTimeNanos());
 	}
 
 	public Class<?>[] getValueTypes() {
-		return MyResponseTimeRecord.TYPES.clone();
+		return MyResponseTimeRecord.TYPES;
 	}
 
-	public String getClassName() {
+	public int getSize() {
+		return SIZE;
+	}
+
+	public final String getClassName() {
 		return this.className;
 	}
 
-	public String getMethodName() {
+	public final String getMethodName() {
 		return this.methodName;
 	}
 
-	public long getResponseTimeNanos() {
+	public final long getResponseTimeNanos() {
 		return this.responseTimeNanos;
 	}
-
 }
