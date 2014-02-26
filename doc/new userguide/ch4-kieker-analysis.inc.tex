@@ -12,13 +12,13 @@
 		\subsection{Readers}
 		
 			In order to develop own monitoring readers, you have to perform the following steps:
-			\begin{itemize}
+			\begin{enumerate}
 				\setlength{\itemsep}{-2pt}
 				\item Extend the class \class{AbstractReaderPlugin}
 				\item Add a constructor accepting a \class{Configuration} and an \class{IProjectContext} object as its only arguments
 				\item Implement the methods \method{init}, \method{read}, and \method{terminate}
 				\item Use the \class{@Plugin} annotation to add output ports
-			\end{itemize}
+			\end{enumerate}
 		
 			\noindent
 			We show this by developing an example reader named \class{MyPipeReader}. Reading monitoring records from the monitoring pipe introduced in the previous Chapter~\ref{chp:Kieker-Monitoring}, the reader provides received monitoring records via its output port.\\
