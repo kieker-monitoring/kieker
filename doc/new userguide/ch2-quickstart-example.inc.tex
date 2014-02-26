@@ -6,7 +6,7 @@
 	
 		Before we can start with the actual instrumentation, we have to compile our example.
 		\setBashListing
-		\begin{lstlisting}[gobble=6,caption=Commands to compile the Bookstore]
+		\begin{lstlisting}[gobble=6,caption=]
 			#\lstshellprompt{}# mkdir build
 			#\lstshellprompt{}# javac src/kieker/examples/userguide/ch2bookstore/*.java -d build/
 		\end{lstlisting} 
@@ -21,21 +21,39 @@
 		\end{enumerate}
 	
 		\noindent
-		For the first two steps, we copy the \dir{META-INF} folder from the root directory into \dir{\plainBookstoreApplicationDirDistro}. This folder contains the necessary configuration files for both AspectJ and \Kieker{}. Additionally we have to copy the \file{dist/\mainJarWeaver} into a new \dir{lib} directory in the directory of the bookstore example. This jar file contains not only \Kieker{}, but AspectJ as well. For the third step we can use the following command.
+		For the first two steps, we copy the \dir{META-INF} folder from the root directory into the \dir{build} directory. This folder contains the necessary configuration files for both AspectJ and \Kieker{}. Additionally we have to copy the \file{dist/\mainJarWeaver} into a new \dir{lib} directory in the directory of the bookstore example. This jar file contains not only \Kieker{}, but AspectJ as well. For the third step we can use the following command.
 		
 		\setBashListing
-		\begin{lstlisting}[gobble=6,caption=Command to run the Bookstore]			
-			#\lstshellprompt{}# java -javaagent:lib/#\mainJarWeaver# -classpath build/
+		\begin{lstlisting}[gobble=6,caption=]			
+			#\lstshellprompt{}# java -javaagent:lib/#\mainJarWeaver# -classpath build
 			    kieker.examples.userguide.ch2bookstore.BookstoreStarter
 		\end{lstlisting} 
 		
 		\noindent
-		By executing the instrumented example, \Kieker{} produces monitoring data (e.g., in \dir{kieker-20140224-152329453-UTC-Laptop-KIEKER}), which can be found in the system's temporary folder.
+		By executing the instrumented example, \Kieker{} produces monitoring data (e.g., in a folder \dir{kieker-20140224-152329453-UTC-Laptop-KIEKER}), which can be found in the system's temporary folder.
 	
 	\section{Analysis}
 	
-		After we have created some monitoring logs, we use our Trace Analysis Tool to visualize the results. In order to use this tool, we have to install Graphviz (\url{http://www.graphviz.org}) first. \\
+		After we have created some monitoring logs, we use our Trace Analysis Tool to visualize the results. In order to use this tool, we have to install Graphviz (\url{http://www.graphviz.org}) first and add it to your system's path. \\
 
-		\NOTIFYBOX{The Trace Analysis Tool is just one way to process monitoring data. It is always possible to use self-defined analyses. We show this in Chapter~\ref{chp:Kieker-Analysis}}.		
+		\NOTIFYBOX{The Trace Analysis Tool is just one way to process monitoring data. It is always possible to use self-defined analyses. We show this in Chapter~\ref{chp:Kieker-Analysis}.}	
 		
-		Our Trace Analysis Tool can be used to generate various graphs. However, we will generate only two of these graphs.
+		\noindent
+		Our Trace Analysis Tool can be used to generate various graphs. However, we will generate only two of these graphs: A call tree and a component overview. We use the script \file{trace-analysis.sh|bat} which can be found in the \dir{bin} directory of the release. We create a folder named \dir{out} in the \dir{bin} directory and use the following command to generate the graphs (the input directory has of course to be adjusted in order to match the directory with the monitoring log created in the previous section).
+		
+		\setBashListing
+		\begin{lstlisting}[gobble=6,caption=]			
+			#\lstshellprompt{}# trace-analysis.sh -i /tmp/kieker-20140224-152329453-UTC-Laptop-KIEKER -o out 
+			    --plot-Aggregated-Assembly-Call-Tree  --plot-Assembly-Component-Dependency-Graph
+		\end{lstlisting} 
+		
+		\noindent
+		The results are two \file{.dot} files in the \dir{out} directory. They can be converted using the script \file{dotPic-fileConverter.sh|bat} (which is just a wrapper for the Graphviz tool).
+		
+		\setBashListing
+		\begin{lstlisting}[gobble=6,caption=]			
+			#\lstshellprompt{}# dotPic-fileConverter.sh out png
+		\end{lstlisting} 
+		
+		\noindent
+		Now, we have two \file{.png} files in the \dir{out} directory, each containing a different visual representation of the monitoring.
