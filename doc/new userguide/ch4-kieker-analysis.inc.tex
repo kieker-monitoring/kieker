@@ -1,9 +1,47 @@
 \chapter{Kieker Analysis}\label{chp:Kieker-Analysis}
-	\section{The Concept behind the Analysis}
+	\section{The Concept behind the Analysis}	
 		\subsection{Data Flow}
 		\subsection{Analysis Components}
 	\section{Creating and Controlling the Analysis}
 	\section{Development of own Analysis Components}
+	
+		 Although \Kieker{} is shipped with various components, you might want to develop more specific analysis filters for your needs or require a monitoring reader to import your very own monitoring logs into \Kieker{}. On this account we describe how to develop own analysis components in this section.
+	
+		\subsection{General Remarks about Plugins}
+		
 		\subsection{Readers}
+		
+			In order to develop own monitoring readers, you have to perform the following steps:
+			\begin{itemize}
+				\setlength{\itemsep}{-2pt}
+				\item Extend the class \class{AbstractReaderPlugin}
+				\item Add a constructor accepting a \class{Configuration} and an \class{IProjectContext} object as its only arguments
+				\item Implement the methods \method{init}, \method{read}, and \method{terminate}
+				\item Use the \class{@Plugin} annotation to add output ports
+			\end{itemize}
+		
+			\noindent
+			We show this by developing an example reader named \class{MyPipeReader}. Reading monitoring records from the monitoring pipe introduced in the previous Chapter~\ref{chp:Kieker-Monitoring}, the reader provides received monitoring records via its output port.\\
+		
+			\noindent 
+			The first step is straightforward. We simply create a new class and extend the mentioned class.
+			\setJavaCodeListing
+			\lstinputlisting[firstline=42, firstnumber=42, lastline=42, caption={}, label=listing:MyPipeReaderInit]{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeReader.java}
+			
+			\noindent 
+			For the second step we have to create and implement the constructor. In our case, the reader reads the pipe name from the configuration and connects to the named pipe. Optionally, the reader can override the \method{init} method.
+		
+			\setJavaCodeListing
+			\lstinputlisting[firstline=52, firstnumber=52, lastline=62, caption={}, label=listing:MyPipeReaderInit]{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeReader.java}
+			
+			\noindent
+			The \method{init}, \method{read}, and \method{terminate} methods from the third step are called by the \class{AnalysisController} to trigger the reader's initialization, reading, and termination. As the \method{init} and \method{terminate} methods can remain empty for our example, we show only the implementation of the \method{read} method for the third step. Readers start reading on invocation of the \method{read} method, providing the obtained records to connected filters via the declared output port(s). The \method{read} method should be implemented synchronously, i.e., it should return after reading is finished or has been aborted via an invocation of the \method{terminate} method. In our case, the reader polls the pipe for new records and forwards these to its output port.
+			
+			\setJavaCodeListing
+			\lstinputlisting[firstline=64, firstnumber=64, lastline=83, caption={}, label=listing:MyPipeReaderRead] {\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeReader.java}
+		
+			\noindent 
+			For the last step, 
+		
 		\subsection{Filters}
 		\subsection{Repositories}
