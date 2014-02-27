@@ -37,53 +37,79 @@
 	<aspects>
 		<!-- Use the aspect directives to specify the aspect(s) to use (typically only one). -->
 
+		<!-- KiekerOperationExecution Aspects (State Based Monitoring) -->
+		<!-- ################## -->
+		
+		<!-- This aspect makes sure that all methods annotated with @OperationExecutionMonitoringProbe are instrumented. -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectAnnotation"/> -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectAnnotationServlet"/> -->
+		<!-- This aspect makes sure that all methods are instrumented. -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFull"/> -->
+		<!-- This aspect makes sure that all methods are instrumented. However, getters (including is.. for booleans) and setters are excluded.  -->
 		<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFullNoGetterAndSetter"/>
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFullServlet"/> -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFullNoGetterAndSetterServlet"/> -->
 		
-		<!-- KiekerFlow Aspects -->
+		<!-- KiekerFlow Aspects (Event Based Monitoring) -->
 		<!-- ################## -->
 		
-		<!-- Concurrency -->
+		<!-- Concurrency (Beta Stated) -->
+		<!-- This aspect makes sure that the creation of threads are monitored. />
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.concurrency.ThreadingAspect" /> -->
+		<!-- This aspect makes sure that synchronizations are monitored. />
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.concurrency.SynchronizedAspect" /> -->
 		
 		<!-- Construction -->
+		<!-- This aspect makes sure that the execution of all constructors are instrumented. -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.construction.FullInstrumentation" /> -->
+		<!-- This aspect makes sure that the execution of all constructors annotated with @ConstructionMonitoringProbe are instrumented. -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.construction.Annotation" /> -->
 
 		<!-- ConstructorExecution -->
+		<!-- This aspect makes sure that the execution of all constructors are instrumented. -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.constructorExecution.FullInstrumentation" /> -->
+		<!-- This aspect makes sure that the execution of all constructors annotated with @ConstructionMonitoringProbe are instrumented. -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.constructorExecution.Annotation" /> -->
 
 		<!-- ConstructorCall -->
+		<!-- This aspect makes sure that the call of all constructors are instrumented. -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.constructorCall.FullInstrumentation" /> -->
+		<!-- This aspect makes sure that the call of all constructors within methods annotated with @OperationExecutionMonitoringProbe are instrumented. -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.constructorCall.Annotation" /> -->
 		
 		<!-- OperationExecution -->
+		<!-- This aspect makes sure that all methods are instrumented. -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecution.FullInstrumentation" /> -->
+		<!-- This aspect makes sure that all methods are instrumented. However, getters (including is.. for booleans) and setters are excluded.  -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecution.FullInstrumentationNoGetterAndSetter" /> -->
+		<!-- This aspect makes sure that all methods annotated with @OperationExecutionMonitoringProbe are instrumented. -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecution.Annotation" /> -->
-
+		
 		<!-- OperationExecutionObject -->
+		<!-- This aspect makes sure that all methods are instrumented. -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecutionObject.FullInstrumentation" /> -->
+		<!-- This aspect makes sure that all methods are instrumented. However, getters (including is.. for booleans) and setters are excluded.  -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecutionObject.FullInstrumentationNoGetterAndSetter" /> -->
+		<!-- This aspect makes sure that all methods annotated with @OperationExecutionMonitoringProbe are instrumented. -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecutionObject.Annotation" /> -->
 
 		<!-- OperationCall -->
+		<!-- This aspect makes sure that all methods are instrumented. -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationCall.FullInstrumentation" /> -->
+		<!-- This aspect makes sure that all methods are instrumented. However, getters (including is.. for booleans) and setters are excluded.  -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationCall.FullInstrumentationNoGetterAndSetter" /> -->
+		<!-- This aspect makes sure that all methods annotated with @OperationExecutionMonitoringProbe are instrumented. -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationCall.Annotation" /> -->
 		
 		<!-- ObjectOperationCall -->
+		<!-- This aspect makes sure that all methods are instrumented. -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationCallObject.FullInstrumentation" /> -->
+		<!-- This aspect makes sure that all methods are instrumented. However, getters (including is.. for booleans) and setters are excluded.  -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationCallObject.FullInstrumentationNoGetterAndSetter" /> -->
+		<!-- This aspect makes sure that all methods annotated with @OperationExecutionMonitoringProbe are instrumented. -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationCallObject.Annotation" /> -->
 		
-		<!-- Definition of additional targeted aspects (example for a single additional getter) -->
+		<!-- Definition of additional targeted aspects (example for a single additional getter). Use these directives to create additional aspects without the need to actually implement them. -->
 		<!--  
 		<concrete-aspect name="kieker.monitoring.probe.aspectj.flow.operationExecution.TargetedAspect" extends="kieker.monitoring.probe.aspectj.flow.operationExecution.AbstractAspect">
 			<pointcut name="monitoredOperation" expression="execution(int kiekerFlow.TestFlow.getA())" />
