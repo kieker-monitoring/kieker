@@ -24,8 +24,6 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.namedRecordPipe.Broker;
 import kieker.common.namedRecordPipe.IPipeReader;
 import kieker.common.namedRecordPipe.Pipe;
@@ -57,8 +55,6 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 	/** The default used pipe name. */
 	public static final String CONFIG_PROPERTY_VALUE_PIPENAME_DEFAULT = "kieker-pipe";
 
-	private static final Log LOG = LogFactory.getLog(PipeReader.class);
-
 	private volatile Pipe pipe;
 	private final String pipeName;
 	private final CountDownLatch terminationLatch = new CountDownLatch(1);
@@ -81,25 +77,12 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 		if (this.pipe == null) {
 			throw new IllegalArgumentException("Failed to get Pipe with name " + pipeNameConfig);
 		} else {
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("Connected to named pipe '" + this.pipe.getName() + "'");
+			if (this.log.isDebugEnabled()) {
+				this.log.debug("Connected to named pipe '" + this.pipe.getName() + "'");
 			}
 		}
 		// escaping this in constructor! very bad practice!
 		this.pipe.setPipeReader(this);
-	}
-
-	/**
-	 * Creates a new instance of this class using the given parameter.
-	 * 
-	 * @param configuration
-	 *            The configuration used to load the pipe name. It <b>must</b> contain the property {@link #CONFIG_PROPERTY_NAME_PIPENAME}.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public PipeReader(final Configuration configuration) {
-		this(configuration, null);
 	}
 
 	/**
@@ -111,9 +94,9 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 		// No need to initialize since we receive asynchronously
 		try {
 			this.terminationLatch.await();
-			LOG.info("Pipe closed. Will terminate.");
+			this.log.info("Pipe closed. Will terminate.");
 		} catch (final InterruptedException ex) {
-			LOG.error("Received InterruptedException", ex);
+			this.log.error("Received InterruptedException", ex);
 			return false;
 		}
 		return true;

@@ -16,8 +16,13 @@
 
 package kieker.common.record.flow.trace.operation;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.flow.ICallRecord;
 import kieker.common.record.flow.IOperationRecord;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Andre van Hoorn, Holger Knoche, Jan Waller
@@ -25,8 +30,8 @@ import kieker.common.record.flow.IOperationRecord;
  * @since 1.5
  */
 public class CallOperationEvent extends AbstractOperationEvent implements ICallRecord {
-	private static final long serialVersionUID = 1193776099551467929L;
-	private static final Class<?>[] TYPES = {
+	public static final int SIZE = 36;
+	public static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
 		int.class, // TraceEvent.orderIndex
@@ -36,11 +41,11 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 		String.class, // calleeClassSiganture
 	};
 
-	/**
-	 * This field should not be exported, because it makes little sense to have no associated class.
-	 */
+	/** This field should not be exported, because it makes little sense to have no associated class. */
 	private static final String NO_CALLEEOPERATIONSIGANTURE = "<no-calleeOperationSiganture>";
 	private static final String NO_CALLEECLASSSIGANTURE = ""; // default is empty
+
+	private static final long serialVersionUID = 4139428237569727507L;
 
 	private final String calleeOperationSignature;
 	private final String calleeClassSignature;
@@ -97,8 +102,24 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	}
 
 	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public CallOperationEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		super(buffer, stringRegistry);
+		this.calleeOperationSignature = stringRegistry.get(buffer.getInt());
+		this.calleeClassSignature = stringRegistry.get(buffer.getInt());
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object[] toArray() {
 		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(),
 			this.getCallerOperationSignature(), this.getCallerClassSignature(),
@@ -108,8 +129,31 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		buffer.putLong(this.getTimestamp());
+		buffer.putLong(this.getTraceId());
+		buffer.putInt(this.getOrderIndex());
+		buffer.putInt(stringRegistry.get(this.getCallerOperationSignature()));
+		buffer.putInt(stringRegistry.get(this.getCallerClassSignature()));
+		buffer.putInt(stringRegistry.get(this.getCalleeOperationSignature()));
+		buffer.putInt(stringRegistry.get(this.getCalleeClassSignature()));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public Class<?>[] getValueTypes() {
-		return TYPES.clone();
+		return TYPES; // NOPMD
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int getSize() {
+		return SIZE;
 	}
 
 	public final String getCallerOperationSignature() {

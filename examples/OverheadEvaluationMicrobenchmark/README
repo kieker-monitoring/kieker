@@ -1,55 +1,6 @@
-This example contains micro-benchmarks to quantify the performance
-overhead caused by the Kieker framework components. 
+MooBench  http://kieker-monitoring.net/MooBench
+-----------------------------------------------
 
-All experiments employ AspectJ for weaving the monitoring probes 
-into the application. The Java methods to be instrumented are 
-selected using Java annotations.
+The Overhead Evaluation Microbenchmark moved to its own git repository:
 
-Currently only shell (.sh) scripts are provided.
-
-The default execution of the benchmark requires a 64Bit JVM!
-This can be changed in the respective .sh scripts.
-
-Files required in /lib:
-  kieker-*_aspectj.jar         (a current build of Kieker)
-  commons-cli-1.2.jar
-
-Initially, the following steps are required:
-1. You should check whether you installed ant (http://ant.apache.org/), 
-   since the execution of all examples described in this 
-   README is based on the run-targets in the ant file build.xml.
-2. Make sure, that you've installed R (http://www.r-project.org/) to 
-   generate the results.
-3. Compile the application by calling ant.
-
-Execution of the micro-benchmark:
-All benchmarks are started with calls of .sh scripts in the /bin folder.
-The top of the files include some possibilities for configuration, such as
-* SLEEPTIME between executions
-* NUM_LOOPS number of repetitions
-* THREADS concurrent benchmarking threads
-* MAXRECURSIONDEPTH recursion up to this depth
-* TOTALCALLS the duration of the benchmark
-* METHODTIME the time per monitored call
-Furthermore some JVM arguments can be adjusted:
-* JAVAARGS JVM Arguments
-
-Experiments:
-Different recursion depth (with MAXRECURSIONDEPTH=1 one can test without recursion)
--> bin/run-benchmark-recursive.sh
-
-To check for a linear rise in monitoring overhead, this benchmark increases the 
-recursion depth up to 2^MAXRECURSIONDEPTH in logarithmic steps
--> bin/run-benchmark-recursive-linear.sh
-
-Benchmarking the JMX-writer
--> bin/run-benchmark-recursive-jmx.sh
-
-The experiments run-cycle*.sh and their used files run-benchmark-cycle-*.sh are 
-currently only supporting Solaris environments and require pfexec permissions to
-assign subsets of cores to the benchmarking system.
-
-Analyzing the data:
-in the folder /bin/r-scripts are some R scripts provided to generate graphs to
-visualize the results. In the top the files, one can configure the required paths
-and the configuration used to analyze the data.
+  http://build.se.informatik.uni-kiel.de/gitlab/kieker/moobench

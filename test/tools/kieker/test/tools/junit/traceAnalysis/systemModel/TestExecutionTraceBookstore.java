@@ -24,6 +24,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import kieker.analysis.AnalysisController;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.filter.traceReconstruction.InvalidTraceException;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
@@ -60,13 +61,16 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 	private volatile Execution exec2_1__crm_getOrders; // NOPMD NOCS (VariableNamingConventions)
 	private volatile Execution exec3_2__catalog_getBook; // NOPMD NOCS (VariableNamingConventions)
 
+	/**
+	 * Default constructor.
+	 */
 	public TestExecutionTraceBookstore() {
 		// empty default constructor
 	}
 
 	@Before
 	public void setUp() throws Exception {
-		final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration(), null);
+		final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration(), new AnalysisController());
 		this.eFactory = new ExecutionFactory(systemEntityFactory);
 
 		int myNumExecutions = 0;
@@ -298,7 +302,7 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 		Assert.assertEquals(msgArray.length, this.numExecutions * 2);
 
 		int curIdx = 0;
-		{ // 1.: [0,0].Call $->bookstore.searchBook(..) // NOCS
+		{ // 1.: [0,0].Call #->bookstore.searchBook(..) // NOCS
 			final AbstractMessage call0_0___root__bookstore_searchBook = msgArray[curIdx++]; // NOCS
 			Assert.assertTrue("Message is not a call", call0_0___root__bookstore_searchBook instanceof SynchronousCallMessage);
 			Assert.assertEquals("Sending execution is not root execution", call0_0___root__bookstore_searchBook.getSendingExecution(),

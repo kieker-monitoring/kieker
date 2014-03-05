@@ -37,6 +37,9 @@ import kieker.monitoring.writer.filesystem.AsyncBinaryFsWriter;
  */
 public class ContinueAfterUnknownTypeNotForBinaryTest extends AbstractUnknownTypeTest { // NOPMD (TestClassWithoutTestCases)
 
+	/**
+	 * Creates a new instance of this class.
+	 */
 	public ContinueAfterUnknownTypeNotForBinaryTest() {
 		// empty default constructor
 	}

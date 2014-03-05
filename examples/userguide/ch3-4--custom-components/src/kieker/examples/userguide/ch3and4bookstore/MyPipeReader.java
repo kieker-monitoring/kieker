@@ -22,8 +22,6 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 
@@ -44,8 +42,6 @@ public class MyPipeReader extends AbstractReaderPlugin {
 	public static final String OUTPUT_PORT_NAME = "outputPort";
 	public static final String CONFIG_PROPERTY_NAME_PIPE_NAME = "pipeName";
 
-	private static final Log LOG = LogFactory.getLog(MyPipeReader.class);
-
 	private final String pipeName;
 	private volatile MyPipe pipe;
 
@@ -57,13 +53,8 @@ public class MyPipeReader extends AbstractReaderPlugin {
 		try {
 			this.pipe = MyNamedPipeManager.getInstance().acquirePipe(this.pipeName);
 		} catch (final Exception ex) {
-			LOG.error("Failed to acquire pipe '" + this.pipeName + "'", ex);
+			this.log.error("Failed to acquire pipe '" + this.pipeName + "'", ex);
 		}
-	}
-
-	@Deprecated
-	public MyPipeReader(final Configuration configuration) {
-		this(configuration, null);
 	}
 
 	public boolean read() {

@@ -23,7 +23,6 @@ import java.util.concurrent.TimeUnit;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
 
 /**
  * A timer implementation, counting in nanoseconds since a specified offset.
@@ -84,8 +83,12 @@ public final class SystemNanoTimer extends AbstractTimeSource {
 		return this.timeunit.convert(System.nanoTime() - this.offset, TimeUnit.NANOSECONDS);
 	}
 
-	public final String getTimeUnit() {
-		return this.timeunit.name();
+	public long getOffset() {
+		return this.timeunit.convert(this.offset - this.clockdifference, TimeUnit.NANOSECONDS);
+	}
+
+	public final TimeUnit getTimeUnit() {
+		return this.timeunit;
 	}
 
 	@Override
@@ -96,28 +99,4 @@ public final class SystemNanoTimer extends AbstractTimeSource {
 		return sb.toString();
 	}
 
-	/**
-	 * @return a singleton instance of SystemNanoTimer
-	 * 
-	 * @deprecated to be removed in Kieker 1.8
-	 */
-	@Deprecated
-	public static final ITimeSource getInstance() {
-		return LazyHolder.INSTANCE;
-	}
-
-	/**
-	 * SINGLETON.
-	 * 
-	 * @deprecated to be removed in Kieker 1.8
-	 */
-	@Deprecated
-	private static final class LazyHolder {
-		static final ITimeSource INSTANCE = new SystemNanoTimer(ConfigurationFactory.createDefaultConfiguration().getPropertiesStartingWith(// NOPMD package
-				SystemNanoTimer.class.getName()));
-
-		private LazyHolder() {
-			// private default constructor
-		}
-	}
 }

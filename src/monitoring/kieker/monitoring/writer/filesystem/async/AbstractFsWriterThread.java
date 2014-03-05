@@ -26,9 +26,9 @@ import java.util.TimeZone;
 import java.util.concurrent.BlockingQueue;
 
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.misc.RegistryRecord;
 import kieker.common.util.filesystem.FSUtil;
 import kieker.monitoring.core.controller.IMonitoringController;
-import kieker.monitoring.core.registry.RegistryRecord;
 import kieker.monitoring.writer.AbstractAsyncThread;
 import kieker.monitoring.writer.filesystem.map.MappingFileWriter;
 
@@ -99,6 +99,7 @@ public abstract class AbstractFsWriterThread extends AbstractAsyncThread {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	protected final void consume(final IMonitoringRecord monitoringRecord) throws Exception {
 		if (monitoringRecord instanceof RegistryRecord) {
 			this.mappingFileWriter.write((RegistryRecord) monitoringRecord);

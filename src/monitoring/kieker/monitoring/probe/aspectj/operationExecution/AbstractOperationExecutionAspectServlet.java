@@ -44,6 +44,9 @@ public abstract class AbstractOperationExecutionAspectServlet extends AbstractOp
 
 	@Around("monitoredServlet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse) && notWithinKieker()")
 	public Object servlet(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
+		if (!CTRLINST.isMonitoringEnabled()) {
+			return thisJoinPoint.proceed();
+		}
 		if (!CTRLINST.isProbeActivated(this.signatureToLongString(thisJoinPoint.getSignature()))) {
 			return thisJoinPoint.proceed();
 		}

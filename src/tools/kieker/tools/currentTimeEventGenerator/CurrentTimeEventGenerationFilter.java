@@ -25,8 +25,6 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.TimestampRecord;
 
@@ -82,8 +80,6 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 	public static final String CONFIG_PROPERTY_NAME_TIMEUNIT = "timeunit";
 	public static final String CONFIG_PROPERTY_VALUE_TIMEUNIT = "NANOSECONDS"; // TimeUnit.NANOSECONDS.name()
 
-	private static final Log LOG = LogFactory.getLog(CurrentTimeEventGenerationFilter.class);
-
 	/**
 	 * Timestamp of the record that was received first. Notice, that this is not
 	 * necessarily the lowest timestamp.
@@ -116,44 +112,18 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 	public CurrentTimeEventGenerationFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
-		if (null != projectContext) { // TODO #819 remove non-null check and else case in Kieker 1.8)
-			final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
-			TimeUnit recordTimeunit;
-			try {
-				recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
-			} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
-				LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
-				recordTimeunit = TimeUnit.NANOSECONDS;
-			}
-			this.timeunit = recordTimeunit;
-		} else {
-			this.timeunit = TimeUnit.NANOSECONDS;
-		}
+		this.timeunit = super.recordsTimeUnitFromProjectContext;
 
 		final String configTimeunitProperty = configuration.getStringProperty(CONFIG_PROPERTY_NAME_TIMEUNIT);
 		TimeUnit configTimeunit;
 		try {
 			configTimeunit = TimeUnit.valueOf(configTimeunitProperty);
 		} catch (final IllegalArgumentException ex) {
-			LOG.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + this.timeunit.name() + " instead.");
+			this.log.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + this.timeunit.name() + " instead.");
 			configTimeunit = this.timeunit;
 		}
 
 		this.timerResolution = this.timeunit.convert(configuration.getLongProperty(CONFIG_PROPERTY_NAME_TIME_RESOLUTION), configTimeunit);
-	}
-
-	/**
-	 * Creates an event generator which generates time events with the given resolution in timeunits via the output port
-	 * {@link #OUTPUT_PORT_NAME_CURRENT_TIME_RECORD}.
-	 * 
-	 * @param configuration
-	 *            The configuration to be used for this plugin.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public CurrentTimeEventGenerationFilter(final Configuration configuration) {
-		this(configuration, null);
 	}
 
 	/**
@@ -178,7 +148,7 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 	@InputPort(name = INPUT_PORT_NAME_NEW_TIMESTAMP, description = "Receives a new timestamp as a time event", eventTypes = { Long.class })
 	public void inputTimestamp(final Long timestamp) {
 		if (timestamp < 0) {
-			LOG.warn("Received timestamp value < 0: " + timestamp);
+			this.log.warn("Received timestamp value < 0: " + timestamp);
 			return;
 		}
 

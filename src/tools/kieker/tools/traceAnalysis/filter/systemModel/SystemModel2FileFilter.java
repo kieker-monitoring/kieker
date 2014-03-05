@@ -24,8 +24,6 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
@@ -56,8 +54,6 @@ public class SystemModel2FileFilter extends AbstractTraceAnalysisFilter {
 	 */
 	protected static final String DEFAULT_HTML_OUTPUT_FN = "system-model.html";
 
-	private static final Log LOG = LogFactory.getLog(SystemModel2FileFilter.class);
-
 	private final String outputFnHTML;
 
 	/**
@@ -72,19 +68,6 @@ public class SystemModel2FileFilter extends AbstractTraceAnalysisFilter {
 		super(configuration, projectContext);
 
 		this.outputFnHTML = configuration.getPathProperty(CONFIG_PROPERTY_NAME_HTML_OUTPUT_FN);
-	}
-
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public SystemModel2FileFilter(final Configuration configuration) {
-		this(configuration, null);
 	}
 
 	/**
@@ -118,14 +101,14 @@ public class SystemModel2FileFilter extends AbstractTraceAnalysisFilter {
 				final SystemModelRepository sysModelRepo = super.getSystemEntityFactory();
 				if (sysModelRepo == null) {
 					final String errorMsg = "Failed to get system model repository";
-					LOG.error(errorMsg);
+					this.log.error(errorMsg);
 					error = true;
 				} else {
 					sysModelRepo.saveSystemToHTMLFile(outputFnHTMLCanonical);
 				}
 			} catch (final IOException e) {
 				final String errorMsg = "Failed to save system model to file " + outputFnHTMLCanonical;
-				LOG.error(errorMsg, e);
+				this.log.error(errorMsg, e);
 				error = true;
 			}
 		}

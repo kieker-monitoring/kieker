@@ -22,8 +22,8 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
+import kieker.common.record.misc.RegistryRecord;
 import kieker.common.util.filesystem.FSUtil;
-import kieker.monitoring.core.registry.RegistryRecord;
 
 /**
  * This writer is a helper class to handle the mapping files for Kieker's records, containing the mapping between short IDs and actual record classes. It provides
@@ -73,7 +73,7 @@ public final class MappingFileWriter {
 				pw.write('$');
 				pw.write(String.valueOf(hashRecord.getId()));
 				pw.write('=');
-				pw.write(FSUtil.encodeNewline(String.valueOf(hashRecord.getObject())));
+				pw.write(FSUtil.encodeNewline(hashRecord.getString()));
 				pw.write('\n');
 				if (pw.checkError()) {
 					throw new IOException("Error writing to mappingFile " + this.mappingFile.toString());

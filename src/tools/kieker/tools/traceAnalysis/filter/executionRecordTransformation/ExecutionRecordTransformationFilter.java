@@ -47,7 +47,6 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
 		})
 public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisFilter {
-	// private static final Log LOG = LogFactory.getLog(ExecutionRecordTransformationFilter.class);
 
 	/** This is the name of the input port receiving new operation execution records. */
 	public static final String INPUT_PORT_NAME_RECORDS = "operationExecutionRecords";
@@ -65,19 +64,6 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisFi
 	 */
 	public ExecutionRecordTransformationFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
-	}
-
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public ExecutionRecordTransformationFilter(final Configuration configuration) {
-		this(configuration, null);
 	}
 
 	/**

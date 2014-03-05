@@ -37,7 +37,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.flow.IFlowRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
-import kieker.common.record.flow.trace.Trace;
+import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
@@ -80,6 +80,14 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	 * The name of the input port receiving the trace records.
 	 */
 	public static final String INPUT_PORT_NAME_TRACE_RECORDS = "traceRecords";
+	/**
+	 * The name of the input port receiving the trace records.
+	 */
+	public static final String INPUT_PORT_NAME_TRACEEVENT_RECORDS = "traceEventRecords";
+	/**
+	 * The name of the input port receiving the trace records.
+	 */
+	public static final String INPUT_PORT_NAME_TIME_EVENT = "timestamps";
 
 	/**
 	 * The name of the property determining the time unit.
@@ -102,8 +110,6 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	 */
 	public static final String CONFIG_PROPERTY_VALUE_TIMEUNIT = "NANOSECONDS"; // TimeUnit.NANOSECONDS.name()
 
-	private static final Log LOG = LogFactory.getLog(EventRecordTraceReconstructionFilter.class);
-
 	private final TimeUnit timeunit;
 	private final long maxTraceDuration;
 	private final long maxTraceTimeout;
@@ -123,46 +129,59 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	public EventRecordTraceReconstructionFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
-		if (null != projectContext) { // TODO #819 remove non-null check and else case in Kieker 1.8
-			final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
-			TimeUnit recordTimeunit;
-			try {
-				recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
-			} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
-				LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
-				recordTimeunit = TimeUnit.NANOSECONDS;
-			}
-			this.timeunit = recordTimeunit;
-		} else {
-			this.timeunit = TimeUnit.NANOSECONDS;
-		}
+		this.timeunit = super.recordsTimeUnitFromProjectContext;
 
 		final String configTimeunitProperty = configuration.getStringProperty(CONFIG_PROPERTY_NAME_TIMEUNIT);
 		TimeUnit configTimeunit;
 		try {
 			configTimeunit = TimeUnit.valueOf(configTimeunitProperty);
 		} catch (final IllegalArgumentException ex) {
-			LOG.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + this.timeunit.name() + " instead.");
+			this.log.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + this.timeunit.name() + " instead.");
 			configTimeunit = this.timeunit;
 		}
 
 		this.maxTraceDuration = this.timeunit.convert(configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION), configTimeunit);
 		this.maxTraceTimeout = this.timeunit.convert(configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT), configTimeunit);
-		this.timeout = !((this.maxTraceTimeout == Long.MAX_VALUE) && (this.maxTraceDuration == Long.MAX_VALUE)); // NOPMD (bitwise conversion makes code unreadable)
+		this.timeout = !((this.maxTraceTimeout == Long.MAX_VALUE) && (this.maxTraceDuration == Long.MAX_VALUE));
 		this.traceId2trace = new ConcurrentHashMap<Long, TraceBuffer>();
 	}
 
 	/**
-	 * Creates a new instance of this class using the given parameters.
+	 * This method is the input port for the timeout.
 	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
+	 * @param timestamp
+	 *            The timestamp
 	 */
-	@Deprecated
-	public EventRecordTraceReconstructionFilter(final Configuration configuration) {
-		this(configuration, null);
+	@InputPort(
+			name = INPUT_PORT_NAME_TIME_EVENT,
+			description = "Input port for a periodic time signal",
+			eventTypes = { Long.class })
+	public void newEvent(final Long timestamp) {
+		synchronized (this) {
+			if (this.timeout) {
+				this.processTimeoutQueue(timestamp);
+			}
+		}
+	}
+
+	/**
+	 * This method is the input port for the new events for this filter.
+	 * 
+	 * @param traceEventRecords
+	 *            The new record to handle.
+	 */
+	@InputPort(
+			name = INPUT_PORT_NAME_TRACEEVENT_RECORDS,
+			description = "Reconstruct traces from incoming traces",
+			eventTypes = { TraceEventRecords.class })
+	public void newTraceEventRecord(final TraceEventRecords traceEventRecords) {
+		final TraceMetadata trace = traceEventRecords.getTraceMetadata();
+		if (null != trace) {
+			this.newEvent(trace);
+		}
+		for (final AbstractTraceEvent record : traceEventRecords.getTraceEvents()) {
+			this.newEvent(record);
+		}
 	}
 
 	/**
@@ -174,13 +193,13 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	@InputPort(
 			name = INPUT_PORT_NAME_TRACE_RECORDS,
 			description = "Reconstruct traces from incoming flow records",
-			eventTypes = { Trace.class, AbstractTraceEvent.class })
+			eventTypes = { TraceMetadata.class, AbstractTraceEvent.class })
 	public void newEvent(final IFlowRecord record) {
 		final Long traceId;
 		TraceBuffer traceBuffer;
 		final long loggingTimestamp;
-		if (record instanceof Trace) {
-			traceId = ((Trace) record).getTraceId();
+		if (record instanceof TraceMetadata) {
+			traceId = ((TraceMetadata) record).getTraceId();
 			traceBuffer = this.traceId2trace.get(traceId);
 			if (traceBuffer == null) { // first record for this id!
 				synchronized (this) {
@@ -191,7 +210,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 					}
 				}
 			}
-			traceBuffer.setTrace((Trace) record);
+			traceBuffer.setTrace((TraceMetadata) record);
 			loggingTimestamp = -1;
 		} else if (record instanceof AbstractTraceEvent) {
 			traceId = ((AbstractTraceEvent) record).getTraceId();
@@ -284,7 +303,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		private static final Log LOG = LogFactory.getLog(TraceBuffer.class);
 		private static final Comparator<AbstractTraceEvent> COMPARATOR = new TraceEventComperator();
 
-		private Trace trace;
+		private TraceMetadata trace;
 		private final SortedSet<AbstractTraceEvent> events = new TreeSet<AbstractTraceEvent>(COMPARATOR);
 
 		private boolean closeable;
@@ -341,7 +360,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 			}
 		}
 
-		public void setTrace(final Trace trace) {
+		public void setTrace(final TraceMetadata trace) {
 			final long myTraceId = trace.getTraceId();
 			synchronized (this) {
 				if (this.traceId == -1) {
@@ -407,4 +426,5 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 			}
 		}
 	}
+
 }

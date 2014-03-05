@@ -29,8 +29,6 @@ import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.MonitoringRecordException;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 
@@ -65,8 +63,6 @@ public class DbReader extends AbstractReaderPlugin {
 	/** The name of the property containing the prefix for the tables to read. */
 	public static final String CONFIG_PROPERTY_NAME_TABLEPREFIX = "TablePrefix";
 
-	private static final Log LOG = LogFactory.getLog(DbReader.class);
-
 	private final String driverClassname;
 	private final String connectionString;
 	private final String tablePrefix;
@@ -98,21 +94,6 @@ public class DbReader extends AbstractReaderPlugin {
 	}
 
 	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * @throws Exception
-	 *             If the driver for the database could not be found.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public DbReader(final Configuration configuration) throws Exception {
-		this(configuration, null);
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	public boolean read() {
@@ -132,7 +113,7 @@ public class DbReader extends AbstractReaderPlugin {
 							this.table2record(connection, tablename, AbstractMonitoringRecord.classForName(classname));
 						} catch (final MonitoringRecordException ex) {
 							// log error but continue with next table
-							LOG.error("Failed to load records of type " + classname + " from table " + tablename, ex);
+							this.log.error("Failed to load records of type " + classname + " from table " + tablename, ex);
 							continue;
 						}
 					}
@@ -147,14 +128,14 @@ public class DbReader extends AbstractReaderPlugin {
 				}
 			}
 		} catch (final SQLException ex) {
-			LOG.error("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
+			this.log.error("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
 			return false;
 		} finally {
 			if (connection != null) {
 				try {
 					connection.close();
 				} catch (final SQLException ex) {
-					LOG.error("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
+					this.log.error("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);
 				}
 			}
 		}
@@ -209,7 +190,7 @@ public class DbReader extends AbstractReaderPlugin {
 	 * {@inheritDoc}
 	 */
 	public void terminate(final boolean error) {
-		LOG.info("Shutdown of DBReader requested.");
+		this.log.info("Shutdown of DBReader requested.");
 		this.running = false;
 	}
 

@@ -63,19 +63,6 @@ public class ComponentDependencyGraphAllocationFilter extends AbstractDependency
 	}
 
 	/**
-	 * Creates a new filter using the given configuration.
-	 * 
-	 * @param configuration
-	 *            The configuration to use
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public ComponentDependencyGraphAllocationFilter(final Configuration configuration) {
-		this(configuration, null);
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	@Override

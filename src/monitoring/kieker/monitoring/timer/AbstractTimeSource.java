@@ -17,8 +17,6 @@
 package kieker.monitoring.timer;
 
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 
 /**
  * @author Jan Waller
@@ -26,13 +24,6 @@ import kieker.common.logging.LogFactory;
  * @since 1.3
  */
 public abstract class AbstractTimeSource implements ITimeSource {
-	private static final Log LOG = LogFactory.getLog(AbstractTimeSource.class);
-
-	/**
-	 * @deprecated to be removed in Kieker 1.8
-	 */
-	@Deprecated
-	protected final Configuration configuration;
 
 	/**
 	 * This constructor initializes the class using the given configuration.
@@ -41,16 +32,11 @@ public abstract class AbstractTimeSource implements ITimeSource {
 	 *            The configuration for this time source.
 	 */
 	protected AbstractTimeSource(final Configuration configuration) {
-		try {
-			// somewhat dirty hack...
-			final Configuration defaultConfig = this.getDefaultConfiguration(); // NOPMD (overrideable)
-			if (defaultConfig != null) {
-				configuration.setDefaultConfiguration(defaultConfig);
-			}
-		} catch (final IllegalAccessException ex) {
-			LOG.error("Unable to set timer custom default properties"); // ok to ignore ex here
+		// somewhat dirty hack...
+		final Configuration defaultConfig = this.getDefaultConfiguration(); // NOPMD (overrideable)
+		if (defaultConfig != null) {
+			configuration.setDefaultConfiguration(defaultConfig);
 		}
-		this.configuration = configuration;
 	}
 
 	/**

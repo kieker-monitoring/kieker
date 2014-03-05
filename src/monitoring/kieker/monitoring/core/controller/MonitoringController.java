@@ -25,6 +25,7 @@ import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.KiekerMetadataRecord;
 import kieker.common.util.Version;
+import kieker.common.util.registry.IRegistry;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.sampler.ISampler;
 import kieker.monitoring.core.sampler.ScheduledSamplerJob;
@@ -180,12 +181,13 @@ public final class MonitoringController extends AbstractController implements IM
 	public final boolean sendMetadataAsRecord() {
 		final ITimeSource timesource = this.getTimeSource();
 		return this.newMonitoringRecord(new KiekerMetadataRecord(
+				null, // Kieker version will be filled in
 				this.getName(), // controllerName
 				this.getHostname(), // hostname
 				this.getExperimentId(), // experimentId
-				timesource.getTimeUnit(), // timeUnit
-				timesource.toString(), // timeSource
 				this.isDebug(), // debugMode
+				timesource.getOffset(), // timeOffset
+				timesource.getTimeUnit().name(), // timeUnit
 				this.getNumberOfInserts() // numberOfRecords
 				));
 	}
@@ -197,11 +199,6 @@ public final class MonitoringController extends AbstractController implements IM
 	// DELEGATE TO OTHER CONTROLLERS
 	// #############################
 
-	/**
-	 * Permanently terminates monitoring.
-	 * 
-	 * @return true if now terminated; false if already terminated
-	 */
 	public final boolean terminateMonitoring() {
 		return this.stateController.terminateMonitoring();
 	}
@@ -210,23 +207,10 @@ public final class MonitoringController extends AbstractController implements IM
 		return this.stateController.isMonitoringTerminated();
 	}
 
-	/**
-	 * Enables monitoring.
-	 * 
-	 * @return
-	 *         true if monitoring is enabled, false otherwise
-	 */
 	public final boolean enableMonitoring() {
 		return this.stateController.enableMonitoring();
 	}
 
-	/**
-	 * Disables monitoring. If monitoring is disabled, the MonitoringController simply pauses. Furthermore, probes should stop collecting new data and monitoring
-	 * writers stop should stop writing existing data.
-	 * 
-	 * @return
-	 *         true if monitoring is disabled, false otherwise
-	 */
 	public final boolean disableMonitoring() {
 		return this.stateController.disableMonitoring();
 	}
@@ -247,21 +231,10 @@ public final class MonitoringController extends AbstractController implements IM
 		return this.stateController.getHostname();
 	}
 
-	/**
-	 * Increments the experiment ID by 1 and returns the new value.
-	 * 
-	 * @return The new experiment ID.
-	 */
 	public final int incExperimentId() {
 		return this.stateController.incExperimentId();
 	}
 
-	/**
-	 * Sets the experiment ID to the given value.
-	 * 
-	 * @param newExperimentID
-	 *            The new ID.
-	 */
 	public final void setExperimentId(final int newExperimentID) {
 		this.stateController.setExperimentId(newExperimentID);
 	}
@@ -270,9 +243,6 @@ public final class MonitoringController extends AbstractController implements IM
 		return this.stateController.getExperimentId();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
 		return this.writerController.newMonitoringRecord(record);
 	}
@@ -281,16 +251,10 @@ public final class MonitoringController extends AbstractController implements IM
 		return this.writerController.getNumberOfInserts();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public final ScheduledSamplerJob schedulePeriodicSampler(final ISampler sampler, final long initialDelay, final long period, final TimeUnit timeUnit) {
 		return this.samplingController.schedulePeriodicSampler(sampler, initialDelay, period, timeUnit);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public final boolean removeScheduledSampler(final ScheduledSamplerJob sampler) {
 		return this.samplingController.removeScheduledSampler(sampler);
 	}
@@ -303,37 +267,30 @@ public final class MonitoringController extends AbstractController implements IM
 		return this.jmxController.getJMXDomain();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public final int getIdForString(final String string) {
-		return this.registryController.getIdForString(string);
+	public final int getUniqueIdForString(final String string) {
+		return this.registryController.getUniqueIdForString(string);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	public String getStringForUniqueId(final int id) {
+		return this.registryController.getStringForUniqueId(id);
+	}
+
+	public IRegistry<String> getStringRegistry() {
+		return this.registryController.getStringRegistry();
+	}
+
 	public final boolean activateProbe(final String pattern) {
 		return this.probeController.activateProbe(pattern);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public final boolean deactivateProbe(final String pattern) {
 		return this.probeController.deactivateProbe(pattern);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public boolean isProbeActivated(final String signature) {
 		return this.probeController.isProbeActivated(signature);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public void setProbePatternList(final List<String> patternList) {
 		this.probeController.setProbePatternList(patternList);
 	}

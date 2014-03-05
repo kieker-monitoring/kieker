@@ -45,6 +45,9 @@ import kieker.test.tools.util.filter.ExecutionSinkClass;
  */
 public class TestExecutionRecordTransformationFilter extends AbstractKiekerTest {
 
+	/**
+	 * Default constructor.
+	 */
 	public TestExecutionRecordTransformationFilter() {
 		// empty default constructor
 	}

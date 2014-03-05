@@ -32,8 +32,9 @@ As depicted by the class diagram in Figure~\ref{fig:monitoringController:classdi
  \item Creating \class{IMonitoringController} instances (Section~\ref{sec:componentsMonitoring:monitoringController:factory}),
  \item Logging monitoring records with the configured monitoring writer (Section~\ref{sec:componentsMonitoring:monitoringController:logging}),
  \item Retrieving the current time via the configured time source (Section~\ref{sec:componentsMonitoring:monitoringController:getTime}),
- \item Scheduling and removing period samplers (Section~\ref{sec:componentsMonitoring:monitoringController:periodicSamplers}), and
- \item Controlling the monitoring state (Section~\ref{sec:componentsMonitoring:monitoringController:controState}).
+ \item Scheduling and removing period samplers (Section~\ref{sec:componentsMonitoring:monitoringController:periodicSamplers}), 
+ \item Controlling the monitoring state (Section~\ref{sec:componentsMonitoring:monitoringController:controState}), and
+ \item Activating and deactivating probes at runtime \ref{sec:componentsMonitoring:monitoringController:adaptive}.
 \end{compactitem}
 
 \subsection{Creating \class{MonitoringController} Instances}\label{sec:componentsMonitoring:monitoringController:factory}
@@ -87,9 +88,9 @@ of the \class{MemSwapUsageSampler} which can be used to monitor memory %
 and swap usage employing the Sigar library~\cite{HypericSigarWebsite}. %
 Likewise to other monitoring probes described in this user guide (see for %
 example Sections~\ref{sec:monitoring:probe} and \ref{sec:example:monitoring}),
-it collects the data of interest (lines~58--59), creates a monitoring record~%
-(lines~60--63), and passes this monitoring record to the monitoring controller~%
-(line~64). %
+it collects the data of interest (lines~61--62), creates a monitoring record~%
+(lines~63--66), and passes this monitoring record to the monitoring controller~%
+(line~67). %
 The available Sigar-based samplers for monitoring system-level monitoring %
 data, such as CPU and memory usage, are discussed in Appendix~\ref{appendix:SigarBasedSamplers}. %
 
@@ -111,6 +112,38 @@ with respect to the return value of the method \method{isMonitoringEnabled}. %
 Note, that once the \class{MonitoringController} is terminated, it cannot be enabled %
 later on.
 
+\subsection{Adaptive Monitoring}\label{sec:componentsMonitoring:monitoringController:adaptive}
+
+The \class{MonitoringController} provides an API to activate and deactivate %
+probes at runtime. By passing a method signature---e.g., %
+\texttt{"public void Bookstore.getBook()"}---to the method %
+\method{isProbeActivated}, probes can check whether or not monitoring for the %
+method with the given signature is active. %
+Monitoring can be (de)activated for single signature \textit{patterns}---e.g., %
+\texttt{"public void Bookstore.*(..)"}--- via the methods %
+\method{activateProbe} and \method{deactivateProbe}. The current list of %
+(de)activated patterns can be obtained via the method \method{getProbePatternList}. %
+The entire list can be replaced using the method \method{setProbePatternList}. %
+Alternatively, a file with include and exclude patterns can be used. This file %
+can be polled in regular intervals. %
+A default configuration file, including a description of the pattern syntax, is provided %
+by the file \file{kieker.monitoring.adaptive\-Monitoring.conf} in the %
+\dir{META-INF/} directory of the binary release. %
+
+With the same mechanism arbitrary probes can be controlled. The syntax is also included %
+in the above file. For example, \Kieker's probes for CPU and memory make use of %
+this mechanism.
+
+By default, \Kieker{}'s adaptive monitoring feature is deactivated. It can be %
+enabled by setting the value of the configuration property %
+\lstinline{kieker.monitoring.adaptiveMonitoring.enabled} %
+in the \file{\monitoringPropertiesFile} file to \textit{true}. Additional properties %
+to configure the adaptive monitoring are included in the file %
+\file{kieker.monitoring.proper\-ties}, e.g., the location of the afore-mentioned file with %
+include/exclude patterns and the polling interval for this file. 
+
+\enlargethispage{0.8cm}
+
 \subsection{JMX MBean Access to \class{MonitoringController}}
 
 The \class{MonitoringController}'s %
@@ -124,10 +157,10 @@ shows two screenshots of the MBean access using \class{jconsole}.
 % nie: I forced the figure to be here, as it would otherwise cut the listing in half. 
 \begin{figure}[H]\centering
 \subfigure[Attributes]{%
-\includegraphics[width=0.485\textwidth]{images/jmxbean-monitoringcontroller-attributes.png}
-}
+\includegraphics[scale=0.362]{images/jmxbean-monitoringcontroller-attributes.png} % 0.485\textwidth
+}\hspace{-0.5cm}%
 \subfigure[Operations]{%
-\includegraphics[width=0.485\textwidth]{images/jmxbean-monitoringcontroller-operations.png}
+\includegraphics[scale=0.362]{images/jmxbean-monitoringcontroller-operations.png} % width=0.485\textwidth
 }
 \caption{Screenshots of the \class{jconsole} JMX client accessing the \class{MonitoringController}'s %
 attributes and operations via the MBean interface. %
@@ -151,34 +184,6 @@ kieker.monitoring.jmx.MonitoringController=true
 
 For remote access to the server, set \textit{kieker.monitoring.jmx.remote=true}. In this case it is recommended to set \textit{com.sun.management.jmxremote.authenticate=true} as well. More information can be found on Oracle's JMX Technology Home Page~\cite{JMX-Website}.
 
-\subsection{Adaptive Monitoring}
-
-The \class{MonitoringController} provides an API to activate and deactivate %
-probes at runtime. By passing a method signature---e.g., %
-\texttt{"public void Bookstore.getBook()"}---to the method %
-\method{isProbeActivated}, probes can check whether or not monitoring for the %
-method with the given signature is active. %
-Monitoring can be (de)activated for single signature \textit{patterns}---e.g., %
-\texttt{"public void Bookstore.*(..)"}--- via the methods %
-\method{activateProbe} and \method{deactivateProbe}. The current list of %
-(de)activated patterns can be obtained via the method \method{getProbePatternList}. %
-The entire list can be replaced using the method \method{setProbePatternList}. %
-Alternatively, a file with include and exclude patterns can be used. This file %
-can be polled in regular intervals. %
-A default configuration file, including a description of the pattern syntax, is provided %
-by the file \file{kieker.monitoring.adaptive\-Monitoring.conf} in the %
-\dir{META-INF/} directory of the binary release. %
-
-With the same mechanism, the monitoring of CPU and memory records can be controlled. %
-The syntax is also included in the above file.
-
-By default, \Kieker{}'s adaptive monitoring feature is deactivated. It can be %
-enabled by setting the value of the configuration property %
-\lstinline{kieker.monitoring.adaptiveMonitoring.enabled} %
-in the \file{\monitoringPropertiesFile} file to \textit{true}. The %
-kieker.monitoring.properties includes additional properties to configure the %
-adaptive monitoring, e.g., the location of the afore-mentioned file with %
-include/exclude patterns and the polling interval for this file. 
 
 \section{\KiekerMonitoringPart{} Configuration}\label{sec:monitoring:configuration}
 
@@ -267,7 +272,7 @@ class \class{AbstractMonitoringRecord}, and a custom monitoring record type %
 \begin{enumerate}
 \item Override the methods \method{initFromArray}, \method{toArray}, \method{getValueTypes}
 \item For immutable record types: implement \class{IMonitoringRecord.Factory}, a constructor %
-with a single \class{Class<?>[]} argument, and a public static \method{TYPES} field. %
+with a single \class{Object[]} argument, and a public static \method{TYPES} field. %
 In this case, \method{initFromArray} (which is not called by the framework then) should %
 throw an \class{UnsupportedOperationException}.
 \end{enumerate}
@@ -279,6 +284,8 @@ Listing~\ref{listing:MyRecord}, is an example of a custom monitoring record type
 that can be used to monitor response times of method executions. %
 Implementing \class{IMonitoringRecord.Factory}, \class{MyResponseTimeRecord} is %
 an immutable type, i.e., it includes only final fields. %
+
+\enlargethispage{1cm}
 
 % \pagebreak 
 
@@ -295,17 +302,19 @@ The probes are responsible for collecting the monitoring data and passing it %
 to the monitoring controller. %
 In Chapter~\ref{sec:example:monitoring}, we have already demonstrated how to %
 manually instrument a Java application. Listing~\ref{listing:cuttingBookstore} %
-shows a similar manual monitoring probe which uses the monitoring record type %
+shows a similar manual monitoring probe, which uses the monitoring record type %
 \class{MyResponseTimeRecord} defined in the previous Section~\ref{sec:componentsMonitoring:monitoringRecords}.
 
 % Make sure that this listing will be modified, once the sourcecode changes!!!
 % It must show the whole monitoring of the bookstorecall, from getting the first time to persisting of the record!!
-\pagebreak
+% \pagebreak
 \lstinputlisting[firstline=32, lastline=40, firstnumber=32, caption=Excerpt from Bookstore.java, label=listing:cuttingBookstore]{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/Bookstore.java}
 
 \noindent In order to avoid multiple calls to the \method{getInstance} method of the %
 \class{MonitoringController} class, singleton instances should be stored %
 in a final static variable, as shown in Listing~\ref{listing:cuttingBookstore:finalStaticController}.
+
+\enlargethispage{1cm}
 
 \lstinputlisting[firstline=24, lastline=25, firstnumber=24, caption=Singleton instance of the monitoring controller stored in a final static variable (excerpt from Bookstore.java), label=listing:cuttingBookstore:finalStaticController]{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/Bookstore.java}
 
@@ -335,13 +344,13 @@ example configuration file (see Appendix~\ref{sec:appdx:monitoringproperties}). 
 
 % \enlargethispage{1.2cm}
 
-The writers \class{AsyncFsWriter}, %
-\class{SyncFsWriter}, \class{AsyncDbWriter}, and \class{SyncDbWriter} can be used %
-to store monitoring records to filesystems and databases respectively. %
+Different writers can be used %
+to store monitoring records to filesystems and databases respectively (e.g., \class{AsyncFsWriter}, %
+\class{SyncFsWriter}, \class{AsyncDbWriter}, and \class{SyncDbWriter}). %
 The variants with the prefix \class{Async} are implemented using asynchronous %
 threads that decouple the I/O operations from the control flow of the %
 instrumented application. %
-The \class{AsyncFsWriter} is the default writer which has already been used in %
+The \class{AsyncFsWriter} is the default writer that has already been used in %
 Section~\ref{sec:example:monitoring}. %
 Please note that the database writers are currently in a prototype stage and
 that they should be used with care. %
@@ -358,6 +367,8 @@ continuously receiving new monitoring data from an instrumented application pote
 running on another machine. A more detailed description of how to use the \class{AsyncJMSWriter} %
 can be found in Appendix~\ref{appendix:usingJMS}. %
 
+\enlargethispage{1.5cm}
+
 % This is the diagram with the hierarchy of the writers.
 \begin{figure}[H]
 \begin{centering}
@@ -373,14 +384,14 @@ a custom writer \class{MyPipeWriter} which uses a named pipe to %
 write the given records into a buffer located in the memory. The source code of %
 the class \class{MyPipe} is listed in Appendix~\ref{appendix:pipeListings}. %
 
-% \enlargethispage{1cm}
+\enlargethispage{1cm}
 
-\pagebreak
+% \pagebreak
 
 \setJavaCodeListing
 \lstinputlisting[caption=MyPipeWriter.java, label=listing:MyWriter,firstline=23,firstnumber=23]{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeWriter.java}
 
-\pagebreak
+% \pagebreak
 
 \noindent The monitoring writer to be used is selected by the %
 \KiekerMonitoringPart{} configuration property (Section~\ref{chap:componentsMonitoring}) %

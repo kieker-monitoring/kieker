@@ -121,6 +121,37 @@ function assert_file_exists_regular {
 	echo OK
 }
 
+function assert_zip_file_content_exist {
+    echo -n "Asserting zip file '$1' contains the following files: '$2' ..."
+    if ! test -s "$1"; then
+	echo "File '$1' is missing or not a regular file"
+	exit 1
+    fi
+    CONTENTS=$(unzip -l $1)
+    for p in $2; do 
+	if ! (echo ${CONTENTS} | grep -q "$p"); then 
+	    echo "'$p' not found in '$1'"
+	    exit 1
+	fi
+    done
+    echo OK
+}
+
+function assert_zip_file_content_contains {
+    echo -n "Asserting file '$2' in zip file '$1' contains the following pattern: '$3' ..."
+    if ! test -s "$1"; then
+	echo "File '$1' is missing or not a regular file"
+	exit 1
+    fi
+    CONTENT=$(unzip -c $1 $2)
+    if ! (echo ${CONTENT} | grep -q "$3"); then 
+	echo "'$3' not found in '$2' (itself contained in '$1')"
+	exit 1
+    fi
+
+    echo OK
+}
+
 # Asserts the existence of files common to the src and bin releases
 function assert_files_exist_common {
 	assert_dir_exists "bin/"
@@ -129,11 +160,11 @@ function assert_files_exist_common {
 	assert_dir_exists "examples/"
 	assert_dir_exists "lib/"
 	assert_dir_exists "lib/framework-libs/"
-	assert_file_exists_regular "lib/sigar-native-libs/libsigar-x86-linux.so"
-	assert_file_exists_regular "lib/sigar-native-libs/libsigar-amd64-linux.so"
-	assert_file_exists_regular "lib/sigar-native-libs/sigar-amd64-winnt.dll"
-	assert_file_exists_regular "lib/sigar-native-libs/sigar-x86-winnt.dll"
-	assert_file_exists_regular "lib/sigar-native-libs/sigar-x86-winnt.lib"
+	assert_file_exists_regular "lib/sigar/libsigar-x86-linux.so"
+	assert_file_exists_regular "lib/sigar/libsigar-amd64-linux.so"
+	assert_file_exists_regular "lib/sigar/sigar-amd64-winnt.dll"
+	assert_file_exists_regular "lib/sigar/sigar-x86-winnt.dll"
+	assert_file_exists_regular "lib/sigar/sigar-x86-winnt.lib"
 	assert_file_exists_regular "README"
 	assert_file_exists_regular "HISTORY"
 	assert_file_exists_regular "LICENSE"
@@ -153,7 +184,6 @@ function assert_files_exist_common {
 	assert_file_exists_regular "lib/aspectjrt-${aspectjversion}.jar"
 	assert_file_exists_regular "lib/aspectjweaver-${aspectjversion}.jar"
 	
-	assert_file_exists_regular "examples/OverheadEvaluationMicrobenchmark/.classpath"
 	assert_file_exists_regular "examples/userguide/appendix-JMS/.classpath"
 	assert_file_exists_regular "examples/userguide/ch2--manual-instrumentation/.classpath"
 	assert_file_exists_regular "examples/userguide/ch2--bookstore-application/.classpath"
@@ -177,19 +207,20 @@ function assert_files_exist_src {
 	assert_file_NOT_exists "dist/"
 	assert_file_NOT_exists "META-INF/"
 	
-	assert_file_NOT_exists "examples/OverheadEvaluationMicrobenchmark/lib/*.jar"
-	assert_file_NOT_exists "examples/OverheadEvaluationMicrobenchmark/lib/*.jar"
 	assert_file_NOT_exists "examples/userguide/ch2--manual-instrumentation/lib/*.jar"
 	assert_file_NOT_exists "examples/userguide/ch3-4--custom-components/lib/*.jar"
 	assert_file_NOT_exists "examples/userguide/ch5--trace-monitoring-aspectj/lib/*.jar"
 	assert_file_NOT_exists "examples/userguide/appendix-JMS/lib/*.jar"
 	assert_file_NOT_exists "examples/userguide/appendix-Sigar/lib/*.jar"
 	
-	assert_file_NOT_exists "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/classes/META-INF/kieker.monitoring.properties"
-	assert_file_NOT_exists "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/aspectjweaver-*"
 	assert_file_NOT_exists "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/kieker-*.jar"
 	assert_file_exists_regular "build.xml"
-	assert_file_exists_regular "build.properties"
+	assert_file_exists_regular "build-config/build.properties"
+	assert_file_exists_regular "build-config/compile-and-build.xml"
+	assert_file_exists_regular "build-config/dist-and-deploy.xml"
+	assert_file_exists_regular "build-config/init-and-clean.xml"
+	assert_file_exists_regular "build-config/quality.xml"
+	assert_file_exists_regular "build-config/test.xml"
 	assert_file_exists_regular "kieker-eclipse.importorder"
 	assert_file_exists_regular "kieker-eclipse-cleanup.xml"
 	assert_file_exists_regular "kieker-eclipse-formatter.xml"
@@ -202,7 +233,7 @@ function assert_files_exist_src {
 	assert_file_exists_regular "doc/README-src"
 }
 
-# Asserts the existence of files in the bin release
+# Asserts the existence of files in the bin release and some basic checks on the Kieker jars
 function assert_files_exist_bin {
 	assert_files_exist_common
 	assert_file_exists_regular "doc/kieker-"*"_userguide.pdf"
@@ -212,23 +243,26 @@ function assert_files_exist_bin {
 	assert_file_exists_regular "META-INF/kieker.monitoring.adaptiveMonitoring.conf"
 	assert_file_exists_regular ${MAIN_JAR}
 	assert_file_exists_regular "dist/kieker-"*"_aspectj.jar"
+	assert_zip_file_content_exist "dist/kieker-"*"_aspectj.jar" " org/aspectj"
+	assert_zip_file_content_exist "dist/kieker-"*"_aspectj.jar" " aj/"
+	assert_zip_file_content_contains "dist/kieker-"*"_aspectj.jar" "META-INF/MANIFEST.MF" "Premain-Class: org.aspectj.weaver.loadtime.Agent"
 	assert_file_exists_regular "dist/kieker-"*"_emf.jar"
-	
-	assert_file_exists_regular "examples/OverheadEvaluationMicrobenchmark/lib/kieker-"*"_aspectj.jar"
-	assert_file_exists_regular "examples/OverheadEvaluationMicrobenchmark/lib/commons-cli-"*".jar"
-    assert_file_exists_regular "examples/userguide/ch2--manual-instrumentation/lib/kieker-"*"_emf.jar"
-    assert_file_exists_regular "examples/userguide/ch3-4--custom-components/lib/kieker-"*"_emf.jar"
-    assert_file_exists_regular "examples/userguide/ch5--trace-monitoring-aspectj/lib/kieker-"*"_aspectj.jar"
-    assert_file_exists_regular "examples/userguide/appendix-JMS/lib/kieker-"*".jar"
-    assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/kieker-"*"_emf.jar"
-    assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/sigar-"*".jar"
-    assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/libsigar-"*".so"
-    assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/sigar-"*".dll"
-    assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/sigar-"*".lib"
+	assert_zip_file_content_exist "dist/kieker-"*"_emf.jar" " model/"
+	assert_zip_file_content_exist "dist/kieker-"*"_emf.jar" " org/eclipse/"
+	assert_file_exists_regular "examples/userguide/ch2--manual-instrumentation/lib/kieker-"*"_emf.jar"
+	assert_file_exists_regular "examples/userguide/ch3-4--custom-components/lib/kieker-"*"_emf.jar"
+	assert_file_exists_regular "examples/userguide/ch5--trace-monitoring-aspectj/lib/kieker-"*"_aspectj.jar"
+	assert_file_exists_regular "examples/userguide/appendix-JMS/lib/kieker-"*"_emf.jar"
+	assert_file_exists_regular "examples/userguide/appendix-JMS/lib/commons-logging-"*".jar"
+	assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/kieker-"*"_emf.jar"
+	assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/sigar-"*".jar"
+	assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/libsigar-"*".so"
+	assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/sigar-"*".dll"
+	assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/sigar-"*".lib"
 	
 	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/kieker.monitoring.properties"
-	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/aspectjweaver-"*
-	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/kieker-"*".jar"
+	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/kieker-"*"_aspectj.jar"
+	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/kieker-"*"_aspectj.jar.LICENSE"
 	assert_file_NOT_exists "lib/static-analysis/"
 	assert_file_NOT_exists "dist/release/"
 	assert_file_NOT_exists "bin/dev/"
@@ -277,7 +311,7 @@ function check_src_archive {
 	assert_file_NOT_exists "dist/kieker-monitoring-servlet-"*".war"
 
 	# check bytecode version of classes contained in jar
-	echo -n "Making sure that bytecode version of class in jar is 49.0 (Java 1.5)"
+	echo "Making sure that bytecode version of class in jar is 49.0 (Java 1.5)"
 	MAIN_JAR=$(ls "dist/kieker-"*".jar" | grep -v emf | grep -v aspectj)
 	assert_file_exists_regular ${MAIN_JAR}
 	VERSION_CLASS=$(find build -name "Version.class")
@@ -296,8 +330,16 @@ function check_src_archive {
 		exit 1
 	fi
 
-	# now execute junt tests (which compiles the sources again ...)
+	# Run static analysis tools (which compiles the sources again ...)
 	run_ant static-analysis
+
+	# Making sure that no JavaDoc warnings reported by the `javadoc` tool
+	echo -n "Making sure that no JavaDoc warnings (ignoring generated sources) ..."
+	if (ant dist-kieker-javadoc | grep "warning -" | grep -v "src-gen"); then 
+	    echo "One or more JavaDoc warnings"
+	    exit 1
+	fi
+	echo "OK"
 }
 
 function check_bin_archive {
@@ -353,15 +395,16 @@ function check_bin_archive {
 	fi
 	for f in $(ls "${REFERENCE_OUTPUT_DIR}" | egrep "(dot$|pic$|html$|txt$)"); do 
 		echo -n "Comparing to reference file $f ... "
+    if test -z "$f"; then
+      echo "File $f does not exist or is empty"
+			exit 1;
+		fi
 		# Note that this is a hack because sometimes the line order differs
 		(cat "$f" | sort) > left.tmp
 		(cat "${REFERENCE_OUTPUT_DIR}/$f" | sort) > right.tmp
 		if test "$f" = "traceDeploymentEquivClasses.txt" || test "$f" = "traceAssemblyEquivClasses.txt"; then
-			# only a basic test because the assignment to classes is not deterministic
-			if test -z "$f"; then
-				echo "File $f does not exist or is empty"
-				exit 1;
-			fi
+			# only the basic test already performed because the assignment to classes is not deterministic
+			echo "OK"
 			continue;
 		fi
 		if ! diff --context=5	 left.tmp right.tmp; then
@@ -414,27 +457,11 @@ function assert_no_common_files_in_archives {
 ## "main" 
 ##
 
-aspectjversion="$(grep "lib.aspectj.version=" build.properties | sed s/.*=//g)"
+aspectjversion="$(grep "lib.aspectj.version=" build-config/build.properties | sed s/.*=//g)"
 
 assert_dir_exists ${BASE_TMP_DIR}
 change_dir "${BASE_TMP_DIR}"
 BASE_TMP_DIR_ABS=$(pwd)
-
-change_dir "${BASE_TMP_DIR_ABS}"
-create_subdir_n_cd
-DIR=$(pwd)
-SRCZIP=$(ls ../../dist/release/*_sources.zip)
-assert_file_exists_regular ${SRCZIP}
-check_src_archive "${SRCZIP}"
-rm -rf ${DIR}
-
-change_dir "${BASE_TMP_DIR_ABS}"
-create_subdir_n_cd
-DIR=$(pwd)
-SRCTGZ=$(ls ../../dist/release/*_sources.tar.gz)
-assert_file_exists_regular ${SRCTGZ}
-check_src_archive "${SRCTGZ}"
-rm -rf ${DIR}
 
 change_dir "${BASE_TMP_DIR_ABS}"
 create_subdir_n_cd
@@ -450,6 +477,22 @@ DIR=$(pwd)
 BINTGZ=$(ls ../../dist/release/*_binaries.tar.gz)
 assert_file_exists_regular ${BINTGZ}
 check_bin_archive "${BINTGZ}"
+rm -rf ${DIR}
+
+change_dir "${BASE_TMP_DIR_ABS}"
+create_subdir_n_cd
+DIR=$(pwd)
+SRCZIP=$(ls ../../dist/release/*_sources.zip)
+assert_file_exists_regular ${SRCZIP}
+check_src_archive "${SRCZIP}"
+rm -rf ${DIR}
+
+change_dir "${BASE_TMP_DIR_ABS}"
+create_subdir_n_cd
+DIR=$(pwd)
+SRCTGZ=$(ls ../../dist/release/*_sources.tar.gz)
+assert_file_exists_regular ${SRCTGZ}
+check_src_archive "${SRCTGZ}"
 rm -rf ${DIR}
 
 # TOOD: check contents of remaining archives

@@ -1,0 +1,494 @@
+/*
+Theme Name: Kieker Theme	
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+	border: 0;
+	font-family: inherit;
+	font-size: 100%;
+	font-style: inherit;
+	font-weight: inherit;
+	margin: 0;
+	outline: 0;
+	padding: 0;
+	vertical-align: baseline;
+}
+:focus {/* remember to define focus styles! */
+	outline: 0;
+}
+body {
+	background: #fff;
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+table {/* tables still need 'cellspacing="0"' in the markup */
+	border-collapse: separate;
+	border-spacing: 0;
+}
+caption, th, td {
+	font-weight: normal;
+	text-align: left;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: "";
+}
+blockquote, q {
+	quotes: "" "";
+}
+a img {
+	border: 0;
+}
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+
+
+/* =Structure
+----------------------------------------------- */
+
+body {
+	padding: 0 2em;
+}
+#page {
+	margin: 2em auto;
+	max-width: 1000px;
+}
+#branding hgroup {
+	margin: 0 7.6%;
+}
+#access div {
+	margin: 0 7.6%;
+}
+#primary {
+	float: left;
+	margin: 0 -26.4% 0 0;
+	width: 100%;
+}
+#content {
+	margin: 0 34% 0 7.6%;
+	width: 58.4%;
+}
+#secondary {
+	float: right;
+	margin-right: 7.6%;
+	width: 18.8%;
+}
+
+
+/* Alignment */
+.alignleft {
+	display: inline;
+	float: left;
+	margin-right: 1.625em;
+}
+.alignright {
+	display: inline;
+	float: right;
+	margin-left: 1.625em;
+}
+.aligncenter {
+	clear: both;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+
+
+/* =Global
+----------------------------------------------- */
+
+body, input, textarea {
+	color: #373737;
+	font: 15px "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-weight: 300;
+	line-height: 1.625;
+}
+body {
+	background: #e2e2e2;
+}
+#page {
+	background: #fff;
+}
+
+/* Headings */
+h1,h2,h3,h4,h5,h6 {
+	clear: both;
+}
+hr {
+	background-color: #ccc;
+	border: 0;
+	height: 1px;
+	margin-bottom: 1.625em;
+}
+
+/* Text elements */
+p {
+	margin-bottom: 1.625em;
+}
+ul, ol {
+	margin: 0 0 1.625em 2.5em;
+}
+ul {
+	list-style: square;
+}
+ol {
+	list-style-type: decimal;
+}
+ol ol {
+	list-style: upper-alpha;
+}
+ol ol ol {
+	list-style: lower-roman;
+}
+ol ol ol ol {
+	list-style: lower-alpha;
+}
+ul ul, ol ol, ul ol, ol ul {
+	margin-bottom: 0;
+}
+strong {
+	font-weight: bold;
+}
+
+/* Links */
+a {
+	color: #1982d1;
+	text-decoration: none;
+}
+a:focus,
+a:active,
+a:hover {
+	text-decoration: underline;
+}
+
+body {
+  color: rgb(55, 55, 55);
+  padding: 0px 2em;
+  margin: 0px;
+  background: none repeat scroll 0% 0% rgb(226, 226, 226);
+  vertical-align: baseline;
+}
+
+div.page {
+  margin: 0px auto;
+  padding: 0px;
+  max-width: 960px;
+  min-width: 960px;
+  background: none repeat scroll 0% 0% rgb(255, 255, 255);
+  position: relative;
+}
+
+div#main, div#mainnav {
+  margin: 0 2em 0 2em;
+}
+
+div#footer {
+  padding: 0;
+  margin: 2em 0px 1em 0px;
+  clear: both;
+  clear: both;
+  height: 30px;
+  border-top: 1px solid rgb(221, 221, 221);
+}
+
+#footer #sourceforgepowered {
+  border: 0px none;
+  float:right;
+  height: 30px;
+}
+
+#footer #sourceforgepowered:hover {
+    background: none repeat scroll 0% 0% transparent;
+}
+
+#footer #sourceforgepowered, #footer #tracpowered {
+  width: 130px;
+}
+
+#footernav {
+  text-align: center;
+}
+
+#footernav ul {
+  display: inline;
+  font: 300 15px/1.625 "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+#footernav li {
+  border: 0px none;
+}
+
+#footernav li a {
+  vertical-align: middle;
+  font-weight: bold;
+  text-decoration: none;
+  border: 0px none;
+  color: rgb(55, 55, 55);
+  font-size: 13px;
+}
+
+#footernav a:link, #footernav a:visited, #footernav a:active, #footernav a:hover {
+  color: rgb(55, 55, 55);
+}
+#footernav a:active, #footernav a:hover {
+  text-decoration: underline;
+  background-color: inherit;
+}
+/* Navigation */
+.nav h2, .nav hr { display: none }
+.nav ul { 
+ font-size: 10px;
+ list-style: none;
+ margin: 0;
+ padding: 0;
+ text-align: right;
+}
+.nav li {
+ border-right: 1px solid #d7d7d7;
+ display: inline-block;
+ padding: 0 .75em;
+ white-space: nowrap;
+ /* IE7 hack to make inline-block effective on block element */
+ zoom: 1;
+ *display: inline;
+}
+.nav li.last { border-right: none }
+
+
+/* Hide some stuff */
+#site-generator, footer.entry-meta {
+	display: none;
+}
+#branding {
+	border-top: none;
+}
+.hentry, .no-results {
+	border-bottom-width: 0px;
+}
+.ddsg-wrapper div {
+	display: none;
+}
+
+/* page layout is usually the page-template-sidebar-page-php layout*/
+.page-template-default .commentlist {
+	width: 100%;
+}
+.page-template-default .commentlist > li.comment,
+.page-template-default.commentlist .pingback {
+	margin-left: 102px;
+	width: auto;
+}
+.page-template-default #respond {
+	width: auto;
+}
+
+/* reduce font-size, change color and spacing */
+body, input, textarea {
+	font-size: 13px;
+}
+.entry-title, .entry-title a {
+	color: #2456a1;
+	font-size: 20px;
+	padding-top: 0px;
+}	
+#main {
+  padding-top: 0px;
+  color: #000000;
+  text-align:justify;
+}
+#page {
+  margin-top: 0;
+  margin-bottom: 0;
+  max-width: 960px;
+  min-width: 960px;
+}
+.entry-content img, .comment-content img {
+    max-width: 100%;
+}
+.entry-content p, .entry-content ul, .entry-content ol,
+.entry-content img.alignleft, .entry-content img.alignright, .entry-content img.aligncenter {
+	margin-bottom: 0.625em;
+}
+.entry-content .widget ul {
+	margin-left: 1.1em;
+}
+.entry-content {
+	margin-left: 1.1em;
+	padding: 0;
+}
+.error404 #main #searchform {
+	margin: 0;
+}
+.error404 #main .widget_tag_cloud {
+	display: none;
+}
+.entry-content td,.comment-content td {
+	vertical-align: middle;
+	text-align:justify;
+}
+/* Style of headings */
+.entry-content h3 {
+  font-size: 10px;
+  color: #666666;
+  margin-left: -1.1em;
+}
+.entry-content h2 {
+  font-size: 12px;
+  color: #666666;
+  text-transform: uppercase;
+  font-weight: normal;
+  margin: 0 0 .8125em -0.6em;
+}
+.entry-content h1 {
+  font-size: 13px;
+  color: #666666;
+  text-transform: uppercase;
+  font-weight: normal;
+  margin: 0 0 .8125em -1.1em;
+}
+
+/* Showcase */
+div.area-left {
+	float: left;
+	margin: 0 -22.15% 0 0;
+	width: 38%;
+}
+div.area-middle {
+	float: left;
+	margin: 0 0 0 30%;
+	width: 22.15%;
+}
+div.area-right {
+	float: right;
+	margin: 0 0 0 0;
+	width: 22.15%;
+}
+a.more-link {
+	color: inherit;
+	font-weight: inherit;
+}
+
+/* Headermenu */
+.menu-header {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 40px;
+	text-align: center;
+}
+.menu-header ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	height: 20px;
+}
+.menu-header li {
+	display: inline-block;
+}
+.menu-header a {
+	padding: 0 5px;
+	font-size: 13px;
+	font-weight: bold;
+	text-decoration: none;
+	text-transform: uppercase;
+}
+.menu-header ul ul {
+	display: none;
+	position: absolute;
+	left: 0px;
+	height: 20px;
+	width: 100%;
+	z-index: 99999;
+	background-color: #e9f5f9;
+}
+.menu-header ul ul a {
+	text-transform: none;
+}
+.menu-header ul li.current_page_item > a,
+.menu-header ul li.current-menu-ancestor > a,
+.menu-header ul li.current-menu-item > a,
+.menu-header ul li.current-menu-parent > a {
+	color: #000000;
+}
+.menu-header ul li.current_page_item > ul,
+.menu-header ul li.current-menu-ancestor > ul,
+.menu-header ul li.current-menu-item > ul,
+.menu-header ul li.current-menu-parent > ul,
+.menu-header ul li:hover > ul {
+	display: block;
+}
+
+/* Footmenu */
+div.footer-edit-link, div.footer-admin-link {
+	height: 30px;
+	float: left;
+	border-top: 1px solid #ddd;
+	text-align: center;
+}
+div.footer-edit-link div, div.footer-admin-link div {
+	visibility: hidden;
+}
+#supplementary {
+	padding: 0;
+}
+#supplementary .widget {
+	margin: 0;
+	clear: none;
+}
+div.menu-footer_menu-container {
+	text-align: center;
+}
+div.menu-footer_menu-container a {
+	vertical-align: middle;
+}
+.widget_nav_menu ul#menu-footer_menu ul, .widget_nav_menu ul#menu-footer_menu li {
+	list-style-type: none;
+	list-style-image: none;
+	list-style-position: outside;
+}
+.widget_nav_menu ul#menu-footer_menu li {
+	display: inline;
+	padding-left: 1em;
+	padding-right: 1em;
+}
+
+/* kielprints */
+.kielprints {
+	font-size: smaller;
+}
+.kielprints .internal_soft_eng {
+	font-weight: bold;
+}
+.kielprints div.ep_view_timestamp, .kielprints div.ep_view_jump, .kielprints div.ep_view_blurb {
+	font-size: smaller;
+}
+.kielprints img.ep_doc_icon {
+	margin-left: 5px;
+}
+.kielprints div.ep_view_timestamp, .kielprints div.ep_view_blurb, .kielprints div.ep_view_jump {
+	display: none;
+}
+
+/* Contacts */
+table.contact {
+	border: none;
+}
+table.contact td {
+	width: 175px;
+	border: none;
+}
+table.contact tr.center td {
+	text-align: center;
+}

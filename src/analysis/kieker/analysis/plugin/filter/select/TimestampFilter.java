@@ -25,13 +25,11 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.record.flow.IEventRecord;
 import kieker.common.record.flow.IFlowRecord;
-import kieker.common.record.flow.trace.Trace;
+import kieker.common.record.flow.trace.TraceMetadata;
 
 /**
  * Allows to filter {@link IMonitoringRecord} objects based on their given timestamps.
@@ -84,8 +82,6 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 	/** The default used lower limit for the records. **/
 	public static final String CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP = "0"; // Long.toString(0)
 
-	private static final Log LOG = LogFactory.getLog(TimestampFilter.class);
-
 	private final TimeUnit timeunit;
 	private final long ignoreBeforeTimestamp;
 	private final long ignoreAfterTimestamp;
@@ -101,44 +97,19 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 	public TimestampFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
-		if (null != projectContext) { // TODO #819 remove non-null check and else case in Kieker 1.8)
-			final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
-			TimeUnit recordTimeunit;
-			try {
-				recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
-			} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
-				LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
-				recordTimeunit = TimeUnit.NANOSECONDS;
-			}
-			this.timeunit = recordTimeunit;
-		} else {
-			this.timeunit = TimeUnit.NANOSECONDS;
-		}
+		this.timeunit = super.recordsTimeUnitFromProjectContext;
 
 		final String configTimeunitProperty = configuration.getStringProperty(CONFIG_PROPERTY_NAME_TIMEUNIT);
 		TimeUnit configTimeunit;
 		try {
 			configTimeunit = TimeUnit.valueOf(configTimeunitProperty);
 		} catch (final IllegalArgumentException ex) {
-			LOG.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + this.timeunit.name() + " instead.");
+			this.log.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + this.timeunit.name() + " instead.");
 			configTimeunit = this.timeunit;
 		}
 
 		this.ignoreBeforeTimestamp = this.timeunit.convert(configuration.getLongProperty(CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP), configTimeunit);
 		this.ignoreAfterTimestamp = this.timeunit.convert(configuration.getLongProperty(CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP), configTimeunit);
-	}
-
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public TimestampFilter(final Configuration configuration) {
-		this(configuration, null);
 	}
 
 	/**
@@ -193,12 +164,12 @@ public final class TimestampFilter extends AbstractFilterPlugin {
 	 *            The new incoming record.
 	 */
 	@InputPort(name = INPUT_PORT_NAME_FLOW, description = "Receives trace events to be selected by a specific timestamp selector",
-			eventTypes = { IEventRecord.class, Trace.class })
+			eventTypes = { IEventRecord.class, TraceMetadata.class })
 	public final void inputTraceEvent(final IFlowRecord record) {
 		final long timestamp;
 
-		if (record instanceof Trace) {
-			timestamp = ((Trace) record).getLoggingTimestamp();
+		if (record instanceof TraceMetadata) {
+			timestamp = ((TraceMetadata) record).getLoggingTimestamp();
 		} else if (record instanceof IEventRecord) {
 			timestamp = ((IEventRecord) record).getTimestamp();
 		} else {

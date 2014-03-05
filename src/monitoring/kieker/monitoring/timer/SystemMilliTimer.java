@@ -80,8 +80,12 @@ public final class SystemMilliTimer extends AbstractTimeSource {
 		return this.timeunit.convert(System.currentTimeMillis() - this.offset, TimeUnit.MILLISECONDS);
 	}
 
-	public final String getTimeUnit() {
-		return this.timeunit.name();
+	public long getOffset() {
+		return this.timeunit.convert(this.offset, TimeUnit.MILLISECONDS);
+	}
+
+	public final TimeUnit getTimeUnit() {
+		return this.timeunit;
 	}
 
 	@Override

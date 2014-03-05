@@ -233,11 +233,16 @@ operation dependency graphs for the monitoring data used in this section.
 \label{fig:appendix:traceAnalysisExample:OperationDepGraphs}
 \end{figure}
 
-\pagebreak
+% \pagebreak
 
-\subsection{Response Times}
+\enlargethispage{1.5cm}
 
-The deployment component dependency, assembly component dependency, deployment operation dependency and the assembly operation dependency graphs can also be decorated with the response times, adding the minimum, the maximum and the average response times of the components. The decoration will be generated with the additional command line parameter \OPT{responseTimes} behind the corresponding \OPT{plot-}command.  An exemplaric graph with response times can be seen in Figure~\ref{fig:appendix:traceAnalysisExample:graphWithRespTimes}.
+\subsection{Response Times in Dependency Graphs}
+
+The afore-mentioned dependency graphs can also be decorated by the response times, adding the minimum, the average, %
+and the maximum response times of the components. The decoration will be generated with the additional command line %
+parameter \OPT{responseTimes} behind the corresponding \OPT{plot-}command.  %
+An exemplaric graph with response times is shown in Figure~\ref{fig:appendix:traceAnalysisExample:graphWithRespTimes}.
 
 \begin{figure}[h]
 \includegraphics[scale=0.45]{images/assemblyComponentDependencyGraphWithResponseTimes}
@@ -255,8 +260,10 @@ from the trace data to a file \file{system-entities.html}. %
 Figure~\ref{fig:appendix:traceAnalysisExample:htmlSystemModel} shows a screenshot %
 of this file rendered by a web browser.
 
-\begin{figure}[h]\centering
-\includegraphics[width=0.7\textwidth]{images/system-entities-html-FFscrsh.png}
+\enlargethispage{1.5cm}
+
+\begin{figure}[h!]\centering
+\includegraphics[width=0.75\textwidth]{images/system-entities-html-FFscrsh.png}
 \caption{HTML output of the system model reconstructed from the traces}
 \label{fig:appendix:traceAnalysisExample:htmlSystemModel}
 \end{figure}

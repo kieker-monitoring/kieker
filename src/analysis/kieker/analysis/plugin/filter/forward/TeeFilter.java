@@ -28,8 +28,6 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 
 /**
  * This filter has exactly one input port and one output port.
@@ -44,7 +42,7 @@ import kieker.common.logging.LogFactory;
 		outputPorts = @OutputPort(name = TeeFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, description = "Provides each incoming object", eventTypes = { Object.class }),
 		configuration = {
 			@Property(name = TeeFilter.CONFIG_PROPERTY_NAME_STREAM, defaultValue = TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_STDOUT,
-					description = "The name of the stream used to print the incoming data (special values are STDOUT, STDERR, STDLOG, and NULL; "
+					description = "The name of the stream used to print the incoming data (special values are STDOUT, STDERR, STDlog, and NULL; "
 							+ "other values are interpreted as filenames)."),
 			@Property(name = TeeFilter.CONFIG_PROPERTY_NAME_ENCODING, defaultValue = TeeFilter.CONFIG_PROPERTY_VALUE_DEFAULT_ENCODING,
 					description = "The used encoding for the selected stream.")
@@ -71,7 +69,7 @@ public final class TeeFilter extends AbstractFilterPlugin {
 	/**
 	 * The value of the stream property which determines that the filter uses the standard log.
 	 */
-	public static final String CONFIG_PROPERTY_VALUE_STREAM_STDLOG = "STDLOG";
+	public static final String CONFIG_PROPERTY_VALUE_STREAM_STDLOG = "STDlog";
 	/**
 	 * The value of the stream property which determines that the filter doesn't print anything.
 	 */
@@ -80,8 +78,6 @@ public final class TeeFilter extends AbstractFilterPlugin {
 	 * The default value of the encoding property which determines that the filter uses utf-8.
 	 */
 	public static final String CONFIG_PROPERTY_VALUE_DEFAULT_ENCODING = "UTF-8";
-
-	private static final Log LOG = LogFactory.getLog(TeeFilter.class);
 
 	private final PrintStream printStream;
 	private final String printStreamName;
@@ -126,29 +122,16 @@ public final class TeeFilter extends AbstractFilterPlugin {
 			try {
 				tmpPrintStream = new PrintStream(new FileOutputStream(printStreamNameConfig), false, this.encoding);
 			} catch (final UnsupportedEncodingException ex) {
-				LOG.error("Failed to initialize " + printStreamNameConfig, ex);
+				this.log.error("Failed to initialize " + printStreamNameConfig, ex);
 				tmpPrintStream = null; // NOPMD (null)
 			} catch (final FileNotFoundException ex) {
-				LOG.error("Failed to initialize " + printStreamNameConfig, ex);
+				this.log.error("Failed to initialize " + printStreamNameConfig, ex);
 				tmpPrintStream = null; // NOPMD (null)
 			}
 			this.printStream = tmpPrintStream;
 			this.printStreamName = printStreamNameConfig;
 			this.active = true;
 		}
-	}
-
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public TeeFilter(final Configuration configuration) {
-		this(configuration, null);
 	}
 
 	@Override
@@ -199,7 +182,7 @@ public final class TeeFilter extends AbstractFilterPlugin {
 			if (this.printStream != null) {
 				this.printStream.println(record);
 			} else {
-				LOG.info(record);
+				this.log.info(record);
 			}
 		}
 		super.deliver(OUTPUT_PORT_NAME_RELAYED_EVENTS, object);

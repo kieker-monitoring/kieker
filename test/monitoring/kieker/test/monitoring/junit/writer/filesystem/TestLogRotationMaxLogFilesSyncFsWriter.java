@@ -29,6 +29,9 @@ import kieker.monitoring.writer.filesystem.SyncFsWriter;
  */
 public class TestLogRotationMaxLogFilesSyncFsWriter extends AbstractTestLogRotationMaxLogFiles {
 
+	/**
+	 * Default constructor.
+	 */
 	public TestLogRotationMaxLogFilesSyncFsWriter() {
 		// empty default constructor
 	}
@@ -38,7 +41,6 @@ public class TestLogRotationMaxLogFilesSyncFsWriter extends AbstractTestLogRotat
 		final Configuration configuration = ConfigurationFactory.createDefaultConfiguration();
 		configuration.setProperty(ConfigurationFactory.METADATA, "false");
 		configuration.setProperty(ConfigurationFactory.WRITER_CLASSNAME, SyncFsWriter.class.getName());
-		configuration.setProperty(SyncFsWriter.CONFIG_TEMP, "false");
 		configuration.setProperty(SyncFsWriter.CONFIG_PATH, path);
 		configuration.setProperty(SyncFsWriter.CONFIG_MAXENTRIESINFILE, String.valueOf(maxEntriesInFile));
 		configuration.setProperty(SyncFsWriter.CONFIG_MAXLOGFILES, String.valueOf(maxLogFiles));

@@ -31,7 +31,7 @@ import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.record.flow.IFlowRecord;
 import kieker.common.record.flow.ITraceRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
-import kieker.common.record.flow.trace.Trace;
+import kieker.common.record.flow.trace.TraceMetadata;
 
 /**
  * Allows to filter Traces about their traceIds.
@@ -46,9 +46,9 @@ import kieker.common.record.flow.trace.Trace;
 @Plugin(description = "A filter allowing to filter incoming objects based on their trace ID",
 		outputPorts = {
 			@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME_MATCH, description = "Forwards events with matching trace IDs", eventTypes = {
-				AbstractTraceEvent.class, Trace.class, OperationExecutionRecord.class }),
+				AbstractTraceEvent.class, TraceMetadata.class, OperationExecutionRecord.class }),
 			@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME_MISMATCH, description = "Forwards events with trace IDs not matching", eventTypes = {
-				AbstractTraceEvent.class, Trace.class, OperationExecutionRecord.class })
+				AbstractTraceEvent.class, TraceMetadata.class, OperationExecutionRecord.class })
 		},
 		configuration = {
 			@Property(name = TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, defaultValue = "true"),
@@ -66,7 +66,9 @@ public final class TraceIdFilter extends AbstractFilterPlugin {
 	/** The name of the output port delivering the records with the non matching IDs. */
 	public static final String OUTPUT_PORT_NAME_MISMATCH = "recordsNotMatchingId";
 
+	/** The name of the property determining whether to accept all traces, regardless of the given trace IDs. */
 	public static final String CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES = "acceptAllTraces";
+	/** The name of the property determining which trace IDs should be accepted by this filter. */
 	public static final String CONFIG_PROPERTY_NAME_SELECTED_TRACES = "selectedTraceIds";
 
 	private final boolean acceptAllTraces;
@@ -88,19 +90,6 @@ public final class TraceIdFilter extends AbstractFilterPlugin {
 		for (final String id : configuration.getStringArrayProperty(CONFIG_PROPERTY_NAME_SELECTED_TRACES)) {
 			this.selectedTraceIds.add(Long.parseLong(id));
 		}
-	}
-
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public TraceIdFilter(final Configuration configuration) {
-		this(configuration, null);
 	}
 
 	/**
@@ -128,11 +117,11 @@ public final class TraceIdFilter extends AbstractFilterPlugin {
 	 *            The next record.
 	 */
 	@InputPort(name = INPUT_PORT_NAME_COMBINED, description = "Receives execution and trace events to be selected by trace ID",
-			eventTypes = { ITraceRecord.class, Trace.class, OperationExecutionRecord.class })
+			eventTypes = { ITraceRecord.class, TraceMetadata.class, OperationExecutionRecord.class })
 	public void inputCombined(final IMonitoringRecord record) {
 		if (record instanceof OperationExecutionRecord) {
 			this.inputOperationExecutionRecord((OperationExecutionRecord) record);
-		} else if ((record instanceof ITraceRecord) || (record instanceof Trace)) {
+		} else if ((record instanceof ITraceRecord) || (record instanceof TraceMetadata)) {
 			this.inputTraceEvent((IFlowRecord) record);
 		} // else discard it, we should never have gotten it anyhow
 	}
@@ -144,12 +133,12 @@ public final class TraceIdFilter extends AbstractFilterPlugin {
 	 *            The next record.
 	 */
 	@InputPort(name = INPUT_PORT_NAME_FLOW, description = "Receives trace events to be selected by trace ID",
-			eventTypes = { ITraceRecord.class, Trace.class })
+			eventTypes = { ITraceRecord.class, TraceMetadata.class })
 	public void inputTraceEvent(final IFlowRecord record) {
 		final long traceId;
 
-		if (record instanceof Trace) {
-			traceId = ((Trace) record).getTraceId();
+		if (record instanceof TraceMetadata) {
+			traceId = ((TraceMetadata) record).getTraceId();
 		} else if (record instanceof AbstractTraceEvent) {
 			traceId = ((ITraceRecord) record).getTraceId();
 		} else {

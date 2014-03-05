@@ -1,0 +1,3 @@
+The licenses for each used library are referenced in the *.LICENSE files
+in this directory. Each file contains the name, version and the URI
+for the license.

@@ -73,19 +73,6 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 		super(configuration, projectContext);
 	}
 
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public AbstractCallTreeFilter(final Configuration configuration) {
-		this(configuration, null);
-	}
-
 	private static final String assemblyComponentOperationPairNodeLabel(final AbstractCallTreeNode<AssemblyComponentOperationPair> node, final boolean shortLabels) {
 		final AssemblyComponentOperationPair p = node.getEntity();
 		final AssemblyComponent component = p.getAssemblyComponent();
@@ -177,7 +164,8 @@ public abstract class AbstractCallTreeFilter<T> extends AbstractMessageTraceProc
 			final Map<AbstractCallTreeNode<?>, Integer> nodeIds, final AtomicInteger nextNodeId, final PrintStream ps, final boolean shortLabels) {
 		final StringBuilder strBuild = new StringBuilder(64);
 		nodeIds.put(n, nextNodeId.get());
-		strBuild.append(nextNodeId.getAndIncrement()).append("[label =\"").append(n.isRootNode() ? "$" : AbstractCallTreeFilter.nodeLabel(n, shortLabels)) // NOCS
+		strBuild.append(nextNodeId.getAndIncrement()).append("[label =\"").append(n.isRootNode() ? SystemModelRepository.ROOT_NODE_LABEL // NOCS
+				: AbstractCallTreeFilter.nodeLabel(n, shortLabels)) // NOCS
 				.append("\",shape=" + DotFactory.DOT_SHAPE_NONE + "];");
 		ps.println(strBuild.toString());
 		for (final WeightedDirectedCallTreeEdge<?> child : n.getChildEdges()) {

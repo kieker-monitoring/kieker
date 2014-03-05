@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.common.record.flow.trace.Trace;
+import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.monitoring.core.controller.MonitoringController;
 
 /**
@@ -43,10 +43,10 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 	private final String hostname = MonitoringController.getInstance().getHostname();
 
 	/** the current trace; null if new trace. */
-	private final ThreadLocal<Trace> traceStorage = new ThreadLocal<Trace>();
+	private final ThreadLocal<TraceMetadata> traceStorage = new ThreadLocal<TraceMetadata>();
 
 	/** used to store the stack of enclosing traces; null if no sub trace created yet. */
-	private final ThreadLocal<Stack<Trace>> enclosingTraceStack = new ThreadLocal<Stack<Trace>>();
+	private final ThreadLocal<Stack<TraceMetadata>> enclosingTraceStack = new ThreadLocal<Stack<TraceMetadata>>();
 
 	/** store the parent Trace. */
 	private final WeakHashMap<Thread, TracePoint> parentTrace = new WeakHashMap<Thread, TracePoint>();
@@ -61,7 +61,7 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 	 * @return
 	 *         Trace object or null
 	 */
-	public final Trace getTrace() {
+	public final TraceMetadata getTrace() {
 		return this.traceStorage.get();
 	}
 
@@ -71,12 +71,12 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 	 * @return
 	 *         Trace object
 	 */
-	public final Trace registerTrace() {
-		final Trace enclosingTrace = this.traceStorage.get();
+	public final TraceMetadata registerTrace() {
+		final TraceMetadata enclosingTrace = this.traceStorage.get();
 		if (enclosingTrace != null) { // we create a subtrace
-			Stack<Trace> localTraceStack = this.enclosingTraceStack.get();
+			Stack<TraceMetadata> localTraceStack = this.enclosingTraceStack.get();
 			if (localTraceStack == null) {
-				localTraceStack = new Stack<Trace>();
+				localTraceStack = new Stack<TraceMetadata>();
 				this.enclosingTraceStack.set(localTraceStack);
 			}
 			localTraceStack.push(enclosingTrace);
@@ -100,7 +100,7 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 			parentOrderId = -1;
 		}
 		final String sessionId = SessionRegistry.INSTANCE.recallThreadLocalSessionId();
-		final Trace trace = new Trace(traceId, thread.getId(), sessionId, this.hostname, parentTraceId, parentOrderId);
+		final TraceMetadata trace = new TraceMetadata(traceId, thread.getId(), sessionId, this.hostname, parentTraceId, parentOrderId);
 		this.traceStorage.set(trace);
 		return trace;
 	}
@@ -111,7 +111,7 @@ public enum TraceRegistry { // Singleton (Effective Java #3)
 	 * Future calls of getTrace() will either return null or the enclosing trace object.
 	 */
 	public final void unregisterTrace() {
-		final Stack<Trace> localTraceStack = this.enclosingTraceStack.get();
+		final Stack<TraceMetadata> localTraceStack = this.enclosingTraceStack.get();
 		if (localTraceStack != null) { // we might have an enclosing trace and and are able to restore it
 			if (!localTraceStack.isEmpty()) { // we actually found something
 				this.traceStorage.set(localTraceStack.pop());

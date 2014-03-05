@@ -19,21 +19,22 @@
  */
 package kieker.common.record.system;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Andre van Hoorn, Jan Waller
  * 
  * @since 1.3
  */
-public final class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-
-	/** A constant which can be used as a default value for non existing fields of the record. */
-	public static final String DEFAULT_VALUE = "N/A";
-
-	private static final long serialVersionUID = 8072422694598002383L;
-	private static final Class<?>[] TYPES = {
+public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
+	public static final int SIZE = 60;
+	public static final Class<?>[] TYPES = {
 		long.class,
 		String.class,
 		long.class,
@@ -43,6 +44,11 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 		long.class,
 		long.class,
 	};
+
+	/** A constant which can be used as a default value for non existing fields of the record. */
+	public static final String DEFAULT_VALUE = "N/A";
+
+	private static final long serialVersionUID = -2159074202253748453L;
 
 	private final long memUsed;
 	private final long memFree;
@@ -114,10 +120,45 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 	}
 
 	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public MemSwapUsageRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		this.timestamp = buffer.getLong();
+		this.hostname = stringRegistry.get(buffer.getInt());
+		this.memTotal = buffer.getLong();
+		this.memUsed = buffer.getLong();
+		this.memFree = buffer.getLong();
+		this.swapTotal = buffer.getLong();
+		this.swapUsed = buffer.getLong();
+		this.swapFree = buffer.getLong();
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public Object[] toArray() {
-		return new Object[] { this.timestamp, this.hostname, this.memTotal, this.memUsed, this.memFree, this.swapTotal, this.swapUsed, this.swapFree, };
+		return new Object[] { this.getTimestamp(), this.getHostname(), this.getMemTotal(), this.getMemUsed(), this.getMemFree(), this.getSwapTotal(),
+			this.getSwapUsed(), this.getSwapFree(), };
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		buffer.putLong(this.getTimestamp());
+		buffer.putInt(stringRegistry.get(this.getHostname()));
+		buffer.putLong(this.getMemTotal());
+		buffer.putLong(this.getMemUsed());
+		buffer.putLong(this.getMemFree());
+		buffer.putLong(this.getSwapTotal());
+		buffer.putLong(this.getSwapUsed());
+		buffer.putLong(this.getSwapFree());
 	}
 
 	/**
@@ -126,7 +167,17 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Deprecated
-	public void initFromArray(final Object[] values) {
+	public final void initFromArray(final Object[] values) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
+	 */
+	@Deprecated
+	public final void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 
@@ -134,7 +185,14 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 	 * {@inheritDoc}
 	 */
 	public Class<?>[] getValueTypes() {
-		return TYPES.clone();
+		return TYPES; // NOPMD
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public int getSize() {
+		return SIZE;
 	}
 
 	/**

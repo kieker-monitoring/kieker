@@ -81,11 +81,6 @@ class HostNameRewriterPlugin extends AbstractFilterPlugin {
 		super(configuration, projectContext);
 	}
 
-	@Deprecated
-	public HostNameRewriterPlugin(final Configuration configuration) {
-		this(configuration, null);
-	}
-
 	@InputPort(
 			name = HostNameRewriterPlugin.INPUT_PORT_NAME,
 			eventTypes = { IMonitoringRecord.class })

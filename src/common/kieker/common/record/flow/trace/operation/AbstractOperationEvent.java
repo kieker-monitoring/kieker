@@ -16,8 +16,13 @@
 
 package kieker.common.record.flow.trace.operation;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.flow.IOperationRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Jan Waller
@@ -25,6 +30,15 @@ import kieker.common.record.flow.trace.AbstractTraceEvent;
  * @since 1.5
  */
 public abstract class AbstractOperationEvent extends AbstractTraceEvent implements IOperationRecord {
+	public static final int SIZE = 28;
+	public static final Class<?>[] TYPES = {
+		long.class, // Event.timestamp
+		long.class, // TraceEvent.traceId
+		int.class, // TraceEvent.orderIndex
+		String.class, // OperationEvent.operationSignature
+		String.class, // OperationEvent.classSignature
+	};
+
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -68,6 +82,53 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 		super(values, valueTypes); // values[0..2]
 		this.operationSignature = (String) values[3];
 		this.classSignature = (String) values[4];
+	}
+
+	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public AbstractOperationEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		super(buffer, stringRegistry);
+		this.operationSignature = stringRegistry.get(buffer.getInt());
+		this.classSignature = stringRegistry.get(buffer.getInt());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public Object[] toArray() {
+		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getOperationSignature(), this.getClassSignature(), };
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		buffer.putLong(this.getTimestamp());
+		buffer.putLong(this.getTraceId());
+		buffer.putInt(this.getOrderIndex());
+		buffer.putInt(stringRegistry.get(this.getOperationSignature()));
+		buffer.putInt(stringRegistry.get(this.getClassSignature()));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public Class<?>[] getValueTypes() {
+		return TYPES; // NOPMD
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public int getSize() {
+		return SIZE;
 	}
 
 	public final String getOperationSignature() {

@@ -24,11 +24,6 @@ public class MyResponseTimeOutputPrinter extends AbstractFilterPlugin {
 		this.validOutput = configuration.getBooleanProperty(MyResponseTimeOutputPrinter.CONFIG_PROPERTY_NAME_VALID_OUTPUT);
 	}
 
-	@Deprecated
-	public MyResponseTimeOutputPrinter(final Configuration configuration) {
-		this(configuration, null);
-	}
-
 	@InputPort(name = MyResponseTimeOutputPrinter.INPUT_PORT_NAME_EVENTS, eventTypes = { MyResponseTimeRecord.class })
 	public void newEvent(final Object event) {
 		if (event instanceof MyResponseTimeRecord) {

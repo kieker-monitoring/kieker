@@ -19,6 +19,7 @@ package kieker.test.tools.junit.traceAnalysis.filter.traceFilter;
 import org.junit.Assert;
 import org.junit.Test;
 
+import kieker.analysis.AnalysisController;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.filter.traceReconstruction.InvalidTraceException;
 import kieker.tools.traceAnalysis.systemModel.Execution;
@@ -35,7 +36,7 @@ public class TestTraceEquivalenceFilterAssemblyEquivalence extends AbstractKieke
 
 	private static final String SESSION_ID = "j8tVhvDPYL";
 
-	private final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration(), null);
+	private final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration(), new AnalysisController());
 	private final ExecutionFactory executionFactory = new ExecutionFactory(this.systemEntityFactory);
 
 	@Test

@@ -17,7 +17,7 @@
 package kieker.monitoring.writer;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.monitoring.core.IMonitoringRecordReceiver;
+import kieker.common.util.registry.IMonitoringRecordReceiver;
 import kieker.monitoring.core.controller.IMonitoringController;
 
 /**

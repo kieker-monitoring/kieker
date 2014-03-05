@@ -27,8 +27,6 @@ import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.filter.IGraphOutputtingFilter;
 import kieker.tools.traceAnalysis.filter.IGraphProducingFilter;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractEdge;
@@ -61,8 +59,6 @@ public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V ex
 	 */
 	public static final String INPUT_PORT_NAME_GRAPH = "graphs";
 
-	private static final Log LOG = LogFactory.getLog(AbstractGraphFilter.class);
-
 	private final Configuration configuration;
 
 	private final List<IGraphProducingFilter<?>> producers = new ArrayList<IGraphProducingFilter<?>>();
@@ -79,19 +75,6 @@ public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V ex
 		super(configuration, projectContext);
 
 		this.configuration = configuration;
-	}
-
-	/**
-	 * Creates a new filter with the given configuration.
-	 * 
-	 * @param configuration
-	 *            The filter configuration to use
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public AbstractGraphFilter(final Configuration configuration) {
-		this(configuration, null);
 	}
 
 	@Override
@@ -122,7 +105,7 @@ public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V ex
 				producer.requestOriginRetentionPolicy(this.getDesiredOriginRetentionPolicy());
 			}
 		} catch (final AnalysisConfigurationException e) {
-			LOG.error(e.getMessage(), e);
+			this.log.error(e.getMessage(), e);
 			return false;
 		}
 

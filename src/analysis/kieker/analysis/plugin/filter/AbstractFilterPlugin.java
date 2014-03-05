@@ -35,18 +35,6 @@ import kieker.common.configuration.Configuration;
 public abstract class AbstractFilterPlugin extends AbstractPlugin implements IFilterPlugin {
 
 	/**
-	 * The constructor for the plugin. Every plugin must have this constructor.
-	 * 
-	 * @param configuration
-	 *            The configuration to use for this plugin.
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public AbstractFilterPlugin(final Configuration configuration) {
-		this(configuration, null);
-	}
-
-	/**
 	 * Each Plugin requires a constructor with a Configuration object and a IProjectContext.
 	 * 
 	 * @param configuration
@@ -54,15 +42,13 @@ public abstract class AbstractFilterPlugin extends AbstractPlugin implements IFi
 	 * @param projectContext
 	 *            The project context for this component. The component will be registered.
 	 */
-	// Internal use of the register methods:
-	@SuppressWarnings("deprecation")
 	public AbstractFilterPlugin(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
 		// Register the filter
 		if (projectContext instanceof AnalysisController) {
 			((AnalysisController) projectContext).registerFilter(this);
-		} else if (projectContext != null) {
+		} else {
 			throw new InvalidProjectContextException("Invalid analysis controller in constructor");
 		}
 	}

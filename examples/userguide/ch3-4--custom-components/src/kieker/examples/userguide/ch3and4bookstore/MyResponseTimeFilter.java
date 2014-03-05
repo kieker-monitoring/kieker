@@ -51,11 +51,6 @@ public class MyResponseTimeFilter extends AbstractFilterPlugin {
 		this.rtThresholdNanos = configuration.getLongProperty(CONFIG_PROPERTY_NAME_TS_NANOS);
 	}
 
-	@Deprecated
-	public MyResponseTimeFilter(final Configuration configuration) {
-		this(configuration, null);
-	}
-
 	public static final String INPUT_PORT_NAME_RESPONSE_TIMES = "newResponseTime";
 
 	@InputPort(

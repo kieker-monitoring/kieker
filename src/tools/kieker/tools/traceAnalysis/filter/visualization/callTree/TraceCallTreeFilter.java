@@ -25,8 +25,6 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.traceReconstruction.TraceProcessingException;
@@ -72,8 +70,6 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 	/** This is the default value whether to use short labels or not. */
 	public static final String CONFIG_PROPERTY_VALUE_SHORT_LABELS_DEFAULT = "true";
 
-	private static final Log LOG = LogFactory.getLog(TraceCallTreeFilter.class);
-
 	private final String dotOutputFn;
 	private final boolean shortLabels;
 
@@ -91,19 +87,6 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 		// Initialize the fields based on the given parameters. */
 		this.shortLabels = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS);
 		this.dotOutputFn = configuration.getStringProperty(CONFIG_PROPERTY_NAME_OUTPUT_FILENAME);
-	}
-
-	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public TraceCallTreeFilter(final Configuration configuration) {
-		this(configuration, null);
 	}
 
 	@Override
@@ -154,13 +137,13 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 			TraceCallTreeFilter.this.reportSuccess(mt.getTraceId());
 		} catch (final TraceProcessingException ex) {
 			TraceCallTreeFilter.this.reportError(mt.getTraceId());
-			LOG.error("TraceProcessingException", ex);
+			this.log.error("TraceProcessingException", ex);
 		} catch (final FileNotFoundException ex) {
 			TraceCallTreeFilter.this.reportError(mt.getTraceId());
-			LOG.error("File not found", ex);
+			this.log.error("File not found", ex);
 		} catch (final UnsupportedEncodingException ex) {
 			TraceCallTreeFilter.this.reportError(mt.getTraceId());
-			LOG.error("Encoding not supported", ex);
+			this.log.error("Encoding not supported", ex);
 		}
 	}
 }

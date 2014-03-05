@@ -32,7 +32,7 @@ import kieker.tools.traceAnalysis.systemModel.ComponentType;
 public class TypeRepository extends AbstractSystemSubRepository {
 
 	/** This constant represents the root component. */
-	public static final ComponentType ROOT_COMPONENT = new ComponentType(AbstractSystemSubRepository.ROOT_ELEMENT_ID, "$");
+	public static final ComponentType ROOT_COMPONENT = new ComponentType(AbstractSystemSubRepository.ROOT_ELEMENT_ID, SystemModelRepository.ROOT_NODE_LABEL);
 
 	private final Map<String, ComponentType> componentTypesByName = new Hashtable<String, ComponentType>(); // NOPMD (UseConcurrentHashMap)
 	private final Map<Integer, ComponentType> componentTypesById = new Hashtable<Integer, ComponentType>(); // NOPMD (UseConcurrentHashMap)

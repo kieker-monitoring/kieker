@@ -61,7 +61,7 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 	 * Creates a new instance of this class.
 	 */
 	public TestTraceReconstructionFilter() {
-		final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration(), null);
+		final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration(), new AnalysisController());
 		final ExecutionFactory executionFactory = new ExecutionFactory(systemEntityFactory);
 
 		// Manually create Executions for a trace
@@ -130,7 +130,7 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 				TraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TRACE_DURATION);
 		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration, controller);
 
-		Assert.assertTrue("Test invalid since trace length smaller than filter timeout", validExecutionTrace.getDurationInNanos() <= filter
+		Assert.assertTrue("Test invalid since trace length smaller than filter timeout", validExecutionTrace.getDuration() <= filter
 				.getMaxTraceDuration());
 
 		final ListCollectionFilter<ExecutionTrace> executionTraceSinkPlugin = new ListCollectionFilter<ExecutionTrace>(new Configuration(), controller);
@@ -233,7 +233,7 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION,
 				TraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TRACE_DURATION);
 		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration, controller);
-		Assert.assertTrue("Test invalid since trace length smaller than filter timeout", invalidExecutionTrace.getDurationInNanos() <= filter
+		Assert.assertTrue("Test invalid since trace length smaller than filter timeout", invalidExecutionTrace.getDuration() <= filter
 				.getMaxTraceDuration());
 
 		final ListCollectionFilter<ExecutionTrace> executionTraceSinkPlugin = new ListCollectionFilter<ExecutionTrace>(new Configuration(), controller);

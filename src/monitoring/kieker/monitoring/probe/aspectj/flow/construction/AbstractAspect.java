@@ -23,7 +23,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
 import kieker.common.record.flow.trace.ConstructionEvent;
-import kieker.common.record.flow.trace.Trace;
+import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.TraceRegistry;
@@ -58,12 +58,15 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	// HINT: This may be logged multiple times due to super constructor calls...
 	@AfterReturning("monitoredConstructor() && this(thisObject) && notWithinKieker()")
 	public void afterConstruction(final Object thisObject, final JoinPoint.StaticPart jp) {
+		if (!CTRLINST.isMonitoringEnabled()) {
+			return;
+		}
 		final Signature signature = jp.getSignature();
 		if (!CTRLINST.isProbeActivated(this.signatureToLongString(signature))) {
 			return;
 		}
 		// common fields
-		Trace trace = TRACEREGISTRY.getTrace();
+		TraceMetadata trace = TRACEREGISTRY.getTrace();
 		final boolean newTrace = trace == null;
 		if (newTrace) {
 			trace = TRACEREGISTRY.registerTrace();

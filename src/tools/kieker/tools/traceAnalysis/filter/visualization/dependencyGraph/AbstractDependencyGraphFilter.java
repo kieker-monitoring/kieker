@@ -18,14 +18,11 @@ package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.filter.AbstractGraphProducingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
@@ -43,9 +40,6 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public abstract class AbstractDependencyGraphFilter<T extends ISystemModelElement> extends AbstractGraphProducingFilter<AbstractDependencyGraph<T>> {
-	private static final Log LOG = LogFactory.getLog(AbstractDependencyGraphFilter.class);
-
-	private final TimeUnit timeunit;
 
 	private final List<AbstractNodeDecorator> decorators = new ArrayList<AbstractNodeDecorator>();
 
@@ -61,34 +55,6 @@ public abstract class AbstractDependencyGraphFilter<T extends ISystemModelElemen
 	 */
 	public AbstractDependencyGraphFilter(final Configuration configuration, final IProjectContext projectContext, final AbstractDependencyGraph<T> graph) {
 		super(configuration, projectContext, graph);
-		if (null != projectContext) { // TODO #819 remove non-null check and else case in Kieker 1.8)
-			final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
-			TimeUnit recordTimeunit;
-			try {
-				recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
-			} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
-				LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
-				recordTimeunit = TimeUnit.NANOSECONDS;
-			}
-			this.timeunit = recordTimeunit;
-		} else {
-			this.timeunit = TimeUnit.NANOSECONDS;
-		}
-	}
-
-	/**
-	 * Creates a new abstract dependency graph filter using the given data.
-	 * 
-	 * @param configuration
-	 *            The configuration to use
-	 * @param graph
-	 *            The graph to produce / extend
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public AbstractDependencyGraphFilter(final Configuration configuration, final AbstractDependencyGraph<T> graph) {
-		this(configuration, null, graph);
 	}
 
 	/**
@@ -113,7 +79,7 @@ public abstract class AbstractDependencyGraphFilter<T extends ISystemModelElemen
 	 */
 	protected void invokeDecorators(final AbstractMessage message, final DependencyGraphNode<?> sourceNode, final DependencyGraphNode<?> targetNode) {
 		for (final AbstractNodeDecorator currentDecorator : this.decorators) {
-			currentDecorator.processMessage(message, sourceNode, targetNode, this.timeunit);
+			currentDecorator.processMessage(message, sourceNode, targetNode, super.recordsTimeUnitFromProjectContext);
 		}
 	}
 

@@ -63,19 +63,6 @@ public class SimpleForwardFilterWithRepository extends AbstractFilterPlugin {
 	}
 
 	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this filter.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public SimpleForwardFilterWithRepository(final Configuration configuration) {
-		this(configuration, null);
-	}
-
-	/**
 	 * This method represents the input port of this method, receiving the new objects.
 	 * 
 	 * @param event

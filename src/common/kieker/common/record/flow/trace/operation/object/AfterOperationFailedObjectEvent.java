@@ -16,8 +16,13 @@
 
 package kieker.common.record.flow.trace.operation.object;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.flow.IObjectRecord;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Jan Waller
@@ -25,17 +30,8 @@ import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
  * @since 1.6
  */
 public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent implements IObjectRecord {
-
-	/**
-	 * Constant to be used if no cause required.
-	 * 
-	 * @deprecated to be removed in Kieker 1.8
-	 */
-	@Deprecated
-	public static final String NO_CAUSE = "<no-cause>";
-
-	private static final long serialVersionUID = 8956196561578879420L;
-	private static final Class<?>[] TYPES = {
+	public static final int SIZE = 36;
+	public static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
 		int.class, // TraceEvent.orderIndex
@@ -44,6 +40,8 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 		String.class, // AfterOperationFailedEvent.Exception
 		int.class, // objectId
 	};
+
+	private static final long serialVersionUID = -2329201498617811437L;
 
 	private final int objectId;
 
@@ -96,6 +94,20 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 	}
 
 	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public AfterOperationFailedObjectEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		super(buffer, stringRegistry);
+		this.objectId = buffer.getInt();
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -108,11 +120,33 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Class<?>[] getValueTypes() {
-		return TYPES.clone();
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		buffer.putLong(this.getTimestamp());
+		buffer.putLong(this.getTraceId());
+		buffer.putInt(this.getOrderIndex());
+		buffer.putInt(stringRegistry.get(this.getOperationSignature()));
+		buffer.putInt(stringRegistry.get(this.getClassSignature()));
+		buffer.putInt(stringRegistry.get(this.getCause()));
+		buffer.putInt(this.getObjectId());
 	}
 
-	public int getObjectId() {
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Class<?>[] getValueTypes() {
+		return TYPES; // NOPMD
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int getSize() {
+		return SIZE;
+	}
+
+	public final int getObjectId() {
 		return this.objectId;
 	}
 }

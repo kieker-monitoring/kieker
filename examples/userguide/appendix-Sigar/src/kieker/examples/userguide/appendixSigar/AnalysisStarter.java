@@ -72,11 +72,6 @@ class StdOutDumpConsumer extends AbstractFilterPlugin {
 		super(configuration, projectContext);
 	}
 
-	@Deprecated
-	public StdOutDumpConsumer(final Configuration configuration) {
-		this(configuration, null);
-	}
-
 	@InputPort(
 			name = StdOutDumpConsumer.INPUT_PORT_NAME,
 			eventTypes = { IMonitoringRecord.class })

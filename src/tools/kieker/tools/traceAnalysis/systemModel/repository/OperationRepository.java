@@ -32,7 +32,7 @@ import kieker.tools.traceAnalysis.systemModel.Operation;
  * @since 1.1
  */
 public class OperationRepository extends AbstractSystemSubRepository {
-	public static final Signature ROOT_SIGNATURE = new Signature("$", new String[] {}, "<>", new String[] {});
+	public static final Signature ROOT_SIGNATURE = new Signature(SystemModelRepository.ROOT_NODE_LABEL, new String[] {}, "<>", new String[] {});
 	public static final Operation ROOT_OPERATION = new Operation(AbstractSystemSubRepository.ROOT_ELEMENT_ID, TypeRepository.ROOT_COMPONENT,
 			ROOT_SIGNATURE);
 

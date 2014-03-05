@@ -50,19 +50,6 @@ public abstract class AbstractMessageTraceProcessingFilter extends AbstractTrace
 	}
 
 	/**
-	 * Creates a new instance of this class using the given parameters.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component.
-	 * 
-	 * @deprecated To be removed in Kieker 1.8.
-	 */
-	@Deprecated
-	public AbstractMessageTraceProcessingFilter(final Configuration configuration) {
-		this(configuration, null);
-	}
-
-	/**
 	 * This is the (abstract) input port for the incoming message traces.
 	 * 
 	 * @param mt

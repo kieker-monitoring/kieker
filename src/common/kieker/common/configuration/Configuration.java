@@ -16,9 +16,9 @@
 
 package kieker.common.configuration;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Properties;
 
 import kieker.common.logging.Log;
@@ -118,6 +118,23 @@ public final class Configuration extends Properties {
 	}
 
 	/**
+	 * Reads the given property from the configuration and interprets it as a double.
+	 * 
+	 * @param key
+	 *            The key of the property.
+	 * @return A long with the value of the given property or null, if the property does not exist.
+	 */
+	public final double getDoubleProperty(final String key) {
+		final String s = this.getStringProperty(key);
+		try {
+			return Double.parseDouble(s);
+		} catch (final NumberFormatException ex) {
+			LOG.warn("Error parsing configuration property '" + key + "', found value '" + s + "', using default value 0"); // ignore ex
+			return 0.0;
+		}
+	}
+
+	/**
 	 * Reads the given property from the configuration and interprets it as a path.
 	 * 
 	 * @param key
@@ -198,21 +215,76 @@ public final class Configuration extends Properties {
 	}
 
 	/**
-	 * Tries to simplify a given filesystem path.
-	 * E.g., test/../x/y/./z/a/../x -> x/y/z/x
+	 * Based upon Guava 14.0.1 (Chris Nokleberg, Colin Decker). Guava is licensed under "The Apache Software License, Version 2.0".<br>
+	 * </br>
+	 * Simplifies a given file system path.
 	 * 
-	 * @param path
+	 * @param pathname
 	 *            The path to be simplified.
-	 * 
 	 * @return A simplified version of the given path.
 	 */
-	public static final String convertToPath(final String path) {
-		try {
-			return new URI(null, null, null, -1, path.replace('\\', '/'), null, null).normalize().toASCIIString();
-		} catch (final URISyntaxException ex) {
-			LOG.warn("Failed to parse path: " + path, ex);
-			return path;
+	public static final String convertToPath(final String pathname) {
+		if (pathname.length() == 0) {
+			return pathname;
 		}
+
+		final String workingPathname = pathname.replace('\\', '/');
+
+		final boolean endsWithSlash = workingPathname.charAt(workingPathname.length() - 1) == '/';
+
+		// split the path apart
+		final String[] components = workingPathname.split("/");
+		final LinkedList<String> path = new LinkedList<String>(); // NOCS NOPMD
+
+		// resolve ., .., and //
+		for (final String component : components) {
+			if (".".equals(component)) {
+				continue;
+			} else if ("".equals(component)) {
+				// Drop empty elements
+				continue;
+			} else if ("..".equals(component)) {
+				if (!path.isEmpty() && !"..".equals(path.getLast())) {
+					path.removeLast();
+				} else {
+					path.add("..");
+				}
+			} else {
+				path.add(component);
+			}
+		}
+
+		// put it back together
+		final StringBuilder sb = new StringBuilder();
+
+		if (workingPathname.charAt(0) == '/') {
+			sb.append('/');
+		}
+
+		final int numberPathElements = path.size();
+		final Iterator<String> pathIter = path.iterator();
+		for (int i = 0; i < (numberPathElements - 1); i++) {
+			sb.append(pathIter.next()).append('/');
+		}
+		if (pathIter.hasNext()) {
+			sb.append(pathIter.next());
+		}
+		if (endsWithSlash
+				&& (sb.length() != 0) // not if the path is now empty
+				&& ((sb.length() != 1) || (sb.charAt(0) != '/'))) { // not if the path is now '/'
+			sb.append('/');
+		}
+
+		String result = sb.toString();
+
+		while (result.startsWith("/../")) {
+			result = result.substring(3);
+		}
+		if ("/..".equals(result)) {
+			result = "/";
+		}
+
+		return result;
 	}
 
 	/**
@@ -267,19 +339,36 @@ public final class Configuration extends Properties {
 	}
 
 	/**
-	 * You should know what you do if you use this method! Currently it is used for a (dirty) hack to implement writers.
+	 * Flattens the Properties hierarchies with this Configuration.
+	 * Afterwards, all Properties will still be present and defaults will be null.
+	 */
+	public final void flattenInPlace() {
+		final Enumeration<?> keys = this.propertyNames();
+		while (keys.hasMoreElements()) {
+			final String property = (String) keys.nextElement();
+			this.setProperty(property, super.getProperty(property));
+		}
+		this.defaults = null; // NOPMD (assign null)
+	}
+
+	/**
+	 * You should know what you do if you use this method!
+	 * Currently it is used for a (dirty) hack to add default configurations to Writers or AnalysisPlugins.
 	 * 
 	 * @param defaultConfiguration
 	 *            The default configuration for this configuration object.
-	 * 
-	 * @throws IllegalAccessException
-	 *             If the default value has already been set.
 	 */
-	public final void setDefaultConfiguration(final Configuration defaultConfiguration) throws IllegalAccessException {
-		if (this.defaults == null) {
-			this.defaults = defaultConfiguration;
+	public final void setDefaultConfiguration(final Configuration defaultConfiguration) {
+		Configuration conf = this;
+		while ((conf.defaults != null) && (conf.defaults instanceof Configuration)) {
+			conf = (Configuration) conf.defaults;
+		}
+		if (conf.defaults == null) {
+			conf.defaults = defaultConfiguration;
 		} else if (defaultConfiguration != null) {
-			throw new IllegalAccessException();
+			// if nothing else works, use the sledge-hammer method
+			this.flattenInPlace();
+			this.defaults = defaultConfiguration;
 		}
 	}
 

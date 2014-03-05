@@ -8,7 +8,7 @@
 \chapter{\KiekerTraceAnalysis{} Tool}\label{chap:aspectJ}
 
 \KiekerTraceAnalysis{} implements the special feature of \Kieker{} allowing to %
-monitor, analyze and visualize (distributed) traces of method executions and %
+monitor, analyze, and visualize (distributed) traces of method executions and %
 corresponding timing information. For this purpose, it includes monitoring probes employing %
 AspectJ~\cite{AspectJ-WebSite}, Java~EE Servlet~\cite{JavaServletTechnology-WebSite}, %
 Spring~\cite{Spring-WebSite}, and Apache~CXF~\cite{CXF-WebSite} technology. %
@@ -291,10 +291,10 @@ In order to use this tool, it is necessary to install two third-party programs:
 \item \textbf{GNU PlotUtils} A set of tools for generating 2D plot graphics which can be downloaded from \url{http://www.gnu.org/software/plotutils/} (for Linux) and from \url{http://gnuwin32.sourceforge.net/packages/plotutils.htm} (for Windows).
 \item \textbf{ps2pdf} The \file{ps2pdf} tool is used to convert ps files to pdf files.
 \end{enumerate}
-Under Windows it is recommended to add the \dir{bin/} directories of both tools to the ``path'' environment variable.
+Under Windows it is recommended to add the \dir{bin/} directories of both tools to the ``path'' environment variable. It is also possible that the GNU PlotUtils are unable to process sequence diagrams. In this case it is recommended to use the Cygwin port of PlotUtils.
 }
 
-\vspace{3mm}
+\vspace{1mm}
 
 \noindent Once both programs have been installed, the \KiekerTraceAnalysis{} tool can be used. It can be accessed via the wrapper-script \file{trace-analysis.sh} or \file{trace-analysis.bat} (Windows) in the \dir{bin/} directory. Non-parameterized calls of the scripts print all possible options on the screen, as listed in Appendix~\ref{appendix:wrapperScripts:traceAnalysis}.
 
@@ -304,7 +304,7 @@ The commands shown in Listings~\ref{lst:traceAnalysis:sequenceDiagram} and \ref{
 \input{ch5-trace-analysis_Produce_Sequence_Diagram.inc}
 \input{ch5-trace-analysis_Produce_Sequence_Diagram-win.inc}
 
-\
+\enlargethispage{1cm}
 
 \WARNBOX{%
 The Windows \file{.bat} wrapper scripts (including \file{trace-analysis.bat}) must be executed from within %

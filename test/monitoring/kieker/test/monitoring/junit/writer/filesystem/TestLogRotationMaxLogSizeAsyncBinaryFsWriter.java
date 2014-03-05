@@ -31,6 +31,9 @@ import kieker.monitoring.writer.filesystem.AsyncBinaryFsWriter;
  */
 public class TestLogRotationMaxLogSizeAsyncBinaryFsWriter extends AbstractTestLogRotationMaxLogSize {
 
+	/**
+	 * Default constructor.
+	 */
 	public TestLogRotationMaxLogSizeAsyncBinaryFsWriter() {
 		super(4 + 8); // int and long
 	}
@@ -42,7 +45,6 @@ public class TestLogRotationMaxLogSizeAsyncBinaryFsWriter extends AbstractTestLo
 		configuration.setProperty(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP, "false"); // needed for constant size
 		final String writer = AsyncBinaryFsWriter.class.getName();
 		configuration.setProperty(ConfigurationFactory.WRITER_CLASSNAME, writer);
-		configuration.setProperty(writer + '.' + AbstractAsyncFSWriter.CONFIG_TEMP, "false");
 		configuration.setProperty(writer + '.' + AbstractAsyncFSWriter.CONFIG_PATH, path);
 		configuration.setProperty(writer + '.' + AbstractAsyncFSWriter.CONFIG_MAXENTRIESINFILE, String.valueOf(maxEntriesInFile));
 		configuration.setProperty(writer + '.' + AbstractAsyncFSWriter.CONFIG_MAXLOGFILES, "-1");
