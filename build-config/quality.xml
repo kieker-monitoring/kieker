@@ -30,7 +30,7 @@
 			</fileset>
 		</path>
 		<taskdef name="cpd" classname="net.sourceforge.pmd.cpd.CPDTask" classpathref="pmd.libs" />
-		<cpd minimumTokenCount="100" outputFile="${tmp.dir}/cpd_report.xml">
+		<cpd minimumTokenCount="100" format="xml" outputFile="${tmp.dir}/cpd_report.xml">
 			<fileset dir="${src.dir}" includes="**/*.java" />
 			<fileset dir="${test.dir}" includes="**/*.java" />
 		</cpd>
