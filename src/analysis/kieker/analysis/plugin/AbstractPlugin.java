@@ -40,6 +40,7 @@ import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
+import kieker.analysis.plugin.filter.visualization.IWebVisualizationFilterPlugin;
 import kieker.analysis.plugin.reader.IReaderPlugin;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
@@ -90,16 +91,20 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 				this.log.error("Two RepositoryPorts use the same name: " + repoPort.name());
 			}
 		}
-		for (final OutputPort outputPort : annotation.outputPorts()) {
-			if (this.outputPorts.put(outputPort.name(), outputPort) != null) {
-				this.log.error("Two OutputPorts use the same name: " + outputPort.name());
+		// ignore possible outputPorts for IWebVisualizationFilters
+		if (!(this instanceof IWebVisualizationFilterPlugin)) {
+			for (final OutputPort outputPort : annotation.outputPorts()) {
+				if (this.outputPorts.put(outputPort.name(), outputPort) != null) {
+					this.log.error("Two OutputPorts use the same name: " + outputPort.name());
+				}
+				Class<?>[] outTypes = outputPort.eventTypes();
+				if (outTypes.length == 0) {
+					outTypes = new Class<?>[] { Object.class };
+				}
+				this.outputPortTypes.put(outputPort, outTypes);
 			}
-			Class<?>[] outTypes = outputPort.eventTypes();
-			if (outTypes.length == 0) {
-				outTypes = new Class<?>[] { Object.class };
-			}
-			this.outputPortTypes.put(outputPort, outTypes);
 		}
+
 		// Get all input ports.
 		this.inputPorts = new ConcurrentHashMap<String, InputPort>();
 		// ignore possible inputPorts for IReaderPlugins
