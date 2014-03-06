@@ -30,7 +30,6 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 
-import kieker.test.analysis.junit.plugin.TestPluginConfigurationRetention;
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
@@ -40,7 +39,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
  */
 public class TestRecordsUsingCorrectBinarySize extends AbstractKiekerTest {
 
-	private static final Log LOG = LogFactory.getLog(TestPluginConfigurationRetention.class);
+	private static final Log LOG = LogFactory.getLog(TestRecordsUsingCorrectBinarySize.class);
 
 	private static final String DIR_NAME_SOURCES = "src";
 	private static final String PATTERN_JAVA_SOURCE_FILES = ".*java";
