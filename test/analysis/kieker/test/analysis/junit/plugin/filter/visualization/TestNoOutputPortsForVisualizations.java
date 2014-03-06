@@ -26,11 +26,8 @@ import org.apache.cxf.helpers.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.analysis.AnalysisController;
-import kieker.analysis.IAnalysisController;
-import kieker.analysis.IProjectContext;
+import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.filter.visualization.AbstractWebVisualizationFilterPlugin;
-import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 
@@ -69,7 +66,7 @@ public class TestNoOutputPortsForVisualizations extends AbstractKiekerTest {
 			if (TestNoOutputPortsForVisualizations.doesClassExtendAbstractWebVisualizationFilter(clazz) && !(this.isClassAbstract(clazz))) {
 				LOG.info("Testing class '" + className + "'...");
 				if (TestNoOutputPortsForVisualizations.containsOutputPorts((Class<? extends AbstractWebVisualizationFilterPlugin>) clazz)) {
-					Assert.fail("Class '" + className + "' is a reader with input ports.");
+					Assert.fail("Class '" + className + "' is a visualization filter with output ports.");
 				}
 			}
 		}
@@ -80,13 +77,10 @@ public class TestNoOutputPortsForVisualizations extends AbstractKiekerTest {
 	}
 
 	private static boolean containsOutputPorts(final Class<? extends AbstractWebVisualizationFilterPlugin> clazz) throws InstantiationException,
-			IllegalAccessException,
-			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		final IAnalysisController ac = new AnalysisController();
-		final AbstractWebVisualizationFilterPlugin pluginInstance = clazz.getConstructor(Configuration.class, IProjectContext.class).newInstance(
-				new Configuration(), ac);
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+		final Plugin annotation = clazz.getAnnotation(Plugin.class);
 
-		return (pluginInstance.getAllOutputPortNames().length != 0);
+		return (annotation.outputPorts().length != 0);
 	}
 
 	private static List<File> listJavaSourceFiles() {

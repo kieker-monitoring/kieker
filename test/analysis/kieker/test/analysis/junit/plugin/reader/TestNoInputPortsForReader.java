@@ -19,6 +19,7 @@ package kieker.test.analysis.junit.plugin.reader;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.List;
 
@@ -26,11 +27,8 @@ import org.apache.cxf.helpers.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.analysis.AnalysisController;
-import kieker.analysis.IAnalysisController;
-import kieker.analysis.IProjectContext;
+import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
-import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 
@@ -80,10 +78,12 @@ public class TestNoInputPortsForReader extends AbstractKiekerTest {
 
 	private static boolean containsInputPorts(final Class<? extends AbstractReaderPlugin> clazz) throws InstantiationException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		final IAnalysisController ac = new AnalysisController();
-		final AbstractReaderPlugin pluginInstance = clazz.getConstructor(Configuration.class, IProjectContext.class).newInstance(new Configuration(), ac);
-
-		return (pluginInstance.getAllInputPortNames().length != 0);
+		for (final Method method : clazz.getMethods()) {
+			if (method.isAnnotationPresent(InputPort.class)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private static List<File> listJavaSourceFiles() {
