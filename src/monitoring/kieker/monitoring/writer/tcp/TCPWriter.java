@@ -105,7 +105,9 @@ final class TCPWriterThread extends AbstractAsyncThread {
 			final ByteBuffer buffer = this.byteBuffer;
 			if ((monitoringRecord.getSize() + 4 + 8) > buffer.remaining()) {
 				buffer.flip();
-				this.socketChannelRecords.write(buffer);
+				while (buffer.hasRemaining()) {
+					this.socketChannelRecords.write(buffer);
+				}
 				buffer.clear();
 			}
 			buffer.putInt(this.monitoringController.getUniqueIdForString(monitoringRecord.getClass().getName()));

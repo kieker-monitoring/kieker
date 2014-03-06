@@ -161,6 +161,13 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	}
 
 	/**
+	 * @return the String as byte[]
+	 */
+	public final byte[] getStrBytes() {
+		return this.strBytes;
+	}
+
+	/**
 	 * @return the id
 	 */
 	public final int getId() {
