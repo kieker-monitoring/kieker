@@ -93,9 +93,9 @@ public class TestRecordsUsingCorrectBinarySize extends AbstractKiekerTest {
 			} else if (type == Character.TYPE) {
 				calculatedSize += Character.SIZE;
 			} else if (type == String.class) {
-				calculatedSize += 32;
+				calculatedSize += Integer.SIZE;
 			} else if (type == Boolean.TYPE) {
-				calculatedSize += 8;
+				calculatedSize += Byte.SIZE;
 			} else {
 				throw new UnsupportedOperationException("Unsupported data type found: " + type);
 			}

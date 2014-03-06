@@ -30,7 +30,7 @@ import kieker.common.util.registry.IRegistry;
  * @since 1.3
  */
 public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	public static final int SIZE = 72;
+	public static final int SIZE = (Long.SIZE + Integer.SIZE + Integer.SIZE + Double.SIZE + Double.SIZE + Double.SIZE + Double.SIZE + Double.SIZE + Double.SIZE + Double.SIZE) / 8;
 	public static final Class<?>[] TYPES = {
 		long.class,
 		String.class,

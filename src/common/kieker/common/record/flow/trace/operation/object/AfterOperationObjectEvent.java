@@ -30,7 +30,7 @@ import kieker.common.util.registry.IRegistry;
  * @since 1.6
  */
 public class AfterOperationObjectEvent extends AfterOperationEvent implements IObjectRecord {
-	public static final int SIZE = 32;
+	public static final int SIZE = (Long.SIZE + Long.SIZE + Integer.SIZE + Integer.SIZE + Integer.SIZE + Integer.SIZE) / 8;
 	public static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId

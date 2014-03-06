@@ -30,7 +30,7 @@ import kieker.common.util.registry.IRegistry;
  * @since 0.91
  */
 public class OperationExecutionRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	public static final int SIZE = 44;
+	public static final int SIZE = (Integer.SIZE + Integer.SIZE + Long.SIZE + Long.SIZE + Long.SIZE + Integer.SIZE + Integer.SIZE + Integer.SIZE) / 8;
 	public static final Class<?>[] TYPES = {
 		String.class, // operationSignature
 		String.class, // sessionId

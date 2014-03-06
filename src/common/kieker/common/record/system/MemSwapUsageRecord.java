@@ -33,7 +33,7 @@ import kieker.common.util.registry.IRegistry;
  * @since 1.3
  */
 public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	public static final int SIZE = 60;
+	public static final int SIZE = (Long.SIZE + Integer.SIZE + Long.SIZE + Long.SIZE + Long.SIZE + Long.SIZE + Long.SIZE + Long.SIZE) / 8;
 	public static final Class<?>[] TYPES = {
 		long.class,
 		String.class,
