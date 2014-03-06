@@ -16,8 +16,13 @@
 
 package kieker.tools.opad.record;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * 
@@ -25,6 +30,13 @@ import kieker.common.record.IMonitoringRecord;
  * 
  */
 public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, INamedElement, IDoubleValue {
+
+	public static final int SIZE = 20;
+	public static final Class<?>[] TYPES = {
+		long.class, // timestamp
+		double.class, // value
+		String.class, // name
+	};
 
 	private static final long serialVersionUID = 436L;
 
@@ -50,8 +62,7 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 	}
 
 	public Class<?>[] getValueTypes() {
-		// TODO Auto-generated method stub
-		return null;
+		return TYPES;
 	}
 
 	public long getTimestamp() {
@@ -64,5 +75,19 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 
 	public double getValue() {
 		return this.value;
+	}
+
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		buffer.putLong(this.getTimestamp());
+		buffer.putDouble(this.getValue());
+		buffer.putInt(stringRegistry.get(this.getName()));
+	}
+
+	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		throw new UnsupportedOperationException(); // TODO: FIX
+	}
+
+	public int getSize() {
+		return SIZE;
 	}
 }

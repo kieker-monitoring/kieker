@@ -16,8 +16,13 @@
 
 package kieker.tools.opad.record;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * This class contains the data that will be stored in the database after each complete analysis.
@@ -31,14 +36,21 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 
 	private static final long serialVersionUID = 7325786584057491433L;
 
-	private static final Class<?>[] TYPES = { String.class, double.class, long.class, double.class, double.class };
+	public static final int SIZE = 36;
+	public static final Class<?>[] TYPES = {
+		String.class, // applicationName
+		double.class, // value
+		long.class, // timestamp
+		double.class, // forecast
+		double.class // score
+	};
 
 	// Attributes
-	private final String applicationName;
-	private final double value;
-	private final long timestamp;
-	private final double forecast;
-	private final double score;
+	protected final String applicationName;
+	protected final double value;
+	protected final long timestamp;
+	protected final double forecast;
+	protected final double score;
 
 	/**
 	 * Creates an instance of this class based on the parameters.
@@ -151,5 +163,21 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 	 */
 	public double getScore() {
 		return this.score;
+	}
+
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		buffer.putInt(stringRegistry.get(this.getApplication()));
+		buffer.putDouble(this.getValue());
+		buffer.putLong(this.timestamp);
+		buffer.putDouble(this.getForecast());
+		buffer.putDouble(this.getScore());
+	}
+
+	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		throw new UnsupportedOperationException(); // TODO: FIX
+	}
+
+	public int getSize() {
+		return SIZE;
 	}
 }

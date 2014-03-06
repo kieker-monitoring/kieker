@@ -16,8 +16,13 @@
 
 package kieker.tools.opad.record;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * This class represents responsetime data from a measured application,
@@ -29,8 +34,12 @@ import kieker.common.record.IMonitoringRecord;
 public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
 
 	private static final long serialVersionUID = 1768657580333390199L;
-
-	private static final Class<?>[] TYPES = { String.class, long.class, double.class };
+	public static final int SIZE = 20;
+	public static final Class<?>[] TYPES = {
+		String.class, // applicationName
+		long.class, // timestamp
+		double.class, // responseTime
+	};
 
 	// Attributes
 	private final String applicationName;
@@ -72,7 +81,7 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	 * {@inheritDoc}
 	 */
 	public Class<?>[] getValueTypes() {
-		return NamedDoubleRecord.TYPES.clone();
+		return NamedDoubleRecord.TYPES;
 	}
 
 	/**
@@ -120,6 +129,20 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	 */
 	public double getValue() {
 		return this.responseTime;
+	}
+
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		buffer.putInt(stringRegistry.get(this.getApplication()));
+		buffer.putLong(this.getTimestamp());
+		buffer.putDouble(this.getValue());
+	}
+
+	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		throw new UnsupportedOperationException(); // TODO: FIX
+	}
+
+	public int getSize() {
+		return SIZE;
 	}
 
 }
