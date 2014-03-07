@@ -117,7 +117,7 @@ final class TCPWriterThread extends AbstractAsyncThread {
 			if (this.flush) {
 				buffer.flip();
 				while (buffer.hasRemaining()) {
-					this.socketChannelStrings.write(buffer);
+					this.socketChannelRecords.write(buffer);
 				}
 				buffer.clear();
 			}
@@ -130,7 +130,7 @@ final class TCPWriterThread extends AbstractAsyncThread {
 			final ByteBuffer buffer = this.byteBuffer;
 			buffer.flip();
 			while (buffer.hasRemaining()) {
-				this.socketChannelStrings.write(buffer);
+				this.socketChannelRecords.write(buffer);
 			}
 			this.socketChannelRecords.close();
 		} catch (final IOException ex) {
