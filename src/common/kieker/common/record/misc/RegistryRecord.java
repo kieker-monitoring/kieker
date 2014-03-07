@@ -163,8 +163,8 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	/**
 	 * @return the String as byte[]
 	 */
-	public final byte[] getStrBytes() { // NOPMD (We know what we are doing here...)
-		return this.strBytes;
+	public final byte[] getStrBytes() {
+		return this.strBytes; // NOPMD (We know what we are doing here...)
 	}
 
 	/**
