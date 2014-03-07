@@ -82,7 +82,7 @@ public class TestRecordsUsingCorrectBinarySize extends AbstractDynamicKiekerTest
 		}
 
 		final int size = (Integer) clazz.getField("SIZE").get(null);
-		return (calculatedSize == size);
+		return calculatedSize == size;
 	}
 
 }

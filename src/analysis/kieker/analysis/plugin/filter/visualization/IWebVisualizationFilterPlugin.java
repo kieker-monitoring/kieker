@@ -27,10 +27,19 @@ import kieker.analysis.plugin.IPlugin;
  */
 public interface IWebVisualizationFilterPlugin extends IPlugin {
 
+	/**
+	 * @since 1.9
+	 */
 	public String getHeader();
 
+	/**
+	 * @since 1.9
+	 */
 	public String getInitialContent();
 
+	/**
+	 * @since 1.9
+	 */
 	public String getUpdatedContent();
 
 }

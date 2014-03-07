@@ -60,7 +60,7 @@ public class TestNoOutputPortsForVisualizations extends AbstractDynamicKiekerTes
 	private static boolean containsOutputPorts(final Class<?> clazz) {
 		final Plugin annotation = clazz.getAnnotation(Plugin.class);
 
-		return (annotation.outputPorts().length != 0);
+		return annotation.outputPorts().length != 0;
 	}
 
 }
