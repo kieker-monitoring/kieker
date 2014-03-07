@@ -96,12 +96,12 @@ final class ExplorVizExportWriterThread extends AbstractAsyncThread {
 		this.flush = flush;
 
 		this.byteBuffer.put(HOST_APPLICATION_META_DATA_CLAZZ_ID);
-
 		final String localHostname = monitoringController.getHostname();
+		// is called to early in the initialization, so no record is created
 		final int localHostnameId = this.monitoringController.getUniqueIdForString(localHostname);
 		this.byteBuffer.putInt(localHostnameId);
-
 		final String applicatioName = monitoringController.getName();
+		// is called to early in the initialization, so no record is created
 		final int applicationId = this.monitoringController.getUniqueIdForString(applicatioName);
 		this.byteBuffer.putInt(applicationId);
 
@@ -113,8 +113,8 @@ final class ExplorVizExportWriterThread extends AbstractAsyncThread {
 
 	@Override
 	protected void consume(final IMonitoringRecord monitoringRecord) throws Exception {
+		// sizes from ExplorViz not Kieker!
 		int recordSize = 0;
-
 		if (monitoringRecord instanceof BeforeOperationEvent) {
 			recordSize = 29;
 		} else if (monitoringRecord instanceof AfterOperationFailedEvent) {
@@ -140,9 +140,8 @@ final class ExplorVizExportWriterThread extends AbstractAsyncThread {
 	private void convertKiekerToExplorViz(final ByteBuffer buffer, final IMonitoringRecord kiekerRecord) {
 		if (kiekerRecord instanceof BeforeOperationEvent) {
 			final BeforeOperationEvent kiekerBefore = (BeforeOperationEvent) kiekerRecord;
-
 			buffer.put(BEFORE_OPERATION_CLAZZ_ID);
-			buffer.putLong(kiekerBefore.getLoggingTimestamp());
+			buffer.putLong(kiekerBefore.getTimestamp());
 			buffer.putLong(kiekerBefore.getTraceId());
 			buffer.putInt(kiekerBefore.getOrderIndex());
 			if (kiekerRecord instanceof IObjectRecord) {
@@ -154,17 +153,15 @@ final class ExplorVizExportWriterThread extends AbstractAsyncThread {
 			buffer.putInt(this.monitoringController.getUniqueIdForString(kiekerBefore.getOperationSignature()));
 		} else if (kiekerRecord instanceof AfterOperationFailedEvent) {
 			final AfterOperationFailedEvent kiekerAfterFailed = (AfterOperationFailedEvent) kiekerRecord;
-
 			buffer.put(AFTER_FAILED_OPERATION_CLAZZ_ID);
-			buffer.putLong(kiekerAfterFailed.getLoggingTimestamp());
+			buffer.putLong(kiekerAfterFailed.getTimestamp());
 			buffer.putLong(kiekerAfterFailed.getTraceId());
 			buffer.putInt(kiekerAfterFailed.getOrderIndex());
 			buffer.putInt(this.monitoringController.getUniqueIdForString(kiekerAfterFailed.getCause()));
 		} else if (kiekerRecord instanceof AfterOperationEvent) {
 			final AfterOperationEvent kiekerAfter = (AfterOperationEvent) kiekerRecord;
-
 			buffer.put(AFTER_OPERATION_CLAZZ_ID);
-			buffer.putLong(kiekerAfter.getLoggingTimestamp());
+			buffer.putLong(kiekerAfter.getTimestamp());
 			buffer.putLong(kiekerAfter.getTraceId());
 			buffer.putInt(kiekerAfter.getOrderIndex());
 		} else if (kiekerRecord instanceof RegistryRecord) {

@@ -96,11 +96,12 @@ final class TCPWriterThread extends AbstractAsyncThread {
 	@Override
 	protected void consume(final IMonitoringRecord monitoringRecord) throws Exception {
 		if (monitoringRecord instanceof RegistryRecord) {
-			final int size = monitoringRecord.getSize();
-			final ByteBuffer buffer = ByteBuffer.allocateDirect(size);
+			final ByteBuffer buffer = ByteBuffer.allocateDirect(monitoringRecord.getSize());
 			monitoringRecord.writeBytes(buffer, this.stringRegistry);
 			buffer.flip();
-			this.socketChannelStrings.write(buffer);
+			while (buffer.hasRemaining()) {
+				this.socketChannelStrings.write(buffer);
+			}
 		} else {
 			final ByteBuffer buffer = this.byteBuffer;
 			if ((monitoringRecord.getSize() + 4 + 8) > buffer.remaining()) {
@@ -115,7 +116,9 @@ final class TCPWriterThread extends AbstractAsyncThread {
 			monitoringRecord.writeBytes(buffer, this.stringRegistry);
 			if (this.flush) {
 				buffer.flip();
-				this.socketChannelRecords.write(buffer);
+				while (buffer.hasRemaining()) {
+					this.socketChannelStrings.write(buffer);
+				}
 				buffer.clear();
 			}
 		}
@@ -124,8 +127,11 @@ final class TCPWriterThread extends AbstractAsyncThread {
 	@Override
 	protected void cleanup() {
 		try {
-			this.byteBuffer.flip();
-			this.socketChannelRecords.write(this.byteBuffer);
+			final ByteBuffer buffer = this.byteBuffer;
+			buffer.flip();
+			while (buffer.hasRemaining()) {
+				this.socketChannelStrings.write(buffer);
+			}
 			this.socketChannelRecords.close();
 		} catch (final IOException ex) {
 			LOG.error("Error closing connection", ex);
