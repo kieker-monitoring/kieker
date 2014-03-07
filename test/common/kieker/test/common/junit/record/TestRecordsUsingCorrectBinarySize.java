@@ -23,6 +23,7 @@ import org.junit.Test;
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 
 import kieker.test.common.junit.AbstractDynamicKiekerTest;
@@ -58,28 +59,27 @@ public class TestRecordsUsingCorrectBinarySize extends AbstractDynamicKiekerTest
 		int calculatedSize = 0;
 		for (final Class<?> type : types) {
 			if (type == Double.TYPE) {
-				calculatedSize += Double.SIZE;
+				calculatedSize += AbstractMonitoringRecord.TYPE_SIZE_DOUBLE;
 			} else if (type == Float.TYPE) {
-				calculatedSize += Float.SIZE;
+				calculatedSize += AbstractMonitoringRecord.TYPE_SIZE_FLOAT;
 			} else if (type == Long.TYPE) {
-				calculatedSize += Long.SIZE;
+				calculatedSize += AbstractMonitoringRecord.TYPE_SIZE_LONG;
 			} else if (type == Integer.TYPE) {
-				calculatedSize += Integer.SIZE;
+				calculatedSize += AbstractMonitoringRecord.TYPE_SIZE_INT;
 			} else if (type == Short.TYPE) {
-				calculatedSize += Short.SIZE;
+				calculatedSize += AbstractMonitoringRecord.TYPE_SIZE_SHORT;
 			} else if (type == Byte.TYPE) {
-				calculatedSize += Byte.SIZE;
+				calculatedSize += AbstractMonitoringRecord.TYPE_SIZE_BYTE;
 			} else if (type == Character.TYPE) {
-				calculatedSize += Character.SIZE;
+				calculatedSize += AbstractMonitoringRecord.TYPE_SIZE_CHARACTER;
 			} else if (type == String.class) {
-				calculatedSize += Integer.SIZE;
+				calculatedSize += AbstractMonitoringRecord.TYPE_SIZE_STRING;
 			} else if (type == Boolean.TYPE) {
-				calculatedSize += Byte.SIZE;
+				calculatedSize += AbstractMonitoringRecord.TYPE_SIZE_BOOLEAN;
 			} else {
 				throw new UnsupportedOperationException("Unsupported data type found: " + type);
 			}
 		}
-		calculatedSize /= 8;
 
 		final int size = (Integer) clazz.getField("SIZE").get(null);
 		return (calculatedSize == size);

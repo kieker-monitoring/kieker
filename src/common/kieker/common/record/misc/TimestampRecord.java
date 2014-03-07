@@ -32,7 +32,7 @@ import kieker.common.util.registry.IRegistry;
  * @since 1.5
  */
 public class TimestampRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	public static final int SIZE = (Long.SIZE) / 8;
+	public static final int SIZE = TYPE_SIZE_LONG;
 	public static final Class<?>[] TYPES = {
 		long.class, // timestamp
 	};

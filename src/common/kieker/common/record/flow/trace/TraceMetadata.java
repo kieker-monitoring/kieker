@@ -31,7 +31,7 @@ import kieker.common.util.registry.IRegistry;
  * @since 1.5
  */
 public class TraceMetadata extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory, IFlowRecord {
-	public static final int SIZE = (Long.SIZE + Long.SIZE + Integer.SIZE + Integer.SIZE + Long.SIZE + Integer.SIZE) / 8;
+	public static final int SIZE = (2 * TYPE_SIZE_LONG) + (2 * TYPE_SIZE_STRING) + TYPE_SIZE_LONG + TYPE_SIZE_INT;
 	public static final Class<?>[] TYPES = {
 		long.class, // traceId
 		long.class, // threadId

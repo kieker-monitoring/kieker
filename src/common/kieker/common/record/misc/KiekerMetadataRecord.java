@@ -33,7 +33,7 @@ import kieker.common.util.registry.IRegistry;
  * @since 1.7
  */
 public final class KiekerMetadataRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	public static final int SIZE = (Integer.SIZE + Integer.SIZE + Integer.SIZE + Integer.SIZE + 8 + Long.SIZE + Integer.SIZE + Long.SIZE) / 8;
+	public static final int SIZE = (3 * TYPE_SIZE_STRING) + TYPE_SIZE_INT + TYPE_SIZE_BOOLEAN + TYPE_SIZE_LONG + TYPE_SIZE_STRING + TYPE_SIZE_LONG;
 	public static final Class<?>[] TYPES = {
 		String.class, // version
 		String.class, // controllerName

@@ -36,15 +36,30 @@ public abstract class AbstractDynamicKiekerTest extends AbstractKiekerTest {
 	private static final String DIR_NAME_TESTS = "test";
 	private static final String DIR_NAME_SOURCES = "src";
 	private static final String PATTERN_JAVA_SOURCE_FILES = ".*java";
+	private static final String PATTERN_JAVA_TEST_FILES = ".*Test.*java";
+	private static final String PATTERN_JUNIT_PACKAGE_NAME = ".*junit.*";
 
 	protected Collection<Class<?>> deliverAllAvailableClassesFromSourceDirectory() throws ClassNotFoundException {
 		return AbstractDynamicKiekerTest.transformClassNameToClasses(AbstractDynamicKiekerTest.transformFilesToClassNames(AbstractDynamicKiekerTest.listSourceFiles(
 				DIR_NAME_SOURCES, PATTERN_JAVA_SOURCE_FILES)));
 	}
 
-	protected Collection<Class<?>> deliverAllAvailableClassesFromTestDirectory() throws ClassNotFoundException {
-		return AbstractDynamicKiekerTest.transformClassNameToClasses(AbstractDynamicKiekerTest.transformFilesToClassNames(AbstractDynamicKiekerTest.listSourceFiles(
-				DIR_NAME_TESTS, PATTERN_JAVA_SOURCE_FILES)));
+	protected Collection<Class<?>> deliverAllAvailableClassesFromTestDirectoryInJUnitPackage() throws ClassNotFoundException {
+		return AbstractDynamicKiekerTest.transformClassNameToClasses(AbstractDynamicKiekerTest.transformFilesToClassNames(
+				AbstractDynamicKiekerTest.filterOutFilesNotMatchingFullQualifiedPathName(PATTERN_JUNIT_PACKAGE_NAME,
+						AbstractDynamicKiekerTest.listSourceFiles(DIR_NAME_TESTS, PATTERN_JAVA_TEST_FILES))));
+	}
+
+	private static Collection<File> filterOutFilesNotMatchingFullQualifiedPathName(final String pattern, final Collection<File> files) {
+		final Collection<File> result = new LinkedList<File>();
+
+		for (final File file : files) {
+			if (file.getAbsolutePath().matches(pattern)) {
+				result.add(file);
+			}
+		}
+
+		return result;
 	}
 
 	private static Collection<File> listSourceFiles(final String directoryName, final String filePattern) {

@@ -31,8 +31,6 @@ import org.junit.Test;
  */
 public class TestJUnitTestsExtendingAbstractKiekerTest extends AbstractDynamicKiekerTest {
 
-	private static final String PATTERN_TEST_SOURCE_FILES = ".*junit.*Test.*";
-
 	/**
 	 * Default constructor.
 	 */
@@ -42,11 +40,9 @@ public class TestJUnitTestsExtendingAbstractKiekerTest extends AbstractDynamicKi
 
 	@Test
 	public void test() throws ClassNotFoundException {
-		final Collection<Class<?>> availableClasses = super.deliverAllAvailableClassesFromTestDirectory();
-		final Collection<Class<?>> matchingClasses = super.filterOutClassesNotMatchingFullQualifiedClassNamePattern(PATTERN_TEST_SOURCE_FILES, availableClasses);
-		final Collection<Class<?>> filteredClasses = super.filterOutClassesExtending(AbstractKiekerTest.class, matchingClasses);
+		final Collection<Class<?>> availableClasses = super.deliverAllAvailableClassesFromTestDirectoryInJUnitPackage();
+		final Collection<Class<?>> filteredClasses = super.filterOutClassesExtending(AbstractKiekerTest.class, availableClasses);
 
 		Assert.assertTrue("Following classes should extend AbstractKiekerTest: " + filteredClasses.toString(), filteredClasses.isEmpty());
 	}
-
 }

@@ -29,7 +29,7 @@ import kieker.common.util.registry.IRegistry;
  * @since 1.5
  */
 public class AfterOperationFailedEvent extends AfterOperationEvent implements IExceptionRecord {
-	public static final int SIZE = (Long.SIZE + Long.SIZE + Integer.SIZE + Integer.SIZE + Integer.SIZE + Integer.SIZE) / 8;
+	public static final int SIZE = (2 * TYPE_SIZE_LONG) + TYPE_SIZE_INT + (3 * TYPE_SIZE_STRING);
 	public static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId

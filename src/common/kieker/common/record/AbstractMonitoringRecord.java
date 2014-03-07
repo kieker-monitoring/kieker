@@ -29,12 +29,24 @@ import kieker.common.exception.MonitoringRecordException;
 import kieker.common.util.registry.IRegistry;
 
 /**
- * @author Andre van Hoorn, Jan Waller
+ * @author Andre van Hoorn, Jan Waller, Nils Christian Ehmke
  * 
  * @since 1.2
  */
 public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
+
+	public static final int TYPE_SIZE_INT = 4;
+	public static final int TYPE_SIZE_LONG = 8;
+	public static final int TYPE_SIZE_FLOAT = 4;
+	public static final int TYPE_SIZE_DOUBLE = 8;
+	public static final int TYPE_SIZE_SHORT = 2;
+	public static final int TYPE_SIZE_BYTE = 1;
+	public static final int TYPE_SIZE_CHARACTER = 2;
+	public static final int TYPE_SIZE_STRING = 4;
+	public static final int TYPE_SIZE_BOOLEAN = 1;
+
 	private static final long serialVersionUID = 1L;
+
 	private static final ConcurrentMap<String, Class<? extends IMonitoringRecord>> CACHED_KIEKERRECORDS = new ConcurrentHashMap<String, Class<? extends IMonitoringRecord>>(); // NOCS
 	private static final ConcurrentMap<Class<? extends IMonitoringRecord>, Class<?>[]> CACHED_KIEKERRECORD_TYPES = new ConcurrentHashMap<Class<? extends IMonitoringRecord>, Class<?>[]>(); // NOCS
 	private static final ConcurrentMap<Class<? extends IMonitoringRecord>, Constructor<? extends IMonitoringRecord>> CACHED_KIEKERRECORD_CONSTRUCTORS_OBJECT = new ConcurrentHashMap<Class<? extends IMonitoringRecord>, Constructor<? extends IMonitoringRecord>>(); // NOCS
