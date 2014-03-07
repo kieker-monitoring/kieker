@@ -16,13 +16,8 @@
 
 package kieker.test.common.junit.record;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Modifier;
-import java.util.List;
+import java.util.Collection;
 
-import org.apache.cxf.helpers.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -30,51 +25,35 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 
-import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.common.junit.AbstractDynamicKiekerTest;
 
 /**
  * @author Nils Christian Ehmke
  * 
  * @since 1.9
  */
-public class TestRecordsUsingCorrectBinarySize extends AbstractKiekerTest {
+public class TestRecordsUsingCorrectBinarySize extends AbstractDynamicKiekerTest {
 
 	private static final Log LOG = LogFactory.getLog(TestRecordsUsingCorrectBinarySize.class);
 
-	private static final String DIR_NAME_SOURCES = "src";
-	private static final String PATTERN_JAVA_SOURCE_FILES = ".*java";
-
-	/**
-	 * Default constructor.
-	 */
 	public TestRecordsUsingCorrectBinarySize() {
 		// empty default constructor
 	}
 
 	@Test
 	@SuppressWarnings("unchecked")
-	public void test() throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException,
-			InvocationTargetException, NoSuchMethodException, SecurityException, NoSuchFieldException {
-		final List<File> sourceFiles = TestRecordsUsingCorrectBinarySize.listJavaSourceFiles();
-		for (final File sourceFile : sourceFiles) {
-			final String className = TestRecordsUsingCorrectBinarySize.sourceFileToClassName(sourceFile);
-			final Class<?> clazz = this.getClass().getClassLoader().loadClass(className);
-			if (TestRecordsUsingCorrectBinarySize.doesClassImplemendBinaryFactory(clazz) && !this.isClassAbstract(clazz)) {
-				LOG.info("Testing class '" + className + "'...");
-				if (!this.isSizeCorrect(clazz)) {
-					Assert.fail("Class '" + className + "' uses an incorrect size field.");
-				}
-			}
+	public void test() throws ClassNotFoundException, IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+		final Collection<Class<?>> availableClasses = super.deliverAllAvailableClassesFromSourceDirectory();
+		final Collection<Class<?>> notAbstractClasses = super.filterOutAbstractClasses(availableClasses);
+		final Collection<Class<?>> filteredClasses = super.filterOutClassesNotExtending(IMonitoringRecord.BinaryFactory.class, notAbstractClasses);
+
+		for (final Class<?> clazz : filteredClasses) {
+			LOG.info("Testing '" + clazz.getSimpleName() + "'...");
+			Assert.assertTrue(clazz.getSimpleName() + "' uses an incorrect size field.", this.isSizeCorrect(clazz));
 		}
 	}
 
-	private boolean isClassAbstract(final Class<?> clazz) {
-		return Modifier.isAbstract(clazz.getModifiers());
-	}
-
-	private boolean isSizeCorrect(final Class<?> clazz) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
-			NoSuchMethodException, SecurityException, NoSuchFieldException {
-		final int size = (Integer) clazz.getField("SIZE").get(null);
+	private boolean isSizeCorrect(final Class<?> clazz) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		final Class<?>[] types = (Class<?>[]) clazz.getField("TYPES").get(null);
 		int calculatedSize = 0;
 		for (final Class<?> type : types) {
@@ -102,23 +81,8 @@ public class TestRecordsUsingCorrectBinarySize extends AbstractKiekerTest {
 		}
 		calculatedSize /= 8;
 
+		final int size = (Integer) clazz.getField("SIZE").get(null);
 		return (calculatedSize == size);
 	}
 
-	private static List<File> listJavaSourceFiles() {
-		return FileUtils.getFilesRecurse(new File(DIR_NAME_SOURCES), PATTERN_JAVA_SOURCE_FILES);
-	}
-
-	private static boolean doesClassImplemendBinaryFactory(final Class<?> clazz) {
-		return IMonitoringRecord.BinaryFactory.class.isAssignableFrom(clazz);
-	}
-
-	private static String sourceFileToClassName(final File file) {
-		final String pathName = file.getPath();
-		String className = pathName.substring(0, pathName.length() - 5).replace(File.separator, ".");
-		final int secondPointPos = className.indexOf('.', 5);
-		className = className.substring(secondPointPos + 1);
-
-		return className;
-	}
 }

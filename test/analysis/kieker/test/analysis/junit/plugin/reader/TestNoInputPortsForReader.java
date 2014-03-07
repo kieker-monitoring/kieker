@@ -16,14 +16,9 @@
 
 package kieker.test.analysis.junit.plugin.reader;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.List;
+import java.util.Collection;
 
-import org.apache.cxf.helpers.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -32,7 +27,7 @@ import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 
-import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.common.junit.AbstractDynamicKiekerTest;
 
 /**
  * This JUnit test makes sure that there are no readers with input ports in Kieker.
@@ -41,43 +36,27 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * 
  * @since 1.9
  */
-public class TestNoInputPortsForReader extends AbstractKiekerTest {
+public class TestNoInputPortsForReader extends AbstractDynamicKiekerTest {
 
 	private static final Log LOG = LogFactory.getLog(TestNoInputPortsForReader.class);
 
-	private static final String DIR_NAME_SOURCES = "src";
-	private static final String PATTERN_JAVA_SOURCE_FILES = ".*java";
-
-	/**
-	 * Default constructor.
-	 */
 	public TestNoInputPortsForReader() {
 		// empty default constructor
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
-	public void test() throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException,
-			InvocationTargetException, NoSuchMethodException, SecurityException {
-		final List<File> sourceFiles = TestNoInputPortsForReader.listJavaSourceFiles();
-		for (final File sourceFile : sourceFiles) {
-			final String className = TestNoInputPortsForReader.sourceFileToClassName(sourceFile);
-			final Class<?> clazz = this.getClass().getClassLoader().loadClass(className);
-			if (TestNoInputPortsForReader.doesClassExtendAbstractReaderPlugin(clazz) && !(this.isClassAbstract(clazz))) {
-				LOG.info("Testing class '" + className + "'...");
-				if (TestNoInputPortsForReader.containsInputPorts((Class<? extends AbstractReaderPlugin>) clazz)) {
-					Assert.fail("Class '" + className + "' is a reader with input ports.");
-				}
-			}
+	public void test() throws ClassNotFoundException {
+		final Collection<Class<?>> availableClasses = super.deliverAllAvailableClassesFromSourceDirectory();
+		final Collection<Class<?>> notAbstractClasses = super.filterOutAbstractClasses(availableClasses);
+		final Collection<Class<?>> filteredClasses = super.filterOutClassesNotExtending(AbstractReaderPlugin.class, notAbstractClasses);
+
+		for (final Class<?> clazz : filteredClasses) {
+			LOG.info("Testing '" + clazz.getSimpleName() + "'...");
+			Assert.assertFalse(clazz.getSimpleName() + "' is a reader with input ports.", TestNoInputPortsForReader.containsInputPorts(clazz));
 		}
 	}
 
-	private boolean isClassAbstract(final Class<?> clazz) {
-		return Modifier.isAbstract(clazz.getModifiers());
-	}
-
-	private static boolean containsInputPorts(final Class<? extends AbstractReaderPlugin> clazz) throws InstantiationException, IllegalAccessException,
-			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	private static boolean containsInputPorts(final Class<?> clazz) {
 		for (final Method method : clazz.getMethods()) {
 			if (method.isAnnotationPresent(InputPort.class)) {
 				return true;
@@ -86,20 +65,4 @@ public class TestNoInputPortsForReader extends AbstractKiekerTest {
 		return false;
 	}
 
-	private static List<File> listJavaSourceFiles() {
-		return FileUtils.getFilesRecurse(new File(DIR_NAME_SOURCES), PATTERN_JAVA_SOURCE_FILES);
-	}
-
-	private static boolean doesClassExtendAbstractReaderPlugin(final Class<?> clazz) {
-		return AbstractReaderPlugin.class.isAssignableFrom(clazz);
-	}
-
-	private static String sourceFileToClassName(final File file) {
-		final String pathName = file.getPath();
-		String className = pathName.substring(0, pathName.length() - 5).replace(File.separator, ".");
-		final int secondPointPos = className.indexOf('.', 5);
-		className = className.substring(secondPointPos + 1);
-
-		return className;
-	}
 }
