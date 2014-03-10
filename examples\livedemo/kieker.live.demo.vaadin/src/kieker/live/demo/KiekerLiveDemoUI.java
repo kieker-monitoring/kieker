@@ -14,17 +14,18 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.UI;
 
-@SuppressWarnings("serial")
 @Theme("kieker_live_demo_vaadin")
 @Title("Kieker Live Demo #Vaadin")
 @Widgetset(value = "kieker.live.demo.widgetset.Kieker_live_demo_vaadinWidgetset")
 public class KiekerLiveDemoUI extends UI {
 
+	private static final long serialVersionUID = -1874617742953933358L;
 	private static Navigator navigator;
 
 	@WebServlet(value = "/*", asyncSupported = true)
 	@VaadinServletConfiguration(productionMode = false, ui = KiekerLiveDemoUI.class, widgetset = "kieker.live.demo.widgetset.Kieker_live_demo_vaadinWidgetset")
 	public static class YourServlet extends VaadinServlet {
+		private static final long serialVersionUID = 1216852994048811901L;
 	}
 	
 	@Override

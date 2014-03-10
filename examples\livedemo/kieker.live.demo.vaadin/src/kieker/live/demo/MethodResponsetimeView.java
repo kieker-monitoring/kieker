@@ -1,65 +1,89 @@
 package kieker.live.demo;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+
 import org.dussan.vaadin.dcharts.DCharts;
 import org.dussan.vaadin.dcharts.data.DataSeries;
 import org.dussan.vaadin.dcharts.metadata.renderers.SeriesRenderers;
 import org.dussan.vaadin.dcharts.options.Options;
 import org.dussan.vaadin.dcharts.options.SeriesDefaults;
 
-import com.google.gwt.user.client.Random;
+import java.util.Random;
+
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Label;
+import com.vaadin.ui.CustomLayout;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
-import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.VerticalLayout;
 
-@SuppressWarnings("serial")
 public class MethodResponsetimeView extends Panel implements View {
 
+	private static final long serialVersionUID = -2313861106966236721L;
 	final DCharts chart = new DCharts();
+	LinkedList<Integer> list = new LinkedList<Integer>();
+	LinkedList<Integer> list2 = new LinkedList<Integer>();
 	
 	public MethodResponsetimeView(){
-		final VerticalLayout layout = new VerticalLayout();
-		layout.setMargin(true);
+		CustomLayout layout = new CustomLayout("methodResponsetimeView");
 		setContent(layout);
+		
+		SeriesDefaults seriesDefaults = new SeriesDefaults().setRenderer(SeriesRenderers.LINE);
+		Options options = new Options().setSeriesDefaults(seriesDefaults);
+		chart.setOptions(options);
+		
+		initLists();
+		DataSeries dataSeries = new DataSeries();
+		dataSeries.add(list.toArray());
+		dataSeries.add(list2.toArray());
+		chart.setDataSeries(dataSeries).show();
+		
 		Button button = new Button("Main");
 		button.addClickListener(new Button.ClickListener() {
+			private static final long serialVersionUID = 1351548194600430027L;
+
 			public void buttonClick(ClickEvent event) {
 				KiekerLiveDemoUI.navigateToMain();
 			}
 		});
-		layout.addComponent(button);
 		
 		Button button2 = new Button("new Data");
 		button2.addClickListener(new Button.ClickListener() {
+			private static final long serialVersionUID = -6517719076274910305L;
+
 			public void buttonClick(ClickEvent event) {
-				chart.setDataSeries(
-						new DataSeries()
-							.add( 7, 9, 1, 4, 6, 8, 2, 5, 11))
-						.show();
+				newData();
+				DataSeries dataSeries = new DataSeries();
+				dataSeries.add(list.toArray());
+				dataSeries.add(list2.toArray());
+				chart.setDataSeries(dataSeries).show();
 			}
 		});
-		layout.addComponent(button2);
-
-		chart.setEnableChartDataClickEvent(true);
-		chart.setEnableChartDataRightClickEvent(true);
-
+		HorizontalLayout hlayout = new HorizontalLayout();
+		hlayout.addComponent(button);
+		hlayout.addComponent(button2);
+		VerticalLayout vlayout = new VerticalLayout();
+		vlayout.addComponent(hlayout);
+		vlayout.addComponent(chart);
 		
-		SeriesDefaults seriesDefaults = new SeriesDefaults()
-		.setRenderer(SeriesRenderers.PIE);
-
-	Options options = new Options()
-		.setSeriesDefaults(seriesDefaults);
+		layout.addComponent(vlayout, "main");
+	}
 	
-	chart.setOptions(options);
+	private void initLists(){
+		list.addAll(Arrays.asList(0,1,2,3,4,5,6,7,8));
+		list2.addAll(Arrays.asList(29,28,27,26,25,24,23,22,21));
+	}
 	
-		chart.setDataSeries(
-			new DataSeries()
-				.add(3, 7, 9, 1, 4, 6, 8, 2, 5))
-			.show();
-		layout.addComponent(chart);		
+	public void newData(){
+		Integer i = new Random().nextInt(30);
+		Integer j = new Random().nextInt(30);
+		list.remove();
+		list2.remove();
+		list.add(i);
+		list2.add(j);
 	}
 	
 	@Override
