@@ -102,7 +102,7 @@ import kieker.tools.util.LoggingTimestampConverter;
  * 
  * @since 0.95a
  */
-public final class TraceAnalysisTool {
+public final class TraceAnalysisTool { // NOPMD (long class)
 	public static final String DATE_FORMAT_PATTERN_CMD_USAGE_HELP = Constants.DATE_FORMAT_PATTERN.replaceAll("'", ""); // only for usage info
 	private static final Log LOG = LogFactory.getLog(TraceAnalysisTool.class);
 	private static final AnalysisController ANALYSIS_INSTANCE = new AnalysisController();
