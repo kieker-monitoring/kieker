@@ -10,16 +10,16 @@ import org.eclipse.emf.ecore.EObject;
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Port</b></em>'.
  * <!-- end-user-doc -->
- * 
+ *
  * <p>
  * The following features are supported:
  * <ul>
- * <li>{@link kieker.analysis.model.analysisMetaModel.MIPort#getName <em>Name</em>}</li>
- * <li>{@link kieker.analysis.model.analysisMetaModel.MIPort#getEventTypes <em>Event Types</em>}</li>
- * <li>{@link kieker.analysis.model.analysisMetaModel.MIPort#getId <em>Id</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.MIPort#getName <em>Name</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.MIPort#getEventTypes <em>Event Types</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.MIPort#getId <em>Id</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getPort()
  * @model abstract="true"
  * @generated
@@ -32,7 +32,6 @@ public interface MIPort extends EObject {
 	 * If the meaning of the '<em>Name</em>' attribute isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Name</em>' attribute.
 	 * @see #setName(String)
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getPort_Name()
@@ -45,9 +44,7 @@ public interface MIPort extends EObject {
 	 * Sets the value of the '{@link kieker.analysis.model.analysisMetaModel.MIPort#getName <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Name</em>' attribute.
+	 * @param value the new value of the '<em>Name</em>' attribute.
 	 * @see #getName()
 	 * @generated
 	 */
@@ -61,7 +58,6 @@ public interface MIPort extends EObject {
 	 * If the meaning of the '<em>Event Types</em>' attribute list isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Event Types</em>' attribute list.
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getPort_EventTypes()
 	 * @model required="true"
@@ -76,7 +72,6 @@ public interface MIPort extends EObject {
 	 * If the meaning of the '<em>Id</em>' attribute isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Id</em>' attribute.
 	 * @see #setId(String)
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getPort_Id()
@@ -89,9 +84,7 @@ public interface MIPort extends EObject {
 	 * Sets the value of the '{@link kieker.analysis.model.analysisMetaModel.MIPort#getId <em>Id</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Id</em>' attribute.
+	 * @param value the new value of the '<em>Id</em>' attribute.
 	 * @see #getId()
 	 * @generated
 	 */
