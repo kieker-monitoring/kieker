@@ -2,6 +2,7 @@ The Apache Software License - ASL - v2.0
 Project: http://code.google.com/p/guava-libraries/
 Description: Google Core libraries
 License: http://www.apache.org/licenses/LICENSE-2.0.txt
+Required by: reflection-0.9.9-RC1, used in CLIServerMain of the KDB to lookup connectors (actually the maven-dependency requires 0.15 of guava)
 
                                  Apache License
                            Version 2.0, January 2004
