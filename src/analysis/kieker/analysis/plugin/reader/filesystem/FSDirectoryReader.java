@@ -241,7 +241,7 @@ final class FSDirectoryReader implements Runnable {
 							}
 							continue; // skip this ignored record
 						}
-						final long loggingTimestamp = Long.valueOf(recordFields[1]);
+						final long loggingTimestamp = Long.parseLong(recordFields[1]);
 						final int skipValues;
 						// check for Kieker < 1.6 OperationExecutionRecords
 						if ((recordFields.length == 11) && clazz.equals(OperationExecutionRecord.class)) {
