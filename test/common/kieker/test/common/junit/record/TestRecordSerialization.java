@@ -41,7 +41,7 @@ public class TestRecordSerialization extends AbstractDynamicKiekerTest {
 
 	private static final Log LOG = LogFactory.getLog(TestRecordSerialization.class);
 
-	private static final IRegistry<String> registry = new Registry<String>();
+	private final IRegistry<String> registry = new Registry<String>();
 
 	public TestRecordSerialization() {
 		// empty default constructor
@@ -57,11 +57,11 @@ public class TestRecordSerialization extends AbstractDynamicKiekerTest {
 			final Object[] unserializedTestArray = TestRecordSerialization.prepareAndFillTestArray(clazz);
 
 			Assert.assertArrayEquals(clazz.getSimpleName() + "' uses an incorrect object serialization/dezerialization mechanism.", unserializedTestArray,
-					TestRecordSerialization.serializeAndDeserializeTestArrayWithObject(clazz, unserializedTestArray));
+					this.serializeAndDeserializeTestArrayWithObject(clazz, unserializedTestArray));
 			Assert.assertArrayEquals(clazz.getSimpleName() + "' uses an incorrect binary serialization/dezerialization mechanism.", unserializedTestArray,
-					TestRecordSerialization.serializeAndDeserializeTestArrayWithBinary(clazz, unserializedTestArray));
+					this.serializeAndDeserializeTestArrayWithBinary(clazz, unserializedTestArray));
 			Assert.assertArrayEquals(clazz.getSimpleName() + "' uses an incorrect string serialization/dezerialization mechanism.", unserializedTestArray,
-					TestRecordSerialization.serializeAndDeserializeTestArrayWithString(clazz, unserializedTestArray));
+					this.serializeAndDeserializeTestArrayWithString(clazz, unserializedTestArray));
 		}
 	}
 
@@ -92,7 +92,7 @@ public class TestRecordSerialization extends AbstractDynamicKiekerTest {
 			} else if (type == Integer.TYPE) {
 				objectForTestArray = 4;
 			} else if (type == Short.TYPE) {
-				objectForTestArray = (short) 5;
+				objectForTestArray = (short) 5; // NOPMD (the short type is just used for test purposes here)
 			} else if (type == Byte.TYPE) {
 				objectForTestArray = (byte) 6;
 			} else if (type == Character.TYPE) {
@@ -112,32 +112,32 @@ public class TestRecordSerialization extends AbstractDynamicKiekerTest {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static Object[] serializeAndDeserializeTestArrayWithObject(final Class<?> clazz, final Object[] unserializedTestArray) throws MonitoringRecordException {
+	private Object[] serializeAndDeserializeTestArrayWithObject(final Class<?> clazz, final Object[] unserializedTestArray) throws MonitoringRecordException {
 		final IMonitoringRecord testRecord = AbstractMonitoringRecord.createFromArray((Class<? extends IMonitoringRecord>) clazz, unserializedTestArray);
 		return testRecord.toArray();
 	}
 
 	@SuppressWarnings("unchecked")
-	private static Object[] serializeAndDeserializeTestArrayWithBinary(final Class<?> clazz, final Object[] unserializedTestArray) throws MonitoringRecordException {
+	private Object[] serializeAndDeserializeTestArrayWithBinary(final Class<?> clazz, final Object[] unserializedTestArray) throws MonitoringRecordException {
 		final IMonitoringRecord inRecord = AbstractMonitoringRecord.createFromArray((Class<? extends IMonitoringRecord>) clazz, unserializedTestArray);
 		final ByteBuffer byteBuffer = ByteBuffer.allocate(inRecord.getSize());
 
-		final int clazzID = registry.get(clazz.getCanonicalName());
-		inRecord.writeBytes(byteBuffer, registry);
+		final int clazzID = this.registry.get(clazz.getCanonicalName());
+		inRecord.writeBytes(byteBuffer, this.registry);
 		byteBuffer.flip();
 
-		final IMonitoringRecord outRecord = AbstractMonitoringRecord.createFromByteBuffer(clazzID, byteBuffer, registry);
+		final IMonitoringRecord outRecord = AbstractMonitoringRecord.createFromByteBuffer(clazzID, byteBuffer, this.registry);
 		return outRecord.toArray();
 	}
 
 	@SuppressWarnings("unchecked")
-	private static Object[] serializeAndDeserializeTestArrayWithString(final Class<?> clazz, final Object[] unserializedTestArray) throws MonitoringRecordException {
+	private Object[] serializeAndDeserializeTestArrayWithString(final Class<?> clazz, final Object[] unserializedTestArray) throws MonitoringRecordException {
 		final String[] unserializedStringTestArray = TestRecordSerialization.testArrayToStringArray(unserializedTestArray);
 		final IMonitoringRecord testRecord = AbstractMonitoringRecord.createFromStringArray((Class<? extends IMonitoringRecord>) clazz, unserializedStringTestArray);
 		return testRecord.toArray();
 	}
 
-	private static String[] testArrayToStringArray(final Object[] unserializedTestArray) {
+	private static String[] testArrayToStringArray(final Object[] unserializedTestArray) { // NOPMD (this is not a test method)
 		final int arrayLength = unserializedTestArray.length;
 		final String[] stringArray = new String[arrayLength];
 
