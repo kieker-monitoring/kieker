@@ -103,6 +103,11 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 				}
 				this.outputPortTypes.put(outputPort, outTypes);
 			}
+		} else {
+			// But inform the user about these invalid ports
+			for (final OutputPort outputPort : annotation.outputPorts()) {
+				this.log.warn("Invalid port for visualization filter detected. Port is ignored: " + outputPort.name());
+			}
 		}
 
 		// Get all input ports.
@@ -131,6 +136,14 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 							}
 						}
 					}
+				}
+			}
+		} else {
+			// But inform the user about these invalid ports
+			for (final Method method : this.getClass().getMethods()) {
+				final InputPort inputPort = method.getAnnotation(InputPort.class);
+				if (inputPort != null) {
+					this.log.warn("Invalid port for reader detected. Port is ignored: " + inputPort.name());
 				}
 			}
 		}

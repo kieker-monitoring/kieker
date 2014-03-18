@@ -66,7 +66,7 @@
 	<classpathentry kind="lib" path="lib/framework-libs/spring/spring-webmvc-3.2.8.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/framework-libs/spring/spring-webmvc-portlet-3.2.8.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/sigar/sigar-1.6.4.jar"/>
-	<classpathentry kind="lib" path="lib/static-analysis/checkstyle-5.7/lib/checkstyle-all.jar"/>
+	<classpathentry kind="lib" path="lib/static-analysis/checkstyle-5.6/lib/checkstyle-all.jar"/>
 	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-ajp-7.6.10.v20130312.jar"/>
 	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-annotations-7.6.10.v20130312.jar"/>
 	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-client-7.6.10.v20130312.jar"/>
