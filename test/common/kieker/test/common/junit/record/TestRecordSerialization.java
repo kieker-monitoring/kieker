@@ -43,7 +43,7 @@ public class TestRecordSerialization extends AbstractDynamicKiekerTest {
 
 	private static final IRegistry<String> registry = new Registry<String>();
 
-	public TestRecordsUsingCorrectBinarySize() {
+	public TestRecordSerialization() {
 		// empty default constructor
 	}
 
