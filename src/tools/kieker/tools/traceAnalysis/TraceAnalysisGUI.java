@@ -30,7 +30,6 @@ import javax.swing.JPanel;
 
 import kieker.tools.traceAnalysis.gui.AbstractStep;
 import kieker.tools.traceAnalysis.gui.FinalStep;
-import kieker.tools.traceAnalysis.gui.IStep;
 import kieker.tools.traceAnalysis.gui.PlotStep;
 import kieker.tools.traceAnalysis.gui.PrintStep;
 import kieker.tools.traceAnalysis.gui.WelcomeStep;
@@ -150,8 +149,8 @@ public class TraceAnalysisGUI extends JFrame {
 	private void startTraceAnalysis() {
 		final Collection<String> parameters = new ArrayList<String>();
 
-		for (final IStep step : this.steps) {
-			step.deliverParameters(parameters);
+		for (final AbstractStep step : this.steps) {
+			step.addSelectedTraceAnalysisParameters(parameters);
 		}
 
 		this.previousButton.setEnabled(false);

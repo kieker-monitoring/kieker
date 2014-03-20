@@ -27,6 +27,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
+ * In this step of the trace analysis wizard, the user can choose the plots to draw.
+ * 
  * @author Nils Christian Ehmke
  * 
  * @since 1.9
@@ -35,7 +37,7 @@ public class PlotStep extends AbstractStep {
 
 	private static final long serialVersionUID = 1L;
 
-	private final JLabel infoLabel = new JLabel("<html>In this step you choose which plots the tool should generate.</html>");
+	private final JLabel infoLabel = new JLabel("In this step you choose which plots the tool should generate.");
 
 	private final JCheckBox deploymentSequenceDiagrams = new JCheckBox("Deployment Sequence Diagrams");
 	private final JCheckBox assemblySequenceDiagrams = new JCheckBox("Assembly Sequence Diagrams");
@@ -62,80 +64,110 @@ public class PlotStep extends AbstractStep {
 	private void addAndLayoutComponents() {
 		this.setLayout(new GridBagLayout());
 
-		final GridBagConstraints gridBagConstraints = new GridBagConstraints();
+		final GridBagConstraints infoLabelConstraints = new GridBagConstraints();
+		infoLabelConstraints.gridwidth = GridBagConstraints.REMAINDER;
+		infoLabelConstraints.anchor = GridBagConstraints.NORTHWEST;
+		infoLabelConstraints.insets.set(5, 5, 5, 5);
+		infoLabelConstraints.weightx = 1.0;
+		infoLabelConstraints.fill = GridBagConstraints.BOTH;
+		this.add(this.infoLabel, infoLabelConstraints);
 
-		gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
-		gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-		gridBagConstraints.insets.set(5, 5, 5, 5);
-		gridBagConstraints.weightx = 1.0;
-		gridBagConstraints.fill = GridBagConstraints.BOTH;
-		this.add(this.infoLabel, gridBagConstraints);
+		final GridBagConstraints deploymentSequenceDiagramsConstraints = new GridBagConstraints();
+		deploymentSequenceDiagramsConstraints.gridwidth = GridBagConstraints.REMAINDER;
+		deploymentSequenceDiagramsConstraints.insets.set(5, 5, 0, 0);
+		deploymentSequenceDiagramsConstraints.weightx = 0.0;
+		deploymentSequenceDiagramsConstraints.fill = GridBagConstraints.BOTH;
+		this.add(this.deploymentSequenceDiagrams, deploymentSequenceDiagramsConstraints);
 
-		gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
-		gridBagConstraints.insets.set(5, 5, 0, 0);
-		gridBagConstraints.weightx = 0.0;
-		this.add(this.deploymentSequenceDiagrams, gridBagConstraints);
+		final GridBagConstraints assemblySequenceDiagramsConstraints = new GridBagConstraints();
+		assemblySequenceDiagramsConstraints.gridwidth = GridBagConstraints.REMAINDER;
+		assemblySequenceDiagramsConstraints.insets.set(0, 5, 0, 0);
+		assemblySequenceDiagramsConstraints.fill = GridBagConstraints.BOTH;
+		this.add(this.assemblySequenceDiagrams, assemblySequenceDiagramsConstraints);
 
-		gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
-		gridBagConstraints.insets.set(0, 5, 0, 0);
-		this.add(this.assemblySequenceDiagrams, gridBagConstraints);
+		final GridBagConstraints deploymentComponentDependencyGraphConstraints = new GridBagConstraints();
+		deploymentComponentDependencyGraphConstraints.gridwidth = GridBagConstraints.RELATIVE;
+		deploymentComponentDependencyGraphConstraints.insets.set(0, 5, 0, 0);
+		deploymentComponentDependencyGraphConstraints.fill = GridBagConstraints.BOTH;
+		this.add(this.deploymentComponentDependencyGraph, deploymentComponentDependencyGraphConstraints);
 
-		gridBagConstraints.gridwidth = GridBagConstraints.RELATIVE;
-		gridBagConstraints.insets.set(0, 5, 0, 0);
-		this.add(this.deploymentComponentDependencyGraph, gridBagConstraints);
+		final GridBagConstraints deploymentComponentDependencyGraphResponseTimeConstraints = new GridBagConstraints();
+		deploymentComponentDependencyGraphResponseTimeConstraints.gridwidth = GridBagConstraints.REMAINDER;
+		deploymentComponentDependencyGraphResponseTimeConstraints.insets.set(0, 5, 0, 0);
+		deploymentComponentDependencyGraphResponseTimeConstraints.fill = GridBagConstraints.BOTH;
+		this.add(this.deploymentComponentDependencyGraphResponseTime, deploymentComponentDependencyGraphResponseTimeConstraints);
 
-		gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
-		gridBagConstraints.insets.set(0, 5, 0, 0);
-		this.add(this.deploymentComponentDependencyGraphResponseTime, gridBagConstraints);
+		final GridBagConstraints assemblyComponentDependencyGraphConstraints = new GridBagConstraints();
+		assemblyComponentDependencyGraphConstraints.gridwidth = GridBagConstraints.RELATIVE;
+		assemblyComponentDependencyGraphConstraints.insets.set(0, 5, 0, 0);
+		assemblyComponentDependencyGraphConstraints.fill = GridBagConstraints.BOTH;
+		this.add(this.assemblyComponentDependencyGraph, assemblyComponentDependencyGraphConstraints);
 
-		gridBagConstraints.gridwidth = GridBagConstraints.RELATIVE;
-		gridBagConstraints.insets.set(0, 5, 0, 0);
-		this.add(this.assemblyComponentDependencyGraph, gridBagConstraints);
+		final GridBagConstraints assemblyComponentDependencyGraphResponseTimeConstraints = new GridBagConstraints();
+		assemblyComponentDependencyGraphResponseTimeConstraints.gridwidth = GridBagConstraints.REMAINDER;
+		assemblyComponentDependencyGraphResponseTimeConstraints.insets.set(0, 5, 0, 0);
+		assemblyComponentDependencyGraphResponseTimeConstraints.fill = GridBagConstraints.BOTH;
+		this.add(this.assemblyComponentDependencyGraphResponseTime, assemblyComponentDependencyGraphResponseTimeConstraints);
 
-		gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
-		gridBagConstraints.insets.set(0, 5, 0, 0);
-		this.add(this.assemblyComponentDependencyGraphResponseTime, gridBagConstraints);
+		final GridBagConstraints containerDependencyGraphConstraints = new GridBagConstraints();
+		containerDependencyGraphConstraints.gridwidth = GridBagConstraints.REMAINDER;
+		containerDependencyGraphConstraints.insets.set(0, 5, 0, 0);
+		containerDependencyGraphConstraints.fill = GridBagConstraints.BOTH;
+		this.add(this.containerDependencyGraph, containerDependencyGraphConstraints);
 
-		gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
-		gridBagConstraints.insets.set(0, 5, 0, 0);
-		this.add(this.containerDependencyGraph, gridBagConstraints);
+		final GridBagConstraints deploymentOperationDependencyGraphConstraints = new GridBagConstraints();
+		deploymentOperationDependencyGraphConstraints.gridwidth = GridBagConstraints.RELATIVE;
+		deploymentOperationDependencyGraphConstraints.insets.set(0, 5, 0, 0);
+		deploymentOperationDependencyGraphConstraints.fill = GridBagConstraints.BOTH;
+		this.add(this.deploymentOperationDependencyGraph, deploymentOperationDependencyGraphConstraints);
 
-		gridBagConstraints.gridwidth = GridBagConstraints.RELATIVE;
-		gridBagConstraints.insets.set(0, 5, 0, 0);
-		this.add(this.deploymentOperationDependencyGraph, gridBagConstraints);
+		final GridBagConstraints deploymentOperationDependencyGraphResponseTimeConstraints = new GridBagConstraints();
+		deploymentOperationDependencyGraphResponseTimeConstraints.gridwidth = GridBagConstraints.REMAINDER;
+		deploymentOperationDependencyGraphResponseTimeConstraints.insets.set(0, 5, 0, 0);
+		deploymentOperationDependencyGraphResponseTimeConstraints.fill = GridBagConstraints.BOTH;
+		this.add(this.deploymentOperationDependencyGraphResponseTime, deploymentOperationDependencyGraphResponseTimeConstraints);
 
-		gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
-		gridBagConstraints.insets.set(0, 5, 0, 0);
-		this.add(this.deploymentOperationDependencyGraphResponseTime, gridBagConstraints);
+		final GridBagConstraints assemblyOperationDependencyGraphConstraints = new GridBagConstraints();
+		assemblyOperationDependencyGraphConstraints.gridwidth = GridBagConstraints.RELATIVE;
+		assemblyOperationDependencyGraphConstraints.insets.set(0, 5, 0, 0);
+		assemblyOperationDependencyGraphConstraints.fill = GridBagConstraints.BOTH;
+		this.add(this.assemblyOperationDependencyGraph, assemblyOperationDependencyGraphConstraints);
 
-		gridBagConstraints.gridwidth = GridBagConstraints.RELATIVE;
-		gridBagConstraints.insets.set(0, 5, 0, 0);
-		this.add(this.assemblyOperationDependencyGraph, gridBagConstraints);
+		final GridBagConstraints assemblyOperationDependencyGraphResponseTimeConstraints = new GridBagConstraints();
+		assemblyOperationDependencyGraphResponseTimeConstraints.gridwidth = GridBagConstraints.REMAINDER;
+		assemblyOperationDependencyGraphResponseTimeConstraints.insets.set(0, 5, 0, 0);
+		assemblyOperationDependencyGraphResponseTimeConstraints.fill = GridBagConstraints.BOTH;
+		this.add(this.assemblyOperationDependencyGraphResponseTime, assemblyOperationDependencyGraphResponseTimeConstraints);
 
-		gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
-		gridBagConstraints.insets.set(0, 5, 0, 0);
-		this.add(this.assemblyOperationDependencyGraphResponseTime, gridBagConstraints);
+		final GridBagConstraints aggregatedDeploymentCallTreeConstraints = new GridBagConstraints();
+		aggregatedDeploymentCallTreeConstraints.gridwidth = GridBagConstraints.REMAINDER;
+		aggregatedDeploymentCallTreeConstraints.insets.set(0, 5, 0, 0);
+		aggregatedDeploymentCallTreeConstraints.fill = GridBagConstraints.BOTH;
+		this.add(this.aggregatedDeploymentCallTree, aggregatedDeploymentCallTreeConstraints);
 
-		gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
-		gridBagConstraints.insets.set(0, 5, 0, 0);
-		this.add(this.aggregatedDeploymentCallTree, gridBagConstraints);
+		final GridBagConstraints aggregatedAssemblyCallTreeConstraints = new GridBagConstraints();
+		aggregatedAssemblyCallTreeConstraints.gridwidth = GridBagConstraints.REMAINDER;
+		aggregatedAssemblyCallTreeConstraints.insets.set(0, 5, 0, 0);
+		aggregatedAssemblyCallTreeConstraints.fill = GridBagConstraints.BOTH;
+		this.add(this.aggregatedAssemblyCallTree, aggregatedAssemblyCallTreeConstraints);
 
-		gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
-		gridBagConstraints.insets.set(0, 5, 0, 0);
-		this.add(this.aggregatedAssemblyCallTree, gridBagConstraints);
+		final GridBagConstraints callTreesConstraints = new GridBagConstraints();
+		callTreesConstraints.gridwidth = GridBagConstraints.REMAINDER;
+		callTreesConstraints.insets.set(0, 5, 0, 0);
+		callTreesConstraints.fill = GridBagConstraints.BOTH;
+		this.add(this.callTrees, callTreesConstraints);
 
-		gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
-		gridBagConstraints.insets.set(0, 5, 0, 0);
-		this.add(this.callTrees, gridBagConstraints);
+		final GridBagConstraints allGraphsConstraints = new GridBagConstraints();
+		allGraphsConstraints.gridwidth = GridBagConstraints.REMAINDER;
+		allGraphsConstraints.insets.set(10, 5, 5, 5);
+		allGraphsConstraints.fill = GridBagConstraints.BOTH;
+		this.add(this.allGraphs, allGraphsConstraints);
 
-		gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
-		gridBagConstraints.insets.set(10, 5, 5, 5);
-		this.add(this.allGraphs, gridBagConstraints);
-
-		gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
-		gridBagConstraints.weighty = 1.0;
-		gridBagConstraints.fill = GridBagConstraints.VERTICAL;
-		this.add(this.expandingPanel, gridBagConstraints);
+		final GridBagConstraints expandingPanelConstraints = new GridBagConstraints();
+		expandingPanelConstraints.gridwidth = GridBagConstraints.REMAINDER;
+		expandingPanelConstraints.weighty = 1.0;
+		expandingPanelConstraints.fill = GridBagConstraints.VERTICAL;
+		this.add(this.expandingPanel, expandingPanelConstraints);
 	}
 
 	private void addLogicToComponents() {
@@ -196,7 +228,9 @@ public class PlotStep extends AbstractStep {
 		});
 	}
 
-	public void deliverParameters(final Collection<String> parameters) {
+	@Override
+	public void addSelectedTraceAnalysisParameters(final Collection<String> parameters) {
+		// TODO Use the constants instead of hard coded strings
 		if (this.deploymentSequenceDiagrams.isSelected()) {
 			parameters.add("--plot-Deployment-Sequence-Diagrams");
 		}
@@ -249,4 +283,5 @@ public class PlotStep extends AbstractStep {
 		}
 
 	}
+
 }

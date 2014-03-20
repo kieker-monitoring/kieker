@@ -111,7 +111,9 @@ public class PrintStep extends AbstractStep {
 		});
 	};
 
-	public void deliverParameters(final Collection<String> parameters) {
+	@Override
+	public void addSelectedTraceAnalysisParameters(final Collection<String> parameters) {
+		// TODO Use the constants instead of hard coded strings
 		if (this.messageTraces.isSelected()) {
 			parameters.add("--print-Message-Traces");
 		}

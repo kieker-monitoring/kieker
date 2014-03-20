@@ -29,6 +29,8 @@ import javax.swing.JTextArea;
 import javax.swing.border.BevelBorder;
 
 /**
+ * The final step of the trace analysis wizard contains of a log area and a button to start the trace analysis asynchronously.
+ * 
  * @author Nils Christian Ehmke
  * 
  * @since 1.9
@@ -37,7 +39,7 @@ public class FinalStep extends AbstractStep {
 
 	private static final long serialVersionUID = 1L;
 
-	private final JLabel infoLabel = new JLabel("<html>All necessary information have been gathered. You can now start the trace analysis.</html>");
+	private final JLabel infoLabel = new JLabel("All necessary information have been gathered. You can now start the trace analysis.");
 	private final JButton startButton = new JButton("Start");
 	private final JTextArea logArea = new JTextArea(20, 60);
 	private final JScrollPane logScrollPane = new JScrollPane(this.logArea);
@@ -58,33 +60,36 @@ public class FinalStep extends AbstractStep {
 	private void addAndLayoutComponents() {
 		this.setLayout(new GridBagLayout());
 
-		final GridBagConstraints gridBagConstraints = new GridBagConstraints();
+		final GridBagConstraints infoLabelConstraint = new GridBagConstraints();
+		infoLabelConstraint.gridwidth = GridBagConstraints.REMAINDER;
+		infoLabelConstraint.anchor = GridBagConstraints.NORTHWEST;
+		infoLabelConstraint.insets.set(5, 5, 5, 5);
+		infoLabelConstraint.weightx = 1.0;
+		infoLabelConstraint.fill = GridBagConstraints.HORIZONTAL;
+		this.add(this.infoLabel, infoLabelConstraint);
 
-		gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
-		gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-		gridBagConstraints.insets.set(5, 5, 5, 5);
-		gridBagConstraints.weightx = 1.0;
-		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-		this.add(this.infoLabel, gridBagConstraints);
+		final GridBagConstraints startButtonConstraint = new GridBagConstraints();
+		startButtonConstraint.gridwidth = GridBagConstraints.REMAINDER;
+		startButtonConstraint.anchor = GridBagConstraints.NORTHWEST;
+		startButtonConstraint.insets.set(5, 5, 5, 5);
+		this.add(this.startButton, startButtonConstraint);
 
-		gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
-		gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-		gridBagConstraints.insets.set(5, 5, 5, 5);
-		gridBagConstraints.fill = GridBagConstraints.NONE;
-		this.add(this.startButton, gridBagConstraints);
-
-		gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
-		gridBagConstraints.gridheight = GridBagConstraints.REMAINDER;
-		gridBagConstraints.anchor = GridBagConstraints.CENTER;
-		gridBagConstraints.insets.set(5, 5, 5, 5);
-		gridBagConstraints.weighty = 1.0;
-		gridBagConstraints.fill = GridBagConstraints.BOTH;
-		this.add(this.logScrollPane, gridBagConstraints);
+		final GridBagConstraints logScrollPaneConstraint = new GridBagConstraints();
+		logScrollPaneConstraint.gridwidth = GridBagConstraints.REMAINDER;
+		logScrollPaneConstraint.gridheight = GridBagConstraints.REMAINDER;
+		logScrollPaneConstraint.anchor = GridBagConstraints.CENTER;
+		logScrollPaneConstraint.insets.set(5, 5, 5, 5);
+		logScrollPaneConstraint.weighty = 1.0;
+		logScrollPaneConstraint.fill = GridBagConstraints.BOTH;
+		this.add(this.logScrollPane, logScrollPaneConstraint);
 	}
 
 	private void addLogicToComponents() {
 		this.startButton.addActionListener(this.startTraceAnalysisClickListener);
 	}
 
-	public void deliverParameters(final Collection<String> parameters) {}
+	@Override
+	public void addSelectedTraceAnalysisParameters(final Collection<String> parameters) {
+		// No parameters can be selected in this step
+	}
 }

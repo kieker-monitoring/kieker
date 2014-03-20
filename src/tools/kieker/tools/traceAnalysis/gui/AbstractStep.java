@@ -16,15 +16,21 @@
 
 package kieker.tools.traceAnalysis.gui;
 
+import java.util.Collection;
+
 import javax.swing.JPanel;
 
 /**
+ * An abstract base for all other steps within the trace analysis wizard.
+ * 
  * @author Nils Christian Ehmke
  * 
  * @since 1.9
  */
-public abstract class AbstractStep extends JPanel implements IStep {
+public abstract class AbstractStep extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+
+	public abstract void addSelectedTraceAnalysisParameters(final Collection<String> parameters);
 
 }

@@ -155,7 +155,7 @@ public class WelcomeStep extends AbstractStep {
 		});
 	}
 
-	public void deliverParameters(final Collection<String> parameters) {
+	public void addSelectedTraceAnalysisParameters(final Collection<String> parameters) {
 		parameters.add("-i");
 		parameters.add("\"" + this.inputDirectoryField.getText() + "\"");
 

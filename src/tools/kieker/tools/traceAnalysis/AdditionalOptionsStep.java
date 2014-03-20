@@ -75,7 +75,7 @@ public class AdditionalOptionsStep extends AbstractStep {
 		this.add(this.expandingPanel, gridBagConstraints);
 	}
 
-	public void deliverParameters(final Collection<String> parameters) {
+	public void addSelectedTraceAnalysisParameters(final Collection<String> parameters) {
 		if (this.ignoreInvalidTraces.isSelected()) {
 			parameters.add("--ignore-invalid-traces");
 		}
