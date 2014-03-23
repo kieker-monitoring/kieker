@@ -2,24 +2,27 @@ package kieker.panalysis.examples.wordcount;
 
 import java.io.File;
 
-import kieker.panalysis.base.Source;
+import kieker.panalysis.base.AbstractSource;
 
-public class FindFilesSource extends Source<FindFilesSource.PORT> {
+public class FindFilesSource extends AbstractSource<FindFilesSource.OUTPUT_PORT> {
 
-	public static enum PORT { FILE }
+	public static enum OUTPUT_PORT {
+		FILE
+	}
 
 	private final String inputDir;
 
 	public FindFilesSource(final long id, final String inputDir) {
-		super(id, PORT.class);
+		super(id, OUTPUT_PORT.class);
 		this.inputDir = inputDir;
 	}
 
-	@Override
 	public void execute() {
-		File[] availableFiles = new File(inputDir).listFiles();
-		for (File file : availableFiles) {
-			deliver(PORT.FILE, file);
+		final String inputDir = this.inputDir;
+
+		final File[] availableFiles = new File(inputDir).listFiles();
+		for (final File file : availableFiles) {
+			this.put(OUTPUT_PORT.FILE, file);
 		}
 	}
 

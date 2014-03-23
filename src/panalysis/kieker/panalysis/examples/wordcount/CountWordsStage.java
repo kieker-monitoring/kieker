@@ -9,41 +9,45 @@ import java.util.Arrays;
 
 import kieker.panalysis.base.Filter;
 
-public class CountWordsStage extends Filter<CountWordsStage.PORT> {
+public class CountWordsStage extends Filter<CountWordsStage.INPUT_PORT, CountWordsStage.OUTPUT_PORT> {
 
-	public static enum PORT {
+	public static enum OUTPUT_PORT {
 		EXCEPTION, WORDSCOUNT
 	}
 
-	public CountWordsStage(final long id) {
-		super(id, PORT.class);
+	public static enum INPUT_PORT {
+		FILE
 	}
 
-	@Override
-	public void execute() {
-
+	public CountWordsStage(final long id) {
+		super(id, INPUT_PORT.class, OUTPUT_PORT.class);
 	}
 
 	@SuppressWarnings("unchecked")
-	public void onPortChanged(final Object record) {
+	public void execute() {
+		final File file = (File) this.take(INPUT_PORT.FILE);
+
 		int wordsCount = 0;
-		final File file = (File) record;
 		try {
 			final BufferedReader reader = new BufferedReader(new FileReader(file));
 			try {
 				String line;
 				while ((line = reader.readLine()) != null) {
-					final String[] words = line.split("\\s");
-					wordsCount += words.length;
+					line = line.trim();
+					if (line.length() > 0) {
+						final String[] words = line.split("[^\\p{Graph}]");
+						// System.out.println("" + Arrays.toString(words));
+						wordsCount += words.length;
+					}
 				}
 			} finally {
 				reader.close();
 			}
-			this.deliver(PORT.WORDSCOUNT, Arrays.asList(file, wordsCount));
+			this.put(OUTPUT_PORT.WORDSCOUNT, Arrays.asList(file, wordsCount));
 		} catch (final FileNotFoundException e) {
-			this.deliver(PORT.EXCEPTION, e);
+			this.put(OUTPUT_PORT.EXCEPTION, e);
 		} catch (final IOException e) {
-			this.deliver(PORT.EXCEPTION, e);
+			this.put(OUTPUT_PORT.EXCEPTION, e);
 		}
 	}
 

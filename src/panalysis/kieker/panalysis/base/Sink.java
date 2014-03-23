@@ -1,9 +1,6 @@
 package kieker.panalysis.base;
 
-public abstract class Sink extends Stage implements PortListener {
+public interface Sink<InputPort extends Enum<InputPort>> extends Stage {
 
-	public Sink(long id) {
-		super(id);
-	}
-
+	void setPipeForInputPort(final InputPort inputPort, final Pipe<Object> pipe);
 }

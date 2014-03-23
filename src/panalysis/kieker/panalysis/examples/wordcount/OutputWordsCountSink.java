@@ -3,22 +3,21 @@ package kieker.panalysis.examples.wordcount;
 import java.io.File;
 import java.util.List;
 
-import kieker.panalysis.base.Sink;
+import kieker.panalysis.base.AbstractSink;
 
-public class OutputWordsCountSink extends Sink {
+public class OutputWordsCountSink extends AbstractSink<OutputWordsCountSink.INPUT_PORT> {
+
+	static public enum INPUT_PORT {
+		FILE_WORDCOUNT_TUPLE
+	}
 
 	public OutputWordsCountSink(final long id) {
-		super(id);
+		super(id, INPUT_PORT.class);
 	}
 
-	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
+		final List<?> tuple = (List<?>) this.take(INPUT_PORT.FILE_WORDCOUNT_TUPLE);
 
-	}
-
-	public void onPortChanged(final Object record) {
-		final List<?> tuple = (List<?>) record;
 		final File file = (File) tuple.get(0);
 		final Number wordsCount = (Number) tuple.get(1);
 		System.out.println(wordsCount + " words in file '" + file.getName() + "'");
