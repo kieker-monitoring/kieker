@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -142,9 +142,10 @@ public final class Constants {
 	public static final Options CMDL_OPTIONS = new Options();
 	public static final List<Option> SORTED_OPTION_LIST = new CopyOnWriteArrayList<Option>();
 
-	public static final String DECORATORS_OPTION_NAME = "responseTimes"; // <- currently the only decoration; "node decorations";
+	public static final String DECORATORS_OPTION_NAME = "responseTimes> <responseTimeColoring threshold(ms)";
 	public static final char DECORATOR_SEPARATOR = ',';
 	public static final String RESPONSE_TIME_DECORATOR_FLAG = "responseTimes";
+	public static final String RESPONSE_TIME_COLORING_DECORATOR_FLAG = "responseTimeColoring";
 
 	public static final String CMD_OPT_NAME_TRACE_COLORING = "traceColoring";
 	public static final String COLORING_FILE_OPTION_NAME = "color map file";
@@ -165,21 +166,21 @@ public final class Constants {
 				.withDescription("Generate and store assembly-level sequence diagrams (.pic)").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG)
 				.withArgName(DECORATORS_OPTION_NAME)
-				.hasArg(true).hasOptionalArg().withValueSeparator(DECORATOR_SEPARATOR)
+				.hasArg(true).hasOptionalArgs().withValueSeparator(DECORATOR_SEPARATOR)
 				.withDescription("Generate and store a deployment-level component dependency graph (.dot)").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTASSEMBLYCOMPONENTDEPG)
 				.withArgName(DECORATORS_OPTION_NAME)
-				.hasArg(true).hasOptionalArg().withValueSeparator(DECORATOR_SEPARATOR)
+				.hasArg(true).hasOptionalArgs().withValueSeparator(DECORATOR_SEPARATOR)
 				.withDescription("Generate and store an assembly-level component dependency graph (.dot)").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTCONTAINERDEPG).hasArg(false)
 				.withDescription("Generate and store a container dependency graph (.dot file)").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG)
 				.withArgName(DECORATORS_OPTION_NAME)
-				.hasArg(true).hasOptionalArg().withValueSeparator(DECORATOR_SEPARATOR)
+				.hasArg(true).hasOptionalArgs().withValueSeparator(DECORATOR_SEPARATOR)
 				.withDescription("Generate and store a deployment-level operation dependency graph (.dot)").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG)
 				.withArgName(DECORATORS_OPTION_NAME)
-				.hasArg(true).hasOptionalArg().withValueSeparator(DECORATOR_SEPARATOR)
+				.hasArg(true).hasOptionalArgs().withValueSeparator(DECORATOR_SEPARATOR)
 				.withDescription("Generate and store an assembly-level operation dependency graph (.dot)").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTAGGREGATEDALLOCATIONCALLTREE).hasArg(false)
 				.withDescription("Generate and store an aggregated deployment-level call tree (.dot)").create());

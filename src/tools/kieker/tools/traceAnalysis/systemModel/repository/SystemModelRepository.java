@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -135,7 +135,7 @@ public class SystemModelRepository extends AbstractRepository {
 	}
 
 	private void printOpenHtmlTable(final PrintStream ps, final String title, final String[] columnTitle) {
-		ps.println("<table class=\"tab\" border=\"1\">");
+		ps.println("<table class=\"tab\" border=\"1\" style=\"width:100%\">");
 		ps.println("<tr><th class=\"tabTitle\" colspan=\"" + columnTitle.length + "\">" + title + "</th></tr>");
 		ps.println("<tr>");
 		for (final String cell : columnTitle) {
@@ -191,6 +191,7 @@ public class SystemModelRepository extends AbstractRepository {
 				+ ".space{padding: 4px 10px;}\n" + "</style>");
 		ps.println("</head><body>");
 		this.htmlHSpace(ps, 10);
+		this.printOpenSurroundingSpan(ps);
 		this.printOpenHtmlTable(ps, "Component Types", new String[] { "ID", "Package", "Name", "Operations" });
 		final Collection<ComponentType> componentTypes = this.typeRepositoryFactory.getComponentTypes();
 		for (final ComponentType type : componentTypes) {
@@ -255,10 +256,19 @@ public class SystemModelRepository extends AbstractRepository {
 			this.printHtmlTableRow(ps, cells);
 		}
 		this.printCloseHtmlTable(ps);
+		this.printCloseSurroundingSpan(ps);
 		this.htmlHSpace(ps, 50);
 		ps.println("</body></html>");
 		ps.flush();
 		ps.close();
+	}
+
+	private void printOpenSurroundingSpan(final PrintStream ps) {
+		ps.println("<span style=\"display: inline-block\">");
+	}
+
+	private void printCloseSurroundingSpan(final PrintStream ps) {
+		ps.println("</span>");
 	}
 
 	private void printLinebreak(final PrintStream ps) {

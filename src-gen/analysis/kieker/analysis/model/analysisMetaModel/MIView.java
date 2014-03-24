@@ -10,17 +10,17 @@ import org.eclipse.emf.ecore.EObject;
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>View</b></em>'.
  * <!-- end-user-doc -->
- * 
+ *
  * <p>
  * The following features are supported:
  * <ul>
- * <li>{@link kieker.analysis.model.analysisMetaModel.MIView#getName <em>Name</em>}</li>
- * <li>{@link kieker.analysis.model.analysisMetaModel.MIView#getDescription <em>Description</em>}</li>
- * <li>{@link kieker.analysis.model.analysisMetaModel.MIView#getDisplayConnectors <em>Display Connectors</em>}</li>
- * <li>{@link kieker.analysis.model.analysisMetaModel.MIView#getId <em>Id</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.MIView#getName <em>Name</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.MIView#getDescription <em>Description</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.MIView#getDisplayConnectors <em>Display Connectors</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.MIView#getId <em>Id</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getView()
  * @model
  * @generated
@@ -33,7 +33,6 @@ public interface MIView extends EObject {
 	 * If the meaning of the '<em>Name</em>' attribute isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Name</em>' attribute.
 	 * @see #setName(String)
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getView_Name()
@@ -46,9 +45,7 @@ public interface MIView extends EObject {
 	 * Sets the value of the '{@link kieker.analysis.model.analysisMetaModel.MIView#getName <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Name</em>' attribute.
+	 * @param value the new value of the '<em>Name</em>' attribute.
 	 * @see #getName()
 	 * @generated
 	 */
@@ -61,7 +58,6 @@ public interface MIView extends EObject {
 	 * If the meaning of the '<em>Description</em>' attribute isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Description</em>' attribute.
 	 * @see #setDescription(String)
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getView_Description()
@@ -74,9 +70,7 @@ public interface MIView extends EObject {
 	 * Sets the value of the '{@link kieker.analysis.model.analysisMetaModel.MIView#getDescription <em>Description</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Description</em>' attribute.
+	 * @param value the new value of the '<em>Description</em>' attribute.
 	 * @see #getDescription()
 	 * @generated
 	 */
@@ -90,7 +84,6 @@ public interface MIView extends EObject {
 	 * If the meaning of the '<em>Display Connectors</em>' containment reference list isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Display Connectors</em>' containment reference list.
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getView_DisplayConnectors()
 	 * @model containment="true"
@@ -105,7 +98,6 @@ public interface MIView extends EObject {
 	 * If the meaning of the '<em>Id</em>' attribute isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Id</em>' attribute.
 	 * @see #setId(String)
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#getView_Id()
@@ -118,9 +110,7 @@ public interface MIView extends EObject {
 	 * Sets the value of the '{@link kieker.analysis.model.analysisMetaModel.MIView#getId <em>Id</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
-	 * @param value
-	 *            the new value of the '<em>Id</em>' attribute.
+	 * @param value the new value of the '<em>Id</em>' attribute.
 	 * @see #getId()
 	 * @generated
 	 */

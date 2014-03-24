@@ -25,10 +25,10 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <p>
  * The following features are implemented:
  * <ul>
- * <li>{@link kieker.analysis.model.analysisMetaModel.impl.MFilter#getInputPorts <em>Input Ports</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MFilter#getInputPorts <em>Input Ports</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @generated
  */
 public class MFilter extends MPlugin implements MIFilter {
@@ -36,7 +36,6 @@ public class MFilter extends MPlugin implements MIFilter {
 	 * The cached value of the '{@link #getInputPorts() <em>Input Ports</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getInputPorts()
 	 * @generated
 	 * @ordered
@@ -46,7 +45,6 @@ public class MFilter extends MPlugin implements MIFilter {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected MFilter() {
@@ -56,7 +54,6 @@ public class MFilter extends MPlugin implements MIFilter {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -67,13 +64,11 @@ public class MFilter extends MPlugin implements MIFilter {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public EList<MIInputPort> getInputPorts() {
 		if (inputPorts == null) {
-			inputPorts = new EObjectContainmentWithInverseEList<MIInputPort>(MIInputPort.class, this, MIAnalysisMetaModelPackage.FILTER__INPUT_PORTS,
-					MIAnalysisMetaModelPackage.INPUT_PORT__PARENT);
+			inputPorts = new EObjectContainmentWithInverseEList<MIInputPort>(MIInputPort.class, this, MIAnalysisMetaModelPackage.FILTER__INPUT_PORTS, MIAnalysisMetaModelPackage.INPUT_PORT__PARENT);
 		}
 		return inputPorts;
 	}
@@ -81,15 +76,14 @@ public class MFilter extends MPlugin implements MIFilter {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case MIAnalysisMetaModelPackage.FILTER__INPUT_PORTS:
-			return ((InternalEList<InternalEObject>) (InternalEList<?>) getInputPorts()).basicAdd(otherEnd, msgs);
+			case MIAnalysisMetaModelPackage.FILTER__INPUT_PORTS:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getInputPorts()).basicAdd(otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
@@ -97,14 +91,13 @@ public class MFilter extends MPlugin implements MIFilter {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case MIAnalysisMetaModelPackage.FILTER__INPUT_PORTS:
-			return ((InternalEList<?>) getInputPorts()).basicRemove(otherEnd, msgs);
+			case MIAnalysisMetaModelPackage.FILTER__INPUT_PORTS:
+				return ((InternalEList<?>)getInputPorts()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -112,14 +105,13 @@ public class MFilter extends MPlugin implements MIFilter {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case MIAnalysisMetaModelPackage.FILTER__INPUT_PORTS:
-			return getInputPorts();
+			case MIAnalysisMetaModelPackage.FILTER__INPUT_PORTS:
+				return getInputPorts();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -127,17 +119,16 @@ public class MFilter extends MPlugin implements MIFilter {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case MIAnalysisMetaModelPackage.FILTER__INPUT_PORTS:
-			getInputPorts().clear();
-			getInputPorts().addAll((Collection<? extends MIInputPort>) newValue);
-			return;
+			case MIAnalysisMetaModelPackage.FILTER__INPUT_PORTS:
+				getInputPorts().clear();
+				getInputPorts().addAll((Collection<? extends MIInputPort>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -145,15 +136,14 @@ public class MFilter extends MPlugin implements MIFilter {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case MIAnalysisMetaModelPackage.FILTER__INPUT_PORTS:
-			getInputPorts().clear();
-			return;
+			case MIAnalysisMetaModelPackage.FILTER__INPUT_PORTS:
+				getInputPorts().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -161,14 +151,13 @@ public class MFilter extends MPlugin implements MIFilter {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case MIAnalysisMetaModelPackage.FILTER__INPUT_PORTS:
-			return inputPorts != null && !inputPorts.isEmpty();
+			case MIAnalysisMetaModelPackage.FILTER__INPUT_PORTS:
+				return inputPorts != null && !inputPorts.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

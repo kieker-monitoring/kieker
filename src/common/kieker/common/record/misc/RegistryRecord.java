@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ import kieker.common.util.registry.IRegistry;
  * @since 1.5
  */
 public final class RegistryRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	public static final int SIZE = 8; // without the String itself!
+	public static final int SIZE = TYPE_SIZE_INT + TYPE_SIZE_STRING;
 	public static final Class<?>[] TYPES = new Class<?>[] {
 		int.class, // id
 		String.class, // object
@@ -158,6 +158,13 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	 */
 	public int getSize() {
 		return 4 + 4 + this.strBytes.length;
+	}
+
+	/**
+	 * @return the String as byte[]
+	 */
+	public final byte[] getStrBytes() {
+		return this.strBytes; // NOPMD (We know what we are doing here...)
 	}
 
 	/**
