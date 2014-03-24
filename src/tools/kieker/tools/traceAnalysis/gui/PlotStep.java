@@ -59,6 +59,7 @@ public class PlotStep extends AbstractStep {
 	public PlotStep() {
 		this.addAndLayoutComponents();
 		this.addLogicToComponents();
+		this.setDefaultSelection();
 	}
 
 	private void addAndLayoutComponents() {
@@ -226,6 +227,20 @@ public class PlotStep extends AbstractStep {
 				}
 			}
 		});
+	}
+
+	private void setDefaultSelection() {
+		this.assemblyComponentDependencyGraph.setSelected(true);
+		this.assemblyComponentDependencyGraphResponseTime.setSelected(true);
+
+		this.assemblyOperationDependencyGraph.setSelected(true);
+		this.assemblyOperationDependencyGraphResponseTime.setSelected(true);
+
+		this.deploymentComponentDependencyGraph.setSelected(true);
+		this.deploymentComponentDependencyGraphResponseTime.setSelected(true);
+
+		this.deploymentOperationDependencyGraph.setSelected(true);
+		this.deploymentOperationDependencyGraphResponseTime.setSelected(true);
 	}
 
 	@Override

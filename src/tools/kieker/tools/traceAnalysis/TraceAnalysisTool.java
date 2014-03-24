@@ -1069,10 +1069,6 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 			System.err.println(""); // NOPMD (System.out)
 			System.err.println("See 'kieker.log' for details"); // NOPMD (System.out)
 		}
-
-		if (!success) {
-			System.exit(1);
-		} // else: terminate with success code (0)
 	}
 
 	private static boolean writeTraceEquivalenceReport(final String outputFnPrefixL, final TraceEquivalenceClassFilter traceEquivFilter) throws IOException {

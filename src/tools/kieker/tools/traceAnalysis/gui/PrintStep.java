@@ -49,6 +49,7 @@ public class PrintStep extends AbstractStep {
 	public PrintStep() {
 		this.addAndLayoutComponents();
 		this.addLogicToComponents();
+		this.setDefaultSelection();
 	}
 
 	private void addAndLayoutComponents() {
@@ -110,6 +111,10 @@ public class PrintStep extends AbstractStep {
 			}
 		});
 	};
+
+	private void setDefaultSelection() {
+		this.systemModel.setSelected(true);
+	}
 
 	@Override
 	public void addSelectedTraceAnalysisParameters(final Collection<String> parameters) {

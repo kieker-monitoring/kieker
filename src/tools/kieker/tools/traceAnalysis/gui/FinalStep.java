@@ -19,6 +19,9 @@ package kieker.tools.traceAnalysis.gui;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.Collection;
 
 import javax.swing.BorderFactory;
@@ -48,13 +51,23 @@ public class FinalStep extends AbstractStep {
 	public FinalStep(final ActionListener startTraceAnalysisClickListener) {
 		this.startTraceAnalysisClickListener = startTraceAnalysisClickListener;
 
+		this.redirectOutputStreams();
 		this.initializeComponents();
 		this.addAndLayoutComponents();
 		this.addLogicToComponents();
 	}
 
+	private void redirectOutputStreams() {
+		final LogOutputStream logOutputStream = new LogOutputStream();
+		final PrintStream logPrintStream = new PrintStream(logOutputStream);
+
+		System.setOut(logPrintStream);
+		System.setErr(logPrintStream);
+	}
+
 	private void initializeComponents() {
 		this.logArea.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
+		this.logArea.setEditable(false);
 	}
 
 	private void addAndLayoutComponents() {
@@ -91,5 +104,25 @@ public class FinalStep extends AbstractStep {
 	@Override
 	public void addSelectedTraceAnalysisParameters(final Collection<String> parameters) {
 		// No parameters can be selected in this step
+	}
+
+	private final class LogOutputStream extends OutputStream {
+
+		private final String lineSeperator = System.getProperty("line.separator");
+		private final StringBuffer stringBuffer = new StringBuffer();
+
+		public LogOutputStream() {}
+
+		@Override
+		public void write(final int data) throws IOException {
+			this.stringBuffer.appendCodePoint(data);
+
+			if (this.stringBuffer.lastIndexOf(this.lineSeperator) != -1) {
+				FinalStep.this.logArea.append(this.stringBuffer.toString());
+				this.stringBuffer.setLength(0);
+			}
+
+		}
+
 	}
 }

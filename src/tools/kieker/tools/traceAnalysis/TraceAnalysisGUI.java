@@ -173,6 +173,8 @@ public class TraceAnalysisGUI extends JFrame {
 
 	private class StartTraceAnalysisActionListener implements ActionListener {
 
+		public StartTraceAnalysisActionListener() {}
+
 		public void actionPerformed(final ActionEvent e) {
 			TraceAnalysisGUI.this.startTraceAnalysis();
 		}
