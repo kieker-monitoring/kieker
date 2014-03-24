@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,8 @@ import kieker.tools.tslib.ITimeSeries;
  * Result of a time series forecast, e.g., computed by {@link IForecaster}. If additional fields are required, {@link IForecaster}s should extend this class.
  * 
  * @author Andre van Hoorn
+ * @since 1.9
  * 
- * @param <T>
  */
 public class ForecastResult<T> implements IForecastResult<T> {
 

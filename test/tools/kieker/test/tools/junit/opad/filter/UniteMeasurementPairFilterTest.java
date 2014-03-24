@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,14 +34,17 @@ import kieker.tools.opad.record.ForecastMeasurementPair;
 import kieker.tools.opad.record.IForecastMeasurementPair;
 import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 /**
  * Checks if the forecasts are assigned to the correct real values. Also checks, if a dummy is created for
  * the first real value, that can not have a calculated forecast.
  * 
  * @author Tom Frotscher
+ * @since 1.9
  * 
  */
-public class UniteMeasurementPairFilterTest {
+public class UniteMeasurementPairFilterTest extends AbstractKiekerTest {
 
 	private static final String OP_SIGNATURE_A = "a.A.opA";
 	private static final String OP_SIGNATURE_B = "b.B.opB";

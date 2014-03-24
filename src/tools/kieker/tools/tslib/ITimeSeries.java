@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @author Andre van Hoorn
- * 
- * @param <T>
+ * @since 1.9
  */
 public interface ITimeSeries<T> {
 
@@ -32,6 +31,7 @@ public interface ITimeSeries<T> {
 	 * Returns the start of the time series, i.e., the time of the first value.
 	 * 
 	 * @return
+	 * @since 1.9
 	 */
 	public long getStartTime();
 
@@ -39,6 +39,7 @@ public interface ITimeSeries<T> {
 	 * Returns the temporal distance between to time series values with respect to the configured {@link TimeUnit} {@link #getDeltaTime()}.
 	 * 
 	 * @return
+	 * @since 1.9
 	 */
 	// TODO rather take Timespan object!
 	public long getDeltaTime();
@@ -47,6 +48,7 @@ public interface ITimeSeries<T> {
 	 * The {@link TimeUnit} used to specify the temporal distance between to values ({@link #getDeltaTime()}).
 	 * 
 	 * @return
+	 * @since 1.9
 	 */
 	// TODO rather take Timespan object!
 	public TimeUnit getDeltaTimeUnit();
@@ -57,6 +59,7 @@ public interface ITimeSeries<T> {
 	 * @param value
 	 *            the value to append
 	 * @return
+	 * @since 1.9
 	 */
 	public ITimeSeriesPoint<T> append(T value);
 
@@ -65,6 +68,7 @@ public interface ITimeSeries<T> {
 	 * 
 	 * @param value
 	 * @return
+	 * @since 1.9
 	 */
 	public List<ITimeSeriesPoint<T>> appendAll(T[] values);
 
@@ -72,6 +76,7 @@ public interface ITimeSeries<T> {
 	 * Returns the {@link ITimeSeriesPoint}s of this time series.
 	 * 
 	 * @return
+	 * @since 1.9
 	 */
 	public List<ITimeSeriesPoint<T>> getPoints();
 
@@ -79,6 +84,7 @@ public interface ITimeSeries<T> {
 	 * Returns a list of all {@link #getPoints()#getValues()}
 	 * 
 	 * @return
+	 * @since 1.9
 	 */
 	public List<T> getValues();
 
@@ -86,6 +92,7 @@ public interface ITimeSeries<T> {
 	 * Returns the maximum number of elements held in this time series.
 	 * 
 	 * @return the capacity; {@link #INFINITE_CAPACITY} if the capacity is infinite
+	 * @since 1.9
 	 */
 	public int getCapacity();
 
@@ -93,6 +100,7 @@ public interface ITimeSeries<T> {
 	 * Returns the number of value contained in the time series
 	 * 
 	 * @return
+	 * @since 1.9
 	 */
 	public int size();
 
@@ -100,6 +108,7 @@ public interface ITimeSeries<T> {
 	 * Returns the time corresponding to the most recent value in the time series
 	 * 
 	 * @return
+	 * @since 1.9
 	 */
 	public long getEndTime();
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,17 +29,19 @@ import kieker.common.util.registry.IRegistry;
  * stored as an double value.
  * 
  * @author Tom Frotscher
+ * @since 1.9
  * 
  */
-public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
+public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 
-	private static final long serialVersionUID = 1768657580333390199L;
-	public static final int SIZE = 20;
+	public static final int SIZE = TYPE_SIZE_STRING + TYPE_SIZE_LONG + TYPE_SIZE_DOUBLE;
 	public static final Class<?>[] TYPES = {
 		String.class, // applicationName
 		long.class, // timestamp
 		double.class, // responseTime
 	};
+
+	private static final long serialVersionUID = 1768657580333390199L;
 
 	// Attributes
 	private final String applicationName;
@@ -60,6 +62,12 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 		this.applicationName = application;
 		this.timestamp = timest;
 		this.responseTime = response;
+	}
+
+	public NamedDoubleRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		this.applicationName = stringRegistry.get(buffer.getInt());
+		this.timestamp = buffer.getLong();
+		this.responseTime = buffer.getDouble();
 	}
 
 	/**
@@ -137,8 +145,14 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 		buffer.putDouble(this.getValue());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
+	 */
+	@Deprecated
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException(); // TODO: FIX
+		throw new UnsupportedOperationException();
 	}
 
 	public int getSize() {

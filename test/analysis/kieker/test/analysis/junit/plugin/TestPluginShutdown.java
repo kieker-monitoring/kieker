@@ -290,6 +290,8 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 			this.shutdownNr = SHUTDOWNORDER.getAndIncrement();
 		}
 
+		@SuppressWarnings("unused")
+		// invoked via reflection
 		@InputPort(name = INPUT_PORT_NAME)
 		public final void inputEvent(final Object event) {
 			super.deliver(OUTPUT_PORT_NAME, event);

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,30 +19,22 @@ package kieker.tools.tslib;
 import kieker.tools.tslib.anomalycalculators.IAnomalyCalculator;
 import kieker.tools.tslib.anomalycalculators.SimpleAnomalyCalculator;
 import kieker.tools.tslib.forecast.IForecaster;
-import kieker.tools.tslib.forecast.arima.ARIMA101Forecaster;
-import kieker.tools.tslib.forecast.ets.ETSForecaster;
 import kieker.tools.tslib.forecast.mean.MeanForecasterJava;
-import kieker.tools.tslib.forecast.ses.SESRForecaster;
 import kieker.tools.tslib.forecast.windowstart.WindowStartForecaster;
 
 /**
  * 
  * @author Andre van Hoorn, Tillmann Carlos Bielefeld
+ * @since 1.9
  * 
  */
 public enum ForecastMethod {
-	MEAN, SES, ETS, ARIMA101, WINDOWSTART;
+	MEAN, SES, WINDOWSTART;
 
 	public IForecaster<Double> getForecaster(final ITimeSeries<Double> history) {
 		switch (this) {
-		case SES:
-			return new SESRForecaster(history);
-		case ETS:
-			return new ETSForecaster(history);
 		case MEAN:
 			return new MeanForecasterJava(history);
-		case ARIMA101:
-			return new ARIMA101Forecaster(history);
 		case WINDOWSTART:
 			return new WindowStartForecaster(history);
 		default:
@@ -51,12 +43,7 @@ public enum ForecastMethod {
 	}
 
 	public IAnomalyCalculator<Double> getAnomalyCalculator() {
-		switch (this) {
-		case SES:
-			return new SimpleAnomalyCalculator();
-		default:
-			return new SimpleAnomalyCalculator();
-		}
+		return new SimpleAnomalyCalculator();
 	}
 
 }

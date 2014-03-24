@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,14 +27,17 @@ import kieker.common.configuration.Configuration;
 import kieker.tools.opad.filter.TimeSeriesPointAggregatorFilter;
 import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 /**
  * Checks if values in the given timespan (10 milliseconds) are aggregated correctly.
  * Also checks if zero values are created for timestamps with no incoming values.
  * 
  * @author Tom Frotscher
+ * @since 1.9
  * 
  */
-public class TimeSeriesPointAggregatorTest {
+public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 
 	private static final String OP_SIGNATURE_A = "a.A.opA";
 	private static final String OP_SIGNATURE_B = "b.B.opB";

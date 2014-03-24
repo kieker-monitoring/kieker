@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,11 +27,12 @@ import kieker.common.util.registry.IRegistry;
 /**
  * 
  * @author Tillmann Carlos Bielefeld
+ * @since 1.9
  * 
  */
-public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, INamedElement, IDoubleValue {
+public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, INamedElement, IDoubleValue, IMonitoringRecord.BinaryFactory {
 
-	public static final int SIZE = 20;
+	public static final int SIZE = TYPE_SIZE_LONG + TYPE_SIZE_DOUBLE + TYPE_SIZE_STRING;
 	public static final Class<?>[] TYPES = {
 		long.class, // timestamp
 		double.class, // value
@@ -51,9 +52,23 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 		this.name = name;
 	}
 
+	public NamedTSPoint(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		this.timestamp = buffer.getLong();
+		this.value = buffer.getDouble();
+		this.name = stringRegistry.get(buffer.getInt());
+	}
+
+	public NamedTSPoint(final Object[] values) {
+		AbstractMonitoringRecord.checkArray(values, NamedTSPoint.TYPES);
+
+		this.timestamp = (Long) values[0];
+		this.value = (Double) values[1];
+		this.name = (String) values[2];
+
+	}
+
 	public Object[] toArray() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Object[] { this.getTimestamp(), this.getValue(), this.getName(), };
 	}
 
 	@Deprecated
@@ -83,8 +98,14 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 		buffer.putInt(stringRegistry.get(this.getName()));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
+	 */
+	@Deprecated
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException(); // TODO: FIX
+		throw new UnsupportedOperationException();
 	}
 
 	public int getSize() {

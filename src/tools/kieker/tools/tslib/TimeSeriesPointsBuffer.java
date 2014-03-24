@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * This class is using a ConcurrentLinkedQueue to implement a bounded FifoBuffer.
  * 
  * @author Tom Frotscher
- * 
- * @param <T>
+ * @since 1.9
  */
 public class TimeSeriesPointsBuffer<T> extends ConcurrentLinkedQueue<T> implements ITimeSeriesPointsBuffer<T> {
 	private static final long serialVersionUID = -7988633509408488397L;

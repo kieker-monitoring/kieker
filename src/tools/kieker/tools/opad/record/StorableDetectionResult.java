@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,20 +30,21 @@ import kieker.common.util.registry.IRegistry;
  * the timestamp and the corresponding anomaly score.
  * 
  * @author Tom Frotscher
+ * @since 1.9
  * 
  */
-public class StorableDetectionResult extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
+public class StorableDetectionResult extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 
-	private static final long serialVersionUID = 7325786584057491433L;
-
-	public static final int SIZE = 36;
+	public static final int SIZE = TYPE_SIZE_STRING + TYPE_SIZE_DOUBLE + TYPE_SIZE_LONG + TYPE_SIZE_DOUBLE + TYPE_SIZE_DOUBLE;
 	public static final Class<?>[] TYPES = {
 		String.class, // applicationName
 		double.class, // value
 		long.class, // timestamp
 		double.class, // forecast
-		double.class // score
+		double.class, // score
 	};
+
+	private static final long serialVersionUID = 7325786584057491433L;
 
 	// Attributes
 	protected final String applicationName;
@@ -72,6 +73,14 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 		this.timestamp = timest;
 		this.forecast = fore;
 		this.score = sc;
+	}
+
+	public StorableDetectionResult(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		this.applicationName = stringRegistry.get(buffer.getInt());
+		this.value = buffer.getDouble();
+		this.timestamp = buffer.getLong();
+		this.forecast = buffer.getDouble();
+		this.score = buffer.getDouble();
 	}
 
 	/**
@@ -173,8 +182,14 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 		buffer.putDouble(this.getScore());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
+	 */
+	@Deprecated
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException(); // TODO: FIX
+		throw new UnsupportedOperationException();
 	}
 
 	public int getSize() {

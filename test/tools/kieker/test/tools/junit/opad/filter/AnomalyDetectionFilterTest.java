@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,8 @@ import kieker.common.configuration.Configuration;
 import kieker.tools.opad.filter.AnomalyDetectionFilter;
 import kieker.tools.opad.record.StorableDetectionResult;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 /**
  * 
  * Testing the AnomalyDetectionFilter. What is basically testing is following:
@@ -42,8 +44,9 @@ import kieker.tools.opad.record.StorableDetectionResult;
  * - 0.6 and 0.7 to be an anomaly
  * 
  * @author Tillmann Carlos Bielefeld
+ * @since 1.9
  */
-public class AnomalyDetectionFilterTest {
+public class AnomalyDetectionFilterTest extends AbstractKiekerTest {
 
 	private static final String OP_SIGNATURE_A = "a.A.opA";
 

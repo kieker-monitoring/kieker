@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,6 +38,8 @@ import kieker.tools.opad.filter.UniteMeasurementPairFilter;
 import kieker.tools.opad.record.NamedDoubleRecord;
 import kieker.tools.opad.record.StorableDetectionResult;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 /**
  * This test creates some ResponseTimeDoubleRecords and let them run through all currently
  * available OPAD Filter. The ResponseTimeDoubleRecords are create as records from different
@@ -45,8 +47,9 @@ import kieker.tools.opad.record.StorableDetectionResult;
  * SendAndStoreDetectionResultsFilter)
  * 
  * @author Tom Frotscher
+ * @since 1.9
  */
-public class OpadIntegrationTest {
+public class OpadIntegrationTest extends AbstractKiekerTest {
 
 	private static final String OP_SIGNATURE_A = "a.A.opA";
 	private static final String OP_SIGNATURE_B = "b.B.opB";

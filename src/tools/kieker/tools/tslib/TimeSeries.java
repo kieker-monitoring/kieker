@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @author Andre van Hoorn
- * 
- * @param <T>
+ * @since 1.9
  */
 public class TimeSeries<T> implements ITimeSeries<T> {
 	private final long startTime;

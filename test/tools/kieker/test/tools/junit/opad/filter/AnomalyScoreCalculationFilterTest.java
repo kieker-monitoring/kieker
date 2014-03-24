@@ -33,14 +33,16 @@ import kieker.tools.opad.filter.AnomalyScoreCalculationFilter;
 import kieker.tools.opad.record.ForecastMeasurementPair;
 import kieker.tools.opad.record.StorableDetectionResult;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 /**
  * Test for the AnomalyScoreCalculationFilter. Therefore comparing the result of the Filter with some
  * previous manually calculated Results.
  * 
  * @author Tom Frotscher
- * 
+ * @since 1.9
  */
-public class AnomalyScoreCalculationFilterTest {
+public class AnomalyScoreCalculationFilterTest extends AbstractKiekerTest {
 
 	private static final String OP_SIGNATURE_A = "a.A.opA";
 

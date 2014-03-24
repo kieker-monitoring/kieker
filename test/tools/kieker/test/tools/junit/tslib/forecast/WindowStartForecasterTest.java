@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,10 +29,13 @@ import kieker.tools.tslib.TimeSeries;
 import kieker.tools.tslib.forecast.IForecastResult;
 import kieker.tools.tslib.forecast.windowstart.WindowStartForecaster;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 /**
  * @author Tillmann Carlos Bielefeld
+ * @since 1.9
  */
-public class WindowStartForecasterTest {
+public class WindowStartForecasterTest extends AbstractKiekerTest {
 
 	private static final Log LOG = LogFactory.getLog(WindowStartForecasterTest.class);
 
