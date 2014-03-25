@@ -23,7 +23,7 @@ import kieker.tools.tslib.ITimeSeries;
  * 
  * @author Andre van Hoorn
  * @since 1.9
- * 
+ * @param <T>
  */
 public class ForecastResult<T> implements IForecastResult<T> {
 

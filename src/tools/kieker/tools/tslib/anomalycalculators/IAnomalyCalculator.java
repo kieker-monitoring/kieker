@@ -23,7 +23,7 @@ import kieker.tools.tslib.forecast.IForecastResult;
  * 
  * @author Tillmann Carlos Bielefeld
  * @since 1.9
- * 
+ * @param <T>
  */
 public interface IAnomalyCalculator<T> {
 	/** @since 1.9 */

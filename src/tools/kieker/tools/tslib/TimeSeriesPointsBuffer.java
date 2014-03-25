@@ -22,7 +22,10 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * This class is using a ConcurrentLinkedQueue to implement a bounded FifoBuffer.
  * 
  * @author Tom Frotscher
+ * 
  * @since 1.9
+ * 
+ * @param <T>
  */
 public class TimeSeriesPointsBuffer<T> extends ConcurrentLinkedQueue<T> implements ITimeSeriesPointsBuffer<T> {
 	private static final long serialVersionUID = -7988633509408488397L;

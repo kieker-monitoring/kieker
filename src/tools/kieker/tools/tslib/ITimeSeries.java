@@ -21,7 +21,10 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @author Andre van Hoorn
+ * 
  * @since 1.9
+ * 
+ * @param <T>
  */
 public interface ITimeSeries<T> {
 

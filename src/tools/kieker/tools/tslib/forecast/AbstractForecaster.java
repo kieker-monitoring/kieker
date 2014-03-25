@@ -22,6 +22,7 @@ import kieker.tools.tslib.TimeSeries;
 /**
  * @author Andre van Hoorn, Tillmann Carlos Bielefeld
  * @since 1.9
+ * @param <T>
  */
 public abstract class AbstractForecaster<T> implements IForecaster<T> {
 	private final ITimeSeries<T> historyTimeseries;

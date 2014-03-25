@@ -22,7 +22,10 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @author Andre van Hoorn
+ * 
  * @since 1.9
+ * 
+ * @param <T>
  */
 public class TimeSeries<T> implements ITimeSeries<T> {
 	private final long startTime;
