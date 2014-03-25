@@ -66,8 +66,7 @@ public class AnomalyDetectionFilterTest extends AbstractKiekerTest {
 	}
 
 	private StorableDetectionResult createNDTSP(final String signature, final double value) {
-		final StorableDetectionResult r = new StorableDetectionResult(signature, value, System.currentTimeMillis(), value, value);
-		return r;
+		return new StorableDetectionResult(signature, value, System.currentTimeMillis(), value, value);
 	}
 
 	private List<StorableDetectionResult> createInputEventSet() {

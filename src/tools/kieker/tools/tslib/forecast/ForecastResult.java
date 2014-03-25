@@ -76,7 +76,8 @@ public class ForecastResult<T> implements IForecastResult<T> {
 
 	@Override
 	public String toString() {
-		final StringBuilder strB = new StringBuilder("\n");
+		final StringBuilder strB = new StringBuilder();
+		strB.append("\n");
 		strB.append("tsForecast: ").append(this.tsForecast.toString()).append("\n");
 		strB.append("tsOriginal: ").append(this.tsOriginal.toString()).append("\n");
 		strB.append("confidenceLevel: ").append(this.confidenceLevel).append("\n");

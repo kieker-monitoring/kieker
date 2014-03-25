@@ -67,8 +67,8 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 	private final ConcurrentHashMap<String, AggregationVariableSet> aggregationVariables;
 
 	private final long aggregationSpan;
-	private TimeUnit timeunit = TimeUnit.MILLISECONDS;
-	private AggregationMethod aggregationMethod = AggregationMethod.MEAN;
+	private final TimeUnit timeunit;
+	private final AggregationMethod aggregationMethod;
 
 	/**
 	 * Creates a new instance of this class.
@@ -87,7 +87,7 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 		try {
 			configTimeunit = TimeUnit.valueOf(configuration.getStringProperty(CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT));
 		} catch (final IllegalArgumentException ex) {
-			configTimeunit = this.timeunit;
+			configTimeunit = TimeUnit.MILLISECONDS;
 		}
 		this.timeunit = configTimeunit;
 		this.aggregationSpan = TimeUnit.MILLISECONDS.convert(configuration.getIntProperty(CONFIG_PROPERTY_NAME_AGGREGATION_SPAN), this.timeunit);
@@ -97,11 +97,9 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 			configAggregationMethod = AggregationMethod.valueOf(configuration
 					.getStringProperty(CONFIG_PROPERTY_NAME_AGGREGATION_METHOD));
 		} catch (final IllegalArgumentException ex) {
-			configAggregationMethod = this.aggregationMethod;
+			configAggregationMethod = AggregationMethod.MEAN;
 		}
 
-		this.aggregationMethod = AggregationMethod.valueOf(configuration
-				.getStringProperty(CONFIG_PROPERTY_NAME_AGGREGATION_METHOD));
 		this.aggregationMethod = configAggregationMethod;
 	}
 

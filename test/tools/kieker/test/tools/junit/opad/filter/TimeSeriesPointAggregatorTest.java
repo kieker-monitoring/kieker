@@ -59,8 +59,7 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 
 	// HelperMethods ForecastingFilter
 	private NamedDoubleTimeSeriesPoint createNDTSP(final long timestamp, final double value, final String signature) {
-		final NamedDoubleTimeSeriesPoint r = new NamedDoubleTimeSeriesPoint(timestamp, value, signature);
-		return r;
+		return new NamedDoubleTimeSeriesPoint(timestamp, value, signature);
 	}
 
 	/**

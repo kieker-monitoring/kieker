@@ -65,8 +65,7 @@ public class ForecastingFilterTest extends AbstractKiekerTest {
 
 	// HelperMethods ForecastingFilter
 	private NamedDoubleTimeSeriesPoint createNDTSP(final String signature, final double value) {
-		final NamedDoubleTimeSeriesPoint r = new NamedDoubleTimeSeriesPoint(System.currentTimeMillis(), value, signature);
-		return r;
+		return new NamedDoubleTimeSeriesPoint(System.currentTimeMillis(), value, signature);
 	}
 
 	private List<NamedDoubleTimeSeriesPoint> createInputEventSetForecast() {

@@ -66,8 +66,7 @@ public class UniteMeasurementPairFilterTest extends AbstractKiekerTest {
 
 	// HelperMethods UniteFilter
 	private NamedDoubleTimeSeriesPoint createNDTSP(final long d, final String signature, final double value) {
-		final NamedDoubleTimeSeriesPoint r = new NamedDoubleTimeSeriesPoint(d, value, signature);
-		return r;
+		return new NamedDoubleTimeSeriesPoint(d, value, signature);
 	}
 
 	private List<NamedDoubleTimeSeriesPoint> createInputEventSetUnite() {
