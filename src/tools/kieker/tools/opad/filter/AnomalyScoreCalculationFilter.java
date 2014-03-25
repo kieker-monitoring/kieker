@@ -22,8 +22,8 @@ import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.tools.opad.record.IForecastMeasurementPair;
-import kieker.tools.opad.record.StorableDetectionResult;
+import kieker.common.record.opad.IForecastMeasurementPair;
+import kieker.common.record.opad.StorableDetectionResult;
 
 /**
  * This filter calculates the anomaly score from the distance of the forecast and the current value.

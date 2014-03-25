@@ -67,6 +67,6 @@ public class MeanForecasterJava extends AbstractForecaster<Double> {
 				newList.add((Double) obj);
 			}
 		}
-		return newList.toArray(new Double[] {});
+		return newList.toArray(new Double[newList.size()]);
 	}
 }

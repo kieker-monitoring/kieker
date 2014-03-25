@@ -29,14 +29,14 @@ import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
+import kieker.common.record.opad.NamedDoubleRecord;
+import kieker.common.record.opad.StorableDetectionResult;
 import kieker.tools.opad.filter.AnomalyDetectionFilter;
 import kieker.tools.opad.filter.AnomalyScoreCalculationFilter;
 import kieker.tools.opad.filter.ExtractionFilter;
 import kieker.tools.opad.filter.ForecastingFilter;
 import kieker.tools.opad.filter.TimeSeriesPointAggregatorFilter;
 import kieker.tools.opad.filter.UniteMeasurementPairFilter;
-import kieker.tools.opad.record.NamedDoubleRecord;
-import kieker.tools.opad.record.StorableDetectionResult;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 

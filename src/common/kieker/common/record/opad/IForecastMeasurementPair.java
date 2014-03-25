@@ -14,7 +14,9 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.opad.record;
+package kieker.common.record.opad;
+
+import kieker.tools.tslib.ITimeSeriesPoint;
 
 /**
  * 
@@ -22,7 +24,9 @@ package kieker.tools.opad.record;
  * @since 1.9
  * 
  */
-public interface IDoubleValue {
+public interface IForecastMeasurementPair extends INamedElement, ITimeSeriesPoint<Double> {
+
 	/** @since 1.9 */
-	public double getValue();
+	public Double getForecasted();
+
 }

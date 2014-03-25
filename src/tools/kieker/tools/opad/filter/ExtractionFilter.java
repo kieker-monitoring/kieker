@@ -25,8 +25,8 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.tools.opad.record.NamedDoubleRecord;
-import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
+import kieker.common.record.opad.NamedDoubleRecord;
+import kieker.common.record.opad.NamedDoubleTimeSeriesPoint;
 
 /**
  * An instance of this class extracts the Data from the incoming Records.
@@ -55,7 +55,7 @@ public class ExtractionFilter extends AbstractFilterPlugin {
 	 */
 	public static final String CONFIG_PROPERTY_NAME_TIMEUNIT = "timeunit";
 
-	private TimeUnit timeunit = TimeUnit.NANOSECONDS;
+	private final TimeUnit timeunit;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -72,7 +72,7 @@ public class ExtractionFilter extends AbstractFilterPlugin {
 		try {
 			configTimeunit = TimeUnit.valueOf(configuration.getStringProperty(CONFIG_PROPERTY_NAME_TIMEUNIT));
 		} catch (final IllegalArgumentException ex) {
-			configTimeunit = this.timeunit;
+			configTimeunit = TimeUnit.NANOSECONDS;
 		}
 		this.timeunit = configTimeunit;
 

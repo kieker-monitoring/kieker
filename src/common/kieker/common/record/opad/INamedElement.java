@@ -14,35 +14,17 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.opad.record;
-
-import kieker.tools.tslib.TimeSeriesPoint;
+package kieker.common.record.opad;
 
 /**
+ * 
  * @author Tillmann Carlos Bielefeld
  * @since 1.9
  * 
- * 
  */
-public class NamedDoubleTimeSeriesPoint extends TimeSeriesPoint<Double> implements INamedElement {
+public interface INamedElement {
 
-	private final String name;
+	/** @since 1.9 */
+	public String getName();
 
-	public NamedDoubleTimeSeriesPoint(final long time, final Double value, final String name) {
-		super(time, value);
-		this.name = name;
-	}
-
-	public String getName() {
-		return this.name;
-	}
-
-	public double getDoubleValue() {
-		return this.getValue();
-	}
-
-	@Override
-	public String toString() {
-		return this.name + " >> " + super.toString();
-	}
 }
