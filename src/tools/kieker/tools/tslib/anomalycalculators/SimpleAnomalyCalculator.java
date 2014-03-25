@@ -23,7 +23,6 @@ import kieker.tools.tslib.forecast.IForecastResult;
  * 
  * @author Tillmann Carlos Bielefeld
  * @since 1.9
- * @param <T>
  */
 public class SimpleAnomalyCalculator implements IAnomalyCalculator<Double> {
 

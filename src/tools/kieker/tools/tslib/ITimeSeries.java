@@ -41,7 +41,6 @@ public interface ITimeSeries<T> {
 	/**
 	 * Returns the temporal distance between to time series values with respect to the configured {@link TimeUnit} {@link #getDeltaTime()}.
 	 * 
-	 * @return
 	 * @since 1.9
 	 */
 	// TODO rather take Timespan object!
@@ -50,7 +49,6 @@ public interface ITimeSeries<T> {
 	/**
 	 * The {@link TimeUnit} used to specify the temporal distance between to values ({@link #getDeltaTime()}).
 	 * 
-	 * @return
 	 * @since 1.9
 	 */
 	// TODO rather take Timespan object!
@@ -61,7 +59,6 @@ public interface ITimeSeries<T> {
 	 * 
 	 * @param value
 	 *            the value to append
-	 * @return
 	 * @since 1.9
 	 */
 	public ITimeSeriesPoint<T> append(T value);
@@ -69,8 +66,6 @@ public interface ITimeSeries<T> {
 	/**
 	 * Appends the given value to the time series.
 	 * 
-	 * @param value
-	 * @return
 	 * @since 1.9
 	 */
 	public List<ITimeSeriesPoint<T>> appendAll(T[] values);
@@ -78,7 +73,6 @@ public interface ITimeSeries<T> {
 	/**
 	 * Returns the {@link ITimeSeriesPoint}s of this time series.
 	 * 
-	 * @return
 	 * @since 1.9
 	 */
 	public List<ITimeSeriesPoint<T>> getPoints();
@@ -86,7 +80,6 @@ public interface ITimeSeries<T> {
 	/**
 	 * Returns a list of all {@link #getPoints()#getValues()}
 	 * 
-	 * @return
 	 * @since 1.9
 	 */
 	public List<T> getValues();
@@ -102,7 +95,6 @@ public interface ITimeSeries<T> {
 	/**
 	 * Returns the number of value contained in the time series
 	 * 
-	 * @return
 	 * @since 1.9
 	 */
 	public int size();
@@ -110,7 +102,6 @@ public interface ITimeSeries<T> {
 	/**
 	 * Returns the time corresponding to the most recent value in the time series
 	 * 
-	 * @return
 	 * @since 1.9
 	 */
 	public long getEndTime();
