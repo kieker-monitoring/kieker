@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import kieker.common.record.opad.NamedDoubleTimeSeriesPoint;
+import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
 
 /**
  * 

@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.record.opad;
+package kieker.tools.opad.record;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;

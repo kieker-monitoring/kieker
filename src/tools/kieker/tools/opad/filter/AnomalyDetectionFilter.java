@@ -23,7 +23,7 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.record.opad.StorableDetectionResult;
+import kieker.tools.opad.record.StorableDetectionResult;
 
 /**
  * 

@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.record.opad;
+package kieker.tools.opad.record;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
@@ -25,78 +25,63 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
 
 /**
- * This class contains the data that will be stored in the database after each complete analysis.
- * Therefore, containing the value, the application name, the forecast calculated from the value,
- * the timestamp and the corresponding anomaly score.
+ * This class represents responsetime data from a measured application,
+ * stored as an double value.
  * 
  * @author Tom Frotscher
  * @since 1.9
  * 
  */
-public class StorableDetectionResult extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
+public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 
-	public static final int SIZE = TYPE_SIZE_STRING + TYPE_SIZE_DOUBLE + TYPE_SIZE_LONG + TYPE_SIZE_DOUBLE + TYPE_SIZE_DOUBLE;
+	public static final int SIZE = TYPE_SIZE_STRING + TYPE_SIZE_LONG + TYPE_SIZE_DOUBLE;
 	public static final Class<?>[] TYPES = {
 		String.class, // applicationName
-		double.class, // value
 		long.class, // timestamp
-		double.class, // forecast
-		double.class, // score
+		double.class, // responseTime
 	};
 
-	private static final long serialVersionUID = 7325786584057491433L;
+	private static final long serialVersionUID = 1768657580333390199L;
 
 	// Attributes
-	protected final String applicationName;
-	protected final double value;
-	protected final long timestamp;
-	protected final double forecast;
-	protected final double score;
+	private final String applicationName;
+	private final long timestamp;
+	private final double responseTime;
 
 	/**
 	 * Creates an instance of this class based on the parameters.
 	 * 
-	 * @param app
+	 * @param application
 	 *            Application that is the source of the data
-	 * @param val
-	 *            Produced value
 	 * @param timest
 	 *            Timestamp
-	 * @param fore
-	 *            Corresponding forecast
-	 * @param sc
-	 *            anomaly score
+	 * @param response
+	 *            Responsetime stored in this record
 	 */
-	public StorableDetectionResult(final String app, final double val, final long timest, final double fore, final double sc) {
-		this.applicationName = app;
-		this.value = val;
+	public NamedDoubleRecord(final String application, final long timest, final double response) {
+		this.applicationName = application;
 		this.timestamp = timest;
-		this.forecast = fore;
-		this.score = sc;
+		this.responseTime = response;
 	}
 
-	public StorableDetectionResult(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+	public NamedDoubleRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		this.applicationName = stringRegistry.get(buffer.getInt());
-		this.value = buffer.getDouble();
 		this.timestamp = buffer.getLong();
-		this.forecast = buffer.getDouble();
-		this.score = buffer.getDouble();
+		this.responseTime = buffer.getDouble();
 	}
 
 	/**
 	 * Creates an Instance of this class based on a single object array.
 	 * 
 	 * @param values
-	 *            Object array containing the application name, value, timestamp, forecast and anomaly score.
+	 *            Object array containing the applicationname, timestamp and responsetime
 	 */
-	public StorableDetectionResult(final Object[] values) {
-		AbstractMonitoringRecord.checkArray(values, StorableDetectionResult.TYPES);
+	public NamedDoubleRecord(final Object[] values) {
+		AbstractMonitoringRecord.checkArray(values, NamedDoubleRecord.TYPES);
 
 		this.applicationName = (String) values[0];
-		this.value = (Double) values[1];
-		this.timestamp = (Long) values[2];
-		this.forecast = (Double) values[3];
-		this.score = (Double) values[4];
+		this.timestamp = (Long) values[1];
+		this.responseTime = (Double) values[2];
 
 	}
 
@@ -104,7 +89,7 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 	 * {@inheritDoc}
 	 */
 	public Class<?>[] getValueTypes() {
-		return StorableDetectionResult.TYPES.clone();
+		return NamedDoubleRecord.TYPES;
 	}
 
 	/**
@@ -121,7 +106,7 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 	 * {@inheritDoc}
 	 */
 	public Object[] toArray() {
-		return new Object[] { this.applicationName, this.value, this.timestamp, this.forecast, this.score };
+		return new Object[] { this.applicationName, this.timestamp, this.responseTime };
 	}
 
 	/**
@@ -145,41 +130,19 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 	}
 
 	/**
-	 * Returns the value.
+	 * Returns the Value.
 	 * 
 	 * @return
 	 *         Value
 	 */
 	public double getValue() {
-		return this.value;
-	}
-
-	/**
-	 * Returns the forecast.
-	 * 
-	 * @return
-	 *         Forecast
-	 */
-	public double getForecast() {
-		return this.forecast;
-	}
-
-	/**
-	 * Returns the anomaly score.
-	 * 
-	 * @return
-	 *         Anomaly score
-	 */
-	public double getScore() {
-		return this.score;
+		return this.responseTime;
 	}
 
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putInt(stringRegistry.get(this.getApplication()));
+		buffer.putLong(this.getTimestamp());
 		buffer.putDouble(this.getValue());
-		buffer.putLong(this.timestamp);
-		buffer.putDouble(this.getForecast());
-		buffer.putDouble(this.getScore());
 	}
 
 	/**
@@ -195,4 +158,5 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 	public int getSize() {
 		return SIZE;
 	}
+
 }
