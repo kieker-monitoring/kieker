@@ -79,10 +79,11 @@ public class AnomalyScoreCalculationFilter extends AbstractFilterPlugin {
 			final double sum = nextpredicted + measuredValue;
 
 			score = Math.abs(difference / sum);
-		}
 
-		final StorableDetectionResult dr = new StorableDetectionResult(fmp.getName(), fmp.getValue(), fmp.getTime(), fmp.getForecasted(), score);
-		super.deliver(OUTPUT_PORT_ANOMALY_SCORE, dr);
+			final StorableDetectionResult dr = new StorableDetectionResult(fmp.getName(), fmp.getValue(), fmp.getTime(), fmp.getForecasted(), score);
+
+			super.deliver(OUTPUT_PORT_ANOMALY_SCORE, dr);
+		}
 	}
 
 	@Override

@@ -76,7 +76,7 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	 * @param values
 	 *            Object array containing the applicationname, timestamp and responsetime
 	 */
-	public NamedDoubleRecord(final Object[] values) {
+	public NamedDoubleRecord(final Object[] values) { // NOPMD (direct store of values)
 		AbstractMonitoringRecord.checkArray(values, NamedDoubleRecord.TYPES);
 
 		this.applicationName = (String) values[0];
@@ -89,7 +89,7 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	 * {@inheritDoc}
 	 */
 	public Class<?>[] getValueTypes() {
-		return NamedDoubleRecord.TYPES;
+		return TYPES; // NOPMD
 	}
 
 	/**

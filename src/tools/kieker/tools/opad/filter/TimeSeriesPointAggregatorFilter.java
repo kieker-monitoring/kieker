@@ -166,17 +166,19 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 
 	}
 
-	private synchronized void calculateAggregationValue(final AggregationVariableSet variables) {
-		final int listSize = variables.getAggregationList().size();
-		final double[] a = new double[listSize];
-		for (int i = 0; i < listSize; i++) {
-			a[i] = variables.getAggregationList().get(i).getValue();
+	private void calculateAggregationValue(final AggregationVariableSet variables) {
+		synchronized (this) {
+			final int listSize = variables.getAggregationList().size();
+			final double[] a = new double[listSize];
+			for (int i = 0; i < listSize; i++) {
+				a[i] = variables.getAggregationList().get(i).getValue();
+			}
+			final double aggregationValue = this.aggregationMethod.getAggregationValue(a);
+			super.deliver(OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, new NamedDoubleTimeSeriesPoint(variables.getLastTimestampInCurrentInterval(),
+					aggregationValue,
+					variables.getAggregationList().get(0).getName()));
+			variables.getAggregationList().clear();
 		}
-		final double aggregationValue = this.aggregationMethod.getAggregationValue(a);
-		super.deliver(OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, new NamedDoubleTimeSeriesPoint(variables.getLastTimestampInCurrentInterval(),
-				aggregationValue,
-				variables.getAggregationList().get(0).getName()));
-		variables.getAggregationList().clear();
 	}
 
 	/**

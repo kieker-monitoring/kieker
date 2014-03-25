@@ -76,13 +76,16 @@ public class ForecastResult<T> implements IForecastResult<T> {
 
 	@Override
 	public String toString() {
-		final StringBuilder strB = new StringBuilder();
-		strB.append("\n");
-		strB.append("tsForecast: ").append(this.tsForecast.toString()).append("\n");
-		strB.append("tsOriginal: ").append(this.tsOriginal.toString()).append("\n");
-		strB.append("confidenceLevel: ").append(this.confidenceLevel).append("\n");
-		strB.append("tsUpper: ").append(this.tsUpper).append("\n");
-		strB.append("tsLower: ").append(this.tsLower).append("\n");
+		final String lineSeperator = System.getProperty("line.separatorr");
+		final StringBuilder strB = new StringBuilder(59); // There are at least 59 characters in the following appening
+
+		strB.append(lineSeperator);
+		strB.append("tsForecast: ").append(this.tsForecast.toString()).append(lineSeperator);
+		strB.append("tsOriginal: ").append(this.tsOriginal.toString()).append(lineSeperator);
+		strB.append("confidenceLevel: ").append(this.confidenceLevel).append(lineSeperator);
+		strB.append("tsUpper: ").append(this.tsUpper).append(lineSeperator);
+		strB.append("tsLower: ").append(this.tsLower).append(lineSeperator);
+
 		return strB.toString();
 	}
 }

@@ -50,11 +50,6 @@ public class ExtractionFilterTest extends AbstractKiekerTest {
 	private static final String OP_SIGNATURE_B = "b.B.opB";
 	private AnalysisController controller;
 
-	// Variables Mockup OperationExecutionReader
-	private ListReader<NamedDoubleRecord> theReaderRecords;
-
-	// Variables ResponsetimeExtractionFilter
-	private ExtractionFilter extraction;
 	private ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPlugin;
 
 	/**
@@ -91,14 +86,14 @@ public class ExtractionFilterTest extends AbstractKiekerTest {
 		// Start - Read OperationExecutionRecords
 		final Configuration readerOERConfiguration = new Configuration();
 		readerOERConfiguration.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
-		this.theReaderRecords = new ListReader<NamedDoubleRecord>(readerOERConfiguration, this.controller);
-		this.theReaderRecords.addAllObjects(this.createInputEventSetOER());
+		final ListReader<NamedDoubleRecord> theReaderRecords = new ListReader<NamedDoubleRecord>(readerOERConfiguration, this.controller);
+		theReaderRecords.addAllObjects(this.createInputEventSetOER());
 		// End - Read OperationExecutionRecords
 
 		// Start - ExtractionFilter Configuration
 		final Configuration extractionConfiguration = new Configuration();
 		extractionConfiguration.setProperty(ExtractionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, "MILLISECONDS");
-		this.extraction = new ExtractionFilter(extractionConfiguration, this.controller);
+		final ExtractionFilter extraction = new ExtractionFilter(extractionConfiguration, this.controller);
 		// End - ResponseTimeExtractionFilter
 
 		// SINK Mock-up
@@ -107,11 +102,11 @@ public class ExtractionFilterTest extends AbstractKiekerTest {
 		// CONNECT the filters
 		// Mock-up Reader (OperationExecutionRecords) -> ResponseTimeExtractionFIlter
 		this.controller
-				.connect(this.theReaderRecords, ListReader.OUTPUT_PORT_NAME, this.extraction,
+				.connect(theReaderRecords, ListReader.OUTPUT_PORT_NAME, extraction,
 						ExtractionFilter.INPUT_PORT_NAME_VALUE);
 		// ResponseTimeExtractionFilter -> SinkPlugin Mock-up
 		this.controller
-				.connect(this.extraction, ExtractionFilter.OUTPUT_PORT_NAME_VALUE, this.sinkPlugin,
+				.connect(extraction, ExtractionFilter.OUTPUT_PORT_NAME_VALUE, this.sinkPlugin,
 						ListCollectionFilter.INPUT_PORT_NAME);
 
 		Assert.assertTrue(this.sinkPlugin.getList().isEmpty());

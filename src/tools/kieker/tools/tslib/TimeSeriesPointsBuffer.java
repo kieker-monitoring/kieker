@@ -49,22 +49,25 @@ public class TimeSeriesPointsBuffer<T> extends ConcurrentLinkedQueue<T> implemen
 	}
 
 	@Override
-	public synchronized boolean add(final T o) {
-		if (this.unbounded) {
-			return super.add(o);
-		} else {
-			return this.addBounded(o);
+	public boolean add(final T o) {
+		synchronized (this) {
+			if (this.unbounded) {
+				return super.add(o);
+			} else {
+				return this.addBounded(o);
+			}
 		}
 	}
 
-	private synchronized boolean addBounded(final T o) {
-		if (this.size() == this.capacity) {
-			super.poll();
-			return super.add(o);
-		} else {
-			return super.add(o);
+	private boolean addBounded(final T o) {
+		synchronized (this) {
+			if (this.size() == this.capacity) {
+				super.poll();
+				return super.add(o);
+			} else {
+				return super.add(o);
+			}
 		}
-
 	}
 
 	@Override

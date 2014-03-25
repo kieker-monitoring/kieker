@@ -89,7 +89,7 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 	 * @param values
 	 *            Object array containing the application name, value, timestamp, forecast and anomaly score.
 	 */
-	public StorableDetectionResult(final Object[] values) {
+	public StorableDetectionResult(final Object[] values) { // NOPMD (direct store of values)
 		AbstractMonitoringRecord.checkArray(values, StorableDetectionResult.TYPES);
 
 		this.applicationName = (String) values[0];

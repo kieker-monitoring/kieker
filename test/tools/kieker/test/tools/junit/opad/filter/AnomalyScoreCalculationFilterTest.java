@@ -47,11 +47,7 @@ public class AnomalyScoreCalculationFilterTest extends AbstractKiekerTest {
 	private static final String OP_SIGNATURE_A = "a.A.opA";
 
 	private AnalysisController controller;
-
-	// Variables AnomalyScoreCalculationFilter
-	private AnomalyScoreCalculationFilter scoreCalc;
 	private ListCollectionFilter<StorableDetectionResult> sinkAnomalyScore;
-	private ListReader<ForecastMeasurementPair> theReaderScoreCalc;
 
 	/**
 	 * Creates a new instance of this class.
@@ -60,17 +56,17 @@ public class AnomalyScoreCalculationFilterTest extends AbstractKiekerTest {
 		// empty default constructor
 	}
 
-	private ForecastMeasurementPair createFMP(final String name, final Double forecast,
-			final Double measurement) {
-		final ForecastMeasurementPair r = new ForecastMeasurementPair(name, forecast, measurement, System.currentTimeMillis());
-		return r;
+	private ForecastMeasurementPair createFMP(final String name, final Double forecast, final Double measurement) {
+		return new ForecastMeasurementPair(name, forecast, measurement, System.currentTimeMillis());
 	}
 
 	private List<ForecastMeasurementPair> createInputEventSetScoreCalc() {
 		final List<ForecastMeasurementPair> retList = new ArrayList<ForecastMeasurementPair>();
+
 		retList.add(this.createFMP(OP_SIGNATURE_A, 0.6, 0.4));
 		retList.add(this.createFMP(OP_SIGNATURE_A, 0.3, 0.4));
 		retList.add(this.createFMP(OP_SIGNATURE_A, 0.5, 0.5));
+
 		return retList;
 	}
 
@@ -90,20 +86,20 @@ public class AnomalyScoreCalculationFilterTest extends AbstractKiekerTest {
 		// READER
 		final Configuration readerScoreCalcConfiguration = new Configuration();
 		readerScoreCalcConfiguration.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
-		this.theReaderScoreCalc = new ListReader<ForecastMeasurementPair>(readerScoreCalcConfiguration, this.controller);
-		this.theReaderScoreCalc.addAllObjects(this.createInputEventSetScoreCalc());
+		final ListReader<ForecastMeasurementPair> theReaderScoreCalc = new ListReader<ForecastMeasurementPair>(readerScoreCalcConfiguration, this.controller);
+		theReaderScoreCalc.addAllObjects(this.createInputEventSetScoreCalc());
 
 		final Configuration scoreConfiguration = new Configuration();
-		this.scoreCalc = new AnomalyScoreCalculationFilter(scoreConfiguration, this.controller);
+		final AnomalyScoreCalculationFilter scoreCalc = new AnomalyScoreCalculationFilter(scoreConfiguration, this.controller);
 
 		// SINK 1
 		this.sinkAnomalyScore = new ListCollectionFilter<StorableDetectionResult>(new Configuration(), this.controller);
 
 		// CONNECTION
 		this.controller
-				.connect(this.theReaderScoreCalc, ListReader.OUTPUT_PORT_NAME, this.scoreCalc, AnomalyScoreCalculationFilter.INPUT_PORT_CURRENT_FORECAST_PAIR);
+				.connect(theReaderScoreCalc, ListReader.OUTPUT_PORT_NAME, scoreCalc, AnomalyScoreCalculationFilter.INPUT_PORT_CURRENT_FORECAST_PAIR);
 		this.controller
-				.connect(this.scoreCalc, AnomalyScoreCalculationFilter.OUTPUT_PORT_ANOMALY_SCORE, this.sinkAnomalyScore, ListCollectionFilter.INPUT_PORT_NAME);
+				.connect(scoreCalc, AnomalyScoreCalculationFilter.OUTPUT_PORT_ANOMALY_SCORE, this.sinkAnomalyScore, ListCollectionFilter.INPUT_PORT_NAME);
 	}
 
 	/**

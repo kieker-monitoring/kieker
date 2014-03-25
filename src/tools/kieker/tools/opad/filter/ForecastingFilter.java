@@ -84,8 +84,6 @@ public class ForecastingFilter extends AbstractFilterPlugin {
 	private final long deltat;
 	private final TimeUnit tunit;
 
-	private IForecaster<Double> forecaster;
-
 	/**
 	 * Creates a new instance of this class.
 	 * 
@@ -149,8 +147,8 @@ public class ForecastingFilter extends AbstractFilterPlugin {
 	public void processInput(final NamedDoubleTimeSeriesPoint input, final long timestamp, final String name) {
 		final ITimeSeries<Double> actualWindow = this.applicationForecastingWindow.get(name);
 		actualWindow.append(input.getValue());
-		this.forecaster = this.forecastMethod.getForecaster(actualWindow);
-		final IForecastResult<Double> result = this.forecaster.forecast(1);
+		final IForecaster<Double> forecaster = this.forecastMethod.getForecaster(actualWindow);
+		final IForecastResult<Double> result = forecaster.forecast(1);
 		super.deliver(OUTPUT_PORT_NAME_FORECAST, result);
 
 		final ForecastMeasurementPair fmp = new ForecastMeasurementPair(

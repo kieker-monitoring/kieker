@@ -58,7 +58,7 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 		this.name = stringRegistry.get(buffer.getInt());
 	}
 
-	public NamedTSPoint(final Object[] values) {
+	public NamedTSPoint(final Object[] values) { // NOPMD (direct store of values)
 		AbstractMonitoringRecord.checkArray(values, NamedTSPoint.TYPES);
 
 		this.timestamp = (Long) values[0];
@@ -77,7 +77,7 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 	}
 
 	public Class<?>[] getValueTypes() {
-		return TYPES;
+		return TYPES; // NOPMD
 	}
 
 	public long getTimestamp() {

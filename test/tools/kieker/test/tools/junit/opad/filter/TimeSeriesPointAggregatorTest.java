@@ -43,13 +43,6 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 	private static final String OP_SIGNATURE_B = "b.B.opB";
 	private static final String OP_SIGNATURE_C = "c.C.opC";
 
-	private AnalysisController controller;
-
-	// Variables ForecastingFilter
-	private ListReader<NamedDoubleTimeSeriesPoint> theReaderAggregator;
-	private TimeSeriesPointAggregatorFilter aggregator;
-	private ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPlugin;
-
 	/**
 	 * Creates an instance of this class.
 	 */
@@ -75,68 +68,69 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 	@Test
 	public void testAggregatorOnly() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
 
-		this.controller = new AnalysisController();
+		final AnalysisController controller = new AnalysisController();
 
 		// READER
 		final Configuration readerAggregationConfiguration = new Configuration();
-		this.theReaderAggregator = new ListReader<NamedDoubleTimeSeriesPoint>(readerAggregationConfiguration, this.controller);
+		final ListReader<NamedDoubleTimeSeriesPoint> theReaderAggregator = new ListReader<NamedDoubleTimeSeriesPoint>(readerAggregationConfiguration,
+				controller);
 
-		this.theReaderAggregator.addObject(this.createNDTSP(1369127812664L, 1000, OP_SIGNATURE_A));
-		this.theReaderAggregator.addObject(this.createNDTSP(1369127812665L, 2000, OP_SIGNATURE_A));
-		this.theReaderAggregator.addObject(this.createNDTSP(1369127812664L, 1000, OP_SIGNATURE_C));
-		this.theReaderAggregator.addObject(this.createNDTSP(1369127812668L, 5500, OP_SIGNATURE_C));
-		this.theReaderAggregator.addObject(this.createNDTSP(1369127812674L, 2000, OP_SIGNATURE_B));
-		this.theReaderAggregator.addObject(this.createNDTSP(1369127812674L, 3000, OP_SIGNATURE_A));
-		this.theReaderAggregator.addObject(this.createNDTSP(1369127812684L, 4000, OP_SIGNATURE_A));
-		this.theReaderAggregator.addObject(this.createNDTSP(1369127812674L, 2000, OP_SIGNATURE_C));
-		this.theReaderAggregator.addObject(this.createNDTSP(1369127812684L, 5000, OP_SIGNATURE_B));
-		this.theReaderAggregator.addObject(this.createNDTSP(1369127812687L, 1000, OP_SIGNATURE_B));
+		theReaderAggregator.addObject(this.createNDTSP(1369127812664L, 1000, OP_SIGNATURE_A));
+		theReaderAggregator.addObject(this.createNDTSP(1369127812665L, 2000, OP_SIGNATURE_A));
+		theReaderAggregator.addObject(this.createNDTSP(1369127812664L, 1000, OP_SIGNATURE_C));
+		theReaderAggregator.addObject(this.createNDTSP(1369127812668L, 5500, OP_SIGNATURE_C));
+		theReaderAggregator.addObject(this.createNDTSP(1369127812674L, 2000, OP_SIGNATURE_B));
+		theReaderAggregator.addObject(this.createNDTSP(1369127812674L, 3000, OP_SIGNATURE_A));
+		theReaderAggregator.addObject(this.createNDTSP(1369127812684L, 4000, OP_SIGNATURE_A));
+		theReaderAggregator.addObject(this.createNDTSP(1369127812674L, 2000, OP_SIGNATURE_C));
+		theReaderAggregator.addObject(this.createNDTSP(1369127812684L, 5000, OP_SIGNATURE_B));
+		theReaderAggregator.addObject(this.createNDTSP(1369127812687L, 1000, OP_SIGNATURE_B));
 		// Skipped two timespans for application A, so two empty points should be created
-		this.theReaderAggregator.addObject(this.createNDTSP(1369127812714L, 6000, OP_SIGNATURE_A));
-		this.theReaderAggregator.addObject(this.createNDTSP(1369127812724L, 7000, OP_SIGNATURE_A));
-		this.theReaderAggregator.addObject(this.createNDTSP(1369127812694L, 5000, OP_SIGNATURE_B));
+		theReaderAggregator.addObject(this.createNDTSP(1369127812714L, 6000, OP_SIGNATURE_A));
+		theReaderAggregator.addObject(this.createNDTSP(1369127812724L, 7000, OP_SIGNATURE_A));
+		theReaderAggregator.addObject(this.createNDTSP(1369127812694L, 5000, OP_SIGNATURE_B));
 		// Skipped one timespans for application B, so one empty point should be created
-		this.theReaderAggregator.addObject(this.createNDTSP(1369127812714L, 5000, OP_SIGNATURE_B));
+		theReaderAggregator.addObject(this.createNDTSP(1369127812714L, 5000, OP_SIGNATURE_B));
 
 		// AGGREGATIONFILTER
 		final Configuration aggregationConfiguration = new Configuration();
 		aggregationConfiguration.setProperty(TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_SPAN, "10");
 		aggregationConfiguration.setProperty(TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT, "MILLISECONDS");
-		this.aggregator = new TimeSeriesPointAggregatorFilter(aggregationConfiguration, this.controller);
+		final TimeSeriesPointAggregatorFilter aggregator = new TimeSeriesPointAggregatorFilter(aggregationConfiguration, controller);
 
 		// SINK 1
-		this.sinkPlugin = new ListCollectionFilter<NamedDoubleTimeSeriesPoint>(new Configuration(), this.controller);
-		Assert.assertTrue(this.sinkPlugin.getList().isEmpty());
+		final ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPlugin = new ListCollectionFilter<NamedDoubleTimeSeriesPoint>(new Configuration(),
+				controller);
+		Assert.assertTrue(sinkPlugin.getList().isEmpty());
 
 		// CONNECTION
-		this.controller.connect(this.theReaderAggregator, ListReader.OUTPUT_PORT_NAME, this.aggregator, TimeSeriesPointAggregatorFilter.INPUT_PORT_NAME_TSPOINT);
-		this.controller.connect(this.aggregator,
-				TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, this.sinkPlugin,
+		controller.connect(theReaderAggregator, ListReader.OUTPUT_PORT_NAME, aggregator, TimeSeriesPointAggregatorFilter.INPUT_PORT_NAME_TSPOINT);
+		controller.connect(aggregator, TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, sinkPlugin,
 				ListCollectionFilter.INPUT_PORT_NAME);
-		Assert.assertEquals(0, this.sinkPlugin.getList().size());
-		this.controller.run();
+		Assert.assertEquals(0, sinkPlugin.getList().size());
+		controller.run();
 
 		// Expected: (1000 + 2000) / 2 = 1500 Application A
-		Assert.assertEquals(new Double(1500), Double.valueOf(this.sinkPlugin.getList().get(0).getDoubleValue()));
+		Assert.assertEquals(Double.valueOf(1500), Double.valueOf(sinkPlugin.getList().get(0).getDoubleValue()));
 		// Expected: 3000 Application A
-		Assert.assertEquals(new Double(3000), Double.valueOf(this.sinkPlugin.getList().get(1).getDoubleValue()));
+		Assert.assertEquals(Double.valueOf(3000), Double.valueOf(sinkPlugin.getList().get(1).getDoubleValue()));
 		// Expected: (1000 + 5500) / 2 = 3250 Application C
-		Assert.assertEquals(new Double(3250), Double.valueOf(this.sinkPlugin.getList().get(2).getDoubleValue()));
+		Assert.assertEquals(Double.valueOf(3250), Double.valueOf(sinkPlugin.getList().get(2).getDoubleValue()));
 		// Expected: 2000 Application B
-		Assert.assertEquals(new Double(2000), Double.valueOf(this.sinkPlugin.getList().get(3).getDoubleValue()));
+		Assert.assertEquals(Double.valueOf(2000), Double.valueOf(sinkPlugin.getList().get(3).getDoubleValue()));
 		// Expected: 4000 Application A
-		Assert.assertEquals(new Double(4000), Double.valueOf(this.sinkPlugin.getList().get(4).getDoubleValue()));
+		Assert.assertEquals(Double.valueOf(4000), Double.valueOf(sinkPlugin.getList().get(4).getDoubleValue()));
 		// Expected: Skipped two spans for Application A -> 2 time 0
-		Assert.assertEquals(new Double(0), Double.valueOf(this.sinkPlugin.getList().get(5).getDoubleValue()));
-		Assert.assertEquals(new Double(0), Double.valueOf(this.sinkPlugin.getList().get(6).getDoubleValue()));
+		Assert.assertEquals(Double.valueOf(0), Double.valueOf(sinkPlugin.getList().get(5).getDoubleValue()));
+		Assert.assertEquals(Double.valueOf(0), Double.valueOf(sinkPlugin.getList().get(6).getDoubleValue()));
 		// Expected: 6000 Application A
-		Assert.assertEquals(new Double(6000), Double.valueOf(this.sinkPlugin.getList().get(7).getDoubleValue()));
+		Assert.assertEquals(Double.valueOf(6000), Double.valueOf(sinkPlugin.getList().get(7).getDoubleValue()));
 		// Expected: (5000 + 1000) / 2 = 3000 Application B
-		Assert.assertEquals(new Double(3000), Double.valueOf(this.sinkPlugin.getList().get(8).getDoubleValue()));
+		Assert.assertEquals(Double.valueOf(3000), Double.valueOf(sinkPlugin.getList().get(8).getDoubleValue()));
 		// Expected: 5000 Application B
-		Assert.assertEquals(new Double(5000), Double.valueOf(this.sinkPlugin.getList().get(9).getDoubleValue()));
+		Assert.assertEquals(Double.valueOf(5000), Double.valueOf(sinkPlugin.getList().get(9).getDoubleValue()));
 		// Expected: Skipped one span for Application B -> 1 time 0
-		Assert.assertEquals(new Double(0), Double.valueOf(this.sinkPlugin.getList().get(10).getDoubleValue()));
+		Assert.assertEquals(Double.valueOf(0), Double.valueOf(sinkPlugin.getList().get(10).getDoubleValue()));
 
 	}
 }

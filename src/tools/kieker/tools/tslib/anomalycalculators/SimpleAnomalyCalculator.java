@@ -31,7 +31,7 @@ public class SimpleAnomalyCalculator implements IAnomalyCalculator<Double> {
 	 * Creates a new Instance of this class.
 	 */
 	public SimpleAnomalyCalculator() {
-
+		// No code necessary
 	}
 
 	public AnomalyScore calculateAnomaly(final IForecastResult<Double> forecast, final ITimeSeriesPoint<Double> current) {

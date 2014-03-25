@@ -51,10 +51,6 @@ public class UniteMeasurementPairFilterTest extends AbstractKiekerTest {
 
 	private AnalysisController controller;
 
-	// Variables UniteFilter
-	private ListReader<NamedDoubleTimeSeriesPoint> theReaderUniteTSPoints;
-	private ListReader<IForecastMeasurementPair> theReaderUniteForecast;
-	private UniteMeasurementPairFilter unite;
 	private ListCollectionFilter<ForecastMeasurementPair> sinkPlugin;
 
 	/**
@@ -111,27 +107,28 @@ public class UniteMeasurementPairFilterTest extends AbstractKiekerTest {
 		// READER TSPoints
 		final Configuration readerUniteConfigurationTS = new Configuration();
 		readerUniteConfigurationTS.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
-		this.theReaderUniteTSPoints = new ListReader<NamedDoubleTimeSeriesPoint>(readerUniteConfigurationTS, this.controller);
-		this.theReaderUniteTSPoints.addAllObjects(this.createInputEventSetUnite());
+		final ListReader<NamedDoubleTimeSeriesPoint> theReaderUniteTSPoints = new ListReader<NamedDoubleTimeSeriesPoint>(readerUniteConfigurationTS, this.controller);
+		theReaderUniteTSPoints.addAllObjects(this.createInputEventSetUnite());
 
 		// READER Forecasts
 		final Configuration readerUniteConfigurationForecast = new Configuration();
 		readerUniteConfigurationForecast.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
-		this.theReaderUniteForecast = new ListReader<IForecastMeasurementPair>(readerUniteConfigurationForecast, this.controller);
-		this.theReaderUniteForecast.addAllObjects(this.createInputEventSetUniteForecast());
+		final ListReader<IForecastMeasurementPair> theReaderUniteForecast = new ListReader<IForecastMeasurementPair>(readerUniteConfigurationForecast,
+				this.controller);
+		theReaderUniteForecast.addAllObjects(this.createInputEventSetUniteForecast());
 
 		// UniteMeasurementPair Filter
 		final Configuration uniteConfiguration = new Configuration();
-		this.unite = new UniteMeasurementPairFilter(uniteConfiguration, this.controller);
+		final UniteMeasurementPairFilter unite = new UniteMeasurementPairFilter(uniteConfiguration, this.controller);
 
 		// SINK 1
 		this.sinkPlugin = new ListCollectionFilter<ForecastMeasurementPair>(new Configuration(), this.controller);
 		Assert.assertTrue(this.sinkPlugin.getList().isEmpty());
 
 		// CONNECTION
-		this.controller.connect(this.theReaderUniteTSPoints, ListReader.OUTPUT_PORT_NAME, this.unite, UniteMeasurementPairFilter.INPUT_PORT_NAME_TSPOINT);
-		this.controller.connect(this.theReaderUniteForecast, ListReader.OUTPUT_PORT_NAME, this.unite, UniteMeasurementPairFilter.INPUT_PORT_NAME_FORECAST);
-		this.controller.connect(this.unite,
+		this.controller.connect(theReaderUniteTSPoints, ListReader.OUTPUT_PORT_NAME, unite, UniteMeasurementPairFilter.INPUT_PORT_NAME_TSPOINT);
+		this.controller.connect(theReaderUniteForecast, ListReader.OUTPUT_PORT_NAME, unite, UniteMeasurementPairFilter.INPUT_PORT_NAME_FORECAST);
+		this.controller.connect(unite,
 				UniteMeasurementPairFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, this.sinkPlugin,
 				ListCollectionFilter.INPUT_PORT_NAME);
 	}
@@ -159,14 +156,22 @@ public class UniteMeasurementPairFilterTest extends AbstractKiekerTest {
 
 		Assert.assertEquals(8, this.sinkPlugin.getList().size());
 
-		Assert.assertTrue((this.sinkPlugin.getList().get(0).getValue() == 0.3) && (this.sinkPlugin.getList().get(0).getForecasted() == 0.3));
-		Assert.assertTrue((this.sinkPlugin.getList().get(1).getValue() == 0.4) && (this.sinkPlugin.getList().get(1).getForecasted() == 0.35));
-		Assert.assertTrue((this.sinkPlugin.getList().get(2).getValue() == 0.5) && (this.sinkPlugin.getList().get(2).getForecasted() == 0.45));
-		Assert.assertTrue((this.sinkPlugin.getList().get(3).getValue() == 0.9) && (this.sinkPlugin.getList().get(3).getForecasted() == 0.55));
-		Assert.assertTrue((this.sinkPlugin.getList().get(4).getValue() == 0.7) && (this.sinkPlugin.getList().get(4).getForecasted() == 0.7));
-		Assert.assertTrue((this.sinkPlugin.getList().get(5).getValue() == 0.3) && (this.sinkPlugin.getList().get(5).getForecasted() == 0.31));
-		Assert.assertTrue((this.sinkPlugin.getList().get(6).getValue() == 0.1) && (this.sinkPlugin.getList().get(6).getForecasted() == 0.46));
-		Assert.assertTrue((this.sinkPlugin.getList().get(7).getValue() == 0.97) && (this.sinkPlugin.getList().get(7).getForecasted() == 0.55));
-
+		Assert.assertEquals(0.3, this.sinkPlugin.getList().get(0).getValue(), 1e-5);
+		Assert.assertEquals(0.4, this.sinkPlugin.getList().get(1).getValue(), 1e-5);
+		Assert.assertEquals(0.5, this.sinkPlugin.getList().get(2).getValue(), 1e-5);
+		Assert.assertEquals(0.9, this.sinkPlugin.getList().get(3).getValue(), 1e-5);
+		Assert.assertEquals(0.7, this.sinkPlugin.getList().get(4).getValue(), 1e-5);
+		Assert.assertEquals(0.3, this.sinkPlugin.getList().get(5).getValue(), 1e-5);
+		Assert.assertEquals(0.1, this.sinkPlugin.getList().get(6).getValue(), 1e-5);
+		Assert.assertEquals(0.97, this.sinkPlugin.getList().get(7).getValue(), 1e-5);
+		Assert.assertEquals(0.3, this.sinkPlugin.getList().get(0).getForecasted(), 1e-5);
+		Assert.assertEquals(0.35, this.sinkPlugin.getList().get(1).getForecasted(), 1e-5);
+		Assert.assertEquals(0.45, this.sinkPlugin.getList().get(2).getForecasted(), 1e-5);
+		Assert.assertEquals(0.55, this.sinkPlugin.getList().get(3).getForecasted(), 1e-5);
+		Assert.assertEquals(0.7, this.sinkPlugin.getList().get(4).getForecasted(), 1e-5);
+		Assert.assertEquals(0.31, this.sinkPlugin.getList().get(5).getForecasted(), 1e-5);
+		Assert.assertEquals(0.46, this.sinkPlugin.getList().get(6).getForecasted(), 1e-5);
+		Assert.assertEquals(0.55, this.sinkPlugin.getList().get(7).getForecasted(), 1e-5);
 	}
+
 }

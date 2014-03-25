@@ -73,11 +73,13 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 		return this.deltaTimeUnit;
 	}
 
-	public synchronized ITimeSeriesPoint<T> append(final T value) {
-		final ITimeSeriesPoint<T> point = new TimeSeriesPoint<T>(this.nextTime, value);
-		this.points.add(point);
-		this.setNextTime();
-		return point;
+	public ITimeSeriesPoint<T> append(final T value) {
+		synchronized (this) {
+			final ITimeSeriesPoint<T> point = new TimeSeriesPoint<T>(this.nextTime, value);
+			this.points.add(point);
+			this.setNextTime();
+			return point;
+		}
 	}
 
 	private void setNextTime() {
