@@ -33,7 +33,6 @@ public interface ITimeSeries<T> {
 	/**
 	 * Returns the start of the time series, i.e., the time of the first value.
 	 * 
-	 * @return
 	 * @since 1.9
 	 */
 	public long getStartTime();

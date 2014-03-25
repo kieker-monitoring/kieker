@@ -29,7 +29,6 @@ public interface IForecastResult<T> {
 	/**
 	 * Returns the point forecasts.
 	 * 
-	 * @return
 	 * @since 1.9
 	 */
 	public ITimeSeries<T> getForecast();
@@ -37,7 +36,6 @@ public interface IForecastResult<T> {
 	/**
 	 * Returns the confidence level for the forecast interval.
 	 * 
-	 * @return
 	 * @since 1.9
 	 */
 	public int getConfidenceLevel();
@@ -45,7 +43,6 @@ public interface IForecastResult<T> {
 	/**
 	 * Returns the upper limits for forecast interval with respect to the confidence level {@link #getConfidenceLevel()}.
 	 * 
-	 * @return
 	 * @since 1.9
 	 */
 	public ITimeSeries<T> getUpper();
@@ -53,7 +50,6 @@ public interface IForecastResult<T> {
 	/**
 	 * Returns the lower limits for forecast interval with respect to the confidence level {@link #getConfidenceLevel()}.
 	 * 
-	 * @return
 	 * @since 1.9
 	 */
 	public ITimeSeries<T> getLower();
@@ -61,7 +57,6 @@ public interface IForecastResult<T> {
 	/**
 	 * Returns the original time series that was the basis for the forecast.
 	 * 
-	 * @return
 	 * @since 1.9
 	 */
 	public ITimeSeries<T> getOriginal();
