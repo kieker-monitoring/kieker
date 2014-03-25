@@ -91,9 +91,11 @@ public class AnomalyDetectionFilter extends AbstractFilterPlugin {
 	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration config = new Configuration();
+
 		config.setProperty(CONFIG_PROPERTY_THRESHOLD, Double.toString(this.threshold));
 		config.setProperty(CONFIG_PROPERTY_THRESHOLD_CRITICAL, Double.toString(this.thresholdCritical));
-		return new Configuration();
+
+		return config;
 	}
 
 	/**
