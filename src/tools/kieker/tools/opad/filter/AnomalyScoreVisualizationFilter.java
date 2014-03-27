@@ -1,5 +1,8 @@
 package kieker.tools.opad.filter;
 
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
 import kieker.analysis.IProjectContext;
 import kieker.analysis.display.XYPlot;
 import kieker.analysis.display.annotation.Display;
@@ -52,9 +55,12 @@ public class AnomalyScoreVisualizationFilter extends AbstractFilterPlugin {
 	}
 
 	private void updateDisplays(final StorableDetectionResult record) {
-		this.xyplot.setEntry(record.getApplication() + " - Actual Value", record.getTimestamp(), record.getValue());
+		final Date date = new Date(TimeUnit.MILLISECONDS.convert(record.getTimestamp(), super.recordsTimeUnitFromProjectContext));
+		final String minutesAndSeconds = date.toString().substring(14, 19);
 
-		this.xyplot.setEntry(record.getApplication() + " - Forecast", record.getTimestamp(), record.getForecast());
+		this.xyplot.setEntry(record.getApplication() + " - Actual Value", minutesAndSeconds, record.getValue());
+
+		this.xyplot.setEntry(record.getApplication() + " - Forecast", minutesAndSeconds, record.getForecast());
 	}
 
 	@Display(name = "XYPlot Anomaly Display")
