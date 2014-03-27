@@ -20,6 +20,7 @@ package kieker.tools.tslib;
  * 
  * @author Tom Frotscher
  * @since 1.9
+ * @param <T>
  */
 public interface ITimeSeriesPointsBuffer<T> {
 
