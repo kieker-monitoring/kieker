@@ -21,8 +21,7 @@ import kieker.tools.opad.record.StorableDetectionResult;
 			defaultValue = CPUUtilizationDisplayFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES) })
 public class AnomalyScoreVisualizationFilter extends AbstractFilterPlugin {
 
-	public static final String INPUT_PORT_NAME_NORMAL_EVENTS = "inputEventsNormal";
-	public static final String INPUT_PORT_NAME_ABNORMAL_EVENTS = "inputEventsAbnormal";
+	public static final String INPUT_PORT_NAME_EVENTS = "inputEvents";
 
 	public static final String CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES = "numberOfEntries";
 	public static final String CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES = "100";
@@ -38,14 +37,9 @@ public class AnomalyScoreVisualizationFilter extends AbstractFilterPlugin {
 		this.xyplot = new XYPlot(this.numberOfEntries);
 	}
 
-	@InputPort(name = AnomalyScoreVisualizationFilter.INPUT_PORT_NAME_NORMAL_EVENTS, eventTypes = { StorableDetectionResult.class })
+	@InputPort(name = AnomalyScoreVisualizationFilter.INPUT_PORT_NAME_EVENTS, eventTypes = { StorableDetectionResult.class })
 	public void inputNormal(final StorableDetectionResult record) {
-		this.updateDisplays(record, false);
-	}
-
-	@InputPort(name = AnomalyScoreVisualizationFilter.INPUT_PORT_NAME_ABNORMAL_EVENTS, eventTypes = { StorableDetectionResult.class })
-	public void inputAbnormal(final StorableDetectionResult record) {
-		this.updateDisplays(record, true);
+		this.updateDisplays(record);
 	}
 
 	@Override
@@ -57,12 +51,8 @@ public class AnomalyScoreVisualizationFilter extends AbstractFilterPlugin {
 		return configuration;
 	}
 
-	private void updateDisplays(final StorableDetectionResult record, final boolean abnormal) {
-		if (abnormal) {
-			this.xyplot.setEntry(record.getApplication() + " - Abnormal", record.getTimestamp(), record.getScore());
-		} else {
-			this.xyplot.setEntry(record.getApplication() + " - Normal", record.getTimestamp(), record.getScore());
-		}
+	private void updateDisplays(final StorableDetectionResult record) {
+		this.xyplot.setEntry(record.getApplication() + " - Actual Value", record.getTimestamp(), record.getValue());
 
 		this.xyplot.setEntry(record.getApplication() + " - Forecast", record.getTimestamp(), record.getForecast());
 	}
