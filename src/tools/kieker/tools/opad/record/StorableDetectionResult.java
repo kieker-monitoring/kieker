@@ -25,13 +25,12 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
 
 /**
- * This class contains the data that will be stored in the database after each complete analysis.
- * Therefore, containing the value, the application name, the forecast calculated from the value,
- * the timestamp and the corresponding anomaly score.
+ * This class contains the data that will be stored in the database after each complete analysis. Therefore, containing the value, the application name, the forecast
+ * calculated from the value, the timestamp and the corresponding anomaly score.
  * 
  * @author Tom Frotscher
- * @since 1.9
  * 
+ * @since 1.9
  */
 public class StorableDetectionResult extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 

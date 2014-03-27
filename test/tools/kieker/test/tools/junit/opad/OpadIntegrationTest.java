@@ -140,10 +140,10 @@ public class OpadIntegrationTest extends AbstractKiekerTest {
 		// Start - ForecastingFilter
 		// ForecastingFilter Configuration
 		final Configuration forecastConfiguration = new Configuration();
-		forecastConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_DELTA_TIME, "10");
-		forecastConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_DELTA_UNIT,
+		forecastConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_NAME_DELTA_TIME, "10");
+		forecastConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_NAME_DELTA_UNIT,
 				"MILLISECONDS");
-		forecastConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_FC_METHOD, "MEAN");
+		forecastConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_NAME_FC_METHOD, "MEAN");
 		final ForecastingFilter forecasting = new ForecastingFilter(forecastConfiguration, this.controller);
 		// End - ForecastingFilter
 
@@ -161,7 +161,7 @@ public class OpadIntegrationTest extends AbstractKiekerTest {
 		// Start - AnomalyDetectionFilter
 		// AnomalyDetectionFilter Configuration
 		final Configuration configAnomalyPre = new Configuration();
-		configAnomalyPre.setProperty(AnomalyDetectionFilter.CONFIG_PROPERTY_THRESHOLD, "0.23");
+		configAnomalyPre.setProperty(AnomalyDetectionFilter.CONFIG_PROPERTY_NAME_THRESHOLD, "0.23");
 		final AnomalyDetectionFilter anomalyDetectionFilter = new AnomalyDetectionFilter(configAnomalyPre, this.controller);
 		// End - AnomalyDetectionFilter
 

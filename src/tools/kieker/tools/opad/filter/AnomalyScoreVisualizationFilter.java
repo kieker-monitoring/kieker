@@ -31,7 +31,10 @@ import kieker.common.configuration.Configuration;
 import kieker.tools.opad.record.StorableDetectionResult;
 
 /**
+ * This filter provides a simply visualization for the OPAD anomaly detection filter.
+ * 
  * @author Nils Christian Ehmke
+ * 
  * @since 1.9
  */
 @Plugin(configuration = {
@@ -75,7 +78,6 @@ public class AnomalyScoreVisualizationFilter extends AbstractFilterPlugin {
 		final String minutesAndSeconds = date.toString().substring(14, 19);
 
 		this.xyplot.setEntry(record.getApplication() + " - Actual Value", minutesAndSeconds, record.getValue());
-
 		this.xyplot.setEntry(record.getApplication() + " - Forecast", minutesAndSeconds, record.getForecast());
 	}
 

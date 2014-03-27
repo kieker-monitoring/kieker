@@ -26,7 +26,9 @@ import kieker.tools.tslib.ITimeSeriesPoint;
  */
 public interface IForecastMeasurementPair extends INamedElement, ITimeSeriesPoint<Double> {
 
-	/** @since 1.9 */
+	/**
+	 * @since 1.9
+	 */
 	public Double getForecasted();
 
 }

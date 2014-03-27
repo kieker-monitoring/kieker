@@ -93,7 +93,7 @@ public class AnomalyDetectionFilterTest extends AbstractKiekerTest {
 
 		// ANOMALY DETECTION FILTER
 		final Configuration configAnomaly = new Configuration();
-		configAnomaly.setProperty(AnomalyDetectionFilter.CONFIG_PROPERTY_THRESHOLD, "0.6");
+		configAnomaly.setProperty(AnomalyDetectionFilter.CONFIG_PROPERTY_NAME_THRESHOLD, "0.6");
 		final AnomalyDetectionFilter anomalyDetectionFilter = new AnomalyDetectionFilter(configAnomaly, this.controller);
 
 		// SINK 1

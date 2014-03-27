@@ -17,14 +17,15 @@
 package kieker.tools.opad.record;
 
 /**
- * 
  * @author Tillmann Carlos Bielefeld
- * @since 1.9
  * 
+ * @since 1.9
  */
 public interface INamedElement {
 
-	/** @since 1.9 */
+	/**
+	 * @since 1.9
+	 */
 	public String getName();
 
 }

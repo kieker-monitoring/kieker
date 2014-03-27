@@ -25,25 +25,23 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
 
 /**
- * This class represents responsetime data from a measured application,
- * stored as an double value.
+ * This class represents responsetime data from a measured application, stored as an double value.
  * 
  * @author Tom Frotscher
- * @since 1.9
  * 
+ * @since 1.9
  */
 public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 
 	public static final int SIZE = TYPE_SIZE_STRING + TYPE_SIZE_LONG + TYPE_SIZE_DOUBLE;
 	public static final Class<?>[] TYPES = {
-		String.class, // applicationName
-		long.class, // timestamp
-		double.class, // responseTime
+		String.class,
+		long.class,
+		double.class,
 	};
 
 	private static final long serialVersionUID = 1768657580333390199L;
 
-	// Attributes
 	private final String applicationName;
 	private final long timestamp;
 	private final double responseTime;
@@ -82,7 +80,6 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 		this.applicationName = (String) values[0];
 		this.timestamp = (Long) values[1];
 		this.responseTime = (Double) values[2];
-
 	}
 
 	/**

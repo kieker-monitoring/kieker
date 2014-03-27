@@ -17,12 +17,15 @@
 package kieker.tools.opad.record;
 
 /**
- * 
  * @author Tillmann Carlos Bielefeld
- * @since 1.9
  * 
+ * @since 1.9
  */
 public interface IDoubleValue {
-	/** @since 1.9 */
+
+	/**
+	 * @since 1.9
+	 */
 	public double getValue();
+
 }

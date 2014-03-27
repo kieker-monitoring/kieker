@@ -27,64 +27,47 @@ import kieker.tools.opad.record.StorableDetectionResult;
 
 /**
  * 
- * This filter separates input values by their reach of a certain threshold (parameter).
- * It takes events of type NamedDoubleTimeSeriesPoint and channels them into two output ports:
- * + anomalyscore_anomaly - yields a NamedDoubleTimeSeriesPoint if the threshold was reached
- * + anomalyscore_else - if the input value was less than the threshold
- * 
- * This filter has one configuration:
- * + threshold - The format is English with a . separator, e.g., 0.5 0.7, ...
+ * This filter separates input values by their reach of a certain threshold (parameter). It takes events of type NamedDoubleTimeSeriesPoint and channels them into
+ * two output ports, depending on whether the threshold was reached or not. This filter has configuration properties for the (critical) threshold. Although the
+ * configuration of the critical threshold is possible, the value is currently not used by the filter.
  * 
  * @author Tillmann Carlos Bielefeld
- * @since 1.9
  * 
+ * @since 1.9
  */
 @Plugin(name = "AnomalyScore Detection Filter",
 		outputPorts = {
 			@OutputPort(eventTypes = { StorableDetectionResult.class }, name = AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY),
 			@OutputPort(eventTypes = { StorableDetectionResult.class }, name = AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_ELSE) },
 		configuration = {
-			@Property(name = AnomalyDetectionFilter.CONFIG_PROPERTY_THRESHOLD, defaultValue = "0.5"),
-			@Property(name = AnomalyDetectionFilter.CONFIG_PROPERTY_THRESHOLD_CRITICAL, defaultValue = "0.95")
+			@Property(name = AnomalyDetectionFilter.CONFIG_PROPERTY_NAME_THRESHOLD,
+					defaultValue = AnomalyDetectionFilter.CONFIG_PROPERTY_VALUE_THRESHOLD),
+			@Property(name = AnomalyDetectionFilter.CONFIG_PROPERTY_NAME_THRESHOLD_CRITICAL,
+					defaultValue = AnomalyDetectionFilter.CONFIG_PROPERTY_VALUE_THRESHOLD_CRITICAL)
 		})
 public class AnomalyDetectionFilter extends AbstractFilterPlugin {
 
-	/**
-	 * Name of the input port receiving the anomalyscore.
-	 */
 	public static final String INPUT_PORT_ANOMALY_SCORE = "anomalyscore";
 
-	/**
-	 * Name of the output port delivering the anomalyscore if it exceeds the threshhold.
-	 */
 	public static final String OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY = "anomalyscore_anomaly";
-
-	/**
-	 * Name of the output port delivering the anomalyscore if it remains below the threshhold.
-	 */
 	public static final String OUTPUT_PORT_ANOMALY_SCORE_ELSE = "anomalyscore_else";
 
-	/** Name of the property determining the threshold. */
-	public static final String CONFIG_PROPERTY_THRESHOLD = "threshold";
-	/** Name of the property determining a critical threshold. */
-	public static final String CONFIG_PROPERTY_THRESHOLD_CRITICAL = "thresholdcritical";
+	public static final String CONFIG_PROPERTY_NAME_THRESHOLD = "threshold";
+	public static final String CONFIG_PROPERTY_NAME_THRESHOLD_CRITICAL = "thresholdcritical";
+
+	public static final String CONFIG_PROPERTY_VALUE_THRESHOLD = "0.5";
+	public static final String CONFIG_PROPERTY_VALUE_THRESHOLD_CRITICAL = "0.95";
 
 	private final double threshold;
 	private final double thresholdCritical;
 
-	/**
-	 * Creates a new instance of this class.
-	 * 
-	 * @param configuration
-	 *            Configuration of this component
-	 * @param projectContext
-	 *            ProjectContext of this component
-	 */
 	public AnomalyDetectionFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
-		final String sThreshold = super.configuration.getStringProperty(CONFIG_PROPERTY_THRESHOLD);
+
+		final String sThreshold = super.configuration.getStringProperty(CONFIG_PROPERTY_NAME_THRESHOLD);
 		this.threshold = Double.parseDouble(sThreshold);
-		final String sThresholdCritical = super.configuration.getStringProperty(CONFIG_PROPERTY_THRESHOLD_CRITICAL);
+
+		final String sThresholdCritical = super.configuration.getStringProperty(CONFIG_PROPERTY_NAME_THRESHOLD_CRITICAL);
 		this.thresholdCritical = Double.parseDouble(sThresholdCritical);
 	}
 
@@ -92,18 +75,12 @@ public class AnomalyDetectionFilter extends AbstractFilterPlugin {
 	public Configuration getCurrentConfiguration() {
 		final Configuration config = new Configuration();
 
-		config.setProperty(CONFIG_PROPERTY_THRESHOLD, Double.toString(this.threshold));
-		config.setProperty(CONFIG_PROPERTY_THRESHOLD_CRITICAL, Double.toString(this.thresholdCritical));
+		config.setProperty(CONFIG_PROPERTY_NAME_THRESHOLD, Double.toString(this.threshold));
+		config.setProperty(CONFIG_PROPERTY_NAME_THRESHOLD_CRITICAL, Double.toString(this.thresholdCritical));
 
 		return config;
 	}
 
-	/**
-	 * This method represents the input port for the incoming anomalyscore.
-	 * 
-	 * @param anomalyScore
-	 *            Incoming anomaly score
-	 */
 	@InputPort(eventTypes = { StorableDetectionResult.class }, name = AnomalyDetectionFilter.INPUT_PORT_ANOMALY_SCORE)
 	public void inputForecastAndMeasurement(final StorableDetectionResult anomalyScore) {
 		if (anomalyScore.getScore() >= this.threshold) {

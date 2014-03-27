@@ -34,8 +34,8 @@ import kieker.tools.util.AggregationVariableSet;
  * This Filter aggregates the incoming DoubleTImeSeriesPoints over a configurable period of time.
  * 
  * @author Tom Frotscher
- * @since 1.9
  * 
+ * @since 1.9
  */
 @Plugin(name = "Variate TimeSeriesPoint Aggregator", outputPorts = {
 	@OutputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATED_TSPOINT) },
@@ -46,21 +46,11 @@ import kieker.tools.util.AggregationVariableSet;
 		})
 public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 
-	/**
-	 * The name of the input port receiving the measurements.
-	 */
 	public static final String INPUT_PORT_NAME_TSPOINT = "tspoint";
-
-	/**
-	 * The name of the output port delivering the aggregated time series point.
-	 */
 	public static final String OUTPUT_PORT_NAME_AGGREGATED_TSPOINT = "aggregatedTSPoint";
 
-	/** The name of the property determining the aggregation method. */
 	public static final String CONFIG_PROPERTY_NAME_AGGREGATION_METHOD = "aggregationMethod";
-	/** The name of the property determining the aggregation time span. */
 	public static final String CONFIG_PROPERTY_NAME_AGGREGATION_SPAN = "aggregationSpan";
-	/** The name of the property determining the time unit of the aggregation time span. */
 	public static final String CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT = "timeUnit";
 
 	/** Saves the variables and the measurements, that are needed to calculate the intervals and the result for the aggregations per application. */
@@ -70,14 +60,6 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 	private final TimeUnit timeunit;
 	private final AggregationMethod aggregationMethod;
 
-	/**
-	 * Creates a new instance of this class.
-	 * 
-	 * @param configuration
-	 *            The configuration for this component
-	 * @param projectContext
-	 *            The projectContext for this component
-	 */
 	public TimeSeriesPointAggregatorFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 

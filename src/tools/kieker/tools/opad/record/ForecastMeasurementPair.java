@@ -19,8 +19,8 @@ package kieker.tools.opad.record;
 /**
  * 
  * @author Tillmann Carlos Bielefeld
- * @since 1.9
  * 
+ * @since 1.9
  */
 public class ForecastMeasurementPair implements IForecastMeasurementPair {
 
@@ -29,9 +29,7 @@ public class ForecastMeasurementPair implements IForecastMeasurementPair {
 	private final Double measurement;
 	private final long time;
 
-	public ForecastMeasurementPair(final String name, final Double forecast,
-			final Double measurement, final long time) {
-		super();
+	public ForecastMeasurementPair(final String name, final Double forecast, final Double measurement, final long time) {
 		this.name = name;
 		this.forecast = forecast;
 		this.measurement = measurement;

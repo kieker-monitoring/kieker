@@ -30,46 +30,27 @@ import kieker.tools.opad.record.StorableDetectionResult;
  * 
  * 
  * @author Tillmann Carlos Bielefeld
- * @since 1.9
  * 
+ * @since 1.9
  */
 @Plugin(name = "AnomalyScore Calculation Filter",
-		outputPorts = { @OutputPort(eventTypes = { StorableDetectionResult.class }, name = AnomalyScoreCalculationFilter.OUTPUT_PORT_ANOMALY_SCORE)
-		})
+		outputPorts = { @OutputPort(eventTypes = { StorableDetectionResult.class }, name = AnomalyScoreCalculationFilter.OUTPUT_PORT_ANOMALY_SCORE) })
 public class AnomalyScoreCalculationFilter extends AbstractFilterPlugin {
 
-	/**
-	 * Name of the input port receiving the pair consisting of measurement and forecast.
-	 */
 	public static final String INPUT_PORT_CURRENT_FORECAST_PAIR = "currentforecast";
-
-	/**
-	 * Name of the output port delivering the anomaly score.
-	 */
 	public static final String OUTPUT_PORT_ANOMALY_SCORE = "anomalyscore";
 
-	/**
-	 * Creates a new instance of this class.
-	 * 
-	 * @param configAnomaly
-	 *            Configuration of this filter
-	 * @param projectContext
-	 *            ProjectContext of this filter
-	 */
 	public AnomalyScoreCalculationFilter(final Configuration configAnomaly, final IProjectContext projectContext) {
 		super(configAnomaly, projectContext);
 	}
 
-	/**
-	 * Representing the input port for pairs of measurements and forecasts.
-	 * 
-	 * @param fmp
-	 *            Pair consisting of measurement and forecast
-	 */
+	@Override
+	public Configuration getCurrentConfiguration() {
+		return new Configuration();
+	}
+
 	@InputPort(eventTypes = { IForecastMeasurementPair.class }, name = AnomalyScoreCalculationFilter.INPUT_PORT_CURRENT_FORECAST_PAIR)
 	public void inputForecastAndMeasurement(final IForecastMeasurementPair fmp) {
-		Double score = null;
-
 		if (null != fmp.getForecasted()) {
 			final double nextpredicted = fmp.getForecasted();
 
@@ -78,16 +59,12 @@ public class AnomalyScoreCalculationFilter extends AbstractFilterPlugin {
 			final double difference = nextpredicted - measuredValue;
 			final double sum = nextpredicted + measuredValue;
 
-			score = Math.abs(difference / sum);
+			final double score = Math.abs(difference / sum);
 
-			final StorableDetectionResult dr = new StorableDetectionResult(fmp.getName(), fmp.getValue(), fmp.getTime(), fmp.getForecasted(), score);
+			final StorableDetectionResult result = new StorableDetectionResult(fmp.getName(), fmp.getValue(), fmp.getTime(), fmp.getForecasted(), score);
 
-			super.deliver(OUTPUT_PORT_ANOMALY_SCORE, dr);
+			super.deliver(OUTPUT_PORT_ANOMALY_SCORE, result);
 		}
 	}
 
-	@Override
-	public Configuration getCurrentConfiguration() {
-		return new Configuration();
-	}
 }
