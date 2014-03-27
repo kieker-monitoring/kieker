@@ -26,6 +26,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import kieker.tools.traceAnalysis.Constants;
+
 /**
  * In this step of the trace analysis wizard, the user can choose the plots to draw.
  * 
@@ -33,7 +35,7 @@ import javax.swing.JPanel;
  * 
  * @since 1.9
  */
-public class PlotStep extends AbstractStep {
+public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 
 	private static final long serialVersionUID = 1L;
 
@@ -174,6 +176,7 @@ public class PlotStep extends AbstractStep {
 	private void addLogicToComponents() {
 		this.allGraphs.addItemListener(new ItemListener() {
 
+			@SuppressWarnings("synthetic-access")
 			public void itemStateChanged(final ItemEvent event) {
 				PlotStep.this.deploymentSequenceDiagrams.setSelected(PlotStep.this.allGraphs.isSelected());
 				PlotStep.this.assemblySequenceDiagrams.setSelected(PlotStep.this.allGraphs.isSelected());
@@ -194,6 +197,7 @@ public class PlotStep extends AbstractStep {
 
 		this.deploymentComponentDependencyGraph.addItemListener(new ItemListener() {
 
+			@SuppressWarnings("synthetic-access")
 			public void itemStateChanged(final ItemEvent e) {
 				if (!PlotStep.this.deploymentComponentDependencyGraph.isSelected()) {
 					PlotStep.this.deploymentComponentDependencyGraphResponseTime.setSelected(false);
@@ -203,6 +207,7 @@ public class PlotStep extends AbstractStep {
 
 		this.assemblyComponentDependencyGraph.addItemListener(new ItemListener() {
 
+			@SuppressWarnings("synthetic-access")
 			public void itemStateChanged(final ItemEvent e) {
 				if (!PlotStep.this.assemblyComponentDependencyGraph.isSelected()) {
 					PlotStep.this.assemblyComponentDependencyGraphResponseTime.setSelected(false);
@@ -212,6 +217,7 @@ public class PlotStep extends AbstractStep {
 
 		this.deploymentOperationDependencyGraph.addItemListener(new ItemListener() {
 
+			@SuppressWarnings("synthetic-access")
 			public void itemStateChanged(final ItemEvent e) {
 				if (!PlotStep.this.deploymentOperationDependencyGraph.isSelected()) {
 					PlotStep.this.deploymentOperationDependencyGraphResponseTime.setSelected(false);
@@ -221,6 +227,7 @@ public class PlotStep extends AbstractStep {
 
 		this.assemblyOperationDependencyGraph.addItemListener(new ItemListener() {
 
+			@SuppressWarnings("synthetic-access")
 			public void itemStateChanged(final ItemEvent e) {
 				if (!PlotStep.this.assemblyOperationDependencyGraph.isSelected()) {
 					PlotStep.this.assemblyOperationDependencyGraphResponseTime.setSelected(false);
@@ -245,56 +252,55 @@ public class PlotStep extends AbstractStep {
 
 	@Override
 	public void addSelectedTraceAnalysisParameters(final Collection<String> parameters) {
-		// TODO Use the constants instead of hard coded strings
 		if (this.deploymentSequenceDiagrams.isSelected()) {
-			parameters.add("--plot-Deployment-Sequence-Diagrams");
+			parameters.add("--" + Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONSEQDS);
 		}
 
 		if (this.assemblySequenceDiagrams.isSelected()) {
-			parameters.add("--plot-Assembly-Sequence-Diagrams");
+			parameters.add("--" + Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYSEQDS);
 		}
 
 		if (this.deploymentComponentDependencyGraph.isSelected()) {
-			parameters.add("--plot-Deployment-Component-Dependency-Graph");
+			parameters.add("--" + Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG);
 			if (this.deploymentComponentDependencyGraphResponseTime.isSelected()) {
-				parameters.add("responseTimes");
+				parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG);
 			}
 		}
 
 		if (this.assemblyComponentDependencyGraph.isSelected()) {
-			parameters.add("--plot-Assembly-Component-Dependency-Graph");
+			parameters.add("--" + Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYCOMPONENTDEPG);
 			if (this.assemblyComponentDependencyGraphResponseTime.isSelected()) {
-				parameters.add("responseTimes");
+				parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG);
 			}
 		}
 
 		if (this.containerDependencyGraph.isSelected()) {
-			parameters.add("--plot-Container-Dependency-Graph");
+			parameters.add("--" + Constants.CMD_OPT_NAME_TASK_PLOTCONTAINERDEPG);
 		}
 
 		if (this.deploymentOperationDependencyGraph.isSelected()) {
-			parameters.add("--plot-Deployment-Operation-Dependency-Graph");
+			parameters.add("--" + Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG);
 			if (this.deploymentOperationDependencyGraphResponseTime.isSelected()) {
-				parameters.add("responseTimes");
+				parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG);
 			}
 		}
 
 		if (this.assemblyOperationDependencyGraph.isSelected()) {
-			parameters.add("--plot-Assembly-Operation-Dependency-Graph");
+			parameters.add("--" + Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG);
 			if (this.assemblyOperationDependencyGraphResponseTime.isSelected()) {
-				parameters.add("responseTimes");
+				parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG);
 			}
 		}
 		if (this.aggregatedDeploymentCallTree.isSelected()) {
-			parameters.add("--plot-Aggregated-Deployment-Call-Tree");
+			parameters.add("--" + Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDALLOCATIONCALLTREE);
 		}
 
 		if (this.aggregatedAssemblyCallTree.isSelected()) {
-			parameters.add("--plot-Aggregated-Assembly-Call-Tree");
+			parameters.add("--" + Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDASSEMBLYCALLTREE);
 		}
 
 		if (this.callTrees.isSelected()) {
-			parameters.add("--plot-Call-Trees");
+			parameters.add("--" + Constants.CMD_OPT_NAME_TASK_PLOTCALLTREES);
 		}
 
 	}

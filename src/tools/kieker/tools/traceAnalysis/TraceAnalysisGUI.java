@@ -29,6 +29,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import kieker.tools.traceAnalysis.gui.AbstractStep;
+import kieker.tools.traceAnalysis.gui.AdditionalOptionsStep;
 import kieker.tools.traceAnalysis.gui.FinalStep;
 import kieker.tools.traceAnalysis.gui.PlotStep;
 import kieker.tools.traceAnalysis.gui.PrintStep;
@@ -50,8 +51,8 @@ public class TraceAnalysisGUI extends JFrame {
 
 	private final StartTraceAnalysisActionListener startTraceAnalysisClickListener = new StartTraceAnalysisActionListener();
 	private final AbstractStep[] steps = { new WelcomeStep(), new PlotStep(), new PrintStep(), new AdditionalOptionsStep(),
-		new FinalStep(this.startTraceAnalysisClickListener) };
-	private int currentStepIndex = 0;
+		new FinalStep(this.startTraceAnalysisClickListener), };
+	private int currentStepIndex;
 
 	public TraceAnalysisGUI() {
 		super("Trace Analysis Tool - GUI");
@@ -103,6 +104,7 @@ public class TraceAnalysisGUI extends JFrame {
 	private void addLogicToComponents() {
 		this.nextButton.addActionListener(new ActionListener() {
 
+			@SuppressWarnings("synthetic-access")
 			public void actionPerformed(final ActionEvent arg0) {
 				TraceAnalysisGUI.this.nextStep();
 			}
@@ -110,6 +112,7 @@ public class TraceAnalysisGUI extends JFrame {
 
 		this.previousButton.addActionListener(new ActionListener() {
 
+			@SuppressWarnings("synthetic-access")
 			public void actionPerformed(final ActionEvent e) {
 				TraceAnalysisGUI.this.previousStep();
 			}
@@ -156,6 +159,8 @@ public class TraceAnalysisGUI extends JFrame {
 		this.previousButton.setEnabled(false);
 
 		final Thread thread = new Thread() {
+
+			@SuppressWarnings("synthetic-access")
 			@Override
 			public void run() {
 				TraceAnalysisTool.main(parameters.toArray(new String[parameters.size()]));
@@ -173,8 +178,11 @@ public class TraceAnalysisGUI extends JFrame {
 
 	private class StartTraceAnalysisActionListener implements ActionListener {
 
-		public StartTraceAnalysisActionListener() {}
+		public StartTraceAnalysisActionListener() {
+			// No code necessary
+		}
 
+		@SuppressWarnings("synthetic-access")
 		public void actionPerformed(final ActionEvent e) {
 			TraceAnalysisGUI.this.startTraceAnalysis();
 		}

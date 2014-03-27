@@ -109,10 +109,13 @@ public class FinalStep extends AbstractStep {
 	private final class LogOutputStream extends OutputStream {
 
 		private final String lineSeperator = System.getProperty("line.separator");
-		private final StringBuffer stringBuffer = new StringBuffer();
+		private final StringBuffer stringBuffer = new StringBuffer(); // NOPMD (stringbuffer is cleared from time to time)
 
-		public LogOutputStream() {}
+		public LogOutputStream() {
+			// No code necessary
+		}
 
+		@SuppressWarnings("synthetic-access")
 		@Override
 		public void write(final int data) throws IOException {
 			this.stringBuffer.appendCodePoint(data);

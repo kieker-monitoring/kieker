@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.traceAnalysis;
+package kieker.tools.traceAnalysis.gui;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -24,7 +24,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import kieker.tools.traceAnalysis.gui.AbstractStep;
+import kieker.tools.traceAnalysis.Constants;
 
 /**
  * @author Nils Christian Ehmke
@@ -75,17 +75,20 @@ public class AdditionalOptionsStep extends AbstractStep {
 		this.add(this.expandingPanel, gridBagConstraints);
 	}
 
+	@Override
+	@SuppressWarnings("synthetic-access")
 	public void addSelectedTraceAnalysisParameters(final Collection<String> parameters) {
 		if (this.ignoreInvalidTraces.isSelected()) {
-			parameters.add("--ignore-invalid-traces");
+
+			parameters.add("--" + Constants.CMD_OPT_NAME_IGNOREINVALIDTRACES);
 		}
 
 		if (this.useShortLabels.isSelected()) {
-			parameters.add("--short-labels");
+			parameters.add("--" + Constants.CMD_OPT_NAME_SHORTLABELS);
 		}
 
 		if (this.includeSelfLoops.isSelected()) {
-			parameters.add("--include-self-loops");
+			parameters.add("--" + Constants.CMD_OPT_NAME_INCLUDESELFLOOPS);
 		}
 	}
 }

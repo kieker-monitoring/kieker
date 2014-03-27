@@ -26,6 +26,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import kieker.tools.traceAnalysis.Constants;
+
 /**
  * @author Nils Christian Ehmke
  * 
@@ -101,6 +103,7 @@ public class PrintStep extends AbstractStep {
 	private void addLogicToComponents() {
 		this.allPrints.addItemListener(new ItemListener() {
 
+			@SuppressWarnings("synthetic-access")
 			public void itemStateChanged(final ItemEvent event) {
 				PrintStep.this.messageTraces.setSelected(PrintStep.this.allPrints.isSelected());
 				PrintStep.this.executionTraces.setSelected(PrintStep.this.allPrints.isSelected());
@@ -110,7 +113,7 @@ public class PrintStep extends AbstractStep {
 				PrintStep.this.assemblyEquivalenceClasses.setSelected(PrintStep.this.allPrints.isSelected());
 			}
 		});
-	};
+	}
 
 	private void setDefaultSelection() {
 		this.systemModel.setSelected(true);
@@ -118,28 +121,27 @@ public class PrintStep extends AbstractStep {
 
 	@Override
 	public void addSelectedTraceAnalysisParameters(final Collection<String> parameters) {
-		// TODO Use the constants instead of hard coded strings
 		if (this.messageTraces.isSelected()) {
-			parameters.add("--print-Message-Traces");
+			parameters.add("--" + Constants.CMD_OPT_NAME_TASK_PRINTMSGTRACES);
 		}
 
 		if (this.executionTraces.isSelected()) {
-			parameters.add("--print-Execution-Traces");
+			parameters.add("--" + Constants.CMD_OPT_NAME_TASK_PRINTEXECTRACES);
 		}
 
 		if (this.invalidExecutionTraces.isSelected()) {
-			parameters.add("--print-invalid-Execution-Traces");
+			parameters.add("--" + Constants.CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES);
 		}
 
 		if (this.systemModel.isSelected()) {
-			parameters.add("--print-System-Model");
+			parameters.add("--" + Constants.CMD_OPT_NAME_TASK_PRINTSYSTEMMODEL);
 		}
 
 		if (this.deploymentEquivalenceClasses.isSelected()) {
-			parameters.add("--print-Deployment-Equivalence-Classes");
+			parameters.add("--" + Constants.CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT);
 		}
 		if (this.assemblyEquivalenceClasses.isSelected()) {
-			parameters.add("--print-Assembly-Equivalence-Classes");
+			parameters.add("--" + Constants.CMD_OPT_NAME_TASK_ASSEMBLYEQUIVCLASSREPORT);
 		}
 	}
 }
