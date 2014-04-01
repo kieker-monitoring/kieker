@@ -16,8 +16,8 @@
 
 package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
-import kieker.common.util.signature.Signature;
 import kieker.tools.traceAnalysis.filter.visualization.AbstractGraphFormatter;
+import kieker.tools.traceAnalysis.filter.visualization.util.NamingConventions;
 import kieker.tools.traceAnalysis.systemModel.Operation;
 
 /**
@@ -33,19 +33,7 @@ import kieker.tools.traceAnalysis.systemModel.Operation;
 public abstract class AbstractOperationDependencyGraphFormatter<T extends AbstractDependencyGraph<?>> extends AbstractDependencyGraphFormatter<T> {
 
 	private String createOperationSignature(final Operation operation) {
-		final StringBuilder builder = new StringBuilder();
-		final Signature signature = operation.getSignature();
-
-		builder.append(signature.getName());
-		builder.append('(');
-
-		final String[] parameterTypes = signature.getParamTypeList();
-		if (parameterTypes.length > 0) { // // parameterTypes cannot be null (getParamTypeList never returns null)
-			builder.append("..");
-		}
-		builder.append(')');
-
-		return builder.toString();
+		return NamingConventions.createOperationSignature(operation);
 	}
 
 	protected String createOperationNodeLabel(final Operation operation, final DependencyGraphNode<?> node) {

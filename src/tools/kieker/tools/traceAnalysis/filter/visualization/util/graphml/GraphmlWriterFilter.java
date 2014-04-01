@@ -11,6 +11,7 @@ import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.filter.visualization.GraphWriterPlugin;
+import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.OperationAllocationDependencyGraph;
 import kieker.tools.traceAnalysis.filter.visualization.exception.GraphFormattingException;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
 
@@ -22,7 +23,6 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
 			@Property(name = GraphWriterPlugin.CONFIG_PROPERTY_NAME_SELFLOOPS, defaultValue = "false")
 		})
 public class GraphmlWriterFilter extends AbstractFilterPlugin {
-
 	/**
 	 * Name of the configuration property containing the output file name.
 	 */
@@ -68,7 +68,7 @@ public class GraphmlWriterFilter extends AbstractFilterPlugin {
 	}
 
 	@InputPort(name = INPUT_PORT_NAME_GRAPHS, eventTypes = { AbstractGraph.class })
-	public void writeGraph(final AbstractGraph<?, ?, ?> graph) {
+	public void writeGraph(final OperationAllocationDependencyGraph graph) {
 		final String filename = this.outputPathName + this.getOutputFilename(graph);
 
 		final GraphmlType graphml = this.transformGraphToGraphml(graph);
@@ -85,9 +85,10 @@ public class GraphmlWriterFilter extends AbstractFilterPlugin {
 		return outputFilename;
 	}
 
-	private GraphmlType transformGraphToGraphml(final AbstractGraph<?, ?, ?> graph) {
-		// TODO Auto-generated method stub
-		return null;
+	private GraphmlType transformGraphToGraphml(final OperationAllocationDependencyGraph graph) {
+		final Graph2GraphmlVisitor graph2graphmlVisitor = new Graph2GraphmlVisitor(this.includeWeights, this.useShortLabels, this.plotLoops);
+		graph.traverseWithVerticesFirst(graph2graphmlVisitor);
+		return graph2graphmlVisitor.getGraphml();
 	}
 
 	/**

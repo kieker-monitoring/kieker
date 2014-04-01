@@ -87,6 +87,7 @@ import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ResponseT
 import kieker.tools.traceAnalysis.filter.visualization.descriptions.DescriptionDecoratorFilter;
 import kieker.tools.traceAnalysis.filter.visualization.sequenceDiagram.SequenceDiagramFilter;
 import kieker.tools.traceAnalysis.filter.visualization.traceColoring.TraceColoringFilter;
+import kieker.tools.traceAnalysis.filter.visualization.util.graphml.GraphmlWriterFilter;
 import kieker.tools.traceAnalysis.repository.DescriptionRepository;
 import kieker.tools.traceAnalysis.repository.TraceColorRepository;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
@@ -344,8 +345,12 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 		configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_SHORTLABELS, String.valueOf(shortLabels));
 		configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_SELFLOOPS, String.valueOf(includeSelfLoops));
 		configuration.setProperty(AbstractAnalysisComponent.CONFIG_NAME, producer.getConfigurationName());
+
 		final GraphWriterPlugin graphWriter = new GraphWriterPlugin(configuration, controller);
-		controller.connect(plugin, plugin.getGraphOutputPortName(), graphWriter, GraphWriterPlugin.INPUT_PORT_NAME_GRAPHS);
+		// controller.connect(plugin, plugin.getGraphOutputPortName(), graphWriter, GraphWriterPlugin.INPUT_PORT_NAME_GRAPHS);
+
+		final GraphmlWriterFilter graphmlWriterFilter = new GraphmlWriterFilter(configuration, controller);
+		controller.connect(plugin, plugin.getGraphOutputPortName(), graphmlWriterFilter, GraphmlWriterFilter.INPUT_PORT_NAME_GRAPHS);
 	}
 
 	private static <P extends AbstractPlugin & IGraphOutputtingFilter<?>> void connectGraphFilters(final P predecessor,

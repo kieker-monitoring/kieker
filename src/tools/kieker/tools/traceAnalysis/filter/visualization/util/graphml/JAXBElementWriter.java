@@ -1,6 +1,7 @@
 package kieker.tools.traceAnalysis.filter.visualization.util.graphml;
 
 import java.io.File;
+import java.io.StringWriter;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -21,8 +22,14 @@ public class JAXBElementWriter<T> {
 		}
 	}
 
-	public void write(final JAXBElement<T> jaxbObject, final String filename) throws JAXBException {
+	public void writeToFile(final JAXBElement<T> jaxbObject, final String filename) throws JAXBException {
 		this.marshaller.marshal(jaxbObject, new File(filename));
+	}
+
+	public String writeToString(final JAXBElement<T> jaxbObject) throws JAXBException {
+		final StringWriter stringWriter = new StringWriter();
+		this.marshaller.marshal(jaxbObject, stringWriter);
+		return stringWriter.toString();
 	}
 
 }
