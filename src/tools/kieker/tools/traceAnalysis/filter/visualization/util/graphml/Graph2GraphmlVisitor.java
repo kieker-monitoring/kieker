@@ -14,6 +14,8 @@ import org.graphdrawing.graphml.xmlns.NodeType;
 import org.graphdrawing.graphml.xmlns.ObjectFactory;
 
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.DependencyGraphNode;
+import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.OperationAllocationDependencyGraph;
+import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ResponseTimeDecoration;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.WeightedBidirectionalDependencyGraphEdge;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph.IGraphVisitor;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraphElement;
@@ -23,11 +25,33 @@ import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationP
 public class Graph2GraphmlVisitor implements
 		IGraphVisitor<DependencyGraphNode<AllocationComponentOperationPair>, WeightedBidirectionalDependencyGraphEdge<AllocationComponentOperationPair>> {
 
-	private static final String ASSUMED_KEY = "assumed";
-	private static final String DESCRIPTION_KEY = "description";
-	private static final String COLOR_KEY = "color";
-	private static final String WEIGHT_KEY = "weight";
-	private static final String OPERATION_SIGNATURE_KEY = "operation signature";
+	static enum GraphmlKey {
+
+		ASSUMED("assumed", KeyForType.EDGE, KeyTypeType.BOOLEAN),
+		DESCRIPTION("description", KeyForType.ALL, KeyTypeType.STRING),
+		COLOR("color", KeyForType.ALL, KeyTypeType.INT),
+		WEIGHT("weight", KeyForType.EDGE, KeyTypeType.INT),
+		OPERATION_SIGNATURE("operation signature", KeyForType.NODE, KeyTypeType.STRING),
+		LABEL("label", KeyForType.NODE, KeyTypeType.STRING),
+		AVG_RESPONSE_TIMES("avg response times", KeyForType.NODE, KeyTypeType.DOUBLE),
+		MIN_RESPONSE_TIMES("min response times", KeyForType.NODE, KeyTypeType.DOUBLE),
+		MAX_RESPONSE_TIMES("max response times", KeyForType.NODE, KeyTypeType.DOUBLE), ;
+
+		final String keyName;
+		final KeyForType entitytype;
+		final KeyTypeType attributeType;
+
+		GraphmlKey(final String keyName, final KeyForType entitytype, final KeyTypeType attributeType) {
+			this.keyName = keyName;
+			this.entitytype = entitytype;
+			this.attributeType = attributeType;
+		}
+
+		@Override
+		public String toString() {
+			return this.keyName;
+		}
+	}
 
 	private final ObjectFactory objectFactory = new ObjectFactory();
 	private final GraphmlType graphml;
@@ -36,6 +60,7 @@ public class Graph2GraphmlVisitor implements
 	private final boolean useShortLabels;
 	private final boolean plotLoops;
 
+	private final Map<String, NodeType> components = new HashMap<String, NodeType>();
 	private final Map<String, String> graphmlNodes = new HashMap<String, String>();
 
 	public Graph2GraphmlVisitor(final boolean includeWeights, final boolean useShortLabels, final boolean plotLoops) {
@@ -49,28 +74,56 @@ public class Graph2GraphmlVisitor implements
 		this.graphml.getGraphOrData().add(this.graph);
 	}
 
+	public void buildAssemblyComponentNodes(final OperationAllocationDependencyGraph kiekerGraph) {
+		for (final DependencyGraphNode<AllocationComponentOperationPair> vertex : kiekerGraph.getVertices()) {
+			final NodeType allocationComponentNode = this.objectFactory.createNodeType();
+			allocationComponentNode.setGraph(this.objectFactory.createGraphType());
+			allocationComponentNode.getGraph().setId(NamingConventions.createSubgraphId());
+
+			final String componentId = NamingConventions.createComponentId(vertex.getEntity().getAllocationComponent().getId());
+			allocationComponentNode.setId(componentId);
+
+			final String label = NamingConventions.createAllocationComponentNodeLabel(vertex.getEntity().getAllocationComponent(), this.useShortLabels);
+			final DataType labelAttribute = this.createAttribute(vertex, GraphmlKey.LABEL, label);
+			allocationComponentNode.getDataOrPort().add(labelAttribute);
+
+			// allocationComponentNode.setDesc(label + "-node");
+			// allocationComponentNode.getGraph().setDesc(label + "-graph");
+
+			this.graph.getDataOrNodeOrEdge().add(allocationComponentNode);
+
+			this.components.put(componentId, allocationComponentNode);
+		}
+	}
+
 	public void visitVertex(final DependencyGraphNode<AllocationComponentOperationPair> vertex) {
 		final NodeType graphmlNode = this.objectFactory.createNodeType();
-		graphmlNode.setId(vertex.getIdentifier());
+		graphmlNode.setId(NamingConventions.createNodeId(vertex.getId()));
 
-		final DataType description = this.createAttribute(vertex, DESCRIPTION_KEY, vertex.getDescription());
+		final DataType description = this.createAttribute(vertex, GraphmlKey.DESCRIPTION, vertex.getDescription());
 		graphmlNode.getDataOrPort().add(description);
-		final DataType color = this.createAttribute(vertex, COLOR_KEY, Integer.toString(vertex.getColor().getRGB()));
+		final DataType color = this.createAttribute(vertex, GraphmlKey.COLOR, Integer.toString(vertex.getColor().getRGB()));
 		graphmlNode.getDataOrPort().add(color);
 
-		vertex.getEntity().getAllocationComponent();
-		// TODO
-
-		vertex.getOrigins();
-		// TODO
+		final ResponseTimeDecoration responseTimeDecoration = vertex.getDecoration(ResponseTimeDecoration.class);
+		if (responseTimeDecoration != null) {
+			DataType attribute = this.createAttribute(vertex, GraphmlKey.AVG_RESPONSE_TIMES, Double.toString(responseTimeDecoration.getAverageResponseTime()));
+			graphmlNode.getDataOrPort().add(attribute);
+			attribute = this.createAttribute(vertex, GraphmlKey.MIN_RESPONSE_TIMES, Double.toString(responseTimeDecoration.getMinimalResponseTime()));
+			graphmlNode.getDataOrPort().add(attribute);
+			attribute = this.createAttribute(vertex, GraphmlKey.MAX_RESPONSE_TIMES, Double.toString(responseTimeDecoration.getMaximalResponseTime()));
+			graphmlNode.getDataOrPort().add(attribute);
+		}
 
 		final String operationSignature = NamingConventions.createOperationSignature(vertex.getEntity().getOperation());
-		final DataType operationSignatureAttribute = this.createAttribute(vertex, OPERATION_SIGNATURE_KEY, operationSignature);
+		final DataType operationSignatureAttribute = this.createAttribute(vertex, GraphmlKey.OPERATION_SIGNATURE, operationSignature);
 		graphmlNode.getDataOrPort().add(operationSignatureAttribute);
 
-		this.graph.getDataOrNodeOrEdge().add(graphmlNode);
+		final String componentId = NamingConventions.createComponentId(vertex.getEntity().getAllocationComponent().getId());
+		final NodeType componentNode = this.components.get(componentId);
+		componentNode.getGraph().getDataOrNodeOrEdge().add(graphmlNode);
 
-		this.graphmlNodes.put(vertex.getIdentifier(), graphmlNode.getId());
+		this.graphmlNodes.put(NamingConventions.createNodeId(vertex.getId()), graphmlNode.getId());
 	}
 
 	public void visitEdge(final WeightedBidirectionalDependencyGraphEdge<AllocationComponentOperationPair> edge) {
@@ -81,19 +134,19 @@ public class Graph2GraphmlVisitor implements
 		final EdgeType graphmlEdge = this.objectFactory.createEdgeType();
 		graphmlEdge.setId(edge.getIdentifier());
 
-		final String sourceGraphmlNodeId = this.graphmlNodes.get(edge.getSource().getIdentifier());
-		final String targetGraphmlNodeId = this.graphmlNodes.get(edge.getTarget().getIdentifier());
+		final String sourceGraphmlNodeId = this.graphmlNodes.get(NamingConventions.createNodeId(edge.getSource().getId()));
+		final String targetGraphmlNodeId = this.graphmlNodes.get(NamingConventions.createNodeId(edge.getTarget().getId()));
 		graphmlEdge.setSource(sourceGraphmlNodeId);
 		graphmlEdge.setTarget(targetGraphmlNodeId);
 
-		final DataType assumed = this.createAttribute(edge, ASSUMED_KEY, Boolean.toString(edge.isAssumed()));
+		final DataType assumed = this.createAttribute(edge, GraphmlKey.ASSUMED, Boolean.toString(edge.isAssumed()));
 		graphmlEdge.getData().add(assumed);
-		final DataType description = this.createAttribute(edge, DESCRIPTION_KEY, edge.getDescription());
+		final DataType description = this.createAttribute(edge, GraphmlKey.DESCRIPTION, edge.getDescription());
 		graphmlEdge.getData().add(description);
-		final DataType color = this.createAttribute(edge, COLOR_KEY, Integer.toString(edge.getColor().getRGB()));
+		final DataType color = this.createAttribute(edge, GraphmlKey.COLOR, Integer.toString(edge.getColor().getRGB()));
 		graphmlEdge.getData().add(color);
 		if (this.includeWeights) {
-			final DataType weight = this.createAttribute(edge, WEIGHT_KEY, Integer.toString(edge.getWeight().get()));
+			final DataType weight = this.createAttribute(edge, GraphmlKey.WEIGHT, Integer.toString(edge.getTargetWeight().get()));
 			graphmlEdge.getData().add(weight);
 		}
 
@@ -107,21 +160,15 @@ public class Graph2GraphmlVisitor implements
 	private GraphmlType createKiekerGraph() {
 		final GraphmlType graphml = this.objectFactory.createGraphmlType();
 
-		KeyType key = this.createKeyDefinition(ASSUMED_KEY, KeyForType.EDGE, ASSUMED_KEY, KeyTypeType.BOOLEAN);
-		graphml.getKey().add(key);
-		key = this.createKeyDefinition(DESCRIPTION_KEY, KeyForType.ALL, DESCRIPTION_KEY, KeyTypeType.STRING);
-		graphml.getKey().add(key);
-		key = this.createKeyDefinition(COLOR_KEY, KeyForType.ALL, COLOR_KEY, KeyTypeType.INT);
-		graphml.getKey().add(key);
-		key = this.createKeyDefinition(WEIGHT_KEY, KeyForType.EDGE, WEIGHT_KEY, KeyTypeType.INT);
-		graphml.getKey().add(key);
-		key = this.createKeyDefinition(OPERATION_SIGNATURE_KEY, KeyForType.NODE, OPERATION_SIGNATURE_KEY, KeyTypeType.STRING);
-		graphml.getKey().add(key);
+		for (final GraphmlKey keyDefinition : GraphmlKey.values()) {
+			final KeyType graphmlKey = this.createGraphmlKey(keyDefinition.keyName, keyDefinition.entitytype, keyDefinition.keyName, keyDefinition.attributeType);
+			graphml.getKey().add(graphmlKey);
+		}
 
 		return graphml;
 	}
 
-	private KeyType createKeyDefinition(final String identifier, final KeyForType entityType, final String attributeName,
+	private KeyType createGraphmlKey(final String identifier, final KeyForType entityType, final String attributeName,
 			final KeyTypeType attributeType) {
 		final KeyType key = this.objectFactory.createKeyType();
 		key.setId(identifier);
@@ -131,9 +178,17 @@ public class Graph2GraphmlVisitor implements
 		return key;
 	}
 
-	private DataType createAttribute(final AbstractGraphElement<?> kiekerGraphElement, final String key, final String value) {
+	private DataType createAttribute(final DependencyGraphNode<?> vertex, final GraphmlKey key, final String value) {
+		return this.createAttribute(Integer.toString(vertex.getId()), key.toString(), value);
+	}
+
+	private DataType createAttribute(final AbstractGraphElement<?> kiekerGraphElement, final GraphmlKey key, final String value) {
+		return this.createAttribute(kiekerGraphElement.getIdentifier(), key.toString(), value);
+	}
+
+	private DataType createAttribute(final String identifier, final String key, final String value) {
 		final DataType attribute = this.objectFactory.createDataType();
-		attribute.setId(kiekerGraphElement.getIdentifier() + key);
+		// attribute.setId(identifier);
 		attribute.setKey(key);
 		attribute.setContent(value);
 		return attribute;
