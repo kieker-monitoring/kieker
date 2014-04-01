@@ -1,0 +1,1 @@
+xjc -mark-generated %1
