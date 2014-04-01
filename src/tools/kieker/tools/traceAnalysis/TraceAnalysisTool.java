@@ -346,11 +346,16 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 		configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_SELFLOOPS, String.valueOf(includeSelfLoops));
 		configuration.setProperty(AbstractAnalysisComponent.CONFIG_NAME, producer.getConfigurationName());
 
-		final GraphWriterPlugin graphWriter = new GraphWriterPlugin(configuration, controller);
-		// controller.connect(plugin, plugin.getGraphOutputPortName(), graphWriter, GraphWriterPlugin.INPUT_PORT_NAME_GRAPHS);
-
-		final GraphmlWriterFilter graphmlWriterFilter = new GraphmlWriterFilter(configuration, controller);
-		controller.connect(plugin, plugin.getGraphOutputPortName(), graphmlWriterFilter, GraphmlWriterFilter.INPUT_PORT_NAME_GRAPHS);
+		final String outputFormat = TraceAnalysisTool.cmdl.getOptionValue(Constants.CMD_OPT_NAME_OUTPUT_FORMAT, "dot");
+		if ("graphml".equals(outputFormat)) {
+			final GraphmlWriterFilter graphmlWriterFilter = new GraphmlWriterFilter(configuration, controller);
+			controller.connect(plugin, plugin.getGraphOutputPortName(), graphmlWriterFilter, GraphmlWriterFilter.INPUT_PORT_NAME_GRAPHS);
+		} else if ("dot".equals(outputFormat)) {
+			final GraphWriterPlugin graphWriter = new GraphWriterPlugin(configuration, controller);
+			controller.connect(plugin, plugin.getGraphOutputPortName(), graphWriter, GraphWriterPlugin.INPUT_PORT_NAME_GRAPHS);
+		} else {
+			System.err.println("Unknown output format specified: " + outputFormat);
+		}
 	}
 
 	private static <P extends AbstractPlugin & IGraphOutputtingFilter<?>> void connectGraphFilters(final P predecessor,

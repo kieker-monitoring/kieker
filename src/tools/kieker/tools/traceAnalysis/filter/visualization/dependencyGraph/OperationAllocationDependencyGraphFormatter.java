@@ -24,6 +24,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import kieker.tools.traceAnalysis.Constants;
 import kieker.tools.traceAnalysis.filter.visualization.AbstractGraphFormatter;
+import kieker.tools.traceAnalysis.filter.visualization.util.NamingConventions;
 import kieker.tools.traceAnalysis.filter.visualization.util.dot.DotFactory;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
@@ -79,24 +80,11 @@ public class OperationAllocationDependencyGraphFormatter extends AbstractOperati
 	}
 
 	private static String createContainerNodeLabel(final ExecutionContainer container) {
-		return STEREOTYPE_EXECUTION_CONTAINER + "\\n" + container.getName();
+		return NamingConventions.createContainerNodeLabel(container);
 	}
 
 	private static String createAllocationComponentNodeLabel(final AllocationComponent component, final boolean useShortLabels) {
-		final StringBuilder builder = new StringBuilder();
-
-		builder.append(AbstractDependencyGraphFormatter.STEREOTYPE_ALLOCATION_COMPONENT).append("\\n");
-		builder.append(component.getAssemblyComponent().getName()).append(':');
-
-		if (useShortLabels) {
-			builder.append("..");
-		} else {
-			builder.append(component.getAssemblyComponent().getType().getPackageName()).append('.');
-		}
-
-		builder.append(component.getAssemblyComponent().getType().getTypeName());
-
-		return builder.toString();
+		return NamingConventions.createAllocationComponentNodeLabel(component, useShortLabels);
 	}
 
 	private void createGraph(final ElementGrouping grouping, final StringBuilder builder, final boolean useShortLabels) {

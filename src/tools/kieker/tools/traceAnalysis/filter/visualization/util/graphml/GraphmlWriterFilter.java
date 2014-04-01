@@ -87,6 +87,7 @@ public class GraphmlWriterFilter extends AbstractFilterPlugin {
 
 	private GraphmlType transformGraphToGraphml(final OperationAllocationDependencyGraph graph) {
 		final Graph2GraphmlVisitor graph2graphmlVisitor = new Graph2GraphmlVisitor(this.includeWeights, this.useShortLabels, this.plotLoops);
+		graph2graphmlVisitor.buildAssemblyComponentNodes(graph);
 		graph.traverseWithVerticesFirst(graph2graphmlVisitor);
 		return graph2graphmlVisitor.getGraphml();
 	}

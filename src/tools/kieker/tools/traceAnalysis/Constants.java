@@ -41,6 +41,8 @@ public final class Constants {
 	public static final String CMD_OPT_NAME_INPUTDIRS = "inputdirs";
 	/** Command for the output directories. */
 	public static final String CMD_OPT_NAME_OUTPUTDIR = "outputdir";
+	/** e.g., dot or graphml */
+	public static final String CMD_OPT_NAME_OUTPUT_FORMAT = "outputFormat";
 	public static final String CMD_OPT_NAME_OUTPUTFNPREFIX = "output-filename-prefix";
 	public static final String CMD_OPT_NAME_SELECTTRACES = "select-traces";
 	/** Command whether to use short labels or not. */
@@ -158,6 +160,8 @@ public final class Constants {
 				.withDescription("Log directories to read data from").withValueSeparator('=').create("i"));
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_OUTPUTDIR).withArgName("dir").hasArg(true).isRequired(true)
 				.withDescription("Directory for the generated file(s)").withValueSeparator('=').create("o"));
+		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_OUTPUT_FORMAT).withArgName("format").hasArg(true).isRequired(false)
+				.withDescription("Format of the output file (default: dot)").withValueSeparator('=').create("f"));
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_OUTPUTFNPREFIX).withArgName("prefix").hasArg(true).isRequired(false)
 				.withDescription("Prefix for output filenames\n").withValueSeparator('=').create("p"));
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTALLOCATIONSEQDS).hasArg(false)
