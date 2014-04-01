@@ -17,6 +17,6 @@ public class GraphmlWriter extends JAXBElementWriter<GraphmlType> {
 
 	public void write(final GraphmlType graphml, final String filename) throws JAXBException {
 		final JAXBElement<GraphmlType> jaxbObject = OBJECT_FACTORY.createGraphml(graphml);
-		this.write(jaxbObject, filename);
+		this.writeToFile(jaxbObject, filename);
 	}
 }
