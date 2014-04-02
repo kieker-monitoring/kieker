@@ -15,32 +15,41 @@ public class DirectoryName2Files extends Filter<DirectoryName2Files.INPUT_PORT, 
 	}
 
 	private long overallDuration;
+	private int numFiles = 0;
 
 	public DirectoryName2Files(final long id) {
 		super(id, INPUT_PORT.class, OUTPUT_PORT.class);
 	}
 
-	public void execute() {
+	@Override
+	public INPUT_PORT chooseInputPort() {
+		return INPUT_PORT.DIRECTORY_NAME;
+	}
+
+	public void execute(final INPUT_PORT inputPort) {
 		final long start = System.currentTimeMillis();
 
-		this.executeInternal();
+		final String inputDir = (String) this.take(inputPort);
+
+		final File[] availableFiles = new File(inputDir).listFiles();
+		for (final File file : availableFiles) {
+			if (file.isFile()) {
+				this.put(OUTPUT_PORT.FILE, file);
+				this.numFiles++;
+			}
+		}
 
 		final long end = System.currentTimeMillis();
 		final long duration = end - start;
 		this.overallDuration += duration;
 	}
 
-	private void executeInternal() {
-		final String inputDir = (String) this.take(INPUT_PORT.DIRECTORY_NAME);
-
-		final File[] availableFiles = new File(inputDir).listFiles();
-		for (final File file : availableFiles) {
-			this.put(OUTPUT_PORT.FILE, file);
-		}
-	}
-
 	public long getOverallDuration() {
 		return this.overallDuration;
+	}
+
+	public int getNumFiles() {
+		return this.numFiles;
 	}
 
 }

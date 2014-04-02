@@ -25,8 +25,13 @@ public class File2TextLinesFilter extends Filter<File2TextLinesFilter.INPUT_PORT
 		super(id, INPUT_PORT.class, OUTPUT_PORT.class);
 	}
 
-	public void execute() {
-		final File file = (File) this.take(INPUT_PORT.FILE);
+	@Override
+	public INPUT_PORT chooseInputPort() {
+		return INPUT_PORT.FILE;
+	}
+
+	public void execute(final INPUT_PORT inputPort) {
+		final File file = (File) this.take(inputPort);
 
 		BufferedReader reader = null;
 		try {

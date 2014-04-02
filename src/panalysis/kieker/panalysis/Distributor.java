@@ -20,10 +20,20 @@ public class Distributor extends Filter<Distributor.INPUT_PORT, Distributor.OUTP
 		this.outputPorts = OUTPUT_PORT.values();
 	}
 
-	public void execute() {
-		final Object object = this.take(INPUT_PORT.OBJECT);
-		final OUTPUT_PORT port = this.outputPorts[this.index];
+	@Override
+	public INPUT_PORT chooseInputPort() {
+		return INPUT_PORT.OBJECT;
+	}
+
+	public void execute(final INPUT_PORT inputPort) {
+		final Object object = this.take(inputPort);
+		final OUTPUT_PORT port = this.getNextPortInRoundRobinOrder();
 		this.put(port, object);
+	}
+
+	private OUTPUT_PORT getNextPortInRoundRobinOrder() {
+		final OUTPUT_PORT port = this.outputPorts[this.index];
 		this.index = (this.index + 1) % this.outputPorts.length;
+		return port;
 	}
 }

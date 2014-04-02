@@ -18,21 +18,17 @@ public class RepeaterSource extends AbstractSource<RepeaterSource.OUTPUT_PORT> {
 		this.num = num;
 	}
 
-	public void execute() {
+	public void execute(final kieker.panalysis.base.AbstractSource.INPUT_PORT inputPort) {
 		final long start = System.currentTimeMillis();
 
-		this.executeInternal();
-
-		final long end = System.currentTimeMillis();
-		final long duration = end - start;
-		this.overallDuration += duration;
-	}
-
-	private void executeInternal() {
 		int counter = this.num;
 		while (counter-- > 0) {
 			this.put(OUTPUT_PORT.OUTPUT, this.outputRecord);
 		}
+
+		final long end = System.currentTimeMillis();
+		final long duration = end - start;
+		this.overallDuration += duration;
 	}
 
 	public long getOverallDuration() {

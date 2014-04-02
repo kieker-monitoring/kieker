@@ -3,7 +3,7 @@ package kieker.panalysis.base;
 import java.util.EnumMap;
 import java.util.Map;
 
-public abstract class Filter<InputPort extends Enum<InputPort>, OutputPort extends Enum<OutputPort>> extends AbstractStage implements Sink<InputPort>,
+public abstract class Filter<InputPort extends Enum<InputPort>, OutputPort extends Enum<OutputPort>> extends AbstractStage<InputPort> implements Sink<InputPort>,
 		Source<OutputPort> {
 
 	private final Map<InputPort, Pipe<?>> inputPortPipes;
@@ -40,5 +40,10 @@ public abstract class Filter<InputPort extends Enum<InputPort>, OutputPort exten
 	protected Object tryTake(final InputPort inputPort) {
 		final Pipe<?> pipe = this.inputPortPipes.get(inputPort);
 		return pipe.tryTake();
+	}
+
+	protected boolean isEmpty(final InputPort inputPort) {
+		final Pipe<?> pipe = this.inputPortPipes.get(inputPort);
+		return pipe.isEmpty();
 	}
 }

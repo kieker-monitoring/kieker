@@ -3,7 +3,7 @@ package kieker.panalysis.base;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class AbstractStage implements Stage {
+public abstract class AbstractStage<InputPort extends Enum<InputPort>> implements Stage<InputPort> {
 
 	protected long id;
 	/**
@@ -16,4 +16,10 @@ public abstract class AbstractStage implements Stage {
 		this.logger = LoggerFactory.getLogger(Long.toString(id));
 	}
 
+	abstract public InputPort chooseInputPort();
+
+	final public void execute() {
+		final InputPort inputPort = this.chooseInputPort();
+		this.execute(inputPort);
+	}
 }

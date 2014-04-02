@@ -28,19 +28,16 @@ public class CountWordsStage extends Filter<CountWordsStage.INPUT_PORT, CountWor
 		this.pattern = Pattern.compile("[^\\p{Graph}]");
 	}
 
-	public void execute() {
-		final long start = System.currentTimeMillis();
-
-		this.executeInternal();
-
-		final long end = System.currentTimeMillis();
-		final long duration = end - start;
-		this.overallDuration += duration;
+	@Override
+	public INPUT_PORT chooseInputPort() {
+		return INPUT_PORT.FILE;
 	}
 
 	@SuppressWarnings("unchecked")
-	private void executeInternal() {
-		final File file = (File) this.take(INPUT_PORT.FILE);
+	public void execute(final INPUT_PORT inputPort) {
+		final long start = System.currentTimeMillis();
+
+		final File file = (File) this.take(inputPort);
 
 		int wordsCount = 0;
 		try {
@@ -64,6 +61,10 @@ public class CountWordsStage extends Filter<CountWordsStage.INPUT_PORT, CountWor
 		} catch (final IOException e) {
 			this.put(OUTPUT_PORT.EXCEPTION, e);
 		}
+
+		final long end = System.currentTimeMillis();
+		final long duration = end - start;
+		this.overallDuration += duration;
 	}
 
 	public long getOverallDuration() {

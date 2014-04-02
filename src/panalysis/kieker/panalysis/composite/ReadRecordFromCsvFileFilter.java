@@ -3,6 +3,7 @@ package kieker.panalysis.composite;
 import java.util.Map;
 
 import kieker.panalysis.File2TextLinesFilter;
+import kieker.panalysis.File2TextLinesFilter.INPUT_PORT;
 import kieker.panalysis.MethodCallPipe;
 import kieker.panalysis.TextLine2RecordFilter;
 import kieker.panalysis.base.Filter;
@@ -24,8 +25,13 @@ public class ReadRecordFromCsvFileFilter extends Filter<File2TextLinesFilter.INP
 		MethodCallPipe.connect(this.stage0, File2TextLinesFilter.OUTPUT_PORT.TEXT_LINE, this.stage1, TextLine2RecordFilter.INPUT_PORT.TEXT_LINE);
 	}
 
-	public void execute() {
-		this.stage0.execute();
+	@Override
+	public INPUT_PORT chooseInputPort() {
+		return this.stage0.chooseInputPort();
+	}
+
+	public void execute(final INPUT_PORT inputPort) {
+		this.stage0.execute(inputPort);
 	}
 
 }

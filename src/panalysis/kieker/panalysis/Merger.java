@@ -20,11 +20,23 @@ public class Merger extends Filter<Merger.INPUT_PORT, Merger.OUTPUT_PORT> {
 		this.inputPorts = INPUT_PORT.values();
 	}
 
-	public void execute() {
-		final INPUT_PORT port = this.inputPorts[this.index];
-		final Object object = this.take(port);
+	@Override
+	public INPUT_PORT chooseInputPort() {
+		return this.getNextPortInRoundRobinOrder();
+	}
+
+	public void execute(final INPUT_PORT inputPort) {
+		final Object object = this.take(inputPort);
 		this.put(OUTPUT_PORT.OBJECT, object);
-		this.index = (this.index + 1) % this.inputPorts.length;
+	}
+
+	private INPUT_PORT getNextPortInRoundRobinOrder() {
+		INPUT_PORT port;
+		do {
+			port = this.inputPorts[this.index];
+			this.index = (this.index + 1) % this.inputPorts.length;
+		} while (this.isEmpty(port));
+		return port;
 	}
 
 }

@@ -20,7 +20,7 @@ public class Directory2FilesFilter extends AbstractSource<Directory2FilesFilter.
 		this.inputDir = inputDir;
 	}
 
-	public void execute() {
+	public void execute(final kieker.panalysis.base.AbstractSource.INPUT_PORT inputPort) {
 		final File inputDir = this.inputDir;
 
 		final File[] inputFiles = inputDir.listFiles(new FileFilter() {

@@ -3,7 +3,11 @@ package kieker.panalysis.base;
 import java.util.EnumMap;
 import java.util.Map;
 
-public abstract class AbstractSource<OutputPort extends Enum<OutputPort>> extends AbstractStage implements Source<OutputPort> {
+public abstract class AbstractSource<OutputPort extends Enum<OutputPort>> extends AbstractStage<AbstractSource.INPUT_PORT> implements Source<OutputPort> {
+
+	static protected enum INPUT_PORT {
+		DUMMY // source stages have not any input ports
+	}
 
 	private final Map<OutputPort, Pipe<Object>> outputPortPipes;
 
@@ -23,6 +27,11 @@ public abstract class AbstractSource<OutputPort extends Enum<OutputPort>> extend
 			return; // ignore unconnected port
 		}
 		pipe.put(record);
+	}
+
+	@Override
+	final public INPUT_PORT chooseInputPort() {
+		return INPUT_PORT.DUMMY;
 	}
 
 }

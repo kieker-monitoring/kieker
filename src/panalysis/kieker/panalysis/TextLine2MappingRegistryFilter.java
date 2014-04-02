@@ -18,8 +18,13 @@ public class TextLine2MappingRegistryFilter extends AbstractSink<TextLine2Mappin
 		this.stringRegistry = stringRegistry;
 	}
 
-	public void execute() {
-		final String textLine = (String) this.take(INPUT_PORT.TEXT_LINE);
+	@Override
+	public INPUT_PORT chooseInputPort() {
+		return INPUT_PORT.TEXT_LINE;
+	}
+
+	public void execute(final INPUT_PORT inputPort) {
+		final String textLine = (String) this.take(inputPort);
 
 		final int split = textLine.indexOf('=');
 		if (split == -1) {

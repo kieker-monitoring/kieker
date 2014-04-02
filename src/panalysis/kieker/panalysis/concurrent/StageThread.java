@@ -6,10 +6,10 @@ import kieker.panalysis.base.Stage;
 
 public class StageThread extends Thread {
 
-	private final Stage stage;
+	private final Stage<?> stage;
 	private final AtomicLong duration = new AtomicLong();
 
-	public StageThread(final Stage stage) {
+	public StageThread(final Stage<?> stage) {
 		this.stage = stage;
 	}
 
