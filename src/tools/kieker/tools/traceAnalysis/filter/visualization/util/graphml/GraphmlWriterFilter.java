@@ -1,3 +1,19 @@
+/***************************************************************************
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
 package kieker.tools.traceAnalysis.filter.visualization.util.graphml;
 
 import javax.xml.bind.JAXBException;
@@ -15,6 +31,11 @@ import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.Operation
 import kieker.tools.traceAnalysis.filter.visualization.exception.GraphFormattingException;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraph;
 
+/**
+ * @author Christian Wulf
+ * 
+ * @since 1.9
+ */
 @Plugin(name = "GraphML writer plugin",
 		description = "Plugin for writing graphs to files in the GraphML format",
 		configuration = {
@@ -80,9 +101,16 @@ public class GraphmlWriterFilter extends AbstractFilterPlugin {
 	}
 
 	private String getOutputFilename(final AbstractGraph<?, ?, ?> graph) {
-		final String DEFAULT_FILENAME = graph.getClass().getName() + GRAPHML_EXTENSION;
-		final String outputFilename = (this.outputFileName.length() > 0 ? this.outputFileName : DEFAULT_FILENAME);
-		return outputFilename;
+		final String defaultFilename = graph.getClass().getName() + GRAPHML_EXTENSION;
+		final String fileName;
+
+		if (!this.outputFileName.isEmpty()) {
+			fileName = this.outputFileName;
+		} else {
+			fileName = defaultFilename;
+		}
+
+		return fileName;
 	}
 
 	private GraphmlType transformGraphToGraphml(final OperationAllocationDependencyGraph graph) {

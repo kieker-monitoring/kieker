@@ -354,7 +354,7 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 			final GraphWriterPlugin graphWriter = new GraphWriterPlugin(configuration, controller);
 			controller.connect(plugin, plugin.getGraphOutputPortName(), graphWriter, GraphWriterPlugin.INPUT_PORT_NAME_GRAPHS);
 		} else {
-			System.err.println("Unknown output format specified: " + outputFormat);
+			System.err.println("Unknown output format specified: " + outputFormat); // NOPMD (System.out)
 		}
 	}
 
