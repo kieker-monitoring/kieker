@@ -48,7 +48,15 @@
 			<compilerarg value="-Xlint:all" />
 		</javac>
 	</target>
-
+	
+	<target name="-compile-kieker.panalysis" depends="-init,-compile-kieker.common,-compile-kieker.analysis.model" description="Compiles the sources of the Kieker.PAnalysis component">
+		<delete dir="${build.kieker.panalysis.dir}" />
+		<mkdir dir="${build.kieker.panalysis.dir}" />
+		<javac destDir="${build.kieker.panalysis.dir}" source="1.5" target="1.5" srcdir="${src.kieker.panalysis.dir}" debug="true" classpathref="kieker.panalysis-compile-classpath" includeAntRuntime="false">
+			<compilerarg value="-Xlint:all" />
+		</javac>
+	</target>
+	
 	<target name="-compile-kieker.tools" depends="-init,-compile-kieker.common,-compile-kieker.monitoring,-compile-kieker.analysis" description="Compiles the sources of Kieker tools">
 		<delete dir="${build.kieker.tools.dir}" />
 		<mkdir dir="${build.kieker.tools.dir}" />
@@ -58,7 +66,7 @@
 		<copy file="${sequence.pic}" tofile="${build.kieker.tools.dir}/META-INF/sequence.pic" />
 	</target>
 
-	<target name="compile-kieker" depends="-init,-compile-kieker.common,-compile-kieker.monitoring,-compile-kieker.analysis,-compile-kieker.tools" description="Compiles the Kieker sources (calls all 'compile-kieker.*' targets)">
+	<target name="compile-kieker" depends="-init,-compile-kieker.common,-compile-kieker.monitoring,-compile-kieker.analysis,-compile-kieker.tools,-compile-kieker.panalysis" description="Compiles the Kieker sources (calls all 'compile-kieker.*' targets)">
 	</target>
 	
 	<target name="-compile-javaee.demo" depends="-init" description="Compiles the sources of the JavaEE example">
@@ -73,6 +81,7 @@
 		<jar destfile="${dist.dir}/${dist.kieker.main.jar}">
 			<fileset dir="${build.kieker.common.dir}" />
 			<fileset dir="${build.kieker.analysis.dir}" />
+			<fileset dir="${build.kieker.panalysis.dir}" />
 			<fileset dir="${build.kieker.analysis.model.dir}" />
 			<fileset dir="${build.kieker.monitoring.dir}" />
 			<fileset dir="${build.kieker.tools.dir}" />

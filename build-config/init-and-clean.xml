@@ -100,7 +100,11 @@
 			<pathelement location="${build.kieker.common.dir}/" />
 			<pathelement location="${build.kieker.monitoring.dir}" />
 		</path>
-
+		
+		<path id="kieker.panalysis-compile-classpath">
+			<pathelement location="${build.kieker.common.dir}/" />
+		</path>
+		
 		<path id="kieker.analysis-compile-classpath">
 			<fileset dir="${lib.dir}">
 				<include name="javax.jms-*.jar" />
