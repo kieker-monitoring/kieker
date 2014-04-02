@@ -1,3 +1,19 @@
+/***************************************************************************
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
 package kieker.tools.traceAnalysis.filter.visualization.util;
 
 import kieker.common.util.signature.Signature;
@@ -5,7 +21,12 @@ import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
 import kieker.tools.traceAnalysis.systemModel.Operation;
 
-public class NamingConventions {
+/**
+ * @author Christian Wulf
+ * 
+ * @since 1.9
+ */
+public final class NamingConventions {
 
 	/** The string used in the node labels for execution containers. */
 	private static final String STEREOTYPE_EXECUTION_CONTAINER = "<<execution container>>";
@@ -17,7 +38,7 @@ public class NamingConventions {
 	private static final String NODE_ID_PREFIX = "depNode_";
 	private static final String COMPONENT_NODE_ID_PREFIX = "component_";
 	private static final String GRAPH_ID_PREFIX = "graph_";
-	private static int index = 0;
+	private static int index;
 
 	private NamingConventions() {
 		// utility class

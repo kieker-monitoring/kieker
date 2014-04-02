@@ -1,3 +1,19 @@
+/***************************************************************************
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
 package kieker.tools.traceAnalysis.filter.visualization.util.graphml;
 
 import java.util.HashMap;
@@ -22,36 +38,13 @@ import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractGraphElemen
 import kieker.tools.traceAnalysis.filter.visualization.util.NamingConventions;
 import kieker.tools.traceAnalysis.systemModel.util.AllocationComponentOperationPair;
 
+/**
+ * @author Christian Wulf
+ * 
+ * @since 1.9
+ */
 public class Graph2GraphmlVisitor implements
 		IGraphVisitor<DependencyGraphNode<AllocationComponentOperationPair>, WeightedBidirectionalDependencyGraphEdge<AllocationComponentOperationPair>> {
-
-	static enum GraphmlKey {
-
-		ASSUMED("assumed", KeyForType.EDGE, KeyTypeType.BOOLEAN),
-		DESCRIPTION("description", KeyForType.ALL, KeyTypeType.STRING),
-		COLOR("color", KeyForType.ALL, KeyTypeType.INT),
-		WEIGHT("weight", KeyForType.EDGE, KeyTypeType.INT),
-		OPERATION_SIGNATURE("operation signature", KeyForType.NODE, KeyTypeType.STRING),
-		LABEL("label", KeyForType.NODE, KeyTypeType.STRING),
-		AVG_RESPONSE_TIMES("avg response times", KeyForType.NODE, KeyTypeType.DOUBLE),
-		MIN_RESPONSE_TIMES("min response times", KeyForType.NODE, KeyTypeType.DOUBLE),
-		MAX_RESPONSE_TIMES("max response times", KeyForType.NODE, KeyTypeType.DOUBLE), ;
-
-		final String keyName;
-		final KeyForType entitytype;
-		final KeyTypeType attributeType;
-
-		GraphmlKey(final String keyName, final KeyForType entitytype, final KeyTypeType attributeType) {
-			this.keyName = keyName;
-			this.entitytype = entitytype;
-			this.attributeType = attributeType;
-		}
-
-		@Override
-		public String toString() {
-			return this.keyName;
-		}
-	}
 
 	private final ObjectFactory objectFactory = new ObjectFactory();
 	private final GraphmlType graphml;
@@ -60,8 +53,8 @@ public class Graph2GraphmlVisitor implements
 	private final boolean useShortLabels;
 	private final boolean plotLoops;
 
-	private final Map<String, NodeType> components = new HashMap<String, NodeType>();
-	private final Map<String, String> graphmlNodes = new HashMap<String, String>();
+	private final Map<String, NodeType> components = new HashMap<String, NodeType>(); // NOPMD (hashmap)
+	private final Map<String, String> graphmlNodes = new HashMap<String, String>(); // NOPMD (hashmap)
 
 	public Graph2GraphmlVisitor(final boolean includeWeights, final boolean useShortLabels, final boolean plotLoops) {
 		this.includeWeights = includeWeights;
@@ -158,14 +151,14 @@ public class Graph2GraphmlVisitor implements
 	}
 
 	private GraphmlType createKiekerGraph() {
-		final GraphmlType graphml = this.objectFactory.createGraphmlType();
+		final GraphmlType graphmlType = this.objectFactory.createGraphmlType();
 
 		for (final GraphmlKey keyDefinition : GraphmlKey.values()) {
 			final KeyType graphmlKey = this.createGraphmlKey(keyDefinition.keyName, keyDefinition.entitytype, keyDefinition.keyName, keyDefinition.attributeType);
-			graphml.getKey().add(graphmlKey);
+			graphmlType.getKey().add(graphmlKey);
 		}
 
-		return graphml;
+		return graphmlType;
 	}
 
 	private KeyType createGraphmlKey(final String identifier, final KeyForType entityType, final String attributeName,
@@ -192,6 +185,34 @@ public class Graph2GraphmlVisitor implements
 		attribute.setKey(key);
 		attribute.setContent(value);
 		return attribute;
+	}
+
+	private static enum GraphmlKey {
+
+		ASSUMED("assumed", KeyForType.EDGE, KeyTypeType.BOOLEAN),
+		DESCRIPTION("description", KeyForType.ALL, KeyTypeType.STRING),
+		COLOR("color", KeyForType.ALL, KeyTypeType.INT),
+		WEIGHT("weight", KeyForType.EDGE, KeyTypeType.INT),
+		OPERATION_SIGNATURE("operation signature", KeyForType.NODE, KeyTypeType.STRING),
+		LABEL("label", KeyForType.NODE, KeyTypeType.STRING),
+		AVG_RESPONSE_TIMES("avg response times", KeyForType.NODE, KeyTypeType.DOUBLE),
+		MIN_RESPONSE_TIMES("min response times", KeyForType.NODE, KeyTypeType.DOUBLE),
+		MAX_RESPONSE_TIMES("max response times", KeyForType.NODE, KeyTypeType.DOUBLE);
+
+		private final String keyName;
+		private final KeyForType entitytype;
+		private final KeyTypeType attributeType;
+
+		private GraphmlKey(final String keyName, final KeyForType entitytype, final KeyTypeType attributeType) {
+			this.keyName = keyName;
+			this.entitytype = entitytype;
+			this.attributeType = attributeType;
+		}
+
+		@Override
+		public String toString() {
+			return this.keyName;
+		}
 	}
 
 }
