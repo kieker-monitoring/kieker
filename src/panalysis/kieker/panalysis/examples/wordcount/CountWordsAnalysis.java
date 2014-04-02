@@ -4,12 +4,12 @@ import kieker.panalysis.Distributor;
 import kieker.panalysis.Merger;
 import kieker.panalysis.MethodCallPipe;
 import kieker.panalysis.RepeaterSource;
-import kieker.panalysis.base.AbstractSource;
 import kieker.panalysis.base.Analysis;
+import kieker.panalysis.base.Pipeline;
 
 public class CountWordsAnalysis extends Analysis {
 
-	private AbstractSource<?> startStage;
+	private Pipeline pipeline;
 
 	private RepeaterSource repeaterSource;
 	private DirectoryName2Files findFilesStage;
@@ -23,13 +23,13 @@ public class CountWordsAnalysis extends Analysis {
 	public void init() {
 		super.init();
 
-		this.repeaterSource = new RepeaterSource(0, ".", 2000);
-		this.findFilesStage = new DirectoryName2Files(1);
-		this.distributor = new Distributor(4);
-		this.countWordsStage0 = new CountWordsStage(2);
-		this.countWordsStage1 = new CountWordsStage(6);
-		this.merger = new Merger(5);
-		this.outputWordsCountStage = new OutputWordsCountSink(3);
+		this.repeaterSource = new RepeaterSource(".", 2000);
+		this.findFilesStage = new DirectoryName2Files();
+		this.distributor = new Distributor();
+		this.countWordsStage0 = new CountWordsStage();
+		this.countWordsStage1 = new CountWordsStage();
+		this.merger = new Merger();
+		this.outputWordsCountStage = new OutputWordsCountSink();
 
 		MethodCallPipe.connect(this.repeaterSource, RepeaterSource.OUTPUT_PORT.OUTPUT, this.findFilesStage, DirectoryName2Files.INPUT_PORT.DIRECTORY_NAME);
 		MethodCallPipe.connect(this.findFilesStage, DirectoryName2Files.OUTPUT_PORT.FILE, this.distributor, Distributor.INPUT_PORT.OBJECT);
@@ -47,13 +47,20 @@ public class CountWordsAnalysis extends Analysis {
 		MethodCallPipe.connect(this.merger, Merger.OUTPUT_PORT.OBJECT, this.outputWordsCountStage,
 				OutputWordsCountSink.INPUT_PORT.FILE_WORDCOUNT_TUPLE);
 
-		this.startStage = this.repeaterSource;
+		this.pipeline = new Pipeline();
+		this.pipeline.addStage(this.repeaterSource);
+		this.pipeline.addStage(this.findFilesStage);
+		this.pipeline.addStage(this.distributor);
+		this.pipeline.addStage(this.countWordsStage0);
+		this.pipeline.addStage(this.countWordsStage1);
+		this.pipeline.addStage(this.merger);
+		this.pipeline.addStage(this.outputWordsCountStage);
 	}
 
 	@Override
 	public void start() {
 		super.start();
-		this.startStage.execute();
+		this.pipeline.start();
 	}
 
 	public static void main(final String[] args) {

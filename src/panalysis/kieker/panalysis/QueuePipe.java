@@ -1,5 +1,6 @@
 package kieker.panalysis;
 
+import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import kieker.panalysis.base.Pipe;
@@ -41,6 +42,16 @@ public class QueuePipe<T> extends LinkedBlockingQueue<T> implements Pipe<T> {
 		final Pipe<Object> pipe = new QueuePipe<Object>(Integer.MAX_VALUE);
 		sourceStage.setPipeForOutputPort(sourcePort, pipe);
 		targetStage.setPipeForInputPort(targetPort, pipe);
+	}
+
+	public List<T> tryTakeMultiple(final int numItemsToTake) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void putMultiple(final List<T> items) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

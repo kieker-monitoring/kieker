@@ -2,9 +2,9 @@ package kieker.panalysis.examples.wordcount;
 
 import java.io.File;
 
-import kieker.panalysis.base.Filter;
+import kieker.panalysis.base.AbstractFilter;
 
-public class DirectoryName2Files extends Filter<DirectoryName2Files.INPUT_PORT, DirectoryName2Files.OUTPUT_PORT> {
+public class DirectoryName2Files extends AbstractFilter<DirectoryName2Files.INPUT_PORT, DirectoryName2Files.OUTPUT_PORT> {
 
 	public static enum INPUT_PORT {
 		DIRECTORY_NAME
@@ -17,19 +17,14 @@ public class DirectoryName2Files extends Filter<DirectoryName2Files.INPUT_PORT, 
 	private long overallDuration;
 	private int numFiles = 0;
 
-	public DirectoryName2Files(final long id) {
-		super(id, INPUT_PORT.class, OUTPUT_PORT.class);
+	public DirectoryName2Files() {
+		super(INPUT_PORT.class, OUTPUT_PORT.class);
 	}
 
-	@Override
-	public INPUT_PORT chooseInputPort() {
-		return INPUT_PORT.DIRECTORY_NAME;
-	}
-
-	public void execute(final INPUT_PORT inputPort) {
+	public void execute() {
 		final long start = System.currentTimeMillis();
 
-		final String inputDir = (String) this.take(inputPort);
+		final String inputDir = (String) this.take(INPUT_PORT.DIRECTORY_NAME);
 
 		final File[] availableFiles = new File(inputDir).listFiles();
 		for (final File file : availableFiles) {

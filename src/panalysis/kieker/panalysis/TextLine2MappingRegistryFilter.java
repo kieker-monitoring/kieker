@@ -13,18 +13,13 @@ public class TextLine2MappingRegistryFilter extends AbstractSink<TextLine2Mappin
 
 	private final Map<Integer, String> stringRegistry;
 
-	public TextLine2MappingRegistryFilter(final long id, final Map<Integer, String> stringRegistry) {
-		super(id, INPUT_PORT.class);
+	public TextLine2MappingRegistryFilter(final Map<Integer, String> stringRegistry) {
+		super(INPUT_PORT.class);
 		this.stringRegistry = stringRegistry;
 	}
 
-	@Override
-	public INPUT_PORT chooseInputPort() {
-		return INPUT_PORT.TEXT_LINE;
-	}
-
-	public void execute(final INPUT_PORT inputPort) {
-		final String textLine = (String) this.take(inputPort);
+	public void execute() {
+		final String textLine = (String) this.take(INPUT_PORT.TEXT_LINE);
 
 		final int split = textLine.indexOf('=');
 		if (split == -1) {
@@ -32,6 +27,7 @@ public class TextLine2MappingRegistryFilter extends AbstractSink<TextLine2Mappin
 			return;
 		}
 		final String key = textLine.substring(0, split);
+		// BETTER execute split instead of checking it before with multiple string operations
 		final String value = FSUtil.decodeNewline(textLine.substring(split + 1));
 		// the leading $ is optional
 		final Integer id;

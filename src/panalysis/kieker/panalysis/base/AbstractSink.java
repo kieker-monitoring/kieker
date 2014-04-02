@@ -1,33 +1,13 @@
 package kieker.panalysis.base;
 
-import java.util.EnumMap;
-import java.util.Map;
+public abstract class AbstractSink<InputPort extends Enum<InputPort>> extends AbstractFilter<InputPort, AbstractSink.OUTPUT_PORT> {
 
-public abstract class AbstractSink<InputPort extends Enum<InputPort>> extends AbstractStage<InputPort> implements Sink<InputPort> {
-
-	private final Map<InputPort, Pipe<?>> inputPortPipes;
-
-	public AbstractSink(final long id, final Class<InputPort> inputEnumType) {
-		super(id);
-		this.inputPortPipes = new EnumMap<InputPort, Pipe<?>>(inputEnumType);
+	static enum OUTPUT_PORT {
+		DUMMY // sink stages have not any output ports
 	}
 
-	public void setPipeForInputPort(final InputPort inputPort, final Pipe<Object> pipe) {
-		this.inputPortPipes.put(inputPort, pipe);
+	public AbstractSink(final Class<InputPort> inputEnumType) {
+		super(inputEnumType, OUTPUT_PORT.class);
 	}
 
-	protected Object take(final InputPort inputPort) {
-		final Pipe<?> pipe = this.inputPortPipes.get(inputPort);
-		return pipe.take();
-	}
-
-	protected Object tryTake(final InputPort inputPort) {
-		final Pipe<?> pipe = this.inputPortPipes.get(inputPort);
-		return pipe.tryTake();
-	}
-
-	protected boolean isEmpty(final InputPort inputPort) {
-		final Pipe<?> pipe = this.inputPortPipes.get(inputPort);
-		return pipe.isEmpty();
-	}
 }

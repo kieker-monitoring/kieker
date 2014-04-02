@@ -8,9 +8,9 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
-import kieker.panalysis.base.Filter;
+import kieker.panalysis.base.AbstractFilter;
 
-public class CountWordsStage extends Filter<CountWordsStage.INPUT_PORT, CountWordsStage.OUTPUT_PORT> {
+public class CountWordsStage extends AbstractFilter<CountWordsStage.INPUT_PORT, CountWordsStage.OUTPUT_PORT> {
 
 	public static enum OUTPUT_PORT {
 		EXCEPTION, WORDSCOUNT
@@ -23,21 +23,16 @@ public class CountWordsStage extends Filter<CountWordsStage.INPUT_PORT, CountWor
 	private long overallDuration = 0;
 	private final Pattern pattern;
 
-	public CountWordsStage(final long id) {
-		super(id, INPUT_PORT.class, OUTPUT_PORT.class);
+	public CountWordsStage() {
+		super(INPUT_PORT.class, OUTPUT_PORT.class);
 		this.pattern = Pattern.compile("[^\\p{Graph}]");
 	}
 
-	@Override
-	public INPUT_PORT chooseInputPort() {
-		return INPUT_PORT.FILE;
-	}
-
 	@SuppressWarnings("unchecked")
-	public void execute(final INPUT_PORT inputPort) {
+	public void execute() {
 		final long start = System.currentTimeMillis();
 
-		final File file = (File) this.take(inputPort);
+		final File file = (File) this.take(INPUT_PORT.FILE);
 
 		int wordsCount = 0;
 		try {

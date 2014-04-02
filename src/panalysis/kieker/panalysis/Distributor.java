@@ -1,8 +1,8 @@
 package kieker.panalysis;
 
-import kieker.panalysis.base.Filter;
+import kieker.panalysis.base.AbstractFilter;
 
-public class Distributor extends Filter<Distributor.INPUT_PORT, Distributor.OUTPUT_PORT> {
+public class Distributor extends AbstractFilter<Distributor.INPUT_PORT, Distributor.OUTPUT_PORT> {
 
 	static public enum INPUT_PORT {
 		OBJECT
@@ -15,18 +15,13 @@ public class Distributor extends Filter<Distributor.INPUT_PORT, Distributor.OUTP
 	private final OUTPUT_PORT[] outputPorts;
 	private int index = 0;
 
-	public Distributor(final long id) {
-		super(id, INPUT_PORT.class, OUTPUT_PORT.class);
+	public Distributor() {
+		super(INPUT_PORT.class, OUTPUT_PORT.class);
 		this.outputPorts = OUTPUT_PORT.values();
 	}
 
-	@Override
-	public INPUT_PORT chooseInputPort() {
-		return INPUT_PORT.OBJECT;
-	}
-
-	public void execute(final INPUT_PORT inputPort) {
-		final Object object = this.take(inputPort);
+	public void execute() {
+		final Object object = this.take(INPUT_PORT.OBJECT);
 		final OUTPUT_PORT port = this.getNextPortInRoundRobinOrder();
 		this.put(port, object);
 	}

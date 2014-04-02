@@ -1,5 +1,7 @@
 package kieker.panalysis.base;
 
+import java.util.List;
+
 public interface Pipe<T> {
 
 	void put(T record);
@@ -18,5 +20,9 @@ public interface Pipe<T> {
 	 *         <i>This method is used to find the next non-empty port of a stage with multiple ports.<i>
 	 */
 	boolean isEmpty();
+
+	List<T> tryTakeMultiple(int numItemsToTake);
+
+	void putMultiple(List<T> items);
 
 }

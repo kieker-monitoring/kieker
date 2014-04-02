@@ -14,19 +14,14 @@ public class OutputWordsCountSink extends AbstractSink<OutputWordsCountSink.INPU
 	private long overallDuration;
 	private int numFiles = 0;
 
-	public OutputWordsCountSink(final long id) {
-		super(id, INPUT_PORT.class);
+	public OutputWordsCountSink() {
+		super(INPUT_PORT.class);
 	}
 
-	@Override
-	public INPUT_PORT chooseInputPort() {
-		return INPUT_PORT.FILE_WORDCOUNT_TUPLE;
-	}
-
-	public void execute(final INPUT_PORT inputPort) {
+	public void execute() {
 		final long start = System.currentTimeMillis();
 
-		final List<?> tuple = (List<?>) this.take(inputPort);
+		final List<?> tuple = (List<?>) this.take(INPUT_PORT.FILE_WORDCOUNT_TUPLE);
 		final File file = (File) tuple.get(0);
 		final Number wordsCount = (Number) tuple.get(1);
 		System.out.println(wordsCount + " words in file '" + file.getAbsolutePath() + "'");

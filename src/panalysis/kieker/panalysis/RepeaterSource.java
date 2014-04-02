@@ -1,6 +1,7 @@
 package kieker.panalysis;
 
 import kieker.panalysis.base.AbstractSource;
+import kieker.panalysis.base.TaskBundle;
 
 public class RepeaterSource extends AbstractSource<RepeaterSource.OUTPUT_PORT> {
 
@@ -12,13 +13,13 @@ public class RepeaterSource extends AbstractSource<RepeaterSource.OUTPUT_PORT> {
 		OUTPUT
 	}
 
-	public RepeaterSource(final long id, final Object outputRecord, final int num) {
-		super(id, OUTPUT_PORT.class);
+	public RepeaterSource(final Object outputRecord, final int num) {
+		super(OUTPUT_PORT.class);
 		this.outputRecord = outputRecord;
 		this.num = num;
 	}
 
-	public void execute(final kieker.panalysis.base.AbstractSource.INPUT_PORT inputPort) {
+	public void execute() {
 		final long start = System.currentTimeMillis();
 
 		int counter = this.num;
@@ -33,6 +34,11 @@ public class RepeaterSource extends AbstractSource<RepeaterSource.OUTPUT_PORT> {
 
 	public long getOverallDuration() {
 		return this.overallDuration;
+	}
+
+	public void execute(final TaskBundle taskBundle) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

@@ -10,9 +10,9 @@ import kieker.common.exception.UnknownRecordTypeException;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.panalysis.base.Filter;
+import kieker.panalysis.base.AbstractFilter;
 
-public class TextLine2RecordFilter extends Filter<TextLine2RecordFilter.INPUT_PORT, TextLine2RecordFilter.OUTPUT_PORT> {
+public class TextLine2RecordFilter extends AbstractFilter<TextLine2RecordFilter.INPUT_PORT, TextLine2RecordFilter.OUTPUT_PORT> {
 
 	static public enum INPUT_PORT {
 		TEXT_LINE
@@ -32,18 +32,13 @@ public class TextLine2RecordFilter extends Filter<TextLine2RecordFilter.INPUT_PO
 	private boolean abortDueToUnknownRecordType;
 	private final Set<String> unknownTypesObserved = new HashSet<String>();
 
-	public TextLine2RecordFilter(final long id, final Map<Integer, String> stringRegistry) {
-		super(id, INPUT_PORT.class, OUTPUT_PORT.class);
+	public TextLine2RecordFilter(final Map<Integer, String> stringRegistry) {
+		super(INPUT_PORT.class, OUTPUT_PORT.class);
 		this.stringRegistry = stringRegistry;
 	}
 
-	@Override
-	public INPUT_PORT chooseInputPort() {
-		return INPUT_PORT.TEXT_LINE;
-	}
-
-	public void execute(final INPUT_PORT inputPort) {
-		final String textLine = (String) this.take(inputPort);
+	public void execute() {
+		final String textLine = (String) this.take(INPUT_PORT.TEXT_LINE);
 
 		try {
 			final IMonitoringRecord record = this.createRecordFromLine(textLine);

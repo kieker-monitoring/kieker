@@ -1,8 +1,8 @@
 package kieker.panalysis;
 
-import kieker.panalysis.base.Filter;
+import kieker.panalysis.base.AbstractFilter;
 
-public class Merger extends Filter<Merger.INPUT_PORT, Merger.OUTPUT_PORT> {
+public class Merger extends AbstractFilter<Merger.INPUT_PORT, Merger.OUTPUT_PORT> {
 
 	static public enum INPUT_PORT {
 		INPUT0, INPUT1
@@ -15,17 +15,13 @@ public class Merger extends Filter<Merger.INPUT_PORT, Merger.OUTPUT_PORT> {
 	private final INPUT_PORT[] inputPorts;
 	private int index = 0;
 
-	public Merger(final long id) {
-		super(id, INPUT_PORT.class, OUTPUT_PORT.class);
+	public Merger() {
+		super(INPUT_PORT.class, OUTPUT_PORT.class);
 		this.inputPorts = INPUT_PORT.values();
 	}
 
-	@Override
-	public INPUT_PORT chooseInputPort() {
-		return this.getNextPortInRoundRobinOrder();
-	}
-
-	public void execute(final INPUT_PORT inputPort) {
+	public void execute() {
+		final INPUT_PORT inputPort = this.getNextPortInRoundRobinOrder();
 		final Object object = this.take(inputPort);
 		this.put(OUTPUT_PORT.OBJECT, object);
 	}

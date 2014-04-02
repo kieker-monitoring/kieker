@@ -5,21 +5,22 @@ import kieker.common.logging.LogFactory;
 
 public abstract class AbstractStage<InputPort extends Enum<InputPort>> implements Stage<InputPort> {
 
-	protected long id;
+	protected int id;
 	/**
 	 * A unique logger instance per stage instance
 	 */
 	protected Log logger;
 
-	public AbstractStage(final long id) {
+	public AbstractStage() {
+		this.logger = LogFactory.getLog(Long.toString(this.id));
+	}
+
+	public int getId() {
+		return this.id;
+	}
+
+	public void setId(final int id) {
 		this.id = id;
-		this.logger = LogFactory.getLog(Long.toString(id));
 	}
 
-	abstract public InputPort chooseInputPort();
-
-	final public void execute() {
-		final InputPort inputPort = this.chooseInputPort();
-		this.execute(inputPort);
-	}
 }

@@ -15,12 +15,12 @@ public class Directory2FilesFilter extends AbstractSource<Directory2FilesFilter.
 
 	private final File inputDir;
 
-	public Directory2FilesFilter(final long id, final File inputDir) {
-		super(id, OUTPUT_PORT.class);
+	public Directory2FilesFilter(final File inputDir) {
+		super(OUTPUT_PORT.class);
 		this.inputDir = inputDir;
 	}
 
-	public void execute(final kieker.panalysis.base.AbstractSource.INPUT_PORT inputPort) {
+	public void execute() {
 		final File inputDir = this.inputDir;
 
 		final File[] inputFiles = inputDir.listFiles(new FileFilter() {
