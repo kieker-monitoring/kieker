@@ -52,7 +52,7 @@
 	<target name="-compile-kieker.panalysis" depends="-init,-compile-kieker.common,-compile-kieker.analysis.model" description="Compiles the sources of the Kieker.PAnalysis component">
 		<delete dir="${build.kieker.panalysis.dir}" />
 		<mkdir dir="${build.kieker.panalysis.dir}" />
-		<javac destDir="${build.kieker.panalysis.dir}" source="1.5" target="1.5" srcdir="${src.kieker.panalysis.dir}" debug="true" classpathref="kieker.panalysis-compile-classpath" includeAntRuntime="false">
+		<javac destDir="${build.kieker.panalysis.dir}" source="1.6" target="1.6" srcdir="${src.kieker.panalysis.dir}" debug="true" classpathref="kieker.panalysis-compile-classpath" includeAntRuntime="false">
 			<compilerarg value="-Xlint:all" />
 		</javac>
 	</target>
