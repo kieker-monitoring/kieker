@@ -1,49 +1,67 @@
 package kieker.panalysis.concurrent;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import kieker.panalysis.base.Pipe;
 
 public class StealableConcurrentPipe<T> implements Pipe<T> {
 
-	// private void steal(final Stage<?> stage, final Enum<?> inputPort) {
-	// for (final WorkerThread otherThread : this.otherThreads) {
-	// final List<TaskBundle> taskBundles = otherThread.onBeingStolen(stage, inputPort);
-	// if (taskBundles != null) {
-	// this.localStages.get(stage).get(inputPort).putMultiple(taskBundles);
-	// break;
-	// }
-	// }
-	// }
+	private final List<StealableConcurrentPipe<T>> otherPipes;
+	/** FIXME must be thread-safe */
+	private final Queue<T> items = new LinkedList<T>();
 
-	public void put(final T record) {
-		// TODO Auto-generated method stub
+	private int numItemsToSteal;
 
+	public StealableConcurrentPipe(final List<StealableConcurrentPipe<T>> otherPipes) {
+		this.otherPipes = otherPipes;
 	}
 
 	public T take() {
-		// TODO Auto-generated method stub
-		return null;
+		final T item = this.tryTake();
+		if (item == null) {
+			this.steal();
+		}
+		return this.tryTake();
+	}
+
+	public void put(final T record) {
+		this.items.add(record);
 	}
 
 	public T tryTake() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.items.poll();
 	}
 
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return false;
+		return this.items.isEmpty();
 	}
 
-	public List<T> tryTakeMultiple(final int numItemsToTake) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<T> tryTakeMultiple(int numItemsToTake) {
+		final List<T> tookItems = new LinkedList<T>();
+		while (numItemsToTake-- > 0) {
+			final T item = this.tryTake();
+			if (item == null) {
+				break;
+			}
+			tookItems.add(item);
+		}
+		return tookItems;
 	}
 
-	public void putMultiple(final List<T> items) {
-		// TODO Auto-generated method stub
+	public void putMultiple(final List<T> newItems) {
+		this.items.addAll(newItems);
+	}
 
+	private void steal() {
+		for (final StealableConcurrentPipe<T> otherPipe : this.otherPipes) {
+			final List<T> stolenItems = otherPipe.tryTakeMultiple(this.numItemsToSteal);
+			if (stolenItems != null) {
+				this.items.addAll(stolenItems);
+				return;
+			}
+		}
 	}
 
 }

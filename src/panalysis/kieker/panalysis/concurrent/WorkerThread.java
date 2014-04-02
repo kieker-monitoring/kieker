@@ -17,6 +17,7 @@ public class WorkerThread extends Thread {
 	private final Map<Stage<?>, Map<Enum<?>, Pipe<TaskBundle>>> localStages = new HashMap<Stage<?>, Map<Enum<?>, Pipe<TaskBundle>>>();
 
 	private final int numTaskBundlesToSteal = 10;
+	/** represents a thread-local pipeline copy */
 	private final PrioritizedStageCollection stages;
 
 	public WorkerThread(final PriorityQueue<WorkerThread> otherThreads, final PrioritizedStageCollection stages) {
