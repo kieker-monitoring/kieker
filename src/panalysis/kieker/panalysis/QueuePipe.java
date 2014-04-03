@@ -19,16 +19,16 @@ package kieker.panalysis;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import kieker.panalysis.base.Pipe;
-import kieker.panalysis.base.Sink;
-import kieker.panalysis.base.Source;
+import kieker.panalysis.base.IPipe;
+import kieker.panalysis.base.ISink;
+import kieker.panalysis.base.ISource;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  */
-public class QueuePipe<T> extends LinkedBlockingQueue<T> implements Pipe<T> {
+public class QueuePipe<T> extends LinkedBlockingQueue<T> implements IPipe<T> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -58,9 +58,9 @@ public class QueuePipe<T> extends LinkedBlockingQueue<T> implements Pipe<T> {
 		return super.poll();
 	}
 
-	static public <OutputPort extends Enum<OutputPort>, InputPort extends Enum<InputPort>> void connect(final Source<OutputPort> sourceStage,
-			final OutputPort sourcePort, final Sink<InputPort> targetStage, final InputPort targetPort) {
-		final Pipe<Object> pipe = new QueuePipe<Object>(Integer.MAX_VALUE);
+	public static <OutputPort extends Enum<OutputPort>, InputPort extends Enum<InputPort>> void connect(final ISource<OutputPort> sourceStage,
+			final OutputPort sourcePort, final ISink<InputPort> targetStage, final InputPort targetPort) {
+		final IPipe<Object> pipe = new QueuePipe<Object>(Integer.MAX_VALUE);
 		sourceStage.setPipeForOutputPort(sourcePort, pipe);
 		targetStage.setPipeForInputPort(targetPort, pipe);
 	}

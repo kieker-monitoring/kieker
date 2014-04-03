@@ -30,19 +30,19 @@ import kieker.panalysis.base.AbstractSource;
  */
 public class Directory2FilesFilter extends AbstractSource<Directory2FilesFilter.OUTPUT_PORT> {
 
-	static public enum OUTPUT_PORT {
+	public static enum OUTPUT_PORT {
 		FILE
 	}
 
-	private final File inputDir;
+	private final File inputDirectory;
 
 	public Directory2FilesFilter(final File inputDir) {
 		super(OUTPUT_PORT.class);
-		this.inputDir = inputDir;
+		this.inputDirectory = inputDir;
 	}
 
 	public void execute() {
-		final File inputDir = this.inputDir;
+		final File inputDir = this.inputDirectory;
 
 		final File[] inputFiles = inputDir.listFiles(new FileFilter() {
 			public boolean accept(final File pathname) {

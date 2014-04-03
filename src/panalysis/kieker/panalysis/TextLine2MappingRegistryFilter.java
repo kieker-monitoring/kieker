@@ -28,7 +28,7 @@ import kieker.panalysis.base.AbstractSink;
  */
 public class TextLine2MappingRegistryFilter extends AbstractSink<TextLine2MappingRegistryFilter.INPUT_PORT> {
 
-	static public enum INPUT_PORT {
+	public static enum INPUT_PORT {
 		TEXT_LINE
 	}
 

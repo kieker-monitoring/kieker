@@ -32,11 +32,11 @@ import kieker.panalysis.base.AbstractFilter;
  */
 public class File2TextLinesFilter extends AbstractFilter<File2TextLinesFilter.INPUT_PORT, File2TextLinesFilter.OUTPUT_PORT> {
 
-	static public enum INPUT_PORT {
+	public static enum INPUT_PORT {
 		FILE
 	}
 
-	static public enum OUTPUT_PORT {
+	public static enum OUTPUT_PORT {
 		TEXT_LINE
 	}
 

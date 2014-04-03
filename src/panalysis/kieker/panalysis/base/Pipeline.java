@@ -27,10 +27,10 @@ import java.util.List;
  */
 public class Pipeline {
 
-	private final List<Stage<?>> stages = new LinkedList<Stage<?>>();
+	private final List<IStage<?>> stages = new LinkedList<IStage<?>>();
 	private int freeId = 0;
 
-	public void addStage(final Stage<?> stage) {
+	public void addStage(final IStage<?> stage) {
 		stage.setId(this.freeId++);
 		this.stages.add(stage);
 	}
@@ -39,7 +39,7 @@ public class Pipeline {
 		this.stages.get(0).execute();
 	}
 
-	public Collection<Stage<?>> getStages() {
+	public Collection<IStage<?>> getStages() {
 		return this.stages;
 	}
 }

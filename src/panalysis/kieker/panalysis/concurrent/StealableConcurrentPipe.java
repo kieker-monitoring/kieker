@@ -20,14 +20,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import kieker.panalysis.base.Pipe;
+import kieker.panalysis.base.IPipe;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  */
-public class StealableConcurrentPipe<T> implements Pipe<T> {
+public class StealableConcurrentPipe<T> implements IPipe<T> {
 
 	private final List<StealableConcurrentPipe<T>> otherPipes;
 	/** FIXME must be thread-safe */
@@ -59,9 +59,9 @@ public class StealableConcurrentPipe<T> implements Pipe<T> {
 		return this.items.isEmpty();
 	}
 
-	public List<T> tryTakeMultiple(int numItemsToTake) {
+	public List<T> tryTakeMultiple(final int numItemsToTake) {
 		final List<T> tookItems = new LinkedList<T>();
-		while (numItemsToTake-- > 0) {
+		for (int i = 0; i < numItemsToTake; i++) {
 			final T item = this.tryTake();
 			if (item == null) {
 				break;

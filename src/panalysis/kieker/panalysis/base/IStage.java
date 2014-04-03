@@ -21,12 +21,21 @@ package kieker.panalysis.base;
  * 
  * @since 1.10
  */
-public interface Stage<InputPort extends Enum<InputPort>> {
+public interface IStage<InputPort extends Enum<InputPort>> {
 
+	/**
+	 * @since 1.10
+	 */
 	void setId(int id);
 
+	/**
+	 * @since 1.10
+	 */
 	int getId();
 
+	/**
+	 * @since 1.10
+	 */
 	void execute();
 
 	/*

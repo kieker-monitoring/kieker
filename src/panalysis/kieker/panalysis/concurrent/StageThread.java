@@ -18,7 +18,7 @@ package kieker.panalysis.concurrent;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-import kieker.panalysis.base.Stage;
+import kieker.panalysis.base.IStage;
 
 /**
  * @author Christian Wulf
@@ -27,10 +27,10 @@ import kieker.panalysis.base.Stage;
  */
 public class StageThread extends Thread {
 
-	private final Stage<?> stage;
+	private final IStage<?> stage;
 	private final AtomicLong duration = new AtomicLong();
 
-	public StageThread(final Stage<?> stage) {
+	public StageThread(final IStage<?> stage) {
 		this.stage = stage;
 	}
 

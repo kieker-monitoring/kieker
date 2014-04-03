@@ -1,5 +1,4 @@
-/***********************************import java.util.List;
- ****************
+/***************************************************************************
  * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,34 +16,15 @@
 
 package kieker.panalysis.base;
 
-import java.util.List;
-
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  */
-public interface Pipe<T> {
-
-	void put(T record);
-
-	T take();
+public interface ISource<OutputPort extends Enum<OutputPort>> {
 
 	/**
-	 * 
-	 * @return and removes the next record if the pipe is not empty, otherwise <code>null</code>
+	 * @since 1.10
 	 */
-	T tryTake();
-
-	/**
-	 * 
-	 * @return <code>true</code> if the pipe contains no element, otherwise <code>false</code>.<br>
-	 *         <i>This method is used to find the next non-empty port of a stage with multiple ports.<i>
-	 */
-	boolean isEmpty();
-
-	List<T> tryTakeMultiple(int numItemsToTake);
-
-	void putMultiple(List<T> items);
-
+	void setPipeForOutputPort(final OutputPort outputPort, final IPipe<Object> pipe);
 }

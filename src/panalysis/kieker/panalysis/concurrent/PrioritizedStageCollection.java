@@ -16,7 +16,7 @@
 
 package kieker.panalysis.concurrent;
 
-import kieker.panalysis.base.Stage;
+import kieker.panalysis.base.IStage;
 
 /**
  * @author Christian Wulf
@@ -25,11 +25,11 @@ import kieker.panalysis.base.Stage;
  */
 public class PrioritizedStageCollection {
 
-	public void add(final Stage<?> stage) {
+	public void add(final IStage<?> stage) {
 
 	}
 
-	public Stage<?> get() {
+	public IStage<?> get() {
 		return null;
 	}
 

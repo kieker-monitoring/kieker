@@ -20,7 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import kieker.panalysis.base.Analysis;
-import kieker.panalysis.base.Stage;
+import kieker.panalysis.base.IStage;
 
 /**
  * @author Christian Wulf
@@ -29,14 +29,14 @@ import kieker.panalysis.base.Stage;
  */
 public class ConcurrentAnalysis extends Analysis {
 
-	private final List<Stage> stages = new LinkedList<Stage>();
+	private final List<IStage> stages = new LinkedList<IStage>();
 	private final List<StageThread> threads = new LinkedList<StageThread>();
 
 	@Override
 	public void init() {
 		// TODO add each stage to stages
 
-		for (final Stage s : this.stages) {
+		for (final IStage s : this.stages) {
 			final StageThread stageThread = new StageThread(s);
 			this.threads.add(stageThread);
 		}

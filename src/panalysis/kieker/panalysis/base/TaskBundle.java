@@ -25,15 +25,15 @@ import java.util.List;
  */
 public class TaskBundle {
 
-	final protected Stage<?> stage;
-	final protected List<Object> tasks;
+	protected final IStage<?> stage;
+	protected final List<Object> tasks;
 
-	public TaskBundle(final Stage<?> stage, final List<Object> tasks) {
+	public TaskBundle(final IStage<?> stage, final List<Object> tasks) {
 		this.stage = stage;
 		this.tasks = tasks;
 	}
 
-	public Stage<?> getStage() {
+	public IStage<?> getStage() {
 		return this.stage;
 	}
 

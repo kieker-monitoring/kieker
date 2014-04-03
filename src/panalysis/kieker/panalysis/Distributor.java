@@ -25,11 +25,11 @@ import kieker.panalysis.base.AbstractFilter;
  */
 public class Distributor extends AbstractFilter<Distributor.INPUT_PORT, Distributor.OUTPUT_PORT> {
 
-	static public enum INPUT_PORT {
+	public static enum INPUT_PORT {
 		OBJECT
 	}
 
-	static public enum OUTPUT_PORT {
+	public static enum OUTPUT_PORT {
 		OUTPUT0, OUTPUT1
 	}
 

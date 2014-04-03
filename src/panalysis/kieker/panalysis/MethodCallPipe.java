@@ -18,22 +18,22 @@ package kieker.panalysis;
 
 import java.util.List;
 
-import kieker.panalysis.base.Pipe;
-import kieker.panalysis.base.Sink;
-import kieker.panalysis.base.Source;
-import kieker.panalysis.base.Stage;
+import kieker.panalysis.base.IPipe;
+import kieker.panalysis.base.ISink;
+import kieker.panalysis.base.ISource;
+import kieker.panalysis.base.IStage;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  */
-public class MethodCallPipe<T> implements Pipe<T> {
+public class MethodCallPipe<T> implements IPipe<T> {
 
-	private final Stage<?> targetStage;
+	private final IStage<?> targetStage;
 	private T record;
 
-	public MethodCallPipe(final Stage<?> targetStage) {
+	public MethodCallPipe(final IStage<?> targetStage) {
 		this.targetStage = targetStage;
 	}
 
@@ -56,9 +56,9 @@ public class MethodCallPipe<T> implements Pipe<T> {
 		return this.record == null;
 	}
 
-	static public <OutputPort extends Enum<OutputPort>, InputPort extends Enum<InputPort>> void connect(final Source<OutputPort> sourceStage,
-			final OutputPort sourcePort, final Sink<InputPort> targetStage, final InputPort targetPort) {
-		final Pipe<Object> pipe = new MethodCallPipe<Object>(targetStage);
+	public static <OutputPort extends Enum<OutputPort>, InputPort extends Enum<InputPort>> void connect(final ISource<OutputPort> sourceStage,
+			final OutputPort sourcePort, final ISink<InputPort> targetStage, final InputPort targetPort) {
+		final IPipe<Object> pipe = new MethodCallPipe<Object>(targetStage);
 		sourceStage.setPipeForOutputPort(sourcePort, pipe);
 		targetStage.setPipeForInputPort(targetPort, pipe);
 	}
