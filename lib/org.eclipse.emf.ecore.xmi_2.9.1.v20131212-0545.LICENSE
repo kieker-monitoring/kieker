@@ -2,6 +2,7 @@ Eclipse Public License - EPL - v1.0
 Project: http://www.eclipse.org/modeling/emf/
 Description: The Eclipse EMF framework. (XMI serialization)
 License: http://www.eclipse.org/legal/epl-v10.html
+Required by: Kieker's analysis part (compile- and run-time); embedded in Kieker's Jar
 
 Eclipse Public License - v 1.0
 

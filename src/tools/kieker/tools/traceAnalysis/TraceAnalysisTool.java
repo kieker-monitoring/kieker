@@ -1040,6 +1040,10 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 	 *            The command line arguments.
 	 */
 	public static void main(final String[] args) {
+		TraceAnalysisTool.mainHelper(args, true);
+	}
+
+	public static void mainHelper(final String[] args, final boolean useSystemExit) {
 		boolean success = true;
 
 		try {
@@ -1070,7 +1074,7 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 			System.err.println("See 'kieker.log' for details"); // NOPMD (System.out)
 		}
 
-		if (!success) {
+		if (!success && useSystemExit) {
 			System.exit(1);
 		} // else: terminate with success code (0)
 	}

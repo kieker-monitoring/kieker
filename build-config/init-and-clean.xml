@@ -126,6 +126,14 @@
 				<include name="reflections-*.jar"/>
 				<include name="geronimo-j2ee-management_1.1_spec-*.jar"/>
 				<!-- Bridge end -->
+				<!-- OPAD begin -->
+				 <!--<include name="mongo-*.jar"/>-->
+				<include name="commons-math-*.jar"/>
+				<include name="commons-lang-*.jar"/>
+				 <!--<include name="REngine.jar"/>-->
+				 <!--<include name="Rserve.jar"/>-->
+ 	 		 	 <!--<include name="Rsession.jar"/>-->
+				<!-- OPAD end -->
 			</fileset>
 			<pathelement location="${build.kieker.common.dir}/" />
 			<pathelement location="${build.kieker.monitoring.dir}/" />

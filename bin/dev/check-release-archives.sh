@@ -180,6 +180,16 @@ function assert_files_exist_common {
 		assert_file_exists_regular "${JAR_BASE}.LICENSE"
 	done
 	
+	# Make sure that required-by info included in each LICENSE file in lib/ (excluding subdirs)
+	for l in lib/*.LICENSE; do 
+	    echo -n "Asserting '$l' contains 'Required by:' information .. "
+	    if ! grep -q "Required by:" $l; then 
+		echo "Required by: missing in $l"; 
+		exit 1
+	    fi; 
+	    echo "OK"
+	done
+
 	# make sure that specified AspectJ version matches the present files
 	assert_file_exists_regular "lib/aspectjrt-${aspectjversion}.jar"
 	assert_file_exists_regular "lib/aspectjweaver-${aspectjversion}.jar"

@@ -2,6 +2,7 @@ Eclipse Public License - EPL - v1.0
 Project: http://eclipse.org/aspectj/
 Description: This jar-file contains the runtime library for AspectJ programs.
 License: http://www.eclipse.org/legal/epl-v10.html
+Required by: AspectJ probes
 
 Eclipse Public License - v 1.0
 

@@ -2,6 +2,7 @@ BSD style License - BSD - 3-clause
 Project: http://www.jgraph.com/jgraph.html
 Description: JGraphX provides a wide ranged graph support to Swing components.
 License: http://www.jgraph.com/bsd.html	
+Required by: KAX Viewer
 
 Copyright (c) 2001-2009, JGraph Ltd
 All rights reserved.

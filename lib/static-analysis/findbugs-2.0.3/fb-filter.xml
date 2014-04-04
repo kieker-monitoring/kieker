@@ -2,7 +2,27 @@
 	<!-- Example: http://findbugs.sourceforge.net/manual/filter.html#d0e2103 -->
 
 	<Match>
+		<Class name="kieker.tools.traceAnalysis.TraceAnalysisGUI" />
+		<Bug pattern="SE_BAD_FIELD" />
+	</Match>
+	
+	<Match>
+		<Class name="kieker.tools.traceAnalysis.gui.FinalStep" />
+		<Bug pattern="SE_BAD_FIELD" />
+	</Match>
+	
+	<Match>
+		<Class name="kieker.tools.traceAnalysis.gui.FinalStep" />
+		<Bug pattern="DM_DEFAULT_ENCODING" />
+	</Match>
+	
+	<Match>
 		<Package name="~kieker\.common\.record.*" />
+		<Bug pattern="EI_EXPOSE_REP" />
+	</Match>
+	
+	<Match>
+		<Package name="~kieker\.tools\.opad\.record.*" />
 		<Bug pattern="EI_EXPOSE_REP" />
 	</Match>
 	
@@ -352,5 +372,9 @@
 		<Field name="TYPES" />
 		<Bug pattern="MS_PKGPROTECT, MS_MUTABLE_ARRAY" />
 	</Match>
-	
+	<Match>
+		<Class name="~kieker.tools.opad.record.*" />
+		<Field name="TYPES" />
+		<Bug pattern="MS_PKGPROTECT, MS_MUTABLE_ARRAY" />
+	</Match>
 </FindBugsFilter>
