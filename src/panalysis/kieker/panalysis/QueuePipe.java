@@ -27,6 +27,8 @@ import kieker.panalysis.base.ISource;
  * @author Christian Wulf
  * 
  * @since 1.10
+ * 
+ * @param T
  */
 public class QueuePipe<T> extends LinkedBlockingQueue<T> implements IPipe<T> {
 

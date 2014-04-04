@@ -23,6 +23,8 @@ import kieker.common.logging.LogFactory;
  * @author Christian Wulf
  * 
  * @since 1.10
+ * 
+ * @param I
  */
 public abstract class AbstractStage<I extends Enum<I>> implements IStage<I> {
 

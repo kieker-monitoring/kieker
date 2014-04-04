@@ -26,6 +26,8 @@ import kieker.panalysis.base.IPipe;
  * @author Christian Wulf
  * 
  * @since 1.10
+ * 
+ * @param T
  */
 public class StealableConcurrentPipe<T> implements IPipe<T> {
 

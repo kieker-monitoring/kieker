@@ -24,6 +24,8 @@ import java.util.Map;
  * @author Christian Wulf
  * 
  * @since 1.10
+ * 
+ * @param I
  */
 public abstract class AbstractFilter<I extends Enum<I>, O extends Enum<O>> extends AbstractStage<I> implements ISink<I>, ISource<O> {
 

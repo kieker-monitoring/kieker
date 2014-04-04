@@ -20,6 +20,8 @@ package kieker.panalysis.base;
  * @author Christian Wulf
  * 
  * @since 1.10
+ * 
+ * @param I
  */
 public abstract class AbstractSink<I extends Enum<I>> extends AbstractFilter<I, AbstractSink.OUTPUT_PORT> {
 

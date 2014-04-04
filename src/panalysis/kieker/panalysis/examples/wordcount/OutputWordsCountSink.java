@@ -45,7 +45,7 @@ public class OutputWordsCountSink extends AbstractSink<OutputWordsCountSink.INPU
 		final List<?> tuple = (List<?>) this.take(INPUT_PORT.FILE_WORDCOUNT_TUPLE);
 		final File file = (File) tuple.get(0);
 		final Number wordsCount = (Number) tuple.get(1);
-		System.out.println(wordsCount + " words in file '" + file.getAbsolutePath() + "'");
+		System.out.println(wordsCount + " words in file '" + file.getAbsolutePath() + "'"); // NOPMD (Just for example purposes)
 		this.numFiles++;
 
 		final long end = System.currentTimeMillis();

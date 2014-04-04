@@ -96,7 +96,7 @@ public class CountWordsAnalysis extends Analysis {
 		final long end = System.currentTimeMillis();
 		// analysis.terminate();
 		final long duration = end - start;
-		System.out.println("duration: " + duration + " ms");
+		System.out.println("duration: " + duration + " ms");// NOPMD (Just for example purposes)
 
 		System.out.println("repeaterSource: " + (analysis.repeaterSource.getOverallDuration() - // NOPMD (Just for example purposes)
 				analysis.findFilesStage.getOverallDuration()) + " ms");

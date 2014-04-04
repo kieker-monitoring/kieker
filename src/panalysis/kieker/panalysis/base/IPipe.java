@@ -22,6 +22,8 @@ import java.util.List;
  * @author Christian Wulf
  * 
  * @since 1.10
+ * 
+ * @param T
  */
 public interface IPipe<T> {
 

@@ -18,9 +18,10 @@ package kieker.panalysis.examples.wordcount;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
@@ -57,7 +58,7 @@ public class CountWordsStage extends AbstractFilter<CountWordsStage.INPUT_PORT, 
 
 		int wordsCount = 0;
 		try {
-			final BufferedReader reader = new BufferedReader(new FileReader(file));
+			final BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
 			try {
 				String line;
 				while ((line = reader.readLine()) != null) {

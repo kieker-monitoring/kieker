@@ -20,6 +20,8 @@ package kieker.panalysis.base;
  * @author Christian Wulf
  * 
  * @since 1.10
+ * 
+ * @param O
  */
 public interface ISource<O extends Enum<O>> {
 

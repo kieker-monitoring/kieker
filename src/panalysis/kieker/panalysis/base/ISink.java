@@ -22,6 +22,8 @@ import java.util.Map;
  * @author Christian Wulf
  * 
  * @since 1.10
+ * 
+ * @param I
  */
 public interface ISink<I extends Enum<I>> extends IStage<I> {
 

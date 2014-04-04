@@ -27,6 +27,8 @@ import kieker.panalysis.base.IStage;
  * @author Christian Wulf
  * 
  * @since 1.10
+ * 
+ * @param T
  */
 public class MethodCallPipe<T> implements IPipe<T> {
 

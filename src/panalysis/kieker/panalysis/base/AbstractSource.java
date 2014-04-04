@@ -20,6 +20,8 @@ package kieker.panalysis.base;
  * @author Christian Wulf
  * 
  * @since 1.10
+ * 
+ * @param O
  */
 public abstract class AbstractSource<O extends Enum<O>> extends AbstractFilter<AbstractSource.INPUT_PORT, O> implements ISource<O> {
 
