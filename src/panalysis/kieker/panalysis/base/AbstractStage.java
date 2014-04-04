@@ -46,4 +46,8 @@ public abstract class AbstractStage<I extends Enum<I>> implements IStage<I> {
 		this.id = id;
 	}
 
+	public void cleanUp() {
+		// empty default implementation
+	}
+
 }

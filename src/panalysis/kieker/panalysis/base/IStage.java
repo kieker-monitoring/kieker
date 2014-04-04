@@ -51,4 +51,6 @@ public interface IStage<I extends Enum<I>> {
 	// an overloaded version with a task bundle of one single input port is useless.
 	// void execute(TaskBundle taskBundle);
 
+	void cleanUp();
+
 }

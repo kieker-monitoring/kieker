@@ -17,7 +17,6 @@
 package kieker.panalysis;
 
 import kieker.panalysis.base.AbstractSource;
-import kieker.panalysis.base.TaskBundle;
 
 /**
  * @author Christian Wulf
@@ -55,11 +54,6 @@ public class RepeaterSource extends AbstractSource<RepeaterSource.OUTPUT_PORT> {
 
 	public long getOverallDuration() {
 		return this.overallDuration;
-	}
-
-	public void execute(final TaskBundle taskBundle) {
-		// TODO Auto-generated method stub
-
 	}
 
 }
