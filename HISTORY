@@ -5,6 +5,16 @@ http://kieker-monitoring.net) contains details on the changes.
 
 Please refer to the Kieker User Guide for details on using Kieker.
 
+* 1.9 (April 16, 2014)
+- New features (selection)
+  - Beta stated Trace Analysis GUI
+  - Beta stated anomaly detection filters (OPAD)
+  - New binary monitoring writers using Java NIO 
+  - Support for DISL probes
+- Bug fixes and improvements to code, performance, tests, build scripts, 
+  documentation, examples
+- Various improvements to the WebGUI (see separate `HISTORY` file)
+
 * 1.8 (October 16, 2013)
 - New features (selection)
   - Data Bridge: Facility to connect Kieker's Java core with other platforms
