@@ -30,6 +30,10 @@ public class Pipeline {
 	private final List<IStage<?>> stages = new LinkedList<IStage<?>>();
 	private int freeId = 0;
 
+	public Pipeline() {
+		// No code necessary
+	}
+
 	public void addStage(final IStage<?> stage) {
 		stage.setId(this.freeId++);
 		this.stages.add(stage);

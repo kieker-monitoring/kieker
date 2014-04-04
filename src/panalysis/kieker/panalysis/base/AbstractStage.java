@@ -24,7 +24,7 @@ import kieker.common.logging.LogFactory;
  * 
  * @since 1.10
  */
-public abstract class AbstractStage<InputPort extends Enum<InputPort>> implements IStage<InputPort> {
+public abstract class AbstractStage<INPUTPORT extends Enum<INPUTPORT>> implements IStage<INPUTPORT> {
 
 	protected int id;
 	/**

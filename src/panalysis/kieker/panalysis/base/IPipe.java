@@ -1,5 +1,4 @@
-/***********************************import java.util.List;
- ****************
+/***************************************************************************
  * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");

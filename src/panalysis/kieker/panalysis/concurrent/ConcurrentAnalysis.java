@@ -32,6 +32,10 @@ public class ConcurrentAnalysis extends Analysis {
 	private final List<IStage> stages = new LinkedList<IStage>();
 	private final List<StageThread> threads = new LinkedList<StageThread>();
 
+	public ConcurrentAnalysis() {
+		// No code necessary
+	}
+
 	@Override
 	public void init() {
 		// TODO add each stage to stages

@@ -94,13 +94,17 @@ public class CountWordsAnalysis extends Analysis {
 		final long duration = end - start;
 		System.out.println("duration: " + duration + " ms");
 
-		System.out.println("repeaterSource: " + (analysis.repeaterSource.getOverallDuration() - analysis.findFilesStage.getOverallDuration()) + " ms");
-		System.out.println("findFilesStage: " + (analysis.findFilesStage.getOverallDuration() - analysis.countWordsStage0.getOverallDuration()) + " ms");
-		System.out.println("countWordsStage0: " + (analysis.countWordsStage0.getOverallDuration() - analysis.outputWordsCountStage.getOverallDuration()) + " ms");
-		System.out.println("countWordsStage1: " + (analysis.countWordsStage1.getOverallDuration() - analysis.outputWordsCountStage.getOverallDuration()) + " ms");
-		System.out.println("outputWordsCountStage: " + analysis.outputWordsCountStage.getOverallDuration() + " ms");
+		System.out.println("repeaterSource: " + (analysis.repeaterSource.getOverallDuration() - // NOPMD (Just for example purposes)
+				analysis.findFilesStage.getOverallDuration()) + " ms");
+		System.out.println("findFilesStage: " + (analysis.findFilesStage.getOverallDuration() - // NOPMD (Just for example purposes)
+				analysis.countWordsStage0.getOverallDuration()) + " ms");
+		System.out.println("countWordsStage0: " + (analysis.countWordsStage0.getOverallDuration() - // NOPMD (Just for example purposes)
+				analysis.outputWordsCountStage.getOverallDuration()) + " ms");
+		System.out.println("countWordsStage1: " + (analysis.countWordsStage1.getOverallDuration() - // NOPMD (Just for example purposes)
+				analysis.outputWordsCountStage.getOverallDuration()) + " ms");
+		System.out.println("outputWordsCountStage: " + analysis.outputWordsCountStage.getOverallDuration() + " ms"); // NOPMD (Just for example purposes)
 
-		System.out.println("findFilesStage: " + analysis.findFilesStage.getNumFiles());
-		System.out.println("outputWordsCountStage: " + analysis.outputWordsCountStage.getNumFiles());
+		System.out.println("findFilesStage: " + analysis.findFilesStage.getNumFiles()); // NOPMD (Just for example purposes)
+		System.out.println("outputWordsCountStage: " + analysis.outputWordsCountStage.getNumFiles()); // NOPMD (Just for example purposes)
 	}
 }
