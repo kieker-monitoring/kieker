@@ -26,7 +26,7 @@ public class CountingObjectsAnalysis extends Analysis {
 	public void init() {
 		super.init();
 
-		this.repeaterSource = new RepeaterSource(".", 1);
+		this.repeaterSource = new RepeaterSource(".", 100);
 		this.findFilesStage = new DirectoryName2Files();
 		this.cycledCountingFilter = new CycledCountingFilter(new MethodCallPipe(0L));
 		this.teeFilter = new TeeFilter();
