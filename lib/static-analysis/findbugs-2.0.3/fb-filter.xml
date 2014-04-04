@@ -2,6 +2,16 @@
 	<!-- Example: http://findbugs.sourceforge.net/manual/filter.html#d0e2103 -->
 
 	<Match>
+		<Class name="kieker.tools.traceAnalysis.TraceAnalysisGUI" />
+		<Bug pattern="SE_BAD_FIELD" />
+	</Match>
+	
+	<Match>
+		<Class name="kieker.tools.traceAnalysis.gui.FinalStep" />
+		<Bug pattern="DM_DEFAULT_ENCODING" />
+	</Match>
+	
+	<Match>
 		<Package name="~kieker\.common\.record.*" />
 		<Bug pattern="EI_EXPOSE_REP" />
 	</Match>
