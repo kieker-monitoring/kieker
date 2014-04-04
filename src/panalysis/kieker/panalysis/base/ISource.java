@@ -28,5 +28,5 @@ public interface ISource<O extends Enum<O>> {
 	/**
 	 * @since 1.10
 	 */
-	void setPipeForOutputPort(final O outputPort, final IPipe<Object> pipe);
+	void setPipeForOutputPort(final O outputPort, final IPipe pipe);
 }

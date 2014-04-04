@@ -46,4 +46,25 @@ public class Pipeline {
 	public Collection<IStage<?>> getStages() {
 		return this.stages;
 	}
+
+	// BETTER use this generic method instead of one per new pipe type; However, this method throws an java.lang.InstantiationException
+	/*
+	 * @SuppressWarnings({ "rawtypes", "unchecked" })
+	 * public static <O extends Enum<O>, I extends Enum<I>> IPipe<?> connect(final Class<? extends IPipe> pipeClass, final ISource<O> sourceStage,
+	 * final O sourcePort,
+	 * final ISink<I> targetStage,
+	 * final I targetPort) {
+	 * try {
+	 * final IPipe pipe = pipeClass.newInstance();
+	 * sourceStage.setPipeForOutputPort(sourcePort, pipe);
+	 * targetStage.setPipeForInputPort(targetPort, pipe);
+	 * return pipe;
+	 * } catch (final InstantiationException e) {
+	 * throw new IllegalStateException(e);
+	 * } catch (final IllegalAccessException e) {
+	 * throw new IllegalStateException(e);
+	 * }
+	 * }
+	 */
+
 }

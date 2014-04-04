@@ -56,20 +56,21 @@ public class CountWordsAnalysis extends Analysis {
 		this.merger = new Merger();
 		this.outputWordsCountStage = new OutputWordsCountSink();
 
-		MethodCallPipe.connect(this.repeaterSource, RepeaterSource.OUTPUT_PORT.OUTPUT, this.findFilesStage, DirectoryName2Files.INPUT_PORT.DIRECTORY_NAME);
-		MethodCallPipe.connect(this.findFilesStage, DirectoryName2Files.OUTPUT_PORT.FILE, this.distributor, Distributor.INPUT_PORT.OBJECT);
+		new MethodCallPipe().connect(this.repeaterSource, RepeaterSource.OUTPUT_PORT.OUTPUT, this.findFilesStage,
+				DirectoryName2Files.INPUT_PORT.DIRECTORY_NAME);
+		new MethodCallPipe().connect(this.findFilesStage, DirectoryName2Files.OUTPUT_PORT.FILE, this.distributor, Distributor.INPUT_PORT.OBJECT);
 
-		MethodCallPipe.connect(this.distributor, Distributor.OUTPUT_PORT.OUTPUT0, this.countWordsStage0,
+		new MethodCallPipe().connect(this.distributor, Distributor.OUTPUT_PORT.OUTPUT0, this.countWordsStage0,
 				CountWordsStage.INPUT_PORT.FILE);
-		MethodCallPipe.connect(this.distributor, Distributor.OUTPUT_PORT.OUTPUT1, this.countWordsStage1,
+		new MethodCallPipe().connect(this.distributor, Distributor.OUTPUT_PORT.OUTPUT1, this.countWordsStage1,
 				CountWordsStage.INPUT_PORT.FILE);
 
-		MethodCallPipe.connect(this.countWordsStage0, CountWordsStage.OUTPUT_PORT.WORDSCOUNT, this.merger,
+		new MethodCallPipe().connect(this.countWordsStage0, CountWordsStage.OUTPUT_PORT.WORDSCOUNT, this.merger,
 				Merger.INPUT_PORT.INPUT0);
-		MethodCallPipe.connect(this.countWordsStage1, CountWordsStage.OUTPUT_PORT.WORDSCOUNT, this.merger,
+		new MethodCallPipe().connect(this.countWordsStage1, CountWordsStage.OUTPUT_PORT.WORDSCOUNT, this.merger,
 				Merger.INPUT_PORT.INPUT1);
 
-		MethodCallPipe.connect(this.merger, Merger.OUTPUT_PORT.OBJECT, this.outputWordsCountStage,
+		new MethodCallPipe().connect(this.merger, Merger.OUTPUT_PORT.OBJECT, this.outputWordsCountStage,
 				OutputWordsCountSink.INPUT_PORT.FILE_WORDCOUNT_TUPLE);
 
 		this.pipeline = new Pipeline();

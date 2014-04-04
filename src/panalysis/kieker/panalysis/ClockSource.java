@@ -14,52 +14,48 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.panalysis.base;
+package kieker.panalysis;
 
-import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import kieker.panalysis.base.AbstractSource;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  */
-public interface IPipe {
+public class ClockSource extends AbstractSource<ClockSource.OUTPUT_PORT> {
 
-	/**
-	 * @since 1.10
-	 */
-	void put(Object record);
+	public static enum OUTPUT_PORT {
+		CLOCK_SIGNAL
+	}
 
-	/**
-	 * @since 1.10
-	 */
-	Object take();
+	private final Timer timer;
 
-	/**
-	 * @return and removes the next record if the pipe is not empty, otherwise <code>null</code>
-	 * 
-	 * @since 1.10
-	 */
-	Object tryTake();
+	public ClockSource(final long delay, final long period) {
+		super(OUTPUT_PORT.class);
 
-	/**
-	 * @return <code>true</code> if the pipe contains no element, otherwise <code>false</code>.<br>
-	 *         <i>This method is used to find the next non-empty port of a stage with multiple ports.<i>
-	 * 
-	 * @since 1.10
-	 */
-	boolean isEmpty();
+		final TimerTask task = new TimerTask() {
+			@SuppressWarnings("synthetic-access")
+			@Override
+			public void run() {
+				ClockSource.this.put(OUTPUT_PORT.CLOCK_SIGNAL, Boolean.TRUE);
+			}
+		};
 
-	/**
-	 * @since 1.10
-	 */
-	List<?> tryTakeMultiple(int numItemsToTake);
+		this.timer = new Timer();
+		this.timer.scheduleAtFixedRate(task, delay, period);
+	}
 
-	/**
-	 * @since 1.10
-	 */
-	void putMultiple(List<?> items);
+	public void execute() {
+		// see timer execution
+	}
 
-	<O extends Enum<O>, I extends Enum<I>> void connect(ISource<O> sourceStage, O sourcePort, ISink<I> targetStage, I targetPort);
+	@Override
+	public void cleanUp() {
+		this.timer.cancel();
+	}
 
 }

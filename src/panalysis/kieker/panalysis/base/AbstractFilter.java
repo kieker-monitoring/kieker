@@ -29,19 +29,20 @@ import java.util.Map;
  */
 public abstract class AbstractFilter<I extends Enum<I>, O extends Enum<O>> extends AbstractStage<I> implements ISink<I>, ISource<O> {
 
-	private final Map<I, IPipe<?>> inputPortPipes;
-	private final Map<O, IPipe<Object>> outputPortPipes;
-	private final Map<I, IPipe<?>> readOnlyInputPortPipes;
-	private TaskBundle taskBundle;
-	private final int numTasksThreshold = 100;
+	private final Map<I, IPipe> inputPortPipes;
+	private final Map<O, IPipe> outputPortPipes;
+	private final Map<I, IPipe> readOnlyInputPortPipes;
+
+	// private TaskBundle taskBundle;
+	// private final int numTasksThreshold = 100;
 
 	public AbstractFilter(final Class<I> inputEnumType, final Class<O> outputEnumType) {
-		this.inputPortPipes = new EnumMap<I, IPipe<?>>(inputEnumType);
-		this.outputPortPipes = new EnumMap<O, IPipe<Object>>(outputEnumType);
+		this.inputPortPipes = new EnumMap<I, IPipe>(inputEnumType);
+		this.outputPortPipes = new EnumMap<O, IPipe>(outputEnumType);
 		this.readOnlyInputPortPipes = Collections.unmodifiableMap(this.inputPortPipes);
 	}
 
-	public void setPipeForOutputPort(final O outputPort, final IPipe<Object> pipe) {
+	public void setPipeForOutputPort(final O outputPort, final IPipe pipe) {
 		this.outputPortPipes.put(outputPort, pipe);
 	}
 
@@ -59,33 +60,33 @@ public abstract class AbstractFilter<I extends Enum<I>, O extends Enum<O>> exten
 	// }
 
 	protected void put(final O port, final Object record) {
-		final IPipe<Object> pipe = this.outputPortPipes.get(port);
+		final IPipe pipe = this.outputPortPipes.get(port);
 		if (pipe == null) {
 			return; // ignore unconnected port
 		}
 		pipe.put(record);
 	}
 
-	public void setPipeForInputPort(final I inputPort, final IPipe<?> pipe) {
+	public void setPipeForInputPort(final I inputPort, final IPipe pipe) {
 		this.inputPortPipes.put(inputPort, pipe);
 	}
 
 	protected Object take(final I inputPort) {
-		final IPipe<?> pipe = this.inputPortPipes.get(inputPort);
+		final IPipe pipe = this.inputPortPipes.get(inputPort);
 		return pipe.take();
 	}
 
 	protected Object tryTake(final I inputPort) {
-		final IPipe<?> pipe = this.inputPortPipes.get(inputPort);
+		final IPipe pipe = this.inputPortPipes.get(inputPort);
 		return pipe.tryTake();
 	}
 
 	protected boolean isEmpty(final I inputPort) {
-		final IPipe<?> pipe = this.inputPortPipes.get(inputPort);
+		final IPipe pipe = this.inputPortPipes.get(inputPort);
 		return pipe.isEmpty();
 	}
 
-	public Map<I, IPipe<?>> getInputPortPipes() {
+	public Map<I, IPipe> getInputPortPipes() {
 		return this.readOnlyInputPortPipes;
 	}
 }

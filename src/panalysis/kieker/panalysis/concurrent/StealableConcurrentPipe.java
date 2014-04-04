@@ -20,40 +20,40 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import kieker.panalysis.base.IPipe;
+import kieker.panalysis.base.AbstractPipe;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  * 
- * @param T
+ * @param Object
  */
-public class StealableConcurrentPipe<T> implements IPipe<T> {
+public class StealableConcurrentPipe extends AbstractPipe {
 
-	private final List<StealableConcurrentPipe<T>> otherPipes;
+	private final List<StealableConcurrentPipe> otherPipes;
 	/** FIXME must be thread-safe */
-	private final Queue<T> items = new LinkedList<T>();
+	private final Queue<Object> items = new LinkedList<Object>();
 
 	private int numItemsToSteal;
 
-	public StealableConcurrentPipe(final List<StealableConcurrentPipe<T>> otherPipes) {
+	public StealableConcurrentPipe(final List<StealableConcurrentPipe> otherPipes) {
 		this.otherPipes = otherPipes;
 	}
 
-	public T take() {
-		final T item = this.tryTake();
+	public Object take() {
+		final Object item = this.tryTake();
 		if (item == null) {
 			this.steal();
 		}
 		return this.tryTake();
 	}
 
-	public void put(final T record) {
+	public void put(final Object record) {
 		this.items.add(record);
 	}
 
-	public T tryTake() {
+	public Object tryTake() {
 		return this.items.poll();
 	}
 
@@ -61,10 +61,10 @@ public class StealableConcurrentPipe<T> implements IPipe<T> {
 		return this.items.isEmpty();
 	}
 
-	public List<T> tryTakeMultiple(final int numItemsToTake) {
-		final List<T> tookItems = new LinkedList<T>();
+	public List<Object> tryTakeMultiple(final int numItemsToTake) {
+		final List<Object> tookItems = new LinkedList<Object>();
 		for (int i = 0; i < numItemsToTake; i++) {
-			final T item = this.tryTake();
+			final Object item = this.tryTake();
 			if (item == null) {
 				break;
 			}
@@ -73,13 +73,13 @@ public class StealableConcurrentPipe<T> implements IPipe<T> {
 		return tookItems;
 	}
 
-	public void putMultiple(final List<T> newItems) {
+	public void putMultiple(final List<?> newItems) {
 		this.items.addAll(newItems);
 	}
 
 	private void steal() {
-		for (final StealableConcurrentPipe<T> otherPipe : this.otherPipes) {
-			final List<T> stolenItems = otherPipe.tryTakeMultiple(this.numItemsToSteal);
+		for (final StealableConcurrentPipe otherPipe : this.otherPipes) {
+			final List<Object> stolenItems = otherPipe.tryTakeMultiple(this.numItemsToSteal);
 			if (stolenItems != null) {
 				this.items.addAll(stolenItems);
 				return;

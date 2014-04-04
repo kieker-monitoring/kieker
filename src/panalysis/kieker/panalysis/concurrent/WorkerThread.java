@@ -17,13 +17,11 @@
 package kieker.panalysis.concurrent;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 
 import kieker.panalysis.base.IPipe;
 import kieker.panalysis.base.IStage;
-import kieker.panalysis.base.TaskBundle;
 
 /**
  * @author Christian Wulf
@@ -35,7 +33,7 @@ public class WorkerThread extends Thread {
 	// BETTER move to StealableConcurrentPipe
 	private final PriorityQueue<WorkerThread> otherThreads;
 
-	private final Map<IStage<?>, Map<Enum<?>, IPipe<TaskBundle>>> localStages = new HashMap<IStage<?>, Map<Enum<?>, IPipe<TaskBundle>>>();
+	private final Map<IStage<?>, Map<Enum<?>, IPipe>> localStages = new HashMap<IStage<?>, Map<Enum<?>, IPipe>>();
 
 	private final int numTaskBundlesToSteal = 10;
 	/** represents a thread-local pipeline copy */
@@ -55,14 +53,6 @@ public class WorkerThread extends Thread {
 			this.startStageExecution();
 			stage.execute();
 			this.finishStageExecution();
-		}
-	}
-
-	public List<TaskBundle> onBeingStolen(final IStage<?> stage, final Enum<?> inputPort) {
-		final IPipe<TaskBundle> pipe = this.localStages.get(stage).get(inputPort);
-		synchronized (pipe) {
-			final List<TaskBundle> taskBundles = pipe.tryTakeMultiple(this.numTaskBundlesToSteal);
-			return taskBundles;
 		}
 	}
 

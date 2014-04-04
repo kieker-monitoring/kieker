@@ -18,7 +18,7 @@ package kieker.panalysis;
 
 import java.util.List;
 
-import kieker.panalysis.base.IPipe;
+import kieker.panalysis.base.AbstractPipe;
 import kieker.panalysis.base.ISink;
 import kieker.panalysis.base.ISource;
 import kieker.panalysis.base.IStage;
@@ -27,30 +27,32 @@ import kieker.panalysis.base.IStage;
  * @author Christian Wulf
  * 
  * @since 1.10
- * 
- * @param T
  */
-public class MethodCallPipe<T> implements IPipe<T> {
+public class MethodCallPipe extends AbstractPipe {
 
-	private final IStage<?> targetStage;
-	private T storedRecord;
+	private IStage<?> targetStage;
+	private Object storedRecord;
 
-	public MethodCallPipe(final IStage<?> targetStage) {
-		this.targetStage = targetStage;
+	public MethodCallPipe(final Object initialRecord) {
+		this.storedRecord = initialRecord;
 	}
 
-	public void put(final T record) {
+	public MethodCallPipe() {
+		this.storedRecord = null;
+	}
+
+	public void put(final Object record) {
 		this.storedRecord = record;
 		this.targetStage.execute();
 	}
 
-	public T take() {
-		final T temp = this.storedRecord;
+	public Object take() {
+		final Object temp = this.storedRecord;
 		this.storedRecord = null;
 		return temp;
 	}
 
-	public T tryTake() {
+	public Object tryTake() {
 		return this.take();
 	}
 
@@ -58,18 +60,17 @@ public class MethodCallPipe<T> implements IPipe<T> {
 		return this.storedRecord == null;
 	}
 
-	public static <O extends Enum<O>, I extends Enum<I>> void connect(final ISource<O> sourceStage, final O sourcePort, final ISink<I> targetStage,
-			final I targetPort) {
-		final IPipe<Object> pipe = new MethodCallPipe<Object>(targetStage);
-		sourceStage.setPipeForOutputPort(sourcePort, pipe);
-		targetStage.setPipeForInputPort(targetPort, pipe);
+	@Override
+	public <O extends Enum<O>, I extends Enum<I>> void connect(final ISource<O> sourceStage, final O sourcePort, final ISink<I> targetStage, final I targetPort) {
+		this.targetStage = targetStage;
+		super.connect(sourceStage, sourcePort, targetStage, targetPort);
 	}
 
-	public List<T> tryTakeMultiple(final int numItemsToTake) {
+	public List<Object> tryTakeMultiple(final int numItemsToTake) {
 		throw new IllegalStateException("Taking more than one element is not possible. You tried to take " + numItemsToTake + " items.");
 	}
 
-	public void putMultiple(final List<T> items) {
+	public void putMultiple(final List<?> items) {
 		throw new IllegalStateException("Putting more than one element is not possible. You tried to put " + items.size() + " items.");
 	}
 

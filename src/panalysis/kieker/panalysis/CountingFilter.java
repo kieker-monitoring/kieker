@@ -30,7 +30,7 @@ public class CountingFilter extends AbstractFilter<CountingFilter.INPUT_PORT, Co
 	}
 
 	public static enum OUTPUT_PORT { // NOCS
-		RELAYED_OBJECT, CURRENT_COUNT
+		RELAYED_OBJECT, NEW_COUNT
 	}
 
 	public CountingFilter() {
@@ -38,11 +38,14 @@ public class CountingFilter extends AbstractFilter<CountingFilter.INPUT_PORT, Co
 	}
 
 	public void execute() {
-		final Object inputObject = super.take(INPUT_PORT.INPUT_OBJECT);
-		final long count = (Long) super.take(INPUT_PORT.CURRENT_COUNT) + 1;
+		final Object inputObject = super.tryTake(INPUT_PORT.INPUT_OBJECT);
+		if (inputObject == null) {
+			return;
+		}
+		final Long count = (Long) super.take(INPUT_PORT.CURRENT_COUNT);
 
-		super.put(OUTPUT_PORT.CURRENT_COUNT, count);
 		super.put(OUTPUT_PORT.RELAYED_OBJECT, inputObject);
+		super.put(OUTPUT_PORT.NEW_COUNT, count + 1);
 	}
 
 }

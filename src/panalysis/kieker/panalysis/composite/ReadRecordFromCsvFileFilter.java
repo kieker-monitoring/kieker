@@ -42,7 +42,7 @@ public class ReadRecordFromCsvFileFilter extends AbstractFilter<File2TextLinesFi
 		this.stage1 = new TextLine2RecordFilter(stringRegistry);
 		this.stage0 = new File2TextLinesFilter();
 
-		MethodCallPipe.connect(this.stage0, File2TextLinesFilter.OUTPUT_PORT.TEXT_LINE, this.stage1, TextLine2RecordFilter.INPUT_PORT.TEXT_LINE);
+		new MethodCallPipe().connect(this.stage0, File2TextLinesFilter.OUTPUT_PORT.TEXT_LINE, this.stage1, TextLine2RecordFilter.INPUT_PORT.TEXT_LINE);
 	}
 
 	public void execute() {

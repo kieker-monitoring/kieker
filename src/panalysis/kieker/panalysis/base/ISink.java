@@ -30,11 +30,11 @@ public interface ISink<I extends Enum<I>> extends IStage<I> {
 	/**
 	 * @since 1.10
 	 */
-	void setPipeForInputPort(final I inputPort, final IPipe<?> pipe);
+	void setPipeForInputPort(final I inputPort, final IPipe pipe);
 
 	/**
 	 * @since 1.10
 	 */
-	public Map<I, IPipe<?>> getInputPortPipes();
+	public Map<I, IPipe> getInputPortPipes();
 
 }
