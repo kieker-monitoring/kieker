@@ -2,6 +2,7 @@ The Apache Software License - ASL - v2.0
 Project: http://geronimo.apache.org
 Description: Apache Geronimo is an open source server runtime that integrates the best open source projects to create Java/OSGi server runtimes that meet the needs of enterprise developers and system administrators.
 License: http://www.apache.org/licenses/LICENSE-2.0
+Required by: Kieker Tests (compile-time and load-time)
 
                                  Apache License
                            Version 2.0, January 2004

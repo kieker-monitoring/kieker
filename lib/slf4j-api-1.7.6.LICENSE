@@ -2,6 +2,7 @@ The MIT License - MIT - v1.0
 Project: http://www.slf4j.org/
 Description: The Simple Logging Facade for Java or (SLF4J) serves as a simple facade or abstraction for various logging frameworks.
 License: http://opensource.org/licenses/MIT
+Required by: Kieker's logging facility (compile- and run-time; the latter when using slf4j)
 
   Copyright (c) 2004-2011 QOS.ch
   All rights reserved.

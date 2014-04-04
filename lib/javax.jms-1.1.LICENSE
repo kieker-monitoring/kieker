@@ -2,7 +2,7 @@ Common Development and Distribution License - CDDL - v1.0
 Project: http://download.oracle.com/javaee/6/api/javax/jms/package-summary.html
 Description: Java Message Service is an API to send and receive messages within a client and to control so called Message Oriented Middleware (MOM).
 License: http://www.opensource.org/licenses/cddl1.txt
-Required by: JMSEmbeddedConnector and JMSCLientConnector of the KDB to realize general JMS interface
+Required by: JMS reader and writer (compile-time and run-time); JMSEmbeddedConnector and JMSCLientConnector of the KDB to realize general JMS interface
 
 COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
 
