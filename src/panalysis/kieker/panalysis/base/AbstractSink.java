@@ -21,13 +21,13 @@ package kieker.panalysis.base;
  * 
  * @since 1.10
  */
-public abstract class AbstractSink<INPUT_PORT extends Enum<INPUT_PORT>> extends AbstractFilter<INPUT_PORT, AbstractSink.OUTPUT_PORT> {
+public abstract class AbstractSink<I extends Enum<I>> extends AbstractFilter<I, AbstractSink.OUTPUT_PORT> {
 
-	static enum OUTPUT_PORT {
+	static enum OUTPUT_PORT { // NOCS
 		DUMMY // sink stages have not any output ports
 	}
 
-	public AbstractSink(final Class<INPUT_PORT> inputEnumType) {
+	public AbstractSink(final Class<I> inputEnumType) {
 		super(inputEnumType, OUTPUT_PORT.class);
 	}
 

@@ -25,11 +25,11 @@ import kieker.panalysis.base.AbstractFilter;
  */
 public class Merger extends AbstractFilter<Merger.INPUT_PORT, Merger.OUTPUT_PORT> {
 
-	public static enum INPUT_PORT {
+	public static enum INPUT_PORT { // NOCS
 		INPUT0, INPUT1
 	}
 
-	public static enum OUTPUT_PORT {
+	public static enum OUTPUT_PORT { // NOCS
 		OBJECT
 	}
 

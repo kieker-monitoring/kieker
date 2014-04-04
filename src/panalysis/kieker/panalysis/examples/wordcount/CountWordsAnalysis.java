@@ -40,6 +40,10 @@ public class CountWordsAnalysis extends Analysis {
 	private Merger merger;
 	private OutputWordsCountSink outputWordsCountStage;
 
+	public CountWordsAnalysis() {
+		// No code necessary
+	}
+
 	@Override
 	public void init() {
 		super.init();

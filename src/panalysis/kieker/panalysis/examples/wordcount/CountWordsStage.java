@@ -33,11 +33,11 @@ import kieker.panalysis.base.AbstractFilter;
  */
 public class CountWordsStage extends AbstractFilter<CountWordsStage.INPUT_PORT, CountWordsStage.OUTPUT_PORT> {
 
-	public static enum OUTPUT_PORT {
+	public static enum OUTPUT_PORT { // NOCS
 		EXCEPTION, WORDSCOUNT
 	}
 
-	public static enum INPUT_PORT {
+	public static enum INPUT_PORT { // NOCS
 		FILE
 	}
 

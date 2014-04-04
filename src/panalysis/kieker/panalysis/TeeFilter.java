@@ -27,11 +27,11 @@ import kieker.panalysis.base.AbstractFilter;
  */
 public final class TeeFilter extends AbstractFilter<TeeFilter.INPUT_PORT, TeeFilter.OUTPUT_PORT> {
 
-	public static enum INPUT_PORT {
+	public static enum INPUT_PORT { // NOCS
 		INPUT_OBJECT
 	}
 
-	public static enum OUTPUT_PORT {
+	public static enum OUTPUT_PORT { // NOCS
 		RELAYED_OBJECT
 	}
 

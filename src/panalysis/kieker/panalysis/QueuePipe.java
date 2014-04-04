@@ -58,8 +58,8 @@ public class QueuePipe<T> extends LinkedBlockingQueue<T> implements IPipe<T> {
 		return super.poll();
 	}
 
-	public static <OutputPort extends Enum<OutputPort>, InputPort extends Enum<InputPort>> void connect(final ISource<OutputPort> sourceStage,
-			final OutputPort sourcePort, final ISink<InputPort> targetStage, final InputPort targetPort) {
+	public static <O extends Enum<O>, I extends Enum<I>> void connect(final ISource<O> sourceStage, final O sourcePort, final ISink<I> targetStage,
+			final I targetPort) {
 		final IPipe<Object> pipe = new QueuePipe<Object>(Integer.MAX_VALUE);
 		sourceStage.setPipeForOutputPort(sourcePort, pipe);
 		targetStage.setPipeForInputPort(targetPort, pipe);

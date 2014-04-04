@@ -31,20 +31,20 @@ import kieker.panalysis.base.IStage;
 public class MethodCallPipe<T> implements IPipe<T> {
 
 	private final IStage<?> targetStage;
-	private T record;
+	private T storedRecord;
 
 	public MethodCallPipe(final IStage<?> targetStage) {
 		this.targetStage = targetStage;
 	}
 
 	public void put(final T record) {
-		this.record = record;
+		this.storedRecord = record;
 		this.targetStage.execute();
 	}
 
 	public T take() {
-		final T temp = this.record;
-		this.record = null;
+		final T temp = this.storedRecord;
+		this.storedRecord = null;
 		return temp;
 	}
 
@@ -53,11 +53,11 @@ public class MethodCallPipe<T> implements IPipe<T> {
 	}
 
 	public boolean isEmpty() {
-		return this.record == null;
+		return this.storedRecord == null;
 	}
 
-	public static <OutputPort extends Enum<OutputPort>, InputPort extends Enum<InputPort>> void connect(final ISource<OutputPort> sourceStage,
-			final OutputPort sourcePort, final ISink<InputPort> targetStage, final InputPort targetPort) {
+	public static <O extends Enum<O>, I extends Enum<I>> void connect(final ISource<O> sourceStage, final O sourcePort, final ISink<I> targetStage,
+			final I targetPort) {
 		final IPipe<Object> pipe = new MethodCallPipe<Object>(targetStage);
 		sourceStage.setPipeForOutputPort(sourcePort, pipe);
 		targetStage.setPipeForInputPort(targetPort, pipe);

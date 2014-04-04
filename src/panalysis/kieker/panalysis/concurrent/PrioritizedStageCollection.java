@@ -25,6 +25,10 @@ import kieker.panalysis.base.IStage;
  */
 public class PrioritizedStageCollection {
 
+	public PrioritizedStageCollection() {
+		// No code necessary
+	}
+
 	public void add(final IStage<?> stage) {
 
 	}

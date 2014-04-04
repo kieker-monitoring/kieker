@@ -28,7 +28,7 @@ import kieker.panalysis.base.AbstractSink;
  */
 public class OutputWordsCountSink extends AbstractSink<OutputWordsCountSink.INPUT_PORT> {
 
-	public static enum INPUT_PORT {
+	public static enum INPUT_PORT { // NOCS
 		FILE_WORDCOUNT_TUPLE
 	}
 

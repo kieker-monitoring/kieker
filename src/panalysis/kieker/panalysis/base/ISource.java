@@ -21,10 +21,10 @@ package kieker.panalysis.base;
  * 
  * @since 1.10
  */
-public interface ISource<OutputPort extends Enum<OutputPort>> {
+public interface ISource<O extends Enum<O>> {
 
 	/**
 	 * @since 1.10
 	 */
-	void setPipeForOutputPort(final OutputPort outputPort, final IPipe<Object> pipe);
+	void setPipeForOutputPort(final O outputPort, final IPipe<Object> pipe);
 }

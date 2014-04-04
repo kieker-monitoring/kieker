@@ -30,7 +30,7 @@ import kieker.panalysis.base.AbstractSource;
  */
 public class Directory2FilesFilter extends AbstractSource<Directory2FilesFilter.OUTPUT_PORT> {
 
-	public static enum OUTPUT_PORT {
+	public static enum OUTPUT_PORT { // NOCS
 		FILE
 	}
 

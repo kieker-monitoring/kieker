@@ -23,16 +23,16 @@ import java.util.Map;
  * 
  * @since 1.10
  */
-public interface ISink<InputPort extends Enum<InputPort>> extends IStage<InputPort> {
+public interface ISink<I extends Enum<I>> extends IStage<I> {
 
 	/**
 	 * @since 1.10
 	 */
-	void setPipeForInputPort(final InputPort inputPort, final IPipe<?> pipe);
+	void setPipeForInputPort(final I inputPort, final IPipe<?> pipe);
 
 	/**
 	 * @since 1.10
 	 */
-	public Map<InputPort, IPipe<?>> getInputPortPipes();
+	public Map<I, IPipe<?>> getInputPortPipes();
 
 }

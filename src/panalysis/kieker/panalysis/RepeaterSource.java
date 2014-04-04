@@ -30,7 +30,7 @@ public class RepeaterSource extends AbstractSource<RepeaterSource.OUTPUT_PORT> {
 	private final int num;
 	private long overallDuration;
 
-	public static enum OUTPUT_PORT {
+	public static enum OUTPUT_PORT { // NOCS
 		OUTPUT
 	}
 

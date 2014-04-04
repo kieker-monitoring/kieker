@@ -21,14 +21,13 @@ package kieker.panalysis.base;
  * 
  * @since 1.10
  */
-public abstract class AbstractSource<OUTPUT_PORT extends Enum<OUTPUT_PORT>> extends AbstractFilter<AbstractSource.INPUT_PORT, OUTPUT_PORT> implements
-		ISource<OUTPUT_PORT> {
+public abstract class AbstractSource<O extends Enum<O>> extends AbstractFilter<AbstractSource.INPUT_PORT, O> implements ISource<O> {
 
-	protected static enum INPUT_PORT {
+	protected static enum INPUT_PORT { // NOCS
 		DUMMY // source stages have not any input ports
 	}
 
-	public AbstractSource(final Class<OUTPUT_PORT> enumType) {
+	public AbstractSource(final Class<O> enumType) {
 		super(INPUT_PORT.class, enumType);
 	}
 
