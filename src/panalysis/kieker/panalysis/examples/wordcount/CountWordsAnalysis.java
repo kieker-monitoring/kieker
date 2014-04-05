@@ -30,7 +30,7 @@ import kieker.panalysis.base.Pipeline;
  */
 public class CountWordsAnalysis extends Analysis {
 
-	private Pipeline pipeline;
+	private Pipeline<MethodCallPipe> pipeline;
 
 	private RepeaterSource repeaterSource;
 	private DirectoryName2Files findFilesStage;
@@ -48,7 +48,7 @@ public class CountWordsAnalysis extends Analysis {
 	public void init() {
 		super.init();
 
-		this.repeaterSource = new RepeaterSource(".", 4000);
+		this.repeaterSource = new RepeaterSource(".", 2000);
 		this.findFilesStage = new DirectoryName2Files();
 		this.distributor = new Distributor();
 		this.countWordsStage0 = new CountWordsStage();
@@ -56,7 +56,7 @@ public class CountWordsAnalysis extends Analysis {
 		this.merger = new Merger();
 		this.outputWordsCountStage = new OutputWordsCountSink();
 
-		this.pipeline = new Pipeline();
+		this.pipeline = new Pipeline<MethodCallPipe>();
 		this.pipeline.addStage(this.repeaterSource);
 		this.pipeline.addStage(this.findFilesStage);
 		this.pipeline.addStage(this.distributor);
@@ -64,6 +64,8 @@ public class CountWordsAnalysis extends Analysis {
 		this.pipeline.addStage(this.countWordsStage1);
 		this.pipeline.addStage(this.merger);
 		this.pipeline.addStage(this.outputWordsCountStage);
+
+		this.pipeline.setStartStages(this.repeaterSource);
 
 		new MethodCallPipe().connect(this.repeaterSource, RepeaterSource.OUTPUT_PORT.OUTPUT, this.findFilesStage,
 				DirectoryName2Files.INPUT_PORT.DIRECTORY_NAME);

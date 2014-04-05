@@ -17,7 +17,6 @@
 package kieker.panalysis.base;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -27,17 +26,21 @@ import java.util.Map;
  * 
  * @since 1.10
  */
-public class Pipeline {
+public class Pipeline<T extends IPipe> {
 
 	protected final List<IStage> stages = new LinkedList<IStage>();
 	private int freeId = 0;
 	private List<IStage> startStages;
 
-	private IPipe currentPipe;
-	private final Map<Integer, List<IPipe>> pipeGroups = new HashMap<Integer, List<IPipe>>();
+	private T currentPipe;
+	private final Map<Integer, List<T>> pipeGroups;
 
 	public Pipeline() {
-		// No code necessary
+		this(null);
+	}
+
+	public Pipeline(final Map<Integer, List<T>> pipeGroups) {
+		this.pipeGroups = pipeGroups;
 	}
 
 	/**
@@ -76,15 +79,15 @@ public class Pipeline {
 		this.startStages = Arrays.asList(startStages);
 	}
 
-	public Pipeline add(final IPipe pipe) {
+	public Pipeline<T> add(final T pipe) {
 		this.currentPipe = pipe;
 		return this;
 	}
 
 	public void toGroup(final int pipeGroupIdentifier) {
-		List<IPipe> pipes = this.pipeGroups.get(pipeGroupIdentifier);
+		List<T> pipes = this.pipeGroups.get(pipeGroupIdentifier);
 		if (pipes == null) {
-			pipes = new LinkedList<IPipe>();
+			pipes = new LinkedList<T>();
 			this.pipeGroups.put(pipeGroupIdentifier, pipes);
 		}
 		pipes.add(this.currentPipe);

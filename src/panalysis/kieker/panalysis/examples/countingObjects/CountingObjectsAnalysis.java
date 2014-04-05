@@ -15,7 +15,7 @@ public class CountingObjectsAnalysis extends Analysis {
 	private RepeaterSource repeaterSource;
 	private DirectoryName2Files findFilesStage;
 	private CycledCountingFilter cycledCountingFilter;
-	private Pipeline pipeline;
+	private Pipeline<MethodCallPipe> pipeline;
 	private TeeFilter teeFilter;
 
 	public CountingObjectsAnalysis() {
@@ -26,7 +26,7 @@ public class CountingObjectsAnalysis extends Analysis {
 	public void init() {
 		super.init();
 
-		this.repeaterSource = new RepeaterSource(".", 100);
+		this.repeaterSource = new RepeaterSource(".", 1);
 		this.findFilesStage = new DirectoryName2Files();
 		this.cycledCountingFilter = new CycledCountingFilter(new MethodCallPipe(0L));
 		this.teeFilter = new TeeFilter();
@@ -38,11 +38,13 @@ public class CountingObjectsAnalysis extends Analysis {
 		new MethodCallPipe().connect(this.cycledCountingFilter, CycledCountingFilter.OUTPUT_PORT.RELAYED_OBJECT, this.teeFilter,
 				TeeFilter.INPUT_PORT.INPUT_OBJECT);
 
-		this.pipeline = new Pipeline();
+		this.pipeline = new Pipeline<MethodCallPipe>();
 		this.pipeline.addStage(this.repeaterSource);
 		this.pipeline.addStage(this.findFilesStage);
 		this.pipeline.addStage(this.cycledCountingFilter);
 		this.pipeline.addStage(this.teeFilter);
+
+		this.pipeline.setStartStages(this.repeaterSource);
 	}
 
 	@Override

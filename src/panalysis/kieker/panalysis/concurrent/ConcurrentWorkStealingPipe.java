@@ -3,14 +3,12 @@ package kieker.panalysis.concurrent;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import de.chw.concurrent.CircularWorkStealingDeque;
 
 import kieker.panalysis.base.AbstractPipe;
 import kieker.panalysis.base.ISink;
 import kieker.panalysis.base.ISource;
-import kieker.panalysis.examples.wordcount.ConcurrentCountWordsAnalysis;
 
 public class ConcurrentWorkStealingPipe extends AbstractPipe<ConcurrentWorkStealingPipe> {
 
@@ -18,7 +16,7 @@ public class ConcurrentWorkStealingPipe extends AbstractPipe<ConcurrentWorkSteal
 	private List<ConcurrentWorkStealingPipe> allOtherPipes;
 	private ISink<?> targetStage;
 
-	public void copyAllOtherPipes(final Set<ConcurrentWorkStealingPipe> samePipesFromAllThreads) {
+	public void copyAllOtherPipes(final List<ConcurrentWorkStealingPipe> samePipesFromAllThreads) {
 		this.allOtherPipes = new ArrayList<ConcurrentWorkStealingPipe>(samePipesFromAllThreads);
 		this.allOtherPipes.remove(this);
 	}
@@ -31,9 +29,9 @@ public class ConcurrentWorkStealingPipe extends AbstractPipe<ConcurrentWorkSteal
 
 	public void put(final Object record) {
 		this.circularWorkStealingDeque.pushBottom(record);
-		if (ConcurrentCountWordsAnalysis.START_DIRECTORY_NAME != record) { // FIXME remove if manual tests are finished
-			this.targetStage.execute();
-		}
+		// if (ConcurrentCountWordsAnalysis.START_DIRECTORY_NAME != record) { // FIXME remove if manual tests are finished
+		// this.targetStage.execute();
+		// }
 	}
 
 	public Object take() {
@@ -71,7 +69,7 @@ public class ConcurrentWorkStealingPipe extends AbstractPipe<ConcurrentWorkSteal
 	public Object tryTake() {
 		final Object record = this.circularWorkStealingDeque.popBottom();
 		if (record == CircularWorkStealingDeque.EMPTY) {
-			return null;
+			return null; // do not expose internal impl details (here: CircularWorkStealingDeque); instead return null
 		}
 		return record;
 	}

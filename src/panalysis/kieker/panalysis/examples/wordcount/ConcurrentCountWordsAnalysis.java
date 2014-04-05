@@ -16,11 +16,14 @@
 
 package kieker.panalysis.examples.wordcount;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import kieker.panalysis.Distributor;
 import kieker.panalysis.Merger;
 import kieker.panalysis.RepeaterSource;
 import kieker.panalysis.base.Analysis;
-import kieker.panalysis.base.IPipe;
 import kieker.panalysis.base.Pipeline;
 import kieker.panalysis.concurrent.ConcurrentWorkStealingPipe;
 import kieker.panalysis.concurrent.WorkerThread;
@@ -54,8 +57,10 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 		numThreads = 2; // only fur testing purposes
 
 		this.threads = new WorkerThread[numThreads];
+		final Map<Integer, List<ConcurrentWorkStealingPipe>> pipeGroups = new HashMap<Integer, List<ConcurrentWorkStealingPipe>>();
+
 		for (int i = 0; i < this.threads.length; i++) {
-			final Pipeline pipeline = new Pipeline();
+			final Pipeline<ConcurrentWorkStealingPipe> pipeline = new Pipeline<ConcurrentWorkStealingPipe>(pipeGroups);
 			this.buildPipeline(pipeline);
 
 			final WorkerThread thread = new WorkerThread();
@@ -63,9 +68,15 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 			this.threads[i] = thread;
 		}
 
+		for (final List<ConcurrentWorkStealingPipe> samePipes : pipeGroups.values()) {
+			for (final ConcurrentWorkStealingPipe pipe : samePipes) {
+				pipe.copyAllOtherPipes(samePipes);
+			}
+		}
+
 	}
 
-	private void buildPipeline(final Pipeline pipeline) {
+	private void buildPipeline(final Pipeline<ConcurrentWorkStealingPipe> pipeline) {
 		// create stages
 		final RepeaterSource repeaterSource = this.repeaterSource;
 		final DirectoryName2Files findFilesStage = pipeline.addStage(new DirectoryName2Files());
@@ -79,7 +90,7 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 		pipeline.setStartStages(findFilesStage);
 
 		// connect stages by pipes
-		IPipe pipe = new ConcurrentWorkStealingPipe()
+		ConcurrentWorkStealingPipe pipe = new ConcurrentWorkStealingPipe()
 				.source(repeaterSource, RepeaterSource.OUTPUT_PORT.OUTPUT)
 				.target(findFilesStage, DirectoryName2Files.INPUT_PORT.DIRECTORY_NAME);
 		pipeline.add(pipe).toGroup(0);

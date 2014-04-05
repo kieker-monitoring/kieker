@@ -21,11 +21,15 @@ import java.util.EnumMap;
 import java.util.Map;
 
 /**
+ * 
  * @author Christian Wulf
  * 
  * @since 1.10
  * 
- * @param I
+ * @param <I>
+ *            The type of the input ports
+ * @param <O>
+ *            The type of the input ports
  */
 public abstract class AbstractFilter<I extends Enum<I>, O extends Enum<O>> extends AbstractStage<I> implements ISink<I>, ISource<O> {
 

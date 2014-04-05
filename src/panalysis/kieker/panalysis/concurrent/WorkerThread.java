@@ -33,6 +33,7 @@ public class WorkerThread extends Thread {
 	/** represents a thread-local pipeline copy */
 	private PrioritizedStageCollection<IStage> stages;
 	private long duration;
+	private Pipeline<ConcurrentWorkStealingPipe> pipeline;
 
 	public void setStages(final List<IStage> stages) {
 		this.stages = new PrioritizedStageCollection<IStage>(stages);
@@ -79,9 +80,9 @@ public class WorkerThread extends Thread {
 		return this.stages.getElements();
 	}
 
-	public void setPipeline(final Pipeline pipeline) {
-		// TODO Auto-generated method stub
-
+	public void setPipeline(final Pipeline<ConcurrentWorkStealingPipe> pipeline) {
+		this.pipeline = pipeline;
+		this.setStages(pipeline.getStages());
 	}
 
 }
