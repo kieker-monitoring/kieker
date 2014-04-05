@@ -48,7 +48,7 @@ public class CountWordsAnalysis extends Analysis {
 	public void init() {
 		super.init();
 
-		this.repeaterSource = new RepeaterSource(".", 2000);
+		this.repeaterSource = new RepeaterSource(".", 4000);
 		this.findFilesStage = new DirectoryName2Files();
 		this.distributor = new Distributor();
 		this.countWordsStage0 = new CountWordsStage();
@@ -98,7 +98,7 @@ public class CountWordsAnalysis extends Analysis {
 		final long end = System.currentTimeMillis();
 		// analysis.terminate();
 		final long duration = end - start;
-		System.out.println("duration: " + duration + " ms");// NOPMD (Just for example purposes)
+		System.out.println("duration: " + duration + " ms"); // NOPMD (Just for example purposes)
 
 		System.out.println("repeaterSource: " + (analysis.repeaterSource.getOverallDuration() - // NOPMD (Just for example purposes)
 				analysis.findFilesStage.getOverallDuration()) + " ms");

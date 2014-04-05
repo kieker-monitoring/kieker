@@ -28,7 +28,7 @@ import kieker.panalysis.base.IStage;
  * 
  * @since 1.10
  */
-public class MethodCallPipe extends AbstractPipe {
+public class MethodCallPipe extends AbstractPipe<MethodCallPipe> {
 
 	private IStage targetStage;
 	private Object storedRecord;

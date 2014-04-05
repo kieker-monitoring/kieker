@@ -55,7 +55,6 @@ public class CountWordsStage extends AbstractFilter<CountWordsStage.INPUT_PORT, 
 		final long start = System.currentTimeMillis();
 
 		final Object record = this.take(INPUT_PORT.FILE);
-		System.out.println("record: " + record);
 		final File file = (File) record;
 
 		int wordsCount = 0;

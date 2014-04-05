@@ -10,10 +10,10 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 // BETTER use a type parameter
 public class CircularWorkStealingDeque {
-	public final static Object EMPTY = new Object();
-	public final static Object ABORT = new Object();
+	public static final Object EMPTY = new Object();
+	public static final Object ABORT = new Object();
 
-	private final static long LOG_INITIAL_SIZE = 10;
+	private static final long LOG_INITIAL_SIZE = 10;
 
 	private volatile long bottom = 0;
 	// private volatile long top = 0;
@@ -84,8 +84,7 @@ public class CircularWorkStealingDeque {
 			final long ss = aa.size();
 			this.bottom = b + ss;
 			t = this.top.get();
-			if (!this.casTop(t, t + ss))
-			{
+			if (!this.casTop(t, t + ss)) {
 				this.bottom = b;
 				// a.free();
 			}

@@ -9,16 +9,21 @@ package de.chw.concurrent;
 // BETTER use a type parameter
 public class CircularArray {
 
-	private final long log_size;
+	private final long logSize;
 	private final Object[] segment;
 
+	/**
+	 * 
+	 * @param log_size
+	 *            The initial size of this array in log2, i.e., the number of bits to use
+	 */
 	public CircularArray(final long log_size) {
-		this.log_size = log_size;
-		this.segment = new Object[1 << this.log_size];
+		this.logSize = log_size;
+		this.segment = new Object[1 << this.logSize];
 	}
 
 	public long size() {
-		return 1 << this.log_size;
+		return 1 << this.logSize;
 	}
 
 	public Object get(final long i) {
@@ -30,7 +35,7 @@ public class CircularArray {
 	}
 
 	public CircularArray grow(final long b, final long t) {
-		final CircularArray a = new CircularArray(this.log_size + 1);
+		final CircularArray a = new CircularArray(this.logSize + 1);
 		for (long i = t; i < b; i++) {
 			a.put(i, this.get(i));
 		}
@@ -38,7 +43,7 @@ public class CircularArray {
 	}
 
 	public CircularArray shrink(final long b, final long t) {
-		final CircularArray a = new CircularArray(this.log_size - 1);
+		final CircularArray a = new CircularArray(this.logSize - 1);
 		for (long i = t; i < b; i++) {
 			a.put(i, this.get(i));
 		}

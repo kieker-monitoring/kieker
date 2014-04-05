@@ -46,7 +46,6 @@ public class DirectoryName2Files extends AbstractFilter<DirectoryName2Files.INPU
 		final long start = System.currentTimeMillis();
 
 		final String inputDir = (String) this.take(INPUT_PORT.DIRECTORY_NAME);
-		System.out.println("Scanning directory: " + inputDir);
 
 		final File[] availableFiles = new File(inputDir).listFiles();
 		for (final File file : availableFiles) {

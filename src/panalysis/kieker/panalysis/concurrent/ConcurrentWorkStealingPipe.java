@@ -12,7 +12,7 @@ import kieker.panalysis.base.ISink;
 import kieker.panalysis.base.ISource;
 import kieker.panalysis.examples.wordcount.ConcurrentCountWordsAnalysis;
 
-public class ConcurrentWorkStealingPipe extends AbstractPipe {
+public class ConcurrentWorkStealingPipe extends AbstractPipe<ConcurrentWorkStealingPipe> {
 
 	private final CircularWorkStealingDeque circularWorkStealingDeque = new CircularWorkStealingDeque();
 	private List<ConcurrentWorkStealingPipe> allOtherPipes;

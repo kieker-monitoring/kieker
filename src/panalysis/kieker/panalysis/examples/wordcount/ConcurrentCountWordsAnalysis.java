@@ -16,14 +16,11 @@
 
 package kieker.panalysis.examples.wordcount;
 
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 import kieker.panalysis.Distributor;
 import kieker.panalysis.Merger;
 import kieker.panalysis.RepeaterSource;
 import kieker.panalysis.base.Analysis;
+import kieker.panalysis.base.IPipe;
 import kieker.panalysis.base.Pipeline;
 import kieker.panalysis.concurrent.ConcurrentWorkStealingPipe;
 import kieker.panalysis.concurrent.WorkerThread;
@@ -35,10 +32,11 @@ import kieker.panalysis.concurrent.WorkerThread;
  */
 public class ConcurrentCountWordsAnalysis extends Analysis {
 
+	private static final int SECONDS = 1000;
+
 	public static final String START_DIRECTORY_NAME = ".";
 
 	private RepeaterSource repeaterSource;
-
 	private WorkerThread[] threads;
 
 	public ConcurrentCountWordsAnalysis() {
@@ -49,87 +47,87 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 	public void init() {
 		super.init();
 
-		int numThreads = Runtime.getRuntime().availableProcessors();
-
-		final ConcurrentWorkStealingPipe[][] pipes = new ConcurrentWorkStealingPipe[7][numThreads];
-		for (int i = 0; i < pipes.length; i++) {
-			for (int j = 0; j < pipes[i].length; j++) {
-				final ConcurrentWorkStealingPipe pipe = new ConcurrentWorkStealingPipe();
-				pipes[i][j] = pipe;
-			}
-		}
-
-		for (final ConcurrentWorkStealingPipe[] pipe : pipes) {
-			for (final ConcurrentWorkStealingPipe element : pipe) {
-				final Set<ConcurrentWorkStealingPipe> pipesAsSet = new LinkedHashSet<ConcurrentWorkStealingPipe>(Arrays.asList(pipe));
-				element.copyAllOtherPipes(pipesAsSet);
-			}
-		}
-
-		this.repeaterSource = new RepeaterSource(START_DIRECTORY_NAME, 2000);
+		this.repeaterSource = new RepeaterSource(START_DIRECTORY_NAME, 4000);
 		this.repeaterSource.setId(99);
 
-		numThreads = 2;
-		this.createThreads(pipes, numThreads);
-	}
+		int numThreads = Runtime.getRuntime().availableProcessors();
+		numThreads = 2; // only fur testing purposes
 
-	private void createThreads(final ConcurrentWorkStealingPipe[][] pipes, final int numThreads) {
 		this.threads = new WorkerThread[numThreads];
 		for (int i = 0; i < this.threads.length; i++) {
-
-			final DirectoryName2Files findFilesStage = new DirectoryName2Files();
-			final Distributor distributor = new Distributor();
-			final CountWordsStage countWordsStage0 = new CountWordsStage();
-			final CountWordsStage countWordsStage1 = new CountWordsStage();
-			final Merger merger = new Merger();
-			final OutputWordsCountSink outputWordsCountStage = new OutputWordsCountSink();
-
 			final Pipeline pipeline = new Pipeline();
-			pipeline.addStage(findFilesStage);
-			pipeline.addStage(distributor);
-			pipeline.addStage(countWordsStage0);
-			pipeline.addStage(countWordsStage1);
-			pipeline.addStage(merger);
-			pipeline.addStage(outputWordsCountStage);
-
-			int pipeIndex = 0;
-			pipes[pipeIndex++][i].connect(this.repeaterSource, RepeaterSource.OUTPUT_PORT.OUTPUT, findFilesStage,
-					DirectoryName2Files.INPUT_PORT.DIRECTORY_NAME);
-			pipes[pipeIndex++][i].connect(findFilesStage, DirectoryName2Files.OUTPUT_PORT.FILE, distributor, Distributor.INPUT_PORT.OBJECT);
-
-			pipes[pipeIndex++][i].connect(distributor, Distributor.OUTPUT_PORT.OUTPUT0, countWordsStage0,
-					CountWordsStage.INPUT_PORT.FILE);
-			pipes[pipeIndex++][i].connect(distributor, Distributor.OUTPUT_PORT.OUTPUT1, countWordsStage1,
-					CountWordsStage.INPUT_PORT.FILE);
-
-			pipes[pipeIndex++][i].connect(countWordsStage0, CountWordsStage.OUTPUT_PORT.WORDSCOUNT, merger,
-					Merger.INPUT_PORT.INPUT0);
-			pipes[pipeIndex++][i].connect(countWordsStage1, CountWordsStage.OUTPUT_PORT.WORDSCOUNT, merger,
-					Merger.INPUT_PORT.INPUT1);
-
-			pipes[pipeIndex++][i].connect(merger, Merger.OUTPUT_PORT.OBJECT, outputWordsCountStage,
-					OutputWordsCountSink.INPUT_PORT.FILE_WORDCOUNT_TUPLE);
+			this.buildPipeline(pipeline);
 
 			final WorkerThread thread = new WorkerThread();
-			thread.setStages(pipeline.getStages());
-
+			thread.setPipeline(pipeline);
 			this.threads[i] = thread;
 		}
+
+	}
+
+	private void buildPipeline(final Pipeline pipeline) {
+		// create stages
+		final RepeaterSource repeaterSource = this.repeaterSource;
+		final DirectoryName2Files findFilesStage = pipeline.addStage(new DirectoryName2Files());
+		final Distributor distributor = pipeline.addStage(new Distributor());
+		final CountWordsStage countWordsStage0 = pipeline.addStage(new CountWordsStage());
+		final CountWordsStage countWordsStage1 = pipeline.addStage(new CountWordsStage());
+		final Merger merger = pipeline.addStage(new Merger());
+		final OutputWordsCountSink outputWordsCountStage = pipeline.addStage(new OutputWordsCountSink());
+		// TODO consider to use: pipeline.add(stage).asStartStage().assignUniqueId()
+
+		pipeline.setStartStages(findFilesStage);
+
+		// connect stages by pipes
+		IPipe pipe = new ConcurrentWorkStealingPipe()
+				.source(repeaterSource, RepeaterSource.OUTPUT_PORT.OUTPUT)
+				.target(findFilesStage, DirectoryName2Files.INPUT_PORT.DIRECTORY_NAME);
+		pipeline.add(pipe).toGroup(0);
+
+		pipe = new ConcurrentWorkStealingPipe()
+				.source(findFilesStage, DirectoryName2Files.OUTPUT_PORT.FILE)
+				.target(distributor, Distributor.INPUT_PORT.OBJECT);
+		pipeline.add(pipe).toGroup(1);
+
+		pipe = new ConcurrentWorkStealingPipe()
+				.source(distributor, Distributor.OUTPUT_PORT.OUTPUT0)
+				.target(countWordsStage0, CountWordsStage.INPUT_PORT.FILE);
+		pipeline.add(pipe).toGroup(2);
+
+		pipe = new ConcurrentWorkStealingPipe()
+				.source(distributor, Distributor.OUTPUT_PORT.OUTPUT1)
+				.target(countWordsStage1, CountWordsStage.INPUT_PORT.FILE);
+		pipeline.add(pipe).toGroup(3);
+
+		pipe = new ConcurrentWorkStealingPipe()
+				.source(countWordsStage0, CountWordsStage.OUTPUT_PORT.WORDSCOUNT)
+				.target(merger, Merger.INPUT_PORT.INPUT0);
+		pipeline.add(pipe).toGroup(4);
+
+		pipe = new ConcurrentWorkStealingPipe()
+				.source(countWordsStage1, CountWordsStage.OUTPUT_PORT.WORDSCOUNT)
+				.target(merger, Merger.INPUT_PORT.INPUT1);
+		pipeline.add(pipe).toGroup(5);
+
+		pipe = new ConcurrentWorkStealingPipe()
+				.source(merger, Merger.OUTPUT_PORT.OBJECT)
+				.target(outputWordsCountStage, OutputWordsCountSink.INPUT_PORT.FILE_WORDCOUNT_TUPLE);
+		pipeline.add(pipe).toGroup(6);
 	}
 
 	@Override
 	public void start() {
 		super.start();
 
-		this.repeaterSource.execute();
-
 		for (final WorkerThread thread : this.threads) {
 			thread.start();
 		}
 
+		this.repeaterSource.execute();
+
 		for (final WorkerThread thread : this.threads) {
 			try {
-				thread.join(60 * 1000);
+				thread.join(60 * SECONDS);
 			} catch (final InterruptedException e) {
 				throw new IllegalStateException();
 			}
@@ -144,7 +142,7 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 		final long end = System.currentTimeMillis();
 		// analysis.terminate();
 		final long duration = end - start;
-		System.out.println("duration: " + duration + " ms");// NOPMD (Just for example purposes)
+		System.out.println("duration: " + duration + " ms"); // NOPMD (Just for example purposes)
 
 		ConcurrentCountWordsAnalysis.analyzeThreads(analysis);
 	}

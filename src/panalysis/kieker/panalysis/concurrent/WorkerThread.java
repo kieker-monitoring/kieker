@@ -19,6 +19,7 @@ package kieker.panalysis.concurrent;
 import java.util.List;
 
 import kieker.panalysis.base.IStage;
+import kieker.panalysis.base.Pipeline;
 
 /**
  * @author Christian Wulf
@@ -76,6 +77,11 @@ public class WorkerThread extends Thread {
 
 	public List<IStage> getStages() {
 		return this.stages.getElements();
+	}
+
+	public void setPipeline(final Pipeline pipeline) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

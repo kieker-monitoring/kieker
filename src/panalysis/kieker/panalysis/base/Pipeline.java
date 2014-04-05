@@ -16,8 +16,11 @@
 
 package kieker.panalysis.base;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Christian Wulf
@@ -28,42 +31,63 @@ public class Pipeline {
 
 	protected final List<IStage> stages = new LinkedList<IStage>();
 	private int freeId = 0;
+	private List<IStage> startStages;
+
+	private IPipe currentPipe;
+	private final Map<Integer, List<IPipe>> pipeGroups = new HashMap<Integer, List<IPipe>>();
 
 	public Pipeline() {
 		// No code necessary
 	}
 
-	public void addStage(final IStage stage) {
+	/**
+	 * <p>
+	 * Adds the given <code>stage</code> to this pipeline and set a unique identifier.
+	 * </p>
+	 * <p>
+	 * Use this method as indicated in the following example: <blockquote> <code>Distributor distributor = pipeline.addStage(new Distributor())</code> </blockquote>
+	 * </p>
+	 * 
+	 * @param stage
+	 * @return
+	 */
+	public <S extends IStage> S addStage(final S stage) {
 		stage.setId(this.freeId++);
 		this.stages.add(stage);
+		return stage;
 	}
 
 	public void start() {
-		this.stages.get(0).execute();
+		if (this.startStages.size() == 0) {
+			throw new IllegalStateException("You need to define at least one start stage.");
+		} else if (this.startStages.size() == 1) {
+			this.stages.get(0).execute();
+		} else {
+			// TODO create a single distributor stage as start stage
+			throw new IllegalStateException("Multiple start stages are not yet supported.");
+		}
 	}
 
 	public List<IStage> getStages() {
 		return this.stages;
 	}
 
-	// BETTER use this generic method instead of one per new pipe type; However, this method throws an java.lang.InstantiationException
-	/*
-	 * @SuppressWarnings({ "rawtypes", "unchecked" })
-	 * public static <O extends Enum<O>, I extends Enum<I>> IPipe<?> connect(final Class<? extends IPipe> pipeClass, final ISource<O> sourceStage,
-	 * final O sourcePort,
-	 * final ISink<I> targetStage,
-	 * final I targetPort) {
-	 * try {
-	 * final IPipe pipe = pipeClass.newInstance();
-	 * sourceStage.setPipeForOutputPort(sourcePort, pipe);
-	 * targetStage.setPipeForInputPort(targetPort, pipe);
-	 * return pipe;
-	 * } catch (final InstantiationException e) {
-	 * throw new IllegalStateException(e);
-	 * } catch (final IllegalAccessException e) {
-	 * throw new IllegalStateException(e);
-	 * }
-	 * }
-	 */
+	public void setStartStages(final IStage... startStages) {
+		this.startStages = Arrays.asList(startStages);
+	}
+
+	public Pipeline add(final IPipe pipe) {
+		this.currentPipe = pipe;
+		return this;
+	}
+
+	public void toGroup(final int pipeGroupIdentifier) {
+		List<IPipe> pipes = this.pipeGroups.get(pipeGroupIdentifier);
+		if (pipes == null) {
+			pipes = new LinkedList<IPipe>();
+			this.pipeGroups.put(pipeGroupIdentifier, pipes);
+		}
+		pipes.add(this.currentPipe);
+	}
 
 }
