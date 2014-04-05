@@ -43,6 +43,7 @@ public class Distributor extends AbstractFilter<Distributor.INPUT_PORT, Distribu
 
 	public void execute() {
 		final Object object = this.take(INPUT_PORT.OBJECT);
+		System.out.println("distributor takes " + object);
 		final OUTPUT_PORT port = this.getNextPortInRoundRobinOrder();
 		this.put(port, object);
 	}

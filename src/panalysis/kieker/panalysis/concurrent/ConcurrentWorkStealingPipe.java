@@ -18,8 +18,8 @@ public class ConcurrentWorkStealingPipe extends AbstractPipe {
 	private List<ConcurrentWorkStealingPipe> allOtherPipes;
 	private ISink<?> targetStage;
 
-	public void copyAllOtherPipes(final Set<ConcurrentWorkStealingPipe> pipes) {
-		this.allOtherPipes = new ArrayList<ConcurrentWorkStealingPipe>(pipes);
+	public void copyAllOtherPipes(final Set<ConcurrentWorkStealingPipe> samePipesFromAllThreads) {
+		this.allOtherPipes = new ArrayList<ConcurrentWorkStealingPipe>(samePipesFromAllThreads);
 		this.allOtherPipes.remove(this);
 	}
 

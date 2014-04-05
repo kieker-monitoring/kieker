@@ -34,7 +34,7 @@ public class PrioritizedStageCollection<T> {
 	}
 
 	public T get() {
-		this.index = (this.index + 1) % this.elements.size();
+		this.index = (this.index++) % this.elements.size();
 		return this.elements.get(this.index);
 	}
 

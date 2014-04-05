@@ -49,26 +49,31 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 	public void init() {
 		super.init();
 
-		final ConcurrentWorkStealingPipe[] pipes = new ConcurrentWorkStealingPipe[7];
+		int numThreads = Runtime.getRuntime().availableProcessors();
+
+		final ConcurrentWorkStealingPipe[][] pipes = new ConcurrentWorkStealingPipe[7][numThreads];
 		for (int i = 0; i < pipes.length; i++) {
-			final ConcurrentWorkStealingPipe pipe = new ConcurrentWorkStealingPipe();
-			pipes[i] = pipe;
+			for (int j = 0; j < pipes[i].length; j++) {
+				final ConcurrentWorkStealingPipe pipe = new ConcurrentWorkStealingPipe();
+				pipes[i][j] = pipe;
+			}
 		}
 
-		for (final ConcurrentWorkStealingPipe pipe : pipes) {
-			final Set<ConcurrentWorkStealingPipe> pipesAsSet = new LinkedHashSet<ConcurrentWorkStealingPipe>(Arrays.asList(pipes));
-			pipe.copyAllOtherPipes(pipesAsSet);
+		for (final ConcurrentWorkStealingPipe[] pipe : pipes) {
+			for (final ConcurrentWorkStealingPipe element : pipe) {
+				final Set<ConcurrentWorkStealingPipe> pipesAsSet = new LinkedHashSet<ConcurrentWorkStealingPipe>(Arrays.asList(pipe));
+				element.copyAllOtherPipes(pipesAsSet);
+			}
 		}
 
 		this.repeaterSource = new RepeaterSource(START_DIRECTORY_NAME, 2000);
 		this.repeaterSource.setId(99);
 
-		int numThreads = Runtime.getRuntime().availableProcessors();
-		numThreads = 1;
+		numThreads = 2;
 		this.createThreads(pipes, numThreads);
 	}
 
-	private void createThreads(final ConcurrentWorkStealingPipe[] pipes, final int numThreads) {
+	private void createThreads(final ConcurrentWorkStealingPipe[][] pipes, final int numThreads) {
 		this.threads = new WorkerThread[numThreads];
 		for (int i = 0; i < this.threads.length; i++) {
 
@@ -88,21 +93,21 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 			pipeline.addStage(outputWordsCountStage);
 
 			int pipeIndex = 0;
-			pipes[pipeIndex++].connect(this.repeaterSource, RepeaterSource.OUTPUT_PORT.OUTPUT, findFilesStage,
+			pipes[pipeIndex++][i].connect(this.repeaterSource, RepeaterSource.OUTPUT_PORT.OUTPUT, findFilesStage,
 					DirectoryName2Files.INPUT_PORT.DIRECTORY_NAME);
-			pipes[pipeIndex++].connect(findFilesStage, DirectoryName2Files.OUTPUT_PORT.FILE, distributor, Distributor.INPUT_PORT.OBJECT);
+			pipes[pipeIndex++][i].connect(findFilesStage, DirectoryName2Files.OUTPUT_PORT.FILE, distributor, Distributor.INPUT_PORT.OBJECT);
 
-			pipes[pipeIndex++].connect(distributor, Distributor.OUTPUT_PORT.OUTPUT0, countWordsStage0,
+			pipes[pipeIndex++][i].connect(distributor, Distributor.OUTPUT_PORT.OUTPUT0, countWordsStage0,
 					CountWordsStage.INPUT_PORT.FILE);
-			pipes[pipeIndex++].connect(distributor, Distributor.OUTPUT_PORT.OUTPUT1, countWordsStage1,
+			pipes[pipeIndex++][i].connect(distributor, Distributor.OUTPUT_PORT.OUTPUT1, countWordsStage1,
 					CountWordsStage.INPUT_PORT.FILE);
 
-			pipes[pipeIndex++].connect(countWordsStage0, CountWordsStage.OUTPUT_PORT.WORDSCOUNT, merger,
+			pipes[pipeIndex++][i].connect(countWordsStage0, CountWordsStage.OUTPUT_PORT.WORDSCOUNT, merger,
 					Merger.INPUT_PORT.INPUT0);
-			pipes[pipeIndex++].connect(countWordsStage1, CountWordsStage.OUTPUT_PORT.WORDSCOUNT, merger,
+			pipes[pipeIndex++][i].connect(countWordsStage1, CountWordsStage.OUTPUT_PORT.WORDSCOUNT, merger,
 					Merger.INPUT_PORT.INPUT1);
 
-			pipes[pipeIndex++].connect(merger, Merger.OUTPUT_PORT.OBJECT, outputWordsCountStage,
+			pipes[pipeIndex++][i].connect(merger, Merger.OUTPUT_PORT.OBJECT, outputWordsCountStage,
 					OutputWordsCountSink.INPUT_PORT.FILE_WORDCOUNT_TUPLE);
 
 			final WorkerThread thread = new WorkerThread();
@@ -116,10 +121,11 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 	public void start() {
 		super.start();
 
+		this.repeaterSource.execute();
+
 		for (final WorkerThread thread : this.threads) {
 			thread.start();
 		}
-		this.repeaterSource.execute();
 
 		for (final WorkerThread thread : this.threads) {
 			try {
@@ -148,7 +154,7 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 		WorkerThread maxThread = null;
 
 		for (final WorkerThread thread : analysis.threads) {
-			System.out.println("findFilesStage: " + ((DirectoryName2Files) thread.getStages().get(0)).getNumFiles()); // NOPMD (Just for example purposes)
+			// System.out.println("findFilesStage: " + ((DirectoryName2Files) thread.getStages().get(0)).getNumFiles()); // NOPMD (Just for example purposes)
 			System.out.println("outputWordsCountStage: " + ((OutputWordsCountSink) thread.getStages().get(5)).getNumFiles()); // NOPMD (Just for example purposes)
 			final long duration = thread.getDuration();
 			if (duration > maxDuration) {
@@ -157,6 +163,6 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 			}
 		}
 
-		System.out.println("maxThread: " + maxThread.toString() + " takes " + maxDuration + " ms");
+		// System.out.println("maxThread: " + maxThread.toString() + " takes " + maxDuration + " ms");
 	}
 }
