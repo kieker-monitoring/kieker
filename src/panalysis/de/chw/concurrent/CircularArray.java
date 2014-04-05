@@ -1,5 +1,11 @@
 package de.chw.concurrent;
 
+/**
+ * 
+ * @author Christian Wulf
+ * @see "Dynamic Circular WorkStealing Deque"
+ * 
+ */
 // BETTER use a type parameter
 public class CircularArray {
 

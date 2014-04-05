@@ -42,17 +42,21 @@ public class Merger extends AbstractFilter<Merger.INPUT_PORT, Merger.OUTPUT_PORT
 	}
 
 	public void execute() {
-		final INPUT_PORT inputPort = this.getNextPortInRoundRobinOrder();
-		final Object object = this.take(inputPort);
-		this.put(OUTPUT_PORT.OBJECT, object);
+		int size = this.inputPorts.length;
+		// check each port at most once to avoid a potentially infinite loop
+		while (size-- > 0) {
+			final INPUT_PORT inputPort = this.getNextPortInRoundRobinOrder();
+			final Object object = this.tryTake(inputPort);
+			if (object != null) {
+				this.put(OUTPUT_PORT.OBJECT, object);
+				return;
+			}
+		}
 	}
 
 	private INPUT_PORT getNextPortInRoundRobinOrder() {
-		INPUT_PORT port;
-		do {
-			port = this.inputPorts[this.index];
-			this.index = (this.index + 1) % this.inputPorts.length;
-		} while (this.isEmpty(port));
+		final INPUT_PORT port = this.inputPorts[this.index];
+		this.index = (this.index + 1) % this.inputPorts.length;
 		return port;
 	}
 

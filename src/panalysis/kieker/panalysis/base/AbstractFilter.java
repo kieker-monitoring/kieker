@@ -42,6 +42,10 @@ public abstract class AbstractFilter<I extends Enum<I>, O extends Enum<O>> exten
 		this.readOnlyInputPortPipes = Collections.unmodifiableMap(this.inputPortPipes);
 	}
 
+	public void setPipeForInputPort(final I inputPort, final IPipe pipe) {
+		this.inputPortPipes.put(inputPort, pipe);
+	}
+
 	public void setPipeForOutputPort(final O outputPort, final IPipe pipe) {
 		this.outputPortPipes.put(outputPort, pipe);
 	}
@@ -67,10 +71,6 @@ public abstract class AbstractFilter<I extends Enum<I>, O extends Enum<O>> exten
 		pipe.put(record);
 	}
 
-	public void setPipeForInputPort(final I inputPort, final IPipe pipe) {
-		this.inputPortPipes.put(inputPort, pipe);
-	}
-
 	protected Object take(final I inputPort) {
 		final IPipe pipe = this.inputPortPipes.get(inputPort);
 		return pipe.take();
@@ -79,11 +79,6 @@ public abstract class AbstractFilter<I extends Enum<I>, O extends Enum<O>> exten
 	protected Object tryTake(final I inputPort) {
 		final IPipe pipe = this.inputPortPipes.get(inputPort);
 		return pipe.tryTake();
-	}
-
-	protected boolean isEmpty(final I inputPort) {
-		final IPipe pipe = this.inputPortPipes.get(inputPort);
-		return pipe.isEmpty();
 	}
 
 	public Map<I, IPipe> getInputPortPipes() {

@@ -16,7 +16,6 @@
 
 package kieker.panalysis.base;
 
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,14 +26,14 @@ import java.util.List;
  */
 public class Pipeline {
 
-	private final List<IStage<?>> stages = new LinkedList<IStage<?>>();
+	protected final List<IStage> stages = new LinkedList<IStage>();
 	private int freeId = 0;
 
 	public Pipeline() {
 		// No code necessary
 	}
 
-	public void addStage(final IStage<?> stage) {
+	public void addStage(final IStage stage) {
 		stage.setId(this.freeId++);
 		this.stages.add(stage);
 	}
@@ -43,7 +42,7 @@ public class Pipeline {
 		this.stages.get(0).execute();
 	}
 
-	public Collection<IStage<?>> getStages() {
+	public List<IStage> getStages() {
 		return this.stages;
 	}
 

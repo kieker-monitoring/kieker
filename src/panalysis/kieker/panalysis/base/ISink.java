@@ -25,7 +25,7 @@ import java.util.Map;
  * 
  * @param I
  */
-public interface ISink<I extends Enum<I>> extends IStage<I> {
+public interface ISink<I extends Enum<I>> extends IStage {
 
 	/**
 	 * @since 1.10

@@ -43,14 +43,6 @@ public interface IPipe {
 	Object tryTake();
 
 	/**
-	 * @return <code>true</code> if the pipe contains no element, otherwise <code>false</code>.<br>
-	 *         <i>This method is used to find the next non-empty port of a stage with multiple ports.<i>
-	 * 
-	 * @since 1.10
-	 */
-	boolean isEmpty();
-
-	/**
 	 * @since 1.10
 	 */
 	List<?> tryTakeMultiple(int numItemsToTake);
@@ -59,6 +51,12 @@ public interface IPipe {
 	 * @since 1.10
 	 */
 	void putMultiple(List<?> items);
+
+	/*
+	 * Let this uncommented fir documentation purpose:<br>
+	 * Do not provide a method to check for emptiness, since the state from EMPTY to NON-EMPTY can change between check and access (stale state)
+	 */
+	// boolean isEmpty();
 
 	<O extends Enum<O>, I extends Enum<I>> void connect(ISource<O> sourceStage, O sourcePort, ISink<I> targetStage, I targetPort);
 

@@ -16,11 +16,8 @@
 
 package kieker.panalysis.concurrent;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.PriorityQueue;
+import java.util.List;
 
-import kieker.panalysis.base.IPipe;
 import kieker.panalysis.base.IStage;
 
 /**
@@ -30,30 +27,32 @@ import kieker.panalysis.base.IStage;
  */
 public class WorkerThread extends Thread {
 
-	// BETTER move to StealableConcurrentPipe
-	private final PriorityQueue<WorkerThread> otherThreads;
+	// private final Map<IStage<?>, Map<Enum<?>, IPipe>> localStages = new HashMap<IStage<?>, Map<Enum<?>, IPipe>>();
 
-	private final Map<IStage<?>, Map<Enum<?>, IPipe>> localStages = new HashMap<IStage<?>, Map<Enum<?>, IPipe>>();
-
-	private final int numTaskBundlesToSteal = 10;
 	/** represents a thread-local pipeline copy */
-	private final PrioritizedStageCollection stages;
+	private PrioritizedStageCollection<IStage> stages;
+	private long duration;
 
-	public WorkerThread(final PriorityQueue<WorkerThread> otherThreads, final PrioritizedStageCollection stages) {
-		this.otherThreads = otherThreads;
-		this.stages = stages;
+	public void setStages(final List<IStage> stages) {
+		this.stages = new PrioritizedStageCollection<IStage>(stages);
 	}
 
 	@Override
 	public void run() {
 		this.initDatastructures();
+
+		final long start = System.currentTimeMillis();
+
 		while (true) {
-			final IStage<?> stage = this.stages.get();
+			final IStage stage = this.stages.get();
 
 			this.startStageExecution();
 			stage.execute();
 			this.finishStageExecution();
 		}
+
+		// final long end = System.currentTimeMillis();
+		// this.duration = end - start;
 	}
 
 	private void initDatastructures() {
@@ -69,6 +68,14 @@ public class WorkerThread extends Thread {
 	private void finishStageExecution() {
 		// TODO Auto-generated method stub
 
+	}
+
+	public long getDuration() {
+		return this.duration;
+	}
+
+	public List<IStage> getStages() {
+		return this.stages.getElements();
 	}
 
 }

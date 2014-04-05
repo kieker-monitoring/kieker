@@ -30,7 +30,7 @@ import kieker.panalysis.base.IStage;
  */
 public class MethodCallPipe extends AbstractPipe {
 
-	private IStage<?> targetStage;
+	private IStage targetStage;
 	private Object storedRecord;
 
 	public MethodCallPipe(final Object initialRecord) {

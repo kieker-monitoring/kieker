@@ -34,12 +34,12 @@ import kieker.panalysis.base.AbstractFilter;
  */
 public class CountWordsStage extends AbstractFilter<CountWordsStage.INPUT_PORT, CountWordsStage.OUTPUT_PORT> {
 
-	public static enum OUTPUT_PORT { // NOCS
-		EXCEPTION, WORDSCOUNT
-	}
-
 	public static enum INPUT_PORT { // NOCS
 		FILE
+	}
+
+	public static enum OUTPUT_PORT { // NOCS
+		EXCEPTION, WORDSCOUNT
 	}
 
 	private long overallDuration = 0;
@@ -54,7 +54,9 @@ public class CountWordsStage extends AbstractFilter<CountWordsStage.INPUT_PORT, 
 	public void execute() {
 		final long start = System.currentTimeMillis();
 
-		final File file = (File) this.take(INPUT_PORT.FILE);
+		final Object record = this.take(INPUT_PORT.FILE);
+		System.out.println("record: " + record);
+		final File file = (File) record;
 
 		int wordsCount = 0;
 		try {

@@ -16,25 +16,30 @@
 
 package kieker.panalysis.concurrent;
 
-import kieker.panalysis.base.IStage;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  */
-public class PrioritizedStageCollection {
+public class PrioritizedStageCollection<T> {
 
-	public PrioritizedStageCollection() {
-		// No code necessary
+	protected final List<T> elements;
+	private int index = 0;
+
+	public PrioritizedStageCollection(final List<T> stages) {
+		this.elements = new ArrayList<T>(stages);
 	}
 
-	public void add(final IStage<?> stage) {
-
+	public T get() {
+		this.index = (this.index + 1) % this.elements.size();
+		return this.elements.get(this.index);
 	}
 
-	public IStage<?> get() {
-		return null;
+	public List<T> getElements() {
+		return this.elements;
 	}
 
 	// TODO implement prioritized get and set

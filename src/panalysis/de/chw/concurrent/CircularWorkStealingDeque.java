@@ -1,29 +1,40 @@
 package de.chw.concurrent;
 
-//BETTER use a type parameter
-public class CircularWorkStealingDeque {
-	public final static Object Empty = new Object();
-	public final static Object Abort = new Object();
+import java.util.concurrent.atomic.AtomicLong;
 
-	private final static long LogInitialSize = 10;
+/**
+ * 
+ * @author Christian Wulf
+ * @see "Dynamic Circular WorkStealing Deque"
+ * 
+ */
+// BETTER use a type parameter
+public class CircularWorkStealingDeque {
+	public final static Object EMPTY = new Object();
+	public final static Object ABORT = new Object();
+
+	private final static long LOG_INITIAL_SIZE = 10;
+
 	private volatile long bottom = 0;
-	private volatile long top = 0;
-	private volatile CircularArray activeArray = new CircularArray(LogInitialSize);
+	// private volatile long top = 0;
+	private final AtomicLong top = new AtomicLong();
+	private volatile CircularArray activeArray = new CircularArray(LOG_INITIAL_SIZE);
 
 	private boolean casTop(final long oldVal, final long newVal) {
-		boolean preCond;
-		synchronized (this) {
-			preCond = (this.top == oldVal);
-			if (preCond) {
-				this.top = newVal;
-			}
-		}
-		return preCond;
+		// boolean preCond;
+		// synchronized (this) {
+		// preCond = (this.top == oldVal);
+		// if (preCond) {
+		// this.top = newVal;
+		// }
+		// }
+		// return preCond;
+		return this.top.compareAndSet(oldVal, newVal);
 	}
 
 	public void pushBottom(final Object o) {
 		final long b = this.bottom;
-		final long t = this.top;
+		final long t = this.top.get();
 		CircularArray a = this.activeArray;
 		final long size = b - t;
 		if (size > (a.size() - 1)) {
@@ -34,16 +45,24 @@ public class CircularWorkStealingDeque {
 		this.bottom = b + 1;
 	}
 
+	/**
+	 * 
+	 * @return
+	 *         <ul>
+	 *         <li><code>EMPTY</code> if the deque contains no elements,
+	 *         <li><i>the latest element</i> otherwise
+	 *         </ul>
+	 */
 	public Object popBottom() {
 		long b = this.bottom;
 		final CircularArray a = this.activeArray;
 		b = b - 1;
 		this.bottom = b;
-		final long t = this.top;
+		final long t = this.top.get();
 		final long size = b - t;
 		if (size < 0) {
 			this.bottom = t;
-			return Empty;
+			return EMPTY;
 		}
 		Object o = a.get(b);
 		if (size > 0) {
@@ -51,7 +70,7 @@ public class CircularWorkStealingDeque {
 			return o;
 		}
 		if (!this.casTop(t, t + 1)) {
-			o = Empty;
+			o = EMPTY;
 		}
 		this.bottom = t + 1;
 		return o;
@@ -64,7 +83,7 @@ public class CircularWorkStealingDeque {
 			this.activeArray = aa;
 			final long ss = aa.size();
 			this.bottom = b + ss;
-			t = this.top;
+			t = this.top.get();
 			if (!this.casTop(t, t + ss))
 			{
 				this.bottom = b;
@@ -73,25 +92,35 @@ public class CircularWorkStealingDeque {
 		}
 	}
 
+	/**
+	 * Tries to steal (return & remove) the oldest element from this deque.
+	 * 
+	 * @return
+	 *         <ul>
+	 *         <li><code>EMPTY</code> if the deque contains no elements,
+	 *         <li><code>ABORT</code> if the deque is currently being stolen by another thread,
+	 *         <li><i>the oldest element</i> otherwise
+	 *         </ul>
+	 */
 	public Object steal() {
-		final long t = this.top;
+		final long t = this.top.get();
 		final CircularArray oldArr = this.activeArray;
 		final long b = this.bottom;
 		final CircularArray a = this.activeArray;
 		final long size = b - t;
 		if (size <= 0) {
-			return Empty;
+			return EMPTY;
 		}
 		if ((size % a.size()) == 0) {
-			if ((oldArr == a) && (t == this.top)) {
-				return Empty;
+			if ((oldArr == a) && (t == this.top.get())) {
+				return EMPTY;
 			} else {
-				return Abort;
+				return ABORT;
 			}
 		}
 		final Object o = a.get(t);
 		if (!this.casTop(t, t + 1)) {
-			return Abort;
+			return ABORT;
 		}
 		return o;
 	}

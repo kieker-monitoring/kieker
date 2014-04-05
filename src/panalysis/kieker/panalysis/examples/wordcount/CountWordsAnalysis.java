@@ -56,6 +56,15 @@ public class CountWordsAnalysis extends Analysis {
 		this.merger = new Merger();
 		this.outputWordsCountStage = new OutputWordsCountSink();
 
+		this.pipeline = new Pipeline();
+		this.pipeline.addStage(this.repeaterSource);
+		this.pipeline.addStage(this.findFilesStage);
+		this.pipeline.addStage(this.distributor);
+		this.pipeline.addStage(this.countWordsStage0);
+		this.pipeline.addStage(this.countWordsStage1);
+		this.pipeline.addStage(this.merger);
+		this.pipeline.addStage(this.outputWordsCountStage);
+
 		new MethodCallPipe().connect(this.repeaterSource, RepeaterSource.OUTPUT_PORT.OUTPUT, this.findFilesStage,
 				DirectoryName2Files.INPUT_PORT.DIRECTORY_NAME);
 		new MethodCallPipe().connect(this.findFilesStage, DirectoryName2Files.OUTPUT_PORT.FILE, this.distributor, Distributor.INPUT_PORT.OBJECT);
@@ -73,14 +82,6 @@ public class CountWordsAnalysis extends Analysis {
 		new MethodCallPipe().connect(this.merger, Merger.OUTPUT_PORT.OBJECT, this.outputWordsCountStage,
 				OutputWordsCountSink.INPUT_PORT.FILE_WORDCOUNT_TUPLE);
 
-		this.pipeline = new Pipeline();
-		this.pipeline.addStage(this.repeaterSource);
-		this.pipeline.addStage(this.findFilesStage);
-		this.pipeline.addStage(this.distributor);
-		this.pipeline.addStage(this.countWordsStage0);
-		this.pipeline.addStage(this.countWordsStage1);
-		this.pipeline.addStage(this.merger);
-		this.pipeline.addStage(this.outputWordsCountStage);
 	}
 
 	@Override

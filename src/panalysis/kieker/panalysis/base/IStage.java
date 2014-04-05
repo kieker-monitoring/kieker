@@ -23,7 +23,7 @@ package kieker.panalysis.base;
  * 
  * @param I
  */
-public interface IStage<I extends Enum<I>> {
+public interface IStage {
 
 	/**
 	 * @since 1.10
