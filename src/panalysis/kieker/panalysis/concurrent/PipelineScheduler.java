@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import kieker.panalysis.base.IStage;
 
@@ -52,8 +53,11 @@ public class PipelineScheduler {
 	}
 
 	public boolean isAnyStageActive() {
-		for (final Boolean state : this.statesOfStages.values()) {
+		for (final Entry<IStage, Boolean> entry : this.statesOfStages.entrySet()) {
+			final IStage stage = entry.getKey();
+			final Boolean state = entry.getValue();
 			if (state == Boolean.TRUE) {
+				System.out.println(stage + " is active.");
 				return true;
 			}
 		}

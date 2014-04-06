@@ -51,11 +51,11 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 	public void init() {
 		super.init();
 
-		this.repeaterSource = new RepeaterSource(START_DIRECTORY_NAME, 4000);
+		this.repeaterSource = new RepeaterSource(START_DIRECTORY_NAME, 1);
 		this.repeaterSource.setId(99);
 
 		int numThreads = Runtime.getRuntime().availableProcessors();
-		numThreads = 2; // only fur testing purposes
+		numThreads = 1; // only fur testing purposes
 
 		this.threads = new WorkerThread[numThreads];
 		final Map<Integer, List<ConcurrentWorkStealingPipe>> pipeGroups = new HashMap<Integer, List<ConcurrentWorkStealingPipe>>();
@@ -137,6 +137,7 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 
 		this.repeaterSource.execute();
 
+		System.out.println("Waiting for the worker threads to terminate...");
 		for (final WorkerThread thread : this.threads) {
 			thread.terminate(TerminationPolicy.TERMINATE_STAGE_AFTER_EXECUTION);
 			try {
@@ -145,6 +146,8 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 				throw new IllegalStateException();
 			}
 		}
+
+		System.out.println("Analysis finished.");
 	}
 
 	public static void main(final String[] args) {

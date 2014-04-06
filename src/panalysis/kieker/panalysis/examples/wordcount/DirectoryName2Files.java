@@ -54,7 +54,7 @@ public class DirectoryName2Files extends AbstractFilter<DirectoryName2Files.INPU
 		final File[] availableFiles = new File(inputDir).listFiles();
 		for (final File file : availableFiles) {
 			if (file.isFile()) {
-				System.out.println("Sending " + file);
+				// this.logger.info("Sending " + file);
 				this.put(OUTPUT_PORT.FILE, file);
 				this.numFiles++;
 			}

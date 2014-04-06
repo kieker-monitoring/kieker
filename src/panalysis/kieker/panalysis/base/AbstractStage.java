@@ -51,4 +51,8 @@ public abstract class AbstractStage<I extends Enum<I>> implements IStage {
 		// empty default implementation
 	}
 
+	@Override
+	public String toString() {
+		return "{" + "id=" + this.id + ", class=" + this.getClass().getSimpleName() + "}";
+	}
 }
