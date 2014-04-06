@@ -45,11 +45,11 @@ public class DirectoryName2Files extends AbstractFilter<DirectoryName2Files.INPU
 	public boolean execute() {
 		final long start = System.currentTimeMillis();
 
-		final Object record = this.tryTake(INPUT_PORT.DIRECTORY_NAME);
-		if (record == null) {
+		final Object token = this.tryTake(INPUT_PORT.DIRECTORY_NAME);
+		if (token == null) {
 			return false;
 		}
-		final String inputDir = (String) record;
+		final String inputDir = (String) token;
 
 		final File[] availableFiles = new File(inputDir).listFiles();
 		for (final File file : availableFiles) {

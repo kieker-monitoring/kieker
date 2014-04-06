@@ -96,5 +96,4 @@ public class Pipeline<T extends IPipe> {
 	public List<AbstractFilter<?, ?>> getStartStages() {
 		return this.startStages;
 	}
-
 }

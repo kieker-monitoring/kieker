@@ -40,6 +40,7 @@ public class ConcurrentWorkStealingPipe extends AbstractPipe<ConcurrentWorkSteal
 	 * </ul>
 	 */
 	private List<ConcurrentWorkStealingPipe> allOtherPipes;
+	private int numTakenElements = 0;
 
 	public void copyAllOtherPipes(final List<ConcurrentWorkStealingPipe> samePipesFromAllThreads) {
 		this.allOtherPipes = new ArrayList<ConcurrentWorkStealingPipe>(samePipesFromAllThreads);
@@ -73,6 +74,7 @@ public class ConcurrentWorkStealingPipe extends AbstractPipe<ConcurrentWorkSteal
 			// BETTER improve stealing efficiency by stealing multiple elements at once
 			return null; // do not expose internal impl details (here: CircularWorkStealingDeque); instead return null
 		}
+		this.numTakenElements++;
 		return record;
 	}
 
@@ -107,4 +109,8 @@ public class ConcurrentWorkStealingPipe extends AbstractPipe<ConcurrentWorkSteal
 		return stolenElements;
 	}
 
+	@Override
+	public String toString() {
+		return this.getClass().getSimpleName() + "={" + "numTakenElements=" + this.numTakenElements + "}";
+	}
 }

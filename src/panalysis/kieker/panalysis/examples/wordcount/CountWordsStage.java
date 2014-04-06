@@ -54,7 +54,6 @@ public class CountWordsStage extends AbstractFilter<CountWordsStage.INPUT_PORT, 
 	public boolean execute() {
 		final long start = System.currentTimeMillis();
 
-		// final Object record = this.take(INPUT_PORT.FILE);
 		final Object record = this.tryTake(INPUT_PORT.FILE);
 		if (record == null) {
 			return false;

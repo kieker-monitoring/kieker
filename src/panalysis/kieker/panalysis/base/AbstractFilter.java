@@ -37,6 +37,9 @@ public abstract class AbstractFilter<I extends Enum<I>, O extends Enum<O>> exten
 	private final Map<I, Port> inputPortPipes;
 	private final Map<O, Port> outputPortPipes;
 
+	private int numPushedElements = 0;
+	private int numTakenElements = 0;
+
 	// private TaskBundle taskBundle;
 	// private final int numTasksThreshold = 100;
 
@@ -73,6 +76,7 @@ public abstract class AbstractFilter<I extends Enum<I>, O extends Enum<O>> exten
 		}
 		final IPipe pipe = portObj.getPipe();
 		pipe.put(record);
+		this.numPushedElements++;
 	}
 
 	protected Object take(final I inputPort) {
@@ -84,7 +88,11 @@ public abstract class AbstractFilter<I extends Enum<I>, O extends Enum<O>> exten
 	protected Object tryTake(final I inputPort) {
 		final Port portObj = this.inputPortPipes.get(inputPort);
 		final IPipe pipe = portObj.getPipe();
-		return pipe.tryTake();
+		final Object token = pipe.tryTake();
+		if (token != null) {
+			this.numTakenElements++;
+		}
+		return token;
 	}
 
 	protected Object read(final I inputPort) {
@@ -122,5 +130,23 @@ public abstract class AbstractFilter<I extends Enum<I>, O extends Enum<O>> exten
 
 	public boolean mayBeDisabled() {
 		return this.mayBeDisabled;
+	}
+
+	/**
+	 * For debugging purposes
+	 * 
+	 * @param port
+	 * @return
+	 */
+	public IPipe getOutputPipe(final O port) {
+		final Port portObj = this.outputPortPipes.get(port);
+		final IPipe pipe = portObj.getPipe();
+		return pipe;
+	}
+
+	@Override
+	public String toString() {
+		return "{" + this.getClass().getSimpleName() + ": " + "numPushedElements=" + this.numPushedElements + ", " + "numTakenElements=" + this.numTakenElements
+				+ "}";
 	}
 }

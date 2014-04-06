@@ -24,6 +24,7 @@ import kieker.panalysis.Distributor;
 import kieker.panalysis.Merger;
 import kieker.panalysis.RepeaterSource;
 import kieker.panalysis.base.Analysis;
+import kieker.panalysis.base.IStage;
 import kieker.panalysis.base.Pipeline;
 import kieker.panalysis.base.TerminationPolicy;
 import kieker.panalysis.concurrent.ConcurrentWorkStealingPipe;
@@ -52,12 +53,6 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 
 		int numThreads = Runtime.getRuntime().availableProcessors();
 		numThreads = 1; // only fur testing purposes
-
-		// FIXME incorrect in some cases: misses 5-15 words
-		// outputWordsCountStage: 15112
-		// outputWordsCountStage: 14903
-
-		// outputWordsCountStage: 59985
 
 		this.threads = new WorkerThread[numThreads];
 		final Map<Integer, List<ConcurrentWorkStealingPipe>> pipeGroups = new HashMap<Integer, List<ConcurrentWorkStealingPipe>>();
@@ -162,17 +157,31 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 		final long duration = end - start;
 		System.out.println("duration: " + duration + " ms"); // NOPMD (Just for example purposes)
 
-		ConcurrentCountWordsAnalysis.analyzeThreads(analysis);
+		analysis.analyzeThreads();
 	}
 
-	private static void analyzeThreads(final ConcurrentCountWordsAnalysis analysis) {
+	private void analyzeThreads() {
 		long maxDuration = -1;
 		WorkerThread maxThread = null;
 
-		for (final WorkerThread thread : analysis.threads) {
+		System.out.println(this.repeaterSource);
+		System.out.println(this.repeaterSource.getOutputPipe(RepeaterSource.OUTPUT_PORT.OUTPUT));
+
+		// FIXME resolve bug; see analysis results below;
+		// solution: use a generic distributor to distribute between the threads' start stages
+		// {RepeaterSource: numPushedElements=4000, numTakenElements=0}
+		// {DirectoryName2Files: numPushedElements=59985, numTakenElements=3999}
+
+		for (final WorkerThread thread : this.threads) {
+			for (final IStage stage : thread.getPipeline().getStages()) {
+				System.out.println(stage);
+			}
+
 			// System.out.println("findFilesStage: " + ((DirectoryName2Files) thread.getStages().get(0)).getNumFiles()); // NOPMD (Just for example purposes)
-			System.out.println("outputWordsCountStage: " + ((OutputWordsCountSink) thread.getPipeline().getStages().get(5)).getNumFiles()); // NOPMD (Just for
-																																			// example purposes)
+
+			final OutputWordsCountSink sink = ((OutputWordsCountSink) thread.getPipeline().getStages().get(5));
+			System.out.println("outputWordsCountStage: " + sink.getNumFiles()); // NOPMD (Just for example purposes)
+
 			final long duration = thread.getDuration();
 			if (duration > maxDuration) {
 				maxDuration = duration;
@@ -180,6 +189,6 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 			}
 		}
 
-		// System.out.println("maxThread: " + maxThread.toString() + " takes " + maxDuration + " ms");
+		System.out.println("maxThread: " + maxThread.toString() + " takes " + maxDuration + " ms");
 	}
 }

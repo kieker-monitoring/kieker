@@ -142,10 +142,40 @@ public class CircularWorkStealingDeque {
 		return o;
 	}
 
+	/**
+	 * For debugging purposes
+	 * 
+	 * @return but does not remove the bottom element from this deque
+	 */
 	public Object readBottom() {
 		final long b = this.bottom;
 		final CircularArray a = this.activeArray;
 		final Object o = a.get(b);
 		return o;
+	}
+
+	/*
+	 * bottom: 4093
+	 * bottom: 66429
+	 * bottom: 29993
+	 * bottom: 29992
+	 */
+	/*
+	 * bottom: 4093
+	 * bottom: 66429
+	 * bottom: 30008
+	 * bottom: 30007
+	 */
+	/**
+	 * For debugging purposes
+	 * 
+	 * @return the number of elements this deque contains
+	 */
+	public long size(final Object sourceStage) {
+		final long t = this.top.get();
+		final long b = this.bottom;
+		final long size = b - t;
+		System.out.println("sourceStage=" + sourceStage + ", " + "bottom: " + this.bottom);
+		return size;
 	}
 }
