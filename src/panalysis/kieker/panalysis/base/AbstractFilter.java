@@ -16,7 +16,6 @@
 
 package kieker.panalysis.base;
 
-import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -33,25 +32,25 @@ import java.util.Map;
  */
 public abstract class AbstractFilter<I extends Enum<I>, O extends Enum<O>> extends AbstractStage<I> implements ISink<I>, ISource<O> {
 
-	private final Map<I, IPipe> inputPortPipes;
-	private final Map<O, IPipe> outputPortPipes;
-	private final Map<I, IPipe> readOnlyInputPortPipes;
+	protected boolean mayBeDisabled;
+
+	private final Map<I, Port> inputPortPipes;
+	private final Map<O, Port> outputPortPipes;
 
 	// private TaskBundle taskBundle;
 	// private final int numTasksThreshold = 100;
 
 	public AbstractFilter(final Class<I> inputEnumType, final Class<O> outputEnumType) {
-		this.inputPortPipes = new EnumMap<I, IPipe>(inputEnumType);
-		this.outputPortPipes = new EnumMap<O, IPipe>(outputEnumType);
-		this.readOnlyInputPortPipes = Collections.unmodifiableMap(this.inputPortPipes);
+		this.inputPortPipes = new EnumMap<I, Port>(inputEnumType);
+		this.outputPortPipes = new EnumMap<O, Port>(outputEnumType);
 	}
 
 	public void setPipeForInputPort(final I inputPort, final IPipe pipe) {
-		this.inputPortPipes.put(inputPort, pipe);
+		this.inputPortPipes.put(inputPort, new Port(pipe));
 	}
 
 	public void setPipeForOutputPort(final O outputPort, final IPipe pipe) {
-		this.outputPortPipes.put(outputPort, pipe);
+		this.outputPortPipes.put(outputPort, new Port(pipe));
 	}
 
 	// protected void put(final OutputPort port, final Object record) {
@@ -68,24 +67,52 @@ public abstract class AbstractFilter<I extends Enum<I>, O extends Enum<O>> exten
 	// }
 
 	protected void put(final O port, final Object record) {
-		final IPipe pipe = this.outputPortPipes.get(port);
-		if (pipe == null) {
+		final Port portObj = this.outputPortPipes.get(port);
+		if (portObj == null) {
 			return; // ignore unconnected port
 		}
+		final IPipe pipe = portObj.getPipe();
 		pipe.put(record);
 	}
 
 	protected Object take(final I inputPort) {
-		final IPipe pipe = this.inputPortPipes.get(inputPort);
+		final Port portObj = this.inputPortPipes.get(inputPort);
+		final IPipe pipe = portObj.getPipe();
 		return pipe.take();
 	}
 
 	protected Object tryTake(final I inputPort) {
-		final IPipe pipe = this.inputPortPipes.get(inputPort);
+		final Port portObj = this.inputPortPipes.get(inputPort);
+		final IPipe pipe = portObj.getPipe();
 		return pipe.tryTake();
 	}
 
-	public Map<I, IPipe> getInputPortPipes() {
-		return this.readOnlyInputPortPipes;
+	protected Object read(final I inputPort) {
+		final Port portObj = this.inputPortPipes.get(inputPort);
+		final IPipe pipe = portObj.getPipe();
+		return pipe.read();
+	}
+
+	public void onSignalClosing(final I inputPort) {
+		final Port portObj = this.inputPortPipes.get(inputPort);
+		portObj.setState(Port.State.CLOSING);
+
+		for (final Port po : this.inputPortPipes.values()) {
+			if (po.getState() != Port.State.CLOSING) {
+				return;
+			}
+		}
+
+		this.mayBeDisabled = true;
+	}
+
+	public void fireSignalClosingToAllInputPorts() {
+		for (final I portObj : this.inputPortPipes.keySet()) {
+			this.onSignalClosing(portObj);
+		}
+	}
+
+	public boolean mayBeDisabled() {
+		return this.mayBeDisabled;
 	}
 }

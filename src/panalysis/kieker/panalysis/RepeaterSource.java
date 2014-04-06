@@ -39,7 +39,7 @@ public class RepeaterSource extends AbstractSource<RepeaterSource.OUTPUT_PORT> {
 		this.num = num;
 	}
 
-	public void execute() {
+	public boolean execute() {
 		final long start = System.currentTimeMillis();
 
 		int counter = this.num;
@@ -50,6 +50,8 @@ public class RepeaterSource extends AbstractSource<RepeaterSource.OUTPUT_PORT> {
 		final long end = System.currentTimeMillis();
 		final long duration = end - start;
 		this.overallDuration += duration;
+
+		return true;
 	}
 
 	public long getOverallDuration() {

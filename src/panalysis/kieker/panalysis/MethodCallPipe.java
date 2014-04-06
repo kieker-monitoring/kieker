@@ -31,33 +31,37 @@ import kieker.panalysis.base.IStage;
 public class MethodCallPipe extends AbstractPipe<MethodCallPipe> {
 
 	private IStage targetStage;
-	private Object storedRecord;
+	private Object storedToken;
 
-	public MethodCallPipe(final Object initialRecord) {
-		this.storedRecord = initialRecord;
+	public MethodCallPipe(final Object initialToken) {
+		this.storedToken = initialToken;
 	}
 
 	public MethodCallPipe() {
-		this.storedRecord = null;
+		this.storedToken = null;
 	}
 
-	public void put(final Object record) {
-		this.storedRecord = record;
+	@Override
+	protected void putInternal(final Object token) {
+		this.storedToken = token;
 		this.targetStage.execute();
 	}
 
 	public Object take() {
-		final Object temp = this.storedRecord;
-		this.storedRecord = null;
+		final Object temp = this.storedToken;
+		this.storedToken = null;
 		return temp;
 	}
 
-	public Object tryTake() {
-		return this.take();
+	@Override
+	protected Object tryTakeInternal() {
+		final Object temp = this.storedToken;
+		this.storedToken = null;
+		return temp;
 	}
 
-	public boolean isEmpty() {
-		return this.storedRecord == null;
+	public Object read() {
+		return this.storedToken;
 	}
 
 	@Override

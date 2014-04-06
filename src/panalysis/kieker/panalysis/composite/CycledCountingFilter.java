@@ -18,4 +18,7 @@ public class CycledCountingFilter extends CountingFilter {
 				CountingFilter.INPUT_PORT.CURRENT_COUNT);
 	}
 
+	public Long getCurrentCount() {
+		return (Long) super.read(CountingFilter.INPUT_PORT.CURRENT_COUNT);
+	}
 }

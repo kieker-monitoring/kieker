@@ -51,13 +51,13 @@ public class CountWordsStage extends AbstractFilter<CountWordsStage.INPUT_PORT, 
 	}
 
 	@SuppressWarnings("unchecked")
-	public void execute() {
+	public boolean execute() {
 		final long start = System.currentTimeMillis();
 
 		// final Object record = this.take(INPUT_PORT.FILE);
 		final Object record = this.tryTake(INPUT_PORT.FILE);
 		if (record == null) {
-			return;
+			return false;
 		}
 		final File file = (File) record;
 
@@ -87,6 +87,8 @@ public class CountWordsStage extends AbstractFilter<CountWordsStage.INPUT_PORT, 
 		final long end = System.currentTimeMillis();
 		final long duration = end - start;
 		this.overallDuration += duration;
+
+		return true;
 	}
 
 	public long getOverallDuration() {

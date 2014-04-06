@@ -48,7 +48,7 @@ public class CountWordsAnalysis extends Analysis {
 	public void init() {
 		super.init();
 
-		this.repeaterSource = new RepeaterSource(".", 2000);
+		this.repeaterSource = new RepeaterSource(".", 1);
 		this.findFilesStage = new DirectoryName2Files();
 		this.distributor = new Distributor();
 		this.countWordsStage0 = new CountWordsStage();

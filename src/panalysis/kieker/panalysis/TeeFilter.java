@@ -43,7 +43,7 @@ public final class TeeFilter extends AbstractFilter<TeeFilter.INPUT_PORT, TeeFil
 		this.printStream = System.out;
 	}
 
-	public void execute() {
+	public boolean execute() {
 		final Object inputObject = super.take(INPUT_PORT.INPUT_OBJECT);
 
 		final StringBuilder sb = new StringBuilder(128);
@@ -51,6 +51,7 @@ public final class TeeFilter extends AbstractFilter<TeeFilter.INPUT_PORT, TeeFil
 		this.printStream.println(sb.toString());
 
 		super.put(OUTPUT_PORT.RELAYED_OBJECT, inputObject);
+		return true;
 	}
 
 }

@@ -23,6 +23,8 @@ package kieker.panalysis.base;
  */
 public abstract class AbstractPipe<T extends AbstractPipe<T>> implements IPipe {
 
+	private Runnable fireSignalClosing;
+
 	public <O extends Enum<O>, I extends Enum<I>> void connect(final ISource<O> sourceStage, final O sourcePort, final ISink<I> targetStage,
 			final I targetPort) {
 		this.source(sourceStage, sourcePort);
@@ -39,6 +41,30 @@ public abstract class AbstractPipe<T extends AbstractPipe<T>> implements IPipe {
 	@SuppressWarnings("unchecked")
 	public <I extends Enum<I>> T target(final ISink<I> targetStage, final I targetPort) {
 		targetStage.setPipeForInputPort(targetPort, this);
+		this.fireSignalClosing = new Runnable() {
+			// This Runnable avoids the declaration of targetStage and targetPort as attributes and the declaration of I as type parameter
+			public void run() {
+				targetStage.onSignalClosing(targetPort);
+			}
+		};
 		return (T) this;
 	}
+
+	protected abstract void putInternal(Object token);
+
+	public final void put(final Object token) {
+		this.putInternal(token);
+	}
+
+	protected abstract Object tryTakeInternal();
+
+	public final Object tryTake() {
+		final Object token = this.tryTakeInternal();
+		return token;
+	}
+
+	public void fireSignalClosing() {
+		this.fireSignalClosing.run();
+	}
+
 }

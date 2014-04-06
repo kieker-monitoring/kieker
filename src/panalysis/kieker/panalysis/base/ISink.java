@@ -16,8 +16,6 @@
 
 package kieker.panalysis.base;
 
-import java.util.Map;
-
 /**
  * @author Christian Wulf
  * 
@@ -35,6 +33,6 @@ public interface ISink<I extends Enum<I>> extends IStage {
 	/**
 	 * @since 1.10
 	 */
-	public Map<I, IPipe> getInputPortPipes();
+	void onSignalClosing(I inputPort);
 
 }

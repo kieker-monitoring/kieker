@@ -29,4 +29,5 @@ public interface ISource<O extends Enum<O>> extends IStage {
 	 * @since 1.10
 	 */
 	void setPipeForOutputPort(final O outputPort, final IPipe pipe);
+
 }

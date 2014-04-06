@@ -25,6 +25,7 @@ import kieker.panalysis.Merger;
 import kieker.panalysis.RepeaterSource;
 import kieker.panalysis.base.Analysis;
 import kieker.panalysis.base.Pipeline;
+import kieker.panalysis.base.TerminationPolicy;
 import kieker.panalysis.concurrent.ConcurrentWorkStealingPipe;
 import kieker.panalysis.concurrent.WorkerThread;
 
@@ -137,6 +138,7 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 		this.repeaterSource.execute();
 
 		for (final WorkerThread thread : this.threads) {
+			thread.terminate(TerminationPolicy.TERMINATE_STAGE_AFTER_EXECUTION);
 			try {
 				thread.join(60 * SECONDS);
 			} catch (final InterruptedException e) {
@@ -164,7 +166,8 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 
 		for (final WorkerThread thread : analysis.threads) {
 			// System.out.println("findFilesStage: " + ((DirectoryName2Files) thread.getStages().get(0)).getNumFiles()); // NOPMD (Just for example purposes)
-			System.out.println("outputWordsCountStage: " + ((OutputWordsCountSink) thread.getStages().get(5)).getNumFiles()); // NOPMD (Just for example purposes)
+			System.out.println("outputWordsCountStage: " + ((OutputWordsCountSink) thread.getPipeline().getStages().get(5)).getNumFiles()); // NOPMD (Just for
+																																			// example purposes)
 			final long duration = thread.getDuration();
 			if (duration > maxDuration) {
 				maxDuration = duration;

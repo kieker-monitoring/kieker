@@ -46,7 +46,7 @@ public class File2TextLinesFilter extends AbstractFilter<File2TextLinesFilter.IN
 		super(INPUT_PORT.class, OUTPUT_PORT.class);
 	}
 
-	public void execute() {
+	public boolean execute() {
 		final File file = (File) this.take(INPUT_PORT.FILE);
 
 		BufferedReader reader = null;
@@ -72,5 +72,6 @@ public class File2TextLinesFilter extends AbstractFilter<File2TextLinesFilter.IN
 				this.logger.warn("", e);
 			}
 		}
+		return true;
 	}
 }

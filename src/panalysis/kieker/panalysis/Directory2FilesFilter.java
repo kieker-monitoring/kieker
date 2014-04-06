@@ -35,27 +35,32 @@ public class Directory2FilesFilter extends AbstractSource<Directory2FilesFilter.
 	}
 
 	private final File inputDirectory;
+	private final FileFilter filter;
 
 	public Directory2FilesFilter(final File inputDir) {
 		super(OUTPUT_PORT.class);
 		this.inputDirectory = inputDir;
-	}
 
-	public void execute() {
-		final File inputDir = this.inputDirectory;
-
-		final File[] inputFiles = inputDir.listFiles(new FileFilter() {
+		this.filter = new FileFilter() {
 			public boolean accept(final File pathname) {
 				final String name = pathname.getName();
 				return pathname.isFile()
 						&& name.startsWith(FSUtil.FILE_PREFIX)
 						&& (name.endsWith(FSUtil.NORMAL_FILE_EXTENSION) || BinaryCompressionMethod.hasValidFileExtension(name));
 			}
-		});
+		};
+	}
+
+	public boolean execute() {
+		final File inputDir = this.inputDirectory;
+
+		final File[] inputFiles = inputDir.listFiles(this.filter);
 
 		for (final File file : inputFiles) {
 			this.put(OUTPUT_PORT.FILE, file);
 		}
+
+		return true;
 	}
 
 }

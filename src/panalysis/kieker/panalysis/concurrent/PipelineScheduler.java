@@ -17,29 +17,51 @@
 package kieker.panalysis.concurrent;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import kieker.panalysis.base.IStage;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  */
-public class PrioritizedStageCollection<T> {
+public class PipelineScheduler {
 
-	protected final List<T> elements;
+	protected final Map<IStage, Boolean> statesOfStages = new HashMap<IStage, Boolean>();
+	private final List<IStage> readOnlyStages;
 	private int index = 0;
 
-	public PrioritizedStageCollection(final List<T> stages) {
-		this.elements = new ArrayList<T>(stages);
+	public PipelineScheduler(final List<IStage> stages) {
+		for (final IStage stage : stages) {
+			this.statesOfStages.put(stage, Boolean.TRUE);
+		}
+		this.readOnlyStages = Collections.unmodifiableList(new ArrayList<IStage>(stages));
 	}
 
-	public T get() {
-		this.index = (this.index++) % this.elements.size();
-		return this.elements.get(this.index);
+	public IStage get() {
+		this.index = (this.index++) % this.statesOfStages.size();
+		return this.readOnlyStages.get(this.index);
 	}
 
-	public List<T> getElements() {
-		return this.elements;
+	public List<IStage> getElements() {
+		return this.readOnlyStages;
+	}
+
+	public boolean isAnyStageActive() {
+		for (final Boolean state : this.statesOfStages.values()) {
+			if (state == Boolean.TRUE) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public void disable(final IStage stage) {
+		this.statesOfStages.put(stage, Boolean.FALSE);
 	}
 
 	// TODO implement prioritized get and set

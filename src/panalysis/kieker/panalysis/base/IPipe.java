@@ -28,7 +28,12 @@ public interface IPipe {
 	/**
 	 * @since 1.10
 	 */
-	void put(Object record);
+	void put(Object token);
+
+	/**
+	 * @since 1.10
+	 */
+	void putMultiple(List<?> items);
 
 	// Since the concurrent execution does not base on locks, it is difficult to define a blocking take. Since there is no definition of blocking in the sequential
 	// execution, we do not define a blocking take in this interface
@@ -39,7 +44,7 @@ public interface IPipe {
 	Object take();
 
 	/**
-	 * @return and removes the next record if the pipe is not empty, otherwise <code>null</code>
+	 * @return and removes the next token if the pipe is not empty, otherwise <code>null</code>
 	 * 
 	 * @since 1.10
 	 */
@@ -47,13 +52,14 @@ public interface IPipe {
 
 	/**
 	 * @since 1.10
+	 * @return but does not removes the next token if the pipe is not empty, otherwise <code>null</code>
 	 */
-	List<?> tryTakeMultiple(int numItemsToTake);
+	Object read();
 
 	/**
 	 * @since 1.10
 	 */
-	void putMultiple(List<?> items);
+	List<?> tryTakeMultiple(int numItemsToTake);
 
 	/*
 	 * Let this uncommented for documentation purpose:<br>

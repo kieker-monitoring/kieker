@@ -42,12 +42,12 @@ public class DirectoryName2Files extends AbstractFilter<DirectoryName2Files.INPU
 		super(INPUT_PORT.class, OUTPUT_PORT.class);
 	}
 
-	public void execute() {
+	public boolean execute() {
 		final long start = System.currentTimeMillis();
 
 		final Object record = this.tryTake(INPUT_PORT.DIRECTORY_NAME);
 		if (record == null) {
-			return;
+			return false;
 		}
 		final String inputDir = (String) record;
 
@@ -63,6 +63,8 @@ public class DirectoryName2Files extends AbstractFilter<DirectoryName2Files.INPU
 		final long end = System.currentTimeMillis();
 		final long duration = end - start;
 		this.overallDuration += duration;
+
+		return true;
 	}
 
 	public long getOverallDuration() {

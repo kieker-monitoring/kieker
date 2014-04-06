@@ -36,9 +36,29 @@ public interface IStage {
 	int getId();
 
 	/**
+	 * @return <code>true</code> if the execution took enough tokens from the input ports so that the stage made progress due to this execution, <code>false</code>
+	 *         otherwise. The definition of <i>progress</i> depends on the semantics of the particular stage.
+	 * 
+	 *         <p>
+	 *         Example usage:
+	 *         </p>
+	 * 
+	 *         <pre>
+	 * <code>
+	 * boolean execute() {
+	 * 	final Object record = this.tryTake(INPUT_PORT.FILE_WORDCOUNT_TUPLE);
+	 * 	if (record == null) {
+	 * 		return false;
+	 * 	}
+	 * 	...
+	 * 	return true;
+	 * }
+	 * 	</code>
+	 * </pre>
+	 * 
 	 * @since 1.10
 	 */
-	void execute();
+	boolean execute();
 
 	// Let the method uncommented for documentation purpose:<br>
 	// Since the execution can dependent on the state of one, a subset, or all input queues,<br>
@@ -52,5 +72,11 @@ public interface IStage {
 	// void execute(TaskBundle taskBundle);
 
 	void cleanUp();
+
+	/**
+	 * 
+	 * @return <code>true</code> if the stage may be disabled by the pipeline scheduler, <code>false</code> otherwise.
+	 */
+	boolean mayBeDisabled();
 
 }

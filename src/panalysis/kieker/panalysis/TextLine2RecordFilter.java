@@ -58,7 +58,7 @@ public class TextLine2RecordFilter extends AbstractFilter<TextLine2RecordFilter.
 		this.stringRegistry = stringRegistry;
 	}
 
-	public void execute() {
+	public boolean execute() {
 		final String textLine = (String) this.take(INPUT_PORT.TEXT_LINE);
 
 		try {
@@ -80,6 +80,8 @@ public class TextLine2RecordFilter extends AbstractFilter<TextLine2RecordFilter.
 				this.logger.error("Failed to load record type " + classname, e); // log once for this type
 			}
 		}
+
+		return true;
 	}
 
 	private IMonitoringRecord createRecordFromLine(final String line) throws MonitoringRecordException, IllegalRecordFormatException, MappingException,

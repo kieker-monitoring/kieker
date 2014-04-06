@@ -49,8 +49,9 @@ public class ClockSource extends AbstractSource<ClockSource.OUTPUT_PORT> {
 		this.timer.scheduleAtFixedRate(task, delay, period);
 	}
 
-	public void execute() {
+	public boolean execute() {
 		// see timer execution
+		return true;
 	}
 
 	@Override

@@ -16,10 +16,10 @@
 
 package kieker.panalysis.concurrent;
 
-import java.util.List;
-
+import kieker.panalysis.base.AbstractFilter;
 import kieker.panalysis.base.IStage;
 import kieker.panalysis.base.Pipeline;
+import kieker.panalysis.base.TerminationPolicy;
 
 /**
  * @author Christian Wulf
@@ -28,16 +28,13 @@ import kieker.panalysis.base.Pipeline;
  */
 public class WorkerThread extends Thread {
 
-	// private final Map<IStage<?>, Map<Enum<?>, IPipe>> localStages = new HashMap<IStage<?>, Map<Enum<?>, IPipe>>();
-
-	/** represents a thread-local pipeline copy */
-	private PrioritizedStageCollection<IStage> stages;
-	private long duration;
 	private Pipeline<ConcurrentWorkStealingPipe> pipeline;
+	private PipelineScheduler pipelineScheduler;
 
-	public void setStages(final List<IStage> stages) {
-		this.stages = new PrioritizedStageCollection<IStage>(stages);
-	}
+	private long duration;
+
+	private volatile TerminationPolicy terminationPolicy;
+	private volatile boolean shouldTerminate = false;
 
 	@Override
 	public void run() {
@@ -45,21 +42,48 @@ public class WorkerThread extends Thread {
 
 		final long start = System.currentTimeMillis();
 
-		while (true) {
-			final IStage stage = this.stages.get();
+		while (this.pipelineScheduler.isAnyStageActive()) {
+			final IStage stage = this.pipelineScheduler.get();
 
 			this.startStageExecution();
-			stage.execute();
+			final boolean executedSuccessfully = stage.execute();
 			this.finishStageExecution();
+
+			if (this.shouldTerminate) {
+				this.executeTerminationPolicy(stage, executedSuccessfully);
+			}
 		}
 
-		// final long end = System.currentTimeMillis();
-		// this.duration = end - start;
+		final long end = System.currentTimeMillis();
+		this.duration = end - start;
+	}
+
+	private void executeTerminationPolicy(final IStage executedStage, final boolean executedSuccessfully) {
+		switch (this.terminationPolicy) {
+		case TERMINATE_STAGE_AFTER_EXECUTION:
+			if (executedStage.mayBeDisabled()) {
+				this.pipelineScheduler.disable(executedStage);
+			}
+			break;
+		case TERMINATE_STAGE_AFTER_UNSUCCESSFUL_EXECUTION:
+			if (!executedSuccessfully) {
+				if (executedStage.mayBeDisabled()) {
+					this.pipelineScheduler.disable(executedStage);
+				}
+			}
+			break;
+		case TERMINATE_STAGE_NOW:
+			for (final IStage stage : this.pipeline.getStages()) {
+				this.pipelineScheduler.disable(stage);
+			}
+			break;
+		default:
+			break;
+		}
 	}
 
 	private void initDatastructures() {
-		// TODO Auto-generated method stub
-
+		this.pipelineScheduler = new PipelineScheduler(this.pipeline.getStages());
 	}
 
 	private void startStageExecution() {
@@ -76,13 +100,20 @@ public class WorkerThread extends Thread {
 		return this.duration;
 	}
 
-	public List<IStage> getStages() {
-		return this.stages.getElements();
-	}
-
 	public void setPipeline(final Pipeline<ConcurrentWorkStealingPipe> pipeline) {
 		this.pipeline = pipeline;
-		this.setStages(pipeline.getStages());
 	}
 
+	public Pipeline<ConcurrentWorkStealingPipe> getPipeline() {
+		return this.pipeline;
+	}
+
+	public void terminate(final TerminationPolicy terminationPolicy) {
+		for (final AbstractFilter<?, ?> startStage : this.pipeline.getStartStages()) {
+			startStage.fireSignalClosingToAllInputPorts();
+		}
+
+		this.terminationPolicy = terminationPolicy;
+		this.shouldTerminate = true;
+	}
 }

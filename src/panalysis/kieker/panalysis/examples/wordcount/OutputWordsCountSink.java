@@ -39,12 +39,12 @@ public class OutputWordsCountSink extends AbstractSink<OutputWordsCountSink.INPU
 		super(INPUT_PORT.class);
 	}
 
-	public void execute() {
+	public boolean execute() {
 		final long start = System.currentTimeMillis();
 
 		final Object record = this.tryTake(INPUT_PORT.FILE_WORDCOUNT_TUPLE);
 		if (record == null) {
-			return;
+			return false;
 		}
 		final List<?> tuple = (List<?>) record;
 
@@ -56,6 +56,8 @@ public class OutputWordsCountSink extends AbstractSink<OutputWordsCountSink.INPU
 		final long end = System.currentTimeMillis();
 		final long duration = end - start;
 		this.overallDuration += duration;
+
+		return true;
 	}
 
 	public long getOverallDuration() {

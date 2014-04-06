@@ -39,13 +39,13 @@ public class TextLine2MappingRegistryFilter extends AbstractSink<TextLine2Mappin
 		this.stringRegistry = stringRegistry;
 	}
 
-	public void execute() {
+	public boolean execute() {
 		final String textLine = (String) this.take(INPUT_PORT.TEXT_LINE);
 
 		final int split = textLine.indexOf('=');
 		if (split == -1) {
 			this.logger.error("Failed to find character '=' in line: {" + textLine + "}. It must consist of a ID=VALUE pair.");
-			return;
+			return true;
 		}
 		final String key = textLine.substring(0, split);
 		// BETTER execute split instead of checking it before with multiple string operations
@@ -56,12 +56,15 @@ public class TextLine2MappingRegistryFilter extends AbstractSink<TextLine2Mappin
 			id = Integer.valueOf((key.charAt(0) == '$') ? key.substring(1) : key); // NOCS
 		} catch (final NumberFormatException ex) {
 			this.logger.error("Error reading mapping file, id must be integer", ex);
-			return; // continue on errors
+			return true; // continue on errors
 		}
 		final String prevVal = this.stringRegistry.put(id, value);
 		if (prevVal != null) {
-			this.logger.error("Found addional entry for id='" + id + "', old value was '" + prevVal + "' new value is '" + value + "'");
+			this.logger.error("Found additional entry for id='" + id + "', old value was '" + prevVal + "' new value is '" + value + "'");
+			return true;
 		}
+
+		return true;
 	}
 
 }

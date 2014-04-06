@@ -29,6 +29,7 @@ import kieker.common.logging.LogFactory;
 public abstract class AbstractStage<I extends Enum<I>> implements IStage {
 
 	protected int id;
+
 	/**
 	 * A unique logger instance per stage instance
 	 */

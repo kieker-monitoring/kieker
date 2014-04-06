@@ -41,10 +41,11 @@ public class Distributor extends AbstractFilter<Distributor.INPUT_PORT, Distribu
 		this.outputPorts = OUTPUT_PORT.values();
 	}
 
-	public void execute() {
+	public boolean execute() {
 		final Object object = this.take(INPUT_PORT.OBJECT);
 		final OUTPUT_PORT port = this.getNextPortInRoundRobinOrder();
 		this.put(port, object);
+		return true;
 	}
 
 	private OUTPUT_PORT getNextPortInRoundRobinOrder() {

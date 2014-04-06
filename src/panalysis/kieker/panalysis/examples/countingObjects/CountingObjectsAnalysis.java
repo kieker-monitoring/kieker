@@ -1,11 +1,9 @@
 package kieker.panalysis.examples.countingObjects;
 
-import kieker.panalysis.CountingFilter;
 import kieker.panalysis.MethodCallPipe;
 import kieker.panalysis.RepeaterSource;
 import kieker.panalysis.TeeFilter;
 import kieker.panalysis.base.Analysis;
-import kieker.panalysis.base.IPipe;
 import kieker.panalysis.base.Pipeline;
 import kieker.panalysis.composite.CycledCountingFilter;
 import kieker.panalysis.examples.wordcount.DirectoryName2Files;
@@ -63,7 +61,7 @@ public class CountingObjectsAnalysis extends Analysis {
 		final long duration = end - start;
 		System.out.println("duration: " + duration + " ms"); // NOPMD (Just for example purposes)
 
-		final IPipe countingPipe = analysis.cycledCountingFilter.getInputPortPipes().get(CountingFilter.INPUT_PORT.CURRENT_COUNT);
-		System.out.println("count: " + countingPipe.take()); // NOPMD (Just for example purposes)
+		final Long currentCount = analysis.cycledCountingFilter.getCurrentCount();
+		System.out.println("count: " + currentCount); // NOPMD (Just for example purposes)
 	}
 }

@@ -37,15 +37,17 @@ public class CountingFilter extends AbstractFilter<CountingFilter.INPUT_PORT, Co
 		super(INPUT_PORT.class, OUTPUT_PORT.class);
 	}
 
-	public void execute() {
+	public boolean execute() {
 		final Object inputObject = super.tryTake(INPUT_PORT.INPUT_OBJECT);
 		if (inputObject == null) {
-			return;
+			return false;
 		}
 		final Long count = (Long) super.take(INPUT_PORT.CURRENT_COUNT);
 
 		super.put(OUTPUT_PORT.RELAYED_OBJECT, inputObject);
-		super.put(OUTPUT_PORT.NEW_COUNT, count + 1);
+		super.put(OUTPUT_PORT.NEW_COUNT, count + 1); // BETTER support pipes with primitive values to improve performance by avoiding auto-boxing
+
+		return true;
 	}
 
 }

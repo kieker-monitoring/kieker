@@ -30,7 +30,7 @@ public class Pipeline<T extends IPipe> {
 
 	protected final List<IStage> stages = new LinkedList<IStage>();
 	private int freeId = 0;
-	private List<IStage> startStages;
+	private List<AbstractFilter<?, ?>> startStages;
 
 	private T currentPipe;
 	private final Map<Integer, List<T>> pipeGroups;
@@ -75,7 +75,7 @@ public class Pipeline<T extends IPipe> {
 		return this.stages;
 	}
 
-	public void setStartStages(final IStage... startStages) {
+	public void setStartStages(final AbstractFilter<?, ?>... startStages) {
 		this.startStages = Arrays.asList(startStages);
 	}
 
@@ -91,6 +91,10 @@ public class Pipeline<T extends IPipe> {
 			this.pipeGroups.put(pipeGroupIdentifier, pipes);
 		}
 		pipes.add(this.currentPipe);
+	}
+
+	public List<AbstractFilter<?, ?>> getStartStages() {
+		return this.startStages;
 	}
 
 }

@@ -45,8 +45,8 @@ public class ReadRecordFromCsvFileFilter extends AbstractFilter<File2TextLinesFi
 		new MethodCallPipe().connect(this.stage0, File2TextLinesFilter.OUTPUT_PORT.TEXT_LINE, this.stage1, TextLine2RecordFilter.INPUT_PORT.TEXT_LINE);
 	}
 
-	public void execute() {
-		this.stage0.execute();
+	public boolean execute() {
+		return this.stage0.execute();
 	}
 
 }

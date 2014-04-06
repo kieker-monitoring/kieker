@@ -41,7 +41,7 @@ public class Merger extends AbstractFilter<Merger.INPUT_PORT, Merger.OUTPUT_PORT
 		this.inputPorts = INPUT_PORT.values();
 	}
 
-	public void execute() {
+	public boolean execute() {
 		int size = this.inputPorts.length;
 		// check each port at most once to avoid a potentially infinite loop
 		while (size-- > 0) {
@@ -49,9 +49,10 @@ public class Merger extends AbstractFilter<Merger.INPUT_PORT, Merger.OUTPUT_PORT
 			final Object object = this.tryTake(inputPort);
 			if (object != null) {
 				this.put(OUTPUT_PORT.OBJECT, object);
-				return;
+				return true;
 			}
 		}
+		return false;
 	}
 
 	private INPUT_PORT getNextPortInRoundRobinOrder() {

@@ -123,4 +123,11 @@ public class CircularWorkStealingDeque {
 		}
 		return o;
 	}
+
+	public Object readBottom() {
+		final long b = this.bottom;
+		final CircularArray a = this.activeArray;
+		final Object o = a.get(b);
+		return o;
+	}
 }
