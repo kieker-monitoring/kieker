@@ -36,16 +36,12 @@ import kieker.panalysis.concurrent.WorkerThread;
  */
 public class ConcurrentCountWordsAnalysis extends Analysis {
 
-	private static final int SECONDS = 1000;
-
 	public static final String START_DIRECTORY_NAME = ".";
+
+	private static final int SECONDS = 1000;
 
 	private RepeaterSource repeaterSource;
 	private WorkerThread[] threads;
-
-	public ConcurrentCountWordsAnalysis() {
-		// No code necessary
-	}
 
 	@Override
 	public void init() {

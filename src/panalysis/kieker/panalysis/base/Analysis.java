@@ -23,10 +23,6 @@ package kieker.panalysis.base;
  */
 public class Analysis {
 
-	public Analysis() {
-		// No code necessary
-	}
-
 	public void init() {
 
 	}
