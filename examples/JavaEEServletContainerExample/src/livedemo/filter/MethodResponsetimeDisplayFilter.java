@@ -161,8 +161,8 @@ public class MethodResponsetimeDisplayFilter extends AbstractFilterPlugin {
 		return this.responsetimeunit.convert(responsetime, this.timeunit);
 	}
 
-	private double convertFromNanosToMillis(long duration) {
-		duration = TimeUnit.NANOSECONDS.convert(duration, this.timeunit);
+	private double convertFromNanosToMillis(final long duration) {
+		final long durationInNanoSeconds = TimeUnit.NANOSECONDS.convert(duration, this.timeunit);
 		return Math.round(duration / 100000.0) / 10.0;
 	}
 
@@ -183,28 +183,28 @@ public class MethodResponsetimeDisplayFilter extends AbstractFilterPlugin {
 		return configuration;
 	}
 
-	public class Pair<T1, T2> {
-		private T1 first;
-		private T2 last;
+	public class Pair<U, V> {
+		private U first;
+		private V last;
 
-		public Pair(final T1 first, final T2 last) {
+		public Pair(final U first, final V last) {
 			this.first = first;
 			this.last = last;
 		}
 
-		public T1 getFirst() {
+		public U getFirst() {
 			return this.first;
 		}
 
-		public void setFirst(final T1 first) {
+		public void setFirst(final U first) {
 			this.first = first;
 		}
 
-		public T2 getLast() {
+		public V getLast() {
 			return this.last;
 		}
 
-		public void setLast(final T2 last) {
+		public void setLast(final V last) {
 			this.last = last;
 		}
 	}

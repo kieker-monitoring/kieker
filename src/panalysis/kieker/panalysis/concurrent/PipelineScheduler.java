@@ -46,7 +46,7 @@ public class PipelineScheduler {
 		}
 		final IStage stage = this.iterator.next();
 		final Boolean isEnabled = this.statesOfStages.get(stage);
-		if (isEnabled == Boolean.FALSE) {
+		if (Boolean.FALSE.equals(isEnabled)) {
 			return this.get(); // return the next enabled stage
 		}
 		return stage;
@@ -56,7 +56,7 @@ public class PipelineScheduler {
 		for (final Entry<IStage, Boolean> entry : this.statesOfStages.entrySet()) {
 			final IStage stage = entry.getKey();
 			final Boolean state = entry.getValue();
-			if (state == Boolean.TRUE) {
+			if (Boolean.TRUE.equals(state)) {
 				// System.out.println(stage + " is active.");
 				return true;
 			}

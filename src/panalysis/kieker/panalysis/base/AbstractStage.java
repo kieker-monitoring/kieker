@@ -48,7 +48,7 @@ public abstract class AbstractStage<I extends Enum<I>> implements IStage {
 		this.id = id;
 	}
 
-	public void cleanUp() {
+	public void cleanUp() { // NOPMD (empty non-abstract method is intended)
 		// empty default implementation
 	}
 

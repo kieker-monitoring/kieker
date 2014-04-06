@@ -56,7 +56,7 @@ public class CPUXYPlotBean implements Observer {
 	private int index;
 
 	private final List<String> availableAttributes = Arrays.asList("idle", "irq", "nice", "system", "totalUtilization", "user");
-	private List<String> selectedAttributes;// = Arrays.asList("idle","totalUtilization");
+	private List<String> selectedAttributes; // = Arrays.asList("idle","totalUtilization");
 
 	public CPUXYPlotBean() {
 		this.models = Collections.synchronizedList(new ArrayList<Model<CartesianChartModel>>());
