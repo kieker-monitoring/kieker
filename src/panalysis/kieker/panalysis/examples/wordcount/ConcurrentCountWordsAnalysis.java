@@ -51,11 +51,17 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 	public void init() {
 		super.init();
 
-		this.repeaterSource = new RepeaterSource(START_DIRECTORY_NAME, 1);
+		this.repeaterSource = new RepeaterSource(START_DIRECTORY_NAME, 4000);
 		this.repeaterSource.setId(99);
 
 		int numThreads = Runtime.getRuntime().availableProcessors();
 		numThreads = 1; // only fur testing purposes
+
+		// FIXME incorrect in some cases: misses 5-15 words
+		// outputWordsCountStage: 15112
+		// outputWordsCountStage: 14903
+
+		// outputWordsCountStage: 59985
 
 		this.threads = new WorkerThread[numThreads];
 		final Map<Integer, List<ConcurrentWorkStealingPipe>> pipeGroups = new HashMap<Integer, List<ConcurrentWorkStealingPipe>>();
@@ -139,7 +145,7 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 
 		System.out.println("Waiting for the worker threads to terminate...");
 		for (final WorkerThread thread : this.threads) {
-			thread.terminate(TerminationPolicy.TERMINATE_STAGE_AFTER_EXECUTION);
+			thread.terminate(TerminationPolicy.TERMINATE_STAGE_AFTER_UNSUCCESSFUL_EXECUTION);
 			try {
 				thread.join(60 * SECONDS);
 			} catch (final InterruptedException e) {

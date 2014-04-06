@@ -69,4 +69,6 @@ public interface IPipe {
 
 	<O extends Enum<O>, I extends Enum<I>> void connect(ISource<O> sourceStage, O sourcePort, ISink<I> targetStage, I targetPort);
 
+	void fireSignalClosing();
+
 }

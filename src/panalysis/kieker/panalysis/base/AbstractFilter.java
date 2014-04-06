@@ -96,6 +96,7 @@ public abstract class AbstractFilter<I extends Enum<I>, O extends Enum<O>> exten
 	public void onSignalClosing(final I inputPort) {
 		final Port portObj = this.inputPortPipes.get(inputPort);
 		portObj.setState(Port.State.CLOSING);
+		System.out.println("Closing " + inputPort + " of " + this.toString());
 
 		for (final Port po : this.inputPortPipes.values()) {
 			if (po.getState() != Port.State.CLOSING) {
@@ -104,11 +105,18 @@ public abstract class AbstractFilter<I extends Enum<I>, O extends Enum<O>> exten
 		}
 
 		this.mayBeDisabled = true;
+		System.out.println(this.toString() + " can now be disabled by the pipeline scheduler.");
 	}
 
 	public void fireSignalClosingToAllInputPorts() {
-		for (final I portObj : this.inputPortPipes.keySet()) {
-			this.onSignalClosing(portObj);
+		for (final I port : this.inputPortPipes.keySet()) {
+			this.onSignalClosing(port);
+		}
+	}
+
+	public void fireSignalClosingToAllOutputPorts() {
+		for (final Port portObj : this.outputPortPipes.values()) {
+			portObj.getPipe().fireSignalClosing();
 		}
 	}
 

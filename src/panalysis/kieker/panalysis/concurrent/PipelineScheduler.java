@@ -16,9 +16,8 @@
 
 package kieker.panalysis.concurrent;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -33,23 +32,24 @@ import kieker.panalysis.base.IStage;
 public class PipelineScheduler {
 
 	protected final Map<IStage, Boolean> statesOfStages = new HashMap<IStage, Boolean>();
-	private final List<IStage> readOnlyStages;
-	private int index = 0;
+	private Iterator<IStage> iterator;
 
 	public PipelineScheduler(final List<IStage> stages) {
 		for (final IStage stage : stages) {
 			this.statesOfStages.put(stage, Boolean.TRUE);
 		}
-		this.readOnlyStages = Collections.unmodifiableList(new ArrayList<IStage>(stages));
 	}
 
 	public IStage get() {
-		this.index = (this.index++) % this.statesOfStages.size();
-		return this.readOnlyStages.get(this.index);
-	}
-
-	public List<IStage> getElements() {
-		return this.readOnlyStages;
+		if ((this.iterator == null) || !this.iterator.hasNext()) { // BETTER use a cycling iterator
+			this.iterator = this.statesOfStages.keySet().iterator();
+		}
+		final IStage stage = this.iterator.next();
+		final Boolean isEnabled = this.statesOfStages.get(stage);
+		if (isEnabled == Boolean.FALSE) {
+			return this.get(); // return the next enabled stage
+		}
+		return stage;
 	}
 
 	public boolean isAnyStageActive() {
@@ -57,7 +57,7 @@ public class PipelineScheduler {
 			final IStage stage = entry.getKey();
 			final Boolean state = entry.getValue();
 			if (state == Boolean.TRUE) {
-				System.out.println(stage + " is active.");
+				// System.out.println(stage + " is active.");
 				return true;
 			}
 		}
@@ -66,6 +66,8 @@ public class PipelineScheduler {
 
 	public void disable(final IStage stage) {
 		this.statesOfStages.put(stage, Boolean.FALSE);
+		System.out.println("Disabled " + stage);
+		stage.fireSignalClosingToAllOutputPorts();
 	}
 
 	// TODO implement prioritized get and set

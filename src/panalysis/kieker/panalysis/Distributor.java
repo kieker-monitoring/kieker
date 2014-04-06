@@ -42,7 +42,10 @@ public class Distributor extends AbstractFilter<Distributor.INPUT_PORT, Distribu
 	}
 
 	public boolean execute() {
-		final Object object = this.take(INPUT_PORT.OBJECT);
+		final Object object = this.tryTake(INPUT_PORT.OBJECT);
+		if (object == null) {
+			return false;
+		}
 		final OUTPUT_PORT port = this.getNextPortInRoundRobinOrder();
 		this.put(port, object);
 		return true;
