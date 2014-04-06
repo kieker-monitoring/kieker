@@ -22,6 +22,7 @@ package kieker.panalysis.base;
  * @since 1.10
  * 
  * @param I
+ *            The type of the input ports
  */
 public interface ISink<I extends Enum<I>> extends IStage {
 

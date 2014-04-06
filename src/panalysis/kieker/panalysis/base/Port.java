@@ -23,6 +23,9 @@ package kieker.panalysis.base;
  */
 class Port {
 
+	/**
+	 * @since 1.10
+	 */
 	enum State {
 		OPEN, CLOSING
 	}

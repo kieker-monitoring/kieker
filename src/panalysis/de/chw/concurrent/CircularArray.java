@@ -32,11 +32,11 @@ public class CircularArray {
 
 	/**
 	 * 
-	 * @param log_size
+	 * @param logSize
 	 *            The initial size of this array in log2, i.e., the number of bits to use
 	 */
-	public CircularArray(final long log_size) {
-		this.logSize = log_size;
+	public CircularArray(final long logSize) {
+		this.logSize = logSize;
 		this.segment = new Object[1 << this.logSize];
 	}
 

@@ -22,6 +22,7 @@ package kieker.panalysis.base;
  * @since 1.10
  * 
  * @param O
+ *            The type of the output ports
  */
 public abstract class AbstractSource<O extends Enum<O>> extends AbstractFilter<AbstractSource.INPUT_PORT, O> implements ISource<O> {
 

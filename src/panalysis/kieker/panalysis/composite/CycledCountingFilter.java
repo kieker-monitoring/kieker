@@ -26,11 +26,11 @@ import kieker.panalysis.base.IPipe;
  */
 public class CycledCountingFilter extends CountingFilter {
 
-	public static final class INPUT_PORT { // mechanism to override the visibility of particular enum values of the super class
+	public static final class INPUT_PORT { // mechanism to override the visibility of particular enum values of the super class // NOCS
 		public final static CountingFilter.INPUT_PORT INPUT_OBJECT = CountingFilter.INPUT_PORT.INPUT_OBJECT;
 	}
 
-	public static final class OUTPUT_PORT { // mechanism to override the visibility of particular enum values of the super class
+	public static final class OUTPUT_PORT { // mechanism to override the visibility of particular enum values of the super class // NOCS
 		public final static CountingFilter.OUTPUT_PORT RELAYED_OBJECT = CountingFilter.OUTPUT_PORT.RELAYED_OBJECT;
 	}
 

@@ -22,6 +22,7 @@ package kieker.panalysis.base;
  * @since 1.10
  * 
  * @param O
+ *            The type of the output ports
  */
 public interface ISource<O extends Enum<O>> extends IStage {
 
