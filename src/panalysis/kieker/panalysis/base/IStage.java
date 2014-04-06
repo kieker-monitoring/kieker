@@ -71,11 +71,16 @@ public interface IStage {
 	// an overloaded version with a task bundle of one single input port is useless.
 	// void execute(TaskBundle taskBundle);
 
+	/**
+	 * @since 1.10
+	 */
 	void cleanUp();
 
 	/**
 	 * 
 	 * @return <code>true</code> if the stage may be disabled by the pipeline scheduler, <code>false</code> otherwise.
+	 * 
+	 * @since 1.10
 	 */
 	boolean mayBeDisabled();
 
