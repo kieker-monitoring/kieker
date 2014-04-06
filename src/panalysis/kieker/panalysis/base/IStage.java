@@ -20,9 +20,6 @@ package kieker.panalysis.base;
  * @author Christian Wulf
  * 
  * @since 1.10
- * 
- * @param I
- *            The type of the input ports
  */
 public interface IStage {
 

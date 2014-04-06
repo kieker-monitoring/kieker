@@ -20,6 +20,9 @@ package kieker.panalysis.base;
  * @author Christian Wulf
  * 
  * @since 1.10
+ * 
+ * @param <T>
+ *            The type of the pipeline
  */
 public abstract class AbstractPipe<T extends AbstractPipe<T>> implements IPipe {
 

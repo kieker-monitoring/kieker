@@ -21,7 +21,7 @@ package kieker.panalysis.base;
  * 
  * @since 1.10
  * 
- * @param I
+ * @param <I>
  *            The type of the input ports
  */
 public abstract class AbstractSink<I extends Enum<I>> extends AbstractFilter<I, AbstractSink.OUTPUT_PORT> {
