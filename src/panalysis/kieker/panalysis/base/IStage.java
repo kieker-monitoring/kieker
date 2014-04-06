@@ -20,8 +20,6 @@ package kieker.panalysis.base;
  * @author Christian Wulf
  * 
  * @since 1.10
- * 
- * @param I
  */
 public interface IStage {
 

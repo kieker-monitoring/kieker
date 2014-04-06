@@ -28,7 +28,7 @@ import kieker.panalysis.base.AbstractSource;
  */
 public class ClockSource extends AbstractSource<ClockSource.OUTPUT_PORT> {
 
-	public static enum OUTPUT_PORT {
+	public static enum OUTPUT_PORT { // NOCS
 		CLOCK_SIGNAL
 	}
 

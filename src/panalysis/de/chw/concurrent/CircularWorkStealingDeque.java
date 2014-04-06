@@ -94,15 +94,16 @@ public class CircularWorkStealingDeque {
 		return o;
 	}
 
-	void perhapsShrink(final long b, long t) {
+	void perhapsShrink(final long b, final long t) {
+		long temp = t;
 		final CircularArray a = this.activeArray;
-		if ((b - t) < (a.size() / 4)) {
-			final CircularArray aa = a.shrink(b, t);
+		if ((b - temp) < (a.size() / 4)) {
+			final CircularArray aa = a.shrink(b, temp);
 			this.activeArray = aa;
 			final long ss = aa.size();
 			this.bottom = b + ss;
-			t = this.top.get();
-			if (!this.casTop(t, t + ss)) {
+			temp = this.top.get();
+			if (!this.casTop(temp, temp + ss)) {
 				this.bottom = b;
 				// a.free();
 			}

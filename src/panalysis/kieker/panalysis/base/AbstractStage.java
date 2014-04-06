@@ -24,7 +24,8 @@ import kieker.common.logging.LogFactory;
  * 
  * @since 1.10
  * 
- * @param I
+ * @param <I>
+ *            The type of the input ports
  */
 public abstract class AbstractStage<I extends Enum<I>> implements IStage {
 
@@ -47,7 +48,7 @@ public abstract class AbstractStage<I extends Enum<I>> implements IStage {
 		this.id = id;
 	}
 
-	public void cleanUp() {
+	public void cleanUp() { // NOPMD (empty non-abstract method is intended)
 		// empty default implementation
 	}
 

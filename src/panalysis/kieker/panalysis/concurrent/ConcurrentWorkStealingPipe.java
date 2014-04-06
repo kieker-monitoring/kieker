@@ -96,9 +96,10 @@ public class ConcurrentWorkStealingPipe extends AbstractPipe<ConcurrentWorkSteal
 		return this.circularWorkStealingDeque.steal();
 	}
 
-	public List<Object> stealMultiple(int maxItemsToSteal) {
+	public List<Object> stealMultiple(final int maxItemsToSteal) {
+		int maxItemsToStealCoutner = maxItemsToSteal;
 		final List<Object> stolenElements = new LinkedList<Object>();
-		while (maxItemsToSteal-- > 0) {
+		while (maxItemsToStealCoutner-- > 0) {
 			final Object stolenElement = this.steal();
 			if ((stolenElement == CircularWorkStealingDeque.EMPTY) && (stolenElement == CircularWorkStealingDeque.ABORT)) {
 				break;

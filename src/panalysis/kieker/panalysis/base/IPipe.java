@@ -37,9 +37,9 @@ public interface IPipe {
 
 	// Since the concurrent execution does not base on locks, it is difficult to define a blocking take. Since there is no definition of blocking in the sequential
 	// execution, we do not define a blocking take in this interface
-	// /**
-	// * @since 1.10
-	// */
+	/**
+	 * @since 1.10
+	 */
 	@Deprecated
 	Object take();
 
@@ -61,10 +61,9 @@ public interface IPipe {
 	 */
 	List<?> tryTakeMultiple(int numItemsToTake);
 
-	/*
-	 * Let this uncommented for documentation purpose:<br>
-	 * Do not provide a method to check for emptiness, since the state from EMPTY to NON-EMPTY can change between check and access (stale state)
-	 */
+	// Let this uncommented for documentation purpose:<br>
+	// Do not provide a method to check for emptiness, since the state from EMPTY to NON-EMPTY can change between check and access (stale state)
+
 	// boolean isEmpty();
 
 	/**

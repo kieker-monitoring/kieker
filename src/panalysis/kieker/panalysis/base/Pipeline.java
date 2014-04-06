@@ -25,6 +25,9 @@ import java.util.Map;
  * @author Christian Wulf
  * 
  * @since 1.10
+ * 
+ * @param <T>
+ *            The type of the pipeline
  */
 public class Pipeline<T extends IPipe> {
 
