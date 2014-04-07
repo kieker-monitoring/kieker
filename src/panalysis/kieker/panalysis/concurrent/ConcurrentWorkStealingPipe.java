@@ -32,13 +32,13 @@ import kieker.panalysis.base.AbstractPipe;
 public class ConcurrentWorkStealingPipe extends AbstractPipe<ConcurrentWorkStealingPipe> {
 
 	private final CircularWorkStealingDeque circularWorkStealingDeque = new CircularWorkStealingDeque();
-	/*
-	 * BETTER use a prioritized list that considers
-	 * <ul>
-	 * <li>the size of each deque to minimize steals
-	 * <li>the core's locality to improve cache access performance
-	 * </ul>
-	 */
+
+	// BETTER use a prioritized list that considers
+	// <ul>
+	// <li>the size of each deque to minimize steals
+	// <li>the core's locality to improve cache access performance
+	// </ul>
+
 	private List<ConcurrentWorkStealingPipe> allOtherPipes;
 	private int numTakenElements = 0;
 

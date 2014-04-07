@@ -76,7 +76,7 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 
 	private void buildPipeline(final Pipeline<ConcurrentWorkStealingPipe> pipeline) {
 		// create stages
-		final RepeaterSource repeaterSource = this.repeaterSource;
+		final RepeaterSource repeater = this.repeaterSource;
 		final DirectoryName2Files findFilesStage = pipeline.addStage(new DirectoryName2Files());
 		final Distributor distributor = pipeline.addStage(new Distributor());
 		final CountWordsStage countWordsStage0 = pipeline.addStage(new CountWordsStage());
@@ -89,7 +89,7 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 
 		// connect stages by pipes
 		ConcurrentWorkStealingPipe pipe = new ConcurrentWorkStealingPipe()
-				.source(repeaterSource, RepeaterSource.OUTPUT_PORT.OUTPUT)
+				.source(repeater, RepeaterSource.OUTPUT_PORT.OUTPUT)
 				.target(findFilesStage, DirectoryName2Files.INPUT_PORT.DIRECTORY_NAME);
 		pipeline.add(pipe).toGroup(0);
 
@@ -134,7 +134,7 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 
 		this.repeaterSource.execute();
 
-		System.out.println("Waiting for the worker threads to terminate...");
+		System.out.println("Waiting for the worker threads to terminate..."); // NOPMD (Just for example purposes)
 		for (final WorkerThread thread : this.threads) {
 			thread.terminate(TerminationPolicy.TERMINATE_STAGE_AFTER_UNSUCCESSFUL_EXECUTION);
 			try {
@@ -144,7 +144,7 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 			}
 		}
 
-		System.out.println("Analysis finished.");
+		System.out.println("Analysis finished."); // NOPMD (Just for example purposes)
 	}
 
 	public static void main(final String[] args) {
@@ -164,8 +164,8 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 		long maxDuration = -1;
 		WorkerThread maxThread = null;
 
-		System.out.println(this.repeaterSource);
-		System.out.println(this.repeaterSource.getOutputPipe(RepeaterSource.OUTPUT_PORT.OUTPUT));
+		System.out.println(this.repeaterSource); // NOPMD (Just for example purposes)
+		System.out.println(this.repeaterSource.getOutputPipe(RepeaterSource.OUTPUT_PORT.OUTPUT)); // NOPMD (Just for example purposes)
 
 		// FIXME resolve bug; see analysis results below;
 		// solution: use a generic distributor to distribute between the threads' start stages
@@ -174,12 +174,12 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 
 		for (final WorkerThread thread : this.threads) {
 			for (final IStage stage : thread.getPipeline().getStages()) {
-				System.out.println(stage);
+				System.out.println(stage); // NOPMD (Just for example purposes)
 			}
 
 			// System.out.println("findFilesStage: " + ((DirectoryName2Files) thread.getStages().get(0)).getNumFiles()); // NOPMD (Just for example purposes)
 
-			final OutputWordsCountSink sink = ((OutputWordsCountSink) thread.getPipeline().getStages().get(5));
+			final OutputWordsCountSink sink = (OutputWordsCountSink) thread.getPipeline().getStages().get(5);
 			System.out.println("outputWordsCountStage: " + sink.getNumFiles()); // NOPMD (Just for example purposes)
 
 			final long duration = thread.getDuration();
@@ -189,6 +189,6 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 			}
 		}
 
-		System.out.println("maxThread: " + maxThread.toString() + " takes " + maxDuration + " ms");
+		System.out.println("maxThread: " + maxThread.toString() + " takes " + maxDuration + " ms"); // NOPMD (Just for example purposes)
 	}
 }

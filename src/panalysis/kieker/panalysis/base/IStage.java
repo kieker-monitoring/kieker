@@ -82,6 +82,9 @@ public interface IStage {
 	 */
 	boolean mayBeDisabled();
 
+	/**
+	 * @since 1.10
+	 */
 	void fireSignalClosingToAllOutputPorts();
 
 }

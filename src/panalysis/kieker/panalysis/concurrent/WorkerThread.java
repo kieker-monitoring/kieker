@@ -108,12 +108,12 @@ public class WorkerThread extends Thread {
 		return this.pipeline;
 	}
 
-	public void terminate(final TerminationPolicy terminationPolicy) {
+	public void terminate(final TerminationPolicy terminationPolicyToUse) {
 		for (final AbstractFilter<?, ?> startStage : this.pipeline.getStartStages()) {
 			startStage.fireSignalClosingToAllInputPorts();
 		}
 
-		this.terminationPolicy = terminationPolicy;
+		this.terminationPolicy = terminationPolicyToUse;
 		this.shouldTerminate = true;
 	}
 }

@@ -155,18 +155,17 @@ public class CircularWorkStealingDeque {
 		return o;
 	}
 
-	/*
-	 * bottom: 4093
-	 * bottom: 66429
-	 * bottom: 29993
-	 * bottom: 29992
-	 */
-	/*
-	 * bottom: 4093
-	 * bottom: 66429
-	 * bottom: 30008
-	 * bottom: 30007
-	 */
+	// bottom: 4093
+	// bottom: 66429
+	// bottom: 29993
+	// bottom: 29992
+	//
+	//
+	// bottom: 4093
+	// bottom: 66429
+	// bottom: 30008
+	// bottom: 30007
+
 	/**
 	 * For debugging purposes
 	 * 

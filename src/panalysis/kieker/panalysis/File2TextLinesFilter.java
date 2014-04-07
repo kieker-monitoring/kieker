@@ -40,7 +40,7 @@ public class File2TextLinesFilter extends AbstractFilter<File2TextLinesFilter.IN
 		TEXT_LINE
 	}
 
-	private String charset; // = "UTF-8"
+	private final String charset = "UTF-8";
 
 	public File2TextLinesFilter() {
 		super(INPUT_PORT.class, OUTPUT_PORT.class);
