@@ -17,47 +17,66 @@
 package kieker.panalysis;
 
 import kieker.panalysis.base.AbstractFilter;
+import kieker.panalysis.base.IInputPort;
+import kieker.panalysis.base.IOutputPort;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  */
-public class Merger extends AbstractFilter<Merger.INPUT_PORT, Merger.OUTPUT_PORT> {
+public class Merger<T> extends AbstractFilter<Merger<T>> {
 
-	public static enum INPUT_PORT { // NOCS
-		INPUT0, INPUT1
-	}
+	public final IOutputPort<Merger<T>, T> OBJECT = this.createOutputPort();
 
-	public static enum OUTPUT_PORT { // NOCS
-		OBJECT
-	}
-
-	private final INPUT_PORT[] inputPorts;
 	private int index = 0;
 
-	public Merger() {
-		super(INPUT_PORT.class, OUTPUT_PORT.class);
-		this.inputPorts = INPUT_PORT.values();
+	// TODO add parameter: MergeStrategy
+	/**
+	 * @since 1.10
+	 * @param numInputPorts
+	 */
+	public Merger(int numInputPorts) {
+		while (numInputPorts-- > 0) {
+			this.createInputPort();
+		}
 	}
 
+	/**
+	 * @since 1.10
+	 */
 	public boolean execute() {
-		int size = this.inputPorts.length;
+		int size = this.getInputPorts().size();
 		// check each port at most once to avoid a potentially infinite loop
 		while (size-- > 0) {
-			final INPUT_PORT inputPort = this.getNextPortInRoundRobinOrder();
-			final Object object = this.tryTake(inputPort);
-			if (object != null) {
-				this.put(OUTPUT_PORT.OBJECT, object);
+			final IInputPort<Merger<T>, T> inputPort = this.getNextPortInRoundRobinOrder();
+			final T token = this.tryTake(inputPort);
+			if (token != null) {
+				this.put(this.OBJECT, token);
 				return true;
 			}
 		}
 		return false;
 	}
 
-	private INPUT_PORT getNextPortInRoundRobinOrder() {
-		final INPUT_PORT port = this.inputPorts[this.index];
-		this.index = (this.index + 1) % this.inputPorts.length;
+	/**
+	 * @since 1.10
+	 * @return
+	 */
+	private IInputPort<Merger<T>, T> getNextPortInRoundRobinOrder() {
+		final IInputPort<Merger<T>, T> port = this.getInputPort(this.index);
+		this.index = (this.index + 1) % this.getInputPorts().size();
+		return port;
+	}
+
+	/**
+	 * @since 1.10
+	 * @param portIndex
+	 * @return
+	 */
+	public IInputPort<Merger<T>, T> getInputPort(final int portIndex) {
+		@SuppressWarnings("unchecked")
+		final IInputPort<Merger<T>, T> port = (IInputPort<Merger<T>, T>) this.getInputPorts().get(portIndex);
 		return port;
 	}
 

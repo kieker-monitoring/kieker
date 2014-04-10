@@ -16,22 +16,17 @@
 
 package kieker.panalysis.base;
 
-/**
- * @author Christian Wulf
- * 
- * @since 1.10
- * 
- * @param <O>
- *            The type of the output ports
- */
-public abstract class AbstractSource<O extends Enum<O>> extends AbstractFilter<AbstractSource.INPUT_PORT, O> implements ISource<O> {
 
-	protected static enum INPUT_PORT { // NOCS
-		DUMMY // source stages have not any input ports
+class InputPortImpl<S extends IStage, T> extends AbstractPort<S, T> implements IInputPort<S, T> {
+
+	private State state = State.OPEN;
+
+	public void setState(final State state) {
+		this.state = state;
 	}
 
-	public AbstractSource(final Class<O> enumType) {
-		super(INPUT_PORT.class, enumType);
+	public State getState() {
+		return this.state;
 	}
 
 }

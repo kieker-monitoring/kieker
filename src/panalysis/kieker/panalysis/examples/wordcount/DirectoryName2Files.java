@@ -19,43 +19,36 @@ package kieker.panalysis.examples.wordcount;
 import java.io.File;
 
 import kieker.panalysis.base.AbstractFilter;
+import kieker.panalysis.base.IInputPort;
+import kieker.panalysis.base.IOutputPort;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  */
-public class DirectoryName2Files extends AbstractFilter<DirectoryName2Files.INPUT_PORT, DirectoryName2Files.OUTPUT_PORT> {
+public class DirectoryName2Files extends AbstractFilter<DirectoryName2Files> {
 
-	public static enum INPUT_PORT { // NOCS
-		DIRECTORY_NAME
-	}
+	public final IInputPort<DirectoryName2Files, String> DIRECTORY_NAME = this.createInputPort();
 
-	public static enum OUTPUT_PORT { // NOCS
-		FILE
-	}
+	public final IOutputPort<DirectoryName2Files, File> FILE = this.createOutputPort();
 
 	private long overallDuration;
 	private int numFiles = 0;
 
-	public DirectoryName2Files() {
-		super(INPUT_PORT.class, OUTPUT_PORT.class);
-	}
-
 	public boolean execute() {
 		final long start = System.currentTimeMillis();
 
-		final Object token = this.tryTake(INPUT_PORT.DIRECTORY_NAME);
-		if (token == null) {
+		final String inputDir = this.tryTake(this.DIRECTORY_NAME);
+		if (inputDir == null) {
 			return false;
 		}
-		final String inputDir = (String) token;
 
 		final File[] availableFiles = new File(inputDir).listFiles();
 		for (final File file : availableFiles) {
 			if (file.isFile()) {
 				// this.logger.info("Sending " + file);
-				this.put(OUTPUT_PORT.FILE, file);
+				this.put(this.FILE, file);
 				this.numFiles++;
 			}
 		}

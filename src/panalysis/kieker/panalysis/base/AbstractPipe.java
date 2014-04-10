@@ -24,45 +24,36 @@ package kieker.panalysis.base;
  * @param <T>
  *            The type of the pipeline
  */
-public abstract class AbstractPipe<T extends AbstractPipe<T>> implements IPipe {
+public abstract class AbstractPipe<T> implements IPipe<T> {
 
 	private Runnable fireSignalClosing;
 
-	public <O extends Enum<O>, I extends Enum<I>> void connect(final ISource<O> sourceStage, final O sourcePort, final ISink<I> targetStage,
-			final I targetPort) {
-		this.source(sourceStage, sourcePort);
-		this.target(targetStage, targetPort);
-		System.out.println("Connected " + sourceStage.getClass().getSimpleName() + " with " + targetStage.getClass().getSimpleName());
+	public <S extends ISource> IPipe<T> source(final IOutputPort<S, T> sourcePort) {
+		sourcePort.setAssociatedPipe(this);
+		return this;
 	}
 
-	@SuppressWarnings("unchecked")
-	public <O extends Enum<O>> T source(final ISource<O> sourceStage, final O outputPort) {
-		sourceStage.setPipeForOutputPort(outputPort, this);
-		return (T) this;
-	}
-
-	@SuppressWarnings("unchecked")
-	public <I extends Enum<I>> T target(final ISink<I> targetStage, final I targetPort) {
-		targetStage.setPipeForInputPort(targetPort, this);
+	public <S extends ISink<S>> IPipe<T> target(final S targetStage, final IInputPort<S, T> targetPort) {
+		targetPort.setAssociatedPipe(this);
 		this.fireSignalClosing = new Runnable() {
 			// This Runnable avoids the declaration of targetStage and targetPort as attributes and the declaration of I as type parameter
 			public void run() {
 				targetStage.onSignalClosing(targetPort);
 			}
 		};
-		return (T) this;
+		return this;
 	}
 
-	protected abstract void putInternal(Object token);
+	protected abstract void putInternal(T token);
 
-	public final void put(final Object token) {
+	public final void put(final T token) {
 		this.putInternal(token);
 	}
 
-	protected abstract Object tryTakeInternal();
+	protected abstract T tryTakeInternal();
 
-	public final Object tryTake() {
-		final Object token = this.tryTakeInternal();
+	public final T tryTake() {
+		final T token = this.tryTakeInternal();
 		return token;
 	}
 

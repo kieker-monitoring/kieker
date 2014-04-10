@@ -44,8 +44,8 @@ public interface IStage {
 	 *         <pre>
 	 * <code>
 	 * boolean execute() {
-	 * 	final Object record = this.tryTake(INPUT_PORT.FILE_WORDCOUNT_TUPLE);
-	 * 	if (record == null) {
+	 * 	final Tuple token = this.tryTake(FILE_WORDCOUNT_TUPLE);
+	 * 	if (token == null) {
 	 * 		return false;
 	 * 	}
 	 * 	...

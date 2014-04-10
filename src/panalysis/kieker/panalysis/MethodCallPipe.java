@@ -19,8 +19,9 @@ package kieker.panalysis;
 import java.util.List;
 
 import kieker.panalysis.base.AbstractPipe;
+import kieker.panalysis.base.IInputPort;
+import kieker.panalysis.base.IPipe;
 import kieker.panalysis.base.ISink;
-import kieker.panalysis.base.ISource;
 import kieker.panalysis.base.IStage;
 
 /**
@@ -28,12 +29,12 @@ import kieker.panalysis.base.IStage;
  * 
  * @since 1.10
  */
-public class MethodCallPipe extends AbstractPipe<MethodCallPipe> {
+public class MethodCallPipe<T> extends AbstractPipe<T> {
 
 	private IStage targetStage;
-	private Object storedToken;
+	private T storedToken;
 
-	public MethodCallPipe(final Object initialToken) {
+	public MethodCallPipe(final T initialToken) {
 		this.storedToken = initialToken;
 	}
 
@@ -42,40 +43,34 @@ public class MethodCallPipe extends AbstractPipe<MethodCallPipe> {
 	}
 
 	@Override
-	protected void putInternal(final Object token) {
+	protected void putInternal(final T token) {
 		this.storedToken = token;
 		this.targetStage.execute();
 	}
 
-	public Object take() {
-		final Object temp = this.storedToken;
-		this.storedToken = null;
-		return temp;
-	}
-
 	@Override
-	protected Object tryTakeInternal() {
-		final Object temp = this.storedToken;
+	protected T tryTakeInternal() {
+		final T temp = this.storedToken;
 		this.storedToken = null;
 		return temp;
 	}
 
-	public Object read() {
+	public T read() {
 		return this.storedToken;
 	}
 
-	@Override
-	public <O extends Enum<O>, I extends Enum<I>> void connect(final ISource<O> sourceStage, final O sourcePort, final ISink<I> targetStage, final I targetPort) {
-		this.targetStage = targetStage;
-		super.connect(sourceStage, sourcePort, targetStage, targetPort);
+	public void putMultiple(final List<T> items) {
+		throw new IllegalStateException("Putting more than one element is not possible. You tried to put " + items.size() + " items.");
 	}
 
-	public List<Object> tryTakeMultiple(final int numItemsToTake) {
+	public List<?> tryTakeMultiple(final int numItemsToTake) {
 		throw new IllegalStateException("Taking more than one element is not possible. You tried to take " + numItemsToTake + " items.");
 	}
 
-	public void putMultiple(final List<?> items) {
-		throw new IllegalStateException("Putting more than one element is not possible. You tried to put " + items.size() + " items.");
+	@Override
+	public <S extends ISink<S>> IPipe<T> target(final S targetStage, final IInputPort<S, T> targetPort) {
+		this.targetStage = targetStage;
+		return super.target(targetStage, targetPort);
 	}
 
 }

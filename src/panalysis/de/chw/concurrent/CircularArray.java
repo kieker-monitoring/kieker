@@ -23,45 +23,47 @@ package de.chw.concurrent;
  * @see "Dynamic Circular WorkStealing Deque"
  * 
  * @since 1.10
+ * 
+ * @param <T>
  */
-// BETTER use a type parameter
-public class CircularArray {
+public class CircularArray<T> {
 
 	private final long logSize;
-	private final Object[] segment;
+	private final T[] segment;
 
 	/**
 	 * 
 	 * @param logSize
 	 *            The initial size of this array in log2, i.e., the number of bits to use
 	 */
+	@SuppressWarnings("unchecked")
 	public CircularArray(final long logSize) {
 		this.logSize = logSize;
-		this.segment = new Object[1 << this.logSize];
+		this.segment = (T[]) new Object[1 << this.logSize];
 	}
 
 	public long size() {
 		return 1 << this.logSize;
 	}
 
-	public Object get(final long i) {
+	public T get(final long i) {
 		return this.segment[(int) (i % this.size())]; // risk of overflow
 	}
 
-	public void put(final long i, final Object o) {
+	public void put(final long i, final T o) {
 		this.segment[(int) (i % this.size())] = o; // risk of overflow
 	}
 
-	public CircularArray grow(final long b, final long t) {
-		final CircularArray a = new CircularArray(this.logSize + 1);
+	public CircularArray<T> grow(final long b, final long t) {
+		final CircularArray<T> a = new CircularArray<T>(this.logSize + 1);
 		for (long i = t; i < b; i++) {
 			a.put(i, this.get(i));
 		}
 		return a;
 	}
 
-	public CircularArray shrink(final long b, final long t) {
-		final CircularArray a = new CircularArray(this.logSize - 1);
+	public CircularArray<T> shrink(final long b, final long t) {
+		final CircularArray<T> a = new CircularArray<T>(this.logSize - 1);
 		for (long i = t; i < b; i++) {
 			a.put(i, this.get(i));
 		}

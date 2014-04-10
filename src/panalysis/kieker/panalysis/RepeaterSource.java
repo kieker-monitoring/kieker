@@ -16,25 +16,23 @@
 
 package kieker.panalysis;
 
-import kieker.panalysis.base.AbstractSource;
+import kieker.panalysis.base.AbstractFilter;
+import kieker.panalysis.base.IOutputPort;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  */
-public class RepeaterSource extends AbstractSource<RepeaterSource.OUTPUT_PORT> {
+public class RepeaterSource<T> extends AbstractFilter<RepeaterSource<T>> {
 
-	private final Object outputRecord;
+	public final IOutputPort<RepeaterSource<T>, T> OUTPUT = this.createOutputPort();
+
+	private final T outputRecord;
 	private final int num;
 	private long overallDuration;
 
-	public static enum OUTPUT_PORT { // NOCS
-		OUTPUT
-	}
-
-	public RepeaterSource(final Object outputRecord, final int num) {
-		super(OUTPUT_PORT.class);
+	public RepeaterSource(final T outputRecord, final int num) {
 		this.outputRecord = outputRecord;
 		this.num = num;
 	}
@@ -44,7 +42,7 @@ public class RepeaterSource extends AbstractSource<RepeaterSource.OUTPUT_PORT> {
 
 		int counter = this.num;
 		while (counter-- > 0) {
-			this.put(OUTPUT_PORT.OUTPUT, this.outputRecord);
+			this.put(this.OUTPUT, this.outputRecord);
 		}
 
 		final long end = System.currentTimeMillis();

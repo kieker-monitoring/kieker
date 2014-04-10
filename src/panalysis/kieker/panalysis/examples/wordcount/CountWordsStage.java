@@ -22,43 +22,37 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.regex.Pattern;
 
 import kieker.panalysis.base.AbstractFilter;
+import kieker.panalysis.base.IInputPort;
+import kieker.panalysis.base.IOutputPort;
+import kieker.panalysis.util.Pair;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  */
-public class CountWordsStage extends AbstractFilter<CountWordsStage.INPUT_PORT, CountWordsStage.OUTPUT_PORT> {
+public class CountWordsStage extends AbstractFilter<CountWordsStage> {
 
-	public static enum INPUT_PORT { // NOCS
-		FILE
-	}
+	public final IInputPort<CountWordsStage, File> FILE = this.createInputPort();
 
-	public static enum OUTPUT_PORT { // NOCS
-		EXCEPTION, WORDSCOUNT
-	}
+	public final IOutputPort<CountWordsStage, Exception> EXCEPTION = this.createOutputPort();
+	public final IOutputPort<CountWordsStage, Pair<File, Integer>> WORDSCOUNT = this.createOutputPort();
+
+	private final Pattern pattern = Pattern.compile("[^\\p{Graph}]");
 
 	private long overallDuration = 0;
-	private final Pattern pattern;
-
-	public CountWordsStage() {
-		super(INPUT_PORT.class, OUTPUT_PORT.class);
-		this.pattern = Pattern.compile("[^\\p{Graph}]");
-	}
 
 	@SuppressWarnings("unchecked")
 	public boolean execute() {
 		final long start = System.currentTimeMillis();
 
-		final Object record = this.tryTake(INPUT_PORT.FILE);
-		if (record == null) {
+		final File file = this.tryTake(this.FILE);
+		if (file == null) {
 			return false;
 		}
-		final File file = (File) record;
 
 		int wordsCount = 0;
 		try {
@@ -76,11 +70,11 @@ public class CountWordsStage extends AbstractFilter<CountWordsStage.INPUT_PORT, 
 			} finally {
 				reader.close();
 			}
-			this.put(OUTPUT_PORT.WORDSCOUNT, Arrays.asList(file, wordsCount));
+			this.put(this.WORDSCOUNT, Pair.of(file, wordsCount));
 		} catch (final FileNotFoundException e) {
-			this.put(OUTPUT_PORT.EXCEPTION, e);
+			this.put(this.EXCEPTION, e);
 		} catch (final IOException e) {
-			this.put(OUTPUT_PORT.EXCEPTION, e);
+			this.put(this.EXCEPTION, e);
 		}
 
 		final long end = System.currentTimeMillis();

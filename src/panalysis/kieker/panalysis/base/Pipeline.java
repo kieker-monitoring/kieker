@@ -29,11 +29,11 @@ import java.util.Map;
  * @param <T>
  *            The type of the pipeline
  */
-public class Pipeline<T extends IPipe> {
+public class Pipeline<T extends IPipe<?>> {
 
 	protected final List<IStage> stages = new LinkedList<IStage>();
 	private int freeId = 0;
-	private List<AbstractFilter<?, ?>> startStages;
+	private List<AbstractFilter<?>> startStages;
 
 	private T currentPipe;
 	private final Map<Integer, List<T>> pipeGroups;
@@ -78,10 +78,6 @@ public class Pipeline<T extends IPipe> {
 		return this.stages;
 	}
 
-	public void setStartStages(final AbstractFilter<?, ?>... startStages) {
-		this.startStages = Arrays.asList(startStages);
-	}
-
 	public Pipeline<T> add(final T pipe) {
 		this.currentPipe = pipe;
 		return this;
@@ -96,7 +92,11 @@ public class Pipeline<T extends IPipe> {
 		pipes.add(this.currentPipe);
 	}
 
-	public List<AbstractFilter<?, ?>> getStartStages() {
+	public void setStartStages(final AbstractFilter<?>... startStages) {
+		this.startStages = Arrays.asList(startStages);
+	}
+
+	public List<AbstractFilter<?>> getStartStages() {
 		return this.startStages;
 	}
 }

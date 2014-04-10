@@ -41,14 +41,14 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 
 	private static final int SECONDS = 1000;
 
-	private RepeaterSource repeaterSource;
+	private RepeaterSource<String> repeaterSource;
 	private WorkerThread[] threads;
 
 	@Override
 	public void init() {
 		super.init();
 
-		this.repeaterSource = new RepeaterSource(START_DIRECTORY_NAME, 4000);
+		this.repeaterSource = new RepeaterSource<String>(START_DIRECTORY_NAME, 4000);
 		this.repeaterSource.setId(99);
 
 		int numThreads = Runtime.getRuntime().availableProcessors();

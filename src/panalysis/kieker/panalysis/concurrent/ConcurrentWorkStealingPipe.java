@@ -29,9 +29,9 @@ import kieker.panalysis.base.AbstractPipe;
  * 
  * @since 1.10
  */
-public class ConcurrentWorkStealingPipe extends AbstractPipe<ConcurrentWorkStealingPipe> {
+public class ConcurrentWorkStealingPipe<T> extends AbstractPipe<T> {
 
-	private final CircularWorkStealingDeque circularWorkStealingDeque = new CircularWorkStealingDeque();
+	private final CircularWorkStealingDeque<T> circularWorkStealingDeque = new CircularWorkStealingDeque<T>();
 
 	// BETTER use a prioritized list that considers
 	// <ul>
@@ -39,34 +39,34 @@ public class ConcurrentWorkStealingPipe extends AbstractPipe<ConcurrentWorkSteal
 	// <li>the core's locality to improve cache access performance
 	// </ul>
 
-	private List<ConcurrentWorkStealingPipe> allOtherPipes;
+	private List<ConcurrentWorkStealingPipe<T>> allOtherPipes;
 	private int numTakenElements = 0;
 
-	public void copyAllOtherPipes(final List<ConcurrentWorkStealingPipe> samePipesFromAllThreads) {
-		this.allOtherPipes = new ArrayList<ConcurrentWorkStealingPipe>(samePipesFromAllThreads);
+	public void copyAllOtherPipes(final List<ConcurrentWorkStealingPipe<T>> samePipesFromAllThreads) {
+		this.allOtherPipes = new ArrayList<ConcurrentWorkStealingPipe<T>>(samePipesFromAllThreads);
 		this.allOtherPipes.remove(this);
 	}
 
 	@Override
-	protected void putInternal(final Object token) {
+	protected void putInternal(final T token) {
 		this.circularWorkStealingDeque.pushBottom(token);
 	}
 
-	public void putMultiple(final List<?> items) {
+	public void putMultiple(final List<T> items) {
 		// TODO Auto-generated method stub
 		// BETTER find a way to put multiple elements directly without a loop
 	}
 
-	public Object take() {
+	public T take() {
 		throw new IllegalStateException("deprecated");
 	}
 
 	@Override
-	protected Object tryTakeInternal() {
-		final Object record = this.circularWorkStealingDeque.popBottom();
+	protected T tryTakeInternal() {
+		final T record = this.circularWorkStealingDeque.popBottom();
 		if (record == CircularWorkStealingDeque.EMPTY) {
-			for (final ConcurrentWorkStealingPipe pipe : this.allOtherPipes) {
-				final Object stolenElement = pipe.steal();
+			for (final ConcurrentWorkStealingPipe<T> pipe : this.allOtherPipes) {
+				final T stolenElement = pipe.steal();
 				if ((stolenElement != CircularWorkStealingDeque.EMPTY) && (stolenElement != CircularWorkStealingDeque.ABORT)) {
 					return stolenElement;
 				}
@@ -78,29 +78,29 @@ public class ConcurrentWorkStealingPipe extends AbstractPipe<ConcurrentWorkSteal
 		return record;
 	}
 
-	public List<?> tryTakeMultiple(final int maxItemsToTake) {
+	public List<T> tryTakeMultiple(final int maxItemsToTake) {
 		// TODO Auto-generated method stub
 		// BETTER find a way to take multiple elements directly without a loop
 		return null;
 	}
 
-	public Object read() {
-		final Object record = this.circularWorkStealingDeque.readBottom();
+	public T read() {
+		final T record = this.circularWorkStealingDeque.readBottom();
 		if (record == CircularWorkStealingDeque.EMPTY) {
 			return null;
 		}
 		return record;
 	}
 
-	public Object steal() {
+	public T steal() {
 		return this.circularWorkStealingDeque.steal();
 	}
 
-	public List<Object> stealMultiple(final int maxItemsToSteal) {
+	public List<T> stealMultiple(final int maxItemsToSteal) {
 		int maxItemsToStealCoutner = maxItemsToSteal;
-		final List<Object> stolenElements = new LinkedList<Object>();
+		final List<T> stolenElements = new LinkedList<T>();
 		while (maxItemsToStealCoutner-- > 0) {
-			final Object stolenElement = this.steal();
+			final T stolenElement = this.steal();
 			if ((stolenElement == CircularWorkStealingDeque.EMPTY) && (stolenElement == CircularWorkStealingDeque.ABORT)) {
 				break;
 			}

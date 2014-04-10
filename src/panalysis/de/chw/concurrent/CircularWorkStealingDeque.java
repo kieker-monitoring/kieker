@@ -26,8 +26,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * 
  * @since 1.10
  */
-// BETTER use a type parameter
-public class CircularWorkStealingDeque {
+public class CircularWorkStealingDeque<T> {
 	public static final Object EMPTY = new Object();
 	public static final Object ABORT = new Object();
 
@@ -36,7 +35,7 @@ public class CircularWorkStealingDeque {
 	private volatile long bottom = 0;
 	// private volatile long top = 0;
 	private final AtomicLong top = new AtomicLong();
-	private volatile CircularArray activeArray = new CircularArray(LOG_INITIAL_SIZE);
+	private volatile CircularArray<T> activeArray = new CircularArray<T>(LOG_INITIAL_SIZE);
 
 	private boolean casTop(final long oldVal, final long newVal) {
 		// boolean preCond;
@@ -50,10 +49,10 @@ public class CircularWorkStealingDeque {
 		return this.top.compareAndSet(oldVal, newVal);
 	}
 
-	public void pushBottom(final Object o) {
+	public void pushBottom(final T o) {
 		final long b = this.bottom;
 		final long t = this.top.get();
-		CircularArray a = this.activeArray;
+		CircularArray<T> a = this.activeArray;
 		final long size = b - t;
 		if (size > (a.size() - 1)) {
 			a = a.grow(b, t);
@@ -71,9 +70,9 @@ public class CircularWorkStealingDeque {
 	 *         <li><i>the latest element</i> otherwise
 	 *         </ul>
 	 */
-	public Object popBottom() {
+	public T popBottom() {
 		long b = this.bottom;
-		final CircularArray a = this.activeArray;
+		final CircularArray<T> a = this.activeArray;
 		b = b - 1;
 		this.bottom = b;
 		final long t = this.top.get();
@@ -82,7 +81,7 @@ public class CircularWorkStealingDeque {
 			this.bottom = t;
 			return EMPTY;
 		}
-		Object o = a.get(b);
+		T o = a.get(b);
 		if (size > 0) {
 			this.perhapsShrink(b, t);
 			return o;
@@ -96,9 +95,9 @@ public class CircularWorkStealingDeque {
 
 	void perhapsShrink(final long b, final long t) {
 		long temp = t;
-		final CircularArray a = this.activeArray;
+		final CircularArray<T> a = this.activeArray;
 		if ((b - temp) < (a.size() / 4)) {
-			final CircularArray aa = a.shrink(b, temp);
+			final CircularArray<T> aa = a.shrink(b, temp);
 			this.activeArray = aa;
 			final long ss = aa.size();
 			this.bottom = b + ss;
@@ -120,11 +119,11 @@ public class CircularWorkStealingDeque {
 	 *         <li><i>the oldest element</i> otherwise
 	 *         </ul>
 	 */
-	public Object steal() {
+	public T steal() {
 		final long t = this.top.get();
-		final CircularArray oldArr = this.activeArray;
+		final CircularArray<T> oldArr = this.activeArray;
 		final long b = this.bottom;
-		final CircularArray a = this.activeArray;
+		final CircularArray<T> a = this.activeArray;
 		final long size = b - t;
 		if (size <= 0) {
 			return EMPTY;
@@ -136,7 +135,7 @@ public class CircularWorkStealingDeque {
 				return ABORT;
 			}
 		}
-		final Object o = a.get(t);
+		final T o = a.get(t);
 		if (!this.casTop(t, t + 1)) {
 			return ABORT;
 		}
@@ -148,10 +147,10 @@ public class CircularWorkStealingDeque {
 	 * 
 	 * @return but does not remove the bottom element from this deque
 	 */
-	public Object readBottom() {
+	public T readBottom() {
 		final long b = this.bottom;
-		final CircularArray a = this.activeArray;
-		final Object o = a.get(b);
+		final CircularArray<T> a = this.activeArray;
+		final T o = a.get(b);
 		return o;
 	}
 

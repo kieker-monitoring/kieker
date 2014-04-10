@@ -16,12 +16,16 @@
 
 package kieker.panalysis.examples.wordcount;
 
+import java.io.File;
+
 import kieker.panalysis.Distributor;
 import kieker.panalysis.Merger;
 import kieker.panalysis.MethodCallPipe;
 import kieker.panalysis.RepeaterSource;
 import kieker.panalysis.base.Analysis;
+import kieker.panalysis.base.IPipe;
 import kieker.panalysis.base.Pipeline;
+import kieker.panalysis.util.Pair;
 
 /**
  * @author Christian Wulf
@@ -30,33 +34,34 @@ import kieker.panalysis.base.Pipeline;
  */
 public class CountWordsAnalysis extends Analysis {
 
-	private Pipeline<MethodCallPipe> pipeline;
+	private Pipeline<IPipe<?>> pipeline;
 
-	private RepeaterSource repeaterSource;
+	private RepeaterSource<String> repeaterSource;
 	private DirectoryName2Files findFilesStage;
-	private Distributor distributor;
+	private Distributor<File> distributor;
 	private CountWordsStage countWordsStage0;
 	private CountWordsStage countWordsStage1;
-	private Merger merger;
+	private Merger<Pair<File, Integer>> merger;
 	private OutputWordsCountSink outputWordsCountStage;
 
 	public CountWordsAnalysis() {
 		// No code necessary
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void init() {
 		super.init();
 
-		this.repeaterSource = new RepeaterSource(".", 4000);
+		this.repeaterSource = new RepeaterSource<String>(".", 4000);
 		this.findFilesStage = new DirectoryName2Files();
-		this.distributor = new Distributor();
+		this.distributor = new Distributor<File>();
 		this.countWordsStage0 = new CountWordsStage();
 		this.countWordsStage1 = new CountWordsStage();
-		this.merger = new Merger();
+		this.merger = new Merger<Pair<File, Integer>>(2);
 		this.outputWordsCountStage = new OutputWordsCountSink();
 
-		this.pipeline = new Pipeline<MethodCallPipe>();
+		this.pipeline = new Pipeline<IPipe<?>>();
 		this.pipeline.addStage(this.repeaterSource);
 		this.pipeline.addStage(this.findFilesStage);
 		this.pipeline.addStage(this.distributor);
@@ -67,23 +72,31 @@ public class CountWordsAnalysis extends Analysis {
 
 		this.pipeline.setStartStages(this.repeaterSource);
 
-		new MethodCallPipe().connect(this.repeaterSource, RepeaterSource.OUTPUT_PORT.OUTPUT, this.findFilesStage,
-				DirectoryName2Files.INPUT_PORT.DIRECTORY_NAME);
-		new MethodCallPipe().connect(this.findFilesStage, DirectoryName2Files.OUTPUT_PORT.FILE, this.distributor, Distributor.INPUT_PORT.OBJECT);
+		this.pipeline.add(new MethodCallPipe<String>()
+				.source(this.repeaterSource.OUTPUT)
+				.target(this.findFilesStage, this.findFilesStage.DIRECTORY_NAME));
 
-		new MethodCallPipe().connect(this.distributor, Distributor.OUTPUT_PORT.OUTPUT0, this.countWordsStage0,
-				CountWordsStage.INPUT_PORT.FILE);
-		new MethodCallPipe().connect(this.distributor, Distributor.OUTPUT_PORT.OUTPUT1, this.countWordsStage1,
-				CountWordsStage.INPUT_PORT.FILE);
+		this.pipeline.add(new MethodCallPipe<File>()
+				.source(this.findFilesStage.FILE)
+				.target(this.distributor, this.distributor.OBJECT));
 
-		new MethodCallPipe().connect(this.countWordsStage0, CountWordsStage.OUTPUT_PORT.WORDSCOUNT, this.merger,
-				Merger.INPUT_PORT.INPUT0);
-		new MethodCallPipe().connect(this.countWordsStage1, CountWordsStage.OUTPUT_PORT.WORDSCOUNT, this.merger,
-				Merger.INPUT_PORT.INPUT1);
+		this.pipeline.add(new MethodCallPipe<File>()
+				.source(this.distributor.OUTPUT0)
+				.target(this.countWordsStage0, this.countWordsStage0.FILE));
+		this.pipeline.add(new MethodCallPipe<File>()
+				.source(this.distributor.OUTPUT1)
+				.target(this.countWordsStage1, this.countWordsStage1.FILE));
 
-		new MethodCallPipe().connect(this.merger, Merger.OUTPUT_PORT.OBJECT, this.outputWordsCountStage,
-				OutputWordsCountSink.INPUT_PORT.FILE_WORDCOUNT_TUPLE);
+		this.pipeline.add(new MethodCallPipe<Pair<File, Integer>>()
+				.source(this.countWordsStage0.WORDSCOUNT)
+				.target(this.merger, this.merger.getInputPort(0)));
+		this.pipeline.add(new MethodCallPipe<Pair<File, Integer>>()
+				.source(this.countWordsStage1.WORDSCOUNT)
+				.target(this.merger, this.merger.getInputPort(1)));
 
+		this.pipeline.add(new MethodCallPipe<Pair<File, Integer>>()
+				.source(this.merger.OBJECT)
+				.target(this.outputWordsCountStage, this.outputWordsCountStage.FILE_WORDCOUNT_TUPLE));
 	}
 
 	@Override

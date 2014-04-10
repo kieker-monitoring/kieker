@@ -17,40 +17,37 @@
 package kieker.panalysis.examples.wordcount;
 
 import java.io.File;
-import java.util.List;
 
-import kieker.panalysis.base.AbstractSink;
+import kieker.panalysis.base.AbstractFilter;
+import kieker.panalysis.base.IInputPort;
+import kieker.panalysis.util.Pair;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  */
-public class OutputWordsCountSink extends AbstractSink<OutputWordsCountSink.INPUT_PORT> {
+public class OutputWordsCountSink extends AbstractFilter<OutputWordsCountSink> {
 
-	public static enum INPUT_PORT { // NOCS
-		FILE_WORDCOUNT_TUPLE
-	}
+	final IInputPort<OutputWordsCountSink, Pair<File, Integer>> FILE_WORDCOUNT_TUPLE = this.createInputPort();
 
 	private long overallDuration;
 	private int numFiles = 0;
 
-	public OutputWordsCountSink() {
-		super(INPUT_PORT.class);
-	}
-
+	/**
+	 * @since 1.10
+	 */
 	public boolean execute() {
 		final long start = System.currentTimeMillis();
 
-		final Object record = this.tryTake(INPUT_PORT.FILE_WORDCOUNT_TUPLE);
-		if (record == null) {
+		final Pair<File, Integer> pair = this.tryTake(this.FILE_WORDCOUNT_TUPLE);
+		if (pair == null) {
 			return false;
 		}
-		final List<?> tuple = (List<?>) record;
 
-		final File file = (File) tuple.get(0);
-		final Number wordsCount = (Number) tuple.get(1);
-		// System.out.println(wordsCount + " words in file '" + file.getAbsolutePath() + "'"); // NOPMD (Just for example purposes)
+		final File file = pair.getFirst();
+		final Number wordsCount = pair.getSecond();
+		System.out.println(wordsCount + " words in file '" + file.getAbsolutePath() + "'"); // NOPMD (Just for example purposes)
 		this.numFiles++;
 
 		final long end = System.currentTimeMillis();
@@ -60,10 +57,18 @@ public class OutputWordsCountSink extends AbstractSink<OutputWordsCountSink.INPU
 		return true;
 	}
 
+	/**
+	 * @since 1.10
+	 * @return
+	 */
 	public long getOverallDuration() {
 		return this.overallDuration;
 	}
 
+	/**
+	 * @since 1.10
+	 * @return
+	 */
 	public int getNumFiles() {
 		return this.numFiles;
 	}

@@ -17,23 +17,20 @@
 package kieker.panalysis.base;
 
 /**
+ * 
  * @author Christian Wulf
  * 
  * @since 1.10
  * 
- * @param <I>
- *            The type of the input ports
+ * @param <S>
  */
-public interface ISink<I extends Enum<I>> extends IStage {
+public interface ISink<S extends IStage> extends IStage {
 
 	/**
 	 * @since 1.10
+	 * 
+	 * @param targetPort
 	 */
-	void setPipeForInputPort(final I inputPort, final IPipe pipe);
-
-	/**
-	 * @since 1.10
-	 */
-	void onSignalClosing(I inputPort);
+	void onSignalClosing(IInputPort<S, ?> targetPort);
 
 }

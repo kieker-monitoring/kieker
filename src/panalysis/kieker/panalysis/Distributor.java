@@ -17,43 +17,53 @@
 package kieker.panalysis;
 
 import kieker.panalysis.base.AbstractFilter;
+import kieker.panalysis.base.IInputPort;
+import kieker.panalysis.base.IOutputPort;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  */
-public class Distributor extends AbstractFilter<Distributor.INPUT_PORT, Distributor.OUTPUT_PORT> {
+public class Distributor<T> extends AbstractFilter<Distributor<T>> {
 
-	public static enum INPUT_PORT { // NOCS
-		OBJECT
-	}
+	public final IInputPort<Distributor<T>, T> OBJECT = this.createInputPort();
 
-	public static enum OUTPUT_PORT { // NOCS
-		OUTPUT0, OUTPUT1
-	}
+	public final IOutputPort<Distributor<T>, T> OUTPUT0 = this.createOutputPort();
+	public final IOutputPort<Distributor<T>, T> OUTPUT1 = this.createOutputPort();
 
-	private final OUTPUT_PORT[] outputPorts;
 	private int index = 0;
 
+	// TODO add parameter: numOutputPorts
+	// TODO add parameter: MergeStrategy
+	/**
+	 * @since 1.10
+	 */
 	public Distributor() {
-		super(INPUT_PORT.class, OUTPUT_PORT.class);
-		this.outputPorts = OUTPUT_PORT.values();
+		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * @since 1.10
+	 */
 	public boolean execute() {
-		final Object object = this.tryTake(INPUT_PORT.OBJECT);
+		final T object = this.tryTake(this.OBJECT);
 		if (object == null) {
 			return false;
 		}
-		final OUTPUT_PORT port = this.getNextPortInRoundRobinOrder();
+		final IOutputPort<Distributor<T>, T> port = this.getNextPortInRoundRobinOrder();
 		this.put(port, object);
 		return true;
 	}
 
-	private OUTPUT_PORT getNextPortInRoundRobinOrder() {
-		final OUTPUT_PORT port = this.outputPorts[this.index];
-		this.index = (this.index + 1) % this.outputPorts.length;
+	/**
+	 * @since 1.10
+	 * @return
+	 */
+	private IOutputPort<Distributor<T>, T> getNextPortInRoundRobinOrder() {
+		@SuppressWarnings("unchecked")
+		final IOutputPort<Distributor<T>, T> port = (IOutputPort<Distributor<T>, T>) this.getOutputPorts().get(this.index);
+		this.index = (this.index + 1) % this.getOutputPorts().size();
 		return port;
 	}
 }
