@@ -23,7 +23,7 @@ import kieker.panalysis.base.AbstractFilter;
  * 
  * @since 1.10
  */
-public class CountingFilter extends AbstractFilter<CountingFilter.INPUT_PORT, CountingFilter.OUTPUT_PORT> {
+public class CountingFilter<T> extends AbstractFilter<CountingFilter<T>> {
 
 	public static enum INPUT_PORT { // NOCS
 		INPUT_OBJECT, CURRENT_COUNT
@@ -33,16 +33,18 @@ public class CountingFilter extends AbstractFilter<CountingFilter.INPUT_PORT, Co
 		RELAYED_OBJECT, NEW_COUNT
 	}
 
-	public CountingFilter() {
-		super(INPUT_PORT.class, OUTPUT_PORT.class);
-	}
-
+	/**
+	 * @since 1.10
+	 */
 	public boolean execute() {
-		final Object inputObject = super.tryTake(INPUT_PORT.INPUT_OBJECT);
+		final T inputObject = super.tryTake(INPUT_PORT.INPUT_OBJECT);
 		if (inputObject == null) {
 			return false;
 		}
-		final Long count = (Long) super.take(INPUT_PORT.CURRENT_COUNT);
+		final Long count = super.tryTake(INPUT_PORT.CURRENT_COUNT);
+		if (count == null) {
+			return false;
+		}
 
 		super.put(OUTPUT_PORT.RELAYED_OBJECT, inputObject);
 		super.put(OUTPUT_PORT.NEW_COUNT, count + 1); // BETTER support pipes with primitive values to improve performance by avoiding auto-boxing

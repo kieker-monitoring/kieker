@@ -21,11 +21,11 @@ import java.io.PrintStream;
 import kieker.panalysis.base.AbstractFilter;
 
 /**
- * @author Matthias Rohr, Jan Waller, Nils Christian Ehmke
+ * @author Matthias Rohr, Jan Waller, Nils Christian Ehmke, Christian Wulf
  * 
  * @since 1.10
  */
-public final class TeeFilter extends AbstractFilter<TeeFilter.INPUT_PORT, TeeFilter.OUTPUT_PORT> {
+public final class TeeFilter extends AbstractFilter<TeeFilter> {
 
 	public static enum INPUT_PORT { // NOCS
 		INPUT_OBJECT
@@ -38,13 +38,11 @@ public final class TeeFilter extends AbstractFilter<TeeFilter.INPUT_PORT, TeeFil
 	private final PrintStream printStream;
 
 	public TeeFilter() {
-		super(INPUT_PORT.class, OUTPUT_PORT.class);
-
 		this.printStream = System.out;
 	}
 
 	public boolean execute() {
-		final Object inputObject = super.take(INPUT_PORT.INPUT_OBJECT);
+		final Object inputObject = super.tryTake(INPUT_PORT.INPUT_OBJECT);
 
 		final StringBuilder sb = new StringBuilder(128);
 		sb.append(super.getId()).append('(').append(inputObject.getClass().getSimpleName()).append(") ").append(inputObject.toString());

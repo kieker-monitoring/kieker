@@ -19,14 +19,14 @@ package kieker.panalysis.stage;
 import java.util.Map;
 
 import kieker.common.util.filesystem.FSUtil;
-import kieker.panalysis.base.AbstractSink;
+import kieker.panalysis.base.AbstractFilter;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  */
-public class TextLine2MappingRegistryFilter extends AbstractSink<TextLine2MappingRegistryFilter.INPUT_PORT> {
+public class TextLine2MappingRegistryFilter extends AbstractFilter<TextLine2MappingRegistryFilter> {
 
 	public static enum INPUT_PORT { // NOCS
 		TEXT_LINE
@@ -35,12 +35,11 @@ public class TextLine2MappingRegistryFilter extends AbstractSink<TextLine2Mappin
 	private final Map<Integer, String> stringRegistry;
 
 	public TextLine2MappingRegistryFilter(final Map<Integer, String> stringRegistry) {
-		super(INPUT_PORT.class);
 		this.stringRegistry = stringRegistry;
 	}
 
 	public boolean execute() {
-		final String textLine = (String) this.take(INPUT_PORT.TEXT_LINE);
+		final String textLine = this.tryTake(INPUT_PORT.TEXT_LINE);
 
 		final int split = textLine.indexOf('=');
 		if (split == -1) {
