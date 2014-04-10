@@ -35,6 +35,20 @@ public interface IMonitoringWriter extends IMonitoringRecordReceiver {
 	public abstract boolean newMonitoringRecord(IMonitoringRecord record);
 
 	/**
+	 * Called for each new record.
+	 * 
+	 * Notice, that this method should not throw an exception, but indicate an error by the return value false.
+	 * Also, this method MUST NOT block.
+	 * 
+	 * @param record
+	 *            the record.
+	 * @return true on success; false in case of an error.
+	 * 
+	 * @since 1.9
+	 */
+	public abstract boolean newMonitoringRecordNonBlocking(IMonitoringRecord record);
+
+	/**
 	 * Called by the Monitoring Controller to announce a shutdown of monitoring.
 	 * Writers should return as soon as it is safe to terminate Kieker.
 	 * 

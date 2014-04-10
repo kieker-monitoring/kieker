@@ -184,6 +184,30 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	}
 
 	@Override
+	public final boolean newMonitoringRecordNonBlocking(final IMonitoringRecord monitoringRecord) {
+		try {
+			if (!this.blockingQueue.offer(monitoringRecord)) {
+				new Thread() {
+					@Override
+					public void run() {
+						try {
+							AbstractAsyncWriter.this.blockingQueue.put(monitoringRecord);
+							return;
+						} catch (final InterruptedException ignore) {
+							Thread.currentThread().interrupt(); // propagate interrupt
+						}
+					}
+				}.start();
+				return false;
+			}
+			return true;
+		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
+			LOG.error("Failed to add new monitoring record to queue.", ex);
+			return false;
+		}
+	}
+
+	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder(64);
 		sb.append(super.toString());

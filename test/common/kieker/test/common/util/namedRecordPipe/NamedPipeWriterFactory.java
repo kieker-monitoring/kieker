@@ -46,12 +46,12 @@ public final class NamedPipeWriterFactory {
 	}
 
 	/**
-	 * Creates an {@link kieker.common.util.registry.IMonitoringRecordReceiver} that writes records
+	 * Creates an {@link kieker.common.namedRecordPipe.IPipeWriter} that writes records
 	 * to a {@link Pipe} with the given name.
 	 * 
 	 * @param pipeName
 	 *            The name of the pipe to use.
-	 * @return the {@link kieker.common.util.registry.IMonitoringRecordReceiver}
+	 * @return the {@link kieker.common.namedRecordPipe.IPipeWriter}
 	 */
 	public static final IPipeWriter createAndRegisterNamedPipeRecordWriter(final String pipeName) {
 		final Pipe namedPipe = Broker.INSTANCE.acquirePipe(pipeName);
