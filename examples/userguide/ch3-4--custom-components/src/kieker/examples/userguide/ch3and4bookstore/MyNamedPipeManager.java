@@ -30,16 +30,6 @@ public class MyNamedPipeManager {
 		return MyNamedPipeManager.PIPE_MGR_INSTANCE;
 	}
 
-	/**
-	 * Returns a pipe with name pipeName. If a pipe with this name does not
-	 * exist prior to the call, it will be created.
-	 * 
-	 * @param pipeName
-	 *            name of the (new) pipe.
-	 * @return the pipe
-	 * @throws IllegalArgumentException
-	 *             if the given name is null or has length zero.
-	 */
 	public MyPipe acquirePipe(final String pipeName) throws IllegalArgumentException {
 		if ((pipeName == null) || (pipeName.length() == 0)) {
 			throw new IllegalArgumentException("Invalid connection name: '" + pipeName + "'");
