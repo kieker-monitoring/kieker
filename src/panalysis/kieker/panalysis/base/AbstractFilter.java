@@ -91,6 +91,7 @@ public abstract class AbstractFilter<I extends Enum<I>, O extends Enum<O>> exten
 		final Object token = pipe.tryTake();
 		if (token != null) {
 			this.numTakenElements++;
+
 		}
 		return token;
 	}
