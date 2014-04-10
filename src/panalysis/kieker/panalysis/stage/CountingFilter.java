@@ -14,49 +14,40 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.panalysis;
+package kieker.panalysis.stage;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
-import kieker.panalysis.base.AbstractSource;
+import kieker.panalysis.base.AbstractFilter;
 
 /**
- * @author Christian Wulf
+ * @author Jan Waller, Nils Christian Ehmke
  * 
  * @since 1.10
  */
-public class ClockSource extends AbstractSource<ClockSource.OUTPUT_PORT> {
+public class CountingFilter extends AbstractFilter<CountingFilter.INPUT_PORT, CountingFilter.OUTPUT_PORT> {
 
-	public static enum OUTPUT_PORT { // NOCS
-		CLOCK_SIGNAL
+	public static enum INPUT_PORT { // NOCS
+		INPUT_OBJECT, CURRENT_COUNT
 	}
 
-	private final Timer timer;
+	public static enum OUTPUT_PORT { // NOCS
+		RELAYED_OBJECT, NEW_COUNT
+	}
 
-	public ClockSource(final long delay, final long period) {
-		super(OUTPUT_PORT.class);
-
-		final TimerTask task = new TimerTask() {
-			@SuppressWarnings("synthetic-access")
-			@Override
-			public void run() {
-				ClockSource.this.put(OUTPUT_PORT.CLOCK_SIGNAL, Boolean.TRUE);
-			}
-		};
-
-		this.timer = new Timer();
-		this.timer.scheduleAtFixedRate(task, delay, period);
+	public CountingFilter() {
+		super(INPUT_PORT.class, OUTPUT_PORT.class);
 	}
 
 	public boolean execute() {
-		// see timer execution
-		return true;
-	}
+		final Object inputObject = super.tryTake(INPUT_PORT.INPUT_OBJECT);
+		if (inputObject == null) {
+			return false;
+		}
+		final Long count = (Long) super.take(INPUT_PORT.CURRENT_COUNT);
 
-	@Override
-	public void cleanUp() {
-		this.timer.cancel();
+		super.put(OUTPUT_PORT.RELAYED_OBJECT, inputObject);
+		super.put(OUTPUT_PORT.NEW_COUNT, count + 1); // BETTER support pipes with primitive values to improve performance by avoiding auto-boxing
+
+		return true;
 	}
 
 }

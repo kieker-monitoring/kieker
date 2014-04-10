@@ -14,39 +14,43 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.panalysis;
+package kieker.panalysis.stage;
+
+import java.io.PrintStream;
 
 import kieker.panalysis.base.AbstractFilter;
 
 /**
- * @author Jan Waller, Nils Christian Ehmke
+ * @author Matthias Rohr, Jan Waller, Nils Christian Ehmke
  * 
  * @since 1.10
  */
-public class CountingFilter extends AbstractFilter<CountingFilter.INPUT_PORT, CountingFilter.OUTPUT_PORT> {
+public final class TeeFilter extends AbstractFilter<TeeFilter.INPUT_PORT, TeeFilter.OUTPUT_PORT> {
 
 	public static enum INPUT_PORT { // NOCS
-		INPUT_OBJECT, CURRENT_COUNT
+		INPUT_OBJECT
 	}
 
 	public static enum OUTPUT_PORT { // NOCS
-		RELAYED_OBJECT, NEW_COUNT
+		RELAYED_OBJECT
 	}
 
-	public CountingFilter() {
+	private final PrintStream printStream;
+
+	public TeeFilter() {
 		super(INPUT_PORT.class, OUTPUT_PORT.class);
+
+		this.printStream = System.out;
 	}
 
 	public boolean execute() {
-		final Object inputObject = super.tryTake(INPUT_PORT.INPUT_OBJECT);
-		if (inputObject == null) {
-			return false;
-		}
-		final Long count = (Long) super.take(INPUT_PORT.CURRENT_COUNT);
+		final Object inputObject = super.take(INPUT_PORT.INPUT_OBJECT);
+
+		final StringBuilder sb = new StringBuilder(128);
+		sb.append(super.getId()).append('(').append(inputObject.getClass().getSimpleName()).append(") ").append(inputObject.toString());
+		this.printStream.println(sb.toString());
 
 		super.put(OUTPUT_PORT.RELAYED_OBJECT, inputObject);
-		super.put(OUTPUT_PORT.NEW_COUNT, count + 1); // BETTER support pipes with primitive values to improve performance by avoiding auto-boxing
-
 		return true;
 	}
 

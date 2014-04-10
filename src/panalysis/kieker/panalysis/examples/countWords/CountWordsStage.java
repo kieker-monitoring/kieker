@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.panalysis.examples.wordcount;
+package kieker.panalysis.examples.countWords;
 
 import java.io.BufferedReader;
 import java.io.File;

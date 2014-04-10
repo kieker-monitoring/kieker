@@ -14,21 +14,21 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.panalysis.examples.wordcount;
+package kieker.panalysis.examples.countWords;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import kieker.panalysis.Distributor;
-import kieker.panalysis.Merger;
-import kieker.panalysis.RepeaterSource;
 import kieker.panalysis.base.Analysis;
 import kieker.panalysis.base.IStage;
 import kieker.panalysis.base.Pipeline;
 import kieker.panalysis.base.TerminationPolicy;
 import kieker.panalysis.concurrent.ConcurrentWorkStealingPipe;
 import kieker.panalysis.concurrent.WorkerThread;
+import kieker.panalysis.stage.Distributor;
+import kieker.panalysis.stage.Merger;
+import kieker.panalysis.stage.RepeaterSource;
 
 /**
  * @author Christian Wulf
@@ -89,37 +89,37 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 
 		// connect stages by pipes
 		ConcurrentWorkStealingPipe pipe = new ConcurrentWorkStealingPipe()
-				.source(repeater, RepeaterSource.OUTPUT_PORT.OUTPUT)
+				.source(repeater, kieker.panalysis.stage.OUTPUT_PORT.OUTPUT)
 				.target(findFilesStage, DirectoryName2Files.INPUT_PORT.DIRECTORY_NAME);
 		pipeline.add(pipe).toGroup(0);
 
 		pipe = new ConcurrentWorkStealingPipe()
 				.source(findFilesStage, DirectoryName2Files.OUTPUT_PORT.FILE)
-				.target(distributor, Distributor.INPUT_PORT.OBJECT);
+				.target(distributor, kieker.panalysis.stage.INPUT_PORT.OBJECT);
 		pipeline.add(pipe).toGroup(1);
 
 		pipe = new ConcurrentWorkStealingPipe()
-				.source(distributor, Distributor.OUTPUT_PORT.OUTPUT0)
+				.source(distributor, kieker.panalysis.stage.OUTPUT_PORT.OUTPUT0)
 				.target(countWordsStage0, CountWordsStage.INPUT_PORT.FILE);
 		pipeline.add(pipe).toGroup(2);
 
 		pipe = new ConcurrentWorkStealingPipe()
-				.source(distributor, Distributor.OUTPUT_PORT.OUTPUT1)
+				.source(distributor, kieker.panalysis.stage.OUTPUT_PORT.OUTPUT1)
 				.target(countWordsStage1, CountWordsStage.INPUT_PORT.FILE);
 		pipeline.add(pipe).toGroup(3);
 
 		pipe = new ConcurrentWorkStealingPipe()
 				.source(countWordsStage0, CountWordsStage.OUTPUT_PORT.WORDSCOUNT)
-				.target(merger, Merger.INPUT_PORT.INPUT0);
+				.target(merger, kieker.panalysis.stage.INPUT_PORT.INPUT0);
 		pipeline.add(pipe).toGroup(4);
 
 		pipe = new ConcurrentWorkStealingPipe()
 				.source(countWordsStage1, CountWordsStage.OUTPUT_PORT.WORDSCOUNT)
-				.target(merger, Merger.INPUT_PORT.INPUT1);
+				.target(merger, kieker.panalysis.stage.INPUT_PORT.INPUT1);
 		pipeline.add(pipe).toGroup(5);
 
 		pipe = new ConcurrentWorkStealingPipe()
-				.source(merger, Merger.OUTPUT_PORT.OBJECT)
+				.source(merger, kieker.panalysis.stage.OUTPUT_PORT.OBJECT)
 				.target(outputWordsCountStage, OutputWordsCountSink.INPUT_PORT.FILE_WORDCOUNT_TUPLE);
 		pipeline.add(pipe).toGroup(6);
 	}
@@ -165,7 +165,7 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 		WorkerThread maxThread = null;
 
 		System.out.println(this.repeaterSource); // NOPMD (Just for example purposes)
-		System.out.println(this.repeaterSource.getOutputPipe(RepeaterSource.OUTPUT_PORT.OUTPUT)); // NOPMD (Just for example purposes)
+		System.out.println(this.repeaterSource.getOutputPipe(kieker.panalysis.stage.OUTPUT_PORT.OUTPUT)); // NOPMD (Just for example purposes)
 
 		// FIXME resolve bug; see analysis results below;
 		// solution: use a generic distributor to distribute between the threads' start stages

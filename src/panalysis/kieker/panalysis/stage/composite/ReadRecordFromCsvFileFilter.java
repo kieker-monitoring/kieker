@@ -14,14 +14,14 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.panalysis.composite;
+package kieker.panalysis.stage.composite;
 
 import java.util.Map;
 
-import kieker.panalysis.File2TextLinesFilter;
 import kieker.panalysis.MethodCallPipe;
-import kieker.panalysis.TextLine2RecordFilter;
 import kieker.panalysis.base.AbstractFilter;
+import kieker.panalysis.stage.File2TextLinesFilter;
+import kieker.panalysis.stage.TextLine2RecordFilter;
 
 /**
  * @author Christian Wulf

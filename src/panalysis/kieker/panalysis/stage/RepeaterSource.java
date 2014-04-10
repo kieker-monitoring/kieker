@@ -14,44 +14,46 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.panalysis;
-
-import java.io.PrintStream;
+package kieker.panalysis.stage;
 
 import kieker.panalysis.base.AbstractFilter;
+import kieker.panalysis.base.IOutputPort;
 
 /**
- * @author Matthias Rohr, Jan Waller, Nils Christian Ehmke
+ * @author Christian Wulf
  * 
  * @since 1.10
  */
-public final class TeeFilter extends AbstractFilter<TeeFilter.INPUT_PORT, TeeFilter.OUTPUT_PORT> {
+public class RepeaterSource<T> extends AbstractFilter<RepeaterSource<T>> {
 
-	public static enum INPUT_PORT { // NOCS
-		INPUT_OBJECT
-	}
+	public final IOutputPort<RepeaterSource<T>, T> OUTPUT = this.createOutputPort();
 
-	public static enum OUTPUT_PORT { // NOCS
-		RELAYED_OBJECT
-	}
+	private final T outputRecord;
+	private final int num;
+	private long overallDuration;
 
-	private final PrintStream printStream;
-
-	public TeeFilter() {
-		super(INPUT_PORT.class, OUTPUT_PORT.class);
-
-		this.printStream = System.out;
+	public RepeaterSource(final T outputRecord, final int num) {
+		this.outputRecord = outputRecord;
+		this.num = num;
 	}
 
 	public boolean execute() {
-		final Object inputObject = super.take(INPUT_PORT.INPUT_OBJECT);
+		final long start = System.currentTimeMillis();
 
-		final StringBuilder sb = new StringBuilder(128);
-		sb.append(super.getId()).append('(').append(inputObject.getClass().getSimpleName()).append(") ").append(inputObject.toString());
-		this.printStream.println(sb.toString());
+		int counter = this.num;
+		while (counter-- > 0) {
+			this.put(this.OUTPUT, this.outputRecord);
+		}
 
-		super.put(OUTPUT_PORT.RELAYED_OBJECT, inputObject);
+		final long end = System.currentTimeMillis();
+		final long duration = end - start;
+		this.overallDuration += duration;
+
 		return true;
+	}
+
+	public long getOverallDuration() {
+		return this.overallDuration;
 	}
 
 }

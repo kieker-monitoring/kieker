@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.panalysis;
+package kieker.panalysis.stage;
 
 import java.io.File;
 import java.io.FileFilter;

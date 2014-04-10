@@ -14,46 +14,49 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.panalysis;
+package kieker.panalysis.stage;
 
-import kieker.panalysis.base.AbstractFilter;
-import kieker.panalysis.base.IOutputPort;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import kieker.panalysis.base.AbstractSource;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  */
-public class RepeaterSource<T> extends AbstractFilter<RepeaterSource<T>> {
+public class ClockSource extends AbstractSource<ClockSource.OUTPUT_PORT> {
 
-	public final IOutputPort<RepeaterSource<T>, T> OUTPUT = this.createOutputPort();
+	public static enum OUTPUT_PORT { // NOCS
+		CLOCK_SIGNAL
+	}
 
-	private final T outputRecord;
-	private final int num;
-	private long overallDuration;
+	private final Timer timer;
 
-	public RepeaterSource(final T outputRecord, final int num) {
-		this.outputRecord = outputRecord;
-		this.num = num;
+	public ClockSource(final long delay, final long period) {
+		super(OUTPUT_PORT.class);
+
+		final TimerTask task = new TimerTask() {
+			@SuppressWarnings("synthetic-access")
+			@Override
+			public void run() {
+				ClockSource.this.put(OUTPUT_PORT.CLOCK_SIGNAL, Boolean.TRUE);
+			}
+		};
+
+		this.timer = new Timer();
+		this.timer.scheduleAtFixedRate(task, delay, period);
 	}
 
 	public boolean execute() {
-		final long start = System.currentTimeMillis();
-
-		int counter = this.num;
-		while (counter-- > 0) {
-			this.put(this.OUTPUT, this.outputRecord);
-		}
-
-		final long end = System.currentTimeMillis();
-		final long duration = end - start;
-		this.overallDuration += duration;
-
+		// see timer execution
 		return true;
 	}
 
-	public long getOverallDuration() {
-		return this.overallDuration;
+	@Override
+	public void cleanUp() {
+		this.timer.cancel();
 	}
 
 }

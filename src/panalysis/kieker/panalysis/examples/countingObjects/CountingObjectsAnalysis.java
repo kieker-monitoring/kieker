@@ -17,12 +17,12 @@
 package kieker.panalysis.examples.countingObjects;
 
 import kieker.panalysis.MethodCallPipe;
-import kieker.panalysis.RepeaterSource;
-import kieker.panalysis.TeeFilter;
 import kieker.panalysis.base.Analysis;
 import kieker.panalysis.base.Pipeline;
-import kieker.panalysis.composite.CycledCountingFilter;
-import kieker.panalysis.examples.wordcount.DirectoryName2Files;
+import kieker.panalysis.examples.countWords.DirectoryName2Files;
+import kieker.panalysis.stage.RepeaterSource;
+import kieker.panalysis.stage.TeeFilter;
+import kieker.panalysis.stage.composite.CycledCountingFilter;
 
 /**
  * @author Christian Wulf
@@ -46,7 +46,7 @@ public class CountingObjectsAnalysis extends Analysis {
 		this.cycledCountingFilter = new CycledCountingFilter(new MethodCallPipe(0L));
 		this.teeFilter = new TeeFilter();
 
-		new MethodCallPipe().connect(this.repeaterSource, RepeaterSource.OUTPUT_PORT.OUTPUT, this.findFilesStage,
+		new MethodCallPipe().connect(this.repeaterSource, kieker.panalysis.stage.OUTPUT_PORT.OUTPUT, this.findFilesStage,
 				DirectoryName2Files.INPUT_PORT.DIRECTORY_NAME);
 		new MethodCallPipe().connect(this.findFilesStage, DirectoryName2Files.OUTPUT_PORT.FILE, this.cycledCountingFilter,
 				CycledCountingFilter.INPUT_PORT.INPUT_OBJECT);

@@ -14,17 +14,17 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.panalysis.examples.wordcount;
+package kieker.panalysis.examples.countWords;
 
 import java.io.File;
 
-import kieker.panalysis.Distributor;
-import kieker.panalysis.Merger;
 import kieker.panalysis.MethodCallPipe;
-import kieker.panalysis.RepeaterSource;
 import kieker.panalysis.base.Analysis;
 import kieker.panalysis.base.IPipe;
 import kieker.panalysis.base.Pipeline;
+import kieker.panalysis.stage.Distributor;
+import kieker.panalysis.stage.Merger;
+import kieker.panalysis.stage.RepeaterSource;
 import kieker.panalysis.util.Pair;
 
 /**

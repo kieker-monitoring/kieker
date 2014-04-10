@@ -14,10 +14,10 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.panalysis.composite;
+package kieker.panalysis.stage.composite;
 
-import kieker.panalysis.CountingFilter;
 import kieker.panalysis.base.IPipe;
+import kieker.panalysis.stage.CountingFilter;
 
 /**
  * @author Christian Wulf
