@@ -94,6 +94,7 @@
 
 		<path id="kieker.monitoring-ajc-compile-classpath">
 			<fileset dir="${lib.dir}">
+				<include name="aspectjweaver-*.jar" />
 				<include name="aspectjrt-*.jar" />
 				<include name="framework-libs/javax.servlet-*.jar" />
 			</fileset>
