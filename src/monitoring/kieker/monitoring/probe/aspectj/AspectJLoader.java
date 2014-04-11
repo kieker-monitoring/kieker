@@ -29,7 +29,11 @@ import org.aspectj.weaver.loadtime.Agent;
  * 
  * @since 1.9
  */
-public class AspectJLoader {
+public final class AspectJLoader {
+
+	private AspectJLoader() {
+		// Avoid instantiation
+	}
 
 	/**
 	 * JSR-163 preMain entry method
@@ -46,7 +50,7 @@ public class AspectJLoader {
 	}
 
 	private static boolean noConfigurationFileAvailable() {
-		if (true == Boolean.parseBoolean(System.getProperty("kieker.monitoring.skipDefaultAOPConfiguration"))) {
+		if (Boolean.parseBoolean(System.getProperty("kieker.monitoring.skipDefaultAOPConfiguration"))) {
 			return false;
 		}
 
@@ -65,7 +69,7 @@ public class AspectJLoader {
 			final Enumeration<URL> aopOSGIXMLs = cl.getResources(Constants.AOP_OSGI_XML);
 
 			final boolean anyConfigFileAvailable = aopUserXMLs.hasMoreElements() || aopAJCXMLs.hasMoreElements() || aopOSGIXMLs.hasMoreElements();
-			return !anyConfigFileAvailable;
+			return !anyConfigFileAvailable; // NOPMD
 		} catch (final IOException ex) {
 			return true;
 		}
