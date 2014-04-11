@@ -9,9 +9,14 @@ Please refer to the Kieker User Guide for details on using Kieker.
 - New features (selection)
   - Binary monitoring writers using Java NIO 
   - Support for DiSL probes
+  - Writer for exporting records to the ExplorViz tool for online
+    trace visualization
   - Trace Analysis GUI (beta)
   - TSLib: time series analysis library (beta)
   - OPAD: online performance anomaly detection filters (beta)
+  - Live demo part of the Java EE example 
+  - TraceAnalysis: coloring of components and operations based on 
+    response times
 - Bug fixes and improvements to code, performance, tests, build scripts, 
   documentation, examples
 - Improvements to the WebGUI (see separate `HISTORY` file)
