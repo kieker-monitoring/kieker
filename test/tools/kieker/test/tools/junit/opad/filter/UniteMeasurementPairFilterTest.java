@@ -151,7 +151,7 @@ public class UniteMeasurementPairFilterTest extends AbstractKiekerTest {
 		final AnalysisControllerThread thread = new AnalysisControllerThread(this.controller);
 		thread.start();
 
-		Thread.sleep(2000);
+		Thread.sleep(5000);
 		thread.terminate();
 
 		Assert.assertEquals(8, this.sinkPlugin.getList().size());
