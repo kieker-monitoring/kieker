@@ -31,7 +31,7 @@
 			</sourceroots>
 		</iajc>
 		<copy file="${kieker.monitoring.default.properties}" tofile="${build.kieker.monitoring.dir}/META-INF/kieker.monitoring.default.properties" />
-		<copy file="examples/aop.example.xml" tofile="${build.kieker.monitoring.dir}/META-INF/aop.example.xml" />
+		<copy file="${examples.dir}/aop.example.xml" tofile="${build.kieker.monitoring.dir}/META-INF/aop.example.xml" />
 	</target>
 
 	<target name="-compile-kieker.analysis.model" depends="-init" description="Compiles the sources of the Analysis Meta-Model">
