@@ -29,18 +29,16 @@ public class Distributor<T> extends AbstractFilter<Distributor<T>> {
 
 	public final IInputPort<Distributor<T>, T> OBJECT = this.createInputPort();
 
-	public final IOutputPort<Distributor<T>, T> OUTPUT0 = this.createOutputPort();
-	public final IOutputPort<Distributor<T>, T> OUTPUT1 = this.createOutputPort();
-
 	private int index = 0;
 
-	// TODO add parameter: numOutputPorts
 	// TODO add parameter: MergeStrategy
 	/**
 	 * @since 1.10
 	 */
-	public Distributor() {
-		// TODO Auto-generated constructor stub
+	public Distributor(int numOutputPorts) {
+		while (numOutputPorts-- > 0) {
+			this.createOutputPort();
+		}
 	}
 
 	/**
@@ -62,8 +60,19 @@ public class Distributor<T> extends AbstractFilter<Distributor<T>> {
 	 */
 	private IOutputPort<Distributor<T>, T> getNextPortInRoundRobinOrder() {
 		@SuppressWarnings("unchecked")
-		final IOutputPort<Distributor<T>, T> port = (IOutputPort<Distributor<T>, T>) this.getOutputPorts().get(this.index);
+		final IOutputPort<Distributor<T>, T> port = this.getOutputPort(this.index);
 		this.index = (this.index + 1) % this.getOutputPorts().size();
+		return port;
+	}
+
+	/**
+	 * @since 1.10
+	 * @param portIndex
+	 * @return
+	 */
+	public IOutputPort<Distributor<T>, T> getOutputPort(final int portIndex) {
+		@SuppressWarnings("unchecked")
+		final IOutputPort<Distributor<T>, T> port = (IOutputPort<Distributor<T>, T>) this.getOutputPorts().get(portIndex);
 		return port;
 	}
 }
