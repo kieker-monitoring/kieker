@@ -14,9 +14,11 @@
  * limitations under the License.
  ***************************************************************************/
 
-package de.chw.concurrent;
+package de.chw.concurrent.alternative;
 
 import java.util.concurrent.atomic.AtomicLong;
+
+import de.chw.concurrent.CircularArray;
 
 /**
  * 
@@ -26,25 +28,36 @@ import java.util.concurrent.atomic.AtomicLong;
  * 
  * @since 1.10
  */
-public class UntypedExceptionalCircularWorkStealingDeque {
-	public static class DequeIsEmptyException extends Exception {
-		private static final long serialVersionUID = -6685406255103741724L;
+public class CircularWorkStealingDequeWithSentinel<T> {
+
+	public static enum State {
+		REGULAR, EMPTY, ABORT
 	}
 
-	public static final DequeIsEmptyException DEQUE_IS_EMPTY_EXCEPTION = new DequeIsEmptyException();
+	public static class ReturnValue<T> {
+		private final State state;
+		private final T value;
 
-	public static class OperationAbortedException extends Exception {
-		private static final long serialVersionUID = 2983001853326344073L;
+		public ReturnValue(final State state, final T value) {
+			this.state = state;
+			this.value = value;
+		}
+
+		public T getValue() {
+			return this.value;
+		}
+
+		public State getState() {
+			return this.state;
+		}
 	}
-
-	public static final OperationAbortedException OPERATION_ABORTED_EXCEPTION = new OperationAbortedException();
 
 	private static final long LOG_INITIAL_SIZE = 10;
 
 	private volatile long bottom = 0;
 	// private volatile long top = 0;
 	private final AtomicLong top = new AtomicLong();
-	private volatile CircularArray<Object> activeArray = new CircularArray<Object>(LOG_INITIAL_SIZE);
+	private volatile CircularArray<T> activeArray = new CircularArray<T>(LOG_INITIAL_SIZE);
 
 	private boolean casTop(final long oldVal, final long newVal) {
 		// boolean preCond;
@@ -58,10 +71,10 @@ public class UntypedExceptionalCircularWorkStealingDeque {
 		return this.top.compareAndSet(oldVal, newVal);
 	}
 
-	public void pushBottom(final Object o) {
+	public void pushBottom(final T o) {
 		final long b = this.bottom;
 		final long t = this.top.get();
-		CircularArray<Object> a = this.activeArray;
+		CircularArray<T> a = this.activeArray;
 		final long size = b - t;
 		if (size > (a.size() - 1)) {
 			a = a.grow(b, t);
@@ -75,40 +88,38 @@ public class UntypedExceptionalCircularWorkStealingDeque {
 	 * 
 	 * @return
 	 *         <ul>
-	 *         <li><code>EMPTY</code> if the deque contains no elements,
+	 *         <li><code>empty()</code> if the deque contains no elements,
 	 *         <li><i>the latest element</i> otherwise
 	 *         </ul>
-	 * @throws DequeIsEmptyException
 	 */
-	public Object popBottom() throws DequeIsEmptyException {
+	public ReturnValue<T> popBottom() {
 		long b = this.bottom;
-		final CircularArray<Object> a = this.activeArray;
+		final CircularArray<T> a = this.activeArray;
 		b = b - 1;
 		this.bottom = b;
 		final long t = this.top.get();
 		final long size = b - t;
 		if (size < 0) {
 			this.bottom = t;
-			throw DEQUE_IS_EMPTY_EXCEPTION;
+			return new ReturnValue<T>(State.EMPTY, null);
 		}
-		final Object o = a.get(b);
+		ReturnValue<T> o = new ReturnValue<T>(State.REGULAR, a.get(b));
 		if (size > 0) {
 			this.perhapsShrink(b, t);
 			return o;
 		}
-		final boolean success = this.casTop(t, t + 1);
-		this.bottom = t + 1;
-		if (!success) {
-			throw DEQUE_IS_EMPTY_EXCEPTION;
+		if (!this.casTop(t, t + 1)) {
+			o = new ReturnValue<T>(State.EMPTY, null);
 		}
+		this.bottom = t + 1;
 		return o;
 	}
 
 	void perhapsShrink(final long b, final long t) {
 		long temp = t;
-		final CircularArray<Object> a = this.activeArray;
+		final CircularArray<T> a = this.activeArray;
 		if ((b - temp) < (a.size() / 4)) {
-			final CircularArray<Object> aa = a.shrink(b, temp);
+			final CircularArray<T> aa = a.shrink(b, temp);
 			this.activeArray = aa;
 			final long ss = aa.size();
 			this.bottom = b + ss;
@@ -125,32 +136,30 @@ public class UntypedExceptionalCircularWorkStealingDeque {
 	 * 
 	 * @return
 	 *         <ul>
-	 *         <li><code>EMPTY</code> if the deque contains no elements,
-	 *         <li><code>ABORT</code> if the deque is currently being stolen by another thread,
+	 *         <li><code>empty()</code> if the deque contains no elements,
+	 *         <li><code>abort()</code> if the deque is currently being stolen by another thread,
 	 *         <li><i>the oldest element</i> otherwise
 	 *         </ul>
-	 * @throws OperationAbortedException
-	 * @throws DequeIsEmptyException
 	 */
-	public Object steal() throws OperationAbortedException, DequeIsEmptyException {
+	public ReturnValue<T> steal() {
 		final long t = this.top.get();
-		final CircularArray<Object> oldArr = this.activeArray;
+		final CircularArray<T> oldArr = this.activeArray;
 		final long b = this.bottom;
-		final CircularArray<Object> a = this.activeArray;
+		final CircularArray<T> a = this.activeArray;
 		final long size = b - t;
 		if (size <= 0) {
-			throw DEQUE_IS_EMPTY_EXCEPTION;
+			return new ReturnValue<T>(State.EMPTY, null);
 		}
 		if ((size % a.size()) == 0) {
 			if ((oldArr == a) && (t == this.top.get())) {
-				throw DEQUE_IS_EMPTY_EXCEPTION;
+				return new ReturnValue<T>(State.EMPTY, null);
 			} else {
-				throw OPERATION_ABORTED_EXCEPTION;
+				return new ReturnValue<T>(State.ABORT, null);
 			}
 		}
-		final Object o = a.get(t);
+		final ReturnValue<T> o = new ReturnValue<T>(State.REGULAR, a.get(t));
 		if (!this.casTop(t, t + 1)) {
-			throw OPERATION_ABORTED_EXCEPTION;
+			return new ReturnValue<T>(State.ABORT, null);
 		}
 		return o;
 	}
@@ -160,10 +169,10 @@ public class UntypedExceptionalCircularWorkStealingDeque {
 	 * 
 	 * @return but does not remove the bottom element from this deque
 	 */
-	public Object readBottom() {
+	public T readBottom() {
 		final long b = this.bottom;
-		final CircularArray<Object> a = this.activeArray;
-		final Object o = a.get(b);
+		final CircularArray<T> a = this.activeArray;
+		final T o = a.get(b);
 		return o;
 	}
 

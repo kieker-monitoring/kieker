@@ -14,9 +14,11 @@
  * limitations under the License.
  ***************************************************************************/
 
-package de.chw.concurrent;
+package de.chw.concurrent.alternative;
 
 import java.util.concurrent.atomic.AtomicLong;
+
+import de.chw.concurrent.CircularArray;
 
 /**
  * 
@@ -74,7 +76,7 @@ public class UntypedCircularWorkStealingDeque {
 		long b = this.bottom;
 		final CircularArray<Object> a = this.activeArray;
 		b = b - 1;
-		this.bottom = b;
+		this.bottom = b; // reserve (avoid stealing) the current bottom element
 		final long t = this.top.get();
 		final long size = b - t;
 		if (size < 0) {

@@ -64,10 +64,10 @@ public class ConcurrentWorkStealingPipe<T> extends AbstractPipe<T> {
 	@Override
 	protected T tryTakeInternal() {
 		final T record = this.circularWorkStealingDeque.popBottom();
-		if (record == CircularWorkStealingDeque.EMPTY) {
+		if (record == null) {
 			for (final ConcurrentWorkStealingPipe<T> pipe : this.allOtherPipes) {
 				final T stolenElement = pipe.steal();
-				if ((stolenElement != CircularWorkStealingDeque.EMPTY) && (stolenElement != CircularWorkStealingDeque.ABORT)) {
+				if (stolenElement != null) {
 					return stolenElement;
 				}
 			}
@@ -86,7 +86,7 @@ public class ConcurrentWorkStealingPipe<T> extends AbstractPipe<T> {
 
 	public T read() {
 		final T record = this.circularWorkStealingDeque.readBottom();
-		if (record == CircularWorkStealingDeque.EMPTY) {
+		if (record == null) {
 			return null;
 		}
 		return record;
@@ -101,7 +101,7 @@ public class ConcurrentWorkStealingPipe<T> extends AbstractPipe<T> {
 		final List<T> stolenElements = new LinkedList<T>();
 		while (maxItemsToStealCoutner-- > 0) {
 			final T stolenElement = this.steal();
-			if ((stolenElement == CircularWorkStealingDeque.EMPTY) && (stolenElement == CircularWorkStealingDeque.ABORT)) {
+			if (stolenElement == null) {
 				break;
 			}
 			stolenElements.add(stolenElement);

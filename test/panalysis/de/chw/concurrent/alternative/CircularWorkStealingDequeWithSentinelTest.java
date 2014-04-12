@@ -1,14 +1,13 @@
-package de.chw.concurrent;
+package de.chw.concurrent.alternative;
 
 import org.hamcrest.number.OrderingComparison;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.chw.concurrent.alternative.UntypedCircularWorkStealingDequeTest;
 import de.chw.util.StopWatch;
 
-public class CircularWorkStealingDequeTest {
+public class CircularWorkStealingDequeWithSentinelTest {
 	private StopWatch stopWatch;
 
 	@Before
@@ -18,12 +17,15 @@ public class CircularWorkStealingDequeTest {
 
 	@Test
 	public void measureManyEmptyPulls() {
-		final CircularWorkStealingDeque<Object> deque = new CircularWorkStealingDeque<Object>();
+		final CircularWorkStealingDequeWithSentinel<Object> deque = new CircularWorkStealingDequeWithSentinel<Object>();
 
 		final int numIterations = UntypedCircularWorkStealingDequeTest.NUM_ITERATIONS;
 		this.stopWatch.start();
 		for (int i = 0; i < numIterations; i++) {
 			deque.popBottom();
+			// if (returnValue.getState() != State.EMPTY) {
+			// returnValue.getValue();
+			// }
 		}
 		this.stopWatch.end();
 

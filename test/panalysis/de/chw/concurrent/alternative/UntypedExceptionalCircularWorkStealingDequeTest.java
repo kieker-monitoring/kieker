@@ -1,13 +1,16 @@
-package de.chw.concurrent;
+package de.chw.concurrent.alternative;
 
 import org.hamcrest.number.OrderingComparison;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
-import de.chw.concurrent.UntypedExceptionalCircularWorkStealingDeque.DequeIsEmptyException;
+import de.chw.concurrent.alternative.UntypedExceptionalCircularWorkStealingDeque;
+import de.chw.concurrent.alternative.UntypedExceptionalCircularWorkStealingDeque.DequeIsEmptyException;
 import de.chw.util.StopWatch;
 
+@Ignore
 public class UntypedExceptionalCircularWorkStealingDequeTest {
 
 	private StopWatch stopWatch;
@@ -32,6 +35,6 @@ public class UntypedExceptionalCircularWorkStealingDequeTest {
 		}
 		this.stopWatch.end();
 
-		Assert.assertThat(this.stopWatch.getDuration(), OrderingComparison.lessThan(1100l));
+		Assert.assertThat(this.stopWatch.getDuration(), OrderingComparison.lessThan(UntypedCircularWorkStealingDequeTest.EXPECTED_DURATION));
 	}
 }

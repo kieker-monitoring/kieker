@@ -1,4 +1,4 @@
-package de.chw.concurrent;
+package de.chw.concurrent.alternative;
 
 import org.hamcrest.number.OrderingComparison;
 import org.junit.Assert;
@@ -9,7 +9,8 @@ import de.chw.util.StopWatch;
 
 public class UntypedCircularWorkStealingDequeTest {
 
-	static final int NUM_ITERATIONS = 100000;
+	public static final int NUM_ITERATIONS = 100000000;
+	public static final long EXPECTED_DURATION = 1100;
 
 	private StopWatch stopWatch;
 
@@ -29,6 +30,6 @@ public class UntypedCircularWorkStealingDequeTest {
 		}
 		this.stopWatch.end();
 
-		Assert.assertThat(this.stopWatch.getDuration(), OrderingComparison.lessThan(1100l));
+		Assert.assertThat(this.stopWatch.getDuration(), OrderingComparison.lessThan(UntypedCircularWorkStealingDequeTest.EXPECTED_DURATION));
 	}
 }
