@@ -87,4 +87,9 @@ public interface IStage {
 	 */
 	void fireSignalClosingToAllOutputPorts();
 
+	/**
+	 * @since 1.10
+	 */
+	void onPipelineStarts();
+
 }

@@ -17,6 +17,7 @@
 package kieker.panalysis.base;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -33,15 +34,20 @@ import java.util.List;
  *            The type of the input ports
  * 
  */
-public abstract class AbstractFilter<S extends IStage, I, O> extends AbstractStage implements ISink<S>, ISource {
+public abstract class AbstractFilter<S extends IStage> extends AbstractStage implements ISink<S>, ISource {
 
 	protected boolean mayBeDisabled;
 
-	private int numPushedElements = 0;
-	private int numTakenElements = 0;
+	private final int numPushedElements = 0;
+	private final int numTakenElements = 0;
 
-	private final List<IInputPort<S, ? extends I>> inputPorts = new ArrayList<IInputPort<S, ? extends I>>();
-	private final List<IOutputPort<S, ? extends O>> outputPorts = new ArrayList<IOutputPort<S, ? extends O>>();
+	private final List<IInputPort<S, ?>> inputPorts = new ArrayList<IInputPort<S, ?>>();
+	private final List<IInputPort<S, ?>> readOnlyInputPorts = Collections.unmodifiableList(this.inputPorts);
+
+	private final List<IOutputPort<S, ?>> outputPorts = new ArrayList<IOutputPort<S, ?>>();
+	private final List<IOutputPort<S, ?>> readOnlyOutputPorts = Collections.unmodifiableList(this.outputPorts);
+
+	private Context<S> context;
 
 	// private TaskBundle taskBundle;
 	// private final int numTasksThreshold = 100;
@@ -61,35 +67,41 @@ public abstract class AbstractFilter<S extends IStage, I, O> extends AbstractSta
 	/**
 	 * @since 1.10
 	 */
-	protected <T extends O> void put(final IOutputPort<S, T> port, final T object) {
-		final IPipe<T, ?> associatedPipe = port.getAssociatedPipe();
-		if (associatedPipe == null) {
-			return; // ignore unconnected port
-			// BETTER return a NullObject rather than checking for null
-		}
-		associatedPipe.put(object);
-		this.numPushedElements++;
+	protected <T> void put(final IOutputPort<S, T> port, final T object) {
+		this.context.put(port, object);
 	}
 
 	/**
 	 * @since 1.10
 	 */
-	protected <T extends I> T tryTake(final IInputPort<S, T> inputPort) {
-		final IPipe<? extends T, ?> associatedPipe = inputPort.getAssociatedPipe();
-		final T token = associatedPipe.tryTake();
-		if (token != null) {
-			this.numTakenElements++;
-
-		}
-		return token;
+	protected <T> T tryTake(final IInputPort<S, T> inputPort) {
+		return this.context.tryTake(inputPort);
 	}
 
 	/**
 	 * @since 1.10
 	 */
-	protected <T extends I> T read(final IInputPort<S, T> inputPort) {
-		final IPipe<? extends T, ?> associatedPipe = inputPort.getAssociatedPipe();
-		return associatedPipe.read();
+	protected <T> T read(final IInputPort<S, T> inputPort) {
+		return this.context.read(inputPort);
+	}
+
+	public final boolean execute() {
+		final boolean success = this.execute(this.context);
+		if (success) {
+			this.context.clear();
+		} else {
+			this.context.rollback();
+		}
+		return success;
+	}
+
+	protected abstract boolean execute(Context<S> context);
+
+	/**
+	 * @since 1.10
+	 */
+	public void onPipelineStarts() {
+		this.context = new Context<S>(this.readOnlyInputPorts, this.readOnlyOutputPorts);
 	}
 
 	/**
@@ -113,7 +125,7 @@ public abstract class AbstractFilter<S extends IStage, I, O> extends AbstractSta
 	 * @since 1.10
 	 */
 	public void fireSignalClosingToAllInputPorts() {
-		for (final IInputPort<S, ? extends I> port : this.inputPorts) {
+		for (final IInputPort<S, ?> port : this.inputPorts) {
 			this.onSignalClosing(port);
 		}
 	}
@@ -124,8 +136,8 @@ public abstract class AbstractFilter<S extends IStage, I, O> extends AbstractSta
 	public void fireSignalClosingToAllOutputPorts() {
 		this.logger.info("Fire closing signal to all output ports..." + "(" + this + ")");
 		this.logger.info("outputPorts: " + this.outputPorts);
-		for (final IOutputPort<S, ? extends O> port : this.outputPorts) {
-			final IPipe<? extends O, ?> associatedPipe = port.getAssociatedPipe();
+		for (final IOutputPort<S, ?> port : this.outputPorts) {
+			final IPipe<?, ?> associatedPipe = port.getAssociatedPipe();
 			if (associatedPipe != null) {
 				associatedPipe.fireSignalClosing();
 			} // else: ignore unconnected port
@@ -151,7 +163,7 @@ public abstract class AbstractFilter<S extends IStage, I, O> extends AbstractSta
 	 * @return a new input port that accepts elements of the particular type that is specified in the variable declaration.
 	 */
 	// <T extends I> is necessary since I is usually the (generic) type Object
-	public <T extends I> IInputPort<S, T> createInputPort() {
+	public <T> IInputPort<S, T> createInputPort() {
 		final IInputPort<S, T> inputPort = new InputPortImpl<S, T>();
 		this.inputPorts.add(inputPort);
 		return inputPort;
@@ -163,7 +175,7 @@ public abstract class AbstractFilter<S extends IStage, I, O> extends AbstractSta
 	 * @return
 	 */
 	// <T extends O> is necessary since O is usually the (generic) type Object
-	public <T extends O> IOutputPort<S, T> createOutputPort() {
+	public <T> IOutputPort<S, T> createOutputPort() {
 		final IOutputPort<S, T> outputPort = new OutputPortImpl<S, T>();
 		this.outputPorts.add(outputPort);
 		return outputPort;
@@ -174,8 +186,8 @@ public abstract class AbstractFilter<S extends IStage, I, O> extends AbstractSta
 	 * @return
 	 * 
 	 */
-	protected List<IInputPort<S, ? extends I>> getInputPorts() {
-		return this.inputPorts;
+	protected List<IInputPort<S, ?>> getInputPorts() {
+		return this.readOnlyInputPorts;
 	}
 
 	/**
@@ -183,7 +195,7 @@ public abstract class AbstractFilter<S extends IStage, I, O> extends AbstractSta
 	 * @return
 	 * 
 	 */
-	protected List<IOutputPort<S, ? extends O>> getOutputPorts() {
-		return this.outputPorts;
+	protected List<IOutputPort<S, ?>> getOutputPorts() {
+		return this.readOnlyOutputPorts;
 	}
 }

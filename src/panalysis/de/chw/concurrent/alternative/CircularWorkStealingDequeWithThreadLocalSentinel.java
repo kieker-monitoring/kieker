@@ -88,7 +88,7 @@ public class CircularWorkStealingDequeWithThreadLocalSentinel<T> {
 		final long t = this.top.get();
 		CircularArray<T> a = this.activeArray;
 		final long size = b - t;
-		if (size > (a.size() - 1)) {
+		if (size > (a.getCapacity() - 1)) {
 			a = a.grow(b, t);
 			this.activeArray = a;
 		}
@@ -130,10 +130,10 @@ public class CircularWorkStealingDequeWithThreadLocalSentinel<T> {
 	void perhapsShrink(final long b, final long t) {
 		long temp = t;
 		final CircularArray<T> a = this.activeArray;
-		if ((b - temp) < (a.size() / 4)) {
+		if ((b - temp) < (a.getCapacity() / 4)) {
 			final CircularArray<T> aa = a.shrink(b, temp);
 			this.activeArray = aa;
-			final long ss = aa.size();
+			final long ss = aa.getCapacity();
 			this.bottom = b + ss;
 			temp = this.top.get();
 			if (!this.casTop(temp, temp + ss)) {
@@ -162,7 +162,7 @@ public class CircularWorkStealingDequeWithThreadLocalSentinel<T> {
 		if (size <= 0) {
 			return this.empty();
 		}
-		if ((size % a.size()) == 0) {
+		if ((size % a.getCapacity()) == 0) {
 			if ((oldArr == a) && (t == this.top.get())) {
 				return this.empty();
 			} else {

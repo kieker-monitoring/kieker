@@ -19,6 +19,7 @@ package kieker.panalysis.examples.countWords;
 import java.io.File;
 
 import kieker.panalysis.base.AbstractDefaultFilter;
+import kieker.panalysis.base.Context;
 import kieker.panalysis.base.IInputPort;
 import kieker.panalysis.base.IOutputPort;
 
@@ -36,7 +37,8 @@ public class DirectoryName2Files extends AbstractDefaultFilter<DirectoryName2Fil
 	private long overallDuration;
 	private int numFiles = 0;
 
-	public boolean execute() {
+	@Override
+	protected boolean execute(final Context<DirectoryName2Files> context) {
 		final long start = System.currentTimeMillis();
 
 		final String inputDir = this.tryTake(this.DIRECTORY_NAME);

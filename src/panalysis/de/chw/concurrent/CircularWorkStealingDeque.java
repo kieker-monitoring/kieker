@@ -16,6 +16,7 @@
 
 package de.chw.concurrent;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -42,19 +43,45 @@ public class CircularWorkStealingDeque<T> {
 	/**
 	 * 
 	 * @param o
-	 *            non-<code>null</code> element
+	 *            a non-<code>null</code> element
 	 */
 	public void pushBottom(final T o) {
 		final long b = this.bottom;
 		final long t = this.top.get();
 		CircularArray<T> a = this.activeArray;
-		final long size = b - t;
-		if (size > (a.size() - 1)) {
+		final int numElementsToPush = 1;
+		final long currentSize = b - t;
+		final long newSize = currentSize + numElementsToPush;
+		if (newSize > a.getCapacity()) {
 			a = a.grow(b, t);
 			this.activeArray = a;
 		}
 		a.put(b, o);
-		this.bottom = b + 1;
+		this.bottom = b + numElementsToPush;
+	}
+
+	/**
+	 * 
+	 * @param elements
+	 *            a non-<code>null</code> list
+	 */
+	public void pushBottomMultiple(final List<T> elements) {
+		final long b = this.bottom;
+		final long t = this.top.get();
+		CircularArray<T> a = this.activeArray;
+		final int numElementsToPush = elements.size();
+		final long currentSize = b - t;
+		final long newSize = currentSize + numElementsToPush;
+		if (newSize > a.getCapacity()) {
+			a = a.grow(b, t);
+			this.activeArray = a;
+		}
+
+		for (final T elem : elements) {
+			a.put(b, elem);
+		}
+
+		this.bottom = b + numElementsToPush;
 	}
 
 	/**
@@ -92,10 +119,10 @@ public class CircularWorkStealingDeque<T> {
 	private void perhapsShrink(final long b, final long t) {
 		long temp = t;
 		final CircularArray<T> a = this.activeArray;
-		if ((b - temp) < (a.size() / 4)) {
+		if ((b - temp) < (a.getCapacity() / 4)) {
 			final CircularArray<T> aa = a.shrink(b, temp);
 			this.activeArray = aa;
-			final long ss = aa.size();
+			final long ss = aa.getCapacity();
 			this.bottom = b + ss;
 			temp = this.top.get();
 			if (!this.casTop(temp, temp + ss)) {
@@ -124,7 +151,7 @@ public class CircularWorkStealingDeque<T> {
 		if (size <= 0) {
 			return this.empty();
 		}
-		if ((size % a.size()) == 0) {
+		if ((size % a.getCapacity()) == 0) {
 			if ((oldArr == a) && (t == this.top.get())) {
 				return this.empty();
 			} else {

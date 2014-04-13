@@ -33,7 +33,7 @@ public class Pipeline<P extends IPipe<?, P>> {
 
 	protected final List<IStage> stages = new LinkedList<IStage>();
 	private int freeId = 0;
-	private List<AbstractFilter<?, ?, ?>> startStages;
+	private List<AbstractFilter<?>> startStages;
 
 	private P currentPipe;
 	private final Map<Integer, List<P>> pipeGroups;
@@ -43,15 +43,23 @@ public class Pipeline<P extends IPipe<?, P>> {
 	 * <i>More constructors are available via the static method <code>create(..)</code></i>
 	 * 
 	 * @see for example, {@link #create(Map)}
+	 * 
+	 * @since 1.10
 	 */
 	private Pipeline() {
 		this(null);
 	}
 
+	/**
+	 * @since 1.10
+	 */
 	private Pipeline(final Map<Integer, List<P>> pipeGroups) {
 		this.pipeGroups = pipeGroups;
 	}
 
+	/**
+	 * @since 1.10
+	 */
 	// this constructor prevents the programmer from repeating the type argument
 	public static <P extends IPipe<?, P>> Pipeline<P> create() {
 		return new Pipeline<P>();
@@ -85,7 +93,12 @@ public class Pipeline<P extends IPipe<?, P>> {
 		return stage;
 	}
 
+	/**
+	 * @since 1.10
+	 */
 	public void start() {
+		this.fireStartEvent();
+
 		if (this.startStages.size() == 0) {
 			throw new IllegalStateException("You need to define at least one start stage.");
 		} else if (this.startStages.size() == 1) {
@@ -96,15 +109,33 @@ public class Pipeline<P extends IPipe<?, P>> {
 		}
 	}
 
+	/**
+	 * @since 1.10
+	 */
+	private void fireStartEvent() {
+		for (final IStage stage : this.stages) {
+			stage.onPipelineStarts();
+		}
+	}
+
+	/**
+	 * @since 1.10
+	 */
 	public List<IStage> getStages() {
 		return this.stages;
 	}
 
+	/**
+	 * @since 1.10
+	 */
 	public Pipeline<P> add(final P pipe) {
 		this.currentPipe = pipe;
 		return this;
 	}
 
+	/**
+	 * @since 1.10
+	 */
 	public void toGroup(final int pipeGroupIdentifier) {
 		List<P> pipes = this.pipeGroups.get(pipeGroupIdentifier);
 		if (pipes == null) {
@@ -114,6 +145,9 @@ public class Pipeline<P extends IPipe<?, P>> {
 		pipes.add(this.currentPipe);
 	}
 
+	/**
+	 * @since 1.10
+	 */
 	// BETTER move this method out of the pipeline
 	public void connectPipeGroups() {
 		for (final List<P> samePipes : this.pipeGroups.values()) {
@@ -123,11 +157,17 @@ public class Pipeline<P extends IPipe<?, P>> {
 		}
 	}
 
-	public void setStartStages(final AbstractFilter<?, ?, ?>... startStages) {
+	/**
+	 * @since 1.10
+	 */
+	public void setStartStages(final AbstractFilter<?>... startStages) {
 		this.startStages = Arrays.asList(startStages);
 	}
 
-	public List<AbstractFilter<?, ?, ?>> getStartStages() {
+	/**
+	 * @since 1.10
+	 */
+	public List<AbstractFilter<?>> getStartStages() {
 		return this.startStages;
 	}
 }

@@ -21,6 +21,7 @@ import java.io.File;
 import de.chw.util.Pair;
 
 import kieker.panalysis.base.AbstractDefaultFilter;
+import kieker.panalysis.base.Context;
 import kieker.panalysis.base.IInputPort;
 
 /**
@@ -30,15 +31,13 @@ import kieker.panalysis.base.IInputPort;
  */
 public class OutputWordsCountSink extends AbstractDefaultFilter<OutputWordsCountSink> {
 
-	final IInputPort<OutputWordsCountSink, Pair<File, Integer>> FILE_WORDCOUNT_TUPLE = this.createInputPort();
+	public final IInputPort<OutputWordsCountSink, Pair<File, Integer>> FILE_WORDCOUNT_TUPLE = this.createInputPort();
 
 	private long overallDuration;
 	private int numFiles = 0;
 
-	/**
-	 * @since 1.10
-	 */
-	public boolean execute() {
+	@Override
+	protected boolean execute(final Context<OutputWordsCountSink> context) {
 		final long start = System.currentTimeMillis();
 
 		final Pair<File, Integer> pair = this.tryTake(this.FILE_WORDCOUNT_TUPLE);

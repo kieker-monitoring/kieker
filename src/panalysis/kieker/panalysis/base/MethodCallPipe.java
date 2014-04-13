@@ -71,4 +71,35 @@ public class MethodCallPipe<T> extends AbstractPipe<T, MethodCallPipe<T>> {
 		// is not needed in a synchronous execution
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = (prime * result) + ((this.targetStage == null) ? 0 : this.targetStage.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(final Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (this.getClass() != obj.getClass()) {
+			return false;
+		}
+		@SuppressWarnings("rawtypes")
+		final MethodCallPipe other = (MethodCallPipe) obj;
+		if (this.targetStage == null) {
+			if (other.targetStage != null) {
+				return false;
+			}
+		} else if (!this.targetStage.equals(other.targetStage)) {
+			return false;
+		}
+		return true;
+	}
+
 }

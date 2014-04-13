@@ -12,7 +12,7 @@ package kieker.panalysis.base;
  */
 interface IPort<S extends IStage, T> {
 
-	public abstract IPipe<T, ?> getAssociatedPipe();
+	public abstract <P extends IPipe<T, P>> P getAssociatedPipe();
 
 	public abstract void setAssociatedPipe(final IPipe<T, ?> associatedPipe);
 

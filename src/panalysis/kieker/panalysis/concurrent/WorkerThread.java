@@ -84,6 +84,7 @@ public class WorkerThread extends Thread {
 
 	private void initDatastructures() {
 		this.pipelineScheduler = new PipelineScheduler(this.pipeline.getStages());
+		this.pipeline.start(); // BETTER encapsulate this method
 	}
 
 	private void startStageExecution() {
@@ -100,6 +101,7 @@ public class WorkerThread extends Thread {
 		return this.duration;
 	}
 
+	// BETTER move initialization to the constructor
 	public void setPipeline(final Pipeline<ConcurrentWorkStealingPipe<?>> pipeline) {
 		this.pipeline = pipeline;
 	}
@@ -109,7 +111,7 @@ public class WorkerThread extends Thread {
 	}
 
 	public void terminate(final TerminationPolicy terminationPolicyToUse) {
-		for (final AbstractFilter<?, ?, ?> startStage : this.pipeline.getStartStages()) {
+		for (final AbstractFilter<?> startStage : this.pipeline.getStartStages()) {
 			startStage.fireSignalClosingToAllInputPorts();
 		}
 

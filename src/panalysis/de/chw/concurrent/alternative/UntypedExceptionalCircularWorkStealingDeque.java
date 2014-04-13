@@ -65,7 +65,7 @@ public class UntypedExceptionalCircularWorkStealingDeque {
 		final long t = this.top.get();
 		CircularArray<Object> a = this.activeArray;
 		final long size = b - t;
-		if (size > (a.size() - 1)) {
+		if (size > (a.getCapacity() - 1)) {
 			a = a.grow(b, t);
 			this.activeArray = a;
 		}
@@ -109,10 +109,10 @@ public class UntypedExceptionalCircularWorkStealingDeque {
 	void perhapsShrink(final long b, final long t) {
 		long temp = t;
 		final CircularArray<Object> a = this.activeArray;
-		if ((b - temp) < (a.size() / 4)) {
+		if ((b - temp) < (a.getCapacity() / 4)) {
 			final CircularArray<Object> aa = a.shrink(b, temp);
 			this.activeArray = aa;
-			final long ss = aa.size();
+			final long ss = aa.getCapacity();
 			this.bottom = b + ss;
 			temp = this.top.get();
 			if (!this.casTop(temp, temp + ss)) {
@@ -143,7 +143,7 @@ public class UntypedExceptionalCircularWorkStealingDeque {
 		if (size <= 0) {
 			throw DEQUE_IS_EMPTY_EXCEPTION;
 		}
-		if ((size % a.size()) == 0) {
+		if ((size % a.getCapacity()) == 0) {
 			if ((oldArr == a) && (t == this.top.get())) {
 				throw DEQUE_IS_EMPTY_EXCEPTION;
 			} else {

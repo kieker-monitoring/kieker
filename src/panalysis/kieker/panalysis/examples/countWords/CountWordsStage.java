@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
 import de.chw.util.Pair;
 
 import kieker.panalysis.base.AbstractDefaultFilter;
+import kieker.panalysis.base.Context;
 import kieker.panalysis.base.IInputPort;
 import kieker.panalysis.base.IOutputPort;
 
@@ -46,8 +47,8 @@ public class CountWordsStage extends AbstractDefaultFilter<CountWordsStage> {
 
 	private long overallDuration = 0;
 
-	@SuppressWarnings("unchecked")
-	public boolean execute() {
+	@Override
+	protected boolean execute(final Context<CountWordsStage> context) {
 		final long start = System.currentTimeMillis();
 
 		final File file = this.tryTake(this.FILE);

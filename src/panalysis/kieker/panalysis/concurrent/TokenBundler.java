@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kieker.panalysis.base.AbstractFilter;
+import kieker.panalysis.base.Context;
 import kieker.panalysis.base.IInputPort;
 import kieker.panalysis.base.IOutputPort;
 
-public class TokenBundler<T> extends AbstractFilter<TokenBundler<T>, T, TokenBundle<T>> {
+public class TokenBundler<T> extends AbstractFilter<TokenBundler<T>> {
 
 	public final IInputPort<TokenBundler<T>, T> INPUT_TOKEN = this.createInputPort();
 
@@ -21,7 +22,8 @@ public class TokenBundler<T> extends AbstractFilter<TokenBundler<T>, T, TokenBun
 		this.collectedTokens = new ArrayList<T>(this.bundleSize);
 	}
 
-	public boolean execute() {
+	@Override
+	protected boolean execute(final Context<TokenBundler<T>> context) {
 		final T token = this.tryTake(this.INPUT_TOKEN);
 		if (token == null) {
 			return false;

@@ -17,6 +17,7 @@
 package kieker.panalysis.stage;
 
 import kieker.panalysis.base.AbstractFilter;
+import kieker.panalysis.base.Context;
 import kieker.panalysis.base.IInputPort;
 import kieker.panalysis.base.IOutputPort;
 
@@ -29,7 +30,7 @@ import kieker.panalysis.base.IOutputPort;
  * @param <I>
  *            the type of the input ports and the output port
  */
-public class Merger<I> extends AbstractFilter<Merger<I>, I, I> {
+public class Merger<I> extends AbstractFilter<Merger<I>> {
 
 	public final IOutputPort<Merger<I>, I> OBJECT = this.createOutputPort();
 
@@ -49,7 +50,8 @@ public class Merger<I> extends AbstractFilter<Merger<I>, I, I> {
 	/**
 	 * @since 1.10
 	 */
-	public boolean execute() {
+	@Override
+	protected boolean execute(final Context<Merger<I>> context) {
 		int size = this.getInputPorts().size();
 		// check each port at most once to avoid a potentially infinite loop
 		while (size-- > 0) {
@@ -80,7 +82,7 @@ public class Merger<I> extends AbstractFilter<Merger<I>, I, I> {
 	 */
 	@SuppressWarnings("unchecked")
 	public IInputPort<Merger<I>, I> getInputPort(final int portIndex) {
-		final IInputPort<Merger<I>, ? extends I> port = this.getInputPorts().get(portIndex);
+		final IInputPort<Merger<I>, ?> port = this.getInputPorts().get(portIndex);
 		return (IInputPort<Merger<I>, I>) port;
 	}
 }
