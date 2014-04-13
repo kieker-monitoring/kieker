@@ -58,7 +58,9 @@ public abstract class AbstractFilter<S extends IStage, I, O> extends AbstractSta
 	// this.taskBundle = null;
 	// }
 	// }
-
+	/**
+	 * @since 1.10
+	 */
 	protected <T extends O> void put(final IOutputPort<S, T> port, final T object) {
 		final IPipe<T, ?> associatedPipe = port.getAssociatedPipe();
 		if (associatedPipe == null) {
@@ -69,6 +71,9 @@ public abstract class AbstractFilter<S extends IStage, I, O> extends AbstractSta
 		this.numPushedElements++;
 	}
 
+	/**
+	 * @since 1.10
+	 */
 	protected <T extends I> T tryTake(final IInputPort<S, T> inputPort) {
 		final IPipe<? extends T, ?> associatedPipe = inputPort.getAssociatedPipe();
 		final T token = associatedPipe.tryTake();
@@ -78,11 +83,17 @@ public abstract class AbstractFilter<S extends IStage, I, O> extends AbstractSta
 		return token;
 	}
 
+	/**
+	 * @since 1.10
+	 */
 	protected <T extends I> T read(final IInputPort<S, T> inputPort) {
 		final IPipe<? extends T, ?> associatedPipe = inputPort.getAssociatedPipe();
 		return associatedPipe.read();
 	}
 
+	/**
+	 * @since 1.10
+	 */
 	public void onSignalClosing(final IInputPort<S, ?> inputPort) {
 		inputPort.setState(IInputPort.State.CLOSING);
 		System.out.println("Closing " + inputPort + " of " + this.toString());
@@ -97,12 +108,18 @@ public abstract class AbstractFilter<S extends IStage, I, O> extends AbstractSta
 		System.out.println(this.toString() + " can now be disabled by the pipeline scheduler.");
 	}
 
+	/**
+	 * @since 1.10
+	 */
 	public void fireSignalClosingToAllInputPorts() {
 		for (final IInputPort<S, ? extends I> port : this.inputPorts) {
 			this.onSignalClosing(port);
 		}
 	}
 
+	/**
+	 * @since 1.10
+	 */
 	public void fireSignalClosingToAllOutputPorts() {
 		this.logger.info("Fire closing signal to all output ports..." + "(" + this + ")");
 		this.logger.info("outputPorts: " + this.outputPorts);
@@ -114,6 +131,9 @@ public abstract class AbstractFilter<S extends IStage, I, O> extends AbstractSta
 		}
 	}
 
+	/**
+	 * @since 1.10
+	 */
 	public boolean mayBeDisabled() {
 		return this.mayBeDisabled;
 	}
