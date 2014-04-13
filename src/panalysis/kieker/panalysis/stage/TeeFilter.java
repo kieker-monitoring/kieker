@@ -18,6 +18,8 @@ package kieker.panalysis.stage;
 
 import java.io.PrintStream;
 
+import kieker.panalysis.base.IInputPort;
+import kieker.panalysis.base.IOutputPort;
 import kieker.panalysis.examples.countWords.AbstractDefaultFilter;
 
 /**
@@ -25,30 +27,33 @@ import kieker.panalysis.examples.countWords.AbstractDefaultFilter;
  * 
  * @since 1.10
  */
-public final class TeeFilter extends AbstractDefaultFilter<TeeFilter> {
+public class TeeFilter<T> extends AbstractDefaultFilter<TeeFilter<T>> {
 
-	public static enum INPUT_PORT { // NOCS
-		INPUT_OBJECT
-	}
+	public final IInputPort<TeeFilter<T>, T> INPUT_OBJECT = this.createInputPort();
 
-	public static enum OUTPUT_PORT { // NOCS
-		RELAYED_OBJECT
-	}
+	public final IOutputPort<TeeFilter<T>, T> RELAYED_OBJECT = this.createOutputPort();
 
 	private final PrintStream printStream;
 
-	public TeeFilter() {
+	private TeeFilter() {
 		this.printStream = System.out;
 	}
 
+	public static <T> TeeFilter<T> create() {
+		return new TeeFilter<T>();
+	}
+
 	public boolean execute() {
-		final Object inputObject = super.tryTake(INPUT_PORT.INPUT_OBJECT);
+		final T inputObject = super.tryTake(this.INPUT_OBJECT);
+		if (inputObject == null) {
+			return false;
+		}
 
 		final StringBuilder sb = new StringBuilder(128);
 		sb.append(super.getId()).append('(').append(inputObject.getClass().getSimpleName()).append(") ").append(inputObject.toString());
 		this.printStream.println(sb.toString());
 
-		super.put(OUTPUT_PORT.RELAYED_OBJECT, inputObject);
+		super.put(this.RELAYED_OBJECT, inputObject);
 		return true;
 	}
 

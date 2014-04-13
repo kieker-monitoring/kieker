@@ -18,13 +18,14 @@ package kieker.panalysis.examples.countWords;
 
 import java.io.File;
 
+import de.chw.util.Pair;
+
 import kieker.panalysis.base.Analysis;
 import kieker.panalysis.base.MethodCallPipe;
 import kieker.panalysis.base.Pipeline;
 import kieker.panalysis.stage.Distributor;
 import kieker.panalysis.stage.Merger;
 import kieker.panalysis.stage.RepeaterSource;
-import kieker.panalysis.util.Pair;
 
 /**
  * @author Christian Wulf

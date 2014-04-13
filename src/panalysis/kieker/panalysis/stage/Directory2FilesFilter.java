@@ -21,6 +21,7 @@ import java.io.FileFilter;
 
 import kieker.common.util.filesystem.BinaryCompressionMethod;
 import kieker.common.util.filesystem.FSUtil;
+import kieker.panalysis.base.IOutputPort;
 import kieker.panalysis.examples.countWords.AbstractDefaultFilter;
 
 /**
@@ -28,17 +29,14 @@ import kieker.panalysis.examples.countWords.AbstractDefaultFilter;
  * 
  * @since 1.10
  */
-public class Directory2FilesFilter extends AbstractDefaultFilter<Directory2FilesFilter.OUTPUT_PORT> {
+public class Directory2FilesFilter extends AbstractDefaultFilter<Directory2FilesFilter> {
 
-	public static enum OUTPUT_PORT { // NOCS
-		FILE
-	}
+	public final IOutputPort<Directory2FilesFilter, File> FILE = this.createOutputPort();
 
 	private final File inputDirectory;
 	private final FileFilter filter;
 
 	public Directory2FilesFilter(final File inputDir) {
-		super(OUTPUT_PORT.class);
 		this.inputDirectory = inputDir;
 
 		this.filter = new FileFilter() {
@@ -57,7 +55,7 @@ public class Directory2FilesFilter extends AbstractDefaultFilter<Directory2Files
 		final File[] inputFiles = inputDir.listFiles(this.filter);
 
 		for (final File file : inputFiles) {
-			this.put(OUTPUT_PORT.FILE, file);
+			this.put(this.FILE, file);
 		}
 
 		return true;

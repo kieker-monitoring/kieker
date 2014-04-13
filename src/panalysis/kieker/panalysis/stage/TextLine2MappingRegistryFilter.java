@@ -19,18 +19,17 @@ package kieker.panalysis.stage;
 import java.util.Map;
 
 import kieker.common.util.filesystem.FSUtil;
-import kieker.panalysis.base.AbstractFilter;
+import kieker.panalysis.base.IInputPort;
+import kieker.panalysis.examples.countWords.AbstractDefaultFilter;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  */
-public class TextLine2MappingRegistryFilter extends AbstractFilter<TextLine2MappingRegistryFilter> {
+public class TextLine2MappingRegistryFilter extends AbstractDefaultFilter<TextLine2MappingRegistryFilter> {
 
-	public static enum INPUT_PORT { // NOCS
-		TEXT_LINE
-	}
+	public final IInputPort<TextLine2MappingRegistryFilter, String> TEXT_LINE = this.createInputPort();
 
 	private final Map<Integer, String> stringRegistry;
 
@@ -39,7 +38,10 @@ public class TextLine2MappingRegistryFilter extends AbstractFilter<TextLine2Mapp
 	}
 
 	public boolean execute() {
-		final String textLine = this.tryTake(INPUT_PORT.TEXT_LINE);
+		final String textLine = this.tryTake(this.TEXT_LINE);
+		if (textLine == null) {
+			return false;
+		}
 
 		final int split = textLine.indexOf('=');
 		if (split == -1) {

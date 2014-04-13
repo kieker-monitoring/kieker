@@ -16,6 +16,8 @@
 
 package kieker.panalysis.stage;
 
+import kieker.panalysis.base.IInputPort;
+import kieker.panalysis.base.IOutputPort;
 import kieker.panalysis.examples.countWords.AbstractDefaultFilter;
 
 /**
@@ -25,29 +27,27 @@ import kieker.panalysis.examples.countWords.AbstractDefaultFilter;
  */
 public class CountingFilter<T> extends AbstractDefaultFilter<CountingFilter<T>> {
 
-	public static enum INPUT_PORT { // NOCS
-		INPUT_OBJECT, CURRENT_COUNT
-	}
+	public final IInputPort<CountingFilter<T>, T> INPUT_OBJECT = this.createInputPort();
+	public final IInputPort<CountingFilter<T>, Long> CURRENT_COUNT = this.createInputPort();
 
-	public static enum OUTPUT_PORT { // NOCS
-		RELAYED_OBJECT, NEW_COUNT
-	}
+	public final IOutputPort<CountingFilter<T>, T> RELAYED_OBJECT = this.createOutputPort();
+	public final IOutputPort<CountingFilter<T>, Long> NEW_COUNT = this.createOutputPort();
 
 	/**
 	 * @since 1.10
 	 */
 	public boolean execute() {
-		final T inputObject = super.tryTake(INPUT_PORT.INPUT_OBJECT);
+		final T inputObject = super.tryTake(this.INPUT_OBJECT);
 		if (inputObject == null) {
 			return false;
 		}
-		final Long count = super.tryTake(INPUT_PORT.CURRENT_COUNT);
+		final Long count = super.tryTake(this.CURRENT_COUNT);
 		if (count == null) {
 			return false;
 		}
 
-		super.put(OUTPUT_PORT.RELAYED_OBJECT, inputObject);
-		super.put(OUTPUT_PORT.NEW_COUNT, count + 1); // BETTER support pipes with primitive values to improve performance by avoiding auto-boxing
+		super.put(this.RELAYED_OBJECT, inputObject);
+		super.put(this.NEW_COUNT, count + 1); // BETTER support pipes with primitive values to improve performance by avoiding auto-boxing
 
 		return true;
 	}

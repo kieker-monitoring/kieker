@@ -26,22 +26,20 @@ import kieker.common.exception.UnknownRecordTypeException;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.panalysis.base.AbstractFilter;
+import kieker.panalysis.base.IInputPort;
+import kieker.panalysis.base.IOutputPort;
+import kieker.panalysis.examples.countWords.AbstractDefaultFilter;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  */
-public class TextLine2RecordFilter extends AbstractFilter<TextLine2RecordFilter.INPUT_PORT, TextLine2RecordFilter.OUTPUT_PORT> {
+public class TextLine2RecordFilter extends AbstractDefaultFilter<TextLine2RecordFilter> {
 
-	public static enum INPUT_PORT { // NOCS
-		TEXT_LINE
-	}
+	public final IInputPort<TextLine2RecordFilter, String> TEXT_LINE = this.createInputPort();
 
-	public static enum OUTPUT_PORT { // NOCS
-		RECORD
-	}
+	public final IOutputPort<TextLine2RecordFilter, IMonitoringRecord> RECORD = this.createOutputPort();
 
 	private static final String CSV_SEPARATOR_CHARACTER = ";";
 
@@ -54,16 +52,18 @@ public class TextLine2RecordFilter extends AbstractFilter<TextLine2RecordFilter.
 	private final Set<String> unknownTypesObserved = new HashSet<String>();
 
 	public TextLine2RecordFilter(final Map<Integer, String> stringRegistry) {
-		super(INPUT_PORT.class, OUTPUT_PORT.class);
 		this.stringRegistry = stringRegistry;
 	}
 
 	public boolean execute() {
-		final String textLine = (String) this.take(INPUT_PORT.TEXT_LINE);
+		final String textLine = this.tryTake(this.TEXT_LINE);
+		if (textLine == null) {
+			return false;
+		}
 
 		try {
 			final IMonitoringRecord record = this.createRecordFromLine(textLine);
-			this.put(OUTPUT_PORT.RECORD, record);
+			this.put(this.RECORD, record);
 		} catch (final MonitoringRecordException e) {
 			this.logger.error("Could not create record from text line: '" + textLine + "'", e);
 		} catch (final IllegalRecordFormatException e) {
@@ -119,10 +119,10 @@ public class TextLine2RecordFilter extends AbstractFilter<TextLine2RecordFilter.
 		// Java 1.5 compatibility
 		final String[] recordFieldsReduced = new String[recordFields.length - skipValues];
 		System.arraycopy(recordFields, skipValues, recordFieldsReduced, 0, recordFields.length - skipValues);
+		// in Java 1.6 this could be simplified to
+		// recordFieldsReduced = Arrays.copyOfRange(recordFields, skipValues, recordFields.length);
 
 		final IMonitoringRecord record = AbstractMonitoringRecord.createFromStringArray(clazz, recordFieldsReduced);
-		// in Java 1.6 this could be simplified to
-		// record = AbstractMonitoringRecord.createFromStringArray(clazz, Arrays.copyOfRange(recordFields, skipValues, recordFields.length));
 		record.setLoggingTimestamp(loggingTimestamp);
 		return record;
 	}

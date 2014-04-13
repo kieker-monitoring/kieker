@@ -1,4 +1,4 @@
-package kieker.panalysis.util;
+package de.chw.util;
 
 public class Pair<F, S> {
 

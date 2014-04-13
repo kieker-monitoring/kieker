@@ -23,31 +23,28 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import kieker.panalysis.base.AbstractFilter;
+import kieker.panalysis.base.IInputPort;
+import kieker.panalysis.base.IOutputPort;
+import kieker.panalysis.examples.countWords.AbstractDefaultFilter;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  */
-public class File2TextLinesFilter extends AbstractFilter<File2TextLinesFilter.INPUT_PORT, File2TextLinesFilter.OUTPUT_PORT> {
+public class File2TextLinesFilter extends AbstractDefaultFilter<File2TextLinesFilter> {
 
-	public static enum INPUT_PORT { // NOCS
-		FILE
-	}
+	public final IInputPort<File2TextLinesFilter, File> FILE = this.createInputPort();
 
-	public static enum OUTPUT_PORT { // NOCS
-		TEXT_LINE
-	}
+	public final IOutputPort<File2TextLinesFilter, String> TEXT_LINE = this.createOutputPort();
 
 	private final String charset = "UTF-8";
 
-	public File2TextLinesFilter() {
-		super(INPUT_PORT.class, OUTPUT_PORT.class);
-	}
-
 	public boolean execute() {
-		final File file = (File) this.take(INPUT_PORT.FILE);
+		final File file = this.tryTake(this.FILE);
+		if (file == null) {
+			return false;
+		}
 
 		BufferedReader reader = null;
 		try {
@@ -56,8 +53,8 @@ public class File2TextLinesFilter extends AbstractFilter<File2TextLinesFilter.IN
 			while ((line = reader.readLine()) != null) {
 				line = line.trim();
 				if (line.length() != 0) {
-					this.put(OUTPUT_PORT.TEXT_LINE, line);
-				} // else ignore empty line
+					this.put(this.TEXT_LINE, line);
+				} // else: ignore empty line
 			}
 		} catch (final FileNotFoundException e) {
 			this.logger.error("", e);

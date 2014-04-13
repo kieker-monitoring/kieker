@@ -16,6 +16,8 @@
 
 package kieker.panalysis.examples.countingObjects;
 
+import java.io.File;
+
 import kieker.panalysis.base.Analysis;
 import kieker.panalysis.base.MethodCallPipe;
 import kieker.panalysis.base.Pipeline;
@@ -35,8 +37,8 @@ public class CountingObjectsAnalysis extends Analysis {
 
 	private RepeaterSource<String> repeaterSource;
 	private DirectoryName2Files findFilesStage;
-	private CycledCountingFilter cycledCountingFilter;
-	private TeeFilter teeFilter;
+	private CycledCountingFilter<File> cycledCountingFilter;
+	private TeeFilter<File> teeFilter;
 
 	@Override
 	public void init() {
@@ -44,8 +46,8 @@ public class CountingObjectsAnalysis extends Analysis {
 
 		this.repeaterSource = RepeaterSource.create(".", 1);
 		this.findFilesStage = new DirectoryName2Files();
-		this.cycledCountingFilter = new CycledCountingFilter(new MethodCallPipe<Long>(0L));
-		this.teeFilter = new TeeFilter();
+		this.cycledCountingFilter = CycledCountingFilter.create(new MethodCallPipe<Long>(0L));
+		this.teeFilter = TeeFilter.create();
 
 		this.pipeline = Pipeline.create();
 		this.pipeline.addStage(this.repeaterSource);
@@ -57,13 +59,13 @@ public class CountingObjectsAnalysis extends Analysis {
 				.source(this.repeaterSource.OUTPUT)
 				.target(this.findFilesStage, this.findFilesStage.DIRECTORY_NAME));
 
-		this.pipeline.add(new MethodCallPipe<String>()
-				.source(this.findFilesStage.DIRECTORY_NAME)
-				.target(this.cycledCountingFilter, this.cycledCountingFilter.DIRECTORY_NAME));
+		this.pipeline.add(new MethodCallPipe<File>()
+				.source(this.findFilesStage.FILE)
+				.target(this.cycledCountingFilter, this.cycledCountingFilter.INPUT_OBJECT));
 
-		this.pipeline.add(new MethodCallPipe<String>()
-				.source(this.cycledCountingFilter.OUTPUT)
-				.target(this.teeFilter, this.teeFilter.DIRECTORY_NAME));
+		this.pipeline.add(new MethodCallPipe<File>()
+				.source(this.cycledCountingFilter.RELAYED_OBJECT)
+				.target(this.teeFilter, this.teeFilter.INPUT_OBJECT));
 
 		this.pipeline.setStartStages(this.repeaterSource);
 	}
@@ -74,6 +76,10 @@ public class CountingObjectsAnalysis extends Analysis {
 		this.pipeline.start();
 	}
 
+	/**
+	 * @since 1.10
+	 * @param args
+	 */
 	public static void main(final String[] args) {
 		final CountingObjectsAnalysis analysis = new CountingObjectsAnalysis();
 		analysis.init();

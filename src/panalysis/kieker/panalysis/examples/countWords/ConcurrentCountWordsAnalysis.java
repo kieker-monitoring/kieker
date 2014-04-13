@@ -21,6 +21,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.chw.util.Pair;
+
 import kieker.panalysis.base.Analysis;
 import kieker.panalysis.base.IStage;
 import kieker.panalysis.base.Pipeline;
@@ -30,7 +32,6 @@ import kieker.panalysis.concurrent.WorkerThread;
 import kieker.panalysis.stage.Distributor;
 import kieker.panalysis.stage.Merger;
 import kieker.panalysis.stage.RepeaterSource;
-import kieker.panalysis.util.Pair;
 
 /**
  * @author Christian Wulf
@@ -54,7 +55,7 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 		this.repeaterSource.setId(99);
 
 		int numThreads = Runtime.getRuntime().availableProcessors();
-		numThreads = 1; // only fur testing purposes
+		numThreads = 1; // only for testing purposes
 
 		this.threads = new WorkerThread[numThreads];
 		final Map<Integer, List<ConcurrentWorkStealingPipe<?>>> pipeGroups = new HashMap<Integer, List<ConcurrentWorkStealingPipe<?>>>();

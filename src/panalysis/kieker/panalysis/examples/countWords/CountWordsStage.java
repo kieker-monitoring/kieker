@@ -24,9 +24,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.regex.Pattern;
 
+import de.chw.util.Pair;
+
 import kieker.panalysis.base.IInputPort;
 import kieker.panalysis.base.IOutputPort;
-import kieker.panalysis.util.Pair;
 
 /**
  * @author Christian Wulf

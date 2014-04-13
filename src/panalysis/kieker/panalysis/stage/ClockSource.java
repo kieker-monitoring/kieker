@@ -26,7 +26,7 @@ import kieker.panalysis.examples.countWords.AbstractDefaultFilter;
  * 
  * @since 1.10
  */
-public class ClockSource extends AbstractDefaultFilter<ClockSource.OUTPUT_PORT> {
+public class ClockSource extends AbstractDefaultFilter<ClockSource> {
 
 	public static enum OUTPUT_PORT { // NOCS
 		CLOCK_SIGNAL
@@ -35,8 +35,6 @@ public class ClockSource extends AbstractDefaultFilter<ClockSource.OUTPUT_PORT> 
 	private final Timer timer;
 
 	public ClockSource(final long delay, final long period) {
-		super(OUTPUT_PORT.class);
-
 		final TimerTask task = new TimerTask() {
 			@SuppressWarnings("synthetic-access")
 			@Override
@@ -50,7 +48,7 @@ public class ClockSource extends AbstractDefaultFilter<ClockSource.OUTPUT_PORT> 
 	}
 
 	public boolean execute() {
-		// see timer execution
+		// TODO implement; see timer execution
 		return true;
 	}
 

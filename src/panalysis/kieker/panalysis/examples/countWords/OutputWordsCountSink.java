@@ -18,8 +18,9 @@ package kieker.panalysis.examples.countWords;
 
 import java.io.File;
 
+import de.chw.util.Pair;
+
 import kieker.panalysis.base.IInputPort;
-import kieker.panalysis.util.Pair;
 
 /**
  * @author Christian Wulf

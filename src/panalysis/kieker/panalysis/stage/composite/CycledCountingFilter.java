@@ -24,23 +24,34 @@ import kieker.panalysis.stage.CountingFilter;
  * 
  * @since 1.10
  */
-public class CycledCountingFilter extends CountingFilter {
+public class CycledCountingFilter<T> extends CountingFilter<T> {
 
-	public CycledCountingFilter(final IPipe countingPipe) {
-		countingPipe.connect(this, CountingFilter.OUTPUT_PORT.NEW_COUNT, this,
-				CountingFilter.INPUT_PORT.CURRENT_COUNT);
+	// BETTER hide the internal ports; the following uncommented lines do not work however
+	// private final IInputPort<CountingFilter<T>, Long> CURRENT_COUNT = this.createInputPort();
+	// private final IOutputPort<CountingFilter<T>, Long> NEW_COUNT = this.createOutputPort();
+
+	/**
+	 * @since 1.10
+	 * @param countingPipe
+	 */
+	private CycledCountingFilter(final IPipe<Long, ?> countingPipe) {
+		countingPipe
+				.source(this.NEW_COUNT)
+				.target(this, this.CURRENT_COUNT);
+		// FIXME counting pipe needs to be added to a group
 	}
 
+	// this constructor prevents the programmer from repeating the type argument
+	public static <T> CycledCountingFilter<T> create(final IPipe<Long, ?> countingPipe) {
+		return new CycledCountingFilter<T>(countingPipe);
+	}
+
+	/**
+	 * @since 1.10
+	 * @return
+	 */
 	public Long getCurrentCount() {
-		return (Long) super.read(CountingFilter.INPUT_PORT.CURRENT_COUNT);
-	}
-
-	public static final class INPUT_PORT { // mechanism to override the visibility of particular enum values of the super class // NOCS
-		public static final CountingFilter.INPUT_PORT INPUT_OBJECT = CountingFilter.INPUT_PORT.INPUT_OBJECT;
-	}
-
-	public static final class OUTPUT_PORT { // mechanism to override the visibility of particular enum values of the super class // NOCS
-		public static final CountingFilter.OUTPUT_PORT RELAYED_OBJECT = CountingFilter.OUTPUT_PORT.RELAYED_OBJECT;
+		return super.read(this.CURRENT_COUNT);
 	}
 
 }
