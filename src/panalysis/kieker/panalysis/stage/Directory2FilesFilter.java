@@ -21,8 +21,8 @@ import java.io.FileFilter;
 
 import kieker.common.util.filesystem.BinaryCompressionMethod;
 import kieker.common.util.filesystem.FSUtil;
+import kieker.panalysis.base.AbstractDefaultFilter;
 import kieker.panalysis.base.IOutputPort;
-import kieker.panalysis.examples.countWords.AbstractDefaultFilter;
 
 /**
  * @author Christian Wulf

@@ -19,8 +19,8 @@ package kieker.panalysis.stage;
 import java.util.Map;
 
 import kieker.common.util.filesystem.FSUtil;
+import kieker.panalysis.base.AbstractDefaultFilter;
 import kieker.panalysis.base.IInputPort;
-import kieker.panalysis.examples.countWords.AbstractDefaultFilter;
 
 /**
  * @author Christian Wulf

@@ -26,6 +26,7 @@ import java.util.regex.Pattern;
 
 import de.chw.util.Pair;
 
+import kieker.panalysis.base.AbstractDefaultFilter;
 import kieker.panalysis.base.IInputPort;
 import kieker.panalysis.base.IOutputPort;
 

@@ -23,9 +23,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import kieker.panalysis.base.AbstractDefaultFilter;
 import kieker.panalysis.base.IInputPort;
 import kieker.panalysis.base.IOutputPort;
-import kieker.panalysis.examples.countWords.AbstractDefaultFilter;
 
 /**
  * @author Christian Wulf

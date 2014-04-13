@@ -23,7 +23,7 @@ import kieker.panalysis.base.MethodCallPipe;
 import kieker.panalysis.base.Pipeline;
 import kieker.panalysis.examples.countWords.DirectoryName2Files;
 import kieker.panalysis.stage.RepeaterSource;
-import kieker.panalysis.stage.TeeFilter;
+import kieker.panalysis.stage.TypeLoggerFilter;
 import kieker.panalysis.stage.composite.CycledCountingFilter;
 
 /**
@@ -38,7 +38,7 @@ public class CountingObjectsAnalysis extends Analysis {
 	private RepeaterSource<String> repeaterSource;
 	private DirectoryName2Files findFilesStage;
 	private CycledCountingFilter<File> cycledCountingFilter;
-	private TeeFilter<File> teeFilter;
+	private TypeLoggerFilter<File> teeFilter;
 
 	@Override
 	public void init() {
@@ -47,7 +47,7 @@ public class CountingObjectsAnalysis extends Analysis {
 		this.repeaterSource = RepeaterSource.create(".", 1);
 		this.findFilesStage = new DirectoryName2Files();
 		this.cycledCountingFilter = CycledCountingFilter.create(new MethodCallPipe<Long>(0L));
-		this.teeFilter = TeeFilter.create();
+		this.teeFilter = TypeLoggerFilter.create();
 
 		this.pipeline = Pipeline.create();
 		this.pipeline.addStage(this.repeaterSource);

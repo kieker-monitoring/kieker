@@ -16,9 +16,9 @@
 
 package kieker.panalysis.stage;
 
+import kieker.panalysis.base.AbstractDefaultFilter;
 import kieker.panalysis.base.IInputPort;
 import kieker.panalysis.base.IOutputPort;
-import kieker.panalysis.examples.countWords.AbstractDefaultFilter;
 
 /**
  * @author Jan Waller, Nils Christian Ehmke

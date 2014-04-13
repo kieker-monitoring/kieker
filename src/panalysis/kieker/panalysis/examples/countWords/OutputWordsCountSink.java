@@ -20,6 +20,7 @@ import java.io.File;
 
 import de.chw.util.Pair;
 
+import kieker.panalysis.base.AbstractDefaultFilter;
 import kieker.panalysis.base.IInputPort;
 
 /**

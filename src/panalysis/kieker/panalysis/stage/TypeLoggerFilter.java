@@ -18,29 +18,29 @@ package kieker.panalysis.stage;
 
 import java.io.PrintStream;
 
+import kieker.panalysis.base.AbstractDefaultFilter;
 import kieker.panalysis.base.IInputPort;
 import kieker.panalysis.base.IOutputPort;
-import kieker.panalysis.examples.countWords.AbstractDefaultFilter;
 
 /**
  * @author Matthias Rohr, Jan Waller, Nils Christian Ehmke, Christian Wulf
  * 
  * @since 1.10
  */
-public class TeeFilter<T> extends AbstractDefaultFilter<TeeFilter<T>> {
+public class TypeLoggerFilter<T> extends AbstractDefaultFilter<TypeLoggerFilter<T>> {
 
-	public final IInputPort<TeeFilter<T>, T> INPUT_OBJECT = this.createInputPort();
+	public final IInputPort<TypeLoggerFilter<T>, T> INPUT_OBJECT = this.createInputPort();
 
-	public final IOutputPort<TeeFilter<T>, T> RELAYED_OBJECT = this.createOutputPort();
+	public final IOutputPort<TypeLoggerFilter<T>, T> RELAYED_OBJECT = this.createOutputPort();
 
 	private final PrintStream printStream;
 
-	private TeeFilter() {
+	private TypeLoggerFilter() {
 		this.printStream = System.out;
 	}
 
-	public static <T> TeeFilter<T> create() {
-		return new TeeFilter<T>();
+	public static <T> TypeLoggerFilter<T> create() {
+		return new TypeLoggerFilter<T>();
 	}
 
 	public boolean execute() {

@@ -18,6 +18,7 @@ package kieker.panalysis.examples.countWords;
 
 import java.io.File;
 
+import kieker.panalysis.base.AbstractDefaultFilter;
 import kieker.panalysis.base.IInputPort;
 import kieker.panalysis.base.IOutputPort;
 
