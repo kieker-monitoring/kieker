@@ -14,16 +14,46 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.panalysis.base;
+package kieker.panalysis.visualization;
+
+import kieker.panalysis.base.AbstractDefaultFilter;
+import kieker.panalysis.base.IInputPort;
 
 /**
- * @author Nils Christian Ehmke
+ * @author Nils Christian Ehmke, Christian Wulf
  * 
  * @since 1.10
  * 
  * @param <I>
  *            The type of the input ports
  */
-public interface IVisualizationSink<I extends Enum<I>> extends ISink<I> {
+public class PlainTextWebVisualizationSink<T> extends AbstractDefaultFilter<PlainTextWebVisualizationSink<T>> implements IWebVisualizationSink {
+
+	public final IInputPort<PlainTextWebVisualizationSink<T>, T> INPUT_OBJECT = this.createInputPort();
+
+	private Object currentObject = "N/A";
+
+	public String getHeader() {
+		return "";
+	}
+
+	public String getInitialContent() {
+		return this.currentObject.toString();
+	}
+
+	public String getUpdatedContent() {
+		return this.currentObject.toString();
+	}
+
+	public boolean execute() {
+		final T object = this.tryTake(this.INPUT_OBJECT);
+		if (object == null) {
+			return false;
+		}
+
+		this.currentObject = object;
+
+		return true;
+	}
 
 }

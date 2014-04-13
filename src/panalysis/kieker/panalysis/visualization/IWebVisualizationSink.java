@@ -14,9 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.panalysis;
-
-import kieker.panalysis.base.AbstractWebVisualizationSink;
+package kieker.panalysis.visualization;
 
 /**
  * @author Nils Christian Ehmke
@@ -26,39 +24,12 @@ import kieker.panalysis.base.AbstractWebVisualizationSink;
  * @param <I>
  *            The type of the input ports
  */
-public class PlainTextWebVisualizationSink extends AbstractWebVisualizationSink<PlainTextWebVisualizationSink.INPUT_PORT> {
+public interface IWebVisualizationSink {
 
-	public static enum INPUT_PORT { // NOCS
-		OBJECT
-	}
+	public String getHeader();
 
-	private Object currentObject = "N/A";
+	public String getInitialContent();
 
-	public PlainTextWebVisualizationSink(final Class<INPUT_PORT> inputEnumType) {
-		super(inputEnumType);
-	}
-
-	public String getHeader() {
-		return "";
-	}
-
-	public String getInitialContent() {
-		return this.currentObject.toString();
-	}
-
-	public String getUpdatedContent() {
-		return this.currentObject.toString();
-	}
-
-	public boolean execute() {
-		final Object object = this.tryTake(INPUT_PORT.OBJECT);
-		if (object == null) {
-			return false;
-		}
-
-		this.currentObject = object;
-
-		return true;
-	}
+	public String getUpdatedContent();
 
 }
