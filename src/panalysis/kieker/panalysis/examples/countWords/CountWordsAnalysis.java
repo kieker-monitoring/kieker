@@ -18,9 +18,8 @@ package kieker.panalysis.examples.countWords;
 
 import java.io.File;
 
-import kieker.panalysis.MethodCallPipe;
 import kieker.panalysis.base.Analysis;
-import kieker.panalysis.base.IPipe;
+import kieker.panalysis.base.MethodCallPipe;
 import kieker.panalysis.base.Pipeline;
 import kieker.panalysis.stage.Distributor;
 import kieker.panalysis.stage.Merger;
@@ -34,7 +33,7 @@ import kieker.panalysis.util.Pair;
  */
 public class CountWordsAnalysis extends Analysis {
 
-	private Pipeline<IPipe<?>> pipeline;
+	private Pipeline<MethodCallPipe<?>> pipeline;
 
 	private RepeaterSource<String> repeaterSource;
 	private DirectoryName2Files findFilesStage;
@@ -53,15 +52,16 @@ public class CountWordsAnalysis extends Analysis {
 	public void init() {
 		super.init();
 
-		this.repeaterSource = new RepeaterSource<String>(".", 4000);
+		this.repeaterSource = RepeaterSource.create(".", 4000);
 		this.findFilesStage = new DirectoryName2Files();
-		this.distributor = new Distributor<File>();
+		final int numBranches = 2;
+		this.distributor = new Distributor<File>(numBranches);
 		this.countWordsStage0 = new CountWordsStage();
 		this.countWordsStage1 = new CountWordsStage();
-		this.merger = new Merger<Pair<File, Integer>>(2);
+		this.merger = new Merger<Pair<File, Integer>>(numBranches);
 		this.outputWordsCountStage = new OutputWordsCountSink();
 
-		this.pipeline = new Pipeline<IPipe<?>>();
+		this.pipeline = Pipeline.create();
 		this.pipeline.addStage(this.repeaterSource);
 		this.pipeline.addStage(this.findFilesStage);
 		this.pipeline.addStage(this.distributor);
@@ -81,10 +81,10 @@ public class CountWordsAnalysis extends Analysis {
 				.target(this.distributor, this.distributor.OBJECT));
 
 		this.pipeline.add(new MethodCallPipe<File>()
-				.source(this.distributor.OUTPUT0)
+				.source(this.distributor.getOutputPort(0))
 				.target(this.countWordsStage0, this.countWordsStage0.FILE));
 		this.pipeline.add(new MethodCallPipe<File>()
-				.source(this.distributor.OUTPUT1)
+				.source(this.distributor.getOutputPort(1))
 				.target(this.countWordsStage1, this.countWordsStage1.FILE));
 
 		this.pipeline.add(new MethodCallPipe<Pair<File, Integer>>()

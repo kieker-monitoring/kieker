@@ -19,21 +19,26 @@ package kieker.panalysis.base;
 import java.util.List;
 
 /**
+ * 
  * @author Christian Wulf
  * 
  * @since 1.10
+ * 
+ * @param <T>
+ *            the type of elements this pipe may contain
+ * @param <P>
  */
-public interface IPipe<T> {
+public interface IPipe<T, P extends IPipe<T, P>> {
 
 	/**
 	 * @since 1.10
 	 */
-	void put(T token);
+	void put(T element);
 
 	/**
 	 * @since 1.10
 	 */
-	void putMultiple(List<T> items);
+	void putMultiple(List<T> elements);
 
 	// Let this uncommented for documentation purpose:<br>
 	// Since the concurrent execution does not base on locks, it is difficult to define a blocking take. Since there is no definition of blocking in the sequential
@@ -45,7 +50,7 @@ public interface IPipe<T> {
 	// T take();
 
 	/**
-	 * @return and removes the next token if the pipe is not empty, otherwise <code>null</code>
+	 * @return and removes the next element if the pipe is not empty, otherwise <code>null</code>
 	 * 
 	 * @since 1.10
 	 */
@@ -53,14 +58,14 @@ public interface IPipe<T> {
 
 	/**
 	 * @since 1.10
-	 * @return but does not removes the next token if the pipe is not empty, otherwise <code>null</code>
+	 * @return but does not removes the next element if the pipe is not empty, otherwise <code>null</code>
 	 */
 	T read();
 
 	/**
 	 * @since 1.10
 	 */
-	List<?> tryTakeMultiple(int numItemsToTake);
+	List<?> tryTakeMultiple(int numElementsToTake);
 
 	// Let this uncommented for documentation purpose:<br>
 	// Do not provide a method to check for emptiness, since the state from EMPTY to NON-EMPTY can change between check and access (stale state)
@@ -71,8 +76,19 @@ public interface IPipe<T> {
 	 */
 	void fireSignalClosing();
 
-	<S extends ISource> IPipe<T> source(final IOutputPort<S, T> sourcePort);
+	/**
+	 * @since 1.10
+	 */
+	<S extends ISource> P source(final IOutputPort<S, T> sourcePort);
 
-	<S extends ISink<S>> IPipe<T> target(final S targetStage, final IInputPort<S, T> targetPort);
+	/**
+	 * @since 1.10
+	 */
+	<S extends ISink<S>> P target(final S targetStage, final IInputPort<S, T> targetPort);
+
+	/**
+	 * @since 1.10
+	 */
+	void copyAllOtherPipes(List<P> pipesOfGroup);
 
 }

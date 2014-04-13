@@ -21,14 +21,14 @@ import java.io.FileFilter;
 
 import kieker.common.util.filesystem.BinaryCompressionMethod;
 import kieker.common.util.filesystem.FSUtil;
-import kieker.panalysis.base.AbstractSource;
+import kieker.panalysis.examples.countWords.AbstractDefaultFilter;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  */
-public class Directory2FilesFilter extends AbstractSource<Directory2FilesFilter.OUTPUT_PORT> {
+public class Directory2FilesFilter extends AbstractDefaultFilter<Directory2FilesFilter.OUTPUT_PORT> {
 
 	public static enum OUTPUT_PORT { // NOCS
 		FILE

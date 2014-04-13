@@ -54,7 +54,7 @@ public class PipelineScheduler {
 
 	public boolean isAnyStageActive() {
 		for (final Entry<IStage, Boolean> entry : this.statesOfStages.entrySet()) {
-			final IStage stage = entry.getKey();
+			// final IStage stage = entry.getKey();
 			final Boolean state = entry.getValue();
 			if (Boolean.TRUE.equals(state)) {
 				// System.out.println(stage + " is active.");

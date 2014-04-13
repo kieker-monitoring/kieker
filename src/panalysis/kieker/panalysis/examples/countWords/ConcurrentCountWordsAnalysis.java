@@ -16,6 +16,7 @@
 
 package kieker.panalysis.examples.countWords;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,7 @@ import kieker.panalysis.concurrent.WorkerThread;
 import kieker.panalysis.stage.Distributor;
 import kieker.panalysis.stage.Merger;
 import kieker.panalysis.stage.RepeaterSource;
+import kieker.panalysis.util.Pair;
 
 /**
  * @author Christian Wulf
@@ -48,17 +50,17 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 	public void init() {
 		super.init();
 
-		this.repeaterSource = new RepeaterSource<String>(START_DIRECTORY_NAME, 4000);
+		this.repeaterSource = RepeaterSource.create(START_DIRECTORY_NAME, 4000);
 		this.repeaterSource.setId(99);
 
 		int numThreads = Runtime.getRuntime().availableProcessors();
 		numThreads = 1; // only fur testing purposes
 
 		this.threads = new WorkerThread[numThreads];
-		final Map<Integer, List<ConcurrentWorkStealingPipe>> pipeGroups = new HashMap<Integer, List<ConcurrentWorkStealingPipe>>();
+		final Map<Integer, List<ConcurrentWorkStealingPipe<?>>> pipeGroups = new HashMap<Integer, List<ConcurrentWorkStealingPipe<?>>>();
 
 		for (int i = 0; i < this.threads.length; i++) {
-			final Pipeline<ConcurrentWorkStealingPipe> pipeline = new Pipeline<ConcurrentWorkStealingPipe>(pipeGroups);
+			final Pipeline<ConcurrentWorkStealingPipe<?>> pipeline = Pipeline.create(pipeGroups);
 			this.buildPipeline(pipeline);
 
 			final WorkerThread thread = new WorkerThread();
@@ -66,62 +68,61 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 			this.threads[i] = thread;
 		}
 
-		for (final List<ConcurrentWorkStealingPipe> samePipes : pipeGroups.values()) {
-			for (final ConcurrentWorkStealingPipe pipe : samePipes) {
-				pipe.copyAllOtherPipes(samePipes);
-			}
+		for (final WorkerThread thread : this.threads) {
+			thread.getPipeline().connectPipeGroups();
 		}
 
 	}
 
-	private void buildPipeline(final Pipeline<ConcurrentWorkStealingPipe> pipeline) {
+	private void buildPipeline(final Pipeline<ConcurrentWorkStealingPipe<?>> pipeline) {
 		// create stages
-		final RepeaterSource repeater = this.repeaterSource;
+		final RepeaterSource<String> repeater = this.repeaterSource;
 		final DirectoryName2Files findFilesStage = pipeline.addStage(new DirectoryName2Files());
-		final Distributor distributor = pipeline.addStage(new Distributor());
+		final int numBranches = 2;
+		final Distributor<File> distributor = pipeline.addStage(new Distributor<File>(numBranches));
 		final CountWordsStage countWordsStage0 = pipeline.addStage(new CountWordsStage());
 		final CountWordsStage countWordsStage1 = pipeline.addStage(new CountWordsStage());
-		final Merger merger = pipeline.addStage(new Merger());
+		final Merger<Pair<File, Integer>> merger = pipeline.addStage(new Merger<Pair<File, Integer>>(numBranches));
 		final OutputWordsCountSink outputWordsCountStage = pipeline.addStage(new OutputWordsCountSink());
 		// TODO consider to use: pipeline.add(stage).asStartStage().assignUniqueId()
 
 		pipeline.setStartStages(findFilesStage);
 
 		// connect stages by pipes
-		ConcurrentWorkStealingPipe pipe = new ConcurrentWorkStealingPipe()
-				.source(repeater, kieker.panalysis.stage.OUTPUT_PORT.OUTPUT)
-				.target(findFilesStage, DirectoryName2Files.INPUT_PORT.DIRECTORY_NAME);
-		pipeline.add(pipe).toGroup(0);
+		pipeline.add(new ConcurrentWorkStealingPipe<String>()
+				.source(repeater.OUTPUT)
+				.target(findFilesStage, findFilesStage.DIRECTORY_NAME)
+				).toGroup(0);
 
-		pipe = new ConcurrentWorkStealingPipe()
-				.source(findFilesStage, DirectoryName2Files.OUTPUT_PORT.FILE)
-				.target(distributor, kieker.panalysis.stage.INPUT_PORT.OBJECT);
-		pipeline.add(pipe).toGroup(1);
+		pipeline.add(new ConcurrentWorkStealingPipe<File>()
+				.source(findFilesStage.FILE)
+				.target(distributor, distributor.OBJECT)
+				).toGroup(1);
 
-		pipe = new ConcurrentWorkStealingPipe()
-				.source(distributor, kieker.panalysis.stage.OUTPUT_PORT.OUTPUT0)
-				.target(countWordsStage0, CountWordsStage.INPUT_PORT.FILE);
-		pipeline.add(pipe).toGroup(2);
+		pipeline.add(new ConcurrentWorkStealingPipe<File>()
+				.source(distributor.getOutputPort(0))
+				.target(countWordsStage0, countWordsStage0.FILE)
+				).toGroup(2);
 
-		pipe = new ConcurrentWorkStealingPipe()
-				.source(distributor, kieker.panalysis.stage.OUTPUT_PORT.OUTPUT1)
-				.target(countWordsStage1, CountWordsStage.INPUT_PORT.FILE);
-		pipeline.add(pipe).toGroup(3);
+		pipeline.add(new ConcurrentWorkStealingPipe<File>()
+				.source(distributor.getOutputPort(1))
+				.target(countWordsStage1, countWordsStage1.FILE)
+				).toGroup(3);
 
-		pipe = new ConcurrentWorkStealingPipe()
-				.source(countWordsStage0, CountWordsStage.OUTPUT_PORT.WORDSCOUNT)
-				.target(merger, kieker.panalysis.stage.INPUT_PORT.INPUT0);
-		pipeline.add(pipe).toGroup(4);
+		pipeline.add(new ConcurrentWorkStealingPipe<Pair<File, Integer>>()
+				.source(countWordsStage0.WORDSCOUNT)
+				.target(merger, merger.getInputPort(0))
+				).toGroup(4);
 
-		pipe = new ConcurrentWorkStealingPipe()
-				.source(countWordsStage1, CountWordsStage.OUTPUT_PORT.WORDSCOUNT)
-				.target(merger, kieker.panalysis.stage.INPUT_PORT.INPUT1);
-		pipeline.add(pipe).toGroup(5);
+		pipeline.add(new ConcurrentWorkStealingPipe<Pair<File, Integer>>()
+				.source(countWordsStage1.WORDSCOUNT)
+				.target(merger, merger.getInputPort(1))
+				).toGroup(5);
 
-		pipe = new ConcurrentWorkStealingPipe()
-				.source(merger, kieker.panalysis.stage.OUTPUT_PORT.OBJECT)
-				.target(outputWordsCountStage, OutputWordsCountSink.INPUT_PORT.FILE_WORDCOUNT_TUPLE);
-		pipeline.add(pipe).toGroup(6);
+		pipeline.add(new ConcurrentWorkStealingPipe<Pair<File, Integer>>()
+				.source(merger.OBJECT)
+				.target(outputWordsCountStage, outputWordsCountStage.FILE_WORDCOUNT_TUPLE)
+				).toGroup(6);
 	}
 
 	@Override
@@ -165,7 +166,7 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 		WorkerThread maxThread = null;
 
 		System.out.println(this.repeaterSource); // NOPMD (Just for example purposes)
-		System.out.println(this.repeaterSource.getOutputPipe(kieker.panalysis.stage.OUTPUT_PORT.OUTPUT)); // NOPMD (Just for example purposes)
+		System.out.println(this.repeaterSource.OUTPUT.getAssociatedPipe()); // NOPMD (Just for example purposes)
 
 		// FIXME resolve bug; see analysis results below;
 		// solution: use a generic distributor to distribute between the threads' start stages

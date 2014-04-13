@@ -19,14 +19,14 @@ package kieker.panalysis.stage;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import kieker.panalysis.base.AbstractSource;
+import kieker.panalysis.examples.countWords.AbstractDefaultFilter;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  */
-public class ClockSource extends AbstractSource<ClockSource.OUTPUT_PORT> {
+public class ClockSource extends AbstractDefaultFilter<ClockSource.OUTPUT_PORT> {
 
 	public static enum OUTPUT_PORT { // NOCS
 		CLOCK_SIGNAL

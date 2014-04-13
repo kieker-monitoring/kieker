@@ -21,13 +21,17 @@ import kieker.panalysis.base.IInputPort;
 import kieker.panalysis.base.IOutputPort;
 
 /**
+ * 
  * @author Christian Wulf
  * 
  * @since 1.10
+ * 
+ * @param <I>
+ *            the type of the input ports and the output port
  */
-public class Merger<T> extends AbstractFilter<Merger<T>> {
+public class Merger<I> extends AbstractFilter<Merger<I>, I, I> {
 
-	public final IOutputPort<Merger<T>, T> OBJECT = this.createOutputPort();
+	public final IOutputPort<Merger<I>, I> OBJECT = this.createOutputPort();
 
 	private int index = 0;
 
@@ -49,8 +53,8 @@ public class Merger<T> extends AbstractFilter<Merger<T>> {
 		int size = this.getInputPorts().size();
 		// check each port at most once to avoid a potentially infinite loop
 		while (size-- > 0) {
-			final IInputPort<Merger<T>, T> inputPort = this.getNextPortInRoundRobinOrder();
-			final T token = this.tryTake(inputPort);
+			final IInputPort<Merger<I>, I> inputPort = this.getNextPortInRoundRobinOrder();
+			final I token = this.tryTake(inputPort);
 			if (token != null) {
 				this.put(this.OBJECT, token);
 				return true;
@@ -63,8 +67,8 @@ public class Merger<T> extends AbstractFilter<Merger<T>> {
 	 * @since 1.10
 	 * @return
 	 */
-	private IInputPort<Merger<T>, T> getNextPortInRoundRobinOrder() {
-		final IInputPort<Merger<T>, T> port = this.getInputPort(this.index);
+	private IInputPort<Merger<I>, I> getNextPortInRoundRobinOrder() {
+		final IInputPort<Merger<I>, I> port = this.getInputPort(this.index);
 		this.index = (this.index + 1) % this.getInputPorts().size();
 		return port;
 	}
@@ -74,10 +78,9 @@ public class Merger<T> extends AbstractFilter<Merger<T>> {
 	 * @param portIndex
 	 * @return
 	 */
-	public IInputPort<Merger<T>, T> getInputPort(final int portIndex) {
-		@SuppressWarnings("unchecked")
-		final IInputPort<Merger<T>, T> port = (IInputPort<Merger<T>, T>) this.getInputPorts().get(portIndex);
-		return port;
+	@SuppressWarnings("unchecked")
+	public IInputPort<Merger<I>, I> getInputPort(final int portIndex) {
+		final IInputPort<Merger<I>, ? extends I> port = this.getInputPorts().get(portIndex);
+		return (IInputPort<Merger<I>, I>) port;
 	}
-
 }

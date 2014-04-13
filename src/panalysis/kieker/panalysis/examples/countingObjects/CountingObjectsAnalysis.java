@@ -16,8 +16,8 @@
 
 package kieker.panalysis.examples.countingObjects;
 
-import kieker.panalysis.MethodCallPipe;
 import kieker.panalysis.base.Analysis;
+import kieker.panalysis.base.MethodCallPipe;
 import kieker.panalysis.base.Pipeline;
 import kieker.panalysis.examples.countWords.DirectoryName2Files;
 import kieker.panalysis.stage.RepeaterSource;
@@ -31,33 +31,39 @@ import kieker.panalysis.stage.composite.CycledCountingFilter;
  */
 public class CountingObjectsAnalysis extends Analysis {
 
-	private RepeaterSource repeaterSource;
+	private Pipeline<MethodCallPipe<?>> pipeline;
+
+	private RepeaterSource<String> repeaterSource;
 	private DirectoryName2Files findFilesStage;
 	private CycledCountingFilter cycledCountingFilter;
-	private Pipeline<MethodCallPipe> pipeline;
 	private TeeFilter teeFilter;
 
 	@Override
 	public void init() {
 		super.init();
 
-		this.repeaterSource = new RepeaterSource(".", 1);
+		this.repeaterSource = RepeaterSource.create(".", 1);
 		this.findFilesStage = new DirectoryName2Files();
-		this.cycledCountingFilter = new CycledCountingFilter(new MethodCallPipe(0L));
+		this.cycledCountingFilter = new CycledCountingFilter(new MethodCallPipe<Long>(0L));
 		this.teeFilter = new TeeFilter();
 
-		new MethodCallPipe().connect(this.repeaterSource, kieker.panalysis.stage.OUTPUT_PORT.OUTPUT, this.findFilesStage,
-				DirectoryName2Files.INPUT_PORT.DIRECTORY_NAME);
-		new MethodCallPipe().connect(this.findFilesStage, DirectoryName2Files.OUTPUT_PORT.FILE, this.cycledCountingFilter,
-				CycledCountingFilter.INPUT_PORT.INPUT_OBJECT);
-		new MethodCallPipe().connect(this.cycledCountingFilter, CycledCountingFilter.OUTPUT_PORT.RELAYED_OBJECT, this.teeFilter,
-				TeeFilter.INPUT_PORT.INPUT_OBJECT);
-
-		this.pipeline = new Pipeline<MethodCallPipe>();
+		this.pipeline = Pipeline.create();
 		this.pipeline.addStage(this.repeaterSource);
 		this.pipeline.addStage(this.findFilesStage);
 		this.pipeline.addStage(this.cycledCountingFilter);
 		this.pipeline.addStage(this.teeFilter);
+
+		this.pipeline.add(new MethodCallPipe<String>()
+				.source(this.repeaterSource.OUTPUT)
+				.target(this.findFilesStage, this.findFilesStage.DIRECTORY_NAME));
+
+		this.pipeline.add(new MethodCallPipe<String>()
+				.source(this.findFilesStage.DIRECTORY_NAME)
+				.target(this.cycledCountingFilter, this.cycledCountingFilter.DIRECTORY_NAME));
+
+		this.pipeline.add(new MethodCallPipe<String>()
+				.source(this.cycledCountingFilter.OUTPUT)
+				.target(this.teeFilter, this.teeFilter.DIRECTORY_NAME));
 
 		this.pipeline.setStartStages(this.repeaterSource);
 	}

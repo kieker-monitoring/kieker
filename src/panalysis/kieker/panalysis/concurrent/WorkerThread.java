@@ -109,7 +109,7 @@ public class WorkerThread extends Thread {
 	}
 
 	public void terminate(final TerminationPolicy terminationPolicyToUse) {
-		for (final AbstractFilter<?> startStage : this.pipeline.getStartStages()) {
+		for (final AbstractFilter<?, ?, ?> startStage : this.pipeline.getStartStages()) {
 			startStage.fireSignalClosingToAllInputPorts();
 		}
 

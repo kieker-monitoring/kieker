@@ -14,22 +14,16 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.panalysis;
+package kieker.panalysis.base;
 
 import java.util.List;
-
-import kieker.panalysis.base.AbstractPipe;
-import kieker.panalysis.base.IInputPort;
-import kieker.panalysis.base.IPipe;
-import kieker.panalysis.base.ISink;
-import kieker.panalysis.base.IStage;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  */
-public class MethodCallPipe<T> extends AbstractPipe<T> {
+public class MethodCallPipe<T> extends AbstractPipe<T, MethodCallPipe<T>> {
 
 	private IStage targetStage;
 	private T storedToken;
@@ -68,9 +62,13 @@ public class MethodCallPipe<T> extends AbstractPipe<T> {
 	}
 
 	@Override
-	public <S extends ISink<S>> IPipe<T> target(final S targetStage, final IInputPort<S, T> targetPort) {
+	public <S extends ISink<S>> MethodCallPipe<T> target(final S targetStage, final IInputPort<S, T> targetPort) {
 		this.targetStage = targetStage;
 		return super.target(targetStage, targetPort);
+	}
+
+	public void copyAllOtherPipes(final List<MethodCallPipe<T>> pipesOfGroup) {
+		// is not needed in a synchronous execution
 	}
 
 }

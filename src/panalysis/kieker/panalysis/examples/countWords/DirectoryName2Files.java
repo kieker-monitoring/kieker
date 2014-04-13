@@ -18,7 +18,6 @@ package kieker.panalysis.examples.countWords;
 
 import java.io.File;
 
-import kieker.panalysis.base.AbstractFilter;
 import kieker.panalysis.base.IInputPort;
 import kieker.panalysis.base.IOutputPort;
 
@@ -27,7 +26,7 @@ import kieker.panalysis.base.IOutputPort;
  * 
  * @since 1.10
  */
-public class DirectoryName2Files extends AbstractFilter<DirectoryName2Files> {
+public class DirectoryName2Files extends AbstractDefaultFilter<DirectoryName2Files> {
 
 	public final IInputPort<DirectoryName2Files, String> DIRECTORY_NAME = this.createInputPort();
 

@@ -22,18 +22,20 @@ package kieker.panalysis.base;
  * @since 1.10
  * 
  * @param <T>
- *            The type of the pipeline
+ *            The type of the pipe
  */
-public abstract class AbstractPipe<T> implements IPipe<T> {
+public abstract class AbstractPipe<T, P extends IPipe<T, P>> implements IPipe<T, P> {
 
 	private Runnable fireSignalClosing;
 
-	public <S extends ISource> IPipe<T> source(final IOutputPort<S, T> sourcePort) {
+	@SuppressWarnings("unchecked")
+	public <S extends ISource> P source(final IOutputPort<S, T> sourcePort) {
 		sourcePort.setAssociatedPipe(this);
-		return this;
+		return (P) this;
 	}
 
-	public <S extends ISink<S>> IPipe<T> target(final S targetStage, final IInputPort<S, T> targetPort) {
+	@SuppressWarnings("unchecked")
+	public <S extends ISink<S>> P target(final S targetStage, final IInputPort<S, T> targetPort) {
 		targetPort.setAssociatedPipe(this);
 		this.fireSignalClosing = new Runnable() {
 			// This Runnable avoids the declaration of targetStage and targetPort as attributes and the declaration of I as type parameter
@@ -41,20 +43,19 @@ public abstract class AbstractPipe<T> implements IPipe<T> {
 				targetStage.onSignalClosing(targetPort);
 			}
 		};
-		return this;
+		return (P) this;
 	}
 
 	protected abstract void putInternal(T token);
 
-	public final void put(final T token) {
+	public void put(final T token) {
 		this.putInternal(token);
 	}
 
 	protected abstract T tryTakeInternal();
 
 	public final T tryTake() {
-		final T token = this.tryTakeInternal();
-		return token;
+		return this.tryTakeInternal();
 	}
 
 	public void fireSignalClosing() {

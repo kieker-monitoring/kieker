@@ -18,8 +18,8 @@ package kieker.panalysis.stage.composite;
 
 import java.util.Map;
 
-import kieker.panalysis.MethodCallPipe;
 import kieker.panalysis.base.AbstractFilter;
+import kieker.panalysis.base.MethodCallPipe;
 import kieker.panalysis.stage.File2TextLinesFilter;
 import kieker.panalysis.stage.TextLine2RecordFilter;
 

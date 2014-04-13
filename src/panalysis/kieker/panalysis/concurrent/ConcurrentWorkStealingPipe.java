@@ -29,7 +29,7 @@ import kieker.panalysis.base.AbstractPipe;
  * 
  * @since 1.10
  */
-public class ConcurrentWorkStealingPipe<T> extends AbstractPipe<T> {
+public class ConcurrentWorkStealingPipe<T> extends AbstractPipe<T, ConcurrentWorkStealingPipe<T>> {
 
 	private final CircularWorkStealingDeque<T> circularWorkStealingDeque = new CircularWorkStealingDeque<T>();
 
@@ -55,10 +55,6 @@ public class ConcurrentWorkStealingPipe<T> extends AbstractPipe<T> {
 	public void putMultiple(final List<T> items) {
 		// TODO Auto-generated method stub
 		// BETTER find a way to put multiple elements directly without a loop
-	}
-
-	public T take() {
-		throw new IllegalStateException("deprecated");
 	}
 
 	@Override
@@ -114,4 +110,5 @@ public class ConcurrentWorkStealingPipe<T> extends AbstractPipe<T> {
 	public String toString() {
 		return this.getClass().getSimpleName() + "={" + "numTakenElements=" + this.numTakenElements + "}";
 	}
+
 }

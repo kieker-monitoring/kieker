@@ -24,7 +24,7 @@ import kieker.panalysis.base.IOutputPort;
  * 
  * @since 1.10
  */
-public class RepeaterSource<T> extends AbstractFilter<RepeaterSource<T>> {
+public class RepeaterSource<T> extends AbstractFilter<RepeaterSource<T>, Object, T> {
 
 	public final IOutputPort<RepeaterSource<T>, T> OUTPUT = this.createOutputPort();
 
@@ -32,9 +32,25 @@ public class RepeaterSource<T> extends AbstractFilter<RepeaterSource<T>> {
 	private final int num;
 	private long overallDuration;
 
-	public RepeaterSource(final T outputRecord, final int num) {
+	/**
+	 * @since 1.10
+	 * @param outputRecord
+	 * @param num
+	 */
+	private RepeaterSource(final T outputRecord, final int num) {
 		this.outputRecord = outputRecord;
 		this.num = num;
+	}
+
+	/**
+	 * @since 1.10
+	 * @param outputRecord
+	 * @param num
+	 * @return
+	 */
+	// this constructor prevents the programmer from repeating the type argument
+	public static <T> RepeaterSource<T> create(final T outputRecord, final int num) {
+		return new RepeaterSource<T>(outputRecord, num);
 	}
 
 	public boolean execute() {
@@ -52,6 +68,10 @@ public class RepeaterSource<T> extends AbstractFilter<RepeaterSource<T>> {
 		return true;
 	}
 
+	/**
+	 * @since 1.10
+	 * @return
+	 */
 	public long getOverallDuration() {
 		return this.overallDuration;
 	}

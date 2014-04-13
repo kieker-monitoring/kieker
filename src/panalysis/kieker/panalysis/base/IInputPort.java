@@ -1,7 +1,5 @@
 package kieker.panalysis.base;
 
-
-
 public interface IInputPort<S extends IStage, T> extends IPort<S, T> {
 
 	/**

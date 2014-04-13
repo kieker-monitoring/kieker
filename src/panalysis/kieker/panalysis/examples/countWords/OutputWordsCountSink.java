@@ -18,7 +18,6 @@ package kieker.panalysis.examples.countWords;
 
 import java.io.File;
 
-import kieker.panalysis.base.AbstractFilter;
 import kieker.panalysis.base.IInputPort;
 import kieker.panalysis.util.Pair;
 
@@ -27,7 +26,7 @@ import kieker.panalysis.util.Pair;
  * 
  * @since 1.10
  */
-public class OutputWordsCountSink extends AbstractFilter<OutputWordsCountSink> {
+public class OutputWordsCountSink extends AbstractDefaultFilter<OutputWordsCountSink> {
 
 	final IInputPort<OutputWordsCountSink, Pair<File, Integer>> FILE_WORDCOUNT_TUPLE = this.createInputPort();
 
@@ -47,7 +46,7 @@ public class OutputWordsCountSink extends AbstractFilter<OutputWordsCountSink> {
 
 		final File file = pair.getFirst();
 		final Number wordsCount = pair.getSecond();
-		System.out.println(wordsCount + " words in file '" + file.getAbsolutePath() + "'"); // NOPMD (Just for example purposes)
+		// System.out.println(wordsCount + " words in file '" + file.getAbsolutePath() + "'"); // NOPMD (Just for example purposes)
 		this.numFiles++;
 
 		final long end = System.currentTimeMillis();

@@ -18,14 +18,14 @@ package kieker.panalysis.stage;
 
 import java.io.PrintStream;
 
-import kieker.panalysis.base.AbstractFilter;
+import kieker.panalysis.examples.countWords.AbstractDefaultFilter;
 
 /**
  * @author Matthias Rohr, Jan Waller, Nils Christian Ehmke, Christian Wulf
  * 
  * @since 1.10
  */
-public final class TeeFilter extends AbstractFilter<TeeFilter> {
+public final class TeeFilter extends AbstractDefaultFilter<TeeFilter> {
 
 	public static enum INPUT_PORT { // NOCS
 		INPUT_OBJECT

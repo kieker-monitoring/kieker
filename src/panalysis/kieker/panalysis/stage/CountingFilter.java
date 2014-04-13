@@ -16,14 +16,14 @@
 
 package kieker.panalysis.stage;
 
-import kieker.panalysis.base.AbstractFilter;
+import kieker.panalysis.examples.countWords.AbstractDefaultFilter;
 
 /**
  * @author Jan Waller, Nils Christian Ehmke
  * 
  * @since 1.10
  */
-public class CountingFilter<T> extends AbstractFilter<CountingFilter<T>> {
+public class CountingFilter<T> extends AbstractDefaultFilter<CountingFilter<T>> {
 
 	public static enum INPUT_PORT { // NOCS
 		INPUT_OBJECT, CURRENT_COUNT
