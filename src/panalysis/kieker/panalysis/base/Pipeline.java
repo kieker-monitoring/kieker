@@ -26,24 +26,46 @@ import java.util.Map;
  * 
  * @since 1.10
  * 
- * @param <T>
- *            The type of the pipeline
+ * @param <P>
+ *            The type of the pipes
  */
-public class Pipeline<T extends IPipe> {
+public class Pipeline<P extends IPipe<?, P>> {
 
 	protected final List<IStage> stages = new LinkedList<IStage>();
 	private int freeId = 0;
-	private List<AbstractFilter<?, ?>> startStages;
+	private List<AbstractFilter<?, ?, ?>> startStages;
 
-	private T currentPipe;
-	private final Map<Integer, List<T>> pipeGroups;
+	private P currentPipe;
+	private final Map<Integer, List<P>> pipeGroups;
 
-	public Pipeline() {
+	/**
+	 * The default constructor.<br>
+	 * <i>More constructors are available via the static method <code>create(..)</code></i>
+	 * 
+	 * @see for example, {@link #create(Map)}
+	 */
+	private Pipeline() {
 		this(null);
 	}
 
-	public Pipeline(final Map<Integer, List<T>> pipeGroups) {
+	private Pipeline(final Map<Integer, List<P>> pipeGroups) {
 		this.pipeGroups = pipeGroups;
+	}
+
+	// this constructor prevents the programmer from repeating the type argument
+	public static <P extends IPipe<?, P>> Pipeline<P> create() {
+		return new Pipeline<P>();
+	}
+
+	/**
+	 * 
+	 * @param pipeGroups
+	 *            a map where its keys represent the group id and its values represent the list of pipes
+	 * @return
+	 */
+	// this constructor prevents the programmer from repeating the type argument
+	public static <P extends IPipe<?, P>> Pipeline<P> create(final Map<Integer, List<P>> pipeGroups) {
+		return new Pipeline<P>(pipeGroups);
 	}
 
 	/**
@@ -78,25 +100,34 @@ public class Pipeline<T extends IPipe> {
 		return this.stages;
 	}
 
-	public void setStartStages(final AbstractFilter<?, ?>... startStages) {
-		this.startStages = Arrays.asList(startStages);
-	}
-
-	public Pipeline<T> add(final T pipe) {
+	public Pipeline<P> add(final P pipe) {
 		this.currentPipe = pipe;
 		return this;
 	}
 
 	public void toGroup(final int pipeGroupIdentifier) {
-		List<T> pipes = this.pipeGroups.get(pipeGroupIdentifier);
+		List<P> pipes = this.pipeGroups.get(pipeGroupIdentifier);
 		if (pipes == null) {
-			pipes = new LinkedList<T>();
+			pipes = new LinkedList<P>();
 			this.pipeGroups.put(pipeGroupIdentifier, pipes);
 		}
 		pipes.add(this.currentPipe);
 	}
 
-	public List<AbstractFilter<?, ?>> getStartStages() {
+	// BETTER move this method out of the pipeline
+	public void connectPipeGroups() {
+		for (final List<P> samePipes : this.pipeGroups.values()) {
+			for (final P pipe : samePipes) {
+				pipe.copyAllOtherPipes(samePipes);
+			}
+		}
+	}
+
+	public void setStartStages(final AbstractFilter<?, ?, ?>... startStages) {
+		this.startStages = Arrays.asList(startStages);
+	}
+
+	public List<AbstractFilter<?, ?, ?>> getStartStages() {
 		return this.startStages;
 	}
 }

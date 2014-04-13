@@ -14,14 +14,47 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.panalysis.base;
+package kieker.panalysis.stage;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
+import kieker.panalysis.examples.countWords.AbstractDefaultFilter;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
- * 
  */
-public interface ISource extends IStage {
+public class ClockSource extends AbstractDefaultFilter<ClockSource> {
+
+	public static enum OUTPUT_PORT { // NOCS
+		CLOCK_SIGNAL
+	}
+
+	private final Timer timer;
+
+	public ClockSource(final long delay, final long period) {
+		final TimerTask task = new TimerTask() {
+			@SuppressWarnings("synthetic-access")
+			@Override
+			public void run() {
+				ClockSource.this.put(OUTPUT_PORT.CLOCK_SIGNAL, Boolean.TRUE);
+			}
+		};
+
+		this.timer = new Timer();
+		this.timer.scheduleAtFixedRate(task, delay, period);
+	}
+
+	public boolean execute() {
+		// TODO implement; see timer execution
+		return true;
+	}
+
+	@Override
+	public void cleanUp() {
+		this.timer.cancel();
+	}
 
 }

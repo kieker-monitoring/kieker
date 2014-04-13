@@ -16,8 +16,8 @@
 
 package kieker.panalysis.base;
 
-import java.util.EnumMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
@@ -25,36 +25,26 @@ import java.util.Map;
  * 
  * @since 1.10
  * 
+ * @param <S>
+ *            the extending stage
  * @param <I>
  *            The type of the input ports
  * @param <O>
  *            The type of the input ports
+ * 
  */
-public abstract class AbstractFilter<I extends Enum<I>, O extends Enum<O>> extends AbstractStage<I> implements ISink<I>, ISource<O> {
+public abstract class AbstractFilter<S extends IStage, I, O> extends AbstractStage implements ISink<S>, ISource {
 
 	protected boolean mayBeDisabled;
-
-	private final Map<I, Port> inputPortPipes;
-	private final Map<O, Port> outputPortPipes;
 
 	private int numPushedElements = 0;
 	private int numTakenElements = 0;
 
+	private final List<IInputPort<S, ? extends I>> inputPorts = new ArrayList<IInputPort<S, ? extends I>>();
+	private final List<IOutputPort<S, ? extends O>> outputPorts = new ArrayList<IOutputPort<S, ? extends O>>();
+
 	// private TaskBundle taskBundle;
 	// private final int numTasksThreshold = 100;
-
-	public AbstractFilter(final Class<I> inputEnumType, final Class<O> outputEnumType) {
-		this.inputPortPipes = new EnumMap<I, Port>(inputEnumType);
-		this.outputPortPipes = new EnumMap<O, Port>(outputEnumType);
-	}
-
-	public void setPipeForInputPort(final I inputPort, final IPipe pipe) {
-		this.inputPortPipes.put(inputPort, new Port(pipe));
-	}
-
-	public void setPipeForOutputPort(final O outputPort, final IPipe pipe) {
-		this.outputPortPipes.put(outputPort, new Port(pipe));
-	}
 
 	// protected void put(final OutputPort port, final Object record) {
 	// if (this.taskBundle == null) {
@@ -68,27 +58,25 @@ public abstract class AbstractFilter<I extends Enum<I>, O extends Enum<O>> exten
 	// this.taskBundle = null;
 	// }
 	// }
-
-	protected void put(final O port, final Object record) {
-		final Port portObj = this.outputPortPipes.get(port);
-		if (portObj == null) {
+	/**
+	 * @since 1.10
+	 */
+	protected <T extends O> void put(final IOutputPort<S, T> port, final T object) {
+		final IPipe<T, ?> associatedPipe = port.getAssociatedPipe();
+		if (associatedPipe == null) {
 			return; // ignore unconnected port
+			// BETTER return a NullObject rather than checking for null
 		}
-		final IPipe pipe = portObj.getPipe();
-		pipe.put(record);
+		associatedPipe.put(object);
 		this.numPushedElements++;
 	}
 
-	protected Object take(final I inputPort) {
-		final Port portObj = this.inputPortPipes.get(inputPort);
-		final IPipe pipe = portObj.getPipe();
-		return pipe.take();
-	}
-
-	protected Object tryTake(final I inputPort) {
-		final Port portObj = this.inputPortPipes.get(inputPort);
-		final IPipe pipe = portObj.getPipe();
-		final Object token = pipe.tryTake();
+	/**
+	 * @since 1.10
+	 */
+	protected <T extends I> T tryTake(final IInputPort<S, T> inputPort) {
+		final IPipe<? extends T, ?> associatedPipe = inputPort.getAssociatedPipe();
+		final T token = associatedPipe.tryTake();
 		if (token != null) {
 			this.numTakenElements++;
 
@@ -96,19 +84,23 @@ public abstract class AbstractFilter<I extends Enum<I>, O extends Enum<O>> exten
 		return token;
 	}
 
-	protected Object read(final I inputPort) {
-		final Port portObj = this.inputPortPipes.get(inputPort);
-		final IPipe pipe = portObj.getPipe();
-		return pipe.read();
+	/**
+	 * @since 1.10
+	 */
+	protected <T extends I> T read(final IInputPort<S, T> inputPort) {
+		final IPipe<? extends T, ?> associatedPipe = inputPort.getAssociatedPipe();
+		return associatedPipe.read();
 	}
 
-	public void onSignalClosing(final I inputPort) {
-		final Port portObj = this.inputPortPipes.get(inputPort);
-		portObj.setState(Port.State.CLOSING);
+	/**
+	 * @since 1.10
+	 */
+	public void onSignalClosing(final IInputPort<S, ?> inputPort) {
+		inputPort.setState(IInputPort.State.CLOSING);
 		System.out.println("Closing " + inputPort + " of " + this.toString());
 
-		for (final Port po : this.inputPortPipes.values()) {
-			if (po.getState() != Port.State.CLOSING) {
+		for (final IInputPort<S, ?> iport : this.inputPorts) {
+			if (iport.getState() != IInputPort.State.CLOSING) {
 				return;
 			}
 		}
@@ -117,37 +109,81 @@ public abstract class AbstractFilter<I extends Enum<I>, O extends Enum<O>> exten
 		System.out.println(this.toString() + " can now be disabled by the pipeline scheduler.");
 	}
 
+	/**
+	 * @since 1.10
+	 */
 	public void fireSignalClosingToAllInputPorts() {
-		for (final I port : this.inputPortPipes.keySet()) {
+		for (final IInputPort<S, ? extends I> port : this.inputPorts) {
 			this.onSignalClosing(port);
 		}
 	}
 
+	/**
+	 * @since 1.10
+	 */
 	public void fireSignalClosingToAllOutputPorts() {
-		for (final Port portObj : this.outputPortPipes.values()) {
-			portObj.getPipe().fireSignalClosing();
+		this.logger.info("Fire closing signal to all output ports..." + "(" + this + ")");
+		this.logger.info("outputPorts: " + this.outputPorts);
+		for (final IOutputPort<S, ? extends O> port : this.outputPorts) {
+			final IPipe<? extends O, ?> associatedPipe = port.getAssociatedPipe();
+			if (associatedPipe != null) {
+				associatedPipe.fireSignalClosing();
+			} // else: ignore unconnected port
 		}
 	}
 
+	/**
+	 * @since 1.10
+	 */
 	public boolean mayBeDisabled() {
 		return this.mayBeDisabled;
 	}
 
-	/**
-	 * For debugging purposes
-	 * 
-	 * @param port
-	 * @return
-	 */
-	public IPipe getOutputPipe(final O port) {
-		final Port portObj = this.outputPortPipes.get(port);
-		final IPipe pipe = portObj.getPipe();
-		return pipe;
-	}
-
 	@Override
 	public String toString() {
-		return "{" + this.getClass().getSimpleName() + ": " + "numPushedElements=" + this.numPushedElements + ", " + "numTakenElements=" + this.numTakenElements
+		final String s = super.toString();
+		return "{" + s + ": " + "numPushedElements=" + this.numPushedElements + ", " + "numTakenElements=" + this.numTakenElements
 				+ "}";
+	}
+
+	/**
+	 * @since 1.10
+	 * @return a new input port that accepts elements of the particular type that is specified in the variable declaration.
+	 */
+	// <T extends I> is necessary since I is usually the (generic) type Object
+	public <T extends I> IInputPort<S, T> createInputPort() {
+		final IInputPort<S, T> inputPort = new InputPortImpl<S, T>();
+		this.inputPorts.add(inputPort);
+		return inputPort;
+	}
+
+	/**
+	 * @since 1.10
+	 * @param stage
+	 * @return
+	 */
+	// <T extends O> is necessary since O is usually the (generic) type Object
+	public <T extends O> IOutputPort<S, T> createOutputPort() {
+		final IOutputPort<S, T> outputPort = new OutputPortImpl<S, T>();
+		this.outputPorts.add(outputPort);
+		return outputPort;
+	}
+
+	/**
+	 * @since 1.10
+	 * @return
+	 * 
+	 */
+	protected List<IInputPort<S, ? extends I>> getInputPorts() {
+		return this.inputPorts;
+	}
+
+	/**
+	 * @since 1.10
+	 * @return
+	 * 
+	 */
+	protected List<IOutputPort<S, ? extends O>> getOutputPorts() {
+		return this.outputPorts;
 	}
 }

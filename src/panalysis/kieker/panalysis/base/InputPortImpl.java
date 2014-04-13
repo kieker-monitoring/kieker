@@ -16,12 +16,16 @@
 
 package kieker.panalysis.base;
 
-/**
- * @author Christian Wulf
- * 
- * @since 1.10
- * 
- */
-public interface ISource extends IStage {
+class InputPortImpl<S extends IStage, T> extends AbstractPort<S, T> implements IInputPort<S, T> {
+
+	private State state = State.OPEN;
+
+	public void setState(final State state) {
+		this.state = state;
+	}
+
+	public State getState() {
+		return this.state;
+	}
 
 }

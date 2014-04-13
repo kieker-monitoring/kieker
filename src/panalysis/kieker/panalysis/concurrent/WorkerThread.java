@@ -28,7 +28,7 @@ import kieker.panalysis.base.TerminationPolicy;
  */
 public class WorkerThread extends Thread {
 
-	private Pipeline<ConcurrentWorkStealingPipe> pipeline;
+	private Pipeline<ConcurrentWorkStealingPipe<?>> pipeline;
 	private PipelineScheduler pipelineScheduler;
 
 	private long duration;
@@ -100,16 +100,16 @@ public class WorkerThread extends Thread {
 		return this.duration;
 	}
 
-	public void setPipeline(final Pipeline<ConcurrentWorkStealingPipe> pipeline) {
+	public void setPipeline(final Pipeline<ConcurrentWorkStealingPipe<?>> pipeline) {
 		this.pipeline = pipeline;
 	}
 
-	public Pipeline<ConcurrentWorkStealingPipe> getPipeline() {
+	public Pipeline<ConcurrentWorkStealingPipe<?>> getPipeline() {
 		return this.pipeline;
 	}
 
 	public void terminate(final TerminationPolicy terminationPolicyToUse) {
-		for (final AbstractFilter<?, ?> startStage : this.pipeline.getStartStages()) {
+		for (final AbstractFilter<?, ?, ?> startStage : this.pipeline.getStartStages()) {
 			startStage.fireSignalClosingToAllInputPorts();
 		}
 
