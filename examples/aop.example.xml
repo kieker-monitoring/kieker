@@ -18,6 +18,10 @@
 			Include/exclude examples for specific libraries:
 		-->
 
+		<!-- 
+		     Important: The logger library that is configured to be used by Kieker must always be excluded!
+		     (Particularly important when using the include-all directive from above.) 
+		--> 
 		<!-- <exclude within="org.apache.commons.logging..*" />  -->
 		<!-- <exclude within="org.slf4j..*" />  -->
 		<!-- <exclude within="java.util.logging..*" />  -->
