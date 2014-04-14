@@ -1,40 +1,40 @@
 \setTextListing
 \begin{lstlisting}[caption=Execution of the Bookstore with AspectJ trace instrumentation (Section~\ref{sec:traceAnalysis:instr:AspectJ})]
 Bookstore.main: Starting request 0
-10.04.2012 13:03:51 kieker.monitoring.core.configuration.ConfigurationFactory createSingletonConfiguration
+Bookstore.main: Starting request 1
+Bookstore.main: Starting request 2
+Bookstore.main: Starting request 3
+Bookstore.main: Starting request 4
+Apr 14, 2014 10:35:04 PM kieker.monitoring.core.configuration.ConfigurationFactory createSingletonConfiguration
 INFO: Loading properties from properties file in classpath: 'META-INF/kieker.monitoring.properties'
-10.04.2012 13:03:51 kieker.monitoring.core.controller.MonitoringController createInstance
-INFO: Current State of kieker.monitoring (1.5) Status: 'enabled'
-        Name: 'KIEKER'; Hostname: 'pc-vanhoorn'; experimentID: '1'
+Apr 14, 2014 10:35:04 PM kieker.monitoring.core.controller.MonitoringController createInstance
+INFO: Current State of kieker.monitoring (1.9) Status: 'enabled'
+        Name: 'KIEKER'; Hostname: 'myHost'; experimentID: '1'
 JMXController: JMX disabled
 RegistryController: 0 strings registered.
 TimeSource: 'kieker.monitoring.timer.SystemNanoTimer'
         Time in nanoseconds (with nanoseconds precision) since Thu Jan 01 01:00:00 CET 1970'
+ProbeController: disabled
 WriterController:
         Number of Inserts: '0'
         Automatic assignment of logging timestamps: 'true'
 Writer: 'kieker.monitoring.writer.filesystem.AsyncFsWriter'
         Configuration:
-                kieker.monitoring.writer.filesystem.AsyncFsWriter.QueueFullBehavior='0'
                 kieker.monitoring.writer.filesystem.AsyncFsWriter.flush='true'
-                kieker.monitoring.writer.filesystem.AsyncFsWriter.QueueSize='10000'
-                kieker.monitoring.writer.filesystem.AsyncFsWriter.customStoragePath='.'
+                kieker.monitoring.writer.filesystem.AsyncFsWriter.maxLogSize='-1'
+                kieker.monitoring.writer.filesystem.AsyncFsWriter.QueueFullBehavior='0'
                 kieker.monitoring.writer.filesystem.AsyncFsWriter.MaxShutdownDelay='-1'
-                kieker.monitoring.writer.filesystem.AsyncFsWriter.storeInJavaIoTmpdir='true'
                 kieker.monitoring.writer.filesystem.AsyncFsWriter.maxEntriesInFile='25000'
+                kieker.monitoring.writer.filesystem.AsyncFsWriter.bufferSize='8192'
+                kieker.monitoring.writer.filesystem.AsyncFsWriter.maxLogFiles='-1'
+                kieker.monitoring.writer.filesystem.AsyncFsWriter.customStoragePath=''
+                kieker.monitoring.writer.filesystem.AsyncFsWriter.QueueSize='10000'
         Records lost: 0
         Writer Threads (1): 
-                Finished: 'false'; Writing to Directory: '/tmp/kieker-20110428-142829399-UTC-Kaapstad-KIEKER'
-Sampling Controller: Periodic Sensor available: Current Poolsize: '0'; Scheduled Tasks: '0'
-
-10.04.2012 13:03:51 kieker.monitoring.core.registry.ControlFlowRegistry <clinit>
-INFO: First threadId will be 7752665283541598209
-10.04.2012 13:03:51 kieker.monitoring.core.controller.MonitoringController$\$$1 run
-INFO: ShutdownHook notifies controller to initiate shutdown
-10.04.2012 13:03:51 kieker.monitoring.core.controller.MonitoringController cleanup
-INFO: Shutting down Monitoring Controller (KIEKER)
-10.04.2012 13:03:51 kieker.monitoring.writer.AbstractAsyncWriter terminate
-INFO: Shutting down writers.
+                Finished: 'false'; Writing to Directory: '/tmp/kieker-20140414-203504785-UTC-myHost-KIEKER'
+Sampling Controller: Periodic Sensor available: Poolsize: '0'; Scheduled Tasks: '0'
+Apr 14, 2014 10:35:04 PM kieker.monitoring.core.registry.ControlFlowRegistry <clinit>
+INFO: First threadId will be 1063271724524503040
 \end{lstlisting}
 
 
