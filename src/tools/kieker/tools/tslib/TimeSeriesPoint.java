@@ -26,14 +26,11 @@ public class TimeSeriesPoint<T> implements ITimeSeriesPoint<T> {
 	private final long time;
 	private final T value;
 
-	// TODO: Add possibility to attach arbitrary objects
-
 	/**
 	 * @param time
 	 * @param value
 	 */
 	public TimeSeriesPoint(final long time, final T value) {
-		// TODO is that a good pattern or should we ensure that the object is immutable from outside?
 		this.time = time;
 		this.value = value;
 	}
