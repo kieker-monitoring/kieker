@@ -38,6 +38,7 @@ setlocal enabledelayedexpansion
 	SET /a DOT_COUNTER=0
 	
 	REM Convert the dot and pic files using the old filenames as base for the new ones.
+	IF exist %DIRNAME%\*.pic (
 	for /F "delims=" %%i in ('dir /B /S "%DIRNAME%\*.pic"') do (
 		for %%j in (%EXTS%) do (
 			pic2plot -T %%j "%%i" > "%%i.%%j"
@@ -46,20 +47,23 @@ setlocal enabledelayedexpansion
         ps2pdf "%%i.ps"
       )
 		)
-		SET /a PIC_COUNTER=%PIC_COUNTER% + 1
+		SET /a PIC_COUNTER=PIC_COUNTER + 1
+	)
 	)
 	
+	IF exist %DIRNAME%\*.dot (
 	for /F "delims=" %%i in ('dir /B /S "%DIRNAME%\*.dot"') do (
 		for %%j in (%EXTS%) do (
 			dot -T %%j "%%i" > "%%i.%%j"
 		)
-		SET /a DOT_COUNTER=%DOT_COUNTER% + 1
+		SET /a DOT_COUNTER=DOT_COUNTER + 1
+	)
 	)
 	
 	REM Show the user the resulting counters.
 	echo. 
-	echo Processed %DOT_COUNTER% .dot file(s)
-	echo Processed %PIC_COUNTER% .pic file(s)
+	echo Processed !DOT_COUNTER! .dot file(s)
+	echo Processed !PIC_COUNTER! .pic file(s)
 GOTO:EOF
 
 REM This subfunction shows the user the usage of the batch-script.
