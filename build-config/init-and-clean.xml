@@ -7,7 +7,7 @@
 		<tstamp />
 		<property name="kieker.name" value="Kieker Framework" />
 		<property name="kieker.version" value="1.9" />
-		<property name="year" value="2013" />
+		<property name="year" value="2014" />
 		<property name="copyright" value="Kieker Project" />
 
 		<property name="dist.kieker.main.sources.jar" value="${kieker.main.packagenamebase}-${kieker.version}-${kieker-src.suffix}.jar" />
