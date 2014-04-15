@@ -6,13 +6,12 @@ package kieker.panalysis.base;
  * 
  * @since 1.10
  * 
- * @param <S>
  * @param <T>
  *            the type of elements this port accepts
  */
-interface IPort<S extends IStage, T> {
+interface IPort<T> {
 
-	public abstract <P extends IPipe<T, P>> P getAssociatedPipe();
+	public abstract IPipe<T, ?> getAssociatedPipe();
 
 	public abstract void setAssociatedPipe(final IPipe<T, ?> associatedPipe);
 

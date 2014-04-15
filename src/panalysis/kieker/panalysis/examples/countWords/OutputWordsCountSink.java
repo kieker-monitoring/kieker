@@ -47,7 +47,7 @@ public class OutputWordsCountSink extends AbstractDefaultFilter<OutputWordsCount
 
 		final File file = pair.getFirst();
 		final Number wordsCount = pair.getSecond();
-		// System.out.println(wordsCount + " words in file '" + file.getAbsolutePath() + "'"); // NOPMD (Just for example purposes)
+		System.out.println(wordsCount + " words in file '" + file.getAbsolutePath() + "'"); // NOPMD (Just for example purposes)
 		this.numFiles++;
 
 		final long end = System.currentTimeMillis();

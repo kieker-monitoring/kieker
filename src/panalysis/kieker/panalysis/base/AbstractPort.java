@@ -1,6 +1,6 @@
 package kieker.panalysis.base;
 
-abstract class AbstractPort<S extends IStage, T> {
+abstract class AbstractPort<S extends IStage, T> implements IPort<T> {
 
 	private IPipe<T, ?> associatedPipe;
 
