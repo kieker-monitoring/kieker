@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import de.chw.util.CyclicIterator;
+
 import kieker.panalysis.base.IStage;
 
 /**
@@ -32,21 +34,19 @@ import kieker.panalysis.base.IStage;
 public class PipelineScheduler {
 
 	protected final Map<IStage, Boolean> statesOfStages = new HashMap<IStage, Boolean>();
-	private Iterator<IStage> iterator;
+	private final Iterator<IStage> iterator;
 
 	public PipelineScheduler(final List<IStage> stages) {
 		for (final IStage stage : stages) {
 			this.statesOfStages.put(stage, Boolean.TRUE);
 		}
+		this.iterator = new CyclicIterator<IStage>(this.statesOfStages.keySet());
 	}
 
 	public IStage get() {
-		if ((this.iterator == null) || !this.iterator.hasNext()) { // BETTER use a cycling iterator
-			this.iterator = this.statesOfStages.keySet().iterator();
-		}
 		final IStage stage = this.iterator.next();
 		final Boolean isEnabled = this.statesOfStages.get(stage);
-		if (Boolean.FALSE.equals(isEnabled)) {
+		if (Boolean.FALSE.booleanValue() == isEnabled.booleanValue()) {
 			return this.get(); // return the next enabled stage
 		}
 		return stage;
