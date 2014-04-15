@@ -29,11 +29,11 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
  * <p>
  * The following features are implemented:
  * <ul>
- * <li>{@link kieker.analysis.model.analysisMetaModel.impl.MOutputPort#getSubscribers <em>Subscribers</em>}</li>
- * <li>{@link kieker.analysis.model.analysisMetaModel.impl.MOutputPort#getParent <em>Parent</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MOutputPort#getSubscribers <em>Subscribers</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MOutputPort#getParent <em>Parent</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @generated
  */
 public class MOutputPort extends MPort implements MIOutputPort {
@@ -41,7 +41,6 @@ public class MOutputPort extends MPort implements MIOutputPort {
 	 * The cached value of the '{@link #getSubscribers() <em>Subscribers</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @see #getSubscribers()
 	 * @generated
 	 * @ordered
@@ -51,7 +50,6 @@ public class MOutputPort extends MPort implements MIOutputPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected MOutputPort() {
@@ -61,7 +59,6 @@ public class MOutputPort extends MPort implements MIOutputPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -72,7 +69,6 @@ public class MOutputPort extends MPort implements MIOutputPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public EList<MIInputPort> getSubscribers() {
@@ -85,30 +81,26 @@ public class MOutputPort extends MPort implements MIOutputPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public MIPlugin getParent() {
-		if (eContainerFeatureID() != MIAnalysisMetaModelPackage.OUTPUT_PORT__PARENT)
-			return null;
-		return (MIPlugin) eInternalContainer();
+		if (eContainerFeatureID() != MIAnalysisMetaModelPackage.OUTPUT_PORT__PARENT) return null;
+		return (MIPlugin)eInternalContainer();
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public NotificationChain basicSetParent(MIPlugin newParent, NotificationChain msgs) {
-		msgs = eBasicSetContainer((InternalEObject) newParent, MIAnalysisMetaModelPackage.OUTPUT_PORT__PARENT, msgs);
+		msgs = eBasicSetContainer((InternalEObject)newParent, MIAnalysisMetaModelPackage.OUTPUT_PORT__PARENT, msgs);
 		return msgs;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public void setParent(MIPlugin newParent) {
@@ -119,10 +111,9 @@ public class MOutputPort extends MPort implements MIOutputPort {
 			if (eInternalContainer() != null)
 				msgs = eBasicRemoveFromContainer(msgs);
 			if (newParent != null)
-				msgs = ((InternalEObject) newParent).eInverseAdd(this, MIAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS, MIPlugin.class, msgs);
+				msgs = ((InternalEObject)newParent).eInverseAdd(this, MIAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS, MIPlugin.class, msgs);
 			msgs = basicSetParent(newParent, msgs);
-			if (msgs != null)
-				msgs.dispatch();
+			if (msgs != null) msgs.dispatch();
 		}
 		else if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, MIAnalysisMetaModelPackage.OUTPUT_PORT__PARENT, newParent, newParent));
@@ -131,16 +122,15 @@ public class MOutputPort extends MPort implements MIOutputPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case MIAnalysisMetaModelPackage.OUTPUT_PORT__PARENT:
-			if (eInternalContainer() != null)
-				msgs = eBasicRemoveFromContainer(msgs);
-			return basicSetParent((MIPlugin) otherEnd, msgs);
+			case MIAnalysisMetaModelPackage.OUTPUT_PORT__PARENT:
+				if (eInternalContainer() != null)
+					msgs = eBasicRemoveFromContainer(msgs);
+				return basicSetParent((MIPlugin)otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
@@ -148,14 +138,13 @@ public class MOutputPort extends MPort implements MIOutputPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case MIAnalysisMetaModelPackage.OUTPUT_PORT__PARENT:
-			return basicSetParent(null, msgs);
+			case MIAnalysisMetaModelPackage.OUTPUT_PORT__PARENT:
+				return basicSetParent(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -163,14 +152,13 @@ public class MOutputPort extends MPort implements MIOutputPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
 		switch (eContainerFeatureID()) {
-		case MIAnalysisMetaModelPackage.OUTPUT_PORT__PARENT:
-			return eInternalContainer().eInverseRemove(this, MIAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS, MIPlugin.class, msgs);
+			case MIAnalysisMetaModelPackage.OUTPUT_PORT__PARENT:
+				return eInternalContainer().eInverseRemove(this, MIAnalysisMetaModelPackage.PLUGIN__OUTPUT_PORTS, MIPlugin.class, msgs);
 		}
 		return super.eBasicRemoveFromContainerFeature(msgs);
 	}
@@ -178,16 +166,15 @@ public class MOutputPort extends MPort implements MIOutputPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case MIAnalysisMetaModelPackage.OUTPUT_PORT__SUBSCRIBERS:
-			return getSubscribers();
-		case MIAnalysisMetaModelPackage.OUTPUT_PORT__PARENT:
-			return getParent();
+			case MIAnalysisMetaModelPackage.OUTPUT_PORT__SUBSCRIBERS:
+				return getSubscribers();
+			case MIAnalysisMetaModelPackage.OUTPUT_PORT__PARENT:
+				return getParent();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -195,20 +182,19 @@ public class MOutputPort extends MPort implements MIOutputPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case MIAnalysisMetaModelPackage.OUTPUT_PORT__SUBSCRIBERS:
-			getSubscribers().clear();
-			getSubscribers().addAll((Collection<? extends MIInputPort>) newValue);
-			return;
-		case MIAnalysisMetaModelPackage.OUTPUT_PORT__PARENT:
-			setParent((MIPlugin) newValue);
-			return;
+			case MIAnalysisMetaModelPackage.OUTPUT_PORT__SUBSCRIBERS:
+				getSubscribers().clear();
+				getSubscribers().addAll((Collection<? extends MIInputPort>)newValue);
+				return;
+			case MIAnalysisMetaModelPackage.OUTPUT_PORT__PARENT:
+				setParent((MIPlugin)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -216,18 +202,17 @@ public class MOutputPort extends MPort implements MIOutputPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case MIAnalysisMetaModelPackage.OUTPUT_PORT__SUBSCRIBERS:
-			getSubscribers().clear();
-			return;
-		case MIAnalysisMetaModelPackage.OUTPUT_PORT__PARENT:
-			setParent((MIPlugin) null);
-			return;
+			case MIAnalysisMetaModelPackage.OUTPUT_PORT__SUBSCRIBERS:
+				getSubscribers().clear();
+				return;
+			case MIAnalysisMetaModelPackage.OUTPUT_PORT__PARENT:
+				setParent((MIPlugin)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -235,16 +220,15 @@ public class MOutputPort extends MPort implements MIOutputPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case MIAnalysisMetaModelPackage.OUTPUT_PORT__SUBSCRIBERS:
-			return subscribers != null && !subscribers.isEmpty();
-		case MIAnalysisMetaModelPackage.OUTPUT_PORT__PARENT:
-			return getParent() != null;
+			case MIAnalysisMetaModelPackage.OUTPUT_PORT__SUBSCRIBERS:
+				return subscribers != null && !subscribers.isEmpty();
+			case MIAnalysisMetaModelPackage.OUTPUT_PORT__PARENT:
+				return getParent() != null;
 		}
 		return super.eIsSet(featureID);
 	}

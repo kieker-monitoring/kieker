@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package kieker.monitoring.writer;
 import java.util.Enumeration;
 
 import kieker.common.configuration.Configuration;
+import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 
 /**
@@ -93,4 +94,11 @@ public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 	 *             If something during the initialization went wrong.
 	 */
 	protected abstract void init() throws Exception;
+
+	/**
+	 * Overwrite this method if necessary.
+	 */
+	public boolean newMonitoringRecordNonBlocking(final IMonitoringRecord record) {
+		return this.newMonitoringRecord(record);
+	}
 }

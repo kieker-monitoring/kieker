@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -76,12 +77,13 @@ import kieker.tools.traceAnalysis.filter.visualization.callTree.AggregatedAlloca
 import kieker.tools.traceAnalysis.filter.visualization.callTree.AggregatedAssemblyComponentOperationCallTreeFilter;
 import kieker.tools.traceAnalysis.filter.visualization.callTree.TraceCallTreeFilter;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.AbstractDependencyGraphFilter;
-import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.AbstractNodeDecorator;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ComponentDependencyGraphAllocationFilter;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ComponentDependencyGraphAssemblyFilter;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ContainerDependencyGraphFilter;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.OperationDependencyGraphAllocationFilter;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.OperationDependencyGraphAssemblyFilter;
+import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ResponseTimeColorNodeDecorator;
+import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ResponseTimeNodeDecorator;
 import kieker.tools.traceAnalysis.filter.visualization.descriptions.DescriptionDecoratorFilter;
 import kieker.tools.traceAnalysis.filter.visualization.sequenceDiagram.SequenceDiagramFilter;
 import kieker.tools.traceAnalysis.filter.visualization.traceColoring.TraceColoringFilter;
@@ -100,7 +102,7 @@ import kieker.tools.util.LoggingTimestampConverter;
  * 
  * @since 0.95a
  */
-public final class TraceAnalysisTool {
+public final class TraceAnalysisTool { // NOPMD (long class)
 	public static final String DATE_FORMAT_PATTERN_CMD_USAGE_HELP = Constants.DATE_FORMAT_PATTERN.replaceAll("'", ""); // only for usage info
 	private static final Log LOG = LogFactory.getLog(TraceAnalysisTool.class);
 	private static final AnalysisController ANALYSIS_INSTANCE = new AnalysisController();
@@ -288,16 +290,31 @@ public final class TraceAnalysisTool {
 		if (decoratorNames == null) {
 			return;
 		}
+		final List<String> decoratorList = Arrays.asList(decoratorNames);
+		final Iterator<String> decoratorIterator = decoratorList.iterator();
 
-		for (final String currentDecoratorName : decoratorNames) {
-			final AbstractNodeDecorator currentDecorator = AbstractNodeDecorator.createFromName(currentDecoratorName);
+		while (decoratorIterator.hasNext()) {
+			final String currentDecoratorStr = decoratorIterator.next();
 
-			if (currentDecorator == null) {
-				LOG.warn("Unknown decoration name '" + currentDecoratorName + "'.");
+			if (Constants.RESPONSE_TIME_DECORATOR_FLAG.equals(currentDecoratorStr)) {
+				plugin.addDecorator(new ResponseTimeNodeDecorator());
 				continue;
+			} else if (Constants.RESPONSE_TIME_COLORING_DECORATOR_FLAG.equals(currentDecoratorStr)) {
+				// if decorator is responseColoring, next value should be the threshold
+				final String thresholdStringStr = decoratorIterator.next();
+
+				try {
+					final int threshold = Integer.parseInt(thresholdStringStr);
+
+					plugin.addDecorator(new ResponseTimeColorNodeDecorator(threshold));
+				} catch (final NumberFormatException exc) {
+					System.err.println("\nFailed to parse int value of property " + "threshold(ms) : " + thresholdStringStr); // NOPMD (System.out)
+				}
+			} else {
+				LOG.warn("Unknown decoration name '" + currentDecoratorStr + "'.");
+				return;
 			}
 
-			plugin.addDecorator(currentDecorator);
 		}
 	}
 
@@ -1023,6 +1040,10 @@ public final class TraceAnalysisTool {
 	 *            The command line arguments.
 	 */
 	public static void main(final String[] args) {
+		TraceAnalysisTool.mainHelper(args, true);
+	}
+
+	public static void mainHelper(final String[] args, final boolean useSystemExit) {
 		boolean success = true;
 
 		try {
@@ -1053,7 +1074,7 @@ public final class TraceAnalysisTool {
 			System.err.println("See 'kieker.log' for details"); // NOPMD (System.out)
 		}
 
-		if (!success) {
+		if (!success && useSystemExit) {
 			System.exit(1);
 		} // else: terminate with success code (0)
 	}

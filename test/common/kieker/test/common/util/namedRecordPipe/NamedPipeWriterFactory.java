@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,12 +46,12 @@ public final class NamedPipeWriterFactory {
 	}
 
 	/**
-	 * Creates an {@link kieker.common.util.registry.IMonitoringRecordReceiver} that writes records
+	 * Creates an {@link kieker.common.namedRecordPipe.IPipeWriter} that writes records
 	 * to a {@link Pipe} with the given name.
 	 * 
 	 * @param pipeName
 	 *            The name of the pipe to use.
-	 * @return the {@link kieker.common.util.registry.IMonitoringRecordReceiver}
+	 * @return the {@link kieker.common.namedRecordPipe.IPipeWriter}
 	 */
 	public static final IPipeWriter createAndRegisterNamedPipeRecordWriter(final String pipeName) {
 		final Pipe namedPipe = Broker.INSTANCE.acquirePipe(pipeName);

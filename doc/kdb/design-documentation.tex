@@ -23,12 +23,12 @@ Kieker is a Java-centric monitoring framework. To open Kieker for other language
 
 The Kieker Data Bridge (KDB) is designed to provide this common platform. The KDB supports different sources of monitoring records and is embeddable in other tools such as Eclipse. In general the KDB receives records online through a connector, converts them to Kieker \texttt{IMonitoringRecord}s and serializes them with a Kieker writer.
 
-In the following, the overall design and architecture is explained in \autoref{s:design}. \autoref{s:using-kdb} provides basic information on the command line version of the KDB. \autoref{s:extension} illustrates the extension of the KDB. And \autoref{s:outlook} explains the future development.
+In the following, the overall design and architecture is explained in Section~\ref{s:design}. Section~\ref{s:using-kdb} provides basic information on the command line version of the KDB. Section~\ref{s:extension} illustrates the extension of the KDB. And Section~\ref{s:outlook} explains the future development.
 
 %%
 \section{Design and Architecture}\label{s:design}
 
-The internal architecture of the KDB uses an inversion of control pattern, where a \texttt{ServiceContainer} handles the processing of received records and steers Kieker to serialize the data. The container requires an service connector implementing the \texttt{IServiceConnector} to de-serialize records from information sources. The general architecture is illustrated in \autoref{fig:kdb-arch}
+The internal architecture of the KDB uses an inversion of control pattern, where a \texttt{ServiceContainer} handles the processing of received records and steers Kieker to serialize the data. The container requires a service connector implementing the \texttt{IServiceConnector} to de-serialize records from information sources. The general architecture is illustrated in \autoref{fig:kdb-arch}
 
 \begin{figure}[htb]
 \includegraphics[width=\textwidth]{images/kieker-data-bridge.pdf}
@@ -44,6 +44,7 @@ The \texttt{IServiceConnector} interface has three methods:
 \item \texttt{deserializeNextRecord()} which receives one new record
 \end{itemize}
 
+\noindent
 The \texttt{initialize()} method may block until the connection is established or an error occurs. However, it can also be implemented in a non-blocking way. The \texttt{deserializeNextRecord()} method must be blocking until a record is received, an error occurs, or the connection is terminated.
 
 The \texttt{ServiceContainer} comprises of a constructor and six service methods. The constructor requires a Kieker-configuration, a connector and a respawn flag. The latter flag is a debatable construct, but is allows to trigger reconnects for simple connectors. It might be removed in future versions of the bridge.
@@ -54,14 +55,16 @@ The \texttt{ServiceContainer} comprises of a constructor and six service methods
 The KDB comes with a command line server including the bridge with a wide set of parameters:
 
 \begin{lstlisting}[caption=Command line options of the Kieker Data Bridge]
-usage: cli-kieker-service [-c <configuration>] [-d] [-h <hostname>] -L
-       <paths> [-l <jms-url>] -m <map-file> [-p <number>] [-s] -t <type>
+usage: cli-kieker-service [-c <configuration>] [-d] 
+       [-h <hostname>] -L <paths> [-l <jms-url>] -m
+       <map-file> [-p <number>] [-s] -t <type>
        [-u <username>] [-v <arg>] [-w <password>]
  --c,--configuration <configuration>
         kieker configuration file
 
  --d,--daemon
-        detach from console; TCP server allows multiple connections
+        detach from console; TCP server allows multiple 
+        connections
 
  --h,--host <hostname>
         connect to server named <hostname>
@@ -76,15 +79,16 @@ usage: cli-kieker-service [-c <configuration>] [-d] [-h <hostname>] -L
         Class name to id (integer or string) mapping
 
  --p,--port <number>
-        listen at port (tcp-server or jms-embedded) or connect to port
-        (tcp-client)
+        listen at port (tcp-server or jms-embedded) or
+        connect to port (tcp-client)
 
  --s,--stats
         output performance statistics
 
  --t,--type <type>
-        select the service type: tcp-client, tcp-server,
-        tcp-single-server, jms-client, jms-embedded
+        select the service type: tcp-client,
+        tcp-server, tcp-single-server, 
+        jms-client, jms-embedded
 
  --u,--user <username>
         user name for a JMS service
@@ -96,6 +100,7 @@ usage: cli-kieker-service [-c <configuration>] [-d] [-h <hostname>] -L
         password for a JMS service
 \end{lstlisting}
 
+\noindent
 In addition the connectors can be initialized via a Configuration object determined by the \texttt{-c} option.
 
 %
@@ -177,7 +182,9 @@ The text format encodes all properties in one string. Values are separated by a 
 The KDB is designed to be extended to support other platforms and technologies. For a new platform and technology a connector must be implemented. The implementation of new connectors must adhere the \texttt{IServiceConnector} interface providing methods to initialize, transmit and close the connector. Furthermore it should inherit the \texttt{AbstractConnector} class for basic setup. Finally each connector must be annotated with the \texttt{ConnectorProperty} annotation to specify properties used in the command line version or the Eclipse plugin.
 
 \begin{lstlisting}[language=Java,caption=Example connector declaration]
-@ConnectorProperty(cmdName = "my-service", name = "My Service Demo Connector", description = "example connector for documentation.")
+@ConnectorProperty(cmdName = "my-service",
+  name = "My Service Demo Connector",
+  description = "example connector for documentation.")
 public class MyServiceConnector extends AbstractConnector {
 \end{lstlisting}
 
@@ -185,7 +192,8 @@ public class MyServiceConnector extends AbstractConnector {
 
 \begin{lstlisting}[language=Java,caption=Example constant for connector configuration and its accompanying property declaration]
 /** Property name for the host name of the record source. */
-public static final String PROPERTY = MyServiceConnector.class.getCanonicalName() + ".property";
+public static final String PROPERTY =
+  MyServiceConnector.class.getCanonicalName() + ".property";
 
 private String property;
 \end{lstlisting}

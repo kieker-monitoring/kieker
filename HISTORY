@@ -5,6 +5,22 @@ http://kieker-monitoring.net) contains details on the changes.
 
 Please refer to the Kieker User Guide for details on using Kieker.
 
+* 1.9 (April 16, 2014)
+- New features (selection)
+  - Binary monitoring writers using Java NIO 
+  - Support for DiSL probes
+  - Writer for exporting records to the ExplorViz tool for online
+    trace visualization
+  - Trace Analysis GUI (beta)
+  - TSLib: time series analysis library (beta)
+  - OPAD: online performance anomaly detection filters (beta)
+  - Live demo part of the Java EE example 
+  - TraceAnalysis: coloring of components and operations based on 
+    response times
+- Bug fixes and improvements to code, performance, tests, build scripts, 
+  documentation, examples
+- Improvements to the WebGUI (see separate `HISTORY` file)
+
 * 1.8 (October 16, 2013)
 - New features (selection)
   - Data Bridge: Facility to connect Kieker's Java core with other platforms

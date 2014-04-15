@@ -2,6 +2,7 @@ The Apache Software License - ASL - v2.0
 Project: http://www.csg.ci.i.u-tokyo.ac.jp/~chiba/javassist/
 Description: Java byte code manipulation library
 License: http://www.apache.org/licenses/LICENSE-2.0.txt
+Required by: reflection-0.9.9-RC1, used in CLIServerMain of the KDB to lookup connectors
 
 
                                  Apache License

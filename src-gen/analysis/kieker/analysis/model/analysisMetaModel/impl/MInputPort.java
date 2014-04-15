@@ -23,17 +23,16 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
  * <p>
  * The following features are implemented:
  * <ul>
- * <li>{@link kieker.analysis.model.analysisMetaModel.impl.MInputPort#getParent <em>Parent</em>}</li>
+ *   <li>{@link kieker.analysis.model.analysisMetaModel.impl.MInputPort#getParent <em>Parent</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @generated
  */
 public class MInputPort extends MPort implements MIInputPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	protected MInputPort() {
@@ -43,7 +42,6 @@ public class MInputPort extends MPort implements MIInputPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
@@ -54,30 +52,26 @@ public class MInputPort extends MPort implements MIInputPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public MIFilter getParent() {
-		if (eContainerFeatureID() != MIAnalysisMetaModelPackage.INPUT_PORT__PARENT)
-			return null;
-		return (MIFilter) eInternalContainer();
+		if (eContainerFeatureID() != MIAnalysisMetaModelPackage.INPUT_PORT__PARENT) return null;
+		return (MIFilter)eInternalContainer();
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public NotificationChain basicSetParent(MIFilter newParent, NotificationChain msgs) {
-		msgs = eBasicSetContainer((InternalEObject) newParent, MIAnalysisMetaModelPackage.INPUT_PORT__PARENT, msgs);
+		msgs = eBasicSetContainer((InternalEObject)newParent, MIAnalysisMetaModelPackage.INPUT_PORT__PARENT, msgs);
 		return msgs;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	public void setParent(MIFilter newParent) {
@@ -88,10 +82,9 @@ public class MInputPort extends MPort implements MIInputPort {
 			if (eInternalContainer() != null)
 				msgs = eBasicRemoveFromContainer(msgs);
 			if (newParent != null)
-				msgs = ((InternalEObject) newParent).eInverseAdd(this, MIAnalysisMetaModelPackage.FILTER__INPUT_PORTS, MIFilter.class, msgs);
+				msgs = ((InternalEObject)newParent).eInverseAdd(this, MIAnalysisMetaModelPackage.FILTER__INPUT_PORTS, MIFilter.class, msgs);
 			msgs = basicSetParent(newParent, msgs);
-			if (msgs != null)
-				msgs.dispatch();
+			if (msgs != null) msgs.dispatch();
 		}
 		else if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, MIAnalysisMetaModelPackage.INPUT_PORT__PARENT, newParent, newParent));
@@ -100,16 +93,15 @@ public class MInputPort extends MPort implements MIInputPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case MIAnalysisMetaModelPackage.INPUT_PORT__PARENT:
-			if (eInternalContainer() != null)
-				msgs = eBasicRemoveFromContainer(msgs);
-			return basicSetParent((MIFilter) otherEnd, msgs);
+			case MIAnalysisMetaModelPackage.INPUT_PORT__PARENT:
+				if (eInternalContainer() != null)
+					msgs = eBasicRemoveFromContainer(msgs);
+				return basicSetParent((MIFilter)otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
@@ -117,14 +109,13 @@ public class MInputPort extends MPort implements MIInputPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case MIAnalysisMetaModelPackage.INPUT_PORT__PARENT:
-			return basicSetParent(null, msgs);
+			case MIAnalysisMetaModelPackage.INPUT_PORT__PARENT:
+				return basicSetParent(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -132,14 +123,13 @@ public class MInputPort extends MPort implements MIInputPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
 		switch (eContainerFeatureID()) {
-		case MIAnalysisMetaModelPackage.INPUT_PORT__PARENT:
-			return eInternalContainer().eInverseRemove(this, MIAnalysisMetaModelPackage.FILTER__INPUT_PORTS, MIFilter.class, msgs);
+			case MIAnalysisMetaModelPackage.INPUT_PORT__PARENT:
+				return eInternalContainer().eInverseRemove(this, MIAnalysisMetaModelPackage.FILTER__INPUT_PORTS, MIFilter.class, msgs);
 		}
 		return super.eBasicRemoveFromContainerFeature(msgs);
 	}
@@ -147,14 +137,13 @@ public class MInputPort extends MPort implements MIInputPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case MIAnalysisMetaModelPackage.INPUT_PORT__PARENT:
-			return getParent();
+			case MIAnalysisMetaModelPackage.INPUT_PORT__PARENT:
+				return getParent();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -162,15 +151,14 @@ public class MInputPort extends MPort implements MIInputPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case MIAnalysisMetaModelPackage.INPUT_PORT__PARENT:
-			setParent((MIFilter) newValue);
-			return;
+			case MIAnalysisMetaModelPackage.INPUT_PORT__PARENT:
+				setParent((MIFilter)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -178,15 +166,14 @@ public class MInputPort extends MPort implements MIInputPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case MIAnalysisMetaModelPackage.INPUT_PORT__PARENT:
-			setParent((MIFilter) null);
-			return;
+			case MIAnalysisMetaModelPackage.INPUT_PORT__PARENT:
+				setParent((MIFilter)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -194,14 +181,13 @@ public class MInputPort extends MPort implements MIInputPort {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case MIAnalysisMetaModelPackage.INPUT_PORT__PARENT:
-			return getParent() != null;
+			case MIAnalysisMetaModelPackage.INPUT_PORT__PARENT:
+				return getParent() != null;
 		}
 		return super.eIsSet(featureID);
 	}

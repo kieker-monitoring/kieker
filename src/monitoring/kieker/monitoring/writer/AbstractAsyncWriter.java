@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -177,6 +177,30 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 				}
 				return true;
 			}
+		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
+			LOG.error("Failed to add new monitoring record to queue.", ex);
+			return false;
+		}
+	}
+
+	@Override
+	public final boolean newMonitoringRecordNonBlocking(final IMonitoringRecord monitoringRecord) {
+		try {
+			if (!this.blockingQueue.offer(monitoringRecord)) {
+				new Thread() {
+					@Override
+					public void run() {
+						try {
+							AbstractAsyncWriter.this.blockingQueue.put(monitoringRecord);
+							return;
+						} catch (final InterruptedException ignore) {
+							Thread.currentThread().interrupt(); // propagate interrupt
+						}
+					}
+				}.start();
+				return false;
+			}
+			return true;
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
 			LOG.error("Failed to add new monitoring record to queue.", ex);
 			return false;

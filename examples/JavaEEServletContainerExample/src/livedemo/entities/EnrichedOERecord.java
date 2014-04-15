@@ -29,7 +29,7 @@ import kieker.common.util.registry.IRegistry;
  * @since 1.9
  */
 public class EnrichedOERecord extends OperationExecutionRecord implements IMonitoringRecord {
-	public static final int SIZE = 60;
+	public static final int SIZE = (2 * TYPE_SIZE_STRING) + (3 * TYPE_SIZE_LONG) + TYPE_SIZE_STRING + (2 * TYPE_SIZE_INT) + TYPE_SIZE_LONG + (2 * TYPE_SIZE_STRING);
 	public static final Class<?>[] TYPES = {
 		String.class, // operationSignature
 		String.class, // sessionId
