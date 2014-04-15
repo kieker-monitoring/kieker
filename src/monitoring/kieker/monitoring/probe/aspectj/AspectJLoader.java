@@ -24,12 +24,17 @@ import java.util.Enumeration;
 import org.aspectj.bridge.Constants;
 import org.aspectj.weaver.loadtime.Agent;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
+
 /**
  * @author Nils Christian Ehmke, Jan Waller
  * 
  * @since 1.9
  */
 public final class AspectJLoader {
+
+	private final static Log LOG = LogFactory.getLog(AspectJLoader.class);
 
 	private AspectJLoader() {
 		// Avoid instantiation
@@ -43,6 +48,7 @@ public final class AspectJLoader {
 	 */
 	public static void premain(final String options, final Instrumentation instrumentation) {
 		if (AspectJLoader.noConfigurationFileAvailable()) {
+			LOG.info("No AspectJ configuration file found. Using Kieker's default AspectJ configuration file.");
 			AspectJLoader.addKiekerDefaultConfigFile();
 		}
 
@@ -53,6 +59,9 @@ public final class AspectJLoader {
 		if (Boolean.parseBoolean(System.getProperty("kieker.monitoring.skipDefaultAOPConfiguration"))) {
 			return false;
 		}
+
+		LOG.info("Using Kieker's AspectJLoader. This is not recommended for multi-classloader environments such as JavaEE and OSGI.");
+		LOG.info("Do disable Kieker's AspectJLoader use the additional VM parameter '-Dkieker.monitoring.skipDefaultAOPConfiguration=true'.");
 
 		if (null != System.getProperty("aj5.def")) {
 			return false;
