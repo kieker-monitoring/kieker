@@ -3,14 +3,11 @@ package de.chw.concurrent.alternative;
 import org.hamcrest.number.OrderingComparison;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import de.chw.concurrent.alternative.UntypedExceptionalCircularWorkStealingDeque;
 import de.chw.concurrent.alternative.UntypedExceptionalCircularWorkStealingDeque.DequeIsEmptyException;
 import de.chw.util.StopWatch;
 
-@Ignore
 public class UntypedExceptionalCircularWorkStealingDequeTest {
 
 	private StopWatch stopWatch;

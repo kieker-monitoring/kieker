@@ -31,12 +31,24 @@ import de.chw.concurrent.CircularArray;
 public class UntypedExceptionalCircularWorkStealingDeque {
 	public static class DequeIsEmptyException extends Exception {
 		private static final long serialVersionUID = -6685406255103741724L;
+
+		@SuppressWarnings("sync-override")
+		@Override
+		public Throwable fillInStackTrace() { // greatly improves performance
+			return null;
+		}
 	}
 
 	public static final DequeIsEmptyException DEQUE_IS_EMPTY_EXCEPTION = new DequeIsEmptyException();
 
 	public static class OperationAbortedException extends Exception {
 		private static final long serialVersionUID = 2983001853326344073L;
+
+		@SuppressWarnings("sync-override")
+		@Override
+		public Throwable fillInStackTrace() {// greatly improves performance
+			return null;
+		}
 	}
 
 	public static final OperationAbortedException OPERATION_ABORTED_EXCEPTION = new OperationAbortedException();
