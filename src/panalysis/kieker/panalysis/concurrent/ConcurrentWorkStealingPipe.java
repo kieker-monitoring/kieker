@@ -52,9 +52,8 @@ public class ConcurrentWorkStealingPipe<T> extends AbstractPipe<T, ConcurrentWor
 		this.circularWorkStealingDeque.pushBottom(token);
 	}
 
-	public void putMultiple(final List<T> items) {
-		// TODO Auto-generated method stub
-		// BETTER find a way to put multiple elements directly without a loop
+	public void putMultiple(final List<T> elements) {
+		this.circularWorkStealingDeque.pushBottomMultiple(elements);
 	}
 
 	@Override

@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import kieker.panalysis.base.AbstractDefaultFilter;
+import kieker.panalysis.base.Context;
 import kieker.panalysis.base.IInputPort;
 import kieker.panalysis.base.IOutputPort;
 
@@ -40,7 +41,11 @@ public class File2TextLinesFilter extends AbstractDefaultFilter<File2TextLinesFi
 
 	private final String charset = "UTF-8";
 
-	public boolean execute() {
+	/**
+	 * @since 1.10
+	 */
+	@Override
+	protected boolean execute(final Context<File2TextLinesFilter> context) {
 		final File file = this.tryTake(this.FILE);
 		if (file == null) {
 			return false;
@@ -71,4 +76,5 @@ public class File2TextLinesFilter extends AbstractDefaultFilter<File2TextLinesFi
 		}
 		return true;
 	}
+
 }

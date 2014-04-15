@@ -19,6 +19,7 @@ package kieker.panalysis.stage.composite;
 import java.util.Map;
 
 import kieker.panalysis.base.AbstractDefaultFilter;
+import kieker.panalysis.base.Context;
 import kieker.panalysis.base.IPipe;
 import kieker.panalysis.stage.File2TextLinesFilter;
 import kieker.panalysis.stage.TextLine2RecordFilter;
@@ -48,12 +49,19 @@ public class ReadRecordFromCsvFileFilter extends AbstractDefaultFilter<File2Text
 				.source(this.stage0.TEXT_LINE)
 				.target(this.stage1, this.stage1.TEXT_LINE);
 		// FIXME textLinePipe needs to be added to a group
+
+		/*
+		 * FIXME a composite filter only serves as a convenient way to connect multiple stages or to realize self-connected queues.<br>
+		 * How should the stage scheduler be aware of these internal stages?<br>
+		 * Should the context not be passed to each of the internal stages?
+		 */
 	}
 
 	/**
 	 * @since 1.10
 	 */
-	public boolean execute() {
+	@Override
+	protected boolean execute(final Context<File2TextLinesFilter> context) {
 		return this.stage0.execute();
 	}
 

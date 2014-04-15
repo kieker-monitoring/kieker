@@ -20,6 +20,7 @@ import java.util.Map;
 
 import kieker.common.util.filesystem.FSUtil;
 import kieker.panalysis.base.AbstractDefaultFilter;
+import kieker.panalysis.base.Context;
 import kieker.panalysis.base.IInputPort;
 
 /**
@@ -37,7 +38,11 @@ public class TextLine2MappingRegistryFilter extends AbstractDefaultFilter<TextLi
 		this.stringRegistry = stringRegistry;
 	}
 
-	public boolean execute() {
+	/**
+	 * @since 1.10
+	 */
+	@Override
+	protected boolean execute(final Context<TextLine2MappingRegistryFilter> context) {
 		final String textLine = this.tryTake(this.TEXT_LINE);
 		if (textLine == null) {
 			return false;

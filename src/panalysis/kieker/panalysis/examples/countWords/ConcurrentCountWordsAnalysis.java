@@ -149,6 +149,9 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 		System.out.println("Analysis finished."); // NOPMD (Just for example purposes)
 	}
 
+	/**
+	 * @since 1.10
+	 */
 	public static void main(final String[] args) {
 		final ConcurrentCountWordsAnalysis analysis = new ConcurrentCountWordsAnalysis();
 		analysis.init();

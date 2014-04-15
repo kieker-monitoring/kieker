@@ -17,6 +17,7 @@
 package kieker.panalysis.stage;
 
 import kieker.panalysis.base.AbstractDefaultFilter;
+import kieker.panalysis.base.Context;
 import kieker.panalysis.base.IInputPort;
 import kieker.panalysis.base.IOutputPort;
 
@@ -36,7 +37,8 @@ public class CountingFilter<T> extends AbstractDefaultFilter<CountingFilter<T>> 
 	/**
 	 * @since 1.10
 	 */
-	public boolean execute() {
+	@Override
+	protected boolean execute(final Context<CountingFilter<T>> context) {
 		final T inputObject = super.tryTake(this.INPUT_OBJECT);
 		if (inputObject == null) {
 			return false;

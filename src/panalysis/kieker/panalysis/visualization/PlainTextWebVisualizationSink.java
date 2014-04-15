@@ -17,6 +17,7 @@
 package kieker.panalysis.visualization;
 
 import kieker.panalysis.base.AbstractDefaultFilter;
+import kieker.panalysis.base.Context;
 import kieker.panalysis.base.IInputPort;
 
 /**
@@ -33,19 +34,32 @@ public class PlainTextWebVisualizationSink<T> extends AbstractDefaultFilter<Plai
 
 	private Object currentObject = "N/A";
 
+	/**
+	 * @since 1.10
+	 */
 	public String getHeader() {
 		return "";
 	}
 
+	/**
+	 * @since 1.10
+	 */
 	public String getInitialContent() {
 		return this.currentObject.toString();
 	}
 
+	/**
+	 * @since 1.10
+	 */
 	public String getUpdatedContent() {
 		return this.currentObject.toString();
 	}
 
-	public boolean execute() {
+	/**
+	 * @since 1.10
+	 */
+	@Override
+	protected boolean execute(final Context<PlainTextWebVisualizationSink<T>> context) {
 		final T object = this.tryTake(this.INPUT_OBJECT);
 		if (object == null) {
 			return false;

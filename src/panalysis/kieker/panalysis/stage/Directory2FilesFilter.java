@@ -22,6 +22,7 @@ import java.io.FileFilter;
 import kieker.common.util.filesystem.BinaryCompressionMethod;
 import kieker.common.util.filesystem.FSUtil;
 import kieker.panalysis.base.AbstractDefaultFilter;
+import kieker.panalysis.base.Context;
 import kieker.panalysis.base.IOutputPort;
 
 /**
@@ -49,7 +50,11 @@ public class Directory2FilesFilter extends AbstractDefaultFilter<Directory2Files
 		};
 	}
 
-	public boolean execute() {
+	/**
+	 * @since 1.10
+	 */
+	@Override
+	protected boolean execute(final Context<Directory2FilesFilter> context) {
 		final File inputDir = this.inputDirectory;
 
 		final File[] inputFiles = inputDir.listFiles(this.filter);

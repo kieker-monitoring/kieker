@@ -27,6 +27,7 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.panalysis.base.AbstractDefaultFilter;
+import kieker.panalysis.base.Context;
 import kieker.panalysis.base.IInputPort;
 import kieker.panalysis.base.IOutputPort;
 
@@ -51,11 +52,18 @@ public class TextLine2RecordFilter extends AbstractDefaultFilter<TextLine2Record
 	private boolean abortDueToUnknownRecordType;
 	private final Set<String> unknownTypesObserved = new HashSet<String>();
 
+	/**
+	 * @since 1.10
+	 */
 	public TextLine2RecordFilter(final Map<Integer, String> stringRegistry) {
 		this.stringRegistry = stringRegistry;
 	}
 
-	public boolean execute() {
+	/**
+	 * @since 1.10
+	 */
+	@Override
+	protected boolean execute(final Context<TextLine2RecordFilter> context) {
 		final String textLine = this.tryTake(this.TEXT_LINE);
 		if (textLine == null) {
 			return false;
@@ -84,6 +92,9 @@ public class TextLine2RecordFilter extends AbstractDefaultFilter<TextLine2Record
 		return true;
 	}
 
+	/**
+	 * @since 1.10
+	 */
 	private IMonitoringRecord createRecordFromLine(final String line) throws MonitoringRecordException, IllegalRecordFormatException, MappingException,
 			UnknownRecordTypeException {
 		final String[] recordFields = line.split(CSV_SEPARATOR_CHARACTER);
@@ -100,6 +111,9 @@ public class TextLine2RecordFilter extends AbstractDefaultFilter<TextLine2Record
 		}
 	}
 
+	/**
+	 * @since 1.10
+	 */
 	private IMonitoringRecord createModernRecordFromRecordFields(final String[] recordFields) throws MonitoringRecordException, MappingException,
 			UnknownRecordTypeException {
 		final Integer id = Integer.valueOf(recordFields[0].substring(1));
@@ -127,6 +141,9 @@ public class TextLine2RecordFilter extends AbstractDefaultFilter<TextLine2Record
 		return record;
 	}
 
+	/**
+	 * @since 1.10
+	 */
 	private Class<? extends IMonitoringRecord> getClassByName(final String classname) throws MonitoringRecordException, UnknownRecordTypeException {
 		try {
 			return AbstractMonitoringRecord.classForName(classname);
@@ -135,6 +152,9 @@ public class TextLine2RecordFilter extends AbstractDefaultFilter<TextLine2Record
 		}
 	}
 
+	/**
+	 * @since 1.10
+	 */
 	private IMonitoringRecord createLegacyRecordFromRecordFiels(final String[] recordFields) throws MonitoringRecordException {
 		final String[] recordFieldsReduced = new String[recordFields.length - 1];
 		System.arraycopy(recordFields, 1, recordFieldsReduced, 0, recordFields.length - 1);

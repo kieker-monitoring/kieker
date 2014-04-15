@@ -46,12 +46,14 @@ public abstract class AbstractPipe<T, P extends IPipe<T, P>> implements IPipe<T,
 		return (P) this;
 	}
 
+	// TODO remove if it does not add any new functionality
 	protected abstract void putInternal(T token);
 
 	public void put(final T token) {
 		this.putInternal(token);
 	}
 
+	// TODO remove if it does not add any new functionality
 	protected abstract T tryTakeInternal();
 
 	public final T tryTake() {

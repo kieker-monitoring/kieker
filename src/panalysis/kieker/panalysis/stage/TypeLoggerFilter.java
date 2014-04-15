@@ -19,6 +19,7 @@ package kieker.panalysis.stage;
 import java.io.PrintStream;
 
 import kieker.panalysis.base.AbstractDefaultFilter;
+import kieker.panalysis.base.Context;
 import kieker.panalysis.base.IInputPort;
 import kieker.panalysis.base.IOutputPort;
 
@@ -35,15 +36,25 @@ public class TypeLoggerFilter<T> extends AbstractDefaultFilter<TypeLoggerFilter<
 
 	private final PrintStream printStream;
 
+	/**
+	 * @since 1.10
+	 */
 	private TypeLoggerFilter() {
 		this.printStream = System.out;
 	}
 
+	/**
+	 * @since 1.10
+	 */
 	public static <T> TypeLoggerFilter<T> create() {
 		return new TypeLoggerFilter<T>();
 	}
 
-	public boolean execute() {
+	/**
+	 * @since 1.10
+	 */
+	@Override
+	protected boolean execute(final Context<TypeLoggerFilter<T>> context) {
 		final T inputObject = super.tryTake(this.INPUT_OBJECT);
 		if (inputObject == null) {
 			return false;
