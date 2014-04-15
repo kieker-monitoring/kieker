@@ -25,6 +25,9 @@ import kieker.panalysis.base.IOutputPort;
  * @author Christian Wulf
  * 
  * @since 1.10
+ * 
+ * @param T
+ *            the type of the input port and the output ports
  */
 public class Distributor<T> extends AbstractFilter<Distributor<T>> {
 
@@ -37,10 +40,16 @@ public class Distributor<T> extends AbstractFilter<Distributor<T>> {
 	 * @since 1.10
 	 */
 	public Distributor(int numOutputPorts) {
+		this();
 		while (numOutputPorts-- > 0) {
-			this.createOutputPort();
+			this.getNewOutputPort();
 		}
 	}
+
+	/**
+	 * @since 1.10
+	 */
+	public Distributor() {}
 
 	@Override
 	protected boolean execute(final Context<Distributor<T>> context) {
@@ -72,5 +81,14 @@ public class Distributor<T> extends AbstractFilter<Distributor<T>> {
 	public IOutputPort<Distributor<T>, T> getOutputPort(final int portIndex) {
 		final IOutputPort<Distributor<T>, ?> port = this.getOutputPorts().get(portIndex);
 		return (IOutputPort<Distributor<T>, T>) port;
+	}
+
+	/**
+	 * @since 1.10
+	 * @return
+	 */
+	public IOutputPort<Distributor<T>, T> getNewOutputPort() {
+		final IOutputPort<Distributor<T>, T> newOutputPort = this.createOutputPort();
+		return newOutputPort;
 	}
 }

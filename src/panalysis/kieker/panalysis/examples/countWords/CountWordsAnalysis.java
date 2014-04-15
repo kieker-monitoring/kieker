@@ -82,18 +82,18 @@ public class CountWordsAnalysis extends Analysis {
 				.target(this.distributor, this.distributor.OBJECT));
 
 		this.pipeline.add(new MethodCallPipe<File>()
-				.source(this.distributor.getOutputPort(0))
+				.source(this.distributor.getNewOutputPort())
 				.target(this.countWordsStage0, this.countWordsStage0.FILE));
 		this.pipeline.add(new MethodCallPipe<File>()
-				.source(this.distributor.getOutputPort(1))
+				.source(this.distributor.getNewOutputPort())
 				.target(this.countWordsStage1, this.countWordsStage1.FILE));
 
 		this.pipeline.add(new MethodCallPipe<Pair<File, Integer>>()
 				.source(this.countWordsStage0.WORDSCOUNT)
-				.target(this.merger, this.merger.getInputPort(0)));
+				.target(this.merger, this.merger.getNewInputPort()));
 		this.pipeline.add(new MethodCallPipe<Pair<File, Integer>>()
 				.source(this.countWordsStage1.WORDSCOUNT)
-				.target(this.merger, this.merger.getInputPort(1)));
+				.target(this.merger, this.merger.getNewInputPort()));
 
 		this.pipeline.add(new MethodCallPipe<Pair<File, Integer>>()
 				.source(this.merger.OBJECT)

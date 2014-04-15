@@ -158,7 +158,7 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	 * @since 1.10
 	 * @return a new input port that accepts elements of the particular type that is specified in the variable declaration.
 	 */
-	public <T> IInputPort<S, T> createInputPort() {
+	protected <T> IInputPort<S, T> createInputPort() {
 		final IInputPort<S, T> inputPort = new InputPortImpl<S, T>();
 		this.inputPorts.add(inputPort);
 		return inputPort;
@@ -169,7 +169,7 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	 * @param stage
 	 * @return
 	 */
-	public <T> IOutputPort<S, T> createOutputPort() {
+	protected <T> IOutputPort<S, T> createOutputPort() {
 		final IOutputPort<S, T> outputPort = new OutputPortImpl<S, T>();
 		this.outputPorts.add(outputPort);
 		return outputPort;
