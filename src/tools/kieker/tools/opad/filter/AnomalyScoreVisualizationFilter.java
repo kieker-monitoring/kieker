@@ -26,7 +26,6 @@ import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
-import kieker.analysis.plugin.filter.sink.CPUUtilizationDisplayFilter;
 import kieker.common.configuration.Configuration;
 import kieker.tools.opad.record.StorableDetectionResult;
 
@@ -38,9 +37,8 @@ import kieker.tools.opad.record.StorableDetectionResult;
  * @since 1.9
  */
 @Plugin(configuration = {
-	@Property(
-			name = CPUUtilizationDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES,
-			defaultValue = CPUUtilizationDisplayFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES) })
+	@Property(name = AnomalyScoreVisualizationFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES,
+			defaultValue = AnomalyScoreVisualizationFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES) })
 public class AnomalyScoreVisualizationFilter extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME_EVENTS = "inputEvents";

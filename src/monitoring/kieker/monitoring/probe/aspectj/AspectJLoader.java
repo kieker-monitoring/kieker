@@ -34,7 +34,7 @@ import kieker.common.logging.LogFactory;
  */
 public final class AspectJLoader {
 
-	private final static Log LOG = LogFactory.getLog(AspectJLoader.class);
+	private static final Log LOG = LogFactory.getLog(AspectJLoader.class);
 
 	private AspectJLoader() {
 		// Avoid instantiation
