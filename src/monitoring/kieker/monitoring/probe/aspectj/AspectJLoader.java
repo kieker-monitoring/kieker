@@ -33,8 +33,9 @@ import kieker.common.logging.LogFactory;
  * @since 1.9
  */
 public final class AspectJLoader {
-
 	private static final Log LOG = LogFactory.getLog(AspectJLoader.class);
+
+	public static final String KIEKER_MONITORING_SKIP_DEFAULT_AOP_CONFIGURATION = "kieker.monitoring.skipDefaultAOPConfiguration";
 
 	private AspectJLoader() {
 		// Avoid instantiation
@@ -56,12 +57,12 @@ public final class AspectJLoader {
 	}
 
 	private static boolean noConfigurationFileAvailable() {
-		if (Boolean.parseBoolean(System.getProperty("kieker.monitoring.skipDefaultAOPConfiguration"))) {
+		if (Boolean.getBoolean(KIEKER_MONITORING_SKIP_DEFAULT_AOP_CONFIGURATION)) {
 			return false;
 		}
 
 		LOG.info("Using Kieker's AspectJLoader. This is not recommended for multi-classloader environments such as JavaEE and OSGI.");
-		LOG.info("To disable Kieker's AspectJLoader use the additional VM parameter '-Dkieker.monitoring.skipDefaultAOPConfiguration=true'.");
+		LOG.info("To disable Kieker's AspectJLoader use the additional VM parameter '-D" + KIEKER_MONITORING_SKIP_DEFAULT_AOP_CONFIGURATION + "=true'.");
 
 		if (null != System.getProperty("aj5.def")) {
 			return false;
