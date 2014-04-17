@@ -1,4 +1,4 @@
-package kieker.panalysis.base;
+package kieker.panalysis.framework.concurrent;
 
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
@@ -10,8 +10,14 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import kieker.common.configuration.Configuration;
-import kieker.panalysis.concurrent.ConcurrentWorkStealingPipe;
-import kieker.panalysis.concurrent.SingleProducerSingleConsumerPipe;
+import kieker.panalysis.framework.core.IInputPort;
+import kieker.panalysis.framework.core.IOutputPort;
+import kieker.panalysis.framework.core.IPipe;
+import kieker.panalysis.framework.core.ISink;
+import kieker.panalysis.framework.core.ISource;
+import kieker.panalysis.framework.core.IStage;
+import kieker.panalysis.framework.core.IoStage;
+import kieker.panalysis.framework.sequential.MethodCallPipe;
 
 public class ConcurrentPipeline {
 

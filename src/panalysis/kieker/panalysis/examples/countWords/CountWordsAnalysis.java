@@ -20,9 +20,9 @@ import java.io.File;
 
 import de.chw.util.Pair;
 
-import kieker.panalysis.base.Analysis;
-import kieker.panalysis.base.MethodCallPipe;
-import kieker.panalysis.base.Pipeline;
+import kieker.panalysis.framework.core.Analysis;
+import kieker.panalysis.framework.sequential.MethodCallPipe;
+import kieker.panalysis.framework.sequential.Pipeline;
 import kieker.panalysis.stage.basic.Distributor;
 import kieker.panalysis.stage.basic.Merger;
 import kieker.panalysis.stage.basic.RepeaterSource;

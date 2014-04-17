@@ -1,4 +1,4 @@
-package kieker.panalysis.base;
+package kieker.panalysis.framework.core;
 
 abstract class AbstractPort<S extends IStage, T> implements IPort<S, T> {
 

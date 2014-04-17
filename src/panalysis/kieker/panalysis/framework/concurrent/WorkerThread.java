@@ -14,12 +14,11 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.panalysis.concurrent;
+package kieker.panalysis.framework.concurrent;
 
-import kieker.panalysis.base.AbstractFilter;
-import kieker.panalysis.base.IStage;
-import kieker.panalysis.base.Pipeline;
-import kieker.panalysis.base.TerminationPolicy;
+import kieker.panalysis.framework.core.AbstractFilter;
+import kieker.panalysis.framework.core.IStage;
+import kieker.panalysis.framework.sequential.Pipeline;
 
 /**
  * @author Christian Wulf

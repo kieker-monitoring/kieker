@@ -16,7 +16,7 @@
 
 package kieker.panalysis.stage.composite;
 
-import kieker.panalysis.base.IPipe;
+import kieker.panalysis.framework.core.IPipe;
 import kieker.panalysis.stage.CountingFilter;
 
 /**

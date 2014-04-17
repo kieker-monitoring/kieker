@@ -1,4 +1,4 @@
-package kieker.panalysis.base;
+package kieker.panalysis.framework.core;
 
 import java.util.HashMap;
 import java.util.LinkedList;

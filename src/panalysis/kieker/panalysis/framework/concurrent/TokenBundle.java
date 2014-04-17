@@ -1,4 +1,4 @@
-package kieker.panalysis.concurrent;
+package kieker.panalysis.framework.concurrent;
 
 import java.util.List;
 

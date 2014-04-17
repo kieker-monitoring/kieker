@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.panalysis.concurrent;
+package kieker.panalysis.framework.concurrent;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -22,7 +22,7 @@ import java.util.List;
 
 import de.chw.concurrent.CircularWorkStealingDeque;
 
-import kieker.panalysis.base.AbstractPipe;
+import kieker.panalysis.framework.core.AbstractPipe;
 
 /**
  * @author Christian Wulf

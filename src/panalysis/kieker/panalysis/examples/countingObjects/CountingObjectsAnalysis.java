@@ -18,10 +18,10 @@ package kieker.panalysis.examples.countingObjects;
 
 import java.io.File;
 
-import kieker.panalysis.base.Analysis;
-import kieker.panalysis.base.MethodCallPipe;
-import kieker.panalysis.base.Pipeline;
 import kieker.panalysis.examples.countWords.DirectoryName2Files;
+import kieker.panalysis.framework.core.Analysis;
+import kieker.panalysis.framework.sequential.MethodCallPipe;
+import kieker.panalysis.framework.sequential.Pipeline;
 import kieker.panalysis.stage.TypeLoggerFilter;
 import kieker.panalysis.stage.basic.RepeaterSource;
 import kieker.panalysis.stage.composite.CycledCountingFilter;

@@ -14,13 +14,17 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.panalysis.base;
+package kieker.panalysis.framework.sequential;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import kieker.panalysis.framework.core.AbstractFilter;
+import kieker.panalysis.framework.core.IPipe;
+import kieker.panalysis.framework.core.IStage;
 
 /**
  * @author Christian Wulf

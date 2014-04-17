@@ -14,23 +14,24 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.panalysis.base;
+package kieker.panalysis.framework.core;
 
 /**
- * 
  * @author Christian Wulf
  * 
  * @since 1.10
- * 
- * @param <S>
  */
-public interface ISink<S extends IStage> extends IStage {
+public class Analysis {
 
-	/**
-	 * @since 1.10
-	 * 
-	 * @param targetPort
-	 */
-	void onSignalClosing(IInputPort<S, ?> targetPort);
+	public void init() {
 
+	}
+
+	public void start() {
+
+	}
+
+	public void terminate() {
+
+	}
 }

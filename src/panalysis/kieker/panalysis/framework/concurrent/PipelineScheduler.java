@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.panalysis.concurrent;
+package kieker.panalysis.framework.concurrent;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -24,8 +24,8 @@ import java.util.Map;
 
 import de.chw.util.CyclicIterator;
 
-import kieker.panalysis.base.IStage;
-import kieker.panalysis.base.Pipeline;
+import kieker.panalysis.framework.core.IStage;
+import kieker.panalysis.framework.sequential.Pipeline;
 
 /**
  * @author Christian Wulf

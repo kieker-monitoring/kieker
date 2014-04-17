@@ -16,9 +16,9 @@
 
 package kieker.panalysis.visualization;
 
-import kieker.panalysis.base.AbstractDefaultFilter;
-import kieker.panalysis.base.Context;
-import kieker.panalysis.base.IInputPort;
+import kieker.panalysis.framework.core.AbstractDefaultFilter;
+import kieker.panalysis.framework.core.Context;
+import kieker.panalysis.framework.core.IInputPort;
 
 /**
  * @author Nils Christian Ehmke, Christian Wulf

@@ -1,12 +1,12 @@
-package kieker.panalysis.concurrent;
+package kieker.panalysis.framework.concurrent;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import kieker.panalysis.base.AbstractFilter;
-import kieker.panalysis.base.Context;
-import kieker.panalysis.base.IInputPort;
-import kieker.panalysis.base.IOutputPort;
+import kieker.panalysis.framework.core.AbstractFilter;
+import kieker.panalysis.framework.core.Context;
+import kieker.panalysis.framework.core.IInputPort;
+import kieker.panalysis.framework.core.IOutputPort;
 
 public class TokenBundler<T> extends AbstractFilter<TokenBundler<T>> {
 

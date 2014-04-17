@@ -14,18 +14,43 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.panalysis.base;
+package kieker.panalysis.framework.core;
 
-class InputPortImpl<S extends IStage, T> extends AbstractPort<S, T> implements IInputPort<S, T> {
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 
-	private volatile State state = State.OPEN;
+/**
+ * @author Christian Wulf
+ * 
+ * @since 1.10
+ */
+public abstract class AbstractStage implements IStage {
 
-	public void setState(final State state) {
-		this.state = state;
+	protected int id;
+
+	/**
+	 * A unique logger instance per stage instance
+	 */
+	protected Log logger;
+
+	public AbstractStage() {
+		this.logger = LogFactory.getLog(Long.toString(this.id));
 	}
 
-	public State getState() {
-		return this.state;
+	public int getId() {
+		return this.id;
 	}
 
+	public void setId(final int id) {
+		this.id = id;
+	}
+
+	public void cleanUp() { // NOPMD (empty non-abstract method is intended)
+		// empty default implementation
+	}
+
+	@Override
+	public String toString() {
+		return "{" + "id=" + this.id + ", class=" + this.getClass().getSimpleName() + "}";
+	}
 }

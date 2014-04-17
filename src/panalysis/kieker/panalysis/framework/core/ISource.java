@@ -14,24 +14,14 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.panalysis.base;
+package kieker.panalysis.framework.core;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
+ * 
  */
-public class Analysis {
+public interface ISource extends IStage {
 
-	public void init() {
-
-	}
-
-	public void start() {
-
-	}
-
-	public void terminate() {
-
-	}
 }

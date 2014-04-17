@@ -21,9 +21,9 @@ import java.io.FileFilter;
 
 import kieker.common.util.filesystem.BinaryCompressionMethod;
 import kieker.common.util.filesystem.FSUtil;
-import kieker.panalysis.base.AbstractDefaultFilter;
-import kieker.panalysis.base.Context;
-import kieker.panalysis.base.IOutputPort;
+import kieker.panalysis.framework.core.AbstractDefaultFilter;
+import kieker.panalysis.framework.core.Context;
+import kieker.panalysis.framework.core.IOutputPort;
 
 /**
  * @author Christian Wulf

@@ -14,14 +14,17 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.panalysis.base;
+package kieker.panalysis.framework.concurrent;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
- * 
  */
-public interface ISource extends IStage {
+public enum TerminationPolicy {
+
+	TERMINATE_STAGE_NOW,
+	TERMINATE_STAGE_AFTER_UNSUCCESSFUL_EXECUTION,
+	TERMINATE_STAGE_AFTER_EXECUTION,
 
 }

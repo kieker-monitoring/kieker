@@ -14,9 +14,14 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.panalysis.base;
+package kieker.panalysis.framework.sequential;
 
 import java.util.List;
+
+import kieker.panalysis.framework.core.AbstractPipe;
+import kieker.panalysis.framework.core.IInputPort;
+import kieker.panalysis.framework.core.ISink;
+import kieker.panalysis.framework.core.IStage;
 
 /**
  * @author Christian Wulf

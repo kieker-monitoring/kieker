@@ -16,10 +16,10 @@
 
 package kieker.panalysis.stage.basic;
 
-import kieker.panalysis.base.AbstractFilter;
-import kieker.panalysis.base.Context;
-import kieker.panalysis.base.IInputPort;
-import kieker.panalysis.base.IOutputPort;
+import kieker.panalysis.framework.core.AbstractFilter;
+import kieker.panalysis.framework.core.Context;
+import kieker.panalysis.framework.core.IInputPort;
+import kieker.panalysis.framework.core.IOutputPort;
 
 /**
  * 

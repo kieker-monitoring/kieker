@@ -14,17 +14,23 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.panalysis.base;
+package kieker.panalysis.framework.core;
 
 /**
+ * 
  * @author Christian Wulf
  * 
  * @since 1.10
+ * 
+ * @param <S>
  */
-public enum TerminationPolicy {
+public interface ISink<S extends IStage> extends IStage {
 
-	TERMINATE_STAGE_NOW,
-	TERMINATE_STAGE_AFTER_UNSUCCESSFUL_EXECUTION,
-	TERMINATE_STAGE_AFTER_EXECUTION,
+	/**
+	 * @since 1.10
+	 * 
+	 * @param targetPort
+	 */
+	void onSignalClosing(IInputPort<S, ?> targetPort);
 
 }

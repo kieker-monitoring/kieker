@@ -1,9 +1,9 @@
-package kieker.panalysis.concurrent;
+package kieker.panalysis.framework.concurrent;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import kieker.panalysis.base.AbstractPipe;
+import kieker.panalysis.framework.core.AbstractPipe;
 
 public class SingleProducerSingleConsumerPipe<T> extends AbstractPipe<T, SingleProducerSingleConsumerPipe<T>> {
 
