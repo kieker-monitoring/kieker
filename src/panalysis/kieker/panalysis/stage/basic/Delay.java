@@ -1,4 +1,4 @@
-package kieker.panalysis.stage;
+package kieker.panalysis.stage.basic;
 
 import kieker.panalysis.base.AbstractDefaultFilter;
 import kieker.panalysis.base.Context;

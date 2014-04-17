@@ -89,6 +89,11 @@ public interface IPipe<T, P extends IPipe<T, P>> {
 	/**
 	 * @since 1.10
 	 */
+	<S extends ISink<S>> P target(final IInputPort<S, T> targetPort);
+
+	/**
+	 * @since 1.10
+	 */
 	void copyAllOtherPipes(List<P> pipesOfGroup);
 
 }

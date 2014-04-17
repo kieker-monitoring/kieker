@@ -110,43 +110,4 @@ public class ConcurrentWorkStealingPipe<T> extends AbstractPipe<T, ConcurrentWor
 		return this.getClass().getSimpleName() + "={" + "numTakenElements=" + this.numTakenElements + "}";
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = (prime * result) + ((this.allOtherPipes == null) ? 0 : this.allOtherPipes.hashCode());
-		result = (prime * result) + ((this.circularWorkStealingDeque == null) ? 0 : this.circularWorkStealingDeque.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(final Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (this.getClass() != obj.getClass()) {
-			return false;
-		}
-		@SuppressWarnings("rawtypes")
-		final ConcurrentWorkStealingPipe other = (ConcurrentWorkStealingPipe) obj;
-		if (this.allOtherPipes == null) {
-			if (other.allOtherPipes != null) {
-				return false;
-			}
-		} else if (!this.allOtherPipes.equals(other.allOtherPipes)) {
-			return false;
-		}
-		if (this.circularWorkStealingDeque == null) {
-			if (other.circularWorkStealingDeque != null) {
-				return false;
-			}
-		} else if (!this.circularWorkStealingDeque.equals(other.circularWorkStealingDeque)) {
-			return false;
-		}
-		return true;
-	}
-
 }

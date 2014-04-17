@@ -67,6 +67,12 @@ public class MethodCallPipe<T> extends AbstractPipe<T, MethodCallPipe<T>> {
 		return super.target(targetStage, targetPort);
 	}
 
+	@Override
+	public <S extends ISink<S>> MethodCallPipe<T> target(final IInputPort<S, T> targetPort) {
+		this.targetStage = targetPort.getOwningStage();
+		return super.target(targetPort);
+	}
+
 	public void copyAllOtherPipes(final List<MethodCallPipe<T>> pipesOfGroup) {
 		// is not needed in a synchronous execution
 	}
@@ -74,7 +80,7 @@ public class MethodCallPipe<T> extends AbstractPipe<T, MethodCallPipe<T>> {
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = 1;
+		int result = super.hashCode();
 		result = (prime * result) + ((this.targetStage == null) ? 0 : this.targetStage.hashCode());
 		return result;
 	}
@@ -84,7 +90,7 @@ public class MethodCallPipe<T> extends AbstractPipe<T, MethodCallPipe<T>> {
 		if (this == obj) {
 			return true;
 		}
-		if (obj == null) {
+		if (!super.equals(obj)) {
 			return false;
 		}
 		if (this.getClass() != obj.getClass()) {

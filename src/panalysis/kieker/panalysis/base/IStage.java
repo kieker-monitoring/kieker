@@ -21,7 +21,7 @@ package kieker.panalysis.base;
  * 
  * @since 1.10
  */
-public interface IStage {
+public interface IStage extends Cloneable {
 
 	/**
 	 * @since 1.10

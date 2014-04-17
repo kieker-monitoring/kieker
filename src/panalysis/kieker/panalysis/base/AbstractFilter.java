@@ -32,10 +32,7 @@ import java.util.List;
  */
 public abstract class AbstractFilter<S extends IStage> extends AbstractStage implements ISink<S>, ISource {
 
-	protected boolean mayBeDisabled;
-
-	private final int numPushedElements = 0;
-	private final int numTakenElements = 0;
+	protected volatile boolean mayBeDisabled;
 
 	private final List<IInputPort<S, ?>> inputPorts = new ArrayList<IInputPort<S, ?>>();
 	private final List<IInputPort<S, ?>> readOnlyInputPorts = Collections.unmodifiableList(this.inputPorts);
@@ -44,6 +41,12 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	private final List<IOutputPort<S, ?>> readOnlyOutputPorts = Collections.unmodifiableList(this.outputPorts);
 
 	private Context<S> context;
+
+	// private final Configuration configuration;
+	//
+	// public AbstractFilter(final Configuration configuration) {
+	// this.configuration = configuration;
+	// }
 
 	// private TaskBundle taskBundle;
 	// private final int numTasksThreshold = 100;
@@ -97,7 +100,7 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	 * @since 1.10
 	 */
 	public void onPipelineStarts() {
-		this.context = new Context<S>(this.readOnlyInputPorts, this.readOnlyOutputPorts);
+		this.context = new Context<S>(this.readOnlyInputPorts);
 	}
 
 	/**
@@ -105,8 +108,15 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	 */
 	public void onSignalClosing(final IInputPort<S, ?> inputPort) {
 		inputPort.setState(IInputPort.State.CLOSING);
-		System.out.println("Closing " + inputPort + " of " + this.toString());
+		System.out.println("Closed " + inputPort + " of " + this.toString());
 
+		this.checkWhetherThisStageMayBeDisabled();
+	}
+
+	/**
+	 * @since 1.10
+	 */
+	private void checkWhetherThisStageMayBeDisabled() {
 		for (final IInputPort<S, ?> iport : this.inputPorts) {
 			if (iport.getState() != IInputPort.State.CLOSING) {
 				return;
@@ -123,6 +133,9 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	public void fireSignalClosingToAllInputPorts() {
 		for (final IInputPort<S, ?> port : this.inputPorts) {
 			this.onSignalClosing(port);
+		}
+		if (this.inputPorts.isEmpty()) {
+			this.checkWhetherThisStageMayBeDisabled();
 		}
 	}
 
@@ -150,8 +163,7 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	@Override
 	public String toString() {
 		final String s = super.toString();
-		return "{" + s + ": " + "numPushedElements=" + this.numPushedElements + ", " + "numTakenElements=" + this.numTakenElements
-				+ "}";
+		return "{" + s + ": " + "numPushedElements=" + this.context + "}";
 	}
 
 	/**
@@ -160,6 +172,7 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	 */
 	protected <T> IInputPort<S, T> createInputPort() {
 		final IInputPort<S, T> inputPort = new InputPortImpl<S, T>();
+		((AbstractPort<S, T>) inputPort).setOwningStage((S) this);
 		this.inputPorts.add(inputPort);
 		return inputPort;
 	}
@@ -171,6 +184,7 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	 */
 	protected <T> IOutputPort<S, T> createOutputPort() {
 		final IOutputPort<S, T> outputPort = new OutputPortImpl<S, T>();
+		((AbstractPort<S, T>) outputPort).setOwningStage((S) this);
 		this.outputPorts.add(outputPort);
 		return outputPort;
 	}
@@ -180,7 +194,8 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	 * @return
 	 * 
 	 */
-	protected List<IInputPort<S, ?>> getInputPorts() {
+	// FIXME hide vis to protected
+	public List<IInputPort<S, ?>> getInputPorts() {
 		return this.readOnlyInputPorts;
 	}
 

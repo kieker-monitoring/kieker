@@ -1,7 +1,7 @@
 package kieker.panalysis.base;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -10,25 +10,22 @@ public class Context<S extends IStage> {
 
 	private final Map<IPipe<Object, ?>, List<Object>> pipesTakenFrom;
 
-	// private final Map<IOutputPort<S, ?>, List<Object>> pipesPutTo;
-
 	// statistics values
 	private int numPushedElements = 0;
 	private int numTakenElements = 0;
 
-	@SuppressWarnings("unchecked")
-	public Context(final List<IInputPort<S, ?>> allInputPorts, final List<IOutputPort<S, ?>> allOutputPorts) {
-		final Map<IPipe<Object, ?>, List<Object>> map = new HashMap<IPipe<Object, ?>, List<Object>>(allInputPorts.size());
-		for (final IInputPort<S, ?> inputPort : allInputPorts) {
-			final IPipe<?, ?> associatedPipe = inputPort.getAssociatedPipe();
-			map.put((IPipe<Object, ?>) associatedPipe, new ArrayList<Object>());
-		}
-		this.pipesTakenFrom = map;
+	public Context(final List<IInputPort<S, ?>> allInputPorts) {
+		this.pipesTakenFrom = this.createPipeMap(allInputPorts);
+	}
 
-		// this.pipesPutTo = new HashMap<IOutputPort<S, Object>, List<Object>>(allOutputPorts.size());
-		// for (final IOutputPort<S, Object> outputPort : allOutputPorts) {
-		// this.pipesPutTo.put(outputPort, new LinkedList<Object>());
-		// }
+	@SuppressWarnings("unchecked")
+	private Map<IPipe<Object, ?>, List<Object>> createPipeMap(final List<? extends IPort<S, ?>> allPorts) {
+		final Map<IPipe<Object, ?>, List<Object>> pipeMap = new HashMap<IPipe<Object, ?>, List<Object>>(allPorts.size());
+		for (final IPort<S, ?> outputPort : allPorts) {
+			final IPipe<?, ?> associatedPipe = outputPort.getAssociatedPipe();
+			pipeMap.put((IPipe<Object, ?>) associatedPipe, new LinkedList<Object>());
+		}
+		return pipeMap;
 	}
 
 	/**
@@ -41,7 +38,6 @@ public class Context<S extends IStage> {
 			// BETTER return a NullObject rather than checking for null
 		}
 		associatedPipe.put(object);
-		// this.pipesPutTo.get(associatedPipe).add(object);
 		this.numPushedElements++;
 	}
 
@@ -72,10 +68,6 @@ public class Context<S extends IStage> {
 		for (final List<Object> takenElements : this.pipesTakenFrom.values()) {
 			takenElements.clear();
 		}
-
-		// for (final List<?> putElements : this.pipesPutTo.values()) {
-		// putElements.clear();
-		// }
 	}
 
 	void rollback() {
@@ -88,9 +80,10 @@ public class Context<S extends IStage> {
 				associatedPipe.put(element);
 			}
 		}
+	}
 
-		// for (final Entry<IOutputPort<S, ? extends O>, List<O>> putElements : this.pipesPutTo.entrySet()) {
-		// entry
-		// }
+	@Override
+	public String toString() {
+		return "{" + "numPushedElements=" + this.numPushedElements + ", " + "numTakenElements=" + this.numTakenElements + "}";
 	}
 }

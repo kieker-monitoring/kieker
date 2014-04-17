@@ -17,6 +17,7 @@
 package kieker.panalysis.base;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -40,14 +41,14 @@ public class Pipeline<P extends IPipe<?, P>> {
 
 	/**
 	 * The default constructor.<br>
-	 * <i>More constructors are available via the static method <code>create(..)</code></i>
+	 * <i>Public constructors are available via the static method <code>create(..)</code></i>
 	 * 
 	 * @see for example, {@link #create(Map)}
 	 * 
 	 * @since 1.10
 	 */
 	private Pipeline() {
-		this(null);
+		this(new HashMap<Integer, List<P>>());
 	}
 
 	/**
@@ -102,7 +103,7 @@ public class Pipeline<P extends IPipe<?, P>> {
 		if (this.startStages.size() == 0) {
 			throw new IllegalStateException("You need to define at least one start stage.");
 		} else if (this.startStages.size() == 1) {
-			this.stages.get(0).execute();
+			// this.startStages.get(0).execute();
 		} else {
 			// TODO create a single distributor stage as start stage
 			throw new IllegalStateException("Multiple start stages are not yet supported.");

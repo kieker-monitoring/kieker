@@ -10,34 +10,34 @@ import kieker.panalysis.base.IOutputPort;
  * 
  * @since 1.10
  */
-public class TypeFilter<T> extends AbstractDefaultFilter<TypeFilter<T>> {
+public class ExactTypeFilter<T> extends AbstractDefaultFilter<ExactTypeFilter<T>> {
 
-	public final IInputPort<TypeFilter<T>, Object> INPUT_OBJECT = this.createInputPort();
+	public final IInputPort<ExactTypeFilter<T>, Object> INPUT_OBJECT = this.createInputPort();
 
-	public final IOutputPort<TypeFilter<T>, Object> OUTPUT_MATCHING = this.createOutputPort();
-	public final IOutputPort<TypeFilter<T>, Object> OUTPUT_MISMATCHING = this.createOutputPort();
+	public final IOutputPort<ExactTypeFilter<T>, Object> OUTPUT_MATCHING = this.createOutputPort();
+	public final IOutputPort<ExactTypeFilter<T>, Object> OUTPUT_MISMATCHING = this.createOutputPort();
 
 	private final Class<T> typeToFilter;
 
 	/**
 	 * @since 1.10
 	 */
-	private TypeFilter(final Class<T> typeToFilter) {
+	private ExactTypeFilter(final Class<T> typeToFilter) {
 		this.typeToFilter = typeToFilter;
 	}
 
 	/**
 	 * @since 1.10
 	 */
-	public static <T> TypeFilter<T> create(final Class<T> type) {
-		return new TypeFilter<T>(type);
+	public static <T> ExactTypeFilter<T> create(final Class<T> type) {
+		return new ExactTypeFilter<T>(type);
 	}
 
 	/**
 	 * @since 1.10
 	 */
 	@Override
-	protected boolean execute(final Context<TypeFilter<T>> context) {
+	protected boolean execute(final Context<ExactTypeFilter<T>> context) {
 		final Object token = this.tryTake(this.INPUT_OBJECT);
 		if (token == null) {
 			return false;

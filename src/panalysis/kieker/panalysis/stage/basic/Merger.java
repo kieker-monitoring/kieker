@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.panalysis.stage;
+package kieker.panalysis.stage.basic;
 
 import kieker.panalysis.base.AbstractFilter;
 import kieker.panalysis.base.Context;
@@ -22,16 +22,17 @@ import kieker.panalysis.base.IInputPort;
 import kieker.panalysis.base.IOutputPort;
 
 /**
+ * 
  * @author Christian Wulf
  * 
  * @since 1.10
  * 
- * @param T
- *            the type of the input port and the output ports
+ * @param <T>
+ *            the type of the input ports and the output port
  */
-public class Distributor<T> extends AbstractFilter<Distributor<T>> {
+public class Merger<T> extends AbstractFilter<Merger<T>> {
 
-	public final IInputPort<Distributor<T>, T> OBJECT = this.createInputPort();
+	public final IOutputPort<Merger<T>, T> OBJECT = this.createOutputPort();
 
 	private int index = 0;
 
@@ -39,36 +40,33 @@ public class Distributor<T> extends AbstractFilter<Distributor<T>> {
 	/**
 	 * @since 1.10
 	 */
-	public Distributor(int numOutputPorts) {
-		this();
-		while (numOutputPorts-- > 0) {
-			this.getNewOutputPort();
-		}
-	}
+	public Merger() {}
 
 	/**
 	 * @since 1.10
 	 */
-	public Distributor() {}
-
 	@Override
-	protected boolean execute(final Context<Distributor<T>> context) {
-		final T object = this.tryTake(this.OBJECT);
-		if (object == null) {
-			return false;
+	protected boolean execute(final Context<Merger<T>> context) {
+		int size = this.getInputPorts().size();
+		// check each port at most once to avoid a potentially infinite loop
+		while (size-- > 0) {
+			final IInputPort<Merger<T>, T> inputPort = this.getNextPortInRoundRobinOrder();
+			final T token = this.tryTake(inputPort);
+			if (token != null) {
+				this.put(this.OBJECT, token);
+				return true;
+			}
 		}
-		final IOutputPort<Distributor<T>, T> port = this.getNextPortInRoundRobinOrder();
-		this.put(port, object);
-		return true;
+		return false;
 	}
 
 	/**
 	 * @since 1.10
 	 * @return
 	 */
-	private IOutputPort<Distributor<T>, T> getNextPortInRoundRobinOrder() {
-		final IOutputPort<Distributor<T>, T> port = this.getOutputPort(this.index);
-		this.index = (this.index + 1) % this.getOutputPorts().size();
+	private IInputPort<Merger<T>, T> getNextPortInRoundRobinOrder() {
+		final IInputPort<Merger<T>, T> port = this.getInputPort(this.index);
+		this.index = (this.index + 1) % this.getInputPorts().size();
 		return port;
 	}
 
@@ -78,17 +76,17 @@ public class Distributor<T> extends AbstractFilter<Distributor<T>> {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public IOutputPort<Distributor<T>, T> getOutputPort(final int portIndex) {
-		final IOutputPort<Distributor<T>, ?> port = this.getOutputPorts().get(portIndex);
-		return (IOutputPort<Distributor<T>, T>) port;
+	private IInputPort<Merger<T>, T> getInputPort(final int portIndex) {
+		final IInputPort<Merger<T>, ?> port = this.getInputPorts().get(portIndex);
+		return (IInputPort<Merger<T>, T>) port;
 	}
 
 	/**
 	 * @since 1.10
 	 * @return
 	 */
-	public IOutputPort<Distributor<T>, T> getNewOutputPort() {
-		final IOutputPort<Distributor<T>, T> newOutputPort = this.createOutputPort();
-		return newOutputPort;
+	public IInputPort<Merger<T>, T> getNewInputPort() {
+		final IInputPort<Merger<T>, T> newInputPort = this.createInputPort();
+		return newInputPort;
 	}
 }

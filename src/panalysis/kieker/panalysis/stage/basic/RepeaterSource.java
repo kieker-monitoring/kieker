@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.panalysis.stage;
+package kieker.panalysis.stage.basic;
 
 import kieker.panalysis.base.AbstractFilter;
 import kieker.panalysis.base.Context;

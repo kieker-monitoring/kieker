@@ -9,6 +9,6 @@ package kieker.panalysis.base;
  *            <i>(used for ensuring type safety)</i>
  * @param <T>
  */
-public interface IOutputPort<S extends IStage, T> extends IPort<T> {
+public interface IOutputPort<S extends IStage, T> extends IPort<S, T> {
 
 }

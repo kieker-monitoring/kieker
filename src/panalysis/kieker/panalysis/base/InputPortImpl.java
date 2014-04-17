@@ -18,7 +18,7 @@ package kieker.panalysis.base;
 
 class InputPortImpl<S extends IStage, T> extends AbstractPort<S, T> implements IInputPort<S, T> {
 
-	private State state = State.OPEN;
+	private volatile State state = State.OPEN;
 
 	public void setState(final State state) {
 		this.state = state;

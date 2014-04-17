@@ -23,6 +23,8 @@ package kieker.panalysis.base;
  * 
  * @param <T>
  *            The type of the pipe
+ * @param <P>
+ *            the extending pipe
  */
 public abstract class AbstractPipe<T, P extends IPipe<T, P>> implements IPipe<T, P> {
 
@@ -46,6 +48,18 @@ public abstract class AbstractPipe<T, P extends IPipe<T, P>> implements IPipe<T,
 		return (P) this;
 	}
 
+	@SuppressWarnings("unchecked")
+	public <S extends ISink<S>> P target(final IInputPort<S, T> targetPort) {
+		targetPort.setAssociatedPipe(this);
+		this.fireSignalClosing = new Runnable() {
+			// This Runnable avoids the declaration of targetStage and targetPort as attributes and the declaration of I as type parameter
+			public void run() {
+				targetPort.getOwningStage().onSignalClosing(targetPort);
+			}
+		};
+		return (P) this;
+	}
+
 	// TODO remove if it does not add any new functionality
 	protected abstract void putInternal(T token);
 
@@ -62,6 +76,37 @@ public abstract class AbstractPipe<T, P extends IPipe<T, P>> implements IPipe<T,
 
 	public void fireSignalClosing() {
 		this.fireSignalClosing.run();
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = (prime * result) + ((this.fireSignalClosing == null) ? 0 : this.fireSignalClosing.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(final Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (this.getClass() != obj.getClass()) {
+			return false;
+		}
+		@SuppressWarnings("rawtypes")
+		final AbstractPipe other = (AbstractPipe) obj;
+		if (this.fireSignalClosing == null) {
+			if (other.fireSignalClosing != null) {
+				return false;
+			}
+		} else if (!this.fireSignalClosing.equals(other.fireSignalClosing)) {
+			return false;
+		}
+		return true;
 	}
 
 }

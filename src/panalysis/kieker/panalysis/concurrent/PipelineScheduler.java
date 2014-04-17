@@ -18,13 +18,14 @@ package kieker.panalysis.concurrent;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import de.chw.util.CyclicIterator;
 
 import kieker.panalysis.base.IStage;
+import kieker.panalysis.base.Pipeline;
 
 /**
  * @author Christian Wulf
@@ -34,41 +35,60 @@ import kieker.panalysis.base.IStage;
 public class PipelineScheduler {
 
 	protected final Map<IStage, Boolean> statesOfStages = new HashMap<IStage, Boolean>();
+	protected final List<IStage> activeStages = new LinkedList<IStage>();
+
 	private final Iterator<IStage> iterator;
 
-	public PipelineScheduler(final List<IStage> stages) {
-		for (final IStage stage : stages) {
-			this.statesOfStages.put(stage, Boolean.TRUE);
+	public PipelineScheduler(final Pipeline<?> pipeline) {
+		pipeline.start();
+
+		final List<IStage> sortedStages = this.sortList(pipeline);
+
+		for (final IStage stage : sortedStages) {
+			this.enable(stage);
 		}
-		this.iterator = new CyclicIterator<IStage>(this.statesOfStages.keySet());
+		this.iterator = new CyclicIterator<IStage>(this.activeStages);
 	}
 
+	private List<IStage> sortList(final Pipeline<?> pipeline) {
+		final List<IStage> list = new LinkedList<IStage>(pipeline.getStages());
+		list.removeAll(pipeline.getStartStages());
+		list.addAll(0, pipeline.getStartStages());
+		return list;
+	}
+
+	// TODO implement prioritized get and set
 	public IStage get() {
 		final IStage stage = this.iterator.next();
-		final Boolean isEnabled = this.statesOfStages.get(stage);
-		if (Boolean.FALSE.booleanValue() == isEnabled.booleanValue()) {
-			return this.get(); // return the next enabled stage
-		}
+		// final Boolean isEnabled = this.statesOfStages.get(stage);
+		// if (Boolean.FALSE.booleanValue() == isEnabled.booleanValue()) {
+		// return this.get(); // return the next enabled stage
+		// }
 		return stage;
 	}
 
 	public boolean isAnyStageActive() {
-		for (final Entry<IStage, Boolean> entry : this.statesOfStages.entrySet()) {
-			// final IStage stage = entry.getKey();
-			final Boolean state = entry.getValue();
-			if (Boolean.TRUE.equals(state)) {
-				// System.out.println(stage + " is active.");
-				return true;
-			}
-		}
-		return false;
+		// for (final Entry<IStage, Boolean> entry : this.statesOfStages.entrySet()) {
+		// // final IStage stage = entry.getKey();
+		// final Boolean state = entry.getValue();
+		// if (Boolean.TRUE.equals(state)) {
+		// // System.out.println(stage + " is active.");
+		// return true;
+		// }
+		// }
+		return this.activeStages.size() > 0;
 	}
 
 	public void disable(final IStage stage) {
 		this.statesOfStages.put(stage, Boolean.FALSE);
+		this.activeStages.remove(stage);
 		System.out.println("Disabled " + stage);
 		stage.fireSignalClosingToAllOutputPorts();
 	}
 
-	// TODO implement prioritized get and set
+	protected void enable(final IStage stage) {
+		this.statesOfStages.put(stage, Boolean.TRUE);
+		this.activeStages.add(stage);
+	}
+
 }

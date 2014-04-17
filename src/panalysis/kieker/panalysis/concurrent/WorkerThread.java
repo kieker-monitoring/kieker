@@ -28,7 +28,7 @@ import kieker.panalysis.base.TerminationPolicy;
  */
 public class WorkerThread extends Thread {
 
-	private Pipeline<ConcurrentWorkStealingPipe<?>> pipeline;
+	private Pipeline<?> pipeline;
 	private PipelineScheduler pipelineScheduler;
 
 	private long duration;
@@ -44,6 +44,9 @@ public class WorkerThread extends Thread {
 
 		while (this.pipelineScheduler.isAnyStageActive()) {
 			final IStage stage = this.pipelineScheduler.get();
+			if ("startThread".equals(this.getName())) {
+				System.out.println("shouldTerminate: " + this.shouldTerminate);
+			}
 
 			this.startStageExecution();
 			final boolean executedSuccessfully = stage.execute();
@@ -59,6 +62,7 @@ public class WorkerThread extends Thread {
 	}
 
 	private void executeTerminationPolicy(final IStage executedStage, final boolean executedSuccessfully) {
+		// System.out.println("WorkerThread.executeTerminationPolicy(): " + this.terminationPolicy);
 		switch (this.terminationPolicy) {
 		case TERMINATE_STAGE_AFTER_EXECUTION:
 			if (executedStage.mayBeDisabled()) {
@@ -83,8 +87,7 @@ public class WorkerThread extends Thread {
 	}
 
 	private void initDatastructures() {
-		this.pipelineScheduler = new PipelineScheduler(this.pipeline.getStages());
-		this.pipeline.start(); // BETTER encapsulate this method
+		this.pipelineScheduler = new PipelineScheduler(this.pipeline);
 	}
 
 	private void startStageExecution() {
@@ -102,11 +105,11 @@ public class WorkerThread extends Thread {
 	}
 
 	// BETTER move initialization to the constructor
-	public void setPipeline(final Pipeline<ConcurrentWorkStealingPipe<?>> pipeline) {
+	public void setPipeline(final Pipeline<?> pipeline) {
 		this.pipeline = pipeline;
 	}
 
-	public Pipeline<ConcurrentWorkStealingPipe<?>> getPipeline() {
+	public Pipeline<?> getPipeline() {
 		return this.pipeline;
 	}
 
@@ -115,6 +118,15 @@ public class WorkerThread extends Thread {
 			startStage.fireSignalClosingToAllInputPorts();
 		}
 
+		this.setTerminationPolicy(terminationPolicyToUse);
+	}
+
+	/**
+	 * If not set, this thread will run infinitely.
+	 * 
+	 * @param terminationPolicyToUse
+	 */
+	public void setTerminationPolicy(final TerminationPolicy terminationPolicyToUse) {
 		this.terminationPolicy = terminationPolicyToUse;
 		this.shouldTerminate = true;
 	}
