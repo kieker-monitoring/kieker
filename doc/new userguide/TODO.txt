@@ -3,3 +3,6 @@ Further information on the overhead caused by \Kieker{} is provided at \url{http
  
 TO DO:
 AOP.xml file into the META-INF folder!!
+
+\noindent
+	In 2011, Kieker was reviewed and accepted for distribution as part of the SPEC Research Group's repository of peer-reviewed tools for quantitative system evaluation and analysis. See \url{http://research.spec.org/projects/tools.html} for details.\\
