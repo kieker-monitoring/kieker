@@ -1,6 +1,6 @@
 package kieker.panalysis.stage;
 
-import kieker.panalysis.framework.core.AbstractDefaultFilter;
+import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Context;
 import kieker.panalysis.framework.core.IInputPort;
 import kieker.panalysis.framework.core.IOutputPort;
@@ -10,7 +10,7 @@ import kieker.panalysis.framework.core.IOutputPort;
  * 
  * @since 1.10
  */
-public class ExactTypeFilter<T> extends AbstractDefaultFilter<ExactTypeFilter<T>> {
+public class ExactTypeFilter<T> extends AbstractFilter<ExactTypeFilter<T>> {
 
 	public final IInputPort<ExactTypeFilter<T>, Object> INPUT_OBJECT = this.createInputPort();
 

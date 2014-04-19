@@ -23,7 +23,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import kieker.panalysis.framework.core.AbstractDefaultFilter;
+import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Context;
 import kieker.panalysis.framework.core.IInputPort;
 import kieker.panalysis.framework.core.IOutputPort;
@@ -33,7 +33,7 @@ import kieker.panalysis.framework.core.IOutputPort;
  * 
  * @since 1.10
  */
-public class File2TextLinesFilter extends AbstractDefaultFilter<File2TextLinesFilter> {
+public class File2TextLinesFilter extends AbstractFilter<File2TextLinesFilter> {
 
 	public final IInputPort<File2TextLinesFilter, File> FILE = this.createInputPort();
 

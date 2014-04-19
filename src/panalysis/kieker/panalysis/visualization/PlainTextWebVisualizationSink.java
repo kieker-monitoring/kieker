@@ -16,7 +16,7 @@
 
 package kieker.panalysis.visualization;
 
-import kieker.panalysis.framework.core.AbstractDefaultFilter;
+import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Context;
 import kieker.panalysis.framework.core.IInputPort;
 
@@ -28,7 +28,7 @@ import kieker.panalysis.framework.core.IInputPort;
  * @param <I>
  *            The type of the input ports
  */
-public class PlainTextWebVisualizationSink<T> extends AbstractDefaultFilter<PlainTextWebVisualizationSink<T>> implements IWebVisualizationSink {
+public class PlainTextWebVisualizationSink<T> extends AbstractFilter<PlainTextWebVisualizationSink<T>> implements IWebVisualizationSink {
 
 	public final IInputPort<PlainTextWebVisualizationSink<T>, T> INPUT_OBJECT = this.createInputPort();
 

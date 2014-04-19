@@ -21,7 +21,7 @@ import java.io.FileFilter;
 
 import kieker.common.util.filesystem.BinaryCompressionMethod;
 import kieker.common.util.filesystem.FSUtil;
-import kieker.panalysis.framework.core.AbstractDefaultFilter;
+import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Context;
 import kieker.panalysis.framework.core.IOutputPort;
 
@@ -30,7 +30,7 @@ import kieker.panalysis.framework.core.IOutputPort;
  * 
  * @since 1.10
  */
-public class Directory2FilesFilter extends AbstractDefaultFilter<Directory2FilesFilter> {
+public class Directory2FilesFilter extends AbstractFilter<Directory2FilesFilter> {
 
 	public final IOutputPort<Directory2FilesFilter, File> FILE = this.createOutputPort();
 

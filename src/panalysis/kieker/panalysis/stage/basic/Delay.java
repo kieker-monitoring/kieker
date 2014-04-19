@@ -1,6 +1,6 @@
 package kieker.panalysis.stage.basic;
 
-import kieker.panalysis.framework.core.AbstractDefaultFilter;
+import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Context;
 import kieker.panalysis.framework.core.IInputPort;
 import kieker.panalysis.framework.core.IOutputPort;
@@ -13,7 +13,7 @@ import kieker.panalysis.framework.core.IOutputPort;
  * 
  * @param <T>
  */
-public class Delay<T> extends AbstractDefaultFilter<Delay<T>> {
+public class Delay<T> extends AbstractFilter<Delay<T>> {
 
 	public final IInputPort<Delay<T>, T> INPUT_OBJECT = this.createInputPort();
 

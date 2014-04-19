@@ -18,7 +18,7 @@ package kieker.panalysis.stage;
 
 import java.io.PrintStream;
 
-import kieker.panalysis.framework.core.AbstractDefaultFilter;
+import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Context;
 import kieker.panalysis.framework.core.IInputPort;
 import kieker.panalysis.framework.core.IOutputPort;
@@ -28,7 +28,7 @@ import kieker.panalysis.framework.core.IOutputPort;
  * 
  * @since 1.10
  */
-public class TypeLoggerFilter<T> extends AbstractDefaultFilter<TypeLoggerFilter<T>> {
+public class TypeLoggerFilter<T> extends AbstractFilter<TypeLoggerFilter<T>> {
 
 	public final IInputPort<TypeLoggerFilter<T>, T> INPUT_OBJECT = this.createInputPort();
 

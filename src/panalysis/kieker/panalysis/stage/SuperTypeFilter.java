@@ -1,6 +1,6 @@
 package kieker.panalysis.stage;
 
-import kieker.panalysis.framework.core.AbstractDefaultFilter;
+import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Context;
 import kieker.panalysis.framework.core.IInputPort;
 import kieker.panalysis.framework.core.IOutputPort;
@@ -10,7 +10,7 @@ import kieker.panalysis.framework.core.IOutputPort;
  * 
  * @since 1.10
  */
-public class SuperTypeFilter<T> extends AbstractDefaultFilter<SuperTypeFilter<T>> {
+public class SuperTypeFilter<T> extends AbstractFilter<SuperTypeFilter<T>> {
 
 	public final IInputPort<SuperTypeFilter<T>, Object> INPUT_OBJECT = this.createInputPort();
 

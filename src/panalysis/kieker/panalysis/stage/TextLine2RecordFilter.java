@@ -26,7 +26,7 @@ import kieker.common.exception.UnknownRecordTypeException;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.panalysis.framework.core.AbstractDefaultFilter;
+import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Context;
 import kieker.panalysis.framework.core.IInputPort;
 import kieker.panalysis.framework.core.IOutputPort;
@@ -36,7 +36,7 @@ import kieker.panalysis.framework.core.IOutputPort;
  * 
  * @since 1.10
  */
-public class TextLine2RecordFilter extends AbstractDefaultFilter<TextLine2RecordFilter> {
+public class TextLine2RecordFilter extends AbstractFilter<TextLine2RecordFilter> {
 
 	public final IInputPort<TextLine2RecordFilter, String> TEXT_LINE = this.createInputPort();
 

@@ -18,7 +18,7 @@ package kieker.panalysis.stage.composite;
 
 import java.util.Map;
 
-import kieker.panalysis.framework.core.AbstractDefaultFilter;
+import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Context;
 import kieker.panalysis.framework.core.IPipe;
 import kieker.panalysis.stage.File2TextLinesFilter;
@@ -29,7 +29,7 @@ import kieker.panalysis.stage.TextLine2RecordFilter;
  * 
  * @since 1.10
  */
-public class ReadRecordFromCsvFileFilter extends AbstractDefaultFilter<File2TextLinesFilter> {
+public class ReadRecordFromCsvFileFilter extends AbstractFilter<File2TextLinesFilter> {
 
 	private final File2TextLinesFilter stage0;
 	private final TextLine2RecordFilter stage1;

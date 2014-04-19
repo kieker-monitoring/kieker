@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
 
 import de.chw.util.Pair;
 
-import kieker.panalysis.framework.core.AbstractDefaultFilter;
+import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Context;
 import kieker.panalysis.framework.core.IInputPort;
 import kieker.panalysis.framework.core.IOutputPort;
@@ -36,7 +36,7 @@ import kieker.panalysis.framework.core.IOutputPort;
  * 
  * @since 1.10
  */
-public class CountWordsStage extends AbstractDefaultFilter<CountWordsStage> {
+public class CountWordsStage extends AbstractFilter<CountWordsStage> {
 
 	public final IInputPort<CountWordsStage, File> FILE = this.createInputPort();
 
