@@ -3,6 +3,8 @@ package kieker.panalysis.framework.concurrent;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import de.chw.concurrent.CircularWorkStealingDeque;
+
 import kieker.panalysis.framework.core.AbstractPipe;
 
 public class SingleProducerSingleConsumerPipe<T> extends AbstractPipe<T, SingleProducerSingleConsumerPipe<T>> {
@@ -38,4 +40,11 @@ public class SingleProducerSingleConsumerPipe<T> extends AbstractPipe<T, SingleP
 		return this.queue.poll();
 	}
 
+	public T take() {
+		final T token = this.tryTake();
+		if (token == null) {
+			throw CircularWorkStealingDeque.DEQUE_IS_EMPTY_EXCEPTION;
+		}
+		return token;
+	}
 }

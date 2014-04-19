@@ -53,18 +53,40 @@ public class Context<S extends IStage> {
 	}
 
 	/**
+	 * 
+	 * @param inputPort
+	 * @return
 	 * @since 1.10
 	 */
 	public <T> T tryTake(final IInputPort<S, T> inputPort) {
 		final IPipe<T, ?> associatedPipe = inputPort.getAssociatedPipe();
 		final T token = associatedPipe.tryTake();
 		if (token != null) {
-			final List<Object> tokenList = this.pipesTakenFrom.get(associatedPipe);
-			tokenList.add(token);
-
-			this.numTakenElements++;
+			this.logTransaction(associatedPipe, token);
 		}
 		return token;
+	}
+
+	/**
+	 * 
+	 * @param inputPort
+	 * @return
+	 * @since 1.10
+	 */
+	public <T> T take(final IInputPort<S, T> inputPort) {
+		final IPipe<T, ?> associatedPipe = inputPort.getAssociatedPipe();
+		final T token = associatedPipe.take();
+		if (token != null) {
+			this.logTransaction(associatedPipe, token);
+		}
+		return token;
+	}
+
+	private <T> void logTransaction(final IPipe<T, ?> associatedPipe, final T token) {
+		final List<Object> tokenList = this.pipesTakenFrom.get(associatedPipe);
+		tokenList.add(token);
+
+		this.numTakenElements++;
 	}
 
 	/**

@@ -1,6 +1,6 @@
 package de.chw.util;
 
-public class StacklessException extends Exception {
+public class StacklessException extends RuntimeException {
 
 	private static final long serialVersionUID = -9040980547278981254L;
 

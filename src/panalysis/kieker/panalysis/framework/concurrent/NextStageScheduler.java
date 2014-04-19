@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import kieker.panalysis.examples.countWords.DirectoryName2Files;
 import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.IStage;
 import kieker.panalysis.framework.sequential.Pipeline;
@@ -69,11 +68,11 @@ public class NextStageScheduler {
 	}
 
 	public void determineNextStage(final IStage stage, final boolean executedSuccessfully) {
-		if (stage instanceof DirectoryName2Files) {
-			System.out.println("stage=" + stage + ", executedSuccessfully=" + executedSuccessfully);
-		}
+		// if (stage instanceof DirectoryName2Files) {
+		// System.out.println("stage=" + stage + ", executedSuccessfully=" + executedSuccessfully);
+		// }
 		if (executedSuccessfully && (this.statesOfStages.get(stage) == Boolean.TRUE)) {
-			System.out.println("Next stages: " + stage.getContext().getOutputStages());
+			// System.out.println("Next stages: " + stage.getContext().getOutputStages());
 			this.workList.addAll(0, stage.getContext().getOutputStages());
 		} else {
 			this.workList.remove(0); // removes the given stage

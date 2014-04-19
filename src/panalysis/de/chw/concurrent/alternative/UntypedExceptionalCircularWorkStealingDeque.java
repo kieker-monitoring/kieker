@@ -19,7 +19,7 @@ package de.chw.concurrent.alternative;
 import java.util.concurrent.atomic.AtomicLong;
 
 import de.chw.concurrent.CircularArray;
-import de.chw.util.StacklessException;
+import de.chw.concurrent.DequePopException;
 
 /**
  * 
@@ -30,13 +30,13 @@ import de.chw.util.StacklessException;
  * @since 1.10
  */
 public class UntypedExceptionalCircularWorkStealingDeque {
-	public static class DequeIsEmptyException extends StacklessException {
+	public static class DequeIsEmptyException extends DequePopException {
 		private static final long serialVersionUID = -6685406255103741724L;
 	}
 
 	public static final DequeIsEmptyException DEQUE_IS_EMPTY_EXCEPTION = new DequeIsEmptyException();
 
-	public static class OperationAbortedException extends StacklessException {
+	public static class OperationAbortedException extends DequePopException {
 		private static final long serialVersionUID = 2983001853326344073L;
 	}
 
@@ -83,7 +83,7 @@ public class UntypedExceptionalCircularWorkStealingDeque {
 	 *         </ul>
 	 * @throws DequeIsEmptyException
 	 */
-	public Object popBottom() throws DequeIsEmptyException {
+	public Object popBottom() throws DequePopException {
 		long b = this.bottom;
 		final CircularArray<Object> a = this.activeArray;
 		b = b - 1;
@@ -132,10 +132,9 @@ public class UntypedExceptionalCircularWorkStealingDeque {
 	 *         <li><code>ABORT</code> if the deque is currently being stolen by another thread,
 	 *         <li><i>the oldest element</i> otherwise
 	 *         </ul>
-	 * @throws OperationAbortedException
-	 * @throws DequeIsEmptyException
+	 * @throws DequePopException
 	 */
-	public Object steal() throws OperationAbortedException, DequeIsEmptyException {
+	public Object steal() throws DequePopException {
 		final long t = this.top.get();
 		final CircularArray<Object> oldArr = this.activeArray;
 		final long b = this.bottom;

@@ -18,6 +18,8 @@ package kieker.panalysis.framework.core;
 
 import java.util.List;
 
+import de.chw.concurrent.DequePopException;
+
 /**
  * 
  * @author Christian Wulf
@@ -55,6 +57,14 @@ public interface IPipe<T, P extends IPipe<T, P>> {
 	 * @since 1.10
 	 */
 	T tryTake();
+
+	/**
+	 * 
+	 * @return and removes the next element if the pipe is not empty, otherwise it throws a <code>DequePopException</code>
+	 * 
+	 * @throws DequePopException
+	 */
+	T take();
 
 	/**
 	 * @since 1.10

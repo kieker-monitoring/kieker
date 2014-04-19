@@ -29,6 +29,18 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class CircularWorkStealingDeque<T> {
 
+	public static class DequeIsEmptyException extends DequePopException {
+		private static final long serialVersionUID = -6685406255103741724L;
+	}
+
+	public static final DequeIsEmptyException DEQUE_IS_EMPTY_EXCEPTION = new DequeIsEmptyException();
+
+	public static class OperationAbortedException extends DequePopException {
+		private static final long serialVersionUID = 2983001853326344073L;
+	}
+
+	public static final OperationAbortedException OPERATION_ABORTED_EXCEPTION = new OperationAbortedException();
+
 	private static final long LOG_INITIAL_SIZE = 10;
 
 	private volatile long bottom = 0;
@@ -116,6 +128,36 @@ public class CircularWorkStealingDeque<T> {
 		return o;
 	}
 
+	/**
+	 * Returns and removes the latest element from this deque.
+	 * 
+	 * @return <i>the latest element</i>, otherwise it throws a <code>DequeIsEmptyException</code>
+	 * 
+	 * @throws DequeIsEmptyException
+	 */
+	public T popBottomEx() {
+		long b = this.bottom;
+		final CircularArray<T> a = this.activeArray;
+		b = b - 1;
+		this.bottom = b;
+		final long t = this.top.get();
+		final long size = b - t;
+		if (size < 0) {
+			this.bottom = t;
+			return this.emptyEx();
+		}
+		T o = this.regular(a.get(b));
+		if (size > 0) {
+			this.perhapsShrink(b, t);
+			return o;
+		}
+		if (!this.casTop(t, t + 1)) {
+			o = this.emptyEx();
+		}
+		this.bottom = t + 1;
+		return o;
+	}
+
 	private void perhapsShrink(final long b, final long t) {
 		long temp = t;
 		final CircularArray<T> a = this.activeArray;
@@ -165,12 +207,51 @@ public class CircularWorkStealingDeque<T> {
 		return o;
 	}
 
+	/**
+	 * Tries to steal (return & remove) the oldest element from this deque.
+	 * 
+	 * @return <i>the oldest element</i>, otherwise it throws a <code>DequeIsEmptyException</code> or a <code>OperationAbortedException</code>
+	 * 
+	 * @throws DequeIsEmptyException
+	 * @throws OperationAbortedException
+	 */
+	public T stealEx() {
+		final long t = this.top.get();
+		final CircularArray<T> oldArr = this.activeArray;
+		final long b = this.bottom;
+		final CircularArray<T> a = this.activeArray;
+		final long size = b - t;
+		if (size <= 0) {
+			return this.emptyEx();
+		}
+		if ((size % a.getCapacity()) == 0) {
+			if ((oldArr == a) && (t == this.top.get())) {
+				return this.emptyEx();
+			} else {
+				return this.abortEx();
+			}
+		}
+		final T o = this.regular(a.get(t));
+		if (!this.casTop(t, t + 1)) {
+			return this.abortEx();
+		}
+		return o;
+	}
+
 	private T empty() {
 		return null;
 	}
 
+	private T emptyEx() {
+		throw DEQUE_IS_EMPTY_EXCEPTION;
+	}
+
 	private T abort() {
 		return null;
+	}
+
+	private T abortEx() {
+		throw OPERATION_ABORTED_EXCEPTION;
 	}
 
 	private T regular(final T value) {
@@ -216,4 +297,5 @@ public class CircularWorkStealingDeque<T> {
 		System.out.println("sourceStage=" + sourceStage + ", " + "bottom: " + this.bottom);
 		return size;
 	}
+
 }

@@ -73,6 +73,22 @@ public class ConcurrentWorkStealingPipe<T> extends AbstractPipe<T, ConcurrentWor
 		return record;
 	}
 
+	public T take() {
+		final T record = this.circularWorkStealingDeque.popBottomEx();
+		if (record == null) {
+			for (final ConcurrentWorkStealingPipe<T> pipe : this.allOtherPipes) {
+				final T stolenElement = pipe.steal();
+				if (stolenElement != null) {
+					return stolenElement;
+				}
+			}
+			// BETTER improve stealing efficiency by stealing multiple elements at once
+			return null; // do not expose internal impl details (here: CircularWorkStealingDeque); instead return null
+		}
+		this.numTakenElements++;
+		return record;
+	}
+
 	public List<T> tryTakeMultiple(final int maxItemsToTake) {
 		// TODO Auto-generated method stub
 		// BETTER find a way to take multiple elements directly without a loop
