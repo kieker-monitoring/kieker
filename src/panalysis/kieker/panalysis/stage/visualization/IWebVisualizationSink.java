@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.panalysis.visualization;
+package kieker.panalysis.stage.visualization;
 
 /**
  * @author Nils Christian Ehmke
