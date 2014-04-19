@@ -20,6 +20,10 @@ class InputPortImpl<S extends IStage, T> extends AbstractPort<S, T> implements I
 
 	private volatile State state = State.OPEN;
 
+	public InputPortImpl(final S owningStage) {
+		this.setOwningStage(owningStage);
+	}
+
 	public void setState(final State state) {
 		this.state = state;
 	}

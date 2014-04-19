@@ -19,6 +19,7 @@ package de.chw.concurrent.alternative;
 import java.util.concurrent.atomic.AtomicLong;
 
 import de.chw.concurrent.CircularArray;
+import de.chw.util.StacklessException;
 
 /**
  * 
@@ -29,26 +30,14 @@ import de.chw.concurrent.CircularArray;
  * @since 1.10
  */
 public class UntypedExceptionalCircularWorkStealingDeque {
-	public static class DequeIsEmptyException extends Exception {
+	public static class DequeIsEmptyException extends StacklessException {
 		private static final long serialVersionUID = -6685406255103741724L;
-
-		@SuppressWarnings("sync-override")
-		@Override
-		public Throwable fillInStackTrace() { // greatly improves performance
-			return null;
-		}
 	}
 
 	public static final DequeIsEmptyException DEQUE_IS_EMPTY_EXCEPTION = new DequeIsEmptyException();
 
-	public static class OperationAbortedException extends Exception {
+	public static class OperationAbortedException extends StacklessException {
 		private static final long serialVersionUID = 2983001853326344073L;
-
-		@SuppressWarnings("sync-override")
-		@Override
-		public Throwable fillInStackTrace() {// greatly improves performance
-			return null;
-		}
 	}
 
 	public static final OperationAbortedException OPERATION_ABORTED_EXCEPTION = new OperationAbortedException();

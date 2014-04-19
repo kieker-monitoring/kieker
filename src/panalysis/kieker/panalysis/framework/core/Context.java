@@ -1,14 +1,20 @@
 package kieker.panalysis.framework.core;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
+
+import kieker.panalysis.framework.concurrent.SingleProducerSingleConsumerPipe;
 
 public class Context<S extends IStage> {
 
 	private final Map<IPipe<Object, ?>, List<Object>> pipesTakenFrom;
+	private final Set<IStage> pipesPutTo = new HashSet<IStage>();
 
 	// statistics values
 	private int numPushedElements = 0;
@@ -38,6 +44,11 @@ public class Context<S extends IStage> {
 			// BETTER return a NullObject rather than checking for null
 		}
 		associatedPipe.put(object);
+
+		if (!(associatedPipe instanceof SingleProducerSingleConsumerPipe)) {
+			this.pipesPutTo.add(associatedPipe.getTargetStage());
+		}
+
 		this.numPushedElements++;
 	}
 
@@ -75,8 +86,8 @@ public class Context<S extends IStage> {
 			final IPipe<Object, ?> associatedPipe = entry.getKey();
 			final List<Object> takenElements = entry.getValue();
 
-			// FIXME to preserve order, the elements need to be re-put in reverse order
-			for (final Object element : takenElements) {
+			for (int i = takenElements.size() - 1; i >= 0; i--) {
+				final Object element = takenElements.get(i);
 				associatedPipe.put(element);
 			}
 		}
@@ -85,5 +96,9 @@ public class Context<S extends IStage> {
 	@Override
 	public String toString() {
 		return "{" + "numPushedElements=" + this.numPushedElements + ", " + "numTakenElements=" + this.numTakenElements + "}";
+	}
+
+	public Collection<? extends IStage> getOutputStages() {
+		return this.pipesPutTo;
 	}
 }

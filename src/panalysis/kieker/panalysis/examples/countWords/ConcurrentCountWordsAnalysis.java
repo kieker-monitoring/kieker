@@ -27,11 +27,8 @@ import kieker.panalysis.framework.concurrent.ConcurrentWorkStealingPipe;
 import kieker.panalysis.framework.concurrent.SingleProducerSingleConsumerPipe;
 import kieker.panalysis.framework.concurrent.TerminationPolicy;
 import kieker.panalysis.framework.concurrent.WorkerThread;
-import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Analysis;
-import kieker.panalysis.framework.core.IInputPort;
 import kieker.panalysis.framework.core.IOutputPort;
-import kieker.panalysis.framework.core.ISink;
 import kieker.panalysis.framework.core.ISource;
 import kieker.panalysis.framework.core.IStage;
 import kieker.panalysis.framework.sequential.MethodCallPipe;
@@ -62,7 +59,7 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 		final Distributor<?> distributor = (Distributor<?>) lastStage;
 
 		int numThreads = Runtime.getRuntime().availableProcessors();
-		numThreads = 4; // only for testing purposes
+		numThreads = 1; // only for testing purposes
 
 		this.threads = new WorkerThread[numThreads + 1];
 
@@ -74,21 +71,11 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 
 		for (int i = 1; i < this.threads.length; i++) {
 			final Pipeline<ConcurrentWorkStealingPipe<?>> pipeline = Pipeline.create(pipeGroups);
-			this.buildPipeline(mainThreadPipeline, pipeline);
+			this.buildPipeline(distributor, pipeline);
 
 			final WorkerThread thread = new WorkerThread();
 			thread.setPipeline(pipeline);
 			this.threads[i] = thread;
-
-			for (final AbstractFilter<?> startStage : pipeline.getStartStages()) {
-				// for (final IInputPort<?, ?> inputPort : startStage.getInputPorts())
-				final IInputPort<?, ?> inputPort = startStage.getInputPorts().get(0);
-				{
-					new SingleProducerSingleConsumerPipe<Object>()
-							.source((IOutputPort<? extends ISource, Object>) distributor.getNewOutputPort())
-							.target((IInputPort<? extends ISink, Object>) inputPort);
-				}
-			}
 		}
 
 		for (final WorkerThread thread : this.threads) {
@@ -98,7 +85,7 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 	}
 
 	private Pipeline<?> mainThreadPipeline() {
-		final RepeaterSource<String> repeaterSource = RepeaterSource.create(START_DIRECTORY_NAME, 4000);
+		final RepeaterSource<String> repeaterSource = RepeaterSource.create(START_DIRECTORY_NAME, 1);
 		final DirectoryName2Files findFilesStage = new DirectoryName2Files();
 		final Distributor<File> distributor = new Distributor<File>();
 
@@ -115,7 +102,7 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 		return pipeline;
 	}
 
-	private void buildPipeline(final Pipeline<?> mainThreadDistributor, final Pipeline<ConcurrentWorkStealingPipe<?>> pipeline) {
+	private void buildPipeline(final Distributor<?> readerDistributor, final Pipeline<ConcurrentWorkStealingPipe<?>> pipeline) {
 		// create stages
 		final Distributor<File> distributor = pipeline.addStage(new Distributor<File>());
 		final CountWordsStage countWordsStage0 = pipeline.addStage(new CountWordsStage());
@@ -127,6 +114,10 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 		pipeline.setStartStages(distributor);
 
 		// connect stages by pipes
+		new SingleProducerSingleConsumerPipe<File>()
+				.source((IOutputPort<? extends ISource, File>) readerDistributor.getNewOutputPort())
+				.target(distributor.OBJECT);
+
 		pipeline.add(new ConcurrentWorkStealingPipe<File>()
 				.source(distributor.getNewOutputPort())
 				.target(countWordsStage0, countWordsStage0.FILE)
@@ -157,7 +148,8 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 	public void start() {
 		super.start();
 
-		this.threads[0].terminate(TerminationPolicy.TERMINATE_STAGE_AFTER_EXECUTION);
+		this.threads[0].terminate(TerminationPolicy.TERMINATE_STAGE_AFTER_NEXT_EXECUTION);
+		// this.threads[0].start();
 
 		for (final WorkerThread thread : this.threads) {
 			thread.start();

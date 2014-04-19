@@ -24,7 +24,7 @@ package kieker.panalysis.framework.concurrent;
 public enum TerminationPolicy {
 
 	TERMINATE_STAGE_NOW,
+	TERMINATE_STAGE_AFTER_NEXT_EXECUTION,
 	TERMINATE_STAGE_AFTER_UNSUCCESSFUL_EXECUTION,
-	TERMINATE_STAGE_AFTER_EXECUTION,
 
 }

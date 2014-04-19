@@ -94,6 +94,7 @@ public class Pipeline<P extends IPipe<?, P>> {
 	 */
 	public <S extends IStage> S addStage(final S stage) {
 		stage.setId(this.freeId++);
+		stage.setOwningPipeline(this);
 		this.stages.add(stage);
 		return stage;
 	}

@@ -28,7 +28,7 @@ import kieker.panalysis.framework.sequential.Pipeline;
 public class WorkerThread extends Thread {
 
 	private Pipeline<?> pipeline;
-	private PipelineScheduler pipelineScheduler;
+	private NextStageScheduler pipelineScheduler;
 
 	private long duration;
 
@@ -51,6 +51,8 @@ public class WorkerThread extends Thread {
 			final boolean executedSuccessfully = stage.execute();
 			this.finishStageExecution();
 
+			this.pipelineScheduler.determineNextStage(stage, executedSuccessfully);
+
 			if (this.shouldTerminate) {
 				this.executeTerminationPolicy(stage, executedSuccessfully);
 			}
@@ -61,9 +63,9 @@ public class WorkerThread extends Thread {
 	}
 
 	private void executeTerminationPolicy(final IStage executedStage, final boolean executedSuccessfully) {
-		// System.out.println("WorkerThread.executeTerminationPolicy(): " + this.terminationPolicy);
+		// System.out.println("WorkerThread.executeTerminationPolicy(): " + this.terminationPolicy + ", mayBeDisabled=" + executedStage.mayBeDisabled());
 		switch (this.terminationPolicy) {
-		case TERMINATE_STAGE_AFTER_EXECUTION:
+		case TERMINATE_STAGE_AFTER_NEXT_EXECUTION:
 			if (executedStage.mayBeDisabled()) {
 				this.pipelineScheduler.disable(executedStage);
 			}
@@ -86,7 +88,7 @@ public class WorkerThread extends Thread {
 	}
 
 	private void initDatastructures() {
-		this.pipelineScheduler = new PipelineScheduler(this.pipeline);
+		this.pipelineScheduler = new NextStageScheduler(this.pipeline);
 	}
 
 	private void startStageExecution() {

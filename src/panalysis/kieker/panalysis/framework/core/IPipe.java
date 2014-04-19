@@ -84,6 +84,7 @@ public interface IPipe<T, P extends IPipe<T, P>> {
 	/**
 	 * @since 1.10
 	 */
+	@Deprecated
 	<S extends ISink<S>> P target(final S targetStage, final IInputPort<S, T> targetPort);
 
 	/**
@@ -94,6 +95,9 @@ public interface IPipe<T, P extends IPipe<T, P>> {
 	/**
 	 * @since 1.10
 	 */
+	@Deprecated
 	void copyAllOtherPipes(List<P> pipesOfGroup);
+
+	IStage getTargetStage();
 
 }

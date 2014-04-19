@@ -8,6 +8,7 @@ import kieker.panalysis.framework.core.Context;
 import kieker.panalysis.framework.core.IInputPort;
 import kieker.panalysis.framework.core.IOutputPort;
 
+@Deprecated
 public class TokenBundler<T> extends AbstractFilter<TokenBundler<T>> {
 
 	public final IInputPort<TokenBundler<T>, T> INPUT_TOKEN = this.createInputPort();

@@ -81,9 +81,6 @@ public class ConcurrentWorkStealingPipe<T> extends AbstractPipe<T, ConcurrentWor
 
 	public T read() {
 		final T record = this.circularWorkStealingDeque.readBottom();
-		if (record == null) {
-			return null;
-		}
 		return record;
 	}
 

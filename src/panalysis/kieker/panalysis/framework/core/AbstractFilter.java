@@ -32,7 +32,7 @@ import java.util.List;
  */
 public abstract class AbstractFilter<S extends IStage> extends AbstractStage implements ISink<S>, ISource {
 
-	protected volatile boolean mayBeDisabled;
+	protected volatile boolean mayBeDisabled; // BETTER write only non-concurrent code in a stage
 
 	private final List<IInputPort<S, ?>> inputPorts = new ArrayList<IInputPort<S, ?>>();
 	private final List<IInputPort<S, ?>> readOnlyInputPorts = Collections.unmodifiableList(this.inputPorts);
@@ -42,48 +42,42 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 
 	private Context<S> context;
 
-	// private final Configuration configuration;
-	//
-	// public AbstractFilter(final Configuration configuration) {
-	// this.configuration = configuration;
-	// }
+	private int enabledInputPorts = 0;
 
-	// private TaskBundle taskBundle;
-	// private final int numTasksThreshold = 100;
+	public Context<S> getContext() {
+		return this.context;
+	}
 
-	// protected void put(final OutputPort port, final Object record) {
-	// if (this.taskBundle == null) {
-	// this.taskBundle = new TaskBundle(this, new LinkedList<Object>());
-	// }
-	//
-	// this.taskBundle.getTasks().add(record);
-	//
-	// if (this.taskBundle.getTasks().size() == this.numTasksThreshold) {
-	// this.put(port, this.taskBundle);
-	// this.taskBundle = null;
-	// }
-	// }
 	/**
 	 * @since 1.10
+	 * @deprecated Use the context parameter in the execute() method
 	 */
+	@Deprecated
 	protected <T> void put(final IOutputPort<S, T> port, final T object) {
 		this.context.put(port, object);
 	}
 
 	/**
 	 * @since 1.10
+	 * @deprecated Use the context parameter in the execute() method
 	 */
+	@Deprecated
 	protected <T> T tryTake(final IInputPort<S, T> inputPort) {
 		return this.context.tryTake(inputPort);
 	}
 
 	/**
 	 * @since 1.10
+	 * @deprecated Use the context parameter in the execute() method
 	 */
+	@Deprecated
 	protected <T> T read(final IInputPort<S, T> inputPort) {
 		return this.context.read(inputPort);
 	}
 
+	/**
+	 * @since 1.10
+	 */
 	public final boolean execute() {
 		final boolean success = this.execute(this.context);
 		if (success) {
@@ -107,7 +101,8 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	 * @since 1.10
 	 */
 	public void onSignalClosing(final IInputPort<S, ?> inputPort) {
-		inputPort.setState(IInputPort.State.CLOSING);
+		// inputPort.setState(IInputPort.State.CLOSING);
+		this.enabledInputPorts--;
 		System.out.println("Closed " + inputPort + " of " + this.toString());
 
 		this.checkWhetherThisStageMayBeDisabled();
@@ -117,14 +112,15 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	 * @since 1.10
 	 */
 	private void checkWhetherThisStageMayBeDisabled() {
-		for (final IInputPort<S, ?> iport : this.inputPorts) {
-			if (iport.getState() != IInputPort.State.CLOSING) {
-				return;
-			}
+		// for (final IInputPort<S, ?> iport : this.inputPorts) {
+		// if (iport.getState() != IInputPort.State.CLOSING) {
+		// return;
+		// }
+		// }
+		if (this.enabledInputPorts == 0) {
+			this.mayBeDisabled = true;
+			System.out.println(this.toString() + " can now be disabled by the pipeline scheduler.");
 		}
-
-		this.mayBeDisabled = true;
-		System.out.println(this.toString() + " can now be disabled by the pipeline scheduler.");
 	}
 
 	/**
@@ -171,20 +167,20 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	 * @return a new input port that accepts elements of the particular type that is specified in the variable declaration.
 	 */
 	protected <T> IInputPort<S, T> createInputPort() {
-		final IInputPort<S, T> inputPort = new InputPortImpl<S, T>();
-		((AbstractPort<S, T>) inputPort).setOwningStage((S) this);
+		@SuppressWarnings("unchecked")
+		final IInputPort<S, T> inputPort = new InputPortImpl<S, T>((S) this);
 		this.inputPorts.add(inputPort);
+		this.enabledInputPorts++;
 		return inputPort;
 	}
 
 	/**
 	 * @since 1.10
-	 * @param stage
-	 * @return
+	 * @return a new output port that accepts elements of the particular type that is specified in the variable declaration.
 	 */
 	protected <T> IOutputPort<S, T> createOutputPort() {
-		final IOutputPort<S, T> outputPort = new OutputPortImpl<S, T>();
-		((AbstractPort<S, T>) outputPort).setOwningStage((S) this);
+		@SuppressWarnings("unchecked")
+		final IOutputPort<S, T> outputPort = new OutputPortImpl<S, T>((S) this);
 		this.outputPorts.add(outputPort);
 		return outputPort;
 	}
@@ -194,8 +190,7 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	 * @return
 	 * 
 	 */
-	// FIXME hide vis to protected
-	public List<IInputPort<S, ?>> getInputPorts() {
+	protected List<IInputPort<S, ?>> getInputPorts() {
 		return this.readOnlyInputPorts;
 	}
 

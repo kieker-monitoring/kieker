@@ -18,6 +18,7 @@ package kieker.panalysis.framework.core;
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.panalysis.framework.sequential.Pipeline;
 
 /**
  * @author Christian Wulf
@@ -27,11 +28,11 @@ import kieker.common.logging.LogFactory;
 public abstract class AbstractStage implements IStage {
 
 	protected int id;
-
 	/**
 	 * A unique logger instance per stage instance
 	 */
 	protected Log logger;
+	private Pipeline<?> owningPipeline;
 
 	public AbstractStage() {
 		this.logger = LogFactory.getLog(Long.toString(this.id));
@@ -45,6 +46,14 @@ public abstract class AbstractStage implements IStage {
 		this.id = id;
 	}
 
+	public Pipeline<?> getOwningPipeline() {
+		return this.owningPipeline;
+	}
+
+	public void setOwningPipeline(final Pipeline<?> owningPipeline) {
+		this.owningPipeline = owningPipeline;
+	}
+
 	public void cleanUp() { // NOPMD (empty non-abstract method is intended)
 		// empty default implementation
 	}
@@ -53,4 +62,5 @@ public abstract class AbstractStage implements IStage {
 	public String toString() {
 		return "{" + "id=" + this.id + ", class=" + this.getClass().getSimpleName() + "}";
 	}
+
 }

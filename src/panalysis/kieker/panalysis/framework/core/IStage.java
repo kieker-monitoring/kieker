@@ -16,12 +16,14 @@
 
 package kieker.panalysis.framework.core;
 
+import kieker.panalysis.framework.sequential.Pipeline;
+
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  */
-public interface IStage extends Cloneable {
+public interface IStage {
 
 	/**
 	 * @since 1.10
@@ -91,5 +93,11 @@ public interface IStage extends Cloneable {
 	 * @since 1.10
 	 */
 	void onPipelineStarts();
+
+	Context<?> getContext();
+
+	Pipeline<?> getOwningPipeline();
+
+	void setOwningPipeline(Pipeline<?> owningPipeline);
 
 }

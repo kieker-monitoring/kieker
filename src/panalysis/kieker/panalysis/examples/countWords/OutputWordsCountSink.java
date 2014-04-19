@@ -20,7 +20,7 @@ import java.io.File;
 
 import de.chw.util.Pair;
 
-import kieker.panalysis.framework.core.AbstractDefaultFilter;
+import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Context;
 import kieker.panalysis.framework.core.IInputPort;
 
@@ -29,7 +29,7 @@ import kieker.panalysis.framework.core.IInputPort;
  * 
  * @since 1.10
  */
-public class OutputWordsCountSink extends AbstractDefaultFilter<OutputWordsCountSink> {
+public class OutputWordsCountSink extends AbstractFilter<OutputWordsCountSink> {
 
 	public final IInputPort<OutputWordsCountSink, Pair<File, Integer>> FILE_WORDCOUNT_TUPLE = this.createInputPort();
 
@@ -47,7 +47,7 @@ public class OutputWordsCountSink extends AbstractDefaultFilter<OutputWordsCount
 
 		final File file = pair.getFirst();
 		final Number wordsCount = pair.getSecond();
-		System.out.println(wordsCount + " words in file '" + file.getAbsolutePath() + "'"); // NOPMD (Just for example purposes)
+		// System.out.println(wordsCount + " words in file '" + file.getAbsolutePath() + "'"); // NOPMD (Just for example purposes)
 		this.numFiles++;
 
 		final long end = System.currentTimeMillis();
