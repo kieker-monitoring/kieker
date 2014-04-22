@@ -156,22 +156,27 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 		return SIZE;
 	}
 
+	@Override
 	public final String getCallerOperationSignature() {
 		return this.getOperationSignature();
 	}
 
+	@Override
 	public final String getCallerClassSignature() {
 		return this.getClassSignature();
 	}
 
+	@Override
 	public final String getCalleeOperationSignature() {
 		return this.calleeOperationSignature;
 	}
 
+	@Override
 	public final String getCalleeClassSignature() {
 		return this.calleeClassSignature;
 	}
 
+	@Override
 	public final boolean callsReferencedOperationOf(final IOperationRecord record) {
 		return this.getCalleeOperationSignature().equals(record.getOperationSignature()) && this.getCalleeClassSignature().equals(record.getClassSignature());
 	}

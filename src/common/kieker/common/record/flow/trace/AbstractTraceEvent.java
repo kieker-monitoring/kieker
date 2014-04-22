@@ -79,10 +79,12 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 		this.orderIndex = buffer.getInt();
 	}
 
+	@Override
 	public final long getTraceId() {
 		return this.traceId;
 	}
 
+	@Override
 	public final int getOrderIndex() {
 		return this.orderIndex;
 	}

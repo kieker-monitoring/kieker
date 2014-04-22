@@ -251,6 +251,7 @@ public class TraceAggregationFilter extends AbstractFilterPlugin {
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public int compare(final TraceEventRecords t1, final TraceEventRecords t2) {
 			final AbstractTraceEvent[] recordsT1 = t1.getTraceEvents();
 			final AbstractTraceEvent[] recordsT2 = t2.getTraceEvents();

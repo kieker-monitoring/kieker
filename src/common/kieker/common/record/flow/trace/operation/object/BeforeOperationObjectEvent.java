@@ -142,6 +142,7 @@ public class BeforeOperationObjectEvent extends BeforeOperationEvent implements 
 		return SIZE;
 	}
 
+	@Override
 	public final int getObjectId() {
 		return this.objectId;
 	}

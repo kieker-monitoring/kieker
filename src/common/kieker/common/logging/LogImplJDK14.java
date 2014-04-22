@@ -61,6 +61,7 @@ public final class LogImplJDK14 implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final boolean isDebugEnabled() {
 		return this.logger.isLoggable(java.util.logging.Level.FINE);
 	}
@@ -68,6 +69,7 @@ public final class LogImplJDK14 implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void debug(final String message) {
 		this.log(java.util.logging.Level.FINE, message, null);
 	}
@@ -75,6 +77,7 @@ public final class LogImplJDK14 implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void debug(final String message, final Throwable t) {
 		this.log(java.util.logging.Level.FINE, message, t);
 	}
@@ -82,6 +85,7 @@ public final class LogImplJDK14 implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void info(final String message) {
 		this.log(java.util.logging.Level.INFO, message, null);
 	}
@@ -89,6 +93,7 @@ public final class LogImplJDK14 implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void info(final String message, final Throwable t) {
 		this.log(java.util.logging.Level.INFO, message, t);
 	}
@@ -96,6 +101,7 @@ public final class LogImplJDK14 implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void warn(final String message) {
 		this.log(java.util.logging.Level.WARNING, message, null);
 	}
@@ -103,6 +109,7 @@ public final class LogImplJDK14 implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void warn(final String message, final Throwable t) {
 		this.log(java.util.logging.Level.WARNING, message, t);
 	}
@@ -110,6 +117,7 @@ public final class LogImplJDK14 implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void error(final String message) {
 		this.log(java.util.logging.Level.SEVERE, message, null);
 	}
@@ -117,6 +125,7 @@ public final class LogImplJDK14 implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void error(final String message, final Throwable t) {
 		this.log(java.util.logging.Level.SEVERE, message, t);
 	}

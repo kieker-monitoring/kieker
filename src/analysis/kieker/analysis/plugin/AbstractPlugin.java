@@ -238,6 +238,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void connect(final String reponame, final AbstractRepository repository) throws AnalysisConfigurationException {
 		if (this.state != STATE.READY) {
 			throw new AnalysisConfigurationException("Plugin: " + this.getClass().getName() + " final not in " + STATE.READY + " this.state, but final in state "
@@ -290,6 +291,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			if ((ip != null) && (m.getParameterTypes().length == 1) && ip.name().equals(inputPortName)) {
 				src.outputPorts.get(outputPortName).eventTypes();
 				java.security.AccessController.doPrivileged(new PrivilegedAction<Object>() {
+					@Override
 					public Object run() {
 						m.setAccessible(true);
 						return null;
@@ -405,6 +407,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final String getPluginName() {
 		final String pluginName = this.getClass().getAnnotation(Plugin.class).name();
 		if (pluginName.equals(Plugin.NO_NAME)) {
@@ -417,6 +420,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final String getPluginDescription() {
 		return this.getClass().getAnnotation(Plugin.class).description();
 	}
@@ -441,6 +445,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final Map<String, AbstractRepository> getCurrentRepositories() {
 		return Collections.unmodifiableMap(this.registeredRepositories);
 	}
@@ -459,6 +464,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final String[] getAllOutputPortNames() {
 		final List<String> outputNames = new LinkedList<String>();
 		final Plugin annotation = this.getClass().getAnnotation(Plugin.class);
@@ -471,6 +477,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final String[] getAllInputPortNames() {
 		final List<String> inputNames = new LinkedList<String>();
 		for (final Method method : this.getClass().getMethods()) {
@@ -485,6 +492,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final String[] getAllDisplayNames() {
 		final List<String> displayNames = new LinkedList<String>();
 		for (final Method method : this.getClass().getMethods()) {
@@ -499,6 +507,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final String[] getAllRepositoryPortNames() {
 		final List<String> repositoryNames = new LinkedList<String>();
 		final Plugin annotation = this.getClass().getAnnotation(Plugin.class);
@@ -511,6 +520,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final List<PluginInputPortReference> getConnectedPlugins(final String outputPortName) {
 		// Make sure that the output port exists
 		final OutputPort outputPort = this.outputPorts.get(outputPortName);
@@ -528,6 +538,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final STATE getState() {
 		return this.state;
 	}

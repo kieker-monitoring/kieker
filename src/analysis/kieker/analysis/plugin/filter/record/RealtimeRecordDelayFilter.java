@@ -183,6 +183,7 @@ public class RealtimeRecordDelayFilter extends AbstractFilterPlugin {
 			// Schedule
 			this.executor.schedule(new Runnable() {
 
+				@Override
 				public void run() {
 					RealtimeRecordDelayFilter.this.deliverIndirect(OUTPUT_PORT_NAME_RECORDS, monitoringRecord);
 				}

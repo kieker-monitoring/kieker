@@ -88,6 +88,7 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object[] toArray() {
 		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getLockId(), };
 	}
@@ -95,6 +96,7 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putLong(this.getTimestamp());
 		buffer.putLong(this.getTraceId());
@@ -102,6 +104,7 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent {
 		buffer.putInt(this.getLockId());
 	}
 
+	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
@@ -109,6 +112,7 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getSize() {
 		return SIZE;
 	}

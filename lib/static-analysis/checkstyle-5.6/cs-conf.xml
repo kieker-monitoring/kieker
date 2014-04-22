@@ -216,11 +216,9 @@
 
         <!-- Verifies that the java.lang.Override annotation is present when the {@inheritDoc} javadoc tag is present. !-->
         <!-- See http://checkstyle.sourceforge.net/config_annotation.html#MissingOverride !-->
-        <!-- problems with Java 1.5
         <module name="MissingOverride">
             <property name="javaFiveCompatibility" value="false"/>
         </module>
-        -->
 
         <!-- This check makes sure that all package annotations are in the package-info.java file. !-->
         <!-- See http://checkstyle.sourceforge.net/config_annotation.html#PackageAnnotation !-->

@@ -85,10 +85,12 @@ final class FSDirectoryReader implements Runnable {
 	/**
 	 * Starts reading and returns after each record has been passed to the registered {@link #recordReceiver}.
 	 */
+	@Override
 	public final void run() {
 		this.readMappingFile(); // must be the first line to set filePrefix!
 		final File[] inputFiles = this.inputDir.listFiles(new FileFilter() {
 
+			@Override
 			public boolean accept(final File pathname) {
 				final String name = pathname.getName();
 				return pathname.isFile()
@@ -104,6 +106,7 @@ final class FSDirectoryReader implements Runnable {
 		} else { // everything ok, we process the files
 			Arrays.sort(inputFiles, new Comparator<File>() {
 
+				@Override
 				public final int compare(final File f1, final File f2) {
 					return f1.compareTo(f2); // simplified (we expect no dirs!)
 				}

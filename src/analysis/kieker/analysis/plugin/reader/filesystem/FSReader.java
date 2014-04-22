@@ -92,6 +92,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void terminate(final boolean error) {
 		this.log.info("Shutting down reader.");
 		this.running = false;
@@ -100,6 +101,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean read() {
 		// start all reader
 		int notInitializesReaders = 0;
@@ -148,6 +150,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean newMonitoringRecord(final IMonitoringRecord record) {
 		synchronized (record) { // with read()
 			synchronized (this.recordQueue) { // with read()

@@ -56,6 +56,7 @@ public final class LogImplWebguiLogging implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean isDebugEnabled() {
 		return false;
 	}
@@ -63,6 +64,7 @@ public final class LogImplWebguiLogging implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void debug(final String message) {
 		// Ignore
 	}
@@ -70,6 +72,7 @@ public final class LogImplWebguiLogging implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void debug(final String message, final Throwable t) {
 		// Ignore
 	}
@@ -77,6 +80,7 @@ public final class LogImplWebguiLogging implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void info(final String message) {
 		this.addMessage(message, "[Info]", null);
 	}
@@ -84,6 +88,7 @@ public final class LogImplWebguiLogging implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void info(final String message, final Throwable t) {
 		this.addMessage(message, "[Info]", t);
 	}
@@ -91,6 +96,7 @@ public final class LogImplWebguiLogging implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void warn(final String message) {
 		this.addMessage(message, "[Warn]", null);
 	}
@@ -98,6 +104,7 @@ public final class LogImplWebguiLogging implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void warn(final String message, final Throwable t) {
 		this.addMessage(message, "[Warn]", t);
 	}
@@ -105,6 +112,7 @@ public final class LogImplWebguiLogging implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void error(final String message) {
 		this.addMessage(message, "[Crit]", null);
 	}
@@ -112,6 +120,7 @@ public final class LogImplWebguiLogging implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void error(final String message, final Throwable t) {
 		this.addMessage(message, "[Crit]", t);
 	}

@@ -82,6 +82,7 @@ public final class FSZipReader implements Runnable {
 	/**
 	 * Starts reading and returns after each record has been passed to the registered {@link #recordReceiver}.
 	 */
+	@Override
 	public final void run() {
 		ZipInputStream zipInputStream = null;
 		try {

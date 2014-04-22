@@ -96,6 +96,7 @@ public class DbReader extends AbstractReaderPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean read() {
 		Connection connection = null;
 		try {
@@ -189,6 +190,7 @@ public class DbReader extends AbstractReaderPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void terminate(final boolean error) {
 		this.log.info("Shutdown of DBReader requested.");
 		this.running = false;

@@ -120,11 +120,13 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public abstract Configuration getCurrentConfiguration();
 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final String getName() {
 		return this.name;
 	}

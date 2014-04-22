@@ -170,6 +170,7 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 	 * 
 	 * @return The ID of the caller.
 	 */
+	@Override
 	public final int getObjectId() {
 		return this.callerObjectId;
 	}
@@ -179,6 +180,7 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 	 * 
 	 * @return The ID of the caller.
 	 */
+	@Override
 	public final int getCallerObjectId() {
 		return this.callerObjectId;
 	}
@@ -188,6 +190,7 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 	 * 
 	 * @return The ID of the callee.
 	 */
+	@Override
 	public final int getCalleeObjectId() {
 		return this.calleeObjectId;
 	}

@@ -142,6 +142,7 @@ public class AfterOperationObjectEvent extends AfterOperationEvent implements IO
 		return SIZE;
 	}
 
+	@Override
 	public final int getObjectId() {
 		return this.objectId;
 	}

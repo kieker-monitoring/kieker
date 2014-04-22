@@ -32,6 +32,7 @@ public final class LogImplNone implements Log {
 		// nothing to do here
 	}
 
+	@Override
 	public boolean isDebugEnabled() {
 		return false;
 	}
@@ -39,40 +40,48 @@ public final class LogImplNone implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void debug(final String message) {} // NOPMD (does nothing)
 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void debug(final String message, final Throwable t) {} // NOPMD (does nothing)
 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void info(final String message) {} // NOPMD (does nothing)
 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void info(final String message, final Throwable t) {} // NOPMD (does nothing)
 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void warn(final String message) {} // NOPMD (does nothing)
 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void warn(final String message, final Throwable t) {} // NOPMD (does nothing)
 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void error(final String message) {} // NOPMD (does nothing)
 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void error(final String message, final Throwable t) {} // NOPMD (does nothing)
 }
