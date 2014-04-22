@@ -66,6 +66,7 @@ public class AssemblyComponentOperationPair implements ISystemModelElement {
 		return +this.assemblyComponent.getId() + ":" + this.operation.getId() + "@" + this.id;
 	}
 
+	@Override
 	public String getIdentifier() {
 		return this.getAssemblyComponent().getIdentifier();
 	}

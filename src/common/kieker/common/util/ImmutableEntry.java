@@ -49,10 +49,12 @@ public class ImmutableEntry<K, V> implements Map.Entry<K, V> {
 		this.value = value;
 	}
 
+	@Override
 	public K getKey() {
 		return this.key;
 	}
 
+	@Override
 	public V getValue() {
 		return this.value;
 	}
@@ -65,6 +67,7 @@ public class ImmutableEntry<K, V> implements Map.Entry<K, V> {
 	 * 
 	 * @return Nothing. The method throws an exception.
 	 */
+	@Override
 	public V setValue(final V v) {
 		throw new UnsupportedOperationException("This entry is immutable");
 	}

@@ -38,6 +38,7 @@ public class JMSBroker implements Runnable {
 	/**
 	 * Runnable run method for the test JMSBroker.
 	 */
+	@Override
 	public void run() {
 		final BrokerService broker = new BrokerService();
 		// configure the broker

@@ -132,6 +132,7 @@ public class WelcomeStep extends AbstractStep {
 	private void addLogicToComponents() {
 		this.inputDirectoryChooseButton.addActionListener(new ActionListener() {
 
+			@Override
 			@SuppressWarnings("synthetic-access")
 			public void actionPerformed(final ActionEvent event) {
 				final JFileChooser fileChooser = new JFileChooser(WelcomeStep.this.inputDirectoryField.getText());
@@ -145,6 +146,7 @@ public class WelcomeStep extends AbstractStep {
 
 		this.outputDirectoryChooseButton.addActionListener(new ActionListener() {
 
+			@Override
 			@SuppressWarnings("synthetic-access")
 			public void actionPerformed(final ActionEvent arg0) {
 				final JFileChooser fileChooser = new JFileChooser(WelcomeStep.this.outputDirectoryField.getText());

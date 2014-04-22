@@ -51,6 +51,7 @@ public final class CPUsDetailedPercSampler extends AbstractSigarSampler {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void sample(final IMonitoringController monitoringController) throws SigarException {
 		if (!monitoringController.isMonitoringEnabled()) {
 			return;

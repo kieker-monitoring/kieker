@@ -83,6 +83,7 @@ public class TCPSingleServerConnector extends AbstractConnector {
 	 * @throws ConnectorDataTransmissionException
 	 *             it the socket could not be established
 	 */
+	@Override
 	public void initialize() throws ConnectorDataTransmissionException {
 		try {
 			this.serverSocket = new ServerSocket(this.port);
@@ -99,6 +100,7 @@ public class TCPSingleServerConnector extends AbstractConnector {
 	 * @throws ConnectorDataTransmissionException
 	 *             if the closing fails
 	 */
+	@Override
 	public void close() throws ConnectorDataTransmissionException {
 		try {
 			this.in.close();
@@ -119,6 +121,7 @@ public class TCPSingleServerConnector extends AbstractConnector {
 	 * @throws ConnectorEndOfDataException
 	 *             if the end of the data stream is reached
 	 */
+	@Override
 	public IMonitoringRecord deserializeNextRecord() throws ConnectorDataTransmissionException, ConnectorEndOfDataException {
 		// read structure ID
 		try {

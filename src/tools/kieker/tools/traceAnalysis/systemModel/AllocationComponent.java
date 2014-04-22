@@ -67,6 +67,7 @@ public class AllocationComponent implements ISystemModelElement {
 		return other.id == this.id;
 	}
 
+	@Override
 	public String getIdentifier() {
 		return this.getAssemblyComponent().getName();
 	}

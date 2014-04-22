@@ -51,6 +51,7 @@ public class ServiceConnectorStub implements IServiceConnector {
 	 *             when called more than END_NUMBER_OF_RECORDS times.
 	 * @return Returns an IMontoringRecord.
 	 */
+	@Override
 	public IMonitoringRecord deserializeNextRecord() throws ConnectorDataTransmissionException, ConnectorEndOfDataException {
 		Assert.assertTrue("Connector's deserializeNextRecord() method called before initialize() was called.", this.initialize);
 		Assert.assertFalse("Connector's deserializeNextRecord() method called after close() was called.", this.close);
@@ -72,6 +73,7 @@ public class ServiceConnectorStub implements IServiceConnector {
 	 * @throws ConnectorDataTransmissionException
 	 *             never, this is just API compatibility
 	 */
+	@Override
 	public void initialize() throws ConnectorDataTransmissionException {
 		// assert that initialize is false
 		Assert.assertFalse("Connector's initialize() method was called more than once.", this.initialize);
@@ -86,6 +88,7 @@ public class ServiceConnectorStub implements IServiceConnector {
 	 * @throws ConnectorDataTransmissionException
 	 *             never, this is just API compatibility
 	 */
+	@Override
 	public void close() throws ConnectorDataTransmissionException {
 		Assert.assertTrue("Connector's close() method was called before initialite() was called.", this.initialize);
 		Assert.assertTrue("Connector's close() method was called more than once.", !this.close);

@@ -47,6 +47,7 @@ class KiekerMapFileFilter implements FilenameFilter { // NOPMD (TestClassWithout
 	 * 
 	 * @return true if and only if the given file name is equals to the name of a kieker.map file.
 	 */
+	@Override
 	public boolean accept(final File dir, final String name) {
 		return FSUtil.MAP_FILENAME.equals(name);
 	}

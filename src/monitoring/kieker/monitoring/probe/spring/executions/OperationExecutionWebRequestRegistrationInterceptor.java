@@ -44,6 +44,7 @@ public class OperationExecutionWebRequestRegistrationInterceptor implements WebR
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void preHandle(final WebRequest request) throws Exception {
 		SESSION_REGISTRY.storeThreadLocalSessionId(request.getSessionId());
 	}
@@ -51,6 +52,7 @@ public class OperationExecutionWebRequestRegistrationInterceptor implements WebR
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void postHandle(final WebRequest request, final ModelMap map) throws Exception {
 		SESSION_REGISTRY.unsetThreadLocalSessionId();
 	}
@@ -58,6 +60,7 @@ public class OperationExecutionWebRequestRegistrationInterceptor implements WebR
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void afterCompletion(final WebRequest request, final Exception map) throws Exception {
 		// nothing to do
 	}

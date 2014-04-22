@@ -68,6 +68,7 @@ public enum SigarSamplerFactory implements ISigarSamplerFactory { // Singleton p
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public CPUsCombinedPercSampler createSensorCPUsCombinedPerc() {
 		return new CPUsCombinedPercSampler(this.sigar);
 	}
@@ -75,6 +76,7 @@ public enum SigarSamplerFactory implements ISigarSamplerFactory { // Singleton p
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public CPUsDetailedPercSampler createSensorCPUsDetailedPerc() {
 		return new CPUsDetailedPercSampler(this.sigar);
 	}
@@ -82,6 +84,7 @@ public enum SigarSamplerFactory implements ISigarSamplerFactory { // Singleton p
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public MemSwapUsageSampler createSensorMemSwapUsage() {
 		return new MemSwapUsageSampler(this.sigar);
 	}

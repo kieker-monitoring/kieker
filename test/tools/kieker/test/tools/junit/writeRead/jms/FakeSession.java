@@ -60,6 +60,7 @@ public class FakeSession implements Session {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void close() throws JMSException {
 		// No code necessary
 	}
@@ -67,6 +68,7 @@ public class FakeSession implements Session {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void commit() throws JMSException {
 		// No code necessary
 	}
@@ -74,6 +76,7 @@ public class FakeSession implements Session {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public QueueBrowser createBrowser(final Queue arg0) throws JMSException {
 		return null;
 	}
@@ -81,6 +84,7 @@ public class FakeSession implements Session {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public QueueBrowser createBrowser(final Queue arg0, final String arg1) throws JMSException {
 		return null;
 	}
@@ -88,6 +92,7 @@ public class FakeSession implements Session {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public BytesMessage createBytesMessage() throws JMSException {
 		return null;
 	}
@@ -95,6 +100,7 @@ public class FakeSession implements Session {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public MessageConsumer createConsumer(final Destination arg0) throws JMSException {
 		return CONSUMER;
 	}
@@ -102,6 +108,7 @@ public class FakeSession implements Session {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public MessageConsumer createConsumer(final Destination arg0, final String arg1) throws JMSException {
 		return null;
 	}
@@ -109,6 +116,7 @@ public class FakeSession implements Session {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public MessageConsumer createConsumer(final Destination arg0, final String arg1, final boolean arg2) throws JMSException {
 		return null;
 	}
@@ -116,6 +124,7 @@ public class FakeSession implements Session {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public TopicSubscriber createDurableSubscriber(final Topic arg0, final String arg1) throws JMSException {
 		return null;
 	}
@@ -123,6 +132,7 @@ public class FakeSession implements Session {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public TopicSubscriber createDurableSubscriber(final Topic arg0, final String arg1, final String arg2, final boolean arg3) throws JMSException {
 		return null;
 	}
@@ -130,6 +140,7 @@ public class FakeSession implements Session {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public MapMessage createMapMessage() throws JMSException {
 		return null;
 	}
@@ -137,6 +148,7 @@ public class FakeSession implements Session {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Message createMessage() throws JMSException {
 		return null;
 	}
@@ -144,6 +156,7 @@ public class FakeSession implements Session {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public ObjectMessage createObjectMessage() throws JMSException {
 		return null;
 	}
@@ -151,6 +164,7 @@ public class FakeSession implements Session {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public ObjectMessage createObjectMessage(final Serializable object) throws JMSException {
 		final ObjectMessage message = new FakeObjectMessage();
 		message.setObject(object);
@@ -160,6 +174,7 @@ public class FakeSession implements Session {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public MessageProducer createProducer(final Destination arg0) throws JMSException {
 		return PRODUCER;
 	}
@@ -167,6 +182,7 @@ public class FakeSession implements Session {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Queue createQueue(final String arg0) throws JMSException {
 		return null;
 	}
@@ -174,6 +190,7 @@ public class FakeSession implements Session {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public StreamMessage createStreamMessage() throws JMSException {
 		return null;
 	}
@@ -181,6 +198,7 @@ public class FakeSession implements Session {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public TemporaryQueue createTemporaryQueue() throws JMSException {
 		return null;
 	}
@@ -188,6 +206,7 @@ public class FakeSession implements Session {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public TemporaryTopic createTemporaryTopic() throws JMSException {
 		return null;
 	}
@@ -195,6 +214,7 @@ public class FakeSession implements Session {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public TextMessage createTextMessage() throws JMSException {
 		return null;
 	}
@@ -202,6 +222,7 @@ public class FakeSession implements Session {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public TextMessage createTextMessage(final String arg0) throws JMSException {
 		return null;
 	}
@@ -209,6 +230,7 @@ public class FakeSession implements Session {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Topic createTopic(final String arg0) throws JMSException {
 		return null;
 	}
@@ -216,6 +238,7 @@ public class FakeSession implements Session {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getAcknowledgeMode() throws JMSException {
 		return 0;
 	}
@@ -223,6 +246,7 @@ public class FakeSession implements Session {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public MessageListener getMessageListener() throws JMSException {
 		return null;
 	}
@@ -230,6 +254,7 @@ public class FakeSession implements Session {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean getTransacted() throws JMSException { // NOPMD (get -> is)
 		return false;
 	}
@@ -237,6 +262,7 @@ public class FakeSession implements Session {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void recover() throws JMSException {
 		// No code necessary
 	}
@@ -244,6 +270,7 @@ public class FakeSession implements Session {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void rollback() throws JMSException {
 		// No code necessary
 	}
@@ -251,6 +278,7 @@ public class FakeSession implements Session {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void run() {
 		// No code necessary
 	}
@@ -258,6 +286,7 @@ public class FakeSession implements Session {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setMessageListener(final MessageListener arg0) throws JMSException {
 		// No code necessary
 	}
@@ -265,6 +294,7 @@ public class FakeSession implements Session {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void unsubscribe(final String arg0) throws JMSException {
 		// No code necessary
 	}

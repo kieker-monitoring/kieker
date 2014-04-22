@@ -57,6 +57,7 @@ public class MyPipeReader extends AbstractReaderPlugin {
 		}
 	}
 
+	@Override
 	public boolean read() {
 		try {
 			// Wait max. 4 seconds for the next data.
@@ -87,6 +88,7 @@ public class MyPipeReader extends AbstractReaderPlugin {
 		return configuration;
 	}
 
+	@Override
 	public void terminate(final boolean error) {
 		// nothing to do
 	}

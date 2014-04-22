@@ -79,14 +79,17 @@ public final class SystemNanoTimer extends AbstractTimeSource {
 		}
 	}
 
+	@Override
 	public final long getTime() {
 		return this.timeunit.convert(System.nanoTime() - this.offset, TimeUnit.NANOSECONDS);
 	}
 
+	@Override
 	public long getOffset() {
 		return this.timeunit.convert(this.offset - this.clockdifference, TimeUnit.NANOSECONDS);
 	}
 
+	@Override
 	public final TimeUnit getTimeUnit() {
 		return this.timeunit;
 	}

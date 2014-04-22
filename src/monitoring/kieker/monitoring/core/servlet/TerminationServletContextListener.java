@@ -50,6 +50,7 @@ public class TerminationServletContextListener implements ServletContextListener
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void contextDestroyed(final ServletContextEvent evt) {
 		this.ctrl.terminateMonitoring();
 		LOG.info("context destroyed");
@@ -58,6 +59,7 @@ public class TerminationServletContextListener implements ServletContextListener
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void contextInitialized(final ServletContextEvent evt) {
 		LOG.info("context initialized");
 	}

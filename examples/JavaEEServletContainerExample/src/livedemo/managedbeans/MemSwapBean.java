@@ -106,6 +106,7 @@ public class MemSwapBean implements Observer {
 		this.swapModel.setModel(swap);
 	}
 
+	@Override
 	public void update(final Observable arg0, final Object arg1) {
 		this.updateXYPlot();
 	}

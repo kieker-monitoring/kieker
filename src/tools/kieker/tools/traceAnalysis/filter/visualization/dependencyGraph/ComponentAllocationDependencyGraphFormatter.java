@@ -146,6 +146,7 @@ public class ComponentAllocationDependencyGraphFormatter extends AbstractCompone
 			super(builder, includeWeights, plotLoops, useShortLabels);
 		}
 
+		@Override
 		public void visitVertex(final DependencyGraphNode<AllocationComponent> vertex) {
 			// Do nothing
 		}

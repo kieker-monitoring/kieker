@@ -392,6 +392,7 @@ public class ExecutionTrace extends AbstractTrace {
 		 * 
 		 * @return -1 if e1 < e2, 1 if e1 > e2, 0 otherwise.
 		 */
+		@Override
 		public final int compare(final Execution e1, final Execution e2) {
 			// If executions equal, return immediately
 			if (e1.equals(e2)) {

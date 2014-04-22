@@ -19,8 +19,8 @@ package kieker.tools.traceAnalysis.filter.traceReconstruction;
 import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.NavigableSet;
 import java.util.Set;
-import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
@@ -101,9 +101,10 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	private boolean traceProcessingErrorOccured; // false
 
 	/** Pending traces sorted by tin timestamps. */
-	private final SortedSet<ExecutionTrace> timeoutMap = new TreeSet<ExecutionTrace>(new Comparator<ExecutionTrace>() {
+	private final NavigableSet<ExecutionTrace> timeoutMap = new TreeSet<ExecutionTrace>(new Comparator<ExecutionTrace>() {
 
 		/** Order traces by tins */
+		@Override
 		public int compare(final ExecutionTrace t1, final ExecutionTrace t2) {
 			if (t1 == t2) { // NOPMD (no equals)
 				return 0;
@@ -298,10 +299,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	private void processTimeoutQueue() throws ExecutionEventProcessingException {
 		synchronized (this.timeoutMap) {
 			while (!this.timeoutMap.isEmpty() && (this.terminated || ((this.maxTout - this.timeoutMap.first().getMinTin()) > this.maxTraceDuration))) {
-				// Java 1.5 compatibility
-				final ExecutionTrace polledTrace = this.timeoutMap.first();
-				this.timeoutMap.remove(polledTrace);
-				// Java 1.6: final ExecutionTrace polledTrace = this.timeoutMap.pollFirst();
+				final ExecutionTrace polledTrace = this.timeoutMap.pollFirst();
 				final long curTraceId = polledTrace.getTraceId();
 				this.pendingTraces.remove(curTraceId);
 				this.processExecutionTrace(polledTrace);

@@ -104,6 +104,7 @@ public class TraceAnalysisGUI extends JFrame {
 	private void addLogicToComponents() {
 		this.nextButton.addActionListener(new ActionListener() {
 
+			@Override
 			@SuppressWarnings("synthetic-access")
 			public void actionPerformed(final ActionEvent arg0) {
 				TraceAnalysisGUI.this.nextStep();
@@ -112,6 +113,7 @@ public class TraceAnalysisGUI extends JFrame {
 
 		this.previousButton.addActionListener(new ActionListener() {
 
+			@Override
 			@SuppressWarnings("synthetic-access")
 			public void actionPerformed(final ActionEvent e) {
 				TraceAnalysisGUI.this.previousStep();
@@ -182,6 +184,7 @@ public class TraceAnalysisGUI extends JFrame {
 			// No code necessary
 		}
 
+		@Override
 		@SuppressWarnings("synthetic-access")
 		public void actionPerformed(final ActionEvent e) {
 			TraceAnalysisGUI.this.startTraceAnalysis();

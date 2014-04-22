@@ -110,6 +110,7 @@ public class ConstructionEvent extends AbstractTraceEvent implements IObjectReco
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object[] toArray() {
 		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getClassSignature(), this.getObjectId(), };
 	}
@@ -117,6 +118,7 @@ public class ConstructionEvent extends AbstractTraceEvent implements IObjectReco
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putLong(this.getTimestamp());
 		buffer.putLong(this.getTraceId());
@@ -128,6 +130,7 @@ public class ConstructionEvent extends AbstractTraceEvent implements IObjectReco
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
@@ -135,14 +138,17 @@ public class ConstructionEvent extends AbstractTraceEvent implements IObjectReco
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getSize() {
 		return SIZE;
 	}
 
+	@Override
 	public final String getClassSignature() {
 		return this.classSignature;
 	}
 
+	@Override
 	public final int getObjectId() {
 		return this.objectId;
 	}

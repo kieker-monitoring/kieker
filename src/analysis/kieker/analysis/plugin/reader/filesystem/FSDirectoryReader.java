@@ -252,12 +252,8 @@ final class FSDirectoryReader implements Runnable {
 						} else {
 							skipValues = 2;
 						}
-						// Java 1.5 compatibility
-						final String[] recordFieldsReduced = new String[recordFields.length - skipValues];
-						System.arraycopy(recordFields, skipValues, recordFieldsReduced, 0, recordFields.length - skipValues);
-						record = AbstractMonitoringRecord.createFromStringArray(clazz, recordFieldsReduced);
-						// in Java 1.6 this could be simplified to
-						// record = AbstractMonitoringRecord.createFromStringArray(clazz, Arrays.copyOfRange(recordFields, skipValues, recordFields.length));
+
+						record = AbstractMonitoringRecord.createFromStringArray(clazz, Arrays.copyOfRange(recordFields, skipValues, recordFields.length));
 						record.setLoggingTimestamp(loggingTimestamp);
 					} else { // legacy record
 						final String[] recordFieldsReduced = new String[recordFields.length - 1];

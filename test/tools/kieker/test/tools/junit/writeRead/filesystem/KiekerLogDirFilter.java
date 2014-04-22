@@ -40,6 +40,7 @@ public class KiekerLogDirFilter implements FilenameFilter { // NOPMD (TestClassW
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean accept(final File dir, final String name) {
 		if (!name.startsWith(FSUtil.FILE_PREFIX)) {
 			return false;
@@ -57,6 +58,7 @@ public class KiekerLogDirFilter implements FilenameFilter { // NOPMD (TestClassW
 			/**
 			 * Accepts directories containing a `kieker.map` file.
 			 */
+			@Override
 			public boolean accept(final File dir, final String name) {
 				return name.equals(FSUtil.MAP_FILENAME);
 			}

@@ -170,6 +170,7 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 			try {
 				AbstractCallTreeFilter.addTraceToTree(this.root, t, new IPairFactory<T>() {
 
+					@Override
 					public T createPair(final SynchronousCallMessage callMsg) {
 						return AbstractAggregatedCallTreeFilter.this.concreteCreatePair(callMsg);
 					}

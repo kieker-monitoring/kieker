@@ -190,6 +190,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object[] toArray() {
 		return new Object[] { this.getTimestamp(), this.getHostname(), this.getCpuID(), this.getUser(), this.getSystem(), this.getWait(), this.getNice(),
 			this.getIrq(), this.getTotalUtilization(), this.getIdle(), };
@@ -198,6 +199,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putLong(this.getTimestamp());
 		buffer.putInt(stringRegistry.get(this.getHostname()));
@@ -216,6 +218,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public final void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
@@ -226,6 +229,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public final void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
@@ -234,6 +238,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
@@ -241,6 +246,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getSize() {
 		return SIZE;
 	}

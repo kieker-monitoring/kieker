@@ -184,6 +184,7 @@ public final class JMXController extends AbstractController implements IJMXContr
 		}
 	}
 
+	@Override
 	public final String getJMXDomain() {
 		return this.domain;
 	}
@@ -247,6 +248,7 @@ public final class JMXController extends AbstractController implements IJMXContr
 			// nothing to do
 		}
 
+		@Override
 		public final void handleNotification(final Notification notification, final Object handback) {
 			final String notificationType = notification.getType();
 			if (notificationType.equals(JMXConnectionNotification.OPENED)) {

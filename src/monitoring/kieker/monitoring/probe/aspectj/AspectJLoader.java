@@ -33,9 +33,10 @@ import kieker.common.logging.LogFactory;
  * @since 1.9
  */
 public final class AspectJLoader {
-	private static final Log LOG = LogFactory.getLog(AspectJLoader.class);
 
 	public static final String KIEKER_MONITORING_SKIP_DEFAULT_AOP_CONFIGURATION = "kieker.monitoring.skipDefaultAOPConfiguration";
+
+	private static final Log LOG = LogFactory.getLog(AspectJLoader.class);
 
 	private AspectJLoader() {
 		// Avoid instantiation

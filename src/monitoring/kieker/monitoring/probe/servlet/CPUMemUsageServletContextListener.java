@@ -116,6 +116,7 @@ public class CPUMemUsageServletContextListener implements ServletContextListener
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void contextDestroyed(final ServletContextEvent sce) {
 		for (final ScheduledSamplerJob s : this.samplerJobs) {
 			this.monitoringController.removeScheduledSampler(s);
@@ -125,6 +126,7 @@ public class CPUMemUsageServletContextListener implements ServletContextListener
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void contextInitialized(final ServletContextEvent sce) {
 		this.initParameters(sce.getServletContext());
 		this.initSensors();

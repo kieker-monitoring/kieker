@@ -80,6 +80,7 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Class<?>[] getValueTypes() {
 		return StorableDetectionResult.TYPES.clone();
 	}
@@ -89,6 +90,7 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public void initFromArray(final Object[] arg0) {
 		throw new UnsupportedOperationException();
@@ -97,6 +99,7 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object[] toArray() {
 		return new Object[] { this.applicationName, this.value, this.timestamp, this.forecast, this.score };
 	}
@@ -121,6 +124,7 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 		return this.score;
 	}
 
+	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putInt(stringRegistry.get(this.getApplication()));
 		buffer.putDouble(this.getValue());
@@ -134,11 +138,13 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public int getSize() {
 		return SIZE;
 	}

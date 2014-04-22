@@ -47,6 +47,7 @@ public class TestPeriodicSampling extends AbstractKiekerTest { // NOCS
 		final AtomicInteger numTriggers = new AtomicInteger(0);
 		final ISampler samplingCounter = new ISampler() {
 
+			@Override
 			public void sample(final IMonitoringController monitoringController) {
 				numTriggers.incrementAndGet();
 			}
@@ -91,6 +92,7 @@ public class TestPeriodicSampling extends AbstractKiekerTest { // NOCS
 		final AtomicInteger numTriggers = new AtomicInteger(0);
 		final ISampler samplingCounter = new ISampler() {
 
+			@Override
 			public void sample(final IMonitoringController monitoringController) {
 				numTriggers.incrementAndGet();
 			}

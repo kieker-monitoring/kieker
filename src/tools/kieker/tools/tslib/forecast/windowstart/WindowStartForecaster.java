@@ -37,6 +37,7 @@ public class WindowStartForecaster extends AbstractForecaster<Double> {
 		super(historyTimeseries);
 	}
 
+	@Override
 	public IForecastResult<Double> forecast(final int numForecastSteps) {
 		final ITimeSeries<Double> history = this.getTsOriginal();
 		final ITimeSeries<Double> tsFC = this.prepareForecastTS();

@@ -40,6 +40,7 @@ public class FakeConnectionFactory implements ConnectionFactory {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Connection createConnection() throws JMSException {
 		return new FakeConnection();
 	}
@@ -47,6 +48,7 @@ public class FakeConnectionFactory implements ConnectionFactory {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Connection createConnection(final String arg0, final String arg1) throws JMSException {
 		return null;
 	}

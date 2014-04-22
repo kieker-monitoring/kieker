@@ -35,6 +35,7 @@ public final class NoOriginRetentionPolicy extends AbstractOriginRetentionPolicy
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public IOriginRetentionPolicy uniteWith(final IOriginRetentionPolicy other) {
 		return other;
 	}
@@ -42,6 +43,7 @@ public final class NoOriginRetentionPolicy extends AbstractOriginRetentionPolicy
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public <T> void handleOrigin(final AbstractGraphElement<T> element, final T origin) {
 		// Do nothing
 	}

@@ -137,6 +137,7 @@ public class CPUXYPlotBean implements Observer {
 		}
 	}
 
+	@Override
 	public void update(final Observable o, final Object arg) {
 		this.updateModel();
 

@@ -33,6 +33,7 @@ public class SimpleAnomalyCalculator implements IAnomalyCalculator<Double> {
 		// No code necessary
 	}
 
+	@Override
 	public AnomalyScore calculateAnomaly(final IForecastResult<Double> forecast, final ITimeSeriesPoint<Double> current) {
 		if (forecast.getForecast().getPoints().size() == 0) {
 			return null;

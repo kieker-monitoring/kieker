@@ -50,6 +50,7 @@ public class MemSwapUsageSampler extends AbstractSigarSampler {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void sample(final IMonitoringController monitoringCtr) throws SigarException {
 		if (!monitoringCtr.isMonitoringEnabled()) {
 			return;

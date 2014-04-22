@@ -52,6 +52,7 @@ public class JMSMessageGenerator implements Runnable {
 	/**
 	 * General run method for the message generator.
 	 */
+	@Override
 	public void run() {
 		this.initialize();
 		this.sendRecords();

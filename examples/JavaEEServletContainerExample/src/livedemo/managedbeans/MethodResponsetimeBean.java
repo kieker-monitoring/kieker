@@ -184,6 +184,7 @@ public class MethodResponsetimeBean implements Observer {
 		return max;
 	}
 
+	@Override
 	public synchronized void update(final Observable o, final Object arg) {
 		this.responsetimeModel.clear();
 		this.countingModel.clear();

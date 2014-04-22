@@ -43,6 +43,7 @@ public abstract class AbstractForecaster<T> implements IForecaster<T> {
 	/**
 	 * @return the historyTimeseries
 	 */
+	@Override
 	public ITimeSeries<T> getTsOriginal() {
 		return this.historyTimeseries;
 	}
@@ -60,6 +61,7 @@ public abstract class AbstractForecaster<T> implements IForecaster<T> {
 		return tsFC;
 	}
 
+	@Override
 	public int getConfidenceLevel() {
 		return this.confidenceLevel;
 	}

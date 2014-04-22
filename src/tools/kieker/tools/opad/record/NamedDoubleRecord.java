@@ -69,6 +69,7 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
@@ -78,6 +79,7 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public void initFromArray(final Object[] arg0) {
 		throw new UnsupportedOperationException();
@@ -86,6 +88,7 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object[] toArray() {
 		return new Object[] { this.applicationName, this.timestamp, this.responseTime };
 	}
@@ -102,6 +105,7 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 		return this.responseTime;
 	}
 
+	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putInt(stringRegistry.get(this.getApplication()));
 		buffer.putLong(this.getTimestamp());
@@ -113,11 +117,13 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public int getSize() {
 		return SIZE;
 	}

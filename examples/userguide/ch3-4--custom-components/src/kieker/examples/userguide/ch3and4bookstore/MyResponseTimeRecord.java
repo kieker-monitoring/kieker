@@ -55,32 +55,38 @@ public class MyResponseTimeRecord extends AbstractMonitoringRecord implements IM
 		this.responseTimeNanos = buffer.getLong();
 	}
 
+	@Override
 	@Deprecated
 	// Will not be used because the record implements IMonitoringRecord.Factory
 	public final void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	@Deprecated
 	// Will not be used because the record implements IMonitoringRecord.BinaryFactory
 	public final void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public Object[] toArray() {
 		return new Object[] { this.getClassName(), this.getMethodName(), this.getResponseTimeNanos(), };
 	}
 
+	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putInt(stringRegistry.get(this.getClassName()));
 		buffer.putInt(stringRegistry.get(this.getMethodName()));
 		buffer.putLong(this.getResponseTimeNanos());
 	}
 
+	@Override
 	public Class<?>[] getValueTypes() {
 		return MyResponseTimeRecord.TYPES;
 	}
 
+	@Override
 	public int getSize() {
 		return SIZE;
 	}

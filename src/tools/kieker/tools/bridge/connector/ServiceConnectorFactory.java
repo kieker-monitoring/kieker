@@ -58,6 +58,7 @@ public final class ServiceConnectorFactory {
 			try {
 				final Field parameterTypesField = type.getDeclaredField(TYPES);
 				java.security.AccessController.doPrivileged(new PrivilegedAction<Object>() {
+					@Override
 					public Object run() {
 						parameterTypesField.setAccessible(true);
 						return null;

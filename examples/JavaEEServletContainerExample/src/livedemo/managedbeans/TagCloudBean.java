@@ -96,6 +96,7 @@ public class TagCloudBean implements Observer {
 		this.analysisBean = analysisBean;
 	}
 
+	@Override
 	public void update(final Observable arg0, final Object arg1) {
 		this.methodModel.clear();
 		for (final String key : this.methodMap.keySet()) {

@@ -126,6 +126,7 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 							NoOriginRetentionPolicy.createInstance()); // rootNode
 			AbstractCallTreeFilter.writeDotForMessageTrace(rootNode, new IPairFactory<AllocationComponentOperationPair>() {
 
+				@Override
 				public AllocationComponentOperationPair createPair(final SynchronousCallMessage callMsg) {
 					final AllocationComponent allocationComponent = callMsg.getReceivingExecution().getAllocationComponent();
 					final Operation op = callMsg.getReceivingExecution().getOperation();

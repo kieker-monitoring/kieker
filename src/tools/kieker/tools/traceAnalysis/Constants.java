@@ -238,6 +238,7 @@ public final class Constants {
 		}
 		CMD_HELP_FORMATTER.setOptionComparator(new Comparator<Object>() {
 
+			@Override
 			public int compare(final Object o1, final Object o2) {
 				if (o1 == o2) {
 					return 0;

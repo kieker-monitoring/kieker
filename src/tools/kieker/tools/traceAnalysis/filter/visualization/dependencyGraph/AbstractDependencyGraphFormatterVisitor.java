@@ -62,6 +62,7 @@ public abstract class AbstractDependencyGraphFormatterVisitor<T extends ISystemM
 		this.useShortLabels = useShortLabels;
 	}
 
+	@Override
 	public void visitEdge(final WeightedBidirectionalDependencyGraphEdge<T> edge) {
 		final DependencyGraphNode<T> sourceNode = edge.getSource();
 		final DependencyGraphNode<T> destinationNode = edge.getTarget();

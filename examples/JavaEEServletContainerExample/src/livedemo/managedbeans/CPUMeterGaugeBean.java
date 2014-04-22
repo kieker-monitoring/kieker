@@ -90,6 +90,7 @@ public class CPUMeterGaugeBean implements Observer {
 		}
 	}
 
+	@Override
 	public void update(final Observable arg0, final Object arg1) {
 		this.meterGaugeModels.clear();
 		this.updateMeterGaugeModels();

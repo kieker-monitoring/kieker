@@ -78,6 +78,7 @@ public class TimeSeriesPointsBuffer<T> extends ConcurrentLinkedQueue<T> implemen
 		return super.poll();
 	}
 
+	@Override
 	public int getSize() {
 		return this.size();
 	}

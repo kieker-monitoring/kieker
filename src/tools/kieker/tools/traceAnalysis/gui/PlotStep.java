@@ -176,6 +176,7 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 	private void addLogicToComponents() {
 		this.allGraphs.addItemListener(new ItemListener() {
 
+			@Override
 			@SuppressWarnings("synthetic-access")
 			public void itemStateChanged(final ItemEvent event) {
 				PlotStep.this.deploymentSequenceDiagrams.setSelected(PlotStep.this.allGraphs.isSelected());
@@ -197,6 +198,7 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 
 		this.deploymentComponentDependencyGraph.addItemListener(new ItemListener() {
 
+			@Override
 			@SuppressWarnings("synthetic-access")
 			public void itemStateChanged(final ItemEvent e) {
 				if (!PlotStep.this.deploymentComponentDependencyGraph.isSelected()) {
@@ -207,6 +209,7 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 
 		this.assemblyComponentDependencyGraph.addItemListener(new ItemListener() {
 
+			@Override
 			@SuppressWarnings("synthetic-access")
 			public void itemStateChanged(final ItemEvent e) {
 				if (!PlotStep.this.assemblyComponentDependencyGraph.isSelected()) {
@@ -217,6 +220,7 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 
 		this.deploymentOperationDependencyGraph.addItemListener(new ItemListener() {
 
+			@Override
 			@SuppressWarnings("synthetic-access")
 			public void itemStateChanged(final ItemEvent e) {
 				if (!PlotStep.this.deploymentOperationDependencyGraph.isSelected()) {
@@ -227,6 +231,7 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 
 		this.assemblyOperationDependencyGraph.addItemListener(new ItemListener() {
 
+			@Override
 			@SuppressWarnings("synthetic-access")
 			public void itemStateChanged(final ItemEvent e) {
 				if (!PlotStep.this.assemblyOperationDependencyGraph.isSelected()) {

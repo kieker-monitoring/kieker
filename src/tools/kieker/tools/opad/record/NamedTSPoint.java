@@ -65,15 +65,18 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 
 	}
 
+	@Override
 	public Object[] toArray() {
 		return new Object[] { this.getTimestamp(), this.getValue(), this.getName(), };
 	}
 
+	@Override
 	@Deprecated
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
@@ -82,14 +85,17 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 		return this.timestamp;
 	}
 
+	@Override
 	public String getName() {
 		return this.name;
 	}
 
+	@Override
 	public double getValue() {
 		return this.value;
 	}
 
+	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putLong(this.getTimestamp());
 		buffer.putDouble(this.getValue());
@@ -101,11 +107,13 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public int getSize() {
 		return SIZE;
 	}

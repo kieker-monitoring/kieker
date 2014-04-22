@@ -54,22 +54,27 @@ public class ForecastResult<T> implements IForecastResult<T> {
 		this(tsForecast, tsOriginal, 0, tsForecast, tsForecast); // tsForecast also lower/upper
 	}
 
+	@Override
 	public ITimeSeries<T> getForecast() {
 		return this.tsForecast;
 	}
 
+	@Override
 	public int getConfidenceLevel() {
 		return this.confidenceLevel;
 	}
 
+	@Override
 	public ITimeSeries<T> getUpper() {
 		return this.tsUpper;
 	}
 
+	@Override
 	public ITimeSeries<T> getLower() {
 		return this.tsLower;
 	}
 
+	@Override
 	public ITimeSeries<T> getOriginal() {
 		return this.tsOriginal;
 	}

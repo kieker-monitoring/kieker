@@ -36,18 +36,22 @@ public class ForecastMeasurementPair implements IForecastMeasurementPair {
 		this.time = time;
 	}
 
+	@Override
 	public String getName() {
 		return this.name;
 	}
 
+	@Override
 	public long getTime() {
 		return this.time;
 	}
 
+	@Override
 	public Double getValue() {
 		return this.measurement;
 	}
 
+	@Override
 	public Double getForecasted() {
 		return this.forecast;
 	}

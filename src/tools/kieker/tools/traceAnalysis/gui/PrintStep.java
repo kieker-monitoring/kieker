@@ -103,6 +103,7 @@ public class PrintStep extends AbstractStep {
 	private void addLogicToComponents() {
 		this.allPrints.addItemListener(new ItemListener() {
 
+			@Override
 			@SuppressWarnings("synthetic-access")
 			public void itemStateChanged(final ItemEvent event) {
 				PrintStep.this.messageTraces.setSelected(PrintStep.this.allPrints.isSelected());

@@ -41,9 +41,6 @@ public class FakeMessageConsumer implements MessageConsumer {
 		this.messageListener = null; // NOPMD (null)
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public void addMessage(final Message message) {
 		this.messageListener.onMessage(message);
 	}
@@ -51,6 +48,7 @@ public class FakeMessageConsumer implements MessageConsumer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void close() throws JMSException {
 		// No code necessary
 	}
@@ -58,6 +56,7 @@ public class FakeMessageConsumer implements MessageConsumer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public MessageListener getMessageListener() throws JMSException {
 		return null;
 	}
@@ -65,6 +64,7 @@ public class FakeMessageConsumer implements MessageConsumer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getMessageSelector() throws JMSException {
 		return null;
 	}
@@ -72,6 +72,7 @@ public class FakeMessageConsumer implements MessageConsumer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Message receive() throws JMSException {
 		return null;
 	}
@@ -79,6 +80,7 @@ public class FakeMessageConsumer implements MessageConsumer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Message receive(final long arg0) throws JMSException {
 		return null;
 	}
@@ -86,6 +88,7 @@ public class FakeMessageConsumer implements MessageConsumer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Message receiveNoWait() throws JMSException {
 		return null;
 	}
@@ -93,6 +96,7 @@ public class FakeMessageConsumer implements MessageConsumer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setMessageListener(final MessageListener listener) throws JMSException {
 		this.messageListener = listener;
 	}

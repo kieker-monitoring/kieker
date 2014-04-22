@@ -46,6 +46,7 @@ public class PrivilegedClassLoaderAction implements PrivilegedAction<URLClassLoa
 	 * 
 	 * @return The class loader.
 	 */
+	@Override
 	public URLClassLoader run() {
 		return new URLClassLoader(this.urls, CLIServerMain.class.getClassLoader());
 	}

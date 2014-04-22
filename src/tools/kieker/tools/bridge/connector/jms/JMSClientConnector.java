@@ -94,6 +94,7 @@ public class JMSClientConnector extends AbstractConnector {
 	 * @throws ConnectorDataTransmissionException
 	 *             if any JMSException occurs
 	 */
+	@Override
 	public void initialize() throws ConnectorDataTransmissionException {
 		try {
 			// setup connection
@@ -123,6 +124,7 @@ public class JMSClientConnector extends AbstractConnector {
 	 * @throws ConnectorDataTransmissionException
 	 *             if any JMSException occurs
 	 */
+	@Override
 	public void close() throws ConnectorDataTransmissionException {
 		try {
 			this.connection.stop();
@@ -141,6 +143,7 @@ public class JMSClientConnector extends AbstractConnector {
 	 * @throws ConnectorEndOfDataException
 	 *             if the received message is null indicating that the consumer is closed
 	 */
+	@Override
 	public IMonitoringRecord deserializeNextRecord() throws ConnectorDataTransmissionException, ConnectorEndOfDataException {
 		Message message;
 		try {

@@ -32,6 +32,7 @@ public class NamedDoubleTimeSeriesPoint extends TimeSeriesPoint<Double> implemen
 		this.name = name;
 	}
 
+	@Override
 	public String getName() {
 		return this.name;
 	}

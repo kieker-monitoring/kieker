@@ -116,6 +116,7 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 		return this.filterOperationSignatureString;
 	}
 
+	@Override
 	public void init(final FilterConfig config) throws ServletException {
 		// by default, we do nothing here. Extending classes may override this method
 		final String valString = config.getInitParameter(CONFIG_PROPERTY_NAME_LOG_FILTER_EXECUTION);
@@ -143,6 +144,7 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 	 * @throws IOException
 	 * @throws ServletException
 	 */
+	@Override
 	public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
 		if (!MONITORING_CTRL.isMonitoringEnabled()) {
 			chain.doFilter(request, response);
@@ -189,6 +191,7 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 		}
 	}
 
+	@Override
 	public void destroy() {
 		// by default, we do nothing here. Extending classes may override this method
 	}

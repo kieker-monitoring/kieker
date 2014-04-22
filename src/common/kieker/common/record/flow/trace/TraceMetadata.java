@@ -122,6 +122,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object[] toArray() {
 		return new Object[] { this.getTraceId(), this.getThreadId(), this.getSessionId(), this.getHostname(), this.getParentTraceId(), this.getParentOrderId(), };
 	}
@@ -129,6 +130,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putLong(this.getTraceId());
 		buffer.putLong(this.getThreadId());
@@ -143,6 +145,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public final void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
@@ -153,6 +156,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public final void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
@@ -161,6 +165,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
@@ -168,6 +173,7 @@ public class TraceMetadata extends AbstractMonitoringRecord implements IMonitori
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getSize() {
 		return SIZE;
 	}

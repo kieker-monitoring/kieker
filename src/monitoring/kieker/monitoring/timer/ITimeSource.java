@@ -53,5 +53,6 @@ public interface ITimeSource {
 	 * 
 	 * @since 1.5
 	 */
+	@Override
 	public String toString();
 }

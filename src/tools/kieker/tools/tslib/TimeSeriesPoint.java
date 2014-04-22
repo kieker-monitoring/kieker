@@ -35,10 +35,12 @@ public class TimeSeriesPoint<T> implements ITimeSeriesPoint<T> {
 		this.value = value;
 	}
 
+	@Override
 	public long getTime() {
 		return this.time;
 	}
 
+	@Override
 	public T getValue() {
 		return this.value;
 	}

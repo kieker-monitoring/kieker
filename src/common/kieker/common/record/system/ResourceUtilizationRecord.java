@@ -117,6 +117,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object[] toArray() {
 		return new Object[] { this.getTimestamp(), this.getHostname(), this.getResourceName(), this.getUtilization(), };
 	}
@@ -124,6 +125,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putLong(this.getTimestamp());
 		buffer.putInt(stringRegistry.get(this.getHostname()));
@@ -136,6 +138,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public final void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
@@ -146,6 +149,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public final void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
@@ -154,6 +158,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
@@ -161,6 +166,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getSize() {
 		return SIZE;
 	}

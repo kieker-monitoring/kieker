@@ -82,6 +82,7 @@ public class ComponentAssemblyDependencyGraphFormatter extends AbstractComponent
 			return builder.toString();
 		}
 
+		@Override
 		public void visitVertex(final DependencyGraphNode<AssemblyComponent> vertex) {
 			final AssemblyComponent component = vertex.getEntity();
 

@@ -52,6 +52,7 @@ public class SpecificOriginRetentionPolicy extends AbstractOriginRetentionPolicy
 		}
 	}
 
+	@Override
 	public IOriginRetentionPolicy uniteWith(final IOriginRetentionPolicy other) {
 		if (other == null) {
 			return this;
@@ -76,6 +77,7 @@ public class SpecificOriginRetentionPolicy extends AbstractOriginRetentionPolicy
 		throw new IllegalArgumentException(other.toString());
 	}
 
+	@Override
 	public <T> void handleOrigin(final AbstractGraphElement<T> element, final T origin) {
 		if (this.selectedOrigins.contains(origin)) {
 			element.addOrigin(origin);
