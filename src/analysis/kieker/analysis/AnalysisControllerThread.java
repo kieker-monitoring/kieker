@@ -69,7 +69,7 @@ public final class AnalysisControllerThread extends Thread {
 			this.analysisController.run();
 			this.terminationLatch.countDown();
 		} catch (final Exception ex) { // NOPMD NOCS (Exception)
-			LOG.error("Error running AnalysisCOntroller.", ex);
+			LOG.error("Error running AnalysisController.", ex);
 		}
 	}
 

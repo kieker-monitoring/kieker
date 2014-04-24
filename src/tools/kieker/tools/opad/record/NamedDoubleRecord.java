@@ -46,16 +46,6 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	private final long timestamp;
 	private final double responseTime;
 
-	/**
-	 * Creates an instance of this class based on the parameters.
-	 * 
-	 * @param application
-	 *            Application that is the source of the data
-	 * @param timest
-	 *            Timestamp
-	 * @param response
-	 *            Responsetime stored in this record
-	 */
 	public NamedDoubleRecord(final String application, final long timest, final double response) {
 		this.applicationName = application;
 		this.timestamp = timest;
@@ -68,12 +58,6 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 		this.responseTime = buffer.getDouble();
 	}
 
-	/**
-	 * Creates an Instance of this class based on a single object array.
-	 * 
-	 * @param values
-	 *            Object array containing the applicationname, timestamp and responsetime
-	 */
 	public NamedDoubleRecord(final Object[] values) { // NOPMD (direct store of values)
 		AbstractMonitoringRecord.checkArray(values, NamedDoubleRecord.TYPES);
 
@@ -106,32 +90,14 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 		return new Object[] { this.applicationName, this.timestamp, this.responseTime };
 	}
 
-	/**
-	 * Returns the application name.
-	 * 
-	 * @return
-	 *         Apllication name
-	 */
 	public String getApplication() {
 		return this.applicationName;
 	}
 
-	/**
-	 * Returns the timestamp.
-	 * 
-	 * @return
-	 *         Timestamp
-	 */
 	public long getTimestamp() {
 		return this.timestamp;
 	}
 
-	/**
-	 * Returns the Value.
-	 * 
-	 * @return
-	 *         Value
-	 */
 	public double getValue() {
 		return this.responseTime;
 	}

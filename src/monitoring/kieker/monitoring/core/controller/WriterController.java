@@ -106,7 +106,7 @@ public final class WriterController extends AbstractController implements IWrite
 	 */
 	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
 		try {
-			// fast lane for RegistryRecords (these must always be delivered!)
+			// fast lane for RegistryRecords (these must always be delivered without blocking!)
 			if (!(record instanceof RegistryRecord)) {
 				final IMonitoringController monitoringController = super.monitoringController;
 				if (!monitoringController.isMonitoringEnabled()) { // enabled and not terminated
@@ -118,11 +118,17 @@ public final class WriterController extends AbstractController implements IWrite
 				if ((0L == this.numberOfInserts.getAndIncrement()) && this.logMetadataRecord) {
 					this.monitoringController.sendMetadataAsRecord();
 				}
-			}
-			if (!this.monitoringWriter.newMonitoringRecord(record)) {
-				LOG.error("Error writing the monitoring data. Will terminate monitoring!");
-				this.terminate();
-				return false;
+				if (!this.monitoringWriter.newMonitoringRecord(record)) {
+					LOG.error("Error writing the monitoring data. Will terminate monitoring!");
+					this.terminate();
+					return false;
+				}
+			} else { // registry record
+				if (!this.monitoringWriter.newMonitoringRecordNonBlocking(record)) {
+					LOG.error("Error writing the monitoring data. Will terminate monitoring!");
+					this.terminate();
+					return false;
+				}
 			}
 			return true;
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)

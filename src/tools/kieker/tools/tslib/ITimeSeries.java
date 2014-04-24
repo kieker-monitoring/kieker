@@ -42,7 +42,6 @@ public interface ITimeSeries<T> {
 	 * 
 	 * @since 1.9
 	 */
-	// TODO rather take Timespan object!
 	public long getDeltaTime();
 
 	/**
@@ -50,7 +49,6 @@ public interface ITimeSeries<T> {
 	 * 
 	 * @since 1.9
 	 */
-	// TODO rather take Timespan object!
 	public TimeUnit getDeltaTimeUnit();
 
 	/**

@@ -13,6 +13,7 @@
 		<findbugs home="${lib.fb.dir}" reportLevel="low" effort="max" maxRank="20" excludeFilter="${lib.fb.dir}/fb-filter.xml" output="xml" outputFile="${tmp.dir}/kieker-fb.xml">
 			<auxClasspath>
 				<fileset dir="${lib.dir}" includes="*.jar" />
+				<fileset dir="${lib.dir}/disl-2.0/" includes="*.jar" />
 				<fileset dir="${lib.dir}/sigar/" includes="*.jar" />
 				<fileset dir="${lib.dir}/framework-libs/" includes="**/*.jar" />
 				<fileset dir="${lib.cs.dir}/lib/" includes="checkstyle-all.jar" />

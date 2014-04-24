@@ -1,20 +1,18 @@
-Sep 10, 2013 2:13:06 PM kieker.analysis.plugin.reader.filesystem.FSDirectoryReader run
-INFO: < Loading /tmp/kieker-20130910-120352847-UTC-myHost-KIEKER-SINGLETON\kieker-20130910-120352862-UTC-000-Thread-
-1.dat
-Sep 10, 2013 2:13:06 PM kieker.analysis.AnalysisController handleKiekerMetadataRecord
-INFO: Kieker metadata: version='1.8-SNAPSHOT', controllerName='KIEKER-SINGLETON', hostname='myHost', experimentId='1',
-debugMode='false', timeOffset='0', timeUnit='NANOSECONDS', numberOfRecords='1'
-TeeFilter-2(OperationExecutionRecord) 1378814632852360525;public void kieker.examples.userguide.ch2bookstore.manual.Catalog.getBook(boolean);<no-session-id>;-1;1378814632849896821;1378814632852105483;myHost;-1;-1
-TeeFilter-2(OperationExecutionRecord) 1378814632867753633;public void kieker.examples.userguide.ch2bookstore.manual.Catalog.getBook(boolean);<no-session-id>;-1;1378814632852970771;1378814632867681312;myHost;-1;-1
-TeeFilter-2(OperationExecutionRecord) 1378814632869662451;public void kieker.examples.userguide.ch2bookstore.manual.Catalog.getBook(boolean);<no-session-id>;-1;1378814632867836834;1378814632869649011;myHost;-1;-1
-TeeFilter-2(OperationExecutionRecord) 1378814632871656390;public void kieker.examples.userguide.ch2bookstore.manual.Catalog.getBook(boolean);<no-session-id>;-1;1378814632869682611;1378814632871646790;myHost;-1;-1
-TeeFilter-2(OperationExecutionRecord) 1378814632873732570;public void kieker.examples.userguide.ch2bookstore.manual.Catalog.getBook(boolean);<no-session-id>;-1;1378814632871710791;1378814632873724250;myHost;-1;-1
-TeeFilter-2(OperationExecutionRecord) 1378814632875637869;public void kieker.examples.userguide.ch2bookstore.manual.Catalog.getBook(boolean);<no-session-id>;-1;1378814632873741530;1378814632875622188;myHost;-1;-1
-TeeFilter-2(OperationExecutionRecord) 1378814632877632448;public void kieker.examples.userguide.ch2bookstore.manual.Catalog.getBook(boolean);<no-session-id>;-1;1378814632875684589;1378814632877623808;myHost;-1;-1
-TeeFilter-2(OperationExecutionRecord) 1378814632879646547;public void kieker.examples.userguide.ch2bookstore.manual.Catalog.getBook(boolean);<no-session-id>;-1;1378814632877640128;1378814632879629267;myHost;-1;-1
-TeeFilter-2(OperationExecutionRecord) 1378814632881640166;public void kieker.examples.userguide.ch2bookstore.manual.Catalog.getBook(boolean);<no-session-id>;-1;1378814632879735508;1378814632881625126;myHost;-1;-1
-TeeFilter-2(OperationExecutionRecord) 1378814632883739386;public void kieker.examples.userguide.ch2bookstore.manual.Catalog.getBook(boolean);<no-session-id>;-1;1378814632881654246;1378814632883718586;myHost;-1;-1
-Sep 10, 2013 2:13:06 PM kieker.analysis.AnalysisController terminate
+Apr 14, 2014 10:33:08 PM kieker.analysis.plugin.reader.filesystem.FSDirectoryReader run
+INFO: < Loading /tmp/kieker-20140414-202909312-UTC-myHost-KIEKER-SINGLETON/kieker-20140414-202909334-UTC-000-Thread-1.dat
+Apr 14, 2014 10:33:08 PM kieker.analysis.AnalysisController handleKiekerMetadataRecord
+INFO: Kieker metadata: version='1.9', controllerName='KIEKER-SINGLETON', hostname='myHost', experimentId='1', debugMode='false', timeOffset='0', timeUnit='NANOSECONDS', numberOfRecords='1'
+TeeFilter-2(OperationExecutionRecord) 1397507349333612418;public void kieker.examples.userguide.ch2bookstore.manual.Catalog.getBook(boolean);<no-session-id>;-1;1397507349331135863;1397507349333237208;myHost;-1;-1
+TeeFilter-2(OperationExecutionRecord) 1397507349336643445;public void kieker.examples.userguide.ch2bookstore.manual.Catalog.getBook(boolean);<no-session-id>;-1;1397507349334501352;1397507349336575189;myHost;-1;-1
+TeeFilter-2(OperationExecutionRecord) 1397507349338830403;public void kieker.examples.userguide.ch2bookstore.manual.Catalog.getBook(boolean);<no-session-id>;-1;1397507349336724513;1397507349338814261;myHost;-1;-1
+TeeFilter-2(OperationExecutionRecord) 1397507349340925965;public void kieker.examples.userguide.ch2bookstore.manual.Catalog.getBook(boolean);<no-session-id>;-1;1397507349338839217;1397507349340906276;myHost;-1;-1
+TeeFilter-2(OperationExecutionRecord) 1397507349343092031;public void kieker.examples.userguide.ch2bookstore.manual.Catalog.getBook(boolean);<no-session-id>;-1;1397507349340999396;1397507349343071939;myHost;-1;-1
+TeeFilter-2(OperationExecutionRecord) 1397507349345216288;public void kieker.examples.userguide.ch2bookstore.manual.Catalog.getBook(boolean);<no-session-id>;-1;1397507349343104120;1397507349345187386;myHost;-1;-1
+TeeFilter-2(OperationExecutionRecord) 1397507349347544442;public void kieker.examples.userguide.ch2bookstore.manual.Catalog.getBook(boolean);<no-session-id>;-1;1397507349345363211;1397507349347493714;myHost;-1;-1
+TeeFilter-2(OperationExecutionRecord) 1397507349349789220;public void kieker.examples.userguide.ch2bookstore.manual.Catalog.getBook(boolean);<no-session-id>;-1;1397507349347593226;1397507349349720521;myHost;-1;-1
+TeeFilter-2(OperationExecutionRecord) 1397507349352170480;public void kieker.examples.userguide.ch2bookstore.manual.Catalog.getBook(boolean);<no-session-id>;-1;1397507349350004459;1397507349352120991;myHost;-1;-1
+TeeFilter-2(OperationExecutionRecord) 1397507349354413163;public void kieker.examples.userguide.ch2bookstore.manual.Catalog.getBook(boolean);<no-session-id>;-1;1397507349352218753;1397507349354363380;myHost;-1;-1
+Apr 14, 2014 10:33:08 PM kieker.analysis.AnalysisController terminate
 INFO: Terminating analysis.
-Sep 10, 2013 2:13:06 PM kieker.analysis.plugin.reader.filesystem.FSReader terminate
+Apr 14, 2014 10:33:08 PM kieker.analysis.analysisComponent.AbstractAnalysisComponent.FSReader-1 terminate
 INFO: Shutting down reader.

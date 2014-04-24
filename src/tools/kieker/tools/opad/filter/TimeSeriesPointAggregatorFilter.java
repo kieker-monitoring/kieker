@@ -76,8 +76,7 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 
 		AggregationMethod configAggregationMethod;
 		try {
-			configAggregationMethod = AggregationMethod.valueOf(configuration
-					.getStringProperty(CONFIG_PROPERTY_NAME_AGGREGATION_METHOD));
+			configAggregationMethod = AggregationMethod.valueOf(configuration.getStringProperty(CONFIG_PROPERTY_NAME_AGGREGATION_METHOD));
 		} catch (final IllegalArgumentException ex) {
 			configAggregationMethod = AggregationMethod.MEAN;
 		}
@@ -88,9 +87,11 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
+
 		configuration.setProperty(CONFIG_PROPERTY_NAME_AGGREGATION_SPAN, Long.toString(this.aggregationSpan));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT, this.timeunit.name());
 		configuration.setProperty(CONFIG_PROPERTY_NAME_AGGREGATION_METHOD, this.aggregationMethod.name());
+
 		return configuration;
 	}
 
@@ -134,8 +135,7 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 				if (numIntervalsElapsed > 1) {
 					for (int i = 1; i < numIntervalsElapsed; i++) {
 						super.deliver(OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, new NamedDoubleTimeSeriesPoint(variables.getLastTimestampInCurrentInterval()
-								+ (i * this.aggregationSpan), 0.0,
-								appname));
+								+ (i * this.aggregationSpan), 0.0, appname));
 					}
 				}
 

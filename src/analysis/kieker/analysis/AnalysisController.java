@@ -413,69 +413,73 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 * {@inheritDoc}
 	 */
 	public final void run() throws IllegalStateException, AnalysisConfigurationException {
-		synchronized (this) {
-			if (this.state != STATE.READY) {
-				throw new IllegalStateException("AnalysisController may be executed only once.");
-			}
-			this.state = STATE.RUNNING;
-			this.notifyStateObservers();
-		}
-		// Make sure that a log reader exists.
-		if (this.readers.size() == 0) {
-			this.terminate(true);
-			throw new AnalysisConfigurationException("No log reader registered.");
-		}
-		// Call init() method of all plug-ins.
-		for (final AbstractReaderPlugin reader : this.readers) {
-			// Make also sure that all repository ports of all plugins are connected.
-			if (!reader.areAllRepositoryPortsConnected()) {
-				this.terminate(true);
-				throw new AnalysisConfigurationException("Reader '" + reader.getName() + "' (" + reader.getPluginName() + ") has unconnected repositories.");
-			}
-			if (!reader.start()) {
-				this.terminate(true);
-				throw new AnalysisConfigurationException("Reader '" + reader.getName() + "' (" + reader.getPluginName() + ") failed to initialize.");
-			}
-		}
-		for (final AbstractFilterPlugin filter : this.filters) {
-			// Make also sure that all repository ports of all plugins are connected.
-			if (!filter.areAllRepositoryPortsConnected()) {
-				this.terminate(true);
-				throw new AnalysisConfigurationException("Plugin '" + filter.getName() + "' (" + filter.getPluginName() + ") has unconnected repositories.");
-			}
-			if (!filter.start()) {
-				this.terminate(true);
-				throw new AnalysisConfigurationException("Plugin '" + filter.getName() + "' (" + filter.getPluginName() + ") failed to initialize.");
-			}
-		}
-		// Start reading
-		final CountDownLatch readerLatch = new CountDownLatch(this.readers.size());
-		for (final AbstractReaderPlugin reader : this.readers) {
-			new Thread(new Runnable() {
-				public void run() {
-					try {
-						if (!reader.read()) {
-							// here we started and won't throw any exceptions!
-							LOG.error("Calling read() on Reader '" + reader.getName() + "' (" + reader.getPluginName() + ")  returned false.");
-							AnalysisController.this.terminate(true);
-						}
-					} catch (final Throwable t) { // NOPMD NOCS (we also want errors)
-						LOG.error("Exception while reading on Reader '" + reader.getName() + "' (" + reader.getPluginName() + ").", t);
-						AnalysisController.this.terminate(true);
-					} finally {
-						readerLatch.countDown();
-					}
-				}
-			}).start();
-		}
-		// wait until all threads are finished
 		try {
-			this.initializationLatch.countDown();
-			readerLatch.await();
-		} catch (final InterruptedException ex) {
-			LOG.warn("Interrupted while waiting for readers to finish", ex);
+			synchronized (this) {
+				if (this.state != STATE.READY) {
+					throw new IllegalStateException("AnalysisController may be executed only once.");
+				}
+				this.state = STATE.RUNNING;
+				this.notifyStateObservers();
+			}
+			// Make sure that a log reader exists.
+			if (this.readers.size() == 0) {
+				this.terminate(true);
+				throw new AnalysisConfigurationException("No log reader registered.");
+			}
+			// Call init() method of all plug-ins.
+			for (final AbstractReaderPlugin reader : this.readers) {
+				// Make also sure that all repository ports of all plugins are connected.
+				if (!reader.areAllRepositoryPortsConnected()) {
+					this.terminate(true);
+					throw new AnalysisConfigurationException("Reader '" + reader.getName() + "' (" + reader.getPluginName() + ") has unconnected repositories.");
+				}
+				if (!reader.start()) {
+					this.terminate(true);
+					throw new AnalysisConfigurationException("Reader '" + reader.getName() + "' (" + reader.getPluginName() + ") failed to initialize.");
+				}
+			}
+			for (final AbstractFilterPlugin filter : this.filters) {
+				// Make also sure that all repository ports of all plugins are connected.
+				if (!filter.areAllRepositoryPortsConnected()) {
+					this.terminate(true);
+					throw new AnalysisConfigurationException("Plugin '" + filter.getName() + "' (" + filter.getPluginName() + ") has unconnected repositories.");
+				}
+				if (!filter.start()) {
+					this.terminate(true);
+					throw new AnalysisConfigurationException("Plugin '" + filter.getName() + "' (" + filter.getPluginName() + ") failed to initialize.");
+				}
+			}
+			// Start reading
+			final CountDownLatch readerLatch = new CountDownLatch(this.readers.size());
+			for (final AbstractReaderPlugin reader : this.readers) {
+				new Thread(new Runnable() {
+					public void run() {
+						try {
+							if (!reader.read()) {
+								// here we started and won't throw any exceptions!
+								LOG.error("Calling read() on Reader '" + reader.getName() + "' (" + reader.getPluginName() + ")  returned false.");
+								AnalysisController.this.terminate(true);
+							}
+						} catch (final Throwable t) { // NOPMD NOCS (we also want errors)
+							LOG.error("Exception while reading on Reader '" + reader.getName() + "' (" + reader.getPluginName() + ").", t);
+							AnalysisController.this.terminate(true);
+						} finally {
+							readerLatch.countDown();
+						}
+					}
+				}).start();
+			}
+			// wait until all threads are finished
+			try {
+				this.initializationLatch.countDown();
+				readerLatch.await();
+			} catch (final InterruptedException ex) {
+				LOG.warn("Interrupted while waiting for readers to finish", ex);
+			}
+		} finally {
+			this.initializationLatch.countDown(); // just to make sure
+			this.terminate();
 		}
-		this.terminate();
 	}
 
 	/**

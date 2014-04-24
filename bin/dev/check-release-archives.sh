@@ -1,5 +1,6 @@
 #!/bin/bash
 
+KIEKER_VERSION="1.10-SNAPSHOT"
 BASE_TMP_DIR="$(dirname $0)/../../tmp/"
 
 function change_dir {
@@ -189,6 +190,15 @@ function assert_files_exist_common {
 	    fi; 
 	    echo "OK"
 	done
+
+	echo -n "Making sure that no references to old Kieker Jars included ..."
+	if (grep -R "kieker-[[:digit:]].*\.jar" * | grep -Ev "kieker-${KIEKER_VERSION}((\\\\)?_[[:alpha:]]+)?\.jar"); then
+	    # Don't ask why results not dumped to stdout above
+	    echo "Found old version string. Add/correct replacement regexp in ant file?"
+	    echo "Due to a strange issue with the grep above, please use the grep regexp above to see where the problem is."
+	    exit 1
+	fi
+	echo OK
 
 	# make sure that specified AspectJ version matches the present files
 	assert_file_exists_regular "lib/aspectjrt-${aspectjversion}.jar"
