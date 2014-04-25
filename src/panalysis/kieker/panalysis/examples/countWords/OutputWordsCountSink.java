@@ -23,24 +23,22 @@ import de.chw.util.Pair;
 import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Context;
 import kieker.panalysis.framework.core.IInputPort;
+import kieker.panalysis.framework.core.IoStage;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  */
-public class OutputWordsCountSink extends AbstractFilter<OutputWordsCountSink> {
+public class OutputWordsCountSink extends AbstractFilter<OutputWordsCountSink> implements IoStage {
 
 	public final IInputPort<OutputWordsCountSink, Pair<File, Integer>> FILE_WORDCOUNT_TUPLE = this.createInputPort();
 
-	private long overallDuration;
 	private int numFiles = 0;
 
 	@Override
 	protected boolean execute(final Context<OutputWordsCountSink> context) {
-		final long start = System.currentTimeMillis();
-
-		final Pair<File, Integer> pair = this.tryTake(this.FILE_WORDCOUNT_TUPLE);
+		final Pair<File, Integer> pair = context.tryTake(this.FILE_WORDCOUNT_TUPLE);
 		if (pair == null) {
 			return false;
 		}
@@ -50,19 +48,7 @@ public class OutputWordsCountSink extends AbstractFilter<OutputWordsCountSink> {
 		// System.out.println(wordsCount + " words in file '" + file.getAbsolutePath() + "'"); // NOPMD (Just for example purposes)
 		this.numFiles++;
 
-		final long end = System.currentTimeMillis();
-		final long duration = end - start;
-		this.overallDuration += duration;
-
 		return true;
-	}
-
-	/**
-	 * @since 1.10
-	 * @return
-	 */
-	public long getOverallDuration() {
-		return this.overallDuration;
 	}
 
 	/**

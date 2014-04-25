@@ -29,7 +29,7 @@ import kieker.panalysis.framework.core.AbstractPipe;
  * 
  * @since 1.10
  */
-public class ConcurrentWorkStealingPipe<T> extends AbstractPipe<T, ConcurrentWorkStealingPipe<T>> {
+public class ConcurrentWorkStealingPipe<T> extends AbstractPipe<T> {
 
 	private final CircularWorkStealingDeque<T> circularWorkStealingDeque = new CircularWorkStealingDeque<T>();
 

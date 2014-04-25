@@ -73,29 +73,29 @@ public class CountWordsAnalysis extends Analysis {
 		this.pipeline.setStartStages(this.repeaterSource);
 
 		this.pipeline.add(new MethodCallPipe<String>()
-				.source(this.repeaterSource.OUTPUT)
+				.setSourcePort(this.repeaterSource.OUTPUT)
 				.target(this.findFilesStage, this.findFilesStage.DIRECTORY_NAME));
 
 		this.pipeline.add(new MethodCallPipe<File>()
-				.source(this.findFilesStage.FILE)
+				.setSourcePort(this.findFilesStage.FILE)
 				.target(this.distributor, this.distributor.OBJECT));
 
 		this.pipeline.add(new MethodCallPipe<File>()
-				.source(this.distributor.getNewOutputPort())
+				.setSourcePort(this.distributor.getNewOutputPort())
 				.target(this.countWordsStage0, this.countWordsStage0.FILE));
 		this.pipeline.add(new MethodCallPipe<File>()
-				.source(this.distributor.getNewOutputPort())
+				.setSourcePort(this.distributor.getNewOutputPort())
 				.target(this.countWordsStage1, this.countWordsStage1.FILE));
 
 		this.pipeline.add(new MethodCallPipe<Pair<File, Integer>>()
-				.source(this.countWordsStage0.WORDSCOUNT)
+				.setSourcePort(this.countWordsStage0.WORDSCOUNT)
 				.target(this.merger, this.merger.getNewInputPort()));
 		this.pipeline.add(new MethodCallPipe<Pair<File, Integer>>()
-				.source(this.countWordsStage1.WORDSCOUNT)
+				.setSourcePort(this.countWordsStage1.WORDSCOUNT)
 				.target(this.merger, this.merger.getNewInputPort()));
 
 		this.pipeline.add(new MethodCallPipe<Pair<File, Integer>>()
-				.source(this.merger.OBJECT)
+				.setSourcePort(this.merger.OBJECT)
 				.target(this.outputWordsCountStage, this.outputWordsCountStage.FILE_WORDCOUNT_TUPLE));
 	}
 

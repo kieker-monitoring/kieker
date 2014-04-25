@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.IStage;
 import kieker.panalysis.framework.sequential.Pipeline;
 
@@ -40,7 +39,8 @@ public class NextStageScheduler {
 		this.workList = new StageWorkList(pipeline);
 		pipeline.start();
 
-		this.workList.addAll(pipeline.getStartStages());
+		// this.workList.addAll(pipeline.getStartStages());
+		this.workList.addAll(pipeline.getStages());
 
 		for (final IStage stage : pipeline.getStages()) {
 			this.enable(stage);
@@ -68,23 +68,27 @@ public class NextStageScheduler {
 	}
 
 	public void determineNextStage(final IStage stage, final boolean executedSuccessfully) {
-		// if (stage instanceof DirectoryName2Files) {
-		// System.out.println("stage=" + stage + ", executedSuccessfully=" + executedSuccessfully);
-		// }
-		if (executedSuccessfully && (this.statesOfStages.get(stage) == Boolean.TRUE)) {
-			// System.out.println("Next stages: " + stage.getContext().getOutputStages());
-			this.workList.addAll(0, stage.getContext().getOutputStages());
-		} else {
-			this.workList.remove(0); // removes the given stage
+		if (!executedSuccessfully || (this.statesOfStages.get(stage) == Boolean.FALSE)) {
+			final IStage removedStage = this.workList.remove(0); // removes the given stage
 			// System.out.println("Removed " + stage);
-			if (this.workList.isEmpty()) {
-				for (final AbstractFilter<?> startStage : this.pipeline.getStartStages()) {
-					if (this.statesOfStages.get(startStage) == Boolean.TRUE) {
-						this.workList.add(startStage);
-					}
-				}
+			// if (this.workList.isEmpty()) {
+			// for (final AbstractFilter<?> startStage : this.pipeline.getStartStages()) {
+			// if (this.statesOfStages.get(startStage) == Boolean.TRUE) {
+			// this.workList.add(startStage);
+			// }
+			// }
+			// }
+			// System.out.println("Removed " + removedStage);
+
+			if (this.statesOfStages.get(removedStage) == Boolean.TRUE) {
+				this.workList.add(removedStage); // re-insert at the tail
 			}
 		}
+
+		if (executedSuccessfully) {
+			this.workList.addAll(0, stage.getContext().getOutputStages()); // FIXME do not add the stage again if it has a cyclic pipe
+		}
 		stage.getContext().getOutputStages().clear();
+
 	}
 }

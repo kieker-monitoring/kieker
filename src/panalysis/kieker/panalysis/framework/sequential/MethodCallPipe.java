@@ -28,7 +28,7 @@ import kieker.panalysis.framework.core.IStage;
  * 
  * @since 1.10
  */
-public class MethodCallPipe<T> extends AbstractPipe<T, MethodCallPipe<T>> {
+public class MethodCallPipe<T> extends AbstractPipe<T> {
 
 	private IStage targetStage;
 	private T storedToken;
@@ -77,9 +77,9 @@ public class MethodCallPipe<T> extends AbstractPipe<T, MethodCallPipe<T>> {
 	}
 
 	@Override
-	public <S extends ISink<S>> MethodCallPipe<T> target(final IInputPort<S, T> targetPort) {
+	public <S extends ISink<S>> MethodCallPipe<T> setTargetPort(final IInputPort<S, T> targetPort) {
 		this.targetStage = targetPort.getOwningStage();
-		return super.target(targetPort);
+		return super.setTargetPort(targetPort);
 	}
 
 	public void copyAllOtherPipes(final List<MethodCallPipe<T>> pipesOfGroup) {

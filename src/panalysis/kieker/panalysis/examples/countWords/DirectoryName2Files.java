@@ -22,26 +22,24 @@ import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Context;
 import kieker.panalysis.framework.core.IInputPort;
 import kieker.panalysis.framework.core.IOutputPort;
+import kieker.panalysis.framework.core.IoStage;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  */
-public class DirectoryName2Files extends AbstractFilter<DirectoryName2Files> {
+public class DirectoryName2Files extends AbstractFilter<DirectoryName2Files> implements IoStage {
 
 	public final IInputPort<DirectoryName2Files, String> DIRECTORY_NAME = this.createInputPort();
 
 	public final IOutputPort<DirectoryName2Files, File> FILE = this.createOutputPort();
 
-	private long overallDuration;
 	private int numFiles = 0;
 
 	@Override
 	protected boolean execute(final Context<DirectoryName2Files> context) {
-		final long start = System.currentTimeMillis();
-
-		final String inputDir = this.tryTake(this.DIRECTORY_NAME);
+		final String inputDir = context.tryTake(this.DIRECTORY_NAME);
 		if (inputDir == null) {
 			return false;
 		}
@@ -50,20 +48,12 @@ public class DirectoryName2Files extends AbstractFilter<DirectoryName2Files> {
 		for (final File file : availableFiles) {
 			if (file.isFile()) {
 				// this.logger.info("Sending " + file);
-				this.put(this.FILE, file);
+				context.put(this.FILE, file);
 				this.numFiles++;
 			}
 		}
 
-		final long end = System.currentTimeMillis();
-		final long duration = end - start;
-		this.overallDuration += duration;
-
 		return true;
-	}
-
-	public long getOverallDuration() {
-		return this.overallDuration;
 	}
 
 	public int getNumFiles() {

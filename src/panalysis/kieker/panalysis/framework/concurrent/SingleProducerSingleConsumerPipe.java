@@ -7,7 +7,7 @@ import de.chw.concurrent.CircularWorkStealingDeque;
 
 import kieker.panalysis.framework.core.AbstractPipe;
 
-public class SingleProducerSingleConsumerPipe<T> extends AbstractPipe<T, SingleProducerSingleConsumerPipe<T>> {
+public class SingleProducerSingleConsumerPipe<T> extends AbstractPipe<T> {
 
 	// BETTER use a cache-aware queue (see the corresponding paper)
 	private final ConcurrentLinkedQueue<T> queue = new ConcurrentLinkedQueue<T>();

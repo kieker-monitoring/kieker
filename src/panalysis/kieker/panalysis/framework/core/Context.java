@@ -9,11 +9,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import kieker.panalysis.framework.concurrent.SingleProducerSingleConsumerPipe;
-
 public class Context<S extends IStage> {
 
-	private final Map<IPipe<Object, ?>, List<Object>> pipesTakenFrom;
+	private final Map<IPipe<Object>, List<Object>> pipesTakenFrom;
 	private final Set<IStage> pipesPutTo = new HashSet<IStage>();
 
 	// statistics values
@@ -25,11 +23,11 @@ public class Context<S extends IStage> {
 	}
 
 	@SuppressWarnings("unchecked")
-	private Map<IPipe<Object, ?>, List<Object>> createPipeMap(final List<? extends IPort<S, ?>> allPorts) {
-		final Map<IPipe<Object, ?>, List<Object>> pipeMap = new HashMap<IPipe<Object, ?>, List<Object>>(allPorts.size());
+	private Map<IPipe<Object>, List<Object>> createPipeMap(final List<? extends IPort<S, ?>> allPorts) {
+		final Map<IPipe<Object>, List<Object>> pipeMap = new HashMap<IPipe<Object>, List<Object>>(allPorts.size());
 		for (final IPort<S, ?> outputPort : allPorts) {
-			final IPipe<?, ?> associatedPipe = outputPort.getAssociatedPipe();
-			pipeMap.put((IPipe<Object, ?>) associatedPipe, new LinkedList<Object>());
+			final IPipe<?> associatedPipe = outputPort.getAssociatedPipe();
+			pipeMap.put((IPipe<Object>) associatedPipe, new LinkedList<Object>());
 		}
 		return pipeMap;
 	}
@@ -38,17 +36,14 @@ public class Context<S extends IStage> {
 	 * @since 1.10
 	 */
 	public <T> void put(final IOutputPort<S, T> port, final T object) {
-		final IPipe<T, ?> associatedPipe = port.getAssociatedPipe();
+		final IPipe<T> associatedPipe = port.getAssociatedPipe();
 		if (associatedPipe == null) {
 			return; // ignore unconnected port
 			// BETTER return a NullObject rather than checking for null
 		}
 		associatedPipe.put(object);
 
-		if (!(associatedPipe instanceof SingleProducerSingleConsumerPipe)) {
-			this.pipesPutTo.add(associatedPipe.getTargetStage());
-		}
-
+		this.pipesPutTo.add(associatedPipe.getTargetStage());
 		this.numPushedElements++;
 	}
 
@@ -59,7 +54,7 @@ public class Context<S extends IStage> {
 	 * @since 1.10
 	 */
 	public <T> T tryTake(final IInputPort<S, T> inputPort) {
-		final IPipe<T, ?> associatedPipe = inputPort.getAssociatedPipe();
+		final IPipe<T> associatedPipe = inputPort.getAssociatedPipe();
 		final T token = associatedPipe.tryTake();
 		if (token != null) {
 			this.logTransaction(associatedPipe, token);
@@ -74,7 +69,7 @@ public class Context<S extends IStage> {
 	 * @since 1.10
 	 */
 	public <T> T take(final IInputPort<S, T> inputPort) {
-		final IPipe<T, ?> associatedPipe = inputPort.getAssociatedPipe();
+		final IPipe<T> associatedPipe = inputPort.getAssociatedPipe();
 		final T token = associatedPipe.take();
 		if (token != null) {
 			this.logTransaction(associatedPipe, token);
@@ -82,7 +77,7 @@ public class Context<S extends IStage> {
 		return token;
 	}
 
-	private <T> void logTransaction(final IPipe<T, ?> associatedPipe, final T token) {
+	private <T> void logTransaction(final IPipe<T> associatedPipe, final T token) {
 		final List<Object> tokenList = this.pipesTakenFrom.get(associatedPipe);
 		tokenList.add(token);
 
@@ -93,7 +88,7 @@ public class Context<S extends IStage> {
 	 * @since 1.10
 	 */
 	public <T> T read(final IInputPort<S, T> inputPort) {
-		final IPipe<? extends T, ?> associatedPipe = inputPort.getAssociatedPipe();
+		final IPipe<? extends T> associatedPipe = inputPort.getAssociatedPipe();
 		return associatedPipe.read();
 	}
 
@@ -104,8 +99,8 @@ public class Context<S extends IStage> {
 	}
 
 	void rollback() {
-		for (final Entry<IPipe<Object, ?>, List<Object>> entry : this.pipesTakenFrom.entrySet()) {
-			final IPipe<Object, ?> associatedPipe = entry.getKey();
+		for (final Entry<IPipe<Object>, List<Object>> entry : this.pipesTakenFrom.entrySet()) {
+			final IPipe<Object> associatedPipe = entry.getKey();
 			final List<Object> takenElements = entry.getValue();
 
 			for (int i = takenElements.size() - 1; i >= 0; i--) {

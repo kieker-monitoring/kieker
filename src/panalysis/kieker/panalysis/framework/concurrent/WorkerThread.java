@@ -44,18 +44,17 @@ public class WorkerThread extends Thread {
 		while (this.pipelineScheduler.isAnyStageActive()) {
 			final IStage stage = this.pipelineScheduler.get();
 			if ("startThread".equals(this.getName())) {
-				System.out.println("shouldTerminate: " + this.shouldTerminate);
+				System.out.println("shouldTerminate: " + this.shouldTerminate + ", stage=" + stage);
 			}
 
 			this.startStageExecution();
 			final boolean executedSuccessfully = stage.execute();
 			this.finishStageExecution();
 
-			this.pipelineScheduler.determineNextStage(stage, executedSuccessfully);
-
 			if (this.shouldTerminate) {
 				this.executeTerminationPolicy(stage, executedSuccessfully);
 			}
+			this.pipelineScheduler.determineNextStage(stage, executedSuccessfully);
 		}
 
 		final long end = System.currentTimeMillis();

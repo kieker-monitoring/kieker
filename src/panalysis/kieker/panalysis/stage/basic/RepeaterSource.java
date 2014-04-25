@@ -18,6 +18,7 @@ package kieker.panalysis.stage.basic;
 
 import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Context;
+import kieker.panalysis.framework.core.IInputPort;
 import kieker.panalysis.framework.core.IOutputPort;
 
 /**
@@ -26,6 +27,8 @@ import kieker.panalysis.framework.core.IOutputPort;
  * @since 1.10
  */
 public class RepeaterSource<T> extends AbstractFilter<RepeaterSource<T>> {
+
+	public final IInputPort<RepeaterSource<T>, Boolean> START = this.createInputPort();
 
 	public final IOutputPort<RepeaterSource<T>, T> OUTPUT = this.createOutputPort();
 
@@ -57,6 +60,11 @@ public class RepeaterSource<T> extends AbstractFilter<RepeaterSource<T>> {
 	@Override
 	protected boolean execute(final Context<RepeaterSource<T>> context) {
 		final long start = System.currentTimeMillis();
+
+		final Boolean token = this.tryTake(this.START);
+		if (token == null) {
+			return false;
+		}
 
 		int counter = this.num;
 		while (counter-- > 0) {

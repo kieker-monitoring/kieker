@@ -36,7 +36,7 @@ public class CycledCountingFilter<T> extends CountingFilter<T> {
 	 */
 	private CycledCountingFilter(final IPipe<Long, ?> countingPipe) {
 		countingPipe
-				.source(this.NEW_COUNT)
+				.setSourcePort(this.NEW_COUNT)
 				.target(this, this.CURRENT_COUNT);
 		// FIXME counting pipe needs to be added to a group
 	}

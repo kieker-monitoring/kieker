@@ -26,32 +26,24 @@ package kieker.panalysis.framework.core;
  * @param <P>
  *            the extending pipe
  */
-public abstract class AbstractPipe<T, P extends IPipe<T, P>> implements IPipe<T, P> {
+public abstract class AbstractPipe<T> implements IPipe<T> {
 
 	private Runnable fireSignalClosing;
 	private ISink<?> targetStage;
 
-	@SuppressWarnings("unchecked")
-	public <S extends ISource> P source(final IOutputPort<S, T> sourcePort) {
+	public <S extends ISource> void setSourcePort(final IOutputPort<S, T> sourcePort) {
 		sourcePort.setAssociatedPipe(this);
-		return (P) this;
 	}
 
-	@SuppressWarnings("unchecked")
-	public <S extends ISink<S>> P target(final S targetStage, final IInputPort<S, T> targetPort) {
+	public <S extends ISink<S>> void setTargetPort(final IInputPort<S, T> targetPort) {
 		targetPort.setAssociatedPipe(this);
 		this.targetStage = targetPort.getOwningStage();
 		this.fireSignalClosing = new Runnable() {
 			// This Runnable avoids the declaration of targetStage and targetPort as attributes and the declaration of I as type parameter
 			public void run() {
-				targetStage.onSignalClosing(targetPort);
+				AbstractPipe.this.targetStage.onSignalClosing(targetPort);
 			}
 		};
-		return (P) this;
-	}
-
-	public <S extends ISink<S>> P target(final IInputPort<S, T> targetPort) {
-		return this.target(targetPort.getOwningStage(), targetPort);
 	}
 
 	public ISink<?> getTargetStage() {

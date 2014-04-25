@@ -16,14 +16,17 @@
 
 package kieker.panalysis.framework.sequential;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import kieker.panalysis.framework.core.AbstractFilter;
+import kieker.panalysis.framework.core.IInputPort;
+import kieker.panalysis.framework.core.IOutputPort;
 import kieker.panalysis.framework.core.IPipe;
+import kieker.panalysis.framework.core.ISink;
+import kieker.panalysis.framework.core.ISource;
 import kieker.panalysis.framework.core.IStage;
 
 /**
@@ -34,14 +37,15 @@ import kieker.panalysis.framework.core.IStage;
  * @param <P>
  *            The type of the pipes
  */
-public class Pipeline<P extends IPipe<?, P>> {
+public class Pipeline<P extends IPipe<?>> {
 
 	protected final List<IStage> stages = new LinkedList<IStage>();
 	private int freeId = 0;
-	private List<AbstractFilter<?>> startStages;
+	private AbstractFilter<?>[] startStages;
 
 	private P currentPipe;
 	private final Map<Integer, List<P>> pipeGroups;
+	private final Map<IOutputPort<?, ?>, IInputPort<?, ?>> connections = new HashMap<IOutputPort<?, ?>, IInputPort<?, ?>>();
 
 	/**
 	 * The default constructor.<br>
@@ -66,7 +70,7 @@ public class Pipeline<P extends IPipe<?, P>> {
 	 * @since 1.10
 	 */
 	// this constructor prevents the programmer from repeating the type argument
-	public static <P extends IPipe<?, P>> Pipeline<P> create() {
+	public static <P extends IPipe<?>> Pipeline<P> create() {
 		return new Pipeline<P>();
 	}
 
@@ -77,7 +81,7 @@ public class Pipeline<P extends IPipe<?, P>> {
 	 * @return
 	 */
 	// this constructor prevents the programmer from repeating the type argument
-	public static <P extends IPipe<?, P>> Pipeline<P> create(final Map<Integer, List<P>> pipeGroups) {
+	public static <P extends IPipe<?>> Pipeline<P> create(final Map<Integer, List<P>> pipeGroups) {
 		return new Pipeline<P>(pipeGroups);
 	}
 
@@ -105,9 +109,9 @@ public class Pipeline<P extends IPipe<?, P>> {
 	public void start() {
 		this.fireStartEvent();
 
-		if (this.startStages.size() == 0) {
+		if (this.startStages.length == 0) {
 			throw new IllegalStateException("You need to define at least one start stage.");
-		} else if (this.startStages.size() == 1) {
+		} else if (this.startStages.length == 1) {
 			// this.startStages.get(0).execute();
 		} else {
 			// TODO create a single distributor stage as start stage
@@ -139,6 +143,10 @@ public class Pipeline<P extends IPipe<?, P>> {
 		return this;
 	}
 
+	public <S0 extends ISource, S1 extends ISink<S1>, T> void connect(final IOutputPort<S0, T> sourcePort, final IInputPort<S1, T> targetPort) {
+		this.connections.put(sourcePort, targetPort);
+	}
+
 	/**
 	 * @since 1.10
 	 */
@@ -167,13 +175,13 @@ public class Pipeline<P extends IPipe<?, P>> {
 	 * @since 1.10
 	 */
 	public void setStartStages(final AbstractFilter<?>... startStages) {
-		this.startStages = Arrays.asList(startStages);
+		this.startStages = startStages;
 	}
 
 	/**
 	 * @since 1.10
 	 */
-	public List<AbstractFilter<?>> getStartStages() {
+	public AbstractFilter<?>[] getStartStages() {
 		return this.startStages;
 	}
 }

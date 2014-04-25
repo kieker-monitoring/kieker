@@ -56,15 +56,15 @@ public class CountingObjectsAnalysis extends Analysis {
 		this.pipeline.addStage(this.teeFilter);
 
 		this.pipeline.add(new MethodCallPipe<String>()
-				.source(this.repeaterSource.OUTPUT)
+				.setSourcePort(this.repeaterSource.OUTPUT)
 				.target(this.findFilesStage, this.findFilesStage.DIRECTORY_NAME));
 
 		this.pipeline.add(new MethodCallPipe<File>()
-				.source(this.findFilesStage.FILE)
+				.setSourcePort(this.findFilesStage.FILE)
 				.target(this.cycledCountingFilter, this.cycledCountingFilter.INPUT_OBJECT));
 
 		this.pipeline.add(new MethodCallPipe<File>()
-				.source(this.cycledCountingFilter.RELAYED_OBJECT)
+				.setSourcePort(this.cycledCountingFilter.RELAYED_OBJECT)
 				.target(this.teeFilter, this.teeFilter.INPUT_OBJECT));
 
 		this.pipeline.setStartStages(this.repeaterSource);

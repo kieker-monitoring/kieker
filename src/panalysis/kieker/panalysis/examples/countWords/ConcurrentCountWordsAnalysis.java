@@ -23,13 +23,11 @@ import java.util.Map;
 
 import de.chw.util.Pair;
 
+import kieker.panalysis.framework.concurrent.ConcurrentPipeline;
 import kieker.panalysis.framework.concurrent.ConcurrentWorkStealingPipe;
-import kieker.panalysis.framework.concurrent.SingleProducerSingleConsumerPipe;
 import kieker.panalysis.framework.concurrent.TerminationPolicy;
 import kieker.panalysis.framework.concurrent.WorkerThread;
 import kieker.panalysis.framework.core.Analysis;
-import kieker.panalysis.framework.core.IOutputPort;
-import kieker.panalysis.framework.core.ISource;
 import kieker.panalysis.framework.core.IStage;
 import kieker.panalysis.framework.sequential.MethodCallPipe;
 import kieker.panalysis.framework.sequential.Pipeline;
@@ -56,7 +54,7 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 
 		final Pipeline<?> mainThreadPipeline = this.mainThreadPipeline();
 		final IStage lastStage = mainThreadPipeline.getStages().get(mainThreadPipeline.getStages().size() - 1);
-		final Distributor<?> distributor = (Distributor<?>) lastStage;
+		final Distributor<File> distributor = (Distributor<File>) lastStage;
 
 		int numThreads = Runtime.getRuntime().availableProcessors();
 		numThreads = 1; // only for testing purposes
@@ -85,12 +83,12 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 	}
 
 	private Pipeline<?> mainThreadPipeline() {
-		final RepeaterSource<String> repeaterSource = RepeaterSource.create(START_DIRECTORY_NAME, 1);
+		final RepeaterSource<String> repeaterSource = RepeaterSource.create(START_DIRECTORY_NAME, 40);
 		final DirectoryName2Files findFilesStage = new DirectoryName2Files();
 		final Distributor<File> distributor = new Distributor<File>();
 
-		new MethodCallPipe<String>().source(repeaterSource.OUTPUT).target(findFilesStage.DIRECTORY_NAME);
-		new MethodCallPipe<File>().source(findFilesStage.FILE).target(distributor.OBJECT);
+		new MethodCallPipe<String>().setSourcePort(repeaterSource.OUTPUT).setTargetPort(findFilesStage.DIRECTORY_NAME);
+		new MethodCallPipe<File>().setSourcePort(findFilesStage.FILE).setTargetPort(distributor.OBJECT);
 
 		final Pipeline<?> pipeline = Pipeline.create();
 		pipeline.addStage(repeaterSource);
@@ -99,56 +97,37 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 
 		pipeline.setStartStages(repeaterSource);
 
+		repeaterSource.START.setAssociatedPipe(new MethodCallPipe<Boolean>(Boolean.TRUE));
+
 		return pipeline;
 	}
 
-	private void buildPipeline(final Distributor<?> readerDistributor, final Pipeline<ConcurrentWorkStealingPipe<?>> pipeline) {
+	private void buildPipeline(final Distributor<File> readerDistributor, final ConcurrentPipeline pipeline) {
 		// create stages
-		final Distributor<File> distributor = pipeline.addStage(new Distributor<File>());
-		final CountWordsStage countWordsStage0 = pipeline.addStage(new CountWordsStage());
-		final CountWordsStage countWordsStage1 = pipeline.addStage(new CountWordsStage());
-		final Merger<Pair<File, Integer>> merger = pipeline.addStage(new Merger<Pair<File, Integer>>());
-		final OutputWordsCountSink outputWordsCountStage = pipeline.addStage(new OutputWordsCountSink());
-		// TODO consider to use: pipeline.add(stage).asStartStage().assignUniqueId()
+		final Distributor<File> distributor = new Distributor<File>();
+		final CountWordsStage countWordsStage0 = new CountWordsStage();
+		final CountWordsStage countWordsStage1 = new CountWordsStage();
+		final Merger<Pair<File, Integer>> merger = new Merger<Pair<File, Integer>>();
+		final OutputWordsCountSink outputWordsCountStage = new OutputWordsCountSink();
 
 		pipeline.setStartStages(distributor);
 
 		// connect stages by pipes
-		new SingleProducerSingleConsumerPipe<File>()
-				.source((IOutputPort<? extends ISource, File>) readerDistributor.getNewOutputPort())
-				.target(distributor.OBJECT);
+		pipeline.connect(readerDistributor.getNewOutputPort(), distributor.OBJECT);
+		pipeline.connect(distributor.getNewOutputPort(), countWordsStage0.FILE);
+		pipeline.connect(distributor.getNewOutputPort(), countWordsStage1.FILE);
+		pipeline.connect(countWordsStage0.WORDSCOUNT, merger.getNewInputPort());
+		pipeline.connect(countWordsStage1.WORDSCOUNT, merger.getNewInputPort());
+		pipeline.connect(merger.OBJECT, outputWordsCountStage.FILE_WORDCOUNT_TUPLE);
 
-		pipeline.add(new ConcurrentWorkStealingPipe<File>()
-				.source(distributor.getNewOutputPort())
-				.target(countWordsStage0, countWordsStage0.FILE)
-				).toGroup(2);
-
-		pipeline.add(new ConcurrentWorkStealingPipe<File>()
-				.source(distributor.getNewOutputPort())
-				.target(countWordsStage1, countWordsStage1.FILE)
-				).toGroup(3);
-
-		pipeline.add(new ConcurrentWorkStealingPipe<Pair<File, Integer>>()
-				.source(countWordsStage0.WORDSCOUNT)
-				.target(merger, merger.getNewInputPort())
-				).toGroup(4);
-
-		pipeline.add(new ConcurrentWorkStealingPipe<Pair<File, Integer>>()
-				.source(countWordsStage1.WORDSCOUNT)
-				.target(merger, merger.getNewInputPort())
-				).toGroup(5);
-
-		pipeline.add(new ConcurrentWorkStealingPipe<Pair<File, Integer>>()
-				.source(merger.OBJECT)
-				.target(outputWordsCountStage, outputWordsCountStage.FILE_WORDCOUNT_TUPLE)
-				).toGroup(6);
+		pipeline.init();
 	}
 
 	@Override
 	public void start() {
 		super.start();
 
-		this.threads[0].terminate(TerminationPolicy.TERMINATE_STAGE_AFTER_NEXT_EXECUTION);
+		this.threads[0].terminate(TerminationPolicy.TERMINATE_STAGE_AFTER_UNSUCCESSFUL_EXECUTION);
 		// this.threads[0].start();
 
 		for (final WorkerThread thread : this.threads) {

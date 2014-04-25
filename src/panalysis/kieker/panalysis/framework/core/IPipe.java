@@ -30,7 +30,7 @@ import de.chw.concurrent.DequePopException;
  *            the type of elements this pipe may contain
  * @param <P>
  */
-public interface IPipe<T, P extends IPipe<T, P>> {
+public interface IPipe<T> {
 
 	/**
 	 * @since 1.10
@@ -89,25 +89,16 @@ public interface IPipe<T, P extends IPipe<T, P>> {
 	/**
 	 * @since 1.10
 	 */
-	<S extends ISource> P source(final IOutputPort<S, T> sourcePort);
+	<S extends ISource> void setSourcePort(final IOutputPort<S, T> sourcePort);
 
 	/**
 	 * @since 1.10
 	 */
-	@Deprecated
-	<S extends ISink<S>> P target(final S targetStage, final IInputPort<S, T> targetPort);
+	<S extends ISink<S>> void setTargetPort(final IInputPort<S, T> targetPort);
 
 	/**
 	 * @since 1.10
 	 */
-	<S extends ISink<S>> P target(final IInputPort<S, T> targetPort);
-
-	/**
-	 * @since 1.10
-	 */
-	@Deprecated
-	void copyAllOtherPipes(List<P> pipesOfGroup);
-
 	IStage getTargetStage();
 
 }

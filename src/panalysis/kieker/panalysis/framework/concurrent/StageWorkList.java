@@ -2,18 +2,18 @@ package kieker.panalysis.framework.concurrent;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 
 import kieker.panalysis.framework.core.IStage;
 import kieker.panalysis.framework.sequential.Pipeline;
 
-public class StageWorkList extends LinkedList<IStage> {
+public class StageWorkList extends ArrayList<IStage> {
 
 	private static final long serialVersionUID = 5025916150961442772L;
 	private final Pipeline<?> pipeline;
 
 	public StageWorkList(final Pipeline<?> pipeline) {
 		this.pipeline = pipeline;
+		this.ensureCapacity(pipeline.getStages().size());
 	}
 
 	private boolean isValid(final IStage stage) {
@@ -32,20 +32,6 @@ public class StageWorkList extends LinkedList<IStage> {
 	public void add(final int index, final IStage stage) {
 		if (this.isValid(stage)) {
 			super.add(index, stage);
-		}
-	}
-
-	@Override
-	public void addFirst(final IStage stage) {
-		if (this.isValid(stage)) {
-			super.addFirst(stage);
-		}
-	}
-
-	@Override
-	public void addLast(final IStage stage) {
-		if (this.isValid(stage)) {
-			super.addLast(stage);
 		}
 	}
 

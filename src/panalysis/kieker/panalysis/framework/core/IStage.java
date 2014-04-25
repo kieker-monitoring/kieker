@@ -100,4 +100,9 @@ public interface IStage {
 
 	void setOwningPipeline(Pipeline<?> owningPipeline);
 
+	/**
+	 * @param stage
+	 */
+	void copyAttributes(IStage stage);
+
 }

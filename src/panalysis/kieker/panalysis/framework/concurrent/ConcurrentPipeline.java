@@ -1,6 +1,5 @@
 package kieker.panalysis.framework.concurrent;
 
-import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -9,7 +8,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import kieker.common.configuration.Configuration;
 import kieker.panalysis.framework.core.IInputPort;
 import kieker.panalysis.framework.core.IOutputPort;
 import kieker.panalysis.framework.core.IPipe;
@@ -17,7 +15,6 @@ import kieker.panalysis.framework.core.ISink;
 import kieker.panalysis.framework.core.ISource;
 import kieker.panalysis.framework.core.IStage;
 import kieker.panalysis.framework.core.IoStage;
-import kieker.panalysis.framework.sequential.MethodCallPipe;
 
 public class ConcurrentPipeline {
 
@@ -26,11 +23,22 @@ public class ConcurrentPipeline {
 	private final Map<IStage, List<IStage>> standardStages = new HashMap<IStage, List<IStage>>();
 
 	private final int numCores = Runtime.getRuntime().availableProcessors();
+	private int defaultBundleSize = 64;
 
-	public <T> void connect(final IOutputPort<?, T> sourcePort, final IInputPort<?, T> targetPort) {
+	public <T> void connect(final IOutputPort<?, T> sourcePort, final IInputPort<?, T> targetPort, final int bundleSize) {
 		this.connections.put(sourcePort, targetPort);
 		this.addStage(sourcePort.getOwningStage());
 		this.addStage(targetPort.getOwningStage());
+	}
+
+	/**
+	 * Connects to ports using the default bundle size
+	 * 
+	 * @param sourcePort
+	 * @param targetPort
+	 */
+	public <T> void connect(final IOutputPort<?, T> sourcePort, final IInputPort<?, T> targetPort) {
+		this.connect(sourcePort, targetPort, this.defaultBundleSize);
 	}
 
 	private void addStage(final IStage owningStage) {
@@ -67,10 +75,19 @@ public class ConcurrentPipeline {
 		final List<IStage> concurrentStages = new LinkedList<IStage>();
 		for (int i = 0; i < this.numCores; i++) {
 			final Class<? extends IStage> stageClazz = stage.getClass();
-			final Constructor<? extends IStage> constructor = stageClazz.getConstructor(Configuration.class);
+			// final Constructor<? extends IStage> constructor = stageClazz.getConstructor(Configuration.class);
 			// final IStage copiedStage = constructor.newInstance(stage.getConfiguration()); // copy by reference since the configuration is read-only
-			// TODO implement me
-			// concurrentStages.add(copiedStage);
+
+			IStage copiedStage;
+			try {
+				copiedStage = stageClazz.newInstance();
+			} catch (final InstantiationException e) {
+				throw new IllegalStateException("The stage to be copied requires a constructor without any parameters.", e);
+			} catch (final IllegalAccessException e) {
+				throw new IllegalStateException("The stage to be copied requires a constructor without any parameters.", e);
+			}
+			copiedStage.copyAttributes(stage);
+			concurrentStages.add(copiedStage);
 		}
 		return concurrentStages;
 	}
@@ -94,22 +111,31 @@ public class ConcurrentPipeline {
 		}
 	}
 
-	private <T, P extends IPipe<T, P>, S0 extends ISource, S1 extends ISink<S1>>
+	private <T, P extends IPipe<T>, S0 extends ISource, S1 extends ISink<S1>>
 			void instantiatePipe(final IOutputPort<S0, T> sourcePort, final IInputPort<S1, T> targetPort) {
 		final boolean isSourceIoStage = sourcePort.getOwningStage() instanceof IoStage;
 		final boolean isTargetIoStage = targetPort.getOwningStage() instanceof IoStage;
 
-		IPipe<T, ?> pipe;
+		IPipe<T> pipe;
 		if (isSourceIoStage && !isTargetIoStage) {
 			pipe = new ConcurrentWorkStealingPipe<T>();
 		} else if (!isSourceIoStage && isTargetIoStage) {
 			pipe = new SingleProducerSingleConsumerPipe<T>();
 		} else if (isSourceIoStage && isTargetIoStage) {
-			pipe = new MethodCallPipe<T>();
+			throw new IllegalStateException("It is not allowed to connect to I/O stages.");
 		} else {
 			pipe = new ConcurrentWorkStealingPipe<T>();
 		}
 
-		pipe.source(sourcePort).target(targetPort);
+		pipe.setSourcePort(sourcePort);
+		pipe.setTargetPort(targetPort);
+	}
+
+	public void setDefaultBundleSize(final int defaultBundleSize) {
+		this.defaultBundleSize = defaultBundleSize;
+	}
+
+	public int getDefaultBundleSize() {
+		return this.defaultBundleSize;
 	}
 }

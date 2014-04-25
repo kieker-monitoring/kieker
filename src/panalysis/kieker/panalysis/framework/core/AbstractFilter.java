@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import de.chw.concurrent.DequePopException;
+
 /**
  * 
  * @author Christian Wulf
@@ -43,6 +45,12 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	private Context<S> context;
 
 	private int enabledInputPorts = 0;
+
+	private long overallDuration;
+
+	public long getOverallDuration() {
+		return this.overallDuration;
+	}
 
 	public Context<S> getContext() {
 		return this.context;
@@ -79,12 +87,29 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	 * @since 1.10
 	 */
 	public final boolean execute() {
-		final boolean success = this.execute(this.context);
-		if (success) {
-			this.context.clear();
-		} else {
+		boolean success = false;
+		try {
+			success = this.executeLogged(this.context);
+			if (success) { // deprecated boolean return value
+				this.context.clear();
+			} else {
+				this.context.rollback();
+			}
+		} catch (final DequePopException e) {
 			this.context.rollback();
 		}
+		return success;
+	}
+
+	private boolean executeLogged(final Context<S> context) {
+		final long start = System.currentTimeMillis();
+
+		final boolean success = this.execute(context);
+
+		final long end = System.currentTimeMillis();
+		final long duration = end - start;
+		this.overallDuration += duration;
+
 		return success;
 	}
 
@@ -103,7 +128,7 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	public void onSignalClosing(final IInputPort<S, ?> inputPort) {
 		// inputPort.setState(IInputPort.State.CLOSING);
 		this.enabledInputPorts--;
-		System.out.println("Closed " + inputPort + " of " + this.toString());
+		System.out.println("Closed " + "(" + this.enabledInputPorts + " remaining) " + inputPort + " of " + this.toString());
 
 		this.checkWhetherThisStageMayBeDisabled();
 	}
@@ -142,7 +167,7 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 		this.logger.info("Fire closing signal to all output ports..." + "(" + this + ")");
 		this.logger.info("outputPorts: " + this.outputPorts);
 		for (final IOutputPort<S, ?> port : this.outputPorts) {
-			final IPipe<?, ?> associatedPipe = port.getAssociatedPipe();
+			final IPipe<?> associatedPipe = port.getAssociatedPipe();
 			if (associatedPipe != null) {
 				associatedPipe.fireSignalClosing();
 			} // else: ignore unconnected port
@@ -202,4 +227,12 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	protected List<IOutputPort<S, ?>> getOutputPorts() {
 		return this.readOnlyOutputPorts;
 	}
+
+	/**
+	 * @since 1.10
+	 */
+	public void copyAttributes(final IStage stage) {
+		// default empty implementation
+	}
+
 }

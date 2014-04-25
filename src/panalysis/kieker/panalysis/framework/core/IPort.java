@@ -11,9 +11,9 @@ package kieker.panalysis.framework.core;
  */
 interface IPort<S extends IStage, T> {
 
-	IPipe<T, ?> getAssociatedPipe();
+	IPipe<T> getAssociatedPipe();
 
-	void setAssociatedPipe(final IPipe<T, ?> associatedPipe);
+	void setAssociatedPipe(final IPipe<T> associatedPipe);
 
 	S getOwningStage();
 

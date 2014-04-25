@@ -30,13 +30,14 @@ import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Context;
 import kieker.panalysis.framework.core.IInputPort;
 import kieker.panalysis.framework.core.IOutputPort;
+import kieker.panalysis.framework.core.IoStage;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  */
-public class CountWordsStage extends AbstractFilter<CountWordsStage> {
+public class CountWordsStage extends AbstractFilter<CountWordsStage> implements IoStage {
 
 	public final IInputPort<CountWordsStage, File> FILE = this.createInputPort();
 
@@ -45,13 +46,9 @@ public class CountWordsStage extends AbstractFilter<CountWordsStage> {
 
 	private final Pattern pattern = Pattern.compile("[^\\p{Graph}]");
 
-	private long overallDuration = 0;
-
 	@Override
 	protected boolean execute(final Context<CountWordsStage> context) {
-		final long start = System.currentTimeMillis();
-
-		final File file = this.tryTake(this.FILE);
+		final File file = context.tryTake(this.FILE);
 		if (file == null) {
 			return false;
 		}
@@ -72,22 +69,14 @@ public class CountWordsStage extends AbstractFilter<CountWordsStage> {
 			} finally {
 				reader.close();
 			}
-			this.put(this.WORDSCOUNT, Pair.of(file, wordsCount));
+			context.put(this.WORDSCOUNT, Pair.of(file, wordsCount));
 		} catch (final FileNotFoundException e) {
-			this.put(this.EXCEPTION, e);
+			context.put(this.EXCEPTION, e);
 		} catch (final IOException e) {
-			this.put(this.EXCEPTION, e);
+			context.put(this.EXCEPTION, e);
 		}
 
-		final long end = System.currentTimeMillis();
-		final long duration = end - start;
-		this.overallDuration += duration;
-
 		return true;
-	}
-
-	public long getOverallDuration() {
-		return this.overallDuration;
 	}
 
 }
