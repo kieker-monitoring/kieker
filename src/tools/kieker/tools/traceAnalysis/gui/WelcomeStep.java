@@ -162,6 +162,15 @@ public class WelcomeStep extends AbstractStep {
 
 	@Override
 	public boolean isNextStepAllowed() {
+		final File inputDirectory = new File(this.inputDirectoryField.getText());
+		if (!inputDirectory.isDirectory()) {
+			final int result = JOptionPane.showConfirmDialog(this, "The input directory does not exist. Continue?", "Input Directory",
+					JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+			if (JOptionPane.NO_OPTION == result) {
+				return false;
+			}
+		}
+
 		final File outputDirectory = new File(this.outputDirectoryField.getText());
 		if (outputDirectory.isDirectory()) {
 			return true;
