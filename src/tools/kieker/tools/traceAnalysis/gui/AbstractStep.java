@@ -33,7 +33,7 @@ public abstract class AbstractStep extends JPanel {
 
 	public abstract void addSelectedTraceAnalysisParameters(final Collection<String> parameters);
 
-	public boolean isNextStepAllowed() {
+	public boolean isNextStepAllowed() { // NOPMD (Empty method for convenient usage)
 		return true;
 	}
 
