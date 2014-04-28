@@ -122,10 +122,12 @@ public class TraceAnalysisGUI extends JFrame {
 	}
 
 	private void nextStep() {
-		this.currentStepIndex++;
-		this.mainPanelLayout.next(this.mainPanel);
-		this.previousButton.setEnabled(true);
-		this.nextButton.setEnabled(this.currentStepIndex < (this.steps.length - 1));
+		if (this.steps[this.currentStepIndex].isNextStepAllowed()) {
+			this.currentStepIndex++;
+			this.mainPanelLayout.next(this.mainPanel);
+			this.previousButton.setEnabled(true);
+			this.nextButton.setEnabled(this.currentStepIndex < (this.steps.length - 1));
+		}
 	}
 
 	private void previousStep() {

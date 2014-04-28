@@ -33,4 +33,8 @@ public abstract class AbstractStep extends JPanel {
 
 	public abstract void addSelectedTraceAnalysisParameters(final Collection<String> parameters);
 
+	public boolean isNextStepAllowed() {
+		return true;
+	}
+
 }

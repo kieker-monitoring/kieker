@@ -26,6 +26,7 @@ import java.util.Collection;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -157,6 +158,22 @@ public class WelcomeStep extends AbstractStep {
 				}
 			}
 		});
+	}
+
+	@Override
+	public boolean isNextStepAllowed() {
+		final File outputDirectory = new File(this.outputDirectoryField.getText());
+		if (outputDirectory.isDirectory()) {
+			return true;
+		} else {
+			final int result = JOptionPane.showConfirmDialog(this, "The output directory does not exist. Create it?", "Create Output Directory",
+					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+			if (JOptionPane.YES_OPTION == result) {
+				return outputDirectory.mkdirs();
+			} else {
+				return false;
+			}
+		}
 	}
 
 	@Override
