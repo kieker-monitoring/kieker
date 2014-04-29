@@ -62,14 +62,6 @@ public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?,
 	}
 
 	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Configuration getCurrentConfiguration() {
-		return super.getCurrentConfiguration();
-	}
-
-	/**
 	 * Returns this filter's configuration name.
 	 * 
 	 * @return See above

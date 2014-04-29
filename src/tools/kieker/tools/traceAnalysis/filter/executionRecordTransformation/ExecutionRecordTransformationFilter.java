@@ -85,12 +85,4 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisFi
 		super.deliver(OUTPUT_PORT_NAME_EXECUTIONS, execution);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Configuration getCurrentConfiguration() {
-		return super.getCurrentConfiguration();
-	}
-
 }
