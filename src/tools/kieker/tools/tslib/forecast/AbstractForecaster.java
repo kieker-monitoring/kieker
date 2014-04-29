@@ -21,16 +21,17 @@ import kieker.tools.tslib.TimeSeries;
 
 /**
  * @author Andre van Hoorn, Tillmann Carlos Bielefeld
+ * 
  * @since 1.9
+ * 
  * @param <T>
+ *            The type of the forecaster.
  */
 public abstract class AbstractForecaster<T> implements IForecaster<T> {
+
 	private final ITimeSeries<T> historyTimeseries;
 	private final int confidenceLevel;
 
-	/**
-	 * @param historyTimeseries
-	 */
 	public AbstractForecaster(final ITimeSeries<T> historyTimeseries) {
 		this(historyTimeseries, 0);
 	}
@@ -40,9 +41,6 @@ public abstract class AbstractForecaster<T> implements IForecaster<T> {
 		this.confidenceLevel = confidenceLevel;
 	}
 
-	/**
-	 * @return the historyTimeseries
-	 */
 	@Override
 	public ITimeSeries<T> getTsOriginal() {
 		return this.historyTimeseries;

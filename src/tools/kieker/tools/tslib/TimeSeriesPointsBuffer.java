@@ -19,46 +19,46 @@ package kieker.tools.tslib;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
- * This class is using a ConcurrentLinkedQueue to implement a bounded FifoBuffer.
+ * This is a thread-safe buffer for time series points, which has or has not a fixed capacity.
  * 
- * @author Tom Frotscher
+ * @author Tom Frotscher, Nils Christian Ehmke
  * 
  * @since 1.9
  * 
  * @param <T>
+ *            The type of the buffer.
  */
-public class TimeSeriesPointsBuffer<T> extends ConcurrentLinkedQueue<T> implements ITimeSeriesPointsBuffer<T> {
+public class TimeSeriesPointsBuffer<T extends ITimeSeriesPoint<?>> extends ConcurrentLinkedQueue<T> implements ITimeSeriesPointsBuffer<T> {
+
 	private static final long serialVersionUID = -7988633509408488397L;
 
 	private final int capacity;
 	private final boolean unbounded;
 
 	/**
-	 * Creates a new TimeSeriesPointsBuffer with the given capacity.
-	 * If capacity <= 0, the capacity is infinite.
-	 * 
-	 * @param cap
-	 *            Capacity of the Buffer
+	 * Creates a new instance with infinite capacity.
 	 */
-	public TimeSeriesPointsBuffer(final int cap) {
-		super();
-		if (cap <= 0) {
-			this.capacity = cap;
-			this.unbounded = true;
-		} else {
-			this.capacity = cap;
-			this.unbounded = false;
-		}
+	public TimeSeriesPointsBuffer() {
+		this(-1);
+	}
+
+	/**
+	 * Creates a new instance with the given capacity. A capacity of less or equal zero means that the capacity is infinite.
+	 * 
+	 * @param capacity
+	 *            The capacity of the buffer
+	 */
+	public TimeSeriesPointsBuffer(final int capacity) {
+		this.capacity = capacity;
+		this.unbounded = capacity <= 0;
 	}
 
 	@Override
 	public boolean add(final T o) {
-		synchronized (this) {
-			if (this.unbounded) {
-				return super.add(o);
-			} else {
-				return this.addBounded(o);
-			}
+		if (this.unbounded) {
+			return super.add(o);
+		} else {
+			return this.addBounded(o);
 		}
 	}
 
@@ -66,10 +66,8 @@ public class TimeSeriesPointsBuffer<T> extends ConcurrentLinkedQueue<T> implemen
 		synchronized (this) {
 			if (this.size() == this.capacity) {
 				super.poll();
-				return super.add(o);
-			} else {
-				return super.add(o);
 			}
+			return super.add(o);
 		}
 	}
 

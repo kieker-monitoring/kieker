@@ -18,18 +18,17 @@ package kieker.tools.tslib;
 
 /**
  * @author Andre van Hoorn
+ * 
  * @since 1.9
+ * 
  * @param <T>
+ *            The type of the point.
  */
 public class TimeSeriesPoint<T> implements ITimeSeriesPoint<T> {
 
 	private final long time;
 	private final T value;
 
-	/**
-	 * @param time
-	 * @param value
-	 */
 	public TimeSeriesPoint(final long time, final T value) {
 		this.time = time;
 		this.value = value;

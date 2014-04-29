@@ -20,15 +20,12 @@ import kieker.tools.tslib.ITimeSeriesPoint;
 import kieker.tools.tslib.forecast.IForecastResult;
 
 /**
- * 
  * @author Tillmann Carlos Bielefeld
+ * 
  * @since 1.9
  */
 public class SimpleAnomalyCalculator implements IAnomalyCalculator<Double> {
 
-	/**
-	 * Creates a new Instance of this class.
-	 */
 	public SimpleAnomalyCalculator() {
 		// No code necessary
 	}

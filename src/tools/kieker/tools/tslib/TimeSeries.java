@@ -26,23 +26,18 @@ import java.util.concurrent.TimeUnit;
  * @since 1.9
  * 
  * @param <T>
+ *            The type of the time series.
  */
 public class TimeSeries<T> implements ITimeSeries<T> {
+
 	private final long startTime;
 	private long nextTime;
 	private final long deltaTime;
 	private final TimeUnit deltaTimeUnit;
 	private final int capacity;
 	private final TimeSeriesPointsBuffer<ITimeSeriesPoint<T>> points;
-	// approach of avh: private final CopyOnWriteArrayList<ITimeSeriesPoint<T>> points;
 	private long oneStepMillis;
 
-	/**
-	 * @param startTime
-	 * @param deltaTime
-	 * @param deltaTimeUnit
-	 * @param capacity
-	 */
 	public TimeSeries(final long startTime, final long deltaTime, final TimeUnit deltaTimeUnit, final int capacity) {
 		this.startTime = startTime;
 		this.deltaTime = deltaTime;
@@ -51,7 +46,7 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 		this.oneStepMillis = TimeUnit.MILLISECONDS.convert(this.deltaTime, this.deltaTimeUnit);
 
 		if (ITimeSeries.INFINITE_CAPACITY == capacity) {
-			this.points = new TimeSeriesPointsBuffer<ITimeSeriesPoint<T>>(capacity);
+			this.points = new TimeSeriesPointsBuffer<ITimeSeriesPoint<T>>();
 		} else {
 			this.points = new TimeSeriesPointsBuffer<ITimeSeriesPoint<T>>(this.capacity);
 		}

@@ -22,8 +22,11 @@ import kieker.tools.tslib.ITimeSeries;
  * Result of a time series forecast, e.g., computed by {@link IForecaster}. If additional fields are required, {@link IForecaster}s should extend this class.
  * 
  * @author Andre van Hoorn
+ * 
  * @since 1.9
+ * 
  * @param <T>
+ *            The type of the forecast result.
  */
 public class ForecastResult<T> implements IForecastResult<T> {
 

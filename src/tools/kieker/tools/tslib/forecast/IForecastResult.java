@@ -19,10 +19,12 @@ package kieker.tools.tslib.forecast;
 import kieker.tools.tslib.ITimeSeries;
 
 /**
- * 
  * @author Andre van Hoorn
+ * 
  * @since 1.9
+ * 
  * @param <T>
+ *            The type of the forecast result.
  */
 public interface IForecastResult<T> {
 

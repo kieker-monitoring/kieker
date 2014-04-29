@@ -19,10 +19,9 @@ package kieker.tools.opad.record;
 import kieker.tools.tslib.ITimeSeriesPoint;
 
 /**
- * 
  * @author Tillmann Carlos Bielefeld
- * @since 1.9
  * 
+ * @since 1.9
  */
 public interface IForecastMeasurementPair extends INamedElement, ITimeSeriesPoint<Double> {
 

@@ -19,10 +19,12 @@ package kieker.tools.tslib.forecast;
 import kieker.tools.tslib.ITimeSeries;
 
 /**
- * 
  * @author Andre van Hoorn
+ * 
  * @since 1.9
+ * 
  * @param <T>
+ *            The type of the forecaster.
  */
 public interface IForecaster<T> {
 
@@ -30,6 +32,7 @@ public interface IForecaster<T> {
 	 * Performs a time series forecast for the given number of steps in the future.
 	 * 
 	 * @param numForecastSteps
+	 * 
 	 * @since 1.9
 	 */
 	public IForecastResult<T> forecast(final int numForecastSteps);
