@@ -19,8 +19,6 @@
 		<property name="dist.kieker.main.javadoc.emf.jar" value="${kieker.main.packagenamebase}-${kieker.version}_emf-${kieker-api.suffix}.jar" />
 
 		<property name="dist.kieker.main.pom" value="${kieker.main.packagenamebase}-${kieker.version}.pom" />
-		<property name="dist.kieker.main.aspectj.pom" value="${kieker.main.packagenamebase}-aspectj-${kieker.version}.pom" />
-		<property name="dist.kieker.main.emf.pom" value="${kieker.main.packagenamebase}-emf-${kieker.version}.pom" />
 
 		<property name="dist.kieker.main.jar" value="${kieker.main.packagenamebase}-${kieker.version}.jar" />
 		<property name="dist.kieker.main.aspectj.jar" value="${kieker.main.packagenamebase}-${kieker.version}_aspectj.jar" />

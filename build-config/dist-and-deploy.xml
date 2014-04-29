@@ -155,12 +155,8 @@
 		</jar>
 		<!-- The pom files -->
 		<copy file="${pom.xml.kieker.main}" tofile="${maven.dir}/${dist.kieker.main.pom}" />
-		<copy file="${pom.xml.kieker.main.aspectj}" tofile="${maven.dir}/${dist.kieker.main.aspectj.pom}" />
-		<copy file="${pom.xml.kieker.main.emf}" tofile="${maven.dir}/${dist.kieker.main.emf.pom}" />
 		<!-- update version -->
 		<replaceregexp file="${maven.dir}/${dist.kieker.main.pom}" match="&lt;version&gt;.*&lt;/version&gt;&lt;!--Kieker.*" replace="&lt;version&gt;${kieker.version}&lt;/version&gt;" />
-		<replaceregexp file="${maven.dir}/${dist.kieker.main.aspectj.pom}" match="&lt;version&gt;.*&lt;/version&gt;&lt;!--Kieker.*" replace="&lt;version&gt;${kieker.version}&lt;/version&gt;" />
-		<replaceregexp file="${maven.dir}/${dist.kieker.main.emf.pom}" match="&lt;version&gt;.*&lt;/version&gt;&lt;!--Kieker.*" replace="&lt;version&gt;${kieker.version}&lt;/version&gt;" />
 	</target>
 
 	<!-- Note that this target just uploads but does NOT build! -->
@@ -196,28 +192,6 @@
 			<arg value="-Dfiles=${maven.dir}/${dist.kieker.main.emf.jar},${maven.dir}/${dist.kieker.main.aspectj.jar},${maven.dir}/${dist.kieker.userguide.pdf}" />
 			<arg value="-Pgpg" />
 		</artifact:mvn>
-
-		<!-- Legacy relocation POMs (section to be removed after release 1.7) -->
-
-		<artifact:mvn>
-			<arg value="org.apache.maven.plugins:maven-gpg-plugin:1.4:sign-and-deploy-file" />
-			<arg value="-Durl=${maven-staging-repository-url}" />
-			<arg value="-DrepositoryId=${maven-staging-repository-id}" />
-			<arg value="-Dfile=${maven.dir}/${dist.kieker.main.emf.pom}" />
-			<arg value="-DpomFile=${maven.dir}/${dist.kieker.main.emf.pom}" />
-			<arg value="-Dtype=pom" />
-			<arg value="-Pgpg" />
-		</artifact:mvn>
-		<artifact:mvn>
-			<arg value="org.apache.maven.plugins:maven-gpg-plugin:1.4:sign-and-deploy-file" />
-			<arg value="-Durl=${maven-staging-repository-url}" />
-			<arg value="-DrepositoryId=${maven-staging-repository-id}" />
-			<arg value="-Dfile=${maven.dir}/${dist.kieker.main.aspectj.pom}" />
-			<arg value="-DpomFile=${maven.dir}/${dist.kieker.main.aspectj.pom}" />
-			<arg value="-Dtype=pom" />
-			<arg value="-Pgpg" />
-		</artifact:mvn>
-
 	</target>
 
 	<target name="dist-kieker-binaries" depends="build-all,-build-userguide,-build-userguide-examples,-prepate-userguide-examples-binary-release,-compile-javaee.demo" description="Packages the binary archives (.zip|.tar.gz) for a release">
