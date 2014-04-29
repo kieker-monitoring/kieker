@@ -114,8 +114,10 @@ public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessing
 	 */
 	@Override
 	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration();
+		final Configuration configuration = super.getCurrentConfiguration();
+
 		configuration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_FN, this.outputFn);
+
 		return configuration;
 	}
 }

@@ -90,9 +90,7 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisFi
 	 */
 	@Override
 	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration();
-		// filter has no configuration properties
-		return configuration;
+		return super.getCurrentConfiguration();
 	}
 
 }

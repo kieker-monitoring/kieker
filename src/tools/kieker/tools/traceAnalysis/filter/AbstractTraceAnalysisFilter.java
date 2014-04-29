@@ -20,6 +20,7 @@ import java.io.PrintStream;
 
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.Plugin;
+import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
@@ -37,8 +38,14 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * 
  * @since 1.2
  */
-@Plugin(repositoryPorts = { @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class) })
+@Plugin(configuration = { @Property(name = AbstractTraceAnalysisFilter.CONFIG_PROPERTY_NAME_VERBOSE,
+		defaultValue = AbstractTraceAnalysisFilter.CONFIG_PROPERTY_VALUE_VERBOSE) },
+		repositoryPorts = { @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class) })
 public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
+
+	public static final String CONFIG_PROPERTY_NAME_VERBOSE = "verbose";
+	public static final String CONFIG_PROPERTY_VALUE_VERBOSE = "false";
+
 	/** The name of the repository port for the system model repository. */
 	public static final String REPOSITORY_PORT_NAME_SYSTEM_MODEL = "systemModelRepository";
 
@@ -54,6 +61,8 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 
 	private volatile SystemModelRepository systemEntityFactory;
 
+	protected final boolean verbose;
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -64,6 +73,17 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 	 */
 	public AbstractTraceAnalysisFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
+
+		this.verbose = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_VERBOSE);
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		final Configuration configuration = new Configuration();
+
+		configuration.setProperty(CONFIG_PROPERTY_NAME_VERBOSE, Boolean.toString(this.verbose));
+
+		return configuration;
 	}
 
 	public static final Execution createExecutionByEntityNames(final SystemModelRepository systemModelRepository,

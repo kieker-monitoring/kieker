@@ -66,7 +66,7 @@ public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?,
 	 */
 	@Override
 	public Configuration getCurrentConfiguration() {
-		return this.configuration;
+		return super.getCurrentConfiguration();
 	}
 
 	/**

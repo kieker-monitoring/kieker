@@ -116,8 +116,10 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 			AbstractCallTreeFilter.saveTreeToDotFile(this.root, outputFn, this.includeWeights, false, // do not include EOIs
 					this.shortLabels);
 			this.numGraphsSaved++;
-			this.printMessage(new String[] { "Wrote call tree to file '" + outputFn + "'", "Dot file can be converted using the dot tool",
-				"Example: dot -T svg " + outputFn + " > " + outputFn + ".svg", });
+			if (this.verbose) {
+				this.printMessage(new String[] { "Wrote call tree to file '" + outputFn + "'", "Dot file can be converted using the dot tool",
+					"Example: dot -T svg " + outputFn + " > " + outputFn + ".svg", });
+			}
 		}
 	}
 
@@ -153,10 +155,12 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	 */
 	@Override
 	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration();
+		final Configuration configuration = super.getCurrentConfiguration();
+
 		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(this.includeWeights));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(this.shortLabels));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_FILENAME, this.dotOutputFile);
+
 		return configuration;
 	}
 

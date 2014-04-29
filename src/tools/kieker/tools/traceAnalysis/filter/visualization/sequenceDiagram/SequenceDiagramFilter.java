@@ -371,10 +371,12 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 
 	@Override
 	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration();
+		final Configuration configuration = super.getCurrentConfiguration();
+
 		configuration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE, this.outputFnBase);
 		configuration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES, Boolean.toString(this.shortLabels));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_SDMODE, this.sdmode.toString());
+
 		return configuration;
 	}
 }

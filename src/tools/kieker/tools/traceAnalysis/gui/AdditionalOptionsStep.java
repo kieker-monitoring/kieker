@@ -37,6 +37,7 @@ public class AdditionalOptionsStep extends AbstractStep {
 
 	private final JLabel infoLabel = new JLabel("<html>In this step you manage additional options for the trace analysis.</html>");
 	private final JPanel expandingPanel = new JPanel();
+	private final JCheckBox verbose = new JCheckBox("Verbosely list used parameters and processed traces");
 	private final JCheckBox ignoreInvalidTraces = new JCheckBox("Ignore Invalid Traces");
 	private final JCheckBox useShortLabels = new JCheckBox("Use Short Labels");
 	private final JCheckBox includeSelfLoops = new JCheckBox("Include Self Loops");
@@ -59,6 +60,10 @@ public class AdditionalOptionsStep extends AbstractStep {
 
 		gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
 		gridBagConstraints.insets.set(5, 5, 0, 0);
+		this.add(this.verbose, gridBagConstraints);
+
+		gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
+		gridBagConstraints.insets.set(0, 5, 0, 0);
 		this.add(this.ignoreInvalidTraces, gridBagConstraints);
 
 		gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
@@ -78,8 +83,11 @@ public class AdditionalOptionsStep extends AbstractStep {
 	@Override
 	@SuppressWarnings("synthetic-access")
 	public void addSelectedTraceAnalysisParameters(final Collection<String> parameters) {
-		if (this.ignoreInvalidTraces.isSelected()) {
+		if (this.verbose.isSelected()) {
+			parameters.add("--" + Constants.CMD_OPT_NAME_VERBOSE);
+		}
 
+		if (this.ignoreInvalidTraces.isSelected()) {
 			parameters.add("--" + Constants.CMD_OPT_NAME_IGNOREINVALIDTRACES);
 		}
 
