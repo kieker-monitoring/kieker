@@ -49,6 +49,8 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 	/** The name of the repository port for the system model repository. */
 	public static final String REPOSITORY_PORT_NAME_SYSTEM_MODEL = "systemModelRepository";
 
+	protected final boolean verbose;
+
 	/**
 	 * Output stream for info output addressed to users, e.g., number of traces processed, files processed etc.
 	 */
@@ -60,8 +62,6 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 	private volatile PrintStream errStream = System.err;
 
 	private volatile SystemModelRepository systemEntityFactory;
-
-	protected final boolean verbose;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
