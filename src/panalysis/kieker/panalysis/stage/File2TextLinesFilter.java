@@ -46,7 +46,7 @@ public class File2TextLinesFilter extends AbstractFilter<File2TextLinesFilter> {
 	 */
 	@Override
 	protected boolean execute(final Context<File2TextLinesFilter> context) {
-		final File file = this.tryTake(this.FILE);
+		final File file = context.tryTake(this.FILE);
 		if (file == null) {
 			return false;
 		}
@@ -58,7 +58,7 @@ public class File2TextLinesFilter extends AbstractFilter<File2TextLinesFilter> {
 			while ((line = reader.readLine()) != null) {
 				line = line.trim();
 				if (line.length() != 0) {
-					this.put(this.TEXT_LINE, line);
+					context.put(this.TEXT_LINE, line);
 				} // else: ignore empty line
 			}
 		} catch (final FileNotFoundException e) {

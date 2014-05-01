@@ -39,17 +39,17 @@ public class CountingFilter<T> extends AbstractFilter<CountingFilter<T>> {
 	 */
 	@Override
 	protected boolean execute(final Context<CountingFilter<T>> context) {
-		final T inputObject = super.tryTake(this.INPUT_OBJECT);
+		final T inputObject = context.tryTake(this.INPUT_OBJECT);
 		if (inputObject == null) {
 			return false;
 		}
-		final Long count = super.tryTake(this.CURRENT_COUNT);
+		final Long count = context.tryTake(this.CURRENT_COUNT);
 		if (count == null) {
 			return false;
 		}
 
-		super.put(this.RELAYED_OBJECT, inputObject);
-		super.put(this.NEW_COUNT, count + 1); // BETTER support pipes with primitive values to improve performance by avoiding auto-boxing
+		context.put(this.RELAYED_OBJECT, inputObject);
+		context.put(this.NEW_COUNT, count + 1); // BETTER support pipes with primitive values to improve performance by avoiding auto-boxing
 
 		return true;
 	}

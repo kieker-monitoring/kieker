@@ -55,7 +55,7 @@ public class TypeLoggerFilter<T> extends AbstractFilter<TypeLoggerFilter<T>> {
 	 */
 	@Override
 	protected boolean execute(final Context<TypeLoggerFilter<T>> context) {
-		final T inputObject = super.tryTake(this.INPUT_OBJECT);
+		final T inputObject = context.tryTake(this.INPUT_OBJECT);
 		if (inputObject == null) {
 			return false;
 		}
@@ -64,7 +64,7 @@ public class TypeLoggerFilter<T> extends AbstractFilter<TypeLoggerFilter<T>> {
 		sb.append(super.getId()).append('(').append(inputObject.getClass().getSimpleName()).append(") ").append(inputObject.toString());
 		this.printStream.println(sb.toString());
 
-		super.put(this.RELAYED_OBJECT, inputObject);
+		context.put(this.RELAYED_OBJECT, inputObject);
 		return true;
 	}
 

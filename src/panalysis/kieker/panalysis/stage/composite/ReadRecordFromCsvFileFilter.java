@@ -38,16 +38,15 @@ public class ReadRecordFromCsvFileFilter extends AbstractFilter<File2TextLinesFi
 	 * @since 1.10
 	 * @param textLinePipe
 	 */
-	public ReadRecordFromCsvFileFilter(final IPipe<String, ?> textLinePipe) {
+	public ReadRecordFromCsvFileFilter(final IPipe<String> textLinePipe) {
 		// FIXME replace null value
 		final Map<Integer, String> stringRegistry = null;
 
 		this.stage0 = new File2TextLinesFilter();
 		this.stage1 = new TextLine2RecordFilter(stringRegistry);
 
-		textLinePipe
-				.setSourcePort(this.stage0.TEXT_LINE)
-				.target(this.stage1, this.stage1.TEXT_LINE);
+		textLinePipe.setSourcePort(this.stage0.TEXT_LINE);
+		textLinePipe.setTargetPort(this.stage1.TEXT_LINE);
 		// FIXME textLinePipe needs to be added to a group
 
 		/*

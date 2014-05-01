@@ -60,7 +60,7 @@ public class Directory2FilesFilter extends AbstractFilter<Directory2FilesFilter>
 		final File[] inputFiles = inputDir.listFiles(this.filter);
 
 		for (final File file : inputFiles) {
-			this.put(this.FILE, file);
+			context.put(this.FILE, file);
 		}
 
 		return true;

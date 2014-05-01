@@ -43,7 +43,7 @@ public class TextLine2MappingRegistryFilter extends AbstractFilter<TextLine2Mapp
 	 */
 	@Override
 	protected boolean execute(final Context<TextLine2MappingRegistryFilter> context) {
-		final String textLine = this.tryTake(this.TEXT_LINE);
+		final String textLine = context.tryTake(this.TEXT_LINE);
 		if (textLine == null) {
 			return false;
 		}

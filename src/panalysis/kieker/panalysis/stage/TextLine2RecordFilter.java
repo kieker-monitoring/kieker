@@ -64,14 +64,14 @@ public class TextLine2RecordFilter extends AbstractFilter<TextLine2RecordFilter>
 	 */
 	@Override
 	protected boolean execute(final Context<TextLine2RecordFilter> context) {
-		final String textLine = this.tryTake(this.TEXT_LINE);
+		final String textLine = context.tryTake(this.TEXT_LINE);
 		if (textLine == null) {
 			return false;
 		}
 
 		try {
 			final IMonitoringRecord record = this.createRecordFromLine(textLine);
-			this.put(this.RECORD, record);
+			context.put(this.RECORD, record);
 		} catch (final MonitoringRecordException e) {
 			this.logger.error("Could not create record from text line: '" + textLine + "'", e);
 		} catch (final IllegalRecordFormatException e) {

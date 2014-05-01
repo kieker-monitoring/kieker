@@ -38,15 +38,15 @@ public class SuperTypeFilter<T> extends AbstractFilter<SuperTypeFilter<T>> {
 	 */
 	@Override
 	protected boolean execute(final Context<SuperTypeFilter<T>> context) {
-		final Object token = this.tryTake(this.INPUT_OBJECT);
+		final Object token = context.tryTake(this.INPUT_OBJECT);
 		if (token == null) {
 			return false;
 		}
 
 		if (this.typeToFilter.isAssignableFrom(token.getClass())) {
-			this.put(this.OUTPUT_MATCHING, token);
+			context.put(this.OUTPUT_MATCHING, token);
 		} else {
-			this.put(this.OUTPUT_MISMATCHING, token);
+			context.put(this.OUTPUT_MISMATCHING, token);
 		}
 
 		return true;

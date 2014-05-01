@@ -34,7 +34,6 @@ public class RepeaterSource<T> extends AbstractFilter<RepeaterSource<T>> {
 
 	private final T outputRecord;
 	private final int num;
-	private long overallDuration;
 
 	/**
 	 * @since 1.10
@@ -59,31 +58,17 @@ public class RepeaterSource<T> extends AbstractFilter<RepeaterSource<T>> {
 
 	@Override
 	protected boolean execute(final Context<RepeaterSource<T>> context) {
-		final long start = System.currentTimeMillis();
-
-		final Boolean token = this.tryTake(this.START);
+		final Boolean token = context.tryTake(this.START);
 		if (token == null) {
 			return false;
 		}
 
 		int counter = this.num;
 		while (counter-- > 0) {
-			this.put(this.OUTPUT, this.outputRecord);
+			context.put(this.OUTPUT, this.outputRecord);
 		}
 
-		final long end = System.currentTimeMillis();
-		final long duration = end - start;
-		this.overallDuration += duration;
-
 		return true;
-	}
-
-	/**
-	 * @since 1.10
-	 * @return
-	 */
-	public long getOverallDuration() {
-		return this.overallDuration;
 	}
 
 }

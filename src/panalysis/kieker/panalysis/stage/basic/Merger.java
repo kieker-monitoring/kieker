@@ -51,9 +51,9 @@ public class Merger<T> extends AbstractFilter<Merger<T>> {
 		// check each port at most once to avoid a potentially infinite loop
 		while (size-- > 0) {
 			final IInputPort<Merger<T>, T> inputPort = this.getNextPortInRoundRobinOrder();
-			final T token = this.tryTake(inputPort);
+			final T token = context.tryTake(inputPort);
 			if (token != null) {
-				this.put(this.OBJECT, token);
+				context.put(this.OBJECT, token);
 				return true;
 			}
 		}

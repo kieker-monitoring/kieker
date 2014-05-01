@@ -34,13 +34,13 @@ public class Delay<T> extends AbstractFilter<Delay<T>> {
 		final long thresholdInMs = (this.initialDelayExceeded) ? this.intervalDelayInMs : this.initialDelayInMs;
 
 		if (passedTimeInMs >= thresholdInMs) {
-			final T token = this.tryTake(this.INPUT_OBJECT);
+			final T token = context.tryTake(this.INPUT_OBJECT);
 			if (token == null) {
 				return false;
 			}
 
 			this.lastTimeInMs += thresholdInMs;
-			this.put(this.RELAYED_OBJECT, token);
+			context.put(this.RELAYED_OBJECT, token);
 
 			this.initialDelayExceeded = true;
 		}

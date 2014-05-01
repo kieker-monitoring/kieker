@@ -34,15 +34,14 @@ public class CycledCountingFilter<T> extends CountingFilter<T> {
 	 * @since 1.10
 	 * @param countingPipe
 	 */
-	private CycledCountingFilter(final IPipe<Long, ?> countingPipe) {
-		countingPipe
-				.setSourcePort(this.NEW_COUNT)
-				.target(this, this.CURRENT_COUNT);
+	private CycledCountingFilter(final IPipe<Long> countingPipe) {
+		countingPipe.setSourcePort(this.NEW_COUNT);
+		countingPipe.setTargetPort(this.CURRENT_COUNT);
 		// FIXME counting pipe needs to be added to a group
 	}
 
 	// this constructor prevents the programmer from repeating the type argument
-	public static <T> CycledCountingFilter<T> create(final IPipe<Long, ?> countingPipe) {
+	public static <T> CycledCountingFilter<T> create(final IPipe<Long> countingPipe) {
 		return new CycledCountingFilter<T>(countingPipe);
 	}
 
@@ -51,7 +50,7 @@ public class CycledCountingFilter<T> extends CountingFilter<T> {
 	 * @return
 	 */
 	public Long getCurrentCount() {
-		return super.read(this.CURRENT_COUNT);
+		return this.getContext().read(this.CURRENT_COUNT);
 	}
 
 }

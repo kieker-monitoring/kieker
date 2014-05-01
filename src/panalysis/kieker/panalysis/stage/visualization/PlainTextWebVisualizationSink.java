@@ -60,7 +60,7 @@ public class PlainTextWebVisualizationSink<T> extends AbstractFilter<PlainTextWe
 	 */
 	@Override
 	protected boolean execute(final Context<PlainTextWebVisualizationSink<T>> context) {
-		final T object = this.tryTake(this.INPUT_OBJECT);
+		final T object = context.tryTake(this.INPUT_OBJECT);
 		if (object == null) {
 			return false;
 		}

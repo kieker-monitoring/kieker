@@ -35,7 +35,7 @@ public class Distributor<T> extends AbstractFilter<Distributor<T>> {
 
 	private int index = 0;
 
-	// TODO add parameter: MergeStrategy
+	// TODO add parameter: DistributionStrategy
 	/**
 	 * @since 1.10
 	 */
@@ -43,12 +43,12 @@ public class Distributor<T> extends AbstractFilter<Distributor<T>> {
 
 	@Override
 	protected boolean execute(final Context<Distributor<T>> context) {
-		final T object = this.tryTake(this.OBJECT);
+		final T object = context.tryTake(this.OBJECT);
 		if (object == null) {
 			return false;
 		}
 		final IOutputPort<Distributor<T>, T> port = this.getNextPortInRoundRobinOrder();
-		this.put(port, object);
+		context.put(port, object);
 		return true;
 	}
 
