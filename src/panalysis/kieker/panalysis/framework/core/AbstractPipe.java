@@ -39,9 +39,9 @@ public abstract class AbstractPipe<T> implements IPipe<T> {
 		targetPort.setAssociatedPipe(this);
 		this.targetStage = targetPort.getOwningStage();
 		this.fireSignalClosing = new Runnable() {
-			// This Runnable avoids the declaration of targetStage and targetPort as attributes and the declaration of I as type parameter
+			// This Runnable avoids the declaration of targetStage and targetPort as attributes and the declaration of a type parameter
 			public void run() {
-				AbstractPipe.this.targetStage.onSignalClosing(targetPort);
+				targetPort.getOwningStage().onSignalClosing(targetPort);
 			}
 		};
 	}
@@ -50,14 +50,14 @@ public abstract class AbstractPipe<T> implements IPipe<T> {
 		return this.targetStage;
 	}
 
-	// TODO remove if it does not add any new functionality
+	// BETTER remove if it does not add any new functionality
 	protected abstract void putInternal(T token);
 
 	public void put(final T token) {
 		this.putInternal(token);
 	}
 
-	// TODO remove if it does not add any new functionality
+	// BETTER remove if it does not add any new functionality
 	protected abstract T tryTakeInternal();
 
 	public final T tryTake() {

@@ -31,6 +31,6 @@ public interface ISink<S extends IStage> extends IStage {
 	 * 
 	 * @param targetPort
 	 */
-	void onSignalClosing(IInputPort<S, ?> targetPort);
+	<T> void onSignalClosing(IInputPort<S, T> targetPort);
 
 }

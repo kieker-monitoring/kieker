@@ -58,33 +58,6 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 
 	/**
 	 * @since 1.10
-	 * @deprecated Use the context parameter in the execute() method
-	 */
-	@Deprecated
-	protected <T> void put(final IOutputPort<S, T> port, final T object) {
-		this.context.put(port, object);
-	}
-
-	/**
-	 * @since 1.10
-	 * @deprecated Use the context parameter in the execute() method
-	 */
-	@Deprecated
-	protected <T> T tryTake(final IInputPort<S, T> inputPort) {
-		return this.context.tryTake(inputPort);
-	}
-
-	/**
-	 * @since 1.10
-	 * @deprecated Use the context parameter in the execute() method
-	 */
-	@Deprecated
-	protected <T> T read(final IInputPort<S, T> inputPort) {
-		return this.context.read(inputPort);
-	}
-
-	/**
-	 * @since 1.10
 	 */
 	public final boolean execute() {
 		boolean success = false;
@@ -125,7 +98,7 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	/**
 	 * @since 1.10
 	 */
-	public void onSignalClosing(final IInputPort<S, ?> inputPort) {
+	public <T> void onSignalClosing(final IInputPort<S, T> inputPort) {
 		// inputPort.setState(IInputPort.State.CLOSING);
 		this.enabledInputPorts--;
 		System.out.println("Closed " + "(" + this.enabledInputPorts + " remaining) " + inputPort + " of " + this.toString());
@@ -224,7 +197,7 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	 * @return
 	 * 
 	 */
-	protected List<IOutputPort<S, ?>> getOutputPorts() {
+	public List<IOutputPort<S, ?>> getOutputPorts() {
 		return this.readOnlyOutputPorts;
 	}
 
