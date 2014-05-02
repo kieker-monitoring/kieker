@@ -21,7 +21,6 @@ import java.io.File;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.rosuda.REngine.REXPDouble;
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -70,6 +69,6 @@ public class RBridgeTest extends AbstractKiekerTest {
 		LOG.info(result.toString());
 
 		Assert.assertTrue(result != null);
-		Assert.assertTrue(result instanceof REXPDouble);
+		Assert.assertTrue(result instanceof org.rosuda.REngine.REXPDouble);
 	}
 }
