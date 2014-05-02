@@ -130,7 +130,7 @@ public class BitOutputStream implements BitWriter {
                 actual = this.vacant;
             }
             this.unwritten |= ((bits >>> (width - actual)) &
-                    BitInputStream.mask[actual]) << (this.vacant - actual);
+                    BitInputStream.MASK[actual]) << (this.vacant - actual);
             width -= actual;
             nrBits += actual;
             this.vacant -= actual;

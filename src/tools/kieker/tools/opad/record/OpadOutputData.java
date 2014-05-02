@@ -78,9 +78,9 @@ public class OpadOutputData extends OperationAnomalyInfo {
 	public String toString() {
 		final StringBuilder sb = new StringBuilder();
 		sb.append(super.toString());
-		sb.append(";");
+		sb.append(';');
 		sb.append(this.responseTime);
-		sb.append(";");
+		sb.append(';');
 		sb.append(this.anomalyThreshold);
 		return sb.toString();
 	}

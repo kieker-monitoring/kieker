@@ -35,8 +35,8 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * 
  */
 public class TimeSeriesTestAvh extends AbstractKiekerTest {
-	static final long STARTTIME = 98890787;
-	static final long DELTATIMEMILIS = 1000;
+	private static final long STARTTIME = 98890787;
+	private static final long DELTATIMEMILIS = 1000;
 
 	/**
 	 * Creates a new instance of this class.

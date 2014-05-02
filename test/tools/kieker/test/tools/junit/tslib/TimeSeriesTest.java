@@ -118,7 +118,8 @@ public class TimeSeriesTest extends AbstractKiekerTest {
 		for (i = 0; i <= lastNumber; i++) {
 			this.boundedTS.append(i);
 		}
-		Assert.assertEquals(new Integer(lastNumber), this.boundedTS.getPoints().get(this.bounds - 1).getValue());
+
+		Assert.assertEquals(Integer.valueOf(lastNumber), this.boundedTS.getPoints().get(this.bounds - 1).getValue());
 	}
 
 }

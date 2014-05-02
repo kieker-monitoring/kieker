@@ -20,7 +20,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysis.exception.AnalysisConfigurationException;
-
 import kieker.tools.tslib.TimeSeriesPointsBuffer;
 
 import kieker.test.common.junit.AbstractKiekerTest;
@@ -31,8 +30,6 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * 
  */
 public class TimeSeriesPointsBufferTest extends AbstractKiekerTest {
-	private TimeSeriesPointsBuffer<Integer> bounded;
-	private TimeSeriesPointsBuffer<Integer> unbounded;
 
 	/**
 	 * Creates a new instance of this class.
@@ -53,16 +50,16 @@ public class TimeSeriesPointsBufferTest extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testBoundedBuffer() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
-		this.bounded = new TimeSeriesPointsBuffer<Integer>(3);
-		this.bounded.add(1);
-		this.bounded.add(2);
-		this.bounded.add(3);
+		final TimeSeriesPointsBuffer<Integer> bounded = new TimeSeriesPointsBuffer<Integer>(3);
+		bounded.add(1);
+		bounded.add(2);
+		bounded.add(3);
 		// Next Value exceed the boundary
-		this.bounded.add(4);
-		Assert.assertEquals(3, this.bounded.getSize());
+		bounded.add(4);
+		Assert.assertEquals(3, bounded.getSize());
 		// Test remove
-		this.bounded.remove();
-		Assert.assertEquals(2, this.bounded.getSize());
+		bounded.remove();
+		Assert.assertEquals(2, bounded.getSize());
 	}
 
 	/**
@@ -77,15 +74,15 @@ public class TimeSeriesPointsBufferTest extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testUnboundedBuffer() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
-		this.unbounded = new TimeSeriesPointsBuffer<Integer>(-1);
+		final TimeSeriesPointsBuffer<Integer> unbounded = new TimeSeriesPointsBuffer<Integer>(-1);
 		int i = 0;
 		while (i < 100) {
-			this.unbounded.add(i);
+			unbounded.add(i);
 			i++;
 		}
-		Assert.assertEquals(i, this.unbounded.getSize());
+		Assert.assertEquals(i, unbounded.getSize());
 		// Test remove
-		this.unbounded.remove();
-		Assert.assertEquals(i - 1, this.unbounded.getSize());
+		unbounded.remove();
+		Assert.assertEquals(i - 1, unbounded.getSize());
 	}
 }

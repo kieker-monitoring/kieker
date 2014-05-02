@@ -35,12 +35,11 @@ import kieker.test.common.junit.AbstractKiekerTest;
  */
 public class MeanForecasterTest extends AbstractKiekerTest {
 	private TimeSeries<Double> ts;
-	private TimeUnit timeUnit;
 	private long startTime;
 	private int steps;
 	private MeanForecaster forecaster;
 	private IForecastResult forecast;
-	private final int confidenceLevel = 95; // 95%
+	private static final int CONFIDENCE_LEVEL = 95; // 95%
 	private ITimeSeries<Double> forecastSeries;
 	private ITimeSeries<Double> upperSeries;
 	private ITimeSeries<Double> lowerSeries;
@@ -62,11 +61,12 @@ public class MeanForecasterTest extends AbstractKiekerTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
+		final TimeUnit timeUnit = TimeUnit.MILLISECONDS;
+
 		this.deltaTime = 1000;
-		this.timeUnit = TimeUnit.MILLISECONDS;
 		this.startTime = System.currentTimeMillis() - (this.deltaTime * 10);
 
-		this.initForecastWithTimeUnit(this.timeUnit);
+		this.initForecastWithTimeUnit(timeUnit);
 	}
 
 	/**
@@ -83,7 +83,7 @@ public class MeanForecasterTest extends AbstractKiekerTest {
 		this.ts.append(this.mean - 1);
 		this.ts.append(this.mean);
 		this.ts.append(this.mean + 1);
-		this.forecaster = new MeanForecaster(this.ts, this.confidenceLevel);
+		this.forecaster = new MeanForecaster(this.ts, MeanForecasterTest.CONFIDENCE_LEVEL);
 		this.forecast = this.forecaster.forecast(this.steps);
 		this.forecastSeries = this.forecast.getForecast();
 		this.upperSeries = this.forecast.getUpper();

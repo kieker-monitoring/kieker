@@ -34,13 +34,13 @@ import kieker.common.util.registry.IRegistry;
 public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
 
 	public static final int SIZE = 20;
-	
+
 	public static final Class<?>[] TYPES = {
 		String.class, // applicationName
 		long.class, // timestamp
 		double.class, // responseTime
 	};
-	
+
 	private static final long serialVersionUID = 1768657580333390199L;
 
 	// Attributes
@@ -71,11 +71,12 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	 *            Object array containing the applicationname, timestamp and responsetime
 	 */
 	public NamedDoubleRecord(final Object[] values) {
-		AbstractMonitoringRecord.checkArray(values, NamedDoubleRecord.TYPES);
+		final Object[] localValue = values.clone();
+		AbstractMonitoringRecord.checkArray(localValue, NamedDoubleRecord.TYPES);
 
-		this.applicationName = (String) values[0];
-		this.timestamp = (Long) values[1];
-		this.responseTime = (Double) values[2];
+		this.applicationName = (String) localValue[0];
+		this.timestamp = (Long) localValue[1];
+		this.responseTime = (Double) localValue[2];
 
 	}
 

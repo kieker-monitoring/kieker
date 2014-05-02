@@ -35,7 +35,7 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 	 * Size is set = 20 by Bielefeld.
 	 */
 	public static final int SIZE = 20;
-	
+
 	/**
 	 * class by Bielefeld
 	 */
@@ -53,9 +53,12 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 
 	/**
 	 * 
-	 * @param timestamp Timestamp
-	 * @param value value of TSPoint
-	 * @param name name of TS
+	 * @param timestamp
+	 *            Timestamp
+	 * @param value
+	 *            value of TSPoint
+	 * @param name
+	 *            name of TS
 	 */
 	public NamedTSPoint(final long timestamp, final double value, final String name) {
 		super();
@@ -66,11 +69,11 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 
 	/**
 	 * 
-	 * @return null 
+	 * @return empty object array
 	 */
 	public Object[] toArray() {
 		// TODO Auto-generated method stub
-		return null;
+		return new Object[] {};
 	}
 
 	@Deprecated
@@ -79,7 +82,7 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 	}
 
 	public Class<?>[] getValueTypes() {
-		return TYPES;
+		return TYPES.clone();
 	}
 
 	public long getTimestamp() {
@@ -94,11 +97,13 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 		return this.value;
 	}
 
-	
 	/**
-	 * @param buffer buffer
-	 * @param stringRegistry outputString
-	 * @throws BufferOverflowException exception
+	 * @param buffer
+	 *            buffer
+	 * @param stringRegistry
+	 *            outputString
+	 * @throws BufferOverflowException
+	 *             exception
 	 */
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putLong(this.getTimestamp());
@@ -106,10 +111,13 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 		buffer.putInt(stringRegistry.get(this.getName()));
 	}
 
-	/**	 
-	 * @param buffer buffer
-	 * @param stringRegistry outputString
-	 * @throws BufferUnderflowException exception
+	/**
+	 * @param buffer
+	 *            buffer
+	 * @param stringRegistry
+	 *            outputString
+	 * @throws BufferUnderflowException
+	 *             exception
 	 */
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException(); // TODO: FIX

@@ -56,9 +56,9 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 	 * The name of the output port delivering the aggregated time series point.
 	 */
 	public static final String OUTPUT_PORT_NAME_AGGREGATED_TSPOINT = "aggregatedTSPoint";
-	
+
 	/**
-	 	 * The name of the output port delivering the aggregated window. 
+	 * The name of the output port delivering the aggregated window.
 	 */
 	public static final String OUTPUT_PORT_NAME_AGGREGATION_WINDOW = "aggregationWindow";
 
@@ -75,7 +75,7 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 	private final long aggregationSpan;
 	private TimeUnit timeunit = TimeUnit.MILLISECONDS;
 	private AggregationMethod aggregationMethod = AggregationMethod.MEAN;
-	
+
 	private AggregationWindow recentWindow = new AggregationWindow(0L, 0L);
 
 	/**
@@ -153,12 +153,12 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 		final AggregationVariableSet variables = this.aggregationVariables.get(appname);
 		final long startOfTimestampsInterval = this.computeFirstTimestampInInterval(currentTime, variables);
 		final long endOfTimestampsInterval = this.computeLastTimestampInInterval(currentTime, variables);
-		
+
 		if (this.recentWindow.getWindowEnd() != endOfTimestampsInterval) {
 			this.recentWindow = new AggregationWindow(startOfTimestampsInterval, endOfTimestampsInterval);
 			super.deliver(OUTPUT_PORT_NAME_AGGREGATION_WINDOW, this.recentWindow);
 		}
-		
+
 		// check if interval is omitted
 		if (endOfTimestampsInterval > variables.getLastTimestampInCurrentInterval()) {
 			if (variables.getFirstTimestampInCurrentInterval() >= 0) { // don't do this for the first record (only used for initialization of variables)

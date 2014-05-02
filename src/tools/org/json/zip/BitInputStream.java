@@ -37,7 +37,7 @@ public class BitInputStream implements BitReader {
     /**
      * 2^n - 1
      */
-    static final int[] mask = { 0, 1, 3, 7, 15, 31, 63, 127, 255 };
+    static final int[] MASK = { 0, 1, 3, 7, 15, 31, 63, 127, 255 };
 
     /**
      * The number of bits remaining in the current byte.
@@ -158,7 +158,7 @@ public class BitInputStream implements BitReader {
             if (take > this.available) {
                 take = this.available;
             }
-            result |= ((this.unread >>> (this.available - take)) & mask[take])
+            result |= ((this.unread >>> (this.available - take)) & MASK[take])
                     << (width - take);
             this.nrBits += take;
             this.available -= take;

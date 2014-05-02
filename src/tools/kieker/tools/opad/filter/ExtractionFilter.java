@@ -54,7 +54,7 @@ public class ExtractionFilter extends AbstractFilterPlugin {
 	 */
 	public static final String CONFIG_PROPERTY_NAME_TIMEUNIT = "timeunit";
 
-	private TimeUnit timeunit = TimeUnit.NANOSECONDS;
+	private final TimeUnit timeunit;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -71,10 +71,9 @@ public class ExtractionFilter extends AbstractFilterPlugin {
 		try {
 			configTimeunit = TimeUnit.valueOf(configuration.getStringProperty(CONFIG_PROPERTY_NAME_TIMEUNIT));
 		} catch (final IllegalArgumentException ex) {
-			configTimeunit = this.timeunit;
+			configTimeunit = TimeUnit.NANOSECONDS;
 		}
 		this.timeunit = configTimeunit;
-
 	}
 
 	/**

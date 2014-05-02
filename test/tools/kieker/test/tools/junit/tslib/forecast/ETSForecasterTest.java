@@ -30,17 +30,16 @@ import kieker.tools.tslib.forecast.ets.ETSForecaster;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 
-
 /**
  * 
  * @author Tillmann Carlos Bielefeld
  * 
  */
 public class ETSForecasterTest extends AbstractKiekerTest {
-	private final long startTime = 98890787;
-	private final long deltaTimeMillis = 1000;
-	private final int confidenceLevel = 90;
-	private final int steps = 1;
+	private static final long START_TIME = 98890787;
+	private static final long DELTA_TIME_MILLIS = 1000;
+	private static final int CONFIDENCE_LEVEL = 90;
+	private static final int STEPS = 1;
 
 	/**
 	 * Creates a new instance of this class.
@@ -61,11 +60,11 @@ public class ETSForecasterTest extends AbstractKiekerTest {
 		}
 
 		final TimeSeries<Double> ts =
-				new TimeSeries<Double>(this.startTime, this.deltaTimeMillis, TimeUnit.MILLISECONDS);
+				new TimeSeries<Double>(ETSForecasterTest.START_TIME, ETSForecasterTest.DELTA_TIME_MILLIS, TimeUnit.MILLISECONDS);
 		ts.appendAll(values);
 
-		final ETSForecaster forecaster = new ETSForecaster(ts, this.confidenceLevel);
-		final IForecastResult forecast = forecaster.forecast(this.steps);
+		final ETSForecaster forecaster = new ETSForecaster(ts, ETSForecasterTest.CONFIDENCE_LEVEL);
+		final IForecastResult forecast = forecaster.forecast(ETSForecasterTest.STEPS);
 
 		final ITimeSeries<Double> forecastSeries = forecast.getForecast();
 		final double expectedForecast = 4.0;
