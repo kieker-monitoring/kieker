@@ -21,22 +21,20 @@ import java.io.File;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.rosuda.REngine.REXPDouble;
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-
 import kieker.tools.util.RBridgeControl;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-
-
 
 /**
  * 
  * @author Tillmann Carlos Bielefeld
  * 
  */
-public class RBridgeTest extends AbstractKiekerTest{
+public class RBridgeTest extends AbstractKiekerTest {
 	private static final Log LOG = LogFactory.getLog(RBridgeTest.class);
 
 	/**
@@ -72,7 +70,6 @@ public class RBridgeTest extends AbstractKiekerTest{
 		LOG.info(result.toString());
 
 		Assert.assertTrue(result != null);
-		Assert.assertTrue(result instanceof org.rosuda.REngine.REXPDouble);
+		Assert.assertTrue(result instanceof REXPDouble);
 	}
-
 }
