@@ -45,4 +45,11 @@ public @interface Property {
 	 * @return The description of this property.
 	 */
 	String description() default "";
+	
+	/**
+	 * The definition whether a property can be updated while the plugin is used
+	 * 
+	 * @return True if updateable on-the-fly, else false
+	 */
+	boolean updateable() default false;
 }

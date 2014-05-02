@@ -29,10 +29,13 @@ import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
+
 import kieker.tools.opad.filter.UniteMeasurementPairFilter;
 import kieker.tools.opad.record.ForecastMeasurementPair;
 import kieker.tools.opad.record.IForecastMeasurementPair;
 import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
+
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * Checks if the forecasts are assigned to the correct real values. Also checks, if a dummy is created for
@@ -41,7 +44,7 @@ import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
  * @author Tom Frotscher
  * 
  */
-public class UniteMeasurementPairFilterTest {
+public class UniteMeasurementPairFilterTest extends AbstractKiekerTest {
 
 	private static final String OP_SIGNATURE_A = "a.A.opA";
 	private static final String OP_SIGNATURE_B = "b.B.opB";

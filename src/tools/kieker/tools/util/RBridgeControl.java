@@ -37,21 +37,23 @@ import kieker.common.logging.LogFactory;
  * @author Tillmann Carlos Bielefeld
  * 
  */
-public class RBridgeControl {
+public final class RBridgeControl {
+
+	// TODO make a better singleton, later
+	private static RBridgeControl instance = null;
 
 	private static final Log LOG = LogFactory.getLog(RBridgeControl.class);
 	private static final Log RSERVELOG = LogFactory.getLog("RSERVE");
+	private static final AtomicInteger NEXTVARID = new AtomicInteger(1);
 
-	Rsession rCon;
+	private final Rsession rCon;
 
-	// TODO make a better singleton, later
-	public static RBridgeControl INSTANCE = null;
-
-	private RBridgeControl(final boolean silent) {
+	private RBridgeControl(boolean silent) {
 
 		OutputStream out = System.out;
 
-		if (true == silent) {
+		silent = true; // --domi
+		if (silent) {
 			out = new OutputStream() {
 
 				@Override
@@ -79,23 +81,29 @@ public class RBridgeControl {
 		this.rCon = Rsession.newLocalInstance(new PrintStream(out), null);
 	}
 
+	/**
+	 * 
+	 * @param root
+	 *            file of R
+	 * @return instance
+	 */
 	public static RBridgeControl getInstance(final File root) {
-		if (null == RBridgeControl.INSTANCE) {
+		if (RBridgeControl.instance == null) {
 
 			// TODO make this configurabe?!?
-			RBridgeControl.INSTANCE = new RBridgeControl(false);
-			RBridgeControl.INSTANCE.e("OPAD_CONTEXT <<- TRUE");
+			RBridgeControl.instance = new RBridgeControl(false);
+			RBridgeControl.instance.e("OPAD_CONTEXT <<- TRUE");
 			// TODO: test if this is needed every time
 			// TODO outsource this into a packaged text file, declare the
 			// functions at runtime
 			// TODO use REngine rather? RServe is not needed any more
 
-			INSTANCE.e("setwd('" + root.getAbsolutePath() + "')");
+			instance.e("setwd('" + root.getAbsolutePath().replace("\\", "\\\\") + "')");
 			// RBridgeControl.INSTANCE
 			// .e("sink(file = 'rsink.log', append = TRUE, type = c('output', 'message'),split = FALSE)");
 			// INSTANCE.e("source('includes.r', local = FALSE, echo = TRUE)");
-			INSTANCE.e("source('plotting2.r', local = FALSE, echo = TRUE)");
-			INSTANCE.e("initTS");
+			instance.e("source('plotting2.r', local = FALSE, echo = TRUE)");
+			instance.e("initTS");
 
 			// INSTANCE.e("print( getwd() )");
 			// INSTANCE.e("source('basic.r', local = FALSE, echo = TRUE)");
@@ -107,14 +115,15 @@ public class RBridgeControl {
 			// INSTANCE.e("initOPADfunctions()");
 		}
 
-		return RBridgeControl.INSTANCE;
+		return RBridgeControl.instance;
 	}
 
 	/**
 	 * wraps the execution of an arbitrary R expression. Logs result and error
 	 * 
 	 * @param input
-	 * @return
+	 *            R expression
+	 * @return result/eroor
 	 */
 	public Object e(final String input) {
 		Object out = null;
@@ -130,9 +139,9 @@ public class RBridgeControl {
 				output = ((REXPLogical) out).toDebugString();
 			}
 
-			RBridgeControl.LOG.info("> REXP: " + input + " return: " + output);
+//			RBridgeControl.LOG.info("> REXP: " + input + " return: " + output);// --domi
 
-		} catch (final Exception exc) {
+		} catch (final Exception exc) { // NOCS
 			RBridgeControl.LOG.error("Error R expr.: " + input + " Cause: "
 					+ exc);
 			exc.printStackTrace();
@@ -140,37 +149,95 @@ public class RBridgeControl {
 		return out;
 	}
 
+	/**
+	 * 
+	 * @param variable
+	 *            variable to R
+	 */
+	public void toTS(final String variable) {
+		try {
+			final StringBuffer buf = new StringBuffer();
+			buf.append(variable + " <<- ts(" + variable + ")");
+			this.e(buf.toString());
+		} catch (final Exception e) { // NOCS
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 
+	 * @param variable
+	 *            variable to R
+	 * @param frequency
+	 *            frequency to R
+	 */
+	public void toTS(final String variable, final long frequency) {
+		try {
+			final StringBuffer buf = new StringBuffer();
+			buf.append(variable + " <<- ts(" + variable + ", frequency=" + frequency + ")");
+			this.e(buf.toString());
+		} catch (final Exception e) { // NOCS
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 
+	 * @param input
+	 *            string
+	 * @return -666.666 error, else dbvalue
+	 */
 	public double eDbl(final String input) {
 		try {
 			// TODO make it error save
 			return ((REXPDouble) this.e(input)).asDouble();
-		} catch (final Exception exc) {
+		} catch (final Exception exc) { // NOCS
 			RBridgeControl.LOG.error("Error casting value from R: " + input
 					+ " Cause: " + exc);
 			return -666.666;
 		}
 	}
 
+	/**
+	 * 
+	 * @param input
+	 *            inputstring
+	 * @return Rdata
+	 */
 	public String eString(final String input) {
 		try {
 			// TODO make it error save
 			final REXPString str = (REXPString) this.e(input);
 			return str.toString();
-		} catch (final Exception e) {
+		} catch (final Exception e) { // NOCS
 			return "";
 		}
 	}
 
+	/**
+	 * 
+	 * @param input
+	 *            inputstring
+	 * @return Rdata
+	 */
 	public double[] eDblArr(final String input) {
 		try {
 			// TODO make it error save
 			final REXPVector res = (REXPVector) this.e(input);
 			return res.asDoubles();
-		} catch (final Exception e) {
+		} catch (final Exception e) { // NOCS
 			return new double[0];
 		}
 	}
 
+	/**
+	 * 
+	 * @param variable
+	 *            string
+	 * 
+	 * @param values
+	 *            assign value
+	 */
 	public void assign(final String variable, final double[] values) {
 		try {
 			final StringBuffer buf = new StringBuffer();
@@ -186,13 +253,20 @@ public class RBridgeControl {
 			}
 			buf.append(")");
 			this.e(buf.toString());
-		} catch (final Exception e) {
+		} catch (final Exception e) { // NOCS
 			e.printStackTrace();
 		}
 
 	}
 
 	// TODO DRY violated!
+	/**
+	 * 
+	 * @param variable
+	 *            string
+	 * @param values
+	 *            assign vaules
+	 */
 	public void assign(final String variable, final Double[] values) {
 		try {
 			final StringBuffer buf = new StringBuffer();
@@ -212,12 +286,19 @@ public class RBridgeControl {
 			}
 			buf.append(")");
 			this.e(buf.toString());
-		} catch (final Exception e) {
+		} catch (final Exception e) { // NOCS
 			e.printStackTrace();
 		}
 
 	}
 
+	/**
+	 * 
+	 * @param variable
+	 *            string
+	 * @param values
+	 *            assign vaules
+	 */
 	public void assign(final String variable, final Long[] values) {
 		try {
 			final StringBuffer buf = new StringBuffer();
@@ -233,23 +314,19 @@ public class RBridgeControl {
 			}
 			buf.append(")");
 			this.e(buf.toString());
-		} catch (final Exception e) {
+		} catch (final Exception e) { // NOCS
 			e.printStackTrace();
 		}
 
 	}
 
-	private final static AtomicInteger nextVarId = new AtomicInteger(1);
-
 	/**
 	 * Returns a globally unique variable name.
 	 * 
-	 * @param prefix
-	 *            may be null
-	 * @return
+	 * @return string unique name
 	 */
 	public static String uniqueVarname() {
 		return String.format("var_%s",
-				RBridgeControl.nextVarId.getAndIncrement());
+				RBridgeControl.NEXTVARID.getAndIncrement());
 	}
 }

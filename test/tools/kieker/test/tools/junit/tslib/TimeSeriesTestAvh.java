@@ -25,6 +25,8 @@ import org.junit.Test;
 
 import kieker.tools.tslib.TimeSeries;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 /**
  * Some tests in addition to {@link TimeSeriesTest}. Since I'm following a slightly different style of writing tests
  * (refuse state in tests), I've decided to add the tests to a separate class. Might be consolidated later.
@@ -32,7 +34,7 @@ import kieker.tools.tslib.TimeSeries;
  * @author Andre van Hoorn
  * 
  */
-public class TimeSeriesTestAvh {
+public class TimeSeriesTestAvh extends AbstractKiekerTest {
 	static final long STARTTIME = 98890787;
 	static final long DELTATIMEMILIS = 1000;
 

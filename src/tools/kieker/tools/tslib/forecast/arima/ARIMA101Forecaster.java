@@ -16,6 +16,7 @@
 
 package kieker.tools.tslib.forecast.arima;
 
+import kieker.tools.tslib.ForecastMethod;
 import kieker.tools.tslib.ITimeSeries;
 import kieker.tools.tslib.forecast.AbstractRForecaster;
 
@@ -29,13 +30,26 @@ public class ARIMA101Forecaster extends AbstractRForecaster {
 
 	private static final String FORECAST_FUNC_NAME = "predict";
 	private static final String MODEL_FUNC_NAME = "arima"; // no explicit stochastic model
+	private final String[] emptyString = new String[0];
 
+	/**
+	 * 
+	 * @param historyTimeseries
+	 *            timeseries used by forecating algo
+	 */
 	public ARIMA101Forecaster(final ITimeSeries<Double> historyTimeseries) {
-		super(historyTimeseries, ARIMA101Forecaster.MODEL_FUNC_NAME, ARIMA101Forecaster.FORECAST_FUNC_NAME);
+		super(historyTimeseries, ARIMA101Forecaster.MODEL_FUNC_NAME, ARIMA101Forecaster.FORECAST_FUNC_NAME, ForecastMethod.ARIMA101);
 	}
 
+	/**
+	 * 
+	 * @param historyTimeseries
+	 *            timeseries used by forecating algo
+	 * @param confidenceLevel
+	 *            value of confidence
+	 */
 	public ARIMA101Forecaster(final ITimeSeries<Double> historyTimeseries, final int confidenceLevel) {
-		super(historyTimeseries, ARIMA101Forecaster.MODEL_FUNC_NAME, ARIMA101Forecaster.FORECAST_FUNC_NAME, confidenceLevel);
+		super(historyTimeseries, ARIMA101Forecaster.MODEL_FUNC_NAME, ARIMA101Forecaster.FORECAST_FUNC_NAME, confidenceLevel, ForecastMethod.ARIMA101);
 	}
 
 	@Override
@@ -45,7 +59,7 @@ public class ARIMA101Forecaster extends AbstractRForecaster {
 
 	@Override
 	protected String[] getForecastFuncParams() {
-		return null; // no additional params required by this predictor
+		return this.emptyString; // no additional params required by this predictor
 	}
 
 	@Override
@@ -54,8 +68,8 @@ public class ARIMA101Forecaster extends AbstractRForecaster {
 	}
 
 	/**
-	 * @param varNameForecast
-	 * @return
+	 * @param varNameForecast Forecastname	
+	 * @return lowOperation
 	 */
 	@Override
 	protected String lowerOperationOnResult(final String varNameForecast) {
@@ -63,8 +77,8 @@ public class ARIMA101Forecaster extends AbstractRForecaster {
 	}
 
 	/**
-	 * @param varNameForecast
-	 * @return
+	 * @param varNameForecast Forecastname
+	 * @return upperOperation
 	 */
 	@Override
 	protected String upperOperationOnResult(final String varNameForecast) {

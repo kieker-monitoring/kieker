@@ -27,6 +27,7 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 
 import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
+import kieker.tools.tslib.ForecastMethod;
 import kieker.tools.tslib.ITimeSeries;
 import kieker.tools.tslib.forecast.AbstractForecaster;
 import kieker.tools.tslib.forecast.ForecastResult;
@@ -90,7 +91,7 @@ public class PatternCheckingForecaster extends AbstractForecaster<Double> {
 	 * @return
 	 *         forecast result
 	 */
-	public IForecastResult<Double> forecast(final int numForecastSteps) {
+	public IForecastResult forecast(final int numForecastSteps) {
 		final ITimeSeries<Double> tsFC = this.prepareForecastTS();
 
 		this.getForecastWindowFromDB();
@@ -100,7 +101,7 @@ public class PatternCheckingForecaster extends AbstractForecaster<Double> {
 		Arrays.fill(forecastValues, alternativeReferenceValue);
 
 		tsFC.appendAll(forecastValues);
-		return new ForecastResult<Double>(tsFC, this.getTsOriginal());
+		return new ForecastResult(tsFC, this.getTsOriginal(), ForecastMethod.PCF);
 	}
 
 	/**
@@ -111,6 +112,7 @@ public class PatternCheckingForecaster extends AbstractForecaster<Double> {
 	 * @return
 	 *         true if corresponding time series point in the past can be found, else false
 	 */
+
 	public boolean getForecastWindowFromDB() {
 		// Calculate the corresponding time stamp in the past, that may contain corresponding data according to the pattern
 		final long distantTSPoint = this.input.getTime() - TimeUnit.MILLISECONDS.convert(this.distance, this.timeunit);

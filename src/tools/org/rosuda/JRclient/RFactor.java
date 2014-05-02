@@ -94,12 +94,12 @@ public class RFactor extends Object {
 			i = this.val.size();
 			this.val.addElement(v);
 		}
-		;
+		
 		this.id.addElement(new Integer(i));
 	}
 
 	/**
-	 * returns name for a specific ID
+	 * returns name for a specific ID.
 	 * 
 	 * @param i
 	 *            ID
@@ -112,12 +112,12 @@ public class RFactor extends Object {
 		return (String) this.val.elementAt(((Integer) this.id.elementAt(i)).intValue());
 	}
 
-	/** returns the number of caes */
+	/** returns the number of caes. */
 	public int size() {
 		return this.id.size();
 	}
 
-	/** displayable representation of the factor variable */
+	/** displayable representation of the factor variable. */
 	@Override
 	public String toString() {
 		// return "{"+((val==null)?"<null>;":("levels="+val.size()+";"))+((id==null)?"<null>":("cases="+id.size()))+"}";

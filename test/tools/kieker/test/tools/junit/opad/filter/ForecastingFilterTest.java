@@ -29,9 +29,12 @@ import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
+
 import kieker.tools.opad.filter.ForecastingFilter;
 import kieker.tools.opad.record.ForecastMeasurementPair;
 import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
+
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * Basically compares the results of the forecaster with previous manually calculated forecasted results.
@@ -40,7 +43,7 @@ import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
  * @author Tom Frotscher
  * 
  */
-public class ForecastingFilterTest {
+public class ForecastingFilterTest extends AbstractKiekerTest {
 
 	private static final String OP_SIGNATURE_A = "a.A.opA";
 	private static final String OP_SIGNATURE_B = "b.B.opB";
@@ -132,7 +135,7 @@ public class ForecastingFilterTest {
 		final AnalysisControllerThread thread = new AnalysisControllerThread(this.controller);
 		thread.start();
 
-		Thread.sleep(1000);
+		Thread.sleep(2500);
 		thread.terminate();
 
 		Assert.assertEquals(7, this.sinkPlugin.getList().size());

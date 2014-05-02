@@ -20,14 +20,17 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysis.exception.AnalysisConfigurationException;
+
 import kieker.tools.tslib.TimeSeriesPointsBuffer;
+
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * 
  * @author Tom Frotscher
  * 
  */
-public class TimeSeriesPointsBufferTest {
+public class TimeSeriesPointsBufferTest extends AbstractKiekerTest {
 	private TimeSeriesPointsBuffer<Integer> bounded;
 	private TimeSeriesPointsBuffer<Integer> unbounded;
 

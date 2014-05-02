@@ -28,7 +28,9 @@ import kieker.analysis.AnalysisControllerThread;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
+
 import kieker.common.configuration.Configuration;
+
 import kieker.tools.opad.filter.AnomalyDetectionFilter;
 import kieker.tools.opad.filter.AnomalyScoreCalculationFilter;
 import kieker.tools.opad.filter.ExtractionFilter;
@@ -38,6 +40,12 @@ import kieker.tools.opad.filter.UniteMeasurementPairFilter;
 import kieker.tools.opad.record.NamedDoubleRecord;
 import kieker.tools.opad.record.StorableDetectionResult;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
+
+
+
+
 /**
  * This test creates some ResponseTimeDoubleRecords and let them run through all currently
  * available OPAD Filter. The ResponseTimeDoubleRecords are create as records from different
@@ -46,7 +54,7 @@ import kieker.tools.opad.record.StorableDetectionResult;
  * 
  * @author Tom Frotscher
  */
-public class OpadIntegrationTest {
+public class OpadIntegrationTest extends AbstractKiekerTest {
 
 	private static final String OP_SIGNATURE_A = "a.A.opA";
 	private static final String OP_SIGNATURE_B = "b.B.opB";

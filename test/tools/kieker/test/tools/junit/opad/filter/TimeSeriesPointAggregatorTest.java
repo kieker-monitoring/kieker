@@ -24,8 +24,11 @@ import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
+
 import kieker.tools.opad.filter.TimeSeriesPointAggregatorFilter;
 import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
+
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * Checks if values in the given timespan (10 milliseconds) are aggregated correctly.
@@ -34,7 +37,7 @@ import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
  * @author Tom Frotscher
  * 
  */
-public class TimeSeriesPointAggregatorTest {
+public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 
 	private static final String OP_SIGNATURE_A = "a.A.opA";
 	private static final String OP_SIGNATURE_B = "b.B.opB";
@@ -125,8 +128,8 @@ public class TimeSeriesPointAggregatorTest {
 		// Expected: 4000 Application A
 		Assert.assertEquals(new Double(4000), Double.valueOf(this.sinkPlugin.getList().get(4).getDoubleValue()));
 		// Expected: Skipped two spans for Application A -> 2 time 0
-		Assert.assertEquals(new Double(0), Double.valueOf(this.sinkPlugin.getList().get(5).getDoubleValue()));
-		Assert.assertEquals(new Double(0), Double.valueOf(this.sinkPlugin.getList().get(6).getDoubleValue()));
+		Assert.assertEquals(Double.NaN, this.sinkPlugin.getList().get(5).getDoubleValue(), 0.0000001d);
+		Assert.assertEquals(Double.NaN, this.sinkPlugin.getList().get(6).getDoubleValue(), 0.0000001d);
 		// Expected: 6000 Application A
 		Assert.assertEquals(new Double(6000), Double.valueOf(this.sinkPlugin.getList().get(7).getDoubleValue()));
 		// Expected: (5000 + 1000) / 2 = 3000 Application B
@@ -134,7 +137,7 @@ public class TimeSeriesPointAggregatorTest {
 		// Expected: 5000 Application B
 		Assert.assertEquals(new Double(5000), Double.valueOf(this.sinkPlugin.getList().get(9).getDoubleValue()));
 		// Expected: Skipped one span for Application B -> 1 time 0
-		Assert.assertEquals(new Double(0), Double.valueOf(this.sinkPlugin.getList().get(10).getDoubleValue()));
+		Assert.assertEquals(Double.NaN, this.sinkPlugin.getList().get(10).getDoubleValue(), 0.0000001d);
 
 	}
 }

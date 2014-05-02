@@ -16,8 +16,6 @@
 
 package kieker.tools.tslib.forecast;
 
-import java.util.concurrent.TimeUnit;
-
 import kieker.tools.tslib.ITimeSeries;
 import kieker.tools.tslib.TimeSeries;
 
@@ -32,11 +30,19 @@ public abstract class AbstractForecaster<T> implements IForecaster<T> {
 
 	/**
 	 * @param historyTimeseries
+	 *            TS
 	 */
 	public AbstractForecaster(final ITimeSeries<T> historyTimeseries) {
 		this(historyTimeseries, 0);
 	}
 
+	/**
+	 * 
+	 * @param historyTimeseries
+	 *            TS
+	 * @param confidenceLevel
+	 *            value for confidencelevel
+	 */
 	public AbstractForecaster(final ITimeSeries<T> historyTimeseries, final int confidenceLevel) {
 		this.historyTimeseries = historyTimeseries;
 		this.confidenceLevel = confidenceLevel;
@@ -49,13 +55,19 @@ public abstract class AbstractForecaster<T> implements IForecaster<T> {
 		return this.historyTimeseries;
 	}
 
+	/**
+	 * 
+	 * @return TS
+	 */
 	protected ITimeSeries<T> prepareForecastTS() {
 		final ITimeSeries<T> history = this.getTsOriginal();
 
 		// The starting point of the FC series is calculated by _one_ additional
 		// tick...
-		final long lastDistanceMillis = TimeUnit.MILLISECONDS.convert(
-				history.getDeltaTime(), history.getDeltaTimeUnit());
+	
+		
+		//final long lastDistanceMillis = TimeUnit.MILLISECONDS.convert(
+		//		history.getDeltaTime(), history.getDeltaTimeUnit());
 		// ... plus the end point of the historic series
 		final long startTime = history.getEndTime();
 		final TimeSeries<T> tsFC = new TimeSeries<T>(startTime,

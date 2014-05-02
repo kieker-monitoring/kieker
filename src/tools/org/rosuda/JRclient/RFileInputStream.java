@@ -46,8 +46,10 @@ public class RFileInputStream extends InputStream {
 	whenever possible. In fact this function calls <code>#read(b,0,1)</code>.
 	@return -1 on any failure, or the acquired byte (0..255) on success */
     public int read() throws IOException {
-	byte[] b=new byte[1];
-	if (read(b,0,1)<1) return -1;
+	final byte[] b = new byte[1];
+	if (this.read() < 1) {
+		return -1;
+	}
 	return b[0];
     }
 
@@ -57,19 +59,26 @@ public class RFileInputStream extends InputStream {
 	@param len maximal number of bytes to read
 	@return number of bytes read or -1 if EOF reached
     */
-    public int read(byte[] b, int off, int len) throws IOException {
-	if (closed) throw new IOException("File is not open");
-	if (eof) return -1;
-	Rpacket rp=rt.request(Rtalk.CMD_readFile,len);
-	if (rp==null || !rp.isOk())
-	    throw new IOException((rp==null)?"Connection to Rserve failed":("Request return code: "+rp.getStat()));
-	byte[] rd=rp.getCont();
-	if (rd==null) {
-	    eof=true;
+    @Override
+	public int read(final byte[] b, final int off, final int len) throws IOException {
+	if (this.closed) {
+		throw new IOException("File is not open");
+	}
+	if (this.eof) {
+		return -1;
+	}
+	final Rpacket rp = rt.request(Rtalk.CMD_readFile, len);
+	if (rp == null || !rp.isOk()) {
+		throw new IOException((rp == null) ? "Connection to Rserve failed" : ("Request return code: " + rp.getStat()));
+	}
+	final byte[] rd = rp.getCont();
+	if (rd == null) {
+	    this.eof = true;
 	    return -1;
-	};
-	int i=0;
-	while(i<rd.length) { b[off+i]=rd[i]; i++; };
+	}
+	int i = 0;
+	while (i < rd.length) { b[off + i] = rd[i]; 
+	i++; }
 	return rd.length;
     }
 
@@ -77,9 +86,10 @@ public class RFileInputStream extends InputStream {
 	close does not close the Rconnection
     */
     public void close() throws IOException {
-	Rpacket rp=rt.request(Rtalk.CMD_closeFile,(byte[])null);
-	if (rp==null || !rp.isOk())
-	    throw new IOException((rp==null)?"Connection to Rserve failed":("Request return code: "+rp.getStat()));
-	closed=true;
+	Rpacket rp = rt.request(Rtalk.CMD_closeFile,(byte[])null);
+	if (rp == null || !rp.isOk()) {
+		throw new IOException((rp == null)? "Connection to Rserve failed" : ("Request return code: " + rp.getStat()));
+	}
+	this.closed = true;
     }
 }

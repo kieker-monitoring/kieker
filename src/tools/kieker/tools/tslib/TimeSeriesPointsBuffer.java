@@ -77,6 +77,9 @@ public class TimeSeriesPointsBuffer<T> extends ConcurrentLinkedQueue<T> implemen
 		return this.size();
 	}
 
+	/**
+	 * print buffer.
+	 */
 	public void printBuffer() {
 		System.out.println(this.toString());
 	}

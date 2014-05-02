@@ -26,6 +26,7 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
+import kieker.tools.opad.record.AggregationWindow;
 import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
 import kieker.tools.tslib.AggregationMethod;
 import kieker.tools.util.AggregationVariableSet;
@@ -37,7 +38,8 @@ import kieker.tools.util.AggregationVariableSet;
  * 
  */
 @Plugin(name = "Variate TimeSeriesPoint Aggregator", outputPorts = {
-	@OutputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATED_TSPOINT) },
+	@OutputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATED_TSPOINT),
+	@OutputPort(eventTypes = { AggregationWindow.class }, name = TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATION_WINDOW) },
 		configuration = {
 			@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_METHOD, defaultValue = "MEAN"),
 			@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_SPAN, defaultValue = "1000"),
@@ -54,6 +56,11 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 	 * The name of the output port delivering the aggregated time series point.
 	 */
 	public static final String OUTPUT_PORT_NAME_AGGREGATED_TSPOINT = "aggregatedTSPoint";
+	
+	/**
+	 	 * The name of the output port delivering the aggregated window. 
+	 */
+	public static final String OUTPUT_PORT_NAME_AGGREGATION_WINDOW = "aggregationWindow";
 
 	/** The name of the property determining the aggregation method. */
 	public static final String CONFIG_PROPERTY_NAME_AGGREGATION_METHOD = "aggregationMethod";
@@ -68,6 +75,8 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 	private final long aggregationSpan;
 	private TimeUnit timeunit = TimeUnit.MILLISECONDS;
 	private AggregationMethod aggregationMethod = AggregationMethod.MEAN;
+	
+	private AggregationWindow recentWindow = new AggregationWindow(0L, 0L);
 
 	/**
 	 * Creates a new instance of this class.
@@ -144,6 +153,12 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 		final AggregationVariableSet variables = this.aggregationVariables.get(appname);
 		final long startOfTimestampsInterval = this.computeFirstTimestampInInterval(currentTime, variables);
 		final long endOfTimestampsInterval = this.computeLastTimestampInInterval(currentTime, variables);
+		
+		if (this.recentWindow.getWindowEnd() != endOfTimestampsInterval) {
+			this.recentWindow = new AggregationWindow(startOfTimestampsInterval, endOfTimestampsInterval);
+			super.deliver(OUTPUT_PORT_NAME_AGGREGATION_WINDOW, this.recentWindow);
+		}
+		
 		// check if interval is omitted
 		if (endOfTimestampsInterval > variables.getLastTimestampInCurrentInterval()) {
 			if (variables.getFirstTimestampInCurrentInterval() >= 0) { // don't do this for the first record (only used for initialization of variables)
@@ -153,7 +168,7 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 				if (numIntervalsElapsed > 1) {
 					for (int i = 1; i < numIntervalsElapsed; i++) {
 						super.deliver(OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, new NamedDoubleTimeSeriesPoint(variables.getLastTimestampInCurrentInterval()
-								+ (i * this.aggregationSpan), 0.0,
+								+ (i * this.aggregationSpan), Double.NaN, // Note: Count filter should use 0.0
 								appname));
 					}
 				}

@@ -28,16 +28,18 @@ import kieker.tools.tslib.TimeSeries;
 import kieker.tools.tslib.forecast.IForecastResult;
 import kieker.tools.tslib.forecast.mean.MeanForecaster;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 /**
  * @author Tillmann Carlos Bielefeld
  */
-public class MeanForecasterTest {
+public class MeanForecasterTest extends AbstractKiekerTest {
 	private TimeSeries<Double> ts;
 	private TimeUnit timeUnit;
 	private long startTime;
 	private int steps;
 	private MeanForecaster forecaster;
-	private IForecastResult<Double> forecast;
+	private IForecastResult forecast;
 	private final int confidenceLevel = 95; // 95%
 	private ITimeSeries<Double> forecastSeries;
 	private ITimeSeries<Double> upperSeries;

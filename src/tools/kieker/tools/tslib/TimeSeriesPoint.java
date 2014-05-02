@@ -16,7 +16,6 @@
 
 package kieker.tools.tslib;
 
-
 /**
  * @author Andre van Hoorn
  * 
@@ -31,7 +30,9 @@ public class TimeSeriesPoint<T> implements ITimeSeriesPoint<T> {
 
 	/**
 	 * @param time
+	 *            time of timeseriespoint
 	 * @param value
+	 *            value of timeseriespoint
 	 */
 	public TimeSeriesPoint(final long time, final T value) {
 		// TODO is that a good pattern or should we ensure that the object is immutable from outside?

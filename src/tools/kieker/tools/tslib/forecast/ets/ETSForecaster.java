@@ -16,6 +16,7 @@
 
 package kieker.tools.tslib.forecast.ets;
 
+import kieker.tools.tslib.ForecastMethod;
 import kieker.tools.tslib.ITimeSeries;
 import kieker.tools.tslib.forecast.AbstractRForecaster;
 
@@ -28,22 +29,32 @@ import kieker.tools.tslib.forecast.AbstractRForecaster;
 public class ETSForecaster extends AbstractRForecaster {
 	private static final String MODEL_FUNC_NAME = "ets"; // no explicit stochastic model
 	private static final String FORECAST_FUNC_NAME = "forecast.ets";
+	private final String[] emptyString = new String[0];
 
+	/**
+	 * 
+	 * @param historyTimeseries Time Series
+	 */
 	public ETSForecaster(final ITimeSeries<Double> historyTimeseries) {
-		super(historyTimeseries, ETSForecaster.MODEL_FUNC_NAME, ETSForecaster.FORECAST_FUNC_NAME);
+		super(historyTimeseries, ETSForecaster.MODEL_FUNC_NAME, ETSForecaster.FORECAST_FUNC_NAME, ForecastMethod.ETS);
 	}
 
+	/**
+	 * 
+	 * @param historyTimeseries Time Series
+	 * @param confidenceLevel value of confidence level (0-100)
+	 */
 	public ETSForecaster(final ITimeSeries<Double> historyTimeseries, final int confidenceLevel) {
-		super(historyTimeseries, ETSForecaster.MODEL_FUNC_NAME, ETSForecaster.FORECAST_FUNC_NAME, confidenceLevel);
+		super(historyTimeseries, ETSForecaster.MODEL_FUNC_NAME, ETSForecaster.FORECAST_FUNC_NAME, confidenceLevel, ForecastMethod.ETS);
 	}
 
 	@Override
 	protected String[] getModelFuncParams() {
-		return null; // no additional params required by this predictor
+		return this.emptyString; // no additional params required by this predictor
 	}
 
 	@Override
 	protected String[] getForecastFuncParams() {
-		return null; // no additional params required by this predictor
+		return this.emptyString; // no additional params required by this predictor
 	}
 }

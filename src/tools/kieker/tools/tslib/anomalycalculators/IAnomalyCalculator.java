@@ -26,6 +26,14 @@ import kieker.tools.tslib.forecast.IForecastResult;
  * @param <T>
  */
 public interface IAnomalyCalculator<T> {
-	public AnomalyScore calculateAnomaly(IForecastResult<T> forecast,
+	
+	/**
+	 * 
+	 * @param forecast Forecast Result
+	 * @param current current Timeseries
+	 * 
+	 * @return AnomalScore
+	 */
+	public AnomalyScore calculateAnomaly(IForecastResult forecast,
 			ITimeSeriesPoint<T> current);
 }

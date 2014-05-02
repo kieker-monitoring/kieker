@@ -23,6 +23,7 @@ import java.util.List;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.math.stat.StatUtils;
 
+import kieker.tools.tslib.ForecastMethod;
 import kieker.tools.tslib.ITimeSeries;
 import kieker.tools.tslib.forecast.AbstractForecaster;
 import kieker.tools.tslib.forecast.ForecastResult;
@@ -37,11 +38,20 @@ import kieker.tools.tslib.forecast.IForecastResult;
  */
 public class MeanForecasterJava extends AbstractForecaster<Double> {
 
+	/**
+	 * 
+	 * @param historyTimeseries TimeSeries
+	 */
 	public MeanForecasterJava(final ITimeSeries<Double> historyTimeseries) {
 		super(historyTimeseries);
 	}
 
-	public IForecastResult<Double> forecast(final int numForecastSteps) {
+	/**
+	 * @param numForecastSteps number of values the forecaster is going to forecast
+	 * 
+	 * @return Forecast Result
+	 */
+	public IForecastResult forecast(final int numForecastSteps) {
 		final ITimeSeries<Double> history = this.getTsOriginal();
 		final ITimeSeries<Double> tsFC = this.prepareForecastTS();
 
@@ -56,13 +66,18 @@ public class MeanForecasterJava extends AbstractForecaster<Double> {
 
 		// TODO: computer confidence interval and set this value along with upper and lower time series
 
-		return new ForecastResult<Double>(tsFC, this.getTsOriginal());
+		return new ForecastResult(tsFC, this.getTsOriginal(), ForecastMethod.MEAN);
 	}
-
+	
+	/**
+	 * 
+	 * @param allHistory List there null values should deltet in this function
+	 * @return List/Array with no NullValues
+	 */
 	public static Double[] removeNullValues(final List<Double> allHistory) {
 		final List<Double> newList = new ArrayList<Double>();
 		for (final Object obj : allHistory) {
-			if ((null != obj) && (obj instanceof Double)) {
+			if ((null != obj) && (obj instanceof Double) && !Double.isNaN((Double) obj)) {
 				newList.add((Double) obj);
 			}
 		}

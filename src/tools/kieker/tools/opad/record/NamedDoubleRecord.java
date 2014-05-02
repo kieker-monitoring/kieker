@@ -33,13 +33,15 @@ import kieker.common.util.registry.IRegistry;
  */
 public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
 
-	private static final long serialVersionUID = 1768657580333390199L;
 	public static final int SIZE = 20;
+	
 	public static final Class<?>[] TYPES = {
 		String.class, // applicationName
 		long.class, // timestamp
 		double.class, // responseTime
 	};
+	
+	private static final long serialVersionUID = 1768657580333390199L;
 
 	// Attributes
 	private final String applicationName;

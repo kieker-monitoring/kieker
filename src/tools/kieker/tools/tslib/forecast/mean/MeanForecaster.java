@@ -16,6 +16,7 @@
 
 package kieker.tools.tslib.forecast.mean;
 
+import kieker.tools.tslib.ForecastMethod;
 import kieker.tools.tslib.ITimeSeries;
 import kieker.tools.tslib.forecast.AbstractRForecaster;
 
@@ -28,22 +29,35 @@ import kieker.tools.tslib.forecast.AbstractRForecaster;
 public class MeanForecaster extends AbstractRForecaster {
 	private static final String MODEL_FUNC_NAME = null; // no explicit stochastic model
 	private static final String FORECAST_FUNC_NAME = "meanf";
+	private final String[] emptyString = new String[0];
 
+	/**
+	 * 
+	 * @param historyTimeseries
+	 *            timeseries used by forecating algo
+	 */
 	public MeanForecaster(final ITimeSeries<Double> historyTimeseries) {
-		super(historyTimeseries, MeanForecaster.MODEL_FUNC_NAME, MeanForecaster.FORECAST_FUNC_NAME);
+		super(historyTimeseries, MeanForecaster.MODEL_FUNC_NAME, MeanForecaster.FORECAST_FUNC_NAME, ForecastMethod.MEAN);
 	}
 
+	/**
+	 * 
+	 * @param historyTimeseries
+	 *            timeseries used by forecating algo
+	 * @param confidenceLevel
+	 *            value of confidence
+	 */
 	public MeanForecaster(final ITimeSeries<Double> historyTimeseries, final int confidenceLevel) {
-		super(historyTimeseries, MeanForecaster.MODEL_FUNC_NAME, MeanForecaster.FORECAST_FUNC_NAME, confidenceLevel);
+		super(historyTimeseries, MeanForecaster.MODEL_FUNC_NAME, MeanForecaster.FORECAST_FUNC_NAME, confidenceLevel, ForecastMethod.MEAN);
 	}
 
 	@Override
 	protected String[] getModelFuncParams() {
-		return null; // no additional params required by this predictor
+		return this.emptyString; // no additional params required by this predictor
 	}
 
 	@Override
 	protected String[] getForecastFuncParams() {
-		return null; // no additional params required by this predictor
+		return this.emptyString; // no additional params required by this predictor
 	}
 }

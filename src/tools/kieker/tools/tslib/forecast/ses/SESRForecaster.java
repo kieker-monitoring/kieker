@@ -1,86 +1,67 @@
-/***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ***************************************************************************/
-
 package kieker.tools.tslib.forecast.ses;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.lang.ArrayUtils;
-
+import kieker.tools.tslib.ForecastMethod;
 import kieker.tools.tslib.ITimeSeries;
-import kieker.tools.tslib.forecast.AbstractForecaster;
-import kieker.tools.tslib.forecast.ForecastResult;
-import kieker.tools.tslib.forecast.IForecastResult;
-import kieker.tools.tslib.forecast.mean.MeanForecasterJava;
-import kieker.tools.util.RBridgeControl;
+import kieker.tools.tslib.forecast.AbstractRForecaster;
 
 /**
  * 
- * @author Tillmann Carlos Bielefeld
- * 
+ * @author Nikolas Herbst
+ *         Generalization of MA by using weights according to the exponential function
+ *         to give higher weight to more recent values.
+ *         1st step: estimation of parameters for weights/exp. function
+ *         2nd step: calculation of weighted averages as point forecast
  */
-public class SESRForecaster extends AbstractForecaster<Double> {
+public class SESForecaster extends AbstractRForecaster {
+	private static final String MODEL_FUNC_NAME = "ets"; // no explicit stochastic model
+	private static final String FORECAST_FUNC_NAME = "forecast";
+	private final String[] emptyString = new String[0];
 
-	public SESRForecaster(final ITimeSeries<Double> historyTimeseries) {
-		super(historyTimeseries);
+	/**
+	 * 
+	 * @param historyTimeseries
+	 *            timeseries used by forecating algo
+	 */
+	public SESForecaster(final ITimeSeries<Double> historyTimeseries) {
+		super(historyTimeseries, SESForecaster.MODEL_FUNC_NAME, SESForecaster.FORECAST_FUNC_NAME, ForecastMethod.SES);
 	}
 
-	public IForecastResult<Double> forecast(final int n) {
-		final ITimeSeries<Double> history = this.getTsOriginal();
-		final ITimeSeries<Double> tsFC = super.prepareForecastTS();
+	/**
+	 * 
+	 * @param historyTimeseries
+	 *            timeseries used by forecating algo
+	 *            
+	 * @param confidenceLevel 
+	 * 			confidenceLevel
+	 */
+	public SESForecaster(final ITimeSeries<Double> historyTimeseries, final int confidenceLevel) {
+		super(historyTimeseries, SESForecaster.MODEL_FUNC_NAME, SESForecaster.FORECAST_FUNC_NAME, confidenceLevel, ForecastMethod.SES);
+	}
 
-		final List<Double> allHistory = new ArrayList<Double>(history.getValues());
-		final Double[] histValuesNotNull = MeanForecasterJava.removeNullValues(allHistory);
-		final double[] values = ArrayUtils.toPrimitive(histValuesNotNull);
+	@Override
+	protected String[] getModelFuncParams() {
+		return new String[] { "model=\"ANN\"" };
+	}
+	@Override
 
-		final RBridgeControl rBridge = RBridgeControl.getInstance(new File("r_scripts"));
-		rBridge.e("initTS()");
-		rBridge.assign("ts_history", values);
-		final double[] pred = rBridge.eDblArr("getForecast(ts_history)");
+	
+	/**
+	 * From R Forecast documentation:
+	 * Usually a three-character string identifying method
+	 * using the framework terminology of Hyndman et al. (2002) and Hyndman et al. (2008).
+	 * The first letter denotes the error type ("A", "M" or "Z");
+	 * the second letter denotes the trend type ("N","A","M" or "Z");
+	 * and the third letter denotes the season type ("N","A","M" or "Z").
+	 * In all cases, "N"=none, "A"=additive, "M"=multiplicative and "Z"=automatically selected.
+	 * So, for example, "ANN" is simple exponential smoothing with additive errors,
+	 * "MAM" is multiplicative Holt-Winters' method with multiplicative errors, and so on.
+	 * It is also possible for the model to be equal to the output from a previous call to ets.
+	 * In this case, the same model is fitted to y without re-estimating any parameters.
 
-		if (pred.length > 0) {
-			tsFC.append(pred[0]);
-		}
-		return new ForecastResult<Double>(tsFC, this.getTsOriginal());
+	 * no additional params required by this predictor
+	 * @return emptyString array
+	 */
+	protected String[] getForecastFuncParams() {
+		return this.emptyString; // no additional params required by this predictor
 	}
 }
-
-/*
- * This was the intention to do it (with avh's code)
- * 
- * r.loadLibrary("tseries");
- * r.loadLibrary("stats");
- * 
- * r.assign("points", values);
- * 
- * try {
- * Thread.sleep(1300);
- * } catch (InterruptedException e1) {
- * // TODO Auto-generated catch block
- * e1.printStackTrace();
- * }
- * 
- * try {
- * // REXP hwResult = r.rEvalSync("ses <- HoltWinters(points, beta = FALSE, gamma = FALSE)");
- * REXP hwResult = r.rEvalSync("HoltWinters");
- * r.assign("ses", hwResult);
- * REXP result = r.rEvalSync("predict(ses, " + n + ", prediction.interval = TRUE)");
- * } catch (REngineFacadeEvalException e) {
- * e.printStackTrace();
- * }
- */

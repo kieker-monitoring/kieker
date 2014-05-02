@@ -28,11 +28,13 @@ import kieker.tools.tslib.TimeSeries;
 import kieker.tools.tslib.forecast.IForecastResult;
 import kieker.tools.tslib.forecast.arima.ARIMA101Forecaster;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 /**
  * @author Tillmann Carlos Bielefeld
  * 
  */
-public class ARIMA101ForecasterTest {
+public class ARIMA101ForecasterTest extends AbstractKiekerTest {
 
 	private final long startTime = 98890787;
 	private final long deltaTimeMillis = 1000;
@@ -51,17 +53,17 @@ public class ARIMA101ForecasterTest {
 	 */
 	@Test
 	public void testARIMAPredictor() {
-		/*
-		 * Test values resulting from this calculation:
-		 * 
-		 * var_1 <<- c(1.0,2.0,3.0,4.0)
-		 * var_2<<-arima(var_1,c(1,0,1))
-		 * var_3<<-predict(var_2,h=1,level=c(90))
-		 * dprint(var_3)
-		 * dprint(var_3$pred[1])
-		 * dprint(var_3$pred[1] + var_3$se[1])
-		 * dprint(var_3$pred[1] - var_3$se[1])
-		 */
+		
+//		  Test values resulting from this calculation:
+		  
+		 // var_1 <<- c(1.0,2.0,3.0,4.0)
+		 // var_2<<-arima(var_1,c(1,0,1))
+		 // var_3<<-predict(var_2,h=1,level=c(90))
+		 // dprint(var_3)
+		 // dprint(var_3$pred[1])
+		 // dprint(var_3$pred[1] + var_3$se[1])
+		 // dprint(var_3$pred[1] - var_3$se[1])
+		 
 		final Double[] values = { 1.0, 2.0, 3.0, 4.0 };
 		final List<Double> expectedValues = new ArrayList<Double>(values.length);
 		for (final Double curVal : values) {
@@ -73,7 +75,7 @@ public class ARIMA101ForecasterTest {
 		ts.appendAll(values);
 
 		final ARIMA101Forecaster forecaster = new ARIMA101Forecaster(ts, this.confidenceLevel);
-		final IForecastResult<Double> forecast = forecaster.forecast(this.steps);
+		final IForecastResult forecast = forecaster.forecast(this.steps);
 
 		final ITimeSeries<Double> forecastSeries = forecast.getForecast();
 		final double expectedForecast = 4.210429;

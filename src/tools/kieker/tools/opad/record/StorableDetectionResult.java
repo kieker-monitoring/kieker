@@ -29,27 +29,52 @@ import kieker.common.util.registry.IRegistry;
  * Therefore, containing the value, the application name, the forecast calculated from the value,
  * the timestamp and the corresponding anomaly score.
  * 
- * @author Tom Frotscher
+ * @author Tom Frotscher, Thomas Düllmann
  * 
  */
 public class StorableDetectionResult extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
 
-	private static final long serialVersionUID = 7325786584057491433L;
-
+	/**
+	 * Size of the serialized object.
+	 */
 	public static final int SIZE = 36;
+
+	/**
+	 * Types used in this class (used for serialization purposes).
+	 */
 	public static final Class<?>[] TYPES = {
 		String.class, // applicationName
 		double.class, // value
 		long.class, // timestamp
 		double.class, // forecast
-		double.class // score
+		double.class, // score
 	};
+	
+	private static final long serialVersionUID = 7325786584057491433L;
 
-	// Attributes
+	/**
+	 * Name of the application.
+	 */
 	protected final String applicationName;
+	
+	/**
+	 * Latency of the application.
+	 */
 	protected final double value;
+	
+	/**
+	 * Timestamp of the record.
+	 */
 	protected final long timestamp;
+	
+	/**
+	 * Forecast value.
+	 */
 	protected final double forecast;
+	
+	/**
+	 * Anomaly score.
+	 */
 	protected final double score;
 
 	/**
@@ -80,7 +105,7 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 	 * @param values
 	 *            Object array containing the application name, value, timestamp, forecast and anomaly score.
 	 */
-	public StorableDetectionResult(final Object[] values) {
+	public StorableDetectionResult(final Object[] values) { //NOPMD
 		AbstractMonitoringRecord.checkArray(values, StorableDetectionResult.TYPES);
 
 		this.applicationName = (String) values[0];
@@ -165,6 +190,12 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 		return this.score;
 	}
 
+	/**
+	 * Serializes the object.
+	 * @param buffer buffer
+	 * @param stringRegistry stringRegistry
+	 * @throws BufferOverflowException bufferOverflowException
+	 */
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putInt(stringRegistry.get(this.getApplication()));
 		buffer.putDouble(this.getValue());
@@ -173,8 +204,14 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 		buffer.putDouble(this.getScore());
 	}
 
+	/**
+	 * Reads obejct from bytes.
+	 * @param buffer buffer
+	 * @param stringRegistry stringRegistry
+	 * @throws BufferUnderflowException bufferUnderflowException
+	 */
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException(); // TODO: FIX
+		throw new UnsupportedOperationException(); // TODO: FIX NOCS
 	}
 
 	public int getSize() {

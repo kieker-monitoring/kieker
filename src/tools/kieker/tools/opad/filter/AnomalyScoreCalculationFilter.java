@@ -67,7 +67,7 @@ public class AnomalyScoreCalculationFilter extends AbstractFilterPlugin {
 	 */
 	@InputPort(eventTypes = { IForecastMeasurementPair.class }, name = AnomalyScoreCalculationFilter.INPUT_PORT_CURRENT_FORECAST_PAIR)
 	public void inputForecastAndMeasurement(final IForecastMeasurementPair fmp) {
-		Double score = null;
+		Double score = 0.0;
 
 		if (null != fmp.getForecasted()) {
 			final double nextpredicted = fmp.getForecasted();
@@ -77,7 +77,13 @@ public class AnomalyScoreCalculationFilter extends AbstractFilterPlugin {
 			final double difference = nextpredicted - measuredValue;
 			final double sum = nextpredicted + measuredValue;
 
-			score = Math.abs(difference / sum);
+			if (Double.isNaN(nextpredicted) && Double.isNaN(measuredValue)) {
+				score = 0.0d;
+			} else if (Double.isNaN(nextpredicted) || Double.isNaN(measuredValue)) {
+				score = 1.0d;
+			} else {
+				score = Math.abs(difference / sum);
+			}
 		}
 
 		final StorableDetectionResult dr = new StorableDetectionResult(fmp.getName(), fmp.getValue(), fmp.getTime(), fmp.getForecasted(), score);

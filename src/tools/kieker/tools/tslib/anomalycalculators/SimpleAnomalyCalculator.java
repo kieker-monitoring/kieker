@@ -31,9 +31,16 @@ public class SimpleAnomalyCalculator implements IAnomalyCalculator<Double> {
 	 */
 	public SimpleAnomalyCalculator() {
 
-	}
-
-	public AnomalyScore calculateAnomaly(final IForecastResult<Double> forecast, final ITimeSeriesPoint<Double> current) {
+	// constructur
+		}
+	
+	/**
+	 * @param forecast Forecast Result
+	 * @param current current Timeseries
+	 * 
+	 * @return AnomalScore
+	 */
+	public AnomalyScore calculateAnomaly(final IForecastResult forecast, final ITimeSeriesPoint<Double> current) {
 		if (forecast.getForecast().getPoints().size() == 0) {
 			return null;
 		}

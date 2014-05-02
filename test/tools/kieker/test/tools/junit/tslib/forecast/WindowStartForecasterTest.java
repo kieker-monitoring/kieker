@@ -24,15 +24,18 @@ import org.junit.Test;
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+
 import kieker.tools.tslib.ITimeSeries;
 import kieker.tools.tslib.TimeSeries;
 import kieker.tools.tslib.forecast.IForecastResult;
 import kieker.tools.tslib.forecast.windowstart.WindowStartForecaster;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 /**
  * @author Tillmann Carlos Bielefeld
  */
-public class WindowStartForecasterTest {
+public class WindowStartForecasterTest extends AbstractKiekerTest {
 
 	private static final Log LOG = LogFactory.getLog(WindowStartForecasterTest.class);
 
@@ -70,7 +73,7 @@ public class WindowStartForecasterTest {
 		LOG.info("TS so far: " + ts);
 
 		final WindowStartForecaster forecaster = new WindowStartForecaster(ts);
-		final IForecastResult<Double> forecast = forecaster.forecast(3);
+		final IForecastResult forecast = forecaster.forecast(3);
 
 		final ITimeSeries<Double> forecastSeries = forecast.getForecast();
 		Assert.assertEquals(3, forecastSeries.getPoints().size());

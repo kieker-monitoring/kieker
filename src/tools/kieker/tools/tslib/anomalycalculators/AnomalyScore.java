@@ -25,6 +25,10 @@ public class AnomalyScore {
 
 	private final double score;
 
+	/**
+	 * 
+	 * @param score score
+	 */
 	public AnomalyScore(final double score) {
 		this.score = score;
 	}

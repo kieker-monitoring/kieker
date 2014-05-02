@@ -24,12 +24,14 @@ import org.junit.Test;
 
 import kieker.tools.tslib.TimeSeries;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 /**
  * 
  * @author Tillmann Carlos Bielefeld
  * 
  */
-public class TimeSeriesTest {
+public class TimeSeriesTest extends AbstractKiekerTest {
 
 	private TimeSeries<Double> unboundTS;
 	private int bounds;

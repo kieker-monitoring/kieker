@@ -24,14 +24,19 @@ import org.junit.Test;
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+
 import kieker.tools.util.RBridgeControl;
+
+import kieker.test.common.junit.AbstractKiekerTest;
+
+
 
 /**
  * 
  * @author Tillmann Carlos Bielefeld
  * 
  */
-public class RBridgeTest {
+public class RBridgeTest extends AbstractKiekerTest{
 	private static final Log LOG = LogFactory.getLog(RBridgeTest.class);
 
 	/**
@@ -63,13 +68,11 @@ public class RBridgeTest {
 				+ "6.0,12.846153846153847,17.428571428571427,18.2,20.9375,22.58823529411765)");
 		r.e("anomalies <<- c(NA,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,0.8333333333333333,0.7446808510638298,"
 				+ "0.761768901569187,0.6308623298033282,0.2288135593220339,0.49510173323285606,0.3689400164338537,NA)");
-		r.e("combined <<- cbind(measures, forecasts, anomalies)");
-		final Object result = r.e("plotAnomaly(combined, '/Users/tom.frotscher/Documents/ThesisStuff/Plots/junit_testplot.pdf', 1323437034798, 2000)");
-		// final Object result = r.e("plot(combined)");
+		final Object result = r.e("combined <<- cbind(measures, forecasts, anomalies)");
 		LOG.info(result.toString());
 
 		Assert.assertTrue(result != null);
-		Assert.assertTrue(result instanceof org.rosuda.REngine.REXPInteger);
+		Assert.assertTrue(result instanceof org.rosuda.REngine.REXPDouble);
 	}
 
 }

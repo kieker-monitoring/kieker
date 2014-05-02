@@ -28,12 +28,15 @@ import kieker.tools.tslib.TimeSeries;
 import kieker.tools.tslib.forecast.IForecastResult;
 import kieker.tools.tslib.forecast.ets.ETSForecaster;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
+
 /**
  * 
  * @author Tillmann Carlos Bielefeld
  * 
  */
-public class ETSForecasterTest {
+public class ETSForecasterTest extends AbstractKiekerTest {
 	private final long startTime = 98890787;
 	private final long deltaTimeMillis = 1000;
 	private final int confidenceLevel = 90;
@@ -62,7 +65,7 @@ public class ETSForecasterTest {
 		ts.appendAll(values);
 
 		final ETSForecaster forecaster = new ETSForecaster(ts, this.confidenceLevel);
-		final IForecastResult<Double> forecast = forecaster.forecast(this.steps);
+		final IForecastResult forecast = forecaster.forecast(this.steps);
 
 		final ITimeSeries<Double> forecastSeries = forecast.getForecast();
 		final double expectedForecast = 4.0;

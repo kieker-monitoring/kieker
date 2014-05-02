@@ -29,9 +29,12 @@ import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
+
 import kieker.tools.opad.filter.ExtractionFilter;
 import kieker.tools.opad.record.NamedDoubleRecord;
 import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
+
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * This Filter creates some NamedDoubleRecords and let them run trough the
@@ -41,7 +44,7 @@ import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
  * @author Tom Frotscher
  * 
  */
-public class ExtractionFilterTest {
+public class ExtractionFilterTest extends AbstractKiekerTest {
 
 	private static final String OP_SIGNATURE_A = "a.A.opA";
 	private static final String OP_SIGNATURE_B = "b.B.opB";

@@ -31,7 +31,14 @@ import kieker.common.util.registry.IRegistry;
  */
 public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, INamedElement, IDoubleValue {
 
+	/**
+	 * Size is set = 20 by Bielefeld.
+	 */
 	public static final int SIZE = 20;
+	
+	/**
+	 * class by Bielefeld
+	 */
 	public static final Class<?>[] TYPES = {
 		long.class, // timestamp
 		double.class, // value
@@ -44,6 +51,12 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 	private final double value;
 	private final String name;
 
+	/**
+	 * 
+	 * @param timestamp Timestamp
+	 * @param value value of TSPoint
+	 * @param name name of TS
+	 */
 	public NamedTSPoint(final long timestamp, final double value, final String name) {
 		super();
 		this.timestamp = timestamp;
@@ -51,6 +64,10 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 		this.name = name;
 	}
 
+	/**
+	 * 
+	 * @return null 
+	 */
 	public Object[] toArray() {
 		// TODO Auto-generated method stub
 		return null;
@@ -77,12 +94,23 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 		return this.value;
 	}
 
+	
+	/**
+	 * @param buffer buffer
+	 * @param stringRegistry outputString
+	 * @throws BufferOverflowException exception
+	 */
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putLong(this.getTimestamp());
 		buffer.putDouble(this.getValue());
 		buffer.putInt(stringRegistry.get(this.getName()));
 	}
 
+	/**	 
+	 * @param buffer buffer
+	 * @param stringRegistry outputString
+	 * @throws BufferUnderflowException exception
+	 */
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException(); // TODO: FIX
 	}

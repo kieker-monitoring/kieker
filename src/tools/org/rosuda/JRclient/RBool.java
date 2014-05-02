@@ -15,18 +15,18 @@ public class RBool extends Object {
     int val;
 
     public RBool(boolean b) {
-	val=(b)?1:0;
+	this.val = b ? 1 :0;
     };
-    public RBool(RBool r) {
-	val=r.val;
+    public RBool(final RBool r) {
+	this.val = r.val;
     };
-    public RBool(int i) { /* 0=FALSE, 2=NA, anything else = TRUE */
-	val=(i==0||i==2)?i:1;
+    public RBool(final int i) { /* 0=FALSE, 2=NA, anything else = TRUE */
+	val=(i == 0||i == 2) ? i :1;
     };
 
-    public boolean isNA() { return (val==2); };
-    public boolean isTRUE() { return (val==1); };
-    public boolean isFALSE() { return (val==0); };
+    public boolean isNA() { return this.val == 2; };
+    public boolean isTRUE() { return this.val == 1; };
+    public boolean isFALSE() { return this.val == 0; };
 
-    public String toString() { return (val==0)?"FALSE":((val==2)?"NA":"TRUE"); };
+    public String toString() { return (val == 0)?"FALSE":((val == 2) ? "NA":"TRUE"); };
 }
