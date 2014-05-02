@@ -27,9 +27,7 @@ import kieker.tools.tslib.forecast.ets.ETSForecaster;
 import kieker.tools.tslib.forecast.mean.MeanForecaster;
 import kieker.tools.tslib.forecast.mean.MeanForecasterJava;
 import kieker.tools.tslib.forecast.naive.NaiveForecaster;
-import kieker.tools.tslib.forecast.ses.SESForecaster;
-import kieker.tools.tslib.forecast.tbats.TBATSForecaster;
-import kieker.tools.tslib.forecast.wcf.wibClassification.ClassificationUtility;
+import kieker.tools.tslib.forecast.ses.SESRForecaster;
 import kieker.tools.tslib.forecast.windowstart.WindowStartForecaster;
 
 /**
@@ -47,17 +45,17 @@ public enum ForecastMethod {
 	/**
 	 * 
 	 * @param history
-	 *            Timeseries which will be forecasted 
+	 *            Timeseries which will be forecasted
 	 * @return FC
 	 */
 	public IForecaster<Double> getForecaster(final ITimeSeries<Double> history) {
 		switch (this) {
-	// Don't use this forecast, the implementation of the SESR Forecast looks disgusting and without the R_script the forecast doesn't work at all,
-	// use for example the SESForecast instead
-	//	case SESR:
-	//		return new SESRForecaster(history);
+		// Don't use this forecast, the implementation of the SESR Forecast looks disgusting and without the R_script the forecast doesn't work at all,
+		// use for example the SESForecast instead
+		// case SESR:
+		// return new SESRForecaster(history);
 		case SES:
-			return new SESForecaster(history);
+			return new SESRForecaster(history);
 		case ETS:
 			return new ETSForecaster(history);
 		case MEANJAVA:
@@ -72,8 +70,11 @@ public enum ForecastMethod {
 			return new NaiveForecaster(history);
 		case CS:
 			return new CSForecaster(history);
-		case TBATS:
-			return new TBATSForecaster(history);
+
+			// WCF/TBATS are not yet integrated
+			// case TBATS:
+			// return new TBATSForecaster(history);
+
 		case ARIMA:
 			return new ARIMAForecaster(history);
 		case WINDOWSTART:
@@ -98,17 +99,13 @@ public enum ForecastMethod {
 		case NAIVE:
 			return new NaiveForecaster(ts, alpha);
 		case MEANJAVA:
-			return new MeanForecasterJava(ClassificationUtility.getLastXofTS(ts, 10));
+			return new MeanForecasterJava(ForecastMethod.getLastXofTS(ts, 10));
 		case MEAN:
-			return new MeanForecaster(ClassificationUtility.getLastXofTS(ts, 10), alpha);
+			return new MeanForecaster(ForecastMethod.getLastXofTS(ts, 10), alpha);
 		case CS: // Cubic Smoothing Splines
-			return new CSForecaster(ClassificationUtility.getLastXofTS(ts, 30), alpha);
+			return new CSForecaster(ForecastMethod.getLastXofTS(ts, 30), alpha);
 		case SES: // Simple Exponential Smoothing
-			return new SESForecaster(ts, alpha);
-			// Don't use this forecast, the implementation of the SESR Forecast looks disgusting and without the R_script the forecast doesn't work at all,
-			// use for example the SESForecast instead
-			//	case SESR:
-			//return new SESRForecaster(ts);
+			return new SESRForecaster(ts, alpha);
 		case CROSTON: // Croston's Method
 			return new CrostonForecaster(ts);
 		case ETS: // Extended Exponential Smoothing
@@ -117,8 +114,9 @@ public enum ForecastMethod {
 			return new ARIMA101Forecaster(ts, alpha);
 		case ARIMA:
 			return new ARIMAForecaster(ts, alpha);
-		case TBATS:
-			return new TBATSForecaster(ts, alpha);
+			// Removed because WCF/TBATS is not integrated yet
+			// case TBATS:
+			// return new TBATSForecaster(ts, alpha);
 		case INACT:
 			return null;
 		default:
@@ -134,4 +132,31 @@ public enum ForecastMethod {
 		return new SimpleAnomalyCalculator();
 	}
 
+	// Was extracted from ClassificationUtility in WCF/TBATS:
+	/**
+	 * Returns a new time series object shortened to the last x values.
+	 * 
+	 * @param ts
+	 *            timeseries
+	 * @param x
+	 *            last x value
+	 * @return new time series object
+	 */
+	private static ITimeSeries<Double> getLastXofTS(final ITimeSeries<Double> ts, final int x) {
+		if (ts.size() >= x) {
+			Double[] a = new Double[ts.size()];
+			a = ts.getValues().toArray(a);
+			final Double[] b = new Double[x];
+			for (int i = 0; i < x; i++) {
+				b[i] = a[(ts.size() - x) + i];
+			}
+			long newStartTime = ts.getStartTime();
+			newStartTime += (ts.size() - x) * ts.getDeltaTimeUnit().toMillis(ts.getDeltaTime());
+			final ITimeSeries<Double> tsLastX = new TimeSeries<Double>(newStartTime, ts.getDeltaTime(), ts.getDeltaTimeUnit(), ts.getCapacity());
+			tsLastX.appendAll(b);
+			return tsLastX;
+		} else {
+			return ts;
+		}
+	}
 }

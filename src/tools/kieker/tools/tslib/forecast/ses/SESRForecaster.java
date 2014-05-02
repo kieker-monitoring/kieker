@@ -12,7 +12,7 @@ import kieker.tools.tslib.forecast.AbstractRForecaster;
  *         1st step: estimation of parameters for weights/exp. function
  *         2nd step: calculation of weighted averages as point forecast
  */
-public class SESForecaster extends AbstractRForecaster {
+public class SESRForecaster extends AbstractRForecaster {
 	private static final String MODEL_FUNC_NAME = "ets"; // no explicit stochastic model
 	private static final String FORECAST_FUNC_NAME = "forecast";
 	private final String[] emptyString = new String[0];
@@ -22,29 +22,28 @@ public class SESForecaster extends AbstractRForecaster {
 	 * @param historyTimeseries
 	 *            timeseries used by forecating algo
 	 */
-	public SESForecaster(final ITimeSeries<Double> historyTimeseries) {
-		super(historyTimeseries, SESForecaster.MODEL_FUNC_NAME, SESForecaster.FORECAST_FUNC_NAME, ForecastMethod.SES);
+	public SESRForecaster(final ITimeSeries<Double> historyTimeseries) {
+		super(historyTimeseries, SESRForecaster.MODEL_FUNC_NAME, SESRForecaster.FORECAST_FUNC_NAME, ForecastMethod.SES);
 	}
 
 	/**
 	 * 
 	 * @param historyTimeseries
 	 *            timeseries used by forecating algo
-	 *            
-	 * @param confidenceLevel 
-	 * 			confidenceLevel
+	 * 
+	 * @param confidenceLevel
+	 *            confidenceLevel
 	 */
-	public SESForecaster(final ITimeSeries<Double> historyTimeseries, final int confidenceLevel) {
-		super(historyTimeseries, SESForecaster.MODEL_FUNC_NAME, SESForecaster.FORECAST_FUNC_NAME, confidenceLevel, ForecastMethod.SES);
+	public SESRForecaster(final ITimeSeries<Double> historyTimeseries, final int confidenceLevel) {
+		super(historyTimeseries, SESRForecaster.MODEL_FUNC_NAME, SESRForecaster.FORECAST_FUNC_NAME, confidenceLevel, ForecastMethod.SES);
 	}
 
 	@Override
 	protected String[] getModelFuncParams() {
 		return new String[] { "model=\"ANN\"" };
 	}
-	@Override
 
-	
+	@Override
 	/**
 	 * From R Forecast documentation:
 	 * Usually a three-character string identifying method

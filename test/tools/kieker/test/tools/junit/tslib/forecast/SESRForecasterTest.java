@@ -72,7 +72,7 @@ public class SESRForecasterTest {
 		ts.append(3.0);
 
 		final SESRForecaster forecaster = new SESRForecaster(ts);
-		final IForecastResult<Double> forecast = forecaster.forecast(1);
+		final IForecastResult forecast = forecaster.forecast(1);
 		final ITimeSeries<Double> forecastSeries = forecast.getForecast();
 
 		final ITimeSeriesPoint<Double> stepFC = forecastSeries.getPoints().get(0);

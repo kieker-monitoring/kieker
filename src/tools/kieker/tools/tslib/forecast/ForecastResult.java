@@ -20,7 +20,6 @@ import java.util.List;
 
 import kieker.tools.tslib.ForecastMethod;
 import kieker.tools.tslib.ITimeSeries;
-import kieker.tools.tslib.forecast.wcf.wibClassification.ClassificationUtility;
 
 /**
  * Result of a time series forecast, e.g., computed by {@link IForecaster}. If additional fields are required, {@link IForecaster}s should extend this class.
@@ -87,10 +86,7 @@ public class ForecastResult implements IForecastResult {
 		this(tsForecast, tsOriginal, 0, 0, tsForecast, tsForecast, fcStrategy); // tsForecast also lower/upper
 	}
 
-	
-	 
-	  // TODO Auto-generated constructor stub
-	
+	// TODO Auto-generated constructor stub
 
 	public ITimeSeries<Double> getForecast() {
 		return this.tsForecast;
@@ -123,7 +119,6 @@ public class ForecastResult implements IForecastResult {
 		return strB.toString();
 	}
 
-	@Override
 	public double getMeanAbsoluteScaledError() {
 		return this.meanAbsoluteScaledError;
 	}
@@ -132,12 +127,11 @@ public class ForecastResult implements IForecastResult {
 		return this.fcStrategy;
 	}
 
-	@Override
 	public boolean isPlausible() {
 		if ((this.meanAbsoluteScaledError == 0) || Double.isNaN(this.meanAbsoluteScaledError)) {
 			return false;
 		}
-		final double maximumObserved = ClassificationUtility.calcMaximum(this.tsOriginal);
+		final double maximumObserved = ForecastResult.calcMaximum(this.tsOriginal);
 		final List<Double> values = this.tsForecast.getValues();
 		for (final Double value : values) {
 			if ((value > (maximumObserved * 2)) || (value < 0)) {
@@ -145,5 +139,22 @@ public class ForecastResult implements IForecastResult {
 			}
 		}
 		return true;
+	}
+
+	// Was extracted from ClassificationUtility in WCF/TBATS as it is not yet integrated:
+	/**
+	 * @param ts
+	 *            timeseries
+	 * @return maximum value of the time series
+	 */
+	private static double calcMaximum(final ITimeSeries<Double> ts) {
+		final List<Double> values = ts.getValues();
+		double max = 0;
+		for (final double t : values) {
+			if (t > max) {
+				max = t;
+			}
+		}
+		return max;
 	}
 }

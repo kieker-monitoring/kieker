@@ -29,7 +29,6 @@ public abstract class AbstractConfigurationRegistry implements IConfigurationReg
 	 * 
 	 * @return Map containing all updateable filter plugins registered to this registry
 	 */
-	@Override
 	public ConcurrentHashMap<String, AbstractUpdateableFilterPlugin> getUpdateableFilters() {
 		return this.updateableFilters;
 	}
@@ -43,7 +42,6 @@ public abstract class AbstractConfigurationRegistry implements IConfigurationReg
 	 * @param plugin
 	 *            plugin to register
 	 */
-	@Override
 	public void registerUpdateableFilterPlugin(final String id, final AbstractUpdateableFilterPlugin plugin) {
 		this.getUpdateableFilters().put(id, plugin);
 	}
@@ -62,7 +60,6 @@ public abstract class AbstractConfigurationRegistry implements IConfigurationReg
 	 * @throws PluginNotFoundException
 	 *             Exception thrown if no plugin is found
 	 */
-	@Override
 	public void updateConfiguration(final String id, final Configuration configuration, final boolean update)
 			throws PluginNotFoundException {
 		final AbstractUpdateableFilterPlugin plugin = this.updateableFilters.get(id);

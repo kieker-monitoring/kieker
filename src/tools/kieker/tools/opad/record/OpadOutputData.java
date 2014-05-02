@@ -60,9 +60,10 @@ public class OpadOutputData extends OperationAnomalyInfo {
 	public void setAnomalyThreshold(final double anomalyThreshold) {
 		this.anomalyThreshold = anomalyThreshold;
 	}
-	
+
 	/**
 	 * Checks whether this output data object contains an anomaly.
+	 * 
 	 * @return true if anomaly, else false
 	 */
 	public boolean isAnomaly() {
@@ -72,7 +73,7 @@ public class OpadOutputData extends OperationAnomalyInfo {
 		}
 		return result;
 	}
-	
+
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder();

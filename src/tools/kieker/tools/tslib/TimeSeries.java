@@ -82,7 +82,7 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 	 *            length of timeseries
 	 */
 	public TimeSeries(final long startTime, final long deltaTime, final TimeUnit deltaTimeUnit, final int capacity) {
-		// frequenc  = 24 best practice
+		// frequenc = 24 best practice
 		this(startTime, deltaTime, deltaTimeUnit, 24, capacity);
 	}
 
@@ -118,12 +118,12 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 	 */
 	public synchronized ITimeSeriesPoint<T> append(final T value) {
 		final ITimeSeriesPoint<T> point = new TimeSeriesPoint<T>(this.nextTime, value);
-		
-		 // if ((this.capacity != ITimeSeries.INFINITE_CAPACITY) && (this.points.size() >= this.capacity)) {
-		 //this.startTime = this.startTime + this.deltaTimeUnit.toMillis(this.deltaTime);
-		 // this.skippedValues++;
-		 // }
-		 
+
+		// if ((this.capacity != ITimeSeries.INFINITE_CAPACITY) && (this.points.size() >= this.capacity)) {
+		// this.startTime = this.startTime + this.deltaTimeUnit.toMillis(this.deltaTime);
+		// this.skippedValues++;
+		// }
+
 		this.points.add(point);
 		this.setNextTime();
 		return point;
@@ -187,7 +187,6 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 		return buf.toString();
 	}
 
-	@Override
 	public int getFrequency() {
 		return this.frequency;
 	}
