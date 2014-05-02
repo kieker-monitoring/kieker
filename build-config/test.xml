@@ -29,6 +29,16 @@
 				<include name="kahadb-5.7.0.jar"/>
 				<include name="slf4j-api-1.7.*.jar"/>
 				<include name="javax.jms-*.jar" /> <!-- Needed for the JMSReader/Writer test -->
+				
+				<!-- Opad begin -->
+				<include name="commons-math-*.jar"/>
+				<include name="commons-lang-*.jar"/>
+				<include name="REngine.jar"/>
+				<include name="Rsession.jar"/>
+				<include name="Rserve.jar"/>
+				<include name="mongo-*.jar"/>
+				<!-- Opad end -->
+				
 			</fileset>
 			<fileset dir="${lib.sigar.dir}">
 				<include name="sigar-*.jar" />
