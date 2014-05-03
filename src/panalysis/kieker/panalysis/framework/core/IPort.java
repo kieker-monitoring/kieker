@@ -17,4 +17,6 @@ interface IPort<S extends IStage, T> {
 
 	S getOwningStage();
 
+	int getIndex();
+
 }

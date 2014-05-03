@@ -61,8 +61,7 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 
 		this.threads = new WorkerThread[numThreads + 1];
 
-		this.threads[0] = new WorkerThread();
-		this.threads[0].setPipeline(mainThreadPipeline);
+		this.threads[0] = new WorkerThread(mainThreadPipeline);
 		this.threads[0].setName("startThread");
 
 		final Map<Integer, List<ConcurrentWorkStealingPipe<?>>> pipeGroups = new HashMap<Integer, List<ConcurrentWorkStealingPipe<?>>>();
@@ -71,8 +70,7 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 			final Pipeline<ConcurrentWorkStealingPipe<?>> pipeline = Pipeline.create(pipeGroups);
 			this.buildPipeline(distributor, pipeline);
 
-			final WorkerThread thread = new WorkerThread();
-			thread.setPipeline(pipeline);
+			final WorkerThread thread = new WorkerThread(pipeline);
 			this.threads[i] = thread;
 		}
 
@@ -88,7 +86,7 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 		final Distributor<File> distributor = new Distributor<File>();
 
 		new MethodCallPipe<String>().setSourcePort(repeaterSource.OUTPUT).setTargetPort(findFilesStage.DIRECTORY_NAME);
-		new MethodCallPipe<File>().setSourcePort(findFilesStage.FILE).setTargetPort(distributor.OBJECT);
+		new MethodCallPipe<File>().setSourcePort(findFilesStage.FILE).setTargetPort(distri, lbutor.OBJECT);
 
 		final Pipeline<?> pipeline = Pipeline.create();
 		pipeline.addStage(repeaterSource);

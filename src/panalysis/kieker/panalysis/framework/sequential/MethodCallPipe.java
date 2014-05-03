@@ -19,9 +19,6 @@ package kieker.panalysis.framework.sequential;
 import java.util.List;
 
 import kieker.panalysis.framework.core.AbstractPipe;
-import kieker.panalysis.framework.core.IInputPort;
-import kieker.panalysis.framework.core.ISink;
-import kieker.panalysis.framework.core.IStage;
 
 /**
  * @author Christian Wulf
@@ -30,7 +27,6 @@ import kieker.panalysis.framework.core.IStage;
  */
 public class MethodCallPipe<T> extends AbstractPipe<T> {
 
-	private IStage targetStage;
 	private T storedToken;
 
 	public MethodCallPipe(final T initialToken) {
@@ -44,7 +40,7 @@ public class MethodCallPipe<T> extends AbstractPipe<T> {
 	@Override
 	protected void putInternal(final T token) {
 		this.storedToken = token;
-		this.targetStage.execute();
+		this.getTargetStage().execute();
 	}
 
 	@Override
@@ -68,18 +64,6 @@ public class MethodCallPipe<T> extends AbstractPipe<T> {
 
 	public List<?> tryTakeMultiple(final int numItemsToTake) {
 		throw new IllegalStateException("Taking more than one element is not possible. You tried to take " + numItemsToTake + " items.");
-	}
-
-	@Override
-	public <S extends ISink<S>> MethodCallPipe<T> target(final S targetStage, final IInputPort<S, T> targetPort) {
-		this.targetStage = targetStage;
-		return super.target(targetStage, targetPort);
-	}
-
-	@Override
-	public <S extends ISink<S>> MethodCallPipe<T> setTargetPort(final IInputPort<S, T> targetPort) {
-		this.targetStage = targetPort.getOwningStage();
-		return super.setTargetPort(targetPort);
 	}
 
 	public void copyAllOtherPipes(final List<MethodCallPipe<T>> pipesOfGroup) {

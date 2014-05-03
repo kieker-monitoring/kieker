@@ -18,11 +18,11 @@ package kieker.panalysis.examples.countWords;
 
 import java.io.File;
 
+import kieker.panalysis.framework.concurrent.IoStage;
 import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Context;
 import kieker.panalysis.framework.core.IInputPort;
 import kieker.panalysis.framework.core.IOutputPort;
-import kieker.panalysis.framework.core.IoStage;
 
 /**
  * @author Christian Wulf

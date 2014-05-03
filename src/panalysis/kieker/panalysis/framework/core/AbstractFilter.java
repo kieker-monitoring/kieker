@@ -52,6 +52,7 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 		return this.overallDuration;
 	}
 
+	// BETTER return a limited context that allows "read" only
 	public Context<S> getContext() {
 		return this.context;
 	}
@@ -166,7 +167,8 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	 */
 	protected <T> IInputPort<S, T> createInputPort() {
 		@SuppressWarnings("unchecked")
-		final IInputPort<S, T> inputPort = new InputPortImpl<S, T>((S) this);
+		final InputPortImpl<S, T> inputPort = new InputPortImpl<S, T>((S) this);
+		inputPort.setIndex(this.inputPorts.size());
 		this.inputPorts.add(inputPort);
 		this.enabledInputPorts++;
 		return inputPort;
@@ -178,7 +180,8 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	 */
 	protected <T> IOutputPort<S, T> createOutputPort() {
 		@SuppressWarnings("unchecked")
-		final IOutputPort<S, T> outputPort = new OutputPortImpl<S, T>((S) this);
+		final OutputPortImpl<S, T> outputPort = new OutputPortImpl<S, T>((S) this);
+		outputPort.setIndex(this.outputPorts.size());
 		this.outputPorts.add(outputPort);
 		return outputPort;
 	}
@@ -206,6 +209,14 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	 */
 	public void copyAttributes(final IStage stage) {
 		// default empty implementation
+	}
+
+	public IInputPort<?, ?> getInputPortByIndex(final int index) {
+		return this.inputPorts.get(index);
+	}
+
+	public IOutputPort<?, ?> getOutputPortByIndex(final int index) {
+		return this.outputPorts.get(index);
 	}
 
 }

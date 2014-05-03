@@ -20,10 +20,10 @@ import java.io.File;
 
 import de.chw.util.Pair;
 
+import kieker.panalysis.framework.concurrent.IoStage;
 import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Context;
 import kieker.panalysis.framework.core.IInputPort;
-import kieker.panalysis.framework.core.IoStage;
 
 /**
  * @author Christian Wulf

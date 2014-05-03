@@ -27,13 +27,17 @@ import kieker.panalysis.framework.sequential.Pipeline;
  */
 public class WorkerThread extends Thread {
 
-	private Pipeline<?> pipeline;
+	private final Pipeline<?> pipeline;
 	private NextStageScheduler pipelineScheduler;
 
 	private long duration;
 
 	private volatile TerminationPolicy terminationPolicy;
 	private volatile boolean shouldTerminate = false;
+
+	public WorkerThread(final Pipeline<?> pipeline) {
+		this.pipeline = pipeline;
+	}
 
 	@Override
 	public void run() {
@@ -102,11 +106,6 @@ public class WorkerThread extends Thread {
 
 	public long getDuration() {
 		return this.duration;
-	}
-
-	// BETTER move initialization to the constructor
-	public void setPipeline(final Pipeline<?> pipeline) {
-		this.pipeline = pipeline;
 	}
 
 	public Pipeline<?> getPipeline() {

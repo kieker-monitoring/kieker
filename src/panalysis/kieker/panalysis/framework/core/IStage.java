@@ -89,9 +89,6 @@ public interface IStage {
 	 */
 	void fireSignalClosingToAllOutputPorts();
 
-	/**
-	 * @since 1.10
-	 */
 	void onPipelineStarts();
 
 	Context<?> getContext();
@@ -100,9 +97,10 @@ public interface IStage {
 
 	void setOwningPipeline(Pipeline<?> owningPipeline);
 
-	/**
-	 * @param stage
-	 */
 	void copyAttributes(IStage stage);
+
+	IOutputPort<?, ?> getOutputPortByIndex(int index);
+
+	IInputPort<?, ?> getInputPortByIndex(int index);
 
 }

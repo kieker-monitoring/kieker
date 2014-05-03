@@ -44,11 +44,6 @@ public class CountWordsAnalysis extends Analysis {
 	private Merger<Pair<File, Integer>> merger;
 	private OutputWordsCountSink outputWordsCountStage;
 
-	public CountWordsAnalysis() {
-		// No code necessary
-	}
-
-	@SuppressWarnings("unchecked")
 	@Override
 	public void init() {
 		super.init();
@@ -72,38 +67,22 @@ public class CountWordsAnalysis extends Analysis {
 
 		this.pipeline.setStartStages(this.repeaterSource);
 
-		this.pipeline.add(new MethodCallPipe<String>()
-				.setSourcePort(this.repeaterSource.OUTPUT)
-				.target(this.findFilesStage, this.findFilesStage.DIRECTORY_NAME));
+		this.pipeline.connect(this.repeaterSource.OUTPUT, this.findFilesStage.DIRECTORY_NAME);
+		this.pipeline.connect(this.findFilesStage.FILE, this.distributor.OBJECT);
+		this.pipeline.connect(this.distributor.getNewOutputPort(), this.countWordsStage0.FILE);
+		this.pipeline.connect(this.distributor.getNewOutputPort(), this.countWordsStage1.FILE);
+		this.pipeline.connect(this.countWordsStage0.WORDSCOUNT, this.merger.getNewInputPort());
+		this.pipeline.connect(this.countWordsStage1.WORDSCOUNT, this.merger.getNewInputPort());
+		this.pipeline.connect(this.merger.OBJECT, this.outputWordsCountStage.FILE_WORDCOUNT_TUPLE);
 
-		this.pipeline.add(new MethodCallPipe<File>()
-				.setSourcePort(this.findFilesStage.FILE)
-				.target(this.distributor, this.distributor.OBJECT));
-
-		this.pipeline.add(new MethodCallPipe<File>()
-				.setSourcePort(this.distributor.getNewOutputPort())
-				.target(this.countWordsStage0, this.countWordsStage0.FILE));
-		this.pipeline.add(new MethodCallPipe<File>()
-				.setSourcePort(this.distributor.getNewOutputPort())
-				.target(this.countWordsStage1, this.countWordsStage1.FILE));
-
-		this.pipeline.add(new MethodCallPipe<Pair<File, Integer>>()
-				.setSourcePort(this.countWordsStage0.WORDSCOUNT)
-				.target(this.merger, this.merger.getNewInputPort()));
-		this.pipeline.add(new MethodCallPipe<Pair<File, Integer>>()
-				.setSourcePort(this.countWordsStage1.WORDSCOUNT)
-				.target(this.merger, this.merger.getNewInputPort()));
-
-		this.pipeline.add(new MethodCallPipe<Pair<File, Integer>>()
-				.setSourcePort(this.merger.OBJECT)
-				.target(this.outputWordsCountStage, this.outputWordsCountStage.FILE_WORDCOUNT_TUPLE));
+		// pipeline.init();
 	}
 
 	@Override
 	public void start() {
 		super.start();
 		this.pipeline.start();
-		this.pipeline.getStartStages().get(0).execute();
+		this.pipeline.getStartStages()[0].execute();
 	}
 
 	public static void main(final String[] args) {

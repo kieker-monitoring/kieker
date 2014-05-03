@@ -143,6 +143,9 @@ public class Pipeline<P extends IPipe<?>> {
 		return this;
 	}
 
+	/**
+	 * @since 1.10
+	 */
 	public <S0 extends ISource, S1 extends ISink<S1>, T> void connect(final IOutputPort<S0, T> sourcePort, final IInputPort<S1, T> targetPort) {
 		this.connections.put(sourcePort, targetPort);
 	}
