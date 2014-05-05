@@ -66,7 +66,7 @@ public final class KaxRun {
 			final CommandLine line = parser.parse(options, args);
 			kaxFilename = line.getOptionValue('i');
 		} catch (final ParseException ex) {
-			System.out.println(ex.getMessage()); // NOPMD (System.out)
+			LOG.error("An error occured while parsing the parameters", ex);
 			final HelpFormatter formatter = new CLIHelpFormatter();
 			formatter.printHelp(KaxRun.class.getName(), options, true);
 			return;

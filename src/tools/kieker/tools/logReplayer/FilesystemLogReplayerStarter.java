@@ -154,8 +154,7 @@ public final class FilesystemLogReplayerStarter {
 		final String keepOriginalLoggingTimestampsOptValStr = FilesystemLogReplayerStarter.cmdl.getOptionValue(
 				CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS, "true");
 		if (!("true".equals(keepOriginalLoggingTimestampsOptValStr) || "false".equals(keepOriginalLoggingTimestampsOptValStr))) {
-			System.out.println("Invalid value for option " + CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS + ": '" // NOPMD (System.out)
-					+ keepOriginalLoggingTimestampsOptValStr + "'");
+			LOG.error("Invalid value for option " + CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS + ": '" + keepOriginalLoggingTimestampsOptValStr + "'");
 			retVal = false;
 		}
 		FilesystemLogReplayerStarter.keepOriginalLoggingTimestamps = "true".equals(keepOriginalLoggingTimestampsOptValStr);
@@ -165,7 +164,7 @@ public final class FilesystemLogReplayerStarter {
 		// 3.) init realtimeMode
 		final String realtimeOptValStr = FilesystemLogReplayerStarter.cmdl.getOptionValue(CMD_OPT_NAME_REALTIME, "false");
 		if (!("true".equals(realtimeOptValStr) || "false".equals(realtimeOptValStr))) {
-			System.out.println("Invalid value for option " + CMD_OPT_NAME_REALTIME + ": '" + realtimeOptValStr + "'"); // NOPMD (System.out)
+			LOG.error("Invalid value for option " + CMD_OPT_NAME_REALTIME + ": '" + realtimeOptValStr + "'");
 			retVal = false;
 		}
 		FilesystemLogReplayerStarter.realtimeMode = "true".equals(realtimeOptValStr);
@@ -176,16 +175,13 @@ public final class FilesystemLogReplayerStarter {
 		try {
 			FilesystemLogReplayerStarter.numRealtimeWorkerThreads = Integer.parseInt(numRealtimeWorkerThreadsStr);
 		} catch (final NumberFormatException ex) {
-			System.out.println("Invalid value for option " + CMD_OPT_NAME_NUM_REALTIME_WORKERS + ": '" + numRealtimeWorkerThreadsStr // NOPMD (System.out)
-					+ "'");
+			LOG.error("Invalid value for option " + CMD_OPT_NAME_NUM_REALTIME_WORKERS + ": '" + numRealtimeWorkerThreadsStr + "'");
 			LOG.error("NumberFormatException: ", ex);
 			retVal = false;
 		}
 		if (FilesystemLogReplayerStarter.numRealtimeWorkerThreads < 1) {
-			System.out.println("Option value for " + CMD_OPT_NAME_NUM_REALTIME_WORKERS + " must be >= 1; found " // NOPMD (System.out)
-					+ FilesystemLogReplayerStarter.numRealtimeWorkerThreads);
-			LOG.error("Invalid specification of " + CMD_OPT_NAME_NUM_REALTIME_WORKERS + ":"
-					+ FilesystemLogReplayerStarter.numRealtimeWorkerThreads);
+			LOG.error("Option value for " + CMD_OPT_NAME_NUM_REALTIME_WORKERS + " must be >= 1; found " + FilesystemLogReplayerStarter.numRealtimeWorkerThreads);
+			LOG.error("Invalid specification of " + CMD_OPT_NAME_NUM_REALTIME_WORKERS + ":" + FilesystemLogReplayerStarter.numRealtimeWorkerThreads);
 			retVal = false;
 		}
 
@@ -195,16 +191,14 @@ public final class FilesystemLogReplayerStarter {
 		try {
 			FilesystemLogReplayerStarter.realtimeAccelerationFactor = Double.parseDouble(realtimeAccelerationFactorStr);
 		} catch (final NumberFormatException ex) {
-			System.out.println("Invalid value for option " + CMD_OPT_NAME_REALTIME_ACCELERATION_FACTOR + ": '" + numRealtimeWorkerThreadsStr // NOPMD (System.out)
-					+ "'");
+			LOG.error("Invalid value for option " + CMD_OPT_NAME_REALTIME_ACCELERATION_FACTOR + ": '" + numRealtimeWorkerThreadsStr + "'");
 			LOG.error("NumberFormatException: ", ex);
 			retVal = false;
 		}
 		if (FilesystemLogReplayerStarter.numRealtimeWorkerThreads <= 0) {
-			System.out.println("Option value for " + CMD_OPT_NAME_REALTIME_ACCELERATION_FACTOR + " must be > 0; found " // NOPMD (System.out)
+			LOG.error("Option value for " + CMD_OPT_NAME_REALTIME_ACCELERATION_FACTOR + " must be > 0; found "
 					+ FilesystemLogReplayerStarter.realtimeAccelerationFactor);
-			LOG.error("Invalid specification of " + CMD_OPT_NAME_REALTIME_ACCELERATION_FACTOR + ":"
-					+ FilesystemLogReplayerStarter.realtimeAccelerationFactor);
+			LOG.error("Invalid specification of " + CMD_OPT_NAME_REALTIME_ACCELERATION_FACTOR + ":" + FilesystemLogReplayerStarter.realtimeAccelerationFactor);
 			retVal = false;
 		}
 

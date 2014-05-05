@@ -397,7 +397,7 @@ public final class KaxViz extends JFrame {
 			kaxFilename = line.getOptionValue('i');
 			svgFilename = line.getOptionValue("svg");
 		} catch (final ParseException ex) {
-			System.out.println(ex.getMessage()); // NOPMD (System.out)
+			LOG.error("An error occured while parsing the parameters", ex);
 			final HelpFormatter formatter = new CLIHelpFormatter();
 			formatter.printHelp(KaxViz.class.getName(), options, true);
 			return;
