@@ -33,6 +33,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.util.CLIHelpFormatter;
 import kieker.tools.util.LoggingTimestampConverter;
+import kieker.tools.utility.ToolsUtility;
 
 /**
  * This tool can be used to convert timestamps.
@@ -69,6 +70,7 @@ public final class LoggingTimestampConverterTool {
 	private static final void initializeOptions() {
 		OPTIONS.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TIMESTAMPS)
 				.withArgName("timestamp1 ... timestampN").hasArgs().isRequired(true).withDescription("List of timestamps (UTC timezone) to convert").create("t"));
+		OPTIONS.add(new Option("v", "verbose", false, "verbosely prints additional information"));
 		for (final Option o : OPTIONS) {
 			CMDL_OPTS.addOption(o);
 		}
@@ -144,6 +146,10 @@ public final class LoggingTimestampConverterTool {
 	 * @return true if and only if the tool has been initialized successfully.
 	 */
 	private static boolean initFromArgs() {
+		if (cmdl.hasOption('v')) {
+			ToolsUtility.loadVerboseLogger();
+		}
+
 		LoggingTimestampConverterTool.timestampsStr = LoggingTimestampConverterTool.cmdl.getOptionValues(CMD_OPT_NAME_TIMESTAMPS);
 		if (LoggingTimestampConverterTool.timestampsStr == null) { // should not happen since marked as required opt
 			LOG.error("Missing value for option '" + CMD_OPT_NAME_TIMESTAMPS + "'");

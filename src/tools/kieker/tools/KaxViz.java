@@ -63,6 +63,7 @@ import kieker.analysis.model.analysisMetaModel.MIRepositoryConnector;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.util.CLIHelpFormatter;
+import kieker.tools.utility.ToolsUtility;
 
 /**
  * A simple visualization of Analysis Configurations.
@@ -381,12 +382,14 @@ public final class KaxViz extends JFrame {
 		// create cmdline options
 		final Options options = new Options();
 		final Option inputOption = new Option("i", "input", true, "the analysis project file (.kax) loaded");
+		final Option verboseOption = new Option("v", "verbose", false, "verbosely prints additional information");
 		inputOption.setRequired(true);
 		inputOption.setArgName("filename");
 		options.addOption(inputOption);
 		final Option outputoption = new Option("svg", true, "name of svg saved on close");
 		outputoption.setArgName("filename");
 		options.addOption(outputoption);
+		options.addOption(verboseOption);
 
 		// parse cmdline options
 		final String kaxFilename;
@@ -394,6 +397,9 @@ public final class KaxViz extends JFrame {
 		try {
 			final CommandLineParser parser = new BasicParser();
 			final CommandLine line = parser.parse(options, args);
+			if (line.hasOption('v')) {
+				ToolsUtility.loadVerboseLogger();
+			}
 			kaxFilename = line.getOptionValue('i');
 			svgFilename = line.getOptionValue("svg");
 		} catch (final ParseException ex) {

@@ -29,6 +29,7 @@ import kieker.analysis.AnalysisController;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.util.CLIHelpFormatter;
+import kieker.tools.utility.ToolsUtility;
 
 /**
  * A simple execution of Analysis Configurations.
@@ -55,15 +56,20 @@ public final class KaxRun {
 		// create cmdline options
 		final Options options = new Options();
 		final Option inputOption = new Option("i", "input", true, "the analysis project file (.kax) loaded");
+		final Option verboseOption = new Option("v", "verbose", false, "verbosely prints additional information");
 		inputOption.setRequired(true);
 		inputOption.setArgName("filename");
 		options.addOption(inputOption);
+		options.addOption(verboseOption);
 
 		// parse cmdline options
 		final String kaxFilename;
 		try {
 			final CommandLineParser parser = new BasicParser();
 			final CommandLine line = parser.parse(options, args);
+			if (line.hasOption('v')) {
+				ToolsUtility.loadVerboseLogger();
+			}
 			kaxFilename = line.getOptionValue('i');
 		} catch (final ParseException ex) {
 			LOG.error("An error occured while parsing the parameters", ex);
@@ -80,4 +86,5 @@ public final class KaxRun {
 			LOG.error("Error", ex);
 		}
 	}
+
 }

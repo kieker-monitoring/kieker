@@ -28,6 +28,7 @@ import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
@@ -35,6 +36,7 @@ import org.apache.commons.cli.ParseException;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.util.CLIHelpFormatter;
+import kieker.tools.utility.ToolsUtility;
 
 /**
  * Command-line tool for replaying a filesystem monitoring log using the {@link FilesystemLogReplayer}.
@@ -109,6 +111,7 @@ public final class FilesystemLogReplayerStarter {
 		CMDL_OPTS.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_IGNORERECORDSAFTERDATE)
 				.withArgName(DATE_FORMAT_PATTERN_CMD_USAGE_HELP).hasArg().isRequired(false)
 				.withDescription("Records logged after this date (UTC timezone) are ignored (disabled by default).").create());
+		CMDL_OPTS.addOption(new Option("v", "verbose", false, "verbosely prints additional information"));
 	}
 
 	/**
@@ -143,6 +146,10 @@ public final class FilesystemLogReplayerStarter {
 	 */
 	private static boolean initFromArgs() {
 		boolean retVal = true;
+
+		if (cmdl.hasOption('v')) {
+			ToolsUtility.loadVerboseLogger();
+		}
 
 		// 0.) monitoring properties
 		monitoringConfigurationFile = cmdl.getOptionValue(CMD_OPT_NAME_MONITORING_CONFIGURATION);
