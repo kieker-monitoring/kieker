@@ -30,15 +30,16 @@ public class Cloner {
 
 	private Cloner() {}
 
-	public static IStage cloneStage(final IStage stage) throws ReflectiveOperationException {
-		final IStage clone = stage.getClass().newInstance();
+	@SuppressWarnings("unchecked")
+	public static <T> T cloneObject(final T original) throws ReflectiveOperationException {
+		final T clone = (T) original.getClass().newInstance();
 
-		Cloner.cloneAllProperties(stage, clone);
+		Cloner.cloneAllProperties(original, clone);
 
 		return clone;
 	}
 
-	private static void cloneAllProperties(final IStage original, final IStage clone) throws ReflectiveOperationException {
+	private static <T> void cloneAllProperties(final T original, final T clone) throws ReflectiveOperationException {
 		final Collection<Property> properties = Cloner.getProperties(original.getClass());
 
 		for (final Property property : properties) {
