@@ -16,12 +16,15 @@
 package kieker.panalysis.framework.core;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * A helper class to clone bean like objects with default constructors, getters, and setters.
+ * 
  * @author Nils Christian Ehmke
  * 
  * @since 1.10
@@ -30,6 +33,20 @@ public class Cloner {
 
 	private Cloner() {}
 
+	/**
+	 * Clones the given object by creating a new instance of the class. The method invokes all getter methods on the original and stores the resulting values in the
+	 * clone by invoking the corresponding setter methods. Properties without setter or getter methods are ignored. The resulting clone is always a new instance,
+	 * hence original != clone holds. It is assumed that the given instance provides a default constructor without any parameters.
+	 * 
+	 * @param original
+	 *            The original instance to clone.
+	 * 
+	 * @return A clone of the given instance.
+	 * 
+	 * @throws ReflectiveOperationException
+	 *             If the given instance does not provide a default constructor, the getters or setters are not accessible, the getters and setters are not
+	 *             compatible, or any of the methods threw an exception.
+	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T cloneObject(final T original) throws ReflectiveOperationException {
 		final T clone = (T) original.getClass().newInstance();
@@ -40,16 +57,16 @@ public class Cloner {
 	}
 
 	private static <T> void cloneAllProperties(final T original, final T clone) throws ReflectiveOperationException {
-		final Collection<Property> properties = Cloner.getProperties(original.getClass());
+		final Collection<GetterSetterPair> getterSetterPairs = Cloner.getGetterSetterPairs(original.getClass());
 
-		for (final Property property : properties) {
-			final Object value = property.getGetter().invoke(original);
-			property.getSetter().invoke(clone, value);
+		for (final GetterSetterPair getterSetterPair : getterSetterPairs) {
+			final Object value = getterSetterPair.getGetter().invoke(original);
+			getterSetterPair.getSetter().invoke(clone, value);
 		}
 	}
 
-	private static Collection<Property> getProperties(final Class<?> clazz) {
-		final Collection<Property> properties = new ArrayList<>();
+	private static Collection<GetterSetterPair> getGetterSetterPairs(final Class<?> clazz) {
+		final Collection<GetterSetterPair> properties = new ArrayList<>();
 
 		final Map<String, Method> foundGetters = new HashMap<>();
 		final Map<String, Method> foundSetters = new HashMap<>();
@@ -59,14 +76,14 @@ public class Cloner {
 			if (Cloner.isGetter(method)) {
 				final String propertyName = method.getName().substring(3);
 				if (foundSetters.containsKey(propertyName)) {
-					properties.add(new Property(method, foundSetters.remove(propertyName)));
+					properties.add(new GetterSetterPair(method, foundSetters.remove(propertyName)));
 				} else {
 					foundGetters.put(propertyName, method);
 				}
 			} else if (Cloner.isSetter(method)) {
 				final String propertyName = method.getName().substring(3);
 				if (foundGetters.containsKey(propertyName)) {
-					properties.add(new Property(foundGetters.remove(propertyName), method));
+					properties.add(new GetterSetterPair(foundGetters.remove(propertyName), method));
 				} else {
 					foundSetters.put(propertyName, method);
 				}
@@ -77,20 +94,21 @@ public class Cloner {
 	}
 
 	private static boolean isSetter(final Method method) {
-		return method.getName().matches("set[A-Z].*") && (method.getReturnType() == Void.TYPE) && (method.getParameterTypes().length == 1);
+		return ((method.getReturnType() == Void.TYPE) && (method.getParameterTypes().length == 1) && (Modifier.isPublic(method.getModifiers())) && method.getName()
+				.matches("set[A-Z].*"));
 	}
 
 	private static boolean isGetter(final Method method) {
-		return method.getName().matches("get[A-Z].*") && (method.getReturnType() != Void.TYPE) && (method.getParameterTypes().length == 0);
+		return ((method.getReturnType() != Void.TYPE) && (method.getParameterTypes().length == 0) && (Modifier.isPublic(method.getModifiers())) && method.getName()
+				.matches("get[A-Z].*"));
 	}
 
-	private static class Property {
+	private static class GetterSetterPair {
 
 		private final Method getter;
 		private final Method setter;
 
-		public Property(final Method getter, final Method setter) {
-
+		public GetterSetterPair(final Method getter, final Method setter) {
 			this.getter = getter;
 			this.setter = setter;
 		}

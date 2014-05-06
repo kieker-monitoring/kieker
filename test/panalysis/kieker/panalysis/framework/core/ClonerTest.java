@@ -16,6 +16,7 @@
 package kieker.panalysis.framework.core;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -25,30 +26,37 @@ import org.junit.Test;
  */
 public class ClonerTest {
 
-	@Test
-	public void test() throws ReflectiveOperationException {
-		final JavaBean original = new JavaBean(42);
-		final JavaBean clone = Cloner.cloneObject(original);
+	private JavaBean original;
+	private JavaBean clone;
 
-		Assert.assertEquals(original.getValue(), clone.getValue());
+	@Before
+	public void createOriginalnstanceAndCloneIt() throws ReflectiveOperationException {
+		this.original = new JavaBean();
+		this.original.setValue(42);
+
+		this.clone = Cloner.cloneObject(this.original);
+	}
+
+	@Test
+	public void testInstancesShouldNotBeEqual() {
+		Assert.assertNotEquals("The cloned instance is the same as the original instance.", this.original, this.clone);
+	}
+
+	@Test
+	public void testInstancesShouldContainSameValues() {
+		Assert.assertEquals("The cloned instance does not contain the same values as the original instance.", this.original.getValue(), this.clone.getValue());
 	}
 
 	private static class JavaBean {
 
 		private int value;
 
-		@SuppressWarnings("unused")
 		public JavaBean() {}
-
-		public JavaBean(final int value) {
-			this.value = value;
-		}
 
 		public int getValue() {
 			return this.value;
 		}
 
-		@SuppressWarnings("unused")
 		public void setValue(final int value) {
 			this.value = value;
 		}
