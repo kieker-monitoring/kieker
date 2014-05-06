@@ -36,7 +36,7 @@ import org.apache.commons.cli.ParseException;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.util.CLIHelpFormatter;
-import kieker.tools.utility.ToolsUtility;
+import kieker.tools.util.ToolsUtility;
 
 /**
  * Command-line tool for replaying a filesystem monitoring log using the {@link FilesystemLogReplayer}.

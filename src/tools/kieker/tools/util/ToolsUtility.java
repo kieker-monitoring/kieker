@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.utility;
+package kieker.tools.util;
 
 import java.io.IOException;
 import java.io.InputStream;

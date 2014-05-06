@@ -33,7 +33,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.util.CLIHelpFormatter;
 import kieker.tools.util.LoggingTimestampConverter;
-import kieker.tools.utility.ToolsUtility;
+import kieker.tools.util.ToolsUtility;
 
 /**
  * This tool can be used to convert timestamps.
