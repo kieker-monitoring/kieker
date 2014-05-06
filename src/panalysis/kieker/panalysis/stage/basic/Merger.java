@@ -18,6 +18,7 @@ package kieker.panalysis.stage.basic;
 
 import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Context;
+import kieker.panalysis.framework.core.Description;
 import kieker.panalysis.framework.core.IInputPort;
 import kieker.panalysis.framework.core.IOutputPort;
 
@@ -30,6 +31,7 @@ import kieker.panalysis.framework.core.IOutputPort;
  * @param <T>
  *            the type of the input ports and the output port
  */
+@Description("This stage merges data from the input ports, by taking elements in round robin order and by putting them to the output port.")
 public class Merger<T> extends AbstractFilter<Merger<T>> {
 
 	public final IOutputPort<Merger<T>, T> OBJECT = this.createOutputPort();

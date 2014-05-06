@@ -1,0 +1,5 @@
+3) Weitere Kieker-Filter migrieren
+4) Privater Zustand aus mehreren Threads mergen?
+
+Properties: Nach Setter-Methoden Ausschau halten; Erstmal kein Updateable; Konvention: setter dürfen nach Pipelinestart nicht mehr aufgerufen werden
+
