@@ -39,7 +39,7 @@ public class ClonerTest {
 
 	@Test
 	public void testInstancesShouldNotBeEqual() {
-		Assert.assertNotEquals("The cloned instance is the same as the original instance.", this.original, this.clone);
+		Assert.assertTrue("The cloned instance is the same as the original instance.", this.original != this.clone);
 	}
 
 	@Test
