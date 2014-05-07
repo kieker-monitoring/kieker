@@ -139,11 +139,11 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 	 *            The lines to be printed.
 	 */
 	protected void printDebugLogMessage(final String[] lines) {
-		LOG.info("");
-		LOG.info("#");
-		LOG.info("# Plugin: " + this.getName());
+		LOG.debug("");
+		LOG.debug("#");
+		LOG.debug("# Plugin: " + this.getName());
 		for (final String l : lines) {
-			LOG.info(l);
+			LOG.debug(l);
 		}
 	}
 

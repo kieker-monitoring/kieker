@@ -150,7 +150,7 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 		boolean success = true;
 
 		try {
-			LOG.info("Argument list: " + Arrays.toString(this.args));
+			LOG.debug("Argument list: " + Arrays.toString(this.args));
 			if (!this.parseArgs() || !this.initFromArgs() || !this.assertOutputDirExists() || !this.assertInputDirsExistsAndAreMonitoringLogs()) {
 				LOG.error("Error parsing arguments");
 				success = false;
@@ -1027,20 +1027,17 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 		final File outputDirFile = new File(this.outputDir);
 		try {
 			if (!outputDirFile.exists()) {
-				System.err.println(""); // NOPMD (System.out)
-				System.err.println("The specified output directory '" + outputDirFile.getCanonicalPath() + "' does not exist"); // NOPMD (System.out)
+				LOG.error("The specified output directory '" + outputDirFile.getCanonicalPath() + "' does not exist");
 				return false;
 			}
 
 			if (!outputDirFile.isDirectory()) {
-				System.err.println(""); // NOPMD (System.out)
-				System.err.println("The specified output directory '" + outputDirFile.getCanonicalPath() + "' is not a directory"); // NOPMD (System.out)
+				LOG.error("The specified output directory '" + outputDirFile.getCanonicalPath() + "' is not a directory");
 				return false;
 			}
 
 		} catch (final IOException e) { // thrown by File.getCanonicalPath()
-			System.err.println(""); // NOPMD (System.out)
-			System.err.println("Error resolving name of output directory: '" + this.outputDir + "'"); // NOPMD (System.out)
+			LOG.error("Error resolving name of output directory: '" + this.outputDir + "'");
 		}
 
 		return true;
@@ -1059,13 +1056,11 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 			final File inputDirFile = new File(inputDir);
 			try {
 				if (!inputDirFile.exists()) {
-					System.err.println(); // NOPMD (System.out)
-					System.err.println("The specified input directory '" + inputDirFile.getCanonicalPath() + "' does not exist"); // NOPMD (System.out)
+					LOG.error("The specified input directory '" + inputDirFile.getCanonicalPath() + "' does not exist");
 					return false;
 				}
 				if (!inputDirFile.isDirectory() && !inputDir.endsWith(FSUtil.ZIP_FILE_EXTENSION)) {
-					System.err.println(); // NOPMD (System.out)
-					System.err.println("The specified input directory '" + inputDirFile.getCanonicalPath() + "' is neither a directory nor a zip file"); // NOPMD
+					LOG.error("The specified input directory '" + inputDirFile.getCanonicalPath() + "' is neither a directory nor a zip file");
 					return false;
 				}
 				// check whether inputDirFile contains a (kieker|tpmon).map file; the latter for legacy reasons
@@ -1080,14 +1075,12 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 						}
 					}
 					if (!mapFileExists) {
-						System.err.println(); // NOPMD (System.out)
-						System.err.println("The specified input directory '" + inputDirFile.getCanonicalPath() + "' is not a kieker log directory"); // NOPMD
+						LOG.error("The specified input directory '" + inputDirFile.getCanonicalPath() + "' is not a kieker log directory");
 						return false;
 					}
 				}
 			} catch (final IOException e) { // thrown by File.getCanonicalPath()
-				System.err.println(); // NOPMD (System.out)
-				System.err.println("Error resolving name of input directory: '" + inputDir + "'"); // NOPMD (System.out)
+				LOG.error("Error resolving name of input directory: '" + inputDir + "'");
 			}
 		}
 
