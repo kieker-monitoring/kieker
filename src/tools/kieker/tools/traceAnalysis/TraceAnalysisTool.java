@@ -157,25 +157,23 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 			}
 
 			if (success) {
-				if (this.verbose) {
-					this.dumpConfiguration();
-				}
+				this.dumpConfiguration();
 				success = this.dispatchTasks();
 			}
 		} catch (final Exception exc) { // NOPMD NOCS (IllegalCatchCheck)
 			success = false;
 			LOG.error("An error occured", exc);
 		} finally {
-			System.err.println(""); // NOPMD (System.out)
+			LOG.info("");
 			if (!success) {
-				System.err.println("An error occured"); // NOPMD (System.out)
+				LOG.error("An error occured");
 			} else {
-				System.err.println("Analysis completed successfully"); // NOPMD (System.out)
+				LOG.info("Analysis completed successfully");
 			}
 
 			// Refer to log regardless of whether error occurred or not
-			System.err.println(""); // NOPMD (System.out)
-			System.err.println("See 'kieker.log' for details"); // NOPMD (System.out)
+			LOG.info("");
+			LOG.info("See 'kieker.log' for details");
 		}
 
 		return success;
@@ -191,7 +189,7 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 			this.cmdl = this.cmdlParser.parse(Constants.CMDL_OPTIONS, this.args);
 		} catch (final ParseException e) {
 			TraceAnalysisTool.printUsage();
-			System.err.println("\nError parsing arguments: " + e.getMessage()); // NOPMD (System.out)
+			LOG.error("Error parsing arguments: " + e.getMessage(), e);
 			return false;
 		}
 		return true;
@@ -231,7 +229,6 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 				}
 				LOG.info(numSelectedTraces + " trace" + (numSelectedTraces > 1 ? "s" : "") + " selected"); // NOCS
 			} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
-				System.err.println("\nFailed to parse list of trace IDs: " + Arrays.toString(traceIdList) + "(" + e.getMessage() + ")"); // NOPMD (System.out)
 				LOG.error("Failed to parse list of trace IDs: " + Arrays.toString(traceIdList), e);
 				return false;
 			}
@@ -246,8 +243,6 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 		try {
 			this.maxTraceDurationMillis = Integer.parseInt(maxTraceDurationStr);
 		} catch (final NumberFormatException exc) {
-			System.err.println("\nFailed to parse int value of property " + Constants.CMD_OPT_NAME_MAXTRACEDURATION + " (must be an integer): " // NOPMD (System.out)
-					+ maxTraceDurationStr);
 			LOG.error("Failed to parse int value of property " + Constants.CMD_OPT_NAME_MAXTRACEDURATION + " (must be an integer):"
 					+ maxTraceDurationStr, exc);
 			return false;
@@ -273,7 +268,6 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 			}
 		} catch (final java.text.ParseException ex) {
 			final String errorMsg = "Error parsing date/time string. Please use the following pattern: " + DATE_FORMAT_PATTERN_CMD_USAGE_HELP;
-			System.err.println(errorMsg); // NOPMD (System.out)
 			LOG.error(errorMsg, ex);
 			return false;
 		}
@@ -284,8 +278,8 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 	 * This method dumps the configuration on the screen.
 	 */
 	private void dumpConfiguration() {
-		System.out.println("#"); // NOPMD (System.out)
-		System.out.println("# Configuration"); // NOPMD (System.out)
+		LOG.debug("#");
+		LOG.debug("# Configuration");
 		for (final Option o : Constants.SORTED_OPTION_LIST) {
 			final String longOpt = o.getLongOpt();
 			String val = "<null>";
@@ -341,7 +335,7 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 				val = Arrays.toString(this.cmdl.getOptionValues(longOpt));
 				LOG.warn("Unformatted configuration output for option " + longOpt);
 			}
-			System.out.println("--" + longOpt + ": " + val); // NOPMD (System.out)
+			LOG.debug("--" + longOpt + ": " + val);
 		}
 	}
 
@@ -367,7 +361,7 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 
 					plugin.addDecorator(new ResponseTimeColorNodeDecorator(threshold));
 				} catch (final NumberFormatException exc) {
-					System.err.println("\nFailed to parse int value of property " + "threshold(ms) : " + thresholdStringStr); // NOPMD (System.out)
+					LOG.error("Failed to parse int value of property " + "threshold(ms) : " + thresholdStringStr, exc);
 				}
 			} else {
 				LOG.warn("Unknown decoration name '" + currentDecoratorStr + "'.");
@@ -1135,12 +1129,10 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 				ps.println("Class " + numClasses++ + " ; cardinality: " + e.getValue() + "; # executions: " + t.getLength() + "; representative: " + t.getTraceId()
 						+ "; max. stack depth: " + t.getMaxEss());
 			}
-			if (this.verbose) {
-				System.out.println(""); // NOPMD (System.out)
-				System.out.println("#"); // NOPMD (System.out)
-				System.out.println("# Plugin: " + "Trace equivalence report"); // NOPMD (System.out)
-				System.out.println("Wrote " + numClasses + " equivalence class" + (numClasses > 1 ? "es" : "") + " to file '" + outputFn + "'"); // NOCS // NOPMD
-			}
+			LOG.debug("");
+			LOG.debug("#");
+			LOG.debug("# Plugin: " + "Trace equivalence report");
+			LOG.debug("Wrote " + numClasses + " equivalence class" + (numClasses > 1 ? "es" : "") + " to file '" + outputFn + "'"); // NOCS
 		} catch (final FileNotFoundException e) {
 			LOG.error("File not found", e);
 			retVal = false;
