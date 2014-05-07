@@ -15,6 +15,7 @@
  ***************************************************************************/
 package kieker.panalysis.framework.core;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -43,12 +44,13 @@ public class Cloner {
 	 * 
 	 * @return A clone of the given instance.
 	 * 
-	 * @throws ReflectiveOperationException
+	 * @throws Exception
 	 *             If the given instance does not provide a default constructor, the getters or setters are not accessible, the getters and setters are not
 	 *             compatible, or any of the methods threw an exception.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T cloneObject(final T original) throws ReflectiveOperationException {
+	public static <T> T cloneObject(final T original) throws Exception {
+		// Comment for 1.7: The three exceptions, thrown by this called method, have the same parent exception since 1.7
 		final T clone = (T) original.getClass().newInstance();
 
 		Cloner.cloneAllProperties(original, clone);
@@ -56,7 +58,7 @@ public class Cloner {
 		return clone;
 	}
 
-	private static <T> void cloneAllProperties(final T original, final T clone) throws ReflectiveOperationException {
+	private static <T> void cloneAllProperties(final T original, final T clone) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 		final Collection<GetterSetterPair> getterSetterPairs = Cloner.getGetterSetterPairs(original.getClass());
 
 		for (final GetterSetterPair getterSetterPair : getterSetterPairs) {
