@@ -43,7 +43,7 @@ public class TeeFilter<T> extends AbstractFilter<TeeFilter<T>> {
 		pipe.setSourcePort(outputPort);
 		pipe.setTargetPort(this.stage0.OBJECT);
 
-		final IPipe<T> internalPipeline = new MethodCallPipe<>();
+		final IPipe<T> internalPipeline = new MethodCallPipe<T>();
 		internalPipeline.setSourcePort(outputPort);
 		internalPipeline.setTargetPort(this.stage1.input);
 	}

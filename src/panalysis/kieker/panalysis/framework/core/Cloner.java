@@ -66,10 +66,10 @@ public class Cloner {
 	}
 
 	private static Collection<GetterSetterPair> getGetterSetterPairs(final Class<?> clazz) {
-		final Collection<GetterSetterPair> properties = new ArrayList<>();
+		final Collection<GetterSetterPair> properties = new ArrayList<GetterSetterPair>();
 
-		final Map<String, Method> foundGetters = new HashMap<>();
-		final Map<String, Method> foundSetters = new HashMap<>();
+		final Map<String, Method> foundGetters = new HashMap<String, Method>();
+		final Map<String, Method> foundSetters = new HashMap<String, Method>();
 
 		final Method[] methods = clazz.getMethods();
 		for (final Method method : methods) {

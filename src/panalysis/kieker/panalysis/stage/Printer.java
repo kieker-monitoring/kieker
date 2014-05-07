@@ -85,37 +85,29 @@ public class Printer extends AbstractFilter<Printer> {
 	}
 
 	private void initializeStream() {
-		switch (this.streamName) {
-		case STREAM_STDOUT: {
+		if (STREAM_STDOUT.equals(this.streamName)) {
 			this.printStream = System.out;
 			this.active = true;
-			break;
-		}
-		case STREAM_STDERR: {
+		} else if (STREAM_STDERR.equals(this.streamName)) {
 			this.printStream = System.err;
 			this.active = true;
-			break;
-		}
-		case STREAM_STDLOG: {
+		} else if (STREAM_STDLOG.equals(this.streamName)) {
 			this.printStream = null;
 			this.active = true;
-			break;
-		}
-		case STREAM_NULL: {
+		} else if (STREAM_NULL.equals(this.streamName)) {
 			this.printStream = null;
 			this.active = false;
-			break;
-		}
-		default: {
+		} else {
 			try {
 				this.printStream = new PrintStream(new FileOutputStream(this.streamName, this.append), false, this.encoding);
 				this.active = true;
-			} catch (final FileNotFoundException | UnsupportedEncodingException ex) {
+			} catch (final FileNotFoundException ex) {
 				this.active = false;
 				super.logger.warn("Stream could not be created", ex);
+			} catch (final UnsupportedEncodingException ex) {
+				this.active = false;
+				super.logger.warn("Encoding not supported", ex);
 			}
-			break;
-		}
 		}
 	}
 
