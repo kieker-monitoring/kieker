@@ -552,7 +552,6 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 			{ // NOCS (nested block)
 				// Create the trace reconstruction filter and connect to the record transformation filter's output port
 				final Configuration mtReconstrFilterConfig = new Configuration();
-				mtReconstrFilterConfig.setProperty(AbstractTraceAnalysisFilter.CONFIG_PROPERTY_NAME_VERBOSE, Boolean.toString(this.verbose));
 				mtReconstrFilterConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.TRACERECONSTR_COMPONENT_NAME);
 				mtReconstrFilterConfig.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
 						TimeUnit.MILLISECONDS.name());
@@ -569,7 +568,6 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 			{ // NOCS (nested block)
 				// Create the event record trace generation filter and connect to the trace ID filter's output port
 				final Configuration configurationEventRecordTraceGenerationFilter = new Configuration();
-				configurationEventRecordTraceGenerationFilter.setProperty(AbstractTraceAnalysisFilter.CONFIG_PROPERTY_NAME_VERBOSE, Boolean.toString(this.verbose));
 				configurationEventRecordTraceGenerationFilter.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.EVENTRECORDTRACERECONSTR_COMPONENT_NAME);
 				configurationEventRecordTraceGenerationFilter.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
 						TimeUnit.MILLISECONDS.name());
@@ -584,7 +582,6 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 			{ // NOCS (nested block)
 				// Create the counter for valid/invalid event record traces
 				final Configuration configurationEventRecordTraceCounter = new Configuration();
-				configurationEventRecordTraceCounter.setProperty(AbstractTraceAnalysisFilter.CONFIG_PROPERTY_NAME_VERBOSE, Boolean.toString(this.verbose));
 				configurationEventRecordTraceCounter.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.EXECEVENTRACESFROMEVENTTRACES_COMPONENT_NAME);
 				eventRecordTraceCounter = new EventRecordTraceCounter(configurationEventRecordTraceCounter, this.analysisController);
 
@@ -600,7 +597,6 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 				// Create the event trace to execution/message trace transformation filter and connect its input to the event record trace generation filter's output
 				// port
 				final Configuration configurationEventTrace2ExecutionTraceFilter = new Configuration();
-				configurationEventTrace2ExecutionTraceFilter.setProperty(AbstractTraceAnalysisFilter.CONFIG_PROPERTY_NAME_VERBOSE, Boolean.toString(this.verbose));
 				configurationEventTrace2ExecutionTraceFilter.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
 						Constants.EXECTRACESFROMEVENTTRACES_COMPONENT_NAME);
 				// EventTrace2ExecutionTraceFilter has no configuration properties
@@ -617,7 +613,6 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 			final List<AbstractGraphProducingFilter<?>> allGraphProducers = new ArrayList<AbstractGraphProducingFilter<?>>();
 
 			final Configuration traceAllocationEquivClassFilterConfig = new Configuration();
-			traceAllocationEquivClassFilterConfig.setProperty(AbstractTraceAnalysisFilter.CONFIG_PROPERTY_NAME_VERBOSE, Boolean.toString(this.verbose));
 			traceAllocationEquivClassFilterConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.TRACEALLOCATIONEQUIVCLASS_COMPONENT_NAME);
 			traceAllocationEquivClassFilterConfig.setProperty(TraceEquivalenceClassFilter.CONFIG_PROPERTY_NAME_EQUIVALENCE_MODE,
 					TraceEquivalenceClassModes.ALLOCATION.toString());
@@ -640,7 +635,6 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 			}
 
 			final Configuration traceAssemblyEquivClassFilterConfig = new Configuration();
-			traceAssemblyEquivClassFilterConfig.setProperty(AbstractTraceAnalysisFilter.CONFIG_PROPERTY_NAME_VERBOSE, Boolean.toString(this.verbose));
 			traceAssemblyEquivClassFilterConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.TRACEASSEMBLYEQUIVCLASS_COMPONENT_NAME);
 			traceAssemblyEquivClassFilterConfig.setProperty(TraceEquivalenceClassFilter.CONFIG_PROPERTY_NAME_EQUIVALENCE_MODE,
 					TraceEquivalenceClassModes.ASSEMBLY.toString());
@@ -667,7 +661,6 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 			if (this.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PRINTMSGTRACES)) {
 				numRequestedTasks++;
 				final Configuration componentPrintMsgTraceConfig = new Configuration();
-				componentPrintMsgTraceConfig.setProperty(AbstractTraceAnalysisFilter.CONFIG_PROPERTY_NAME_VERBOSE, Boolean.toString(this.verbose));
 				componentPrintMsgTraceConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.PRINTMSGTRACE_COMPONENT_NAME);
 				componentPrintMsgTraceConfig.setProperty(MessageTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN, new File(this.outputDir
 						+ File.separator
@@ -688,7 +681,6 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 			if (this.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PRINTEXECTRACES)) {
 				numRequestedTasks++;
 				final Configuration componentPrintExecTraceConfig = new Configuration();
-				componentPrintExecTraceConfig.setProperty(AbstractTraceAnalysisFilter.CONFIG_PROPERTY_NAME_VERBOSE, Boolean.toString(this.verbose));
 				componentPrintExecTraceConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.PRINTEXECTRACE_COMPONENT_NAME);
 				componentPrintExecTraceConfig.setProperty(ExecutionTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN, new File(this.outputDir
 						+ File.separator
@@ -709,7 +701,6 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 			if (this.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES)) {
 				numRequestedTasks++;
 				final Configuration componentPrintInvalidTraceConfig = new Configuration();
-				componentPrintInvalidTraceConfig.setProperty(AbstractTraceAnalysisFilter.CONFIG_PROPERTY_NAME_VERBOSE, Boolean.toString(this.verbose));
 				componentPrintInvalidTraceConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
 						Constants.PRINTINVALIDEXECTRACE_COMPONENT_NAME);
 				componentPrintInvalidTraceConfig.setProperty(InvalidExecutionTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN, new File(this.outputDir
@@ -731,7 +722,6 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 			if (retVal && this.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONSEQDS)) {
 				numRequestedTasks++;
 				final Configuration componentPlotAllocationSeqDiagrConfig = new Configuration();
-				componentPlotAllocationSeqDiagrConfig.setProperty(AbstractTraceAnalysisFilter.CONFIG_PROPERTY_NAME_VERBOSE, Boolean.toString(this.verbose));
 				componentPlotAllocationSeqDiagrConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.PLOTALLOCATIONSEQDIAGR_COMPONENT_NAME);
 				componentPlotAllocationSeqDiagrConfig.setProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE,
 						this.outputDir + File.separator + this.outputFnPrefix + Constants.ALLOCATION_SEQUENCE_DIAGRAM_FN_PREFIX);
@@ -754,7 +744,6 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 			if (retVal && this.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYSEQDS)) {
 				numRequestedTasks++;
 				final Configuration componentPlotAssemblySeqDiagrConfig = new Configuration();
-				componentPlotAssemblySeqDiagrConfig.setProperty(AbstractTraceAnalysisFilter.CONFIG_PROPERTY_NAME_VERBOSE, Boolean.toString(this.verbose));
 				componentPlotAssemblySeqDiagrConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.PLOTASSEMBLYSEQDIAGR_COMPONENT_NAME);
 				componentPlotAssemblySeqDiagrConfig.setProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE,
 						this.outputDir + File.separator + this.outputFnPrefix + Constants.ASSEMBLY_SEQUENCE_DIAGRAM_FN_PREFIX);
@@ -778,7 +767,6 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 			if (retVal && this.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG)) {
 				numRequestedTasks++;
 				final Configuration configuration = new Configuration();
-				configuration.setProperty(AbstractTraceAnalysisFilter.CONFIG_PROPERTY_NAME_VERBOSE, Boolean.toString(this.verbose));
 				componentPlotAllocationComponentDepGraph = new ComponentDependencyGraphAllocationFilter(configuration, this.analysisController);
 
 				final String[] nodeDecorations = this.cmdl.getOptionValues(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG);
@@ -800,7 +788,6 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 			if (retVal && this.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYCOMPONENTDEPG)) {
 				numRequestedTasks++;
 				final Configuration configuration = new Configuration();
-				configuration.setProperty(AbstractTraceAnalysisFilter.CONFIG_PROPERTY_NAME_VERBOSE, Boolean.toString(this.verbose));
 				componentPlotAssemblyComponentDepGraph = new ComponentDependencyGraphAssemblyFilter(configuration, this.analysisController);
 
 				final String[] nodeDecorations = this.cmdl.getOptionValues(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYCOMPONENTDEPG);
@@ -821,7 +808,6 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 			if (retVal && this.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTCONTAINERDEPG)) {
 				numRequestedTasks++;
 				final Configuration configuration = new Configuration();
-				configuration.setProperty(AbstractTraceAnalysisFilter.CONFIG_PROPERTY_NAME_VERBOSE, Boolean.toString(this.verbose));
 				componentPlotContainerDepGraph = new ContainerDependencyGraphFilter(configuration, this.analysisController);
 				this.analysisController.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
 						componentPlotContainerDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
@@ -838,7 +824,6 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 			if (retVal && this.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG)) {
 				numRequestedTasks++;
 				final Configuration configuration = new Configuration();
-				configuration.setProperty(AbstractTraceAnalysisFilter.CONFIG_PROPERTY_NAME_VERBOSE, Boolean.toString(this.verbose));
 				componentPlotAllocationOperationDepGraph = new OperationDependencyGraphAllocationFilter(configuration, this.analysisController);
 
 				final String[] nodeDecorations = this.cmdl.getOptionValues(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG);
@@ -859,7 +844,6 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 			if (retVal && this.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG)) {
 				numRequestedTasks++;
 				final Configuration configuration = new Configuration();
-				configuration.setProperty(AbstractTraceAnalysisFilter.CONFIG_PROPERTY_NAME_VERBOSE, Boolean.toString(this.verbose));
 				componentPlotAssemblyOperationDepGraph = new OperationDependencyGraphAssemblyFilter(configuration, this.analysisController);
 
 				final String[] nodeDecorations = this.cmdl.getOptionValues(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG);
@@ -881,7 +865,6 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 				numRequestedTasks++;
 
 				final Configuration componentPlotTraceCallTreesConfig = new Configuration();
-				componentPlotTraceCallTreesConfig.setProperty(AbstractTraceAnalysisFilter.CONFIG_PROPERTY_NAME_VERBOSE, Boolean.toString(this.verbose));
 
 				componentPlotTraceCallTreesConfig.setProperty(TraceCallTreeFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILENAME, new File(this.outputDir
 						+ File.separator + this.outputFnPrefix + Constants.CALL_TREE_FN_PREFIX).getCanonicalPath());
@@ -903,7 +886,6 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 			if (retVal && this.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDALLOCATIONCALLTREE)) {
 				numRequestedTasks++;
 				final Configuration componentPlotAggregatedCallTreeConfig = new Configuration();
-				componentPlotAggregatedCallTreeConfig.setProperty(AbstractTraceAnalysisFilter.CONFIG_PROPERTY_NAME_VERBOSE, Boolean.toString(this.verbose));
 				componentPlotAggregatedCallTreeConfig
 						.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
 								Constants.PLOTAGGREGATEDALLOCATIONCALLTREE_COMPONENT_NAME);
@@ -929,7 +911,6 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 			if (retVal && this.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDASSEMBLYCALLTREE)) {
 				numRequestedTasks++;
 				final Configuration componentPlotAssemblyCallTreeConfig = new Configuration();
-				componentPlotAssemblyCallTreeConfig.setProperty(AbstractTraceAnalysisFilter.CONFIG_PROPERTY_NAME_VERBOSE, Boolean.toString(this.verbose));
 				componentPlotAssemblyCallTreeConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
 						Constants.PLOTAGGREGATEDASSEMBLYCALLTREE_COMPONENT_NAME);
 				componentPlotAssemblyCallTreeConfig.setProperty(AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(true));
@@ -972,7 +953,6 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 				final String systemEntitiesHtmlFn =
 						this.outputDir + File.separator + this.outputFnPrefix + "system-entities.html";
 				final Configuration systemModel2FileFilterConfig = new Configuration();
-				systemModel2FileFilterConfig.setProperty(AbstractTraceAnalysisFilter.CONFIG_PROPERTY_NAME_VERBOSE, Boolean.toString(this.verbose));
 				systemModel2FileFilterConfig.setProperty(SystemModel2FileFilter.CONFIG_PROPERTY_NAME_HTML_OUTPUT_FN, systemEntitiesHtmlFn);
 				final SystemModel2FileFilter systemModel2FileFilter = new SystemModel2FileFilter(systemModel2FileFilterConfig, this.analysisController);
 				// note that this plugin is (currently) not connected to any other filters
@@ -991,9 +971,7 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 			} finally {
 				for (final AbstractTraceProcessingFilter c : allTraceProcessingComponents) {
 					numErrorCount += c.getErrorCount();
-					if (this.verbose) {
-						c.printStatusMessage();
-					}
+					c.printStatusMessage();
 				}
 				final String kaxOutputFn = this.outputDir + File.separator + this.outputFnPrefix + "traceAnalysis.kax";
 				final File kaxOutputFile = new File(kaxOutputFn);
