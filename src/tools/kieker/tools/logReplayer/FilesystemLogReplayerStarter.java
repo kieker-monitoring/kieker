@@ -112,6 +112,8 @@ public final class FilesystemLogReplayerStarter {
 				.withArgName(DATE_FORMAT_PATTERN_CMD_USAGE_HELP).hasArg().isRequired(false)
 				.withDescription("Records logged after this date (UTC timezone) are ignored (disabled by default).").create());
 		CMDL_OPTS.addOption(new Option("v", "verbose", false, "verbosely prints additional information"));
+		CMDL_OPTS.addOption(new Option("d", "debug", false, "prints additional debug information"));
+
 	}
 
 	/**
@@ -147,7 +149,9 @@ public final class FilesystemLogReplayerStarter {
 	private static boolean initFromArgs() {
 		boolean retVal = true;
 
-		if (cmdl.hasOption('v')) {
+		if (cmdl.hasOption('d')) {
+			ToolsUtil.loadDebugLogger();
+		} else if (cmdl.hasOption('v')) {
 			ToolsUtil.loadVerboseLogger();
 		}
 

@@ -38,6 +38,7 @@ import kieker.tools.util.CLIHelpFormatter;
 public final class Constants {
 
 	public static final String CMD_OPT_NAME_VERBOSE = "verbose";
+	public static final String CMD_OPT_NAME_DEBUG = "debug";
 	/** Command for the input directories containing monitoring records. */
 	public static final String CMD_OPT_NAME_INPUTDIRS = "inputdirs";
 	/** Command for the output directories. */
@@ -163,6 +164,8 @@ public final class Constants {
 				.withDescription("Prefix for output filenames\n").withValueSeparator('=').create("p"));
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_VERBOSE).hasArg(false)
 				.withDescription("Verbosely list used parameters and processed traces").create("v"));
+		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_DEBUG).hasArg(false)
+				.withDescription("prints additional debug information").create("d"));
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTALLOCATIONSEQDS).hasArg(false)
 				.withDescription("Generate and store deployment-level sequence diagrams (.pic)").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTASSEMBLYSEQDS).hasArg(false)

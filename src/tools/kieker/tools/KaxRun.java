@@ -36,7 +36,7 @@ import kieker.tools.util.ToolsUtil;
 /**
  * A simple execution of Analysis Configurations.
  * 
- * @author Jan Waller
+ * @author Jan Waller, Nils Christian Ehmke
  * 
  * @since 1.5
  */

@@ -92,6 +92,7 @@ import kieker.tools.traceAnalysis.repository.TraceColorRepository;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.tools.util.LoggingTimestampConverter;
+import kieker.tools.util.ToolsUtil;
 
 /**
  * This is the main class to start the Kieker TraceAnalysisTool - the model synthesis and analysis tool to process the monitoring data that comes from the
@@ -116,7 +117,6 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 	private String[] inputDirs;
 	private String outputDir;
 	private String outputFnPrefix;
-	private boolean verbose;
 	private Set<Long> selectedTraces; // null means select all
 	private boolean shortLabels = true;
 	private boolean includeSelfLoops; // false
@@ -210,11 +210,16 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 	 * @return true if and only if the tool has been initialized correctly.
 	 */
 	private boolean initFromArgs() {
+		if (this.cmdl.hasOption('d')) {
+			ToolsUtil.loadDebugLogger();
+		} else if (this.cmdl.hasOption('v')) {
+			ToolsUtil.loadVerboseLogger();
+		}
+
 		this.inputDirs = this.cmdl.getOptionValues(Constants.CMD_OPT_NAME_INPUTDIRS);
 
 		this.outputDir = this.cmdl.getOptionValue(Constants.CMD_OPT_NAME_OUTPUTDIR) + File.separator;
 		this.outputFnPrefix = this.cmdl.getOptionValue(Constants.CMD_OPT_NAME_OUTPUTFNPREFIX, "");
-		this.verbose = this.cmdl.hasOption(Constants.CMD_OPT_NAME_VERBOSE);
 
 		if (this.cmdl.hasOption(Constants.CMD_OPT_NAME_SELECTTRACES)) { // Parse list of trace Ids
 			final String[] traceIdList = this.cmdl.getOptionValues(Constants.CMD_OPT_NAME_SELECTTRACES);
