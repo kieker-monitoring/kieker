@@ -26,7 +26,7 @@ import java.lang.annotation.Target;
  * @since 1.10
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
+@Target({ ElementType.TYPE, ElementType.FIELD })
 public @interface Description {
 
 	String value();
