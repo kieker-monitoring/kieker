@@ -53,10 +53,6 @@ public abstract class AbstractStage implements IStage {
 		this.owningPipeline = owningPipeline;
 	}
 
-	public void cleanUp() { // NOPMD (empty non-abstract method is intended)
-		// empty default implementation
-	}
-
 	@Override
 	public String toString() {
 		return "{" + "id=" + this.id + ", class=" + this.getClass().getSimpleName() + "}";

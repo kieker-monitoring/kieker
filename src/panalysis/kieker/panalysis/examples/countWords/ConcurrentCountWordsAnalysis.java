@@ -51,7 +51,8 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 
 	private static final int SECONDS = 1000;
 
-	private WorkerThread[] threads;
+	private WorkerThread[] ioThreads;
+	private WorkerThread[] nonIoThreads;
 
 	ConcurrentWorkStealingPipeFactory<?>[] pipeFactories = new ConcurrentWorkStealingPipeFactory[6];
 
@@ -59,23 +60,24 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 	public void init() {
 		super.init();
 
-		this.createPipeFactories();
+		this.ioThreads = new WorkerThread[1];
 
-		final IPipeline mainThreadPipeline = this.readerThreadPipeline();
-		final IStage lastStage = mainThreadPipeline.getStages().get(mainThreadPipeline.getStages().size() - 1);
-		final Distributor<File> distributor = (Distributor<File>) lastStage;
+		final IPipeline readerThreadPipeline = this.readerThreadPipeline();
+		this.ioThreads[0] = new WorkerThread(readerThreadPipeline);
+		this.ioThreads[0].setName("startThread");
+
+		@SuppressWarnings("unchecked")
+		final Distributor<File> distributor = (Distributor<File>) readerThreadPipeline.getStages().get(readerThreadPipeline.getStages().size() - 1);
+
+		this.createPipeFactories();
 
 		int numThreads = Runtime.getRuntime().availableProcessors();
 		numThreads = 1; // only for testing purposes
 
-		this.threads = new WorkerThread[numThreads + 1];
-
-		this.threads[0] = new WorkerThread(mainThreadPipeline);
-		this.threads[0].setName("startThread");
-
-		for (int i = 1; i < this.threads.length; i++) {
+		this.nonIoThreads = new WorkerThread[numThreads];
+		for (int i = 0; i < this.nonIoThreads.length; i++) {
 			final IPipeline pipeline = this.buildNonIoPipeline(distributor);
-			this.threads[i] = new WorkerThread(pipeline);
+			this.nonIoThreads[i] = new WorkerThread(pipeline);
 		}
 	}
 
@@ -116,20 +118,29 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 				return stages;
 			}
 
-			public void start() {
+			public void fireStartNotification() {
 				// notify each stage
 				for (final IStage stage : stages) {
 					stage.onPipelineStarts();
 				}
 				// notify each pipe
 				for (final ConcurrentWorkStealingPipeFactory<?> pipeFactory : ConcurrentCountWordsAnalysis.this.pipeFactories) {
-					this.onPipelineStarts(pipeFactory.getPipes());
+					for (final ConcurrentWorkStealingPipe<?> pipe : pipeFactory.getPipes()) {
+						pipe.onPipelineStarts();
+					}
 				}
 			}
 
-			private <T> void onPipelineStarts(final List<ConcurrentWorkStealingPipe<T>> pipes) {
-				for (final ConcurrentWorkStealingPipe<T> pipe : pipes) {
-					pipe.onPipelineStarts();
+			public void fireStopNotification() {
+				// notify each stage
+				for (final IStage stage : stages) {
+					stage.onPipelineStops();
+				}
+				// notify each pipe
+				for (final ConcurrentWorkStealingPipeFactory<?> pipeFactory : ConcurrentCountWordsAnalysis.this.pipeFactories) {
+					for (final ConcurrentWorkStealingPipe<?> pipe : pipeFactory.getPipes()) {
+						pipe.onPipelineStops();
+					}
 				}
 			}
 		};
@@ -177,20 +188,29 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 				return stages;
 			}
 
-			public void start() {
+			public void fireStartNotification() {
 				// notify each stage
 				for (final IStage stage : stages) {
 					stage.onPipelineStarts();
 				}
 				// notify each pipe
 				for (final ConcurrentWorkStealingPipeFactory<?> pipeFactory : ConcurrentCountWordsAnalysis.this.pipeFactories) {
-					this.onPipelineStarts(pipeFactory.getPipes());
+					for (final ConcurrentWorkStealingPipe<?> pipe : pipeFactory.getPipes()) {
+						pipe.onPipelineStarts();
+					}
 				}
 			}
 
-			private <T> void onPipelineStarts(final List<ConcurrentWorkStealingPipe<T>> pipes) {
-				for (final ConcurrentWorkStealingPipe<T> pipe : pipes) {
-					pipe.onPipelineStarts();
+			public void fireStopNotification() {
+				// notify each stage
+				for (final IStage stage : stages) {
+					stage.onPipelineStops();
+				}
+				// notify each pipe
+				for (final ConcurrentWorkStealingPipeFactory<?> pipeFactory : ConcurrentCountWordsAnalysis.this.pipeFactories) {
+					for (final ConcurrentWorkStealingPipe<?> pipe : pipeFactory.getPipes()) {
+						pipe.onPipelineStops();
+					}
 				}
 			}
 		};
@@ -210,23 +230,23 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 	public void start() {
 		super.start();
 
-		this.threads[0].terminate(TerminationPolicy.TERMINATE_STAGE_AFTER_UNSUCCESSFUL_EXECUTION);
+		this.ioThreads[0].terminate(TerminationPolicy.TERMINATE_STAGE_AFTER_UNSUCCESSFUL_EXECUTION);
 		// this.threads[0].start();
 
-		for (final WorkerThread thread : this.threads) {
+		for (final WorkerThread thread : this.ioThreads) {
 			thread.start();
 		}
 
 		try {
-			this.threads[0].join(60 * SECONDS);
+			this.ioThreads[0].join(60 * SECONDS);
 		} catch (final InterruptedException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
 		System.out.println("Waiting for the worker threads to terminate..."); // NOPMD (Just for example purposes)
-		for (int i = 1; i < this.threads.length; i++) {
-			final WorkerThread thread = this.threads[i];
+		for (int i = 1; i < this.ioThreads.length; i++) {
+			final WorkerThread thread = this.ioThreads[i];
 			thread.setTerminationPolicy(TerminationPolicy.TERMINATE_STAGE_AFTER_UNSUCCESSFUL_EXECUTION);
 			try {
 				thread.join(60 * SECONDS);
@@ -263,9 +283,7 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 		// {RepeaterSource: numPushedElements=4000, numTakenElements=0}
 		// {DirectoryName2Files: numPushedElements=59985, numTakenElements=3999}
 
-		for (int i = 1; i < this.threads.length; i++) {
-			final WorkerThread thread = this.threads[i];
-
+		for (final WorkerThread thread : this.nonIoThreads) {
 			for (final IStage stage : thread.getPipeline().getStages()) {
 				System.out.println(stage); // NOPMD (Just for example purposes)
 			}

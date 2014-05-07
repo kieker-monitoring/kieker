@@ -120,7 +120,9 @@ public class ConcurrentWorkStealingPipe<T> extends AbstractPipe<T> {
 		this.pipesToStealFrom = pipesToStealFrom;
 	}
 
+	@Override
 	public void onPipelineStarts() {
+		this.pipesToStealFrom = new LinkedList<ConcurrentWorkStealingPipe<T>>(this.pipesToStealFrom);
 		this.pipesToStealFrom.remove(this);
 	}
 

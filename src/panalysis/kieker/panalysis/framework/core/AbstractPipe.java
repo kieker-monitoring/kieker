@@ -68,4 +68,12 @@ public abstract class AbstractPipe<T> implements IPipe<T> {
 		this.fireSignalClosing.run();
 	}
 
+	public void onPipelineStarts() {
+		// empty default implementation
+	}
+
+	public void onPipelineStops() {
+		// empty default implementation
+	}
+
 }

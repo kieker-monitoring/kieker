@@ -16,7 +16,6 @@
 
 package kieker.panalysis.framework.core;
 
-
 /**
  * @author Christian Wulf
  * 
@@ -71,11 +70,6 @@ public interface IStage {
 	// void execute(TaskBundle taskBundle);
 
 	/**
-	 * @since 1.10
-	 */
-	void cleanUp();
-
-	/**
 	 * 
 	 * @return <code>true</code> if the stage may be disabled by the pipeline scheduler, <code>false</code> otherwise.
 	 * 
@@ -88,7 +82,15 @@ public interface IStage {
 	 */
 	void fireSignalClosingToAllOutputPorts();
 
+	/**
+	 * @since 1.10
+	 */
 	void onPipelineStarts();
+
+	/**
+	 * @since 1.10
+	 */
+	void onPipelineStops();
 
 	Context<?> getContext();
 
@@ -98,8 +100,14 @@ public interface IStage {
 
 	void copyAttributes(IStage stage);
 
+	/**
+	 * @since 1.10
+	 */
 	IOutputPort<?, ?> getOutputPortByIndex(int index);
 
+	/**
+	 * @since 1.10
+	 */
 	IInputPort<?, ?> getInputPortByIndex(int index);
 
 }

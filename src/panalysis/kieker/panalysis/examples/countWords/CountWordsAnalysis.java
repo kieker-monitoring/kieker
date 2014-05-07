@@ -82,7 +82,7 @@ public class CountWordsAnalysis extends Analysis {
 	@Override
 	public void start() {
 		super.start();
-		this.pipeline.start();
+		this.pipeline.fireStartNotification();
 		this.pipeline.getStartStages()[0].execute();
 	}
 

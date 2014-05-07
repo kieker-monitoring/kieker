@@ -79,9 +79,9 @@ public class Printer<T> extends AbstractFilter<Printer<T>> {
 	}
 
 	@Override
-	public void cleanUp() {
+	public void onPipelineStops() {
 		this.closeStream();
-		super.cleanUp();
+		super.onPipelineStops();
 	}
 
 	private void initializeStream() {

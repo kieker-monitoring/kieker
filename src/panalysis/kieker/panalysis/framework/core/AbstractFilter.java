@@ -99,6 +99,13 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	/**
 	 * @since 1.10
 	 */
+	public void onPipelineStops() { // NOPMD (empty non-abstract method is intended)
+		// empty default implementation
+	}
+
+	/**
+	 * @since 1.10
+	 */
 	public <T> void onSignalClosing(final IInputPort<S, T> inputPort) {
 		// inputPort.setState(IInputPort.State.CLOSING);
 		this.enabledInputPorts--;

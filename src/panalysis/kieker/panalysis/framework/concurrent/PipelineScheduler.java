@@ -41,7 +41,7 @@ public class PipelineScheduler {
 	private final Iterator<IStage> iterator;
 
 	public PipelineScheduler(final IPipeline pipeline) {
-		pipeline.start();
+		pipeline.fireStartNotification();
 
 		final List<IStage> sortedStages = this.sortList(pipeline);
 

@@ -32,10 +32,12 @@ public class NextStageScheduler {
 
 	protected final Map<IStage, Boolean> statesOfStages = new HashMap<IStage, Boolean>();
 	private final List<IStage> workList;
+	private final IPipeline pipeline;
 
 	public NextStageScheduler(final IPipeline pipeline) {
+		this.pipeline = pipeline;
 		this.workList = new StageWorkList(pipeline);
-		pipeline.start();
+		pipeline.fireStartNotification();
 
 		// this.workList.addAll(pipeline.getStartStages());
 		this.workList.addAll(pipeline.getStages());
@@ -88,5 +90,9 @@ public class NextStageScheduler {
 		}
 		stage.getContext().getOutputStages().clear();
 
+	}
+
+	public void cleanUp() {
+		this.pipeline.fireStopNotification();
 	}
 }

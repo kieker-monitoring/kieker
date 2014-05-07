@@ -61,6 +61,8 @@ public class WorkerThread extends Thread {
 			this.pipelineScheduler.determineNextStage(stage, executedSuccessfully);
 		}
 
+		this.cleanUpDatastructures();
+
 		final long end = System.currentTimeMillis();
 		this.duration = end - start;
 	}
@@ -101,6 +103,11 @@ public class WorkerThread extends Thread {
 
 	private void finishStageExecution() {
 		// TODO Auto-generated method stub
+
+	}
+
+	private void cleanUpDatastructures() {
+		this.pipelineScheduler.cleanUp();
 
 	}
 

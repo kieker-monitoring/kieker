@@ -28,5 +28,7 @@ public interface IPipeline {
 
 	List<? extends AbstractFilter<?>> getStartStages();
 
-	void start();
+	void fireStartNotification();
+
+	void fireStopNotification();
 }

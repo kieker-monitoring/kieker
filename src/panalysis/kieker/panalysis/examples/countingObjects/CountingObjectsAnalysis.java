@@ -65,7 +65,7 @@ public class CountingObjectsAnalysis extends Analysis {
 	@Override
 	public void start() {
 		super.start();
-		this.pipeline.start();
+		this.pipeline.fireStartNotification();
 	}
 
 	/**

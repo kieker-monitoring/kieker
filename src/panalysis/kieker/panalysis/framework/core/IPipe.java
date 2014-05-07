@@ -101,4 +101,14 @@ public interface IPipe<T> {
 	 */
 	IStage getTargetStage();
 
+	/**
+	 * @since 1.10
+	 */
+	void onPipelineStarts();
+
+	/**
+	 * @since 1.10
+	 */
+	void onPipelineStops();
+
 }
