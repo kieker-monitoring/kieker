@@ -23,9 +23,9 @@ import de.chw.util.Pair;
 import kieker.panalysis.framework.core.Analysis;
 import kieker.panalysis.framework.sequential.MethodCallPipe;
 import kieker.panalysis.framework.sequential.Pipeline;
-import kieker.panalysis.stage.basic.Merger;
 import kieker.panalysis.stage.basic.RepeaterSource;
 import kieker.panalysis.stage.basic.distributor.Distributor;
+import kieker.panalysis.stage.basic.merger.Merger;
 
 /**
  * @author Christian Wulf

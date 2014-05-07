@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.panalysis.stage.basic;
+package kieker.panalysis.stage.basic.merger;
 
 import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Context;
@@ -36,59 +36,31 @@ public class Merger<T> extends AbstractFilter<Merger<T>> {
 
 	public final IOutputPort<Merger<T>, T> OBJECT = this.createOutputPort();
 
-	private int index = 0;
+	private IStrategy<T> strategy = new RoundRobinStrategy<T>();
 
-	// TODO add parameter: MergeStrategy
-	/**
-	 * @since 1.10
-	 */
-	public Merger() {}
+	public IStrategy<T> getStrategy() {
+		return this.strategy;
+	}
 
-	/**
-	 * @since 1.10
-	 */
+	public void setStrategy(final IStrategy<T> strategy) {
+		this.strategy = strategy;
+	}
+
 	@Override
 	protected boolean execute(final Context<Merger<T>> context) {
-		int size = this.getInputPorts().size();
-		// check each port at most once to avoid a potentially infinite loop
-		while (size-- > 0) {
-			final IInputPort<Merger<T>, T> inputPort = this.getNextPortInRoundRobinOrder();
-			final T token = context.tryTake(inputPort);
-			if (token != null) {
-				context.put(this.OBJECT, token);
-				return true;
-			}
+		final T token = this.strategy.getNextInput(context, this.getInputPorts());
+
+		if (token != null) {
+			context.put(this.OBJECT, token);
+			return true;
+		} else {
+			return false;
 		}
-		return false;
 	}
 
-	/**
-	 * @since 1.10
-	 * @return
-	 */
-	private IInputPort<Merger<T>, T> getNextPortInRoundRobinOrder() {
-		final IInputPort<Merger<T>, T> port = this.getInputPort(this.index);
-		this.index = (this.index + 1) % this.getInputPorts().size();
-		return port;
-	}
-
-	/**
-	 * @since 1.10
-	 * @param portIndex
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	private IInputPort<Merger<T>, T> getInputPort(final int portIndex) {
-		final IInputPort<Merger<T>, ?> port = this.getInputPorts().get(portIndex);
-		return (IInputPort<Merger<T>, T>) port;
-	}
-
-	/**
-	 * @since 1.10
-	 * @return
-	 */
 	public IInputPort<Merger<T>, T> getNewInputPort() {
 		final IInputPort<Merger<T>, T> newInputPort = this.createInputPort();
 		return newInputPort;
 	}
+
 }
