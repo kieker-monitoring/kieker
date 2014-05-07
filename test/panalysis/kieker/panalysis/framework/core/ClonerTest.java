@@ -30,7 +30,7 @@ public class ClonerTest {
 	private JavaBean clone;
 
 	@Before
-	public void createOriginalnstanceAndCloneIt() throws ReflectiveOperationException {
+	public void createOriginalnstanceAndCloneIt() throws Exception {
 		this.original = new JavaBean();
 		this.original.setValue(42);
 

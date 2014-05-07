@@ -16,7 +16,6 @@
 
 package kieker.panalysis.framework.concurrent;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -39,13 +38,8 @@ public class ConcurrentWorkStealingPipe<T> extends AbstractPipe<T> {
 	// <li>the core's locality to improve cache access performance
 	// </ul>
 
-	private List<ConcurrentWorkStealingPipe<T>> allOtherPipes;
+	private List<ConcurrentWorkStealingPipe<T>> pipesToStealFrom;
 	private int numTakenElements = 0;
-
-	public void copyAllOtherPipes(final List<ConcurrentWorkStealingPipe<T>> samePipesFromAllThreads) {
-		this.allOtherPipes = new ArrayList<ConcurrentWorkStealingPipe<T>>(samePipesFromAllThreads);
-		this.allOtherPipes.remove(this);
-	}
 
 	@Override
 	protected void putInternal(final T token) {
@@ -60,7 +54,7 @@ public class ConcurrentWorkStealingPipe<T> extends AbstractPipe<T> {
 	protected T tryTakeInternal() {
 		final T record = this.circularWorkStealingDeque.popBottom();
 		if (record == null) {
-			for (final ConcurrentWorkStealingPipe<T> pipe : this.allOtherPipes) {
+			for (final ConcurrentWorkStealingPipe<T> pipe : this.pipesToStealFrom) {
 				final T stolenElement = pipe.steal();
 				if (stolenElement != null) {
 					return stolenElement;
@@ -76,7 +70,7 @@ public class ConcurrentWorkStealingPipe<T> extends AbstractPipe<T> {
 	public T take() {
 		final T record = this.circularWorkStealingDeque.popBottomEx();
 		if (record == null) {
-			for (final ConcurrentWorkStealingPipe<T> pipe : this.allOtherPipes) {
+			for (final ConcurrentWorkStealingPipe<T> pipe : this.pipesToStealFrom) {
 				final T stolenElement = pipe.steal();
 				if (stolenElement != null) {
 					return stolenElement;
@@ -116,6 +110,18 @@ public class ConcurrentWorkStealingPipe<T> extends AbstractPipe<T> {
 		}
 		// BETTER find a way to steal multiple elements directly without a loop
 		return stolenElements;
+	}
+
+	public List<ConcurrentWorkStealingPipe<T>> getPipesToStealFrom() {
+		return this.pipesToStealFrom;
+	}
+
+	public void setPipesToStealFrom(final List<ConcurrentWorkStealingPipe<T>> pipesToStealFrom) {
+		this.pipesToStealFrom = pipesToStealFrom;
+	}
+
+	public void onPipelineStarts() {
+		this.pipesToStealFrom.remove(this);
 	}
 
 	@Override

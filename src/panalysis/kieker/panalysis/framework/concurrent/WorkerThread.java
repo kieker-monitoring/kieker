@@ -17,8 +17,8 @@
 package kieker.panalysis.framework.concurrent;
 
 import kieker.panalysis.framework.core.AbstractFilter;
+import kieker.panalysis.framework.core.IPipeline;
 import kieker.panalysis.framework.core.IStage;
-import kieker.panalysis.framework.sequential.Pipeline;
 
 /**
  * @author Christian Wulf
@@ -27,7 +27,7 @@ import kieker.panalysis.framework.sequential.Pipeline;
  */
 public class WorkerThread extends Thread {
 
-	private final Pipeline<?> pipeline;
+	private final IPipeline pipeline;
 	private NextStageScheduler pipelineScheduler;
 
 	private long duration;
@@ -35,7 +35,7 @@ public class WorkerThread extends Thread {
 	private volatile TerminationPolicy terminationPolicy;
 	private volatile boolean shouldTerminate = false;
 
-	public WorkerThread(final Pipeline<?> pipeline) {
+	public WorkerThread(final IPipeline pipeline) {
 		this.pipeline = pipeline;
 	}
 
@@ -108,7 +108,7 @@ public class WorkerThread extends Thread {
 		return this.duration;
 	}
 
-	public Pipeline<?> getPipeline() {
+	public IPipeline getPipeline() {
 		return this.pipeline;
 	}
 

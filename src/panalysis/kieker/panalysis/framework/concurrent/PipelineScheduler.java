@@ -16,7 +16,6 @@
 
 package kieker.panalysis.framework.concurrent;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -26,8 +25,8 @@ import java.util.Map;
 import de.chw.util.CyclicIterator;
 
 import kieker.panalysis.framework.core.AbstractFilter;
+import kieker.panalysis.framework.core.IPipeline;
 import kieker.panalysis.framework.core.IStage;
-import kieker.panalysis.framework.sequential.Pipeline;
 
 /**
  * @author Christian Wulf
@@ -41,7 +40,7 @@ public class PipelineScheduler {
 
 	private final Iterator<IStage> iterator;
 
-	public PipelineScheduler(final Pipeline<?> pipeline) {
+	public PipelineScheduler(final IPipeline pipeline) {
 		pipeline.start();
 
 		final List<IStage> sortedStages = this.sortList(pipeline);
@@ -52,8 +51,8 @@ public class PipelineScheduler {
 		this.iterator = new CyclicIterator<IStage>(this.activeStages);
 	}
 
-	private List<IStage> sortList(final Pipeline<?> pipeline) {
-		final List<AbstractFilter<?>> startStages = Arrays.asList(pipeline.getStartStages());
+	private List<IStage> sortList(final IPipeline pipeline) {
+		final List<? extends AbstractFilter<?>> startStages = pipeline.getStartStages();
 
 		final List<IStage> list = new LinkedList<IStage>(pipeline.getStages());
 		list.removeAll(startStages);

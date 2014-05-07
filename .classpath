@@ -17,7 +17,7 @@
 	<classpathentry kind="src" path="examples/userguide/appendix-Sigar/src"/>
 	<classpathentry kind="src" path="examples/SPECjEnterprise2010/src"/>
 	<classpathentry kind="src" path="examples/JavaEEServletContainerExample/src"/>
-	<classpathentry excluding="kieker/panalysis/stage/ClockSource.java" kind="src" path="src/panalysis"/>
+	<classpathentry excluding="kieker/panalysis/stage/ClockSource.java|kieker/panalysis/framework/concurrent/ConcurrentPipeline.java|kieker/panalysis/framework/sequential/Pipeline.java" kind="src" path="src/panalysis"/>
 	<classpathentry kind="src" path="test/panalysis"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>

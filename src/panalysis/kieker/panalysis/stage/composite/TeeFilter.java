@@ -32,11 +32,11 @@ import kieker.panalysis.stage.basic.Distributor;
 public class TeeFilter<T> extends AbstractFilter<TeeFilter<T>> {
 
 	private final Distributor<T> stage0;
-	private final Printer stage1;
+	private final Printer<T> stage1;
 
 	public TeeFilter(final IPipe<T> pipe) {
 		this.stage0 = new Distributor<T>();
-		this.stage1 = new Printer();
+		this.stage1 = new Printer<T>();
 
 		final IOutputPort<Distributor<T>, T> outputPort = this.stage0.getNewOutputPort();
 

@@ -66,6 +66,7 @@ public class CountWordsAnalysis extends Analysis {
 		this.pipeline.addStage(this.outputWordsCountStage);
 
 		this.pipeline.setStartStages(this.repeaterSource);
+		this.repeaterSource.START.setAssociatedPipe(new MethodCallPipe<Boolean>(Boolean.TRUE));
 
 		this.pipeline.connect(this.repeaterSource.OUTPUT, this.findFilesStage.DIRECTORY_NAME);
 		this.pipeline.connect(this.findFilesStage.FILE, this.distributor.OBJECT);

@@ -89,12 +89,12 @@ public interface IPipe<T> {
 	/**
 	 * @since 1.10
 	 */
-	<S extends ISource> void setSourcePort(final IOutputPort<S, T> sourcePort);
+	<S extends ISource, A extends T> void setSourcePort(final IOutputPort<S, T> sourcePort);
 
 	/**
 	 * @since 1.10
 	 */
-	<S extends ISink<S>> void setTargetPort(final IInputPort<S, T> targetPort);
+	<S extends ISink<S>, A extends T> void setTargetPort(final IInputPort<S, T> targetPort);
 
 	/**
 	 * @since 1.10

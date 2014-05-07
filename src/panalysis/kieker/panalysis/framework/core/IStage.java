@@ -16,7 +16,6 @@
 
 package kieker.panalysis.framework.core;
 
-import kieker.panalysis.framework.sequential.Pipeline;
 
 /**
  * @author Christian Wulf
@@ -93,9 +92,9 @@ public interface IStage {
 
 	Context<?> getContext();
 
-	Pipeline<?> getOwningPipeline();
+	IPipeline getOwningPipeline();
 
-	void setOwningPipeline(Pipeline<?> owningPipeline);
+	void setOwningPipeline(IPipeline owningPipeline);
 
 	void copyAttributes(IStage stage);
 

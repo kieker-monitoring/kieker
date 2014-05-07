@@ -13,53 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.panalysis.framework.core;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
+import java.util.List;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  */
-public abstract class AbstractStage implements IStage {
+public interface IPipeline {
 
-	protected int id;
-	/**
-	 * A unique logger instance per stage instance
-	 */
-	protected Log logger;
-	private IPipeline owningPipeline;
+	List<IStage> getStages();
 
-	public AbstractStage() {
-		this.logger = LogFactory.getLog(Long.toString(this.id));
-	}
+	List<? extends AbstractFilter<?>> getStartStages();
 
-	public int getId() {
-		return this.id;
-	}
-
-	public void setId(final int id) {
-		this.id = id;
-	}
-
-	public IPipeline getOwningPipeline() {
-		return this.owningPipeline;
-	}
-
-	public void setOwningPipeline(final IPipeline owningPipeline) {
-		this.owningPipeline = owningPipeline;
-	}
-
-	public void cleanUp() { // NOPMD (empty non-abstract method is intended)
-		// empty default implementation
-	}
-
-	@Override
-	public String toString() {
-		return "{" + "id=" + this.id + ", class=" + this.getClass().getSimpleName() + "}";
-	}
-
+	void start();
 }

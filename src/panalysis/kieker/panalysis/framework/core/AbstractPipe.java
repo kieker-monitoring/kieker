@@ -31,11 +31,11 @@ public abstract class AbstractPipe<T> implements IPipe<T> {
 	private Runnable fireSignalClosing;
 	private ISink<?> targetStage;
 
-	public <S extends ISource> void setSourcePort(final IOutputPort<S, T> sourcePort) {
+	public <S extends ISource, A extends T> void setSourcePort(final IOutputPort<S, T> sourcePort) {
 		sourcePort.setAssociatedPipe(this);
 	}
 
-	public <S extends ISink<S>> void setTargetPort(final IInputPort<S, T> targetPort) {
+	public <S extends ISink<S>, A extends T> void setTargetPort(final IInputPort<S, T> targetPort) {
 		targetPort.setAssociatedPipe(this);
 		this.targetStage = targetPort.getOwningStage();
 		this.fireSignalClosing = new Runnable() {

@@ -20,8 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import kieker.panalysis.framework.core.IPipeline;
 import kieker.panalysis.framework.core.IStage;
-import kieker.panalysis.framework.sequential.Pipeline;
 
 /**
  * @author Christian Wulf
@@ -32,10 +32,8 @@ public class NextStageScheduler {
 
 	protected final Map<IStage, Boolean> statesOfStages = new HashMap<IStage, Boolean>();
 	private final List<IStage> workList;
-	private final Pipeline<?> pipeline;
 
-	public NextStageScheduler(final Pipeline<?> pipeline) {
-		this.pipeline = pipeline;
+	public NextStageScheduler(final IPipeline pipeline) {
 		this.workList = new StageWorkList(pipeline);
 		pipeline.start();
 
