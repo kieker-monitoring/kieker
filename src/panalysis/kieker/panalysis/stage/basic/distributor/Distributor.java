@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.panalysis.stage.basic;
+package kieker.panalysis.stage.basic.distributor;
 
 import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Context;
@@ -33,13 +33,15 @@ public class Distributor<T> extends AbstractFilter<Distributor<T>> {
 
 	public final IInputPort<Distributor<T>, T> OBJECT = this.createInputPort();
 
-	private int index = 0;
+	private IStrategy<T> strategy = new RoundRobinStrategy<T>();
 
-	// TODO add parameter: DistributionStrategy
-	/**
-	 * @since 1.10
-	 */
-	public Distributor() {}
+	public IStrategy<T> getStrategy() {
+		return this.strategy;
+	}
+
+	public void setStrategy(final IStrategy<T> strategy) {
+		this.strategy = strategy;
+	}
 
 	@Override
 	protected boolean execute(final Context<Distributor<T>> context) {
@@ -47,36 +49,10 @@ public class Distributor<T> extends AbstractFilter<Distributor<T>> {
 		if (object == null) {
 			return false;
 		}
-		final IOutputPort<Distributor<T>, T> port = this.getNextPortInRoundRobinOrder();
-		context.put(port, object);
-		return true;
+
+		return this.strategy.processInput(context, this.getOutputPorts(), object);
 	}
 
-	/**
-	 * @since 1.10
-	 * @return
-	 */
-	private IOutputPort<Distributor<T>, T> getNextPortInRoundRobinOrder() {
-		final IOutputPort<Distributor<T>, T> port = this.getOutputPort(this.index);
-		this.index = (this.index + 1) % this.getOutputPorts().size();
-		return port;
-	}
-
-	/**
-	 * @since 1.10
-	 * @param portIndex
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	private IOutputPort<Distributor<T>, T> getOutputPort(final int portIndex) {
-		final IOutputPort<Distributor<T>, ?> port = this.getOutputPorts().get(portIndex);
-		return (IOutputPort<Distributor<T>, T>) port;
-	}
-
-	/**
-	 * @since 1.10
-	 * @return
-	 */
 	public IOutputPort<Distributor<T>, T> getNewOutputPort() {
 		final IOutputPort<Distributor<T>, T> newOutputPort = this.createOutputPort();
 		return newOutputPort;

@@ -36,9 +36,9 @@ import kieker.panalysis.framework.core.ISink;
 import kieker.panalysis.framework.core.ISource;
 import kieker.panalysis.framework.core.IStage;
 import kieker.panalysis.framework.sequential.MethodCallPipe;
-import kieker.panalysis.stage.basic.Distributor;
 import kieker.panalysis.stage.basic.Merger;
 import kieker.panalysis.stage.basic.RepeaterSource;
+import kieker.panalysis.stage.basic.distributor.Distributor;
 
 /**
  * @author Christian Wulf
