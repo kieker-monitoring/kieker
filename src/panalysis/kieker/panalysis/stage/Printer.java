@@ -31,7 +31,7 @@ import kieker.panalysis.framework.core.IInputPort;
  * @since 1.10
  */
 @Description("A filter to print objects to a configured stream")
-public class Printer<T> extends AbstractFilter<Printer<T>> {
+public class Printer extends AbstractFilter<Printer> {
 
 	public static final String STREAM_STDOUT = "STDOUT";
 	public static final String STREAM_STDERR = "STDERR";
@@ -40,7 +40,7 @@ public class Printer<T> extends AbstractFilter<Printer<T>> {
 
 	public static final String ENCODING_UTF8 = "UTF-8";
 
-	public final IInputPort<Printer<T>, T> input = this.createInputPort();
+	public final IInputPort<Printer, Object> input = this.createInputPort();
 
 	private PrintStream printStream;
 	private String streamName = STREAM_STDOUT;
@@ -78,6 +78,12 @@ public class Printer<T> extends AbstractFilter<Printer<T>> {
 		this.initializeStream();
 	}
 
+	@Override
+	public void cleanUp() {
+		this.closeStream();
+		super.cleanUp();
+	}
+
 	private void initializeStream() {
 		switch (this.streamName) {
 		case STREAM_STDOUT: {
@@ -113,8 +119,6 @@ public class Printer<T> extends AbstractFilter<Printer<T>> {
 		}
 	}
 
-	// TODO Use
-	@SuppressWarnings("unused")
 	private void closeStream() {
 		if ((this.printStream != null) && (this.printStream != System.out) && (this.printStream != System.err)) {
 			this.printStream.close();
@@ -122,8 +126,8 @@ public class Printer<T> extends AbstractFilter<Printer<T>> {
 	}
 
 	@Override
-	protected boolean execute(final Context<Printer<T>> context) {
-		final T object = context.tryTake(this.input);
+	protected boolean execute(final Context<Printer> context) {
+		final Object object = context.tryTake(this.input);
 		if (null == object) {
 			return false;
 		}
