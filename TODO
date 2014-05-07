@@ -5,3 +5,63 @@
 
 Properties: Nach Setter-Methoden Ausschau halten; Erstmal kein Updateable; Konvention: setter dürfen nach Pipelinestart nicht mehr aufgerufen werden
 
+
+
+http://blog.julienviet.com/2009/07/28/type-safe-enumeration-with-java-generics/
+http://codyaray.com/2013/01/finding-generic-type-parameters-with-guava
+
+
+[ok]state with cycle pipe
+	[TODO]improve API to implement a new filter with a state
+	[TODO]bug: only initialize one filter of a group with the state, so that other one can steal the state and thereby synch the state over all threads
+-buffered put (w.r.t. to a timeout) or (with t/o and to a threshold of items), but not threshold alone
+[ok]close/cleanup, e.g.,
+	-close stream
+-filter configuration, e.g., 
+	-time interval
+	-type filter
+	-trace id filter
+[ok]definition of termination of an analysis
+	[no] when all pipes are empty
+	[yes] when all filters' state are "waiting", i.e., not "executing"
+		-a synchronous merge with 2 input ports could have taken one item from port 0 and wait for port 1, 
+		but no input is expected anymore, since the analysis was terminated or has finished
+	[ok]gracefully:
+		-each stage has a state {ENABLED, DISABLED}
+		-send an END token through the pipeline
+			-what does happen if one thread steals the END token?
+		-if stage read an END token, 
+			-it sets its state to DISABLED
+			-irrespective of whether further non-END token follow
+			-and passes the END token to all of its output ports
+	[TODO]abort:
+		-interrupt all threads
+	-termination is defined by
+		[ok]its signal, e.g., an END token or a flag/state
+		[ok]its kind/policy
+			-at once
+			-after all current executions have finished
+			-after all possible executions have finished)
+	-encapsulate termination signal and kind 
+		-in the pipes by using a state for each pipe
+			-END token is not exposed to the execute-method, i.e., it is transparent to the user
+		-in the stages by using a state for each stage
+			-user needs to super.execute() or even more explicitly handle state changes
+
+[TODO]how to avoid busy-waiting when not enough work is in the pipeline?
+[TODO]dynamic change of the pipeline structure
+[TODO]each stage needs to read a configuration
+[TODO]each stage needs to provide information about its used configuration without creating an instance: each entry needs to define
+	-the config key
+	-a description of the config entry
+	-a default value
+-semantics of access to pipe
+	-take and/or tryTake?
+		[ok]tryTake() with null-checking; take() is disallowed
+		[TODO]how to implement a merger that synchronously waits for two input ports?
+	-should the execute method return null, a boolean, or a cached exception to indicate empty pipe/race condition?
+		[ok]by returning a boolean
+			-pros/cons: see below
+		-by returning a cached exception
+			-cons: perhaps slower? => evaluate
+			-pros: only unsuccessful needs to be implemented by the user; a successful execution is implicitly indicated by not throwing any exception
