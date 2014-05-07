@@ -28,16 +28,25 @@ import kieker.common.logging.LogFactory;
  * 
  * @since 1.10
  */
-public class ToolsUtility {
+public class ToolsUtil {
 
-	private static final Log LOG = LogFactory.getLog(ToolsUtility.class);
+	private static final Log LOG = LogFactory.getLog(ToolsUtil.class);
 
-	private ToolsUtility() {}
+	private ToolsUtil() {}
 
 	public static void loadVerboseLogger() {
+		ToolsUtil.loadLogger("logging.verbosely.properties");
+
+	}
+
+	public static void loadDebugLogger() {
+		ToolsUtil.loadLogger("logging.debug.properties");
+	}
+
+	private static void loadLogger(final String loggerProperties) {
 		try {
 			final LogManager logManager = LogManager.getLogManager();
-			final InputStream configStream = ClassLoader.getSystemClassLoader().getResourceAsStream("logging.verbosely.properties");
+			final InputStream configStream = ClassLoader.getSystemClassLoader().getResourceAsStream(loggerProperties);
 			if (configStream != null) {
 				logManager.readConfiguration(configStream);
 			} else {

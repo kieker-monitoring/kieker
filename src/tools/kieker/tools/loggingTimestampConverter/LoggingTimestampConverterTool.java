@@ -33,7 +33,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.util.CLIHelpFormatter;
 import kieker.tools.util.LoggingTimestampConverter;
-import kieker.tools.util.ToolsUtility;
+import kieker.tools.util.ToolsUtil;
 
 /**
  * This tool can be used to convert timestamps.
@@ -147,7 +147,7 @@ public final class LoggingTimestampConverterTool {
 	 */
 	private static boolean initFromArgs() {
 		if (cmdl.hasOption('v')) {
-			ToolsUtility.loadVerboseLogger();
+			ToolsUtil.loadVerboseLogger();
 		}
 
 		LoggingTimestampConverterTool.timestampsStr = LoggingTimestampConverterTool.cmdl.getOptionValues(CMD_OPT_NAME_TIMESTAMPS);

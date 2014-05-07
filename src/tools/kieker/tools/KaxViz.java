@@ -63,7 +63,7 @@ import kieker.analysis.model.analysisMetaModel.MIRepositoryConnector;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.util.CLIHelpFormatter;
-import kieker.tools.util.ToolsUtility;
+import kieker.tools.util.ToolsUtil;
 
 /**
  * A simple visualization of Analysis Configurations.
@@ -383,13 +383,17 @@ public final class KaxViz extends JFrame {
 		final Options options = new Options();
 		final Option inputOption = new Option("i", "input", true, "the analysis project file (.kax) loaded");
 		final Option verboseOption = new Option("v", "verbose", false, "verbosely prints additional information");
+		final Option debugOption = new Option("d", "debug", false, "prints additional debug information");
+		final Option outputoption = new Option("svg", true, "name of svg saved on close");
+
 		inputOption.setRequired(true);
 		inputOption.setArgName("filename");
-		options.addOption(inputOption);
-		final Option outputoption = new Option("svg", true, "name of svg saved on close");
 		outputoption.setArgName("filename");
+
+		options.addOption(inputOption);
 		options.addOption(outputoption);
 		options.addOption(verboseOption);
+		options.addOption(debugOption);
 
 		// parse cmdline options
 		final String kaxFilename;
@@ -397,9 +401,13 @@ public final class KaxViz extends JFrame {
 		try {
 			final CommandLineParser parser = new BasicParser();
 			final CommandLine line = parser.parse(options, args);
-			if (line.hasOption('v')) {
-				ToolsUtility.loadVerboseLogger();
+
+			if (line.hasOption('d')) {
+				ToolsUtil.loadDebugLogger();
+			} else if (line.hasOption('v')) {
+				ToolsUtil.loadVerboseLogger();
 			}
+
 			kaxFilename = line.getOptionValue('i');
 			svgFilename = line.getOptionValue("svg");
 		} catch (final ParseException ex) {
@@ -416,6 +424,8 @@ public final class KaxViz extends JFrame {
 			frame.setExtendedState(Frame.MAXIMIZED_BOTH);
 			frame.setSize(800, 600);
 			frame.setVisible(true);
+		} catch (final IOException ex) {
+			LOG.error("The given file could not be loaded", ex);
 		} catch (final Exception ex) { // NOPMD NOCS (log all errors)
 			LOG.error("Error", ex);
 		}

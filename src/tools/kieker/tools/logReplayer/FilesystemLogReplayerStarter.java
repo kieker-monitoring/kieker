@@ -36,7 +36,7 @@ import org.apache.commons.cli.ParseException;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.util.CLIHelpFormatter;
-import kieker.tools.util.ToolsUtility;
+import kieker.tools.util.ToolsUtil;
 
 /**
  * Command-line tool for replaying a filesystem monitoring log using the {@link FilesystemLogReplayer}.
@@ -148,7 +148,7 @@ public final class FilesystemLogReplayerStarter {
 		boolean retVal = true;
 
 		if (cmdl.hasOption('v')) {
-			ToolsUtility.loadVerboseLogger();
+			ToolsUtil.loadVerboseLogger();
 		}
 
 		// 0.) monitoring properties
