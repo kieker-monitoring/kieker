@@ -85,7 +85,7 @@ public abstract class AbstractLogReplayer {
 		this.ignoreRecordsAfterTimestamp = ignoreRecordsAfterTimestamp;
 		this.monitoringConfigurationFile = monitoringConfigurationFile;
 		if (this.monitoringConfigurationFile == null) {
-			LOG.info("No path to a 'monitoring.properties' passed; default configuration will be used.");
+			LOG.warn("No path to a 'monitoring.properties' passed; default configuration will be used.");
 		}
 	}
 
