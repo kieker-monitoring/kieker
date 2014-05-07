@@ -39,6 +39,7 @@ import kieker.tools.util.ToolsUtility;
  * @since 1.5
  */
 public final class KaxRun {
+
 	private static final Log LOG = LogFactory.getLog(KaxRun.class);
 
 	/**
@@ -72,9 +73,10 @@ public final class KaxRun {
 			}
 			kaxFilename = line.getOptionValue('i');
 		} catch (final ParseException ex) {
-			LOG.error("An error occured while parsing the parameters", ex);
+			LOG.error("An error occurred while parsing the parameters", ex);
 			final HelpFormatter formatter = new CLIHelpFormatter();
 			formatter.printHelp(KaxRun.class.getName(), options, true);
+			LOG.info("See 'kieker.log' for details");
 			return;
 		}
 
@@ -85,6 +87,6 @@ public final class KaxRun {
 		} catch (final Exception ex) { // NOPMD NOCS (log all errors)
 			LOG.error("Error", ex);
 		}
+		LOG.info("See 'kieker.log' for details");
 	}
-
 }

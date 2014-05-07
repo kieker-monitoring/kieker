@@ -19,6 +19,7 @@ package kieker.tools.util;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.logging.Formatter;
+import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
 /**
@@ -30,23 +31,29 @@ import java.util.logging.LogRecord;
  */
 public class SimpleLoggingFormatter extends Formatter {
 
-	private static final String LINE_SEPERATOR = System.getProperty("line.separator");
+	protected static final String LINE_SEPERATOR = System.getProperty("line.separator");
+	private static final DateFormat DATE_FORMAT = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
 
 	@Override
 	public String format(final LogRecord record) {
-		final Date date = new Date(record.getMillis());
-		final DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
-		final String dateText = dateFormat.format(date);
-
 		final StringBuilder sb = new StringBuilder();
 
-		sb.append(record.getLevel().getLocalizedName());
-		sb.append(" (").append(dateText).append("): ");
-		sb.append(record.getMessage());
-		sb.append(LINE_SEPERATOR);
-		sb.append(LINE_SEPERATOR);
+		this.fillStringBuilderWithMessage(sb, record);
 
 		return sb.toString();
+	}
+
+	protected void fillStringBuilderWithMessage(final StringBuilder sb, final LogRecord record) {
+		final Date date = new Date(record.getMillis());
+		final String dateText = DATE_FORMAT.format(date);
+
+		if ((record.getLevel() == Level.WARNING) || (record.getLevel() == Level.SEVERE)) {
+			sb.append(record.getLevel().getLocalizedName());
+			sb.append(" (").append(dateText).append("): ");
+		}
+
+		sb.append(record.getMessage());
+		sb.append(LINE_SEPERATOR);
 	}
 
 }
