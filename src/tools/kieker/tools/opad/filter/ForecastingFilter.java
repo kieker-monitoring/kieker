@@ -80,7 +80,7 @@ public class ForecastingFilter extends AbstractUpdateableFilterPlugin {
 	public static final String CONFIG_PROPERTY_TS_WINDOW_CAPACITY = "tswcapacity";
 
 	private final ConcurrentHashMap<String, ITimeSeries<Double>> applicationForecastingWindow;
-	
+
 	private AtomicInteger timeSeriesWindowCapacity;
 	private final AtomicReference<ForecastMethod> forecastMethod = new AtomicReference<ForecastMethod>();
 	private AtomicLong deltat;
@@ -109,22 +109,22 @@ public class ForecastingFilter extends AbstractUpdateableFilterPlugin {
 		configuration.setProperty(CONFIG_PROPERTY_TS_WINDOW_CAPACITY, Integer.toString(this.timeSeriesWindowCapacity.get()));
 		return configuration;
 	}
-	
+
 	@Override
 	public void setCurrentConfiguration(final Configuration config, final boolean update) {
-		if (!update || isPropertyUpdateable(CONFIG_PROPERTY_DELTA_TIME)) {
+		if (!update || this.isPropertyUpdateable(CONFIG_PROPERTY_DELTA_TIME)) {
 			this.deltat = new AtomicLong(config.getLongProperty(CONFIG_PROPERTY_DELTA_TIME));
 		}
-		
-		if (!update || isPropertyUpdateable(CONFIG_PROPERTY_DELTA_UNIT)) {
+
+		if (!update || this.isPropertyUpdateable(CONFIG_PROPERTY_DELTA_UNIT)) {
 			this.tunit = TimeUnit.valueOf(config.getStringProperty(CONFIG_PROPERTY_DELTA_UNIT));
 		}
-		
-		if (!update || isPropertyUpdateable(CONFIG_PROPERTY_FC_METHOD)) {
+
+		if (!update || this.isPropertyUpdateable(CONFIG_PROPERTY_FC_METHOD)) {
 			this.forecastMethod.set(ForecastMethod.valueOf(config.getStringProperty(CONFIG_PROPERTY_FC_METHOD)));
 		}
-		
-		if (!update || isPropertyUpdateable(CONFIG_PROPERTY_TS_WINDOW_CAPACITY)) {
+
+		if (!update || this.isPropertyUpdateable(CONFIG_PROPERTY_TS_WINDOW_CAPACITY)) {
 			this.timeSeriesWindowCapacity = new AtomicInteger(config.getIntProperty(CONFIG_PROPERTY_TS_WINDOW_CAPACITY));
 		}
 	}
@@ -140,7 +140,7 @@ public class ForecastingFilter extends AbstractUpdateableFilterPlugin {
 		if (this.checkInitialization(input.getName())) {
 			this.processInput(input, input.getTime(), input.getName());
 		} else {
-			// Initialization of the forecasting variables for a new application	
+			// Initialization of the forecasting variables for a new application
 			this.applicationForecastingWindow.put(input.getName(),
 					new TimeSeries<Double>(System.currentTimeMillis(), this.deltat.get(), this.tunit, this.timeSeriesWindowCapacity.get()));
 			this.processInput(input, input.getTime(), input.getName());
@@ -159,19 +159,24 @@ public class ForecastingFilter extends AbstractUpdateableFilterPlugin {
 	 *            Name of the application of the measurement
 	 */
 	public void processInput(final NamedDoubleTimeSeriesPoint input, final long timestamp, final String name) {
-		
-		final ITimeSeries<Double> actualWindow = this.applicationForecastingWindow.get(name);
-		actualWindow.append(input.getValue());
-		final IForecaster<Double> forecaster = this.forecastMethod.get().getForecaster(actualWindow);
+
+		final ITimeSeries<Double> currentWindow = this.applicationForecastingWindow.get(name);
+		currentWindow.append(input.getValue());
+		final IForecaster<Double> forecaster = this.forecastMethod.get().getForecaster(currentWindow);
 		final IForecastResult result = forecaster.forecast(1);
 		super.deliver(OUTPUT_PORT_NAME_FORECAST, result);
 
-		final ForecastMeasurementPair fmp = new ForecastMeasurementPair(
-				name,
-				result.getForecast().getPoints().get(0).getValue(),
-				input.getValue(),
-				timestamp);
-		super.deliver(OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, fmp);
+		// Check whether we have forecasted points
+		if (result.getForecast().getPoints().size() > 0) {
+			final ForecastMeasurementPair fmp = new ForecastMeasurementPair(
+					name,
+					result.getForecast().getPoints().get(0).getValue(),
+					input.getValue(),
+					timestamp);
+			super.deliver(OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, fmp);
+		} else {
+			this.log.error("There are no forecast points to deliver. Perhaps Rserve is not running?");
+		}
 	}
 
 	/**

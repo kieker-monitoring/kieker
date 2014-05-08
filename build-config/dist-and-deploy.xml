@@ -48,7 +48,7 @@
 			<classpath refid="kieker.monitoring-compile-classpath" />
 			<classpath refid="kieker.monitoring-ajc-compile-classpath" />
 			<classpath refid="kieker.tools-compile-classpath" />
-			<link href="http://docs.oracle.com/javase/1.5.0/docs/api/" />
+			<link href="http://docs.oracle.com/javase/6/docs/api/" />
 			<tag name="generated" />
 			<tag name="ordered" />
 			<tag name="model" />

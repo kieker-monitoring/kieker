@@ -28,12 +28,14 @@ import kieker.tools.tslib.TimeSeries;
 import kieker.tools.tslib.forecast.IForecastResult;
 import kieker.tools.tslib.forecast.ses.SESRForecaster;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 /**
  * 
  * @author Tillmann Carlos Bielefeld
  * 
  */
-public class SESRForecasterTest {
+public class SESRForecasterTest extends AbstractKiekerTest {
 
 	/**
 	 * Creates a new instance of this class.

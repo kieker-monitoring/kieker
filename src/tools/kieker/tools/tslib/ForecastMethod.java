@@ -132,7 +132,7 @@ public enum ForecastMethod {
 		return new SimpleAnomalyCalculator();
 	}
 
-	// Was extracted from ClassificationUtility in WCF/TBATS:
+	// Was extracted from ClassificationUtility in WCF/TBATS as it is not yet integrated:
 	/**
 	 * Returns a new time series object shortened to the last x values.
 	 * 
