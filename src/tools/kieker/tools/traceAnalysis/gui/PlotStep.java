@@ -24,6 +24,7 @@ import java.util.Collection;
 
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import kieker.tools.traceAnalysis.Constants;
@@ -253,6 +254,21 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 
 		this.deploymentOperationDependencyGraph.setSelected(true);
 		this.deploymentOperationDependencyGraphResponseTime.setSelected(true);
+	}
+
+	@Override
+	public boolean isNextStepAllowed() {
+		final boolean nothingSelected = !(this.deploymentSequenceDiagrams.isSelected() || this.assemblySequenceDiagrams.isSelected()
+				|| this.deploymentComponentDependencyGraph.isSelected() || this.assemblyComponentDependencyGraph.isSelected()
+				|| this.containerDependencyGraph.isSelected() || this.deploymentOperationDependencyGraph.isSelected()
+				|| this.assemblyOperationDependencyGraph.isSelected() || this.aggregatedDeploymentCallTree.isSelected()
+				|| this.aggregatedAssemblyCallTree.isSelected() || this.callTrees.isSelected());
+		if (nothingSelected) {
+			final int result = JOptionPane.showConfirmDialog(this, "No plots have been selected. Continue?", "No Plots Selected", JOptionPane.YES_NO_OPTION,
+					JOptionPane.WARNING_MESSAGE);
+			return (JOptionPane.YES_OPTION == result);
+		}
+		return true;
 	}
 
 	@Override

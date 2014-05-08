@@ -24,6 +24,7 @@ import java.util.Collection;
 
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import kieker.tools.traceAnalysis.Constants;
@@ -118,6 +119,18 @@ public class PrintStep extends AbstractStep {
 
 	private void setDefaultSelection() {
 		this.systemModel.setSelected(true);
+	}
+
+	@Override
+	public boolean isNextStepAllowed() {
+		final boolean nothingSelected = !(this.messageTraces.isSelected() || this.executionTraces.isSelected() || this.invalidExecutionTraces.isSelected()
+				|| this.systemModel.isSelected() || this.deploymentEquivalenceClasses.isSelected() || this.assemblyEquivalenceClasses.isSelected());
+		if (nothingSelected) {
+			final int result = JOptionPane.showConfirmDialog(this, "No prints have been selected. Continue?", "No Prints Selected", JOptionPane.YES_NO_OPTION,
+					JOptionPane.WARNING_MESSAGE);
+			return (JOptionPane.YES_OPTION == result);
+		}
+		return true;
 	}
 
 	@Override
