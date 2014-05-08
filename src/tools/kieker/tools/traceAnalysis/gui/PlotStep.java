@@ -208,6 +208,17 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 			}
 		});
 
+		this.deploymentComponentDependencyGraphResponseTime.addItemListener(new ItemListener() {
+
+			@Override
+			@SuppressWarnings("synthetic-access")
+			public void itemStateChanged(final ItemEvent e) {
+				if (PlotStep.this.deploymentComponentDependencyGraphResponseTime.isSelected()) {
+					PlotStep.this.deploymentComponentDependencyGraph.setSelected(true);
+				}
+			}
+		});
+
 		this.assemblyComponentDependencyGraph.addItemListener(new ItemListener() {
 
 			@Override
@@ -215,6 +226,17 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 			public void itemStateChanged(final ItemEvent e) {
 				if (!PlotStep.this.assemblyComponentDependencyGraph.isSelected()) {
 					PlotStep.this.assemblyComponentDependencyGraphResponseTime.setSelected(false);
+				}
+			}
+		});
+
+		this.assemblyComponentDependencyGraphResponseTime.addItemListener(new ItemListener() {
+
+			@Override
+			@SuppressWarnings("synthetic-access")
+			public void itemStateChanged(final ItemEvent e) {
+				if (PlotStep.this.assemblyComponentDependencyGraphResponseTime.isSelected()) {
+					PlotStep.this.assemblyComponentDependencyGraph.setSelected(true);
 				}
 			}
 		});
@@ -230,6 +252,17 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 			}
 		});
 
+		this.deploymentOperationDependencyGraphResponseTime.addItemListener(new ItemListener() {
+
+			@Override
+			@SuppressWarnings("synthetic-access")
+			public void itemStateChanged(final ItemEvent e) {
+				if (PlotStep.this.deploymentOperationDependencyGraphResponseTime.isSelected()) {
+					PlotStep.this.deploymentOperationDependencyGraph.setSelected(true);
+				}
+			}
+		});
+
 		this.assemblyOperationDependencyGraph.addItemListener(new ItemListener() {
 
 			@Override
@@ -237,6 +270,17 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 			public void itemStateChanged(final ItemEvent e) {
 				if (!PlotStep.this.assemblyOperationDependencyGraph.isSelected()) {
 					PlotStep.this.assemblyOperationDependencyGraphResponseTime.setSelected(false);
+				}
+			}
+		});
+
+		this.assemblyOperationDependencyGraphResponseTime.addItemListener(new ItemListener() {
+
+			@Override
+			@SuppressWarnings("synthetic-access")
+			public void itemStateChanged(final ItemEvent e) {
+				if (PlotStep.this.assemblyOperationDependencyGraphResponseTime.isSelected()) {
+					PlotStep.this.assemblyOperationDependencyGraph.setSelected(true);
 				}
 			}
 		});
