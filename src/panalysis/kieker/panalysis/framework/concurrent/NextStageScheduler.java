@@ -34,7 +34,7 @@ public class NextStageScheduler {
 	private final List<IStage> workList;
 	private final IPipeline pipeline;
 
-	public NextStageScheduler(final IPipeline pipeline) {
+	public NextStageScheduler(final IPipeline pipeline) throws Exception {
 		this.pipeline = pipeline;
 		this.workList = new StageWorkList(pipeline);
 		pipeline.fireStartNotification();

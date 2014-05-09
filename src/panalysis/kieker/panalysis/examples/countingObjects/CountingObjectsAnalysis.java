@@ -20,8 +20,8 @@ import java.io.File;
 
 import kieker.panalysis.examples.countWords.DirectoryName2Files;
 import kieker.panalysis.framework.core.Analysis;
+import kieker.panalysis.framework.core.IPipeline;
 import kieker.panalysis.framework.sequential.MethodCallPipe;
-import kieker.panalysis.framework.sequential.Pipeline;
 import kieker.panalysis.stage.TypeLoggerFilter;
 import kieker.panalysis.stage.basic.RepeaterSource;
 import kieker.panalysis.stage.composite.CycledCountingFilter;
@@ -33,7 +33,7 @@ import kieker.panalysis.stage.composite.CycledCountingFilter;
  */
 public class CountingObjectsAnalysis extends Analysis {
 
-	private Pipeline<MethodCallPipe<?>> pipeline;
+	private IPipeline pipeline;
 
 	private RepeaterSource<String> repeaterSource;
 	private DirectoryName2Files findFilesStage;

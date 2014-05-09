@@ -41,7 +41,11 @@ public class WorkerThread extends Thread {
 
 	@Override
 	public void run() {
-		this.initDatastructures();
+		try {
+			this.initDatastructures();
+		} catch (final Exception e) {
+			throw new IllegalStateException(e);
+		}
 
 		final long start = System.currentTimeMillis();
 
@@ -92,7 +96,7 @@ public class WorkerThread extends Thread {
 		}
 	}
 
-	private void initDatastructures() {
+	private void initDatastructures() throws Exception {
 		this.pipelineScheduler = new NextStageScheduler(this.pipeline);
 	}
 

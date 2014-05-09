@@ -13,22 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.panalysis.framework.core;
+package kieker.panalysis.stage.basic.merger;
 
 import java.util.List;
 
+import kieker.panalysis.framework.core.Context;
+import kieker.panalysis.framework.core.IInputPort;
+
 /**
- * @author Christian Wulf
+ * @author Nils Christian Ehmke
  * 
  * @since 1.10
  */
-public interface IPipeline {
+public interface IStrategy<T> {
 
-	List<IStage> getStages();
+	public <S extends Merger<T>> T getNextInput(final Context<S> context, final List<IInputPort<S, ?>> inputPorts);
 
-	List<? extends AbstractFilter<?>> getStartStages();
-
-	void fireStartNotification() throws Exception;
-
-	void fireStopNotification();
 }

@@ -90,9 +90,10 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	protected abstract boolean execute(Context<S> context);
 
 	/**
+	 * @throws Exception
 	 * @since 1.10
 	 */
-	public void onPipelineStarts() {
+	public void onPipelineStarts() throws Exception {
 		this.context = new Context<S>(this.readOnlyInputPorts);
 	}
 

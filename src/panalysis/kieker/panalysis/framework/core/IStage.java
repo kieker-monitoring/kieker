@@ -85,7 +85,7 @@ public interface IStage {
 	/**
 	 * @since 1.10
 	 */
-	void onPipelineStarts();
+	void onPipelineStarts() throws Exception;
 
 	/**
 	 * @since 1.10

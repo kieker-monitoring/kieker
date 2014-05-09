@@ -22,7 +22,7 @@ import kieker.panalysis.framework.core.IOutputPort;
 import kieker.panalysis.framework.core.IPipe;
 import kieker.panalysis.framework.sequential.MethodCallPipe;
 import kieker.panalysis.stage.Printer;
-import kieker.panalysis.stage.basic.Distributor;
+import kieker.panalysis.stage.basic.distributor.Distributor;
 
 /**
  * @author Nils Christian Ehmke

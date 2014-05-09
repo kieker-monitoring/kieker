@@ -13,22 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.panalysis.framework.core;
+package kieker.panalysis.stage.basic.distributor;
 
 import java.util.List;
 
+import kieker.panalysis.framework.core.Context;
+import kieker.panalysis.framework.core.IOutputPort;
+
 /**
- * @author Christian Wulf
+ * @author Nils Christian Ehmke
  * 
  * @since 1.10
  */
-public interface IPipeline {
+public final class CopyByReferenceStrategy<T> implements IStrategy<T> {
 
-	List<IStage> getStages();
+	@SuppressWarnings("unchecked")
+	public <S extends Distributor<T>> boolean processInput(final Context<S> context, final List<IOutputPort<S, ?>> outputPorts, final T input) {
+		for (final IOutputPort<S, ?> port : outputPorts) {
+			context.put((IOutputPort<S, T>) port, input);
+		}
 
-	List<? extends AbstractFilter<?>> getStartStages();
+		return true;
+	}
 
-	void fireStartNotification() throws Exception;
-
-	void fireStopNotification();
 }

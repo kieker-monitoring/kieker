@@ -37,9 +37,9 @@ import kieker.panalysis.framework.core.ISink;
 import kieker.panalysis.framework.core.ISource;
 import kieker.panalysis.framework.core.IStage;
 import kieker.panalysis.framework.sequential.MethodCallPipe;
-import kieker.panalysis.stage.basic.Distributor;
-import kieker.panalysis.stage.basic.Merger;
 import kieker.panalysis.stage.basic.RepeaterSource;
+import kieker.panalysis.stage.basic.distributor.Distributor;
+import kieker.panalysis.stage.basic.merger.Merger;
 
 /**
  * @author Christian Wulf
@@ -118,7 +118,7 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 				return stages;
 			}
 
-			public void fireStartNotification() {
+			public void fireStartNotification() throws Exception {
 				// notify each stage
 				for (final IStage stage : stages) {
 					stage.onPipelineStarts();
@@ -188,7 +188,7 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 				return stages;
 			}
 
-			public void fireStartNotification() {
+			public void fireStartNotification() throws Exception {
 				// notify each stage
 				for (final IStage stage : stages) {
 					stage.onPipelineStarts();

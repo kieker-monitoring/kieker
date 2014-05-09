@@ -73,7 +73,7 @@ public class Printer<T> extends AbstractFilter<Printer<T>> {
 	}
 
 	@Override
-	public void onPipelineStarts() {
+	public void onPipelineStarts() throws Exception {
 		super.onPipelineStarts();
 		this.initializeStream();
 	}

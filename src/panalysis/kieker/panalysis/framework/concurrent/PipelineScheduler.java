@@ -40,7 +40,7 @@ public class PipelineScheduler {
 
 	private final Iterator<IStage> iterator;
 
-	public PipelineScheduler(final IPipeline pipeline) {
+	public PipelineScheduler(final IPipeline pipeline) throws Exception {
 		pipeline.fireStartNotification();
 
 		final List<IStage> sortedStages = this.sortList(pipeline);
