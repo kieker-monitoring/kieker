@@ -34,6 +34,7 @@ public class CycledCountingFilter<T> extends CountingFilter<T> {
 	 * @since 1.10
 	 * @param countingPipe
 	 */
+	// FIXME a non-default constructor is not allowed
 	private CycledCountingFilter(final IPipe<Long> countingPipe) {
 		countingPipe.setSourcePort(this.NEW_COUNT);
 		countingPipe.setTargetPort(this.CURRENT_COUNT);

@@ -36,7 +36,7 @@ public abstract class AbstractStage implements IStage {
 	private IPipeline owningPipeline;
 
 	public AbstractStage() {
-		this.id = UUID.randomUUID().toString();
+		this.id = this.getClass().getCanonicalName() + "---" + UUID.randomUUID().toString();
 		this.logger = LogFactory.getLog(this.id);
 	}
 

@@ -49,6 +49,7 @@ public class CountingFilter<T> extends AbstractFilter<CountingFilter<T>> {
 		}
 
 		context.put(this.RELAYED_OBJECT, inputObject);
+		// FIXME using a MethodCallPipe leads to a stackoverflow since the value (currentCount+1) is put and taken infinitely
 		context.put(this.NEW_COUNT, currentCount + 1); // BETTER support pipes with primitive values to improve performance by avoiding auto-boxing
 
 		return true;
