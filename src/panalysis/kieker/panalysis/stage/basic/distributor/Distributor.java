@@ -33,13 +33,13 @@ public class Distributor<T> extends AbstractFilter<Distributor<T>> {
 
 	public final IInputPort<Distributor<T>, T> OBJECT = this.createInputPort();
 
-	private IStrategy<T> strategy = new RoundRobinStrategy<T>();
+	private IDistributorStrategy<T> strategy = new RoundRobinStrategy<T>();
 
-	public IStrategy<T> getStrategy() {
+	public IDistributorStrategy<T> getStrategy() {
 		return this.strategy;
 	}
 
-	public void setStrategy(final IStrategy<T> strategy) {
+	public void setStrategy(final IDistributorStrategy<T> strategy) {
 		this.strategy = strategy;
 	}
 
@@ -50,7 +50,7 @@ public class Distributor<T> extends AbstractFilter<Distributor<T>> {
 			return false;
 		}
 
-		return this.strategy.processInput(context, this.getOutputPorts(), object);
+		return this.strategy.distribute(context, this.getOutputPorts(), object);
 	}
 
 	public IOutputPort<Distributor<T>, T> getNewOutputPort() {

@@ -25,7 +25,7 @@ import kieker.panalysis.framework.core.IInputPort;
  * 
  * @since 1.10
  */
-public final class RoundRobinStrategy<T> implements IStrategy<T> {
+public final class RoundRobinStrategy<T> implements IMergerStrategy<T> {
 
 	private int index = 0;
 
@@ -44,11 +44,11 @@ public final class RoundRobinStrategy<T> implements IStrategy<T> {
 
 	@SuppressWarnings("unchecked")
 	private <S extends Merger<T>> IInputPort<S, T> getNextPortInRoundRobinOrder(final List<IInputPort<S, ?>> inputPorts) {
-		final IInputPort<S, ?> port = inputPorts.get(this.index);
+		final IInputPort<S, T> port = (IInputPort<S, T>) inputPorts.get(this.index);
 
 		this.index = (this.index + 1) % inputPorts.size();
 
-		return (IInputPort<S, T>) port;
+		return port;
 	}
 
 }

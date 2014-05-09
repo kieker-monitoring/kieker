@@ -25,10 +25,10 @@ import kieker.panalysis.framework.core.IOutputPort;
  * 
  * @since 1.10
  */
-public final class CopyByReferenceStrategy<T> implements IStrategy<T> {
+public final class CopyByReferenceStrategy<T> implements IDistributorStrategy<T> {
 
 	@SuppressWarnings("unchecked")
-	public <S extends Distributor<T>> boolean processInput(final Context<S> context, final List<IOutputPort<S, ?>> outputPorts, final T input) {
+	public <S extends Distributor<T>> boolean distribute(final Context<S> context, final List<IOutputPort<S, ?>> outputPorts, final T input) {
 		for (final IOutputPort<S, ?> port : outputPorts) {
 			context.put((IOutputPort<S, T>) port, input);
 		}

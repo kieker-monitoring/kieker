@@ -36,13 +36,13 @@ public class Merger<T> extends AbstractFilter<Merger<T>> {
 
 	public final IOutputPort<Merger<T>, T> OBJECT = this.createOutputPort();
 
-	private IStrategy<T> strategy = new RoundRobinStrategy<T>();
+	private IMergerStrategy<T> strategy = new RoundRobinStrategy<T>();
 
-	public IStrategy<T> getStrategy() {
+	public IMergerStrategy<T> getStrategy() {
 		return this.strategy;
 	}
 
-	public void setStrategy(final IStrategy<T> strategy) {
+	public void setStrategy(final IMergerStrategy<T> strategy) {
 		this.strategy = strategy;
 	}
 

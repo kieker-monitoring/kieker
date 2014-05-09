@@ -25,11 +25,11 @@ import kieker.panalysis.framework.core.IOutputPort;
  * 
  * @since 1.10
  */
-public final class RoundRobinStrategy<T> implements IStrategy<T> {
+public final class RoundRobinStrategy<T> implements IDistributorStrategy<T> {
 
 	private int index = 0;
 
-	public <S extends Distributor<T>> boolean processInput(final Context<S> context, final List<IOutputPort<S, ?>> outputPorts, final T input) {
+	public <S extends Distributor<T>> boolean distribute(final Context<S> context, final List<IOutputPort<S, ?>> outputPorts, final T input) {
 		final IOutputPort<S, T> port = this.getNextPortInRoundRobinOrder(outputPorts);
 		context.put(port, input);
 

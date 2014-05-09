@@ -25,7 +25,7 @@ import kieker.panalysis.framework.core.IInputPort;
  * 
  * @since 1.10
  */
-public interface IStrategy<T> {
+public interface IMergerStrategy<T> {
 
 	public <S extends Merger<T>> T getNextInput(final Context<S> context, final List<IInputPort<S, ?>> inputPorts);
 

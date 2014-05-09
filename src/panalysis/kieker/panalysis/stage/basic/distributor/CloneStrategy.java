@@ -25,9 +25,9 @@ import kieker.panalysis.framework.core.IOutputPort;
  * 
  * @since 1.10
  */
-public final class CloneStrategy<T> implements IStrategy<T> {
+public final class CloneStrategy<T> implements IDistributorStrategy<T> {
 
-	public <S extends Distributor<T>> boolean processInput(final Context<S> context, final List<IOutputPort<S, ?>> outputPorts, final T input) {
+	public <S extends Distributor<T>> boolean distribute(final Context<S> context, final List<IOutputPort<S, ?>> outputPorts, final T input) {
 		throw new UnsupportedOperationException();
 	}
 
