@@ -22,7 +22,7 @@ import kieker.panalysis.framework.core.IInputPort;
 import kieker.panalysis.framework.core.IOutputPort;
 
 /**
- * @author Jan Waller, Nils Christian Ehmke
+ * @author Christian Wulf
  * 
  * @since 1.10
  */
@@ -43,13 +43,13 @@ public class CountingFilter<T> extends AbstractFilter<CountingFilter<T>> {
 		if (inputObject == null) {
 			return false;
 		}
-		final Long count = context.tryTake(this.CURRENT_COUNT);
-		if (count == null) {
+		final Long currentCount = context.tryTake(this.CURRENT_COUNT);
+		if (currentCount == null) {
 			return false;
 		}
 
 		context.put(this.RELAYED_OBJECT, inputObject);
-		context.put(this.NEW_COUNT, count + 1); // BETTER support pipes with primitive values to improve performance by avoiding auto-boxing
+		context.put(this.NEW_COUNT, currentCount + 1); // BETTER support pipes with primitive values to improve performance by avoiding auto-boxing
 
 		return true;
 	}

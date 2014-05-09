@@ -23,15 +23,7 @@ package kieker.panalysis.framework.core;
  */
 public interface IStage {
 
-	/**
-	 * @since 1.10
-	 */
-	void setId(int id);
-
-	/**
-	 * @since 1.10
-	 */
-	int getId();
+	public String getId();
 
 	/**
 	 * @return <code>true</code> if the execution took enough tokens from the input ports so that the stage made progress due to this execution, <code>false</code>

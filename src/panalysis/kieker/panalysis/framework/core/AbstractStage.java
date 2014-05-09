@@ -16,6 +16,8 @@
 
 package kieker.panalysis.framework.core;
 
+import java.util.UUID;
+
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 
@@ -26,7 +28,7 @@ import kieker.common.logging.LogFactory;
  */
 public abstract class AbstractStage implements IStage {
 
-	protected int id;
+	private final String id;
 	/**
 	 * A unique logger instance per stage instance
 	 */
@@ -34,15 +36,12 @@ public abstract class AbstractStage implements IStage {
 	private IPipeline owningPipeline;
 
 	public AbstractStage() {
-		this.logger = LogFactory.getLog(Long.toString(this.id));
+		this.id = UUID.randomUUID().toString();
+		this.logger = LogFactory.getLog(this.id);
 	}
 
-	public int getId() {
+	public String getId() {
 		return this.id;
-	}
-
-	public void setId(final int id) {
-		this.id = id;
 	}
 
 	public IPipeline getOwningPipeline() {
@@ -55,7 +54,7 @@ public abstract class AbstractStage implements IStage {
 
 	@Override
 	public String toString() {
-		return "{" + "id=" + this.id + ", class=" + this.getClass().getSimpleName() + "}";
+		return "{" + "class=" + this.getClass().getSimpleName() + "}";
 	}
 
 }
