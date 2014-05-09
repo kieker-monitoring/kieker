@@ -17,11 +17,21 @@
 package kieker.panalysis.examples.countWords;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 import de.chw.util.Pair;
 
+import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Analysis;
+import kieker.panalysis.framework.core.IInputPort;
+import kieker.panalysis.framework.core.IOutputPort;
+import kieker.panalysis.framework.core.IPipe;
 import kieker.panalysis.framework.core.IPipeline;
+import kieker.panalysis.framework.core.ISink;
+import kieker.panalysis.framework.core.ISource;
+import kieker.panalysis.framework.core.IStage;
 import kieker.panalysis.framework.sequential.MethodCallPipe;
 import kieker.panalysis.stage.basic.RepeaterSource;
 import kieker.panalysis.stage.basic.distributor.Distributor;
@@ -36,54 +46,105 @@ public class CountWordsAnalysis extends Analysis {
 
 	private IPipeline pipeline;
 
-	private RepeaterSource<String> repeaterSource;
-	private DirectoryName2Files findFilesStage;
-	private Distributor<File> distributor;
-	private CountWordsStage countWordsStage0;
-	private CountWordsStage countWordsStage1;
-	private Merger<Pair<File, Integer>> merger;
-	private OutputWordsCountSink outputWordsCountStage;
-
 	@Override
 	public void init() {
 		super.init();
 
-		this.repeaterSource = RepeaterSource.create(".", 4000);
-		this.findFilesStage = new DirectoryName2Files();
-		this.distributor = new Distributor<File>();
-		this.countWordsStage0 = new CountWordsStage();
-		this.countWordsStage1 = new CountWordsStage();
-		this.merger = new Merger<Pair<File, Integer>>();
-		this.outputWordsCountStage = new OutputWordsCountSink();
+		this.pipeline = this.buildNonIoPipeline();
+	}
 
-		this.pipeline = Pipeline.create();
-		this.pipeline.addStage(this.repeaterSource);
-		this.pipeline.addStage(this.findFilesStage);
-		this.pipeline.addStage(this.distributor);
-		this.pipeline.addStage(this.countWordsStage0);
-		this.pipeline.addStage(this.countWordsStage1);
-		this.pipeline.addStage(this.merger);
-		this.pipeline.addStage(this.outputWordsCountStage);
+	private IPipeline buildNonIoPipeline() {
+		// create stages
+		final RepeaterSource<String> repeaterSource = RepeaterSource.create(".", 4000);
+		final DirectoryName2Files findFilesStage = new DirectoryName2Files();
+		final Distributor<File> distributor = new Distributor<File>();
+		final CountWordsStage countWordsStage0 = new CountWordsStage();
+		final CountWordsStage countWordsStage1 = new CountWordsStage();
+		final Merger<Pair<File, Integer>> merger = new Merger<Pair<File, Integer>>();
+		final OutputWordsCountSink outputWordsCountStage = new OutputWordsCountSink();
 
-		this.pipeline.setStartStages(this.repeaterSource);
-		this.repeaterSource.START.setAssociatedPipe(new MethodCallPipe<Boolean>(Boolean.TRUE));
+		// add each stage to a stage list
+		final List<IStage> stages = new LinkedList<IStage>();
+		stages.add(repeaterSource);
+		stages.add(findFilesStage);
+		stages.add(distributor);
+		stages.add(countWordsStage0);
+		stages.add(countWordsStage1);
+		stages.add(merger);
+		stages.add(outputWordsCountStage);
 
-		this.pipeline.connect(this.repeaterSource.OUTPUT, this.findFilesStage.DIRECTORY_NAME);
-		this.pipeline.connect(this.findFilesStage.FILE, this.distributor.OBJECT);
-		this.pipeline.connect(this.distributor.getNewOutputPort(), this.countWordsStage0.FILE);
-		this.pipeline.connect(this.distributor.getNewOutputPort(), this.countWordsStage1.FILE);
-		this.pipeline.connect(this.countWordsStage0.WORDSCOUNT, this.merger.getNewInputPort());
-		this.pipeline.connect(this.countWordsStage1.WORDSCOUNT, this.merger.getNewInputPort());
-		this.pipeline.connect(this.merger.OBJECT, this.outputWordsCountStage.FILE_WORDCOUNT_TUPLE);
+		final IPipe<?>[] pipes = new IPipe[7];
+		// connect stages by pipes
+		pipes[0] = this.connectWithSequentialPipe(repeaterSource.OUTPUT, findFilesStage.DIRECTORY_NAME);
+		pipes[1] = this.connectWithSequentialPipe(findFilesStage.FILE, distributor.OBJECT);
+		pipes[2] = this.connectWithSequentialPipe(distributor.getNewOutputPort(), countWordsStage0.FILE);
+		pipes[3] = this.connectWithSequentialPipe(distributor.getNewOutputPort(), countWordsStage1.FILE);
+		pipes[4] = this.connectWithSequentialPipe(countWordsStage0.WORDSCOUNT, merger.getNewInputPort());
+		pipes[5] = this.connectWithSequentialPipe(countWordsStage1.WORDSCOUNT, merger.getNewInputPort());
+		pipes[6] = this.connectWithSequentialPipe(merger.OBJECT, outputWordsCountStage.FILE_WORDCOUNT_TUPLE);
 
-		// pipeline.init();
+		repeaterSource.START.setAssociatedPipe(new MethodCallPipe<Boolean>(Boolean.TRUE));
+
+		final IPipeline pipeline = new IPipeline() {
+			@SuppressWarnings("unchecked")
+			public List<? extends AbstractFilter<?>> getStartStages() {
+				return Arrays.asList(repeaterSource);
+			}
+
+			public List<IStage> getStages() {
+				return stages;
+			}
+
+			public void fireStartNotification() throws Exception {
+				// notify each stage
+				for (final IStage stage : stages) {
+					stage.onPipelineStarts();
+				}
+				// notify each pipe
+				for (final IPipe<?> pipe : pipes) {
+					pipe.onPipelineStarts();
+				}
+			}
+
+			public void fireStopNotification() {
+				// notify each stage
+				for (final IStage stage : stages) {
+					stage.onPipelineStops();
+				}
+				// notify each pipe
+				for (final IPipe<?> pipe : pipes) {
+					pipe.onPipelineStops();
+				}
+			}
+		};
+
+		return pipeline;
+	}
+
+	private <A extends ISource, B extends ISink<B>, T> MethodCallPipe<T> connectWithSequentialPipe(final IOutputPort<A, T> sourcePort,
+			final IInputPort<B, T> targetPort) {
+		final MethodCallPipe<T> pipe = new MethodCallPipe<T>();
+		pipe.setSourcePort(sourcePort);
+		pipe.setTargetPort(targetPort);
+		return pipe;
 	}
 
 	@Override
 	public void start() {
 		super.start();
-		this.pipeline.fireStartNotification();
-		this.pipeline.getStartStages()[0].execute();
+		try {
+			this.pipeline.fireStartNotification();
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+
+		this.pipeline.getStartStages().get(0).execute();
+
+		try {
+			this.pipeline.fireStopNotification();
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void main(final String[] args) {
@@ -96,17 +157,16 @@ public class CountWordsAnalysis extends Analysis {
 		final long duration = end - start;
 		System.out.println("duration: " + duration + " ms"); // NOPMD (Just for example purposes)
 
-		System.out.println("repeaterSource: " + (analysis.repeaterSource.getOverallDuration() - // NOPMD (Just for example purposes)
-				analysis.findFilesStage.getOverallDuration()) + " ms");
-		System.out.println("findFilesStage: " + (analysis.findFilesStage.getOverallDuration() - // NOPMD (Just for example purposes)
-				analysis.countWordsStage0.getOverallDuration()) + " ms");
-		System.out.println("countWordsStage0: " + (analysis.countWordsStage0.getOverallDuration() - // NOPMD (Just for example purposes)
-				analysis.outputWordsCountStage.getOverallDuration()) + " ms");
-		System.out.println("countWordsStage1: " + (analysis.countWordsStage1.getOverallDuration() - // NOPMD (Just for example purposes)
-				analysis.outputWordsCountStage.getOverallDuration()) + " ms");
-		System.out.println("outputWordsCountStage: " + analysis.outputWordsCountStage.getOverallDuration() + " ms"); // NOPMD (Just for example purposes)
+		for (final IStage stage : analysis.pipeline.getStages()) {
+			if (stage instanceof AbstractFilter<?>) {
+				System.out.println(stage.getClass().getName() + ": " + ((AbstractFilter<?>) stage).getOverallDuration()); // NOPMD (Just for example purposes)
+			}
+		}
 
-		System.out.println("findFilesStage: " + analysis.findFilesStage.getNumFiles()); // NOPMD (Just for example purposes)
-		System.out.println("outputWordsCountStage: " + analysis.outputWordsCountStage.getNumFiles()); // NOPMD (Just for example purposes)
+		final DirectoryName2Files findFilesStage = (DirectoryName2Files) analysis.pipeline.getStages().get(1);
+		System.out.println("findFilesStage: " + findFilesStage.getNumFiles()); // NOPMD (Just for example purposes)
+
+		final OutputWordsCountSink outputWordsCountStage = (OutputWordsCountSink) analysis.pipeline.getStages().get(6);
+		System.out.println("outputWordsCountStage: " + outputWordsCountStage.getNumFiles()); // NOPMD (Just for example purposes)
 	}
 }
