@@ -51,9 +51,9 @@ public class WorkerThread extends Thread {
 				System.out.println("shouldTerminate: " + this.shouldTerminate + ", stage=" + stage);
 			}
 
-			this.startStageExecution();
+			this.startStageExecution(stage);
 			final boolean executedSuccessfully = stage.execute();
-			this.finishStageExecution();
+			this.finishStageExecution(stage, executedSuccessfully);
 
 			if (this.shouldTerminate) {
 				this.executeTerminationPolicy(stage, executedSuccessfully);
@@ -96,19 +96,17 @@ public class WorkerThread extends Thread {
 		this.pipelineScheduler = new NextStageScheduler(this.pipeline);
 	}
 
-	private void startStageExecution() {
-		// TODO Auto-generated method stub
-
+	private void startStageExecution(final IStage stage) {
+		System.out.println("Executing stage: " + stage);
 	}
 
-	private void finishStageExecution() {
-		// TODO Auto-generated method stub
-
+	private void finishStageExecution(final IStage stage, final boolean executedSuccessfully) {
+		System.out.println("Executed " + executedSuccessfully + ": stage");
 	}
 
 	private void cleanUpDatastructures() {
 		this.pipelineScheduler.cleanUp();
-
+		System.out.println("Thread terminated:" + this);
 	}
 
 	public long getDuration() {

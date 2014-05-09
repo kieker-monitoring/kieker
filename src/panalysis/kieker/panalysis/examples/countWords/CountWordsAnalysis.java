@@ -21,8 +21,8 @@ import java.io.File;
 import de.chw.util.Pair;
 
 import kieker.panalysis.framework.core.Analysis;
+import kieker.panalysis.framework.core.IPipeline;
 import kieker.panalysis.framework.sequential.MethodCallPipe;
-import kieker.panalysis.framework.sequential.Pipeline;
 import kieker.panalysis.stage.basic.Distributor;
 import kieker.panalysis.stage.basic.Merger;
 import kieker.panalysis.stage.basic.RepeaterSource;
@@ -34,7 +34,7 @@ import kieker.panalysis.stage.basic.RepeaterSource;
  */
 public class CountWordsAnalysis extends Analysis {
 
-	private Pipeline<MethodCallPipe<?>> pipeline;
+	private IPipeline pipeline;
 
 	private RepeaterSource<String> repeaterSource;
 	private DirectoryName2Files findFilesStage;

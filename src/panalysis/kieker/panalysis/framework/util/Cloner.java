@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.panalysis.framework.core;
+package kieker.panalysis.framework.util;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

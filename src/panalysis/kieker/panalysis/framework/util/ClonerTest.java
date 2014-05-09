@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.panalysis.framework.core;
+package kieker.panalysis.framework.util;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import kieker.panalysis.framework.util.Cloner;
 
 /**
  * @author Nils Christian Ehmke
