@@ -1,11 +1,25 @@
+/***************************************************************************
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
 package kieker.test.tools.junit.opad.filter;
 
-
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals; //NOCS
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.IAnalysisController;
@@ -13,12 +27,12 @@ import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
-
 import kieker.tools.opad.filter.OpadOutputCompositionFilter;
 import kieker.tools.opad.record.ExtendedStorableDetectionResult;
 import kieker.tools.opad.record.OpadOutputData;
 
 import kieker.test.common.junit.AbstractKiekerTest;
+//NOCS
 
 /**
  * Tests the composition of the OpadOutputCompositionFilter.
@@ -104,7 +118,7 @@ public class OpadOutputCompositionFilterTest extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testOpadOutputCompositionHostname() {
-		assertEquals(this.compositionResult.getOperationSignature().getHostName(), HOSTNAME);
+		Assert.assertEquals(this.compositionResult.getOperationSignature().getHostName(), HOSTNAME);
 	}
 
 	/**
@@ -112,7 +126,7 @@ public class OpadOutputCompositionFilterTest extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testOpadOutputCompositionAppname() {
-		assertEquals(this.compositionResult.getOperationSignature().getApplicationName(), APPNAME);
+		Assert.assertEquals(this.compositionResult.getOperationSignature().getApplicationName(), APPNAME);
 	}
 
 	/**
@@ -120,7 +134,7 @@ public class OpadOutputCompositionFilterTest extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testOpadOutputCompositionOperation() {
-		assertEquals(this.compositionResult.getOperationSignature().getStringSignature(), OPERATION);
+		Assert.assertEquals(this.compositionResult.getOperationSignature().getStringSignature(), OPERATION);
 	}
 
 	/**
@@ -128,7 +142,7 @@ public class OpadOutputCompositionFilterTest extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testOpadOutputCompositionLatency() {
-		assertEquals(this.compositionResult.getResponseTime(), ESDR_LATENCY);
+		Assert.assertEquals(this.compositionResult.getResponseTime(), ESDR_LATENCY);
 	}
 
 	/**
@@ -136,7 +150,7 @@ public class OpadOutputCompositionFilterTest extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testOpadOutputCompositionTimestamp() {
-		assertEquals(this.compositionResult.getTimestamp(), ESDR_TIMESTAMP);
+		Assert.assertEquals(this.compositionResult.getTimestamp(), ESDR_TIMESTAMP);
 	}
 
 	// @Test
@@ -149,7 +163,7 @@ public class OpadOutputCompositionFilterTest extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testOpadOutputCompositionScore() {
-		assertEquals(this.compositionResult.getAnomalyScore(), ESDR_SCORE, 0.0d);
+		Assert.assertEquals(this.compositionResult.getAnomalyScore(), ESDR_SCORE, 0.0d);
 	}
 
 	/**
@@ -157,6 +171,6 @@ public class OpadOutputCompositionFilterTest extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testOpadOutputCompositionAnomalyThreshold() {
-		assertEquals(this.compositionResult.getAnomalyThreshold(), ESDR_ANOMALY_THRESHOLD, 0.0d);
+		Assert.assertEquals(this.compositionResult.getAnomalyThreshold(), ESDR_ANOMALY_THRESHOLD, 0.0d);
 	}
 }

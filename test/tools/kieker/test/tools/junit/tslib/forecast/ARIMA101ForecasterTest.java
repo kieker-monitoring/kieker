@@ -36,10 +36,10 @@ import kieker.test.common.junit.AbstractKiekerTest;
  */
 public class ARIMA101ForecasterTest extends AbstractKiekerTest {
 
-	private final long startTime = 98890787;
-	private final long deltaTimeMillis = 1000;
-	private final int confidenceLevel = 90;
-	private final int steps = 1;
+	private static final long START_TIME = 98890787;
+	private static final long DELTA_TIME_MILLIS = 1000;
+	private static final int CONFIDENCE_LEVEL = 90;
+	private static final int STEPS = 1;
 
 	/**
 	 * Creates an instance of this class.
@@ -49,21 +49,22 @@ public class ARIMA101ForecasterTest extends AbstractKiekerTest {
 	}
 
 	/**
+	 * steps
 	 * Test of the ARIMA101 Forecaster via Rserve.
 	 */
 	@Test
 	public void testARIMAPredictor() {
-		
-//		  Test values resulting from this calculation:
-		  
-		 // var_1 <<- c(1.0,2.0,3.0,4.0)
-		 // var_2<<-arima(var_1,c(1,0,1))
-		 // var_3<<-predict(var_2,h=1,level=c(90))
-		 // dprint(var_3)
-		 // dprint(var_3$pred[1])
-		 // dprint(var_3$pred[1] + var_3$se[1])
-		 // dprint(var_3$pred[1] - var_3$se[1])
-		 
+
+		// Test values resulting from this calculation:
+
+		// var_1 <<- c(1.0,2.0,3.0,4.0)
+		// var_2<<-arima(var_1,c(1,0,1))
+		// var_3<<-predict(var_2,h=1,level=c(90))
+		// dprint(var_3)
+		// dprint(var_3$pred[1])
+		// dprint(var_3$pred[1] + var_3$se[1])
+		// dprint(var_3$pred[1] - var_3$se[1])
+
 		final Double[] values = { 1.0, 2.0, 3.0, 4.0 };
 		final List<Double> expectedValues = new ArrayList<Double>(values.length);
 		for (final Double curVal : values) {
@@ -71,11 +72,11 @@ public class ARIMA101ForecasterTest extends AbstractKiekerTest {
 		}
 
 		final TimeSeries<Double> ts =
-				new TimeSeries<Double>(this.startTime, this.deltaTimeMillis, TimeUnit.MILLISECONDS);
+				new TimeSeries<Double>(ARIMA101ForecasterTest.START_TIME, ARIMA101ForecasterTest.DELTA_TIME_MILLIS, TimeUnit.MILLISECONDS);
 		ts.appendAll(values);
 
-		final ARIMA101Forecaster forecaster = new ARIMA101Forecaster(ts, this.confidenceLevel);
-		final IForecastResult forecast = forecaster.forecast(this.steps);
+		final ARIMA101Forecaster forecaster = new ARIMA101Forecaster(ts, ARIMA101ForecasterTest.CONFIDENCE_LEVEL);
+		final IForecastResult forecast = forecaster.forecast(ARIMA101ForecasterTest.STEPS);
 
 		final ITimeSeries<Double> forecastSeries = forecast.getForecast();
 		final double expectedForecast = 4.210429;

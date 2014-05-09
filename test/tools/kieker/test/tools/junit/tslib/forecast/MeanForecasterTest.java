@@ -34,12 +34,12 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * @author Tillmann Carlos Bielefeld
  */
 public class MeanForecasterTest extends AbstractKiekerTest {
+	private static final int CONFIDENCE_LEVEL = 95; // 95%
 	private TimeSeries<Double> ts;
 	private long startTime;
 	private int steps;
 	private MeanForecaster forecaster;
 	private IForecastResult forecast;
-	private static final int CONFIDENCE_LEVEL = 95; // 95%
 	private ITimeSeries<Double> forecastSeries;
 	private ITimeSeries<Double> upperSeries;
 	private ITimeSeries<Double> lowerSeries;
@@ -79,7 +79,7 @@ public class MeanForecasterTest extends AbstractKiekerTest {
 		this.ts = new TimeSeries<Double>(this.startTime, this.deltaTime, tu);
 
 		this.steps = 1;
-		this.mean = new Double(2.0);
+		this.mean = Double.valueOf(2.0);
 		this.ts.append(this.mean - 1);
 		this.ts.append(this.mean);
 		this.ts.append(this.mean + 1);

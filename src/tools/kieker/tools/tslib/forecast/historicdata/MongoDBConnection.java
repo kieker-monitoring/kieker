@@ -22,6 +22,9 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
+
 /**
  * The database connection used by the pattern checking forecaster. This must be
  * the database, were the results of OPAD are stored. This enables the pattern
@@ -34,23 +37,25 @@ public class MongoDBConnection {
 
 	private static final String DB_NAME = "opadxDB";
 	private static final String COLL_NAME = "analysisResults";
+	private static final Log LOG = LogFactory.getLog(MongoDBConnection.class);
 
-	private MongoClient mongoClient;
-	private final DB db;
 	private final DBCollection coll;
 
 	/**
 	 * Creates a new MongoDB connection.
 	 */
 	public MongoDBConnection() {
+		final MongoClient mongoClient;
+		final DB db;
+		DBCollection dbCol = null;
 		try {
-			this.mongoClient = new MongoClient("localhost");
+			mongoClient = new MongoClient("localhost");
+			db = mongoClient.getDB(DB_NAME);
+			dbCol = db.getCollection(COLL_NAME);
 		} catch (final UnknownHostException e) {
-			System.out.println("Database connection can not be established for the  Pattern Checking Forecaster!");
-			e.printStackTrace();
+			LOG.error("Database connection can not be established for the  Pattern Checking Forecaster!", e);
 		}
-		this.db = this.mongoClient.getDB(DB_NAME);
-		this.coll = this.db.getCollection(COLL_NAME);
+		this.coll = dbCol;
 	}
 
 	/**

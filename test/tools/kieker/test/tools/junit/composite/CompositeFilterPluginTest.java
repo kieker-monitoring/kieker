@@ -1,12 +1,28 @@
+/***************************************************************************
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
 package kieker.test.tools.junit.composite;
 
 // CHECKSTYLE:OFF
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.IAnalysisController;
 import kieker.analysis.IProjectContext;
@@ -19,10 +35,11 @@ import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.tools.junit.composite.CompositeImplementation.Distributor;
 import kieker.tools.composite.AbstractCompositeFilterPlugin;
 import kieker.tools.composite.AbstractCompositeFilterPlugin.PortWrapper;
+
+import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.tools.junit.composite.CompositeImplementation.Distributor;
 
 //CHECKSTYLE:ON
 
@@ -81,10 +98,10 @@ public class CompositeFilterPluginTest extends AbstractKiekerTest {
 					ListCollectionFilter.INPUT_PORT_NAME);
 
 			this.simulate();
-		} catch (IllegalStateException e) {
+		} catch (final IllegalStateException e) {
 			this.nothing();
 			// e.printStackTrace();
-		} catch (AnalysisConfigurationException e) {
+		} catch (final AnalysisConfigurationException e) {
 			this.nothing();
 			// e.printStackTrace();
 		}
@@ -115,7 +132,7 @@ public class CompositeFilterPluginTest extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testInternallyUpdatedConfiguration() {
-		assertEquals("Configuration of Distributor was not updated", CompositeFilterPluginTest.NEW_PROPERTY,
+		Assert.assertEquals("Configuration of Distributor was not updated", CompositeFilterPluginTest.NEW_PROPERTY,
 				this.compositePlugin.getDistributorConfiguration().getStringProperty(Distributor.TEST_PROPERTY_ONE));
 	}
 
@@ -124,7 +141,7 @@ public class CompositeFilterPluginTest extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testListCollectionSizeInt() {
-		assertEquals("Wrong number of Integer messages", 1, this.listCollectionfilterINT.size());
+		Assert.assertEquals("Wrong number of Integer messages", 1, this.listCollectionfilterINT.size());
 	}
 
 	/**
@@ -132,7 +149,7 @@ public class CompositeFilterPluginTest extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testListCollectionSizeStr() {
-		assertEquals("Wrong number of String messages", 1, this.listCollectionfilterSTR.size());
+		Assert.assertEquals("Wrong number of String messages", 1, this.listCollectionfilterSTR.size());
 	}
 
 	/**
@@ -140,7 +157,7 @@ public class CompositeFilterPluginTest extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testListCollectionSizeOer() {
-		assertEquals("Wrong number of OER messages", 1, this.listCollectionfilterOER.size());
+		Assert.assertEquals("Wrong number of OER messages", 1, this.listCollectionfilterOER.size());
 	}
 
 	/**
@@ -157,7 +174,7 @@ public class CompositeFilterPluginTest extends AbstractKiekerTest {
 		// clear the "master configuration"
 		this.compositePlugin.getCurrentConfiguration().clear();
 		// check if truly empty
-		assertTrue("The CompositePlugins Config is not empty", this.compositePlugin.getCurrentConfiguration().isEmpty());
+		Assert.assertTrue("The CompositePlugins Config is not empty", this.compositePlugin.getCurrentConfiguration().isEmpty());
 
 		final String change = "AENDERUNG";
 		// refill "master configuration"
@@ -167,9 +184,11 @@ public class CompositeFilterPluginTest extends AbstractKiekerTest {
 				PropertyPlugin.class.getSimpleName() + PropertyPlugin.PROPERTY_DO_NOT_CHANGE, "huehuae");
 
 		testConfig = this.compositePlugin.updateConfiguration(testConfig, PropertyPlugin.class);
-		assertEquals("The Value was not changed", testConfig.getStringProperty(PropertyPlugin.PROPERTY_DO_CHANGE), change);
-		assertEquals("The Value was changed", testConfig.getStringProperty(PropertyPlugin.PROPERTY_DO_NOT_CHANGE), PropertyPlugin.DEFAULT_PROPERTY_DO_NOT_CHANGE);
-		assertEquals("Something happened", testConfig.getStringProperty(PropertyPlugin.PROPERTY_DO_NOT_GET_LOST), PropertyPlugin.DEFAULT_PROPERTY_DO_NOT_GET_LOST);
+		Assert.assertEquals("The Value was not changed", testConfig.getStringProperty(PropertyPlugin.PROPERTY_DO_CHANGE), change);
+		Assert.assertEquals("The Value was changed", testConfig.getStringProperty(PropertyPlugin.PROPERTY_DO_NOT_CHANGE),
+				PropertyPlugin.DEFAULT_PROPERTY_DO_NOT_CHANGE);
+		Assert.assertEquals("Something happened", testConfig.getStringProperty(PropertyPlugin.PROPERTY_DO_NOT_GET_LOST),
+				PropertyPlugin.DEFAULT_PROPERTY_DO_NOT_GET_LOST);
 
 	}
 
@@ -184,20 +203,20 @@ public class CompositeFilterPluginTest extends AbstractKiekerTest {
 		final List<PortWrapper> t6 = testPlugin.getOutputPorts(new T6());
 		final List<PortWrapper> t3 = testPlugin.getOutputPorts(new T3());
 
-		assertTrue("T1 is not in the list", this.containing(t1, OutputportsPlugin.T1_T3, T1.class));
-		assertFalse("T3 is in the list falsefully", this.containing(t1, OutputportsPlugin.T1_T3, T3.class));
-		assertEquals("Wrong number of Ports found!", 1, t1.size());
+		Assert.assertTrue("T1 is not in the list", this.containing(t1, OutputportsPlugin.T1_T3, T1.class));
+		Assert.assertFalse("T3 is in the list falsefully", this.containing(t1, OutputportsPlugin.T1_T3, T3.class));
+		Assert.assertEquals("Wrong number of Ports found!", 1, t1.size());
 
-		assertTrue("T2 is not in the list", this.containing(t2, OutputportsPlugin.T2, T2.class));
-		assertEquals("Wrong number of Ports found!", 1, t2.size());
+		Assert.assertTrue("T2 is not in the list", this.containing(t2, OutputportsPlugin.T2, T2.class));
+		Assert.assertEquals("Wrong number of Ports found!", 1, t2.size());
 
-		assertTrue("T6 is not in the list", this.containing(t6, OutputportsPlugin.T3_T6, T6.class));
-		assertTrue("T6 is not in the list", this.containing(t6, OutputportsPlugin.T5_T6, T6.class));
-		assertEquals("Wrong number of Ports found!", 2, t6.size());
+		Assert.assertTrue("T6 is not in the list", this.containing(t6, OutputportsPlugin.T3_T6, T6.class));
+		Assert.assertTrue("T6 is not in the list", this.containing(t6, OutputportsPlugin.T5_T6, T6.class));
+		Assert.assertEquals("Wrong number of Ports found!", 2, t6.size());
 
-		assertTrue("T3 is not in the list", this.containing(t3, OutputportsPlugin.T1_T3, T3.class));
-		assertTrue("T3 is not in the list", this.containing(t3, OutputportsPlugin.T3_T6, T3.class));
-		assertEquals("Wrong number of Ports found!", 2, t3.size());
+		Assert.assertTrue("T3 is not in the list", this.containing(t3, OutputportsPlugin.T1_T3, T3.class));
+		Assert.assertTrue("T3 is not in the list", this.containing(t3, OutputportsPlugin.T3_T6, T3.class));
+		Assert.assertEquals("Wrong number of Ports found!", 2, t3.size());
 
 	}
 
@@ -309,7 +328,7 @@ public class CompositeFilterPluginTest extends AbstractKiekerTest {
 
 		@Override
 		public Configuration getCurrentConfiguration() {
-			return configuration;
+			return this.configuration;
 		}
 
 	}

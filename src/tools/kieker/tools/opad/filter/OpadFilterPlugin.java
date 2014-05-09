@@ -1,3 +1,19 @@
+/***************************************************************************
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
 package kieker.tools.opad.filter;
 
 import kieker.analysis.IProjectContext;
@@ -64,14 +80,14 @@ public class OpadFilterPlugin extends AbstractCompositeFilterPlugin {
 			 */
 			final Configuration extractionConfiguration = new Configuration();
 			this.updateConfiguration(extractionConfiguration, ExtractionFilter.class);
-			final ExtractionFilter extractionFilter = new ExtractionFilter(extractionConfiguration, controller);
+			final ExtractionFilter extractionFilter = new ExtractionFilter(extractionConfiguration, this.controller);
 
 			/**
 			 * TimeSeriesPointAggregatorFilter
 			 */
 			final Configuration aggregationConfiguration = new Configuration();
 			this.updateConfiguration(aggregationConfiguration, TimeSeriesPointAggregatorFilter.class);
-			final TimeSeriesPointAggregatorFilter tsPointAggregatorFilter = new TimeSeriesPointAggregatorFilter(aggregationConfiguration, controller);
+			final TimeSeriesPointAggregatorFilter tsPointAggregatorFilter = new TimeSeriesPointAggregatorFilter(aggregationConfiguration, this.controller);
 
 			/**
 			 * ExtendedForecastingFilter
@@ -79,72 +95,72 @@ public class OpadFilterPlugin extends AbstractCompositeFilterPlugin {
 
 			final Configuration forecastConfiguration = new Configuration();
 			this.updateConfiguration(forecastConfiguration, ExtendedForecastingFilter.class);
-			final ExtendedForecastingFilter extForecastingFilter = new ExtendedForecastingFilter(forecastConfiguration, controller);
-			configRegistry.registerUpdateableFilterPlugin("extForecastingFilter", extForecastingFilter);
+			final ExtendedForecastingFilter extForecastingFilter = new ExtendedForecastingFilter(forecastConfiguration, this.controller);
+			this.configRegistry.registerUpdateableFilterPlugin("extForecastingFilter", extForecastingFilter);
 
 			/**
 			 * UniteMeasurementPairFilter
 			 */
 			final Configuration uniteConfiguration = new Configuration();
 			this.updateConfiguration(uniteConfiguration, UniteMeasurementPairFilter.class);
-			final UniteMeasurementPairFilter uniteFilter = new UniteMeasurementPairFilter(uniteConfiguration, controller);
+			final UniteMeasurementPairFilter uniteFilter = new UniteMeasurementPairFilter(uniteConfiguration, this.controller);
 
 			/**
 			 * AnomalyScoreCalculatorFilter
 			 */
 			final Configuration scoreConfiguration = new Configuration();
 			this.updateConfiguration(scoreConfiguration, AnomalyScoreCalculationFilter.class);
-			final AnomalyScoreCalculationFilter scoreCalculationFilter = new AnomalyScoreCalculationFilter(scoreConfiguration, controller);
+			final AnomalyScoreCalculationFilter scoreCalculationFilter = new AnomalyScoreCalculationFilter(scoreConfiguration, this.controller);
 
 			/**
 			 * AnomalyDetectionFilter
 			 */
 			final Configuration configAnomaly = new Configuration();
 			this.updateConfiguration(configAnomaly, AnomalyDetectionFilter.class);
-			final AnomalyDetectionFilter anomalyDetectionFilter = new AnomalyDetectionFilter(configAnomaly, controller);
-			configRegistry.registerUpdateableFilterPlugin("anomalyDetectionFilter", anomalyDetectionFilter);
+			final AnomalyDetectionFilter anomalyDetectionFilter = new AnomalyDetectionFilter(configAnomaly, this.controller);
+			this.configRegistry.registerUpdateableFilterPlugin("anomalyDetectionFilter", anomalyDetectionFilter);
 
 			/**
 			 * SendAndStoreDetectionResultsFilter
 			 */
 			final Configuration configSaS = new Configuration();
 			this.updateConfiguration(configSaS, SendAndStoreDetectionResultFilter.class);
-			final SendAndStoreDetectionResultFilter sendAndStoreDetectionResultFilter = new SendAndStoreDetectionResultFilter(configSaS, controller);
+			final SendAndStoreDetectionResultFilter sendAndStoreDetectionResultFilter = new SendAndStoreDetectionResultFilter(configSaS, this.controller);
 
 			// StringBufferFilter -> ExtractionFilter
-			controller.connect(inputRelay, CompositeInputRelay.INPUTRELAY_OUTPUTPORT, extractionFilter, ExtractionFilter.INPUT_PORT_NAME_VALUE);
+			this.controller.connect(this.inputRelay, CompositeInputRelay.INPUTRELAY_OUTPUTPORT, extractionFilter, ExtractionFilter.INPUT_PORT_NAME_VALUE);
 
 			// ExtractionFilter -> TSPointAggregatorFilter
-			controller.connect(extractionFilter, ExtractionFilter.OUTPUT_PORT_NAME_VALUE, tsPointAggregatorFilter,
+			this.controller.connect(extractionFilter, ExtractionFilter.OUTPUT_PORT_NAME_VALUE, tsPointAggregatorFilter,
 					TimeSeriesPointAggregatorFilter.INPUT_PORT_NAME_TSPOINT); // NOCS
 
 			// TSPointAggregatorFilter -> ExtendedForecastingFilter
-			controller.connect(tsPointAggregatorFilter, TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, extForecastingFilter,
+			this.controller.connect(tsPointAggregatorFilter, TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, extForecastingFilter,
 					ExtendedForecastingFilter.INPUT_PORT_NAME_TSPOINT); // NOCS
 
 			// TSPointAggregatorfilter -> UniteMeasurementPairFilter
-			controller.connect(tsPointAggregatorFilter, TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, uniteFilter,
+			this.controller.connect(tsPointAggregatorFilter, TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, uniteFilter,
 					UniteMeasurementPairFilter.INPUT_PORT_NAME_TSPOINT); // NOCS
 
 			// ExtendedForecastingFilter -> UniteMeasurementPairFilter
-			controller.connect(extForecastingFilter, ExtendedForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, uniteFilter,
+			this.controller.connect(extForecastingFilter, ExtendedForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, uniteFilter,
 					UniteMeasurementPairFilter.INPUT_PORT_NAME_FORECAST); // NOCS
 
 			// UniteMeasurementPairFilter -> AnomalyScoreCalculationFilter
-			controller.connect(uniteFilter, UniteMeasurementPairFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, scoreCalculationFilter,
+			this.controller.connect(uniteFilter, UniteMeasurementPairFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, scoreCalculationFilter,
 					AnomalyScoreCalculationFilter.INPUT_PORT_CURRENT_FORECAST_PAIR); // NOCS
 
 			// AnomalyScoreCalculationFilter -> AnomalyScoreDetectionFilter
-			controller.connect(scoreCalculationFilter, AnomalyScoreCalculationFilter.OUTPUT_PORT_ANOMALY_SCORE, anomalyDetectionFilter,
+			this.controller.connect(scoreCalculationFilter, AnomalyScoreCalculationFilter.OUTPUT_PORT_ANOMALY_SCORE, anomalyDetectionFilter,
 					AnomalyDetectionFilter.INPUT_PORT_ANOMALY_SCORE); // NOCS
 
 			// AnomalyScoreDetectionFilter -> SendAndStoreDetectionResultFilter
-			controller.connect(anomalyDetectionFilter, AnomalyDetectionFilter.OUTPUT_PORT_ALL,
+			this.controller.connect(anomalyDetectionFilter, AnomalyDetectionFilter.OUTPUT_PORT_ALL,
 					sendAndStoreDetectionResultFilter, SendAndStoreDetectionResultFilter.INPUT_PORT_DETECTION_RESULTS);
 
 			// SendAndStoreDetectionResultFilter -> OpadOutputCompositionFilter
-			controller.connect(sendAndStoreDetectionResultFilter, SendAndStoreDetectionResultFilter.OUTPUT_PORT_SENT_DATA,
-					outputRelay, CompositeOutputRelay.INPUT_PORT_NAME_EVENTS);
+			this.controller.connect(sendAndStoreDetectionResultFilter, SendAndStoreDetectionResultFilter.OUTPUT_PORT_SENT_DATA,
+					this.outputRelay, CompositeOutputRelay.INPUT_PORT_NAME_EVENTS);
 
 		} catch (final IllegalStateException ise) {
 			LOG.error("An error occurred: " + ise.getMessage());
@@ -155,13 +171,13 @@ public class OpadFilterPlugin extends AbstractCompositeFilterPlugin {
 
 	@Override
 	public Configuration getCurrentConfiguration() {
-		if (!configuration.containsKey(OpadFilterPlugin.PROPERTY_NAME_FC_METHOD)) {
-			configuration.setProperty(OpadFilterPlugin.PROPERTY_NAME_FC_METHOD, "MEAN");
+		if (!this.configuration.containsKey(OpadFilterPlugin.PROPERTY_NAME_FC_METHOD)) {
+			this.configuration.setProperty(OpadFilterPlugin.PROPERTY_NAME_FC_METHOD, "MEAN");
 		}
-		if (!configuration.containsKey(OpadFilterPlugin.PROPERTY_NAME_THRESHOLD)) {
-			configuration.setProperty(OpadFilterPlugin.PROPERTY_NAME_THRESHOLD, "0.5");
+		if (!this.configuration.containsKey(OpadFilterPlugin.PROPERTY_NAME_THRESHOLD)) {
+			this.configuration.setProperty(OpadFilterPlugin.PROPERTY_NAME_THRESHOLD, "0.5");
 		}
-		return configuration;
+		return this.configuration;
 	}
 
 	/**

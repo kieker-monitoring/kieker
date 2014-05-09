@@ -1,3 +1,19 @@
+/***************************************************************************
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
 package kieker.tools.opad.record;
 
 import kieker.common.record.AbstractMonitoringRecord;
@@ -27,15 +43,22 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult {
 
 	/**
 	 * Constructor.
-	 * @param hostAppOperationName host, app and operation name of the instrumented environment (host+app:operation)
-	 * @param latency the latency the method has
-	 * @param timestamp timestamp of the measurement
-	 * @param forecast forecasted value
-	 * @param score calculated anomaly score
-	 * @param anomalyThreshold anomaly threshold
+	 * 
+	 * @param hostAppOperationName
+	 *            host, app and operation name of the instrumented environment (host+app:operation)
+	 * @param latency
+	 *            the latency the method has
+	 * @param timestamp
+	 *            timestamp of the measurement
+	 * @param forecast
+	 *            forecasted value
+	 * @param score
+	 *            calculated anomaly score
+	 * @param anomalyThreshold
+	 *            anomaly threshold
 	 */
 	public ExtendedStorableDetectionResult(
-			final String hostAppOperationName, final double latency, final long timestamp, 
+			final String hostAppOperationName, final double latency, final long timestamp,
 			final double forecast, final double score, final double anomalyThreshold) {
 		super(hostAppOperationName, latency, timestamp, forecast, score);
 		this.anomalyThreshold = anomalyThreshold;
@@ -43,8 +66,11 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult {
 
 	/**
 	 * Constructor.
-	 * @param sdr StorableDetectionResult object
-	 * @param anomalyThreshold anomaly threshold
+	 * 
+	 * @param sdr
+	 *            StorableDetectionResult object
+	 * @param anomalyThreshold
+	 *            anomaly threshold
 	 */
 	public ExtendedStorableDetectionResult(final StorableDetectionResult sdr, final double anomalyThreshold) {
 		this(sdr.getApplication(), sdr.getValue(), sdr.getTimestamp(), sdr.getForecast(), sdr.getScore(), anomalyThreshold);
@@ -52,9 +78,11 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult {
 
 	/**
 	 * Constructor.
-	 * @param values values of members as Object array
+	 * 
+	 * @param values
+	 *            values of members as Object array
 	 */
-	public ExtendedStorableDetectionResult(final Object[] values) { //NOPMD
+	public ExtendedStorableDetectionResult(final Object[] values) { // NOPMD
 		super(values);
 		AbstractMonitoringRecord.checkArray(values, ExtendedStorableDetectionResult.TYPES);
 		this.anomalyThreshold = (Double) values[5];
