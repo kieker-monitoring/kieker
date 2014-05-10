@@ -27,6 +27,6 @@ import kieker.panalysis.framework.core.IOutputPort;
  */
 public interface IDistributorStrategy<T> {
 
-	public <S extends Distributor<T>> boolean distribute(final Context<S> context, final List<IOutputPort<S, ?>> list, final T input);
+	public <S extends Distributor<T>> boolean distribute(final Context<S> context, final List<IOutputPort<S, ?>> allOutputPorts, final T input);
 
 }

@@ -3,21 +3,19 @@ package kieker.panalysis.framework.concurrent;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import kieker.panalysis.framework.core.IPipeline;
 import kieker.panalysis.framework.core.IStage;
 
 public class StageWorkList extends ArrayList<IStage> {
 
 	private static final long serialVersionUID = 5025916150961442772L;
-	private final IPipeline pipeline;
+	private final int accessesDeviceId;
 
-	public StageWorkList(final IPipeline pipeline) {
-		this.pipeline = pipeline;
-		this.ensureCapacity(pipeline.getStages().size());
+	public StageWorkList(final int accessesDeviceId) {
+		this.accessesDeviceId = accessesDeviceId;
 	}
 
 	private boolean isValid(final IStage stage) {
-		return (stage.getOwningPipeline() == this.pipeline);
+		return (stage.getAccessesDeviceId() == this.accessesDeviceId);
 	}
 
 	@Override

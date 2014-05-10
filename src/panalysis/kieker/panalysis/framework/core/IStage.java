@@ -86,10 +86,6 @@ public interface IStage {
 
 	Context<?> getContext();
 
-	IPipeline getOwningPipeline();
-
-	void setOwningPipeline(IPipeline owningPipeline);
-
 	void copyAttributes(IStage stage);
 
 	/**
@@ -101,5 +97,9 @@ public interface IStage {
 	 * @since 1.10
 	 */
 	IInputPort<?, ?> getInputPortByIndex(int index);
+
+	int getAccessesDeviceId();
+
+	void setAccessesDeviceId(final int accessesDeviceId);
 
 }

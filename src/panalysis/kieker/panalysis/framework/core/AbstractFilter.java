@@ -45,11 +45,19 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	private Context<S> context;
 
 	private int enabledInputPorts = 0;
-
-	private long overallDuration;
+	private int accessesDeviceId = 0;
+	private long overallDuration = 0; // 0=in-memory, x>0=disk0, disk1, socket0, socket1 etc.
 
 	public long getOverallDuration() {
 		return this.overallDuration;
+	}
+
+	public int getAccessesDeviceId() {
+		return this.accessesDeviceId;
+	}
+
+	public void setAccessesDeviceId(final int accessesDeviceId) {
+		this.accessesDeviceId = accessesDeviceId;
 	}
 
 	// BETTER return a limited context that allows "read" only
@@ -110,7 +118,7 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	public <T> void onSignalClosing(final IInputPort<S, T> inputPort) {
 		// inputPort.setState(IInputPort.State.CLOSING);
 		this.enabledInputPorts--;
-		System.out.println("Closed " + "(" + this.enabledInputPorts + " remaining) " + inputPort + " of " + this.toString());
+		this.logger.info("Closed " + "(" + this.enabledInputPorts + " remaining) " + inputPort + " of " + this);
 
 		this.checkWhetherThisStageMayBeDisabled();
 	}
@@ -119,14 +127,9 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	 * @since 1.10
 	 */
 	private void checkWhetherThisStageMayBeDisabled() {
-		// for (final IInputPort<S, ?> iport : this.inputPorts) {
-		// if (iport.getState() != IInputPort.State.CLOSING) {
-		// return;
-		// }
-		// }
 		if (this.enabledInputPorts == 0) {
 			this.mayBeDisabled = true;
-			System.out.println(this.toString() + " can now be disabled by the pipeline scheduler.");
+			this.logger.info(this.toString() + " can now be disabled by the pipeline scheduler.");
 		}
 	}
 
@@ -146,8 +149,7 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	 * @since 1.10
 	 */
 	public void fireSignalClosingToAllOutputPorts() {
-		this.logger.info("Fire closing signal to all output ports..." + "(" + this + ")");
-		this.logger.info("outputPorts: " + this.outputPorts);
+		this.logger.info("Fire closing signal to all output ports of: " + this);
 		for (final IOutputPort<S, ?> port : this.outputPorts) {
 			final IPipe<?> associatedPipe = port.getAssociatedPipe();
 			if (associatedPipe != null) {

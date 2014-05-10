@@ -34,9 +34,11 @@ public class WorkerThread extends Thread {
 
 	private volatile TerminationPolicy terminationPolicy;
 	private volatile boolean shouldTerminate = false;
+	private final int accessesDeviceId;
 
-	public WorkerThread(final IPipeline pipeline) {
+	public WorkerThread(final IPipeline pipeline, final int accessesDeviceId) {
 		this.pipeline = pipeline;
+		this.accessesDeviceId = accessesDeviceId;
 	}
 
 	@Override
@@ -51,9 +53,6 @@ public class WorkerThread extends Thread {
 
 		while (this.pipelineScheduler.isAnyStageActive()) {
 			final IStage stage = this.pipelineScheduler.get();
-			if ("startThread".equals(this.getName())) {
-				System.out.println("shouldTerminate: " + this.shouldTerminate + ", stage=" + stage);
-			}
 
 			this.startStageExecution(stage);
 			final boolean executedSuccessfully = stage.execute();
@@ -72,7 +71,11 @@ public class WorkerThread extends Thread {
 	}
 
 	private void executeTerminationPolicy(final IStage executedStage, final boolean executedSuccessfully) {
-		// System.out.println("WorkerThread.executeTerminationPolicy(): " + this.terminationPolicy + ", mayBeDisabled=" + executedStage.mayBeDisabled());
+		if (!Thread.currentThread().getName().equals("startThread")) {
+			// System.out.println("WorkerThread.executeTerminationPolicy(): " + this.terminationPolicy + ", executedSuccessfully=" + executedSuccessfully
+			// + ", mayBeDisabled=" + executedStage.mayBeDisabled());
+		}
+
 		switch (this.terminationPolicy) {
 		case TERMINATE_STAGE_AFTER_NEXT_EXECUTION:
 			if (executedStage.mayBeDisabled()) {
@@ -97,15 +100,19 @@ public class WorkerThread extends Thread {
 	}
 
 	private void initDatastructures() throws Exception {
-		this.pipelineScheduler = new NextStageScheduler(this.pipeline);
+		this.pipelineScheduler = new NextStageScheduler(this.pipeline, this.accessesDeviceId);
 	}
 
 	private void startStageExecution(final IStage stage) {
-		System.out.println("Executing stage: " + stage);
+		if (!Thread.currentThread().getName().equals("startThread")) {
+			// System.out.println("Executing stage: " + stage);
+		}
 	}
 
 	private void finishStageExecution(final IStage stage, final boolean executedSuccessfully) {
-		System.out.println("Executed " + executedSuccessfully + ": stage");
+		if (!Thread.currentThread().getName().equals("startThread")) {
+			// System.out.println("Executed " + executedSuccessfully + ": stage");
+		}
 	}
 
 	private void cleanUpDatastructures() {

@@ -32,11 +32,13 @@ import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Analysis;
 import kieker.panalysis.framework.core.IInputPort;
 import kieker.panalysis.framework.core.IOutputPort;
+import kieker.panalysis.framework.core.IPipe;
 import kieker.panalysis.framework.core.IPipeline;
 import kieker.panalysis.framework.core.ISink;
 import kieker.panalysis.framework.core.ISource;
 import kieker.panalysis.framework.core.IStage;
 import kieker.panalysis.framework.sequential.MethodCallPipe;
+import kieker.panalysis.framework.sequential.QueuePipe;
 import kieker.panalysis.stage.basic.RepeaterSource;
 import kieker.panalysis.stage.basic.distributor.Distributor;
 import kieker.panalysis.stage.basic.merger.Merger;
@@ -55,7 +57,7 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 	private WorkerThread[] ioThreads;
 	private WorkerThread[] nonIoThreads;
 
-	ConcurrentWorkStealingPipeFactory<?>[] pipeFactories = new ConcurrentWorkStealingPipeFactory[5];
+	ConcurrentWorkStealingPipeFactory<?>[] pipeFactories;
 
 	@Override
 	public void init() {
@@ -64,7 +66,7 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 		this.ioThreads = new WorkerThread[1];
 
 		final IPipeline readerThreadPipeline = this.readerThreadPipeline();
-		this.ioThreads[0] = new WorkerThread(readerThreadPipeline);
+		this.ioThreads[0] = new WorkerThread(readerThreadPipeline, 1);
 		this.ioThreads[0].setName("startThread");
 
 		@SuppressWarnings("unchecked")
@@ -78,11 +80,12 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 		this.nonIoThreads = new WorkerThread[numThreads];
 		for (int i = 0; i < this.nonIoThreads.length; i++) {
 			final IPipeline pipeline = this.buildNonIoPipeline(distributor);
-			this.nonIoThreads[i] = new WorkerThread(pipeline);
+			this.nonIoThreads[i] = new WorkerThread(pipeline, 0);
 		}
 	}
 
 	private void createPipeFactories() {
+		this.pipeFactories = new ConcurrentWorkStealingPipeFactory[5];
 		this.pipeFactories[0] = new ConcurrentWorkStealingPipeFactory<File>();
 		this.pipeFactories[1] = new ConcurrentWorkStealingPipeFactory<File>();
 		this.pipeFactories[2] = new ConcurrentWorkStealingPipeFactory<Pair<File, Integer>>();
@@ -92,9 +95,12 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 
 	private IPipeline readerThreadPipeline() {
 		// create stages
-		final RepeaterSource<String> repeaterSource = RepeaterSource.create(START_DIRECTORY_NAME, 40);
+		final RepeaterSource<String> repeaterSource = RepeaterSource.create(START_DIRECTORY_NAME, 1);
+		repeaterSource.setAccessesDeviceId(1);
 		final DirectoryName2Files findFilesStage = new DirectoryName2Files();
+		findFilesStage.setAccessesDeviceId(1);
 		final Distributor<File> distributor = new Distributor<File>();
+		distributor.setAccessesDeviceId(1);
 
 		// add each stage to a stage list
 		final List<IStage> stages = new LinkedList<IStage>();
@@ -149,7 +155,7 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 	}
 
 	private <A extends ISource, B extends ISink<B>, T> void connectWithSequentialPipe(final IOutputPort<A, T> sourcePort, final IInputPort<B, T> targetPort) {
-		final MethodCallPipe<T> pipe = new MethodCallPipe<T>();
+		final IPipe<T> pipe = new QueuePipe<T>();
 		pipe.setSourcePort(sourcePort);
 		pipe.setTargetPort(targetPort);
 	}
@@ -171,7 +177,10 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 		stages.add(outputWordsCountStage);
 
 		// connect stages by pipes
-		this.connectWithConcurrentPipe(readerDistributor.getNewOutputPort(), distributor.OBJECT);
+		// this.connectWithConcurrentPipe(readerDistributor.getNewOutputPort(), distributor.OBJECT);
+		final ConcurrentWorkStealingPipeFactory<File> pf = new ConcurrentWorkStealingPipeFactory<File>();
+		this.connectWithStealAwarePipe(pf, readerDistributor.getNewOutputPort(), distributor.OBJECT);
+
 		this.connectWithStealAwarePipe(this.pipeFactories[0], distributor.getNewOutputPort(), countWordsStage0.FILE);
 		this.connectWithStealAwarePipe(this.pipeFactories[1], distributor.getNewOutputPort(), countWordsStage1.FILE);
 		this.connectWithStealAwarePipe(this.pipeFactories[2], countWordsStage0.WORDSCOUNT, merger.getNewInputPort());
@@ -219,7 +228,7 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 	}
 
 	private <A extends ISource, B extends ISink<B>, T> void connectWithConcurrentPipe(final IOutputPort<A, T> sourcePort, final IInputPort<B, T> targetPort) {
-		final SingleProducerSingleConsumerPipe<T> pipe = new SingleProducerSingleConsumerPipe<T>();
+		final IPipe<T> pipe = new SingleProducerSingleConsumerPipe<T>();
 		pipe.setSourcePort(sourcePort);
 		pipe.setTargetPort(targetPort);
 	}
@@ -237,7 +246,8 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 		super.start();
 
 		for (final WorkerThread thread : this.ioThreads) {
-			thread.setTerminationPolicy(TerminationPolicy.TERMINATE_STAGE_AFTER_UNSUCCESSFUL_EXECUTION);
+			// thread.setTerminationPolicy(TerminationPolicy.TERMINATE_STAGE_AFTER_UNSUCCESSFUL_EXECUTION);
+			thread.terminate(TerminationPolicy.TERMINATE_STAGE_AFTER_UNSUCCESSFUL_EXECUTION);
 			thread.start();
 		}
 

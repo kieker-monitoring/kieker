@@ -62,8 +62,8 @@ public class MethodCallPipe<T> extends AbstractPipe<T> {
 		throw new IllegalStateException("Putting more than one element is not possible. You tried to put " + items.size() + " items.");
 	}
 
-	public List<?> tryTakeMultiple(final int numItemsToTake) {
-		throw new IllegalStateException("Taking more than one element is not possible. You tried to take " + numItemsToTake + " items.");
+	public List<?> tryTakeMultiple(final int numElementsToTake) {
+		throw new IllegalStateException("Taking more than one element is not possible. You tried to take " + numElementsToTake + " items.");
 	}
 
 	public void copyAllOtherPipes(final List<MethodCallPipe<T>> pipesOfGroup) {

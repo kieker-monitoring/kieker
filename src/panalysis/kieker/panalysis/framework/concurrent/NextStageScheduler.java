@@ -17,7 +17,6 @@
 package kieker.panalysis.framework.concurrent;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import kieker.panalysis.framework.core.IPipeline;
@@ -31,16 +30,18 @@ import kieker.panalysis.framework.core.IStage;
 public class NextStageScheduler {
 
 	protected final Map<IStage, Boolean> statesOfStages = new HashMap<IStage, Boolean>();
-	private final List<IStage> workList;
+	private final StageWorkList workList;
 	private final IPipeline pipeline;
 
-	public NextStageScheduler(final IPipeline pipeline) throws Exception {
+	public NextStageScheduler(final IPipeline pipeline, final int accessesDeviceId) throws Exception {
 		this.pipeline = pipeline;
-		this.workList = new StageWorkList(pipeline);
+		this.workList = new StageWorkList(accessesDeviceId);
+		this.workList.ensureCapacity(pipeline.getStages().size());
+
 		pipeline.fireStartNotification();
 
-		// this.workList.addAll(pipeline.getStartStages());
-		this.workList.addAll(pipeline.getStages());
+		this.workList.addAll(pipeline.getStartStages());
+		// this.workList.addAll(pipeline.getStages());
 
 		for (final IStage stage : pipeline.getStages()) {
 			this.enable(stage);
@@ -48,7 +49,7 @@ public class NextStageScheduler {
 	}
 
 	public IStage get() {
-		final IStage stage = this.workList.get(0);
+		final IStage stage = this.workList.remove(0);
 		// System.out.println(Thread.currentThread() + " > Executing " + stage);
 		return stage;
 	}
@@ -63,33 +64,20 @@ public class NextStageScheduler {
 
 	public void disable(final IStage stage) {
 		this.statesOfStages.put(stage, Boolean.FALSE);
+		// if (!Thread.currentThread().getName().equals("startThread")) {
 		System.out.println("Disabled " + stage);
+		// }
 		stage.fireSignalClosingToAllOutputPorts();
 	}
 
 	public void determineNextStage(final IStage stage, final boolean executedSuccessfully) {
-		if (!executedSuccessfully || (this.statesOfStages.get(stage) == Boolean.FALSE)) {
-			final IStage removedStage = this.workList.remove(0); // removes the given stage
-			// System.out.println("Removed " + stage);
-			// if (this.workList.isEmpty()) {
-			// for (final AbstractFilter<?> startStage : this.pipeline.getStartStages()) {
-			// if (this.statesOfStages.get(startStage) == Boolean.TRUE) {
-			// this.workList.add(startStage);
-			// }
-			// }
-			// }
-			// System.out.println("Removed " + removedStage);
-
-			if (this.statesOfStages.get(removedStage) == Boolean.TRUE) {
-				this.workList.add(removedStage); // re-insert at the tail
-			}
-		}
-
-		if (executedSuccessfully) {
-			this.workList.addAll(0, stage.getContext().getOutputStages()); // FIXME do not add the stage again if it has a cyclic pipe
-		}
+		this.workList.addAll(0, stage.getContext().getOutputStages()); // FIXME do not add the stage again if it has a cyclic pipe
 		stage.getContext().getOutputStages().clear();
 
+		if (this.statesOfStages.get(stage) == Boolean.TRUE) {
+			this.workList.add(stage); // re-insert at the tail
+			// System.out.println("added again: " + stage);
+		}
 	}
 
 	public void cleanUp() {

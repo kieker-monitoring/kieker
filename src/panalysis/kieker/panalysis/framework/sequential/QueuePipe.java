@@ -21,54 +21,31 @@ import java.util.Queue;
 
 import de.chw.concurrent.CircularWorkStealingDeque;
 
-import kieker.panalysis.framework.core.IInputPort;
-import kieker.panalysis.framework.core.IOutputPort;
-import kieker.panalysis.framework.core.IPipe;
-import kieker.panalysis.framework.core.ISink;
-import kieker.panalysis.framework.core.ISource;
-import kieker.panalysis.framework.core.IStage;
+import kieker.panalysis.framework.core.AbstractPipe;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  */
-public class QueuePipe<T> implements IPipe<T> {
+public class QueuePipe<T> extends AbstractPipe<T> {
 
 	private final Queue<T> queue = new LinkedList<T>();
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.panalysis.framework.core.IPipe#put(java.lang.Object)
-	 */
-	public void put(final T element) {
+	@Override
+	public void putInternal(final T element) {
 		this.queue.add(element);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.panalysis.framework.core.IPipe#putMultiple(java.util.List)
-	 */
 	public void putMultiple(final List<T> elements) {
 		this.queue.addAll(elements);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.panalysis.framework.core.IPipe#tryTake()
-	 */
-	public T tryTake() {
+	@Override
+	public T tryTakeInternal() {
 		return this.queue.poll();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.panalysis.framework.core.IPipe#take()
-	 */
 	public T take() {
 		final T element = this.tryTake();
 		if (element == null) {
@@ -77,83 +54,12 @@ public class QueuePipe<T> implements IPipe<T> {
 		return element;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.panalysis.framework.core.IPipe#read()
-	 */
 	public T read() {
 		return this.queue.peek();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.panalysis.framework.core.IPipe#tryTakeMultiple(int)
-	 */
 	public List<?> tryTakeMultiple(final int numElementsToTake) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.panalysis.framework.core.IPipe#fireSignalClosing()
-	 */
-	public void fireSignalClosing() {
-		// TODO Auto-generated method stub
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.panalysis.framework.core.IPipe#setSourcePort(kieker.panalysis.framework.core.IOutputPort)
-	 */
-	public <S extends ISource, A extends T> void setSourcePort(final IOutputPort<S, T> sourcePort) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.panalysis.framework.core.IPipe#setTargetPort(kieker.panalysis.framework.core.IInputPort)
-	 */
-	public <S extends ISink<S>, A extends T> void setTargetPort(final IInputPort<S, T> targetPort) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.panalysis.framework.core.IPipe#getTargetStage()
-	 */
-	public IStage getTargetStage() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.panalysis.framework.core.IPipe#onPipelineStarts()
-	 */
-	public void onPipelineStarts() {
-		// TODO Auto-generated method stub
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see kieker.panalysis.framework.core.IPipe#onPipelineStops()
-	 */
-	public void onPipelineStops() {
-		// TODO Auto-generated method stub
-
+		throw new IllegalStateException("Taking more than one element is not possible. You tried to take " + numElementsToTake + " items.");
 	}
 
 }
