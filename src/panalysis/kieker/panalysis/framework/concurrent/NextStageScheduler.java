@@ -76,7 +76,7 @@ public class NextStageScheduler {
 
 		if (this.statesOfStages.get(stage) == Boolean.TRUE) {
 			this.workList.add(stage); // re-insert at the tail
-			// System.out.println("added again: " + stage);
+			System.out.println("added again: " + stage);
 		}
 	}
 

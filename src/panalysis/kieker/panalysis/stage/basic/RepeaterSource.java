@@ -63,6 +63,7 @@ public class RepeaterSource<T> extends AbstractFilter<RepeaterSource<T>> {
 			return false;
 		}
 
+		// TODO consider to put only one record per iteration and decrement the num directly
 		int counter = this.num;
 		while (counter-- > 0) {
 			context.put(this.OUTPUT, this.outputRecord);

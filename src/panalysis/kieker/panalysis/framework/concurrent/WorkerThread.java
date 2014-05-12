@@ -104,15 +104,11 @@ public class WorkerThread extends Thread {
 	}
 
 	private void startStageExecution(final IStage stage) {
-		if (!Thread.currentThread().getName().equals("startThread")) {
-			// System.out.println("Executing stage: " + stage);
-		}
+		// System.out.println("Executing stage: " + stage);
 	}
 
 	private void finishStageExecution(final IStage stage, final boolean executedSuccessfully) {
-		if (!Thread.currentThread().getName().equals("startThread")) {
-			// System.out.println("Executed " + executedSuccessfully + ": stage");
-		}
+		// System.out.println("Executed stage successfully: " + executedSuccessfully);
 	}
 
 	private void cleanUpDatastructures() {

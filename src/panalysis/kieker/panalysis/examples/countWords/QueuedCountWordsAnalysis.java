@@ -23,6 +23,8 @@ import java.util.List;
 
 import de.chw.util.Pair;
 
+import kieker.panalysis.framework.concurrent.TerminationPolicy;
+import kieker.panalysis.framework.concurrent.WorkerThread;
 import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Analysis;
 import kieker.panalysis.framework.core.IInputPort;
@@ -33,6 +35,7 @@ import kieker.panalysis.framework.core.ISink;
 import kieker.panalysis.framework.core.ISource;
 import kieker.panalysis.framework.core.IStage;
 import kieker.panalysis.framework.sequential.MethodCallPipe;
+import kieker.panalysis.framework.sequential.QueuePipe;
 import kieker.panalysis.stage.basic.RepeaterSource;
 import kieker.panalysis.stage.basic.distributor.Distributor;
 import kieker.panalysis.stage.basic.merger.Merger;
@@ -42,15 +45,19 @@ import kieker.panalysis.stage.basic.merger.Merger;
  * 
  * @since 1.10
  */
-public class CountWordsAnalysis extends Analysis {
+public class QueuedCountWordsAnalysis extends Analysis {
 
-	private IPipeline pipeline;
+	private static final int SECONDS = 1000;
+
+	private WorkerThread workerThread;
 
 	@Override
 	public void init() {
 		super.init();
 
-		this.pipeline = this.buildNonIoPipeline();
+		final IPipeline pipeline = this.buildNonIoPipeline();
+
+		this.workerThread = new WorkerThread(pipeline, 0);
 	}
 
 	private IPipeline buildNonIoPipeline() {
@@ -123,7 +130,7 @@ public class CountWordsAnalysis extends Analysis {
 
 	private <A extends ISource, B extends ISink<B>, T> IPipe<T> connectWithSequentialPipe(final IOutputPort<A, T> sourcePort,
 			final IInputPort<B, T> targetPort) {
-		final IPipe<T> pipe = new MethodCallPipe<T>();
+		final IPipe<T> pipe = new QueuePipe<T>();
 		pipe.setSourcePort(sourcePort);
 		pipe.setTargetPort(targetPort);
 		return pipe;
@@ -132,23 +139,19 @@ public class CountWordsAnalysis extends Analysis {
 	@Override
 	public void start() {
 		super.start();
-		try {
-			this.pipeline.fireStartNotification();
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
 
-		this.pipeline.getStartStages().get(0).execute();
+		this.workerThread.terminate(TerminationPolicy.TERMINATE_STAGE_AFTER_UNSUCCESSFUL_EXECUTION);
 
+		this.workerThread.start();
 		try {
-			this.pipeline.fireStopNotification();
-		} catch (final Exception e) {
+			this.workerThread.join(60 * SECONDS);
+		} catch (final InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
 
 	public static void main(final String[] args) {
-		final CountWordsAnalysis analysis = new CountWordsAnalysis();
+		final QueuedCountWordsAnalysis analysis = new QueuedCountWordsAnalysis();
 		analysis.init();
 		final long start = System.currentTimeMillis();
 		analysis.start();
@@ -157,16 +160,18 @@ public class CountWordsAnalysis extends Analysis {
 		final long duration = end - start;
 		System.out.println("duration: " + duration + " ms"); // NOPMD (Just for example purposes)
 
-		for (final IStage stage : analysis.pipeline.getStages()) {
+		final IPipeline pipeline = analysis.workerThread.getPipeline();
+
+		for (final IStage stage : pipeline.getStages()) {
 			if (stage instanceof AbstractFilter<?>) {
 				System.out.println(stage.getClass().getName() + ": " + ((AbstractFilter<?>) stage).getOverallDuration()); // NOPMD (Just for example purposes)
 			}
 		}
 
-		final DirectoryName2Files findFilesStage = (DirectoryName2Files) analysis.pipeline.getStages().get(1);
+		final DirectoryName2Files findFilesStage = (DirectoryName2Files) pipeline.getStages().get(1);
 		System.out.println("findFilesStage: " + findFilesStage.getNumFiles()); // NOPMD (Just for example purposes)
 
-		final OutputWordsCountSink outputWordsCountStage = (OutputWordsCountSink) analysis.pipeline.getStages().get(6);
+		final OutputWordsCountSink outputWordsCountStage = (OutputWordsCountSink) pipeline.getStages().get(6);
 		System.out.println("outputWordsCountStage: " + outputWordsCountStage.getNumFiles()); // NOPMD (Just for example purposes)
 	}
 }
