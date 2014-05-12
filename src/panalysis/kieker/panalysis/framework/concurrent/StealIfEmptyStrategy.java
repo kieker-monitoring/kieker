@@ -15,29 +15,27 @@
  ***************************************************************************/
 package kieker.panalysis.framework.concurrent;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Collection;
+
+import kieker.panalysis.framework.core.IInputPort;
+import kieker.panalysis.framework.core.IStage;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  */
-public class ConcurrentWorkStealingPipeFactory<T> {
+public class StealIfEmptyStrategy<T> implements IStealStrategy<T> {
 
-	private final List<ConcurrentWorkStealingPipe<T>> pipes = new LinkedList<ConcurrentWorkStealingPipe<T>>();
-	private final IStealStrategy<T> stealStrategy = new StealIfEmptyStrategy<T>();
-
-	public ConcurrentWorkStealingPipe<T> create() {
-		final ConcurrentWorkStealingPipe<T> pipe = new ConcurrentWorkStealingPipe<T>(this.stealStrategy);
-		pipe.setPipesToStealFrom(this.pipes);
-
-		this.pipes.add(pipe);
-
-		return pipe;
+	public <S extends IStage> T steal(final IInputPort<S, T> inputPort, final Collection<ConcurrentWorkStealingPipe<T>> pipesToStealFrom) {
+		for (final ConcurrentWorkStealingPipe<T> pipe : pipesToStealFrom) {
+			final T stolenElement = pipe.steal();
+			if (stolenElement != null) {
+				return stolenElement;
+			}
+		}
+		// BETTER improve stealing efficiency by stealing multiple elements at once
+		return null; // do not expose internal impl details (here: CircularWorkStealingDeque); instead return null
 	}
 
-	public List<ConcurrentWorkStealingPipe<T>> getPipes() {
-		return this.pipes;
-	}
 }

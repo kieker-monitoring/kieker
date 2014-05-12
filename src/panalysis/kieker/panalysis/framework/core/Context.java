@@ -18,15 +18,15 @@ public class Context<S extends IStage> {
 	private int numPushedElements = 0;
 	private int numTakenElements = 0;
 
-	public Context(final List<IInputPort<S, ?>> allInputPorts) {
-		this.pipesTakenFrom = this.createPipeMap(allInputPorts);
+	public Context(final List<IInputPort<S, ?>> allTargetPorts) {
+		this.pipesTakenFrom = this.createPipeMap(allTargetPorts);
 	}
 
 	@SuppressWarnings("unchecked")
-	private Map<IPipe<Object>, List<Object>> createPipeMap(final List<? extends IPort<S, ?>> allPorts) {
-		final Map<IPipe<Object>, List<Object>> pipeMap = new HashMap<IPipe<Object>, List<Object>>(allPorts.size());
-		for (final IPort<S, ?> outputPort : allPorts) {
-			final IPipe<?> associatedPipe = outputPort.getAssociatedPipe();
+	private Map<IPipe<Object>, List<Object>> createPipeMap(final List<? extends IPort<S, ?>> targetPorts) {
+		final Map<IPipe<Object>, List<Object>> pipeMap = new HashMap<IPipe<Object>, List<Object>>(targetPorts.size());
+		for (final IPort<S, ?> targetPort : targetPorts) {
+			final IPipe<?> associatedPipe = targetPort.getAssociatedPipe();
 			pipeMap.put((IPipe<Object>) associatedPipe, new LinkedList<Object>());
 		}
 		return pipeMap;
@@ -121,5 +121,17 @@ public class Context<S extends IStage> {
 
 	public Collection<? extends IStage> getOutputStages() {
 		return this.pipesPutTo;
+	}
+
+	/**
+	 * @return <code>true</code> iff all input ports are empty, otherwise <code>false</code>.
+	 */
+	public boolean inputPortsAreEmpty() {
+		for (final IPipe<Object> pipe : this.pipesTakenFrom.keySet()) {
+			if (!pipe.isEmpty()) {
+				return false;
+			}
+		}
+		return true;
 	}
 }

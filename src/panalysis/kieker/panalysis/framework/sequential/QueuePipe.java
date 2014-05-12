@@ -62,4 +62,8 @@ public class QueuePipe<T> extends AbstractPipe<T> {
 		throw new IllegalStateException("Taking more than one element is not possible. You tried to take " + numElementsToTake + " items.");
 	}
 
+	public boolean isEmpty() {
+		return this.queue.isEmpty();
+	}
+
 }

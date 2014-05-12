@@ -16,6 +16,8 @@
 
 package kieker.panalysis.framework.concurrent;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,13 +32,15 @@ import kieker.panalysis.framework.core.IStage;
 public class NextStageScheduler {
 
 	protected final Map<IStage, Boolean> statesOfStages = new HashMap<IStage, Boolean>();
+	private final Collection<IStage> highestPrioritizedEnabledStages = new ArrayList<IStage>();
 	private final StageWorkList workList;
 
 	public NextStageScheduler(final IPipeline pipeline, final int accessesDeviceId) throws Exception {
-		this.workList = new StageWorkList(accessesDeviceId);
-		this.workList.ensureCapacity(pipeline.getStages().size());
+		this.workList = new StageWorkList(accessesDeviceId, pipeline.getStages().size());
 
-		this.workList.addAll(pipeline.getStartStages());
+		this.highestPrioritizedEnabledStages.addAll(pipeline.getStartStages());
+
+		this.workList.pushAll(this.highestPrioritizedEnabledStages);
 		// this.workList.addAll(pipeline.getStages());
 
 		for (final IStage stage : pipeline.getStages()) {
@@ -45,7 +49,7 @@ public class NextStageScheduler {
 	}
 
 	public IStage get() {
-		final IStage stage = this.workList.remove(0);
+		final IStage stage = this.workList.read();
 		// System.out.println(Thread.currentThread() + " > Executing " + stage);
 		return stage;
 	}
@@ -56,6 +60,7 @@ public class NextStageScheduler {
 	}
 
 	protected void enable(final IStage stage) {
+		// // / TODO consider to move state (enabled/disabled) of stage to stage for performance reasons
 		this.statesOfStages.put(stage, Boolean.TRUE);
 	}
 
@@ -68,13 +73,26 @@ public class NextStageScheduler {
 	}
 
 	public void determineNextStage(final IStage stage, final boolean executedSuccessfully) {
-		this.workList.addAll(0, stage.getContext().getOutputStages()); // FIXME do not add the stage again if it has a cyclic pipe
-		stage.getContext().getOutputStages().clear();
+		// this.workList.addAll(0, stage.getContext().getOutputStages()); // FIXME do not add the stage again if it has a cyclic pipe
+		// stage.getContext().getOutputStages().clear();
+		//
+		// if (this.statesOfStages.get(stage) == Boolean.TRUE) {
+		// this.workList.add(stage); // re-insert at the tail
+		// // System.out.println("added again: " + stage);
+		// }
 
-		// / TODO consider to move state (enabled/disabled) of stage to stage for performance reasons
-		if (this.statesOfStages.get(stage) == Boolean.TRUE) {
-			this.workList.add(stage); // re-insert at the tail
-			// System.out.println("added again: " + stage);
+		final Collection<? extends IStage> outputStages = stage.getContext().getOutputStages();
+		if (outputStages.size() > 0) {
+			if (stage.getContext().inputPortsAreEmpty()) {
+				this.workList.pop();
+			}
+			this.workList.pushAll(outputStages);
+		} else {
+			this.workList.pop();
+		}
+
+		if (this.workList.isEmpty()) {
+			this.workList.pushAll(this.highestPrioritizedEnabledStages);
 		}
 	}
 }

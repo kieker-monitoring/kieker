@@ -31,6 +31,7 @@ import kieker.panalysis.framework.core.AbstractPipe;
 public class ConcurrentWorkStealingPipe<T> extends AbstractPipe<T> {
 
 	private final CircularWorkStealingDeque<T> circularWorkStealingDeque = new CircularWorkStealingDeque<T>();
+	private final IStealStrategy<T> stealStrategy;
 
 	// BETTER use a prioritized list that considers
 	// <ul>
@@ -40,6 +41,10 @@ public class ConcurrentWorkStealingPipe<T> extends AbstractPipe<T> {
 
 	private List<ConcurrentWorkStealingPipe<T>> pipesToStealFrom;
 	private int numTakenElements = 0;
+
+	public ConcurrentWorkStealingPipe(final IStealStrategy<T> stealStrategy) {
+		this.stealStrategy = stealStrategy;
+	}
 
 	@Override
 	protected void putInternal(final T token) {
@@ -54,14 +59,7 @@ public class ConcurrentWorkStealingPipe<T> extends AbstractPipe<T> {
 	protected T tryTakeInternal() {
 		final T record = this.circularWorkStealingDeque.popBottom();
 		if (record == null) {
-			for (final ConcurrentWorkStealingPipe<T> pipe : this.pipesToStealFrom) {
-				final T stolenElement = pipe.steal();
-				if (stolenElement != null) {
-					return stolenElement;
-				}
-			}
-			// BETTER improve stealing efficiency by stealing multiple elements at once
-			return null; // do not expose internal impl details (here: CircularWorkStealingDeque); instead return null
+			this.stealStrategy.steal(this.getTargetPort(), this.pipesToStealFrom);
 		}
 		this.numTakenElements++;
 		return record;
@@ -70,14 +68,7 @@ public class ConcurrentWorkStealingPipe<T> extends AbstractPipe<T> {
 	public T take() {
 		final T record = this.circularWorkStealingDeque.popBottomEx();
 		if (record == null) {
-			for (final ConcurrentWorkStealingPipe<T> pipe : this.pipesToStealFrom) {
-				final T stolenElement = pipe.steal();
-				if (stolenElement != null) {
-					return stolenElement;
-				}
-			}
-			// BETTER improve stealing efficiency by stealing multiple elements at once
-			return null; // do not expose internal impl details (here: CircularWorkStealingDeque); instead return null
+			this.stealStrategy.steal(this.getTargetPort(), this.pipesToStealFrom);
 		}
 		this.numTakenElements++;
 		return record;
@@ -94,14 +85,18 @@ public class ConcurrentWorkStealingPipe<T> extends AbstractPipe<T> {
 		return record;
 	}
 
+	public boolean isEmpty() {
+		return this.circularWorkStealingDeque.isEmpty();
+	}
+
 	public T steal() {
 		return this.circularWorkStealingDeque.steal();
 	}
 
 	public List<T> stealMultiple(final int maxItemsToSteal) {
-		int maxItemsToStealCoutner = maxItemsToSteal;
+		int maxItemsToStealCounter = maxItemsToSteal;
 		final List<T> stolenElements = new LinkedList<T>();
-		while (maxItemsToStealCoutner-- > 0) {
+		while (maxItemsToStealCounter-- > 0) {
 			final T stolenElement = this.steal();
 			if (stolenElement == null) {
 				break;

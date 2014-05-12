@@ -70,4 +70,8 @@ public class MethodCallPipe<T> extends AbstractPipe<T> {
 		// is not needed in a synchronous execution
 	}
 
+	public boolean isEmpty() {
+		return this.storedToken == null;
+	}
+
 }

@@ -77,9 +77,12 @@ public interface IPipe<T> {
 	 */
 	List<?> tryTakeMultiple(int numElementsToTake);
 
-	// Let this uncommented for documentation purpose:<br>
-	// Do not provide a method to check for emptiness, since the state from EMPTY to NON-EMPTY can change between check and access (stale state)
-	// boolean isEmpty();
+	/**
+	 * <i>Attention: Checking for emptiness is rarely appropriate, since the state from EMPTY to NON-EMPTY can change between check and access (stale state).</i>
+	 * 
+	 * @return <code>true</code> if this pipe is empty in this special point in time, otherwise <code>false</code>.
+	 */
+	boolean isEmpty();
 
 	/**
 	 * @since 1.10

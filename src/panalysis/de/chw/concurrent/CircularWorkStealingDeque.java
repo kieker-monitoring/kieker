@@ -44,7 +44,6 @@ public class CircularWorkStealingDeque<T> {
 	private static final long LOG_INITIAL_SIZE = 10;
 
 	private volatile long bottom = 0;
-	// private volatile long top = 0;
 	private final AtomicLong top = new AtomicLong();
 	private volatile CircularArray<T> activeArray = new CircularArray<T>(LOG_INITIAL_SIZE);
 
@@ -284,6 +283,12 @@ public class CircularWorkStealingDeque<T> {
 	// bottom: 66429
 	// bottom: 30008
 	// bottom: 30007
+
+	public boolean isEmpty() {
+		final long t = this.top.get();
+		final long b = this.bottom;
+		return t >= b;
+	}
 
 	/**
 	 * For debugging purposes

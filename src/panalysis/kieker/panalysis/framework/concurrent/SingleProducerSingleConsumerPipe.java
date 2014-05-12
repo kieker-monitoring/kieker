@@ -47,4 +47,8 @@ public class SingleProducerSingleConsumerPipe<T> extends AbstractPipe<T> {
 		}
 		return token;
 	}
+
+	public boolean isEmpty() {
+		return this.queue.isEmpty();
+	}
 }
