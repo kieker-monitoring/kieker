@@ -21,6 +21,7 @@ import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
+import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
 
 /**
@@ -28,15 +29,15 @@ import kieker.common.util.registry.IRegistry;
  * 
  * @since 1.10
  */
-public class ClassLoadingRecord extends AbstractMonitoringRecord {
-	public static final int SIZE = TYPE_SIZE_LONG + (2 * TYPE_SIZE_STRING) + (3 * TYPE_SIZE_LONG);
+public class ClassLoadingRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
+	public static final int SIZE = TYPE_SIZE_LONG + (2 * TYPE_SIZE_STRING) + TYPE_SIZE_LONG + TYPE_SIZE_INT + TYPE_SIZE_LONG;
 
 	public static final Class<?>[] TYPES = {
 		long.class,
 		String.class,
 		String.class,
 		long.class,
-		long.class,
+		int.class,
 		long.class,
 	};
 
@@ -46,7 +47,7 @@ public class ClassLoadingRecord extends AbstractMonitoringRecord {
 	private final String hostname;
 	private final String vmName;
 	private final long totalLoadedClassCount;
-	private final long loadedClassCount;
+	private final int loadedClassCount;
 	private final long unloadedClassCount;
 
 	public ClassLoadingRecord(final long timestamp, final String hostname, final String vmName, final long totalLoadedClassCount, final int loadedClassCount,
@@ -66,7 +67,7 @@ public class ClassLoadingRecord extends AbstractMonitoringRecord {
 		this.hostname = (String) values[1];
 		this.vmName = (String) values[2];
 		this.totalLoadedClassCount = (Long) values[3];
-		this.loadedClassCount = (Long) values[4];
+		this.loadedClassCount = (Integer) values[4];
 		this.unloadedClassCount = (Long) values[5];
 	}
 
@@ -75,7 +76,7 @@ public class ClassLoadingRecord extends AbstractMonitoringRecord {
 		this.hostname = stringRegistry.get(buffer.getInt());
 		this.vmName = stringRegistry.get(buffer.getInt());
 		this.totalLoadedClassCount = buffer.getLong();
-		this.loadedClassCount = buffer.getLong();
+		this.loadedClassCount = buffer.getInt();
 		this.unloadedClassCount = buffer.getLong();
 	}
 
@@ -91,7 +92,7 @@ public class ClassLoadingRecord extends AbstractMonitoringRecord {
 		buffer.putInt(stringRegistry.get(this.getHostname()));
 		buffer.putInt(stringRegistry.get(this.getVmName()));
 		buffer.putLong(this.getTotalLoadedClassCount());
-		buffer.putLong(this.getLoadedClassCount());
+		buffer.putInt(this.getLoadedClassCount());
 		buffer.putLong(this.getUnloadedClassCount());
 	}
 
@@ -149,7 +150,7 @@ public class ClassLoadingRecord extends AbstractMonitoringRecord {
 		return this.totalLoadedClassCount;
 	}
 
-	public long getLoadedClassCount() {
+	public int getLoadedClassCount() {
 		return this.loadedClassCount;
 	}
 
