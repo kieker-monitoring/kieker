@@ -41,7 +41,9 @@ public final class KaxRun extends AbstractCommandLineTool {
 
 	private String kaxFilename;
 
-	private KaxRun() {}
+	private KaxRun() {
+		super(true);
+	}
 
 	public static void main(final String[] args) {
 		new KaxRun().start(args);

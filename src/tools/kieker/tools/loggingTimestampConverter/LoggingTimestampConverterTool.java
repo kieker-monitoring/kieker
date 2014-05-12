@@ -39,7 +39,9 @@ public final class LoggingTimestampConverterTool extends AbstractCommandLineTool
 	private String[] timestampsStr;
 	private long[] timestampsLong;
 
-	private LoggingTimestampConverterTool() {}
+	private LoggingTimestampConverterTool() {
+		super(true);
+	}
 
 	public static void main(final String[] args) {
 		new LoggingTimestampConverterTool().start(args);

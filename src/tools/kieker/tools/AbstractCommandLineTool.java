@@ -37,6 +37,12 @@ public abstract class AbstractCommandLineTool {
 
 	private static final Log LOG = LogFactory.getLog(AbstractCommandLineTool.class);
 
+	private final boolean useSystemExit;
+
+	public AbstractCommandLineTool(final boolean useSystemExit) {
+		this.useSystemExit = useSystemExit;
+	}
+
 	public final void start(final String args[]) {
 		final Options options = new Options();
 
@@ -55,7 +61,7 @@ public abstract class AbstractCommandLineTool {
 		}
 
 		LOG.info("See 'kieker.log' for details");
-		if (!success) {
+		if (!success && this.useSystemExit) {
 			System.exit(1);
 		}
 	}
@@ -82,7 +88,7 @@ public abstract class AbstractCommandLineTool {
 			LOG.error("An error occurred while parsing the command line arguments", ex);
 
 			final HelpFormatter formatter = new CLIHelpFormatter();
-			formatter.printHelp(KaxViz.class.getName(), options, true);
+			formatter.printHelp(this.getClass().getName(), options, true);
 
 			return null;
 		}

@@ -36,11 +36,9 @@ import java.util.TimeZone;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.Options;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.analysisComponent.AbstractAnalysisComponent;
@@ -55,6 +53,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.util.filesystem.FSUtil;
+import kieker.tools.AbstractCommandLineTool;
 import kieker.tools.traceAnalysis.filter.AbstractGraphProducingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
@@ -103,7 +102,8 @@ import kieker.tools.util.ToolsUtil;
  * 
  * @since 0.95a
  */
-public final class TraceAnalysisTool { // NOPMD (long class)
+
+public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD (long class)
 
 	public static final String DATE_FORMAT_PATTERN_CMD_USAGE_HELP = Constants.DATE_FORMAT_PATTERN.replaceAll("'", ""); // only for usage info
 
@@ -112,8 +112,6 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 
 	private final AnalysisController analysisController = new AnalysisController();
 	private final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration(), this.analysisController);
-	private final CommandLineParser cmdlParser = new BasicParser();
-	private CommandLine cmdl;
 	private String[] inputDirs;
 	private String outputDir;
 	private String outputFnPrefix;
@@ -125,102 +123,60 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 	private long ignoreExecutionsBeforeTimestamp = Long.parseLong(TimestampFilter.CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP);
 	private long ignoreExecutionsAfterTimestamp = Long.parseLong(TimestampFilter.CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP);
 
-	private final String[] args;
-
-	private TraceAnalysisTool(final String[] args) { // NOPMD (direct array store)
-		this.args = args;
-	}
+	private CommandLine cmdl;
 
 	public static void main(final String[] args) {
-		final boolean success = new TraceAnalysisTool(args).start();
-		if (!success) {
-			System.exit(1);
-		}
+		TraceAnalysisTool.mainHelper(args, true);
 	}
 
 	public static void mainHelper(final String[] args, final boolean useSystemExit) {
-		if (useSystemExit) {
-			TraceAnalysisTool.main(args);
-		} else {
-			new TraceAnalysisTool(args).start();
+		new TraceAnalysisTool(useSystemExit).start(args);
+	}
+
+	private TraceAnalysisTool(final boolean useSystemExit) {
+		super(useSystemExit);
+	}
+
+	@Override
+	protected void addAdditionalOptions(final Options options) {
+		for (final Object option : Constants.CMDL_OPTIONS.getOptions()) {
+			options.addOption((Option) option);
 		}
 	}
 
-	private boolean start() {
-		boolean success = true;
-
-		try {
-			LOG.debug("Argument list: " + Arrays.toString(this.args));
-			if (!this.parseArgs() || !this.initFromArgs() || !this.assertOutputDirExists() || !this.assertInputDirsExistsAndAreMonitoringLogs()) {
-				LOG.error("Error parsing arguments");
-				success = false;
-			}
-
-			if (success) {
-				this.dumpConfiguration();
-				success = this.dispatchTasks();
-			}
-		} catch (final Exception exc) { // NOPMD NOCS (IllegalCatchCheck)
-			success = false;
-			LOG.error("An error occured", exc);
-		} finally {
-			LOG.info("");
-			if (!success) {
-				LOG.error("An error occured");
-			} else {
-				LOG.info("Analysis completed successfully");
-			}
-
-			// Refer to log regardless of whether error occurred or not
-			LOG.info("");
-			LOG.info("See 'kieker.log' for details");
-		}
-
-		return success;
+	@Override
+	protected boolean readPropertiesFromCommandLine(final CommandLine commandLine) {
+		this.cmdl = commandLine;
+		return (this.initFromArgs(commandLine) && this.assertOutputDirExists()) || this.assertInputDirsExistsAndAreMonitoringLogs();
 	}
 
-	/**
-	 * This method parses the command line arguments and stores them in the class field.
-	 * 
-	 * @return true if and only if the arguments have been parsed succesfully.
-	 */
-	private boolean parseArgs() {
-		try {
-			this.cmdl = this.cmdlParser.parse(Constants.CMDL_OPTIONS, this.args);
-		} catch (final ParseException e) {
-			TraceAnalysisTool.printUsage();
-			LOG.error("Error parsing arguments: " + e.getMessage(), e);
-			return false;
-		}
-		return true;
-	}
-
-	/**
-	 * This method prints some information to show the user how to use this tool.
-	 */
-	private static void printUsage() {
-		Constants.CMD_HELP_FORMATTER.printHelp(80, TraceAnalysisTool.class.getName(), "", Constants.CMDL_OPTIONS, "", true);
+	@Override
+	protected boolean performTask() {
+		this.dumpConfiguration();
+		return this.dispatchTasks();
 	}
 
 	/**
 	 * This method uses the (already parsed and stored) command line arguments to initialize the tool.
 	 * 
+	 * @param commandLine
+	 * 
 	 * @return true if and only if the tool has been initialized correctly.
 	 */
-	private boolean initFromArgs() {
-		if (this.cmdl.hasOption('d')) {
+	private boolean initFromArgs(final CommandLine commandLine) {
+		if (commandLine.hasOption('d')) {
 			ToolsUtil.loadDebugLogger();
-		} else if (this.cmdl.hasOption('v')) {
+		} else if (commandLine.hasOption('v')) {
 			ToolsUtil.loadVerboseLogger();
 		}
 
-		this.inputDirs = this.cmdl.getOptionValues(Constants.CMD_OPT_NAME_INPUTDIRS);
+		this.inputDirs = commandLine.getOptionValues(Constants.CMD_OPT_NAME_INPUTDIRS);
 
-		this.outputDir = this.cmdl.getOptionValue(Constants.CMD_OPT_NAME_OUTPUTDIR) + File.separator;
-		this.outputFnPrefix = this.cmdl.getOptionValue(Constants.CMD_OPT_NAME_OUTPUTFNPREFIX, "");
+		this.outputDir = commandLine.getOptionValue(Constants.CMD_OPT_NAME_OUTPUTDIR) + File.separator;
+		this.outputFnPrefix = commandLine.getOptionValue(Constants.CMD_OPT_NAME_OUTPUTFNPREFIX, "");
 
-		if (this.cmdl.hasOption(Constants.CMD_OPT_NAME_SELECTTRACES)) { // Parse list of trace Ids
-			final String[] traceIdList = this.cmdl.getOptionValues(Constants.CMD_OPT_NAME_SELECTTRACES);
+		if (commandLine.hasOption(Constants.CMD_OPT_NAME_SELECTTRACES)) { // Parse list of trace Ids
+			final String[] traceIdList = commandLine.getOptionValues(Constants.CMD_OPT_NAME_SELECTTRACES);
 			this.selectedTraces = new TreeSet<Long>();
 			final int numSelectedTraces = traceIdList.length;
 			try {
@@ -234,11 +190,11 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 			}
 		}
 
-		this.shortLabels = this.cmdl.hasOption(Constants.CMD_OPT_NAME_SHORTLABELS);
-		this.includeSelfLoops = this.cmdl.hasOption(Constants.CMD_OPT_NAME_INCLUDESELFLOOPS);
-		this.ignoreInvalidTraces = this.cmdl.hasOption(Constants.CMD_OPT_NAME_IGNOREINVALIDTRACES);
+		this.shortLabels = commandLine.hasOption(Constants.CMD_OPT_NAME_SHORTLABELS);
+		this.includeSelfLoops = commandLine.hasOption(Constants.CMD_OPT_NAME_INCLUDESELFLOOPS);
+		this.ignoreInvalidTraces = commandLine.hasOption(Constants.CMD_OPT_NAME_IGNOREINVALIDTRACES);
 
-		final String maxTraceDurationStr = this.cmdl.getOptionValue(Constants.CMD_OPT_NAME_MAXTRACEDURATION,
+		final String maxTraceDurationStr = commandLine.getOptionValue(Constants.CMD_OPT_NAME_MAXTRACEDURATION,
 				Integer.toString(this.maxTraceDurationMillis));
 		try {
 			this.maxTraceDurationMillis = Integer.parseInt(maxTraceDurationStr);
@@ -252,8 +208,8 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
 		try {
-			final String ignoreRecordsBeforeTimestampString = this.cmdl.getOptionValue(Constants.CMD_OPT_NAME_IGNOREEXECUTIONSBEFOREDATE, null);
-			final String ignoreRecordsAfterTimestampString = this.cmdl.getOptionValue(Constants.CMD_OPT_NAME_IGNOREEXECUTIONSAFTERDATE, null);
+			final String ignoreRecordsBeforeTimestampString = commandLine.getOptionValue(Constants.CMD_OPT_NAME_IGNOREEXECUTIONSBEFOREDATE, null);
+			final String ignoreRecordsAfterTimestampString = commandLine.getOptionValue(Constants.CMD_OPT_NAME_IGNOREEXECUTIONSAFTERDATE, null);
 			if (ignoreRecordsBeforeTimestampString != null) {
 				final Date ignoreBeforeDate = dateFormat.parse(ignoreRecordsBeforeTimestampString);
 				this.ignoreExecutionsBeforeTimestamp = ignoreBeforeDate.getTime() * (1000 * 1000);
@@ -275,206 +231,74 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 	}
 
 	/**
-	 * This method dumps the configuration on the screen.
+	 * Returns if the specified output directory {@link #outputDir} exists. If
+	 * the directory does not exist, an error message is printed to stderr.
+	 * 
+	 * @return true if {@link #outputDir} is exists and is a directory; false
+	 *         otherwise
 	 */
-	private void dumpConfiguration() {
-		LOG.debug("#");
-		LOG.debug("# Configuration");
-		for (final Option o : Constants.SORTED_OPTION_LIST) {
-			final String longOpt = o.getLongOpt();
-			String val = "<null>";
-			if (longOpt.equals(Constants.CMD_OPT_NAME_INPUTDIRS)) {
-				val = Constants.stringArrToStringList(this.inputDirs);
-			} else if (longOpt.equals(Constants.CMD_OPT_NAME_OUTPUTDIR)) {
-				val = this.outputDir;
-			} else if (longOpt.equals(Constants.CMD_OPT_NAME_OUTPUTFNPREFIX)) {
-				val = this.outputFnPrefix;
-			} else if (longOpt.equals(Constants.CMD_OPT_NAME_VERBOSE) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT)
-					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_ASSEMBLYEQUIVCLASSREPORT) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONSEQDS)
-					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYSEQDS) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG)
-					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYCOMPONENTDEPG) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTCONTAINERDEPG)
-					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG)
-					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG)
-					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDALLOCATIONCALLTREE)
-					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDASSEMBLYCALLTREE) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTCALLTREES)
-					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTEXECTRACES) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES)
-					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTMSGTRACES) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTSYSTEMMODEL)) {
-				val = this.cmdl.hasOption(longOpt) ? "true" : "false"; // NOCS
-			} else if (longOpt.equals(Constants.CMD_OPT_NAME_SELECTTRACES)) {
-				if (this.selectedTraces != null) {
-					val = this.selectedTraces.toString();
-				} else {
-					val = "<select all>";
-				}
-
-			} else if (longOpt.equals(Constants.CMD_OPT_NAME_SHORTLABELS)) {
-				val = this.shortLabels ? "true" : "false"; // NOCS
-			} else if (longOpt.equals(Constants.CMD_OPT_NAME_INCLUDESELFLOOPS)) {
-				val = this.includeSelfLoops ? "true" : "false"; // NOCS
-			} else if (longOpt.equals(Constants.CMD_OPT_NAME_IGNOREINVALIDTRACES)) {
-				val = this.ignoreInvalidTraces ? "true" : "false"; // NOCS
-			} else if (longOpt.equals(Constants.CMD_OPT_NAME_MAXTRACEDURATION)) {
-				val = this.maxTraceDurationMillis + " ms";
-			} else if (longOpt.equals(Constants.CMD_OPT_NAME_IGNOREEXECUTIONSBEFOREDATE)) {
-				val = LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.ignoreExecutionsBeforeTimestamp) + " ("
-						+ LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.ignoreExecutionsBeforeTimestamp) + ")";
-			} else if (longOpt.equals(Constants.CMD_OPT_NAME_IGNOREEXECUTIONSAFTERDATE)) {
-				val = LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.ignoreExecutionsAfterTimestamp) + " ("
-						+ LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.ignoreExecutionsAfterTimestamp) + ")";
-			} else if (Constants.CMD_OPT_NAME_TRACE_COLORING.equals(longOpt)) {
-				val = this.cmdl.getOptionValue(Constants.CMD_OPT_NAME_TRACE_COLORING);
-				if (val == null) {
-					val = "";
-				}
-			} else if (Constants.CMD_OPT_NAME_ADD_DESCRIPTIONS.equals(longOpt)) {
-				val = this.cmdl.getOptionValue(Constants.CMD_OPT_NAME_ADD_DESCRIPTIONS);
-				if (val == null) {
-					val = "";
-				}
-			} else {
-				val = Arrays.toString(this.cmdl.getOptionValues(longOpt));
-				LOG.warn("Unformatted configuration output for option " + longOpt);
-			}
-			LOG.debug("--" + longOpt + ": " + val);
-		}
-	}
-
-	private static void addDecorators(final String[] decoratorNames, final AbstractDependencyGraphFilter<?> plugin) {
-		if (decoratorNames == null) {
-			return;
-		}
-		final List<String> decoratorList = Arrays.asList(decoratorNames);
-		final Iterator<String> decoratorIterator = decoratorList.iterator();
-
-		while (decoratorIterator.hasNext()) {
-			final String currentDecoratorStr = decoratorIterator.next();
-
-			if (Constants.RESPONSE_TIME_DECORATOR_FLAG.equals(currentDecoratorStr)) {
-				plugin.addDecorator(new ResponseTimeNodeDecorator());
-				continue;
-			} else if (Constants.RESPONSE_TIME_COLORING_DECORATOR_FLAG.equals(currentDecoratorStr)) {
-				// if decorator is responseColoring, next value should be the threshold
-				final String thresholdStringStr = decoratorIterator.next();
-
-				try {
-					final int threshold = Integer.parseInt(thresholdStringStr);
-
-					plugin.addDecorator(new ResponseTimeColorNodeDecorator(threshold));
-				} catch (final NumberFormatException exc) {
-					LOG.error("Failed to parse int value of property " + "threshold(ms) : " + thresholdStringStr, exc);
-				}
-			} else {
-				LOG.warn("Unknown decoration name '" + currentDecoratorStr + "'.");
-				return;
+	private boolean assertOutputDirExists() {
+		final File outputDirFile = new File(this.outputDir);
+		try {
+			if (!outputDirFile.exists()) {
+				LOG.error("The specified output directory '" + outputDirFile.getCanonicalPath() + "' does not exist");
+				return false;
 			}
 
+			if (!outputDirFile.isDirectory()) {
+				LOG.error("The specified output directory '" + outputDirFile.getCanonicalPath() + "' is not a directory");
+				return false;
+			}
+
+		} catch (final IOException e) { // thrown by File.getCanonicalPath()
+			LOG.error("Error resolving name of output directory: '" + this.outputDir + "'");
 		}
+
+		return true;
 	}
 
 	/**
-	 * Attaches a graph writer plugin to the given plugin.
+	 * Returns if the specified input directories {@link #inputDirs} exist and that
+	 * each one is a monitoring log. If this is not the case for one of the directories,
+	 * an error message is printed to stderr.
 	 * 
-	 * @param plugin
-	 *            The plugin which delivers the graph to write
-	 * @param producer
-	 *            The producer which originally produced the graph
-	 * @param controller
-	 *            The analysis controller to use for the connection of the plugins
-	 * @throws IllegalStateException
-	 *             If the connection of the plugins is not possible at the moment
-	 * @throws AnalysisConfigurationException
-	 *             If the plugins cannot be connected
-	 * 
-	 * @param <P>
-	 *            The type of the plugin.
+	 * @return true if {@link #outputDir} is exists and is a directory; false
+	 *         otherwise
 	 */
-	private <P extends AbstractPlugin & IGraphOutputtingFilter<?>> void attachGraphWriter(final P plugin,
-			final AbstractGraphProducingFilter<?> producer, final AnalysisController controller) throws IllegalStateException, AnalysisConfigurationException {
-
-		final Configuration configuration = new Configuration();
-		configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_OUTPUT_PATH_NAME, this.outputDir + File.separator + this.outputFnPrefix);
-		configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, String.valueOf(true));
-		configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_SHORTLABELS, String.valueOf(this.shortLabels));
-		configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_SELFLOOPS, String.valueOf(this.includeSelfLoops));
-		configuration.setProperty(AbstractAnalysisComponent.CONFIG_NAME, producer.getConfigurationName());
-		final GraphWriterPlugin graphWriter = new GraphWriterPlugin(configuration, controller);
-		controller.connect(plugin, plugin.getGraphOutputPortName(), graphWriter, GraphWriterPlugin.INPUT_PORT_NAME_GRAPHS);
-	}
-
-	private static <P extends AbstractPlugin & IGraphOutputtingFilter<?>> void connectGraphFilters(final P predecessor,
-			final AbstractGraphFilter<?, ?, ?, ?> filter, final AnalysisController controller) throws IllegalStateException, AnalysisConfigurationException {
-		controller.connect(predecessor, predecessor.getGraphOutputPortName(), filter, filter.getGraphInputPortName());
-	}
-
-	private static <P extends AbstractPlugin & IGraphOutputtingFilter<?>> TraceColoringFilter<?, ?> createTraceColoringFilter(final P predecessor,
-			final String coloringFileName, final AnalysisController controller) throws IOException, IllegalStateException, AnalysisConfigurationException {
-		final TraceColorRepository colorRepository = TraceColorRepository.createFromFile(coloringFileName, controller);
-
-		@SuppressWarnings("rawtypes")
-		final TraceColoringFilter<?, ?> coloringFilter = new TraceColoringFilter(new Configuration(), controller);
-		TraceAnalysisTool.connectGraphFilters(predecessor, coloringFilter, controller);
-		controller.connect(coloringFilter, TraceColoringFilter.COLOR_REPOSITORY_PORT_NAME, colorRepository);
-
-		return coloringFilter;
-	}
-
-	private static <P extends AbstractPlugin & IGraphOutputtingFilter<?>> DescriptionDecoratorFilter<?, ?, ?> createDescriptionDecoratorFilter(
-			final P predecessor, final String descriptionsFileName, final AnalysisController controller) throws IOException, IllegalStateException,
-			AnalysisConfigurationException {
-		final DescriptionRepository descriptionRepository = DescriptionRepository.createFromFile(descriptionsFileName, controller);
-
-		@SuppressWarnings("rawtypes")
-		final DescriptionDecoratorFilter<?, ?, ?> descriptionFilter = new DescriptionDecoratorFilter(new Configuration(), controller);
-		TraceAnalysisTool.connectGraphFilters(predecessor, descriptionFilter, controller);
-		controller.connect(descriptionFilter, DescriptionDecoratorFilter.DESCRIPTION_REPOSITORY_PORT_NAME, descriptionRepository);
-
-		return descriptionFilter;
-	}
-
-	/**
-	 * Attaches graph processors and a writer to the given graph producers depending on the given
-	 * command line.
-	 * 
-	 * @param graphProducers
-	 *            The graph producers to connect processors to
-	 * @param controller
-	 *            The analysis controller to use for the connection of the plugins
-	 * @param commandLine
-	 *            The command line to determine the desired processors
-	 * 
-	 * @throws IllegalStateException
-	 *             If the connection of plugins is not possible at the moment
-	 * @throws AnalysisConfigurationException
-	 *             If some plugins cannot be connected
-	 */
-	private void attachGraphProcessors(final List<AbstractGraphProducingFilter<?>> graphProducers, final AnalysisController controller,
-			final CommandLine commandLine) throws IllegalStateException, AnalysisConfigurationException, IOException {
-
-		for (final AbstractGraphProducingFilter<?> producer : graphProducers) {
-			AbstractGraphFilter<?, ?, ?, ?> lastFilter = null;
-
-			// Add a trace coloring filter, if necessary
-			if (commandLine.hasOption(Constants.CMD_OPT_NAME_TRACE_COLORING)) {
-				final String coloringFileName = commandLine.getOptionValue(Constants.CMD_OPT_NAME_TRACE_COLORING);
-				lastFilter = TraceAnalysisTool.createTraceColoringFilter(producer, coloringFileName, controller);
-			}
-
-			// Add a description filter, if necessary
-			if (commandLine.hasOption(Constants.CMD_OPT_NAME_ADD_DESCRIPTIONS)) {
-				final String descriptionsFileName = commandLine.getOptionValue(Constants.CMD_OPT_NAME_ADD_DESCRIPTIONS);
-				if (lastFilter != null) {
-					lastFilter = TraceAnalysisTool.createDescriptionDecoratorFilter(lastFilter, descriptionsFileName, controller);
-				} else {
-					lastFilter = TraceAnalysisTool.createDescriptionDecoratorFilter(producer, descriptionsFileName, controller);
+	private boolean assertInputDirsExistsAndAreMonitoringLogs() {
+		for (final String inputDir : this.inputDirs) {
+			final File inputDirFile = new File(inputDir);
+			try {
+				if (!inputDirFile.exists()) {
+					LOG.error("The specified input directory '" + inputDirFile.getCanonicalPath() + "' does not exist");
+					return false;
 				}
-			}
-
-			if (lastFilter != null) {
-				this.attachGraphWriter(lastFilter, producer, controller);
-			} else {
-				this.attachGraphWriter(producer, producer, controller);
+				if (!inputDirFile.isDirectory() && !inputDir.endsWith(FSUtil.ZIP_FILE_EXTENSION)) {
+					LOG.error("The specified input directory '" + inputDirFile.getCanonicalPath() + "' is neither a directory nor a zip file");
+					return false;
+				}
+				// check whether inputDirFile contains a (kieker|tpmon).map file; the latter for legacy reasons
+				if (inputDirFile.isDirectory()) { // only check for dirs
+					final File[] mapFiles = { new File(inputDir + File.separatorChar + FSUtil.MAP_FILENAME),
+						new File(inputDir + File.separatorChar + FSUtil.LEGACY_MAP_FILENAME), };
+					boolean mapFileExists = false;
+					for (final File potentialMapFile : mapFiles) {
+						if (potentialMapFile.isFile()) {
+							mapFileExists = true;
+							break;
+						}
+					}
+					if (!mapFileExists) {
+						LOG.error("The specified input directory '" + inputDirFile.getCanonicalPath() + "' is not a kieker log directory");
+						return false;
+					}
+				}
+			} catch (final IOException e) { // thrown by File.getCanonicalPath()
+				LOG.error("Error resolving name of input directory: '" + inputDir + "'");
 			}
 		}
+
+		return true;
 	}
 
 	/**
@@ -942,10 +766,6 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 
 			if (numRequestedTasks == 0) {
 				LOG.warn("No task requested");
-				TraceAnalysisTool.printUsage();
-				System.err.println(""); // NOPMD (System.out)
-				System.err.println("No task requested"); // NOPMD (System.out)
-				System.err.println(""); // NOPMD (System.out)
 				return false;
 			}
 
@@ -1017,74 +837,206 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 	}
 
 	/**
-	 * Returns if the specified output directory {@link #outputDir} exists. If
-	 * the directory does not exist, an error message is printed to stderr.
-	 * 
-	 * @return true if {@link #outputDir} is exists and is a directory; false
-	 *         otherwise
+	 * This method dumps the configuration on the screen.
 	 */
-	private boolean assertOutputDirExists() {
-		final File outputDirFile = new File(this.outputDir);
-		try {
-			if (!outputDirFile.exists()) {
-				LOG.error("The specified output directory '" + outputDirFile.getCanonicalPath() + "' does not exist");
-				return false;
-			}
+	private void dumpConfiguration() {
+		LOG.debug("#");
+		LOG.debug("# Configuration");
+		for (final Option o : Constants.SORTED_OPTION_LIST) {
+			final String longOpt = o.getLongOpt();
+			String val = "<null>";
+			if (longOpt.equals(Constants.CMD_OPT_NAME_INPUTDIRS)) {
+				val = Constants.stringArrToStringList(this.inputDirs);
+			} else if (longOpt.equals(Constants.CMD_OPT_NAME_OUTPUTDIR)) {
+				val = this.outputDir;
+			} else if (longOpt.equals(Constants.CMD_OPT_NAME_OUTPUTFNPREFIX)) {
+				val = this.outputFnPrefix;
+			} else if (longOpt.equals(Constants.CMD_OPT_NAME_VERBOSE) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT)
+					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_ASSEMBLYEQUIVCLASSREPORT) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONSEQDS)
+					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYSEQDS) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG)
+					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYCOMPONENTDEPG) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTCONTAINERDEPG)
+					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG)
+					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG)
+					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDALLOCATIONCALLTREE)
+					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDASSEMBLYCALLTREE) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTCALLTREES)
+					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTEXECTRACES) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES)
+					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTMSGTRACES) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTSYSTEMMODEL)) {
+				val = this.cmdl.hasOption(longOpt) ? "true" : "false"; // NOCS
+			} else if (longOpt.equals(Constants.CMD_OPT_NAME_SELECTTRACES)) {
+				if (this.selectedTraces != null) {
+					val = this.selectedTraces.toString();
+				} else {
+					val = "<select all>";
+				}
 
-			if (!outputDirFile.isDirectory()) {
-				LOG.error("The specified output directory '" + outputDirFile.getCanonicalPath() + "' is not a directory");
-				return false;
+			} else if (longOpt.equals(Constants.CMD_OPT_NAME_SHORTLABELS)) {
+				val = this.shortLabels ? "true" : "false"; // NOCS
+			} else if (longOpt.equals(Constants.CMD_OPT_NAME_INCLUDESELFLOOPS)) {
+				val = this.includeSelfLoops ? "true" : "false"; // NOCS
+			} else if (longOpt.equals(Constants.CMD_OPT_NAME_IGNOREINVALIDTRACES)) {
+				val = this.ignoreInvalidTraces ? "true" : "false"; // NOCS
+			} else if (longOpt.equals(Constants.CMD_OPT_NAME_MAXTRACEDURATION)) {
+				val = this.maxTraceDurationMillis + " ms";
+			} else if (longOpt.equals(Constants.CMD_OPT_NAME_IGNOREEXECUTIONSBEFOREDATE)) {
+				val = LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.ignoreExecutionsBeforeTimestamp) + " ("
+						+ LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.ignoreExecutionsBeforeTimestamp) + ")";
+			} else if (longOpt.equals(Constants.CMD_OPT_NAME_IGNOREEXECUTIONSAFTERDATE)) {
+				val = LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.ignoreExecutionsAfterTimestamp) + " ("
+						+ LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.ignoreExecutionsAfterTimestamp) + ")";
+			} else if (Constants.CMD_OPT_NAME_TRACE_COLORING.equals(longOpt)) {
+				val = this.cmdl.getOptionValue(Constants.CMD_OPT_NAME_TRACE_COLORING);
+				if (val == null) {
+					val = "";
+				}
+			} else if (Constants.CMD_OPT_NAME_ADD_DESCRIPTIONS.equals(longOpt)) {
+				val = this.cmdl.getOptionValue(Constants.CMD_OPT_NAME_ADD_DESCRIPTIONS);
+				if (val == null) {
+					val = "";
+				}
+			} else {
+				val = Arrays.toString(this.cmdl.getOptionValues(longOpt));
+				LOG.warn("Unformatted configuration output for option " + longOpt);
 			}
-
-		} catch (final IOException e) { // thrown by File.getCanonicalPath()
-			LOG.error("Error resolving name of output directory: '" + this.outputDir + "'");
+			LOG.debug("--" + longOpt + ": " + val);
 		}
+	}
 
-		return true;
+	private static void addDecorators(final String[] decoratorNames, final AbstractDependencyGraphFilter<?> plugin) {
+		if (decoratorNames == null) {
+			return;
+		}
+		final List<String> decoratorList = Arrays.asList(decoratorNames);
+		final Iterator<String> decoratorIterator = decoratorList.iterator();
+
+		while (decoratorIterator.hasNext()) {
+			final String currentDecoratorStr = decoratorIterator.next();
+
+			if (Constants.RESPONSE_TIME_DECORATOR_FLAG.equals(currentDecoratorStr)) {
+				plugin.addDecorator(new ResponseTimeNodeDecorator());
+				continue;
+			} else if (Constants.RESPONSE_TIME_COLORING_DECORATOR_FLAG.equals(currentDecoratorStr)) {
+				// if decorator is responseColoring, next value should be the threshold
+				final String thresholdStringStr = decoratorIterator.next();
+
+				try {
+					final int threshold = Integer.parseInt(thresholdStringStr);
+
+					plugin.addDecorator(new ResponseTimeColorNodeDecorator(threshold));
+				} catch (final NumberFormatException exc) {
+					LOG.error("Failed to parse int value of property " + "threshold(ms) : " + thresholdStringStr, exc);
+				}
+			} else {
+				LOG.warn("Unknown decoration name '" + currentDecoratorStr + "'.");
+				return;
+			}
+
+		}
 	}
 
 	/**
-	 * Returns if the specified input directories {@link #inputDirs} exist and that
-	 * each one is a monitoring log. If this is not the case for one of the directories,
-	 * an error message is printed to stderr.
+	 * Attaches a graph writer plugin to the given plugin.
 	 * 
-	 * @return true if {@link #outputDir} is exists and is a directory; false
-	 *         otherwise
+	 * @param plugin
+	 *            The plugin which delivers the graph to write
+	 * @param producer
+	 *            The producer which originally produced the graph
+	 * @param controller
+	 *            The analysis controller to use for the connection of the plugins
+	 * @throws IllegalStateException
+	 *             If the connection of the plugins is not possible at the moment
+	 * @throws AnalysisConfigurationException
+	 *             If the plugins cannot be connected
+	 * 
+	 * @param <P>
+	 *            The type of the plugin.
 	 */
-	private boolean assertInputDirsExistsAndAreMonitoringLogs() {
-		for (final String inputDir : this.inputDirs) {
-			final File inputDirFile = new File(inputDir);
-			try {
-				if (!inputDirFile.exists()) {
-					LOG.error("The specified input directory '" + inputDirFile.getCanonicalPath() + "' does not exist");
-					return false;
+	private <P extends AbstractPlugin & IGraphOutputtingFilter<?>> void attachGraphWriter(final P plugin,
+			final AbstractGraphProducingFilter<?> producer, final AnalysisController controller) throws IllegalStateException, AnalysisConfigurationException {
+
+		final Configuration configuration = new Configuration();
+		configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_OUTPUT_PATH_NAME, this.outputDir + File.separator + this.outputFnPrefix);
+		configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, String.valueOf(true));
+		configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_SHORTLABELS, String.valueOf(this.shortLabels));
+		configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_SELFLOOPS, String.valueOf(this.includeSelfLoops));
+		configuration.setProperty(AbstractAnalysisComponent.CONFIG_NAME, producer.getConfigurationName());
+		final GraphWriterPlugin graphWriter = new GraphWriterPlugin(configuration, controller);
+		controller.connect(plugin, plugin.getGraphOutputPortName(), graphWriter, GraphWriterPlugin.INPUT_PORT_NAME_GRAPHS);
+	}
+
+	private static <P extends AbstractPlugin & IGraphOutputtingFilter<?>> void connectGraphFilters(final P predecessor,
+			final AbstractGraphFilter<?, ?, ?, ?> filter, final AnalysisController controller) throws IllegalStateException, AnalysisConfigurationException {
+		controller.connect(predecessor, predecessor.getGraphOutputPortName(), filter, filter.getGraphInputPortName());
+	}
+
+	private static <P extends AbstractPlugin & IGraphOutputtingFilter<?>> TraceColoringFilter<?, ?> createTraceColoringFilter(final P predecessor,
+			final String coloringFileName, final AnalysisController controller) throws IOException, IllegalStateException, AnalysisConfigurationException {
+		final TraceColorRepository colorRepository = TraceColorRepository.createFromFile(coloringFileName, controller);
+
+		@SuppressWarnings("rawtypes")
+		final TraceColoringFilter<?, ?> coloringFilter = new TraceColoringFilter(new Configuration(), controller);
+		TraceAnalysisTool.connectGraphFilters(predecessor, coloringFilter, controller);
+		controller.connect(coloringFilter, TraceColoringFilter.COLOR_REPOSITORY_PORT_NAME, colorRepository);
+
+		return coloringFilter;
+	}
+
+	private static <P extends AbstractPlugin & IGraphOutputtingFilter<?>> DescriptionDecoratorFilter<?, ?, ?> createDescriptionDecoratorFilter(
+			final P predecessor, final String descriptionsFileName, final AnalysisController controller) throws IOException, IllegalStateException,
+			AnalysisConfigurationException {
+		final DescriptionRepository descriptionRepository = DescriptionRepository.createFromFile(descriptionsFileName, controller);
+
+		@SuppressWarnings("rawtypes")
+		final DescriptionDecoratorFilter<?, ?, ?> descriptionFilter = new DescriptionDecoratorFilter(new Configuration(), controller);
+		TraceAnalysisTool.connectGraphFilters(predecessor, descriptionFilter, controller);
+		controller.connect(descriptionFilter, DescriptionDecoratorFilter.DESCRIPTION_REPOSITORY_PORT_NAME, descriptionRepository);
+
+		return descriptionFilter;
+	}
+
+	/**
+	 * Attaches graph processors and a writer to the given graph producers depending on the given
+	 * command line.
+	 * 
+	 * @param graphProducers
+	 *            The graph producers to connect processors to
+	 * @param controller
+	 *            The analysis controller to use for the connection of the plugins
+	 * @param commandLine
+	 *            The command line to determine the desired processors
+	 * 
+	 * @throws IllegalStateException
+	 *             If the connection of plugins is not possible at the moment
+	 * @throws AnalysisConfigurationException
+	 *             If some plugins cannot be connected
+	 */
+	private void attachGraphProcessors(final List<AbstractGraphProducingFilter<?>> graphProducers, final AnalysisController controller,
+			final CommandLine commandLine) throws IllegalStateException, AnalysisConfigurationException, IOException {
+
+		for (final AbstractGraphProducingFilter<?> producer : graphProducers) {
+			AbstractGraphFilter<?, ?, ?, ?> lastFilter = null;
+
+			// Add a trace coloring filter, if necessary
+			if (commandLine.hasOption(Constants.CMD_OPT_NAME_TRACE_COLORING)) {
+				final String coloringFileName = commandLine.getOptionValue(Constants.CMD_OPT_NAME_TRACE_COLORING);
+				lastFilter = TraceAnalysisTool.createTraceColoringFilter(producer, coloringFileName, controller);
+			}
+
+			// Add a description filter, if necessary
+			if (commandLine.hasOption(Constants.CMD_OPT_NAME_ADD_DESCRIPTIONS)) {
+				final String descriptionsFileName = commandLine.getOptionValue(Constants.CMD_OPT_NAME_ADD_DESCRIPTIONS);
+				if (lastFilter != null) {
+					lastFilter = TraceAnalysisTool.createDescriptionDecoratorFilter(lastFilter, descriptionsFileName, controller);
+				} else {
+					lastFilter = TraceAnalysisTool.createDescriptionDecoratorFilter(producer, descriptionsFileName, controller);
 				}
-				if (!inputDirFile.isDirectory() && !inputDir.endsWith(FSUtil.ZIP_FILE_EXTENSION)) {
-					LOG.error("The specified input directory '" + inputDirFile.getCanonicalPath() + "' is neither a directory nor a zip file");
-					return false;
-				}
-				// check whether inputDirFile contains a (kieker|tpmon).map file; the latter for legacy reasons
-				if (inputDirFile.isDirectory()) { // only check for dirs
-					final File[] mapFiles = { new File(inputDir + File.separatorChar + FSUtil.MAP_FILENAME),
-						new File(inputDir + File.separatorChar + FSUtil.LEGACY_MAP_FILENAME), };
-					boolean mapFileExists = false;
-					for (final File potentialMapFile : mapFiles) {
-						if (potentialMapFile.isFile()) {
-							mapFileExists = true;
-							break;
-						}
-					}
-					if (!mapFileExists) {
-						LOG.error("The specified input directory '" + inputDirFile.getCanonicalPath() + "' is not a kieker log directory");
-						return false;
-					}
-				}
-			} catch (final IOException e) { // thrown by File.getCanonicalPath()
-				LOG.error("Error resolving name of input directory: '" + inputDir + "'");
+			}
+
+			if (lastFilter != null) {
+				this.attachGraphWriter(lastFilter, producer, controller);
+			} else {
+				this.attachGraphWriter(producer, producer, controller);
 			}
 		}
-
-		return true;
 	}
 
 	private boolean writeTraceEquivalenceReport(final String outputFnPrefixL, final TraceEquivalenceClassFilter traceEquivFilter) throws IOException {
@@ -1115,4 +1067,5 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 
 		return retVal;
 	}
+
 }

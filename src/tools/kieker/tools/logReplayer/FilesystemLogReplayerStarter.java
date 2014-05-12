@@ -66,7 +66,9 @@ public final class FilesystemLogReplayerStarter extends AbstractCommandLineTool 
 	private long ignoreRecordsBeforeTimestamp = FilesystemLogReplayer.MIN_TIMESTAMP;
 	private long ignoreRecordsAfterTimestamp = FilesystemLogReplayer.MAX_TIMESTAMP;
 
-	private FilesystemLogReplayerStarter() {}
+	private FilesystemLogReplayerStarter() {
+		super(true);
+	}
 
 	public static void main(final String[] args) {
 		new FilesystemLogReplayerStarter().start(args);
