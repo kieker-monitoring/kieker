@@ -16,10 +16,11 @@
 
 package kieker.panalysis.framework.core;
 
-
 class InputPortImpl<S extends IStage, T> extends AbstractPort<S, T> implements IInputPort<S, T> {
 
 	private volatile State state = State.OPEN;
+
+	private IPortListener stageListener;
 
 	public InputPortImpl(final S owningStage) {
 		this.setOwningStage(owningStage);
@@ -31,6 +32,14 @@ class InputPortImpl<S extends IStage, T> extends AbstractPort<S, T> implements I
 
 	public State getState() {
 		return this.state;
+	}
+
+	public void setStageListener(final IPortListener stageListener) {
+		this.stageListener = stageListener;
+	}
+
+	public void close() {
+		this.stageListener.onPortIsClosed(this);
 	}
 
 }

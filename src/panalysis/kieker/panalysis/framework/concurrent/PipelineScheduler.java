@@ -22,7 +22,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import de.chw.util.CyclicIterator;
+import de.chw.util.CyclicListIterator;
 
 import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.IPipeline;
@@ -48,7 +48,7 @@ public class PipelineScheduler {
 		for (final IStage stage : sortedStages) {
 			this.enable(stage);
 		}
-		this.iterator = new CyclicIterator<IStage>(this.activeStages);
+		this.iterator = new CyclicListIterator<IStage>(this.activeStages);
 	}
 
 	private List<IStage> sortList(final IPipeline pipeline) {

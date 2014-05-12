@@ -13,18 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
 package kieker.panalysis.framework.core;
 
 /**
- * 
  * @author Christian Wulf
  * 
  * @since 1.10
- * 
- * @param <S>
  */
-public interface ISink<S extends IStage> extends IStage {
+public interface IPortListener<S extends IStage> {
 
-	// BETTER remove the type parameter
+	void onPortIsClosed(IInputPort<S, ?> inputPort);
 }

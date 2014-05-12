@@ -43,7 +43,7 @@ public class Context<S extends IStage> {
 		}
 		associatedPipe.put(object);
 
-		this.pipesPutTo.add(associatedPipe.getTargetStage());
+		this.pipesPutTo.add(associatedPipe.getTargetPort().getOwningStage());
 		this.numPushedElements++;
 	}
 

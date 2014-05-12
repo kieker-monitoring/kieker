@@ -84,11 +84,6 @@ public interface IPipe<T> {
 	/**
 	 * @since 1.10
 	 */
-	void fireSignalClosing();
-
-	/**
-	 * @since 1.10
-	 */
 	<S extends ISource, A extends T> void setSourcePort(final IOutputPort<S, T> sourcePort);
 
 	/**
@@ -99,7 +94,7 @@ public interface IPipe<T> {
 	/**
 	 * @since 1.10
 	 */
-	IStage getTargetStage();
+	IInputPort<?, T> getTargetPort();
 
 	/**
 	 * @since 1.10

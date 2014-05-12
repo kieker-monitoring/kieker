@@ -62,7 +62,7 @@ public class QueuedCountWordsAnalysis extends Analysis {
 
 	private IPipeline buildNonIoPipeline() {
 		// create stages
-		final RepeaterSource<String> repeaterSource = RepeaterSource.create(".", 2);
+		final RepeaterSource<String> repeaterSource = RepeaterSource.create(".", 1);
 		final DirectoryName2Files findFilesStage = new DirectoryName2Files();
 		final Distributor<File> distributor = new Distributor<File>();
 		final CountWordsStage countWordsStage0 = new CountWordsStage();

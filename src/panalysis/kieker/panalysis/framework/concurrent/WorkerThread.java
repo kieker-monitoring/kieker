@@ -100,6 +100,7 @@ public class WorkerThread extends Thread {
 	}
 
 	private void initDatastructures() throws Exception {
+		this.pipeline.fireStartNotification();
 		this.pipelineScheduler = new NextStageScheduler(this.pipeline, this.accessesDeviceId);
 	}
 
@@ -112,7 +113,7 @@ public class WorkerThread extends Thread {
 	}
 
 	private void cleanUpDatastructures() {
-		this.pipelineScheduler.cleanUp();
+		this.pipeline.fireStopNotification();
 		System.out.println("Thread terminated:" + this);
 	}
 

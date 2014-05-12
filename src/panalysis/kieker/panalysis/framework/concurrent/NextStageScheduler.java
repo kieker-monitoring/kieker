@@ -31,14 +31,10 @@ public class NextStageScheduler {
 
 	protected final Map<IStage, Boolean> statesOfStages = new HashMap<IStage, Boolean>();
 	private final StageWorkList workList;
-	private final IPipeline pipeline;
 
 	public NextStageScheduler(final IPipeline pipeline, final int accessesDeviceId) throws Exception {
-		this.pipeline = pipeline;
 		this.workList = new StageWorkList(accessesDeviceId);
 		this.workList.ensureCapacity(pipeline.getStages().size());
-
-		pipeline.fireStartNotification();
 
 		this.workList.addAll(pipeline.getStartStages());
 		// this.workList.addAll(pipeline.getStages());
@@ -65,7 +61,7 @@ public class NextStageScheduler {
 	public void disable(final IStage stage) {
 		this.statesOfStages.put(stage, Boolean.FALSE);
 		// if (!Thread.currentThread().getName().equals("startThread")) {
-		System.out.println("Disabled " + stage);
+		// System.out.println("Disabled " + stage);
 		// }
 		stage.fireSignalClosingToAllOutputPorts();
 	}
@@ -74,13 +70,10 @@ public class NextStageScheduler {
 		this.workList.addAll(0, stage.getContext().getOutputStages()); // FIXME do not add the stage again if it has a cyclic pipe
 		stage.getContext().getOutputStages().clear();
 
+		// / TODO consider to move state (enabled/disabled) of stage to stage for performance reasons
 		if (this.statesOfStages.get(stage) == Boolean.TRUE) {
 			this.workList.add(stage); // re-insert at the tail
-			System.out.println("added again: " + stage);
+			// System.out.println("added again: " + stage);
 		}
-	}
-
-	public void cleanUp() {
-		this.pipeline.fireStopNotification();
 	}
 }

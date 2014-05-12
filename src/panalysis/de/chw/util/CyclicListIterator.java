@@ -10,14 +10,14 @@ import java.util.List;
  * 
  * @param <T>
  */
-public class CyclicIterator<T> implements Iterator<T> {
+public class CyclicListIterator<T> implements Iterator<T> {
 
 	private final List<T> list;
 	// private Iterator<T> iterator;
 
 	private int currentIndex = 0;
 
-	public CyclicIterator(final List<T> list) {
+	public CyclicListIterator(final List<T> list) {
 		this.list = list;
 		// this.iterator = this.list.iterator();
 	}

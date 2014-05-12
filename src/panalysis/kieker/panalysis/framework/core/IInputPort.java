@@ -27,4 +27,14 @@ public interface IInputPort<S extends IStage, T> extends IPort<S, T> {
 	 * @since 1.10
 	 */
 	public abstract void setState(final State state);
+
+	/**
+	 * @since 1.10
+	 */
+	public abstract void setStageListener(final IPortListener stageListener);
+
+	/**
+	 * @since 1.10
+	 */
+	public void close();
 }

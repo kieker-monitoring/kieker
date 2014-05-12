@@ -32,7 +32,7 @@ import de.chw.concurrent.DequePopException;
  *            the extending stage
  * 
  */
-public abstract class AbstractFilter<S extends IStage> extends AbstractStage implements ISink<S>, ISource {
+public abstract class AbstractFilter<S extends IStage> extends AbstractStage implements ISink<S>, ISource, IPortListener<S> {
 
 	protected volatile boolean mayBeDisabled; // BETTER write only non-concurrent code in a stage
 
@@ -115,10 +115,14 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	/**
 	 * @since 1.10
 	 */
-	public <T> void onSignalClosing(final IInputPort<S, T> inputPort) {
+	public void onPortIsClosed(final IInputPort<S, ?> inputPort) {
 		// inputPort.setState(IInputPort.State.CLOSING);
 		this.enabledInputPorts--;
-		this.logger.info("Closed " + "(" + this.enabledInputPorts + " remaining) " + inputPort + " of " + this);
+		// this.logger.info("Closed " + "(" + this.enabledInputPorts + " remaining) " + inputPort + " of " + this);
+
+		if (this.enabledInputPorts < 0) {
+			this.logger.error("Closed port more than once: portIndex=" + inputPort.getIndex() + " for stage " + this);
+		}
 
 		this.checkWhetherThisStageMayBeDisabled();
 	}
@@ -129,7 +133,7 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	private void checkWhetherThisStageMayBeDisabled() {
 		if (this.enabledInputPorts == 0) {
 			this.mayBeDisabled = true;
-			this.logger.info(this.toString() + " can now be disabled by the pipeline scheduler.");
+			// this.logger.info(this.toString() + " can now be disabled by the pipeline scheduler.");
 		}
 	}
 
@@ -138,7 +142,7 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	 */
 	public void fireSignalClosingToAllInputPorts() {
 		for (final IInputPort<S, ?> port : this.inputPorts) {
-			this.onSignalClosing(port);
+			port.close();
 		}
 		if (this.inputPorts.isEmpty()) {
 			this.checkWhetherThisStageMayBeDisabled();
@@ -149,11 +153,11 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	 * @since 1.10
 	 */
 	public void fireSignalClosingToAllOutputPorts() {
-		this.logger.info("Fire closing signal to all output ports of: " + this);
+		// this.logger.info("Fire closing signal to all output ports of: " + this);
 		for (final IOutputPort<S, ?> port : this.outputPorts) {
 			final IPipe<?> associatedPipe = port.getAssociatedPipe();
 			if (associatedPipe != null) {
-				associatedPipe.fireSignalClosing();
+				associatedPipe.getTargetPort().close();
 			} // else: ignore unconnected port
 		}
 	}
@@ -180,6 +184,7 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 		final InputPortImpl<S, T> inputPort = new InputPortImpl<S, T>((S) this);
 		inputPort.setIndex(this.inputPorts.size());
 		this.inputPorts.add(inputPort);
+		inputPort.setStageListener(this);
 		this.enabledInputPorts++;
 		return inputPort;
 	}
@@ -222,11 +227,11 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	}
 
 	public IInputPort<?, ?> getInputPortByIndex(final int index) {
-		return this.inputPorts.get(index);
+		return this.readOnlyInputPorts.get(index);
 	}
 
 	public IOutputPort<?, ?> getOutputPortByIndex(final int index) {
-		return this.outputPorts.get(index);
+		return this.readOnlyOutputPorts.get(index);
 	}
 
 }

@@ -40,7 +40,7 @@ public class MethodCallPipe<T> extends AbstractPipe<T> {
 	@Override
 	protected void putInternal(final T token) {
 		this.storedToken = token;
-		this.getTargetStage().execute();
+		this.getTargetPort().getOwningStage().execute();
 	}
 
 	@Override
