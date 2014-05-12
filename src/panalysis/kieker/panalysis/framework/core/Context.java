@@ -85,6 +85,10 @@ public class Context<S extends IStage> {
 	}
 
 	/**
+	 * 
+	 * @param inputPort
+	 * @return
+	 * 
 	 * @since 1.10
 	 */
 	public <T> T read(final IInputPort<S, T> inputPort) {

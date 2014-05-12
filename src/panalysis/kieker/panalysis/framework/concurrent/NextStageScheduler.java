@@ -51,6 +51,7 @@ public class NextStageScheduler {
 	}
 
 	public boolean isAnyStageActive() {
+		System.out.println("workList: " + this.workList);
 		return !this.workList.isEmpty();
 	}
 
@@ -61,8 +62,8 @@ public class NextStageScheduler {
 	public void disable(final IStage stage) {
 		this.statesOfStages.put(stage, Boolean.FALSE);
 		// if (!Thread.currentThread().getName().equals("startThread")) {
-		// System.out.println("Disabled " + stage);
 		// }
+		System.out.println("statesOfStages: " + this.statesOfStages);
 		stage.fireSignalClosingToAllOutputPorts();
 	}
 

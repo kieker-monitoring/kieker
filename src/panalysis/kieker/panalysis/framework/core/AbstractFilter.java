@@ -172,7 +172,8 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	@Override
 	public String toString() {
 		final String s = super.toString();
-		return "{" + s + ": " + "numPushedElements=" + this.context + "}";
+		// return "{" + s + ": " + "numPushedElements=" + this.context + "}";
+		return s;
 	}
 
 	/**
