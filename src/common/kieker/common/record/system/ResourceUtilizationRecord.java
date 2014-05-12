@@ -171,30 +171,18 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 		return SIZE;
 	}
 
-	/**
-	 * @return the timestamp
-	 */
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
 
-	/**
-	 * @return the hostname
-	 */
 	public final String getHostname() {
 		return this.hostname;
 	}
 
-	/**
-	 * @return the resourceName
-	 */
 	public final String getResourceName() {
 		return this.resourceName;
 	}
 
-	/**
-	 * @return the utilization
-	 */
 	public final double getUtilization() {
 		return this.utilization;
 	}
