@@ -20,22 +20,21 @@ import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
-import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Nils Christian Ehmke
- *
+ * 
  * @since 1.10
  */
-public class GCRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
+public class GCRecord extends AbstractJVMRecord {
 
-	public static final int SIZE = TYPE_SIZE_LONG + (3 * TYPE_SIZE_STRING) + (2 * TYPE_SIZE_LONG);
+	public static final int SIZE = AbstractJVMRecord.SIZE + TYPE_SIZE_STRING + (2 * TYPE_SIZE_LONG);
 
 	public static final Class<?>[] TYPES = {
-		long.class,
-		String.class,
-		String.class,
+		long.class, // timestamp
+		String.class, // hostname
+		String.class, // vmName
 		String.class,
 		long.class,
 		long.class,
@@ -43,37 +42,30 @@ public class GCRecord extends AbstractMonitoringRecord implements IMonitoringRec
 
 	private static final long serialVersionUID = 2989308154952301746L;
 
-	private final long timestamp;
-	private final String hostname;
-	private final String vmName;
 	private final String gcName;
 	private final long collectionCount;
 	private final long collectionTime;
 
 	public GCRecord(final long timestamp, final String hostname, final String vmName, final String gcName, final long collectionCount, final long collectionTime) {
-		this.timestamp = timestamp;
-		this.hostname = hostname;
-		this.vmName = vmName;
+		super(timestamp, hostname, vmName);
+
 		this.gcName = gcName;
 		this.collectionCount = collectionCount;
 		this.collectionTime = collectionTime;
 	}
 
 	public GCRecord(final Object[] values) { // NOPMD (direct store of values)
+		super(values);
 		AbstractMonitoringRecord.checkArray(values, TYPES);
 
-		this.timestamp = (Long) values[0];
-		this.hostname = (String) values[1];
-		this.vmName = (String) values[2];
 		this.gcName = (String) values[3];
 		this.collectionCount = (Long) values[4];
 		this.collectionTime = (Long) values[5];
 	}
 
 	public GCRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.timestamp = buffer.getLong();
-		this.hostname = stringRegistry.get(buffer.getInt());
-		this.vmName = stringRegistry.get(buffer.getInt());
+		super(buffer, stringRegistry);
+
 		this.gcName = stringRegistry.get(buffer.getInt());
 		this.collectionCount = buffer.getLong();
 		this.collectionTime = buffer.getLong();
@@ -81,39 +73,16 @@ public class GCRecord extends AbstractMonitoringRecord implements IMonitoringRec
 
 	@Override
 	public Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getHostname(), this.getVmName(), this.getGcName(), this.getCollectionCount(), this.getCollectionTime() };
+		return new Object[] { super.getTimestamp(), super.getHostname(), super.getVmName(), this.getGcName(), this.getCollectionCount(), this.getCollectionTime() };
 	}
 
 	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putLong(this.getTimestamp());
-		buffer.putInt(stringRegistry.get(this.getHostname()));
-		buffer.putInt(stringRegistry.get(this.getVmName()));
+		super.writeBytes(buffer, stringRegistry);
+
 		buffer.putInt(stringRegistry.get(this.getGcName()));
 		buffer.putLong(this.getCollectionCount());
 		buffer.putLong(this.getCollectionTime());
-	}
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public final void initFromArray(final Object[] values) {
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public final void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -130,18 +99,6 @@ public class GCRecord extends AbstractMonitoringRecord implements IMonitoringRec
 	@Override
 	public int getSize() {
 		return SIZE;
-	}
-
-	public long getTimestamp() {
-		return this.timestamp;
-	}
-
-	public String getHostname() {
-		return this.hostname;
-	}
-
-	public String getVmName() {
-		return this.vmName;
 	}
 
 	public String getGcName() {
