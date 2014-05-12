@@ -37,6 +37,7 @@ import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 
@@ -154,6 +155,11 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 	protected boolean performTask() {
 		this.dumpConfiguration();
 		return this.dispatchTasks();
+	}
+
+	@Override
+	protected HelpFormatter getHelpFormatter() {
+		return Constants.CMD_HELP_FORMATTER;
 	}
 
 	/**

@@ -87,7 +87,7 @@ public abstract class AbstractCommandLineTool {
 		} catch (final ParseException ex) {
 			LOG.error("An error occurred while parsing the command line arguments", ex);
 
-			final HelpFormatter formatter = new CLIHelpFormatter();
+			final HelpFormatter formatter = this.getHelpFormatter();
 			formatter.printHelp(this.getClass().getName(), options, true);
 
 			return null;
@@ -99,5 +99,9 @@ public abstract class AbstractCommandLineTool {
 	protected abstract boolean readPropertiesFromCommandLine(CommandLine commandLine);
 
 	protected abstract boolean performTask();
+
+	protected HelpFormatter getHelpFormatter() {
+		return new CLIHelpFormatter();
+	}
 
 }
