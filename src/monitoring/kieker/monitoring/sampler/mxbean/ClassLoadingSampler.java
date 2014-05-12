@@ -20,34 +20,26 @@ import java.lang.management.ManagementFactory;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.jvm.ClassLoadingRecord;
-import kieker.monitoring.core.controller.IMonitoringController;
-import kieker.monitoring.core.sampler.ISampler;
 
 /**
- * A sampler using the Java MXBean interface to access information about the class loading. The sampler produces a {@link ClassLoadingRecord} each time the
- * {@link #sample(IMonitoringController)} method is called.
+ * A sampler using the MXBean interface to access information about the class loading. The sampler produces a {@link ClassLoadingRecord} each time the {@code sample}
+ * method is called.
  * 
  * @author Nils Christian Ehmke
  * 
  * @since 1.10
  */
-public class ClassLoadingSampler implements ISampler {
+public class ClassLoadingSampler extends AbstractMXBeanSampler {
 
 	public ClassLoadingSampler() {
 		// Empty default constructor
 	}
 
 	@Override
-	public void sample(final IMonitoringController monitoringController) throws Exception {
-		final long timestamp = monitoringController.getTimeSource().getTime();
-		final String vmName = ManagementFactory.getRuntimeMXBean().getName();
-		final String hostname = monitoringController.getHostname();
-
+	protected IMonitoringRecord[] createNewMonitoringRecords(final long timestamp, final String hostname, final String vmName) {
 		final ClassLoadingMXBean classLoadingBean = ManagementFactory.getClassLoadingMXBean();
-
-		final IMonitoringRecord record = new ClassLoadingRecord(timestamp, hostname, vmName, classLoadingBean.getTotalLoadedClassCount(),
-				classLoadingBean.getLoadedClassCount(), classLoadingBean.getUnloadedClassCount());
-		monitoringController.newMonitoringRecord(record);
+		return new IMonitoringRecord[] { new ClassLoadingRecord(timestamp, hostname, vmName, classLoadingBean.getTotalLoadedClassCount(),
+				classLoadingBean.getLoadedClassCount(), classLoadingBean.getUnloadedClassCount()), };
 	}
 
 }

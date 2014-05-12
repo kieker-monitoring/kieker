@@ -13,31 +13,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
+
 package kieker.monitoring.sampler.mxbean;
 
-import java.lang.management.CompilationMXBean;
 import java.lang.management.ManagementFactory;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.jvm.CompilationRecord;
+import kieker.monitoring.core.controller.IMonitoringController;
+import kieker.monitoring.core.sampler.ISampler;
 
 /**
- * A sampler using the MXBean interface to access information about the compilation time. The sampler produces a {@link CompilationRecord} each time the
- * {@code sample} method is called.
+ * This is an abstract base for all sampler using the MXBean interface to access information from the JVM.
  * 
  * @author Nils Christian Ehmke
  * 
  * @since 1.10
  */
-public class CompilationSampler extends AbstractMXBeanSampler {
+public abstract class AbstractMXBeanSampler implements ISampler {
 
-	public CompilationSampler() {
+	private static final String VM_NAME = ManagementFactory.getRuntimeMXBean().getName();
+
+	public AbstractMXBeanSampler() {
 		// Empty default constructor
 	}
 
 	@Override
-	protected IMonitoringRecord[] createNewMonitoringRecords(final long timestamp, final String hostname, final String vmName) {
-		final CompilationMXBean compilationBean = ManagementFactory.getCompilationMXBean();
-		return new IMonitoringRecord[] { new CompilationRecord(timestamp, hostname, vmName, compilationBean.getName(), compilationBean.getTotalCompilationTime()), };
+	public final void sample(final IMonitoringController monitoringController) throws Exception {
+		final long timestamp = monitoringController.getTimeSource().getTime();
+		final String hostname = monitoringController.getHostname();
+
+		final IMonitoringRecord[] records = this.createNewMonitoringRecords(timestamp, hostname, VM_NAME);
+
+		for (final IMonitoringRecord record : records) {
+			monitoringController.newMonitoringRecord(record);
+		}
 	}
+
+	protected abstract IMonitoringRecord[] createNewMonitoringRecords(final long timestamp, final String hostname, final String vmName);
+
 }

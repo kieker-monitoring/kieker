@@ -83,7 +83,7 @@ public class ClassLoadingRecord extends AbstractMonitoringRecord implements IMon
 	@Override
 	public Object[] toArray() {
 		return new Object[] { this.getTimestamp(), this.getHostname(), this.getVmName(), this.getTotalLoadedClassCount(), this.getLoadedClassCount(),
-			this.getUnloadedClassCount() };
+			this.getUnloadedClassCount(), };
 	}
 
 	@Override
