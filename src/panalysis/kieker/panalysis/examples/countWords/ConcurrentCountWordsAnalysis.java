@@ -49,7 +49,7 @@ import kieker.panalysis.stage.basic.merger.Merger;
  */
 public class ConcurrentCountWordsAnalysis extends Analysis {
 
-	private static final int MAX_NUM_THREADS = 1;
+	private static final int MAX_NUM_THREADS = 4;
 	private static final int NUM_TOKENS_TO_REPEAT = 1000;
 
 	public static final String START_DIRECTORY_NAME = ".";
@@ -60,6 +60,7 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 	private WorkerThread[] nonIoThreads;
 
 	ConcurrentWorkStealingPipeFactory<?>[] pipeFactories;
+	public static String distributorId;
 
 	@Override
 	public void init() {
@@ -165,6 +166,7 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 	private IPipeline buildNonIoPipeline(final Distributor<File> readerDistributor) {
 		// create stages
 		final Distributor<File> distributor = new Distributor<File>();
+		ConcurrentCountWordsAnalysis.distributorId = distributor.getId();
 		final CountWordsStage countWordsStage0 = new CountWordsStage();
 		final CountWordsStage countWordsStage1 = new CountWordsStage();
 		final Merger<Pair<File, Integer>> merger = new Merger<Pair<File, Integer>>();
@@ -294,9 +296,22 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 		WorkerThread maxThread = null;
 
 		// FIXME resolve bug; see analysis results below;
-		// solution: use a generic distributor to distribute between the threads' start stages
-		// {RepeaterSource: numPushedElements=4000, numTakenElements=0}
-		// {DirectoryName2Files: numPushedElements=59985, numTakenElements=3999}
+		//
+		// --- Thread[startThread,5,] ---
+		// {RepeaterSource: numPushedElements={numPushedElements=1000, numTakenElements=1}}
+		// {DirectoryName2Files: numPushedElements={numPushedElements=16000, numTakenElements=1000}}
+		// {Distributor: numPushedElements={numPushedElements=16000, numTakenElements=16000}}
+		// --- Thread[Thread-2,5,] ---
+		// {Distributor: numPushedElements={numPushedElements=16008, numTakenElements=16008}}
+		//
+		// cause: the non-io distributor is executed faster than the io distributor
+
+		for (final WorkerThread thread : this.ioThreads) {
+			System.out.println("--- " + thread + " ---"); // NOPMD (Just for example purposes)
+			for (final IStage stage : thread.getPipeline().getStages()) {
+				System.out.println(stage); // NOPMD (Just for example purposes)
+			}
+		}
 
 		for (final WorkerThread thread : this.nonIoThreads) {
 			System.out.println("--- " + thread + " ---"); // NOPMD (Just for example purposes)

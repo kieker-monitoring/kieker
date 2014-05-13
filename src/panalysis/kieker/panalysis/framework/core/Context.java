@@ -111,6 +111,8 @@ public class Context<S extends IStage> {
 				final Object element = takenElements.get(i);
 				associatedPipe.put(element);
 			}
+
+			this.numTakenElements -= takenElements.size();
 		}
 	}
 

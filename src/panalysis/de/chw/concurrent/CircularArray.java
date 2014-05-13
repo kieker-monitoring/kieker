@@ -16,6 +16,8 @@
 
 package de.chw.concurrent;
 
+import java.util.Arrays;
+
 /**
  * 
  * @author Christian Wulf
@@ -68,5 +70,10 @@ public class CircularArray<T> {
 			a.put(i, this.get(i));
 		}
 		return a;
+	}
+
+	@Override
+	public String toString() {
+		return Arrays.toString(this.segment);
 	}
 }

@@ -67,7 +67,7 @@ public class NextStageScheduler {
 		this.statesOfStages.put(stage, Boolean.FALSE);
 		// if (!Thread.currentThread().getName().equals("startThread")) {
 		// }
-		// System.out.println("statesOfStages: " + this.statesOfStages);
+		// System.out.println("Disabled stage " + stage + ", statesOfStages: " + this.statesOfStages);
 
 		if (this.highestPrioritizedEnabledStages.contains(stage)) {
 			this.highestPrioritizedEnabledStages.remove(stage);

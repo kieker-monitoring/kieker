@@ -177,8 +177,8 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	@Override
 	public String toString() {
 		final String s = super.toString();
-		// return "{" + s + ": " + "numPushedElements=" + this.context + "}";
-		return s;
+		return "{" + s + ": " + "numPushedElements=" + this.context + "}";
+		// return s;
 	}
 
 	/**
@@ -190,7 +190,7 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 		final InputPortImpl<S, T> inputPort = new InputPortImpl<S, T>((S) this);
 		inputPort.setIndex(this.inputPorts.size());
 		this.inputPorts.add(inputPort);
-		inputPort.setStageListener(this);
+		inputPort.setPortListener(this);
 		this.enabledInputPorts++;
 		return inputPort;
 	}

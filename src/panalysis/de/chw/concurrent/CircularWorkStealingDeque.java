@@ -303,4 +303,9 @@ public class CircularWorkStealingDeque<T> {
 		return size;
 	}
 
+	@Override
+	public String toString() {
+		return this.activeArray.toString();
+	}
+
 }

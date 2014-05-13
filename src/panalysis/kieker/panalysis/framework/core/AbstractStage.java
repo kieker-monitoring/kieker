@@ -55,6 +55,6 @@ public abstract class AbstractStage implements IStage {
 	@Override
 	public String toString() {
 		// return "{" + "class=" + this.getClass().getSimpleName() + ", id=" + this.id + "}";
-		return this.getClass().getSimpleName();
+		return this.getClass().getSimpleName() + "(" + Thread.currentThread() + ")";
 	}
 }

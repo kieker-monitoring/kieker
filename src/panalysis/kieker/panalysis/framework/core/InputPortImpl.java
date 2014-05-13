@@ -34,7 +34,7 @@ class InputPortImpl<S extends IStage, T> extends AbstractPort<S, T> implements I
 		return this.state;
 	}
 
-	public void setStageListener(final IPortListener stageListener) {
+	public void setPortListener(final IPortListener stageListener) {
 		this.stageListener = stageListener;
 	}
 

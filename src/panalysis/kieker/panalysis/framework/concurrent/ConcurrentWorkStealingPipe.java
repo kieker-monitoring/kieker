@@ -30,7 +30,7 @@ import kieker.panalysis.framework.core.AbstractPipe;
  */
 public class ConcurrentWorkStealingPipe<T> extends AbstractPipe<T> {
 
-	private final CircularWorkStealingDeque<T> circularWorkStealingDeque = new CircularWorkStealingDeque<T>();
+	private final CircularWorkStealingDeque<T> circularWorkStealingDeque = new SimpleCircularWorkStealingDeque<T>();
 	private final IStealStrategy<T> stealStrategy;
 
 	// BETTER use a prioritized list that considers
@@ -57,18 +57,25 @@ public class ConcurrentWorkStealingPipe<T> extends AbstractPipe<T> {
 
 	@Override
 	protected T tryTakeInternal() {
-		final T record = this.circularWorkStealingDeque.popBottom();
+		T record = this.circularWorkStealingDeque.popBottom();
 		if (record == null) {
-			this.stealStrategy.steal(this.getTargetPort(), this.pipesToStealFrom);
+			record = this.stealStrategy.steal(this.getTargetPort(), this.pipesToStealFrom);
+			if (record == null) {
+				return null;
+			}
+			System.out.println("stolen (" + Thread.currentThread() + "): " + record);
 		}
 		this.numTakenElements++;
 		return record;
 	}
 
 	public T take() {
-		final T record = this.circularWorkStealingDeque.popBottomEx();
+		T record = this.circularWorkStealingDeque.popBottomEx();
 		if (record == null) {
-			this.stealStrategy.steal(this.getTargetPort(), this.pipesToStealFrom);
+			record = this.stealStrategy.steal(this.getTargetPort(), this.pipesToStealFrom);
+			if (record == null) {
+				return null;
+			}
 		}
 		this.numTakenElements++;
 		return record;
