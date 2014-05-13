@@ -32,7 +32,7 @@ import kieker.monitoring.core.sampler.ISampler;
 import kieker.monitoring.core.sampler.ScheduledSamplerJob;
 
 /**
- * @author Nils Christian Ehmke
+ * @author Nils Christian Ehmke, Andre van Hoorn
  * 
  * @since 1.10
  */
