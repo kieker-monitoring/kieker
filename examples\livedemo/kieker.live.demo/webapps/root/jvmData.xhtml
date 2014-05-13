@@ -54,9 +54,31 @@
 		 		<li><a style="color:#000000" href="jvmData.jsf">JVM Data</a></li>
 			</ul>
 		</div>
+		
 		<div id="main">
-		 	
+		 	<h:form id="form"> 
+				<p:commandButton async="true" id="loadButton" value="#{jMeterBean.buttonText}" disabled="#{jMeterBean.disabled}" actionListener="#{jMeterBean.runJMeter}" />
+					
+				<p:lineChart id="jit" value="#{classLoadingBean.model}" legendPosition="ne"  
+			    	title="Total Running Time of JIT Compiler" minY="0" style="height:300px;margin-top:20px"
+			    	xaxisLabel="Time" yaxisLabel="Running time (ms)"/>	
+			    	
+			    <p:lineChart id="classloading" value="#{classLoadingBean.model}" legendPosition="ne"  
+			    	title="Class Loading" minY="0" style="height:300px;margin-top:20px"
+			    	xaxisLabel="Time" yaxisLabel="Number of loaded classes"/>	
+			    		
+				<p:lineChart id="threads" value="#{classLoadingBean.model}" legendPosition="ne"  
+			    	title="Threads Status" minY="0"  style="height:300px;margin-top:20px"
+			    	xaxisLabel="Time" yaxisLabel="Number of threads"/>
+			    	
+			   <p:lineChart id="gc" value="#{classLoadingBean.model}" legendPosition="ne"  
+			    	title="Garbage Collectors" minY="0" style="height:300px;margin-top:20px"
+			    	xaxisLabel="Time" yaxisLabel=" "/>	
+			    	
+			   <p:poll interval="1" update="jit, classloading, threads, gc, loadButton" />	  		 	
+			</h:form>
 		</div>
+		
 		<div id="footer">
        		<div id="footernav" class="nav">
         		<ul class="menu">

@@ -24,8 +24,6 @@ import kieker.analysis.AnalysisController;
 import kieker.analysis.AnalysisControllerThread;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
-import kieker.analysis.plugin.filter.forward.TeeFilter;
-import kieker.analysis.plugin.filter.select.TypeFilter;
 import kieker.analysis.plugin.filter.sink.CPUUtilizationDisplayFilter;
 import kieker.analysis.plugin.filter.sink.MemSwapUtilizationDisplayFilter;
 import kieker.analysis.plugin.filter.sink.MethodAndComponentFlowDisplayFilter;
@@ -36,6 +34,8 @@ import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.executionRecordTransformation.ExecutionRecordTransformationFilter;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import livedemo.entities.EnrichedOERecord;
+import livedemo.filter.ClassLoadingDisplayFilter;
+import livedemo.filter.Distributor;
 import livedemo.filter.MethodResponsetimeDisplayFilter;
 import livedemo.filter.OER2EnrichedOERFilter;
 
@@ -63,10 +63,10 @@ public class AnalysisBean {
 	private final ListCollectionFilter<EnrichedOERecord> recordListFilter;
 	private final MethodResponsetimeDisplayFilter responsetimeFilter;
 	private final MethodAndComponentFlowDisplayFilter tagCloudFilter;
+	private final ClassLoadingDisplayFilter classLoadingDisplayFilter;
 
 	public AnalysisBean() {
 		this.updateThread = new UpdateThread(1000); // will notify its observers every second
-		
 
 		this.analysisInstance = new AnalysisController();
 
@@ -90,6 +90,10 @@ public class AnalysisBean {
 		responsetimeConfiguration.setProperty(MethodResponsetimeDisplayFilter.CONFIG_PROPERTY_NAME_RESPONSETIME_TIMEUNIT, "MILLISECONDS");
 		this.responsetimeFilter = new MethodResponsetimeDisplayFilter(responsetimeConfiguration, this.analysisInstance);
 
+		final Configuration classLoadingConfiguration = new Configuration();
+		classLoadingConfiguration.setProperty(ClassLoadingDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, this.numberOfResponsetimeEntries);
+		this.classLoadingDisplayFilter = new ClassLoadingDisplayFilter(classLoadingConfiguration, this.analysisInstance);
+
 		this.tagCloudFilter = new MethodAndComponentFlowDisplayFilter(new Configuration(), this.analysisInstance);
 
 		try {
@@ -100,9 +104,9 @@ public class AnalysisBean {
 			e.printStackTrace();
 		}
 		this.act = new AnalysisControllerThread(this.analysisInstance);
-		
+
 	}
-	
+
 	@PostConstruct
 	protected void startThreads() {
 		this.updateThread.start();
@@ -110,6 +114,7 @@ public class AnalysisBean {
 	}
 
 	private void init() throws IllegalStateException, AnalysisConfigurationException {
+
 		final Configuration jmxReaderConfig = new Configuration();
 		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_SILENT, "true");
 		final JMXReader reader = new JMXReader(jmxReaderConfig, this.analysisInstance);
@@ -118,57 +123,41 @@ public class AnalysisBean {
 		timeReaderConfig.setProperty(TimeReader.CONFIG_PROPERTY_NAME_UPDATE_INTERVAL_NS, this.timeReaderUpdateIntervallNS);
 		final TimeReader timeReader = new TimeReader(timeReaderConfig, this.analysisInstance);
 
-		final Configuration typeFilter1Config = new Configuration();
-		typeFilter1Config.setProperty(TypeFilter.CONFIG_PROPERTY_NAME_TYPES, "kieker.common.record.controlflow.OperationExecutionRecord");
-		final TypeFilter typeFilter1 = new TypeFilter(typeFilter1Config, this.analysisInstance);
-
-		final Configuration typeFilter2Config = new Configuration();
-		typeFilter2Config.setProperty(TypeFilter.CONFIG_PROPERTY_NAME_TYPES, "kieker.common.record.system.CPUUtilizationRecord");
-		final TypeFilter typeFilter2 = new TypeFilter(typeFilter2Config, this.analysisInstance);
-
-		final Configuration typeFilter3Config = new Configuration();
-		typeFilter3Config.setProperty(TypeFilter.CONFIG_PROPERTY_NAME_TYPES, "kieker.common.record.system.MemSwapUsageRecord");
-		final TypeFilter typeFilter3 = new TypeFilter(typeFilter3Config, this.analysisInstance);
+		final Distributor distributor = new Distributor(new Configuration(), this.analysisInstance);
 
 		final OER2EnrichedOERFilter oer2RecordFilter = new OER2EnrichedOERFilter(new Configuration(), this.analysisInstance);
 
 		final ExecutionRecordTransformationFilter ertf = new ExecutionRecordTransformationFilter(new Configuration(), this.analysisInstance);
 
-		this.analysisInstance.connect(reader, JMXReader.OUTPUT_PORT_NAME_RECORDS,
-				typeFilter1, TypeFilter.INPUT_PORT_NAME_EVENTS);
-		
-		this.analysisInstance.connect(typeFilter1, TypeFilter.OUTPUT_PORT_NAME_TYPE_MATCH,
-				this.responsetimeFilter, MethodResponsetimeDisplayFilter.INPUT_PORT_NAME_RECORDS);
+		this.analysisInstance.connect(reader, JMXReader.OUTPUT_PORT_NAME_RECORDS, distributor, Distributor.INPUT_PORT_NAME_RECORDS);
 
-		this.analysisInstance.connect(timeReader, TimeReader.OUTPUT_PORT_NAME_TIMESTAMPS,
-				this.responsetimeFilter, MethodResponsetimeDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS);
+		this.analysisInstance.connect(distributor, Distributor.OUTPUT_PORT_NAME_OPERATION_EXECUTION_RECORDS, this.responsetimeFilter,
+				MethodResponsetimeDisplayFilter.INPUT_PORT_NAME_RECORDS);
+		this.analysisInstance.connect(timeReader, TimeReader.OUTPUT_PORT_NAME_TIMESTAMPS, this.responsetimeFilter,
+				MethodResponsetimeDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS);
 
-		this.analysisInstance.connect(typeFilter1, TypeFilter.OUTPUT_PORT_NAME_TYPE_MATCH,
-				this.tagCloudFilter, MethodAndComponentFlowDisplayFilter.INPUT_PORT_NAME_EVENTS);
+		this.analysisInstance.connect(distributor, Distributor.OUTPUT_PORT_NAME_OPERATION_EXECUTION_RECORDS, this.tagCloudFilter,
+				MethodAndComponentFlowDisplayFilter.INPUT_PORT_NAME_EVENTS);
 
-		this.analysisInstance.connect(typeFilter1, TypeFilter.OUTPUT_PORT_NAME_TYPE_MATCH,
+		this.analysisInstance.connect(distributor, Distributor.OUTPUT_PORT_NAME_OPERATION_EXECUTION_RECORDS,
 				oer2RecordFilter, OER2EnrichedOERFilter.INPUT_PORT_NAME);
 
-		this.analysisInstance.connect(oer2RecordFilter, OER2EnrichedOERFilter.OUTPUT_PORT_NAME,
-				this.recordListFilter, ListCollectionFilter.INPUT_PORT_NAME);
+		this.analysisInstance.connect(oer2RecordFilter, OER2EnrichedOERFilter.OUTPUT_PORT_NAME, this.recordListFilter, ListCollectionFilter.INPUT_PORT_NAME);
 
-		this.analysisInstance.connect(typeFilter1, TypeFilter.OUTPUT_PORT_NAME_TYPE_MISMATCH,
-				typeFilter2, TypeFilter.INPUT_PORT_NAME_EVENTS);
+		this.analysisInstance.connect(distributor, Distributor.OUTPUT_PORT_NAME_CPU_UTILIZATION_RECORDS, this.cpuFilter,
+				CPUUtilizationDisplayFilter.INPUT_PORT_NAME_EVENTS);
 
-		this.analysisInstance.connect(typeFilter2, TypeFilter.OUTPUT_PORT_NAME_TYPE_MATCH,
-				this.cpuFilter, CPUUtilizationDisplayFilter.INPUT_PORT_NAME_EVENTS);
+		this.analysisInstance.connect(distributor, Distributor.OUTPUT_PORT_NAME_MEM_SWAP_USAGE_RECORDS, this.memSwapFilter,
+				MemSwapUtilizationDisplayFilter.INPUT_PORT_NAME_EVENTS);
 
-		this.analysisInstance.connect(typeFilter2, TypeFilter.OUTPUT_PORT_NAME_TYPE_MISMATCH,
-				typeFilter3, TypeFilter.INPUT_PORT_NAME_EVENTS);
+		this.analysisInstance.connect(distributor, Distributor.OUTPUT_PORT_NAME_CLASS_LOADING_RECORDS, this.classLoadingDisplayFilter,
+				ClassLoadingDisplayFilter.INPUT_PORT_NAME_RECORDS);
+		this.analysisInstance.connect(timeReader, TimeReader.OUTPUT_PORT_NAME_TIMESTAMPS, this.classLoadingDisplayFilter,
+				ClassLoadingDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS);
 
-		this.analysisInstance.connect(typeFilter3, TypeFilter.OUTPUT_PORT_NAME_TYPE_MATCH,
-				this.memSwapFilter, MemSwapUtilizationDisplayFilter.INPUT_PORT_NAME_EVENTS);
+		this.analysisInstance.connect(reader, JMXReader.OUTPUT_PORT_NAME_RECORDS, ertf, ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
 
-		this.analysisInstance.connect(reader, JMXReader.OUTPUT_PORT_NAME_RECORDS, ertf,
-				ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
-
-		this.analysisInstance.connect(ertf, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
-				this.systemModelRepository);
+		this.analysisInstance.connect(ertf, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.systemModelRepository);
 	}
 
 	public UpdateThread getUpdateThread() {
@@ -197,6 +186,10 @@ public class AnalysisBean {
 
 	public MethodAndComponentFlowDisplayFilter getTagCloudFilter() {
 		return this.tagCloudFilter;
+	}
+
+	public ClassLoadingDisplayFilter getClassLoadingDisplayFilter() {
+		return this.classLoadingDisplayFilter;
 	}
 
 }
