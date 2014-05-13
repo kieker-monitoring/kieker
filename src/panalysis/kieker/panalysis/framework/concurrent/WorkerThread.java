@@ -109,7 +109,7 @@ public class WorkerThread extends Thread {
 	}
 
 	private void finishStageExecution(final IStage stage, final boolean executedSuccessfully) {
-		System.out.println("Executed stage " + stage + " successfully: " + executedSuccessfully);
+		// System.out.println("Executed stage " + stage + " successfully: " + executedSuccessfully);
 	}
 
 	private void cleanUpDatastructures() {

@@ -47,6 +47,7 @@ import kieker.panalysis.stage.basic.merger.Merger;
  */
 public class QueuedCountWordsAnalysis extends Analysis {
 
+	private static final int NUM_TOKENS_TO_REPEAT = 1000;
 	private static final int SECONDS = 1000;
 
 	private WorkerThread workerThread;
@@ -62,7 +63,7 @@ public class QueuedCountWordsAnalysis extends Analysis {
 
 	private IPipeline buildNonIoPipeline() {
 		// create stages
-		final RepeaterSource<String> repeaterSource = RepeaterSource.create(".", 1);
+		final RepeaterSource<String> repeaterSource = RepeaterSource.create(".", NUM_TOKENS_TO_REPEAT);
 		final DirectoryName2Files findFilesStage = new DirectoryName2Files();
 		final Distributor<File> distributor = new Distributor<File>();
 		final CountWordsStage countWordsStage0 = new CountWordsStage();

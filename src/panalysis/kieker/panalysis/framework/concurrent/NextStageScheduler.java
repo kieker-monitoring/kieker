@@ -41,6 +41,7 @@ public class NextStageScheduler {
 		this.highestPrioritizedEnabledStages.addAll(pipeline.getStartStages());
 
 		this.workList.pushAll(this.highestPrioritizedEnabledStages);
+		System.out.println("Initial work list: " + this.workList);
 		// this.workList.addAll(pipeline.getStages());
 
 		for (final IStage stage : pipeline.getStages()) {
@@ -49,13 +50,11 @@ public class NextStageScheduler {
 	}
 
 	public IStage get() {
-		final IStage stage = this.workList.read();
-		// System.out.println(Thread.currentThread() + " > Executing " + stage);
-		return stage;
+		return this.workList.read();
 	}
 
 	public boolean isAnyStageActive() {
-		System.out.println("workList: " + this.workList);
+		// System.out.println("workList: " + this.workList);
 		return !this.workList.isEmpty();
 	}
 
@@ -68,25 +67,35 @@ public class NextStageScheduler {
 		this.statesOfStages.put(stage, Boolean.FALSE);
 		// if (!Thread.currentThread().getName().equals("startThread")) {
 		// }
-		System.out.println("statesOfStages: " + this.statesOfStages);
+		// System.out.println("statesOfStages: " + this.statesOfStages);
+
+		if (this.highestPrioritizedEnabledStages.contains(stage)) {
+			this.highestPrioritizedEnabledStages.remove(stage);
+			for (final IStage outputStage : stage.getAllOutputStages()) {
+				if (this.statesOfStages.get(outputStage) == Boolean.TRUE) {
+					this.highestPrioritizedEnabledStages.add(outputStage);
+				}
+			}
+		}
+
 		stage.fireSignalClosingToAllOutputPorts();
 	}
 
 	public void determineNextStage(final IStage stage, final boolean executedSuccessfully) {
-		// this.workList.addAll(0, stage.getContext().getOutputStages()); // FIXME do not add the stage again if it has a cyclic pipe
-		// stage.getContext().getOutputStages().clear();
-		//
-		// if (this.statesOfStages.get(stage) == Boolean.TRUE) {
-		// this.workList.add(stage); // re-insert at the tail
-		// // System.out.println("added again: " + stage);
-		// }
-
 		final Collection<? extends IStage> outputStages = stage.getContext().getOutputStages();
+		// System.out.println("outputStages: " + outputStages);
 		if (outputStages.size() > 0) {
 			if (stage.getContext().inputPortsAreEmpty()) {
 				this.workList.pop();
 			}
+
+			// TODO consider to not add the stage again if it has a cyclic pipe
+			// while (outputStages.remove(stage)) {
+			// }
+
 			this.workList.pushAll(outputStages);
+
+			stage.getContext().getOutputStages().clear();
 		} else {
 			this.workList.pop();
 		}

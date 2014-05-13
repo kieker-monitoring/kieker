@@ -17,7 +17,9 @@
 package kieker.panalysis.framework.core;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import de.chw.concurrent.DequePopException;
@@ -141,10 +143,13 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	 * @since 1.10
 	 */
 	public void fireSignalClosingToAllInputPorts() {
-		for (final IInputPort<S, ?> port : this.inputPorts) {
-			port.close();
-		}
-		if (this.inputPorts.isEmpty()) {
+		// this.logger.info("Fire closing signal to all input ports of: " + this);
+
+		if (!this.inputPorts.isEmpty()) {
+			for (final IInputPort<S, ?> port : this.inputPorts) {
+				port.close();
+			}
+		} else {
 			this.checkWhetherThisStageMayBeDisabled();
 		}
 	}
@@ -154,7 +159,7 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	 */
 	public void fireSignalClosingToAllOutputPorts() {
 		// this.logger.info("Fire closing signal to all output ports of: " + this);
-		for (final IOutputPort<S, ?> port : this.outputPorts) {
+		for (final IOutputPort<S, ?> port : this.readOnlyOutputPorts) {
 			final IPipe<?> associatedPipe = port.getAssociatedPipe();
 			if (associatedPipe != null) {
 				associatedPipe.getTargetPort().close();
@@ -218,6 +223,18 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	 */
 	public List<IOutputPort<S, ?>> getOutputPorts() {
 		return this.readOnlyOutputPorts;
+	}
+
+	@Override
+	public Collection<? extends IStage> getAllOutputStages() {
+		final Collection<IStage> outputStages = new LinkedList<IStage>();
+		for (final IOutputPort<S, ?> outputPort : this.readOnlyOutputPorts) {
+			final IPipe<?> associatedPipe = outputPort.getAssociatedPipe();
+			if (associatedPipe != null) {
+				outputStages.add(associatedPipe.getTargetPort().getOwningStage());
+			}
+		}
+		return outputStages;
 	}
 
 	/**

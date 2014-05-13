@@ -16,6 +16,8 @@
 
 package kieker.panalysis.framework.core;
 
+import java.util.Collection;
+
 /**
  * @author Christian Wulf
  * 
@@ -101,5 +103,12 @@ public interface IStage {
 	int getAccessesDeviceId();
 
 	void setAccessesDeviceId(final int accessesDeviceId);
+
+	/**
+	 * <i>Hint: Only needed by stage schedulers.</i>
+	 * 
+	 * @return
+	 */
+	public Collection<? extends IStage> getAllOutputStages();
 
 }

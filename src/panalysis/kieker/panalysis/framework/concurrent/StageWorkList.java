@@ -56,4 +56,9 @@ public class StageWorkList {
 		return this.array.addAll(index, filteredCollection);
 	}
 
+	@Override
+	public String toString() {
+		return this.array.toString();
+	}
+
 }

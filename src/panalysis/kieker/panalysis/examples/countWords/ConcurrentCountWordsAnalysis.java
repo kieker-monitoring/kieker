@@ -25,7 +25,6 @@ import de.chw.util.Pair;
 
 import kieker.panalysis.framework.concurrent.ConcurrentWorkStealingPipe;
 import kieker.panalysis.framework.concurrent.ConcurrentWorkStealingPipeFactory;
-import kieker.panalysis.framework.concurrent.SingleProducerSingleConsumerPipe;
 import kieker.panalysis.framework.concurrent.TerminationPolicy;
 import kieker.panalysis.framework.concurrent.WorkerThread;
 import kieker.panalysis.framework.core.AbstractFilter;
@@ -49,6 +48,9 @@ import kieker.panalysis.stage.basic.merger.Merger;
  * @since 1.10
  */
 public class ConcurrentCountWordsAnalysis extends Analysis {
+
+	private static final int MAX_NUM_THREADS = 1;
+	private static final int NUM_TOKENS_TO_REPEAT = 1000;
 
 	public static final String START_DIRECTORY_NAME = ".";
 
@@ -75,7 +77,7 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 		this.createPipeFactories();
 
 		int numThreads = Runtime.getRuntime().availableProcessors();
-		numThreads = 1; // only for testing purposes
+		numThreads = Math.min(MAX_NUM_THREADS, numThreads); // only for testing purposes
 
 		this.nonIoThreads = new WorkerThread[numThreads];
 		for (int i = 0; i < this.nonIoThreads.length; i++) {
@@ -95,7 +97,7 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 
 	private IPipeline readerThreadPipeline() {
 		// create stages
-		final RepeaterSource<String> repeaterSource = RepeaterSource.create(START_DIRECTORY_NAME, 1);
+		final RepeaterSource<String> repeaterSource = RepeaterSource.create(START_DIRECTORY_NAME, NUM_TOKENS_TO_REPEAT);
 		repeaterSource.setAccessesDeviceId(1);
 		final DirectoryName2Files findFilesStage = new DirectoryName2Files();
 		findFilesStage.setAccessesDeviceId(1);
@@ -227,12 +229,6 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 		return pipeline;
 	}
 
-	private <A extends ISource, B extends ISink<B>, T> void connectWithConcurrentPipe(final IOutputPort<A, T> sourcePort, final IInputPort<B, T> targetPort) {
-		final IPipe<T> pipe = new SingleProducerSingleConsumerPipe<T>();
-		pipe.setSourcePort(sourcePort);
-		pipe.setTargetPort(targetPort);
-	}
-
 	private <A extends ISource, B extends ISink<B>, T> void connectWithStealAwarePipe(final ConcurrentWorkStealingPipeFactory<?> pipeFactory,
 			final IOutputPort<A, T> sourcePort, final IInputPort<B, T> targetPort) {
 		@SuppressWarnings("unchecked")
@@ -303,6 +299,7 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 		// {DirectoryName2Files: numPushedElements=59985, numTakenElements=3999}
 
 		for (final WorkerThread thread : this.nonIoThreads) {
+			System.out.println("--- " + thread + " ---"); // NOPMD (Just for example purposes)
 			for (final IStage stage : thread.getPipeline().getStages()) {
 				System.out.println(stage); // NOPMD (Just for example purposes)
 			}
