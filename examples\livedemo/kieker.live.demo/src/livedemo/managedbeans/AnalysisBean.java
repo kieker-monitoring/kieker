@@ -24,6 +24,7 @@ import kieker.analysis.AnalysisController;
 import kieker.analysis.AnalysisControllerThread;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
+import kieker.analysis.plugin.filter.forward.TeeFilter;
 import kieker.analysis.plugin.filter.select.TypeFilter;
 import kieker.analysis.plugin.filter.sink.CPUUtilizationDisplayFilter;
 import kieker.analysis.plugin.filter.sink.MemSwapUtilizationDisplayFilter;
@@ -135,7 +136,7 @@ public class AnalysisBean {
 
 		this.analysisInstance.connect(reader, JMXReader.OUTPUT_PORT_NAME_RECORDS,
 				typeFilter1, TypeFilter.INPUT_PORT_NAME_EVENTS);
-
+		
 		this.analysisInstance.connect(typeFilter1, TypeFilter.OUTPUT_PORT_NAME_TYPE_MATCH,
 				this.responsetimeFilter, MethodResponsetimeDisplayFilter.INPUT_PORT_NAME_RECORDS);
 

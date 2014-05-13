@@ -80,4 +80,54 @@
 	</listener>
 	<!-- End: Example for kieker.monitoring.probe.servlet.CPUMemUsageServletContextListener -->
 
+	<!-- Begin: Example for additional samplers  -->
+	<context-param>
+	  <param-name>GCServletContextListener.samplingIntervalSeconds</param-name>
+	  <param-value>1</param-value>
+	</context-param>
+	
+	<context-param>
+	  <param-name>GCServletContextListener.initialSamplingDelaySeconds</param-name>
+	  <param-value>0</param-value>
+	</context-param>
+
+	<listener>
+	  <listener-class>
+	    kieker.monitoring.probe.servlet.GCServletContextListener
+	  </listener-class>
+	</listener>
+	
+	<context-param>
+	  <param-name>ThreadStatusServletContextListener.samplingIntervalSeconds</param-name>
+	  <param-value>1</param-value>
+	</context-param>
+	
+	<context-param>
+	  <param-name>ThreadStatusServletContextListener.initialSamplingDelaySeconds</param-name>
+	  <param-value>0</param-value>
+	</context-param>
+
+	<listener>
+	  <listener-class>
+	    kieker.monitoring.probe.servlet.ThreadStatusServletContextListener
+	  </listener-class>
+	</listener>
+	
+	<context-param>
+	  <param-name>ClassLoadingServletContextListener.samplingIntervalSeconds</param-name>
+	  <param-value>1</param-value>
+	</context-param>
+	
+	<context-param>
+	  <param-name>ClassLoadingServletContextListener.initialSamplingDelaySeconds</param-name>
+	  <param-value>0</param-value>
+	</context-param>
+
+	<listener>
+	  <listener-class>
+	    kieker.monitoring.probe.servlet.ClassLoadingServletContextListener
+	  </listener-class>
+	</listener>
+	<!-- End: Example for additional samplers -->
+	
 </web-app>
