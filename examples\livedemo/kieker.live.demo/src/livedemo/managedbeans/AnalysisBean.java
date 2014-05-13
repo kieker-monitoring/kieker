@@ -16,6 +16,7 @@
 
 package livedemo.managedbeans;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 
@@ -33,7 +34,6 @@ import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.executionRecordTransformation.ExecutionRecordTransformationFilter;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
-
 import livedemo.entities.EnrichedOERecord;
 import livedemo.filter.MethodResponsetimeDisplayFilter;
 import livedemo.filter.OER2EnrichedOERFilter;
@@ -65,7 +65,7 @@ public class AnalysisBean {
 
 	public AnalysisBean() {
 		this.updateThread = new UpdateThread(1000); // will notify its observers every second
-		this.updateThread.start();
+		
 
 		this.analysisInstance = new AnalysisController();
 
@@ -99,6 +99,12 @@ public class AnalysisBean {
 			e.printStackTrace();
 		}
 		this.act = new AnalysisControllerThread(this.analysisInstance);
+		
+	}
+	
+	@PostConstruct
+	protected void startThreads() {
+		this.updateThread.start();
 		this.act.start();
 	}
 

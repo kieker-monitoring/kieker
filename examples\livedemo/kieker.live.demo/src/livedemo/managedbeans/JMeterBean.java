@@ -86,7 +86,7 @@ public class JMeterBean implements Observer{
 			this.buttonText = this.DEFAULT_BUTTON_TEXT;
 			this.disabled = false;
 		}else{
-			this.buttonText = "Generate Load in " + String.valueOf((int)((this.timestamp - actualtime)/1000)) + " s";
+			this.buttonText = "Generate Load for " + String.valueOf((int)((this.timestamp - actualtime)/1000)) + " s";
 			this.disabled = true;
 		}
 	}

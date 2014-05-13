@@ -35,7 +35,7 @@ import kieker.tools.traceAnalysis.systemModel.Operation;
  * 
  * @since 1.9
  */
-@ManagedBean(name = "systemModelBean", eager = true)
+@ManagedBean(name = "systemModelBean")
 @ApplicationScoped
 public class SystemModelBean {
 
