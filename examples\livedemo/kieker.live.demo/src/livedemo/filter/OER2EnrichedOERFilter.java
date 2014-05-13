@@ -47,7 +47,7 @@ public class OER2EnrichedOERFilter extends AbstractFilterPlugin {
 		super(configuration, projectContext);
 	}
 
-	@InputPort(name = OER2EnrichedOERFilter.INPUT_PORT_NAME)
+	@InputPort(name = OER2EnrichedOERFilter.INPUT_PORT_NAME, eventTypes = OperationExecutionRecord.class)
 	public void input(final OperationExecutionRecord record) {
 		final double responseTime = this.computeResponseTime(record);
 		final String shortSignature = this.createShortSignature(record);
