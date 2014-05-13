@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.util;
+package kieker.common.logging;
 
 import java.util.logging.LogRecord;
 

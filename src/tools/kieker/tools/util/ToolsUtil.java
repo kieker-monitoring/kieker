@@ -35,7 +35,7 @@ public class ToolsUtil {
 	private ToolsUtil() {}
 
 	public static void loadVerboseLogger() {
-		ToolsUtil.loadLogger("logging.verbosely.properties");
+		ToolsUtil.loadLogger("logging.verbose.properties");
 
 	}
 
@@ -50,12 +50,12 @@ public class ToolsUtil {
 			if (configStream != null) {
 				logManager.readConfiguration(configStream);
 			} else {
-				LOG.warn("Could not load verbose logger");
+				LOG.warn("Could not load verbose/debug logger");
 			}
 		} catch (final SecurityException ex) {
-			LOG.warn("Could not load verbose logger", ex);
+			LOG.warn("Could not load verbose/debug logger", ex);
 		} catch (final IOException ex) {
-			LOG.warn("Could not load verbose logger", ex);
+			LOG.warn("Could not load verbose/debug logger", ex);
 		}
 	}
 
