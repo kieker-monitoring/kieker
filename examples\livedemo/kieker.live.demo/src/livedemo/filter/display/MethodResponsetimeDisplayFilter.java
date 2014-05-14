@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package livedemo.filter;
+package livedemo.filter.display;
 
 import java.util.Date;
 import java.util.Map;

@@ -1,131 +1,138 @@
-2014/01/15 12:30:05 INFO  - jmeter.util.JMeterUtils: Setting Locale to de_DE 
-2014/01/15 12:30:05 INFO  - jmeter.util.JMeterUtils: Could not find resources for 'de_DE', using 'de' 
-2014/01/15 12:30:05 INFO  - jmeter.JMeter: Copyright (c) 1998-2012 The Apache Software Foundation 
-2014/01/15 12:30:05 INFO  - jmeter.JMeter: Version 2.8 r1393162 
-2014/01/15 12:30:05 INFO  - jmeter.JMeter: java.version=1.7.0_45 
-2014/01/15 12:30:05 INFO  - jmeter.JMeter: java.vm.name=Java HotSpot(TM) 64-Bit Server VM 
-2014/01/15 12:30:05 INFO  - jmeter.JMeter: os.name=Windows 8 
-2014/01/15 12:30:05 INFO  - jmeter.JMeter: os.arch=amd64 
-2014/01/15 12:30:05 INFO  - jmeter.JMeter: os.version=6.2 
-2014/01/15 12:30:05 INFO  - jmeter.JMeter: file.encoding=Cp1252 
-2014/01/15 12:30:05 INFO  - jmeter.JMeter: Default Locale=Deutsch (Deutschland) 
-2014/01/15 12:30:05 INFO  - jmeter.JMeter: JMeter  Locale=Deutsch (Deutschland) 
-2014/01/15 12:30:05 INFO  - jmeter.JMeter: JMeterHome=C:\Users\Nils Christian Ehmke\Documents\Repositories\kieker.examples\kieker.live.demo\webapps\root\WEB-INF 
-2014/01/15 12:30:05 INFO  - jmeter.JMeter: user.dir  =C:\Users\Nils Christian Ehmke\Documents\Repositories\kieker.examples\kieker.live.demo\webapps\root\WEB-INF\bin 
-2014/01/15 12:30:05 INFO  - jmeter.JMeter: PWD       =C:\Users\Nils Christian Ehmke\Documents\Repositories\kieker.examples\kieker.live.demo\webapps\root\WEB-INF\bin 
-2014/01/15 12:30:05 INFO  - jmeter.JMeter: IP: 192.168.48.246 Name: SE-Nils-Ehmke FullName: 192.168.48.246 
-2014/01/15 12:30:05 INFO  - jmeter.services.FileServer: Set new base='C:\Users\Nils Christian Ehmke\Documents\Repositories\kieker.examples\kieker.live.demo\webapps\root\WEB-INF\bin\webapps\root\WEB-INF\bin' 
-2014/01/15 12:30:05 INFO  - jmeter.JMeter: Loading file: webapps\root\WEB-INF\bin\Testplan.jmx 
-2014/01/15 12:30:05 INFO  - jmeter.engine.StandardJMeterEngine: Running the test! 
-2014/01/15 12:30:05 INFO  - jmeter.JMeter: Test starten (1389785405545) 
-2014/01/15 12:30:05 INFO  - jmeter.engine.StandardJMeterEngine: Starting ThreadGroup: 1 : JPetStore Users 
-2014/01/15 12:30:05 INFO  - jmeter.engine.StandardJMeterEngine: Starting 50 threads for group JPetStore Users. 
-2014/01/15 12:30:05 INFO  - jmeter.engine.StandardJMeterEngine: Thread will continue on error 
-2014/01/15 12:30:05 INFO  - jmeter.threads.ThreadGroup: Starting thread group number 1 threads 50 ramp-up 50 perThread 1000.0 delayedStart=false 
-2014/01/15 12:30:05 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-1 
-2014/01/15 12:30:05 INFO  - jmeter.threads.ThreadGroup: Started thread group number 1 
-2014/01/15 12:30:05 INFO  - jmeter.engine.StandardJMeterEngine: All thread groups have been started 
-2014/01/15 12:30:06 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-2 
-2014/01/15 12:30:07 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-2 
-2014/01/15 12:30:07 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-3 
-2014/01/15 12:30:08 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-3 
-2014/01/15 12:30:08 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-4 
-2014/01/15 12:30:09 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-5 
-2014/01/15 12:30:10 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-1 
-2014/01/15 12:30:10 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-6 
-2014/01/15 12:30:11 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-7 
-2014/01/15 12:30:12 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-4 
-2014/01/15 12:30:12 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-8 
-2014/01/15 12:30:13 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-9 
-2014/01/15 12:30:14 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-7 
-2014/01/15 12:30:14 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-6 
-2014/01/15 12:30:14 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-5 
-2014/01/15 12:30:14 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-10 
-2014/01/15 12:30:15 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-9 
-2014/01/15 12:30:15 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-11 
-2014/01/15 12:30:16 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-12 
-2014/01/15 12:30:17 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-8 
-2014/01/15 12:30:17 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-13 
-2014/01/15 12:30:18 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-14 
-2014/01/15 12:30:19 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-14 
-2014/01/15 12:30:19 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-10 
-2014/01/15 12:30:19 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-15 
-2014/01/15 12:30:19 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-12 
-2014/01/15 12:30:20 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-16 
-2014/01/15 12:30:21 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-15 
-2014/01/15 12:30:21 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-17 
-2014/01/15 12:30:22 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-16 
-2014/01/15 12:30:22 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-11 
-2014/01/15 12:30:22 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-18 
-2014/01/15 12:30:23 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-17 
-2014/01/15 12:30:23 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-19 
-2014/01/15 12:30:24 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-13 
-2014/01/15 12:30:24 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-20 
-2014/01/15 12:30:25 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-18 
-2014/01/15 12:30:25 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-21 
-2014/01/15 12:30:26 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-22 
-2014/01/15 12:30:26 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-19 
-2014/01/15 12:30:27 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-20 
-2014/01/15 12:30:27 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-23 
-2014/01/15 12:30:28 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-24 
-2014/01/15 12:30:29 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-21 
-2014/01/15 12:30:29 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-25 
-2014/01/15 12:30:30 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-23 
-2014/01/15 12:30:30 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-25 
-2014/01/15 12:30:30 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-26 
-2014/01/15 12:30:30 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-22 
-2014/01/15 12:30:31 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-27 
-2014/01/15 12:30:32 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-28 
-2014/01/15 12:30:32 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-24 
-2014/01/15 12:30:33 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-29 
-2014/01/15 12:30:34 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-27 
-2014/01/15 12:30:34 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-30 
-2014/01/15 12:30:35 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-31 
-2014/01/15 12:30:35 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-28 
-2014/01/15 12:30:36 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-31 
-2014/01/15 12:30:36 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-32 
-2014/01/15 12:30:37 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-29 
-2014/01/15 12:30:37 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-26 
-2014/01/15 12:30:37 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-33 
-2014/01/15 12:30:38 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-34 
-2014/01/15 12:30:39 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-32 
-2014/01/15 12:30:39 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-30 
-2014/01/15 12:30:39 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-35 
-2014/01/15 12:30:40 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-34 
-2014/01/15 12:30:40 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-36 
-2014/01/15 12:30:41 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-37 
-2014/01/15 12:30:42 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-38 
-2014/01/15 12:30:43 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-33 
-2014/01/15 12:30:43 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-39 
-2014/01/15 12:30:43 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-35 
-2014/01/15 12:30:44 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-40 
-2014/01/15 12:30:44 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-37 
-2014/01/15 12:30:45 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-36 
-2014/01/15 12:30:45 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-41 
-2014/01/15 12:30:45 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-40 
-2014/01/15 12:30:46 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-42 
-2014/01/15 12:30:46 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-38 
-2014/01/15 12:30:46 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-41 
-2014/01/15 12:30:47 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-43 
-2014/01/15 12:30:48 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-44 
-2014/01/15 12:30:49 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-39 
-2014/01/15 12:30:49 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-45 
-2014/01/15 12:30:50 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-46 
-2014/01/15 12:30:50 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-46 
-2014/01/15 12:30:51 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-47 
-2014/01/15 12:30:52 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-42 
-2014/01/15 12:30:52 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-48 
-2014/01/15 12:30:53 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-44 
-2014/01/15 12:30:53 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-45 
-2014/01/15 12:30:53 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-49 
-2014/01/15 12:30:54 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-50 
-2014/01/15 12:30:55 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-48 
-2014/01/15 12:30:55 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-47 
-2014/01/15 12:30:55 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-43 
-2014/01/15 12:30:56 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-49 
-2014/01/15 12:30:59 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-50 
-2014/01/15 12:30:59 INFO  - jmeter.engine.StandardJMeterEngine: Notifying test listeners of end of test 
-2014/01/15 12:32:31 ERROR - jmeter.JMeter: Uncaught exception:  java.lang.ExceptionInInitializerError
+2014/05/14 12:36:56 INFO  - jmeter.util.JMeterUtils: Setting Locale to de_DE 
+2014/05/14 12:36:56 INFO  - jmeter.util.JMeterUtils: Could not find resources for 'de_DE', using 'de' 
+2014/05/14 12:36:56 INFO  - jmeter.JMeter: Copyright (c) 1998-2012 The Apache Software Foundation 
+2014/05/14 12:36:56 INFO  - jmeter.JMeter: Version 2.8 r1393162 
+2014/05/14 12:36:56 INFO  - jmeter.JMeter: java.version=1.8.0 
+2014/05/14 12:36:56 INFO  - jmeter.JMeter: java.vm.name=Java HotSpot(TM) 64-Bit Server VM 
+2014/05/14 12:36:56 INFO  - jmeter.JMeter: os.name=Windows 8.1 
+2014/05/14 12:36:56 INFO  - jmeter.JMeter: os.arch=amd64 
+2014/05/14 12:36:56 INFO  - jmeter.JMeter: os.version=6.3 
+2014/05/14 12:36:56 INFO  - jmeter.JMeter: file.encoding=Cp1252 
+2014/05/14 12:36:56 INFO  - jmeter.JMeter: Default Locale=Deutsch (Deutschland) 
+2014/05/14 12:36:56 INFO  - jmeter.JMeter: JMeter  Locale=Deutsch (Deutschland) 
+2014/05/14 12:36:56 INFO  - jmeter.JMeter: JMeterHome=C:\Users\Nils Christian Ehmke\Documents\Kieker\kieker.examples\kieker.live.demo\webapps\root\WEB-INF 
+2014/05/14 12:36:56 INFO  - jmeter.JMeter: user.dir  =C:\Users\Nils Christian Ehmke\Documents\Kieker\kieker.examples\kieker.live.demo\webapps\root\WEB-INF\bin 
+2014/05/14 12:36:56 INFO  - jmeter.JMeter: PWD       =C:\Users\Nils Christian Ehmke\Documents\Kieker\kieker.examples\kieker.live.demo\webapps\root\WEB-INF\bin 
+2014/05/14 12:36:56 INFO  - jmeter.JMeter: IP: 192.168.48.246 Name: SE-Nils-Ehmke FullName: 192.168.48.246 
+2014/05/14 12:36:56 INFO  - jmeter.services.FileServer: Default base='C:\Users\Nils Christian Ehmke\Documents\Kieker\kieker.examples\kieker.live.demo\webapps\root\WEB-INF\bin' 
+2014/05/14 12:36:56 INFO  - jmeter.services.FileServer: Set new base='C:\Users\Nils Christian Ehmke\Documents\Kieker\kieker.examples\kieker.live.demo\webapps\root\WEB-INF\bin\webapps\root\WEB-INF\bin' 
+2014/05/14 12:36:56 INFO  - jmeter.JMeter: Loading file: webapps\root\WEB-INF\bin\Testplan.jmx 
+2014/05/14 12:36:56 INFO  - jmeter.save.SaveService: Testplan (JMX) version: 2.2. Testlog (JTL) version: 2.2 
+2014/05/14 12:36:56 INFO  - jmeter.save.SaveService: Using SaveService properties file encoding UTF-8 
+2014/05/14 12:36:56 INFO  - jmeter.save.SaveService: Using SaveService properties file version 1382180 
+2014/05/14 12:36:56 INFO  - jmeter.save.SaveService: Using SaveService properties version 2.3 
+2014/05/14 12:36:56 INFO  - jmeter.save.SaveService: All converter versions present and correct 
+2014/05/14 12:36:56 ERROR - jmeter.util.NameUpdater: Could not find upgrade file:  java.io.FileNotFoundException: C:\Users\Nils Christian Ehmke\Documents\Kieker\kieker.examples\kieker.live.demo\webapps\root\WEB-INF\bin\upgrade.properties (Das System kann die angegebene Datei nicht finden)
+	at java.io.FileInputStream.open(Native Method)
+	at java.io.FileInputStream.<init>(Unknown Source)
+	at org.apache.jmeter.util.NameUpdater.<clinit>(NameUpdater.java:53)
+	at org.apache.jmeter.save.SaveService$XStreamWrapper$1.realClass(SaveService.java:89)
+	at com.thoughtworks.xstream.mapper.MapperWrapper.realClass(MapperWrapper.java:30)
+	at com.thoughtworks.xstream.mapper.CachingMapper.realClass(CachingMapper.java:45)
+	at com.thoughtworks.xstream.core.util.HierarchicalStreams.readClassType(HierarchicalStreams.java:29)
+	at com.thoughtworks.xstream.core.TreeUnmarshaller.start(TreeUnmarshaller.java:133)
+	at com.thoughtworks.xstream.core.AbstractTreeMarshallingStrategy.unmarshal(AbstractTreeMarshallingStrategy.java:32)
+	at com.thoughtworks.xstream.XStream.unmarshal(XStream.java:1052)
+	at com.thoughtworks.xstream.XStream.unmarshal(XStream.java:1036)
+	at com.thoughtworks.xstream.XStream.fromXML(XStream.java:912)
+	at org.apache.jmeter.save.SaveService.loadTree(SaveService.java:501)
+	at org.apache.jmeter.JMeter.runNonGui(JMeter.java:739)
+	at org.apache.jmeter.JMeter.startNonGui(JMeter.java:722)
+	at org.apache.jmeter.JMeter.start(JMeter.java:386)
+	at livedemo.managedbeans.JMeterBean.runJMeter(JMeterBean.java:79)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at com.sun.el.parser.AstValue.invoke(AstValue.java:187)
+	at com.sun.el.MethodExpressionImpl.invoke(MethodExpressionImpl.java:297)
+	at javax.faces.event.MethodExpressionActionListener.processAction(MethodExpressionActionListener.java:153)
+	at javax.faces.event.ActionEvent.processListener(ActionEvent.java:88)
+	at javax.faces.component.UIComponentBase.broadcast(UIComponentBase.java:775)
+	at javax.faces.component.UICommand.broadcast(UICommand.java:300)
+	at javax.faces.component.UIViewRoot.broadcastEvents(UIViewRoot.java:786)
+	at javax.faces.component.UIViewRoot.processApplication(UIViewRoot.java:1251)
+	at com.sun.faces.lifecycle.InvokeApplicationPhase.execute(InvokeApplicationPhase.java:81)
+	at com.sun.faces.lifecycle.Phase.doPhase(Phase.java:101)
+	at com.sun.faces.lifecycle.LifecycleImpl.execute(LifecycleImpl.java:118)
+	at javax.faces.webapp.FacesServlet.service(FacesServlet.java:593)
+	at org.eclipse.jetty.servlet.ServletHolder.handle(ServletHolder.java:652)
+	at org.eclipse.jetty.servlet.ServletHandler.doHandle(ServletHandler.java:445)
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:137)
+	at org.eclipse.jetty.security.SecurityHandler.handle(SecurityHandler.java:532)
+	at org.eclipse.jetty.server.session.SessionHandler.doHandle(SessionHandler.java:227)
+	at org.eclipse.jetty.server.handler.ContextHandler.doHandle(ContextHandler.java:1044)
+	at org.eclipse.jetty.servlet.ServletHandler.doScope(ServletHandler.java:372)
+	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:189)
+	at org.eclipse.jetty.server.handler.ContextHandler.doScope(ContextHandler.java:978)
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:135)
+	at org.eclipse.jetty.server.handler.ContextHandlerCollection.handle(ContextHandlerCollection.java:255)
+	at org.eclipse.jetty.server.handler.HandlerCollection.handle(HandlerCollection.java:154)
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:116)
+	at org.eclipse.jetty.server.Server.handle(Server.java:367)
+	at org.eclipse.jetty.server.AbstractHttpConnection.handleRequest(AbstractHttpConnection.java:486)
+	at org.eclipse.jetty.server.AbstractHttpConnection.content(AbstractHttpConnection.java:937)
+	at org.eclipse.jetty.server.AbstractHttpConnection$RequestHandler.content(AbstractHttpConnection.java:998)
+	at org.eclipse.jetty.http.HttpParser.parseNext(HttpParser.java:861)
+	at org.eclipse.jetty.http.HttpParser.parseAvailable(HttpParser.java:240)
+	at org.eclipse.jetty.server.AsyncHttpConnection.handle(AsyncHttpConnection.java:82)
+	at org.eclipse.jetty.io.nio.SelectChannelEndPoint.handle(SelectChannelEndPoint.java:628)
+	at org.eclipse.jetty.io.nio.SelectChannelEndPoint$1.run(SelectChannelEndPoint.java:52)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:608)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$3.run(QueuedThreadPool.java:543)
+	at java.lang.Thread.run(Unknown Source)
+
+2014/05/14 12:36:56 INFO  - jmeter.protocol.http.control.CookieManager: Settings: Delete null: true Check: true Allow variable: true Save: false Prefix: COOKIE_ 
+2014/05/14 12:36:56 INFO  - jmeter.protocol.http.sampler.HTTPSamplerBase: Cannot find .className property for htmlParser, using default 
+2014/05/14 12:36:56 INFO  - jmeter.protocol.http.sampler.HTTPSamplerBase: Parser for text/html is  
+2014/05/14 12:36:56 INFO  - jmeter.protocol.http.sampler.HTTPSamplerBase: Parser for application/xhtml+xml is  
+2014/05/14 12:36:56 INFO  - jmeter.protocol.http.sampler.HTTPSamplerBase: Parser for application/xml is  
+2014/05/14 12:36:56 INFO  - jmeter.protocol.http.sampler.HTTPSamplerBase: Parser for text/xml is  
+2014/05/14 12:36:56 INFO  - jmeter.protocol.http.sampler.HTTPSamplerBase: Parser for text/vnd.wap.wml is org.apache.jmeter.protocol.http.parser.RegexpHTMLParser 
+2014/05/14 12:36:56 INFO  - jmeter.protocol.http.sampler.HTTPSamplerBase: Reuse SSL session context on subsequent iterations: true 
+2014/05/14 12:36:56 INFO  - jmeter.engine.StandardJMeterEngine: Listeners will be started after enabling running version 
+2014/05/14 12:36:56 INFO  - jmeter.engine.StandardJMeterEngine: To revert to the earlier behaviour, define jmeterengine.startlistenerslater=false 
+2014/05/14 12:36:56 INFO  - jmeter.engine.StandardJMeterEngine: Running the test! 
+2014/05/14 12:36:56 INFO  - jmeter.engine.util.CompoundVariable: Note: Function class names must contain the string: '.functions.' 
+2014/05/14 12:36:56 INFO  - jmeter.engine.util.CompoundVariable: Note: Function class names must not contain the string: '.gui.' 
+2014/05/14 12:36:56 WARN  - jmeter.engine.util.CompoundVariable: Did not find any functions 
+2014/05/14 12:36:56 INFO  - jmeter.JMeter: Test starten (1400063816879) 
+2014/05/14 12:36:56 INFO  - jmeter.engine.StandardJMeterEngine: Starting ThreadGroup: 1 : JPetStore Users 
+2014/05/14 12:36:56 INFO  - jmeter.engine.StandardJMeterEngine: Starting 50 threads for group JPetStore Users. 
+2014/05/14 12:36:56 INFO  - jmeter.engine.StandardJMeterEngine: Thread will continue on error 
+2014/05/14 12:36:56 INFO  - jmeter.threads.ThreadGroup: Starting thread group number 1 threads 50 ramp-up 50 perThread 1000.0 delayedStart=false 
+2014/05/14 12:36:56 INFO  - jmeter.threads.JMeterThread: jmeterthread.startearlier=true (see jmeter.properties) 
+2014/05/14 12:36:56 INFO  - jmeter.threads.JMeterThread: Running PostProcessors in forward order 
+2014/05/14 12:36:56 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-1 
+2014/05/14 12:36:57 INFO  - jmeter.threads.ThreadGroup: Started thread group number 1 
+2014/05/14 12:36:57 INFO  - jmeter.engine.StandardJMeterEngine: All thread groups have been started 
+2014/05/14 12:36:57 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-2 
+2014/05/14 12:36:58 INFO  - jmeter.protocol.http.sampler.HTTPHCAbstractImpl: Local host = SE-Nils-Ehmke 
+2014/05/14 12:36:58 INFO  - jmeter.protocol.http.sampler.HTTPHC4Impl: HTTP request retry count = 1 
+2014/05/14 12:36:58 INFO  - jmeter.protocol.http.sampler.HTTPHC4Impl: Setting up HTTPS TrustAll scheme 
+2014/05/14 12:36:58 INFO  - jmeter.util.JsseSSLManager: Using default SSL protocol: TLS 
+2014/05/14 12:36:58 INFO  - jmeter.util.JsseSSLManager: SSL session context: per-thread 
+2014/05/14 12:36:58 INFO  - jmeter.samplers.SampleResult: Note: Sample TimeStamps are START times 
+2014/05/14 12:36:58 INFO  - jmeter.samplers.SampleResult: sampleresult.default.encoding is set to ISO-8859-1 
+2014/05/14 12:36:58 INFO  - jmeter.samplers.SampleResult: sampleresult.useNanoTime=true 
+2014/05/14 12:36:58 INFO  - jmeter.samplers.SampleResult: sampleresult.nanoThreadSleep=5000 
+2014/05/14 12:36:58 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-3 
+2014/05/14 12:36:59 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-4 
+2014/05/14 12:37:00 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-1 
+2014/05/14 12:37:00 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-5 
+2014/05/14 12:37:01 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-2 
+2014/05/14 12:37:01 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-6 
+2014/05/14 12:37:02 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-4 
+2014/05/14 12:37:02 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-5 
+2014/05/14 12:37:02 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-7 
+2014/05/14 12:37:03 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-8 
+2014/05/14 12:37:04 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-3 
+2014/05/14 12:37:04 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-9 
+2014/05/14 12:37:05 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-10 
+2014/05/14 12:37:07 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-11 
+2014/05/14 12:37:07 INFO  - jmeter.threads.JMeterThread: Thread finished: JPetStore Users 1-8 
+2014/05/14 12:37:08 INFO  - jmeter.threads.JMeterThread: Thread started: JPetStore Users 1-12 
+2014/05/14 12:37:08 ERROR - jmeter.JMeter: Uncaught exception:  java.lang.ExceptionInInitializerError
 	at org.springframework.web.context.ContextLoaderListener.contextDestroyed(ContextLoaderListener.java:80)
 	at org.eclipse.jetty.server.handler.ContextHandler.doStop(ContextHandler.java:785)
 	at org.eclipse.jetty.servlet.ServletContextHandler.doStop(ServletContextHandler.java:149)

@@ -14,16 +14,14 @@
  * limitations under the License.
  ***************************************************************************/
 
-package livedemo.filter;
+package livedemo.filter.display;
 
 import java.util.Date;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
 
 import kieker.analysis.IProjectContext;
-import kieker.analysis.display.XYPlot;
-import kieker.analysis.display.annotation.Display;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
@@ -31,78 +29,80 @@ import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.common.record.jvm.GCRecord;
+import kieker.common.record.IMonitoringRecord;
+
+import org.primefaces.model.chart.ChartModel;
 
 /**
  * @author Nils Christian Ehmke
  * 
  * @since 1.10
  */
-@Plugin(configuration = {
-	@Property(name = GcDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES,
-			defaultValue = GcDisplayFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES) })
-public class GcDisplayFilter extends AbstractFilterPlugin {
+@Plugin(configuration =
+		@Property(name = AbstractDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, defaultValue = AbstractDisplayFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES))
+public abstract class AbstractDisplayFilter<T extends IMonitoringRecord, C extends ChartModel> extends AbstractFilterPlugin {
 
-	public static final String INPUT_PORT_NAME_RECORDS = "inputRecordEvents";
-	public static final String INPUT_PORT_NAME_TIMESTAMPS = "inputTimeEvents";
+	public static final String INPUT_PORT_NAME_RECORDS = "inputPortRecords";
+	public static final String INPUT_PORT_NAME_TIMESTAMPS = "inputPortTimestamps";
 
 	public static final String CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES = "numberOfEntries";
 	public static final String CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES = "100";
 
 	public static final String CONFIG_PROPERTY_VALUE_RESPONSETIME_TIMEUNIT = "NANOSECONDS";
 
-	private static final Log LOG = LogFactory.getLog(GcDisplayFilter.class);
+	private static final Log LOG = LogFactory.getLog(AbstractDisplayFilter.class);
 
-	private final XYPlot plot;
 	private final int numberOfEntries;
 	private final TimeUnit timeunit;
-	private final List<GCRecord> records;
+	private final Queue<T> records;
+	private final C chartModel;
 
-	public GcDisplayFilter(final Configuration configuration, final IProjectContext projectContext) {
+	public AbstractDisplayFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
-		this.numberOfEntries = configuration.getIntProperty(GcDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES);
+
+		this.numberOfEntries = configuration.getIntProperty(AbstractDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES);
 		final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
 		TimeUnit recordTimeunit;
 		try {
 			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
 		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
-			GcDisplayFilter.LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
+			AbstractDisplayFilter.LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
 			recordTimeunit = TimeUnit.NANOSECONDS;
 		}
 		this.timeunit = recordTimeunit;
-		this.plot = new XYPlot(this.numberOfEntries);
-		this.records = new CopyOnWriteArrayList<GCRecord>();
+
+		this.chartModel = this.createChartModel();
+		this.records = new ConcurrentLinkedQueue<T>();
 	}
 
-	@InputPort(name = GcDisplayFilter.INPUT_PORT_NAME_RECORDS, eventTypes = { GCRecord.class })
-	public synchronized void inputRecords(final GCRecord record) {
+	@InputPort(name = AbstractDisplayFilter.INPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class })
+	public void inputRecords(final T record) {
 		this.records.add(record);
 	}
 
-	@InputPort(name = GcDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS, eventTypes = { Long.class })
+	@InputPort(name = ClassLoadingDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS, eventTypes = { Long.class })
 	public synchronized void inputTimeEvents(final Long timestamp) {
-		// Calculate the minutes and seconds of the logging timestamp of the record
 		final Date date = new Date(TimeUnit.MILLISECONDS.convert(timestamp, this.timeunit));
 		final String minutesAndSeconds = date.toString().substring(14, 19);
 
-		for (final GCRecord record : this.records) {
-			this.plot.setEntry("Collection Count (" + record.getGcName() + ")", minutesAndSeconds, record.getCollectionCount());
-			this.plot.setEntry("Collection Time (" + record.getGcName() + ")", minutesAndSeconds, record.getCollectionTime());
-		}
+		this.fillChartModelWithRecordData(this.chartModel, this.records, minutesAndSeconds, this.numberOfEntries);
 
 		this.records.clear();
 	}
 
-	@Display(name = "XYPlot")
-	public XYPlot getPlot() {
-		return this.plot;
+	public synchronized C getChartModel() {
+		return this.chartModel;
 	}
 
 	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(GcDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, String.valueOf(this.numberOfEntries));
+		configuration.setProperty(AbstractDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, String.valueOf(this.numberOfEntries));
 		return configuration;
 	}
+
+	abstract protected C createChartModel();
+
+	abstract protected void fillChartModelWithRecordData(C chartModel, Queue<T> records, String minutesAndSeconds, int numberOfEntries);
 
 }

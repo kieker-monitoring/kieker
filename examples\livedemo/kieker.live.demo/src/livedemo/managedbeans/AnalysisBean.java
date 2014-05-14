@@ -34,13 +34,13 @@ import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.executionRecordTransformation.ExecutionRecordTransformationFilter;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import livedemo.entities.EnrichedOERecord;
-import livedemo.filter.ClassLoadingDisplayFilter;
 import livedemo.filter.Distributor;
-import livedemo.filter.GcDisplayFilter;
-import livedemo.filter.JITCompilationDisplayFilter;
-import livedemo.filter.MethodResponsetimeDisplayFilter;
 import livedemo.filter.OER2EnrichedOERFilter;
-import livedemo.filter.ThreadsStatusDisplayFilter;
+import livedemo.filter.display.ClassLoadingDisplayFilter;
+import livedemo.filter.display.GcDisplayFilter;
+import livedemo.filter.display.JITCompilationDisplayFilter;
+import livedemo.filter.display.MethodResponsetimeDisplayFilter;
+import livedemo.filter.display.ThreadsStatusDisplayFilter;
 
 /**
  * @author Bjoern Weissenfels

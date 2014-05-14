@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package livedemo.filter;
+package livedemo.filter.display;
 
 import java.util.Date;
 import java.util.List;
@@ -31,7 +31,7 @@ import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.common.record.jvm.CompilationRecord;
+import kieker.common.record.jvm.ThreadsStatusRecord;
 
 /**
  * @author Nils Christian Ehmke
@@ -39,9 +39,9 @@ import kieker.common.record.jvm.CompilationRecord;
  * @since 1.10
  */
 @Plugin(configuration = {
-	@Property(name = JITCompilationDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES,
-			defaultValue = JITCompilationDisplayFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES) })
-public class JITCompilationDisplayFilter extends AbstractFilterPlugin {
+	@Property(name = ThreadsStatusDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES,
+			defaultValue = ThreadsStatusDisplayFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES) })
+public class ThreadsStatusDisplayFilter extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME_RECORDS = "inputRecordEvents";
 	public static final String INPUT_PORT_NAME_TIMESTAMPS = "inputTimeEvents";
@@ -51,42 +51,45 @@ public class JITCompilationDisplayFilter extends AbstractFilterPlugin {
 
 	public static final String CONFIG_PROPERTY_VALUE_RESPONSETIME_TIMEUNIT = "NANOSECONDS";
 
-	private static final Log LOG = LogFactory.getLog(JITCompilationDisplayFilter.class);
+	private static final Log LOG = LogFactory.getLog(ThreadsStatusDisplayFilter.class);
 
 	private final XYPlot plot;
 	private final int numberOfEntries;
 	private final TimeUnit timeunit;
-	private final List<CompilationRecord> records;
+	private final List<ThreadsStatusRecord> records;
 
-	public JITCompilationDisplayFilter(final Configuration configuration, final IProjectContext projectContext) {
+	public ThreadsStatusDisplayFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
-		this.numberOfEntries = configuration.getIntProperty(JITCompilationDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES);
+		this.numberOfEntries = configuration.getIntProperty(ThreadsStatusDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES);
 		final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
 		TimeUnit recordTimeunit;
 		try {
 			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
 		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
-			JITCompilationDisplayFilter.LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
+			ThreadsStatusDisplayFilter.LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
 			recordTimeunit = TimeUnit.NANOSECONDS;
 		}
 		this.timeunit = recordTimeunit;
 		this.plot = new XYPlot(this.numberOfEntries);
-		this.records = new CopyOnWriteArrayList<CompilationRecord>();
+		this.records = new CopyOnWriteArrayList<ThreadsStatusRecord>();
 	}
 
-	@InputPort(name = JITCompilationDisplayFilter.INPUT_PORT_NAME_RECORDS, eventTypes = { CompilationRecord.class })
-	public synchronized void inputRecords(final CompilationRecord record) {
+	@InputPort(name = ThreadsStatusDisplayFilter.INPUT_PORT_NAME_RECORDS, eventTypes = { ThreadsStatusRecord.class })
+	public synchronized void inputRecords(final ThreadsStatusRecord record) {
 		this.records.add(record);
 	}
 
-	@InputPort(name = JITCompilationDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS, eventTypes = { Long.class })
+	@InputPort(name = ThreadsStatusDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS, eventTypes = { Long.class })
 	public synchronized void inputTimeEvents(final Long timestamp) {
 		// Calculate the minutes and seconds of the logging timestamp of the record
 		final Date date = new Date(TimeUnit.MILLISECONDS.convert(timestamp, this.timeunit));
 		final String minutesAndSeconds = date.toString().substring(14, 19);
 
-		for (final CompilationRecord record : this.records) {
-			this.plot.setEntry("Total Compilation Time", minutesAndSeconds, record.getTotalCompilationTime());
+		for (final ThreadsStatusRecord record : this.records) {
+			this.plot.setEntry("Threads", minutesAndSeconds, record.getThreadCount());
+			this.plot.setEntry("Daemon Threads", minutesAndSeconds, record.getDaemonThreadCount());
+			this.plot.setEntry("Peak Threads", minutesAndSeconds, record.getPeakThreadCount());
+			this.plot.setEntry("Total Started Threads", minutesAndSeconds, record.getTotalStartedThreadCount());
 		}
 
 		this.records.clear();
@@ -100,7 +103,7 @@ public class JITCompilationDisplayFilter extends AbstractFilterPlugin {
 	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(JITCompilationDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, String.valueOf(this.numberOfEntries));
+		configuration.setProperty(ThreadsStatusDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, String.valueOf(this.numberOfEntries));
 		return configuration;
 	}
 

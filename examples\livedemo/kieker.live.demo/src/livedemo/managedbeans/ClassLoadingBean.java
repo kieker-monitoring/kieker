@@ -16,109 +16,32 @@
 
 package livedemo.managedbeans;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
+import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
-
-import kieker.analysis.display.XYPlot;
 
 import org.primefaces.model.chart.CartesianChartModel;
-import org.primefaces.model.chart.ChartSeries;
 
 /**
  * @author Nils Christian Ehmke
  * 
  * @since 1.10
  */
-@ManagedBean(name = "classLoadingBean", eager = true)
-@ViewScoped
-public class ClassLoadingBean implements Observer {
+@ManagedBean(name = "classLoadingBean")
+@ApplicationScoped
+public class ClassLoadingBean {
 
 	@ManagedProperty(value = "#{analysisBean}")
 	private AnalysisBean analysisBean;
 
-	private int maxY;
-	private boolean selectButton = true;
-
-	private XYPlot plot;
-	private final CartesianChartModel model;
-
-	public ClassLoadingBean() {
-		this.maxY = 1;
-		this.model = new CartesianChartModel();
-	}
-
-	@PostConstruct
-	public void init() {
-		this.plot = this.analysisBean.getClassLoadingDisplayFilter().getPlot();
-		this.updateModels();
-		this.analysisBean.getUpdateThread().addObserver(this);
-	}
-
-	@PreDestroy
-	public void terminate() {
-		this.analysisBean.getUpdateThread().deleteObserver(this);
-	}
+	public ClassLoadingBean() {}
 
 	public void setAnalysisBean(final AnalysisBean analysisBean) {
 		this.analysisBean = analysisBean;
 	}
 
-	public synchronized CartesianChartModel getModel() {
-		return this.model;
-	}
-
-	public void setMaxY(final int maxY) {
-		this.maxY = maxY;
-	}
-
-	public int getMaxY() {
-		return this.maxY;
-	}
-
-	public void setSelectButton(final boolean selectButton) {
-		this.selectButton = selectButton;
-	}
-
-	public boolean isSelectButton() {
-		return this.selectButton;
-	}
-
-
-
-	private int calculateMaxY(final Collection<Number> numbers) {
-		int max = 1;
-		for (final Number n : numbers) {
-			max = Math.max(max, n.intValue());
-		}
-		max = (max + 4) - (max % 4);
-		return max;
-	}
-	
-	private synchronized void updateModels() {
-		this.maxY = 4;
-		
-		for (final String key : this.plot.getKeys()) {
-			final ChartSeries series = new ChartSeries();
-			series.setLabel(key);
-			final Map<Object, Number> map = this.plot.getEntries(key);
-			series.setData(map);
-			this.model.addSeries(series);
-			
-			maxY = this.calculateMaxY(map.values());
-		}
-	}
-
-	public synchronized void update(final Observable o, final Object arg) {
-		this.model.clear();
-		this.updateModels();
+	public CartesianChartModel getModel() {
+		return this.analysisBean.getClassLoadingDisplayFilter().getChartModel();
 	}
 
 }

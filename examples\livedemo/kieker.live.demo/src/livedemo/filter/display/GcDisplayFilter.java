@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package livedemo.filter;
+package livedemo.filter.display;
 
 import java.util.Date;
 import java.util.List;
@@ -31,7 +31,7 @@ import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-import kieker.common.record.jvm.ThreadsStatusRecord;
+import kieker.common.record.jvm.GCRecord;
 
 /**
  * @author Nils Christian Ehmke
@@ -39,9 +39,9 @@ import kieker.common.record.jvm.ThreadsStatusRecord;
  * @since 1.10
  */
 @Plugin(configuration = {
-	@Property(name = ThreadsStatusDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES,
-			defaultValue = ThreadsStatusDisplayFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES) })
-public class ThreadsStatusDisplayFilter extends AbstractFilterPlugin {
+	@Property(name = GcDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES,
+			defaultValue = GcDisplayFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES) })
+public class GcDisplayFilter extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME_RECORDS = "inputRecordEvents";
 	public static final String INPUT_PORT_NAME_TIMESTAMPS = "inputTimeEvents";
@@ -51,45 +51,43 @@ public class ThreadsStatusDisplayFilter extends AbstractFilterPlugin {
 
 	public static final String CONFIG_PROPERTY_VALUE_RESPONSETIME_TIMEUNIT = "NANOSECONDS";
 
-	private static final Log LOG = LogFactory.getLog(ThreadsStatusDisplayFilter.class);
+	private static final Log LOG = LogFactory.getLog(GcDisplayFilter.class);
 
 	private final XYPlot plot;
 	private final int numberOfEntries;
 	private final TimeUnit timeunit;
-	private final List<ThreadsStatusRecord> records;
+	private final List<GCRecord> records;
 
-	public ThreadsStatusDisplayFilter(final Configuration configuration, final IProjectContext projectContext) {
+	public GcDisplayFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
-		this.numberOfEntries = configuration.getIntProperty(ThreadsStatusDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES);
+		this.numberOfEntries = configuration.getIntProperty(GcDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES);
 		final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
 		TimeUnit recordTimeunit;
 		try {
 			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
 		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
-			ThreadsStatusDisplayFilter.LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
+			GcDisplayFilter.LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
 			recordTimeunit = TimeUnit.NANOSECONDS;
 		}
 		this.timeunit = recordTimeunit;
 		this.plot = new XYPlot(this.numberOfEntries);
-		this.records = new CopyOnWriteArrayList<ThreadsStatusRecord>();
+		this.records = new CopyOnWriteArrayList<GCRecord>();
 	}
 
-	@InputPort(name = ThreadsStatusDisplayFilter.INPUT_PORT_NAME_RECORDS, eventTypes = { ThreadsStatusRecord.class })
-	public synchronized void inputRecords(final ThreadsStatusRecord record) {
+	@InputPort(name = GcDisplayFilter.INPUT_PORT_NAME_RECORDS, eventTypes = { GCRecord.class })
+	public synchronized void inputRecords(final GCRecord record) {
 		this.records.add(record);
 	}
 
-	@InputPort(name = ThreadsStatusDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS, eventTypes = { Long.class })
+	@InputPort(name = GcDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS, eventTypes = { Long.class })
 	public synchronized void inputTimeEvents(final Long timestamp) {
 		// Calculate the minutes and seconds of the logging timestamp of the record
 		final Date date = new Date(TimeUnit.MILLISECONDS.convert(timestamp, this.timeunit));
 		final String minutesAndSeconds = date.toString().substring(14, 19);
 
-		for (final ThreadsStatusRecord record : this.records) {
-			this.plot.setEntry("Threads", minutesAndSeconds, record.getThreadCount());
-			this.plot.setEntry("Daemon Threads", minutesAndSeconds, record.getDaemonThreadCount());
-			this.plot.setEntry("Peak Threads", minutesAndSeconds, record.getPeakThreadCount());
-			this.plot.setEntry("Total Started Threads", minutesAndSeconds, record.getTotalStartedThreadCount());
+		for (final GCRecord record : this.records) {
+			this.plot.setEntry("Collection Count (" + record.getGcName() + ")", minutesAndSeconds, record.getCollectionCount());
+			this.plot.setEntry("Collection Time (" + record.getGcName() + ")", minutesAndSeconds, record.getCollectionTime());
 		}
 
 		this.records.clear();
@@ -103,7 +101,7 @@ public class ThreadsStatusDisplayFilter extends AbstractFilterPlugin {
 	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(ThreadsStatusDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, String.valueOf(this.numberOfEntries));
+		configuration.setProperty(GcDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, String.valueOf(this.numberOfEntries));
 		return configuration;
 	}
 
