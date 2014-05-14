@@ -36,9 +36,11 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import livedemo.entities.EnrichedOERecord;
 import livedemo.filter.Distributor;
 import livedemo.filter.OER2EnrichedOERFilter;
+import livedemo.filter.display.AbstractDisplayFilter;
 import livedemo.filter.display.ClassLoadingDisplayFilter;
-import livedemo.filter.display.GcDisplayFilter;
-import livedemo.filter.display.JITCompilationDisplayFilter;
+import livedemo.filter.display.CompilationDisplayFilter;
+import livedemo.filter.display.GCCountDisplayFilter;
+import livedemo.filter.display.GCTimeDisplayFilter;
 import livedemo.filter.display.MethodResponsetimeDisplayFilter;
 import livedemo.filter.display.ThreadsStatusDisplayFilter;
 
@@ -68,8 +70,9 @@ public class AnalysisBean {
 	private final MethodAndComponentFlowDisplayFilter tagCloudFilter;
 	private final ClassLoadingDisplayFilter classLoadingDisplayFilter;
 	private final ThreadsStatusDisplayFilter threadsStatusDisplayFilter;
-	private final JITCompilationDisplayFilter jitCompilationDisplayFilter;
-	private final GcDisplayFilter gcDisplayFilter;
+	private final CompilationDisplayFilter jitCompilationDisplayFilter;
+	private final GCCountDisplayFilter gcCountDisplayFilter;
+	private final GCTimeDisplayFilter gcTimeDisplayFilter;
 
 	public AnalysisBean() {
 		this.updateThread = new UpdateThread(1000); // will notify its observers every second
@@ -97,15 +100,16 @@ public class AnalysisBean {
 		this.responsetimeFilter = new MethodResponsetimeDisplayFilter(responsetimeConfiguration, this.analysisInstance);
 
 		final Configuration classLoadingConfiguration = new Configuration();
-		classLoadingConfiguration.setProperty(ClassLoadingDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, this.numberOfResponsetimeEntries);
+		classLoadingConfiguration.setProperty(AbstractDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, this.numberOfResponsetimeEntries);
 		this.classLoadingDisplayFilter = new ClassLoadingDisplayFilter(classLoadingConfiguration, this.analysisInstance);
 
 		final Configuration threadsStatusConfiguration = new Configuration();
-		threadsStatusConfiguration.setProperty(ThreadsStatusDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, this.numberOfResponsetimeEntries);
+		threadsStatusConfiguration.setProperty(AbstractDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, this.numberOfResponsetimeEntries);
 		this.threadsStatusDisplayFilter = new ThreadsStatusDisplayFilter(threadsStatusConfiguration, this.analysisInstance);
 
-		this.jitCompilationDisplayFilter = new JITCompilationDisplayFilter(threadsStatusConfiguration, this.analysisInstance);
-		this.gcDisplayFilter = new GcDisplayFilter(threadsStatusConfiguration, this.analysisInstance);
+		this.jitCompilationDisplayFilter = new CompilationDisplayFilter(threadsStatusConfiguration, this.analysisInstance);
+		this.gcCountDisplayFilter = new GCCountDisplayFilter(threadsStatusConfiguration, this.analysisInstance);
+		this.gcTimeDisplayFilter = new GCTimeDisplayFilter(threadsStatusConfiguration, this.analysisInstance);
 
 		this.tagCloudFilter = new MethodAndComponentFlowDisplayFilter(new Configuration(), this.analysisInstance);
 
@@ -164,24 +168,29 @@ public class AnalysisBean {
 				MemSwapUtilizationDisplayFilter.INPUT_PORT_NAME_EVENTS);
 
 		this.analysisInstance.connect(distributor, Distributor.OUTPUT_PORT_NAME_CLASS_LOADING_RECORDS, this.classLoadingDisplayFilter,
-				ClassLoadingDisplayFilter.INPUT_PORT_NAME_RECORDS);
+				AbstractDisplayFilter.INPUT_PORT_NAME_RECORDS);
 		this.analysisInstance.connect(timeReader, TimeReader.OUTPUT_PORT_NAME_TIMESTAMPS, this.classLoadingDisplayFilter,
-				ClassLoadingDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS);
+				AbstractDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS);
 
 		this.analysisInstance.connect(distributor, Distributor.OUTPUT_PORT_NAME_THREADS_STATUS_RECORDS, this.threadsStatusDisplayFilter,
-				ThreadsStatusDisplayFilter.INPUT_PORT_NAME_RECORDS);
+				AbstractDisplayFilter.INPUT_PORT_NAME_RECORDS);
 		this.analysisInstance.connect(timeReader, TimeReader.OUTPUT_PORT_NAME_TIMESTAMPS, this.threadsStatusDisplayFilter,
-				ThreadsStatusDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS);
+				AbstractDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS);
 
 		this.analysisInstance.connect(distributor, Distributor.OUTPUT_PORT_NAME_COMPILATION_RECORDS, this.jitCompilationDisplayFilter,
-				JITCompilationDisplayFilter.INPUT_PORT_NAME_RECORDS);
+				AbstractDisplayFilter.INPUT_PORT_NAME_RECORDS);
 		this.analysisInstance.connect(timeReader, TimeReader.OUTPUT_PORT_NAME_TIMESTAMPS, this.jitCompilationDisplayFilter,
-				JITCompilationDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS);
+				AbstractDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS);
 
-		this.analysisInstance.connect(distributor, Distributor.OUTPUT_PORT_NAME_GC_RECORDS, this.gcDisplayFilter,
-				GcDisplayFilter.INPUT_PORT_NAME_RECORDS);
-		this.analysisInstance.connect(timeReader, TimeReader.OUTPUT_PORT_NAME_TIMESTAMPS, this.gcDisplayFilter,
-				GcDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS);
+		this.analysisInstance.connect(distributor, Distributor.OUTPUT_PORT_NAME_GC_RECORDS, this.gcCountDisplayFilter,
+				GCCountDisplayFilter.INPUT_PORT_NAME_RECORDS);
+		this.analysisInstance.connect(timeReader, TimeReader.OUTPUT_PORT_NAME_TIMESTAMPS, this.gcCountDisplayFilter,
+				GCCountDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS);
+
+		this.analysisInstance.connect(distributor, Distributor.OUTPUT_PORT_NAME_GC_RECORDS, this.gcTimeDisplayFilter,
+				GCTimeDisplayFilter.INPUT_PORT_NAME_RECORDS);
+		this.analysisInstance.connect(timeReader, TimeReader.OUTPUT_PORT_NAME_TIMESTAMPS, this.gcTimeDisplayFilter,
+				GCTimeDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS);
 
 		this.analysisInstance.connect(reader, JMXReader.OUTPUT_PORT_NAME_RECORDS, ertf, ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
 
@@ -224,12 +233,16 @@ public class AnalysisBean {
 		return this.threadsStatusDisplayFilter;
 	}
 
-	public JITCompilationDisplayFilter getJitCompilationDisplayFilter() {
+	public CompilationDisplayFilter getJitCompilationDisplayFilter() {
 		return this.jitCompilationDisplayFilter;
 	}
 
-	public GcDisplayFilter getGCDisplayFilter() {
-		return this.gcDisplayFilter;
+	public GCCountDisplayFilter getGcCountDisplayFilter() {
+		return this.gcCountDisplayFilter;
+	}
+
+	public GCTimeDisplayFilter getGcTimeDisplayFilter() {
+		return this.gcTimeDisplayFilter;
 	}
 
 }

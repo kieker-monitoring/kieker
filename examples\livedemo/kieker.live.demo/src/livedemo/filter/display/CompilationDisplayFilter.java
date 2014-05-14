@@ -32,12 +32,12 @@ import org.primefaces.model.chart.ChartSeries;
  * 
  * @since 1.10
  */
-public class JITCompilationDisplayFilter extends AbstractDisplayFilter<CompilationRecord, CartesianChartModel> {
+public class CompilationDisplayFilter extends AbstractDisplayFilter<CompilationRecord, CartesianChartModel> {
 
 	private SortedMap<Object, Number> totalCompilationTimeData;
 	private ChartSeries totalCompilationTimeSeries;
 
-	public JITCompilationDisplayFilter(final Configuration configuration, final IProjectContext projectContext) {
+	public CompilationDisplayFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 	}
 

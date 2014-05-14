@@ -39,9 +39,9 @@ import kieker.common.record.jvm.GCRecord;
  * @since 1.10
  */
 @Plugin(configuration = {
-	@Property(name = GcDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES,
-			defaultValue = GcDisplayFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES) })
-public class GcDisplayFilter extends AbstractFilterPlugin {
+	@Property(name = GCCountDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES,
+			defaultValue = GCCountDisplayFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES) })
+public class GCCountDisplayFilter extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME_RECORDS = "inputRecordEvents";
 	public static final String INPUT_PORT_NAME_TIMESTAMPS = "inputTimeEvents";
@@ -51,22 +51,22 @@ public class GcDisplayFilter extends AbstractFilterPlugin {
 
 	public static final String CONFIG_PROPERTY_VALUE_RESPONSETIME_TIMEUNIT = "NANOSECONDS";
 
-	private static final Log LOG = LogFactory.getLog(GcDisplayFilter.class);
+	private static final Log LOG = LogFactory.getLog(GCCountDisplayFilter.class);
 
 	private final XYPlot plot;
 	private final int numberOfEntries;
 	private final TimeUnit timeunit;
 	private final List<GCRecord> records;
 
-	public GcDisplayFilter(final Configuration configuration, final IProjectContext projectContext) {
+	public GCCountDisplayFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
-		this.numberOfEntries = configuration.getIntProperty(GcDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES);
+		this.numberOfEntries = configuration.getIntProperty(GCCountDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES);
 		final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
 		TimeUnit recordTimeunit;
 		try {
 			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
 		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
-			GcDisplayFilter.LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
+			GCCountDisplayFilter.LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
 			recordTimeunit = TimeUnit.NANOSECONDS;
 		}
 		this.timeunit = recordTimeunit;
@@ -74,20 +74,19 @@ public class GcDisplayFilter extends AbstractFilterPlugin {
 		this.records = new CopyOnWriteArrayList<GCRecord>();
 	}
 
-	@InputPort(name = GcDisplayFilter.INPUT_PORT_NAME_RECORDS, eventTypes = { GCRecord.class })
+	@InputPort(name = GCCountDisplayFilter.INPUT_PORT_NAME_RECORDS, eventTypes = { GCRecord.class })
 	public synchronized void inputRecords(final GCRecord record) {
 		this.records.add(record);
 	}
 
-	@InputPort(name = GcDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS, eventTypes = { Long.class })
+	@InputPort(name = GCCountDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS, eventTypes = { Long.class })
 	public synchronized void inputTimeEvents(final Long timestamp) {
 		// Calculate the minutes and seconds of the logging timestamp of the record
 		final Date date = new Date(TimeUnit.MILLISECONDS.convert(timestamp, this.timeunit));
 		final String minutesAndSeconds = date.toString().substring(14, 19);
 
 		for (final GCRecord record : this.records) {
-			this.plot.setEntry("Collection Count (" + record.getGcName() + ")", minutesAndSeconds, record.getCollectionCount());
-			this.plot.setEntry("Collection Time (" + record.getGcName() + ")", minutesAndSeconds, record.getCollectionTime());
+			this.plot.setEntry(record.getGcName(), minutesAndSeconds, record.getCollectionCount());
 		}
 
 		this.records.clear();
@@ -101,7 +100,7 @@ public class GcDisplayFilter extends AbstractFilterPlugin {
 	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(GcDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, String.valueOf(this.numberOfEntries));
+		configuration.setProperty(GCCountDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, String.valueOf(this.numberOfEntries));
 		return configuration;
 	}
 

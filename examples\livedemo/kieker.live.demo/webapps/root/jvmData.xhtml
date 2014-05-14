@@ -63,19 +63,23 @@
 			    	title="Threads Status" minY="0"  style="height:300px;margin-top:20px"
 			    	xaxisLabel="Time" yaxisLabel="Number of threads"/>	
 				
-				<p:lineChart id="gc" value="#{gcBean.model}" legendPosition="ne"  
-			    	title="Garbage Collectors" minY="0" style="height:300px;margin-top:20px"
-			    	xaxisLabel="Time" yaxisLabel=" "/>	
-					
+				<p:lineChart id="gcTime" value="#{gcBean.timeModel}" legendPosition="ne"  
+			    	title="Garbage Collecting Time" minY="0" style="height:300px;margin-top:20px"
+			    	xaxisLabel="Time" yaxisLabel="Running time (ms)"/>	
+			    	
+				<p:lineChart id="gcCount" value="#{gcBean.countModel}" legendPosition="ne"  
+			    	title="Garbage Collecting Count" minY="0" style="height:300px;margin-top:20px"
+			    	xaxisLabel="Time" yaxisLabel="Number of collections"/>	
+			    		
 				<p:lineChart id="jit" value="#{jitCompilationBean.model}" legendPosition="ne"  
-			    	title="Total Running Time of JIT Compiler" minY="0" style="height:300px;margin-top:20px"
+			    	title="Total Compilation Time of JIT Compiler" minY="0" style="height:300px;margin-top:20px"
 			    	xaxisLabel="Time" yaxisLabel="Running time (ms)"/>	
 			    	
 			    <p:lineChart id="classloading" value="#{classLoadingBean.model}" legendPosition="ne"  
 			    	title="Class Loading" minY="0" style="height:300px;margin-top:20px"
-			    	xaxisLabel="Time" yaxisLabel="Number of loaded classes"/>	
+			    	xaxisLabel="Time" yaxisLabel="Number of classes"/>	
 
-			   <p:poll interval="1" update="jit, classloading, threads, gc, loadButton" />	  		
+			   <p:poll interval="1" update="jit, classloading, threads, gcCount, gcTime, loadButton" />	  		
 			   <p:poll interval="1" update="loadButton" /> 	
 			</h:form>
 		</div>

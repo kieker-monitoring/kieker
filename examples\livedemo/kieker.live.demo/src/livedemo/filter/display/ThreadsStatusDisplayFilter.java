@@ -16,95 +16,77 @@
 
 package livedemo.filter.display;
 
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.TimeUnit;
+import java.util.Queue;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import kieker.analysis.IProjectContext;
-import kieker.analysis.display.XYPlot;
-import kieker.analysis.display.annotation.Display;
-import kieker.analysis.plugin.annotation.InputPort;
-import kieker.analysis.plugin.annotation.Plugin;
-import kieker.analysis.plugin.annotation.Property;
-import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.jvm.ThreadsStatusRecord;
+
+import org.primefaces.model.chart.CartesianChartModel;
+import org.primefaces.model.chart.ChartSeries;
 
 /**
  * @author Nils Christian Ehmke
  * 
  * @since 1.10
  */
-@Plugin(configuration = {
-	@Property(name = ThreadsStatusDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES,
-			defaultValue = ThreadsStatusDisplayFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES) })
-public class ThreadsStatusDisplayFilter extends AbstractFilterPlugin {
+public class ThreadsStatusDisplayFilter extends AbstractDisplayFilter<ThreadsStatusRecord, CartesianChartModel> {
 
-	public static final String INPUT_PORT_NAME_RECORDS = "inputRecordEvents";
-	public static final String INPUT_PORT_NAME_TIMESTAMPS = "inputTimeEvents";
+	private SortedMap<Object, Number> threadsData;
+	private SortedMap<Object, Number> peakThreadsData;
+	private SortedMap<Object, Number> daemonThreadsData;
 
-	public static final String CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES = "numberOfEntries";
-	public static final String CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES = "100";
-
-	public static final String CONFIG_PROPERTY_VALUE_RESPONSETIME_TIMEUNIT = "NANOSECONDS";
-
-	private static final Log LOG = LogFactory.getLog(ThreadsStatusDisplayFilter.class);
-
-	private final XYPlot plot;
-	private final int numberOfEntries;
-	private final TimeUnit timeunit;
-	private final List<ThreadsStatusRecord> records;
+	private ChartSeries threadsSeries;
+	private ChartSeries peakThreadsSeries;
+	private ChartSeries daemonThreadsSeries;
 
 	public ThreadsStatusDisplayFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
-		this.numberOfEntries = configuration.getIntProperty(ThreadsStatusDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES);
-		final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
-		TimeUnit recordTimeunit;
-		try {
-			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
-		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
-			ThreadsStatusDisplayFilter.LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
-			recordTimeunit = TimeUnit.NANOSECONDS;
-		}
-		this.timeunit = recordTimeunit;
-		this.plot = new XYPlot(this.numberOfEntries);
-		this.records = new CopyOnWriteArrayList<ThreadsStatusRecord>();
-	}
-
-	@InputPort(name = ThreadsStatusDisplayFilter.INPUT_PORT_NAME_RECORDS, eventTypes = { ThreadsStatusRecord.class })
-	public synchronized void inputRecords(final ThreadsStatusRecord record) {
-		this.records.add(record);
-	}
-
-	@InputPort(name = ThreadsStatusDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS, eventTypes = { Long.class })
-	public synchronized void inputTimeEvents(final Long timestamp) {
-		// Calculate the minutes and seconds of the logging timestamp of the record
-		final Date date = new Date(TimeUnit.MILLISECONDS.convert(timestamp, this.timeunit));
-		final String minutesAndSeconds = date.toString().substring(14, 19);
-
-		for (final ThreadsStatusRecord record : this.records) {
-			this.plot.setEntry("Threads", minutesAndSeconds, record.getThreadCount());
-			this.plot.setEntry("Daemon Threads", minutesAndSeconds, record.getDaemonThreadCount());
-			this.plot.setEntry("Peak Threads", minutesAndSeconds, record.getPeakThreadCount());
-			this.plot.setEntry("Total Started Threads", minutesAndSeconds, record.getTotalStartedThreadCount());
-		}
-
-		this.records.clear();
-	}
-
-	@Display(name = "XYPlot")
-	public XYPlot getPlot() {
-		return this.plot;
 	}
 
 	@Override
-	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration();
-		configuration.setProperty(ThreadsStatusDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, String.valueOf(this.numberOfEntries));
-		return configuration;
+	protected CartesianChartModel createChartModel() {
+		final CartesianChartModel model = new CartesianChartModel();
+
+		this.threadsSeries = new ChartSeries();
+		this.peakThreadsSeries = new ChartSeries();
+		this.daemonThreadsSeries = new ChartSeries();
+
+		this.threadsData = new TreeMap<>();
+		this.peakThreadsData = new TreeMap<>();
+		this.daemonThreadsData = new TreeMap<>();
+
+		model.addSeries(this.threadsSeries);
+		model.addSeries(this.peakThreadsSeries);
+		model.addSeries(this.daemonThreadsSeries);
+
+		this.threadsSeries.setData(this.threadsData);
+		this.peakThreadsSeries.setData(this.peakThreadsData);
+		this.daemonThreadsSeries.setData(this.daemonThreadsData);
+
+		this.threadsSeries.setLabel("Threads");
+		this.peakThreadsSeries.setLabel("Peak threads");
+		this.daemonThreadsSeries.setLabel("Daemon threads");
+
+		return model;
+	}
+
+	@Override
+	protected void fillChartModelWithRecordData(final CartesianChartModel chartModel, final Queue<ThreadsStatusRecord> records, final String minutesAndSeconds,
+			final int numberOfEntries) {
+		if (this.threadsData.size() >= numberOfEntries) {
+			this.threadsData.remove(this.threadsData.firstKey());
+			this.peakThreadsData.remove(this.peakThreadsData.firstKey());
+			this.daemonThreadsData.remove(this.daemonThreadsData.firstKey());
+		}
+
+		for (final ThreadsStatusRecord record : records) {
+			this.threadsData.put(minutesAndSeconds, record.getThreadCount());
+			this.peakThreadsData.put(minutesAndSeconds, record.getPeakThreadCount());
+			this.daemonThreadsData.put(minutesAndSeconds, record.getDaemonThreadCount());
+		}
 	}
 
 }

@@ -47,17 +47,21 @@ public class GCBean implements Observer {
 	private int maxY;
 	private boolean selectButton = true;
 
-	private XYPlot plot;
-	private final CartesianChartModel model;
+	private XYPlot plot1;
+	private XYPlot plot2;
+	private final CartesianChartModel model1;
+	private final CartesianChartModel model2;
 
 	public GCBean() {
 		this.maxY = 1;
-		this.model = new CartesianChartModel();
+		this.model1 = new CartesianChartModel();
+		this.model2 = new CartesianChartModel();
 	}
 
 	@PostConstruct
 	public void init() {
-		this.plot = this.analysisBean.getGCDisplayFilter().getPlot();
+		this.plot1 = this.analysisBean.getGcCountDisplayFilter().getPlot();
+		this.plot2 = this.analysisBean.getGcTimeDisplayFilter().getPlot();
 		this.updateModels();
 		this.analysisBean.getUpdateThread().addObserver(this);
 	}
@@ -71,8 +75,12 @@ public class GCBean implements Observer {
 		this.analysisBean = analysisBean;
 	}
 
-	public synchronized CartesianChartModel getModel() {
-		return this.model;
+	public synchronized CartesianChartModel getCountModel() {
+		return this.model1;
+	}
+
+	public synchronized CartesianChartModel getTimeModel() {
+		return this.model2;
 	}
 
 	public void setMaxY(final int maxY) {
@@ -103,12 +111,22 @@ public class GCBean implements Observer {
 	private synchronized void updateModels() {
 		this.maxY = 4;
 
-		for (final String key : this.plot.getKeys()) {
+		for (final String key : this.plot1.getKeys()) {
 			final ChartSeries series = new ChartSeries();
 			series.setLabel(key);
-			final Map<Object, Number> map = this.plot.getEntries(key);
+			final Map<Object, Number> map = this.plot1.getEntries(key);
 			series.setData(map);
-			this.model.addSeries(series);
+			this.model1.addSeries(series);
+
+			this.maxY = this.calculateMaxY(map.values());
+		}
+
+		for (final String key : this.plot2.getKeys()) {
+			final ChartSeries series = new ChartSeries();
+			series.setLabel(key);
+			final Map<Object, Number> map = this.plot2.getEntries(key);
+			series.setData(map);
+			this.model2.addSeries(series);
 
 			this.maxY = this.calculateMaxY(map.values());
 		}
@@ -116,7 +134,8 @@ public class GCBean implements Observer {
 
 	@Override
 	public synchronized void update(final Observable o, final Object arg) {
-		this.model.clear();
+		this.model1.clear();
+		this.model2.clear();
 		this.updateModels();
 	}
 
