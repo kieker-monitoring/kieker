@@ -128,6 +128,22 @@
 	    kieker.monitoring.probe.servlet.ClassLoadingServletContextListener
 	  </listener-class>
 	</listener>
+	
+	<context-param>
+	  <param-name>CompilationServletContextListener.samplingIntervalSeconds</param-name>
+	  <param-value>1</param-value>
+	</context-param>
+	
+	<context-param>
+	  <param-name>CompilationServletContextListener.initialSamplingDelaySeconds</param-name>
+	  <param-value>0</param-value>
+	</context-param>
+
+	<listener>
+	  <listener-class>
+	    kieker.monitoring.probe.servlet.CompilationServletContextListener
+	  </listener-class>
+	</listener>
 	<!-- End: Example for additional samplers -->
 	
 </web-app>

@@ -36,8 +36,11 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import livedemo.entities.EnrichedOERecord;
 import livedemo.filter.ClassLoadingDisplayFilter;
 import livedemo.filter.Distributor;
+import livedemo.filter.GcDisplayFilter;
+import livedemo.filter.JITCompilationDisplayFilter;
 import livedemo.filter.MethodResponsetimeDisplayFilter;
 import livedemo.filter.OER2EnrichedOERFilter;
+import livedemo.filter.ThreadsStatusDisplayFilter;
 
 /**
  * @author Bjoern Weissenfels
@@ -64,6 +67,9 @@ public class AnalysisBean {
 	private final MethodResponsetimeDisplayFilter responsetimeFilter;
 	private final MethodAndComponentFlowDisplayFilter tagCloudFilter;
 	private final ClassLoadingDisplayFilter classLoadingDisplayFilter;
+	private final ThreadsStatusDisplayFilter threadsStatusDisplayFilter;
+	private final JITCompilationDisplayFilter jitCompilationDisplayFilter;
+	private final GcDisplayFilter gcDisplayFilter;
 
 	public AnalysisBean() {
 		this.updateThread = new UpdateThread(1000); // will notify its observers every second
@@ -93,6 +99,13 @@ public class AnalysisBean {
 		final Configuration classLoadingConfiguration = new Configuration();
 		classLoadingConfiguration.setProperty(ClassLoadingDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, this.numberOfResponsetimeEntries);
 		this.classLoadingDisplayFilter = new ClassLoadingDisplayFilter(classLoadingConfiguration, this.analysisInstance);
+
+		final Configuration threadsStatusConfiguration = new Configuration();
+		threadsStatusConfiguration.setProperty(ThreadsStatusDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, this.numberOfResponsetimeEntries);
+		this.threadsStatusDisplayFilter = new ThreadsStatusDisplayFilter(threadsStatusConfiguration, this.analysisInstance);
+
+		this.jitCompilationDisplayFilter = new JITCompilationDisplayFilter(threadsStatusConfiguration, this.analysisInstance);
+		this.gcDisplayFilter = new GcDisplayFilter(threadsStatusConfiguration, this.analysisInstance);
 
 		this.tagCloudFilter = new MethodAndComponentFlowDisplayFilter(new Configuration(), this.analysisInstance);
 
@@ -155,6 +168,21 @@ public class AnalysisBean {
 		this.analysisInstance.connect(timeReader, TimeReader.OUTPUT_PORT_NAME_TIMESTAMPS, this.classLoadingDisplayFilter,
 				ClassLoadingDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS);
 
+		this.analysisInstance.connect(distributor, Distributor.OUTPUT_PORT_NAME_THREADS_STATUS_RECORDS, this.threadsStatusDisplayFilter,
+				ThreadsStatusDisplayFilter.INPUT_PORT_NAME_RECORDS);
+		this.analysisInstance.connect(timeReader, TimeReader.OUTPUT_PORT_NAME_TIMESTAMPS, this.threadsStatusDisplayFilter,
+				ThreadsStatusDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS);
+
+		this.analysisInstance.connect(distributor, Distributor.OUTPUT_PORT_NAME_COMPILATION_RECORDS, this.jitCompilationDisplayFilter,
+				JITCompilationDisplayFilter.INPUT_PORT_NAME_RECORDS);
+		this.analysisInstance.connect(timeReader, TimeReader.OUTPUT_PORT_NAME_TIMESTAMPS, this.jitCompilationDisplayFilter,
+				JITCompilationDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS);
+
+		this.analysisInstance.connect(distributor, Distributor.OUTPUT_PORT_NAME_GC_RECORDS, this.gcDisplayFilter,
+				GcDisplayFilter.INPUT_PORT_NAME_RECORDS);
+		this.analysisInstance.connect(timeReader, TimeReader.OUTPUT_PORT_NAME_TIMESTAMPS, this.gcDisplayFilter,
+				GcDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS);
+
 		this.analysisInstance.connect(reader, JMXReader.OUTPUT_PORT_NAME_RECORDS, ertf, ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
 
 		this.analysisInstance.connect(ertf, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.systemModelRepository);
@@ -190,6 +218,18 @@ public class AnalysisBean {
 
 	public ClassLoadingDisplayFilter getClassLoadingDisplayFilter() {
 		return this.classLoadingDisplayFilter;
+	}
+
+	public ThreadsStatusDisplayFilter getThreadsStatusDisplayFilter() {
+		return this.threadsStatusDisplayFilter;
+	}
+
+	public JITCompilationDisplayFilter getJitCompilationDisplayFilter() {
+		return this.jitCompilationDisplayFilter;
+	}
+
+	public GcDisplayFilter getGCDisplayFilter() {
+		return this.gcDisplayFilter;
 	}
 
 }
