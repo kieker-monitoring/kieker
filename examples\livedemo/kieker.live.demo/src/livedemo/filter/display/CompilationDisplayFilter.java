@@ -17,12 +17,12 @@
 package livedemo.filter.display;
 
 import java.util.Deque;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.Map;
 
 import kieker.analysis.IProjectContext;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.jvm.CompilationRecord;
+import livedemo.filter.display.util.LimitedHashMap;
 
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
@@ -34,7 +34,7 @@ import org.primefaces.model.chart.ChartSeries;
  */
 public class CompilationDisplayFilter extends AbstractDisplayFilter<CompilationRecord, CartesianChartModel> {
 
-	private SortedMap<Object, Number> totalCompilationTimeData;
+	private Map<Object, Number> totalCompilationTimeData;
 	private ChartSeries totalCompilationTimeSeries;
 
 	public CompilationDisplayFilter(final Configuration configuration, final IProjectContext projectContext) {
@@ -42,11 +42,11 @@ public class CompilationDisplayFilter extends AbstractDisplayFilter<CompilationR
 	}
 
 	@Override
-	protected CartesianChartModel createChartModel() {
+	protected CartesianChartModel createChartModel(final int numberOfEntries) {
 		final CartesianChartModel model = new CartesianChartModel();
 
 		this.totalCompilationTimeSeries = new ChartSeries();
-		this.totalCompilationTimeData = new TreeMap<>();
+		this.totalCompilationTimeData = new LimitedHashMap<>(numberOfEntries);
 
 		model.addSeries(this.totalCompilationTimeSeries);
 
@@ -59,10 +59,6 @@ public class CompilationDisplayFilter extends AbstractDisplayFilter<CompilationR
 	@Override
 	protected void fillChartModelWithRecordData(final CartesianChartModel chartModel, final Deque<CompilationRecord> records, final String minutesAndSeconds,
 			final int numberOfEntries) {
-		if (this.totalCompilationTimeData.size() >= numberOfEntries) {
-			this.totalCompilationTimeData.remove(this.totalCompilationTimeData.firstKey());
-		}
-
 		if (!records.isEmpty()) {
 			final CompilationRecord lastRecord = records.getLast();
 			this.totalCompilationTimeData.put(minutesAndSeconds, lastRecord.getTotalCompilationTime());

@@ -19,12 +19,11 @@ package livedemo.filter.display;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
 import kieker.analysis.IProjectContext;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.jvm.GCRecord;
+import livedemo.filter.display.util.LimitedHashMap;
 
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
@@ -36,14 +35,14 @@ import org.primefaces.model.chart.ChartSeries;
  */
 public class GCTimeDisplayFilter extends AbstractDisplayFilter<GCRecord, CartesianChartModel> {
 
-	private final Map<String, SortedMap<Object, Number>> dataMap = new HashMap<String, SortedMap<Object, Number>>();
+	private final Map<String, Map<Object, Number>> dataMap = new HashMap<String, Map<Object, Number>>();
 
 	public GCTimeDisplayFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 	}
 
 	@Override
-	protected CartesianChartModel createChartModel() {
+	protected CartesianChartModel createChartModel(final int numberOfEntries) {
 		return new CartesianChartModel();
 	}
 
@@ -54,7 +53,7 @@ public class GCTimeDisplayFilter extends AbstractDisplayFilter<GCRecord, Cartesi
 			final String gcName = record.getGcName();
 			if (!this.dataMap.containsKey(gcName)) {
 				final ChartSeries series = new ChartSeries();
-				final SortedMap<Object, Number> data = new TreeMap<>();
+				final Map<Object, Number> data = new LimitedHashMap<>(numberOfEntries);
 
 				chartModel.addSeries(series);
 				series.setData(data);
@@ -62,10 +61,7 @@ public class GCTimeDisplayFilter extends AbstractDisplayFilter<GCRecord, Cartesi
 				this.dataMap.put(gcName, data);
 			}
 
-			final SortedMap<Object, Number> data = this.dataMap.get(gcName);
-			if (data.size() >= numberOfEntries) {
-				data.remove(data.firstKey());
-			}
+			final Map<Object, Number> data = this.dataMap.get(gcName);
 			data.put(minutesAndSeconds, record.getCollectionTime());
 		}
 	}

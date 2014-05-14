@@ -71,7 +71,7 @@ public abstract class AbstractDisplayFilter<T extends IMonitoringRecord, C exten
 		}
 		this.timeunit = recordTimeunit;
 
-		this.chartModel = this.createChartModel();
+		this.chartModel = this.createChartModel(this.numberOfEntries);
 		this.records = new ConcurrentLinkedDeque<T>();
 	}
 
@@ -101,7 +101,7 @@ public abstract class AbstractDisplayFilter<T extends IMonitoringRecord, C exten
 		return configuration;
 	}
 
-	abstract protected C createChartModel();
+	abstract protected C createChartModel(int numberOfEntries);
 
 	abstract protected void fillChartModelWithRecordData(C chartModel, Deque<T> records, String minutesAndSeconds, int numberOfEntries);
 

@@ -17,12 +17,12 @@
 package livedemo.filter.display;
 
 import java.util.Deque;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.Map;
 
 import kieker.analysis.IProjectContext;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.jvm.ClassLoadingRecord;
+import livedemo.filter.display.util.LimitedHashMap;
 
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
@@ -34,9 +34,9 @@ import org.primefaces.model.chart.ChartSeries;
  */
 public class ClassLoadingDisplayFilter extends AbstractDisplayFilter<ClassLoadingRecord, CartesianChartModel> {
 
-	private SortedMap<Object, Number> totalLoadedClassesData;
-	private SortedMap<Object, Number> loadedClassesData;
-	private SortedMap<Object, Number> unloadedClassesData;
+	private Map<Object, Number> totalLoadedClassesData;
+	private Map<Object, Number> loadedClassesData;
+	private Map<Object, Number> unloadedClassesData;
 
 	private ChartSeries totalLoadedClassesSeries;
 	private ChartSeries loadedClassesSeries;
@@ -47,16 +47,16 @@ public class ClassLoadingDisplayFilter extends AbstractDisplayFilter<ClassLoadin
 	}
 
 	@Override
-	protected CartesianChartModel createChartModel() {
+	protected CartesianChartModel createChartModel(final int numberOfEntries) {
 		final CartesianChartModel model = new CartesianChartModel();
 
 		this.totalLoadedClassesSeries = new ChartSeries();
 		this.loadedClassesSeries = new ChartSeries();
 		this.unloadedClassesSeries = new ChartSeries();
 
-		this.totalLoadedClassesData = new TreeMap<>();
-		this.loadedClassesData = new TreeMap<>();
-		this.unloadedClassesData = new TreeMap<>();
+		this.totalLoadedClassesData = new LimitedHashMap<>(numberOfEntries);
+		this.loadedClassesData = new LimitedHashMap<>(numberOfEntries);
+		this.unloadedClassesData = new LimitedHashMap<>(numberOfEntries);
 
 		model.addSeries(this.totalLoadedClassesSeries);
 		model.addSeries(this.loadedClassesSeries);
@@ -76,12 +76,6 @@ public class ClassLoadingDisplayFilter extends AbstractDisplayFilter<ClassLoadin
 	@Override
 	protected void fillChartModelWithRecordData(final CartesianChartModel chartModel, final Deque<ClassLoadingRecord> records, final String minutesAndSeconds,
 			final int numberOfEntries) {
-		if (this.totalLoadedClassesData.size() >= numberOfEntries) {
-			this.totalLoadedClassesData.remove(this.totalLoadedClassesData.firstKey());
-			this.loadedClassesData.remove(this.loadedClassesData.firstKey());
-			this.unloadedClassesData.remove(this.unloadedClassesData.firstKey());
-		}
-
 		if (!records.isEmpty()) {
 			final ClassLoadingRecord lastRecord = records.getLast();
 			this.totalLoadedClassesData.put(minutesAndSeconds, lastRecord.getTotalLoadedClassCount());

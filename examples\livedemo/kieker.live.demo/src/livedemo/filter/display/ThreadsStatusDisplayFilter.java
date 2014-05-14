@@ -17,12 +17,12 @@
 package livedemo.filter.display;
 
 import java.util.Deque;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.Map;
 
 import kieker.analysis.IProjectContext;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.jvm.ThreadsStatusRecord;
+import livedemo.filter.display.util.LimitedHashMap;
 
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
@@ -34,9 +34,9 @@ import org.primefaces.model.chart.ChartSeries;
  */
 public class ThreadsStatusDisplayFilter extends AbstractDisplayFilter<ThreadsStatusRecord, CartesianChartModel> {
 
-	private SortedMap<Object, Number> threadsData;
-	private SortedMap<Object, Number> peakThreadsData;
-	private SortedMap<Object, Number> daemonThreadsData;
+	private Map<Object, Number> threadsData;
+	private Map<Object, Number> peakThreadsData;
+	private Map<Object, Number> daemonThreadsData;
 
 	private ChartSeries threadsSeries;
 	private ChartSeries peakThreadsSeries;
@@ -47,16 +47,16 @@ public class ThreadsStatusDisplayFilter extends AbstractDisplayFilter<ThreadsSta
 	}
 
 	@Override
-	protected CartesianChartModel createChartModel() {
+	protected CartesianChartModel createChartModel(final int numberOfEntries) {
 		final CartesianChartModel model = new CartesianChartModel();
 
 		this.threadsSeries = new ChartSeries();
 		this.peakThreadsSeries = new ChartSeries();
 		this.daemonThreadsSeries = new ChartSeries();
 
-		this.threadsData = new TreeMap<>();
-		this.peakThreadsData = new TreeMap<>();
-		this.daemonThreadsData = new TreeMap<>();
+		this.threadsData = new LimitedHashMap<>(numberOfEntries);
+		this.peakThreadsData = new LimitedHashMap<>(numberOfEntries);
+		this.daemonThreadsData = new LimitedHashMap<>(numberOfEntries);
 
 		model.addSeries(this.threadsSeries);
 		model.addSeries(this.peakThreadsSeries);
@@ -76,12 +76,6 @@ public class ThreadsStatusDisplayFilter extends AbstractDisplayFilter<ThreadsSta
 	@Override
 	protected void fillChartModelWithRecordData(final CartesianChartModel chartModel, final Deque<ThreadsStatusRecord> records, final String minutesAndSeconds,
 			final int numberOfEntries) {
-		if (this.threadsData.size() >= numberOfEntries) {
-			this.threadsData.remove(this.threadsData.firstKey());
-			this.peakThreadsData.remove(this.peakThreadsData.firstKey());
-			this.daemonThreadsData.remove(this.daemonThreadsData.firstKey());
-		}
-
 		if (!records.isEmpty()) {
 			final ThreadsStatusRecord lastRecord = records.getLast();
 			this.threadsData.put(minutesAndSeconds, lastRecord.getThreadCount());
