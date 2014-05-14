@@ -16,7 +16,7 @@
 
 package livedemo.filter.display;
 
-import java.util.Queue;
+import java.util.Deque;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -57,14 +57,15 @@ public class CompilationDisplayFilter extends AbstractDisplayFilter<CompilationR
 	}
 
 	@Override
-	protected void fillChartModelWithRecordData(final CartesianChartModel chartModel, final Queue<CompilationRecord> records,
-			final String minutesAndSeconds, final int numberOfEntries) {
+	protected void fillChartModelWithRecordData(final CartesianChartModel chartModel, final Deque<CompilationRecord> records, final String minutesAndSeconds,
+			final int numberOfEntries) {
 		if (this.totalCompilationTimeData.size() >= numberOfEntries) {
 			this.totalCompilationTimeData.remove(this.totalCompilationTimeData.firstKey());
 		}
 
-		for (final CompilationRecord record : records) {
-			this.totalCompilationTimeData.put(minutesAndSeconds, record.getTotalCompilationTime());
+		if (!records.isEmpty()) {
+			final CompilationRecord lastRecord = records.getLast();
+			this.totalCompilationTimeData.put(minutesAndSeconds, lastRecord.getTotalCompilationTime());
 		}
 	}
 

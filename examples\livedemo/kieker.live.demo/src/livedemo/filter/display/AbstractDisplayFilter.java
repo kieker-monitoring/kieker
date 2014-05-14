@@ -17,8 +17,8 @@
 package livedemo.filter.display;
 
 import java.util.Date;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.Deque;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.TimeUnit;
 
 import kieker.analysis.IProjectContext;
@@ -54,7 +54,7 @@ public abstract class AbstractDisplayFilter<T extends IMonitoringRecord, C exten
 
 	private final int numberOfEntries;
 	private final TimeUnit timeunit;
-	private final Queue<T> records;
+	private final Deque<T> records;
 	private final C chartModel;
 
 	public AbstractDisplayFilter(final Configuration configuration, final IProjectContext projectContext) {
@@ -72,7 +72,7 @@ public abstract class AbstractDisplayFilter<T extends IMonitoringRecord, C exten
 		this.timeunit = recordTimeunit;
 
 		this.chartModel = this.createChartModel();
-		this.records = new ConcurrentLinkedQueue<T>();
+		this.records = new ConcurrentLinkedDeque<T>();
 	}
 
 	@InputPort(name = AbstractDisplayFilter.INPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class })
@@ -103,6 +103,6 @@ public abstract class AbstractDisplayFilter<T extends IMonitoringRecord, C exten
 
 	abstract protected C createChartModel();
 
-	abstract protected void fillChartModelWithRecordData(C chartModel, Queue<T> records, String minutesAndSeconds, int numberOfEntries);
+	abstract protected void fillChartModelWithRecordData(C chartModel, Deque<T> records, String minutesAndSeconds, int numberOfEntries);
 
 }

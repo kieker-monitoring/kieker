@@ -16,7 +16,7 @@
 
 package livedemo.filter.display;
 
-import java.util.Queue;
+import java.util.Deque;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -66,15 +66,15 @@ public class ThreadsStatusDisplayFilter extends AbstractDisplayFilter<ThreadsSta
 		this.peakThreadsSeries.setData(this.peakThreadsData);
 		this.daemonThreadsSeries.setData(this.daemonThreadsData);
 
-		this.threadsSeries.setLabel("Threads");
-		this.peakThreadsSeries.setLabel("Peak threads");
+		this.threadsSeries.setLabel("Live Threads");
+		this.peakThreadsSeries.setLabel("Peak");
 		this.daemonThreadsSeries.setLabel("Daemon threads");
 
 		return model;
 	}
 
 	@Override
-	protected void fillChartModelWithRecordData(final CartesianChartModel chartModel, final Queue<ThreadsStatusRecord> records, final String minutesAndSeconds,
+	protected void fillChartModelWithRecordData(final CartesianChartModel chartModel, final Deque<ThreadsStatusRecord> records, final String minutesAndSeconds,
 			final int numberOfEntries) {
 		if (this.threadsData.size() >= numberOfEntries) {
 			this.threadsData.remove(this.threadsData.firstKey());
@@ -82,10 +82,11 @@ public class ThreadsStatusDisplayFilter extends AbstractDisplayFilter<ThreadsSta
 			this.daemonThreadsData.remove(this.daemonThreadsData.firstKey());
 		}
 
-		for (final ThreadsStatusRecord record : records) {
-			this.threadsData.put(minutesAndSeconds, record.getThreadCount());
-			this.peakThreadsData.put(minutesAndSeconds, record.getPeakThreadCount());
-			this.daemonThreadsData.put(minutesAndSeconds, record.getDaemonThreadCount());
+		if (!records.isEmpty()) {
+			final ThreadsStatusRecord lastRecord = records.getLast();
+			this.threadsData.put(minutesAndSeconds, lastRecord.getThreadCount());
+			this.peakThreadsData.put(minutesAndSeconds, lastRecord.getPeakThreadCount());
+			this.daemonThreadsData.put(minutesAndSeconds, lastRecord.getDaemonThreadCount());
 		}
 	}
 

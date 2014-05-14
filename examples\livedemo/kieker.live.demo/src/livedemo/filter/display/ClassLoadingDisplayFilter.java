@@ -16,7 +16,7 @@
 
 package livedemo.filter.display;
 
-import java.util.Queue;
+import java.util.Deque;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -74,7 +74,7 @@ public class ClassLoadingDisplayFilter extends AbstractDisplayFilter<ClassLoadin
 	}
 
 	@Override
-	protected void fillChartModelWithRecordData(final CartesianChartModel chartModel, final Queue<ClassLoadingRecord> records, final String minutesAndSeconds,
+	protected void fillChartModelWithRecordData(final CartesianChartModel chartModel, final Deque<ClassLoadingRecord> records, final String minutesAndSeconds,
 			final int numberOfEntries) {
 		if (this.totalLoadedClassesData.size() >= numberOfEntries) {
 			this.totalLoadedClassesData.remove(this.totalLoadedClassesData.firstKey());
@@ -82,10 +82,11 @@ public class ClassLoadingDisplayFilter extends AbstractDisplayFilter<ClassLoadin
 			this.unloadedClassesData.remove(this.unloadedClassesData.firstKey());
 		}
 
-		for (final ClassLoadingRecord record : records) {
-			this.totalLoadedClassesData.put(minutesAndSeconds, record.getTotalLoadedClassCount());
-			this.loadedClassesData.put(minutesAndSeconds, record.getLoadedClassCount());
-			this.unloadedClassesData.put(minutesAndSeconds, record.getUnloadedClassCount());
+		if (!records.isEmpty()) {
+			final ClassLoadingRecord lastRecord = records.getLast();
+			this.totalLoadedClassesData.put(minutesAndSeconds, lastRecord.getTotalLoadedClassCount());
+			this.loadedClassesData.put(minutesAndSeconds, lastRecord.getLoadedClassCount());
+			this.unloadedClassesData.put(minutesAndSeconds, lastRecord.getUnloadedClassCount());
 		}
 	}
 

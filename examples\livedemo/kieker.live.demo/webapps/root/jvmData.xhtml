@@ -59,23 +59,23 @@
 		 	<h:form id="form"> 
 				<p:commandButton async="true" id="loadButton" value="#{jMeterBean.buttonText}" disabled="#{jMeterBean.disabled}" actionListener="#{jMeterBean.runJMeter}" />
 					
-				<p:lineChart id="threads" value="#{threadsStatusBean.model}" legendPosition="ne"  
+				<p:lineChart id="threads" value="#{jvmDataDisplayBean.threadsStatusModel}" legendPosition="ne"  
 			    	title="Threads Status" minY="0"  style="height:300px;margin-top:20px"
 			    	xaxisLabel="Time" yaxisLabel="Number of threads"/>	
 				
-				<p:lineChart id="gcTime" value="#{gcBean.timeModel}" legendPosition="ne"  
+				<p:lineChart id="gcTime" value="#{jvmDataDisplayBean.gcTimeModel}" legendPosition="ne"  
 			    	title="Garbage Collecting Time" minY="0" style="height:300px;margin-top:20px"
 			    	xaxisLabel="Time" yaxisLabel="Running time (ms)"/>	
 			    	
-				<p:lineChart id="gcCount" value="#{gcBean.countModel}" legendPosition="ne"  
+				<p:lineChart id="gcCount" value="#{jvmDataDisplayBean.gcCountModel}" legendPosition="ne"  
 			    	title="Garbage Collecting Count" minY="0" style="height:300px;margin-top:20px"
 			    	xaxisLabel="Time" yaxisLabel="Number of collections"/>	
 			    		
-				<p:lineChart id="jit" value="#{jitCompilationBean.model}" legendPosition="ne"  
+				<p:lineChart id="jit" value="#{jvmDataDisplayBean.compilationModel}" legendPosition="ne"  
 			    	title="Total Compilation Time of JIT Compiler" minY="0" style="height:300px;margin-top:20px"
 			    	xaxisLabel="Time" yaxisLabel="Running time (ms)"/>	
 			    	
-			    <p:lineChart id="classloading" value="#{classLoadingBean.model}" legendPosition="ne"  
+			    <p:lineChart id="classloading" value="#{jvmDataDisplayBean.classLoadingModel}" legendPosition="ne"  
 			    	title="Class Loading" minY="0" style="height:300px;margin-top:20px"
 			    	xaxisLabel="Time" yaxisLabel="Number of classes"/>	
 

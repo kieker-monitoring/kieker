@@ -16,92 +16,58 @@
 
 package livedemo.filter.display;
 
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.TimeUnit;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import kieker.analysis.IProjectContext;
-import kieker.analysis.display.XYPlot;
-import kieker.analysis.display.annotation.Display;
-import kieker.analysis.plugin.annotation.InputPort;
-import kieker.analysis.plugin.annotation.Plugin;
-import kieker.analysis.plugin.annotation.Property;
-import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.jvm.GCRecord;
+
+import org.primefaces.model.chart.CartesianChartModel;
+import org.primefaces.model.chart.ChartSeries;
 
 /**
  * @author Nils Christian Ehmke
  * 
  * @since 1.10
  */
-@Plugin(configuration = {
-	@Property(name = GCCountDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES,
-			defaultValue = GCCountDisplayFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES) })
-public class GCCountDisplayFilter extends AbstractFilterPlugin {
+public class GCCountDisplayFilter extends AbstractDisplayFilter<GCRecord, CartesianChartModel> {
 
-	public static final String INPUT_PORT_NAME_RECORDS = "inputRecordEvents";
-	public static final String INPUT_PORT_NAME_TIMESTAMPS = "inputTimeEvents";
-
-	public static final String CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES = "numberOfEntries";
-	public static final String CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES = "100";
-
-	public static final String CONFIG_PROPERTY_VALUE_RESPONSETIME_TIMEUNIT = "NANOSECONDS";
-
-	private static final Log LOG = LogFactory.getLog(GCCountDisplayFilter.class);
-
-	private final XYPlot plot;
-	private final int numberOfEntries;
-	private final TimeUnit timeunit;
-	private final List<GCRecord> records;
+	private final Map<String, SortedMap<Object, Number>> dataMap = new HashMap<String, SortedMap<Object, Number>>();
 
 	public GCCountDisplayFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
-		this.numberOfEntries = configuration.getIntProperty(GCCountDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES);
-		final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
-		TimeUnit recordTimeunit;
-		try {
-			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
-		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
-			GCCountDisplayFilter.LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
-			recordTimeunit = TimeUnit.NANOSECONDS;
-		}
-		this.timeunit = recordTimeunit;
-		this.plot = new XYPlot(this.numberOfEntries);
-		this.records = new CopyOnWriteArrayList<GCRecord>();
-	}
-
-	@InputPort(name = GCCountDisplayFilter.INPUT_PORT_NAME_RECORDS, eventTypes = { GCRecord.class })
-	public synchronized void inputRecords(final GCRecord record) {
-		this.records.add(record);
-	}
-
-	@InputPort(name = GCCountDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS, eventTypes = { Long.class })
-	public synchronized void inputTimeEvents(final Long timestamp) {
-		// Calculate the minutes and seconds of the logging timestamp of the record
-		final Date date = new Date(TimeUnit.MILLISECONDS.convert(timestamp, this.timeunit));
-		final String minutesAndSeconds = date.toString().substring(14, 19);
-
-		for (final GCRecord record : this.records) {
-			this.plot.setEntry(record.getGcName(), minutesAndSeconds, record.getCollectionCount());
-		}
-
-		this.records.clear();
-	}
-
-	@Display(name = "XYPlot")
-	public XYPlot getPlot() {
-		return this.plot;
 	}
 
 	@Override
-	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration();
-		configuration.setProperty(GCCountDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, String.valueOf(this.numberOfEntries));
-		return configuration;
+	protected CartesianChartModel createChartModel() {
+		return new CartesianChartModel();
+	}
+
+	@Override
+	protected void fillChartModelWithRecordData(final CartesianChartModel chartModel, final Deque<GCRecord> records, final String minutesAndSeconds,
+			final int numberOfEntries) {
+		for (final GCRecord record : records) {
+			final String gcName = record.getGcName();
+			if (!this.dataMap.containsKey(gcName)) {
+				final ChartSeries series = new ChartSeries();
+				final SortedMap<Object, Number> data = new TreeMap<>();
+
+				chartModel.addSeries(series);
+				series.setData(data);
+				series.setLabel(gcName);
+				this.dataMap.put(gcName, data);
+			}
+
+			final SortedMap<Object, Number> data = this.dataMap.get(gcName);
+			if (data.size() >= numberOfEntries) {
+				data.remove(data.firstKey());
+			}
+			data.put(minutesAndSeconds, record.getCollectionCount());
+		}
 	}
 
 }
