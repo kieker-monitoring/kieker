@@ -313,13 +313,14 @@
 				<include name="javax.jms-*.jar" />
 				
 				<!-- OPAD includes begin -->
-				<!-- <include name="commons-math-*.jar"/>
+				<include name="commons-math-*.jar"/>
 				<include name="commons-lang-*.jar"/>
 				<include name="Rsession.jar"/>
 				<include name="Rserve.jar"/>
-				<include name="mongo-*.jar"/> -->
+				<include name="mongo-*.jar"/>
 				<include name="REngine.jar"/>
 				<!-- OPAD includes end -->
+				
 			</fileset>
 			<fileset dir="${dist.dir}">
 				<include name="${dist.kieker.main.jar}" />

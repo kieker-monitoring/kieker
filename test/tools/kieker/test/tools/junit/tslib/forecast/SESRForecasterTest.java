@@ -51,9 +51,7 @@ public class SESRForecasterTest extends AbstractKiekerTest {
 	 *             If excepton is thrown
 	 */
 	@Before
-	public void setUp() throws Exception {
-
-	}
+	public void setUp() throws Exception {}
 
 	/**
 	 * Test of the SESRForecaster via Rserve.
@@ -78,7 +76,6 @@ public class SESRForecasterTest extends AbstractKiekerTest {
 		final ITimeSeries<Double> forecastSeries = forecast.getForecast();
 
 		final ITimeSeriesPoint<Double> stepFC = forecastSeries.getPoints().get(0);
-		Assert.assertTrue((stepFC.getValue() > 2.88) && (stepFC.getValue() < 3.1));
+		Assert.assertEquals(2.000054d, stepFC.getValue(), 0.001d);
 	}
-
 }
