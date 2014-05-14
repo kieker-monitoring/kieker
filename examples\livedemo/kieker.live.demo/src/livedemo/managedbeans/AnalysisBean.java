@@ -183,14 +183,14 @@ public class AnalysisBean {
 				AbstractDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS);
 
 		this.analysisInstance.connect(distributor, Distributor.OUTPUT_PORT_NAME_GC_RECORDS, this.gcCountDisplayFilter,
-				GCCountDisplayFilter.INPUT_PORT_NAME_RECORDS);
+				AbstractDisplayFilter.INPUT_PORT_NAME_RECORDS);
 		this.analysisInstance.connect(timeReader, TimeReader.OUTPUT_PORT_NAME_TIMESTAMPS, this.gcCountDisplayFilter,
-				GCCountDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS);
+				AbstractDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS);
 
 		this.analysisInstance.connect(distributor, Distributor.OUTPUT_PORT_NAME_GC_RECORDS, this.gcTimeDisplayFilter,
-				GCTimeDisplayFilter.INPUT_PORT_NAME_RECORDS);
+				AbstractDisplayFilter.INPUT_PORT_NAME_RECORDS);
 		this.analysisInstance.connect(timeReader, TimeReader.OUTPUT_PORT_NAME_TIMESTAMPS, this.gcTimeDisplayFilter,
-				GCTimeDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS);
+				AbstractDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS);
 
 		this.analysisInstance.connect(reader, JMXReader.OUTPUT_PORT_NAME_RECORDS, ertf, ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
 
