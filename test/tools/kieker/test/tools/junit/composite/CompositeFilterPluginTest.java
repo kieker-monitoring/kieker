@@ -335,22 +335,46 @@ public class CompositeFilterPluginTest extends AbstractKiekerTest {
 
 	// just some classes
 	// CHECKSTYLE:OFF
+	/**
+	 * Dummy class used within the CompositeFilterPluginTest.
+	 */
 	class T1 {// NOPMD
+		T1() {}
 	}// NOPMD
 
+	/**
+	 * Dummy class used within the CompositeFilterPluginTest.
+	 */
 	class T2 {// NOPMD
+		T2() {}
 	}// NOPMD
 
+	/**
+	 * Dummy class used within the CompositeFilterPluginTest.
+	 */
 	class T3 {// NOPMD
+		T3() {}
 	}// NOPMD
 
+	/**
+	 * Dummy class used within the CompositeFilterPluginTest.
+	 */
 	class T4 {// NOPMD
+		T4() {}
 	}// NOPMD
 
+	/**
+	 * Dummy class used within the CompositeFilterPluginTest.
+	 */
 	class T5 {// NOPMD
+		T5() {}
 	}// NOPMD
 
+	/**
+	 * Dummy class used within the CompositeFilterPluginTest.
+	 */
 	class T6 {// NOPMD
+		T6() {}
 	}// NOPMD
 		// CHECKSTYLE:ON
 

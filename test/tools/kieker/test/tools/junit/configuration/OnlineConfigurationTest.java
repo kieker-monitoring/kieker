@@ -1,15 +1,26 @@
-/**
- * 
- */
+/***************************************************************************
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
 package kieker.test.tools.junit.configuration;
 
 import java.util.Map.Entry;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals; // NOCS
-import static org.junit.Assert.assertTrue; // NOCS
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.IAnalysisController;
@@ -23,13 +34,13 @@ import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
-
 import kieker.tools.configuration.AbstractUpdateableFilterPlugin;
-
 import kieker.tools.configuration.GlobalConfigurationRegistry;
 import kieker.tools.configuration.exception.PluginNotFoundException;
 
 import kieker.test.common.junit.AbstractKiekerTest;
+// NOCS
+// NOCS
 
 /**
  * Test for Configuration plugins during runtime.
@@ -82,10 +93,10 @@ public class OnlineConfigurationTest extends AbstractKiekerTest {
 			this.analysisController.connect(this.simpleListReader, ListReader.OUTPUT_PORT_NAME, this.updateable, Updateable.INPUT);
 			this.analysisController.connect(this.updateable, Updateable.OUPUT_STRING, this.listCollectionfilterSTR, ListCollectionFilter.INPUT_PORT_NAME);
 			this.simulate();
-		} catch (IllegalStateException e) {
+		} catch (final IllegalStateException e) {
 			this.nothing();
 			// e.printStackTrace();
-		} catch (AnalysisConfigurationException e) {
+		} catch (final AnalysisConfigurationException e) {
 			this.nothing();
 			// e.printStackTrace();
 		}
@@ -96,7 +107,7 @@ public class OnlineConfigurationTest extends AbstractKiekerTest {
 	 */
 	@Test
 	public void numberOfExceptionsTest() {
-		assertEquals("Wrong number of PNF-Exceptions thrown", 1, this.noPNFExceptions);
+		Assert.assertEquals("Wrong number of PNF-Exceptions thrown", 1, this.noPNFExceptions);
 	}
 
 	/**
@@ -107,7 +118,7 @@ public class OnlineConfigurationTest extends AbstractKiekerTest {
 		final boolean notYetUpdated = this.listCollectionfilterSTR.getList().get(0).equals(Updateable.TEST_PROPERTY_UPDATEABLE);
 		final boolean updated = this.listCollectionfilterSTR.getList().get(1)
 				.equals(this.updateable.getCurrentConfiguration().getStringProperty(Updateable.TEST_PROPERTY_UPDATEABLE));
-		assertTrue("Updating wrent wrong ", notYetUpdated && updated);
+		Assert.assertTrue("Updating wrent wrong ", notYetUpdated && updated);
 	}
 
 	/**
@@ -166,7 +177,7 @@ public class OnlineConfigurationTest extends AbstractKiekerTest {
 
 		@Override
 		public Configuration getCurrentConfiguration() {
-			return configuration;
+			return this.configuration;
 		}
 
 		/**
@@ -184,7 +195,7 @@ public class OnlineConfigurationTest extends AbstractKiekerTest {
 					GlobalConfigurationRegistry.getInstance().updateConfiguration(UPDATEABLE_FILTER_ID, config, true);
 					GlobalConfigurationRegistry.getInstance().updateConfiguration("non-Existent-ID", config, true);
 				}
-			} catch (PluginNotFoundException e) {
+			} catch (final PluginNotFoundException e) {
 				OnlineConfigurationTest.this.increaseExceptionCount();
 				// e.printStackTrace();
 			} finally {
@@ -243,7 +254,7 @@ public class OnlineConfigurationTest extends AbstractKiekerTest {
 
 		@Override
 		public Configuration getCurrentConfiguration() {
-			return configuration;
+			return this.configuration;
 		}
 
 		/**
@@ -263,7 +274,7 @@ public class OnlineConfigurationTest extends AbstractKiekerTest {
 		public void setCurrentConfiguration(final Configuration config, final boolean update) {
 			for (final Entry<Object, Object> entry : this.configuration.getPropertiesStartingWith("").entrySet()) {
 				final String propertyName = (String) entry.getKey();
-				if (isPropertyUpdateable(propertyName)) {
+				if (this.isPropertyUpdateable(propertyName)) {
 					this.configuration.setProperty(propertyName, config.getStringProperty(propertyName));
 				}
 			}
