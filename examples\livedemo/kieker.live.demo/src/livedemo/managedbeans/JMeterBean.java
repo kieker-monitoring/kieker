@@ -36,9 +36,9 @@ import org.apache.jmeter.JMeter;
 @ApplicationScoped
 public class JMeterBean implements Observer {
 
-	private static final long TIMEOUT_IN_MILLIS = 120000;
-	private static final String DEFAULT_BUTTON_TEXT = "Generate Load";
-	private static final JMeter JMETER = new JMeter();
+	private final long timeOutMillis = 120000;
+	private final String defaultButtonText = "Generate Load";
+	private final JMeter jMeter = new JMeter();
 
 	@ManagedProperty(value = "#{analysisBean}")
 	private AnalysisBean analysisBean;
@@ -51,7 +51,7 @@ public class JMeterBean implements Observer {
 	public JMeterBean() {
 		this.disabled = false;
 		this.timestamp = System.currentTimeMillis();
-		this.buttonText = this.DEFAULT_BUTTON_TEXT;
+		this.buttonText = this.defaultButtonText;
 	}
 
 	@PostConstruct
@@ -89,17 +89,17 @@ public class JMeterBean implements Observer {
 			if (actualtime < this.timestamp) {
 				return;
 			} else {
-				this.timestamp = actualtime + this.TIMEOUT_IN_MILLIS;
+				this.timestamp = actualtime + this.timeOutMillis;
 			}
 		}
-		this.JMETER.start(this.arguments);
+		this.jMeter.start(this.arguments);
 	}
 
 	@Override
 	public void update(final Observable arg0, final Object arg1) {
 		final long actualtime = System.currentTimeMillis();
 		if (actualtime > this.timestamp) {
-			this.buttonText = this.DEFAULT_BUTTON_TEXT;
+			this.buttonText = this.defaultButtonText;
 			this.disabled = false;
 		} else {
 			this.buttonText = "Generate Load for " + String.valueOf((int) ((this.timestamp - actualtime) / 1000)) + " s";
