@@ -106,8 +106,8 @@ public abstract class AbstractDisplayFilter<T extends IMonitoringRecord, C exten
 		return configuration;
 	}
 
-	protected abstract C createChartModel(int numberOfEntries);
+	protected abstract C createChartModel(int numberOfEntries); // NOCS (hidden field)
 
-	protected abstract void fillChartModelWithRecordData(C chartModel, Deque<T> records, String minutesAndSeconds, int numberOfEntries);
+	protected abstract void fillChartModelWithRecordData(C chartModel, Deque<T> records, String minutesAndSeconds, int numberOfEntries); // NOCS (hidden field)
 
 }
