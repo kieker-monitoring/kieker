@@ -23,7 +23,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
-import livedemo.entities.EnrichedOERecord;
+import livedemo.entities.EnrichedOperationExecutionRecord;
 
 /**
  * @author Bjoern Weissenfels
@@ -72,8 +72,8 @@ public class RecordListBean {
 		return this.freezeButton;
 	}
 
-	public List<EnrichedOERecord> getRecords() {
-		final List<EnrichedOERecord> list = this.analysisBean.getRecordListFilter().getList();
+	public List<EnrichedOperationExecutionRecord> getRecords() {
+		final List<EnrichedOperationExecutionRecord> list = this.analysisBean.getRecordListFilter().getList();
 		Collections.reverse(list);
 		return list;
 	}

@@ -24,7 +24,7 @@ import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 
-import livedemo.entities.EnrichedOERecord;
+import livedemo.entities.EnrichedOperationExecutionRecord;
 
 /**
  * @author Bjoern Weissenfels
@@ -35,7 +35,7 @@ import livedemo.entities.EnrichedOERecord;
 		description = "A filter collecting incoming objects in a list",
 		outputPorts = @OutputPort(
 				name = OER2EnrichedOERFilter.OUTPUT_PORT_NAME,
-				eventTypes = { EnrichedOERecord.class },
+				eventTypes = { EnrichedOperationExecutionRecord.class },
 				description = "Provides each incoming object"))
 public class OER2EnrichedOERFilter extends AbstractFilterPlugin {
 
@@ -54,7 +54,7 @@ public class OER2EnrichedOERFilter extends AbstractFilterPlugin {
 		final String commaSeperatedValues = record.toString();
 		this.deliver(
 				OER2EnrichedOERFilter.OUTPUT_PORT_NAME,
-				new EnrichedOERecord(record.getOperationSignature(), record.getSessionId(), record.getTraceId(), record.getTin(), record.getTout(), record
+				new EnrichedOperationExecutionRecord(record.getOperationSignature(), record.getSessionId(), record.getTraceId(), record.getTin(), record.getTout(), record
 						.getHostname(), record.getEoi(), record.getEss(), responseTime, shortSignature, commaSeperatedValues));
 	}
 

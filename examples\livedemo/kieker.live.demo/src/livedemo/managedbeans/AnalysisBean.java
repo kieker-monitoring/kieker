@@ -34,7 +34,7 @@ import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.executionRecordTransformation.ExecutionRecordTransformationFilter;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
-import livedemo.entities.EnrichedOERecord;
+import livedemo.entities.EnrichedOperationExecutionRecord;
 import livedemo.filter.Distributor;
 import livedemo.filter.OER2EnrichedOERFilter;
 import livedemo.filter.display.AbstractDisplayFilter;
@@ -66,7 +66,7 @@ public class AnalysisBean {
 	private final SystemModelRepository systemModelRepository;
 	private final CPUUtilizationDisplayFilter cpuFilter;
 	private final MemSwapUtilizationDisplayFilter memSwapFilter;
-	private final ListCollectionFilter<EnrichedOERecord> recordListFilter;
+	private final ListCollectionFilter<EnrichedOperationExecutionRecord> recordListFilter;
 	private final MethodResponsetimeDisplayFilter responsetimeFilter;
 	private final MethodAndComponentFlowDisplayFilter tagCloudFilter;
 	private final ClassLoadingDisplayFilter classLoadingDisplayFilter;
@@ -93,7 +93,7 @@ public class AnalysisBean {
 		final Configuration recordListConfiguration = new Configuration();
 		recordListConfiguration.setProperty(ListCollectionFilter.CONFIG_PROPERTY_NAME_MAX_NUMBER_OF_ENTRIES, this.numberOfRecordListEntries);
 		recordListConfiguration.setProperty(ListCollectionFilter.CONFIG_PROPERTY_NAME_LIST_FULL_BEHAVIOR, "dropOldest");
-		this.recordListFilter = new ListCollectionFilter<EnrichedOERecord>(recordListConfiguration, this.analysisInstance);
+		this.recordListFilter = new ListCollectionFilter<EnrichedOperationExecutionRecord>(recordListConfiguration, this.analysisInstance);
 
 		final Configuration responsetimeConfiguration = new Configuration();
 		responsetimeConfiguration.setProperty(MethodResponsetimeDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, this.numberOfResponsetimeEntries);
@@ -214,7 +214,7 @@ public class AnalysisBean {
 		return this.memSwapFilter;
 	}
 
-	public ListCollectionFilter<EnrichedOERecord> getRecordListFilter() {
+	public ListCollectionFilter<EnrichedOperationExecutionRecord> getRecordListFilter() {
 		return this.recordListFilter;
 	}
 
