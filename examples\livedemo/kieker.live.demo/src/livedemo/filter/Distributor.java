@@ -31,6 +31,11 @@ import kieker.common.record.jvm.ThreadsStatusRecord;
 import kieker.common.record.system.CPUUtilizationRecord;
 import kieker.common.record.system.MemSwapUsageRecord;
 
+/**
+ * @author Nils Christian Ehmke
+ * 
+ * @since 1.10
+ */
 @Plugin(outputPorts = {
 	@OutputPort(eventTypes = GCRecord.class, name = Distributor.OUTPUT_PORT_NAME_GC_RECORDS),
 	@OutputPort(eventTypes = ClassLoadingRecord.class, name = Distributor.OUTPUT_PORT_NAME_CLASS_LOADING_RECORDS),
@@ -38,7 +43,7 @@ import kieker.common.record.system.MemSwapUsageRecord;
 	@OutputPort(eventTypes = CompilationRecord.class, name = Distributor.OUTPUT_PORT_NAME_COMPILATION_RECORDS),
 	@OutputPort(eventTypes = CPUUtilizationRecord.class, name = Distributor.OUTPUT_PORT_NAME_CPU_UTILIZATION_RECORDS),
 	@OutputPort(eventTypes = MemSwapUsageRecord.class, name = Distributor.OUTPUT_PORT_NAME_MEM_SWAP_USAGE_RECORDS),
-	@OutputPort(eventTypes = OperationExecutionRecord.class, name = Distributor.OUTPUT_PORT_NAME_OPERATION_EXECUTION_RECORDS),
+	@OutputPort(eventTypes = OperationExecutionRecord.class, name = Distributor.OUTPUT_PORT_NAME_OPERATION_EXECUTION_RECORDS)
 })
 public class Distributor extends AbstractFilterPlugin {
 

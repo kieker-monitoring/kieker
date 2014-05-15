@@ -28,10 +28,11 @@ import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 
-import kieker.analysis.display.MeterGauge;
-import livedemo.entities.Model;
-
 import org.primefaces.model.chart.MeterGaugeChartModel;
+
+import kieker.analysis.display.MeterGauge;
+
+import livedemo.entities.Model;
 
 /**
  * @author Bjoern Weissenfels

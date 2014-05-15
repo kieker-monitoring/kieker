@@ -36,8 +36,7 @@ import kieker.common.record.controlflow.OperationExecutionRecord;
 
 /**
  * This is a filter which accepts {@link OperationExecutionRecord} instances and provides different views to visualize them. The incoming records are relayed without
- * any
- * enrichment.
+ * any enrichment.
  * 
  * @author Bjoern Weissenfels
  * 
@@ -74,7 +73,6 @@ public class MethodResponsetimeDisplayFilter extends AbstractFilterPlugin {
 	private final XYPlot methodCallsXYplot;
 	private final int numberOfEntries;
 	private final TimeUnit timeunit;
-	private final TimeUnit responsetimeunit;
 	private final Map<String, Pair<Long, Integer>> signatureResponsetimeMap;
 	private final Map<String, Pair<Long, Integer>> newSignatures;
 
@@ -84,17 +82,14 @@ public class MethodResponsetimeDisplayFilter extends AbstractFilterPlugin {
 		this.numberOfEntries = configuration.getIntProperty(MethodResponsetimeDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES);
 		final String responsetimeTimeunitProperty = configuration.getStringProperty(MethodResponsetimeDisplayFilter.CONFIG_PROPERTY_NAME_RESPONSETIME_TIMEUNIT);
 		final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
-		TimeUnit responsetimeTimeunit;
 		TimeUnit recordTimeunit;
 		try {
-			responsetimeTimeunit = TimeUnit.valueOf(responsetimeTimeunitProperty);
+			TimeUnit.valueOf(responsetimeTimeunitProperty);
 			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
 		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
 			MethodResponsetimeDisplayFilter.LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
-			responsetimeTimeunit = TimeUnit.NANOSECONDS;
 			recordTimeunit = TimeUnit.NANOSECONDS;
 		}
-		this.responsetimeunit = responsetimeTimeunit;
 		this.timeunit = recordTimeunit;
 		this.methodResponsetimeXYplot = new XYPlot(this.numberOfEntries);
 		this.methodCallsXYplot = new XYPlot(this.numberOfEntries);
@@ -155,9 +150,9 @@ public class MethodResponsetimeDisplayFilter extends AbstractFilterPlugin {
 		this.newSignatures.clear();
 	}
 
-	private double convertFromNanosToMillis(long duration) {
-		duration = TimeUnit.NANOSECONDS.convert(duration, this.timeunit);
-		return Math.round(duration / 100000.0) / 10.0;
+	private double convertFromNanosToMillis(final long duration) {
+		final long tempDuration = TimeUnit.NANOSECONDS.convert(duration, this.timeunit);
+		return Math.round(tempDuration / 100000.0) / 10.0;
 	}
 
 	@Display(name = "XYPlot Of Average Method Responsetime Per Intervall")
@@ -177,28 +172,39 @@ public class MethodResponsetimeDisplayFilter extends AbstractFilterPlugin {
 		return configuration;
 	}
 
-	public class Pair<T1, T2> {
-		private T1 first;
-		private T2 last;
+	/**
+	 * 
+	 * @author Bjoern Weissenfels
+	 * 
+	 * @since 1.9
+	 * 
+	 * @param <V>
+	 *            The first type.
+	 * @param <W>
+	 *            The second type.
+	 */
+	public class Pair<V, W> {
+		private V first;
+		private W last;
 
-		public Pair(final T1 first, final T2 last) {
+		public Pair(final V first, final W last) {
 			this.first = first;
 			this.last = last;
 		}
 
-		public T1 getFirst() {
+		public V getFirst() {
 			return this.first;
 		}
 
-		public void setFirst(final T1 first) {
+		public void setFirst(final V first) {
 			this.first = first;
 		}
 
-		public T2 getLast() {
+		public W getLast() {
 			return this.last;
 		}
 
-		public void setLast(final T2 last) {
+		public void setLast(final W last) {
 			this.last = last;
 		}
 	}

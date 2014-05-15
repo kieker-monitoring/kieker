@@ -24,11 +24,12 @@ import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 
-import kieker.analysis.display.XYPlot;
-import livedemo.entities.Model;
-
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
+
+import kieker.analysis.display.XYPlot;
+
+import livedemo.entities.Model;
 
 /**
  * @author Bjoern Weissenfels

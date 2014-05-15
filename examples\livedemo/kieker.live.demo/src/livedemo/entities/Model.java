@@ -23,6 +23,9 @@ import java.util.List;
  * @author Bjoern Weissenfels
  * 
  * @since 1.9
+ * 
+ * @param <T>
+ *            The type of the content of this model instance.
  */
 public class Model<T> {
 

@@ -21,6 +21,8 @@ import java.util.Deque;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.TimeUnit;
 
+import org.primefaces.model.chart.ChartModel;
+
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -31,12 +33,15 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 
-import org.primefaces.model.chart.ChartModel;
-
 /**
  * @author Nils Christian Ehmke
  * 
  * @since 1.10
+ * 
+ * @param <T>
+ *            The type of the monitoring records processed by the filter.
+ * @param <C>
+ *            The type of the chart model used by the filter.
  */
 @Plugin(configuration =
 		@Property(name = AbstractDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, defaultValue = AbstractDisplayFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES))
@@ -101,8 +106,8 @@ public abstract class AbstractDisplayFilter<T extends IMonitoringRecord, C exten
 		return configuration;
 	}
 
-	abstract protected C createChartModel(int numberOfEntries);
+	protected abstract C createChartModel(int numberOfEntries);
 
-	abstract protected void fillChartModelWithRecordData(C chartModel, Deque<T> records, String minutesAndSeconds, int numberOfEntries);
+	protected abstract void fillChartModelWithRecordData(C chartModel, Deque<T> records, String minutesAndSeconds, int numberOfEntries);
 
 }

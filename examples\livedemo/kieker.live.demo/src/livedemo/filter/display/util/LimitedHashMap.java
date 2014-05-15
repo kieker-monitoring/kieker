@@ -17,25 +17,33 @@
 package livedemo.filter.display.util;
 
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
+ * A simple extension of a {@link LinkedHashMap} with fixed maximal size. Older entries are removed in FiFo order when new entries exceed the maximal size.
+ * 
  * @author Nils Christian Ehmke
  * 
  * @since 1.10
+ * 
+ * @param <K>
+ *            The type of the keys.
+ * @param <V>
+ *            The type of the values.
  */
 public class LimitedHashMap<K, V> extends LinkedHashMap<K, V> {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -8171905963249349942L;
 
-	private final int maxEntries;
+	private final int maximalNumberOfEntries;
 
-	public LimitedHashMap(final int maxEntries) {
-		this.maxEntries = maxEntries;
+	public LimitedHashMap(final int maximalNumberOfEntries) {
+		this.maximalNumberOfEntries = maximalNumberOfEntries;
 	}
 
 	@Override
-	protected boolean removeEldestEntry(final java.util.Map.Entry<K, V> eldest) {
-		return this.size() > this.maxEntries;
+	protected boolean removeEldestEntry(final Map.Entry<K, V> eldest) {
+		return (this.size() > this.maximalNumberOfEntries);
 	}
 
 }

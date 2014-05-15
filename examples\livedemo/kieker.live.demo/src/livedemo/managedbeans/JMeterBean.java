@@ -36,9 +36,9 @@ import org.apache.jmeter.JMeter;
 @ApplicationScoped
 public class JMeterBean implements Observer {
 
-	private final long TIMEOUT_IN_MILLIS = 120000;
-	private final String DEFAULT_BUTTON_TEXT = "Generate Load";
-	private final JMeter JMETER = new JMeter();
+	private static final long TIMEOUT_IN_MILLIS = 120000;
+	private static final String DEFAULT_BUTTON_TEXT = "Generate Load";
+	private static final JMeter JMETER = new JMeter();
 
 	@ManagedProperty(value = "#{analysisBean}")
 	private AnalysisBean analysisBean;

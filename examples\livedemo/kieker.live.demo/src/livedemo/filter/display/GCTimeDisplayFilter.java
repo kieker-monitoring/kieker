@@ -20,13 +20,14 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.primefaces.model.chart.CartesianChartModel;
+import org.primefaces.model.chart.ChartSeries;
+
 import kieker.analysis.IProjectContext;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.jvm.GCRecord;
-import livedemo.filter.display.util.LimitedHashMap;
 
-import org.primefaces.model.chart.CartesianChartModel;
-import org.primefaces.model.chart.ChartSeries;
+import livedemo.filter.display.util.LimitedHashMap;
 
 /**
  * @author Nils Christian Ehmke

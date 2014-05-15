@@ -30,11 +30,12 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
-import kieker.analysis.display.XYPlot;
-import livedemo.entities.Model;
-
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
+
+import kieker.analysis.display.XYPlot;
+
+import livedemo.entities.Model;
 
 /**
  * @author Bjoern Weissenfels
@@ -55,7 +56,7 @@ public class CPUXYPlotBean implements Observer {
 	private int index;
 
 	private final List<String> availableAttributes = Arrays.asList("idle", "irq", "nice", "system", "totalUtilization", "user");
-	private List<String> selectedAttributes;// = Arrays.asList("idle","totalUtilization");
+	private List<String> selectedAttributes; // = Arrays.asList("idle","totalUtilization");
 
 	public CPUXYPlotBean() {
 		this.models = Collections.synchronizedList(new ArrayList<Model<CartesianChartModel>>());
