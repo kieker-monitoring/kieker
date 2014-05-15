@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,7 +81,7 @@ public class MethodResponsetimeDisplayFilter extends AbstractFilterPlugin {
 	public MethodResponsetimeDisplayFilter(final Configuration configuration,
 			final IProjectContext projectContext) {
 		super(configuration, projectContext);
-		this.numberOfEntries = configuration.getIntProperty(CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES);
+		this.numberOfEntries = configuration.getIntProperty(MethodResponsetimeDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES);
 		final String responsetimeTimeunitProperty = configuration.getStringProperty(MethodResponsetimeDisplayFilter.CONFIG_PROPERTY_NAME_RESPONSETIME_TIMEUNIT);
 		final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
 		TimeUnit responsetimeTimeunit;
@@ -90,7 +90,7 @@ public class MethodResponsetimeDisplayFilter extends AbstractFilterPlugin {
 			responsetimeTimeunit = TimeUnit.valueOf(responsetimeTimeunitProperty);
 			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
 		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
-			LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
+			MethodResponsetimeDisplayFilter.LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
 			responsetimeTimeunit = TimeUnit.NANOSECONDS;
 			recordTimeunit = TimeUnit.NANOSECONDS;
 		}
@@ -124,7 +124,7 @@ public class MethodResponsetimeDisplayFilter extends AbstractFilterPlugin {
 			}
 		}
 
-		super.deliver(OUTPUT_PORT_NAME_RELAYED_RECORDS, record);
+		super.deliver(MethodResponsetimeDisplayFilter.OUTPUT_PORT_NAME_RELAYED_RECORDS, record);
 	}
 
 	@InputPort(name = MethodResponsetimeDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS, eventTypes = { Long.class })
@@ -155,12 +155,6 @@ public class MethodResponsetimeDisplayFilter extends AbstractFilterPlugin {
 		this.newSignatures.clear();
 	}
 
-	// another possibility to convert the response time, but under circumstances very inaccurate (900.000 ns = 0 ms)
-	@SuppressWarnings("unused")
-	private long convertResponsetime(final long responsetime) {
-		return this.responsetimeunit.convert(responsetime, this.timeunit);
-	}
-
 	private double convertFromNanosToMillis(long duration) {
 		duration = TimeUnit.NANOSECONDS.convert(duration, this.timeunit);
 		return Math.round(duration / 100000.0) / 10.0;
@@ -179,7 +173,7 @@ public class MethodResponsetimeDisplayFilter extends AbstractFilterPlugin {
 	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, String.valueOf(this.numberOfEntries));
+		configuration.setProperty(MethodResponsetimeDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, String.valueOf(this.numberOfEntries));
 		return configuration;
 	}
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,10 +31,10 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ValueChangeEvent;
 
+import kieker.analysis.display.XYPlot;
+
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
-
-import kieker.analysis.display.XYPlot;
 
 /**
  * @author Bjoern Weissenfels
@@ -151,11 +151,6 @@ public class MethodResponsetimeBean implements Observer {
 		return result;
 	}
 
-	@SuppressWarnings("unused")
-	private double convertFromNanosToMillis(final long duration) {
-		return Math.round(duration / 100000.0) / 10.0;
-	}
-
 	private synchronized void updateModels() {
 		this.maxY = 4;
 		for (final String shortSignature : this.getSelectedMethods()) {
@@ -170,9 +165,9 @@ public class MethodResponsetimeBean implements Observer {
 			final ChartSeries countings = new ChartSeries();
 			countings.setLabel(shortSignature);
 			final Map<Object, Number> countMap = this.methodCallsXYplot.getEntries(signature);
-			
-			int max = this.calculateMaxY(countMap.values());
-			if(max > this.maxY){
+
+			final int max = this.calculateMaxY(countMap.values());
+			if (max > this.maxY) {
 				this.maxY = max;
 			}
 			countings.setData(countMap);
@@ -189,6 +184,7 @@ public class MethodResponsetimeBean implements Observer {
 		return max;
 	}
 
+	@Override
 	public synchronized void update(final Observable o, final Object arg) {
 		this.responsetimeModel.clear();
 		this.countingModel.clear();

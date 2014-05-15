@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,6 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.controlflow.OperationExecutionRecord;
-
 import livedemo.entities.EnrichedOERecord;
 
 /**
@@ -53,7 +52,7 @@ public class OER2EnrichedOERFilter extends AbstractFilterPlugin {
 		final String shortSignature = this.createShortSignature(record);
 		final String commaSeperatedValues = record.toString();
 		this.deliver(
-				OUTPUT_PORT_NAME,
+				OER2EnrichedOERFilter.OUTPUT_PORT_NAME,
 				new EnrichedOERecord(record.getOperationSignature(), record.getSessionId(), record.getTraceId(), record.getTin(), record.getTout(), record
 						.getHostname(), record.getEoi(), record.getEss(), responseTime, shortSignature, commaSeperatedValues));
 	}

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,12 +30,11 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
+import kieker.analysis.display.XYPlot;
+import livedemo.entities.Model;
+
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
-
-import kieker.analysis.display.XYPlot;
-
-import livedemo.entities.Model;
 
 /**
  * @author Bjoern Weissenfels
@@ -137,6 +136,7 @@ public class CPUXYPlotBean implements Observer {
 		}
 	}
 
+	@Override
 	public void update(final Observable o, final Object arg) {
 		this.updateModel();
 

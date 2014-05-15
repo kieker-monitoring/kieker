@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,11 +28,10 @@ import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 
-import org.primefaces.model.chart.MeterGaugeChartModel;
-
 import kieker.analysis.display.MeterGauge;
-
 import livedemo.entities.Model;
+
+import org.primefaces.model.chart.MeterGaugeChartModel;
 
 /**
  * @author Bjoern Weissenfels
@@ -90,6 +89,7 @@ public class CPUMeterGaugeBean implements Observer {
 		}
 	}
 
+	@Override
 	public void update(final Observable arg0, final Object arg1) {
 		this.meterGaugeModels.clear();
 		this.updateMeterGaugeModels();
