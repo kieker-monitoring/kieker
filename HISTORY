@@ -6,6 +6,9 @@ http://kieker-monitoring.net) contains details on the changes.
 Please refer to the Kieker User Guide for details on using Kieker.
 
 * 1.10 (upcoming)
+- New features (selection)
+  - Various samplers to collect data from the JVM	
+  
 - support for Java 1.8 (via AspectJ)
 
 * 1.9 (April 16, 2014)
