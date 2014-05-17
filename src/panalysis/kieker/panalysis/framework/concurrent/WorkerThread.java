@@ -113,6 +113,7 @@ public class WorkerThread extends Thread {
 	}
 
 	private void cleanUpDatastructures() {
+		System.out.println("Firing stop notification...");
 		this.pipeline.fireStopNotification();
 		System.out.println("Thread terminated:" + this);
 	}

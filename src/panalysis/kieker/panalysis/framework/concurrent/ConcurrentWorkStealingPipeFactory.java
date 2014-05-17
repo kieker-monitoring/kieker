@@ -18,6 +18,9 @@ package kieker.panalysis.framework.concurrent;
 import java.util.LinkedList;
 import java.util.List;
 
+import kieker.panalysis.framework.concurrent.steal.IStealStrategy;
+import kieker.panalysis.framework.concurrent.steal.StealIfEmptyStrategy;
+
 /**
  * @author Christian Wulf
  * 

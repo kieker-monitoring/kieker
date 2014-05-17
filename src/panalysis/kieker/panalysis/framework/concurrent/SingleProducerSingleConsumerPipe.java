@@ -2,6 +2,7 @@ package kieker.panalysis.framework.concurrent;
 
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Callable;
 import java.util.concurrent.LinkedBlockingDeque;
 
 import de.chw.concurrent.CircularWorkStealingDeque;
@@ -12,6 +13,18 @@ public class SingleProducerSingleConsumerPipe<T> extends AbstractPipe<T> {
 
 	// BETTER use a cache-aware queue (see the corresponding paper)
 	private final BlockingQueue<T> queue = new LinkedBlockingDeque<T>();
+
+	private final Callable<T> blockingTake = new Callable<T>() {
+		public T call() throws Exception {
+			return SingleProducerSingleConsumerPipe.this.queue.take();
+		}
+	};
+	private final Callable<T> nonBlockingTake = new Callable<T>() {
+		public T call() throws Exception {
+			return SingleProducerSingleConsumerPipe.this.queue.poll();
+		}
+	};
+	private volatile Callable<T> take = this.blockingTake;
 
 	public void putMultiple(final List<T> elements) {
 		this.queue.addAll(elements);
@@ -34,8 +47,8 @@ public class SingleProducerSingleConsumerPipe<T> extends AbstractPipe<T> {
 	@Override
 	protected T tryTakeInternal() {
 		try {
-			return this.queue.take();
-		} catch (final InterruptedException e) {
+			return this.take.call();
+		} catch (final Exception e) {
 			return null;
 		}
 	}
@@ -51,4 +64,11 @@ public class SingleProducerSingleConsumerPipe<T> extends AbstractPipe<T> {
 	public boolean isEmpty() {
 		return this.queue.isEmpty();
 	}
+
+	@Override
+	public void close() {
+		this.take = this.nonBlockingTake;
+		super.close();
+	}
+
 }

@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.panalysis.framework.concurrent;
+package kieker.panalysis.framework.concurrent.steal;
 
 import java.util.Collection;
 
+import kieker.panalysis.framework.concurrent.ConcurrentWorkStealingPipe;
 import kieker.panalysis.framework.core.IInputPort;
 import kieker.panalysis.framework.core.IStage;
 
@@ -25,19 +26,8 @@ import kieker.panalysis.framework.core.IStage;
  * 
  * @since 1.10
  */
-public class StealIfMayBeDisabledStrategy<T> implements IStealStrategy<T> {
+public interface IStealStrategy<T> {
 
-	public <S extends IStage> T steal(final IInputPort<S, T> inputPort, final Collection<ConcurrentWorkStealingPipe<T>> pipesToStealFrom) {
-		if (inputPort.getOwningStage().mayBeDisabled()) {
-			for (final ConcurrentWorkStealingPipe<T> pipe : pipesToStealFrom) {
-				final T stolenElement = pipe.steal();
-				if (stolenElement != null) {
-					return stolenElement;
-				}
-			}
-		}
-		// BETTER improve stealing efficiency by stealing multiple elements at once
-		return null; // do not expose internal impl details (here: CircularWorkStealingDeque); instead return null
-	}
+	<S extends IStage> T steal(IInputPort<S, T> inputPort, Collection<ConcurrentWorkStealingPipe<T>> pipesToStealFrom);
 
 }

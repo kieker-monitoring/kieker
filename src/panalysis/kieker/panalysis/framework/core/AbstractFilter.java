@@ -162,7 +162,7 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 		for (final IOutputPort<S, ?> port : this.readOnlyOutputPorts) {
 			final IPipe<?> associatedPipe = port.getAssociatedPipe();
 			if (associatedPipe != null) {
-				associatedPipe.getTargetPort().close();
+				associatedPipe.close();
 			} // else: ignore unconnected port
 		}
 	}

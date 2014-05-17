@@ -109,4 +109,9 @@ public interface IPipe<T> {
 	 */
 	void onPipelineStops();
 
+	/**
+	 * @since 1.10
+	 */
+	void close();
+
 }

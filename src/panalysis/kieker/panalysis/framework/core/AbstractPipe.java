@@ -68,4 +68,8 @@ public abstract class AbstractPipe<T> implements IPipe<T> {
 		// empty default implementation
 	}
 
+	public void close() {
+		this.targetPort.close();
+	}
+
 }

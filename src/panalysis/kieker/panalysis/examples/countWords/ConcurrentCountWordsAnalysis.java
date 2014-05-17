@@ -25,6 +25,7 @@ import de.chw.util.Pair;
 
 import kieker.panalysis.framework.concurrent.ConcurrentWorkStealingPipe;
 import kieker.panalysis.framework.concurrent.ConcurrentWorkStealingPipeFactory;
+import kieker.panalysis.framework.concurrent.SingleProducerSingleConsumerPipe;
 import kieker.panalysis.framework.concurrent.TerminationPolicy;
 import kieker.panalysis.framework.concurrent.WorkerThread;
 import kieker.panalysis.framework.core.AbstractFilter;
@@ -49,7 +50,7 @@ import kieker.panalysis.stage.basic.merger.Merger;
  */
 public class ConcurrentCountWordsAnalysis extends Analysis {
 
-	private static final int MAX_NUM_THREADS = 4;
+	private static final int MAX_NUM_THREADS = 2;
 	private static final int NUM_TOKENS_TO_REPEAT = 1000;
 
 	public static final String START_DIRECTORY_NAME = ".";
@@ -181,9 +182,9 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 		stages.add(outputWordsCountStage);
 
 		// connect stages by pipes
-		// this.connectWithConcurrentPipe(readerDistributor.getNewOutputPort(), distributor.OBJECT);
-		final ConcurrentWorkStealingPipeFactory<File> pf = new ConcurrentWorkStealingPipeFactory<File>();
-		this.connectWithStealAwarePipe(pf, readerDistributor.getNewOutputPort(), distributor.OBJECT);
+		this.connectWithConcurrentPipe(readerDistributor.getNewOutputPort(), distributor.OBJECT);
+		// final ConcurrentWorkStealingPipeFactory<File> pf = new ConcurrentWorkStealingPipeFactory<File>();
+		// this.connectWithStealAwarePipe(pf, readerDistributor.getNewOutputPort(), distributor.OBJECT);
 
 		this.connectWithStealAwarePipe(this.pipeFactories[0], distributor.getNewOutputPort(), countWordsStage0.FILE);
 		this.connectWithStealAwarePipe(this.pipeFactories[1], distributor.getNewOutputPort(), countWordsStage1.FILE);
@@ -229,6 +230,17 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 		};
 
 		return pipeline;
+	}
+
+	/**
+	 * @param <T>
+	 * @param newOutputPort
+	 * @param oBJECT
+	 */
+	private <S0 extends ISource, S1 extends ISink<S1>, T> void connectWithConcurrentPipe(final IOutputPort<S0, T> sourcePort, final IInputPort<S1, T> targetPort) {
+		final SingleProducerSingleConsumerPipe<T> pipe = new SingleProducerSingleConsumerPipe<T>();
+		pipe.setSourcePort(sourcePort);
+		pipe.setTargetPort(targetPort);
 	}
 
 	private <A extends ISource, B extends ISink<B>, T> void connectWithStealAwarePipe(final ConcurrentWorkStealingPipeFactory<?> pipeFactory,

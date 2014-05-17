@@ -21,6 +21,7 @@ import java.util.List;
 
 import de.chw.concurrent.CircularWorkStealingDeque;
 
+import kieker.panalysis.framework.concurrent.steal.IStealStrategy;
 import kieker.panalysis.framework.core.AbstractPipe;
 
 /**
@@ -30,7 +31,7 @@ import kieker.panalysis.framework.core.AbstractPipe;
  */
 public class ConcurrentWorkStealingPipe<T> extends AbstractPipe<T> {
 
-	private final CircularWorkStealingDeque<T> circularWorkStealingDeque = new SimpleCircularWorkStealingDeque<T>();
+	private final CircularWorkStealingDeque<T> circularWorkStealingDeque = new CircularWorkStealingDeque<T>();
 	private final IStealStrategy<T> stealStrategy;
 
 	// BETTER use a prioritized list that considers
