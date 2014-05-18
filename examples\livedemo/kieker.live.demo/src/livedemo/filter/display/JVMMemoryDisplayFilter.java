@@ -16,7 +16,6 @@
 
 package livedemo.filter.display;
 
-import java.util.Deque;
 import java.util.Map;
 
 import org.primefaces.model.chart.CartesianChartModel;
@@ -33,7 +32,7 @@ import livedemo.filter.display.util.LimitedHashMap;
  * 
  * @since 1.10
  */
-public class JVMMemoryDisplayFilter extends AbstractDisplayFilter<MemoryRecord, CartesianChartModel> {
+public class JVMMemoryDisplayFilter extends AbstractNonAggregatingDisplayFilter<MemoryRecord, CartesianChartModel> {
 
 	private Map<Object, Number> usedNonHeapData;
 	private Map<Object, Number> usedHeapData;
@@ -68,13 +67,10 @@ public class JVMMemoryDisplayFilter extends AbstractDisplayFilter<MemoryRecord, 
 	}
 
 	@Override
-	protected void fillChartModelWithRecordData(final CartesianChartModel chartModel, final Deque<MemoryRecord> records, final String minutesAndSeconds,
+	protected void fillChartModelWithRecordData(final CartesianChartModel chartModel, final MemoryRecord record, final String minutesAndSeconds,
 			final int numberOfEntries) {
-		if (!records.isEmpty()) {
-			final MemoryRecord lastRecord = records.getLast();
-			this.usedNonHeapData.put(minutesAndSeconds, lastRecord.getNonHeapUsed());
-			this.usedHeapData.put(minutesAndSeconds, lastRecord.getHeapUsed());
-		}
+		this.usedNonHeapData.put(minutesAndSeconds, record.getNonHeapUsed());
+		this.usedHeapData.put(minutesAndSeconds, record.getHeapUsed());
 	}
 
 }

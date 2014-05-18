@@ -16,7 +16,6 @@
 
 package livedemo.filter.display;
 
-import java.util.Deque;
 import java.util.Map;
 
 import org.primefaces.model.chart.CartesianChartModel;
@@ -33,7 +32,7 @@ import livedemo.filter.display.util.LimitedHashMap;
  * 
  * @since 1.10
  */
-public class ClassLoadingDisplayFilter extends AbstractDisplayFilter<ClassLoadingRecord, CartesianChartModel> {
+public class ClassLoadingDisplayFilter extends AbstractNonAggregatingDisplayFilter<ClassLoadingRecord, CartesianChartModel> {
 
 	private Map<Object, Number> totalLoadedClassesData;
 	private Map<Object, Number> loadedClassesData;
@@ -75,14 +74,11 @@ public class ClassLoadingDisplayFilter extends AbstractDisplayFilter<ClassLoadin
 	}
 
 	@Override
-	protected void fillChartModelWithRecordData(final CartesianChartModel chartModel, final Deque<ClassLoadingRecord> records, final String minutesAndSeconds,
+	protected void fillChartModelWithRecordData(final CartesianChartModel chartModel, final ClassLoadingRecord record, final String minutesAndSeconds,
 			final int numberOfEntries) {
-		if (!records.isEmpty()) {
-			final ClassLoadingRecord lastRecord = records.getLast();
-			this.totalLoadedClassesData.put(minutesAndSeconds, lastRecord.getTotalLoadedClassCount());
-			this.loadedClassesData.put(minutesAndSeconds, lastRecord.getLoadedClassCount());
-			this.unloadedClassesData.put(minutesAndSeconds, lastRecord.getUnloadedClassCount());
-		}
+		this.totalLoadedClassesData.put(minutesAndSeconds, record.getTotalLoadedClassCount());
+		this.loadedClassesData.put(minutesAndSeconds, record.getLoadedClassCount());
+		this.unloadedClassesData.put(minutesAndSeconds, record.getUnloadedClassCount());
 	}
 
 }

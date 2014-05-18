@@ -16,7 +16,6 @@
 
 package livedemo.filter.display;
 
-import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,7 +33,7 @@ import livedemo.filter.display.util.LimitedHashMap;
  * 
  * @since 1.10
  */
-public class GCTimeDisplayFilter extends AbstractDisplayFilter<GCRecord, CartesianChartModel> {
+public class GCTimeDisplayFilter extends AbstractNonAggregatingDisplayFilter<GCRecord, CartesianChartModel> {
 
 	private final Map<String, Map<Object, Number>> dataMap = new HashMap<String, Map<Object, Number>>();
 
@@ -48,23 +47,21 @@ public class GCTimeDisplayFilter extends AbstractDisplayFilter<GCRecord, Cartesi
 	}
 
 	@Override
-	protected void fillChartModelWithRecordData(final CartesianChartModel chartModel, final Deque<GCRecord> records, final String minutesAndSeconds,
+	protected void fillChartModelWithRecordData(final CartesianChartModel chartModel, final GCRecord record, final String minutesAndSeconds,
 			final int numberOfEntries) {
-		for (final GCRecord record : records) {
-			final String gcName = record.getGcName();
-			if (!this.dataMap.containsKey(gcName)) {
-				final ChartSeries series = new ChartSeries();
-				final Map<Object, Number> data = new LimitedHashMap<>(numberOfEntries);
+		final String gcName = record.getGcName();
+		if (!this.dataMap.containsKey(gcName)) {
+			final ChartSeries series = new ChartSeries();
+			final Map<Object, Number> data = new LimitedHashMap<>(numberOfEntries);
 
-				chartModel.addSeries(series);
-				series.setData(data);
-				series.setLabel(gcName);
-				this.dataMap.put(gcName, data);
-			}
-
-			final Map<Object, Number> data = this.dataMap.get(gcName);
-			data.put(minutesAndSeconds, record.getCollectionTime());
+			chartModel.addSeries(series);
+			series.setData(data);
+			series.setLabel(gcName);
+			this.dataMap.put(gcName, data);
 		}
+
+		final Map<Object, Number> data = this.dataMap.get(gcName);
+		data.put(minutesAndSeconds, record.getCollectionTime());
 	}
 
 }

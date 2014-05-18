@@ -44,8 +44,8 @@ import kieker.common.record.IMonitoringRecord;
  *            The type of the chart model used by the filter.
  */
 @Plugin(configuration =
-		@Property(name = AbstractDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, defaultValue = AbstractDisplayFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES))
-public abstract class AbstractDisplayFilter<T extends IMonitoringRecord, C extends ChartModel> extends AbstractFilterPlugin {
+		@Property(name = AbstractAggregatingDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, defaultValue = AbstractAggregatingDisplayFilter.CONFIG_PROPERTY_VALUE_NUMBER_OF_ENTRIES))
+public abstract class AbstractAggregatingDisplayFilter<T extends IMonitoringRecord, C extends ChartModel> extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME_RECORDS = "inputPortRecords";
 	public static final String INPUT_PORT_NAME_TIMESTAMPS = "inputPortTimestamps";
@@ -55,23 +55,23 @@ public abstract class AbstractDisplayFilter<T extends IMonitoringRecord, C exten
 
 	public static final String CONFIG_PROPERTY_VALUE_RESPONSETIME_TIMEUNIT = "NANOSECONDS";
 
-	private static final Log LOG = LogFactory.getLog(AbstractDisplayFilter.class);
+	private static final Log LOG = LogFactory.getLog(AbstractAggregatingDisplayFilter.class);
 
 	private final int numberOfEntries;
 	private final TimeUnit timeunit;
 	private final Deque<T> records;
 	private final C chartModel;
 
-	public AbstractDisplayFilter(final Configuration configuration, final IProjectContext projectContext) {
+	public AbstractAggregatingDisplayFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
-		this.numberOfEntries = configuration.getIntProperty(AbstractDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES);
+		this.numberOfEntries = configuration.getIntProperty(AbstractAggregatingDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES);
 		final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
 		TimeUnit recordTimeunit;
 		try {
 			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
 		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
-			AbstractDisplayFilter.LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
+			AbstractAggregatingDisplayFilter.LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
 			recordTimeunit = TimeUnit.NANOSECONDS;
 		}
 		this.timeunit = recordTimeunit;
@@ -80,12 +80,12 @@ public abstract class AbstractDisplayFilter<T extends IMonitoringRecord, C exten
 		this.records = new ConcurrentLinkedDeque<T>();
 	}
 
-	@InputPort(name = AbstractDisplayFilter.INPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class })
+	@InputPort(name = AbstractAggregatingDisplayFilter.INPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class })
 	public void inputRecords(final T record) {
 		this.records.add(record);
 	}
 
-	@InputPort(name = ClassLoadingDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS, eventTypes = { Long.class })
+	@InputPort(name = AbstractAggregatingDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS, eventTypes = { Long.class })
 	public synchronized void inputTimeEvents(final Long timestamp) {
 		final Date date = new Date(TimeUnit.MILLISECONDS.convert(timestamp, this.timeunit));
 		final String minutesAndSeconds = date.toString().substring(14, 19);
@@ -102,7 +102,7 @@ public abstract class AbstractDisplayFilter<T extends IMonitoringRecord, C exten
 	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(AbstractDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, String.valueOf(this.numberOfEntries));
+		configuration.setProperty(AbstractAggregatingDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, String.valueOf(this.numberOfEntries));
 		return configuration;
 	}
 

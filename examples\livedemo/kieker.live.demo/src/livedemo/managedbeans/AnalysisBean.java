@@ -37,7 +37,8 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import livedemo.entities.EnrichedOperationExecutionRecord;
 import livedemo.filter.Distributor;
 import livedemo.filter.OER2EnrichedOERFilter;
-import livedemo.filter.display.AbstractDisplayFilter;
+import livedemo.filter.display.AbstractAggregatingDisplayFilter;
+import livedemo.filter.display.AbstractNonAggregatingDisplayFilter;
 import livedemo.filter.display.ClassLoadingDisplayFilter;
 import livedemo.filter.display.CompilationDisplayFilter;
 import livedemo.filter.display.GCCountDisplayFilter;
@@ -103,11 +104,11 @@ public class AnalysisBean {
 		this.responsetimeFilter = new MethodResponsetimeDisplayFilter(responsetimeConfiguration, this.analysisInstance);
 
 		final Configuration classLoadingConfiguration = new Configuration();
-		classLoadingConfiguration.setProperty(AbstractDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, this.numberOfResponsetimeEntries);
+		classLoadingConfiguration.setProperty(AbstractAggregatingDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, this.numberOfResponsetimeEntries);
 		this.classLoadingDisplayFilter = new ClassLoadingDisplayFilter(classLoadingConfiguration, this.analysisInstance);
 
 		final Configuration threadsStatusConfiguration = new Configuration();
-		threadsStatusConfiguration.setProperty(AbstractDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, this.numberOfResponsetimeEntries);
+		threadsStatusConfiguration.setProperty(AbstractAggregatingDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, this.numberOfResponsetimeEntries);
 		this.threadsStatusDisplayFilter = new ThreadsStatusDisplayFilter(threadsStatusConfiguration, this.analysisInstance);
 
 		this.jitCompilationDisplayFilter = new CompilationDisplayFilter(threadsStatusConfiguration, this.analysisInstance);
@@ -172,34 +173,22 @@ public class AnalysisBean {
 				MemSwapUtilizationDisplayFilter.INPUT_PORT_NAME_EVENTS);
 
 		this.analysisInstance.connect(distributor, Distributor.OUTPUT_PORT_NAME_CLASS_LOADING_RECORDS, this.classLoadingDisplayFilter,
-				AbstractDisplayFilter.INPUT_PORT_NAME_RECORDS);
-		this.analysisInstance.connect(timeReader, TimeReader.OUTPUT_PORT_NAME_TIMESTAMPS, this.classLoadingDisplayFilter,
-				AbstractDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS);
+				AbstractNonAggregatingDisplayFilter.INPUT_PORT_NAME_RECORDS);
 
 		this.analysisInstance.connect(distributor, Distributor.OUTPUT_PORT_NAME_THREADS_STATUS_RECORDS, this.threadsStatusDisplayFilter,
-				AbstractDisplayFilter.INPUT_PORT_NAME_RECORDS);
-		this.analysisInstance.connect(timeReader, TimeReader.OUTPUT_PORT_NAME_TIMESTAMPS, this.threadsStatusDisplayFilter,
-				AbstractDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS);
+				AbstractNonAggregatingDisplayFilter.INPUT_PORT_NAME_RECORDS);
 
 		this.analysisInstance.connect(distributor, Distributor.OUTPUT_PORT_NAME_COMPILATION_RECORDS, this.jitCompilationDisplayFilter,
-				AbstractDisplayFilter.INPUT_PORT_NAME_RECORDS);
-		this.analysisInstance.connect(timeReader, TimeReader.OUTPUT_PORT_NAME_TIMESTAMPS, this.jitCompilationDisplayFilter,
-				AbstractDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS);
+				AbstractNonAggregatingDisplayFilter.INPUT_PORT_NAME_RECORDS);
 
 		this.analysisInstance.connect(distributor, Distributor.OUTPUT_PORT_NAME_GC_RECORDS, this.gcCountDisplayFilter,
-				AbstractDisplayFilter.INPUT_PORT_NAME_RECORDS);
-		this.analysisInstance.connect(timeReader, TimeReader.OUTPUT_PORT_NAME_TIMESTAMPS, this.gcCountDisplayFilter,
-				AbstractDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS);
+				AbstractNonAggregatingDisplayFilter.INPUT_PORT_NAME_RECORDS);
 
 		this.analysisInstance.connect(distributor, Distributor.OUTPUT_PORT_NAME_GC_RECORDS, this.gcTimeDisplayFilter,
-				AbstractDisplayFilter.INPUT_PORT_NAME_RECORDS);
-		this.analysisInstance.connect(timeReader, TimeReader.OUTPUT_PORT_NAME_TIMESTAMPS, this.gcTimeDisplayFilter,
-				AbstractDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS);
+				AbstractNonAggregatingDisplayFilter.INPUT_PORT_NAME_RECORDS);
 
 		this.analysisInstance.connect(distributor, Distributor.OUTPUT_PORT_NAME_JVM_MEMORY_RECORDS, this.jvmMemoryDisplayFilter,
-				AbstractDisplayFilter.INPUT_PORT_NAME_RECORDS);
-		this.analysisInstance.connect(timeReader, TimeReader.OUTPUT_PORT_NAME_TIMESTAMPS, this.jvmMemoryDisplayFilter,
-				AbstractDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS);
+				AbstractAggregatingDisplayFilter.INPUT_PORT_NAME_RECORDS);
 
 		this.analysisInstance.connect(reader, JMXReader.OUTPUT_PORT_NAME_RECORDS, ertf, ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
 

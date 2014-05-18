@@ -16,7 +16,6 @@
 
 package livedemo.filter.display;
 
-import java.util.Deque;
 import java.util.Map;
 
 import org.primefaces.model.chart.CartesianChartModel;
@@ -33,7 +32,7 @@ import livedemo.filter.display.util.LimitedHashMap;
  * 
  * @since 1.10
  */
-public class CompilationDisplayFilter extends AbstractDisplayFilter<CompilationRecord, CartesianChartModel> {
+public class CompilationDisplayFilter extends AbstractNonAggregatingDisplayFilter<CompilationRecord, CartesianChartModel> {
 
 	private Map<Object, Number> totalCompilationTimeData;
 	private ChartSeries totalCompilationTimeSeries;
@@ -58,12 +57,9 @@ public class CompilationDisplayFilter extends AbstractDisplayFilter<CompilationR
 	}
 
 	@Override
-	protected void fillChartModelWithRecordData(final CartesianChartModel chartModel, final Deque<CompilationRecord> records, final String minutesAndSeconds,
+	protected void fillChartModelWithRecordData(final CartesianChartModel chartModel, final CompilationRecord record, final String minutesAndSeconds,
 			final int numberOfEntries) {
-		if (!records.isEmpty()) {
-			final CompilationRecord lastRecord = records.getLast();
-			this.totalCompilationTimeData.put(minutesAndSeconds, lastRecord.getTotalCompilationTime());
-		}
+		this.totalCompilationTimeData.put(minutesAndSeconds, record.getTotalCompilationTime());
 	}
 
 }

@@ -16,7 +16,6 @@
 
 package livedemo.filter.display;
 
-import java.util.Deque;
 import java.util.Map;
 
 import org.primefaces.model.chart.CartesianChartModel;
@@ -33,7 +32,7 @@ import livedemo.filter.display.util.LimitedHashMap;
  * 
  * @since 1.10
  */
-public class ThreadsStatusDisplayFilter extends AbstractDisplayFilter<ThreadsStatusRecord, CartesianChartModel> {
+public class ThreadsStatusDisplayFilter extends AbstractNonAggregatingDisplayFilter<ThreadsStatusRecord, CartesianChartModel> {
 
 	private Map<Object, Number> threadsData;
 	private Map<Object, Number> peakThreadsData;
@@ -75,14 +74,11 @@ public class ThreadsStatusDisplayFilter extends AbstractDisplayFilter<ThreadsSta
 	}
 
 	@Override
-	protected void fillChartModelWithRecordData(final CartesianChartModel chartModel, final Deque<ThreadsStatusRecord> records, final String minutesAndSeconds,
+	protected void fillChartModelWithRecordData(final CartesianChartModel chartModel, final ThreadsStatusRecord record, final String minutesAndSeconds,
 			final int numberOfEntries) {
-		if (!records.isEmpty()) {
-			final ThreadsStatusRecord lastRecord = records.getLast();
-			this.threadsData.put(minutesAndSeconds, lastRecord.getThreadCount());
-			this.peakThreadsData.put(minutesAndSeconds, lastRecord.getPeakThreadCount());
-			this.daemonThreadsData.put(minutesAndSeconds, lastRecord.getDaemonThreadCount());
-		}
+		this.threadsData.put(minutesAndSeconds, record.getThreadCount());
+		this.peakThreadsData.put(minutesAndSeconds, record.getPeakThreadCount());
+		this.daemonThreadsData.put(minutesAndSeconds, record.getDaemonThreadCount());
 	}
 
 }
