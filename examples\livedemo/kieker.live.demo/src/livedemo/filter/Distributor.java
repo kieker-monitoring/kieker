@@ -27,6 +27,7 @@ import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.record.jvm.ClassLoadingRecord;
 import kieker.common.record.jvm.CompilationRecord;
 import kieker.common.record.jvm.GCRecord;
+import kieker.common.record.jvm.MemoryRecord;
 import kieker.common.record.jvm.ThreadsStatusRecord;
 import kieker.common.record.system.CPUUtilizationRecord;
 import kieker.common.record.system.MemSwapUsageRecord;
@@ -43,7 +44,8 @@ import kieker.common.record.system.MemSwapUsageRecord;
 	@OutputPort(eventTypes = CompilationRecord.class, name = Distributor.OUTPUT_PORT_NAME_COMPILATION_RECORDS),
 	@OutputPort(eventTypes = CPUUtilizationRecord.class, name = Distributor.OUTPUT_PORT_NAME_CPU_UTILIZATION_RECORDS),
 	@OutputPort(eventTypes = MemSwapUsageRecord.class, name = Distributor.OUTPUT_PORT_NAME_MEM_SWAP_USAGE_RECORDS),
-	@OutputPort(eventTypes = OperationExecutionRecord.class, name = Distributor.OUTPUT_PORT_NAME_OPERATION_EXECUTION_RECORDS)
+	@OutputPort(eventTypes = OperationExecutionRecord.class, name = Distributor.OUTPUT_PORT_NAME_OPERATION_EXECUTION_RECORDS),
+	@OutputPort(eventTypes = MemoryRecord.class, name = Distributor.OUTPUT_PORT_NAME_JVM_MEMORY_RECORDS)
 })
 public class Distributor extends AbstractFilterPlugin {
 
@@ -56,6 +58,7 @@ public class Distributor extends AbstractFilterPlugin {
 	public static final String OUTPUT_PORT_NAME_CPU_UTILIZATION_RECORDS = "cpuUtilizationRecords";
 	public static final String OUTPUT_PORT_NAME_MEM_SWAP_USAGE_RECORDS = "memSwapUsageRecords";
 	public static final String OUTPUT_PORT_NAME_OPERATION_EXECUTION_RECORDS = "operationExecutionRecords";
+	public static final String OUTPUT_PORT_NAME_JVM_MEMORY_RECORDS = "jvmMemoryRecords";
 
 	public Distributor(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
@@ -82,6 +85,8 @@ public class Distributor extends AbstractFilterPlugin {
 			super.deliver(Distributor.OUTPUT_PORT_NAME_MEM_SWAP_USAGE_RECORDS, record);
 		} else if (record instanceof OperationExecutionRecord) {
 			super.deliver(Distributor.OUTPUT_PORT_NAME_OPERATION_EXECUTION_RECORDS, record);
+		} else if (record instanceof MemoryRecord) {
+			super.deliver(Distributor.OUTPUT_PORT_NAME_JVM_MEMORY_RECORDS, record);
 		}
 	}
 

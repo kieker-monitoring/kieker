@@ -40,6 +40,7 @@ public class JVMDataDisplayBean {
 	private CartesianChartModel compilationModel;
 	private CartesianChartModel classLoadingModel;
 	private CartesianChartModel threadsStatusModel;
+	private CartesianChartModel jvmMemoryModel;
 
 	public JVMDataDisplayBean() {}
 
@@ -50,6 +51,7 @@ public class JVMDataDisplayBean {
 		this.compilationModel = this.analysisBean.getJitCompilationDisplayFilter().getChartModel();
 		this.classLoadingModel = this.analysisBean.getClassLoadingDisplayFilter().getChartModel();
 		this.threadsStatusModel = this.analysisBean.getThreadsStatusDisplayFilter().getChartModel();
+		this.jvmMemoryModel = this.analysisBean.getJvmHeapMemoryDisplayFilter().getChartModel();
 	}
 
 	public void setAnalysisBean(final AnalysisBean analysisBean) {
@@ -76,4 +78,7 @@ public class JVMDataDisplayBean {
 		return this.threadsStatusModel;
 	}
 
+	public CartesianChartModel getJvmMemoryModel() {
+		return this.jvmMemoryModel;
+	}
 }

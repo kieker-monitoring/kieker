@@ -70,6 +70,10 @@
 				<p:lineChart id="gcCount" value="#{jvmDataDisplayBean.gcCountModel}" legendPosition="ne"  
 			    	title="Garbage Collecting Count" minY="0" style="height:300px;margin-top:20px"
 			    	xaxisLabel="Time" yaxisLabel="Number of collections"/>	
+			    
+			    <p:lineChart id="jvmMemory" value="#{jvmDataDisplayBean.jvmMemoryModel}" legendPosition="ne"  
+			    	title="JVM Memory Usage" minY="0" style="height:300px;margin-top:20px"
+			    	xaxisLabel="Time" yaxisLabel="Memory (Bytes)"/>	
 			    		
 				<p:lineChart id="jit" value="#{jvmDataDisplayBean.compilationModel}" legendPosition="ne"  
 			    	title="Total Compilation Time of JIT Compiler" minY="0" style="height:300px;margin-top:20px"
@@ -79,7 +83,7 @@
 			    	title="Class Loading" minY="0" style="height:300px;margin-top:20px"
 			    	xaxisLabel="Time" yaxisLabel="Number of classes"/>	
 
-			   <p:poll interval="1" update="jit, classloading, threads, gcCount, gcTime, loadButton" />	  		
+			   <p:poll interval="1" update="jit, classloading, threads, gcCount, gcTime, jvmMemory, loadButton" />	  		
 			   <p:poll interval="1" update="loadButton" /> 	
 			</h:form>
 		</div>

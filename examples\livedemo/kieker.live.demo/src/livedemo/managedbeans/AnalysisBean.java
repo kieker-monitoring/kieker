@@ -42,6 +42,7 @@ import livedemo.filter.display.ClassLoadingDisplayFilter;
 import livedemo.filter.display.CompilationDisplayFilter;
 import livedemo.filter.display.GCCountDisplayFilter;
 import livedemo.filter.display.GCTimeDisplayFilter;
+import livedemo.filter.display.JVMMemoryDisplayFilter;
 import livedemo.filter.display.MethodResponsetimeDisplayFilter;
 import livedemo.filter.display.ThreadsStatusDisplayFilter;
 
@@ -74,6 +75,7 @@ public class AnalysisBean {
 	private final CompilationDisplayFilter jitCompilationDisplayFilter;
 	private final GCCountDisplayFilter gcCountDisplayFilter;
 	private final GCTimeDisplayFilter gcTimeDisplayFilter;
+	private final JVMMemoryDisplayFilter jvmMemoryDisplayFilter;
 
 	public AnalysisBean() {
 		this.updateThread = new UpdateThread(1000); // will notify its observers every second
@@ -111,6 +113,7 @@ public class AnalysisBean {
 		this.jitCompilationDisplayFilter = new CompilationDisplayFilter(threadsStatusConfiguration, this.analysisInstance);
 		this.gcCountDisplayFilter = new GCCountDisplayFilter(threadsStatusConfiguration, this.analysisInstance);
 		this.gcTimeDisplayFilter = new GCTimeDisplayFilter(threadsStatusConfiguration, this.analysisInstance);
+		this.jvmMemoryDisplayFilter = new JVMMemoryDisplayFilter(threadsStatusConfiguration, this.analysisInstance);
 
 		this.tagCloudFilter = new MethodAndComponentFlowDisplayFilter(new Configuration(), this.analysisInstance);
 
@@ -193,6 +196,11 @@ public class AnalysisBean {
 		this.analysisInstance.connect(timeReader, TimeReader.OUTPUT_PORT_NAME_TIMESTAMPS, this.gcTimeDisplayFilter,
 				AbstractDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS);
 
+		this.analysisInstance.connect(distributor, Distributor.OUTPUT_PORT_NAME_JVM_MEMORY_RECORDS, this.jvmMemoryDisplayFilter,
+				AbstractDisplayFilter.INPUT_PORT_NAME_RECORDS);
+		this.analysisInstance.connect(timeReader, TimeReader.OUTPUT_PORT_NAME_TIMESTAMPS, this.jvmMemoryDisplayFilter,
+				AbstractDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS);
+
 		this.analysisInstance.connect(reader, JMXReader.OUTPUT_PORT_NAME_RECORDS, ertf, ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
 
 		this.analysisInstance.connect(ertf, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.systemModelRepository);
@@ -244,6 +252,10 @@ public class AnalysisBean {
 
 	public GCTimeDisplayFilter getGcTimeDisplayFilter() {
 		return this.gcTimeDisplayFilter;
+	}
+
+	public JVMMemoryDisplayFilter getJvmHeapMemoryDisplayFilter() {
+		return this.jvmMemoryDisplayFilter;
 	}
 
 }
