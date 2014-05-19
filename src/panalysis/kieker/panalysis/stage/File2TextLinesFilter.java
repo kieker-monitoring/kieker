@@ -35,9 +35,9 @@ import kieker.panalysis.framework.core.IOutputPort;
  */
 public class File2TextLinesFilter extends AbstractFilter<File2TextLinesFilter> {
 
-	public final IInputPort<File2TextLinesFilter, File> FILE = this.createInputPort();
+	public final IInputPort<File2TextLinesFilter, File> fileInputPort = this.createInputPort();
 
-	public final IOutputPort<File2TextLinesFilter, String> TEXT_LINE = this.createOutputPort();
+	public final IOutputPort<File2TextLinesFilter, String> textLineOutputPort = this.createOutputPort();
 
 	private final String charset = "UTF-8";
 
@@ -46,7 +46,7 @@ public class File2TextLinesFilter extends AbstractFilter<File2TextLinesFilter> {
 	 */
 	@Override
 	protected boolean execute(final Context<File2TextLinesFilter> context) {
-		final File file = context.tryTake(this.FILE);
+		final File file = context.tryTake(this.fileInputPort);
 		if (file == null) {
 			return false;
 		}
@@ -58,7 +58,7 @@ public class File2TextLinesFilter extends AbstractFilter<File2TextLinesFilter> {
 			while ((line = reader.readLine()) != null) {
 				line = line.trim();
 				if (line.length() != 0) {
-					context.put(this.TEXT_LINE, line);
+					context.put(this.textLineOutputPort, line);
 				} // else: ignore empty line
 			}
 		} catch (final FileNotFoundException e) {

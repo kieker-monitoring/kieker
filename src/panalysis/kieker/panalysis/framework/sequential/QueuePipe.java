@@ -22,6 +22,10 @@ import java.util.Queue;
 import de.chw.concurrent.CircularWorkStealingDeque;
 
 import kieker.panalysis.framework.core.AbstractPipe;
+import kieker.panalysis.framework.core.IInputPort;
+import kieker.panalysis.framework.core.IOutputPort;
+import kieker.panalysis.framework.core.ISink;
+import kieker.panalysis.framework.core.ISource;
 
 /**
  * @author Christian Wulf
@@ -31,6 +35,12 @@ import kieker.panalysis.framework.core.AbstractPipe;
 public class QueuePipe<T> extends AbstractPipe<T> {
 
 	private final Queue<T> queue = new LinkedList<T>();
+
+	static public <S0 extends ISource, S1 extends ISink<S1>, T> void connect(final IOutputPort<S0, T> sourcePort, final IInputPort<S1, T> targetPort) {
+		final QueuePipe<T> pipe = new QueuePipe<T>();
+		pipe.setSourcePort(sourcePort);
+		pipe.setTargetPort(targetPort);
+	}
 
 	@Override
 	public void putInternal(final T element) {

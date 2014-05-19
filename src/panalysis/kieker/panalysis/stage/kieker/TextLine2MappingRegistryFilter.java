@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.panalysis.stage;
+package kieker.panalysis.stage.kieker;
 
 import java.util.Map;
 

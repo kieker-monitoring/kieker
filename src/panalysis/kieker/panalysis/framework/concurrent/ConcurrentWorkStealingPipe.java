@@ -23,6 +23,10 @@ import de.chw.concurrent.CircularWorkStealingDeque;
 
 import kieker.panalysis.framework.concurrent.steal.IStealStrategy;
 import kieker.panalysis.framework.core.AbstractPipe;
+import kieker.panalysis.framework.core.IInputPort;
+import kieker.panalysis.framework.core.IOutputPort;
+import kieker.panalysis.framework.core.ISink;
+import kieker.panalysis.framework.core.ISource;
 
 /**
  * @author Christian Wulf
@@ -43,8 +47,13 @@ public class ConcurrentWorkStealingPipe<T> extends AbstractPipe<T> {
 	private List<ConcurrentWorkStealingPipe<T>> pipesToStealFrom;
 	private int numTakenElements = 0;
 
-	public ConcurrentWorkStealingPipe(final IStealStrategy<T> stealStrategy) {
+	ConcurrentWorkStealingPipe(final IStealStrategy<T> stealStrategy) {
 		this.stealStrategy = stealStrategy;
+	}
+
+	public <S0 extends ISource, S1 extends ISink<S1>> void connect(final IOutputPort<S0, T> sourcePort, final IInputPort<S1, T> targetPort) {
+		this.setSourcePort(sourcePort);
+		this.setTargetPort(targetPort);
 	}
 
 	@Override

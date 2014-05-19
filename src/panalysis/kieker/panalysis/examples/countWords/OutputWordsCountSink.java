@@ -20,7 +20,6 @@ import java.io.File;
 
 import de.chw.util.Pair;
 
-import kieker.panalysis.framework.concurrent.IoStage;
 import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Context;
 import kieker.panalysis.framework.core.IInputPort;
@@ -30,11 +29,15 @@ import kieker.panalysis.framework.core.IInputPort;
  * 
  * @since 1.10
  */
-public class OutputWordsCountSink extends AbstractFilter<OutputWordsCountSink> implements IoStage {
+public class OutputWordsCountSink extends AbstractFilter<OutputWordsCountSink> {
 
 	public final IInputPort<OutputWordsCountSink, Pair<File, Integer>> FILE_WORDCOUNT_TUPLE = this.createInputPort();
 
 	private int numFiles = 0;
+
+	public OutputWordsCountSink() {
+		this.setAccessesDeviceId(2);
+	}
 
 	@Override
 	protected boolean execute(final Context<OutputWordsCountSink> context) {

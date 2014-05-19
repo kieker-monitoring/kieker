@@ -16,7 +16,6 @@
 
 package kieker.panalysis.framework.concurrent;
 
-import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.IPipeline;
 import kieker.panalysis.framework.core.IStage;
 
@@ -127,7 +126,7 @@ public class WorkerThread extends Thread {
 	}
 
 	public void terminate(final TerminationPolicy terminationPolicyToUse) {
-		for (final AbstractFilter<?> startStage : this.pipeline.getStartStages()) {
+		for (final IStage startStage : this.pipeline.getStartStages()) {
 			startStage.fireSignalClosingToAllInputPorts();
 		}
 

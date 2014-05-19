@@ -13,22 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.panalysis.framework.core;
+package kieker.panalysis.predicate;
 
-import java.util.List;
+import java.io.File;
+
+import com.google.common.base.Predicate;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  */
-public interface IPipeline {
+public class IsDirectoryPredicate implements Predicate<File> {
 
-	List<? extends IStage> getStages();
+	public boolean apply(final File file) {
+		return file.isDirectory();
+	}
 
-	List<? extends IStage> getStartStages();
-
-	void fireStartNotification() throws Exception;
-
-	void fireStopNotification();
 }

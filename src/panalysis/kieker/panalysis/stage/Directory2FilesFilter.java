@@ -18,11 +18,12 @@ package kieker.panalysis.stage;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.Arrays;
+import java.util.Comparator;
 
-import kieker.common.util.filesystem.BinaryCompressionMethod;
-import kieker.common.util.filesystem.FSUtil;
 import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Context;
+import kieker.panalysis.framework.core.IInputPort;
 import kieker.panalysis.framework.core.IOutputPort;
 
 /**
@@ -32,22 +33,28 @@ import kieker.panalysis.framework.core.IOutputPort;
  */
 public class Directory2FilesFilter extends AbstractFilter<Directory2FilesFilter> {
 
-	public final IOutputPort<Directory2FilesFilter, File> FILE = this.createOutputPort();
+	public final IInputPort<Directory2FilesFilter, File> directoryInputPort = this.createInputPort();
 
-	private final File inputDirectory;
-	private final FileFilter filter;
+	public final IOutputPort<Directory2FilesFilter, File> fileOutputPort = this.createOutputPort();
 
-	public Directory2FilesFilter(final File inputDir) {
-		this.inputDirectory = inputDir;
+	private FileFilter filter;
+	private Comparator<File> fileComparator;
 
-		this.filter = new FileFilter() {
-			public boolean accept(final File pathname) {
-				final String name = pathname.getName();
-				return pathname.isFile()
-						&& name.startsWith(FSUtil.FILE_PREFIX)
-						&& (name.endsWith(FSUtil.NORMAL_FILE_EXTENSION) || BinaryCompressionMethod.hasValidFileExtension(name));
-			}
-		};
+	public Directory2FilesFilter() {
+		super();
+	}
+
+	public Directory2FilesFilter(final FileFilter fileFilter) {
+		this.setFilter(fileFilter);
+	}
+
+	public Directory2FilesFilter(final Comparator<File> fileComparator) {
+		this.setFileComparator(fileComparator);
+	}
+
+	public Directory2FilesFilter(final FileFilter fileFilter, final Comparator<File> fileComparator) {
+		this.setFilter(fileFilter);
+		this.setFileComparator(fileComparator);
 	}
 
 	/**
@@ -55,15 +62,43 @@ public class Directory2FilesFilter extends AbstractFilter<Directory2FilesFilter>
 	 */
 	@Override
 	protected boolean execute(final Context<Directory2FilesFilter> context) {
-		final File inputDir = this.inputDirectory;
+		final File inputDir = context.tryTake(this.directoryInputPort);
+		if (inputDir == null) {
+			return false;
+		}
 
 		final File[] inputFiles = inputDir.listFiles(this.filter);
 
+		if (inputFiles == null) {
+			this.logger.error("Directory '" + inputDir + "' does not exist or an I/O error occured.");
+			return true;
+		}
+
+		if (this.fileComparator != null) {
+			Arrays.sort(inputFiles, this.fileComparator);
+		}
+
 		for (final File file : inputFiles) {
-			context.put(this.FILE, file);
+			context.put(this.fileOutputPort, file);
 		}
 
 		return true;
+	}
+
+	public FileFilter getFilter() {
+		return this.filter;
+	}
+
+	public void setFilter(final FileFilter filter) {
+		this.filter = filter;
+	}
+
+	public Comparator<File> getFileComparator() {
+		return this.fileComparator;
+	}
+
+	public void setFileComparator(final Comparator<File> fileComparator) {
+		this.fileComparator = fileComparator;
 	}
 
 }

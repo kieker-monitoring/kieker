@@ -19,8 +19,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import kieker.panalysis.framework.util.Cloner;
-
 /**
  * @author Nils Christian Ehmke
  * 

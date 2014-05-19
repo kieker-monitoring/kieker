@@ -61,6 +61,20 @@ public class QueuedCountWordsAnalysis extends Analysis {
 		this.workerThread = new WorkerThread(pipeline, 0);
 	}
 
+	@Override
+	public void start() {
+		super.start();
+
+		this.workerThread.terminate(TerminationPolicy.TERMINATE_STAGE_AFTER_UNSUCCESSFUL_EXECUTION);
+
+		this.workerThread.start();
+		try {
+			this.workerThread.join(60 * SECONDS);
+		} catch (final InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
 	private IPipeline buildNonIoPipeline() {
 		// create stages
 		final RepeaterSource<String> repeaterSource = RepeaterSource.create(".", NUM_TOKENS_TO_REPEAT);
@@ -89,7 +103,7 @@ public class QueuedCountWordsAnalysis extends Analysis {
 		pipes[3] = this.connectWithSequentialPipe(distributor.getNewOutputPort(), countWordsStage1.FILE);
 		pipes[4] = this.connectWithSequentialPipe(countWordsStage0.WORDSCOUNT, merger.getNewInputPort());
 		pipes[5] = this.connectWithSequentialPipe(countWordsStage1.WORDSCOUNT, merger.getNewInputPort());
-		pipes[6] = this.connectWithSequentialPipe(merger.OBJECT, outputWordsCountStage.FILE_WORDCOUNT_TUPLE);
+		pipes[6] = this.connectWithSequentialPipe(merger.outputPort, outputWordsCountStage.FILE_WORDCOUNT_TUPLE);
 
 		repeaterSource.START.setAssociatedPipe(new MethodCallPipe<Boolean>(Boolean.TRUE));
 
@@ -137,18 +151,8 @@ public class QueuedCountWordsAnalysis extends Analysis {
 		return pipe;
 	}
 
-	@Override
-	public void start() {
-		super.start();
-
-		this.workerThread.terminate(TerminationPolicy.TERMINATE_STAGE_AFTER_UNSUCCESSFUL_EXECUTION);
-
-		this.workerThread.start();
-		try {
-			this.workerThread.join(60 * SECONDS);
-		} catch (final InterruptedException e) {
-			e.printStackTrace();
-		}
+	WorkerThread getWorkerThread() {
+		return this.workerThread;
 	}
 
 	public static void main(final String[] args) {

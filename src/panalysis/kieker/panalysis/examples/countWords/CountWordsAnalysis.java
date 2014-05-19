@@ -55,6 +55,24 @@ public class CountWordsAnalysis extends Analysis {
 		this.pipeline = this.buildNonIoPipeline();
 	}
 
+	@Override
+	public void start() {
+		super.start();
+		try {
+			this.pipeline.fireStartNotification();
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+
+		this.pipeline.getStartStages().get(0).execute();
+
+		try {
+			this.pipeline.fireStopNotification();
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	private IPipeline buildNonIoPipeline() {
 		// create stages
 		final RepeaterSource<String> repeaterSource = RepeaterSource.create(".", NUM_TOKENS_TO_REPEAT);
@@ -83,7 +101,7 @@ public class CountWordsAnalysis extends Analysis {
 		pipes[3] = this.connectWithSequentialPipe(distributor.getNewOutputPort(), countWordsStage1.FILE);
 		pipes[4] = this.connectWithSequentialPipe(countWordsStage0.WORDSCOUNT, merger.getNewInputPort());
 		pipes[5] = this.connectWithSequentialPipe(countWordsStage1.WORDSCOUNT, merger.getNewInputPort());
-		pipes[6] = this.connectWithSequentialPipe(merger.OBJECT, outputWordsCountStage.FILE_WORDCOUNT_TUPLE);
+		pipes[6] = this.connectWithSequentialPipe(merger.outputPort, outputWordsCountStage.FILE_WORDCOUNT_TUPLE);
 
 		repeaterSource.START.setAssociatedPipe(new MethodCallPipe<Boolean>(Boolean.TRUE));
 
@@ -129,24 +147,6 @@ public class CountWordsAnalysis extends Analysis {
 		pipe.setSourcePort(sourcePort);
 		pipe.setTargetPort(targetPort);
 		return pipe;
-	}
-
-	@Override
-	public void start() {
-		super.start();
-		try {
-			this.pipeline.fireStartNotification();
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
-
-		this.pipeline.getStartStages().get(0).execute();
-
-		try {
-			this.pipeline.fireStopNotification();
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	public static void main(final String[] args) {

@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-
-package kieker.panalysis.examples.countingObjects;
+package kieker.panalysis.examples.recordReader;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import kieker.panalysis.examples.countWords.DirectoryName2Files;
+import kieker.common.record.IMonitoringRecord;
+import kieker.panalysis.framework.concurrent.TerminationPolicy;
+import kieker.panalysis.framework.concurrent.WorkerThread;
 import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Analysis;
 import kieker.panalysis.framework.core.IInputPort;
@@ -32,52 +32,70 @@ import kieker.panalysis.framework.core.ISink;
 import kieker.panalysis.framework.core.ISource;
 import kieker.panalysis.framework.core.IStage;
 import kieker.panalysis.framework.sequential.MethodCallPipe;
-import kieker.panalysis.stage.TypeLoggerFilter;
-import kieker.panalysis.stage.basic.RepeaterSource;
-import kieker.panalysis.stage.composite.CycledCountingFilter;
+import kieker.panalysis.framework.sequential.QueuePipe;
+import kieker.panalysis.framework.util.BaseStage2StageExtractor;
+import kieker.panalysis.stage.Collector;
+import kieker.panalysis.stage.kieker.File2RecordFilter;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  */
-public class CountingObjectsAnalysis extends Analysis {
+public class RecordReaderAnalysis extends Analysis {
 
-	private IPipeline pipeline;
+	private static final int SECONDS = 1000;
+
+	private WorkerThread workerThread;
+
+	private File2RecordFilter file2RecordFilter;
+	private Collector<IMonitoringRecord> collector;
 
 	@Override
 	public void init() {
 		super.init();
-
-		this.pipeline = this.buildNonIoPipeline();
+		final IPipeline pipeline = this.buildPipeline();
+		this.workerThread = new WorkerThread(pipeline, 0);
 	}
 
-	private IPipeline buildNonIoPipeline() {
+	@Override
+	public void start() {
+		super.start();
+
+		this.workerThread.terminate(TerminationPolicy.TERMINATE_STAGE_AFTER_UNSUCCESSFUL_EXECUTION);
+
+		this.workerThread.start();
+		try {
+			this.workerThread.join(60 * SECONDS);
+		} catch (final InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	void setInputFile(final File file) {
+		this.file2RecordFilter.fileInputPort.setAssociatedPipe(new MethodCallPipe<File>(file));
+	}
+
+	private IPipeline buildPipeline() {
+		final BaseStage2StageExtractor baseStage2StageExtractor = new BaseStage2StageExtractor();
+
 		// create stages
-		final RepeaterSource<String> repeaterSource = RepeaterSource.create(".", 1);
-		final DirectoryName2Files findFilesStage = new DirectoryName2Files();
-		final CycledCountingFilter<File> cycledCountingFilter = CycledCountingFilter.create(new MethodCallPipe<Long>(0L));
-		final TypeLoggerFilter<File> typeLoggerFilter = TypeLoggerFilter.create();
+		this.file2RecordFilter = new File2RecordFilter();
+		this.collector = new Collector<IMonitoringRecord>();
 
 		// add each stage to a stage list
 		final List<IStage> stages = new LinkedList<IStage>();
-		stages.add(repeaterSource);
-		stages.add(findFilesStage);
-		stages.add(cycledCountingFilter);
-		stages.add(typeLoggerFilter);
+		stages.addAll(baseStage2StageExtractor.extract(this.file2RecordFilter));
+		stages.add(this.collector);
 
-		final IPipe<?>[] pipes = new IPipe[3];
 		// connect stages by pipes
-		pipes[0] = this.connectWithSequentialPipe(repeaterSource.OUTPUT, findFilesStage.DIRECTORY_NAME);
-		pipes[1] = this.connectWithSequentialPipe(findFilesStage.FILE, cycledCountingFilter.INPUT_OBJECT);
-		pipes[2] = this.connectWithSequentialPipe(cycledCountingFilter.RELAYED_OBJECT, typeLoggerFilter.INPUT_OBJECT);
-
-		repeaterSource.START.setAssociatedPipe(new MethodCallPipe<Boolean>(Boolean.TRUE));
+		final List<IPipe<?>> pipes = new LinkedList<IPipe<?>>();
+		pipes.add(this.connectWithSequentialPipe(this.file2RecordFilter.recordOutputPort, this.collector.objectInputPort));
 
 		final IPipeline pipeline = new IPipeline() {
 			@SuppressWarnings("unchecked")
 			public List<? extends IStage> getStartStages() {
-				return Arrays.asList(repeaterSource);
+				return baseStage2StageExtractor.extract(RecordReaderAnalysis.this.file2RecordFilter);
 			}
 
 			public List<IStage> getStages() {
@@ -106,41 +124,24 @@ public class CountingObjectsAnalysis extends Analysis {
 				}
 			}
 		};
+
 		return pipeline;
 	}
 
-	private <A extends ISource, B extends ISink<B>, T> MethodCallPipe<T> connectWithSequentialPipe(final IOutputPort<A, T> sourcePort,
+	private <A extends ISource, B extends ISink<B>, T> IPipe<T> connectWithSequentialPipe(final IOutputPort<A, T> sourcePort,
 			final IInputPort<B, T> targetPort) {
-		final MethodCallPipe<T> pipe = new MethodCallPipe<T>();
+		final IPipe<T> pipe = new QueuePipe<T>();
 		pipe.setSourcePort(sourcePort);
 		pipe.setTargetPort(targetPort);
 		return pipe;
 	}
 
-	@Override
-	public void start() {
-		super.start();
-		try {
-			this.pipeline.fireStartNotification();
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
-
-		this.pipeline.getStartStages().get(0).execute();
-
-		try {
-			this.pipeline.fireStopNotification();
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
+	WorkerThread getWorkerThread() {
+		return this.workerThread;
 	}
 
-	/**
-	 * @since 1.10
-	 * @param args
-	 */
 	public static void main(final String[] args) {
-		final CountingObjectsAnalysis analysis = new CountingObjectsAnalysis();
+		final RecordReaderAnalysis analysis = new RecordReaderAnalysis();
 		analysis.init();
 		final long start = System.currentTimeMillis();
 		analysis.start();
@@ -149,13 +150,16 @@ public class CountingObjectsAnalysis extends Analysis {
 		final long duration = end - start;
 		System.out.println("duration: " + duration + " ms"); // NOPMD (Just for example purposes)
 
-		for (final IStage stage : analysis.pipeline.getStages()) {
+		final IPipeline pipeline = analysis.workerThread.getPipeline();
+
+		for (final IStage stage : pipeline.getStages()) {
 			if (stage instanceof AbstractFilter<?>) {
 				System.out.println(stage.getClass().getName() + ": " + ((AbstractFilter<?>) stage).getOverallDuration()); // NOPMD (Just for example purposes)
 			}
 		}
+	}
 
-		final CycledCountingFilter<File> cycledCountingFilter = (CycledCountingFilter<File>) analysis.pipeline.getStages().get(2);
-		System.out.println("count: " + cycledCountingFilter.getCurrentCount()); // NOPMD (Just for example purposes)
+	void setOutputRecordList(final List<IMonitoringRecord> records) {
+		this.collector.setObjects(records);
 	}
 }

@@ -19,6 +19,10 @@ package kieker.panalysis.framework.sequential;
 import java.util.List;
 
 import kieker.panalysis.framework.core.AbstractPipe;
+import kieker.panalysis.framework.core.IInputPort;
+import kieker.panalysis.framework.core.IOutputPort;
+import kieker.panalysis.framework.core.ISink;
+import kieker.panalysis.framework.core.ISource;
 
 /**
  * @author Christian Wulf
@@ -35,6 +39,12 @@ public class MethodCallPipe<T> extends AbstractPipe<T> {
 
 	public MethodCallPipe() {
 		this.storedToken = null;
+	}
+
+	static public <S0 extends ISource, S1 extends ISink<S1>, T> void connect(final IOutputPort<S0, T> sourcePort, final IInputPort<S1, T> targetPort) {
+		final MethodCallPipe<T> pipe = new MethodCallPipe<T>();
+		pipe.setSourcePort(sourcePort);
+		pipe.setTargetPort(targetPort);
 	}
 
 	@Override

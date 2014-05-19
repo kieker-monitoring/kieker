@@ -23,7 +23,7 @@ import java.util.Collection;
  * 
  * @since 1.10
  */
-public interface IStage {
+public interface IStage extends IBaseStage {
 
 	public String getId();
 
@@ -75,6 +75,11 @@ public interface IStage {
 	 * @since 1.10
 	 */
 	void fireSignalClosingToAllOutputPorts();
+
+	/**
+	 * @since 1.10
+	 */
+	void fireSignalClosingToAllInputPorts();
 
 	/**
 	 * @since 1.10

@@ -13,22 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.panalysis.framework.core;
+package kieker.panalysis.examples.recordReader;
 
+import java.io.File;
+import java.util.LinkedList;
 import java.util.List;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+import kieker.common.record.IMonitoringRecord;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  */
-public interface IPipeline {
+public class RecordReaderAnalysisTest {
 
-	List<? extends IStage> getStages();
+	@Test
+	public void test() {
+		final File inputFile = new File("examples/userguide/ch5--trace-monitoring-aspectj/testdata");
+		final List<IMonitoringRecord> records = new LinkedList<IMonitoringRecord>();
 
-	List<? extends IStage> getStartStages();
+		final RecordReaderAnalysis recordReaderAnalysis = new RecordReaderAnalysis();
+		recordReaderAnalysis.init();
+		recordReaderAnalysis.setInputFile(inputFile);
+		recordReaderAnalysis.setOutputRecordList(records);
+		recordReaderAnalysis.start();
 
-	void fireStartNotification() throws Exception;
+		Assert.assertEquals(100, records.size());
 
-	void fireStopNotification();
+		Assert.assertEquals(2349872345907l, records.get(0).getLoggingTimestamp());
+
+	}
 }

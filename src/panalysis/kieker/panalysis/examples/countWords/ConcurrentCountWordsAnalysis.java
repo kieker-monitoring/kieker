@@ -88,6 +88,41 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 		}
 	}
 
+	@Override
+	public void start() {
+		super.start();
+
+		for (final WorkerThread thread : this.ioThreads) {
+			thread.terminate(TerminationPolicy.TERMINATE_STAGE_AFTER_UNSUCCESSFUL_EXECUTION);
+			thread.start();
+		}
+
+		for (final WorkerThread thread : this.nonIoThreads) {
+			thread.setTerminationPolicy(TerminationPolicy.TERMINATE_STAGE_AFTER_UNSUCCESSFUL_EXECUTION);
+			thread.start();
+		}
+
+		System.out.println("Waiting for the I/O worker threads to terminate..."); // NOPMD (Just for example purposes)
+		for (final WorkerThread thread : this.ioThreads) {
+			try {
+				thread.join(60 * SECONDS);
+			} catch (final InterruptedException e) {
+				throw new IllegalStateException();
+			}
+		}
+
+		System.out.println("Waiting for the non I/O worker threads to terminate..."); // NOPMD (Just for example purposes)
+		for (final WorkerThread thread : this.nonIoThreads) {
+			try {
+				thread.join(60 * SECONDS);
+			} catch (final InterruptedException e) {
+				throw new IllegalStateException();
+			}
+		}
+
+		System.out.println("Analysis finished."); // NOPMD (Just for example purposes)
+	}
+
 	private void createPipeFactories() {
 		this.pipeFactories = new ConcurrentWorkStealingPipeFactory[5];
 		this.pipeFactories[0] = new ConcurrentWorkStealingPipeFactory<File>();
@@ -190,7 +225,7 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 		this.connectWithStealAwarePipe(this.pipeFactories[1], distributor.getNewOutputPort(), countWordsStage1.FILE);
 		this.connectWithStealAwarePipe(this.pipeFactories[2], countWordsStage0.WORDSCOUNT, merger.getNewInputPort());
 		this.connectWithStealAwarePipe(this.pipeFactories[3], countWordsStage1.WORDSCOUNT, merger.getNewInputPort());
-		this.connectWithStealAwarePipe(this.pipeFactories[4], merger.OBJECT, outputWordsCountStage.FILE_WORDCOUNT_TUPLE);
+		this.connectWithStealAwarePipe(this.pipeFactories[4], merger.outputPort, outputWordsCountStage.FILE_WORDCOUNT_TUPLE);
 
 		final IPipeline pipeline = new IPipeline() {
 			@SuppressWarnings("unchecked")
@@ -249,42 +284,6 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 		final ConcurrentWorkStealingPipe<T> pipe = (ConcurrentWorkStealingPipe<T>) pipeFactory.create();
 		pipe.setSourcePort(sourcePort);
 		pipe.setTargetPort(targetPort);
-	}
-
-	@Override
-	public void start() {
-		super.start();
-
-		for (final WorkerThread thread : this.ioThreads) {
-			// thread.setTerminationPolicy(TerminationPolicy.TERMINATE_STAGE_AFTER_UNSUCCESSFUL_EXECUTION);
-			thread.terminate(TerminationPolicy.TERMINATE_STAGE_AFTER_UNSUCCESSFUL_EXECUTION);
-			thread.start();
-		}
-
-		for (final WorkerThread thread : this.nonIoThreads) {
-			thread.setTerminationPolicy(TerminationPolicy.TERMINATE_STAGE_AFTER_UNSUCCESSFUL_EXECUTION);
-			thread.start();
-		}
-
-		System.out.println("Waiting for the I/O worker threads to terminate..."); // NOPMD (Just for example purposes)
-		for (final WorkerThread thread : this.ioThreads) {
-			try {
-				thread.join(60 * SECONDS);
-			} catch (final InterruptedException e) {
-				throw new IllegalStateException();
-			}
-		}
-
-		System.out.println("Waiting for the non I/O worker threads to terminate..."); // NOPMD (Just for example purposes)
-		for (final WorkerThread thread : this.nonIoThreads) {
-			try {
-				thread.join(60 * SECONDS);
-			} catch (final InterruptedException e) {
-				throw new IllegalStateException();
-			}
-		}
-
-		System.out.println("Analysis finished."); // NOPMD (Just for example purposes)
 	}
 
 	/**

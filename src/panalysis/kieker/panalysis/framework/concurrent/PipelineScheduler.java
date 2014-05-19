@@ -24,7 +24,6 @@ import java.util.Map;
 
 import de.chw.util.CyclicListIterator;
 
-import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.IPipeline;
 import kieker.panalysis.framework.core.IStage;
 
@@ -52,7 +51,7 @@ public class PipelineScheduler {
 	}
 
 	private List<IStage> sortList(final IPipeline pipeline) {
-		final List<? extends AbstractFilter<?>> startStages = pipeline.getStartStages();
+		final List<? extends IStage> startStages = pipeline.getStartStages();
 
 		final List<IStage> list = new LinkedList<IStage>(pipeline.getStages());
 		list.removeAll(startStages);

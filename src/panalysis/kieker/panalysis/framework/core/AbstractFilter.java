@@ -47,8 +47,11 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	private Context<S> context;
 
 	private int enabledInputPorts = 0;
+	/**
+	 * 0=in-memory, x>0=disk0, disk1, display0, display1, socket0, socket1 etc.
+	 */
 	private int accessesDeviceId = 0;
-	private long overallDuration = 0; // 0=in-memory, x>0=disk0, disk1, socket0, socket1 etc.
+	private long overallDuration = 0;
 
 	public long getOverallDuration() {
 		return this.overallDuration;
@@ -81,6 +84,8 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 			}
 		} catch (final DequePopException e) {
 			this.context.rollback();
+		} catch (final Exception e) {
+			this.logger.error("Error in stage execution", e);
 		}
 		return success;
 	}

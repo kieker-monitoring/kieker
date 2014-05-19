@@ -13,54 +13,50 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
+package kieker.panalysis.stage;
 
-package kieker.panalysis.examples.countWords;
-
-import java.io.File;
+import java.util.Collection;
 
 import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Context;
 import kieker.panalysis.framework.core.IInputPort;
-import kieker.panalysis.framework.core.IOutputPort;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  */
-public class DirectoryName2Files extends AbstractFilter<DirectoryName2Files> {
+public class Collector<T> extends AbstractFilter<Collector<T>> {
 
-	public final IInputPort<DirectoryName2Files, String> DIRECTORY_NAME = this.createInputPort();
+	public final IInputPort<Collector<T>, T> objectInputPort = this.createInputPort();
+	private Collection<T> objects;
 
-	public final IOutputPort<DirectoryName2Files, File> FILE = this.createOutputPort();
+	public Collector(final Collection<T> collection) {
+		this.objects = collection;
+	}
 
-	private int numFiles = 0;
-
-	public DirectoryName2Files() {
-		this.setAccessesDeviceId(1);
+	public Collector() {
+		super();
 	}
 
 	@Override
-	protected boolean execute(final Context<DirectoryName2Files> context) {
-		final String inputDir = context.tryTake(this.DIRECTORY_NAME);
-		if (inputDir == null) {
+	protected boolean execute(final Context<Collector<T>> context) {
+		final T object = context.tryTake(this.objectInputPort);
+		if (object == null) {
 			return false;
 		}
 
-		final File[] availableFiles = new File(inputDir).listFiles();
-		for (final File file : availableFiles) {
-			if (file.isFile()) {
-				// this.logger.info("Sending " + file);
-				context.put(this.FILE, file);
-				this.numFiles++;
-			}
-		}
+		this.objects.add(object);
 
 		return true;
 	}
 
-	public int getNumFiles() {
-		return this.numFiles;
+	public Collection<T> getObjects() {
+		return this.objects;
+	}
+
+	public void setObjects(final Collection<T> objects) {
+		this.objects = objects;
 	}
 
 }

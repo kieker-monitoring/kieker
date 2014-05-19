@@ -30,11 +30,19 @@ import kieker.panalysis.framework.core.IOutputPort;
  */
 public class PredicateFilter<T> extends AbstractFilter<PredicateFilter<T>> {
 
-	public final IInputPort<PredicateFilter<T>, T> inputObject = this.createInputPort();
-	public final IOutputPort<PredicateFilter<T>, T> outputMatching = this.createOutputPort();
-	public final IOutputPort<PredicateFilter<T>, T> outputMismatching = this.createOutputPort();
+	public final IInputPort<PredicateFilter<T>, T> inputPort = this.createInputPort();
+	public final IOutputPort<PredicateFilter<T>, T> outputMatchingPort = this.createOutputPort();
+	public final IOutputPort<PredicateFilter<T>, T> outputMismatchingPort = this.createOutputPort();
 
 	private Predicate<T> predicate;
+
+	public PredicateFilter(final Predicate<T> predicate) {
+		this.setPredicate(predicate);
+	}
+
+	public PredicateFilter() {
+		super();
+	}
 
 	public Predicate<T> getPredicate() {
 		return this.predicate;
@@ -46,15 +54,15 @@ public class PredicateFilter<T> extends AbstractFilter<PredicateFilter<T>> {
 
 	@Override
 	protected boolean execute(final Context<PredicateFilter<T>> context) {
-		final T inputObject = context.tryTake(this.inputObject);
+		final T inputObject = context.tryTake(this.inputPort);
 		if (inputObject == null) {
 			return false;
 		}
 
 		if (this.predicate.apply(inputObject)) {
-			context.put(this.outputMatching, inputObject);
+			context.put(this.outputMatchingPort, inputObject);
 		} else {
-			context.put(this.outputMismatching, inputObject);
+			context.put(this.outputMismatchingPort, inputObject);
 		}
 
 		return true;

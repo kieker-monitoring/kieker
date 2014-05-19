@@ -15,20 +15,11 @@
  ***************************************************************************/
 package kieker.panalysis.framework.core;
 
-import java.util.List;
-
 /**
  * @author Christian Wulf
- * 
+ *
  * @since 1.10
  */
-public interface IPipeline {
+public interface IBaseStage {
 
-	List<? extends IStage> getStages();
-
-	List<? extends IStage> getStartStages();
-
-	void fireStartNotification() throws Exception;
-
-	void fireStopNotification();
 }

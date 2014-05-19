@@ -22,7 +22,7 @@ import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Context;
 import kieker.panalysis.framework.core.IPipe;
 import kieker.panalysis.stage.File2TextLinesFilter;
-import kieker.panalysis.stage.TextLine2RecordFilter;
+import kieker.panalysis.stage.kieker.TextLine2RecordFilter;
 
 /**
  * @author Christian Wulf
@@ -45,8 +45,8 @@ public class ReadRecordFromCsvFileFilter extends AbstractFilter<File2TextLinesFi
 		this.stage0 = new File2TextLinesFilter();
 		this.stage1 = new TextLine2RecordFilter(stringRegistry);
 
-		textLinePipe.setSourcePort(this.stage0.TEXT_LINE);
-		textLinePipe.setTargetPort(this.stage1.TEXT_LINE);
+		textLinePipe.setSourcePort(this.stage0.textLineOutputPort);
+		textLinePipe.setTargetPort(this.stage1.textLineInputPort);
 		// FIXME textLinePipe needs to be added to a group
 
 		/*

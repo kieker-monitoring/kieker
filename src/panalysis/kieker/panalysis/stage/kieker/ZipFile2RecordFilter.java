@@ -1,0 +1,93 @@
+/***************************************************************************
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+package kieker.panalysis.stage.kieker;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+
+import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.filesystem.FSUtil;
+import kieker.panalysis.framework.core.AbstractFilter;
+import kieker.panalysis.framework.core.Context;
+import kieker.panalysis.framework.core.IInputPort;
+import kieker.panalysis.framework.core.IOutputPort;
+import kieker.panalysis.kieker.MappingFileParser;
+
+/**
+ * @author Christian Wulf
+ * 
+ * @since 1.10
+ */
+public class ZipFile2RecordFilter extends AbstractFilter<ZipFile2RecordFilter> {
+
+	public final IInputPort<ZipFile2RecordFilter, File> fileInputPort = this.createInputPort();
+
+	public final IOutputPort<ZipFile2RecordFilter, IMonitoringRecord> recordOutputPort = this.createOutputPort();
+
+	@Override
+	protected boolean execute(final Context<ZipFile2RecordFilter> context) {
+		final File file = context.tryTake(this.fileInputPort);
+		if (file == null) {
+			return false;
+		}
+
+		final boolean fileExists = this.readMappingFile(file);
+		if (!fileExists) {
+			return true;
+		}
+
+		// TODO Auto-generated method stub
+		final IMonitoringRecord record = null;
+
+		context.put(this.recordOutputPort, record);
+
+		return true;
+	}
+
+	private boolean readMappingFile(final File file) {
+		ZipInputStream zipInputStream = null;
+		try {
+			zipInputStream = new ZipInputStream(new FileInputStream(file));
+			ZipEntry zipEntry;
+			while ((null != (zipEntry = zipInputStream.getNextEntry())) && !zipEntry.getName().equals(FSUtil.MAP_FILENAME)) { // NOCS NOPMD
+				// do nothing, just skip to the map file if present
+			}
+			if (null == zipEntry) {
+				this.logger.error("The zip file does not contain a Kieker log: " + file.toString());
+				return false;
+			}
+			final MappingFileParser mappingFileParser = new MappingFileParser();
+			mappingFileParser.parse(zipInputStream);
+			return true;
+		} catch (final IOException ex) {
+			this.logger.error("Error accessing ZipInputStream", ex);
+		} finally {
+			if (null != zipInputStream) {
+				try {
+					zipInputStream.close();
+				} catch (final IOException ex) {
+					this.logger.error("Failed to close ZipInputStream", ex);
+				}
+			}
+		}
+
+		return false;
+	}
+
+}

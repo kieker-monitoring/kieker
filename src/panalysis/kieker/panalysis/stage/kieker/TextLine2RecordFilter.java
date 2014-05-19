@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.panalysis.stage;
+package kieker.panalysis.stage.kieker;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -30,6 +30,7 @@ import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Context;
 import kieker.panalysis.framework.core.IInputPort;
 import kieker.panalysis.framework.core.IOutputPort;
+import kieker.panalysis.stage.MappingException;
 
 /**
  * @author Christian Wulf
@@ -38,9 +39,9 @@ import kieker.panalysis.framework.core.IOutputPort;
  */
 public class TextLine2RecordFilter extends AbstractFilter<TextLine2RecordFilter> {
 
-	public final IInputPort<TextLine2RecordFilter, String> TEXT_LINE = this.createInputPort();
+	public final IInputPort<TextLine2RecordFilter, String> textLineInputPort = this.createInputPort();
 
-	public final IOutputPort<TextLine2RecordFilter, IMonitoringRecord> RECORD = this.createOutputPort();
+	public final IOutputPort<TextLine2RecordFilter, IMonitoringRecord> recordOutputPort = this.createOutputPort();
 
 	private static final String CSV_SEPARATOR_CHARACTER = ";";
 
@@ -64,14 +65,14 @@ public class TextLine2RecordFilter extends AbstractFilter<TextLine2RecordFilter>
 	 */
 	@Override
 	protected boolean execute(final Context<TextLine2RecordFilter> context) {
-		final String textLine = context.tryTake(this.TEXT_LINE);
+		final String textLine = context.tryTake(this.textLineInputPort);
 		if (textLine == null) {
 			return false;
 		}
 
 		try {
 			final IMonitoringRecord record = this.createRecordFromLine(textLine);
-			context.put(this.RECORD, record);
+			context.put(this.recordOutputPort, record);
 		} catch (final MonitoringRecordException e) {
 			this.logger.error("Could not create record from text line: '" + textLine + "'", e);
 		} catch (final IllegalRecordFormatException e) {

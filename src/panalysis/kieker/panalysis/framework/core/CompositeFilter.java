@@ -15,6 +15,7 @@
  ***************************************************************************/
 package kieker.panalysis.framework.core;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,13 +23,11 @@ import java.util.List;
  * 
  * @since 1.10
  */
-public interface IPipeline {
+public abstract class CompositeFilter implements IBaseStage {
 
-	List<? extends IStage> getStages();
+	protected final List<IBaseStage> schedulableStages = new ArrayList<IBaseStage>();
 
-	List<? extends IStage> getStartStages();
-
-	void fireStartNotification() throws Exception;
-
-	void fireStopNotification();
+	public List<IBaseStage> getSchedulableStages() {
+		return this.schedulableStages;
+	}
 }
