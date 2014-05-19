@@ -16,9 +16,15 @@
 
 package kieker.tools.bridge.connector.jms;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
 import org.apache.activemq.broker.BrokerService;
+import org.apache.activemq.security.AuthenticationUser;
+import org.apache.activemq.security.SimpleAuthenticationPlugin;
 
 import kieker.common.configuration.Configuration;
 import kieker.tools.bridge.LookupEntity;
@@ -66,6 +72,14 @@ public class JMSEmbeddedConnector extends JMSClientConnector {
 		this.broker = new BrokerService();
 		this.broker.setUseJmx(true);
 		try {
+			final SimpleAuthenticationPlugin authPlugin = new SimpleAuthenticationPlugin();
+			final Map<String, String> passwords = new HashMap<String, String>();
+			passwords.put(this.username, this.password);
+			final List<AuthenticationUser> users = new ArrayList<AuthenticationUser>();
+			users.add(new AuthenticationUser(this.username, this.password, "default"));
+			authPlugin.setUsers(users);
+			authPlugin.setUserPasswords(passwords);
+			// this.broker.setPlugins(new BrokerPlugin[] { authPlugin });
 			this.broker.addConnector("tcp://localhost:" + this.port);
 			this.broker.start();
 			super.initialize();

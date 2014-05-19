@@ -32,7 +32,7 @@
 	<classpathentry kind="lib" path="lib/javassist-3.18.0.jar"/>
 	<classpathentry kind="lib" path="lib/javax.jms-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/jgraphx-2.1.1.0.jar"/>
-	<classpathentry kind="lib" path="lib/junit-4.11.jar"/>
+	<classpathentry kind="lib" path="lib/junit-4.11.jar" sourcepath="/home/rju/.m2/repository/junit/junit/4.11/junit-4.11-sources.jar"/>
 	<classpathentry kind="lib" path="lib/org.eclipse.emf.common_2.9.2.v20131212-0545.jar"/>
 	<classpathentry kind="lib" path="lib/org.eclipse.emf.ecore.xmi_2.9.1.v20131212-0545.jar"/>
 	<classpathentry kind="lib" path="lib/org.eclipse.emf.ecore_2.9.2.v20131212-0545.jar"/>
@@ -96,5 +96,6 @@
 	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/aopalliance-1.0.jar"/>
 	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/asm-3.1.jar"/>
 	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/cglib-2.2.jar"/>
+	<classpathentry kind="lib" path="lib/kahadb-5.7.0.jar"/>
 	<classpathentry kind="output" path="build-eclipse"/>
 </classpath>

@@ -28,11 +28,13 @@ import kieker.tools.bridge.connector.jms.JMSClientConnector;
  */
 public class JMSBroker implements Runnable {
 
+	private final BrokerService broker;
+
 	/**
 	 * Empty constructor.
 	 */
 	public JMSBroker() {
-		// Nothing to be done.
+		this.broker = new BrokerService();
 	}
 
 	/**
@@ -40,15 +42,19 @@ public class JMSBroker implements Runnable {
 	 */
 	@Override
 	public void run() {
-		final BrokerService broker = new BrokerService();
+
 		// configure the broker
-		broker.setBrokerName(JMSClientConnector.KIEKER_DATA_BRIDGE_READ_QUEUE);
+		this.broker.setBrokerName(JMSClientConnector.KIEKER_DATA_BRIDGE_READ_QUEUE);
 		try {
-			broker.addConnector(ConfigurationParameters.JMS_URI);
-			broker.start();
+			this.broker.addConnector(ConfigurationParameters.JMS_URI);
+			this.broker.start();
 		} catch (final Exception e) { // NOCS NOPMD -- the framework uses Exception :-(
 			Assert.fail("Broker startup failed. " + e.getMessage());
 		}
+	}
+
+	public boolean isRunning() {
+		return this.broker.isStarted();
 	}
 
 }

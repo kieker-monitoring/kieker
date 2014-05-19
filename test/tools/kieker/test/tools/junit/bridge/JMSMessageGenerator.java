@@ -16,7 +16,6 @@
 package kieker.test.tools.junit.bridge;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
@@ -41,12 +40,13 @@ public class JMSMessageGenerator implements Runnable {
 
 	private Connection connection;
 	private MessageProducer producer;
+	private final URI jmsUri;
 
 	/**
 	 * Empty constructor.
 	 */
-	public JMSMessageGenerator() {
-		// Nothing to be done.
+	public JMSMessageGenerator(final URI uri) {
+		this.jmsUri = uri;
 	}
 
 	/**
@@ -63,7 +63,7 @@ public class JMSMessageGenerator implements Runnable {
 		try {
 			// setup connection
 			final ConnectionFactory factory = new ActiveMQConnectionFactory(ConfigurationParameters.JMS_USERNAME,
-					ConfigurationParameters.JMS_PASSWORD, new URI(ConfigurationParameters.JMS_URI));
+					ConfigurationParameters.JMS_PASSWORD, this.jmsUri);
 
 			this.connection = factory.createConnection();
 
@@ -74,24 +74,21 @@ public class JMSMessageGenerator implements Runnable {
 			this.connection.start();
 		} catch (final JMSException e) {
 			Assert.fail(e.getMessage());
-		} catch (final URISyntaxException e) {
-			Assert.fail(e.getMessage());
 		}
 	}
 
 	private void sendRecords() {
-		final String messageText = ConfigurationParameters.TEST_RECORD_ID
-				+ ";" + ConfigurationParameters.TEST_OPERATION_SIGNATURE
-				+ ";" + ConfigurationParameters.TEST_SESSION_ID
-				+ ";" + ConfigurationParameters.TEST_TRACE_ID
-				+ ";" + ConfigurationParameters.TEST_TIN
-				+ ";" + ConfigurationParameters.TEST_TOUT
-				+ ";" + ConfigurationParameters.TEST_HOSTNAME
-				+ ";" + ConfigurationParameters.TEST_EOI
-				+ ";" + ConfigurationParameters.TEST_ESS;
-
 		for (int i = 0; i < ConfigurationParameters.SEND_NUMBER_OF_RECORDS; i++) {
 			try {
+				final String messageText = ConfigurationParameters.TEST_RECORD_ID
+						+ ";" + ConfigurationParameters.TEST_OPERATION_SIGNATURE
+						+ ";" + ConfigurationParameters.TEST_SESSION_ID
+						+ ";" + ConfigurationParameters.TEST_TRACE_ID
+						+ ";" + ConfigurationParameters.TEST_TIN
+						+ ";" + ConfigurationParameters.TEST_TOUT
+						+ ";" + ConfigurationParameters.TEST_HOSTNAME
+						+ ";" + i
+						+ ";" + ConfigurationParameters.TEST_ESS;
 				final ActiveMQTextMessage message = new ActiveMQTextMessage();
 				message.setText(messageText);
 				this.producer.send(message);

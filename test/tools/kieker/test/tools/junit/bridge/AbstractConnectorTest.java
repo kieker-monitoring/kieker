@@ -106,7 +106,7 @@ public abstract class AbstractConnectorTest extends AbstractKiekerTest {
 				Assert.assertEquals("Tin is not equal", ConfigurationParameters.TEST_TIN, record.getTin());
 				Assert.assertEquals("Tout is not equal", ConfigurationParameters.TEST_TOUT, record.getTout());
 				Assert.assertEquals("TraceId is not equal", ConfigurationParameters.TEST_TRACE_ID, record.getTraceId());
-				Assert.assertEquals("Eoi is not equal", ConfigurationParameters.TEST_EOI, record.getEoi());
+				Assert.assertEquals("Eoi is not equal", i, record.getEoi());
 				Assert.assertEquals("Ess is not equal", ConfigurationParameters.TEST_ESS, record.getEss());
 				Assert.assertEquals("Hostname is not equal", ConfigurationParameters.TEST_HOSTNAME, record.getHostname());
 				Assert.assertEquals("OperationSignature is not equal", ConfigurationParameters.TEST_OPERATION_SIGNATURE, record.getOperationSignature());

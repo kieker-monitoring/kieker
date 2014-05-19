@@ -49,6 +49,8 @@ public final class ConfigurationParameters {
 	public static final String JMS_PASSWORD = "testpw";
 	/** JMS test URI. */
 	public static final String JMS_URI = "tcp://localhost:" + JMS_PORT;
+	/** JMS embedded test URI. */
+	public static final String JMS_EMBEDDED_URI = "tcp://localhost:" + JMS_EMBEDDED_PORT;
 
 	/**
 	 * Values for test records.

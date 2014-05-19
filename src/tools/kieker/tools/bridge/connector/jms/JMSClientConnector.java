@@ -63,8 +63,8 @@ public class JMSClientConnector extends AbstractConnector {
 
 	private static final int BUF_LEN = 65536;
 
-	private final String username;
-	private final String password;
+	protected final String username;
+	protected final String password;
 	private final String uri;
 
 	private MessageConsumer consumer;
@@ -100,7 +100,11 @@ public class JMSClientConnector extends AbstractConnector {
 			// setup connection
 			ConnectionFactory factory;
 			if ((this.username != null) && (this.password != null)) {
-				factory = new ActiveMQConnectionFactory(this.username, this.password, new URI(this.uri));
+				if (!this.username.isEmpty() && (!this.password.isEmpty())) {
+					factory = new ActiveMQConnectionFactory(this.username, this.password, new URI(this.uri));
+				} else {
+					factory = new ActiveMQConnectionFactory(new URI(this.uri));
+				}
 			} else {
 				factory = new ActiveMQConnectionFactory(new URI(this.uri));
 			}

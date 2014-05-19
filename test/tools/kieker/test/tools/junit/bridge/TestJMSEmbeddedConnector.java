@@ -15,6 +15,9 @@
  ***************************************************************************/
 package kieker.test.tools.junit.bridge;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import org.junit.Test;
 
 import kieker.common.configuration.Configuration;
@@ -47,22 +50,23 @@ public class TestJMSEmbeddedConnector extends AbstractConnectorTest {
 	@Test
 	public void testJMSEmbeddedConnector() throws ConnectorDataTransmissionException { // NOPMD
 
-		final Thread messageGenerator = new Thread(new JMSMessageGenerator(), "Generator");
-		messageGenerator.start();
+		try {
+			final Thread messageGenerator = new Thread(new JMSMessageGenerator(new URI(ConfigurationParameters.JMS_EMBEDDED_URI)), "Generator");
 
-		final Thread broker = new Thread(new JMSBroker(), "Broker");
-		broker.start();
+			final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
+			configuration.setProperty(JMSEmbeddedConnector.PORT, String.valueOf(ConfigurationParameters.JMS_EMBEDDED_PORT));
+			// configuration.setProperty(JMSClientConnector.USERNAME, String.valueOf(ConfigurationParameters.JMS_USERNAME));
+			// configuration.setProperty(JMSClientConnector.PASSWORD, String.valueOf(ConfigurationParameters.JMS_PASSWORD));
+			configuration.setProperty(JMSClientConnector.URI, String.valueOf(ConfigurationParameters.JMS_EMBEDDED_URI));
+			// test the connector
+			this.setConnector(new JMSEmbeddedConnector(configuration, this.createLookupEntityMap()));
+			this.initialize();
+			messageGenerator.start();
+			this.deserialize(ConfigurationParameters.SEND_NUMBER_OF_RECORDS);
+			this.close(ConfigurationParameters.SEND_NUMBER_OF_RECORDS);
+		} catch (final URISyntaxException e) {
+			throw new ConnectorDataTransmissionException(e.getMessage());
+		}
 
-		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
-		configuration.setProperty(JMSEmbeddedConnector.PORT, String.valueOf(ConfigurationParameters.JMS_EMBEDDED_PORT));
-		configuration.setProperty(JMSClientConnector.USERNAME, String.valueOf(ConfigurationParameters.JMS_USERNAME));
-		configuration.setProperty(JMSClientConnector.PASSWORD, String.valueOf(ConfigurationParameters.JMS_PASSWORD));
-		configuration.setProperty(JMSClientConnector.URI, String.valueOf(ConfigurationParameters.JMS_URI));
-		// test the connector
-		this.setConnector(new JMSEmbeddedConnector(configuration, this.createLookupEntityMap()));
-		this.initialize();
-		this.deserialize(ConfigurationParameters.SEND_NUMBER_OF_RECORDS);
-		this.close(ConfigurationParameters.SEND_NUMBER_OF_RECORDS);
 	}
-
 }
