@@ -22,7 +22,7 @@ import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Context;
 import kieker.panalysis.framework.core.IPipe;
 import kieker.panalysis.stage.File2TextLinesFilter;
-import kieker.panalysis.stage.kieker.TextLine2RecordFilter;
+import kieker.panalysis.stage.kieker.fileToRecord.textLine.TextLine2RecordFilter;
 
 /**
  * @author Christian Wulf

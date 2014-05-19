@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.panalysis.stage.kieker;
+package kieker.panalysis.stage.kieker.fileToRecord.textLine;
 
 import java.util.HashSet;
 import java.util.Map;

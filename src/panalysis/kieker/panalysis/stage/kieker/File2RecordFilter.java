@@ -33,6 +33,9 @@ import kieker.panalysis.stage.Directory2FilesFilter;
 import kieker.panalysis.stage.basic.PredicateFilter;
 import kieker.panalysis.stage.basic.merger.Merger;
 import kieker.panalysis.stage.io.FileExtensionFilter;
+import kieker.panalysis.stage.kieker.fileToRecord.BinaryFile2RecordFilter;
+import kieker.panalysis.stage.kieker.fileToRecord.DatFile2RecordFilter;
+import kieker.panalysis.stage.kieker.fileToRecord.ZipFile2RecordFilter;
 
 /**
  * @author Christian Wulf
