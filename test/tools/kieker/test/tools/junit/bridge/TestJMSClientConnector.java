@@ -68,6 +68,7 @@ public class TestJMSClientConnector extends AbstractConnectorTest {
 			configuration.setProperty(JMSClientConnector.USERNAME, String.valueOf(ConfigurationParameters.JMS_USERNAME));
 			configuration.setProperty(JMSClientConnector.PASSWORD, String.valueOf(ConfigurationParameters.JMS_PASSWORD));
 			configuration.setProperty(JMSClientConnector.URI, String.valueOf(ConfigurationParameters.JMS_URI));
+			configuration.setProperty(JMSClientConnector.FACTORY_LOOKUP_NAME, ConfigurationParameters.JMS_FACTORY_LOOKUP_NAME);
 			// test the connector
 			this.setConnector(new JMSClientConnector(configuration, this.createLookupEntityMap()));
 			this.initialize();
@@ -78,5 +79,4 @@ public class TestJMSClientConnector extends AbstractConnectorTest {
 		}
 
 	}
-
 }

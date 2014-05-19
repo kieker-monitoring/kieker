@@ -58,6 +58,8 @@ public class TestJMSEmbeddedConnector extends AbstractConnectorTest {
 			// configuration.setProperty(JMSClientConnector.USERNAME, String.valueOf(ConfigurationParameters.JMS_USERNAME));
 			// configuration.setProperty(JMSClientConnector.PASSWORD, String.valueOf(ConfigurationParameters.JMS_PASSWORD));
 			configuration.setProperty(JMSClientConnector.URI, String.valueOf(ConfigurationParameters.JMS_EMBEDDED_URI));
+			configuration.setProperty(JMSClientConnector.FACTORY_LOOKUP_NAME, ConfigurationParameters.JMS_FACTORY_LOOKUP_NAME);
+
 			// test the connector
 			this.setConnector(new JMSEmbeddedConnector(configuration, this.createLookupEntityMap()));
 			this.initialize();

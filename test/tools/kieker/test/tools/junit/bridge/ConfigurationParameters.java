@@ -69,6 +69,7 @@ public final class ConfigurationParameters {
 	 * The number of threads to start.
 	 */
 	public static final int NUMBER_OF_TEST_THREADS = 5;
+	public static final String JMS_FACTORY_LOOKUP_NAME = "org.apache.activemq.jndi.ActiveMQInitialContextFactory";
 
 	/**
 	 * Private default constructor for utility class.
