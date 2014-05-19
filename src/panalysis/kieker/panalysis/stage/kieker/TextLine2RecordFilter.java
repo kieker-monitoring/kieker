@@ -23,13 +23,12 @@ import java.util.Set;
 import kieker.common.exception.IllegalRecordFormatException;
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.exception.UnknownRecordTypeException;
-import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Context;
 import kieker.panalysis.framework.core.IInputPort;
 import kieker.panalysis.framework.core.IOutputPort;
+import kieker.panalysis.kieker.RecordFromTextLineCreator;
 import kieker.panalysis.stage.MappingException;
 
 /**
@@ -43,21 +42,21 @@ public class TextLine2RecordFilter extends AbstractFilter<TextLine2RecordFilter>
 
 	public final IOutputPort<TextLine2RecordFilter, IMonitoringRecord> recordOutputPort = this.createOutputPort();
 
-	private static final String CSV_SEPARATOR_CHARACTER = ";";
-
-	private static final IllegalRecordFormatException ILLEGAL_RECORD_FORMAT_EXCEPTION = new IllegalRecordFormatException();
-
-	private final Map<Integer, String> stringRegistry;
-
 	private boolean ignoreUnknownRecordTypes;
 	private boolean abortDueToUnknownRecordType;
+
 	private final Set<String> unknownTypesObserved = new HashSet<String>();
+
+	private Map<Integer, String> stringRegistry;
+
+	private final RecordFromTextLineCreator recordFromTextLineCreator;
 
 	/**
 	 * @since 1.10
 	 */
-	public TextLine2RecordFilter(final Map<Integer, String> stringRegistry) {
-		this.stringRegistry = stringRegistry;
+	public TextLine2RecordFilter() {
+		// FIXME stringRegistry
+		this.recordFromTextLineCreator = new RecordFromTextLineCreator(this.stringRegistry);
 	}
 
 	/**
@@ -71,7 +70,7 @@ public class TextLine2RecordFilter extends AbstractFilter<TextLine2RecordFilter>
 		}
 
 		try {
-			final IMonitoringRecord record = this.createRecordFromLine(textLine);
+			final IMonitoringRecord record = this.recordFromTextLineCreator.createRecordFromLine(textLine);
 			context.put(this.recordOutputPort, record);
 		} catch (final MonitoringRecordException e) {
 			this.logger.error("Could not create record from text line: '" + textLine + "'", e);
@@ -91,75 +90,6 @@ public class TextLine2RecordFilter extends AbstractFilter<TextLine2RecordFilter>
 		}
 
 		return true;
-	}
-
-	/**
-	 * @since 1.10
-	 */
-	private IMonitoringRecord createRecordFromLine(final String line) throws MonitoringRecordException, IllegalRecordFormatException, MappingException,
-			UnknownRecordTypeException {
-		final String[] recordFields = line.split(CSV_SEPARATOR_CHARACTER);
-
-		if (recordFields.length < 2) {
-			throw ILLEGAL_RECORD_FORMAT_EXCEPTION;
-		}
-
-		final boolean isModernRecord = recordFields[0].charAt(0) == '$';
-		if (isModernRecord) {
-			return this.createModernRecordFromRecordFields(recordFields);
-		} else {
-			return this.createLegacyRecordFromRecordFiels(recordFields);
-		}
-	}
-
-	/**
-	 * @since 1.10
-	 */
-	private IMonitoringRecord createModernRecordFromRecordFields(final String[] recordFields) throws MonitoringRecordException, MappingException,
-			UnknownRecordTypeException {
-		final Integer id = Integer.valueOf(recordFields[0].substring(1));
-		final String classname = this.stringRegistry.get(id);
-		if (classname == null) {
-			throw new MappingException("Missing classname mapping for record type id " + "'" + id + "'");
-		}
-		final Class<? extends IMonitoringRecord> clazz = this.getClassByName(classname);
-		final long loggingTimestamp = Long.parseLong(recordFields[1]);
-		final int skipValues;
-		// check for Kieker < 1.6 OperationExecutionRecords
-		if ((recordFields.length == 11) && clazz.equals(OperationExecutionRecord.class)) {
-			skipValues = 3;
-		} else {
-			skipValues = 2;
-		}
-		// Java 1.5 compatibility
-		final String[] recordFieldsReduced = new String[recordFields.length - skipValues];
-		System.arraycopy(recordFields, skipValues, recordFieldsReduced, 0, recordFields.length - skipValues);
-		// in Java 1.6 this could be simplified to
-		// recordFieldsReduced = Arrays.copyOfRange(recordFields, skipValues, recordFields.length);
-
-		final IMonitoringRecord record = AbstractMonitoringRecord.createFromStringArray(clazz, recordFieldsReduced);
-		record.setLoggingTimestamp(loggingTimestamp);
-		return record;
-	}
-
-	/**
-	 * @since 1.10
-	 */
-	private Class<? extends IMonitoringRecord> getClassByName(final String classname) throws MonitoringRecordException, UnknownRecordTypeException {
-		try {
-			return AbstractMonitoringRecord.classForName(classname);
-		} catch (final MonitoringRecordException ex) {
-			throw new UnknownRecordTypeException("Failed to load record type " + classname, classname, ex);
-		}
-	}
-
-	/**
-	 * @since 1.10
-	 */
-	private IMonitoringRecord createLegacyRecordFromRecordFiels(final String[] recordFields) throws MonitoringRecordException {
-		final String[] recordFieldsReduced = new String[recordFields.length - 1];
-		System.arraycopy(recordFields, 1, recordFieldsReduced, 0, recordFields.length - 1);
-		return AbstractMonitoringRecord.createFromStringArray(OperationExecutionRecord.class, recordFieldsReduced);
 	}
 
 }

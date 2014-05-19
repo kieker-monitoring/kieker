@@ -19,6 +19,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 import java.util.Map;
 
 import kieker.common.logging.Log;
@@ -32,9 +33,14 @@ import kieker.common.util.filesystem.FSUtil;
 public class MappingFileParser {
 
 	protected Log logger;
-	protected Map<Integer, String> stringRegistry;
 
-	public void parse(final InputStream inputStream) {
+	public MappingFileParser(final Log logger) {
+		this.logger = logger;
+	}
+
+	public Map<Integer, String> parse(final InputStream inputStream) {
+		final Map<Integer, String> stringRegistry = new HashMap<Integer, String>();
+
 		BufferedReader in = null;
 		try {
 			in = new BufferedReader(new InputStreamReader(inputStream, FSUtil.ENCODING));
@@ -58,7 +64,7 @@ public class MappingFileParser {
 					this.logger.error("Error reading mapping file, id must be integer", ex);
 					continue; // continue on errors
 				}
-				final String prevVal = this.stringRegistry.put(id, value);
+				final String prevVal = stringRegistry.put(id, value);
 				if (prevVal != null) {
 					this.logger.error("Found addional entry for id='" + id + "', old value was '" + prevVal + "' new value is '" + value + "'");
 				}
@@ -74,5 +80,7 @@ public class MappingFileParser {
 				}
 			}
 		}
+
+		return stringRegistry;
 	}
 }

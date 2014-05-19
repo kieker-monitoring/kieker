@@ -31,7 +31,7 @@ public class WorkerThread extends Thread {
 
 	private long duration;
 
-	private volatile TerminationPolicy terminationPolicy;
+	private volatile StageTerminationPolicy terminationPolicy;
 	private volatile boolean shouldTerminate = false;
 	private final int accessesDeviceId;
 
@@ -125,7 +125,7 @@ public class WorkerThread extends Thread {
 		return this.pipeline;
 	}
 
-	public void terminate(final TerminationPolicy terminationPolicyToUse) {
+	public void terminate(final StageTerminationPolicy terminationPolicyToUse) {
 		for (final IStage startStage : this.pipeline.getStartStages()) {
 			startStage.fireSignalClosingToAllInputPorts();
 		}
@@ -138,7 +138,7 @@ public class WorkerThread extends Thread {
 	 * 
 	 * @param terminationPolicyToUse
 	 */
-	public void setTerminationPolicy(final TerminationPolicy terminationPolicyToUse) {
+	public void setTerminationPolicy(final StageTerminationPolicy terminationPolicyToUse) {
 		this.terminationPolicy = terminationPolicyToUse;
 		this.shouldTerminate = true;
 	}

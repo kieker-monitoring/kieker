@@ -15,9 +15,15 @@
  ***************************************************************************/
 package kieker.panalysis.stage.kieker;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -42,22 +48,47 @@ public class ZipFile2RecordFilter extends AbstractFilter<ZipFile2RecordFilter> {
 
 	@Override
 	protected boolean execute(final Context<ZipFile2RecordFilter> context) {
-		final File file = context.tryTake(this.fileInputPort);
-		if (file == null) {
+		final File zipFile = context.tryTake(this.fileInputPort);
+		if (zipFile == null) {
 			return false;
 		}
 
-		final boolean fileExists = this.readMappingFile(file);
+		final boolean fileExists = this.readMappingFile(zipFile);
 		if (!fileExists) {
 			return true;
 		}
 
-		// TODO Auto-generated method stub
-		final IMonitoringRecord record = null;
-
-		context.put(this.recordOutputPort, record);
+		try {
+			this.createAndSendRecordsFromZipFile(context, zipFile);
+		} catch (final FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		return true;
+	}
+
+	private void createAndSendRecordsFromZipFile(final Context<ZipFile2RecordFilter> context, final File zipFile) throws FileNotFoundException {
+		final ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(zipFile));
+		final BufferedReader reader;
+		try {
+			reader = new BufferedReader(new InputStreamReader(zipInputStream, FSUtil.ENCODING));
+		} catch (final UnsupportedEncodingException e) {
+			this.logger.error("This exception should never occur.", e);
+			return;
+		}
+		final DataInputStream input = new DataInputStream(new BufferedInputStream(zipInputStream, 1024 * 1024));
+
+		ZipEntry zipEntry;
+		try {
+			while (null != (zipEntry = zipInputStream.getNextEntry())) { // NOCS NOPMD
+				final String filename = zipEntry.getName();
+				// TODO
+			}
+		} catch (final IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private boolean readMappingFile(final File file) {
@@ -72,7 +103,7 @@ public class ZipFile2RecordFilter extends AbstractFilter<ZipFile2RecordFilter> {
 				this.logger.error("The zip file does not contain a Kieker log: " + file.toString());
 				return false;
 			}
-			final MappingFileParser mappingFileParser = new MappingFileParser();
+			final MappingFileParser mappingFileParser = new MappingFileParser(this.logger);
 			mappingFileParser.parse(zipInputStream);
 			return true;
 		} catch (final IOException ex) {

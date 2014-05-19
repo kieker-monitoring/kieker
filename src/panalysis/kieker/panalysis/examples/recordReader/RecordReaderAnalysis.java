@@ -20,7 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import kieker.common.record.IMonitoringRecord;
-import kieker.panalysis.framework.concurrent.TerminationPolicy;
+import kieker.panalysis.framework.concurrent.StageTerminationPolicy;
 import kieker.panalysis.framework.concurrent.WorkerThread;
 import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Analysis;
@@ -62,7 +62,7 @@ public class RecordReaderAnalysis extends Analysis {
 	public void start() {
 		super.start();
 
-		this.workerThread.terminate(TerminationPolicy.TERMINATE_STAGE_AFTER_UNSUCCESSFUL_EXECUTION);
+		this.workerThread.terminate(StageTerminationPolicy.TERMINATE_STAGE_AFTER_UNSUCCESSFUL_EXECUTION);
 
 		this.workerThread.start();
 		try {

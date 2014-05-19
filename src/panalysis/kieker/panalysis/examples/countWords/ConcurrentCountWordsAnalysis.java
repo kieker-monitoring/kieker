@@ -26,7 +26,7 @@ import de.chw.util.Pair;
 import kieker.panalysis.framework.concurrent.ConcurrentWorkStealingPipe;
 import kieker.panalysis.framework.concurrent.ConcurrentWorkStealingPipeFactory;
 import kieker.panalysis.framework.concurrent.SingleProducerSingleConsumerPipe;
-import kieker.panalysis.framework.concurrent.TerminationPolicy;
+import kieker.panalysis.framework.concurrent.StageTerminationPolicy;
 import kieker.panalysis.framework.concurrent.WorkerThread;
 import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Analysis;
@@ -93,12 +93,12 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 		super.start();
 
 		for (final WorkerThread thread : this.ioThreads) {
-			thread.terminate(TerminationPolicy.TERMINATE_STAGE_AFTER_UNSUCCESSFUL_EXECUTION);
+			thread.terminate(StageTerminationPolicy.TERMINATE_STAGE_AFTER_UNSUCCESSFUL_EXECUTION);
 			thread.start();
 		}
 
 		for (final WorkerThread thread : this.nonIoThreads) {
-			thread.setTerminationPolicy(TerminationPolicy.TERMINATE_STAGE_AFTER_UNSUCCESSFUL_EXECUTION);
+			thread.setTerminationPolicy(StageTerminationPolicy.TERMINATE_STAGE_AFTER_UNSUCCESSFUL_EXECUTION);
 			thread.start();
 		}
 

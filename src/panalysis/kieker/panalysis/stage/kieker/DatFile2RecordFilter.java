@@ -42,7 +42,7 @@ public class DatFile2RecordFilter extends CompositeFilter {
 
 	public DatFile2RecordFilter() {
 		final File2TextLinesFilter file2TextLinesFilter = new File2TextLinesFilter();
-		final TextLine2RecordFilter textLine2RecordFilter = new TextLine2RecordFilter(this.stringRegistry);
+		final TextLine2RecordFilter textLine2RecordFilter = new TextLine2RecordFilter();
 
 		final ConcurrentWorkStealingPipeFactory<String> concurrentWorkStealingPipeFactory = new ConcurrentWorkStealingPipeFactory<String>();
 		final ConcurrentWorkStealingPipe<String> pipe = concurrentWorkStealingPipeFactory.create();

@@ -13,18 +13,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
+package kieker.panalysis.framework.core;
 
-package kieker.panalysis.framework.concurrent;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  */
-public enum TerminationPolicy {
+abstract class AbstractMultiPort<S extends IStage, T> {
 
-	TERMINATE_STAGE_NOW,
-	TERMINATE_STAGE_AFTER_NEXT_EXECUTION,
-	TERMINATE_STAGE_AFTER_UNSUCCESSFUL_EXECUTION,
+	private final Set<IPipe<T>> associatedPipes = new HashSet<IPipe<T>>();
+	private final Set<IPipe<T>> readOnlyAssociatedPipes = Collections.unmodifiableSet(this.associatedPipes);
 
+	private S owningStage;
+
+	public void addAssociatedPipe(final IPipe<T> associatedPipe) {
+		this.associatedPipes.add(associatedPipe);
+	}
+
+	public Set<IPipe<T>> getAssociatedPipes() {
+		return this.readOnlyAssociatedPipes;
+	}
+
+	public S getOwningStage() {
+		return this.owningStage;
+	}
+
+	public void setOwningStage(final S owningStage) {
+		this.owningStage = owningStage;
+	}
 }

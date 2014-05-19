@@ -16,19 +16,18 @@
 package kieker.panalysis.stage.kieker;
 
 import java.io.DataInputStream;
-import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
 import kieker.common.exception.MonitoringRecordException;
-import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.filesystem.BinaryCompressionMethod;
 import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Context;
 import kieker.panalysis.framework.core.IInputPort;
 import kieker.panalysis.framework.core.IOutputPort;
+import kieker.panalysis.kieker.RecordFromBinaryFileCreator;
 
 /**
  * @author Christian Wulf
@@ -44,6 +43,13 @@ public class BinaryFile2RecordFilter extends AbstractFilter<BinaryFile2RecordFil
 
 	private Map<Integer, String> stringRegistry;
 
+	private final RecordFromBinaryFileCreator recordFromBinaryFileCreator;
+
+	public BinaryFile2RecordFilter() {
+		// FIXME stringRegistry
+		this.recordFromBinaryFileCreator = new RecordFromBinaryFileCreator(this.logger, this.stringRegistry);
+	}
+
 	@Override
 	protected boolean execute(final Context<BinaryFile2RecordFilter> context) {
 		final File file = context.tryTake(this.fileInputPort);
@@ -55,10 +61,10 @@ public class BinaryFile2RecordFilter extends AbstractFilter<BinaryFile2RecordFil
 			final BinaryCompressionMethod method = BinaryCompressionMethod.getByFileExtension(file.getName());
 			final DataInputStream in = method.getDataInputStream(file, 1 * MB);
 			try {
-				IMonitoringRecord record = this.createRecordFromBinaryFile(in);
+				IMonitoringRecord record = this.recordFromBinaryFileCreator.createRecordFromBinaryFile(in);
 				while (record != null) {
 					context.put(this.recordOutputPort, record);
-					record = this.createRecordFromBinaryFile(in);
+					record = this.recordFromBinaryFileCreator.createRecordFromBinaryFile(in);
 				}
 			} catch (final MonitoringRecordException e) {
 				this.logger.error("Error reading file: " + file, e);
@@ -78,72 +84,6 @@ public class BinaryFile2RecordFilter extends AbstractFilter<BinaryFile2RecordFil
 		}
 
 		return true;
-	}
-
-	/**
-	 * @param inputStream
-	 * @return
-	 * @throws IOException
-	 * @throws MonitoringRecordException
-	 */
-	private IMonitoringRecord createRecordFromBinaryFile(final DataInputStream inputStream) throws IOException, MonitoringRecordException {
-		final Integer id;
-		try {
-			id = inputStream.readInt();
-		} catch (final EOFException eof) {
-			return null; // we are finished
-		}
-		final String classname = this.stringRegistry.get(id);
-		if (classname == null) {
-			this.logger.error("Missing classname mapping for record type id " + "'" + id + "'");
-			return null; // we can't easily recover on errors
-		}
-
-		final Class<? extends IMonitoringRecord> clazz = AbstractMonitoringRecord.classForName(classname);
-		final Class<?>[] typeArray = AbstractMonitoringRecord.typesForClass(clazz);
-
-		// read record
-		final long loggingTimestamp = inputStream.readLong(); // NOPMD (must be read here!)
-		final Object[] objectArray = new Object[typeArray.length];
-		int idx = -1;
-		for (final Class<?> type : typeArray) {
-			idx++;
-			if (type == String.class) {
-				final Integer strId = inputStream.readInt();
-				final String str = this.stringRegistry.get(strId);
-				if (str == null) {
-					this.logger.error("No String mapping found for id " + strId.toString());
-					objectArray[idx] = "";
-				} else {
-					objectArray[idx] = str;
-				}
-			} else if ((type == int.class) || (type == Integer.class)) {
-				objectArray[idx] = inputStream.readInt();
-			} else if ((type == long.class) || (type == Long.class)) {
-				objectArray[idx] = inputStream.readLong();
-			} else if ((type == float.class) || (type == Float.class)) {
-				objectArray[idx] = inputStream.readFloat();
-			} else if ((type == double.class) || (type == Double.class)) {
-				objectArray[idx] = inputStream.readDouble();
-			} else if ((type == byte.class) || (type == Byte.class)) {
-				objectArray[idx] = inputStream.readByte();
-			} else if ((type == short.class) || (type == Short.class)) { // NOPMD (short)
-				objectArray[idx] = inputStream.readShort();
-			} else if ((type == boolean.class) || (type == Boolean.class)) {
-				objectArray[idx] = inputStream.readBoolean();
-			} else {
-				if (inputStream.readByte() != 0) {
-					this.logger.error("Unexpected value for unsupported type: " + clazz.getName());
-					return null; // breaking error (break would not terminate the correct loop)
-				}
-				this.logger.warn("Unsupported type: " + clazz.getName());
-				objectArray[idx] = null;
-			}
-		}
-		final IMonitoringRecord record = AbstractMonitoringRecord.createFromArray(clazz, objectArray);
-		record.setLoggingTimestamp(loggingTimestamp);
-
-		return record;
 	}
 
 }
