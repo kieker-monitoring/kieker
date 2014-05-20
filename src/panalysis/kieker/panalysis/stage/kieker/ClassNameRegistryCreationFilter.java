@@ -79,7 +79,7 @@ public class ClassNameRegistryCreationFilter extends AbstractFilter<ClassNameReg
 			final String filePrefix = this.mappingFileParser.getFilePrefixFromMappingFile(mappingFile);
 			context.put(this.filePrefixOutputPort, filePrefix);
 		} catch (final FileNotFoundException e) {
-			this.logger.error("Mapping file not found.", e);
+			this.logger.error("Mapping file not found.", e); // and skip this directory
 		}
 
 		return true;

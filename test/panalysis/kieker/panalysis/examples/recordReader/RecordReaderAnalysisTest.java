@@ -24,6 +24,9 @@ import org.junit.Test;
 
 import kieker.analysis.ClassNameRegistry;
 import kieker.analysis.ClassNameRegistryRepository;
+import kieker.analysis.IProjectContext;
+import kieker.analysis.plugin.reader.filesystem.FSReader;
+import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 
 /**
@@ -33,21 +36,22 @@ import kieker.common.record.IMonitoringRecord;
  */
 public class RecordReaderAnalysisTest {
 
+	private final static File INPUT_DIRECTORY = new File("examples/userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC");
+
 	@Test
-	public void test() {
-		final File inputDirectory = new File("examples/userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC");
+	public void testExampleWithNewFramework() {
 		final List<IMonitoringRecord> records = new LinkedList<IMonitoringRecord>();
 
 		final RecordReaderAnalysis recordReaderAnalysis = new RecordReaderAnalysis();
 		recordReaderAnalysis.init();
-		recordReaderAnalysis.setInputFile(inputDirectory);
+		recordReaderAnalysis.setInputFile(RecordReaderAnalysisTest.INPUT_DIRECTORY);
 		recordReaderAnalysis.setOutputRecordList(records);
 		recordReaderAnalysis.start();
 
 		final ClassNameRegistryRepository classNameRegistryRepository = recordReaderAnalysis.getClassNameRegistryRepository();
 		Assert.assertEquals(1, classNameRegistryRepository.size());
 
-		final ClassNameRegistry classNameRegistry = classNameRegistryRepository.get(inputDirectory);
+		final ClassNameRegistry classNameRegistry = classNameRegistryRepository.get(RecordReaderAnalysisTest.INPUT_DIRECTORY);
 		Assert.assertNotNull(classNameRegistry);
 
 		Assert.assertEquals(2, classNameRegistry.size());
@@ -55,6 +59,14 @@ public class RecordReaderAnalysisTest {
 		Assert.assertEquals("kieker.common.record.controlflow.OperationExecutionRecord", classNameRegistry.get(1));
 		Assert.assertEquals(6541, records.size());
 		Assert.assertEquals(1283156546127117246l, records.get(0).getLoggingTimestamp());
+	}
 
+	@Test
+	public void testExampleWithKiekerFramework() throws Exception {
+		final Configuration configuration = null;
+		final IProjectContext projectContext = null;
+		final FSReader fsReader = new FSReader(configuration, projectContext);
+		// fsReader.
+		// TODO
 	}
 }
