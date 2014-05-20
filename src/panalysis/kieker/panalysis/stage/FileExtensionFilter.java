@@ -17,6 +17,7 @@ package kieker.panalysis.stage;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.regex.Pattern;
 
 import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Context;
@@ -32,9 +33,11 @@ public class FileExtensionFilter extends AbstractFilter<FileExtensionFilter> {
 
 	public final IInputPort<FileExtensionFilter, File> fileInputPort = this.createInputPort();
 
-	public final IOutputPort<FileExtensionFilter, File> unknownFileExtensionPort = this.createOutputPort();
+	public final IOutputPort<FileExtensionFilter, File> unknownFileExtensionOutputPort = this.createOutputPort();
 
 	private final HashMap<String, IOutputPort<FileExtensionFilter, File>> fileExtensionMap = new HashMap<String, IOutputPort<FileExtensionFilter, File>>();
+
+	private static final Pattern DOT_PATTERN = Pattern.compile("\\.");
 
 	@Override
 	protected boolean execute(final Context<FileExtensionFilter> context) {
@@ -43,13 +46,13 @@ public class FileExtensionFilter extends AbstractFilter<FileExtensionFilter> {
 			return false;
 		}
 
-		final String[] filenameParts = file.getName().split("\\.");
+		final String[] filenameParts = DOT_PATTERN.split(file.getName());
 		final String fileExtension = filenameParts[filenameParts.length - 1];
 		final IOutputPort<FileExtensionFilter, File> outputPort = this.fileExtensionMap.get(fileExtension);
 		if (outputPort != null) {
 			context.put(outputPort, file);
 		} else {
-			context.put(this.unknownFileExtensionPort, file);
+			context.put(this.unknownFileExtensionOutputPort, file);
 		}
 
 		return true;
@@ -58,12 +61,12 @@ public class FileExtensionFilter extends AbstractFilter<FileExtensionFilter> {
 	/**
 	 * 
 	 * @param fileExtension
-	 *            the file extension with a leading dot
+	 *            the file extension (<i>a leading dot is removed automatically)</i>
 	 * @return
 	 */
-	public IOutputPort<FileExtensionFilter, File> createOutputPortForFileExtension(final String fileExtension) {
-		if (!fileExtension.startsWith(".")) {
-			throw new IllegalArgumentException("Please pass the file extension with a leading dot.");
+	public IOutputPort<FileExtensionFilter, File> createOutputPortForFileExtension(String fileExtension) {
+		if (fileExtension.startsWith(".")) {
+			fileExtension = fileExtension.substring(1);
 		}
 		IOutputPort<FileExtensionFilter, File> outputPort = this.fileExtensionMap.get(fileExtension);
 		if (outputPort == null) {
@@ -72,11 +75,4 @@ public class FileExtensionFilter extends AbstractFilter<FileExtensionFilter> {
 		}
 		return outputPort;
 	}
-
-	// public IOutputPort<FileExtensionFilter, File> getOutputPortForFileExtension(final String fileExtension) {
-	// if (fileExtension.startsWith(".")) {
-	// throw new IllegalArgumentException("");
-	// }
-	// return this.fileExtensionMap.get(fileExtension);
-	// }
 }

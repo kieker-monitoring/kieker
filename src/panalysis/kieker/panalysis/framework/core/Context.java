@@ -118,7 +118,7 @@ public class Context<S extends IStage> {
 
 	@Override
 	public String toString() {
-		return "{" + "numPushedElements=" + this.numPushedElements + ", " + "numTakenElements=" + this.numTakenElements + "}";
+		return "{" + "numTakenElements=" + this.numTakenElements + ", " + "numPushedElements=" + this.numPushedElements + "}";
 	}
 
 	public Collection<? extends IStage> getOutputStages() {

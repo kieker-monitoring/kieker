@@ -35,26 +35,26 @@ public class RecordReaderAnalysisTest {
 
 	@Test
 	public void test() {
-		final File inputFile = new File("examples/userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC");
+		final File inputDirectory = new File("examples/userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC");
 		final List<IMonitoringRecord> records = new LinkedList<IMonitoringRecord>();
 
 		final RecordReaderAnalysis recordReaderAnalysis = new RecordReaderAnalysis();
 		recordReaderAnalysis.init();
-		recordReaderAnalysis.setInputFile(inputFile);
+		recordReaderAnalysis.setInputFile(inputDirectory);
 		recordReaderAnalysis.setOutputRecordList(records);
 		recordReaderAnalysis.start();
 
 		final ClassNameRegistryRepository classNameRegistryRepository = recordReaderAnalysis.getClassNameRegistryRepository();
 		Assert.assertEquals(1, classNameRegistryRepository.size());
 
-		final ClassNameRegistry classNameRegistry = classNameRegistryRepository.get(inputFile.getParentFile());
+		final ClassNameRegistry classNameRegistry = classNameRegistryRepository.get(inputDirectory);
 		Assert.assertNotNull(classNameRegistry);
 
 		Assert.assertEquals(2, classNameRegistry.size());
 		Assert.assertEquals("kieker.common.record.misc.KiekerMetadataRecord", classNameRegistry.get(0));
 		Assert.assertEquals("kieker.common.record.controlflow.OperationExecutionRecord", classNameRegistry.get(1));
-		Assert.assertEquals(100, records.size());
-		Assert.assertEquals(2349872345907l, records.get(0).getLoggingTimestamp());
+		Assert.assertEquals(6541, records.size());
+		Assert.assertEquals(1283156546127117246l, records.get(0).getLoggingTimestamp());
 
 	}
 }

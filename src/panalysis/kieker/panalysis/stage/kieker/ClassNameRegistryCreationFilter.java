@@ -73,7 +73,7 @@ public class ClassNameRegistryCreationFilter extends AbstractFilter<ClassNameReg
 
 		try {
 			final ClassNameRegistry classNameRegistry = this.mappingFileParser.parseFromStream(new FileInputStream(mappingFile));
-			this.classNameRegistryRepository.put(inputDir.getParentFile(), classNameRegistry);
+			this.classNameRegistryRepository.put(inputDir, classNameRegistry);
 			context.put(this.relayDirectoryOutputPort, inputDir);
 
 			final String filePrefix = this.mappingFileParser.getFilePrefixFromMappingFile(mappingFile);
