@@ -94,7 +94,11 @@ public interface IStage extends IBaseStage {
 	 */
 	void notifyPipelineStops();
 
-	@Deprecated
+	/**
+	 * <i>Hint: Used by the scheduler</i>
+	 * 
+	 * @since 1.10
+	 */
 	Context<?> getContext();
 
 	@Deprecated

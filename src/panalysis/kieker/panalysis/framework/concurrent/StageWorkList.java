@@ -8,12 +8,14 @@ import kieker.panalysis.framework.core.IStage;
 
 public class StageWorkList {
 
-	private final List<IStage> array;
+	// private static final Log LOG = LogFactory.getLog(StageWorkList.class);
+
+	private final List<IStage> workList;
 	private final int accessesDeviceId;
 
 	public StageWorkList(final int accessesDeviceId, final int initialCapacity) {
 		this.accessesDeviceId = accessesDeviceId;
-		this.array = new ArrayList<IStage>(initialCapacity);
+		this.workList = new ArrayList<IStage>(initialCapacity);
 	}
 
 	public void pushAll(final Collection<? extends IStage> stages) {
@@ -25,24 +27,29 @@ public class StageWorkList {
 	}
 
 	public IStage pop() {
-		return this.array.remove(0);
+		return this.workList.remove(0);
 	}
 
 	public IStage read() {
-		return this.array.get(0);
+		return this.workList.get(0);
 	}
 
 	public boolean isEmpty() {
-		return this.array.isEmpty();
+		return this.workList.isEmpty();
 	}
 
 	private boolean isValid(final IStage stage) {
-		return (stage.getAccessesDeviceId() == this.accessesDeviceId);
+		final boolean isValid = (stage.getAccessesDeviceId() == this.accessesDeviceId);
+		if (!isValid) {
+			// LOG.warn("Invalid stage: stage.accessesDeviceId = " + stage.getAccessesDeviceId() + ", accessesDeviceId = " + this.accessesDeviceId + ", stage = " +
+			// stage);
+		}
+		return isValid;
 	}
 
 	private void add(final int index, final IStage stage) {
 		if (this.isValid(stage)) {
-			this.array.add(index, stage);
+			this.workList.add(index, stage);
 		}
 	}
 
@@ -53,12 +60,12 @@ public class StageWorkList {
 				filteredCollection.add(stage);
 			}
 		}
-		return this.array.addAll(index, filteredCollection);
+		return this.workList.addAll(index, filteredCollection);
 	}
 
 	@Override
 	public String toString() {
-		return this.array.toString();
+		return this.workList.toString();
 	}
 
 }

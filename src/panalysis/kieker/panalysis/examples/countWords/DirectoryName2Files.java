@@ -37,7 +37,7 @@ public class DirectoryName2Files extends AbstractFilter<DirectoryName2Files> {
 	private int numFiles = 0;
 
 	public DirectoryName2Files() {
-		this.setAccessesDeviceId(1);
+		// this.setAccessesDeviceId(1);
 	}
 
 	@Override

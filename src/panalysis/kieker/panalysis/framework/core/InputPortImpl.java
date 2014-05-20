@@ -20,7 +20,7 @@ class InputPortImpl<S extends IStage, T> extends AbstractPort<S, T> implements I
 
 	private volatile State state = State.OPEN;
 
-	private IPortListener stageListener;
+	private IPortListener<S> stageListener;
 
 	public InputPortImpl(final S owningStage) {
 		this.setOwningStage(owningStage);
@@ -34,7 +34,7 @@ class InputPortImpl<S extends IStage, T> extends AbstractPort<S, T> implements I
 		return this.state;
 	}
 
-	public void setPortListener(final IPortListener stageListener) {
+	public void setPortListener(final IPortListener<S> stageListener) {
 		this.stageListener = stageListener;
 	}
 

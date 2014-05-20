@@ -70,10 +70,8 @@ public class WorkerThread extends Thread {
 	}
 
 	private void executeTerminationPolicy(final IStage executedStage, final boolean executedSuccessfully) {
-		if (!Thread.currentThread().getName().equals("startThread")) {
-			// System.out.println("WorkerThread.executeTerminationPolicy(): " + this.terminationPolicy + ", executedSuccessfully=" + executedSuccessfully
-			// + ", mayBeDisabled=" + executedStage.mayBeDisabled());
-		}
+		// System.out.println("WorkerThread.executeTerminationPolicy(): " + this.terminationPolicy + ", executedSuccessfully=" + executedSuccessfully
+		// + ", mayBeDisabled=" + executedStage.mayBeDisabled());
 
 		switch (this.terminationPolicy) {
 		case TERMINATE_STAGE_AFTER_NEXT_EXECUTION:

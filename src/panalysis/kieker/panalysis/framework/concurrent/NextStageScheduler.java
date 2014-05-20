@@ -65,9 +65,6 @@ public class NextStageScheduler {
 
 	public void disable(final IStage stage) {
 		this.statesOfStages.put(stage, Boolean.FALSE);
-		// if (!Thread.currentThread().getName().equals("startThread")) {
-		// }
-		// System.out.println("Disabled stage " + stage + ", statesOfStages: " + this.statesOfStages);
 
 		if (this.highestPrioritizedEnabledStages.contains(stage)) {
 			this.highestPrioritizedEnabledStages.remove(stage);
@@ -83,7 +80,6 @@ public class NextStageScheduler {
 
 	public void determineNextStage(final IStage stage, final boolean executedSuccessfully) {
 		final Collection<? extends IStage> outputStages = stage.getContext().getOutputStages();
-		// System.out.println("outputStages: " + outputStages);
 		if (outputStages.size() > 0) {
 			if (stage.getContext().inputPortsAreEmpty()) {
 				this.workList.pop();

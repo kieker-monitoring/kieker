@@ -31,23 +31,23 @@ import kieker.panalysis.framework.core.IInputPort;
  */
 public class OutputWordsCountSink extends AbstractFilter<OutputWordsCountSink> {
 
-	public final IInputPort<OutputWordsCountSink, Pair<File, Integer>> FILE_WORDCOUNT_TUPLE = this.createInputPort();
+	public final IInputPort<OutputWordsCountSink, Pair<File, Integer>> fileWordcountTupleInputPort = this.createInputPort();
 
 	private int numFiles = 0;
 
 	public OutputWordsCountSink() {
-		this.setAccessesDeviceId(2);
+		// this.setAccessesDeviceId(2);
 	}
 
 	@Override
 	protected boolean execute(final Context<OutputWordsCountSink> context) {
-		final Pair<File, Integer> pair = context.tryTake(this.FILE_WORDCOUNT_TUPLE);
+		final Pair<File, Integer> pair = context.tryTake(this.fileWordcountTupleInputPort);
 		if (pair == null) {
 			return false;
 		}
 
-		final File file = pair.getFirst();
-		final Number wordsCount = pair.getSecond();
+		// final File file = pair.getFirst();
+		// final Number wordsCount = pair.getSecond();
 		// System.out.println(wordsCount + " words in file '" + file.getAbsolutePath() + "'"); // NOPMD (Just for example purposes)
 		this.numFiles++;
 
@@ -60,6 +60,11 @@ public class OutputWordsCountSink extends AbstractFilter<OutputWordsCountSink> {
 	 */
 	public int getNumFiles() {
 		return this.numFiles;
+	}
+
+	@Override
+	public String toString() {
+		return super.toString() + ", numFiles = " + this.numFiles;
 	}
 
 }

@@ -31,7 +31,7 @@ public interface IInputPort<S extends IStage, T> extends IPort<S, T> {
 	/**
 	 * @since 1.10
 	 */
-	public abstract void setPortListener(final IPortListener stageListener);
+	public abstract void setPortListener(final IPortListener<S> stageListener);
 
 	/**
 	 * @since 1.10

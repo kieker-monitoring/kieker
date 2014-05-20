@@ -25,12 +25,7 @@ import de.chw.util.Pair;
 
 import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Analysis;
-import kieker.panalysis.framework.core.IInputPort;
-import kieker.panalysis.framework.core.IOutputPort;
-import kieker.panalysis.framework.core.IPipe;
 import kieker.panalysis.framework.core.IPipeline;
-import kieker.panalysis.framework.core.ISink;
-import kieker.panalysis.framework.core.ISource;
 import kieker.panalysis.framework.core.IStage;
 import kieker.panalysis.framework.sequential.MethodCallPipe;
 import kieker.panalysis.stage.basic.RepeaterSource;
@@ -45,6 +40,7 @@ import kieker.panalysis.stage.basic.merger.Merger;
 public class CountWordsAnalysis extends Analysis {
 
 	private static final int NUM_TOKENS_TO_REPEAT = 1000;
+	private static final String START_DIRECTORY_NAME = ".";
 
 	private IPipeline pipeline;
 
@@ -75,7 +71,7 @@ public class CountWordsAnalysis extends Analysis {
 
 	private IPipeline buildNonIoPipeline() {
 		// create stages
-		final RepeaterSource<String> repeaterSource = RepeaterSource.create(".", NUM_TOKENS_TO_REPEAT);
+		final RepeaterSource<String> repeaterSource = RepeaterSource.create(START_DIRECTORY_NAME, NUM_TOKENS_TO_REPEAT);
 		final DirectoryName2Files findFilesStage = new DirectoryName2Files();
 		final Distributor<File> distributor = new Distributor<File>();
 		final CountWordsStage countWordsStage0 = new CountWordsStage();
@@ -93,15 +89,14 @@ public class CountWordsAnalysis extends Analysis {
 		stages.add(merger);
 		stages.add(outputWordsCountStage);
 
-		final IPipe<?>[] pipes = new IPipe[7];
 		// connect stages by pipes
-		pipes[0] = this.connectWithSequentialPipe(repeaterSource.OUTPUT, findFilesStage.DIRECTORY_NAME);
-		pipes[1] = this.connectWithSequentialPipe(findFilesStage.FILE, distributor.OBJECT);
-		pipes[2] = this.connectWithSequentialPipe(distributor.getNewOutputPort(), countWordsStage0.FILE);
-		pipes[3] = this.connectWithSequentialPipe(distributor.getNewOutputPort(), countWordsStage1.FILE);
-		pipes[4] = this.connectWithSequentialPipe(countWordsStage0.WORDSCOUNT, merger.getNewInputPort());
-		pipes[5] = this.connectWithSequentialPipe(countWordsStage1.WORDSCOUNT, merger.getNewInputPort());
-		pipes[6] = this.connectWithSequentialPipe(merger.outputPort, outputWordsCountStage.FILE_WORDCOUNT_TUPLE);
+		MethodCallPipe.connect(repeaterSource.OUTPUT, findFilesStage.DIRECTORY_NAME);
+		MethodCallPipe.connect(findFilesStage.FILE, distributor.OBJECT);
+		MethodCallPipe.connect(distributor.getNewOutputPort(), countWordsStage0.FILE);
+		MethodCallPipe.connect(distributor.getNewOutputPort(), countWordsStage1.FILE);
+		MethodCallPipe.connect(countWordsStage0.WORDSCOUNT, merger.getNewInputPort());
+		MethodCallPipe.connect(countWordsStage1.WORDSCOUNT, merger.getNewInputPort());
+		MethodCallPipe.connect(merger.outputPort, outputWordsCountStage.fileWordcountTupleInputPort);
 
 		repeaterSource.START.setAssociatedPipe(new MethodCallPipe<Boolean>(Boolean.TRUE));
 
@@ -129,14 +124,6 @@ public class CountWordsAnalysis extends Analysis {
 		};
 
 		return pipeline;
-	}
-
-	private <A extends ISource, B extends ISink<B>, T> IPipe<T> connectWithSequentialPipe(final IOutputPort<A, T> sourcePort,
-			final IInputPort<B, T> targetPort) {
-		final IPipe<T> pipe = new MethodCallPipe<T>();
-		pipe.setSourcePort(sourcePort);
-		pipe.setTargetPort(targetPort);
-		return pipe;
 	}
 
 	public static void main(final String[] args) {
