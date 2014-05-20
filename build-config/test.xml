@@ -37,6 +37,7 @@
 				<include name="Rsession.jar"/>
 				<include name="Rserve.jar"/>
 				<include name="mongo-*.jar"/>
+				<include name="org.json.min.jar"/>
 				<!-- Opad end -->
 				
 			</fileset>
