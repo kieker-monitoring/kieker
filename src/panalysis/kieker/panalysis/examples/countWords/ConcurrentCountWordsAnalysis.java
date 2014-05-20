@@ -164,28 +164,14 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 			}
 
 			public void fireStartNotification() throws Exception {
-				// notify each stage
-				for (final IStage stage : stages) {
-					stage.onPipelineStarts();
-				}
-				// notify each pipe
-				for (final ConcurrentWorkStealingPipeFactory<?> pipeFactory : ConcurrentCountWordsAnalysis.this.pipeFactories) {
-					for (final ConcurrentWorkStealingPipe<?> pipe : pipeFactory.getPipes()) {
-						pipe.onPipelineStarts();
-					}
+				for (final IStage stage : this.getStartStages()) {
+					stage.notifyPipelineStarts();
 				}
 			}
 
 			public void fireStopNotification() {
-				// notify each stage
-				for (final IStage stage : stages) {
-					stage.onPipelineStops();
-				}
-				// notify each pipe
-				for (final ConcurrentWorkStealingPipeFactory<?> pipeFactory : ConcurrentCountWordsAnalysis.this.pipeFactories) {
-					for (final ConcurrentWorkStealingPipe<?> pipe : pipeFactory.getPipes()) {
-						pipe.onPipelineStops();
-					}
+				for (final IStage stage : this.getStartStages()) {
+					stage.notifyPipelineStops();
 				}
 			}
 		};
@@ -238,28 +224,14 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 			}
 
 			public void fireStartNotification() throws Exception {
-				// notify each stage
-				for (final IStage stage : stages) {
-					stage.onPipelineStarts();
-				}
-				// notify each pipe
-				for (final ConcurrentWorkStealingPipeFactory<?> pipeFactory : ConcurrentCountWordsAnalysis.this.pipeFactories) {
-					for (final ConcurrentWorkStealingPipe<?> pipe : pipeFactory.getPipes()) {
-						pipe.onPipelineStarts();
-					}
+				for (final IStage stage : this.getStartStages()) {
+					stage.notifyPipelineStarts();
 				}
 			}
 
 			public void fireStopNotification() {
-				// notify each stage
-				for (final IStage stage : stages) {
-					stage.onPipelineStops();
-				}
-				// notify each pipe
-				for (final ConcurrentWorkStealingPipeFactory<?> pipeFactory : ConcurrentCountWordsAnalysis.this.pipeFactories) {
-					for (final ConcurrentWorkStealingPipe<?> pipe : pipeFactory.getPipes()) {
-						pipe.onPipelineStops();
-					}
+				for (final IStage stage : this.getStartStages()) {
+					stage.notifyPipelineStops();
 				}
 			}
 		};

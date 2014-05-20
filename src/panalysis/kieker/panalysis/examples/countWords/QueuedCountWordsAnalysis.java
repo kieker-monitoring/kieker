@@ -118,24 +118,14 @@ public class QueuedCountWordsAnalysis extends Analysis {
 			}
 
 			public void fireStartNotification() throws Exception {
-				// notify each stage
-				for (final IStage stage : stages) {
-					stage.onPipelineStarts();
-				}
-				// notify each pipe
-				for (final IPipe<?> pipe : pipes) {
-					pipe.onPipelineStarts();
+				for (final IStage stage : this.getStartStages()) {
+					stage.notifyPipelineStarts();
 				}
 			}
 
 			public void fireStopNotification() {
-				// notify each stage
-				for (final IStage stage : stages) {
-					stage.onPipelineStops();
-				}
-				// notify each pipe
-				for (final IPipe<?> pipe : pipes) {
-					pipe.onPipelineStops();
+				for (final IStage stage : this.getStartStages()) {
+					stage.notifyPipelineStops();
 				}
 			}
 		};

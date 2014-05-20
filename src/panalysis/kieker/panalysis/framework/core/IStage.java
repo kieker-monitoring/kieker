@@ -25,6 +25,9 @@ import java.util.Collection;
  */
 public interface IStage extends IBaseStage {
 
+	/**
+	 * @since 1.10
+	 */
 	public String getId();
 
 	/**
@@ -84,15 +87,17 @@ public interface IStage extends IBaseStage {
 	/**
 	 * @since 1.10
 	 */
-	void onPipelineStarts() throws Exception;
+	void notifyPipelineStarts() throws Exception;
 
 	/**
 	 * @since 1.10
 	 */
-	void onPipelineStops();
+	void notifyPipelineStops();
 
+	@Deprecated
 	Context<?> getContext();
 
+	@Deprecated
 	void copyAttributes(IStage stage);
 
 	/**
@@ -105,8 +110,14 @@ public interface IStage extends IBaseStage {
 	 */
 	IInputPort<?, ?> getInputPortByIndex(int index);
 
+	/**
+	 * @since 1.10
+	 */
 	int getAccessesDeviceId();
 
+	/**
+	 * @since 1.10
+	 */
 	void setAccessesDeviceId(final int accessesDeviceId);
 
 	/**

@@ -18,6 +18,7 @@ package kieker.panalysis.stage.kieker.fileToRecord;
 import java.io.File;
 import java.util.Map;
 
+import kieker.analysis.ClassNameRegistry;
 import kieker.common.record.IMonitoringRecord;
 import kieker.panalysis.framework.concurrent.ConcurrentWorkStealingPipe;
 import kieker.panalysis.framework.concurrent.ConcurrentWorkStealingPipeFactory;
@@ -26,6 +27,7 @@ import kieker.panalysis.framework.core.IInputPort;
 import kieker.panalysis.framework.core.IOutputPort;
 import kieker.panalysis.stage.File2TextLinesFilter;
 import kieker.panalysis.stage.kieker.fileToRecord.textLine.TextLine2RecordFilter;
+import kieker.panalysis.stage.util.TextLine;
 
 /**
  * @author Christian Wulf
@@ -38,15 +40,13 @@ public class DatFile2RecordFilter extends CompositeFilter {
 
 	public final IOutputPort<TextLine2RecordFilter, IMonitoringRecord> recordOutputPort;
 
-	// TODO
-	private Map<Integer, String> stringRegistry;
-
-	public DatFile2RecordFilter() {
+	public DatFile2RecordFilter(final Map<String, ClassNameRegistry> classNameRegistryRepository) {
 		final File2TextLinesFilter file2TextLinesFilter = new File2TextLinesFilter();
-		final TextLine2RecordFilter textLine2RecordFilter = new TextLine2RecordFilter();
+		final TextLine2RecordFilter textLine2RecordFilter = new TextLine2RecordFilter(classNameRegistryRepository);
 
-		final ConcurrentWorkStealingPipeFactory<String> concurrentWorkStealingPipeFactory = new ConcurrentWorkStealingPipeFactory<String>();
-		final ConcurrentWorkStealingPipe<String> pipe = concurrentWorkStealingPipeFactory.create();
+		// FIXME extract pipe implementation
+		final ConcurrentWorkStealingPipeFactory<TextLine> concurrentWorkStealingPipeFactory = new ConcurrentWorkStealingPipeFactory<TextLine>();
+		final ConcurrentWorkStealingPipe<TextLine> pipe = concurrentWorkStealingPipeFactory.create();
 		pipe.connect(file2TextLinesFilter.textLineOutputPort, textLine2RecordFilter.textLineInputPort);
 
 		this.fileInputPort = file2TextLinesFilter.fileInputPort;

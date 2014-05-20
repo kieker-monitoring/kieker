@@ -24,12 +24,7 @@ import java.util.List;
 import kieker.panalysis.examples.countWords.DirectoryName2Files;
 import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Analysis;
-import kieker.panalysis.framework.core.IInputPort;
-import kieker.panalysis.framework.core.IOutputPort;
-import kieker.panalysis.framework.core.IPipe;
 import kieker.panalysis.framework.core.IPipeline;
-import kieker.panalysis.framework.core.ISink;
-import kieker.panalysis.framework.core.ISource;
 import kieker.panalysis.framework.core.IStage;
 import kieker.panalysis.framework.sequential.MethodCallPipe;
 import kieker.panalysis.stage.TypeLoggerFilter;
@@ -66,11 +61,10 @@ public class CountingObjectsAnalysis extends Analysis {
 		stages.add(cycledCountingFilter);
 		stages.add(typeLoggerFilter);
 
-		final IPipe<?>[] pipes = new IPipe[3];
 		// connect stages by pipes
-		pipes[0] = this.connectWithSequentialPipe(repeaterSource.OUTPUT, findFilesStage.DIRECTORY_NAME);
-		pipes[1] = this.connectWithSequentialPipe(findFilesStage.FILE, cycledCountingFilter.INPUT_OBJECT);
-		pipes[2] = this.connectWithSequentialPipe(cycledCountingFilter.RELAYED_OBJECT, typeLoggerFilter.INPUT_OBJECT);
+		MethodCallPipe.connect(repeaterSource.OUTPUT, findFilesStage.DIRECTORY_NAME);
+		MethodCallPipe.connect(findFilesStage.FILE, cycledCountingFilter.INPUT_OBJECT);
+		MethodCallPipe.connect(cycledCountingFilter.RELAYED_OBJECT, typeLoggerFilter.INPUT_OBJECT);
 
 		repeaterSource.START.setAssociatedPipe(new MethodCallPipe<Boolean>(Boolean.TRUE));
 
@@ -85,36 +79,18 @@ public class CountingObjectsAnalysis extends Analysis {
 			}
 
 			public void fireStartNotification() throws Exception {
-				// notify each stage
-				for (final IStage stage : stages) {
-					stage.onPipelineStarts();
-				}
-				// notify each pipe
-				for (final IPipe<?> pipe : pipes) {
-					pipe.onPipelineStarts();
+				for (final IStage stage : this.getStartStages()) {
+					stage.notifyPipelineStarts();
 				}
 			}
 
 			public void fireStopNotification() {
-				// notify each stage
-				for (final IStage stage : stages) {
-					stage.onPipelineStops();
-				}
-				// notify each pipe
-				for (final IPipe<?> pipe : pipes) {
-					pipe.onPipelineStops();
+				for (final IStage stage : this.getStartStages()) {
+					stage.notifyPipelineStops();
 				}
 			}
 		};
 		return pipeline;
-	}
-
-	private <A extends ISource, B extends ISink<B>, T> MethodCallPipe<T> connectWithSequentialPipe(final IOutputPort<A, T> sourcePort,
-			final IInputPort<B, T> targetPort) {
-		final MethodCallPipe<T> pipe = new MethodCallPipe<T>();
-		pipe.setSourcePort(sourcePort);
-		pipe.setTargetPort(targetPort);
-		return pipe;
 	}
 
 	@Override
@@ -155,6 +131,7 @@ public class CountingObjectsAnalysis extends Analysis {
 			}
 		}
 
+		@SuppressWarnings("unchecked")
 		final CycledCountingFilter<File> cycledCountingFilter = (CycledCountingFilter<File>) analysis.pipeline.getStages().get(2);
 		System.out.println("count: " + cycledCountingFilter.getCurrentCount()); // NOPMD (Just for example purposes)
 	}

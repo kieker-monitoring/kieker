@@ -100,14 +100,15 @@ public interface IPipe<T> {
 	IInputPort<?, T> getTargetPort();
 
 	/**
+	 * @throws Exception
 	 * @since 1.10
 	 */
-	void onPipelineStarts();
+	void notifyPipelineStarts() throws Exception;
 
 	/**
 	 * @since 1.10
 	 */
-	void onPipelineStops();
+	void notifyPipelineStops();
 
 	/**
 	 * @since 1.10

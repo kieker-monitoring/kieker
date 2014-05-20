@@ -18,7 +18,10 @@ package kieker.panalysis.examples.recordReader;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
+import kieker.analysis.ClassNameRegistry;
 import kieker.common.record.IMonitoringRecord;
 import kieker.panalysis.framework.concurrent.StageTerminationPolicy;
 import kieker.panalysis.framework.concurrent.WorkerThread;
@@ -34,7 +37,7 @@ import kieker.panalysis.framework.core.IStage;
 import kieker.panalysis.framework.sequential.MethodCallPipe;
 import kieker.panalysis.framework.sequential.QueuePipe;
 import kieker.panalysis.framework.util.BaseStage2StageExtractor;
-import kieker.panalysis.stage.Collector;
+import kieker.panalysis.stage.CollectorSink;
 import kieker.panalysis.stage.kieker.File2RecordFilter;
 
 /**
@@ -49,7 +52,7 @@ public class RecordReaderAnalysis extends Analysis {
 	private WorkerThread workerThread;
 
 	private File2RecordFilter file2RecordFilter;
-	private Collector<IMonitoringRecord> collector;
+	private CollectorSink<IMonitoringRecord> collector;
 
 	@Override
 	public void init() {
@@ -79,9 +82,10 @@ public class RecordReaderAnalysis extends Analysis {
 	private IPipeline buildPipeline() {
 		final BaseStage2StageExtractor baseStage2StageExtractor = new BaseStage2StageExtractor();
 
+		final Map<String, ClassNameRegistry> classNameRegistryRepository = new ConcurrentHashMap<String, ClassNameRegistry>();
 		// create stages
-		this.file2RecordFilter = new File2RecordFilter();
-		this.collector = new Collector<IMonitoringRecord>();
+		this.file2RecordFilter = new File2RecordFilter(classNameRegistryRepository);
+		this.collector = new CollectorSink<IMonitoringRecord>();
 
 		// add each stage to a stage list
 		final List<IStage> stages = new LinkedList<IStage>();
@@ -103,24 +107,14 @@ public class RecordReaderAnalysis extends Analysis {
 			}
 
 			public void fireStartNotification() throws Exception {
-				// notify each stage
-				for (final IStage stage : stages) {
-					stage.onPipelineStarts();
-				}
-				// notify each pipe
-				for (final IPipe<?> pipe : pipes) {
-					pipe.onPipelineStarts();
+				for (final IStage stage : this.getStartStages()) {
+					stage.notifyPipelineStarts();
 				}
 			}
 
 			public void fireStopNotification() {
-				// notify each stage
-				for (final IStage stage : stages) {
-					stage.onPipelineStops();
-				}
-				// notify each pipe
-				for (final IPipe<?> pipe : pipes) {
-					pipe.onPipelineStops();
+				for (final IStage stage : this.getStartStages()) {
+					stage.notifyPipelineStops();
 				}
 			}
 		};

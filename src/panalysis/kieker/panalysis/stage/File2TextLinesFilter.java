@@ -27,6 +27,7 @@ import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Context;
 import kieker.panalysis.framework.core.IInputPort;
 import kieker.panalysis.framework.core.IOutputPort;
+import kieker.panalysis.stage.util.TextLine;
 
 /**
  * @author Christian Wulf
@@ -37,7 +38,7 @@ public class File2TextLinesFilter extends AbstractFilter<File2TextLinesFilter> {
 
 	public final IInputPort<File2TextLinesFilter, File> fileInputPort = this.createInputPort();
 
-	public final IOutputPort<File2TextLinesFilter, String> textLineOutputPort = this.createOutputPort();
+	public final IOutputPort<File2TextLinesFilter, TextLine> textLineOutputPort = this.createOutputPort();
 
 	private final String charset = "UTF-8";
 
@@ -46,19 +47,19 @@ public class File2TextLinesFilter extends AbstractFilter<File2TextLinesFilter> {
 	 */
 	@Override
 	protected boolean execute(final Context<File2TextLinesFilter> context) {
-		final File file = context.tryTake(this.fileInputPort);
-		if (file == null) {
+		final File textFile = context.tryTake(this.fileInputPort);
+		if (textFile == null) {
 			return false;
 		}
 
 		BufferedReader reader = null;
 		try {
-			reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), this.charset));
+			reader = new BufferedReader(new InputStreamReader(new FileInputStream(textFile), this.charset));
 			String line;
 			while ((line = reader.readLine()) != null) {
 				line = line.trim();
 				if (line.length() != 0) {
-					context.put(this.textLineOutputPort, line);
+					context.put(this.textLineOutputPort, new TextLine(textFile, line));
 				} // else: ignore empty line
 			}
 		} catch (final FileNotFoundException e) {

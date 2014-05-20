@@ -18,17 +18,20 @@ package kieker.panalysis.stage.composite;
 
 import java.util.Map;
 
+import kieker.analysis.ClassNameRegistry;
 import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Context;
 import kieker.panalysis.framework.core.IPipe;
 import kieker.panalysis.stage.File2TextLinesFilter;
 import kieker.panalysis.stage.kieker.fileToRecord.textLine.TextLine2RecordFilter;
+import kieker.panalysis.stage.util.TextLine;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  */
+// FIXME extend from CompositeStage
 public class ReadRecordFromCsvFileFilter extends AbstractFilter<File2TextLinesFilter> {
 
 	private final File2TextLinesFilter stage0;
@@ -38,12 +41,9 @@ public class ReadRecordFromCsvFileFilter extends AbstractFilter<File2TextLinesFi
 	 * @since 1.10
 	 * @param textLinePipe
 	 */
-	public ReadRecordFromCsvFileFilter(final IPipe<String> textLinePipe) {
-		// FIXME replace null value
-		final Map<Integer, String> stringRegistry = null;
-
+	public ReadRecordFromCsvFileFilter(final IPipe<TextLine> textLinePipe, final Map<String, ClassNameRegistry> classNameRegistryRepository) {
 		this.stage0 = new File2TextLinesFilter();
-		this.stage1 = new TextLine2RecordFilter();
+		this.stage1 = new TextLine2RecordFilter(classNameRegistryRepository);
 
 		textLinePipe.setSourcePort(this.stage0.textLineOutputPort);
 		textLinePipe.setTargetPort(this.stage1.textLineInputPort);

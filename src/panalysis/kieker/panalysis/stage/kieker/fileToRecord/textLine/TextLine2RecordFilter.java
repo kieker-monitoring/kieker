@@ -20,6 +20,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import kieker.analysis.ClassNameRegistry;
+import kieker.analysis.RecordFromTextLineCreator;
 import kieker.common.exception.IllegalRecordFormatException;
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.exception.UnknownRecordTypeException;
@@ -28,8 +30,8 @@ import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Context;
 import kieker.panalysis.framework.core.IInputPort;
 import kieker.panalysis.framework.core.IOutputPort;
-import kieker.panalysis.kieker.RecordFromTextLineCreator;
 import kieker.panalysis.stage.MappingException;
+import kieker.panalysis.stage.util.TextLine;
 
 /**
  * @author Christian Wulf
@@ -38,25 +40,30 @@ import kieker.panalysis.stage.MappingException;
  */
 public class TextLine2RecordFilter extends AbstractFilter<TextLine2RecordFilter> {
 
-	public final IInputPort<TextLine2RecordFilter, String> textLineInputPort = this.createInputPort();
+	public final IInputPort<TextLine2RecordFilter, TextLine> textLineInputPort = this.createInputPort();
 
 	public final IOutputPort<TextLine2RecordFilter, IMonitoringRecord> recordOutputPort = this.createOutputPort();
 
-	private boolean ignoreUnknownRecordTypes;
-	private boolean abortDueToUnknownRecordType;
-
 	private final Set<String> unknownTypesObserved = new HashSet<String>();
 
-	private Map<Integer, String> stringRegistry;
+	private boolean ignoreUnknownRecordTypes;
 
-	private final RecordFromTextLineCreator recordFromTextLineCreator;
+	private boolean abortDueToUnknownRecordType;
+
+	private RecordFromTextLineCreator recordFromTextLineCreator;
+
+	/**
+	 * @since 1.10
+	 */
+	public TextLine2RecordFilter(final Map<String, ClassNameRegistry> classNameRegistryRepository) {
+		this.recordFromTextLineCreator = new RecordFromTextLineCreator(classNameRegistryRepository);
+	}
 
 	/**
 	 * @since 1.10
 	 */
 	public TextLine2RecordFilter() {
-		// FIXME stringRegistry
-		this.recordFromTextLineCreator = new RecordFromTextLineCreator(this.stringRegistry);
+		super();
 	}
 
 	/**
@@ -64,13 +71,13 @@ public class TextLine2RecordFilter extends AbstractFilter<TextLine2RecordFilter>
 	 */
 	@Override
 	protected boolean execute(final Context<TextLine2RecordFilter> context) {
-		final String textLine = context.tryTake(this.textLineInputPort);
+		final TextLine textLine = context.tryTake(this.textLineInputPort);
 		if (textLine == null) {
 			return false;
 		}
 
 		try {
-			final IMonitoringRecord record = this.recordFromTextLineCreator.createRecordFromLine(textLine);
+			final IMonitoringRecord record = this.recordFromTextLineCreator.createRecordFromLine(textLine.getTextFile(), textLine.getTextLine());
 			context.put(this.recordOutputPort, record);
 		} catch (final MonitoringRecordException e) {
 			this.logger.error("Could not create record from text line: '" + textLine + "'", e);
@@ -90,6 +97,22 @@ public class TextLine2RecordFilter extends AbstractFilter<TextLine2RecordFilter>
 		}
 
 		return true;
+	}
+
+	public boolean isIgnoreUnknownRecordTypes() {
+		return this.ignoreUnknownRecordTypes;
+	}
+
+	public void setIgnoreUnknownRecordTypes(final boolean ignoreUnknownRecordTypes) {
+		this.ignoreUnknownRecordTypes = ignoreUnknownRecordTypes;
+	}
+
+	public RecordFromTextLineCreator getRecordFromTextLineCreator() {
+		return this.recordFromTextLineCreator;
+	}
+
+	public void setRecordFromTextLineCreator(final RecordFromTextLineCreator recordFromTextLineCreator) {
+		this.recordFromTextLineCreator = recordFromTextLineCreator;
 	}
 
 }

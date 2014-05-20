@@ -18,7 +18,9 @@ package kieker.panalysis.stage.kieker;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.Comparator;
+import java.util.Map;
 
+import kieker.analysis.ClassNameRegistry;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.filesystem.BinaryCompressionMethod;
 import kieker.common.util.filesystem.FSUtil;
@@ -27,7 +29,7 @@ import kieker.panalysis.framework.concurrent.ConcurrentWorkStealingPipeFactory;
 import kieker.panalysis.framework.core.CompositeFilter;
 import kieker.panalysis.framework.core.IInputPort;
 import kieker.panalysis.framework.core.IOutputPort;
-import kieker.panalysis.framework.sequential.QueuePipe;
+import kieker.panalysis.framework.sequential.MethodCallPipe;
 import kieker.panalysis.predicate.IsDirectoryPredicate;
 import kieker.panalysis.stage.Directory2FilesFilter;
 import kieker.panalysis.stage.basic.PredicateFilter;
@@ -63,14 +65,17 @@ public class File2RecordFilter extends CompositeFilter {
 		}
 	};
 
-	public File2RecordFilter() {
+	// FIXME filters must have a default ctor
+	// FIXME classNameRegistryRepository must be a property to be able to be cloned
+	public File2RecordFilter(final Map<String, ClassNameRegistry> classNameRegistryRepository) {
 		// create stages
 		final PredicateFilter<File> isDirectoryFilter = new PredicateFilter<File>(new IsDirectoryPredicate());
+		final ClassNameRegistryCreationFilter classNameRegistryCreationFilter = new ClassNameRegistryCreationFilter(classNameRegistryRepository);
 		final Directory2FilesFilter directory2FilesFilter = new Directory2FilesFilter(this.fileFilter, this.fileComparator);
 		final Merger<File> fileMerger = new Merger<File>();
 		final FileExtensionFilter fileExtensionFilter = new FileExtensionFilter();
 
-		final DatFile2RecordFilter datFile2RecordFilter = new DatFile2RecordFilter();
+		final DatFile2RecordFilter datFile2RecordFilter = new DatFile2RecordFilter(classNameRegistryRepository);
 		final BinaryFile2RecordFilter binaryFile2RecordFilter = new BinaryFile2RecordFilter();
 		final ZipFile2RecordFilter zipFile2RecordFilter = new ZipFile2RecordFilter();
 
@@ -83,10 +88,11 @@ public class File2RecordFilter extends CompositeFilter {
 		final IOutputPort<FileExtensionFilter, File> zipFileInputPort = fileExtensionFilter.createOutputPortForFileExtension(FSUtil.ZIP_FILE_EXTENSION);
 
 		// connect ports by pipes
-		QueuePipe.connect(isDirectoryFilter.outputMatchingPort, directory2FilesFilter.directoryInputPort);
-		QueuePipe.connect(isDirectoryFilter.outputMismatchingPort, fileMerger.getNewInputPort());
-		QueuePipe.connect(directory2FilesFilter.fileOutputPort, fileMerger.getNewInputPort());
-		QueuePipe.connect(fileMerger.outputPort, fileExtensionFilter.fileInputPort);
+		MethodCallPipe.connect(isDirectoryFilter.outputMatchingPort, classNameRegistryCreationFilter.directoryInputPort);
+		MethodCallPipe.connect(isDirectoryFilter.outputMismatchingPort, fileMerger.getNewInputPort()); // BETTER restructure pipeline
+		MethodCallPipe.connect(classNameRegistryCreationFilter.relayDirectoryOutputPort, directory2FilesFilter.directoryInputPort);
+		MethodCallPipe.connect(directory2FilesFilter.fileOutputPort, fileMerger.getNewInputPort());
+		MethodCallPipe.connect(fileMerger.outputPort, fileExtensionFilter.fileInputPort);
 
 		final ConcurrentWorkStealingPipeFactory<File> concurrentWorkStealingPipeFactory0 = new ConcurrentWorkStealingPipeFactory<File>();
 		final ConcurrentWorkStealingPipe<File> concurrentWorkStealingPipe0 = concurrentWorkStealingPipeFactory0.create();
@@ -120,9 +126,10 @@ public class File2RecordFilter extends CompositeFilter {
 
 		this.schedulableStages.add(isDirectoryFilter);
 
-		this.schedulableStages.add(directory2FilesFilter);
-		this.schedulableStages.add(fileMerger);
-		this.schedulableStages.add(fileExtensionFilter);
+		// this.schedulableStages.add(classNameRegistryCreationFilter);
+		// this.schedulableStages.add(directory2FilesFilter);
+		// this.schedulableStages.add(fileMerger);
+		// this.schedulableStages.add(fileExtensionFilter);
 
 		this.schedulableStages.add(datFile2RecordFilter);
 		this.schedulableStages.add(binaryFile2RecordFilter);

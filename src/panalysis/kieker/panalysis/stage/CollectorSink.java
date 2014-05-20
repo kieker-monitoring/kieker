@@ -26,21 +26,21 @@ import kieker.panalysis.framework.core.IInputPort;
  * 
  * @since 1.10
  */
-public class Collector<T> extends AbstractFilter<Collector<T>> {
+public class CollectorSink<T> extends AbstractFilter<CollectorSink<T>> {
 
-	public final IInputPort<Collector<T>, T> objectInputPort = this.createInputPort();
+	public final IInputPort<CollectorSink<T>, T> objectInputPort = this.createInputPort();
 	private Collection<T> objects;
 
-	public Collector(final Collection<T> collection) {
+	public CollectorSink(final Collection<T> collection) {
 		this.objects = collection;
 	}
 
-	public Collector() {
+	public CollectorSink() {
 		super();
 	}
 
 	@Override
-	protected boolean execute(final Context<Collector<T>> context) {
+	protected boolean execute(final Context<CollectorSink<T>> context) {
 		final T object = context.tryTake(this.objectInputPort);
 		if (object == null) {
 			return false;

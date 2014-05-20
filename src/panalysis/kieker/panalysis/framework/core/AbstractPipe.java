@@ -28,6 +28,17 @@ package kieker.panalysis.framework.core;
  */
 public abstract class AbstractPipe<T> implements IPipe<T> {
 
+	/**
+	 * @author Christian Wulf
+	 * 
+	 * @since 1.10
+	 */
+	public enum PipeState {
+		UNINITIALIZED, PIPELINE_STARTED, PIPELINE_STOPPED
+	}
+
+	private PipeState state = PipeState.UNINITIALIZED;
+
 	private IInputPort<?, T> targetPort;
 
 	/**
@@ -60,10 +71,36 @@ public abstract class AbstractPipe<T> implements IPipe<T> {
 		return this.tryTakeInternal();
 	}
 
+	public final void notifyPipelineStarts() throws Exception {
+		if (this.state == PipeState.UNINITIALIZED) {
+			this.state = PipeState.PIPELINE_STARTED;
+			this.onPipelineStarts();
+			this.getTargetPort().getOwningStage().notifyPipelineStarts();
+		}
+	}
+
+	/**
+	 * This method is called exactly once iff the pipeline is started.
+	 * 
+	 * @since 1.10
+	 */
 	public void onPipelineStarts() {
 		// empty default implementation
 	}
 
+	public final void notifyPipelineStops() {
+		if (this.state != PipeState.PIPELINE_STOPPED) {
+			this.state = PipeState.PIPELINE_STOPPED;
+			this.onPipelineStops();
+			this.getTargetPort().getOwningStage().notifyPipelineStops();
+		}
+	}
+
+	/**
+	 * This method is called exactly once iff the pipeline is stopped.
+	 * 
+	 * @since 1.10
+	 */
 	public void onPipelineStops() {
 		// empty default implementation
 	}

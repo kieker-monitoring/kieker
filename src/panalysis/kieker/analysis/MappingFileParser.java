@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.panalysis.kieker;
+package kieker.analysis;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -46,28 +46,7 @@ public class MappingFileParser {
 			in = new BufferedReader(new InputStreamReader(inputStream, FSUtil.ENCODING));
 			String line;
 			while ((line = in.readLine()) != null) { // NOPMD (assign)
-				if (line.length() == 0) {
-					continue; // ignore empty lines
-				}
-				final int split = line.indexOf('=');
-				if (split == -1) {
-					this.logger.error("Failed to find character '=' in line: {" + line + "}. It must consist of a ID=VALUE pair.");
-					continue; // continue on errors
-				}
-				final String key = line.substring(0, split);
-				final String value = FSUtil.decodeNewline(line.substring(split + 1));
-				// the leading $ is optional
-				final Integer id;
-				try {
-					id = Integer.valueOf((key.charAt(0) == '$') ? key.substring(1) : key); // NOCS
-				} catch (final NumberFormatException ex) {
-					this.logger.error("Error reading mapping file, id must be integer", ex);
-					continue; // continue on errors
-				}
-				final String prevVal = stringRegistry.put(id, value);
-				if (prevVal != null) {
-					this.logger.error("Found addional entry for id='" + id + "', old value was '" + prevVal + "' new value is '" + value + "'");
-				}
+				this.parseTextLine(line, stringRegistry);
 			}
 		} catch (final IOException ex) {
 			this.logger.error("Error reading mapping file", ex);
@@ -82,5 +61,30 @@ public class MappingFileParser {
 		}
 
 		return stringRegistry;
+	}
+
+	private void parseTextLine(final String line, final Map<Integer, String> stringRegistry) {
+		if (line.length() == 0) {
+			return; // ignore empty lines
+		}
+		final int split = line.indexOf('=');
+		if (split == -1) {
+			this.logger.error("Failed to find character '=' in line: {" + line + "}. It must consist of a ID=VALUE pair.");
+			return; // continue on errors
+		}
+		final String key = line.substring(0, split);
+		final String value = FSUtil.decodeNewline(line.substring(split + 1));
+		// the leading $ is optional
+		final Integer id;
+		try {
+			id = Integer.valueOf((key.charAt(0) == '$') ? key.substring(1) : key); // NOCS
+		} catch (final NumberFormatException ex) {
+			this.logger.error("Error reading mapping file, id must be integer", ex);
+			return; // continue on errors
+		}
+		final String prevVal = stringRegistry.put(id, value);
+		if (prevVal != null) {
+			this.logger.error("Found addional entry for id='" + id + "', old value was '" + prevVal + "' new value is '" + value + "'");
+		}
 	}
 }

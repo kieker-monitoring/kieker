@@ -38,6 +38,21 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 
 	protected volatile boolean mayBeDisabled; // BETTER write only non-concurrent code in a stage
 
+	/**
+	 * @author Christian Wulf
+	 * 
+	 * @since 1.10
+	 */
+	public enum StageState {
+		UNINITIALIZED, PIPELINE_STARTED, PIPELINE_STOPPED
+	}
+
+	/**
+	 * Indicates whether this stage has (already) been initialized.<br>
+	 * <i>This attribute prevents this stage to be initialized more than once.</i>
+	 */
+	private StageState state = StageState.UNINITIALIZED;
+
 	private final List<IInputPort<S, ?>> inputPorts = new ArrayList<IInputPort<S, ?>>();
 	private final List<IInputPort<S, ?>> readOnlyInputPorts = Collections.unmodifiableList(this.inputPorts);
 
@@ -104,7 +119,17 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 
 	protected abstract boolean execute(Context<S> context);
 
+	public final void notifyPipelineStarts() throws Exception {
+		if (this.state == StageState.UNINITIALIZED) {
+			this.state = StageState.PIPELINE_STARTED;
+			this.onPipelineStarts();
+			this.notifyOutputStages();
+		}
+	}
+
 	/**
+	 * This method is called exactly once iff the pipeline is started.
+	 * 
 	 * @throws Exception
 	 * @since 1.10
 	 */
@@ -113,10 +138,33 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	}
 
 	/**
+	 * @throws Exception
 	 * @since 1.10
 	 */
-	public void onPipelineStops() { // NOPMD (empty non-abstract method is intended)
-		// empty default implementation
+	private void notifyOutputStages() throws Exception {
+		for (final IOutputPort<S, ?> outputPort : this.readOnlyOutputPorts) {
+			final IPipe<?> associatedPipe = outputPort.getAssociatedPipe();
+			if (associatedPipe != null) {
+				// associatedPipe.getTargetPort().getOwningStage().notifyPipelineStarts();
+				associatedPipe.notifyPipelineStarts();
+			}
+		}
+	}
+
+	public final void notifyPipelineStops() {
+		if (this.state != StageState.PIPELINE_STOPPED) {
+			this.state = StageState.PIPELINE_STOPPED;
+			this.onPipelineStops();
+		}
+	}
+
+	/**
+	 * This method is called exactly once iff the pipeline is stopped.
+	 * 
+	 * @since 1.10
+	 */
+	public void onPipelineStops() {
+		// default empty implementation
 	}
 
 	/**

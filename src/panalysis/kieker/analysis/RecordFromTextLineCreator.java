@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.panalysis.kieker;
+package kieker.analysis;
 
+import java.io.File;
 import java.util.Map;
 
 import kieker.common.exception.IllegalRecordFormatException;
@@ -36,16 +37,17 @@ public class RecordFromTextLineCreator {
 
 	private static final IllegalRecordFormatException ILLEGAL_RECORD_FORMAT_EXCEPTION = new IllegalRecordFormatException();
 
-	private final Map<Integer, String> stringRegistry;
+	private final Map<String, ClassNameRegistry> classNameRegistryRepository;
 
-	public RecordFromTextLineCreator(final Map<Integer, String> stringRegistry) {
-		this.stringRegistry = stringRegistry;
+	public RecordFromTextLineCreator(final Map<String, ClassNameRegistry> classNameRegistryRepository) {
+		this.classNameRegistryRepository = classNameRegistryRepository;
 	}
 
 	/**
 	 * @since 1.10
 	 */
-	public IMonitoringRecord createRecordFromLine(final String line) throws MonitoringRecordException, IllegalRecordFormatException, MappingException,
+	public IMonitoringRecord createRecordFromLine(final File textFile, final String line) throws MonitoringRecordException, IllegalRecordFormatException,
+			MappingException,
 			UnknownRecordTypeException {
 		final String[] recordFields = line.split(CSV_SEPARATOR_CHARACTER);
 
@@ -55,19 +57,18 @@ public class RecordFromTextLineCreator {
 
 		final boolean isModernRecord = recordFields[0].charAt(0) == '$';
 		if (isModernRecord) {
-			return this.createModernRecordFromRecordFields(recordFields);
+			return this.createModernRecordFromRecordFields(textFile, recordFields);
 		} else {
 			return this.createLegacyRecordFromRecordFiels(recordFields);
 		}
 	}
 
-	/**
-	 * @since 1.10
-	 */
-	private IMonitoringRecord createModernRecordFromRecordFields(final String[] recordFields) throws MonitoringRecordException, MappingException,
+	private IMonitoringRecord createModernRecordFromRecordFields(final File textFile, final String[] recordFields) throws MonitoringRecordException,
+			MappingException,
 			UnknownRecordTypeException {
+		final ClassNameRegistry classNameRegistry = this.classNameRegistryRepository.get(textFile.getParent());
 		final Integer id = Integer.valueOf(recordFields[0].substring(1));
-		final String classname = this.stringRegistry.get(id);
+		final String classname = classNameRegistry.get(id);
 		if (classname == null) {
 			throw new MappingException("Missing classname mapping for record type id " + "'" + id + "'");
 		}

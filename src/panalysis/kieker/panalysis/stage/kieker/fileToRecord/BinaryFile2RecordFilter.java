@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
+import kieker.analysis.RecordFromBinaryFileCreator;
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.filesystem.BinaryCompressionMethod;
@@ -27,7 +28,6 @@ import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Context;
 import kieker.panalysis.framework.core.IInputPort;
 import kieker.panalysis.framework.core.IOutputPort;
-import kieker.panalysis.kieker.RecordFromBinaryFileCreator;
 
 /**
  * @author Christian Wulf

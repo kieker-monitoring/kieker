@@ -47,6 +47,7 @@ public class TCPReader extends AbstractFilter<TCPReader> {
 
 	private final IOutputPort<TCPReader, IMonitoringRecord> outputPort = super.createOutputPort();
 
+	// BETTER use a non thread-safe implementation to increase performance. A thread-safe version is not necessary.
 	private final ILookup<String> stringRegistry = new Lookup<String>();
 	private int port1 = 10133;
 	private int port2 = 10134;
@@ -55,6 +56,7 @@ public class TCPReader extends AbstractFilter<TCPReader> {
 	public void onPipelineStarts() throws Exception {
 		super.onPipelineStarts();
 
+		// FIXME use the implementation from the thread or from execute(), but not both
 		final TCPStringReader tcpStringReader = new TCPStringReader(this.port2, this.stringRegistry);
 		tcpStringReader.start();
 	}
