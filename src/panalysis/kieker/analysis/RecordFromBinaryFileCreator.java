@@ -19,7 +19,6 @@ import java.io.DataInputStream;
 import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
 
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.logging.Log;
@@ -34,15 +33,15 @@ import kieker.common.record.IMonitoringRecord;
 public class RecordFromBinaryFileCreator {
 
 	private final Log logger;
-	private final Map<String, ClassNameRegistry> classNameRegistryRepository;
+	private final ClassNameRegistryRepository classNameRegistryRepository;
 
-	public RecordFromBinaryFileCreator(final Log logger, final Map<String, ClassNameRegistry> classNameRegistryRepository) {
+	public RecordFromBinaryFileCreator(final Log logger, final ClassNameRegistryRepository classNameRegistryRepository) {
 		this.logger = logger;
 		this.classNameRegistryRepository = classNameRegistryRepository;
 	}
 
 	public IMonitoringRecord createRecordFromBinaryFile(final File binaryFile, final DataInputStream inputStream) throws IOException, MonitoringRecordException {
-		final ClassNameRegistry classNameRegistry = this.classNameRegistryRepository.get(binaryFile.getParent());
+		final ClassNameRegistry classNameRegistry = this.classNameRegistryRepository.get(binaryFile.getParentFile());
 
 		final Integer id;
 		try {

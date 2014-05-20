@@ -18,9 +18,8 @@ package kieker.panalysis.stage.kieker.fileToRecord;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
 
-import kieker.analysis.ClassNameRegistry;
+import kieker.analysis.ClassNameRegistryRepository;
 import kieker.analysis.RecordFromBinaryFileCreator;
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.record.IMonitoringRecord;
@@ -44,12 +43,12 @@ public class BinaryFile2RecordFilter extends AbstractFilter<BinaryFile2RecordFil
 
 	private RecordFromBinaryFileCreator recordFromBinaryFileCreator;
 
-	private Map<String, ClassNameRegistry> classNameRegistryRepository;
+	private ClassNameRegistryRepository classNameRegistryRepository;
 
 	/**
 	 * @since 1.10
 	 */
-	public BinaryFile2RecordFilter(final Map<String, ClassNameRegistry> classNameRegistryRepository) {
+	public BinaryFile2RecordFilter(final ClassNameRegistryRepository classNameRegistryRepository) {
 		this();
 		this.classNameRegistryRepository = classNameRegistryRepository;
 	}
@@ -103,11 +102,11 @@ public class BinaryFile2RecordFilter extends AbstractFilter<BinaryFile2RecordFil
 		return true;
 	}
 
-	public Map<String, ClassNameRegistry> getClassNameRegistryRepository() {
+	public ClassNameRegistryRepository getClassNameRegistryRepository() {
 		return this.classNameRegistryRepository;
 	}
 
-	public void setClassNameRegistryRepository(final Map<String, ClassNameRegistry> classNameRegistryRepository) {
+	public void setClassNameRegistryRepository(final ClassNameRegistryRepository classNameRegistryRepository) {
 		this.classNameRegistryRepository = classNameRegistryRepository;
 	}
 

@@ -54,46 +54,47 @@ public class File2RecordFilter extends CompositeFilter {
 	public File2RecordFilter(final ClassNameRegistryRepository classNameRegistryRepository) {
 		this.classNameRegistryRepository = classNameRegistryRepository;
 
+		// FIXME does not yet work with more than one thread due to classNameRegistryRepository
 		// create stages
 		final PredicateFilter<File> isDirectoryFilter = new PredicateFilter<File>(new IsDirectoryPredicate());
 		final ClassNameRegistryCreationFilter classNameRegistryCreationFilter = new ClassNameRegistryCreationFilter(this.classNameRegistryRepository);
 		final MonitoringLogDirectory2Files directory2FilesFilter = new MonitoringLogDirectory2Files();
-		final Merger<File> fileMerger = new Merger<File>();
 		final FileExtensionFilter fileExtensionFilter = new FileExtensionFilter();
+		final Merger<File> fileMerger = new Merger<File>();
 
 		final DatFile2RecordFilter datFile2RecordFilter = new DatFile2RecordFilter(this.classNameRegistryRepository);
-		final BinaryFile2RecordFilter binaryFile2RecordFilter = new BinaryFile2RecordFilter();
+		final BinaryFile2RecordFilter binaryFile2RecordFilter = new BinaryFile2RecordFilter(this.classNameRegistryRepository);
 		final ZipFile2RecordFilter zipFile2RecordFilter = new ZipFile2RecordFilter();
 
 		final Merger<IMonitoringRecord> recordMerger = new Merger<IMonitoringRecord>();
 
 		// store ports due to readability reasons
-		final IOutputPort<FileExtensionFilter, File> normalFileInputPort = fileExtensionFilter.createOutputPortForFileExtension(FSUtil.NORMAL_FILE_EXTENSION);
-		final IOutputPort<FileExtensionFilter, File> binFileInputPort = fileExtensionFilter.createOutputPortForFileExtension(BinaryCompressionMethod.NONE
+		final IOutputPort<FileExtensionFilter, File> normalFileOutputPort = fileExtensionFilter.createOutputPortForFileExtension(FSUtil.NORMAL_FILE_EXTENSION);
+		final IOutputPort<FileExtensionFilter, File> binFileOutputPort = fileExtensionFilter.createOutputPortForFileExtension(BinaryCompressionMethod.NONE
 				.getFileExtension());
-		final IOutputPort<FileExtensionFilter, File> zipFileInputPort = fileExtensionFilter.createOutputPortForFileExtension(FSUtil.ZIP_FILE_EXTENSION);
+		final IOutputPort<FileExtensionFilter, File> zipFileOutputPort = fileExtensionFilter.createOutputPortForFileExtension(FSUtil.ZIP_FILE_EXTENSION);
 
 		// connect ports by pipes
 		MethodCallPipe.connect(isDirectoryFilter.outputMatchingPort, classNameRegistryCreationFilter.directoryInputPort);
 		MethodCallPipe.connect(isDirectoryFilter.outputMismatchingPort, fileMerger.getNewInputPort()); // BETTER restructure pipeline
 		MethodCallPipe.connect(classNameRegistryCreationFilter.relayDirectoryOutputPort, directory2FilesFilter.directoryInputPort);
 		MethodCallPipe.connect(classNameRegistryCreationFilter.filePrefixOutputPort, directory2FilesFilter.filePrefixInputPort);
-		MethodCallPipe.connect(directory2FilesFilter.fileOutputPort, fileMerger.getNewInputPort());
-		MethodCallPipe.connect(fileMerger.outputPort, fileExtensionFilter.fileInputPort);
+		MethodCallPipe.connect(directory2FilesFilter.fileOutputPort, fileExtensionFilter.fileInputPort);
+		MethodCallPipe.connect(zipFileOutputPort, fileMerger.getNewInputPort());
 
 		final ConcurrentWorkStealingPipeFactory<File> concurrentWorkStealingPipeFactory0 = new ConcurrentWorkStealingPipeFactory<File>();
 		final ConcurrentWorkStealingPipe<File> concurrentWorkStealingPipe0 = concurrentWorkStealingPipeFactory0.create();
-		concurrentWorkStealingPipe0.setSourcePort(normalFileInputPort);
+		concurrentWorkStealingPipe0.setSourcePort(normalFileOutputPort);
 		concurrentWorkStealingPipe0.setTargetPort(datFile2RecordFilter.fileInputPort);
 
 		final ConcurrentWorkStealingPipeFactory<File> concurrentWorkStealingPipeFactory1 = new ConcurrentWorkStealingPipeFactory<File>();
 		final ConcurrentWorkStealingPipe<File> concurrentWorkStealingPipe1 = concurrentWorkStealingPipeFactory1.create();
-		concurrentWorkStealingPipe1.setSourcePort(binFileInputPort);
+		concurrentWorkStealingPipe1.setSourcePort(binFileOutputPort);
 		concurrentWorkStealingPipe1.setTargetPort(binaryFile2RecordFilter.fileInputPort);
 
 		final ConcurrentWorkStealingPipeFactory<File> concurrentWorkStealingPipeFactory2 = new ConcurrentWorkStealingPipeFactory<File>();
 		final ConcurrentWorkStealingPipe<File> concurrentWorkStealingPipe2 = concurrentWorkStealingPipeFactory2.create();
-		concurrentWorkStealingPipe2.setSourcePort(zipFileInputPort);
+		concurrentWorkStealingPipe2.setSourcePort(fileMerger.outputPort);
 		concurrentWorkStealingPipe2.setTargetPort(zipFile2RecordFilter.fileInputPort);
 
 		final ConcurrentWorkStealingPipeFactory<IMonitoringRecord> concurrentWorkStealingPipeFactoriesNormal = new ConcurrentWorkStealingPipeFactory<IMonitoringRecord>();
