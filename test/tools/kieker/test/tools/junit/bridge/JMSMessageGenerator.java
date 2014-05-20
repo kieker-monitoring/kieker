@@ -15,7 +15,7 @@
  ***************************************************************************/
 package kieker.test.tools.junit.bridge;
 
-import java.net.URI;
+import java.util.Hashtable;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
@@ -24,12 +24,18 @@ import javax.jms.JMSException;
 import javax.jms.MessageNotWriteableException;
 import javax.jms.MessageProducer;
 import javax.jms.Session;
+import javax.jms.TextMessage;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
-import org.apache.activemq.ActiveMQConnectionFactory;
-import org.apache.activemq.command.ActiveMQTextMessage;
 import org.junit.Assert;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.tools.bridge.connector.jms.JMSClientConnector;
+
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Reiner Jung
@@ -38,14 +44,25 @@ import kieker.tools.bridge.connector.jms.JMSClientConnector;
  */
 public class JMSMessageGenerator implements Runnable {
 
+	private static final Log LOG;
+
+	static {
+		if (System.getProperty("kieker.common.logging.Log") == null) {
+			System.setProperty("kieker.common.logging.Log", "JUNIT");
+		}
+		LOG = LogFactory.getLog(AbstractKiekerTest.class);
+	}
+
 	private Connection connection;
 	private MessageProducer producer;
-	private final URI jmsUri;
+	private final String jmsUri;
+	private Session session;
 
 	/**
 	 * Empty constructor.
 	 */
-	public JMSMessageGenerator(final URI uri) {
+	public JMSMessageGenerator(final String uri) {
+		LOG.info("Destination " + uri);
 		this.jmsUri = uri;
 	}
 
@@ -61,26 +78,40 @@ public class JMSMessageGenerator implements Runnable {
 
 	private void initialize() {
 		try {
+			LOG.info("Initialize message generator");
+
 			// setup connection
-			final ConnectionFactory factory = new ActiveMQConnectionFactory(ConfigurationParameters.JMS_USERNAME,
-					ConfigurationParameters.JMS_PASSWORD, this.jmsUri);
+			final Hashtable<String, String> properties = new Hashtable<String, String>(); // NOPMD NOCS (IllegalTypeCheck, InitialContext requires Hashtable)
+			properties.put(Context.INITIAL_CONTEXT_FACTORY, ConfigurationParameters.JMS_FACTORY_LOOKUP_NAME);
+			properties.put(Context.PROVIDER_URL, this.jmsUri);
+			properties.put(Context.SECURITY_PRINCIPAL, ConfigurationParameters.JMS_USERNAME);
+			properties.put(Context.SECURITY_CREDENTIALS, ConfigurationParameters.JMS_PASSWORD);
+
+			final Context context = new InitialContext(properties);
+			final ConnectionFactory factory = (ConnectionFactory) context.lookup("ConnectionFactory");
 
 			this.connection = factory.createConnection();
 
-			final Session session = this.connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-			final Destination destination = session.createQueue(JMSClientConnector.KIEKER_DATA_BRIDGE_READ_QUEUE);
-			this.producer = session.createProducer(destination);
+			this.session = this.connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+			final Destination destination = this.session.createQueue(JMSClientConnector.KIEKER_DATA_BRIDGE_READ_QUEUE);
+			this.producer = this.session.createProducer(destination);
 
+			LOG.info("Start connection");
 			this.connection.start();
 		} catch (final JMSException e) {
 			Assert.fail(e.getMessage());
+			LOG.warn(e.getMessage());
+		} catch (final NamingException e) {
+			Assert.fail(e.getMessage());
+			LOG.warn("No connection factory found. " + e.getMessage());
 		}
 	}
 
 	private void sendRecords() {
 		for (int i = 0; i < ConfigurationParameters.SEND_NUMBER_OF_RECORDS; i++) {
+			LOG.debug("Send record " + i);
 			try {
-				final String messageText = ConfigurationParameters.TEST_RECORD_ID
+				final TextMessage message = this.session.createTextMessage(ConfigurationParameters.TEST_RECORD_ID
 						+ ";" + ConfigurationParameters.TEST_OPERATION_SIGNATURE
 						+ ";" + ConfigurationParameters.TEST_SESSION_ID
 						+ ";" + ConfigurationParameters.TEST_TRACE_ID
@@ -88,9 +119,7 @@ public class JMSMessageGenerator implements Runnable {
 						+ ";" + ConfigurationParameters.TEST_TOUT
 						+ ";" + ConfigurationParameters.TEST_HOSTNAME
 						+ ";" + i
-						+ ";" + ConfigurationParameters.TEST_ESS;
-				final ActiveMQTextMessage message = new ActiveMQTextMessage();
-				message.setText(messageText);
+						+ ";" + ConfigurationParameters.TEST_ESS);
 				this.producer.send(message);
 			} catch (final MessageNotWriteableException e) {
 				Assert.fail(e.getMessage());
@@ -103,6 +132,7 @@ public class JMSMessageGenerator implements Runnable {
 
 	private void close() {
 		try {
+			LOG.info("Stop connection");
 			this.connection.stop();
 		} catch (final JMSException e) {
 			Assert.fail(e.getMessage());

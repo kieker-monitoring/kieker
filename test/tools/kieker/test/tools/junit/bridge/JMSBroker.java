@@ -18,7 +18,11 @@ package kieker.test.tools.junit.bridge;
 import org.apache.activemq.broker.BrokerService;
 import org.junit.Assert;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.tools.bridge.connector.jms.JMSClientConnector;
+
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Reiner Jung
@@ -28,12 +32,22 @@ import kieker.tools.bridge.connector.jms.JMSClientConnector;
  */
 public class JMSBroker implements Runnable {
 
+	private static final Log LOG;
+
+	static {
+		if (System.getProperty("kieker.common.logging.Log") == null) {
+			System.setProperty("kieker.common.logging.Log", "JUNIT");
+		}
+		LOG = LogFactory.getLog(AbstractKiekerTest.class);
+	}
+
 	private final BrokerService broker;
 
 	/**
 	 * Empty constructor.
 	 */
 	public JMSBroker() {
+		LOG.info("Create broker service");
 		this.broker = new BrokerService();
 	}
 
@@ -47,7 +61,9 @@ public class JMSBroker implements Runnable {
 		this.broker.setBrokerName(JMSClientConnector.KIEKER_DATA_BRIDGE_READ_QUEUE);
 		try {
 			this.broker.addConnector(ConfigurationParameters.JMS_URI);
+			LOG.info("Start broker");
 			this.broker.start();
+			LOG.info("Broker stopped");
 		} catch (final Exception e) { // NOCS NOPMD -- the framework uses Exception :-(
 			Assert.fail("Broker startup failed. " + e.getMessage());
 		}

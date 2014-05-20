@@ -20,6 +20,8 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.junit.Assert;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.tools.bridge.LookupEntity;
@@ -39,6 +41,15 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * @since 1.8
  */
 public abstract class AbstractConnectorTest extends AbstractKiekerTest {
+
+	private static final Log LOG;
+
+	static {
+		if (System.getProperty("kieker.common.logging.Log") == null) {
+			System.setProperty("kieker.common.logging.Log", "JUNIT");
+		}
+		LOG = LogFactory.getLog(AbstractKiekerTest.class);
+	}
 
 	private IServiceConnector connector;
 	private int recordCount; // default initialization is 0
@@ -70,6 +81,7 @@ public abstract class AbstractConnectorTest extends AbstractKiekerTest {
 	 */
 	protected void initialize() {
 		try {
+			LOG.info("Initialize connector " + this.connector.getClass().toString());
 			this.connector.initialize();
 		} catch (final ConnectorDataTransmissionException e) {
 			Assert.fail("Connector initialization failed: " + e.getMessage());
@@ -84,6 +96,7 @@ public abstract class AbstractConnectorTest extends AbstractKiekerTest {
 	 */
 	protected void close(final int numberOfRecords) {
 		try {
+			LOG.info("Terminate connector " + this.connector.getClass().toString());
 			this.connector.close();
 		} catch (final ConnectorDataTransmissionException e) {
 			Assert.fail("Connector termination failed: " + e.getMessage());
@@ -101,6 +114,7 @@ public abstract class AbstractConnectorTest extends AbstractKiekerTest {
 	 */
 	protected void deserialize(final int numberOfRecords) {
 		for (int i = 0; i < numberOfRecords; i++) {
+			LOG.debug("Receive record " + i);
 			try {
 				final OperationExecutionRecord record = (OperationExecutionRecord) this.connector.deserializeNextRecord();
 				Assert.assertEquals("Tin is not equal", ConfigurationParameters.TEST_TIN, record.getTin());
