@@ -106,6 +106,9 @@
 		</path>
 		
 		<path id="kieker.panalysis-compile-classpath">
+			<fileset dir="${lib.dir}">
+				<include name="guava-*.jar" />
+			</fileset>
 			<pathelement location="${build.kieker.common.dir}/" />
 		</path>
 		
