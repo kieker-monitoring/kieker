@@ -26,7 +26,7 @@ import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.ConnectorProperty;
 
 /**
- * a yes broken JMSClient with an embedded JMS server.
+ * JMSClient with an embedded JMS server.
  * 
  * @author Reiner Jung
  * @since 1.8
