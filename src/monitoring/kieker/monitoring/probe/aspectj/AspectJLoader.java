@@ -49,7 +49,7 @@ public final class AspectJLoader {
 	 * @param instrumentation
 	 */
 	public static void premain(final String options, final Instrumentation instrumentation) {
-		if (AspectJLoader.noConfigurationFileAvailable()) {
+		if (!AspectJLoader.checkConfigurationFileAvailable()) {
 			LOG.info("No AspectJ configuration file found. Using Kieker's default AspectJ configuration file.");
 			AspectJLoader.addKiekerDefaultConfigFile();
 		}
@@ -57,20 +57,20 @@ public final class AspectJLoader {
 		Agent.premain(options, instrumentation);
 	}
 
-	private static boolean noConfigurationFileAvailable() {
+	private static boolean checkConfigurationFileAvailable() {
 		if (Boolean.getBoolean(KIEKER_MONITORING_SKIP_DEFAULT_AOP_CONFIGURATION)) {
-			return false;
+			return true;
 		}
 
 		LOG.info("Using Kieker's AspectJLoader. This is not recommended for multi-classloader environments such as JavaEE and OSGI. Use the additional VM"
 				+ " parameter '-D" + KIEKER_MONITORING_SKIP_DEFAULT_AOP_CONFIGURATION + "=true'. to disable Kieker's AspectJLoader");
 
 		if (null != System.getProperty("aj5.def")) {
-			return false;
+			return true;
 		}
 
 		if (null != System.getProperty("org.aspectj.weaver.loadtime.configuration")) {
-			return false;
+			return true;
 		}
 
 		final ClassLoader cl = ClassLoader.getSystemClassLoader();
@@ -80,9 +80,9 @@ public final class AspectJLoader {
 			final Enumeration<URL> aopOSGIXMLs = cl.getResources(Constants.AOP_OSGI_XML);
 
 			final boolean anyConfigFileAvailable = aopUserXMLs.hasMoreElements() || aopAJCXMLs.hasMoreElements() || aopOSGIXMLs.hasMoreElements();
-			return !anyConfigFileAvailable; // NOPMD
+			return anyConfigFileAvailable; // NOPMD
 		} catch (final IOException ex) {
-			return true;
+			return false;
 		}
 	}
 
