@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.panalysis.stage.io;
+package kieker.panalysis.stage;
 
 import java.io.File;
 import java.util.HashMap;

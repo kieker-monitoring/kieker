@@ -23,7 +23,7 @@ import kieker.common.util.filesystem.BinaryCompressionMethod;
 import kieker.common.util.filesystem.FSUtil;
 import kieker.panalysis.framework.core.Context;
 import kieker.panalysis.framework.core.IInputPort;
-import kieker.panalysis.stage.Directory2FilesFilter;
+import kieker.panalysis.stage.io.Directory2FilesFilter;
 
 /**
  * @author Christian Wulf

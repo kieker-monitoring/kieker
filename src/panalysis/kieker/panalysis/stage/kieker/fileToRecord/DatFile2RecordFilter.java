@@ -24,7 +24,7 @@ import kieker.panalysis.framework.concurrent.ConcurrentWorkStealingPipeFactory;
 import kieker.panalysis.framework.core.CompositeFilter;
 import kieker.panalysis.framework.core.IInputPort;
 import kieker.panalysis.framework.core.IOutputPort;
-import kieker.panalysis.stage.File2TextLinesFilter;
+import kieker.panalysis.stage.io.File2TextLinesFilter;
 import kieker.panalysis.stage.kieker.fileToRecord.textLine.TextLine2RecordFilter;
 import kieker.panalysis.stage.util.TextLine;
 

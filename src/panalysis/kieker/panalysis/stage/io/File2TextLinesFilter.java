@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.panalysis.stage;
+package kieker.panalysis.stage.io;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -40,7 +40,7 @@ public class File2TextLinesFilter extends AbstractFilter<File2TextLinesFilter> {
 
 	public final IOutputPort<File2TextLinesFilter, TextLine> textLineOutputPort = this.createOutputPort();
 
-	private final String charset = "UTF-8";
+	private String charset = "UTF-8";
 
 	/**
 	 * @since 1.10
@@ -76,6 +76,14 @@ public class File2TextLinesFilter extends AbstractFilter<File2TextLinesFilter> {
 			}
 		}
 		return true;
+	}
+
+	public String getCharset() {
+		return this.charset;
+	}
+
+	public void setCharset(final String charset) {
+		this.charset = charset;
 	}
 
 }
