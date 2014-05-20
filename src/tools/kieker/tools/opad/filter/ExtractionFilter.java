@@ -31,6 +31,7 @@ import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
 /**
  * An instance of this class extracts the Data from the incoming Records.
  * 
+ * @since 1.10
  * @author Tom Frotscher
  */
 @Plugin(outputPorts = { @OutputPort(name = ExtractionFilter.OUTPUT_PORT_NAME_VALUE, eventTypes = { NamedDoubleTimeSeriesPoint.class }) },

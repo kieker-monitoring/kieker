@@ -25,9 +25,8 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
 
 /**
- * 
  * @author Tillmann Carlos Bielefeld
- * 
+ * @since 1.10
  */
 public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, INamedElement, IDoubleValue {
 
@@ -37,9 +36,9 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 	public static final int SIZE = 20;
 
 	/**
-	 * class by Bielefeld
+	 * class by Bielefeld.
 	 */
-	public static final Class<?>[] TYPES = {
+	protected static final Class<?>[] TYPES = {
 		long.class, // timestamp
 		double.class, // value
 		String.class, // name

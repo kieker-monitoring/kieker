@@ -16,10 +16,9 @@
 
 package kieker.tools.tslib;
 
-
 /**
  * @author Andre van Hoorn
- * 
+ * @since 1.10
  * @param <T>
  */
 public interface ITimeSeriesPoint<T> {

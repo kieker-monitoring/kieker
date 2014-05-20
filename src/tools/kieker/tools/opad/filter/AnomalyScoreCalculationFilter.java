@@ -28,7 +28,7 @@ import kieker.tools.opad.record.StorableDetectionResult;
 /**
  * This filter calculates the anomaly score from the distance of the forecast and the current value.
  * 
- * 
+ * @since 1.10
  * @author Tillmann Carlos Bielefeld
  * 
  */

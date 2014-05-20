@@ -22,6 +22,7 @@ import kieker.tools.tslib.forecast.IForecastResult;
 /**
  * 
  * @author Tillmann Carlos Bielefeld
+ * @since 1.10
  * 
  */
 public class SimpleAnomalyCalculator implements IAnomalyCalculator<Double> {
@@ -31,12 +32,14 @@ public class SimpleAnomalyCalculator implements IAnomalyCalculator<Double> {
 	 */
 	public SimpleAnomalyCalculator() {
 
-	// constructur
-		}
-	
+		// constructur
+	}
+
 	/**
-	 * @param forecast Forecast Result
-	 * @param current current Timeseries
+	 * @param forecast
+	 *            Forecast Result
+	 * @param current
+	 *            current Timeseries
 	 * 
 	 * @return AnomalScore
 	 */

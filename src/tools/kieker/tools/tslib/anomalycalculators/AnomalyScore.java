@@ -17,7 +17,7 @@
 package kieker.tools.tslib.anomalycalculators;
 
 /**
- * 
+ * @since 1.10
  * @author Tillmann Carlos Bielefeld
  * 
  */
@@ -27,7 +27,8 @@ public class AnomalyScore {
 
 	/**
 	 * 
-	 * @param score score
+	 * @param score
+	 *            score
 	 */
 	public AnomalyScore(final double score) {
 		this.score = score;

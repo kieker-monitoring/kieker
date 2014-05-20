@@ -32,6 +32,7 @@ import kieker.tools.composite.CompositeOutputRelay;
  * Filter plugin that contains the whole opad pipes/filter structure.
  * 
  * @author Thomas Düllmann, Tobias Rudolph
+ * @since 1.10
  * 
  */
 @Plugin(description = "Cumulated filters that opad consists of",

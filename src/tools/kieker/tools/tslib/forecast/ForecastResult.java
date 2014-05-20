@@ -24,6 +24,7 @@ import kieker.tools.tslib.ITimeSeries;
 /**
  * Result of a time series forecast, e.g., computed by {@link IForecaster}. If additional fields are required, {@link IForecaster}s should extend this class.
  * 
+ * @since 1.10
  * @author Andre van Hoorn
  * 
  */

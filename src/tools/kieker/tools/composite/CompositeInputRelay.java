@@ -25,10 +25,11 @@ import kieker.common.record.IMonitoringRecord;
 
 /***
  * 
- * @author Markus Fischer, Thomas Düllmann, Tobias Rudolph,
+ * @author Markus Fischer, Thomas Düllmann, Tobias Rudolph
+ * @since 1.10
  * 
- *         Simple implementation of a Filterplugin to relay incoming
- *         messages for the AbstractCompositeFilterPlugin
+ *        Simple implementation of a Filterplugin to relay incoming
+ *        messages for the AbstractCompositeFilterPlugin
  */
 @Plugin(name = "CompositeInputRelay",
 		outputPorts = { @OutputPort(name = CompositeInputRelay.INPUTRELAY_OUTPUTPORT, eventTypes = { IMonitoringRecord.class }) })

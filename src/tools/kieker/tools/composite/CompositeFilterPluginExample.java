@@ -31,6 +31,7 @@ import kieker.common.record.IMonitoringRecord;
  * 
  * @author Markus Fischer
  * @version 0.1
+ * @since 1.10
  */
 @Plugin(description = "CompositeFilterPluginExample",
 		outputPorts = {

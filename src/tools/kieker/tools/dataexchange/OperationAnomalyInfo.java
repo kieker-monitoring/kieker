@@ -21,6 +21,7 @@ package kieker.tools.dataexchange;
  * 
  * @author Thomas Düllmann, Yannic Noller
  * @version 0.2
+ * @since 1.10
  */
 public class OperationAnomalyInfo {
 

@@ -33,7 +33,7 @@ import kieker.tools.configuration.IConfigurationRegistry;
  * Abstract class that makes it possible to encapsulate filters in a composite plugin.
  * 
  * @author Markus Fischer, Thomas Düllmann
- * 
+ * @since 1.10
  */
 public abstract class AbstractCompositeFilterPlugin extends AbstractFilterPlugin {
 
@@ -135,8 +135,9 @@ public abstract class AbstractCompositeFilterPlugin extends AbstractFilterPlugin
 	/**
 	 * 
 	 * @author Markus Fischer
+	 * @since 1.10
 	 * 
-	 *         Simple class to wrap up a portName and a corresponding eventtype
+	 *        Simple class to wrap up a portName and a corresponding eventtype
 	 */
 	public class PortWrapper {
 		private final String outputPortName;

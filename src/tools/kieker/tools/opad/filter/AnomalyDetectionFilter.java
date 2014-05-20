@@ -40,6 +40,7 @@ import kieker.tools.opad.record.StorableDetectionResult;
  * . separator, e.g., 0.5 0.7, ...
  * 
  * @author Tillmann Carlos Bielefeld, Thomas Duellmann, Tobias Rudolph
+ * @since 1.10
  * 
  */
 @Plugin(name = "AnomalyScore Detection Filter", outputPorts = {

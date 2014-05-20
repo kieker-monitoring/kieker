@@ -35,6 +35,7 @@ import kieker.tools.util.AggregationVariableSet;
  * This Filter aggregates the incoming DoubleTImeSeriesPoints over a configurable period of time.
  * 
  * @author Tom Frotscher
+ * @since 1.10
  * 
  */
 @Plugin(name = "Variate TimeSeriesPoint Aggregator", outputPorts = {

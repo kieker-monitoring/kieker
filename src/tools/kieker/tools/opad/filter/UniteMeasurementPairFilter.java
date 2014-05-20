@@ -35,6 +35,7 @@ import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
  * This Filter brings a Measurement Point and a corresponding Forecasting value together.
  * 
  * @author Tom Frotscher
+ * @since 1.10
  * 
  */
 @Plugin(name = "VariateUniteForecastingMeasurementPair Filter", outputPorts = {

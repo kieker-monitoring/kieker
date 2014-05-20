@@ -29,13 +29,20 @@ import kieker.common.util.registry.IRegistry;
  * stored as an double value.
  * 
  * @author Tom Frotscher
+ * @since 1.10
  * 
  */
 public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
 
-	public static final int SIZE = 20;
+	/**
+	 * Serialization size.
+	 */
+	protected static final int SIZE = 20;
 
-	public static final Class<?>[] TYPES = {
+	/**
+	 * Types used for serialization.
+	 */
+	protected static final Class<?>[] TYPES = {
 		String.class, // applicationName
 		long.class, // timestamp
 		double.class, // responseTime

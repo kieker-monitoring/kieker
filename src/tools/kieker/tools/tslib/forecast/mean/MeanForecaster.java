@@ -24,6 +24,7 @@ import kieker.tools.tslib.forecast.AbstractRForecaster;
  * An R-based time series forecaster which computes a forecast based on the mean value of the historic values.
  * 
  * @author Andre van Hoorn
+ * @since 1.10
  * 
  */
 public class MeanForecaster extends AbstractRForecaster {

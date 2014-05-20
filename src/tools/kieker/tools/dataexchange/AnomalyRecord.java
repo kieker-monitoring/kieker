@@ -21,6 +21,7 @@ package kieker.tools.dataexchange;
  * 
  * @author Dominik Olp, Yannic Noller
  * @version 0.2
+ * @since 1.10
  */
 public class AnomalyRecord {
 

@@ -48,6 +48,7 @@ import kieker.tools.tslib.forecast.historicdata.PatternCheckingForecaster;
  * approach (pattern checking forecaster) is used.
  * 
  * @author Tom Frotscher, Thomas Düllmann, Tobias Rudolph, Andreas Eberlein
+ * @since 1.10
  * 
  */
 @Plugin(name = "Extended Forecasting Filter", outputPorts = {

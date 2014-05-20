@@ -19,6 +19,7 @@ package kieker.tools.opad.record;
 /**
  * 
  * @author Tillmann Carlos Bielefeld
+ * @since 1.10
  * 
  */
 public interface INamedElement {

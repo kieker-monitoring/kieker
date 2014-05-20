@@ -26,9 +26,10 @@ import kieker.tools.composite.AbstractCompositeFilterPlugin.PortWrapper;
 /**
  * 
  * @author Markus Fischer
+ * @since 1.10
  * 
- *         Simple implementation of a Filterplugin to relay outgoing
- *         messages for the AbstractCompositeFilterPlugin
+ *        Simple implementation of a Filterplugin to relay outgoing
+ *        messages for the AbstractCompositeFilterPlugin
  */
 @Plugin(description = "A filter relay Messages to the compositeOutput")
 public class CompositeOutputRelay extends AbstractFilterPlugin {

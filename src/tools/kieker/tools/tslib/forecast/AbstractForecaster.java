@@ -21,7 +21,7 @@ import kieker.tools.tslib.TimeSeries;
 
 /**
  * @author Andre van Hoorn, Tillmann Carlos Bielefeld
- * 
+ * @since 1.10
  * @param <T>
  */
 public abstract class AbstractForecaster<T> implements IForecaster<T> {
@@ -64,10 +64,9 @@ public abstract class AbstractForecaster<T> implements IForecaster<T> {
 
 		// The starting point of the FC series is calculated by _one_ additional
 		// tick...
-	
-		
-		//final long lastDistanceMillis = TimeUnit.MILLISECONDS.convert(
-		//		history.getDeltaTime(), history.getDeltaTimeUnit());
+
+		// final long lastDistanceMillis = TimeUnit.MILLISECONDS.convert(
+		// history.getDeltaTime(), history.getDeltaTimeUnit());
 		// ... plus the end point of the historic series
 		final long startTime = history.getEndTime();
 		final TimeSeries<T> tsFC = new TimeSeries<T>(startTime,

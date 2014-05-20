@@ -21,7 +21,7 @@ import org.apache.commons.math.stat.StatUtils;
 /**
  * 
  * @author Tom Frotscher
- * 
+ * @since 1.10
  */
 public enum AggregationMethod {
 

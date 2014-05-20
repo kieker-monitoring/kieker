@@ -30,6 +30,7 @@ import kieker.common.util.registry.IRegistry;
  * the timestamp and the corresponding anomaly score.
  * 
  * @author Tom Frotscher, Thomas Düllmann
+ * @since 1.10
  * 
  */
 public class StorableDetectionResult extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
@@ -49,29 +50,29 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 		double.class, // forecast
 		double.class, // score
 	};
-	
+
 	private static final long serialVersionUID = 7325786584057491433L;
 
 	/**
 	 * Name of the application.
 	 */
 	protected final String applicationName;
-	
+
 	/**
 	 * Latency of the application.
 	 */
 	protected final double value;
-	
+
 	/**
 	 * Timestamp of the record.
 	 */
 	protected final long timestamp;
-	
+
 	/**
 	 * Forecast value.
 	 */
 	protected final double forecast;
-	
+
 	/**
 	 * Anomaly score.
 	 */
@@ -105,7 +106,7 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 	 * @param values
 	 *            Object array containing the application name, value, timestamp, forecast and anomaly score.
 	 */
-	public StorableDetectionResult(final Object[] values) { //NOPMD
+	public StorableDetectionResult(final Object[] values) { // NOPMD
 		AbstractMonitoringRecord.checkArray(values, StorableDetectionResult.TYPES);
 
 		this.applicationName = (String) values[0];
@@ -192,9 +193,13 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 
 	/**
 	 * Serializes the object.
-	 * @param buffer buffer
-	 * @param stringRegistry stringRegistry
-	 * @throws BufferOverflowException bufferOverflowException
+	 * 
+	 * @param buffer
+	 *            buffer
+	 * @param stringRegistry
+	 *            stringRegistry
+	 * @throws BufferOverflowException
+	 *             bufferOverflowException
 	 */
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putInt(stringRegistry.get(this.getApplication()));
@@ -206,9 +211,13 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 
 	/**
 	 * Reads obejct from bytes.
-	 * @param buffer buffer
-	 * @param stringRegistry stringRegistry
-	 * @throws BufferUnderflowException bufferUnderflowException
+	 * 
+	 * @param buffer
+	 *            buffer
+	 * @param stringRegistry
+	 *            stringRegistry
+	 * @throws BufferUnderflowException
+	 *             bufferUnderflowException
 	 */
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException(); // TODO: FIX NOCS

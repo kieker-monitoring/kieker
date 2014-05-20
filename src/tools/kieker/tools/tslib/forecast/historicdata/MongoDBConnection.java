@@ -31,6 +31,7 @@ import kieker.common.logging.LogFactory;
  * checking forecaster to search for the patterns in the past.
  * 
  * @author Tom Frotscher
+ * @since 1.10
  * 
  */
 public class MongoDBConnection {

@@ -27,6 +27,7 @@ import kieker.tools.configuration.exception.PluginNotFoundException;
  * {@link AbstractUpdateableFilterPlugin} can register to a Registry and thereby be accessed and updated.
  * 
  * @author Markus Fischer
+ * @since 1.10
  * 
  */
 public abstract class AbstractConfigurationRegistry implements IConfigurationRegistry {

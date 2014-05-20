@@ -33,6 +33,7 @@ import kieker.tools.tslib.forecast.windowstart.WindowStartForecaster;
 /**
  * 
  * @author Andre van Hoorn, Tillmann Carlos Bielefeld, Tobias Rudolph, Andreas Eberlein
+ * @since 1.10
  * 
  */
 public enum ForecastMethod {

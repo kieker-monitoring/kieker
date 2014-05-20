@@ -41,7 +41,8 @@ import kieker.tools.opad.record.StorableDetectionResult;
  * anomaly score and name of the corresponding application. The results are then communicated to
  * the Logging-queue via ZeroMQ.
  * 
- * @author Tom Frotscher, Thomas Düllmann, Andreas Eberlein, Tobias Rudolph,
+ * @author Tom Frotscher, Thomas Düllmann, Andreas Eberlein, Tobias Rudolph
+ * @since 1.10
  * 
  */
 @Plugin(name = "Send and Store Detection Result Filter",

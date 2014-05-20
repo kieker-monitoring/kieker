@@ -29,20 +29,23 @@ import kieker.tools.tslib.forecast.IForecastResult;
  * It can also be used for weeks, months, ... and ever other periodicity.
  * 
  * @author Tillmann Carlos Bielefeld
+ * @since 1.10
  * 
  */
 public class WindowStartForecaster extends AbstractForecaster<Double> {
 
 	/**
 	 * 
-	 * @param historyTimeseries Timeseries
+	 * @param historyTimeseries
+	 *            Timeseries
 	 */
 	public WindowStartForecaster(final ITimeSeries<Double> historyTimeseries) {
 		super(historyTimeseries);
 	}
 
 	/**
-	 * @param numForecastSteps number of values the forecaster return
+	 * @param numForecastSteps
+	 *            number of values the forecaster return
 	 * @return ForecastResult
 	 */
 	public IForecastResult forecast(final int numForecastSteps) {

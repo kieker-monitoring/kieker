@@ -29,6 +29,7 @@ import kieker.tools.opad.record.NamedDoubleRecord;
  * Converts OperationExecutionRecords to NamedDoubleRecords.
  * 
  * @author Thomas Düllmann
+ * @since 1.10
  * 
  */
 @Plugin(

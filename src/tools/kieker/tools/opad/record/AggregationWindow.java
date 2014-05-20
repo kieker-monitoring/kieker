@@ -21,6 +21,7 @@ package kieker.tools.opad.record;
  * 
  * @author Thomas Düllmann
  * @version 0.1
+ * @since 1.10
  */
 public class AggregationWindow {
 	private final long windowStart;

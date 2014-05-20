@@ -39,6 +39,7 @@ import kieker.tools.tslib.forecast.IForecastResult;
  * seasonal pattern (distance, timeunit). Around the found time series point a new time series window is established,
  * the values of the time series window are aggregated and used as prediction.
  * 
+ * @since 1.10
  * @author Tom Frotscher
  * 
  */

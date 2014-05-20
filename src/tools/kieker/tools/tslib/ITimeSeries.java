@@ -21,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @author Andre van Hoorn
+ * @since 1.10
  * 
  * @param <T>
  */
@@ -105,47 +106,47 @@ public interface ITimeSeries<T> {
 	 * @return endTime
 	 */
 	public long getEndTime();
-	
+
 	/**
 	 * Returns the frequency of the time series (how many time series points add up to an time unit of interest)
 	 * needed to improve forecast accuracy
 	 * e.g. a time series point each 15 minutes, interested in forecasting days: frequency is 96
 	 * 
-	 * @return frequency as the number of time series points 
-	 * that add up either to the next bigger time unit and/or 
-	 * to the estimated length of seasonal patterns in focus. 
-	 * The value should not be too small 
-	 * (still able to approximate the shape of the seasonal pattern) 
-	 * and not to high (to limit the computational effort of 
-	 * complex forecast strategies)
+	 * @return frequency as the number of time series points
+	 *         that add up either to the next bigger time unit and/or
+	 *         to the estimated length of seasonal patterns in focus.
+	 *         The value should not be too small
+	 *         (still able to approximate the shape of the seasonal pattern)
+	 *         and not to high (to limit the computational effort of
+	 *         complex forecast strategies)
 	 */
 	public int getFrequency();
-	
+
 	/**
-	 * @return The number of time series points that have fallen 
-	 * of the time series due to capacity constraints by max_periods
+	 * @return The number of time series points that have fallen
+	 *         of the time series due to capacity constraints by max_periods
 	 * 
 	 */
-//	public long getSkippedValues();
-	
+	// public long getSkippedValues();
+
 	/**
-	 * a period is a timeUnit of interest in this case 
-	 * returns the maximum number of periods the TS can contain - 
+	 * a period is a timeUnit of interest in this case
+	 * returns the maximum number of periods the TS can contain -
 	 * for forecasting seasonal patterns with the maximum duration of a period, MaxPeriods should be at least 3
 	 * 
 	 * capacity = frequency * periods
 	 * 
-	 * The amount of Frequency time series points form a period. 
-	 * This parameter defines the maximum number of periods that 
-	 * fit into the time series. 
-	 * As in a `fifo` queue the oldest values fall off 
-	 * when more recent values are added. 
-	 * The value of this setting should be at least 3 
-	 * to enable reliable pattern detection by complex 
-	 * forecast strategies and multiplied the by 
-	 * Frequency value not be higher than 200 if 
-	 * the computational effort of more complex 
-	 * forecast strategies should stay below one minute. 
+	 * The amount of Frequency time series points form a period.
+	 * This parameter defines the maximum number of periods that
+	 * fit into the time series.
+	 * As in a `fifo` queue the oldest values fall off
+	 * when more recent values are added.
+	 * The value of this setting should be at least 3
+	 * to enable reliable pattern detection by complex
+	 * forecast strategies and multiplied the by
+	 * Frequency value not be higher than 200 if
+	 * the computational effort of more complex
+	 * forecast strategies should stay below one minute.
 	 */
-//	public long getMaxPeriods();
+	// public long getMaxPeriods();
 }

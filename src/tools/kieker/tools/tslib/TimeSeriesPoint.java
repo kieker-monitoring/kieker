@@ -18,7 +18,7 @@ package kieker.tools.tslib;
 
 /**
  * @author Andre van Hoorn
- * 
+ * @since 1.10
  * @param <T>
  */
 public class TimeSeriesPoint<T> implements ITimeSeriesPoint<T> {

@@ -41,6 +41,7 @@ import kieker.tools.tslib.forecast.IForecaster;
 /**
  * Computes a forecast for every incoming measurement from different applications.
  * 
+ * @since 1.10
  * @author Tom Frotscher, Thomas Duellmann, Tobias Rudolph
  * 
  */

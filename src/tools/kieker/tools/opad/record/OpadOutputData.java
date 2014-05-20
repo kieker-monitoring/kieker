@@ -23,6 +23,7 @@ import kieker.tools.dataexchange.OperationAnomalyInfo;
  * 
  * @author Thomas Düllmann
  * @version 0.1
+ * @since 1.10
  */
 public class OpadOutputData extends OperationAnomalyInfo {
 

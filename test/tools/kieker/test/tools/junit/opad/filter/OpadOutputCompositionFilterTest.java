@@ -32,12 +32,14 @@ import kieker.tools.opad.record.ExtendedStorableDetectionResult;
 import kieker.tools.opad.record.OpadOutputData;
 
 import kieker.test.common.junit.AbstractKiekerTest;
+
 //NOCS
 
 /**
  * Tests the composition of the OpadOutputCompositionFilter.
  * 
  * @author Thomas Düllmann
+ * @since 1.10
  * 
  */
 public class OpadOutputCompositionFilterTest extends AbstractKiekerTest {

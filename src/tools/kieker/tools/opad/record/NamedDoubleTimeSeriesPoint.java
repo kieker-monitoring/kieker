@@ -20,7 +20,7 @@ import kieker.tools.tslib.TimeSeriesPoint;
 
 /**
  * @author Tillmann Carlos Bielefeld
- * 
+ * @since 1.10
  * 
  */
 public class NamedDoubleTimeSeriesPoint extends TimeSeriesPoint<Double> implements INamedElement {

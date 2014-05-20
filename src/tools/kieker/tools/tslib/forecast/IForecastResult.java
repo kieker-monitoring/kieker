@@ -22,7 +22,7 @@ import kieker.tools.tslib.ITimeSeries;
 /**
  * 
  * @author Andre van Hoorn
- * 
+ * @since 1.10
  */
 public interface IForecastResult {
 
@@ -32,7 +32,7 @@ public interface IForecastResult {
 	// <li>model</li>
 	// <li>method</li>
 	// <li>x (original time series)</li>
-	// </ul>	 
+	// </ul>
 
 	/**
 	 * Returns the point forecasts.

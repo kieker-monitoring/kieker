@@ -20,10 +20,11 @@ import kieker.common.configuration.Configuration;
 
 /**
  * 
- * @author Markus
+ * @author Markus Fischer
+ * @since 1.10
  * 
  * 
- *         The Plugin requested with the ID was not found in the registry.
+ *        The Plugin requested with the ID was not found in the registry.
  * 
  */
 public class PluginNotFoundException extends Exception {

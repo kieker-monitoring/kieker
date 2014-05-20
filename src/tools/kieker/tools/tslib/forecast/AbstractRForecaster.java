@@ -29,6 +29,7 @@ import kieker.tools.util.RBridgeControl;
 /**
  * Convenience class to implement an {@link IForecaster} with R.
  * 
+ * @since 1.10
  * @author Andre van Hoorn, Nikolas Herbst, Andreas Eberlein, Tobias Rudolph
  * 
  */

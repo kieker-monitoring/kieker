@@ -34,20 +34,23 @@ import kieker.tools.tslib.forecast.IForecastResult;
  * mean value of the historic values.
  * 
  * @author Andre van Hoorn
+ * @since 1.10
  * 
  */
 public class MeanForecasterJava extends AbstractForecaster<Double> {
 
 	/**
 	 * 
-	 * @param historyTimeseries TimeSeries
+	 * @param historyTimeseries
+	 *            TimeSeries
 	 */
 	public MeanForecasterJava(final ITimeSeries<Double> historyTimeseries) {
 		super(historyTimeseries);
 	}
 
 	/**
-	 * @param numForecastSteps number of values the forecaster is going to forecast
+	 * @param numForecastSteps
+	 *            number of values the forecaster is going to forecast
 	 * 
 	 * @return Forecast Result
 	 */
@@ -68,10 +71,11 @@ public class MeanForecasterJava extends AbstractForecaster<Double> {
 
 		return new ForecastResult(tsFC, this.getTsOriginal(), ForecastMethod.MEAN);
 	}
-	
+
 	/**
 	 * 
-	 * @param allHistory List there null values should deltet in this function
+	 * @param allHistory
+	 *            List there null values should deltet in this function
 	 * @return List/Array with no NullValues
 	 */
 	public static Double[] removeNullValues(final List<Double> allHistory) {

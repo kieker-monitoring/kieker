@@ -35,6 +35,7 @@ import kieker.common.logging.LogFactory;
 /**
  * 
  * @author Tillmann Carlos Bielefeld
+ * @since 1.10
  * 
  */
 public final class RBridgeControl {
@@ -139,7 +140,7 @@ public final class RBridgeControl {
 				output = ((REXPLogical) out).toDebugString();
 			}
 
-//			RBridgeControl.LOG.info("> REXP: " + input + " return: " + output);// --domi
+			// RBridgeControl.LOG.info("> REXP: " + input + " return: " + output);// --domi
 
 		} catch (final Exception exc) { // NOCS
 			RBridgeControl.LOG.error("Error R expr.: " + input + " Cause: "

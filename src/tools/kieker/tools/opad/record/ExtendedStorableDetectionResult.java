@@ -22,6 +22,7 @@ import kieker.common.record.AbstractMonitoringRecord;
  * Extended StorableDetectionResult class that extends the StorableDetectionResult class by anomaly threshold.
  * 
  * @author Thomas Düllmann
+ * @since 1.10
  * 
  */
 public class ExtendedStorableDetectionResult extends StorableDetectionResult {
