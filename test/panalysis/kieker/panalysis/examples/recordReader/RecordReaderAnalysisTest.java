@@ -22,12 +22,19 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
+import kieker.analysis.AnalysisController;
 import kieker.analysis.ClassNameRegistry;
 import kieker.analysis.ClassNameRegistryRepository;
+import kieker.analysis.IAnalysisController;
 import kieker.analysis.IProjectContext;
+import kieker.analysis.plugin.annotation.InputPort;
+import kieker.analysis.plugin.filter.AbstractFilterPlugin;
+import kieker.analysis.plugin.filter.forward.CountingFilter;
+import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.registry.Registry;
 
 /**
  * @author Christian Wulf
@@ -63,10 +70,57 @@ public class RecordReaderAnalysisTest {
 
 	@Test
 	public void testExampleWithKiekerFramework() throws Exception {
-		final Configuration configuration = null;
-		final IProjectContext projectContext = null;
-		final FSReader fsReader = new FSReader(configuration, projectContext);
-		// fsReader.
-		// TODO
+		final IAnalysisController ac = new AnalysisController();
+
+		final Configuration readerConfiguration = new Configuration();
+		readerConfiguration.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, INPUT_DIRECTORY.getAbsolutePath());
+		final FSReader reader = new FSReader(readerConfiguration, ac);
+
+		final ListCollectionFilter<IMonitoringRecord> records = new ListCollectionFilter<IMonitoringRecord>(new Configuration(), ac);
+		final ClassNameRegistryFilter classNameRegistry = new ClassNameRegistryFilter(new Configuration(), ac);
+
+		final CountingFilter countingFilter = new CountingFilter(new Configuration(), ac);
+
+		ac.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, countingFilter, CountingFilter.INPUT_PORT_NAME_EVENTS);
+		ac.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, records, ListCollectionFilter.INPUT_PORT_NAME);
+		ac.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, classNameRegistry, ClassNameRegistryFilter.INPUT_PORT_NAME_RECORDS);
+
+		ac.run();
+
+		// Keep in mind that the metadata record is not processed in a regular way
+		Assert.assertEquals(1, classNameRegistry.size());
+		Assert.assertEquals("kieker.common.record.controlflow.OperationExecutionRecord", classNameRegistry.get(0));
+		Assert.assertEquals(6540, countingFilter.getMessageCount());
+		Assert.assertEquals(1283156545581511026L, records.getList().get(0).getLoggingTimestamp());
+	}
+
+	private static class ClassNameRegistryFilter extends AbstractFilterPlugin {
+
+		public static final String INPUT_PORT_NAME_RECORDS = "input";
+
+		private final Registry<String> registry = new Registry<String>();
+
+		public ClassNameRegistryFilter(final Configuration configuration, final IProjectContext projectContext) {
+			super(configuration, projectContext);
+		}
+
+		@InputPort(name = ClassNameRegistryFilter.INPUT_PORT_NAME_RECORDS, eventTypes = IMonitoringRecord.class)
+		public void input(final IMonitoringRecord record) {
+			this.registry.get(record.getClass().getName());
+		}
+
+		public Object get(final int id) {
+			return this.registry.get(id);
+		}
+
+		public Object size() {
+			return this.registry.getSize();
+		}
+
+		@Override
+		public Configuration getCurrentConfiguration() {
+			return new Configuration();
+		}
+
 	}
 }
