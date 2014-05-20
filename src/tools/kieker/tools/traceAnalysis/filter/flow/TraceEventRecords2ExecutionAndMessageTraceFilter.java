@@ -366,7 +366,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 
 		private boolean isPrevEventMatchingCall(final BeforeOperationEvent beforeOperationEvent, final AbstractTraceEvent prevEvent,
 				final Class<? extends CallOperationEvent> callClass) {
-			if ((prevEvent != null) && prevEvent.getClass().equals(callClass) && (prevEvent.getOrderIndex() == (beforeOperationEvent.getOrderIndex() - 1))) {
+			if ((prevEvent != null) && callClass.isAssignableFrom(prevEvent.getClass()) && (prevEvent.getOrderIndex() == (beforeOperationEvent.getOrderIndex() - 1))) {
 				if (((CallOperationEvent) prevEvent).callsReferencedOperationOf(beforeOperationEvent)) {
 					return true;
 				} else if (this.enhanceCallDetection) { // perhaps we don't find a perfect match, but can guess one!
@@ -395,7 +395,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 			// Obtain the matching before-operation event from the stack
 			final AbstractTraceEvent potentialBeforeEvent = this.peekEvent();
 			// The element at the top of the stack needs to be a before-operation event...
-			if ((potentialBeforeEvent == null) || !potentialBeforeEvent.getClass().equals(beforeClass)) {
+			if ((potentialBeforeEvent == null) || !beforeClass.isAssignableFrom(potentialBeforeEvent.getClass())) {
 				throw new InvalidTraceException("Didn't find corresponding "
 						+ beforeClass.getName() + " for " + afterOperationEvent.getClass().getName() + " "
 						+ afterOperationEvent.toString() + " (found: " + potentialBeforeEvent + ").");
