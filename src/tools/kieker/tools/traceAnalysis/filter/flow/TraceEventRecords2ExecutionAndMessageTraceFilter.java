@@ -145,24 +145,28 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 				this.log.error("Found event with wrong traceId. Found: " + event.getTraceId() + " expected: " + traceId);
 				continue; // simply ignore wrong event
 			}
-			try { // handle all cases
-				if (BeforeOperationEvent.class.equals(event.getClass())) {
-					traceEventRecordHandler.handleBeforeOperationEvent((BeforeOperationEvent) event);
-				} else if (AfterOperationEvent.class.equals(event.getClass())) {
-					traceEventRecordHandler.handleAfterOperationEvent((AfterOperationEvent) event);
-				} else if (AfterOperationFailedEvent.class.equals(event.getClass())) {
-					traceEventRecordHandler.handleAfterOperationFailedEvent((AfterOperationFailedEvent) event);
-				} else if (BeforeConstructorEvent.class.equals(event.getClass())) {
+			try { // handle all cases (more specific classes should be handled before less specific ones)
+					// Before Events
+				if (BeforeConstructorEvent.class.isAssignableFrom(event.getClass())) {
 					traceEventRecordHandler.handleBeforeConstructorEvent((BeforeConstructorEvent) event);
-				} else if (AfterConstructorEvent.class.equals(event.getClass())) {
-					traceEventRecordHandler.handleAfterConstructorEvent((AfterConstructorEvent) event);
-				} else if (AfterConstructorFailedEvent.class.equals(event.getClass())) {
+				} else if (BeforeOperationEvent.class.isAssignableFrom(event.getClass())) {
+					traceEventRecordHandler.handleBeforeOperationEvent((BeforeOperationEvent) event);
+					// After Events
+				} else if (AfterConstructorFailedEvent.class.isAssignableFrom(event.getClass())) {
 					traceEventRecordHandler.handleAfterConstructorFailedEvent((AfterConstructorFailedEvent) event);
-				} else if (CallOperationEvent.class.equals(event.getClass())) {
-					traceEventRecordHandler.handleCallOperationEvent((CallOperationEvent) event);
-				} else if (CallConstructorEvent.class.equals(event.getClass())) {
+				} else if (AfterOperationFailedEvent.class.isAssignableFrom(event.getClass())) {
+					traceEventRecordHandler.handleAfterOperationFailedEvent((AfterOperationFailedEvent) event);
+				} else if (AfterConstructorEvent.class.isAssignableFrom(event.getClass())) {
+					traceEventRecordHandler.handleAfterConstructorEvent((AfterConstructorEvent) event);
+				} else if (AfterOperationEvent.class.isAssignableFrom(event.getClass())) {
+					traceEventRecordHandler.handleAfterOperationEvent((AfterOperationEvent) event);
+					// CallOperation Events
+				} else if (CallConstructorEvent.class.isAssignableFrom(event.getClass())) {
 					traceEventRecordHandler.handleCallConstructorEvent((CallConstructorEvent) event);
-				} else if (SplitEvent.class.equals(event.getClass())) {
+				} else if (CallOperationEvent.class.isAssignableFrom(event.getClass())) {
+					traceEventRecordHandler.handleCallOperationEvent((CallOperationEvent) event);
+					// SplitEvent
+				} else if (SplitEvent.class.isAssignableFrom(event.getClass())) {
 					this.log.warn("Events of type 'SplitEvent' are currently not handled and ignored.");
 				} else {
 					this.log.warn("Events of type '" + event.getClass().getName() + "' are currently not handled and ignored.");
