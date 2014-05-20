@@ -129,6 +129,7 @@
 				<include name="REngine.jar"/>
 				<include name="Rserve.jar"/>
 				<include name="Rsession.jar"/>
+				<include name="org.json.min.jar"/>
 				<!-- OPAD end -->
 			</fileset>
 			<pathelement location="${build.kieker.common.dir}/" />
