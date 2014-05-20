@@ -16,7 +16,6 @@
 package kieker.analysis;
 
 import java.io.File;
-import java.util.Map;
 
 import kieker.common.exception.IllegalRecordFormatException;
 import kieker.common.exception.MonitoringRecordException;
@@ -37,9 +36,9 @@ public class RecordFromTextLineCreator {
 
 	private static final IllegalRecordFormatException ILLEGAL_RECORD_FORMAT_EXCEPTION = new IllegalRecordFormatException();
 
-	private final Map<String, ClassNameRegistry> classNameRegistryRepository;
+	private final ClassNameRegistryRepository classNameRegistryRepository;
 
-	public RecordFromTextLineCreator(final Map<String, ClassNameRegistry> classNameRegistryRepository) {
+	public RecordFromTextLineCreator(final ClassNameRegistryRepository classNameRegistryRepository) {
 		this.classNameRegistryRepository = classNameRegistryRepository;
 	}
 
@@ -66,7 +65,7 @@ public class RecordFromTextLineCreator {
 	private IMonitoringRecord createModernRecordFromRecordFields(final File textFile, final String[] recordFields) throws MonitoringRecordException,
 			MappingException,
 			UnknownRecordTypeException {
-		final ClassNameRegistry classNameRegistry = this.classNameRegistryRepository.get(textFile.getParent());
+		final ClassNameRegistry classNameRegistry = this.classNameRegistryRepository.get(textFile.getParentFile());
 		final Integer id = Integer.valueOf(recordFields[0].substring(1));
 		final String classname = classNameRegistry.get(id);
 		if (classname == null) {

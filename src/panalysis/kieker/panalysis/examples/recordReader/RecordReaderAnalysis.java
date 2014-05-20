@@ -18,10 +18,8 @@ package kieker.panalysis.examples.recordReader;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
-import kieker.analysis.ClassNameRegistry;
+import kieker.analysis.ClassNameRegistryRepository;
 import kieker.common.record.IMonitoringRecord;
 import kieker.panalysis.framework.concurrent.StageTerminationPolicy;
 import kieker.panalysis.framework.concurrent.WorkerThread;
@@ -54,6 +52,8 @@ public class RecordReaderAnalysis extends Analysis {
 	private File2RecordFilter file2RecordFilter;
 	private CollectorSink<IMonitoringRecord> collector;
 
+	private ClassNameRegistryRepository classNameRegistryRepository;
+
 	@Override
 	public void init() {
 		super.init();
@@ -82,9 +82,9 @@ public class RecordReaderAnalysis extends Analysis {
 	private IPipeline buildPipeline() {
 		final BaseStage2StageExtractor baseStage2StageExtractor = new BaseStage2StageExtractor();
 
-		final Map<String, ClassNameRegistry> classNameRegistryRepository = new ConcurrentHashMap<String, ClassNameRegistry>();
+		this.classNameRegistryRepository = new ClassNameRegistryRepository();
 		// create stages
-		this.file2RecordFilter = new File2RecordFilter(classNameRegistryRepository);
+		this.file2RecordFilter = new File2RecordFilter(this.classNameRegistryRepository);
 		this.collector = new CollectorSink<IMonitoringRecord>();
 
 		// add each stage to a stage list
@@ -156,4 +156,9 @@ public class RecordReaderAnalysis extends Analysis {
 	void setOutputRecordList(final List<IMonitoringRecord> records) {
 		this.collector.setObjects(records);
 	}
+
+	public ClassNameRegistryRepository getClassNameRegistryRepository() {
+		return this.classNameRegistryRepository;
+	}
+
 }

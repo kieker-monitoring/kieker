@@ -16,6 +16,7 @@
 package kieker.analysis;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -34,19 +35,26 @@ public class MappingFileParser {
 
 	protected Log logger;
 
+	private static final Map<String, String> filePrefixRegistry = new HashMap<String, String>();
+
+	static {
+		filePrefixRegistry.put(FSUtil.MAP_FILENAME, FSUtil.FILE_PREFIX);
+		filePrefixRegistry.put(FSUtil.LEGACY_MAP_FILENAME, FSUtil.LEGACY_FILE_PREFIX);
+	}
+
 	public MappingFileParser(final Log logger) {
 		this.logger = logger;
 	}
 
-	public Map<Integer, String> parse(final InputStream inputStream) {
-		final Map<Integer, String> stringRegistry = new HashMap<Integer, String>();
+	public ClassNameRegistry parseFromStream(final InputStream inputStream) {
+		final ClassNameRegistry classNameRegistry = new ClassNameRegistry();
 
 		BufferedReader in = null;
 		try {
 			in = new BufferedReader(new InputStreamReader(inputStream, FSUtil.ENCODING));
 			String line;
 			while ((line = in.readLine()) != null) { // NOPMD (assign)
-				this.parseTextLine(line, stringRegistry);
+				this.parseTextLine(line, classNameRegistry);
 			}
 		} catch (final IOException ex) {
 			this.logger.error("Error reading mapping file", ex);
@@ -60,7 +68,7 @@ public class MappingFileParser {
 			}
 		}
 
-		return stringRegistry;
+		return classNameRegistry;
 	}
 
 	private void parseTextLine(final String line, final Map<Integer, String> stringRegistry) {
@@ -86,5 +94,34 @@ public class MappingFileParser {
 		if (prevVal != null) {
 			this.logger.error("Found addional entry for id='" + id + "', old value was '" + prevVal + "' new value is '" + value + "'");
 		}
+	}
+
+	/**
+	 * @since 1.10
+	 */
+	public File findMappingFile(final File dirPath) {
+		File mappingFile = new File(dirPath, FSUtil.MAP_FILENAME);
+		if (!mappingFile.exists()) {
+			// No mapping file found. Check whether we find a legacy tpmon.map file!
+			mappingFile = new File(dirPath, FSUtil.LEGACY_MAP_FILENAME);
+			if (mappingFile.exists()) {
+				this.logger.info("Directory '" + dirPath + "' contains no file '" + FSUtil.MAP_FILENAME + "'. Found '" + FSUtil.LEGACY_MAP_FILENAME
+						+ "' ... switching to legacy mode");
+			} else {
+				// no {kieker|tpmon}.map exists. This is valid for very old monitoring logs. Hence, only dump a log.warn
+				this.logger.warn("No mapping file in directory '" + dirPath.getAbsolutePath() + "'");
+				return null;
+			}
+		}
+
+		return mappingFile;
+	}
+
+	/**
+	 * @return <code>null</code> if a file prefix for the given <code>mappingFile</code> is not registered.
+	 * @since 1.10
+	 */
+	public String getFilePrefixFromMappingFile(final File mappingFile) {
+		return MappingFileParser.filePrefixRegistry.get(mappingFile.getName());
 	}
 }

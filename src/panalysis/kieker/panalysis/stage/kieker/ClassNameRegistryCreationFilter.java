@@ -16,9 +16,12 @@
 package kieker.panalysis.stage.kieker;
 
 import java.io.File;
-import java.util.Map;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 import kieker.analysis.ClassNameRegistry;
+import kieker.analysis.ClassNameRegistryRepository;
+import kieker.analysis.MappingFileParser;
 import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Context;
 import kieker.panalysis.framework.core.IInputPort;
@@ -34,13 +37,17 @@ public class ClassNameRegistryCreationFilter extends AbstractFilter<ClassNameReg
 	public final IInputPort<ClassNameRegistryCreationFilter, File> directoryInputPort = this.createInputPort();
 
 	public final IOutputPort<ClassNameRegistryCreationFilter, File> relayDirectoryOutputPort = this.createOutputPort();
+	public final IOutputPort<ClassNameRegistryCreationFilter, String> filePrefixOutputPort = this.createOutputPort();
 
-	private Map<String, ClassNameRegistry> classNameRegistryRepository;
+	private ClassNameRegistryRepository classNameRegistryRepository;
+
+	private final MappingFileParser mappingFileParser;
 
 	/**
 	 * @since 1.10
 	 */
-	public ClassNameRegistryCreationFilter(final Map<String, ClassNameRegistry> classNameRegistryRepository) {
+	public ClassNameRegistryCreationFilter(final ClassNameRegistryRepository classNameRegistryRepository) {
+		this();
 		this.classNameRegistryRepository = classNameRegistryRepository;
 	}
 
@@ -49,6 +56,7 @@ public class ClassNameRegistryCreationFilter extends AbstractFilter<ClassNameReg
 	 */
 	public ClassNameRegistryCreationFilter() {
 		super();
+		this.mappingFileParser = new MappingFileParser(this.logger);
 	}
 
 	@Override
@@ -58,20 +66,30 @@ public class ClassNameRegistryCreationFilter extends AbstractFilter<ClassNameReg
 			return false;
 		}
 
-		final String dirPath = inputDir.getAbsolutePath();
-		final ClassNameRegistry classNameRegistry = new ClassNameRegistry();
-		this.classNameRegistryRepository.put(dirPath, classNameRegistry);
+		final File mappingFile = this.mappingFileParser.findMappingFile(inputDir);
+		if (mappingFile == null) {
+			return true;
+		}
 
-		context.put(this.relayDirectoryOutputPort, inputDir);
+		try {
+			final ClassNameRegistry classNameRegistry = this.mappingFileParser.parseFromStream(new FileInputStream(mappingFile));
+			this.classNameRegistryRepository.put(inputDir.getParentFile(), classNameRegistry);
+			context.put(this.relayDirectoryOutputPort, inputDir);
+
+			final String filePrefix = this.mappingFileParser.getFilePrefixFromMappingFile(mappingFile);
+			context.put(this.filePrefixOutputPort, filePrefix);
+		} catch (final FileNotFoundException e) {
+			this.logger.error("Mapping file not found.", e);
+		}
 
 		return true;
 	}
 
-	public Map<String, ClassNameRegistry> getClassNameRegistryRepository() {
+	public ClassNameRegistryRepository getClassNameRegistryRepository() {
 		return this.classNameRegistryRepository;
 	}
 
-	public void setClassNameRegistryRepository(final Map<String, ClassNameRegistry> classNameRegistryRepository) {
+	public void setClassNameRegistryRepository(final ClassNameRegistryRepository classNameRegistryRepository) {
 		this.classNameRegistryRepository = classNameRegistryRepository;
 	}
 

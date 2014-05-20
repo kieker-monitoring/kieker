@@ -16,11 +16,8 @@
 package kieker.panalysis.stage.kieker;
 
 import java.io.File;
-import java.io.FileFilter;
-import java.util.Comparator;
-import java.util.Map;
 
-import kieker.analysis.ClassNameRegistry;
+import kieker.analysis.ClassNameRegistryRepository;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.filesystem.BinaryCompressionMethod;
 import kieker.common.util.filesystem.FSUtil;
@@ -31,7 +28,6 @@ import kieker.panalysis.framework.core.IInputPort;
 import kieker.panalysis.framework.core.IOutputPort;
 import kieker.panalysis.framework.sequential.MethodCallPipe;
 import kieker.panalysis.predicate.IsDirectoryPredicate;
-import kieker.panalysis.stage.Directory2FilesFilter;
 import kieker.panalysis.stage.basic.PredicateFilter;
 import kieker.panalysis.stage.basic.merger.Merger;
 import kieker.panalysis.stage.io.FileExtensionFilter;
@@ -50,32 +46,22 @@ public class File2RecordFilter extends CompositeFilter {
 
 	public final IOutputPort<Merger<IMonitoringRecord>, IMonitoringRecord> recordOutputPort;
 
-	private final FileFilter fileFilter = new FileFilter() {
-		public boolean accept(final File pathname) {
-			final String name = pathname.getName();
-			return pathname.isFile()
-					&& name.startsWith(FSUtil.FILE_PREFIX)
-					&& (name.endsWith(FSUtil.NORMAL_FILE_EXTENSION) || BinaryCompressionMethod.hasValidFileExtension(name));
-		}
-	};
+	private ClassNameRegistryRepository classNameRegistryRepository;
 
-	private final Comparator<File> fileComparator = new Comparator<File>() {
-		public final int compare(final File f1, final File f2) {
-			return f1.compareTo(f2); // simplified (we expect no dirs!)
-		}
-	};
+	/**
+	 * @since 1.10
+	 */
+	public File2RecordFilter(final ClassNameRegistryRepository classNameRegistryRepository) {
+		this.classNameRegistryRepository = classNameRegistryRepository;
 
-	// FIXME filters must have a default ctor
-	// FIXME classNameRegistryRepository must be a property to be able to be cloned
-	public File2RecordFilter(final Map<String, ClassNameRegistry> classNameRegistryRepository) {
 		// create stages
 		final PredicateFilter<File> isDirectoryFilter = new PredicateFilter<File>(new IsDirectoryPredicate());
-		final ClassNameRegistryCreationFilter classNameRegistryCreationFilter = new ClassNameRegistryCreationFilter(classNameRegistryRepository);
-		final Directory2FilesFilter directory2FilesFilter = new Directory2FilesFilter(this.fileFilter, this.fileComparator);
+		final ClassNameRegistryCreationFilter classNameRegistryCreationFilter = new ClassNameRegistryCreationFilter(this.classNameRegistryRepository);
+		final MonitoringLogDirectory2Files directory2FilesFilter = new MonitoringLogDirectory2Files();
 		final Merger<File> fileMerger = new Merger<File>();
 		final FileExtensionFilter fileExtensionFilter = new FileExtensionFilter();
 
-		final DatFile2RecordFilter datFile2RecordFilter = new DatFile2RecordFilter(classNameRegistryRepository);
+		final DatFile2RecordFilter datFile2RecordFilter = new DatFile2RecordFilter(this.classNameRegistryRepository);
 		final BinaryFile2RecordFilter binaryFile2RecordFilter = new BinaryFile2RecordFilter();
 		final ZipFile2RecordFilter zipFile2RecordFilter = new ZipFile2RecordFilter();
 
@@ -91,6 +77,7 @@ public class File2RecordFilter extends CompositeFilter {
 		MethodCallPipe.connect(isDirectoryFilter.outputMatchingPort, classNameRegistryCreationFilter.directoryInputPort);
 		MethodCallPipe.connect(isDirectoryFilter.outputMismatchingPort, fileMerger.getNewInputPort()); // BETTER restructure pipeline
 		MethodCallPipe.connect(classNameRegistryCreationFilter.relayDirectoryOutputPort, directory2FilesFilter.directoryInputPort);
+		MethodCallPipe.connect(classNameRegistryCreationFilter.filePrefixOutputPort, directory2FilesFilter.filePrefixInputPort);
 		MethodCallPipe.connect(directory2FilesFilter.fileOutputPort, fileMerger.getNewInputPort());
 		MethodCallPipe.connect(fileMerger.outputPort, fileExtensionFilter.fileInputPort);
 
@@ -135,6 +122,21 @@ public class File2RecordFilter extends CompositeFilter {
 		this.schedulableStages.add(binaryFile2RecordFilter);
 		this.schedulableStages.add(zipFile2RecordFilter);
 		this.schedulableStages.add(recordMerger);
+	}
+
+	/**
+	 * @since 1.10
+	 */
+	public File2RecordFilter() {
+		this(null);
+	}
+
+	public ClassNameRegistryRepository getClassNameRegistryRepository() {
+		return this.classNameRegistryRepository;
+	}
+
+	public void setClassNameRegistryRepository(final ClassNameRegistryRepository classNameRegistryRepository) {
+		this.classNameRegistryRepository = classNameRegistryRepository;
 	}
 
 }

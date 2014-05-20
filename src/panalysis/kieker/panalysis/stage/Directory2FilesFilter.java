@@ -40,21 +40,33 @@ public class Directory2FilesFilter extends AbstractFilter<Directory2FilesFilter>
 	private FileFilter filter;
 	private Comparator<File> fileComparator;
 
-	public Directory2FilesFilter() {
-		super();
-	}
-
+	/**
+	 * @since 1.10
+	 */
 	public Directory2FilesFilter(final FileFilter fileFilter) {
 		this.setFilter(fileFilter);
 	}
 
+	/**
+	 * @since 1.10
+	 */
 	public Directory2FilesFilter(final Comparator<File> fileComparator) {
 		this.setFileComparator(fileComparator);
 	}
 
+	/**
+	 * @since 1.10
+	 */
 	public Directory2FilesFilter(final FileFilter fileFilter, final Comparator<File> fileComparator) {
 		this.setFilter(fileFilter);
 		this.setFileComparator(fileComparator);
+	}
+
+	/**
+	 * @since 1.10
+	 */
+	public Directory2FilesFilter() {
+		super();
 	}
 
 	/**

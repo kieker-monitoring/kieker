@@ -17,6 +17,7 @@ package kieker.analysis;
 
 import java.io.DataInputStream;
 import java.io.EOFException;
+import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
@@ -33,21 +34,23 @@ import kieker.common.record.IMonitoringRecord;
 public class RecordFromBinaryFileCreator {
 
 	private final Log logger;
-	private final Map<Integer, String> stringRegistry;
+	private final Map<String, ClassNameRegistry> classNameRegistryRepository;
 
-	public RecordFromBinaryFileCreator(final Log logger, final Map<Integer, String> stringRegistry) {
+	public RecordFromBinaryFileCreator(final Log logger, final Map<String, ClassNameRegistry> classNameRegistryRepository) {
 		this.logger = logger;
-		this.stringRegistry = stringRegistry;
+		this.classNameRegistryRepository = classNameRegistryRepository;
 	}
 
-	public IMonitoringRecord createRecordFromBinaryFile(final DataInputStream inputStream) throws IOException, MonitoringRecordException {
+	public IMonitoringRecord createRecordFromBinaryFile(final File binaryFile, final DataInputStream inputStream) throws IOException, MonitoringRecordException {
+		final ClassNameRegistry classNameRegistry = this.classNameRegistryRepository.get(binaryFile.getParent());
+
 		final Integer id;
 		try {
 			id = inputStream.readInt();
 		} catch (final EOFException eof) {
 			return null; // we are finished
 		}
-		final String classname = this.stringRegistry.get(id);
+		final String classname = classNameRegistry.get(id);
 		if (classname == null) {
 			this.logger.error("Missing classname mapping for record type id " + "'" + id + "'");
 			return null; // we can't easily recover on errors
@@ -64,7 +67,7 @@ public class RecordFromBinaryFileCreator {
 			idx++;
 			if (type == String.class) {
 				final Integer strId = inputStream.readInt();
-				final String str = this.stringRegistry.get(strId);
+				final String str = classNameRegistry.get(strId);
 				if (str == null) {
 					this.logger.error("No String mapping found for id " + strId.toString());
 					objectArray[idx] = "";

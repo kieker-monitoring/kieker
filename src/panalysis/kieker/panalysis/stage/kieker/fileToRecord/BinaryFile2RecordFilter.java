@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
+import kieker.analysis.ClassNameRegistry;
 import kieker.analysis.RecordFromBinaryFileCreator;
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.record.IMonitoringRecord;
@@ -41,33 +42,49 @@ public class BinaryFile2RecordFilter extends AbstractFilter<BinaryFile2RecordFil
 	public final IInputPort<BinaryFile2RecordFilter, File> fileInputPort = this.createInputPort();
 	public final IOutputPort<BinaryFile2RecordFilter, IMonitoringRecord> recordOutputPort = this.createOutputPort();
 
-	private Map<Integer, String> stringRegistry;
+	private RecordFromBinaryFileCreator recordFromBinaryFileCreator;
 
-	private final RecordFromBinaryFileCreator recordFromBinaryFileCreator;
+	private Map<String, ClassNameRegistry> classNameRegistryRepository;
 
+	/**
+	 * @since 1.10
+	 */
+	public BinaryFile2RecordFilter(final Map<String, ClassNameRegistry> classNameRegistryRepository) {
+		this();
+		this.classNameRegistryRepository = classNameRegistryRepository;
+	}
+
+	/**
+	 * @since 1.10
+	 */
 	public BinaryFile2RecordFilter() {
-		// FIXME stringRegistry
-		this.recordFromBinaryFileCreator = new RecordFromBinaryFileCreator(this.logger, this.stringRegistry);
+		super();
+	}
+
+	@Override
+	public void onPipelineStarts() throws Exception {
+		this.recordFromBinaryFileCreator = new RecordFromBinaryFileCreator(this.logger, this.classNameRegistryRepository);
+		super.onPipelineStarts();
 	}
 
 	@Override
 	protected boolean execute(final Context<BinaryFile2RecordFilter> context) {
-		final File file = context.tryTake(this.fileInputPort);
-		if (file == null) {
+		final File binaryFile = context.tryTake(this.fileInputPort);
+		if (binaryFile == null) {
 			return false;
 		}
 
 		try {
-			final BinaryCompressionMethod method = BinaryCompressionMethod.getByFileExtension(file.getName());
-			final DataInputStream in = method.getDataInputStream(file, 1 * MB);
+			final BinaryCompressionMethod method = BinaryCompressionMethod.getByFileExtension(binaryFile.getName());
+			final DataInputStream in = method.getDataInputStream(binaryFile, 1 * MB);
 			try {
-				IMonitoringRecord record = this.recordFromBinaryFileCreator.createRecordFromBinaryFile(in);
+				IMonitoringRecord record = this.recordFromBinaryFileCreator.createRecordFromBinaryFile(binaryFile, in);
 				while (record != null) {
 					context.put(this.recordOutputPort, record);
-					record = this.recordFromBinaryFileCreator.createRecordFromBinaryFile(in);
+					record = this.recordFromBinaryFileCreator.createRecordFromBinaryFile(binaryFile, in);
 				}
 			} catch (final MonitoringRecordException e) {
-				this.logger.error("Error reading file: " + file, e);
+				this.logger.error("Error reading file: " + binaryFile, e);
 			} finally {
 				if (in != null) {
 					try {
@@ -78,12 +95,20 @@ public class BinaryFile2RecordFilter extends AbstractFilter<BinaryFile2RecordFil
 				}
 			}
 		} catch (final IOException e) {
-			this.logger.error("Error reading file: " + file, e);
+			this.logger.error("Error reading file: " + binaryFile, e);
 		} catch (final IllegalArgumentException e) {
-			this.logger.warn("Unknown file extension for file: " + file);
+			this.logger.warn("Unknown file extension for file: " + binaryFile);
 		}
 
 		return true;
+	}
+
+	public Map<String, ClassNameRegistry> getClassNameRegistryRepository() {
+		return this.classNameRegistryRepository;
+	}
+
+	public void setClassNameRegistryRepository(final Map<String, ClassNameRegistry> classNameRegistryRepository) {
+		this.classNameRegistryRepository = classNameRegistryRepository;
 	}
 
 }

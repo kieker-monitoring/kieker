@@ -16,9 +16,7 @@
 
 package kieker.panalysis.stage.composite;
 
-import java.util.Map;
-
-import kieker.analysis.ClassNameRegistry;
+import kieker.analysis.ClassNameRegistryRepository;
 import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Context;
 import kieker.panalysis.framework.core.IPipe;
@@ -41,7 +39,7 @@ public class ReadRecordFromCsvFileFilter extends AbstractFilter<File2TextLinesFi
 	 * @since 1.10
 	 * @param textLinePipe
 	 */
-	public ReadRecordFromCsvFileFilter(final IPipe<TextLine> textLinePipe, final Map<String, ClassNameRegistry> classNameRegistryRepository) {
+	public ReadRecordFromCsvFileFilter(final IPipe<TextLine> textLinePipe, final ClassNameRegistryRepository classNameRegistryRepository) {
 		this.stage0 = new File2TextLinesFilter();
 		this.stage1 = new TextLine2RecordFilter(classNameRegistryRepository);
 

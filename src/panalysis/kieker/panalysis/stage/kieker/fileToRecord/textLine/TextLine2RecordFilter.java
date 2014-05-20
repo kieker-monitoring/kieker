@@ -17,10 +17,9 @@
 package kieker.panalysis.stage.kieker.fileToRecord.textLine;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
-import kieker.analysis.ClassNameRegistry;
+import kieker.analysis.ClassNameRegistryRepository;
 import kieker.analysis.RecordFromTextLineCreator;
 import kieker.common.exception.IllegalRecordFormatException;
 import kieker.common.exception.MonitoringRecordException;
@@ -55,7 +54,7 @@ public class TextLine2RecordFilter extends AbstractFilter<TextLine2RecordFilter>
 	/**
 	 * @since 1.10
 	 */
-	public TextLine2RecordFilter(final Map<String, ClassNameRegistry> classNameRegistryRepository) {
+	public TextLine2RecordFilter(final ClassNameRegistryRepository classNameRegistryRepository) {
 		this.recordFromTextLineCreator = new RecordFromTextLineCreator(classNameRegistryRepository);
 	}
 

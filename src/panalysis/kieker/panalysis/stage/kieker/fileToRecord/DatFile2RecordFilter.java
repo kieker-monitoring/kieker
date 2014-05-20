@@ -16,9 +16,8 @@
 package kieker.panalysis.stage.kieker.fileToRecord;
 
 import java.io.File;
-import java.util.Map;
 
-import kieker.analysis.ClassNameRegistry;
+import kieker.analysis.ClassNameRegistryRepository;
 import kieker.common.record.IMonitoringRecord;
 import kieker.panalysis.framework.concurrent.ConcurrentWorkStealingPipe;
 import kieker.panalysis.framework.concurrent.ConcurrentWorkStealingPipeFactory;
@@ -40,7 +39,7 @@ public class DatFile2RecordFilter extends CompositeFilter {
 
 	public final IOutputPort<TextLine2RecordFilter, IMonitoringRecord> recordOutputPort;
 
-	public DatFile2RecordFilter(final Map<String, ClassNameRegistry> classNameRegistryRepository) {
+	public DatFile2RecordFilter(final ClassNameRegistryRepository classNameRegistryRepository) {
 		final File2TextLinesFilter file2TextLinesFilter = new File2TextLinesFilter();
 		final TextLine2RecordFilter textLine2RecordFilter = new TextLine2RecordFilter(classNameRegistryRepository);
 

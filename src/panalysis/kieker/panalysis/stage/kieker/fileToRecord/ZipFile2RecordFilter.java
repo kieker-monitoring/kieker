@@ -22,11 +22,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import kieker.analysis.ClassNameRegistry;
 import kieker.analysis.MappingFileParser;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.filesystem.FSUtil;
@@ -46,6 +48,15 @@ public class ZipFile2RecordFilter extends AbstractFilter<ZipFile2RecordFilter> {
 
 	public final IOutputPort<ZipFile2RecordFilter, IMonitoringRecord> recordOutputPort = this.createOutputPort();
 
+	private final MappingFileParser mappingFileParser;
+
+	/**
+	 * @since 1.10
+	 */
+	public ZipFile2RecordFilter() {
+		this.mappingFileParser = new MappingFileParser(this.logger);
+	}
+
 	@Override
 	protected boolean execute(final Context<ZipFile2RecordFilter> context) {
 		final File zipFile = context.tryTake(this.fileInputPort);
@@ -53,13 +64,14 @@ public class ZipFile2RecordFilter extends AbstractFilter<ZipFile2RecordFilter> {
 			return false;
 		}
 
-		final boolean fileExists = this.readMappingFile(zipFile);
-		if (!fileExists) {
+		final InputStream mappingFileInputStream = this.findMappingFileInputStream(zipFile);
+		if (mappingFileInputStream == null) {
 			return true;
 		}
+		final ClassNameRegistry classNameRegistry = this.mappingFileParser.parseFromStream(mappingFileInputStream);
 
 		try {
-			this.createAndSendRecordsFromZipFile(context, zipFile);
+			this.createAndSendRecordsFromZipFile(context, zipFile, classNameRegistry);
 		} catch (final FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -68,7 +80,8 @@ public class ZipFile2RecordFilter extends AbstractFilter<ZipFile2RecordFilter> {
 		return true;
 	}
 
-	private void createAndSendRecordsFromZipFile(final Context<ZipFile2RecordFilter> context, final File zipFile) throws FileNotFoundException {
+	private void createAndSendRecordsFromZipFile(final Context<ZipFile2RecordFilter> context, final File zipFile, final ClassNameRegistry classNameRegistry)
+			throws FileNotFoundException {
 		final ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(zipFile));
 		final BufferedReader reader;
 		try {
@@ -91,21 +104,19 @@ public class ZipFile2RecordFilter extends AbstractFilter<ZipFile2RecordFilter> {
 		}
 	}
 
-	private boolean readMappingFile(final File file) {
+	private InputStream findMappingFileInputStream(final File zipFile) {
 		ZipInputStream zipInputStream = null;
 		try {
-			zipInputStream = new ZipInputStream(new FileInputStream(file));
+			zipInputStream = new ZipInputStream(new FileInputStream(zipFile));
 			ZipEntry zipEntry;
 			while ((null != (zipEntry = zipInputStream.getNextEntry())) && !zipEntry.getName().equals(FSUtil.MAP_FILENAME)) { // NOCS NOPMD
 				// do nothing, just skip to the map file if present
 			}
 			if (null == zipEntry) {
-				this.logger.error("The zip file does not contain a Kieker log: " + file.toString());
-				return false;
+				this.logger.error("The zip file does not contain a Kieker log: " + zipFile.toString());
+				return null;
 			}
-			final MappingFileParser mappingFileParser = new MappingFileParser(this.logger);
-			mappingFileParser.parse(zipInputStream);
-			return true;
+			return zipInputStream;
 		} catch (final IOException ex) {
 			this.logger.error("Error accessing ZipInputStream", ex);
 		} finally {
@@ -118,7 +129,6 @@ public class ZipFile2RecordFilter extends AbstractFilter<ZipFile2RecordFilter> {
 			}
 		}
 
-		return false;
+		return null;
 	}
-
 }
