@@ -59,6 +59,8 @@
 		<delete dir="${tests.junit-results.dir}" />
 		<mkdir dir="${tests.junit-results.dir}" />
 
+		<antcall target="-start-rserve.tools"></antcall>
+		
 		<junit fork="false" printsummary="yes">
 			<classpath refid="kieker.test-junit-run-classpath" />
 								
@@ -72,6 +74,7 @@
 				</fileset>
 			</batchtest>
 		</junit>
+		<antcall target="-stop-rserve.tools"></antcall>
 
 		<antcall target="-test.junit.report" />
 	</target>
@@ -87,5 +90,18 @@
 
 		<echo message="To see the test report, open ${tests.junit-results.dir}/report/index.html in your Web browser." />
 	</target>
+	
+	<target name="-start-rserve.tools" depends="">
+		<echo message="Starting Rserve ..." />
+		<exec executable="${tests.rserve-control-script.sh}" failonerror="true">
+			<arg value="start" />
+		</exec>
+	</target>
 
+	<target name="-stop-rserve.tools" depends="">
+		<echo message="Stopping Rserve ..." />
+		<exec executable="${tests.rserve-control-script.sh}" failonerror="true">
+			<arg value="stop" />
+		</exec>
+	</target>
 </project>
