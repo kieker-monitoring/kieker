@@ -34,9 +34,22 @@
 			background-color: #2456a1;
 		}
 	</style>
+	
+
 </h:head>
 
 <h:body class="page">
+
+ <script type="text/javascript">
+ function ext() {
+	this.cfg.seriesColors = [ "#ff0000", "#00ff00"],                
+	this.cfg.seriesDefaults = {
+			fill: true,
+			fillAlpha: 0.5,
+			fillAndStroke: true
+	};
+	}
+</script>
 	<div id="page" style="background:#FFFFFF">
 		<div id="header">
     		<img src="resources/header_image_small.jpg" width="960" height="125" border="0" usemap="#kiekermenumap" />
@@ -59,6 +72,12 @@
 		 	<h:form id="form"> 
 				<p:commandButton async="true" id="loadButton" value="#{jMeterBean.buttonText}" disabled="#{jMeterBean.disabled}" actionListener="#{jMeterBean.runJMeter}" />
 					
+			    <p:lineChart id="jvmHeap" value="#{jvmDataDisplayBean.jvmHeapModel}" fill="true" shadow="true" legendPosition="ne"  
+			    	title="JVM Heap Usage" minY="0" style="height:300px;margin-top:20px" extender="ext" xaxisLabel="Time" yaxisLabel="Memory (Bytes)"/>	
+			  	
+			  	 <p:lineChart id="jvmNonHeap" value="#{jvmDataDisplayBean.jvmNonHeapModel}" fill="true" shadow="true" legendPosition="ne"  
+			    	title="JVM Non-Heap Usage" minY="0" style="height:300px;margin-top:20px" extender="ext" xaxisLabel="Time" yaxisLabel="Memory (Bytes)"/>	
+			  			
 				<p:lineChart id="threads" value="#{jvmDataDisplayBean.threadsStatusModel}" legendPosition="ne"  
 			    	title="Threads Status" minY="0"  style="height:300px;margin-top:20px"
 			    	xaxisLabel="Time" yaxisLabel="Number of threads"/>	
@@ -70,11 +89,7 @@
 				<p:lineChart id="gcCount" value="#{jvmDataDisplayBean.gcCountModel}" legendPosition="ne"  
 			    	title="Garbage Collecting Count" minY="0" style="height:300px;margin-top:20px"
 			    	xaxisLabel="Time" yaxisLabel="Number of collections"/>	
-			    
-			    <p:lineChart id="jvmMemory" value="#{jvmDataDisplayBean.jvmMemoryModel}" legendPosition="ne"  
-			    	title="JVM Memory Usage" minY="0" style="height:300px;margin-top:20px"
-			    	xaxisLabel="Time" yaxisLabel="Memory (Bytes)"/>	
-			    		
+			  
 				<p:lineChart id="jit" value="#{jvmDataDisplayBean.compilationModel}" legendPosition="ne"  
 			    	title="Total Compilation Time of JIT Compiler" minY="0" style="height:300px;margin-top:20px"
 			    	xaxisLabel="Time" yaxisLabel="Running time (ms)"/>	
@@ -83,7 +98,7 @@
 			    	title="Class Loading" minY="0" style="height:300px;margin-top:20px"
 			    	xaxisLabel="Time" yaxisLabel="Number of classes"/>	
 
-			   <p:poll interval="1" update="jit, classloading, threads, gcCount, gcTime, jvmMemory, loadButton" />	  		
+			   <p:poll interval="1" update="jit, classloading, threads, gcCount, gcTime, jvmHeap, jvmNonHeap, loadButton" />	  		
 			   <p:poll interval="1" update="loadButton" /> 	
 			</h:form>
 		</div>

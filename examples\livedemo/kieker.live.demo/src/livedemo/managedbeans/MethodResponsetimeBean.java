@@ -31,10 +31,10 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ValueChangeEvent;
 
-import kieker.analysis.display.XYPlot;
-
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
+
+import kieker.analysis.display.XYPlot;
 
 /**
  * @author Bjoern Weissenfels

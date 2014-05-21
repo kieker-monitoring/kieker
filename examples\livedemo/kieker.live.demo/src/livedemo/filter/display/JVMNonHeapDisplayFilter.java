@@ -32,15 +32,15 @@ import livedemo.filter.display.util.LimitedHashMap;
  * 
  * @since 1.10
  */
-public class JVMMemoryDisplayFilter extends AbstractNonAggregatingDisplayFilter<MemoryRecord, CartesianChartModel> {
+public class JVMNonHeapDisplayFilter extends AbstractNonAggregatingDisplayFilter<MemoryRecord, CartesianChartModel> {
 
+	private Map<Object, Number> committedNonHeapData;
 	private Map<Object, Number> usedNonHeapData;
-	private Map<Object, Number> usedHeapData;
 
+	private ChartSeries committedNonHeapSeries;
 	private ChartSeries usedNonHeapSeries;
-	private ChartSeries usedHeapSeries;
 
-	public JVMMemoryDisplayFilter(final Configuration configuration, final IProjectContext projectContext) {
+	public JVMNonHeapDisplayFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 	}
 
@@ -48,20 +48,20 @@ public class JVMMemoryDisplayFilter extends AbstractNonAggregatingDisplayFilter<
 	protected CartesianChartModel createChartModel(final int numberOfEntries) {
 		final CartesianChartModel model = new CartesianChartModel();
 
+		this.committedNonHeapSeries = new ChartSeries();
 		this.usedNonHeapSeries = new ChartSeries();
-		this.usedHeapSeries = new ChartSeries();
 
+		this.committedNonHeapData = new LimitedHashMap<>(numberOfEntries);
 		this.usedNonHeapData = new LimitedHashMap<>(numberOfEntries);
-		this.usedHeapData = new LimitedHashMap<>(numberOfEntries);
 
+		model.addSeries(this.committedNonHeapSeries);
 		model.addSeries(this.usedNonHeapSeries);
-		model.addSeries(this.usedHeapSeries);
 
+		this.committedNonHeapSeries.setData(this.committedNonHeapData);
 		this.usedNonHeapSeries.setData(this.usedNonHeapData);
-		this.usedHeapSeries.setData(this.usedHeapData);
 
-		this.usedNonHeapSeries.setLabel("Non Heap");
-		this.usedHeapSeries.setLabel("Heap");
+		this.committedNonHeapSeries.setLabel("Committed");
+		this.usedNonHeapSeries.setLabel("Used");
 
 		return model;
 	}
@@ -69,8 +69,8 @@ public class JVMMemoryDisplayFilter extends AbstractNonAggregatingDisplayFilter<
 	@Override
 	protected void fillChartModelWithRecordData(final CartesianChartModel chartModel, final MemoryRecord record, final String minutesAndSeconds,
 			final int numberOfEntries) {
+		this.committedNonHeapData.put(minutesAndSeconds, record.getNonHeapCommitted());
 		this.usedNonHeapData.put(minutesAndSeconds, record.getNonHeapUsed());
-		this.usedHeapData.put(minutesAndSeconds, record.getHeapUsed());
 	}
 
 }

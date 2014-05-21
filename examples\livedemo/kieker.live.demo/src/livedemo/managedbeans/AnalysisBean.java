@@ -43,7 +43,8 @@ import livedemo.filter.display.ClassLoadingDisplayFilter;
 import livedemo.filter.display.CompilationDisplayFilter;
 import livedemo.filter.display.GCCountDisplayFilter;
 import livedemo.filter.display.GCTimeDisplayFilter;
-import livedemo.filter.display.JVMMemoryDisplayFilter;
+import livedemo.filter.display.JVMHeapDisplayFilter;
+import livedemo.filter.display.JVMNonHeapDisplayFilter;
 import livedemo.filter.display.MethodResponsetimeDisplayFilter;
 import livedemo.filter.display.ThreadsStatusDisplayFilter;
 
@@ -76,7 +77,8 @@ public class AnalysisBean {
 	private final CompilationDisplayFilter jitCompilationDisplayFilter;
 	private final GCCountDisplayFilter gcCountDisplayFilter;
 	private final GCTimeDisplayFilter gcTimeDisplayFilter;
-	private final JVMMemoryDisplayFilter jvmMemoryDisplayFilter;
+	private final JVMHeapDisplayFilter jvmHeapDisplayFilter;
+	private final JVMNonHeapDisplayFilter jvmNonHeapDisplayFilter;
 
 	public AnalysisBean() {
 		this.updateThread = new UpdateThread(1000); // will notify its observers every second
@@ -114,7 +116,8 @@ public class AnalysisBean {
 		this.jitCompilationDisplayFilter = new CompilationDisplayFilter(threadsStatusConfiguration, this.analysisInstance);
 		this.gcCountDisplayFilter = new GCCountDisplayFilter(threadsStatusConfiguration, this.analysisInstance);
 		this.gcTimeDisplayFilter = new GCTimeDisplayFilter(threadsStatusConfiguration, this.analysisInstance);
-		this.jvmMemoryDisplayFilter = new JVMMemoryDisplayFilter(threadsStatusConfiguration, this.analysisInstance);
+		this.jvmHeapDisplayFilter = new JVMHeapDisplayFilter(threadsStatusConfiguration, this.analysisInstance);
+		this.jvmNonHeapDisplayFilter = new JVMNonHeapDisplayFilter(threadsStatusConfiguration, this.analysisInstance);
 
 		this.tagCloudFilter = new MethodAndComponentFlowDisplayFilter(new Configuration(), this.analysisInstance);
 
@@ -187,8 +190,10 @@ public class AnalysisBean {
 		this.analysisInstance.connect(distributor, Distributor.OUTPUT_PORT_NAME_GC_RECORDS, this.gcTimeDisplayFilter,
 				AbstractNonAggregatingDisplayFilter.INPUT_PORT_NAME_RECORDS);
 
-		this.analysisInstance.connect(distributor, Distributor.OUTPUT_PORT_NAME_JVM_MEMORY_RECORDS, this.jvmMemoryDisplayFilter,
-				AbstractAggregatingDisplayFilter.INPUT_PORT_NAME_RECORDS);
+		this.analysisInstance.connect(distributor, Distributor.OUTPUT_PORT_NAME_JVM_MEMORY_RECORDS, this.jvmHeapDisplayFilter,
+				AbstractNonAggregatingDisplayFilter.INPUT_PORT_NAME_RECORDS);
+		this.analysisInstance.connect(distributor, Distributor.OUTPUT_PORT_NAME_JVM_MEMORY_RECORDS, this.jvmNonHeapDisplayFilter,
+				AbstractNonAggregatingDisplayFilter.INPUT_PORT_NAME_RECORDS);
 
 		this.analysisInstance.connect(reader, JMXReader.OUTPUT_PORT_NAME_RECORDS, ertf, ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
 
@@ -243,8 +248,12 @@ public class AnalysisBean {
 		return this.gcTimeDisplayFilter;
 	}
 
-	public JVMMemoryDisplayFilter getJvmHeapMemoryDisplayFilter() {
-		return this.jvmMemoryDisplayFilter;
+	public JVMHeapDisplayFilter getJvmHeapMemoryDisplayFilter() {
+		return this.jvmHeapDisplayFilter;
+	}
+
+	public JVMNonHeapDisplayFilter getJvmNonHeapMemoryDisplayFilter() {
+		return this.jvmNonHeapDisplayFilter;
 	}
 
 }
