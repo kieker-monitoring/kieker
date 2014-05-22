@@ -23,7 +23,6 @@ import org.junit.Before;
 import kieker.tools.tslib.ITimeSeries;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.tools.util.RserveControl;
 
 /**
  * Test that ensures that every time a R-dependent test is run, a fresh
@@ -34,7 +33,7 @@ import kieker.test.tools.util.RserveControl;
  */
 public abstract class AbstractKiekerRTest extends AbstractKiekerTest {
 
-	private RserveControl rServeControl;
+	// private RserveControl rServeControl;
 
 	@Before
 	public void setUp() throws Exception {
