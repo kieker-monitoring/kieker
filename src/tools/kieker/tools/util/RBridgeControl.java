@@ -92,18 +92,18 @@ public final class RBridgeControl {
 		if (RBridgeControl.instance == null) {
 
 			// TODO make this configurabe?!?
-			RBridgeControl.instance = new RBridgeControl(false);
+			RBridgeControl.instance = new RBridgeControl(true);
 			RBridgeControl.instance.e("OPAD_CONTEXT <<- TRUE");
 			// TODO: test if this is needed every time
 			// TODO outsource this into a packaged text file, declare the
 			// functions at runtime
 			// TODO use REngine rather? RServe is not needed any more
 
-			instance.e("setwd('" + root.getAbsolutePath().replace("\\", "\\\\") + "')");
+			// instance.e("setwd('" + root.getAbsolutePath().replace("\\", "\\\\") + "')");
 			// RBridgeControl.INSTANCE
 			// .e("sink(file = 'rsink.log', append = TRUE, type = c('output', 'message'),split = FALSE)");
 			// INSTANCE.e("source('includes.r', local = FALSE, echo = TRUE)");
-			instance.e("source('plotting2.r', local = FALSE, echo = TRUE)");
+			// instance.e("source('plotting2.r', local = FALSE, echo = TRUE)");
 			instance.e("initTS");
 
 			// INSTANCE.e("print( getwd() )");
