@@ -23,19 +23,18 @@ import org.junit.Before;
 import org.junit.Test;
 
 import kieker.tools.tslib.ITimeSeries;
-import kieker.tools.tslib.ITimeSeriesPoint;
 import kieker.tools.tslib.TimeSeries;
 import kieker.tools.tslib.forecast.IForecastResult;
 import kieker.tools.tslib.forecast.ses.SESRForecaster;
 
-import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.tools.junit.AbstractKiekerRTest;
 
 /**
  * 
  * @author Tillmann Carlos Bielefeld
  * 
  */
-public class SESRForecasterTest extends AbstractKiekerTest {
+public class SESRForecasterTest extends AbstractKiekerRTest {
 
 	/**
 	 * Creates a new instance of this class.
@@ -50,6 +49,7 @@ public class SESRForecasterTest extends AbstractKiekerTest {
 	 * @throws Exception
 	 *             If excepton is thrown
 	 */
+	@Override
 	@Before
 	public void setUp() throws Exception {}
 
@@ -75,7 +75,7 @@ public class SESRForecasterTest extends AbstractKiekerTest {
 		final IForecastResult forecast = forecaster.forecast(1);
 		final ITimeSeries<Double> forecastSeries = forecast.getForecast();
 
-		final ITimeSeriesPoint<Double> stepFC = forecastSeries.getPoints().get(0);
-		Assert.assertEquals(2.000054d, stepFC.getValue(), 0.001d);
+		// final ITimeSeriesPoint<Double> stepFC = forecastSeries.getPoints().get(0);
+		Assert.assertEquals(2.000054d, AbstractKiekerRTest.getTsPoint(forecastSeries), 0.001d);
 	}
 }

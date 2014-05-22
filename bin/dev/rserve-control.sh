@@ -4,7 +4,8 @@
 case "$1" in
     start)
 	echo -n "Trying to start Rserve..."
-	R CMD Rserve --no-save
+	R CMD Rserve --no-save --vanilla &
+	#R CMD Rserve.dbg --no-save --vanilla > /tmp/rserve.dbg.log &
 	echo "done."
 	exit 0
         ;;

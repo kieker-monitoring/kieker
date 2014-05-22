@@ -28,9 +28,7 @@ import kieker.analysis.AnalysisControllerThread;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
-
 import kieker.common.configuration.Configuration;
-
 import kieker.tools.opad.filter.AnomalyDetectionFilter;
 import kieker.tools.opad.filter.AnomalyScoreCalculationFilter;
 import kieker.tools.opad.filter.ExtractionFilter;
@@ -41,10 +39,6 @@ import kieker.tools.opad.record.NamedDoubleRecord;
 import kieker.tools.opad.record.StorableDetectionResult;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-
-
-
-
 
 /**
  * This test creates some ResponseTimeDoubleRecords and let them run through all currently
@@ -233,7 +227,7 @@ public class OpadIntegrationTest extends AbstractKiekerTest {
 	}
 
 	/**
-	 * Starts a complete test flow through all currently available filters. In this case, the NanmedDoubleRecords can
+	 * Starts a complete test flow through all currently available filters. In this case, the NamedDoubleRecords can
 	 * be from different applications and will still be treated correctly.
 	 * 
 	 * @throws InterruptedException
@@ -246,6 +240,7 @@ public class OpadIntegrationTest extends AbstractKiekerTest {
 		thread.start();
 		Thread.sleep(2000);
 		thread.terminate();
+
 		Assert.assertEquals(7, this.sinkPluginIfAnomaly.getList().size());
 		Assert.assertEquals(6, this.sinkPluginElse.getList().size());
 

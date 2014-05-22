@@ -28,14 +28,14 @@ import kieker.tools.tslib.TimeSeries;
 import kieker.tools.tslib.forecast.IForecastResult;
 import kieker.tools.tslib.forecast.ets.ETSForecaster;
 
-import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.tools.junit.AbstractKiekerRTest;
 
 /**
  * 
  * @author Tillmann Carlos Bielefeld
  * 
  */
-public class ETSForecasterTest extends AbstractKiekerTest {
+public class ETSForecasterTest extends AbstractKiekerRTest {
 	private static final long START_TIME = 98890787;
 	private static final long DELTA_TIME_MILLIS = 1000;
 	private static final int CONFIDENCE_LEVEL = 90;
@@ -68,15 +68,15 @@ public class ETSForecasterTest extends AbstractKiekerTest {
 
 		final ITimeSeries<Double> forecastSeries = forecast.getForecast();
 		final double expectedForecast = 4.0;
-		this.assertEqualsWithTolerance("Unexpected forecast value", expectedForecast, 0.1, forecastSeries.getPoints().get(0).getValue());
+		this.assertEqualsWithTolerance("Unexpected forecast value", expectedForecast, 0.1, AbstractKiekerRTest.getTsPoint(forecastSeries));
 
 		final ITimeSeries<Double> upperSeries = forecast.getUpper();
 		final double expectedUpper = 5.424480;
-		this.assertEqualsWithTolerance("Unexpected upper value", expectedUpper, 0.1, upperSeries.getPoints().get(0).getValue());
+		this.assertEqualsWithTolerance("Unexpected upper value", expectedUpper, 0.1, AbstractKiekerRTest.getTsPoint(upperSeries));
 
 		final ITimeSeries<Double> lowerSeries = forecast.getLower();
 		final double expectedLower = 2.57531997;
-		this.assertEqualsWithTolerance("Unexpected lower value", expectedLower, 0.1, lowerSeries.getPoints().get(0).getValue());
+		this.assertEqualsWithTolerance("Unexpected lower value", expectedLower, 0.1, AbstractKiekerRTest.getTsPoint(lowerSeries));
 	}
 
 	private void assertEqualsWithTolerance(final String message, final double expected, final double tolerance, final double actual) {
