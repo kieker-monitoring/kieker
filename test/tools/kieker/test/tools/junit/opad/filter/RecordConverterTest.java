@@ -37,6 +37,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * Tests the RecordConverter.
  * 
  * @author Thomas Düllmann
+ * @since 1.10
  * 
  */
 public final class RecordConverterTest extends AbstractKiekerTest {

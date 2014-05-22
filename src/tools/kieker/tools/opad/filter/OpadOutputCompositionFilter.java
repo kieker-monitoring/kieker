@@ -31,6 +31,7 @@ import kieker.tools.opad.record.OpadOutputData;
  * Converts the incoming ExtendedStorableDetectionResult objects to OpadOutputData objects.
  * This includes the extraction of information in separate fields.
  * 
+ * @since 1.10
  * @author Thomas Düllmann
  */
 @Plugin(name = "Combines information for RanCorr usage",

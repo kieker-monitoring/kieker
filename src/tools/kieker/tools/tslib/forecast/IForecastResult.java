@@ -37,6 +37,7 @@ public interface IForecastResult {
 	/**
 	 * Returns the point forecasts.
 	 * 
+	 * @since 1.10
 	 * @return Timeseries
 	 */
 	public ITimeSeries<Double> getForecast();
@@ -44,6 +45,7 @@ public interface IForecastResult {
 	/**
 	 * Returns the confidence level for the forecast interval.
 	 * 
+	 * @since 1.10
 	 * @return confidencelevel
 	 */
 	public int getConfidenceLevel();
@@ -51,6 +53,7 @@ public interface IForecastResult {
 	/**
 	 * Returns the upper limits for forecast interval with respect to the confidence level {@link #getConfidenceLevel()}.
 	 * 
+	 * @since 1.10
 	 * @return upper limits
 	 */
 	public ITimeSeries<Double> getUpper();
@@ -58,6 +61,7 @@ public interface IForecastResult {
 	/**
 	 * Returns the lower limits for forecast interval with respect to the confidence level {@link #getConfidenceLevel()}.
 	 * 
+	 * @since 1.10
 	 * @return lower limits
 	 */
 	public ITimeSeries<Double> getLower();
@@ -65,6 +69,7 @@ public interface IForecastResult {
 	/**
 	 * Returns the original time series that was the basis for the forecast.
 	 * 
+	 * @since 1.10
 	 * @return orginal Timeseries
 	 */
 	public ITimeSeries<Double> getOriginal();
@@ -72,6 +77,7 @@ public interface IForecastResult {
 	/**
 	 * Returns the MeanAbsoluteScaledError.
 	 * 
+	 * @since 1.10
 	 * @return MASE
 	 */
 	public double getMeanAbsoluteScaledError();
@@ -79,6 +85,7 @@ public interface IForecastResult {
 	/**
 	 * Returns the forecasting strategy that has been used for this forecast.
 	 * 
+	 * @since 1.10
 	 * @return ForecastMethod
 	 */
 	public ForecastMethod getFcStrategy();
@@ -86,6 +93,7 @@ public interface IForecastResult {
 	/**
 	 * Returns whether the result is plausible - mean forecast bigger than 0 and smaller than 1.5*maximum.
 	 * 
+	 * @since 1.10
 	 * @return if result is plausible
 	 */
 	public boolean isPlausible();

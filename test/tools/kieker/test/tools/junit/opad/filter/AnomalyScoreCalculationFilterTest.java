@@ -16,7 +16,6 @@
 
 package kieker.test.tools.junit.opad.filter;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +29,6 @@ import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
-
 import kieker.tools.opad.filter.AnomalyScoreCalculationFilter;
 import kieker.tools.opad.record.ForecastMeasurementPair;
 import kieker.tools.opad.record.StorableDetectionResult;
@@ -41,6 +39,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * Test for the AnomalyScoreCalculationFilter. Therefore comparing the result of the Filter with some
  * previous manually calculated Results.
  * 
+ * @since 1.10
  * @author Tom Frotscher
  * 
  */

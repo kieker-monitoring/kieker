@@ -35,6 +35,7 @@ public interface ITimeSeries<T> {
 	/**
 	 * Returns the start of the time series, i.e., the time of the first value.
 	 * 
+	 * @since 1.10
 	 * @return start Time
 	 */
 	public long getStartTime();
@@ -42,6 +43,7 @@ public interface ITimeSeries<T> {
 	/**
 	 * Returns the temporal distance between to time series values with respect to the configured {@link TimeUnit} {@link #getDeltaTime()}.
 	 * 
+	 * @since 1.10
 	 * @return delta Time
 	 */
 	// TODO rather take Timespan object!
@@ -50,6 +52,7 @@ public interface ITimeSeries<T> {
 	/**
 	 * The {@link TimeUnit} used to specify the temporal distance between to values ({@link #getDeltaTime()}).
 	 * 
+	 * @since 1.10
 	 * @return DeltaTime
 	 */
 	// TODO rather take Timespan object!
@@ -58,6 +61,7 @@ public interface ITimeSeries<T> {
 	/**
 	 * Appends the given value to the time series.
 	 * 
+	 * @since 1.10
 	 * @param value
 	 *            the value to append
 	 * @return TimeSeries
@@ -67,6 +71,7 @@ public interface ITimeSeries<T> {
 	/**
 	 * Appends the given value to the time series.
 	 * 
+	 * @since 1.10
 	 * @param value
 	 * @return appen List
 	 */
@@ -75,6 +80,7 @@ public interface ITimeSeries<T> {
 	/**
 	 * Returns the {@link ITimeSeriesPoint}s of this time series.
 	 * 
+	 * @since 1.10
 	 * @return Points
 	 */
 	public List<ITimeSeriesPoint<T>> getPoints();
@@ -82,6 +88,7 @@ public interface ITimeSeries<T> {
 	/**
 	 * Returns a list of all {@link #getPoints()#getValues()}.
 	 * 
+	 * @since 1.10
 	 * @return Values
 	 */
 	public List<T> getValues();
@@ -89,6 +96,7 @@ public interface ITimeSeries<T> {
 	/**
 	 * Returns the maximum number of elements held in this time series.
 	 * 
+	 * @since 1.10
 	 * @return the capacity; {@link #INFINITE_CAPACITY} if the capacity is infinite
 	 */
 	public int getCapacity();
@@ -96,6 +104,7 @@ public interface ITimeSeries<T> {
 	/**
 	 * Returns the number of value contained in the time series.
 	 * 
+	 * @since 1.10
 	 * @return size
 	 */
 	public int size();
@@ -103,6 +112,7 @@ public interface ITimeSeries<T> {
 	/**
 	 * Returns the time corresponding to the most recent value in the time series.
 	 * 
+	 * @since 1.10
 	 * @return endTime
 	 */
 	public long getEndTime();
@@ -112,6 +122,7 @@ public interface ITimeSeries<T> {
 	 * needed to improve forecast accuracy
 	 * e.g. a time series point each 15 minutes, interested in forecasting days: frequency is 96
 	 * 
+	 * @since 1.10
 	 * @return frequency as the number of time series points
 	 *         that add up either to the next bigger time unit and/or
 	 *         to the estimated length of seasonal patterns in focus.

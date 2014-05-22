@@ -46,6 +46,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * Test for Configuration plugins during runtime.
  * 
  * @author Markus Fischer
+ * @since 1.10
  * 
  */
 public class OnlineConfigurationTest extends AbstractKiekerTest {
@@ -152,6 +153,7 @@ public class OnlineConfigurationTest extends AbstractKiekerTest {
 	 * Reconfigures a Plugin every second message.
 	 * 
 	 * @author Markus Fischer
+	 * @since 1.10
 	 * 
 	 */
 	@Plugin(description = "Updater")
@@ -209,6 +211,7 @@ public class OnlineConfigurationTest extends AbstractKiekerTest {
 	 * Passes through its current property value as message.
 	 * 
 	 * @author Markus Fischer
+	 * @since 1.10
 	 * 
 	 */
 	@Plugin(description = "Updateable",

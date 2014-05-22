@@ -22,7 +22,7 @@ import kieker.common.configuration.Configuration;
 import kieker.tools.configuration.exception.PluginNotFoundException;
 
 /**
- * 
+ * @since 1.10
  * @author Markus Fischer
  * 
  *         Registry for updateable filters
@@ -30,7 +30,7 @@ import kieker.tools.configuration.exception.PluginNotFoundException;
 public interface IConfigurationRegistry {
 
 	/**
-	 * 
+	 * @since 1.10
 	 * @return a map containing all updateable FilterPlugins.
 	 */
 	public abstract Map<String, AbstractUpdateableFilterPlugin> getUpdateableFilters();
@@ -38,6 +38,7 @@ public interface IConfigurationRegistry {
 	/**
 	 * Register an AbstractUpdateableFilterPlugin to the registry.
 	 * 
+	 * @since 1.10
 	 * @param id
 	 *            Unique id for the plugin (within the scope of a registry)
 	 * @param plugin
@@ -49,6 +50,7 @@ public interface IConfigurationRegistry {
 	/**
 	 * Update the configuration of a FilterPlugin identified by its id.
 	 * 
+	 * @since 1.10
 	 * @param id
 	 *            id of the plugin to be updated
 	 * @param configuration

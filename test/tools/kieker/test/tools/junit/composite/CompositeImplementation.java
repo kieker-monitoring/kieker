@@ -31,6 +31,7 @@ import kieker.tools.composite.CompositeOutputRelay;
 
 /**
  * @author Markus Fischer
+ * @since 1.10
  * 
  */
 @Plugin(description = "CompositeTestPlugin",
@@ -123,6 +124,7 @@ public class CompositeImplementation extends AbstractCompositeFilterPlugin {
 	 * For every incoming IMonitoringRecord sends a string and an integer on its way.
 	 * 
 	 * @author Markus Fischer
+	 * @since 1.10
 	 * 
 	 */
 	@Plugin(description = "Distributor",

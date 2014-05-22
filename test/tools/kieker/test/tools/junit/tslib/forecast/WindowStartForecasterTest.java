@@ -24,7 +24,6 @@ import org.junit.Test;
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
-
 import kieker.tools.tslib.ITimeSeries;
 import kieker.tools.tslib.TimeSeries;
 import kieker.tools.tslib.forecast.IForecastResult;
@@ -34,6 +33,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Tillmann Carlos Bielefeld
+ * @since 1.10
  */
 public class WindowStartForecasterTest extends AbstractKiekerTest {
 

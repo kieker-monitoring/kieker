@@ -24,13 +24,13 @@ package kieker.tools.tslib;
 public interface ITimeSeriesPoint<T> {
 
 	/**
-	 * 
+	 * @since 1.10
 	 * @return Time
 	 */
 	public long getTime();
 
 	/**
-	 * 
+	 * @since 1.10
 	 * @return Value
 	 */
 	public T getValue();

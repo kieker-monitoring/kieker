@@ -26,6 +26,12 @@ import kieker.tools.tslib.ITimeSeriesPoint;
  */
 public interface IForecastMeasurementPair extends INamedElement, ITimeSeriesPoint<Double> {
 
+	/**
+	 * Returns the forecasted Double value.
+	 * 
+	 * @since 1.10
+	 * @return forecasted Double value
+	 */
 	public Double getForecasted();
 
 }

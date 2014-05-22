@@ -29,6 +29,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
 /**
  * 
  * @author Tillmann Carlos Bielefeld
+ * @since 1.10
  * 
  */
 public class TimeSeriesTest extends AbstractKiekerTest {

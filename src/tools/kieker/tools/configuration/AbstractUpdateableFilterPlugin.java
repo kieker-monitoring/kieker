@@ -29,7 +29,7 @@ import kieker.common.configuration.Configuration;
  * Extends the AbstractFilterPlugin with possibilities to update properties that are marked as updateable.
  * 
  * @author Thomas Düllmann, Tobias Rudolph, Markus Fischer
- * 
+ * @since 1.10
  */
 
 public abstract class AbstractUpdateableFilterPlugin extends AbstractFilterPlugin {

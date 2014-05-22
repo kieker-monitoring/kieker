@@ -29,6 +29,7 @@ public interface IAnomalyCalculator<T> {
 
 	/**
 	 * 
+	 * @since 1.10
 	 * @param forecast
 	 *            Forecast Result
 	 * @param current

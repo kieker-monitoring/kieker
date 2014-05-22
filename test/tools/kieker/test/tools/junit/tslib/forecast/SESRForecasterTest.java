@@ -19,7 +19,6 @@ package kieker.test.tools.junit.tslib.forecast;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import kieker.tools.tslib.ITimeSeries;
@@ -32,6 +31,7 @@ import kieker.test.tools.junit.AbstractKiekerRTest;
 /**
  * 
  * @author Tillmann Carlos Bielefeld
+ * @since 1.10
  * 
  */
 public class SESRForecasterTest extends AbstractKiekerRTest {
@@ -42,16 +42,6 @@ public class SESRForecasterTest extends AbstractKiekerRTest {
 	public SESRForecasterTest() {
 		// Default constructor
 	}
-
-	/**
-	 * Set up of the SESRForecasterTest.
-	 * 
-	 * @throws Exception
-	 *             If excepton is thrown
-	 */
-	@Override
-	@Before
-	public void setUp() throws Exception {}
 
 	/**
 	 * Test of the SESRForecaster via Rserve.

@@ -31,6 +31,7 @@ import kieker.tools.tslib.forecast.mean.MeanForecaster;
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
+ * @since 1.10
  * @author Tillmann Carlos Bielefeld
  */
 public class MeanForecasterTest extends AbstractKiekerTest {

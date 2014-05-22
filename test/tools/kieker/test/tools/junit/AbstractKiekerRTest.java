@@ -16,9 +16,7 @@
 
 package kieker.test.tools.junit;
 
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 
 import kieker.tools.tslib.ITimeSeries;
 
@@ -28,33 +26,11 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * Test that ensures that every time a R-dependent test is run, a fresh
  * Rserve instance is started beforehand and terminated afterwards.
  * 
+ * @since 1.10
  * @author Thomas Düllmann
  * 
  */
 public abstract class AbstractKiekerRTest extends AbstractKiekerTest {
-
-	// private RserveControl rServeControl;
-
-	@Before
-	public void setUp() throws Exception {
-
-		// // To make sure, that RBridgeControl does not hold a connection
-		// // to an old Rserve instance, we have to enforce a new connection
-		// this.rServeControl = new RserveControl();
-		// Assume.assumeTrue(this.rServeControl.start());
-	}
-
-	@After
-	public void tearDown() {
-		// if ((this.rServeControl != null) && this.rServeControl.isRserveRunning()) {
-		// this.rServeControl.terminate();
-		// try {
-		// Thread.sleep(500);
-		// } catch (final InterruptedException e) {
-		// e.printStackTrace();
-		// }
-		// }
-	}
 
 	public static boolean tsContainsPoints(final ITimeSeries<Double> timeSeries) {
 		return timeSeries.getPoints().size() > 0;

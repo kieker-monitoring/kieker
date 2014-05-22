@@ -29,7 +29,6 @@ import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
-
 import kieker.tools.opad.filter.ForecastingFilter;
 import kieker.tools.opad.record.ForecastMeasurementPair;
 import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
@@ -40,6 +39,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * Basically compares the results of the forecaster with previous manually calculated forecasted results.
  * Currently for the mean forecaster.
  * 
+ * @since 1.10
  * @author Tom Frotscher
  * 
  */

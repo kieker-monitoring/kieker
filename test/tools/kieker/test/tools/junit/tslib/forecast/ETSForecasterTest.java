@@ -31,7 +31,7 @@ import kieker.tools.tslib.forecast.ets.ETSForecaster;
 import kieker.test.tools.junit.AbstractKiekerRTest;
 
 /**
- * 
+ * @since 1.10
  * @author Tillmann Carlos Bielefeld
  * 
  */

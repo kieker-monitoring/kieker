@@ -32,6 +32,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * (refuse state in tests), I've decided to add the tests to a separate class. Might be consolidated later.
  * 
  * @author Andre van Hoorn
+ * @since 1.10
  * 
  */
 public class TimeSeriesTestAvh extends AbstractKiekerTest {

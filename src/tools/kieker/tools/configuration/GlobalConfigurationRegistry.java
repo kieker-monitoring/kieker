@@ -22,6 +22,7 @@ package kieker.tools.configuration;
  * 
  *         Singleton to provide a global registry for all updateable Filters.<br>
  *         All updateable Filters have to be stored to the Registry with a unique ID.
+ * @since 1.10
  */
 public final class GlobalConfigurationRegistry extends AbstractConfigurationRegistry {
 

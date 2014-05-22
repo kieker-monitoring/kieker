@@ -49,11 +49,11 @@ public final class RBridgeControl {
 
 	private final Rsession rCon;
 
-	private RBridgeControl(boolean silent) {
+	private RBridgeControl(final boolean silent) {
 
 		OutputStream out = System.out;
 
-		silent = true; // --domi
+		// silent = true; // --domi
 		if (silent) {
 			out = new OutputStream() {
 

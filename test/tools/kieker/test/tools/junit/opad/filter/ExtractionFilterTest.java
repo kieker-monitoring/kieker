@@ -29,7 +29,6 @@ import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
-
 import kieker.tools.opad.filter.ExtractionFilter;
 import kieker.tools.opad.record.NamedDoubleRecord;
 import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
@@ -42,6 +41,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * converted input timestamp from the incoming record.
  * 
  * @author Tom Frotscher
+ * @since 1.10
  * 
  */
 public class ExtractionFilterTest extends AbstractKiekerTest {

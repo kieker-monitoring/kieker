@@ -45,6 +45,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * - 0.6 and 0.7 to be an anomaly
  * 
  * @author Tillmann Carlos Bielefeld
+ * @since 1.10
  */
 public class AnomalyDetectionFilterTest extends AbstractKiekerTest {
 
@@ -110,7 +111,7 @@ public class AnomalyDetectionFilterTest extends AbstractKiekerTest {
 
 		// SINK 3
 		this.sinkPluginAll = new ListCollectionFilter<ExtendedStorableDetectionResult>(new Configuration(), this.controller);
-		
+
 		// CONNECT the filters
 		this.controller.connect(this.theReader, ListReader.OUTPUT_PORT_NAME,
 				this.anomalyDetectionFilter, AnomalyDetectionFilter.INPUT_PORT_ANOMALY_SCORE);

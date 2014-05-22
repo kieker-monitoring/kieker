@@ -27,6 +27,7 @@ public interface ITimeSeriesPointsBuffer<T> {
 	/**
 	 * Add an Object to the tail of the Buffer.
 	 * 
+	 * @since 1.10
 	 * @param o
 	 *            The Value to add
 	 * @return
@@ -37,6 +38,7 @@ public interface ITimeSeriesPointsBuffer<T> {
 	/**
 	 * Removes a Value from the buffer in FIFO order.
 	 * 
+	 * @since 1.10
 	 * @return
 	 *         Returns the removed Object
 	 */
@@ -45,6 +47,7 @@ public interface ITimeSeriesPointsBuffer<T> {
 	/**
 	 * Returns the current size of the buffer.
 	 * 
+	 * @since 1.10
 	 * @return Returned Buffersize
 	 */
 	public int getSize();

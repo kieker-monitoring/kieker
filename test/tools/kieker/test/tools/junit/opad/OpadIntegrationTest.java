@@ -47,6 +47,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * SendAndStoreDetectionResultsFilter)
  * 
  * @author Tom Frotscher
+ * @since 1.10
  */
 public class OpadIntegrationTest extends AbstractKiekerTest {
 

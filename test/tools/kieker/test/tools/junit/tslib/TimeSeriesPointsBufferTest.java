@@ -27,6 +27,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
 /**
  * 
  * @author Tom Frotscher
+ * @since 1.10
  * 
  */
 public class TimeSeriesPointsBufferTest extends AbstractKiekerTest {

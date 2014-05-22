@@ -29,7 +29,6 @@ import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
-
 import kieker.tools.opad.filter.UniteMeasurementPairFilter;
 import kieker.tools.opad.record.ForecastMeasurementPair;
 import kieker.tools.opad.record.IForecastMeasurementPair;
@@ -42,6 +41,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * the first real value, that can not have a calculated forecast.
  * 
  * @author Tom Frotscher
+ * @since 1.10
  * 
  */
 public class UniteMeasurementPairFilterTest extends AbstractKiekerTest {

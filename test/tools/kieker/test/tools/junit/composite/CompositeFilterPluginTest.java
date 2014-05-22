@@ -44,11 +44,12 @@ import kieker.test.tools.junit.composite.CompositeImplementation.Distributor;
 //CHECKSTYLE:ON
 
 /**
- * @author Markus Fischer <br>
- * <br>
- *         This test is set up with {@link CompositeImplementation}, Within the CompositeImplementation
- *         every incoming IMonitoringRecord is passed through and for every IMonitoringRecord a String and an
- *         Integer are broadcasted via their respective Outputports
+ * This test is set up with {@link CompositeImplementation}, Within the CompositeImplementation
+ * every incoming IMonitoringRecord is passed through and for every IMonitoringRecord a String and an
+ * Integer are broadcasted via their respective Outputports
+ * 
+ * @author Markus Fischer
+ * @since 1.10
  * 
  */
 public class CompositeFilterPluginTest extends AbstractKiekerTest {
@@ -251,6 +252,7 @@ public class CompositeFilterPluginTest extends AbstractKiekerTest {
 	 * Small implementation of AbstractFilterPlugin to test Configuration-updating.
 	 * 
 	 * @author Markus Fischer
+	 * @since 1.10
 	 * 
 	 */
 	@Plugin(description = "Properties",
@@ -297,7 +299,7 @@ public class CompositeFilterPluginTest extends AbstractKiekerTest {
 	 * Implementation of AbstractCompositeFilterPlugin to test the selection of Outputports.
 	 * 
 	 * @author Markus Fischer
-	 * 
+	 * @since 1.10
 	 */
 	@Plugin(description = "Outputports",
 			outputPorts = {
@@ -337,6 +339,8 @@ public class CompositeFilterPluginTest extends AbstractKiekerTest {
 	// CHECKSTYLE:OFF
 	/**
 	 * Dummy class used within the CompositeFilterPluginTest.
+	 * 
+	 * @since 1.10
 	 */
 	class T1 {// NOPMD
 		T1() {}
@@ -344,6 +348,8 @@ public class CompositeFilterPluginTest extends AbstractKiekerTest {
 
 	/**
 	 * Dummy class used within the CompositeFilterPluginTest.
+	 * 
+	 * @since 1.10
 	 */
 	class T2 {// NOPMD
 		T2() {}
@@ -351,6 +357,8 @@ public class CompositeFilterPluginTest extends AbstractKiekerTest {
 
 	/**
 	 * Dummy class used within the CompositeFilterPluginTest.
+	 * 
+	 * @since 1.10
 	 */
 	class T3 {// NOPMD
 		T3() {}
@@ -358,6 +366,8 @@ public class CompositeFilterPluginTest extends AbstractKiekerTest {
 
 	/**
 	 * Dummy class used within the CompositeFilterPluginTest.
+	 * 
+	 * @since 1.10
 	 */
 	class T4 {// NOPMD
 		T4() {}
@@ -365,6 +375,8 @@ public class CompositeFilterPluginTest extends AbstractKiekerTest {
 
 	/**
 	 * Dummy class used within the CompositeFilterPluginTest.
+	 * 
+	 * @since 1.10
 	 */
 	class T5 {// NOPMD
 		T5() {}
@@ -372,6 +384,8 @@ public class CompositeFilterPluginTest extends AbstractKiekerTest {
 
 	/**
 	 * Dummy class used within the CompositeFilterPluginTest.
+	 * 
+	 * @since 1.10
 	 */
 	class T6 {// NOPMD
 		T6() {}

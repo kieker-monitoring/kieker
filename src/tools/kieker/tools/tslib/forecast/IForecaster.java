@@ -29,6 +29,7 @@ public interface IForecaster<T> {
 	/**
 	 * Performs a time series forecast for the given number of steps in the future.
 	 * 
+	 * @since 1.10
 	 * @param numForecastSteps
 	 *            number of steps which will be forecated
 	 * @return ForecastResult
@@ -38,6 +39,7 @@ public interface IForecaster<T> {
 	/**
 	 * Returns the original time series used for the forecast.
 	 * 
+	 * @since 1.10
 	 * @return Timerseries
 	 */
 	public ITimeSeries<T> getTsOriginal();
@@ -45,6 +47,7 @@ public interface IForecaster<T> {
 	/**
 	 * Returns the confidence level to be computed for the forecast.
 	 * 
+	 * @since 1.10
 	 * @return confidencelevel
 	 */
 	public int getConfidenceLevel();
