@@ -36,6 +36,7 @@ public final class AspectJLoader {
 
 	public static final String KIEKER_MONITORING_SKIP_DEFAULT_AOP_CONFIGURATION = "kieker.monitoring.skipDefaultAOPConfiguration";
 
+	private static final String DEFAULT_AOP_CONFIG = "META-INF/aop.example.xml";
 	private static final Log LOG = LogFactory.getLog(AspectJLoader.class);
 
 	private AspectJLoader() {
@@ -50,7 +51,8 @@ public final class AspectJLoader {
 	 */
 	public static void premain(final String options, final Instrumentation instrumentation) {
 		if (!AspectJLoader.checkConfigurationFileAvailable()) {
-			LOG.info("No AspectJ configuration file found. Using Kieker's default AspectJ configuration file.");
+			final URL aspectConfigURL = AspectJLoader.class.getClassLoader().getResource(DEFAULT_AOP_CONFIG);
+			LOG.info("No AspectJ configuration file found. Using Kieker's default AspectJ configuration file (" + aspectConfigURL + ").");
 			AspectJLoader.addKiekerDefaultConfigFile();
 		}
 
@@ -87,7 +89,7 @@ public final class AspectJLoader {
 	}
 
 	private static void addKiekerDefaultConfigFile() {
-		System.setProperty("org.aspectj.weaver.loadtime.configuration", "META-INF/aop.example.xml");
+		System.setProperty("org.aspectj.weaver.loadtime.configuration", DEFAULT_AOP_CONFIG);
 	}
 
 }
