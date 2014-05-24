@@ -27,7 +27,7 @@ import kieker.panalysis.framework.core.IStage;
 public class WorkerThread extends Thread {
 
 	private final IPipeline pipeline;
-	private NextStageScheduler pipelineScheduler;
+	private IStageScheduler stageScheduler;
 
 	private long duration;
 
@@ -50,8 +50,8 @@ public class WorkerThread extends Thread {
 
 		final long start = System.currentTimeMillis();
 
-		while (this.pipelineScheduler.isAnyStageActive()) {
-			final IStage stage = this.pipelineScheduler.get();
+		while (this.stageScheduler.isAnyStageActive()) {
+			final IStage stage = this.stageScheduler.get();
 
 			this.startStageExecution(stage);
 			final boolean executedSuccessfully = stage.execute();
@@ -60,7 +60,7 @@ public class WorkerThread extends Thread {
 			if (this.shouldTerminate) {
 				this.executeTerminationPolicy(stage, executedSuccessfully);
 			}
-			this.pipelineScheduler.determineNextStage(stage, executedSuccessfully);
+			this.stageScheduler.determineNextStage(stage, executedSuccessfully);
 		}
 
 		this.cleanUpDatastructures();
@@ -76,19 +76,19 @@ public class WorkerThread extends Thread {
 		switch (this.terminationPolicy) {
 		case TERMINATE_STAGE_AFTER_NEXT_EXECUTION:
 			if (executedStage.mayBeDisabled()) {
-				this.pipelineScheduler.disable(executedStage);
+				this.stageScheduler.disable(executedStage);
 			}
 			break;
 		case TERMINATE_STAGE_AFTER_UNSUCCESSFUL_EXECUTION:
 			if (!executedSuccessfully) {
 				if (executedStage.mayBeDisabled()) {
-					this.pipelineScheduler.disable(executedStage);
+					this.stageScheduler.disable(executedStage);
 				}
 			}
 			break;
 		case TERMINATE_STAGE_NOW:
 			for (final IStage stage : this.pipeline.getStages()) {
-				this.pipelineScheduler.disable(stage);
+				this.stageScheduler.disable(stage);
 			}
 			break;
 		default:
@@ -98,7 +98,7 @@ public class WorkerThread extends Thread {
 
 	private void initDatastructures() throws Exception {
 		this.pipeline.fireStartNotification();
-		this.pipelineScheduler = new NextStageScheduler(this.pipeline, this.accessesDeviceId);
+		this.stageScheduler = new NextStageScheduler(this.pipeline, this.accessesDeviceId);
 	}
 
 	private void startStageExecution(final IStage stage) {

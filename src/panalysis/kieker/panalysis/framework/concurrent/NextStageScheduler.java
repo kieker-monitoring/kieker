@@ -29,7 +29,7 @@ import kieker.panalysis.framework.core.IStage;
  * 
  * @since 1.10
  */
-public class NextStageScheduler {
+public class NextStageScheduler implements IStageScheduler {
 
 	protected final Map<IStage, Boolean> statesOfStages = new HashMap<IStage, Boolean>();
 	private final Collection<IStage> highestPrioritizedEnabledStages = new ArrayList<IStage>();
@@ -49,10 +49,12 @@ public class NextStageScheduler {
 		}
 	}
 
+	@Override
 	public IStage get() {
 		return this.workList.read();
 	}
 
+	@Override
 	public boolean isAnyStageActive() {
 		// System.out.println("workList: " + this.workList);
 		return !this.workList.isEmpty();
@@ -63,6 +65,7 @@ public class NextStageScheduler {
 		this.statesOfStages.put(stage, Boolean.TRUE);
 	}
 
+	@Override
 	public void disable(final IStage stage) {
 		this.statesOfStages.put(stage, Boolean.FALSE);
 
@@ -78,6 +81,7 @@ public class NextStageScheduler {
 		stage.fireSignalClosingToAllOutputPorts();
 	}
 
+	@Override
 	public void determineNextStage(final IStage stage, final boolean executedSuccessfully) {
 		final Collection<? extends IStage> outputStages = stage.getContext().getOutputStages();
 		if (outputStages.size() > 0) {
