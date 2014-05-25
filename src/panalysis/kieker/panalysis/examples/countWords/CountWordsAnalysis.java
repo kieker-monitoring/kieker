@@ -91,7 +91,7 @@ public class CountWordsAnalysis extends Analysis {
 
 		// connect stages by pipes
 		MethodCallPipe.connect(repeaterSource.OUTPUT, findFilesStage.DIRECTORY_NAME);
-		MethodCallPipe.connect(findFilesStage.FILE, distributor.OBJECT);
+		MethodCallPipe.connect(findFilesStage.fileOutputPort, distributor.genericInputPort);
 		MethodCallPipe.connect(distributor.getNewOutputPort(), countWordsStage0.FILE);
 		MethodCallPipe.connect(distributor.getNewOutputPort(), countWordsStage1.FILE);
 		MethodCallPipe.connect(countWordsStage0.WORDSCOUNT, merger.getNewInputPort());

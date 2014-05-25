@@ -137,20 +137,20 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 		// create stages
 		final RepeaterSource<String> repeaterSource = RepeaterSource.create(START_DIRECTORY_NAME, NUM_TOKENS_TO_REPEAT);
 		repeaterSource.setAccessesDeviceId(1);
-		final DirectoryName2Files findFilesStage = new DirectoryName2Files();
-		findFilesStage.setAccessesDeviceId(1);
+		final DirectoryName2Files directoryName2Files = new DirectoryName2Files();
+		directoryName2Files.setAccessesDeviceId(1);
 		final Distributor<File> distributor = new Distributor<File>();
 		distributor.setAccessesDeviceId(1);
 
 		// add each stage to a stage list
 		final List<IStage> stages = new LinkedList<IStage>();
 		stages.add(repeaterSource);
-		stages.add(findFilesStage);
+		stages.add(directoryName2Files);
 		stages.add(distributor);
 
 		// connect stages by pipes
-		QueuePipe.connect(repeaterSource.OUTPUT, findFilesStage.DIRECTORY_NAME);
-		QueuePipe.connect(findFilesStage.FILE, distributor.OBJECT);
+		QueuePipe.connect(repeaterSource.OUTPUT, directoryName2Files.DIRECTORY_NAME);
+		QueuePipe.connect(directoryName2Files.fileOutputPort, distributor.genericInputPort);
 
 		repeaterSource.START.setAssociatedPipe(new MethodCallPipe<Boolean>(Boolean.TRUE));
 
@@ -196,7 +196,7 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 		stages.add(merger);
 
 		// connect stages by pipes
-		SingleProducerSingleConsumerPipe.connect(readerDistributor.getNewOutputPort(), distributor.OBJECT);
+		SingleProducerSingleConsumerPipe.connect(readerDistributor.getNewOutputPort(), distributor.genericInputPort);
 
 		this.connectWithStealAwarePipe(this.pipeFactories[0], distributor.getNewOutputPort(), countWordsStage0.FILE);
 		this.connectWithStealAwarePipe(this.pipeFactories[1], distributor.getNewOutputPort(), countWordsStage1.FILE);

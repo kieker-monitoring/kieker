@@ -32,7 +32,7 @@ public class DirectoryName2Files extends AbstractFilter<DirectoryName2Files> {
 
 	public final IInputPort<DirectoryName2Files, String> DIRECTORY_NAME = this.createInputPort();
 
-	public final IOutputPort<DirectoryName2Files, File> FILE = this.createOutputPort();
+	public final IOutputPort<DirectoryName2Files, File> fileOutputPort = this.createOutputPort();
 
 	private int numFiles = 0;
 
@@ -51,7 +51,7 @@ public class DirectoryName2Files extends AbstractFilter<DirectoryName2Files> {
 		for (final File file : availableFiles) {
 			if (file.isFile()) {
 				// this.logger.info("Sending " + file);
-				context.put(this.FILE, file);
+				context.put(this.fileOutputPort, file);
 				this.numFiles++;
 			}
 		}

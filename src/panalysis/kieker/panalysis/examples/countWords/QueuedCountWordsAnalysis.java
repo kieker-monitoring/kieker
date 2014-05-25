@@ -93,7 +93,7 @@ public class QueuedCountWordsAnalysis extends Analysis {
 
 		// connect stages by pipes
 		QueuePipe.connect(repeaterSource.OUTPUT, findFilesStage.DIRECTORY_NAME);
-		QueuePipe.connect(findFilesStage.FILE, distributor.OBJECT);
+		QueuePipe.connect(findFilesStage.fileOutputPort, distributor.genericInputPort);
 		QueuePipe.connect(distributor.getNewOutputPort(), countWordsStage0.FILE);
 		QueuePipe.connect(distributor.getNewOutputPort(), countWordsStage1.FILE);
 		QueuePipe.connect(countWordsStage0.WORDSCOUNT, merger.getNewInputPort());

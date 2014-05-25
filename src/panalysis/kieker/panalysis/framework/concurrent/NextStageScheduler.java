@@ -90,6 +90,7 @@ public class NextStageScheduler implements IStageScheduler {
 			}
 
 			// TODO consider to not add the stage again if it has a cyclic pipe
+			// TODO or prioritize non-self stages
 			// while (outputStages.remove(stage)) {
 			// }
 

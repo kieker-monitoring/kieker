@@ -31,8 +31,9 @@ import kieker.panalysis.framework.core.IOutputPort;
 public class PredicateFilter<T> extends AbstractFilter<PredicateFilter<T>> {
 
 	public final IInputPort<PredicateFilter<T>, T> inputPort = this.createInputPort();
-	public final IOutputPort<PredicateFilter<T>, T> outputMatchingPort = this.createOutputPort();
-	public final IOutputPort<PredicateFilter<T>, T> outputMismatchingPort = this.createOutputPort();
+
+	public final IOutputPort<PredicateFilter<T>, T> matchingOutputPort = this.createOutputPort();
+	public final IOutputPort<PredicateFilter<T>, T> mismatchingOutputPort = this.createOutputPort();
 
 	private Predicate<T> predicate;
 
@@ -60,9 +61,9 @@ public class PredicateFilter<T> extends AbstractFilter<PredicateFilter<T>> {
 		}
 
 		if (this.predicate.apply(inputObject)) {
-			context.put(this.outputMatchingPort, inputObject);
+			context.put(this.matchingOutputPort, inputObject);
 		} else {
-			context.put(this.outputMismatchingPort, inputObject);
+			context.put(this.mismatchingOutputPort, inputObject);
 		}
 
 		return true;

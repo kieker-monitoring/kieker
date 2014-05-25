@@ -63,7 +63,7 @@ public class CountingObjectsAnalysis extends Analysis {
 
 		// connect stages by pipes
 		MethodCallPipe.connect(repeaterSource.OUTPUT, findFilesStage.DIRECTORY_NAME);
-		MethodCallPipe.connect(findFilesStage.FILE, cycledCountingFilter.INPUT_OBJECT);
+		MethodCallPipe.connect(findFilesStage.fileOutputPort, cycledCountingFilter.INPUT_OBJECT);
 		MethodCallPipe.connect(cycledCountingFilter.RELAYED_OBJECT, typeLoggerFilter.INPUT_OBJECT);
 
 		repeaterSource.START.setAssociatedPipe(new MethodCallPipe<Boolean>(Boolean.TRUE));

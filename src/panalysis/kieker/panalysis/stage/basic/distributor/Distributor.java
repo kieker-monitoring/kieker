@@ -31,7 +31,7 @@ import kieker.panalysis.framework.core.IOutputPort;
  */
 public class Distributor<T> extends AbstractFilter<Distributor<T>> {
 
-	public final IInputPort<Distributor<T>, T> OBJECT = this.createInputPort();
+	public final IInputPort<Distributor<T>, T> genericInputPort = this.createInputPort();
 
 	private IDistributorStrategy<T> strategy = new RoundRobinStrategy<T>();
 
@@ -45,7 +45,7 @@ public class Distributor<T> extends AbstractFilter<Distributor<T>> {
 
 	@Override
 	protected boolean execute(final Context<Distributor<T>> context) {
-		final T object = context.tryTake(this.OBJECT);
+		final T object = context.tryTake(this.genericInputPort);
 		if (object == null) {
 			return false;
 		}

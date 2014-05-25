@@ -75,8 +75,8 @@ public class File2RecordFilter extends CompositeFilter {
 		final IOutputPort<FileExtensionFilter, File> zipFileOutputPort = fileExtensionFilter.createOutputPortForFileExtension(FSUtil.ZIP_FILE_EXTENSION);
 
 		// connect ports by pipes
-		MethodCallPipe.connect(isDirectoryFilter.outputMatchingPort, classNameRegistryCreationFilter.directoryInputPort);
-		MethodCallPipe.connect(isDirectoryFilter.outputMismatchingPort, fileMerger.getNewInputPort()); // BETTER restructure pipeline
+		MethodCallPipe.connect(isDirectoryFilter.matchingOutputPort, classNameRegistryCreationFilter.directoryInputPort);
+		MethodCallPipe.connect(isDirectoryFilter.mismatchingOutputPort, fileMerger.getNewInputPort()); // BETTER restructure pipeline
 		MethodCallPipe.connect(classNameRegistryCreationFilter.relayDirectoryOutputPort, directory2FilesFilter.directoryInputPort);
 		MethodCallPipe.connect(classNameRegistryCreationFilter.filePrefixOutputPort, directory2FilesFilter.filePrefixInputPort);
 		MethodCallPipe.connect(directory2FilesFilter.fileOutputPort, fileExtensionFilter.fileInputPort);

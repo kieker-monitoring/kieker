@@ -31,7 +31,7 @@ import kieker.panalysis.framework.core.IOutputPort;
  * @param <T>
  *            the type of the input ports and the output port
  */
-@Description("This stage merges data from the input ports, by taking elements in round robin order and by putting them to the output port.")
+@Description("This stage merges data from the input ports, by taking elements according to the chosen merge strategy and by putting them to the output port.")
 public class Merger<T> extends AbstractFilter<Merger<T>> {
 
 	public final IOutputPort<Merger<T>, T> outputPort = this.createOutputPort();
@@ -49,13 +49,12 @@ public class Merger<T> extends AbstractFilter<Merger<T>> {
 	@Override
 	protected boolean execute(final Context<Merger<T>> context) {
 		final T token = this.strategy.getNextInput(context, this.getInputPorts());
-
-		if (token != null) {
-			context.put(this.outputPort, token);
-			return true;
-		} else {
+		if (token == null) {
 			return false;
 		}
+
+		context.put(this.outputPort, token);
+		return true;
 	}
 
 	public IInputPort<Merger<T>, T> getNewInputPort() {
