@@ -131,39 +131,4 @@ public abstract class AbstractCompositeFilterPlugin extends AbstractFilterPlugin
 		}
 		return config;
 	}
-
-	/**
-	 * 
-	 * @author Markus Fischer
-	 * @since 1.10
-	 * 
-	 *        Simple class to wrap up a portName and a corresponding eventtype
-	 */
-	public class PortWrapper {
-		private final String outputPortName;
-		private final Class<?> eventClass;
-
-		/**
-		 * Constructor.
-		 * 
-		 * @param outputPortName
-		 *            OutputPortame
-		 * @param eventClass
-		 *            eventClass
-		 */
-		public PortWrapper(final String outputPortName, final Class<?> eventClass) {
-			this.eventClass = eventClass;
-			this.outputPortName = outputPortName;
-		}
-
-		public String getOutputPortName() {
-			return this.outputPortName;
-
-		}
-
-		public Class<?> getEventClass() {
-			return this.eventClass;
-
-		}
-	}
 }

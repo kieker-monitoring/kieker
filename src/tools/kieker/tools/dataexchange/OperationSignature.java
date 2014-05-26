@@ -198,8 +198,8 @@ public class OperationSignature {
 		this.hostName = hostName;
 	}
 
-	public void setPackagePath(final String[] packagePath) { // NOPMD directly storing is intended
-		this.packagePath = packagePath;
+	public void setPackagePath(final String[] packagePath) {
+		this.packagePath = packagePath; // NOPMD directly storing is intended
 	}
 
 	public void setStringSignature(final String stringSignature) {

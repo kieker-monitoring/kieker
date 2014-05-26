@@ -158,13 +158,21 @@ public class UniteMeasurementPairFilterTest extends AbstractKiekerTest {
 
 		Assert.assertEquals(8, this.sinkPlugin.getList().size());
 
-		Assert.assertTrue((this.sinkPlugin.getList().get(0).getValue() == 0.3) && (this.sinkPlugin.getList().get(0).getForecasted() == 0.3));
-		Assert.assertTrue((this.sinkPlugin.getList().get(1).getValue() == 0.4) && (this.sinkPlugin.getList().get(1).getForecasted() == 0.35));
-		Assert.assertTrue((this.sinkPlugin.getList().get(2).getValue() == 0.5) && (this.sinkPlugin.getList().get(2).getForecasted() == 0.45));
-		Assert.assertTrue((this.sinkPlugin.getList().get(3).getValue() == 0.9) && (this.sinkPlugin.getList().get(3).getForecasted() == 0.55));
-		Assert.assertTrue((this.sinkPlugin.getList().get(4).getValue() == 0.7) && (this.sinkPlugin.getList().get(4).getForecasted() == 0.7));
-		Assert.assertTrue((this.sinkPlugin.getList().get(5).getValue() == 0.3) && (this.sinkPlugin.getList().get(5).getForecasted() == 0.31));
-		Assert.assertTrue((this.sinkPlugin.getList().get(6).getValue() == 0.1) && (this.sinkPlugin.getList().get(6).getForecasted() == 0.46));
-		Assert.assertTrue((this.sinkPlugin.getList().get(7).getValue() == 0.97) && (this.sinkPlugin.getList().get(7).getForecasted() == 0.55));
+		Assert.assertEquals(this.sinkPlugin.getList().get(0).getValue().doubleValue(), 0.3d, 0.000001d);
+		Assert.assertEquals(this.sinkPlugin.getList().get(0).getForecasted().doubleValue(), 0.3d, 0.000001d);
+		Assert.assertEquals(this.sinkPlugin.getList().get(1).getValue().doubleValue(), 0.4d, 0.000001d);
+		Assert.assertEquals(this.sinkPlugin.getList().get(1).getForecasted().doubleValue(), 0.35d, 0.000001d);
+		Assert.assertEquals(this.sinkPlugin.getList().get(2).getValue().doubleValue(), 0.5d, 0.000001d);
+		Assert.assertEquals(this.sinkPlugin.getList().get(2).getForecasted().doubleValue(), 0.45d, 0.000001d);
+		Assert.assertEquals(this.sinkPlugin.getList().get(3).getValue().doubleValue(), 0.9d, 0.000001d);
+		Assert.assertEquals(this.sinkPlugin.getList().get(3).getForecasted().doubleValue(), 0.55d, 0.000001d);
+		Assert.assertEquals(this.sinkPlugin.getList().get(4).getValue().doubleValue(), 0.7d, 0.000001d);
+		Assert.assertEquals(this.sinkPlugin.getList().get(4).getForecasted().doubleValue(), 0.7d, 0.000001d);
+		Assert.assertEquals(this.sinkPlugin.getList().get(5).getValue().doubleValue(), 0.3d, 0.000001d);
+		Assert.assertEquals(this.sinkPlugin.getList().get(5).getForecasted().doubleValue(), 0.31d, 0.000001d);
+		Assert.assertEquals(this.sinkPlugin.getList().get(6).getValue().doubleValue(), 0.1d, 0.000001d);
+		Assert.assertEquals(this.sinkPlugin.getList().get(6).getForecasted().doubleValue(), 0.46d, 0.000001d);
+		Assert.assertEquals(this.sinkPlugin.getList().get(7).getValue().doubleValue(), 0.97d, 0.000001d);
+		Assert.assertEquals(this.sinkPlugin.getList().get(7).getForecasted().doubleValue(), 0.55d, 0.000001d);
 	}
 }

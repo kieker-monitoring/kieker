@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,44 +14,39 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.opad.record;
-
-import kieker.tools.tslib.TimeSeriesPoint;
+package kieker.tools.composite;
 
 /**
- * @author Tillmann Carlos Bielefeld
+ * 
+ * @author Markus Fischer
  * @since 1.10
  * 
+ *        Simple class to wrap up a portName and a corresponding eventtype
  */
-public class NamedDoubleTimeSeriesPoint extends TimeSeriesPoint<Double> implements INamedElement {
-
-	private final String name;
+public class PortWrapper {
+	private final String outputPortName;
+	private final Class<?> eventClass;
 
 	/**
 	 * Constructor.
 	 * 
-	 * @param time
-	 *            timestamp
-	 * @param value
-	 *            measurement value
-	 * @param name
-	 *            name of the ts point
+	 * @param outputPortName
+	 *            OutputPortame
+	 * @param eventClass
+	 *            eventClass
 	 */
-	public NamedDoubleTimeSeriesPoint(final long time, final Double value, final String name) {
-		super(time, value);
-		this.name = name;
+	public PortWrapper(final String outputPortName, final Class<?> eventClass) {
+		this.eventClass = eventClass;
+		this.outputPortName = outputPortName;
 	}
 
-	public String getName() {
-		return this.name;
+	public String getOutputPortName() {
+		return this.outputPortName;
+
 	}
 
-	public double getDoubleValue() {
-		return this.getValue();
-	}
+	public Class<?> getEventClass() {
+		return this.eventClass;
 
-	@Override
-	public String toString() {
-		return this.name + " >> " + super.toString();
 	}
 }
