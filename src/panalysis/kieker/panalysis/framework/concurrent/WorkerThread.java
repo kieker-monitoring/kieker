@@ -34,6 +34,7 @@ public class WorkerThread extends Thread {
 	private volatile StageTerminationPolicy terminationPolicy;
 	private volatile boolean shouldTerminate = false;
 	private final int accessesDeviceId;
+	private int executedUnsuccessfullyCount;
 
 	public WorkerThread(final IPipeline pipeline, final int accessesDeviceId) {
 		this.pipeline = pipeline;
@@ -110,12 +111,16 @@ public class WorkerThread extends Thread {
 
 	private void finishStageExecution(final IStage stage, final boolean executedSuccessfully) {
 		// System.out.println("Executed stage " + stage + " successfully: " + executedSuccessfully);
+		if (!executedSuccessfully) { // statistics
+			this.executedUnsuccessfullyCount++;
+		}
 	}
 
 	private void cleanUpDatastructures() {
 		System.out.println("Firing stop notification...");
 		this.pipeline.fireStopNotification();
 		System.out.println("Thread terminated:" + this);
+		System.out.println(this.getName() + ": executedUnsuccessfullyCount=" + this.executedUnsuccessfullyCount);
 	}
 
 	public long getDuration() {

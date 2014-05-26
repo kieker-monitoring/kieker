@@ -52,13 +52,12 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 	private static final String START_DIRECTORY_NAME = ".";
 	private static final int SECONDS = 1000;
 
-	private static final int MAX_NUM_THREADS = 2;
+	private static final int MAX_NUM_THREADS = 1;
 
 	private WorkerThread[] ioThreads;
 	private WorkerThread[] nonIoThreads;
 
 	ConcurrentWorkStealingPipeFactory<?>[] pipeFactories;
-	public static String distributorId;
 
 	@Override
 	public void init() {
@@ -102,7 +101,6 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 		}
 
 		for (final WorkerThread thread : this.nonIoThreads) {
-			thread.setTerminationPolicy(StageTerminationPolicy.TERMINATE_STAGE_AFTER_UNSUCCESSFUL_EXECUTION);
 			thread.start();
 		}
 
@@ -185,7 +183,6 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 	private IPipeline buildNonIoPipeline(final Distributor<File> readerDistributor, final Merger<Pair<File, Integer>> printingMerger) {
 		// create stages
 		final Distributor<File> distributor = new Distributor<File>();
-		ConcurrentCountWordsAnalysis.distributorId = distributor.getId();
 		final CountWordsStage countWordsStage0 = new CountWordsStage();
 		final CountWordsStage countWordsStage1 = new CountWordsStage();
 		final Merger<Pair<File, Integer>> merger = new Merger<Pair<File, Integer>>();
