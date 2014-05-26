@@ -33,6 +33,8 @@ import kieker.examples.livedemo.filter.display.util.LimitedHashMap;
  */
 public class JVMHeapDisplayFilter extends AbstractNonAggregatingDisplayFilter<MemoryRecord, CartesianChartModel> {
 
+	private static final float BYTE_TO_MEGABYTE_CONVERSION_VALUE = 1.0f / (1024.0f * 1024.0f);
+
 	private Map<Object, Number> committedHeapData;
 	private Map<Object, Number> usedHeapData;
 
@@ -68,8 +70,8 @@ public class JVMHeapDisplayFilter extends AbstractNonAggregatingDisplayFilter<Me
 	@Override
 	protected void fillChartModelWithRecordData(final CartesianChartModel chartModel, final MemoryRecord record, final String minutesAndSeconds,
 			final int numberOfEntries) {
-		this.committedHeapData.put(minutesAndSeconds, record.getHeapCommitted());
-		this.usedHeapData.put(minutesAndSeconds, record.getHeapUsed());
+		this.committedHeapData.put(minutesAndSeconds, JVMHeapDisplayFilter.BYTE_TO_MEGABYTE_CONVERSION_VALUE * record.getHeapCommitted());
+		this.usedHeapData.put(minutesAndSeconds, JVMHeapDisplayFilter.BYTE_TO_MEGABYTE_CONVERSION_VALUE * record.getHeapUsed());
 	}
 
 }

@@ -33,21 +33,25 @@ import kieker.common.record.system.CPUUtilizationRecord;
 import kieker.common.record.system.MemSwapUsageRecord;
 
 /**
+ * A filter distributing the incoming records based on their types and replacing therefore a bunch of type filters. Records which do not match are discarded. Usage
+ * of this filter reduces both runtime and memory overhead in the analysis.
+ * 
  * @author Nils Christian Ehmke
  * 
  * @since 1.10
  */
-@Plugin(outputPorts = {
-	@OutputPort(eventTypes = GCRecord.class, name = Distributor.OUTPUT_PORT_NAME_GC_RECORDS),
-	@OutputPort(eventTypes = ClassLoadingRecord.class, name = Distributor.OUTPUT_PORT_NAME_CLASS_LOADING_RECORDS),
-	@OutputPort(eventTypes = ThreadsStatusRecord.class, name = Distributor.OUTPUT_PORT_NAME_THREADS_STATUS_RECORDS),
-	@OutputPort(eventTypes = CompilationRecord.class, name = Distributor.OUTPUT_PORT_NAME_COMPILATION_RECORDS),
-	@OutputPort(eventTypes = CPUUtilizationRecord.class, name = Distributor.OUTPUT_PORT_NAME_CPU_UTILIZATION_RECORDS),
-	@OutputPort(eventTypes = MemSwapUsageRecord.class, name = Distributor.OUTPUT_PORT_NAME_MEM_SWAP_USAGE_RECORDS),
-	@OutputPort(eventTypes = OperationExecutionRecord.class, name = Distributor.OUTPUT_PORT_NAME_OPERATION_EXECUTION_RECORDS),
-	@OutputPort(eventTypes = MemoryRecord.class, name = Distributor.OUTPUT_PORT_NAME_JVM_MEMORY_RECORDS)
-})
-public class Distributor extends AbstractFilterPlugin {
+@Plugin(programmaticOnly = true,
+		outputPorts = {
+			@OutputPort(eventTypes = GCRecord.class, name = Distributor.OUTPUT_PORT_NAME_GC_RECORDS),
+			@OutputPort(eventTypes = ClassLoadingRecord.class, name = Distributor.OUTPUT_PORT_NAME_CLASS_LOADING_RECORDS),
+			@OutputPort(eventTypes = ThreadsStatusRecord.class, name = Distributor.OUTPUT_PORT_NAME_THREADS_STATUS_RECORDS),
+			@OutputPort(eventTypes = CompilationRecord.class, name = Distributor.OUTPUT_PORT_NAME_COMPILATION_RECORDS),
+			@OutputPort(eventTypes = CPUUtilizationRecord.class, name = Distributor.OUTPUT_PORT_NAME_CPU_UTILIZATION_RECORDS),
+			@OutputPort(eventTypes = MemSwapUsageRecord.class, name = Distributor.OUTPUT_PORT_NAME_MEM_SWAP_USAGE_RECORDS),
+			@OutputPort(eventTypes = OperationExecutionRecord.class, name = Distributor.OUTPUT_PORT_NAME_OPERATION_EXECUTION_RECORDS),
+			@OutputPort(eventTypes = MemoryRecord.class, name = Distributor.OUTPUT_PORT_NAME_JVM_MEMORY_RECORDS)
+		})
+public final class Distributor extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME_RECORDS = "input";
 

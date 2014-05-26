@@ -16,12 +16,15 @@
 
 package kieker.examples.livedemo.managedbeans;
 
+import java.util.Collection;
+
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 
 import org.primefaces.model.chart.CartesianChartModel;
+import org.primefaces.model.chart.ChartSeries;
 
 /**
  * @author Nils Christian Ehmke
@@ -86,6 +89,46 @@ public class JVMDataDisplayBean {
 
 	public CartesianChartModel getJvmNonHeapModel() {
 		return this.jvmNonHeapModel;
+	}
+
+	public int getSeriesMaximum(final Collection<ChartSeries> seriesCollection, final int roundToValue) {
+		int maximum = 0;
+
+		for (final ChartSeries series : seriesCollection) {
+			for (final Number value : series.getData().values()) {
+				maximum = Math.max(value.intValue(), maximum);
+			}
+		}
+
+		return ((maximum + (roundToValue - 1)) / roundToValue) * roundToValue;
+	}
+
+	public int getThreadsStatusMaximum() {
+		return this.getSeriesMaximum(this.threadsStatusModel.getSeries(), 50);
+	}
+
+	public int getJvmNonHeapMaximum() {
+		return this.getSeriesMaximum(this.jvmNonHeapModel.getSeries(), 50);
+	}
+
+	public int getJvmHeapMaximum() {
+		return this.getSeriesMaximum(this.jvmHeapModel.getSeries(), 50);
+	}
+
+	public int getGcTimeMaximum() {
+		return this.getSeriesMaximum(this.gcTimeModel.getSeries(), 50);
+	}
+
+	public int getGcCountMaximum() {
+		return this.getSeriesMaximum(this.gcCountModel.getSeries(), 50);
+	}
+
+	public int getCompilationMaximum() {
+		return this.getSeriesMaximum(this.compilationModel.getSeries(), 1000);
+	}
+
+	public int getClassLoadingMaximum() {
+		return this.getSeriesMaximum(this.classLoadingModel.getSeries(), 1000);
 	}
 
 }

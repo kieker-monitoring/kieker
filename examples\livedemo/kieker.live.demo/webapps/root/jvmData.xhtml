@@ -73,30 +73,37 @@
 				<p:commandButton async="true" id="loadButton" value="#{jMeterBean.buttonText}" disabled="#{jMeterBean.disabled}" actionListener="#{jMeterBean.runJMeter}" />
 					
 			    <p:lineChart id="jvmHeap" value="#{jvmDataDisplayBean.jvmHeapModel}" fill="true" shadow="true" legendPosition="ne"  
-			    	title="JVM Heap Usage" minY="0" style="height:300px;margin-top:20px" extender="ext" xaxisLabel="Time" yaxisLabel="Memory (Bytes)"/>	
+			    	title="JVM Heap Usage" minY="0" style="height:300px;margin-top:20px" extender="ext" xaxisLabel="Time" yaxisLabel="Memory (Megabytes)"
+			    	maxY="#{jvmDataDisplayBean.jvmHeapMaximum}"/>	
 			  	
 			  	 <p:lineChart id="jvmNonHeap" value="#{jvmDataDisplayBean.jvmNonHeapModel}" fill="true" shadow="true" legendPosition="ne"  
-			    	title="JVM Non-Heap Usage" minY="0" style="height:300px;margin-top:20px" extender="ext" xaxisLabel="Time" yaxisLabel="Memory (Bytes)"/>	
+			    	title="JVM Non-Heap Usage" minY="0" style="height:300px;margin-top:20px" extender="ext" xaxisLabel="Time" yaxisLabel="Memory (Megabytes)"
+			    	maxY="#{jvmDataDisplayBean.jvmNonHeapMaximum}"/>
 			  			
 				<p:lineChart id="threads" value="#{jvmDataDisplayBean.threadsStatusModel}" legendPosition="ne"  
 			    	title="Threads Status" minY="0"  style="height:300px;margin-top:20px"
-			    	xaxisLabel="Time" yaxisLabel="Number of threads"/>	
+			    	xaxisLabel="Time" yaxisLabel="Number of threads"
+			    		maxY="#{jvmDataDisplayBean.threadsStatusMaximum}"/>
 				
 				<p:lineChart id="gcTime" value="#{jvmDataDisplayBean.gcTimeModel}" legendPosition="ne"  
 			    	title="Garbage Collecting Time" minY="0" style="height:300px;margin-top:20px"
-			    	xaxisLabel="Time" yaxisLabel="Running time (ms)"/>	
+			    	xaxisLabel="Time" yaxisLabel="Running time (ms)"
+			    	maxY="#{jvmDataDisplayBean.gcTimeMaximum}"/>
 			    	
 				<p:lineChart id="gcCount" value="#{jvmDataDisplayBean.gcCountModel}" legendPosition="ne"  
 			    	title="Garbage Collecting Count" minY="0" style="height:300px;margin-top:20px"
-			    	xaxisLabel="Time" yaxisLabel="Number of collections"/>	
+			    	xaxisLabel="Time" yaxisLabel="Number of collections"
+			    	maxY="#{jvmDataDisplayBean.gcCountMaximum}"/>
 			  
 				<p:lineChart id="jit" value="#{jvmDataDisplayBean.compilationModel}" legendPosition="ne"  
 			    	title="Total Compilation Time of JIT Compiler" minY="0" style="height:300px;margin-top:20px"
-			    	xaxisLabel="Time" yaxisLabel="Running time (ms)"/>	
+			    	xaxisLabel="Time" yaxisLabel="Running time (ms)"
+			    	maxY="#{jvmDataDisplayBean.compilationMaximum}" />	
 			    	
 			    <p:lineChart id="classloading" value="#{jvmDataDisplayBean.classLoadingModel}" legendPosition="ne"  
 			    	title="Class Loading" minY="0" style="height:300px;margin-top:20px"
-			    	xaxisLabel="Time" yaxisLabel="Number of classes"/>	
+			    	xaxisLabel="Time" yaxisLabel="Number of classes"
+			    	   	maxY="#{jvmDataDisplayBean.classLoadingMaximum}" />	
 
 			   <p:poll interval="1" update="jit, classloading, threads, gcCount, gcTime, jvmHeap, jvmNonHeap, loadButton" />	  		
 			   <p:poll interval="1" update="loadButton" /> 	

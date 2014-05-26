@@ -26,23 +26,20 @@ import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.examples.livedemo.entities.EnrichedOperationExecutionRecord;
 
 /**
+ * A filter enriching Kieker's {@link OperationExecutionRecord} with a short signature and some comma seperated values.
+ * 
  * @author Bjoern Weissenfels
  * 
  * @since 1.9
  */
 @Plugin(programmaticOnly = true,
-		description = "A filter collecting incoming objects in a list",
-		outputPorts = @OutputPort(
-				name = OER2EnrichedOERFilter.OUTPUT_PORT_NAME,
-				eventTypes = { EnrichedOperationExecutionRecord.class },
-				description = "Provides each incoming object"))
+		outputPorts = @OutputPort(name = OER2EnrichedOERFilter.OUTPUT_PORT_NAME, eventTypes = EnrichedOperationExecutionRecord.class))
 public final class OER2EnrichedOERFilter extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME = "inputObject";
 	public static final String OUTPUT_PORT_NAME = "outputObjects";
 
-	public OER2EnrichedOERFilter(final Configuration configuration,
-			final IProjectContext projectContext) {
+	public OER2EnrichedOERFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 	}
 
@@ -51,10 +48,11 @@ public final class OER2EnrichedOERFilter extends AbstractFilterPlugin {
 		final double responseTime = this.computeResponseTime(record);
 		final String shortSignature = this.createShortSignature(record);
 		final String commaSeperatedValues = record.toString();
-		this.deliver(
-				OER2EnrichedOERFilter.OUTPUT_PORT_NAME,
-				new EnrichedOperationExecutionRecord(record.getOperationSignature(), record.getSessionId(), record.getTraceId(), record.getTin(), record.getTout(),
-						record.getHostname(), record.getEoi(), record.getEss(), responseTime, shortSignature, commaSeperatedValues));
+
+		final EnrichedOperationExecutionRecord enrichedRecord = new EnrichedOperationExecutionRecord(record.getOperationSignature(), record.getSessionId(),
+				record.getTraceId(), record.getTin(), record.getTout(), record.getHostname(), record.getEoi(), record.getEss(), responseTime, shortSignature,
+				commaSeperatedValues);
+		this.deliver(OER2EnrichedOERFilter.OUTPUT_PORT_NAME, enrichedRecord);
 	}
 
 	private double computeResponseTime(final OperationExecutionRecord record) {
