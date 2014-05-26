@@ -56,30 +56,9 @@ public class OpadIntegrationTest extends AbstractKiekerTest {
 
 	private AnalysisController controller;
 
-	// Variables ExtractionFilter
-	private ExtractionFilter extractionFilter;
-
-	// Variables TimeSeriesPointAggregatorFilter
-	private TimeSeriesPointAggregatorFilter aggregationFilter;
-
-	// Variables ForecastingFilter
-	private ForecastingFilter forecasting;
-
-	// Variable UniteMeasurementPairFilter
-	private UniteMeasurementPairFilter uniteFilter;
-
-	// Variables AnomalyScoreCalculationFilter
-	private AnomalyScoreCalculationFilter scoreCalc;
-
-	// Variables AnomalyDetectionFilter
-	private AnomalyDetectionFilter anomalyDetectionFilter;
-
 	// Mockup sink
 	private ListCollectionFilter<StorableDetectionResult> sinkPluginIfAnomaly;
 	private ListCollectionFilter<StorableDetectionResult> sinkPluginElse;
-
-	// Variables Mockup Reader
-	private ListReader<NamedDoubleRecord> theReaderNamedDoubleRecord;
 
 	/**
 	 * Creates a new instance of this class.
@@ -139,15 +118,15 @@ public class OpadIntegrationTest extends AbstractKiekerTest {
 		// Start - Read OperationExecutionRecords
 		final Configuration readerOERConfiguration = new Configuration();
 		readerOERConfiguration.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
-		this.theReaderNamedDoubleRecord = new ListReader<NamedDoubleRecord>(readerOERConfiguration, this.controller);
-		this.theReaderNamedDoubleRecord.addAllObjects(this.createInputEventSetOER());
+		final ListReader<NamedDoubleRecord> theReaderNamedDoubleRecord = new ListReader<NamedDoubleRecord>(readerOERConfiguration, this.controller);
+		theReaderNamedDoubleRecord.addAllObjects(this.createInputEventSetOER());
 		// End - Read OperationExecutionRecords
 
 		// Start - ExtractionFilter Configuration
 		// ExtractionFilter Configuration
 		final Configuration extractionConfiguration = new Configuration();
 		extractionConfiguration.setProperty(ExtractionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, "MILLISECONDS");
-		this.extractionFilter = new ExtractionFilter(extractionConfiguration, this.controller);
+		final ExtractionFilter extractionFilter = new ExtractionFilter(extractionConfiguration, this.controller);
 		// End - ResponseTimeExtractionFilter
 
 		// Start - TimeSeriesPointAggregatorFilter
@@ -155,7 +134,7 @@ public class OpadIntegrationTest extends AbstractKiekerTest {
 		final Configuration aggregationConfiguration = new Configuration();
 		aggregationConfiguration.setProperty(TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_SPAN, "2");
 		aggregationConfiguration.setProperty(TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT, "MILLISECONDS");
-		this.aggregationFilter = new TimeSeriesPointAggregatorFilter(aggregationConfiguration, this.controller);
+		final TimeSeriesPointAggregatorFilter aggregationFilter = new TimeSeriesPointAggregatorFilter(aggregationConfiguration, this.controller);
 		// End - TimeSeriesPointAggregatorFilter
 
 		// Start - ForecastingFilter
@@ -165,25 +144,25 @@ public class OpadIntegrationTest extends AbstractKiekerTest {
 		forecastConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_DELTA_UNIT,
 				"MILLISECONDS");
 		forecastConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_FC_METHOD, "MEAN");
-		this.forecasting = new ForecastingFilter(forecastConfiguration, this.controller);
+		final ForecastingFilter forecasting = new ForecastingFilter(forecastConfiguration, this.controller);
 		// End - ForecastingFilter
 
 		// Start - UniteMeasurementFilter
 		// UniteMeasurementFilter Configuration
 		final Configuration uniteConfiguration = new Configuration();
-		this.uniteFilter = new UniteMeasurementPairFilter(uniteConfiguration, this.controller);
+		final UniteMeasurementPairFilter uniteFilter = new UniteMeasurementPairFilter(uniteConfiguration, this.controller);
 		// End - UniteMeasurementFilter
 
 		// Start - AnomalyScoreCalculatorFilter
 		final Configuration scoreConfiguration = new Configuration();
-		this.scoreCalc = new AnomalyScoreCalculationFilter(scoreConfiguration, this.controller);
+		final AnomalyScoreCalculationFilter scoreCalc = new AnomalyScoreCalculationFilter(scoreConfiguration, this.controller);
 		// End - AnomalyScoreCalculatorFilter
 
 		// Start - AnomalyDetectionFilter
 		// AnomalyDetectionFilter Configuration
 		final Configuration configAnomalyPre = new Configuration();
 		configAnomalyPre.setProperty(AnomalyDetectionFilter.CONFIG_PROPERTY_THRESHOLD, "0.23");
-		this.anomalyDetectionFilter = new AnomalyDetectionFilter(configAnomalyPre, this.controller);
+		final AnomalyDetectionFilter anomalyDetectionFilter = new AnomalyDetectionFilter(configAnomalyPre, this.controller);
 		// End - AnomalyDetectionFilter
 
 		// SINK 1
@@ -194,36 +173,36 @@ public class OpadIntegrationTest extends AbstractKiekerTest {
 		// CONNECT the filters
 		// Mock-up Reader (NamedDoubleRecords) -> Extraction Input
 		this.controller
-				.connect(this.theReaderNamedDoubleRecord, ListReader.OUTPUT_PORT_NAME, this.extractionFilter,
+				.connect(theReaderNamedDoubleRecord, ListReader.OUTPUT_PORT_NAME, extractionFilter,
 						ExtractionFilter.INPUT_PORT_NAME_VALUE);
 		// ExtractionFilter -> Aggregator Input
 		this.controller
-				.connect(this.extractionFilter, ExtractionFilter.OUTPUT_PORT_NAME_VALUE, this.aggregationFilter,
+				.connect(extractionFilter, ExtractionFilter.OUTPUT_PORT_NAME_VALUE, aggregationFilter,
 						TimeSeriesPointAggregatorFilter.INPUT_PORT_NAME_TSPOINT);
 		// AggregatorFilter -> Forecast Input
 		this.controller
-				.connect(this.aggregationFilter, TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, this.forecasting,
+				.connect(aggregationFilter, TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, forecasting,
 						ForecastingFilter.INPUT_PORT_NAME_TSPOINT);
 		// Aggregation Filter -> UniteMeasurementPair Input
 		this.controller
-				.connect(this.aggregationFilter, TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, this.uniteFilter,
+				.connect(aggregationFilter, TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, uniteFilter,
 						UniteMeasurementPairFilter.INPUT_PORT_NAME_TSPOINT);
 		// Forecast Output -> UniteMeasurementPair Forecast Input
 		this.controller
-				.connect(this.forecasting, ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, this.uniteFilter,
+				.connect(forecasting, ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, uniteFilter,
 						UniteMeasurementPairFilter.INPUT_PORT_NAME_FORECAST);
 		// UniteMeasurementPair -> AnomalyScoreCalculation Input
 		this.controller
-				.connect(this.uniteFilter, UniteMeasurementPairFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, this.scoreCalc,
+				.connect(uniteFilter, UniteMeasurementPairFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, scoreCalc,
 						AnomalyScoreCalculationFilter.INPUT_PORT_CURRENT_FORECAST_PAIR);
 		// ScoreCalculation Output -> AnomalyDetection Input
 		this.controller
-				.connect(this.scoreCalc, AnomalyScoreCalculationFilter.OUTPUT_PORT_ANOMALY_SCORE, this.anomalyDetectionFilter,
+				.connect(scoreCalc, AnomalyScoreCalculationFilter.OUTPUT_PORT_ANOMALY_SCORE, anomalyDetectionFilter,
 						AnomalyDetectionFilter.INPUT_PORT_ANOMALY_SCORE);
 		// AnomalyDetection -> Sinks
-		this.controller.connect(this.anomalyDetectionFilter, AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY,
+		this.controller.connect(anomalyDetectionFilter, AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY,
 				this.sinkPluginIfAnomaly, ListCollectionFilter.INPUT_PORT_NAME);
-		this.controller.connect(this.anomalyDetectionFilter, AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_ELSE,
+		this.controller.connect(anomalyDetectionFilter, AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_ELSE,
 				this.sinkPluginElse, ListCollectionFilter.INPUT_PORT_NAME);
 	}
 

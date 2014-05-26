@@ -190,7 +190,7 @@ public class ExtendedForecastingFilter extends AbstractUpdateableFilterPlugin {
 		final ITimeSeries<Double> actualWindow = this.applicationForecastingWindow.get(name);
 		final PatternCheckingForecaster histForecaster = new PatternCheckingForecaster(actualWindow, this.patternLength.get(), this.patternTimeunit.get(),
 				this.patternWindowLengthUnit.get(), this.coll, this.timeSeriesWindowCapacity.get(), input);
-		if ((cons > this.consecutiveAnomalyThreshold.get()) && histForecaster.getForecastWindowFromDB()) {
+		if ((cons > this.consecutiveAnomalyThreshold.get()) && histForecaster.isForecastWindowFromDB()) {
 			// Pattern checking forecaster selected
 			final IForecastResult result = histForecaster.forecast(1);
 

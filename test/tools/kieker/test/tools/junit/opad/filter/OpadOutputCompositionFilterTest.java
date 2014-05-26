@@ -66,7 +66,9 @@ public class OpadOutputCompositionFilterTest extends AbstractKiekerTest {
 	/**
 	 * Constructor.
 	 */
-	public OpadOutputCompositionFilterTest() {}
+	public OpadOutputCompositionFilterTest() {
+		// Empty constructor.
+	}
 
 	/**
 	 * Set up the testing environment.
@@ -101,12 +103,6 @@ public class OpadOutputCompositionFilterTest extends AbstractKiekerTest {
 	@After
 	public void tearDown() throws Exception {
 		this.controller.terminate();
-		this.controller = null;
-		this.listReader = null;
-		this.ooCompFilter = null;
-		this.listCollectionFilter = null;
-		this.detectionResult = null;
-		this.compositionResult = null;
 	}
 
 	private void composeOutput() throws IllegalStateException, AnalysisConfigurationException {

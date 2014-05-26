@@ -150,8 +150,8 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 
 		// 2. Perform forecast based on stochastic model
 
-		final String[] additionalForecastParams = this.getModelFuncParams();
 		// TODO: append additionalForecastParams to call
+		// final String[] additionalForecastParams = this.getModelFuncParams();
 
 		if (this.getConfidenceLevel() == 0) {
 			AbstractRForecaster.RBRIDGE.e(String.format("%s <<- %s(%s, h=%d)", varNameForecast, this.forecastFunc, varNameModel,

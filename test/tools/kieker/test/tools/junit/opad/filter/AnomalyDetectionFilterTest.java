@@ -51,10 +51,6 @@ public class AnomalyDetectionFilterTest extends AbstractKiekerTest {
 
 	private static final String OP_SIGNATURE_A = "a.A.opA";
 
-	// private NameFilter nameFilter;
-	private ListReader<StorableDetectionResult> theReader;
-	private AnomalyDetectionFilter anomalyDetectionFilter;
-
 	private ListCollectionFilter<StorableDetectionResult> sinkPluginIfAnomaly;
 	private ListCollectionFilter<StorableDetectionResult> sinkPluginElse;
 	private ListCollectionFilter<ExtendedStorableDetectionResult> sinkPluginAll;
@@ -68,8 +64,7 @@ public class AnomalyDetectionFilterTest extends AbstractKiekerTest {
 	}
 
 	private StorableDetectionResult createNDTSP(final String signature, final double value) {
-		final StorableDetectionResult r = new StorableDetectionResult(signature, value, System.currentTimeMillis(), value, value);
-		return r;
+		return new StorableDetectionResult(signature, value, System.currentTimeMillis(), value, value);
 	}
 
 	private List<StorableDetectionResult> createInputEventSet() {
@@ -95,13 +90,13 @@ public class AnomalyDetectionFilterTest extends AbstractKiekerTest {
 		// READER
 		final Configuration readerConfiguration = new Configuration();
 		readerConfiguration.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
-		this.theReader = new ListReader<StorableDetectionResult>(readerConfiguration, this.controller);
-		this.theReader.addAllObjects(this.createInputEventSet());
+		final ListReader<StorableDetectionResult> theReader = new ListReader<StorableDetectionResult>(readerConfiguration, this.controller);
+		theReader.addAllObjects(this.createInputEventSet());
 
 		// ANOMALY DETECTION FILTER
 		final Configuration configAnomaly = new Configuration();
 		configAnomaly.setProperty(AnomalyDetectionFilter.CONFIG_PROPERTY_THRESHOLD, "0.6");
-		this.anomalyDetectionFilter = new AnomalyDetectionFilter(configAnomaly, this.controller);
+		final AnomalyDetectionFilter anomalyDetectionFilter = new AnomalyDetectionFilter(configAnomaly, this.controller);
 
 		// SINK 1
 		this.sinkPluginIfAnomaly = new ListCollectionFilter<StorableDetectionResult>(new Configuration(), this.controller);
@@ -113,13 +108,13 @@ public class AnomalyDetectionFilterTest extends AbstractKiekerTest {
 		this.sinkPluginAll = new ListCollectionFilter<ExtendedStorableDetectionResult>(new Configuration(), this.controller);
 
 		// CONNECT the filters
-		this.controller.connect(this.theReader, ListReader.OUTPUT_PORT_NAME,
-				this.anomalyDetectionFilter, AnomalyDetectionFilter.INPUT_PORT_ANOMALY_SCORE);
-		this.controller.connect(this.anomalyDetectionFilter, AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY,
+		this.controller.connect(theReader, ListReader.OUTPUT_PORT_NAME,
+				anomalyDetectionFilter, AnomalyDetectionFilter.INPUT_PORT_ANOMALY_SCORE);
+		this.controller.connect(anomalyDetectionFilter, AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY,
 				this.sinkPluginIfAnomaly, ListCollectionFilter.INPUT_PORT_NAME);
-		this.controller.connect(this.anomalyDetectionFilter, AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_ELSE,
+		this.controller.connect(anomalyDetectionFilter, AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_ELSE,
 				this.sinkPluginElse, ListCollectionFilter.INPUT_PORT_NAME);
-		this.controller.connect(this.anomalyDetectionFilter, AnomalyDetectionFilter.OUTPUT_PORT_ALL,
+		this.controller.connect(anomalyDetectionFilter, AnomalyDetectionFilter.OUTPUT_PORT_ALL,
 				this.sinkPluginAll, ListCollectionFilter.INPUT_PORT_NAME);
 
 		Assert.assertTrue(this.sinkPluginIfAnomaly.getList().isEmpty());

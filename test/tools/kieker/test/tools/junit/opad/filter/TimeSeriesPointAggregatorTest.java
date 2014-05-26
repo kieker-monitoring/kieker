@@ -17,6 +17,7 @@
 package kieker.test.tools.junit.opad.filter;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
@@ -45,9 +46,6 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 
 	private AnalysisController controller;
 
-	// Variables ForecastingFilter
-	private ListReader<NamedDoubleTimeSeriesPoint> theReaderAggregator;
-	private TimeSeriesPointAggregatorFilter aggregator;
 	private ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPlugin;
 
 	/**
@@ -59,8 +57,59 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 
 	// HelperMethods ForecastingFilter
 	private NamedDoubleTimeSeriesPoint createNDTSP(final long timestamp, final double value, final String signature) {
-		final NamedDoubleTimeSeriesPoint r = new NamedDoubleTimeSeriesPoint(timestamp, value, signature);
-		return r;
+		return new NamedDoubleTimeSeriesPoint(timestamp, value, signature);
+	}
+
+	/**
+	 * Prepares the test environment.
+	 * 
+	 * @throws AnalysisConfigurationException
+	 *             If configuration of analysis fails
+	 * @throws IllegalStateException
+	 *             If any illegal state arises
+	 */
+	@Before
+	public void setUp() throws IllegalStateException, AnalysisConfigurationException {
+		this.controller = new AnalysisController();
+
+		// READER
+		final Configuration readerAggregationConfiguration = new Configuration();
+		final ListReader<NamedDoubleTimeSeriesPoint> theReaderAggregator = new ListReader<NamedDoubleTimeSeriesPoint>(readerAggregationConfiguration,
+				this.controller);
+
+		theReaderAggregator.addObject(this.createNDTSP(1369127812664L, 1000, OP_SIGNATURE_A));
+		theReaderAggregator.addObject(this.createNDTSP(1369127812665L, 2000, OP_SIGNATURE_A));
+		theReaderAggregator.addObject(this.createNDTSP(1369127812664L, 1000, OP_SIGNATURE_C));
+		theReaderAggregator.addObject(this.createNDTSP(1369127812668L, 5500, OP_SIGNATURE_C));
+		theReaderAggregator.addObject(this.createNDTSP(1369127812674L, 2000, OP_SIGNATURE_B));
+		theReaderAggregator.addObject(this.createNDTSP(1369127812674L, 3000, OP_SIGNATURE_A));
+		theReaderAggregator.addObject(this.createNDTSP(1369127812684L, 4000, OP_SIGNATURE_A));
+		theReaderAggregator.addObject(this.createNDTSP(1369127812674L, 2000, OP_SIGNATURE_C));
+		theReaderAggregator.addObject(this.createNDTSP(1369127812684L, 5000, OP_SIGNATURE_B));
+		theReaderAggregator.addObject(this.createNDTSP(1369127812687L, 1000, OP_SIGNATURE_B));
+		// Skipped two timespans for application A, so two empty points should be created
+		theReaderAggregator.addObject(this.createNDTSP(1369127812714L, 6000, OP_SIGNATURE_A));
+		theReaderAggregator.addObject(this.createNDTSP(1369127812724L, 7000, OP_SIGNATURE_A));
+		theReaderAggregator.addObject(this.createNDTSP(1369127812694L, 5000, OP_SIGNATURE_B));
+		// Skipped one timespans for application B, so one empty point should be created
+		theReaderAggregator.addObject(this.createNDTSP(1369127812714L, 5000, OP_SIGNATURE_B));
+
+		// AGGREGATIONFILTER
+		final Configuration aggregationConfiguration = new Configuration();
+		aggregationConfiguration.setProperty(TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_SPAN, "10");
+		aggregationConfiguration.setProperty(TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT, "MILLISECONDS");
+		final TimeSeriesPointAggregatorFilter aggregator = new TimeSeriesPointAggregatorFilter(aggregationConfiguration, this.controller);
+
+		// SINK 1
+		this.sinkPlugin = new ListCollectionFilter<NamedDoubleTimeSeriesPoint>(new Configuration(),
+				this.controller);
+		Assert.assertTrue(this.sinkPlugin.getList().isEmpty());
+
+		// CONNECTION
+		this.controller.connect(theReaderAggregator, ListReader.OUTPUT_PORT_NAME, aggregator, TimeSeriesPointAggregatorFilter.INPUT_PORT_NAME_TSPOINT);
+		this.controller.connect(aggregator,
+				TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, this.sinkPlugin,
+				ListCollectionFilter.INPUT_PORT_NAME);
 	}
 
 	/**
@@ -76,44 +125,6 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 	@Test
 	public void testAggregatorOnly() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
 
-		this.controller = new AnalysisController();
-
-		// READER
-		final Configuration readerAggregationConfiguration = new Configuration();
-		this.theReaderAggregator = new ListReader<NamedDoubleTimeSeriesPoint>(readerAggregationConfiguration, this.controller);
-
-		this.theReaderAggregator.addObject(this.createNDTSP(1369127812664L, 1000, OP_SIGNATURE_A));
-		this.theReaderAggregator.addObject(this.createNDTSP(1369127812665L, 2000, OP_SIGNATURE_A));
-		this.theReaderAggregator.addObject(this.createNDTSP(1369127812664L, 1000, OP_SIGNATURE_C));
-		this.theReaderAggregator.addObject(this.createNDTSP(1369127812668L, 5500, OP_SIGNATURE_C));
-		this.theReaderAggregator.addObject(this.createNDTSP(1369127812674L, 2000, OP_SIGNATURE_B));
-		this.theReaderAggregator.addObject(this.createNDTSP(1369127812674L, 3000, OP_SIGNATURE_A));
-		this.theReaderAggregator.addObject(this.createNDTSP(1369127812684L, 4000, OP_SIGNATURE_A));
-		this.theReaderAggregator.addObject(this.createNDTSP(1369127812674L, 2000, OP_SIGNATURE_C));
-		this.theReaderAggregator.addObject(this.createNDTSP(1369127812684L, 5000, OP_SIGNATURE_B));
-		this.theReaderAggregator.addObject(this.createNDTSP(1369127812687L, 1000, OP_SIGNATURE_B));
-		// Skipped two timespans for application A, so two empty points should be created
-		this.theReaderAggregator.addObject(this.createNDTSP(1369127812714L, 6000, OP_SIGNATURE_A));
-		this.theReaderAggregator.addObject(this.createNDTSP(1369127812724L, 7000, OP_SIGNATURE_A));
-		this.theReaderAggregator.addObject(this.createNDTSP(1369127812694L, 5000, OP_SIGNATURE_B));
-		// Skipped one timespans for application B, so one empty point should be created
-		this.theReaderAggregator.addObject(this.createNDTSP(1369127812714L, 5000, OP_SIGNATURE_B));
-
-		// AGGREGATIONFILTER
-		final Configuration aggregationConfiguration = new Configuration();
-		aggregationConfiguration.setProperty(TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_SPAN, "10");
-		aggregationConfiguration.setProperty(TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT, "MILLISECONDS");
-		this.aggregator = new TimeSeriesPointAggregatorFilter(aggregationConfiguration, this.controller);
-
-		// SINK 1
-		this.sinkPlugin = new ListCollectionFilter<NamedDoubleTimeSeriesPoint>(new Configuration(), this.controller);
-		Assert.assertTrue(this.sinkPlugin.getList().isEmpty());
-
-		// CONNECTION
-		this.controller.connect(this.theReaderAggregator, ListReader.OUTPUT_PORT_NAME, this.aggregator, TimeSeriesPointAggregatorFilter.INPUT_PORT_NAME_TSPOINT);
-		this.controller.connect(this.aggregator,
-				TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, this.sinkPlugin,
-				ListCollectionFilter.INPUT_PORT_NAME);
 		Assert.assertEquals(0, this.sinkPlugin.getList().size());
 		this.controller.run();
 

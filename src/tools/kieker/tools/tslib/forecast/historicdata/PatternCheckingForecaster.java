@@ -52,7 +52,7 @@ public class PatternCheckingForecaster extends AbstractForecaster<Double> {
 	private final int timeSeriesWindowCapacity;
 	private final NamedDoubleTimeSeriesPoint input;
 
-	private DBCursor resultCursor = null;
+	private DBCursor resultCursor;
 
 	/**
 	 * Creates a net historic data forecaster.
@@ -95,7 +95,7 @@ public class PatternCheckingForecaster extends AbstractForecaster<Double> {
 	public IForecastResult forecast(final int numForecastSteps) {
 		final ITimeSeries<Double> tsFC = this.prepareForecastTS();
 
-		this.getForecastWindowFromDB();
+		this.isForecastWindowFromDB();
 		final double alternativeReferenceValue = this.extractAlternativeReferenceModel(this.resultCursor);
 
 		final Double[] forecastValues = new Double[numForecastSteps];
@@ -114,7 +114,7 @@ public class PatternCheckingForecaster extends AbstractForecaster<Double> {
 	 *         true if corresponding time series point in the past can be found, else false
 	 */
 
-	public boolean getForecastWindowFromDB() {
+	public boolean isForecastWindowFromDB() {
 		// Calculate the corresponding time stamp in the past, that may contain corresponding data according to the pattern
 		final long distantTSPoint = this.input.getTime() - TimeUnit.MILLISECONDS.convert(this.distance, this.timeunit);
 		// Calculate the time series window size in milliseconds
@@ -147,8 +147,6 @@ public class PatternCheckingForecaster extends AbstractForecaster<Double> {
 		} finally {
 			cursor.close();
 		}
-		final double mean = StatUtils.mean(values);
-		return mean;
+		return StatUtils.mean(values);
 	}
-
 }

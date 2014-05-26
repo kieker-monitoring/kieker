@@ -19,7 +19,6 @@ package kieker.test.tools.junit.rbridge;
 import java.io.File;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import kieker.common.logging.Log;
@@ -45,19 +44,13 @@ public class RBridgeTest extends AbstractKiekerTest {
 	}
 
 	/**
-	 * Set up of the RBridgeTest.
+	 * Test of the RBridge, connects to Rserve.
 	 * 
 	 * @throws Exception
 	 *             If exception is thrown
 	 */
-	@Before
-	public void setUp() throws Exception {}
-
-	/**
-	 * Test of the RBridge, connects to Rserve.
-	 */
 	@Test
-	public void test() {
+	public void test() throws Exception {
 
 		final RBridgeControl r = RBridgeControl.getInstance(new File("."));
 

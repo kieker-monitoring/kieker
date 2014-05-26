@@ -60,7 +60,7 @@ public class ARIMA101Forecaster extends AbstractRForecaster {
 
 	@Override
 	protected String[] getForecastFuncParams() {
-		return this.emptyString; // no additional params required by this predictor
+		return this.emptyString.clone(); // no additional params required by this predictor
 	}
 
 	@Override

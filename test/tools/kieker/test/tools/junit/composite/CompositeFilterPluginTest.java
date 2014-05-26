@@ -333,7 +333,7 @@ public class CompositeFilterPluginTest extends AbstractKiekerTest {
 
 	}
 
-	// just some classes
+	// just some classes for test reasons.
 	// CHECKSTYLE:OFF
 	/**
 	 * Dummy class used within the CompositeFilterPluginTest.
@@ -341,7 +341,7 @@ public class CompositeFilterPluginTest extends AbstractKiekerTest {
 	 * @since 1.10
 	 */
 	class T1 {// NOPMD
-		T1() {}
+		T1() {}// NOPMD
 	}// NOPMD
 
 	/**
@@ -350,7 +350,7 @@ public class CompositeFilterPluginTest extends AbstractKiekerTest {
 	 * @since 1.10
 	 */
 	class T2 {// NOPMD
-		T2() {}
+		T2() {}// NOPMD
 	}// NOPMD
 
 	/**
@@ -359,7 +359,7 @@ public class CompositeFilterPluginTest extends AbstractKiekerTest {
 	 * @since 1.10
 	 */
 	class T3 {// NOPMD
-		T3() {}
+		T3() {}// NOPMD
 	}// NOPMD
 
 	/**
@@ -368,7 +368,7 @@ public class CompositeFilterPluginTest extends AbstractKiekerTest {
 	 * @since 1.10
 	 */
 	class T4 {// NOPMD
-		T4() {}
+		T4() {}// NOPMD
 	}// NOPMD
 
 	/**
@@ -377,7 +377,7 @@ public class CompositeFilterPluginTest extends AbstractKiekerTest {
 	 * @since 1.10
 	 */
 	class T5 {// NOPMD
-		T5() {}
+		T5() {}// NOPMD
 	}// NOPMD
 
 	/**
@@ -386,7 +386,7 @@ public class CompositeFilterPluginTest extends AbstractKiekerTest {
 	 * @since 1.10
 	 */
 	class T6 {// NOPMD
-		T6() {}
+		T6() {}// NOPMD
 	}// NOPMD
 		// CHECKSTYLE:ON
 

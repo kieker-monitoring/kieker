@@ -87,8 +87,6 @@ public class ForecastResult implements IForecastResult {
 		this(tsForecast, tsOriginal, 0, 0, tsForecast, tsForecast, fcStrategy); // tsForecast also lower/upper
 	}
 
-	// TODO Auto-generated constructor stub
-
 	public ITimeSeries<Double> getForecast() {
 		return this.tsForecast;
 	}
@@ -111,12 +109,18 @@ public class ForecastResult implements IForecastResult {
 
 	@Override
 	public String toString() {
-		final StringBuilder strB = new StringBuilder("\n");
-		strB.append("tsForecast: ").append(this.tsForecast.toString()).append("\n");
-		strB.append("tsOriginal: ").append(this.tsOriginal.toString()).append("\n");
-		strB.append("confidenceLevel: ").append(this.confidenceLevel).append("\n");
-		strB.append("tsUpper: ").append(this.tsUpper).append("\n");
-		strB.append("tsLower: ").append(this.tsLower).append("\n");
+		final StringBuilder strB = new StringBuilder(71);
+		strB.append('\n' + "tsForecast: ");
+		strB.append(this.tsForecast.toString());
+		strB.append('\n' + "tsOriginal: ");
+		strB.append(this.tsOriginal.toString());
+		strB.append('\n' + "confidenceLevel: ");
+		strB.append(this.confidenceLevel);
+		strB.append('\n' + "tsUpper: ");
+		strB.append(this.tsUpper);
+		strB.append('\n' + "tsLower: ");
+		strB.append(this.tsLower);
+		strB.append('\n');
 		return strB.toString();
 	}
 
@@ -128,6 +132,11 @@ public class ForecastResult implements IForecastResult {
 		return this.fcStrategy;
 	}
 
+	/**
+	 * Checks whether the input seems to be plausible.
+	 * 
+	 * @return true if plausible, else false
+	 */
 	public boolean isPlausible() {
 		if ((this.meanAbsoluteScaledError == 0) || Double.isNaN(this.meanAbsoluteScaledError)) {
 			return false;

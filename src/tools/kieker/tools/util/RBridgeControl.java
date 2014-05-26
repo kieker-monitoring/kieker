@@ -41,7 +41,7 @@ import kieker.common.logging.LogFactory;
 public final class RBridgeControl {
 
 	// TODO make a better singleton, later
-	private static RBridgeControl instance = null;
+	private static RBridgeControl instance;
 
 	private static final Log LOG = LogFactory.getLog(RBridgeControl.class);
 	private static final Log RSERVELOG = LogFactory.getLog("RSERVE");
@@ -58,7 +58,9 @@ public final class RBridgeControl {
 			out = new OutputStream() {
 
 				@Override
-				public void write(final int arg0) throws IOException {}
+				public void write(final int arg0) throws IOException {
+					// overriding write method of OutputStream
+				}
 			};
 		} else {
 			out = new OutputStream() {
@@ -124,7 +126,7 @@ public final class RBridgeControl {
 	 * 
 	 * @param input
 	 *            R expression
-	 * @return result/eroor
+	 * @return result/error
 	 */
 	public Object e(final String input) {
 		Object out = null;
@@ -145,8 +147,7 @@ public final class RBridgeControl {
 
 		} catch (final Exception exc) { // NOCS
 			RBridgeControl.LOG.error("Error R expr.: " + input + " Cause: "
-					+ exc);
-			exc.printStackTrace();
+					+ exc, exc);
 		}
 		return out;
 	}
@@ -159,10 +160,13 @@ public final class RBridgeControl {
 	public void toTS(final String variable) {
 		try {
 			final StringBuffer buf = new StringBuffer();
-			buf.append(variable + " <<- ts(" + variable + ")");
+			buf.append(variable);
+			buf.append(" <<- ts(");
+			buf.append(variable);
+			buf.append(')');
 			this.e(buf.toString());
 		} catch (final Exception e) { // NOCS
-			e.printStackTrace();
+			LOG.error("Conversion to timeseries failed.", e);
 		}
 	}
 
@@ -175,11 +179,16 @@ public final class RBridgeControl {
 	 */
 	public void toTS(final String variable, final long frequency) {
 		try {
-			final StringBuffer buf = new StringBuffer();
-			buf.append(variable + " <<- ts(" + variable + ", frequency=" + frequency + ")");
+			final StringBuffer buf = new StringBuffer(21);
+			buf.append(variable);
+			buf.append(" <<- ts(");
+			buf.append(variable);
+			buf.append(", frequency=");
+			buf.append(frequency);
+			buf.append(')');
 			this.e(buf.toString());
 		} catch (final Exception e) { // NOCS
-			e.printStackTrace();
+			LOG.error("Conversion to timeseries failed.", e);
 		}
 	}
 
@@ -243,20 +252,21 @@ public final class RBridgeControl {
 	public void assign(final String variable, final double[] values) {
 		try {
 			final StringBuffer buf = new StringBuffer();
-			buf.append(variable + " <<- c(");
+			buf.append(variable);
+			buf.append(" <<- c(");
 			boolean first = true;
 			for (final double item : values) {
 				if (!first) {
-					buf.append(",");
+					buf.append(',');
 				} else {
 					first = false;
 				}
 				buf.append(item);
 			}
-			buf.append(")");
+			buf.append(')');
 			this.e(buf.toString());
 		} catch (final Exception e) { // NOCS
-			e.printStackTrace();
+			LOG.error("Assignment failed.", e);
 		}
 
 	}
@@ -272,11 +282,12 @@ public final class RBridgeControl {
 	public void assign(final String variable, final Double[] values) {
 		try {
 			final StringBuffer buf = new StringBuffer();
-			buf.append(variable + " <<- c(");
+			buf.append(variable);
+			buf.append(" <<- c(");
 			boolean first = true;
 			for (final Double item : values) {
 				if (!first) {
-					buf.append(",");
+					buf.append(',');
 				} else {
 					first = false;
 				}
@@ -286,10 +297,10 @@ public final class RBridgeControl {
 					buf.append(item);
 				}
 			}
-			buf.append(")");
+			buf.append(')');
 			this.e(buf.toString());
 		} catch (final Exception e) { // NOCS
-			e.printStackTrace();
+			LOG.error("Assignment failed.", e);
 		}
 
 	}
@@ -304,20 +315,21 @@ public final class RBridgeControl {
 	public void assign(final String variable, final Long[] values) {
 		try {
 			final StringBuffer buf = new StringBuffer();
-			buf.append(variable + " <<- c(");
+			buf.append(variable);
+			buf.append(" <<- c(");
 			boolean first = true;
 			for (final Long item : values) {
 				if (!first) {
-					buf.append(",");
+					buf.append(',');
 				} else {
 					first = false;
 				}
 				buf.append(item);
 			}
-			buf.append(")");
+			buf.append(',');
 			this.e(buf.toString());
 		} catch (final Exception e) { // NOCS
-			e.printStackTrace();
+			LOG.error("Assignment failed.", e);
 		}
 
 	}

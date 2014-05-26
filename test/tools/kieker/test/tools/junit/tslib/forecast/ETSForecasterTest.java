@@ -52,7 +52,7 @@ public class ETSForecasterTest extends AbstractKiekerRTest {
 	 * Test of the ETSForecaster via Rserve.
 	 */
 	@Test
-	public void testETSPredictor() {
+	public void testETSPredictor() { // NOPMD assertEqualsWithTolerance is a custom method
 		final Double[] values = { 1.0, 2.0, 3.0, 4.0 };
 		final List<Double> expectedValues = new ArrayList<Double>(values.length);
 		for (final Double curVal : values) {
@@ -80,7 +80,7 @@ public class ETSForecasterTest extends AbstractKiekerRTest {
 	}
 
 	private void assertEqualsWithTolerance(final String message, final double expected, final double tolerance, final double actual) {
-		if (!((expected - tolerance) <= actual) || !(actual <= (expected + tolerance))) {
+		if (((expected - tolerance) > actual) || (actual > (expected + tolerance))) {
 			Assert.fail(String.format(message + ". Expected value %s with tolerance %s; found %s", expected, tolerance, actual));
 		}
 	}

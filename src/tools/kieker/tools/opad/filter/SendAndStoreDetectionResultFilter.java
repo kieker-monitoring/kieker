@@ -89,8 +89,7 @@ public class SendAndStoreDetectionResultFilter extends AbstractFilterPlugin {
 			mongoClient = null;
 			db = null;
 			this.coll = null;
-			LOG.error("Database connection can not be established. The data is processed, but not stored!");
-			e.printStackTrace();
+			LOG.error("Database connection can not be established. The data is processed, but not stored!", e);
 		}
 	}
 

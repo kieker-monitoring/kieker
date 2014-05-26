@@ -51,9 +51,6 @@ public class ForecastingFilterTest extends AbstractKiekerTest {
 
 	private AnalysisController controller;
 
-	// Variables ForecastingFilter
-	private ListReader<NamedDoubleTimeSeriesPoint> theReaderForecast;
-	private ForecastingFilter forecasting;
 	private ListCollectionFilter<ForecastMeasurementPair> sinkPlugin;
 
 	/**
@@ -65,8 +62,7 @@ public class ForecastingFilterTest extends AbstractKiekerTest {
 
 	// HelperMethods ForecastingFilter
 	private NamedDoubleTimeSeriesPoint createNDTSP(final String signature, final double value) {
-		final NamedDoubleTimeSeriesPoint r = new NamedDoubleTimeSeriesPoint(System.currentTimeMillis(), value, signature);
-		return r;
+		return new NamedDoubleTimeSeriesPoint(System.currentTimeMillis(), value, signature);
 	}
 
 	private List<NamedDoubleTimeSeriesPoint> createInputEventSetForecast() {
@@ -97,8 +93,8 @@ public class ForecastingFilterTest extends AbstractKiekerTest {
 		// READER
 		final Configuration readerForecastConfiguration = new Configuration();
 		readerForecastConfiguration.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
-		this.theReaderForecast = new ListReader<NamedDoubleTimeSeriesPoint>(readerForecastConfiguration, this.controller);
-		this.theReaderForecast.addAllObjects(this.createInputEventSetForecast());
+		final ListReader<NamedDoubleTimeSeriesPoint> theReaderForecast = new ListReader<NamedDoubleTimeSeriesPoint>(readerForecastConfiguration, this.controller);
+		theReaderForecast.addAllObjects(this.createInputEventSetForecast());
 
 		// FORECASTINGFILTER
 		final Configuration forecastConfiguration = new Configuration();
@@ -106,15 +102,15 @@ public class ForecastingFilterTest extends AbstractKiekerTest {
 		forecastConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_DELTA_UNIT,
 				"MILLISECONDS");
 		forecastConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_FC_METHOD, "MEAN");
-		this.forecasting = new ForecastingFilter(forecastConfiguration, this.controller);
+		final ForecastingFilter forecasting = new ForecastingFilter(forecastConfiguration, this.controller);
 
 		// SINK 1
 		this.sinkPlugin = new ListCollectionFilter<ForecastMeasurementPair>(new Configuration(), this.controller);
 		Assert.assertTrue(this.sinkPlugin.getList().isEmpty());
 
 		// CONNECTION
-		this.controller.connect(this.theReaderForecast, ListReader.OUTPUT_PORT_NAME, this.forecasting, ForecastingFilter.INPUT_PORT_NAME_TSPOINT);
-		this.controller.connect(this.forecasting,
+		this.controller.connect(theReaderForecast, ListReader.OUTPUT_PORT_NAME, forecasting, ForecastingFilter.INPUT_PORT_NAME_TSPOINT);
+		this.controller.connect(forecasting,
 				ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, this.sinkPlugin,
 				ListCollectionFilter.INPUT_PORT_NAME);
 	}
@@ -153,7 +149,5 @@ public class ForecastingFilterTest extends AbstractKiekerTest {
 		Assert.assertEquals(new Double(0.4), this.sinkPlugin.getList().get(5).getForecasted());
 		// Expected: (0.4 + 0.3 + 0.5) / 3 = 0.4 Application B
 		Assert.assertEquals(new Double(0.4), this.sinkPlugin.getList().get(6).getForecasted());
-
 	}
-
 }

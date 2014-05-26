@@ -54,7 +54,7 @@ public class ARIMA101ForecasterTest extends AbstractKiekerTest {
 	 * Test of the ARIMA101 Forecaster via Rserve.
 	 */
 	@Test
-	public void testARIMAPredictor() {
+	public void testARIMAPredictor() { // NOPMD assertEqualsWithTolerance is a custom method
 
 		// Test values resulting from this calculation:
 
@@ -93,7 +93,7 @@ public class ARIMA101ForecasterTest extends AbstractKiekerTest {
 	}
 
 	private void assertEqualsWithTolerance(final String message, final double expected, final double tolerance, final double actual) {
-		if (!((expected - tolerance) <= actual) || !(actual <= (expected + tolerance))) {
+		if ((actual < (expected - tolerance)) || (actual > (expected + tolerance))) {
 			Assert.fail(String.format(message + ". Expected value %s with tolerance %s; found %s", expected, tolerance, actual));
 		}
 	}
