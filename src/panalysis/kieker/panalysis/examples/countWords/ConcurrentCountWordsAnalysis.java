@@ -52,7 +52,7 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 	private static final String START_DIRECTORY_NAME = ".";
 	private static final int SECONDS = 1000;
 
-	private static final int MAX_NUM_THREADS = 1;
+	private static final int MAX_NUM_THREADS = 4;
 
 	private WorkerThread[] ioThreads;
 	private WorkerThread[] nonIoThreads;
