@@ -24,6 +24,12 @@ package kieker.tools.opad.record;
  */
 public interface INamedElement {
 
+	/**
+	 * Returns the name of the element.
+	 * 
+	 * @since 1.10
+	 * @return name of the element
+	 */
 	public String getName();
 
 }

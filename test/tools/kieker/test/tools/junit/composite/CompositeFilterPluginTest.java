@@ -46,7 +46,7 @@ import kieker.test.tools.junit.composite.CompositeImplementation.Distributor;
 /**
  * This test is set up with {@link CompositeImplementation}, Within the CompositeImplementation
  * every incoming IMonitoringRecord is passed through and for every IMonitoringRecord a String and an
- * Integer are broadcasted via their respective Outputports
+ * Integer are broadcasted via their respective Outputports.
  * 
  * @author Markus Fischer
  * @since 1.10
@@ -101,10 +101,8 @@ public class CompositeFilterPluginTest extends AbstractKiekerTest {
 			this.simulate();
 		} catch (final IllegalStateException e) {
 			this.nothing();
-			// e.printStackTrace();
 		} catch (final AnalysisConfigurationException e) {
 			this.nothing();
-			// e.printStackTrace();
 		}
 	}
 

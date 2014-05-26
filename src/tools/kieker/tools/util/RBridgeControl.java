@@ -51,7 +51,7 @@ public final class RBridgeControl {
 
 	private RBridgeControl(final boolean silent) {
 
-		OutputStream out = System.out;
+		OutputStream out; // = System.out;
 
 		// silent = true; // --domi
 		if (silent) {
@@ -63,12 +63,12 @@ public final class RBridgeControl {
 		} else {
 			out = new OutputStream() {
 
-				private final int lineEnd = '\n';
+				private static final int LINE_END = '\n';
 				private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
 				@Override
 				public void write(final int b) throws IOException {
-					if (b == this.lineEnd) {
+					if (b == LINE_END) {
 						RSERVELOG.info(this.baos.toString());
 						this.baos.reset();
 					} else {
@@ -88,7 +88,7 @@ public final class RBridgeControl {
 	 *            file of R
 	 * @return instance
 	 */
-	public static RBridgeControl getInstance(final File root) {
+	public static synchronized RBridgeControl getInstance(final File root) {
 		if (RBridgeControl.instance == null) {
 
 			// TODO make this configurabe?!?
@@ -99,7 +99,7 @@ public final class RBridgeControl {
 			// functions at runtime
 			// TODO use REngine rather? RServe is not needed any more
 
-			// instance.e("setwd('" + root.getAbsolutePath().replace("\\", "\\\\") + "')");
+			// instance.e("setwd('" + root.getAbsolutePath().replace("\\", "\x1ynwn82Nt \\\") + "')");
 			// RBridgeControl.INSTANCE
 			// .e("sink(file = 'rsink.log', append = TRUE, type = c('output', 'message'),split = FALSE)");
 			// INSTANCE.e("source('includes.r', local = FALSE, echo = TRUE)");
@@ -131,16 +131,17 @@ public final class RBridgeControl {
 		try {
 			out = this.rCon.eval(input);
 
-			Object output = out;
+			Object output = null;
 
 			if (out instanceof REXPString) {
 				output = ((REXPString) out).asString();
-			}
-			if (out instanceof REXPLogical) {
+			} else if (out instanceof REXPLogical) {
 				output = ((REXPLogical) out).toDebugString();
+			} else {
+				output = out;
 			}
 
-			// RBridgeControl.LOG.info("> REXP: " + input + " return: " + output);// --domi
+			RBridgeControl.LOG.info("> REXP: " + input + " return: " + output); // --domi
 
 		} catch (final Exception exc) { // NOCS
 			RBridgeControl.LOG.error("Error R expr.: " + input + " Cause: "
