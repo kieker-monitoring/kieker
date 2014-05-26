@@ -59,7 +59,6 @@ public class OpadOutputCompositionFilterTest extends AbstractKiekerTest {
 	private IAnalysisController controller;
 	private ListReader<ExtendedStorableDetectionResult> listReader;
 	private ListCollectionFilter<OpadOutputData> listCollectionFilter;
-	private OpadOutputCompositionFilter ooCompFilter;
 	private ExtendedStorableDetectionResult detectionResult;
 	private OpadOutputData compositionResult;
 
@@ -81,11 +80,11 @@ public class OpadOutputCompositionFilterTest extends AbstractKiekerTest {
 	public void setUp() throws Exception {
 		this.controller = new AnalysisController();
 		this.listReader = new ListReader<ExtendedStorableDetectionResult>(new Configuration(), this.controller);
-		this.ooCompFilter = new OpadOutputCompositionFilter(new Configuration(), this.controller);
+		final OpadOutputCompositionFilter ooCompFilter = new OpadOutputCompositionFilter(new Configuration(), this.controller);
 		this.listCollectionFilter = new ListCollectionFilter<OpadOutputData>(new Configuration(), this.controller);
 
-		this.controller.connect(this.listReader, ListReader.OUTPUT_PORT_NAME, this.ooCompFilter, OpadOutputCompositionFilter.INPUT_PORT_NAME_DETECTION_RESULTS);
-		this.controller.connect(this.ooCompFilter, OpadOutputCompositionFilter.OUTPUT_PORT_OPAD_DATA,
+		this.controller.connect(this.listReader, ListReader.OUTPUT_PORT_NAME, ooCompFilter, OpadOutputCompositionFilter.INPUT_PORT_NAME_DETECTION_RESULTS);
+		this.controller.connect(ooCompFilter, OpadOutputCompositionFilter.OUTPUT_PORT_OPAD_DATA,
 				this.listCollectionFilter, ListCollectionFilter.INPUT_PORT_NAME);
 
 		this.detectionResult = new ExtendedStorableDetectionResult(ESDR_HOST_APP_OPERATION_NAME, ESDR_LATENCY, ESDR_TIMESTAMP, ESDR_FORECAST, ESDR_SCORE,
