@@ -104,8 +104,8 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 			thread.start();
 		}
 
-		System.out.println("Waiting for the I/O worker threads to terminate..."); // NOPMD (Just for example purposes)
-		for (final WorkerThread thread : this.ioThreads) {
+		System.out.println("Waiting for the non I/O worker threads to terminate..."); // NOPMD (Just for example purposes)
+		for (final WorkerThread thread : this.nonIoThreads) {
 			try {
 				thread.join(60 * SECONDS);
 			} catch (final InterruptedException e) {
@@ -113,8 +113,8 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 			}
 		}
 
-		System.out.println("Waiting for the non I/O worker threads to terminate..."); // NOPMD (Just for example purposes)
-		for (final WorkerThread thread : this.nonIoThreads) {
+		System.out.println("Waiting for the I/O worker threads to terminate..."); // NOPMD (Just for example purposes)
+		for (final WorkerThread thread : this.ioThreads) {
 			try {
 				thread.join(60 * SECONDS);
 			} catch (final InterruptedException e) {
@@ -313,17 +313,22 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 		for (final WorkerThread thread : this.ioThreads) {
 			System.out.println("--- " + thread + " ---"); // NOPMD (Just for example purposes)
 			for (final IStage stage : thread.getPipeline().getStages()) {
-				System.out.println(stage); // NOPMD (Just for example purposes)
+				// System.out.println(stage); // NOPMD (Just for example purposes)
 			}
+
+			final long duration = thread.getDuration();
+			System.out.println(thread + " takes " + duration + " ms");
 		}
 
 		for (final WorkerThread thread : this.nonIoThreads) {
 			System.out.println("--- " + thread + " ---"); // NOPMD (Just for example purposes)
 			for (final IStage stage : thread.getPipeline().getStages()) {
-				System.out.println(stage); // NOPMD (Just for example purposes)
+				// System.out.println(stage); // NOPMD (Just for example purposes)
 			}
 
 			final long duration = thread.getDuration();
+			System.out.println(thread + " takes " + duration + " ms");
+
 			if (duration > maxDuration) {
 				maxDuration = duration;
 				maxThread = thread;
