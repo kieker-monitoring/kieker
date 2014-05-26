@@ -27,10 +27,6 @@ import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 
-import org.primefaces.model.DashboardColumn;
-import org.primefaces.model.DashboardModel;
-import org.primefaces.model.DefaultDashboardColumn;
-import org.primefaces.model.DefaultDashboardModel;
 import org.primefaces.model.tagcloud.DefaultTagCloudItem;
 import org.primefaces.model.tagcloud.DefaultTagCloudModel;
 import org.primefaces.model.tagcloud.TagCloudModel;
@@ -52,20 +48,9 @@ public class TagCloudBean implements Observer {
 	private Map<String, AtomicLong> componentMap;
 	private final TagCloudModel componentModel;
 
-	private final DashboardModel dashboardModel;
-	private final DashboardColumn column1;
-	private final DashboardColumn column2;
-
 	public TagCloudBean() {
 		this.methodModel = new DefaultTagCloudModel();
 		this.componentModel = new DefaultTagCloudModel();
-		this.dashboardModel = new DefaultDashboardModel();
-		this.column1 = new DefaultDashboardColumn();
-		this.column2 = new DefaultDashboardColumn();
-		this.column1.addWidget("c1");
-		this.column2.addWidget("c2");
-		this.dashboardModel.addColumn(this.column1);
-		this.dashboardModel.addColumn(this.column2);
 	}
 
 	@PostConstruct
@@ -78,10 +63,6 @@ public class TagCloudBean implements Observer {
 	@PreDestroy
 	public void terminate() {
 		this.analysisBean.getUpdateThread().deleteObserver(this);
-	}
-
-	public DashboardModel getDashboardModel() {
-		return this.dashboardModel;
 	}
 
 	public TagCloudModel getMethodModel() {
