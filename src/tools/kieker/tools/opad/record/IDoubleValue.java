@@ -19,8 +19,15 @@ package kieker.tools.opad.record;
 /**
  * 
  * @author Tillmann Carlos Bielefeld
- * 
+ * @since 1.10
  */
 public interface IDoubleValue {
+
+	/**
+	 * Returns the double value as basic type.
+	 * 
+	 * @since 1.10
+	 * @return double value of IDoubleValue
+	 */
 	public double getValue();
 }
