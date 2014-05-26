@@ -140,7 +140,6 @@ public class AnalysisBean {
 	private void init() throws IllegalStateException, AnalysisConfigurationException {
 
 		final Configuration jmxReaderConfig = new Configuration();
-		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_PORT, "59996");
 		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_SILENT, "true");
 		final JMXReader reader = new JMXReader(jmxReaderConfig, this.analysisInstance);
 
