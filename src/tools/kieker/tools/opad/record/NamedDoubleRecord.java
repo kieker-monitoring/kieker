@@ -42,7 +42,7 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	/**
 	 * Types used for serialization.
 	 */
-	static final Class<?>[] TYPES = {
+	protected static final Class<?>[] TYPES = {
 		String.class, // applicationName
 		long.class, // timestamp
 		double.class, // responseTime

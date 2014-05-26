@@ -38,7 +38,7 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 	/**
 	 * class by Bielefeld.
 	 */
-	static final Class<?>[] TYPES = {
+	protected static final Class<?>[] TYPES = {
 		long.class, // timestamp
 		double.class, // value
 		String.class, // name
