@@ -52,7 +52,7 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 	private static final String START_DIRECTORY_NAME = ".";
 	private static final int SECONDS = 1000;
 
-	private static final int MAX_NUM_THREADS = 1;
+	private static final int MAX_NUM_THREADS = 2;
 
 	private WorkerThread[] ioThreads;
 	private WorkerThread[] nonIoThreads;
@@ -71,12 +71,14 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 		final Distributor<File> distributor = (Distributor<File>) readerThreadPipeline.getStages().get(readerThreadPipeline.getStages().size() - 1);
 		this.ioThreads[0] = new WorkerThread(readerThreadPipeline, 1);
 		this.ioThreads[0].setName("startThread");
+		this.ioThreads[0].terminate(StageTerminationPolicy.TERMINATE_STAGE_AFTER_UNSUCCESSFUL_EXECUTION);
 
 		final IPipeline printingThreadPipeline = this.printingThreadPipeline();
 		@SuppressWarnings("unchecked")
 		final Merger<Pair<File, Integer>> merger = (Merger<Pair<File, Integer>>) printingThreadPipeline.getStages().get(0);
 		this.ioThreads[1] = new WorkerThread(printingThreadPipeline, 2);
 		this.ioThreads[1].setName("printingThread");
+		this.ioThreads[1].setTerminationPolicy(StageTerminationPolicy.TERMINATE_STAGE_AFTER_UNSUCCESSFUL_EXECUTION);
 
 		this.createPipeFactories();
 
@@ -87,6 +89,7 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 		for (int i = 0; i < this.nonIoThreads.length; i++) {
 			final IPipeline pipeline = this.buildNonIoPipeline(distributor, merger);
 			this.nonIoThreads[i] = new WorkerThread(pipeline, 0);
+			this.nonIoThreads[i].setTerminationPolicy(StageTerminationPolicy.TERMINATE_STAGE_AFTER_UNSUCCESSFUL_EXECUTION);
 		}
 	}
 
@@ -95,7 +98,6 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 		super.start();
 
 		for (final WorkerThread thread : this.ioThreads) {
-			thread.terminate(StageTerminationPolicy.TERMINATE_STAGE_AFTER_UNSUCCESSFUL_EXECUTION);
 			thread.start();
 		}
 

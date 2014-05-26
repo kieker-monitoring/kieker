@@ -28,7 +28,7 @@ public class SingleProducerSingleConsumerPipe<T> extends AbstractPipe<T> {
 			return SingleProducerSingleConsumerPipe.this.queue.poll();
 		}
 	};
-	private volatile Callable<T> take = this.nonBlockingTake;
+	private volatile Callable<T> take = this.blockingTake;
 
 	public static <S0 extends ISource, S1 extends ISink<S1>, T> void connect(final IOutputPort<S0, T> sourcePort, final IInputPort<S1, T> targetPort) {
 		final SingleProducerSingleConsumerPipe<T> pipe = new SingleProducerSingleConsumerPipe<T>();
@@ -79,6 +79,7 @@ public class SingleProducerSingleConsumerPipe<T> extends AbstractPipe<T> {
 	public void close() {
 		this.take = this.nonBlockingTake;
 		super.close();
+		this.getTargetPort().getOwningStage().getOwningThread().interrupt();
 	}
 
 }

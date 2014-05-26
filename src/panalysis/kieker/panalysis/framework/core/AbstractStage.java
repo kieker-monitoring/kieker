@@ -35,6 +35,8 @@ public abstract class AbstractStage implements IStage {
 	protected Log logger;
 	private IPipeline owningPipeline;
 
+	private Thread owningThread;
+
 	public AbstractStage() {
 		this.id = UUID.randomUUID().toString(); // the id should only be represented by a UUID, not additionally by the class name
 		this.logger = LogFactory.getLog(this.id);
@@ -50,6 +52,15 @@ public abstract class AbstractStage implements IStage {
 
 	public void setOwningPipeline(final IPipeline owningPipeline) {
 		this.owningPipeline = owningPipeline;
+	}
+
+	@Override
+	public Thread getOwningThread() {
+		return this.owningThread;
+	}
+
+	public void setOwningThread(final Thread owningThread) {
+		this.owningThread = owningThread;
 	}
 
 	@Override

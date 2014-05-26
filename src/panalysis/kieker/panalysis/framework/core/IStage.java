@@ -131,4 +131,7 @@ public interface IStage extends IBaseStage {
 	 */
 	public Collection<? extends IStage> getAllOutputStages();
 
+	Thread getOwningThread();
+
+	void setOwningThread(Thread owningThread);
 }

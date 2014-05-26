@@ -37,6 +37,9 @@ public class WorkerThread extends Thread {
 
 	public WorkerThread(final IPipeline pipeline, final int accessesDeviceId) {
 		this.pipeline = pipeline;
+		for (final IStage stage : pipeline.getStages()) {
+			stage.setOwningThread(this);
+		}
 		this.accessesDeviceId = accessesDeviceId;
 	}
 
@@ -123,6 +126,7 @@ public class WorkerThread extends Thread {
 		return this.pipeline;
 	}
 
+	// BETTER remove this method since it is not intuitive; add a check to onStartPipeline so that a stage automatically disables itself if it has no input ports
 	public void terminate(final StageTerminationPolicy terminationPolicyToUse) {
 		for (final IStage startStage : this.pipeline.getStartStages()) {
 			startStage.fireSignalClosingToAllInputPorts();
