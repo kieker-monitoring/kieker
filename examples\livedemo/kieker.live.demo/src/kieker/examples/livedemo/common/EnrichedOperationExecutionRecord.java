@@ -20,7 +20,6 @@ import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
-import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.util.registry.IRegistry;
 
@@ -31,7 +30,7 @@ import kieker.common.util.registry.IRegistry;
  * 
  * @since 1.9
  */
-public final class EnrichedOperationExecutionRecord extends OperationExecutionRecord implements IMonitoringRecord {
+public final class EnrichedOperationExecutionRecord extends OperationExecutionRecord {
 
 	public static final int SIZE = (2 * AbstractMonitoringRecord.TYPE_SIZE_STRING) + (3 * AbstractMonitoringRecord.TYPE_SIZE_LONG)
 			+ AbstractMonitoringRecord.TYPE_SIZE_STRING + (2 * AbstractMonitoringRecord.TYPE_SIZE_INT) + AbstractMonitoringRecord.TYPE_SIZE_DOUBLE

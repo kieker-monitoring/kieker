@@ -45,11 +45,11 @@ public class CPUMeterGaugeBean implements Observer {
 	@ManagedProperty(value = "#{analysisBean}")
 	private AnalysisBean analysisBean;
 
-	private MeterGauge meterGauge;
-	private final List<Model<MeterGaugeChartModel>> meterGaugeModels;
+	private static final String COLORS = "66cc66, E7E658, cc6666";
 
+	private final List<Model<MeterGaugeChartModel>> meterGaugeModels;
+	private MeterGauge meterGauge;
 	private List<String> cpuIds;
-	private final String colors = "66cc66, E7E658, cc6666";
 
 	public CPUMeterGaugeBean() {
 		this.meterGaugeModels = Collections.synchronizedList(new ArrayList<Model<MeterGaugeChartModel>>());
@@ -78,7 +78,7 @@ public class CPUMeterGaugeBean implements Observer {
 	}
 
 	public String getColors() {
-		return this.colors;
+		return CPUMeterGaugeBean.COLORS;
 	}
 
 	private void updateMeterGaugeModels() {

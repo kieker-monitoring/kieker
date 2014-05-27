@@ -57,10 +57,10 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 @ApplicationScoped
 public class AnalysisBean {
 
-	private final String numberOfCpuAndMemSwapEntries = "20";
-	private final String numberOfRecordListEntries = "50";
-	private final String numberOfResponsetimeEntries = "20";
-	private final String timeReaderUpdateIntervallNS = "2000000000";
+	private static final String NUMBER_OF_CPU_AND_MEMSWAP_ENTRIES = "20";
+	private static final String NUMBER_OF_RECORD_LIST_ENTRIES = "50";
+	private static final String NUMBER_OF_RESPONSE_TIME_ENTRIES = "20";
+	private static final String TIME_READER_UPDATE_INTERVANL_NS = "2000000000";
 
 	private final AnalysisController analysisInstance;
 	private final AnalysisControllerThread act;
@@ -89,29 +89,30 @@ public class AnalysisBean {
 		this.systemModelRepository = new SystemModelRepository(new Configuration(), this.analysisInstance);
 
 		final Configuration cpuConfiguration = new Configuration();
-		cpuConfiguration.setProperty(CPUUtilizationDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, this.numberOfCpuAndMemSwapEntries);
+		cpuConfiguration.setProperty(CPUUtilizationDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, AnalysisBean.NUMBER_OF_CPU_AND_MEMSWAP_ENTRIES);
 		this.cpuFilter = new CPUUtilizationDisplayFilter(cpuConfiguration, this.analysisInstance);
 
 		final Configuration memSwapConfiguration = new Configuration();
-		memSwapConfiguration.setProperty(MemSwapUtilizationDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, this.numberOfCpuAndMemSwapEntries);
+		memSwapConfiguration.setProperty(MemSwapUtilizationDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, AnalysisBean.NUMBER_OF_CPU_AND_MEMSWAP_ENTRIES);
 		this.memSwapFilter = new MemSwapUtilizationDisplayFilter(memSwapConfiguration, this.analysisInstance);
 
 		final Configuration recordListConfiguration = new Configuration();
-		recordListConfiguration.setProperty(ListCollectionFilter.CONFIG_PROPERTY_NAME_MAX_NUMBER_OF_ENTRIES, this.numberOfRecordListEntries);
+		recordListConfiguration.setProperty(ListCollectionFilter.CONFIG_PROPERTY_NAME_MAX_NUMBER_OF_ENTRIES, AnalysisBean.NUMBER_OF_RECORD_LIST_ENTRIES);
 		recordListConfiguration.setProperty(ListCollectionFilter.CONFIG_PROPERTY_NAME_LIST_FULL_BEHAVIOR, "dropOldest");
 		this.recordListFilter = new ListCollectionFilter<EnrichedOperationExecutionRecord>(recordListConfiguration, this.analysisInstance);
 
 		final Configuration responsetimeConfiguration = new Configuration();
-		responsetimeConfiguration.setProperty(MethodResponsetimeDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, this.numberOfResponsetimeEntries);
+		responsetimeConfiguration.setProperty(MethodResponsetimeDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, AnalysisBean.NUMBER_OF_RESPONSE_TIME_ENTRIES);
 		responsetimeConfiguration.setProperty(MethodResponsetimeDisplayFilter.CONFIG_PROPERTY_NAME_RESPONSETIME_TIMEUNIT, "MILLISECONDS");
 		this.responsetimeFilter = new MethodResponsetimeDisplayFilter(responsetimeConfiguration, this.analysisInstance);
 
 		final Configuration classLoadingConfiguration = new Configuration();
-		classLoadingConfiguration.setProperty(AbstractAggregatingDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, this.numberOfResponsetimeEntries);
+		classLoadingConfiguration.setProperty(AbstractAggregatingDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, AnalysisBean.NUMBER_OF_RESPONSE_TIME_ENTRIES);
 		this.classLoadingDisplayFilter = new ClassLoadingDisplayFilter(classLoadingConfiguration, this.analysisInstance);
 
 		final Configuration threadsStatusConfiguration = new Configuration();
-		threadsStatusConfiguration.setProperty(AbstractAggregatingDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, this.numberOfResponsetimeEntries);
+		threadsStatusConfiguration
+				.setProperty(AbstractAggregatingDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, AnalysisBean.NUMBER_OF_RESPONSE_TIME_ENTRIES);
 		this.threadsStatusDisplayFilter = new ThreadsStatusDisplayFilter(threadsStatusConfiguration, this.analysisInstance);
 
 		this.jitCompilationDisplayFilter = new CompilationDisplayFilter(threadsStatusConfiguration, this.analysisInstance);
@@ -147,7 +148,7 @@ public class AnalysisBean {
 		final JMXReader reader = new JMXReader(jmxReaderConfig, this.analysisInstance);
 
 		final Configuration timeReaderConfig = new Configuration();
-		timeReaderConfig.setProperty(TimeReader.CONFIG_PROPERTY_NAME_UPDATE_INTERVAL_NS, this.timeReaderUpdateIntervallNS);
+		timeReaderConfig.setProperty(TimeReader.CONFIG_PROPERTY_NAME_UPDATE_INTERVAL_NS, AnalysisBean.TIME_READER_UPDATE_INTERVANL_NS);
 		final TimeReader timeReader = new TimeReader(timeReaderConfig, this.analysisInstance);
 
 		final Distributor distributor = new Distributor(new Configuration(), this.analysisInstance);
