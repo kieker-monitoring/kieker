@@ -18,6 +18,7 @@ package kieker;
 import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
+import kieker.analysis.CacheFilter;
 import kieker.analysis.EmptyPassOnFilter;
 import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
@@ -42,8 +43,11 @@ public class EmptyPassOnFilterTest {
 				"examples/userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC");
 		final FSReader reader = new FSReader(fsReaderConfiguration, ac);
 
+		final CacheFilter cacheFilter = new CacheFilter(new Configuration(), ac);
+
 		EmptyPassOnFilter predecessor = new EmptyPassOnFilter(new Configuration(), ac);
-		ac.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, predecessor, EmptyPassOnFilter.INPUT_PORT_NAME);
+		ac.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, cacheFilter, CacheFilter.INPUT_PORT_NAME);
+		ac.connect(cacheFilter, CacheFilter.OUTPUT_PORT_NAME, predecessor, EmptyPassOnFilter.INPUT_PORT_NAME);
 		for (int idx = 0; idx < (NUMBER_OF_EMPTY_PASS_ON_FILTERS - 1); idx++) {
 			final EmptyPassOnFilter newPredecessor = new EmptyPassOnFilter(new Configuration(), ac);
 			ac.connect(predecessor, EmptyPassOnFilter.OUTPUT_PORT_NAME, newPredecessor, EmptyPassOnFilter.INPUT_PORT_NAME);
