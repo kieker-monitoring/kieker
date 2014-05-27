@@ -38,4 +38,10 @@ public class MathUtil {
 	public static double getConfidenceWidth(final double z, final double variance, final long n) {
 		return z * Math.sqrt(variance / n);
 	}
+
+	public static double getConfidenceWidth(final double z, final long[] values, final long avgValue) {
+		final double variance = MathUtil.getVariance(values, avgValue);
+		final double confidenceWidth = MathUtil.getConfidenceWidth(z, variance, values.length);
+		return confidenceWidth;
+	}
 }
