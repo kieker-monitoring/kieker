@@ -47,6 +47,7 @@ public abstract class AbstractKiekerRTest extends AbstractKiekerTest {
 		try {
 			final RConnection rConnection = new RConnection();
 			Assume.assumeTrue(rConnection.isConnected());
+			rConnection.close();
 		} catch (final RserveException e) {
 			if (this.isTestKiekerRTestsSet()) {
 				Assert.fail("You chose to execute KiekerRTests, but no connection to Rserve can be established.");
