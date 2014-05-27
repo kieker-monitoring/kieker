@@ -98,6 +98,29 @@ public class ThroughputTimestampAnalysisTest {
 		for (final Entry<Double, Long> entry : quintileValues.entrySet()) {
 			System.out.println((entry.getKey() * 100) + " % : " + (entry.getValue() / 1000) + " µs");
 		}
+
+		final double z = 1.96; // 0.975
+		final double confidenceNiveau = 0.95;
+		final double confidenceWidth = this.getConfidenceWidth(z, confidenceNiveau, this.getVariance(sortedDurations, avgDur), sortedDurations.length);
+		System.out.println("[" + ((avgDur - confidenceWidth) / 1000) + " µs," + ((avgDur + confidenceWidth) / 1000) + " µs]");
 	}
 
+	public double getVariance(final long[] values, final long avgValue) {
+		double sum = 0;
+		for (final long val : values) {
+			final long diff = val - avgValue;
+			sum += (diff * 2) / (values.length - 1);
+		}
+		return sum;
+	}
+
+	//
+	// public double getS(final long[] values, final long avgValue) {
+	// final double variance = this.getVariance(values, avgValue);
+	// return Math.sqrt(variance);
+	// }
+
+	public double getConfidenceWidth(final double z, final double confidenceNiveau, final double variance, final long n) {
+		return z * (1 - (confidenceNiveau / 2)) * Math.sqrt(variance / n);
+	}
 }
