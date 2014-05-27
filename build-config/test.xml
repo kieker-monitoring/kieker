@@ -73,7 +73,7 @@
 
 			<batchtest fork="true" todir="${tests.junit-results.dir}">
 				<fileset dir="${build.tests.dir}/">
-					<include name="**/junit/**/*Test*.class" />
+					<include name="**/junit/**/tslib/**/*Test*.class" />
 					<exclude name="**/junit/**/Abstract*.class" />
 					<exclude name="**/*$*.class" />
 				</fileset>
@@ -179,7 +179,7 @@
 	
 	<target name="-start-rserve.tools" depends="">
 		<echo message="Starting Rserve ..." />
-		<exec executable="${tests.rserve-control-script.sh}" failonerror="true">
+		<exec executable="${tests.rserve-control-script.sh}" spawn="true"> <!-- failonerror="true" -->
 			<arg value="start" />
 		</exec>
 	</target>
