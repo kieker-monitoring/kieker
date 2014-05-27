@@ -117,10 +117,10 @@ public class WorkerThread extends Thread {
 	}
 
 	private void cleanUpDatastructures() {
-		System.out.println("Firing stop notification...");
+		// System.out.println("Firing stop notification...");
 		this.pipeline.fireStopNotification();
-		System.out.println("Thread terminated:" + this);
-		System.out.println(this.getName() + ": executedUnsuccessfullyCount=" + this.executedUnsuccessfullyCount);
+		// System.out.println("Thread terminated:" + this);
+		// System.out.println(this.getName() + ": executedUnsuccessfullyCount=" + this.executedUnsuccessfullyCount);
 	}
 
 	public long getDuration() {

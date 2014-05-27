@@ -15,54 +15,34 @@
  ***************************************************************************/
 package kieker.panalysis.stage;
 
-import java.util.Collection;
-
+import kieker.panalysis.examples.throughput.TimestampObject;
 import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Context;
 import kieker.panalysis.framework.core.IInputPort;
+import kieker.panalysis.framework.core.IOutputPort;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  */
-public class CollectorSink<T> extends AbstractFilter<CollectorSink<T>> {
+public class StartTimestampFilter extends AbstractFilter<StartTimestampFilter> {
 
-	private static final int THRESHOLD = 10000;
-
-	public final IInputPort<CollectorSink<T>, T> objectInputPort = this.createInputPort();
-	private Collection<T> objects;
-
-	public CollectorSink(final Collection<T> collection) {
-		this.objects = collection;
-	}
-
-	public CollectorSink() {
-		super();
-	}
+	public final IInputPort<StartTimestampFilter, TimestampObject> inputPort = this.createInputPort();
+	public final IOutputPort<StartTimestampFilter, TimestampObject> outputPort = this.createOutputPort();
 
 	@Override
-	protected boolean execute(final Context<CollectorSink<T>> context) {
-		final T object = context.tryTake(this.objectInputPort);
-		if (object == null) {
+	protected boolean execute(final Context<StartTimestampFilter> context) {
+		final TimestampObject inputObject = context.tryTake(this.inputPort);
+		if (inputObject == null) {
 			return false;
 		}
 
-		this.objects.add(object);
-		if ((this.objects.size() % THRESHOLD) == 0) {
-			System.out.println("size: " + this.objects.size());
+		inputObject.setStartTimestamp(System.nanoTime());
 
-		}
+		context.put(this.outputPort, inputObject);
 
 		return true;
-	}
-
-	public Collection<T> getObjects() {
-		return this.objects;
-	}
-
-	public void setObjects(final Collection<T> objects) {
-		this.objects = objects;
 	}
 
 }

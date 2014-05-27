@@ -41,7 +41,7 @@ public class NextStageScheduler implements IStageScheduler {
 		this.highestPrioritizedEnabledStages.addAll(pipeline.getStartStages());
 
 		this.workList.pushAll(this.highestPrioritizedEnabledStages);
-		System.out.println("Initial work list: " + this.workList);
+		// System.out.println("Initial work list: " + this.workList);
 		// this.workList.addAll(pipeline.getStages());
 
 		for (final IStage stage : pipeline.getStages()) {

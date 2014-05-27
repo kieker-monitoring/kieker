@@ -188,7 +188,7 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	private void checkWhetherThisStageMayBeDisabled() {
 		if (this.enabledInputPorts == 0) {
 			this.mayBeDisabled = true;
-			this.logger.info(this.toString() + " can now be disabled by the pipeline scheduler.");
+			// this.logger.info(this.toString() + " can now be disabled by the pipeline scheduler.");
 		}
 	}
 

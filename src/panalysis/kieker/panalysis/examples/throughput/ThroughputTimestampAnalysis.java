@@ -16,6 +16,7 @@
 package kieker.panalysis.examples.throughput;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -26,7 +27,10 @@ import kieker.panalysis.framework.core.Analysis;
 import kieker.panalysis.framework.core.IPipeline;
 import kieker.panalysis.framework.core.IStage;
 import kieker.panalysis.framework.sequential.QueuePipe;
+import kieker.panalysis.stage.CollectorSink;
 import kieker.panalysis.stage.NoopFilter;
+import kieker.panalysis.stage.StartTimestampFilter;
+import kieker.panalysis.stage.StopTimestampFilter;
 import kieker.panalysis.stage.basic.ObjectProducer;
 
 /**
@@ -34,7 +38,7 @@ import kieker.panalysis.stage.basic.ObjectProducer;
  * 
  * @since 1.10
  */
-public class ThroughputAnalysis<T> extends Analysis {
+public class ThroughputTimestampAnalysis extends Analysis {
 
 	private static final int SECONDS = 1000;
 
@@ -44,7 +48,9 @@ public class ThroughputAnalysis<T> extends Analysis {
 
 	private int numInputObjects;
 
-	private Callable<T> inputObjectCreator;
+	private Callable<TimestampObject> inputObjectCreator;
+
+	private Collection<TimestampObject> timestampObjects;
 
 	@Override
 	public void init() {
@@ -61,12 +67,15 @@ public class ThroughputAnalysis<T> extends Analysis {
 	 */
 	private IPipeline buildPipeline(final int numNoopFilters) {
 		@SuppressWarnings("unchecked")
-		final NoopFilter<T>[] noopFilters = new NoopFilter[numNoopFilters];
+		final NoopFilter<TimestampObject>[] noopFilters = new NoopFilter[numNoopFilters];
 		// create stages
-		final ObjectProducer<T> objectProducer = new ObjectProducer<T>(this.numInputObjects, this.inputObjectCreator);
+		final ObjectProducer<TimestampObject> objectProducer = new ObjectProducer<TimestampObject>(this.numInputObjects, this.inputObjectCreator);
+		final StartTimestampFilter startTimestampFilter = new StartTimestampFilter();
 		for (int i = 0; i < noopFilters.length; i++) {
-			noopFilters[i] = new NoopFilter<T>();
+			noopFilters[i] = new NoopFilter<TimestampObject>();
 		}
+		final StopTimestampFilter stopTimestampFilter = new StopTimestampFilter();
+		final CollectorSink<TimestampObject> collectorSink = new CollectorSink<TimestampObject>(this.timestampObjects);
 
 		// add each stage to a stage list
 		final List<IStage> startStages = new LinkedList<IStage>();
@@ -74,13 +83,19 @@ public class ThroughputAnalysis<T> extends Analysis {
 
 		final List<IStage> stages = new LinkedList<IStage>();
 		stages.add(objectProducer);
+		stages.add(startTimestampFilter);
 		stages.addAll(Arrays.asList(noopFilters));
+		stages.add(stopTimestampFilter);
+		stages.add(collectorSink);
 
 		// connect stages by pipes
-		QueuePipe.connect(objectProducer.outputPort, noopFilters[0].inputPort);
+		QueuePipe.connect(objectProducer.outputPort, startTimestampFilter.inputPort);
+		QueuePipe.connect(startTimestampFilter.outputPort, noopFilters[0].inputPort);
 		for (int i = 1; i < noopFilters.length; i++) {
 			QueuePipe.connect(noopFilters[i - 1].outputPort, noopFilters[i].inputPort);
 		}
+		QueuePipe.connect(noopFilters[noopFilters.length - 1].outputPort, stopTimestampFilter.inputPort);
+		QueuePipe.connect(stopTimestampFilter.outputPort, collectorSink.objectInputPort);
 
 		final IPipeline pipeline = new IPipeline() {
 			@SuppressWarnings("unchecked")
@@ -131,8 +146,16 @@ public class ThroughputAnalysis<T> extends Analysis {
 	/**
 	 * @since 1.10
 	 */
-	public void setInput(final int numInputObjects, final Callable<T> inputObjectCreator) {
+	public void setInput(final int numInputObjects, final Callable<TimestampObject> inputObjectCreator) {
 		this.numInputObjects = numInputObjects;
 		this.inputObjectCreator = inputObjectCreator;
+	}
+
+	public Collection<TimestampObject> getTimestampObjects() {
+		return timestampObjects;
+	}
+
+	public void setTimestampObjects(Collection<TimestampObject> timestampObjects) {
+		this.timestampObjects = timestampObjects;
 	}
 }
