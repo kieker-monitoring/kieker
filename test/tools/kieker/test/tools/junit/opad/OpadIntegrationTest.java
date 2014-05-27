@@ -143,7 +143,7 @@ public class OpadIntegrationTest extends AbstractKiekerTest {
 		forecastConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_DELTA_TIME, "10");
 		forecastConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_DELTA_UNIT,
 				"MILLISECONDS");
-		forecastConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_FC_METHOD, "MEAN");
+		forecastConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_FC_METHOD, "MEANJAVA");
 		final ForecastingFilter forecasting = new ForecastingFilter(forecastConfiguration, this.controller);
 		// End - ForecastingFilter
 

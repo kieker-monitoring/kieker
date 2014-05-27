@@ -17,6 +17,10 @@
 package kieker.test.tools.junit;
 
 import org.junit.Assert;
+import org.junit.Assume;
+import org.junit.Before;
+import org.rosuda.REngine.Rserve.RConnection;
+import org.rosuda.REngine.Rserve.RserveException;
 
 import kieker.tools.tslib.ITimeSeries;
 
@@ -32,10 +36,43 @@ import kieker.test.common.junit.AbstractKiekerTest;
  */
 public abstract class AbstractKiekerRTest extends AbstractKiekerTest {
 
+	/**
+	 * Check whether the SystemProperty is set that states, that Kieker R-related tests
+	 * should be executed and Check whether a connection to the Rserve server can be established.
+	 */
+	@Before
+	public void preCheckForRSysPropertyAndConnection() {
+
+		Assume.assumeTrue(this.isTestKiekerRTestsSet());
+		try {
+			final RConnection rConnection = new RConnection();
+			Assume.assumeTrue(rConnection.isConnected());
+		} catch (final RserveException e) {
+			if (this.isTestKiekerRTestsSet()) {
+				Assert.fail("You chose to execute KiekerRTests, but no connection to Rserve can be established.");
+			}
+		}
+
+	}
+
+	/**
+	 * Checks whether the given TimeSeries contains items.
+	 * 
+	 * @param timeSeries
+	 *            TimeSeries
+	 * @return true if TimeSeries contains one or more items, else false
+	 */
 	public static boolean tsContainsPoints(final ITimeSeries<Double> timeSeries) {
 		return timeSeries.getPoints().size() > 0;
 	}
 
+	/**
+	 * Gets the first (index = 0) TimeSeries point from the given TimeSeries.
+	 * 
+	 * @param timeSeries
+	 *            TimeSeries
+	 * @return First (index = 0) TimeSeries item if there are any, else 0d (and Test fails)
+	 */
 	public static Double getTsPoint(final ITimeSeries<Double> timeSeries) {
 		if (AbstractKiekerRTest.tsContainsPoints(timeSeries)) {
 			return timeSeries.getPoints().get(0).getValue();
@@ -43,5 +80,14 @@ public abstract class AbstractKiekerRTest extends AbstractKiekerTest {
 			Assert.fail("The timeseries point you tried to read does not exist");
 			return 0.0d;
 		}
+	}
+
+	/**
+	 * Checks whether the system property "TestKiekerRTests" is set to true.
+	 * 
+	 * @return true if set correctly (to true), else false
+	 */
+	private boolean isTestKiekerRTestsSet() {
+		return "true".equals(System.getProperty("TestKiekerRTests"));
 	}
 }

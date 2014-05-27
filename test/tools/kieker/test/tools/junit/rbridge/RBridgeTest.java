@@ -25,7 +25,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.util.RBridgeControl;
 
-import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.tools.junit.AbstractKiekerRTest;
 
 /**
  * 
@@ -33,7 +33,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * @since 1.10
  * 
  */
-public class RBridgeTest extends AbstractKiekerTest {
+public class RBridgeTest extends AbstractKiekerRTest {
 	private static final Log LOG = LogFactory.getLog(RBridgeTest.class);
 
 	/**

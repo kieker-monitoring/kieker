@@ -29,13 +29,13 @@ import kieker.tools.tslib.TimeSeries;
 import kieker.tools.tslib.forecast.IForecastResult;
 import kieker.tools.tslib.forecast.windowstart.WindowStartForecaster;
 
-import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.tools.junit.AbstractKiekerRTest;
 
 /**
  * @author Tillmann Carlos Bielefeld
  * @since 1.10
  */
-public class WindowStartForecasterTest extends AbstractKiekerTest {
+public class WindowStartForecasterTest extends AbstractKiekerRTest {
 
 	private static final Log LOG = LogFactory.getLog(WindowStartForecasterTest.class);
 

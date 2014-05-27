@@ -28,14 +28,14 @@ import kieker.tools.tslib.TimeSeries;
 import kieker.tools.tslib.forecast.IForecastResult;
 import kieker.tools.tslib.forecast.arima.ARIMA101Forecaster;
 
-import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.tools.junit.AbstractKiekerRTest;
 
 /**
  * @since 1.10
  * @author Tillmann Carlos Bielefeld
  * 
  */
-public class ARIMA101ForecasterTest extends AbstractKiekerTest {
+public class ARIMA101ForecasterTest extends AbstractKiekerRTest {
 
 	private static final long START_TIME = 98890787;
 	private static final long DELTA_TIME_MILLIS = 1000;

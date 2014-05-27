@@ -101,7 +101,7 @@ public class ForecastingFilterTest extends AbstractKiekerTest {
 		forecastConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_DELTA_TIME, "1000");
 		forecastConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_DELTA_UNIT,
 				"MILLISECONDS");
-		forecastConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_FC_METHOD, "MEAN");
+		forecastConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_FC_METHOD, "MEANJAVA");
 		final ForecastingFilter forecasting = new ForecastingFilter(forecastConfiguration, this.controller);
 
 		// SINK 1
