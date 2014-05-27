@@ -51,7 +51,7 @@ public class ThroughputTimestampAnalysisTest {
 		final List<TimestampObject> timestampObjects = new ArrayList<TimestampObject>(NUM_OBJECTS_TO_CREATE);
 
 		final ThroughputTimestampAnalysis analysis = new ThroughputTimestampAnalysis();
-		analysis.setNumNoopFilters(100);
+		analysis.setNumNoopFilters(800);
 		analysis.setTimestampObjects(timestampObjects);
 		analysis.setInput(NUM_OBJECTS_TO_CREATE, new Callable<TimestampObject>() {
 			public TimestampObject call() throws Exception {

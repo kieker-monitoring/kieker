@@ -31,6 +31,7 @@ import de.chw.util.StopWatch;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.common.logging.LogFactory;
 import kieker.panalysis.examples.throughput.TimestampObject;
+import kieker.panalysis.util.MathUtil;
 
 /**
  * @author Nils Christian Ehmke
@@ -52,7 +53,7 @@ public class ThroughputTimestampAnalysisTest {
 		final List<TimestampObject> timestampObjects = new ArrayList<TimestampObject>(NUM_OBJECTS_TO_CREATE);
 
 		final ThroughputTimestampAnalysis analysis = new ThroughputTimestampAnalysis();
-		analysis.setNumNoopFilters(100);
+		analysis.setNumNoopFilters(800);
 		analysis.setTimestampObjects(timestampObjects);
 		analysis.setInput(NUM_OBJECTS_TO_CREATE, new Callable<TimestampObject>() {
 			public TimestampObject call() throws Exception {
@@ -101,23 +102,12 @@ public class ThroughputTimestampAnalysisTest {
 			System.out.println((entry.getKey() * 100) + " % : " + (entry.getValue() / 1000) + " 탎");
 		}
 
-		final double z = 1.96; // 0.975
-		final double confidenceNiveau = 0.95;
-		final double confidenceWidth = this.getConfidenceWidth(z, confidenceNiveau, this.getVariance(sortedDurations, avgDur), sortedDurations.length);
+		final double z = 1.96; // for alpha = 0.05
+		final double variance = MathUtil.getVariance(sortedDurations, avgDur);
+		final double confidenceWidth = MathUtil.getConfidenceWidth(z, variance, sortedDurations.length);
+
+		System.out.println("confidenceWidth: " + (long) confidenceWidth + " 탎");
 		System.out.println("[" + ((avgDur - confidenceWidth) / 1000) + " 탎," + ((avgDur + confidenceWidth) / 1000) + " 탎]");
-	}
-
-	public double getVariance(final long[] values, final long avgValue) {
-		double sum = 0;
-		for (final long val : values) {
-			final long diff = val - avgValue;
-			sum += (diff * 2) / (values.length - 1);
-		}
-		return sum;
-	}
-
-	public double getConfidenceWidth(final double z, final double confidenceNiveau, final double variance, final long n) {
-		return z * (1 - (confidenceNiveau / 2)) * Math.sqrt(variance / n);
 	}
 
 }
