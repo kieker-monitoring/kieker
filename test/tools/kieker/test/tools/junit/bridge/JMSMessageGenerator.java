@@ -38,6 +38,10 @@ import kieker.tools.bridge.connector.jms.JMSClientConnector;
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
+ * Implements a JMS client sending Kieker records to a JMS queue.
+ * This class is used by both JMS tests as message source. It mis-uses
+ * the EOI property to deliver the record number.
+ * 
  * @author Reiner Jung
  * 
  * @since 1.8

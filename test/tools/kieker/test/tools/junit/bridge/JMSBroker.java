@@ -25,6 +25,8 @@ import kieker.tools.bridge.connector.jms.JMSClientConnector;
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
+ * Provides a JMSBroker, presently realized though ActiveMQ for the JMSClientConnector test.
+ * 
  * @author Reiner Jung
  * 
  * @since 1.8
