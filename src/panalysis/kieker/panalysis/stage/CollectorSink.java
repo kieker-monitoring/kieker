@@ -51,7 +51,6 @@ public class CollectorSink<T> extends AbstractFilter<CollectorSink<T>> {
 		this.objects.add(object);
 		if ((this.objects.size() % THRESHOLD) == 0) {
 			System.out.println("size: " + this.objects.size());
-
 		}
 
 		return true;
