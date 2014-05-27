@@ -100,8 +100,9 @@ public class ThroughputTimestampAnalysisTest {
 		}
 
 		final double z = 1.96; // 0.975
-		final double confidenceNiveau = 0.95;
+		final double confidenceNiveau = 0.05;
 		final double confidenceWidth = this.getConfidenceWidth(z, confidenceNiveau, this.getVariance(sortedDurations, avgDur), sortedDurations.length);
+		System.out.println("confidenceWidth: " + confidenceWidth);
 		System.out.println("[" + ((avgDur - confidenceWidth) / 1000) + " µs," + ((avgDur + confidenceWidth) / 1000) + " µs]");
 	}
 
@@ -109,7 +110,7 @@ public class ThroughputTimestampAnalysisTest {
 		double sum = 0;
 		for (final long val : values) {
 			final long diff = val - avgValue;
-			sum += (diff * 2) / (values.length - 1);
+			sum += (diff * diff) / (values.length - 1);
 		}
 		return sum;
 	}
@@ -121,6 +122,6 @@ public class ThroughputTimestampAnalysisTest {
 	// }
 
 	public double getConfidenceWidth(final double z, final double confidenceNiveau, final double variance, final long n) {
-		return z * (1 - (confidenceNiveau / 2)) * Math.sqrt(variance / n);
+		return z * Math.sqrt(variance / n);
 	}
 }
