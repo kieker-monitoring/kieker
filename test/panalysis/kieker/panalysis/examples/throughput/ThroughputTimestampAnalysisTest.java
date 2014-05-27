@@ -104,7 +104,7 @@ public class ThroughputTimestampAnalysisTest {
 		final double variance = MathUtil.getVariance(sortedDurations, avgDur);
 		final double confidenceWidth = MathUtil.getConfidenceWidth(z, variance, sortedDurations.length);
 
-		System.out.println("confidenceWidth: " + (long) confidenceWidth + " µs");
+		System.out.println("confidenceWidth: " + (long) confidenceWidth + " ns");
 		System.out.println("[" + ((avgDur - confidenceWidth) / 1000) + " µs," + ((avgDur + confidenceWidth) / 1000) + " µs]");
 	}
 
