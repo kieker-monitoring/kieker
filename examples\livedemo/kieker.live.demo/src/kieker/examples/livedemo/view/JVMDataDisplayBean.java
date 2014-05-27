@@ -46,7 +46,9 @@ public class JVMDataDisplayBean {
 	private CartesianChartModel jvmHeapModel;
 	private CartesianChartModel jvmNonHeapModel;
 
-	public JVMDataDisplayBean() {}
+	public JVMDataDisplayBean() {
+		// Initialization in PostContruct method
+	}
 
 	@PostConstruct
 	protected void initialize() {

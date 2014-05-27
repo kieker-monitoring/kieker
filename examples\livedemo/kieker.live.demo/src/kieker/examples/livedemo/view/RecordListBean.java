@@ -51,7 +51,7 @@ public class RecordListBean {
 		this.analysisBean = analysisBean;
 	}
 
-	public String freeze() {
+	public String freezeList() {
 		if (this.freeze) {
 			this.freeze = false;
 			this.freezeButton = "freeze";

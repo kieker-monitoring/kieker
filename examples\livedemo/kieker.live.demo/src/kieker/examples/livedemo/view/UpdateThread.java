@@ -21,6 +21,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Observer;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
+
 /**
  * This thread notifies some beans to update their content.
  * 
@@ -29,6 +32,8 @@ import java.util.Observer;
  * @since 1.9
  */
 public class UpdateThread extends Thread {
+
+	private static final Log LOG = LogFactory.getLog(UpdateThread.class);
 
 	private final long timeout;
 	private final List<Observer> observers;
@@ -45,8 +50,8 @@ public class UpdateThread extends Thread {
 		while (!this.terminated) {
 			try {
 				Thread.sleep(this.timeout);
-			} catch (final InterruptedException e) {
-				e.printStackTrace();
+			} catch (final InterruptedException ex) {
+				UpdateThread.LOG.warn("UpdateThread interrupted", ex);
 			}
 			this.notifyObservers();
 		}

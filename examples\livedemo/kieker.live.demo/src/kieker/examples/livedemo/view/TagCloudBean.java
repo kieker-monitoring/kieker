@@ -38,7 +38,9 @@ public class TagCloudBean {
 	private TagCloudModel methodModel;
 	private TagCloudModel componentModel;
 
-	public TagCloudBean() {}
+	public TagCloudBean() {
+		// Initialization in PostContruct method
+	}
 
 	@PostConstruct
 	protected void initialize() {

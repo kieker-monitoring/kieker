@@ -147,8 +147,7 @@ public class MethodResponsetimeBean implements Observer {
 		String[] array = signature.split("\\(");
 		array = array[0].split("\\.");
 		final int end = array.length;
-		final String result = "..." + array[end - 2] + "." + array[end - 1] + "(...)";
-		return result;
+		return "..." + array[end - 2] + "." + array[end - 1] + "(...)";
 	}
 
 	private synchronized void updateModels() {

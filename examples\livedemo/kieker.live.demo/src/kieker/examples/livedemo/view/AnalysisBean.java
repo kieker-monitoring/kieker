@@ -29,6 +29,8 @@ import kieker.analysis.plugin.filter.sink.MemSwapUtilizationDisplayFilter;
 import kieker.analysis.plugin.reader.jmx.JMXReader;
 import kieker.analysis.plugin.reader.timer.TimeReader;
 import kieker.common.configuration.Configuration;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.examples.livedemo.analysis.Distributor;
 import kieker.examples.livedemo.analysis.OperationExecutionRecordEnrichmentFilter;
 import kieker.examples.livedemo.analysis.display.AbstractAggregatingDisplayFilter;
@@ -56,6 +58,8 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 @ManagedBean(name = "analysisBean", eager = true)
 @ApplicationScoped
 public class AnalysisBean {
+
+	private static final Log LOG = LogFactory.getLog(AnalysisBean.class);
 
 	private static final String NUMBER_OF_CPU_AND_MEMSWAP_ENTRIES = "20";
 	private static final String NUMBER_OF_RECORD_LIST_ENTRIES = "50";
@@ -126,10 +130,10 @@ public class AnalysisBean {
 
 		try {
 			this.init();
-		} catch (final IllegalStateException e) {
-			e.printStackTrace();
-		} catch (final AnalysisConfigurationException e) {
-			e.printStackTrace();
+		} catch (final IllegalStateException ex) {
+			AnalysisBean.LOG.error("Could not initialize analysis", ex);
+		} catch (final AnalysisConfigurationException ex) {
+			AnalysisBean.LOG.error("Could not initialize analysis", ex);
 		}
 		this.act = new AnalysisControllerThread(this.analysisInstance);
 

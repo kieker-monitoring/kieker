@@ -56,7 +56,7 @@
 		</div>
 		<div id="main">
 		 	<h:form id="table">
-				<p:commandButton id="button" update="button,table" value="#{recordBean.freezeButton}" action="#{recordBean.freeze}"/>
+				<p:commandButton id="button" update="button,table" value="#{recordBean.freezeButton}" action="#{recordBean.freezeList}"/>
 		    	<p:dataTable id="rec" value="#{recordBean.records}" var="record">
 		    		<p:column headerText="Session Id">  
 		            	<h:outputText id="session" value="#{record.sessionId}" />     	  

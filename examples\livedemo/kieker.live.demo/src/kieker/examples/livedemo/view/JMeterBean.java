@@ -79,7 +79,7 @@ public class JMeterBean implements Observer {
 		return this.buttonText;
 	}
 
-	public boolean getDisabled() {
+	public boolean isDisabled() {
 		return this.disabled;
 	}
 

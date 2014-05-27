@@ -42,7 +42,9 @@ public class SystemModelBean {
 	@ManagedProperty(value = "#{analysisBean}")
 	private AnalysisBean analysisBean;
 
-	public SystemModelBean() {}
+	public SystemModelBean() {
+		// No code necessary
+	}
 
 	public void setAnalysisBean(final AnalysisBean analysisBean) {
 		this.analysisBean = analysisBean;

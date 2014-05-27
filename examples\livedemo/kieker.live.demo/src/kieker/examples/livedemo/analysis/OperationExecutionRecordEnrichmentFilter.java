@@ -58,16 +58,14 @@ public final class OperationExecutionRecordEnrichmentFilter extends AbstractFilt
 	private double computeResponseTime(final OperationExecutionRecord record) {
 		double resp = record.getTout() - record.getTin();
 		resp = resp / 1000000; // conversion to milliseconds
-		final double rounded = Math.round(resp * 10) / 10.0; // rounded to one decimal
-		return rounded;
+		return Math.round(resp * 10) / 10.0; // rounded to one decimal
 	}
 
 	private String createShortSignature(final OperationExecutionRecord record) {
 		String[] array = record.getOperationSignature().split("\\(");
 		array = array[0].split("\\.");
 		final int end = array.length;
-		final String result = "..." + array[end - 2] + "." + array[end - 1] + "(...)";
-		return result;
+		return "..." + array[end - 2] + "." + array[end - 1] + "(...)";
 	}
 
 	@Override
