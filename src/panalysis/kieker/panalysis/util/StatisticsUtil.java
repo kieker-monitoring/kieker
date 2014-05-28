@@ -41,42 +41,43 @@ public class StatisticsUtil {
 	public static void printStatistics(final long overallDurationInNs, final List<TimestampObject> timestampObjects) {
 		System.out.println("Duration: " + TimeUnit.NANOSECONDS.toMillis(overallDurationInNs) + " ms");
 
-		final long[] sortedDurations = new long[timestampObjects.size() / 2];
-		long minDuration = Long.MAX_VALUE;
-		long maxDuration = Long.MIN_VALUE;
-		long sum = 0;
+		final long[] sortedDurationsInNs = new long[timestampObjects.size() / 2];
+		long minDurationInNs = Long.MAX_VALUE;
+		long maxDurationInNs = Long.MIN_VALUE;
+		long sumInNs = 0;
 		for (int i = timestampObjects.size() / 2; i < timestampObjects.size(); i++) {
 			final TimestampObject timestampObject = timestampObjects.get(i);
-			final long duration = timestampObject.getStopTimestamp() - timestampObject.getStartTimestamp();
-			sortedDurations[i - (timestampObjects.size() / 2)] = duration;
-			minDuration = Math.min(duration, minDuration);
-			maxDuration = Math.max(duration, maxDuration);
-			sum += duration;
+			final long durationInNs = timestampObject.getStopTimestamp() - timestampObject.getStartTimestamp();
+			sortedDurationsInNs[i - (timestampObjects.size() / 2)] = durationInNs;
+			minDurationInNs = Math.min(durationInNs, minDurationInNs);
+			maxDurationInNs = Math.max(durationInNs, maxDurationInNs);
+			sumInNs += durationInNs;
 		}
 
-		Arrays.sort(sortedDurations);
+		Arrays.sort(sortedDurationsInNs);
 
 		final Map<Double, Long> quintileValues = new LinkedHashMap<Double, Long>();
 		final double[] quintiles = { 0.00, 0.25, 0.50, 0.75, 1.00 };
-		for (final double quartile : quintiles) {
-			final int index = (int) ((sortedDurations.length - 1) * quartile);
-			quintileValues.put(quartile, sortedDurations[index]);
+		for (final double quintile : quintiles) {
+			final int index = (int) ((sortedDurationsInNs.length - 1) * quintile);
+			quintileValues.put(quintile, sortedDurationsInNs[index]);
 		}
 
-		System.out.println("min: " + (minDuration / 1000) + " 탎");
-		System.out.println("max: " + (maxDuration / 1000) + " 탎");
-		final long avgDur = sum / (timestampObjects.size() / 2);
-		System.out.println("avg duration: " + (avgDur / 1000) + " 탎");
+		System.out.println("min: " + TimeUnit.NANOSECONDS.toMicros(minDurationInNs) + " 탎");
+		System.out.println("max: " + TimeUnit.NANOSECONDS.toMicros(maxDurationInNs) + " 탎");
+		final long avgDurInNs = sumInNs / (timestampObjects.size() / 2);
+		System.out.println("avg duration: " + TimeUnit.NANOSECONDS.toMicros(avgDurInNs) + " 탎");
 
 		for (final Entry<Double, Long> entry : quintileValues.entrySet()) {
-			System.out.println((entry.getKey() * 100) + " % : " + (entry.getValue() / 1000) + " 탎");
+			System.out.println((entry.getKey() * 100) + " % : " + TimeUnit.NANOSECONDS.toMicros(entry.getValue()) + " 탎");
 		}
 
 		final double z = 1.96; // for alpha = 0.05
-		final double variance = MathUtil.getVariance(sortedDurations, avgDur);
-		final double confidenceWidth = MathUtil.getConfidenceWidth(z, variance, sortedDurations.length);
+		final double variance = MathUtil.getVariance(sortedDurationsInNs, avgDurInNs);
+		final long confidenceWidthInNs = (long) MathUtil.getConfidenceWidth(z, variance, sortedDurationsInNs.length);
 
-		System.out.println("confidenceWidth: " + (long) confidenceWidth + " 탎");
-		System.out.println("[" + ((avgDur - confidenceWidth) / 1000) + " 탎," + ((avgDur + confidenceWidth) / 1000) + " 탎]");
+		System.out.println("confidenceWidth: " + confidenceWidthInNs + " ns");
+		System.out.println("[" + TimeUnit.NANOSECONDS.toMicros(avgDurInNs - confidenceWidthInNs) + " 탎, "
+				+ TimeUnit.NANOSECONDS.toMicros(avgDurInNs + confidenceWidthInNs) + " 탎]");
 	}
 }
