@@ -42,7 +42,20 @@ public class ThroughputTimestampAnalysisTest {
 	}
 
 	// Using QueuePipes ist 1/3 faster than using MethodCallPipes
-	// TODO check why
+	// reason:
+	/*
+	 * MethodCallPipes:
+	 * <ul>
+	 * <li>SchedulingOverhead: 12629 ms
+	 * <li>ExecutedUnsuccessfullyCount: 80300001
+	 * </ul>
+	 * 
+	 * QueuePipes:
+	 * <ul>
+	 * <li>SchedulingOverhead: 11337 ms
+	 * <li>ExecutedUnsuccessfullyCount: 804
+	 * </ul>
+	 */
 
 	@Test
 	public void testWithManyObjects() {
@@ -50,6 +63,7 @@ public class ThroughputTimestampAnalysisTest {
 		final List<TimestampObject> timestampObjects = new ArrayList<TimestampObject>(NUM_OBJECTS_TO_CREATE);
 
 		final ThroughputTimestampAnalysis analysis = new ThroughputTimestampAnalysis();
+		analysis.setShouldUseQueue(true);
 		analysis.setNumNoopFilters(800);
 		analysis.setTimestampObjects(timestampObjects);
 		analysis.setInput(NUM_OBJECTS_TO_CREATE, new Callable<TimestampObject>() {

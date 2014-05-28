@@ -20,12 +20,14 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 
 import kieker.panalysis.framework.concurrent.StageTerminationPolicy;
 import kieker.panalysis.framework.concurrent.WorkerThread;
 import kieker.panalysis.framework.core.Analysis;
 import kieker.panalysis.framework.core.IPipeline;
 import kieker.panalysis.framework.core.IStage;
+import kieker.panalysis.framework.sequential.MethodCallPipe;
 import kieker.panalysis.framework.sequential.QueuePipe;
 import kieker.panalysis.stage.CollectorSink;
 import kieker.panalysis.stage.NoopFilter;
@@ -51,6 +53,8 @@ public class ThroughputTimestampAnalysis extends Analysis {
 	private Callable<TimestampObject> inputObjectCreator;
 
 	private Collection<TimestampObject> timestampObjects;
+
+	private boolean shouldUseQueue;
 
 	@Override
 	public void init() {
@@ -83,19 +87,30 @@ public class ThroughputTimestampAnalysis extends Analysis {
 
 		final List<IStage> stages = new LinkedList<IStage>();
 		stages.add(objectProducer);
-		stages.add(startTimestampFilter);
-		stages.addAll(Arrays.asList(noopFilters));
-		stages.add(stopTimestampFilter);
-		stages.add(collectorSink);
+		if (this.shouldUseQueue) {
+			stages.add(startTimestampFilter);
+			stages.addAll(Arrays.asList(noopFilters));
+			stages.add(stopTimestampFilter);
+			stages.add(collectorSink);
 
-		// connect stages by pipes
-		QueuePipe.connect(objectProducer.outputPort, startTimestampFilter.inputPort);
-		QueuePipe.connect(startTimestampFilter.outputPort, noopFilters[0].inputPort);
-		for (int i = 1; i < noopFilters.length; i++) {
-			QueuePipe.connect(noopFilters[i - 1].outputPort, noopFilters[i].inputPort);
+			// connect stages by pipes
+			QueuePipe.connect(objectProducer.outputPort, startTimestampFilter.inputPort);
+			QueuePipe.connect(startTimestampFilter.outputPort, noopFilters[0].inputPort);
+			for (int i = 1; i < noopFilters.length; i++) {
+				QueuePipe.connect(noopFilters[i - 1].outputPort, noopFilters[i].inputPort);
+			}
+			QueuePipe.connect(noopFilters[noopFilters.length - 1].outputPort, stopTimestampFilter.inputPort);
+			QueuePipe.connect(stopTimestampFilter.outputPort, collectorSink.objectInputPort);
+		} else {
+			// connect stages by pipes
+			MethodCallPipe.connect(objectProducer.outputPort, startTimestampFilter.inputPort);
+			MethodCallPipe.connect(startTimestampFilter.outputPort, noopFilters[0].inputPort);
+			for (int i = 1; i < noopFilters.length; i++) {
+				MethodCallPipe.connect(noopFilters[i - 1].outputPort, noopFilters[i].inputPort);
+			}
+			MethodCallPipe.connect(noopFilters[noopFilters.length - 1].outputPort, stopTimestampFilter.inputPort);
+			MethodCallPipe.connect(stopTimestampFilter.outputPort, collectorSink.objectInputPort);
 		}
-		QueuePipe.connect(noopFilters[noopFilters.length - 1].outputPort, stopTimestampFilter.inputPort);
-		QueuePipe.connect(stopTimestampFilter.outputPort, collectorSink.objectInputPort);
 
 		final IPipeline pipeline = new IPipeline() {
 			@SuppressWarnings("unchecked")
@@ -133,6 +148,9 @@ public class ThroughputTimestampAnalysis extends Analysis {
 		} catch (final InterruptedException e) {
 			e.printStackTrace();
 		}
+
+		System.out.println("SchedulingOverhead: " + TimeUnit.NANOSECONDS.toMillis(this.workerThread.getSchedulingOverheadInNs()) + " ms");
+		System.out.println("ExecutedUnsuccessfullyCount: " + this.workerThread.getExecutedUnsuccessfullyCount());
 	}
 
 	public int getNumNoopFilters() {
@@ -157,5 +175,13 @@ public class ThroughputTimestampAnalysis extends Analysis {
 
 	public void setTimestampObjects(final Collection<TimestampObject> timestampObjects) {
 		this.timestampObjects = timestampObjects;
+	}
+
+	public boolean isShouldUseQueue() {
+		return this.shouldUseQueue;
+	}
+
+	public void setShouldUseQueue(final boolean shouldUseQueue) {
+		this.shouldUseQueue = shouldUseQueue;
 	}
 }

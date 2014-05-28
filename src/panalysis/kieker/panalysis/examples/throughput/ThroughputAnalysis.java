@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 
 import kieker.panalysis.framework.concurrent.StageTerminationPolicy;
 import kieker.panalysis.framework.concurrent.WorkerThread;
@@ -118,6 +119,8 @@ public class ThroughputAnalysis<T> extends Analysis {
 		} catch (final InterruptedException e) {
 			e.printStackTrace();
 		}
+
+		System.out.println("SchedulingOverhead: " + TimeUnit.NANOSECONDS.toMillis(this.workerThread.getSchedulingOverheadInNs()) + " ms");
 	}
 
 	public int getNumNoopFilters() {
