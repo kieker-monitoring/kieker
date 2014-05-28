@@ -50,8 +50,8 @@ public class SwapDisplayFilter extends AbstractNonAggregatingDisplayFilter<MemSw
 		this.usedSwapSeries = new ChartSeries();
 		this.freeSwapSeries = new ChartSeries();
 
-		this.usedSwapData = new LimitedHashMap<>(numberOfEntries);
-		this.freeSwapData = new LimitedHashMap<>(numberOfEntries);
+		this.usedSwapData = new LimitedHashMap<Object, Number>(numberOfEntries);
+		this.freeSwapData = new LimitedHashMap<Object, Number>(numberOfEntries);
 
 		model.addSeries(this.usedSwapSeries);
 		model.addSeries(this.freeSwapSeries);
