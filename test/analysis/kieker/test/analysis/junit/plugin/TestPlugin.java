@@ -141,7 +141,13 @@ public class TestPlugin extends AbstractKiekerTest {
 		final FSReader reader1 = new FSReader(readerConfig1, ac);
 		final FSReader reader2 = new FSReader(readerConfig2, ac);
 
+		// make sure the first reader is named as intended
 		Assert.assertEquals("reader", reader1.getName());
-		Assert.assertEquals(FSReader.class.getSimpleName() + "-1", reader2.getName());
+
+		// make sure the the second reader is named beginning with the simple class name
+		Assert.assertTrue(reader2.getName().startsWith(FSReader.class.getSimpleName()));
+
+		// make sure that both reader names differ
+		Assert.assertNotEquals(reader1.getName(), reader2.getName());
 	}
 }
