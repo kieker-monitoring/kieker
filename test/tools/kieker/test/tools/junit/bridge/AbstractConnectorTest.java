@@ -111,8 +111,10 @@ public abstract class AbstractConnectorTest extends AbstractKiekerTest {
 	 * 
 	 * @param numberOfRecords
 	 *            number of expected records to receive
+	 * @param honorOrderId
+	 *            if true the received EOI is compared to the record counter
 	 */
-	protected void deserialize(final int numberOfRecords) {
+	protected void deserialize(final int numberOfRecords, final boolean honorOrderId) {
 		for (int i = 0; i < numberOfRecords; i++) {
 			if (LOG.isDebugEnabled()) {
 				LOG.debug("Receive record " + i);
@@ -122,7 +124,9 @@ public abstract class AbstractConnectorTest extends AbstractKiekerTest {
 				Assert.assertEquals("Tin is not equal", ConfigurationParameters.TEST_TIN, record.getTin());
 				Assert.assertEquals("Tout is not equal", ConfigurationParameters.TEST_TOUT, record.getTout());
 				Assert.assertEquals("TraceId is not equal", ConfigurationParameters.TEST_TRACE_ID, record.getTraceId());
-				Assert.assertEquals("Eoi is not equal", i, record.getEoi());
+				if (honorOrderId) {
+					Assert.assertEquals("Eoi is not equal", i, record.getEoi());
+				}
 				Assert.assertEquals("Ess is not equal", ConfigurationParameters.TEST_ESS, record.getEss());
 				Assert.assertEquals("Hostname is not equal", ConfigurationParameters.TEST_HOSTNAME, record.getHostname());
 				Assert.assertEquals("OperationSignature is not equal", ConfigurationParameters.TEST_OPERATION_SIGNATURE, record.getOperationSignature());

@@ -60,7 +60,7 @@ public class TestJMSEmbeddedConnector extends AbstractConnectorTest {
 		this.setConnector(new JMSEmbeddedConnector(configuration, this.createLookupEntityMap()));
 		this.initialize();
 		messageGenerator.start();
-		this.deserialize(ConfigurationParameters.SEND_NUMBER_OF_RECORDS);
+		this.deserialize(ConfigurationParameters.SEND_NUMBER_OF_RECORDS, true);
 		this.close(ConfigurationParameters.SEND_NUMBER_OF_RECORDS);
 	}
 }
