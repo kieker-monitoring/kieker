@@ -45,19 +45,7 @@ public class TestJMSClientConnector extends AbstractConnectorTest {
 	 */
 	@Test
 	public void testJMSClientConnector() throws ConnectorDataTransmissionException { // NOPMD
-
-		final JMSBroker broker = new JMSBroker();
-		final Thread brokerThread = new Thread(broker, "Broker");
 		final Thread messageGenerator = new Thread(new JMSMessageGenerator(ConfigurationParameters.JMS_URI), "Generator");
-
-		brokerThread.start();
-		while (!broker.isRunning()) {
-			try {
-				Thread.sleep(10);
-			} catch (final InterruptedException e) {
-				throw new ConnectorDataTransmissionException("Wait for broker failed.");
-			}
-		}
 		messageGenerator.start();
 
 		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();

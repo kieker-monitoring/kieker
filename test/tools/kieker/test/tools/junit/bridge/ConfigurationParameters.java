@@ -15,6 +15,8 @@
  ***************************************************************************/
 package kieker.test.tools.junit.bridge;
 
+import kieker.test.tools.junit.writeRead.jms.FakeInitialContextFactory;
+
 /**
  * Common configuration parameters for all bridge tests.
  * 
@@ -69,7 +71,7 @@ public final class ConfigurationParameters {
 	 * The number of threads to start.
 	 */
 	public static final int NUMBER_OF_TEST_THREADS = 5;
-	public static final String JMS_FACTORY_LOOKUP_NAME = "org.apache.activemq.jndi.ActiveMQInitialContextFactory";
+	public static final String JMS_FACTORY_LOOKUP_NAME = FakeInitialContextFactory.class.getName();
 
 	/**
 	 * Private default constructor for utility class.
