@@ -1,0 +1,54 @@
+/***************************************************************************
+ * Copyright 2014 Kicker Project (http://kicker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
+package kicker.monitoring.sampler.mxbean;
+
+import java.lang.management.ManagementFactory;
+
+import kicker.common.record.IMonitoringRecord;
+import kicker.monitoring.core.controller.IMonitoringController;
+import kicker.monitoring.core.sampler.ISampler;
+
+/**
+ * This is an abstract base for all sampler using the MXBean interface to access information from the JVM.
+ * 
+ * @author Nils Christian Ehmke
+ * 
+ * @since 1.10
+ */
+public abstract class AbstractMXBeanSampler implements ISampler {
+
+	private static final String VM_NAME = ManagementFactory.getRuntimeMXBean().getName();
+
+	public AbstractMXBeanSampler() {
+		// Empty default constructor
+	}
+
+	@Override
+	public final void sample(final IMonitoringController monitoringController) throws Exception {
+		final long timestamp = monitoringController.getTimeSource().getTime();
+		final String hostname = monitoringController.getHostname();
+
+		final IMonitoringRecord[] records = this.createNewMonitoringRecords(timestamp, hostname, VM_NAME);
+
+		for (final IMonitoringRecord record : records) {
+			monitoringController.newMonitoringRecord(record);
+		}
+	}
+
+	protected abstract IMonitoringRecord[] createNewMonitoringRecords(final long timestamp, final String hostname, final String vmName);
+
+}

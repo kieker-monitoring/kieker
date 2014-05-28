@@ -26,7 +26,7 @@
    font-weight="normal"
    id="svg2"
    inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="kieker_OperationExecutionRecord-notraceattributes-inheritance.svg"
+   sodipodi:docname="kicker_OperationExecutionRecord-notraceattributes-inheritance.svg"
    style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog">
   <metadata
      id="metadata139">
@@ -278,7 +278,7 @@
        clip-path="none"
        y="133.5022"
        x="4.5985432"
-       font-size="9">(from kieker::common::record::controlflow)</text>
+       font-size="9">(from kicker::common::record::controlflow)</text>
     <text
        transform="translate(-8.5347033,-19.898845)"
        style="font-size:10px;fill:#000000;stroke:none;font-family:Arial"
@@ -354,7 +354,7 @@
      xml:space="preserve"
      id="text111"
      style="font-size:9px;fill:#808080;fill-opacity:1;stroke:none;font-family:Arial"
-     transform="translate(4.0350637,-9.4977984)">(from kieker::common::record)</text>
+     transform="translate(4.0350637,-9.4977984)">(from kicker::common::record)</text>
   <rect
      x="10"
      y="70"
@@ -388,7 +388,7 @@
      xml:space="preserve"
      id="text121"
      style="font-size:9px;fill:#808080;fill-opacity:1;stroke:none;font-family:Arial"
-     transform="translate(4.0350637,-9.4977984)">(from kieker::common::record)</text>
+     transform="translate(4.0350637,-9.4977984)">(from kicker::common::record)</text>
   <rect
      x="10"
      y="10"

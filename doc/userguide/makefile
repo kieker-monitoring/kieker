@@ -1,6 +1,6 @@
 SHELL=/bin/bash
 
-DOCBASEFN=kieker-userguide
+DOCBASEFN=kicker-userguide
 BIBGEN_SH=../../../../../../phd_vanhoorn/bin/bibs-gen.sh
 
 

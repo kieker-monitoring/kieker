@@ -1,12 +1,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Kieker Monitoring Component
+% Kicker Monitoring Component
 %
 % $Date$
 % $Rev$:
 % $Author$
 
 
-\chapter{\KiekerMonitoringPart{} Component}\label{chap:componentsMonitoring}
+\chapter{\KickerMonitoringPart{} Component}\label{chap:componentsMonitoring}
 
 \NOTIFYBOX{The Java sources of this chapter, as well as a pre-compiled binary, %
 can be found in the %
@@ -15,13 +15,13 @@ binary release.}
 
 \section{Monitoring Controller}\label{sec:componentsMonitoring:monitoringController}
 
-The \class{MonitoringController} constructs and controls a \KiekerMonitoringPart{} %
+The \class{MonitoringController} constructs and controls a \KickerMonitoringPart{} %
 instance.
 
 \enlargethispage{1cm}
 
 \begin{figure}[h]\centering % 
-\includegraphics[scale=0.7]{images/kieker_monitoringControlleruserguide-simplified}
+\includegraphics[scale=0.7]{images/kicker_monitoringControlleruserguide-simplified}
 \caption{Class diagram of the \class{MonitoringController} (including selected methods)}
 \label{fig:monitoringController:classdiagram}
 \end{figure}
@@ -63,7 +63,7 @@ Note, that this is not the case if monitoring is disabled or terminated (Section
 
 The current time is maintained by a so-called time source. The \class{MonitoringController}'s method %
 \method{getTimeSource} returns an \class{ITimeSource} whose method %
-\method{getTime} returns a timestamp in nanoseconds. \Kieker{}'s default %
+\method{getTime} returns a timestamp in nanoseconds. \Kicker{}'s default %
 time source, \class{SystemNanoTimer}, returns the current system %
 time as the number of nanoseconds elapsed since 1 Jan 1970 00:00~UTC. %
 The easiest way to use a custom time source is to extend the \class{AbstractTimeSource} and %
@@ -75,7 +75,7 @@ relevant. The configuration needs to be adjusted to use a custom time source cla
 
 For certain applications, it is required to monitor runtime data periodically, %
 e.g., the utilization of system resources such as CPUs. %
-For this purpose, \Kieker{} supports special monitoring probes, called samplers. %
+For this purpose, \Kicker{} supports special monitoring probes, called samplers. %
 Samplers must implement the interface \class{ISampler} which includes a %
 single method \method{sample(IMonitoringController monitoringController)}. %
 This method is called in periodic time steps, %
@@ -97,7 +97,7 @@ data, such as CPU and memory usage, are discussed in Appendix~\ref{appendix:Siga
 \pagebreak
 
 \setJavaCodeListing
-\lstinputlisting[firstline=53, lastline=70, firstnumber=53, caption=Method \method{sample} from MemSwapUsageSampler.java, label=listing:sigarSamplerMethod]{\kiekerSrcDir/monitoring/kieker/monitoring/sampler/sigar/samplers/MemSwapUsageSampler.java}
+\lstinputlisting[firstline=53, lastline=70, firstnumber=53, caption=Method \method{sample} from MemSwapUsageSampler.java, label=listing:sigarSamplerMethod]{\kickerSrcDir/monitoring/kicker/monitoring/sampler/sigar/samplers/MemSwapUsageSampler.java}
 
 \subsection{Controlling the Monitoring State}\label{sec:componentsMonitoring:monitoringController:controState}
 
@@ -127,19 +127,19 @@ The entire list can be replaced using the method \method{setProbePatternList}. %
 Alternatively, a file with include and exclude patterns can be used. This file %
 can be polled in regular intervals. %
 A default configuration file, including a description of the pattern syntax, is provided %
-by the file \file{kieker.monitoring.adaptive\-Monitoring.conf} in the %
+by the file \file{kicker.monitoring.adaptive\-Monitoring.conf} in the %
 \dir{META-INF/} directory of the binary release. %
 
 With the same mechanism arbitrary probes can be controlled. The syntax is also included %
-in the above file. For example, \Kieker's probes for CPU and memory make use of %
+in the above file. For example, \Kicker's probes for CPU and memory make use of %
 this mechanism.
 
-By default, \Kieker{}'s adaptive monitoring feature is deactivated. It can be %
+By default, \Kicker{}'s adaptive monitoring feature is deactivated. It can be %
 enabled by setting the value of the configuration property %
-\lstinline{kieker.monitoring.adaptiveMonitoring.enabled} %
+\lstinline{kicker.monitoring.adaptiveMonitoring.enabled} %
 in the \file{\monitoringPropertiesFile} file to \textit{true}. Additional properties %
 to configure the adaptive monitoring are included in the file %
-\file{kieker.monitoring.proper\-ties}, e.g., the location of the afore-mentioned file with %
+\file{kicker.monitoring.proper\-ties}, e.g., the location of the afore-mentioned file with %
 include/exclude patterns and the polling interval for this file. 
 
 \enlargethispage{0.8cm}
@@ -151,7 +151,7 @@ interface methods (see Figure~\ref{fig:monitoringController:classdiagram}) can b
 as a JMX MBean. For example, this allows to control the monitoring state using %
 the methods described in the previous Section~\ref{sec:componentsMonitoring:monitoringController:controState}. %
 As a JMX-compliant graphical client that is included in the JDK, \class{jconsole} %
-is probably the easiest way to get started. Just keep in mind to add \Kieker{} to the classpath when calling \class{jconsole} so that the MBean works correctly. Figure~\ref{fig:monitoringController:MBean:jconsole} %
+is probably the easiest way to get started. Just keep in mind to add \Kicker{} to the classpath when calling \class{jconsole} so that the MBean works correctly. Figure~\ref{fig:monitoringController:MBean:jconsole} %
 shows two screenshots of the MBean access using \class{jconsole}.
 
 % nie: I forced the figure to be here, as it would otherwise cut the listing in half. 
@@ -174,20 +174,20 @@ The \file{\monitoringPropertiesFile} includes additional JMX-related configurati
 \setPropertiesListing
 \begin{lstlisting}
 ## Whether any JMX functionality is available
-kieker.monitoring.jmx=true
+kicker.monitoring.jmx=true
 ...
 
 ## Enable/Disable the MonitoringController MBean
-kieker.monitoring.jmx.MonitoringController=true
+kicker.monitoring.jmx.MonitoringController=true
 ...
 \end{lstlisting}
 
-For remote access to the server, set \textit{kieker.monitoring.jmx.remote=true}. In this case it is recommended to set \textit{com.sun.management.jmxremote.authenticate=true} as well. More information can be found on Oracle's JMX Technology Home Page~\cite{JMX-Website}.
+For remote access to the server, set \textit{kicker.monitoring.jmx.remote=true}. In this case it is recommended to set \textit{com.sun.management.jmxremote.authenticate=true} as well. More information can be found on Oracle's JMX Technology Home Page~\cite{JMX-Website}.
 
 
-\section{\KiekerMonitoringPart{} Configuration}\label{sec:monitoring:configuration}
+\section{\KickerMonitoringPart{} Configuration}\label{sec:monitoring:configuration}
 
-\KiekerMonitoringPart{} instances can be configured by properties files, %
+\KickerMonitoringPart{} instances can be configured by properties files, %
 \class{Configuration} objects, and by passing property values as %
 JVM arguments. If no configuration is specified, a default %
 configuration is being used. %
@@ -195,24 +195,24 @@ Appendix~\ref{sec:appdx:monitoringproperties} lists this default %
 configuration with a documentation of all available properties. %
 The default configuration properties file, which %
 can be used as a template for custom configurations, is provided by the file %
-\file{\monitoringPropertiesFile} in the directory \dir{\KiekerDir/META-INF/} of %
+\file{\monitoringPropertiesFile} in the directory \dir{\KickerDir/META-INF/} of %
 the binary release (see Section~\ref{sec:example:downloadInstall}). %
 
 
 \subsection*{Configurations for Singleton Instances}
 
 In order to use a custom configuration file, its location needs to be passed to %
-the JVM using the parameter \textit{kieker.monitoring.configuration} as follows:
+the JVM using the parameter \textit{kicker.monitoring.configuration} as follows:
 
 \setBashListing
 \begin{lstlisting}[caption=,label=lst:monitoringPropertiesPassedToJVM]
-#\lstshellprompt# java  #\textbf{-Dkieker.monitoring.configuration=}#<ANY-DIR>/my.kieker.monitoring.properties #[\ldots]#
+#\lstshellprompt# java  #\textbf{-Dkicker.monitoring.configuration=}#<ANY-DIR>/my.kicker.monitoring.properties #[\ldots]#
 \end{lstlisting}
 
-\noindent Alternatively, a file named \file{kieker.monitoring.properties} %
+\noindent Alternatively, a file named \file{kicker.monitoring.properties} %
 can be placed in a directory called \dir{META-INF/} located in the classpath. %
 The available configuration properties can also be passed as JVM %
-arguments, e.g., \lstinline{-Dkieker.monitoring.enabled=true}. %
+arguments, e.g., \lstinline{-Dkicker.monitoring.enabled=true}. %
 
 \subsection*{Configurations for Non-Singleton Instances}
 
@@ -234,11 +234,11 @@ passed to the monitoring controller (Section~\ref{sec:componentsMonitoring:monit
 serialized and deserialized by a monitoring %
 writer (Section~\ref{sec:monitoring-log-writers}) and a
 monitoring reader, and provided to analysis filters (Section~\ref{sec:analysis:controller}). %
-Figure~\ref{fig:KiekerCommunicationDiagram} illustrates this life cycle of a monitoring %
+Figure~\ref{fig:KickerCommunicationDiagram} illustrates this life cycle of a monitoring %
 record. %
 
 In Chapter~\ref{chap:example}, we've already introduced and used the monitoring %
-record type \class{OperationExecutionRecord}. \Kieker{} allows to use custom %
+record type \class{OperationExecutionRecord}. \Kicker{} allows to use custom %
 monitoring record types. Corresponding classes must implement the %
 interface \class{IMonitoringRecord} shown in Figure~\ref{sec:monitoringrecord:interfacesAndImplementingClasses}. %
 The methods \method{initFromArray}, \method{toArray}, \method{getValueTypes} %
@@ -250,12 +250,12 @@ constructor accepting a values array, and (iii)~a public static \method{TYPES} %
 field. The method \method{setLoggingTimestamp} is used by the monitoring controller to %
 store the date and time when a record is received by the controller. %
 The method \method{getLoggingTimestamp} can be used during analysis to retrieve %
-this value. \KiekerMonitoringPart{} provides the abstract class %
+this value. \KickerMonitoringPart{} provides the abstract class %
 \class{AbstractMonitoringRecord} (Figure~\ref{sec:monitoringrecord:interfacesAndImplementingClasses}) %
 which already implements the methods to maintain the logging timestamp.
 
 \begin{figure}[ht]\centering
-\includegraphics[scale=0.75]{images/kieker_MyRTRecord-modified}
+\includegraphics[scale=0.75]{images/kicker_MyRTRecord-modified}
 \caption{Class diagram with the \class{IMonitoringRecord} and \class{IMonitoringRecord.Factory} interfaces, the abstract %
 class \class{AbstractMonitoringRecord}, and a custom monitoring record type %
 \class{MyResponseTimeRecord}}
@@ -292,7 +292,7 @@ an immutable type, i.e., it includes only final fields. %
 \ % pushing the method initFromArray in the listing to the following page
 
 \setJavaCodeListing
-\lstinputlisting[caption=MyResponseTimeRecord.java, label=listing:MyRecord,firstline=27,firstnumber=27]{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyResponseTimeRecord.java}
+\lstinputlisting[caption=MyResponseTimeRecord.java, label=listing:MyRecord,firstline=27,firstnumber=27]{\customComponentsBookstoreApplicationDir/src/kicker/examples/userguide/ch3and4bookstore/MyResponseTimeRecord.java}
 
 % \pagebreak
 
@@ -308,7 +308,7 @@ shows a similar manual monitoring probe, which uses the monitoring record type %
 % Make sure that this listing will be modified, once the sourcecode changes!!!
 % It must show the whole monitoring of the bookstorecall, from getting the first time to persisting of the record!!
 % \pagebreak
-\lstinputlisting[firstline=32, lastline=40, firstnumber=32, caption=Excerpt from Bookstore.java, label=listing:cuttingBookstore]{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/Bookstore.java}
+\lstinputlisting[firstline=32, lastline=40, firstnumber=32, caption=Excerpt from Bookstore.java, label=listing:cuttingBookstore]{\customComponentsBookstoreApplicationDir/src/kicker/examples/userguide/ch3and4bookstore/Bookstore.java}
 
 \noindent In order to avoid multiple calls to the \method{getInstance} method of the %
 \class{MonitoringController} class, singleton instances should be stored %
@@ -316,7 +316,7 @@ in a final static variable, as shown in Listing~\ref{listing:cuttingBookstore:fi
 
 \enlargethispage{1cm}
 
-\lstinputlisting[firstline=24, lastline=25, firstnumber=24, caption=Singleton instance of the monitoring controller stored in a final static variable (excerpt from Bookstore.java), label=listing:cuttingBookstore:finalStaticController]{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/Bookstore.java}
+\lstinputlisting[firstline=24, lastline=25, firstnumber=24, caption=Singleton instance of the monitoring controller stored in a final static variable (excerpt from Bookstore.java), label=listing:cuttingBookstore:finalStaticController]{\customComponentsBookstoreApplicationDir/src/kicker/examples/userguide/ch3and4bookstore/Bookstore.java}
 
 \noindent When manually instrumenting an application, the monitoring probe is implemented %
 by mixing monitoring logic with business logic, which is often not desired since %
@@ -326,7 +326,7 @@ Spring~\cite{Spring-WebSite}, and %
 Apache~CXF~\cite{CXF-WebSite} provide interception/AOP~\cite{Kiczales1997} interfaces %
 which are well-suited to implement monitoring probes. AspectJ~\cite{AspectJ-WebSite} allows to %
 instrument Java applications without source code modifications. %
-Chapter~\ref{chap:aspectJ} describes the \Kieker{} probes based on these technologies allowing to %
+Chapter~\ref{chap:aspectJ} describes the \Kicker{} probes based on these technologies allowing to %
 monitor trace information in distributed applications.
 
 \section{Monitoring Writers}\label{sec:monitoring-log-writers}
@@ -338,7 +338,7 @@ controller passes the received records to the writer by calling the method %
 record contents, as described in Section~\ref{sec:componentsMonitoring:monitoringRecords}.
 
 Figure~\ref{figure:monitoringLogWritersHierarchy} shows the monitoring writers %
-already implemented in \KiekerMonitoringPart{}. The available properties for the %
+already implemented in \KickerMonitoringPart{}. The available properties for the %
 included writers are well-documented in the %
 example configuration file (see Appendix~\ref{sec:appdx:monitoringproperties}). %
 
@@ -372,7 +372,7 @@ can be found in Appendix~\ref{appendix:usingJMS}. %
 % This is the diagram with the hierarchy of the writers.
 \begin{figure}[H]
 \begin{centering}
-\includegraphics[scale=0.7]{images/kieker_writerimplsuserguide-modified}
+\includegraphics[scale=0.7]{images/kicker_writerimplsuserguide-modified}
 \caption{Interface \class{IMonitoringWriter} and  the implementing classes}
 \label{figure:monitoringLogWritersHierarchy}
 \end{centering}
@@ -389,15 +389,15 @@ the class \class{MyPipe} is listed in Appendix~\ref{appendix:pipeListings}. %
 \pagebreak
 
 \setJavaCodeListing
-\lstinputlisting[caption=MyPipeWriter.java, label=listing:MyWriter,firstline=23,firstnumber=23]{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeWriter.java}
+\lstinputlisting[caption=MyPipeWriter.java, label=listing:MyWriter,firstline=23,firstnumber=23]{\customComponentsBookstoreApplicationDir/src/kicker/examples/userguide/ch3and4bookstore/MyPipeWriter.java}
 
 % \pagebreak
 
 \pagebreak
 
 \noindent The monitoring writer to be used is selected by the %
-\KiekerMonitoringPart{} configuration property (Section~\ref{chap:componentsMonitoring}) %
-\textit{kieker.monitoring.writer}. Writer-specific configuration properties %
+\KickerMonitoringPart{} configuration property (Section~\ref{chap:componentsMonitoring}) %
+\textit{kicker.monitoring.writer}. Writer-specific configuration properties %
 can be provided by properties prefixed by the fully-qualified writer classname.  %
 Listing~\ref{lst:monitoringwriter:MyWriter} demonstrates how to use the custom %
 writer \class{MyPipeWriter} defined above. In this example, the pipe name is %
@@ -405,7 +405,7 @@ passed as the property value \textit{pipeName}.
 
 \setPropertiesListing
 \lstinputlisting[caption={Configuration of the custom writer \class{MyPipeWriter}},label=lst:monitoringwriter:MyWriter,firstline=5,firstnumber=5,lastline=6]%
-{\customComponentsBookstoreApplicationDir/META-INF/kieker.monitoring.properties}
+{\customComponentsBookstoreApplicationDir/META-INF/kicker.monitoring.properties}
 
 \enlargethispage{1cm}
 
@@ -416,4 +416,4 @@ A \class{PipeData} object holds a logging timestamp and an \class{Object} array 
 containing the serialized record data. %
 Appendix~\ref{appendix:pipeListings} includes a source code listing of this class. %
 Alternatively, we could have used \class{IMonitoringRecord} as the data structure %
-used by the pipe. This is the way, \Kieker{}'s \class{PipeWriter} works. %
+used by the pipe. This is the way, \Kicker{}'s \class{PipeWriter} works. %

@@ -5,7 +5,7 @@
 % Get the new commands we defined for this document.
 \input{../userguide/Macros}
 
-\title{Kieker Data Bridge}
+\title{Kicker Data Bridge}
 \author{Reiner Jung}
 \date{\today}
 
@@ -18,21 +18,21 @@
 %%
 \section{Introduction}  
 
-% Why Kieker Data Bridge
-Kieker is a Java-centric monitoring framework. To open Kieker for other language platforms and technologies, specific extensions have been developed for Visual Basic 6, .Net or Cobol. However, each extension reimplemented features which have to be maintained for every Kieker release. This fostered the idea to provide a common platform and design model for additional extension to minimize the effort necessary to integrate new languages and technologies.
+% Why Kicker Data Bridge
+Kicker is a Java-centric monitoring framework. To open Kicker for other language platforms and technologies, specific extensions have been developed for Visual Basic 6, .Net or Cobol. However, each extension reimplemented features which have to be maintained for every Kicker release. This fostered the idea to provide a common platform and design model for additional extension to minimize the effort necessary to integrate new languages and technologies.
 
-The Kieker Data Bridge (KDB) is designed to provide this common platform. The KDB supports different sources of monitoring records and is embeddable in other tools such as Eclipse. In general the KDB receives records online through a connector, converts them to Kieker \texttt{IMonitoringRecord}s and serializes them with a Kieker writer.
+The Kicker Data Bridge (KDB) is designed to provide this common platform. The KDB supports different sources of monitoring records and is embeddable in other tools such as Eclipse. In general the KDB receives records online through a connector, converts them to Kicker \texttt{IMonitoringRecord}s and serializes them with a Kicker writer.
 
 In the following, the overall design and architecture is explained in Section~\ref{s:design}. Section~\ref{s:using-kdb} provides basic information on the command line version of the KDB. Section~\ref{s:extension} illustrates the extension of the KDB. And Section~\ref{s:outlook} explains the future development.
 
 %%
 \section{Design and Architecture}\label{s:design}
 
-The internal architecture of the KDB uses an inversion of control pattern, where a \texttt{ServiceContainer} handles the processing of received records and steers Kieker to serialize the data. The container requires a service connector implementing the \texttt{IServiceConnector} to de-serialize records from information sources. The general architecture is illustrated in \autoref{fig:kdb-arch}
+The internal architecture of the KDB uses an inversion of control pattern, where a \texttt{ServiceContainer} handles the processing of received records and steers Kicker to serialize the data. The container requires a service connector implementing the \texttt{IServiceConnector} to de-serialize records from information sources. The general architecture is illustrated in \autoref{fig:kdb-arch}
 
 \begin{figure}[htb]
-\includegraphics[width=\textwidth]{images/kieker-data-bridge.pdf}
-\caption{General Kieker Data Bridge (KDB) architecture}
+\includegraphics[width=\textwidth]{images/kicker-data-bridge.pdf}
+\caption{General Kicker Data Bridge (KDB) architecture}
 \label{fig:kdb-arch}
 \end{figure}
 
@@ -47,20 +47,20 @@ The \texttt{IServiceConnector} interface has three methods:
 \noindent
 The \texttt{initialize()} method may block until the connection is established or an error occurs. However, it can also be implemented in a non-blocking way. The \texttt{deserializeNextRecord()} method must be blocking until a record is received, an error occurs, or the connection is terminated.
 
-The \texttt{ServiceContainer} comprises of a constructor and six service methods. The constructor requires a Kieker-configuration, a connector and a respawn flag. The latter flag is a debatable construct, but is allows to trigger reconnects for simple connectors. It might be removed in future versions of the bridge.
+The \texttt{ServiceContainer} comprises of a constructor and six service methods. The constructor requires a Kicker-configuration, a connector and a respawn flag. The latter flag is a debatable construct, but is allows to trigger reconnects for simple connectors. It might be removed in future versions of the bridge.
 
 %%
-\section{Using Kieker Data Bridge}\label{s:using-kdb}
+\section{Using Kicker Data Bridge}\label{s:using-kdb}
 
 The KDB comes with a command line server including the bridge with a wide set of parameters:
 
-\begin{lstlisting}[caption=Command line options of the Kieker Data Bridge]
-usage: cli-kieker-service [-c <configuration>] [-d] 
+\begin{lstlisting}[caption=Command line options of the Kicker Data Bridge]
+usage: cli-kicker-service [-c <configuration>] [-d] 
        [-h <hostname>] -L <paths> [-l <jms-url>] -m
        <map-file> [-p <number>] [-s] -t <type>
        [-u <username>] [-v <arg>] [-w <password>]
  --c,--configuration <configuration>
-        kieker configuration file
+        kicker configuration file
 
  --d,--daemon
         detach from console; TCP server allows multiple 
@@ -106,38 +106,38 @@ In addition the connectors can be initialized via a Configuration object determi
 %
 \subsection{Connectors}
 
-The KDB supports presently five different connectors which are described here briefly. The selection of the connector can by done via the \texttt{--type} property on command line or via a Kieker-configuration file entry:
+The KDB supports presently five different connectors which are described here briefly. The selection of the connector can by done via the \texttt{--type} property on command line or via a Kicker-configuration file entry:
 
 \begin{verbatim}
-kieker.tools.bridge.connector=FullQualifiedClassName
+kicker.tools.bridge.connector=FullQualifiedClassName
 \end{verbatim}
 
 %
 \subsubsection{TCPClientConnector}
 
-Connects to a remote site specified by a host name and a port. The connector reads then binary data and reconstructs records. The two configuration properties can either be specified as a command line option or via the Kieker-configuration file by:
+Connects to a remote site specified by a host name and a port. The connector reads then binary data and reconstructs records. The two configuration properties can either be specified as a command line option or via the Kicker-configuration file by:
 
 \begin{verbatim}
-kieker.tools.bridge.connector.tcp.TCPClientConnector.hostname=HOSTNAME
-kieker.tools.bridge.connector.tcp.TCPClientConnector.port=PORT
+kicker.tools.bridge.connector.tcp.TCPClientConnector.hostname=HOSTNAME
+kicker.tools.bridge.connector.tcp.TCPClientConnector.port=PORT
 \end{verbatim}
 
 %
 \subsubsection{TCPSingleServerConnector}
 
-Sets up a server for a single connection in \texttt{initialize()} and waits for a connection. After the connections is established the method terminates, and the \texttt{ServiceContainer} calls repeatedly the \texttt{deserializeNextRecord} method. The connector requires a port number for its port. The configuration property can either be specified by a command line option or via the Kieker-configuration file by:
+Sets up a server for a single connection in \texttt{initialize()} and waits for a connection. After the connections is established the method terminates, and the \texttt{ServiceContainer} calls repeatedly the \texttt{deserializeNextRecord} method. The connector requires a port number for its port. The configuration property can either be specified by a command line option or via the Kicker-configuration file by:
 
 \begin{verbatim}
-kieker.tools.bridge.connector.tcp.TCPSingleServerConnector.port=PORT
+kicker.tools.bridge.connector.tcp.TCPSingleServerConnector.port=PORT
 \end{verbatim}
 
 %
 \subsubsection{TCPMultiServerConnector}
 
-Sets up a server for multiple connection in \texttt{initialize()}. The method starts a port listener thread and exits immediately afterwards. If a connection is established from a client, a connection listener thread is started to handle the incoming data and create records. Completed records are transferred into a queue, which emptied by repeated calles to the \texttt{deserializeNextRecord} method. The connector requires a port number for its port. The configuration property can either be specified by a command line option or via the Kieker-configuration file by:
+Sets up a server for multiple connection in \texttt{initialize()}. The method starts a port listener thread and exits immediately afterwards. If a connection is established from a client, a connection listener thread is started to handle the incoming data and create records. Completed records are transferred into a queue, which emptied by repeated calles to the \texttt{deserializeNextRecord} method. The connector requires a port number for its port. The configuration property can either be specified by a command line option or via the Kicker-configuration file by:
 
 \begin{verbatim}
-kieker.tools.bridge.connector.tcp.TCPMultiServerConnector.port=PORT
+kicker.tools.bridge.connector.tcp.TCPMultiServerConnector.port=PORT
 \end{verbatim}
 
 %
@@ -146,9 +146,9 @@ kieker.tools.bridge.connector.tcp.TCPMultiServerConnector.port=PORT
 The \texttt{JMSClientConnector} supports text and binary messages.
 
 \begin{verbatim}
-kieker.tools.bridge.connector.jms.JMSClientConnector.username=USERNAME
-kieker.tools.bridge.connector.jms.JMSClientConnector.password=PASSWORD
-kieker.tools.bridge.connector.jms.JMSClientConnector.uri=ServiceURI
+kicker.tools.bridge.connector.jms.JMSClientConnector.username=USERNAME
+kicker.tools.bridge.connector.jms.JMSClientConnector.password=PASSWORD
+kicker.tools.bridge.connector.jms.JMSClientConnector.uri=ServiceURI
 \end{verbatim}
 
 %
@@ -177,7 +177,7 @@ The text format encodes all properties in one string. Values are separated by a 
 
 
 %%
-\section{Extending Kieker Data Bridge}\label{s:extension}
+\section{Extending Kicker Data Bridge}\label{s:extension}
 
 The KDB is designed to be extended to support other platforms and technologies. For a new platform and technology a connector must be implemented. The implementation of new connectors must adhere the \texttt{IServiceConnector} interface providing methods to initialize, transmit and close the connector. Furthermore it should inherit the \texttt{AbstractConnector} class for basic setup. Finally each connector must be annotated with the \texttt{ConnectorProperty} annotation to specify properties used in the command line version or the Eclipse plugin.
 
@@ -188,7 +188,7 @@ The KDB is designed to be extended to support other platforms and technologies. 
 public class MyServiceConnector extends AbstractConnector {
 \end{lstlisting}
 
-\noindent As the connector uses the normal Kieker \texttt{Configuration} object for configuration, the different settings require \texttt{Configuration} property names and should use private properties in the class to hold the values.
+\noindent As the connector uses the normal Kicker \texttt{Configuration} object for configuration, the different settings require \texttt{Configuration} property names and should use private properties in the class to hold the values.
 
 \begin{lstlisting}[language=Java,caption=Example constant for connector configuration and its accompanying property declaration]
 /** Property name for the host name of the record source. */
@@ -205,7 +205,7 @@ private String property;
  * Create a MyServiceConnector.
  * 
  * @param configuration
- *            Kieker configuration including setup for connectors
+ *            Kicker configuration including setup for connectors
  * 
  * @param lookupEntityMap
  *            IMonitoringRecord constructor and TYPES-array to id map
@@ -283,6 +283,6 @@ public IMonitoringRecord deserializeNextRecord() throws ConnectorDataTransmissio
 %%
 \section{Future Development}\label{s:outlook}
 
-Kieker is learning new features and therefore the Kieker Data Bridge (KDB) must grow too. For the next release 1.10, the KDB will be extended by adaptive monitoring which has already been discussed in different blogs. Furthermore, there are parallels between Kieker analysis reader and KDB connectors, which suggest to share code between readers and KDB connectors. Past specialized Kieker extensions for other languages are not integrated into Kieker by now. This is also an open task for the near future. And finally, discussions around network load will lead to a more compact communication protocol for TCP and text based JMS messages.
+Kicker is learning new features and therefore the Kicker Data Bridge (KDB) must grow too. For the next release 1.10, the KDB will be extended by adaptive monitoring which has already been discussed in different blogs. Furthermore, there are parallels between Kicker analysis reader and KDB connectors, which suggest to share code between readers and KDB connectors. Past specialized Kicker extensions for other languages are not integrated into Kicker by now. This is also an open task for the near future. And finally, discussions around network load will lead to a more compact communication protocol for TCP and text based JMS messages.
 
 \end{document}

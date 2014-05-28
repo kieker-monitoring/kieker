@@ -1,4 +1,4 @@
-As for Kieker in general, this example is licensed under Apache License 2.0
+As for Kicker in general, this example is licensed under Apache License 2.0
 (license text to be found below). The example includes external software, 
 for which other license conditions apply:
 
@@ -9,7 +9,7 @@ for which other license conditions apply:
    directory. We included a subset of the external libraries contained in the 
    Jetty release to be found in the `lib/` directory as-is without additional 
    license information. For additional libraries added to the directory by us 
-   as part of this Kieker example, we included a `*.jar.LICENSE` file.
+   as part of this Kicker example, we included a `*.jar.LICENSE` file.
 
 2. MyBatis JPetStore (http://code.google.com/p/mybatis/)
    The directory `jetty-hightide-jpetstore/webapps/jpetstore/` contains a 
@@ -17,9 +17,9 @@ for which other license conditions apply:
    The license is included in that directory. We included a subset of the 
    external libraries contained in the JPetStore release to be found in the 
    `WEB-INF/lib/` directory as-is without additional license information. 
-   For additional libraries added to the directory by us as part of this Kieker 
+   For additional libraries added to the directory by us as part of this Kicker 
    example, we included a `*.jar.LICENSE` file. For additional modifications 
-   to the example by us as part of this Kieker example see the README file 
+   to the example by us as part of this Kicker example see the README file 
    contained in the `jpetstore/`  directory. 
 
 ===

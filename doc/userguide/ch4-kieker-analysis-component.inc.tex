@@ -1,11 +1,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Kieker Analysis Component
+% Kicker Analysis Component
 %
 % $Date$
 % $Rev$:
 % $Author$
 
-\chapter{\KiekerAnalysisPart{} Component}\label{chap:componentsAnalysis}
+\chapter{\KickerAnalysisPart{} Component}\label{chap:componentsAnalysis}
 
 \NOTIFYBOX{The Java sources of this chapter, as well as a pre-compiled binary, %
 can be found in the %
@@ -14,7 +14,7 @@ binary release.}
 
 \section{Pipe-and-Filter Framework and Included Plugins}\label{sec:analysis:controller}
 
-\KiekerAnalysisPart{} provides a framework to define and execute pipe-and-filter %
+\KickerAnalysisPart{} provides a framework to define and execute pipe-and-filter %
 architectures of analysis plugins, i.e., monitoring readers and analysis filters, %
 as well as repositories. %
 This section describes how to use and develop readers, filters, and %
@@ -43,19 +43,19 @@ print the received records to the standard output stream.
 % other analysis plugins can be registered. %
 
 \begin{figure}\centering
-\includegraphics[width=\textwidth]{images/kieker_AnalysisControlleruserguide-modified}
-\caption{Class diagram showing important \KiekerAnalysisPart{} types and their relationship}
+\includegraphics[width=\textwidth]{images/kicker_AnalysisControlleruserguide-modified}
+\caption{Class diagram showing important \KickerAnalysisPart{} types and their relationship}
 \label{fig:analysisController:classdiagram}
 \end{figure}
 
 % \pagebreak
 
 \noindent Figure~\ref{fig:analysisController:classdiagram} shows the class diagram %
-with the important \KiekerAnalysisPart{} classes and their relationships. %
+with the important \KickerAnalysisPart{} classes and their relationships. %
 Note that only the most important methods are included. 
-An analysis with \KiekerAnalysisPart{} is set up and executed employing %
+An analysis with \KickerAnalysisPart{} is set up and executed employing %
 the class \class{AnalysisController}. %
-Setting up and running an analysis with \KiekerAnalysisPart{} requires the %
+Setting up and running an analysis with \KickerAnalysisPart{} requires the %
 following steps to be performed, as sketched in Section~\ref{sec:example:analysis} already:
 
 \enlargethispage{1.2cm}
@@ -80,7 +80,7 @@ input ports. Plugins can be connected to repositories, which may provide %
 shared services, such as managed access to a common architectural model %
 of the analyzed system. As soon as all readers have returned from the execution of their \method{read}
 methods, the method \method{terminate} of each registered plugin is called by the %
-\class{AnalysisController}. \KiekerAnalysisPart{} configurations can be saved %
+\class{AnalysisController}. \KickerAnalysisPart{} configurations can be saved %
 to a \class{.kax} file by calling the \class{AnalysisController}'s \method{saveToFile} method. %
 The \class{AnalysisController} provides a constructor which accepts the %
 file system location of a \class{.kax} file to load the configuration from. %
@@ -109,7 +109,7 @@ file \file{Starter.java}.
 
 \setJavaCodeListing
 \lstinputlisting[caption=Initializing and connecting the example reader and filter (Starter.java),label=listing:StarterInitConnect,firstline=47, lastline=62, firstnumber=47]%
-{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/Starter.java}
+{\customComponentsBookstoreApplicationDir/src/kicker/examples/userguide/ch3and4bookstore/Starter.java}
 
 \enlargethispage{0.5cm}
 
@@ -122,8 +122,8 @@ of monitoring logs/streams, readers deserialize monitoring data and provide it a
 \class{IMonitoringRecord} instances.
 
 \begin{figure}\centering
-\includegraphics[scale=0.7]{images/kieker_readerimplsuserguide-modified}
-\caption{Monitoring reader plugins included with \Kieker{}}
+\includegraphics[scale=0.7]{images/kicker_readerimplsuserguide-modified}
+\caption{Monitoring reader plugins included with \Kicker{}}
 \label{Figure:ReaderHierarchy}
 \end{figure}
 
@@ -137,7 +137,7 @@ of monitoring logs/streams, readers deserialize monitoring data and provide it a
 
 % \enlargethispage{1cm}
 
-\noindent There are already some readers implemented in \Kieker,  as shown in the %
+\noindent There are already some readers implemented in \Kicker,  as shown in the %
 class diagram in Figure \ref{Figure:ReaderHierarchy}. %
 The \class{FSReader} has already been used in Section~\ref{sec:example:analysis}. %
 A brief description of how to use the \class{JMSReader} can be found in Appendix~%
@@ -151,7 +151,7 @@ Like each plugin, readers are configured via properties, as used in Section~%
 
 Filter plugins receive events (Java objects) via input ports from other %
 plugins and implement analyses or visualizations based on these events. %
-\Kieker{} already includes some basic filter plugins. For example, the %
+\Kicker{} already includes some basic filter plugins. For example, the %
 \class{CountingFilter} and  \class{TeeFilter} forward incoming events %
 to their output ports. The \class{CountingFilter} additionally provides the %
 current number of received records via a second output port. The \class{TeeFilter} %
@@ -162,7 +162,7 @@ timestamp and by type, respectively. A \class{TraceIdFilter} filters incoming %
 trace events (e.g., \class{OperationExecutionRecord}s, see Section~%
 \ref{chap:example}) by trace ID. Additional filters for trace analysis, %
 architecture reconstruction and visualization are included as part of %
-the \KiekerTraceAnalysis{} tool, presented in Chapter~\ref{chap:aspectJ}. %
+the \KickerTraceAnalysis{} tool, presented in Chapter~\ref{chap:aspectJ}. %
 Like each plugin, filters are configured %
 via properties, as used in Section~\ref{sec:analysis:programmaticCreation} and %
 detailed in Section~%
@@ -170,27 +170,27 @@ detailed in Section~%
 
 % \pagebreak
 % \setJavaCodeListing
-%\lstinputlisting[caption=MyReponseTimeConsumer.java,label=lst:MyReponseTimeConsumer,firstline=21,firstnumber=21]{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyResponseTimeConsumer.java}
+%\lstinputlisting[caption=MyReponseTimeConsumer.java,label=lst:MyReponseTimeConsumer,firstline=21,firstnumber=21]{\customComponentsBookstoreApplicationDir/src/kicker/examples/userguide/ch3and4bookstore/MyResponseTimeConsumer.java}
 
 % The following Listing~\ref{listing:AnalysisController} shows how to create and run an analysis %
 % with these custom components:
 %
 % \setJavaCodeListing
-% \lstinputlisting[caption=Code snippet setting up and running a \KiekerAnalysisPart{} instance (Starter.java),label=listing:AnalysisController,firstline=48, lastline=82, firstnumber=48]%
-% {\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/Starter.java}
+% \lstinputlisting[caption=Code snippet setting up and running a \KickerAnalysisPart{} instance (Starter.java),label=listing:AnalysisController,firstline=48, lastline=82, firstnumber=48]%
+% {\customComponentsBookstoreApplicationDir/src/kicker/examples/userguide/ch3and4bookstore/Starter.java}
 
 % \enlargethispage{1.2cm}
 
 \subsection{Repositories}
 
-Currently, \Kieker{} includes a single repository, \class{SystemModelRepository}, %
-which is used by the \KiekerTraceAnalysis{} filters to update and query %
+Currently, \Kicker{} includes a single repository, \class{SystemModelRepository}, %
+which is used by the \KickerTraceAnalysis{} filters to update and query %
 a component-based system model representing architectural entities %
 and structures discovered while processing the incoming monitoring data. %
 The development and use of repositories is detailed in Section~%
 \ref{sec:analysis:repositories}. %
 
-When using components of the \KiekerTraceAnalysis{}, make sure that write access to the %
+When using components of the \KickerTraceAnalysis{}, make sure that write access to the %
 \class{SystemModelRepository} is only triggered by readers. Some filters are terminated %
 after the readers and expect the repository to be in a completed state.
 
@@ -214,15 +214,15 @@ are given in Sections~\ref{sec:analysis:filters}--\ref{sec:analysis:repositories
 % the monitoring records provided by the monitoring reader. %
 % Starting with these monitoring record plugins, analysis plugins can be connected %
 % in a pipe-and-filter style to implement more complex analyses. %
-% \Kieker{} provides input and output port interfaces and implementing classes %
+% \Kicker{} provides input and output port interfaces and implementing classes %
 % to implement such analyses. See the documentation of the classes \class{AbstractInputPort} %
-% and \class{OutputPort} for details. \KiekerTraceAnalysis{} is implemented %
+% and \class{OutputPort} for details. \KickerTraceAnalysis{} is implemented %
 % based on this pattern.
 
 \subsection{Configuration}\label{sec:analysis:configuration}
 
 \noindent According to the %
-configuration of the \KiekerMonitoringPart{} components (see Section~\ref{sec:monitoring:configuration}),
+configuration of the \KickerMonitoringPart{} components (see Section~\ref{sec:monitoring:configuration}),
 plugins and repositories are configured via \class{Configuration} objects. Classes must %
 provide a public constructor, accepting a \class{Configuration} and an \class{IProjectContext} (normally the \class{IAnalysisController} instance) object as %
 its only arguments. It is important to invoke the constructor of the super class. %
@@ -236,7 +236,7 @@ configuration.
 
 \setJavaCodeListing
 \lstinputlisting[firstline=44, firstnumber=44, lastline=52, caption={Plugin constructor accepting a \class{Configuration} and an \class{IProjectContext} object}, label=listing:MyResponseTimeFilterConstructor]%
-{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyResponseTimeFilter.java}
+{\customComponentsBookstoreApplicationDir/src/kicker/examples/userguide/ch3and4bookstore/MyResponseTimeFilter.java}
 
 \noindent Additionally, the %
 current configuration must be provided via the method %
@@ -250,7 +250,7 @@ shows how the methods are implemented for the example filter \class{MyResponseTi
 
 \setJavaCodeListing
 \lstinputlisting[firstline=69, firstnumber=69, lastline=74, caption={Plugin returning its current configuration}, label=listing:MyResponseTimeFilterEventsToOutput]%
-{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyResponseTimeFilter.java}
+{\customComponentsBookstoreApplicationDir/src/kicker/examples/userguide/ch3and4bookstore/MyResponseTimeFilter.java}
 
 \noindent The declaration of the available properties and their default values within a plugin is shown in section~\ref{sec:analysis:pluginAnnotation}, as this is done with annotations.
 
@@ -287,7 +287,7 @@ This is detailed in Section~\ref{sec:analysis:repositories}. %
 
 \setJavaCodeListing
 \lstinputlisting[firstline=27, firstnumber=27, lastline=40, caption={@Plugin annotation for the example plugin \class{MyResponseTimeFilter}}, label=listing:MyResponseTimeFilterPluginAnnotationOutputs]%
-{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyResponseTimeFilter.java}
+{\customComponentsBookstoreApplicationDir/src/kicker/examples/userguide/ch3and4bookstore/MyResponseTimeFilter.java}
 
 \noindent Plugins can send events to their output ports by calling the %
 \method{deliver} method provided by the super class. The method expects the %
@@ -300,7 +300,7 @@ to its two output ports declared in the \class{@Plugin} annotation.
 
 \setJavaCodeListing
 \lstinputlisting[firstline=61, firstnumber=61, lastline=65, caption={Plugin sending events to output ports}, label=listing:MyResponseTimeFilterDelivers]%
-{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyResponseTimeFilter.java}
+{\customComponentsBookstoreApplicationDir/src/kicker/examples/userguide/ch3and4bookstore/MyResponseTimeFilter.java}
 
 Listing~\ref{listing:MyResponseTimeFilterPluginAnnotationOutputs} shows also how %
 the properties are declared. Using the \class{@Property} annotation, it is possible to declare %
@@ -333,13 +333,13 @@ return after reading is finished or has been aborted via an invocation of the %
 
 % If there is nothing on the pipe to be read, the reader waits 4 seconds at maximum before it terminates.
 % \setJavaCodeListing
-% \lstinputlisting[firstline=29, firstnumber=29, caption=MyPipeReader.java (excerpt), label=listing:MyReader,float]{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeReader.java}
+% \lstinputlisting[firstline=29, firstnumber=29, caption=MyPipeReader.java (excerpt), label=listing:MyReader,float]{\customComponentsBookstoreApplicationDir/src/kicker/examples/userguide/ch3and4bookstore/MyPipeReader.java}
 
 \enlargethispage{1cm}
 
 \setJavaCodeListing
 \lstinputlisting[firstline=28, firstnumber=28, lastline=40, caption={@Plugin annotation for the example reader}, label=listing:MyPipeReaderPluginAnnotation]%
-{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeReader.java}
+{\customComponentsBookstoreApplicationDir/src/kicker/examples/userguide/ch3and4bookstore/MyPipeReader.java}
 
 Listing~\ref{listing:MyPipeReaderPluginAnnotation} shows the \class{@Plugin} %
 annotation  of the example reader \class{MyPipeReader}. Reading monitoring %
@@ -356,7 +356,7 @@ configuration and connects to the named pipe. Optionally, the reader can overrid
 
 \setJavaCodeListing
 \lstinputlisting[firstline=51, firstnumber=51, lastline=57, caption={Example reader's initialization in the constructor (excerpt)}, label=listing:MyPipeReaderInit]%
-{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeReader.java}
+{\customComponentsBookstoreApplicationDir/src/kicker/examples/userguide/ch3and4bookstore/MyPipeReader.java}
 
 % \pagebreak
 
@@ -366,7 +366,7 @@ and forwards these to its output port.
 
 \setJavaCodeListing
 \lstinputlisting[firstline=60, firstnumber=60, lastline=79, caption={Example reader's \method{read} method}, label=listing:MyPipeReaderRead]%
-{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeReader.java}
+{\customComponentsBookstoreApplicationDir/src/kicker/examples/userguide/ch3and4bookstore/MyPipeReader.java}
 
 \vspace{-0.2cm}
 
@@ -403,7 +403,7 @@ The body of this method was shown in Listing~%
 
 \setJavaCodeListing
 \lstinputlisting[firstline=56, firstnumber=56, lastline=60, caption={@InputPort annotation for the example plugin's input method}, label=listing:MyResponseTimeFilterInputPort]%
-{\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyResponseTimeFilter.java}
+{\customComponentsBookstoreApplicationDir/src/kicker/examples/userguide/ch3and4bookstore/MyResponseTimeFilter.java}
 
 \subsection{Developing and Accessing Required Repositories}\label{sec:analysis:repositories}
 
@@ -411,20 +411,20 @@ Custom repositories must extend the class \class{AbstractRepository}. %
 The \class{@Repository} annotation is used to provide a \method{name} %
 and a \method{description} for a repository type. %
 Listing~\ref{listing:RepositoryAnnotation} shows the \class{@Repository} annotation %
-of the \class{SystemModelRepository}, which is included in \Kieker{} as part of the %
-\KiekerTraceAnalysis{} tool. %
+of the \class{SystemModelRepository}, which is included in \Kicker{} as part of the %
+\KickerTraceAnalysis{} tool. %
 
 \enlargethispage{1cm}
 
 \setJavaCodeListing
-\lstinputlisting[firstline=43, firstnumber=43, lastline=46, caption={\class{@Respository} annotation of Kieker's \class{SystemModelRepository}}, label=listing:RepositoryAnnotation]%
-{../../src/tools/kieker/tools/traceAnalysis/systemModel/repository/SystemModelRepository.java}
+\lstinputlisting[firstline=43, firstnumber=43, lastline=46, caption={\class{@Respository} annotation of Kicker's \class{SystemModelRepository}}, label=listing:RepositoryAnnotation]%
+{../../src/tools/kicker/tools/traceAnalysis/systemModel/repository/SystemModelRepository.java}
 
 \noindent Plugins specify the list of required repositories in their %
 \class{@Plugin} annotation. Repositories are connected to filter-provided %
 repository ports. A plugin's repository ports are specified using the %
 nested \class{@RepositoryPort} annotation, as depicted for a %
-\KiekerTraceAnalysis{} filter in Listing~\ref{listing:RepositoryRequirementDeclaration}. %
+\KickerTraceAnalysis{} filter in Listing~\ref{listing:RepositoryRequirementDeclaration}. %
 Like for input and output port names, this name must be unique for the plugin %
 and should be provided as a \class{public static} constant %
 with prefix \method{REPOSITORY\_PORT\_NAME\_}, in order to ease the programmatic %
@@ -432,12 +432,12 @@ connection of repositories to readers and filters. %
 
 \setJavaCodeListing
 \lstinputlisting[firstline=42, firstnumber=42, lastline=43, caption={Declaration of required repositories in the @Respository annotation}, label=listing:RepositoryRequirementDeclaration]%
-{../../src/tools/kieker/tools/traceAnalysis/filter/AbstractTraceAnalysisFilter.java}
+{../../src/tools/kicker/tools/traceAnalysis/filter/AbstractTraceAnalysisFilter.java}
 
 \noindent Plugins can access their connected repositories via the \method{getRepository} %
 method provided by the super class, as shown in Listing~\ref{listing:RepositoryAccess}. %
 
 \setJavaCodeListing
 \lstinputlisting[firstline=151, firstnumber=151, lastline=152, caption={Accessing a repository within a plugin}, label=listing:RepositoryAccess]%
-{../../src/tools/kieker/tools/traceAnalysis/filter/AbstractTraceAnalysisFilter.java}
+{../../src/tools/kicker/tools/traceAnalysis/filter/AbstractTraceAnalysisFilter.java}
 

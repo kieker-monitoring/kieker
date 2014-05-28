@@ -27,7 +27,7 @@
    font-weight="normal"
    id="svg2"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="kieker_readerimplsuserguide-modified.svg"
+   sodipodi:docname="kicker_readerimplsuserguide-modified.svg"
    style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog">
   <g
      id="g3979"
@@ -845,7 +845,7 @@
      clip-path="none"
      id="text268"
      style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
-     sodipodi:linespacing="125%">(from kieker::analysis::plugin::reader)</text>
+     sodipodi:linespacing="125%">(from kicker::analysis::plugin::reader)</text>
   <text
      xml:space="preserve"
      x="264"
@@ -900,7 +900,7 @@
      xml:space="preserve"
      id="text230"
      style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
-     sodipodi:linespacing="125%">(from kieker::analysis::plugin::reader)</text>
+     sodipodi:linespacing="125%">(from kicker::analysis::plugin::reader)</text>
   <line
      clip-path="url(#clipPath6)"
      x1="269"

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Kieker (dist and deploy)" basedir=".." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+<project name="Kicker (dist and deploy)" basedir=".." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 
 	<property file="build-config/build.properties" />
 	
@@ -13,21 +13,21 @@
 					 uri="antlib:org.apache.maven.artifact.ant"
 					 classpathref="maven-ant-tasks.classpath" />
 
-	<target name="dist-kieker-javadoc" depends="-init,-generate-javadoc" description="Packages the Javadoc API documentation archives">
-		<tar destfile="${release.dir}/${dist.kieker.apiBaseName}.tar" longfile="gnu">
+	<target name="dist-kicker-javadoc" depends="-init,-generate-javadoc" description="Packages the Javadoc API documentation archives">
+		<tar destfile="${release.dir}/${dist.kicker.apiBaseName}.tar" longfile="gnu">
 			<tarfileset dir="${build.api.dir}" prefix="" defaultexcludes="yes" />
 		</tar>
-		<gzip zipfile="${release.dir}/${dist.kieker.apiBaseName}.tar.gz" src="${release.dir}/${dist.kieker.apiBaseName}.tar" />
+		<gzip zipfile="${release.dir}/${dist.kicker.apiBaseName}.tar.gz" src="${release.dir}/${dist.kicker.apiBaseName}.tar" />
 		<!-- tar file no longer needed -->
-		<delete file="${release.dir}/${dist.kieker.apiBaseName}.tar" />
+		<delete file="${release.dir}/${dist.kicker.apiBaseName}.tar" />
 
-		<zip zipfile="${release.dir}/${dist.kieker.apiBaseName}.zip">
+		<zip zipfile="${release.dir}/${dist.kicker.apiBaseName}.zip">
 			<zipfileset dir="${build.api.dir}" prefix="" defaultexcludes="yes" />
 		</zip>
 	</target>
 
-	<target name="dist-kieker-userguide" depends="-init,-build-userguide" description="Packages the Kieker user guide">
-		<copy file="${src.userguide.pdf}" tofile="${release.dir}/${dist.kieker.userguide.pdf}" />
+	<target name="dist-kicker-userguide" depends="-init,-build-userguide" description="Packages the Kicker user guide">
+		<copy file="${src.userguide.pdf}" tofile="${release.dir}/${dist.kicker.userguide.pdf}" />
 	</target>
 
 	<target name="-generate-javadoc" depends="-init" description="Generate the Javadoc API documentation">
@@ -35,19 +35,19 @@
 		<mkdir dir="${build.api.dir}" />
 		<path id="javadoc-sourcepath">
 			<dirset dir=".">
-				<include name="${src.kieker.common.dir}" />
-				<include name="${src.kieker.analysis.dir}" />
-				<include name="${src.gen.kieker.analysis.dir}" />
-				<include name="${src.kieker.monitoring.dir}" />
-				<include name="${src.kieker.tools.dir}" />
+				<include name="${src.kicker.common.dir}" />
+				<include name="${src.kicker.analysis.dir}" />
+				<include name="${src.gen.kicker.analysis.dir}" />
+				<include name="${src.kicker.monitoring.dir}" />
+				<include name="${src.kicker.tools.dir}" />
 			</dirset>
 		</path>
-		<javadoc sourcepathref="javadoc-sourcepath" destdir="${build.api.dir}" packagenames="kieker.*" access="public" author="true" version="false" failonerror="true" use="true" doctitle="Kieker Monitoring and Analysis Framework, Vers. ${kieker.version}&lt;br/&gt;API Documentation" header="Kieker ${kieker.version}" footer="Kieker ${kieker.version}" bottom="Copyright ${year} ${copyright}, &lt;a href=&quot;http://kieker-monitoring.net&quot;&gt;http://kieker-monitoring.net&lt;/&gt;">
-			<classpath refid="kieker.common-compile-classpath" />
-			<classpath refid="kieker.analysis-compile-classpath" />
-			<classpath refid="kieker.monitoring-compile-classpath" />
-			<classpath refid="kieker.monitoring-ajc-compile-classpath" />
-			<classpath refid="kieker.tools-compile-classpath" />
+		<javadoc sourcepathref="javadoc-sourcepath" destdir="${build.api.dir}" packagenames="kicker.*" access="public" author="true" version="false" failonerror="true" use="true" doctitle="Kicker Monitoring and Analysis Framework, Vers. ${kicker.version}&lt;br/&gt;API Documentation" header="Kicker ${kicker.version}" footer="Kicker ${kicker.version}" bottom="Copyright ${year} ${copyright}, &lt;a href=&quot;http://kicker-monitoring.net&quot;&gt;http://kicker-monitoring.net&lt;/&gt;">
+			<classpath refid="kicker.common-compile-classpath" />
+			<classpath refid="kicker.analysis-compile-classpath" />
+			<classpath refid="kicker.monitoring-compile-classpath" />
+			<classpath refid="kicker.monitoring-ajc-compile-classpath" />
+			<classpath refid="kicker.tools-compile-classpath" />
 			<link href="http://docs.oracle.com/javase/6/docs/api/" />
 			<tag name="generated" />
 			<tag name="ordered" />
@@ -55,8 +55,8 @@
 		</javadoc>
 	</target>
 
-	<target name="dist-kieker-sources" depends="-init" description="Packages the source archives (.zip|.tar.gz) for a release">
-		<!-- <echo message="${test.dir}/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/jetty.xml" /> -->
+	<target name="dist-kicker-sources" depends="-init" description="Packages the source archives (.zip|.tar.gz) for a release">
+		<!-- <echo message="${test.dir}/monitoring/kicker/test/monitoring/junit/probe/spring/executions/jetty/jetty.xml" /> -->
 		<patternset id="dist_src_files-nonbinmode"> <!-- NOTE that the order of includes/excludes seems to have no effect. So be careful with excludes -->
 			<include name="${build.config.dir}/*" />
 			<include name="${bin.dir}/logging.properties" />
@@ -72,8 +72,8 @@
 			<include name="${src.model.dir}/*.genmodel" />
 			<include name="${test.dir}/**/*.java" />
 			<include name="${test.dir}/**/META-INF/*" />
-			<include name="${test.dir}/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/jetty.xml" />
-			<include name="${test.dir}/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/webapp/**" />
+			<include name="${test.dir}/monitoring/kicker/test/monitoring/junit/probe/spring/executions/jetty/jetty.xml" />
+			<include name="${test.dir}/monitoring/kicker/test/monitoring/junit/probe/spring/executions/jetty/webapp/**" />
 			<include name="${lib.dir}/**/*" />
 			<include name="${examples.dir}/**/*" />
 			<exclude name="${examples.dir}/**/.classpath-binrelease.generated" />
@@ -81,10 +81,10 @@
 			<exclude name="${src.userguide.examples.dir}/**/**/*.jar" />
 			<include name="${example.javaee.dir}/README" />
 			<include name="${example.javaee.dir}/${license.file}" />
-			<!-- (re-)enable as soon as existent <include name="${example.javaee.dir}/kieker-testdata/**" /> -->
+			<!-- (re-)enable as soon as existent <include name="${example.javaee.dir}/kicker-testdata/**" /> -->
 			<include name="${example.javaee.jetty.dir}/**/*" />
 			<exclude name="${example.javaee.jetty.dir}/logs/**/*" />
-			<exclude name="${example.javaee.jetty.dir}/**/kieker*.jar" />
+			<exclude name="${example.javaee.jetty.dir}/**/kicker*.jar" />
 			<exclude name="${example.javaee.jpetstore.lib.dir}/*sigar*" />
 			<exclude name="${example.javaee.demo.classes.dir}/**" />
 			<include name=".settings/**/*" />
@@ -92,9 +92,9 @@
 			<include name=".classpath" />
 			<include name=".pmd" />
 			<include name=".project" />
-			<include name="kieker-eclipse.importorder" />
-			<include name="kieker-eclipse-cleanup.xml" />
-			<include name="kieker-eclipse-formatter.xml" />
+			<include name="kicker-eclipse.importorder" />
+			<include name="kicker-eclipse-cleanup.xml" />
+			<include name="kicker-eclipse-formatter.xml" />
 			<include name="build.xml" />
 			<include name="build.properties" />
 			<include name="${history.file}" />
@@ -108,55 +108,55 @@
 			<include name="${src.userguide.dir}/**/*.sh" />
 		</patternset>
 
-		<tar destfile="${release.dir}/${dist.kieker.srcBaseName}.tar" longfile="gnu">
-			<!-- ${kieker.dist.name}/META-INF/kieker.monitoring.properties not required in source release release! -->
-			<tarfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
+		<tar destfile="${release.dir}/${dist.kicker.srcBaseName}.tar" longfile="gnu">
+			<!-- ${kicker.dist.name}/META-INF/kicker.monitoring.properties not required in source release release! -->
+			<tarfileset dir="." prefix="${kicker.dist.name}" defaultexcludes="yes">
 				<patternset refid="dist_src_files-nonbinmode" />
 			</tarfileset>
-			<tarfileset dir="." prefix="${kieker.dist.name}" filemode="755" defaultexcludes="yes">
+			<tarfileset dir="." prefix="${kicker.dist.name}" filemode="755" defaultexcludes="yes">
 				<patternset refid="dist_src_files-binmode" />
 			</tarfileset>
-			<tarfileset file="${readme.src.file}" fullpath="${kieker.dist.name}/${readme.file}" />
+			<tarfileset file="${readme.src.file}" fullpath="${kicker.dist.name}/${readme.file}" />
 		</tar>
-		<gzip zipfile="${release.dir}/${dist.kieker.srcBaseName}.tar.gz" src="${release.dir}/${dist.kieker.srcBaseName}.tar" />
+		<gzip zipfile="${release.dir}/${dist.kicker.srcBaseName}.tar.gz" src="${release.dir}/${dist.kicker.srcBaseName}.tar" />
 		<!-- tar file no longer needed -->
-		<delete file="${release.dir}/${dist.kieker.srcBaseName}.tar" />
+		<delete file="${release.dir}/${dist.kicker.srcBaseName}.tar" />
 
-		<zip zipfile="${release.dir}/${dist.kieker.srcBaseName}.zip">
-			<!-- ${kieker.dist.name}/META-INF/kieker.monitoring.properties not required in source release release! -->
-			<zipfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
+		<zip zipfile="${release.dir}/${dist.kicker.srcBaseName}.zip">
+			<!-- ${kicker.dist.name}/META-INF/kicker.monitoring.properties not required in source release release! -->
+			<zipfileset dir="." prefix="${kicker.dist.name}" defaultexcludes="yes">
 				<patternset refid="dist_src_files-nonbinmode" />
 			</zipfileset>
-			<zipfileset dir="." prefix="${kieker.dist.name}" filemode="755" defaultexcludes="yes">
+			<zipfileset dir="." prefix="${kicker.dist.name}" filemode="755" defaultexcludes="yes">
 				<patternset refid="dist_src_files-binmode" />
 			</zipfileset>
-			<zipfileset file="${readme.src.file}" fullpath="${kieker.dist.name}/${readme.file}" />
+			<zipfileset file="${readme.src.file}" fullpath="${kicker.dist.name}/${readme.file}" />
 		</zip>
 	</target>
 
-	<target name="dist-maven" depends="build-all,-generate-javadoc,-build-userguide" description="Creates the Kieker release artifacts to be uploaded to a Maven repository">
+	<target name="dist-maven" depends="build-all,-generate-javadoc,-build-userguide" description="Creates the Kicker release artifacts to be uploaded to a Maven repository">
 		<!-- The "real" jar files -->
-		<copy file="${dist.dir}/${dist.kieker.main.jar}" tofile="${maven.dir}/${dist.kieker.main.jar}" />
-		<copy file="${dist.dir}/${dist.kieker.main.emf.jar}" tofile="${maven.dir}/${dist.kieker.main.emf.jar}" />
-		<copy file="${dist.dir}/${dist.kieker.main.aspectj.jar}" tofile="${maven.dir}/${dist.kieker.main.aspectj.jar}" />
+		<copy file="${dist.dir}/${dist.kicker.main.jar}" tofile="${maven.dir}/${dist.kicker.main.jar}" />
+		<copy file="${dist.dir}/${dist.kicker.main.emf.jar}" tofile="${maven.dir}/${dist.kicker.main.emf.jar}" />
+		<copy file="${dist.dir}/${dist.kicker.main.aspectj.jar}" tofile="${maven.dir}/${dist.kicker.main.aspectj.jar}" />
 		<!-- The userguide -->
-		<copy file="${src.userguide.pdf}" tofile="${maven.dir}/${dist.kieker.userguide.pdf}" />
+		<copy file="${src.userguide.pdf}" tofile="${maven.dir}/${dist.kicker.userguide.pdf}" />
 		<!-- The source files -->
-		<jar zipfile="${maven.dir}/${dist.kieker.main.sources.jar}">
-			<zipfileset dir="${src.kieker.common.dir}" defaultexcludes="yes" />
-			<zipfileset dir="${src.kieker.monitoring.dir}" defaultexcludes="yes" />
-			<zipfileset dir="${src.kieker.analysis.dir}" defaultexcludes="yes" />
-			<zipfileset dir="${src.kieker.tools.dir}" defaultexcludes="yes" />
-			<zipfileset dir="${src.gen.kieker.analysis.dir}" defaultexcludes="yes" />
+		<jar zipfile="${maven.dir}/${dist.kicker.main.sources.jar}">
+			<zipfileset dir="${src.kicker.common.dir}" defaultexcludes="yes" />
+			<zipfileset dir="${src.kicker.monitoring.dir}" defaultexcludes="yes" />
+			<zipfileset dir="${src.kicker.analysis.dir}" defaultexcludes="yes" />
+			<zipfileset dir="${src.kicker.tools.dir}" defaultexcludes="yes" />
+			<zipfileset dir="${src.gen.kicker.analysis.dir}" defaultexcludes="yes" />
 		</jar>
 		<!-- The javadoc files -->
-		<jar zipfile="${maven.dir}/${dist.kieker.main.javadoc.jar}">
+		<jar zipfile="${maven.dir}/${dist.kicker.main.javadoc.jar}">
 			<zipfileset dir="${build.api.dir}" prefix="" defaultexcludes="yes" />
 		</jar>
 		<!-- The pom files -->
-		<copy file="${pom.xml.kieker.main}" tofile="${maven.dir}/${dist.kieker.main.pom}" />
+		<copy file="${pom.xml.kicker.main}" tofile="${maven.dir}/${dist.kicker.main.pom}" />
 		<!-- update version -->
-		<replaceregexp file="${maven.dir}/${dist.kieker.main.pom}" match="&lt;version&gt;.*&lt;/version&gt;&lt;!--Kieker.*" replace="&lt;version&gt;${kieker.version}&lt;/version&gt;" />
+		<replaceregexp file="${maven.dir}/${dist.kicker.main.pom}" match="&lt;version&gt;.*&lt;/version&gt;&lt;!--Kicker.*" replace="&lt;version&gt;${kicker.version}&lt;/version&gt;" />
 	</target>
 
 	<!-- Note that this target just uploads but does NOT build! -->
@@ -166,13 +166,13 @@
 			<arg value="org.apache.maven.plugins:maven-deploy-plugin:2.7:deploy-file" />
 			<arg value="-Durl=${maven-snapshots-repository-url}" />
 			<arg value="-DrepositoryId=${maven-snapshots-repository-id}" />
-			<arg value="-DpomFile=${maven.dir}/${dist.kieker.main.pom}" />
-			<arg value="-Dfile=${maven.dir}/${dist.kieker.main.jar}" />
-			<arg value="-Dsources=${maven.dir}/${dist.kieker.main.sources.jar}" />
-			<arg value="-Djavadoc=${maven.dir}/${dist.kieker.main.javadoc.jar}" />
+			<arg value="-DpomFile=${maven.dir}/${dist.kicker.main.pom}" />
+			<arg value="-Dfile=${maven.dir}/${dist.kicker.main.jar}" />
+			<arg value="-Dsources=${maven.dir}/${dist.kicker.main.sources.jar}" />
+			<arg value="-Djavadoc=${maven.dir}/${dist.kicker.main.javadoc.jar}" />
 			<arg value="-Dclassifiers=emf,aspectj,userguide" />
 			<arg value="-Dtypes=jar,jar,pdf" />
-			<arg value="-Dfiles=${maven.dir}/${dist.kieker.main.emf.jar},${maven.dir}/${dist.kieker.main.aspectj.jar},${maven.dir}/${dist.kieker.userguide.pdf}" />
+			<arg value="-Dfiles=${maven.dir}/${dist.kicker.main.emf.jar},${maven.dir}/${dist.kicker.main.aspectj.jar},${maven.dir}/${dist.kicker.userguide.pdf}" />
 		</artifact:mvn>
 	</target>
 
@@ -183,18 +183,18 @@
 			<arg value="org.apache.maven.plugins:maven-gpg-plugin:1.4:sign-and-deploy-file" />
 			<arg value="-Durl=${maven-staging-repository-url}" />
 			<arg value="-DrepositoryId=${maven-staging-repository-id}" />
-			<arg value="-DpomFile=${maven.dir}/${dist.kieker.main.pom}" />
-			<arg value="-Dfile=${maven.dir}/${dist.kieker.main.jar}" />
-			<arg value="-Dsources=${maven.dir}/${dist.kieker.main.sources.jar}" />
-			<arg value="-Djavadoc=${maven.dir}/${dist.kieker.main.javadoc.jar}" />
+			<arg value="-DpomFile=${maven.dir}/${dist.kicker.main.pom}" />
+			<arg value="-Dfile=${maven.dir}/${dist.kicker.main.jar}" />
+			<arg value="-Dsources=${maven.dir}/${dist.kicker.main.sources.jar}" />
+			<arg value="-Djavadoc=${maven.dir}/${dist.kicker.main.javadoc.jar}" />
 			<arg value="-Dclassifiers=emf,aspectj,userguide" />
 			<arg value="-Dtypes=jar,jar,pdf" />
-			<arg value="-Dfiles=${maven.dir}/${dist.kieker.main.emf.jar},${maven.dir}/${dist.kieker.main.aspectj.jar},${maven.dir}/${dist.kieker.userguide.pdf}" />
+			<arg value="-Dfiles=${maven.dir}/${dist.kicker.main.emf.jar},${maven.dir}/${dist.kicker.main.aspectj.jar},${maven.dir}/${dist.kicker.userguide.pdf}" />
 			<arg value="-Pgpg" />
 		</artifact:mvn>
 	</target>
 
-	<target name="dist-kieker-binaries" depends="build-all,-build-userguide,-build-userguide-examples,-prepate-userguide-examples-binary-release,-compile-javaee.demo" description="Packages the binary archives (.zip|.tar.gz) for a release">
+	<target name="dist-kicker-binaries" depends="build-all,-build-userguide,-build-userguide-examples,-prepate-userguide-examples-binary-release,-compile-javaee.demo" description="Packages the binary archives (.zip|.tar.gz) for a release">
 		<patternset id="dist_bin_files-nonbinmode"> <!-- NOTE that the order of includes/excludes seems to have no effect. So be careful with excludes -->
 			<include name="${history.file}" />
 			<include name="${license.file}" />
@@ -218,10 +218,10 @@
 			<exclude name="${src.userguide.examples.dir}/**/lib/**/*" />
 			<include name="${example.javaee.dir}/README" />
 			<include name="${example.javaee.dir}/${license.file}" />
-			<!-- (re-)enable as soon as existent <include name="${example.javaee.dir}/kieker-testdata/**" /> -->
+			<!-- (re-)enable as soon as existent <include name="${example.javaee.dir}/kicker-testdata/**" /> -->
 			<include name="${example.javaee.jetty.dir}/**" />
 			<exclude name="${example.javaee.jetty.dir}/logs/**/*" />
-			<exclude name="${example.javaee.jetty.dir}/**/kieker*.jar" />
+			<exclude name="${example.javaee.jetty.dir}/**/kicker*.jar" />
 			<exclude name="${example.javaee.jpetstore.lib.dir}/*sigar*" />
 			<exclude name="**/build-eclipse/**" />
 		</patternset>
@@ -230,128 +230,128 @@
 			<include name="${examples.dir}/**/*.sh" />
 		</patternset>
 
-		<tar destfile="${release.dir}/${dist.kieker.binBaseName}.tar" longfile="gnu">
-			<tarfileset file="${kieker.monitoring.adaptiveMonitoring.default.conf}" fullpath="${kieker.dist.name}/META-INF/kieker.monitoring.adaptiveMonitoring.conf" />
-			<tarfileset file="${kieker.monitoring.default.properties}" fullpath="${kieker.dist.name}/META-INF/kieker.monitoring.properties" />
-			<tarfileset file="${src.userguide.pdf}" fullpath="${kieker.dist.name}/doc/${dist.kieker.userguide.pdf}" />
-			<tarfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
+		<tar destfile="${release.dir}/${dist.kicker.binBaseName}.tar" longfile="gnu">
+			<tarfileset file="${kicker.monitoring.adaptiveMonitoring.default.conf}" fullpath="${kicker.dist.name}/META-INF/kicker.monitoring.adaptiveMonitoring.conf" />
+			<tarfileset file="${kicker.monitoring.default.properties}" fullpath="${kicker.dist.name}/META-INF/kicker.monitoring.properties" />
+			<tarfileset file="${src.userguide.pdf}" fullpath="${kicker.dist.name}/doc/${dist.kicker.userguide.pdf}" />
+			<tarfileset dir="." prefix="${kicker.dist.name}" defaultexcludes="yes">
 				<patternset refid="dist_bin_files-nonbinmode" />
 			</tarfileset>
-			<tarfileset dir="." prefix="${kieker.dist.name}" filemode="755" defaultexcludes="yes">
+			<tarfileset dir="." prefix="${kicker.dist.name}" filemode="755" defaultexcludes="yes">
 				<patternset refid="dist_bin_files-binmode" />
 			</tarfileset>
 
-			<tarfileset file="${readme.bin.file}" fullpath="${kieker.dist.name}/${readme.file}" />
+			<tarfileset file="${readme.bin.file}" fullpath="${kicker.dist.name}/${readme.file}" />
 
-			<tarfileset file="${kieker.monitoring.default.properties}"
-						fullpath="${kieker.dist.name}/${example.javaee.jetty.dir}/kieker.monitoring.properties" />
+			<tarfileset file="${kicker.monitoring.default.properties}"
+						fullpath="${kicker.dist.name}/${example.javaee.jetty.dir}/kicker.monitoring.properties" />
 
 			<!-- Include tailored Eclipse files in the examples -->
 			<tarfileset file="${src.userguide.example.bookstore.dir}/.classpath"
-						fullpath="${kieker.dist.name}/${src.userguide.example.bookstore.dir}/.classpath" /> <!-- leave "as-is" -->
+						fullpath="${kicker.dist.name}/${src.userguide.example.bookstore.dir}/.classpath" /> <!-- leave "as-is" -->
 			<tarfileset file="${src.userguide.example.manual.dir}/.classpath-binrelease.generated"
-						fullpath="${kieker.dist.name}/${src.userguide.example.manual.dir}/.classpath" />
+						fullpath="${kicker.dist.name}/${src.userguide.example.manual.dir}/.classpath" />
 			<tarfileset file="${src.userguide.example.extended.dir}/.classpath-binrelease.generated"
-						fullpath="${kieker.dist.name}/${src.userguide.example.extended.dir}/.classpath" />
+						fullpath="${kicker.dist.name}/${src.userguide.example.extended.dir}/.classpath" />
 			<tarfileset file="${src.userguide.example.aspectj.dir}/.classpath-binrelease.generated"
-						fullpath="${kieker.dist.name}/${src.userguide.example.aspectj.dir}/.classpath" />
+						fullpath="${kicker.dist.name}/${src.userguide.example.aspectj.dir}/.classpath" />
 			<tarfileset file="${src.userguide.example.jms.dir}/.classpath-binrelease.generated"
-						fullpath="${kieker.dist.name}/${src.userguide.example.jms.dir}/.classpath" />
+						fullpath="${kicker.dist.name}/${src.userguide.example.jms.dir}/.classpath" />
 			<tarfileset file="${src.userguide.example.sigar.dir}/.classpath-binrelease.generated"
-						fullpath="${kieker.dist.name}/${src.userguide.example.sigar.dir}/.classpath" />
+						fullpath="${kicker.dist.name}/${src.userguide.example.sigar.dir}/.classpath" />
 
-			<!-- Include the right Kieker libs (and licenses) in the examples -->
-			<tarfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
-						prefix="${kieker.dist.name}/${example.javaee.jpetstore.lib.dir}" />
+			<!-- Include the right Kicker libs (and licenses) in the examples -->
+			<tarfileset file="${dist.dir}/${dist.kicker.main.aspectj.jar}"
+						prefix="${kicker.dist.name}/${example.javaee.jpetstore.lib.dir}" />
 			<tarfileset file="${license.file}"
-						fullpath="${kieker.dist.name}/${example.javaee.jpetstore.lib.dir}/${dist.kieker.main.aspectj.jar}.LICENSE" />
-			<tarfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
-						prefix="${kieker.dist.name}/${src.userguide.example.manual.dir}/lib" />
-			<tarfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
-						prefix="${kieker.dist.name}/${src.userguide.example.extended.dir}/lib" />
-			<tarfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
-						prefix="${kieker.dist.name}/${src.userguide.example.aspectj.dir}/lib" />
-			<tarfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
-						prefix="${kieker.dist.name}/${src.userguide.example.jms.dir}/lib" />
+						fullpath="${kicker.dist.name}/${example.javaee.jpetstore.lib.dir}/${dist.kicker.main.aspectj.jar}.LICENSE" />
+			<tarfileset file="${dist.dir}/${dist.kicker.main.emf.jar}"
+						prefix="${kicker.dist.name}/${src.userguide.example.manual.dir}/lib" />
+			<tarfileset file="${dist.dir}/${dist.kicker.main.emf.jar}"
+						prefix="${kicker.dist.name}/${src.userguide.example.extended.dir}/lib" />
+			<tarfileset file="${dist.dir}/${dist.kicker.main.aspectj.jar}"
+						prefix="${kicker.dist.name}/${src.userguide.example.aspectj.dir}/lib" />
+			<tarfileset file="${dist.dir}/${dist.kicker.main.emf.jar}"
+						prefix="${kicker.dist.name}/${src.userguide.example.jms.dir}/lib" />
 			<tarfileset file="${lib.dir}/commons-logging-*.jar"
-						prefix="${kieker.dist.name}/${src.userguide.example.jms.dir}/lib" />
-			<tarfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
-						prefix="${kieker.dist.name}/${src.userguide.example.sigar.dir}/lib" />
-			<tarfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
-						prefix="${kieker.dist.name}/${example.javaee.demo.lib.dir}" />
+						prefix="${kicker.dist.name}/${src.userguide.example.jms.dir}/lib" />
+			<tarfileset file="${dist.dir}/${dist.kicker.main.emf.jar}"
+						prefix="${kicker.dist.name}/${src.userguide.example.sigar.dir}/lib" />
+			<tarfileset file="${dist.dir}/${dist.kicker.main.emf.jar}"
+						prefix="${kicker.dist.name}/${example.javaee.demo.lib.dir}" />
 			<tarfileset file="${license.file}"
-						fullpath="${kieker.dist.name}/${example.javaee.demo.lib.dir}/${dist.kieker.main.emf.jar}.LICENSE" />
+						fullpath="${kicker.dist.name}/${example.javaee.demo.lib.dir}/${dist.kicker.main.emf.jar}.LICENSE" />
 			<tarfileset file="${lib.sigar.dir}/*"
-						prefix="${kieker.dist.name}/${src.userguide.example.sigar.dir}/lib" />
+						prefix="${kicker.dist.name}/${src.userguide.example.sigar.dir}/lib" />
 			<tarfileset file="${lib.sigar.dir}/*"
-						prefix="${kieker.dist.name}/${example.javaee.jpetstore.lib.dir}" />
+						prefix="${kicker.dist.name}/${example.javaee.jpetstore.lib.dir}" />
 		</tar>
-		<gzip zipfile="${release.dir}/${dist.kieker.binBaseName}.tar.gz" src="${release.dir}/${dist.kieker.binBaseName}.tar" />
+		<gzip zipfile="${release.dir}/${dist.kicker.binBaseName}.tar.gz" src="${release.dir}/${dist.kicker.binBaseName}.tar" />
 		<!-- tar file no longer needed -->
-		<delete file="${release.dir}/${dist.kieker.binBaseName}.tar" />
+		<delete file="${release.dir}/${dist.kicker.binBaseName}.tar" />
 
-		<zip zipfile="${release.dir}/${dist.kieker.binBaseName}.zip">
-			<zipfileset file="${kieker.monitoring.adaptiveMonitoring.default.conf}" fullpath="${kieker.dist.name}/META-INF/kieker.monitoring.adaptiveMonitoring.conf" />
-			<zipfileset file="${kieker.monitoring.default.properties}" fullpath="${kieker.dist.name}/META-INF/kieker.monitoring.properties" />
-			<zipfileset file="${src.userguide.pdf}" fullpath="${kieker.dist.name}/doc/${dist.kieker.userguide.pdf}" />
-			<zipfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
+		<zip zipfile="${release.dir}/${dist.kicker.binBaseName}.zip">
+			<zipfileset file="${kicker.monitoring.adaptiveMonitoring.default.conf}" fullpath="${kicker.dist.name}/META-INF/kicker.monitoring.adaptiveMonitoring.conf" />
+			<zipfileset file="${kicker.monitoring.default.properties}" fullpath="${kicker.dist.name}/META-INF/kicker.monitoring.properties" />
+			<zipfileset file="${src.userguide.pdf}" fullpath="${kicker.dist.name}/doc/${dist.kicker.userguide.pdf}" />
+			<zipfileset dir="." prefix="${kicker.dist.name}" defaultexcludes="yes">
 				<patternset refid="dist_bin_files-nonbinmode" />
 			</zipfileset>
-			<zipfileset dir="." prefix="${kieker.dist.name}" filemode="755" defaultexcludes="yes">
+			<zipfileset dir="." prefix="${kicker.dist.name}" filemode="755" defaultexcludes="yes">
 				<patternset refid="dist_bin_files-binmode" />
 			</zipfileset>
 
-			<zipfileset file="${readme.bin.file}" fullpath="${kieker.dist.name}/${readme.file}" />
+			<zipfileset file="${readme.bin.file}" fullpath="${kicker.dist.name}/${readme.file}" />
 
-			<zipfileset file="${kieker.monitoring.default.properties}"
-						fullpath="${kieker.dist.name}/${example.javaee.jetty.dir}/kieker.monitoring.properties" />
+			<zipfileset file="${kicker.monitoring.default.properties}"
+						fullpath="${kicker.dist.name}/${example.javaee.jetty.dir}/kicker.monitoring.properties" />
 
 			<!-- Include tailored Eclipse files in the examples -->
 			<zipfileset file="${src.userguide.example.bookstore.dir}/.classpath"
-						fullpath="${kieker.dist.name}/${src.userguide.example.bookstore.dir}/.classpath" /> <!-- leave "as-is" -->
+						fullpath="${kicker.dist.name}/${src.userguide.example.bookstore.dir}/.classpath" /> <!-- leave "as-is" -->
 			<zipfileset file="${src.userguide.example.manual.dir}/.classpath-binrelease.generated"
-						fullpath="${kieker.dist.name}/${src.userguide.example.manual.dir}/.classpath" />
+						fullpath="${kicker.dist.name}/${src.userguide.example.manual.dir}/.classpath" />
 			<zipfileset file="${src.userguide.example.extended.dir}/.classpath-binrelease.generated"
-						fullpath="${kieker.dist.name}/${src.userguide.example.extended.dir}/.classpath" />
+						fullpath="${kicker.dist.name}/${src.userguide.example.extended.dir}/.classpath" />
 			<zipfileset file="${src.userguide.example.aspectj.dir}/.classpath-binrelease.generated"
-						fullpath="${kieker.dist.name}/${src.userguide.example.aspectj.dir}/.classpath" />
+						fullpath="${kicker.dist.name}/${src.userguide.example.aspectj.dir}/.classpath" />
 			<zipfileset file="${src.userguide.example.jms.dir}/.classpath-binrelease.generated"
-						fullpath="${kieker.dist.name}/${src.userguide.example.jms.dir}/.classpath" />
+						fullpath="${kicker.dist.name}/${src.userguide.example.jms.dir}/.classpath" />
 			<zipfileset file="${src.userguide.example.sigar.dir}/.classpath-binrelease.generated"
-						fullpath="${kieker.dist.name}/${src.userguide.example.sigar.dir}/.classpath" />
+						fullpath="${kicker.dist.name}/${src.userguide.example.sigar.dir}/.classpath" />
 
-			<!-- Include the right Kieker libs in the examples -->
-			<zipfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
-						prefix="${kieker.dist.name}/${example.javaee.jetty.dir}/webapps/jpetstore/WEB-INF/lib" />
+			<!-- Include the right Kicker libs in the examples -->
+			<zipfileset file="${dist.dir}/${dist.kicker.main.aspectj.jar}"
+						prefix="${kicker.dist.name}/${example.javaee.jetty.dir}/webapps/jpetstore/WEB-INF/lib" />
 			<zipfileset file="${license.file}"
-						fullpath="${kieker.dist.name}/${example.javaee.jetty.dir}/webapps/jpetstore/WEB-INF/lib/${dist.kieker.main.aspectj.jar}.LICENSE" />
-			<zipfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
-						prefix="${kieker.dist.name}/${src.userguide.example.manual.dir}/lib" />
-			<zipfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
-						prefix="${kieker.dist.name}/${src.userguide.example.extended.dir}/lib" />
-			<zipfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
-						prefix="${kieker.dist.name}/${src.userguide.example.aspectj.dir}/lib" />
-			<zipfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
-						prefix="${kieker.dist.name}/${src.userguide.example.jms.dir}/lib" />
+						fullpath="${kicker.dist.name}/${example.javaee.jetty.dir}/webapps/jpetstore/WEB-INF/lib/${dist.kicker.main.aspectj.jar}.LICENSE" />
+			<zipfileset file="${dist.dir}/${dist.kicker.main.emf.jar}"
+						prefix="${kicker.dist.name}/${src.userguide.example.manual.dir}/lib" />
+			<zipfileset file="${dist.dir}/${dist.kicker.main.emf.jar}"
+						prefix="${kicker.dist.name}/${src.userguide.example.extended.dir}/lib" />
+			<zipfileset file="${dist.dir}/${dist.kicker.main.aspectj.jar}"
+						prefix="${kicker.dist.name}/${src.userguide.example.aspectj.dir}/lib" />
+			<zipfileset file="${dist.dir}/${dist.kicker.main.emf.jar}"
+						prefix="${kicker.dist.name}/${src.userguide.example.jms.dir}/lib" />
 			<zipfileset file="${lib.dir}/commons-logging-*.jar"
-						prefix="${kieker.dist.name}/${src.userguide.example.jms.dir}/lib" />
-			<zipfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
-						prefix="${kieker.dist.name}/${src.userguide.example.sigar.dir}/lib" />
-			<zipfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
-						prefix="${kieker.dist.name}/${example.javaee.demo.lib.dir}" />
+						prefix="${kicker.dist.name}/${src.userguide.example.jms.dir}/lib" />
+			<zipfileset file="${dist.dir}/${dist.kicker.main.emf.jar}"
+						prefix="${kicker.dist.name}/${src.userguide.example.sigar.dir}/lib" />
+			<zipfileset file="${dist.dir}/${dist.kicker.main.emf.jar}"
+						prefix="${kicker.dist.name}/${example.javaee.demo.lib.dir}" />
 			<zipfileset file="${license.file}"
-						fullpath="${kieker.dist.name}/${example.javaee.demo.lib.dir}/${dist.kieker.main.emf.jar}.LICENSE" />
+						fullpath="${kicker.dist.name}/${example.javaee.demo.lib.dir}/${dist.kicker.main.emf.jar}.LICENSE" />
 			<zipfileset file="${lib.sigar.dir}/*"
-						prefix="${kieker.dist.name}/${src.userguide.example.sigar.dir}/lib" />
+						prefix="${kicker.dist.name}/${src.userguide.example.sigar.dir}/lib" />
 			<zipfileset file="${lib.sigar.dir}/*"
-						prefix="${kieker.dist.name}/${example.javaee.jpetstore.lib.dir}" />
+						prefix="${kicker.dist.name}/${example.javaee.jpetstore.lib.dir}" />
 		</zip>
 	</target>
 
 	<target name="dist-examples" depends="-update-version.examples" description="Packages the example archives (.zip|.tar.gz) for a release">
 	</target>
 
-	<target name="release" depends="build-all,dist-kieker-sources,dist-kieker-binaries,dist-kieker-javadoc,dist-examples,dist-kieker-userguide,dist-maven" description="Packages the release files (calling all dist- targets)">
+	<target name="release" depends="build-all,dist-kicker-sources,dist-kicker-binaries,dist-kicker-javadoc,dist-examples,dist-kicker-userguide,dist-maven" description="Packages the release files (calling all dist- targets)">
 		<echo message="Sourceforge release instructions can be found at:" />
 		<echo message="https://sourceforge.net/apps/trac/sourceforge/wiki/Release files for download#Createoreditarelease" />
 		<echo message="" />
@@ -366,7 +366,7 @@
 		</exec>
 	</target>
 
-	<!-- http://kieker.uni-kiel.de/trac/ticket/292: add run-tests-integration BEFORE static-analysis -->
-	<target name="run-hudson-kieker" depends="build-all,run-tests-junit,static-analysis" description="Ant target used by the Hudson build (includes run-tests-junit,run-tests-integration,static-analysis)" />
+	<!-- http://kicker.uni-kiel.de/trac/ticket/292: add run-tests-integration BEFORE static-analysis -->
+	<target name="run-hudson-kicker" depends="build-all,run-tests-junit,static-analysis" description="Ant target used by the Hudson build (includes run-tests-junit,run-tests-integration,static-analysis)" />
 
 </project>

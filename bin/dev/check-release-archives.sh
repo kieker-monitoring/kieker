@@ -66,7 +66,7 @@ function extract_archive_n_cd {
 		exit 1
 	fi 
 
-	change_dir kieker-*
+	change_dir kicker-*
 }
 
 # lists the files included in an archive without extracting it
@@ -191,8 +191,8 @@ function assert_files_exist_common {
 	    echo "OK"
 	done
 
-	echo -n "Making sure that no references to old Kieker Jars included ..."
-	if (grep -R "kieker-[[:digit:]].*\.jar" * | grep -Ev "kieker-${KIEKER_VERSION}((\\\\)?_[[:alpha:]]+)?\.jar"); then
+	echo -n "Making sure that no references to old Kicker Jars included ..."
+	if (grep -R "kicker-[[:digit:]].*\.jar" * | grep -Ev "kicker-${KIEKER_VERSION}((\\\\)?_[[:alpha:]]+)?\.jar"); then
 	    # Don't ask why results not dumped to stdout above
 	    echo "Found old version string. Add/correct replacement regexp in ant file?"
 	    echo "Due to a strange issue with the grep above, please use the grep regexp above to see where the problem is."
@@ -223,7 +223,7 @@ function assert_files_exist_src {
 	assert_dir_exists "src/"
 	assert_dir_exists "src-gen/"
 	assert_dir_exists "test/"
-	assert_file_exists_regular "src/monitoring/META-INF/kieker.monitoring.default.properties"
+	assert_file_exists_regular "src/monitoring/META-INF/kicker.monitoring.default.properties"
 	assert_file_NOT_exists "dist/"
 	assert_file_NOT_exists "META-INF/"
 	
@@ -233,7 +233,7 @@ function assert_files_exist_src {
 	assert_file_NOT_exists "examples/userguide/appendix-JMS/lib/*.jar"
 	assert_file_NOT_exists "examples/userguide/appendix-Sigar/lib/*.jar"
 	
-	assert_file_NOT_exists "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/kieker-*.jar"
+	assert_file_NOT_exists "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/kicker-*.jar"
 	assert_file_exists_regular "build.xml"
 	assert_file_exists_regular "build-config/build.properties"
 	assert_file_exists_regular "build-config/compile-and-build.xml"
@@ -241,9 +241,9 @@ function assert_files_exist_src {
 	assert_file_exists_regular "build-config/init-and-clean.xml"
 	assert_file_exists_regular "build-config/quality.xml"
 	assert_file_exists_regular "build-config/test.xml"
-	assert_file_exists_regular "kieker-eclipse.importorder"
-	assert_file_exists_regular "kieker-eclipse-cleanup.xml"
-	assert_file_exists_regular "kieker-eclipse-formatter.xml"
+	assert_file_exists_regular "kicker-eclipse.importorder"
+	assert_file_exists_regular "kicker-eclipse-cleanup.xml"
+	assert_file_exists_regular "kicker-eclipse-formatter.xml"
 	assert_file_exists_regular ".project"
 	assert_file_exists_regular ".classpath"
 	assert_file_exists_regular ".checkstyle"
@@ -253,36 +253,36 @@ function assert_files_exist_src {
 	assert_file_exists_regular "doc/README-src"
 }
 
-# Asserts the existence of files in the bin release and some basic checks on the Kieker jars
+# Asserts the existence of files in the bin release and some basic checks on the Kicker jars
 function assert_files_exist_bin {
 	assert_files_exist_common
-	assert_file_exists_regular "doc/kieker-"*"_userguide.pdf"
+	assert_file_exists_regular "doc/kicker-"*"_userguide.pdf"
 	assert_dir_exists "dist/"
-	MAIN_JAR=$(ls "dist/kieker-"*".jar" | grep -v emf | grep -v aspectj )
-	assert_file_exists_regular "META-INF/kieker.monitoring.properties"
-	assert_file_exists_regular "META-INF/kieker.monitoring.adaptiveMonitoring.conf"
+	MAIN_JAR=$(ls "dist/kicker-"*".jar" | grep -v emf | grep -v aspectj )
+	assert_file_exists_regular "META-INF/kicker.monitoring.properties"
+	assert_file_exists_regular "META-INF/kicker.monitoring.adaptiveMonitoring.conf"
 	assert_file_exists_regular ${MAIN_JAR}
-	assert_file_exists_regular "dist/kieker-"*"_aspectj.jar"
-	assert_zip_file_content_exist "dist/kieker-"*"_aspectj.jar" " org/aspectj"
-	assert_zip_file_content_exist "dist/kieker-"*"_aspectj.jar" " aj/"
-	assert_zip_file_content_contains "dist/kieker-"*"_aspectj.jar" "META-INF/MANIFEST.MF" "Premain-Class: org.aspectj.weaver.loadtime.Agent"
-	assert_file_exists_regular "dist/kieker-"*"_emf.jar"
-	assert_zip_file_content_exist "dist/kieker-"*"_emf.jar" " model/"
-	assert_zip_file_content_exist "dist/kieker-"*"_emf.jar" " org/eclipse/"
-	assert_file_exists_regular "examples/userguide/ch2--manual-instrumentation/lib/kieker-"*"_emf.jar"
-	assert_file_exists_regular "examples/userguide/ch3-4--custom-components/lib/kieker-"*"_emf.jar"
-	assert_file_exists_regular "examples/userguide/ch5--trace-monitoring-aspectj/lib/kieker-"*"_aspectj.jar"
-	assert_file_exists_regular "examples/userguide/appendix-JMS/lib/kieker-"*"_emf.jar"
+	assert_file_exists_regular "dist/kicker-"*"_aspectj.jar"
+	assert_zip_file_content_exist "dist/kicker-"*"_aspectj.jar" " org/aspectj"
+	assert_zip_file_content_exist "dist/kicker-"*"_aspectj.jar" " aj/"
+	assert_zip_file_content_contains "dist/kicker-"*"_aspectj.jar" "META-INF/MANIFEST.MF" "Premain-Class: org.aspectj.weaver.loadtime.Agent"
+	assert_file_exists_regular "dist/kicker-"*"_emf.jar"
+	assert_zip_file_content_exist "dist/kicker-"*"_emf.jar" " model/"
+	assert_zip_file_content_exist "dist/kicker-"*"_emf.jar" " org/eclipse/"
+	assert_file_exists_regular "examples/userguide/ch2--manual-instrumentation/lib/kicker-"*"_emf.jar"
+	assert_file_exists_regular "examples/userguide/ch3-4--custom-components/lib/kicker-"*"_emf.jar"
+	assert_file_exists_regular "examples/userguide/ch5--trace-monitoring-aspectj/lib/kicker-"*"_aspectj.jar"
+	assert_file_exists_regular "examples/userguide/appendix-JMS/lib/kicker-"*"_emf.jar"
 	assert_file_exists_regular "examples/userguide/appendix-JMS/lib/commons-logging-"*".jar"
-	assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/kieker-"*"_emf.jar"
+	assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/kicker-"*"_emf.jar"
 	assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/sigar-"*".jar"
 	assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/libsigar-"*".so"
 	assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/sigar-"*".dll"
 	assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/sigar-"*".lib"
 	
-	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/kieker.monitoring.properties"
-	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/kieker-"*"_aspectj.jar"
-	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/kieker-"*"_aspectj.jar.LICENSE"
+	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/kicker.monitoring.properties"
+	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/kicker-"*"_aspectj.jar"
+	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/kicker-"*"_aspectj.jar.LICENSE"
 	assert_file_NOT_exists "lib/static-analysis/"
 	assert_file_NOT_exists "dist/release/"
 	assert_file_NOT_exists "bin/dev/"
@@ -291,9 +291,9 @@ function assert_files_exist_bin {
 	assert_file_NOT_exists "src/"
 	assert_file_NOT_exists "src-gen/"
 	assert_file_NOT_exists "test/"
-	assert_file_NOT_exists "kieker-eclipse.importorder"
-	assert_file_NOT_exists "kieker-eclipse-cleanup.xml"
-	assert_file_NOT_exists "kieker-eclipse-formatter.xml"
+	assert_file_NOT_exists "kicker-eclipse.importorder"
+	assert_file_NOT_exists "kicker-eclipse-cleanup.xml"
+	assert_file_NOT_exists "kicker-eclipse-formatter.xml"
 	assert_file_NOT_exists ".project"
 	assert_file_NOT_exists ".classpath"
 	assert_file_NOT_exists ".checkstyle"
@@ -325,14 +325,14 @@ function check_src_archive {
 	run_ant
 	# make sure that the expected files are present
 	assert_dir_exists "dist/"
-	assert_file_exists_regular $(ls "dist/kieker-"*".jar" | grep -v emf | grep -v aspectj ) # the core jar
-	assert_file_exists_regular "dist/kieker-"*"_aspectj.jar"
-	assert_file_exists_regular "dist/kieker-"*"_emf.jar"
-	assert_file_NOT_exists "dist/kieker-monitoring-servlet-"*".war"
+	assert_file_exists_regular $(ls "dist/kicker-"*".jar" | grep -v emf | grep -v aspectj ) # the core jar
+	assert_file_exists_regular "dist/kicker-"*"_aspectj.jar"
+	assert_file_exists_regular "dist/kicker-"*"_emf.jar"
+	assert_file_NOT_exists "dist/kicker-monitoring-servlet-"*".war"
 
 	# check bytecode version of classes contained in jar
 	echo "Making sure that bytecode version of class in jar is 50.0 (Java 1.6)"
-	MAIN_JAR=$(ls "dist/kieker-"*".jar" | grep -v emf | grep -v aspectj)
+	MAIN_JAR=$(ls "dist/kicker-"*".jar" | grep -v emf | grep -v aspectj)
 	assert_file_exists_regular ${MAIN_JAR}
 	VERSION_CLASS=$(find build -name "Version.class")
 	assert_file_exists_regular "${VERSION_CLASS}"
@@ -355,7 +355,7 @@ function check_src_archive {
 
 	# Making sure that no JavaDoc warnings reported by the `javadoc` tool
 	echo -n "Making sure that no JavaDoc warnings (ignoring generated sources) ..."
-	if (ant dist-kieker-javadoc | grep "warning -" | grep -v "src-gen"); then 
+	if (ant dist-kicker-javadoc | grep "warning -" | grep -v "src-gen"); then 
 	    echo "One or more JavaDoc warnings"
 	    exit 1
 	fi
@@ -382,7 +382,7 @@ function check_bin_archive {
 
 	# check bytecode version of classes contained in jar
 	echo -n "Making sure that bytecode version of class in jar is version 50.0 (Java 1.6)"
-	MAIN_JAR=$(ls "dist/kieker-"*".jar" | grep -v emf | grep -v aspectj)
+	MAIN_JAR=$(ls "dist/kicker-"*".jar" | grep -v emf | grep -v aspectj)
 	assert_file_exists_regular ${MAIN_JAR}
 	VERSION_CLASS_IN_JAR=$(unzip -l	 ${MAIN_JAR} | grep Version.class | awk '{ print $4 }')
 	unzip "${MAIN_JAR}" "${VERSION_CLASS_IN_JAR}"
@@ -403,13 +403,13 @@ function check_bin_archive {
 	# now perform some trace analysis tests and compare results with reference data
 	ARCHDIR=$(pwd)
 	create_subdir_n_cd
-	REFERENCE_OUTPUT_DIR="${ARCHDIR}/examples/userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC-example-plots"
-	PLOT_SCRIPT="${ARCHDIR}/examples/userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC-example-plots.sh"
+	REFERENCE_OUTPUT_DIR="${ARCHDIR}/examples/userguide/ch5--trace-monitoring-aspectj/testdata/kicker-20100830-082225522-UTC-example-plots"
+	PLOT_SCRIPT="${ARCHDIR}/examples/userguide/ch5--trace-monitoring-aspectj/testdata/kicker-20100830-082225522-UTC-example-plots.sh"
 	if ! test -x ${PLOT_SCRIPT}; then
 		echo "${PLOT_SCRIPT} does not exist or is not executable"
 		exit 1
 	fi
-	if ! ${PLOT_SCRIPT} "${ARCHDIR}" "."; then # passing kieker dir and output dir
+	if ! ${PLOT_SCRIPT} "${ARCHDIR}" "."; then # passing kicker dir and output dir
 		echo "${PLOT_SCRIPT} returned with error"
 		exit 1
 	fi

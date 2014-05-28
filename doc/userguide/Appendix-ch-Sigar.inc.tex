@@ -12,7 +12,7 @@ These samplers employ the Sigar API~\cite{HypericSigarWebsite}. \\%
 binary distribution to the example's \dir{lib/} directory.
 \item Additionally, depending on the underlying system platform, %
 corresponding Sigar native libraries need to be placed in the example's \dir{lib/} directory. %
-Kieker's \dir{lib/sigar-native-libs/} folder already includes the right libraries for 32 and 64~bit Linux/Windows platforms. %
+Kicker's \dir{lib/sigar-native-libs/} folder already includes the right libraries for 32 and 64~bit Linux/Windows platforms. %
 Native libraries for other platforms can be downloaded from~\cite{HypericSigarWebsite}. %
 \end{compactenum}
 
@@ -24,7 +24,7 @@ Native libraries for other platforms can be downloaded from~\cite{HypericSigarWe
 
 The Sigar API~\cite{HypericSigarWebsite} provides access to a number of system-level inventory and monitoring data, %
 e.g., regarding memory, swap, cpu, file system, and network devices. %
-Kieker includes Sigar-based samplers %
+Kicker includes Sigar-based samplers %
 for monitoring CPU utilization %
 (\class{CPUsDetailedPercSampler}, \class{CPUsCombinedPercSampler}) %
 and memory/swap usage (\class{MemSwapUsageSampler}). %
@@ -43,7 +43,7 @@ should be used to create instances of the Sigar-based Samplers.
 %\pagebreak
 
 \setJavaCodeListing
-\lstinputlisting[firstline=38, lastline=51, firstnumber=38, caption=Excerpt from MonitoringStarter.java, label=listing:sigarSamplerMonitoringStarterExample]{\SigarExampleDir/src/kieker/examples/userguide/appendixSigar/MonitoringStarter.java}
+\lstinputlisting[firstline=38, lastline=51, firstnumber=38, caption=Excerpt from MonitoringStarter.java, label=listing:sigarSamplerMonitoringStarterExample]{\SigarExampleDir/src/kicker/examples/userguide/appendixSigar/MonitoringStarter.java}
 
 \noindent Based on the existing samplers, users can easily create custom Sigar-based %
 samplers by extending the class \class{AbstractSigarSampler}. For example, Listing~%
@@ -58,7 +58,7 @@ This example uses a stand-alone Java application to set up %
 a Sigar-based monitoring process. When using servlet containers,  %
 users may consider implementing this routine as a \class{ServletContextListener}, %
 which are executed when the container is started and shutdown. %
-As an example, Kieker includes a \class{CPUMemUsageServletContextListener}. %
+As an example, Kicker includes a \class{CPUMemUsageServletContextListener}. %
 
 \section{Executing the Example}
 
@@ -71,24 +71,24 @@ The execution of the example is performed by the following two steps:\\
 #\lstshellprompt{}# #\textbf{ant}# run-monitoring
 \end{lstlisting}
 
-Kieker's console output lists the location of the directory containing the file system %
+Kicker's console output lists the location of the directory containing the file system %
 monitoring log. The following listing shows an excerpt: %
 
 %\enlargethispage{1.5cm}
 \pagebreak
 \setBashListing
 \begin{lstlisting}
- Writer: 'kieker.monitoring.writer.filesystem.AsyncFsWriter'
+ Writer: 'kicker.monitoring.writer.filesystem.AsyncFsWriter'
      Configuration:
-             kieker.monitoring.writer.filesystem.AsyncFsWriter.QueueFullBehavior='0'
-             kieker.monitoring.writer.filesystem.AsyncFsWriter.QueueSize='10000'
-             kieker.monitoring.writer.filesystem.AsyncFsWriter.customStoragePath=''
-             kieker.monitoring.writer.filesystem.AsyncFsWriter.storeInJavaIoTmpdir='true'
+             kicker.monitoring.writer.filesystem.AsyncFsWriter.QueueFullBehavior='0'
+             kicker.monitoring.writer.filesystem.AsyncFsWriter.QueueSize='10000'
+             kicker.monitoring.writer.filesystem.AsyncFsWriter.customStoragePath=''
+             kicker.monitoring.writer.filesystem.AsyncFsWriter.storeInJavaIoTmpdir='true'
      Writer Threads (1): 
-             Finished: 'false'; Writing to Directory: '/tmp/kieker-20110511-10095928-UTC-avanhoorn-thinkpad-KIEKER-SINGLETON'
+             Finished: 'false'; Writing to Directory: '/tmp/kicker-20110511-10095928-UTC-avanhoorn-thinkpad-KIEKER-SINGLETON'
 \end{lstlisting}
 
-A sample monitoring log can be found in the directory \dir{\SigarExampleDirDistro/testdata/kieker-20110511-10095928-UTC-avanhoorn-thinkpad-KIEKER-SINGLETON/}.
+A sample monitoring log can be found in the directory \dir{\SigarExampleDirDistro/testdata/kicker-20110511-10095928-UTC-avanhoorn-thinkpad-KIEKER-SINGLETON/}.
 
 \item Analyzing the monitoring data (class \class{AnalysisStarter}):
 

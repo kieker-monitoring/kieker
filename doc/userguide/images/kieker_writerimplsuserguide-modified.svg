@@ -27,7 +27,7 @@
    font-weight="normal"
    id="svg2"
    inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="kieker_writerimplsuserguide-modified.svg"
+   sodipodi:docname="kicker_writerimplsuserguide-modified.svg"
    style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog">
   <g
      id="g3218-6"
@@ -1237,7 +1237,7 @@
      id="text217"
      style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
      sodipodi:linespacing="125%"
-     transform="translate(369.63248,-97.27518)">(from kieker::monitoring::writer)</text>
+     transform="translate(369.63248,-97.27518)">(from kicker::monitoring::writer)</text>
   <text
      x="111"
      y="152"
@@ -1283,7 +1283,7 @@
      id="text217-7"
      style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
      sodipodi:linespacing="125%"
-     transform="translate(78.885409,-97.27518)">(from kieker::monitoring::core)</text>
+     transform="translate(78.885409,-97.27518)">(from kicker::monitoring::core)</text>
   <text
      xml:space="preserve"
      x="29"
@@ -1774,7 +1774,7 @@
      id="text217-9"
      style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
      sodipodi:linespacing="125%"
-     transform="translate(194.72942,-32.135859)">(from kieker::monitoring::writer)</text>
+     transform="translate(194.72942,-32.135859)">(from kicker::monitoring::writer)</text>
   <text
      x="111"
      y="152"

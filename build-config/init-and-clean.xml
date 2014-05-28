@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Kieker (init and clean)" basedir=".." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+<project name="Kicker (init and clean)" basedir=".." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 
 	<property file="build-config/build.properties" />
 	
-	<target name="-init-version" description="Initializes variables based on the Kieker version number">
+	<target name="-init-version" description="Initializes variables based on the Kicker version number">
 		<tstamp />
-		<property name="kieker.name" value="Kieker Framework" />
-		<property name="kieker.version" value="1.10-SNAPSHOT" />
+		<property name="kicker.name" value="Kicker Framework" />
+		<property name="kicker.version" value="1.10-SNAPSHOT" />
 		<property name="year" value="2014" />
-		<property name="copyright" value="Kieker Project" />
+		<property name="copyright" value="Kicker Project" />
 
-		<property name="dist.kieker.main.sources.jar" value="${kieker.main.packagenamebase}-${kieker.version}-${kieker-src.suffix}.jar" />
-		<property name="dist.kieker.main.sources.aspectj.jar" value="${kieker.main.packagenamebase}-${kieker.version}_aspectj-${kieker-src.suffix}.jar" />
-		<property name="dist.kieker.main.sources.emf.jar" value="${kieker.main.packagenamebase}-${kieker.version}_emf-${kieker-src.suffix}.jar" />
+		<property name="dist.kicker.main.sources.jar" value="${kicker.main.packagenamebase}-${kicker.version}-${kicker-src.suffix}.jar" />
+		<property name="dist.kicker.main.sources.aspectj.jar" value="${kicker.main.packagenamebase}-${kicker.version}_aspectj-${kicker-src.suffix}.jar" />
+		<property name="dist.kicker.main.sources.emf.jar" value="${kicker.main.packagenamebase}-${kicker.version}_emf-${kicker-src.suffix}.jar" />
 
-		<property name="dist.kieker.main.javadoc.jar" value="${kieker.main.packagenamebase}-${kieker.version}-${kieker-api.suffix}.jar" />
-		<property name="dist.kieker.main.javadoc.aspectj.jar" value="${kieker.main.packagenamebase}-${kieker.version}_aspectj-${kieker-api.suffix}.jar" />
-		<property name="dist.kieker.main.javadoc.emf.jar" value="${kieker.main.packagenamebase}-${kieker.version}_emf-${kieker-api.suffix}.jar" />
+		<property name="dist.kicker.main.javadoc.jar" value="${kicker.main.packagenamebase}-${kicker.version}-${kicker-api.suffix}.jar" />
+		<property name="dist.kicker.main.javadoc.aspectj.jar" value="${kicker.main.packagenamebase}-${kicker.version}_aspectj-${kicker-api.suffix}.jar" />
+		<property name="dist.kicker.main.javadoc.emf.jar" value="${kicker.main.packagenamebase}-${kicker.version}_emf-${kicker-api.suffix}.jar" />
 
-		<property name="dist.kieker.main.pom" value="${kieker.main.packagenamebase}-${kieker.version}.pom" />
+		<property name="dist.kicker.main.pom" value="${kicker.main.packagenamebase}-${kicker.version}.pom" />
 
-		<property name="dist.kieker.main.jar" value="${kieker.main.packagenamebase}-${kieker.version}.jar" />
-		<property name="dist.kieker.main.aspectj.jar" value="${kieker.main.packagenamebase}-${kieker.version}_aspectj.jar" />
-		<property name="dist.kieker.main.aspectj.jar.latex" value="${kieker.main.packagenamebase}-${kieker.version}\\\\\\_aspectj.jar" />
-		<property name="dist.kieker.main.emf.jar" value="${kieker.main.packagenamebase}-${kieker.version}_emf.jar" />
-		<property name="dist.kieker.main.emf.jar.latex" value="${kieker.main.packagenamebase}-${kieker.version}\\\\\\_emf.jar" />
+		<property name="dist.kicker.main.jar" value="${kicker.main.packagenamebase}-${kicker.version}.jar" />
+		<property name="dist.kicker.main.aspectj.jar" value="${kicker.main.packagenamebase}-${kicker.version}_aspectj.jar" />
+		<property name="dist.kicker.main.aspectj.jar.latex" value="${kicker.main.packagenamebase}-${kicker.version}\\\\\\_aspectj.jar" />
+		<property name="dist.kicker.main.emf.jar" value="${kicker.main.packagenamebase}-${kicker.version}_emf.jar" />
+		<property name="dist.kicker.main.emf.jar.latex" value="${kicker.main.packagenamebase}-${kicker.version}\\\\\\_emf.jar" />
 
-		<property name="kieker.dist.name" value="${kieker.packagenamebase}-${kieker.version}" />
-		<property name="dist.kieker.srcBaseName" value="${kieker.dist.name}_${kieker-src.suffix}" />
-		<property name="dist.kieker.binBaseName" value="${kieker.dist.name}_${kieker-bin.suffix}" />
-		<property name="dist.kieker.apiBaseName" value="${kieker.dist.name}_${kieker-api.suffix}" />
-		<property name="dist.kieker.userguide.pdf" value="${kieker.dist.name}_${kieker-userguide.suffix}.pdf" />
+		<property name="kicker.dist.name" value="${kicker.packagenamebase}-${kicker.version}" />
+		<property name="dist.kicker.srcBaseName" value="${kicker.dist.name}_${kicker-src.suffix}" />
+		<property name="dist.kicker.binBaseName" value="${kicker.dist.name}_${kicker-bin.suffix}" />
+		<property name="dist.kicker.apiBaseName" value="${kicker.dist.name}_${kicker-api.suffix}" />
+		<property name="dist.kicker.userguide.pdf" value="${kicker.dist.name}_${kicker-userguide.suffix}.pdf" />
 	</target>
 
-	<target name="-update-version" unless="version.noupdate" depends="-init-version" description="Updates the version number contained in the Kieker sources">
-		<replaceregexp file="${src.kieker.common.dir}/kieker/common/util/Version.java" match="VERSION = &quot;.*?&quot;" replace="VERSION = &quot;${kieker.version}&quot;" />
-		<replaceregexp file="bin/dev/check-release-archives.sh" match="KIEKER_VERSION=&quot;.*?&quot;" replace="KIEKER_VERSION=&quot;${kieker.version}&quot;" />
+	<target name="-update-version" unless="version.noupdate" depends="-init-version" description="Updates the version number contained in the Kicker sources">
+		<replaceregexp file="${src.kicker.common.dir}/kicker/common/util/Version.java" match="VERSION = &quot;.*?&quot;" replace="VERSION = &quot;${kicker.version}&quot;" />
+		<replaceregexp file="bin/dev/check-release-archives.sh" match="KIEKER_VERSION=&quot;.*?&quot;" replace="KIEKER_VERSION=&quot;${kicker.version}&quot;" />
 		<!-- Not sure if String valid today, but replacing it #1199: -->
-		<replaceregexp file="test/tools/kieker/test/tools/manual/TestTCPReader.java" match="lib/kieker-.*_aspectj.jar" replace="lib/kieker-${kieker.version}_aspectj.jar" />
+		<replaceregexp file="test/tools/kicker/test/tools/manual/TestTCPReader.java" match="lib/kicker-.*_aspectj.jar" replace="lib/kicker-${kicker.version}_aspectj.jar" />
 
 		<!-- Update the AspectJ version in various files -->
 		<replaceregexp byline="true" flags="g">
@@ -69,14 +69,14 @@
 
 	<!-- Compile classpaths used for javac and javadoc -->
 	<target name="-init-compile-classpaths" description="Initializes the classpath variables for the compile and Javadoc targets">
-		<path id="kieker.common-compile-classpath">
+		<path id="kicker.common-compile-classpath">
 			<fileset dir="${lib.dir}">
 				<include name="commons-logging-*.jar" />
 				<include name="slf4j-api-*.jar" />
 			</fileset>
 		</path>
 
-		<path id="kieker.monitoring-compile-classpath">
+		<path id="kicker.monitoring-compile-classpath">
 			<fileset dir="${lib.dir}">
 				<!--<include name="aspectjrt-*.jar" />-->
 				<include name="javax.jms-*.jar" />
@@ -90,29 +90,29 @@
 			<fileset dir="${lib.sigar.dir}">
 				<include name="sigar-*.jar" />
 			</fileset>
-			<pathelement location="${build.kieker.common.dir}/" />
+			<pathelement location="${build.kicker.common.dir}/" />
 		</path>
 
-		<path id="kieker.monitoring-ajc-compile-classpath">
+		<path id="kicker.monitoring-ajc-compile-classpath">
 			<fileset dir="${lib.dir}">
 				<include name="aspectjweaver-*.jar" />
 				<include name="aspectjrt-*.jar" />
 				<include name="framework-libs/javax.servlet-*.jar" />
 			</fileset>
-			<pathelement location="${build.kieker.common.dir}/" />
-			<pathelement location="${build.kieker.monitoring.dir}" />
+			<pathelement location="${build.kicker.common.dir}/" />
+			<pathelement location="${build.kicker.monitoring.dir}" />
 		</path>
 
-		<path id="kieker.analysis-compile-classpath">
+		<path id="kicker.analysis-compile-classpath">
 			<fileset dir="${lib.dir}">
 				<include name="javax.jms-*.jar" />
 				<include name="org.eclipse.emf.*.jar" />
 			</fileset>
-			<pathelement location="${build.kieker.common.dir}/" />
-			<pathelement location="${build.kieker.analysis.model.dir}/" />
+			<pathelement location="${build.kicker.common.dir}/" />
+			<pathelement location="${build.kicker.analysis.model.dir}/" />
 		</path>
 
-		<path id="kieker.tools-compile-classpath">
+		<path id="kicker.tools-compile-classpath">
 			<fileset dir="${lib.dir}">
 				<include name="commons-cli-*.jar" />
 				<include name="jgraphx-*.jar" />
@@ -133,10 +133,10 @@
  	 		 	 <!--<include name="Rsession.jar"/>-->
 				<!-- OPAD end -->
 			</fileset>
-			<pathelement location="${build.kieker.common.dir}/" />
-			<pathelement location="${build.kieker.monitoring.dir}/" />
-			<pathelement location="${build.kieker.analysis.dir}/" />
-			<pathelement location="${build.kieker.analysis.model.dir}/" />
+			<pathelement location="${build.kicker.common.dir}/" />
+			<pathelement location="${build.kicker.monitoring.dir}/" />
+			<pathelement location="${build.kicker.analysis.dir}/" />
+			<pathelement location="${build.kicker.analysis.model.dir}/" />
 		</path>
 
 		<path id="javaee.demo-compile-classpath">
@@ -148,7 +148,7 @@
 				<include name="javax.annotation-*.jar" />
 			</fileset>
 			<fileset dir="${dist.dir}">
-				<include name="${dist.kieker.main.jar}" />
+				<include name="${dist.kicker.main.jar}" />
 			</fileset>
 		</path>
 	</target>
@@ -164,7 +164,7 @@
 			<fileset dir="${examples.dir}" includes="**/.classpath-binrelease.generated" />
 		</delete>
 		<!-- make sure a current version is included -->
-		<copy file="${kieker.monitoring.default.properties}" tofile="${src.userguide.example.aspectj.dir}/META-INF/kieker.monitoring.properties" />
+		<copy file="${kicker.monitoring.default.properties}" tofile="${src.userguide.example.aspectj.dir}/META-INF/kicker.monitoring.properties" />
 	</target>
 
 	<target name="-prepate-userguide-examples-binary-release" depends="-init-version" description="Removes artifacts from previous builds and manually changed configuration files">
@@ -177,8 +177,8 @@
 
 		<!-- Examples using the plain Jar -->
 		<replaceregexp byline="true" flags="g">
-			<regexp pattern="&lt;classpathentry .*/Kieker&quot;.*"/>
-			<substitution expression="&lt;classpathentry kind=&quot;lib&quot; path=&quot;lib/${dist.kieker.main.jar}&quot;/&gt;"/>
+			<regexp pattern="&lt;classpathentry .*/Kicker&quot;.*"/>
+			<substitution expression="&lt;classpathentry kind=&quot;lib&quot; path=&quot;lib/${dist.kicker.main.jar}&quot;/&gt;"/>
 			<fileset dir=".">
 				<include name="${src.userguide.example.jms.dir}/.classpath-binrelease.generated"/>
 			</fileset>
@@ -186,8 +186,8 @@
 
 		<!-- Examples using the EMF Jar -->
 		<replaceregexp byline="true" flags="g">
-			<regexp pattern="&lt;classpathentry .*/Kieker&quot;.*"/>
-			<substitution expression="&lt;classpathentry kind=&quot;lib&quot; path=&quot;lib/${dist.kieker.main.emf.jar}&quot;/&gt;"/>
+			<regexp pattern="&lt;classpathentry .*/Kicker&quot;.*"/>
+			<substitution expression="&lt;classpathentry kind=&quot;lib&quot; path=&quot;lib/${dist.kicker.main.emf.jar}&quot;/&gt;"/>
 			<fileset dir=".">
 				<include name="${src.userguide.example.manual.dir}/.classpath-binrelease.generated"/>
 				<include name="${src.userguide.example.extended.dir}/.classpath-binrelease.generated"/>
@@ -197,16 +197,16 @@
 
 		<!-- Examples using the AspectJ Jar -->
 		<replaceregexp byline="true" flags="g">
-			<regexp pattern="&lt;classpathentry .*/Kieker&quot;.*"/>
-			<substitution expression="&lt;classpathentry kind=&quot;lib&quot; path=&quot;lib//${dist.kieker.main.aspectj.jar}&quot;/&gt;"/>
+			<regexp pattern="&lt;classpathentry .*/Kicker&quot;.*"/>
+			<substitution expression="&lt;classpathentry kind=&quot;lib&quot; path=&quot;lib//${dist.kicker.main.aspectj.jar}&quot;/&gt;"/>
 			<fileset dir=".">
 				<include name="${src.userguide.example.aspectj.dir}/.classpath-binrelease.generated"/>
 			</fileset>
 		</replaceregexp>
 
-		<!-- Examples referencing libs from /Kieker/lib/ -->
+		<!-- Examples referencing libs from /Kicker/lib/ -->
 		<replaceregexp byline="true" flags="g">
-			<regexp pattern="(&lt;classpathentry .*)/Kieker/lib/(.*&quot;.*)"/>
+			<regexp pattern="(&lt;classpathentry .*)/Kicker/lib/(.*&quot;.*)"/>
 			<substitution expression="\1lib/\2"/>
 			<fileset dir=".">
 				<include name="${src.userguide.example.aspectj.dir}/.classpath-binrelease.generated"/>
@@ -215,20 +215,20 @@
 		</replaceregexp>
 	</target>
 
-	<target name="-update-version.examples" depends="-init-version" description="Updates the Kieker version in the examples (e.g., in the .classpath files)">
-		<replaceregexp file="${example.javaee.jetty.dir}/start.ini" match="kieker-\S*.jar" replace="${dist.kieker.main.aspectj.jar}" flags="g" />
-		<replaceregexp file="${example.javaee.jetty.dir}/start.KiekerAspectJActivated.ini" match="kieker-\S*.jar" replace="${dist.kieker.main.aspectj.jar}" flags="g" />
-		<replaceregexp file="${src.userguide.example.bookstore.dir}/.classpath" match="kieker-\S*.jar" replace="${dist.kieker.main.jar}" flags="g" />
-		<replaceregexp file="${src.userguide.example.bookstore.dir}/README.txt" match="kieker-\S*.jarr" replace="${dist.kieker.main.jar}" flags="g" />
-		<replaceregexp file="${src.userguide.example.manual.dir}/.classpath" match="kieker-\S*.jar" replace="${dist.kieker.main.emf.jar}" flags="g" />
-		<replaceregexp file="${src.userguide.example.manual.dir}/README.txt" match="kieker-\S*.jar" replace="${dist.kieker.main.emf.jar}" flags="g" />
-		<replaceregexp file="${src.userguide.example.extended.dir}/.classpath" match="kieker-\S*.jar" replace="${dist.kieker.main.emf.jar}" flags="g" />
-		<replaceregexp file="${src.userguide.example.extended.dir}/README.txt" match="kieker-\S*.jar" replace="${dist.kieker.main.emf.jar}" flags="g" />
-		<replaceregexp file="${src.userguide.example.aspectj.dir}/build.properties" match="kieker-\S*.jar" replace="${dist.kieker.main.aspectj.jar}" flags="g" />
-		<replaceregexp file="${src.userguide.example.aspectj.dir}/.classpath" match="kieker-\S*.jar" replace="${dist.kieker.main.aspectj.jar}" flags="g" />
-		<replaceregexp file="${src.userguide.example.aspectj.dir}/README.txt" match="kieker-\S*.jar" replace="${dist.kieker.main.aspectj.jar}" flags="g" />
-		<replaceregexp file="${src.userguide.example.jms.dir}/.classpath" match="kieker-\S*.jar" replace="${dist.kieker.main.jar}" flags="g" />
-		<replaceregexp file="${src.userguide.example.sigar.dir}/.classpath" match="kieker-\S*.jar" replace="${dist.kieker.main.jar}" flags="g" />
+	<target name="-update-version.examples" depends="-init-version" description="Updates the Kicker version in the examples (e.g., in the .classpath files)">
+		<replaceregexp file="${example.javaee.jetty.dir}/start.ini" match="kicker-\S*.jar" replace="${dist.kicker.main.aspectj.jar}" flags="g" />
+		<replaceregexp file="${example.javaee.jetty.dir}/start.KickerAspectJActivated.ini" match="kicker-\S*.jar" replace="${dist.kicker.main.aspectj.jar}" flags="g" />
+		<replaceregexp file="${src.userguide.example.bookstore.dir}/.classpath" match="kicker-\S*.jar" replace="${dist.kicker.main.jar}" flags="g" />
+		<replaceregexp file="${src.userguide.example.bookstore.dir}/README.txt" match="kicker-\S*.jarr" replace="${dist.kicker.main.jar}" flags="g" />
+		<replaceregexp file="${src.userguide.example.manual.dir}/.classpath" match="kicker-\S*.jar" replace="${dist.kicker.main.emf.jar}" flags="g" />
+		<replaceregexp file="${src.userguide.example.manual.dir}/README.txt" match="kicker-\S*.jar" replace="${dist.kicker.main.emf.jar}" flags="g" />
+		<replaceregexp file="${src.userguide.example.extended.dir}/.classpath" match="kicker-\S*.jar" replace="${dist.kicker.main.emf.jar}" flags="g" />
+		<replaceregexp file="${src.userguide.example.extended.dir}/README.txt" match="kicker-\S*.jar" replace="${dist.kicker.main.emf.jar}" flags="g" />
+		<replaceregexp file="${src.userguide.example.aspectj.dir}/build.properties" match="kicker-\S*.jar" replace="${dist.kicker.main.aspectj.jar}" flags="g" />
+		<replaceregexp file="${src.userguide.example.aspectj.dir}/.classpath" match="kicker-\S*.jar" replace="${dist.kicker.main.aspectj.jar}" flags="g" />
+		<replaceregexp file="${src.userguide.example.aspectj.dir}/README.txt" match="kicker-\S*.jar" replace="${dist.kicker.main.aspectj.jar}" flags="g" />
+		<replaceregexp file="${src.userguide.example.jms.dir}/.classpath" match="kicker-\S*.jar" replace="${dist.kicker.main.jar}" flags="g" />
+		<replaceregexp file="${src.userguide.example.sigar.dir}/.classpath" match="kicker-\S*.jar" replace="${dist.kicker.main.jar}" flags="g" />
 	</target>
 
 	<target name="clean" depends="clean-userguide-examples" description="Removes artifacts from previous builds">

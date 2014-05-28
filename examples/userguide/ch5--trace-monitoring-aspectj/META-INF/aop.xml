@@ -2,10 +2,10 @@
 
 <aspectj>
     <weaver options="">
-        <include within="kieker.examples.userguide.ch5bookstore..*"/>
+        <include within="kicker.examples.userguide.ch5bookstore..*"/>
     </weaver>
     
     <aspects>
-      <aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectAnnotation"/>
+      <aspect name="kicker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectAnnotation"/>
     </aspects>
 </aspectj>

@@ -4,8 +4,8 @@ REM @author Nils Christian Ehmke
 
 setlocal enabledelayedexpansion
 
-SET JAVAARGS=-Dkieker.common.logging.Log=JDK -Djava.util.logging.config.file=./logging.properties -Xms56m -Xmx1024m
-SET MAINCLASSNAME=kieker.tools.loggingTimestampConverter.LoggingTimestampConverterTool
+SET JAVAARGS=-Dkicker.common.logging.Log=JDK -Djava.util.logging.config.file=./logging.properties -Xms56m -Xmx1024m
+SET MAINCLASSNAME=kicker.tools.loggingTimestampConverter.LoggingTimestampConverterTool
 
 REM Get the directory of this file and change the working directory to it.
 cd %~dp0

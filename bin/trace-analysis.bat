@@ -4,8 +4,8 @@ REM @author Nils Christian Ehmke
 
 setlocal enabledelayedexpansion
 
-SET JAVAARGS=-Dkieker.common.logging.Log=JDK -Djava.util.logging.config.file=./logging.properties -Xms56m -Xmx1024m
-SET MAINCLASSNAME=kieker.tools.traceAnalysis.TraceAnalysisTool
+SET JAVAARGS=-Dkicker.common.logging.Log=JDK -Djava.util.logging.config.file=./logging.properties -Xms56m -Xmx1024m
+SET MAINCLASSNAME=kicker.tools.traceAnalysis.TraceAnalysisTool
 
 REM Set every variable we will need for the execution.
 SET BINDIR=%~dp0

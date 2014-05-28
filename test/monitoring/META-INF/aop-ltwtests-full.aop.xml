@@ -2,11 +2,11 @@
 
 <aspectj>
 	<weaver options=""> <!-- options="-verbose" -->
-		<!-- instrument the kieker.tests -->
-		<include within="kieker.test..*" />
+		<!-- instrument the kicker.tests -->
+		<include within="kicker.test..*" />
 	</weaver>
 
 	<aspects>
-		<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFull" />
+		<aspect name="kicker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFull" />
 	</aspects>
 </aspectj>

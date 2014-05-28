@@ -2,20 +2,20 @@
 
 <aspectj>
 	<weaver options=""> <!-- options="-verbose" -->
-		<!-- instrument the kieker.tests -->
-		<include within="kieker.test..*" />
-		<!--<include within="kieker.monitoring.probe.aspectj..*"/> -->
+		<!-- instrument the kicker.tests -->
+		<include within="kicker.test..*" />
+		<!--<include within="kicker.monitoring.probe.aspectj..*"/> -->
 	</weaver>
 
 	<aspects>
 		<!-- Construction -->
-		<aspect name="kieker.monitoring.probe.aspectj.flow.construction.Annotation" />
+		<aspect name="kicker.monitoring.probe.aspectj.flow.construction.Annotation" />
 
 		<!-- OperationCall -->
-		<aspect name="kieker.monitoring.probe.aspectj.flow.operationExecution.Annotation" />
+		<aspect name="kicker.monitoring.probe.aspectj.flow.operationExecution.Annotation" />
 		
 		<!-- OperationExecution -->
-		<aspect name="kieker.monitoring.probe.aspectj.flow.operationCall.Annotation" />
+		<aspect name="kicker.monitoring.probe.aspectj.flow.operationCall.Annotation" />
 		
 	</aspects>
 </aspectj>

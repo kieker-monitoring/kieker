@@ -2,7 +2,7 @@ Eclipse Public License - EPL - v1.0
 Project: http://eclipse.org/aspectj/
 Description: This jar contains the weaver-agent for the aspect-oriented-extension for Java named AspectJ.
 License: http://www.eclipse.org/legal/epl-v10.html
-Required by: Aspectj-based load-time weaving (also embedded in Kieker's AspectJ Jar); Tests
+Required by: Aspectj-based load-time weaving (also embedded in Kicker's AspectJ Jar); Tests
 
 Eclipse Public License - v 1.0
 

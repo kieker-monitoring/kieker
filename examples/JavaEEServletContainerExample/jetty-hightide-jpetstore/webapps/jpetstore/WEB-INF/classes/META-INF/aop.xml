@@ -7,9 +7,9 @@
   </weaver>
     <aspects>
       <!-- Use the aspect directives to specify the aspect(s) to use (typically only one). -->
-      <!--<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectAnnotation"/>-->
-      <!--<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectAnnotationServlet"/>-->
-      <aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFull"/>
-      <!--<aspect name="kieker.monitoring.probe.aspect.JoperationExecution.OperationExecutionAspectFullServlet"/>-->
+      <!--<aspect name="kicker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectAnnotation"/>-->
+      <!--<aspect name="kicker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectAnnotationServlet"/>-->
+      <aspect name="kicker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFull"/>
+      <!--<aspect name="kicker.monitoring.probe.aspect.JoperationExecution.OperationExecutionAspectFullServlet"/>-->
     </aspects>
 </aspectj>

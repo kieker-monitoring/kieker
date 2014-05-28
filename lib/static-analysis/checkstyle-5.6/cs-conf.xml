@@ -56,7 +56,7 @@
     <module name="Header">
         <!--<property name="headerFile"     value=""/>-->
         <!--<property name="charset"        value=""/>-->
-        <property name="header"         value="/***************************************************************************\n * Copyright 2014 Kieker Project (http://kieker-monitoring.net)\n *\n * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);\n * you may not use this file except in compliance with the License.\n * You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n ***************************************************************************/\n"/>
+        <property name="header"         value="/***************************************************************************\n * Copyright 2014 Kicker Project (http://kicker-monitoring.net)\n *\n * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);\n * you may not use this file except in compliance with the License.\n * You may obtain a copy of the License at\n *\n *     http://www.apache.org/licenses/LICENSE-2.0\n *\n * Unless required by applicable law or agreed to in writing, software\n * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n * See the License for the specific language governing permissions and\n * limitations under the License.\n ***************************************************************************/\n"/>
         <property name="ignoreLines"    value="2"/>
         <property name="fileExtensions" value="java"/>
     </module>
@@ -174,22 +174,22 @@
         <!-- KIEKER -->
         <property name="tabWidth" value="4"/>
         <!-- KIEKER -->
-        <module name="kieker.test.tools.cs.AnalysisComponentConstructorCheck">
+        <module name="kicker.test.tools.cs.AnalysisComponentConstructorCheck">
             <property name="ignoreAbstractClasses" value="true"/>
-            <property name="severity" value="${checkstyle.ignoreCustomKieker}" default="ignore"/>
+            <property name="severity" value="${checkstyle.ignoreCustomKicker}" default="ignore"/>
         </module>
-        <module name="kieker.test.tools.cs.MonitoringRecordFactoryConventionCheck">
+        <module name="kicker.test.tools.cs.MonitoringRecordFactoryConventionCheck">
             <property name="ignoreAbstractClasses" value="true"/>
-            <property name="severity" value="${checkstyle.ignoreCustomKieker}" default="ignore"/>
+            <property name="severity" value="${checkstyle.ignoreCustomKicker}" default="ignore"/>
         </module>
-        <module name="kieker.test.tools.cs.MissingSinceTagCheck">
-            <property name="severity" value="${checkstyle.ignoreCustomKieker}" default="ignore"/>
+        <module name="kicker.test.tools.cs.MissingSinceTagCheck">
+            <property name="severity" value="${checkstyle.ignoreCustomKicker}" default="ignore"/>
         </module>
-        <module name="kieker.test.tools.cs.NotAllowedSinceTagCheck">
-            <property name="severity" value="${checkstyle.ignoreCustomKieker}" default="ignore"/>
+        <module name="kicker.test.tools.cs.NotAllowedSinceTagCheck">
+            <property name="severity" value="${checkstyle.ignoreCustomKicker}" default="ignore"/>
         </module>
-        <module name="kieker.test.tools.cs.NoBlockCommentsCheck">
-            <property name="severity" value="${checkstyle.ignoreCustomKieker}" default="ignore"/>
+        <module name="kicker.test.tools.cs.NoBlockCommentsCheck">
+            <property name="severity" value="${checkstyle.ignoreCustomKicker}" default="ignore"/>
         </module>
         <module name="FileContentsHolder"/>
 
@@ -488,7 +488,7 @@
         <!-- Checks that there are no "magic numbers", where a magic number is a numeric literal !-->
         <!-- that is not defined as a constant. !-->
         <!-- See http://checkstyle.sf.net/config_coding.html !-->
-        <!-- deactivated for Kieker
+        <!-- deactivated for Kicker
         <module name="MagicNumber">
             <property name="tokens"               value="NUM_DOUBLE, NUM_FLOAT, NUM_INT, NUM_LONG"/>
             <property name="ignoreNumbers"        value="-1, 0, 1, 2"/>
@@ -655,7 +655,7 @@
         <!-- See http://checkstyle.sf.net/config_import.html !-->
         <module name="ImportOrder">
             <property name="option"        value="under"/>
-            <property name="groups"        value="java,javax,junit,org,com,ch,de,kieker,kieker.test"/>
+            <property name="groups"        value="java,javax,junit,org,com,ch,de,kicker,kicker.test"/>
             <property name="ordered"       value="true"/>
             <property name="separated"     value="true"/>
             <property name="caseSensitive" value="true"/>
@@ -872,7 +872,7 @@
 
         <!-- A check for TODO: comments. Actually it is a generic regular expression matcher on Java comments. !-->
         <!-- See http://checkstyle.sf.net/config_misc.html !-->
-        <!-- Kieker !-->
+        <!-- Kicker !-->
         <module name="TodoComment">
             <property name="format" value="TODO"/>
             <property name="severity" value="warning"/>

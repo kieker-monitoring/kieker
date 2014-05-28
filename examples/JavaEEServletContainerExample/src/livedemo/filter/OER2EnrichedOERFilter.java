@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kicker Project (http://kicker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,13 @@
 
 package livedemo.filter;
 
-import kieker.analysis.IProjectContext;
-import kieker.analysis.plugin.annotation.InputPort;
-import kieker.analysis.plugin.annotation.OutputPort;
-import kieker.analysis.plugin.annotation.Plugin;
-import kieker.analysis.plugin.filter.AbstractFilterPlugin;
-import kieker.common.configuration.Configuration;
-import kieker.common.record.controlflow.OperationExecutionRecord;
-
+import kicker.analysis.IProjectContext;
+import kicker.analysis.plugin.annotation.InputPort;
+import kicker.analysis.plugin.annotation.OutputPort;
+import kicker.analysis.plugin.annotation.Plugin;
+import kicker.analysis.plugin.filter.AbstractFilterPlugin;
+import kicker.common.configuration.Configuration;
+import kicker.common.record.controlflow.OperationExecutionRecord;
 import livedemo.entities.EnrichedOERecord;
 
 /**

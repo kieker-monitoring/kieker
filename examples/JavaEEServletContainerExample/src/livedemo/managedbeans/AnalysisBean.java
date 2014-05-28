@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kicker Project (http://kicker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,21 +19,20 @@ package livedemo.managedbeans;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 
-import kieker.analysis.AnalysisController;
-import kieker.analysis.AnalysisControllerThread;
-import kieker.analysis.exception.AnalysisConfigurationException;
-import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
-import kieker.analysis.plugin.filter.select.TypeFilter;
-import kieker.analysis.plugin.filter.sink.CPUUtilizationDisplayFilter;
-import kieker.analysis.plugin.filter.sink.MemSwapUtilizationDisplayFilter;
-import kieker.analysis.plugin.filter.sink.MethodAndComponentFlowDisplayFilter;
-import kieker.analysis.plugin.reader.jmx.JMXReader;
-import kieker.analysis.plugin.reader.timer.TimeReader;
-import kieker.common.configuration.Configuration;
-import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
-import kieker.tools.traceAnalysis.filter.executionRecordTransformation.ExecutionRecordTransformationFilter;
-import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
-
+import kicker.analysis.AnalysisController;
+import kicker.analysis.AnalysisControllerThread;
+import kicker.analysis.exception.AnalysisConfigurationException;
+import kicker.analysis.plugin.filter.forward.ListCollectionFilter;
+import kicker.analysis.plugin.filter.select.TypeFilter;
+import kicker.analysis.plugin.filter.sink.CPUUtilizationDisplayFilter;
+import kicker.analysis.plugin.filter.sink.MemSwapUtilizationDisplayFilter;
+import kicker.analysis.plugin.filter.sink.MethodAndComponentFlowDisplayFilter;
+import kicker.analysis.plugin.reader.jmx.JMXReader;
+import kicker.analysis.plugin.reader.timer.TimeReader;
+import kicker.common.configuration.Configuration;
+import kicker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
+import kicker.tools.traceAnalysis.filter.executionRecordTransformation.ExecutionRecordTransformationFilter;
+import kicker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import livedemo.entities.EnrichedOERecord;
 import livedemo.filter.MethodResponsetimeDisplayFilter;
 import livedemo.filter.OER2EnrichedOERFilter;
@@ -112,15 +111,15 @@ public class AnalysisBean {
 		final TimeReader timeReader = new TimeReader(timeReaderConfig, this.analysisInstance);
 
 		final Configuration typeFilter1Config = new Configuration();
-		typeFilter1Config.setProperty(TypeFilter.CONFIG_PROPERTY_NAME_TYPES, "kieker.common.record.controlflow.OperationExecutionRecord");
+		typeFilter1Config.setProperty(TypeFilter.CONFIG_PROPERTY_NAME_TYPES, "kicker.common.record.controlflow.OperationExecutionRecord");
 		final TypeFilter typeFilter1 = new TypeFilter(typeFilter1Config, this.analysisInstance);
 
 		final Configuration typeFilter2Config = new Configuration();
-		typeFilter2Config.setProperty(TypeFilter.CONFIG_PROPERTY_NAME_TYPES, "kieker.common.record.system.CPUUtilizationRecord");
+		typeFilter2Config.setProperty(TypeFilter.CONFIG_PROPERTY_NAME_TYPES, "kicker.common.record.system.CPUUtilizationRecord");
 		final TypeFilter typeFilter2 = new TypeFilter(typeFilter2Config, this.analysisInstance);
 
 		final Configuration typeFilter3Config = new Configuration();
-		typeFilter3Config.setProperty(TypeFilter.CONFIG_PROPERTY_NAME_TYPES, "kieker.common.record.system.MemSwapUsageRecord");
+		typeFilter3Config.setProperty(TypeFilter.CONFIG_PROPERTY_NAME_TYPES, "kicker.common.record.system.MemSwapUsageRecord");
 		final TypeFilter typeFilter3 = new TypeFilter(typeFilter3Config, this.analysisInstance);
 
 		final OER2EnrichedOERFilter oer2RecordFilter = new OER2EnrichedOERFilter(new Configuration(), this.analysisInstance);

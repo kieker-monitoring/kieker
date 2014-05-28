@@ -14,7 +14,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="kieker-data-bridge.svg">
+   sodipodi:docname="kicker-data-bridge.svg">
   <defs
      id="defs4">
     <clipPath
@@ -512,7 +512,7 @@
          x="328.5434"
          y="136.50113"
          style="font-size:15px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial Bold"
-         id="tspan4561-1-7-4">Kieker Monitoring</tspan></text>
+         id="tspan4561-1-7-4">Kicker Monitoring</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:100%;letter-spacing:0px;word-spacing:0px;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Arial;-inkscape-font-specification:Arial"
@@ -1175,6 +1175,6 @@
          x="87.378555"
          y="136.50113"
          style="font-size:15px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;font-family:Arial;-inkscape-font-specification:Arial Bold"
-         id="tspan4561-1-7-4-0">Kieker Data Bridge</tspan></text>
+         id="tspan4561-1-7-4-0">Kicker Data Bridge</tspan></text>
   </g>
 </svg>

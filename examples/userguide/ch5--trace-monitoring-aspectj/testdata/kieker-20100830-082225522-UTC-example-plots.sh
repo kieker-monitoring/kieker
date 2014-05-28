@@ -2,13 +2,13 @@
 
 KIEKER_DIR="$1"
 OUTDIR="$2"
-EXAMPLE_LOG=${KIEKER_DIR}/examples/userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC
+EXAMPLE_LOG=${KIEKER_DIR}/examples/userguide/ch5--trace-monitoring-aspectj/testdata/kicker-20100830-082225522-UTC
 TRACE_ANALYSIS_SH=${KIEKER_DIR}/bin/trace-analysis.sh
 FILE_CONVERTER_SH=${KIEKER_DIR}/bin/dotPic-fileConverter.sh
 
 # Should be enabled only if the reference pdfs shall be created (otherwise the release test script is broken):
-#KIEKER_DIR=${HOME}/git_work/kieker/
-#EXAMPLE_LOG=${KIEKER_DIR}/examples/userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC
+#KIEKER_DIR=${HOME}/git_work/kicker/
+#EXAMPLE_LOG=${KIEKER_DIR}/examples/userguide/ch5--trace-monitoring-aspectj/testdata/kicker-20100830-082225522-UTC
 #TRACE_ANALYSIS_SH=${KIEKER_DIR}/bin/trace-analysis.sh
 #FILE_CONVERTER_SH=${KIEKER_DIR}/bin/dotPic-fileConverter.sh
 #OUTDIR=$(basename "${EXAMPLE_LOG}")"-example-plots77"
@@ -23,7 +23,7 @@ if ! test -x "${FILE_CONVERTER_SH}"; then
     exit 1
 fi
 
-if ! test -s "${EXAMPLE_LOG}/kieker.map"; then
+if ! test -s "${EXAMPLE_LOG}/kicker.map"; then
     echo "${EXAMPLE_LOG}/ is no monitoring log"
     exit 1 
 fi

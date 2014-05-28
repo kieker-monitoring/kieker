@@ -1,7 +1,7 @@
 output_fn="results-macro.pdf"
 
-values1 <- array(dim=c(2,2,5),dimnames=list(c("nokiek","kieker"),c("mean","ci95%"),c(1:5)))
-values1["kieker",,] <- c(
+values1 <- array(dim=c(2,2,5),dimnames=list(c("nokiek","kicker"),c("mean","ci95%"),c(1:5)))
+values1["kicker",,] <- c(
 c(0.043,0.0012),
 c(0.031,0.0031),
 c(0.020,0.0012),
@@ -14,8 +14,8 @@ c(0.015,0.0012),
 c(0.012,0.0005),
 c(0.031,0.0023))
 
-values2 <- array(dim=c(2,2,5),dimnames=list(c("nokiek","kieker"),c("mean","ci95%"),c(1:5)))
-values2["kieker",,] <- c(
+values2 <- array(dim=c(2,2,5),dimnames=list(c("nokiek","kicker"),c("mean","ci95%"),c(1:5)))
+values2["kicker",,] <- c(
 c(0.036,0.0006),
 c(0.018,0.0012),
 c(0.012,0.0012),
@@ -28,8 +28,8 @@ c(0.010,0.0003),
 c(0.008,0.0003),
 c(0.023,0.0002))
 
-values3 <- array(dim=c(2,2,5),dimnames=list(c("nokiek","kieker"),c("mean","ci95%"),c(1:5)))
-values3["kieker",,] <- c(
+values3 <- array(dim=c(2,2,5),dimnames=list(c("nokiek","kicker"),c("mean","ci95%"),c(1:5)))
+values3["kicker",,] <- c(
 c(0.036,0.0005),
 c(0.017,0.0004),
 c(0.011,0.0012),
@@ -60,9 +60,9 @@ for (ce in c(1:5)) {
     lines(c(0.36+ce*0.18+0.04,0.36+ce*0.18+0.08),c(ciu,ciu))
     lines(c(0.36+ce*0.18+0.06,0.36+ce*0.18+0.06),c(ciu,cil))
     lines(c(0.36+ce*0.18+0.04,0.36+ce*0.18+0.08),c(cil,cil))
-  rect(0.36+ce*0.18+0.1, 0, 0.36+ce*0.18+0.18, values1["kieker","mean",ce],angle=135,density=ce*5)
-    ciu=values1["kieker","mean",ce]+values1["kieker","ci95%",ce]
-    cil=values1["kieker","mean",ce]-values1["kieker","ci95%",ce]
+  rect(0.36+ce*0.18+0.1, 0, 0.36+ce*0.18+0.18, values1["kicker","mean",ce],angle=135,density=ce*5)
+    ciu=values1["kicker","mean",ce]+values1["kicker","ci95%",ce]
+    cil=values1["kicker","mean",ce]-values1["kicker","ci95%",ce]
     lines(c(0.36+ce*0.18+0.12,0.36+ce*0.18+0.16),c(ciu,ciu))
     lines(c(0.36+ce*0.18+0.14,0.36+ce*0.18+0.14),c(ciu,cil))
     lines(c(0.36+ce*0.18+0.12,0.36+ce*0.18+0.16),c(cil,cil))
@@ -76,9 +76,9 @@ for (ce in c(1:5)) {
     lines(c(1.36+ce*0.18+0.04,1.36+ce*0.18+0.08),c(ciu,ciu))
     lines(c(1.36+ce*0.18+0.06,1.36+ce*0.18+0.06),c(ciu,cil))
     lines(c(1.36+ce*0.18+0.04,1.36+ce*0.18+0.08),c(cil,cil))
-  rect(1.36+ce*0.18+0.1, 0, 1.36+ce*0.18+0.18, values2["kieker","mean",ce],angle=135,density=ce*5)
-    ciu=values2["kieker","mean",ce]+values2["kieker","ci95%",ce]
-    cil=values2["kieker","mean",ce]-values2["kieker","ci95%",ce]
+  rect(1.36+ce*0.18+0.1, 0, 1.36+ce*0.18+0.18, values2["kicker","mean",ce],angle=135,density=ce*5)
+    ciu=values2["kicker","mean",ce]+values2["kicker","ci95%",ce]
+    cil=values2["kicker","mean",ce]-values2["kicker","ci95%",ce]
     lines(c(1.36+ce*0.18+0.12,1.36+ce*0.18+0.16),c(ciu,ciu))
     lines(c(1.36+ce*0.18+0.14,1.36+ce*0.18+0.14),c(ciu,cil))
     lines(c(1.36+ce*0.18+0.12,1.36+ce*0.18+0.16),c(cil,cil))
@@ -92,9 +92,9 @@ for (ce in c(1:5)) {
     lines(c(2.36+ce*0.18+0.04,2.36+ce*0.18+0.08),c(ciu,ciu))
     lines(c(2.36+ce*0.18+0.06,2.36+ce*0.18+0.06),c(ciu,cil))
     lines(c(2.36+ce*0.18+0.04,2.36+ce*0.18+0.08),c(cil,cil))
-  rect(2.36+ce*0.18+0.1, 0, 2.36+ce*0.18+0.18, values3["kieker","mean",ce],angle=135,density=ce*5)
-    ciu=values3["kieker","mean",ce]+values3["kieker","ci95%",ce]
-    cil=values3["kieker","mean",ce]-values3["kieker","ci95%",ce]
+  rect(2.36+ce*0.18+0.1, 0, 2.36+ce*0.18+0.18, values3["kicker","mean",ce],angle=135,density=ce*5)
+    ciu=values3["kicker","mean",ce]+values3["kicker","ci95%",ce]
+    cil=values3["kicker","mean",ce]-values3["kicker","ci95%",ce]
     lines(c(2.36+ce*0.18+0.12,2.36+ce*0.18+0.16),c(ciu,ciu))
     lines(c(2.36+ce*0.18+0.14,2.36+ce*0.18+0.14),c(ciu,cil))
     lines(c(2.36+ce*0.18+0.12,2.36+ce*0.18+0.16),c(cil,cil))

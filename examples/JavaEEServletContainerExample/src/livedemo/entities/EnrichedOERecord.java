@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kicker Project (http://kicker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,9 @@ package livedemo.entities;
 import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
 
-import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.common.util.registry.IRegistry;
+import kicker.common.record.IMonitoringRecord;
+import kicker.common.record.controlflow.OperationExecutionRecord;
+import kicker.common.util.registry.IRegistry;
 
 /**
  * @author Bjoern Weissenfels

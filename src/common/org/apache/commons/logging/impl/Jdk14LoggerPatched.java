@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kicker Project (http://kicker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,7 +58,7 @@ public final class Jdk14LoggerPatched extends Jdk14Logger {
 	}
 
 	/**
-	 * Copy of {@link Jdk14Logger.log(level, msg, ex)} with correct stack depth for Kieker.
+	 * Copy of {@link Jdk14Logger.log(level, msg, ex)} with correct stack depth for Kicker.
 	 * 
 	 * @param level
 	 *            The level of the log entry (the severity).

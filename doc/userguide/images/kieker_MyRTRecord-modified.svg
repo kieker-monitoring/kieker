@@ -26,7 +26,7 @@
    font-weight="normal"
    id="svg2"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="kieker_MyRTRecord-modified.svg"
+   sodipodi:docname="kicker_MyRTRecord-modified.svg"
    style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog">
   <line
      clip-path="url(#clipPath29-0)"
@@ -536,7 +536,7 @@
        clip-path="url(#clipPath3)"
        y="35"
        x="315"
-       font-size="9">(from kieker::common::record)</text>
+       font-size="9">(from kicker::common::record)</text>
     <text
        style="fill:#000000;stroke:none"
        id="text112"
@@ -603,7 +603,7 @@
        clip-path="url(#clipPath11)"
        y="48"
        x="56"
-       font-size="9">(from kieker::common::record)</text>
+       font-size="9">(from kicker::common::record)</text>
     <text
        style="fill:#000000;stroke:none"
        id="text134"
@@ -696,7 +696,7 @@
      xml:space="preserve"
      id="text132-0"
      style="font-size:9px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
-     transform="translate(-9.2187097,104.56567)">(from kieker::common::record)</text>
+     transform="translate(-9.2187097,104.56567)">(from kicker::common::record)</text>
   <text
      x="320"
      y="111"

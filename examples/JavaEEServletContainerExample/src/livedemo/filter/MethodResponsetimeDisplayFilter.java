@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kicker Project (http://kicker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,18 +21,18 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
-import kieker.analysis.IProjectContext;
-import kieker.analysis.display.XYPlot;
-import kieker.analysis.display.annotation.Display;
-import kieker.analysis.plugin.annotation.InputPort;
-import kieker.analysis.plugin.annotation.OutputPort;
-import kieker.analysis.plugin.annotation.Plugin;
-import kieker.analysis.plugin.annotation.Property;
-import kieker.analysis.plugin.filter.AbstractFilterPlugin;
-import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
-import kieker.common.record.controlflow.OperationExecutionRecord;
+import kicker.analysis.IProjectContext;
+import kicker.analysis.display.XYPlot;
+import kicker.analysis.display.annotation.Display;
+import kicker.analysis.plugin.annotation.InputPort;
+import kicker.analysis.plugin.annotation.OutputPort;
+import kicker.analysis.plugin.annotation.Plugin;
+import kicker.analysis.plugin.annotation.Property;
+import kicker.analysis.plugin.filter.AbstractFilterPlugin;
+import kicker.common.configuration.Configuration;
+import kicker.common.logging.Log;
+import kicker.common.logging.LogFactory;
+import kicker.common.record.controlflow.OperationExecutionRecord;
 
 /**
  * This is a filter which accepts {@link OperationExecutionRecord} instances and provides different views to visualize them. The incoming records are relayed without

@@ -7,8 +7,8 @@
 	</weaver>
 	<aspects>
 		<concrete-aspect
-			name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectSPECjEnterprise2010Servlet"
-			extends="kieker.monitoring.probe.aspectj.AbstractOperationExecutionAspectServlet">
+			name="kicker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectSPECjEnterprise2010Servlet"
+			extends="kicker.monitoring.probe.aspectj.AbstractOperationExecutionAspectServlet">
 			<pointcut name="monitoredServlet"
 				expression="execution(* org.spec.jent.servlet.SpecAppServlet.do*(..)) && args(request,response)" />
 			<pointcut name="monitoredOperation"

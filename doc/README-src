@@ -1,8 +1,8 @@
-This is the source release archive of the Kieker framework for application 
+This is the source release archive of the Kicker framework for application 
 performance monitoring and dynamic software analysis.
 
-Detailed information about Kieker is provided at http://kieker-monitoring.net/
+Detailed information about Kicker is provided at http://kicker-monitoring.net/
 
 Ant is used as the build tool. A `build.xml` is provided. Also, the sources can 
 be imported into Eclipse. The developer guide contains additional information 
-on the build environment: http://trac.kieker-monitoring.net/wiki/DevGuide 
+on the build environment: http://trac.kicker-monitoring.net/wiki/DevGuide 

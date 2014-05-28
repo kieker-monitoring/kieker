@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kicker Project (http://kicker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,11 +24,11 @@ import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 
-import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
-import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
-import kieker.tools.traceAnalysis.systemModel.ComponentType;
-import kieker.tools.traceAnalysis.systemModel.ExecutionContainer;
-import kieker.tools.traceAnalysis.systemModel.Operation;
+import kicker.tools.traceAnalysis.systemModel.AllocationComponent;
+import kicker.tools.traceAnalysis.systemModel.AssemblyComponent;
+import kicker.tools.traceAnalysis.systemModel.ComponentType;
+import kicker.tools.traceAnalysis.systemModel.ExecutionContainer;
+import kicker.tools.traceAnalysis.systemModel.Operation;
 
 /**
  * @author Bjoern Weissenfels

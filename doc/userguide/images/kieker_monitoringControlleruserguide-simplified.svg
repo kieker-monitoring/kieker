@@ -27,7 +27,7 @@
    font-weight="normal"
    id="svg2"
    inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="kieker_monitoringControlleruserguide-simplified.svg"
+   sodipodi:docname="kicker_monitoringControlleruserguide-simplified.svg"
    style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog">
   <metadata
      id="metadata315">
@@ -459,7 +459,7 @@
      clip-path="none"
      xml:space="preserve"
      id="text169"
-     style="font-size:11px;fill:#000000;stroke:none;font-family:Arial">(from kieker::monitoring::core::controller)</text>
+     style="font-size:11px;fill:#000000;stroke:none;font-family:Arial">(from kicker::monitoring::core::controller)</text>
   <text
      x="7.5"
      y="45.53125"
@@ -604,7 +604,7 @@
      xml:space="preserve"
      id="text227"
      style="font-size:11px;stroke:none;font-family:Arial"
-     transform="translate(-8.5,-8.46875)">(from kieker::monitoring::writer)</text>
+     transform="translate(-8.5,-8.46875)">(from kicker::monitoring::writer)</text>
   <rect
      x="513"
      y="9"
@@ -646,7 +646,7 @@
      clip-path="none"
      xml:space="preserve"
      id="text257"
-     style="font-size:11px;stroke:none;font-family:Arial">(from kieker::monitoring::timer)</text>
+     style="font-size:11px;stroke:none;font-family:Arial">(from kicker::monitoring::timer)</text>
   <text
      x="511.5"
      y="122.53125"

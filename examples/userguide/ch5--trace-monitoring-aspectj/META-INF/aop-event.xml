@@ -2,19 +2,19 @@
 
 <aspectj>
     <weaver options="">
-        <include within="kieker.examples.userguide.ch5bookstore..*"/>
+        <include within="kicker.examples.userguide.ch5bookstore..*"/>
     </weaver>
     
     <aspects>
-		<!-- KiekerFlow Aspects-->
+		<!-- KickerFlow Aspects-->
 		<!-- Construction -->
-		<aspect name="kieker.monitoring.probe.aspectj.flow.construction.Annotation" />
+		<aspect name="kicker.monitoring.probe.aspectj.flow.construction.Annotation" />
 
 		<!-- OperationCall -->
-		<aspect name="kieker.monitoring.probe.aspectj.flow.operationExecution.Annotation" />
+		<aspect name="kicker.monitoring.probe.aspectj.flow.operationExecution.Annotation" />
 		
 		<!-- OperationExecution -->
-		<aspect name="kieker.monitoring.probe.aspectj.flow.operationCall.Annotation" />
+		<aspect name="kicker.monitoring.probe.aspectj.flow.operationCall.Annotation" />
 		
    </aspects>
 </aspectj>

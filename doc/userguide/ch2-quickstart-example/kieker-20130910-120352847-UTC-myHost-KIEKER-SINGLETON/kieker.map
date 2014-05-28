@@ -1,2 +1,2 @@
-$0=kieker.common.record.misc.KiekerMetadataRecord
-$1=kieker.common.record.controlflow.OperationExecutionRecord
+$0=kicker.common.record.misc.KickerMetadataRecord
+$1=kicker.common.record.controlflow.OperationExecutionRecord

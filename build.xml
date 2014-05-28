@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Kieker" default="build-all" basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+<project name="Kicker" default="build-all" basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 	<echo>Java Version: ${ant.java.version}</echo> 
 	<property file="build-config/build.properties" />
 	<import file="build-config/init-and-clean.xml"/>

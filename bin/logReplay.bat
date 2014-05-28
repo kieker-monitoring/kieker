@@ -4,8 +4,8 @@ REM @author Nils Christian Ehmke
 
 setlocal enabledelayedexpansion
 
-SET JAVAARGS=-Dkieker.common.logging.Log=JDK -Djava.util.logging.config.file=./logging.properties
-SET MAINCLASSNAME=kieker.tools.logReplayer.FilesystemLogReplayerStarter
+SET JAVAARGS=-Dkicker.common.logging.Log=JDK -Djava.util.logging.config.file=./logging.properties
+SET MAINCLASSNAME=kicker.tools.logReplayer.FilesystemLogReplayerStarter
 
 REM Get the directory of this file and change the working directory to it.
 cd %~dp0

@@ -27,7 +27,7 @@
    font-weight="normal"
    id="svg2"
    inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="kieker_AnalysisControlleruserguide-modified.svg"
+   sodipodi:docname="kicker_AnalysisControlleruserguide-modified.svg"
    style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog">
   <line
      clip-path="url(#clipPath45-3-4)"
@@ -1694,7 +1694,7 @@
        clip-path="none"
        y="268.54788"
        x="-337.3465"
-       xml:space="preserve">(from kieker::analysis::plugin::reader)</text>
+       xml:space="preserve">(from kicker::analysis::plugin::reader)</text>
     <line
        transform="matrix(0.86296857,0,0,1,-674.77262,65.547874)"
        style="font-size:11px;fill:none;stroke-width:1.16549563;stroke-linecap:butt;font-family:Arial"
@@ -1752,7 +1752,7 @@
        clip-path="none"
        y="265.98987"
        x="453.52789"
-       xml:space="preserve">(from kieker::analysis::plugin::filter)</text>
+       xml:space="preserve">(from kicker::analysis::plugin::filter)</text>
   </g>
   <g
      transform="matrix(0,-1,-0.57302756,0,799.00861,922.68308)"
@@ -1812,7 +1812,7 @@
        clip-path="none"
        y="247.73424"
        x="858.75696"
-       xml:space="preserve">(from kieker::analysis::repository)</text>
+       xml:space="preserve">(from kicker::analysis::repository)</text>
     <text
        style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
        id="text411-4-6"
@@ -1884,7 +1884,7 @@
      y="356.923"
      clip-path="none"
      id="text303-0"
-     style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial">(from kieker::analysis::plugin)</text>
+     style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial">(from kicker::analysis::plugin)</text>
   <text
      xml:space="preserve"
      x="197.76085"
@@ -1938,7 +1938,7 @@
        clip-path="none"
        y="174.06122"
        x="768.53992"
-       xml:space="preserve">(from kieker::analysis::repository)</text>
+       xml:space="preserve">(from kicker::analysis::repository)</text>
     <text
        style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
        id="text305-9-4"
@@ -1981,7 +1981,7 @@
        clip-path="none"
        y="175.30768"
        x="126.92808"
-       xml:space="preserve">(from kieker::analysis::plugin::reader)</text>
+       xml:space="preserve">(from kicker::analysis::plugin::reader)</text>
     <text
        style="font-size:11px;stroke:none;font-family:Arial"
        id="text305"
@@ -2024,7 +2024,7 @@
        clip-path="none"
        y="175.30768"
        x="465.56516"
-       xml:space="preserve">(from kieker::analysis::plugin::filter)</text>
+       xml:space="preserve">(from kicker::analysis::plugin::filter)</text>
     <line
        transform="matrix(1.2911676,0,0,1,324.1186,-27.692318)"
        style="font-size:11px;font-style:normal;font-weight:normal;fill:none;stroke:#000000;stroke-width:0.95283312;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Arial"
@@ -2117,7 +2117,7 @@
          xml:space="preserve"
          id="text263"
          style="font-size:11px;fill:#000000;stroke:none;font-family:Arial"
-         transform="translate(-18.920112,-30.034919)">(from kieker::analysis)</text>
+         transform="translate(-18.920112,-30.034919)">(from kicker::analysis)</text>
     </g>
   </g>
   <text
@@ -2287,7 +2287,7 @@
            clip-path="none"
            y="-358.48291"
            x="494.20593"
-           xml:space="preserve">(from kieker::analysis)</text>
+           xml:space="preserve">(from kicker::analysis)</text>
       </g>
     </g>
     <text
@@ -2351,7 +2351,7 @@
        clip-path="none"
        y="-90.054237"
        x="325.0799"
-       xml:space="preserve">(from kieker::analysis)</text>
+       xml:space="preserve">(from kicker::analysis)</text>
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 124.54115,-84.929679 509.04024,0"
@@ -2437,7 +2437,7 @@
        clip-path="none"
        y="349.09641"
        x="244.65562"
-       xml:space="preserve">(from kieker::analysis::plugin)</text>
+       xml:space="preserve">(from kicker::analysis::plugin)</text>
     <text
        style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
        id="text411-4"
@@ -2504,7 +2504,7 @@
        clip-path="none"
        y="391.9585"
        x="606.95972"
-       xml:space="preserve">(from kieker::analysis::analysisComponent)</text>
+       xml:space="preserve">(from kicker::analysis::analysisComponent)</text>
     <text
        style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
        id="text305-9-4-2"
@@ -2554,7 +2554,7 @@
        clip-path="none"
        y="524.91254"
        x="344.64471"
-       xml:space="preserve">(from kieker::analysis::plugin)</text>
+       xml:space="preserve">(from kicker::analysis::plugin)</text>
     <text
        style="font-size:11px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
        id="text413-4"
