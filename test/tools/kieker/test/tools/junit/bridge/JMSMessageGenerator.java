@@ -48,7 +48,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
  */
 public class JMSMessageGenerator implements Runnable {
 
-	private static final Log LOG;
+	private static final Log LOG; // NOPMD
 
 	private Connection connection;
 	private MessageProducer producer;
