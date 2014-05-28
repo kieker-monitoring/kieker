@@ -45,9 +45,13 @@ public class FakeMessageConsumer implements MessageConsumer {
 		this.messageListener = null; // NOPMD (null)
 	}
 
+	/**
+	 * Add a message from the producer to the consumer queue.
+	 */
 	public void addMessage(final Message message) {
 		this.messages.add(message);
-		// Some tests already use this method without a connected consumer
+		// Some tests already use this method without a connected consumer or
+		// do not use the listener API.
 		if (this.messageListener != null) {
 			while (!this.messages.isEmpty()) {
 				this.messageListener.onMessage(this.messages.poll());
@@ -68,7 +72,7 @@ public class FakeMessageConsumer implements MessageConsumer {
 	 */
 	@Override
 	public MessageListener getMessageListener() throws JMSException {
-		return null;
+		return this.messageListener;
 	}
 
 	/**
@@ -84,7 +88,7 @@ public class FakeMessageConsumer implements MessageConsumer {
 	 */
 	@Override
 	public Message receive() throws JMSException {
-		return null;
+		return this.messages.poll();
 	}
 
 	/**
