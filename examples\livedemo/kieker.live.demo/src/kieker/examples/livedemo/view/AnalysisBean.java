@@ -178,9 +178,9 @@ public class AnalysisBean {
 				AbstractNonAggregatingDisplayFilter.INPUT_PORT_NAME_RECORDS);
 
 		this.analysisInstance.connect(distributor, Distributor.OUTPUT_PORT_NAME_OPERATION_EXECUTION_RECORDS,
-				oer2RecordFilter, OperationExecutionRecordEnrichmentFilter.INPUT_PORT_NAME);
+				oer2RecordFilter, OperationExecutionRecordEnrichmentFilter.INPUT_PORT_NAME_RECORDS);
 
-		this.analysisInstance.connect(oer2RecordFilter, OperationExecutionRecordEnrichmentFilter.OUTPUT_PORT_NAME, this.recordListFilter,
+		this.analysisInstance.connect(oer2RecordFilter, OperationExecutionRecordEnrichmentFilter.OUTPUT_PORT_NAME_RECORDS, this.recordListFilter,
 				ListCollectionFilter.INPUT_PORT_NAME);
 
 		this.analysisInstance.connect(distributor, Distributor.OUTPUT_PORT_NAME_CPU_UTILIZATION_RECORDS, this.cpuFilter,

@@ -40,17 +40,16 @@ import kieker.common.record.system.MemSwapUsageRecord;
  * 
  * @since 1.10
  */
-@Plugin(programmaticOnly = true,
-		outputPorts = {
-			@OutputPort(eventTypes = GCRecord.class, name = Distributor.OUTPUT_PORT_NAME_GC_RECORDS),
-			@OutputPort(eventTypes = ClassLoadingRecord.class, name = Distributor.OUTPUT_PORT_NAME_CLASS_LOADING_RECORDS),
-			@OutputPort(eventTypes = ThreadsStatusRecord.class, name = Distributor.OUTPUT_PORT_NAME_THREADS_STATUS_RECORDS),
-			@OutputPort(eventTypes = CompilationRecord.class, name = Distributor.OUTPUT_PORT_NAME_COMPILATION_RECORDS),
-			@OutputPort(eventTypes = CPUUtilizationRecord.class, name = Distributor.OUTPUT_PORT_NAME_CPU_UTILIZATION_RECORDS),
-			@OutputPort(eventTypes = MemSwapUsageRecord.class, name = Distributor.OUTPUT_PORT_NAME_MEM_SWAP_USAGE_RECORDS),
-			@OutputPort(eventTypes = OperationExecutionRecord.class, name = Distributor.OUTPUT_PORT_NAME_OPERATION_EXECUTION_RECORDS),
-			@OutputPort(eventTypes = MemoryRecord.class, name = Distributor.OUTPUT_PORT_NAME_JVM_MEMORY_RECORDS)
-		})
+@Plugin(outputPorts = {
+	@OutputPort(eventTypes = GCRecord.class, name = Distributor.OUTPUT_PORT_NAME_GC_RECORDS),
+	@OutputPort(eventTypes = ClassLoadingRecord.class, name = Distributor.OUTPUT_PORT_NAME_CLASS_LOADING_RECORDS),
+	@OutputPort(eventTypes = ThreadsStatusRecord.class, name = Distributor.OUTPUT_PORT_NAME_THREADS_STATUS_RECORDS),
+	@OutputPort(eventTypes = CompilationRecord.class, name = Distributor.OUTPUT_PORT_NAME_COMPILATION_RECORDS),
+	@OutputPort(eventTypes = CPUUtilizationRecord.class, name = Distributor.OUTPUT_PORT_NAME_CPU_UTILIZATION_RECORDS),
+	@OutputPort(eventTypes = MemSwapUsageRecord.class, name = Distributor.OUTPUT_PORT_NAME_MEM_SWAP_USAGE_RECORDS),
+	@OutputPort(eventTypes = OperationExecutionRecord.class, name = Distributor.OUTPUT_PORT_NAME_OPERATION_EXECUTION_RECORDS),
+	@OutputPort(eventTypes = MemoryRecord.class, name = Distributor.OUTPUT_PORT_NAME_JVM_MEMORY_RECORDS)
+})
 public final class Distributor extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME_RECORDS = "input";
