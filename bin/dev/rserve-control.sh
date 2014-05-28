@@ -11,7 +11,7 @@ case "$1" in
 	if [ $RET = 0 ]; then
 		echo "done."
 	else
-		echo "failed (exit status: $RET)"
+		echo "failed (exit status: $RET)."
 	fi
 	exit $RET
         ;;
@@ -22,7 +22,7 @@ case "$1" in
 	exit 0
         ;;
     *)
-        ## If no parameters are given, print which are avaiable.
+        ## If no parameters are given, print which are available.
         echo "Usage: $0 {start|stop}"
         exit 0
         ;;
