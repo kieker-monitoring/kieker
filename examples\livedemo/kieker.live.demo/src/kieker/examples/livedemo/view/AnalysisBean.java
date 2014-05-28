@@ -25,7 +25,6 @@ import kieker.analysis.AnalysisControllerThread;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.filter.sink.CPUUtilizationDisplayFilter;
-import kieker.analysis.plugin.filter.sink.MemSwapUtilizationDisplayFilter;
 import kieker.analysis.plugin.reader.jmx.JMXReader;
 import kieker.analysis.plugin.reader.timer.TimeReader;
 import kieker.common.configuration.Configuration;
@@ -42,8 +41,10 @@ import kieker.examples.livedemo.analysis.display.GCCountDisplayFilter;
 import kieker.examples.livedemo.analysis.display.GCTimeDisplayFilter;
 import kieker.examples.livedemo.analysis.display.JVMHeapDisplayFilter;
 import kieker.examples.livedemo.analysis.display.JVMNonHeapDisplayFilter;
+import kieker.examples.livedemo.analysis.display.MemoryDisplayFilter;
 import kieker.examples.livedemo.analysis.display.MethodFlowDisplayFilter;
 import kieker.examples.livedemo.analysis.display.MethodResponsetimeDisplayFilter;
+import kieker.examples.livedemo.analysis.display.SwapDisplayFilter;
 import kieker.examples.livedemo.analysis.display.ThreadsStatusDisplayFilter;
 import kieker.examples.livedemo.common.EnrichedOperationExecutionRecord;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
@@ -72,7 +73,6 @@ public class AnalysisBean {
 
 	private final SystemModelRepository systemModelRepository;
 	private final CPUUtilizationDisplayFilter cpuFilter;
-	private final MemSwapUtilizationDisplayFilter memSwapFilter;
 	private final ListCollectionFilter<EnrichedOperationExecutionRecord> recordListFilter;
 	private final MethodResponsetimeDisplayFilter responsetimeFilter;
 	private final MethodFlowDisplayFilter methodFlowDisplayFilter;
@@ -84,6 +84,8 @@ public class AnalysisBean {
 	private final GCTimeDisplayFilter gcTimeDisplayFilter;
 	private final JVMHeapDisplayFilter jvmHeapDisplayFilter;
 	private final JVMNonHeapDisplayFilter jvmNonHeapDisplayFilter;
+	private final MemoryDisplayFilter memoryDisplayFilter;
+	private final SwapDisplayFilter swapDisplayFilter;
 
 	public AnalysisBean() {
 		this.updateThread = new UpdateThread(1000); // will notify its observers every second
@@ -97,8 +99,9 @@ public class AnalysisBean {
 		this.cpuFilter = new CPUUtilizationDisplayFilter(cpuConfiguration, this.analysisInstance);
 
 		final Configuration memSwapConfiguration = new Configuration();
-		memSwapConfiguration.setProperty(MemSwapUtilizationDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, AnalysisBean.NUMBER_OF_CPU_AND_MEMSWAP_ENTRIES);
-		this.memSwapFilter = new MemSwapUtilizationDisplayFilter(memSwapConfiguration, this.analysisInstance);
+		memSwapConfiguration.setProperty(AbstractNonAggregatingDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES, AnalysisBean.NUMBER_OF_CPU_AND_MEMSWAP_ENTRIES);
+		this.memoryDisplayFilter = new MemoryDisplayFilter(memSwapConfiguration, this.analysisInstance);
+		this.swapDisplayFilter = new SwapDisplayFilter(memSwapConfiguration, this.analysisInstance);
 
 		final Configuration recordListConfiguration = new Configuration();
 		recordListConfiguration.setProperty(ListCollectionFilter.CONFIG_PROPERTY_NAME_MAX_NUMBER_OF_ENTRIES, AnalysisBean.NUMBER_OF_RECORD_LIST_ENTRIES);
@@ -183,8 +186,10 @@ public class AnalysisBean {
 		this.analysisInstance.connect(distributor, Distributor.OUTPUT_PORT_NAME_CPU_UTILIZATION_RECORDS, this.cpuFilter,
 				CPUUtilizationDisplayFilter.INPUT_PORT_NAME_EVENTS);
 
-		this.analysisInstance.connect(distributor, Distributor.OUTPUT_PORT_NAME_MEM_SWAP_USAGE_RECORDS, this.memSwapFilter,
-				MemSwapUtilizationDisplayFilter.INPUT_PORT_NAME_EVENTS);
+		this.analysisInstance.connect(distributor, Distributor.OUTPUT_PORT_NAME_MEM_SWAP_USAGE_RECORDS, this.memoryDisplayFilter,
+				AbstractNonAggregatingDisplayFilter.INPUT_PORT_NAME_RECORDS);
+		this.analysisInstance.connect(distributor, Distributor.OUTPUT_PORT_NAME_MEM_SWAP_USAGE_RECORDS, this.swapDisplayFilter,
+				AbstractNonAggregatingDisplayFilter.INPUT_PORT_NAME_RECORDS);
 
 		this.analysisInstance.connect(distributor, Distributor.OUTPUT_PORT_NAME_CLASS_LOADING_RECORDS, this.classLoadingDisplayFilter,
 				AbstractNonAggregatingDisplayFilter.INPUT_PORT_NAME_RECORDS);
@@ -223,8 +228,12 @@ public class AnalysisBean {
 		return this.cpuFilter;
 	}
 
-	public MemSwapUtilizationDisplayFilter getMemSwapUtilizationDisplayFilter() {
-		return this.memSwapFilter;
+	public MemoryDisplayFilter getMemoryDisplayFilter() {
+		return this.memoryDisplayFilter;
+	}
+
+	public SwapDisplayFilter getSwapDisplayFilter() {
+		return this.swapDisplayFilter;
 	}
 
 	public ListCollectionFilter<EnrichedOperationExecutionRecord> getRecordListFilter() {

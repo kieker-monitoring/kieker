@@ -16,18 +16,13 @@
 
 package kieker.examples.livedemo.view;
 
-import java.util.Observable;
-import java.util.Observer;
-
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 
 import org.primefaces.model.chart.CartesianChartModel;
-import org.primefaces.model.chart.ChartSeries;
 
-import kieker.analysis.display.XYPlot;
 import kieker.examples.livedemo.common.Model;
 
 /**
@@ -37,30 +32,22 @@ import kieker.examples.livedemo.common.Model;
  */
 @ManagedBean(name = "memSwapBean")
 @ApplicationScoped
-public class MemSwapBean implements Observer {
+public class MemSwapBean {
 
 	@ManagedProperty(value = "#{analysisBean}")
 	private AnalysisBean analysisBean;
 
-	private XYPlot xyplot;
-	private final Model<CartesianChartModel> memModel;
-	private final Model<CartesianChartModel> swapModel;
+	private Model<CartesianChartModel> memModel;
+	private Model<CartesianChartModel> swapModel;
 
 	public MemSwapBean() {
-		this.memModel = new Model<CartesianChartModel>(new CartesianChartModel(), "KIEKER-DEMO-SVR - MEM");
-		this.swapModel = new Model<CartesianChartModel>(new CartesianChartModel(), "KIEKER-DEMO-SVR - SWAP");
+		// No code necessary
 	}
 
 	@PostConstruct
 	public void init() {
-		this.xyplot = this.analysisBean.getMemSwapUtilizationDisplayFilter().getXYPlot();
-		this.updateXYPlot();
-		final String key = this.xyplot.getKeys().iterator().next();
-		final int index = key.lastIndexOf('-');
-		final String hostname = key.substring(0, index - 1);
-		this.memModel.setName(hostname + " - MEM");
-		this.swapModel.setName(hostname + " - SWAP");
-		this.analysisBean.getUpdateThread().addObserver(this);
+		this.memModel = new Model<CartesianChartModel>(this.analysisBean.getMemoryDisplayFilter().getChartModel(), "KIEKER-DEMO-SVR - MEM");
+		this.swapModel = new Model<CartesianChartModel>(this.analysisBean.getSwapDisplayFilter().getChartModel(), "KIEKER-DEMO-SVR - SWAP");
 	}
 
 	public void setAnalysisBean(final AnalysisBean analysisBean) {
@@ -75,38 +62,4 @@ public class MemSwapBean implements Observer {
 		return this.swapModel;
 	}
 
-	private void updateXYPlot() {
-		final CartesianChartModel mem = new CartesianChartModel();
-		final CartesianChartModel swap = new CartesianChartModel();
-		for (final String key : this.xyplot.getKeys()) { // key = hostname - memFree|memTotal|memUsed|swapFree|...
-			if (key.endsWith("memFree")) {
-				final ChartSeries series = new ChartSeries();
-				series.setLabel("memFree");
-				series.setData(this.xyplot.getEntries(key));
-				mem.addSeries(series);
-			} else if (key.endsWith("memUsed")) {
-				final ChartSeries series = new ChartSeries();
-				series.setLabel("memUsed");
-				series.setData(this.xyplot.getEntries(key));
-				mem.addSeries(series);
-			} else if (key.endsWith("swapFree")) {
-				final ChartSeries series = new ChartSeries();
-				series.setLabel("swapFree");
-				series.setData(this.xyplot.getEntries(key));
-				swap.addSeries(series);
-			} else if (key.endsWith("swapUsed")) {
-				final ChartSeries series = new ChartSeries();
-				series.setLabel("swapUsed");
-				series.setData(this.xyplot.getEntries(key));
-				swap.addSeries(series);
-			}
-		}
-		this.memModel.setModel(mem);
-		this.swapModel.setModel(swap);
-	}
-
-	@Override
-	public void update(final Observable arg0, final Object arg1) {
-		this.updateXYPlot();
-	}
 }
