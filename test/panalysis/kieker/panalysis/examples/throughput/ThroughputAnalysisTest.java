@@ -18,7 +18,6 @@ package kieker.panalysis.examples.throughput;
 import java.util.concurrent.Callable;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.chw.util.StopWatch;
@@ -30,10 +29,10 @@ import kieker.common.logging.LogFactory;
  * 
  * @since 1.10
  */
-@Ignore
 public class ThroughputAnalysisTest {
 
-	private static final int numRuns = 1000;
+	private static final int NUM_OBJECTS_TO_CREATE = 100000;
+	private static final int numRuns = 2;
 
 	@Before
 	public void before() {
@@ -47,8 +46,8 @@ public class ThroughputAnalysisTest {
 
 		for (int i = 0; i < numRuns; i++) {
 			final ThroughputAnalysis<Object> analysis = new ThroughputAnalysis<Object>();
-			analysis.setNumNoopFilters(100);
-			analysis.setInput(100, new Callable<Object>() {
+			analysis.setNumNoopFilters(800);
+			analysis.setInput(NUM_OBJECTS_TO_CREATE, new Callable<Object>() {
 				public Object call() throws Exception {
 					return new Object();
 				}

@@ -42,6 +42,9 @@ public class MethodCallThoughputTimestampAnalysisTest {
 		System.setProperty(LogFactory.CUSTOM_LOGGER_JVM, "NONE");
 	}
 
+	// 500 times faster than our new framework
+	// TODO check why
+
 	@Test
 	public void testWithManyObjects() {
 		final StopWatch stopWatch = new StopWatch();

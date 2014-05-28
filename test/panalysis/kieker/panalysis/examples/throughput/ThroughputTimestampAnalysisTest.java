@@ -41,6 +41,9 @@ public class ThroughputTimestampAnalysisTest {
 		System.setProperty(LogFactory.CUSTOM_LOGGER_JVM, "NONE");
 	}
 
+	// Using QueuePipes ist 1/3 faster than using MethodCallPipes
+	// TODO check why
+
 	@Test
 	public void testWithManyObjects() {
 		final StopWatch stopWatch = new StopWatch();

@@ -152,10 +152,10 @@ public class ThroughputTimestampAnalysis extends Analysis {
 	}
 
 	public Collection<TimestampObject> getTimestampObjects() {
-		return timestampObjects;
+		return this.timestampObjects;
 	}
 
-	public void setTimestampObjects(Collection<TimestampObject> timestampObjects) {
+	public void setTimestampObjects(final Collection<TimestampObject> timestampObjects) {
 		this.timestampObjects = timestampObjects;
 	}
 }
