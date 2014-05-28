@@ -46,23 +46,20 @@ public class TestJMSEmbeddedConnector extends AbstractConnectorTest {
 	 */
 	@Test
 	public void testJMSEmbeddedConnector() throws ConnectorDataTransmissionException { // NOPMD
-
-		final Thread messageGenerator = new Thread(new JMSMessageGenerator(), "Generator");
-		messageGenerator.start();
-
-		final Thread broker = new Thread(new JMSBroker(), "Broker");
-		broker.start();
+		final Thread messageGenerator = new Thread(new JMSMessageGenerator(ConfigurationParameters.JMS_EMBEDDED_URI), "Generator");
 
 		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
 		configuration.setProperty(JMSEmbeddedConnector.PORT, String.valueOf(ConfigurationParameters.JMS_EMBEDDED_PORT));
 		configuration.setProperty(JMSClientConnector.USERNAME, String.valueOf(ConfigurationParameters.JMS_USERNAME));
 		configuration.setProperty(JMSClientConnector.PASSWORD, String.valueOf(ConfigurationParameters.JMS_PASSWORD));
-		configuration.setProperty(JMSClientConnector.URI, String.valueOf(ConfigurationParameters.JMS_URI));
+		configuration.setProperty(JMSClientConnector.URI, ConfigurationParameters.JMS_EMBEDDED_URI);
+		configuration.setProperty(JMSClientConnector.FACTORY_LOOKUP_NAME, ConfigurationParameters.JMS_FACTORY_LOOKUP_NAME);
+
 		// test the connector
 		this.setConnector(new JMSEmbeddedConnector(configuration, this.createLookupEntityMap()));
 		this.initialize();
+		messageGenerator.start();
 		this.deserialize(ConfigurationParameters.SEND_NUMBER_OF_RECORDS);
 		this.close(ConfigurationParameters.SEND_NUMBER_OF_RECORDS);
 	}
-
 }
