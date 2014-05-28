@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package livedemo.managedbeans;
+package kieker.examples.livedemo.view.cpuAndMemSwap;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,8 +34,8 @@ import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
 
 import kieker.analysis.display.XYPlot;
-
-import livedemo.entities.Model;
+import kieker.examples.livedemo.view.AnalysisBean;
+import kieker.examples.livedemo.view.util.Model;
 
 /**
  * @author Bjoern Weissenfels
@@ -56,7 +56,7 @@ public class CPUXYPlotBean implements Observer {
 	private int index;
 
 	private final List<String> availableAttributes = Arrays.asList("idle", "irq", "nice", "system", "totalUtilization", "user");
-	private List<String> selectedAttributes;// = Arrays.asList("idle","totalUtilization");
+	private List<String> selectedAttributes; // = Arrays.asList("idle","totalUtilization");
 
 	public CPUXYPlotBean() {
 		this.models = Collections.synchronizedList(new ArrayList<Model<CartesianChartModel>>());

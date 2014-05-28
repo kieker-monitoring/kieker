@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package livedemo.managedbeans;
+package kieker.examples.livedemo.view.recordList;
 
 import java.util.Collections;
 import java.util.List;
@@ -23,10 +23,11 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
-import livedemo.entities.EnrichedOERecord;
+import kieker.examples.livedemo.common.EnrichedOperationExecutionRecord;
+import kieker.examples.livedemo.view.AnalysisBean;
 
 /**
- * @author Bjoern Weissenfels
+ * @author Bjoern Weissenfels, Nils Christian Ehmke
  * 
  * @since 1.9
  */
@@ -51,7 +52,7 @@ public class RecordListBean {
 		this.analysisBean = analysisBean;
 	}
 
-	public String freeze() {
+	public String freezeList() {
 		if (this.freeze) {
 			this.freeze = false;
 			this.freezeButton = "freeze";
@@ -72,8 +73,8 @@ public class RecordListBean {
 		return this.freezeButton;
 	}
 
-	public List<EnrichedOERecord> getRecords() {
-		final List<EnrichedOERecord> list = this.analysisBean.getRecordListFilter().getList();
+	public List<EnrichedOperationExecutionRecord> getRecords() {
+		final List<EnrichedOperationExecutionRecord> list = this.analysisBean.getRecordListFilter().getList();
 		Collections.reverse(list);
 		return list;
 	}

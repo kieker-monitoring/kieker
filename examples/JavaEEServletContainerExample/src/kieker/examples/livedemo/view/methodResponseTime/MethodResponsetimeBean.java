@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package livedemo.managedbeans;
+package kieker.examples.livedemo.view.methodResponseTime;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,6 +35,7 @@ import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
 
 import kieker.analysis.display.XYPlot;
+import kieker.examples.livedemo.view.AnalysisBean;
 
 /**
  * @author Bjoern Weissenfels
@@ -147,16 +148,11 @@ public class MethodResponsetimeBean implements Observer {
 		String[] array = signature.split("\\(");
 		array = array[0].split("\\.");
 		final int end = array.length;
-		final String result = "..." + array[end - 2] + "." + array[end - 1] + "(...)";
-		return result;
-	}
-
-	@SuppressWarnings("unused")
-	private double convertFromNanosToMillis(final long duration) {
-		return Math.round(duration / 100000.0) / 10.0;
+		return "..." + array[end - 2] + "." + array[end - 1] + "(...)";
 	}
 
 	private synchronized void updateModels() {
+		this.maxY = 4;
 		for (final String shortSignature : this.getSelectedMethods()) {
 			final String signature = this.shortToLongSignatures.get(shortSignature);
 
@@ -169,7 +165,11 @@ public class MethodResponsetimeBean implements Observer {
 			final ChartSeries countings = new ChartSeries();
 			countings.setLabel(shortSignature);
 			final Map<Object, Number> countMap = this.methodCallsXYplot.getEntries(signature);
-			this.maxY = this.calculateMaxY(countMap.values());
+
+			final int max = this.calculateMaxY(countMap.values());
+			if (max > this.maxY) {
+				this.maxY = max;
+			}
 			countings.setData(countMap);
 			this.countingModel.addSeries(countings);
 		}

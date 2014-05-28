@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package livedemo.managedbeans;
+package kieker.examples.livedemo.view.system;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,6 +24,7 @@ import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 
+import kieker.examples.livedemo.view.AnalysisBean;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
 import kieker.tools.traceAnalysis.systemModel.ComponentType;
@@ -35,14 +36,16 @@ import kieker.tools.traceAnalysis.systemModel.Operation;
  * 
  * @since 1.9
  */
-@ManagedBean(name = "systemModelBean", eager = true)
+@ManagedBean(name = "systemModelBean")
 @ApplicationScoped
 public class SystemModelBean {
 
 	@ManagedProperty(value = "#{analysisBean}")
 	private AnalysisBean analysisBean;
 
-	public SystemModelBean() {}
+	public SystemModelBean() {
+		// No code necessary
+	}
 
 	public void setAnalysisBean(final AnalysisBean analysisBean) {
 		this.analysisBean = analysisBean;

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,28 @@
  * limitations under the License.
  ***************************************************************************/
 
-package livedemo.entities;
+package kieker.examples.livedemo.common;
 
 import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
 
-import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.util.registry.IRegistry;
 
 /**
+ * A record enriching Kieker's {@link OperationExecutionRecord} with a short signature and some comma seperated values.
+ * 
  * @author Bjoern Weissenfels
  * 
  * @since 1.9
  */
-public class EnrichedOERecord extends OperationExecutionRecord implements IMonitoringRecord {
-	public static final int SIZE = (2 * TYPE_SIZE_STRING) + (3 * TYPE_SIZE_LONG) + TYPE_SIZE_STRING + (2 * TYPE_SIZE_INT) + TYPE_SIZE_LONG + (2 * TYPE_SIZE_STRING);
+public final class EnrichedOperationExecutionRecord extends OperationExecutionRecord {
+
+	public static final int SIZE = (2 * AbstractMonitoringRecord.TYPE_SIZE_STRING) + (3 * AbstractMonitoringRecord.TYPE_SIZE_LONG)
+			+ AbstractMonitoringRecord.TYPE_SIZE_STRING + (2 * AbstractMonitoringRecord.TYPE_SIZE_INT) + AbstractMonitoringRecord.TYPE_SIZE_DOUBLE
+			+ (2 * AbstractMonitoringRecord.TYPE_SIZE_STRING);
+
 	public static final Class<?>[] TYPES = {
 		String.class, // operationSignature
 		String.class, // sessionId
@@ -46,20 +52,21 @@ public class EnrichedOERecord extends OperationExecutionRecord implements IMonit
 
 	private static final long serialVersionUID = 4652653198700953697L;
 
-	private final double responseTime; // in milliseconds, rounded to one decimal
+	private final double responseTimeMS; // rounded to one decimal
 	private final String shortSignature; // should be ...class.method(...)
 	private final String commaSeperatedValues;
 
-	public EnrichedOERecord(final String operationSignature, final String sessionId, final long traceId, final long tin, final long tout,
-			final String hostname, final int eoi, final int ess, final double responseTime, final String shortSignature, final String commaSeperatedValues) {
+	public EnrichedOperationExecutionRecord(final String operationSignature, final String sessionId, final long traceId, final long tin, final long tout,
+			final String hostname, final int eoi, final int ess, final double responseTimeMS, final String shortSignature, final String commaSeperatedValues) {
 		super(operationSignature, sessionId, traceId, tin, tout, hostname, eoi, ess);
-		this.responseTime = responseTime;
+
+		this.responseTimeMS = responseTimeMS;
 		this.shortSignature = shortSignature;
 		this.commaSeperatedValues = commaSeperatedValues;
 	}
 
 	public double getResponseTime() {
-		return this.responseTime;
+		return this.responseTimeMS;
 	}
 
 	public String getShortSignature() {
@@ -89,6 +96,7 @@ public class EnrichedOERecord extends OperationExecutionRecord implements IMonit
 	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		super.writeBytes(buffer, stringRegistry);
+
 		buffer.putDouble(this.getResponseTime());
 		buffer.putInt(stringRegistry.get(this.getShortSignature()));
 		buffer.putInt(stringRegistry.get(this.getCommaSeperatedValues()));
@@ -96,12 +104,12 @@ public class EnrichedOERecord extends OperationExecutionRecord implements IMonit
 
 	@Override
 	public Class<?>[] getValueTypes() {
-		return TYPES; // NOPMD
+		return EnrichedOperationExecutionRecord.TYPES; // NOPMD
 	}
 
 	@Override
 	public int getSize() {
-		return SIZE;
+		return EnrichedOperationExecutionRecord.SIZE;
 	}
 
 }
