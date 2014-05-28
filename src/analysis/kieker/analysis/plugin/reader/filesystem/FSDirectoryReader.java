@@ -111,6 +111,7 @@ final class FSDirectoryReader implements Runnable {
 					return f1.compareTo(f2); // simplified (we expect no dirs!)
 				}
 			});
+			boolean ignoreUnknownRecordTypesWarningAlreadyShown = false;
 			for (final File inputFile : inputFiles) {
 				if (this.terminated) {
 					LOG.info("Shutting down DirectoryReader.");
@@ -120,7 +121,8 @@ final class FSDirectoryReader implements Runnable {
 				if (inputFile.getName().endsWith(FSUtil.NORMAL_FILE_EXTENSION)) {
 					this.processNormalInputFile(inputFile);
 				} else {
-					if (this.ignoreUnknownRecordTypes) {
+					if (this.ignoreUnknownRecordTypes && ignoreUnknownRecordTypesWarningAlreadyShown) {
+						ignoreUnknownRecordTypesWarningAlreadyShown = true;
 						LOG.warn("The property '" + FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES
 								+ "' is not supported for binary files. But trying to read '" + inputFile + "'");
 					}
