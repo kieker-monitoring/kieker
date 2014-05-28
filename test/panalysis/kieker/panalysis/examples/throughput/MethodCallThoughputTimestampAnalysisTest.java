@@ -15,25 +15,27 @@
  ***************************************************************************/
 package kieker.panalysis.examples.throughput;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.chw.util.StopWatch;
 
 import kieker.common.logging.LogFactory;
+import kieker.panalysis.examples.throughput.methodcall.MethodCallThroughputAnalysis;
+import kieker.panalysis.util.StatisticsUtil;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  */
-@Ignore
-public class ThroughputAnalysisTest {
+public class MethodCallThoughputTimestampAnalysisTest {
 
-	private static final int numRuns = 1000;
+	private static final int NUM_OBJECTS_TO_CREATE = 100000;
 
 	@Before
 	public void before() {
@@ -41,41 +43,28 @@ public class ThroughputAnalysisTest {
 	}
 
 	@Test
-	public void testWithMultipleRuns() {
+	public void testWithManyObjects() {
 		final StopWatch stopWatch = new StopWatch();
-		final long[] durations = new long[numRuns];
+		final List<TimestampObject> timestampObjects = new ArrayList<TimestampObject>(NUM_OBJECTS_TO_CREATE);
 
-		for (int i = 0; i < numRuns; i++) {
-			final ThroughputAnalysis<Object> analysis = new ThroughputAnalysis<Object>();
-			analysis.setNumNoopFilters(100);
-			analysis.setInput(100, new Callable<Object>() {
-				public Object call() throws Exception {
-					return new Object();
-				}
-			});
-			analysis.init();
-
-			stopWatch.start();
-			try {
-				analysis.start();
-			} finally {
-				stopWatch.end();
+		final MethodCallThroughputAnalysis analysis = new MethodCallThroughputAnalysis();
+		analysis.setNumNoopFilters(800);
+		analysis.setTimestampObjects(timestampObjects);
+		analysis.setInput(NUM_OBJECTS_TO_CREATE, new Callable<TimestampObject>() {
+			public TimestampObject call() throws Exception {
+				return new TimestampObject();
 			}
+		});
+		analysis.init();
 
-			durations[i] = stopWatch.getDuration();
+		stopWatch.start();
+		try {
+			analysis.start();
+		} finally {
+			stopWatch.end();
 		}
 
-		// for (final long dur : durations) {
-		// System.out.println("Duration: " + (dur / 1000) + " µs");
-		// }
-
-		long sum = 0;
-		for (int i = durations.length / 2; i < durations.length; i++) {
-			sum += durations[i];
-		}
-
-		final long avgDur = sum / (numRuns / 2);
-		System.out.println("avg duration: " + (avgDur / 1000) + " µs");
+		StatisticsUtil.printStatistics(stopWatch.getDuration(), timestampObjects);
 	}
 
 }
