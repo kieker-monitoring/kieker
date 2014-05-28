@@ -80,7 +80,6 @@ public final class OperationExecutionRecordEnrichmentFilter extends AbstractFilt
 			final String shortOperationSignature = "..." + simpleClassName + "." + operationName + "(...)";
 
 			this.shortSignatureCache.put(operationSignatureStr, shortOperationSignature);
-
 		}
 
 		return this.shortSignatureCache.get(operationSignatureStr);

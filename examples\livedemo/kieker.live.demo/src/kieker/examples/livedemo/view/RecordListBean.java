@@ -26,7 +26,7 @@ import javax.faces.bean.ViewScoped;
 import kieker.examples.livedemo.common.EnrichedOperationExecutionRecord;
 
 /**
- * @author Bjoern Weissenfels
+ * @author Bjoern Weissenfels, Nils Christian Ehmke
  * 
  * @since 1.9
  */

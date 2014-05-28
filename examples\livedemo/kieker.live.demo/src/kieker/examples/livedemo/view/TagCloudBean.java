@@ -24,7 +24,7 @@ import javax.faces.bean.ManagedProperty;
 import org.primefaces.model.tagcloud.TagCloudModel;
 
 /**
- * @author Bjoern Weissenfels
+ * @author Bjoern Weissenfels, Nils Christian Ehmke
  * 
  * @since 1.9
  */

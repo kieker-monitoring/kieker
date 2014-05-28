@@ -26,7 +26,7 @@ import org.primefaces.model.chart.CartesianChartModel;
 import kieker.examples.livedemo.common.Model;
 
 /**
- * @author Bjoern Weissenfels
+ * @author Bjoern Weissenfels, Nils Christian Ehmke
  * 
  * @since 1.9
  */

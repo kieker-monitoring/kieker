@@ -52,21 +52,21 @@ public final class EnrichedOperationExecutionRecord extends OperationExecutionRe
 
 	private static final long serialVersionUID = 4652653198700953697L;
 
-	private final double responseTime; // in milliseconds, rounded to one decimal
+	private final double responseTimeMS; // rounded to one decimal
 	private final String shortSignature; // should be ...class.method(...)
 	private final String commaSeperatedValues;
 
 	public EnrichedOperationExecutionRecord(final String operationSignature, final String sessionId, final long traceId, final long tin, final long tout,
-			final String hostname, final int eoi, final int ess, final double responseTime, final String shortSignature, final String commaSeperatedValues) {
+			final String hostname, final int eoi, final int ess, final double responseTimeMS, final String shortSignature, final String commaSeperatedValues) {
 		super(operationSignature, sessionId, traceId, tin, tout, hostname, eoi, ess);
 
-		this.responseTime = responseTime;
+		this.responseTimeMS = responseTimeMS;
 		this.shortSignature = shortSignature;
 		this.commaSeperatedValues = commaSeperatedValues;
 	}
 
 	public double getResponseTime() {
-		return this.responseTime;
+		return this.responseTimeMS;
 	}
 
 	public String getShortSignature() {
