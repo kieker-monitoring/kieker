@@ -42,7 +42,10 @@ import kieker.test.common.junit.AbstractKiekerTest;
  */
 public abstract class AbstractConnectorTest extends AbstractKiekerTest {
 
-	private static final Log LOG;
+	private static final Log LOG; // NOPMD
+
+	private IServiceConnector connector;
+	private int recordCount; // default initialization is 0
 
 	static {
 		if (System.getProperty("kieker.common.logging.Log") == null) {
@@ -50,9 +53,6 @@ public abstract class AbstractConnectorTest extends AbstractKiekerTest {
 		}
 		LOG = LogFactory.getLog(AbstractKiekerTest.class);
 	}
-
-	private IServiceConnector connector;
-	private int recordCount; // default initialization is 0
 
 	public int getRecordCount() {
 		return this.recordCount;
@@ -114,7 +114,9 @@ public abstract class AbstractConnectorTest extends AbstractKiekerTest {
 	 */
 	protected void deserialize(final int numberOfRecords) {
 		for (int i = 0; i < numberOfRecords; i++) {
-			LOG.debug("Receive record " + i);
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("Receive record " + i);
+			}
 			try {
 				final OperationExecutionRecord record = (OperationExecutionRecord) this.connector.deserializeNextRecord();
 				Assert.assertEquals("Tin is not equal", ConfigurationParameters.TEST_TIN, record.getTin());

@@ -47,6 +47,9 @@ public class FakeMessageConsumer implements MessageConsumer {
 
 	/**
 	 * Add a message from the producer to the consumer queue.
+	 * 
+	 * @param message
+	 *            the message to add to the internal queue
 	 */
 	public void addMessage(final Message message) {
 		this.messages.add(message);

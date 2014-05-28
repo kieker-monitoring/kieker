@@ -67,11 +67,12 @@ public final class ConfigurationParameters {
 	public static final int TEST_EOI = 10; // NOCS
 	public static final int TEST_ESS = 9; // NOCS
 
-	/**
-	 * The number of threads to start.
-	 */
+	/** The number of threads to start. */
 	public static final int NUMBER_OF_TEST_THREADS = 5;
-	public static final String JMS_FACTORY_LOOKUP_NAME = FakeInitialContextFactory.class.getName();
+	/** The JMS factory to use for the JMS client connector test. */
+	public static final String JMS_CLIENT_FACTORY_LOOKUP_NAME = FakeInitialContextFactory.class.getName();
+	/** The JMS factory to use for the JMS embedded connector test. */
+	public static final String JMS_EMBEDDED_FACTORY_LOOKUP_NAME = "org.apache.activemq.jndi.ActiveMQInitialContextFactory";
 
 	/**
 	 * Private default constructor for utility class.

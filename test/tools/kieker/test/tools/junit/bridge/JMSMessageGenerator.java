@@ -50,6 +50,13 @@ public class JMSMessageGenerator implements Runnable {
 
 	private static final Log LOG;
 
+	private Connection connection;
+	private MessageProducer producer;
+	private final String jmsUri;
+	private Session session;
+
+	private final String jmsContextFactory;
+
 	static {
 		if (System.getProperty("kieker.common.logging.Log") == null) {
 			System.setProperty("kieker.common.logging.Log", "JUNIT");
@@ -57,17 +64,18 @@ public class JMSMessageGenerator implements Runnable {
 		LOG = LogFactory.getLog(AbstractKiekerTest.class);
 	}
 
-	private Connection connection;
-	private MessageProducer producer;
-	private final String jmsUri;
-	private Session session;
-
 	/**
 	 * Empty constructor.
+	 * 
+	 * @param uri
+	 *            jms uri of the broker
+	 * @param jmsContextFactory
+	 *            full qualified class name of the context factory
 	 */
-	public JMSMessageGenerator(final String uri) {
+	public JMSMessageGenerator(final String uri, final String jmsContextFactory) {
 		LOG.info("Destination " + uri);
 		this.jmsUri = uri;
+		this.jmsContextFactory = jmsContextFactory;
 	}
 
 	/**
@@ -86,7 +94,7 @@ public class JMSMessageGenerator implements Runnable {
 
 			// setup connection
 			final Hashtable<String, String> properties = new Hashtable<String, String>(); // NOPMD NOCS (IllegalTypeCheck, InitialContext requires Hashtable)
-			properties.put(Context.INITIAL_CONTEXT_FACTORY, ConfigurationParameters.JMS_FACTORY_LOOKUP_NAME);
+			properties.put(Context.INITIAL_CONTEXT_FACTORY, this.jmsContextFactory);
 			properties.put(Context.PROVIDER_URL, this.jmsUri);
 			properties.put(Context.SECURITY_PRINCIPAL, ConfigurationParameters.JMS_USERNAME);
 			properties.put(Context.SECURITY_CREDENTIALS, ConfigurationParameters.JMS_PASSWORD);
@@ -113,7 +121,9 @@ public class JMSMessageGenerator implements Runnable {
 
 	private void sendRecords() {
 		for (int i = 0; i < ConfigurationParameters.SEND_NUMBER_OF_RECORDS; i++) {
-			LOG.debug("Send record " + i);
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("Send record " + i);
+			}
 			try {
 				final TextMessage message = this.session.createTextMessage(ConfigurationParameters.TEST_RECORD_ID
 						+ ";" + ConfigurationParameters.TEST_OPERATION_SIGNATURE

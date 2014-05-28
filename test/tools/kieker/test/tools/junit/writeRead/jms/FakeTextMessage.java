@@ -31,6 +31,9 @@ public class FakeTextMessage implements TextMessage {
 
 	private String text;
 
+	/**
+	 * Empty constructor.
+	 */
 	public FakeTextMessage() {
 		// No code necessary
 	}

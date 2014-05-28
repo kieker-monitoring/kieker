@@ -65,7 +65,9 @@ public class JMSClientConnector extends AbstractConnector {
 
 	private static final int BUF_LEN = 65536;
 
+	/** username used to connect to the JMS service. */
 	protected final String username;
+	/** password used to connect to the JMS service. */
 	protected final String password;
 	private final String uri;
 
