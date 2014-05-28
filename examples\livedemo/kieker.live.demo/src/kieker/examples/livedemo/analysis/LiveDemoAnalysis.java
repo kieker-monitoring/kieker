@@ -25,20 +25,22 @@ import kieker.analysis.plugin.filter.sink.CPUUtilizationDisplayFilter;
 import kieker.analysis.plugin.reader.jmx.JMXReader;
 import kieker.analysis.plugin.reader.timer.TimeReader;
 import kieker.common.configuration.Configuration;
-import kieker.examples.livedemo.analysis.display.AbstractAggregatingDisplayFilter;
-import kieker.examples.livedemo.analysis.display.AbstractNonAggregatingDisplayFilter;
-import kieker.examples.livedemo.analysis.display.ClassLoadingDisplayFilter;
-import kieker.examples.livedemo.analysis.display.CompilationDisplayFilter;
-import kieker.examples.livedemo.analysis.display.ComponentFlowDisplayFilter;
-import kieker.examples.livedemo.analysis.display.GCCountDisplayFilter;
-import kieker.examples.livedemo.analysis.display.GCTimeDisplayFilter;
-import kieker.examples.livedemo.analysis.display.JVMHeapDisplayFilter;
-import kieker.examples.livedemo.analysis.display.JVMNonHeapDisplayFilter;
-import kieker.examples.livedemo.analysis.display.MemoryDisplayFilter;
-import kieker.examples.livedemo.analysis.display.MethodFlowDisplayFilter;
-import kieker.examples.livedemo.analysis.display.MethodResponsetimeDisplayFilter;
-import kieker.examples.livedemo.analysis.display.SwapDisplayFilter;
-import kieker.examples.livedemo.analysis.display.ThreadsStatusDisplayFilter;
+import kieker.examples.livedemo.analysis.filter.OperationExecutionRecordEnrichmentFilter;
+import kieker.examples.livedemo.analysis.select.Distributor;
+import kieker.examples.livedemo.analysis.sink.AbstractAggregatingDisplayFilter;
+import kieker.examples.livedemo.analysis.sink.AbstractNonAggregatingDisplayFilter;
+import kieker.examples.livedemo.analysis.sink.ClassLoadingDisplayFilter;
+import kieker.examples.livedemo.analysis.sink.CompilationDisplayFilter;
+import kieker.examples.livedemo.analysis.sink.ComponentFlowDisplayFilter;
+import kieker.examples.livedemo.analysis.sink.GCCountDisplayFilter;
+import kieker.examples.livedemo.analysis.sink.GCTimeDisplayFilter;
+import kieker.examples.livedemo.analysis.sink.JVMHeapDisplayFilter;
+import kieker.examples.livedemo.analysis.sink.JVMNonHeapDisplayFilter;
+import kieker.examples.livedemo.analysis.sink.MemoryDisplayFilter;
+import kieker.examples.livedemo.analysis.sink.MethodFlowDisplayFilter;
+import kieker.examples.livedemo.analysis.sink.MethodResponsetimeDisplayFilter;
+import kieker.examples.livedemo.analysis.sink.SwapDisplayFilter;
+import kieker.examples.livedemo.analysis.sink.ThreadsStatusDisplayFilter;
 import kieker.examples.livedemo.common.EnrichedOperationExecutionRecord;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.executionRecordTransformation.ExecutionRecordTransformationFilter;
@@ -56,7 +58,7 @@ public class LiveDemoAnalysis {
 	private static final String NUMBER_OF_CPU_AND_MEMSWAP_ENTRIES = "20";
 	private static final String NUMBER_OF_RECORD_LIST_ENTRIES = "50";
 	private static final String NUMBER_OF_RESPONSE_TIME_ENTRIES = "20";
-	private static final String TIME_READER_UPDATE_INTERVANL_NS = "2000000000";
+	private static final String TIME_READER_UPDATE_INTERVAL_NS = "2000000000";
 
 	private final IAnalysisController analysisController = new AnalysisController();
 	private final AnalysisControllerThread analysisControllerThread = new AnalysisControllerThread(this.analysisController);
@@ -127,7 +129,7 @@ public class LiveDemoAnalysis {
 		final JMXReader reader = new JMXReader(jmxReaderConfig, this.analysisController);
 
 		final Configuration timeReaderConfig = new Configuration();
-		timeReaderConfig.setProperty(TimeReader.CONFIG_PROPERTY_NAME_UPDATE_INTERVAL_NS, LiveDemoAnalysis.TIME_READER_UPDATE_INTERVANL_NS);
+		timeReaderConfig.setProperty(TimeReader.CONFIG_PROPERTY_NAME_UPDATE_INTERVAL_NS, LiveDemoAnalysis.TIME_READER_UPDATE_INTERVAL_NS);
 		final TimeReader timeReader = new TimeReader(timeReaderConfig, this.analysisController);
 
 		final Distributor distributor = new Distributor(new Configuration(), this.analysisController);
