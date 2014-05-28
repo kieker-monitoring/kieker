@@ -50,8 +50,8 @@ public class MemoryDisplayFilter extends AbstractNonAggregatingDisplayFilter<Mem
 		this.usedMemorySeries = new ChartSeries();
 		this.freeMemorySeries = new ChartSeries();
 
-		this.usedMemoryData = new LimitedHashMap<>(numberOfEntries);
-		this.freeMemoryData = new LimitedHashMap<>(numberOfEntries);
+		this.usedMemoryData = new LimitedHashMap<Object, Number>(numberOfEntries);
+		this.freeMemoryData = new LimitedHashMap<Object, Number>(numberOfEntries);
 
 		model.addSeries(this.usedMemorySeries);
 		model.addSeries(this.freeMemorySeries);

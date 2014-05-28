@@ -51,7 +51,7 @@ public class GCTimeDisplayFilter extends AbstractNonAggregatingDisplayFilter<GCR
 		final String gcName = record.getGcName();
 		if (!this.dataMap.containsKey(gcName)) {
 			final ChartSeries series = new ChartSeries();
-			final Map<Object, Number> data = new LimitedHashMap<>(numberOfEntries);
+			final Map<Object, Number> data = new LimitedHashMap<Object, Number>(numberOfEntries);
 
 			chartModel.addSeries(series);
 			series.setData(data);

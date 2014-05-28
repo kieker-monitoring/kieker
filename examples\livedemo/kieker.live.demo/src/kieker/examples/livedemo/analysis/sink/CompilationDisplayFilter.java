@@ -45,7 +45,7 @@ public class CompilationDisplayFilter extends AbstractNonAggregatingDisplayFilte
 		final CartesianChartModel model = new CartesianChartModel();
 
 		this.totalCompilationTimeSeries = new ChartSeries();
-		this.totalCompilationTimeData = new LimitedHashMap<>(numberOfEntries);
+		this.totalCompilationTimeData = new LimitedHashMap<Object, Number>(numberOfEntries);
 
 		model.addSeries(this.totalCompilationTimeSeries);
 

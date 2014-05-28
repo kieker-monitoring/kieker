@@ -52,8 +52,8 @@ public class JVMHeapDisplayFilter extends AbstractNonAggregatingDisplayFilter<Me
 		this.committedHeapSeries = new ChartSeries();
 		this.usedHeapSeries = new ChartSeries();
 
-		this.committedHeapData = new LimitedHashMap<>(numberOfEntries);
-		this.usedHeapData = new LimitedHashMap<>(numberOfEntries);
+		this.committedHeapData = new LimitedHashMap<Object, Number>(numberOfEntries);
+		this.usedHeapData = new LimitedHashMap<Object, Number>(numberOfEntries);
 
 		model.addSeries(this.committedHeapSeries);
 		model.addSeries(this.usedHeapSeries);

@@ -53,9 +53,9 @@ public class ClassLoadingDisplayFilter extends AbstractNonAggregatingDisplayFilt
 		this.loadedClassesSeries = new ChartSeries();
 		this.unloadedClassesSeries = new ChartSeries();
 
-		this.totalLoadedClassesData = new LimitedHashMap<>(numberOfEntries);
-		this.loadedClassesData = new LimitedHashMap<>(numberOfEntries);
-		this.unloadedClassesData = new LimitedHashMap<>(numberOfEntries);
+		this.totalLoadedClassesData = new LimitedHashMap<Object, Number>(numberOfEntries);
+		this.loadedClassesData = new LimitedHashMap<Object, Number>(numberOfEntries);
+		this.unloadedClassesData = new LimitedHashMap<Object, Number>(numberOfEntries);
 
 		model.addSeries(this.totalLoadedClassesSeries);
 		model.addSeries(this.loadedClassesSeries);

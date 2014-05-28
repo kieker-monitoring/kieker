@@ -52,8 +52,8 @@ public class JVMNonHeapDisplayFilter extends AbstractNonAggregatingDisplayFilter
 		this.committedNonHeapSeries = new ChartSeries();
 		this.usedNonHeapSeries = new ChartSeries();
 
-		this.committedNonHeapData = new LimitedHashMap<>(numberOfEntries);
-		this.usedNonHeapData = new LimitedHashMap<>(numberOfEntries);
+		this.committedNonHeapData = new LimitedHashMap<Object, Number>(numberOfEntries);
+		this.usedNonHeapData = new LimitedHashMap<Object, Number>(numberOfEntries);
 
 		model.addSeries(this.committedNonHeapSeries);
 		model.addSeries(this.usedNonHeapSeries);

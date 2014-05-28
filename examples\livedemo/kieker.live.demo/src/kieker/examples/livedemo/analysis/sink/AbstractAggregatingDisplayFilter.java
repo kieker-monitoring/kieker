@@ -17,8 +17,8 @@
 package kieker.examples.livedemo.analysis.sink;
 
 import java.util.Date;
-import java.util.Deque;
-import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
 
 import org.primefaces.model.chart.ChartModel;
@@ -59,7 +59,7 @@ public abstract class AbstractAggregatingDisplayFilter<T extends IMonitoringReco
 
 	private final int numberOfEntries;
 	private final TimeUnit timeunit;
-	private final Deque<T> records;
+	private final Queue<T> records;
 	private final C chartModel;
 
 	public AbstractAggregatingDisplayFilter(final Configuration configuration, final IProjectContext projectContext) {
@@ -77,7 +77,7 @@ public abstract class AbstractAggregatingDisplayFilter<T extends IMonitoringReco
 		this.timeunit = recordTimeunit;
 
 		this.chartModel = this.createChartModel(this.numberOfEntries);
-		this.records = new ConcurrentLinkedDeque<T>();
+		this.records = new ConcurrentLinkedQueue<T>();
 	}
 
 	@InputPort(name = AbstractAggregatingDisplayFilter.INPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class })
@@ -108,6 +108,6 @@ public abstract class AbstractAggregatingDisplayFilter<T extends IMonitoringReco
 
 	protected abstract C createChartModel(int numberOfEntries); // NOCS (hidden field)
 
-	protected abstract void fillChartModelWithRecordData(C chartModel, Deque<T> records, String minutesAndSeconds, int numberOfEntries); // NOCS (hidden field)
+	protected abstract void fillChartModelWithRecordData(C chartModel, Queue<T> records, String minutesAndSeconds, int numberOfEntries); // NOCS (hidden field)
 
 }

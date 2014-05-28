@@ -53,9 +53,9 @@ public class ThreadsStatusDisplayFilter extends AbstractNonAggregatingDisplayFil
 		this.peakThreadsSeries = new ChartSeries();
 		this.daemonThreadsSeries = new ChartSeries();
 
-		this.threadsData = new LimitedHashMap<>(numberOfEntries);
-		this.peakThreadsData = new LimitedHashMap<>(numberOfEntries);
-		this.daemonThreadsData = new LimitedHashMap<>(numberOfEntries);
+		this.threadsData = new LimitedHashMap<Object, Number>(numberOfEntries);
+		this.peakThreadsData = new LimitedHashMap<Object, Number>(numberOfEntries);
+		this.daemonThreadsData = new LimitedHashMap<Object, Number>(numberOfEntries);
 
 		model.addSeries(this.threadsSeries);
 		model.addSeries(this.peakThreadsSeries);
