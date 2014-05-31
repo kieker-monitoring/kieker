@@ -60,25 +60,17 @@ public class CompositeFilterPluginTest extends AbstractKiekerTest {
 	private static long timeIn = 1337L;
 	private static final String NEW_PROPERTY = "testProperty";
 
-	private IAnalysisController analysisController;
-	private ListReader<OperationExecutionRecord> simpleListReader;
-	private ListCollectionFilter<OperationExecutionRecord> listCollectionfilterOER;
-	private ListCollectionFilter<String> listCollectionfilterSTR;
-	private ListCollectionFilter<Integer> listCollectionfilterINT;
-	private CompositeImplementation compositePlugin;
+	private final IAnalysisController analysisController;
+	private final ListReader<OperationExecutionRecord> simpleListReader;
+	private final ListCollectionFilter<OperationExecutionRecord> listCollectionfilterOER;
+	private final ListCollectionFilter<String> listCollectionfilterSTR;
+	private final ListCollectionFilter<Integer> listCollectionfilterINT;
+	private final CompositeImplementation compositePlugin;
 
 	/**
 	 * Contructor.
 	 */
 	public CompositeFilterPluginTest() {
-		//
-	}
-
-	/**
-	 * Sets up the TestEnvironment.
-	 */
-	@Before
-	public void setUp() {
 		this.analysisController = new AnalysisController();
 		this.simpleListReader = new ListReader<OperationExecutionRecord>(new Configuration(), this.analysisController);
 		this.listCollectionfilterOER = new ListCollectionFilter<OperationExecutionRecord>(new Configuration(), this.analysisController);
@@ -88,7 +80,13 @@ public class CompositeFilterPluginTest extends AbstractKiekerTest {
 		final Configuration compositeConfiguration = new Configuration();
 		compositeConfiguration.setProperty(Distributor.class.getSimpleName() + "." + Distributor.TEST_PROPERTY_ONE, CompositeFilterPluginTest.NEW_PROPERTY);
 		this.compositePlugin = new CompositeImplementation(compositeConfiguration, this.analysisController);
+	}
 
+	/**
+	 * Sets up the TestEnvironment.
+	 */
+	@Before
+	public void setUp() {
 		try {
 			this.analysisController.connect(this.simpleListReader, ListReader.OUTPUT_PORT_NAME, this.compositePlugin, CompositeImplementation.INPUT_PORT);
 			this.analysisController.connect(this.compositePlugin, CompositeImplementation.OUPUT_PORT_MR, this.listCollectionfilterOER,
@@ -306,7 +304,7 @@ public class CompositeFilterPluginTest extends AbstractKiekerTest {
 				@OutputPort(name = OutputportsPlugin.T3_T6, eventTypes = { T3.class, T6.class }),
 				@OutputPort(name = OutputportsPlugin.T4, eventTypes = { T4.class }),
 				@OutputPort(name = OutputportsPlugin.T5_T6, eventTypes = { T5.class, T6.class }) })
-	class OutputportsPlugin extends AbstractCompositeFilterPlugin {
+	static class OutputportsPlugin extends AbstractCompositeFilterPlugin {
 
 		public static final String T1_T3 = "T1_T3";
 		public static final String T2 = "T2";
@@ -340,7 +338,7 @@ public class CompositeFilterPluginTest extends AbstractKiekerTest {
 	 * 
 	 * @since 1.10
 	 */
-	class T1 {// NOPMD
+	static class T1 {// NOPMD
 		T1() {}// NOPMD
 	}// NOPMD
 
@@ -349,7 +347,7 @@ public class CompositeFilterPluginTest extends AbstractKiekerTest {
 	 * 
 	 * @since 1.10
 	 */
-	class T2 {// NOPMD
+	static class T2 {// NOPMD
 		T2() {}// NOPMD
 	}// NOPMD
 
@@ -358,7 +356,7 @@ public class CompositeFilterPluginTest extends AbstractKiekerTest {
 	 * 
 	 * @since 1.10
 	 */
-	class T3 {// NOPMD
+	static class T3 {// NOPMD
 		T3() {}// NOPMD
 	}// NOPMD
 
@@ -367,7 +365,7 @@ public class CompositeFilterPluginTest extends AbstractKiekerTest {
 	 * 
 	 * @since 1.10
 	 */
-	class T4 {// NOPMD
+	static class T4 {// NOPMD
 		T4() {}// NOPMD
 	}// NOPMD
 
@@ -376,7 +374,7 @@ public class CompositeFilterPluginTest extends AbstractKiekerTest {
 	 * 
 	 * @since 1.10
 	 */
-	class T5 {// NOPMD
+	static class T5 {// NOPMD
 		T5() {}// NOPMD
 	}// NOPMD
 
@@ -385,7 +383,7 @@ public class CompositeFilterPluginTest extends AbstractKiekerTest {
 	 * 
 	 * @since 1.10
 	 */
-	class T6 {// NOPMD
+	static class T6 {// NOPMD
 		T6() {}// NOPMD
 	}// NOPMD
 		// CHECKSTYLE:ON

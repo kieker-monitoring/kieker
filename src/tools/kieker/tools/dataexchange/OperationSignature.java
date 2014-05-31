@@ -171,7 +171,7 @@ public class OperationSignature {
 	}
 
 	public String[] getPackagePath() {
-		return this.packagePath; // NOPMD returning String[] is intended
+		return this.packagePath.clone(); // NOPMD returning String[] is intended
 	}
 
 	public String[] getParamTypeList() {

@@ -43,7 +43,7 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 	/**
 	 * Types used in this class (used for serialization purposes).
 	 */
-	protected static final Class<?>[] TYPES = {
+	private static final Class<?>[] TYPES = {
 		String.class, // applicationName
 		double.class, // value
 		long.class, // timestamp
