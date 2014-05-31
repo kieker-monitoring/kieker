@@ -27,6 +27,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.math.R.Rsession;
 import org.rosuda.REngine.REXPDouble;
 import org.rosuda.REngine.REXPLogical;
+import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.REXPString;
 import org.rosuda.REngine.REXPVector;
 
@@ -99,7 +100,7 @@ public final class RBridgeControl {
 
 			// TODO make this configurabe?!?
 			RBridgeControl.instance = new RBridgeControl(true);
-			RBridgeControl.instance.e("OPAD_CONTEXT <<- TRUE");
+			RBridgeControl.instance.evalWithR("OPAD_CONTEXT <<- TRUE");
 			// TODO: test if this is needed every time
 			// TODO outsource this into a packaged text file, declare the
 			// functions at runtime
@@ -110,7 +111,7 @@ public final class RBridgeControl {
 			// .e("sink(file = 'rsink.log', append = TRUE, type = c('output', 'message'),split = FALSE)");
 			// INSTANCE.e("source('includes.r', local = FALSE, echo = TRUE)");
 			// instance.e("source('plotting2.r', local = FALSE, echo = TRUE)");
-			instance.e("initTS");
+			instance.evalWithR("initTS");
 
 			// INSTANCE.e("print( getwd() )");
 			// INSTANCE.e("source('basic.r', local = FALSE, echo = TRUE)");
@@ -132,7 +133,7 @@ public final class RBridgeControl {
 	 *            R expression
 	 * @return result/error
 	 */
-	public Object e(final String input) {
+	public Object evalWithR(final String input) {
 		Object out = null;
 		try {
 			out = this.rCon.eval(input);
@@ -149,7 +150,7 @@ public final class RBridgeControl {
 
 			RBridgeControl.LOG.info("> REXP: " + input + " return: " + output); // --domi
 
-		} catch (final Exception exc) { // NOCS
+		} catch (final REXPMismatchException exc) { // NOCS
 			RBridgeControl.LOG.error("Error R expr.: " + input + " Cause: "
 					+ exc, exc);
 		}
@@ -162,16 +163,18 @@ public final class RBridgeControl {
 	 *            variable to R
 	 */
 	public void toTS(final String variable) {
-		try {
+		// try {
+		if (variable != null) {
 			final StringBuffer buf = new StringBuffer();
 			buf.append(variable);
 			buf.append(" <<- ts(");
 			buf.append(variable);
 			buf.append(')');
-			this.e(buf.toString());
-		} catch (final Exception e) { // NOCS
-			LOG.error("Conversion to timeseries failed.", e);
+			this.evalWithR(buf.toString());
 		}
+		// } catch (final REXPMismatchException e) { // NOCS
+		// LOG.error("Conversion to timeseries failed.", e);
+		// }
 	}
 
 	/**
@@ -182,7 +185,8 @@ public final class RBridgeControl {
 	 *            frequency to R
 	 */
 	public void toTS(final String variable, final long frequency) {
-		try {
+		// try {
+		if (variable != null) {
 			final StringBuffer buf = new StringBuffer(21);
 			buf.append(variable);
 			buf.append(" <<- ts(");
@@ -190,10 +194,11 @@ public final class RBridgeControl {
 			buf.append(", frequency=");
 			buf.append(frequency);
 			buf.append(')');
-			this.e(buf.toString());
-		} catch (final Exception e) { // NOCS
-			LOG.error("Conversion to timeseries failed.", e);
+			this.evalWithR(buf.toString());
 		}
+		// } catch (final Exception e) { // NOCS
+		// LOG.error("Conversion to timeseries failed.", e);
+		// }
 	}
 
 	/**
@@ -205,8 +210,8 @@ public final class RBridgeControl {
 	public double eDbl(final String input) {
 		try {
 			// TODO make it error save
-			return ((REXPDouble) this.e(input)).asDouble();
-		} catch (final Exception exc) { // NOCS
+			return ((REXPDouble) this.evalWithR(input)).asDouble();
+		} catch (final REXPMismatchException exc) { // NOCS
 			RBridgeControl.LOG.error("Error casting value from R: " + input
 					+ " Cause: " + exc);
 			return -666.666;
@@ -220,13 +225,17 @@ public final class RBridgeControl {
 	 * @return Rdata
 	 */
 	public String eString(final String input) {
-		try {
-			// TODO make it error save
-			final REXPString str = (REXPString) this.e(input);
+		// try {
+		// TODO make it error save
+		final REXPString str = (REXPString) this.evalWithR(input);
+		if (str != null) {
 			return str.toString();
-		} catch (final Exception e) { // NOCS
+		} else {
 			return "";
 		}
+		// } catch (final NumberFormatException e) { // NOCS
+		// return "";
+		// }
 	}
 
 	/**
@@ -238,9 +247,9 @@ public final class RBridgeControl {
 	public double[] eDblArr(final String input) {
 		try {
 			// TODO make it error save
-			final REXPVector res = (REXPVector) this.e(input);
+			final REXPVector res = (REXPVector) this.evalWithR(input);
 			return res.asDoubles();
-		} catch (final Exception e) { // NOCS
+		} catch (final REXPMismatchException e) { // NOCS
 			return new double[0];
 		}
 	}
@@ -254,24 +263,24 @@ public final class RBridgeControl {
 	 *            assign value
 	 */
 	public void assign(final String variable, final double[] values) {
-		try {
-			final StringBuffer buf = new StringBuffer();
-			buf.append(variable);
-			buf.append(" <<- c(");
-			boolean first = true;
-			for (final double item : values) {
-				if (!first) {
-					buf.append(',');
-				} else {
-					first = false;
-				}
-				buf.append(item);
+		// try {
+		final StringBuffer buf = new StringBuffer();
+		buf.append(variable);
+		buf.append(" <<- c(");
+		boolean first = true;
+		for (final double item : values) {
+			if (!first) {
+				buf.append(',');
+			} else {
+				first = false;
 			}
-			buf.append(')');
-			this.e(buf.toString());
-		} catch (final Exception e) { // NOCS
-			LOG.error("Assignment failed.", e);
+			buf.append(item);
 		}
+		buf.append(')');
+		this.evalWithR(buf.toString());
+		// } catch (final Exception e) { // NOCS
+		// LOG.error("Assignment failed.", e);
+		// }
 
 	}
 
@@ -284,28 +293,28 @@ public final class RBridgeControl {
 	 *            assign vaules
 	 */
 	public void assign(final String variable, final Double[] values) {
-		try {
-			final StringBuffer buf = new StringBuffer();
-			buf.append(variable);
-			buf.append(" <<- c(");
-			boolean first = true;
-			for (final Double item : values) {
-				if (!first) {
-					buf.append(',');
-				} else {
-					first = false;
-				}
-				if ((null == item) || item.isNaN()) {
-					buf.append("NA");
-				} else {
-					buf.append(item);
-				}
+		// try {
+		final StringBuffer buf = new StringBuffer();
+		buf.append(variable);
+		buf.append(" <<- c(");
+		boolean first = true;
+		for (final Double item : values) {
+			if (!first) {
+				buf.append(',');
+			} else {
+				first = false;
 			}
-			buf.append(')');
-			this.e(buf.toString());
-		} catch (final Exception e) { // NOCS
-			LOG.error("Assignment failed.", e);
+			if ((null == item) || item.isNaN()) {
+				buf.append("NA");
+			} else {
+				buf.append(item);
+			}
 		}
+		buf.append(')');
+		this.evalWithR(buf.toString());
+		// } catch (final Exception e) { // NOCS
+		// LOG.error("Assignment failed.", e);
+		// }
 
 	}
 
@@ -317,24 +326,24 @@ public final class RBridgeControl {
 	 *            assign vaules
 	 */
 	public void assign(final String variable, final Long[] values) {
-		try {
-			final StringBuffer buf = new StringBuffer();
-			buf.append(variable);
-			buf.append(" <<- c(");
-			boolean first = true;
-			for (final Long item : values) {
-				if (!first) {
-					buf.append(',');
-				} else {
-					first = false;
-				}
-				buf.append(item);
+		// try {
+		final StringBuffer buf = new StringBuffer();
+		buf.append(variable);
+		buf.append(" <<- c(");
+		boolean first = true;
+		for (final Long item : values) {
+			if (!first) {
+				buf.append(',');
+			} else {
+				first = false;
 			}
-			buf.append(',');
-			this.e(buf.toString());
-		} catch (final Exception e) { // NOCS
-			LOG.error("Assignment failed.", e);
+			buf.append(item);
 		}
+		buf.append(',');
+		this.evalWithR(buf.toString());
+		// } catch (final Exception e) { // NOCS
+		// LOG.error("Assignment failed.", e);
+		// }
 
 	}
 

@@ -43,7 +43,7 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 	 * Acquire an instance of the {@link RBridgeControl} once.
 	 */
 	static {
-		AbstractRForecaster.RBRIDGE.e("require(forecast)");
+		AbstractRForecaster.RBRIDGE.evalWithR("require(forecast)");
 	}
 
 	/**
@@ -143,10 +143,10 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 					params.append(param);
 				}
 			}
-			AbstractRForecaster.RBRIDGE.e(String.format("%s <<- %s(%s)", varNameModel, this.modelFunc, params));
+			AbstractRForecaster.RBRIDGE.evalWithR(String.format("%s <<- %s(%s)", varNameModel, this.modelFunc, params));
 		}
 		// remove temporal variable:
-		AbstractRForecaster.RBRIDGE.e(String.format("rm(%s)", varNameValues));
+		AbstractRForecaster.RBRIDGE.evalWithR(String.format("rm(%s)", varNameValues));
 
 		// 2. Perform forecast based on stochastic model
 
@@ -154,10 +154,10 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 		// final String[] additionalForecastParams = this.getModelFuncParams();
 
 		if (this.getConfidenceLevel() == 0) {
-			AbstractRForecaster.RBRIDGE.e(String.format("%s <<- %s(%s, h=%d)", varNameForecast, this.forecastFunc, varNameModel,
+			AbstractRForecaster.RBRIDGE.evalWithR(String.format("%s <<- %s(%s, h=%d)", varNameForecast, this.forecastFunc, varNameModel,
 					numForecastSteps));
 		} else {
-			AbstractRForecaster.RBRIDGE.e(String.format("%s <<- %s(%s, h=%d, level=c(%d))", varNameForecast, this.forecastFunc, varNameModel,
+			AbstractRForecaster.RBRIDGE.evalWithR(String.format("%s <<- %s(%s, h=%d, level=c(%d))", varNameForecast, this.forecastFunc, varNameModel,
 					numForecastSteps, this.getConfidenceLevel()));
 		}
 
@@ -182,9 +182,9 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 		}
 
 		// remove temporal variable:
-		AbstractRForecaster.RBRIDGE.e(String.format("rm(%s)", varNameModel));
-		AbstractRForecaster.RBRIDGE.e(String.format("rm(%s)", varNameValues));
-		AbstractRForecaster.RBRIDGE.e(String.format("rm(%s)", varNameForecast));
+		AbstractRForecaster.RBRIDGE.evalWithR(String.format("rm(%s)", varNameModel));
+		AbstractRForecaster.RBRIDGE.evalWithR(String.format("rm(%s)", varNameValues));
+		AbstractRForecaster.RBRIDGE.evalWithR(String.format("rm(%s)", varNameForecast));
 
 		final ITimeSeries<Double> tsForecast = this.prepareForecastTS();
 		final ITimeSeries<Double> tsLower;
