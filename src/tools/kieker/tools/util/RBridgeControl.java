@@ -48,7 +48,7 @@ public final class RBridgeControl {
 	private static final Log RSERVELOG = LogFactory.getLog("RSERVE");
 	private static final AtomicInteger NEXTVARID = new AtomicInteger(1);
 
-	private final Rsession rCon;
+	private Rsession rCon = null;
 
 	private RBridgeControl(final boolean silent) {
 
