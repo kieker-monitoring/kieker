@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.math.R.Rsession;
@@ -71,7 +72,7 @@ public final class RBridgeControl {
 				@Override
 				public void write(final int b) throws IOException {
 					if (b == LINE_END) {
-						RSERVELOG.info(this.baos.toString());
+						RSERVELOG.info(this.baos.toString("UTF-8"));
 						this.baos.reset();
 					} else {
 						this.baos.write(b);
@@ -80,8 +81,11 @@ public final class RBridgeControl {
 
 			};
 		}
-
-		this.rCon = Rsession.newLocalInstance(new PrintStream(out), null);
+		try {
+			this.rCon = Rsession.newLocalInstance(new PrintStream(out, true, "UTF-8"), null);
+		} catch (final UnsupportedEncodingException e) {
+			LOG.error(e.toString(), e);
+		}
 	}
 
 	/**

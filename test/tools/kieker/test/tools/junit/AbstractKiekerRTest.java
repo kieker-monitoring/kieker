@@ -53,8 +53,12 @@ public abstract class AbstractKiekerRTest extends AbstractKiekerTest {
 				Assert.fail("You chose to execute KiekerRTests, but no connection to Rserve can be established.");
 			}
 		}
-
 	}
+
+	// Führt der Fall, dass TestKiekerRTests = true
+	// und keine Verbindung aufgebaut werden kann aktuell wirklich immer
+	// zum Fail? Müsste Assume.assumeTrue(rConnection.isConnected())
+	// hier nicht ein assertTrue sein?
 
 	/**
 	 * Checks whether the given TimeSeries contains items.

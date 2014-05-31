@@ -199,7 +199,7 @@ public class OperationSignature {
 	}
 
 	public void setPackagePath(final String[] packagePath) {
-		this.packagePath = packagePath; // NOPMD directly storing is intended
+		this.packagePath = packagePath.clone(); // NOPMD directly storing is intended
 	}
 
 	public void setStringSignature(final String stringSignature) {

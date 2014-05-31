@@ -67,6 +67,21 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 	}
 
 	/**
+	 * Constructor for deserialization purposes taking an array of object.
+	 * 
+	 * @param values
+	 *            array of parameters as object array
+	 */
+	public NamedTSPoint(final Object[] values) {
+		final Object[] localValue = values.clone();
+		AbstractMonitoringRecord.checkArray(localValue, NamedTSPoint.TYPES);
+
+		this.timestamp = (Long) localValue[0];
+		this.value = (Double) localValue[1];
+		this.name = (String) localValue[2];
+	}
+
+	/**
 	 * 
 	 * @return empty object array
 	 */
