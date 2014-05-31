@@ -86,9 +86,6 @@ public class SendAndStoreDetectionResultFilter extends AbstractFilterPlugin {
 			this.coll = db.getCollection("analysisResults"); // Collection name
 		} catch (final UnknownHostException e) {
 			this.connected = false;
-			mongoClient = null;
-			db = null;
-			this.coll = null;
 			LOG.error("Database connection can not be established. The data is processed, but not stored!", e);
 		}
 	}
