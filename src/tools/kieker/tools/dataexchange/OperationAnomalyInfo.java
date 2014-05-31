@@ -54,7 +54,7 @@ public class OperationAnomalyInfo {
 	 *            - other OperationAnomalyInfo which should be copied
 	 */
 	public OperationAnomalyInfo(final OperationAnomalyInfo otherInfo) {
-		this(otherInfo.getTimestamp(), otherInfo.getOperationSignature().getHostName(), otherInfo.getOperationSignature().getApplicationName(), otherInfo
+		this(otherInfo.getTimestamp(), otherInfo.getOperationSignature().getHostname(), otherInfo.getOperationSignature().getApplicationName(), otherInfo
 				.getOperationSignature().getStringSignature(), otherInfo.getAnomalyScore());
 	}
 
@@ -112,7 +112,7 @@ public class OperationAnomalyInfo {
 		sb.append(';');
 		sb.append(this.anomalyRecord.getAnomalyScore());
 		sb.append(';');
-		sb.append(this.operationSignature.getHostName());
+		sb.append(this.operationSignature.getHostname());
 		sb.append(';');
 		sb.append(this.operationSignature.getApplicationName());
 		sb.append(';');

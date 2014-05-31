@@ -63,17 +63,24 @@ public class OnlineConfigurationTest extends AbstractKiekerTest {
 
 	private int noPNFExceptions;
 
-	private IAnalysisController analysisController;
-	private ListReader<String> simpleListReader;
-	private ListCollectionFilter<String> listCollectionfilterSTR;
+	private final IAnalysisController analysisController;
+	private final ListReader<String> simpleListReader;
+	private final ListCollectionFilter<String> listCollectionfilterSTR;
 
-	private Updateable updateable;
+	private final Updater updater;
+	private final Updateable updateable;
 
 	/**
 	 * Mandatory Constructor.
 	 */
 	public OnlineConfigurationTest() {
-		//
+		this.analysisController = new AnalysisController();
+		this.simpleListReader = new ListReader<String>(new Configuration(), this.analysisController);
+		this.listCollectionfilterSTR = new ListCollectionFilter<String>(new Configuration(), this.analysisController);
+
+		this.updater = new Updater(new Configuration(), this.analysisController);
+		final Configuration updateableConfig = new Configuration();
+		this.updateable = new Updateable(updateableConfig, this.analysisController);
 	}
 
 	/**
@@ -81,16 +88,10 @@ public class OnlineConfigurationTest extends AbstractKiekerTest {
 	 */
 	@Before
 	public void setUp() {
-		this.analysisController = new AnalysisController();
-		this.simpleListReader = new ListReader<String>(new Configuration(), this.analysisController);
-		this.listCollectionfilterSTR = new ListCollectionFilter<String>(new Configuration(), this.analysisController);
 
-		final Updater updater = new Updater(new Configuration(), this.analysisController);
-		final Configuration updateableConfig = new Configuration();
-		this.updateable = new Updateable(updateableConfig, this.analysisController);
 		GlobalConfigurationRegistry.getInstance().registerUpdateableFilterPlugin(UPDATEABLE_FILTER_ID, this.updateable);
 		try {
-			this.analysisController.connect(this.simpleListReader, ListReader.OUTPUT_PORT_NAME, updater, Updater.INPUT);
+			this.analysisController.connect(this.simpleListReader, ListReader.OUTPUT_PORT_NAME, this.updater, Updater.INPUT);
 			this.analysisController.connect(this.simpleListReader, ListReader.OUTPUT_PORT_NAME, this.updateable, Updateable.INPUT);
 			this.analysisController.connect(this.updateable, Updateable.OUPUT_STRING, this.listCollectionfilterSTR, ListCollectionFilter.INPUT_PORT_NAME);
 			this.simulate();
@@ -221,7 +222,7 @@ public class OnlineConfigurationTest extends AbstractKiekerTest {
 				@Property(name = Updateable.TEST_PROPERTY_UPDATEABLE, defaultValue = Updateable.TEST_PROPERTY_UPDATEABLE, updateable = true),
 				@Property(name = Updateable.TEST_PROPERTY_TWO, defaultValue = Updateable.TEST_PROPERTY_TWO)
 			})
-	public class Updateable extends AbstractUpdateableFilterPlugin {
+	public static class Updateable extends AbstractUpdateableFilterPlugin {
 
 		/**
 		 * Inputportname.

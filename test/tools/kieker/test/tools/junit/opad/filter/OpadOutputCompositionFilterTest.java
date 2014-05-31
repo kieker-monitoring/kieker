@@ -115,7 +115,7 @@ public class OpadOutputCompositionFilterTest extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testOpadOutputCompositionHostname() {
-		Assert.assertEquals(this.compositionResult.getOperationSignature().getHostName(), HOSTNAME);
+		Assert.assertEquals(this.compositionResult.getOperationSignature().getHostname(), HOSTNAME);
 	}
 
 	/**

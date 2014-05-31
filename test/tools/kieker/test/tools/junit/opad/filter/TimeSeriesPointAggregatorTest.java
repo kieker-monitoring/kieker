@@ -44,7 +44,7 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 	private static final String OP_SIGNATURE_B = "b.B.opB";
 	private static final String OP_SIGNATURE_C = "c.C.opC";
 
-	private AnalysisController controller;
+	private final AnalysisController controller;
 
 	private ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPlugin;
 
@@ -52,7 +52,7 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 	 * Creates an instance of this class.
 	 */
 	public TimeSeriesPointAggregatorTest() {
-		// empty default constructor
+		this.controller = new AnalysisController();
 	}
 
 	// HelperMethods ForecastingFilter
@@ -70,8 +70,6 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 	 */
 	@Before
 	public void setUp() throws IllegalStateException, AnalysisConfigurationException {
-		this.controller = new AnalysisController();
-
 		// READER
 		final Configuration readerAggregationConfiguration = new Configuration();
 		final ListReader<NamedDoubleTimeSeriesPoint> theReaderAggregator = new ListReader<NamedDoubleTimeSeriesPoint>(readerAggregationConfiguration,
@@ -129,24 +127,24 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 		this.controller.run();
 
 		// Expected: (1000 + 2000) / 2 = 1500 Application A
-		Assert.assertEquals(new Double(1500), Double.valueOf(this.sinkPlugin.getList().get(0).getDoubleValue()));
+		Assert.assertEquals(Double.valueOf(1500d), Double.valueOf(this.sinkPlugin.getList().get(0).getDoubleValue()));
 		// Expected: 3000 Application A
-		Assert.assertEquals(new Double(3000), Double.valueOf(this.sinkPlugin.getList().get(1).getDoubleValue()));
+		Assert.assertEquals(Double.valueOf(3000d), Double.valueOf(this.sinkPlugin.getList().get(1).getDoubleValue()));
 		// Expected: (1000 + 5500) / 2 = 3250 Application C
-		Assert.assertEquals(new Double(3250), Double.valueOf(this.sinkPlugin.getList().get(2).getDoubleValue()));
+		Assert.assertEquals(Double.valueOf(3250d), Double.valueOf(this.sinkPlugin.getList().get(2).getDoubleValue()));
 		// Expected: 2000 Application B
-		Assert.assertEquals(new Double(2000), Double.valueOf(this.sinkPlugin.getList().get(3).getDoubleValue()));
+		Assert.assertEquals(Double.valueOf(2000d), Double.valueOf(this.sinkPlugin.getList().get(3).getDoubleValue()));
 		// Expected: 4000 Application A
-		Assert.assertEquals(new Double(4000), Double.valueOf(this.sinkPlugin.getList().get(4).getDoubleValue()));
+		Assert.assertEquals(Double.valueOf(4000d), Double.valueOf(this.sinkPlugin.getList().get(4).getDoubleValue()));
 		// Expected: Skipped two spans for Application A -> 2 time 0
 		Assert.assertEquals(Double.NaN, this.sinkPlugin.getList().get(5).getDoubleValue(), 0.0000001d);
 		Assert.assertEquals(Double.NaN, this.sinkPlugin.getList().get(6).getDoubleValue(), 0.0000001d);
 		// Expected: 6000 Application A
-		Assert.assertEquals(new Double(6000), Double.valueOf(this.sinkPlugin.getList().get(7).getDoubleValue()));
+		Assert.assertEquals(Double.valueOf(6000d), Double.valueOf(this.sinkPlugin.getList().get(7).getDoubleValue()));
 		// Expected: (5000 + 1000) / 2 = 3000 Application B
-		Assert.assertEquals(new Double(3000), Double.valueOf(this.sinkPlugin.getList().get(8).getDoubleValue()));
+		Assert.assertEquals(Double.valueOf(3000d), Double.valueOf(this.sinkPlugin.getList().get(8).getDoubleValue()));
 		// Expected: 5000 Application B
-		Assert.assertEquals(new Double(5000), Double.valueOf(this.sinkPlugin.getList().get(9).getDoubleValue()));
+		Assert.assertEquals(Double.valueOf(5000d), Double.valueOf(this.sinkPlugin.getList().get(9).getDoubleValue()));
 		// Expected: Skipped one span for Application B -> 1 time 0
 		Assert.assertEquals(Double.NaN, this.sinkPlugin.getList().get(10).getDoubleValue(), 0.0000001d);
 

@@ -127,7 +127,7 @@ public class OperationSignature {
 		return this.className;
 	}
 
-	public String getHostName() {
+	public String getHostname() {
 		return this.hostName;
 	}
 

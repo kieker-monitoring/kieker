@@ -49,7 +49,7 @@ public class ForecastingFilterTest extends AbstractKiekerTest {
 	private static final String OP_SIGNATURE_B = "b.B.opB";
 	private static final String OP_SIGNATURE_C = "c.C.opC";
 
-	private AnalysisController controller;
+	private final AnalysisController controller;
 
 	private ListCollectionFilter<ForecastMeasurementPair> sinkPlugin;
 
@@ -57,7 +57,7 @@ public class ForecastingFilterTest extends AbstractKiekerTest {
 	 * Creates an instance of this class.
 	 */
 	public ForecastingFilterTest() {
-		// empty default constructor
+		this.controller = new AnalysisController();
 	}
 
 	// HelperMethods ForecastingFilter
@@ -88,8 +88,6 @@ public class ForecastingFilterTest extends AbstractKiekerTest {
 	@Before
 	public void setUp() throws IllegalStateException,
 			AnalysisConfigurationException {
-		this.controller = new AnalysisController();
-
 		// READER
 		final Configuration readerForecastConfiguration = new Configuration();
 		readerForecastConfiguration.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
@@ -136,18 +134,18 @@ public class ForecastingFilterTest extends AbstractKiekerTest {
 
 		Assert.assertEquals(7, this.sinkPlugin.getList().size());
 		// Expected: 0.3 - 0.3 (dummy) Application A
-		Assert.assertEquals(new Double(0.3), this.sinkPlugin.getList().get(0).getForecasted());
+		Assert.assertEquals(Double.valueOf(0.3d), this.sinkPlugin.getList().get(0).getForecasted());
 		// Expected: 0.4 - 0.4 (dummy) Application B
-		Assert.assertEquals(new Double(0.4), this.sinkPlugin.getList().get(1).getForecasted());
+		Assert.assertEquals(Double.valueOf(0.4d), this.sinkPlugin.getList().get(1).getForecasted());
 		// Expected: (0.3 + 0.5) / 2 = 0.4 Application A
-		Assert.assertEquals(new Double(0.4), this.sinkPlugin.getList().get(2).getForecasted());
+		Assert.assertEquals(Double.valueOf(0.4d), this.sinkPlugin.getList().get(2).getForecasted());
 		// Expected: 0.5 = 0.5 (dummy) Application C
-		Assert.assertEquals(new Double(0.5), this.sinkPlugin.getList().get(3).getForecasted());
+		Assert.assertEquals(Double.valueOf(0.5d), this.sinkPlugin.getList().get(3).getForecasted());
 		// Expected: (0.4 + 0.3) / 2 = 0.35 Application B
-		Assert.assertEquals(new Double(0.35), this.sinkPlugin.getList().get(4).getForecasted());
+		Assert.assertEquals(Double.valueOf(0.35d), this.sinkPlugin.getList().get(4).getForecasted());
 		// Expected: (0.3 + 0.5 + 0.4) / 3 = 0.4 Application A
-		Assert.assertEquals(new Double(0.4), this.sinkPlugin.getList().get(5).getForecasted());
+		Assert.assertEquals(Double.valueOf(0.4d), this.sinkPlugin.getList().get(5).getForecasted());
 		// Expected: (0.4 + 0.3 + 0.5) / 3 = 0.4 Application B
-		Assert.assertEquals(new Double(0.4), this.sinkPlugin.getList().get(6).getForecasted());
+		Assert.assertEquals(Double.valueOf(0.4d), this.sinkPlugin.getList().get(6).getForecasted());
 	}
 }
