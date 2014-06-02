@@ -104,6 +104,8 @@ public class JVMDataDisplayBean {
 			}
 		}
 
+		maximum += roundToValue / 2;
+
 		return ((maximum + (roundToValue - 1)) / roundToValue) * roundToValue;
 	}
 
