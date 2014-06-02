@@ -19,27 +19,27 @@ public class Delay<T> extends AbstractFilter<Delay<T>> {
 
 	public final IOutputPort<Delay<T>, T> RELAYED_OBJECT = this.createOutputPort();
 
-	private long initialDelayInMs;
-	private long intervalDelayInMs;
+	private long initialDelayInNs;
+	private long intervalDelayInNs;
 
 	private boolean initialDelayExceeded = false;
-	private long lastTimeInMs = this.getCurrentTime();
+	private long lastTimeInNs = this.getCurrentTimeInNs();
 
 	/**
 	 * @since 1.10
 	 */
 	@Override
 	protected boolean execute(final Context<Delay<T>> context) {
-		final long passedTimeInMs = this.getCurrentTime() - this.lastTimeInMs;
-		final long thresholdInMs = (this.initialDelayExceeded) ? this.intervalDelayInMs : this.initialDelayInMs;
+		final long passedTimeInNs = this.getCurrentTimeInNs() - this.lastTimeInNs;
+		final long thresholdInNs = (this.initialDelayExceeded) ? this.intervalDelayInNs : this.initialDelayInNs;
 
-		if (passedTimeInMs >= thresholdInMs) {
+		if (passedTimeInNs >= thresholdInNs) {
 			final T token = context.tryTake(this.INPUT_OBJECT);
 			if (token == null) {
 				return false;
 			}
 
-			this.lastTimeInMs += thresholdInMs;
+			this.lastTimeInNs += thresholdInNs;
 			context.put(this.RELAYED_OBJECT, token);
 
 			this.initialDelayExceeded = true;
@@ -51,7 +51,23 @@ public class Delay<T> extends AbstractFilter<Delay<T>> {
 	/**
 	 * @since 1.10
 	 */
-	private long getCurrentTime() {
-		return System.currentTimeMillis();
+	private long getCurrentTimeInNs() {
+		return System.nanoTime();
+	}
+
+	public long getInitialDelayInNs() {
+		return initialDelayInNs;
+	}
+
+	public void setInitialDelayInNs(long initialDelayInNs) {
+		this.initialDelayInNs = initialDelayInNs;
+	}
+
+	public long getIntervalDelayInNs() {
+		return intervalDelayInNs;
+	}
+
+	public void setIntervalDelayInNs(long intervalDelayInNs) {
+		this.intervalDelayInNs = intervalDelayInNs;
 	}
 }
