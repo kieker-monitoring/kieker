@@ -148,7 +148,7 @@ public class RecordReaderAnalysis extends Analysis {
 
 		for (final IStage stage : pipeline.getStages()) {
 			if (stage instanceof AbstractFilter<?>) {
-				System.out.println(stage.getClass().getName() + ": " + ((AbstractFilter<?>) stage).getOverallDuration()); // NOPMD (Just for example purposes)
+				System.out.println(stage.getClass().getName() + ": " + ((AbstractFilter<?>) stage).getOverallDurationInNs()); // NOPMD (Just for example purposes)
 			}
 		}
 	}

@@ -23,6 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.chw.concurrent.DequePopException;
+import de.chw.util.StopWatch;
 
 /**
  * 
@@ -66,11 +67,9 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	 * 0=in-memory, x>0=disk0, disk1, display0, display1, socket0, socket1 etc.
 	 */
 	private int accessesDeviceId = 0;
-	private long overallDuration = 0;
 
-	public long getOverallDuration() {
-		return this.overallDuration;
-	}
+	private final StopWatch stopWatch = new StopWatch();
+	private long overallDurationInNs = 0;
 
 	public int getAccessesDeviceId() {
 		return this.accessesDeviceId;
@@ -106,15 +105,14 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	}
 
 	private boolean executeLogged(final Context<S> context) {
-		final long start = System.currentTimeMillis();
-
-		final boolean success = this.execute(context);
-
-		final long end = System.currentTimeMillis();
-		final long duration = end - start;
-		this.overallDuration += duration;
-
-		return success;
+		this.stopWatch.start();
+		try {
+			final boolean success = this.execute(context);
+			return success;
+		} finally {
+			this.stopWatch.end();
+			this.overallDurationInNs += this.stopWatch.getDuration();
+		}
 	}
 
 	protected abstract boolean execute(Context<S> context);
@@ -303,6 +301,10 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 
 	public IOutputPort<?, ?> getOutputPortByIndex(final int index) {
 		return this.readOnlyOutputPorts.get(index);
+	}
+
+	public long getOverallDurationInNs() {
+		return this.overallDurationInNs;
 	}
 
 }

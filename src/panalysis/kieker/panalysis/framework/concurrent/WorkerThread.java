@@ -16,6 +16,9 @@
 
 package kieker.panalysis.framework.concurrent;
 
+import de.chw.util.StopWatch;
+
+import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.IPipeline;
 import kieker.panalysis.framework.core.IStage;
 
@@ -29,12 +32,14 @@ public class WorkerThread extends Thread {
 	private final IPipeline pipeline;
 	private IStageScheduler stageScheduler;
 
-	private long duration;
+	private long durationInNs;
 
 	private volatile StageTerminationPolicy terminationPolicy;
 	private volatile boolean shouldTerminate = false;
 	private final int accessesDeviceId;
 	private int executedUnsuccessfullyCount;
+	private final StopWatch stopWatch = new StopWatch();
+	private long schedulingOverheadInNs;
 
 	public WorkerThread(final IPipeline pipeline, final int accessesDeviceId) {
 		this.pipeline = pipeline;
@@ -52,7 +57,7 @@ public class WorkerThread extends Thread {
 			throw new IllegalStateException(e);
 		}
 
-		final long start = System.currentTimeMillis();
+		this.stopWatch.start();
 
 		while (this.stageScheduler.isAnyStageActive()) {
 			final IStage stage = this.stageScheduler.get();
@@ -67,10 +72,17 @@ public class WorkerThread extends Thread {
 			this.stageScheduler.determineNextStage(stage, executedSuccessfully);
 		}
 
+		this.stopWatch.end();
+
 		this.cleanUpDatastructures();
 
-		final long end = System.currentTimeMillis();
-		this.duration = end - start;
+		this.durationInNs = this.stopWatch.getDuration();
+
+		this.schedulingOverheadInNs = this.durationInNs;
+		for (final IStage stage : this.pipeline.getStages()) {
+			final AbstractFilter<?> af = (AbstractFilter<?>) stage;
+			this.schedulingOverheadInNs -= af.getOverallDurationInNs();
+		}
 	}
 
 	private void executeTerminationPolicy(final IStage executedStage, final boolean executedSuccessfully) {
@@ -124,7 +136,7 @@ public class WorkerThread extends Thread {
 	}
 
 	public long getDuration() {
-		return this.duration;
+		return this.durationInNs;
 	}
 
 	public IPipeline getPipeline() {
@@ -149,4 +161,13 @@ public class WorkerThread extends Thread {
 		this.terminationPolicy = terminationPolicyToUse;
 		this.shouldTerminate = true;
 	}
+
+	public long getSchedulingOverheadInNs() {
+		return this.schedulingOverheadInNs;
+	}
+
+	public int getExecutedUnsuccessfullyCount() {
+		return this.executedUnsuccessfullyCount;
+	}
+
 }
