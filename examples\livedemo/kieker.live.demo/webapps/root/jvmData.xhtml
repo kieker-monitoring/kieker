@@ -104,9 +104,10 @@
 			    	title="Class Loading" minY="0" style="height:300px;margin-top:20px"
 			    	xaxisLabel="Time" yaxisLabel="Number of classes"
 			    	   	maxY="#{jvmDataDisplayBean.classLoadingMaximum}" />	
-
-			   <p:poll interval="1" update="jit, classloading, threads, gcCount, gcTime, jvmHeap, jvmNonHeap, loadButton" />	  		
-			   <p:poll interval="1" update="loadButton" /> 	
+			</h:form>
+			
+			<h:form> 
+				 <p:poll interval="1" update=":form" /> 	
 			</h:form>
 		</div>
 		
