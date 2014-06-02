@@ -1,25 +1,26 @@
 package kieker.panalysis.framework.core;
 
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 public class Context<S extends IStage> {
 
 	private final Map<IPipe<Object>, List<Object>> pipesTakenFrom;
-	private final Set<IStage> pipesPutTo = new HashSet<IStage>();
+	// private final Set<IStage> pipesPutTo = new HashSet<IStage>();
+
+	private final IOutputPort<S, ?>[] outputPorts;
 
 	// statistics values
 	private int numPushedElements = 0;
 	private int numTakenElements = 0;
 
-	public Context(final List<IInputPort<S, ?>> allTargetPorts) {
+	@SuppressWarnings("unchecked")
+	public Context(final IStage owningStage, final List<IInputPort<S, ?>> allTargetPorts) {
 		this.pipesTakenFrom = this.createPipeMap(allTargetPorts);
+		this.outputPorts = new IOutputPort[owningStage.getOutputPorts().size()];
 	}
 
 	@SuppressWarnings("unchecked")
@@ -43,7 +44,8 @@ public class Context<S extends IStage> {
 		}
 		associatedPipe.put(object);
 
-		this.pipesPutTo.add(associatedPipe.getTargetPort().getOwningStage());
+		this.outputPorts[port.getIndex()] = port;
+		// this.pipesPutTo.add(associatedPipe.getTargetPort().getOwningStage());
 		this.numPushedElements++;
 	}
 
@@ -121,10 +123,6 @@ public class Context<S extends IStage> {
 		return "{" + "numTakenElements=" + this.numTakenElements + ", " + "numPushedElements=" + this.numPushedElements + "}";
 	}
 
-	public Collection<? extends IStage> getOutputStages() {
-		return this.pipesPutTo;
-	}
-
 	/**
 	 * @return <code>true</code> iff all input ports are empty, otherwise <code>false</code>.
 	 */
@@ -135,5 +133,22 @@ public class Context<S extends IStage> {
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * @since 1.10
+	 */
+	public void clearSucessors() {
+		for (int i = 0; i < this.outputPorts.length; i++) {
+			this.outputPorts[i] = null;
+		}
+	}
+
+	/**
+	 * @return
+	 * @since 1.10
+	 */
+	public IOutputPort<S, ?>[] getOutputStages() {
+		return this.outputPorts;
 	}
 }

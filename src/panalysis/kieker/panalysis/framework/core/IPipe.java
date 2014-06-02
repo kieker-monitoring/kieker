@@ -97,6 +97,11 @@ public interface IPipe<T> {
 	/**
 	 * @since 1.10
 	 */
+	IOutputPort<?, T> getSourcePort();
+
+	/**
+	 * @since 1.10
+	 */
 	IInputPort<?, T> getTargetPort();
 
 	/**

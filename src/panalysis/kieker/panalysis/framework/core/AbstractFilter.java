@@ -54,6 +54,9 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	 */
 	private StageState state = StageState.UNINITIALIZED;
 
+	private int depth = IStage.DEPTH_NOT_SET;
+	private int schedulingIndex;
+
 	private final List<IInputPort<S, ?>> inputPorts = new ArrayList<IInputPort<S, ?>>();
 	private final List<IInputPort<S, ?>> readOnlyInputPorts = Collections.unmodifiableList(this.inputPorts);
 
@@ -147,9 +150,12 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	 * @since 1.10
 	 */
 	public void onPipelineStarts() throws Exception {
-		this.context = new Context<S>(this.readOnlyInputPorts);
+		this.context = new Context<S>(this, this.readOnlyInputPorts);
 	}
 
+	/**
+	 * @since 1.10
+	 */
 	public void notifyOutputPipes(final IPipeCommand pipeCommand) throws Exception {
 		for (final IOutputPort<S, ?> outputPort : this.readOnlyOutputPorts) {
 			final IPipe<?> associatedPipe = outputPort.getAssociatedPipe();
@@ -268,8 +274,6 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 
 	/**
 	 * @since 1.10
-	 * @return
-	 * 
 	 */
 	protected List<IInputPort<S, ?>> getInputPorts() {
 		return this.readOnlyInputPorts;
@@ -277,9 +281,8 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 
 	/**
 	 * @since 1.10
-	 * @return
-	 * 
 	 */
+	@SuppressWarnings("unchecked")
 	public List<IOutputPort<S, ?>> getOutputPorts() {
 		return this.readOnlyOutputPorts;
 	}
@@ -312,4 +315,19 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 		return this.lastDuration;
 	}
 
+	public int getDepth() {
+		return this.depth;
+	}
+
+	public void setDepth(final int depth) {
+		this.depth = depth;
+	}
+
+	public int getSchedulingIndex() {
+		return this.schedulingIndex;
+	}
+
+	public void setSchedulingIndex(final int schedulingIndex) {
+		this.schedulingIndex = schedulingIndex;
+	}
 }

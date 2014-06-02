@@ -39,17 +39,20 @@ public abstract class AbstractPipe<T> implements IPipe<T> {
 
 	private PipeState state = PipeState.UNINITIALIZED;
 
+	private IOutputPort<?, T> sourcePort;
 	private IInputPort<?, T> targetPort;
 
-	/**
-	 * @return the targetPort
-	 */
+	public IOutputPort<?, T> getSourcePort() {
+		return this.sourcePort;
+	}
+
 	public IInputPort<?, T> getTargetPort() {
 		return this.targetPort;
 	}
 
 	public <S extends ISource, A extends T> void setSourcePort(final IOutputPort<S, T> sourcePort) {
 		sourcePort.setAssociatedPipe(this);
+		this.sourcePort = sourcePort;
 	}
 
 	public <S extends ISink<S>, A extends T> void setTargetPort(final IInputPort<S, T> targetPort) {

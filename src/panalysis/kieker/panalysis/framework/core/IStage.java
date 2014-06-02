@@ -17,6 +17,7 @@
 package kieker.panalysis.framework.core;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * @author Christian Wulf
@@ -24,6 +25,8 @@ import java.util.Collection;
  * @since 1.10
  */
 public interface IStage extends IBaseStage {
+
+	public final static int DEPTH_NOT_SET = -1;
 
 	/**
 	 * @since 1.10
@@ -128,6 +131,8 @@ public interface IStage extends IBaseStage {
 	 */
 	public Collection<? extends IStage> getAllOutputStages();
 
+	public <S extends IStage> List<IOutputPort<S, ?>> getOutputPorts();
+
 	Thread getOwningThread();
 
 	void setOwningThread(Thread owningThread);
@@ -141,4 +146,25 @@ public interface IStage extends IBaseStage {
 	 * @since 1.10
 	 */
 	void notifyOutputPipes(IPipeCommand pipeCommand) throws Exception;
+
+	/**
+	 * @since 1.10
+	 */
+	public int getDepth();
+
+	/**
+	 * @since 1.10
+	 */
+	public void setDepth(int depth);
+
+	/**
+	 * @since 1.10
+	 */
+	public int getSchedulingIndex();
+
+	/**
+	 * @since 1.10
+	 */
+	public void setSchedulingIndex(int schedulingIndex);
+
 }

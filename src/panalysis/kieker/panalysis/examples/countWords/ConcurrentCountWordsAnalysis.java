@@ -20,6 +20,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import de.chw.util.Pair;
 
@@ -52,7 +53,7 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 	private static final String START_DIRECTORY_NAME = ".";
 	private static final int SECONDS = 1000;
 
-	private static final int MAX_NUM_THREADS = 4;
+	private static final int MAX_NUM_THREADS = 3;
 
 	private WorkerThread[] ioThreads;
 	private WorkerThread[] nonIoThreads;
@@ -313,28 +314,29 @@ public class ConcurrentCountWordsAnalysis extends Analysis {
 		for (final WorkerThread thread : this.ioThreads) {
 			System.out.println("--- " + thread + " ---"); // NOPMD (Just for example purposes)
 			for (final IStage stage : thread.getPipeline().getStages()) {
-				// System.out.println(stage); // NOPMD (Just for example purposes)
+				System.out.println(stage); // NOPMD (Just for example purposes)
 			}
 
-			final long duration = thread.getDuration();
-			System.out.println(thread + " takes " + duration + " ms");
+			final long durationInNs = thread.getDurationInNs();
+			System.out.println(thread + " takes " + TimeUnit.NANOSECONDS.toMillis(durationInNs) + " ms");
 		}
 
 		for (final WorkerThread thread : this.nonIoThreads) {
 			System.out.println("--- " + thread + " ---"); // NOPMD (Just for example purposes)
 			for (final IStage stage : thread.getPipeline().getStages()) {
-				// System.out.println(stage); // NOPMD (Just for example purposes)
+				System.out.println(stage); // NOPMD (Just for example purposes)
 			}
 
-			final long duration = thread.getDuration();
-			System.out.println(thread + " takes " + duration + " ms");
+			final long durationInNs = thread.getDurationInNs();
+			System.out.println(thread + " takes " + TimeUnit.NANOSECONDS.toMillis(durationInNs) + " ms");
 
-			if (duration > maxDuration) {
-				maxDuration = duration;
+			if (durationInNs > maxDuration) {
+				maxDuration = durationInNs;
 				maxThread = thread;
 			}
 		}
 
-		System.out.println("maxThread: " + maxThread.toString() + " takes " + maxDuration + " ms"); // NOPMD (Just for example purposes)
+		System.out.println("maxThread: " + maxThread.toString() + " takes " + TimeUnit.NANOSECONDS.toMillis(maxDuration) + " ms"); // NOPMD (Just for example
+																																	// purposes)
 	}
 }

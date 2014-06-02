@@ -19,8 +19,13 @@ package kieker.panalysis.framework.concurrent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
+import de.chw.util.StopWatch;
+
+import kieker.panalysis.framework.core.IOutputPort;
 import kieker.panalysis.framework.core.IPipeline;
 import kieker.panalysis.framework.core.IStage;
 
@@ -35,8 +40,14 @@ public class NextStageScheduler implements IStageScheduler {
 	private final Collection<IStage> highestPrioritizedEnabledStages = new ArrayList<IStage>();
 	private final IStageWorkList workList;
 
+	private final StopWatch stopWatch = new StopWatch();
+	private long durationInNs;
+	private int iterations;
+	private final List<Long> durations = new LinkedList<Long>();
+
 	public NextStageScheduler(final IPipeline pipeline, final int accessesDeviceId) throws Exception {
-		this.workList = new StageWorkList(accessesDeviceId, pipeline.getStages().size());
+		// this.workList = new StageWorkList(accessesDeviceId, pipeline.getStages().size());
+		this.workList = new StageWorkArrayList(pipeline, accessesDeviceId); // faster implementation
 
 		this.highestPrioritizedEnabledStages.addAll(pipeline.getStartStages());
 
@@ -83,9 +94,15 @@ public class NextStageScheduler implements IStageScheduler {
 
 	@Override
 	public void determineNextStage(final IStage stage, final boolean executedSuccessfully) {
-		final Collection<? extends IStage> outputStages = stage.getContext().getOutputStages();
-		if (outputStages.size() > 0) {
-			if (stage.getContext().inputPortsAreEmpty()) {
+		this.iterations++;
+
+		this.stopWatch.start();
+
+		// final Collection<? extends IStage> outputStages = stage.getContext().getOutputStages();
+		final IOutputPort<?, ?>[] outputPorts = stage.getContext().getOutputStages();
+		if (outputPorts.length > 0) {
+			final boolean inputPortsAreEmpty = stage.getContext().inputPortsAreEmpty();
+			if (inputPortsAreEmpty) {
 				this.workList.pop();
 			}
 
@@ -94,9 +111,9 @@ public class NextStageScheduler implements IStageScheduler {
 			// while (outputStages.remove(stage)) {
 			// }
 
-			this.workList.pushAll(outputStages);
+			this.workList.pushAll(outputPorts);
 
-			stage.getContext().getOutputStages().clear();
+			stage.getContext().clearSucessors();
 		} else {
 			this.workList.pop();
 		}
@@ -104,5 +121,17 @@ public class NextStageScheduler implements IStageScheduler {
 		if (this.workList.isEmpty()) {
 			this.workList.pushAll(this.highestPrioritizedEnabledStages);
 		}
+
+		this.stopWatch.end();
+
+		this.durationInNs += this.stopWatch.getDuration();
+		if ((this.iterations % 10000) == 0) {
+			this.durations.add(this.durationInNs);
+			this.durationInNs = 0;
+		}
+	}
+
+	public List<Long> getDurations() {
+		return this.durations;
 	}
 }

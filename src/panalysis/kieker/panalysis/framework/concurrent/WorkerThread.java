@@ -18,6 +18,7 @@ package kieker.panalysis.framework.concurrent;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import de.chw.util.StopWatch;
 
@@ -89,6 +90,13 @@ public class WorkerThread extends Thread {
 
 		this.stopWatch.end();
 		this.durationInNs = this.stopWatch.getDuration();
+
+		final List<Long> durations = ((NextStageScheduler) this.stageScheduler).getDurations();
+		long overallDuration = 0;
+		for (int i = durations.size() / 2; i < durations.size(); i++) {
+			overallDuration += durations.get(i);
+		}
+		System.out.println("Scheduler determine next stage (" + (durations.size() / 2) + "): " + TimeUnit.NANOSECONDS.toMillis(overallDuration) + " ms");
 
 		this.cleanUpDatastructures();
 	}
@@ -178,7 +186,7 @@ public class WorkerThread extends Thread {
 	/**
 	 * @since 1.10
 	 */
-	public long getDuration() {
+	public long getDurationInNs() {
 		return this.durationInNs;
 	}
 

@@ -17,16 +17,19 @@ package kieker.panalysis.framework.concurrent;
 
 import java.util.Collection;
 
+import kieker.panalysis.framework.core.IOutputPort;
 import kieker.panalysis.framework.core.IStage;
 
 /**
  * @author Christian Wulf
- *
+ * 
  * @since 1.10
  */
 public interface IStageWorkList {
 
 	public abstract void pushAll(Collection<? extends IStage> stages);
+
+	public abstract void pushAll(IOutputPort<?, ?>[] outputPorts);
 
 	public abstract IStage pop();
 
