@@ -126,6 +126,7 @@ public class LiveDemoAnalysis {
 	public void initializeAnalysis() throws IllegalStateException, AnalysisConfigurationException {
 		final Configuration jmxReaderConfig = new Configuration();
 		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_SILENT, "true");
+		jmxReaderConfig.setProperty(JMXReader.CONFIG_PROPERTY_NAME_PORT, "59996");
 		final JMXReader reader = new JMXReader(jmxReaderConfig, this.analysisController);
 
 		final Configuration timeReaderConfig = new Configuration();
