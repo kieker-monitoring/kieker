@@ -31,7 +31,7 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
  */
 public class ResponseTimeDecoration extends AbstractVertexDecoration {
 
-	private static final String OUTPUT_TEMPLATE = "min: %dms, avg: %.2fms, max: %dms";
+	private static final String OUTPUT_TEMPLATE = "min: %,dms, avg: %,.2fms, max: %,dms";
 
 	private static final TimeUnit DISPLAY_TIMEUNIT = TimeUnit.MILLISECONDS;
 
