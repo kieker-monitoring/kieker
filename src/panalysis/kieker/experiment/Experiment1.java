@@ -19,6 +19,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.concurrent.Callable;
+
+import kieker.analysis.AnalysisController;
+import kieker.analysis.EmptyPassOnFilter;
+import kieker.analysis.IAnalysisController;
+import kieker.analysis.ObjectProducer;
+import kieker.common.configuration.Configuration;
 
 /**
  * @author Nils Christian Ehmke
@@ -30,7 +37,7 @@ public class Experiment1 {
 	private static final int NUMBER_OF_WARMUP_RUNS_PER_EXPERIMENT = 100;
 	private static final int NUMBER_OF_MEASURED_RUNS_PER_EXPERIMENT = 100;
 
-	private static final int NUMBER_OF_OBJECTS_TO_SEND = 100000;
+	private static final int NUMBER_OF_OBJECTS_TO_SEND = 10000;
 
 	private static final int NUMBER_OF_MINIMAL_FILTERS = 10;
 	private static final int NUMBER_OF_MAXIMAL_FILTERS = 1000;
@@ -40,13 +47,12 @@ public class Experiment1 {
 
 	private static final Collection<Long> measuredTimes = new ArrayList<Long>();
 
-	public static void main(final String[] args) throws IOException {
+	public static void main(final String[] args) throws Exception {
 		for (final IAnalysis analysis : analyses) {
 			for (int numberOfFilters = NUMBER_OF_MINIMAL_FILTERS; numberOfFilters <= NUMBER_OF_MAXIMAL_FILTERS; numberOfFilters += NUMBER_OF_FILTERS_PER_STEP) {
-				analysis.initialize(numberOfFilters, NUMBER_OF_OBJECTS_TO_SEND);
-
 				// Warmup
 				for (int run = 0; run < NUMBER_OF_WARMUP_RUNS_PER_EXPERIMENT; run++) {
+					analysis.initialize(numberOfFilters, NUMBER_OF_OBJECTS_TO_SEND);
 					analysis.execute();
 				}
 
@@ -54,6 +60,7 @@ public class Experiment1 {
 				for (int run = 0; run < NUMBER_OF_MEASURED_RUNS_PER_EXPERIMENT; run++) {
 					final long tin = System.nanoTime();
 
+					analysis.initialize(numberOfFilters, NUMBER_OF_OBJECTS_TO_SEND);
 					analysis.execute();
 
 					final long tout = System.nanoTime();
@@ -82,11 +89,11 @@ public class Experiment1 {
 
 	private static interface IAnalysis {
 
-		public void initialize(int numberOfFilters, int numberOfObjectsToSend);
+		public void initialize(int numberOfFilters, int numberOfObjectsToSend) throws Exception;
 
 		public String getName();
 
-		public void execute();
+		public void execute() throws Exception;
 
 	}
 
@@ -104,13 +111,35 @@ public class Experiment1 {
 
 	private static final class KiekerAnalysis implements IAnalysis {
 
-		public void initialize(final int numberOfFilters, final int numberOfObjectsToSend) {}
+		private IAnalysisController ac;
+
+		public void initialize(final int numberOfFilters, final int numberOfObjectsToSend) throws Exception {
+			this.ac = new AnalysisController();
+
+			final Configuration producerConfig = new Configuration();
+			producerConfig.setProperty(ObjectProducer.CONFIG_PROPERTY_NAME_OBJECTS_TO_CREATE, Long.toString(numberOfObjectsToSend));
+			final ObjectProducer<Object> producer = new ObjectProducer<Object>(producerConfig, this.ac, new Callable<Object>() {
+				public Object call() throws Exception {
+					return new Object();
+				}
+			});
+
+			EmptyPassOnFilter predecessor = new EmptyPassOnFilter(new Configuration(), this.ac);
+			this.ac.connect(producer, ObjectProducer.OUTPUT_PORT_NAME, predecessor, EmptyPassOnFilter.INPUT_PORT_NAME);
+			for (int idx = 0; idx < (numberOfFilters - 1); idx++) {
+				final EmptyPassOnFilter newPredecessor = new EmptyPassOnFilter(new Configuration(), this.ac);
+				this.ac.connect(predecessor, EmptyPassOnFilter.OUTPUT_PORT_NAME, newPredecessor, EmptyPassOnFilter.INPUT_PORT_NAME);
+				predecessor = newPredecessor;
+			}
+		}
 
 		public String getName() {
 			return "Kieker";
 		}
 
-		public void execute() {}
+		public void execute() throws Exception {
+			this.ac.run();
+		}
 
 	}
 
