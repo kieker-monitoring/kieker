@@ -16,9 +16,11 @@
 
 package kieker.panalysis.framework.concurrent;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import de.chw.util.StopWatch;
 
-import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.IPipeline;
 import kieker.panalysis.framework.core.IStage;
 
@@ -32,14 +34,14 @@ public class WorkerThread extends Thread {
 	private final IPipeline pipeline;
 	private IStageScheduler stageScheduler;
 
-	private long durationInNs;
-
 	private volatile StageTerminationPolicy terminationPolicy;
 	private volatile boolean shouldTerminate = false;
 	private final int accessesDeviceId;
 	private int executedUnsuccessfullyCount;
 	private final StopWatch stopWatch = new StopWatch();
-	private long schedulingOverheadInNs;
+	private final StopWatch iterationStopWatch = new StopWatch();
+	private final List<Long> schedulingOverheadsInNs = new LinkedList<Long>();
+	private long durationInNs;
 
 	public WorkerThread(final IPipeline pipeline, final int accessesDeviceId) {
 		this.pipeline = pipeline;
@@ -57,9 +59,14 @@ public class WorkerThread extends Thread {
 			throw new IllegalStateException(e);
 		}
 
+		long iterations = 0;
+		long schedulingOverheadInNs = 0;
 		this.stopWatch.start();
 
 		while (this.stageScheduler.isAnyStageActive()) {
+			iterations++;
+			this.iterationStopWatch.start();
+
 			final IStage stage = this.stageScheduler.get();
 
 			this.startStageExecution(stage);
@@ -70,19 +77,20 @@ public class WorkerThread extends Thread {
 				this.executeTerminationPolicy(stage, executedSuccessfully);
 			}
 			this.stageScheduler.determineNextStage(stage, executedSuccessfully);
+
+			this.iterationStopWatch.end();
+			final long schedulingOverhead = this.iterationStopWatch.getDuration() - stage.getLastDuration();
+			schedulingOverheadInNs += schedulingOverhead;
+			if ((iterations % 10000) == 0) {
+				this.schedulingOverheadsInNs.add(schedulingOverheadInNs);
+				schedulingOverheadInNs = 0;
+			}
 		}
 
 		this.stopWatch.end();
-
-		this.cleanUpDatastructures();
-
 		this.durationInNs = this.stopWatch.getDuration();
 
-		this.schedulingOverheadInNs = this.durationInNs;
-		for (final IStage stage : this.pipeline.getStages()) {
-			final AbstractFilter<?> af = (AbstractFilter<?>) stage;
-			this.schedulingOverheadInNs -= af.getOverallDurationInNs();
-		}
+		this.cleanUpDatastructures();
 	}
 
 	private void executeTerminationPolicy(final IStage executedStage, final boolean executedSuccessfully) {
@@ -129,14 +137,11 @@ public class WorkerThread extends Thread {
 	}
 
 	private void cleanUpDatastructures() {
+		System.out.println("Cleaning up datastructures...");
 		// System.out.println("Firing stop notification...");
 		this.pipeline.fireStopNotification();
 		// System.out.println("Thread terminated:" + this);
-		// System.out.println(this.getName() + ": executedUnsuccessfullyCount=" + this.executedUnsuccessfullyCount);
-	}
-
-	public long getDuration() {
-		return this.durationInNs;
+		System.out.println(this.getName() + ": executedUnsuccessfullyCount=" + this.executedUnsuccessfullyCount);
 	}
 
 	public IPipeline getPipeline() {
@@ -162,12 +167,35 @@ public class WorkerThread extends Thread {
 		this.shouldTerminate = true;
 	}
 
-	public long getSchedulingOverheadInNs() {
-		return this.schedulingOverheadInNs;
-	}
-
 	public int getExecutedUnsuccessfullyCount() {
 		return this.executedUnsuccessfullyCount;
 	}
 
+	public List<Long> getSchedulingOverheadsInNs() {
+		return this.schedulingOverheadsInNs;
+	}
+
+	/**
+	 * @since 1.10
+	 */
+	public long getDuration() {
+		return this.durationInNs;
+	}
+
+	/**
+	 * Uses the last half of values to compute the scheduling overall overhead in ns
+	 * 
+	 * @since 1.10
+	 */
+	public long computeSchedulingOverheadInNs() {
+		final int size = this.schedulingOverheadsInNs.size();
+
+		long schedulingOverheadInNs = 0;
+		for (int i = size / 2; i < size; i++) {
+			final Long iterationOverhead = this.schedulingOverheadsInNs.get(i);
+			schedulingOverheadInNs += iterationOverhead;
+		}
+
+		return schedulingOverheadInNs;
+	}
 }

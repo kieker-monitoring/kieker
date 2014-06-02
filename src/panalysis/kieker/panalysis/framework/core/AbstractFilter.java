@@ -62,6 +62,18 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 
 	private Context<S> context;
 
+	private final IPipeCommand closeCommand = new IPipeCommand() {
+		public void execute(final IPipe<?> pipe) throws Exception {
+			pipe.close();
+		}
+	};
+
+	private final IPipeCommand pipelineStartsCommand = new IPipeCommand() {
+		public void execute(final IPipe<?> pipe) throws Exception {
+			pipe.notifyPipelineStarts();
+		}
+	};
+
 	private int enabledInputPorts = 0;
 	/**
 	 * 0=in-memory, x>0=disk0, disk1, display0, display1, socket0, socket1 etc.
@@ -70,6 +82,8 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 
 	private final StopWatch stopWatch = new StopWatch();
 	private long overallDurationInNs = 0;
+
+	private long lastDuration;
 
 	public int getAccessesDeviceId() {
 		return this.accessesDeviceId;
@@ -111,7 +125,8 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 			return success;
 		} finally {
 			this.stopWatch.end();
-			this.overallDurationInNs += this.stopWatch.getDuration();
+			this.lastDuration = this.stopWatch.getDuration();
+			this.overallDurationInNs += this.lastDuration;
 		}
 	}
 
@@ -121,7 +136,7 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 		if (this.state == StageState.UNINITIALIZED) {
 			this.state = StageState.PIPELINE_STARTED;
 			this.onPipelineStarts();
-			this.notifyOutputStages();
+			this.notifyOutputPipes(this.pipelineStartsCommand);
 		}
 	}
 
@@ -135,17 +150,12 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 		this.context = new Context<S>(this.readOnlyInputPorts);
 	}
 
-	/**
-	 * @throws Exception
-	 * @since 1.10
-	 */
-	private void notifyOutputStages() throws Exception {
+	public void notifyOutputPipes(final IPipeCommand pipeCommand) throws Exception {
 		for (final IOutputPort<S, ?> outputPort : this.readOnlyOutputPorts) {
 			final IPipe<?> associatedPipe = outputPort.getAssociatedPipe();
 			if (associatedPipe != null) {
-				// associatedPipe.getTargetPort().getOwningStage().notifyPipelineStarts();
-				associatedPipe.notifyPipelineStarts();
-			}
+				pipeCommand.execute(associatedPipe);
+			} // else: ignore unconnected port
 		}
 	}
 
@@ -209,12 +219,10 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	 * @since 1.10
 	 */
 	public void fireSignalClosingToAllOutputPorts() {
-		// this.logger.info("Fire closing signal to all output ports of: " + this);
-		for (final IOutputPort<S, ?> port : this.readOnlyOutputPorts) {
-			final IPipe<?> associatedPipe = port.getAssociatedPipe();
-			if (associatedPipe != null) {
-				associatedPipe.close();
-			} // else: ignore unconnected port
+		try {
+			this.notifyOutputPipes(this.closeCommand);
+		} catch (final Exception e) {
+			throw new IllegalStateException("may not happen");
 		}
 	}
 
@@ -288,13 +296,6 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 		return outputStages;
 	}
 
-	/**
-	 * @since 1.10
-	 */
-	public void copyAttributes(final IStage stage) {
-		// default empty implementation
-	}
-
 	public IInputPort<?, ?> getInputPortByIndex(final int index) {
 		return this.readOnlyInputPorts.get(index);
 	}
@@ -305,6 +306,10 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 
 	public long getOverallDurationInNs() {
 		return this.overallDurationInNs;
+	}
+
+	public long getLastDuration() {
+		return this.lastDuration;
 	}
 
 }

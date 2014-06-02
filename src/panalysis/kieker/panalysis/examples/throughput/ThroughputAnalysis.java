@@ -120,7 +120,7 @@ public class ThroughputAnalysis<T> extends Analysis {
 			e.printStackTrace();
 		}
 
-		System.out.println("SchedulingOverhead: " + TimeUnit.NANOSECONDS.toMillis(this.workerThread.getSchedulingOverheadInNs()) + " ms");
+		System.out.println("SchedulingOverhead: " + TimeUnit.NANOSECONDS.toMillis(this.workerThread.computeSchedulingOverheadInNs()) + " ms");
 	}
 
 	public int getNumNoopFilters() {

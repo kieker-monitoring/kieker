@@ -6,7 +6,7 @@ import java.util.List;
 
 import kieker.panalysis.framework.core.IStage;
 
-public class StageWorkList {
+public class StageWorkList implements IStageWorkList {
 
 	// private static final Log LOG = LogFactory.getLog(StageWorkList.class);
 
@@ -18,22 +18,22 @@ public class StageWorkList {
 		this.workList = new ArrayList<IStage>(initialCapacity);
 	}
 
+	@Override
 	public void pushAll(final Collection<? extends IStage> stages) {
 		this.addAll(0, stages);
 	}
 
-	public void push(final IStage stage) {
-		this.add(0, stage);
-	}
-
+	@Override
 	public IStage pop() {
 		return this.workList.remove(0);
 	}
 
+	@Override
 	public IStage read() {
 		return this.workList.get(0);
 	}
 
+	@Override
 	public boolean isEmpty() {
 		return this.workList.isEmpty();
 	}
@@ -45,12 +45,6 @@ public class StageWorkList {
 			// stage);
 		}
 		return isValid;
-	}
-
-	private void add(final int index, final IStage stage) {
-		if (this.isValid(stage)) {
-			this.workList.add(index, stage);
-		}
 	}
 
 	private boolean addAll(final int index, final Collection<? extends IStage> collection) {

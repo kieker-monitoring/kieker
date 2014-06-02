@@ -101,9 +101,6 @@ public interface IStage extends IBaseStage {
 	 */
 	Context<?> getContext();
 
-	@Deprecated
-	void copyAttributes(IStage stage);
-
 	/**
 	 * @since 1.10
 	 */
@@ -134,4 +131,14 @@ public interface IStage extends IBaseStage {
 	Thread getOwningThread();
 
 	void setOwningThread(Thread owningThread);
+
+	/**
+	 * @since 1.10
+	 */
+	long getLastDuration();
+
+	/**
+	 * @since 1.10
+	 */
+	void notifyOutputPipes(IPipeCommand pipeCommand) throws Exception;
 }

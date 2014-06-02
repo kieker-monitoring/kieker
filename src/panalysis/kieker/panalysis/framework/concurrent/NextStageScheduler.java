@@ -33,7 +33,7 @@ public class NextStageScheduler implements IStageScheduler {
 
 	protected final Map<IStage, Boolean> statesOfStages = new HashMap<IStage, Boolean>();
 	private final Collection<IStage> highestPrioritizedEnabledStages = new ArrayList<IStage>();
-	private final StageWorkList workList;
+	private final IStageWorkList workList;
 
 	public NextStageScheduler(final IPipeline pipeline, final int accessesDeviceId) throws Exception {
 		this.workList = new StageWorkList(accessesDeviceId, pipeline.getStages().size());

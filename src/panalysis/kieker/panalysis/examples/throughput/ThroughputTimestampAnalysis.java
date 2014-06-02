@@ -149,7 +149,12 @@ public class ThroughputTimestampAnalysis extends Analysis {
 			e.printStackTrace();
 		}
 
-		System.out.println("SchedulingOverhead: " + TimeUnit.NANOSECONDS.toMillis(this.workerThread.getSchedulingOverheadInNs()) + " ms");
+		final long schedulingOverheadInNs = this.workerThread.computeSchedulingOverheadInNs();
+		final int size = this.workerThread.getSchedulingOverheadsInNs().size();
+		System.out.println("scheduling overhead times: " + size);
+		System.out.println("SchedulingOverhead: " + TimeUnit.NANOSECONDS.toMillis(schedulingOverheadInNs) + " ms");
+		System.out.println("avg overhead of iteration: "
+				+ TimeUnit.NANOSECONDS.toMillis(schedulingOverheadInNs / (size / 2)) + " ms");
 		System.out.println("ExecutedUnsuccessfullyCount: " + this.workerThread.getExecutedUnsuccessfullyCount());
 	}
 

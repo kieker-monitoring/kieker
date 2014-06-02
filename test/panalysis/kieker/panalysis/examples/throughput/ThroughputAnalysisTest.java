@@ -45,6 +45,7 @@ public class ThroughputAnalysisTest {
 		final long[] durations = new long[numRuns];
 
 		for (int i = 0; i < numRuns; i++) {
+			System.out.println("Run " + i);
 			final ThroughputAnalysis<Object> analysis = new ThroughputAnalysis<Object>();
 			analysis.setNumNoopFilters(800);
 			analysis.setInput(NUM_OBJECTS_TO_CREATE, new Callable<Object>() {
