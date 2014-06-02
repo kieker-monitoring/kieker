@@ -17,6 +17,7 @@
 package kieker.monitoring.writer.explorviz;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
@@ -96,15 +97,27 @@ final class ExplorVizExportWriterThread extends AbstractAsyncThread {
 		this.flush = flush;
 
 		this.byteBuffer.put(HOST_APPLICATION_META_DATA_CLAZZ_ID);
+
+		final String systemName = "Default System";
+		final int systemId = this.monitoringController.getUniqueIdForString(systemName);
+		this.byteBuffer.putInt(systemId);
+
+		final String ip = InetAddress.getLocalHost().getHostAddress();
+		final int ipId = this.monitoringController.getUniqueIdForString(ip);
+		this.byteBuffer.putInt(ipId);
+
 		final String localHostname = monitoringController.getHostname();
 		// is called to early in the initialization, so no record is created
 		final int localHostnameId = this.monitoringController.getUniqueIdForString(localHostname);
 		this.byteBuffer.putInt(localHostnameId);
+
 		final String applicatioName = monitoringController.getName();
 		// is called to early in the initialization, so no record is created
 		final int applicationId = this.monitoringController.getUniqueIdForString(applicatioName);
 		this.byteBuffer.putInt(applicationId);
 
+		this.putRegistryRecordIntoBuffer(new RegistryRecord(systemId, systemName));
+		this.putRegistryRecordIntoBuffer(new RegistryRecord(ipId, ip));
 		this.putRegistryRecordIntoBuffer(new RegistryRecord(localHostnameId, localHostname));
 		this.putRegistryRecordIntoBuffer(new RegistryRecord(applicationId, applicatioName));
 
