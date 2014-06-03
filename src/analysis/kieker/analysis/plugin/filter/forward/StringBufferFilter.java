@@ -73,29 +73,35 @@ public final class StringBufferFilter extends AbstractFilterPlugin {
 			eventTypes = { Object.class })
 	public final void inputEvent(final Object object) {
 		if (object instanceof String) {
-			super.deliver(StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, this.kiekerHashMap.get((String) object));
+			final String string = (String) object;
+			super.deliver(StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, this.kiekerHashMap.get(string));
 		} else if (object instanceof IMonitoringRecord) {
-			final Object[] objects = ((IMonitoringRecord) object).toArray();
-			boolean stringBuffered = false;
-			for (int i = 0; i < objects.length; i++) {
-				if (objects[i] instanceof String) {
-					objects[i] = this.kiekerHashMap.get((String) objects[i]);
-					stringBuffered = true;
-				}
-			}
-			if (stringBuffered) {
-				try {
-					final IMonitoringRecord newRecord = AbstractMonitoringRecord.createFromArray((Class<? extends IMonitoringRecord>) object.getClass(), objects);
-					newRecord.setLoggingTimestamp(((IMonitoringRecord) object).getLoggingTimestamp());
-					super.deliver(StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, newRecord);
-				} catch (final MonitoringRecordException ex) {
-					this.log.warn("Failed to recreate buffered monitoring record: " + object.toString(), ex);
-				}
-			} else {
-				super.deliver(StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, object);
-			}
+			final IMonitoringRecord monitoringRecord = (IMonitoringRecord) object;
+			this.processRecord(monitoringRecord);
 		} else { // simply forward the object
 			super.deliver(StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, object);
+		}
+	}
+
+	private void processRecord(final IMonitoringRecord monitoringRecord) {
+		final Object[] objects = monitoringRecord.toArray();
+		boolean stringBuffered = false;
+		for (int i = 0; i < objects.length; i++) {
+			if (objects[i] instanceof String) {
+				objects[i] = this.kiekerHashMap.get((String) objects[i]);
+				stringBuffered = true;
+			}
+		}
+		if (stringBuffered) {
+			try {
+				final IMonitoringRecord newRecord = AbstractMonitoringRecord.createFromArray(monitoringRecord.getClass(), objects);
+				newRecord.setLoggingTimestamp(monitoringRecord.getLoggingTimestamp());
+				super.deliver(StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, newRecord);
+			} catch (final MonitoringRecordException ex) {
+				this.log.warn("Failed to recreate buffered monitoring record: " + monitoringRecord.toString(), ex);
+			}
+		} else {
+			super.deliver(StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, monitoringRecord);
 		}
 	}
 
