@@ -22,6 +22,7 @@ import kieker.analysis.ClassNameRegistryRepository;
 import kieker.analysis.plugin.filter.flow.TraceEventRecords;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
+import kieker.common.record.flow.IFlowRecord;
 import kieker.panalysis.framework.concurrent.StageTerminationPolicy;
 import kieker.panalysis.framework.concurrent.WorkerThread;
 import kieker.panalysis.framework.core.Analysis;
@@ -76,10 +77,10 @@ public class TraceReconstructionAnalysis2 extends Analysis {
 		final Cache<TextLine> cache = new Cache<TextLine>();
 
 		final TextLine2RecordFilter textLine2RecordFilter = new TextLine2RecordFilter(this.classNameRegistryRepository);
-		final StringBufferFilter stringBufferFilter = new StringBufferFilter();
+		final StringBufferFilter<IMonitoringRecord> stringBufferFilter = new StringBufferFilter<IMonitoringRecord>();
 		final PredicateFilter<IMonitoringRecord> timestampFilter = new PredicateFilter<IMonitoringRecord>(isIMonitoringRecordInRange);
 		final PredicateFilter<OperationExecutionRecord> traceIdFilter = new PredicateFilter<OperationExecutionRecord>(isOperationExecutionRecordTraceIdPredicate);
-		final InstanceOfFilter<Object> instanceOfFilter = new InstanceOfFilter<Object>(IMonitoringRecord.class);
+		final InstanceOfFilter<IMonitoringRecord> instanceOfFilter = new InstanceOfFilter<IMonitoringRecord>(IFlowRecord.class);
 		final TraceReconstructionFilter traceReconstructionFilter = new TraceReconstructionFilter();
 		final CountingFilter<TraceEventRecords> countingFilter = new CountingFilter<TraceEventRecords>();
 
@@ -107,11 +108,18 @@ public class TraceReconstructionAnalysis2 extends Analysis {
 		QueuePipe.connect(directory2FilesFilter.fileOutputPort, file2TextLinesFilter.fileInputPort);
 		QueuePipe.connect(file2TextLinesFilter.textLineOutputPort, cache.objectInputPort);
 		// QueuePipe.connect(XXX, cache.sendInputPort);
-		// QueuePipe.connect(cache.objectOutputPort, textLine2RecordFilter.textLineInputPort);
-		// QueuePipe.connect(textLine2RecordFilter.recordOutputPort, stringBufferFilter.objectInputPort);
-		// QueuePipe.connect(stringBufferFilter.objectOutputPort, timestampFilter.inputPort);
-		// QueuePipe.connect(timestampFilter.matchingOutputPort, XXX);
-		// QueuePipe.connect(timestampFilter.mismatchingOutputPort, YYY);
+		QueuePipe.connect(cache.objectOutputPort, textLine2RecordFilter.textLineInputPort);
+		QueuePipe.connect(textLine2RecordFilter.recordOutputPort, stringBufferFilter.objectInputPort);
+		QueuePipe.connect(stringBufferFilter.objectOutputPort, timestampFilter.inputPort);
+		QueuePipe.connect(timestampFilter.matchingOutputPort, traceIdFilter.inputPort);
+		// QueuePipe.connect(timestampFilter.mismatchingOutputPort, YYY); // ignore this case
+		QueuePipe.connect(traceIdFilter.matchingOutputPort, instanceOfFilter.inputPort);
+		// QueuePipe.connect(traceIdFilter.mismatchingOutputPort, traceIdFilter.inputPort); // ignore this case
+		QueuePipe.connect(XXX, traceReconstructionFilter.timestampInputPort);
+		QueuePipe.connect(instanceOfFilter.matchingOutputPort, traceReconstructionFilter.recordInputPort);
+		// QueuePipe.connect(instanceOfFilter.mismatchingOutputPort, instanceOfFilter.inputPort); // ignore this case
+		QueuePipe.connect(traceReconstructionFilter.traceValidOutputPort, countingFilter.INPUT_OBJECT);
+		// QueuePipe.connect(traceReconstructionFilter.traceInvalidOutputPort, XXX); // ignore this case
 
 		final Pipeline pipeline = new Pipeline();
 		pipeline.setStartStages(startStages);

@@ -35,8 +35,8 @@ import kieker.common.configuration.Configuration;
 import kieker.panalysis.examples.throughput.TimestampObject;
 import kieker.panalysis.framework.concurrent.WorkerThread;
 import kieker.panalysis.framework.core.Analysis;
-import kieker.panalysis.framework.core.IPipeline;
 import kieker.panalysis.framework.core.IStage;
+import kieker.panalysis.framework.core.Pipeline;
 import kieker.panalysis.framework.sequential.MethodCallPipe;
 import kieker.panalysis.framework.sequential.QueuePipe;
 import kieker.panalysis.stage.NoopFilter;
@@ -129,7 +129,7 @@ public class Experiment2 {
 
 		private static final int SECONDS = 1000;
 
-		private IPipeline pipeline;
+		private Pipeline pipeline;
 		private WorkerThread workerThread;
 		private final boolean shouldUseQueue;
 
@@ -186,28 +186,9 @@ public class Experiment2 {
 				MethodCallPipe.connect(stopTimestampFilter.outputPort, collectorSink.objectInputPort);
 			}
 
-			this.pipeline = new IPipeline() {
-				@SuppressWarnings("unchecked")
-				public List<? extends IStage> getStartStages() {
-					return startStages;
-				}
-
-				public List<IStage> getStages() {
-					return stages;
-				}
-
-				public void fireStartNotification() throws Exception {
-					for (final IStage stage : this.getStartStages()) {
-						stage.notifyPipelineStarts();
-					}
-				}
-
-				public void fireStopNotification() {
-					for (final IStage stage : this.getStartStages()) {
-						stage.notifyPipelineStops();
-					}
-				}
-			};
+			this.pipeline = new Pipeline();
+			this.pipeline.setStartStages(startStages);
+			this.pipeline.setStages(stages);
 		}
 
 		public String getName() {

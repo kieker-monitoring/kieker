@@ -23,7 +23,7 @@ import kieker.common.logging.Log;
  * 
  * @since 1.10
  */
-public abstract class AbstractDataTypeHandler {
+public abstract class AbstractDataTypeHandler<T> {
 
 	protected Log logger;
 	protected KiekerHashMap stringRepository;
@@ -36,7 +36,7 @@ public abstract class AbstractDataTypeHandler {
 	/**
 	 * @since 1.10
 	 */
-	public abstract Object handle(Object object);
+	public abstract T handle(T object);
 
 	/**
 	 * @since 1.10

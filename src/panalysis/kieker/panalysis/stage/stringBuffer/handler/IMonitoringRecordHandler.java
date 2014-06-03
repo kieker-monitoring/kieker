@@ -24,7 +24,7 @@ import kieker.common.record.IMonitoringRecord;
  * 
  * @since 1.10
  */
-public class IMonitoringRecordHandler extends AbstractDataTypeHandler {
+public class IMonitoringRecordHandler extends AbstractDataTypeHandler<IMonitoringRecord> {
 
 	@Override
 	public boolean canHandle(final Object object) {
@@ -32,8 +32,7 @@ public class IMonitoringRecordHandler extends AbstractDataTypeHandler {
 	}
 
 	@Override
-	public Object handle(final Object object) {
-		final IMonitoringRecord monitoringRecord = (IMonitoringRecord) object;
+	public IMonitoringRecord handle(final IMonitoringRecord monitoringRecord) {
 		final Object[] objects = monitoringRecord.toArray();
 
 		boolean stringBuffered = false;

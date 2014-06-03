@@ -32,8 +32,8 @@ import kieker.common.configuration.Configuration;
 import kieker.panalysis.framework.concurrent.StageTerminationPolicy;
 import kieker.panalysis.framework.concurrent.WorkerThread;
 import kieker.panalysis.framework.core.Analysis;
-import kieker.panalysis.framework.core.IPipeline;
 import kieker.panalysis.framework.core.IStage;
+import kieker.panalysis.framework.core.Pipeline;
 import kieker.panalysis.framework.sequential.QueuePipe;
 import kieker.panalysis.stage.NoopFilter;
 import kieker.panalysis.util.StatisticsUtil;
@@ -125,7 +125,7 @@ public class Experiment1 {
 
 		private static final int SECONDS = 1000;
 
-		private IPipeline pipeline;
+		private Pipeline pipeline;
 		private WorkerThread workerThread;
 
 		public TeeTimeAnalysis() {}
@@ -159,28 +159,9 @@ public class Experiment1 {
 				QueuePipe.connect(noopFilters[i - 1].outputPort, noopFilters[i].inputPort);
 			}
 
-			this.pipeline = new IPipeline() {
-				@SuppressWarnings("unchecked")
-				public List<? extends IStage> getStartStages() {
-					return startStages;
-				}
-
-				public List<IStage> getStages() {
-					return stages;
-				}
-
-				public void fireStartNotification() throws Exception {
-					for (final IStage stage : this.getStartStages()) {
-						stage.notifyPipelineStarts();
-					}
-				}
-
-				public void fireStopNotification() {
-					for (final IStage stage : this.getStartStages()) {
-						stage.notifyPipelineStops();
-					}
-				}
-			};
+			this.pipeline = new Pipeline();
+			this.pipeline.setStartStages(startStages);
+			this.pipeline.setStages(stages);
 
 			this.workerThread = new WorkerThread(this.pipeline, 0);
 			this.workerThread.terminate(StageTerminationPolicy.TERMINATE_STAGE_AFTER_UNSUCCESSFUL_EXECUTION);

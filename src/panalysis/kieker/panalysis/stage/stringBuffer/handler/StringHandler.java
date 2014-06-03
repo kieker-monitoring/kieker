@@ -20,7 +20,7 @@ package kieker.panalysis.stage.stringBuffer.handler;
  * 
  * @since 1.10
  */
-public class StringHandler extends AbstractDataTypeHandler {
+public class StringHandler extends AbstractDataTypeHandler<String> {
 
 	@Override
 	public boolean canHandle(final Object object) {
@@ -28,8 +28,8 @@ public class StringHandler extends AbstractDataTypeHandler {
 	}
 
 	@Override
-	public Object handle(final Object object) {
-		return this.stringRepository.get((String) object);
+	public String handle(final String object) {
+		return this.stringRepository.get(object);
 	}
 
 }

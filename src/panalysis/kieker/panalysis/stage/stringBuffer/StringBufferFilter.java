@@ -30,25 +30,25 @@ import kieker.panalysis.stage.stringBuffer.handler.AbstractDataTypeHandler;
  * 
  * @since 1.10
  */
-public class StringBufferFilter extends AbstractFilter<StringBufferFilter> {
+public class StringBufferFilter<T> extends AbstractFilter<StringBufferFilter<T>> {
 
-	public final IInputPort<StringBufferFilter, Object> objectInputPort = this.createInputPort();
+	public final IInputPort<StringBufferFilter<T>, T> objectInputPort = this.createInputPort();
 
-	public final IOutputPort<StringBufferFilter, Object> objectOutputPort = this.createOutputPort();
+	public final IOutputPort<StringBufferFilter<T>, T> objectOutputPort = this.createOutputPort();
 
 	// BETTER use a non shared data structure to avoid synchronization between threads
 	private KiekerHashMap kiekerHashMap = new KiekerHashMap();
 
-	private Collection<AbstractDataTypeHandler> dataTypeHandlers = new ArrayList<AbstractDataTypeHandler>();
+	private Collection<AbstractDataTypeHandler<?>> dataTypeHandlers = new ArrayList<AbstractDataTypeHandler<?>>();
 
 	@Override
-	protected boolean execute(final Context<StringBufferFilter> context) {
-		final Object object = context.tryTake(this.objectInputPort);
+	protected boolean execute(final Context<StringBufferFilter<T>> context) {
+		final T object = context.tryTake(this.objectInputPort);
 		if (object == null) {
 			return false;
 		}
 
-		final Object returnedObject = this.handle(object);
+		final T returnedObject = this.handle(object);
 		context.put(this.objectOutputPort, returnedObject);
 
 		return true;
@@ -56,17 +56,18 @@ public class StringBufferFilter extends AbstractFilter<StringBufferFilter> {
 
 	@Override
 	public void onPipelineStarts() throws Exception {
-		for (final AbstractDataTypeHandler handler : this.dataTypeHandlers) {
+		for (final AbstractDataTypeHandler<?> handler : this.dataTypeHandlers) {
 			handler.setLogger(this.logger);
 			handler.setStringRepository(this.kiekerHashMap);
 		}
 		super.onPipelineStarts();
 	}
 
-	private Object handle(final Object object) {
-		for (final AbstractDataTypeHandler handler : this.dataTypeHandlers) {
+	private T handle(final T object) {
+		for (final AbstractDataTypeHandler<?> handler : this.dataTypeHandlers) {
 			if (handler.canHandle(object)) {
-				final Object returnedObject = handler.handle(object);
+				@SuppressWarnings("unchecked")
+				final T returnedObject = ((AbstractDataTypeHandler<T>) handler).handle(object);
 				return returnedObject;
 			}
 		}
@@ -81,11 +82,11 @@ public class StringBufferFilter extends AbstractFilter<StringBufferFilter> {
 		this.kiekerHashMap = kiekerHashMap;
 	}
 
-	public Collection<AbstractDataTypeHandler> getDataTypeHandlers() {
+	public Collection<AbstractDataTypeHandler<?>> getDataTypeHandlers() {
 		return this.dataTypeHandlers;
 	}
 
-	public void setDataTypeHandlers(final Collection<AbstractDataTypeHandler> dataTypeHandlers) {
+	public void setDataTypeHandlers(final Collection<AbstractDataTypeHandler<?>> dataTypeHandlers) {
 		this.dataTypeHandlers = dataTypeHandlers;
 	}
 
