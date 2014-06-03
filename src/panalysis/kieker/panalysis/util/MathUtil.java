@@ -15,6 +15,8 @@
  ***************************************************************************/
 package kieker.panalysis.util;
 
+import java.util.List;
+
 /**
  * @author Christian Wulf
  * 
@@ -26,11 +28,11 @@ public class MathUtil {
 		// utility class
 	}
 
-	public static double getVariance(final long[] values, final long avgValue) {
+	public static double getVariance(final List<Long> values, final long avgValue) {
 		double sum = 0;
 		for (final long val : values) {
 			final long diff = val - avgValue;
-			sum += (diff * diff) / (values.length - 1);
+			sum += (diff * diff) / (values.size() - 1);
 		}
 		return sum;
 	}
@@ -39,9 +41,9 @@ public class MathUtil {
 		return z * Math.sqrt(variance / n);
 	}
 
-	public static double getConfidenceWidth(final double z, final long[] values, final long avgValue) {
+	public static double getConfidenceWidth(final double z, final List<Long> values, final long avgValue) {
 		final double variance = MathUtil.getVariance(values, avgValue);
-		final double confidenceWidth = MathUtil.getConfidenceWidth(z, variance, values.length);
+		final double confidenceWidth = MathUtil.getConfidenceWidth(z, variance, values.size());
 		return confidenceWidth;
 	}
 }

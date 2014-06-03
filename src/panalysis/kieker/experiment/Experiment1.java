@@ -18,7 +18,10 @@ package kieker.experiment;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 import kieker.analysis.AnalysisController;
@@ -26,6 +29,14 @@ import kieker.analysis.EmptyPassOnFilter;
 import kieker.analysis.IAnalysisController;
 import kieker.analysis.ObjectProducer;
 import kieker.common.configuration.Configuration;
+import kieker.panalysis.framework.concurrent.StageTerminationPolicy;
+import kieker.panalysis.framework.concurrent.WorkerThread;
+import kieker.panalysis.framework.core.Analysis;
+import kieker.panalysis.framework.core.IPipeline;
+import kieker.panalysis.framework.core.IStage;
+import kieker.panalysis.framework.sequential.QueuePipe;
+import kieker.panalysis.stage.NoopFilter;
+import kieker.panalysis.util.StatisticsUtil;
 
 /**
  * @author Nils Christian Ehmke
@@ -45,7 +56,7 @@ public class Experiment1 {
 
 	private static final IAnalysis[] analyses = { new TeeTimeAnalysis(), new KiekerAnalysis() };
 
-	private static final Collection<Long> measuredTimes = new ArrayList<Long>();
+	private static final List<Long> measuredTimes = new ArrayList<Long>();
 
 	public static void main(final String[] args) throws Exception {
 		for (final IAnalysis analysis : analyses) {
@@ -80,7 +91,18 @@ public class Experiment1 {
 		final FileWriter fileWriter = new FileWriter(analysisName + ".csv", true);
 		fileWriter.write(Integer.toString(numberOfFilters));
 		fileWriter.write(";");
-		// ...
+
+		final Map<Double, Long> quintiles = StatisticsUtil.calculateQuintiles(measuredTimes);
+		for (final Long value : quintiles.values()) {
+			fileWriter.write(Long.toString(value));
+			fileWriter.write(";");
+		}
+
+		fileWriter.write(Long.toString(StatisticsUtil.calculateAverage(measuredTimes)));
+		fileWriter.write(";");
+
+		fileWriter.write(Long.toString(StatisticsUtil.calculateConfidenceWidth(measuredTimes)));
+
 		fileWriter.write("\n");
 		fileWriter.close();
 
@@ -97,15 +119,83 @@ public class Experiment1 {
 
 	}
 
-	private static final class TeeTimeAnalysis implements IAnalysis {
+	private static final class TeeTimeAnalysis extends Analysis implements IAnalysis {
 
-		public void initialize(final int numberOfFilters, final int numberOfObjectsToSend) {}
+		private static final int SECONDS = 1000;
+
+		private IPipeline pipeline;
+		private WorkerThread workerThread;
+
+		public void initialize(final int numberOfFilters, final int numberOfObjectsToSend) {
+
+			@SuppressWarnings("unchecked")
+			final NoopFilter<Object>[] noopFilters = new NoopFilter[numberOfFilters];
+			// create stages
+			final kieker.panalysis.stage.basic.ObjectProducer<Object> objectProducer = new kieker.panalysis.stage.basic.ObjectProducer<Object>(
+					numberOfObjectsToSend, new Callable<Object>() {
+						public Object call() throws Exception {
+							return new Object();
+						}
+					});
+			for (int i = 0; i < noopFilters.length; i++) {
+				noopFilters[i] = new NoopFilter<Object>();
+			}
+
+			// add each stage to a stage list
+			final List<IStage> startStages = new LinkedList<IStage>();
+			startStages.add(objectProducer);
+
+			final List<IStage> stages = new LinkedList<IStage>();
+			stages.add(objectProducer);
+			stages.addAll(Arrays.asList(noopFilters));
+
+			// connect stages by pipes
+			QueuePipe.connect(objectProducer.outputPort, noopFilters[0].inputPort);
+			for (int i = 1; i < noopFilters.length; i++) {
+				QueuePipe.connect(noopFilters[i - 1].outputPort, noopFilters[i].inputPort);
+			}
+
+			this.pipeline = new IPipeline() {
+				@SuppressWarnings("unchecked")
+				public List<? extends IStage> getStartStages() {
+					return startStages;
+				}
+
+				public List<IStage> getStages() {
+					return stages;
+				}
+
+				public void fireStartNotification() throws Exception {
+					for (final IStage stage : this.getStartStages()) {
+						stage.notifyPipelineStarts();
+					}
+				}
+
+				public void fireStopNotification() {
+					for (final IStage stage : this.getStartStages()) {
+						stage.notifyPipelineStops();
+					}
+				}
+			};
+
+			this.workerThread = new WorkerThread(this.pipeline, 0);
+			this.workerThread.terminate(StageTerminationPolicy.TERMINATE_STAGE_AFTER_UNSUCCESSFUL_EXECUTION);
+		}
 
 		public String getName() {
 			return "TeeTime";
 		}
 
-		public void execute() {}
+		public void execute() {
+			super.start();
+
+			this.workerThread.start();
+			try {
+				this.workerThread.join(60 * SECONDS);
+			} catch (final InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 
 	}
 

@@ -15,7 +15,8 @@
  ***************************************************************************/
 package kieker.panalysis.util;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,30 +39,27 @@ public class StatisticsUtil {
 		// utility class
 	}
 
+	public static void calculateAvg(final List<Long> durations) {
+
+	}
+
 	public static void printStatistics(final long overallDurationInNs, final List<TimestampObject> timestampObjects) {
 		System.out.println("Duration: " + TimeUnit.NANOSECONDS.toMillis(overallDurationInNs) + " ms");
 
-		final long[] sortedDurationsInNs = new long[timestampObjects.size() / 2];
+		final List<Long> sortedDurationsInNs = new ArrayList<Long>(timestampObjects.size() / 2);
 		long minDurationInNs = Long.MAX_VALUE;
 		long maxDurationInNs = Long.MIN_VALUE;
 		long sumInNs = 0;
 		for (int i = timestampObjects.size() / 2; i < timestampObjects.size(); i++) {
 			final TimestampObject timestampObject = timestampObjects.get(i);
 			final long durationInNs = timestampObject.getStopTimestamp() - timestampObject.getStartTimestamp();
-			sortedDurationsInNs[i - (timestampObjects.size() / 2)] = durationInNs;
+			sortedDurationsInNs.set(i - (timestampObjects.size() / 2), durationInNs);
 			minDurationInNs = Math.min(durationInNs, minDurationInNs);
 			maxDurationInNs = Math.max(durationInNs, maxDurationInNs);
 			sumInNs += durationInNs;
 		}
 
-		Arrays.sort(sortedDurationsInNs);
-
-		final Map<Double, Long> quintileValues = new LinkedHashMap<Double, Long>();
-		final double[] quintiles = { 0.00, 0.25, 0.50, 0.75, 1.00 };
-		for (final double quintile : quintiles) {
-			final int index = (int) ((sortedDurationsInNs.length - 1) * quintile);
-			quintileValues.put(quintile, sortedDurationsInNs[index]);
-		}
+		final Map<Double, Long> quintileValues = StatisticsUtil.calculateQuintiles(sortedDurationsInNs);
 
 		System.out.println("min: " + TimeUnit.NANOSECONDS.toMicros(minDurationInNs) + " 탎");
 		System.out.println("max: " + TimeUnit.NANOSECONDS.toMicros(maxDurationInNs) + " 탎");
@@ -72,12 +70,42 @@ public class StatisticsUtil {
 			System.out.println((entry.getKey() * 100) + " % : " + TimeUnit.NANOSECONDS.toMicros(entry.getValue()) + " 탎");
 		}
 
-		final double z = 1.96; // for alpha = 0.05
-		final double variance = MathUtil.getVariance(sortedDurationsInNs, avgDurInNs);
-		final long confidenceWidthInNs = (long) MathUtil.getConfidenceWidth(z, variance, sortedDurationsInNs.length);
+		final long confidenceWidthInNs = StatisticsUtil.calculateConfidenceWidth(sortedDurationsInNs, avgDurInNs);
 
 		System.out.println("confidenceWidth: " + confidenceWidthInNs + " ns");
 		System.out.println("[" + TimeUnit.NANOSECONDS.toMicros(avgDurInNs - confidenceWidthInNs) + " 탎, "
 				+ TimeUnit.NANOSECONDS.toMicros(avgDurInNs + confidenceWidthInNs) + " 탎]");
+	}
+
+	public static long calculateConfidenceWidth(final List<Long> durations, final long avgDurInNs) {
+		final double z = 1.96; // for alpha = 0.05
+		final double variance = MathUtil.getVariance(durations, avgDurInNs);
+		final long confidenceWidthInNs = (long) MathUtil.getConfidenceWidth(z, variance, durations.size());
+		return confidenceWidthInNs;
+	}
+
+	public static long calculateConfidenceWidth(final List<Long> durations) {
+		return StatisticsUtil.calculateConfidenceWidth(durations, StatisticsUtil.calculateAverage(durations));
+	}
+
+	public static long calculateAverage(final List<Long> durations) {
+		long sumNs = 0;
+		for (final Long value : durations) {
+			sumNs += value;
+		}
+
+		return sumNs / durations.size();
+	}
+
+	public static Map<Double, Long> calculateQuintiles(final List<Long> durationsInNs) {
+		Collections.sort(durationsInNs);
+
+		final Map<Double, Long> quintileValues = new LinkedHashMap<Double, Long>();
+		final double[] quintiles = { 0.00, 0.25, 0.50, 0.75, 1.00 };
+		for (final double quintile : quintiles) {
+			final int index = (int) ((durationsInNs.size() - 1) * quintile);
+			quintileValues.put(quintile, durationsInNs.get(index));
+		}
+		return quintileValues;
 	}
 }
