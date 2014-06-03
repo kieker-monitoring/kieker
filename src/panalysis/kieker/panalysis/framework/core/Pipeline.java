@@ -13,35 +13,46 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.panalysis.predicate;
+package kieker.panalysis.framework.core;
 
-import java.util.Collection;
-
-import com.google.common.base.Predicate;
+import java.util.List;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  */
-public class IsExactTypePredicate<T> implements Predicate<T> {
+public class Pipeline implements IPipeline {
 
-	private final Collection<Class<?>> acceptedClasses;
+	private List<? extends IStage> startStages;
+	private List<IStage> stages;
 
-	/**
-	 * @since 1.10
-	 */
-	public IsExactTypePredicate(final Collection<Class<?>> acceptedClasses) {
-		this.acceptedClasses = acceptedClasses;
+	public List<? extends IStage> getStartStages() {
+		return this.startStages;
 	}
 
-	public boolean apply(final T object) {
-		for (final Class<?> acceptedClazz : this.acceptedClasses) {
-			if (acceptedClazz.isInstance(object)) {
-				return true;
-			}
+	public List<IStage> getStages() {
+		return this.stages;
+	}
+
+	public void fireStartNotification() throws Exception {
+		for (final IStage stage : this.getStartStages()) {
+			stage.notifyPipelineStarts();
 		}
-		return false;
+	}
+
+	public void fireStopNotification() {
+		for (final IStage stage : this.getStartStages()) {
+			stage.notifyPipelineStops();
+		}
+	}
+
+	public void setStartStages(final List<? extends IStage> startStages) {
+		this.startStages = startStages;
+	}
+
+	public void setStages(final List<IStage> stages) {
+		this.stages = stages;
 	}
 
 }

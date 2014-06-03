@@ -48,7 +48,7 @@ public class Context<S extends IStage> {
 	 * @since 1.10
 	 */
 	public <T> void put(final IOutputPort<S, T> port, final T object) {
-		final IPipe<T> associatedPipe = port.getAssociatedPipe();
+		final IPipe<? super T> associatedPipe = port.getAssociatedPipe();
 		if (associatedPipe == null) {
 			return; // ignore unconnected port
 			// BETTER return a NullObject rather than checking for null
@@ -67,7 +67,7 @@ public class Context<S extends IStage> {
 	 * @since 1.10
 	 */
 	public <T> T tryTake(final IInputPort<S, T> inputPort) {
-		final IPipe<T> associatedPipe = inputPort.getAssociatedPipe();
+		final IPipe<? super T> associatedPipe = inputPort.getAssociatedPipe();
 		final T token = associatedPipe.tryTake();
 		if (token != null) {
 			this.logTransaction(inputPort, token);
@@ -82,7 +82,7 @@ public class Context<S extends IStage> {
 	 * @since 1.10
 	 */
 	public <T> T take(final IInputPort<S, T> inputPort) {
-		final IPipe<T> associatedPipe = inputPort.getAssociatedPipe();
+		final IPipe<? super T> associatedPipe = inputPort.getAssociatedPipe();
 		final T token = associatedPipe.take();
 		if (token != null) {
 			this.logTransaction(inputPort, token);
@@ -106,7 +106,7 @@ public class Context<S extends IStage> {
 	 * @since 1.10
 	 */
 	public <T> T read(final IInputPort<S, T> inputPort) {
-		final IPipe<? extends T> associatedPipe = inputPort.getAssociatedPipe();
+		final IPipe<? super T> associatedPipe = inputPort.getAssociatedPipe();
 		return associatedPipe.read();
 	}
 

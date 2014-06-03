@@ -32,7 +32,7 @@ import kieker.panalysis.stage.stringBuffer.handler.AbstractDataTypeHandler;
  */
 public class StringBufferFilter extends AbstractFilter<StringBufferFilter> {
 
-	public final IInputPort<StringBufferFilter, ?> objectInputPort = this.createInputPort();
+	public final IInputPort<StringBufferFilter, Object> objectInputPort = this.createInputPort();
 
 	public final IOutputPort<StringBufferFilter, Object> objectOutputPort = this.createOutputPort();
 

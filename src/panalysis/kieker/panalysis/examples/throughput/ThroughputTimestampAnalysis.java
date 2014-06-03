@@ -27,6 +27,7 @@ import kieker.panalysis.framework.concurrent.WorkerThread;
 import kieker.panalysis.framework.core.Analysis;
 import kieker.panalysis.framework.core.IPipeline;
 import kieker.panalysis.framework.core.IStage;
+import kieker.panalysis.framework.core.Pipeline;
 import kieker.panalysis.framework.sequential.MethodCallPipe;
 import kieker.panalysis.framework.sequential.QueuePipe;
 import kieker.panalysis.stage.CollectorSink;
@@ -112,29 +113,9 @@ public class ThroughputTimestampAnalysis extends Analysis {
 			MethodCallPipe.connect(stopTimestampFilter.outputPort, collectorSink.objectInputPort);
 		}
 
-		final IPipeline pipeline = new IPipeline() {
-			@SuppressWarnings("unchecked")
-			public List<? extends IStage> getStartStages() {
-				return startStages;
-			}
-
-			public List<IStage> getStages() {
-				return stages;
-			}
-
-			public void fireStartNotification() throws Exception {
-				for (final IStage stage : this.getStartStages()) {
-					stage.notifyPipelineStarts();
-				}
-			}
-
-			public void fireStopNotification() {
-				for (final IStage stage : this.getStartStages()) {
-					stage.notifyPipelineStops();
-				}
-			}
-		};
-
+		final Pipeline pipeline = new Pipeline();
+		pipeline.setStartStages(startStages);
+		pipeline.setStages(stages);
 		return pipeline;
 	}
 

@@ -36,7 +36,7 @@ public class QueuePipe<T> extends AbstractPipe<T> {
 
 	private final Queue<T> queue = new LinkedList<T>();
 
-	static public <S0 extends ISource, S1 extends ISink<S1>, T> void connect(final IOutputPort<S0, T> sourcePort, final IInputPort<S1, T> targetPort) {
+	static public <S0 extends ISource, S1 extends ISink<S1>, T> void connect(final IOutputPort<S0, ? extends T> sourcePort, final IInputPort<S1, T> targetPort) {
 		final QueuePipe<T> pipe = new QueuePipe<T>();
 		pipe.setSourcePort(sourcePort);
 		pipe.setTargetPort(targetPort);

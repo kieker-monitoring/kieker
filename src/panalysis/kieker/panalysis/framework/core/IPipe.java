@@ -35,7 +35,7 @@ public interface IPipe<T> {
 	/**
 	 * @since 1.10
 	 */
-	void put(T element);
+	void put(T object);
 
 	/**
 	 * @since 1.10
@@ -56,7 +56,7 @@ public interface IPipe<T> {
 	 * 
 	 * @since 1.10
 	 */
-	T tryTake();
+	<A extends T> A tryTake();
 
 	/**
 	 * 
@@ -64,13 +64,13 @@ public interface IPipe<T> {
 	 * 
 	 * @throws DequePopException
 	 */
-	T take();
+	<A extends T> A take();
 
 	/**
 	 * @since 1.10
 	 * @return but does not removes the next element if the pipe is not empty, otherwise <code>null</code>
 	 */
-	T read();
+	<A extends T> A read();
 
 	/**
 	 * @since 1.10
@@ -87,7 +87,7 @@ public interface IPipe<T> {
 	/**
 	 * @since 1.10
 	 */
-	<S extends ISource, A extends T> void setSourcePort(final IOutputPort<S, T> sourcePort);
+	<S extends ISource, A extends T> void setSourcePort(final IOutputPort<S, A> sourcePort);
 
 	/**
 	 * @since 1.10
@@ -97,7 +97,7 @@ public interface IPipe<T> {
 	/**
 	 * @since 1.10
 	 */
-	IOutputPort<?, T> getSourcePort();
+	IOutputPort<?, ? extends T> getSourcePort();
 
 	/**
 	 * @since 1.10

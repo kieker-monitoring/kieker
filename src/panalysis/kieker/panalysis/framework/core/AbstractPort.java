@@ -7,15 +7,15 @@ package kieker.panalysis.framework.core;
  */
 abstract class AbstractPort<S extends IStage, T> implements IPort<S, T> {
 
-	private IPipe<T> associatedPipe;
+	private IPipe<? super T> associatedPipe;
 	private S owningStage;
 	private int index;
 
-	public void setAssociatedPipe(final IPipe<T> associatedPipe) {
+	public <A extends T> void setAssociatedPipe(final IPipe<? super T> associatedPipe) {
 		this.associatedPipe = associatedPipe;
 	}
 
-	public IPipe<T> getAssociatedPipe() {
+	public IPipe<? super T> getAssociatedPipe() {
 		return this.associatedPipe;
 	}
 
