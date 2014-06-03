@@ -80,7 +80,7 @@ public class TraceReconstructionAnalysis2 extends Analysis {
 		final StringBufferFilter<IMonitoringRecord> stringBufferFilter = new StringBufferFilter<IMonitoringRecord>();
 		final PredicateFilter<IMonitoringRecord> timestampFilter = new PredicateFilter<IMonitoringRecord>(isIMonitoringRecordInRange);
 		final PredicateFilter<OperationExecutionRecord> traceIdFilter = new PredicateFilter<OperationExecutionRecord>(isOperationExecutionRecordTraceIdPredicate);
-		final InstanceOfFilter<IMonitoringRecord> instanceOfFilter = new InstanceOfFilter<IMonitoringRecord>(IFlowRecord.class);
+		final InstanceOfFilter<IMonitoringRecord, IFlowRecord> instanceOfFilter = new InstanceOfFilter<IMonitoringRecord, IFlowRecord>(IFlowRecord.class);
 		final TraceReconstructionFilter traceReconstructionFilter = new TraceReconstructionFilter();
 		final CountingFilter<TraceEventRecords> countingFilter = new CountingFilter<TraceEventRecords>();
 
