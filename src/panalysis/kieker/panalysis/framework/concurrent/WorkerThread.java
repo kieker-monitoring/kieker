@@ -18,7 +18,6 @@ package kieker.panalysis.framework.concurrent;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import de.chw.util.StopWatch;
 
@@ -96,7 +95,7 @@ public class WorkerThread extends Thread {
 		for (int i = durations.size() / 2; i < durations.size(); i++) {
 			overallDuration += durations.get(i);
 		}
-		System.out.println("Scheduler determine next stage (" + (durations.size() / 2) + "): " + TimeUnit.NANOSECONDS.toMillis(overallDuration) + " ms");
+		// System.out.println("Scheduler determine next stage (" + (durations.size() / 2) + "): " + TimeUnit.NANOSECONDS.toMillis(overallDuration) + " ms");
 
 		this.cleanUpDatastructures();
 	}
@@ -145,11 +144,11 @@ public class WorkerThread extends Thread {
 	}
 
 	private void cleanUpDatastructures() {
-		System.out.println("Cleaning up datastructures...");
+		// System.out.println("Cleaning up datastructures...");
 		// System.out.println("Firing stop notification...");
 		this.pipeline.fireStopNotification();
 		// System.out.println("Thread terminated:" + this);
-		System.out.println(this.getName() + ": executedUnsuccessfullyCount=" + this.executedUnsuccessfullyCount);
+		// System.out.println(this.getName() + ": executedUnsuccessfullyCount=" + this.executedUnsuccessfullyCount);
 	}
 
 	public IPipeline getPipeline() {

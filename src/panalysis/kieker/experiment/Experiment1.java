@@ -45,20 +45,22 @@ import kieker.panalysis.util.StatisticsUtil;
  */
 public class Experiment1 {
 
-	private static final int NUMBER_OF_WARMUP_RUNS_PER_EXPERIMENT = 100;
-	private static final int NUMBER_OF_MEASURED_RUNS_PER_EXPERIMENT = 100;
+	private static final int NUMBER_OF_WARMUP_RUNS_PER_EXPERIMENT = 5;
+	private static final int NUMBER_OF_MEASURED_RUNS_PER_EXPERIMENT = 50;
 
 	private static final int NUMBER_OF_OBJECTS_TO_SEND = 10000;
 
-	private static final int NUMBER_OF_MINIMAL_FILTERS = 10;
+	private static final int NUMBER_OF_MINIMAL_FILTERS = 50;
 	private static final int NUMBER_OF_MAXIMAL_FILTERS = 1000;
-	private static final int NUMBER_OF_FILTERS_PER_STEP = 10;
+	private static final int NUMBER_OF_FILTERS_PER_STEP = 50;
 
 	private static final IAnalysis[] analyses = { new TeeTimeAnalysis(), new KiekerAnalysis() };
 
 	private static final List<Long> measuredTimes = new ArrayList<Long>();
 
 	public static void main(final String[] args) throws Exception {
+		System.setProperty("kieker.common.logging.Log", "NONE");
+
 		for (final IAnalysis analysis : analyses) {
 			for (int numberOfFilters = NUMBER_OF_MINIMAL_FILTERS; numberOfFilters <= NUMBER_OF_MAXIMAL_FILTERS; numberOfFilters += NUMBER_OF_FILTERS_PER_STEP) {
 				// Warmup
@@ -125,6 +127,8 @@ public class Experiment1 {
 
 		private IPipeline pipeline;
 		private WorkerThread workerThread;
+
+		public TeeTimeAnalysis() {}
 
 		public void initialize(final int numberOfFilters, final int numberOfObjectsToSend) {
 
@@ -202,6 +206,8 @@ public class Experiment1 {
 	private static final class KiekerAnalysis implements IAnalysis {
 
 		private IAnalysisController ac;
+
+		public KiekerAnalysis() {}
 
 		public void initialize(final int numberOfFilters, final int numberOfObjectsToSend) throws Exception {
 			this.ac = new AnalysisController();
