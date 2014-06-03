@@ -53,7 +53,8 @@ public class StatisticsUtil {
 		for (int i = timestampObjects.size() / 2; i < timestampObjects.size(); i++) {
 			final TimestampObject timestampObject = timestampObjects.get(i);
 			final long durationInNs = timestampObject.getStopTimestamp() - timestampObject.getStartTimestamp();
-			sortedDurationsInNs.set(i - (timestampObjects.size() / 2), durationInNs);
+			// sortedDurationsInNs.set(i - (timestampObjects.size() / 2), durationInNs);
+			sortedDurationsInNs.add(durationInNs);
 			minDurationInNs = Math.min(durationInNs, minDurationInNs);
 			maxDurationInNs = Math.max(durationInNs, maxDurationInNs);
 			sumInNs += durationInNs;

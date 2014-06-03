@@ -131,6 +131,14 @@ public interface IStage extends IBaseStage {
 	 */
 	public Collection<? extends IStage> getAllOutputStages();
 
+	/**
+	 * @since 1.10
+	 */
+	public <S extends IStage> List<IInputPort<S, ?>> getInputPorts();
+
+	/**
+	 * @since 1.10
+	 */
 	public <S extends IStage> List<IOutputPort<S, ?>> getOutputPorts();
 
 	Thread getOwningThread();

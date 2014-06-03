@@ -275,7 +275,8 @@ public abstract class AbstractFilter<S extends IStage> extends AbstractStage imp
 	/**
 	 * @since 1.10
 	 */
-	protected List<IInputPort<S, ?>> getInputPorts() {
+	@SuppressWarnings("unchecked")
+	public List<IInputPort<S, ?>> getInputPorts() {
 		return this.readOnlyInputPorts;
 	}
 

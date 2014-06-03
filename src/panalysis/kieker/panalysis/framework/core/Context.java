@@ -1,16 +1,26 @@
 package kieker.panalysis.framework.core;
 
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 public class Context<S extends IStage> {
 
-	private final Map<IPipe<Object>, List<Object>> pipesTakenFrom;
+	// private final Map<IPipe<Object>, List<Object>> pipesTakenFrom;
 	// private final Set<IStage> pipesPutTo = new HashSet<IStage>();
 
+	/**
+	 * @author Christian Wulf
+	 * 
+	 * @since 1.10
+	 */
+	private static class InputPortContainer {
+		public final List<Object> takenElements = new ArrayList<Object>();
+		public IPipe<Object> pipe;
+
+		public InputPortContainer() {}
+	}
+
+	private final InputPortContainer[] inputPortContainers;
 	private final IOutputPort<S, ?>[] outputPorts;
 
 	// statistics values
@@ -19,18 +29,19 @@ public class Context<S extends IStage> {
 
 	@SuppressWarnings("unchecked")
 	public Context(final IStage owningStage, final List<IInputPort<S, ?>> allTargetPorts) {
-		this.pipesTakenFrom = this.createPipeMap(allTargetPorts);
+		// this.pipesTakenFrom = this.createPipeMap(allTargetPorts);
+		this.inputPortContainers = this.createInputPortLists(owningStage.getInputPorts());
 		this.outputPorts = new IOutputPort[owningStage.getOutputPorts().size()];
 	}
 
 	@SuppressWarnings("unchecked")
-	private Map<IPipe<Object>, List<Object>> createPipeMap(final List<? extends IPort<S, ?>> targetPorts) {
-		final Map<IPipe<Object>, List<Object>> pipeMap = new HashMap<IPipe<Object>, List<Object>>(targetPorts.size());
-		for (final IPort<S, ?> targetPort : targetPorts) {
-			final IPipe<?> associatedPipe = targetPort.getAssociatedPipe();
-			pipeMap.put((IPipe<Object>) associatedPipe, new LinkedList<Object>());
+	private InputPortContainer[] createInputPortLists(final List<IInputPort<IStage, ?>> inputPorts) {
+		final InputPortContainer[] inputPortContainers = new InputPortContainer[inputPorts.size()];
+		for (int i = 0; i < inputPorts.size(); i++) {
+			inputPortContainers[i] = new InputPortContainer();
+			inputPortContainers[i].pipe = (IPipe<Object>) inputPorts.get(i).getAssociatedPipe();
 		}
-		return pipeMap;
+		return inputPortContainers;
 	}
 
 	/**
@@ -59,7 +70,7 @@ public class Context<S extends IStage> {
 		final IPipe<T> associatedPipe = inputPort.getAssociatedPipe();
 		final T token = associatedPipe.tryTake();
 		if (token != null) {
-			this.logTransaction(associatedPipe, token);
+			this.logTransaction(inputPort, token);
 		}
 		return token;
 	}
@@ -74,14 +85,15 @@ public class Context<S extends IStage> {
 		final IPipe<T> associatedPipe = inputPort.getAssociatedPipe();
 		final T token = associatedPipe.take();
 		if (token != null) {
-			this.logTransaction(associatedPipe, token);
+			this.logTransaction(inputPort, token);
 		}
 		return token;
 	}
 
-	private <T> void logTransaction(final IPipe<T> associatedPipe, final T token) {
-		final List<Object> tokenList = this.pipesTakenFrom.get(associatedPipe);
-		tokenList.add(token);
+	private <T> void logTransaction(final IInputPort<S, T> inputPort, final T token) {
+		final InputPortContainer inputPortContainer = this.inputPortContainers[inputPort.getIndex()];
+		// final List<Object> tokenList = this.pipesTakenFrom.get(inputPort);
+		inputPortContainer.takenElements.add(token);
 
 		this.numTakenElements++;
 	}
@@ -99,22 +111,25 @@ public class Context<S extends IStage> {
 	}
 
 	void clear() {
-		for (final List<Object> takenElements : this.pipesTakenFrom.values()) {
-			takenElements.clear();
+		// for (final List<Object> takenElements : this.pipesTakenFrom.values()) {
+		for (final InputPortContainer inputPortContainer : this.inputPortContainers) {
+			inputPortContainer.takenElements.clear();
 		}
 	}
 
 	void rollback() {
-		for (final Entry<IPipe<Object>, List<Object>> entry : this.pipesTakenFrom.entrySet()) {
-			final IPipe<Object> associatedPipe = entry.getKey();
-			final List<Object> takenElements = entry.getValue();
+		// for (final Entry<IPipe<Object>, List<Object>> entry : this.pipesTakenFrom.entrySet()) {
+		// final IPipe<Object> associatedPipe = entry.getKey();
+		// final List<Object> takenElements = entry.getValue();
 
-			for (int i = takenElements.size() - 1; i >= 0; i--) {
-				final Object element = takenElements.get(i);
-				associatedPipe.put(element);
+		for (final InputPortContainer inputPortContainer : this.inputPortContainers) {
+
+			for (int k = inputPortContainer.takenElements.size() - 1; k >= 0; k--) {
+				final Object element = inputPortContainer.takenElements.get(k);
+				inputPortContainer.pipe.put(element);
 			}
 
-			this.numTakenElements -= takenElements.size();
+			this.numTakenElements -= inputPortContainer.takenElements.size();
 		}
 	}
 
@@ -127,8 +142,8 @@ public class Context<S extends IStage> {
 	 * @return <code>true</code> iff all input ports are empty, otherwise <code>false</code>.
 	 */
 	public boolean inputPortsAreEmpty() {
-		for (final IPipe<Object> pipe : this.pipesTakenFrom.keySet()) {
-			if (!pipe.isEmpty()) {
+		for (final InputPortContainer inputPortContainer : this.inputPortContainers) {
+			if (!inputPortContainer.pipe.isEmpty()) {
 				return false;
 			}
 		}
@@ -148,7 +163,7 @@ public class Context<S extends IStage> {
 	 * @return
 	 * @since 1.10
 	 */
-	public IOutputPort<S, ?>[] getOutputStages() {
+	public IOutputPort<S, ?>[] getOutputPorts() {
 		return this.outputPorts;
 	}
 }

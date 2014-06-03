@@ -99,7 +99,7 @@ public class NextStageScheduler implements IStageScheduler {
 		this.stopWatch.start();
 
 		// final Collection<? extends IStage> outputStages = stage.getContext().getOutputStages();
-		final IOutputPort<?, ?>[] outputPorts = stage.getContext().getOutputStages();
+		final IOutputPort<?, ?>[] outputPorts = stage.getContext().getOutputPorts();
 		if (outputPorts.length > 0) {
 			final boolean inputPortsAreEmpty = stage.getContext().inputPortsAreEmpty();
 			if (inputPortsAreEmpty) {
