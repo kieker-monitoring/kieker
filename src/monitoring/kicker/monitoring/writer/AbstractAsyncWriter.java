@@ -200,7 +200,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 						}
 					}
 				}.start();
-				return false;
+				return true;
 			}
 			return true;
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
