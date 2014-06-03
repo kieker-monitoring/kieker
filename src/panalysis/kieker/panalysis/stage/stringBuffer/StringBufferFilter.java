@@ -23,6 +23,7 @@ import kieker.panalysis.framework.core.AbstractFilter;
 import kieker.panalysis.framework.core.Context;
 import kieker.panalysis.framework.core.IInputPort;
 import kieker.panalysis.framework.core.IOutputPort;
+import kieker.panalysis.stage.stringBuffer.handler.AbstractDataTypeHandler;
 
 /**
  * @author Christian Wulf

@@ -23,7 +23,7 @@ import kieker.analysis.AnalysisController;
 import kieker.analysis.IAnalysisController;
 import kieker.analysis.analysisComponent.AbstractAnalysisComponent;
 import kieker.analysis.exception.AnalysisConfigurationException;
-import kieker.analysis.plugin.filter.flow.EventRecordTraceReconstructionFilter;
+import kieker.analysis.plugin.filter.flow.reconstruction.EventRecordTraceReconstructionFilter;
 import kieker.analysis.plugin.filter.forward.CountingFilter;
 import kieker.analysis.plugin.filter.forward.StringBufferFilter;
 import kieker.analysis.plugin.filter.forward.TeeFilter;

@@ -13,43 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
-package kieker.panalysis.stage.stringBuffer;
-
-import kieker.analysis.plugin.filter.forward.util.KiekerHashMap;
-import kieker.common.logging.Log;
+package kieker.analysis.plugin.filter.flow.reconstruction;
 
 /**
  * @author Christian Wulf
  * 
  * @since 1.10
  */
-public abstract class AbstractDataTypeHandler {
-
-	protected Log logger;
-	protected KiekerHashMap stringRepository;
+public interface ValueFactory<T> {
 
 	/**
+	 * Create a new instance of the type <code>T</code>.
+	 * 
 	 * @since 1.10
 	 */
-	public abstract boolean canHandle(Object object);
-
-	/**
-	 * @since 1.10
-	 */
-	public abstract Object handle(Object object);
-
-	/**
-	 * @since 1.10
-	 */
-	public void setLogger(final Log logger) {
-		this.logger = logger;
-	}
-
-	/**
-	 * @since 1.10
-	 */
-	public void setStringRepository(final KiekerHashMap stringRepository) {
-		this.stringRepository = stringRepository;
-	}
-
+	public T create();
 }
