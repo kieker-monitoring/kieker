@@ -31,7 +31,7 @@ import kieker.common.logging.LogFactory;
  * @author Andre van Hoorn, Tillmann Carlos Bielefeld
  */
 public class OutputStream2StandardLog extends OutputStream {
-	private static final Log LOG_REDIRECT_LOGGER = LogFactory.getLog(OutputStream2StandardLog.class);
+	private static final Log LOG = LogFactory.getLog(OutputStream2StandardLog.class);
 
 	private static final int LINE_END = '\n';
 	private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -46,7 +46,7 @@ public class OutputStream2StandardLog extends OutputStream {
 	@Override
 	public void write(final int b) throws IOException {
 		if (b == LINE_END) {
-			LOG_REDIRECT_LOGGER.info(this.baos.toString("UTF-8")); // Redirect previous log message from RSession as log message
+			LOG.info(this.baos.toString("UTF-8")); // Redirect previous log message from RSession as log message
 			this.baos.reset();
 		} else {
 			this.baos.write(b);
