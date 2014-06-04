@@ -116,7 +116,7 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 	 * 
 	 * @return tspoint
 	 */
-	public synchronized ITimeSeriesPoint<T> append(final T value) {
+	public ITimeSeriesPoint<T> append(final T value) {
 		final ITimeSeriesPoint<T> point;
 
 		synchronized (value) {

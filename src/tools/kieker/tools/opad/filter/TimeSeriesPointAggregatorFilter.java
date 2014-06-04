@@ -93,15 +93,14 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 		this.aggregationVariables = new ConcurrentHashMap<String, AggregationVariableSet>();
 
 		// Determine Aggregation time unit
-		TimeUnit configTimeunit = super.recordsTimeUnitFromProjectContext;
+		TimeUnit configTimeUnit = super.recordsTimeUnitFromProjectContext;
 		final String configTimeunitProperty = configuration.getStringProperty(CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT);
 		try {
-			configTimeunit = TimeUnit.valueOf(configTimeunitProperty);
+			configTimeUnit = TimeUnit.valueOf(configTimeunitProperty);
 		} catch (final IllegalArgumentException ex) {
-			this.log.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + this.timeunit.name() + " instead.");
-			configTimeunit = this.timeunit;
+			this.log.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + configTimeUnit.name() + " instead.");
 		}
-		this.timeunit = configTimeunit;
+		this.timeunit = configTimeUnit;
 
 		// Determine aggreation span method
 		AggregationMethod configAggregationMethod;

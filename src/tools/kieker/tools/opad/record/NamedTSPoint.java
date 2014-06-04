@@ -86,29 +86,12 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 	 * @return empty object array
 	 */
 	public Object[] toArray() {
-		// TODO Auto-generated method stub
 		return new Object[] {};
 	}
 
 	@Deprecated
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
-	}
-
-	public Class<?>[] getValueTypes() {
-		return TYPES.clone();
-	}
-
-	public long getTimestamp() {
-		return this.timestamp;
-	}
-
-	public String getName() {
-		return this.name;
-	}
-
-	public double getValue() {
-		return this.value;
 	}
 
 	/**
@@ -126,15 +109,29 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 	}
 
 	/**
-	 * @param buffer
-	 *            buffer
-	 * @param stringRegistry
-	 *            outputString
-	 * @throws BufferUnderflowException
-	 *             exception
+	 * {@inheritDoc}
+	 * 
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
+	@Deprecated
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException(); // TODO: FIX
+		throw new UnsupportedOperationException();
+	}
+
+	public Class<?>[] getValueTypes() {
+		return TYPES.clone();
+	}
+
+	public long getTimestamp() {
+		return this.timestamp;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public double getValue() {
+		return this.value;
 	}
 
 	public int getSize() {

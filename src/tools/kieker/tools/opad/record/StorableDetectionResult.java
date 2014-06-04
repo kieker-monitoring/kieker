@@ -210,17 +210,13 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 	}
 
 	/**
-	 * Reads obejct from bytes.
+	 * {@inheritDoc}
 	 * 
-	 * @param buffer
-	 *            buffer
-	 * @param stringRegistry
-	 *            stringRegistry
-	 * @throws BufferUnderflowException
-	 *             bufferUnderflowException
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
+	@Deprecated
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException(); // TODO: FIX NOCS
+		throw new UnsupportedOperationException();
 	}
 
 	public int getSize() {

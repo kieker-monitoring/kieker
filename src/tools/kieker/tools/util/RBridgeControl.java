@@ -69,13 +69,17 @@ public final class RBridgeControl {
 	public static synchronized RBridgeControl getInstance(final File root) { // NOPMD Whole code depends on "instance" variable
 		if (RBridgeControl.instance == null) {
 
-			// TODO make this configurabe?!?
 			RBridgeControl.instance = new RBridgeControl();
 			RBridgeControl.instance.evalWithR("OPAD_CONTEXT <<- TRUE");
-			// TODO: test if this is needed every time
-			// TODO outsource this into a packaged text file, declare the
-			// functions at runtime
-			// TODO use REngine rather? RServe is not needed any more
+			/**
+			 * TODO
+			 * - make this (RBridgeControl.instance = new RBridgeControl();) configurable?!?
+			 * - test if this (RBridgeControl.instance.evalWithR("OPAD_CONTEXT <<- TRUE");) is needed every time
+			 * - outsource this into a packaged text file
+			 * - declare the functions at runtime
+			 * - use REngine rather?
+			 * - RServe is not needed any more
+			 */
 
 			instance.evalWithR("initTS");
 		}
@@ -107,7 +111,7 @@ public final class RBridgeControl {
 
 			RBridgeControl.LOG.info("> REXP: " + input + " return: " + output); // --domi
 
-		} catch (final REXPMismatchException exc) { // NOCS
+		} catch (final REXPMismatchException exc) {
 			RBridgeControl.LOG.error("Error R expr.: " + input + " Cause: "
 					+ exc, exc);
 		}
@@ -129,7 +133,7 @@ public final class RBridgeControl {
 			buf.append(')');
 			this.evalWithR(buf.toString());
 		}
-		// } catch (final REXPMismatchException e) { // NOCS
+		// } catch (final REXPMismatchException e) {
 		// LOG.error("Conversion to timeseries failed.", e);
 		// }
 	}
@@ -153,7 +157,7 @@ public final class RBridgeControl {
 			buf.append(')');
 			this.evalWithR(buf.toString());
 		}
-		// } catch (final Exception e) { // NOCS
+		// } catch (final Exception e) {
 		// LOG.error("Conversion to timeseries failed.", e);
 		// }
 	}
@@ -168,7 +172,7 @@ public final class RBridgeControl {
 		try {
 			// TODO make it error save
 			return ((REXPDouble) this.evalWithR(input)).asDouble();
-		} catch (final REXPMismatchException exc) { // NOCS
+		} catch (final REXPMismatchException exc) {
 			RBridgeControl.LOG.error("Error casting value from R: " + input
 					+ " Cause: " + exc);
 			return -666.666;
@@ -190,7 +194,7 @@ public final class RBridgeControl {
 		} else {
 			return "";
 		}
-		// } catch (final NumberFormatException e) { // NOCS
+		// } catch (final NumberFormatException e) {
 		// return "";
 		// }
 	}
@@ -206,7 +210,7 @@ public final class RBridgeControl {
 			// TODO make it error save
 			final REXPVector res = (REXPVector) this.evalWithR(input);
 			return res.asDoubles();
-		} catch (final REXPMismatchException e) { // NOCS
+		} catch (final REXPMismatchException e) {
 			return new double[0];
 		}
 	}
@@ -235,7 +239,7 @@ public final class RBridgeControl {
 		}
 		buf.append(')');
 		this.evalWithR(buf.toString());
-		// } catch (final Exception e) { // NOCS
+		// } catch (final Exception e) {
 		// LOG.error("Assignment failed.", e);
 		// }
 
@@ -269,7 +273,7 @@ public final class RBridgeControl {
 		}
 		buf.append(')');
 		this.evalWithR(buf.toString());
-		// } catch (final Exception e) { // NOCS
+		// } catch (final Exception e) {
 		// LOG.error("Assignment failed.", e);
 		// }
 
@@ -298,7 +302,7 @@ public final class RBridgeControl {
 		}
 		buf.append(',');
 		this.evalWithR(buf.toString());
-		// } catch (final Exception e) { // NOCS
+		// } catch (final Exception e) {
 		// LOG.error("Assignment failed.", e);
 		// }
 
