@@ -20,7 +20,11 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Collection;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -368,6 +372,74 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 			parameters.add("--" + Constants.CMD_OPT_NAME_TASK_PLOTCALLTREES);
 		}
 
+	}
+
+	@Override
+	public void saveCurrentConfiguration(final FileWriter writer) throws IOException {
+		writer.write(Boolean.toString(this.deploymentSequenceDiagrams.isSelected()));
+		writer.write("\n");
+
+		writer.write(Boolean.toString(this.assemblySequenceDiagrams.isSelected()));
+		writer.write("\n");
+
+		writer.write(Boolean.toString(this.deploymentComponentDependencyGraph.isSelected()));
+		writer.write("\n");
+
+		writer.write(Boolean.toString(this.deploymentComponentDependencyGraphResponseTime.isSelected()));
+		writer.write("\n");
+
+		writer.write(Boolean.toString(this.assemblyComponentDependencyGraph.isSelected()));
+		writer.write("\n");
+
+		writer.write(Boolean.toString(this.assemblyComponentDependencyGraphResponseTime.isSelected()));
+		writer.write("\n");
+
+		writer.write(Boolean.toString(this.containerDependencyGraph.isSelected()));
+		writer.write("\n");
+
+		writer.write(Boolean.toString(this.deploymentOperationDependencyGraph.isSelected()));
+		writer.write("\n");
+
+		writer.write(Boolean.toString(this.deploymentOperationDependencyGraphResponseTime.isSelected()));
+		writer.write("\n");
+
+		writer.write(Boolean.toString(this.assemblyOperationDependencyGraph.isSelected()));
+		writer.write("\n");
+
+		writer.write(Boolean.toString(this.assemblyOperationDependencyGraphResponseTime.isSelected()));
+		writer.write("\n");
+
+		writer.write(Boolean.toString(this.aggregatedDeploymentCallTree.isSelected()));
+		writer.write("\n");
+
+		writer.write(Boolean.toString(this.aggregatedAssemblyCallTree.isSelected()));
+		writer.write("\n");
+
+		writer.write(Boolean.toString(this.callTrees.isSelected()));
+		writer.write("\n");
+	}
+
+	@Override
+	public void loadCurrentConfiguration(final Scanner scanner) throws IOException {
+		try {
+			this.deploymentSequenceDiagrams.setSelected(scanner.nextBoolean());
+			this.assemblySequenceDiagrams.setSelected(scanner.nextBoolean());
+			this.deploymentComponentDependencyGraph.setSelected(scanner.nextBoolean());
+			this.deploymentComponentDependencyGraphResponseTime.setSelected(scanner.nextBoolean());
+			this.assemblyComponentDependencyGraph.setSelected(scanner.nextBoolean());
+			this.assemblyComponentDependencyGraphResponseTime.setSelected(scanner.nextBoolean());
+			this.containerDependencyGraph.setSelected(scanner.nextBoolean());
+			this.deploymentOperationDependencyGraph.setSelected(scanner.nextBoolean());
+			this.deploymentOperationDependencyGraphResponseTime.setSelected(scanner.nextBoolean());
+			this.assemblyOperationDependencyGraph.setSelected(scanner.nextBoolean());
+			this.assemblyOperationDependencyGraphResponseTime.setSelected(scanner.nextBoolean());
+			this.aggregatedDeploymentCallTree.setSelected(scanner.nextBoolean());
+			this.aggregatedAssemblyCallTree.setSelected(scanner.nextBoolean());
+			this.callTrees.setSelected(scanner.nextBoolean());
+		} catch (final NoSuchElementException ex) {
+			this.setDefaultSelection();
+			throw new IOException(ex);
+		}
 	}
 
 }

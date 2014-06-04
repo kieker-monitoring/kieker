@@ -18,7 +18,11 @@ package kieker.tools.traceAnalysis.gui;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Collection;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -98,5 +102,40 @@ public class AdditionalOptionsStep extends AbstractStep {
 		if (this.includeSelfLoops.isSelected()) {
 			parameters.add("--" + Constants.CMD_OPT_NAME_INCLUDESELFLOOPS);
 		}
+	}
+
+	@Override
+	public void saveCurrentConfiguration(final FileWriter writer) throws IOException {
+		writer.write(Boolean.toString(this.verbose.isSelected()));
+		writer.write("\n");
+
+		writer.write(Boolean.toString(this.ignoreInvalidTraces.isSelected()));
+		writer.write("\n");
+
+		writer.write(Boolean.toString(this.useShortLabels.isSelected()));
+		writer.write("\n");
+
+		writer.write(Boolean.toString(this.includeSelfLoops.isSelected()));
+		writer.write("\n");
+	}
+
+	@Override
+	public void loadCurrentConfiguration(final Scanner scanner) throws IOException {
+		try {
+			this.verbose.setSelected(scanner.nextBoolean());
+			this.ignoreInvalidTraces.setSelected(scanner.nextBoolean());
+			this.useShortLabels.setSelected(scanner.nextBoolean());
+			this.includeSelfLoops.setSelected(scanner.nextBoolean());
+		} catch (final NoSuchElementException ex) {
+			this.setDefaultValues();
+			throw new IOException(ex);
+		}
+	}
+
+	private void setDefaultValues() {
+		this.verbose.setSelected(false);
+		this.ignoreInvalidTraces.setSelected(false);
+		this.useShortLabels.setSelected(false);
+		this.includeSelfLoops.setSelected(false);
 	}
 }

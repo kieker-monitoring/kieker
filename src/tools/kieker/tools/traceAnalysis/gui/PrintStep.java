@@ -20,7 +20,11 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Collection;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -158,4 +162,41 @@ public class PrintStep extends AbstractStep {
 			parameters.add("--" + Constants.CMD_OPT_NAME_TASK_ASSEMBLYEQUIVCLASSREPORT);
 		}
 	}
+
+	@Override
+	public void saveCurrentConfiguration(final FileWriter writer) throws IOException {
+		writer.write(Boolean.toString(this.messageTraces.isSelected()));
+		writer.write("\n");
+
+		writer.write(Boolean.toString(this.executionTraces.isSelected()));
+		writer.write("\n");
+
+		writer.write(Boolean.toString(this.invalidExecutionTraces.isSelected()));
+		writer.write("\n");
+
+		writer.write(Boolean.toString(this.systemModel.isSelected()));
+		writer.write("\n");
+
+		writer.write(Boolean.toString(this.deploymentEquivalenceClasses.isSelected()));
+		writer.write("\n");
+
+		writer.write(Boolean.toString(this.assemblyEquivalenceClasses.isSelected()));
+		writer.write("\n");
+	}
+
+	@Override
+	public void loadCurrentConfiguration(final Scanner scanner) throws IOException {
+		try {
+			this.messageTraces.setSelected(scanner.nextBoolean());
+			this.executionTraces.setSelected(scanner.nextBoolean());
+			this.invalidExecutionTraces.setSelected(scanner.nextBoolean());
+			this.systemModel.setSelected(scanner.nextBoolean());
+			this.deploymentEquivalenceClasses.setSelected(scanner.nextBoolean());
+			this.assemblyEquivalenceClasses.setSelected(scanner.nextBoolean());
+		} catch (final NoSuchElementException ex) {
+			this.setDefaultSelection();
+			throw new IOException(ex);
+		}
+	}
+
 }

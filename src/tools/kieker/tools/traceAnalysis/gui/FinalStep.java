@@ -20,10 +20,12 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Collection;
+import java.util.Scanner;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -115,6 +117,16 @@ public class FinalStep extends AbstractStep {
 		// No parameters can be selected in this step
 	}
 
+	@Override
+	public void saveCurrentConfiguration(final FileWriter writer) throws IOException {
+		// Nothing to save
+	}
+
+	@Override
+	public void loadCurrentConfiguration(final Scanner scanner) throws IOException {
+		// Nothing to load
+	}
+
 	private final class ClearLogClickListener implements ActionListener {
 
 		public ClearLogClickListener() {
@@ -151,4 +163,5 @@ public class FinalStep extends AbstractStep {
 		}
 
 	}
+
 }

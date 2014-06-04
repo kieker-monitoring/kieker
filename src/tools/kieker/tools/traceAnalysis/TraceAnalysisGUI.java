@@ -21,13 +21,19 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Scanner;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.gui.AbstractStep;
 import kieker.tools.traceAnalysis.gui.AdditionalFiltersStep;
 import kieker.tools.traceAnalysis.gui.AdditionalOptionsStep;
@@ -44,6 +50,8 @@ import kieker.tools.traceAnalysis.gui.WelcomeStep;
 public class TraceAnalysisGUI extends JFrame {
 
 	private static final long serialVersionUID = 1L;
+
+	private static final Log LOG = LogFactory.getLog(TraceAnalysisGUI.class);
 
 	private final CardLayout mainPanelLayout = new CardLayout();
 	private final JPanel mainPanel = new JPanel(this.mainPanelLayout);
@@ -62,6 +70,7 @@ public class TraceAnalysisGUI extends JFrame {
 		this.initializeComponents();
 		this.addLogicToComponents();
 		this.initializeWindow();
+		this.loadCurrentConfiguration();
 	}
 
 	private void addAndLayoutComponents() {
@@ -128,6 +137,8 @@ public class TraceAnalysisGUI extends JFrame {
 			this.mainPanelLayout.next(this.mainPanel);
 			this.previousButton.setEnabled(true);
 			this.nextButton.setEnabled(this.currentStepIndex < (this.steps.length - 1));
+
+			this.saveCurrentConfiguration();
 		}
 	}
 
@@ -136,6 +147,47 @@ public class TraceAnalysisGUI extends JFrame {
 		this.mainPanelLayout.previous(this.mainPanel);
 		this.nextButton.setEnabled(true);
 		this.previousButton.setEnabled(this.currentStepIndex > 0);
+
+		this.saveCurrentConfiguration();
+	}
+
+	private void loadCurrentConfiguration() {
+		final File propertiesFile = new File("TraceAnalysisGUI.properties");
+		if (propertiesFile.exists()) {
+			Scanner scanner = null;
+			try {
+				scanner = new Scanner(propertiesFile);
+				for (final AbstractStep step : this.steps) {
+					step.loadCurrentConfiguration(scanner);
+				}
+			} catch (final IOException ex) {
+				LOG.warn("Configuration could not be loaded", ex);
+			} finally {
+				if (null != scanner) {
+					scanner.close();
+				}
+			}
+		}
+	}
+
+	private void saveCurrentConfiguration() {
+		FileWriter writer = null;
+		try {
+			writer = new FileWriter("TraceAnalysisGUI.properties", false);
+			for (final AbstractStep step : this.steps) {
+				step.saveCurrentConfiguration(writer);
+			}
+		} catch (final IOException ex) {
+			LOG.warn("Configuration could not be saved", ex);
+		} finally {
+			if (null != writer) {
+				try {
+					writer.close();
+				} catch (final IOException ex) {
+					LOG.warn("Configuration could not be saved", ex);
+				}
+			}
+		}
 	}
 
 	private void initializeWindow() {

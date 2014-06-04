@@ -20,7 +20,11 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Collection;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -105,5 +109,30 @@ public class AdditionalFiltersStep extends AbstractStep {
 				parameters.add(id);
 			}
 		}
+	}
+
+	@Override
+	public void saveCurrentConfiguration(final FileWriter writer) throws IOException {
+		writer.write(Boolean.toString(this.selectOnlyTraces.isSelected()));
+		writer.write("\n");
+
+		writer.write(this.selectOnlyTracesInput.getText());
+		writer.write("\n");
+	}
+
+	@Override
+	public void loadCurrentConfiguration(final Scanner scanner) throws IOException {
+		try {
+			this.selectOnlyTraces.setSelected(scanner.nextBoolean());
+			this.selectOnlyTracesInput.setText(scanner.nextLine());
+		} catch (final NoSuchElementException ex) {
+			this.setDefaultValues();
+			throw new IOException(ex);
+		}
+	}
+
+	private void setDefaultValues() {
+		this.selectOnlyTraces.setSelected(false);
+		this.selectOnlyTracesInput.setText("1 2 3 4 42");
 	}
 }

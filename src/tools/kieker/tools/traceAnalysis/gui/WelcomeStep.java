@@ -21,7 +21,11 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Collection;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -192,6 +196,31 @@ public class WelcomeStep extends AbstractStep {
 
 		parameters.add("-o");
 		parameters.add("\"" + this.outputDirectoryField.getText() + "\"");
+	}
+
+	@Override
+	public void saveCurrentConfiguration(final FileWriter writer) throws IOException {
+		writer.write(this.inputDirectoryField.getText());
+		writer.write("\n");
+
+		writer.write(this.outputDirectoryField.getText());
+		writer.write("\n");
+	}
+
+	@Override
+	public void loadCurrentConfiguration(final Scanner scanner) throws IOException {
+		try {
+			this.inputDirectoryField.setText(scanner.nextLine());
+			this.outputDirectoryField.setText(scanner.nextLine());
+		} catch (final NoSuchElementException ex) {
+			this.setDefaultValues();
+			throw new IOException(ex);
+		}
+	}
+
+	private void setDefaultValues() {
+		this.inputDirectoryField.setText(this.currentPath);
+		this.outputDirectoryField.setText(this.currentPath);
 	}
 
 }
