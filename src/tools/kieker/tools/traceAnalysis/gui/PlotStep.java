@@ -377,19 +377,46 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 	@Override
 	public void saveCurrentConfiguration(final Writer writer) throws IOException {
 		writer.write(Boolean.toString(this.deploymentSequenceDiagrams.isSelected()));
+		writer.write("\n");
+
 		writer.write(Boolean.toString(this.assemblySequenceDiagrams.isSelected()));
+		writer.write("\n");
+
 		writer.write(Boolean.toString(this.deploymentComponentDependencyGraph.isSelected()));
+		writer.write("\n");
+
 		writer.write(Boolean.toString(this.deploymentComponentDependencyGraphResponseTime.isSelected()));
+		writer.write("\n");
+
 		writer.write(Boolean.toString(this.assemblyComponentDependencyGraph.isSelected()));
+		writer.write("\n");
+
 		writer.write(Boolean.toString(this.assemblyComponentDependencyGraphResponseTime.isSelected()));
+		writer.write("\n");
+
 		writer.write(Boolean.toString(this.containerDependencyGraph.isSelected()));
+		writer.write("\n");
+
 		writer.write(Boolean.toString(this.deploymentOperationDependencyGraph.isSelected()));
+		writer.write("\n");
+
 		writer.write(Boolean.toString(this.deploymentOperationDependencyGraphResponseTime.isSelected()));
+		writer.write("\n");
+
 		writer.write(Boolean.toString(this.assemblyOperationDependencyGraph.isSelected()));
+		writer.write("\n");
+
 		writer.write(Boolean.toString(this.assemblyOperationDependencyGraphResponseTime.isSelected()));
+		writer.write("\n");
+
 		writer.write(Boolean.toString(this.aggregatedDeploymentCallTree.isSelected()));
+		writer.write("\n");
+
 		writer.write(Boolean.toString(this.aggregatedAssemblyCallTree.isSelected()));
+		writer.write("\n");
+
 		writer.write(Boolean.toString(this.callTrees.isSelected()));
+		writer.write("\n");
 	}
 
 	@Override

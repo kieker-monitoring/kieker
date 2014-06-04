@@ -165,11 +165,13 @@ public class AdditionalFiltersStep extends AbstractStep {
 	@Override
 	public void saveCurrentConfiguration(final Writer writer) throws IOException {
 		writer.write(Boolean.toString(this.selectOnlyTraces.isSelected()));
+		writer.write("\n");
 
 		writer.write(this.selectOnlyTracesInput.getText());
 		writer.write("\n");
 
 		writer.write(Boolean.toString(this.filterTraces.isSelected()));
+		writer.write("\n");
 
 		writer.write(this.filterTracesInput.getText());
 		writer.write("\n");
@@ -179,8 +181,10 @@ public class AdditionalFiltersStep extends AbstractStep {
 	public void loadCurrentConfiguration(final Scanner scanner) throws IOException {
 		try {
 			this.selectOnlyTraces.setSelected(scanner.nextBoolean());
+			scanner.nextLine();
 			this.selectOnlyTracesInput.setText(scanner.nextLine());
 			this.filterTraces.setSelected(scanner.nextBoolean());
+			scanner.nextLine();
 			this.filterTracesInput.setText(scanner.nextLine());
 		} catch (final NoSuchElementException ex) {
 			this.setDefaultValues();

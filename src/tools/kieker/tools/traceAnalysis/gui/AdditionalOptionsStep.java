@@ -179,11 +179,22 @@ public class AdditionalOptionsStep extends AbstractStep {
 	@Override
 	public void saveCurrentConfiguration(final Writer writer) throws IOException {
 		writer.write(Boolean.toString(this.verbose.isSelected()));
+		writer.write("\n");
+
 		writer.write(Boolean.toString(this.ignoreInvalidTraces.isSelected()));
+		writer.write("\n");
+
 		writer.write(Boolean.toString(this.useShortLabels.isSelected()));
+		writer.write("\n");
+
 		writer.write(Boolean.toString(this.includeSelfLoops.isSelected()));
+		writer.write("\n");
+
 		writer.write(Boolean.toString(this.maxTraceDurationMS.isSelected()));
+		writer.write("\n");
+
 		writer.write(Long.toString((Long) this.maxTraceDurationMSInput.getValue()));
+		writer.write("\n");
 	}
 
 	@Override

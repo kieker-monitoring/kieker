@@ -166,11 +166,23 @@ public class PrintStep extends AbstractStep {
 	@Override
 	public void saveCurrentConfiguration(final Writer writer) throws IOException {
 		writer.write(Boolean.toString(this.messageTraces.isSelected()));
+		writer.write("\n");
+
 		writer.write(Boolean.toString(this.executionTraces.isSelected()));
+		writer.write("\n");
+
 		writer.write(Boolean.toString(this.invalidExecutionTraces.isSelected()));
+		writer.write("\n");
+
 		writer.write(Boolean.toString(this.systemModel.isSelected()));
+		writer.write("\n");
+
 		writer.write(Boolean.toString(this.deploymentEquivalenceClasses.isSelected()));
+		writer.write("\n");
+
 		writer.write(Boolean.toString(this.assemblyEquivalenceClasses.isSelected()));
+		writer.write("\n");
+
 	}
 
 	@Override
