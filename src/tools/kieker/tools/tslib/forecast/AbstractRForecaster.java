@@ -150,7 +150,7 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 
 		// 2. Perform forecast based on stochastic model
 
-		// TODO: append additionalForecastParams to call
+		// TODO: append additionalForecastParams to call ( https://kieker.uni-kiel.de/trac/ticket/1311 )
 		// final String[] additionalForecastParams = this.getModelFuncParams();
 
 		if (this.getConfidenceLevel() == 0) {

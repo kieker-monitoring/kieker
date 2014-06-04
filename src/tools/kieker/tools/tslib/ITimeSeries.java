@@ -46,7 +46,7 @@ public interface ITimeSeries<T> {
 	 * @since 1.10
 	 * @return delta Time
 	 */
-	// TODO rather take Timespan object!
+	// TODO rather take Timespan object! ( https://kieker.uni-kiel.de/trac/ticket/1311 )
 	public long getDeltaTime();
 
 	/**
@@ -55,7 +55,7 @@ public interface ITimeSeries<T> {
 	 * @since 1.10
 	 * @return DeltaTime
 	 */
-	// TODO rather take Timespan object!
+	// TODO rather take Timespan object! ( https://kieker.uni-kiel.de/trac/ticket/1311 )
 	public TimeUnit getDeltaTimeUnit();
 
 	/**

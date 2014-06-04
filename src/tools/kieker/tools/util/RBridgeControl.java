@@ -40,7 +40,7 @@ import kieker.common.logging.LogFactory;
  */
 public final class RBridgeControl {
 
-	// TODO make a better singleton, later
+	// TODO make a better singleton, later ( https://kieker.uni-kiel.de/trac/ticket/1311 )
 	private static RBridgeControl instance;
 
 	private static final Log LOG = LogFactory.getLog(RBridgeControl.class);
@@ -72,7 +72,7 @@ public final class RBridgeControl {
 			RBridgeControl.instance = new RBridgeControl();
 			RBridgeControl.instance.evalWithR("OPAD_CONTEXT <<- TRUE");
 			/**
-			 * TODO
+			 * TODO ( https://kieker.uni-kiel.de/trac/ticket/1311 )
 			 * - make this (RBridgeControl.instance = new RBridgeControl();) configurable?!?
 			 * - test if this (RBridgeControl.instance.evalWithR("OPAD_CONTEXT <<- TRUE");) is needed every time
 			 * - outsource this into a packaged text file
@@ -109,7 +109,7 @@ public final class RBridgeControl {
 				output = out;
 			}
 
-			RBridgeControl.LOG.info("> REXP: " + input + " return: " + output); // --domi
+			RBridgeControl.LOG.info("> REXP: " + input + " return: " + output);
 
 		} catch (final REXPMismatchException exc) {
 			RBridgeControl.LOG.error("Error R expr.: " + input + " Cause: "
@@ -170,7 +170,7 @@ public final class RBridgeControl {
 	 */
 	public double eDbl(final String input) {
 		try {
-			// TODO make it error save
+			// TODO make it error save ( https://kieker.uni-kiel.de/trac/ticket/1311 )
 			return ((REXPDouble) this.evalWithR(input)).asDouble();
 		} catch (final REXPMismatchException exc) {
 			RBridgeControl.LOG.error("Error casting value from R: " + input
@@ -187,7 +187,7 @@ public final class RBridgeControl {
 	 */
 	public String eString(final String input) {
 		// try {
-		// TODO make it error save
+		// TODO make it error save ( https://kieker.uni-kiel.de/trac/ticket/1311 )
 		final REXPString str = (REXPString) this.evalWithR(input);
 		if (str != null) {
 			return str.toString();
@@ -207,7 +207,7 @@ public final class RBridgeControl {
 	 */
 	public double[] eDblArr(final String input) {
 		try {
-			// TODO make it error save
+			// TODO make it error save ( https://kieker.uni-kiel.de/trac/ticket/1311 )
 			final REXPVector res = (REXPVector) this.evalWithR(input);
 			return res.asDoubles();
 		} catch (final REXPMismatchException e) {
@@ -245,7 +245,7 @@ public final class RBridgeControl {
 
 	}
 
-	// TODO DRY violated!
+	// TODO DRY violated! ( https://kieker.uni-kiel.de/trac/ticket/1311 )
 	/**
 	 * 
 	 * @param variable

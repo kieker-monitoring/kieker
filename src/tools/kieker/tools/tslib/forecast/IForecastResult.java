@@ -26,7 +26,7 @@ import kieker.tools.tslib.ITimeSeries;
  */
 public interface IForecastResult {
 
-	// TODO:
+	// TODO ( https://kieker.uni-kiel.de/trac/ticket/1311 )
 	// Add
 	// <ul>
 	// <li>model</li>

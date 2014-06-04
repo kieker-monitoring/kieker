@@ -26,7 +26,7 @@ public class TimeSeriesPoint<T> implements ITimeSeriesPoint<T> {
 	private final long time;
 	private final T value;
 
-	// TODO: Add possibility to attach arbitrary objects
+	// TODO: Add possibility to attach arbitrary objects ( https://kieker.uni-kiel.de/trac/ticket/1311 )
 
 	/**
 	 * @param time
@@ -35,7 +35,7 @@ public class TimeSeriesPoint<T> implements ITimeSeriesPoint<T> {
 	 *            value of timeseriespoint
 	 */
 	public TimeSeriesPoint(final long time, final T value) {
-		// TODO is that a good pattern or should we ensure that the object is immutable from outside?
+		// TODO is that a good pattern or should we ensure that the object is immutable from outside? ( https://kieker.uni-kiel.de/trac/ticket/1311 )
 		this.time = time;
 		this.value = value;
 	}
