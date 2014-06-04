@@ -46,42 +46,15 @@ public final class RBridgeControl {
 	private static RBridgeControl instance;
 
 	private static final Log LOG = LogFactory.getLog(RBridgeControl.class);
-	private static final Log RSERVELOG = LogFactory.getLog("RSERVE");
 	private static final AtomicInteger NEXTVARID = new AtomicInteger(1);
 
 	private Rsession rCon = null;
 
-	private RBridgeControl(final boolean silent) {
+	private RBridgeControl() {
 
-		OutputStream out; // = System.out;
+		final OutputStream out;
 
-		// silent = true; // --domi
-		if (silent) {
-			out = new OutputStream() {
-
-				@Override
-				public void write(final int arg0) throws IOException {
-					// overriding write method of OutputStream
-				}
-			};
-		} else {
-			out = new OutputStream() {
-
-				private static final int LINE_END = '\n';
-				private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-				@Override
-				public void write(final int b) throws IOException {
-					if (b == LINE_END) {
-						RSERVELOG.info(this.baos.toString("UTF-8"));
-						this.baos.reset();
-					} else {
-						this.baos.write(b);
-					}
-				}
-
-			};
-		}
+		out = new OutputStream2StandardLog();
 		try {
 			this.rCon = Rsession.newLocalInstance(new PrintStream(out, true, "UTF-8"), null);
 		} catch (final UnsupportedEncodingException e) {
@@ -99,7 +72,7 @@ public final class RBridgeControl {
 		if (RBridgeControl.instance == null) {
 
 			// TODO make this configurabe?!?
-			RBridgeControl.instance = new RBridgeControl(true);
+			RBridgeControl.instance = new RBridgeControl();
 			RBridgeControl.instance.evalWithR("OPAD_CONTEXT <<- TRUE");
 			// TODO: test if this is needed every time
 			// TODO outsource this into a packaged text file, declare the
@@ -355,5 +328,41 @@ public final class RBridgeControl {
 	public static String uniqueVarname() {
 		return String.format("var_%s",
 				RBridgeControl.NEXTVARID.getAndIncrement());
+	}
+}
+
+/**
+ * Implementation of an {@link OutputStream} that redirects data received via
+ * its {@link #write(int)} method to an instance of {@link Log}.
+ * 
+ */
+class OutputStream2StandardLog extends OutputStream {
+	private static final Log LOG_REDIRECT_LOGGER = LogFactory.getLog(OutputStream2StandardLog.class);
+
+	private static final int LINE_END = '\n';
+	private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+	public OutputStream2StandardLog() {
+		super();
+	}
+
+	@Override
+	public void write(final int b) throws IOException {
+		if (b == LINE_END) {
+			LOG_REDIRECT_LOGGER.info(this.baos.toString("UTF-8")); // Redirect previous log message from RSession as log message
+			this.baos.reset();
+		} else {
+			this.baos.write(b);
+		}
+	}
+
+	@Override
+	public void write(final byte[] b) throws IOException {
+		throw new UnsupportedOperationException("Only write(int) supported");
+	}
+
+	@Override
+	public void write(final byte[] b, final int off, final int len) throws IOException {
+		throw new UnsupportedOperationException("Only write(int) supported");
 	}
 }

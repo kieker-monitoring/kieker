@@ -80,9 +80,7 @@ public class RecordConverter extends AbstractFilterPlugin {
 
 		if (response >= 0.0d) {
 			final NamedDoubleRecord ndr = new NamedDoubleRecord(application, timestamp, response);
-			if (ndr != null) {
-				super.deliver(OUTPUT_PORT_NAME_NDR, ndr);
-			}
+			super.deliver(OUTPUT_PORT_NAME_NDR, ndr);
 		}
 	}
 }
