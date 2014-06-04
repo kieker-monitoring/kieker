@@ -615,6 +615,8 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 				final Configuration configurationEventRecordTraceCounter = new Configuration();
 				configurationEventRecordTraceCounter.setProperty(AbstractTraceAnalysisFilter.CONFIG_PROPERTY_NAME_VERBOSE, Boolean.toString(this.verbose));
 				configurationEventRecordTraceCounter.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.EXECEVENTRACESFROMEVENTTRACES_COMPONENT_NAME);
+				configurationEventRecordTraceCounter.setProperty(EventRecordTraceCounter.CONFIG_PROPERTY_NAME_LOG_INVALID,
+						Boolean.toString(!this.ignoreInvalidTraces));
 				eventRecordTraceCounter = new EventRecordTraceCounter(configurationEventRecordTraceCounter, this.analysisController);
 
 				this.analysisController.connect(
