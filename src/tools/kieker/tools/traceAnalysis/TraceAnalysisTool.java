@@ -601,8 +601,13 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 						Long.toString(this.maxTraceDurationMillis));
 				eventTraceReconstructionFilter = new EventRecordTraceReconstructionFilter(configurationEventRecordTraceGenerationFilter, this.analysisController);
 
-				this.analysisController.connect(traceIdFilter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH,
-						eventTraceReconstructionFilter, EventRecordTraceReconstructionFilter.INPUT_PORT_NAME_TRACE_RECORDS);
+				if (this.invertTraceIdFilter) {
+					this.analysisController.connect(traceIdFilter, TraceIdFilter.OUTPUT_PORT_NAME_MISMATCH, eventTraceReconstructionFilter,
+							EventRecordTraceReconstructionFilter.INPUT_PORT_NAME_TRACE_RECORDS);
+				} else {
+					this.analysisController.connect(traceIdFilter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, eventTraceReconstructionFilter,
+							EventRecordTraceReconstructionFilter.INPUT_PORT_NAME_TRACE_RECORDS);
+				}
 			}
 
 			{ // NOCS (nested block)
