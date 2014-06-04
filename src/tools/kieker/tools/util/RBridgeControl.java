@@ -16,9 +16,7 @@
 
 package kieker.tools.util;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
@@ -48,7 +46,7 @@ public final class RBridgeControl {
 	private static final Log LOG = LogFactory.getLog(RBridgeControl.class);
 	private static final AtomicInteger NEXTVARID = new AtomicInteger(1);
 
-	private Rsession rCon = null;
+	private Rsession rCon;
 
 	private RBridgeControl() {
 
@@ -314,42 +312,5 @@ public final class RBridgeControl {
 	public static String uniqueVarname() {
 		return String.format("var_%s",
 				RBridgeControl.NEXTVARID.getAndIncrement());
-	}
-}
-
-/**
- * Implementation of an {@link OutputStream} that redirects data received via
- * its {@link #write(int)} method to an instance of {@link Log}.
- * 
- * @author Andre van Hoorn
- */
-class OutputStream2StandardLog extends OutputStream {
-	private static final Log LOG_REDIRECT_LOGGER = LogFactory.getLog(OutputStream2StandardLog.class);
-
-	private static final int LINE_END = '\n';
-	private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-	public OutputStream2StandardLog() {
-		super();
-	}
-
-	@Override
-	public void write(final int b) throws IOException {
-		if (b == LINE_END) {
-			LOG_REDIRECT_LOGGER.info(this.baos.toString("UTF-8")); // Redirect previous log message from RSession as log message
-			this.baos.reset();
-		} else {
-			this.baos.write(b);
-		}
-	}
-
-	@Override
-	public void write(final byte[] b) throws IOException {
-		throw new UnsupportedOperationException("Only write(int) supported");
-	}
-
-	@Override
-	public void write(final byte[] b, final int off, final int len) throws IOException {
-		throw new UnsupportedOperationException("Only write(int) supported");
 	}
 }

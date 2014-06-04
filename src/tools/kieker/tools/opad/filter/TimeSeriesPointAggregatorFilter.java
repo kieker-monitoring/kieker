@@ -75,7 +75,7 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 
 	private final long aggregationSpan; // default from annotation used
 	private final TimeUnit timeunit; // default from annotation used
-	private AggregationMethod aggregationMethod; // default from annotation used
+	private final AggregationMethod aggregationMethod; // default from annotation used
 
 	private AggregationWindow recentWindow = new AggregationWindow(0L, 0L);
 
@@ -92,30 +92,29 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 
 		this.aggregationVariables = new ConcurrentHashMap<String, AggregationVariableSet>();
 
-		{ // Determine Aggregation time unit
-			TimeUnit configTimeunit = super.recordsTimeUnitFromProjectContext;
-			final String configTimeunitProperty = configuration.getStringProperty(CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT);
-			try {
-				configTimeunit = TimeUnit.valueOf(configTimeunitProperty);
-			} catch (final IllegalArgumentException ex) {
-				this.log.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + this.timeunit.name() + " instead.");
-				configTimeunit = this.timeunit;
-			}
-			this.timeunit = configTimeunit;
+		// Determine Aggregation time unit
+		TimeUnit configTimeunit = super.recordsTimeUnitFromProjectContext;
+		final String configTimeunitProperty = configuration.getStringProperty(CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT);
+		try {
+			configTimeunit = TimeUnit.valueOf(configTimeunitProperty);
+		} catch (final IllegalArgumentException ex) {
+			this.log.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + this.timeunit.name() + " instead.");
+			configTimeunit = this.timeunit;
 		}
+		this.timeunit = configTimeunit;
 
-		this.aggregationSpan = TimeUnit.MILLISECONDS.convert(configuration.getIntProperty(CONFIG_PROPERTY_NAME_AGGREGATION_SPAN), this.timeunit);
+		// Determine aggreation span method
 		AggregationMethod configAggregationMethod;
 		try {
 			configAggregationMethod = AggregationMethod.valueOf(configuration
 					.getStringProperty(CONFIG_PROPERTY_NAME_AGGREGATION_METHOD));
 		} catch (final IllegalArgumentException ex) {
-			configAggregationMethod = this.aggregationMethod;
+			configAggregationMethod = AggregationMethod.valueOf("MEAN");
 		}
-
-		this.aggregationMethod = AggregationMethod.valueOf(configuration
-				.getStringProperty(CONFIG_PROPERTY_NAME_AGGREGATION_METHOD));
 		this.aggregationMethod = configAggregationMethod;
+
+		// Determine aggregation span
+		this.aggregationSpan = TimeUnit.MILLISECONDS.convert(configuration.getIntProperty(CONFIG_PROPERTY_NAME_AGGREGATION_SPAN), this.timeunit);
 	}
 
 	@Override

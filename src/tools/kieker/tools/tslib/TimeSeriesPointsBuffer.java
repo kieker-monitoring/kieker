@@ -54,7 +54,7 @@ public class TimeSeriesPointsBuffer<T> extends ConcurrentLinkedQueue<T> implemen
 	}
 
 	@Override
-	public synchronized boolean add(final T o) {
+	public synchronized boolean add(final T o) { // NOPMD It would not make sense to sync within this method
 		if (this.unbounded) {
 			return super.add(o);
 		} else {
@@ -62,7 +62,7 @@ public class TimeSeriesPointsBuffer<T> extends ConcurrentLinkedQueue<T> implemen
 		}
 	}
 
-	private synchronized boolean addBounded(final T o) {
+	private synchronized boolean addBounded(final T o) { // NOPMD It would not make sense to sync within this method
 		if (this.size() == this.capacity) {
 			super.poll();
 			return super.add(o);
@@ -87,5 +87,4 @@ public class TimeSeriesPointsBuffer<T> extends ConcurrentLinkedQueue<T> implemen
 	public void printBuffer() {
 		LOG.info(this.toString());
 	}
-
 }
