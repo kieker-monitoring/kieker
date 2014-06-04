@@ -46,11 +46,13 @@ public class AdditionalFiltersStep extends AbstractStep {
 	private final JPanel expandingPanel = new JPanel();
 	private final JCheckBox selectOnlyTraces = new JCheckBox("Select Only Traces with Following IDs:");
 	private final JTextField selectOnlyTracesInput = new JTextField("1 2 3 4 42");
+	private final JCheckBox filterTraces = new JCheckBox("Filter Traces with Following IDs Out:");
+	private final JTextField filterTracesInput = new JTextField("1 2 3 4 42");
 
 	public AdditionalFiltersStep() {
 		this.addAndLayoutComponents();
 		this.addLogicToComponents();
-		this.setDefaultState();
+		this.setDefaultValues();
 	}
 
 	private void addAndLayoutComponents() {
@@ -79,6 +81,20 @@ public class AdditionalFiltersStep extends AbstractStep {
 		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
 		this.add(this.selectOnlyTracesInput, gridBagConstraints);
 
+		gridBagConstraints.anchor = GridBagConstraints.WEST;
+		gridBagConstraints.insets.set(5, 5, 5, 5);
+		gridBagConstraints.fill = GridBagConstraints.VERTICAL;
+		gridBagConstraints.gridwidth = 1;
+		gridBagConstraints.weightx = 0.0;
+		this.add(this.filterTraces, gridBagConstraints);
+
+		gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
+		gridBagConstraints.anchor = GridBagConstraints.EAST;
+		gridBagConstraints.insets.set(5, 5, 5, 5);
+		gridBagConstraints.weightx = 0.0;
+		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+		this.add(this.filterTracesInput, gridBagConstraints);
+
 		gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
 		gridBagConstraints.weighty = 1.0;
 		gridBagConstraints.fill = GridBagConstraints.VERTICAL;
@@ -94,10 +110,37 @@ public class AdditionalFiltersStep extends AbstractStep {
 				AdditionalFiltersStep.this.selectOnlyTracesInput.setEnabled(AdditionalFiltersStep.this.selectOnlyTraces.isSelected());
 			}
 		});
-	}
 
-	private void setDefaultState() {
-		this.selectOnlyTracesInput.setEnabled(false);
+		this.filterTraces.addItemListener(new ItemListener() {
+
+			@Override
+			@SuppressWarnings("synthetic-access")
+			public void itemStateChanged(final ItemEvent e) {
+				AdditionalFiltersStep.this.filterTracesInput.setEnabled(AdditionalFiltersStep.this.filterTraces.isSelected());
+			}
+		});
+
+		this.filterTraces.addItemListener(new ItemListener() {
+
+			@Override
+			@SuppressWarnings("synthetic-access")
+			public void itemStateChanged(final ItemEvent e) {
+				if (AdditionalFiltersStep.this.filterTraces.isSelected()) {
+					AdditionalFiltersStep.this.selectOnlyTraces.setSelected(false);
+				}
+			}
+		});
+
+		this.selectOnlyTraces.addItemListener(new ItemListener() {
+
+			@Override
+			@SuppressWarnings("synthetic-access")
+			public void itemStateChanged(final ItemEvent e) {
+				if (AdditionalFiltersStep.this.selectOnlyTraces.isSelected()) {
+					AdditionalFiltersStep.this.filterTraces.setSelected(false);
+				}
+			}
+		});
 	}
 
 	@Override
@@ -105,6 +148,14 @@ public class AdditionalFiltersStep extends AbstractStep {
 		if (this.selectOnlyTraces.isSelected()) {
 			parameters.add("--" + Constants.CMD_OPT_NAME_SELECTTRACES);
 			final String[] ids = this.selectOnlyTracesInput.getText().split(" ");
+			for (final String id : ids) {
+				parameters.add(id);
+			}
+		}
+
+		if (this.filterTraces.isSelected()) {
+			parameters.add("--" + Constants.CMD_OPT_NAME_FILTERTRACES);
+			final String[] ids = this.filterTracesInput.getText().split(" ");
 			for (final String id : ids) {
 				parameters.add(id);
 			}
@@ -118,6 +169,12 @@ public class AdditionalFiltersStep extends AbstractStep {
 
 		writer.write(this.selectOnlyTracesInput.getText());
 		writer.write("\n");
+
+		writer.write(Boolean.toString(this.filterTraces.isSelected()));
+		writer.write("\n");
+
+		writer.write(this.filterTracesInput.getText());
+		writer.write("\n");
 	}
 
 	@Override
@@ -126,6 +183,10 @@ public class AdditionalFiltersStep extends AbstractStep {
 			this.selectOnlyTraces.setSelected(scanner.nextBoolean());
 			scanner.nextLine();
 			this.selectOnlyTracesInput.setText(scanner.nextLine());
+
+			this.filterTraces.setSelected(scanner.nextBoolean());
+			scanner.nextLine();
+			this.filterTracesInput.setText(scanner.nextLine());
 		} catch (final NoSuchElementException ex) {
 			this.setDefaultValues();
 			throw new IOException(ex);
@@ -135,5 +196,11 @@ public class AdditionalFiltersStep extends AbstractStep {
 	private void setDefaultValues() {
 		this.selectOnlyTraces.setSelected(false);
 		this.selectOnlyTracesInput.setText("1 2 3 4 42");
+
+		this.filterTraces.setSelected(false);
+		this.filterTracesInput.setText("1 2 3 4 42");
+
+		this.selectOnlyTracesInput.setEnabled(false);
+		this.filterTracesInput.setEnabled(false);
 	}
 }

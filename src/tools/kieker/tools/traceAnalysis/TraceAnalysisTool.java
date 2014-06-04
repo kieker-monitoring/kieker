@@ -118,6 +118,7 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 	private String outputFnPrefix;
 	private boolean verbose;
 	private Set<Long> selectedTraces; // null means select all
+	private boolean invertTraceIdFilter;
 	private boolean shortLabels = true;
 	private boolean includeSelfLoops; // false
 	private boolean ignoreInvalidTraces; // false
@@ -216,15 +217,24 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 		this.outputFnPrefix = this.cmdl.getOptionValue(Constants.CMD_OPT_NAME_OUTPUTFNPREFIX, "");
 		this.verbose = this.cmdl.hasOption(Constants.CMD_OPT_NAME_VERBOSE);
 
-		if (this.cmdl.hasOption(Constants.CMD_OPT_NAME_SELECTTRACES)) { // Parse list of trace Ids
-			final String[] traceIdList = this.cmdl.getOptionValues(Constants.CMD_OPT_NAME_SELECTTRACES);
+		if (this.cmdl.hasOption(Constants.CMD_OPT_NAME_SELECTTRACES) && this.cmdl.hasOption(Constants.CMD_OPT_NAME_FILTERTRACES)) {
+			LOG.error("Trace Id selection and filtering are mutually exclusive");
+			return false;
+		}
+
+		if (this.cmdl.hasOption(Constants.CMD_OPT_NAME_SELECTTRACES) || this.cmdl.hasOption(Constants.CMD_OPT_NAME_FILTERTRACES)) { // Parse list of trace Ids
+			this.invertTraceIdFilter = this.cmdl.hasOption(Constants.CMD_OPT_NAME_FILTERTRACES);
+			final String[] traceIdList = this.cmdl.getOptionValues(this.invertTraceIdFilter ? Constants.CMD_OPT_NAME_FILTERTRACES
+					: Constants.CMD_OPT_NAME_SELECTTRACES);
+
 			this.selectedTraces = new TreeSet<Long>();
+
 			final int numSelectedTraces = traceIdList.length;
 			try {
 				for (final String idStr : traceIdList) {
 					this.selectedTraces.add(Long.valueOf(idStr));
 				}
-				LOG.info(numSelectedTraces + " trace" + (numSelectedTraces > 1 ? "s" : "") + " selected"); // NOCS
+				LOG.info(numSelectedTraces + " trace" + (numSelectedTraces > 1 ? "s" : "") + (this.invertTraceIdFilter ? " filtered" : " selected")); // NOCS
 			} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
 				System.err.println("\nFailed to parse list of trace IDs: " + Arrays.toString(traceIdList) + "(" + e.getMessage() + ")"); // NOPMD (System.out)
 				LOG.error("Failed to parse list of trace IDs: " + Arrays.toString(traceIdList), e);
@@ -306,6 +316,13 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 					val = this.selectedTraces.toString();
 				} else {
 					val = "<select all>";
+				}
+
+			} else if (longOpt.equals(Constants.CMD_OPT_NAME_FILTERTRACES)) {
+				if (this.selectedTraces != null) {
+					val = this.selectedTraces.toString();
+				} else {
+					val = "<filter none>";
 				}
 
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_SHORTLABELS)) {
@@ -545,8 +562,14 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 				final Configuration execRecTransformerConfig = new Configuration();
 				execRecTransformerConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.EXEC_TRACE_RECONSTR_COMPONENT_NAME);
 				execRecTransformer = new ExecutionRecordTransformationFilter(execRecTransformerConfig, this.analysisController);
-				this.analysisController.connect(traceIdFilter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, execRecTransformer,
-						ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
+				if (this.invertTraceIdFilter) {
+					this.analysisController.connect(traceIdFilter, TraceIdFilter.OUTPUT_PORT_NAME_MISMATCH, execRecTransformer,
+							ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
+				} else {
+					this.analysisController.connect(traceIdFilter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, execRecTransformer,
+							ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
+				}
+
 				this.analysisController.connect(execRecTransformer, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.systemEntityFactory);
 			}
 
