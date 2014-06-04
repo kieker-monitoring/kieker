@@ -117,15 +117,19 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 	 * @return tspoint
 	 */
 	public synchronized ITimeSeriesPoint<T> append(final T value) {
-		final ITimeSeriesPoint<T> point = new TimeSeriesPoint<T>(this.nextTime, value);
+		final ITimeSeriesPoint<T> point;
+
+		synchronized (value) {
+			point = new TimeSeriesPoint<T>(this.nextTime, value);
+			this.points.add(point);
+			this.setNextTime();
+		}
 
 		// if ((this.capacity != ITimeSeries.INFINITE_CAPACITY) && (this.points.size() >= this.capacity)) {
 		// this.startTime = this.startTime + this.deltaTimeUnit.toMillis(this.deltaTime);
 		// this.skippedValues++;
 		// }
 
-		this.points.add(point);
-		this.setNextTime();
 		return point;
 	}
 

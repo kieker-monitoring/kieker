@@ -68,7 +68,7 @@ public final class RBridgeControl {
 	 *            file of R
 	 * @return instance
 	 */
-	public static synchronized RBridgeControl getInstance(final File root) {
+	public static synchronized RBridgeControl getInstance(final File root) { // NOPMD Whole code depends on "instance" variable
 		if (RBridgeControl.instance == null) {
 
 			// TODO make this configurabe?!?
@@ -79,21 +79,7 @@ public final class RBridgeControl {
 			// functions at runtime
 			// TODO use REngine rather? RServe is not needed any more
 
-			// instance.e("setwd('" + root.getAbsolutePath().replace("\\", "\x1ynwn82Nt \\\") + "')");
-			// RBridgeControl.INSTANCE
-			// .e("sink(file = 'rsink.log', append = TRUE, type = c('output', 'message'),split = FALSE)");
-			// INSTANCE.e("source('includes.r', local = FALSE, echo = TRUE)");
-			// instance.e("source('plotting2.r', local = FALSE, echo = TRUE)");
 			instance.evalWithR("initTS");
-
-			// INSTANCE.e("print( getwd() )");
-			// INSTANCE.e("source('basic.r', local = FALSE, echo = TRUE)");
-			// INSTANCE.e("dprint('from opad') ");
-			// INSTANCE.e("source('plotting.r', local = FALSE, echo = TRUE)");
-			// INSTANCE.e("source('opad_functions.r', echo = TRUE, verbose = TRUE)");
-			// INSTANCE.e("source('plotting.r', echo = TRUE, verbose = TRUE)");
-			// INSTANCE.e("library('logging')");
-			// INSTANCE.e("initOPADfunctions()");
 		}
 
 		return RBridgeControl.instance;
@@ -335,6 +321,7 @@ public final class RBridgeControl {
  * Implementation of an {@link OutputStream} that redirects data received via
  * its {@link #write(int)} method to an instance of {@link Log}.
  * 
+ * @author Andre van Hoorn
  */
 class OutputStream2StandardLog extends OutputStream {
 	private static final Log LOG_REDIRECT_LOGGER = LogFactory.getLog(OutputStream2StandardLog.class);
