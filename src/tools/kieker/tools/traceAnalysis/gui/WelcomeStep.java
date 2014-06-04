@@ -21,8 +21,8 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -199,7 +199,7 @@ public class WelcomeStep extends AbstractStep {
 	}
 
 	@Override
-	public void saveCurrentConfiguration(final FileWriter writer) throws IOException {
+	public void saveCurrentConfiguration(final Writer writer) throws IOException {
 		writer.write(this.inputDirectoryField.getText());
 		writer.write("\n");
 

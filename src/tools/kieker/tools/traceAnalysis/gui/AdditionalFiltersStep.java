@@ -20,8 +20,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -112,7 +112,7 @@ public class AdditionalFiltersStep extends AbstractStep {
 	}
 
 	@Override
-	public void saveCurrentConfiguration(final FileWriter writer) throws IOException {
+	public void saveCurrentConfiguration(final Writer writer) throws IOException {
 		writer.write(Boolean.toString(this.selectOnlyTraces.isSelected()));
 		writer.write("\n");
 
@@ -124,6 +124,7 @@ public class AdditionalFiltersStep extends AbstractStep {
 	public void loadCurrentConfiguration(final Scanner scanner) throws IOException {
 		try {
 			this.selectOnlyTraces.setSelected(scanner.nextBoolean());
+			scanner.nextLine();
 			this.selectOnlyTracesInput.setText(scanner.nextLine());
 		} catch (final NoSuchElementException ex) {
 			this.setDefaultValues();

@@ -20,10 +20,10 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.Writer;
 import java.util.Collection;
 import java.util.Scanner;
 
@@ -118,7 +118,7 @@ public class FinalStep extends AbstractStep {
 	}
 
 	@Override
-	public void saveCurrentConfiguration(final FileWriter writer) throws IOException {
+	public void saveCurrentConfiguration(final Writer writer) throws IOException {
 		// Nothing to save
 	}
 

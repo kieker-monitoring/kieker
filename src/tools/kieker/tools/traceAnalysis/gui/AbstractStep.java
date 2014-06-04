@@ -16,8 +16,8 @@
 
 package kieker.tools.traceAnalysis.gui;
 
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.Collection;
 import java.util.Scanner;
 
@@ -36,7 +36,7 @@ public abstract class AbstractStep extends JPanel {
 
 	public abstract void addSelectedTraceAnalysisParameters(final Collection<String> parameters);
 
-	public abstract void saveCurrentConfiguration(FileWriter writer) throws IOException;
+	public abstract void saveCurrentConfiguration(Writer writer) throws IOException;
 
 	public abstract void loadCurrentConfiguration(Scanner scanner) throws IOException;
 

@@ -20,8 +20,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -164,7 +164,7 @@ public class PrintStep extends AbstractStep {
 	}
 
 	@Override
-	public void saveCurrentConfiguration(final FileWriter writer) throws IOException {
+	public void saveCurrentConfiguration(final Writer writer) throws IOException {
 		writer.write(Boolean.toString(this.messageTraces.isSelected()));
 		writer.write("\n");
 

@@ -22,8 +22,10 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Scanner;
@@ -156,7 +158,7 @@ public class TraceAnalysisGUI extends JFrame {
 		if (propertiesFile.exists()) {
 			Scanner scanner = null;
 			try {
-				scanner = new Scanner(propertiesFile);
+				scanner = new Scanner(propertiesFile, "UTF-8");
 				for (final AbstractStep step : this.steps) {
 					step.loadCurrentConfiguration(scanner);
 				}
@@ -171,9 +173,9 @@ public class TraceAnalysisGUI extends JFrame {
 	}
 
 	private void saveCurrentConfiguration() {
-		FileWriter writer = null;
+		Writer writer = null;
 		try {
-			writer = new FileWriter("TraceAnalysisGUI.properties", false);
+			writer = new OutputStreamWriter(new FileOutputStream("TraceAnalysisGUI.properties"), "UTF-8");
 			for (final AbstractStep step : this.steps) {
 				step.saveCurrentConfiguration(writer);
 			}
