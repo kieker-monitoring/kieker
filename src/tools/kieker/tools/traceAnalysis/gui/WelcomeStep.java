@@ -45,8 +45,8 @@ public class WelcomeStep extends AbstractStep {
 
 	private final String currentPath = new File(".").getAbsolutePath();
 
-	private final JLabel welcomeLabel = new JLabel("<html>Welcome to Kieker's Trace Analysis GUI.<br/>This wizard helps you to generate visual representatons "
-			+ "based on trace analysis of your records.<br/><br/>Please specify the input and output directories.</html>");
+	private final JLabel welcomeLabel = new JLabel("<html>Welcome to Kieker's Trace Analysis GUI.<br/>This wizard helps you generating visual representatons "
+			+ "based on a trace analysis of your records.<br/><br/>In this step you choose the input input and output directories.</html>");
 	private final JLabel inputDirectoryLabel = new JLabel("Input Directory: ");
 	private final JLabel outputDirectoryLabel = new JLabel("Output Directory: ");
 	private final JTextField inputDirectoryField = new JTextField(this.currentPath);
@@ -132,6 +132,9 @@ public class WelcomeStep extends AbstractStep {
 		gridBagConstraints.weighty = 1.0;
 		gridBagConstraints.fill = GridBagConstraints.VERTICAL;
 		this.add(this.expandingPanel, gridBagConstraints);
+
+		this.inputDirectoryField.setToolTipText("The input directory contains usually monitoring records for the analysis.");
+		this.outputDirectoryField.setToolTipText("The output directory is used to write the visual representations from the analysis.");
 	}
 
 	private void addLogicToComponents() {

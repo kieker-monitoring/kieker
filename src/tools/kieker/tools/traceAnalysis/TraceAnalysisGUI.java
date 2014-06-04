@@ -193,7 +193,6 @@ public class TraceAnalysisGUI extends JFrame {
 	}
 
 	private void initializeWindow() {
-		this.setResizable(false);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		int maxHeight = 1;
