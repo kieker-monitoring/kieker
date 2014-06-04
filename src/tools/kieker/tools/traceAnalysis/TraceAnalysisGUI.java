@@ -29,6 +29,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import kieker.tools.traceAnalysis.gui.AbstractStep;
+import kieker.tools.traceAnalysis.gui.AdditionalFiltersStep;
 import kieker.tools.traceAnalysis.gui.AdditionalOptionsStep;
 import kieker.tools.traceAnalysis.gui.FinalStep;
 import kieker.tools.traceAnalysis.gui.PlotStep;
@@ -50,7 +51,7 @@ public class TraceAnalysisGUI extends JFrame {
 	private final JButton nextButton = new JButton("Next");
 
 	private final StartTraceAnalysisActionListener startTraceAnalysisClickListener = new StartTraceAnalysisActionListener();
-	private final AbstractStep[] steps = { new WelcomeStep(), new PlotStep(), new PrintStep(), new AdditionalOptionsStep(),
+	private final AbstractStep[] steps = { new WelcomeStep(), new PlotStep(), new PrintStep(), new AdditionalOptionsStep(), new AdditionalFiltersStep(),
 		new FinalStep(this.startTraceAnalysisClickListener), };
 	private int currentStepIndex;
 
