@@ -5,7 +5,7 @@
 	
 	<import file="compile-and-build.xml"/>
 	
-	<target name="static-analysis" depends="findbugs, pmd, checkstyle" description="Performs static analysis of Kieker's source and binary code employing FindBugs and PMD">
+	<target name="static-analysis" depends="findbugs, pmd, checkstyle, cpd" description="Performs static analysis of Kieker's source and binary code employing FindBugs and PMD">
 	</target>
 
 	<target name="findbugs" depends="build-all,compile-tests" description="Performs a byte code analysis to find potential bugs employing findbugs">
@@ -13,6 +13,7 @@
 		<findbugs home="${lib.fb.dir}" reportLevel="low" effort="max" maxRank="20" excludeFilter="${lib.fb.dir}/fb-filter.xml" output="xml" outputFile="${tmp.dir}/kieker-fb.xml">
 			<auxClasspath>
 				<fileset dir="${lib.dir}" includes="*.jar" />
+				<fileset dir="${lib.dir}/disl-2.0/" includes="*.jar" />
 				<fileset dir="${lib.dir}/sigar/" includes="*.jar" />
 				<fileset dir="${lib.dir}/framework-libs/" includes="**/*.jar" />
 				<fileset dir="${lib.cs.dir}/lib/" includes="checkstyle-all.jar" />
@@ -22,6 +23,21 @@
 			<class location="${build.dir}" />
 		</findbugs>
 	</target>
+	
+	<target name="cpd" depends="build-all,compile-tests" description="Performs a source code analysis to find duplicate code">
+		<path id="pmd.libs">
+			<fileset dir="${lib.pmd.dir}/lib">
+				<include name="*.jar" />
+			</fileset>
+		</path>
+		<taskdef name="cpd" classname="net.sourceforge.pmd.cpd.CPDTask" classpathref="pmd.libs" />
+		<cpd minimumTokenCount="100" format="xml" outputFile="${tmp.dir}/cpd_report.xml">
+			<fileset dir="${src.dir}" includes="**/*.java" />
+			<fileset dir="${test.dir}" includes="**/*.java" />
+		</cpd>
+		<echo message="CPD report written to '${tmp.dir}/cpd_report.xml'" />
+	</target>
+
 
 	<target name="pmd" depends="build-all,compile-tests" description="Performs a source code analysis employing PMD">
 		<path id="pmd.libs">
