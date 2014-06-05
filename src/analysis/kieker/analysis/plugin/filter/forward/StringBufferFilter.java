@@ -21,6 +21,7 @@ import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
+import kieker.analysis.plugin.filter.forward.util.KiekerHashMap;
 import kieker.common.configuration.Configuration;
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.record.AbstractMonitoringRecord;
@@ -48,6 +49,8 @@ public final class StringBufferFilter extends AbstractFilterPlugin {
 	/** The name of the output port for the relayed events. */
 	public static final String OUTPUT_PORT_NAME_RELAYED_EVENTS = "relayed-events";
 
+	private final KiekerHashMap kiekerHashMap = new KiekerHashMap();
+
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
@@ -70,13 +73,13 @@ public final class StringBufferFilter extends AbstractFilterPlugin {
 			eventTypes = { Object.class })
 	public final void inputEvent(final Object object) {
 		if (object instanceof String) {
-			super.deliver(StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, ((String) object).intern());
+			super.deliver(StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS, this.kiekerHashMap.get((String) object));
 		} else if (object instanceof IMonitoringRecord) {
 			final Object[] objects = ((IMonitoringRecord) object).toArray();
 			boolean stringBuffered = false;
 			for (int i = 0; i < objects.length; i++) {
 				if (objects[i] instanceof String) {
-					objects[i] = ((String) objects[i]).intern();
+					objects[i] = this.kiekerHashMap.get((String) objects[i]);
 					stringBuffered = true;
 				}
 			}
