@@ -196,24 +196,26 @@ public class ConversionStep extends AbstractStep {
 	}
 
 	@Override
-	public void addSelectedTraceAnalysisParameters(final Collection<String> parameters) {}
+	public void addSelectedTraceAnalysisParameters(final Collection<String> parameters) {
+		// Has to be implemented
+	}
 
 	@Override
 	public void saveCurrentConfiguration(final Writer writer) throws IOException {
-
+		// Has to be implemented
 	}
 
 	@Override
 	public void loadCurrentConfiguration(final Scanner scanner) throws IOException {
-
+		// Has to be implemented
 	}
 
 	private void setDefaultValues() {
-
+		// Has to be implemented
 	}
 
 	public void convert() {
-
+		// Has to be implemented
 	}
 
 }
