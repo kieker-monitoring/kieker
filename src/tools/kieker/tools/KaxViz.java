@@ -60,7 +60,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 
 /**
- * A simple visualization of Analysis Configurations.
+ * A simple visualization of analysis configurations.
  * 
  * @author Jan Waller, Nils Christian Ehmke
  * 
@@ -78,7 +78,7 @@ public final class KaxViz extends AbstractCommandLineTool {
 	}
 
 	/**
-	 * Starts the Visualization of a .kax file.
+	 * Starts the visualization of a .kax file.
 	 * 
 	 * @param args
 	 *            The command line arguments (including the name of the .kax file in question).

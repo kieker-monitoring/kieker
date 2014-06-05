@@ -25,6 +25,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -91,6 +92,7 @@ import kieker.tools.traceAnalysis.repository.DescriptionRepository;
 import kieker.tools.traceAnalysis.repository.TraceColorRepository;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
+import kieker.tools.util.CLIHelpFormatter;
 import kieker.tools.util.LoggingTimestampConverter;
 import kieker.tools.util.ToolsUtil;
 
@@ -141,10 +143,17 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	protected void addAdditionalOptions(final Options options) {
+		// Remember the inherited options for the help formatter
+		final List<Option> inheritedOptions = new ArrayList<Option>();
+		inheritedOptions.addAll(options.getOptions());
+
 		for (final Object option : Constants.CMDL_OPTIONS.getOptions()) {
 			options.addOption((Option) option);
 		}
+
+		Constants.SORTED_OPTION_LIST.addAll(inheritedOptions);
 	}
 
 	@Override
@@ -161,7 +170,28 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 
 	@Override
 	protected HelpFormatter getHelpFormatter() {
-		return Constants.CMD_HELP_FORMATTER;
+		final HelpFormatter helpFormatter = new CLIHelpFormatter();
+
+		helpFormatter.setOptionComparator(new Comparator<Object>() {
+
+			@Override
+			public int compare(final Object o1, final Object o2) {
+				if (o1 == o2) {
+					return 0;
+				}
+				final int posO1 = Constants.SORTED_OPTION_LIST.indexOf(o1);
+				final int posO2 = Constants.SORTED_OPTION_LIST.indexOf(o2);
+				if (posO1 < posO2) {
+					return -1;
+				}
+				if (posO1 > posO2) {
+					return 1;
+				}
+				return 0;
+			}
+		});
+
+		return helpFormatter;
 	}
 
 	/**
@@ -179,6 +209,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 		}
 
 		this.inputDirs = commandLine.getOptionValues(Constants.CMD_OPT_NAME_INPUTDIRS);
+		this.outputDir = commandLine.getOptionValue(Constants.CMD_OPT_NAME_OUTPUTDIR);
 
 		if (this.cmdl.hasOption(Constants.CMD_OPT_NAME_SELECTTRACES) && this.cmdl.hasOption(Constants.CMD_OPT_NAME_FILTERTRACES)) {
 			LOG.error("Trace Id selection and filtering are mutually exclusive");
@@ -207,7 +238,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 		this.shortLabels = commandLine.hasOption(Constants.CMD_OPT_NAME_SHORTLABELS);
 		this.includeSelfLoops = commandLine.hasOption(Constants.CMD_OPT_NAME_INCLUDESELFLOOPS);
 		this.ignoreInvalidTraces = commandLine.hasOption(Constants.CMD_OPT_NAME_IGNOREINVALIDTRACES);
-		this.ignoreAssumedCalls = this.cmdl.hasOption(Constants.CMD_OPT_NAME_IGNORE_ASSUMED);
+		this.ignoreAssumedCalls = commandLine.hasOption(Constants.CMD_OPT_NAME_IGNORE_ASSUMED);
 
 		final String maxTraceDurationStr = commandLine.getOptionValue(Constants.CMD_OPT_NAME_MAXTRACEDURATION,
 				Integer.toString(this.maxTraceDurationMillis));
@@ -252,72 +283,12 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 	 * @return true if {@link #outputDir} is exists and is a directory; false
 	 *         otherwise
 	 */
-	private void dumpConfiguration() {
-		System.out.println("#"); // NOPMD (System.out)
-		System.out.println("# Configuration"); // NOPMD (System.out)
-		for (final Option o : Constants.SORTED_OPTION_LIST) {
-			final String longOpt = o.getLongOpt();
-			String val = "<null>";
-			if (longOpt.equals(Constants.CMD_OPT_NAME_INPUTDIRS)) {
-				val = Constants.stringArrToStringList(this.inputDirs);
-			} else if (longOpt.equals(Constants.CMD_OPT_NAME_OUTPUTDIR)) {
-				val = this.outputDir;
-			} else if (longOpt.equals(Constants.CMD_OPT_NAME_OUTPUTFNPREFIX)) {
-				val = this.outputFnPrefix;
-			} else if (longOpt.equals(Constants.CMD_OPT_NAME_VERBOSE) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT)
-					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_ASSEMBLYEQUIVCLASSREPORT) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONSEQDS)
-					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYSEQDS) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG)
-					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYCOMPONENTDEPG) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTCONTAINERDEPG)
-					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG)
-					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG)
-					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDALLOCATIONCALLTREE)
-					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDASSEMBLYCALLTREE) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTCALLTREES)
-					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTEXECTRACES) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES)
-					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTMSGTRACES) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTSYSTEMMODEL)) {
-				val = this.cmdl.hasOption(longOpt) ? "true" : "false"; // NOCS
-			} else if (longOpt.equals(Constants.CMD_OPT_NAME_SELECTTRACES)) {
-				if (this.selectedTraces != null) {
-					val = this.selectedTraces.toString();
-				} else {
-					val = "<select all>";
-				}
-
-			} else if (longOpt.equals(Constants.CMD_OPT_NAME_FILTERTRACES)) {
-				if (this.selectedTraces != null) {
-					val = this.selectedTraces.toString();
-				} else {
-					val = "<filter none>";
-				}
-
-			} else if (longOpt.equals(Constants.CMD_OPT_NAME_SHORTLABELS)) {
-				val = this.shortLabels ? "true" : "false"; // NOCS
-			} else if (longOpt.equals(Constants.CMD_OPT_NAME_INCLUDESELFLOOPS)) {
-				val = this.includeSelfLoops ? "true" : "false"; // NOCS
-			} else if (longOpt.equals(Constants.CMD_OPT_NAME_IGNORE_ASSUMED)) {
-				val = this.ignoreAssumedCalls ? "true" : "false"; // NOCS
-			} else if (longOpt.equals(Constants.CMD_OPT_NAME_IGNOREINVALIDTRACES)) {
-				val = this.ignoreInvalidTraces ? "true" : "false"; // NOCS
-			} else if (longOpt.equals(Constants.CMD_OPT_NAME_MAXTRACEDURATION)) {
-				val = this.maxTraceDurationMillis + " ms";
-			} else if (longOpt.equals(Constants.CMD_OPT_NAME_IGNOREEXECUTIONSBEFOREDATE)) {
-				val = LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.ignoreExecutionsBeforeTimestamp) + " ("
-						+ LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.ignoreExecutionsBeforeTimestamp) + ")";
-			} else if (longOpt.equals(Constants.CMD_OPT_NAME_IGNOREEXECUTIONSAFTERDATE)) {
-				val = LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.ignoreExecutionsAfterTimestamp) + " ("
-						+ LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.ignoreExecutionsAfterTimestamp) + ")";
-			} else if (Constants.CMD_OPT_NAME_TRACE_COLORING.equals(longOpt)) {
-				val = this.cmdl.getOptionValue(Constants.CMD_OPT_NAME_TRACE_COLORING);
-				if (val == null) {
-					val = "";
-				}
-			} else if (Constants.CMD_OPT_NAME_ADD_DESCRIPTIONS.equals(longOpt)) {
-				val = this.cmdl.getOptionValue(Constants.CMD_OPT_NAME_ADD_DESCRIPTIONS);
-				if (val == null) {
-					val = "";
-				}
-			} else {
-				val = Arrays.toString(this.cmdl.getOptionValues(longOpt));
-				LOG.warn("Unformatted configuration output for option " + longOpt);
+	private boolean assertOutputDirExists() {
+		final File outputDirFile = new File(this.outputDir);
+		try {
+			if (!outputDirFile.exists()) {
+				LOG.error("The specified output directory '" + outputDirFile.getCanonicalPath() + "' does not exist");
+				return false;
 			}
 
 			if (!outputDirFile.isDirectory()) {
@@ -959,10 +930,19 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 					val = "<select all>";
 				}
 
+			} else if (longOpt.equals(Constants.CMD_OPT_NAME_FILTERTRACES)) {
+				if (this.selectedTraces != null) {
+					val = this.selectedTraces.toString();
+				} else {
+					val = "<filter none>";
+				}
+
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_SHORTLABELS)) {
 				val = this.shortLabels ? "true" : "false"; // NOCS
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_INCLUDESELFLOOPS)) {
 				val = this.includeSelfLoops ? "true" : "false"; // NOCS
+			} else if (longOpt.equals(Constants.CMD_OPT_NAME_IGNORE_ASSUMED)) {
+				val = this.ignoreAssumedCalls ? "true" : "false"; // NOCS
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_IGNOREINVALIDTRACES)) {
 				val = this.ignoreInvalidTraces ? "true" : "false"; // NOCS
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_MAXTRACEDURATION)) {

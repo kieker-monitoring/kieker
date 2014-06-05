@@ -17,7 +17,7 @@
 package kieker.tools.loggingTimestampConverter;
 
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Option;
+import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 
 import kieker.common.logging.Log;
@@ -48,12 +48,10 @@ public final class LoggingTimestampConverterTool extends AbstractCommandLineTool
 	}
 
 	@Override
+	@SuppressWarnings("static-access")
 	protected void addAdditionalOptions(final Options options) {
-		final Option timestampsOption = new Option("t", "timestamps", true, "List of timestamps (UTC timezone) to convert");
-		timestampsOption.setRequired(true);
-		timestampsOption.setArgName("timestamp1 ... timestampN");
-
-		options.addOption(timestampsOption);
+		options.addOption(OptionBuilder.withLongOpt("timestamps").withArgName("timestamp1 ... timestampN").hasArgs().isRequired(true)
+				.withDescription("List of timestamps (UTC timezone) to convert").create("t"));
 	}
 
 	@Override

@@ -29,7 +29,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 
 /**
- * A simple execution of Analysis Configurations.
+ * A simple execution of analysis configurations.
  * 
  * @author Jan Waller, Nils Christian Ehmke
  * 
@@ -45,6 +45,12 @@ public final class KaxRun extends AbstractCommandLineTool {
 		super(true);
 	}
 
+	/**
+	 * Starts the execution of a .kax file.
+	 * 
+	 * @param args
+	 *            The command line arguments (including the name of the .kax file in question).
+	 */
 	public static void main(final String[] args) {
 		new KaxRun().start(args);
 	}

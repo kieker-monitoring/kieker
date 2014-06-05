@@ -16,16 +16,12 @@
 
 package kieker.tools.traceAnalysis;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-
-import kieker.tools.util.CLIHelpFormatter;
 
 /**
  * Externalized Strings from {@link TraceAnalysisTool}.
@@ -142,7 +138,6 @@ public final class Constants {
 	public static final String PLOTAGGREGATEDALLOCATIONCALLTREE_COMPONENT_NAME = "Aggregated call tree (deployment level)";
 	public static final String PLOTAGGREGATEDASSEMBLYCALLTREE_COMPONENT_NAME = "Aggregated call tree (assembly level)";
 	public static final String PLOTCALLTREE_COMPONENT_NAME = "Trace call trees";
-	public static final HelpFormatter CMD_HELP_FORMATTER = new CLIHelpFormatter();
 	public static final Options CMDL_OPTIONS = new Options();
 	public static final List<Option> SORTED_OPTION_LIST = new CopyOnWriteArrayList<Option>();
 
@@ -248,24 +243,6 @@ public final class Constants {
 		for (final Option o : SORTED_OPTION_LIST) {
 			CMDL_OPTIONS.addOption(o);
 		}
-		CMD_HELP_FORMATTER.setOptionComparator(new Comparator<Object>() {
-
-			@Override
-			public int compare(final Object o1, final Object o2) {
-				if (o1 == o2) {
-					return 0;
-				}
-				final int posO1 = SORTED_OPTION_LIST.indexOf(o1);
-				final int posO2 = SORTED_OPTION_LIST.indexOf(o2);
-				if (posO1 < posO2) {
-					return -1;
-				}
-				if (posO1 > posO2) {
-					return 1;
-				}
-				return 0;
-			}
-		});
 	}
 
 	/**
