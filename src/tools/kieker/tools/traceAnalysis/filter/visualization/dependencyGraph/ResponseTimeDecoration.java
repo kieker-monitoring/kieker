@@ -115,6 +115,10 @@ public class ResponseTimeDecoration extends AbstractVertexDecoration {
 		return (this.executionCount == 0) ? 0 : ((double) this.responseTimeSum / (double) this.executionCount); // NOCS (inline ?)
 	}
 
+	public long getTotalResponseTime() {
+		return this.responseTimeSum;
+	}
+
 	@Override
 	public String createFormattedOutput() {
 		final StringBuilder sb = new StringBuilder();
@@ -127,6 +131,10 @@ public class ResponseTimeDecoration extends AbstractVertexDecoration {
 		sb.append(", max: ");
 		sb.append(this.getMaximalResponseTime());
 		sb.append(this.timeUnitShortname);
+		sb.append(",\ntotal: ");
+		sb.append(this.getTotalResponseTime());
+		sb.append(this.timeUnitShortname);
 		return sb.toString();
 	}
+
 }
