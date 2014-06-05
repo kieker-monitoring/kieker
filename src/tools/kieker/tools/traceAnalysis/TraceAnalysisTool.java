@@ -383,9 +383,20 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 
 		while (decoratorIterator.hasNext()) {
 			final String currentDecoratorStr = decoratorIterator.next();
-
 			if (Constants.RESPONSE_TIME_DECORATOR_FLAG.equals(currentDecoratorStr)) {
-				plugin.addDecorator(new ResponseTimeNodeDecorator());
+				plugin.addDecorator(new ResponseTimeNodeDecorator(TimeUnit.MILLISECONDS));
+				continue;
+			} else if (Constants.RESPONSE_TIME_DECORATOR_FLAG_NS.equals(currentDecoratorStr)) {
+				plugin.addDecorator(new ResponseTimeNodeDecorator(TimeUnit.NANOSECONDS));
+				continue;
+			} else if (Constants.RESPONSE_TIME_DECORATOR_FLAG_US.equals(currentDecoratorStr)) {
+				plugin.addDecorator(new ResponseTimeNodeDecorator(TimeUnit.MICROSECONDS));
+				continue;
+			} else if (Constants.RESPONSE_TIME_DECORATOR_FLAG_MS.equals(currentDecoratorStr)) {
+				plugin.addDecorator(new ResponseTimeNodeDecorator(TimeUnit.MILLISECONDS));
+				continue;
+			} else if (Constants.RESPONSE_TIME_DECORATOR_FLAG_S.equals(currentDecoratorStr)) {
+				plugin.addDecorator(new ResponseTimeNodeDecorator(TimeUnit.SECONDS));
 				continue;
 			} else if (Constants.RESPONSE_TIME_COLORING_DECORATOR_FLAG.equals(currentDecoratorStr)) {
 				// if decorator is responseColoring, next value should be the threshold
