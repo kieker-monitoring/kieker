@@ -16,23 +16,9 @@
 
 package kieker.monitoring.probe.servlet;
 
-import java.util.Collection;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.TimeUnit;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
-import kieker.monitoring.core.controller.IMonitoringController;
-import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.core.sampler.ScheduledSamplerJob;
+import kieker.monitoring.core.sampler.ISampler;
 import kieker.monitoring.sampler.sigar.ISigarSamplerFactory;
 import kieker.monitoring.sampler.sigar.SigarSamplerFactory;
-import kieker.monitoring.sampler.sigar.samplers.CPUsDetailedPercSampler;
-import kieker.monitoring.sampler.sigar.samplers.MemSwapUsageSampler;
 
 /**
  * <p>
@@ -76,11 +62,7 @@ import kieker.monitoring.sampler.sigar.samplers.MemSwapUsageSampler;
  * 
  * @since 1.3
  */
-public class CPUMemUsageServletContextListener implements ServletContextListener {
-	/** The default used sensor interval in seconds. */
-	public static final long DEFAULT_SENSOR_INTERVAL_SECONDS = 15;
-	/** The default used initial delay in seconds. */
-	public static final long DEFAULT_SENSOR_INITIAL_DELAY_SECONDS = 0;
+public class CPUMemUsageServletContextListener extends AbstractRegularSamplingServletContextListener {
 
 	/** Prefix for parameters used in the web.xml file. */
 	// NOTE that this declaration must be BEFORE the following public constants!
@@ -93,118 +75,24 @@ public class CPUMemUsageServletContextListener implements ServletContextListener
 	public static final String CONTEXT_PARAM_NAME_INITIAL_SAMPLING_DELAY_SECONDS = CONTEXT_PARAM_NAME_PREFIX // NOCS (decl. order)
 			+ ".initialSamplingDelaySeconds";
 
-	private static final Log LOG = LogFactory.getLog(CPUMemUsageServletContextListener.class);
-
-	private final IMonitoringController monitoringController = MonitoringController.getInstance();
-
-	/**
-	 * Stores the {@link ScheduledSamplerJob}s which are scheduled in {@link #contextInitialized(ServletContextEvent)} and removed from the
-	 * scheduler in {@link #contextDestroyed(ServletContextEvent)}.
-	 */
-	private final Collection<ScheduledSamplerJob> samplerJobs = new CopyOnWriteArrayList<ScheduledSamplerJob>();
-
-	private volatile long sensorIntervalSeconds = DEFAULT_SENSOR_INTERVAL_SECONDS;
-	private volatile long initialDelaySeconds = DEFAULT_SENSOR_INITIAL_DELAY_SECONDS;
-
-	/**
-	 * Default constructor.
-	 */
 	public CPUMemUsageServletContextListener() {
 		// nothing to do
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public void contextDestroyed(final ServletContextEvent sce) {
-		for (final ScheduledSamplerJob s : this.samplerJobs) {
-			this.monitoringController.removeScheduledSampler(s);
-		}
+	protected String getContextParameterNameSamplingIntervalSeconds() {
+		return CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public void contextInitialized(final ServletContextEvent sce) {
-		this.initParameters(sce.getServletContext());
-		this.initSensors();
+	protected String getContextParameterNameSamplingDelaySeconds() {
+		return CONTEXT_PARAM_NAME_INITIAL_SAMPLING_DELAY_SECONDS;
 	}
 
-	/**
-	 * Initializes the variables {@link #sensorIntervalSeconds} and {@link #initialDelaySeconds} based on the values given in the web.xml
-	 * file. If no parameter values are defined in the web.xml, the default
-	 * values {@link #DEFAULT_SENSOR_INTERVAL_SECONDS} and {@link #DEFAULT_SENSOR_INITIAL_DELAY_SECONDS} are used.
-	 * 
-	 * @param c
-	 *            the {@link ServletContext} providing access to the parameter
-	 *            values via {@link ServletContext#getInitParameter(String)}
-	 */
-	private void initParameters(final ServletContext c) {
-		if (c == null) {
-			LOG.warn("ServletContext == null");
-			// we are using the default values assigned during variable
-			// declaration.
-			return;
-		}
-
-		// allowed values: Int>=0
-		this.initialDelaySeconds = this.readLongInitParameter(c, CONTEXT_PARAM_NAME_INITIAL_SAMPLING_DELAY_SECONDS,
-				DEFAULT_SENSOR_INITIAL_DELAY_SECONDS);
-
-		// allows values: Int>0
-		this.sensorIntervalSeconds = this.readLongInitParameter(c, CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS,
-				DEFAULT_SENSOR_INTERVAL_SECONDS);
-		if (this.sensorIntervalSeconds == 0) {
-			LOG.warn("values for the init-param '"
-					+ CONTEXT_PARAM_NAME_SAMPLING_INTERVAL_SECONDS + "' must be >0; found: " + this.sensorIntervalSeconds
-					+ ". Using default value: "
-					+ DEFAULT_SENSOR_INTERVAL_SECONDS);
-			this.sensorIntervalSeconds = DEFAULT_SENSOR_INTERVAL_SECONDS;
-		}
-
-	}
-
-	private long readLongInitParameter(final ServletContext c, final String paramName, final long defaultValue) {
-		long val = -1;
-		final String valStr = c.getInitParameter(paramName);
-
-		if (valStr != null) {
-			try {
-				val = Long.parseLong(valStr);
-			} catch (final NumberFormatException exc) {
-				val = -1;
-				// will use default value below.
-			}
-		}
-
-		if (val < 0) {
-			LOG.warn("Invalid or missing value for context-param '" + paramName + "': " + valStr + ". Using default value: "
-					+ defaultValue);
-			val = defaultValue;
-		}
-
-		return val;
-	}
-
-	/**
-	 * Creates and schedules the {@link ScheduledSamplerJob}s and stores them
-	 * for later removal in the {@link Collection} {@link #samplerJobs}.
-	 */
-	private void initSensors() {
+	@Override
+	protected ISampler[] createSamplers() {
 		final ISigarSamplerFactory sigarFactory = SigarSamplerFactory.INSTANCE;
-
-		// Log utilization of each CPU every X seconds
-		final CPUsDetailedPercSampler cpuSensor = sigarFactory.createSensorCPUsDetailedPerc();
-		final ScheduledSamplerJob cpuSensorJob = this.monitoringController.schedulePeriodicSampler(cpuSensor, this.initialDelaySeconds, this.sensorIntervalSeconds,
-				TimeUnit.SECONDS);
-		this.samplerJobs.add(cpuSensorJob);
-
-		// Log memory and swap statistics every Y seconds
-		final MemSwapUsageSampler memSensor = sigarFactory.createSensorMemSwapUsage();
-		final ScheduledSamplerJob memSensorJob = this.monitoringController.schedulePeriodicSampler(memSensor, this.initialDelaySeconds, this.sensorIntervalSeconds,
-				TimeUnit.SECONDS);
-		this.samplerJobs.add(memSensorJob);
+		return new ISampler[] { sigarFactory.createSensorCPUsDetailedPerc(), sigarFactory.createSensorMemSwapUsage() };
 	}
+
 }

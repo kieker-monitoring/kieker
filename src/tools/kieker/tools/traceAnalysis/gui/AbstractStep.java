@@ -16,7 +16,10 @@
 
 package kieker.tools.traceAnalysis.gui;
 
+import java.io.IOException;
+import java.io.Writer;
 import java.util.Collection;
+import java.util.Scanner;
 
 import javax.swing.JPanel;
 
@@ -32,6 +35,10 @@ public abstract class AbstractStep extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	public abstract void addSelectedTraceAnalysisParameters(final Collection<String> parameters);
+
+	public abstract void saveCurrentConfiguration(Writer writer) throws IOException;
+
+	public abstract void loadCurrentConfiguration(Scanner scanner) throws IOException;
 
 	public boolean isNextStepAllowed() { // NOPMD (Empty method for convenient usage)
 		return true;

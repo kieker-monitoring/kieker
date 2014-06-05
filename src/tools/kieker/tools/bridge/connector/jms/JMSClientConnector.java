@@ -18,8 +18,7 @@ package kieker.tools.bridge.connector.jms;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.util.Hashtable;
 import java.util.concurrent.ConcurrentMap;
 
 import javax.jms.BytesMessage;
@@ -31,8 +30,9 @@ import javax.jms.Message;
 import javax.jms.MessageConsumer;
 import javax.jms.Session;
 import javax.jms.TextMessage;
-
-import org.apache.activemq.ActiveMQConnectionFactory;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
@@ -58,18 +58,23 @@ public class JMSClientConnector extends AbstractConnector {
 	public static final String PASSWORD = JMSClientConnector.class.getCanonicalName() + ".password";
 	/** Property name for the configuration service URI property. */
 	public static final String URI = JMSClientConnector.class.getCanonicalName() + ".uri";
+	/** Property name for the configuration of the JMS connector. */
+	public static final String FACTORY_LOOKUP_NAME = JMSClientConnector.class.getCanonicalName() + ".jmsFactoryLookupName";
 	/** Default KDB queue name. */
 	public static final String KIEKER_DATA_BRIDGE_READ_QUEUE = "kieker.tools.bridge";
 
 	private static final int BUF_LEN = 65536;
 
-	private final String username;
-	private final String password;
+	/** username used to connect to the JMS service. */
+	protected final String username;
+	/** password used to connect to the JMS service. */
+	protected final String password;
 	private final String uri;
 
 	private MessageConsumer consumer;
 	private final byte[] buffer = new byte[BUF_LEN];
 	private Connection connection;
+	private final String jmsFactoryLookupName;
 
 	/**
 	 * Create a JMSClientConnector.
@@ -86,6 +91,7 @@ public class JMSClientConnector extends AbstractConnector {
 		this.username = this.configuration.getStringProperty(JMSClientConnector.USERNAME);
 		this.password = this.configuration.getStringProperty(JMSClientConnector.PASSWORD);
 		this.uri = this.configuration.getStringProperty(JMSClientConnector.URI);
+		this.jmsFactoryLookupName = this.configuration.getStringProperty(JMSClientConnector.FACTORY_LOOKUP_NAME);
 	}
 
 	/**
@@ -98,12 +104,12 @@ public class JMSClientConnector extends AbstractConnector {
 	public void initialize() throws ConnectorDataTransmissionException {
 		try {
 			// setup connection
-			ConnectionFactory factory;
-			if ((this.username != null) && (this.password != null)) {
-				factory = new ActiveMQConnectionFactory(this.username, this.password, new URI(this.uri));
-			} else {
-				factory = new ActiveMQConnectionFactory(new URI(this.uri));
-			}
+			final Hashtable<String, String> properties = new Hashtable<String, String>(); // NOPMD NOCS (IllegalTypeCheck, InitialContext requires Hashtable)
+			properties.put(Context.INITIAL_CONTEXT_FACTORY, this.jmsFactoryLookupName);
+			properties.put(Context.PROVIDER_URL, this.uri);
+
+			final Context context = new InitialContext(properties);
+			final ConnectionFactory factory = (ConnectionFactory) context.lookup("ConnectionFactory");
 			this.connection = factory.createConnection();
 
 			final Session session = this.connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
@@ -111,10 +117,10 @@ public class JMSClientConnector extends AbstractConnector {
 			this.consumer = session.createConsumer(destination);
 
 			this.connection.start();
+		} catch (final NamingException e) {
+			throw new ConnectorDataTransmissionException(e.getMessage(), e);
 		} catch (final JMSException e) {
 			throw new ConnectorDataTransmissionException(e.getMessage(), e);
-		} catch (final URISyntaxException e) {
-			throw new ConnectorDataTransmissionException("URI for queue.", e);
 		}
 	}
 

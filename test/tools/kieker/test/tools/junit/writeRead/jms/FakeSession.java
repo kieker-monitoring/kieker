@@ -223,8 +223,10 @@ public class FakeSession implements Session {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public TextMessage createTextMessage(final String arg0) throws JMSException {
-		return null;
+	public TextMessage createTextMessage(final String content) throws JMSException {
+		final TextMessage message = new FakeTextMessage();
+		message.setText(content);
+		return message;
 	}
 
 	/**

@@ -18,11 +18,14 @@ package kieker.tools.traceAnalysis.gui;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.Writer;
 import java.util.Collection;
+import java.util.Scanner;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -44,6 +47,7 @@ public class FinalStep extends AbstractStep {
 
 	private final JLabel infoLabel = new JLabel("All necessary information have been gathered. You can now start the trace analysis.");
 	private final JButton startButton = new JButton("Start");
+	private final JButton clearLogButton = new JButton("Clear Log");
 	private final JTextArea logArea = new JTextArea(20, 60);
 	private final JScrollPane logScrollPane = new JScrollPane(this.logArea);
 	private final ActionListener startTraceAnalysisClickListener;
@@ -82,10 +86,16 @@ public class FinalStep extends AbstractStep {
 		this.add(this.infoLabel, infoLabelConstraint);
 
 		final GridBagConstraints startButtonConstraint = new GridBagConstraints();
-		startButtonConstraint.gridwidth = GridBagConstraints.REMAINDER;
+		startButtonConstraint.gridwidth = GridBagConstraints.RELATIVE;
 		startButtonConstraint.anchor = GridBagConstraints.NORTHWEST;
 		startButtonConstraint.insets.set(5, 5, 5, 5);
 		this.add(this.startButton, startButtonConstraint);
+
+		final GridBagConstraints clearLogButtonConstraint = new GridBagConstraints();
+		clearLogButtonConstraint.gridwidth = GridBagConstraints.REMAINDER;
+		clearLogButtonConstraint.anchor = GridBagConstraints.NORTHWEST;
+		clearLogButtonConstraint.insets.set(5, 5, 5, 5);
+		this.add(this.clearLogButton, clearLogButtonConstraint);
 
 		final GridBagConstraints logScrollPaneConstraint = new GridBagConstraints();
 		logScrollPaneConstraint.gridwidth = GridBagConstraints.REMAINDER;
@@ -99,11 +109,36 @@ public class FinalStep extends AbstractStep {
 
 	private void addLogicToComponents() {
 		this.startButton.addActionListener(this.startTraceAnalysisClickListener);
+		this.clearLogButton.addActionListener(new ClearLogClickListener());
 	}
 
 	@Override
 	public void addSelectedTraceAnalysisParameters(final Collection<String> parameters) {
 		// No parameters can be selected in this step
+	}
+
+	@Override
+	public void saveCurrentConfiguration(final Writer writer) throws IOException {
+		// Nothing to save
+	}
+
+	@Override
+	public void loadCurrentConfiguration(final Scanner scanner) throws IOException {
+		// Nothing to load
+	}
+
+	private final class ClearLogClickListener implements ActionListener {
+
+		public ClearLogClickListener() {
+			// No code necessary
+		}
+
+		@SuppressWarnings("synthetic-access")
+		@Override
+		public void actionPerformed(final ActionEvent e) {
+			FinalStep.this.logArea.setText("");
+		}
+
 	}
 
 	private final class LogOutputStream extends OutputStream {
@@ -128,4 +163,5 @@ public class FinalStep extends AbstractStep {
 		}
 
 	}
+
 }

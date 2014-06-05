@@ -609,7 +609,7 @@
 
         <!-- Checks for the use of unnecessary parentheses. !-->
         <!-- See http://checkstyle.sf.net/config_coding.html !-->
-        <module name="UnnecessaryParentheses"/>
+        <!-- <module name="UnnecessaryParentheses"/> !-->
 
 
         <!--

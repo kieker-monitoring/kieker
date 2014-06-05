@@ -66,7 +66,7 @@ public class TCPServerForClient implements Runnable {
 					outToClient.writeLong(ConfigurationParameters.TEST_TOUT);
 					outToClient.writeInt(ConfigurationParameters.TEST_HOSTNAME.length());
 					outToClient.writeBytes(ConfigurationParameters.TEST_HOSTNAME);
-					outToClient.writeInt(ConfigurationParameters.TEST_EOI);
+					outToClient.writeInt(i); // send the current record id
 					outToClient.writeInt(ConfigurationParameters.TEST_ESS);
 				}
 

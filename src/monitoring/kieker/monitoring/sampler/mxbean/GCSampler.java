@@ -17,42 +17,37 @@ package kieker.monitoring.sampler.mxbean;
 
 import java.lang.management.GarbageCollectorMXBean;
 import java.lang.management.ManagementFactory;
-import java.util.Collection;
+import java.util.List;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.jvm.GCRecord;
-import kieker.monitoring.core.controller.IMonitoringController;
-import kieker.monitoring.core.sampler.ISampler;
 
 /**
- * A sampler using the Java MXBean interface to access information about the garbage collector(s). The sampler produces a {@link GCRecord} for each garbage collector
- * each time the {@link #sample(IMonitoringController)} method is called.
- *
+ * A sampler using the MXBean interface to access information about the garbage collector(s). The sampler produces a {@link GCRecord} for each garbage collector each
+ * time the {@code sample} method is called.
+ * 
  * @author Nils Christian Ehmke
- *
+ * 
  * @since 1.10
  */
-public class GCSampler implements ISampler {
+public class GCSampler extends AbstractMXBeanSampler {
 
 	public GCSampler() {
 		// Empty default constructor
 	}
 
 	@Override
-	public void sample(final IMonitoringController monitoringController) throws Exception {
-		final long timestamp = monitoringController.getTimeSource().getTime();
-		final String vmName = ManagementFactory.getRuntimeMXBean().getName();
-		final String hostname = monitoringController.getHostname();
+	protected IMonitoringRecord[] createNewMonitoringRecords(final long timestamp, final String hostname, final String vmName) {
+		final List<GarbageCollectorMXBean> gcBeans = ManagementFactory.getGarbageCollectorMXBeans();
+		final int numberOfGCs = gcBeans.size();
+		final IMonitoringRecord[] records = new IMonitoringRecord[numberOfGCs];
 
-		final Collection<GarbageCollectorMXBean> gcBeans = ManagementFactory.getGarbageCollectorMXBeans();
-		for (final GarbageCollectorMXBean gcBean : gcBeans) {
-			final long collectionCount = gcBean.getCollectionCount();
-			final long collectionTime = gcBean.getCollectionTime();
-			final String gcName = gcBean.getName();
-
-			final IMonitoringRecord record = new GCRecord(timestamp, hostname, vmName, gcName, collectionCount, collectionTime);
-			monitoringController.newMonitoringRecord(record);
+		for (int i = 0; i < numberOfGCs; i++) {
+			final GarbageCollectorMXBean gcBean = gcBeans.get(i);
+			records[i] = new GCRecord(timestamp, hostname, vmName, gcBean.getName(), gcBean.getCollectionCount(), gcBean.getCollectionTime());
 		}
+
+		return records;
 	}
 
 }

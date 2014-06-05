@@ -20,22 +20,21 @@ import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
 import kieker.common.record.AbstractMonitoringRecord;
-import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Nils Christian Ehmke
- *
+ * 
  * @since 1.10
  */
-public class ThreadsStatusRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
+public class ThreadsStatusRecord extends AbstractJVMRecord {
 
-	public static final int SIZE = TYPE_SIZE_LONG + (2 * TYPE_SIZE_STRING) + (4 * TYPE_SIZE_LONG);
+	public static final int SIZE = AbstractJVMRecord.SIZE + (4 * TYPE_SIZE_LONG);
 
 	public static final Class<?>[] TYPES = {
-		long.class,
-		String.class,
-		String.class,
+		long.class, // timestamp
+		String.class, // hostname
+		String.class, // vmName
 		long.class,
 		long.class,
 		long.class,
@@ -44,9 +43,6 @@ public class ThreadsStatusRecord extends AbstractMonitoringRecord implements IMo
 
 	private static final long serialVersionUID = 2989308154952301746L;
 
-	private final long timestamp;
-	private final String hostname;
-	private final String vmName;
 	private final long threadCount;
 	private final long daemonThreadCount;
 	private final long peakThreadCount;
@@ -54,9 +50,8 @@ public class ThreadsStatusRecord extends AbstractMonitoringRecord implements IMo
 
 	public ThreadsStatusRecord(final long timestamp, final String hostname, final String vmName, final long threadCount, final long daemonThreadCount,
 			final long peakThreadCount, final long totalStartedThreadCount) {
-		this.timestamp = timestamp;
-		this.hostname = hostname;
-		this.vmName = vmName;
+		super(timestamp, hostname, vmName);
+
 		this.threadCount = threadCount;
 		this.daemonThreadCount = daemonThreadCount;
 		this.peakThreadCount = peakThreadCount;
@@ -64,11 +59,9 @@ public class ThreadsStatusRecord extends AbstractMonitoringRecord implements IMo
 	}
 
 	public ThreadsStatusRecord(final Object[] values) { // NOPMD (direct store of values)
+		super(values);
 		AbstractMonitoringRecord.checkArray(values, TYPES);
 
-		this.timestamp = (Long) values[0];
-		this.hostname = (String) values[1];
-		this.vmName = (String) values[2];
 		this.threadCount = (Long) values[3];
 		this.daemonThreadCount = (Long) values[4];
 		this.peakThreadCount = (Long) values[5];
@@ -76,9 +69,8 @@ public class ThreadsStatusRecord extends AbstractMonitoringRecord implements IMo
 	}
 
 	public ThreadsStatusRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.timestamp = buffer.getLong();
-		this.hostname = stringRegistry.get(buffer.getInt());
-		this.vmName = stringRegistry.get(buffer.getInt());
+		super(buffer, stringRegistry);
+
 		this.threadCount = buffer.getLong();
 		this.daemonThreadCount = buffer.getLong();
 		this.peakThreadCount = buffer.getLong();
@@ -87,41 +79,18 @@ public class ThreadsStatusRecord extends AbstractMonitoringRecord implements IMo
 
 	@Override
 	public Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getHostname(), this.getVmName(), this.getThreadCount(), this.getDaemonThreadCount(),
+		return new Object[] { super.getTimestamp(), super.getHostname(), super.getVmName(), this.getThreadCount(), this.getDaemonThreadCount(),
 			this.getPeakThreadCount(), this.getTotalStartedThreadCount(), };
 	}
 
 	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putLong(this.getTimestamp());
-		buffer.putInt(stringRegistry.get(this.getHostname()));
-		buffer.putInt(stringRegistry.get(this.getVmName()));
+		super.writeBytes(buffer, stringRegistry);
+
 		buffer.putLong(this.getThreadCount());
 		buffer.putLong(this.getDaemonThreadCount());
 		buffer.putLong(this.getPeakThreadCount());
 		buffer.putLong(this.getTotalStartedThreadCount());
-	}
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public final void initFromArray(final Object[] values) {
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
-	 */
-	@Override
-	@Deprecated
-	public final void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -138,18 +107,6 @@ public class ThreadsStatusRecord extends AbstractMonitoringRecord implements IMo
 	@Override
 	public int getSize() {
 		return SIZE;
-	}
-
-	public long getTimestamp() {
-		return this.timestamp;
-	}
-
-	public String getHostname() {
-		return this.hostname;
-	}
-
-	public String getVmName() {
-		return this.vmName;
 	}
 
 	public long getThreadCount() {

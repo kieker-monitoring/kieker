@@ -22,10 +22,10 @@
 		     Important: The logger library that is configured to be used by Kieker must always be excluded!
 		     (Particularly important when using the include-all directive from above.) 
 		--> 
-		<!-- <exclude within="org.apache.commons.logging..*" />  -->
-		<!-- <exclude within="org.slf4j..*" />  -->
-		<!-- <exclude within="java.util.logging..*" />  -->
-		<!-- <exclude within="org.apache.log4j..*" />  -->
+		<exclude within="org.apache.commons.logging..*" /> 
+		<exclude within="org.slf4j..*" /> 
+		<exclude within="java.util.logging..*" /> 
+		<exclude within="org.apache.log4j..*" />
 
 		<!-- Instrument all kieker.tests: -->
 		<!-- <include within="kieker.tests..*" /> -->
@@ -85,11 +85,11 @@
 		
 		<!-- Method executions and method calls: -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecution.FullInstrumentation" /> -->
-		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecution.FullInstrumentationNoGetterAndSetter" /> -->
+		<aspect name="kieker.monitoring.probe.aspectj.flow.operationExecution.FullInstrumentationNoGetterAndSetter" /> 
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecution.Annotation" /> -->
 		
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecutionObject.FullInstrumentation" /> -->
-		<aspect name="kieker.monitoring.probe.aspectj.flow.operationExecutionObject.FullInstrumentationNoGetterAndSetter" />
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecutionObject.FullInstrumentationNoGetterAndSetter" />  -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecutionObject.Annotation" /> -->
 
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationCall.FullInstrumentation" /> -->

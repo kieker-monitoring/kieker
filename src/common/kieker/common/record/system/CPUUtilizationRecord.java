@@ -251,72 +251,42 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 		return SIZE;
 	}
 
-	/**
-	 * @return the timestamp
-	 */
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
 
-	/**
-	 * @return the hostname
-	 */
 	public final String getHostname() {
 		return this.hostname;
 	}
 
-	/**
-	 * @return the cpuID
-	 */
 	public final String getCpuID() {
 		return this.cpuID;
 	}
 
-	/**
-	 * @return the user
-	 */
 	public final double getUser() {
 		return this.user;
 	}
 
-	/**
-	 * @return the system
-	 */
 	public final double getSystem() {
 		return this.system;
 	}
 
-	/**
-	 * @return the wait
-	 */
 	public final double getWait() {
 		return this.wait;
 	}
 
-	/**
-	 * @return the nice
-	 */
 	public final double getNice() {
 		return this.nice;
 	}
 
-	/**
-	 * @return the irq
-	 */
 	public final double getIrq() {
 		return this.irq;
 	}
 
-	/**
-	 * @return the totalUtilization
-	 */
 	public final double getTotalUtilization() {
 		return this.totalUtilization;
 	}
 
-	/**
-	 * @return the idle
-	 */
 	public final double getIdle() {
 		return this.idle;
 	}

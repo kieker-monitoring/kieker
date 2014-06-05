@@ -117,6 +117,8 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 	private String outputDir;
 	private String outputFnPrefix;
 	private Set<Long> selectedTraces; // null means select all
+	private boolean invertTraceIdFilter;
+	private boolean ignoreAssumedCalls;
 	private boolean shortLabels = true;
 	private boolean includeSelfLoops; // false
 	private boolean ignoreInvalidTraces; // false
@@ -178,18 +180,24 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 
 		this.inputDirs = commandLine.getOptionValues(Constants.CMD_OPT_NAME_INPUTDIRS);
 
-		this.outputDir = commandLine.getOptionValue(Constants.CMD_OPT_NAME_OUTPUTDIR) + File.separator;
-		this.outputFnPrefix = commandLine.getOptionValue(Constants.CMD_OPT_NAME_OUTPUTFNPREFIX, "");
+		if (this.cmdl.hasOption(Constants.CMD_OPT_NAME_SELECTTRACES) && this.cmdl.hasOption(Constants.CMD_OPT_NAME_FILTERTRACES)) {
+			LOG.error("Trace Id selection and filtering are mutually exclusive");
+			return false;
+		}
 
-		if (commandLine.hasOption(Constants.CMD_OPT_NAME_SELECTTRACES)) { // Parse list of trace Ids
-			final String[] traceIdList = commandLine.getOptionValues(Constants.CMD_OPT_NAME_SELECTTRACES);
+		if (this.cmdl.hasOption(Constants.CMD_OPT_NAME_SELECTTRACES) || this.cmdl.hasOption(Constants.CMD_OPT_NAME_FILTERTRACES)) { // Parse list of trace Ids
+			this.invertTraceIdFilter = this.cmdl.hasOption(Constants.CMD_OPT_NAME_FILTERTRACES);
+			final String[] traceIdList = this.cmdl.getOptionValues(this.invertTraceIdFilter ? Constants.CMD_OPT_NAME_FILTERTRACES
+					: Constants.CMD_OPT_NAME_SELECTTRACES);
+
 			this.selectedTraces = new TreeSet<Long>();
+
 			final int numSelectedTraces = traceIdList.length;
 			try {
 				for (final String idStr : traceIdList) {
 					this.selectedTraces.add(Long.valueOf(idStr));
 				}
-				LOG.info(numSelectedTraces + " trace" + (numSelectedTraces > 1 ? "s" : "") + " selected"); // NOCS
+				LOG.info(numSelectedTraces + " trace" + (numSelectedTraces > 1 ? "s" : "") + (this.invertTraceIdFilter ? " filtered" : " selected")); // NOCS
 			} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
 				LOG.error("Failed to parse list of trace IDs: " + Arrays.toString(traceIdList), e);
 				return false;
@@ -199,6 +207,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 		this.shortLabels = commandLine.hasOption(Constants.CMD_OPT_NAME_SHORTLABELS);
 		this.includeSelfLoops = commandLine.hasOption(Constants.CMD_OPT_NAME_INCLUDESELFLOOPS);
 		this.ignoreInvalidTraces = commandLine.hasOption(Constants.CMD_OPT_NAME_IGNOREINVALIDTRACES);
+		this.ignoreAssumedCalls = this.cmdl.hasOption(Constants.CMD_OPT_NAME_IGNORE_ASSUMED);
 
 		final String maxTraceDurationStr = commandLine.getOptionValue(Constants.CMD_OPT_NAME_MAXTRACEDURATION,
 				Integer.toString(this.maxTraceDurationMillis));
@@ -243,12 +252,72 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 	 * @return true if {@link #outputDir} is exists and is a directory; false
 	 *         otherwise
 	 */
-	private boolean assertOutputDirExists() {
-		final File outputDirFile = new File(this.outputDir);
-		try {
-			if (!outputDirFile.exists()) {
-				LOG.error("The specified output directory '" + outputDirFile.getCanonicalPath() + "' does not exist");
-				return false;
+	private void dumpConfiguration() {
+		System.out.println("#"); // NOPMD (System.out)
+		System.out.println("# Configuration"); // NOPMD (System.out)
+		for (final Option o : Constants.SORTED_OPTION_LIST) {
+			final String longOpt = o.getLongOpt();
+			String val = "<null>";
+			if (longOpt.equals(Constants.CMD_OPT_NAME_INPUTDIRS)) {
+				val = Constants.stringArrToStringList(this.inputDirs);
+			} else if (longOpt.equals(Constants.CMD_OPT_NAME_OUTPUTDIR)) {
+				val = this.outputDir;
+			} else if (longOpt.equals(Constants.CMD_OPT_NAME_OUTPUTFNPREFIX)) {
+				val = this.outputFnPrefix;
+			} else if (longOpt.equals(Constants.CMD_OPT_NAME_VERBOSE) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT)
+					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_ASSEMBLYEQUIVCLASSREPORT) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONSEQDS)
+					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYSEQDS) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG)
+					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYCOMPONENTDEPG) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTCONTAINERDEPG)
+					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG)
+					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG)
+					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDALLOCATIONCALLTREE)
+					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDASSEMBLYCALLTREE) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTCALLTREES)
+					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTEXECTRACES) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES)
+					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTMSGTRACES) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTSYSTEMMODEL)) {
+				val = this.cmdl.hasOption(longOpt) ? "true" : "false"; // NOCS
+			} else if (longOpt.equals(Constants.CMD_OPT_NAME_SELECTTRACES)) {
+				if (this.selectedTraces != null) {
+					val = this.selectedTraces.toString();
+				} else {
+					val = "<select all>";
+				}
+
+			} else if (longOpt.equals(Constants.CMD_OPT_NAME_FILTERTRACES)) {
+				if (this.selectedTraces != null) {
+					val = this.selectedTraces.toString();
+				} else {
+					val = "<filter none>";
+				}
+
+			} else if (longOpt.equals(Constants.CMD_OPT_NAME_SHORTLABELS)) {
+				val = this.shortLabels ? "true" : "false"; // NOCS
+			} else if (longOpt.equals(Constants.CMD_OPT_NAME_INCLUDESELFLOOPS)) {
+				val = this.includeSelfLoops ? "true" : "false"; // NOCS
+			} else if (longOpt.equals(Constants.CMD_OPT_NAME_IGNORE_ASSUMED)) {
+				val = this.ignoreAssumedCalls ? "true" : "false"; // NOCS
+			} else if (longOpt.equals(Constants.CMD_OPT_NAME_IGNOREINVALIDTRACES)) {
+				val = this.ignoreInvalidTraces ? "true" : "false"; // NOCS
+			} else if (longOpt.equals(Constants.CMD_OPT_NAME_MAXTRACEDURATION)) {
+				val = this.maxTraceDurationMillis + " ms";
+			} else if (longOpt.equals(Constants.CMD_OPT_NAME_IGNOREEXECUTIONSBEFOREDATE)) {
+				val = LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.ignoreExecutionsBeforeTimestamp) + " ("
+						+ LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.ignoreExecutionsBeforeTimestamp) + ")";
+			} else if (longOpt.equals(Constants.CMD_OPT_NAME_IGNOREEXECUTIONSAFTERDATE)) {
+				val = LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.ignoreExecutionsAfterTimestamp) + " ("
+						+ LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.ignoreExecutionsAfterTimestamp) + ")";
+			} else if (Constants.CMD_OPT_NAME_TRACE_COLORING.equals(longOpt)) {
+				val = this.cmdl.getOptionValue(Constants.CMD_OPT_NAME_TRACE_COLORING);
+				if (val == null) {
+					val = "";
+				}
+			} else if (Constants.CMD_OPT_NAME_ADD_DESCRIPTIONS.equals(longOpt)) {
+				val = this.cmdl.getOptionValue(Constants.CMD_OPT_NAME_ADD_DESCRIPTIONS);
+				if (val == null) {
+					val = "";
+				}
+			} else {
+				val = Arrays.toString(this.cmdl.getOptionValues(longOpt));
+				LOG.warn("Unformatted configuration output for option " + longOpt);
 			}
 
 			if (!outputDirFile.isDirectory()) {
@@ -374,8 +443,14 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 				final Configuration execRecTransformerConfig = new Configuration();
 				execRecTransformerConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.EXEC_TRACE_RECONSTR_COMPONENT_NAME);
 				execRecTransformer = new ExecutionRecordTransformationFilter(execRecTransformerConfig, this.analysisController);
-				this.analysisController.connect(traceIdFilter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, execRecTransformer,
-						ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
+				if (this.invertTraceIdFilter) {
+					this.analysisController.connect(traceIdFilter, TraceIdFilter.OUTPUT_PORT_NAME_MISMATCH, execRecTransformer,
+							ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
+				} else {
+					this.analysisController.connect(traceIdFilter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, execRecTransformer,
+							ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
+				}
+
 				this.analysisController.connect(execRecTransformer, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.systemEntityFactory);
 			}
 
@@ -405,14 +480,21 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 						Long.toString(this.maxTraceDurationMillis));
 				eventTraceReconstructionFilter = new EventRecordTraceReconstructionFilter(configurationEventRecordTraceGenerationFilter, this.analysisController);
 
-				this.analysisController.connect(traceIdFilter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH,
-						eventTraceReconstructionFilter, EventRecordTraceReconstructionFilter.INPUT_PORT_NAME_TRACE_RECORDS);
+				if (this.invertTraceIdFilter) {
+					this.analysisController.connect(traceIdFilter, TraceIdFilter.OUTPUT_PORT_NAME_MISMATCH, eventTraceReconstructionFilter,
+							EventRecordTraceReconstructionFilter.INPUT_PORT_NAME_TRACE_RECORDS);
+				} else {
+					this.analysisController.connect(traceIdFilter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, eventTraceReconstructionFilter,
+							EventRecordTraceReconstructionFilter.INPUT_PORT_NAME_TRACE_RECORDS);
+				}
 			}
 
 			{ // NOCS (nested block)
 				// Create the counter for valid/invalid event record traces
 				final Configuration configurationEventRecordTraceCounter = new Configuration();
 				configurationEventRecordTraceCounter.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.EXECEVENTRACESFROMEVENTTRACES_COMPONENT_NAME);
+				configurationEventRecordTraceCounter.setProperty(EventRecordTraceCounter.CONFIG_PROPERTY_NAME_LOG_INVALID,
+						Boolean.toString(!this.ignoreInvalidTraces));
 				eventRecordTraceCounter = new EventRecordTraceCounter(configurationEventRecordTraceCounter, this.analysisController);
 
 				this.analysisController.connect(
@@ -429,6 +511,8 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 				final Configuration configurationEventTrace2ExecutionTraceFilter = new Configuration();
 				configurationEventTrace2ExecutionTraceFilter.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
 						Constants.EXECTRACESFROMEVENTTRACES_COMPONENT_NAME);
+				configurationEventTrace2ExecutionTraceFilter.setProperty(TraceEventRecords2ExecutionAndMessageTraceFilter.CONFIG_IGNORE_ASSUMED,
+						Boolean.toString(this.ignoreAssumedCalls));
 				// EventTrace2ExecutionTraceFilter has no configuration properties
 				traceEvents2ExecutionAndMessageTraceFilter = new TraceEventRecords2ExecutionAndMessageTraceFilter(configurationEventTrace2ExecutionTraceFilter,
 						this.analysisController);

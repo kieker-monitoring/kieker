@@ -16,6 +16,9 @@
 
 package kieker.test.tools.junit.writeRead.jms;
 
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageConsumer;
@@ -32,6 +35,7 @@ import javax.jms.MessageListener;
 public class FakeMessageConsumer implements MessageConsumer {
 
 	private MessageListener messageListener;
+	private final Queue<Message> messages = new ConcurrentLinkedQueue<Message>();
 
 	/**
 	 * Default constructor.
@@ -41,8 +45,21 @@ public class FakeMessageConsumer implements MessageConsumer {
 		this.messageListener = null; // NOPMD (null)
 	}
 
+	/**
+	 * Add a message from the producer to the consumer queue.
+	 * 
+	 * @param message
+	 *            the message to add to the internal queue
+	 */
 	public void addMessage(final Message message) {
-		this.messageListener.onMessage(message);
+		this.messages.add(message);
+		// Some tests already use this method without a connected consumer or
+		// do not use the listener API.
+		if (this.messageListener != null) {
+			while (!this.messages.isEmpty()) {
+				this.messageListener.onMessage(this.messages.poll());
+			}
+		}
 	}
 
 	/**
@@ -58,7 +75,7 @@ public class FakeMessageConsumer implements MessageConsumer {
 	 */
 	@Override
 	public MessageListener getMessageListener() throws JMSException {
-		return null;
+		return this.messageListener;
 	}
 
 	/**
@@ -74,7 +91,7 @@ public class FakeMessageConsumer implements MessageConsumer {
 	 */
 	@Override
 	public Message receive() throws JMSException {
-		return null;
+		return this.messages.poll();
 	}
 
 	/**

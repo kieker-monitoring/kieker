@@ -201,58 +201,34 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 		return SIZE;
 	}
 
-	/**
-	 * @return the memTotal
-	 */
 	public final long getMemTotal() {
 		return this.memTotal;
 	}
 
-	/**
-	 * @return the memUsed
-	 */
 	public final long getMemUsed() {
 		return this.memUsed;
 	}
 
-	/**
-	 * @return the memFree
-	 */
 	public final long getMemFree() {
 		return this.memFree;
 	}
 
-	/**
-	 * @return the swapTotal
-	 */
 	public final long getSwapTotal() {
 		return this.swapTotal;
 	}
 
-	/**
-	 * @return the swapUsed
-	 */
 	public final long getSwapUsed() {
 		return this.swapUsed;
 	}
 
-	/**
-	 * @return the swapFree
-	 */
 	public final long getSwapFree() {
 		return this.swapFree;
 	}
 
-	/**
-	 * @return the timestamp
-	 */
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
 
-	/**
-	 * @return the hostname
-	 */
 	public final String getHostname() {
 		return this.hostname;
 	}

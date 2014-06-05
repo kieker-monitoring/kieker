@@ -63,7 +63,7 @@ public class TestTCPMultiServerConnector extends AbstractConnectorTest {
 		// test the connector
 		this.setConnector(new TCPMultiServerConnector(configuration, this.createLookupEntityMap()));
 		this.initialize();
-		this.deserialize(ConfigurationParameters.NUMBER_OF_TEST_THREADS * ConfigurationParameters.SEND_NUMBER_OF_RECORDS);
+		this.deserialize(ConfigurationParameters.NUMBER_OF_TEST_THREADS * ConfigurationParameters.SEND_NUMBER_OF_RECORDS, false);
 
 		// shutdown multiple clients
 		executor.shutdown();

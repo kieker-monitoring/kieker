@@ -20,38 +20,26 @@ import java.lang.management.ThreadMXBean;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.jvm.ThreadsStatusRecord;
-import kieker.monitoring.core.controller.IMonitoringController;
-import kieker.monitoring.core.sampler.ISampler;
 
 /**
- * A sampler using the Java MXBean interface to access information about the threads in the JVM. The sampler produces a {@link ThreadsStatusRecord} each time the
- * {@link #sample(IMonitoringController)} method is called.
- *
+ * A sampler using the MXBean interface to access information about the threads in the JVM. The sampler produces a {@link ThreadsStatusRecord} each time the
+ * {@code sample} method is called.
+ * 
  * @author Nils Christian Ehmke
- *
+ * 
  * @since 1.10
  */
-public class ThreadsStatusSampler implements ISampler {
+public class ThreadsStatusSampler extends AbstractMXBeanSampler {
 
 	public ThreadsStatusSampler() {
 		// Empty default constructor
 	}
 
 	@Override
-	public void sample(final IMonitoringController monitoringController) throws Exception {
-		final long timestamp = monitoringController.getTimeSource().getTime();
-		final String vmName = ManagementFactory.getRuntimeMXBean().getName();
-		final String hostname = monitoringController.getHostname();
-
+	protected IMonitoringRecord[] createNewMonitoringRecords(final long timestamp, final String hostname, final String vmName) {
 		final ThreadMXBean threadBean = ManagementFactory.getThreadMXBean();
-		final long threadCount = threadBean.getThreadCount();
-		final long daemonThreadCount = threadBean.getDaemonThreadCount();
-		final long peakThreadCount = threadBean.getPeakThreadCount();
-		final long totalStartedThreadCount = threadBean.getTotalStartedThreadCount();
-
-		final IMonitoringRecord record = new ThreadsStatusRecord(timestamp, hostname, vmName, threadCount, daemonThreadCount, peakThreadCount,
-				totalStartedThreadCount);
-		monitoringController.newMonitoringRecord(record);
+		return new IMonitoringRecord[] { new ThreadsStatusRecord(timestamp, hostname, vmName, threadBean.getThreadCount(), threadBean.getDaemonThreadCount(),
+				threadBean.getPeakThreadCount(), threadBean.getTotalStartedThreadCount()), };
 	}
 
 }
