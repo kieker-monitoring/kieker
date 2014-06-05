@@ -18,6 +18,8 @@ package kieker.tools.traceAnalysis.gui;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Collection;
@@ -26,6 +28,7 @@ import java.util.Scanner;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
@@ -60,6 +63,7 @@ public class AdditionalOptionsStep extends AbstractStep {
 
 	public AdditionalOptionsStep() {
 		this.addAndLayoutComponents();
+		this.addLogicToComponents();
 
 		this.maxTraceDurationMSInput.setValue(600000L);
 	}
@@ -183,6 +187,46 @@ public class AdditionalOptionsStep extends AbstractStep {
 		if (this.ignoreAssumedCalls.isSelected()) {
 			parameters.add("--" + Constants.CMD_OPT_NAME_IGNORE_ASSUMED);
 		}
+
+		if (this.description.isSelected()) {
+			parameters.add("--" + Constants.CMD_OPT_NAME_ADD_DESCRIPTIONS);
+			parameters.add(this.descriptionInput.getText());
+		}
+
+		if (this.traceColoringMap.isSelected()) {
+			parameters.add("--" + Constants.CMD_OPT_NAME_TRACE_COLORING);
+			parameters.add(this.traceColoringMapInput.getText());
+		}
+	}
+
+	private void addLogicToComponents() {
+		this.descriptionChooseButton.addActionListener(new ActionListener() {
+
+			@Override
+			@SuppressWarnings("synthetic-access")
+			public void actionPerformed(final ActionEvent event) {
+				final JFileChooser fileChooser = new JFileChooser(AdditionalOptionsStep.this.descriptionInput.getText());
+				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+				if (fileChooser.showOpenDialog(AdditionalOptionsStep.this) == JFileChooser.APPROVE_OPTION) {
+					AdditionalOptionsStep.this.descriptionInput.setText(fileChooser.getSelectedFile().getAbsolutePath());
+				}
+			}
+		});
+
+		this.traceColoringMapChooseButton.addActionListener(new ActionListener() {
+
+			@Override
+			@SuppressWarnings("synthetic-access")
+			public void actionPerformed(final ActionEvent event) {
+				final JFileChooser fileChooser = new JFileChooser(AdditionalOptionsStep.this.traceColoringMapInput.getText());
+				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+				if (fileChooser.showOpenDialog(AdditionalOptionsStep.this) == JFileChooser.APPROVE_OPTION) {
+					AdditionalOptionsStep.this.traceColoringMapInput.setText(fileChooser.getSelectedFile().getAbsolutePath());
+				}
+			}
+		});
 	}
 
 	@Override
