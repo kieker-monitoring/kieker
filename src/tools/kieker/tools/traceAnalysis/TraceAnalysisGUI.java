@@ -39,6 +39,7 @@ import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.gui.AbstractStep;
 import kieker.tools.traceAnalysis.gui.AdditionalFiltersStep;
 import kieker.tools.traceAnalysis.gui.AdditionalOptionsStep;
+import kieker.tools.traceAnalysis.gui.ConversionStep;
 import kieker.tools.traceAnalysis.gui.FinalStep;
 import kieker.tools.traceAnalysis.gui.PlotStep;
 import kieker.tools.traceAnalysis.gui.PrintStep;
@@ -61,8 +62,9 @@ public class TraceAnalysisGUI extends JFrame {
 	private final JButton nextButton = new JButton("Next");
 
 	private final StartTraceAnalysisActionListener startTraceAnalysisClickListener = new StartTraceAnalysisActionListener();
+	private final ConversionStep conversionStep = new ConversionStep();
 	private final AbstractStep[] steps = { new WelcomeStep(), new PlotStep(), new PrintStep(), new AdditionalOptionsStep(), new AdditionalFiltersStep(),
-		new FinalStep(this.startTraceAnalysisClickListener), };
+		this.conversionStep, new FinalStep(this.startTraceAnalysisClickListener), };
 	private int currentStepIndex;
 
 	public TraceAnalysisGUI() {
@@ -222,6 +224,7 @@ public class TraceAnalysisGUI extends JFrame {
 			@Override
 			public void run() {
 				TraceAnalysisTool.mainHelper(parameters.toArray(new String[parameters.size()]), false);
+				TraceAnalysisGUI.this.conversionStep.convert();
 				TraceAnalysisGUI.this.previousButton.setEnabled(true);
 			}
 		};
