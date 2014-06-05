@@ -54,7 +54,7 @@ public class ResponseTimeDecoration extends AbstractVertexDecoration {
 			this.timeUnitShortname = "ns";
 			break;
 		case MICROSECONDS:
-			this.timeUnitShortname = "µs";
+			this.timeUnitShortname = "us";
 			break;
 		case MILLISECONDS:
 			this.timeUnitShortname = "ms";
