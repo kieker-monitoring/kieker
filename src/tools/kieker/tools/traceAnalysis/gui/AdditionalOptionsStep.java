@@ -46,6 +46,7 @@ public class AdditionalOptionsStep extends AbstractStep {
 	private final JPanel expandingPanel = new JPanel();
 	private final JCheckBox verbose = new JCheckBox("Verbosely list used parameters and processed traces");
 	private final JCheckBox ignoreInvalidTraces = new JCheckBox("Ignore Invalid Traces");
+	private final JCheckBox ignoreAssumedCalls = new JCheckBox("Draw Assumed Calls As Usual Calls");
 	private final JCheckBox useShortLabels = new JCheckBox("Use Short Labels");
 	private final JCheckBox includeSelfLoops = new JCheckBox("Include Self Loops");
 	private final JCheckBox maxTraceDurationMS = new JCheckBox("Maximal Duration of Traces in Milliseconds:");
@@ -78,6 +79,10 @@ public class AdditionalOptionsStep extends AbstractStep {
 		gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
 		gridBagConstraints.insets.set(5, 5, 0, 0);
 		this.add(this.verbose, gridBagConstraints);
+
+		gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
+		gridBagConstraints.insets.set(0, 5, 0, 0);
+		this.add(this.ignoreAssumedCalls, gridBagConstraints);
 
 		gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
 		gridBagConstraints.insets.set(0, 5, 0, 0);
@@ -174,6 +179,10 @@ public class AdditionalOptionsStep extends AbstractStep {
 			parameters.add("--" + Constants.CMD_OPT_NAME_MAXTRACEDURATION);
 			parameters.add(((Long) this.maxTraceDurationMSInput.getValue()).toString());
 		}
+
+		if (this.ignoreAssumedCalls.isSelected()) {
+			parameters.add("--" + Constants.CMD_OPT_NAME_IGNORE_ASSUMED);
+		}
 	}
 
 	@Override
@@ -195,6 +204,9 @@ public class AdditionalOptionsStep extends AbstractStep {
 
 		writer.write(Long.toString((Long) this.maxTraceDurationMSInput.getValue()));
 		writer.write("\n");
+
+		writer.write(Boolean.toString(this.ignoreAssumedCalls.isSelected()));
+		writer.write("\n");
 	}
 
 	@Override
@@ -206,6 +218,7 @@ public class AdditionalOptionsStep extends AbstractStep {
 			this.includeSelfLoops.setSelected(scanner.nextBoolean());
 			this.maxTraceDurationMS.setSelected(scanner.nextBoolean());
 			this.maxTraceDurationMSInput.setValue(scanner.nextLong());
+			this.ignoreAssumedCalls.setSelected(scanner.nextBoolean());
 		} catch (final NoSuchElementException ex) {
 			this.setDefaultValues();
 			throw new IOException(ex);
@@ -218,6 +231,7 @@ public class AdditionalOptionsStep extends AbstractStep {
 		this.useShortLabels.setSelected(false);
 		this.includeSelfLoops.setSelected(false);
 		this.maxTraceDurationMS.setSelected(false);
+		this.ignoreAssumedCalls.setSelected(true);
 		this.maxTraceDurationMSInput.setValue(600000);
 	}
 }

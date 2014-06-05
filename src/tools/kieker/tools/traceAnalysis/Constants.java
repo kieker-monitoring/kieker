@@ -47,6 +47,7 @@ public final class Constants {
 	public static final String CMD_OPT_NAME_FILTERTRACES = "filter-traces";
 	/** Command whether to use short labels or not. */
 	public static final String CMD_OPT_NAME_SHORTLABELS = "short-labels";
+	public static final String CMD_OPT_NAME_IGNORE_ASSUMED = "ignore-assumed-calls";
 	/** Command whether to include self loops or not. */
 	public static final String CMD_OPT_NAME_INCLUDESELFLOOPS = "include-self-loops";
 	/** Command whether to ignore invalid traces or not. */
@@ -222,6 +223,8 @@ public final class Constants {
 				.withDescription("If selected, abbreviated labels (e.g., package names) are used in the visualizations.").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_INCLUDESELFLOOPS).hasArg(false).isRequired(false)
 				.withDescription("If selected, self-loops are included in the visualizations.").create());
+		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_IGNORE_ASSUMED).hasArg(false).isRequired(false)
+				.withDescription("If selected, assumed calls are visualized just as regular calls.").create());
 		SORTED_OPTION_LIST
 				.add(OptionBuilder
 						.withLongOpt(CMD_OPT_NAME_TRACE_COLORING)

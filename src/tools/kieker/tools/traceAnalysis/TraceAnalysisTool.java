@@ -119,6 +119,7 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 	private boolean verbose;
 	private Set<Long> selectedTraces; // null means select all
 	private boolean invertTraceIdFilter;
+	private boolean ignoreAssumedCalls;
 	private boolean shortLabels = true;
 	private boolean includeSelfLoops; // false
 	private boolean ignoreInvalidTraces; // false
@@ -245,6 +246,7 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 		this.shortLabels = this.cmdl.hasOption(Constants.CMD_OPT_NAME_SHORTLABELS);
 		this.includeSelfLoops = this.cmdl.hasOption(Constants.CMD_OPT_NAME_INCLUDESELFLOOPS);
 		this.ignoreInvalidTraces = this.cmdl.hasOption(Constants.CMD_OPT_NAME_IGNOREINVALIDTRACES);
+		this.ignoreAssumedCalls = this.cmdl.hasOption(Constants.CMD_OPT_NAME_IGNORE_ASSUMED);
 
 		final String maxTraceDurationStr = this.cmdl.getOptionValue(Constants.CMD_OPT_NAME_MAXTRACEDURATION,
 				Integer.toString(this.maxTraceDurationMillis));
@@ -329,6 +331,8 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 				val = this.shortLabels ? "true" : "false"; // NOCS
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_INCLUDESELFLOOPS)) {
 				val = this.includeSelfLoops ? "true" : "false"; // NOCS
+			} else if (longOpt.equals(Constants.CMD_OPT_NAME_IGNORE_ASSUMED)) {
+				val = this.ignoreAssumedCalls ? "true" : "false"; // NOCS
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_IGNOREINVALIDTRACES)) {
 				val = this.ignoreInvalidTraces ? "true" : "false"; // NOCS
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_MAXTRACEDURATION)) {
@@ -634,6 +638,8 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 				configurationEventTrace2ExecutionTraceFilter.setProperty(AbstractTraceAnalysisFilter.CONFIG_PROPERTY_NAME_VERBOSE, Boolean.toString(this.verbose));
 				configurationEventTrace2ExecutionTraceFilter.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
 						Constants.EXECTRACESFROMEVENTTRACES_COMPONENT_NAME);
+				configurationEventTrace2ExecutionTraceFilter.setProperty(TraceEventRecords2ExecutionAndMessageTraceFilter.CONFIG_IGNORE_ASSUMED,
+						Boolean.toString(this.ignoreAssumedCalls));
 				// EventTrace2ExecutionTraceFilter has no configuration properties
 				traceEvents2ExecutionAndMessageTraceFilter = new TraceEventRecords2ExecutionAndMessageTraceFilter(configurationEventTrace2ExecutionTraceFilter,
 						this.analysisController);

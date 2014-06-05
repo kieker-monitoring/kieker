@@ -69,7 +69,8 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 		},
 		configuration = {
 			@Property(name = TraceEventRecords2ExecutionAndMessageTraceFilter.CONFIG_ENHANCE_JAVA_CONSTRUCTORS, defaultValue = "true"),
-			@Property(name = TraceEventRecords2ExecutionAndMessageTraceFilter.CONFIG_ENHANCE_CALL_DETECTION, defaultValue = "true")
+			@Property(name = TraceEventRecords2ExecutionAndMessageTraceFilter.CONFIG_ENHANCE_CALL_DETECTION, defaultValue = "true"),
+			@Property(name = TraceEventRecords2ExecutionAndMessageTraceFilter.CONFIG_IGNORE_ASSUMED, defaultValue = "false")
 		})
 public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTraceProcessingFilter {
 
@@ -83,11 +84,14 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 	/** This is the name of the output port delivering invalid traces. */
 	public static final String OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE = "invalidTrace";
 
+	public static final String CONFIG_IGNORE_ASSUMED = "ignoreAssumed";
+
 	public static final String CONFIG_ENHANCE_JAVA_CONSTRUCTORS = "enhanceJavaConstructors";
 	public static final String CONFIG_ENHANCE_CALL_DETECTION = "enhanceCallDetection";
 
 	private final boolean enhanceJavaConstructors;
 	private final boolean enhanceCallDetection;
+	private final boolean ignoreAssumedCalls;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -102,6 +106,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 
 		this.enhanceJavaConstructors = configuration.getBooleanProperty(CONFIG_ENHANCE_JAVA_CONSTRUCTORS);
 		this.enhanceCallDetection = configuration.getBooleanProperty(CONFIG_ENHANCE_CALL_DETECTION);
+		this.ignoreAssumedCalls = configuration.getBooleanProperty(CONFIG_IGNORE_ASSUMED);
 	}
 
 	/**
@@ -113,6 +118,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 
 		configuration.setProperty(CONFIG_ENHANCE_JAVA_CONSTRUCTORS, String.valueOf(this.enhanceJavaConstructors));
 		configuration.setProperty(CONFIG_ENHANCE_CALL_DETECTION, String.valueOf(this.enhanceCallDetection));
+		configuration.setProperty(CONFIG_IGNORE_ASSUMED, String.valueOf(this.ignoreAssumedCalls));
 
 		return configuration;
 	}
@@ -133,7 +139,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 		final long traceId = trace.getTraceId();
 		final ExecutionTrace executionTrace = new ExecutionTrace(traceId, trace.getSessionId());
 		final TraceEventRecordHandler traceEventRecordHandler = new TraceEventRecordHandler(trace, executionTrace, this.getSystemEntityFactory(),
-				this.enhanceJavaConstructors, this.enhanceCallDetection);
+				this.enhanceJavaConstructors, this.enhanceCallDetection, this.ignoreAssumedCalls);
 		int expectedOrderIndex = -1;
 		for (final AbstractTraceEvent event : traceEventRecords.getTraceEvents()) {
 			expectedOrderIndex += 1; // increment in each iteration -> 0 is the first real value
@@ -210,14 +216,16 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 		private final boolean enhanceCallDetection;
 
 		private int orderindex;
+		private final boolean ignoreAssumedCalls;
 
 		public TraceEventRecordHandler(final TraceMetadata trace, final ExecutionTrace executionTrace, final SystemModelRepository systemModelRepository,
-				final boolean enhanceJavaConstructors, final boolean enhanceCallDetection) {
+				final boolean enhanceJavaConstructors, final boolean enhanceCallDetection, final boolean ignoreAssumedCalls) {
 			this.trace = trace;
 			this.executionTrace = executionTrace;
 			this.systemModelRepository = systemModelRepository;
 			this.enhanceJavaConstructors = enhanceJavaConstructors;
 			this.enhanceCallDetection = enhanceCallDetection;
+			this.ignoreAssumedCalls = ignoreAssumedCalls;
 		}
 
 		/**
@@ -248,7 +256,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 								executionInformation.getEss(),
 								currentEvent.getTimestamp(),
 								lastTimeStamp,
-								true, currentEvent instanceof CallConstructorEvent);
+								!this.ignoreAssumedCalls, currentEvent instanceof CallConstructorEvent);
 					} else {
 						throw new InvalidTraceException("Only CallOperationEvents are expected to be remaining, but found: "
 								+ currentEvent.getClass().getSimpleName());
@@ -334,7 +342,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 								executionInformation.getEss(),
 								currentCallEvent.getTimestamp(),
 								lastEvent.getTimestamp(),
-								true, currentCallEvent instanceof CallConstructorEvent);
+								!this.ignoreAssumedCalls,
+								currentCallEvent instanceof CallConstructorEvent);
 					}
 					return;
 				}
@@ -425,7 +434,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 					executionInformation.getEss(),
 					beforeOperationEvent.getTimestamp(),
 					afterOperationEvent.getTimestamp(),
-					!definiteCall, beforeOperationEvent instanceof BeforeConstructorEvent);
+					!(definiteCall || this.ignoreAssumedCalls),
+					beforeOperationEvent instanceof BeforeConstructorEvent);
 		}
 
 		public void handleAfterOperationEvent(final AfterOperationEvent afterOperationEvent) throws InvalidTraceException {
