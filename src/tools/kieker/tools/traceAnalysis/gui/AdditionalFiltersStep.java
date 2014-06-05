@@ -48,8 +48,8 @@ public class AdditionalFiltersStep extends AbstractStep {
 	private final JTextField selectOnlyTracesInput = new JTextField("1 2 3 4 42");
 	private final JCheckBox filterTraces = new JCheckBox("Filter Traces with Following IDs Out:");
 	private final JTextField filterTracesInput = new JTextField("1 2 3 4 42");
-	private final JCheckBox ignoreBefore = new JCheckBox("Ignore Executions Before the Following Date (yyyyMMdd-HHmmss:");
-	private final JCheckBox ignoreAfter = new JCheckBox("Ignore Executions After the Following Date (yyyyMMdd-HHmmss):");
+	private final JCheckBox ignoreBefore = new JCheckBox("Ignore Executions Before the Following Date (yyyyMMdd-HHmmss or timestamp):");
+	private final JCheckBox ignoreAfter = new JCheckBox("Ignore Executions After the Following Date (yyyyMMdd-HHmmss or timestamp):");
 	private final JTextField ignoreBeforeInput = new JTextField(Integer.toString(0));
 	private final JTextField ignoreAfterInput = new JTextField(Integer.toString(Integer.MAX_VALUE));
 
