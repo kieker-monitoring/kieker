@@ -215,10 +215,10 @@ public final class Constants {
 				.withDescription("Threshold (in ms) after which incomplete traces become invalid. Defaults to 600,000 (i.e, 10 minutes).").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_IGNOREEXECUTIONSBEFOREDATE)
 				.withArgName(TraceAnalysisTool.DATE_FORMAT_PATTERN_CMD_USAGE_HELP).hasArg().isRequired(false)
-				.withDescription("Executions starting before this date (UTC timezone) are ignored.").create());
+				.withDescription("Executions starting before this date (UTC timezone) or monitoring timestamp are ignored.").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_IGNOREEXECUTIONSAFTERDATE)
 				.withArgName(TraceAnalysisTool.DATE_FORMAT_PATTERN_CMD_USAGE_HELP).hasArg().isRequired(false)
-				.withDescription("Executions ending after this date (UTC timezone) are ignored.").create());
+				.withDescription("Executions ending after this date (UTC timezone) or monitoring timestamp  are ignored.").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_SHORTLABELS).hasArg(false).isRequired(false)
 				.withDescription("If selected, abbreviated labels (e.g., package names) are used in the visualizations.").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_INCLUDESELFLOOPS).hasArg(false).isRequired(false)

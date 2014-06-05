@@ -104,7 +104,7 @@ import kieker.tools.util.LoggingTimestampConverter;
  */
 public final class TraceAnalysisTool { // NOPMD (long class)
 
-	public static final String DATE_FORMAT_PATTERN_CMD_USAGE_HELP = Constants.DATE_FORMAT_PATTERN.replaceAll("'", ""); // only for usage info
+	public static final String DATE_FORMAT_PATTERN_CMD_USAGE_HELP = Constants.DATE_FORMAT_PATTERN.replaceAll("'", "") + " | timestamp"; // only for usage info
 
 	private static final Log LOG = LogFactory.getLog(TraceAnalysisTool.class);
 	private static final String ENCODING = "UTF-8";
@@ -267,16 +267,29 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 			final String ignoreRecordsBeforeTimestampString = this.cmdl.getOptionValue(Constants.CMD_OPT_NAME_IGNOREEXECUTIONSBEFOREDATE, null);
 			final String ignoreRecordsAfterTimestampString = this.cmdl.getOptionValue(Constants.CMD_OPT_NAME_IGNOREEXECUTIONSAFTERDATE, null);
 			if (ignoreRecordsBeforeTimestampString != null) {
-				final Date ignoreBeforeDate = dateFormat.parse(ignoreRecordsBeforeTimestampString);
-				this.ignoreExecutionsBeforeTimestamp = ignoreBeforeDate.getTime() * (1000 * 1000);
-				LOG.info("Ignoring records before " + dateFormat.format(ignoreBeforeDate) + " ("
-						+ this.ignoreExecutionsBeforeTimestamp + ")");
+				long ignoreExecutionsBeforeTimestampTemp;
+				try {
+					ignoreExecutionsBeforeTimestampTemp = Long.parseLong(ignoreRecordsBeforeTimestampString);
+					LOG.info("Ignoring records before " + ignoreExecutionsBeforeTimestampTemp);
+				} catch (final NumberFormatException ex) {
+					final Date ignoreBeforeDate = dateFormat.parse(ignoreRecordsBeforeTimestampString);
+					ignoreExecutionsBeforeTimestampTemp = ignoreBeforeDate.getTime() * (1000 * 1000);
+					LOG.info("Ignoring records before " + dateFormat.format(ignoreBeforeDate) + " (" + ignoreExecutionsBeforeTimestampTemp + ")");
+				}
+				this.ignoreExecutionsBeforeTimestamp = ignoreExecutionsBeforeTimestampTemp;
 			}
 			if (ignoreRecordsAfterTimestampString != null) {
-				final Date ignoreAfterDate = dateFormat.parse(ignoreRecordsAfterTimestampString);
-				this.ignoreExecutionsAfterTimestamp = ignoreAfterDate.getTime() * (1000 * 1000);
-				LOG.info("Ignoring records after " + dateFormat.format(ignoreAfterDate) + " ("
-						+ this.ignoreExecutionsAfterTimestamp + ")");
+				long ignoreExecutionsAfterTimestampTemp;
+				try {
+					ignoreExecutionsAfterTimestampTemp = Long.parseLong(ignoreRecordsAfterTimestampString);
+					LOG.info("Ignoring records after " + ignoreExecutionsAfterTimestampTemp);
+				} catch (final NumberFormatException ex) {
+					final Date ignoreAfterDate = dateFormat.parse(ignoreRecordsAfterTimestampString);
+					ignoreExecutionsAfterTimestampTemp = ignoreAfterDate.getTime() * (1000 * 1000);
+					LOG.info("Ignoring records after " + dateFormat.format(ignoreAfterDate) + " (" + ignoreExecutionsAfterTimestampTemp + ")");
+				}
+				this.ignoreExecutionsAfterTimestamp = ignoreExecutionsAfterTimestampTemp;
+
 			}
 		} catch (final java.text.ParseException ex) {
 			final String errorMsg = "Error parsing date/time string. Please use the following pattern: " + DATE_FORMAT_PATTERN_CMD_USAGE_HELP;
