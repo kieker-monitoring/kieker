@@ -26,8 +26,7 @@ import kieker.tools.opad.record.IForecastMeasurementPair;
 import kieker.tools.opad.record.StorableDetectionResult;
 
 /**
- * This filter calculates the anomaly score from the distance of the forecast and the current value.
- * 
+ * This filter calculates the anomaly score based on the distance between the forecasted and the actual value.
  * 
  * @author Tillmann Carlos Bielefeld
  * 
@@ -40,8 +39,8 @@ public class AnomalyScoreCalculationFilter extends AbstractFilterPlugin {
 	public static final String INPUT_PORT_CURRENT_FORECAST_PAIR = "currentforecast";
 	public static final String OUTPUT_PORT_ANOMALY_SCORE = "anomalyscore";
 
-	public AnomalyScoreCalculationFilter(final Configuration configAnomaly, final IProjectContext projectContext) {
-		super(configAnomaly, projectContext);
+	public AnomalyScoreCalculationFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
 	}
 
 	@Override
@@ -52,17 +51,14 @@ public class AnomalyScoreCalculationFilter extends AbstractFilterPlugin {
 	@InputPort(eventTypes = { IForecastMeasurementPair.class }, name = AnomalyScoreCalculationFilter.INPUT_PORT_CURRENT_FORECAST_PAIR)
 	public void inputForecastAndMeasurement(final IForecastMeasurementPair fmp) {
 		if (null != fmp.getForecasted()) {
-			final double nextpredicted = fmp.getForecasted();
+			final double forecastedValue = fmp.getForecasted();
+			final double actualValue = fmp.getValue();
 
-			final double measuredValue = fmp.getValue();
+			final double difference = forecastedValue - actualValue;
+			final double sum = forecastedValue + actualValue;
+			final double anomalyScore = Math.abs(difference / sum);
 
-			final double difference = nextpredicted - measuredValue;
-			final double sum = nextpredicted + measuredValue;
-
-			final double score = Math.abs(difference / sum);
-
-			final StorableDetectionResult result = new StorableDetectionResult(fmp.getName(), fmp.getValue(), fmp.getTime(), fmp.getForecasted(), score);
-
+			final StorableDetectionResult result = new StorableDetectionResult(fmp.getName(), fmp.getValue(), fmp.getTime(), fmp.getForecasted(), anomalyScore);
 			super.deliver(OUTPUT_PORT_ANOMALY_SCORE, result);
 		}
 	}

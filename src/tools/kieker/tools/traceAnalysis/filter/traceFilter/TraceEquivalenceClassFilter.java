@@ -177,8 +177,10 @@ public class TraceEquivalenceClassFilter extends AbstractExecutionTraceProcessin
 	 */
 	@Override
 	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration();
+		final Configuration configuration = super.getCurrentConfiguration();
+
 		configuration.setProperty(CONFIG_PROPERTY_NAME_EQUIVALENCE_MODE, this.equivalenceMode.toString());
+
 		return configuration;
 	}
 }

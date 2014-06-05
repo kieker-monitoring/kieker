@@ -121,6 +121,7 @@ public class ExecutionContainer implements ISystemModelElement {
 	 * 
 	 * @return The identifier.
 	 */
+	@Override
 	public String getIdentifier() {
 		return this.getName();
 	}

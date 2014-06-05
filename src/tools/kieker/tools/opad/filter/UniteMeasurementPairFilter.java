@@ -62,12 +62,6 @@ public class UniteMeasurementPairFilter extends AbstractFilterPlugin {
 		return new Configuration();
 	}
 
-	/**
-	 * Method that represents the input port for incoming measurements.
-	 * 
-	 * @param input
-	 *            The incoming measurement.
-	 */
 	@InputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = UniteMeasurementPairFilter.INPUT_PORT_NAME_TSPOINT)
 	public void inputTSPoint(final NamedDoubleTimeSeriesPoint input) {
 		if (!this.checkCorrespondingForecast(input)) {
@@ -76,12 +70,6 @@ public class UniteMeasurementPairFilter extends AbstractFilterPlugin {
 		}
 	}
 
-	/**
-	 * Method that represents the input port for incoming forecast.
-	 * 
-	 * @param input
-	 *            The incoming forecast.
-	 */
 	@InputPort(eventTypes = { IForecastMeasurementPair.class }, name = UniteMeasurementPairFilter.INPUT_PORT_NAME_FORECAST)
 	public void inputForecastValue(final IForecastMeasurementPair input) {
 		final NamedDoubleTimeSeriesPoint pointFromForecast = new NamedDoubleTimeSeriesPoint(input.getTime(), input.getForecasted(), input.getName());

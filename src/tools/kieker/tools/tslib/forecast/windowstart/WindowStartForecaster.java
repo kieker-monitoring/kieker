@@ -23,13 +23,14 @@ import kieker.tools.tslib.forecast.ForecastResult;
 import kieker.tools.tslib.forecast.IForecastResult;
 
 /**
- * This forecaster uses the start of its timeseries window.
- * When defining a window length of e.g. a day, it gives the value of yesterday at the same time.
- * It can also be used for weeks, months, ... and ever other periodicity.
+ * This forecaster uses the start of its timeseries window.<br/>
+ * 
+ * When defining a window length of e.g. a day, it gives the value of yesterday at the same time. It can also be used for weeks, months, ... and ever other
+ * periodicity.
  * 
  * @author Tillmann Carlos Bielefeld
- * @since 1.9
  * 
+ * @since 1.9
  */
 public class WindowStartForecaster extends AbstractForecaster<Double> {
 
@@ -37,6 +38,7 @@ public class WindowStartForecaster extends AbstractForecaster<Double> {
 		super(historyTimeseries);
 	}
 
+	@Override
 	public IForecastResult<Double> forecast(final int numForecastSteps) {
 		final ITimeSeries<Double> history = this.getTsOriginal();
 		final ITimeSeries<Double> tsFC = this.prepareForecastTS();

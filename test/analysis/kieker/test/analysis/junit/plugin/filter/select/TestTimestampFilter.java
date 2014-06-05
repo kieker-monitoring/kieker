@@ -47,18 +47,22 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 	private static final AbstractTraceEvent EVENT = new AbstractTraceEvent(34556L, 324440L, 0) {
 		private static final long serialVersionUID = 1L;
 
+		@Override
 		public Object[] toArray() {
 			return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), };
 		}
 
+		@Override
 		public Class<?>[] getValueTypes() {
 			return new Class<?>[] { long.class, long.class, int.class, };
 		}
 
+		@Override
 		public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 			// not used here
 		}
 
+		@Override
 		public int getSize() {
 			return 8 + 8 + 4;
 		}

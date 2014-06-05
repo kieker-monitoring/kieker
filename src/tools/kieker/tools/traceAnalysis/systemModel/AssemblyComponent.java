@@ -85,6 +85,7 @@ public class AssemblyComponent implements ISystemModelElement {
 		return false;
 	}
 
+	@Override
 	public String getIdentifier() {
 		if (this.getType() == null) {
 			return this.getName();

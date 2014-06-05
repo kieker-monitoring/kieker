@@ -94,6 +94,7 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
 		final Class<? extends IMonitoringRecord> recordClass = record.getClass();
 		final String recordClassName = recordClass.getSimpleName();
@@ -149,6 +150,7 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void terminate() {
 		try {
 			// close all prepared statements

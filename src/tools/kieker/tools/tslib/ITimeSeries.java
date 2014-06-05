@@ -25,6 +25,7 @@ import java.util.concurrent.TimeUnit;
  * @since 1.9
  * 
  * @param <T>
+ *            The type of the series.
  */
 public interface ITimeSeries<T> {
 
@@ -85,6 +86,7 @@ public interface ITimeSeries<T> {
 	 * Returns the maximum number of elements held in this time series.
 	 * 
 	 * @return the capacity; {@link #INFINITE_CAPACITY} if the capacity is infinite
+	 * 
 	 * @since 1.9
 	 */
 	public int getCapacity();

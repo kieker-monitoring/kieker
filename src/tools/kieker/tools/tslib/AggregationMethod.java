@@ -19,12 +19,12 @@ package kieker.tools.tslib;
 import org.apache.commons.math.stat.StatUtils;
 
 /**
- * 
  * @author Tom Frotscher
- * @since 1.9
  * 
+ * @since 1.9
  */
 public enum AggregationMethod {
+
 	GEOMETRIC_MEAN, MAX, MEAN, MIN, PERCENTILE90, PERCENTILE95, PRODUCT, SUM, SUMLOG, SUMSQ, VARIANCE;
 
 	/**

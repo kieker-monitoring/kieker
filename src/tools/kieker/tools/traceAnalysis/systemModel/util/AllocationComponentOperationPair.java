@@ -66,6 +66,7 @@ public class AllocationComponentOperationPair implements ISystemModelElement {
 		return +this.allocationComponent.getId() + ":" + this.operation.getId() + "@" + this.id;
 	}
 
+	@Override
 	public String getIdentifier() {
 		return this.getAllocationComponent().getIdentifier();
 	}

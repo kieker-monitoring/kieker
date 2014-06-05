@@ -113,7 +113,7 @@ public class ForecastingFilter extends AbstractFilterPlugin {
 		final ITimeSeries<Double> actualWindow = this.applicationForecastingWindow.get(windowName);
 		actualWindow.append(input.getValue());
 
-		final IForecaster<Double> forecaster = this.forecastMethod.getForecaster(actualWindow);
+		final IForecaster<Double> forecaster = this.forecastMethod.createForecaster(actualWindow);
 		final IForecastResult<Double> result = forecaster.forecast(1);
 
 		super.deliver(OUTPUT_PORT_NAME_FORECAST, result);

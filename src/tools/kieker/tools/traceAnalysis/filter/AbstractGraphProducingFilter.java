@@ -62,14 +62,6 @@ public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?,
 	}
 
 	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Configuration getCurrentConfiguration() {
-		return this.configuration;
-	}
-
-	/**
 	 * Returns this filter's configuration name.
 	 * 
 	 * @return See above
@@ -83,6 +75,7 @@ public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?,
 		}
 	}
 
+	@Override
 	public String getGraphOutputPortName() {
 		return OUTPUT_PORT_NAME_GRAPH;
 	}
@@ -100,6 +93,7 @@ public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?,
 		return this.originRetentionPolicy;
 	}
 
+	@Override
 	public void requestOriginRetentionPolicy(final IOriginRetentionPolicy policy) throws AnalysisConfigurationException {
 		if (!this.originRetentionPolicy.isCompatibleWith(policy)) {
 			throw new AnalysisConfigurationException(String.format(INCOMPATIBLE_RETENTION_ERROR_TEMPLATE, this, this.originRetentionPolicy, policy));

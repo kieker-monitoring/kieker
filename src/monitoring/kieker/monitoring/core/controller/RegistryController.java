@@ -67,6 +67,7 @@ public final class RegistryController extends AbstractController implements IReg
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final int getUniqueIdForString(final String string) {
 		return this.stringRegistry.get(string);
 	}
@@ -74,6 +75,7 @@ public final class RegistryController extends AbstractController implements IReg
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getStringForUniqueId(final int id) {
 		return this.stringRegistry.get(id);
 	}
@@ -81,6 +83,7 @@ public final class RegistryController extends AbstractController implements IReg
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public IRegistry<String> getStringRegistry() {
 		return this.stringRegistry;
 	}

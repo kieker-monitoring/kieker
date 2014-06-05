@@ -38,6 +38,7 @@ public interface IMonitoringController extends
 	 * 
 	 * @since 1.3
 	 */
+	@Override
 	public String toString();
 
 	/**

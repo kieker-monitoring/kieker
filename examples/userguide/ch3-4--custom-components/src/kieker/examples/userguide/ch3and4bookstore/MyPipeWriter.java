@@ -34,6 +34,7 @@ public class MyPipeWriter extends AbstractMonitoringWriter {
 				configuration.getStringProperty(CONFIG_PROPERTY_NAME_PIPE_NAME);
 	}
 
+	@Override
 	public boolean newMonitoringRecord(final IMonitoringRecord record) {
 		try {
 			// Just write the content of the record into the pipe.
@@ -57,6 +58,7 @@ public class MyPipeWriter extends AbstractMonitoringWriter {
 		this.pipe = MyNamedPipeManager.getInstance().acquirePipe(this.pipeName);
 	}
 
+	@Override
 	public void terminate() {
 		// nothing to do
 	}

@@ -20,6 +20,7 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Properties;
+import java.util.Set;
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -297,11 +298,8 @@ public final class Configuration extends Properties {
 	 */
 	public final Configuration getPropertiesStartingWith(final String prefix) {
 		final Configuration configuration = new Configuration(null);
-		// for Java 1.6 simply (also adjust below)
-		// final Set<String> keys = this.stringPropertyNames();
-		final Enumeration<?> keys = this.propertyNames();
-		while (keys.hasMoreElements()) {
-			final String property = (String) keys.nextElement();
+		final Set<String> keys = this.stringPropertyNames();
+		for (final String property : keys) {
 			if (property.startsWith(prefix)) {
 				configuration.setProperty(property, super.getProperty(property));
 			}
@@ -319,11 +317,8 @@ public final class Configuration extends Properties {
 	 */
 	public final Configuration flatten(final Configuration defaultConfiguration) {
 		final Configuration configuration = new Configuration(defaultConfiguration);
-		// for Java 1.6 simply (also adjust below)
-		// final Set<String> keys = this.stringPropertyNames();
-		final Enumeration<?> keys = this.propertyNames();
-		while (keys.hasMoreElements()) {
-			final String property = (String) keys.nextElement();
+		final Set<String> keys = this.stringPropertyNames();
+		for (final String property : keys) {
 			configuration.setProperty(property, super.getProperty(property));
 		}
 		return configuration;

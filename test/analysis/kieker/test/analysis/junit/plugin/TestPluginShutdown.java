@@ -244,6 +244,7 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public void terminate(final boolean error) {
 			this.shutdownNr = SHUTDOWNORDER.getAndIncrement();
 		}
@@ -259,6 +260,7 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean read() {
 			// don't send anything (else we would fail in loop!)
 			// super.deliver(OUTPUT_PORT_NAME, new Object());

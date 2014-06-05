@@ -69,6 +69,7 @@ public class ContainerDependencyGraphFormatter extends AbstractDependencyGraphFo
 			super(builder, includeWeights, plotLoops, useShortLabels);
 		}
 
+		@Override
 		public void visitVertex(final DependencyGraphNode<ExecutionContainer> vertex) {
 			final ExecutionContainer container = vertex.getEntity();
 

@@ -69,7 +69,8 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 		},
 		configuration = {
 			@Property(name = TraceEventRecords2ExecutionAndMessageTraceFilter.CONFIG_ENHANCE_JAVA_CONSTRUCTORS, defaultValue = "true"),
-			@Property(name = TraceEventRecords2ExecutionAndMessageTraceFilter.CONFIG_ENHANCE_CALL_DETECTION, defaultValue = "true")
+			@Property(name = TraceEventRecords2ExecutionAndMessageTraceFilter.CONFIG_ENHANCE_CALL_DETECTION, defaultValue = "true"),
+			@Property(name = TraceEventRecords2ExecutionAndMessageTraceFilter.CONFIG_IGNORE_ASSUMED, defaultValue = "false")
 		})
 public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTraceProcessingFilter {
 
@@ -83,11 +84,14 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 	/** This is the name of the output port delivering invalid traces. */
 	public static final String OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE = "invalidTrace";
 
+	public static final String CONFIG_IGNORE_ASSUMED = "ignoreAssumed";
+
 	public static final String CONFIG_ENHANCE_JAVA_CONSTRUCTORS = "enhanceJavaConstructors";
 	public static final String CONFIG_ENHANCE_CALL_DETECTION = "enhanceCallDetection";
 
 	private final boolean enhanceJavaConstructors;
 	private final boolean enhanceCallDetection;
+	private final boolean ignoreAssumedCalls;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -102,6 +106,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 
 		this.enhanceJavaConstructors = configuration.getBooleanProperty(CONFIG_ENHANCE_JAVA_CONSTRUCTORS);
 		this.enhanceCallDetection = configuration.getBooleanProperty(CONFIG_ENHANCE_CALL_DETECTION);
+		this.ignoreAssumedCalls = configuration.getBooleanProperty(CONFIG_IGNORE_ASSUMED);
 	}
 
 	/**
@@ -109,9 +114,12 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 	 */
 	@Override
 	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration();
+		final Configuration configuration = super.getCurrentConfiguration();
+
 		configuration.setProperty(CONFIG_ENHANCE_JAVA_CONSTRUCTORS, String.valueOf(this.enhanceJavaConstructors));
 		configuration.setProperty(CONFIG_ENHANCE_CALL_DETECTION, String.valueOf(this.enhanceCallDetection));
+		configuration.setProperty(CONFIG_IGNORE_ASSUMED, String.valueOf(this.ignoreAssumedCalls));
+
 		return configuration;
 	}
 
@@ -131,7 +139,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 		final long traceId = trace.getTraceId();
 		final ExecutionTrace executionTrace = new ExecutionTrace(traceId, trace.getSessionId());
 		final TraceEventRecordHandler traceEventRecordHandler = new TraceEventRecordHandler(trace, executionTrace, this.getSystemEntityFactory(),
-				this.enhanceJavaConstructors, this.enhanceCallDetection);
+				this.enhanceJavaConstructors, this.enhanceCallDetection, this.ignoreAssumedCalls);
 		int expectedOrderIndex = -1;
 		for (final AbstractTraceEvent event : traceEventRecords.getTraceEvents()) {
 			expectedOrderIndex += 1; // increment in each iteration -> 0 is the first real value
@@ -143,24 +151,28 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 				this.log.error("Found event with wrong traceId. Found: " + event.getTraceId() + " expected: " + traceId);
 				continue; // simply ignore wrong event
 			}
-			try { // handle all cases
-				if (BeforeOperationEvent.class.equals(event.getClass())) {
-					traceEventRecordHandler.handleBeforeOperationEvent((BeforeOperationEvent) event);
-				} else if (AfterOperationEvent.class.equals(event.getClass())) {
-					traceEventRecordHandler.handleAfterOperationEvent((AfterOperationEvent) event);
-				} else if (AfterOperationFailedEvent.class.equals(event.getClass())) {
-					traceEventRecordHandler.handleAfterOperationFailedEvent((AfterOperationFailedEvent) event);
-				} else if (BeforeConstructorEvent.class.equals(event.getClass())) {
+			try { // handle all cases (more specific classes should be handled before less specific ones)
+					// Before Events
+				if (BeforeConstructorEvent.class.isAssignableFrom(event.getClass())) {
 					traceEventRecordHandler.handleBeforeConstructorEvent((BeforeConstructorEvent) event);
-				} else if (AfterConstructorEvent.class.equals(event.getClass())) {
-					traceEventRecordHandler.handleAfterConstructorEvent((AfterConstructorEvent) event);
-				} else if (AfterConstructorFailedEvent.class.equals(event.getClass())) {
+				} else if (BeforeOperationEvent.class.isAssignableFrom(event.getClass())) {
+					traceEventRecordHandler.handleBeforeOperationEvent((BeforeOperationEvent) event);
+					// After Events
+				} else if (AfterConstructorFailedEvent.class.isAssignableFrom(event.getClass())) {
 					traceEventRecordHandler.handleAfterConstructorFailedEvent((AfterConstructorFailedEvent) event);
-				} else if (CallOperationEvent.class.equals(event.getClass())) {
-					traceEventRecordHandler.handleCallOperationEvent((CallOperationEvent) event);
-				} else if (CallConstructorEvent.class.equals(event.getClass())) {
+				} else if (AfterOperationFailedEvent.class.isAssignableFrom(event.getClass())) {
+					traceEventRecordHandler.handleAfterOperationFailedEvent((AfterOperationFailedEvent) event);
+				} else if (AfterConstructorEvent.class.isAssignableFrom(event.getClass())) {
+					traceEventRecordHandler.handleAfterConstructorEvent((AfterConstructorEvent) event);
+				} else if (AfterOperationEvent.class.isAssignableFrom(event.getClass())) {
+					traceEventRecordHandler.handleAfterOperationEvent((AfterOperationEvent) event);
+					// CallOperation Events
+				} else if (CallConstructorEvent.class.isAssignableFrom(event.getClass())) {
 					traceEventRecordHandler.handleCallConstructorEvent((CallConstructorEvent) event);
-				} else if (SplitEvent.class.equals(event.getClass())) {
+				} else if (CallOperationEvent.class.isAssignableFrom(event.getClass())) {
+					traceEventRecordHandler.handleCallOperationEvent((CallOperationEvent) event);
+					// SplitEvent
+				} else if (SplitEvent.class.isAssignableFrom(event.getClass())) {
 					this.log.warn("Events of type 'SplitEvent' are currently not handled and ignored.");
 				} else {
 					this.log.warn("Events of type '" + event.getClass().getName() + "' are currently not handled and ignored.");
@@ -204,14 +216,16 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 		private final boolean enhanceCallDetection;
 
 		private int orderindex;
+		private final boolean ignoreAssumedCalls;
 
 		public TraceEventRecordHandler(final TraceMetadata trace, final ExecutionTrace executionTrace, final SystemModelRepository systemModelRepository,
-				final boolean enhanceJavaConstructors, final boolean enhanceCallDetection) {
+				final boolean enhanceJavaConstructors, final boolean enhanceCallDetection, final boolean ignoreAssumedCalls) {
 			this.trace = trace;
 			this.executionTrace = executionTrace;
 			this.systemModelRepository = systemModelRepository;
 			this.enhanceJavaConstructors = enhanceJavaConstructors;
 			this.enhanceCallDetection = enhanceCallDetection;
+			this.ignoreAssumedCalls = ignoreAssumedCalls;
 		}
 
 		/**
@@ -242,7 +256,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 								executionInformation.getEss(),
 								currentEvent.getTimestamp(),
 								lastTimeStamp,
-								true, currentEvent instanceof CallConstructorEvent);
+								!this.ignoreAssumedCalls, currentEvent instanceof CallConstructorEvent);
 					} else {
 						throw new InvalidTraceException("Only CallOperationEvents are expected to be remaining, but found: "
 								+ currentEvent.getClass().getSimpleName());
@@ -328,7 +342,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 								executionInformation.getEss(),
 								currentCallEvent.getTimestamp(),
 								lastEvent.getTimestamp(),
-								true, currentCallEvent instanceof CallConstructorEvent);
+								!this.ignoreAssumedCalls,
+								currentCallEvent instanceof CallConstructorEvent);
 					}
 					return;
 				}
@@ -360,7 +375,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 
 		private boolean isPrevEventMatchingCall(final BeforeOperationEvent beforeOperationEvent, final AbstractTraceEvent prevEvent,
 				final Class<? extends CallOperationEvent> callClass) {
-			if ((prevEvent != null) && prevEvent.getClass().equals(callClass) && (prevEvent.getOrderIndex() == (beforeOperationEvent.getOrderIndex() - 1))) {
+			if ((prevEvent != null) && callClass.isAssignableFrom(prevEvent.getClass()) && (prevEvent.getOrderIndex() == (beforeOperationEvent.getOrderIndex() - 1))) {
 				if (((CallOperationEvent) prevEvent).callsReferencedOperationOf(beforeOperationEvent)) {
 					return true;
 				} else if (this.enhanceCallDetection) { // perhaps we don't find a perfect match, but can guess one!
@@ -389,7 +404,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 			// Obtain the matching before-operation event from the stack
 			final AbstractTraceEvent potentialBeforeEvent = this.peekEvent();
 			// The element at the top of the stack needs to be a before-operation event...
-			if ((potentialBeforeEvent == null) || !potentialBeforeEvent.getClass().equals(beforeClass)) {
+			if ((potentialBeforeEvent == null) || !beforeClass.isAssignableFrom(potentialBeforeEvent.getClass())) {
 				throw new InvalidTraceException("Didn't find corresponding "
 						+ beforeClass.getName() + " for " + afterOperationEvent.getClass().getName() + " "
 						+ afterOperationEvent.toString() + " (found: " + potentialBeforeEvent + ").");
@@ -419,7 +434,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 					executionInformation.getEss(),
 					beforeOperationEvent.getTimestamp(),
 					afterOperationEvent.getTimestamp(),
-					!definiteCall, beforeOperationEvent instanceof BeforeConstructorEvent);
+					!(definiteCall || this.ignoreAssumedCalls),
+					beforeOperationEvent instanceof BeforeConstructorEvent);
 		}
 
 		public void handleAfterOperationEvent(final AfterOperationEvent afterOperationEvent) throws InvalidTraceException {

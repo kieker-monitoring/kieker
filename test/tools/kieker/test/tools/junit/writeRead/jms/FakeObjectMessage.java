@@ -45,6 +45,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void acknowledge() throws JMSException {
 		// No code necessary
 	}
@@ -52,6 +53,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void clearBody() throws JMSException {
 		// No code necessary
 	}
@@ -59,6 +61,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void clearProperties() throws JMSException {
 		// No code necessary
 	}
@@ -66,6 +69,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean getBooleanProperty(final String arg0) throws JMSException {
 		return false;
 	}
@@ -73,6 +77,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public byte getByteProperty(final String arg0) throws JMSException {
 		return 0;
 	}
@@ -80,6 +85,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public double getDoubleProperty(final String arg0) throws JMSException {
 		return 0;
 	}
@@ -87,6 +93,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public float getFloatProperty(final String arg0) throws JMSException {
 		return 0;
 	}
@@ -94,6 +101,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getIntProperty(final String arg0) throws JMSException {
 		return 0;
 	}
@@ -101,6 +109,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getJMSCorrelationID() throws JMSException {
 		return null;
 	}
@@ -108,6 +117,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public byte[] getJMSCorrelationIDAsBytes() throws JMSException {
 		return new byte[0];
 	}
@@ -115,6 +125,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getJMSDeliveryMode() throws JMSException {
 		return 0;
 	}
@@ -122,6 +133,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Destination getJMSDestination() throws JMSException {
 		return null;
 	}
@@ -129,6 +141,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public long getJMSExpiration() throws JMSException {
 		return 0;
 	}
@@ -136,6 +149,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getJMSMessageID() throws JMSException {
 		return null;
 	}
@@ -143,6 +157,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getJMSPriority() throws JMSException {
 		return 0;
 	}
@@ -150,6 +165,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean getJMSRedelivered() throws JMSException { // NOPMD (get -> is)
 		return false;
 	}
@@ -157,6 +173,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Destination getJMSReplyTo() throws JMSException {
 		return null;
 	}
@@ -164,6 +181,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public long getJMSTimestamp() throws JMSException {
 		return 0;
 	}
@@ -171,6 +189,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getJMSType() throws JMSException {
 		return null;
 	}
@@ -178,6 +197,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public long getLongProperty(final String arg0) throws JMSException {
 		return 0;
 	}
@@ -185,6 +205,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object getObjectProperty(final String arg0) throws JMSException {
 		return null;
 	}
@@ -192,6 +213,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	@SuppressWarnings("rawtypes")
 	public Enumeration getPropertyNames() throws JMSException {
 		return null;
@@ -200,6 +222,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public short getShortProperty(final String arg0) throws JMSException { // NOPMD (no short)
 		return 0;
 	}
@@ -207,6 +230,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getStringProperty(final String arg0) throws JMSException {
 		return null;
 	}
@@ -214,6 +238,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean propertyExists(final String arg0) throws JMSException {
 		return false;
 	}
@@ -221,6 +246,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setBooleanProperty(final String arg0, final boolean arg1) throws JMSException {
 		// No code necessary
 	}
@@ -228,6 +254,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setByteProperty(final String arg0, final byte arg1) throws JMSException {
 		// No code necessary
 	}
@@ -235,6 +262,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setDoubleProperty(final String arg0, final double arg1) throws JMSException {
 		// No code necessary
 	}
@@ -242,6 +270,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setFloatProperty(final String arg0, final float arg1) throws JMSException {
 		// No code necessary
 	}
@@ -249,6 +278,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setIntProperty(final String arg0, final int arg1) throws JMSException {
 		// No code necessary
 	}
@@ -256,6 +286,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setJMSCorrelationID(final String arg0) throws JMSException {
 		// No code necessary
 	}
@@ -263,6 +294,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setJMSCorrelationIDAsBytes(final byte[] arg0) throws JMSException {
 		// No code necessary
 	}
@@ -270,6 +302,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setJMSDeliveryMode(final int arg0) throws JMSException {
 		// No code necessary
 	}
@@ -277,6 +310,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setJMSDestination(final Destination arg0) throws JMSException {
 		// No code necessary
 	}
@@ -284,6 +318,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setJMSExpiration(final long arg0) throws JMSException {
 		// No code necessary
 	}
@@ -291,6 +326,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setJMSMessageID(final String arg0) throws JMSException {
 		// No code necessary
 	}
@@ -298,6 +334,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setJMSPriority(final int arg0) throws JMSException {
 		// No code necessary
 	}
@@ -305,6 +342,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setJMSRedelivered(final boolean arg0) throws JMSException {
 		// No code necessary
 	}
@@ -312,6 +350,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setJMSReplyTo(final Destination arg0) throws JMSException {
 		// No code necessary
 	}
@@ -319,6 +358,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setJMSTimestamp(final long arg0) throws JMSException {
 		// No code necessary
 	}
@@ -326,6 +366,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setJMSType(final String arg0) throws JMSException {
 		// No code necessary
 	}
@@ -333,6 +374,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setLongProperty(final String arg0, final long arg1) throws JMSException {
 		// No code necessary
 	}
@@ -340,6 +382,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setObjectProperty(final String arg0, final Object arg1) throws JMSException {
 		// No code necessary
 	}
@@ -347,6 +390,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setShortProperty(final String arg0, final short arg1) throws JMSException { // NOPMD (no short)
 		// No code necessary
 	}
@@ -354,6 +398,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setStringProperty(final String arg0, final String arg1) throws JMSException {
 		// No code necessary
 	}
@@ -361,6 +406,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Serializable getObject() throws JMSException {
 		return this.object;
 	}
@@ -368,6 +414,7 @@ public class FakeObjectMessage implements ObjectMessage {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setObject(final Serializable object) throws JMSException {
 		this.object = object;
 	}

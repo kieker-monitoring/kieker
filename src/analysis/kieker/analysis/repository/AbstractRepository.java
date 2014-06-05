@@ -74,6 +74,7 @@ public abstract class AbstractRepository extends AbstractAnalysisComponent imple
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final String getRepositoryName() {
 		final String repositoryName = this.getClass().getAnnotation(Repository.class).name();
 		if (repositoryName.equals(Repository.NO_NAME)) {
@@ -86,6 +87,7 @@ public abstract class AbstractRepository extends AbstractAnalysisComponent imple
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final String getRepositoryDescription() {
 		return this.getClass().getAnnotation(Repository.class).description();
 	}

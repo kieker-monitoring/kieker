@@ -54,7 +54,7 @@ public class TestTCPSingleServerConnector extends AbstractConnectorTest {
 		// test the connector
 		this.setConnector(new TCPSingleServerConnector(configuration, this.createLookupEntityMap()));
 		this.initialize();
-		this.deserialize(ConfigurationParameters.SEND_NUMBER_OF_RECORDS);
+		this.deserialize(ConfigurationParameters.SEND_NUMBER_OF_RECORDS, true);
 		this.close(ConfigurationParameters.SEND_NUMBER_OF_RECORDS);
 	}
 }

@@ -41,6 +41,7 @@ public class LogImplSLF4JLogging implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean isDebugEnabled() {
 		return this.log.isDebugEnabled();
 	}
@@ -48,6 +49,7 @@ public class LogImplSLF4JLogging implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void debug(final String message) {
 		this.log.debug(message);
 	}
@@ -55,6 +57,7 @@ public class LogImplSLF4JLogging implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void debug(final String message, final Throwable t) {
 		this.log.debug(message, t);
 	}
@@ -62,6 +65,7 @@ public class LogImplSLF4JLogging implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void info(final String message) {
 		this.log.info(message);
 	}
@@ -69,6 +73,7 @@ public class LogImplSLF4JLogging implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void info(final String message, final Throwable t) {
 		this.log.info(message, t);
 	}
@@ -76,6 +81,7 @@ public class LogImplSLF4JLogging implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void warn(final String message) {
 		this.log.warn(message);
 	}
@@ -83,6 +89,7 @@ public class LogImplSLF4JLogging implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void warn(final String message, final Throwable t) {
 		this.log.warn(message, t);
 	}
@@ -90,6 +97,7 @@ public class LogImplSLF4JLogging implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void error(final String message) {
 		this.log.error(message);
 	}
@@ -97,6 +105,7 @@ public class LogImplSLF4JLogging implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void error(final String message, final Throwable t) {
 		this.log.error(message, t);
 	}

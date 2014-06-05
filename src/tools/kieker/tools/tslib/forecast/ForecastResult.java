@@ -22,8 +22,11 @@ import kieker.tools.tslib.ITimeSeries;
  * Result of a time series forecast, e.g., computed by {@link IForecaster}. If additional fields are required, {@link IForecaster}s should extend this class.
  * 
  * @author Andre van Hoorn
+ * 
  * @since 1.9
+ * 
  * @param <T>
+ *            The type of the forecast result.
  */
 public class ForecastResult<T> implements IForecastResult<T> {
 
@@ -54,22 +57,27 @@ public class ForecastResult<T> implements IForecastResult<T> {
 		this(tsForecast, tsOriginal, 0, tsForecast, tsForecast); // tsForecast also lower/upper
 	}
 
+	@Override
 	public ITimeSeries<T> getForecast() {
 		return this.tsForecast;
 	}
 
+	@Override
 	public int getConfidenceLevel() {
 		return this.confidenceLevel;
 	}
 
+	@Override
 	public ITimeSeries<T> getUpper() {
 		return this.tsUpper;
 	}
 
+	@Override
 	public ITimeSeries<T> getLower() {
 		return this.tsLower;
 	}
 
+	@Override
 	public ITimeSeries<T> getOriginal() {
 		return this.tsOriginal;
 	}

@@ -46,6 +46,7 @@ public class FakeConnection implements Connection {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void close() throws JMSException {
 		// No code necessary
 	}
@@ -53,6 +54,7 @@ public class FakeConnection implements Connection {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public ConnectionConsumer createConnectionConsumer(final Destination arg0, final String arg1, final ServerSessionPool arg2, final int arg3) throws JMSException {
 		return null;
 	}
@@ -60,6 +62,7 @@ public class FakeConnection implements Connection {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public ConnectionConsumer createDurableConnectionConsumer(final Topic arg0, final String arg1, final String arg2, final ServerSessionPool arg3, final int arg4)
 			throws JMSException {
 		return null;
@@ -68,6 +71,7 @@ public class FakeConnection implements Connection {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Session createSession(final boolean arg0, final int arg1) throws JMSException {
 		return new FakeSession();
 	}
@@ -75,6 +79,7 @@ public class FakeConnection implements Connection {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getClientID() throws JMSException {
 		return null;
 	}
@@ -82,6 +87,7 @@ public class FakeConnection implements Connection {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public ExceptionListener getExceptionListener() throws JMSException {
 		return null;
 	}
@@ -89,6 +95,7 @@ public class FakeConnection implements Connection {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public ConnectionMetaData getMetaData() throws JMSException {
 		return null;
 	}
@@ -96,6 +103,7 @@ public class FakeConnection implements Connection {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setClientID(final String arg0) throws JMSException {
 		// No code necessary
 	}
@@ -103,6 +111,7 @@ public class FakeConnection implements Connection {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setExceptionListener(final ExceptionListener arg0) throws JMSException {
 		// No code necessary
 	}
@@ -110,6 +119,7 @@ public class FakeConnection implements Connection {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void start() throws JMSException {
 		// No code necessary
 	}
@@ -117,6 +127,7 @@ public class FakeConnection implements Connection {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void stop() throws JMSException {
 		// No code necessary
 	}

@@ -46,6 +46,7 @@ public class FakeContext implements Context {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object addToEnvironment(final String propName, final Object propVal) throws NamingException {
 		return null;
 	}
@@ -53,6 +54,7 @@ public class FakeContext implements Context {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void bind(final Name name, final Object obj) throws NamingException {
 		// No code necessary
 	}
@@ -60,6 +62,7 @@ public class FakeContext implements Context {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void bind(final String name, final Object obj) throws NamingException {
 		// No code necessary
 	}
@@ -67,6 +70,7 @@ public class FakeContext implements Context {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void close() throws NamingException {
 		// No code necessary
 	}
@@ -74,6 +78,7 @@ public class FakeContext implements Context {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Name composeName(final Name name, final Name prefix) throws NamingException {
 		return null;
 	}
@@ -81,6 +86,7 @@ public class FakeContext implements Context {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String composeName(final String name, final String prefix) throws NamingException {
 		return null;
 	}
@@ -88,6 +94,7 @@ public class FakeContext implements Context {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Context createSubcontext(final Name name) throws NamingException {
 		return null;
 	}
@@ -95,6 +102,7 @@ public class FakeContext implements Context {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Context createSubcontext(final String name) throws NamingException {
 		return null;
 	}
@@ -102,6 +110,7 @@ public class FakeContext implements Context {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void destroySubcontext(final Name name) throws NamingException {
 		// No code necessary
 	}
@@ -109,6 +118,7 @@ public class FakeContext implements Context {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void destroySubcontext(final String name) throws NamingException {
 		// No code necessary
 	}
@@ -116,6 +126,7 @@ public class FakeContext implements Context {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Hashtable<?, ?> getEnvironment() throws NamingException { // NOPMD (Hashtable)
 		return null;
 	}
@@ -123,6 +134,7 @@ public class FakeContext implements Context {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getNameInNamespace() throws NamingException {
 		return null;
 	}
@@ -130,6 +142,7 @@ public class FakeContext implements Context {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public NameParser getNameParser(final Name name) throws NamingException {
 		return null;
 	}
@@ -137,6 +150,7 @@ public class FakeContext implements Context {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public NameParser getNameParser(final String name) throws NamingException {
 		return null;
 	}
@@ -144,6 +158,7 @@ public class FakeContext implements Context {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public NamingEnumeration<NameClassPair> list(final Name name) throws NamingException {
 		return null;
 	}
@@ -151,6 +166,7 @@ public class FakeContext implements Context {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public NamingEnumeration<NameClassPair> list(final String name) throws NamingException {
 		return null;
 	}
@@ -158,6 +174,7 @@ public class FakeContext implements Context {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public NamingEnumeration<Binding> listBindings(final Name name) throws NamingException {
 		return null;
 	}
@@ -165,6 +182,7 @@ public class FakeContext implements Context {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public NamingEnumeration<Binding> listBindings(final String name) throws NamingException {
 		return null;
 	}
@@ -172,6 +190,7 @@ public class FakeContext implements Context {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object lookup(final Name name) throws NamingException {
 		return null;
 	}
@@ -179,6 +198,7 @@ public class FakeContext implements Context {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object lookup(final String name) throws NamingException {
 		if ("ConnectionFactory".equals(name)) {
 			return new FakeConnectionFactory();
@@ -191,6 +211,7 @@ public class FakeContext implements Context {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object lookupLink(final Name name) throws NamingException {
 		return null;
 	}
@@ -198,6 +219,7 @@ public class FakeContext implements Context {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object lookupLink(final String name) throws NamingException {
 		return null;
 	}
@@ -205,6 +227,7 @@ public class FakeContext implements Context {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void rebind(final Name name, final Object obj) throws NamingException {
 		// No code necessary
 	}
@@ -212,6 +235,7 @@ public class FakeContext implements Context {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void rebind(final String name, final Object obj) throws NamingException {
 		// No code necessary
 	}
@@ -219,6 +243,7 @@ public class FakeContext implements Context {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object removeFromEnvironment(final String propName) throws NamingException {
 		return null;
 	}
@@ -226,6 +251,7 @@ public class FakeContext implements Context {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void rename(final Name oldName, final Name newName) throws NamingException {
 		// No code necessary
 	}
@@ -233,6 +259,7 @@ public class FakeContext implements Context {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void rename(final String oldName, final String newName) throws NamingException {
 		// No code necessary
 	}
@@ -240,6 +267,7 @@ public class FakeContext implements Context {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void unbind(final Name name) throws NamingException {
 		// No code necessary
 	}
@@ -247,6 +275,7 @@ public class FakeContext implements Context {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void unbind(final String name) throws NamingException {
 		// No code necessary
 	}

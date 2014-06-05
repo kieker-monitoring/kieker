@@ -49,6 +49,7 @@ public class DummyWriter extends AbstractMonitoringWriter {
 	 * 
 	 * @return True.
 	 */
+	@Override
 	public boolean newMonitoringRecord(final IMonitoringRecord record) {
 		return true; // we don't care about incoming records
 	}
@@ -56,6 +57,7 @@ public class DummyWriter extends AbstractMonitoringWriter {
 	/**
 	 * Terminates the writer.
 	 */
+	@Override
 	public void terminate() {
 		LOG.info(this.getClass().getName() + " shutting down");
 	}

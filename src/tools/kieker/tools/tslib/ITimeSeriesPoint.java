@@ -22,12 +22,17 @@ package kieker.tools.tslib;
  * @since 1.9
  * 
  * @param <T>
+ *            The type of the point.
  */
 public interface ITimeSeriesPoint<T> {
 
-	/** @since 1.9 */
+	/**
+	 * @since 1.9
+	 * */
 	public long getTime();
 
-	/** @since 1.9 */
+	/**
+	 * @since 1.9
+	 */
 	public T getValue();
 }

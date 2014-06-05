@@ -29,12 +29,11 @@ import kieker.tools.tslib.forecast.ForecastResult;
 import kieker.tools.tslib.forecast.IForecastResult;
 
 /**
- * A Java-based time series forecaster which computes a forecast based on the
- * mean value of the historic values.
+ * A Java-based time series forecaster which computes a forecast based on the mean value of the historic values.
  * 
  * @author Andre van Hoorn
- * @since 1.9
  * 
+ * @since 1.9
  */
 public class MeanForecasterJava extends AbstractForecaster<Double> {
 
@@ -42,6 +41,7 @@ public class MeanForecasterJava extends AbstractForecaster<Double> {
 		super(historyTimeseries);
 	}
 
+	@Override
 	public IForecastResult<Double> forecast(final int numForecastSteps) {
 		final ITimeSeries<Double> history = this.getTsOriginal();
 		final ITimeSeries<Double> tsFC = this.prepareForecastTS();
@@ -55,18 +55,20 @@ public class MeanForecasterJava extends AbstractForecaster<Double> {
 
 		tsFC.appendAll(forecastValues);
 
-		// TODO #1217: computer confidence interval and set this value along with upper and lower time series
+		// TODO #1217: compute confidence interval and set this value along with upper and lower time series
 
 		return new ForecastResult<Double>(tsFC, this.getTsOriginal());
 	}
 
 	public static Double[] removeNullValues(final List<Double> allHistory) {
 		final List<Double> newList = new ArrayList<Double>();
+
 		for (final Object obj : allHistory) {
-			if ((null != obj) && (obj instanceof Double)) {
+			if (obj instanceof Double) {
 				newList.add((Double) obj);
 			}
 		}
+
 		return newList.toArray(new Double[newList.size()]);
 	}
 }

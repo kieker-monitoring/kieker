@@ -21,11 +21,16 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.Collection;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -40,8 +45,8 @@ public class WelcomeStep extends AbstractStep {
 
 	private final String currentPath = new File(".").getAbsolutePath();
 
-	private final JLabel welcomeLabel = new JLabel("<html>Welcome to Kieker's Trace Analysis GUI.<br/>This wizard helps you to generate visual representatons "
-			+ "based on trace analysis of your records.<br/><br/>Please specify the input and output directories.</html>");
+	private final JLabel welcomeLabel = new JLabel("<html>Welcome to Kieker's Trace Analysis GUI.<br/>This wizard helps you generating visual representatons "
+			+ "based on a trace analysis of your records.<br/><br/>In this step you choose the input input and output directories.</html>");
 	private final JLabel inputDirectoryLabel = new JLabel("Input Directory: ");
 	private final JLabel outputDirectoryLabel = new JLabel("Output Directory: ");
 	private final JTextField inputDirectoryField = new JTextField(this.currentPath);
@@ -127,11 +132,15 @@ public class WelcomeStep extends AbstractStep {
 		gridBagConstraints.weighty = 1.0;
 		gridBagConstraints.fill = GridBagConstraints.VERTICAL;
 		this.add(this.expandingPanel, gridBagConstraints);
+
+		this.inputDirectoryField.setToolTipText("The input directory contains usually monitoring records for the analysis.");
+		this.outputDirectoryField.setToolTipText("The output directory is used to write the visual representations from the analysis.");
 	}
 
 	private void addLogicToComponents() {
 		this.inputDirectoryChooseButton.addActionListener(new ActionListener() {
 
+			@Override
 			@SuppressWarnings("synthetic-access")
 			public void actionPerformed(final ActionEvent event) {
 				final JFileChooser fileChooser = new JFileChooser(WelcomeStep.this.inputDirectoryField.getText());
@@ -145,6 +154,7 @@ public class WelcomeStep extends AbstractStep {
 
 		this.outputDirectoryChooseButton.addActionListener(new ActionListener() {
 
+			@Override
 			@SuppressWarnings("synthetic-access")
 			public void actionPerformed(final ActionEvent arg0) {
 				final JFileChooser fileChooser = new JFileChooser(WelcomeStep.this.outputDirectoryField.getText());
@@ -158,12 +168,62 @@ public class WelcomeStep extends AbstractStep {
 	}
 
 	@Override
+	public boolean isNextStepAllowed() {
+		final File inputDirectory = new File(this.inputDirectoryField.getText());
+		if (!inputDirectory.isDirectory()) {
+			final int result = JOptionPane.showConfirmDialog(this, "The input directory does not exist. Continue?", "Input Directory",
+					JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+			if (JOptionPane.NO_OPTION == result) {
+				return false;
+			}
+		}
+
+		final File outputDirectory = new File(this.outputDirectoryField.getText());
+		if (outputDirectory.isDirectory()) {
+			return true;
+		} else {
+			final int result = JOptionPane.showConfirmDialog(this, "The output directory does not exist. Create it?", "Create Output Directory",
+					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+			if (JOptionPane.YES_OPTION == result) {
+				return outputDirectory.mkdirs();
+			} else {
+				return false;
+			}
+		}
+	}
+
+	@Override
 	public void addSelectedTraceAnalysisParameters(final Collection<String> parameters) {
 		parameters.add("-i");
 		parameters.add("\"" + this.inputDirectoryField.getText() + "\"");
 
 		parameters.add("-o");
 		parameters.add("\"" + this.outputDirectoryField.getText() + "\"");
+	}
+
+	@Override
+	public void saveCurrentConfiguration(final Writer writer) throws IOException {
+		writer.write(this.inputDirectoryField.getText());
+		writer.write("\n");
+
+		writer.write(this.outputDirectoryField.getText());
+		writer.write("\n");
+	}
+
+	@Override
+	public void loadCurrentConfiguration(final Scanner scanner) throws IOException {
+		try {
+			this.inputDirectoryField.setText(scanner.nextLine());
+			this.outputDirectoryField.setText(scanner.nextLine());
+		} catch (final NoSuchElementException ex) {
+			this.setDefaultValues();
+			throw new IOException(ex);
+		}
+	}
+
+	private void setDefaultValues() {
+		this.inputDirectoryField.setText(this.currentPath);
+		this.outputDirectoryField.setText(this.currentPath);
 	}
 
 }

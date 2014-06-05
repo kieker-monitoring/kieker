@@ -26,23 +26,18 @@ import java.util.concurrent.TimeUnit;
  * @since 1.9
  * 
  * @param <T>
+ *            The type of the time series.
  */
 public class TimeSeries<T> implements ITimeSeries<T> {
+
 	private final long startTime;
 	private long nextTime;
 	private final long deltaTime;
 	private final TimeUnit deltaTimeUnit;
 	private final int capacity;
 	private final TimeSeriesPointsBuffer<ITimeSeriesPoint<T>> points;
-	// approach of avh: private final CopyOnWriteArrayList<ITimeSeriesPoint<T>> points;
 	private long oneStepMillis;
 
-	/**
-	 * @param startTime
-	 * @param deltaTime
-	 * @param deltaTimeUnit
-	 * @param capacity
-	 */
 	public TimeSeries(final long startTime, final long deltaTime, final TimeUnit deltaTimeUnit, final int capacity) {
 		this.startTime = startTime;
 		this.deltaTime = deltaTime;
@@ -51,7 +46,7 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 		this.oneStepMillis = TimeUnit.MILLISECONDS.convert(this.deltaTime, this.deltaTimeUnit);
 
 		if (ITimeSeries.INFINITE_CAPACITY == capacity) {
-			this.points = new TimeSeriesPointsBuffer<ITimeSeriesPoint<T>>(capacity);
+			this.points = new TimeSeriesPointsBuffer<ITimeSeriesPoint<T>>();
 		} else {
 			this.points = new TimeSeriesPointsBuffer<ITimeSeriesPoint<T>>(this.capacity);
 		}
@@ -64,18 +59,22 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 		this(startTime, deltaTime, deltaTimeUnit, ITimeSeries.INFINITE_CAPACITY);
 	}
 
+	@Override
 	public long getStartTime() {
 		return this.startTime;
 	}
 
+	@Override
 	public long getDeltaTime() {
 		return this.deltaTime;
 	}
 
+	@Override
 	public TimeUnit getDeltaTimeUnit() {
 		return this.deltaTimeUnit;
 	}
 
+	@Override
 	public ITimeSeriesPoint<T> append(final T value) {
 		synchronized (this) {
 			final ITimeSeriesPoint<T> point = new TimeSeriesPoint<T>(this.nextTime, value);
@@ -89,10 +88,12 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 		this.nextTime = this.nextTime + this.oneStepMillis;
 	}
 
+	@Override
 	public List<ITimeSeriesPoint<T>> getPoints() {
 		return new ArrayList<ITimeSeriesPoint<T>>(this.points);
 	}
 
+	@Override
 	public List<T> getValues() {
 		final List<ITimeSeriesPoint<T>> pointsCopy = this.getPoints();
 		final List<T> retVals = new ArrayList<T>(pointsCopy.size());
@@ -102,18 +103,22 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 		return retVals;
 	}
 
+	@Override
 	public int getCapacity() {
 		return this.capacity;
 	}
 
+	@Override
 	public int size() {
 		return this.points.getSize();
 	}
 
+	@Override
 	public long getEndTime() {
 		return this.getStartTime() + (this.oneStepMillis * this.size());
 	}
 
+	@Override
 	public List<ITimeSeriesPoint<T>> appendAll(final T[] values) {
 		final List<ITimeSeriesPoint<T>> retVals = new ArrayList<ITimeSeriesPoint<T>>(values.length);
 		for (final T value : values) {

@@ -64,6 +64,7 @@ public class NamedListWriter extends AbstractMonitoringWriter {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean newMonitoringRecord(final IMonitoringRecord record) {
 		synchronized (this.myNamedList) {
 			return this.myNamedList.add(record);
@@ -73,6 +74,7 @@ public class NamedListWriter extends AbstractMonitoringWriter {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void terminate() {
 		// no need to do anything
 	}

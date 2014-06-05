@@ -37,14 +37,17 @@ import kieker.tools.util.CLIHelpFormatter;
 @SuppressWarnings({ "static-access", "static" })
 public final class Constants {
 
+	public static final String CMD_OPT_NAME_VERBOSE = "verbose";
 	/** Command for the input directories containing monitoring records. */
 	public static final String CMD_OPT_NAME_INPUTDIRS = "inputdirs";
 	/** Command for the output directories. */
 	public static final String CMD_OPT_NAME_OUTPUTDIR = "outputdir";
 	public static final String CMD_OPT_NAME_OUTPUTFNPREFIX = "output-filename-prefix";
 	public static final String CMD_OPT_NAME_SELECTTRACES = "select-traces";
+	public static final String CMD_OPT_NAME_FILTERTRACES = "filter-traces";
 	/** Command whether to use short labels or not. */
 	public static final String CMD_OPT_NAME_SHORTLABELS = "short-labels";
+	public static final String CMD_OPT_NAME_IGNORE_ASSUMED = "ignore-assumed-calls";
 	/** Command whether to include self loops or not. */
 	public static final String CMD_OPT_NAME_INCLUDESELFLOOPS = "include-self-loops";
 	/** Command whether to ignore invalid traces or not. */
@@ -160,6 +163,8 @@ public final class Constants {
 				.withDescription("Directory for the generated file(s)").withValueSeparator('=').create("o"));
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_OUTPUTFNPREFIX).withArgName("prefix").hasArg(true).isRequired(false)
 				.withDescription("Prefix for output filenames\n").withValueSeparator('=').create("p"));
+		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_VERBOSE).hasArg(false)
+				.withDescription("Verbosely list used parameters and processed traces").create("v"));
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTALLOCATIONSEQDS).hasArg(false)
 				.withDescription("Generate and store deployment-level sequence diagrams (.pic)").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTASSEMBLYSEQDS).hasArg(false)
@@ -202,6 +207,8 @@ public final class Constants {
 				.withDescription("Output an overview about the assembly-level trace equivalence classes").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_SELECTTRACES).withArgName("id0 ... idn").hasArgs().isRequired(false)
 				.withDescription("Consider only the traces identified by the list of trace IDs. Defaults to all traces.").create());
+		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_FILTERTRACES).withArgName("id0 ... idn").hasArgs().isRequired(false)
+				.withDescription("Consider only the traces not identified by the list of trace IDs. Defaults to no traces.").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_IGNOREINVALIDTRACES).hasArg(false).isRequired(false)
 				.withDescription("If selected, the execution aborts on the occurence of an invalid trace.").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_MAXTRACEDURATION).withArgName("duration in ms").hasArg().isRequired(false)
@@ -216,6 +223,8 @@ public final class Constants {
 				.withDescription("If selected, abbreviated labels (e.g., package names) are used in the visualizations.").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_INCLUDESELFLOOPS).hasArg(false).isRequired(false)
 				.withDescription("If selected, self-loops are included in the visualizations.").create());
+		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_IGNORE_ASSUMED).hasArg(false).isRequired(false)
+				.withDescription("If selected, assumed calls are visualized just as regular calls.").create());
 		SORTED_OPTION_LIST
 				.add(OptionBuilder
 						.withLongOpt(CMD_OPT_NAME_TRACE_COLORING)
@@ -238,6 +247,7 @@ public final class Constants {
 		}
 		CMD_HELP_FORMATTER.setOptionComparator(new Comparator<Object>() {
 
+			@Override
 			public int compare(final Object o1, final Object o2) {
 				if (o1 == o2) {
 					return 0;

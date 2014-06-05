@@ -73,6 +73,7 @@ public class PrintStreamWriter extends AbstractMonitoringWriter {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean newMonitoringRecord(final IMonitoringRecord record) {
 		this.printStream.println(record.getClass().getSimpleName() + ": " + record.toString());
 		return true;
@@ -81,6 +82,7 @@ public class PrintStreamWriter extends AbstractMonitoringWriter {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void terminate() {
 		if ((this.printStream != null) && (this.printStream != System.out) && (this.printStream != System.err)) {
 			this.printStream.close();

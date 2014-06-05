@@ -68,6 +68,7 @@ public interface IPlugin extends IAnalysisComponent {
 	 * 
 	 * @since 1.5
 	 */
+	@Override
 	public abstract Configuration getCurrentConfiguration();
 
 	/**
@@ -95,6 +96,7 @@ public interface IPlugin extends IAnalysisComponent {
 	 * 
 	 * @since 1.5
 	 */
+	@Override
 	public abstract String getName();
 
 	/**

@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -82,6 +83,7 @@ public final class FSZipReader implements Runnable {
 	/**
 	 * Starts reading and returns after each record has been passed to the registered {@link #recordReceiver}.
 	 */
+	@Override
 	public final void run() {
 		ZipInputStream zipInputStream = null;
 		try {
@@ -281,12 +283,7 @@ public final class FSZipReader implements Runnable {
 						} else {
 							skipValues = 2;
 						}
-						// Java 1.5 compatibility
-						final String[] recordFieldsReduced = new String[recordFields.length - skipValues];
-						System.arraycopy(recordFields, skipValues, recordFieldsReduced, 0, recordFields.length - skipValues);
-						record = AbstractMonitoringRecord.createFromStringArray(clazz, recordFieldsReduced);
-						// in Java 1.6 this could be simplified to
-						// record = AbstractMonitoringRecord.createFromStringArray(clazz, Arrays.copyOfRange(recordFields, skipValues, recordFields.length));
+						record = AbstractMonitoringRecord.createFromStringArray(clazz, Arrays.copyOfRange(recordFields, skipValues, recordFields.length));
 						record.setLoggingTimestamp(loggingTimestamp);
 					} else { // legacy record
 						final String[] recordFieldsReduced = new String[recordFields.length - 1];

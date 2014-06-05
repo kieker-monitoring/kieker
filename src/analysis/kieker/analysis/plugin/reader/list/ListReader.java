@@ -101,6 +101,7 @@ public class ListReader<T> extends AbstractReaderPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean read() {
 		for (final T obj : this.objects) {
 			super.deliver(ListReader.OUTPUT_PORT_NAME, obj);
@@ -121,6 +122,7 @@ public class ListReader<T> extends AbstractReaderPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void terminate(final boolean error) {
 		this.terminationLatch.countDown();
 	}

@@ -209,6 +209,7 @@ public final class KaxViz extends JFrame {
 
 		// repaint fix
 		this.graph.addListener(mxEvent.CELLS_MOVED, new mxIEventListener() {
+			@Override
 			public void invoke(final Object sender, final mxEventObject evt) {
 				KaxViz.this.graph.repaint();
 			}

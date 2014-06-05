@@ -26,12 +26,12 @@ import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.ConnectorProperty;
 
 /**
- * a yes broken JMSClient with an embedded JMS server.
+ * JMSClient with an embedded JMS server.
  * 
  * @author Reiner Jung
  * @since 1.8
  */
-@ConnectorProperty(cmdName = "jms-embedded", name = "JMS Client Connector + Queue", description = "JMS Client to receive records from a build in JMS queue.")
+@ConnectorProperty(cmdName = "jms-embedded", name = "JMS Embedded Connector", description = "JMS Client to receive records from a built-in JMS queue.")
 public class JMSEmbeddedConnector extends JMSClientConnector {
 
 	/** Property name for the configuration property for the port of the embedded JMS server. */
@@ -69,7 +69,7 @@ public class JMSEmbeddedConnector extends JMSClientConnector {
 			this.broker.addConnector("tcp://localhost:" + this.port);
 			this.broker.start();
 			super.initialize();
-			// Exception cannot be avoided as the broker actually throws this.
+			// Cannot be avoided as the broker throws Exception.
 		} catch (final Exception e) { // NOCS, NOPMD
 			throw new ConnectorDataTransmissionException(e.getMessage(), e);
 		}
@@ -85,7 +85,7 @@ public class JMSEmbeddedConnector extends JMSClientConnector {
 		try {
 			super.close();
 			this.broker.stop();
-			// Exception cannot be avoided as the broker actually throws this.
+			// Cannot be avoided as the broker throws Exception.
 		} catch (final Exception e) { // NOCS, NOPMD
 			throw new ConnectorDataTransmissionException(e.getMessage(), e);
 		}

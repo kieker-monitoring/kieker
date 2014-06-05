@@ -69,7 +69,7 @@
 	</Match>
 
 	<Match>
-		<Class name="kieker.analysis.plugin.filter.forward.StringBufferFilter$Segment" />
+		<Class name="kieker.analysis.plugin.filter.forward.util.KiekerHashMap$Segment" />
 		<Bug pattern="SE_BAD_FIELD" />
 	</Match>
 

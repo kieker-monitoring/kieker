@@ -164,6 +164,7 @@ public class OperationAssemblyDependencyGraphFormatter extends AbstractOperation
 			super(builder, includeWeights, plotLoops, useShortLabels);
 		}
 
+		@Override
 		public void visitVertex(final DependencyGraphNode<AssemblyComponentOperationPair> vertex) {
 			// Do nothing
 		}

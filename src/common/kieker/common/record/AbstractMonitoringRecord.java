@@ -65,10 +65,12 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		CACHED_KIEKERRECORDS.put("kieker.common.record.flow.trace.Trace", kieker.common.record.flow.trace.TraceMetadata.class);
 	}
 
+	@Override
 	public final long getLoggingTimestamp() {
 		return this.loggingTimestamp;
 	}
 
+	@Override
 	public final void setLoggingTimestamp(final long timestamp) {
 		this.loggingTimestamp = timestamp;
 	}
@@ -98,6 +100,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	 * 
 	 * @return -1 if this object is less than, +1 if it is greater than or 0 if it is equal to the specified record.
 	 */
+	@Override
 	public int compareTo(final IMonitoringRecord otherRecord) {
 		final long timedifference = this.loggingTimestamp - otherRecord.getLoggingTimestamp();
 		if (timedifference < 0L) {

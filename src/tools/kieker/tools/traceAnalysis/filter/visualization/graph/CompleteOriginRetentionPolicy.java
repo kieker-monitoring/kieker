@@ -32,10 +32,12 @@ public final class CompleteOriginRetentionPolicy extends AbstractOriginRetention
 		super(OriginRetentionPolicyKind.ALL);
 	}
 
+	@Override
 	public IOriginRetentionPolicy uniteWith(final IOriginRetentionPolicy other) {
 		return this;
 	}
 
+	@Override
 	public <T> void handleOrigin(final AbstractGraphElement<T> element, final T origin) {
 		element.addOrigin(origin);
 	}

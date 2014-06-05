@@ -23,15 +23,15 @@ import kieker.tools.tslib.forecast.mean.MeanForecasterJava;
 import kieker.tools.tslib.forecast.windowstart.WindowStartForecaster;
 
 /**
- * 
  * @author Andre van Hoorn, Tillmann Carlos Bielefeld
- * @since 1.9
  * 
+ * @since 1.9
  */
 public enum ForecastMethod {
+
 	MEAN, SES, WINDOWSTART;
 
-	public IForecaster<Double> getForecaster(final ITimeSeries<Double> history) {
+	public IForecaster<Double> createForecaster(final ITimeSeries<Double> history) {
 		switch (this) {
 		case MEAN:
 			return new MeanForecasterJava(history);
@@ -42,7 +42,7 @@ public enum ForecastMethod {
 		}
 	}
 
-	public IAnomalyCalculator<Double> getAnomalyCalculator() {
+	public IAnomalyCalculator<Double> createAnomalyCalculator() {
 		return new SimpleAnomalyCalculator();
 	}
 

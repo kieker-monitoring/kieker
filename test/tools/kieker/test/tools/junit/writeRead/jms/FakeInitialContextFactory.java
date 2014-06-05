@@ -41,6 +41,7 @@ public class FakeInitialContextFactory implements InitialContextFactory {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	@SuppressWarnings("rawtypes")
 	public Context getInitialContext(final Hashtable env) { // NOPMD (Hashtable)
 		return new FakeContext();

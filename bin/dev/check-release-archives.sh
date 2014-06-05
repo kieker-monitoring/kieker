@@ -331,12 +331,12 @@ function check_src_archive {
 	assert_file_NOT_exists "dist/kieker-monitoring-servlet-"*".war"
 
 	# check bytecode version of classes contained in jar
-	echo "Making sure that bytecode version of class in jar is 49.0 (Java 1.5)"
+	echo "Making sure that bytecode version of class in jar is 50.0 (Java 1.6)"
 	MAIN_JAR=$(ls "dist/kieker-"*".jar" | grep -v emf | grep -v aspectj)
 	assert_file_exists_regular ${MAIN_JAR}
 	VERSION_CLASS=$(find build -name "Version.class")
 	assert_file_exists_regular "${VERSION_CLASS}"
-	if ! file ${VERSION_CLASS} | grep "version 49.0 (Java 1.5)"; then
+	if ! file ${VERSION_CLASS} | grep "version 50.0 (Java 1.6)"; then
 		echo "Unexpected bytecode version"
 		exit 1
 	fi
@@ -381,13 +381,13 @@ function check_bin_archive {
 	assert_files_exist_bin
 
 	# check bytecode version of classes contained in jar
-	echo -n "Making sure that bytecode version of class in jar is 49.0 (Java 1.5)"
+	echo -n "Making sure that bytecode version of class in jar is version 50.0 (Java 1.6)"
 	MAIN_JAR=$(ls "dist/kieker-"*".jar" | grep -v emf | grep -v aspectj)
 	assert_file_exists_regular ${MAIN_JAR}
 	VERSION_CLASS_IN_JAR=$(unzip -l	 ${MAIN_JAR} | grep Version.class | awk '{ print $4 }')
 	unzip "${MAIN_JAR}" "${VERSION_CLASS_IN_JAR}"
 	assert_file_exists_regular "${VERSION_CLASS_IN_JAR}"
-	if ! file ${VERSION_CLASS_IN_JAR} | grep "version 49.0 (Java 1.5)"; then
+	if ! file ${VERSION_CLASS_IN_JAR} | grep "version 50.0 (Java 1.6)"; then
 		echo "Unexpected bytecode version"
 		exit 1
 	fi

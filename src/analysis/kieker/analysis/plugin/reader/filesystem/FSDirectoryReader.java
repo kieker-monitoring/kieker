@@ -85,10 +85,12 @@ final class FSDirectoryReader implements Runnable {
 	/**
 	 * Starts reading and returns after each record has been passed to the registered {@link #recordReceiver}.
 	 */
+	@Override
 	public final void run() {
 		this.readMappingFile(); // must be the first line to set filePrefix!
 		final File[] inputFiles = this.inputDir.listFiles(new FileFilter() {
 
+			@Override
 			public boolean accept(final File pathname) {
 				final String name = pathname.getName();
 				return pathname.isFile()
@@ -104,10 +106,12 @@ final class FSDirectoryReader implements Runnable {
 		} else { // everything ok, we process the files
 			Arrays.sort(inputFiles, new Comparator<File>() {
 
+				@Override
 				public final int compare(final File f1, final File f2) {
 					return f1.compareTo(f2); // simplified (we expect no dirs!)
 				}
 			});
+			boolean ignoreUnknownRecordTypesWarningAlreadyShown = false;
 			for (final File inputFile : inputFiles) {
 				if (this.terminated) {
 					LOG.info("Shutting down DirectoryReader.");
@@ -117,7 +121,8 @@ final class FSDirectoryReader implements Runnable {
 				if (inputFile.getName().endsWith(FSUtil.NORMAL_FILE_EXTENSION)) {
 					this.processNormalInputFile(inputFile);
 				} else {
-					if (this.ignoreUnknownRecordTypes) {
+					if (this.ignoreUnknownRecordTypes && ignoreUnknownRecordTypesWarningAlreadyShown) {
+						ignoreUnknownRecordTypesWarningAlreadyShown = true;
 						LOG.warn("The property '" + FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES
 								+ "' is not supported for binary files. But trying to read '" + inputFile + "'");
 					}
@@ -249,12 +254,8 @@ final class FSDirectoryReader implements Runnable {
 						} else {
 							skipValues = 2;
 						}
-						// Java 1.5 compatibility
-						final String[] recordFieldsReduced = new String[recordFields.length - skipValues];
-						System.arraycopy(recordFields, skipValues, recordFieldsReduced, 0, recordFields.length - skipValues);
-						record = AbstractMonitoringRecord.createFromStringArray(clazz, recordFieldsReduced);
-						// in Java 1.6 this could be simplified to
-						// record = AbstractMonitoringRecord.createFromStringArray(clazz, Arrays.copyOfRange(recordFields, skipValues, recordFields.length));
+
+						record = AbstractMonitoringRecord.createFromStringArray(clazz, Arrays.copyOfRange(recordFields, skipValues, recordFields.length));
 						record.setLoggingTimestamp(loggingTimestamp);
 					} else { // legacy record
 						final String[] recordFieldsReduced = new String[recordFields.length - 1];

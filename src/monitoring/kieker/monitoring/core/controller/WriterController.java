@@ -104,6 +104,7 @@ public final class WriterController extends AbstractController implements IWrite
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
 		try {
 			// fast lane for RegistryRecords (these must always be delivered without blocking!)
@@ -141,6 +142,7 @@ public final class WriterController extends AbstractController implements IWrite
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final long getNumberOfInserts() {
 		return this.numberOfInserts.longValue();
 	}

@@ -75,8 +75,10 @@ public class SystemModel2FileFilter extends AbstractTraceAnalysisFilter {
 	 */
 	@Override
 	public Configuration getCurrentConfiguration() {
-		final Configuration currentConfiguration = new Configuration();
+		final Configuration currentConfiguration = super.getCurrentConfiguration();
+
 		currentConfiguration.setProperty(CONFIG_PROPERTY_NAME_HTML_OUTPUT_FN, this.outputFnHTML);
+
 		return currentConfiguration;
 	}
 
@@ -114,7 +116,9 @@ public class SystemModel2FileFilter extends AbstractTraceAnalysisFilter {
 		}
 
 		if (!error) {
-			this.printMessage(new String[] { "Wrote HTML output of system model to file '" + outputFnHTMLCanonical + "'" });
+			if (this.verbose) {
+				this.printMessage(new String[] { "Wrote HTML output of system model to file '" + outputFnHTMLCanonical + "'" });
+			}
 		} else {
 			this.printMessage(new String[] { "Failed to write HTML output of system model to file '" + outputFnHTMLCanonical + "'" });
 		}

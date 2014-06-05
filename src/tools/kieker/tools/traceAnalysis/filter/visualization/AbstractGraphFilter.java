@@ -136,6 +136,7 @@ public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V ex
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getGraphOutputPortName() {
 		return OUTPUT_PORT_NAME_GRAPH;
 	}

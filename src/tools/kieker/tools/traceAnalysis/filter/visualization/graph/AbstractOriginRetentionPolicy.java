@@ -37,6 +37,7 @@ public abstract class AbstractOriginRetentionPolicy implements IOriginRetentionP
 		this.kind = kind;
 	}
 
+	@Override
 	public OriginRetentionPolicyKind getKind() {
 		return this.kind;
 	}
@@ -44,6 +45,7 @@ public abstract class AbstractOriginRetentionPolicy implements IOriginRetentionP
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean isCompatibleWith(final IOriginRetentionPolicy policy) { // NOPMD, for some reason, PMD regards this function as empty
 		return true;
 	}
@@ -51,6 +53,7 @@ public abstract class AbstractOriginRetentionPolicy implements IOriginRetentionP
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean dependsOn(final IOriginRetentionPolicy policy) {
 		return this == policy;
 	}

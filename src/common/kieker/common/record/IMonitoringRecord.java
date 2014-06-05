@@ -67,6 +67,7 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 * 
 	 * @since 1.5
 	 */
+	@Override
 	public String toString();
 
 	/**

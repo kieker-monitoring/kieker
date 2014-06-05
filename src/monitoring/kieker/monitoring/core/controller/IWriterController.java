@@ -40,6 +40,7 @@ public interface IWriterController extends IMonitoringRecordReceiver {
 	 * 
 	 * @since 1.3
 	 */
+	@Override
 	public abstract boolean newMonitoringRecord(IMonitoringRecord record);
 
 	/**

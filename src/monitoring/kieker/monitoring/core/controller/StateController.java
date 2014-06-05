@@ -98,6 +98,7 @@ public final class StateController extends AbstractController implements IStateC
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final boolean terminateMonitoring() {
 		if (super.monitoringController != null) {
 			return super.monitoringController.terminate();
@@ -107,6 +108,7 @@ public final class StateController extends AbstractController implements IStateC
 		}
 	}
 
+	@Override
 	public final boolean isMonitoringTerminated() {
 		return super.isTerminated();
 	}
@@ -114,6 +116,7 @@ public final class StateController extends AbstractController implements IStateC
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final boolean enableMonitoring() {
 		if (this.isMonitoringTerminated()) {
 			LOG.error("Refused to enable monitoring because monitoring has been permanently terminated");
@@ -127,20 +130,24 @@ public final class StateController extends AbstractController implements IStateC
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final boolean disableMonitoring() {
 		LOG.info("Disabling monitoring");
 		this.monitoringEnabled = false;
 		return true;
 	}
 
+	@Override
 	public final boolean isMonitoringEnabled() {
 		return !super.isTerminated() && this.monitoringEnabled;
 	}
 
+	@Override
 	public final String getName() {
 		return this.name;
 	}
 
+	@Override
 	public final String getHostname() {
 		return this.hostname;
 	}
@@ -148,6 +155,7 @@ public final class StateController extends AbstractController implements IStateC
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final int incExperimentId() {
 		return this.experimentId.incrementAndGet();
 	}
@@ -155,14 +163,17 @@ public final class StateController extends AbstractController implements IStateC
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void setExperimentId(final int newExperimentID) {
 		this.experimentId.set(newExperimentID);
 	}
 
+	@Override
 	public final int getExperimentId() {
 		return this.experimentId.get();
 	}
 
+	@Override
 	public final boolean isDebug() {
 		return this.debug;
 	}

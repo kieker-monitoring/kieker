@@ -227,6 +227,7 @@ public class OperationAllocationDependencyGraphFormatter extends AbstractOperati
 			super(builder, includeWeights, plotLoops, useShortLabels);
 		}
 
+		@Override
 		public void visitVertex(final DependencyGraphNode<AllocationComponentOperationPair> vertex) {
 			// Do nothing
 		}

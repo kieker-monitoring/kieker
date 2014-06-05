@@ -56,6 +56,7 @@ public abstract class AbstractReaderPlugin extends AbstractPlugin implements IRe
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean init() { // NOPMD (default implementation)
 		return true;
 	}

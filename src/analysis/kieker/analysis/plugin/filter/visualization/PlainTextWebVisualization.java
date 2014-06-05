@@ -38,14 +38,17 @@ public final class PlainTextWebVisualization extends AbstractWebVisualizationFil
 		super(configuration, projectContext);
 	}
 
+	@Override
 	public String getHeader() {
 		return "";
 	}
 
+	@Override
 	public String getInitialContent() {
 		return "N/A";
 	}
 
+	@Override
 	public String getUpdatedContent() {
 		if (this.currentObject != null) {
 			return this.currentObject.toString();

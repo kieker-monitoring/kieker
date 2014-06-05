@@ -92,6 +92,7 @@ public final class TCPReader extends AbstractReaderPlugin {
 		return configuration;
 	}
 
+	@Override
 	public boolean read() {
 		ServerSocketChannel serversocket = null;
 		try {
@@ -147,6 +148,7 @@ public final class TCPReader extends AbstractReaderPlugin {
 		return true;
 	}
 
+	@Override
 	public void terminate(final boolean error) {
 		this.log.info("Shutdown of TCPReader requested.");
 		// TODO actually implement terminate!

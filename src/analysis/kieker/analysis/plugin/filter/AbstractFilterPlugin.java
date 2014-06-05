@@ -56,6 +56,7 @@ public abstract class AbstractFilterPlugin extends AbstractPlugin implements IFi
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean init() { // NOPMD (default implementation)
 		return true; // do nothing
 	}
@@ -63,6 +64,7 @@ public abstract class AbstractFilterPlugin extends AbstractPlugin implements IFi
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void terminate(final boolean error) { // NOPMD (default implementation)
 		// do nothing
 	}

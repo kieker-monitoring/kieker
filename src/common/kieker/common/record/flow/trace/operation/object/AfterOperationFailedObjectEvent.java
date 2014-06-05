@@ -146,6 +146,7 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 		return SIZE;
 	}
 
+	@Override
 	public final int getObjectId() {
 		return this.objectId;
 	}

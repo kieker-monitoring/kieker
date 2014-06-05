@@ -16,6 +16,8 @@
 
 package kieker.tools.logReplayer;
 
+import java.util.Arrays;
+
 import kieker.analysis.IAnalysisController;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
@@ -62,11 +64,7 @@ public class FilesystemLogReplayer extends AbstractLogReplayer {
 		super(monitoringConfigurationFile, realtimeMode, realtimeAccelerationFactor, keepOriginalLoggingTimestamps, numRealtimeWorkerThreads,
 				ignoreRecordsBeforeTimestamp,
 				ignoreRecordsAfterTimestamp);
-		// Java 1.5 compatibility
-		this.inputDirs = new String[inputDirs.length];
-		System.arraycopy(inputDirs, 0, this.inputDirs, 0, inputDirs.length);
-		// for Java 1.6+:
-		// this.inputDirs = Arrays.copyOf(inputDirs, inputDirs.length);
+		this.inputDirs = Arrays.copyOf(inputDirs, inputDirs.length);
 	}
 
 	/**

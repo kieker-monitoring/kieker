@@ -165,6 +165,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public final boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 		if (monitoringRecord instanceof RegistryRecord) {
@@ -270,6 +271,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void terminate() {
 		synchronized (this) {
 			if (this.pos != null) {

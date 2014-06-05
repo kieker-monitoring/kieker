@@ -80,6 +80,7 @@ public final class JMXWriter extends AbstractMonitoringWriter {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean newMonitoringRecord(final IMonitoringRecord record) {
 		return this.kiekerJMXMonitoringLog.newMonitoringRecord(record);
 	}
@@ -87,6 +88,7 @@ public final class JMXWriter extends AbstractMonitoringWriter {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void terminate() {
 		try {
 			ManagementFactory.getPlatformMBeanServer().unregisterMBean(this.monitoringLogName);

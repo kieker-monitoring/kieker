@@ -68,8 +68,10 @@ public class EventRecordTraceCounter extends AbstractTraceProcessingFilter {
 
 	@Override
 	public Configuration getCurrentConfiguration() {
-		final Configuration config = new Configuration();
+		final Configuration config = super.getCurrentConfiguration();
+
 		config.setProperty(CONFIG_PROPERTY_NAME_LOG_INVALID, Boolean.toString(this.logInvalidTraces));
+
 		return config;
 	}
 

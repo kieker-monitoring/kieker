@@ -277,6 +277,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void registerStateObserver(final IStateObserver stateObserver) {
 		this.stateObservers.add(stateObserver);
 	}
@@ -284,6 +285,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void unregisterStateObserver(final IStateObserver stateObserver) {
 		this.stateObservers.remove(stateObserver);
 	}
@@ -303,6 +305,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final String getProperty(final String key) {
 		return this.globalConfiguration.getStringProperty(key);
 	}
@@ -341,6 +344,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void saveToFile(final File file) throws IOException, AnalysisConfigurationException {
 		final MIProject mProject = this.getCurrentConfiguration();
 		AnalysisController.saveToFile(file, mProject);
@@ -349,6 +353,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void saveToFile(final String pathname) throws IOException, AnalysisConfigurationException {
 		this.saveToFile(new File(pathname));
 	}
@@ -356,6 +361,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst, final String inputPortName)
 			throws IllegalStateException, AnalysisConfigurationException {
 		if (this.state != STATE.READY) {
@@ -382,6 +388,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void connect(final AbstractPlugin plugin, final String repositoryPort, final AbstractRepository repository)
 			throws IllegalStateException, AnalysisConfigurationException {
 		if (this.state != STATE.READY) {
@@ -405,6 +412,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final MIProject getCurrentConfiguration() throws AnalysisConfigurationException {
 		return MetaModelHandler.javaToMetaModel(this.readers, this.filters, this.repos, this.dependencies, this.projectName, this.globalConfiguration);
 	}
@@ -412,6 +420,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void run() throws IllegalStateException, AnalysisConfigurationException {
 		try {
 			synchronized (this) {
@@ -453,6 +462,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 			final CountDownLatch readerLatch = new CountDownLatch(this.readers.size());
 			for (final AbstractReaderPlugin reader : this.readers) {
 				new Thread(new Runnable() {
+					@Override
 					public void run() {
 						try {
 							if (!reader.read()) {
@@ -496,6 +506,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void terminate() {
 		this.terminate(false);
 	}
@@ -503,6 +514,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void terminate(final boolean error) {
 		try {
 			synchronized (this) {
@@ -609,6 +621,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final String getProjectName() {
 		return this.projectName;
 	}
@@ -616,6 +629,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final Collection<AbstractReaderPlugin> getReaders() {
 		return Collections.unmodifiableCollection(this.readers);
 	}
@@ -623,6 +637,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final Collection<AbstractFilterPlugin> getFilters() {
 		return Collections.unmodifiableCollection(this.filters);
 	}
@@ -630,6 +645,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final Collection<AbstractRepository> getRepositories() {
 		return Collections.unmodifiableCollection(this.repos);
 	}
@@ -637,6 +653,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final STATE getState() {
 		return this.state;
 	}

@@ -21,14 +21,23 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Scanner;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.gui.AbstractStep;
+import kieker.tools.traceAnalysis.gui.AdditionalFiltersStep;
 import kieker.tools.traceAnalysis.gui.AdditionalOptionsStep;
 import kieker.tools.traceAnalysis.gui.FinalStep;
 import kieker.tools.traceAnalysis.gui.PlotStep;
@@ -44,13 +53,15 @@ public class TraceAnalysisGUI extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
+	private static final Log LOG = LogFactory.getLog(TraceAnalysisGUI.class);
+
 	private final CardLayout mainPanelLayout = new CardLayout();
 	private final JPanel mainPanel = new JPanel(this.mainPanelLayout);
 	private final JButton previousButton = new JButton("Previous");
 	private final JButton nextButton = new JButton("Next");
 
 	private final StartTraceAnalysisActionListener startTraceAnalysisClickListener = new StartTraceAnalysisActionListener();
-	private final AbstractStep[] steps = { new WelcomeStep(), new PlotStep(), new PrintStep(), new AdditionalOptionsStep(),
+	private final AbstractStep[] steps = { new WelcomeStep(), new PlotStep(), new PrintStep(), new AdditionalOptionsStep(), new AdditionalFiltersStep(),
 		new FinalStep(this.startTraceAnalysisClickListener), };
 	private int currentStepIndex;
 
@@ -61,6 +72,7 @@ public class TraceAnalysisGUI extends JFrame {
 		this.initializeComponents();
 		this.addLogicToComponents();
 		this.initializeWindow();
+		this.loadCurrentConfiguration();
 	}
 
 	private void addAndLayoutComponents() {
@@ -104,6 +116,7 @@ public class TraceAnalysisGUI extends JFrame {
 	private void addLogicToComponents() {
 		this.nextButton.addActionListener(new ActionListener() {
 
+			@Override
 			@SuppressWarnings("synthetic-access")
 			public void actionPerformed(final ActionEvent arg0) {
 				TraceAnalysisGUI.this.nextStep();
@@ -112,6 +125,7 @@ public class TraceAnalysisGUI extends JFrame {
 
 		this.previousButton.addActionListener(new ActionListener() {
 
+			@Override
 			@SuppressWarnings("synthetic-access")
 			public void actionPerformed(final ActionEvent e) {
 				TraceAnalysisGUI.this.previousStep();
@@ -120,10 +134,14 @@ public class TraceAnalysisGUI extends JFrame {
 	}
 
 	private void nextStep() {
-		this.currentStepIndex++;
-		this.mainPanelLayout.next(this.mainPanel);
-		this.previousButton.setEnabled(true);
-		this.nextButton.setEnabled(this.currentStepIndex < (this.steps.length - 1));
+		if (this.steps[this.currentStepIndex].isNextStepAllowed()) {
+			this.currentStepIndex++;
+			this.mainPanelLayout.next(this.mainPanel);
+			this.previousButton.setEnabled(true);
+			this.nextButton.setEnabled(this.currentStepIndex < (this.steps.length - 1));
+
+			this.saveCurrentConfiguration();
+		}
 	}
 
 	private void previousStep() {
@@ -131,10 +149,50 @@ public class TraceAnalysisGUI extends JFrame {
 		this.mainPanelLayout.previous(this.mainPanel);
 		this.nextButton.setEnabled(true);
 		this.previousButton.setEnabled(this.currentStepIndex > 0);
+
+		this.saveCurrentConfiguration();
+	}
+
+	private void loadCurrentConfiguration() {
+		final File propertiesFile = new File("TraceAnalysisGUI.properties");
+		if (propertiesFile.exists()) {
+			Scanner scanner = null;
+			try {
+				scanner = new Scanner(propertiesFile, "UTF-8");
+				for (final AbstractStep step : this.steps) {
+					step.loadCurrentConfiguration(scanner);
+				}
+			} catch (final IOException ex) {
+				LOG.warn("Configuration could not be loaded", ex);
+			} finally {
+				if (null != scanner) {
+					scanner.close();
+				}
+			}
+		}
+	}
+
+	private void saveCurrentConfiguration() {
+		Writer writer = null;
+		try {
+			writer = new OutputStreamWriter(new FileOutputStream("TraceAnalysisGUI.properties"), "UTF-8");
+			for (final AbstractStep step : this.steps) {
+				step.saveCurrentConfiguration(writer);
+			}
+		} catch (final IOException ex) {
+			LOG.warn("Configuration could not be saved", ex);
+		} finally {
+			if (null != writer) {
+				try {
+					writer.close();
+				} catch (final IOException ex) {
+					LOG.warn("Configuration could not be saved", ex);
+				}
+			}
+		}
 	}
 
 	private void initializeWindow() {
-		this.setResizable(false);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		int maxHeight = 1;
@@ -182,6 +240,7 @@ public class TraceAnalysisGUI extends JFrame {
 			// No code necessary
 		}
 
+		@Override
 		@SuppressWarnings("synthetic-access")
 		public void actionPerformed(final ActionEvent e) {
 			TraceAnalysisGUI.this.startTraceAnalysis();

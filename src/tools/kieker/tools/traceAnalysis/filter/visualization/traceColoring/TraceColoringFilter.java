@@ -121,6 +121,7 @@ public class TraceColoringFilter<V extends AbstractVertex<V, E, TraceInformation
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void visitVertex(final V vertex) {
 		this.handleGraphElement(vertex);
 	}
@@ -128,6 +129,7 @@ public class TraceColoringFilter<V extends AbstractVertex<V, E, TraceInformation
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void visitEdge(final E edge) {
 		this.handleGraphElement(edge);
 	}

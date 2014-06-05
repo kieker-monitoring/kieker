@@ -144,6 +144,7 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 		return SIZE;
 	}
 
+	@Override
 	public final String getCause() {
 		return this.cause;
 	}

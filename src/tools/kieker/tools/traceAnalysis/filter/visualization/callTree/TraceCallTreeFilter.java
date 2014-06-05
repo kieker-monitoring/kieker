@@ -108,9 +108,11 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 	 */
 	@Override
 	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration();
+		final Configuration configuration = super.getCurrentConfiguration();
+
 		configuration.setProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(this.shortLabels));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_FILENAME, this.dotOutputFn);
+
 		return configuration;
 	}
 
@@ -126,6 +128,7 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 							NoOriginRetentionPolicy.createInstance()); // rootNode
 			AbstractCallTreeFilter.writeDotForMessageTrace(rootNode, new IPairFactory<AllocationComponentOperationPair>() {
 
+				@Override
 				public AllocationComponentOperationPair createPair(final SynchronousCallMessage callMsg) {
 					final AllocationComponent allocationComponent = callMsg.getReceivingExecution().getAllocationComponent();
 					final Operation op = callMsg.getReceivingExecution().getOperation();

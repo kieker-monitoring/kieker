@@ -27,15 +27,15 @@ import kieker.tools.opad.record.StorableDetectionResult;
 
 /**
  * 
- * This filter separates input values by their reach of a certain threshold (parameter). It takes events of type NamedDoubleTimeSeriesPoint and channels them into
- * two output ports, depending on whether the threshold was reached or not. This filter has configuration properties for the (critical) threshold. Although the
+ * This filter separates input values by their reach of a certain threshold (parameter). It takes events of type {@link StorableDetectionResult} and channels them
+ * into two output ports, depending on whether the threshold was reached or not. This filter has configuration properties for the (critical) threshold. Although the
  * configuration of the critical threshold is possible, the value is currently not used by the filter.
  * 
  * @author Tillmann Carlos Bielefeld
  * 
  * @since 1.9
  */
-@Plugin(name = "AnomalyScore Detection Filter",
+@Plugin(name = "Anomaly Detection Filter",
 		outputPorts = {
 			@OutputPort(eventTypes = { StorableDetectionResult.class }, name = AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY),
 			@OutputPort(eventTypes = { StorableDetectionResult.class }, name = AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_ELSE) },
@@ -83,12 +83,10 @@ public class AnomalyDetectionFilter extends AbstractFilterPlugin {
 
 	@InputPort(eventTypes = { StorableDetectionResult.class }, name = AnomalyDetectionFilter.INPUT_PORT_ANOMALY_SCORE)
 	public void inputForecastAndMeasurement(final StorableDetectionResult anomalyScore) {
-		if (anomalyScore.getScore() >= this.threshold) {
-			if (anomalyScore.getScore() >= this.thresholdCritical) {
-				super.deliver(OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY, anomalyScore);
-			} else {
-				super.deliver(OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY, anomalyScore);
-			}
+		if (anomalyScore.getScore() >= this.thresholdCritical) {
+			super.deliver(OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY, anomalyScore);
+		} else if (anomalyScore.getScore() >= this.threshold) {
+			super.deliver(OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY, anomalyScore);
 		} else {
 			super.deliver(OUTPUT_PORT_ANOMALY_SCORE_ELSE, anomalyScore);
 		}

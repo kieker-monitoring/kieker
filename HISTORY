@@ -5,6 +5,12 @@ http://kieker-monitoring.net) contains details on the changes.
 
 Please refer to the Kieker User Guide for details on using Kieker.
 
+* 1.10 (upcoming)
+- New features (selection)
+  - Various samplers to collect data from the JVM	
+  
+- support for Java 1.8 (via AspectJ)
+
 * 1.9 (April 16, 2014)
 - New features (selection)
   - Binary monitoring writers using Java NIO 
@@ -17,6 +23,11 @@ Please refer to the Kieker User Guide for details on using Kieker.
   - Live demo part of the Java EE example 
   - TraceAnalysis: coloring of components and operations based on 
     response times
+- API change:
+  - Kieker's AspectJ weaver Jar now uses a default aop.xml when 
+    no other aop.xml found. Should be disabled in multi-classloader 
+    environments (Java EE, OSGi, etc.) by using a new configuration 
+    parameter; alternatively, AspectJ's weaver agent can be used.
 - Bug fixes and improvements to code, performance, tests, build scripts, 
   documentation, examples
 - Improvements to the WebGUI (see separate `HISTORY` file)

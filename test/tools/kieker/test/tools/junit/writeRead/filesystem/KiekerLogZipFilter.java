@@ -40,6 +40,7 @@ public class KiekerLogZipFilter implements FilenameFilter { // NOPMD (TestClassW
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean accept(final File dir, final String name) {
 		if (!dir.isDirectory() || !name.startsWith(FSUtil.FILE_PREFIX) || !name.endsWith(FSUtil.ZIP_FILE_EXTENSION)) {
 			return false;

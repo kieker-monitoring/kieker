@@ -421,6 +421,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 				// default empty constructor
 			}
 
+			@Override
 			public int compare(final AbstractTraceEvent o1, final AbstractTraceEvent o2) {
 				return o1.getOrderIndex() - o2.getOrderIndex();
 			}
