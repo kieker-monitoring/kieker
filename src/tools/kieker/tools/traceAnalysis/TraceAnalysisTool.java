@@ -225,7 +225,7 @@ public final class TraceAnalysisTool { // NOPMD (long class)
 
 		if (this.cmdl.hasOption(Constants.CMD_OPT_NAME_SELECTTRACES) || this.cmdl.hasOption(Constants.CMD_OPT_NAME_FILTERTRACES)) { // Parse list of trace Ids
 			this.invertTraceIdFilter = this.cmdl.hasOption(Constants.CMD_OPT_NAME_FILTERTRACES);
-			final String[] traceIdList = this.cmdl.getOptionValues(this.invertTraceIdFilter ? Constants.CMD_OPT_NAME_FILTERTRACES
+			final String[] traceIdList = this.cmdl.getOptionValues(this.invertTraceIdFilter ? Constants.CMD_OPT_NAME_FILTERTRACES // NOCS (Short if operator)
 					: Constants.CMD_OPT_NAME_SELECTTRACES);
 
 			this.selectedTraces = new TreeSet<Long>();

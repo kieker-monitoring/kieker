@@ -121,7 +121,7 @@ public class ResponseTimeDecoration extends AbstractVertexDecoration {
 
 	@Override
 	public String createFormattedOutput() {
-		final StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder(30);
 		sb.append("min: ");
 		sb.append(this.getMinimalResponseTime());
 		sb.append(this.timeUnitShortname);

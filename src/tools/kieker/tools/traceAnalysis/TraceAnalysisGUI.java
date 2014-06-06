@@ -22,9 +22,10 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileInputStream;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Properties;
@@ -157,9 +158,9 @@ public class TraceAnalysisGUI extends JFrame {
 	}
 
 	private void loadCurrentConfiguration() {
-		InputStream propertiesFileInputStream = null;
+		InputStreamReader propertiesFileInputStream = null;
 		try {
-			propertiesFileInputStream = new FileInputStream("TraceAnalysisGUI.properties");
+			propertiesFileInputStream = new InputStreamReader(new FileInputStream("TraceAnalysisGUI.properties"), "UTF-8");
 			final Properties properties = new Properties();
 			properties.load(propertiesFileInputStream);
 			for (final AbstractStep step : this.steps) {
@@ -186,16 +187,16 @@ public class TraceAnalysisGUI extends JFrame {
 			step.saveCurrentConfiguration(properties);
 		}
 
-		FileWriter fileWriter = null;
+		OutputStreamWriter stream = null;
 		try {
-			fileWriter = new FileWriter("TraceAnalysisGUI.properties");
-			properties.store(fileWriter, null);
+			stream = new OutputStreamWriter(new FileOutputStream("TraceAnalysisGUI.properties"), "UTF-8");
+			properties.store(stream, null);
 		} catch (final IOException ex) {
 			LOG.warn("Configuration could not be saved", ex);
 		} finally {
-			if (null != fileWriter) {
+			if (null != stream) {
 				try {
-					fileWriter.close();
+					stream.close();
 				} catch (final IOException e) {
 					LOG.warn("Could not close output stream", e);
 				}

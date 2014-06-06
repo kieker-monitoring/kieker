@@ -16,6 +16,7 @@
 
 package kieker.tools.traceAnalysis.gui;
 
+import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -27,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Properties;
 
 import javax.swing.JButton;
@@ -70,7 +72,7 @@ public class ConversionStep extends AbstractStep {
 	private final JButton graphvizDirectoryChooseButton = new JButton("Choose");
 	private final JButton pic2plotDirectoryChooseButton = new JButton("Choose");
 	private final JLabel outputFormat = new JLabel("Output Format: ");
-	private final JComboBox outputFormatField = new JComboBox(new String[] { "PNG", "JPEG", "SVG", "PDF" });
+	private final JComboBox outputFormatField = new JComboBox(new String[] { "PNG", "JPEG", "SVG", "PDF", });
 
 	public ConversionStep() {
 		this.addAndLayoutComponents();
@@ -178,33 +180,8 @@ public class ConversionStep extends AbstractStep {
 	}
 
 	private void addLogicToComponents() {
-		this.graphvizDirectoryChooseButton.addActionListener(new ActionListener() {
-
-			@Override
-			@SuppressWarnings("synthetic-access")
-			public void actionPerformed(final ActionEvent event) {
-				final JFileChooser fileChooser = new JFileChooser(ConversionStep.this.graphvizDirectoryField.getText());
-				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-
-				if (fileChooser.showOpenDialog(ConversionStep.this) == JFileChooser.APPROVE_OPTION) {
-					ConversionStep.this.graphvizDirectoryField.setText(fileChooser.getSelectedFile().getAbsolutePath());
-				}
-			}
-		});
-
-		this.pic2plotDirectoryChooseButton.addActionListener(new ActionListener() {
-
-			@Override
-			@SuppressWarnings("synthetic-access")
-			public void actionPerformed(final ActionEvent event) {
-				final JFileChooser fileChooser = new JFileChooser(ConversionStep.this.pic2plotDirectoryField.getText());
-				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-
-				if (fileChooser.showOpenDialog(ConversionStep.this) == JFileChooser.APPROVE_OPTION) {
-					ConversionStep.this.pic2plotDirectoryField.setText(fileChooser.getSelectedFile().getAbsolutePath());
-				}
-			}
-		});
+		this.graphvizDirectoryChooseButton.addActionListener(new ChooseDirectoryActionListener(this.graphvizDirectoryField, this));
+		this.pic2plotDirectoryChooseButton.addActionListener(new ChooseDirectoryActionListener(this.pic2plotDirectoryField, this));
 	}
 
 	@Override
@@ -234,8 +211,8 @@ public class ConversionStep extends AbstractStep {
 				try {
 					final Process p = Runtime.getRuntime().exec(
 							new String[] { this.graphvizDirectoryField.getText() + "/dot", "-O",
-								"-T" + this.outputFormatField.getSelectedItem().toString().toLowerCase(),
-								dotFile.getAbsolutePath() });
+								"-T" + this.outputFormatField.getSelectedItem().toString().toLowerCase(Locale.ENGLISH),
+								dotFile.getAbsolutePath(), });
 					p.waitFor();
 				} catch (final IOException e) {
 					LOG.warn("An exception occurred", e);
@@ -245,17 +222,18 @@ public class ConversionStep extends AbstractStep {
 			}
 
 			for (final File picFile : picFiles) {
+				OutputStream writer = null;
 				try {
 					final Process p = Runtime.getRuntime().exec(
 							new String[] { this.pic2plotDirectoryField.getText() + "/pic2plot",
-								"-T" + this.outputFormatField.getSelectedItem().toString().toLowerCase(),
-								picFile.getAbsolutePath() });
+								"-T" + this.outputFormatField.getSelectedItem().toString().toLowerCase(Locale.ENGLISH),
+								picFile.getAbsolutePath(), });
 					final InputStream s = p.getInputStream();
-					final OutputStream writer = new FileOutputStream(picFile.getAbsolutePath() + "."
-							+ this.outputFormatField.getSelectedItem().toString().toLowerCase());
+					writer = new FileOutputStream(picFile.getAbsolutePath() + "."
+							+ this.outputFormatField.getSelectedItem().toString().toLowerCase(Locale.ENGLISH));
 					int r;
 					final byte[] buffer = new byte[10 * 1024];
-					while ((r = s.read(buffer)) != -1) {
+					while ((r = s.read(buffer)) != -1) { // NOPMD
 						writer.write(buffer, 0, r);
 					}
 					writer.close();
@@ -265,6 +243,14 @@ public class ConversionStep extends AbstractStep {
 					LOG.warn("An exception occurred", e);
 				} catch (final InterruptedException e) {
 					LOG.warn("An exception occurred", e);
+				} finally {
+					if (null != writer) {
+						try {
+							writer.close();
+						} catch (final IOException e) {
+							LOG.warn("An exception occurred", e);
+						}
+					}
 				}
 			}
 
@@ -297,6 +283,28 @@ public class ConversionStep extends AbstractStep {
 	@Override
 	public boolean isNextStepAllowed() {
 		return true;
+	}
+
+	private static class ChooseDirectoryActionListener implements ActionListener {
+
+		private final JTextField textField;
+		private final Component parent;
+
+		public ChooseDirectoryActionListener(final JTextField textField, final Component parent) {
+			this.textField = textField;
+			this.parent = parent;
+		}
+
+		@Override
+		public void actionPerformed(final ActionEvent event) {
+			final JFileChooser fileChooser = new JFileChooser(this.textField.getText());
+			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+			if (fileChooser.showOpenDialog(this.parent) == JFileChooser.APPROVE_OPTION) {
+				this.textField.setText(fileChooser.getSelectedFile().getAbsolutePath());
+			}
+		}
+
 	}
 
 }
