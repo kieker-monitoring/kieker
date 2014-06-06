@@ -192,20 +192,9 @@ public class ConversionStep extends AbstractStep {
 	public void convert(final String outputDirectory) {
 		if (this.performStep.isSelected()) {
 			final File outputDir = new File(outputDirectory);
-			final File[] dotFiles = outputDir.listFiles(new FilenameFilter() {
 
-				@Override
-				public boolean accept(final File dir, final String name) {
-					return name.endsWith(".dot");
-				}
-			});
-			final File[] picFiles = outputDir.listFiles(new FilenameFilter() {
-
-				@Override
-				public boolean accept(final File dir, final String name) {
-					return name.endsWith(".pic");
-				}
-			});
+			final File[] dotFiles = outputDir.listFiles(new FileNameExtensionFilter(".dot"));
+			final File[] picFiles = outputDir.listFiles(new FileNameExtensionFilter(".pic"));
 
 			for (final File dotFile : dotFiles) {
 				try {
@@ -303,6 +292,21 @@ public class ConversionStep extends AbstractStep {
 			if (fileChooser.showOpenDialog(this.parent) == JFileChooser.APPROVE_OPTION) {
 				this.textField.setText(fileChooser.getSelectedFile().getAbsolutePath());
 			}
+		}
+
+	}
+
+	private static class FileNameExtensionFilter implements FilenameFilter {
+
+		private final String extension;
+
+		public FileNameExtensionFilter(final String extension) {
+			this.extension = extension;
+		}
+
+		@Override
+		public boolean accept(final File dir, final String name) {
+			return name.endsWith(this.extension);
 		}
 
 	}
