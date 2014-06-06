@@ -16,16 +16,14 @@
 
 package kieker.tools.traceAnalysis.gui;
 
+import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
-import java.io.Writer;
 import java.util.Collection;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.util.Properties;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -33,6 +31,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import kieker.tools.traceAnalysis.Constants;
 
 /**
  * @author Nils Christian Ehmke
@@ -43,14 +43,16 @@ public class WelcomeStep extends AbstractStep {
 
 	private static final long serialVersionUID = 1L;
 
-	private final String currentPath = new File(".").getAbsolutePath();
+	private static final String PROPERTY_KEY_IDENTIFIER = WelcomeStep.class.getSimpleName();
+	private static final String PROPERTY_KEY_OUTPUT_DIRECTORY = PROPERTY_KEY_IDENTIFIER + ".outputDirectory";
+	private static final String PROPERTY_KEY_INPUT_DIRECTORY = PROPERTY_KEY_IDENTIFIER + ".inputDirectory";
 
 	private final JLabel welcomeLabel = new JLabel("<html>Welcome to Kieker's Trace Analysis GUI.<br/>This wizard helps you generating visual representatons "
 			+ "based on a trace analysis of your records.<br/><br/>In this step you choose the input input and output directories.</html>");
 	private final JLabel inputDirectoryLabel = new JLabel("Input Directory: ");
 	private final JLabel outputDirectoryLabel = new JLabel("Output Directory: ");
-	private final JTextField inputDirectoryField = new JTextField(this.currentPath);
-	private final JTextField outputDirectoryField = new JTextField(this.currentPath);
+	private final JTextField inputDirectoryTextField = new JTextField();
+	private final JTextField outputDirectoryTextField = new JTextField();
 	private final JButton inputDirectoryChooseButton = new JButton("Choose");
 	private final JButton outputDirectoryChooseButton = new JButton("Choose");
 	private final JPanel expandingPanel = new JPanel();
@@ -63,8 +65,7 @@ public class WelcomeStep extends AbstractStep {
 	private void addAndLayoutComponents() {
 		this.setLayout(new GridBagLayout());
 
-		final GridBagConstraints gridBagConstraints = new GridBagConstraints();
-
+		GridBagConstraints gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
 		gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
 		gridBagConstraints.insets.set(5, 5, 5, 5);
@@ -74,6 +75,7 @@ public class WelcomeStep extends AbstractStep {
 		gridBagConstraints.fill = GridBagConstraints.BOTH;
 		this.add(this.welcomeLabel, gridBagConstraints);
 
+		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.anchor = GridBagConstraints.WEST;
 		gridBagConstraints.insets.set(5, 5, 5, 5);
 		gridBagConstraints.gridx = 0;
@@ -83,14 +85,17 @@ public class WelcomeStep extends AbstractStep {
 		gridBagConstraints.weightx = 0.0;
 		this.add(this.inputDirectoryLabel, gridBagConstraints);
 
+		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.anchor = GridBagConstraints.WEST;
 		gridBagConstraints.insets.set(5, 5, 5, 5);
 		gridBagConstraints.gridx = 1;
 		gridBagConstraints.gridy = 1;
+		gridBagConstraints.gridwidth = 1;
 		gridBagConstraints.weightx = 1.0;
 		gridBagConstraints.fill = GridBagConstraints.BOTH;
-		this.add(this.inputDirectoryField, gridBagConstraints);
+		this.add(this.inputDirectoryTextField, gridBagConstraints);
 
+		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
 		gridBagConstraints.anchor = GridBagConstraints.WEST;
 		gridBagConstraints.gridx = 2;
@@ -100,6 +105,7 @@ public class WelcomeStep extends AbstractStep {
 		gridBagConstraints.fill = GridBagConstraints.VERTICAL;
 		this.add(this.inputDirectoryChooseButton, gridBagConstraints);
 
+		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridwidth = GridBagConstraints.RELATIVE;
 		gridBagConstraints.anchor = GridBagConstraints.WEST;
 		gridBagConstraints.insets.set(5, 5, 5, 5);
@@ -108,14 +114,16 @@ public class WelcomeStep extends AbstractStep {
 		gridBagConstraints.fill = GridBagConstraints.VERTICAL;
 		this.add(this.outputDirectoryLabel, gridBagConstraints);
 
+		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridwidth = GridBagConstraints.RELATIVE;
 		gridBagConstraints.anchor = GridBagConstraints.WEST;
 		gridBagConstraints.insets.set(5, 5, 5, 5);
 		gridBagConstraints.gridx = 1;
 		gridBagConstraints.gridy = 2;
 		gridBagConstraints.fill = GridBagConstraints.BOTH;
-		this.add(this.outputDirectoryField, gridBagConstraints);
+		this.add(this.outputDirectoryTextField, gridBagConstraints);
 
+		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
 		gridBagConstraints.anchor = GridBagConstraints.WEST;
 		gridBagConstraints.insets.set(5, 5, 5, 5);
@@ -124,6 +132,7 @@ public class WelcomeStep extends AbstractStep {
 		gridBagConstraints.fill = GridBagConstraints.VERTICAL;
 		this.add(this.outputDirectoryChooseButton, gridBagConstraints);
 
+		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
 		gridBagConstraints.anchor = GridBagConstraints.WEST;
 		gridBagConstraints.insets.set(5, 5, 5, 5);
@@ -133,57 +142,32 @@ public class WelcomeStep extends AbstractStep {
 		gridBagConstraints.fill = GridBagConstraints.VERTICAL;
 		this.add(this.expandingPanel, gridBagConstraints);
 
-		this.inputDirectoryField.setToolTipText("The input directory contains usually monitoring records for the analysis.");
-		this.outputDirectoryField.setToolTipText("The output directory is used to write the visual representations from the analysis.");
+		this.inputDirectoryTextField.setToolTipText("The input directory contains usually monitoring records for the analysis.");
+		this.outputDirectoryTextField.setToolTipText("The output directory is used to write the visual representations from the analysis.");
 	}
 
 	private void addLogicToComponents() {
-		this.inputDirectoryChooseButton.addActionListener(new ActionListener() {
-
-			@Override
-			@SuppressWarnings("synthetic-access")
-			public void actionPerformed(final ActionEvent event) {
-				final JFileChooser fileChooser = new JFileChooser(WelcomeStep.this.inputDirectoryField.getText());
-				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-
-				if (fileChooser.showOpenDialog(WelcomeStep.this) == JFileChooser.APPROVE_OPTION) {
-					WelcomeStep.this.inputDirectoryField.setText(fileChooser.getSelectedFile().getAbsolutePath());
-				}
-			}
-		});
-
-		this.outputDirectoryChooseButton.addActionListener(new ActionListener() {
-
-			@Override
-			@SuppressWarnings("synthetic-access")
-			public void actionPerformed(final ActionEvent arg0) {
-				final JFileChooser fileChooser = new JFileChooser(WelcomeStep.this.outputDirectoryField.getText());
-				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-
-				if (fileChooser.showOpenDialog(WelcomeStep.this) == JFileChooser.APPROVE_OPTION) {
-					WelcomeStep.this.outputDirectoryField.setText(fileChooser.getSelectedFile().getAbsolutePath());
-				}
-			}
-		});
+		this.inputDirectoryChooseButton.addActionListener(new ChooseDirectoryActionListener(this.inputDirectoryTextField, this));
+		this.outputDirectoryChooseButton.addActionListener(new ChooseDirectoryActionListener(this.outputDirectoryTextField, this));
 	}
 
 	@Override
 	public boolean isNextStepAllowed() {
-		final File inputDirectory = new File(this.inputDirectoryField.getText());
+		final File inputDirectory = new File(this.inputDirectoryTextField.getText());
 		if (!inputDirectory.isDirectory()) {
-			final int result = JOptionPane.showConfirmDialog(this, "The input directory does not exist. Continue?", "Input Directory",
-					JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+			final int result = JOptionPane.showConfirmDialog(this, "The input directory does not exist. Continue?", "Input Directory", JOptionPane.YES_NO_OPTION,
+					JOptionPane.WARNING_MESSAGE);
 			if (JOptionPane.NO_OPTION == result) {
 				return false;
 			}
 		}
 
-		final File outputDirectory = new File(this.outputDirectoryField.getText());
+		final File outputDirectory = new File(this.outputDirectoryTextField.getText());
 		if (outputDirectory.isDirectory()) {
 			return true;
 		} else {
-			final int result = JOptionPane.showConfirmDialog(this, "The output directory does not exist. Create it?", "Create Output Directory",
-					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+			final int result = JOptionPane.showConfirmDialog(this, "The output directory does not exist. Create it?", "Output Directory", JOptionPane.YES_NO_OPTION,
+					JOptionPane.QUESTION_MESSAGE);
 			if (JOptionPane.YES_OPTION == result) {
 				return outputDirectory.mkdirs();
 			} else {
@@ -192,38 +176,59 @@ public class WelcomeStep extends AbstractStep {
 		}
 	}
 
+	public String getOutputDirectory() {
+		return this.outputDirectoryTextField.getText();
+	}
+
 	@Override
 	public void addSelectedTraceAnalysisParameters(final Collection<String> parameters) {
-		parameters.add("-i");
-		parameters.add("\"" + this.inputDirectoryField.getText() + "\"");
+		parameters.add("--" + Constants.CMD_OPT_NAME_INPUTDIRS);
+		parameters.add("\"" + this.inputDirectoryTextField.getText() + "\"");
 
-		parameters.add("-o");
-		parameters.add("\"" + this.outputDirectoryField.getText() + "\"");
+		parameters.add("--" + Constants.CMD_OPT_NAME_OUTPUTDIR);
+		parameters.add("\"" + this.outputDirectoryTextField.getText() + "\"");
 	}
 
 	@Override
-	public void saveCurrentConfiguration(final Writer writer) throws IOException {
-		writer.write(this.inputDirectoryField.getText());
-		writer.write("\n");
-
-		writer.write(this.outputDirectoryField.getText());
-		writer.write("\n");
+	public void saveCurrentConfiguration(final Properties properties) {
+		properties.setProperty(PROPERTY_KEY_INPUT_DIRECTORY, this.inputDirectoryTextField.getText());
+		properties.setProperty(PROPERTY_KEY_OUTPUT_DIRECTORY, this.outputDirectoryTextField.getText());
 	}
 
 	@Override
-	public void loadCurrentConfiguration(final Scanner scanner) throws IOException {
-		try {
-			this.inputDirectoryField.setText(scanner.nextLine());
-			this.outputDirectoryField.setText(scanner.nextLine());
-		} catch (final NoSuchElementException ex) {
-			this.setDefaultValues();
-			throw new IOException(ex);
+	public void loadCurrentConfiguration(final Properties properties) {
+		this.inputDirectoryTextField.setText(properties.getProperty(PROPERTY_KEY_INPUT_DIRECTORY));
+		this.outputDirectoryTextField.setText(properties.getProperty(PROPERTY_KEY_OUTPUT_DIRECTORY));
+	}
+
+	@Override
+	public void loadDefaultConfiguration() {
+		final String currentPath = new File(".").getAbsolutePath();
+
+		this.inputDirectoryTextField.setText(currentPath);
+		this.outputDirectoryTextField.setText(currentPath);
+	}
+
+	private static class ChooseDirectoryActionListener implements ActionListener {
+
+		private final JTextField textField;
+		private final Component parent;
+
+		public ChooseDirectoryActionListener(final JTextField textField, final Component parent) {
+			this.textField = textField;
+			this.parent = parent;
 		}
-	}
 
-	private void setDefaultValues() {
-		this.inputDirectoryField.setText(this.currentPath);
-		this.outputDirectoryField.setText(this.currentPath);
+		@Override
+		public void actionPerformed(final ActionEvent event) {
+			final JFileChooser fileChooser = new JFileChooser(this.textField.getText());
+			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+			if (fileChooser.showOpenDialog(this.parent) == JFileChooser.APPROVE_OPTION) {
+				this.textField.setText(fileChooser.getSelectedFile().getAbsolutePath());
+			}
+		}
+
 	}
 
 }

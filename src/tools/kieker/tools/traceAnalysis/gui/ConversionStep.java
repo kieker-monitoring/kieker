@@ -21,10 +21,13 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.Writer;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Collection;
-import java.util.Scanner;
+import java.util.Properties;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -33,6 +36,9 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 
 /**
  * @author Nils Christian Ehmke
@@ -43,6 +49,13 @@ public class ConversionStep extends AbstractStep {
 
 	private static final long serialVersionUID = 1L;
 
+	private static final String PROPERTY_KEY_IDENTIFIER = ConversionStep.class.getSimpleName();
+	private static final String PROPERTY_KEY_PERFORM_STEP = PROPERTY_KEY_IDENTIFIER + ".performStep";
+	private static final String PROPERTY_KEY_GRAPHVIZ = PROPERTY_KEY_IDENTIFIER + ".graphvizDirectoryField";
+	private static final String PROPERTY_KEY_PIC2PLOT = PROPERTY_KEY_IDENTIFIER + ".pic2plotDirectoryField";
+	private static final String PROPERTY_KEY_OUTPUT_FORMAT = PROPERTY_KEY_IDENTIFIER + ".outputFormatField";
+
+	private static final Log LOG = LogFactory.getLog(ConversionStep.class);
 	private final String currentPath = new File(".").getAbsolutePath();
 
 	private final JLabel infoLabel = new JLabel("<html>In this step you manage Graphviz and Pic2Plot in order to convert the results from the trace "
@@ -57,12 +70,11 @@ public class ConversionStep extends AbstractStep {
 	private final JButton graphvizDirectoryChooseButton = new JButton("Choose");
 	private final JButton pic2plotDirectoryChooseButton = new JButton("Choose");
 	private final JLabel outputFormat = new JLabel("Output Format: ");
-	private final JComboBox outputFormatField = new JComboBox(new String[] { "PNG", "JPEG", "SVG" });
+	private final JComboBox outputFormatField = new JComboBox(new String[] { "PNG", "JPEG", "SVG", "PDF" });
 
 	public ConversionStep() {
 		this.addAndLayoutComponents();
 		this.addLogicToComponents();
-		this.setDefaultValues();
 	}
 
 	private void addAndLayoutComponents() {
@@ -197,25 +209,94 @@ public class ConversionStep extends AbstractStep {
 
 	@Override
 	public void addSelectedTraceAnalysisParameters(final Collection<String> parameters) {
-		// Has to be implemented
+		// Nothing to add here
+	}
+
+	public void convert(final String outputDirectory) {
+		if (this.performStep.isSelected()) {
+			final File outputDir = new File(outputDirectory);
+			final File[] dotFiles = outputDir.listFiles(new FilenameFilter() {
+
+				@Override
+				public boolean accept(final File dir, final String name) {
+					return name.endsWith(".dot");
+				}
+			});
+			final File[] picFiles = outputDir.listFiles(new FilenameFilter() {
+
+				@Override
+				public boolean accept(final File dir, final String name) {
+					return name.endsWith(".pic");
+				}
+			});
+
+			for (final File dotFile : dotFiles) {
+				try {
+					final Process p = Runtime.getRuntime().exec(
+							new String[] { this.graphvizDirectoryField.getText() + "/dot", "-O",
+								"-T" + this.outputFormatField.getSelectedItem().toString().toLowerCase(),
+								dotFile.getAbsolutePath() });
+					p.waitFor();
+				} catch (final IOException e) {
+					LOG.warn("An exception occurred", e);
+				} catch (final InterruptedException e) {
+					LOG.warn("An exception occurred", e);
+				}
+			}
+
+			for (final File picFile : picFiles) {
+				try {
+					final Process p = Runtime.getRuntime().exec(
+							new String[] { this.pic2plotDirectoryField.getText() + "/pic2plot",
+								"-T" + this.outputFormatField.getSelectedItem().toString().toLowerCase(),
+								picFile.getAbsolutePath() });
+					final InputStream s = p.getInputStream();
+					final OutputStream writer = new FileOutputStream(picFile.getAbsolutePath() + "."
+							+ this.outputFormatField.getSelectedItem().toString().toLowerCase());
+					int r;
+					final byte[] buffer = new byte[10 * 1024];
+					while ((r = s.read(buffer)) != -1) {
+						writer.write(buffer, 0, r);
+					}
+					writer.close();
+					s.close();
+					p.waitFor();
+				} catch (final IOException e) {
+					LOG.warn("An exception occurred", e);
+				} catch (final InterruptedException e) {
+					LOG.warn("An exception occurred", e);
+				}
+			}
+
+		}
 	}
 
 	@Override
-	public void saveCurrentConfiguration(final Writer writer) throws IOException {
-		// Has to be implemented
+	public void loadDefaultConfiguration() {
+		this.graphvizDirectoryField.setText(this.currentPath);
+		this.pic2plotDirectoryField.setText(this.currentPath);
+		this.outputFormatField.setSelectedIndex(0);
 	}
 
 	@Override
-	public void loadCurrentConfiguration(final Scanner scanner) throws IOException {
-		// Has to be implemented
+	public void saveCurrentConfiguration(final Properties properties) {
+		properties.setProperty(PROPERTY_KEY_PERFORM_STEP, Boolean.toString(this.performStep.isSelected()));
+		properties.setProperty(PROPERTY_KEY_GRAPHVIZ, this.graphvizDirectoryField.getText());
+		properties.setProperty(PROPERTY_KEY_PIC2PLOT, this.pic2plotDirectoryField.getText());
+		properties.setProperty(PROPERTY_KEY_OUTPUT_FORMAT, Integer.toString(this.outputFormatField.getSelectedIndex()));
 	}
 
-	private void setDefaultValues() {
-		// Has to be implemented
+	@Override
+	public void loadCurrentConfiguration(final Properties properties) {
+		this.performStep.setSelected(Boolean.parseBoolean(properties.getProperty(PROPERTY_KEY_PERFORM_STEP)));
+		this.graphvizDirectoryField.setText(properties.getProperty(PROPERTY_KEY_GRAPHVIZ));
+		this.pic2plotDirectoryField.setText(properties.getProperty(PROPERTY_KEY_PIC2PLOT));
+		this.outputFormatField.setSelectedIndex(Integer.parseInt(properties.getProperty(PROPERTY_KEY_OUTPUT_FORMAT)));
 	}
 
-	public void convert() {
-		// Has to be implemented
+	@Override
+	public boolean isNextStepAllowed() {
+		return true;
 	}
 
 }

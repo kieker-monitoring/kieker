@@ -20,11 +20,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.io.Writer;
 import java.util.Collection;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.util.Properties;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -45,6 +42,19 @@ public class AdditionalOptionsStep extends AbstractStep {
 
 	private static final long serialVersionUID = 1L;
 
+	private static final String PROPERTY_KEY_IDENTIFIER = AdditionalOptionsStep.class.getSimpleName();
+	private static final String PROPERTY_KEY_VERBOSE = PROPERTY_KEY_IDENTIFIER + ".verbose";
+	private static final String PROPERTY_KEY_IGNORE_INVALID_TRACES = PROPERTY_KEY_IDENTIFIER + ".ignoreInvalidTraces";
+	private static final String PROPERTY_KEY_IGNORE_ASSUMED_CALLS = PROPERTY_KEY_IDENTIFIER + ".ignoreAssumedCalls";
+	private static final String PROPERTY_KEY_USE_SHORT_LABELS = PROPERTY_KEY_IDENTIFIER + ".useShortLabels";
+	private static final String PROPERTY_KEY_INCLUDE_SELF_LOOPS = PROPERTY_KEY_IDENTIFIER + ".includeSelfLoops";
+	private static final String PROPERTY_KEY_MAX_TRACE_DURATION = PROPERTY_KEY_IDENTIFIER + ".maxTraceDurationMS";
+	private static final String PROPERTY_KEY_MAX_TRACE_DURATION_INPUT = PROPERTY_KEY_IDENTIFIER + ".maxTraceDurationMSInput";
+	private static final String PROPERTY_KEY_TRACE_COLORING_MAP = PROPERTY_KEY_IDENTIFIER + ".traceColoringMap";
+	private static final String PROPERTY_KEY_TRACE_COLORING_MAP_INPUT = PROPERTY_KEY_IDENTIFIER + ".traceColoringMapInput";
+	private static final String PROPERTY_KEY_DESCRIPTION = PROPERTY_KEY_IDENTIFIER + ".description";
+	private static final String PROPERTY_KEY_DESCRIPTION_INPUT = PROPERTY_KEY_IDENTIFIER + ".descriptionInput";
+
 	private final JLabel infoLabel = new JLabel("<html>In this step you manage additional options for the trace analysis.</html>");
 	private final JPanel expandingPanel = new JPanel();
 	private final JCheckBox verbose = new JCheckBox("Verbosely list used parameters and processed traces");
@@ -64,8 +74,6 @@ public class AdditionalOptionsStep extends AbstractStep {
 	public AdditionalOptionsStep() {
 		this.addAndLayoutComponents();
 		this.addLogicToComponents();
-
-		this.maxTraceDurationMSInput.setValue(600000L);
 	}
 
 	private void addAndLayoutComponents() {
@@ -230,52 +238,42 @@ public class AdditionalOptionsStep extends AbstractStep {
 	}
 
 	@Override
-	public void saveCurrentConfiguration(final Writer writer) throws IOException {
-		writer.write(Boolean.toString(this.verbose.isSelected()));
-		writer.write("\n");
-
-		writer.write(Boolean.toString(this.ignoreInvalidTraces.isSelected()));
-		writer.write("\n");
-
-		writer.write(Boolean.toString(this.useShortLabels.isSelected()));
-		writer.write("\n");
-
-		writer.write(Boolean.toString(this.includeSelfLoops.isSelected()));
-		writer.write("\n");
-
-		writer.write(Boolean.toString(this.maxTraceDurationMS.isSelected()));
-		writer.write("\n");
-
-		writer.write(Long.toString((Long) this.maxTraceDurationMSInput.getValue()));
-		writer.write("\n");
-
-		writer.write(Boolean.toString(this.ignoreAssumedCalls.isSelected()));
-		writer.write("\n");
+	public void loadDefaultConfiguration() {
+		this.maxTraceDurationMSInput.setValue(600000);
 	}
 
 	@Override
-	public void loadCurrentConfiguration(final Scanner scanner) throws IOException {
-		try {
-			this.verbose.setSelected(scanner.nextBoolean());
-			this.ignoreInvalidTraces.setSelected(scanner.nextBoolean());
-			this.useShortLabels.setSelected(scanner.nextBoolean());
-			this.includeSelfLoops.setSelected(scanner.nextBoolean());
-			this.maxTraceDurationMS.setSelected(scanner.nextBoolean());
-			this.maxTraceDurationMSInput.setValue(scanner.nextLong());
-			this.ignoreAssumedCalls.setSelected(scanner.nextBoolean());
-		} catch (final NoSuchElementException ex) {
-			this.setDefaultValues();
-			throw new IOException(ex);
-		}
+	public void saveCurrentConfiguration(final Properties properties) {
+		properties.setProperty(PROPERTY_KEY_VERBOSE, Boolean.toString(this.verbose.isSelected()));
+		properties.setProperty(PROPERTY_KEY_IGNORE_INVALID_TRACES, Boolean.toString(this.ignoreInvalidTraces.isSelected()));
+		properties.setProperty(PROPERTY_KEY_USE_SHORT_LABELS, Boolean.toString(this.useShortLabels.isSelected()));
+		properties.setProperty(PROPERTY_KEY_INCLUDE_SELF_LOOPS, Boolean.toString(this.includeSelfLoops.isSelected()));
+		properties.setProperty(PROPERTY_KEY_MAX_TRACE_DURATION, Boolean.toString(this.maxTraceDurationMS.isSelected()));
+		properties.setProperty(PROPERTY_KEY_MAX_TRACE_DURATION_INPUT, Integer.toString((Integer) this.maxTraceDurationMSInput.getValue()));
+		properties.setProperty(PROPERTY_KEY_IGNORE_ASSUMED_CALLS, Boolean.toString(this.ignoreAssumedCalls.isSelected()));
+		properties.setProperty(PROPERTY_KEY_TRACE_COLORING_MAP, Boolean.toString(this.traceColoringMap.isSelected()));
+		properties.setProperty(PROPERTY_KEY_TRACE_COLORING_MAP_INPUT, this.traceColoringMapInput.getText());
+		properties.setProperty(PROPERTY_KEY_DESCRIPTION, Boolean.toString(this.description.isSelected()));
+		properties.setProperty(PROPERTY_KEY_DESCRIPTION_INPUT, this.descriptionInput.getText());
 	}
 
-	private void setDefaultValues() {
-		this.verbose.setSelected(false);
-		this.ignoreInvalidTraces.setSelected(false);
-		this.useShortLabels.setSelected(false);
-		this.includeSelfLoops.setSelected(false);
-		this.maxTraceDurationMS.setSelected(false);
-		this.ignoreAssumedCalls.setSelected(true);
-		this.maxTraceDurationMSInput.setValue(600000);
+	@Override
+	public void loadCurrentConfiguration(final Properties properties) {
+		this.verbose.setSelected(Boolean.parseBoolean(properties.getProperty(PROPERTY_KEY_VERBOSE)));
+		this.ignoreInvalidTraces.setSelected(Boolean.parseBoolean(properties.getProperty(PROPERTY_KEY_IGNORE_INVALID_TRACES)));
+		this.useShortLabels.setSelected(Boolean.parseBoolean(properties.getProperty(PROPERTY_KEY_USE_SHORT_LABELS)));
+		this.includeSelfLoops.setSelected(Boolean.parseBoolean(properties.getProperty(PROPERTY_KEY_INCLUDE_SELF_LOOPS)));
+		this.maxTraceDurationMS.setSelected(Boolean.parseBoolean(properties.getProperty(PROPERTY_KEY_MAX_TRACE_DURATION)));
+		this.ignoreAssumedCalls.setSelected(Boolean.parseBoolean(properties.getProperty(PROPERTY_KEY_IGNORE_ASSUMED_CALLS)));
+		this.traceColoringMap.setSelected(Boolean.parseBoolean(properties.getProperty(PROPERTY_KEY_TRACE_COLORING_MAP)));
+		this.description.setSelected(Boolean.parseBoolean(properties.getProperty(PROPERTY_KEY_DESCRIPTION)));
+		this.descriptionInput.setText(properties.getProperty(PROPERTY_KEY_DESCRIPTION_INPUT));
+		this.traceColoringMapInput.setText(properties.getProperty(PROPERTY_KEY_TRACE_COLORING_MAP_INPUT));
+		this.maxTraceDurationMSInput.setValue(Integer.parseInt(properties.getProperty(PROPERTY_KEY_MAX_TRACE_DURATION_INPUT)));
+	}
+
+	@Override
+	public boolean isNextStepAllowed() {
+		return true;
 	}
 }

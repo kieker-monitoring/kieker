@@ -20,11 +20,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.IOException;
-import java.io.Writer;
 import java.util.Collection;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.util.Properties;
 
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -42,6 +39,16 @@ public class AdditionalFiltersStep extends AbstractStep {
 
 	private static final long serialVersionUID = 1L;
 
+	private static final String PROPERTY_KEY_IDENTIFIER = AdditionalFiltersStep.class.getSimpleName();
+	private static final String PROPERTY_KEY_SELECT_TRACES = PROPERTY_KEY_IDENTIFIER + ".selectOnlyTraces";
+	private static final String PROPERTY_KEY_SELECT_TRACES_INPUT = PROPERTY_KEY_IDENTIFIER + ".selectOnlyTracesInput";
+	private static final String PROPERTY_KEY_FILTER_TRACES = PROPERTY_KEY_IDENTIFIER + ".filterTraces";
+	private static final String PROPERTY_KEY_FILTER_TRACES_INPUT = PROPERTY_KEY_IDENTIFIER + ".filterTracesInput";
+	private static final String PROPERTY_KEY_IGNORE_BEFORE = PROPERTY_KEY_IDENTIFIER + ".ignoreBefore";
+	private static final String PROPERTY_KEY_IGNORE_BEFORE_INPUT = PROPERTY_KEY_IDENTIFIER + ".ignoreBeforeInput";
+	private static final String PROPERTY_KEY_IGNORE_AFTER = PROPERTY_KEY_IDENTIFIER + ".ignoreAfter";
+	private static final String PROPERTY_KEY_IGNORE_AFTER_INPUT = PROPERTY_KEY_IDENTIFIER + ".ignoreAfterInput";
+
 	private final JLabel infoLabel = new JLabel("<html>In this step you manage additional filters and selections for the trace analysis.</html>");
 	private final JPanel expandingPanel = new JPanel();
 	private final JCheckBox selectOnlyTraces = new JCheckBox("Select Only Traces with Following IDs:");
@@ -56,7 +63,6 @@ public class AdditionalFiltersStep extends AbstractStep {
 	public AdditionalFiltersStep() {
 		this.addAndLayoutComponents();
 		this.addLogicToComponents();
-		this.setDefaultValues();
 	}
 
 	private void addAndLayoutComponents() {
@@ -223,36 +229,7 @@ public class AdditionalFiltersStep extends AbstractStep {
 	}
 
 	@Override
-	public void saveCurrentConfiguration(final Writer writer) throws IOException {
-		writer.write(Boolean.toString(this.selectOnlyTraces.isSelected()));
-		writer.write("\n");
-
-		writer.write(this.selectOnlyTracesInput.getText());
-		writer.write("\n");
-
-		writer.write(Boolean.toString(this.filterTraces.isSelected()));
-		writer.write("\n");
-
-		writer.write(this.filterTracesInput.getText());
-		writer.write("\n");
-	}
-
-	@Override
-	public void loadCurrentConfiguration(final Scanner scanner) throws IOException {
-		try {
-			this.selectOnlyTraces.setSelected(scanner.nextBoolean());
-			scanner.nextLine();
-			this.selectOnlyTracesInput.setText(scanner.nextLine());
-			this.filterTraces.setSelected(scanner.nextBoolean());
-			scanner.nextLine();
-			this.filterTracesInput.setText(scanner.nextLine());
-		} catch (final NoSuchElementException ex) {
-			this.setDefaultValues();
-			throw new IOException(ex);
-		}
-	}
-
-	private void setDefaultValues() {
+	public void loadDefaultConfiguration() {
 		this.selectOnlyTraces.setSelected(false);
 		this.selectOnlyTracesInput.setText("1 2 3 4 42");
 
@@ -267,5 +244,34 @@ public class AdditionalFiltersStep extends AbstractStep {
 
 		this.ignoreAfterInput.setEnabled(false);
 		this.ignoreBeforeInput.setEnabled(false);
+	}
+
+	@Override
+	public void saveCurrentConfiguration(final Properties properties) {
+		properties.setProperty(PROPERTY_KEY_SELECT_TRACES, Boolean.toString(this.selectOnlyTraces.isSelected()));
+		properties.setProperty(PROPERTY_KEY_SELECT_TRACES_INPUT, this.selectOnlyTracesInput.getText());
+		properties.setProperty(PROPERTY_KEY_FILTER_TRACES, Boolean.toString(this.filterTraces.isSelected()));
+		properties.setProperty(PROPERTY_KEY_FILTER_TRACES_INPUT, this.filterTracesInput.getText());
+		properties.setProperty(PROPERTY_KEY_IGNORE_BEFORE, Boolean.toString(this.ignoreBefore.isSelected()));
+		properties.setProperty(PROPERTY_KEY_IGNORE_BEFORE_INPUT, this.ignoreBeforeInput.getText());
+		properties.setProperty(PROPERTY_KEY_IGNORE_AFTER, Boolean.toString(this.ignoreAfter.isSelected()));
+		properties.setProperty(PROPERTY_KEY_IGNORE_AFTER_INPUT, this.ignoreAfterInput.getText());
+	}
+
+	@Override
+	public void loadCurrentConfiguration(final Properties properties) {
+		this.selectOnlyTraces.setSelected(Boolean.parseBoolean(properties.getProperty(PROPERTY_KEY_SELECT_TRACES)));
+		this.selectOnlyTracesInput.setText(properties.getProperty(PROPERTY_KEY_SELECT_TRACES_INPUT));
+		this.filterTraces.setSelected(Boolean.parseBoolean(properties.getProperty(PROPERTY_KEY_FILTER_TRACES)));
+		this.filterTracesInput.setText(properties.getProperty(PROPERTY_KEY_FILTER_TRACES_INPUT));
+		this.ignoreBefore.setSelected(Boolean.parseBoolean(properties.getProperty(PROPERTY_KEY_IGNORE_BEFORE)));
+		this.ignoreBeforeInput.setText(properties.getProperty(PROPERTY_KEY_IGNORE_BEFORE_INPUT));
+		this.ignoreAfter.setSelected(Boolean.parseBoolean(properties.getProperty(PROPERTY_KEY_IGNORE_AFTER)));
+		this.ignoreAfterInput.setText(properties.getProperty(PROPERTY_KEY_IGNORE_AFTER_INPUT));
+	}
+
+	@Override
+	public boolean isNextStepAllowed() {
+		return true;
 	}
 }

@@ -23,9 +23,8 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.io.Writer;
 import java.util.Collection;
-import java.util.Scanner;
+import java.util.Properties;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -112,19 +111,37 @@ public class FinalStep extends AbstractStep {
 		this.clearLogButton.addActionListener(new ClearLogClickListener());
 	}
 
+	public void disableButtons() {
+		this.startButton.setEnabled(false);
+	}
+
+	public void enableButtons() {
+		this.startButton.setEnabled(true);
+	}
+
 	@Override
 	public void addSelectedTraceAnalysisParameters(final Collection<String> parameters) {
 		// No parameters can be selected in this step
 	}
 
 	@Override
-	public void saveCurrentConfiguration(final Writer writer) throws IOException {
+	public void loadDefaultConfiguration() {
+		// Nothing to load
+	}
+
+	@Override
+	public void saveCurrentConfiguration(final Properties properties) {
 		// Nothing to save
 	}
 
 	@Override
-	public void loadCurrentConfiguration(final Scanner scanner) throws IOException {
+	public void loadCurrentConfiguration(final Properties properties) {
 		// Nothing to load
+	}
+
+	@Override
+	public boolean isNextStepAllowed() {
+		return false;
 	}
 
 	private final class ClearLogClickListener implements ActionListener {
