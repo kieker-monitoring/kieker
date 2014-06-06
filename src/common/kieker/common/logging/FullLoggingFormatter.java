@@ -16,7 +16,7 @@
 
 package kieker.common.logging;
 
-import java.util.logging.LogRecord;
+import java.util.logging.LogRecord; // NOCS 
 
 /**
  * A formatter for the logging which is used by the Kieker tools. It prints the important information, as well as a stack trace.
@@ -26,6 +26,10 @@ import java.util.logging.LogRecord;
  * @since 1.10
  */
 public class FullLoggingFormatter extends SimpleLoggingFormatter {
+
+	public FullLoggingFormatter() {
+		// No code necessary
+	}
 
 	@Override
 	protected void fillStringBuilderWithMessage(final StringBuilder sb, final LogRecord record) {
@@ -39,7 +43,7 @@ public class FullLoggingFormatter extends SimpleLoggingFormatter {
 			sb.append(thrown.getLocalizedMessage()).append(LINE_SEPERATOR);
 			final StackTraceElement[] stackTrace = thrown.getStackTrace();
 			for (final StackTraceElement stackTraceElement : stackTrace) {
-				sb.append("\t").append(stackTraceElement).append(LINE_SEPERATOR);
+				sb.append('\t').append(stackTraceElement).append(LINE_SEPERATOR);
 			}
 		}
 	}

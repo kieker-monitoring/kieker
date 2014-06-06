@@ -352,8 +352,10 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 				final String maxToutStr = new StringBuilder().append(this.maxTout).append(" (")
 						.append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.timeunit.toNanos(this.maxTout))).append(",")
 						.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.maxTout)).append(")").toString();
-				LOG.debug("First timestamp: " + minTinStr);
-				LOG.debug("Last timestamp: " + maxToutStr);
+				if (LOG.isDebugEnabled()) {
+					LOG.debug("First timestamp: " + minTinStr);
+					LOG.debug("Last timestamp: " + maxToutStr);
+				}
 			}
 		}
 	}

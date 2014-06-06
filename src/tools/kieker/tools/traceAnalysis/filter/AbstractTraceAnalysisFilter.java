@@ -47,7 +47,7 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 	/** The name of the repository port for the system model repository. */
 	public static final String REPOSITORY_PORT_NAME_SYSTEM_MODEL = "systemModelRepository";
 
-	protected static final Log LOG = LogFactory.getLog(AbstractTraceAnalysisFilter.class);
+	protected static final Log LOG = LogFactory.getLog(AbstractTraceAnalysisFilter.class); // NOPMD (inherited constructor)
 
 	private volatile SystemModelRepository systemEntityFactory;
 
@@ -139,11 +139,13 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 	 *            The lines to be printed.
 	 */
 	protected void printDebugLogMessage(final String[] lines) {
-		LOG.debug("");
-		LOG.debug("#");
-		LOG.debug("# Plugin: " + this.getName());
-		for (final String l : lines) {
-			LOG.debug(l);
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("");
+			LOG.debug("#");
+			LOG.debug("# Plugin: " + this.getName());
+			for (final String l : lines) {
+				LOG.debug(l);
+			}
 		}
 	}
 

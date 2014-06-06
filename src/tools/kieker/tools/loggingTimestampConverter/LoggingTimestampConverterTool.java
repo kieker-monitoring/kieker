@@ -36,7 +36,6 @@ public final class LoggingTimestampConverterTool extends AbstractCommandLineTool
 
 	private static final Log LOG = LogFactory.getLog(LoggingTimestampConverterTool.class);
 
-	private String[] timestampsStr;
 	private long[] timestampsLong;
 
 	private LoggingTimestampConverterTool() {
@@ -56,14 +55,14 @@ public final class LoggingTimestampConverterTool extends AbstractCommandLineTool
 
 	@Override
 	protected boolean readPropertiesFromCommandLine(final CommandLine commandLine) {
-		this.timestampsStr = commandLine.getOptionValues("t");
-		this.timestampsLong = new long[this.timestampsStr.length];
+		final String[] timestampsStr = commandLine.getOptionValues("t");
+		this.timestampsLong = new long[timestampsStr.length];
 
-		for (int curIdx = 0; curIdx < this.timestampsStr.length; curIdx++) {
+		for (int curIdx = 0; curIdx < timestampsStr.length; curIdx++) {
 			try {
-				this.timestampsLong[curIdx] = Long.parseLong(this.timestampsStr[curIdx]);
+				this.timestampsLong[curIdx] = Long.parseLong(timestampsStr[curIdx]);
 			} catch (final NumberFormatException ex) {
-				LOG.error("Failed to parse timestamp:" + this.timestampsStr[curIdx], ex);
+				LOG.error("Failed to parse timestamp:" + timestampsStr[curIdx], ex);
 				return false;
 			}
 		}

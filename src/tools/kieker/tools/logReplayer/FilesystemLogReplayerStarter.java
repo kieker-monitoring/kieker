@@ -122,8 +122,9 @@ public final class FilesystemLogReplayerStarter extends AbstractCommandLineTool 
 			retVal = false;
 		}
 		this.keepOriginalLoggingTimestamps = "true".equals(keepOriginalLoggingTimestampsOptValStr);
-		LOG.debug("Keeping original logging timestamps: " + (this.keepOriginalLoggingTimestamps ? "true" : "false")); // NOCS
-
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Keeping original logging timestamps: " + (this.keepOriginalLoggingTimestamps ? "true" : "false")); // NOCS
+		}
 		// 3.) init realtimeMode
 		final String realtimeOptValStr = commandLine.getOptionValue(CMD_OPT_NAME_REALTIME, "false");
 		if (!("true".equals(realtimeOptValStr) || "false".equals(realtimeOptValStr))) {
@@ -177,12 +178,16 @@ public final class FilesystemLogReplayerStarter extends AbstractCommandLineTool 
 			if (ignoreRecordsBeforeTimestampString != null) {
 				final Date ignoreBeforeDate = dateFormat.parse(ignoreRecordsBeforeTimestampString);
 				this.ignoreRecordsBeforeTimestamp = ignoreBeforeDate.getTime() * (1000 * 1000);
-				LOG.debug("Ignoring records before " + dateFormat.format(ignoreBeforeDate) + " (" + this.ignoreRecordsBeforeTimestamp + ")");
+				if (LOG.isDebugEnabled()) {
+					LOG.debug("Ignoring records before " + dateFormat.format(ignoreBeforeDate) + " (" + this.ignoreRecordsBeforeTimestamp + ")");
+				}
 			}
 			if (ignoreRecordsAfterTimestampString != null) {
 				final Date ignoreAfterDate = dateFormat.parse(ignoreRecordsAfterTimestampString);
 				this.ignoreRecordsAfterTimestamp = ignoreAfterDate.getTime() * (1000 * 1000);
-				LOG.debug("Ignoring records after " + dateFormat.format(ignoreAfterDate) + " (" + this.ignoreRecordsAfterTimestamp + ")");
+				if (LOG.isDebugEnabled()) {
+					LOG.debug("Ignoring records after " + dateFormat.format(ignoreAfterDate) + " (" + this.ignoreRecordsAfterTimestamp + ")");
+				}
 			}
 		} catch (final java.text.ParseException ex) {
 			final String erorMsg = "Error parsing date/time string. Please use the following pattern: "
@@ -192,7 +197,7 @@ public final class FilesystemLogReplayerStarter extends AbstractCommandLineTool 
 		}
 
 		// log configuration
-		if (retVal) {
+		if (retVal && LOG.isDebugEnabled()) {
 			LOG.debug("inputDirs: " + FilesystemLogReplayerStarter.fromStringArrayToDeliminedString(this.inputDirs, ';'));
 			LOG.debug("Replaying in " + (this.realtimeMode ? "" : "non-") + "realtime mode"); // NOCS
 			if (this.realtimeMode) {
@@ -205,10 +210,12 @@ public final class FilesystemLogReplayerStarter extends AbstractCommandLineTool 
 
 	@Override
 	protected boolean performTask() {
-		if (this.realtimeMode) {
-			LOG.debug("Replaying log data in real time");
-		} else {
-			LOG.debug("Replaying log data in non-real time");
+		if (LOG.isDebugEnabled()) {
+			if (this.realtimeMode) {
+				LOG.debug("Replaying log data in real time");
+			} else {
+				LOG.debug("Replaying log data in non-real time");
+			}
 		}
 
 		final FilesystemLogReplayer player = new FilesystemLogReplayer(this.monitoringConfigurationFile, this.realtimeMode, this.realtimeAccelerationFactor,

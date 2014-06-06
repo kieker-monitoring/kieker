@@ -76,7 +76,9 @@ public class MessageTraceWriterFilter extends AbstractMessageTraceProcessingFilt
 	public void printStatusMessage() {
 		super.printStatusMessage();
 		final int numTraces = this.getSuccessCount();
-		LOG.debug("Wrote " + numTraces + " trace" + (numTraces > 1 ? "s" : "") + " to file '" + this.outputFn + "'"); // NOCS
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Wrote " + numTraces + " trace" + (numTraces > 1 ? "s" : "") + " to file '" + this.outputFn + "'"); // NOCS
+		}
 	}
 
 	/**

@@ -43,7 +43,7 @@ public abstract class AbstractCommandLineTool {
 		this.useSystemExit = useSystemExit;
 	}
 
-	public final void start(final String args[]) {
+	public final void start(final String[] args) {
 		final Options options = new Options();
 
 		this.addDefaultOptions(options);

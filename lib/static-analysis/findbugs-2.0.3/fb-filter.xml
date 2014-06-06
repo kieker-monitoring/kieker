@@ -1,6 +1,12 @@
 <FindBugsFilter>
 	<!-- Example: http://findbugs.sourceforge.net/manual/filter.html#d0e2103 -->
 
+	
+	<Match>
+		<Class name="kieker.tools.AbstractCommandLineTool" />
+		<Bug pattern="DM_EXIT" />
+	</Match>
+	
 	<Match>
 		<Class name="kieker.tools.traceAnalysis.TraceAnalysisGUI" />
 		<Bug pattern="SE_BAD_FIELD" />

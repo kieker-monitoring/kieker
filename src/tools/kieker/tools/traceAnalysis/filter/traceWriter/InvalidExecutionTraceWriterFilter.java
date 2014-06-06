@@ -77,7 +77,9 @@ public class InvalidExecutionTraceWriterFilter extends AbstractInvalidExecutionT
 	public void printStatusMessage() {
 		super.printStatusMessage();
 		final int numTraces = this.getSuccessCount();
-		LOG.debug("Wrote " + numTraces + " execution trace artifact" + (numTraces > 1 ? "s" : "") + " to file '" + this.outputFn + "'"); // NOCS
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Wrote " + numTraces + " execution trace artifact" + (numTraces > 1 ? "s" : "") + " to file '" + this.outputFn + "'"); // NOCS
+		}
 	}
 
 	/**

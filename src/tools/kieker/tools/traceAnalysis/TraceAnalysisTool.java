@@ -21,6 +21,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -105,7 +106,7 @@ import kieker.tools.util.ToolsUtil;
  * 
  * @since 0.95a
  */
-
+public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD (long class)
 	public static final String DATE_FORMAT_PATTERN_CMD_USAGE_HELP = Constants.DATE_FORMAT_PATTERN.replaceAll("'", "") + " | timestamp"; // only for usage info
 
 	private static final Log LOG = LogFactory.getLog(TraceAnalysisTool.class);
@@ -128,16 +129,16 @@ import kieker.tools.util.ToolsUtil;
 
 	private CommandLine cmdl;
 
+	private TraceAnalysisTool(final boolean useSystemExit) {
+		super(useSystemExit);
+	}
+
 	public static void main(final String[] args) {
 		TraceAnalysisTool.mainHelper(args, true);
 	}
 
 	public static void mainHelper(final String[] args, final boolean useSystemExit) {
 		new TraceAnalysisTool(useSystemExit).start(args);
-	}
-
-	private TraceAnalysisTool(final boolean useSystemExit) {
-		super(useSystemExit);
 	}
 
 	@Override
@@ -170,24 +171,7 @@ import kieker.tools.util.ToolsUtil;
 	protected HelpFormatter getHelpFormatter() {
 		final HelpFormatter helpFormatter = new CLIHelpFormatter();
 
-		helpFormatter.setOptionComparator(new Comparator<Object>() {
-
-			@Override
-			public int compare(final Object o1, final Object o2) {
-				if (o1 == o2) {
-					return 0;
-				}
-				final int posO1 = Constants.SORTED_OPTION_LIST.indexOf(o1);
-				final int posO2 = Constants.SORTED_OPTION_LIST.indexOf(o2);
-				if (posO1 < posO2) {
-					return -1;
-				}
-				if (posO1 > posO2) {
-					return 1;
-				}
-				return 0;
-			}
-		});
+		helpFormatter.setOptionComparator(new OptionComparator());
 
 		return helpFormatter;
 	}
@@ -208,6 +192,7 @@ import kieker.tools.util.ToolsUtil;
 
 		this.inputDirs = commandLine.getOptionValues(Constants.CMD_OPT_NAME_INPUTDIRS);
 		this.outputDir = commandLine.getOptionValue(Constants.CMD_OPT_NAME_OUTPUTDIR);
+		this.outputFnPrefix = this.cmdl.getOptionValue(Constants.CMD_OPT_NAME_OUTPUTFNPREFIX, "");
 
 		if (this.cmdl.hasOption(Constants.CMD_OPT_NAME_SELECTTRACES) && this.cmdl.hasOption(Constants.CMD_OPT_NAME_FILTERTRACES)) {
 			LOG.error("Trace Id selection and filtering are mutually exclusive");
@@ -298,9 +283,24 @@ import kieker.tools.util.ToolsUtil;
 		final File outputDirFile = new File(this.outputDir);
 		try {
 			if (!outputDirFile.exists()) {
-				LOG.error("The specified output directory '" + outputDirFile.getCanonicalPath() + "' does not exist");
+				System.err.println(""); // NOPMD (System.out)
+				System.err.println("The specified output directory '" + outputDirFile.getCanonicalPath() + "' does not exist"); // NOPMD (System.out)
 				return false;
 			}
+
+			if (!outputDirFile.isDirectory()) {
+				System.err.println(""); // NOPMD (System.out)
+				System.err.println("The specified output directory '" + outputDirFile.getCanonicalPath() + "' is not a directory"); // NOPMD (System.out)
+				return false;
+			}
+
+		} catch (final IOException e) { // thrown by File.getCanonicalPath()
+			System.err.println(""); // NOPMD (System.out)
+			System.err.println("Error resolving name of output directory: '" + this.outputDir + "'"); // NOPMD (System.out)
+		}
+
+		return true;
+	}
 
 	private static void addDecorators(final String[] decoratorNames, final AbstractDependencyGraphFilter<?> plugin) {
 		if (decoratorNames == null) {
@@ -341,12 +341,7 @@ import kieker.tools.util.ToolsUtil;
 				LOG.warn("Unknown decoration name '" + currentDecoratorStr + "'.");
 				return;
 			}
-
-		} catch (final IOException e) { // thrown by File.getCanonicalPath()
-			LOG.error("Error resolving name of output directory: '" + this.outputDir + "'");
 		}
-
-		return true;
 	}
 
 	/**
@@ -1013,39 +1008,9 @@ import kieker.tools.util.ToolsUtil;
 				val = Arrays.toString(this.cmdl.getOptionValues(longOpt));
 				LOG.warn("Unformatted configuration output for option " + longOpt);
 			}
-			LOG.debug("--" + longOpt + ": " + val);
-		}
-	}
-
-	private static void addDecorators(final String[] decoratorNames, final AbstractDependencyGraphFilter<?> plugin) {
-		if (decoratorNames == null) {
-			return;
-		}
-		final List<String> decoratorList = Arrays.asList(decoratorNames);
-		final Iterator<String> decoratorIterator = decoratorList.iterator();
-
-		while (decoratorIterator.hasNext()) {
-			final String currentDecoratorStr = decoratorIterator.next();
-
-			if (Constants.RESPONSE_TIME_DECORATOR_FLAG.equals(currentDecoratorStr)) {
-				plugin.addDecorator(new ResponseTimeNodeDecorator());
-				continue;
-			} else if (Constants.RESPONSE_TIME_COLORING_DECORATOR_FLAG.equals(currentDecoratorStr)) {
-				// if decorator is responseColoring, next value should be the threshold
-				final String thresholdStringStr = decoratorIterator.next();
-
-				try {
-					final int threshold = Integer.parseInt(thresholdStringStr);
-
-					plugin.addDecorator(new ResponseTimeColorNodeDecorator(threshold));
-				} catch (final NumberFormatException exc) {
-					LOG.error("Failed to parse int value of property " + "threshold(ms) : " + thresholdStringStr, exc);
-				}
-			} else {
-				LOG.warn("Unknown decoration name '" + currentDecoratorStr + "'.");
-				return;
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("--" + longOpt + ": " + val);
 			}
-
 		}
 	}
 
@@ -1168,10 +1133,12 @@ import kieker.tools.util.ToolsUtil;
 				ps.println("Class " + numClasses++ + " ; cardinality: " + e.getValue() + "; # executions: " + t.getLength() + "; representative: " + t.getTraceId()
 						+ "; max. stack depth: " + t.getMaxEss());
 			}
-			LOG.debug("");
-			LOG.debug("#");
-			LOG.debug("# Plugin: " + "Trace equivalence report");
-			LOG.debug("Wrote " + numClasses + " equivalence class" + (numClasses > 1 ? "es" : "") + " to file '" + outputFn + "'"); // NOCS
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("");
+				LOG.debug("#");
+				LOG.debug("# Plugin: " + "Trace equivalence report");
+				LOG.debug("Wrote " + numClasses + " equivalence class" + (numClasses > 1 ? "es" : "") + " to file '" + outputFn + "'"); // NOCS
+			}
 		} catch (final FileNotFoundException e) {
 			LOG.error("File not found", e);
 			retVal = false;
@@ -1182,6 +1149,31 @@ import kieker.tools.util.ToolsUtil;
 		}
 
 		return retVal;
+	}
+
+	private static class OptionComparator implements Comparator<Object>, Serializable {
+
+		private static final long serialVersionUID = 1L;
+
+		public OptionComparator() {
+			// No code necessary
+		}
+
+		@Override
+		public int compare(final Object o1, final Object o2) {
+			if (o1 == o2) { // NOPMD
+				return 0;
+			}
+			final int posO1 = Constants.SORTED_OPTION_LIST.indexOf(o1);
+			final int posO2 = Constants.SORTED_OPTION_LIST.indexOf(o2);
+			if (posO1 < posO2) {
+				return -1;
+			}
+			if (posO1 > posO2) {
+				return 1;
+			}
+			return 0;
+		}
 	}
 
 }

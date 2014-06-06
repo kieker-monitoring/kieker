@@ -18,7 +18,7 @@ package kieker.tools.util;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.logging.LogManager;
+import java.util.logging.LogManager; // NOCS 
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -28,11 +28,13 @@ import kieker.common.logging.LogFactory;
  * 
  * @since 1.10
  */
-public class ToolsUtil {
+public final class ToolsUtil {
 
 	private static final Log LOG = LogFactory.getLog(ToolsUtil.class);
 
-	private ToolsUtil() {}
+	private ToolsUtil() {
+		// Private constructor to avoid instantiation
+	}
 
 	public static void loadVerboseLogger() {
 		ToolsUtil.loadLogger("logging.verbose.properties");

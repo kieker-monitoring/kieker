@@ -125,7 +125,9 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	public void printStatusMessage() {
 		synchronized (this) {
 			super.printStatusMessage();
-			LOG.debug("Saved " + this.numGraphsSaved + " call tree" + (this.numGraphsSaved > 1 ? "s" : "")); // NOCS
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("Saved " + this.numGraphsSaved + " call tree" + (this.numGraphsSaved > 1 ? "s" : "")); // NOCS
+			}
 		}
 	}
 
