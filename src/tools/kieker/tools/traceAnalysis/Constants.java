@@ -16,16 +16,12 @@
 
 package kieker.tools.traceAnalysis;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-
-import kieker.tools.util.CLIHelpFormatter;
 
 /**
  * Externalized Strings from {@link TraceAnalysisTool}.
@@ -38,6 +34,7 @@ import kieker.tools.util.CLIHelpFormatter;
 public final class Constants {
 
 	public static final String CMD_OPT_NAME_VERBOSE = "verbose";
+	public static final String CMD_OPT_NAME_DEBUG = "debug";
 	/** Command for the input directories containing monitoring records. */
 	public static final String CMD_OPT_NAME_INPUTDIRS = "inputdirs";
 	/** Command for the output directories. */
@@ -141,7 +138,6 @@ public final class Constants {
 	public static final String PLOTAGGREGATEDALLOCATIONCALLTREE_COMPONENT_NAME = "Aggregated call tree (deployment level)";
 	public static final String PLOTAGGREGATEDASSEMBLYCALLTREE_COMPONENT_NAME = "Aggregated call tree (assembly level)";
 	public static final String PLOTCALLTREE_COMPONENT_NAME = "Trace call trees";
-	public static final HelpFormatter CMD_HELP_FORMATTER = new CLIHelpFormatter();
 	public static final Options CMDL_OPTIONS = new Options();
 	public static final List<Option> SORTED_OPTION_LIST = new CopyOnWriteArrayList<Option>();
 
@@ -170,6 +166,8 @@ public final class Constants {
 				.withDescription("Prefix for output filenames\n").withValueSeparator('=').create("p"));
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_VERBOSE).hasArg(false)
 				.withDescription("Verbosely list used parameters and processed traces").create("v"));
+		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_DEBUG).hasArg(false)
+				.withDescription("prints additional debug information").create("d"));
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTALLOCATIONSEQDS).hasArg(false)
 				.withDescription("Generate and store deployment-level sequence diagrams (.pic)").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTASSEMBLYSEQDS).hasArg(false)
@@ -250,24 +248,6 @@ public final class Constants {
 		for (final Option o : SORTED_OPTION_LIST) {
 			CMDL_OPTIONS.addOption(o);
 		}
-		CMD_HELP_FORMATTER.setOptionComparator(new Comparator<Object>() {
-
-			@Override
-			public int compare(final Object o1, final Object o2) {
-				if (o1 == o2) {
-					return 0;
-				}
-				final int posO1 = SORTED_OPTION_LIST.indexOf(o1);
-				final int posO2 = SORTED_OPTION_LIST.indexOf(o2);
-				if (posO1 < posO2) {
-					return -1;
-				}
-				if (posO1 > posO2) {
-					return 1;
-				}
-				return 0;
-			}
-		});
 	}
 
 	/**

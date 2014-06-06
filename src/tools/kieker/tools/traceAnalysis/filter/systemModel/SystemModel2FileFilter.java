@@ -116,11 +116,9 @@ public class SystemModel2FileFilter extends AbstractTraceAnalysisFilter {
 		}
 
 		if (!error) {
-			if (this.verbose) {
-				this.printMessage(new String[] { "Wrote HTML output of system model to file '" + outputFnHTMLCanonical + "'" });
-			}
+			this.printDebugLogMessage(new String[] { "Wrote HTML output of system model to file '" + outputFnHTMLCanonical + "'" });
 		} else {
-			this.printMessage(new String[] { "Failed to write HTML output of system model to file '" + outputFnHTMLCanonical + "'" });
+			this.printErrorLogMessage(new String[] { "Failed to write HTML output of system model to file '" + outputFnHTMLCanonical + "'" });
 		}
 	}
 }
