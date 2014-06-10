@@ -85,7 +85,7 @@ public final class FilesystemLogReplayerStarter extends AbstractCommandLineTool 
 				.withValueSeparator('=').create("i"));
 		options.addOption(OptionBuilder.withArgName("true|false").hasArg()
 				.withLongOpt(CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS).isRequired(false)
-				.withDescription("Replay the original logging timestamps (defaults to true)?)").withValueSeparator('=').create("k"));
+				.withDescription("Replay the original logging timestamps (defaults to true)?").withValueSeparator('=').create("k"));
 		options.addOption(OptionBuilder.withArgName("true|false").hasArg()
 				.withLongOpt(CMD_OPT_NAME_REALTIME).isRequired(true).withDescription("Replay log data in realtime?")
 				.withValueSeparator('=').create("r"));
