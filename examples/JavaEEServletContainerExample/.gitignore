@@ -1,4 +1,5 @@
-/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/kieker-*.jar
-/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/*sigar*
-/jetty-hightide-jpetstore/webapps/demo/WEB-INF/lib/kieker-*.jar
-/jetty-hightide-jpetstore/webapps/demo/WEB-INF/classes
+/jetty/webapps/root/WEB-INF/classes
+/jetty/webapps/root/WEB-INF/lib/kieker-*.jar
+/jetty/webapps/jpetstore/WEB-INF/lib/kieker-*.jar
+/jetty/webapps/jpetstore/WEB-INF/lib/*sigar*
+/jetty/jmeter.log

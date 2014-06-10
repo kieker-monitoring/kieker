@@ -17,6 +17,7 @@
 	<classpathentry kind="src" path="examples/userguide/appendix-Sigar/src"/>
 	<classpathentry kind="src" path="examples/SPECjEnterprise2010/src"/>
 	<classpathentry kind="src" path="examples/JavaEEServletContainerExample/src"/>
+	<classpathentry kind="src" output="examples/JavaEEServletContainerExample/jetty/webapps/root/WEB-INF/classes" path="examples/JavaEEServletContainerExample/livedemo/src"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="lib" path="lib/activemq-core-5.4.3.jar"/>
@@ -70,32 +71,11 @@
 	<classpathentry kind="lib" path="lib/framework-libs/spring/spring-webmvc-portlet-3.2.8.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/sigar/sigar-1.6.4.jar"/>
 	<classpathentry kind="lib" path="lib/static-analysis/checkstyle-5.6/lib/checkstyle-all.jar"/>
-	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-ajp-7.6.10.v20130312.jar"/>
-	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-annotations-7.6.10.v20130312.jar"/>
-	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-client-7.6.10.v20130312.jar"/>
-	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-continuation-7.6.10.v20130312.jar"/>
-	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-deploy-7.6.10.v20130312.jar"/>
-	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-http-7.6.10.v20130312.jar"/>
-	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-io-7.6.10.v20130312.jar"/>
-	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-jmx-7.6.10.v20130312.jar"/>
-	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-jndi-7.6.10.v20130312.jar"/>
-	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-overlay-deployer-7.6.10.v20130312.jar"/>
-	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-plus-7.6.10.v20130312.jar"/>
-	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-policy-7.6.10.v20130312.jar"/>
-	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-rewrite-7.6.10.v20130312.jar"/>
-	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-security-7.6.10.v20130312.jar"/>
-	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-server-7.6.10.v20130312.jar"/>
-	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-servlet-7.6.10.v20130312.jar"/>
-	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-servlets-7.6.10.v20130312.jar"/>
-	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-util-7.6.10.v20130312.jar"/>
-	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-webapp-7.6.10.v20130312.jar"/>
-	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-websocket-7.6.10.v20130312.jar"/>
-	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/jetty-xml-7.6.10.v20130312.jar"/>
-	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/demo/WEB-INF/lib/primefaces-3.4.2.jar"/>
-	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/demo/WEB-INF/lib/jsf-api-2.1.20.jar"/>
-	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/aopalliance-1.0.jar"/>
-	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/asm-3.1.jar"/>
-	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/cglib-2.2.jar"/>
 	<classpathentry kind="lib" path="lib/kahadb-5.7.0.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib/asm-3.1.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib/cglib-2.2.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty/webapps/root/WEB-INF/lib/primefaces-3.4.2.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty/webapps/root/WEB-INF/lib/jsf-api-2.1.20.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty/webapps/root/WEB-INF/lib/ApacheJMeter_core.jar"/>
 	<classpathentry kind="output" path="build-eclipse"/>
 </classpath>
