@@ -16,23 +16,20 @@
 
 package kieker.tools.traceAnalysis.gui;
 
-import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.Collection;
 import java.util.Properties;
 
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import kieker.tools.traceAnalysis.Constants;
+import kieker.tools.traceAnalysis.gui.util.FileChooserActionListener;
 
 /**
  * @author Nils Christian Ehmke
@@ -60,6 +57,7 @@ public class WelcomeStep extends AbstractStep {
 	public WelcomeStep() {
 		this.addAndLayoutComponents();
 		this.addLogicToComponents();
+		this.addToolTipsToComponents();
 	}
 
 	private void addAndLayoutComponents() {
@@ -141,14 +139,16 @@ public class WelcomeStep extends AbstractStep {
 		gridBagConstraints.weighty = 1.0;
 		gridBagConstraints.fill = GridBagConstraints.VERTICAL;
 		this.add(this.expandingPanel, gridBagConstraints);
-
-		this.inputDirectoryTextField.setToolTipText("The input directory contains usually monitoring records for the analysis.");
-		this.outputDirectoryTextField.setToolTipText("The output directory is used to write the visual representations from the analysis.");
 	}
 
 	private void addLogicToComponents() {
-		this.inputDirectoryChooseButton.addActionListener(new ChooseDirectoryActionListener(this.inputDirectoryTextField, this));
-		this.outputDirectoryChooseButton.addActionListener(new ChooseDirectoryActionListener(this.outputDirectoryTextField, this));
+		this.inputDirectoryChooseButton.addActionListener(FileChooserActionListener.createDirectoryChooserActionListener(this.inputDirectoryTextField, this));
+		this.outputDirectoryChooseButton.addActionListener(FileChooserActionListener.createDirectoryChooserActionListener(this.outputDirectoryTextField, this));
+	}
+
+	private void addToolTipsToComponents() {
+		this.inputDirectoryTextField.setToolTipText("The input directory contains usually monitoring records for the analysis.");
+		this.outputDirectoryTextField.setToolTipText("The output directory is used to write the visual representations from the analysis.");
 	}
 
 	@Override
@@ -207,28 +207,6 @@ public class WelcomeStep extends AbstractStep {
 
 		this.inputDirectoryTextField.setText(currentPath);
 		this.outputDirectoryTextField.setText(currentPath);
-	}
-
-	private static class ChooseDirectoryActionListener implements ActionListener {
-
-		private final JTextField textField;
-		private final Component parent;
-
-		public ChooseDirectoryActionListener(final JTextField textField, final Component parent) {
-			this.textField = textField;
-			this.parent = parent;
-		}
-
-		@Override
-		public void actionPerformed(final ActionEvent event) {
-			final JFileChooser fileChooser = new JFileChooser(this.textField.getText());
-			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-
-			if (fileChooser.showOpenDialog(this.parent) == JFileChooser.APPROVE_OPTION) {
-				this.textField.setText(fileChooser.getSelectedFile().getAbsolutePath());
-			}
-		}
-
 	}
 
 }

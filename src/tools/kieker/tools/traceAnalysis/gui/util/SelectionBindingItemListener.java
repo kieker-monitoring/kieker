@@ -14,32 +14,35 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.traceAnalysis.gui;
+package kieker.tools.traceAnalysis.gui.util;
 
-import java.util.Collection;
-import java.util.Properties;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
-import javax.swing.JPanel;
+import javax.swing.JCheckBox;
 
 /**
- * An abstract base for all other steps within the trace analysis GUI.
+ * An item listener which selects or deselects a given check box if the owning checkbox is selected or deselected.
  * 
  * @author Nils Christian Ehmke
  * 
- * @since 1.9
+ * @since 1.10
  */
-public abstract class AbstractStep extends JPanel {
+public final class SelectionBindingItemListener implements ItemListener {
 
-	private static final long serialVersionUID = 1L;
+	private final JCheckBox bindedCheckBox;
+	private final boolean inverted;
 
-	public abstract void addSelectedTraceAnalysisParameters(final Collection<String> parameters);
+	public SelectionBindingItemListener(final JCheckBox bindedCheckBox, final boolean inverted) {
+		this.bindedCheckBox = bindedCheckBox;
+		this.inverted = inverted;
+	}
 
-	public abstract void loadDefaultConfiguration();
-
-	public abstract void saveCurrentConfiguration(Properties properties);
-
-	public abstract void loadCurrentConfiguration(Properties properties);
-
-	public abstract boolean isNextStepAllowed();
+	@Override
+	public void itemStateChanged(final ItemEvent event) {
+		if (this.inverted ^ (ItemEvent.SELECTED == event.getStateChange())) {
+			this.bindedCheckBox.setSelected(!this.inverted);
+		}
+	}
 
 }

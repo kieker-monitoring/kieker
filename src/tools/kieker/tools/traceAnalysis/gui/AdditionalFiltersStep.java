@@ -256,6 +256,11 @@ public class AdditionalFiltersStep extends AbstractStep {
 		properties.setProperty(PROPERTY_KEY_IGNORE_BEFORE_INPUT, this.ignoreBeforeInput.getText());
 		properties.setProperty(PROPERTY_KEY_IGNORE_AFTER, Boolean.toString(this.ignoreAfter.isSelected()));
 		properties.setProperty(PROPERTY_KEY_IGNORE_AFTER_INPUT, this.ignoreAfterInput.getText());
+
+		this.selectOnlyTracesInput.setEnabled(this.selectOnlyTraces.isSelected());
+		this.filterTracesInput.setEnabled(this.filterTraces.isSelected());
+		this.ignoreBeforeInput.setEnabled(this.ignoreBefore.isSelected());
+		this.ignoreAfterInput.setEnabled(this.ignoreAfter.isSelected());
 	}
 
 	@Override

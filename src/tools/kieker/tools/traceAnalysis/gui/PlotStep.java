@@ -18,8 +18,6 @@ package kieker.tools.traceAnalysis.gui;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.Collection;
 import java.util.Properties;
 
@@ -29,6 +27,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import kieker.tools.traceAnalysis.Constants;
+import kieker.tools.traceAnalysis.gui.util.AllSelectionBindingItemListener;
+import kieker.tools.traceAnalysis.gui.util.SelectionBindingItemListener;
 
 /**
  * In this step of the trace analysis wizard, the user can choose the plots to draw.
@@ -191,52 +191,24 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 	}
 
 	private void addLogicToComponents() {
-		this.allGraphs.addItemListener(new ItemListener() {
+		this.allGraphs.addItemListener(new AllSelectionBindingItemListener(this.deploymentSequenceDiagrams, this.assemblySequenceDiagrams,
+				this.deploymentComponentDependencyGraph, this.deploymentComponentDependencyGraphResponseTime, this.assemblyComponentDependencyGraph,
+				this.assemblyComponentDependencyGraphResponseTime, this.assemblyComponentDependencyGraphResponseTime, this.containerDependencyGraph,
+				this.deploymentOperationDependencyGraph, this.deploymentOperationDependencyGraphResponseTime, this.assemblyOperationDependencyGraph,
+				this.assemblyOperationDependencyGraph, this.assemblyOperationDependencyGraphResponseTime, this.aggregatedDeploymentCallTree,
+				this.aggregatedAssemblyCallTree, this.callTrees));
 
-			@Override
-			@SuppressWarnings("synthetic-access")
-			public void itemStateChanged(final ItemEvent event) {
-				PlotStep.this.deploymentSequenceDiagrams.setSelected(PlotStep.this.allGraphs.isSelected());
-				PlotStep.this.assemblySequenceDiagrams.setSelected(PlotStep.this.allGraphs.isSelected());
-				PlotStep.this.deploymentComponentDependencyGraph.setSelected(PlotStep.this.allGraphs.isSelected());
-				PlotStep.this.deploymentComponentDependencyGraphResponseTime.setSelected(PlotStep.this.allGraphs.isSelected());
-				PlotStep.this.assemblyComponentDependencyGraph.setSelected(PlotStep.this.allGraphs.isSelected());
-				PlotStep.this.assemblyComponentDependencyGraphResponseTime.setSelected(PlotStep.this.allGraphs.isSelected());
-				PlotStep.this.containerDependencyGraph.setSelected(PlotStep.this.allGraphs.isSelected());
-				PlotStep.this.deploymentOperationDependencyGraph.setSelected(PlotStep.this.allGraphs.isSelected());
-				PlotStep.this.deploymentOperationDependencyGraphResponseTime.setSelected(PlotStep.this.allGraphs.isSelected());
-				PlotStep.this.assemblyOperationDependencyGraph.setSelected(PlotStep.this.allGraphs.isSelected());
-				PlotStep.this.assemblyOperationDependencyGraphResponseTime.setSelected(PlotStep.this.allGraphs.isSelected());
-				PlotStep.this.aggregatedDeploymentCallTree.setSelected(PlotStep.this.allGraphs.isSelected());
-				PlotStep.this.aggregatedAssemblyCallTree.setSelected(PlotStep.this.allGraphs.isSelected());
-				PlotStep.this.callTrees.setSelected(PlotStep.this.allGraphs.isSelected());
-			}
-		});
+		this.deploymentComponentDependencyGraph.addItemListener(new SelectionBindingItemListener(this.deploymentComponentDependencyGraphResponseTime, true));
+		this.deploymentComponentDependencyGraphResponseTime.addItemListener(new SelectionBindingItemListener(this.deploymentComponentDependencyGraph, false));
 
-		this.deploymentComponentDependencyGraph.addItemListener(new SelectionBindingItemListener(this.deploymentComponentDependencyGraph,
-				this.deploymentComponentDependencyGraphResponseTime, true));
-		this.deploymentComponentDependencyGraphResponseTime.addItemListener(new SelectionBindingItemListener(this.deploymentComponentDependencyGraphResponseTime,
-				this.deploymentComponentDependencyGraph, false));
+		this.assemblyComponentDependencyGraph.addItemListener(new SelectionBindingItemListener(this.assemblyComponentDependencyGraphResponseTime, true));
+		this.assemblyComponentDependencyGraphResponseTime.addItemListener(new SelectionBindingItemListener(this.assemblyComponentDependencyGraph, false));
 
-		this.assemblyComponentDependencyGraph.addItemListener(new SelectionBindingItemListener(this.assemblyComponentDependencyGraph,
-				this.assemblyComponentDependencyGraphResponseTime, true));
-		this.assemblyComponentDependencyGraphResponseTime.addItemListener(new SelectionBindingItemListener(this.assemblyComponentDependencyGraphResponseTime,
-				this.assemblyComponentDependencyGraph, false));
+		this.deploymentOperationDependencyGraph.addItemListener(new SelectionBindingItemListener(this.deploymentOperationDependencyGraphResponseTime, true));
+		this.deploymentOperationDependencyGraphResponseTime.addItemListener(new SelectionBindingItemListener(this.deploymentOperationDependencyGraph, false));
 
-		this.deploymentOperationDependencyGraph.addItemListener(new SelectionBindingItemListener(this.deploymentOperationDependencyGraph,
-				this.deploymentOperationDependencyGraphResponseTime, true));
-		this.deploymentOperationDependencyGraphResponseTime.addItemListener(new SelectionBindingItemListener(this.deploymentOperationDependencyGraphResponseTime,
-				this.deploymentOperationDependencyGraph, false));
-
-		this.assemblyOperationDependencyGraph.addItemListener(new SelectionBindingItemListener(this.assemblyOperationDependencyGraph,
-				this.assemblyOperationDependencyGraphResponseTime, true));
-		this.assemblyOperationDependencyGraphResponseTime.addItemListener(new SelectionBindingItemListener(this.assemblyOperationDependencyGraphResponseTime,
-				this.assemblyOperationDependencyGraph, false));
-
-		this.assemblyOperationDependencyGraphResponseTime.addItemListener(new SelectionBindingItemListener(this.assemblyOperationDependencyGraphResponseTime,
-				this.assemblyOperationDependencyGraphResponseTime, true));
-		this.assemblyOperationDependencyGraphResponseTime.addItemListener(new SelectionBindingItemListener(this.assemblyOperationDependencyGraphResponseTime,
-				this.assemblyOperationDependencyGraphResponseTime, false));
+		this.assemblyOperationDependencyGraph.addItemListener(new SelectionBindingItemListener(this.assemblyOperationDependencyGraphResponseTime, true));
+		this.assemblyOperationDependencyGraphResponseTime.addItemListener(new SelectionBindingItemListener(this.assemblyOperationDependencyGraph, false));
 	}
 
 	@Override
@@ -366,27 +338,6 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 
 		this.deploymentOperationDependencyGraph.setSelected(true);
 		this.deploymentOperationDependencyGraphResponseTime.setSelected(true);
-	}
-
-	private static class SelectionBindingItemListener implements ItemListener {
-
-		private final JCheckBox sourceCheckBox;
-		private final JCheckBox bindedCheckBox;
-		private final boolean inverted;
-
-		public SelectionBindingItemListener(final JCheckBox sourceCheckBox, final JCheckBox bindedCheckBox, final boolean inverted) {
-			this.sourceCheckBox = sourceCheckBox;
-			this.bindedCheckBox = bindedCheckBox;
-			this.inverted = inverted;
-		}
-
-		@Override
-		public void itemStateChanged(final ItemEvent e) {
-			if (this.inverted ^ this.sourceCheckBox.isSelected()) {
-				this.bindedCheckBox.setSelected(!this.inverted);
-			}
-		}
-
 	}
 
 }

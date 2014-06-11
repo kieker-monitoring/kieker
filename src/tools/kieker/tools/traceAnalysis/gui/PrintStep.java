@@ -18,8 +18,6 @@ package kieker.tools.traceAnalysis.gui;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.Collection;
 import java.util.Properties;
 
@@ -29,6 +27,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import kieker.tools.traceAnalysis.Constants;
+import kieker.tools.traceAnalysis.gui.util.AllSelectionBindingItemListener;
 
 /**
  * @author Nils Christian Ehmke
@@ -110,19 +109,8 @@ public class PrintStep extends AbstractStep {
 	}
 
 	private void addLogicToComponents() {
-		this.allPrints.addItemListener(new ItemListener() {
-
-			@Override
-			@SuppressWarnings("synthetic-access")
-			public void itemStateChanged(final ItemEvent event) {
-				PrintStep.this.messageTraces.setSelected(PrintStep.this.allPrints.isSelected());
-				PrintStep.this.executionTraces.setSelected(PrintStep.this.allPrints.isSelected());
-				PrintStep.this.invalidExecutionTraces.setSelected(PrintStep.this.allPrints.isSelected());
-				PrintStep.this.systemModel.setSelected(PrintStep.this.allPrints.isSelected());
-				PrintStep.this.deploymentEquivalenceClasses.setSelected(PrintStep.this.allPrints.isSelected());
-				PrintStep.this.assemblyEquivalenceClasses.setSelected(PrintStep.this.allPrints.isSelected());
-			}
-		});
+		this.allPrints.addItemListener(new AllSelectionBindingItemListener(this.messageTraces, this.executionTraces, this.invalidExecutionTraces, this.systemModel,
+				this.deploymentEquivalenceClasses, this.assemblyEquivalenceClasses));
 	}
 
 	@Override

@@ -166,7 +166,7 @@ public class TraceAnalysisGUI extends JFrame {
 			for (final AbstractStep step : this.steps) {
 				step.loadCurrentConfiguration(properties);
 			}
-		} catch (final IOException ex) {
+		} catch (final Exception ex) { // NOPMD
 			for (final AbstractStep step : this.steps) {
 				step.loadDefaultConfiguration();
 			}

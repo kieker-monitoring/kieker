@@ -182,6 +182,19 @@ public class ConversionStep extends AbstractStep {
 	private void addLogicToComponents() {
 		this.graphvizDirectoryChooseButton.addActionListener(new ChooseDirectoryActionListener(this.graphvizDirectoryField, this));
 		this.pic2plotDirectoryChooseButton.addActionListener(new ChooseDirectoryActionListener(this.pic2plotDirectoryField, this));
+
+		this.performStep.addActionListener(new ActionListener() {
+
+			@Override
+			@SuppressWarnings("synthetic-access")
+			public void actionPerformed(final ActionEvent e) {
+				ConversionStep.this.graphvizDirectoryField.setEnabled(ConversionStep.this.performStep.isSelected());
+				ConversionStep.this.pic2plotDirectoryField.setEnabled(ConversionStep.this.performStep.isSelected());
+				ConversionStep.this.graphvizDirectoryChooseButton.setEnabled(ConversionStep.this.performStep.isSelected());
+				ConversionStep.this.pic2plotDirectoryChooseButton.setEnabled(ConversionStep.this.performStep.isSelected());
+				ConversionStep.this.outputFormatField.setEnabled(ConversionStep.this.performStep.isSelected());
+			}
+		});
 	}
 
 	@Override
@@ -251,6 +264,12 @@ public class ConversionStep extends AbstractStep {
 		this.graphvizDirectoryField.setText(this.currentPath);
 		this.pic2plotDirectoryField.setText(this.currentPath);
 		this.outputFormatField.setSelectedIndex(0);
+
+		this.graphvizDirectoryField.setEnabled(false);
+		this.pic2plotDirectoryField.setEnabled(false);
+		this.graphvizDirectoryChooseButton.setEnabled(false);
+		this.pic2plotDirectoryChooseButton.setEnabled(false);
+		this.outputFormatField.setEnabled(false);
 	}
 
 	@Override
@@ -267,6 +286,12 @@ public class ConversionStep extends AbstractStep {
 		this.graphvizDirectoryField.setText(properties.getProperty(PROPERTY_KEY_GRAPHVIZ));
 		this.pic2plotDirectoryField.setText(properties.getProperty(PROPERTY_KEY_PIC2PLOT));
 		this.outputFormatField.setSelectedIndex(Integer.parseInt(properties.getProperty(PROPERTY_KEY_OUTPUT_FORMAT)));
+
+		this.graphvizDirectoryField.setEnabled(this.performStep.isSelected());
+		this.pic2plotDirectoryField.setEnabled(this.performStep.isSelected());
+		this.graphvizDirectoryChooseButton.setEnabled(this.performStep.isSelected());
+		this.pic2plotDirectoryChooseButton.setEnabled(this.performStep.isSelected());
+		this.outputFormatField.setEnabled(this.performStep.isSelected());
 	}
 
 	@Override
