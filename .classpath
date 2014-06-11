@@ -16,7 +16,6 @@
 	<classpathentry kind="src" path="examples/userguide/appendix-JMS/src"/>
 	<classpathentry kind="src" path="examples/userguide/appendix-Sigar/src"/>
 	<classpathentry kind="src" path="examples/SPECjEnterprise2010/src"/>
-	<classpathentry kind="src" path="examples/JavaEEServletContainerExample/src"/>
 	<classpathentry kind="src" output="examples/JavaEEServletContainerExample/jetty/webapps/root/WEB-INF/classes" path="examples/JavaEEServletContainerExample/livedemo/src"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>

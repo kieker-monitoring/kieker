@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="KiekerLiveDemoExample" default="build-all" basedir=".">
+	<property name="kieker.version" value="1.10"/>
+	<property name="dist" value="dist"/>
+	<property name="war.demo.name" value="${dist}/livedemo.war"/>
+	<property name="war.petstore.name" value="${dist}/jpetstore.war"/>
+	<property name="src" value="livedemo"/>
+	<property name="root" value="../.."/>
+	<property name="kieker.dir" value="${root}/dist"/>
+	<property name="sigar.lib.dir" value="${root}/lib/sigar"/>
+	<property name="build" value="jetty/webapps/root/WEB-INF/classes"/>
+	<property name="demo.lib.dir" value="jetty/webapps/root/WEB-INF/lib"/>
+	<property name="jpetstore.lib.dir" value="jetty/webapps/jpetstore/WEB-INF/lib"/>
+	<property name="jetty.lib.dir" value="jetty/lib"/>
+	
+	<path id="demo-compile-classpath">
+		<fileset dir="${demo.lib.dir}">
+			<include name="primefaces-*.jar" />
+			<include name="ApacheJMeter_core.jar" />
+			<include name="jsf-api-*.jar" />
+			<include name="kieker-*.jar" />
+		</fileset>
+		<fileset dir="${jetty.lib.dir}/annotations/">
+			<include name="javax.annotation-*.jar" />
+		</fileset>
+	</path>
+
+	<target name="build-all" depends="clean,init,compile,war" />
+	
+	<target name="clean">
+		<delete dir="${build}"/>
+		<delete dir="${dist}"/>
+	</target>
+
+	<target name="init" depends="clean">
+		<mkdir dir="${build}"/>
+		<mkdir dir="${dist}"/>
+		<copy file="${kieker.dir}/kieker-${kieker.version}-SNAPSHOT_emf.jar" todir="${demo.lib.dir}" overwrite="true"/>
+		<copy file="${kieker.dir}/kieker-${kieker.version}-SNAPSHOT_aspectj.jar" todir="${jpetstore.lib.dir}" overwrite="true"/>
+		<copy todir="${jpetstore.lib.dir}">
+			<fileset dir="${sigar.lib.dir}"/>
+		</copy>
+	</target>
+
+	<target name="compile" depends="init">
+		<javac srcdir="${src}" destdir="${build}" classpathref="demo-compile-classpath"/>
+	</target>
+
+	<target name="war">
+		<war destfile="${war.demo.name}">
+			<fileset dir="jetty/webapps/root"/>
+		</war>
+		<war destfile="${war.petstore.name}">
+			<fileset dir="jetty/webapps/jpetstore"/>
+		</war>
+	</target>
+
+</project>
