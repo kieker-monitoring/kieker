@@ -962,7 +962,8 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDALLOCATIONCALLTREE)
 					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDASSEMBLYCALLTREE) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTCALLTREES)
 					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTEXECTRACES) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES)
-					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTMSGTRACES) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTSYSTEMMODEL)) {
+					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTMSGTRACES) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTSYSTEMMODEL)
+					|| longOpt.equals(Constants.CMD_OPT_NAME_DEBUG) || longOpt.equals(Constants.CMD_OPT_NAME_VERBOSE)) {
 				val = this.cmdl.hasOption(longOpt) ? "true" : "false"; // NOCS
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_SELECTTRACES)) {
 				if (this.selectedTraces != null) {
