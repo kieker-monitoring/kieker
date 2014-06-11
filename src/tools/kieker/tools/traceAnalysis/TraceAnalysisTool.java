@@ -184,12 +184,6 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 	 * @return true if and only if the tool has been initialized correctly.
 	 */
 	private boolean initFromArgs(final CommandLine commandLine) {
-		if (commandLine.hasOption('d')) {
-			ToolsUtil.loadDebugLogger();
-		} else if (commandLine.hasOption('v')) {
-			ToolsUtil.loadVerboseLogger();
-		}
-
 		this.inputDirs = commandLine.getOptionValues(Constants.CMD_OPT_NAME_INPUTDIRS);
 		this.outputDir = commandLine.getOptionValue(Constants.CMD_OPT_NAME_OUTPUTDIR);
 		this.outputFnPrefix = this.cmdl.getOptionValue(Constants.CMD_OPT_NAME_OUTPUTFNPREFIX, "");
