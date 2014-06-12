@@ -22,11 +22,12 @@ import kieker.tools.tslib.forecast.AbstractRForecaster;
 
 /**
  * 
- * @author Nikolas Herbst
+ * @author Nikolas Herbst <nikolas.herbst@uni-wuerzburg.de>
  *         Generalization of MA by using weights according to the exponential function
  *         to give higher weight to more recent values.
  *         1st step: estimation of parameters for weights/exp. function
  *         2nd step: calculation of weighted averages as point forecast
+ * @see http://dx.doi.org/10.1002/cpe.3224
  * 
  * @since 1.10
  */

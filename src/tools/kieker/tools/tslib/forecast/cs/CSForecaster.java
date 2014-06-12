@@ -22,7 +22,7 @@ import kieker.tools.tslib.forecast.AbstractRForecaster;
 
 /**
  * @since 1.10
- * @author Nikolas Herbst
+ * @author Nikolas Herbst <nikolas.herbst@uni-wuerzburg.de>
  * 
  *         Cubic splines are fitted to the univariate time series data to obtain
  *         a trend estimate and linear forecast function.
@@ -31,6 +31,8 @@ import kieker.tools.tslib.forecast.AbstractRForecaster;
  *         an ARIMA 022 stochastic process model with a restricted parameter space.
  * 
  *         Overhead below 100ms for less than 30 values (more values do not sig. improve accuracy)
+ * 
+ * @see http://dx.doi.org/10.1002/cpe.3224
  */
 public class CSForecaster extends AbstractRForecaster {
 	private static final String MODEL_FUNC_NAME = null; // no explicit stochastic model

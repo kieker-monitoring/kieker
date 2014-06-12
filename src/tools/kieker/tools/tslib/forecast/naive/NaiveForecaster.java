@@ -22,13 +22,15 @@ import kieker.tools.tslib.forecast.AbstractRForecaster;
 
 /**
  * @since 1.10
- * @author Nikolas Herbst
+ * @author Nikolas Herbst <nikolas.herbst@uni-wuerzburg.de>
  *         The naïve forecast considers only the
  *         value of the most recent observation assuming that this
  *         value has the highest probability for the next forecast point.
  * 
  *         Horizon: very short term forecast (1-2 points)
  *         Overhead: nearly none O(1)
+ * 
+ * @see http://dx.doi.org/10.1002/cpe.3224
  */
 public class NaiveForecaster extends AbstractRForecaster {
 	private static final String MODEL_FUNC_NAME = null; // no explicit stochastic model

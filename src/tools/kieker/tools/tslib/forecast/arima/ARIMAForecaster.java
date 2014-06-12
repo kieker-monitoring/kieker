@@ -24,7 +24,7 @@ import kieker.tools.tslib.forecast.AbstractRForecaster;
  * An R-based time series forecaster, auto-arima model selection.
  * 
  * @since 1.10
- * @author Andre van Hoorn + Nikolas Herbst
+ * @author Andre van Hoorn + Nikolas Herbst <nikolas.herbst@uni-wuerzburg.de>
  * 
  *         The automated ARIMA model selection process of the R forecasting package starts
  *         with a complex estimation of an appropriate ARIMA(p, d, q)(P, D, Q)m model by using
