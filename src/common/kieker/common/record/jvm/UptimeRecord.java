@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ***************************************************************************/
+
 package kieker.common.record.jvm;
 
 import java.nio.BufferOverflowException;
@@ -27,62 +28,49 @@ import kieker.common.util.registry.IRegistry;
  * 
  * @since 1.10
  */
-public class GCRecord extends AbstractJVMRecord {
+public class UptimeRecord extends AbstractJVMRecord {
 
-	public static final int SIZE = AbstractJVMRecord.SIZE + TYPE_SIZE_STRING + (2 * TYPE_SIZE_LONG);
+	public static final int SIZE = AbstractJVMRecord.SIZE + TYPE_SIZE_LONG;
 
 	public static final Class<?>[] TYPES = {
 		long.class, // timestamp
 		String.class, // hostname
 		String.class, // vmName
-		String.class,
-		long.class,
 		long.class,
 	};
 
 	private static final long serialVersionUID = 2989308154952301746L;
+	private final long uptimeMS;
 
-	private final String gcName;
-	private final long collectionCount;
-	private final long collectionTimeMS;
-
-	public GCRecord(final long timestamp, final String hostname, final String vmName, final String gcName, final long collectionCount, final long collectionTimeMS) {
+	public UptimeRecord(final long timestamp, final String hostname, final String vmName, final long uptimeMS) {
 		super(timestamp, hostname, vmName);
 
-		this.gcName = gcName;
-		this.collectionCount = collectionCount;
-		this.collectionTimeMS = collectionTimeMS;
+		this.uptimeMS = uptimeMS;
 	}
 
-	public GCRecord(final Object[] values) { // NOPMD (direct store of values)
+	public UptimeRecord(final Object[] values) { // NOPMD (direct store of values)
 		super(values);
 		AbstractMonitoringRecord.checkArray(values, TYPES);
 
-		this.gcName = (String) values[3];
-		this.collectionCount = (Long) values[4];
-		this.collectionTimeMS = (Long) values[5];
+		this.uptimeMS = (Long) values[3];
 	}
 
-	public GCRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+	public UptimeRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		super(buffer, stringRegistry);
 
-		this.gcName = stringRegistry.get(buffer.getInt());
-		this.collectionCount = buffer.getLong();
-		this.collectionTimeMS = buffer.getLong();
+		this.uptimeMS = buffer.getLong();
 	}
 
 	@Override
 	public Object[] toArray() {
-		return new Object[] { super.getTimestamp(), super.getHostname(), super.getVmName(), this.getGcName(), this.getCollectionCount(), this.getCollectionTimeMS() };
+		return new Object[] { super.getTimestamp(), super.getHostname(), super.getVmName(), this.getUptimeMS() };
 	}
 
 	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		super.writeBytes(buffer, stringRegistry);
 
-		buffer.putInt(stringRegistry.get(this.getGcName()));
-		buffer.putLong(this.getCollectionCount());
-		buffer.putLong(this.getCollectionTimeMS());
+		buffer.putLong(this.getUptimeMS());
 	}
 
 	/**
@@ -101,16 +89,8 @@ public class GCRecord extends AbstractJVMRecord {
 		return SIZE;
 	}
 
-	public String getGcName() {
-		return this.gcName;
-	}
-
-	public long getCollectionCount() {
-		return this.collectionCount;
-	}
-
-	public long getCollectionTimeMS() {
-		return this.collectionTimeMS;
+	public long getUptimeMS() {
+		return this.uptimeMS;
 	}
 
 }

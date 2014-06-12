@@ -70,8 +70,8 @@ public class JVMNonHeapDisplayFilter extends AbstractNonAggregatingDisplayFilter
 	@Override
 	protected void fillChartModelWithRecordData(final CartesianChartModel chartModel, final MemoryRecord record, final String minutesAndSeconds,
 			final int numberOfEntries) {
-		this.committedNonHeapData.put(minutesAndSeconds, JVMNonHeapDisplayFilter.BYTE_TO_MEGABYTE_CONVERSION_VALUE * record.getNonHeapCommitted());
-		this.usedNonHeapData.put(minutesAndSeconds, JVMNonHeapDisplayFilter.BYTE_TO_MEGABYTE_CONVERSION_VALUE * record.getNonHeapUsed());
+		this.committedNonHeapData.put(minutesAndSeconds, JVMNonHeapDisplayFilter.BYTE_TO_MEGABYTE_CONVERSION_VALUE * record.getNonHeapCommittedBytes());
+		this.usedNonHeapData.put(minutesAndSeconds, JVMNonHeapDisplayFilter.BYTE_TO_MEGABYTE_CONVERSION_VALUE * record.getNonHeapUsedBytes());
 	}
 
 }
