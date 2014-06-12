@@ -24,7 +24,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
-import kieker.analysis.AnalysisControllerThread;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
@@ -37,12 +36,12 @@ import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
- * Checks if the forecasts are assigned to the correct real values. Also checks, if a dummy is created for
- * the first real value, that can not have a calculated forecast.
+ * Checks if the forecasts are assigned to the correct real values. Also checks, if a dummy is created for the first real value, that can not have a calculated
+ * forecast.
  * 
- * @author Tom Frotscher
+ * @author Tom Frotscher, Nils Christian Ehmke
+ * 
  * @since 1.9
- * 
  */
 public class UniteMeasurementPairFilterTest extends AbstractKiekerTest {
 
@@ -53,9 +52,6 @@ public class UniteMeasurementPairFilterTest extends AbstractKiekerTest {
 
 	private ListCollectionFilter<ForecastMeasurementPair> sinkPlugin;
 
-	/**
-	 * Creates a new instance of this class.
-	 */
 	public UniteMeasurementPairFilterTest() {
 		// empty default constructor
 	}
@@ -106,13 +102,13 @@ public class UniteMeasurementPairFilterTest extends AbstractKiekerTest {
 
 		// READER TSPoints
 		final Configuration readerUniteConfigurationTS = new Configuration();
-		readerUniteConfigurationTS.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
+		readerUniteConfigurationTS.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.FALSE.toString());
 		final ListReader<NamedDoubleTimeSeriesPoint> theReaderUniteTSPoints = new ListReader<NamedDoubleTimeSeriesPoint>(readerUniteConfigurationTS, this.controller);
 		theReaderUniteTSPoints.addAllObjects(this.createInputEventSetUnite());
 
 		// READER Forecasts
 		final Configuration readerUniteConfigurationForecast = new Configuration();
-		readerUniteConfigurationForecast.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
+		readerUniteConfigurationForecast.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.FALSE.toString());
 		final ListReader<IForecastMeasurementPair> theReaderUniteForecast = new ListReader<IForecastMeasurementPair>(readerUniteConfigurationForecast,
 				this.controller);
 		theReaderUniteForecast.addAllObjects(this.createInputEventSetUniteForecast());
@@ -128,15 +124,12 @@ public class UniteMeasurementPairFilterTest extends AbstractKiekerTest {
 		// CONNECTION
 		this.controller.connect(theReaderUniteTSPoints, ListReader.OUTPUT_PORT_NAME, unite, UniteMeasurementPairFilter.INPUT_PORT_NAME_TSPOINT);
 		this.controller.connect(theReaderUniteForecast, ListReader.OUTPUT_PORT_NAME, unite, UniteMeasurementPairFilter.INPUT_PORT_NAME_FORECAST);
-		this.controller.connect(unite,
-				UniteMeasurementPairFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, this.sinkPlugin,
-				ListCollectionFilter.INPUT_PORT_NAME);
+		this.controller.connect(unite, UniteMeasurementPairFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, this.sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
 	}
 
 	/**
-	 * Test of the VariateUniteFMPFilter. The measurement values and the forecast values have to be brought together
-	 * correctly. Therefore, the measurements and forecasts with corresponding time stamps have to be brought together
-	 * if they are from the same application.
+	 * Test of the VariateUniteFMPFilter. The measurement values and the forecast values have to be brought together correctly. Therefore, the measurements and
+	 * forecasts with corresponding time stamps have to be brought together if they are from the same application.
 	 * 
 	 * @throws InterruptedException
 	 *             If interrupted
@@ -147,12 +140,7 @@ public class UniteMeasurementPairFilterTest extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testUniteOnly() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
-
-		final AnalysisControllerThread thread = new AnalysisControllerThread(this.controller);
-		thread.start();
-
-		Thread.sleep(5000);
-		thread.terminate();
+		this.controller.run();
 
 		Assert.assertEquals(8, this.sinkPlugin.getList().size());
 
