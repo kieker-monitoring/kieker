@@ -98,9 +98,8 @@ public class LiveDemoAnalysis {
 		this.recordListFilter = new ListCollectionFilter<EnrichedOperationExecutionRecord>(recordListConfiguration, this.analysisController);
 
 		final Configuration responsetimeConfiguration = new Configuration();
-		responsetimeConfiguration.setProperty(MethodResponsetimeDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES,
+		responsetimeConfiguration.setProperty(AbstractAggregatingDisplayFilter.CONFIG_PROPERTY_NAME_NUMBER_OF_ENTRIES,
 				LiveDemoAnalysis.NUMBER_OF_RESPONSE_TIME_ENTRIES);
-		responsetimeConfiguration.setProperty(MethodResponsetimeDisplayFilter.CONFIG_PROPERTY_NAME_RESPONSETIME_TIMEUNIT, "MILLISECONDS");
 		this.responsetimeFilter = new MethodResponsetimeDisplayFilter(responsetimeConfiguration, this.analysisController);
 
 		final Configuration classLoadingConfiguration = new Configuration();
@@ -141,9 +140,9 @@ public class LiveDemoAnalysis {
 		this.analysisController.connect(reader, JMXReader.OUTPUT_PORT_NAME_RECORDS, distributor, Distributor.INPUT_PORT_NAME_RECORDS);
 
 		this.analysisController.connect(distributor, Distributor.OUTPUT_PORT_NAME_OPERATION_EXECUTION_RECORDS, this.responsetimeFilter,
-				MethodResponsetimeDisplayFilter.INPUT_PORT_NAME_RECORDS);
+				AbstractAggregatingDisplayFilter.INPUT_PORT_NAME_RECORDS);
 		this.analysisController.connect(timeReader, TimeReader.OUTPUT_PORT_NAME_TIMESTAMPS, this.responsetimeFilter,
-				MethodResponsetimeDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS);
+				AbstractAggregatingDisplayFilter.INPUT_PORT_NAME_TIMESTAMPS);
 
 		this.analysisController.connect(distributor, Distributor.OUTPUT_PORT_NAME_OPERATION_EXECUTION_RECORDS, this.methodFlowDisplayFilter,
 				AbstractNonAggregatingDisplayFilter.INPUT_PORT_NAME_RECORDS);

@@ -19,13 +19,8 @@ package kieker.examples.livedemo.view.methodResponseTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -34,7 +29,6 @@ import javax.faces.event.ValueChangeEvent;
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
 
-import kieker.analysis.display.XYPlot;
 import kieker.examples.livedemo.view.AnalysisBean;
 
 /**
@@ -44,7 +38,7 @@ import kieker.examples.livedemo.view.AnalysisBean;
  */
 @ManagedBean(name = "methodResponsetimeBean", eager = true)
 @ViewScoped
-public class MethodResponsetimeBean implements Observer {
+public class MethodResponsetimeBean {
 
 	@ManagedProperty(value = "#{analysisBean}")
 	private AnalysisBean analysisBean;
@@ -54,42 +48,27 @@ public class MethodResponsetimeBean implements Observer {
 	private int maxY;
 	private boolean selectButton = true;
 
-	private XYPlot methodResponsetimeXYplot;
-	private XYPlot methodCallsXYplot;
-	private final CartesianChartModel responsetimeModel;
+	private CartesianChartModel responsetimeModel;
+	private final CartesianChartModel shownResponsetimeModel;
 	private final CartesianChartModel countingModel;
-	private final Map<String, String> longToShortSignatures;
-	private final Map<String, String> shortToLongSignatures;
 
 	public MethodResponsetimeBean() {
 		this.availableMethods = new ArrayList<String>();
 		this.selectedMethods = new ArrayList<String>();
-		this.maxY = 1;
-		this.responsetimeModel = new CartesianChartModel();
+		this.maxY = 4;
+		this.shownResponsetimeModel = new CartesianChartModel();
 		this.countingModel = new CartesianChartModel();
-		this.longToShortSignatures = new ConcurrentHashMap<String, String>();
-		this.shortToLongSignatures = new ConcurrentHashMap<String, String>();
 	}
 
 	@PostConstruct
 	public void init() {
-		this.methodResponsetimeXYplot = this.analysisBean.getMethodResponsetimeDisplayFilter().getMethodResponsetimeXYPlot();
-		this.methodCallsXYplot = this.analysisBean.getMethodResponsetimeDisplayFilter().getMethodCallsXYPlot();
-		for (final String signature : this.methodResponsetimeXYplot.getKeys()) {
-			final String shortSignature = this.createShortSignature(signature);
+		this.responsetimeModel = this.analysisBean.getMethodResponsetimeDisplayFilter().getChartModel();
+		for (final ChartSeries series : this.responsetimeModel.getSeries()) {
+			final String shortSignature = series.getLabel();
 			if (!this.availableMethods.contains(shortSignature)) {
 				this.availableMethods.add(shortSignature);
-				this.longToShortSignatures.put(signature, shortSignature);
-				this.shortToLongSignatures.put(shortSignature, signature);
 			}
 		}
-		this.updateModels();
-		this.analysisBean.getUpdateThread().addObserver(this);
-	}
-
-	@PreDestroy
-	public void terminate() {
-		this.analysisBean.getUpdateThread().deleteObserver(this);
 	}
 
 	public void setAnalysisBean(final AnalysisBean analysisBean) {
@@ -121,7 +100,17 @@ public class MethodResponsetimeBean implements Observer {
 	}
 
 	public synchronized CartesianChartModel getResponsetimeModel() {
-		return this.responsetimeModel;
+		this.shownResponsetimeModel.clear();
+		for (final ChartSeries series : this.responsetimeModel.getSeries()) {
+			final String shortSignature = series.getLabel();
+			if (this.selectedMethods.contains(shortSignature)) {
+				this.shownResponsetimeModel.addSeries(series);
+			}
+			if (!this.availableMethods.contains(shortSignature)) {
+				this.availableMethods.add(shortSignature);
+			}
+		}
+		return this.shownResponsetimeModel;
 	}
 
 	public synchronized CartesianChartModel getCountingModel() {
@@ -144,37 +133,6 @@ public class MethodResponsetimeBean implements Observer {
 		return this.selectButton;
 	}
 
-	private String createShortSignature(final String signature) {
-		String[] array = signature.split("\\(");
-		array = array[0].split("\\.");
-		final int end = array.length;
-		return "..." + array[end - 2] + "." + array[end - 1] + "(...)";
-	}
-
-	private synchronized void updateModels() {
-		this.maxY = 4;
-		for (final String shortSignature : this.getSelectedMethods()) {
-			final String signature = this.shortToLongSignatures.get(shortSignature);
-
-			final ChartSeries responsetimes = new ChartSeries();
-			responsetimes.setLabel(shortSignature);
-			final Map<Object, Number> map = this.methodResponsetimeXYplot.getEntries(signature);
-			responsetimes.setData(map);
-			this.responsetimeModel.addSeries(responsetimes);
-
-			final ChartSeries countings = new ChartSeries();
-			countings.setLabel(shortSignature);
-			final Map<Object, Number> countMap = this.methodCallsXYplot.getEntries(signature);
-
-			final int max = this.calculateMaxY(countMap.values());
-			if (max > this.maxY) {
-				this.maxY = max;
-			}
-			countings.setData(countMap);
-			this.countingModel.addSeries(countings);
-		}
-	}
-
 	private int calculateMaxY(final Collection<Number> numbers) {
 		int max = 1;
 		for (final Number n : numbers) {
@@ -182,26 +140,6 @@ public class MethodResponsetimeBean implements Observer {
 		}
 		max = (max + 4) - (max % 4);
 		return max;
-	}
-
-	@Override
-	public synchronized void update(final Observable o, final Object arg) {
-		this.responsetimeModel.clear();
-		this.countingModel.clear();
-
-		this.updateModels();
-
-		// look for new methods
-		for (final String signature : this.methodResponsetimeXYplot.getKeys()) {
-			if (null == this.longToShortSignatures.get(signature)) {
-				final String shortSignature = this.createShortSignature(signature);
-				this.availableMethods.add(shortSignature);
-				this.longToShortSignatures.put(signature, shortSignature);
-				this.shortToLongSignatures.put(shortSignature, signature);
-			}
-
-		}
-
 	}
 
 }

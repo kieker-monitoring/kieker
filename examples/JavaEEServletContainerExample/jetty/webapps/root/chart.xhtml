@@ -73,17 +73,17 @@
 						<f:selectItems value="#{methodResponsetimeBean.availableMethods}" />  
 					</p:selectManyCheckbox>
 				</p:dialog>
-				
+				<!-- 
 				<p:lineChart id="count" value="#{methodResponsetimeBean.countingModel}" legendPosition="ne"  
 			    	title="Method Calls" minY="0" maxY="#{methodResponsetimeBean.maxY}" style="height:300px;margin-top:20px"
 			    	xaxisLabel="Time" yaxisLabel="Number of calls per 2 Seconds"/>
-				
+				 -->
 				<p:barChart id="resp" value="#{methodResponsetimeBean.responsetimeModel}" legendPosition="ne"  
 			    	title="Average Responsetime" minY="0" style="height:300px;margin-top:20px"
 			    	xaxisLabel="Time" yaxisLabel="Responsetime in ms"/>
 		     	
 		     	<p:poll interval="1" widgetVar="poll" update="dialog" autoStart="true"/>
-				<p:poll interval="1" update="count,resp,loadButton" />
+				<p:poll interval="1" update="resp,loadButton" />
 			</h:form>
 		</div>
 		<div id="footer">
