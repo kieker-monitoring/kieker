@@ -21,13 +21,16 @@ import kieker.tools.tslib.ITimeSeries;
 import kieker.tools.tslib.forecast.AbstractRForecaster;
 
 /**
+ * This is one of the forecasters used in the research
+ * paper on <i>Self-adaptive workload classification and forecasting for
+ * proactive resource provisioning</i>
+ * (http://dx.doi.org/10.1002/cpe.3224), authored by Herbst et al.
  * 
  * @author Nikolas Herbst <nikolas.herbst@uni-wuerzburg.de>
  *         Generalization of MA by using weights according to the exponential function
  *         to give higher weight to more recent values.
  *         1st step: estimation of parameters for weights/exp. function
  *         2nd step: calculation of weighted averages as point forecast
- * @see http://dx.doi.org/10.1002/cpe.3224
  * 
  * @since 1.10
  */

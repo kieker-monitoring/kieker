@@ -23,6 +23,11 @@ import kieker.tools.tslib.forecast.AbstractRForecaster;
 /**
  * An R-based time series forecaster, auto-arima model selection.
  * 
+ * This is one of the forecasters used in the research
+ * paper on <i>Self-adaptive workload classification and forecasting for
+ * proactive resource provisioning</i>
+ * (http://dx.doi.org/10.1002/cpe.3224), authored by Herbst et al.
+ * 
  * @since 1.10
  * @author Andre van Hoorn + Nikolas Herbst <nikolas.herbst@uni-wuerzburg.de>
  * 
