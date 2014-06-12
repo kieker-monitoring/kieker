@@ -169,7 +169,7 @@ public class FinalStep extends AbstractStep {
 
 		@SuppressWarnings("synthetic-access")
 		@Override
-		public synchronized void write(final int data) throws IOException {
+		public synchronized void write(final int data) throws IOException { // NOPMD (method level synchronization)
 			this.stringBuffer.appendCodePoint(data);
 
 			if (this.stringBuffer.lastIndexOf(this.lineSeperator) != -1) {
