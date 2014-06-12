@@ -112,7 +112,6 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 	private static final String ENCODING = "UTF-8";
 
 	private final AnalysisController analysisController = new AnalysisController();
-	private final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration(), this.analysisController);
 	private String[] inputDirs;
 	private String outputDir;
 	private String outputFnPrefix;
@@ -393,6 +392,8 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 		boolean retVal = true;
 		int numRequestedTasks = 0;
 
+		final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration(), this.analysisController);
+
 		TraceReconstructionFilter mtReconstrFilter = null;
 		EventRecordTraceCounter eventRecordTraceCounter = null;
 		EventRecordTraceReconstructionFilter eventTraceReconstructionFilter = null;
@@ -460,7 +461,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 							ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
 				}
 
-				this.analysisController.connect(execRecTransformer, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.systemEntityFactory);
+				this.analysisController.connect(execRecTransformer, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
 			}
 
 			{ // NOCS (nested block)
@@ -474,7 +475,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 				mtReconstrFilterConfig.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES,
 						Boolean.toString(this.ignoreInvalidTraces));
 				mtReconstrFilter = new TraceReconstructionFilter(mtReconstrFilterConfig, this.analysisController);
-				this.analysisController.connect(mtReconstrFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, this.systemEntityFactory);
+				this.analysisController.connect(mtReconstrFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
 				this.analysisController.connect(execRecTransformer, ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME_EXECUTIONS,
 						mtReconstrFilter, TraceReconstructionFilter.INPUT_PORT_NAME_EXECUTIONS);
 			}
@@ -529,7 +530,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 				this.analysisController.connect(eventTraceReconstructionFilter, EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID,
 						traceEvents2ExecutionAndMessageTraceFilter, TraceEventRecords2ExecutionAndMessageTraceFilter.INPUT_PORT_NAME_EVENT_TRACE);
 				this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
-						this.systemEntityFactory);
+						systemEntityFactory);
 			}
 
 			final List<AbstractTraceProcessingFilter> allTraceProcessingComponents = new ArrayList<AbstractTraceProcessingFilter>();
@@ -548,7 +549,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 				 */
 				traceAllocationEquivClassFilter = new TraceEquivalenceClassFilter(traceAllocationEquivClassFilterConfig, this.analysisController);
 				this.analysisController.connect(traceAllocationEquivClassFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
-						this.systemEntityFactory);
+						systemEntityFactory);
 				this.analysisController.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
 						traceAllocationEquivClassFilter, TraceEquivalenceClassFilter.INPUT_PORT_NAME_EXECUTION_TRACE);
 				this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
@@ -575,7 +576,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
 						traceAssemblyEquivClassFilter, TraceEquivalenceClassFilter.INPUT_PORT_NAME_EXECUTION_TRACE);
 				this.analysisController.connect(traceAssemblyEquivClassFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
-						this.systemEntityFactory);
+						systemEntityFactory);
 				allTraceProcessingComponents.add(traceAssemblyEquivClassFilter);
 			}
 
@@ -597,7 +598,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
 						componentPrintMsgTrace, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
 				this.analysisController.connect(componentPrintMsgTrace, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
-						this.systemEntityFactory);
+						systemEntityFactory);
 				allTraceProcessingComponents.add(componentPrintMsgTrace);
 			}
 			ExecutionTraceWriterFilter componentPrintExecTrace = null;
@@ -617,7 +618,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
 						componentPrintExecTrace, ExecutionTraceWriterFilter.INPUT_PORT_NAME_EXECUTION_TRACES);
 				this.analysisController.connect(componentPrintExecTrace, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
-						this.systemEntityFactory);
+						systemEntityFactory);
 				allTraceProcessingComponents.add(componentPrintExecTrace);
 			}
 			InvalidExecutionTraceWriterFilter componentPrintInvalidTrace = null;
@@ -635,7 +636,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 				this.analysisController.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE,
 						componentPrintInvalidTrace, InvalidExecutionTraceWriterFilter.INPUT_PORT_NAME_INVALID_EXECUTION_TRACES);
 				this.analysisController.connect(componentPrintInvalidTrace, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
-						this.systemEntityFactory);
+						systemEntityFactory);
 				this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
 						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE,
 						componentPrintInvalidTrace, InvalidExecutionTraceWriterFilter.INPUT_PORT_NAME_INVALID_EXECUTION_TRACES);
@@ -660,7 +661,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
 						componentPlotAllocationSeqDiagr, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
 				this.analysisController.connect(componentPlotAllocationSeqDiagr, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
-						this.systemEntityFactory);
+						systemEntityFactory);
 				allTraceProcessingComponents.add(componentPlotAllocationSeqDiagr);
 			}
 			SequenceDiagramFilter componentPlotAssemblySeqDiagr = null;
@@ -682,7 +683,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
 						componentPlotAssemblySeqDiagr, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
 				this.analysisController.connect(componentPlotAssemblySeqDiagr, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
-						this.systemEntityFactory);
+						systemEntityFactory);
 				allTraceProcessingComponents.add(componentPlotAssemblySeqDiagr);
 			}
 
@@ -701,7 +702,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
 						componentPlotAllocationComponentDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
 				this.analysisController.connect(componentPlotAllocationComponentDepGraph, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
-						this.systemEntityFactory);
+						systemEntityFactory);
 
 				allTraceProcessingComponents.add(componentPlotAllocationComponentDepGraph);
 				allGraphProducers.add(componentPlotAllocationComponentDepGraph);
@@ -722,7 +723,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
 						componentPlotAssemblyComponentDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
 				this.analysisController.connect(componentPlotAssemblyComponentDepGraph, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
-						this.systemEntityFactory);
+						systemEntityFactory);
 				allTraceProcessingComponents.add(componentPlotAssemblyComponentDepGraph);
 				allGraphProducers.add(componentPlotAssemblyComponentDepGraph);
 			}
@@ -738,7 +739,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
 						componentPlotContainerDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
 				this.analysisController.connect(componentPlotContainerDepGraph, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
-						this.systemEntityFactory);
+						systemEntityFactory);
 				allTraceProcessingComponents.add(componentPlotContainerDepGraph);
 				allGraphProducers.add(componentPlotContainerDepGraph);
 			}
@@ -758,7 +759,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
 						componentPlotAllocationOperationDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
 				this.analysisController.connect(componentPlotAllocationOperationDepGraph, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
-						this.systemEntityFactory);
+						systemEntityFactory);
 				allTraceProcessingComponents.add(componentPlotAllocationOperationDepGraph);
 				allGraphProducers.add(componentPlotAllocationOperationDepGraph);
 			}
@@ -778,7 +779,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
 						componentPlotAssemblyOperationDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
 				this.analysisController.connect(componentPlotAssemblyOperationDepGraph, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
-						this.systemEntityFactory);
+						systemEntityFactory);
 				allTraceProcessingComponents.add(componentPlotAssemblyOperationDepGraph);
 				allGraphProducers.add(componentPlotAssemblyOperationDepGraph);
 			}
@@ -802,7 +803,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
 						componentPlotTraceCallTrees, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
 				this.analysisController.connect(componentPlotTraceCallTrees, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
-						this.systemEntityFactory);
+						systemEntityFactory);
 				allTraceProcessingComponents.add(componentPlotTraceCallTrees);
 			}
 			AggregatedAllocationComponentOperationCallTreeFilter componentPlotAggregatedCallTree = null;
@@ -827,7 +828,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
 						componentPlotAggregatedCallTree, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
 				this.analysisController.connect(componentPlotAggregatedCallTree, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
-						this.systemEntityFactory);
+						systemEntityFactory);
 				allTraceProcessingComponents.add(componentPlotAggregatedCallTree);
 			}
 			AggregatedAssemblyComponentOperationCallTreeFilter componentPlotAssemblyCallTree = null;
@@ -849,7 +850,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
 						componentPlotAssemblyCallTree, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
 				this.analysisController.connect(componentPlotAssemblyCallTree, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
-						this.systemEntityFactory);
+						systemEntityFactory);
 				allTraceProcessingComponents.add(componentPlotAssemblyCallTree);
 			}
 			if (retVal && this.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT)) {
@@ -875,8 +876,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 				systemModel2FileFilterConfig.setProperty(SystemModel2FileFilter.CONFIG_PROPERTY_NAME_HTML_OUTPUT_FN, systemEntitiesHtmlFn);
 				final SystemModel2FileFilter systemModel2FileFilter = new SystemModel2FileFilter(systemModel2FileFilterConfig, this.analysisController);
 				// note that this plugin is (currently) not connected to any other filters
-				this.analysisController.connect(systemModel2FileFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
-						this.systemEntityFactory);
+				this.analysisController.connect(systemModel2FileFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
 			}
 
 			int numErrorCount = 0;
