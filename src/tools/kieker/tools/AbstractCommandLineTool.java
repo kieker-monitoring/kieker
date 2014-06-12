@@ -71,6 +71,8 @@ public abstract class AbstractCommandLineTool {
 			ToolsUtil.loadDebugLogger();
 		} else if (commandLine.hasOption('v')) {
 			ToolsUtil.loadVerboseLogger();
+		} else {
+			ToolsUtil.loadDefaultLogger();
 		}
 	}
 

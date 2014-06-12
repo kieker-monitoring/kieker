@@ -45,6 +45,10 @@ public final class ToolsUtil {
 		ToolsUtil.loadLogger("logging.debug.properties");
 	}
 
+	public static void loadDefaultLogger() {
+		ToolsUtil.loadLogger("logging.properties");
+	}
+
 	private static void loadLogger(final String loggerProperties) {
 		try {
 			final LogManager logManager = LogManager.getLogManager();
