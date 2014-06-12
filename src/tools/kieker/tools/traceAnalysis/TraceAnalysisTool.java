@@ -95,7 +95,6 @@ import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 import kieker.tools.util.CLIHelpFormatter;
 import kieker.tools.util.LoggingTimestampConverter;
-import kieker.tools.util.ToolsUtil;
 
 /**
  * This is the main class to start the Kieker TraceAnalysisTool - the model synthesis and analysis tool to process the monitoring data that comes from the
@@ -152,7 +151,11 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 			options.addOption((Option) option);
 		}
 
-		Constants.SORTED_OPTION_LIST.addAll(inheritedOptions);
+		for (final Option option : inheritedOptions) {
+			if (!Constants.SORTED_OPTION_LIST.contains(option)) {
+				Constants.SORTED_OPTION_LIST.add(option);
+			}
+		}
 	}
 
 	@Override
