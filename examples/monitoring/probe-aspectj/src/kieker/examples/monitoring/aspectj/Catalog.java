@@ -16,11 +16,8 @@
 
 package kieker.examples.monitoring.aspectj;
 
-import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
-
 public class Catalog {
 
-	@OperationExecutionMonitoringProbe
 	public void getBook(final boolean complexQuery) {
 		try {
 			if (complexQuery) {
@@ -31,4 +28,5 @@ public class Catalog {
 		} catch (final InterruptedException ex) {
 		}
 	}
+
 }

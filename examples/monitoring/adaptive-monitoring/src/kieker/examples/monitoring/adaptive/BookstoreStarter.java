@@ -14,16 +14,21 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.examples.monitoring.aspectj;
+package kieker.examples.monitoring.adaptive;
 
-public class Bookstore {
+public final class BookstoreStarter {
 
-	private final Catalog catalog = new Catalog();
-	private final CRM crm = new CRM(this.catalog);
+	private BookstoreStarter() {}
 
-	public void searchBook() {
-		this.catalog.getBook(false);
-		this.crm.getOffers();
+	public static void main(final String[] args) throws InterruptedException {
+		final Bookstore bookstore = new Bookstore();
+
+		for (int i = 0;; i++) {
+			System.out.println("Bookstore.main: Starting request " + i);
+			bookstore.searchBook();
+
+			Thread.sleep(1000);
+		}
 	}
 
 }

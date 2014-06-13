@@ -16,8 +16,6 @@
 
 package kieker.examples.monitoring.aspectj;
 
-import kieker.monitoring.annotation.OperationExecutionMonitoringProbe;
-
 public class CRM {
 
 	private final Catalog catalog;
@@ -26,8 +24,8 @@ public class CRM {
 		this.catalog = catalog;
 	}
 
-	@OperationExecutionMonitoringProbe
 	public void getOffers() {
 		this.catalog.getBook(false);
 	}
+
 }

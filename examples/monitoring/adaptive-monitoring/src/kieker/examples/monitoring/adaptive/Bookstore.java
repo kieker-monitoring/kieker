@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.examples.monitoring.aspectj;
+package kieker.examples.monitoring.adaptive;
 
 public class Bookstore {
 

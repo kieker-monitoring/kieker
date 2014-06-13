@@ -20,6 +20,9 @@
 	<classpathentry kind="src" path="examples/monitoring/sampler-sigar/src"/>
 	<classpathentry kind="src" path="examples/monitoring/sampler-jvm/src"/>
 	<classpathentry kind="src" path="examples/monitoring/probe-aspectj/src"/>
+	<classpathentry kind="src" path="examples/monitoring/probe-spring/src"/>
+	<classpathentry kind="src" path="examples/monitoring/adaptive-monitoring/src"/>
+	<classpathentry kind="src" path="examples/monitoring/custom-timesource/src"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="lib" path="lib/activemq-core-5.4.3.jar"/>

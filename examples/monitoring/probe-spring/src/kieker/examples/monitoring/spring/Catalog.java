@@ -14,16 +14,24 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.examples.monitoring.aspectj;
+package kieker.examples.monitoring.spring;
 
-public class Bookstore {
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
-	private final Catalog catalog = new Catalog();
-	private final CRM crm = new CRM(this.catalog);
+@Component
+@Scope("singleton")
+public class Catalog {
 
-	public void searchBook() {
-		this.catalog.getBook(false);
-		this.crm.getOffers();
+	public void getBook(final boolean complexQuery) {
+		try {
+			if (complexQuery) {
+				Thread.sleep(20);
+			} else {
+				Thread.sleep(2);
+			}
+		} catch (final InterruptedException ex) {
+		}
 	}
 
 }

@@ -14,16 +14,40 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.examples.monitoring.aspectj;
+package kieker.monitoring.timer;
 
-public class Bookstore {
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 
-	private final Catalog catalog = new Catalog();
-	private final CRM crm = new CRM(this.catalog);
+import kieker.common.configuration.Configuration;
+import kieker.monitoring.timer.AbstractTimeSource;
 
-	public void searchBook() {
-		this.catalog.getBook(false);
-		this.crm.getOffers();
+public class CustomTimeSource extends AbstractTimeSource {
+
+	private final AtomicLong counter = new AtomicLong();
+
+	public CustomTimeSource(final Configuration configuration) {
+		super(configuration);
+	}
+
+	@Override
+	public long getTime() {
+		return this.counter.getAndIncrement();
+	}
+
+	@Override
+	public long getOffset() {
+		return 0;
+	}
+
+	@Override
+	public TimeUnit getTimeUnit() {
+		return TimeUnit.MILLISECONDS;
+	}
+
+	@Override
+	public String toString() {
+		return "Custom TimeSource";
 	}
 
 }

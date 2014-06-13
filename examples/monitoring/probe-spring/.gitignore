@@ -1,0 +1,5 @@
+
+/build-eclipse/
+/build/
+/*.jar
+.classpath-binrelease.generated

@@ -14,12 +14,20 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.examples.monitoring.aspectj;
+package kieker.examples.monitoring.spring;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+@Component
+@Scope("singleton")
 public class Bookstore {
 
-	private final Catalog catalog = new Catalog();
-	private final CRM crm = new CRM(this.catalog);
+	@Autowired
+	private Catalog catalog;
+	@Autowired
+	private CRM crm;
 
 	public void searchBook() {
 		this.catalog.getBook(false);
