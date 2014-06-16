@@ -1,4 +1,4 @@
-<project name="SigarExample" basedir="." default="run-monitoring">
+<project name="JVMExample" basedir="." default="run-monitoring">
 
 	<property file="build.properties" />
 
