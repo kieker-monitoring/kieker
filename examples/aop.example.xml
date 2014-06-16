@@ -80,8 +80,14 @@
 		<!-- <aspect name="kicker.monitoring.probe.aspectj.flow.constructorExecution.FullInstrumentation" /> -->
 		<!-- <aspect name="kicker.monitoring.probe.aspectj.flow.constructorExecution.Annotation" /> -->
 
+		<!-- <aspect name="kicker.monitoring.probe.aspectj.flow.constructorExecutionObject.FullInstrumentation" /> -->
+		<!-- <aspect name="kicker.monitoring.probe.aspectj.flow.constructorExecutionObject.Annotation" /> -->
+
 		<!-- <aspect name="kicker.monitoring.probe.aspectj.flow.constructorCall.FullInstrumentation" /> -->
 		<!-- <aspect name="kicker.monitoring.probe.aspectj.flow.constructorCall.Annotation" /> -->
+
+		<!-- <aspect name="kicker.monitoring.probe.aspectj.flow.constructorCallObject.FullInstrumentation" /> -->
+		<!-- <aspect name="kicker.monitoring.probe.aspectj.flow.constructorCallObject.Annotation" /> -->
 		
 		<!-- Method executions and method calls: -->
 		<!-- <aspect name="kicker.monitoring.probe.aspectj.flow.operationExecution.FullInstrumentation" /> -->
