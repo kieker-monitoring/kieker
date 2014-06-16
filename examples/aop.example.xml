@@ -80,8 +80,14 @@
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.constructorExecution.FullInstrumentation" /> -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.constructorExecution.Annotation" /> -->
 
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.constructorExecutionObject.FullInstrumentation" /> -->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.constructorExecutionObject.Annotation" /> -->
+
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.constructorCall.FullInstrumentation" /> -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.constructorCall.Annotation" /> -->
+
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.constructorCallObject.FullInstrumentation" /> -->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.constructorCallObject.Annotation" /> -->
 		
 		<!-- Method executions and method calls: -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecution.FullInstrumentation" /> -->
