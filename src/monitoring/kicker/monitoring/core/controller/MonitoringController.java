@@ -113,6 +113,11 @@ public final class MonitoringController extends AbstractController implements IM
 					@Override
 					public void run() {
 						if (!monitoringController.isMonitoringTerminated()) {
+							try {
+								Thread.sleep(2000L);
+							} catch (final InterruptedException e) {
+								// ignore
+							}
 							// WONTFIX: We should not use a logger in shutdown hooks, logger may already be down! (#26)
 							LOG.info("ShutdownHook notifies controller to initiate shutdown");
 							// System.err.println(monitoringController.toString());
