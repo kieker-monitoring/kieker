@@ -1,6 +1,10 @@
 <FindBugsFilter>
 	<!-- Example: http://findbugs.sourceforge.net/manual/filter.html#d0e2103 -->
 
+	<Match>
+		<Class name="kieker.analysis.plugin.reader.tcp.TCPReader" />
+		<Bug pattern="UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" />
+	</Match>
 	
 	<Match>
 		<Class name="kieker.tools.AbstractCommandLineTool" />
