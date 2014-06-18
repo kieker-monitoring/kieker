@@ -210,6 +210,43 @@
 			<reference refid="classpath" />
 			<target name="-build-jar-monitoring" />
 		</ant>
+		
+		<ant antfile="build.xml" dir="${src.example.analysis.kax.dir}">
+			<reference refid="classpath" />
+			<target name="-build-jar" />
+		</ant>
+		<ant antfile="build.xml" dir="${src.example.analysis.opad.dir}">
+			<reference refid="classpath" />
+			<target name="-build-jar" />
+		</ant>
+		<ant antfile="build.xml" dir="${src.example.monitoring.adaptive.dir}">
+			<reference refid="classpath" />
+			<target name="-build-jar" />
+		</ant>
+		<ant antfile="build.xml" dir="${src.example.monitoring.timesource.dir}">
+			<reference refid="classpath" />
+			<target name="-build-jar" />
+		</ant>
+		<ant antfile="build.xml" dir="${src.example.monitoring.aspectj.dir}">
+			<reference refid="classpath" />
+			<target name="-build-jar" />
+		</ant>
+		<ant antfile="build.xml" dir="${src.example.monitoring.manual.dir}">
+			<reference refid="classpath" />
+			<target name="-build-jar" />
+		</ant>
+		<ant antfile="build.xml" dir="${src.example.monitoring.spring.dir}">
+			<reference refid="classpath" />
+			<target name="-build-jar" />
+		</ant>
+		<ant antfile="build.xml" dir="${src.example.monitoring.jvm.dir}">
+			<reference refid="classpath" />
+			<target name="-build-jar-monitoring" />
+		</ant>
+		<ant antfile="build.xml" dir="${src.example.monitoring.sigar.dir}">
+			<reference refid="classpath" />
+			<target name="-build-jar-monitoring" />
+		</ant>
 	</target>
 
 	<target name="-build-userguide" depends="-init-version" description="Creates the Kieker user guide PDF from the LaTeX sources">
