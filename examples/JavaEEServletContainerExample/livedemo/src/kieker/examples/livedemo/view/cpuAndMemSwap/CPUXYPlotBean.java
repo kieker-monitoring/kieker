@@ -53,7 +53,6 @@ public class CPUXYPlotBean implements Observer {
 	private List<String> keys;
 	private final List<String> cpuIds;
 	private final List<Model<CartesianChartModel>> models;
-	private int index;
 
 	private final List<String> availableAttributes = Arrays.asList("idle", "irq", "nice", "system", "totalUtilization", "user");
 	private List<String> selectedAttributes; // = Arrays.asList("idle","totalUtilization");
@@ -70,12 +69,16 @@ public class CPUXYPlotBean implements Observer {
 	public void init() {
 		this.xyPlot = this.analysisBean.getCPUUtilizationDisplayFilter().getXYPlot();
 		this.keys = new ArrayList<String>(this.xyPlot.getKeys()); // key = hostname - cpuId - idle
-		Collections.sort(this.keys);
-		this.index = this.keys.get(0).lastIndexOf('-');
-		for (final String key : this.keys) {
-			final String id = key.substring(0, this.index - 1); // id = hostname - cpuId
-			if (!this.cpuIds.contains(id)) {
-				this.cpuIds.add(id);
+
+		if (this.keys.size() != 0) {
+			for (final String key : this.keys) {
+				Collections.sort(this.keys);
+				final int index = this.keys.get(0).lastIndexOf('-');
+
+				final String id = key.substring(0, index - 1); // id = hostname - cpuId
+				if (!this.cpuIds.contains(id)) {
+					this.cpuIds.add(id);
+				}
 			}
 		}
 		this.updateModel();
@@ -121,16 +124,20 @@ public class CPUXYPlotBean implements Observer {
 
 	private void updateModel() {
 		this.models.clear();
+
 		for (final String id : this.cpuIds) { // id = hostname - cpuId
 			final CartesianChartModel cpuModel = new CartesianChartModel();
-			for (final String key : this.keys) { // key = hostname - cpuId - idle
-				if (key.substring(0, this.index - 1).equals(id)) {
-					for (final String attribute : this.getSelectedAttributes()) {
-						if (key.substring(this.index + 2).equals(attribute)) {
-							cpuModel.addSeries(this.computeModel(key, attribute));
+			if (this.keys.size() != 0) {
+				final int index = this.keys.get(0).lastIndexOf('-');
+				for (final String key : this.keys) { // key = hostname - cpuId - idle
+					if (key.substring(0, index - 1).equals(id)) {
+						for (final String attribute : this.getSelectedAttributes()) {
+							if (key.substring(index + 2).equals(attribute)) {
+								cpuModel.addSeries(this.computeModel(key, attribute));
+							}
 						}
-					}
 
+					}
 				}
 			}
 			this.models.add(new Model<CartesianChartModel>(cpuModel, id));
