@@ -116,10 +116,8 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 			AbstractCallTreeFilter.saveTreeToDotFile(this.root, outputFn, this.includeWeights, false, // do not include EOIs
 					this.shortLabels);
 			this.numGraphsSaved++;
-			if (this.verbose) {
-				this.printMessage(new String[] { "Wrote call tree to file '" + outputFn + "'", "Dot file can be converted using the dot tool",
-					"Example: dot -T svg " + outputFn + " > " + outputFn + ".svg", });
-			}
+			this.printDebugLogMessage(new String[] { "Wrote call tree to file '" + outputFn + "'", "Dot file can be converted using the dot tool",
+				"Example: dot -T svg " + outputFn + " > " + outputFn + ".svg", });
 		}
 	}
 
@@ -127,7 +125,9 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	public void printStatusMessage() {
 		synchronized (this) {
 			super.printStatusMessage();
-			this.stdOutPrintln("Saved " + this.numGraphsSaved + " call tree" + (this.numGraphsSaved > 1 ? "s" : "")); // NOCS
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("Saved " + this.numGraphsSaved + " call tree" + (this.numGraphsSaved > 1 ? "s" : "")); // NOCS
+			}
 		}
 	}
 

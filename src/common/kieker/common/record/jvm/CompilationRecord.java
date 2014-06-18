@@ -42,13 +42,13 @@ public class CompilationRecord extends AbstractJVMRecord {
 
 	private static final long serialVersionUID = 2989308154952301746L;
 	private final String jitCompilerName;
-	private final long totalCompilationTime;
+	private final long totalCompilationTimeMS;
 
-	public CompilationRecord(final long timestamp, final String hostname, final String vmName, final String jitCompilerName, final long totalCompilationTime) {
+	public CompilationRecord(final long timestamp, final String hostname, final String vmName, final String jitCompilerName, final long totalCompilationTimeMS) {
 		super(timestamp, hostname, vmName);
 
 		this.jitCompilerName = jitCompilerName;
-		this.totalCompilationTime = totalCompilationTime;
+		this.totalCompilationTimeMS = totalCompilationTimeMS;
 	}
 
 	public CompilationRecord(final Object[] values) { // NOPMD (direct store of values)
@@ -56,19 +56,19 @@ public class CompilationRecord extends AbstractJVMRecord {
 		AbstractMonitoringRecord.checkArray(values, TYPES);
 
 		this.jitCompilerName = (String) values[3];
-		this.totalCompilationTime = (Long) values[4];
+		this.totalCompilationTimeMS = (Long) values[4];
 	}
 
 	public CompilationRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		super(buffer, stringRegistry);
 
 		this.jitCompilerName = stringRegistry.get(buffer.getInt());
-		this.totalCompilationTime = buffer.getLong();
+		this.totalCompilationTimeMS = buffer.getLong();
 	}
 
 	@Override
 	public Object[] toArray() {
-		return new Object[] { super.getTimestamp(), super.getHostname(), super.getVmName(), this.getJitCompilerName(), this.getTotalCompilationTime() };
+		return new Object[] { super.getTimestamp(), super.getHostname(), super.getVmName(), this.getJitCompilerName(), this.getTotalCompilationTimeMS() };
 	}
 
 	@Override
@@ -76,7 +76,7 @@ public class CompilationRecord extends AbstractJVMRecord {
 		super.writeBytes(buffer, stringRegistry);
 
 		buffer.putInt(stringRegistry.get(this.getJitCompilerName()));
-		buffer.putLong(this.getTotalCompilationTime());
+		buffer.putLong(this.getTotalCompilationTimeMS());
 	}
 
 	/**
@@ -99,8 +99,8 @@ public class CompilationRecord extends AbstractJVMRecord {
 		return this.jitCompilerName;
 	}
 
-	public long getTotalCompilationTime() {
-		return this.totalCompilationTime;
+	public long getTotalCompilationTimeMS() {
+		return this.totalCompilationTimeMS;
 	}
 
 }

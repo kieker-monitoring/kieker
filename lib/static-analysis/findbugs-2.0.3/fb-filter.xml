@@ -1,6 +1,12 @@
 <FindBugsFilter>
 	<!-- Example: http://findbugs.sourceforge.net/manual/filter.html#d0e2103 -->
 
+	
+	<Match>
+		<Class name="kieker.tools.AbstractCommandLineTool" />
+		<Bug pattern="DM_EXIT" />
+	</Match>
+	
 	<Match>
 		<Class name="kieker.tools.traceAnalysis.TraceAnalysisGUI" />
 		<Bug pattern="SE_BAD_FIELD" />
@@ -69,7 +75,7 @@
 	</Match>
 
 	<Match>
-		<Class name="kieker.analysis.plugin.filter.forward.StringBufferFilter$Segment" />
+		<Class name="kieker.analysis.plugin.filter.forward.util.KiekerHashMap$Segment" />
 		<Bug pattern="SE_BAD_FIELD" />
 	</Match>
 
@@ -144,8 +150,8 @@
 		<Class name="kieker.analysis.plugin.reader.filesystem.FSDirectoryReader" />
 		<Method name="processNormalInputFile" params="java.io.File" returns="void" />
 		<Bug pattern="REC_CATCH_EXCEPTION" />
-	</Match>
-
+	</Match>	
+	
 	<Match>
 		<Class name="kieker.analysis.plugin.reader.filesystem.FSDirectoryReader" />
 		<Method name="processBinaryInputFile" params="java.io.File,kieker.common.util.filesystem.BinaryCompressionMethod" returns="void" />
@@ -364,6 +370,12 @@
 	<Match>
 		<Package name="~kieker\.analysis\.model\.analysisMetaModel.*" />
 		<Bug pattern="NM_CONFUSING" />
+	</Match>
+	
+	<Match>
+		<Class name="kieker.tools.traceAnalysis.TraceAnalysisGUI" />
+		<Method name="loadCurrentConfiguration" params="" returns="void" />
+		<Bug pattern="REC_CATCH_EXCEPTION" />
 	</Match>
 	
 	<!-- For the public TYPES field of our records. -->

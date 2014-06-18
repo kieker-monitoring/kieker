@@ -20,6 +20,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import kieker.common.configuration.Configuration;
@@ -40,6 +41,7 @@ import kieker.test.monitoring.util.DefaultConfigurationFactory;
 public class TestPeriodicSampling extends AbstractKiekerTest { // NOCS
 
 	@Test
+	@Ignore("#1318")
 	public void testNoSamplingWhenMonitoringDisabled() throws InterruptedException {
 		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();
 		final IMonitoringController monitoringController = MonitoringController.createInstance(configuration);

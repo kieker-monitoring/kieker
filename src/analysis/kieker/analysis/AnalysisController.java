@@ -614,7 +614,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		}
 		this.repos.add(repository);
 		if (LOG.isDebugEnabled()) {
-			LOG.debug("Registered Repository '" + repository.getName() + "' (" + repository.getRepositoryName() + ")");
+			LOG.debug("Registered repository '" + repository.getName() + "' (" + repository.getRepositoryName() + ")");
 		}
 	}
 

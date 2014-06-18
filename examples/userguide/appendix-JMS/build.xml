@@ -154,7 +154,7 @@
 	</target>
 
 	<target name="-compile" depends="-init">
-		<javac source="1.5" target="1.5" srcdir="${src.dir}" destdir="${build.dir}" classpathref="classpath" includeAntRuntime="false" />
+		<javac source="1.6" target="1.6" srcdir="${src.dir}" destdir="${build.dir}" classpathref="classpath" includeAntRuntime="false" />
 		<mkdir dir="${build.dir}/${meta.dir}" />
                 <copy file="${log4j.properties.example}" tofile="${build.dir}/${meta.dir}/log4j.properties"/>
 	</target>

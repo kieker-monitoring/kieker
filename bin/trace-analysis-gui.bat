@@ -21,5 +21,5 @@ for /F "delims=" %%i in ('dir /B /S "%BINDIR%\..\dist\*.jar"') do (
 SET CLASSPATH=!CLASSPATH!;%%i
 )
 
-java %JAVAARGS% -cp "%CLASSPATH%" %MAINCLASSNAME%
+start javaw %JAVAARGS% -cp "%CLASSPATH%" %MAINCLASSNAME%
 @echo on 

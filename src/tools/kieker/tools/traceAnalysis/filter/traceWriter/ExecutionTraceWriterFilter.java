@@ -81,7 +81,9 @@ public class ExecutionTraceWriterFilter extends AbstractExecutionTraceProcessing
 	public void printStatusMessage() {
 		super.printStatusMessage();
 		final int numTraces = this.getSuccessCount();
-		this.stdOutPrintln("Wrote " + numTraces + " execution trace" + (numTraces > 1 ? "s" : "") + " to file '" + this.outputFn + "'"); // NOCS
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Wrote " + numTraces + " execution trace" + (numTraces > 1 ? "s" : "") + " to file '" + this.outputFn + "'"); // NOCS
+		}
 	}
 
 	/**

@@ -44,14 +44,14 @@ public class GCRecord extends AbstractJVMRecord {
 
 	private final String gcName;
 	private final long collectionCount;
-	private final long collectionTime;
+	private final long collectionTimeMS;
 
-	public GCRecord(final long timestamp, final String hostname, final String vmName, final String gcName, final long collectionCount, final long collectionTime) {
+	public GCRecord(final long timestamp, final String hostname, final String vmName, final String gcName, final long collectionCount, final long collectionTimeMS) {
 		super(timestamp, hostname, vmName);
 
 		this.gcName = gcName;
 		this.collectionCount = collectionCount;
-		this.collectionTime = collectionTime;
+		this.collectionTimeMS = collectionTimeMS;
 	}
 
 	public GCRecord(final Object[] values) { // NOPMD (direct store of values)
@@ -60,7 +60,7 @@ public class GCRecord extends AbstractJVMRecord {
 
 		this.gcName = (String) values[3];
 		this.collectionCount = (Long) values[4];
-		this.collectionTime = (Long) values[5];
+		this.collectionTimeMS = (Long) values[5];
 	}
 
 	public GCRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
@@ -68,12 +68,12 @@ public class GCRecord extends AbstractJVMRecord {
 
 		this.gcName = stringRegistry.get(buffer.getInt());
 		this.collectionCount = buffer.getLong();
-		this.collectionTime = buffer.getLong();
+		this.collectionTimeMS = buffer.getLong();
 	}
 
 	@Override
 	public Object[] toArray() {
-		return new Object[] { super.getTimestamp(), super.getHostname(), super.getVmName(), this.getGcName(), this.getCollectionCount(), this.getCollectionTime() };
+		return new Object[] { super.getTimestamp(), super.getHostname(), super.getVmName(), this.getGcName(), this.getCollectionCount(), this.getCollectionTimeMS() };
 	}
 
 	@Override
@@ -82,7 +82,7 @@ public class GCRecord extends AbstractJVMRecord {
 
 		buffer.putInt(stringRegistry.get(this.getGcName()));
 		buffer.putLong(this.getCollectionCount());
-		buffer.putLong(this.getCollectionTime());
+		buffer.putLong(this.getCollectionTimeMS());
 	}
 
 	/**
@@ -109,8 +109,8 @@ public class GCRecord extends AbstractJVMRecord {
 		return this.collectionCount;
 	}
 
-	public long getCollectionTime() {
-		return this.collectionTime;
+	public long getCollectionTimeMS() {
+		return this.collectionTimeMS;
 	}
 
 }
