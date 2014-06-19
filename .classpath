@@ -73,8 +73,8 @@
 	<classpathentry kind="lib" path="lib/kahadb-5.7.0.jar"/>
 	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib/asm-3.1.jar"/>
 	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib/cglib-2.2.jar"/>
-	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty/webapps/root/WEB-INF/lib/primefaces-3.4.2.jar"/>
-	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty/webapps/root/WEB-INF/lib/jsf-api-2.1.20.jar"/>
-	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty/webapps/root/WEB-INF/lib/ApacheJMeter_core.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/livedemo/lib/ApacheJMeter_core.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/livedemo/lib/jsf-api-2.1.20.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/livedemo/lib/primefaces-3.4.2.jar"/>
 	<classpathentry kind="output" path="build-eclipse"/>
 </classpath>

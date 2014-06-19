@@ -50,18 +50,20 @@ public class MethodResponsetimeBean {
 
 	private CartesianChartModel responsetimeModel;
 	private final CartesianChartModel shownResponsetimeModel;
-	private final CartesianChartModel countingModel;
+	private CartesianChartModel countingModel;
+	private final CartesianChartModel shownCountingModel;
 
 	public MethodResponsetimeBean() {
 		this.availableMethods = new ArrayList<String>();
 		this.selectedMethods = new ArrayList<String>();
 		this.maxY = 4;
 		this.shownResponsetimeModel = new CartesianChartModel();
-		this.countingModel = new CartesianChartModel();
+		this.shownCountingModel = new CartesianChartModel();
 	}
 
 	@PostConstruct
 	public void init() {
+		this.countingModel = this.analysisBean.getMethodResponsetimeDisplayFilter().getCountModel();
 		this.responsetimeModel = this.analysisBean.getMethodResponsetimeDisplayFilter().getChartModel();
 		for (final ChartSeries series : this.responsetimeModel.getSeries()) {
 			final String shortSignature = series.getLabel();
@@ -114,7 +116,17 @@ public class MethodResponsetimeBean {
 	}
 
 	public synchronized CartesianChartModel getCountingModel() {
-		return this.countingModel;
+		this.shownCountingModel.clear();
+		for (final ChartSeries series : this.countingModel.getSeries()) {
+			final String shortSignature = series.getLabel();
+			if (this.selectedMethods.contains(shortSignature)) {
+				this.shownCountingModel.addSeries(series);
+			}
+			if (!this.availableMethods.contains(shortSignature)) {
+				this.availableMethods.add(shortSignature);
+			}
+		}
+		return this.shownCountingModel;
 	}
 
 	public void setMaxY(final int maxY) {
@@ -122,6 +134,10 @@ public class MethodResponsetimeBean {
 	}
 
 	public int getMaxY() {
+		this.maxY = 4;
+		for (final ChartSeries series : this.shownCountingModel.getSeries()) {
+			this.maxY = Math.max(this.maxY, this.calculateMaxY(series.getData().values()));
+		}
 		return this.maxY;
 	}
 

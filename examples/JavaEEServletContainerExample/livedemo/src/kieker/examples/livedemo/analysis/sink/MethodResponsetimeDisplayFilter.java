@@ -38,11 +38,19 @@ import kieker.examples.livedemo.analysis.util.Pair;
 public class MethodResponsetimeDisplayFilter extends AbstractAggregatingDisplayFilter<OperationExecutionRecord, CartesianChartModel> {
 
 	private Map<String, Map<Object, Number>> chartMaps;
+	private final Map<String, Map<Object, Number>> countMaps;
 	private final Map<String, Pair<Long, Integer>> signatureResponsetimeMap;
+	private final CartesianChartModel countModel;
 
 	public MethodResponsetimeDisplayFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 		this.signatureResponsetimeMap = new ConcurrentHashMap<String, Pair<Long, Integer>>();
+		this.countModel = new CartesianChartModel();
+		this.countMaps = new ConcurrentHashMap<String, Map<Object, Number>>();
+	}
+
+	public synchronized CartesianChartModel getCountModel() {
+		return this.countModel;
 	}
 
 	@Override
@@ -70,9 +78,11 @@ public class MethodResponsetimeDisplayFilter extends AbstractAggregatingDisplayF
 		}
 		for (final String key : this.signatureResponsetimeMap.keySet()) {
 			final Pair<Long, Integer> pair = this.signatureResponsetimeMap.get(key);
-			final long responsetime = pair.getFirst() / pair.getLast();
+			final int methodCount = pair.getLast();
+			final long responsetime = pair.getFirst() / methodCount;
 			if (this.chartMaps.containsKey(key)) {
 				this.chartMaps.get(key).put(minutesAndSeconds, this.convertFromNanosToMillis(responsetime));
+				this.countMaps.get(key).put(minutesAndSeconds, methodCount);
 			} else {
 				final Map<Object, Number> newMap = new LimitedHashMap<Object, Number>(numberOfEntries);
 				newMap.put(minutesAndSeconds, this.convertFromNanosToMillis(responsetime));
@@ -81,11 +91,19 @@ public class MethodResponsetimeDisplayFilter extends AbstractAggregatingDisplayF
 				series.setData(newMap);
 				series.setLabel(key);
 				chartModel.addSeries(series);
+				final Map<Object, Number> newCountMap = new LimitedHashMap<Object, Number>(numberOfEntries);
+				newCountMap.put(minutesAndSeconds, methodCount);
+				this.countMaps.put(key, newCountMap);
+				final ChartSeries countSeries = new ChartSeries();
+				countSeries.setData(newCountMap);
+				countSeries.setLabel(key);
+				this.countModel.addSeries(countSeries);
 			}
 		}
 		for (final String key : this.chartMaps.keySet()) {
 			if (!this.signatureResponsetimeMap.containsKey(key)) {
 				this.chartMaps.get(key).put(minutesAndSeconds, 0);
+				this.countMaps.get(key).put(minutesAndSeconds, 0);
 			}
 		}
 
