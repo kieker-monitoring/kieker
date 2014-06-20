@@ -39,6 +39,8 @@ public class SwapDisplayFilter extends AbstractNonAggregatingDisplayFilter<MemSw
 	private ChartSeries usedSwapSeries;
 	private ChartSeries freeSwapSeries;
 
+	private final int byteToMB = 1048576;
+
 	public SwapDisplayFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 	}
@@ -68,8 +70,8 @@ public class SwapDisplayFilter extends AbstractNonAggregatingDisplayFilter<MemSw
 	@Override
 	protected void fillChartModelWithRecordData(final CartesianChartModel chartModel, final MemSwapUsageRecord record, final String minutesAndSeconds,
 			final int numberOfEntries) {
-		this.usedSwapData.put(minutesAndSeconds, record.getSwapUsed());
-		this.freeSwapData.put(minutesAndSeconds, record.getSwapFree());
+		this.usedSwapData.put(minutesAndSeconds, record.getSwapUsed() / this.byteToMB);
+		this.freeSwapData.put(minutesAndSeconds, record.getSwapFree() / this.byteToMB);
 	}
 
 }

@@ -20,12 +20,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -33,7 +29,6 @@ import javax.faces.bean.ViewScoped;
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
 
-import kieker.analysis.display.XYPlot;
 import kieker.examples.livedemo.view.AnalysisBean;
 import kieker.examples.livedemo.view.util.Model;
 
@@ -44,22 +39,19 @@ import kieker.examples.livedemo.view.util.Model;
  */
 @ManagedBean(name = "cpuXYPlotBean")
 @ViewScoped
-public class CPUXYPlotBean implements Observer {
+public class CPUXYPlotBean {
 
 	@ManagedProperty(value = "#{analysisBean}")
 	private AnalysisBean analysisBean;
 
-	private XYPlot xyPlot;
-	private List<String> keys;
-	private final List<String> cpuIds;
-	private final List<Model<CartesianChartModel>> models;
+	private List<Model<CartesianChartModel>> models;
+	private final List<Model<CartesianChartModel>> shownModels;
 
 	private final List<String> availableAttributes = Arrays.asList("idle", "irq", "nice", "system", "totalUtilization", "user");
 	private List<String> selectedAttributes; // = Arrays.asList("idle","totalUtilization");
 
 	public CPUXYPlotBean() {
-		this.models = Collections.synchronizedList(new ArrayList<Model<CartesianChartModel>>());
-		this.cpuIds = new ArrayList<String>();
+		this.shownModels = Collections.synchronizedList(new ArrayList<Model<CartesianChartModel>>());
 		this.selectedAttributes = new ArrayList<String>();
 		this.selectedAttributes.add("idle");
 		this.selectedAttributes.add("totalUtilization");
@@ -67,27 +59,8 @@ public class CPUXYPlotBean implements Observer {
 
 	@PostConstruct
 	public void init() {
-		this.xyPlot = this.analysisBean.getCPUUtilizationDisplayFilter().getXYPlot();
-		this.keys = new ArrayList<String>(this.xyPlot.getKeys()); // key = hostname - cpuId - idle
-
-		if (this.keys.size() != 0) {
-			for (final String key : this.keys) {
-				Collections.sort(this.keys);
-				final int index = this.keys.get(0).lastIndexOf('-');
-
-				final String id = key.substring(0, index - 1); // id = hostname - cpuId
-				if (!this.cpuIds.contains(id)) {
-					this.cpuIds.add(id);
-				}
-			}
-		}
+		this.models = this.analysisBean.getCPUUtilizationDisplayFilter().getModels();
 		this.updateModel();
-		this.analysisBean.getUpdateThread().addObserver(this);
-	}
-
-	@PreDestroy
-	public void terminate() {
-		this.analysisBean.getUpdateThread().deleteObserver(this);
 	}
 
 	public void setAnalysisBean(final AnalysisBean analysisBean) {
@@ -111,43 +84,22 @@ public class CPUXYPlotBean implements Observer {
 	}
 
 	public List<Model<CartesianChartModel>> getModels() {
-		return this.models;
-	}
-
-	private ChartSeries computeModel(final String key, final String attribute) {
-		final Map<Object, Number> data = this.xyPlot.getEntries(key);
-		final ChartSeries cpuSeries = new ChartSeries();
-		cpuSeries.setLabel(attribute);
-		cpuSeries.setData(data);
-		return cpuSeries;
+		this.updateModel();
+		return this.shownModels;
 	}
 
 	private void updateModel() {
-		this.models.clear();
-
-		for (final String id : this.cpuIds) { // id = hostname - cpuId
-			final CartesianChartModel cpuModel = new CartesianChartModel();
-			if (this.keys.size() != 0) {
-				final int index = this.keys.get(0).lastIndexOf('-');
-				for (final String key : this.keys) { // key = hostname - cpuId - idle
-					if (key.substring(0, index - 1).equals(id)) {
-						for (final String attribute : this.getSelectedAttributes()) {
-							if (key.substring(index + 2).equals(attribute)) {
-								cpuModel.addSeries(this.computeModel(key, attribute));
-							}
-						}
-
-					}
+		this.shownModels.clear();
+		for (final Model<CartesianChartModel> model : this.models) {
+			final CartesianChartModel chartModel = new CartesianChartModel();
+			final Model<CartesianChartModel> shownModel = new Model<CartesianChartModel>(chartModel, model.getName());
+			for (final ChartSeries series : model.getModel().getSeries()) {
+				if (this.selectedAttributes.contains(series.getLabel())) {
+					chartModel.addSeries(series);
 				}
 			}
-			this.models.add(new Model<CartesianChartModel>(cpuModel, id));
+			this.shownModels.add(shownModel);
 		}
-	}
-
-	@Override
-	public void update(final Observable o, final Object arg) {
-		this.updateModel();
-
 	}
 
 }

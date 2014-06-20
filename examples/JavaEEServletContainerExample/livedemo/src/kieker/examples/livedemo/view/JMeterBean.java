@@ -16,11 +16,7 @@
 
 package kieker.examples.livedemo.view;
 
-import java.util.Observable;
-import java.util.Observer;
-
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -34,7 +30,7 @@ import org.apache.jmeter.JMeter;
  */
 @ManagedBean(name = "jMeterBean")
 @ApplicationScoped
-public class JMeterBean implements Observer {
+public class JMeterBean {
 
 	private final long timeOutMillis = 120000;
 	private final String defaultButtonText = "Generate Load";
@@ -43,9 +39,9 @@ public class JMeterBean implements Observer {
 	@ManagedProperty(value = "#{analysisBean}")
 	private AnalysisBean analysisBean;
 
-	private boolean disabled;
+	private final boolean disabled;
 	private long timestamp;
-	private String buttonText;
+	private final String buttonText;
 	private String[] arguments;
 
 	public JMeterBean() {
@@ -56,7 +52,6 @@ public class JMeterBean implements Observer {
 
 	@PostConstruct
 	public void init() {
-		this.analysisBean.getUpdateThread().addObserver(this);
 		final String userDir = System.getProperty("user.dir");
 		final String fileSeparator = System.getProperty("file.separator");
 		final String bin = "webapps" + fileSeparator + "root" + fileSeparator + "WEB-INF" + fileSeparator + "bin";
@@ -64,11 +59,6 @@ public class JMeterBean implements Observer {
 		System.setProperty("user.dir", newUserDir);
 		final String testplan = bin + fileSeparator + "Testplan.jmx";
 		this.arguments = new String[] { "-n", "-t", testplan };
-	}
-
-	@PreDestroy
-	public void terminate() {
-		this.analysisBean.getUpdateThread().deleteObserver(this);
 	}
 
 	public void setAnalysisBean(final AnalysisBean analysisBean) {
@@ -95,16 +85,16 @@ public class JMeterBean implements Observer {
 		this.jMeter.start(this.arguments);
 	}
 
-	@Override
-	public void update(final Observable arg0, final Object arg1) {
-		final long actualtime = System.currentTimeMillis();
-		if (actualtime > this.timestamp) {
-			this.buttonText = this.defaultButtonText;
-			this.disabled = false;
-		} else {
-			this.buttonText = "Generate Load for " + String.valueOf((int) ((this.timestamp - actualtime) / 1000)) + " s";
-			this.disabled = true;
-		}
-	}
+	// @Override
+	// public void update(final Observable arg0, final Object arg1) {
+	// final long actualtime = System.currentTimeMillis();
+	// if (actualtime > this.timestamp) {
+	// this.buttonText = this.defaultButtonText;
+	// this.disabled = false;
+	// } else {
+	// this.buttonText = "Generate Load for " + String.valueOf((int) ((this.timestamp - actualtime) / 1000)) + " s";
+	// this.disabled = true;
+	// }
+	// }
 
 }

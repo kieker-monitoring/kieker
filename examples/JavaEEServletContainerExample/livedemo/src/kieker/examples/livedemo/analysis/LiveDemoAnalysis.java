@@ -21,7 +21,6 @@ import kieker.analysis.AnalysisControllerThread;
 import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
-import kieker.analysis.plugin.filter.sink.CPUUtilizationDisplayFilter;
 import kieker.analysis.plugin.reader.jmx.JMXReader;
 import kieker.analysis.plugin.reader.timer.TimeReader;
 import kieker.common.configuration.Configuration;
@@ -29,6 +28,7 @@ import kieker.examples.livedemo.analysis.filter.OperationExecutionRecordEnrichme
 import kieker.examples.livedemo.analysis.select.Distributor;
 import kieker.examples.livedemo.analysis.sink.AbstractAggregatingDisplayFilter;
 import kieker.examples.livedemo.analysis.sink.AbstractNonAggregatingDisplayFilter;
+import kieker.examples.livedemo.analysis.sink.CPUUtilizationDisplayFilter;
 import kieker.examples.livedemo.analysis.sink.ClassLoadingDisplayFilter;
 import kieker.examples.livedemo.analysis.sink.CompilationDisplayFilter;
 import kieker.examples.livedemo.analysis.sink.ComponentFlowDisplayFilter;
@@ -157,7 +157,7 @@ public class LiveDemoAnalysis {
 				ListCollectionFilter.INPUT_PORT_NAME);
 
 		this.analysisController.connect(distributor, Distributor.OUTPUT_PORT_NAME_CPU_UTILIZATION_RECORDS, this.cpuFilter,
-				CPUUtilizationDisplayFilter.INPUT_PORT_NAME_EVENTS);
+				CPUUtilizationDisplayFilter.INPUT_PORT_NAME_RECORDS);
 
 		this.analysisController.connect(distributor, Distributor.OUTPUT_PORT_NAME_MEM_SWAP_USAGE_RECORDS, this.memoryDisplayFilter,
 				AbstractNonAggregatingDisplayFilter.INPUT_PORT_NAME_RECORDS);

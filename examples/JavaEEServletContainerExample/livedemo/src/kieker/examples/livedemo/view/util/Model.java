@@ -16,8 +16,6 @@
 
 package kieker.examples.livedemo.view.util;
 
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Bjoern Weissenfels
@@ -31,12 +29,10 @@ public class Model<T> {
 
 	private T model;
 	private String name;
-	private List<String> ids;
 
 	public Model(final T model, final String name) {
 		this.model = model;
 		this.name = name;
-		this.ids = new ArrayList<String>();
 	}
 
 	public T getModel() {
@@ -53,18 +49,6 @@ public class Model<T> {
 
 	public void setName(final String name) {
 		this.name = name;
-	}
-
-	public List<String> getIds() {
-		return this.ids;
-	}
-
-	public void setIds(final List<String> ids) {
-		this.ids = ids;
-	}
-
-	public void addId(final String id) {
-		this.ids.add(id);
 	}
 
 }

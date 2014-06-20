@@ -22,10 +22,10 @@ import javax.faces.bean.ManagedBean;
 
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
-import kieker.analysis.plugin.filter.sink.CPUUtilizationDisplayFilter;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.examples.livedemo.analysis.LiveDemoAnalysis;
+import kieker.examples.livedemo.analysis.sink.CPUUtilizationDisplayFilter;
 import kieker.examples.livedemo.analysis.sink.ClassLoadingDisplayFilter;
 import kieker.examples.livedemo.analysis.sink.CompilationDisplayFilter;
 import kieker.examples.livedemo.analysis.sink.ComponentFlowDisplayFilter;
@@ -52,11 +52,7 @@ public class AnalysisBean {
 
 	private static final Log LOG = LogFactory.getLog(AnalysisBean.class);
 
-	private final UpdateThread updateThread;
-
 	public AnalysisBean() {
-		this.updateThread = new UpdateThread(1000); // will notify its observers every second
-
 		try {
 			LiveDemoAnalysis.getInstance().initializeAnalysis();
 		} catch (final IllegalStateException ex) {
@@ -68,12 +64,7 @@ public class AnalysisBean {
 
 	@PostConstruct
 	protected void startThreads() {
-		this.updateThread.start();
 		LiveDemoAnalysis.getInstance().startAnalysis();
-	}
-
-	public UpdateThread getUpdateThread() {
-		return this.updateThread;
 	}
 
 	public SystemModelRepository getSystemModelRepository() {

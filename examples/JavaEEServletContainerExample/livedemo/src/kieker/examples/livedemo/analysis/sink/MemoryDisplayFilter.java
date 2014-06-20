@@ -39,6 +39,8 @@ public class MemoryDisplayFilter extends AbstractNonAggregatingDisplayFilter<Mem
 	private ChartSeries usedMemorySeries;
 	private ChartSeries freeMemorySeries;
 
+	private final int byteToMB = 1048576;
+
 	public MemoryDisplayFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 	}
@@ -68,8 +70,8 @@ public class MemoryDisplayFilter extends AbstractNonAggregatingDisplayFilter<Mem
 	@Override
 	protected void fillChartModelWithRecordData(final CartesianChartModel chartModel, final MemSwapUsageRecord record, final String minutesAndSeconds,
 			final int numberOfEntries) {
-		this.usedMemoryData.put(minutesAndSeconds, record.getMemUsed());
-		this.freeMemoryData.put(minutesAndSeconds, record.getMemFree());
+		this.usedMemoryData.put(minutesAndSeconds, record.getMemUsed() / this.byteToMB);
+		this.freeMemoryData.put(minutesAndSeconds, record.getMemFree() / this.byteToMB);
 	}
 
 }
