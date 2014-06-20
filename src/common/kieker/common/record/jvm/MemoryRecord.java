@@ -49,32 +49,32 @@ public class MemoryRecord extends AbstractJVMRecord {
 
 	private static final long serialVersionUID = 2989308154952301746L;
 
-	private final long heapMax;
-	private final long heapUsed;
-	private final long heapCommitted;
-	private final long heapInit;
+	private final long heapMaxBytes;
+	private final long heapUsedBytes;
+	private final long heapCommittedBytes;
+	private final long heapInitBytes;
 
-	private final long nonHeapMax;
-	private final long nonHeapUsed;
-	private final long nonHeapCommitted;
-	private final long nonHeapInit;
+	private final long nonHeapMaxBytes;
+	private final long nonHeapUsedBytes;
+	private final long nonHeapCommittedBytes;
+	private final long nonHeapInitBytes;
 
 	private final int objectPendingFinalizationCount;
 
-	public MemoryRecord(final long timestamp, final String hostname, final String vmName, final long heapMax, final long heapUsed, final long heapCommitted,
-			final long heapInit, final long nonHeapMax, final long nonHeapUsed, final long nonHeapCommitted, final long nonHeapInit,
-			final int objectPendingFinalizationCount) {
+	public MemoryRecord(final long timestamp, final String hostname, final String vmName, final long heapMaxBytes, final long heapUsedBytes,
+			final long heapCommittedBytes, final long heapInitBytes, final long nonHeapMaxBytes, final long nonHeapUsedBytes, final long nonHeapCommittedBytes,
+			final long nonHeapInitBytes, final int objectPendingFinalizationCount) {
 		super(timestamp, hostname, vmName);
 
-		this.heapMax = heapMax;
-		this.heapUsed = heapUsed;
-		this.heapCommitted = heapCommitted;
-		this.heapInit = heapInit;
+		this.heapMaxBytes = heapMaxBytes;
+		this.heapUsedBytes = heapUsedBytes;
+		this.heapCommittedBytes = heapCommittedBytes;
+		this.heapInitBytes = heapInitBytes;
 
-		this.nonHeapMax = nonHeapMax;
-		this.nonHeapUsed = nonHeapUsed;
-		this.nonHeapCommitted = nonHeapCommitted;
-		this.nonHeapInit = nonHeapInit;
+		this.nonHeapMaxBytes = nonHeapMaxBytes;
+		this.nonHeapUsedBytes = nonHeapUsedBytes;
+		this.nonHeapCommittedBytes = nonHeapCommittedBytes;
+		this.nonHeapInitBytes = nonHeapInitBytes;
 
 		this.objectPendingFinalizationCount = objectPendingFinalizationCount;
 	}
@@ -83,15 +83,15 @@ public class MemoryRecord extends AbstractJVMRecord {
 		super(values);
 		AbstractMonitoringRecord.checkArray(values, TYPES);
 
-		this.heapMax = (Long) values[3];
-		this.heapUsed = (Long) values[4];
-		this.heapCommitted = (Long) values[5];
-		this.heapInit = (Long) values[6];
+		this.heapMaxBytes = (Long) values[3];
+		this.heapUsedBytes = (Long) values[4];
+		this.heapCommittedBytes = (Long) values[5];
+		this.heapInitBytes = (Long) values[6];
 
-		this.nonHeapMax = (Long) values[7];
-		this.nonHeapUsed = (Long) values[8];
-		this.nonHeapCommitted = (Long) values[9];
-		this.nonHeapInit = (Long) values[10];
+		this.nonHeapMaxBytes = (Long) values[7];
+		this.nonHeapUsedBytes = (Long) values[8];
+		this.nonHeapCommittedBytes = (Long) values[9];
+		this.nonHeapInitBytes = (Long) values[10];
 
 		this.objectPendingFinalizationCount = (Integer) values[11];
 	}
@@ -99,23 +99,23 @@ public class MemoryRecord extends AbstractJVMRecord {
 	public MemoryRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		super(buffer, stringRegistry);
 
-		this.heapMax = buffer.getLong();
-		this.heapUsed = buffer.getLong();
-		this.heapCommitted = buffer.getLong();
-		this.heapInit = buffer.getLong();
+		this.heapMaxBytes = buffer.getLong();
+		this.heapUsedBytes = buffer.getLong();
+		this.heapCommittedBytes = buffer.getLong();
+		this.heapInitBytes = buffer.getLong();
 
-		this.nonHeapMax = buffer.getLong();
-		this.nonHeapUsed = buffer.getLong();
-		this.nonHeapCommitted = buffer.getLong();
-		this.nonHeapInit = buffer.getLong();
+		this.nonHeapMaxBytes = buffer.getLong();
+		this.nonHeapUsedBytes = buffer.getLong();
+		this.nonHeapCommittedBytes = buffer.getLong();
+		this.nonHeapInitBytes = buffer.getLong();
 
 		this.objectPendingFinalizationCount = buffer.getInt();
 	}
 
 	@Override
 	public Object[] toArray() {
-		return new Object[] { super.getTimestamp(), super.getHostname(), super.getVmName(), this.getHeapMax(), this.getHeapUsed(), this.getHeapCommitted(),
-			this.getHeapInit(), this.getNonHeapMax(), this.getNonHeapUsed(), this.getNonHeapCommitted(), this.getNonHeapInit(),
+		return new Object[] { super.getTimestamp(), super.getHostname(), super.getVmName(), this.getHeapMaxBytes(), this.getHeapUsedBytes(), this.getHeapCommittedBytes(),
+			this.getHeapInitBytes(), this.getNonHeapMaxBytes(), this.getNonHeapUsedBytes(), this.getNonHeapCommittedBytes(), this.getNonHeapInitBytes(),
 			this.getObjectPendingFinalizationCount(), };
 	}
 
@@ -123,15 +123,15 @@ public class MemoryRecord extends AbstractJVMRecord {
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		super.writeBytes(buffer, stringRegistry);
 
-		buffer.putLong(this.getHeapMax());
-		buffer.putLong(this.getHeapUsed());
-		buffer.putLong(this.getHeapCommitted());
-		buffer.putLong(this.getHeapInit());
+		buffer.putLong(this.getHeapMaxBytes());
+		buffer.putLong(this.getHeapUsedBytes());
+		buffer.putLong(this.getHeapCommittedBytes());
+		buffer.putLong(this.getHeapInitBytes());
 
-		buffer.putLong(this.getNonHeapMax());
-		buffer.putLong(this.getNonHeapUsed());
-		buffer.putLong(this.getNonHeapCommitted());
-		buffer.putLong(this.getNonHeapInit());
+		buffer.putLong(this.getNonHeapMaxBytes());
+		buffer.putLong(this.getNonHeapUsedBytes());
+		buffer.putLong(this.getNonHeapCommittedBytes());
+		buffer.putLong(this.getNonHeapInitBytes());
 
 		buffer.putInt(this.getObjectPendingFinalizationCount());
 	}
@@ -152,36 +152,36 @@ public class MemoryRecord extends AbstractJVMRecord {
 		return SIZE;
 	}
 
-	public long getHeapMax() {
-		return this.heapMax;
+	public long getHeapMaxBytes() {
+		return this.heapMaxBytes;
 	}
 
-	public long getHeapUsed() {
-		return this.heapUsed;
+	public long getHeapUsedBytes() {
+		return this.heapUsedBytes;
 	}
 
-	public long getHeapCommitted() {
-		return this.heapCommitted;
+	public long getHeapCommittedBytes() {
+		return this.heapCommittedBytes;
 	}
 
-	public long getHeapInit() {
-		return this.heapInit;
+	public long getHeapInitBytes() {
+		return this.heapInitBytes;
 	}
 
-	public long getNonHeapMax() {
-		return this.nonHeapMax;
+	public long getNonHeapMaxBytes() {
+		return this.nonHeapMaxBytes;
 	}
 
-	public long getNonHeapUsed() {
-		return this.nonHeapUsed;
+	public long getNonHeapUsedBytes() {
+		return this.nonHeapUsedBytes;
 	}
 
-	public long getNonHeapCommitted() {
-		return this.nonHeapCommitted;
+	public long getNonHeapCommittedBytes() {
+		return this.nonHeapCommittedBytes;
 	}
 
-	public long getNonHeapInit() {
-		return this.nonHeapInit;
+	public long getNonHeapInitBytes() {
+		return this.nonHeapInitBytes;
 	}
 
 	public int getObjectPendingFinalizationCount() {

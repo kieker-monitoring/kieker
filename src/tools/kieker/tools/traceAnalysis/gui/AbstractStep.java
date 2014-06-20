@@ -17,11 +17,12 @@
 package kieker.tools.traceAnalysis.gui;
 
 import java.util.Collection;
+import java.util.Properties;
 
 import javax.swing.JPanel;
 
 /**
- * An abstract base for all other steps within the trace analysis wizard.
+ * An abstract base for all other steps within the trace analysis GUI.
  * 
  * @author Nils Christian Ehmke
  * 
@@ -33,8 +34,12 @@ public abstract class AbstractStep extends JPanel {
 
 	public abstract void addSelectedTraceAnalysisParameters(final Collection<String> parameters);
 
-	public boolean isNextStepAllowed() { // NOPMD (Empty method for convenient usage)
-		return true;
-	}
+	public abstract void loadDefaultConfiguration();
+
+	public abstract void saveCurrentConfiguration(Properties properties);
+
+	public abstract void loadCurrentConfiguration(Properties properties);
+
+	public abstract boolean isNextStepAllowed();
 
 }

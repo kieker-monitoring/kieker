@@ -16,16 +16,12 @@
 
 package kieker.tools.traceAnalysis;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-
-import kieker.tools.util.CLIHelpFormatter;
 
 /**
  * Externalized Strings from {@link TraceAnalysisTool}.
@@ -38,14 +34,17 @@ import kieker.tools.util.CLIHelpFormatter;
 public final class Constants {
 
 	public static final String CMD_OPT_NAME_VERBOSE = "verbose";
+	public static final String CMD_OPT_NAME_DEBUG = "debug";
 	/** Command for the input directories containing monitoring records. */
 	public static final String CMD_OPT_NAME_INPUTDIRS = "inputdirs";
 	/** Command for the output directories. */
 	public static final String CMD_OPT_NAME_OUTPUTDIR = "outputdir";
 	public static final String CMD_OPT_NAME_OUTPUTFNPREFIX = "output-filename-prefix";
 	public static final String CMD_OPT_NAME_SELECTTRACES = "select-traces";
+	public static final String CMD_OPT_NAME_FILTERTRACES = "filter-traces";
 	/** Command whether to use short labels or not. */
 	public static final String CMD_OPT_NAME_SHORTLABELS = "short-labels";
+	public static final String CMD_OPT_NAME_IGNORE_ASSUMED = "ignore-assumed-calls";
 	/** Command whether to include self loops or not. */
 	public static final String CMD_OPT_NAME_INCLUDESELFLOOPS = "include-self-loops";
 	/** Command whether to ignore invalid traces or not. */
@@ -139,13 +138,17 @@ public final class Constants {
 	public static final String PLOTAGGREGATEDALLOCATIONCALLTREE_COMPONENT_NAME = "Aggregated call tree (deployment level)";
 	public static final String PLOTAGGREGATEDASSEMBLYCALLTREE_COMPONENT_NAME = "Aggregated call tree (assembly level)";
 	public static final String PLOTCALLTREE_COMPONENT_NAME = "Trace call trees";
-	public static final HelpFormatter CMD_HELP_FORMATTER = new CLIHelpFormatter();
 	public static final Options CMDL_OPTIONS = new Options();
 	public static final List<Option> SORTED_OPTION_LIST = new CopyOnWriteArrayList<Option>();
 
-	public static final String DECORATORS_OPTION_NAME = "responseTimes> <responseTimeColoring threshold(ms)";
+	public static final String DECORATORS_OPTION_NAME = "responseTimes | responseTimes-ns | responseTimes-us | responseTimes-ms | responseTimes-s> <responseTimeColoring threshold(ms)";
 	public static final char DECORATOR_SEPARATOR = ',';
+	@Deprecated
 	public static final String RESPONSE_TIME_DECORATOR_FLAG = "responseTimes";
+	public static final String RESPONSE_TIME_DECORATOR_FLAG_NS = "responseTimes-ns";
+	public static final String RESPONSE_TIME_DECORATOR_FLAG_US = "responseTimes-us";
+	public static final String RESPONSE_TIME_DECORATOR_FLAG_MS = "responseTimes-ms";
+	public static final String RESPONSE_TIME_DECORATOR_FLAG_S = "responseTimes-s";
 	public static final String RESPONSE_TIME_COLORING_DECORATOR_FLAG = "responseTimeColoring";
 
 	public static final String CMD_OPT_NAME_TRACE_COLORING = "traceColoring";
@@ -163,6 +166,8 @@ public final class Constants {
 				.withDescription("Prefix for output filenames\n").withValueSeparator('=').create("p"));
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_VERBOSE).hasArg(false)
 				.withDescription("Verbosely list used parameters and processed traces").create("v"));
+		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_DEBUG).hasArg(false)
+				.withDescription("prints additional debug information").create("d"));
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTALLOCATIONSEQDS).hasArg(false)
 				.withDescription("Generate and store deployment-level sequence diagrams (.pic)").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_TASK_PLOTASSEMBLYSEQDS).hasArg(false)
@@ -205,20 +210,24 @@ public final class Constants {
 				.withDescription("Output an overview about the assembly-level trace equivalence classes").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_SELECTTRACES).withArgName("id0 ... idn").hasArgs().isRequired(false)
 				.withDescription("Consider only the traces identified by the list of trace IDs. Defaults to all traces.").create());
+		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_FILTERTRACES).withArgName("id0 ... idn").hasArgs().isRequired(false)
+				.withDescription("Consider only the traces not identified by the list of trace IDs. Defaults to no traces.").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_IGNOREINVALIDTRACES).hasArg(false).isRequired(false)
 				.withDescription("If selected, the execution aborts on the occurence of an invalid trace.").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_MAXTRACEDURATION).withArgName("duration in ms").hasArg().isRequired(false)
 				.withDescription("Threshold (in ms) after which incomplete traces become invalid. Defaults to 600,000 (i.e, 10 minutes).").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_IGNOREEXECUTIONSBEFOREDATE)
 				.withArgName(TraceAnalysisTool.DATE_FORMAT_PATTERN_CMD_USAGE_HELP).hasArg().isRequired(false)
-				.withDescription("Executions starting before this date (UTC timezone) are ignored.").create());
+				.withDescription("Executions starting before this date (UTC timezone) or monitoring timestamp are ignored.").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_IGNOREEXECUTIONSAFTERDATE)
 				.withArgName(TraceAnalysisTool.DATE_FORMAT_PATTERN_CMD_USAGE_HELP).hasArg().isRequired(false)
-				.withDescription("Executions ending after this date (UTC timezone) are ignored.").create());
+				.withDescription("Executions ending after this date (UTC timezone) or monitoring timestamp  are ignored.").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_SHORTLABELS).hasArg(false).isRequired(false)
 				.withDescription("If selected, abbreviated labels (e.g., package names) are used in the visualizations.").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_INCLUDESELFLOOPS).hasArg(false).isRequired(false)
 				.withDescription("If selected, self-loops are included in the visualizations.").create());
+		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_IGNORE_ASSUMED).hasArg(false).isRequired(false)
+				.withDescription("If selected, assumed calls are visualized just as regular calls.").create());
 		SORTED_OPTION_LIST
 				.add(OptionBuilder
 						.withLongOpt(CMD_OPT_NAME_TRACE_COLORING)
@@ -239,24 +248,6 @@ public final class Constants {
 		for (final Option o : SORTED_OPTION_LIST) {
 			CMDL_OPTIONS.addOption(o);
 		}
-		CMD_HELP_FORMATTER.setOptionComparator(new Comparator<Object>() {
-
-			@Override
-			public int compare(final Object o1, final Object o2) {
-				if (o1 == o2) {
-					return 0;
-				}
-				final int posO1 = SORTED_OPTION_LIST.indexOf(o1);
-				final int posO2 = SORTED_OPTION_LIST.indexOf(o2);
-				if (posO1 < posO2) {
-					return -1;
-				}
-				if (posO1 > posO2) {
-					return 1;
-				}
-				return 0;
-			}
-		});
 	}
 
 	/**

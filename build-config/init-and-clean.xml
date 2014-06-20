@@ -161,6 +161,17 @@
 		<ant antfile="build.xml" dir="${src.userguide.example.aspectj.dir}" target="clean" />
 		<ant antfile="build.xml" dir="${src.userguide.example.jms.dir}" target="clean" />
 		<ant antfile="build.xml" dir="${src.userguide.example.sigar.dir}" target="clean" />
+		
+		<ant antfile="build.xml" dir="${src.example.analysis.kax.dir}" target="clean" />
+		<ant antfile="build.xml" dir="${src.example.analysis.opad.dir}" target="clean" />
+		<ant antfile="build.xml" dir="${src.example.monitoring.adaptive.dir}" target="clean" />
+		<ant antfile="build.xml" dir="${src.example.monitoring.timesource.dir}" target="clean" />
+		<ant antfile="build.xml" dir="${src.example.monitoring.aspectj.dir}" target="clean" />
+		<ant antfile="build.xml" dir="${src.example.monitoring.manual.dir}" target="clean" />
+		<ant antfile="build.xml" dir="${src.example.monitoring.spring.dir}" target="clean" />
+		<ant antfile="build.xml" dir="${src.example.monitoring.jvm.dir}" target="clean" />
+		<ant antfile="build.xml" dir="${src.example.monitoring.sigar.dir}" target="clean" />
+		
 		<delete>
 			<fileset dir="${examples.dir}" includes="**/.classpath-binrelease.generated" />
 		</delete>
@@ -168,7 +179,7 @@
 		<copy file="${kieker.monitoring.default.properties}" tofile="${src.userguide.example.aspectj.dir}/META-INF/kieker.monitoring.properties" />
 	</target>
 
-	<target name="-prepate-userguide-examples-binary-release" depends="-init-version" description="Removes artifacts from previous builds and manually changed configuration files">
+	<target name="-prepare-userguide-examples-binary-release" depends="-init-version" description="Removes artifacts from previous builds and manually changed configuration files">
 		<!-- Create .classpath variant for binary release(#710) -->
 		<copy file="${src.userguide.example.manual.dir}/.classpath" tofile="${src.userguide.example.manual.dir}/.classpath-binrelease.generated" overwrite="true"/>
 		<copy file="${src.userguide.example.extended.dir}/.classpath" tofile="${src.userguide.example.extended.dir}/.classpath-binrelease.generated" overwrite="true"/>
@@ -176,12 +187,24 @@
 		<copy file="${src.userguide.example.jms.dir}/.classpath" tofile="${src.userguide.example.jms.dir}/.classpath-binrelease.generated" overwrite="true"/>
 		<copy file="${src.userguide.example.sigar.dir}/.classpath" tofile="${src.userguide.example.sigar.dir}/.classpath-binrelease.generated" overwrite="true"/>
 
+		<copy file="${src.example.analysis.kax.dir}/.classpath" tofile="${src.example.analysis.kax.dir}/.classpath-binrelease.generated" overwrite="true"/>
+		<copy file="${src.example.analysis.opad.dir}/.classpath" tofile="${src.example.analysis.opad.dir}/.classpath-binrelease.generated" overwrite="true"/>
+		<copy file="${src.example.monitoring.adaptive.dir}/.classpath" tofile="${src.example.monitoring.adaptive.dir}/.classpath-binrelease.generated" overwrite="true"/>
+		<copy file="${src.example.monitoring.timesource.dir}/.classpath" tofile="${src.example.monitoring.timesource.dir}/.classpath-binrelease.generated" overwrite="true"/>
+		<copy file="${src.example.monitoring.aspectj.dir}/.classpath" tofile="${src.example.monitoring.aspectj.dir}/.classpath-binrelease.generated" overwrite="true"/>
+		<copy file="${src.example.monitoring.manual.dir}/.classpath" tofile="${src.example.monitoring.manual.dir}/.classpath-binrelease.generated" overwrite="true"/>
+		<copy file="${src.example.monitoring.spring.dir}/.classpath" tofile="${src.example.monitoring.spring.dir}/.classpath-binrelease.generated" overwrite="true"/>
+		<copy file="${src.example.monitoring.jvm.dir}/.classpath" tofile="${src.example.monitoring.jvm.dir}/.classpath-binrelease.generated" overwrite="true"/>
+		<copy file="${src.example.monitoring.sigar.dir}/.classpath" tofile="${src.example.monitoring.sigar.dir}/.classpath-binrelease.generated" overwrite="true"/>
+		
 		<!-- Examples using the plain Jar -->
 		<replaceregexp byline="true" flags="g">
 			<regexp pattern="&lt;classpathentry .*/Kieker&quot;.*"/>
 			<substitution expression="&lt;classpathentry kind=&quot;lib&quot; path=&quot;lib/${dist.kieker.main.jar}&quot;/&gt;"/>
 			<fileset dir=".">
 				<include name="${src.userguide.example.jms.dir}/.classpath-binrelease.generated"/>
+				<include name="${src.example.monitoring.manual.dir}/.classpath-binrelease.generated"/>
+				<include name="${src.example.monitoring.jvm.dir}/.classpath-binrelease.generated"/>
 			</fileset>
 		</replaceregexp>
 
@@ -193,6 +216,8 @@
 				<include name="${src.userguide.example.manual.dir}/.classpath-binrelease.generated"/>
 				<include name="${src.userguide.example.extended.dir}/.classpath-binrelease.generated"/>
 				<include name="${src.userguide.example.sigar.dir}/.classpath-binrelease.generated"/>
+				<include name="${src.example.analysis.kax.dir}/.classpath-binrelease.generated"/>
+				<include name="${src.example.analysis.aspectj.dir}/.classpath-binrelease.generated"/>
 			</fileset>
 		</replaceregexp>
 
@@ -202,6 +227,9 @@
 			<substitution expression="&lt;classpathentry kind=&quot;lib&quot; path=&quot;lib//${dist.kieker.main.aspectj.jar}&quot;/&gt;"/>
 			<fileset dir=".">
 				<include name="${src.userguide.example.aspectj.dir}/.classpath-binrelease.generated"/>
+				<include name="${src.example.monitoring.adaptive.dir}/.classpath-binrelease.generated"/>
+				<include name="${src.example.monitoring.timesource.dir}/.classpath-binrelease.generated"/>
+				<include name="${src.example.monitoring.aspectj.dir}/.classpath-binrelease.generated"/>
 			</fileset>
 		</replaceregexp>
 
@@ -212,6 +240,8 @@
 			<fileset dir=".">
 				<include name="${src.userguide.example.aspectj.dir}/.classpath-binrelease.generated"/>
 				<include name="${src.userguide.example.sigar.dir}/.classpath-binrelease.generated"/>
+				<include name="${src.example.monitoring.sigar.dir}/.classpath-binrelease.generated"/>
+				<include name="${src.example.monitoring.spring.dir}/.classpath-binrelease.generated"/>
 			</fileset>
 		</replaceregexp>
 	</target>
@@ -230,6 +260,19 @@
 		<replaceregexp file="${src.userguide.example.aspectj.dir}/README.txt" match="kieker-\S*.jar" replace="${dist.kieker.main.aspectj.jar}" flags="g" />
 		<replaceregexp file="${src.userguide.example.jms.dir}/.classpath" match="kieker-\S*.jar" replace="${dist.kieker.main.jar}" flags="g" />
 		<replaceregexp file="${src.userguide.example.sigar.dir}/.classpath" match="kieker-\S*.jar" replace="${dist.kieker.main.jar}" flags="g" />
+		
+		<replaceregexp file="${src.example.analysis.kax.dir}/.classpath" match="kieker-\S*.jar" replace="${dist.kieker.main.emf.jar}" flags="g" />
+		<replaceregexp file="${src.example.analysis.opad.dir}/.classpath" match="kieker-\S*.jar" replace="${dist.kieker.main.emf.jar}" flags="g" />
+		<replaceregexp file="${src.example.monitoring.adaptive.dir}/.classpath" match="kieker-\S*.jar" replace="${dist.kieker.main.aspectj.jar}" flags="g" />
+		<replaceregexp file="${src.example.monitoring.adaptive.dir}/.build.properties" match="kieker-\S*.jar" replace="${dist.kieker.main.aspectj.jar}" flags="g" />
+		<replaceregexp file="${src.example.monitoring.timesource.dir}/.classpath" match="kieker-\S*.jar" replace="${dist.kieker.main.aspectj.jar}" flags="g" />
+		<replaceregexp file="${src.example.monitoring.timesource.dir}/.build.properties" match="kieker-\S*.jar" replace="${dist.kieker.main.aspectj.jar}" flags="g" />
+		<replaceregexp file="${src.example.monitoring.aspectj.dir}/.classpath" match="kieker-\S*.jar" replace="${dist.kieker.main.aspectj.jar}" flags="g" />
+		<replaceregexp file="${src.example.monitoring.aspectj.dir}/.build.properties" match="kieker-\S*.jar" replace="${dist.kieker.main.aspectj.jar}" flags="g" />
+		<replaceregexp file="${src.example.monitoring.manual.dir}/.classpath" match="kieker-\S*.jar" replace="${dist.kieker.main.jar}" flags="g" />
+		<replaceregexp file="${src.example.monitoring.spring.dir}/.classpath" match="kieker-\S*.jar" replace="${dist.kieker.main.jar}" flags="g" />
+		<replaceregexp file="${src.example.monitoring.jvm.dir}/.classpath" match="kieker-\S*.jar" replace="${dist.kieker.main.jar}" flags="g" />
+		<replaceregexp file="${src.example.monitoring.sigar.dir}/.classpath" match="kieker-\S*.jar" replace="${dist.kieker.main.jar}" flags="g" />
 	</target>
 
 	<target name="clean" depends="clean-userguide-examples" description="Removes artifacts from previous builds">

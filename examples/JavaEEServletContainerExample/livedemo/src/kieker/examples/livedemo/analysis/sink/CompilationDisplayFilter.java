@@ -58,7 +58,7 @@ public class CompilationDisplayFilter extends AbstractNonAggregatingDisplayFilte
 	@Override
 	protected void fillChartModelWithRecordData(final CartesianChartModel chartModel, final CompilationRecord record, final String minutesAndSeconds,
 			final int numberOfEntries) {
-		this.totalCompilationTimeData.put(minutesAndSeconds, record.getTotalCompilationTime());
+		this.totalCompilationTimeData.put(minutesAndSeconds, record.getTotalCompilationTimeMS());
 	}
 
 }

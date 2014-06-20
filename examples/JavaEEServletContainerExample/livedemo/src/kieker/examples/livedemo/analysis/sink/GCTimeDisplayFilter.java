@@ -60,7 +60,7 @@ public class GCTimeDisplayFilter extends AbstractNonAggregatingDisplayFilter<GCR
 		}
 
 		final Map<Object, Number> data = this.dataMap.get(gcName);
-		data.put(minutesAndSeconds, record.getCollectionTime());
+		data.put(minutesAndSeconds, record.getCollectionTimeMS());
 	}
 
 }

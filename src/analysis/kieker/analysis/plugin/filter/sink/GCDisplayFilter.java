@@ -89,7 +89,7 @@ public class GCDisplayFilter extends AbstractFilterPlugin {
 		final String id = record.getHostname() + " - " + record.getVmName() + " - " + record.getGcName();
 
 		this.xyplot.setEntry(id + " - " + GCDisplayFilter.COLLECTION_COUNT, minutesAndSeconds, record.getCollectionCount());
-		this.xyplot.setEntry(id + " - " + GCDisplayFilter.COLLECTION_TIME, minutesAndSeconds, record.getCollectionTime());
+		this.xyplot.setEntry(id + " - " + GCDisplayFilter.COLLECTION_TIME, minutesAndSeconds, record.getCollectionTimeMS());
 	}
 
 	@Display(name = "XYPlot Display")

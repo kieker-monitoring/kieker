@@ -20,10 +20,11 @@ import java.io.PrintStream;
 
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.Plugin;
-import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.common.util.signature.Signature;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 import kieker.tools.traceAnalysis.systemModel.AssemblyComponent;
@@ -38,28 +39,15 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * 
  * @since 1.2
  */
-@Plugin(configuration = { @Property(name = AbstractTraceAnalysisFilter.CONFIG_PROPERTY_NAME_VERBOSE,
-		defaultValue = AbstractTraceAnalysisFilter.CONFIG_PROPERTY_VALUE_VERBOSE) },
-		repositoryPorts = { @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class) })
+@Plugin(repositoryPorts = { @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class) })
 public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 
-	public static final String CONFIG_PROPERTY_NAME_VERBOSE = "verbose";
 	public static final String CONFIG_PROPERTY_VALUE_VERBOSE = "false";
 
 	/** The name of the repository port for the system model repository. */
 	public static final String REPOSITORY_PORT_NAME_SYSTEM_MODEL = "systemModelRepository";
 
-	protected final boolean verbose;
-
-	/**
-	 * Output stream for info output addressed to users, e.g., number of traces processed, files processed etc.
-	 */
-	private volatile PrintStream outStream = System.out;
-
-	/**
-	 * Output stream for error output addressed to users, e.g., file not found.
-	 */
-	private volatile PrintStream errStream = System.err;
+	protected static final Log LOG = LogFactory.getLog(AbstractTraceAnalysisFilter.class); // NOPMD (inherited constructor)
 
 	private volatile SystemModelRepository systemEntityFactory;
 
@@ -73,17 +61,11 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 	 */
 	public AbstractTraceAnalysisFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
-
-		this.verbose = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_VERBOSE);
 	}
 
 	@Override
 	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration();
-
-		configuration.setProperty(CONFIG_PROPERTY_NAME_VERBOSE, Boolean.toString(this.verbose));
-
-		return configuration;
+		return new Configuration();
 	}
 
 	public static final Execution createExecutionByEntityNames(final SystemModelRepository systemModelRepository,
@@ -151,18 +133,28 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 	}
 
 	/**
-	 * Prints a message to the configured standard output stream. The output is prepended by a
-	 * header which includes the name of this plugin instance.
+	 * Prints a debug message to the logger. The output is prepended by a header which includes the name of this plugin instance.
 	 * 
 	 * @param lines
 	 *            The lines to be printed.
 	 */
-	protected void printMessage(final String[] lines) {
-		this.stdOutPrintln("");
-		this.stdOutPrintln("#");
-		this.stdOutPrintln("# Plugin: " + this.getName());
+	protected void printDebugLogMessage(final String[] lines) {
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("");
+			LOG.debug("#");
+			LOG.debug("# Plugin: " + this.getName());
+			for (final String l : lines) {
+				LOG.debug(l);
+			}
+		}
+	}
+
+	protected void printErrorLogMessage(final String[] lines) {
+		LOG.error("");
+		LOG.error("#");
+		LOG.error("# Plugin: " + this.getName());
 		for (final String l : lines) {
-			this.stdOutPrintln(l);
+			LOG.error(l);
 		}
 	}
 
@@ -184,11 +176,12 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 	 * 
 	 * @param outStream
 	 *            the outStream to set
+	 * 
+	 * @deprecated To be removed in 1.10
 	 */
+	@Deprecated
 	public void setOutStream(final PrintStream outStream) {
-		synchronized (this) {
-			this.outStream = outStream;
-		}
+		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -197,11 +190,12 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 	 * 
 	 * @param errStream
 	 *            the errStream to set
+	 * 
+	 * @deprecated To be removed in 1.10
 	 */
+	@Deprecated
 	public void setErrStream(final PrintStream errStream) {
-		synchronized (this) {
-			this.errStream = errStream;
-		}
+		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -209,13 +203,12 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 	 * 
 	 * @param message
 	 *            The message to be printed.
+	 * 
+	 * @deprecated To be removed in 1.10
 	 */
+	@Deprecated
 	protected void stdOutPrintln(final String message) {
-		synchronized (this) {
-			if (this.outStream != null) {
-				this.outStream.println(message);
-			}
-		}
+		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -223,12 +216,11 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 	 * 
 	 * @param message
 	 *            The message to be printed.
+	 * 
+	 * @deprecated To be removed in 1.10
 	 */
+	@Deprecated
 	protected void errOutPrintln(final String message) {
-		synchronized (this) {
-			if (this.errStream != null) {
-				this.errStream.println(message);
-			}
-		}
+		throw new UnsupportedOperationException();
 	}
 }

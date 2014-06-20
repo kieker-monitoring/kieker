@@ -10,4 +10,5 @@ plugin.xml
 *.backup
 /*.log
 .DS_Store
+/TraceAnalysisGUI.properties
 /examples/JavaEEServletContainerExample/livedemo/build-eclipse

@@ -166,7 +166,7 @@ public class KiekerHashMap {
 				while (e != null) {
 					if (e.hash == hash) {
 						cachedString = e.get();
-						if (value.equals(cachedString)) {
+						if (value.equals(cachedString)) { // NOPMD (deeply nested if)
 							return cachedString;
 						}
 					}

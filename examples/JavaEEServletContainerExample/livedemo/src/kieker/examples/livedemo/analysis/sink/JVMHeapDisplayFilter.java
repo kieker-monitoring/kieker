@@ -70,8 +70,8 @@ public class JVMHeapDisplayFilter extends AbstractNonAggregatingDisplayFilter<Me
 	@Override
 	protected void fillChartModelWithRecordData(final CartesianChartModel chartModel, final MemoryRecord record, final String minutesAndSeconds,
 			final int numberOfEntries) {
-		this.committedHeapData.put(minutesAndSeconds, JVMHeapDisplayFilter.BYTE_TO_MEGABYTE_CONVERSION_VALUE * record.getHeapCommitted());
-		this.usedHeapData.put(minutesAndSeconds, JVMHeapDisplayFilter.BYTE_TO_MEGABYTE_CONVERSION_VALUE * record.getHeapUsed());
+		this.committedHeapData.put(minutesAndSeconds, JVMHeapDisplayFilter.BYTE_TO_MEGABYTE_CONVERSION_VALUE * record.getHeapCommittedBytes());
+		this.usedHeapData.put(minutesAndSeconds, JVMHeapDisplayFilter.BYTE_TO_MEGABYTE_CONVERSION_VALUE * record.getHeapUsedBytes());
 	}
 
 }

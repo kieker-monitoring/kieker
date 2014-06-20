@@ -31,16 +31,14 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
  */
 public class ResponseTimeDecoration extends AbstractVertexDecoration {
 
-	private static final String OUTPUT_TEMPLATE = "min: %,dms, avg: %,.2fms, max: %,dms";
-
-	private static final TimeUnit DISPLAY_TIMEUNIT = TimeUnit.MILLISECONDS;
-
 	private final TimeUnit executionTimeunit;
+	private final TimeUnit displayTimeunit;
+	private final String timeUnitShortname;
 
 	private long responseTimeSum;
 	private int executionCount;
-	private int minimalResponseTime = Integer.MAX_VALUE;
-	private int maximalResponseTime;
+	private long minimalResponseTime = Integer.MAX_VALUE;
+	private long maximalResponseTime;
 
 	/**
 	 * Creates a new response time decoration.
@@ -48,8 +46,26 @@ public class ResponseTimeDecoration extends AbstractVertexDecoration {
 	 * @param executionTimeunit
 	 *            The time unit which tells how to interpret the times of the executions.
 	 */
-	public ResponseTimeDecoration(final TimeUnit executionTimeunit) {
+	public ResponseTimeDecoration(final TimeUnit executionTimeunit, final TimeUnit displayTimeunit) {
 		this.executionTimeunit = executionTimeunit;
+		this.displayTimeunit = displayTimeunit;
+		switch (displayTimeunit) {
+		case NANOSECONDS:
+			this.timeUnitShortname = "ns";
+			break;
+		case MICROSECONDS:
+			this.timeUnitShortname = "us";
+			break;
+		case MILLISECONDS:
+			this.timeUnitShortname = "ms";
+			break;
+		case SECONDS:
+			this.timeUnitShortname = "s";
+			break;
+		default:
+			this.timeUnitShortname = "??";
+			break;
+		}
 	}
 
 	/**
@@ -59,7 +75,7 @@ public class ResponseTimeDecoration extends AbstractVertexDecoration {
 	 *            The execution to register
 	 */
 	public void registerExecution(final Execution execution) {
-		final int responseTime = (int) DISPLAY_TIMEUNIT.convert(execution.getTout() - execution.getTin(), this.executionTimeunit);
+		final long responseTime = this.displayTimeunit.convert(execution.getTout() - execution.getTin(), this.executionTimeunit);
 
 		this.responseTimeSum = this.responseTimeSum + responseTime;
 		this.executionCount++;
@@ -77,7 +93,7 @@ public class ResponseTimeDecoration extends AbstractVertexDecoration {
 	 * 
 	 * @return See above
 	 */
-	public int getMinimalResponseTime() {
+	public long getMinimalResponseTime() {
 		return this.minimalResponseTime;
 	}
 
@@ -86,7 +102,7 @@ public class ResponseTimeDecoration extends AbstractVertexDecoration {
 	 * 
 	 * @return See above
 	 */
-	public int getMaximalResponseTime() {
+	public long getMaximalResponseTime() {
 		return this.maximalResponseTime;
 	}
 
@@ -99,9 +115,26 @@ public class ResponseTimeDecoration extends AbstractVertexDecoration {
 		return (this.executionCount == 0) ? 0 : ((double) this.responseTimeSum / (double) this.executionCount); // NOCS (inline ?)
 	}
 
+	public long getTotalResponseTime() {
+		return this.responseTimeSum;
+	}
+
 	@Override
 	public String createFormattedOutput() {
-		return String.format(OUTPUT_TEMPLATE, this.getMinimalResponseTime(), this.getAverageResponseTime(), this.getMaximalResponseTime());
+		final StringBuilder sb = new StringBuilder(30);
+		sb.append("min: ");
+		sb.append(this.getMinimalResponseTime());
+		sb.append(this.timeUnitShortname);
+		sb.append(", avg: ");
+		sb.append(Math.round(this.getAverageResponseTime()));
+		sb.append(this.timeUnitShortname);
+		sb.append(", max: ");
+		sb.append(this.getMaximalResponseTime());
+		sb.append(this.timeUnitShortname);
+		sb.append(",\ntotal: ");
+		sb.append(this.getTotalResponseTime());
+		sb.append(this.timeUnitShortname);
+		return sb.toString();
 	}
 
 }
