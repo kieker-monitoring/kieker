@@ -21,7 +21,6 @@ import java.lang.management.ManagementFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.sampler.ISampler;
-import kieker.monitoring.core.signaturePattern.SignatureFactory;
 
 /**
  * This is an abstract base for all sampler using the MXBean interface to access information from the JVM.
@@ -33,20 +32,23 @@ import kieker.monitoring.core.signaturePattern.SignatureFactory;
 public abstract class AbstractMXBeanSampler implements ISampler {
 
 	private static final String VM_NAME = ManagementFactory.getRuntimeMXBean().getName();
+	private volatile IMonitoringController monitoringCtr;
 
 	public AbstractMXBeanSampler() {
 		// Empty default constructor
 	}
 
+	// necessary for ProbeActivation-Check in child classes
+	public IMonitoringController getMonitoringCtr() {
+		return this.monitoringCtr;
+	}
+
 	@Override
 	public final void sample(final IMonitoringController monitoringController) throws Exception {
 
-		// new added
-		if (!monitoringController.isMonitoringEnabled()) {
-			return;
-		}
+		this.monitoringCtr = monitoringController;
 
-		if (!monitoringController.isProbeActivated(SignatureFactory.createMemSwapSignature())) {
+		if (!monitoringController.isMonitoringEnabled()) {
 			return;
 		}
 

@@ -21,6 +21,7 @@ import java.lang.management.MemoryUsage;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.jvm.MemoryRecord;
+import kieker.monitoring.core.signaturePattern.SignatureFactory;
 
 /**
  * A sampler using the MXBean interface to access information about the JVM memory usage. The sampler produces a {@link MemoryRecord} each time the {@code sample}
@@ -38,6 +39,11 @@ public class MemorySampler extends AbstractMXBeanSampler {
 
 	@Override
 	protected IMonitoringRecord[] createNewMonitoringRecords(final long timestamp, final String hostname, final String vmName) {
+
+		if (!this.getMonitoringCtr().isProbeActivated(SignatureFactory.createJVMMemSignature())) {
+			return new IMonitoringRecord[] {};
+		}
+
 		final MemoryMXBean memoryBean = ManagementFactory.getMemoryMXBean();
 		final MemoryUsage heapMemoryUsage = memoryBean.getHeapMemoryUsage();
 		final MemoryUsage nonHeapMemoryUsage = memoryBean.getNonHeapMemoryUsage();

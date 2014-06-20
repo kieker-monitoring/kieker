@@ -25,12 +25,12 @@ import org.junit.Test;
 
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.jvm.MemoryRecord;
+import kieker.common.record.jvm.UptimeRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.signaturePattern.SignatureFactory;
-import kieker.monitoring.sampler.mxbean.MemorySampler;
+import kieker.monitoring.sampler.mxbean.UptimeSampler;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.monitoring.util.NamedListWriter;
@@ -40,7 +40,7 @@ import kieker.test.monitoring.util.NamedListWriter;
  * 
  * @since 1.10
  */
-public class TestMemorySampler extends AbstractKiekerTest {
+public class TestUptimeSampler extends AbstractKiekerTest {
 
 	private volatile String listName;
 	private volatile List<IMonitoringRecord> recordListFilledByListWriter;
@@ -48,7 +48,7 @@ public class TestMemorySampler extends AbstractKiekerTest {
 
 	@Before
 	public void prepare() {
-		this.listName = TestMemorySampler.class.getName();
+		this.listName = TestUptimeSampler.class.getName();
 		this.recordListFilledByListWriter = NamedListWriter.createNamedList(this.listName);
 		this.monitoringController = this.createMonitoringController();
 	}
@@ -59,7 +59,7 @@ public class TestMemorySampler extends AbstractKiekerTest {
 		final long period = 1000; // 1000 ms
 		final long offset = 200; // 1st event after 200 ms
 
-		final MemorySampler sampler = new MemorySampler();
+		final UptimeSampler sampler = new UptimeSampler();
 
 		this.monitoringController.schedulePeriodicSampler(sampler, offset, period, TimeUnit.MILLISECONDS);
 
@@ -70,7 +70,7 @@ public class TestMemorySampler extends AbstractKiekerTest {
 		// There should be 4 saved records
 		final int numEventsBeforeProbeDisabled = this.recordListFilledByListWriter.size();
 
-		final String pattern = SignatureFactory.createJVMMemSignature();
+		final String pattern = SignatureFactory.createJVMUpTimeSignature();
 		this.monitoringController.deactivateProbe(pattern);
 
 		Thread.sleep(2000); // sleep 2 seconds while probe being disabled
@@ -85,7 +85,7 @@ public class TestMemorySampler extends AbstractKiekerTest {
 		// There should be at least 1 new record after re-enabling (expecting 2)
 		final int numEventsAfterProbeReEnabled = this.recordListFilledByListWriter.size() - numEventsBeforeProbeDisabled;
 
-		final boolean isInstanceOf = this.recordListFilledByListWriter.get(0) instanceof MemoryRecord;
+		final boolean isInstanceOf = this.recordListFilledByListWriter.get(0) instanceof UptimeRecord;
 
 		Assert.assertTrue("Unexpected instance of IMonitoringRecord", isInstanceOf);
 		Assert.assertEquals("Unexpected number of triggering events before disabling", 4, numEventsBeforeProbeDisabled);

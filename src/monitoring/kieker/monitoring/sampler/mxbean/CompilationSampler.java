@@ -20,6 +20,7 @@ import java.lang.management.ManagementFactory;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.jvm.CompilationRecord;
+import kieker.monitoring.core.signaturePattern.SignatureFactory;
 
 /**
  * A sampler using the MXBean interface to access information about the compilation time. The sampler produces a {@link CompilationRecord} each time the
@@ -37,7 +38,13 @@ public class CompilationSampler extends AbstractMXBeanSampler {
 
 	@Override
 	protected IMonitoringRecord[] createNewMonitoringRecords(final long timestamp, final String hostname, final String vmName) {
+
+		if (!this.getMonitoringCtr().isProbeActivated(SignatureFactory.createJVMCompilationSignature())) {
+			return new IMonitoringRecord[] {};
+		}
+
 		final CompilationMXBean compilationBean = ManagementFactory.getCompilationMXBean();
+
 		return new IMonitoringRecord[] { new CompilationRecord(timestamp, hostname, vmName, compilationBean.getName(), compilationBean.getTotalCompilationTime()), };
 	}
 }

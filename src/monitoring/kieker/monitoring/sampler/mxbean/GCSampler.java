@@ -21,6 +21,7 @@ import java.util.List;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.jvm.GCRecord;
+import kieker.monitoring.core.signaturePattern.SignatureFactory;
 
 /**
  * A sampler using the MXBean interface to access information about the garbage collector(s). The sampler produces a {@link GCRecord} for each garbage collector each
@@ -38,6 +39,11 @@ public class GCSampler extends AbstractMXBeanSampler {
 
 	@Override
 	protected IMonitoringRecord[] createNewMonitoringRecords(final long timestamp, final String hostname, final String vmName) {
+
+		if (!this.getMonitoringCtr().isProbeActivated(SignatureFactory.createJVMGarbageCollectorSignature())) {
+			return new IMonitoringRecord[] {};
+		}
+
 		final List<GarbageCollectorMXBean> gcBeans = ManagementFactory.getGarbageCollectorMXBeans();
 		final int numberOfGCs = gcBeans.size();
 		final IMonitoringRecord[] records = new IMonitoringRecord[numberOfGCs];

@@ -29,16 +29,18 @@ import kieker.common.record.jvm.GCRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
+import kieker.monitoring.core.signaturePattern.SignatureFactory;
 import kieker.monitoring.sampler.mxbean.GCSampler;
 
+import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.monitoring.util.NamedListWriter;
 
 /**
- * @author Micky-Singh
+ * @author Micky Singh Multani
  * 
  * @since 1.10
  */
-public class TestGCSampler {
+public class TestGCSampler extends AbstractKiekerTest {
 
 	private volatile String listName;
 	private volatile List<IMonitoringRecord> recordListFilledByListWriter;
@@ -46,10 +48,9 @@ public class TestGCSampler {
 
 	@Before
 	public void prepare() {
-		this.listName = TestMemorySampler.class.getName();
+		this.listName = TestGCSampler.class.getName();
 		this.recordListFilledByListWriter = NamedListWriter.createNamedList(this.listName);
 		this.monitoringController = this.createMonitoringController();
-
 	}
 
 	@Test
@@ -62,32 +63,60 @@ public class TestGCSampler {
 
 		this.monitoringController.schedulePeriodicSampler(sampler, offset, period, TimeUnit.MILLISECONDS);
 
-		Thread.sleep(3500); // sleep 3,5 seconds -> 4 trigger events
+		Thread.sleep(3500); // sleep 3,5 seconds
+
+		// PROBE DEACTIVATION AND REACTIVATION TEST
 
 		// There should be 4 saved records
-		final int numEventsBeforeDisabled = this.recordListFilledByListWriter.size();
-		// System.out.println(numEventsBeforeDisabled);
-		this.monitoringController.disableMonitoring();
+		final int numEventsBeforeProbeDisabled = this.recordListFilledByListWriter.size();
 
-		Thread.sleep(2000); // sleep 2 seconds while being disabled
+		final String pattern = SignatureFactory.createJVMGarbageCollectorSignature();
+		this.monitoringController.deactivateProbe(pattern);
 
-		// There should be no new trigger events
-		final int numEventsWhileDisabled = this.recordListFilledByListWriter.size() - numEventsBeforeDisabled;
+		Thread.sleep(2000); // sleep 2 seconds while probe being disabled
 
-		this.monitoringController.enableMonitoring();
+		// There should be no new records while probe being disabled
+		final int numEventsWhileProbeDisabled = this.recordListFilledByListWriter.size() - numEventsBeforeProbeDisabled;
 
-		Thread.sleep(2000); // sleep 2 seconds while being re-enabled
+		this.monitoringController.activateProbe(pattern);
 
-		// There should be at least 1 new record after re-enabling
-		final int numEventsAfterReEnabled = this.recordListFilledByListWriter.size() - numEventsBeforeDisabled;
-		// System.out.println(numEventsAfterReEnabled);
+		Thread.sleep(2000); // sleep 2 seconds while probe being re-enabled
+
+		// There should be at least 1 new record after re-enabling (expecting 2)
+		final int numEventsAfterProbeReEnabled = this.recordListFilledByListWriter.size() - numEventsBeforeProbeDisabled;
+
 		final boolean isInstanceOf = this.recordListFilledByListWriter.get(0) instanceof GCRecord;
 
 		Assert.assertTrue("Unexpected instance of IMonitoringRecord", isInstanceOf);
-		Assert.assertEquals("Unexpected number of triggering events before disabling", 8, numEventsBeforeDisabled);
-		Assert.assertEquals("Unexpected number of triggering events while disabled", 0, numEventsWhileDisabled);
-		Assert.assertTrue("Unexpected at least one triggering events after being re-enabled. Found " + numEventsAfterReEnabled,
-				numEventsAfterReEnabled > 0); // NOCS (MagicNumberCheck)
+		Assert.assertEquals("Unexpected number of triggering events before disabling", 8, numEventsBeforeProbeDisabled);
+		Assert.assertEquals("Unexpected number of triggering events while disabled", 0, numEventsWhileProbeDisabled);
+		Assert.assertTrue("Expected at least one triggering event after being re-enabled. Found " + numEventsAfterProbeReEnabled,
+				numEventsAfterProbeReEnabled > 0);
+
+		// DISABLING AND RE-ENABLING MONITORING TEST
+
+		// There should be 6 saved records
+		final int numEventsBeforeMonitoringDisabled = this.recordListFilledByListWriter.size();
+
+		this.monitoringController.disableMonitoring();
+
+		Thread.sleep(2000); // sleep 2 seconds while monitoring being disabled
+
+		// There should be no new records while monitoring being disabled
+		final int numEventsWhileMonitoringDisabled = this.recordListFilledByListWriter.size() - numEventsBeforeMonitoringDisabled;
+
+		this.monitoringController.enableMonitoring();
+
+		Thread.sleep(2000); // sleep 2 seconds while monitoring being re-enabled
+
+		// There should be at least one new record
+		final int numEventsAfterMonitoringReEnabled = this.recordListFilledByListWriter.size() - numEventsBeforeProbeDisabled;
+
+		Assert.assertEquals("Unexpected number of triggering events before disabling", 12, numEventsBeforeMonitoringDisabled);
+		Assert.assertEquals("Unexpected number of triggering events while disabled", 0, numEventsWhileMonitoringDisabled);
+		Assert.assertTrue("Expected at least one triggering event after being re-enabled. Found " + numEventsAfterMonitoringReEnabled,
+				numEventsAfterMonitoringReEnabled > 0);
+
 		this.monitoringController.terminateMonitoring();
 	}
 

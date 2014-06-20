@@ -43,6 +43,36 @@ public final class SignatureFactory {
 	public static final String PATTERN_PREFIX_MEM_SWAP = PATTERN_PREFIX + "MEM_SWAP";
 
 	/**
+	 * Prefix of a JVM memory signature.
+	 */
+	public static final String PATTERN_PREFIX_JVM_MEM = PATTERN_PREFIX + "JVM_MEM";
+
+	/**
+	 * Prefix of a JVM class loading signature.
+	 */
+	public static final String PATTERN_PREFIX_JVM_CL = PATTERN_PREFIX + "JVM_CL";
+
+	/**
+	 * Prefix of a JVM uptime signature.
+	 */
+	public static final String PATTERN_PREFIX_JVM_UP_TIME = PATTERN_PREFIX + "JVM_UPTIME";
+
+	/**
+	 * Prefix of a JVM threads signature.
+	 */
+	public static final String PATTERN_PREFIX_JVM_THREADS = PATTERN_PREFIX + "JVM_THREADS";
+
+	/**
+	 * Prefix of a JVM compilation signature.
+	 */
+	public static final String PATTERN_PREFIX_JVM_COMPILATION = PATTERN_PREFIX + "JVM_COMPILATION";
+
+	/**
+	 * Prefix of a JVM garbage collector signature.
+	 */
+	public static final String PATTERN_PREFIX_JVM_GC = PATTERN_PREFIX + "JVM_GC";
+
+	/**
 	 * Private constructor to avoid instantiation.
 	 */
 	private SignatureFactory() {
@@ -81,6 +111,60 @@ public final class SignatureFactory {
 	 */
 	public static String createMemSwapSignature() {
 		return PATTERN_PREFIX_MEM_SWAP;
+	}
+
+	/**
+	 * Creates a JVM Mem signature.
+	 * 
+	 * @return The signature.
+	 */
+	public static String createJVMMemSignature() {
+		return PATTERN_PREFIX_JVM_MEM;
+	}
+
+	/**
+	 * Creates a JVM class loading signature.
+	 * 
+	 * @return The signature.
+	 */
+	public static String createJVMClassLoadSignature() {
+		return PATTERN_PREFIX_JVM_CL;
+	}
+
+	/**
+	 * Creates a JVM uptime signature.
+	 * 
+	 * @return The signature.
+	 */
+	public static String createJVMUpTimeSignature() {
+		return PATTERN_PREFIX_JVM_UP_TIME;
+	}
+
+	/**
+	 * Creates a JVM threads signature.
+	 * 
+	 * @return The signature.
+	 */
+	public static String createJVMThreadsSignature() {
+		return PATTERN_PREFIX_JVM_THREADS;
+	}
+
+	/**
+	 * Creates a JVM compilation signature.
+	 * 
+	 * @return The signature.
+	 */
+	public static String createJVMCompilationSignature() {
+		return PATTERN_PREFIX_JVM_COMPILATION;
+	}
+
+	/**
+	 * Creates a JVM garbage collector signature.
+	 * 
+	 * @return The signature.
+	 */
+	public static String createJVMGarbageCollectorSignature() {
+		return PATTERN_PREFIX_JVM_GC;
 	}
 
 	/**
