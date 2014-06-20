@@ -51,7 +51,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * 
  * @since 1.10
  */
-public class LiveDemoAnalysis {
+public final class LiveDemoAnalysis {
 
 	private static final LiveDemoAnalysis INSTANCE = new LiveDemoAnalysis();
 

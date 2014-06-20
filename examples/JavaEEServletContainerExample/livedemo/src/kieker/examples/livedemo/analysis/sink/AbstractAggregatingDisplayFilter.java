@@ -57,8 +57,9 @@ public abstract class AbstractAggregatingDisplayFilter<T extends IMonitoringReco
 
 	private static final Log LOG = LogFactory.getLog(AbstractAggregatingDisplayFilter.class);
 
-	private final int numberOfEntries;
 	protected final TimeUnit timeunit;
+
+	private final int numberOfEntries;
 	private final Queue<T> records;
 	private final C chartModel;
 
