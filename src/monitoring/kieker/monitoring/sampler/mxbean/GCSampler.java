@@ -21,6 +21,7 @@ import java.util.List;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.jvm.GCRecord;
+import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.signaturePattern.SignatureFactory;
 
 /**
@@ -38,9 +39,10 @@ public class GCSampler extends AbstractMXBeanSampler {
 	}
 
 	@Override
-	protected IMonitoringRecord[] createNewMonitoringRecords(final long timestamp, final String hostname, final String vmName) {
+	protected IMonitoringRecord[] createNewMonitoringRecords(final long timestamp, final String hostname, final String vmName,
+			final IMonitoringController monitoringCtr) {
 
-		if (!this.getMonitoringCtr().isProbeActivated(SignatureFactory.createJVMGarbageCollectorSignature())) {
+		if (!monitoringCtr.isProbeActivated(SignatureFactory.createJVMGarbageCollectorSignature())) {
 			return new IMonitoringRecord[] {};
 		}
 

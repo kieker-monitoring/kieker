@@ -32,21 +32,13 @@ import kieker.monitoring.core.sampler.ISampler;
 public abstract class AbstractMXBeanSampler implements ISampler {
 
 	private static final String VM_NAME = ManagementFactory.getRuntimeMXBean().getName();
-	private volatile IMonitoringController monitoringCtr;
 
 	public AbstractMXBeanSampler() {
 		// Empty default constructor
 	}
 
-	// necessary for ProbeActivation-Check in child classes
-	public IMonitoringController getMonitoringCtr() {
-		return this.monitoringCtr;
-	}
-
 	@Override
 	public final void sample(final IMonitoringController monitoringController) throws Exception {
-
-		this.monitoringCtr = monitoringController;
 
 		if (!monitoringController.isMonitoringEnabled()) {
 			return;
@@ -55,13 +47,14 @@ public abstract class AbstractMXBeanSampler implements ISampler {
 		final long timestamp = monitoringController.getTimeSource().getTime();
 		final String hostname = monitoringController.getHostname();
 
-		final IMonitoringRecord[] records = this.createNewMonitoringRecords(timestamp, hostname, VM_NAME);
+		final IMonitoringRecord[] records = this.createNewMonitoringRecords(timestamp, hostname, VM_NAME, monitoringController);
 
 		for (final IMonitoringRecord record : records) {
 			monitoringController.newMonitoringRecord(record);
 		}
 	}
 
-	protected abstract IMonitoringRecord[] createNewMonitoringRecords(final long timestamp, final String hostname, final String vmName);
+	protected abstract IMonitoringRecord[] createNewMonitoringRecords(final long timestamp, final String hostname, final String vmName,
+			final IMonitoringController monitoringCtr);
 
 }

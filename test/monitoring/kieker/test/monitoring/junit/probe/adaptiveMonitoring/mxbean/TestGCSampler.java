@@ -67,7 +67,7 @@ public class TestGCSampler extends AbstractKiekerTest {
 
 		// PROBE DEACTIVATION AND REACTIVATION TEST
 
-		// There should be 4 saved records
+		// There should be 8 saved records
 		final int numEventsBeforeProbeDisabled = this.recordListFilledByListWriter.size();
 
 		final String pattern = SignatureFactory.createJVMGarbageCollectorSignature();
@@ -82,7 +82,7 @@ public class TestGCSampler extends AbstractKiekerTest {
 
 		Thread.sleep(2000); // sleep 2 seconds while probe being re-enabled
 
-		// There should be at least 1 new record after re-enabling (expecting 2)
+		// There should be at least 1 new record after re-enabling
 		final int numEventsAfterProbeReEnabled = this.recordListFilledByListWriter.size() - numEventsBeforeProbeDisabled;
 
 		final boolean isInstanceOf = this.recordListFilledByListWriter.get(0) instanceof GCRecord;
@@ -95,7 +95,7 @@ public class TestGCSampler extends AbstractKiekerTest {
 
 		// DISABLING AND RE-ENABLING MONITORING TEST
 
-		// There should be 6 saved records
+		// There should be 12 saved records
 		final int numEventsBeforeMonitoringDisabled = this.recordListFilledByListWriter.size();
 
 		this.monitoringController.disableMonitoring();

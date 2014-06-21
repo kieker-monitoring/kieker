@@ -20,6 +20,7 @@ import java.lang.management.ManagementFactory;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.jvm.CompilationRecord;
+import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.signaturePattern.SignatureFactory;
 
 /**
@@ -37,9 +38,10 @@ public class CompilationSampler extends AbstractMXBeanSampler {
 	}
 
 	@Override
-	protected IMonitoringRecord[] createNewMonitoringRecords(final long timestamp, final String hostname, final String vmName) {
+	protected IMonitoringRecord[] createNewMonitoringRecords(final long timestamp, final String hostname, final String vmName,
+			final IMonitoringController monitoringCtr) {
 
-		if (!this.getMonitoringCtr().isProbeActivated(SignatureFactory.createJVMCompilationSignature())) {
+		if (!monitoringCtr.isProbeActivated(SignatureFactory.createJVMCompilationSignature())) {
 			return new IMonitoringRecord[] {};
 		}
 

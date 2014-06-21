@@ -20,6 +20,7 @@ import java.lang.management.ThreadMXBean;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.jvm.ThreadsStatusRecord;
+import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.signaturePattern.SignatureFactory;
 
 /**
@@ -37,9 +38,10 @@ public class ThreadsStatusSampler extends AbstractMXBeanSampler {
 	}
 
 	@Override
-	protected IMonitoringRecord[] createNewMonitoringRecords(final long timestamp, final String hostname, final String vmName) {
+	protected IMonitoringRecord[] createNewMonitoringRecords(final long timestamp, final String hostname, final String vmName,
+			final IMonitoringController monitoringCtr) {
 
-		if (!this.getMonitoringCtr().isProbeActivated(SignatureFactory.createJVMThreadsSignature())) {
+		if (!monitoringCtr.isProbeActivated(SignatureFactory.createJVMThreadsSignature())) {
 			return new IMonitoringRecord[] {};
 		}
 
