@@ -138,19 +138,16 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 		try {
 			switch (this.queueFullBehavior) {
 			case 1: // blocks when queue full
-				boolean interrupted = false;
 				for (int i = 0; i < 10; i++) { // drop out if more than 10 times interrupted
 					try {
 						this.blockingQueue.put(monitoringRecord);
-						if (interrupted) {
-							LOG.warn("Interupted when adding new monitoring record to queue. Tries: " + i);
-							Thread.currentThread().interrupt(); // propagate interrupt
-						}
 						return true;
 					} catch (final InterruptedException ignore) {
-						interrupted = true;
+						LOG.warn("Interupted when adding new monitoring record to queue. Try: " + i);
+						Thread.currentThread().interrupt(); // propagate interrupt
 					}
 				}
+				LOG.error("Failed to add new monitoring record to queue (Finally interruped while blocked).");
 				return false;
 			case 2: // does nothing if queue is full
 				if (!this.blockingQueue.offer(monitoringRecord)) {
