@@ -16,7 +16,6 @@
 
 package kieker.tools.util;
 
-import java.io.File;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
@@ -40,15 +39,12 @@ import kieker.common.logging.LogFactory;
  */
 public final class RBridgeControl {
 
-	// TODO make a better singleton, later ( https://kieker.uni-kiel.de/trac/ticket/1311 )
-	private static RBridgeControl instance;
-
 	private static final Log LOG = LogFactory.getLog(RBridgeControl.class);
 	private static final AtomicInteger NEXTVARID = new AtomicInteger(1);
 
 	private Rsession rCon;
 
-	private RBridgeControl() {
+	protected RBridgeControl() {
 
 		final OutputStream out;
 
@@ -58,33 +54,6 @@ public final class RBridgeControl {
 		} catch (final UnsupportedEncodingException e) {
 			LOG.error(e.toString(), e);
 		}
-	}
-
-	/**
-	 * 
-	 * @param root
-	 *            file of R
-	 * @return instance
-	 */
-	public static synchronized RBridgeControl getInstance(final File root) { // NOPMD Whole code depends on "instance" variable
-		if (RBridgeControl.instance == null) {
-
-			RBridgeControl.instance = new RBridgeControl();
-			RBridgeControl.instance.evalWithR("OPAD_CONTEXT <<- TRUE");
-			/**
-			 * TODO ( https://kieker.uni-kiel.de/trac/ticket/1311 )
-			 * - make this (RBridgeControl.instance = new RBridgeControl();) configurable?!?
-			 * - test if this (RBridgeControl.instance.evalWithR("OPAD_CONTEXT <<- TRUE");) is needed every time
-			 * - outsource this into a packaged text file
-			 * - declare the functions at runtime
-			 * - use REngine rather?
-			 * - RServe is not needed any more
-			 */
-
-			instance.evalWithR("initTS");
-		}
-
-		return RBridgeControl.instance;
 	}
 
 	/**
@@ -124,7 +93,6 @@ public final class RBridgeControl {
 	 *            variable to R
 	 */
 	public void toTS(final String variable) {
-		// try {
 		if (variable != null) {
 			final StringBuffer buf = new StringBuffer();
 			buf.append(variable);
@@ -133,9 +101,6 @@ public final class RBridgeControl {
 			buf.append(')');
 			this.evalWithR(buf.toString());
 		}
-		// } catch (final REXPMismatchException e) {
-		// LOG.error("Conversion to timeseries failed.", e);
-		// }
 	}
 
 	/**
@@ -146,7 +111,6 @@ public final class RBridgeControl {
 	 *            frequency to R
 	 */
 	public void toTS(final String variable, final long frequency) {
-		// try {
 		if (variable != null) {
 			final StringBuffer buf = new StringBuffer(21);
 			buf.append(variable);
@@ -157,9 +121,6 @@ public final class RBridgeControl {
 			buf.append(')');
 			this.evalWithR(buf.toString());
 		}
-		// } catch (final Exception e) {
-		// LOG.error("Conversion to timeseries failed.", e);
-		// }
 	}
 
 	/**
@@ -170,7 +131,6 @@ public final class RBridgeControl {
 	 */
 	public double eDbl(final String input) {
 		try {
-			// TODO make it error save ( https://kieker.uni-kiel.de/trac/ticket/1311 )
 			return ((REXPDouble) this.evalWithR(input)).asDouble();
 		} catch (final REXPMismatchException exc) {
 			RBridgeControl.LOG.error("Error casting value from R: " + input
@@ -186,17 +146,12 @@ public final class RBridgeControl {
 	 * @return Rdata
 	 */
 	public String eString(final String input) {
-		// try {
-		// TODO make it error save ( https://kieker.uni-kiel.de/trac/ticket/1311 )
 		final REXPString str = (REXPString) this.evalWithR(input);
 		if (str != null) {
 			return str.toString();
 		} else {
 			return "";
 		}
-		// } catch (final NumberFormatException e) {
-		// return "";
-		// }
 	}
 
 	/**
@@ -207,7 +162,6 @@ public final class RBridgeControl {
 	 */
 	public double[] eDblArr(final String input) {
 		try {
-			// TODO make it error save ( https://kieker.uni-kiel.de/trac/ticket/1311 )
 			final REXPVector res = (REXPVector) this.evalWithR(input);
 			return res.asDoubles();
 		} catch (final REXPMismatchException e) {
@@ -224,7 +178,6 @@ public final class RBridgeControl {
 	 *            assign value
 	 */
 	public void assign(final String variable, final double[] values) {
-		// try {
 		final StringBuffer buf = new StringBuffer();
 		buf.append(variable);
 		buf.append(" <<- c(");
@@ -239,13 +192,8 @@ public final class RBridgeControl {
 		}
 		buf.append(')');
 		this.evalWithR(buf.toString());
-		// } catch (final Exception e) {
-		// LOG.error("Assignment failed.", e);
-		// }
-
 	}
 
-	// TODO DRY violated! ( https://kieker.uni-kiel.de/trac/ticket/1311 )
 	/**
 	 * 
 	 * @param variable
@@ -254,7 +202,6 @@ public final class RBridgeControl {
 	 *            assign vaules
 	 */
 	public void assign(final String variable, final Double[] values) {
-		// try {
 		final StringBuffer buf = new StringBuffer();
 		buf.append(variable);
 		buf.append(" <<- c(");
@@ -273,10 +220,6 @@ public final class RBridgeControl {
 		}
 		buf.append(')');
 		this.evalWithR(buf.toString());
-		// } catch (final Exception e) {
-		// LOG.error("Assignment failed.", e);
-		// }
-
 	}
 
 	/**
@@ -287,7 +230,6 @@ public final class RBridgeControl {
 	 *            assign vaules
 	 */
 	public void assign(final String variable, final Long[] values) {
-		// try {
 		final StringBuffer buf = new StringBuffer();
 		buf.append(variable);
 		buf.append(" <<- c(");
@@ -302,10 +244,6 @@ public final class RBridgeControl {
 		}
 		buf.append(',');
 		this.evalWithR(buf.toString());
-		// } catch (final Exception e) {
-		// LOG.error("Assignment failed.", e);
-		// }
-
 	}
 
 	/**
@@ -316,5 +254,21 @@ public final class RBridgeControl {
 	public static String uniqueVarname() {
 		return String.format("var_%s",
 				RBridgeControl.NEXTVARID.getAndIncrement());
+	}
+
+	// GET SINGLETON INSTANCE
+	// #############################
+	public static final RBridgeControl getInstance() {
+		return LazyHolder.INSTANCE;
+	}
+
+	/**
+	 * SINGLETON.
+	 */
+	private static final class LazyHolder { // NOCS
+		static final RBridgeControl INSTANCE;
+		static {
+			INSTANCE = new RBridgeControl();
+		}
 	}
 }
