@@ -98,10 +98,10 @@
 	<classpathentry kind="lib" path="lib/commons-math-2.2.jar"/>
 	<classpathentry kind="lib" path="lib/mongo-2.10.1.jar"/>
 	<classpathentry kind="lib" path="lib/static-analysis/checkstyle-5.6/lib/checkstyle-all.jar"/>
-	<classpathentry kind="lib" path="lib/Rserve.jar"/>
 	<classpathentry kind="lib" path="lib/org.json.min.jar"/>
 	<classpathentry kind="lib" path="lib/aspectjrt-1.8.0.jar"/>
 	<classpathentry kind="lib" path="lib/aspectjweaver-1.8.0.jar"/>
 	<classpathentry kind="lib" path="lib/static-analysis/pmd-5.0.5/lib/commons-io-2.2.jar"/>
+	<classpathentry kind="lib" path="lib/Rserve-1.8-0.jar"/>
 	<classpathentry kind="output" path="build-eclipse"/>
 </classpath>
