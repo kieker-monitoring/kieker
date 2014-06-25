@@ -30,11 +30,7 @@
 	<classpathentry kind="lib" path="lib/jgraphx-2.1.1.0.jar"/>
 	<classpathentry kind="lib" path="lib/junit-4.11.jar"/>
 	<classpathentry kind="lib" path="lib/kahadb-5.7.0.jar"/>
-	<classpathentry kind="lib" path="lib/org.eclipse.emf.common_2.9.0.v20130528-0742.jar"/>
-	<classpathentry kind="lib" path="lib/org.eclipse.emf.ecore.xmi_2.9.0.v20130528-0742.jar"/>
-	<classpathentry kind="lib" path="lib/org.eclipse.emf.ecore_2.9.0.v20130528-0742.jar"/>
 	<classpathentry kind="lib" path="lib/reflections-0.9.9-RC1.jar"/>
-	<classpathentry kind="lib" path="lib/slf4j-api-1.7.5.jar"/>
 	<classpathentry kind="lib" path="lib/disl-2.0/disl-server.jar"/>
 	<classpathentry kind="lib" path="lib/framework-libs/cxf/cxf-2.6.9.jar"/>
 	<classpathentry kind="lib" path="lib/framework-libs/cxf/asm-3.3.1.jar"/>
@@ -96,12 +92,16 @@
 	<classpathentry kind="lib" path="lib/REngine.jar"/>
 	<classpathentry kind="lib" path="lib/Rsession.jar"/>
 	<classpathentry kind="lib" path="lib/commons-math-2.2.jar"/>
-	<classpathentry kind="lib" path="lib/mongo-2.10.1.jar"/>
 	<classpathentry kind="lib" path="lib/static-analysis/checkstyle-5.6/lib/checkstyle-all.jar"/>
 	<classpathentry kind="lib" path="lib/org.json.min.jar"/>
 	<classpathentry kind="lib" path="lib/aspectjrt-1.8.0.jar"/>
 	<classpathentry kind="lib" path="lib/aspectjweaver-1.8.0.jar"/>
 	<classpathentry kind="lib" path="lib/static-analysis/pmd-5.0.5/lib/commons-io-2.2.jar"/>
 	<classpathentry kind="lib" path="lib/Rserve-1.8-0.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.emf.common_2.9.2.v20131212-0545.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.emf.ecore_2.9.2.v20131212-0545.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.emf.ecore.xmi_2.9.1.v20131212-0545.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.7.6.jar"/>
+	<classpathentry kind="lib" path="lib/mongo-2.10.1.jar"/>
 	<classpathentry kind="output" path="build-eclipse"/>
 </classpath>
