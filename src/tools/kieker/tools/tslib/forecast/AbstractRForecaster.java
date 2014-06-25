@@ -16,7 +16,6 @@
 
 package kieker.tools.tslib.forecast;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +33,7 @@ import kieker.tools.util.RBridgeControl;
  * 
  */
 public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
-	private static final RBridgeControl RBRIDGE = RBridgeControl.getInstance(new File("r_scripts"));
+	private static final RBridgeControl RBRIDGE = RBridgeControl.getInstance();
 	private final String modelFunc;
 	private final String forecastFunc;
 	private final ForecastMethod strategy;
