@@ -26,14 +26,6 @@ import kieker.tools.tslib.ITimeSeries;
  */
 public interface IForecastResult {
 
-	// TODO ( https://kieker.uni-kiel.de/trac/ticket/1311 )
-	// Add
-	// <ul>
-	// <li>model</li>
-	// <li>method</li>
-	// <li>x (original time series)</li>
-	// </ul>
-
 	/**
 	 * Returns the point forecasts.
 	 * 

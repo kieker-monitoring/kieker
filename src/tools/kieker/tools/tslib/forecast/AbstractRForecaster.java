@@ -99,8 +99,6 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 		final String varNameModel = RBridgeControl.uniqueVarname();
 		final String varNameForecast = RBridgeControl.uniqueVarname();
 
-		// final double[] values = ArrayUtils.toPrimitive(history.getValues().toArray(new Double[] {}));
-
 		final List<Double> allHistory = new ArrayList<Double>(history.getValues());
 		final Double[] histValuesNotNull = AbstractRForecaster.removeNullValues(allHistory);
 		final double[] values = ArrayUtils.toPrimitive(histValuesNotNull);
@@ -149,9 +147,6 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 
 		// 2. Perform forecast based on stochastic model
 
-		// TODO: append additionalForecastParams to call ( https://kieker.uni-kiel.de/trac/ticket/1311 )
-		// final String[] additionalForecastParams = this.getModelFuncParams();
-
 		if (this.getConfidenceLevel() == 0) {
 			AbstractRForecaster.RBRIDGE.evalWithR(String.format("%s <<- %s(%s, h=%d)", varNameForecast, this.forecastFunc, varNameModel,
 					numForecastSteps));
@@ -159,11 +154,6 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 			AbstractRForecaster.RBRIDGE.evalWithR(String.format("%s <<- %s(%s, h=%d, level=c(%d))", varNameForecast, this.forecastFunc, varNameModel,
 					numForecastSteps, this.getConfidenceLevel()));
 		}
-
-		// AbstractRForecaster.RBRIDGE.e(String.format("%s <<- %s(%s,h=%d,level=c(%d))", varNameForecast, this.forecastFunc, varNameModel,
-		// numForecastSteps, this.getConfidenceLevel()));
-
-		// final double mean = MeanForecasterR.rBridge.eDbl(String.format("mean(c(%s))", varNameValues));
 
 		final double[] lowerValues = AbstractRForecaster.RBRIDGE.eDblArr(this.lowerOperationOnResult(varNameForecast));
 		final double[] forecastValues = AbstractRForecaster.RBRIDGE.eDblArr(this.forecastOperationOnResult(varNameForecast));

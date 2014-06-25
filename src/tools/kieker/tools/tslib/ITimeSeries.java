@@ -46,7 +46,6 @@ public interface ITimeSeries<T> {
 	 * @since 1.10
 	 * @return delta Time
 	 */
-	// TODO rather take Timespan object! ( https://kieker.uni-kiel.de/trac/ticket/1311 )
 	public long getDeltaTime();
 
 	/**
@@ -55,7 +54,6 @@ public interface ITimeSeries<T> {
 	 * @since 1.10
 	 * @return DeltaTime
 	 */
-	// TODO rather take Timespan object! ( https://kieker.uni-kiel.de/trac/ticket/1311 )
 	public TimeUnit getDeltaTimeUnit();
 
 	/**
@@ -132,32 +130,4 @@ public interface ITimeSeries<T> {
 	 *         complex forecast strategies)
 	 */
 	public int getFrequency();
-
-	/**
-	 * @return The number of time series points that have fallen
-	 *         of the time series due to capacity constraints by max_periods
-	 * 
-	 */
-	// public long getSkippedValues();
-
-	/**
-	 * a period is a timeUnit of interest in this case
-	 * returns the maximum number of periods the TS can contain -
-	 * for forecasting seasonal patterns with the maximum duration of a period, MaxPeriods should be at least 3
-	 * 
-	 * capacity = frequency * periods
-	 * 
-	 * The amount of Frequency time series points form a period.
-	 * This parameter defines the maximum number of periods that
-	 * fit into the time series.
-	 * As in a `fifo` queue the oldest values fall off
-	 * when more recent values are added.
-	 * The value of this setting should be at least 3
-	 * to enable reliable pattern detection by complex
-	 * forecast strategies and multiplied the by
-	 * Frequency value not be higher than 200 if
-	 * the computational effort of more complex
-	 * forecast strategies should stay below one minute.
-	 */
-	// public long getMaxPeriods();
 }
