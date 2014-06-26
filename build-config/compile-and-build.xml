@@ -316,7 +316,6 @@
 				<include name="commons-math-*.jar"/>
 				<include name="commons-lang-*.jar"/>
 				<include name="Rsession.jar"/>
-				<include name="Rserve-*.jar"/>
 				<include name="mongo-*.jar"/>
 				<include name="REngine.jar"/>
 				<include name="org.json.min.jar"/>
