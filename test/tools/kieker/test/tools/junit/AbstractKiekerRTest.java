@@ -25,8 +25,6 @@ import org.rosuda.REngine.Rserve.RserveException;
 import kieker.tools.tslib.ITimeSeries;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-//import org.rosuda.REngine.Rserve.RConnection;
-//import org.rosuda.REngine.Rserve.RserveException;
 
 /**
  * Test that ensures that every time a R-dependent test is run, a fresh
