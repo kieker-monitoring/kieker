@@ -16,15 +16,23 @@
 
 package kieker.test.tools.junit;
 
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
+
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;
-import org.rosuda.REngine.Rserve.RConnection;
-import org.rosuda.REngine.Rserve.RserveException;
+import org.math.R.Rsession;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.tools.tslib.ITimeSeries;
+import kieker.tools.util.OutputStream2StandardLog;
 
 import kieker.test.common.junit.AbstractKiekerTest;
+//import org.rosuda.REngine.Rserve.RConnection;
+//import org.rosuda.REngine.Rserve.RserveException;
 
 /**
  * Test that ensures that every time a R-dependent test is run, a fresh
@@ -36,6 +44,8 @@ import kieker.test.common.junit.AbstractKiekerTest;
  */
 public abstract class AbstractKiekerRTest extends AbstractKiekerTest {
 
+	private static final Log LOG = LogFactory.getLog(AbstractKiekerRTest.class);
+
 	/**
 	 * Check whether the SystemProperty is set that states, that Kieker R-related tests
 	 * should be executed and Check whether a connection to the Rserve server can be established.
@@ -44,21 +54,16 @@ public abstract class AbstractKiekerRTest extends AbstractKiekerTest {
 	public void preCheckForRSysPropertyAndConnection() {
 
 		Assume.assumeTrue(this.isTestKiekerRTestsSet());
+
 		try {
-			final RConnection rConnection = new RConnection();
-			Assume.assumeTrue(rConnection.isConnected());
-			rConnection.close();
-		} catch (final RserveException e) {
-			if (this.isTestKiekerRTestsSet()) {
-				Assert.fail("You chose to execute KiekerRTests, but no connection to Rserve can be established.");
-			}
+			final OutputStream out = new OutputStream2StandardLog();
+			final Rsession rSession = Rsession.newLocalInstance(new PrintStream(out, true, "UTF-8"), null);
+			Assume.assumeTrue(rSession.connected);
+			rSession.end();
+		} catch (final UnsupportedEncodingException e) {
+			LOG.error(e.toString(), e);
 		}
 	}
-
-	// Führt der Fall, dass TestKiekerRTests = true
-	// und keine Verbindung aufgebaut werden kann aktuell wirklich immer
-	// zum Fail? Müsste Assume.assumeTrue(rConnection.isConnected())
-	// hier nicht ein assertTrue sein?
 
 	/**
 	 * Checks whether the given TimeSeries contains items.
