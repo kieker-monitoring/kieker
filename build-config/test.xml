@@ -36,6 +36,7 @@
 				<include name="commons-lang-*.jar"/>
 				<include name="REngine.jar"/>
 				<include name="Rsession.jar"/>
+				<include name="RServe-*.jar"/>
 				<include name="mongo-*.jar"/>
 				<include name="org.json.min.jar"/>
 				<!-- Opad end -->

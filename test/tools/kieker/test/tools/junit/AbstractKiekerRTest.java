@@ -16,19 +16,13 @@
 
 package kieker.test.tools.junit;
 
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
-
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;
-import org.math.R.Rsession;
+import org.rosuda.REngine.Rserve.RConnection;
+import org.rosuda.REngine.Rserve.RserveException;
 
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.tools.tslib.ITimeSeries;
-import kieker.tools.util.OutputStream2StandardLog;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 //import org.rosuda.REngine.Rserve.RConnection;
@@ -44,8 +38,6 @@ import kieker.test.common.junit.AbstractKiekerTest;
  */
 public abstract class AbstractKiekerRTest extends AbstractKiekerTest {
 
-	private static final Log LOG = LogFactory.getLog(AbstractKiekerRTest.class);
-
 	/**
 	 * Check whether the SystemProperty is set that states, that Kieker R-related tests
 	 * should be executed and Check whether a connection to the Rserve server can be established.
@@ -56,12 +48,13 @@ public abstract class AbstractKiekerRTest extends AbstractKiekerTest {
 		Assume.assumeTrue(this.isTestKiekerRTestsSet());
 
 		try {
-			final OutputStream out = new OutputStream2StandardLog();
-			final Rsession rSession = Rsession.newLocalInstance(new PrintStream(out, true, "UTF-8"), null);
-			Assume.assumeTrue(rSession.connected);
-			rSession.end();
-		} catch (final UnsupportedEncodingException e) {
-			LOG.error(e.toString(), e);
+			final RConnection rConnection = new RConnection();
+			Assume.assumeTrue(rConnection.isConnected());
+			rConnection.close();
+		} catch (final RserveException e) {
+			if (this.isTestKiekerRTestsSet()) {
+				Assert.fail("You chose to execute KiekerRTests, but no connection to Rserve can be established.");
+			}
 		}
 	}
 
