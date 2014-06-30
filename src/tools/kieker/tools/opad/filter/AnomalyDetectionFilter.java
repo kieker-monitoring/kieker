@@ -47,8 +47,7 @@ import kieker.tools.opad.record.StorableDetectionResult;
 	@OutputPort(eventTypes = { StorableDetectionResult.class }, name = AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY),
 	@OutputPort(eventTypes = { StorableDetectionResult.class }, name = AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_ELSE),
 	@OutputPort(eventTypes = { ExtendedStorableDetectionResult.class }, name = AnomalyDetectionFilter.OUTPUT_PORT_ALL) }, configuration = {
-	@Property(name = AnomalyDetectionFilter.CONFIG_PROPERTY_THRESHOLD, defaultValue = "0.5", updateable = true),
-	@Property(name = AnomalyDetectionFilter.CONFIG_PROPERTY_THRESHOLD_CRITICAL, defaultValue = "0.95", updateable = true) })
+	@Property(name = AnomalyDetectionFilter.CONFIG_PROPERTY_THRESHOLD, defaultValue = "0.5", updateable = true) })
 public class AnomalyDetectionFilter extends AbstractUpdateableFilterPlugin {
 
 	/**
@@ -76,14 +75,8 @@ public class AnomalyDetectionFilter extends AbstractUpdateableFilterPlugin {
 
 	/** Name of the property determining the threshold. */
 	public static final String CONFIG_PROPERTY_THRESHOLD = "threshold";
-	/** Name of the property determining a critical threshold. */
-	public static final String CONFIG_PROPERTY_THRESHOLD_CRITICAL = "thresholdcritical";
 
 	private AtomicReference<Double> threshold;
-	private AtomicReference<Double> thresholdCritical;
-
-	// private final double threshold;
-	// private final double thresholdCritical;
 
 	/**
 	 * Creates a new instance of this class.
@@ -100,10 +93,6 @@ public class AnomalyDetectionFilter extends AbstractUpdateableFilterPlugin {
 				.getStringProperty(CONFIG_PROPERTY_THRESHOLD);
 		this.threshold = new AtomicReference<Double>(
 				Double.parseDouble(sThreshold));
-		final String sThresholdCritical = super.configuration
-				.getStringProperty(CONFIG_PROPERTY_THRESHOLD_CRITICAL);
-		this.thresholdCritical = new AtomicReference<Double>(
-				Double.parseDouble(sThresholdCritical));
 	}
 
 	@Override
@@ -111,8 +100,6 @@ public class AnomalyDetectionFilter extends AbstractUpdateableFilterPlugin {
 		final Configuration config = new Configuration();
 		config.setProperty(CONFIG_PROPERTY_THRESHOLD,
 				Double.toString(this.threshold.get()));
-		config.setProperty(CONFIG_PROPERTY_THRESHOLD_CRITICAL,
-				Double.toString(this.thresholdCritical.get()));
 		return config;
 	}
 
@@ -127,13 +114,8 @@ public class AnomalyDetectionFilter extends AbstractUpdateableFilterPlugin {
 			final StorableDetectionResult anomalyScore) {
 
 		if (anomalyScore.getScore() >= this.threshold.get()) {
-			if (anomalyScore.getScore() >= this.thresholdCritical.get()) {
-				super.deliver(OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY,
-						anomalyScore);
-			} else {
-				super.deliver(OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY,
-						anomalyScore);
-			}
+			super.deliver(OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY,
+					anomalyScore);
 		} else {
 			super.deliver(OUTPUT_PORT_ANOMALY_SCORE_ELSE, anomalyScore);
 		}
@@ -149,12 +131,6 @@ public class AnomalyDetectionFilter extends AbstractUpdateableFilterPlugin {
 			this.threshold = new AtomicReference<Double>(
 					Double.parseDouble(config
 							.getStringProperty(CONFIG_PROPERTY_THRESHOLD)));
-		}
-
-		if (!update || this.isPropertyUpdateable(CONFIG_PROPERTY_THRESHOLD_CRITICAL)) {
-			this.thresholdCritical = new AtomicReference<Double>(
-					Double.parseDouble(config
-							.getStringProperty(CONFIG_PROPERTY_THRESHOLD_CRITICAL)));
 		}
 	}
 }
