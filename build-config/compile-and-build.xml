@@ -315,11 +315,11 @@
 				<!-- OPAD includes begin -->
 				<include name="commons-math-*.jar"/>
 				<include name="commons-lang-*.jar"/>
-				<include name="Rsession.jar"/>
+				<include name="Rsession-*.jar"/>
 				<include name="mongo-*.jar"/>
-				<include name="REngine.jar"/>
+				<include name="REngine-*.jar"/>
 				<include name="Rserve-*.jar"/>
-				<include name="org.json.min.jar"/>
+				<include name="org.json.min-*.jar"/>
 				<!-- OPAD includes end -->
 				
 			</fileset>
