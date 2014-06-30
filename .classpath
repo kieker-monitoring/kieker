@@ -91,7 +91,6 @@
 	<classpathentry kind="lib" path="lib/commons-lang-2.6.jar"/>
 	<classpathentry kind="lib" path="lib/commons-math-2.2.jar"/>
 	<classpathentry kind="lib" path="lib/static-analysis/checkstyle-5.6/lib/checkstyle-all.jar"/>
-	<classpathentry kind="lib" path="lib/org.json.min.jar"/>
 	<classpathentry kind="lib" path="lib/aspectjrt-1.8.0.jar"/>
 	<classpathentry kind="lib" path="lib/aspectjweaver-1.8.0.jar"/>
 	<classpathentry kind="lib" path="lib/static-analysis/pmd-5.0.5/lib/commons-io-2.2.jar"/>
@@ -103,5 +102,6 @@
 	<classpathentry kind="lib" path="lib/Rserve-1.8-0.jar"/>
 	<classpathentry kind="lib" path="lib/Rsession-2012-09-04.r114.jar"/>
 	<classpathentry kind="lib" path="lib/REngine-2014-04-28.jar"/>
+	<classpathentry kind="lib" path="lib/org.json.min-2014-05-22.jar"/>
 	<classpathentry kind="output" path="build-eclipse"/>
 </classpath>
