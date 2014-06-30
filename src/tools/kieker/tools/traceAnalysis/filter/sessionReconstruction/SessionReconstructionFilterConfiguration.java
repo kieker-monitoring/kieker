@@ -24,6 +24,7 @@ import kieker.common.configuration.Configuration;
  * @author Holger Knoche
  * 
  */
+// TODO: #699: Remove this class
 public class SessionReconstructionFilterConfiguration {
 
 	/**

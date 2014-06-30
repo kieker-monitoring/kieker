@@ -31,20 +31,20 @@ import kieker.common.configuration.Configuration;
 import kieker.tools.traceAnalysis.systemModel.AbstractSession;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTraceBasedSession;
-import kieker.tools.traceAnalysis.systemModel.MessageTraceBasedSession;
 
 /**
  * This filter reconstructs sessions from execution or message traces.
  * 
+ * 
  * @author Holger Knoche
  * 
  */
+// TODO: #699: Add input and output ports for {@link MessageTrace}s
+// TODO: #699: Add generic time unit related attributes?
 @Plugin(description = "Reconstructs sessions from execution or message traces",
 		outputPorts = {
 			@OutputPort(name = SessionReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE_SESSIONS, description = "Reconstructed execution trace-based sessions",
 					eventTypes = { ExecutionTraceBasedSession.class }),
-			@OutputPort(name = SessionReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE_SESSIONS, description = "Reconstructed message trace-based sessions",
-					eventTypes = { MessageTraceBasedSession.class })
 		},
 		configuration = {
 			@Property(name = SessionReconstructionFilterConfiguration.CONFIGURATION_NAME_MAX_THINK_TIME, defaultValue = "500000")
@@ -57,19 +57,9 @@ public class SessionReconstructionFilter extends AbstractFilterPlugin {
 	public static final String INPUT_PORT_NAME_EXECUTION_TRACES = "executionTraces";
 
 	/**
-	 * Name of the input port accepting message traces.
-	 */
-	public static final String INPUT_PORT_NAME_MESSAGE_TRACES = "messageTraces";
-
-	/**
 	 * Name of the output port dispatching execution trace-based sessions.
 	 */
 	public static final String OUTPUT_PORT_NAME_EXECUTION_TRACE_SESSIONS = "executionTraceSessions";
-
-	/**
-	 * Name of the output port dispatching message trace-based sessions.
-	 */
-	public static final String OUTPUT_PORT_NAME_MESSAGE_TRACE_SESSIONS = "messageTraceSessions";
 
 	/**
 	 * Default size for all priority queues. This is only needed because there is no priority queue
@@ -96,7 +86,7 @@ public class SessionReconstructionFilter extends AbstractFilterPlugin {
 		super(configuration, projectContext);
 
 		this.configuration = new SessionReconstructionFilterConfiguration(configuration);
-		this.maxThinkTime = this.configuration.getMaxThinkTime() * 1000000L;
+		this.maxThinkTime = this.configuration.getMaxThinkTime() * 1000000L; // TODO: resolve magic number!
 	}
 
 	@Override

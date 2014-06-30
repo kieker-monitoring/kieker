@@ -24,11 +24,13 @@ import java.util.TreeSet;
 /**
  * Sessions group traces which belong to the same high-level user interaction.
  * 
+ * 
  * @author Holger Knoche
  * 
  * @param <T>
  *            The concrete type of trace this session is based on
  */
+// TODO: #699: Is the implementation with ISessionState &quot;over-complicating&quot; things?
 public abstract class AbstractSession<T extends AbstractTrace> {
 
 	private final SortedSet<T> containedTraces;
