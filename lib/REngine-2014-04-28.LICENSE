@@ -1,4 +1,9 @@
+GNU Lesser General Public License, Version 2.1+
+Project: https://github.com/s-u/REngine
+Description: General Java interface to R supporting multiple back-ends such as JRI and Rserve
+License: https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
 Required by: OPAD (Connection to Rserve)
+
 
 REngine - Java interface to R
 Copyright (C) 2004,5,6,7 Simon Urbanek

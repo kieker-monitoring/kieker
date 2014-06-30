@@ -89,7 +89,6 @@
 	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/asm-3.1.jar"/>
 	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/cglib-2.2.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang-2.6.jar"/>
-	<classpathentry kind="lib" path="lib/REngine.jar"/>
 	<classpathentry kind="lib" path="lib/commons-math-2.2.jar"/>
 	<classpathentry kind="lib" path="lib/static-analysis/checkstyle-5.6/lib/checkstyle-all.jar"/>
 	<classpathentry kind="lib" path="lib/org.json.min.jar"/>
@@ -101,7 +100,8 @@
 	<classpathentry kind="lib" path="lib/org.eclipse.emf.ecore.xmi_2.9.1.v20131212-0545.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-api-1.7.6.jar"/>
 	<classpathentry kind="lib" path="lib/mongo-2.10.1.jar"/>
-	<classpathentry kind="lib" path="lib/Rsession.jar"/>
 	<classpathentry kind="lib" path="lib/Rserve-1.8-0.jar"/>
+	<classpathentry kind="lib" path="lib/Rsession-2012-09-04.r114.jar"/>
+	<classpathentry kind="lib" path="lib/REngine-2014-04-28.jar"/>
 	<classpathentry kind="output" path="build-eclipse"/>
 </classpath>
