@@ -1,3 +1,7 @@
+No standard license (see below for license text)
+Project: http://www.json.org/java/index.html https://github.com/douglascrockford/JSON-java
+Description: Implementation of the JSON interchange format.
+License: No standard license (see below for license text)
 Required by: OPAD (write data to MongoDB)
 
  Copyright (c) 2002 JSON.org
