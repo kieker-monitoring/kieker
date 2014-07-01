@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,20 +16,27 @@
 
 package kieker.common.record.flow.trace.concurrency;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.flow.trace.AbstractTraceEvent;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Jan Waller
  * 
  * @since 1.5
  */
-public final class SplitEvent extends AbstractTraceEvent {
-	private static final long serialVersionUID = -4454625562107999414L;
-	private static final Class<?>[] TYPES = {
+public class SplitEvent extends AbstractTraceEvent {
+	public static final int SIZE = (2 * TYPE_SIZE_LONG) + TYPE_SIZE_INT;
+	public static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
 		int.class, // TraceEvent.orderIndex
 	};
+
+	private static final long serialVersionUID = -9102181356119079902L;
 
 	/**
 	 * This constructor uses the given parameters to initialize the fields of this record.
@@ -56,13 +63,49 @@ public final class SplitEvent extends AbstractTraceEvent {
 	}
 
 	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public SplitEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		super(buffer, stringRegistry);
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
-	public final Object[] toArray() {
+	@Override
+	public Object[] toArray() {
 		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), };
 	}
 
-	public final Class<?>[] getValueTypes() {
-		return TYPES.clone();
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		buffer.putLong(this.getTimestamp());
+		buffer.putLong(this.getTraceId());
+		buffer.putInt(this.getOrderIndex());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Class<?>[] getValueTypes() {
+		return TYPES; // NOPMD
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int getSize() {
+		return SIZE;
 	}
 }

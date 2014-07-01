@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +26,6 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 
 /**
  * Helper class that reads records added using the methods {@link #addAllObjects(List)} or {@link #addObject(Object)}.
@@ -57,8 +55,6 @@ public class ListReader<T> extends AbstractReaderPlugin {
 
 	/** The name of the configuration determining whether the reader terminates after all objects have been delivered of whether it waits for a terminate signal. */
 	public static final String CONFIG_PROPERTY_NAME_AWAIT_TERMINATION = "awaitTermination";
-
-	private static final Log LOG = LogFactory.getLog(ListReader.class);
 
 	private final boolean awaitTermination;
 	private final CountDownLatch terminationLatch = new CountDownLatch(1);
@@ -105,18 +101,19 @@ public class ListReader<T> extends AbstractReaderPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean read() {
 		for (final T obj : this.objects) {
 			super.deliver(ListReader.OUTPUT_PORT_NAME, obj);
 		}
 		try {
 			if (this.awaitTermination) {
-				LOG.info("Awaiting termination latch to count down ...");
+				this.log.info("Awaiting termination latch to count down ...");
 				this.terminationLatch.await();
-				LOG.info("Passed termination latch");
+				this.log.info("Passed termination latch");
 			}
 		} catch (final InterruptedException e) {
-			LOG.error("Reader interrupted while awaiting termination", e);
+			this.log.error("Reader interrupted while awaiting termination", e);
 			return false;
 		}
 		return true;
@@ -125,6 +122,7 @@ public class ListReader<T> extends AbstractReaderPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void terminate(final boolean error) {
 		this.terminationLatch.countDown();
 	}

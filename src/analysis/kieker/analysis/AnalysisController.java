@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -87,6 +89,8 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	private final Collection<IStateObserver> stateObservers = new CopyOnWriteArrayList<IStateObserver>();
 
 	private final CountDownLatch initializationLatch = new CountDownLatch(1);
+
+	private final Set<String> registeredComponentNames = new CopyOnWriteArraySet<String>();
 
 	/**
 	 * This map is used to store the mapping between a given instance of {@link MIProject} and an actual instantiation of an analysis. It is not modified after
@@ -273,6 +277,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void registerStateObserver(final IStateObserver stateObserver) {
 		this.stateObservers.add(stateObserver);
 	}
@@ -280,6 +285,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void unregisterStateObserver(final IStateObserver stateObserver) {
 		this.stateObservers.remove(stateObserver);
 	}
@@ -299,6 +305,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final String getProperty(final String key) {
 		return this.globalConfiguration.getStringProperty(key);
 	}
@@ -337,6 +344,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void saveToFile(final File file) throws IOException, AnalysisConfigurationException {
 		final MIProject mProject = this.getCurrentConfiguration();
 		AnalysisController.saveToFile(file, mProject);
@@ -345,6 +353,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void saveToFile(final String pathname) throws IOException, AnalysisConfigurationException {
 		this.saveToFile(new File(pathname));
 	}
@@ -352,6 +361,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void connect(final AbstractPlugin src, final String outputPortName, final AbstractPlugin dst, final String inputPortName)
 			throws IllegalStateException, AnalysisConfigurationException {
 		if (this.state != STATE.READY) {
@@ -378,10 +388,14 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void connect(final AbstractPlugin plugin, final String repositoryPort, final AbstractRepository repository)
 			throws IllegalStateException, AnalysisConfigurationException {
 		if (this.state != STATE.READY) {
 			throw new IllegalStateException("Unable to connect repositories after starting analysis.");
+		}
+		if (repository == null) {
+			throw new AnalysisConfigurationException("Plugin '" + plugin.getName() + "' (" + plugin.getPluginName() + ") has unconnected repositories.");
 		}
 		// Make sure that the plugin is registered.
 		if (!(this.filters.contains(plugin) || this.readers.contains(plugin))) {
@@ -398,6 +412,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final MIProject getCurrentConfiguration() throws AnalysisConfigurationException {
 		return MetaModelHandler.javaToMetaModel(this.readers, this.filters, this.repos, this.dependencies, this.projectName, this.globalConfiguration);
 	}
@@ -405,70 +420,76 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void run() throws IllegalStateException, AnalysisConfigurationException {
-		synchronized (this) {
-			if (this.state != STATE.READY) {
-				throw new IllegalStateException("AnalysisController may be executed only once.");
-			}
-			this.state = STATE.RUNNING;
-			this.notifyStateObservers();
-		}
-		// Make sure that a log reader exists.
-		if (this.readers.size() == 0) {
-			this.terminate(true);
-			throw new AnalysisConfigurationException("No log reader registered.");
-		}
-		// Call init() method of all plug-ins.
-		for (final AbstractReaderPlugin reader : this.readers) {
-			// Make also sure that all repository ports of all plugins are connected.
-			if (!reader.areAllRepositoryPortsConnected()) {
-				this.terminate(true);
-				throw new AnalysisConfigurationException("Reader '" + reader.getName() + "' (" + reader.getPluginName() + ") has unconnected repositories.");
-			}
-			if (!reader.start()) {
-				this.terminate(true);
-				throw new AnalysisConfigurationException("Reader '" + reader.getName() + "' (" + reader.getPluginName() + ") failed to initialize.");
-			}
-		}
-		for (final AbstractFilterPlugin filter : this.filters) {
-			// Make also sure that all repository ports of all plugins are connected.
-			if (!filter.areAllRepositoryPortsConnected()) {
-				this.terminate(true);
-				throw new AnalysisConfigurationException("Plugin '" + filter.getName() + "' (" + filter.getPluginName() + ") has unconnected repositories.");
-			}
-			if (!filter.start()) {
-				this.terminate(true);
-				throw new AnalysisConfigurationException("Plugin '" + filter.getName() + "' (" + filter.getPluginName() + ") failed to initialize.");
-			}
-		}
-		// Start reading
-		final CountDownLatch readerLatch = new CountDownLatch(this.readers.size());
-		for (final AbstractReaderPlugin reader : this.readers) {
-			new Thread(new Runnable() {
-				public void run() {
-					try {
-						if (!reader.read()) {
-							// here we started and won't throw any exceptions!
-							LOG.error("Calling read() on Reader '" + reader.getName() + "' (" + reader.getPluginName() + ")  returned false.");
-							AnalysisController.this.terminate(true);
-						}
-					} catch (final Throwable t) { // NOPMD NOCS (we also want errors)
-						LOG.error("Exception while reading on Reader '" + reader.getName() + "' (" + reader.getPluginName() + ").", t);
-						AnalysisController.this.terminate(true);
-					} finally {
-						readerLatch.countDown();
-					}
-				}
-			}).start();
-		}
-		// wait until all threads are finished
 		try {
-			this.initializationLatch.countDown();
-			readerLatch.await();
-		} catch (final InterruptedException ex) {
-			LOG.warn("Interrupted while waiting for readers to finish", ex);
+			synchronized (this) {
+				if (this.state != STATE.READY) {
+					throw new IllegalStateException("AnalysisController may be executed only once.");
+				}
+				this.state = STATE.RUNNING;
+				this.notifyStateObservers();
+			}
+			// Make sure that a log reader exists.
+			if (this.readers.size() == 0) {
+				this.terminate(true);
+				throw new AnalysisConfigurationException("No log reader registered.");
+			}
+			// Call init() method of all plug-ins.
+			for (final AbstractReaderPlugin reader : this.readers) {
+				// Make also sure that all repository ports of all plugins are connected.
+				if (!reader.areAllRepositoryPortsConnected()) {
+					this.terminate(true);
+					throw new AnalysisConfigurationException("Reader '" + reader.getName() + "' (" + reader.getPluginName() + ") has unconnected repositories.");
+				}
+				if (!reader.start()) {
+					this.terminate(true);
+					throw new AnalysisConfigurationException("Reader '" + reader.getName() + "' (" + reader.getPluginName() + ") failed to initialize.");
+				}
+			}
+			for (final AbstractFilterPlugin filter : this.filters) {
+				// Make also sure that all repository ports of all plugins are connected.
+				if (!filter.areAllRepositoryPortsConnected()) {
+					this.terminate(true);
+					throw new AnalysisConfigurationException("Plugin '" + filter.getName() + "' (" + filter.getPluginName() + ") has unconnected repositories.");
+				}
+				if (!filter.start()) {
+					this.terminate(true);
+					throw new AnalysisConfigurationException("Plugin '" + filter.getName() + "' (" + filter.getPluginName() + ") failed to initialize.");
+				}
+			}
+			// Start reading
+			final CountDownLatch readerLatch = new CountDownLatch(this.readers.size());
+			for (final AbstractReaderPlugin reader : this.readers) {
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							if (!reader.read()) {
+								// here we started and won't throw any exceptions!
+								LOG.error("Calling read() on Reader '" + reader.getName() + "' (" + reader.getPluginName() + ")  returned false.");
+								AnalysisController.this.terminate(true);
+							}
+						} catch (final Throwable t) { // NOPMD NOCS (we also want errors)
+							LOG.error("Exception while reading on Reader '" + reader.getName() + "' (" + reader.getPluginName() + ").", t);
+							AnalysisController.this.terminate(true);
+						} finally {
+							readerLatch.countDown();
+						}
+					}
+				}).start();
+			}
+			// wait until all threads are finished
+			try {
+				this.initializationLatch.countDown();
+				readerLatch.await();
+			} catch (final InterruptedException ex) {
+				LOG.warn("Interrupted while waiting for readers to finish", ex);
+			}
+		} finally {
+			this.initializationLatch.countDown(); // just to make sure
+			this.terminate();
 		}
-		this.terminate();
 	}
 
 	/**
@@ -485,6 +506,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void terminate() {
 		this.terminate(false);
 	}
@@ -492,6 +514,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void terminate(final boolean error) {
 		try {
 			synchronized (this) {
@@ -591,13 +614,14 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		}
 		this.repos.add(repository);
 		if (LOG.isDebugEnabled()) {
-			LOG.debug("Registered Repository '" + repository.getName() + "' (" + repository.getRepositoryName() + ")");
+			LOG.debug("Registered repository '" + repository.getName() + "' (" + repository.getRepositoryName() + ")");
 		}
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final String getProjectName() {
 		return this.projectName;
 	}
@@ -605,6 +629,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final Collection<AbstractReaderPlugin> getReaders() {
 		return Collections.unmodifiableCollection(this.readers);
 	}
@@ -612,6 +637,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final Collection<AbstractFilterPlugin> getFilters() {
 		return Collections.unmodifiableCollection(this.filters);
 	}
@@ -619,6 +645,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final Collection<AbstractRepository> getRepositories() {
 		return Collections.unmodifiableCollection(this.repos);
 	}
@@ -626,6 +653,7 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final STATE getState() {
 		return this.state;
 	}
@@ -693,6 +721,18 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		final AnalysisController controller = new AnalysisController(project, classLoader);
 
 		return new AnalysisControllerWithMapping(controller, controller.pluginModelMap, controller.repositoryModelMap);
+	}
+
+	/**
+	 * This method tries to atomically register the given name for a component.
+	 * 
+	 * @param name
+	 *            The component name to register
+	 * 
+	 * @return true if and only if the given name is not already used and could now be registered.
+	 */
+	public boolean tryRegisterComponentName(final String name) {
+		return this.registeredComponentNames.add(name);
 	}
 
 	/**
@@ -806,4 +846,5 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 		 */
 		public void update(final AnalysisController controller, final STATE state);
 	}
+
 }

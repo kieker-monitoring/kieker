@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,22 @@
 
 package kieker.common.record.system;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Andre van Hoorn, Jan Waller
  * 
  * @since 1.3
  */
-public final class CPUUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-	private static final long serialVersionUID = 229860008090066333L;
-	private static final Class<?>[] TYPES = {
+public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
+	public static final int SIZE = TYPE_SIZE_LONG + (2 * TYPE_SIZE_STRING) + (7 * TYPE_SIZE_LONG);
+	public static final Class<?>[] TYPES = {
 		long.class,
 		String.class,
 		String.class,
@@ -38,6 +43,9 @@ public final class CPUUtilizationRecord extends AbstractMonitoringRecord impleme
 		double.class,
 		double.class,
 	};
+
+	private static final long serialVersionUID = -6855133162344169157L;
+
 	private static final String DEFAULT_VALUE = "N/A";
 
 	/**
@@ -158,10 +166,51 @@ public final class CPUUtilizationRecord extends AbstractMonitoringRecord impleme
 	}
 
 	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public CPUUtilizationRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		this.timestamp = buffer.getLong();
+		this.hostname = stringRegistry.get(buffer.getInt());
+		this.cpuID = stringRegistry.get(buffer.getInt());
+		this.user = buffer.getDouble();
+		this.system = buffer.getDouble();
+		this.wait = buffer.getDouble();
+		this.nice = buffer.getDouble();
+		this.irq = buffer.getDouble();
+		this.totalUtilization = buffer.getDouble();
+		this.idle = buffer.getDouble();
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object[] toArray() {
-		return new Object[] { this.timestamp, this.hostname, this.cpuID, this.user, this.system, this.wait, this.nice, this.irq, this.totalUtilization, this.idle, };
+		return new Object[] { this.getTimestamp(), this.getHostname(), this.getCpuID(), this.getUser(), this.getSystem(), this.getWait(), this.getNice(),
+			this.getIrq(), this.getTotalUtilization(), this.getIdle(), };
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		buffer.putLong(this.getTimestamp());
+		buffer.putInt(stringRegistry.get(this.getHostname()));
+		buffer.putInt(stringRegistry.get(this.getCpuID()));
+		buffer.putDouble(this.getUser());
+		buffer.putDouble(this.getSystem());
+		buffer.putDouble(this.getWait());
+		buffer.putDouble(this.getNice());
+		buffer.putDouble(this.getIrq());
+		buffer.putDouble(this.getTotalUtilization());
+		buffer.putDouble(this.getIdle());
 	}
 
 	/**
@@ -169,84 +218,75 @@ public final class CPUUtilizationRecord extends AbstractMonitoringRecord impleme
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
-	public void initFromArray(final Object[] values) {
+	public final void initFromArray(final Object[] values) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
+	 */
+	@Override
+	@Deprecated
+	public final void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Class<?>[] getValueTypes() {
-		return TYPES.clone();
+		return TYPES; // NOPMD
 	}
 
 	/**
-	 * @return the timestamp
+	 * {@inheritDoc}
 	 */
+	@Override
+	public int getSize() {
+		return SIZE;
+	}
+
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
 
-	/**
-	 * @return the hostname
-	 */
 	public final String getHostname() {
 		return this.hostname;
 	}
 
-	/**
-	 * @return the cpuID
-	 */
 	public final String getCpuID() {
 		return this.cpuID;
 	}
 
-	/**
-	 * @return the user
-	 */
 	public final double getUser() {
 		return this.user;
 	}
 
-	/**
-	 * @return the system
-	 */
 	public final double getSystem() {
 		return this.system;
 	}
 
-	/**
-	 * @return the wait
-	 */
 	public final double getWait() {
 		return this.wait;
 	}
 
-	/**
-	 * @return the nice
-	 */
 	public final double getNice() {
 		return this.nice;
 	}
 
-	/**
-	 * @return the irq
-	 */
 	public final double getIrq() {
 		return this.irq;
 	}
 
-	/**
-	 * @return the totalUtilization
-	 */
 	public final double getTotalUtilization() {
 		return this.totalUtilization;
 	}
 
-	/**
-	 * @return the idle
-	 */
 	public final double getIdle() {
 		return this.idle;
 	}

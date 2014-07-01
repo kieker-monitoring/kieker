@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,6 +56,7 @@ public abstract class AbstractFilterPlugin extends AbstractPlugin implements IFi
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean init() { // NOPMD (default implementation)
 		return true; // do nothing
 	}
@@ -63,6 +64,7 @@ public abstract class AbstractFilterPlugin extends AbstractPlugin implements IFi
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void terminate(final boolean error) { // NOPMD (default implementation)
 		// do nothing
 	}

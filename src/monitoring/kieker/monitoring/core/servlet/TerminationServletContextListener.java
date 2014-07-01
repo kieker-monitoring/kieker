@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,6 +50,7 @@ public class TerminationServletContextListener implements ServletContextListener
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void contextDestroyed(final ServletContextEvent evt) {
 		this.ctrl.terminateMonitoring();
 		LOG.info("context destroyed");
@@ -58,6 +59,7 @@ public class TerminationServletContextListener implements ServletContextListener
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void contextInitialized(final ServletContextEvent evt) {
 		LOG.info("context initialized");
 	}

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,15 @@
 
 package kieker.analysis.analysisComponent;
 
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import kieker.analysis.AnalysisController;
 import kieker.analysis.IProjectContext;
+import kieker.analysis.exception.InvalidProjectContextException;
 import kieker.common.configuration.Configuration;
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 
 /**
  * <b>Do not</b> inherit directly from this class! Instead inherit from the class {@link kieker.analysis.plugin.filter.AbstractFilterPlugin},
@@ -32,22 +37,23 @@ import kieker.common.configuration.Configuration;
  */
 public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 
-	/**
-	 * The name of the property for the name. This should normally only be used by Kieker.
-	 */
+	/** The name of the property for the name. This should normally only be used by Kieker. */
 	public static final String CONFIG_NAME = "name-hiddenAndNeverExportedProperty";
+
+	protected static final Log LOG = LogFactory.getLog(AbstractAnalysisComponent.class); // NOPMD (logger for inheriting classes)
 
 	private static final AtomicInteger UNNAMED_COUNTER = new AtomicInteger(0);
 
-	/**
-	 * The project context of this component.
-	 */
+	/** The project context (usually the analysis controller) of this component. */
 	protected final IProjectContext projectContext;
 
-	/**
-	 * The current configuration of this component.
-	 */
+	/** The current configuration of this component. */
 	protected final Configuration configuration;
+	/** The log for this component. */
+	protected final Log log; // NOPMD (logger for inheriting classes)
+
+	/** The record time unit as provided by the project context. */
+	protected final TimeUnit recordsTimeUnitFromProjectContext;
 
 	private final String name;
 
@@ -74,12 +80,34 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 		configuration.setDefaultConfiguration(this.getDefaultConfiguration());
 		this.configuration = configuration;
 
+		// Get the controller, as we have to register the name
+		final AnalysisController ac;
+		if (projectContext instanceof AnalysisController) {
+			ac = (AnalysisController) projectContext;
+		} else {
+			throw new InvalidProjectContextException("Invalid analysis controller in constructor");
+		}
+
 		// Try to determine the name
 		String tmpName = configuration.getStringProperty(CONFIG_NAME);
-		if (tmpName.length() == 0) {
+		while ((tmpName.length() == 0) || !ac.tryRegisterComponentName(tmpName)) {
 			tmpName = this.getClass().getSimpleName() + '-' + UNNAMED_COUNTER.incrementAndGet();
 		}
 		this.name = tmpName;
+
+		// As we have now a name, we can create our logger
+		this.log = LogFactory.getLog(this.getClass().getName() + " (" + this.name + ")");
+
+		// Try the record time unit
+		final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
+		TimeUnit recordTimeunit;
+		try {
+			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
+		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
+			this.log.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
+			recordTimeunit = TimeUnit.NANOSECONDS;
+		}
+		this.recordsTimeUnitFromProjectContext = recordTimeunit;
 	}
 
 	/**
@@ -92,11 +120,13 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public abstract Configuration getCurrentConfiguration();
 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final String getName() {
 		return this.name;
 	}

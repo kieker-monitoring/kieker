@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import kieker.analysis.IAnalysisController;
 import kieker.analysis.analysisComponent.AbstractAnalysisComponent;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
+import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 
@@ -122,5 +123,31 @@ public class TestPlugin extends AbstractKiekerTest {
 		Assert.assertEquals(2, list.size());
 		Assert.assertEquals(testObject1, list.get(0));
 		Assert.assertEquals(testObject2, list.get(1));
+	}
+
+	/**
+	 * This method tests that the analysis controller makes sure that component names are unique.
+	 */
+	@Test
+	public void testComponentNameRegistering() {
+		final IAnalysisController ac = new AnalysisController();
+
+		final Configuration readerConfig1 = new Configuration();
+		final Configuration readerConfig2 = new Configuration();
+
+		readerConfig1.setProperty(AbstractAnalysisComponent.CONFIG_NAME, "reader");
+		readerConfig2.setProperty(AbstractAnalysisComponent.CONFIG_NAME, "reader");
+
+		final FSReader reader1 = new FSReader(readerConfig1, ac);
+		final FSReader reader2 = new FSReader(readerConfig2, ac);
+
+		// make sure the first reader is named as intended
+		Assert.assertEquals("reader", reader1.getName());
+
+		// make sure the the second reader is named beginning with the simple class name
+		Assert.assertTrue(reader2.getName().startsWith(FSReader.class.getSimpleName()));
+
+		// make sure that both reader names differ
+		Assert.assertNotEquals(reader1.getName(), reader2.getName());
 	}
 }

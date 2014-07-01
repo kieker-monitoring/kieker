@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,8 +25,6 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.common.util.filesystem.FSUtil;
@@ -60,8 +58,6 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	/** This dummy record can be send to the reader's record queue to mark the end of the current file. */
 	public static final IMonitoringRecord EOF = new EmptyRecord();
 
-	private static final Log LOG = LogFactory.getLog(FSReader.class);
-
 	private final boolean ignoreUnknownRecordTypes;
 
 	private final String[] inputDirs;
@@ -83,10 +79,13 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 		this.inputDirs = this.configuration.getStringArrayProperty(CONFIG_PROPERTY_NAME_INPUTDIRS);
 		int nDirs = this.inputDirs.length;
 		for (int i = 0; i < nDirs; i++) {
-			this.inputDirs[i] = Configuration.convertToPath(this.inputDirs[i]);
+			// Workaround for #1323
+			if (!".".equals(this.inputDirs[i])) {
+				this.inputDirs[i] = Configuration.convertToPath(this.inputDirs[i]);
+			}
 		}
 		if (nDirs == 0) {
-			LOG.warn("The list of input dirs passed to the " + FSReader.class.getSimpleName() + " is empty");
+			this.log.warn("The list of input dirs passed to the " + FSReader.class.getSimpleName() + " is empty");
 			nDirs = 1;
 		}
 		this.recordQueue = new PriorityQueue<IMonitoringRecord>(nDirs);
@@ -96,14 +95,16 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void terminate(final boolean error) {
-		LOG.info("Shutting down reader.");
+		this.log.info("Shutting down reader.");
 		this.running = false;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean read() {
 		// start all reader
 		int notInitializesReaders = 0;
@@ -117,7 +118,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 			} else if (inputDir.isFile() && inputDirFn.endsWith(FSUtil.ZIP_FILE_EXTENSION)) {
 				readerThread = new Thread(new FSZipReader(inputDir, this, this.ignoreUnknownRecordTypes));
 			} else {
-				LOG.warn("Invalid Directory or filename (no Kieker log): " + inputDirFn);
+				this.log.warn("Invalid Directory or filename (no Kieker log): " + inputDirFn);
 				notInitializesReaders++;
 				continue;
 			}
@@ -152,6 +153,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean newMonitoringRecord(final IMonitoringRecord record) {
 		synchronized (record) { // with read()
 			synchronized (this.recordQueue) { // with read()

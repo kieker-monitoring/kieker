@@ -5,7 +5,8 @@ running in a Java~EE container---in this case Jetty.\footnote{\url{http://www.ec
 Monitoring probes based on the Java~EE Servlet API, Spring, %
 and AspectJ are used to monitor execution, trace, and session data (see Section~\ref{chap:aspectJ}). %
 The directory \dir{\JavaEEServletExampleDistro/} contains the prepared Jetty %
-server with the MyBatis JPetStore application. %
+server with the MyBatis JPetStore application and the \Kieker-based demo %
+analysis application known from \url{http://demo.kieker-monitoring.net/}. %
 
 \section{Setting}
 
@@ -55,7 +56,7 @@ to the server on startup. When using AspectJ for instrumentation, the respective
 JVM argument needs to be activated in this file: %
 
 \setPropertiesListing
-\lstinputlisting[firstline=37,lastline=40, linewidth=1\textwidth,caption=Enabling the AspectJ weaver in Jetty's \file{start.ini}]{\JavaEEServletExampleDir/jetty-hightide-jpetstore/start.KiekerAspectJActivated.ini}
+\lstinputlisting[firstline=32,lastline=35, linewidth=1\textwidth,caption=Enabling the AspectJ weaver in Jetty's \file{start.ini}]{\JavaEEServletExampleDir/jetty-hightide-jpetstore/start.KiekerAspectJActivated.ini}
 
 \noindent The AspectJ configuration file \file{aop.xml} is already located in the %
 webapps's\linebreak \dir{WEB-INF/classes/META-INF/} directory and configured to instrument %
@@ -74,17 +75,28 @@ interceptor in the file \file{applicationContext.xml}, mentioned above. %
 \item Now, you can access the JPetStore application by opening the URL
    \url{http://localhost:8080/jpetstore/} (Figure~\ref{fig:jpetstore}). %
    \Kieker{} initialization messages should appear in the console output. %
-   The output includes the information where the monitoring data is written to
-   (should be a \dir{kieker-<DATE-TIME>/} directory) located in the default %
-   temporary directory.
-\item  Browse through the application to generate some monitoring data. %
+   
+\begin{figure}[h]\centering
+\includegraphics[width=0.8\textwidth]{images/jpetstore-example-FFscrsh}
+\caption{MyBatis JPetStore}\label{fig:jpetstore}%
+\end{figure}
+   
+\item   Browse through the application to generate some monitoring data. %
+\item In this example, \Kieker{} is configured to write the monitoring data %
+      to JMX in order to communicate with the \Kieker-based demo analysis %
+      application, which is accessible via \url{localhost:8080/demo/}.
+   
+\item In order to write the monitoring data to the file system, the %
+      JMX writer needs to be disabled in the file \file{kieker.monitoring.properties}, %
+      which is located in the directory \file{webapps/jpetstore/WEB-INF/classes/META-INF/}.
+      After a restart of the Jetty server, the Kieker startup output includes the %
+      information where the monitoring data is written to (should be a %
+      \dir{kieker-<DATE-TIME>/} directory) located in the default temporary %
+      directory. %
    This data can be analyzed and visualized using \KiekerTraceAnalysis{}, %
    as described in Chapter~\ref{chap:aspectJ}.
 \end{compactenum}
 
 \medskip
 
-\begin{figure}[h]\centering
-\includegraphics[width=0.8\textwidth]{images/jpetstore-example-FFscrsh}
-\caption{MyBatis JPetStore}\label{fig:jpetstore}%
-\end{figure}
+ 

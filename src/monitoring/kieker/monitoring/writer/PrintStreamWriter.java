@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,6 +73,7 @@ public class PrintStreamWriter extends AbstractMonitoringWriter {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean newMonitoringRecord(final IMonitoringRecord record) {
 		this.printStream.println(record.getClass().getSimpleName() + ": " + record.toString());
 		return true;
@@ -81,6 +82,7 @@ public class PrintStreamWriter extends AbstractMonitoringWriter {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void terminate() {
 		if ((this.printStream != null) && (this.printStream != System.out) && (this.printStream != System.err)) {
 			this.printStream.close();

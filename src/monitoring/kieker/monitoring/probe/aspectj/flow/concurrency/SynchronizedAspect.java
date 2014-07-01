@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 
-import kieker.common.record.flow.trace.Trace;
+import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.concurrency.monitor.MonitorEntryEvent;
 import kieker.common.record.flow.trace.concurrency.monitor.MonitorExitEvent;
 import kieker.common.record.flow.trace.concurrency.monitor.MonitorRequestEvent;
@@ -55,7 +55,7 @@ public final class SynchronizedAspect extends AbstractAspectJProbe {
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return;
 		}
-		final Trace trace = TRACEREGISTRY.getTrace();
+		final TraceMetadata trace = TRACEREGISTRY.getTrace();
 		if (trace != null) { // ignore monitorRequest if not inside of a trace!
 			final long traceId = trace.getTraceId();
 			final int orderId = trace.getNextOrderId();
@@ -68,7 +68,7 @@ public final class SynchronizedAspect extends AbstractAspectJProbe {
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return;
 		}
-		final Trace trace = TRACEREGISTRY.getTrace();
+		final TraceMetadata trace = TRACEREGISTRY.getTrace();
 		if (trace != null) { // ignore monitorEntry if not inside of a trace!
 			final long traceId = trace.getTraceId();
 			final int orderId = trace.getNextOrderId();
@@ -82,7 +82,7 @@ public final class SynchronizedAspect extends AbstractAspectJProbe {
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return;
 		}
-		final Trace trace = TRACEREGISTRY.getTrace();
+		final TraceMetadata trace = TRACEREGISTRY.getTrace();
 		if (trace != null) { // ignore monitorExit if not inside of a trace!
 			final long traceId = trace.getTraceId();
 			final int orderId = trace.getNextOrderId();

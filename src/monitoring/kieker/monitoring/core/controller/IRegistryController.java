@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  ***************************************************************************/
 
 package kieker.monitoring.core.controller;
+
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Jan Waller
@@ -33,5 +35,28 @@ public interface IRegistryController {
 	 * 
 	 * @since 1.5
 	 */
-	public int getIdForString(final String string);
+	public abstract int getUniqueIdForString(final String string);
+
+	/**
+	 * Gets a string for a unique id.
+	 * 
+	 * @param id
+	 *            the unique id
+	 * @return
+	 *         the string
+	 * 
+	 * @since 1.8
+	 */
+	public abstract String getStringForUniqueId(final int id);
+
+	/**
+	 * Gets the used IRegistry<String>
+	 * 
+	 * @return
+	 *         the registry
+	 * 
+	 * @since 1.8
+	 */
+	public abstract IRegistry<String> getStringRegistry();
+
 }

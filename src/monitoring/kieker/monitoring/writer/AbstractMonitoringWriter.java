@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,10 @@
 
 package kieker.monitoring.writer;
 
-import java.util.Enumeration;
+import java.util.Set;
 
 import kieker.common.configuration.Configuration;
+import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 
 /**
@@ -62,15 +63,11 @@ public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 		sb.append("Writer: '");
 		sb.append(this.getClass().getName());
 		sb.append("'\n\tConfiguration:");
-		// Java 1.5 compability
-		final Enumeration<?> keys = this.configuration.propertyNames();
-		// for Java 1.6 simply (also adjust below)
-		// final Set<String> keys = this.configuration.stringPropertyNames();
-		if (!keys.hasMoreElements()) {
+		final Set<String> keys = this.configuration.stringPropertyNames();
+		if (keys.isEmpty()) {
 			sb.append("\n\t\tNo Configuration");
 		} else {
-			while (keys.hasMoreElements()) {
-				final String property = (String) keys.nextElement();
+			for (final String property : keys) {
 				sb.append("\n\t\t");
 				sb.append(property);
 				sb.append("='");
@@ -81,6 +78,7 @@ public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 		return sb.toString();
 	}
 
+	@Override
 	public final void setController(final IMonitoringController controller) throws Exception {
 		this.monitoringController = controller;
 		this.init();
@@ -93,4 +91,12 @@ public abstract class AbstractMonitoringWriter implements IMonitoringWriter {
 	 *             If something during the initialization went wrong.
 	 */
 	protected abstract void init() throws Exception;
+
+	/**
+	 * Overwrite this method if necessary.
+	 */
+	@Override
+	public boolean newMonitoringRecordNonBlocking(final IMonitoringRecord record) {
+		return this.newMonitoringRecord(record);
+	}
 }

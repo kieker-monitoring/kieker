@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,8 +24,6 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
@@ -56,8 +54,6 @@ public class SystemModel2FileFilter extends AbstractTraceAnalysisFilter {
 	 */
 	protected static final String DEFAULT_HTML_OUTPUT_FN = "system-model.html";
 
-	private static final Log LOG = LogFactory.getLog(SystemModel2FileFilter.class);
-
 	private final String outputFnHTML;
 
 	/**
@@ -79,8 +75,10 @@ public class SystemModel2FileFilter extends AbstractTraceAnalysisFilter {
 	 */
 	@Override
 	public Configuration getCurrentConfiguration() {
-		final Configuration currentConfiguration = new Configuration();
+		final Configuration currentConfiguration = super.getCurrentConfiguration();
+
 		currentConfiguration.setProperty(CONFIG_PROPERTY_NAME_HTML_OUTPUT_FN, this.outputFnHTML);
+
 		return currentConfiguration;
 	}
 
@@ -105,22 +103,22 @@ public class SystemModel2FileFilter extends AbstractTraceAnalysisFilter {
 				final SystemModelRepository sysModelRepo = super.getSystemEntityFactory();
 				if (sysModelRepo == null) {
 					final String errorMsg = "Failed to get system model repository";
-					LOG.error(errorMsg);
+					this.log.error(errorMsg);
 					error = true;
 				} else {
 					sysModelRepo.saveSystemToHTMLFile(outputFnHTMLCanonical);
 				}
 			} catch (final IOException e) {
 				final String errorMsg = "Failed to save system model to file " + outputFnHTMLCanonical;
-				LOG.error(errorMsg, e);
+				this.log.error(errorMsg, e);
 				error = true;
 			}
 		}
 
 		if (!error) {
-			this.printMessage(new String[] { "Wrote HTML output of system model to file '" + outputFnHTMLCanonical + "'" });
+			this.printDebugLogMessage(new String[] { "Wrote HTML output of system model to file '" + outputFnHTMLCanonical + "'" });
 		} else {
-			this.printMessage(new String[] { "Failed to write HTML output of system model to file '" + outputFnHTMLCanonical + "'" });
+			this.printErrorLogMessage(new String[] { "Failed to write HTML output of system model to file '" + outputFnHTMLCanonical + "'" });
 		}
 	}
 }

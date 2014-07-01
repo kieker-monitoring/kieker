@@ -33,8 +33,7 @@ public interface MIProject extends EObject {
 	 * The list contents are of type {@link kieker.analysis.model.analysisMetaModel.MIPlugin}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Plugins</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Plugins</em>' containment reference list isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Plugins</em>' containment reference list.
@@ -48,8 +47,7 @@ public interface MIProject extends EObject {
 	 * Returns the value of the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Name</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Name</em>' attribute isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Name</em>' attribute.
@@ -75,8 +73,7 @@ public interface MIProject extends EObject {
 	 * The list contents are of type {@link kieker.analysis.model.analysisMetaModel.MIRepository}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Repositories</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Repositories</em>' containment reference list isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Repositories</em>' containment reference list.
@@ -91,8 +88,7 @@ public interface MIProject extends EObject {
 	 * The list contents are of type {@link kieker.analysis.model.analysisMetaModel.MIDependency}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Dependencies</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Dependencies</em>' containment reference list isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Dependencies</em>' containment reference list.
@@ -107,8 +103,7 @@ public interface MIProject extends EObject {
 	 * The list contents are of type {@link kieker.analysis.model.analysisMetaModel.MIView}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Views</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Views</em>' containment reference list isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Views</em>' containment reference list.
@@ -123,8 +118,7 @@ public interface MIProject extends EObject {
 	 * The list contents are of type {@link kieker.analysis.model.analysisMetaModel.MIProperty}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Properties</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Properties</em>' containment reference list isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Properties</em>' containment reference list.

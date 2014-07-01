@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -234,8 +234,7 @@ public class TestExecutionTraceBookstore extends AbstractKiekerTest {
 						this.exec1_1__catalog_getBook.getEoi() + 100, this.exec1_1__catalog_getBook.getEss() + 100,
 						this.exec1_1__catalog_getBook.getTin() + 100, this.exec1_1__catalog_getBook.getTout(), !this.exec1_1__catalog_getBook.isAssumed());
 
-		vLoop:
-		for (final VariationPoint vPoint : VariationPoint.values()) {
+		vLoop: for (final VariationPoint vPoint : VariationPoint.values()) {
 			final ExecutionTrace trace1 = new ExecutionTrace(trace0.getTraceId(), trace0.getSessionId());
 			for (final Execution execFromTrace0 : trace0.getTraceAsSortedExecutionSet()) {
 				final Execution execToAddToTrace1;

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,11 +21,14 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -35,11 +38,10 @@ import java.util.TimeZone;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.Options;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.analysisComponent.AbstractAnalysisComponent;
@@ -54,6 +56,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.util.filesystem.FSUtil;
+import kieker.tools.AbstractCommandLineTool;
 import kieker.tools.traceAnalysis.filter.AbstractGraphProducingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
@@ -76,12 +79,13 @@ import kieker.tools.traceAnalysis.filter.visualization.callTree.AggregatedAlloca
 import kieker.tools.traceAnalysis.filter.visualization.callTree.AggregatedAssemblyComponentOperationCallTreeFilter;
 import kieker.tools.traceAnalysis.filter.visualization.callTree.TraceCallTreeFilter;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.AbstractDependencyGraphFilter;
-import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.AbstractNodeDecorator;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ComponentDependencyGraphAllocationFilter;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ComponentDependencyGraphAssemblyFilter;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ContainerDependencyGraphFilter;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.OperationDependencyGraphAllocationFilter;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.OperationDependencyGraphAssemblyFilter;
+import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ResponseTimeColorNodeDecorator;
+import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ResponseTimeNodeDecorator;
 import kieker.tools.traceAnalysis.filter.visualization.descriptions.DescriptionDecoratorFilter;
 import kieker.tools.traceAnalysis.filter.visualization.sequenceDiagram.SequenceDiagramFilter;
 import kieker.tools.traceAnalysis.filter.visualization.traceColoring.TraceColoringFilter;
@@ -89,6 +93,7 @@ import kieker.tools.traceAnalysis.repository.DescriptionRepository;
 import kieker.tools.traceAnalysis.repository.TraceColorRepository;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTrace;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
+import kieker.tools.util.CLIHelpFormatter;
 import kieker.tools.util.LoggingTimestampConverter;
 
 /**
@@ -100,93 +105,125 @@ import kieker.tools.util.LoggingTimestampConverter;
  * 
  * @since 0.95a
  */
-public final class TraceAnalysisTool {
-	public static final String DATE_FORMAT_PATTERN_CMD_USAGE_HELP = Constants.DATE_FORMAT_PATTERN.replaceAll("'", ""); // only for usage info
-	private static final Log LOG = LogFactory.getLog(TraceAnalysisTool.class);
-	private static final AnalysisController ANALYSIS_INSTANCE = new AnalysisController();
-	private static final SystemModelRepository SYSTEM_ENTITY_FACTORY = new SystemModelRepository(new Configuration(), ANALYSIS_INSTANCE);
-	private static final CommandLineParser CMDL_PARSER = new BasicParser();
-	private static CommandLine cmdl;
-	private static String[] inputDirs;
-	private static String outputDir;
-	private static String outputFnPrefix;
-	private static Set<Long> selectedTraces; // null means select all
-	private static boolean shortLabels = true;
-	private static boolean includeSelfLoops; // false
-	private static boolean ignoreInvalidTraces; // false
-	private static int maxTraceDurationMillis = 10 * 60 * 1000; // 10 minutes default
-	private static long ignoreExecutionsBeforeTimestamp = Long.parseLong(TimestampFilter.CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP);
-	private static long ignoreExecutionsAfterTimestamp = Long.parseLong(TimestampFilter.CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP);
+public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD (long class)
+	public static final String DATE_FORMAT_PATTERN_CMD_USAGE_HELP = Constants.DATE_FORMAT_PATTERN.replaceAll("'", "") + " | timestamp"; // only for usage info
 
+	private static final Log LOG = LogFactory.getLog(TraceAnalysisTool.class);
 	private static final String ENCODING = "UTF-8";
 
-	/**
-	 * Private constructor to avoid instantiation. An object of this class should not be created.
-	 */
-	private TraceAnalysisTool() {}
+	private final AnalysisController analysisController = new AnalysisController();
+	private String[] inputDirs;
+	private String outputDir;
+	private String outputFnPrefix;
+	private Set<Long> selectedTraces; // null means select all
+	private boolean invertTraceIdFilter;
+	private boolean ignoreAssumedCalls;
+	private boolean shortLabels = true;
+	private boolean includeSelfLoops; // false
+	private boolean ignoreInvalidTraces; // false
+	private int maxTraceDurationMillis = 10 * 60 * 1000; // 10 minutes default
+	private long ignoreExecutionsBeforeTimestamp = Long.parseLong(TimestampFilter.CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP);
+	private long ignoreExecutionsAfterTimestamp = Long.parseLong(TimestampFilter.CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP);
 
-	/**
-	 * This method parses the given command line arguments and stores them in the class field.
-	 * 
-	 * @param args
-	 *            The command line arguments-
-	 * @return true if and only if the arguments have been parsed succesfully.
-	 */
-	private static boolean parseArgs(final String[] args) {
-		try {
-			TraceAnalysisTool.cmdl = CMDL_PARSER.parse(Constants.CMDL_OPTIONS, args);
-		} catch (final ParseException e) {
-			TraceAnalysisTool.printUsage();
-			System.err.println("\nError parsing arguments: " + e.getMessage()); // NOPMD (System.out)
-			return false;
-		}
-		return true;
+	private CommandLine cmdl;
+
+	private TraceAnalysisTool(final boolean useSystemExit) {
+		super(useSystemExit);
 	}
 
-	/**
-	 * This method prints some information to show the user how to use this tool.
-	 */
-	private static void printUsage() {
-		Constants.CMD_HELP_FORMATTER.printHelp(80, TraceAnalysisTool.class.getName(), "", Constants.CMDL_OPTIONS, "", true);
+	public static void main(final String[] args) {
+		TraceAnalysisTool.mainHelper(args, true);
+	}
+
+	public static void mainHelper(final String[] args, final boolean useSystemExit) {
+		new TraceAnalysisTool(useSystemExit).start(args);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	protected void addAdditionalOptions(final Options options) {
+		// Remember the inherited options for the help formatter
+		final List<Option> inheritedOptions = new ArrayList<Option>();
+		inheritedOptions.addAll(options.getOptions());
+
+		for (final Object option : Constants.CMDL_OPTIONS.getOptions()) {
+			options.addOption((Option) option);
+		}
+
+		for (final Option option : inheritedOptions) {
+			if (!Constants.SORTED_OPTION_LIST.contains(option)) {
+				Constants.SORTED_OPTION_LIST.add(option);
+			}
+		}
+	}
+
+	@Override
+	protected boolean readPropertiesFromCommandLine(final CommandLine commandLine) {
+		this.cmdl = commandLine;
+		return (this.initFromArgs(commandLine) && this.assertOutputDirExists()) || this.assertInputDirsExistsAndAreMonitoringLogs();
+	}
+
+	@Override
+	protected boolean performTask() {
+		this.dumpConfiguration();
+		return this.dispatchTasks();
+	}
+
+	@Override
+	protected HelpFormatter getHelpFormatter() {
+		final HelpFormatter helpFormatter = new CLIHelpFormatter();
+
+		helpFormatter.setOptionComparator(new OptionComparator());
+
+		return helpFormatter;
 	}
 
 	/**
 	 * This method uses the (already parsed and stored) command line arguments to initialize the tool.
 	 * 
+	 * @param commandLine
+	 * 
 	 * @return true if and only if the tool has been initialized correctly.
 	 */
-	private static boolean initFromArgs() {
-		TraceAnalysisTool.inputDirs = TraceAnalysisTool.cmdl.getOptionValues(Constants.CMD_OPT_NAME_INPUTDIRS);
+	private boolean initFromArgs(final CommandLine commandLine) {
+		this.inputDirs = commandLine.getOptionValues(Constants.CMD_OPT_NAME_INPUTDIRS);
+		this.outputDir = commandLine.getOptionValue(Constants.CMD_OPT_NAME_OUTPUTDIR);
+		this.outputFnPrefix = this.cmdl.getOptionValue(Constants.CMD_OPT_NAME_OUTPUTFNPREFIX, "");
 
-		TraceAnalysisTool.outputDir = TraceAnalysisTool.cmdl.getOptionValue(Constants.CMD_OPT_NAME_OUTPUTDIR) + File.separator;
-		TraceAnalysisTool.outputFnPrefix = TraceAnalysisTool.cmdl.getOptionValue(Constants.CMD_OPT_NAME_OUTPUTFNPREFIX, "");
-		if (TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_SELECTTRACES)) { // Parse list of trace Ids
-			final String[] traceIdList = TraceAnalysisTool.cmdl.getOptionValues(Constants.CMD_OPT_NAME_SELECTTRACES);
-			TraceAnalysisTool.selectedTraces = new TreeSet<Long>();
+		if (this.cmdl.hasOption(Constants.CMD_OPT_NAME_SELECTTRACES) && this.cmdl.hasOption(Constants.CMD_OPT_NAME_FILTERTRACES)) {
+			LOG.error("Trace Id selection and filtering are mutually exclusive");
+			return false;
+		}
+
+		if (this.cmdl.hasOption(Constants.CMD_OPT_NAME_SELECTTRACES) || this.cmdl.hasOption(Constants.CMD_OPT_NAME_FILTERTRACES)) { // Parse list of trace Ids
+			this.invertTraceIdFilter = this.cmdl.hasOption(Constants.CMD_OPT_NAME_FILTERTRACES);
+			final String[] traceIdList = this.cmdl.getOptionValues(this.invertTraceIdFilter ? Constants.CMD_OPT_NAME_FILTERTRACES // NOCS (Short if operator)
+					: Constants.CMD_OPT_NAME_SELECTTRACES);
+
+			this.selectedTraces = new TreeSet<Long>();
+
 			final int numSelectedTraces = traceIdList.length;
 			try {
 				for (final String idStr : traceIdList) {
-					TraceAnalysisTool.selectedTraces.add(Long.valueOf(idStr));
+					this.selectedTraces.add(Long.valueOf(idStr));
 				}
-				LOG.info(numSelectedTraces + " trace" + (numSelectedTraces > 1 ? "s" : "") + " selected"); // NOCS
+				LOG.info(numSelectedTraces + " trace" + (numSelectedTraces > 1 ? "s" : "") + (this.invertTraceIdFilter ? " filtered" : " selected")); // NOCS
 			} catch (final Exception e) { // NOPMD NOCS (IllegalCatchCheck)
-				System.err.println("\nFailed to parse list of trace IDs: " + Arrays.toString(traceIdList) + "(" + e.getMessage() + ")"); // NOPMD (System.out)
 				LOG.error("Failed to parse list of trace IDs: " + Arrays.toString(traceIdList), e);
 				return false;
 			}
 		}
 
-		TraceAnalysisTool.shortLabels = TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_SHORTLABELS);
-		TraceAnalysisTool.includeSelfLoops = TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_INCLUDESELFLOOPS);
-		TraceAnalysisTool.ignoreInvalidTraces = TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_IGNOREINVALIDTRACES);
+		this.shortLabels = commandLine.hasOption(Constants.CMD_OPT_NAME_SHORTLABELS);
+		this.includeSelfLoops = commandLine.hasOption(Constants.CMD_OPT_NAME_INCLUDESELFLOOPS);
+		this.ignoreInvalidTraces = commandLine.hasOption(Constants.CMD_OPT_NAME_IGNOREINVALIDTRACES);
+		this.ignoreAssumedCalls = commandLine.hasOption(Constants.CMD_OPT_NAME_IGNORE_ASSUMED);
 
-		final String maxTraceDurationStr = TraceAnalysisTool.cmdl.getOptionValue(Constants.CMD_OPT_NAME_MAXTRACEDURATION,
-				Integer.toString(TraceAnalysisTool.maxTraceDurationMillis));
+		final String maxTraceDurationStr = commandLine.getOptionValue(Constants.CMD_OPT_NAME_MAXTRACEDURATION,
+				Integer.toString(this.maxTraceDurationMillis));
 		try {
-			TraceAnalysisTool.maxTraceDurationMillis = Integer.parseInt(maxTraceDurationStr);
+			this.maxTraceDurationMillis = Integer.parseInt(maxTraceDurationStr);
 		} catch (final NumberFormatException exc) {
-			System.err.println("\nFailed to parse int value of property " + Constants.CMD_OPT_NAME_MAXTRACEDURATION + " (must be an integer): " // NOPMD (System.out)
-					+ maxTraceDurationStr);
 			LOG.error("Failed to parse int value of property " + Constants.CMD_OPT_NAME_MAXTRACEDURATION + " (must be an integer):"
 					+ maxTraceDurationStr, exc);
 			return false;
@@ -196,23 +233,35 @@ public final class TraceAnalysisTool {
 		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
 		try {
-			final String ignoreRecordsBeforeTimestampString = TraceAnalysisTool.cmdl.getOptionValue(Constants.CMD_OPT_NAME_IGNOREEXECUTIONSBEFOREDATE, null);
-			final String ignoreRecordsAfterTimestampString = TraceAnalysisTool.cmdl.getOptionValue(Constants.CMD_OPT_NAME_IGNOREEXECUTIONSAFTERDATE, null);
+			final String ignoreRecordsBeforeTimestampString = commandLine.getOptionValue(Constants.CMD_OPT_NAME_IGNOREEXECUTIONSBEFOREDATE, null);
+			final String ignoreRecordsAfterTimestampString = commandLine.getOptionValue(Constants.CMD_OPT_NAME_IGNOREEXECUTIONSAFTERDATE, null);
 			if (ignoreRecordsBeforeTimestampString != null) {
-				final Date ignoreBeforeDate = dateFormat.parse(ignoreRecordsBeforeTimestampString);
-				TraceAnalysisTool.ignoreExecutionsBeforeTimestamp = ignoreBeforeDate.getTime() * (1000 * 1000);
-				LOG.info("Ignoring records before " + dateFormat.format(ignoreBeforeDate) + " ("
-						+ TraceAnalysisTool.ignoreExecutionsBeforeTimestamp + ")");
+				long ignoreExecutionsBeforeTimestampTemp;
+				try {
+					ignoreExecutionsBeforeTimestampTemp = Long.parseLong(ignoreRecordsBeforeTimestampString);
+					LOG.info("Ignoring records before " + ignoreExecutionsBeforeTimestampTemp);
+				} catch (final NumberFormatException ex) {
+					final Date ignoreBeforeDate = dateFormat.parse(ignoreRecordsBeforeTimestampString);
+					ignoreExecutionsBeforeTimestampTemp = ignoreBeforeDate.getTime() * (1000 * 1000);
+					LOG.info("Ignoring records before " + dateFormat.format(ignoreBeforeDate) + " (" + ignoreExecutionsBeforeTimestampTemp + ")");
+				}
+				this.ignoreExecutionsBeforeTimestamp = ignoreExecutionsBeforeTimestampTemp;
 			}
 			if (ignoreRecordsAfterTimestampString != null) {
-				final Date ignoreAfterDate = dateFormat.parse(ignoreRecordsAfterTimestampString);
-				TraceAnalysisTool.ignoreExecutionsAfterTimestamp = ignoreAfterDate.getTime() * (1000 * 1000);
-				LOG.info("Ignoring records after " + dateFormat.format(ignoreAfterDate) + " ("
-						+ TraceAnalysisTool.ignoreExecutionsAfterTimestamp + ")");
+				long ignoreExecutionsAfterTimestampTemp;
+				try {
+					ignoreExecutionsAfterTimestampTemp = Long.parseLong(ignoreRecordsAfterTimestampString);
+					LOG.info("Ignoring records after " + ignoreExecutionsAfterTimestampTemp);
+				} catch (final NumberFormatException ex) {
+					final Date ignoreAfterDate = dateFormat.parse(ignoreRecordsAfterTimestampString);
+					ignoreExecutionsAfterTimestampTemp = ignoreAfterDate.getTime() * (1000 * 1000);
+					LOG.info("Ignoring records after " + dateFormat.format(ignoreAfterDate) + " (" + ignoreExecutionsAfterTimestampTemp + ")");
+				}
+				this.ignoreExecutionsAfterTimestamp = ignoreExecutionsAfterTimestampTemp;
+
 			}
 		} catch (final java.text.ParseException ex) {
 			final String errorMsg = "Error parsing date/time string. Please use the following pattern: " + DATE_FORMAT_PATTERN_CMD_USAGE_HELP;
-			System.err.println(errorMsg); // NOPMD (System.out)
 			LOG.error(errorMsg, ex);
 			return false;
 		}
@@ -220,21 +269,688 @@ public final class TraceAnalysisTool {
 	}
 
 	/**
+	 * Returns if the specified output directory {@link #outputDir} exists. If
+	 * the directory does not exist, an error message is printed to stderr.
+	 * 
+	 * @return true if {@link #outputDir} is exists and is a directory; false
+	 *         otherwise
+	 */
+	private boolean assertOutputDirExists() {
+		final File outputDirFile = new File(this.outputDir);
+		try {
+			if (!outputDirFile.exists()) {
+				System.err.println(""); // NOPMD (System.out)
+				System.err.println("The specified output directory '" + outputDirFile.getCanonicalPath() + "' does not exist"); // NOPMD (System.out)
+				return false;
+			}
+
+			if (!outputDirFile.isDirectory()) {
+				System.err.println(""); // NOPMD (System.out)
+				System.err.println("The specified output directory '" + outputDirFile.getCanonicalPath() + "' is not a directory"); // NOPMD (System.out)
+				return false;
+			}
+
+		} catch (final IOException e) { // thrown by File.getCanonicalPath()
+			System.err.println(""); // NOPMD (System.out)
+			System.err.println("Error resolving name of output directory: '" + this.outputDir + "'"); // NOPMD (System.out)
+		}
+
+		return true;
+	}
+
+	private static void addDecorators(final String[] decoratorNames, final AbstractDependencyGraphFilter<?> plugin) {
+		if (decoratorNames == null) {
+			return;
+		}
+		final List<String> decoratorList = Arrays.asList(decoratorNames);
+		final Iterator<String> decoratorIterator = decoratorList.iterator();
+
+		while (decoratorIterator.hasNext()) {
+			final String currentDecoratorStr = decoratorIterator.next();
+			if (Constants.RESPONSE_TIME_DECORATOR_FLAG.equals(currentDecoratorStr)) {
+				plugin.addDecorator(new ResponseTimeNodeDecorator(TimeUnit.MILLISECONDS));
+				continue;
+			} else if (Constants.RESPONSE_TIME_DECORATOR_FLAG_NS.equals(currentDecoratorStr)) {
+				plugin.addDecorator(new ResponseTimeNodeDecorator(TimeUnit.NANOSECONDS));
+				continue;
+			} else if (Constants.RESPONSE_TIME_DECORATOR_FLAG_US.equals(currentDecoratorStr)) {
+				plugin.addDecorator(new ResponseTimeNodeDecorator(TimeUnit.MICROSECONDS));
+				continue;
+			} else if (Constants.RESPONSE_TIME_DECORATOR_FLAG_MS.equals(currentDecoratorStr)) {
+				plugin.addDecorator(new ResponseTimeNodeDecorator(TimeUnit.MILLISECONDS));
+				continue;
+			} else if (Constants.RESPONSE_TIME_DECORATOR_FLAG_S.equals(currentDecoratorStr)) {
+				plugin.addDecorator(new ResponseTimeNodeDecorator(TimeUnit.SECONDS));
+				continue;
+			} else if (Constants.RESPONSE_TIME_COLORING_DECORATOR_FLAG.equals(currentDecoratorStr)) {
+				// if decorator is responseColoring, next value should be the threshold
+				final String thresholdStringStr = decoratorIterator.next();
+
+				try {
+					final int threshold = Integer.parseInt(thresholdStringStr);
+
+					plugin.addDecorator(new ResponseTimeColorNodeDecorator(threshold));
+				} catch (final NumberFormatException exc) {
+					System.err.println("\nFailed to parse int value of property " + "threshold(ms) : " + thresholdStringStr); // NOPMD (System.out)
+				}
+			} else {
+				LOG.warn("Unknown decoration name '" + currentDecoratorStr + "'.");
+				return;
+			}
+		}
+	}
+
+	/**
+	 * Returns if the specified input directories {@link #inputDirs} exist and that
+	 * each one is a monitoring log. If this is not the case for one of the directories,
+	 * an error message is printed to stderr.
+	 * 
+	 * @return true if {@link #outputDir} is exists and is a directory; false
+	 *         otherwise
+	 */
+	private boolean assertInputDirsExistsAndAreMonitoringLogs() {
+		for (final String inputDir : this.inputDirs) {
+			final File inputDirFile = new File(inputDir);
+			try {
+				if (!inputDirFile.exists()) {
+					LOG.error("The specified input directory '" + inputDirFile.getCanonicalPath() + "' does not exist");
+					return false;
+				}
+				if (!inputDirFile.isDirectory() && !inputDir.endsWith(FSUtil.ZIP_FILE_EXTENSION)) {
+					LOG.error("The specified input directory '" + inputDirFile.getCanonicalPath() + "' is neither a directory nor a zip file");
+					return false;
+				}
+				// check whether inputDirFile contains a (kieker|tpmon).map file; the latter for legacy reasons
+				if (inputDirFile.isDirectory()) { // only check for dirs
+					final File[] mapFiles = { new File(inputDir + File.separatorChar + FSUtil.MAP_FILENAME),
+						new File(inputDir + File.separatorChar + FSUtil.LEGACY_MAP_FILENAME), };
+					boolean mapFileExists = false;
+					for (final File potentialMapFile : mapFiles) {
+						if (potentialMapFile.isFile()) {
+							mapFileExists = true;
+							break;
+						}
+					}
+					if (!mapFileExists) {
+						LOG.error("The specified input directory '" + inputDirFile.getCanonicalPath() + "' is not a kieker log directory");
+						return false;
+					}
+				}
+			} catch (final IOException e) { // thrown by File.getCanonicalPath()
+				LOG.error("Error resolving name of input directory: '" + inputDir + "'");
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * 
+	 * @return false iff an error occurred
+	 */
+	private boolean dispatchTasks() {
+		boolean retVal = true;
+		int numRequestedTasks = 0;
+
+		final SystemModelRepository systemEntityFactory = new SystemModelRepository(new Configuration(), this.analysisController);
+
+		TraceReconstructionFilter mtReconstrFilter = null;
+		EventRecordTraceCounter eventRecordTraceCounter = null;
+		EventRecordTraceReconstructionFilter eventTraceReconstructionFilter = null;
+		TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter = null;
+		try {
+			FSReader reader;
+			{ // NOCS (NestedBlock)
+				final Configuration conf = new Configuration(null);
+				conf.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(this.inputDirs));
+				conf.setProperty(FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, Boolean.TRUE.toString());
+				reader = new FSReader(conf, this.analysisController);
+			}
+
+			// Unify Strings
+			final StringBufferFilter stringBufferFilter = new StringBufferFilter(new Configuration(), this.analysisController);
+			this.analysisController.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, stringBufferFilter, StringBufferFilter.INPUT_PORT_NAME_EVENTS);
+
+			// This map can be used within the constructor for all following plugins which use the repository with the name defined in the
+			// AbstractTraceAnalysisPlugin.
+			final TimestampFilter timestampFilter;
+			{ // NOCS (nested block)
+				// Create the timestamp filter and connect to the reader's output port
+				final Configuration configTimestampFilter = new Configuration();
+				configTimestampFilter.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP,
+						Long.toString(this.ignoreExecutionsBeforeTimestamp));
+				configTimestampFilter.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP,
+						Long.toString(this.ignoreExecutionsAfterTimestamp));
+
+				timestampFilter = new TimestampFilter(configTimestampFilter, this.analysisController);
+				this.analysisController.connect(stringBufferFilter, StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
+						timestampFilter, TimestampFilter.INPUT_PORT_NAME_EXECUTION);
+				this.analysisController.connect(stringBufferFilter, StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
+						timestampFilter, TimestampFilter.INPUT_PORT_NAME_FLOW);
+			}
+
+			final TraceIdFilter traceIdFilter;
+			{ // NOCS (nested block)
+				// Create the trace ID filter and connect to the timestamp filter's output port
+				final Configuration configTraceIdFilterFlow = new Configuration();
+				if (this.selectedTraces == null) {
+					configTraceIdFilterFlow.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, Boolean.TRUE.toString());
+				} else {
+					configTraceIdFilterFlow.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, Boolean.FALSE.toString());
+					configTraceIdFilterFlow.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECTED_TRACES,
+							Configuration.toProperty(this.selectedTraces.toArray(new Long[this.selectedTraces.size()])));
+				}
+
+				traceIdFilter = new TraceIdFilter(configTraceIdFilterFlow, this.analysisController);
+
+				this.analysisController.connect(timestampFilter, TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD,
+						traceIdFilter, TraceIdFilter.INPUT_PORT_NAME_COMBINED);
+			}
+
+			final ExecutionRecordTransformationFilter execRecTransformer;
+			{ // NOCS (nested block)
+				// Create the execution record transformation filter and connect to the trace ID filter's output port
+				final Configuration execRecTransformerConfig = new Configuration();
+				execRecTransformerConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.EXEC_TRACE_RECONSTR_COMPONENT_NAME);
+				execRecTransformer = new ExecutionRecordTransformationFilter(execRecTransformerConfig, this.analysisController);
+				if (this.invertTraceIdFilter) {
+					this.analysisController.connect(traceIdFilter, TraceIdFilter.OUTPUT_PORT_NAME_MISMATCH, execRecTransformer,
+							ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
+				} else {
+					this.analysisController.connect(traceIdFilter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, execRecTransformer,
+							ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
+				}
+
+				this.analysisController.connect(execRecTransformer, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
+			}
+
+			{ // NOCS (nested block)
+				// Create the trace reconstruction filter and connect to the record transformation filter's output port
+				final Configuration mtReconstrFilterConfig = new Configuration();
+				mtReconstrFilterConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.TRACERECONSTR_COMPONENT_NAME);
+				mtReconstrFilterConfig.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
+						TimeUnit.MILLISECONDS.name());
+				mtReconstrFilterConfig.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION,
+						Integer.toString(this.maxTraceDurationMillis));
+				mtReconstrFilterConfig.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES,
+						Boolean.toString(this.ignoreInvalidTraces));
+				mtReconstrFilter = new TraceReconstructionFilter(mtReconstrFilterConfig, this.analysisController);
+				this.analysisController.connect(mtReconstrFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
+				this.analysisController.connect(execRecTransformer, ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME_EXECUTIONS,
+						mtReconstrFilter, TraceReconstructionFilter.INPUT_PORT_NAME_EXECUTIONS);
+			}
+
+			{ // NOCS (nested block)
+				// Create the event record trace generation filter and connect to the trace ID filter's output port
+				final Configuration configurationEventRecordTraceGenerationFilter = new Configuration();
+				configurationEventRecordTraceGenerationFilter.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.EVENTRECORDTRACERECONSTR_COMPONENT_NAME);
+				configurationEventRecordTraceGenerationFilter.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
+						TimeUnit.MILLISECONDS.name());
+				configurationEventRecordTraceGenerationFilter.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION,
+						Long.toString(this.maxTraceDurationMillis));
+				eventTraceReconstructionFilter = new EventRecordTraceReconstructionFilter(configurationEventRecordTraceGenerationFilter, this.analysisController);
+
+				if (this.invertTraceIdFilter) {
+					this.analysisController.connect(traceIdFilter, TraceIdFilter.OUTPUT_PORT_NAME_MISMATCH, eventTraceReconstructionFilter,
+							EventRecordTraceReconstructionFilter.INPUT_PORT_NAME_TRACE_RECORDS);
+				} else {
+					this.analysisController.connect(traceIdFilter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, eventTraceReconstructionFilter,
+							EventRecordTraceReconstructionFilter.INPUT_PORT_NAME_TRACE_RECORDS);
+				}
+			}
+
+			{ // NOCS (nested block)
+				// Create the counter for valid/invalid event record traces
+				final Configuration configurationEventRecordTraceCounter = new Configuration();
+				configurationEventRecordTraceCounter.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.EXECEVENTRACESFROMEVENTTRACES_COMPONENT_NAME);
+				configurationEventRecordTraceCounter.setProperty(EventRecordTraceCounter.CONFIG_PROPERTY_NAME_LOG_INVALID,
+						Boolean.toString(!this.ignoreInvalidTraces));
+				eventRecordTraceCounter = new EventRecordTraceCounter(configurationEventRecordTraceCounter, this.analysisController);
+
+				this.analysisController.connect(
+						eventTraceReconstructionFilter, EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID,
+						eventRecordTraceCounter, EventRecordTraceCounter.INPUT_PORT_NAME_VALID);
+				this.analysisController.connect(
+						eventTraceReconstructionFilter, EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_INVALID,
+						eventRecordTraceCounter, EventRecordTraceCounter.INPUT_PORT_NAME_INVALID);
+			}
+
+			{ // NOCS (nested block)
+				// Create the event trace to execution/message trace transformation filter and connect its input to the event record trace generation filter's output
+				// port
+				final Configuration configurationEventTrace2ExecutionTraceFilter = new Configuration();
+				configurationEventTrace2ExecutionTraceFilter.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
+						Constants.EXECTRACESFROMEVENTTRACES_COMPONENT_NAME);
+				configurationEventTrace2ExecutionTraceFilter.setProperty(TraceEventRecords2ExecutionAndMessageTraceFilter.CONFIG_IGNORE_ASSUMED,
+						Boolean.toString(this.ignoreAssumedCalls));
+				// EventTrace2ExecutionTraceFilter has no configuration properties
+				traceEvents2ExecutionAndMessageTraceFilter = new TraceEventRecords2ExecutionAndMessageTraceFilter(configurationEventTrace2ExecutionTraceFilter,
+						this.analysisController);
+
+				this.analysisController.connect(eventTraceReconstructionFilter, EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID,
+						traceEvents2ExecutionAndMessageTraceFilter, TraceEventRecords2ExecutionAndMessageTraceFilter.INPUT_PORT_NAME_EVENT_TRACE);
+				this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
+						systemEntityFactory);
+			}
+
+			final List<AbstractTraceProcessingFilter> allTraceProcessingComponents = new ArrayList<AbstractTraceProcessingFilter>();
+			final List<AbstractGraphProducingFilter<?>> allGraphProducers = new ArrayList<AbstractGraphProducingFilter<?>>();
+
+			final Configuration traceAllocationEquivClassFilterConfig = new Configuration();
+			traceAllocationEquivClassFilterConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.TRACEALLOCATIONEQUIVCLASS_COMPONENT_NAME);
+			traceAllocationEquivClassFilterConfig.setProperty(TraceEquivalenceClassFilter.CONFIG_PROPERTY_NAME_EQUIVALENCE_MODE,
+					TraceEquivalenceClassModes.ALLOCATION.toString());
+			TraceEquivalenceClassFilter traceAllocationEquivClassFilter = null; // must not be instantiate it here, due to side-effects in the constructor
+			if (this.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT)) {
+				/**
+				 * Currently, this filter is only used to print an equivalence
+				 * report. That's why we only activate it in case this options
+				 * is requested.
+				 */
+				traceAllocationEquivClassFilter = new TraceEquivalenceClassFilter(traceAllocationEquivClassFilterConfig, this.analysisController);
+				this.analysisController.connect(traceAllocationEquivClassFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
+						systemEntityFactory);
+				this.analysisController.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
+						traceAllocationEquivClassFilter, TraceEquivalenceClassFilter.INPUT_PORT_NAME_EXECUTION_TRACE);
+				this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
+						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
+						traceAllocationEquivClassFilter, TraceEquivalenceClassFilter.INPUT_PORT_NAME_EXECUTION_TRACE);
+				allTraceProcessingComponents.add(traceAllocationEquivClassFilter);
+			}
+
+			final Configuration traceAssemblyEquivClassFilterConfig = new Configuration();
+			traceAssemblyEquivClassFilterConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.TRACEASSEMBLYEQUIVCLASS_COMPONENT_NAME);
+			traceAssemblyEquivClassFilterConfig.setProperty(TraceEquivalenceClassFilter.CONFIG_PROPERTY_NAME_EQUIVALENCE_MODE,
+					TraceEquivalenceClassModes.ASSEMBLY.toString());
+			TraceEquivalenceClassFilter traceAssemblyEquivClassFilter = null; // must not be instantiate it here, due to side-effects in the constructor
+			if (this.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_ASSEMBLYEQUIVCLASSREPORT)) {
+				/**
+				 * Currently, this filter is only used to print an equivalence
+				 * report. That's why we only activate it in case this options
+				 * is requested.
+				 */
+				traceAssemblyEquivClassFilter = new TraceEquivalenceClassFilter(traceAssemblyEquivClassFilterConfig, this.analysisController);
+				this.analysisController.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
+						traceAssemblyEquivClassFilter, TraceEquivalenceClassFilter.INPUT_PORT_NAME_EXECUTION_TRACE);
+				this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
+						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
+						traceAssemblyEquivClassFilter, TraceEquivalenceClassFilter.INPUT_PORT_NAME_EXECUTION_TRACE);
+				this.analysisController.connect(traceAssemblyEquivClassFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
+						systemEntityFactory);
+				allTraceProcessingComponents.add(traceAssemblyEquivClassFilter);
+			}
+
+			// fill list of msgTraceProcessingComponents:
+			MessageTraceWriterFilter componentPrintMsgTrace = null;
+			if (this.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PRINTMSGTRACES)) {
+				numRequestedTasks++;
+				final Configuration componentPrintMsgTraceConfig = new Configuration();
+				componentPrintMsgTraceConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.PRINTMSGTRACE_COMPONENT_NAME);
+				componentPrintMsgTraceConfig.setProperty(MessageTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN, new File(this.outputDir
+						+ File.separator
+						+ this.outputFnPrefix + Constants.MESSAGE_TRACES_FN_PREFIX + ".txt")
+						.getCanonicalPath());
+				componentPrintMsgTrace = new MessageTraceWriterFilter(componentPrintMsgTraceConfig, this.analysisController);
+
+				this.analysisController.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+						componentPrintMsgTrace, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+				this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
+						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+						componentPrintMsgTrace, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+				this.analysisController.connect(componentPrintMsgTrace, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
+						systemEntityFactory);
+				allTraceProcessingComponents.add(componentPrintMsgTrace);
+			}
+			ExecutionTraceWriterFilter componentPrintExecTrace = null;
+			if (this.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PRINTEXECTRACES)) {
+				numRequestedTasks++;
+				final Configuration componentPrintExecTraceConfig = new Configuration();
+				componentPrintExecTraceConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.PRINTEXECTRACE_COMPONENT_NAME);
+				componentPrintExecTraceConfig.setProperty(ExecutionTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN, new File(this.outputDir
+						+ File.separator
+						+ this.outputFnPrefix + Constants.EXECUTION_TRACES_FN_PREFIX + ".txt")
+						.getCanonicalPath());
+				componentPrintExecTrace = new ExecutionTraceWriterFilter(componentPrintExecTraceConfig, this.analysisController);
+
+				this.analysisController.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
+						componentPrintExecTrace, ExecutionTraceWriterFilter.INPUT_PORT_NAME_EXECUTION_TRACES);
+				this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
+						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
+						componentPrintExecTrace, ExecutionTraceWriterFilter.INPUT_PORT_NAME_EXECUTION_TRACES);
+				this.analysisController.connect(componentPrintExecTrace, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
+						systemEntityFactory);
+				allTraceProcessingComponents.add(componentPrintExecTrace);
+			}
+			InvalidExecutionTraceWriterFilter componentPrintInvalidTrace = null;
+			if (this.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES)) {
+				numRequestedTasks++;
+				final Configuration componentPrintInvalidTraceConfig = new Configuration();
+				componentPrintInvalidTraceConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
+						Constants.PRINTINVALIDEXECTRACE_COMPONENT_NAME);
+				componentPrintInvalidTraceConfig.setProperty(InvalidExecutionTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN, new File(this.outputDir
+						+ File.separator
+						+ this.outputFnPrefix
+						+ Constants.INVALID_TRACES_FN_PREFIX + ".txt").getCanonicalPath());
+				componentPrintInvalidTrace = new InvalidExecutionTraceWriterFilter(componentPrintInvalidTraceConfig, this.analysisController);
+
+				this.analysisController.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE,
+						componentPrintInvalidTrace, InvalidExecutionTraceWriterFilter.INPUT_PORT_NAME_INVALID_EXECUTION_TRACES);
+				this.analysisController.connect(componentPrintInvalidTrace, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
+						systemEntityFactory);
+				this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
+						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE,
+						componentPrintInvalidTrace, InvalidExecutionTraceWriterFilter.INPUT_PORT_NAME_INVALID_EXECUTION_TRACES);
+				allTraceProcessingComponents.add(componentPrintInvalidTrace);
+			}
+			SequenceDiagramFilter componentPlotAllocationSeqDiagr = null;
+			if (retVal && this.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONSEQDS)) {
+				numRequestedTasks++;
+				final Configuration componentPlotAllocationSeqDiagrConfig = new Configuration();
+				componentPlotAllocationSeqDiagrConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.PLOTALLOCATIONSEQDIAGR_COMPONENT_NAME);
+				componentPlotAllocationSeqDiagrConfig.setProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE,
+						this.outputDir + File.separator + this.outputFnPrefix + Constants.ALLOCATION_SEQUENCE_DIAGRAM_FN_PREFIX);
+				componentPlotAllocationSeqDiagrConfig.setProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SDMODE,
+						SequenceDiagramFilter.SDModes.ALLOCATION.toString());
+				componentPlotAllocationSeqDiagrConfig.setProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES,
+						Boolean.toString(this.shortLabels));
+				componentPlotAllocationSeqDiagr = new SequenceDiagramFilter(componentPlotAllocationSeqDiagrConfig, this.analysisController);
+
+				this.analysisController.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+						componentPlotAllocationSeqDiagr, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+				this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
+						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+						componentPlotAllocationSeqDiagr, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+				this.analysisController.connect(componentPlotAllocationSeqDiagr, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
+						systemEntityFactory);
+				allTraceProcessingComponents.add(componentPlotAllocationSeqDiagr);
+			}
+			SequenceDiagramFilter componentPlotAssemblySeqDiagr = null;
+			if (retVal && this.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYSEQDS)) {
+				numRequestedTasks++;
+				final Configuration componentPlotAssemblySeqDiagrConfig = new Configuration();
+				componentPlotAssemblySeqDiagrConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.PLOTASSEMBLYSEQDIAGR_COMPONENT_NAME);
+				componentPlotAssemblySeqDiagrConfig.setProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE,
+						this.outputDir + File.separator + this.outputFnPrefix + Constants.ASSEMBLY_SEQUENCE_DIAGRAM_FN_PREFIX);
+				componentPlotAssemblySeqDiagrConfig.setProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SDMODE,
+						SequenceDiagramFilter.SDModes.ASSEMBLY.toString());
+				componentPlotAssemblySeqDiagrConfig.setProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES,
+						Boolean.toString(this.shortLabels));
+				componentPlotAssemblySeqDiagr = new SequenceDiagramFilter(componentPlotAssemblySeqDiagrConfig, this.analysisController);
+
+				this.analysisController.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+						componentPlotAssemblySeqDiagr, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+				this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
+						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+						componentPlotAssemblySeqDiagr, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+				this.analysisController.connect(componentPlotAssemblySeqDiagr, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
+						systemEntityFactory);
+				allTraceProcessingComponents.add(componentPlotAssemblySeqDiagr);
+			}
+
+			ComponentDependencyGraphAllocationFilter componentPlotAllocationComponentDepGraph = null;
+			if (retVal && this.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG)) {
+				numRequestedTasks++;
+				final Configuration configuration = new Configuration();
+				componentPlotAllocationComponentDepGraph = new ComponentDependencyGraphAllocationFilter(configuration, this.analysisController);
+
+				final String[] nodeDecorations = this.cmdl.getOptionValues(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG);
+				TraceAnalysisTool.addDecorators(nodeDecorations, componentPlotAllocationComponentDepGraph);
+
+				this.analysisController.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+						componentPlotAllocationComponentDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+				this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
+						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+						componentPlotAllocationComponentDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+				this.analysisController.connect(componentPlotAllocationComponentDepGraph, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
+						systemEntityFactory);
+
+				allTraceProcessingComponents.add(componentPlotAllocationComponentDepGraph);
+				allGraphProducers.add(componentPlotAllocationComponentDepGraph);
+			}
+
+			ComponentDependencyGraphAssemblyFilter componentPlotAssemblyComponentDepGraph = null;
+			if (retVal && this.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYCOMPONENTDEPG)) {
+				numRequestedTasks++;
+				final Configuration configuration = new Configuration();
+				componentPlotAssemblyComponentDepGraph = new ComponentDependencyGraphAssemblyFilter(configuration, this.analysisController);
+
+				final String[] nodeDecorations = this.cmdl.getOptionValues(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYCOMPONENTDEPG);
+				TraceAnalysisTool.addDecorators(nodeDecorations, componentPlotAssemblyComponentDepGraph);
+
+				this.analysisController.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+						componentPlotAssemblyComponentDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+				this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
+						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+						componentPlotAssemblyComponentDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+				this.analysisController.connect(componentPlotAssemblyComponentDepGraph, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
+						systemEntityFactory);
+				allTraceProcessingComponents.add(componentPlotAssemblyComponentDepGraph);
+				allGraphProducers.add(componentPlotAssemblyComponentDepGraph);
+			}
+
+			ContainerDependencyGraphFilter componentPlotContainerDepGraph = null;
+			if (retVal && this.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTCONTAINERDEPG)) {
+				numRequestedTasks++;
+				final Configuration configuration = new Configuration();
+				componentPlotContainerDepGraph = new ContainerDependencyGraphFilter(configuration, this.analysisController);
+				this.analysisController.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+						componentPlotContainerDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+				this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
+						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+						componentPlotContainerDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+				this.analysisController.connect(componentPlotContainerDepGraph, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
+						systemEntityFactory);
+				allTraceProcessingComponents.add(componentPlotContainerDepGraph);
+				allGraphProducers.add(componentPlotContainerDepGraph);
+			}
+
+			OperationDependencyGraphAllocationFilter componentPlotAllocationOperationDepGraph = null;
+			if (retVal && this.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG)) {
+				numRequestedTasks++;
+				final Configuration configuration = new Configuration();
+				componentPlotAllocationOperationDepGraph = new OperationDependencyGraphAllocationFilter(configuration, this.analysisController);
+
+				final String[] nodeDecorations = this.cmdl.getOptionValues(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG);
+				TraceAnalysisTool.addDecorators(nodeDecorations, componentPlotAllocationOperationDepGraph);
+
+				this.analysisController.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+						componentPlotAllocationOperationDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+				this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
+						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+						componentPlotAllocationOperationDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+				this.analysisController.connect(componentPlotAllocationOperationDepGraph, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
+						systemEntityFactory);
+				allTraceProcessingComponents.add(componentPlotAllocationOperationDepGraph);
+				allGraphProducers.add(componentPlotAllocationOperationDepGraph);
+			}
+
+			OperationDependencyGraphAssemblyFilter componentPlotAssemblyOperationDepGraph = null;
+			if (retVal && this.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG)) {
+				numRequestedTasks++;
+				final Configuration configuration = new Configuration();
+				componentPlotAssemblyOperationDepGraph = new OperationDependencyGraphAssemblyFilter(configuration, this.analysisController);
+
+				final String[] nodeDecorations = this.cmdl.getOptionValues(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG);
+				TraceAnalysisTool.addDecorators(nodeDecorations, componentPlotAssemblyOperationDepGraph);
+
+				this.analysisController.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+						componentPlotAssemblyOperationDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+				this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
+						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+						componentPlotAssemblyOperationDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+				this.analysisController.connect(componentPlotAssemblyOperationDepGraph, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
+						systemEntityFactory);
+				allTraceProcessingComponents.add(componentPlotAssemblyOperationDepGraph);
+				allGraphProducers.add(componentPlotAssemblyOperationDepGraph);
+			}
+
+			TraceCallTreeFilter componentPlotTraceCallTrees = null;
+			if (retVal && this.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTCALLTREES)) {
+				numRequestedTasks++;
+
+				final Configuration componentPlotTraceCallTreesConfig = new Configuration();
+
+				componentPlotTraceCallTreesConfig.setProperty(TraceCallTreeFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILENAME, new File(this.outputDir
+						+ File.separator + this.outputFnPrefix + Constants.CALL_TREE_FN_PREFIX).getCanonicalPath());
+				componentPlotTraceCallTreesConfig
+						.setProperty(TraceCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(this.shortLabels));
+				componentPlotTraceCallTreesConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.PLOTCALLTREE_COMPONENT_NAME);
+				componentPlotTraceCallTrees = new TraceCallTreeFilter(componentPlotTraceCallTreesConfig, this.analysisController);
+
+				this.analysisController.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+						componentPlotTraceCallTrees, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+				this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
+						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+						componentPlotTraceCallTrees, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+				this.analysisController.connect(componentPlotTraceCallTrees, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
+						systemEntityFactory);
+				allTraceProcessingComponents.add(componentPlotTraceCallTrees);
+			}
+			AggregatedAllocationComponentOperationCallTreeFilter componentPlotAggregatedCallTree = null;
+			if (retVal && this.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDALLOCATIONCALLTREE)) {
+				numRequestedTasks++;
+				final Configuration componentPlotAggregatedCallTreeConfig = new Configuration();
+				componentPlotAggregatedCallTreeConfig
+						.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
+								Constants.PLOTAGGREGATEDALLOCATIONCALLTREE_COMPONENT_NAME);
+				componentPlotAggregatedCallTreeConfig.setProperty(AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(true));
+				componentPlotAggregatedCallTreeConfig.setProperty(AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS,
+						Boolean.toString(this.shortLabels));
+				componentPlotAggregatedCallTreeConfig.setProperty(AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILENAME, this.outputDir
+						+ File.separator + this.outputFnPrefix
+						+ Constants.AGGREGATED_ALLOCATION_CALL_TREE_FN_PREFIX + ".dot");
+				componentPlotAggregatedCallTree = new AggregatedAllocationComponentOperationCallTreeFilter(componentPlotAggregatedCallTreeConfig,
+						this.analysisController);
+
+				this.analysisController.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+						componentPlotAggregatedCallTree, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+				this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
+						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+						componentPlotAggregatedCallTree, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+				this.analysisController.connect(componentPlotAggregatedCallTree, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
+						systemEntityFactory);
+				allTraceProcessingComponents.add(componentPlotAggregatedCallTree);
+			}
+			AggregatedAssemblyComponentOperationCallTreeFilter componentPlotAssemblyCallTree = null;
+			if (retVal && this.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDASSEMBLYCALLTREE)) {
+				numRequestedTasks++;
+				final Configuration componentPlotAssemblyCallTreeConfig = new Configuration();
+				componentPlotAssemblyCallTreeConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
+						Constants.PLOTAGGREGATEDASSEMBLYCALLTREE_COMPONENT_NAME);
+				componentPlotAssemblyCallTreeConfig.setProperty(AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(true));
+				componentPlotAssemblyCallTreeConfig.setProperty(AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS,
+						Boolean.toString(this.shortLabels));
+				componentPlotAssemblyCallTreeConfig.setProperty(AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILENAME, this.outputDir
+						+ File.separator + this.outputFnPrefix + Constants.AGGREGATED_ASSEMBLY_CALL_TREE_FN_PREFIX + ".dot");
+				componentPlotAssemblyCallTree = new AggregatedAssemblyComponentOperationCallTreeFilter(componentPlotAssemblyCallTreeConfig, this.analysisController);
+
+				this.analysisController.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+						componentPlotAssemblyCallTree, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+				this.analysisController.connect(traceEvents2ExecutionAndMessageTraceFilter,
+						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
+						componentPlotAssemblyCallTree, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
+				this.analysisController.connect(componentPlotAssemblyCallTree, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
+						systemEntityFactory);
+				allTraceProcessingComponents.add(componentPlotAssemblyCallTree);
+			}
+			if (retVal && this.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT)) {
+				numRequestedTasks++;
+				// the actual execution of the task is performed below
+			}
+			if (this.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PRINTSYSTEMMODEL)) {
+				numRequestedTasks++;
+			}
+
+			// Attach graph processors to the graph producers
+			this.attachGraphProcessors(allGraphProducers, this.analysisController, this.cmdl);
+
+			if (numRequestedTasks == 0) {
+				LOG.warn("No task requested");
+				return false;
+			}
+
+			if (retVal) {
+				final String systemEntitiesHtmlFn =
+						this.outputDir + File.separator + this.outputFnPrefix + "system-entities.html";
+				final Configuration systemModel2FileFilterConfig = new Configuration();
+				systemModel2FileFilterConfig.setProperty(SystemModel2FileFilter.CONFIG_PROPERTY_NAME_HTML_OUTPUT_FN, systemEntitiesHtmlFn);
+				final SystemModel2FileFilter systemModel2FileFilter = new SystemModel2FileFilter(systemModel2FileFilterConfig, this.analysisController);
+				// note that this plugin is (currently) not connected to any other filters
+				this.analysisController.connect(systemModel2FileFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, systemEntityFactory);
+			}
+
+			int numErrorCount = 0;
+			try {
+				this.analysisController.run();
+				if (this.analysisController.getState() != AnalysisController.STATE.TERMINATED) {
+					// Analysis did not terminate successfully
+					retVal = false; // Error message referring to log will be printed later
+					LOG.error("Analysis instance terminated in state other than" + AnalysisController.STATE.TERMINATED + ":" + this.analysisController.getState());
+				}
+			} finally {
+				for (final AbstractTraceProcessingFilter c : allTraceProcessingComponents) {
+					numErrorCount += c.getErrorCount();
+					c.printStatusMessage();
+				}
+				final String kaxOutputFn = this.outputDir + File.separator + this.outputFnPrefix + "traceAnalysis.kax";
+				final File kaxOutputFile = new File(kaxOutputFn);
+				try { // NOCS (nested try)
+						// Try to serialize analysis configuration to .kax file
+					this.analysisController.saveToFile(kaxOutputFile);
+					LOG.info("Saved analysis configuration to file '" + kaxOutputFile.getCanonicalPath() + "'");
+				} catch (final IOException ex) {
+					LOG.error("Failed to save analysis configuration to file '" + kaxOutputFile.getCanonicalPath() + "'");
+				}
+			}
+			if (!this.ignoreInvalidTraces && (numErrorCount > 0)) {
+				throw new Exception(numErrorCount + " errors occured in trace processing components");
+			}
+
+			if (retVal && this.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT)) {
+				retVal = this.writeTraceEquivalenceReport(this.outputDir + File.separator + this.outputFnPrefix
+						+ Constants.TRACE_ALLOCATION_EQUIV_CLASSES_FN_PREFIX + ".txt", traceAllocationEquivClassFilter);
+			}
+
+			if (retVal && this.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_ASSEMBLYEQUIVCLASSREPORT)) {
+				retVal = this.writeTraceEquivalenceReport(this.outputDir + File.separator + this.outputFnPrefix
+						+ Constants.TRACE_ASSEMBLY_EQUIV_CLASSES_FN_PREFIX + ".txt", traceAssemblyEquivClassFilter);
+			}
+		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
+			LOG.error("An error occured", ex);
+			retVal = false;
+		} finally {
+			if (numRequestedTasks > 0) {
+				if (mtReconstrFilter != null) {
+					mtReconstrFilter.printStatusMessage();
+				}
+				if (eventRecordTraceCounter != null) {
+					eventRecordTraceCounter.printStatusMessage();
+				}
+				if (traceEvents2ExecutionAndMessageTraceFilter != null) {
+					traceEvents2ExecutionAndMessageTraceFilter.printStatusMessage();
+				}
+			}
+		}
+
+		return retVal;
+	}
+
+	/**
 	 * This method dumps the configuration on the screen.
 	 */
-	private static void dumpConfiguration() {
-		System.out.println("#"); // NOPMD (System.out)
-		System.out.println("# Configuration"); // NOPMD (System.out)
+	private void dumpConfiguration() {
+		LOG.debug("#");
+		LOG.debug("# Configuration");
 		for (final Option o : Constants.SORTED_OPTION_LIST) {
 			final String longOpt = o.getLongOpt();
 			String val = "<null>";
 			if (longOpt.equals(Constants.CMD_OPT_NAME_INPUTDIRS)) {
-				val = Constants.stringArrToStringList(TraceAnalysisTool.inputDirs);
+				val = Constants.stringArrToStringList(this.inputDirs);
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_OUTPUTDIR)) {
-				val = TraceAnalysisTool.outputDir;
+				val = this.outputDir;
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_OUTPUTFNPREFIX)) {
-				val = TraceAnalysisTool.outputFnPrefix;
-			} else if (longOpt.equals(Constants.CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT)
+				val = this.outputFnPrefix;
+			} else if (longOpt.equals(Constants.CMD_OPT_NAME_VERBOSE) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT)
 					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_ASSEMBLYEQUIVCLASSREPORT) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONSEQDS)
 					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYSEQDS) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG)
 					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYCOMPONENTDEPG) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTCONTAINERDEPG)
@@ -243,61 +959,56 @@ public final class TraceAnalysisTool {
 					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDALLOCATIONCALLTREE)
 					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDASSEMBLYCALLTREE) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTCALLTREES)
 					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTEXECTRACES) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES)
-					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTMSGTRACES) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTSYSTEMMODEL)) {
-				val = TraceAnalysisTool.cmdl.hasOption(longOpt) ? "true" : "false"; // NOCS
+					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTMSGTRACES) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTSYSTEMMODEL)
+					|| longOpt.equals(Constants.CMD_OPT_NAME_DEBUG) || longOpt.equals(Constants.CMD_OPT_NAME_VERBOSE)) {
+				val = this.cmdl.hasOption(longOpt) ? "true" : "false"; // NOCS
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_SELECTTRACES)) {
-				if (TraceAnalysisTool.selectedTraces != null) {
-					val = TraceAnalysisTool.selectedTraces.toString();
+				if (this.selectedTraces != null) {
+					val = this.selectedTraces.toString();
 				} else {
 					val = "<select all>";
 				}
 
+			} else if (longOpt.equals(Constants.CMD_OPT_NAME_FILTERTRACES)) {
+				if (this.selectedTraces != null) {
+					val = this.selectedTraces.toString();
+				} else {
+					val = "<filter none>";
+				}
+
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_SHORTLABELS)) {
-				val = TraceAnalysisTool.shortLabels ? "true" : "false"; // NOCS
+				val = this.shortLabels ? "true" : "false"; // NOCS
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_INCLUDESELFLOOPS)) {
-				val = TraceAnalysisTool.includeSelfLoops ? "true" : "false"; // NOCS
+				val = this.includeSelfLoops ? "true" : "false"; // NOCS
+			} else if (longOpt.equals(Constants.CMD_OPT_NAME_IGNORE_ASSUMED)) {
+				val = this.ignoreAssumedCalls ? "true" : "false"; // NOCS
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_IGNOREINVALIDTRACES)) {
-				val = TraceAnalysisTool.ignoreInvalidTraces ? "true" : "false"; // NOCS
+				val = this.ignoreInvalidTraces ? "true" : "false"; // NOCS
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_MAXTRACEDURATION)) {
-				val = TraceAnalysisTool.maxTraceDurationMillis + " ms";
+				val = this.maxTraceDurationMillis + " ms";
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_IGNOREEXECUTIONSBEFOREDATE)) {
-				val = LoggingTimestampConverter.convertLoggingTimestampToUTCString(TraceAnalysisTool.ignoreExecutionsBeforeTimestamp) + " ("
-						+ LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(TraceAnalysisTool.ignoreExecutionsBeforeTimestamp) + ")";
+				val = LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.ignoreExecutionsBeforeTimestamp) + " ("
+						+ LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.ignoreExecutionsBeforeTimestamp) + ")";
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_IGNOREEXECUTIONSAFTERDATE)) {
-				val = LoggingTimestampConverter.convertLoggingTimestampToUTCString(TraceAnalysisTool.ignoreExecutionsAfterTimestamp) + " ("
-						+ LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(TraceAnalysisTool.ignoreExecutionsAfterTimestamp) + ")";
+				val = LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.ignoreExecutionsAfterTimestamp) + " ("
+						+ LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.ignoreExecutionsAfterTimestamp) + ")";
 			} else if (Constants.CMD_OPT_NAME_TRACE_COLORING.equals(longOpt)) {
-				val = cmdl.getOptionValue(Constants.CMD_OPT_NAME_TRACE_COLORING);
+				val = this.cmdl.getOptionValue(Constants.CMD_OPT_NAME_TRACE_COLORING);
 				if (val == null) {
 					val = "";
 				}
 			} else if (Constants.CMD_OPT_NAME_ADD_DESCRIPTIONS.equals(longOpt)) {
-				val = cmdl.getOptionValue(Constants.CMD_OPT_NAME_ADD_DESCRIPTIONS);
+				val = this.cmdl.getOptionValue(Constants.CMD_OPT_NAME_ADD_DESCRIPTIONS);
 				if (val == null) {
 					val = "";
 				}
 			} else {
-				val = Arrays.toString(TraceAnalysisTool.cmdl.getOptionValues(longOpt));
+				val = Arrays.toString(this.cmdl.getOptionValues(longOpt));
 				LOG.warn("Unformatted configuration output for option " + longOpt);
 			}
-			System.out.println("--" + longOpt + ": " + val); // NOPMD (System.out)
-		}
-	}
-
-	private static void addDecorators(final String[] decoratorNames, final AbstractDependencyGraphFilter<?> plugin) {
-		if (decoratorNames == null) {
-			return;
-		}
-
-		for (final String currentDecoratorName : decoratorNames) {
-			final AbstractNodeDecorator currentDecorator = AbstractNodeDecorator.createFromName(currentDecoratorName);
-
-			if (currentDecorator == null) {
-				LOG.warn("Unknown decoration name '" + currentDecoratorName + "'.");
-				continue;
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("--" + longOpt + ": " + val);
 			}
-
-			plugin.addDecorator(currentDecorator);
 		}
 	}
 
@@ -318,14 +1029,14 @@ public final class TraceAnalysisTool {
 	 * @param <P>
 	 *            The type of the plugin.
 	 */
-	private static <P extends AbstractPlugin & IGraphOutputtingFilter<?>> void attachGraphWriter(final P plugin,
+	private <P extends AbstractPlugin & IGraphOutputtingFilter<?>> void attachGraphWriter(final P plugin,
 			final AbstractGraphProducingFilter<?> producer, final AnalysisController controller) throws IllegalStateException, AnalysisConfigurationException {
 
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_OUTPUT_PATH_NAME, outputDir + File.separator + outputFnPrefix);
+		configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_OUTPUT_PATH_NAME, this.outputDir + File.separator + this.outputFnPrefix);
 		configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, String.valueOf(true));
-		configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_SHORTLABELS, String.valueOf(shortLabels));
-		configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_SELFLOOPS, String.valueOf(includeSelfLoops));
+		configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_SHORTLABELS, String.valueOf(this.shortLabels));
+		configuration.setProperty(GraphWriterPlugin.CONFIG_PROPERTY_NAME_SELFLOOPS, String.valueOf(this.includeSelfLoops));
 		configuration.setProperty(AbstractAnalysisComponent.CONFIG_NAME, producer.getConfigurationName());
 		final GraphWriterPlugin graphWriter = new GraphWriterPlugin(configuration, controller);
 		controller.connect(plugin, plugin.getGraphOutputPortName(), graphWriter, GraphWriterPlugin.INPUT_PORT_NAME_GRAPHS);
@@ -377,7 +1088,7 @@ public final class TraceAnalysisTool {
 	 * @throws AnalysisConfigurationException
 	 *             If some plugins cannot be connected
 	 */
-	private static void attachGraphProcessors(final List<AbstractGraphProducingFilter<?>> graphProducers, final AnalysisController controller,
+	private void attachGraphProcessors(final List<AbstractGraphProducingFilter<?>> graphProducers, final AnalysisController controller,
 			final CommandLine commandLine) throws IllegalStateException, AnalysisConfigurationException, IOException {
 
 		for (final AbstractGraphProducingFilter<?> producer : graphProducers) {
@@ -400,665 +1111,14 @@ public final class TraceAnalysisTool {
 			}
 
 			if (lastFilter != null) {
-				TraceAnalysisTool.attachGraphWriter(lastFilter, producer, controller);
+				this.attachGraphWriter(lastFilter, producer, controller);
 			} else {
-				TraceAnalysisTool.attachGraphWriter(producer, producer, controller);
+				this.attachGraphWriter(producer, producer, controller);
 			}
 		}
 	}
 
-	/**
-	 * 
-	 * @return false iff an error occurred
-	 */
-	private static boolean dispatchTasks() {
-		boolean retVal = true;
-		int numRequestedTasks = 0;
-
-		TraceReconstructionFilter mtReconstrFilter = null;
-		EventRecordTraceCounter eventRecordTraceCounter = null;
-		EventRecordTraceReconstructionFilter eventTraceReconstructionFilter = null;
-		TraceEventRecords2ExecutionAndMessageTraceFilter traceEvents2ExecutionAndMessageTraceFilter = null;
-		try {
-			FSReader reader;
-			{ // NOCS (NestedBlock)
-				final Configuration conf = new Configuration(null);
-				conf.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, Configuration.toProperty(TraceAnalysisTool.inputDirs));
-				conf.setProperty(FSReader.CONFIG_PROPERTY_NAME_IGNORE_UNKNOWN_RECORD_TYPES, Boolean.TRUE.toString());
-				reader = new FSReader(conf, ANALYSIS_INSTANCE);
-			}
-
-			// Unify Strings
-			final StringBufferFilter stringBufferFilter = new StringBufferFilter(new Configuration(), ANALYSIS_INSTANCE);
-			ANALYSIS_INSTANCE.connect(reader, FSReader.OUTPUT_PORT_NAME_RECORDS, stringBufferFilter, StringBufferFilter.INPUT_PORT_NAME_EVENTS);
-
-			// This map can be used within the constructor for all following plugins which use the repository with the name defined in the
-			// AbstractTraceAnalysisPlugin.
-			final TimestampFilter timestampFilter;
-			{ // NOCS (nested block)
-				// Create the timestamp filter and connect to the reader's output port
-				final Configuration configTimestampFilter = new Configuration();
-				configTimestampFilter.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_BEFORE_TIMESTAMP,
-						Long.toString(TraceAnalysisTool.ignoreExecutionsBeforeTimestamp));
-				configTimestampFilter.setProperty(TimestampFilter.CONFIG_PROPERTY_NAME_IGNORE_AFTER_TIMESTAMP,
-						Long.toString(TraceAnalysisTool.ignoreExecutionsAfterTimestamp));
-
-				timestampFilter = new TimestampFilter(configTimestampFilter, ANALYSIS_INSTANCE);
-				ANALYSIS_INSTANCE.connect(stringBufferFilter, StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
-						timestampFilter, TimestampFilter.INPUT_PORT_NAME_EXECUTION);
-				ANALYSIS_INSTANCE.connect(stringBufferFilter, StringBufferFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
-						timestampFilter, TimestampFilter.INPUT_PORT_NAME_FLOW);
-			}
-
-			final TraceIdFilter traceIdFilter;
-			{ // NOCS (nested block)
-				// Create the trace ID filter and connect to the timestamp filter's output port
-				final Configuration configTraceIdFilterFlow = new Configuration();
-				if (TraceAnalysisTool.selectedTraces == null) {
-					configTraceIdFilterFlow.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, Boolean.TRUE.toString());
-				} else {
-					configTraceIdFilterFlow.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, Boolean.FALSE.toString());
-					configTraceIdFilterFlow.setProperty(TraceIdFilter.CONFIG_PROPERTY_NAME_SELECTED_TRACES,
-							Configuration.toProperty(TraceAnalysisTool.selectedTraces.toArray(new Long[TraceAnalysisTool.selectedTraces.size()])));
-				}
-
-				traceIdFilter = new TraceIdFilter(configTraceIdFilterFlow, ANALYSIS_INSTANCE);
-
-				ANALYSIS_INSTANCE.connect(timestampFilter, TimestampFilter.OUTPUT_PORT_NAME_WITHIN_PERIOD,
-						traceIdFilter, TraceIdFilter.INPUT_PORT_NAME_COMBINED);
-			}
-
-			final ExecutionRecordTransformationFilter execRecTransformer;
-			{ // NOCS (nested block)
-				// Create the execution record transformation filter and connect to the trace ID filter's output port
-				final Configuration execRecTransformerConfig = new Configuration();
-				execRecTransformerConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.EXEC_TRACE_RECONSTR_COMPONENT_NAME);
-				execRecTransformer = new ExecutionRecordTransformationFilter(execRecTransformerConfig, ANALYSIS_INSTANCE);
-				ANALYSIS_INSTANCE.connect(traceIdFilter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH, execRecTransformer,
-						ExecutionRecordTransformationFilter.INPUT_PORT_NAME_RECORDS);
-				ANALYSIS_INSTANCE.connect(execRecTransformer, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, SYSTEM_ENTITY_FACTORY);
-			}
-
-			{ // NOCS (nested block)
-				// Create the trace reconstruction filter and connect to the record transformation filter's output port
-				final Configuration mtReconstrFilterConfig = new Configuration();
-				mtReconstrFilterConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.TRACERECONSTR_COMPONENT_NAME);
-				mtReconstrFilterConfig.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
-						TimeUnit.MILLISECONDS.name());
-				mtReconstrFilterConfig.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION,
-						Integer.toString(TraceAnalysisTool.maxTraceDurationMillis));
-				mtReconstrFilterConfig.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES,
-						Boolean.toString(TraceAnalysisTool.ignoreInvalidTraces));
-				mtReconstrFilter = new TraceReconstructionFilter(mtReconstrFilterConfig, ANALYSIS_INSTANCE);
-				ANALYSIS_INSTANCE.connect(mtReconstrFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, SYSTEM_ENTITY_FACTORY);
-				ANALYSIS_INSTANCE.connect(execRecTransformer, ExecutionRecordTransformationFilter.OUTPUT_PORT_NAME_EXECUTIONS,
-						mtReconstrFilter, TraceReconstructionFilter.INPUT_PORT_NAME_EXECUTIONS);
-			}
-
-			{ // NOCS (nested block)
-				// Create the event record trace generation filter and connect to the trace ID filter's output port
-				final Configuration configurationEventRecordTraceGenerationFilter = new Configuration();
-				configurationEventRecordTraceGenerationFilter.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.EVENTRECORDTRACERECONSTR_COMPONENT_NAME);
-				configurationEventRecordTraceGenerationFilter.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT,
-						TimeUnit.MILLISECONDS.name());
-				configurationEventRecordTraceGenerationFilter.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION,
-						Long.toString(TraceAnalysisTool.maxTraceDurationMillis));
-				eventTraceReconstructionFilter = new EventRecordTraceReconstructionFilter(configurationEventRecordTraceGenerationFilter, ANALYSIS_INSTANCE);
-
-				ANALYSIS_INSTANCE.connect(traceIdFilter, TraceIdFilter.OUTPUT_PORT_NAME_MATCH,
-						eventTraceReconstructionFilter, EventRecordTraceReconstructionFilter.INPUT_PORT_NAME_TRACE_RECORDS);
-			}
-
-			{ // NOCS (nested block)
-				// Create the counter for valid/invalid event record traces
-				final Configuration configurationEventRecordTraceCounter = new Configuration();
-				configurationEventRecordTraceCounter.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.EXECEVENTRACESFROMEVENTTRACES_COMPONENT_NAME);
-				eventRecordTraceCounter = new EventRecordTraceCounter(configurationEventRecordTraceCounter, ANALYSIS_INSTANCE);
-
-				ANALYSIS_INSTANCE.connect(
-						eventTraceReconstructionFilter, EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID,
-						eventRecordTraceCounter, EventRecordTraceCounter.INPUT_PORT_NAME_VALID);
-				ANALYSIS_INSTANCE.connect(
-						eventTraceReconstructionFilter, EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_INVALID,
-						eventRecordTraceCounter, EventRecordTraceCounter.INPUT_PORT_NAME_INVALID);
-			}
-
-			{ // NOCS (nested block)
-				// Create the event trace to execution/message trace transformation filter and connect its input to the event record trace generation filter's output
-				// port
-				final Configuration configurationEventTrace2ExecutionTraceFilter = new Configuration();
-				configurationEventTrace2ExecutionTraceFilter.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
-						Constants.EXECTRACESFROMEVENTTRACES_COMPONENT_NAME);
-				// EventTrace2ExecutionTraceFilter has no configuration properties
-				traceEvents2ExecutionAndMessageTraceFilter = new TraceEventRecords2ExecutionAndMessageTraceFilter(configurationEventTrace2ExecutionTraceFilter,
-						ANALYSIS_INSTANCE);
-
-				ANALYSIS_INSTANCE.connect(eventTraceReconstructionFilter, EventRecordTraceReconstructionFilter.OUTPUT_PORT_NAME_TRACE_VALID,
-						traceEvents2ExecutionAndMessageTraceFilter, TraceEventRecords2ExecutionAndMessageTraceFilter.INPUT_PORT_NAME_EVENT_TRACE);
-				ANALYSIS_INSTANCE.connect(traceEvents2ExecutionAndMessageTraceFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
-						SYSTEM_ENTITY_FACTORY);
-			}
-
-			final List<AbstractTraceProcessingFilter> allTraceProcessingComponents = new ArrayList<AbstractTraceProcessingFilter>();
-			final List<AbstractGraphProducingFilter<?>> allGraphProducers = new ArrayList<AbstractGraphProducingFilter<?>>();
-
-			final Configuration traceAllocationEquivClassFilterConfig = new Configuration();
-			traceAllocationEquivClassFilterConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.TRACEALLOCATIONEQUIVCLASS_COMPONENT_NAME);
-			traceAllocationEquivClassFilterConfig.setProperty(TraceEquivalenceClassFilter.CONFIG_PROPERTY_NAME_EQUIVALENCE_MODE,
-					TraceEquivalenceClassModes.ALLOCATION.toString());
-			TraceEquivalenceClassFilter traceAllocationEquivClassFilter = null; // must not be instantiate it here, due to side-effects in the constructor
-			if (TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT)) {
-				/**
-				 * Currently, this filter is only used to print an equivalence
-				 * report. That's why we only activate it in case this options
-				 * is requested.
-				 */
-				traceAllocationEquivClassFilter = new TraceEquivalenceClassFilter(traceAllocationEquivClassFilterConfig, ANALYSIS_INSTANCE);
-				ANALYSIS_INSTANCE.connect(traceAllocationEquivClassFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
-						SYSTEM_ENTITY_FACTORY);
-				ANALYSIS_INSTANCE.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
-						traceAllocationEquivClassFilter, TraceEquivalenceClassFilter.INPUT_PORT_NAME_EXECUTION_TRACE);
-				ANALYSIS_INSTANCE.connect(traceEvents2ExecutionAndMessageTraceFilter,
-						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
-						traceAllocationEquivClassFilter, TraceEquivalenceClassFilter.INPUT_PORT_NAME_EXECUTION_TRACE);
-				allTraceProcessingComponents.add(traceAllocationEquivClassFilter);
-			}
-
-			final Configuration traceAssemblyEquivClassFilterConfig = new Configuration();
-			traceAssemblyEquivClassFilterConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.TRACEASSEMBLYEQUIVCLASS_COMPONENT_NAME);
-			traceAssemblyEquivClassFilterConfig.setProperty(TraceEquivalenceClassFilter.CONFIG_PROPERTY_NAME_EQUIVALENCE_MODE,
-					TraceEquivalenceClassModes.ASSEMBLY.toString());
-			TraceEquivalenceClassFilter traceAssemblyEquivClassFilter = null; // must not be instantiate it here, due to side-effects in the constructor
-			if (TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_ASSEMBLYEQUIVCLASSREPORT)) {
-				/**
-				 * Currently, this filter is only used to print an equivalence
-				 * report. That's why we only activate it in case this options
-				 * is requested.
-				 */
-				traceAssemblyEquivClassFilter = new TraceEquivalenceClassFilter(traceAssemblyEquivClassFilterConfig, ANALYSIS_INSTANCE);
-				ANALYSIS_INSTANCE.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
-						traceAssemblyEquivClassFilter, TraceEquivalenceClassFilter.INPUT_PORT_NAME_EXECUTION_TRACE);
-				ANALYSIS_INSTANCE.connect(traceEvents2ExecutionAndMessageTraceFilter,
-						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
-						traceAssemblyEquivClassFilter, TraceEquivalenceClassFilter.INPUT_PORT_NAME_EXECUTION_TRACE);
-				ANALYSIS_INSTANCE.connect(traceAssemblyEquivClassFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
-						SYSTEM_ENTITY_FACTORY);
-				allTraceProcessingComponents.add(traceAssemblyEquivClassFilter);
-			}
-
-			// fill list of msgTraceProcessingComponents:
-			MessageTraceWriterFilter componentPrintMsgTrace = null;
-			if (TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PRINTMSGTRACES)) {
-				numRequestedTasks++;
-				final Configuration componentPrintMsgTraceConfig = new Configuration();
-				componentPrintMsgTraceConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.PRINTMSGTRACE_COMPONENT_NAME);
-				componentPrintMsgTraceConfig.setProperty(MessageTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN, new File(TraceAnalysisTool.outputDir
-						+ File.separator
-						+ TraceAnalysisTool.outputFnPrefix + Constants.MESSAGE_TRACES_FN_PREFIX + ".txt")
-						.getCanonicalPath());
-				componentPrintMsgTrace = new MessageTraceWriterFilter(componentPrintMsgTraceConfig, ANALYSIS_INSTANCE);
-
-				ANALYSIS_INSTANCE.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPrintMsgTrace, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				ANALYSIS_INSTANCE.connect(traceEvents2ExecutionAndMessageTraceFilter,
-						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPrintMsgTrace, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				ANALYSIS_INSTANCE.connect(componentPrintMsgTrace, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
-						SYSTEM_ENTITY_FACTORY);
-				allTraceProcessingComponents.add(componentPrintMsgTrace);
-			}
-			ExecutionTraceWriterFilter componentPrintExecTrace = null;
-			if (TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PRINTEXECTRACES)) {
-				numRequestedTasks++;
-				final Configuration componentPrintExecTraceConfig = new Configuration();
-				componentPrintExecTraceConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.PRINTEXECTRACE_COMPONENT_NAME);
-				componentPrintExecTraceConfig.setProperty(ExecutionTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN, new File(TraceAnalysisTool.outputDir
-						+ File.separator
-						+ TraceAnalysisTool.outputFnPrefix + Constants.EXECUTION_TRACES_FN_PREFIX + ".txt")
-						.getCanonicalPath());
-				componentPrintExecTrace = new ExecutionTraceWriterFilter(componentPrintExecTraceConfig, ANALYSIS_INSTANCE);
-
-				ANALYSIS_INSTANCE.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
-						componentPrintExecTrace, ExecutionTraceWriterFilter.INPUT_PORT_NAME_EXECUTION_TRACES);
-				ANALYSIS_INSTANCE.connect(traceEvents2ExecutionAndMessageTraceFilter,
-						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE,
-						componentPrintExecTrace, ExecutionTraceWriterFilter.INPUT_PORT_NAME_EXECUTION_TRACES);
-				ANALYSIS_INSTANCE.connect(componentPrintExecTrace, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
-						SYSTEM_ENTITY_FACTORY);
-				allTraceProcessingComponents.add(componentPrintExecTrace);
-			}
-			InvalidExecutionTraceWriterFilter componentPrintInvalidTrace = null;
-			if (TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES)) {
-				numRequestedTasks++;
-				final Configuration componentPrintInvalidTraceConfig = new Configuration();
-				componentPrintInvalidTraceConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
-						Constants.PRINTINVALIDEXECTRACE_COMPONENT_NAME);
-				componentPrintInvalidTraceConfig.setProperty(InvalidExecutionTraceWriterFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN, new File(TraceAnalysisTool.outputDir
-						+ File.separator
-						+ TraceAnalysisTool.outputFnPrefix
-						+ Constants.INVALID_TRACES_FN_PREFIX + ".txt").getCanonicalPath());
-				componentPrintInvalidTrace = new InvalidExecutionTraceWriterFilter(componentPrintInvalidTraceConfig, ANALYSIS_INSTANCE);
-
-				ANALYSIS_INSTANCE.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE,
-						componentPrintInvalidTrace, InvalidExecutionTraceWriterFilter.INPUT_PORT_NAME_INVALID_EXECUTION_TRACES);
-				ANALYSIS_INSTANCE.connect(componentPrintInvalidTrace, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
-						SYSTEM_ENTITY_FACTORY);
-				ANALYSIS_INSTANCE.connect(traceEvents2ExecutionAndMessageTraceFilter,
-						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_INVALID_EXECUTION_TRACE,
-						componentPrintInvalidTrace, InvalidExecutionTraceWriterFilter.INPUT_PORT_NAME_INVALID_EXECUTION_TRACES);
-				allTraceProcessingComponents.add(componentPrintInvalidTrace);
-			}
-			SequenceDiagramFilter componentPlotAllocationSeqDiagr = null;
-			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONSEQDS)) {
-				numRequestedTasks++;
-				final Configuration componentPlotAllocationSeqDiagrConfig = new Configuration();
-				componentPlotAllocationSeqDiagrConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.PLOTALLOCATIONSEQDIAGR_COMPONENT_NAME);
-				componentPlotAllocationSeqDiagrConfig.setProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE,
-						TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + Constants.ALLOCATION_SEQUENCE_DIAGRAM_FN_PREFIX);
-				componentPlotAllocationSeqDiagrConfig.setProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SDMODE,
-						SequenceDiagramFilter.SDModes.ALLOCATION.toString());
-				componentPlotAllocationSeqDiagrConfig.setProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES,
-						Boolean.toString(TraceAnalysisTool.shortLabels));
-				componentPlotAllocationSeqDiagr = new SequenceDiagramFilter(componentPlotAllocationSeqDiagrConfig, ANALYSIS_INSTANCE);
-
-				ANALYSIS_INSTANCE.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAllocationSeqDiagr, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				ANALYSIS_INSTANCE.connect(traceEvents2ExecutionAndMessageTraceFilter,
-						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAllocationSeqDiagr, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				ANALYSIS_INSTANCE.connect(componentPlotAllocationSeqDiagr, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
-						SYSTEM_ENTITY_FACTORY);
-				allTraceProcessingComponents.add(componentPlotAllocationSeqDiagr);
-			}
-			SequenceDiagramFilter componentPlotAssemblySeqDiagr = null;
-			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYSEQDS)) {
-				numRequestedTasks++;
-				final Configuration componentPlotAssemblySeqDiagrConfig = new Configuration();
-				componentPlotAssemblySeqDiagrConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.PLOTASSEMBLYSEQDIAGR_COMPONENT_NAME);
-				componentPlotAssemblySeqDiagrConfig.setProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE,
-						TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + Constants.ASSEMBLY_SEQUENCE_DIAGRAM_FN_PREFIX);
-				componentPlotAssemblySeqDiagrConfig.setProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SDMODE,
-						SequenceDiagramFilter.SDModes.ASSEMBLY.toString());
-				componentPlotAssemblySeqDiagrConfig.setProperty(SequenceDiagramFilter.CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES,
-						Boolean.toString(TraceAnalysisTool.shortLabels));
-				componentPlotAssemblySeqDiagr = new SequenceDiagramFilter(componentPlotAssemblySeqDiagrConfig, ANALYSIS_INSTANCE);
-
-				ANALYSIS_INSTANCE.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAssemblySeqDiagr, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				ANALYSIS_INSTANCE.connect(traceEvents2ExecutionAndMessageTraceFilter,
-						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAssemblySeqDiagr, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				ANALYSIS_INSTANCE.connect(componentPlotAssemblySeqDiagr, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
-						SYSTEM_ENTITY_FACTORY);
-				allTraceProcessingComponents.add(componentPlotAssemblySeqDiagr);
-			}
-
-			ComponentDependencyGraphAllocationFilter componentPlotAllocationComponentDepGraph = null;
-			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG)) {
-				numRequestedTasks++;
-				componentPlotAllocationComponentDepGraph = new ComponentDependencyGraphAllocationFilter(new Configuration(), ANALYSIS_INSTANCE);
-
-				final String[] nodeDecorations = TraceAnalysisTool.cmdl.getOptionValues(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG);
-				TraceAnalysisTool.addDecorators(nodeDecorations, componentPlotAllocationComponentDepGraph);
-
-				ANALYSIS_INSTANCE.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAllocationComponentDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				ANALYSIS_INSTANCE.connect(traceEvents2ExecutionAndMessageTraceFilter,
-						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAllocationComponentDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				ANALYSIS_INSTANCE.connect(componentPlotAllocationComponentDepGraph, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
-						SYSTEM_ENTITY_FACTORY);
-
-				allTraceProcessingComponents.add(componentPlotAllocationComponentDepGraph);
-				allGraphProducers.add(componentPlotAllocationComponentDepGraph);
-			}
-
-			ComponentDependencyGraphAssemblyFilter componentPlotAssemblyComponentDepGraph = null;
-			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYCOMPONENTDEPG)) {
-				numRequestedTasks++;
-				componentPlotAssemblyComponentDepGraph = new ComponentDependencyGraphAssemblyFilter(new Configuration(), ANALYSIS_INSTANCE);
-
-				final String[] nodeDecorations = TraceAnalysisTool.cmdl.getOptionValues(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYCOMPONENTDEPG);
-				TraceAnalysisTool.addDecorators(nodeDecorations, componentPlotAssemblyComponentDepGraph);
-
-				ANALYSIS_INSTANCE.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAssemblyComponentDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				ANALYSIS_INSTANCE.connect(traceEvents2ExecutionAndMessageTraceFilter,
-						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAssemblyComponentDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				ANALYSIS_INSTANCE.connect(componentPlotAssemblyComponentDepGraph, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
-						SYSTEM_ENTITY_FACTORY);
-				allTraceProcessingComponents.add(componentPlotAssemblyComponentDepGraph);
-				allGraphProducers.add(componentPlotAssemblyComponentDepGraph);
-			}
-
-			ContainerDependencyGraphFilter componentPlotContainerDepGraph = null;
-			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTCONTAINERDEPG)) {
-				numRequestedTasks++;
-				componentPlotContainerDepGraph = new ContainerDependencyGraphFilter(new Configuration(), ANALYSIS_INSTANCE);
-				ANALYSIS_INSTANCE.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotContainerDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				ANALYSIS_INSTANCE.connect(traceEvents2ExecutionAndMessageTraceFilter,
-						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotContainerDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				ANALYSIS_INSTANCE.connect(componentPlotContainerDepGraph, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
-						SYSTEM_ENTITY_FACTORY);
-				allTraceProcessingComponents.add(componentPlotContainerDepGraph);
-				allGraphProducers.add(componentPlotContainerDepGraph);
-			}
-
-			OperationDependencyGraphAllocationFilter componentPlotAllocationOperationDepGraph = null;
-			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG)) {
-				numRequestedTasks++;
-				componentPlotAllocationOperationDepGraph = new OperationDependencyGraphAllocationFilter(new Configuration(), ANALYSIS_INSTANCE);
-
-				final String[] nodeDecorations = TraceAnalysisTool.cmdl.getOptionValues(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG);
-				TraceAnalysisTool.addDecorators(nodeDecorations, componentPlotAllocationOperationDepGraph);
-
-				ANALYSIS_INSTANCE.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAllocationOperationDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				ANALYSIS_INSTANCE.connect(traceEvents2ExecutionAndMessageTraceFilter,
-						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAllocationOperationDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				ANALYSIS_INSTANCE.connect(componentPlotAllocationOperationDepGraph, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
-						SYSTEM_ENTITY_FACTORY);
-				allTraceProcessingComponents.add(componentPlotAllocationOperationDepGraph);
-				allGraphProducers.add(componentPlotAllocationOperationDepGraph);
-			}
-
-			OperationDependencyGraphAssemblyFilter componentPlotAssemblyOperationDepGraph = null;
-			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG)) {
-				numRequestedTasks++;
-				componentPlotAssemblyOperationDepGraph = new OperationDependencyGraphAssemblyFilter(new Configuration(), ANALYSIS_INSTANCE);
-
-				final String[] nodeDecorations = TraceAnalysisTool.cmdl.getOptionValues(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG);
-				TraceAnalysisTool.addDecorators(nodeDecorations, componentPlotAssemblyOperationDepGraph);
-
-				ANALYSIS_INSTANCE.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAssemblyOperationDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				ANALYSIS_INSTANCE.connect(traceEvents2ExecutionAndMessageTraceFilter,
-						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAssemblyOperationDepGraph, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				ANALYSIS_INSTANCE.connect(componentPlotAssemblyOperationDepGraph, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
-						SYSTEM_ENTITY_FACTORY);
-				allTraceProcessingComponents.add(componentPlotAssemblyOperationDepGraph);
-				allGraphProducers.add(componentPlotAssemblyOperationDepGraph);
-			}
-
-			TraceCallTreeFilter componentPlotTraceCallTrees = null;
-			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTCALLTREES)) {
-				numRequestedTasks++;
-				final Configuration componentPlotTraceCallTreesConfig = new Configuration();
-				componentPlotTraceCallTreesConfig.setProperty(TraceCallTreeFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILENAME, new File(TraceAnalysisTool.outputDir
-						+ File.separator + TraceAnalysisTool.outputFnPrefix + Constants.CALL_TREE_FN_PREFIX).getCanonicalPath());
-				componentPlotTraceCallTreesConfig
-						.setProperty(TraceCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(TraceAnalysisTool.shortLabels));
-				componentPlotTraceCallTreesConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME, Constants.PLOTCALLTREE_COMPONENT_NAME);
-				componentPlotTraceCallTrees = new TraceCallTreeFilter(componentPlotTraceCallTreesConfig, ANALYSIS_INSTANCE);
-
-				ANALYSIS_INSTANCE.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotTraceCallTrees, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				ANALYSIS_INSTANCE.connect(traceEvents2ExecutionAndMessageTraceFilter,
-						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotTraceCallTrees, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				ANALYSIS_INSTANCE.connect(componentPlotTraceCallTrees, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
-						SYSTEM_ENTITY_FACTORY);
-				allTraceProcessingComponents.add(componentPlotTraceCallTrees);
-			}
-			AggregatedAllocationComponentOperationCallTreeFilter componentPlotAggregatedCallTree = null;
-			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDALLOCATIONCALLTREE)) {
-				numRequestedTasks++;
-				final Configuration componentPlotAggregatedCallTreeConfig = new Configuration();
-				componentPlotAggregatedCallTreeConfig
-						.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
-								Constants.PLOTAGGREGATEDALLOCATIONCALLTREE_COMPONENT_NAME);
-				componentPlotAggregatedCallTreeConfig.setProperty(AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(true));
-				componentPlotAggregatedCallTreeConfig.setProperty(AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS,
-						Boolean.toString(TraceAnalysisTool.shortLabels));
-				componentPlotAggregatedCallTreeConfig.setProperty(AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILENAME, TraceAnalysisTool.outputDir
-						+ File.separator + TraceAnalysisTool.outputFnPrefix
-						+ Constants.AGGREGATED_ALLOCATION_CALL_TREE_FN_PREFIX + ".dot");
-				componentPlotAggregatedCallTree = new AggregatedAllocationComponentOperationCallTreeFilter(componentPlotAggregatedCallTreeConfig, ANALYSIS_INSTANCE);
-
-				ANALYSIS_INSTANCE.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAggregatedCallTree, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				ANALYSIS_INSTANCE.connect(traceEvents2ExecutionAndMessageTraceFilter,
-						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAggregatedCallTree, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				ANALYSIS_INSTANCE.connect(componentPlotAggregatedCallTree, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
-						SYSTEM_ENTITY_FACTORY);
-				allTraceProcessingComponents.add(componentPlotAggregatedCallTree);
-			}
-			AggregatedAssemblyComponentOperationCallTreeFilter componentPlotAssemblyCallTree = null;
-			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDASSEMBLYCALLTREE)) {
-				numRequestedTasks++;
-				final Configuration componentPlotAssemblyCallTreeConfig = new Configuration();
-				componentPlotAssemblyCallTreeConfig.setProperty(AbstractAnalysisComponent.CONFIG_NAME,
-						Constants.PLOTAGGREGATEDASSEMBLYCALLTREE_COMPONENT_NAME);
-				componentPlotAssemblyCallTreeConfig.setProperty(AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(true));
-				componentPlotAssemblyCallTreeConfig.setProperty(AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_SHORT_LABELS,
-						Boolean.toString(TraceAnalysisTool.shortLabels));
-				componentPlotAssemblyCallTreeConfig.setProperty(AbstractAggregatedCallTreeFilter.CONFIG_PROPERTY_NAME_OUTPUT_FILENAME, TraceAnalysisTool.outputDir
-						+ File.separator + TraceAnalysisTool.outputFnPrefix + Constants.AGGREGATED_ASSEMBLY_CALL_TREE_FN_PREFIX + ".dot");
-				componentPlotAssemblyCallTree = new AggregatedAssemblyComponentOperationCallTreeFilter(componentPlotAssemblyCallTreeConfig, ANALYSIS_INSTANCE);
-
-				ANALYSIS_INSTANCE.connect(mtReconstrFilter, TraceReconstructionFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAssemblyCallTree, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				ANALYSIS_INSTANCE.connect(traceEvents2ExecutionAndMessageTraceFilter,
-						TraceEventRecords2ExecutionAndMessageTraceFilter.OUTPUT_PORT_NAME_MESSAGE_TRACE,
-						componentPlotAssemblyCallTree, AbstractMessageTraceProcessingFilter.INPUT_PORT_NAME_MESSAGE_TRACES);
-				ANALYSIS_INSTANCE.connect(componentPlotAssemblyCallTree, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
-						SYSTEM_ENTITY_FACTORY);
-				allTraceProcessingComponents.add(componentPlotAssemblyCallTree);
-			}
-			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT)) {
-				numRequestedTasks++;
-				// the actual execution of the task is performed below
-			}
-			if (TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_PRINTSYSTEMMODEL)) {
-				numRequestedTasks++;
-			}
-
-			// Attach graph processors to the graph producers
-			TraceAnalysisTool.attachGraphProcessors(allGraphProducers, ANALYSIS_INSTANCE, cmdl);
-
-			if (numRequestedTasks == 0) {
-				LOG.warn("No task requested");
-				TraceAnalysisTool.printUsage();
-				System.err.println(""); // NOPMD (System.out)
-				System.err.println("No task requested"); // NOPMD (System.out)
-				System.err.println(""); // NOPMD (System.out)
-				return false;
-			}
-
-			if (retVal) {
-				final String systemEntitiesHtmlFn =
-						TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + "system-entities.html";
-				final Configuration systemModel2FileFilterConfig = new Configuration();
-				systemModel2FileFilterConfig.setProperty(SystemModel2FileFilter.CONFIG_PROPERTY_NAME_HTML_OUTPUT_FN, systemEntitiesHtmlFn);
-				final SystemModel2FileFilter systemModel2FileFilter = new SystemModel2FileFilter(systemModel2FileFilterConfig, ANALYSIS_INSTANCE);
-				// note that this plugin is (currently) not connected to any other filters
-				ANALYSIS_INSTANCE.connect(systemModel2FileFilter, AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL,
-						SYSTEM_ENTITY_FACTORY);
-			}
-
-			int numErrorCount = 0;
-			try {
-				ANALYSIS_INSTANCE.run();
-				if (ANALYSIS_INSTANCE.getState() != AnalysisController.STATE.TERMINATED) {
-					// Analysis did not terminate successfully
-					retVal = false; // Error message referring to log will be printed later
-					LOG.error("Analysis instance terminated in state other than" + AnalysisController.STATE.TERMINATED + ":" + ANALYSIS_INSTANCE.getState());
-				}
-			} finally {
-				for (final AbstractTraceProcessingFilter c : allTraceProcessingComponents) {
-					numErrorCount += c.getErrorCount();
-					c.printStatusMessage();
-				}
-				final String kaxOutputFn = TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix + "traceAnalysis.kax";
-				final File kaxOutputFile = new File(kaxOutputFn);
-				try { // NOCS (nested try)
-						// Try to serialize analysis configuration to .kax file
-					ANALYSIS_INSTANCE.saveToFile(kaxOutputFile);
-					LOG.info("Saved analysis configuration to file '" + kaxOutputFile.getCanonicalPath() + "'");
-				} catch (final IOException ex) {
-					LOG.error("Failed to save analysis configuration to file '" + kaxOutputFile.getCanonicalPath() + "'");
-				}
-			}
-			if (!TraceAnalysisTool.ignoreInvalidTraces && (numErrorCount > 0)) {
-				throw new Exception(numErrorCount + " errors occured in trace processing components");
-			}
-
-			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT)) {
-				retVal = TraceAnalysisTool.writeTraceEquivalenceReport(TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix
-						+ Constants.TRACE_ALLOCATION_EQUIV_CLASSES_FN_PREFIX + ".txt", traceAllocationEquivClassFilter);
-			}
-
-			if (retVal && TraceAnalysisTool.cmdl.hasOption(Constants.CMD_OPT_NAME_TASK_ASSEMBLYEQUIVCLASSREPORT)) {
-				retVal = TraceAnalysisTool.writeTraceEquivalenceReport(TraceAnalysisTool.outputDir + File.separator + TraceAnalysisTool.outputFnPrefix
-						+ Constants.TRACE_ASSEMBLY_EQUIV_CLASSES_FN_PREFIX + ".txt", traceAssemblyEquivClassFilter);
-			}
-		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
-			LOG.error("An error occured", ex);
-			retVal = false;
-		} finally {
-			if (numRequestedTasks > 0) {
-				if (mtReconstrFilter != null) {
-					mtReconstrFilter.printStatusMessage();
-				}
-				if (eventRecordTraceCounter != null) {
-					eventRecordTraceCounter.printStatusMessage();
-				}
-				if (traceEvents2ExecutionAndMessageTraceFilter != null) {
-					traceEvents2ExecutionAndMessageTraceFilter.printStatusMessage();
-				}
-			}
-		}
-
-		return retVal;
-	}
-
-	/**
-	 * Returns if the specified output directory {@link #outputDir} exists. If
-	 * the directory does not exist, an error message is printed to stderr.
-	 * 
-	 * @return true if {@link #outputDir} is exists and is a directory; false
-	 *         otherwise
-	 */
-	private static boolean assertOutputDirExists() {
-		final File outputDirFile = new File(TraceAnalysisTool.outputDir);
-		try {
-			if (!outputDirFile.exists()) {
-				System.err.println(""); // NOPMD (System.out)
-				System.err.println("The specified output directory '" + outputDirFile.getCanonicalPath() + "' does not exist"); // NOPMD (System.out)
-				return false;
-			}
-
-			if (!outputDirFile.isDirectory()) {
-				System.err.println(""); // NOPMD (System.out)
-				System.err.println("The specified output directory '" + outputDirFile.getCanonicalPath() + "' is not a directory"); // NOPMD (System.out)
-				return false;
-			}
-
-		} catch (final IOException e) { // thrown by File.getCanonicalPath()
-			System.err.println(""); // NOPMD (System.out)
-			System.err.println("Error resolving name of output directory: '" + TraceAnalysisTool.outputDir + "'"); // NOPMD (System.out)
-		}
-
-		return true;
-	}
-
-	/**
-	 * Returns if the specified input directories {@link #inputDirs} exist and that
-	 * each one is a monitoring log. If this is not the case for one of the directories,
-	 * an error message is printed to stderr.
-	 * 
-	 * @return true if {@link #outputDir} is exists and is a directory; false
-	 *         otherwise
-	 */
-	private static boolean assertInputDirsExistsAndAreMonitoringLogs() {
-		for (final String inputDir : TraceAnalysisTool.inputDirs) {
-			final File inputDirFile = new File(inputDir);
-			try {
-				if (!inputDirFile.exists()) {
-					System.err.println(); // NOPMD (System.out)
-					System.err.println("The specified input directory '" + inputDirFile.getCanonicalPath() + "' does not exist"); // NOPMD (System.out)
-					return false;
-				}
-				if (!inputDirFile.isDirectory() && !inputDir.endsWith(FSUtil.ZIP_FILE_EXTENSION)) {
-					System.err.println(); // NOPMD (System.out)
-					System.err.println("The specified input directory '" + inputDirFile.getCanonicalPath() + "' is neither a directory nor a zip file"); // NOPMD
-					return false;
-				}
-				// check whether inputDirFile contains a (kieker|tpmon).map file; the latter for legacy reasons
-				if (inputDirFile.isDirectory()) { // only check for dirs
-					final File[] mapFiles = { new File(inputDir + File.separatorChar + FSUtil.MAP_FILENAME),
-						new File(inputDir + File.separatorChar + FSUtil.LEGACY_MAP_FILENAME), };
-					boolean mapFileExists = false;
-					for (final File potentialMapFile : mapFiles) {
-						if (potentialMapFile.isFile()) {
-							mapFileExists = true;
-							break;
-						}
-					}
-					if (!mapFileExists) {
-						System.err.println(); // NOPMD (System.out)
-						System.err.println("The specified input directory '" + inputDirFile.getCanonicalPath() + "' is not a kieker log directory"); // NOPMD
-						return false;
-					}
-				}
-			} catch (final IOException e) { // thrown by File.getCanonicalPath()
-				System.err.println(); // NOPMD (System.out)
-				System.err.println("Error resolving name of input directory: '" + inputDir + "'"); // NOPMD (System.out)
-			}
-		}
-
-		return true;
-	}
-
-	/**
-	 * This is the main method of the tool.
-	 * 
-	 * @param args
-	 *            The command line arguments.
-	 */
-	public static void main(final String[] args) {
-		boolean success = true;
-
-		try {
-			LOG.info("Argument list: " + Arrays.toString(args));
-			if (!TraceAnalysisTool.parseArgs(args) || !TraceAnalysisTool.initFromArgs()
-					|| !TraceAnalysisTool.assertOutputDirExists() || !TraceAnalysisTool.assertInputDirsExistsAndAreMonitoringLogs()) {
-				LOG.error("Error parsing arguments");
-				success = false;
-			}
-
-			if (success) {
-				TraceAnalysisTool.dumpConfiguration();
-				success = TraceAnalysisTool.dispatchTasks();
-			}
-		} catch (final Exception exc) { // NOPMD NOCS (IllegalCatchCheck)
-			success = false;
-			LOG.error("An error occured", exc);
-		} finally {
-			System.err.println(""); // NOPMD (System.out)
-			if (!success) {
-				System.err.println("An error occured"); // NOPMD (System.out)
-			} else {
-				System.err.println("Analysis completed successfully"); // NOPMD (System.out)
-			}
-
-			// Refer to log regardless of whether error occurred or not
-			System.err.println(""); // NOPMD (System.out)
-			System.err.println("See 'kieker.log' for details"); // NOPMD (System.out)
-		}
-
-		if (!success) {
-			System.exit(1);
-		} // else: terminate with success code (0)
-	}
-
-	private static boolean writeTraceEquivalenceReport(final String outputFnPrefixL, final TraceEquivalenceClassFilter traceEquivFilter) throws IOException {
+	private boolean writeTraceEquivalenceReport(final String outputFnPrefixL, final TraceEquivalenceClassFilter traceEquivFilter) throws IOException {
 		boolean retVal = true;
 		final String outputFn = new File(outputFnPrefixL).getCanonicalPath();
 		PrintStream ps = null;
@@ -1071,10 +1131,12 @@ public final class TraceAnalysisTool {
 				ps.println("Class " + numClasses++ + " ; cardinality: " + e.getValue() + "; # executions: " + t.getLength() + "; representative: " + t.getTraceId()
 						+ "; max. stack depth: " + t.getMaxEss());
 			}
-			System.out.println(""); // NOPMD (System.out)
-			System.out.println("#"); // NOPMD (System.out)
-			System.out.println("# Plugin: " + "Trace equivalence report"); // NOPMD (System.out)
-			System.out.println("Wrote " + numClasses + " equivalence class" + (numClasses > 1 ? "es" : "") + " to file '" + outputFn + "'"); // NOCS // NOPMD
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("");
+				LOG.debug("#");
+				LOG.debug("# Plugin: " + "Trace equivalence report");
+				LOG.debug("Wrote " + numClasses + " equivalence class" + (numClasses > 1 ? "es" : "") + " to file '" + outputFn + "'"); // NOCS
+			}
 		} catch (final FileNotFoundException e) {
 			LOG.error("File not found", e);
 			retVal = false;
@@ -1086,4 +1148,30 @@ public final class TraceAnalysisTool {
 
 		return retVal;
 	}
+
+	private static class OptionComparator implements Comparator<Object>, Serializable {
+
+		private static final long serialVersionUID = 1L;
+
+		public OptionComparator() {
+			// No code necessary
+		}
+
+		@Override
+		public int compare(final Object o1, final Object o2) {
+			if (o1 == o2) { // NOPMD
+				return 0;
+			}
+			final int posO1 = Constants.SORTED_OPTION_LIST.indexOf(o1);
+			final int posO2 = Constants.SORTED_OPTION_LIST.indexOf(o2);
+			if (posO1 < posO2) {
+				return -1;
+			}
+			if (posO1 > posO2) {
+				return 1;
+			}
+			return 0;
+		}
+	}
+
 }

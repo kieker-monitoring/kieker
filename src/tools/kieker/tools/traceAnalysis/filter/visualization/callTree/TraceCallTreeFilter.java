@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,8 +25,6 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.traceReconstruction.TraceProcessingException;
@@ -72,8 +70,6 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 	/** This is the default value whether to use short labels or not. */
 	public static final String CONFIG_PROPERTY_VALUE_SHORT_LABELS_DEFAULT = "true";
 
-	private static final Log LOG = LogFactory.getLog(TraceCallTreeFilter.class);
-
 	private final String dotOutputFn;
 	private final boolean shortLabels;
 
@@ -99,11 +95,13 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 			super.printStatusMessage();
 			final int numPlots = this.getSuccessCount();
 			final long lastSuccessTracesId = this.getLastTraceIdSuccess();
-			this.stdOutPrintln("Wrote " + numPlots + " call tree" + (numPlots > 1 ? "s" : "") + " to file" + (numPlots > 1 ? "s" : "") + " with name pattern '" // NOCS
-					+ this.dotOutputFn + "-<traceId>.dot'");
-			this.stdOutPrintln("Dot files can be converted using the dot tool");
-			this.stdOutPrintln("Example: dot -T svg " + this.dotOutputFn + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".dot > " // NOCS
-					+ this.dotOutputFn + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".svg"); // NOCS
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("Wrote " + numPlots + " call tree" + (numPlots > 1 ? "s" : "") + " to file" + (numPlots > 1 ? "s" : "") + " with name pattern '" // NOCS
+						+ this.dotOutputFn + "-<traceId>.dot'");
+				LOG.debug("Dot files can be converted using the dot tool");
+				LOG.debug("Example: dot -T svg " + this.dotOutputFn + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".dot > " // NOCS
+						+ this.dotOutputFn + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".svg"); // NOCS
+			}
 		}
 	}
 
@@ -112,9 +110,11 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 	 */
 	@Override
 	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration();
+		final Configuration configuration = super.getCurrentConfiguration();
+
 		configuration.setProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(this.shortLabels));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_FILENAME, this.dotOutputFn);
+
 		return configuration;
 	}
 
@@ -130,6 +130,7 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 							NoOriginRetentionPolicy.createInstance()); // rootNode
 			AbstractCallTreeFilter.writeDotForMessageTrace(rootNode, new IPairFactory<AllocationComponentOperationPair>() {
 
+				@Override
 				public AllocationComponentOperationPair createPair(final SynchronousCallMessage callMsg) {
 					final AllocationComponent allocationComponent = callMsg.getReceivingExecution().getAllocationComponent();
 					final Operation op = callMsg.getReceivingExecution().getOperation();
@@ -141,13 +142,13 @@ public class TraceCallTreeFilter extends AbstractMessageTraceProcessingFilter {
 			TraceCallTreeFilter.this.reportSuccess(mt.getTraceId());
 		} catch (final TraceProcessingException ex) {
 			TraceCallTreeFilter.this.reportError(mt.getTraceId());
-			LOG.error("TraceProcessingException", ex);
+			this.log.error("TraceProcessingException", ex);
 		} catch (final FileNotFoundException ex) {
 			TraceCallTreeFilter.this.reportError(mt.getTraceId());
-			LOG.error("File not found", ex);
+			this.log.error("File not found", ex);
 		} catch (final UnsupportedEncodingException ex) {
 			TraceCallTreeFilter.this.reportError(mt.getTraceId());
-			LOG.error("Encoding not supported", ex);
+			this.log.error("Encoding not supported", ex);
 		}
 	}
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,8 @@ package kieker.monitoring.writer.filesystem.map;
 
 import java.io.IOException;
 
+import kieker.common.record.misc.RegistryRecord;
 import kieker.common.util.filesystem.FSUtil;
-import kieker.monitoring.core.registry.RegistryRecord;
 
 /**
  * @author Andre van Hoorn, Jan Waller
@@ -52,7 +52,7 @@ public final class StringMappingFileWriter {
 			sbl.append('$');
 			sbl.append(hashRecord.getId());
 			sbl.append('=');
-			sbl.append(FSUtil.encodeNewline(String.valueOf(hashRecord.getObject())));
+			sbl.append(FSUtil.encodeNewline(hashRecord.getString()));
 			sbl.append('\n');
 		}
 	}

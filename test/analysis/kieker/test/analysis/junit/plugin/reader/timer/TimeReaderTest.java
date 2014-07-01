@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,10 +62,13 @@ public class TimeReaderTest extends AbstractKiekerTest {
 		final AnalysisControllerThread thread = new AnalysisControllerThread(ac);
 
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(TimeReader.CONFIG_PROPERTY_NAME_BLOCKING_READ, "false");
+		configuration.setProperty(TimeReader.CONFIG_PROPERTY_NAME_NUMBER_IMPULSES, "1");
+		configuration.setProperty(TimeReader.CONFIG_PROPERTY_NAME_DELAY_NS, "0");
+		configuration.setProperty(TimeReader.CONFIG_PROPERTY_NAME_UPDATE_INTERVAL_NS, "1000000000");
+
 		new TimeReader(configuration, ac);
 
-		// We expect the reader to return immediately - in this case we expect the AC to return within five seconds
+		// We expect the reader to return very fast - in this case we expect the AC to return within five seconds
 		thread.start();
 		Thread.sleep(6000);
 
@@ -85,7 +88,7 @@ public class TimeReaderTest extends AbstractKiekerTest {
 		final AnalysisControllerThread thread = new AnalysisControllerThread(ac);
 
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(TimeReader.CONFIG_PROPERTY_NAME_BLOCKING_READ, "true");
+		configuration.setProperty(TimeReader.CONFIG_PROPERTY_NAME_NUMBER_IMPULSES, Long.toString(TimeReader.INFINITE_EMITS));
 
 		new TimeReader(configuration, ac);
 
@@ -103,14 +106,14 @@ public class TimeReaderTest extends AbstractKiekerTest {
 	@Test
 	public void testConfigurationConservation() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(TimeReader.CONFIG_PROPERTY_NAME_BLOCKING_READ, "false");
+		configuration.setProperty(TimeReader.CONFIG_PROPERTY_NAME_NUMBER_IMPULSES, "50");
 		configuration.setProperty(TimeReader.CONFIG_PROPERTY_NAME_DELAY_NS, "42");
 		configuration.setProperty(TimeReader.CONFIG_PROPERTY_NAME_UPDATE_INTERVAL_NS, "21");
 		final TimeReader tr = new TimeReader(configuration, new AnalysisController());
 
 		Assert.assertEquals(42, tr.getCurrentConfiguration().getLongProperty(TimeReader.CONFIG_PROPERTY_NAME_DELAY_NS));
 		Assert.assertEquals(21, tr.getCurrentConfiguration().getLongProperty(TimeReader.CONFIG_PROPERTY_NAME_UPDATE_INTERVAL_NS));
-		Assert.assertEquals(false, tr.getCurrentConfiguration().getBooleanProperty(TimeReader.CONFIG_PROPERTY_NAME_BLOCKING_READ));
+		Assert.assertEquals(50, tr.getCurrentConfiguration().getLongProperty(TimeReader.CONFIG_PROPERTY_NAME_NUMBER_IMPULSES));
 	}
 
 	/**
@@ -144,4 +147,34 @@ public class TimeReaderTest extends AbstractKiekerTest {
 		Assert.assertTrue(cf.getMessageCount() < 60);
 	}
 
+	/**
+	 * This test should make sure that the timer delivers the correct amount of records.
+	 * 
+	 * @throws InterruptedException
+	 *             If the test thread is interrupted.
+	 * @throws IllegalStateException
+	 *             If the analysis is in the wrong state.
+	 * @throws AnalysisConfigurationException
+	 *             If the analysis is somehow invalid configured.
+	 */
+	@Test
+	public void testNumberOfEmittedSignals() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
+		// Delivering 10 records with an interval time of 1 second, the analysis should run not more than 12 seconds.
+		final AnalysisController ac = new AnalysisController();
+		final AnalysisControllerThread thread = new AnalysisControllerThread(ac);
+
+		final Configuration configuration = new Configuration();
+		configuration.setProperty(TimeReader.CONFIG_PROPERTY_NAME_UPDATE_INTERVAL_NS, "100000000");
+		configuration.setProperty(TimeReader.CONFIG_PROPERTY_NAME_NUMBER_IMPULSES, "10");
+		final TimeReader tr = new TimeReader(configuration, ac);
+		final CountingFilter cf = new CountingFilter(new Configuration(), ac);
+
+		ac.connect(tr, TimeReader.OUTPUT_PORT_NAME_TIMESTAMP_RECORDS, cf, CountingFilter.INPUT_PORT_NAME_EVENTS);
+
+		thread.start();
+		Thread.sleep(12000);
+		ac.terminate();
+
+		Assert.assertEquals(10, cf.getMessageCount());
+	}
 }

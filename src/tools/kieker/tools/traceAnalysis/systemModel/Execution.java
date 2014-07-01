@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,9 @@ package kieker.tools.traceAnalysis.systemModel;
 
 /**
  * This class represents an execution within the trace analysis tool.
+ * 
+ * Note that no assumptions about the {@link java.util.concurrent.TimeUnit} used for the
+ * timestamps are made ({@link kieker.tools.traceAnalysis.systemModel.Execution#getTin()} and {@link kieker.tools.traceAnalysis.systemModel.Execution#getTout()}).
  * 
  * @author Andre van Hoorn
  * 

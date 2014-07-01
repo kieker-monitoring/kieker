@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,6 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 
@@ -44,8 +42,6 @@ public class MyPipeReader extends AbstractReaderPlugin {
 	public static final String OUTPUT_PORT_NAME = "outputPort";
 	public static final String CONFIG_PROPERTY_NAME_PIPE_NAME = "pipeName";
 
-	private static final Log LOG = LogFactory.getLog(MyPipeReader.class);
-
 	private final String pipeName;
 	private volatile MyPipe pipe;
 
@@ -57,10 +53,11 @@ public class MyPipeReader extends AbstractReaderPlugin {
 		try {
 			this.pipe = MyNamedPipeManager.getInstance().acquirePipe(this.pipeName);
 		} catch (final Exception ex) {
-			LOG.error("Failed to acquire pipe '" + this.pipeName + "'", ex);
+			this.log.error("Failed to acquire pipe '" + this.pipeName + "'", ex);
 		}
 	}
 
+	@Override
 	public boolean read() {
 		try {
 			// Wait max. 4 seconds for the next data.
@@ -91,6 +88,7 @@ public class MyPipeReader extends AbstractReaderPlugin {
 		return configuration;
 	}
 
+	@Override
 	public void terminate(final boolean error) {
 		// nothing to do
 	}

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,21 @@
 
 package kieker.common.record.flow.trace.concurrency.monitor;
 
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
+import kieker.common.util.registry.IRegistry;
+
 /**
  * @author Jan Waller
  * 
  * @since 1.8
  */
-public final class MonitorWaitEvent extends AbstractMonitorEvent {
-	private static final long serialVersionUID = -4340999904303514377L;
-	private static final Class<?>[] TYPES = {
-		long.class, // Event.timestamp
-		long.class, // TraceEvent.traceId
-		int.class, // TraceEvent.orderIndex
-		int.class, // AbstractMonitorEvent.lockId
-	};
+public class MonitorWaitEvent extends AbstractMonitorEvent {
+	public static final int SIZE = AbstractMonitorEvent.SIZE;
+	public static final Class<?>[] TYPES = AbstractMonitorEvent.TYPES;
+
+	private static final long serialVersionUID = 4769036508577014064L;
 
 	/**
 	 * This constructor uses the given parameters to initialize the fields of this record.
@@ -54,5 +56,18 @@ public final class MonitorWaitEvent extends AbstractMonitorEvent {
 	 */
 	public MonitorWaitEvent(final Object[] values) {
 		super(values, TYPES); // values[0..3]
+	}
+
+	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public MonitorWaitEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		super(buffer, stringRegistry);
 	}
 }

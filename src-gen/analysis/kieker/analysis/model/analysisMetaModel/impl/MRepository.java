@@ -36,4 +36,4 @@ public class MRepository extends MAnalysisComponent implements MIRepository {
 		return MIAnalysisMetaModelPackage.Literals.REPOSITORY;
 	}
 
-} //MRepository
+} // MRepository

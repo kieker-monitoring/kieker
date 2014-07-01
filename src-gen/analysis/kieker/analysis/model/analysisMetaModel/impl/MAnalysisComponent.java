@@ -327,4 +327,4 @@ public abstract class MAnalysisComponent extends EObjectImpl implements MIAnalys
 		return result.toString();
 	}
 
-} //MAnalysisComponent
+} // MAnalysisComponent

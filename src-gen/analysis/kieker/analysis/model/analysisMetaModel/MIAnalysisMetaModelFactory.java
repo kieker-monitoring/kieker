@@ -138,4 +138,4 @@ public interface MIAnalysisMetaModelFactory extends EFactory {
 	 */
 	MIAnalysisMetaModelPackage getAnalysisMetaModelPackage();
 
-} //MIAnalysisMetaModelFactory
+} // MIAnalysisMetaModelFactory

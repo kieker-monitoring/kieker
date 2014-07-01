@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +23,6 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
@@ -57,8 +55,6 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 
 	public static final String CONFIG_PROPERTY_NAME_MONITORING_PROPS_FN = "monitoringPropertiesFilename";
 
-	private static final Log LOG = LogFactory.getLog(MonitoringRecordLoggerFilter.class);
-
 	/**
 	 * The {@link IMonitoringController} the records received via {@link #inputIMonitoringRecord(IMonitoringRecord)} are passed to.
 	 */
@@ -87,7 +83,7 @@ public class MonitoringRecordLoggerFilter extends AbstractFilterPlugin {
 		if (monitoringPropertiesFn.length() > 0) {
 			controllerConfiguration = ConfigurationFactory.createConfigurationFromFile(monitoringPropertiesFn);
 		} else {
-			LOG.info("No path to a 'monitoring.properties' file passed; using default configuration");
+			this.log.info("No path to a 'monitoring.properties' file passed; using default configuration");
 			controllerConfiguration = ConfigurationFactory.createDefaultConfiguration();
 		}
 		// flatten submitted properties

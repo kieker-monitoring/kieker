@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,13 @@
 
 package kieker.common.record.misc;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * This class represents an (always) empty record.
@@ -26,11 +31,11 @@ import kieker.common.record.IMonitoringRecord;
  * 
  * @since 0.95a
  */
-public final class EmptyRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
+public final class EmptyRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
+	public static final int SIZE = 0;
+	public static final Class<?>[] TYPES = {};
 
-	private static final long serialVersionUID = -9106270301270791630L;
-
-	private static final Class<?>[] TYPES = {};
+	private static final long serialVersionUID = -4469595388362639213L;
 
 	/**
 	 * Creates a new instance of this class.
@@ -50,10 +55,32 @@ public final class EmptyRecord extends AbstractMonitoringRecord implements IMoni
 	}
 
 	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public EmptyRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException { // NOPMD
+		// nothing to do
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object[] toArray() {
 		return new Object[] {};
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		// nothing to do
 	}
 
 	/**
@@ -61,15 +88,36 @@ public final class EmptyRecord extends AbstractMonitoringRecord implements IMoni
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
-	public void initFromArray(final Object[] values) {
+	public final void initFromArray(final Object[] values) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
+	 */
+	@Override
+	@Deprecated
+	public final void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Class<?>[] getValueTypes() {
-		return TYPES.clone();
+		return TYPES; // NOPMD
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int getSize() {
+		return SIZE;
 	}
 }

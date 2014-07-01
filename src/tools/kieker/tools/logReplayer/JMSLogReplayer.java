@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,6 +49,7 @@ public class JMSLogReplayer extends AbstractLogReplayer {
 	public JMSLogReplayer(final String monitoringConfigurationFile, final String jmsProviderUrl, final String jmsDestination, final String jmsFactoryLookupName) {
 		super(monitoringConfigurationFile,
 				false, // realtimeMode
+				1.0, // realtimeAccelerationFactor: any value will do because realtimeMode = false
 				true, // keepOriginalLoggingTimestamps
 				1, // numRealtimeWorkerThreads: any value will do because realtimeMode = false
 				Long.MIN_VALUE,

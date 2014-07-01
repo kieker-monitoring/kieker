@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,6 @@ public class TestLogRotationMaxLogSizeAsyncBinaryFsWriter extends AbstractTestLo
 		configuration.setProperty(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP, "false"); // needed for constant size
 		final String writer = AsyncBinaryFsWriter.class.getName();
 		configuration.setProperty(ConfigurationFactory.WRITER_CLASSNAME, writer);
-		configuration.setProperty(writer + '.' + AbstractAsyncFSWriter.CONFIG_TEMP, "false");
 		configuration.setProperty(writer + '.' + AbstractAsyncFSWriter.CONFIG_PATH, path);
 		configuration.setProperty(writer + '.' + AbstractAsyncFSWriter.CONFIG_MAXENTRIESINFILE, String.valueOf(maxEntriesInFile));
 		configuration.setProperty(writer + '.' + AbstractAsyncFSWriter.CONFIG_MAXLOGFILES, "-1");

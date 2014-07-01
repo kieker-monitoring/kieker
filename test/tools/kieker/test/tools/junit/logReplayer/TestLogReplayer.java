@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -106,6 +106,7 @@ public class TestLogReplayer extends AbstractKiekerTest {
 	public void testIt() {
 		final ListReplayer replayer = new ListReplayer(this.monitoringConfigurationFile.getAbsolutePath(),
 				false, // realtimeMode
+				1.0, // realtimeAccelerationFactor
 				true, // keepOriginalLoggingTimestamps
 				1, // numRealtimeWorkerThreads
 				AbstractLogReplayer.MIN_TIMESTAMP, // ignoreRecordsBeforeTimestamp
@@ -130,10 +131,12 @@ public class TestLogReplayer extends AbstractKiekerTest {
 class ListReplayer extends AbstractLogReplayer { // NOPMD
 	private final List<IMonitoringRecord> replayList = new ArrayList<IMonitoringRecord>();
 
-	public ListReplayer(final String monitoringConfigurationFile, final boolean realtimeMode, final boolean keepOriginalLoggingTimestamps,
+	public ListReplayer(final String monitoringConfigurationFile, final boolean realtimeMode, final double realtimeAccelerationFactor,
+			final boolean keepOriginalLoggingTimestamps,
 			final int numRealtimeWorkerThreads, final long ignoreRecordsBeforeTimestamp, final long ignoreRecordsAfterTimestamp,
 			final List<IMonitoringRecord> replayList) {
-		super(monitoringConfigurationFile, realtimeMode, keepOriginalLoggingTimestamps, numRealtimeWorkerThreads, ignoreRecordsBeforeTimestamp,
+		super(monitoringConfigurationFile, realtimeMode, realtimeAccelerationFactor, keepOriginalLoggingTimestamps, numRealtimeWorkerThreads,
+				ignoreRecordsBeforeTimestamp,
 				ignoreRecordsAfterTimestamp);
 		this.replayList.addAll(replayList);
 	}

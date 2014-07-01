@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import kieker.common.logging.LogFactory;
 
 /**
  * Allows spawn the execution of an {@link AnalysisController} into a separate {@link Thread}. The thread with the {@link AnalysisController} instance
- * provided in the constructor {@link #AnalysisControllerThread(AnalysisController)} is started by calling the {@link #start()} method. The analysis can be
+ * provided in the constructor {@link #AnalysisControllerThread(IAnalysisController)} is started by calling the {@link #start()} method. The analysis can be
  * terminated by calling the {@link #terminate()} method which delegates the call to the {@link kieker.analysis.AnalysisController#terminate()} method.
  * 
  * @author Andre van Hoorn, Jan Waller
@@ -69,7 +69,7 @@ public final class AnalysisControllerThread extends Thread {
 			this.analysisController.run();
 			this.terminationLatch.countDown();
 		} catch (final Exception ex) { // NOPMD NOCS (Exception)
-			LOG.error("Error running AnalysisCOntroller.", ex);
+			LOG.error("Error running AnalysisController.", ex);
 		}
 	}
 

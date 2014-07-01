@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,21 +19,22 @@
  */
 package kieker.common.record.system;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Andre van Hoorn, Jan Waller
  * 
  * @since 1.3
  */
-public final class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-
-	/** A constant which can be used as a default value for non existing fields of the record. */
-	public static final String DEFAULT_VALUE = "N/A";
-
-	private static final long serialVersionUID = 8072422694598002383L;
-	private static final Class<?>[] TYPES = {
+public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
+	public static final int SIZE = TYPE_SIZE_LONG + TYPE_SIZE_STRING + (6 * TYPE_SIZE_LONG);
+	public static final Class<?>[] TYPES = {
 		long.class,
 		String.class,
 		long.class,
@@ -43,6 +44,11 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 		long.class,
 		long.class,
 	};
+
+	/** A constant which can be used as a default value for non existing fields of the record. */
+	public static final String DEFAULT_VALUE = "N/A";
+
+	private static final long serialVersionUID = -2159074202253748453L;
 
 	private final long memUsed;
 	private final long memFree;
@@ -114,10 +120,47 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 	}
 
 	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public MemSwapUsageRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		this.timestamp = buffer.getLong();
+		this.hostname = stringRegistry.get(buffer.getInt());
+		this.memTotal = buffer.getLong();
+		this.memUsed = buffer.getLong();
+		this.memFree = buffer.getLong();
+		this.swapTotal = buffer.getLong();
+		this.swapUsed = buffer.getLong();
+		this.swapFree = buffer.getLong();
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object[] toArray() {
-		return new Object[] { this.timestamp, this.hostname, this.memTotal, this.memUsed, this.memFree, this.swapTotal, this.swapUsed, this.swapFree, };
+		return new Object[] { this.getTimestamp(), this.getHostname(), this.getMemTotal(), this.getMemUsed(), this.getMemFree(), this.getSwapTotal(),
+			this.getSwapUsed(), this.getSwapFree(), };
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		buffer.putLong(this.getTimestamp());
+		buffer.putInt(stringRegistry.get(this.getHostname()));
+		buffer.putLong(this.getMemTotal());
+		buffer.putLong(this.getMemUsed());
+		buffer.putLong(this.getMemFree());
+		buffer.putLong(this.getSwapTotal());
+		buffer.putLong(this.getSwapUsed());
+		buffer.putLong(this.getSwapFree());
 	}
 
 	/**
@@ -125,70 +168,67 @@ public final class MemSwapUsageRecord extends AbstractMonitoringRecord implement
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
-	public void initFromArray(final Object[] values) {
+	public final void initFromArray(final Object[] values) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
+	 */
+	@Override
+	@Deprecated
+	public final void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Class<?>[] getValueTypes() {
-		return TYPES.clone();
+		return TYPES; // NOPMD
 	}
 
 	/**
-	 * @return the memTotal
+	 * {@inheritDoc}
 	 */
+	@Override
+	public int getSize() {
+		return SIZE;
+	}
+
 	public final long getMemTotal() {
 		return this.memTotal;
 	}
 
-	/**
-	 * @return the memUsed
-	 */
 	public final long getMemUsed() {
 		return this.memUsed;
 	}
 
-	/**
-	 * @return the memFree
-	 */
 	public final long getMemFree() {
 		return this.memFree;
 	}
 
-	/**
-	 * @return the swapTotal
-	 */
 	public final long getSwapTotal() {
 		return this.swapTotal;
 	}
 
-	/**
-	 * @return the swapUsed
-	 */
 	public final long getSwapUsed() {
 		return this.swapUsed;
 	}
 
-	/**
-	 * @return the swapFree
-	 */
 	public final long getSwapFree() {
 		return this.swapFree;
 	}
 
-	/**
-	 * @return the timestamp
-	 */
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
 
-	/**
-	 * @return the hostname
-	 */
 	public final String getHostname() {
 		return this.hostname;
 	}

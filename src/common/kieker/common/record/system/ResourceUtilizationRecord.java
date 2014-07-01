@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,22 +19,30 @@
  */
 package kieker.common.record.system;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Andre van Hoorn, Jan Waller
  * 
  * @since 1.3
  */
-public final class ResourceUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-	private static final long serialVersionUID = 8412442607068036054L;
-	private static final Class<?>[] TYPES = {
+public class ResourceUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
+	public static final int SIZE = TYPE_SIZE_LONG + (2 * TYPE_SIZE_STRING) + TYPE_SIZE_DOUBLE;
+	public static final Class<?>[] TYPES = {
 		long.class,
 		String.class,
 		String.class,
 		double.class,
 	};
+
+	private static final long serialVersionUID = 3633890084086058413L;
+
 	private static final String DEFAULT_VALUE = "N/A";
 
 	/**
@@ -91,10 +99,38 @@ public final class ResourceUtilizationRecord extends AbstractMonitoringRecord im
 	}
 
 	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public ResourceUtilizationRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		this.timestamp = buffer.getLong();
+		this.hostname = stringRegistry.get(buffer.getInt());
+		this.resourceName = stringRegistry.get(buffer.getInt());
+		this.utilization = buffer.getDouble();
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object[] toArray() {
-		return new Object[] { this.timestamp, this.hostname, this.resourceName, this.utilization, };
+		return new Object[] { this.getTimestamp(), this.getHostname(), this.getResourceName(), this.getUtilization(), };
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		buffer.putLong(this.getTimestamp());
+		buffer.putInt(stringRegistry.get(this.getHostname()));
+		buffer.putInt(stringRegistry.get(this.getResourceName()));
+		buffer.putDouble(this.getUtilization());
 	}
 
 	/**
@@ -102,42 +138,51 @@ public final class ResourceUtilizationRecord extends AbstractMonitoringRecord im
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
-	public void initFromArray(final Object[] values) {
+	public final void initFromArray(final Object[] values) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
+	 */
+	@Override
+	@Deprecated
+	public final void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Class<?>[] getValueTypes() {
-		return TYPES.clone();
+		return TYPES; // NOPMD
 	}
 
 	/**
-	 * @return the timestamp
+	 * {@inheritDoc}
 	 */
+	@Override
+	public int getSize() {
+		return SIZE;
+	}
+
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
 
-	/**
-	 * @return the hostname
-	 */
 	public final String getHostname() {
 		return this.hostname;
 	}
 
-	/**
-	 * @return the resourceName
-	 */
 	public final String getResourceName() {
 		return this.resourceName;
 	}
 
-	/**
-	 * @return the utilization
-	 */
 	public final double getUtilization() {
 		return this.utilization;
 	}

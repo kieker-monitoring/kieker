@@ -28,8 +28,7 @@ public interface MIPlugin extends MIAnalysisComponent {
 	 * The list contents are of type {@link kieker.analysis.model.analysisMetaModel.MIRepositoryConnector}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Repositories</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Repositories</em>' containment reference list isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Repositories</em>' containment reference list.
@@ -45,8 +44,7 @@ public interface MIPlugin extends MIAnalysisComponent {
 	 * It is bidirectional and its opposite is '{@link kieker.analysis.model.analysisMetaModel.MIOutputPort#getParent <em>Parent</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Output Ports</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Output Ports</em>' containment reference list isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Output Ports</em>' containment reference list.
@@ -63,8 +61,7 @@ public interface MIPlugin extends MIAnalysisComponent {
 	 * It is bidirectional and its opposite is '{@link kieker.analysis.model.analysisMetaModel.MIDisplay#getParent <em>Parent</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Displays</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
+	 * If the meaning of the '<em>Displays</em>' containment reference list isn't clear, there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Displays</em>' containment reference list.

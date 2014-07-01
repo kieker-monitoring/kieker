@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Properties;
+import java.util.Set;
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
@@ -114,6 +115,23 @@ public final class Configuration extends Properties {
 		} catch (final NumberFormatException ex) {
 			LOG.warn("Error parsing configuration property '" + key + "', found value '" + s + "', using default value 0"); // ignore ex
 			return 0;
+		}
+	}
+
+	/**
+	 * Reads the given property from the configuration and interprets it as a double.
+	 * 
+	 * @param key
+	 *            The key of the property.
+	 * @return A long with the value of the given property or null, if the property does not exist.
+	 */
+	public final double getDoubleProperty(final String key) {
+		final String s = this.getStringProperty(key);
+		try {
+			return Double.parseDouble(s);
+		} catch (final NumberFormatException ex) {
+			LOG.warn("Error parsing configuration property '" + key + "', found value '" + s + "', using default value 0"); // ignore ex
+			return 0.0;
 		}
 	}
 
@@ -280,11 +298,8 @@ public final class Configuration extends Properties {
 	 */
 	public final Configuration getPropertiesStartingWith(final String prefix) {
 		final Configuration configuration = new Configuration(null);
-		// for Java 1.6 simply (also adjust below)
-		// final Set<String> keys = this.stringPropertyNames();
-		final Enumeration<?> keys = this.propertyNames();
-		while (keys.hasMoreElements()) {
-			final String property = (String) keys.nextElement();
+		final Set<String> keys = this.stringPropertyNames();
+		for (final String property : keys) {
 			if (property.startsWith(prefix)) {
 				configuration.setProperty(property, super.getProperty(property));
 			}
@@ -302,11 +317,8 @@ public final class Configuration extends Properties {
 	 */
 	public final Configuration flatten(final Configuration defaultConfiguration) {
 		final Configuration configuration = new Configuration(defaultConfiguration);
-		// for Java 1.6 simply (also adjust below)
-		// final Set<String> keys = this.stringPropertyNames();
-		final Enumeration<?> keys = this.propertyNames();
-		while (keys.hasMoreElements()) {
-			final String property = (String) keys.nextElement();
+		final Set<String> keys = this.stringPropertyNames();
+		for (final String property : keys) {
 			configuration.setProperty(property, super.getProperty(property));
 		}
 		return configuration;

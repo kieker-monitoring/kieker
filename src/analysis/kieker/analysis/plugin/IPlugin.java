@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,6 +68,7 @@ public interface IPlugin extends IAnalysisComponent {
 	 * 
 	 * @since 1.5
 	 */
+	@Override
 	public abstract Configuration getCurrentConfiguration();
 
 	/**
@@ -95,6 +96,7 @@ public interface IPlugin extends IAnalysisComponent {
 	 * 
 	 * @since 1.5
 	 */
+	@Override
 	public abstract String getName();
 
 	/**
@@ -207,7 +209,7 @@ public interface IPlugin extends IAnalysisComponent {
 			this.plugin = plugin;
 			this.inputPortName = inputPortName;
 			this.inputPortMethod = inputPortMethod;
-			this.eventTypes = eventTypes.clone();
+			this.eventTypes = eventTypes;
 		}
 
 		/**
@@ -234,7 +236,7 @@ public interface IPlugin extends IAnalysisComponent {
 		 * @return The current value of the attribute.
 		 */
 		public final Class<?>[] getEventTypes() {
-			return this.eventTypes.clone();
+			return this.eventTypes;
 		}
 
 		/**

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,21 +16,28 @@
 
 package kieker.common.record.controlflow;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Andre van Hoorn, Jan Waller
  * 
  * @since 1.2
  */
-public final class BranchingRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
-	private static final long serialVersionUID = 1949567386494340839L;
-	private static final Class<?>[] TYPES = {
+public class BranchingRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
+	public static final int SIZE = TYPE_SIZE_LONG + (2 * TYPE_SIZE_INT);
+	public static final Class<?>[] TYPES = {
 		long.class, // timestamp
 		int.class, // branchId
 		int.class, // branchingOutcome
 	};
+
+	private static final long serialVersionUID = 361952208062069707L;
 
 	private final long timestamp;
 	private final int branchID;
@@ -66,10 +73,36 @@ public final class BranchingRecord extends AbstractMonitoringRecord implements I
 	}
 
 	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public BranchingRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException { // NOPMD
+		this.timestamp = buffer.getLong();
+		this.branchID = buffer.getInt();
+		this.branchingOutcome = buffer.getInt();
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object[] toArray() {
-		return new Object[] { this.timestamp, this.branchID, this.branchingOutcome, };
+		return new Object[] { this.getTimestamp(), this.getBranchID(), this.getBranchingOutcome(), };
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		buffer.putLong(this.getTimestamp());
+		buffer.putInt(this.getBranchID());
+		buffer.putInt(this.getBranchingOutcome());
 	}
 
 	/**
@@ -77,16 +110,37 @@ public final class BranchingRecord extends AbstractMonitoringRecord implements I
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
-	public void initFromArray(final Object[] values) {
+	public final void initFromArray(final Object[] values) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
+	 */
+	@Override
+	@Deprecated
+	public final void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Class<?>[] getValueTypes() {
-		return TYPES.clone();
+		return TYPES; // NOPMD
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int getSize() {
+		return SIZE;
 	}
 
 	/**

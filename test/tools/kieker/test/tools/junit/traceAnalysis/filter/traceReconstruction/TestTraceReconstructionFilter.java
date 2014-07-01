@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -130,7 +130,7 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 				TraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TRACE_DURATION);
 		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration, controller);
 
-		Assert.assertTrue("Test invalid since trace length smaller than filter timeout", validExecutionTrace.getDurationInNanos() <= filter
+		Assert.assertTrue("Test invalid since trace length smaller than filter timeout", validExecutionTrace.getDuration() <= filter
 				.getMaxTraceDuration());
 
 		final ListCollectionFilter<ExecutionTrace> executionTraceSinkPlugin = new ListCollectionFilter<ExecutionTrace>(new Configuration(), controller);
@@ -233,7 +233,7 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 		configuration.setProperty(TraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION,
 				TraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TRACE_DURATION);
 		final TraceReconstructionFilter filter = new TraceReconstructionFilter(configuration, controller);
-		Assert.assertTrue("Test invalid since trace length smaller than filter timeout", invalidExecutionTrace.getDurationInNanos() <= filter
+		Assert.assertTrue("Test invalid since trace length smaller than filter timeout", invalidExecutionTrace.getDuration() <= filter
 				.getMaxTraceDuration());
 
 		final ListCollectionFilter<ExecutionTrace> executionTraceSinkPlugin = new ListCollectionFilter<ExecutionTrace>(new Configuration(), controller);

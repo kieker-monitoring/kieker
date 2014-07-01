@@ -36,4 +36,4 @@ public class MReader extends MPlugin implements MIReader {
 		return MIAnalysisMetaModelPackage.Literals.READER;
 	}
 
-} //MReader
+} // MReader

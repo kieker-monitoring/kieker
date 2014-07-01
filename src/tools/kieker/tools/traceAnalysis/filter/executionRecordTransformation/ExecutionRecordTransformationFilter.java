@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +47,6 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 			@RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class)
 		})
 public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisFilter {
-	// private static final Log LOG = LogFactory.getLog(ExecutionRecordTransformationFilter.class);
 
 	/** This is the name of the input port receiving new operation execution records. */
 	public static final String INPUT_PORT_NAME_RECORDS = "operationExecutionRecords";
@@ -84,16 +83,6 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisFi
 				fqComponentNameSignaturePair.getSignature(),
 				execRec.getTraceId(), execRec.getSessionId(), execRec.getEoi(), execRec.getEss(), execRec.getTin(), execRec.getTout(), false);
 		super.deliver(OUTPUT_PORT_NAME_EXECUTIONS, execution);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration();
-		// filter has no configuration properties
-		return configuration;
 	}
 
 }

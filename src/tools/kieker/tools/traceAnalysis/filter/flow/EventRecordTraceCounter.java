@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,10 +22,8 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.flow.TraceEventRecords;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
-import kieker.common.record.flow.trace.Trace;
+import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.tools.traceAnalysis.filter.AbstractTraceProcessingFilter;
 
 /**
@@ -52,8 +50,6 @@ public class EventRecordTraceCounter extends AbstractTraceProcessingFilter {
 
 	private static final long TRACE_ID_IF_NONE = -1;
 
-	private static final Log LOG = LogFactory.getLog(EventRecordTraceCounter.class);
-
 	private final boolean logInvalidTraces;
 
 	/**
@@ -72,8 +68,10 @@ public class EventRecordTraceCounter extends AbstractTraceProcessingFilter {
 
 	@Override
 	public Configuration getCurrentConfiguration() {
-		final Configuration config = new Configuration();
+		final Configuration config = super.getCurrentConfiguration();
+
 		config.setProperty(CONFIG_PROPERTY_NAME_LOG_INVALID, Boolean.toString(this.logInvalidTraces));
+
 		return config;
 	}
 
@@ -85,7 +83,7 @@ public class EventRecordTraceCounter extends AbstractTraceProcessingFilter {
 	 */
 	@InputPort(name = INPUT_PORT_NAME_VALID, eventTypes = { TraceEventRecords.class }, description = "Receives valid event record traces")
 	public void inputValidTrace(final TraceEventRecords validTrace) {
-		super.reportSuccess(validTrace.getTrace().getTraceId());
+		super.reportSuccess(validTrace.getTraceMetadata().getTraceId());
 	}
 
 	/**
@@ -97,12 +95,12 @@ public class EventRecordTraceCounter extends AbstractTraceProcessingFilter {
 	@InputPort(name = INPUT_PORT_NAME_INVALID, eventTypes = { TraceEventRecords.class }, description = "Receives invalid event record traces")
 	public void inputInvalidTrace(final TraceEventRecords invalidTrace) {
 		if (this.logInvalidTraces) {
-			LOG.error("Invalid trace: " + invalidTrace);
+			this.log.error("Invalid trace: " + invalidTrace);
 		}
 
-		final Trace trace = invalidTrace.getTrace();
+		final TraceMetadata trace = invalidTrace.getTraceMetadata();
 		if (trace != null) {
-			super.reportError(invalidTrace.getTrace().getTraceId());
+			super.reportError(invalidTrace.getTraceMetadata().getTraceId());
 		} else {
 			final AbstractTraceEvent[] events = invalidTrace.getTraceEvents();
 			if ((events != null) && (events.length > 0)) {

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,6 @@ import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.filter.IGraphOutputtingFilter;
 import kieker.tools.traceAnalysis.filter.IGraphProducingFilter;
 import kieker.tools.traceAnalysis.filter.visualization.graph.AbstractEdge;
@@ -60,8 +58,6 @@ public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V ex
 	 * The name of the filter's graph input port.
 	 */
 	public static final String INPUT_PORT_NAME_GRAPH = "graphs";
-
-	private static final Log LOG = LogFactory.getLog(AbstractGraphFilter.class);
 
 	private final Configuration configuration;
 
@@ -109,7 +105,7 @@ public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V ex
 				producer.requestOriginRetentionPolicy(this.getDesiredOriginRetentionPolicy());
 			}
 		} catch (final AnalysisConfigurationException e) {
-			LOG.error(e.getMessage(), e);
+			this.log.error(e.getMessage(), e);
 			return false;
 		}
 
@@ -140,6 +136,7 @@ public abstract class AbstractGraphFilter<G extends AbstractGraph<V, E, O>, V ex
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getGraphOutputPortName() {
 		return OUTPUT_PORT_NAME_GRAPH;
 	}

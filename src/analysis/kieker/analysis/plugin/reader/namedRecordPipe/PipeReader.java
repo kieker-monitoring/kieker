@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,8 +24,6 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.namedRecordPipe.Broker;
 import kieker.common.namedRecordPipe.IPipeReader;
 import kieker.common.namedRecordPipe.Pipe;
@@ -57,8 +55,6 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 	/** The default used pipe name. */
 	public static final String CONFIG_PROPERTY_VALUE_PIPENAME_DEFAULT = "kieker-pipe";
 
-	private static final Log LOG = LogFactory.getLog(PipeReader.class);
-
 	private volatile Pipe pipe;
 	private final String pipeName;
 	private final CountDownLatch terminationLatch = new CountDownLatch(1);
@@ -81,8 +77,8 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 		if (this.pipe == null) {
 			throw new IllegalArgumentException("Failed to get Pipe with name " + pipeNameConfig);
 		} else {
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("Connected to named pipe '" + this.pipe.getName() + "'");
+			if (this.log.isDebugEnabled()) {
+				this.log.debug("Connected to named pipe '" + this.pipe.getName() + "'");
 			}
 		}
 		// escaping this in constructor! very bad practice!
@@ -94,13 +90,14 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 	 * 
 	 * @return true if the reading terminated in a "normal" way. If an interrupt terminates the wait-method too early, false will be returned.
 	 */
+	@Override
 	public boolean read() {
 		// No need to initialize since we receive asynchronously
 		try {
 			this.terminationLatch.await();
-			LOG.info("Pipe closed. Will terminate.");
+			this.log.info("Pipe closed. Will terminate.");
 		} catch (final InterruptedException ex) {
-			LOG.error("Received InterruptedException", ex);
+			this.log.error("Received InterruptedException", ex);
 			return false;
 		}
 		return true;
@@ -113,6 +110,7 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 	 *            The new record object.
 	 * @return true if and only if the record has been delivered.
 	 */
+	@Override
 	public boolean newMonitoringRecord(final IMonitoringRecord rec) {
 		return super.deliver(OUTPUT_PORT_NAME_RECORDS, rec);
 	}
@@ -120,6 +118,7 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void notifyPipeClosed() {
 		// Notify main thread
 		this.terminationLatch.countDown();
@@ -128,6 +127,7 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void terminate(final boolean error) {
 		// will lead to notifyPipeClosed() and the subsequent termination of read()
 		if (this.pipe != null) {

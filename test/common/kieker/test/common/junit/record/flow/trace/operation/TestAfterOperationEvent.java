@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,14 @@
 
 package kieker.test.common.junit.record.flow.trace.operation;
 
+import java.nio.ByteBuffer;
+
 import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
+import kieker.common.util.registry.IRegistry;
+import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 
@@ -64,6 +68,33 @@ public class TestAfterOperationEvent extends AbstractKiekerTest {
 		final Object[] event1Array = event1.toArray();
 
 		final AfterOperationEvent event2 = new AfterOperationEvent(event1Array);
+
+		Assert.assertEquals(event1, event2);
+		Assert.assertEquals(0, event1.compareTo(event2));
+		Assert.assertTrue(event1.refersToSameOperationAs(event2));
+	}
+
+	/**
+	 * Tests the constructor and writeBytes(..) methods of {@link AfterOperationEvent}.
+	 */
+	@Test
+	public void testSerializeDeserializeBinaryEquals() {
+
+		final AfterOperationEvent event1 =
+				new AfterOperationEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_OPERATION_SIGNATURE, FQ_CLASSNAME);
+
+		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
+		Assert.assertEquals("Unexpected trace ID", TRACE_ID, event1.getTraceId());
+		Assert.assertEquals("Unexpected order index", ORDER_INDEX, event1.getOrderIndex());
+		Assert.assertEquals("Unexpected class name", FQ_CLASSNAME, event1.getClassSignature());
+		Assert.assertEquals("Unexpected operation signature", FQ_OPERATION_SIGNATURE, event1.getOperationSignature());
+
+		final IRegistry<String> stringRegistry = new Registry<String>();
+		final ByteBuffer buffer = ByteBuffer.allocate(event1.getSize());
+		event1.writeBytes(buffer, stringRegistry);
+		buffer.flip();
+
+		final AfterOperationEvent event2 = new AfterOperationEvent(buffer, stringRegistry);
 
 		Assert.assertEquals(event1, event2);
 		Assert.assertEquals(0, event1.compareTo(event2));

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,15 +34,15 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.misc.RegistryRecord;
 import kieker.common.util.filesystem.FSUtil;
-import kieker.monitoring.core.registry.RegistryRecord;
 import kieker.monitoring.writer.AbstractMonitoringWriter;
 import kieker.monitoring.writer.filesystem.map.MappingFileWriter;
 
 /**
  * Simple class to store monitoring data in the file system. Although a buffered
  * writer is used, outliers (delays of 1000 ms) occur from time to time if many
- * monitoring events have to be writen. We believe that outliers result from a
+ * monitoring events have to be written. We believe that outliers result from a
  * flush on the buffer of the writer.
  * 
  * A more sophisticated writer to store data in the file system is the
@@ -64,12 +64,12 @@ import kieker.monitoring.writer.filesystem.map.MappingFileWriter;
 public final class SyncFsWriter extends AbstractMonitoringWriter {
 	private static final String PREFIX = SyncFsWriter.class.getName() + ".";
 	public static final String CONFIG_PATH = PREFIX + "customStoragePath"; // NOCS (afterPREFIX)
-	public static final String CONFIG_TEMP = PREFIX + "storeInJavaIoTmpdir"; // NOCS (afterPREFIX)
 	public static final String CONFIG_MAXENTRIESINFILE = PREFIX + "maxEntriesInFile"; // NOCS (afterPREFIX)
 	public static final String CONFIG_MAXLOGSIZE = PREFIX + "maxLogSize"; // NOCS (afterPREFIX)
 	public static final String CONFIG_MAXLOGFILES = PREFIX + "maxLogFiles"; // NOCS (afterPREFIX)
 	public static final String CONFIG_FLUSH = PREFIX + "flush"; // NOCS (afterPREFIX)
 	public static final String CONFIG_BUFFER = PREFIX + "bufferSize"; // NOCS (afterPREFIX)
+	private static final String CONFIG_TEMP = PREFIX + "storeInJavaIoTmpdir"; // NOCS (afterPREFIX)
 
 	private static final Log LOG = LogFactory.getLog(SyncFsWriter.class);
 
@@ -130,11 +130,12 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 		this.dateFormat = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
 		this.dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 		// Determine path
-		String pathTmp;
 		if (configuration.getBooleanProperty(CONFIG_TEMP)) {
+			LOG.warn("Using deprecated configuration property " + CONFIG_TEMP + ". Instead use empty value for " + CONFIG_PATH);
+		}
+		String pathTmp = configuration.getStringProperty(CONFIG_PATH);
+		if (pathTmp.length() == 0) {
 			pathTmp = System.getProperty("java.io.tmpdir");
-		} else {
-			pathTmp = configuration.getStringProperty(CONFIG_PATH);
 		}
 		if (!(new File(pathTmp)).isDirectory()) {
 			throw new IllegalArgumentException("'" + pathTmp + "' is not a directory.");
@@ -164,6 +165,8 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
+	@SuppressWarnings("unchecked")
 	public final boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 		if (monitoringRecord instanceof RegistryRecord) {
 			try {
@@ -176,7 +179,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 			final Object[] recordFields = monitoringRecord.toArray();
 			final StringBuilder sb = new StringBuilder(256);
 			sb.append('$');
-			sb.append(this.monitoringController.getIdForString(monitoringRecord.getClass().getName()));
+			sb.append(this.monitoringController.getUniqueIdForString(monitoringRecord.getClass().getName()));
 			sb.append(';');
 			sb.append(monitoringRecord.getLoggingTimestamp());
 			for (final Object recordField : recordFields) {
@@ -198,7 +201,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 							this.listOfLogFiles.add(new FileNameSize(filename));
 							if ((this.maxLogFiles > 0) && (this.listOfLogFiles.size() > this.maxLogFiles)) { // too many files (at most one!)
 								final FileNameSize removeFile = this.listOfLogFiles.removeFirst();
-								if (!new File(removeFile.name).delete()) { // NOCS (nested if)
+								if (!new File(removeFile.name).delete()) { // NOCS NOPMD (nested if)
 									throw new IOException("Failed to delete file " + removeFile.name);
 								}
 								this.totalLogSize -= removeFile.size;
@@ -206,7 +209,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 							if (this.maxLogSize > 0) {
 								while ((this.listOfLogFiles.size() > 1) && (this.totalLogSize > this.maxLogSize)) {
 									final FileNameSize removeFile = this.listOfLogFiles.removeFirst();
-									if (!new File(removeFile.name).delete()) { // NOCS (nested if)
+									if (!new File(removeFile.name).delete()) { // NOCS NOPMD (nested if)
 										throw new IOException("Failed to delete file " + removeFile.name);
 									}
 									this.totalLogSize -= removeFile.size;
@@ -268,6 +271,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void terminate() {
 		synchronized (this) {
 			if (this.pos != null) {

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,6 @@ import javax.jms.MessageFormatException;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.Session;
-import javax.jms.TextMessage;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
@@ -42,7 +41,6 @@ import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 
 /**
@@ -74,8 +72,6 @@ public final class JMSReader extends AbstractReaderPlugin {
 	public static final String CONFIG_PROPERTY_NAME_DESTINATION = "jmsDestination";
 	/** The name of the configuration determining the name of the used JMS factory. */
 	public static final String CONFIG_PROPERTY_NAME_FACTORYLOOKUP = "jmsFactoryLookupName";
-
-	static final Log LOG = LogFactory.getLog(JMSReader.class); // NOPMD package for inner class
 
 	private final String jmsProviderUrl;
 	private final String jmsDestination;
@@ -117,6 +113,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 	 * 
 	 * @return true if the method succeeds, false otherwise.
 	 */
+	@Override
 	public boolean read() {
 		boolean retVal = true;
 		Connection connection = null;
@@ -139,23 +136,23 @@ public final class JMSReader extends AbstractReaderPlugin {
 				// JNDI lookup failed, try manual creation (this seems to fail with ActiveMQ/HornetQ sometimes)
 				destination = session.createQueue(this.jmsDestination);
 				if (destination == null) { //
-					LOG.error("Failed to lookup queue '" + this.jmsDestination + "' via JNDI: " + exc.getMessage() + " AND failed to create queue");
+					this.log.error("Failed to lookup queue '" + this.jmsDestination + "' via JNDI: " + exc.getMessage() + " AND failed to create queue");
 					throw exc; // will be catched below to abort the read method
 				}
 			}
 
-			LOG.info("Listening to destination:" + destination + " at " + this.jmsProviderUrl + " !\n***\n\n");
+			this.log.info("Listening to destination:" + destination + " at " + this.jmsProviderUrl + " !\n***\n\n");
 			final MessageConsumer receiver = session.createConsumer(destination);
 			receiver.setMessageListener(new JMSMessageListener());
 
 			// start the connection to enable message delivery
 			connection.start();
 
-			LOG.info("JMSReader started and waits for incoming monitoring events!");
+			this.log.info("JMSReader started and waits for incoming monitoring events!");
 			this.block();
-			LOG.info("Woke up by shutdown");
+			this.log.info("Woke up by shutdown");
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
-			LOG.error("Error in read()", ex);
+			this.log.error("Error in read()", ex);
 			retVal = false;
 		} finally {
 			try {
@@ -163,7 +160,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 					connection.close();
 				}
 			} catch (final JMSException ex) {
-				LOG.error("Failed to close JMS", ex);
+				this.log.error("Failed to close JMS", ex);
 			}
 		}
 		return retVal;
@@ -194,8 +191,9 @@ public final class JMSReader extends AbstractReaderPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void terminate(final boolean error) {
-		LOG.info("Shutdown of JMSReader requested.");
+		this.log.info("Shutdown of JMSReader requested.");
 		this.unblock();
 	}
 
@@ -213,6 +211,10 @@ public final class JMSReader extends AbstractReaderPlugin {
 		return configuration;
 	}
 
+	protected Log getLog() {
+		return super.log;
+	}
+
 	/**
 	 * The MessageListener will read onMessage each time a message comes in.
 	 */
@@ -222,23 +224,27 @@ public final class JMSReader extends AbstractReaderPlugin {
 			// empty default constructor
 		}
 
+		@Override
 		public void onMessage(final Message jmsMessage) {
-			if (jmsMessage instanceof TextMessage) {
-				final TextMessage text = (TextMessage) jmsMessage;
-				LOG.info("Received text message: " + text);
+			if (jmsMessage == null) {
+				JMSReader.this.getLog().warn("Received null message");
 			} else {
-				try {
-					final ObjectMessage om = (ObjectMessage) jmsMessage;
-					final Serializable omo = om.getObject();
-					if ((omo instanceof IMonitoringRecord) && (!JMSReader.this.deliverIndirect(OUTPUT_PORT_NAME_RECORDS, omo))) {
-						LOG.error("deliverRecord returned false");
+				if (jmsMessage instanceof ObjectMessage) {
+					try {
+						final ObjectMessage om = (ObjectMessage) jmsMessage;
+						final Serializable omo = om.getObject();
+						if ((omo instanceof IMonitoringRecord) && (!JMSReader.this.deliverIndirect(OUTPUT_PORT_NAME_RECORDS, omo))) {
+							JMSReader.this.getLog().error("deliverRecord returned false");
+						}
+					} catch (final MessageFormatException ex) {
+						JMSReader.this.getLog().error("Error delivering record", ex);
+					} catch (final JMSException ex) {
+						JMSReader.this.getLog().error("Error delivering record", ex);
+					} catch (final Exception ex) { // NOPMD NOCS (catch Exception)
+						JMSReader.this.getLog().error("Error delivering record", ex);
 					}
-				} catch (final MessageFormatException ex) {
-					LOG.error("Error delivering record", ex);
-				} catch (final JMSException ex) {
-					LOG.error("Error delivering record", ex);
-				} catch (final Exception ex) { // NOPMD NOCS (catch Exception)
-					LOG.error("Error delivering record", ex);
+				} else {
+					JMSReader.this.getLog().warn("Received message of invalid type: " + jmsMessage.getClass().getName());
 				}
 			}
 		}

@@ -27,7 +27,7 @@ public class MAnalysisMetaModelFactory extends EFactoryImpl implements MIAnalysi
 	 */
 	public static MIAnalysisMetaModelFactory init() {
 		try {
-			MIAnalysisMetaModelFactory theAnalysisMetaModelFactory = (MIAnalysisMetaModelFactory)EPackage.Registry.INSTANCE.getEFactory("platform:/resource/Kieker/model/AnalysisMetaModel.ecore"); 
+			MIAnalysisMetaModelFactory theAnalysisMetaModelFactory = (MIAnalysisMetaModelFactory)EPackage.Registry.INSTANCE.getEFactory(MIAnalysisMetaModelPackage.eNS_URI);
 			if (theAnalysisMetaModelFactory != null) {
 				return theAnalysisMetaModelFactory;
 			}
@@ -213,4 +213,4 @@ public class MAnalysisMetaModelFactory extends EFactoryImpl implements MIAnalysi
 		return MIAnalysisMetaModelPackage.eINSTANCE;
 	}
 
-} //MAnalysisMetaModelFactory
+} // MAnalysisMetaModelFactory

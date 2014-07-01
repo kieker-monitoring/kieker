@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,11 +49,9 @@ public class ScheduledSamplerJob implements Runnable {
 	/**
 	 * Throws a {@link RuntimeException} if an error occurred.
 	 */
+	@Override
 	public final void run() throws RuntimeException { // NOCS (IllegalThrowsCheck)
 		try {
-			if (!this.monitoringController.isMonitoringEnabled()) {
-				return;
-			}
 			this.sampler.sample(this.monitoringController);
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
 			// Re-throw exception because run must throw RuntimeException

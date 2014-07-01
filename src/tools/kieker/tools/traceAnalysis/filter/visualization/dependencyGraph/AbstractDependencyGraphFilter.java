@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +18,11 @@ package kieker.tools.traceAnalysis.filter.visualization.dependencyGraph;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.filter.AbstractGraphProducingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.systemModel.AbstractMessage;
@@ -43,9 +40,6 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  */
 @Plugin(repositoryPorts = @RepositoryPort(name = AbstractTraceAnalysisFilter.REPOSITORY_PORT_NAME_SYSTEM_MODEL, repositoryType = SystemModelRepository.class))
 public abstract class AbstractDependencyGraphFilter<T extends ISystemModelElement> extends AbstractGraphProducingFilter<AbstractDependencyGraph<T>> {
-	private static final Log LOG = LogFactory.getLog(AbstractDependencyGraphFilter.class);
-
-	private final TimeUnit timeunit;
 
 	private final List<AbstractNodeDecorator> decorators = new ArrayList<AbstractNodeDecorator>();
 
@@ -61,17 +55,6 @@ public abstract class AbstractDependencyGraphFilter<T extends ISystemModelElemen
 	 */
 	public AbstractDependencyGraphFilter(final Configuration configuration, final IProjectContext projectContext, final AbstractDependencyGraph<T> graph) {
 		super(configuration, projectContext, graph);
-
-		final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
-		TimeUnit recordTimeunit;
-		try {
-			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
-		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
-			LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
-			recordTimeunit = TimeUnit.NANOSECONDS;
-		}
-		this.timeunit = recordTimeunit;
-
 	}
 
 	/**
@@ -96,7 +79,7 @@ public abstract class AbstractDependencyGraphFilter<T extends ISystemModelElemen
 	 */
 	protected void invokeDecorators(final AbstractMessage message, final DependencyGraphNode<?> sourceNode, final DependencyGraphNode<?> targetNode) {
 		for (final AbstractNodeDecorator currentDecorator : this.decorators) {
-			currentDecorator.processMessage(message, sourceNode, targetNode, this.timeunit);
+			currentDecorator.processMessage(message, sourceNode, targetNode, super.recordsTimeUnitFromProjectContext);
 		}
 	}
 

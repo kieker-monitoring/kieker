@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.record.flow.IFlowRecord;
 import kieker.common.record.flow.ITraceRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
-import kieker.common.record.flow.trace.Trace;
+import kieker.common.record.flow.trace.TraceMetadata;
 
 /**
  * Allows to filter Traces about their traceIds.
@@ -46,9 +46,9 @@ import kieker.common.record.flow.trace.Trace;
 @Plugin(description = "A filter allowing to filter incoming objects based on their trace ID",
 		outputPorts = {
 			@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME_MATCH, description = "Forwards events with matching trace IDs", eventTypes = {
-				AbstractTraceEvent.class, Trace.class, OperationExecutionRecord.class }),
+				AbstractTraceEvent.class, TraceMetadata.class, OperationExecutionRecord.class }),
 			@OutputPort(name = TraceIdFilter.OUTPUT_PORT_NAME_MISMATCH, description = "Forwards events with trace IDs not matching", eventTypes = {
-				AbstractTraceEvent.class, Trace.class, OperationExecutionRecord.class })
+				AbstractTraceEvent.class, TraceMetadata.class, OperationExecutionRecord.class })
 		},
 		configuration = {
 			@Property(name = TraceIdFilter.CONFIG_PROPERTY_NAME_SELECT_ALL_TRACES, defaultValue = "true"),
@@ -117,11 +117,11 @@ public final class TraceIdFilter extends AbstractFilterPlugin {
 	 *            The next record.
 	 */
 	@InputPort(name = INPUT_PORT_NAME_COMBINED, description = "Receives execution and trace events to be selected by trace ID",
-			eventTypes = { ITraceRecord.class, Trace.class, OperationExecutionRecord.class })
+			eventTypes = { ITraceRecord.class, TraceMetadata.class, OperationExecutionRecord.class })
 	public void inputCombined(final IMonitoringRecord record) {
 		if (record instanceof OperationExecutionRecord) {
 			this.inputOperationExecutionRecord((OperationExecutionRecord) record);
-		} else if ((record instanceof ITraceRecord) || (record instanceof Trace)) {
+		} else if ((record instanceof ITraceRecord) || (record instanceof TraceMetadata)) {
 			this.inputTraceEvent((IFlowRecord) record);
 		} // else discard it, we should never have gotten it anyhow
 	}
@@ -133,12 +133,12 @@ public final class TraceIdFilter extends AbstractFilterPlugin {
 	 *            The next record.
 	 */
 	@InputPort(name = INPUT_PORT_NAME_FLOW, description = "Receives trace events to be selected by trace ID",
-			eventTypes = { ITraceRecord.class, Trace.class })
+			eventTypes = { ITraceRecord.class, TraceMetadata.class })
 	public void inputTraceEvent(final IFlowRecord record) {
 		final long traceId;
 
-		if (record instanceof Trace) {
-			traceId = ((Trace) record).getTraceId();
+		if (record instanceof TraceMetadata) {
+			traceId = ((TraceMetadata) record).getTraceId();
 		} else if (record instanceof AbstractTraceEvent) {
 			traceId = ((ITraceRecord) record).getTraceId();
 		} else {

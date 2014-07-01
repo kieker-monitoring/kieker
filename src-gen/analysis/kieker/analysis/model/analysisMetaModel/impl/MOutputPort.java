@@ -85,7 +85,7 @@ public class MOutputPort extends MPort implements MIOutputPort {
 	 */
 	public MIPlugin getParent() {
 		if (eContainerFeatureID() != MIAnalysisMetaModelPackage.OUTPUT_PORT__PARENT) return null;
-		return (MIPlugin)eContainer();
+		return (MIPlugin)eInternalContainer();
 	}
 
 	/**
@@ -233,4 +233,4 @@ public class MOutputPort extends MPort implements MIOutputPort {
 		return super.eIsSet(featureID);
 	}
 
-} //MOutputPort
+} // MOutputPort

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,8 +25,6 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.filter.AbstractMessageTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.traceReconstruction.TraceProcessingException;
@@ -70,8 +68,6 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	public static final String CONFIG_PROPERTY_VALUE_INCLUDE_WEIGHTS_DEFAULT = "true";
 	/** The default used value determining whether to use short labels in the call tree or not. */
 	public static final String CONFIG_PROPERTY_VALUE_SHORT_LABELS_DEFAULT = "true";
-
-	private static final Log LOG = LogFactory.getLog(AbstractAggregatedCallTreeFilter.class);
 
 	private volatile AbstractAggregatedCallTreeNode<T> root;
 	private final String dotOutputFile;
@@ -120,7 +116,7 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 			AbstractCallTreeFilter.saveTreeToDotFile(this.root, outputFn, this.includeWeights, false, // do not include EOIs
 					this.shortLabels);
 			this.numGraphsSaved++;
-			this.printMessage(new String[] { "Wrote call tree to file '" + outputFn + "'", "Dot file can be converted using the dot tool",
+			this.printDebugLogMessage(new String[] { "Wrote call tree to file '" + outputFn + "'", "Dot file can be converted using the dot tool",
 				"Example: dot -T svg " + outputFn + " > " + outputFn + ".svg", });
 		}
 	}
@@ -129,7 +125,9 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	public void printStatusMessage() {
 		synchronized (this) {
 			super.printStatusMessage();
-			this.stdOutPrintln("Saved " + this.numGraphsSaved + " call tree" + (this.numGraphsSaved > 1 ? "s" : "")); // NOCS
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("Saved " + this.numGraphsSaved + " call tree" + (this.numGraphsSaved > 1 ? "s" : "")); // NOCS
+			}
 		}
 	}
 
@@ -146,7 +144,7 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 				try {
 					this.saveTreeToDotFile();
 				} catch (final IOException ex) {
-					LOG.error("IOException while saving to dot file", ex);
+					this.log.error("IOException while saving to dot file", ex);
 				}
 			}
 		}
@@ -157,10 +155,12 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	 */
 	@Override
 	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration();
+		final Configuration configuration = super.getCurrentConfiguration();
+
 		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(this.includeWeights));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(this.shortLabels));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_FILENAME, this.dotOutputFile);
+
 		return configuration;
 	}
 
@@ -174,13 +174,14 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 			try {
 				AbstractCallTreeFilter.addTraceToTree(this.root, t, new IPairFactory<T>() {
 
+					@Override
 					public T createPair(final SynchronousCallMessage callMsg) {
 						return AbstractAggregatedCallTreeFilter.this.concreteCreatePair(callMsg);
 					}
 				}, true); // aggregated
 				AbstractAggregatedCallTreeFilter.this.reportSuccess(t.getTraceId());
 			} catch (final TraceProcessingException ex) {
-				LOG.error("TraceProcessingException", ex);
+				this.log.error("TraceProcessingException", ex);
 				AbstractAggregatedCallTreeFilter.this.reportError(t.getTraceId());
 			}
 		}

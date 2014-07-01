@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,14 +62,6 @@ public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?,
 	}
 
 	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Configuration getCurrentConfiguration() {
-		return this.configuration;
-	}
-
-	/**
 	 * Returns this filter's configuration name.
 	 * 
 	 * @return See above
@@ -83,6 +75,7 @@ public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?,
 		}
 	}
 
+	@Override
 	public String getGraphOutputPortName() {
 		return OUTPUT_PORT_NAME_GRAPH;
 	}
@@ -100,6 +93,7 @@ public abstract class AbstractGraphProducingFilter<G extends AbstractGraph<?, ?,
 		return this.originRetentionPolicy;
 	}
 
+	@Override
 	public void requestOriginRetentionPolicy(final IOriginRetentionPolicy policy) throws AnalysisConfigurationException {
 		if (!this.originRetentionPolicy.isCompatibleWith(policy)) {
 			throw new AnalysisConfigurationException(String.format(INCOMPATIBLE_RETENTION_ERROR_TEMPLATE, this, this.originRetentionPolicy, policy));

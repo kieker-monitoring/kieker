@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -94,6 +94,7 @@ public final class SamplingController extends AbstractController implements ISam
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final ScheduledSamplerJob schedulePeriodicSampler(final ISampler sensor, final long initialDelay, final long period, final TimeUnit timeUnit) {
 		if (null == this.periodicSensorsPoolExecutor) {
 			LOG.warn("Won't schedule periodic sensor since Periodic Sampling is deactivated.");
@@ -109,6 +110,7 @@ public final class SamplingController extends AbstractController implements ISam
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final boolean removeScheduledSampler(final ScheduledSamplerJob sensorJob) {
 		if (null == this.periodicSensorsPoolExecutor) {
 			LOG.warn("Won't schedule periodic sensor since Periodic Sampling is deactivated.");
@@ -135,6 +137,7 @@ public final class SamplingController extends AbstractController implements ISam
 			// empty default constructor
 		}
 
+		@Override
 		public void rejectedExecution(final Runnable r, final ThreadPoolExecutor executor) {
 			LOG.error("Exception caught by RejectedExecutionHandler for Runnable " + r + " and ThreadPoolExecutor " + executor);
 		}
@@ -154,6 +157,7 @@ public final class SamplingController extends AbstractController implements ISam
 			// empty default constructor
 		}
 
+		@Override
 		public Thread newThread(final Runnable r) {
 			final Thread t = this.defaultThreadFactory.newThread(r);
 			t.setDaemon(true);

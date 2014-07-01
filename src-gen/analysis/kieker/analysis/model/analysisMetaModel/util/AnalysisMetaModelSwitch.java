@@ -12,8 +12,7 @@ import org.eclipse.emf.ecore.util.Switch;
 /**
  * <!-- begin-user-doc -->
  * The <b>Switch</b> for the model's inheritance hierarchy.
- * It supports the call {@link #doSwitch(EObject) doSwitch(object)}
- * to invoke the <code>caseXXX</code> method for each class of the model,
+ * It supports the call {@link #doSwitch(EObject) doSwitch(object)} to invoke the <code>caseXXX</code> method for each class of the model,
  * starting with the actual class of the object
  * and proceeding up the inheritance hierarchy
  * until a non-null result is returned,
@@ -409,4 +408,4 @@ public class AnalysisMetaModelSwitch<T> extends Switch<T> {
 		return null;
 	}
 
-} //AnalysisMetaModelSwitch
+} // AnalysisMetaModelSwitch

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,8 +67,8 @@ public interface IProbeController {
 	 * Overwrites the current list of patterns with a new pattern list.
 	 * 
 	 * @param patternList
-	 *            list of strings with patterns
-	 *            where each string starts either with a + or -
+	 *            list of strings with patterns where each string starts either with a + or -. The list can be empty (in which case the internal pattern list and the
+	 *            internal cache are cleared) - but not null.
 	 * 
 	 * @since 1.6
 	 */

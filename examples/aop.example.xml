@@ -3,87 +3,112 @@
 <aspectj>
 	<weaver options=""> <!-- options="-verbose -showWeaveInfo -Xjoinpoints:synchronization" -->
 
-		<!-- Use the exclude/include directives to specify which classes are (not) to be considered for weaving.
-		     Some examples are given below. -->
+		<!--
+			 Use the exclude/include directives to specify which classes are (not) to be considered for weaving.
+		     Some examples are given below. Please refer to the AspectJ documentation to learn more on the 
+		     allowed patterns, including wildcards. 
+		-->
 
-		<!-- Use * to consider all classes. In this case, you typically need some additional excludes. -->
+		<!-- 
+			Use * to consider all classes in all packages. In this case, you typically need some additional excludes. 
+		-->
 		<include within="*"/>
 
-		<!-- The monitoring solution used within in Kieker must not be monitored! -->
-		<!-- <exclude within="org.apache.commons.logging..*" />  -->
-		<!-- <exclude within="org.slf4j..*" />  -->
-		<!-- <exclude within="java.util.logging..*" />  -->
-		<!-- <exclude within="org.apache.log4j..*" />  -->
+		<!--
+			Include/exclude examples for specific libraries:
+		-->
 
-		<!-- instrument the kieker.tests -->
+		<!-- 
+		     Important: The logger library that is configured to be used by Kieker must always be excluded!
+		     (Particularly important when using the include-all directive from above.) 
+		--> 
+		<exclude within="org.apache.commons.logging..*" /> 
+		<exclude within="org.slf4j..*" /> 
+		<exclude within="java.util.logging..*" /> 
+		<exclude within="org.apache.log4j..*" />
+
+		<!-- Instrument all kieker.tests: -->
 		<!-- <include within="kieker.tests..*" /> -->
 
 		<!-- Example instrumentation for the iBATIS JPetStore -->
 		<!-- <include within="com.ibatis.jpetstore..*"/> -->
 		<!-- <include within="org.apache.struts.action.ActionServlet" /> -->
 
-		<!-- Example instrumentation for Sun's Java Pet Store -->
-		<!-- <include within="com.sun.j2ee.blueprints..*"/> -->
-		<!-- <exclude within="java..*,com.sun.corba..*,com.sun.enterprise..*,com.sun.appserv..*"/> -->
-		<!-- <exclude within="com.sun.j2ee.blueprints.waf.controller.web.EventMapping,com.sun.j2ee.blueprints.waf.processmanager..*"/> -->
-
-		<!-- Instrumentation of the dacapo eclipse benchmark -->
-		<!-- <include within="org.eclipse..*"/> -->
-
-		<!-- include this to enable javac compilation (instead of ajc) of the probes -->
+		<!-- Include this to enable javac compilation (instead of ajc) of the probes: -->
 		<!-- <include within="kieker.monitoring.probe.aspectj..*"/> -->
 	</weaver>
 
 	<aspects>
-		<!-- Use the aspect directives to specify the aspect(s) to use (typically only one). -->
+		<!-- 
+			Aspects are configured in this section of the AspectJ configuration file.
+			Specific examples for Kieker monitoring aspects are given below.
+			Usually, only one aspect should be active at a time. 
+		-->
 
+		<!-- 1. STATE-BASED MONITORING (OPERATION EXECUTIONS)
+			 The following directives enable aspects for monitoring operation executions. These aspects intercept 
+			 an execution of a software operation resulting in a single Kieker monitoring record of type 
+			 OperationExecutionRecord. 
+			 Depending on the used directives, i. all, ii. only annotated (@OperationExecutionMonitoringProbe), 
+			 or ii. only specific methods are monitored. Note that the noGetterAndSetter aspects also exclude 
+			 is..() methods for boolean getters. The Servlet aspects additionally extract session information 
+			 from Servlet entry point methods (do* with HttpServletRequest and HttpServletResponse parameters.)  
+		 -->
+		
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectAnnotation"/> -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectAnnotationServlet"/> -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFull"/> -->
-		<aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFullNoGetterAndSetter"/>
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFullNoGetterAndSetter"/> -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFullServlet"/> -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFullNoGetterAndSetterServlet"/> -->
 		
-		<!-- KiekerFlow Aspects -->
-		<!-- ################## -->
+		<!-- 2. EVENT-BASED MONITORING		
+			 The following directives enable aspects for monitoring control flow events, resulting in different 
+			 types of monitoring records to be found in the kieker.common.record.flow package.  
+			 Depending on the used directives, i. all, ii. only annotated, or iii. only specific methods are 
+			 monitored. Again, the noGetterAndSetter aspects also exclude is.. for boolean getters. 
+		-->
 		
-		<!-- Concurrency -->
+		<!-- Concurrency (beta stated): -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.concurrency.ThreadingAspect" /> -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.concurrency.SynchronizedAspect" /> -->
 		
-		<!-- Construction -->
+		<!-- Constructors and constructor calls: -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.construction.FullInstrumentation" /> -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.construction.Annotation" /> -->
 
-		<!-- ConstructorExecution -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.constructorExecution.FullInstrumentation" /> -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.constructorExecution.Annotation" /> -->
 
-		<!-- ConstructorCall -->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.constructorExecutionObject.FullInstrumentation" /> -->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.constructorExecutionObject.Annotation" /> -->
+
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.constructorCall.FullInstrumentation" /> -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.constructorCall.Annotation" /> -->
-		
-		<!-- OperationExecution -->
-		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecution.FullInstrumentation" /> -->
-		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecution.FullInstrumentationNoGetterAndSetter" /> -->
-		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecution.Annotation" /> -->
 
-		<!-- OperationExecutionObject -->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.constructorCallObject.FullInstrumentation" /> -->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.constructorCallObject.Annotation" /> -->
+		
+		<!-- Method executions and method calls: -->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecution.FullInstrumentation" /> -->
+		<aspect name="kieker.monitoring.probe.aspectj.flow.operationExecution.FullInstrumentationNoGetterAndSetter" /> 
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecution.Annotation" /> -->
+		
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecutionObject.FullInstrumentation" /> -->
-		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecutionObject.FullInstrumentationNoGetterAndSetter" /> -->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecutionObject.FullInstrumentationNoGetterAndSetter" />  -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecutionObject.Annotation" /> -->
 
-		<!-- OperationCall -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationCall.FullInstrumentation" /> -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationCall.FullInstrumentationNoGetterAndSetter" /> -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationCall.Annotation" /> -->
 		
-		<!-- ObjectOperationCall -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationCallObject.FullInstrumentation" /> -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationCallObject.FullInstrumentationNoGetterAndSetter" /> -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationCallObject.Annotation" /> -->
 		
-		<!-- Definition of additional targeted aspects (example for a single additional getter) -->
+		<!--
+			Definition of additional targeted aspects (example for a single additional getter). 
+			Use these directives to create additional aspects without the need to actually implement them. -->
 		<!--  
 		<concrete-aspect name="kieker.monitoring.probe.aspectj.flow.operationExecution.TargetedAspect" extends="kieker.monitoring.probe.aspectj.flow.operationExecution.AbstractAspect">
 			<pointcut name="monitoredOperation" expression="execution(int kiekerFlow.TestFlow.getA())" />

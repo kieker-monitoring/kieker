@@ -37,6 +37,7 @@ fi
 
 # Dependency graphs, equivalence classes
 ${TRACE_ANALYSIS_SH} \
+    --verbose \
     --inputdirs "${EXAMPLE_LOG}" --outputdir "./${OUTDIR}" \
     --plot-Deployment-Component-Dependency-Graph \
     --plot-Assembly-Component-Dependency-Graph \
@@ -55,6 +56,7 @@ ${TRACE_ANALYSIS_SH} \
 # Assembly-level representative:    6488138950668976129
 
 ${TRACE_ANALYSIS_SH} \
+    --verbose \
     --inputdirs "${EXAMPLE_LOG}" --outputdir "./${OUTDIR}" \
     --select-traces  6488138950668976141 6488138950668976129 6488138950668976130 6488138950668976131 \
     --plot-Deployment-Sequence-Diagrams \

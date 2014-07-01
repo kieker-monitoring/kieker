@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  ***************************************************************************/
 
 package kieker.tools.logReplayer;
+
+import java.util.Arrays;
 
 import kieker.analysis.IAnalysisController;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
@@ -41,6 +43,9 @@ public class FilesystemLogReplayer extends AbstractLogReplayer {
 	 *            The name of the monitoring configuration file.
 	 * @param realtimeMode
 	 *            Whether realtime mode should be used.
+	 * @param realtimeAccelerationFactor
+	 *            Determines whether to accelerate (value > 1.0) or slow down (<1.0) the replay in realtime mode by the given factor.
+	 *            Choose a value of 1.0 for "real" realtime mode (i.e., no acceleration/slow down)
 	 * @param keepOriginalLoggingTimestamps
 	 *            Whether to keep the original logging timestamps or not.
 	 * @param numRealtimeWorkerThreads
@@ -52,16 +57,14 @@ public class FilesystemLogReplayer extends AbstractLogReplayer {
 	 * @param inputDirs
 	 *            The array containing the input directories.
 	 */
-	public FilesystemLogReplayer(final String monitoringConfigurationFile, final boolean realtimeMode, final boolean keepOriginalLoggingTimestamps,
+	public FilesystemLogReplayer(final String monitoringConfigurationFile, final boolean realtimeMode, final double realtimeAccelerationFactor,
+			final boolean keepOriginalLoggingTimestamps,
 			final int numRealtimeWorkerThreads, final long ignoreRecordsBeforeTimestamp, final long ignoreRecordsAfterTimestamp,
 			final String[] inputDirs) {
-		super(monitoringConfigurationFile, realtimeMode, keepOriginalLoggingTimestamps, numRealtimeWorkerThreads, ignoreRecordsBeforeTimestamp,
+		super(monitoringConfigurationFile, realtimeMode, realtimeAccelerationFactor, keepOriginalLoggingTimestamps, numRealtimeWorkerThreads,
+				ignoreRecordsBeforeTimestamp,
 				ignoreRecordsAfterTimestamp);
-		// Java 1.5 compatibility
-		this.inputDirs = new String[inputDirs.length];
-		System.arraycopy(inputDirs, 0, this.inputDirs, 0, inputDirs.length);
-		// for Java 1.6+:
-		// this.inputDirs = Arrays.copyOf(inputDirs, inputDirs.length);
+		this.inputDirs = Arrays.copyOf(inputDirs, inputDirs.length);
 	}
 
 	/**

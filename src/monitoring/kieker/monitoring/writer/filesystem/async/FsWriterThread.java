@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,7 +55,7 @@ public final class FsWriterThread extends AbstractFsWriterThread {
 		final Object[] recordFields = monitoringRecord.toArray();
 		final StringBuilder sb = new StringBuilder(256);
 		sb.append('$');
-		sb.append(this.monitoringController.getIdForString(monitoringRecord.getClass().getName()));
+		sb.append(this.monitoringController.getUniqueIdForString(monitoringRecord.getClass().getName()));
 		sb.append(';');
 		sb.append(monitoringRecord.getLoggingTimestamp());
 		for (final Object recordField : recordFields) {

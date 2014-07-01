@@ -5,6 +5,47 @@ http://kieker-monitoring.net) contains details on the changes.
 
 Please refer to the Kieker User Guide for details on using Kieker.
 
+* 1.10 (upcoming)
+- New features (selection)
+  - Various samplers to collect data from the JVM	
+  
+- support for Java 1.8 (via AspectJ)
+
+* 1.9 (April 16, 2014)
+- New features (selection)
+  - Binary monitoring writers using Java NIO 
+  - Support for DiSL probes
+  - Writer for exporting records to the ExplorViz tool for online
+    trace visualization
+  - Trace Analysis GUI (beta)
+  - TSLib: time series analysis library (beta)
+  - OPAD: online performance anomaly detection filters (beta)
+  - Live demo part of the Java EE example 
+  - TraceAnalysis: coloring of components and operations based on 
+    response times
+- API change:
+  - Kieker's AspectJ weaver Jar now uses a default aop.xml when 
+    no other aop.xml found. Should be disabled in multi-classloader 
+    environments (Java EE, OSGi, etc.) by using a new configuration 
+    parameter; alternatively, AspectJ's weaver agent can be used.
+- Bug fixes and improvements to code, performance, tests, build scripts, 
+  documentation, examples
+- Improvements to the WebGUI (see separate `HISTORY` file)
+
+* 1.8 (October 16, 2013)
+- New features (selection)
+  - Data Bridge: Facility to connect Kieker's Java core with other platforms
+  - New reader plugin that provides the current system time in regular intervals
+  - New TCP writer and reader
+  - Acceleration/slow-down factor for real-time replayer
+- Minor changes to the record API 
+  - Additional method for binary (de)serialization
+  - `TYPES` field now public 
+  - Many record types no longer `final` (eases custom extensions)
+- Bug fixes and improvements to code, performance, tests, build scripts, 
+  documentation, examples
+- Various improvements to the WebGUI (see separate `HISTORY` file)
+
 * 1.7 (April 17, 2013)
 - Major changes
   - Adaptive monitoring: extended set of (de)activation patterns to 

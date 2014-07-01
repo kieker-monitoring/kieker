@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,8 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.misc.RegistryRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.core.registry.RegistryRecord;
 import kieker.monitoring.writer.IMonitoringWriter;
 
 /**
@@ -104,9 +104,10 @@ public final class WriterController extends AbstractController implements IWrite
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
 		try {
-			// fast lane for RegistryRecords (these must always be delivered!)
+			// fast lane for RegistryRecords (these must always be delivered without blocking!)
 			if (!(record instanceof RegistryRecord)) {
 				final IMonitoringController monitoringController = super.monitoringController;
 				if (!monitoringController.isMonitoringEnabled()) { // enabled and not terminated
@@ -118,11 +119,17 @@ public final class WriterController extends AbstractController implements IWrite
 				if ((0L == this.numberOfInserts.getAndIncrement()) && this.logMetadataRecord) {
 					this.monitoringController.sendMetadataAsRecord();
 				}
-			}
-			if (!this.monitoringWriter.newMonitoringRecord(record)) {
-				LOG.error("Error writing the monitoring data. Will terminate monitoring!");
-				this.terminate();
-				return false;
+				if (!this.monitoringWriter.newMonitoringRecord(record)) {
+					LOG.error("Error writing the monitoring data. Will terminate monitoring!");
+					this.terminate();
+					return false;
+				}
+			} else { // registry record
+				if (!this.monitoringWriter.newMonitoringRecordNonBlocking(record)) {
+					LOG.error("Error writing the monitoring data. Will terminate monitoring!");
+					this.terminate();
+					return false;
+				}
 			}
 			return true;
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
@@ -135,6 +142,7 @@ public final class WriterController extends AbstractController implements IWrite
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final long getNumberOfInserts() {
 		return this.numberOfInserts.longValue();
 	}

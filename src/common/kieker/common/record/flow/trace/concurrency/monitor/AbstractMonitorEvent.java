@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,12 @@
 
 package kieker.common.record.flow.trace.concurrency.monitor;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.flow.trace.AbstractTraceEvent;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Jan Waller
@@ -24,13 +29,15 @@ import kieker.common.record.flow.trace.AbstractTraceEvent;
  * @since 1.8
  */
 public abstract class AbstractMonitorEvent extends AbstractTraceEvent {
-	private static final long serialVersionUID = -1L;
-	private static final Class<?>[] TYPES = {
+	public static final int SIZE = (2 * TYPE_SIZE_LONG) + (2 * TYPE_SIZE_INT);
+	public static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
 		int.class, // TraceEvent.orderIndex
 		int.class, // lockId
 	};
+
+	private static final long serialVersionUID = -1L;
 
 	private final int lockId;
 
@@ -65,14 +72,49 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
 	 */
-	public Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.lockId, };
+	public AbstractMonitorEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		super(buffer, stringRegistry);
+		this.lockId = buffer.getInt();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Object[] toArray() {
+		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getLockId(), };
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		buffer.putLong(this.getTimestamp());
+		buffer.putLong(this.getTraceId());
+		buffer.putInt(this.getOrderIndex());
+		buffer.putInt(this.getLockId());
+	}
+
+	@Override
 	public Class<?>[] getValueTypes() {
-		return TYPES.clone();
+		return TYPES; // NOPMD
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int getSize() {
+		return SIZE;
 	}
 
 	public final int getLockId() {

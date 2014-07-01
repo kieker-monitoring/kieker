@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -77,6 +77,7 @@ public class DescriptionDecoratorFilter<V extends AbstractPayloadedVertex<V, E, 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void visitVertex(final V vertex) {
 		final ISystemModelElement element = vertex.getPayload();
 		if (element == null) {
@@ -90,6 +91,7 @@ public class DescriptionDecoratorFilter<V extends AbstractPayloadedVertex<V, E, 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void visitEdge(final E edge) {
 		// Not yet supported
 	}

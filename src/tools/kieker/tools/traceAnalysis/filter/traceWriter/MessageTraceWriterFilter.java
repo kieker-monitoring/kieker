@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -76,7 +76,9 @@ public class MessageTraceWriterFilter extends AbstractMessageTraceProcessingFilt
 	public void printStatusMessage() {
 		super.printStatusMessage();
 		final int numTraces = this.getSuccessCount();
-		this.stdOutPrintln("Wrote " + numTraces + " trace" + (numTraces > 1 ? "s" : "") + " to file '" + this.outputFn + "'"); // NOCS
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Wrote " + numTraces + " trace" + (numTraces > 1 ? "s" : "") + " to file '" + this.outputFn + "'"); // NOCS
+		}
 	}
 
 	/**
@@ -94,8 +96,10 @@ public class MessageTraceWriterFilter extends AbstractMessageTraceProcessingFilt
 	 */
 	@Override
 	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration();
+		final Configuration configuration = super.getCurrentConfiguration();
+
 		configuration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_FN, this.outputFn);
+
 		return configuration;
 	}
 

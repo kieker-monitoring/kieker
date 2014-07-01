@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package kieker.test.analysis.util.plugin.filter.flow;
 
 import kieker.analysis.plugin.filter.flow.TraceEventRecords;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
-import kieker.common.record.flow.trace.Trace;
+import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.concurrency.SplitEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
@@ -110,7 +110,7 @@ public final class BookstoreEventRecordFactory {
 						traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
 						BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE);
 
-		final Trace trace = new Trace(traceId, -1, sessionId, hostname, -1, -1);
+		final TraceMetadata trace = new TraceMetadata(traceId, -1, sessionId, hostname, -1, -1);
 		final AbstractTraceEvent[] events = new AbstractTraceEvent[] {
 			entry0_0__bookstore_searchBook,
 			entry1_1__catalog_getBook,
@@ -206,7 +206,7 @@ public final class BookstoreEventRecordFactory {
 				traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
 				BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE);
 
-		final Trace trace = new Trace(traceId, -1, sessionId, hostname, -1, -1);
+		final TraceMetadata trace = new TraceMetadata(traceId, -1, sessionId, hostname, -1, -1);
 		final AbstractTraceEvent[] events = new AbstractTraceEvent[] {
 			entry0_0__bookstore_searchBook,
 			call1_1__catalog_getBook,
@@ -308,7 +308,7 @@ public final class BookstoreEventRecordFactory {
 						traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
 						BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE);
 
-		final Trace trace = new Trace(traceId, -1, sessionId, hostname, -1, -1);
+		final TraceMetadata trace = new TraceMetadata(traceId, -1, sessionId, hostname, -1, -1);
 		final AbstractTraceEvent[] events = new AbstractTraceEvent[] {
 			entry0_0__bookstore_searchBook,
 			call1_1__catalog_getBook,
@@ -373,7 +373,7 @@ public final class BookstoreEventRecordFactory {
 						traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
 						BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE);
 
-		final Trace trace = new Trace(traceId, -1, sessionId, hostname, -1, -1);
+		final TraceMetadata trace = new TraceMetadata(traceId, -1, sessionId, hostname, -1, -1);
 		final AbstractTraceEvent[] events = new AbstractTraceEvent[] {
 			entry0_0__bookstore_searchBook,
 			call1_1__catalog_getBook,
@@ -440,7 +440,7 @@ public final class BookstoreEventRecordFactory {
 						traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
 						BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE);
 
-		final Trace trace = new Trace(traceId, -1, sessionId, hostname, -1, -1);
+		final TraceMetadata trace = new TraceMetadata(traceId, -1, sessionId, hostname, -1, -1);
 		final AbstractTraceEvent[] events = new AbstractTraceEvent[] {
 			entry0_0__bookstore_searchBook,
 			call1_1__catalog_getBook,
@@ -506,7 +506,7 @@ public final class BookstoreEventRecordFactory {
 						traceId, curOrderIndex++, BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_BOOKSTORE_SEARCH_BOOK,
 						BookstoreOperationExecutionRecordFactory.FQ_CLASS_BOOKSTORE);
 
-		final Trace trace = new Trace(traceId, -1, sessionId, hostname, -1, -1);
+		final TraceMetadata trace = new TraceMetadata(traceId, -1, sessionId, hostname, -1, -1);
 		final AbstractTraceEvent[] events = new AbstractTraceEvent[] {
 			entry0_0__bookstore_searchBook,
 			call2_1__crm_getOrders,
@@ -547,7 +547,7 @@ public final class BookstoreEventRecordFactory {
 						BookstoreOperationExecutionRecordFactory.FQ_SIGNATURE_CATALOG_GET_BOOK,
 						BookstoreOperationExecutionRecordFactory.FQ_CLASS_CATALOG);
 
-		final Trace trace = new Trace(traceId, -1, sessionId, hostname, -1, -1);
+		final TraceMetadata trace = new TraceMetadata(traceId, -1, sessionId, hostname, -1, -1);
 		final AbstractTraceEvent[] events = new AbstractTraceEvent[] {
 			call2_1__crm_getOrders,
 			call3_2__catalog_getBook,

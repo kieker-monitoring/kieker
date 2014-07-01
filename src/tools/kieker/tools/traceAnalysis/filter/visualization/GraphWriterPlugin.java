@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,8 +31,6 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ComponentAllocationDependencyGraph;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ComponentAllocationDependencyGraphFormatter;
 import kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ComponentAssemblyDependencyGraph;
@@ -88,8 +86,6 @@ public class GraphWriterPlugin extends AbstractFilterPlugin {
 	 * Name of the plugin's graph input port.
 	 */
 	public static final String INPUT_PORT_NAME_GRAPHS = "inputGraph";
-
-	private static final Log LOG = LogFactory.getLog(GraphWriterPlugin.class);
 
 	private static final String ENCODING = "UTF-8";
 
@@ -210,7 +206,7 @@ public class GraphWriterPlugin extends AbstractFilterPlugin {
 				try {
 					writer.close();
 				} catch (final IOException e) {
-					LOG.error(String.format(WRITE_ERROR_MESSAGE_TEMPLATE, fileName), e);
+					this.log.error(String.format(WRITE_ERROR_MESSAGE_TEMPLATE, fileName), e);
 				}
 			}
 		}

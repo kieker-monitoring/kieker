@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,9 +81,6 @@ public class TestMonitoringRecordLoggerFilter extends AbstractKiekerTest {
 
 		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, AsyncFsWriter.class.getName());
 
-		final String asyncFsWriterPropertyPrefix = AsyncFsWriter.class.getName() + ".";
-
-		config.setProperty(asyncFsWriterPropertyPrefix + AbstractAsyncFSWriter.CONFIG_TEMP, Boolean.FALSE.toString());
 		config.setProperty(AsyncFsWriter.class.getName() + "." + AbstractAsyncFSWriter.CONFIG_PATH, this.tmpFolder.getRoot().getCanonicalPath());
 
 		// Write configuration to tmp file

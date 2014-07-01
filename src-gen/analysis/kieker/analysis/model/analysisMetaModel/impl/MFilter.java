@@ -162,4 +162,4 @@ public class MFilter extends MPlugin implements MIFilter {
 		return super.eIsSet(featureID);
 	}
 
-} //MFilter
+} // MFilter

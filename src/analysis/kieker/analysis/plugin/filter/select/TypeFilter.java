@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +26,6 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 
 /**
  * This filter has exactly one input port and one output port.
@@ -70,8 +68,6 @@ public final class TypeFilter extends AbstractFilterPlugin {
 	 */
 	public static final String CONFIG_PROPERTY_NAME_TYPES = "types";
 
-	private static final Log LOG = LogFactory.getLog(TypeFilter.class);
-
 	private final Class<?>[] acceptedClasses;
 
 	/**
@@ -91,7 +87,7 @@ public final class TypeFilter extends AbstractFilterPlugin {
 			try {
 				listOfClasses.add(Class.forName(clazz));
 			} catch (final ClassNotFoundException ex) {
-				LOG.warn("Failed to add class " + clazz + " to the filter.", ex);
+				this.log.warn("Failed to add class " + clazz + " to the filter.", ex);
 			}
 		}
 		this.acceptedClasses = listOfClasses.toArray(new Class<?>[listOfClasses.size()]);
@@ -123,7 +119,7 @@ public final class TypeFilter extends AbstractFilterPlugin {
 		for (final Class<?> clazz : this.acceptedClasses) {
 			if (clazz.isAssignableFrom(eventClass)) {
 				super.deliver(OUTPUT_PORT_NAME_TYPE_MATCH, event);
-				break; // only deliver once!
+				return; // only deliver once!
 			}
 		}
 		super.deliver(OUTPUT_PORT_NAME_TYPE_MISMATCH, event);

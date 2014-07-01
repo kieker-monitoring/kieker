@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,8 @@ package kieker.tools.traceAnalysis.filter.traceReconstruction;
 import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.NavigableSet;
 import java.util.Set;
-import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
@@ -31,8 +31,6 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.AbstractTraceProcessingFilter;
 import kieker.tools.traceAnalysis.filter.executionRecordTransformation.ExecutionEventProcessingException;
@@ -88,8 +86,6 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	/** This is the default value for the maximal duration of a trace. */
 	public static final String CONFIG_PROPERTY_VALUE_MAX_TRACE_DURATION = "9223372036854775807"; // Long.toString(Long.MAX_VALUE)
 
-	private static final Log LOG = LogFactory.getLog(TraceReconstructionFilter.class);
-
 	private final TimeUnit timeunit;
 
 	/** TraceId x trace. */
@@ -105,9 +101,10 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	private boolean traceProcessingErrorOccured; // false
 
 	/** Pending traces sorted by tin timestamps. */
-	private final SortedSet<ExecutionTrace> timeoutMap = new TreeSet<ExecutionTrace>(new Comparator<ExecutionTrace>() {
+	private final NavigableSet<ExecutionTrace> timeoutMap = new TreeSet<ExecutionTrace>(new Comparator<ExecutionTrace>() {
 
 		/** Order traces by tins */
+		@Override
 		public int compare(final ExecutionTrace t1, final ExecutionTrace t2) {
 			if (t1 == t2) { // NOPMD (no equals)
 				return 0;
@@ -135,22 +132,14 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	public TraceReconstructionFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
-		final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
-		TimeUnit recordTimeunit;
-		try {
-			recordTimeunit = TimeUnit.valueOf(recordTimeunitProperty);
-		} catch (final IllegalArgumentException ex) { // already caught in AnalysisController, should never happen
-			LOG.warn(recordTimeunitProperty + " is no valid TimeUnit! Using NANOSECONDS instead.");
-			recordTimeunit = TimeUnit.NANOSECONDS;
-		}
-		this.timeunit = recordTimeunit;
+		this.timeunit = super.recordsTimeUnitFromProjectContext;
 
 		final String configTimeunitProperty = configuration.getStringProperty(CONFIG_PROPERTY_NAME_TIMEUNIT);
 		TimeUnit configTimeunit;
 		try {
 			configTimeunit = TimeUnit.valueOf(configTimeunitProperty);
 		} catch (final IllegalArgumentException ex) {
-			LOG.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + this.timeunit.name() + " instead.");
+			this.log.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + this.timeunit.name() + " instead.");
 			configTimeunit = this.timeunit;
 		}
 
@@ -222,7 +211,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 			ExecutionTrace executionTrace = this.pendingTraces.get(traceId);
 			if (executionTrace != null) { // trace (artifacts) exists already;
 				if (!this.timeoutMap.remove(executionTrace)) { // remove from timeoutMap. Will be re-added below
-					LOG.error("Missing entry for trace in timeoutMap: " + executionTrace
+					this.log.error("Missing entry for trace in timeoutMap: " + executionTrace
 							+ " PendingTraces and timeoutMap are now longer consistent!");
 					this.reportError(traceId);
 				}
@@ -233,13 +222,13 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 			try {
 				executionTrace.add(execution);
 				if (!this.timeoutMap.add(executionTrace)) { // (re-)add trace to timeoutMap
-					LOG.error("Equal entry existed in timeoutMap already:" + executionTrace);
+					this.log.error("Equal entry existed in timeoutMap already:" + executionTrace);
 				}
 				this.processTimeoutQueue();
 			} catch (final InvalidTraceException ex) { // this would be a bug!
-				LOG.error("Attempt to add record to wrong trace", ex);
+				this.log.error("Attempt to add record to wrong trace", ex);
 			} catch (final ExecutionEventProcessingException ex) {
-				LOG.error("ExecutionEventProcessingException occured while processing the timeout queue.", ex);
+				this.log.error("ExecutionEventProcessingException occured while processing the timeout queue.", ex);
 			}
 		}
 	}
@@ -288,15 +277,15 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 				this.invalidTraces.add(curTraceId);
 				if (!this.ignoreInvalidTraces) {
 					this.traceProcessingErrorOccured = true;
-					LOG.warn("Note that this filter was configured to terminate at the *first* occurence of an invalid trace \n"
+					this.log.warn("Note that this filter was configured to terminate at the *first* occurence of an invalid trace \n"
 							+ "If this is not the desired behavior, set the configuration property "
 							+ CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES + " to 'true'");
 					throw new ExecutionEventProcessingException(transformationError, ex);
 				} else {
-					LOG.error(transformationError); // do not pass 'ex' to LOG.error because this makes the output verbose (#584)
+					this.log.error(transformationError); // do not pass 'ex' to log.error because this makes the output verbose (#584)
 				}
 			} else {
-				LOG.warn("Found additional fragment for trace already marked invalid: " + transformationError);
+				this.log.warn("Found additional fragment for trace already marked invalid: " + transformationError);
 			}
 		}
 	}
@@ -310,10 +299,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	private void processTimeoutQueue() throws ExecutionEventProcessingException {
 		synchronized (this.timeoutMap) {
 			while (!this.timeoutMap.isEmpty() && (this.terminated || ((this.maxTout - this.timeoutMap.first().getMinTin()) > this.maxTraceDuration))) {
-				// Java 1.5 compatibility
-				final ExecutionTrace polledTrace = this.timeoutMap.first();
-				this.timeoutMap.remove(polledTrace);
-				// Java 1.6: final ExecutionTrace polledTrace = this.timeoutMap.pollFirst();
+				final ExecutionTrace polledTrace = this.timeoutMap.pollFirst();
 				final long curTraceId = polledTrace.getTraceId();
 				this.pendingTraces.remove(curTraceId);
 				this.processExecutionTrace(polledTrace);
@@ -346,11 +332,11 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 				if (!error || (this.traceProcessingErrorOccured && !this.ignoreInvalidTraces)) {
 					this.processTimeoutQueue();
 				} else {
-					LOG.info("terminate called with error an flag set or a trace processing occurred; won't process timeoutqueue any more.");
+					this.log.info("terminate called with error an flag set or a trace processing occurred; won't process timeoutqueue any more.");
 				}
 			} catch (final ExecutionEventProcessingException ex) {
 				this.traceProcessingErrorOccured = true;
-				LOG.error("Error processing timeout queue", ex);
+				this.log.error("Error processing timeout queue", ex);
 			}
 		}
 	}
@@ -366,8 +352,10 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 				final String maxToutStr = new StringBuilder().append(this.maxTout).append(" (")
 						.append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.timeunit.toNanos(this.maxTout))).append(",")
 						.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.maxTout)).append(")").toString();
-				this.stdOutPrintln("First timestamp: " + minTinStr);
-				this.stdOutPrintln("Last timestamp: " + maxToutStr);
+				if (LOG.isDebugEnabled()) {
+					LOG.debug("First timestamp: " + minTinStr);
+					LOG.debug("Last timestamp: " + maxToutStr);
+				}
 			}
 		}
 	}
@@ -377,10 +365,12 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	 */
 	@Override
 	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration();
+		final Configuration configuration = super.getCurrentConfiguration();
+
 		configuration.setProperty(CONFIG_PROPERTY_NAME_TIMEUNIT, this.timeunit.name());
 		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, Long.toString(this.maxTraceDuration));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES, Boolean.toString(this.ignoreInvalidTraces));
+
 		return configuration;
 	}
 }

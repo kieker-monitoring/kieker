@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import java.util.TimeZone;
 import java.util.concurrent.BlockingQueue;
 
 import kieker.common.configuration.Configuration;
+import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.filesystem.FSUtil;
 import kieker.monitoring.core.controller.IMonitoringController;
@@ -39,14 +40,14 @@ import kieker.monitoring.writer.filesystem.map.MappingFileWriter;
 public abstract class AbstractAsyncFSWriter extends AbstractAsyncWriter {
 	/** The name of the configuration for the custom storage path if the writer is advised not to store in the temporary directory. */
 	public static final String CONFIG_PATH = "customStoragePath";
-	/** The name of the configuration determining whether to store the data in the temporary directory or not. */
-	public static final String CONFIG_TEMP = "storeInJavaIoTmpdir";
 	/** The name of the configuration determining the maximal number of entries in a file. */
 	public static final String CONFIG_MAXENTRIESINFILE = "maxEntriesInFile";
 	/** The name of the configuration determining the maximal size of the files in MiB. */
 	public static final String CONFIG_MAXLOGSIZE = "maxLogSize"; // in MiB
 	/** The name of the configuration determining the maximal number of log files. */
 	public static final String CONFIG_MAXLOGFILES = "maxLogFiles";
+	/** The name of the configuration determining whether to store the data in the temporary directory or not. */
+	private static final String CONFIG_TEMP = "storeInJavaIoTmpdir";
 
 	private final String configPath;
 	private final int configMaxEntriesInFile;
@@ -64,11 +65,13 @@ public abstract class AbstractAsyncFSWriter extends AbstractAsyncWriter {
 		super(configuration);
 		final String prefix = this.getClass().getName() + '.';
 		// Determine path
-		String path;
 		if (configuration.getBooleanProperty(prefix + CONFIG_TEMP)) {
+			LogFactory.getLog(this.getClass()).warn(
+					"Using deprecated configuration property " + prefix + CONFIG_TEMP + ". Instead use empty value for " + prefix + CONFIG_PATH);
+		}
+		String path = configuration.getStringProperty(prefix + CONFIG_PATH);
+		if (path.length() == 0) {
 			path = System.getProperty("java.io.tmpdir");
-		} else {
-			path = configuration.getStringProperty(prefix + CONFIG_PATH);
 		}
 		if (!(new File(path)).isDirectory()) {
 			throw new IllegalArgumentException("'" + path + "' is not a directory.");
@@ -92,8 +95,7 @@ public abstract class AbstractAsyncFSWriter extends AbstractAsyncWriter {
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration(super.getDefaultConfiguration());
 		final String prefix = this.getClass().getName() + "."; // can't use this.prefix, maybe uninitialized
-		configuration.setProperty(prefix + CONFIG_PATH, ".");
-		configuration.setProperty(prefix + CONFIG_TEMP, "true");
+		configuration.setProperty(prefix + CONFIG_PATH, "");
 		configuration.setProperty(prefix + CONFIG_MAXENTRIESINFILE, "25000");
 		configuration.setProperty(prefix + CONFIG_MAXLOGSIZE, "-1");
 		configuration.setProperty(prefix + CONFIG_MAXLOGFILES, "-1");

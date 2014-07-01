@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,14 +37,14 @@ import kieker.monitoring.writer.filesystem.map.StringMappingFileWriter;
 public abstract class AbstractAsyncZipWriter extends AbstractAsyncWriter {
 	/** The name of the configuration for the custom storage path if the writer is advised not to store in the temporary directory. */
 	public static final String CONFIG_PATH = "customStoragePath";
-	/** The name of the configuration determining whether to store the data in the temporary directory or not. */
-	public static final String CONFIG_TEMP = "storeInJavaIoTmpdir";
 	/** The name of the configuration determining the maximal number of entries in a file. */
 	public static final String CONFIG_MAXENTRIESINFILE = "maxEntriesInFile";
 	/** The name of the configuration determining the size of the buffer. */
 	public static final String CONFIG_BUFFER = "bufferSize";
 	/** The name of the configuration determining the compression level. */
 	public static final String CONFIG_COMPRESS_LEVEL = "compressionLevel";
+	/** The name of the configuration determining whether to store the data in the temporary directory or not. */
+	private static final String CONFIG_TEMP = "storeInJavaIoTmpdir";
 
 	private static final Log LOG = LogFactory.getLog(AbstractAsyncZipWriter.class);
 
@@ -65,11 +65,13 @@ public abstract class AbstractAsyncZipWriter extends AbstractAsyncWriter {
 
 		final String prefix = this.getClass().getName() + '.';
 		// Determine path
-		String tmpPath;
 		if (configuration.getBooleanProperty(prefix + CONFIG_TEMP)) {
+			LogFactory.getLog(this.getClass()).warn(
+					"Using deprecated configuration property " + prefix + CONFIG_TEMP + ". Instead use empty value for " + prefix + CONFIG_PATH);
+		}
+		String tmpPath = configuration.getStringProperty(prefix + CONFIG_PATH);
+		if (tmpPath.length() == 0) {
 			tmpPath = System.getProperty("java.io.tmpdir");
-		} else {
-			tmpPath = configuration.getStringProperty(prefix + CONFIG_PATH);
 		}
 		if (!(new File(tmpPath)).isDirectory()) {
 			throw new IllegalArgumentException("'" + tmpPath + "' is not a directory.");
@@ -103,8 +105,7 @@ public abstract class AbstractAsyncZipWriter extends AbstractAsyncWriter {
 	protected Configuration getDefaultConfiguration() {
 		final Configuration configuration = new Configuration(super.getDefaultConfiguration());
 		final String prefix = this.getClass().getName() + "."; // can't use this.prefix, maybe uninitialized
-		configuration.setProperty(prefix + CONFIG_PATH, ".");
-		configuration.setProperty(prefix + CONFIG_TEMP, "true");
+		configuration.setProperty(prefix + CONFIG_PATH, "");
 		configuration.setProperty(prefix + CONFIG_MAXENTRIESINFILE, "25000");
 		configuration.setProperty(prefix + CONFIG_BUFFER, "8192");
 		configuration.setProperty(prefix + CONFIG_COMPRESS_LEVEL, Integer.toString(Deflater.DEFAULT_COMPRESSION));

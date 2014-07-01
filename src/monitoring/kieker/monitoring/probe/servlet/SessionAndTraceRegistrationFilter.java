@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,7 +53,7 @@ import kieker.monitoring.timer.ITimeSource;
  * {@code
  * <filter>
  *   <filter-name>sessionAndTraceRegistrationFilter</filter-name>
- *   <filter-class>SessionAndTraceRegistrationFilter</filter-class>
+ *   <filter-class>kieker.monitoring.probe.servlet.SessionAndTraceRegistrationFilter</filter-class>
  * </filter>
  * <filter-mapping>
  *   <filter-name>sessionAndTraceRegistrationFilter</filter-name>
@@ -116,6 +116,7 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 		return this.filterOperationSignatureString;
 	}
 
+	@Override
 	public void init(final FilterConfig config) throws ServletException {
 		// by default, we do nothing here. Extending classes may override this method
 		final String valString = config.getInitParameter(CONFIG_PROPERTY_NAME_LOG_FILTER_EXECUTION);
@@ -143,6 +144,7 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 	 * @throws IOException
 	 * @throws ServletException
 	 */
+	@Override
 	public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
 		if (!MONITORING_CTRL.isMonitoringEnabled()) {
 			chain.doFilter(request, response);
@@ -189,6 +191,7 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 		}
 	}
 
+	@Override
 	public void destroy() {
 		// by default, we do nothing here. Extending classes may override this method
 	}

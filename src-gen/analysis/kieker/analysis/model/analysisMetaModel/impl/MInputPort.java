@@ -56,7 +56,7 @@ public class MInputPort extends MPort implements MIInputPort {
 	 */
 	public MIFilter getParent() {
 		if (eContainerFeatureID() != MIAnalysisMetaModelPackage.INPUT_PORT__PARENT) return null;
-		return (MIFilter)eContainer();
+		return (MIFilter)eInternalContainer();
 	}
 
 	/**
@@ -192,4 +192,4 @@ public class MInputPort extends MPort implements MIInputPort {
 		return super.eIsSet(featureID);
 	}
 
-} //MInputPort
+} // MInputPort

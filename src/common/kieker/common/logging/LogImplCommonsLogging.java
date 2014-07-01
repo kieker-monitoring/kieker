@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,6 +55,7 @@ public final class LogImplCommonsLogging implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean isDebugEnabled() {
 		return this.log.isDebugEnabled();
 	}
@@ -62,6 +63,7 @@ public final class LogImplCommonsLogging implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void debug(final String message) {
 		if (this.log.isDebugEnabled()) {
 			this.log.debug(message);
@@ -71,6 +73,7 @@ public final class LogImplCommonsLogging implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void debug(final String message, final Throwable t) {
 		if (this.log.isDebugEnabled()) {
 			this.log.debug(message, t);
@@ -80,6 +83,7 @@ public final class LogImplCommonsLogging implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void info(final String message) {
 		if (this.log.isInfoEnabled()) {
 			this.log.info(message);
@@ -89,6 +93,7 @@ public final class LogImplCommonsLogging implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void info(final String message, final Throwable t) {
 		if (this.log.isInfoEnabled()) {
 			this.log.info(message, t);
@@ -98,6 +103,7 @@ public final class LogImplCommonsLogging implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void warn(final String message) {
 		if (this.log.isWarnEnabled()) {
 			this.log.warn(message);
@@ -107,6 +113,7 @@ public final class LogImplCommonsLogging implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void warn(final String message, final Throwable t) {
 		if (this.log.isWarnEnabled()) {
 			this.log.warn(message, t);
@@ -116,6 +123,7 @@ public final class LogImplCommonsLogging implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void error(final String message) {
 		if (this.log.isErrorEnabled()) {
 			this.log.error(message);
@@ -125,6 +133,7 @@ public final class LogImplCommonsLogging implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void error(final String message, final Throwable t) {
 		if (this.log.isErrorEnabled()) {
 			this.log.error(message, t);

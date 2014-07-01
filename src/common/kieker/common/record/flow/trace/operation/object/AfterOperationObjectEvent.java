@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,13 @@
 
 package kieker.common.record.flow.trace.operation.object;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
 import kieker.common.record.flow.IObjectRecord;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Jan Waller
@@ -25,8 +30,8 @@ import kieker.common.record.flow.trace.operation.AfterOperationEvent;
  * @since 1.6
  */
 public class AfterOperationObjectEvent extends AfterOperationEvent implements IObjectRecord {
-	private static final long serialVersionUID = 2118146247161144658L;
-	private static final Class<?>[] TYPES = {
+	public static final int SIZE = (2 * TYPE_SIZE_LONG) + TYPE_SIZE_INT + (2 * TYPE_SIZE_STRING) + TYPE_SIZE_INT;
+	public static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
 		int.class, // TraceEvent.orderIndex
@@ -34,6 +39,8 @@ public class AfterOperationObjectEvent extends AfterOperationEvent implements IO
 		String.class, // OperationEvent.classSignature
 		int.class, // objectId
 	};
+
+	private static final long serialVersionUID = 2850083275002989849L;
 
 	private final int objectId;
 
@@ -84,6 +91,20 @@ public class AfterOperationObjectEvent extends AfterOperationEvent implements IO
 	}
 
 	/**
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
+	 */
+	public AfterOperationObjectEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		super(buffer, stringRegistry);
+		this.objectId = buffer.getInt();
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -96,11 +117,33 @@ public class AfterOperationObjectEvent extends AfterOperationEvent implements IO
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Class<?>[] getValueTypes() {
-		return TYPES.clone();
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		buffer.putLong(this.getTimestamp());
+		buffer.putLong(this.getTraceId());
+		buffer.putInt(this.getOrderIndex());
+		buffer.putInt(stringRegistry.get(this.getOperationSignature()));
+		buffer.putInt(stringRegistry.get(this.getClassSignature()));
+		buffer.putInt(this.getObjectId());
 	}
 
-	public int getObjectId() {
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Class<?>[] getValueTypes() {
+		return TYPES; // NOPMD
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int getSize() {
+		return SIZE;
+	}
+
+	@Override
+	public final int getObjectId() {
 		return this.objectId;
 	}
 }

@@ -239,4 +239,4 @@ public abstract class MPlugin extends MAnalysisComponent implements MIPlugin {
 		return super.eIsSet(featureID);
 	}
 
-} //MPlugin
+} // MPlugin

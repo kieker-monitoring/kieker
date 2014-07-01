@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,20 +16,21 @@
 
 package kieker.common.record.flow.trace.operation;
 
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+
+import kieker.common.util.registry.IRegistry;
+
 /**
  * @author Jan Waller
  * 
  * @since 1.6
  */
 public class AfterOperationEvent extends AbstractOperationEvent {
-	private static final long serialVersionUID = -1072024765497556058L;
-	private static final Class<?>[] TYPES = {
-		long.class, // Event.timestamp
-		long.class, // TraceEvent.traceId
-		int.class, // TraceEvent.orderIndex
-		String.class, // OperationEvent.operationSignature
-		String.class, // OperationEvent.classSignature
-	};
+	public static final int SIZE = AbstractOperationEvent.SIZE;
+	public static final Class<?>[] TYPES = AbstractOperationEvent.TYPES;
+
+	private static final long serialVersionUID = 99591136099208296L;
 
 	/**
 	 * This constructor initializes the fields of the record using the given parameters.
@@ -72,16 +73,15 @@ public class AfterOperationEvent extends AbstractOperationEvent {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * This constructor converts the given array into a record.
+	 * 
+	 * @param buffer
+	 *            The bytes for the record.
+	 * 
+	 * @throws BufferUnderflowException
+	 *             if buffer not sufficient
 	 */
-	public Object[] toArray() {
-		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getOperationSignature(), this.getClassSignature(), };
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public Class<?>[] getValueTypes() {
-		return TYPES.clone();
+	public AfterOperationEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		super(buffer, stringRegistry);
 	}
 }

@@ -1,0 +1,174 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<title>Kieker Live Demo</title>
+	<link rel="stylesheet" type="text/css" media="all" href="css/style.css" />
+	<link rel="shortcut icon" type="image/x-icon"
+		href="resources/favicon.ico" />
+	<style>
+/* Link color */
+a,#site-title a:focus,#site-title a:hover,#site-title a:active,.entry-title a:hover,.entry-title a:focus,.entry-title a:active,.widget_twentyeleven_ephemera .comments-link a:hover,section.recent-posts .other-recent-posts a[rel="bookmark"]:hover,section.recent-posts .other-recent-posts .comments-link a:hover,.format-image footer.entry-meta a:hover,#site-generator a:hover
+	{
+	color: #2456a1;
+}
+
+section.recent-posts .other-recent-posts .comments-link a:hover {
+	border-color: #2456a1;
+}
+
+article.feature-image.small .entry-summary p a:hover,.entry-header .comments-link a:hover,.entry-header .comments-link a:focus,.entry-header .comments-link a:active,.feature-slider a.active
+	{
+	background-color: #2456a1;
+}
+
+.ui-widget,.ui-widget .ui-widget {
+	font-size: 80% !important;
+}
+
+.colStyle {
+	width: 50%;
+}
+</style>
+</h:head>
+
+<h:body class="page">
+	<div id="page" style="background: #FFFFFF">
+		<div id="header">
+			<img src="resources/header_image_small.jpg" width="960" height="125"
+				border="0" usemap="#kiekermenumap" />
+			<map name="kiekermenumap">
+				<area shape="rect" coords="70,3,350,93"
+					href="http://kieker-monitoring.net" alt="home" title="home" />
+			</map>
+		</div>
+		<div class="menu-header">
+			<ul id="menu-header_menu" class="menu">
+				<li><a href="index.jsf">Main Menu</a></li>
+				<li><a href="recordList.jsf">Record List</a></li>
+				<li><a href="chart.jsf">Method Response Times</a></li>
+				<li><a style="color: #000000" href="systemModel.jsf">System
+						Model</a></li>
+				<li><a href="cpuAndMemSwap.jsf">CPU and MemSwap</a></li>
+				<li><a href="jvmData.jsf">JVM Data</a></li>
+			</ul>
+		</div>
+		<div id="main">
+			<h:form id="model">
+				<p:panel header="Tag Cloud with the Used Operations" style="margin-bottom:10px">
+					<p:tagCloud model="#{tagCloudBean.methodModel}" style="width:100%;" />
+				</p:panel>
+				<p:panel header="Tag Cloud with the Used Components" style="margin-bottom:10px">
+					<p:tagCloud model="#{tagCloudBean.componentModel}"
+						style="width:100%;" />
+				</p:panel>
+				<p:dataTable var="type" id="componentTypes"
+					value="#{systemModelBean.componentTypes}"
+					style="margin-bottom:10px">
+					<f:facet name="header">  
+						Component Types  
+					</f:facet>
+					<p:column headerText="Id">
+						<h:outputText value="#{type.id}" />
+					</p:column>
+					<p:column headerText="Package">
+						<h:outputText value="#{type.packageName}" />
+					</p:column>
+					<p:column headerText="Name">
+						<h:outputText value="#{type.typeName}" />
+					</p:column>
+					<p:column headerText="Operations">
+						<ui:repeat value="#{type.operations}" var="op">
+							<h:outputText value="#{op.signature}" />
+							<br />
+						</ui:repeat>
+					</p:column>
+				</p:dataTable>
+				<p:dataTable var="operation" id="operations"
+					value="#{systemModelBean.operations}" style="margin-bottom:10px">
+					<f:facet name="header">  
+		            	Operations  
+		        	</f:facet>
+					<p:column headerText="Id">
+						<h:outputText value="#{operation.id}" />
+					</p:column>
+					<p:column headerText="Component type">
+						<h:outputText value="#{operation.componentType.fullQualifiedName}" />
+					</p:column>
+					<p:column headerText="Name">
+						<h:outputText value="#{operation.signature.name}" />
+					</p:column>
+					<p:column headerText="Parameter types">
+						<ui:repeat value="#{operation.signature.paramTypeList}" var="type">
+							<h:outputText value="#{type}" />
+							<br />
+						</ui:repeat>
+					</p:column>
+					<p:column headerText="Return type">
+						<h:outputText value="#{operation.signature.returnType}" />
+					</p:column>
+				</p:dataTable>
+				<p:dataTable var="assemblyComponent" id="assemblyComponents"
+					value="#{systemModelBean.assemblyComponents}"
+					style="margin-bottom:10px">
+					<f:facet name="header">  
+		            	Assembly Components  
+		        	</f:facet>
+					<p:column headerText="Id">
+						<h:outputText value="#{assemblyComponent.id}" />
+					</p:column>
+					<p:column headerText="Name">
+						<h:outputText value="#{assemblyComponent.name}" />
+					</p:column>
+					<p:column headerText="Component type">
+						<h:outputText value="#{assemblyComponent.type.fullQualifiedName}" />
+					</p:column>
+				</p:dataTable>
+				<p:dataTable var="container" id="executionContainers"
+					value="#{systemModelBean.executionContainers}"
+					style="margin-bottom:10px">
+					<f:facet name="header">  
+		            	Execution Containers  
+		        	</f:facet>
+					<p:column headerText="Id">
+						<h:outputText value="#{container.id}" />
+					</p:column>
+					<p:column headerText="Name">
+						<h:outputText value="#{container.name}" />
+					</p:column>
+				</p:dataTable>
+				<p:dataTable var="deploymentComponent" id="deploymentComponents"
+					value="#{systemModelBean.deploymentComponents}">
+					<f:facet name="header">  
+		            	Deployment Components  
+		        	</f:facet>
+					<p:column headerText="Id">
+						<h:outputText value="#{deploymentComponent.id}" />
+					</p:column>
+					<p:column headerText="Assembly component">
+						<h:outputText value="#{deploymentComponent.assemblyComponent}" />
+					</p:column>
+					<p:column headerText="Execution container">
+						<h:outputText
+							value="#{deploymentComponent.executionContainer.name}" />
+					</p:column>
+				</p:dataTable>
+				<p:poll interval="2" update="model" />
+			</h:form>
+		</div>
+		<div id="footer">
+			<div id="footernav" class="nav">
+				<ul class="menu">
+					<li class="menu-item"><a
+						href="http://kieker-monitoring.net/contact/">Contact</a></li>
+					<li class="menu-item"><a
+						href="http://kieker-monitoring.net/legal-notice/">Legal Notice</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</h:body>
+</html>

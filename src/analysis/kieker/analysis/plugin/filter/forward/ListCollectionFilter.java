@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,6 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 
 /**
  * This filter collects the incoming objects in a simple synchronized list. It is mostly used for test purposes.
@@ -66,8 +64,6 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 	public static final String CONFIG_PROPERTY_NAME_LIST_FULL_BEHAVIOR = "listFullBehavior";
 	/** The default value for the behavior of a full list (drop oldest). */
 	public static final String CONFIG_PROPERTY_VALUE_LIST_FULL_BEHAVIOR = "dropOldest"; // must really be a String here
-
-	private static final Log LOG = LogFactory.getLog(ListCollectionFilter.class);
 
 	private final LinkedList<T> list; // NOCS NOPMD (we actually need LinkedLIst here, no good interface is provided)
 
@@ -113,7 +109,7 @@ public class ListCollectionFilter<T> extends AbstractFilterPlugin {
 		try {
 			tmpListFullBehavior = ListFullBehavior.valueOf(strListFullBehavior);
 		} catch (final IllegalArgumentException ex) {
-			LOG.warn(strListFullBehavior + " is no valid list full behavior! Using 'ignore' instead.");
+			this.log.warn(strListFullBehavior + " is no valid list full behavior! Using 'ignore' instead.");
 			tmpListFullBehavior = ListFullBehavior.ignore;
 		}
 		this.listFullBehavior = tmpListFullBehavior;

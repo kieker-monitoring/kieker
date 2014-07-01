@@ -214,4 +214,4 @@ public class MProperty extends EObjectImpl implements MIProperty {
 		return result.toString();
 	}
 
-} //MProperty
+} // MProperty

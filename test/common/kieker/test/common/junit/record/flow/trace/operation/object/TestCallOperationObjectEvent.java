@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,14 @@
 
 package kieker.test.common.junit.record.flow.trace.operation.object;
 
+import java.nio.ByteBuffer;
+
 import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.common.record.flow.trace.operation.object.CallOperationObjectEvent;
+import kieker.common.util.registry.IRegistry;
+import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 
@@ -73,6 +77,39 @@ public class TestCallOperationObjectEvent extends AbstractKiekerTest {
 		final Object[] event1Array = event1.toArray();
 
 		final CallOperationObjectEvent event2 = new CallOperationObjectEvent(event1Array);
+
+		Assert.assertEquals(event1, event2);
+		Assert.assertEquals(0, event1.compareTo(event2));
+		Assert.assertTrue(event1.refersToSameOperationAs(event2));
+		Assert.assertTrue(event1.refersToSameOperationAs(event2));
+	}
+
+	/**
+	 * Tests the constructor and writeBytes(..) methods of {@link CallOperationObjectEvent}.
+	 */
+	@Test
+	public void testSerializeDeserializeBinaryEquals() {
+
+		final CallOperationObjectEvent event1 =
+				new CallOperationObjectEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CALLER_OPERATION_SIGNATURE, FQ_CALLER_CLASSNAME,
+						FQ_CALLEE_OPERATION_SIGNATURE, FQ_CALLEE_CLASSNAME, CALLER_OBJECT_ID, CALLEE_OBJECT_ID);
+
+		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
+		Assert.assertEquals("Unexpected trace ID", TRACE_ID, event1.getTraceId());
+		Assert.assertEquals("Unexpected order index", ORDER_INDEX, event1.getOrderIndex());
+		Assert.assertEquals("Unexpected caller operation name", FQ_CALLER_OPERATION_SIGNATURE, event1.getCallerOperationSignature());
+		Assert.assertEquals("Unexpected caller class name", FQ_CALLER_CLASSNAME, event1.getCallerClassSignature());
+		Assert.assertEquals("Unexpected callee operation name", FQ_CALLEE_OPERATION_SIGNATURE, event1.getCalleeOperationSignature());
+		Assert.assertEquals("Unexpected callee class name", FQ_CALLEE_CLASSNAME, event1.getCalleeClassSignature());
+		Assert.assertEquals("Unexpected caller object id", CALLER_OBJECT_ID, event1.getCallerObjectId());
+		Assert.assertEquals("Unexpected callee object id", CALLEE_OBJECT_ID, event1.getCalleeObjectId());
+
+		final IRegistry<String> stringRegistry = new Registry<String>();
+		final ByteBuffer buffer = ByteBuffer.allocate(event1.getSize());
+		event1.writeBytes(buffer, stringRegistry);
+		buffer.flip();
+
+		final CallOperationObjectEvent event2 = new CallOperationObjectEvent(buffer, stringRegistry);
 
 		Assert.assertEquals(event1, event2);
 		Assert.assertEquals(0, event1.compareTo(event2));

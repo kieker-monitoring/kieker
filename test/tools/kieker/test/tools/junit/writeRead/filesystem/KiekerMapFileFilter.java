@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,6 +47,7 @@ class KiekerMapFileFilter implements FilenameFilter { // NOPMD (TestClassWithout
 	 * 
 	 * @return true if and only if the given file name is equals to the name of a kieker.map file.
 	 */
+	@Override
 	public boolean accept(final File dir, final String name) {
 		return FSUtil.MAP_FILENAME.equals(name);
 	}

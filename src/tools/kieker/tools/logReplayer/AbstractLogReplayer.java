@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import kieker.analysis.AnalysisController;
 import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.AbstractPlugin;
-import kieker.analysis.plugin.filter.forward.RealtimeRecordDelayFilter;
+import kieker.analysis.plugin.filter.record.RealtimeRecordDelayFilter;
 import kieker.analysis.plugin.filter.select.TimestampFilter;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
@@ -50,6 +50,7 @@ public abstract class AbstractLogReplayer {
 	private final String monitoringConfigurationFile;
 
 	private final boolean realtimeMode;
+	private final double realtimeAccelerationFactor;
 	private final boolean keepOriginalLoggingTimestamps;
 	private final int numRealtimeWorkerThreads;
 
@@ -58,6 +59,9 @@ public abstract class AbstractLogReplayer {
 	 *            The name of the {@code monitoring.properties} file.
 	 * @param realtimeMode
 	 *            Determines whether to use real time mode or not.
+	 * @param realtimeAccelerationFactor
+	 *            Determines whether to accelerate (value > 1.0) or slow down (<1.0) the replay in realtime mode by the given factor.
+	 *            Choose a value of 1.0 for "real" realtime mode (i.e., no acceleration/slow down)
 	 * @param keepOriginalLoggingTimestamps
 	 *            Determines whether the original logging timestamps will be used of whether the timestamps will be modified.
 	 * @param numRealtimeWorkerThreads
@@ -67,10 +71,11 @@ public abstract class AbstractLogReplayer {
 	 * @param ignoreRecordsAfterTimestamp
 	 *            The upper limit for the time stamps of the records.
 	 */
-	public AbstractLogReplayer(final String monitoringConfigurationFile, final boolean realtimeMode,
+	public AbstractLogReplayer(final String monitoringConfigurationFile, final boolean realtimeMode, final double realtimeAccelerationFactor,
 			final boolean keepOriginalLoggingTimestamps, final int numRealtimeWorkerThreads, final long ignoreRecordsBeforeTimestamp,
 			final long ignoreRecordsAfterTimestamp) {
 		this.realtimeMode = realtimeMode;
+		this.realtimeAccelerationFactor = realtimeAccelerationFactor; // ignored if realtimeMode == false
 		this.keepOriginalLoggingTimestamps = keepOriginalLoggingTimestamps;
 		this.numRealtimeWorkerThreads = numRealtimeWorkerThreads;
 		if (this.numRealtimeWorkerThreads <= 0) {
@@ -80,7 +85,7 @@ public abstract class AbstractLogReplayer {
 		this.ignoreRecordsAfterTimestamp = ignoreRecordsAfterTimestamp;
 		this.monitoringConfigurationFile = monitoringConfigurationFile;
 		if (this.monitoringConfigurationFile == null) {
-			LOG.info("No path to a 'monitoring.properties' passed; default configuration will be used.");
+			LOG.warn("No path to a 'monitoring.properties' passed; default configuration will be used.");
 		}
 	}
 
@@ -132,6 +137,8 @@ public abstract class AbstractLogReplayer {
 			if (this.realtimeMode) {
 				final Configuration delayFilterConfiguration = new Configuration();
 				delayFilterConfiguration.setProperty(RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_NUM_WORKERS, Integer.toString(this.numRealtimeWorkerThreads));
+				delayFilterConfiguration.setProperty(RealtimeRecordDelayFilter.CONFIG_PROPERTY_NAME_ACCELERATION_FACTOR,
+						Double.toString(this.realtimeAccelerationFactor));
 				final RealtimeRecordDelayFilter rtFilter = new RealtimeRecordDelayFilter(delayFilterConfiguration, analysisInstance);
 
 				analysisInstance.connect(lastFilter, lastOutputPortName, rtFilter, RealtimeRecordDelayFilter.INPUT_PORT_NAME_RECORDS);

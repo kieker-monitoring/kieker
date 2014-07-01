@@ -2,6 +2,7 @@ Common Public License - CPL - v1.0
 Project: http://www.junit.org/
 Description: This jar-file contains the necessary classes for the JUnit-tests, which can be used to test automatically Java classes.
 License: http://www.junit.org/license
+Required by: JUnit tests (compile- and run-time)
 
 Common Public License - v 1.0
 
