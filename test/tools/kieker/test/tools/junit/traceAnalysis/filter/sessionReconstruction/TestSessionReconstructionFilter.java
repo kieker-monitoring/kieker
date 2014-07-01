@@ -18,6 +18,7 @@ package kieker.test.tools.junit.traceAnalysis.filter.sessionReconstruction;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -41,7 +42,7 @@ import kieker.test.tools.util.filter.sessionReconstruction.SessionReconstruction
 public class TestSessionReconstructionFilter extends AbstractKiekerTest {
 
 	private static final long MAX_THINK_TIME_MILLIS = 1;
-	private static final long MAX_THINK_TIME_NANOS = MAX_THINK_TIME_MILLIS * 1000000L;
+	private static final long MAX_THINK_TIME_NANOS = TimeUnit.MILLISECONDS.toNanos(MAX_THINK_TIME_MILLIS);
 
 	private static final String HOST_NAME = "test";
 	private static final String NO_PARAMETERS = "()";
@@ -58,6 +59,11 @@ public class TestSessionReconstructionFilter extends AbstractKiekerTest {
 		return new OperationExecutionRecord(signature, sessionId, traceId, tIn, tOut, HOST_NAME, eoi, ess);
 	}
 
+	/**
+	 * Returns a list with two {@link OperationExecutionRecord}s, having different trace identifiers
+	 * but equal session identifiers. The time distance between the two traces is small in order
+	 * to have them in the same session.
+	 */
 	private static List<OperationExecutionRecord> createSimpleExecutionTrace() {
 		final List<OperationExecutionRecord> records = new ArrayList<OperationExecutionRecord>();
 		long time = 0;
@@ -69,6 +75,11 @@ public class TestSessionReconstructionFilter extends AbstractKiekerTest {
 		return records;
 	}
 
+	/**
+	 * Returns a list with two {@link OperationExecutionRecord}s, having different trace identifiers
+	 * but equal session identifiers. The time distance between the two traces is large in order
+	 * to have them in the separate sessions.
+	 */
 	private static List<OperationExecutionRecord> createSplitSessionExecutionTrace() {
 		final List<OperationExecutionRecord> records = new ArrayList<OperationExecutionRecord>();
 		long time = 0;
@@ -81,6 +92,10 @@ public class TestSessionReconstructionFilter extends AbstractKiekerTest {
 		return records;
 	}
 
+	/**
+	 * Returns a list with two {@link OperationExecutionRecord}s, having different trace identifiers
+	 * and different session identifiers.
+	 */
 	private static List<OperationExecutionRecord> createTwoSessionsExecutionTrace() {
 		final List<OperationExecutionRecord> records = new ArrayList<OperationExecutionRecord>();
 		long time = 0;
