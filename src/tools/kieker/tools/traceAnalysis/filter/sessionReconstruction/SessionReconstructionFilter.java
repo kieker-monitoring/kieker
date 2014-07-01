@@ -20,6 +20,7 @@ import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.concurrent.TimeUnit;
 
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
@@ -41,14 +42,14 @@ import kieker.tools.traceAnalysis.systemModel.ExecutionTraceBasedSession;
  * 
  */
 // TODO: #699: Add input and output ports for {@link MessageTrace}s
-// TODO: #699: Add generic time unit related attributes?
 @Plugin(description = "Reconstructs sessions from execution or message traces",
 		outputPorts = {
 			@OutputPort(name = SessionReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE_SESSIONS, description = "Reconstructed execution trace-based sessions",
 					eventTypes = { ExecutionTraceBasedSession.class }),
 		},
 		configuration = {
-			@Property(name = SessionReconstructionFilterConfiguration.CONFIGURATION_NAME_MAX_THINK_TIME, defaultValue = "500000")
+			@Property(name = SessionReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_THINK_TIME, defaultValue = "500000"),
+			@Property(name = SessionReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, defaultValue = SessionReconstructionFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
 		})
 public class SessionReconstructionFilter extends AbstractFilterPlugin {
 
@@ -62,13 +63,29 @@ public class SessionReconstructionFilter extends AbstractFilterPlugin {
 	 */
 	public static final String OUTPUT_PORT_NAME_EXECUTION_TRACE_SESSIONS = "executionTraceSessions";
 
+	/** This is the name of the property determining the used time unit. */
+	public static final String CONFIG_PROPERTY_NAME_TIMEUNIT = "timeunit";
+
+	/** This is the default used time unit. */
+	public static final String CONFIG_PROPERTY_VALUE_TIMEUNIT = "NANOSECONDS"; // TimeUnit.NANOSECONDS.name()
+
+	/**
+	 * This is name of the configuration parameter which accepts the maximum think time
+	 * (i.e. the time interval after which a new session is started)
+	 */
+	public static final String CONFIG_PROPERTY_NAME_MAX_THINK_TIME = "maxThinkTime";
+
+	/** This is the default value for the maximal think time. */
+	public static final String CONFIG_PROPERTY_VALUE_MAX_THINK_TIME = "9223372036854775807"; // Long.toString(Long.MAX_VALUE)
+
 	/**
 	 * Default size for all priority queues. This is only needed because there is no priority queue
 	 * constructor that only takes a comparator.
 	 */
 	private static final int DEFAULT_QUEUE_SIZE = 16;
 
-	private final SessionReconstructionFilterConfiguration configuration;
+	private final TimeUnit timeunit;
+
 	private final long maxThinkTime;
 
 	private final Map<String, ExecutionTraceBasedSession> openExecutionBasedSessions = new Hashtable<String, ExecutionTraceBasedSession>();
@@ -86,13 +103,37 @@ public class SessionReconstructionFilter extends AbstractFilterPlugin {
 	public SessionReconstructionFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 
-		this.configuration = new SessionReconstructionFilterConfiguration(configuration);
-		this.maxThinkTime = this.configuration.getMaxThinkTime() * 1000000L; // TODO: resolve magic number!
+		this.timeunit = super.recordsTimeUnitFromProjectContext;
+
+		final String configTimeunitProperty = configuration.getStringProperty(CONFIG_PROPERTY_NAME_TIMEUNIT);
+		TimeUnit configTimeunit;
+		try {
+			configTimeunit = TimeUnit.valueOf(configTimeunitProperty);
+		} catch (final IllegalArgumentException ex) {
+			this.log.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + this.timeunit.name() + " instead.");
+			configTimeunit = this.timeunit;
+		}
+
+		this.maxThinkTime = this.timeunit.convert(configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_THINK_TIME),
+				configTimeunit);
+
+		if (this.maxThinkTime < 0) {
+			throw new IllegalArgumentException("value " + CONFIG_PROPERTY_VALUE_MAX_THINK_TIME + " must not be negative (found: " + this.maxThinkTime + ")");
+		}
+
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Configuration getCurrentConfiguration() {
-		return new Configuration(this.configuration.getWrappedConfiguration());
+		final Configuration configuration = new Configuration();
+
+		configuration.setProperty(CONFIG_PROPERTY_NAME_TIMEUNIT, this.timeunit.name());
+		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_THINK_TIME, Long.toString(this.maxThinkTime));
+
+		return configuration;
 	}
 
 	private <T extends AbstractSession<?>> void dispatchCompletedSession(final T session, final String outputPortName) {

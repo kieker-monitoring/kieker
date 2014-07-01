@@ -27,7 +27,6 @@ import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.filter.executionRecordTransformation.ExecutionRecordTransformationFilter;
 import kieker.tools.traceAnalysis.filter.sessionReconstruction.SessionReconstructionFilter;
-import kieker.tools.traceAnalysis.filter.sessionReconstruction.SessionReconstructionFilterConfiguration;
 import kieker.tools.traceAnalysis.filter.traceReconstruction.TraceReconstructionFilter;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTraceBasedSession;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
@@ -80,10 +79,7 @@ public class SessionReconstructionTestUtil {
 
 		// Initialize, register and connect the session reconstruction filter
 		final Configuration bareSessionReconstructionFilterConfiguration = new Configuration();
-		final SessionReconstructionFilterConfiguration sessionReconstructionFilterConfiguration =
-				new SessionReconstructionFilterConfiguration(bareSessionReconstructionFilterConfiguration);
-
-		sessionReconstructionFilterConfiguration.setMaxThinkTime(maxThinkTime);
+		bareSessionReconstructionFilterConfiguration.setProperty(SessionReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_THINK_TIME, Long.toString(maxThinkTime));
 
 		final SessionReconstructionFilter sessionReconstructionFilter = new SessionReconstructionFilter(bareSessionReconstructionFilterConfiguration,
 				analysisController);
