@@ -39,7 +39,7 @@ import kieker.test.tools.util.filter.sessionReconstruction.SessionReconstruction
  * @since 1.10
  * 
  */
-public class TestSessionReconstructionFilter extends AbstractKiekerTest {
+public class TestSessionReconstructionFilter extends AbstractKiekerTest { // NOCS (MissingCtorCheck)
 
 	private static final long MAX_THINK_TIME_MILLIS = 1;
 	private static final long MAX_THINK_TIME_NANOS = TimeUnit.MILLISECONDS.toNanos(MAX_THINK_TIME_MILLIS);
@@ -70,7 +70,7 @@ public class TestSessionReconstructionFilter extends AbstractKiekerTest {
 		long traceId = 0;
 
 		records.add(TestSessionReconstructionFilter.createOperationExecutionRecord(OPERATION_SIGNATURE, SESSION_ID_1, traceId, time++, time++, 0, 0));
-		records.add(TestSessionReconstructionFilter.createOperationExecutionRecord(OPERATION_SIGNATURE, SESSION_ID_1, ++traceId, time++, time++, 0, 0));
+		records.add(TestSessionReconstructionFilter.createOperationExecutionRecord(OPERATION_SIGNATURE, SESSION_ID_1, ++traceId, time++, time, 0, 0));
 
 		return records;
 	}
@@ -87,7 +87,7 @@ public class TestSessionReconstructionFilter extends AbstractKiekerTest {
 
 		records.add(TestSessionReconstructionFilter.createOperationExecutionRecord(OPERATION_SIGNATURE, SESSION_ID_1, traceId, time++, time++, 0, 0));
 		time += (MAX_THINK_TIME_NANOS + 1);
-		records.add(TestSessionReconstructionFilter.createOperationExecutionRecord(OPERATION_SIGNATURE, SESSION_ID_1, ++traceId, time++, time++, 0, 0));
+		records.add(TestSessionReconstructionFilter.createOperationExecutionRecord(OPERATION_SIGNATURE, SESSION_ID_1, ++traceId, time++, time, 0, 0));
 
 		return records;
 	}
@@ -102,7 +102,7 @@ public class TestSessionReconstructionFilter extends AbstractKiekerTest {
 		long traceId = 0;
 
 		records.add(TestSessionReconstructionFilter.createOperationExecutionRecord(OPERATION_SIGNATURE, SESSION_ID_1, traceId, time++, time++, 0, 0));
-		records.add(TestSessionReconstructionFilter.createOperationExecutionRecord(OPERATION_SIGNATURE, SESSION_ID_2, ++traceId, time++, time++, 0, 0));
+		records.add(TestSessionReconstructionFilter.createOperationExecutionRecord(OPERATION_SIGNATURE, SESSION_ID_2, ++traceId, time++, time, 0, 0));
 
 		return records;
 	}

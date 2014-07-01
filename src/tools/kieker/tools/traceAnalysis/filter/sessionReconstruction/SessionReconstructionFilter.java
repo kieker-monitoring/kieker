@@ -16,10 +16,11 @@
 
 package kieker.tools.traceAnalysis.filter.sessionReconstruction;
 
+import java.io.Serializable;
 import java.util.Comparator;
-import java.util.Hashtable;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 import kieker.analysis.IProjectContext;
@@ -45,11 +46,11 @@ import kieker.tools.traceAnalysis.systemModel.ExecutionTraceBasedSession;
 @Plugin(description = "Reconstructs sessions from execution or message traces",
 		outputPorts = {
 			@OutputPort(name = SessionReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE_SESSIONS, description = "Reconstructed execution trace-based sessions",
-					eventTypes = { ExecutionTraceBasedSession.class }),
+					eventTypes = { ExecutionTraceBasedSession.class })
 		},
 		configuration = {
 			@Property(name = SessionReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_THINK_TIME, defaultValue = "500000"),
-			@Property(name = SessionReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, defaultValue = SessionReconstructionFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT),
+			@Property(name = SessionReconstructionFilter.CONFIG_PROPERTY_NAME_TIMEUNIT, defaultValue = SessionReconstructionFilter.CONFIG_PROPERTY_VALUE_TIMEUNIT)
 		})
 public class SessionReconstructionFilter extends AbstractFilterPlugin {
 
@@ -88,9 +89,9 @@ public class SessionReconstructionFilter extends AbstractFilterPlugin {
 
 	private final long maxThinkTime;
 
-	private final Map<String, ExecutionTraceBasedSession> openExecutionBasedSessions = new Hashtable<String, ExecutionTraceBasedSession>();
+	private final Map<String, ExecutionTraceBasedSession> openExecutionBasedSessions = new ConcurrentHashMap<String, ExecutionTraceBasedSession>();
 	private final PriorityQueue<ExecutionTraceBasedSession> executionSessionTimeoutQueue =
-			new PriorityQueue<ExecutionTraceBasedSession>(DEFAULT_QUEUE_SIZE, new AbstractSessionEndTimestampComparator());
+			new PriorityQueue<ExecutionTraceBasedSession>(DEFAULT_QUEUE_SIZE, new SessionEndTimestampComparator());
 
 	/**
 	 * Creates a new session reconstruction filter using the given configuration.
@@ -152,9 +153,7 @@ public class SessionReconstructionFilter extends AbstractFilterPlugin {
 				timeoutQueue.remove();
 				openSessions.remove(session.getSessionId());
 				this.dispatchCompletedSession(session, outputPortName);
-			}
-			// If the current session has not timed out, we are done due to the ordering of the queue
-			else {
+			} else { // If the current session has not timed out, we are done due to the ordering of the queue
 				break;
 			}
 		}
@@ -216,10 +215,12 @@ public class SessionReconstructionFilter extends AbstractFilterPlugin {
 		}
 	}
 
-	private static class AbstractSessionEndTimestampComparator implements Comparator<AbstractSession<?>> {
+	private static class SessionEndTimestampComparator implements Comparator<AbstractSession<?>>, Serializable {
+
+		private static final long serialVersionUID = -5631887288009598075L;
 
 		// Avoid warning when calling (default) constructor
-		public AbstractSessionEndTimestampComparator() {
+		public SessionEndTimestampComparator() {
 			super();
 		}
 
@@ -230,11 +231,9 @@ public class SessionReconstructionFilter extends AbstractFilterPlugin {
 
 			if (endTimestamp1 == endTimestamp2) {
 				return 0;
-			}
-			else if (endTimestamp1 < endTimestamp2) {
+			} else if (endTimestamp1 < endTimestamp2) {
 				return -1;
-			}
-			else {
+			} else {
 				return 1;
 			}
 		}

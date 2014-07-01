@@ -18,7 +18,7 @@ package kieker.tools.traceAnalysis.systemModel;
 
 import java.util.Comparator;
 
-import kieker.tools.traceAnalysis.systemModel.util.AbstractTraceStartTimestampComparator;
+import kieker.tools.traceAnalysis.systemModel.util.TraceStartTimestampComparator;
 
 /**
  * Specialized sub-class for sessions based on message traces (see {@link MessageTrace}).
@@ -41,7 +41,7 @@ public class MessageTraceBasedSession extends AbstractSession<MessageTrace> {
 
 	@Override
 	protected Comparator<? super MessageTrace> getOrderComparator() {
-		return new AbstractTraceStartTimestampComparator();
+		return new TraceStartTimestampComparator();
 	}
 
 }

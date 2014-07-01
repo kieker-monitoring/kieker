@@ -16,6 +16,7 @@
 
 package kieker.tools.traceAnalysis.systemModel.util;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 import kieker.tools.traceAnalysis.systemModel.AbstractTrace;
@@ -27,7 +28,11 @@ import kieker.tools.traceAnalysis.systemModel.AbstractTrace;
  * @since 1.10
  * 
  */
-public class AbstractTraceStartTimestampComparator implements Comparator<AbstractTrace> {
+public class TraceStartTimestampComparator implements Comparator<AbstractTrace>, Serializable {
+
+	public TraceStartTimestampComparator() { /* Empty default constructor */}
+
+	private static final long serialVersionUID = -8372489878918932083L;
 
 	@Override
 	public int compare(final AbstractTrace o1, final AbstractTrace o2) {
@@ -36,11 +41,9 @@ public class AbstractTraceStartTimestampComparator implements Comparator<Abstrac
 
 		if (startTimestamp1 == startTimestamp2) {
 			return 0;
-		}
-		else if (startTimestamp1 < startTimestamp2) {
+		} else if (startTimestamp1 < startTimestamp2) {
 			return -1;
-		}
-		else {
+		} else {
 			return 1;
 		}
 	}

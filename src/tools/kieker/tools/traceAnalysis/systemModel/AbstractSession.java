@@ -34,11 +34,11 @@ import java.util.TreeSet;
 // TODO: #699: Is the implementation with ISessionState &quot;over-complicating&quot; things?
 public abstract class AbstractSession<T extends AbstractTrace> {
 
-	private final SortedSet<T> containedTraces;
+	private final SortedSet<T> containedTraces; // protected visibility to avoid synthetic access
 	private final String sessionId;
 
-	private volatile long startTime = Long.MAX_VALUE;
-	private volatile long endTime = Long.MIN_VALUE;
+	private volatile long startTime = Long.MAX_VALUE; // protected visibility to avoid synthetic access
+	private volatile long endTime = Long.MIN_VALUE; // protected visibility to avoid synthetic access
 
 	private volatile ISessionState<T> state = new ModifiableState();
 
@@ -130,8 +130,10 @@ public abstract class AbstractSession<T extends AbstractTrace> {
 			super();
 		}
 
+		// Access to startTime and endTime emulated by synthetic accessor method
+		@SuppressWarnings("synthetic-access")
 		@Override
-		public synchronized void addTrace(final T trace) {
+		public synchronized void addTrace(final T trace) { // NOPMD (AvoidSynchronizedAtMethodLevel)
 			if (!AbstractSession.this.containedTraces.add(trace)) {
 				return;
 			}
@@ -144,23 +146,39 @@ public abstract class AbstractSession<T extends AbstractTrace> {
 			}
 		}
 
+		// Access to containedTraces emulated by synthetic accessor method
+		@SuppressWarnings("synthetic-access")
 		@Override
-		public synchronized SortedSet<T> getContainedTraces() {
+		public synchronized SortedSet<T> getContainedTraces() { // NOPMD (AvoidSynchronizedAtMethodLevel)
 			return Collections.unmodifiableSortedSet(AbstractSession.this.containedTraces);
 		}
 
+		// Access to startTime and containedTraces emulated by synthetic accessor method
+		@SuppressWarnings("synthetic-access")
 		@Override
-		public synchronized long getStartTimestamp() {
-			return (AbstractSession.this.containedTraces.isEmpty()) ? 0 : AbstractSession.this.startTime;
+		public synchronized long getStartTimestamp() { // NOPMD (AvoidSynchronizedAtMethodLevel)
+			if (AbstractSession.this.containedTraces.isEmpty()) {
+				return 0;
+			} else {
+				return AbstractSession.this.startTime;
+			}
 		}
 
+		// Access to endTime and containedTraces emulated by synthetic accessor method
+		@SuppressWarnings("synthetic-access")
 		@Override
-		public synchronized long getEndTimestamp() {
-			return (AbstractSession.this.containedTraces.isEmpty()) ? 0 : AbstractSession.this.endTime;
+		public synchronized long getEndTimestamp() { // NOPMD (AvoidSynchronizedAtMethodLevel)
+			if (AbstractSession.this.containedTraces.isEmpty()) {
+				return 0;
+			} else {
+				return AbstractSession.this.endTime;
+			}
 		}
 
+		// Access to state emulated by synthetic accessor method
+		@SuppressWarnings("synthetic-access")
 		@Override
-		public synchronized void setCompleted() {
+		public synchronized void setCompleted() { // NOPMD (AvoidSynchronizedAtMethodLevel)
 			AbstractSession.this.state = new UnmodifiableState();
 		}
 
@@ -168,24 +186,40 @@ public abstract class AbstractSession<T extends AbstractTrace> {
 
 	private class UnmodifiableState implements ISessionState<T> {
 
+		public UnmodifiableState() { /* Empty default constructor */}
+
 		@Override
 		public void addTrace(final T trace) {
 			// Do nothing
 		}
 
+		// Access to containedTraces emulated by synthetic accessor method
+		@SuppressWarnings("synthetic-access")
 		@Override
 		public SortedSet<T> getContainedTraces() {
 			return Collections.unmodifiableSortedSet(AbstractSession.this.containedTraces);
 		}
 
+		// Access to startTime and containedTraces emulated by synthetic accessor method
+		@SuppressWarnings("synthetic-access")
 		@Override
 		public long getStartTimestamp() {
-			return (AbstractSession.this.containedTraces.isEmpty()) ? 0 : AbstractSession.this.startTime;
+			if (AbstractSession.this.containedTraces.isEmpty()) {
+				return 0;
+			} else {
+				return AbstractSession.this.startTime;
+			}
 		}
 
+		// Access to endTime and containedTraces emulated by synthetic accessor method
+		@SuppressWarnings("synthetic-access")
 		@Override
 		public long getEndTimestamp() {
-			return (AbstractSession.this.containedTraces.isEmpty()) ? 0 : AbstractSession.this.endTime;
+			if (AbstractSession.this.containedTraces.isEmpty()) {
+				return 0;
+			} else {
+				return AbstractSession.this.endTime;
+			}
 		}
 
 		@Override

@@ -38,7 +38,9 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * @since 1.10
  * 
  */
-public class SessionReconstructionTestUtil {
+public class SessionReconstructionTestUtil { // NOPMD (UseSingleton) NOCS (MissingCtorCheck)
+
+	private SessionReconstructionTestUtil() { /* Util class should not be instantiated */}
 
 	/**
 	 * Creates a new test setup that produces execution trace-based sessions from a list of execution records.

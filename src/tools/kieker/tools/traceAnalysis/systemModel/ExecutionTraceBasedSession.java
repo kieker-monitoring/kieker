@@ -18,7 +18,7 @@ package kieker.tools.traceAnalysis.systemModel;
 
 import java.util.Comparator;
 
-import kieker.tools.traceAnalysis.systemModel.util.AbstractTraceStartTimestampComparator;
+import kieker.tools.traceAnalysis.systemModel.util.TraceStartTimestampComparator;
 import kieker.tools.util.LoggingTimestampConverter;
 
 /**
@@ -42,7 +42,7 @@ public class ExecutionTraceBasedSession extends AbstractSession<ExecutionTrace> 
 
 	@Override
 	protected Comparator<? super ExecutionTrace> getOrderComparator() {
-		return new AbstractTraceStartTimestampComparator();
+		return new TraceStartTimestampComparator();
 	}
 
 	@Override
