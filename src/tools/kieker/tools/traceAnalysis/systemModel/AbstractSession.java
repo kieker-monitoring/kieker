@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import java.util.TreeSet;
  * 
  * 
  * @author Holger Knoche
+ * @since 1.10
  * 
  * @param <T>
  *            The concrete type of trace this session is based on
@@ -129,6 +130,7 @@ public abstract class AbstractSession<T extends AbstractTrace> {
 			super();
 		}
 
+		@Override
 		public synchronized void addTrace(final T trace) {
 			if (!AbstractSession.this.containedTraces.add(trace)) {
 				return;
@@ -142,18 +144,22 @@ public abstract class AbstractSession<T extends AbstractTrace> {
 			}
 		}
 
+		@Override
 		public synchronized SortedSet<T> getContainedTraces() {
 			return Collections.unmodifiableSortedSet(AbstractSession.this.containedTraces);
 		}
 
+		@Override
 		public synchronized long getStartTimestamp() {
 			return (AbstractSession.this.containedTraces.isEmpty()) ? 0 : AbstractSession.this.startTime;
 		}
 
+		@Override
 		public synchronized long getEndTimestamp() {
 			return (AbstractSession.this.containedTraces.isEmpty()) ? 0 : AbstractSession.this.endTime;
 		}
 
+		@Override
 		public synchronized void setCompleted() {
 			AbstractSession.this.state = new UnmodifiableState();
 		}
@@ -162,22 +168,27 @@ public abstract class AbstractSession<T extends AbstractTrace> {
 
 	private class UnmodifiableState implements ISessionState<T> {
 
+		@Override
 		public void addTrace(final T trace) {
 			// Do nothing
 		}
 
+		@Override
 		public SortedSet<T> getContainedTraces() {
 			return Collections.unmodifiableSortedSet(AbstractSession.this.containedTraces);
 		}
 
+		@Override
 		public long getStartTimestamp() {
 			return (AbstractSession.this.containedTraces.isEmpty()) ? 0 : AbstractSession.this.startTime;
 		}
 
+		@Override
 		public long getEndTimestamp() {
 			return (AbstractSession.this.containedTraces.isEmpty()) ? 0 : AbstractSession.this.endTime;
 		}
 
+		@Override
 		public void setCompleted() {
 			// Do nothing
 		}

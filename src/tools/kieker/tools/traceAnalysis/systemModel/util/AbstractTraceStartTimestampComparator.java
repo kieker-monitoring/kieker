@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,10 +24,12 @@ import kieker.tools.traceAnalysis.systemModel.AbstractTrace;
  * Comparator which compares abstract traces according to their start timestamps.
  * 
  * @author Holger Knoche
+ * @since 1.10
  * 
  */
 public class AbstractTraceStartTimestampComparator implements Comparator<AbstractTrace> {
 
+	@Override
 	public int compare(final AbstractTrace o1, final AbstractTrace o2) {
 		final long startTimestamp1 = o1.getStartTimestamp();
 		final long startTimestamp2 = o2.getStartTimestamp();
