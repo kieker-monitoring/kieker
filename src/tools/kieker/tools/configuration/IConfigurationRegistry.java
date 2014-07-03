@@ -18,6 +18,7 @@ package kieker.tools.configuration;
 
 import java.util.Map;
 
+import kieker.analysis.configuration.AbstractUpdateableFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.tools.configuration.exception.PluginNotFoundException;
 

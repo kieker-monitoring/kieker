@@ -18,6 +18,7 @@ package kieker.tools.configuration;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import kieker.analysis.configuration.AbstractUpdateableFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.tools.configuration.exception.PluginNotFoundException;
 
@@ -52,7 +53,7 @@ public abstract class AbstractConfigurationRegistry implements IConfigurationReg
 
 	/**
 	 * @see kieker.tools.configuration.IConfigurationRegistry#registerUpdateableFilterPlugin(java.lang.String,
-	 *      kieker.tools.configuration.AbstractUpdateableFilterPlugin)
+	 *      kieker.analysis.configuration.AbstractUpdateableFilterPlugin)
 	 * 
 	 * @param id
 	 *            id of the plugin

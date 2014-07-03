@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.configuration;
+package kieker.analysis.configuration;
 
 import java.util.Arrays;
 import java.util.List;

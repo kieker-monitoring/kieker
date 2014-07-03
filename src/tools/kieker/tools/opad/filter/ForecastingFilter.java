@@ -23,12 +23,12 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 import kieker.analysis.IProjectContext;
+import kieker.analysis.configuration.AbstractUpdateableFilterPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.common.configuration.Configuration;
-import kieker.tools.configuration.AbstractUpdateableFilterPlugin;
 import kieker.tools.opad.record.ForecastMeasurementPair;
 import kieker.tools.opad.record.IForecastMeasurementPair;
 import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
