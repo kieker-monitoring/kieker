@@ -2,6 +2,7 @@ The Apache Software License - ASL - v2.0
 Project: http://commons.apache.org/math/
 Description: Commons Math is a library of lightweight, self-contained mathematics and statistics components addressing the most common problems not available in the Java programming language or Commons Lang. 
 License: http://www.apache.org/licenses/LICENSE-2.0.txt
+Required by: Calculations in OPAD/tslib
 
                                  Apache License
                            Version 2.0, January 2004
