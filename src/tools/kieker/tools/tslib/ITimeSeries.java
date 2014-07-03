@@ -70,8 +70,8 @@ public interface ITimeSeries<T> {
 	 * Appends the given value to the time series.
 	 * 
 	 * @since 1.10
-	 * @param value
-	 * @return appen List
+	 * @param values
+	 * @return appends List
 	 */
 	public List<ITimeSeriesPoint<T>> appendAll(T[] values);
 
@@ -84,7 +84,7 @@ public interface ITimeSeries<T> {
 	public List<ITimeSeriesPoint<T>> getPoints();
 
 	/**
-	 * Returns a list of all {@link #getPoints()#getValues()}.
+	 * Returns a list of all values from {@link #getPoints()}.
 	 * 
 	 * @since 1.10
 	 * @return Values

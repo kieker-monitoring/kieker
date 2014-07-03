@@ -57,8 +57,7 @@ public interface IConfigurationRegistry {
 	 * @param configuration
 	 *            Configuration containing the new values
 	 * @param update
-	 *            boolean value @see {@link AbstractUpdateableFilterPlugin#setCurrentConfiguration(Configuration, boolean)}
-	 * 
+	 *            If false, set all properties, else overwrite only properties that are marked as updateable
 	 * @throws PluginNotFoundException
 	 *             plugin was not found
 	 */
