@@ -101,7 +101,7 @@
 	<classpathentry kind="lib" path="lib/mongo-2.10.1.jar"/>
 	<classpathentry kind="lib" path="lib/org.json.min-2014-05-22.jar"/>
 	<classpathentry kind="lib" path="lib/Rsession-2012-09-04.r114.jar"/>
-	<classpathentry kind="lib" path="lib/REngine-0.61.jar"/>
-	<classpathentry kind="lib" path="lib/Rserve-0.61.jar"/>
+	<classpathentry kind="lib" path="lib/Rserve-0.6-1.jar"/>
+	<classpathentry kind="lib" path="lib/REngine-0.6-1.jar"/>
 	<classpathentry kind="output" path="build-eclipse"/>
 </classpath>
