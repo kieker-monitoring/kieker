@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import kieker.common.configuration.Configuration;
@@ -40,6 +41,7 @@ import kieker.test.monitoring.util.DefaultConfigurationFactory;
 public class TestPeriodicSampling extends AbstractKiekerTest { // NOCS
 
 	@Test
+	@Ignore("#1318")
 	public void testNoSamplingWhenMonitoringDisabled() throws InterruptedException {
 		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();
 		final IMonitoringController monitoringController = MonitoringController.createInstance(configuration);
@@ -47,6 +49,7 @@ public class TestPeriodicSampling extends AbstractKiekerTest { // NOCS
 		final AtomicInteger numTriggers = new AtomicInteger(0);
 		final ISampler samplingCounter = new ISampler() {
 
+			@Override
 			public void sample(final IMonitoringController monitoringController) {
 				numTriggers.incrementAndGet();
 			}
@@ -91,6 +94,7 @@ public class TestPeriodicSampling extends AbstractKiekerTest { // NOCS
 		final AtomicInteger numTriggers = new AtomicInteger(0);
 		final ISampler samplingCounter = new ISampler() {
 
+			@Override
 			public void sample(final IMonitoringController monitoringController) {
 				numTriggers.incrementAndGet();
 			}

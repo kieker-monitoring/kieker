@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -421,6 +421,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 				// default empty constructor
 			}
 
+			@Override
 			public int compare(final AbstractTraceEvent o1, final AbstractTraceEvent o2) {
 				return o1.getOrderIndex() - o2.getOrderIndex();
 			}

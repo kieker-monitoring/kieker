@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,6 +47,7 @@ public class TCPServerForClient implements Runnable {
 	/**
 	 * Main loop for the server.
 	 */
+	@Override
 	public void run() {
 		try {
 			final ServerSocket serverSocket = new ServerSocket(this.port);
@@ -65,7 +66,7 @@ public class TCPServerForClient implements Runnable {
 					outToClient.writeLong(ConfigurationParameters.TEST_TOUT);
 					outToClient.writeInt(ConfigurationParameters.TEST_HOSTNAME.length());
 					outToClient.writeBytes(ConfigurationParameters.TEST_HOSTNAME);
-					outToClient.writeInt(ConfigurationParameters.TEST_EOI);
+					outToClient.writeInt(i); // send the current record id
 					outToClient.writeInt(ConfigurationParameters.TEST_ESS);
 				}
 

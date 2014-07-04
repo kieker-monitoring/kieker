@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -78,6 +78,7 @@ public class TCPClientConnector extends AbstractConnector {
 	 * @throws ConnectorDataTransmissionException
 	 *             if the given host or IP cannot be found, or an IOException occurs
 	 */
+	@Override
 	public void initialize() throws ConnectorDataTransmissionException {
 		try {
 			this.socket = new Socket(this.hostname, this.port);
@@ -96,6 +97,7 @@ public class TCPClientConnector extends AbstractConnector {
 	 * @throws ConnectorDataTransmissionException
 	 *             if an IOException occurs during the close operation
 	 */
+	@Override
 	public void close() throws ConnectorDataTransmissionException {
 		try {
 			this.in.close();
@@ -115,6 +117,7 @@ public class TCPClientConnector extends AbstractConnector {
 	 * @throws ConnectorEndOfDataException
 	 *             when the other end hung up or the data stream ends of another reason
 	 */
+	@Override
 	public IMonitoringRecord deserializeNextRecord() throws ConnectorDataTransmissionException, ConnectorEndOfDataException {
 		// read structure ID
 		try {

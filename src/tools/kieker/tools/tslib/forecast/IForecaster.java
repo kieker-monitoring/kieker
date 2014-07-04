@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,20 +19,22 @@ package kieker.tools.tslib.forecast;
 import kieker.tools.tslib.ITimeSeries;
 
 /**
- * 
  * @author Andre van Hoorn
  * @since 1.10
+ * 
  * @param <T>
+ *            The type of the forecaster.
  */
 public interface IForecaster<T> {
 
 	/**
 	 * Performs a time series forecast for the given number of steps in the future.
 	 * 
-	 * @since 1.10
 	 * @param numForecastSteps
 	 *            number of steps which will be forecated
 	 * @return ForecastResult
+	 * 
+	 * @since 1.10
 	 */
 	public IForecastResult forecast(final int numForecastSteps);
 
@@ -40,7 +42,6 @@ public interface IForecaster<T> {
 	 * Returns the original time series used for the forecast.
 	 * 
 	 * @since 1.10
-	 * @return Timerseries
 	 */
 	public ITimeSeries<T> getTsOriginal();
 
@@ -48,7 +49,6 @@ public interface IForecaster<T> {
 	 * Returns the confidence level to be computed for the forecast.
 	 * 
 	 * @since 1.10
-	 * @return confidencelevel
 	 */
 	public int getConfidenceLevel();
 }

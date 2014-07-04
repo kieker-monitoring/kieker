@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -244,6 +244,7 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public void terminate(final boolean error) {
 			this.shutdownNr = SHUTDOWNORDER.getAndIncrement();
 		}
@@ -259,6 +260,7 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 		/**
 		 * {@inheritDoc}
 		 */
+		@Override
 		public boolean read() {
 			// don't send anything (else we would fail in loop!)
 			// super.deliver(OUTPUT_PORT_NAME, new Object());
@@ -290,6 +292,8 @@ public final class TestPluginShutdown extends AbstractKiekerTest {
 			this.shutdownNr = SHUTDOWNORDER.getAndIncrement();
 		}
 
+		@SuppressWarnings("unused")
+		// invoked via reflection
 		@InputPort(name = INPUT_PORT_NAME)
 		public final void inputEvent(final Object event) {
 			super.deliver(OUTPUT_PORT_NAME, event);

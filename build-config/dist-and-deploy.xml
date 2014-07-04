@@ -155,12 +155,8 @@
 		</jar>
 		<!-- The pom files -->
 		<copy file="${pom.xml.kieker.main}" tofile="${maven.dir}/${dist.kieker.main.pom}" />
-		<copy file="${pom.xml.kieker.main.aspectj}" tofile="${maven.dir}/${dist.kieker.main.aspectj.pom}" />
-		<copy file="${pom.xml.kieker.main.emf}" tofile="${maven.dir}/${dist.kieker.main.emf.pom}" />
 		<!-- update version -->
 		<replaceregexp file="${maven.dir}/${dist.kieker.main.pom}" match="&lt;version&gt;.*&lt;/version&gt;&lt;!--Kieker.*" replace="&lt;version&gt;${kieker.version}&lt;/version&gt;" />
-		<replaceregexp file="${maven.dir}/${dist.kieker.main.aspectj.pom}" match="&lt;version&gt;.*&lt;/version&gt;&lt;!--Kieker.*" replace="&lt;version&gt;${kieker.version}&lt;/version&gt;" />
-		<replaceregexp file="${maven.dir}/${dist.kieker.main.emf.pom}" match="&lt;version&gt;.*&lt;/version&gt;&lt;!--Kieker.*" replace="&lt;version&gt;${kieker.version}&lt;/version&gt;" />
 	</target>
 
 	<!-- Note that this target just uploads but does NOT build! -->
@@ -196,31 +192,9 @@
 			<arg value="-Dfiles=${maven.dir}/${dist.kieker.main.emf.jar},${maven.dir}/${dist.kieker.main.aspectj.jar},${maven.dir}/${dist.kieker.userguide.pdf}" />
 			<arg value="-Pgpg" />
 		</artifact:mvn>
-
-		<!-- Legacy relocation POMs (section to be removed after release 1.7) -->
-
-		<artifact:mvn>
-			<arg value="org.apache.maven.plugins:maven-gpg-plugin:1.4:sign-and-deploy-file" />
-			<arg value="-Durl=${maven-staging-repository-url}" />
-			<arg value="-DrepositoryId=${maven-staging-repository-id}" />
-			<arg value="-Dfile=${maven.dir}/${dist.kieker.main.emf.pom}" />
-			<arg value="-DpomFile=${maven.dir}/${dist.kieker.main.emf.pom}" />
-			<arg value="-Dtype=pom" />
-			<arg value="-Pgpg" />
-		</artifact:mvn>
-		<artifact:mvn>
-			<arg value="org.apache.maven.plugins:maven-gpg-plugin:1.4:sign-and-deploy-file" />
-			<arg value="-Durl=${maven-staging-repository-url}" />
-			<arg value="-DrepositoryId=${maven-staging-repository-id}" />
-			<arg value="-Dfile=${maven.dir}/${dist.kieker.main.aspectj.pom}" />
-			<arg value="-DpomFile=${maven.dir}/${dist.kieker.main.aspectj.pom}" />
-			<arg value="-Dtype=pom" />
-			<arg value="-Pgpg" />
-		</artifact:mvn>
-
 	</target>
 
-	<target name="dist-kieker-binaries" depends="build-all,-build-userguide,-build-userguide-examples,-prepate-userguide-examples-binary-release,-compile-javaee.demo" description="Packages the binary archives (.zip|.tar.gz) for a release">
+	<target name="dist-kieker-binaries" depends="build-all,-build-userguide,-build-userguide-examples,-prepare-userguide-examples-binary-release,-compile-javaee.demo" description="Packages the binary archives (.zip|.tar.gz) for a release">
 		<patternset id="dist_bin_files-nonbinmode"> <!-- NOTE that the order of includes/excludes seems to have no effect. So be careful with excludes -->
 			<include name="${history.file}" />
 			<include name="${license.file}" />
@@ -285,7 +259,25 @@
 						fullpath="${kieker.dist.name}/${src.userguide.example.jms.dir}/.classpath" />
 			<tarfileset file="${src.userguide.example.sigar.dir}/.classpath-binrelease.generated"
 						fullpath="${kieker.dist.name}/${src.userguide.example.sigar.dir}/.classpath" />
-
+			<tarfileset file="${src.example.analysis.kax.dir}/.classpath-binrelease.generated"
+						fullpath="${kieker.dist.name}/${src.example.analysis.kax.dir}/.classpath" />	
+			<tarfileset file="${src.example.analysis.opad.dir}/.classpath-binrelease.generated"
+						fullpath="${kieker.dist.name}/${src.example.analysis.opad.dir}/.classpath" />				
+			<tarfileset file="${src.example.monitoring.adaptive.dir}/.classpath-binrelease.generated"
+						fullpath="${kieker.dist.name}/${src.example.monitoring.adaptive.dir}/.classpath" />	
+			<tarfileset file="${src.example.monitoring.timesource.dir}/.classpath-binrelease.generated"
+						fullpath="${kieker.dist.name}/${src.example.monitoring.timesource.dir}/.classpath" />	
+			<tarfileset file="${src.example.monitoring.aspectj.dir}/.classpath-binrelease.generated"
+						fullpath="${kieker.dist.name}/${src.example.monitoring.aspectj.dir}/.classpath" />	
+			<tarfileset file="${src.example.monitoring.manual.dir}/.classpath-binrelease.generated"
+						fullpath="${kieker.dist.name}/${src.example.monitoring.manual.dir}/.classpath" />	
+			<tarfileset file="${src.example.monitoring.spring.dir}/.classpath-binrelease.generated"
+						fullpath="${kieker.dist.name}/${src.example.monitoring.spring.dir}/.classpath" />	
+			<tarfileset file="${src.example.monitoring.jvm.dir}/.classpath-binrelease.generated"
+						fullpath="${kieker.dist.name}/${src.example.monitoring.jvm.dir}/.classpath" />	
+			<tarfileset file="${src.example.monitoring.sigar.dir}/.classpath-binrelease.generated"
+						fullpath="${kieker.dist.name}/${src.example.monitoring.sigar.dir}/.classpath" />
+						
 			<!-- Include the right Kieker libs (and licenses) in the examples -->
 			<tarfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
 						prefix="${kieker.dist.name}/${example.javaee.jpetstore.lib.dir}" />
@@ -311,6 +303,47 @@
 						prefix="${kieker.dist.name}/${src.userguide.example.sigar.dir}/lib" />
 			<tarfileset file="${lib.sigar.dir}/*"
 						prefix="${kieker.dist.name}/${example.javaee.jpetstore.lib.dir}" />
+			<tarfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
+						prefix="${kieker.dist.name}/${src.example.analysis.kax.dir}/lib" />	
+			<tarfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
+						prefix="${kieker.dist.name}/${src.example.analysis.opad.dir}/lib" />	
+			<tarfileset file="${lib.dir}/commons-lang-*.jar"
+						prefix="${kieker.dist.name}/${src.example.analysis.opad.dir}/lib" />
+			<tarfileset file="${lib.dir}/commons-math-*.jar"
+						prefix="${kieker.dist.name}/${src.example.analysis.opad.dir}/lib" />			
+			<tarfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
+						prefix="${kieker.dist.name}/${src.example.monitoring.aspectj.dir}/lib" />		
+			<tarfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
+						prefix="${kieker.dist.name}/${src.example.monitoring.adaptive.dir}/lib" />		
+			<tarfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
+						prefix="${kieker.dist.name}/${src.example.monitoring.timesource.dir}/lib" />	
+			<tarfileset file="${dist.dir}/${dist.kieker.main.jar}"
+						prefix="${kieker.dist.name}/${src.example.monitoring.spring.dir}/lib" />	
+			<tarfileset file="${dist.dir}/${dist.kieker.main.jar}"
+						prefix="${kieker.dist.name}/${src.example.monitoring.manual.dir}/lib" />	
+			<tarfileset file="${dist.dir}/${dist.kieker.main.jar}"
+						prefix="${kieker.dist.name}/${src.example.monitoring.jvm.dir}/lib" />	
+			<tarfileset file="${dist.dir}/${dist.kieker.main.jar}"
+						prefix="${kieker.dist.name}/${src.example.monitoring.sigar.dir}/lib" />		
+			<tarfileset file="${lib.sigar.dir}/*"
+						prefix="${kieker.dist.name}/${src.example.monitoring.sigar.dir}/lib" />			
+			<tarfileset file="${lib.spring.dir}/aopalliance-*.jar"
+						prefix="${kieker.dist.name}/${src.example.monitoring.spring.dir}/lib" />				
+			<tarfileset file="${lib.spring.dir}/spring-aop-*.jar"
+						prefix="${kieker.dist.name}/${src.example.monitoring.spring.dir}/lib" />	
+			<tarfileset file="${lib.spring.dir}/spring-beans-*.jar"
+						prefix="${kieker.dist.name}/${src.example.monitoring.spring.dir}/lib" />				
+			<tarfileset file="${lib.spring.dir}/spring-context-*.jar"
+						prefix="${kieker.dist.name}/${src.example.monitoring.spring.dir}/lib" />	
+			<tarfileset file="${lib.spring.dir}/spring-core-*.jar"
+						prefix="${kieker.dist.name}/${src.example.monitoring.spring.dir}/lib" />	
+			<tarfileset file="${lib.spring.dir}/spring-expression-*.jar"
+						prefix="${kieker.dist.name}/${src.example.monitoring.spring.dir}/lib" />
+			<tarfileset file="${lib.dir}/aspectjweaver-*.jar"
+						prefix="${kieker.dist.name}/${src.example.monitoring.spring.dir}/lib" />
+			<tarfileset file="${lib.dir}/commons-logging-*.jar"
+						prefix="${kieker.dist.name}/${src.example.monitoring.spring.dir}/lib" />			
+						
 		</tar>
 		<gzip zipfile="${release.dir}/${dist.kieker.binBaseName}.tar.gz" src="${release.dir}/${dist.kieker.binBaseName}.tar" />
 		<!-- tar file no longer needed -->
@@ -346,6 +379,25 @@
 			<zipfileset file="${src.userguide.example.sigar.dir}/.classpath-binrelease.generated"
 						fullpath="${kieker.dist.name}/${src.userguide.example.sigar.dir}/.classpath" />
 
+			<zipfileset file="${src.example.analysis.kax.dir}/.classpath-binrelease.generated"
+						fullpath="${kieker.dist.name}/${src.example.analysis.kax.dir}/.classpath" />	
+			<zipfileset file="${src.example.analysis.opad.dir}/.classpath-binrelease.generated"
+						fullpath="${kieker.dist.name}/${src.example.analysis.opad.dir}/.classpath" />				
+			<zipfileset file="${src.example.monitoring.adaptive.dir}/.classpath-binrelease.generated"
+						fullpath="${kieker.dist.name}/${src.example.monitoring.adaptive.dir}/.classpath" />	
+			<zipfileset file="${src.example.monitoring.timesource.dir}/.classpath-binrelease.generated"
+						fullpath="${kieker.dist.name}/${src.example.monitoring.timesource.dir}/.classpath" />	
+			<zipfileset file="${src.example.monitoring.aspectj.dir}/.classpath-binrelease.generated"
+						fullpath="${kieker.dist.name}/${src.example.monitoring.aspectj.dir}/.classpath" />	
+			<zipfileset file="${src.example.monitoring.manual.dir}/.classpath-binrelease.generated"
+						fullpath="${kieker.dist.name}/${src.example.monitoring.manual.dir}/.classpath" />	
+			<zipfileset file="${src.example.monitoring.spring.dir}/.classpath-binrelease.generated"
+						fullpath="${kieker.dist.name}/${src.example.monitoring.spring.dir}/.classpath" />	
+			<zipfileset file="${src.example.monitoring.jvm.dir}/.classpath-binrelease.generated"
+						fullpath="${kieker.dist.name}/${src.example.monitoring.jvm.dir}/.classpath" />	
+			<zipfileset file="${src.example.monitoring.sigar.dir}/.classpath-binrelease.generated"
+						fullpath="${kieker.dist.name}/${src.example.monitoring.sigar.dir}/.classpath" />						
+						
 			<!-- Include the right Kieker libs in the examples -->
 			<zipfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
 						prefix="${kieker.dist.name}/${example.javaee.jetty.dir}/webapps/jpetstore/WEB-INF/lib" />
@@ -371,6 +423,46 @@
 						prefix="${kieker.dist.name}/${src.userguide.example.sigar.dir}/lib" />
 			<zipfileset file="${lib.sigar.dir}/*"
 						prefix="${kieker.dist.name}/${example.javaee.jpetstore.lib.dir}" />
+			<zipfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
+						prefix="${kieker.dist.name}/${src.example.analysis.kax.dir}/lib" />	
+			<zipfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
+						prefix="${kieker.dist.name}/${src.example.analysis.opad.dir}/lib" />				
+			<zipfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
+						prefix="${kieker.dist.name}/${src.example.monitoring.aspectj.dir}/lib" />	
+			<zipfileset file="${lib.dir}/commons-lang-*.jar"
+						prefix="${kieker.dist.name}/${src.example.analysis.opad.dir}/lib" />
+			<zipfileset file="${lib.dir}/commons-math-*.jar"
+						prefix="${kieker.dist.name}/${src.example.analysis.opad.dir}/lib" />			
+			<zipfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
+						prefix="${kieker.dist.name}/${src.example.monitoring.adaptive.dir}/lib" />		
+			<zipfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
+						prefix="${kieker.dist.name}/${src.example.monitoring.timesource.dir}/lib" />	
+			<zipfileset file="${dist.dir}/${dist.kieker.main.jar}"
+						prefix="${kieker.dist.name}/${src.example.monitoring.spring.dir}/lib" />	
+			<zipfileset file="${dist.dir}/${dist.kieker.main.jar}"
+						prefix="${kieker.dist.name}/${src.example.monitoring.manual.dir}/lib" />	
+			<zipfileset file="${dist.dir}/${dist.kieker.main.jar}"
+						prefix="${kieker.dist.name}/${src.example.monitoring.jvm.dir}/lib" />	
+			<zipfileset file="${dist.dir}/${dist.kieker.main.jar}"
+						prefix="${kieker.dist.name}/${src.example.monitoring.sigar.dir}/lib" />		
+			<zipfileset file="${lib.sigar.dir}/*"
+						prefix="${kieker.dist.name}/${src.example.monitoring.sigar.dir}/lib" />		
+			<zipfileset file="${lib.spring.dir}/aopalliance-*.jar"
+						prefix="${kieker.dist.name}/${src.example.monitoring.spring.dir}/lib" />				
+			<zipfileset file="${lib.spring.dir}/spring-aop-*.jar"
+						prefix="${kieker.dist.name}/${src.example.monitoring.spring.dir}/lib" />	
+			<zipfileset file="${lib.spring.dir}/spring-beans-*.jar"
+						prefix="${kieker.dist.name}/${src.example.monitoring.spring.dir}/lib" />				
+			<zipfileset file="${lib.spring.dir}/spring-context-*.jar"
+						prefix="${kieker.dist.name}/${src.example.monitoring.spring.dir}/lib" />	
+			<zipfileset file="${lib.spring.dir}/spring-core-*.jar"
+						prefix="${kieker.dist.name}/${src.example.monitoring.spring.dir}/lib" />	
+			<zipfileset file="${lib.spring.dir}/spring-expression-*.jar"
+						prefix="${kieker.dist.name}/${src.example.monitoring.spring.dir}/lib" />
+			<zipfileset file="${lib.dir}/aspectjweaver-*.jar"
+						prefix="${kieker.dist.name}/${src.example.monitoring.spring.dir}/lib" />
+			<zipfileset file="${lib.dir}/commons-logging-*.jar"
+						prefix="${kieker.dist.name}/${src.example.monitoring.spring.dir}/lib" />						
 		</zip>
 	</target>
 

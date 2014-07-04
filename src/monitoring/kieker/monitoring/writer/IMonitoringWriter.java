@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,22 @@ public interface IMonitoringWriter extends IMonitoringRecordReceiver {
 	 * 
 	 * @since 1.3
 	 */
+	@Override
 	public abstract boolean newMonitoringRecord(IMonitoringRecord record);
+
+	/**
+	 * Called for each new record.
+	 * 
+	 * Notice, that this method should not throw an exception, but indicate an error by the return value false.
+	 * Also, this method MUST NOT block.
+	 * 
+	 * @param record
+	 *            the record.
+	 * @return true on success; false in case of an error.
+	 * 
+	 * @since 1.9
+	 */
+	public abstract boolean newMonitoringRecordNonBlocking(IMonitoringRecord record);
 
 	/**
 	 * Called by the Monitoring Controller to announce a shutdown of monitoring.
@@ -62,5 +77,6 @@ public interface IMonitoringWriter extends IMonitoringRecordReceiver {
 	 * 
 	 * @since 1.3
 	 */
+	@Override
 	public abstract String toString();
 }

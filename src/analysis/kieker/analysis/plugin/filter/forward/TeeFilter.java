@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,9 @@ import kieker.common.configuration.Configuration;
 					description = "The name of the stream used to print the incoming data (special values are STDOUT, STDERR, STDlog, and NULL; "
 							+ "other values are interpreted as filenames)."),
 			@Property(name = TeeFilter.CONFIG_PROPERTY_NAME_ENCODING, defaultValue = TeeFilter.CONFIG_PROPERTY_VALUE_DEFAULT_ENCODING,
-					description = "The used encoding for the selected stream.")
+					description = "The used encoding for the selected stream."),
+			@Property(name = TeeFilter.CONFIG_PROPERTY_NAME_APPEND, defaultValue = TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_APPEND,
+					description = "Decides whether the filter appends to the stream in the case of a file or not.")
 		})
 public final class TeeFilter extends AbstractFilterPlugin {
 
@@ -57,31 +59,26 @@ public final class TeeFilter extends AbstractFilterPlugin {
 	public static final String CONFIG_PROPERTY_NAME_STREAM = "stream";
 	/** The name of the property determining the used encoding. */
 	public static final String CONFIG_PROPERTY_NAME_ENCODING = "characterEncoding";
+	/** The name of the property determining whether or not the stream appends or overwrites to files */
+	public static final String CONFIG_PROPERTY_NAME_APPEND = "append";
 
-	/**
-	 * The value of the stream property which determines that the filter uses the standard output.
-	 */
+	/** The value of the stream property which determines that the filter uses the standard output. */
 	public static final String CONFIG_PROPERTY_VALUE_STREAM_STDOUT = "STDOUT";
-	/**
-	 * The value of the stream property which determines that the filter uses the standard error output.
-	 */
+	/** The value of the stream property which determines that the filter uses the standard error output. */
 	public static final String CONFIG_PROPERTY_VALUE_STREAM_STDERR = "STDERR";
-	/**
-	 * The value of the stream property which determines that the filter uses the standard log.
-	 */
+	/** The value of the stream property which determines that the filter uses the standard log. */
 	public static final String CONFIG_PROPERTY_VALUE_STREAM_STDLOG = "STDlog";
-	/**
-	 * The value of the stream property which determines that the filter doesn't print anything.
-	 */
+	/** The value of the stream property which determines that the filter doesn't print anything. */
 	public static final String CONFIG_PROPERTY_VALUE_STREAM_NULL = "NULL";
-	/**
-	 * The default value of the encoding property which determines that the filter uses utf-8.
-	 */
+	/** The default value of the encoding property which determines that the filter uses utf-8. */
 	public static final String CONFIG_PROPERTY_VALUE_DEFAULT_ENCODING = "UTF-8";
+	/** The default value of the stream property which determines that the filter appends or overwrites a file. */
+	public static final String CONFIG_PROPERTY_VALUE_STREAM_APPEND = "true";
 
 	private final PrintStream printStream;
 	private final String printStreamName;
 	private final boolean active;
+	private final boolean append;
 	private final String encoding;
 
 	/**
@@ -105,22 +102,27 @@ public final class TeeFilter extends AbstractFilterPlugin {
 			this.printStream = null; // NOPMD (null)
 			this.printStreamName = null; // NOPMD (null)
 			this.active = true;
+			this.append = false;
 		} else if (CONFIG_PROPERTY_VALUE_STREAM_STDOUT.equals(printStreamNameConfig)) {
 			this.printStream = System.out;
 			this.printStreamName = null; // NOPMD (null)
 			this.active = true;
+			this.append = false;
 		} else if (CONFIG_PROPERTY_VALUE_STREAM_STDERR.equals(printStreamNameConfig)) {
 			this.printStream = System.err;
 			this.printStreamName = null; // NOPMD (null)
 			this.active = true;
+			this.append = false;
 		} else if (CONFIG_PROPERTY_VALUE_STREAM_NULL.equals(printStreamNameConfig)) {
 			this.printStream = null; // NOPMD (null)
 			this.printStreamName = null; // NOPMD (null)
 			this.active = false;
+			this.append = false;
 		} else {
+			this.append = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_APPEND);
 			PrintStream tmpPrintStream;
 			try {
-				tmpPrintStream = new PrintStream(new FileOutputStream(printStreamNameConfig), false, this.encoding);
+				tmpPrintStream = new PrintStream(new FileOutputStream(printStreamNameConfig, this.append), false, this.encoding);
 			} catch (final UnsupportedEncodingException ex) {
 				this.log.error("Failed to initialize " + printStreamNameConfig, ex);
 				tmpPrintStream = null; // NOPMD (null)
@@ -148,6 +150,7 @@ public final class TeeFilter extends AbstractFilterPlugin {
 	public final Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
 		configuration.setProperty(CONFIG_PROPERTY_NAME_ENCODING, this.encoding);
+		configuration.setProperty(CONFIG_PROPERTY_NAME_APPEND, Boolean.toString(this.append));
 		// We reverse the if-decisions within the constructor.
 		if (this.printStream == null) {
 			if (this.active) {

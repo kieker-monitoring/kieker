@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -165,6 +165,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public final boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 		if (monitoringRecord instanceof RegistryRecord) {
@@ -270,6 +271,7 @@ public final class SyncFsWriter extends AbstractMonitoringWriter {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void terminate() {
 		synchronized (this) {
 			if (this.pos != null) {

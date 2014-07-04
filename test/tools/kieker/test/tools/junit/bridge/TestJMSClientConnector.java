@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,29 +38,26 @@ public class TestJMSClientConnector extends AbstractConnectorTest {
 	}
 
 	/**
-	 * Test a JMS client connector.
+	 * Test the JMS client connector.
 	 * 
 	 * @throws ConnectorDataTransmissionException
 	 *             on lookup failure for the test record
 	 */
 	@Test
 	public void testJMSClientConnector() throws ConnectorDataTransmissionException { // NOPMD
-
-		final Thread messageGenerator = new Thread(new JMSMessageGenerator(), "Generator");
+		final Thread messageGenerator = new Thread(new JMSMessageGenerator(ConfigurationParameters.JMS_URI, ConfigurationParameters.JMS_CLIENT_FACTORY_LOOKUP_NAME),
+				"Generator");
 		messageGenerator.start();
-
-		final Thread broker = new Thread(new JMSBroker(), "Broker");
-		broker.start();
 
 		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
 		configuration.setProperty(JMSClientConnector.USERNAME, String.valueOf(ConfigurationParameters.JMS_USERNAME));
 		configuration.setProperty(JMSClientConnector.PASSWORD, String.valueOf(ConfigurationParameters.JMS_PASSWORD));
 		configuration.setProperty(JMSClientConnector.URI, String.valueOf(ConfigurationParameters.JMS_URI));
+		configuration.setProperty(JMSClientConnector.FACTORY_LOOKUP_NAME, ConfigurationParameters.JMS_CLIENT_FACTORY_LOOKUP_NAME);
 		// test the connector
 		this.setConnector(new JMSClientConnector(configuration, this.createLookupEntityMap()));
 		this.initialize();
-		this.deserialize(ConfigurationParameters.SEND_NUMBER_OF_RECORDS);
+		this.deserialize(ConfigurationParameters.SEND_NUMBER_OF_RECORDS, true);
 		this.close(ConfigurationParameters.SEND_NUMBER_OF_RECORDS);
 	}
-
 }

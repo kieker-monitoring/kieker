@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import kieker.common.util.registry.IRegistry;
  * @since 1.5
  */
 public class CallOperationEvent extends AbstractOperationEvent implements ICallRecord {
-	public static final int SIZE = 36;
+	public static final int SIZE = (2 * TYPE_SIZE_LONG) + TYPE_SIZE_INT + (4 * TYPE_SIZE_STRING);
 	public static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
@@ -156,22 +156,27 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 		return SIZE;
 	}
 
+	@Override
 	public final String getCallerOperationSignature() {
 		return this.getOperationSignature();
 	}
 
+	@Override
 	public final String getCallerClassSignature() {
 		return this.getClassSignature();
 	}
 
+	@Override
 	public final String getCalleeOperationSignature() {
 		return this.calleeOperationSignature;
 	}
 
+	@Override
 	public final String getCalleeClassSignature() {
 		return this.calleeClassSignature;
 	}
 
+	@Override
 	public final boolean callsReferencedOperationOf(final IOperationRecord record) {
 		return this.getCalleeOperationSignature().equals(record.getOperationSignature()) && this.getCalleeClassSignature().equals(record.getClassSignature());
 	}

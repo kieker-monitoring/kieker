@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -79,7 +79,10 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 		this.inputDirs = this.configuration.getStringArrayProperty(CONFIG_PROPERTY_NAME_INPUTDIRS);
 		int nDirs = this.inputDirs.length;
 		for (int i = 0; i < nDirs; i++) {
-			this.inputDirs[i] = Configuration.convertToPath(this.inputDirs[i]);
+			// Workaround for #1323
+			if (!".".equals(this.inputDirs[i])) {
+				this.inputDirs[i] = Configuration.convertToPath(this.inputDirs[i]);
+			}
 		}
 		if (nDirs == 0) {
 			this.log.warn("The list of input dirs passed to the " + FSReader.class.getSimpleName() + " is empty");
@@ -92,6 +95,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void terminate(final boolean error) {
 		this.log.info("Shutting down reader.");
 		this.running = false;
@@ -100,6 +104,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean read() {
 		// start all reader
 		int notInitializesReaders = 0;
@@ -148,6 +153,7 @@ public class FSReader extends AbstractReaderPlugin implements IMonitoringRecordR
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean newMonitoringRecord(final IMonitoringRecord record) {
 		synchronized (record) { // with read()
 			synchronized (this.recordQueue) { // with read()

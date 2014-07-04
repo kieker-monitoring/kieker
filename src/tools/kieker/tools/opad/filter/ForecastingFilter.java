@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,36 +49,22 @@ import kieker.tools.tslib.forecast.IForecaster;
 	@OutputPort(eventTypes = { IForecastResult.class }, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECAST),
 	@OutputPort(eventTypes = { IForecastMeasurementPair.class }, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT) },
 		configuration = {
-			@Property(name = ForecastingFilter.CONFIG_PROPERTY_DELTA_TIME, defaultValue = "1000"),
-			@Property(name = ForecastingFilter.CONFIG_PROPERTY_DELTA_UNIT, defaultValue = "MILLISECONDS"),
-			@Property(name = ForecastingFilter.CONFIG_PROPERTY_FC_METHOD, defaultValue = "MEAN", updateable = true),
-			@Property(name = ForecastingFilter.CONFIG_PROPERTY_TS_WINDOW_CAPACITY, defaultValue = "60")
+			@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_DELTA_TIME, defaultValue = "1000"),
+			@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_DELTA_UNIT, defaultValue = "MILLISECONDS"),
+			@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_FC_METHOD, defaultValue = "MEAN", updateable = true),
+			@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_TS_WINDOW_CAPACITY, defaultValue = "60")
 		})
 public class ForecastingFilter extends AbstractUpdateableFilterPlugin {
 
-	/**
-	 * Name of the input port receiving the measurements.
-	 */
 	public static final String INPUT_PORT_NAME_TSPOINT = "tspoint";
 
-	/**
-	 * Name of the output port delivering the forecasts.
-	 */
 	public static final String OUTPUT_PORT_NAME_FORECAST = "forecast";
-
-	/**
-	 * Name of the output port delivering the measurement-forecast-pairs.
-	 */
 	public static final String OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT = "forecastedcurrent";
 
-	/** Name of the property determining the deltatime. */
-	public static final String CONFIG_PROPERTY_DELTA_TIME = "deltatime";
-	/** Name of the property determining the timeunit of the deltatime. */
-	public static final String CONFIG_PROPERTY_DELTA_UNIT = "deltaunit";
-	/** Name of the property determining the forecasting method. */
-	public static final String CONFIG_PROPERTY_FC_METHOD = "fcmethod";
-	/** Name of the property determining the capacity of the timeseries window. Take value <= 0 for infinite buffersize */
-	public static final String CONFIG_PROPERTY_TS_WINDOW_CAPACITY = "tswcapacity";
+	public static final String CONFIG_PROPERTY_NAME_DELTA_TIME = "deltatime";
+	public static final String CONFIG_PROPERTY_NAME_DELTA_UNIT = "deltaunit";
+	public static final String CONFIG_PROPERTY_NAME_FC_METHOD = "fcmethod";
+	public static final String CONFIG_PROPERTY_NAME_TS_WINDOW_CAPACITY = "tswcapacity";
 
 	private final ConcurrentHashMap<String, ITimeSeries<Double>> applicationForecastingWindow;
 
@@ -104,29 +90,29 @@ public class ForecastingFilter extends AbstractUpdateableFilterPlugin {
 	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-		configuration.setProperty(CONFIG_PROPERTY_DELTA_TIME, Long.toString(this.deltat.get()));
-		configuration.setProperty(CONFIG_PROPERTY_DELTA_UNIT, this.tunit.name());
-		configuration.setProperty(CONFIG_PROPERTY_FC_METHOD, this.forecastMethod.get().name());
-		configuration.setProperty(CONFIG_PROPERTY_TS_WINDOW_CAPACITY, Integer.toString(this.timeSeriesWindowCapacity.get()));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_DELTA_TIME, Long.toString(this.deltat.get()));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_DELTA_UNIT, this.tunit.name());
+		configuration.setProperty(CONFIG_PROPERTY_NAME_FC_METHOD, this.forecastMethod.get().name());
+		configuration.setProperty(CONFIG_PROPERTY_NAME_TS_WINDOW_CAPACITY, Integer.toString(this.timeSeriesWindowCapacity.get()));
 		return configuration;
 	}
 
 	@Override
 	public void setCurrentConfiguration(final Configuration config, final boolean update) {
-		if (!update || this.isPropertyUpdateable(CONFIG_PROPERTY_DELTA_TIME)) {
-			this.deltat = new AtomicLong(config.getLongProperty(CONFIG_PROPERTY_DELTA_TIME));
+		if (!update || this.isPropertyUpdateable(CONFIG_PROPERTY_NAME_DELTA_TIME)) {
+			this.deltat = new AtomicLong(config.getLongProperty(CONFIG_PROPERTY_NAME_DELTA_TIME));
 		}
 
-		if (!update || this.isPropertyUpdateable(CONFIG_PROPERTY_DELTA_UNIT)) {
-			this.tunit = TimeUnit.valueOf(config.getStringProperty(CONFIG_PROPERTY_DELTA_UNIT));
+		if (!update || this.isPropertyUpdateable(CONFIG_PROPERTY_NAME_DELTA_UNIT)) {
+			this.tunit = TimeUnit.valueOf(config.getStringProperty(CONFIG_PROPERTY_NAME_DELTA_UNIT));
 		}
 
-		if (!update || this.isPropertyUpdateable(CONFIG_PROPERTY_FC_METHOD)) {
-			this.forecastMethod.set(ForecastMethod.valueOf(config.getStringProperty(CONFIG_PROPERTY_FC_METHOD)));
+		if (!update || this.isPropertyUpdateable(CONFIG_PROPERTY_NAME_FC_METHOD)) {
+			this.forecastMethod.set(ForecastMethod.valueOf(config.getStringProperty(CONFIG_PROPERTY_NAME_FC_METHOD)));
 		}
 
-		if (!update || this.isPropertyUpdateable(CONFIG_PROPERTY_TS_WINDOW_CAPACITY)) {
-			this.timeSeriesWindowCapacity = new AtomicInteger(config.getIntProperty(CONFIG_PROPERTY_TS_WINDOW_CAPACITY));
+		if (!update || this.isPropertyUpdateable(CONFIG_PROPERTY_NAME_TS_WINDOW_CAPACITY)) {
+			this.timeSeriesWindowCapacity = new AtomicInteger(config.getIntProperty(CONFIG_PROPERTY_NAME_TS_WINDOW_CAPACITY));
 		}
 	}
 
@@ -146,7 +132,6 @@ public class ForecastingFilter extends AbstractUpdateableFilterPlugin {
 					new TimeSeries<Double>(System.currentTimeMillis(), this.deltat.get(), this.tunit, this.timeSeriesWindowCapacity.get()));
 			this.processInput(input, input.getTime(), input.getName());
 		}
-
 	}
 
 	/**
@@ -184,10 +169,9 @@ public class ForecastingFilter extends AbstractUpdateableFilterPlugin {
 	 * Checks if the current application is already known to this filter.
 	 * 
 	 * @param name
-	 *            Application name
+	 *            application name
 	 */
 	private boolean checkInitialization(final String name) {
 		return this.applicationForecastingWindow.containsKey(name);
 	}
-
 }

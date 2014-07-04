@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,6 +69,7 @@ public final class LogImplJUnit implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final boolean isDebugEnabled() {
 		return this.logger.isLoggable(java.util.logging.Level.FINE);
 	}
@@ -76,6 +77,7 @@ public final class LogImplJUnit implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void debug(final String message) {
 		this.log(java.util.logging.Level.FINE, message, null);
 	}
@@ -83,6 +85,7 @@ public final class LogImplJUnit implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void debug(final String message, final Throwable t) {
 		this.log(java.util.logging.Level.FINE, message, t);
 	}
@@ -90,6 +93,7 @@ public final class LogImplJUnit implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void info(final String message) {
 		this.log(java.util.logging.Level.INFO, message, null);
 	}
@@ -97,6 +101,7 @@ public final class LogImplJUnit implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void info(final String message, final Throwable t) {
 		synchronized (DISABLED_THROWABLES) {
 			for (final Class<? extends Throwable> clazz : DISABLED_THROWABLES) {
@@ -112,6 +117,7 @@ public final class LogImplJUnit implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void warn(final String message) {
 		this.log(java.util.logging.Level.WARNING, message, null);
 	}
@@ -119,6 +125,7 @@ public final class LogImplJUnit implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void warn(final String message, final Throwable t) {
 		synchronized (DISABLED_THROWABLES) {
 			for (final Class<? extends Throwable> clazz : DISABLED_THROWABLES) {
@@ -135,6 +142,7 @@ public final class LogImplJUnit implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void error(final String message) {
 		this.log(java.util.logging.Level.SEVERE, message, null);
 	}
@@ -142,6 +150,7 @@ public final class LogImplJUnit implements Log {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void error(final String message, final Throwable t) {
 		synchronized (DISABLED_THROWABLES) {
 			for (final Class<? extends Throwable> clazz : DISABLED_THROWABLES) {

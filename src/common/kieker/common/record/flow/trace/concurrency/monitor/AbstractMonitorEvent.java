@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ import kieker.common.util.registry.IRegistry;
  * @since 1.8
  */
 public abstract class AbstractMonitorEvent extends AbstractTraceEvent {
-	public static final int SIZE = 24;
+	public static final int SIZE = (2 * TYPE_SIZE_LONG) + (2 * TYPE_SIZE_INT);
 	public static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
@@ -88,6 +88,7 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object[] toArray() {
 		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getLockId(), };
 	}
@@ -95,6 +96,7 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putLong(this.getTimestamp());
 		buffer.putLong(this.getTraceId());
@@ -102,6 +104,7 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent {
 		buffer.putInt(this.getLockId());
 	}
 
+	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
@@ -109,6 +112,7 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getSize() {
 		return SIZE;
 	}

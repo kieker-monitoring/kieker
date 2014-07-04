@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,19 +20,14 @@ import kieker.tools.tslib.ITimeSeriesPoint;
 import kieker.tools.tslib.forecast.IForecastResult;
 
 /**
- * 
  * @author Tillmann Carlos Bielefeld
- * @since 1.10
  * 
+ * @since 1.10
  */
 public class SimpleAnomalyCalculator implements IAnomalyCalculator<Double> {
 
-	/**
-	 * Creates a new Instance of this class.
-	 */
 	public SimpleAnomalyCalculator() {
-
-		// constructur
+		// empty default constructor
 	}
 
 	/**
@@ -43,6 +38,7 @@ public class SimpleAnomalyCalculator implements IAnomalyCalculator<Double> {
 	 * 
 	 * @return AnomalScore
 	 */
+	@Override
 	public AnomalyScore calculateAnomaly(final IForecastResult forecast, final ITimeSeriesPoint<Double> current) {
 		if (forecast.getForecast().getPoints().size() == 0) {
 			return null;

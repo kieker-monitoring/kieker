@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -134,6 +134,7 @@ public final class JMXReader extends AbstractReaderPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void terminate(final boolean error) {
 		this.log.info("Shutdown of JMXReader requested.");
 		this.unblock();
@@ -142,6 +143,7 @@ public final class JMXReader extends AbstractReaderPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final boolean read() {
 		if (this.silentreconnect) {
 			return this.read2();
@@ -318,6 +320,7 @@ public final class JMXReader extends AbstractReaderPlugin {
 			// nothing to do
 		}
 
+		@Override
 		public final void handleNotification(final Notification notification, final Object handback) {
 			JMXReader.this.deliverIndirect(OUTPUT_PORT_NAME_RECORDS, notification.getUserData());
 		}
@@ -335,6 +338,7 @@ public final class JMXReader extends AbstractReaderPlugin {
 			// nothing to do
 		}
 
+		@Override
 		public final void handleNotification(final Notification notification, final Object handback) {
 			final String notificationType = notification.getType();
 			if (notificationType.equals(JMXConnectionNotification.CLOSED)) {

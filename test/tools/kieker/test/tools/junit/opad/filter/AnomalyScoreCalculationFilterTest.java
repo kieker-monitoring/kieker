@@ -41,14 +41,12 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * 
  * @since 1.10
  * @author Tom Frotscher
- * 
  */
 public class AnomalyScoreCalculationFilterTest extends AbstractKiekerTest {
 
 	private static final String OP_SIGNATURE_A = "a.A.opA";
 
 	private AnalysisController controller;
-
 	private ListCollectionFilter<StorableDetectionResult> sinkAnomalyScore;
 
 	/**
@@ -58,16 +56,17 @@ public class AnomalyScoreCalculationFilterTest extends AbstractKiekerTest {
 		// empty default constructor
 	}
 
-	private ForecastMeasurementPair createFMP(final String name, final Double forecast,
-			final Double measurement) {
+	private ForecastMeasurementPair createFMP(final String name, final Double forecast, final Double measurement) {
 		return new ForecastMeasurementPair(name, forecast, measurement, System.currentTimeMillis());
 	}
 
 	private List<ForecastMeasurementPair> createInputEventSetScoreCalc() {
 		final List<ForecastMeasurementPair> retList = new ArrayList<ForecastMeasurementPair>();
+
 		retList.add(this.createFMP(OP_SIGNATURE_A, 0.6, 0.4));
 		retList.add(this.createFMP(OP_SIGNATURE_A, 0.3, 0.4));
 		retList.add(this.createFMP(OP_SIGNATURE_A, 0.5, 0.5));
+
 		return retList;
 	}
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,25 +25,18 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
 
 /**
- * This class contains the data that will be stored in the database after each complete analysis.
- * Therefore, containing the value, the application name, the forecast calculated from the value,
- * the timestamp and the corresponding anomaly score.
+ * This class contains the data that will be stored in the database after each complete analysis. Therefore, containing the value, the application name, the forecast
+ * calculated from the value, the timestamp and the corresponding anomaly score.
  * 
  * @author Tom Frotscher, Thomas Düllmann
  * @since 1.10
  * 
+ * @since 1.9
  */
-public class StorableDetectionResult extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
+public class StorableDetectionResult extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 
-	/**
-	 * Size of the serialized object.
-	 */
-	public static final int SIZE = 36;
-
-	/**
-	 * Types used in this class (used for serialization purposes).
-	 */
-	private static final Class<?>[] TYPES = {
+	public static final int SIZE = TYPE_SIZE_STRING + TYPE_SIZE_DOUBLE + TYPE_SIZE_LONG + TYPE_SIZE_DOUBLE + TYPE_SIZE_DOUBLE;
+	public static final Class<?>[] TYPES = {
 		String.class, // applicationName
 		double.class, // value
 		long.class, // timestamp
@@ -78,20 +71,6 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 	 */
 	protected final double score;
 
-	/**
-	 * Creates an instance of this class based on the parameters.
-	 * 
-	 * @param app
-	 *            Application that is the source of the data
-	 * @param val
-	 *            Produced value
-	 * @param timest
-	 *            Timestamp
-	 * @param fore
-	 *            Corresponding forecast
-	 * @param sc
-	 *            anomaly score
-	 */
 	public StorableDetectionResult(final String app, final double val, final long timest, final double fore, final double sc) {
 		this.applicationName = app;
 		this.value = val;
@@ -106,7 +85,15 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 	 * @param values
 	 *            Object array containing the application name, value, timestamp, forecast and anomaly score.
 	 */
-	public StorableDetectionResult(final Object[] values) { // NOPMD
+	public StorableDetectionResult(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		this.applicationName = stringRegistry.get(buffer.getInt());
+		this.value = buffer.getDouble();
+		this.timestamp = buffer.getLong();
+		this.forecast = buffer.getDouble();
+		this.score = buffer.getDouble();
+	}
+
+	public StorableDetectionResult(final Object[] values) { // NOPMD (direct store of values)
 		AbstractMonitoringRecord.checkArray(values, StorableDetectionResult.TYPES);
 
 		this.applicationName = (String) values[0];
@@ -114,12 +101,12 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 		this.timestamp = (Long) values[2];
 		this.forecast = (Double) values[3];
 		this.score = (Double) values[4];
-
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Class<?>[] getValueTypes() {
 		return StorableDetectionResult.TYPES.clone();
 	}
@@ -129,6 +116,7 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public void initFromArray(final Object[] arg0) {
 		throw new UnsupportedOperationException();
@@ -137,70 +125,32 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object[] toArray() {
 		return new Object[] { this.applicationName, this.value, this.timestamp, this.forecast, this.score };
 	}
 
-	/**
-	 * Returns the application name.
-	 * 
-	 * @return
-	 *         Apllication name
-	 */
 	public String getApplication() {
 		return this.applicationName;
 	}
 
-	/**
-	 * Returns the timestamp.
-	 * 
-	 * @return
-	 *         Timestamp
-	 */
 	public long getTimestamp() {
 		return this.timestamp;
 	}
 
-	/**
-	 * Returns the value.
-	 * 
-	 * @return
-	 *         Value
-	 */
 	public double getValue() {
 		return this.value;
 	}
 
-	/**
-	 * Returns the forecast.
-	 * 
-	 * @return
-	 *         Forecast
-	 */
 	public double getForecast() {
 		return this.forecast;
 	}
 
-	/**
-	 * Returns the anomaly score.
-	 * 
-	 * @return
-	 *         Anomaly score
-	 */
 	public double getScore() {
 		return this.score;
 	}
 
-	/**
-	 * Serializes the object.
-	 * 
-	 * @param buffer
-	 *            buffer
-	 * @param stringRegistry
-	 *            stringRegistry
-	 * @throws BufferOverflowException
-	 *             bufferOverflowException
-	 */
+	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putInt(stringRegistry.get(this.getApplication()));
 		buffer.putDouble(this.getValue());
@@ -214,11 +164,13 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public int getSize() {
 		return SIZE;
 	}

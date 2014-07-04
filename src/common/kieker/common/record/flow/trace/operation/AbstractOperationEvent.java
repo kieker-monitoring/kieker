@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import kieker.common.util.registry.IRegistry;
  * @since 1.5
  */
 public abstract class AbstractOperationEvent extends AbstractTraceEvent implements IOperationRecord {
-	public static final int SIZE = 28;
+	public static final int SIZE = (2 * TYPE_SIZE_LONG) + TYPE_SIZE_INT + (2 * TYPE_SIZE_STRING);
 	public static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
@@ -102,6 +102,7 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object[] toArray() {
 		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), this.getOperationSignature(), this.getClassSignature(), };
 	}
@@ -109,6 +110,7 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putLong(this.getTimestamp());
 		buffer.putLong(this.getTraceId());
@@ -120,6 +122,7 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
@@ -127,14 +130,17 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getSize() {
 		return SIZE;
 	}
 
+	@Override
 	public final String getOperationSignature() {
 		return this.operationSignature;
 	}
 
+	@Override
 	public final String getClassSignature() {
 		return this.classSignature;
 	}
@@ -142,6 +148,7 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final boolean refersToSameOperationAs(final IOperationRecord record) {
 		return this.getOperationSignature().equals(record.getOperationSignature()) && this.getClassSignature().equals(record.getClassSignature());
 	}

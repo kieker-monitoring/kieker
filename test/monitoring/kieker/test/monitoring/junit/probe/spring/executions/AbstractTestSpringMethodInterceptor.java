@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -221,6 +221,7 @@ public abstract class AbstractTestSpringMethodInterceptor extends AbstractKieker
 			this.methodsToInvoke = subInvocations;
 		}
 
+		@Override
 		public Object proceed() throws Throwable { // NOCS (Throwable)
 			this.actualEoiBeforeInvokes = AbstractTestSpringMethodInterceptor.this.controlFlowRegistry.recallThreadLocalEOI();
 			this.actualEssBeforeInvokes = AbstractTestSpringMethodInterceptor.this.controlFlowRegistry.recallThreadLocalESS();
@@ -246,10 +247,12 @@ public abstract class AbstractTestSpringMethodInterceptor extends AbstractKieker
 					this.expectedEssAfterInvokes, this.actualEssAfterInvokes);
 		}
 
+		@Override
 		public Object getThis() {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public AccessibleObject getStaticPart() {
 			throw new UnsupportedOperationException();
 		}
@@ -262,6 +265,7 @@ public abstract class AbstractTestSpringMethodInterceptor extends AbstractKieker
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public Object[] getArguments() {
 			throw new UnsupportedOperationException();
 		}
@@ -282,6 +286,7 @@ public abstract class AbstractTestSpringMethodInterceptor extends AbstractKieker
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public Method getMethod() {
 			return this.myMethod;
 		}

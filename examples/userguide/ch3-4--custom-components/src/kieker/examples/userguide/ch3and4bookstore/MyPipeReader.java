@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,6 +57,7 @@ public class MyPipeReader extends AbstractReaderPlugin {
 		}
 	}
 
+	@Override
 	public boolean read() {
 		try {
 			// Wait max. 4 seconds for the next data.
@@ -87,6 +88,7 @@ public class MyPipeReader extends AbstractReaderPlugin {
 		return configuration;
 	}
 
+	@Override
 	public void terminate(final boolean error) {
 		// nothing to do
 	}

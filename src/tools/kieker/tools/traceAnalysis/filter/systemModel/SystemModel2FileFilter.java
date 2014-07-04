@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,8 +75,10 @@ public class SystemModel2FileFilter extends AbstractTraceAnalysisFilter {
 	 */
 	@Override
 	public Configuration getCurrentConfiguration() {
-		final Configuration currentConfiguration = new Configuration();
+		final Configuration currentConfiguration = super.getCurrentConfiguration();
+
 		currentConfiguration.setProperty(CONFIG_PROPERTY_NAME_HTML_OUTPUT_FN, this.outputFnHTML);
+
 		return currentConfiguration;
 	}
 
@@ -114,9 +116,9 @@ public class SystemModel2FileFilter extends AbstractTraceAnalysisFilter {
 		}
 
 		if (!error) {
-			this.printMessage(new String[] { "Wrote HTML output of system model to file '" + outputFnHTMLCanonical + "'" });
+			this.printDebugLogMessage(new String[] { "Wrote HTML output of system model to file '" + outputFnHTMLCanonical + "'" });
 		} else {
-			this.printMessage(new String[] { "Failed to write HTML output of system model to file '" + outputFnHTMLCanonical + "'" });
+			this.printErrorLogMessage(new String[] { "Failed to write HTML output of system model to file '" + outputFnHTMLCanonical + "'" });
 		}
 	}
 }

@@ -92,6 +92,7 @@ public class PatternCheckingForecaster extends AbstractForecaster<Double> {
 	 * @return
 	 *         forecast result
 	 */
+	@Override
 	public IForecastResult forecast(final int numForecastSteps) {
 		final ITimeSeries<Double> tsFC = this.prepareForecastTS();
 
@@ -102,7 +103,7 @@ public class PatternCheckingForecaster extends AbstractForecaster<Double> {
 		Arrays.fill(forecastValues, alternativeReferenceValue);
 
 		tsFC.appendAll(forecastValues);
-		return new ForecastResult(tsFC, this.getTsOriginal(), ForecastMethod.PCF);
+		return new ForecastResult(tsFC, this.getTsOriginal(), ForecastMethod.PatternChecking);
 	}
 
 	/**

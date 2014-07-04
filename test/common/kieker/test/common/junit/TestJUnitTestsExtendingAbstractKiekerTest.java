@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,10 @@
 
 package kieker.test.common.junit;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
+import java.util.Collection;
 
-import org.apache.cxf.helpers.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
-
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 
 /**
  * This JUnit test makes sure that all JUnit tests within Kieker extend the {@link AbstractKiekerTest}. The tests in question will be found using two criteria: They
@@ -35,13 +29,7 @@ import kieker.common.logging.LogFactory;
  * 
  * @since 1.7
  */
-public class TestJUnitTestsExtendingAbstractKiekerTest extends AbstractKiekerTest {
-
-	private static final Log LOG = LogFactory.getLog(TestJUnitTestsExtendingAbstractKiekerTest.class);
-
-	private static final String PATTERN_JUNIT_PACKAGE = File.separator + "junit" + File.separator;
-	private static final String DIR_NAME_TEST = "test";
-	private static final String PATTERN_TEST_SOURCE_FILES = ".*Test.*java";
+public class TestJUnitTestsExtendingAbstractKiekerTest extends AbstractDynamicKiekerTest {
 
 	/**
 	 * Default constructor.
@@ -51,38 +39,10 @@ public class TestJUnitTestsExtendingAbstractKiekerTest extends AbstractKiekerTes
 	}
 
 	@Test
-	public void test() throws IOException, ClassNotFoundException {
-		final List<File> sourceFiles = TestJUnitTestsExtendingAbstractKiekerTest.listJavaSourceFilesFromTests();
-		for (final File sourceFile : sourceFiles) {
-			if (TestJUnitTestsExtendingAbstractKiekerTest.isSourceFileInJUnitPackage(sourceFile)) {
-				final String className = TestJUnitTestsExtendingAbstractKiekerTest.sourceFileToClassName(sourceFile);
-				final Class<?> clazz = this.getClass().getClassLoader().loadClass(className);
-				LOG.info("Testing class '" + className + "'...");
-				if (!TestJUnitTestsExtendingAbstractKiekerTest.doesClassExtendKiekerAbstractTest(clazz)) {
-					Assert.fail("Class '" + className + "' doesn't extend AbstractKiekerTest");
-				}
-			}
-		}
-	}
+	public void test() throws ClassNotFoundException {
+		final Collection<Class<?>> availableClasses = super.deliverAllAvailableClassesFromTestDirectoryInJUnitPackage();
+		final Collection<Class<?>> filteredClasses = super.filterOutClassesExtending(AbstractKiekerTest.class, availableClasses);
 
-	private static List<File> listJavaSourceFilesFromTests() {
-		return FileUtils.getFilesRecurse(new File(DIR_NAME_TEST), PATTERN_TEST_SOURCE_FILES);
-	}
-
-	private static boolean isSourceFileInJUnitPackage(final File file) {
-		return file.getAbsolutePath().contains(PATTERN_JUNIT_PACKAGE);
-	}
-
-	private static boolean doesClassExtendKiekerAbstractTest(final Class<?> clazz) {
-		return AbstractKiekerTest.class.isAssignableFrom(clazz);
-	}
-
-	private static String sourceFileToClassName(final File file) {
-		final String pathName = file.getPath();
-		String className = pathName.substring(0, pathName.length() - 5).replace(File.separator, ".");
-		final int secondPointPos = className.indexOf('.', 5);
-		className = className.substring(secondPointPos + 1);
-
-		return className;
+		Assert.assertTrue("Following classes should extend AbstractKiekerTest: " + filteredClasses.toString(), filteredClasses.isEmpty());
 	}
 }

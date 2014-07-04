@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  ***************************************************************************/
 
 package kieker.tools.logReplayer;
+
+import java.util.Arrays;
 
 import kieker.analysis.IAnalysisController;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
@@ -62,11 +64,7 @@ public class FilesystemLogReplayer extends AbstractLogReplayer {
 		super(monitoringConfigurationFile, realtimeMode, realtimeAccelerationFactor, keepOriginalLoggingTimestamps, numRealtimeWorkerThreads,
 				ignoreRecordsBeforeTimestamp,
 				ignoreRecordsAfterTimestamp);
-		// Java 1.5 compatibility
-		this.inputDirs = new String[inputDirs.length];
-		System.arraycopy(inputDirs, 0, this.inputDirs, 0, inputDirs.length);
-		// for Java 1.6+:
-		// this.inputDirs = Arrays.copyOf(inputDirs, inputDirs.length);
+		this.inputDirs = Arrays.copyOf(inputDirs, inputDirs.length);
 	}
 
 	/**

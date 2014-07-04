@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
 
 public class MyResponseTimeRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	public static final int SIZE = 16;
+	public static final int SIZE = (2 * TYPE_SIZE_STRING) + TYPE_SIZE_LONG;
 	public static final Class<?>[] TYPES = { String.class, String.class, long.class, };
 
 	private static final long serialVersionUID = 7837873751833770201L;
@@ -55,32 +55,38 @@ public class MyResponseTimeRecord extends AbstractMonitoringRecord implements IM
 		this.responseTimeNanos = buffer.getLong();
 	}
 
+	@Override
 	@Deprecated
 	// Will not be used because the record implements IMonitoringRecord.Factory
 	public final void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	@Deprecated
 	// Will not be used because the record implements IMonitoringRecord.BinaryFactory
 	public final void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public Object[] toArray() {
 		return new Object[] { this.getClassName(), this.getMethodName(), this.getResponseTimeNanos(), };
 	}
 
+	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putInt(stringRegistry.get(this.getClassName()));
 		buffer.putInt(stringRegistry.get(this.getMethodName()));
 		buffer.putLong(this.getResponseTimeNanos());
 	}
 
+	@Override
 	public Class<?>[] getValueTypes() {
 		return MyResponseTimeRecord.TYPES;
 	}
 
+	@Override
 	public int getSize() {
 		return SIZE;
 	}

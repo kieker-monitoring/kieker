@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,13 +22,16 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 
 /**
- * This class is using a ConcurrentLinkedQueue to implement a bounded FifoBuffer.
+ * This is a thread-safe buffer for time series points, which has or has not a fixed capacity.
  * 
- * @author Tom Frotscher
+ * @author Tom Frotscher, Nils Christian Ehmke
  * @since 1.10
+ * 
  * @param <T>
+ *            The type of the buffer.
  */
 public class TimeSeriesPointsBuffer<T> extends ConcurrentLinkedQueue<T> implements ITimeSeriesPointsBuffer<T> {
+
 	private static final long serialVersionUID = -7988633509408488397L;
 	private static final Log LOG = LogFactory.getLog(TimeSeriesPointsBuffer.class);
 
@@ -36,21 +39,21 @@ public class TimeSeriesPointsBuffer<T> extends ConcurrentLinkedQueue<T> implemen
 	private final boolean unbounded;
 
 	/**
-	 * Creates a new TimeSeriesPointsBuffer with the given capacity.
-	 * If capacity <= 0, the capacity is infinite.
-	 * 
-	 * @param cap
-	 *            Capacity of the Buffer
+	 * Creates a new instance with infinite capacity.
 	 */
-	public TimeSeriesPointsBuffer(final int cap) {
-		super();
-		if (cap <= 0) {
-			this.capacity = cap;
-			this.unbounded = true;
-		} else {
-			this.capacity = cap;
-			this.unbounded = false;
-		}
+	public TimeSeriesPointsBuffer() {
+		this(-1);
+	}
+
+	/**
+	 * Creates a new instance with the given capacity. A capacity of less or equal zero means that the capacity is infinite.
+	 * 
+	 * @param capacity
+	 *            The capacity of the buffer
+	 */
+	public TimeSeriesPointsBuffer(final int capacity) {
+		this.capacity = capacity;
+		this.unbounded = capacity <= 0;
 	}
 
 	@Override
@@ -69,7 +72,6 @@ public class TimeSeriesPointsBuffer<T> extends ConcurrentLinkedQueue<T> implemen
 		} else {
 			return super.add(o);
 		}
-
 	}
 
 	@Override
@@ -77,6 +79,7 @@ public class TimeSeriesPointsBuffer<T> extends ConcurrentLinkedQueue<T> implemen
 		return super.poll();
 	}
 
+	@Override
 	public int getSize() {
 		return this.size();
 	}

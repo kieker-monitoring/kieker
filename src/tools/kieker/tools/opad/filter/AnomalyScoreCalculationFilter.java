@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,37 +26,26 @@ import kieker.tools.opad.record.IForecastMeasurementPair;
 import kieker.tools.opad.record.StorableDetectionResult;
 
 /**
- * This filter calculates the anomaly score from the distance of the forecast and the current value.
+ * This filter calculates the anomaly score based on the distance between the forecasted and the actual value.
  * 
- * @since 1.10
  * @author Tillmann Carlos Bielefeld
  * 
+ * @since 1.9
  */
 @Plugin(name = "AnomalyScore Calculation Filter",
-		outputPorts = { @OutputPort(eventTypes = { StorableDetectionResult.class }, name = AnomalyScoreCalculationFilter.OUTPUT_PORT_ANOMALY_SCORE)
-		})
+		outputPorts = { @OutputPort(eventTypes = { StorableDetectionResult.class }, name = AnomalyScoreCalculationFilter.OUTPUT_PORT_ANOMALY_SCORE) })
 public class AnomalyScoreCalculationFilter extends AbstractFilterPlugin {
 
-	/**
-	 * Name of the input port receiving the pair consisting of measurement and forecast.
-	 */
 	public static final String INPUT_PORT_CURRENT_FORECAST_PAIR = "currentforecast";
-
-	/**
-	 * Name of the output port delivering the anomaly score.
-	 */
 	public static final String OUTPUT_PORT_ANOMALY_SCORE = "anomalyscore";
 
-	/**
-	 * Creates a new instance of this class.
-	 * 
-	 * @param configAnomaly
-	 *            Configuration of this filter
-	 * @param projectContext
-	 *            ProjectContext of this filter
-	 */
-	public AnomalyScoreCalculationFilter(final Configuration configAnomaly, final IProjectContext projectContext) {
-		super(configAnomaly, projectContext);
+	public AnomalyScoreCalculationFilter(final Configuration configuration, final IProjectContext projectContext) {
+		super(configuration, projectContext);
+	}
+
+	@Override
+	public Configuration getCurrentConfiguration() {
+		return new Configuration();
 	}
 
 	/**
@@ -88,10 +77,5 @@ public class AnomalyScoreCalculationFilter extends AbstractFilterPlugin {
 
 		final StorableDetectionResult dr = new StorableDetectionResult(fmp.getName(), fmp.getValue(), fmp.getTime(), fmp.getForecasted(), score);
 		super.deliver(OUTPUT_PORT_ANOMALY_SCORE, dr);
-	}
-
-	@Override
-	public Configuration getCurrentConfiguration() {
-		return new Configuration();
 	}
 }

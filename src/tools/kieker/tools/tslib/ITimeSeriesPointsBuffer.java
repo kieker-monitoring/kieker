@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,9 @@ package kieker.tools.tslib;
  * 
  * @author Tom Frotscher
  * @since 1.10
+ * 
  * @param <T>
+ *            The type of the buffer.
  */
 public interface ITimeSeriesPointsBuffer<T> {
 
@@ -32,6 +34,8 @@ public interface ITimeSeriesPointsBuffer<T> {
 	 *            The Value to add
 	 * @return
 	 *         Returns true if Object is added successfully
+	 * 
+	 * @since 1.9
 	 */
 	public boolean add(T o);
 
@@ -41,6 +45,8 @@ public interface ITimeSeriesPointsBuffer<T> {
 	 * @since 1.10
 	 * @return
 	 *         Returns the removed Object
+	 * 
+	 * @since 1.9
 	 */
 	public T remove();
 
@@ -49,6 +55,8 @@ public interface ITimeSeriesPointsBuffer<T> {
 	 * 
 	 * @since 1.10
 	 * @return Returned Buffersize
+	 * 
+	 * @since 1.9
 	 */
 	public int getSize();
 

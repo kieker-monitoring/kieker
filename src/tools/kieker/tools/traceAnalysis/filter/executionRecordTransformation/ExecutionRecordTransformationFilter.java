@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -83,16 +83,6 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisFi
 				fqComponentNameSignaturePair.getSignature(),
 				execRec.getTraceId(), execRec.getSessionId(), execRec.getEoi(), execRec.getEss(), execRec.getTin(), execRec.getTout(), false);
 		super.deliver(OUTPUT_PORT_NAME_EXECUTIONS, execution);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration();
-		// filter has no configuration properties
-		return configuration;
 	}
 
 }

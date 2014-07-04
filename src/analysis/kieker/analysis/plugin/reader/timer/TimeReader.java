@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -115,6 +115,7 @@ public final class TimeReader extends AbstractReaderPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void terminate(final boolean error) {
 		if (!this.terminated) {
 			this.log.info("Shutdown of TimeReader requested.");
@@ -134,6 +135,7 @@ public final class TimeReader extends AbstractReaderPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean read() {
 		this.result = this.executorService.scheduleAtFixedRate(new TimestampEventTask(this.numberImpulses), this.initialDelay, this.period, TimeUnit.NANOSECONDS);
 		try {
@@ -201,6 +203,7 @@ public final class TimeReader extends AbstractReaderPlugin {
 		/**
 		 * Executes the task.
 		 */
+		@Override
 		public void run() {
 			if (this.infinite || (this.numberImpulses > 0)) {
 				TimeReader.this.sendTimestampEvent();

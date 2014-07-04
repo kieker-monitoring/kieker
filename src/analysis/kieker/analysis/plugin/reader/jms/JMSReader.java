@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -113,6 +113,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 	 * 
 	 * @return true if the method succeeds, false otherwise.
 	 */
+	@Override
 	public boolean read() {
 		boolean retVal = true;
 		Connection connection = null;
@@ -190,6 +191,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void terminate(final boolean error) {
 		this.log.info("Shutdown of JMSReader requested.");
 		this.unblock();
@@ -222,6 +224,7 @@ public final class JMSReader extends AbstractReaderPlugin {
 			// empty default constructor
 		}
 
+		@Override
 		public void onMessage(final Message jmsMessage) {
 			if (jmsMessage == null) {
 				JMSReader.this.getLog().warn("Received null message");

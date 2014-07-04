@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,7 +58,7 @@ public class TestTCPClientConnector extends AbstractConnectorTest {
 		// test the connector
 		this.setConnector(new TCPClientConnector(configuration, this.createLookupEntityMap()));
 		this.initialize();
-		this.deserialize(ConfigurationParameters.SEND_NUMBER_OF_RECORDS);
+		this.deserialize(ConfigurationParameters.SEND_NUMBER_OF_RECORDS, true);
 		this.close(ConfigurationParameters.SEND_NUMBER_OF_RECORDS);
 	}
 }

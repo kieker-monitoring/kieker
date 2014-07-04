@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -94,6 +94,7 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
 		final Class<? extends IMonitoringRecord> recordClass = record.getClass();
 		final String recordClassName = recordClass.getSimpleName();
@@ -149,6 +150,7 @@ public final class SyncDbWriter extends AbstractMonitoringWriter {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void terminate() {
 		try {
 			// close all prepared statements

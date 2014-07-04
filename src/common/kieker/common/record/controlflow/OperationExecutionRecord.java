@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import kieker.common.util.registry.IRegistry;
  * @since 0.91
  */
 public class OperationExecutionRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	public static final int SIZE = 44;
+	public static final int SIZE = (2 * TYPE_SIZE_STRING) + (3 * TYPE_SIZE_LONG) + TYPE_SIZE_STRING + (2 * TYPE_SIZE_INT);
 	public static final Class<?>[] TYPES = {
 		String.class, // operationSignature
 		String.class, // sessionId
@@ -156,6 +156,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object[] toArray() {
 		return new Object[] {
 			this.getOperationSignature(),
@@ -171,6 +172,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putInt(stringRegistry.get(this.getOperationSignature()));
 		buffer.putInt(stringRegistry.get(this.getSessionId()));
@@ -187,6 +189,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public final void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
@@ -197,6 +200,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public final void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
@@ -205,6 +209,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
@@ -212,6 +217,7 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getSize() {
 		return SIZE;
 	}

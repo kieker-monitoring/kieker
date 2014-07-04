@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ import kieker.common.util.registry.IRegistry;
  * @since 1.5
  */
 public class SplitEvent extends AbstractTraceEvent {
-	public static final int SIZE = 20;
+	public static final int SIZE = (2 * TYPE_SIZE_LONG) + TYPE_SIZE_INT;
 	public static final Class<?>[] TYPES = {
 		long.class, // Event.timestamp
 		long.class, // TraceEvent.traceId
@@ -78,6 +78,7 @@ public class SplitEvent extends AbstractTraceEvent {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object[] toArray() {
 		return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), };
 	}
@@ -85,6 +86,7 @@ public class SplitEvent extends AbstractTraceEvent {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putLong(this.getTimestamp());
 		buffer.putLong(this.getTraceId());
@@ -94,6 +96,7 @@ public class SplitEvent extends AbstractTraceEvent {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
@@ -101,6 +104,7 @@ public class SplitEvent extends AbstractTraceEvent {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getSize() {
 		return SIZE;
 	}

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -138,6 +138,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean activateProbe(final String pattern) {
 		return this.addPattern(pattern, true);
 	}
@@ -145,6 +146,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean deactivateProbe(final String pattern) {
 		return this.addPattern(pattern, false);
 	}
@@ -152,6 +154,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean isProbeActivated(final String signature) {
 		if (this.enabled) {
 			final Boolean active = this.signatureCache.get(signature);
@@ -215,6 +218,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setProbePatternList(final List<String> strPatternList) {
 		this.setProbePatternList(strPatternList, true);
 	}
@@ -222,6 +226,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public List<String> getProbePatternList() {
 		if (!this.enabled) {
 			LOG.warn("Adapative Monitoring is disabled!");
@@ -396,6 +401,7 @@ public class ProbeController extends AbstractController implements IProbeControl
 			}
 		}
 
+		@Override
 		public void run() {
 			this.readFile(false);
 		}

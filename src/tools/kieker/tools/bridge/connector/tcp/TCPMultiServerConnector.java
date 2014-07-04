@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -80,6 +80,7 @@ public class TCPMultiServerConnector extends AbstractConnector {
 	 * @throws ConnectorDataTransmissionException
 	 *             when the server socket cannot be acquired
 	 */
+	@Override
 	public void initialize() throws ConnectorDataTransmissionException {
 		// do not move, in future these properties will be handled by the kieker configuration
 		this.recordQueue = new ArrayBlockingQueue<IMonitoringRecord>(QUEUE_CAPACITY);
@@ -101,6 +102,7 @@ public class TCPMultiServerConnector extends AbstractConnector {
 	 *             if the thread shutdown is interrupted or fails, the graceful wait to empty the queue
 	 *             fails or the queue is not emptied after a waiting period
 	 */
+	@Override
 	public void close() throws ConnectorDataTransmissionException {
 		for (final Runnable runnable : this.executor.shutdownNow()) {
 			if (runnable instanceof TCPMultiServerPortListenerRunnable) {
@@ -141,6 +143,7 @@ public class TCPMultiServerConnector extends AbstractConnector {
 	 *             if end of all data streams are reached
 	 * @return one IMonitoringRecord per call
 	 */
+	@Override
 	public IMonitoringRecord deserializeNextRecord() throws ConnectorDataTransmissionException, ConnectorEndOfDataException {
 		try {
 			return this.recordQueue.take();

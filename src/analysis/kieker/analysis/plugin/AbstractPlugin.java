@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,6 +40,7 @@ import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.annotation.RepositoryPort;
+import kieker.analysis.plugin.filter.visualization.IWebVisualizationFilterPlugin;
 import kieker.analysis.plugin.reader.IReaderPlugin;
 import kieker.analysis.repository.AbstractRepository;
 import kieker.common.configuration.Configuration;
@@ -90,16 +91,25 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 				this.log.error("Two RepositoryPorts use the same name: " + repoPort.name());
 			}
 		}
-		for (final OutputPort outputPort : annotation.outputPorts()) {
-			if (this.outputPorts.put(outputPort.name(), outputPort) != null) {
-				this.log.error("Two OutputPorts use the same name: " + outputPort.name());
+		// ignore possible outputPorts for IWebVisualizationFilters
+		if (!(this instanceof IWebVisualizationFilterPlugin)) {
+			for (final OutputPort outputPort : annotation.outputPorts()) {
+				if (this.outputPorts.put(outputPort.name(), outputPort) != null) {
+					this.log.error("Two OutputPorts use the same name: " + outputPort.name());
+				}
+				Class<?>[] outTypes = outputPort.eventTypes();
+				if (outTypes.length == 0) {
+					outTypes = new Class<?>[] { Object.class };
+				}
+				this.outputPortTypes.put(outputPort, outTypes);
 			}
-			Class<?>[] outTypes = outputPort.eventTypes();
-			if (outTypes.length == 0) {
-				outTypes = new Class<?>[] { Object.class };
+		} else {
+			// But inform the user about these invalid ports
+			for (final OutputPort outputPort : annotation.outputPorts()) {
+				this.log.warn("Invalid port for visualization filter detected. Port is ignored: " + outputPort.name());
 			}
-			this.outputPortTypes.put(outputPort, outTypes);
 		}
+
 		// Get all input ports.
 		this.inputPorts = new ConcurrentHashMap<String, InputPort>();
 		// ignore possible inputPorts for IReaderPlugins
@@ -126,6 +136,14 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 							}
 						}
 					}
+				}
+			}
+		} else {
+			// But inform the user about these invalid ports
+			for (final Method method : this.getClass().getMethods()) {
+				final InputPort inputPort = method.getAnnotation(InputPort.class);
+				if (inputPort != null) {
+					this.log.warn("Invalid port for reader detected. Port is ignored: " + inputPort.name());
 				}
 			}
 		}
@@ -220,6 +238,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void connect(final String reponame, final AbstractRepository repository) throws AnalysisConfigurationException {
 		if (this.state != STATE.READY) {
 			throw new AnalysisConfigurationException("Plugin: " + this.getClass().getName() + " final not in " + STATE.READY + " this.state, but final in state "
@@ -272,6 +291,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 			if ((ip != null) && (m.getParameterTypes().length == 1) && ip.name().equals(inputPortName)) {
 				src.outputPorts.get(outputPortName).eventTypes();
 				java.security.AccessController.doPrivileged(new PrivilegedAction<Object>() {
+					@Override
 					public Object run() {
 						m.setAccessible(true);
 						return null;
@@ -387,6 +407,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final String getPluginName() {
 		final String pluginName = this.getClass().getAnnotation(Plugin.class).name();
 		if (pluginName.equals(Plugin.NO_NAME)) {
@@ -399,6 +420,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final String getPluginDescription() {
 		return this.getClass().getAnnotation(Plugin.class).description();
 	}
@@ -423,6 +445,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final Map<String, AbstractRepository> getCurrentRepositories() {
 		return Collections.unmodifiableMap(this.registeredRepositories);
 	}
@@ -441,6 +464,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final String[] getAllOutputPortNames() {
 		final List<String> outputNames = new LinkedList<String>();
 		final Plugin annotation = this.getClass().getAnnotation(Plugin.class);
@@ -453,6 +477,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final String[] getAllInputPortNames() {
 		final List<String> inputNames = new LinkedList<String>();
 		for (final Method method : this.getClass().getMethods()) {
@@ -467,6 +492,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final String[] getAllDisplayNames() {
 		final List<String> displayNames = new LinkedList<String>();
 		for (final Method method : this.getClass().getMethods()) {
@@ -481,6 +507,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final String[] getAllRepositoryPortNames() {
 		final List<String> repositoryNames = new LinkedList<String>();
 		final Plugin annotation = this.getClass().getAnnotation(Plugin.class);
@@ -493,6 +520,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final List<PluginInputPortReference> getConnectedPlugins(final String outputPortName) {
 		// Make sure that the output port exists
 		final OutputPort outputPort = this.outputPorts.get(outputPortName);
@@ -510,6 +538,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final STATE getState() {
 		return this.state;
 	}

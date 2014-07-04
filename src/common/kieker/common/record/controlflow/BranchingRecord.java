@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import kieker.common.util.registry.IRegistry;
  * @since 1.2
  */
 public class BranchingRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	public static final int SIZE = 16;
+	public static final int SIZE = TYPE_SIZE_LONG + (2 * TYPE_SIZE_INT);
 	public static final Class<?>[] TYPES = {
 		long.class, // timestamp
 		int.class, // branchId
@@ -90,6 +90,7 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object[] toArray() {
 		return new Object[] { this.getTimestamp(), this.getBranchID(), this.getBranchingOutcome(), };
 	}
@@ -97,6 +98,7 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putLong(this.getTimestamp());
 		buffer.putInt(this.getBranchID());
@@ -108,6 +110,7 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public final void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
@@ -118,6 +121,7 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public final void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
@@ -126,6 +130,7 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
@@ -133,6 +138,7 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getSize() {
 		return SIZE;
 	}

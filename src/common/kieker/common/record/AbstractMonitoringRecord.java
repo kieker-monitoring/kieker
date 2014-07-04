@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,12 +29,24 @@ import kieker.common.exception.MonitoringRecordException;
 import kieker.common.util.registry.IRegistry;
 
 /**
- * @author Andre van Hoorn, Jan Waller
+ * @author Andre van Hoorn, Jan Waller, Nils Christian Ehmke
  * 
  * @since 1.2
  */
 public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
+
+	public static final int TYPE_SIZE_INT = 4;
+	public static final int TYPE_SIZE_LONG = 8;
+	public static final int TYPE_SIZE_FLOAT = 4;
+	public static final int TYPE_SIZE_DOUBLE = 8;
+	public static final int TYPE_SIZE_SHORT = 2;
+	public static final int TYPE_SIZE_BYTE = 1;
+	public static final int TYPE_SIZE_CHARACTER = 2;
+	public static final int TYPE_SIZE_STRING = 4;
+	public static final int TYPE_SIZE_BOOLEAN = 1;
+
 	private static final long serialVersionUID = 1L;
+
 	private static final ConcurrentMap<String, Class<? extends IMonitoringRecord>> CACHED_KIEKERRECORDS = new ConcurrentHashMap<String, Class<? extends IMonitoringRecord>>(); // NOCS
 	private static final ConcurrentMap<Class<? extends IMonitoringRecord>, Class<?>[]> CACHED_KIEKERRECORD_TYPES = new ConcurrentHashMap<Class<? extends IMonitoringRecord>, Class<?>[]>(); // NOCS
 	private static final ConcurrentMap<Class<? extends IMonitoringRecord>, Constructor<? extends IMonitoringRecord>> CACHED_KIEKERRECORD_CONSTRUCTORS_OBJECT = new ConcurrentHashMap<Class<? extends IMonitoringRecord>, Constructor<? extends IMonitoringRecord>>(); // NOCS
@@ -53,10 +65,12 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		CACHED_KIEKERRECORDS.put("kieker.common.record.flow.trace.Trace", kieker.common.record.flow.trace.TraceMetadata.class);
 	}
 
+	@Override
 	public final long getLoggingTimestamp() {
 		return this.loggingTimestamp;
 	}
 
+	@Override
 	public final void setLoggingTimestamp(final long timestamp) {
 		this.loggingTimestamp = timestamp;
 	}
@@ -86,6 +100,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	 * 
 	 * @return -1 if this object is less than, +1 if it is greater than or 0 if it is equal to the specified record.
 	 */
+	@Override
 	public int compareTo(final IMonitoringRecord otherRecord) {
 		final long timedifference = this.loggingTimestamp - otherRecord.getLoggingTimestamp();
 		if (timedifference < 0L) {

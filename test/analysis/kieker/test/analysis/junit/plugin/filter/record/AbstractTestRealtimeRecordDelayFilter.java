@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package kieker.test.analysis.junit.plugin.filter.record;
 
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -37,7 +38,6 @@ import kieker.analysis.plugin.reader.timer.TimeReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
-import kieker.common.util.ImmutableEntry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 
@@ -159,7 +159,7 @@ public abstract class AbstractTestRealtimeRecordDelayFilter extends AbstractKiek
 		for (final long eventDelaySeconds : this.eventTimeOffsetsSeconds) {
 			curNumRecords++;
 			currentTimeSeconds = START_TIME_SECONDS + eventDelaySeconds;
-			final Entry<Long, Integer> curEntry = new ImmutableEntry<Long, Integer>(eventDelaySeconds, curNumRecords);
+			final Entry<Long, Integer> curEntry = new SimpleImmutableEntry<Long, Integer>(eventDelaySeconds, curNumRecords);
 			eventList.add(curEntry);
 			final EmptyRecord r = new EmptyRecord();
 			r.setLoggingTimestamp(TimeUnit.NANOSECONDS.convert(currentTimeSeconds, TimeUnit.SECONDS));

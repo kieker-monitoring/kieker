@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  ***************************************************************************/
 package kieker.test.tools.junit.bridge;
+
+import kieker.test.tools.junit.writeRead.jms.FakeInitialContextFactory;
 
 /**
  * Common configuration parameters for all bridge tests.
@@ -49,6 +51,8 @@ public final class ConfigurationParameters {
 	public static final String JMS_PASSWORD = "testpw";
 	/** JMS test URI. */
 	public static final String JMS_URI = "tcp://localhost:" + JMS_PORT;
+	/** JMS embedded test URI. */
+	public static final String JMS_EMBEDDED_URI = "tcp://localhost:" + JMS_EMBEDDED_PORT;
 
 	/**
 	 * Values for test records.
@@ -63,10 +67,12 @@ public final class ConfigurationParameters {
 	public static final int TEST_EOI = 10; // NOCS
 	public static final int TEST_ESS = 9; // NOCS
 
-	/**
-	 * The number of threads to start.
-	 */
+	/** The number of threads to start. */
 	public static final int NUMBER_OF_TEST_THREADS = 5;
+	/** The JMS factory to use for the JMS client connector test. */
+	public static final String JMS_CLIENT_FACTORY_LOOKUP_NAME = FakeInitialContextFactory.class.getName();
+	/** The JMS factory to use for the JMS embedded connector test. */
+	public static final String JMS_EMBEDDED_FACTORY_LOOKUP_NAME = "org.apache.activemq.jndi.ActiveMQInitialContextFactory";
 
 	/**
 	 * Private default constructor for utility class.

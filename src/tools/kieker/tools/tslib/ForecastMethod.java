@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import kieker.tools.tslib.forecast.arima.ARIMAForecaster;
 import kieker.tools.tslib.forecast.croston.CrostonForecaster;
 import kieker.tools.tslib.forecast.cs.CSForecaster;
 import kieker.tools.tslib.forecast.ets.ETSForecaster;
+import kieker.tools.tslib.forecast.historicdata.PatternCheckingForecaster;
 import kieker.tools.tslib.forecast.mean.MeanForecaster;
 import kieker.tools.tslib.forecast.mean.MeanForecasterJava;
 import kieker.tools.tslib.forecast.naive.NaiveForecaster;
@@ -34,94 +35,118 @@ import kieker.tools.tslib.forecast.windowstart.WindowStartForecaster;
  * 
  * @author Andre van Hoorn, Tillmann Carlos Bielefeld, Tobias Rudolph, Andreas Eberlein
  * @since 1.10
- * 
  */
 public enum ForecastMethod {
 
+	/** {@link ARIMAForecaster} */
+	ARIMA,
+
+	/** {@link ARIMA101Forecaster} */
+	ARIMA101,
+
+	/** {@link CrostonForecaster} */
+	CROSTON,
+
+	/** {@link CSForecaster} */
+	CS,
+
+	/** {@link ETSForecaster} */
+	ETS,
+
+	/** {@link MeanForecaster} */
+	MEAN,
+
+	/** {@link MeanForecasterJava} */
+	MEANJAVA,
+
+	/** {@link NaiveForecaster} */
+	NAIVE,
+
 	/**
-	 * different FC algos
+	 * {@link PatternCheckingForecaster}. {@link #getForecaster(ITimeSeries)} and {@link #getForecaster(ITimeSeries, int)} not supported
+	 * for this algorithm!
 	 */
-	MEAN, MEANJAVA, SES, ETS, ARIMA101, WINDOWSTART, ARIMA, CROSTON, NAIVE, TBATS, CS, PCF, WSF, INACT;
+	PatternChecking,
+
+	/** {@link SESRForecaster} */
+	SES,
+
+	/** {@link WindowStartForecaster} */
+	WINDOWSTART;
 
 	/**
 	 * 
 	 * @param history
 	 *            Timeseries which will be forecasted
-	 * @return FC
+	 * @return the forecaster for this algorithm
+	 * @throws IllegalArgumentException
+	 *             if forecaster not instantiable or not defined.
 	 */
 	public IForecaster<Double> getForecaster(final ITimeSeries<Double> history) {
 		switch (this) {
-		// Don't use this forecast, the implementation of the SESR Forecast looks disgusting and without the R_script the forecast doesn't work at all,
-		// use for example the SESForecast instead
-		// case SESR:
-		// return new SESRForecaster(history);
-		case SES:
-			return new SESRForecaster(history);
-		case ETS:
-			return new ETSForecaster(history);
-		case MEANJAVA:
-			return new MeanForecasterJava(history);
-		case MEAN:
-			return new MeanForecaster(history);
+		case ARIMA:
+			return new ARIMAForecaster(history);
 		case ARIMA101:
 			return new ARIMA101Forecaster(history);
 		case CROSTON:
 			return new CrostonForecaster(history);
-		case NAIVE:
-			return new NaiveForecaster(history);
 		case CS:
 			return new CSForecaster(history);
-
-			// WCF/TBATS are not yet integrated
-			// case TBATS:
-			// return new TBATSForecaster(history);
-
-		case ARIMA:
-			return new ARIMAForecaster(history);
+		case ETS:
+			return new ETSForecaster(history);
+		case MEAN:
+			return new MeanForecaster(history);
+		case MEANJAVA:
+			return new MeanForecasterJava(history);
+		case NAIVE:
+			return new NaiveForecaster(history);
+		case PatternChecking:
+			throw new IllegalArgumentException("Forecaster " + this.toString() + " not instantiable");
+		case SES:
+			return new SESRForecaster(history);
 		case WINDOWSTART:
 			return new WindowStartForecaster(history);
-		case INACT:
-			return null;
 		default:
-			return new MeanForecaster(history);
+			throw new IllegalArgumentException("No forecaster defined for " + this.toString());
 		}
 	}
 
 	/**
 	 * 
-	 * @param ts
-	 *            Timeseries
+	 * @param history
+	 *            Timeseries which will be forecasted
 	 * @param alpha
-	 *            confidentlevel
-	 * @return Forecaster
+	 *            confidence level
+	 * @return the forecaster for this algorithm
+	 * @throws IllegalArgumentException
+	 *             if forecaster not instantiable or not defined.
 	 */
-	public IForecaster<Double> getForecaster(final ITimeSeries<Double> ts, final int alpha) {
+	public IForecaster<Double> getForecaster(final ITimeSeries<Double> history, final int alpha) {
 		switch (this) {
-		case NAIVE:
-			return new NaiveForecaster(ts, alpha);
-		case MEANJAVA:
-			return new MeanForecasterJava(ForecastMethod.getLastXofTS(ts, 10));
-		case MEAN:
-			return new MeanForecaster(ForecastMethod.getLastXofTS(ts, 10), alpha);
-		case CS: // Cubic Smoothing Splines
-			return new CSForecaster(ForecastMethod.getLastXofTS(ts, 30), alpha);
-		case SES: // Simple Exponential Smoothing
-			return new SESRForecaster(ts, alpha);
-		case CROSTON: // Croston's Method
-			return new CrostonForecaster(ts);
-		case ETS: // Extended Exponential Smoothing
-			return new ETSForecaster(ts, alpha);
-		case ARIMA101:
-			return new ARIMA101Forecaster(ts, alpha);
 		case ARIMA:
-			return new ARIMAForecaster(ts, alpha);
-			// Removed because WCF/TBATS is not integrated yet
-			// case TBATS:
-			// return new TBATSForecaster(ts, alpha);
-		case INACT:
-			return null;
+			return new ARIMAForecaster(history, alpha);
+		case ARIMA101:
+			return new ARIMA101Forecaster(history, alpha);
+		case CROSTON:
+			return new CrostonForecaster(history, alpha);
+		case CS:
+			return new CSForecaster(ForecastMethod.getLastXofTS(history, 30), alpha);
+		case ETS:
+			return new ETSForecaster(history, alpha);
+		case MEAN:
+			return new MeanForecaster(ForecastMethod.getLastXofTS(history, 10), alpha);
+		case MEANJAVA:
+			return new MeanForecasterJava(ForecastMethod.getLastXofTS(history, 10)); // confidence level? #1346
+		case NAIVE:
+			return new NaiveForecaster(history, alpha);
+		case PatternChecking:
+			throw new IllegalArgumentException("Forecaster " + this.toString() + " not instantiable");
+		case SES:
+			return new SESRForecaster(history, alpha);
+		case WINDOWSTART:
+			return new WindowStartForecaster(history); // confidence level? #1346
 		default:
-			return null;
+			throw new IllegalArgumentException("No forecaster defined for " + this.toString());
 		}
 	}
 

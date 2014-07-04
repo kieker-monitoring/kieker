@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import kieker.tools.tslib.ForecastMethod;
 import kieker.tools.tslib.ITimeSeries;
 
 /**
- * 
  * @author Andre van Hoorn
  * @since 1.10
  */
@@ -30,7 +29,6 @@ public interface IForecastResult {
 	 * Returns the point forecasts.
 	 * 
 	 * @since 1.10
-	 * @return Timeseries
 	 */
 	public ITimeSeries<Double> getForecast();
 
@@ -38,7 +36,6 @@ public interface IForecastResult {
 	 * Returns the confidence level for the forecast interval.
 	 * 
 	 * @since 1.10
-	 * @return confidencelevel
 	 */
 	public int getConfidenceLevel();
 
@@ -46,7 +43,6 @@ public interface IForecastResult {
 	 * Returns the upper limits for forecast interval with respect to the confidence level {@link #getConfidenceLevel()}.
 	 * 
 	 * @since 1.10
-	 * @return upper limits
 	 */
 	public ITimeSeries<Double> getUpper();
 
@@ -54,7 +50,6 @@ public interface IForecastResult {
 	 * Returns the lower limits for forecast interval with respect to the confidence level {@link #getConfidenceLevel()}.
 	 * 
 	 * @since 1.10
-	 * @return lower limits
 	 */
 	public ITimeSeries<Double> getLower();
 

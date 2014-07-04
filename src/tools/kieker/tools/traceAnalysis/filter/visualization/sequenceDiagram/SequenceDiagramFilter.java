@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -163,12 +163,15 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 		super.printStatusMessage();
 		final int numPlots = this.getSuccessCount();
 		final long lastSuccessTracesId = this.getLastTraceIdSuccess();
-		this.stdOutPrintln("Wrote " + numPlots + " sequence diagram" + (numPlots > 1 ? "s" : "") // NOCS (AvoidInlineConditionalsCheck)
-				+ " to file" + (numPlots > 1 ? "s" : "") + " with name pattern '" + this.outputFnBase + "-<traceId>.pic'"); // NOCS (AvoidInlineConditionalsCheck)
-		this.stdOutPrintln("Pic files can be converted using the pic2plot tool (package plotutils)");
-		this.stdOutPrintln("Example: pic2plot -T svg " + this.outputFnBase + "-" + ((numPlots > 0)
-				? lastSuccessTracesId : "<traceId>") // NOCS (AvoidInlineConditionalsCheck)
-				+ ".pic > " + this.outputFnBase + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".svg"); // NOCS (AvoidInlineConditionalsCheck)
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("Wrote " + numPlots + " sequence diagram" + (numPlots > 1 ? "s" : "") // NOCS (AvoidInlineConditionalsCheck)
+					+ " to file" + (numPlots > 1 ? "s" : "") + " with name pattern '" + this.outputFnBase + "-<traceId>.pic'"); // NOCS
+																																// (AvoidInlineConditionalsCheck)
+			LOG.debug("Pic files can be converted using the pic2plot tool (package plotutils)");
+			LOG.debug("Example: pic2plot -T svg " + this.outputFnBase + "-" + ((numPlots > 0)
+					? lastSuccessTracesId : "<traceId>") // NOCS (AvoidInlineConditionalsCheck)
+					+ ".pic > " + this.outputFnBase + "-" + ((numPlots > 0) ? lastSuccessTracesId : "<traceId>") + ".svg"); // NOCS (AvoidInlineConditionalsCheck)
+		}
 	}
 
 	@Override
@@ -371,10 +374,12 @@ public class SequenceDiagramFilter extends AbstractMessageTraceProcessingFilter 
 
 	@Override
 	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration();
+		final Configuration configuration = super.getCurrentConfiguration();
+
 		configuration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_FN_BASE, this.outputFnBase);
 		configuration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_SHORTLABES, Boolean.toString(this.shortLabels));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_SDMODE, this.sdmode.toString());
+
 		return configuration;
 	}
 }

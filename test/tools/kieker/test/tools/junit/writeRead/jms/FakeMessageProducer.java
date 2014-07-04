@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,6 +46,7 @@ public class FakeMessageProducer implements MessageProducer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void close() throws JMSException {
 		// No code necessary
 	}
@@ -53,6 +54,7 @@ public class FakeMessageProducer implements MessageProducer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getDeliveryMode() throws JMSException {
 		return 0;
 	}
@@ -60,6 +62,7 @@ public class FakeMessageProducer implements MessageProducer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Destination getDestination() throws JMSException {
 		return null;
 	}
@@ -67,6 +70,7 @@ public class FakeMessageProducer implements MessageProducer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean getDisableMessageID() throws JMSException { // NOPMD (get -> is)
 		return false;
 	}
@@ -74,6 +78,7 @@ public class FakeMessageProducer implements MessageProducer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean getDisableMessageTimestamp() throws JMSException { // NOPMD (get -> is)
 		return false;
 	}
@@ -81,6 +86,7 @@ public class FakeMessageProducer implements MessageProducer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getPriority() throws JMSException {
 		return 0;
 	}
@@ -88,6 +94,7 @@ public class FakeMessageProducer implements MessageProducer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public long getTimeToLive() throws JMSException {
 		return 0;
 	}
@@ -95,6 +102,7 @@ public class FakeMessageProducer implements MessageProducer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void send(final Message message) throws JMSException {
 		this.consumer.addMessage(message);
 	}
@@ -102,6 +110,7 @@ public class FakeMessageProducer implements MessageProducer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void send(final Destination arg0, final Message arg1) throws JMSException {
 		// No code necessary
 	}
@@ -109,6 +118,7 @@ public class FakeMessageProducer implements MessageProducer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void send(final Message arg0, final int arg1, final int arg2, final long arg3) throws JMSException {
 		// No code necessary
 	}
@@ -116,6 +126,7 @@ public class FakeMessageProducer implements MessageProducer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void send(final Destination arg0, final Message arg1, final int arg2, final int arg3, final long arg4) throws JMSException {
 		// No code necessary
 	}
@@ -123,6 +134,7 @@ public class FakeMessageProducer implements MessageProducer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setDeliveryMode(final int arg0) throws JMSException {
 		// No code necessary
 	}
@@ -130,6 +142,7 @@ public class FakeMessageProducer implements MessageProducer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setDisableMessageID(final boolean arg0) throws JMSException {
 		// No code necessary
 	}
@@ -137,6 +150,7 @@ public class FakeMessageProducer implements MessageProducer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setDisableMessageTimestamp(final boolean arg0) throws JMSException {
 		// No code necessary
 	}
@@ -144,6 +158,7 @@ public class FakeMessageProducer implements MessageProducer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setPriority(final int arg0) throws JMSException {
 		// No code necessary
 	}
@@ -151,6 +166,7 @@ public class FakeMessageProducer implements MessageProducer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setTimeToLive(final long arg0) throws JMSException {
 		// No code necessary
 	}

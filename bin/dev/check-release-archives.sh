@@ -1,5 +1,6 @@
 #!/bin/bash
 
+KIEKER_VERSION="1.10-SNAPSHOT"
 BASE_TMP_DIR="$(dirname $0)/../../tmp/"
 
 function change_dir {
@@ -180,6 +181,25 @@ function assert_files_exist_common {
 		assert_file_exists_regular "${JAR_BASE}.LICENSE"
 	done
 	
+	# Make sure that required-by info included in each LICENSE file in lib/ (excluding subdirs)
+	for l in lib/*.LICENSE; do 
+	    echo -n "Asserting '$l' contains 'Required by:' information .. "
+	    if ! grep -q "Required by:" $l; then 
+		echo "Required by: missing in $l"; 
+		exit 1
+	    fi; 
+	    echo "OK"
+	done
+
+	echo -n "Making sure that no references to old Kieker Jars included ..."
+	if (grep -R "kieker-[[:digit:]].*\.jar" * | grep -Ev "kieker-${KIEKER_VERSION}((\\\\)?_[[:alpha:]]+)?\.jar"); then
+	    # Don't ask why results not dumped to stdout above
+	    echo "Found old version string. Add/correct replacement regexp in ant file?"
+	    echo "Due to a strange issue with the grep above, please use the grep regexp above to see where the problem is."
+	    exit 1
+	fi
+	echo OK
+
 	# make sure that specified AspectJ version matches the present files
 	assert_file_exists_regular "lib/aspectjrt-${aspectjversion}.jar"
 	assert_file_exists_regular "lib/aspectjweaver-${aspectjversion}.jar"
@@ -361,7 +381,7 @@ function check_bin_archive {
 	assert_files_exist_bin
 
 	# check bytecode version of classes contained in jar
-	echo -n "Making sure that bytecode version of class in jar is 50.0 (Java 1.6)"
+	echo -n "Making sure that bytecode version of class in jar is version 50.0 (Java 1.6)"
 	MAIN_JAR=$(ls "dist/kieker-"*".jar" | grep -v emf | grep -v aspectj)
 	assert_file_exists_regular ${MAIN_JAR}
 	VERSION_CLASS_IN_JAR=$(unzip -l	 ${MAIN_JAR} | grep Version.class | awk '{ print $4 }')

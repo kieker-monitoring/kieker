@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,9 +39,16 @@ public abstract class AbstractNodeDecorator {
 	 */
 	public static AbstractNodeDecorator createFromName(final String optionName) {
 		if (Constants.RESPONSE_TIME_DECORATOR_FLAG.equals(optionName)) {
-			return new ResponseTimeNodeDecorator();
+			return new ResponseTimeNodeDecorator(TimeUnit.NANOSECONDS);
+		} else if (Constants.RESPONSE_TIME_DECORATOR_FLAG_NS.equals(optionName)) {
+			return new ResponseTimeNodeDecorator(TimeUnit.NANOSECONDS);
+		} else if (Constants.RESPONSE_TIME_DECORATOR_FLAG_US.equals(optionName)) {
+			return new ResponseTimeNodeDecorator(TimeUnit.MICROSECONDS);
+		} else if (Constants.RESPONSE_TIME_DECORATOR_FLAG_MS.equals(optionName)) {
+			return new ResponseTimeNodeDecorator(TimeUnit.MILLISECONDS);
+		} else if (Constants.RESPONSE_TIME_DECORATOR_FLAG_S.equals(optionName)) {
+			return new ResponseTimeNodeDecorator(TimeUnit.SECONDS);
 		}
-
 		return null;
 	}
 
@@ -58,5 +65,4 @@ public abstract class AbstractNodeDecorator {
 	 *            The time unit which determines how to interpret times.
 	 */
 	public abstract void processMessage(AbstractMessage message, DependencyGraphNode<?> sourceNode, DependencyGraphNode<?> targetNode, final TimeUnit timeunit);
-
 }

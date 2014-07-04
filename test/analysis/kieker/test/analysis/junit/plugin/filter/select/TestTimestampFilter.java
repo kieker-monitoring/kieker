@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,18 +47,22 @@ public final class TestTimestampFilter extends AbstractKiekerTest {
 	private static final AbstractTraceEvent EVENT = new AbstractTraceEvent(34556L, 324440L, 0) {
 		private static final long serialVersionUID = 1L;
 
+		@Override
 		public Object[] toArray() {
 			return new Object[] { this.getTimestamp(), this.getTraceId(), this.getOrderIndex(), };
 		}
 
+		@Override
 		public Class<?>[] getValueTypes() {
 			return new Class<?>[] { long.class, long.class, int.class, };
 		}
 
+		@Override
 		public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 			// not used here
 		}
 
+		@Override
 		public int getSize() {
 			return 8 + 8 + 4;
 		}

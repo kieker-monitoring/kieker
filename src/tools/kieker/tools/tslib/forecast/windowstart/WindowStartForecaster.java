@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,10 @@ import kieker.tools.tslib.forecast.ForecastResult;
 import kieker.tools.tslib.forecast.IForecastResult;
 
 /**
- * This forecaster uses the start of its timeseries window.
- * When defining a window length of e.g. a day, it gives the value of yesterday at the same time.
- * It can also be used for weeks, months, ... and ever other periodicity.
+ * This forecaster uses the start of its timeseries window.<br/>
+ * 
+ * When defining a window length of e.g. a day, it gives the value of yesterday at the same time. It can also be used for weeks, months, ... and ever other
+ * periodicity.
  * 
  * @author Tillmann Carlos Bielefeld
  * @since 1.10
@@ -48,6 +49,7 @@ public class WindowStartForecaster extends AbstractForecaster<Double> {
 	 *            number of values the forecaster return
 	 * @return ForecastResult
 	 */
+	@Override
 	public IForecastResult forecast(final int numForecastSteps) {
 		final ITimeSeries<Double> history = this.getTsOriginal();
 		final ITimeSeries<Double> tsFC = this.prepareForecastTS();
@@ -61,7 +63,7 @@ public class WindowStartForecaster extends AbstractForecaster<Double> {
 			}
 		}
 
-		return new ForecastResult(tsFC, this.getTsOriginal(), ForecastMethod.WSF);
+		return new ForecastResult(tsFC, this.getTsOriginal(), ForecastMethod.WINDOWSTART);
 	}
 
 }

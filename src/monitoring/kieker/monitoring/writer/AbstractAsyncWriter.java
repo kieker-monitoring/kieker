@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -104,6 +104,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	/**
 	 * The framework ensures, that this method is called only once!
 	 */
+	@Override
 	public final void terminate() {
 		final CountDownLatch cdl = new CountDownLatch(this.workers.size());
 		for (final AbstractAsyncThread worker : this.workers) {
@@ -132,23 +133,21 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
 		try {
 			switch (this.queueFullBehavior) {
 			case 1: // blocks when queue full
-				boolean interrupted = false;
 				for (int i = 0; i < 10; i++) { // drop out if more than 10 times interrupted
 					try {
 						this.blockingQueue.put(monitoringRecord);
-						if (interrupted) {
-							LOG.warn("Interupted when adding new monitoring record to queue. Tries: " + i);
-							Thread.currentThread().interrupt(); // propagate interrupt
-						}
 						return true;
 					} catch (final InterruptedException ignore) {
-						interrupted = true;
+						LOG.warn("Interupted when adding new monitoring record to queue. Try: " + i);
+						Thread.currentThread().interrupt(); // propagate interrupt
 					}
 				}
+				LOG.error("Failed to add new monitoring record to queue (Finally interruped while blocked).");
 				return false;
 			case 2: // does nothing if queue is full
 				if (!this.blockingQueue.offer(monitoringRecord)) {
@@ -177,6 +176,29 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 				}
 				return true;
 			}
+		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
+			LOG.error("Failed to add new monitoring record to queue.", ex);
+			return false;
+		}
+	}
+
+	@Override
+	public final boolean newMonitoringRecordNonBlocking(final IMonitoringRecord monitoringRecord) {
+		try {
+			if (!this.blockingQueue.offer(monitoringRecord)) {
+				new Thread() {
+					@Override
+					public void run() {
+						try {
+							AbstractAsyncWriter.this.blockingQueue.put(monitoringRecord);
+							return;
+						} catch (final InterruptedException ignore) {
+							Thread.currentThread().interrupt(); // propagate interrupt
+						}
+					}
+				}.start();
+			}
+			return true;
 		} catch (final Exception ex) { // NOPMD NOCS (IllegalCatchCheck)
 			LOG.error("Failed to add new monitoring record to queue.", ex);
 			return false;

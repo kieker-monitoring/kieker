@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,6 +49,7 @@ public class DummyWriter extends AbstractMonitoringWriter {
 	 * 
 	 * @return True.
 	 */
+	@Override
 	public boolean newMonitoringRecord(final IMonitoringRecord record) {
 		return true; // we don't care about incoming records
 	}
@@ -56,6 +57,7 @@ public class DummyWriter extends AbstractMonitoringWriter {
 	/**
 	 * Terminates the writer.
 	 */
+	@Override
 	public void terminate() {
 		LOG.info(this.getClass().getName() + " shutting down");
 	}

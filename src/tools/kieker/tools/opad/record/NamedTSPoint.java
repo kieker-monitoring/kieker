@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,17 +28,10 @@ import kieker.common.util.registry.IRegistry;
  * @author Tillmann Carlos Bielefeld
  * @since 1.10
  */
-public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, INamedElement, IDoubleValue {
+public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, INamedElement, IDoubleValue, IMonitoringRecord.BinaryFactory {
 
-	/**
-	 * Size is set = 20 by Bielefeld.
-	 */
-	public static final int SIZE = 20;
-
-	/**
-	 * class by Bielefeld.
-	 */
-	private static final Class<?>[] TYPES = {
+	public static final int SIZE = TYPE_SIZE_LONG + TYPE_SIZE_DOUBLE + TYPE_SIZE_STRING;
+	public static final Class<?>[] TYPES = {
 		long.class, // timestamp
 		double.class, // value
 		String.class, // name
@@ -60,48 +53,57 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 	 *            name of TS
 	 */
 	public NamedTSPoint(final long timestamp, final double value, final String name) {
-		super();
 		this.timestamp = timestamp;
 		this.value = value;
 		this.name = name;
 	}
 
-	/**
-	 * Constructor for deserialization purposes taking an array of object.
-	 * 
-	 * @param values
-	 *            array of parameters as object array
-	 */
-	public NamedTSPoint(final Object[] values) {
-		final Object[] localValue = values.clone();
-		AbstractMonitoringRecord.checkArray(localValue, NamedTSPoint.TYPES);
-
-		this.timestamp = (Long) localValue[0];
-		this.value = (Double) localValue[1];
-		this.name = (String) localValue[2];
+	public NamedTSPoint(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		this.timestamp = buffer.getLong();
+		this.value = buffer.getDouble();
+		this.name = stringRegistry.get(buffer.getInt());
 	}
 
-	/**
-	 * 
-	 * @return empty object array
-	 */
+	public NamedTSPoint(final Object[] values) { // NOPMD (direct store of values)
+		AbstractMonitoringRecord.checkArray(values, NamedTSPoint.TYPES);
+
+		this.timestamp = (Long) values[0];
+		this.value = (Double) values[1];
+		this.name = (String) values[2];
+
+	}
+
+	@Override
 	public Object[] toArray() {
-		return new Object[] {};
+		return new Object[] { this.getTimestamp(), this.getValue(), this.getName(), };
 	}
 
+	@Override
 	@Deprecated
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * @param buffer
-	 *            buffer
-	 * @param stringRegistry
-	 *            outputString
-	 * @throws BufferOverflowException
-	 *             exception
-	 */
+	@Override
+	public Class<?>[] getValueTypes() {
+		return TYPES; // NOPMD
+	}
+
+	public long getTimestamp() {
+		return this.timestamp;
+	}
+
+	@Override
+	public String getName() {
+		return this.name;
+	}
+
+	@Override
+	public double getValue() {
+		return this.value;
+	}
+
+	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putLong(this.getTimestamp());
 		buffer.putDouble(this.getValue());
@@ -113,27 +115,13 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 
-	public Class<?>[] getValueTypes() {
-		return TYPES.clone();
-	}
-
-	public long getTimestamp() {
-		return this.timestamp;
-	}
-
-	public String getName() {
-		return this.name;
-	}
-
-	public double getValue() {
-		return this.value;
-	}
-
+	@Override
 	public int getSize() {
 		return SIZE;
 	}

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ import kieker.common.util.registry.IRegistry;
  * @since 1.7
  */
 public final class KiekerMetadataRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	public static final int SIZE = 37;
+	public static final int SIZE = (3 * TYPE_SIZE_STRING) + TYPE_SIZE_INT + TYPE_SIZE_BOOLEAN + TYPE_SIZE_LONG + TYPE_SIZE_STRING + TYPE_SIZE_LONG;
 	public static final Class<?>[] TYPES = {
 		String.class, // version
 		String.class, // controllerName
@@ -138,6 +138,7 @@ public final class KiekerMetadataRecord extends AbstractMonitoringRecord impleme
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object[] toArray() {
 		return new Object[] { this.getVersion(), this.getControllerName(), this.getHostname(), this.getExperimentId(), this.isDebugMode(), this.getTimeOffset(),
 			this.getTimeUnit(), this.getNumberOfRecords(), };
@@ -146,6 +147,7 @@ public final class KiekerMetadataRecord extends AbstractMonitoringRecord impleme
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putInt(stringRegistry.get(this.getVersion()));
 		buffer.putInt(stringRegistry.get(this.getControllerName()));
@@ -162,6 +164,7 @@ public final class KiekerMetadataRecord extends AbstractMonitoringRecord impleme
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public final void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
@@ -172,6 +175,7 @@ public final class KiekerMetadataRecord extends AbstractMonitoringRecord impleme
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public final void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
@@ -180,6 +184,7 @@ public final class KiekerMetadataRecord extends AbstractMonitoringRecord impleme
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
@@ -187,6 +192,7 @@ public final class KiekerMetadataRecord extends AbstractMonitoringRecord impleme
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getSize() {
 		return SIZE;
 	}

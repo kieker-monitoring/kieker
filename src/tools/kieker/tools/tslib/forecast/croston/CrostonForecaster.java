@@ -51,6 +51,17 @@ public class CrostonForecaster extends AbstractRForecaster {
 		super(historyTimeseries, CrostonForecaster.MODEL_FUNC_NAME, CrostonForecaster.FORECAST_FUNC_NAME, ForecastMethod.CROSTON);
 	}
 
+	/**
+	 * 
+	 * @param historyTimeseries
+	 *            timeseries used by forecating algo
+	 * @param confidenceLevel
+	 *            value of confidence
+	 */
+	public CrostonForecaster(final ITimeSeries<Double> historyTimeseries, final int confidenceLevel) {
+		super(historyTimeseries, CrostonForecaster.MODEL_FUNC_NAME, CrostonForecaster.FORECAST_FUNC_NAME, confidenceLevel, ForecastMethod.CROSTON);
+	}
+
 	@Override
 	protected String[] getModelFuncParams() {
 		return this.emptyString.clone(); // no additional params required by this predictor

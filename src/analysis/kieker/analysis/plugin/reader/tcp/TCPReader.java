@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
+import java.nio.channels.ClosedByInterruptException;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 
@@ -67,6 +68,9 @@ public final class TCPReader extends AbstractReaderPlugin {
 
 	private static final int MESSAGE_BUFFER_SIZE = 65535;
 
+	private volatile Thread readerThread;
+	private volatile TCPStringReader tcpStringReader;
+	private volatile boolean terminated = false; // NOPMD
 	private final int port1;
 	private final int port2;
 	private final ILookup<String> stringRegistry = new Lookup<String>();
@@ -79,8 +83,8 @@ public final class TCPReader extends AbstractReaderPlugin {
 
 	@Override
 	public boolean init() {
-		final TCPStringReader tcpStringReader = new TCPStringReader(this.port2, this.stringRegistry);
-		tcpStringReader.start();
+		this.tcpStringReader = new TCPStringReader(this.port2, this.stringRegistry);
+		this.tcpStringReader.start();
 		return super.init();
 	}
 
@@ -92,7 +96,9 @@ public final class TCPReader extends AbstractReaderPlugin {
 		return configuration;
 	}
 
+	@Override
 	public boolean read() {
+		this.readerThread = Thread.currentThread();
 		ServerSocketChannel serversocket = null;
 		try {
 			serversocket = ServerSocketChannel.open();
@@ -103,7 +109,7 @@ public final class TCPReader extends AbstractReaderPlugin {
 			// BEGIN also loop this one?
 			final SocketChannel socketChannel = serversocket.accept();
 			final ByteBuffer buffer = ByteBuffer.allocateDirect(MESSAGE_BUFFER_SIZE);
-			while (socketChannel.read(buffer) != -1) {
+			while ((socketChannel.read(buffer) != -1) && (!this.terminated)) {
 				buffer.flip();
 				// System.out.println("Reading, remaining:" + buffer.remaining());
 				try {
@@ -130,6 +136,9 @@ public final class TCPReader extends AbstractReaderPlugin {
 			// System.out.println("Channel closing...");
 			socketChannel.close();
 			// END also loop this one?
+		} catch (final ClosedByInterruptException ex) {
+			this.log.warn("Reader interrupted", ex);
+			return this.terminated;
 		} catch (final IOException ex) {
 			this.log.error("Error while reading", ex);
 			return false;
@@ -147,9 +156,13 @@ public final class TCPReader extends AbstractReaderPlugin {
 		return true;
 	}
 
+	@Override
 	public void terminate(final boolean error) {
 		this.log.info("Shutdown of TCPReader requested.");
-		// TODO actually implement terminate!
+		this.terminated = true;
+		this.readerThread.interrupt();
+
+		this.tcpStringReader.terminate();
 	}
 
 }
@@ -168,14 +181,22 @@ class TCPStringReader extends Thread {
 
 	private final int port;
 	private final ILookup<String> stringRegistry;
+	private volatile boolean terminated = false; // NOPMD
+	private volatile Thread readerThread;
 
 	public TCPStringReader(final int port, final ILookup<String> stringRegistry) {
 		this.port = port;
 		this.stringRegistry = stringRegistry;
 	}
 
+	public void terminate() {
+		this.terminated = true;
+		this.readerThread.interrupt();
+	}
+
 	@Override
 	public void run() {
+		this.readerThread = Thread.currentThread();
 		ServerSocketChannel serversocket = null;
 		try {
 			serversocket = ServerSocketChannel.open();
@@ -186,7 +207,7 @@ class TCPStringReader extends Thread {
 			// BEGIN also loop this one?
 			final SocketChannel socketChannel = serversocket.accept();
 			final ByteBuffer buffer = ByteBuffer.allocateDirect(MESSAGE_BUFFER_SIZE);
-			while (socketChannel.read(buffer) != -1) {
+			while ((socketChannel.read(buffer) != -1) && (!this.terminated)) {
 				buffer.flip();
 				try {
 					while (buffer.hasRemaining()) {
@@ -201,6 +222,8 @@ class TCPStringReader extends Thread {
 			}
 			socketChannel.close();
 			// END also loop this one?
+		} catch (final ClosedByInterruptException ex) {
+			LOG.warn("Reader interrupted", ex);
 		} catch (final IOException ex) {
 			LOG.error("Error while reading", ex);
 		} finally {

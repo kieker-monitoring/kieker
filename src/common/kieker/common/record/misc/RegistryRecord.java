@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ import kieker.common.util.registry.IRegistry;
  * @since 1.5
  */
 public final class RegistryRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	public static final int SIZE = 8; // without the String itself!
+	public static final int SIZE = TYPE_SIZE_INT + TYPE_SIZE_STRING;
 	public static final Class<?>[] TYPES = new Class<?>[] {
 		int.class, // id
 		String.class, // object
@@ -113,6 +113,7 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object[] toArray() {
 		return new Object[] { this.getId(), this.getString(), };
 	}
@@ -120,6 +121,7 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putInt(this.getId());
 		buffer.putInt(this.getString().length());
@@ -131,6 +133,7 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public final void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
@@ -141,6 +144,7 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public final void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
@@ -149,6 +153,7 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
@@ -156,8 +161,16 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getSize() {
 		return 4 + 4 + this.strBytes.length;
+	}
+
+	/**
+	 * @return the String as byte[]
+	 */
+	public final byte[] getStrBytes() {
+		return this.strBytes; // NOPMD (We know what we are doing here...)
 	}
 
 	/**

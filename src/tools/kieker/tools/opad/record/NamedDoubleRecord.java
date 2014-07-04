@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,73 +25,53 @@ import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
 
 /**
- * This class represents responsetime data from a measured application,
- * stored as an double value.
+ * This class represents responsetime data from a measured application, stored as an double value.
  * 
  * @author Tom Frotscher
- * @since 1.10
  * 
+ * @since 1.10
  */
-public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory {
+public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 
-	/**
-	 * Serialization size.
-	 */
-	protected static final int SIZE = 20;
-
-	/**
-	 * Types used for serialization.
-	 */
-	private static final Class<?>[] TYPES = {
-		String.class, // applicationName
-		long.class, // timestamp
-		double.class, // responseTime
+	public static final int SIZE = TYPE_SIZE_STRING + TYPE_SIZE_LONG + TYPE_SIZE_DOUBLE;
+	public static final Class<?>[] TYPES = {
+		String.class,
+		long.class,
+		double.class,
 	};
 
 	private static final long serialVersionUID = 1768657580333390199L;
 
-	// Attributes
 	private final String applicationName;
 	private final long timestamp;
 	private final double responseTime;
 
-	/**
-	 * Creates an instance of this class based on the parameters.
-	 * 
-	 * @param application
-	 *            Application that is the source of the data
-	 * @param timest
-	 *            Timestamp
-	 * @param response
-	 *            Responsetime stored in this record
-	 */
 	public NamedDoubleRecord(final String application, final long timest, final double response) {
 		this.applicationName = application;
 		this.timestamp = timest;
 		this.responseTime = response;
 	}
 
-	/**
-	 * Creates an Instance of this class based on a single object array.
-	 * 
-	 * @param values
-	 *            Object array containing the applicationname, timestamp and responsetime
-	 */
-	public NamedDoubleRecord(final Object[] values) {
-		final Object[] localValue = values.clone();
-		AbstractMonitoringRecord.checkArray(localValue, NamedDoubleRecord.TYPES);
+	public NamedDoubleRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		this.applicationName = stringRegistry.get(buffer.getInt());
+		this.timestamp = buffer.getLong();
+		this.responseTime = buffer.getDouble();
+	}
 
-		this.applicationName = (String) localValue[0];
-		this.timestamp = (Long) localValue[1];
-		this.responseTime = (Double) localValue[2];
+	public NamedDoubleRecord(final Object[] values) { // NOPMD (direct store of values)
+		AbstractMonitoringRecord.checkArray(values, NamedDoubleRecord.TYPES);
 
+		this.applicationName = (String) values[0];
+		this.timestamp = (Long) values[1];
+		this.responseTime = (Double) values[2];
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Class<?>[] getValueTypes() {
-		return NamedDoubleRecord.TYPES.clone();
+		return TYPES; // NOPMD
 	}
 
 	/**
@@ -99,6 +79,7 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public void initFromArray(final Object[] arg0) {
 		throw new UnsupportedOperationException();
@@ -107,10 +88,24 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object[] toArray() {
 		return new Object[] { this.applicationName, this.timestamp, this.responseTime };
 	}
 
+	public String getApplication() {
+		return this.applicationName;
+	}
+
+	public long getTimestamp() {
+		return this.timestamp;
+	}
+
+	public double getValue() {
+		return this.responseTime;
+	}
+
+	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putInt(stringRegistry.get(this.getApplication()));
 		buffer.putLong(this.getTimestamp());
@@ -122,41 +117,13 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * Returns the application name.
-	 * 
-	 * @return
-	 *         Apllication name
-	 */
-	public String getApplication() {
-		return this.applicationName;
-	}
-
-	/**
-	 * Returns the timestamp.
-	 * 
-	 * @return
-	 *         Timestamp
-	 */
-	public long getTimestamp() {
-		return this.timestamp;
-	}
-
-	/**
-	 * Returns the Value.
-	 * 
-	 * @return
-	 *         Value
-	 */
-	public double getValue() {
-		return this.responseTime;
-	}
-
+	@Override
 	public int getSize() {
 		return SIZE;
 	}

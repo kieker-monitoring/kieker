@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -178,6 +178,7 @@ public final class MonitoringController extends AbstractController implements IM
 	 * 
 	 * @return true on success; false in case of an error.
 	 */
+	@Override
 	public final boolean sendMetadataAsRecord() {
 		final ITimeSource timesource = this.getTimeSource();
 		return this.newMonitoringRecord(new KiekerMetadataRecord(
@@ -199,102 +200,127 @@ public final class MonitoringController extends AbstractController implements IM
 	// DELEGATE TO OTHER CONTROLLERS
 	// #############################
 
+	@Override
 	public final boolean terminateMonitoring() {
 		return this.stateController.terminateMonitoring();
 	}
 
+	@Override
 	public final boolean isMonitoringTerminated() {
 		return this.stateController.isMonitoringTerminated();
 	}
 
+	@Override
 	public final boolean enableMonitoring() {
 		return this.stateController.enableMonitoring();
 	}
 
+	@Override
 	public final boolean disableMonitoring() {
 		return this.stateController.disableMonitoring();
 	}
 
+	@Override
 	public final boolean isMonitoringEnabled() {
 		return this.stateController.isMonitoringEnabled();
 	}
 
+	@Override
 	public final boolean isDebug() {
 		return this.stateController.isDebug();
 	}
 
+	@Override
 	public final String getName() {
 		return this.stateController.getName();
 	}
 
+	@Override
 	public final String getHostname() {
 		return this.stateController.getHostname();
 	}
 
+	@Override
 	public final int incExperimentId() {
 		return this.stateController.incExperimentId();
 	}
 
+	@Override
 	public final void setExperimentId(final int newExperimentID) {
 		this.stateController.setExperimentId(newExperimentID);
 	}
 
+	@Override
 	public final int getExperimentId() {
 		return this.stateController.getExperimentId();
 	}
 
+	@Override
 	public final boolean newMonitoringRecord(final IMonitoringRecord record) {
 		return this.writerController.newMonitoringRecord(record);
 	}
 
+	@Override
 	public final long getNumberOfInserts() {
 		return this.writerController.getNumberOfInserts();
 	}
 
+	@Override
 	public final ScheduledSamplerJob schedulePeriodicSampler(final ISampler sampler, final long initialDelay, final long period, final TimeUnit timeUnit) {
 		return this.samplingController.schedulePeriodicSampler(sampler, initialDelay, period, timeUnit);
 	}
 
+	@Override
 	public final boolean removeScheduledSampler(final ScheduledSamplerJob sampler) {
 		return this.samplingController.removeScheduledSampler(sampler);
 	}
 
+	@Override
 	public final ITimeSource getTimeSource() {
 		return this.timeSourceController.getTimeSource();
 	}
 
+	@Override
 	public final String getJMXDomain() {
 		return this.jmxController.getJMXDomain();
 	}
 
+	@Override
 	public final int getUniqueIdForString(final String string) {
 		return this.registryController.getUniqueIdForString(string);
 	}
 
+	@Override
 	public String getStringForUniqueId(final int id) {
 		return this.registryController.getStringForUniqueId(id);
 	}
 
+	@Override
 	public IRegistry<String> getStringRegistry() {
 		return this.registryController.getStringRegistry();
 	}
 
+	@Override
 	public final boolean activateProbe(final String pattern) {
 		return this.probeController.activateProbe(pattern);
 	}
 
+	@Override
 	public final boolean deactivateProbe(final String pattern) {
 		return this.probeController.deactivateProbe(pattern);
 	}
 
+	@Override
 	public boolean isProbeActivated(final String signature) {
 		return this.probeController.isProbeActivated(signature);
 	}
 
+	@Override
 	public void setProbePatternList(final List<String> patternList) {
 		this.probeController.setProbePatternList(patternList);
 	}
 
+	@Override
 	public List<String> getProbePatternList() {
 		return this.probeController.getProbePatternList();
 	}

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ import kieker.common.util.registry.IRegistry;
  * @since 1.3
  */
 public class ResourceUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	public static final int SIZE = 24;
+	public static final int SIZE = TYPE_SIZE_LONG + (2 * TYPE_SIZE_STRING) + TYPE_SIZE_DOUBLE;
 	public static final Class<?>[] TYPES = {
 		long.class,
 		String.class,
@@ -117,6 +117,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object[] toArray() {
 		return new Object[] { this.getTimestamp(), this.getHostname(), this.getResourceName(), this.getUtilization(), };
 	}
@@ -124,6 +125,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putLong(this.getTimestamp());
 		buffer.putInt(stringRegistry.get(this.getHostname()));
@@ -136,6 +138,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public final void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
@@ -146,6 +149,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public final void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
@@ -154,6 +158,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
@@ -161,34 +166,23 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getSize() {
 		return SIZE;
 	}
 
-	/**
-	 * @return the timestamp
-	 */
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
 
-	/**
-	 * @return the hostname
-	 */
 	public final String getHostname() {
 		return this.hostname;
 	}
 
-	/**
-	 * @return the resourceName
-	 */
 	public final String getResourceName() {
 		return this.resourceName;
 	}
 
-	/**
-	 * @return the utilization
-	 */
 	public final double getUtilization() {
 		return this.utilization;
 	}

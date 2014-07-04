@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -96,10 +96,10 @@ public class ForecastingFilterTest extends AbstractKiekerTest {
 
 		// FORECASTINGFILTER
 		final Configuration forecastConfiguration = new Configuration();
-		forecastConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_DELTA_TIME, "1000");
-		forecastConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_DELTA_UNIT,
+		forecastConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_NAME_DELTA_TIME, "1000");
+		forecastConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_NAME_DELTA_UNIT,
 				"MILLISECONDS");
-		forecastConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_FC_METHOD, "MEANJAVA");
+		forecastConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_NAME_FC_METHOD, "MEANJAVA");
 		final ForecastingFilter forecasting = new ForecastingFilter(forecastConfiguration, this.controller);
 
 		// SINK 1

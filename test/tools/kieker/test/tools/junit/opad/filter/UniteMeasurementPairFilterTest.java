@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
-import kieker.analysis.AnalysisControllerThread;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
@@ -37,12 +36,12 @@ import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
- * Checks if the forecasts are assigned to the correct real values. Also checks, if a dummy is created for
- * the first real value, that can not have a calculated forecast.
+ * Checks if the forecasts are assigned to the correct real values. Also checks, if a dummy is created for the first real value, that can not have a calculated
+ * forecast.
  * 
- * @author Tom Frotscher
+ * @author Tom Frotscher, Nils Christian Ehmke
+ * 
  * @since 1.10
- * 
  */
 public class UniteMeasurementPairFilterTest extends AbstractKiekerTest {
 
@@ -51,12 +50,8 @@ public class UniteMeasurementPairFilterTest extends AbstractKiekerTest {
 
 	private AnalysisController controller;
 
-	// Variables UniteFilter
 	private ListCollectionFilter<ForecastMeasurementPair> sinkPlugin;
 
-	/**
-	 * Creates a new instance of this class.
-	 */
 	public UniteMeasurementPairFilterTest() {
 		// empty default constructor
 	}
@@ -107,14 +102,13 @@ public class UniteMeasurementPairFilterTest extends AbstractKiekerTest {
 
 		// READER TSPoints
 		final Configuration readerUniteConfigurationTS = new Configuration();
-		readerUniteConfigurationTS.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
-		final ListReader<NamedDoubleTimeSeriesPoint> theReaderUniteTSPoints =
-				new ListReader<NamedDoubleTimeSeriesPoint>(readerUniteConfigurationTS, this.controller);
+		readerUniteConfigurationTS.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.FALSE.toString());
+		final ListReader<NamedDoubleTimeSeriesPoint> theReaderUniteTSPoints = new ListReader<NamedDoubleTimeSeriesPoint>(readerUniteConfigurationTS, this.controller);
 		theReaderUniteTSPoints.addAllObjects(this.createInputEventSetUnite());
 
 		// READER Forecasts
 		final Configuration readerUniteConfigurationForecast = new Configuration();
-		readerUniteConfigurationForecast.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.TRUE.toString());
+		readerUniteConfigurationForecast.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.FALSE.toString());
 		final ListReader<IForecastMeasurementPair> theReaderUniteForecast = new ListReader<IForecastMeasurementPair>(readerUniteConfigurationForecast,
 				this.controller);
 		theReaderUniteForecast.addAllObjects(this.createInputEventSetUniteForecast());
@@ -130,15 +124,12 @@ public class UniteMeasurementPairFilterTest extends AbstractKiekerTest {
 		// CONNECTION
 		this.controller.connect(theReaderUniteTSPoints, ListReader.OUTPUT_PORT_NAME, unite, UniteMeasurementPairFilter.INPUT_PORT_NAME_TSPOINT);
 		this.controller.connect(theReaderUniteForecast, ListReader.OUTPUT_PORT_NAME, unite, UniteMeasurementPairFilter.INPUT_PORT_NAME_FORECAST);
-		this.controller.connect(unite,
-				UniteMeasurementPairFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, this.sinkPlugin,
-				ListCollectionFilter.INPUT_PORT_NAME);
+		this.controller.connect(unite, UniteMeasurementPairFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, this.sinkPlugin, ListCollectionFilter.INPUT_PORT_NAME);
 	}
 
 	/**
-	 * Test of the VariateUniteFMPFilter. The measurement values and the forecast values have to be brought together
-	 * correctly. Therefore, the measurements and forecasts with corresponding time stamps have to be brought together
-	 * if they are from the same application.
+	 * Test of the VariateUniteFMPFilter. The measurement values and the forecast values have to be brought together correctly. Therefore, the measurements and
+	 * forecasts with corresponding time stamps have to be brought together if they are from the same application.
 	 * 
 	 * @throws InterruptedException
 	 *             If interrupted
@@ -149,30 +140,25 @@ public class UniteMeasurementPairFilterTest extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testUniteOnly() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
-
-		final AnalysisControllerThread thread = new AnalysisControllerThread(this.controller);
-		thread.start();
-
-		Thread.sleep(2000);
-		thread.terminate();
+		this.controller.run();
 
 		Assert.assertEquals(8, this.sinkPlugin.getList().size());
 
-		Assert.assertEquals(this.sinkPlugin.getList().get(0).getValue().doubleValue(), 0.3d, 0.000001d);
-		Assert.assertEquals(this.sinkPlugin.getList().get(0).getForecasted().doubleValue(), 0.3d, 0.000001d);
-		Assert.assertEquals(this.sinkPlugin.getList().get(1).getValue().doubleValue(), 0.4d, 0.000001d);
-		Assert.assertEquals(this.sinkPlugin.getList().get(1).getForecasted().doubleValue(), 0.35d, 0.000001d);
-		Assert.assertEquals(this.sinkPlugin.getList().get(2).getValue().doubleValue(), 0.5d, 0.000001d);
-		Assert.assertEquals(this.sinkPlugin.getList().get(2).getForecasted().doubleValue(), 0.45d, 0.000001d);
-		Assert.assertEquals(this.sinkPlugin.getList().get(3).getValue().doubleValue(), 0.9d, 0.000001d);
-		Assert.assertEquals(this.sinkPlugin.getList().get(3).getForecasted().doubleValue(), 0.55d, 0.000001d);
-		Assert.assertEquals(this.sinkPlugin.getList().get(4).getValue().doubleValue(), 0.7d, 0.000001d);
-		Assert.assertEquals(this.sinkPlugin.getList().get(4).getForecasted().doubleValue(), 0.7d, 0.000001d);
-		Assert.assertEquals(this.sinkPlugin.getList().get(5).getValue().doubleValue(), 0.3d, 0.000001d);
-		Assert.assertEquals(this.sinkPlugin.getList().get(5).getForecasted().doubleValue(), 0.31d, 0.000001d);
-		Assert.assertEquals(this.sinkPlugin.getList().get(6).getValue().doubleValue(), 0.1d, 0.000001d);
-		Assert.assertEquals(this.sinkPlugin.getList().get(6).getForecasted().doubleValue(), 0.46d, 0.000001d);
-		Assert.assertEquals(this.sinkPlugin.getList().get(7).getValue().doubleValue(), 0.97d, 0.000001d);
-		Assert.assertEquals(this.sinkPlugin.getList().get(7).getForecasted().doubleValue(), 0.55d, 0.000001d);
+		Assert.assertEquals(0.3, this.sinkPlugin.getList().get(0).getValue(), 1e-5);
+		Assert.assertEquals(0.4, this.sinkPlugin.getList().get(1).getValue(), 1e-5);
+		Assert.assertEquals(0.5, this.sinkPlugin.getList().get(2).getValue(), 1e-5);
+		Assert.assertEquals(0.9, this.sinkPlugin.getList().get(3).getValue(), 1e-5);
+		Assert.assertEquals(0.7, this.sinkPlugin.getList().get(4).getValue(), 1e-5);
+		Assert.assertEquals(0.3, this.sinkPlugin.getList().get(5).getValue(), 1e-5);
+		Assert.assertEquals(0.1, this.sinkPlugin.getList().get(6).getValue(), 1e-5);
+		Assert.assertEquals(0.97, this.sinkPlugin.getList().get(7).getValue(), 1e-5);
+		Assert.assertEquals(0.3, this.sinkPlugin.getList().get(0).getForecasted(), 1e-5);
+		Assert.assertEquals(0.35, this.sinkPlugin.getList().get(1).getForecasted(), 1e-5);
+		Assert.assertEquals(0.45, this.sinkPlugin.getList().get(2).getForecasted(), 1e-5);
+		Assert.assertEquals(0.55, this.sinkPlugin.getList().get(3).getForecasted(), 1e-5);
+		Assert.assertEquals(0.7, this.sinkPlugin.getList().get(4).getForecasted(), 1e-5);
+		Assert.assertEquals(0.31, this.sinkPlugin.getList().get(5).getForecasted(), 1e-5);
+		Assert.assertEquals(0.46, this.sinkPlugin.getList().get(6).getForecasted(), 1e-5);
+		Assert.assertEquals(0.55, this.sinkPlugin.getList().get(7).getForecasted(), 1e-5);
 	}
 }

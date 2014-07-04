@@ -1,7 +1,8 @@
 BSD style License - BSD - 3-clause
 Project: http://code.google.com/p/hamcrest/
-Description: Hamcrest - library of matchers for building test expressions (needed by jUnit)
+Description: Hamcrest - library of matchers for building test expressions 
 License: http://opensource.org/licenses/BSD-3-Clause
+Required by: JUnit (compile- and run-time)
 
 Copyright (c) <YEAR>, <OWNER>
 All rights reserved.

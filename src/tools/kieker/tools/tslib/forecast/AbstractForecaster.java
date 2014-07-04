@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,16 +22,15 @@ import kieker.tools.tslib.TimeSeries;
 /**
  * @author Andre van Hoorn, Tillmann Carlos Bielefeld
  * @since 1.10
+ * 
  * @param <T>
+ *            The type of the forecaster.
  */
 public abstract class AbstractForecaster<T> implements IForecaster<T> {
+
 	private final ITimeSeries<T> historyTimeseries;
 	private final int confidenceLevel;
 
-	/**
-	 * @param historyTimeseries
-	 *            TS
-	 */
 	public AbstractForecaster(final ITimeSeries<T> historyTimeseries) {
 		this(historyTimeseries, 0);
 	}
@@ -48,9 +47,7 @@ public abstract class AbstractForecaster<T> implements IForecaster<T> {
 		this.confidenceLevel = confidenceLevel;
 	}
 
-	/**
-	 * @return the historyTimeseries
-	 */
+	@Override
 	public ITimeSeries<T> getTsOriginal() {
 		return this.historyTimeseries;
 	}
@@ -62,12 +59,6 @@ public abstract class AbstractForecaster<T> implements IForecaster<T> {
 	protected ITimeSeries<T> prepareForecastTS() {
 		final ITimeSeries<T> history = this.getTsOriginal();
 
-		// The starting point of the FC series is calculated by _one_ additional
-		// tick...
-
-		// final long lastDistanceMillis = TimeUnit.MILLISECONDS.convert(
-		// history.getDeltaTime(), history.getDeltaTimeUnit());
-		// ... plus the end point of the historic series
 		final long startTime = history.getEndTime();
 		final TimeSeries<T> tsFC = new TimeSeries<T>(startTime,
 				history.getDeltaTime(), history.getDeltaTimeUnit());
@@ -75,6 +66,7 @@ public abstract class AbstractForecaster<T> implements IForecaster<T> {
 		return tsFC;
 	}
 
+	@Override
 	public int getConfidenceLevel() {
 		return this.confidenceLevel;
 	}

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,7 @@ public final class Lookup<E> implements ILookup<E> {
 		this.array = (E[]) new Object[0];
 	}
 
+	@Override
 	public int get(final E value) {
 		final E[] arr = this.array; // work on this "copy" to prevent concurrent modification
 		if (value != null) {
@@ -54,6 +55,7 @@ public final class Lookup<E> implements ILookup<E> {
 		return null;
 	}
 
+	@Override
 	public E[] getAll() {
 		final E[] arr = this.array; // work on this "copy" to prevent concurrent modification
 		@SuppressWarnings("unchecked")
@@ -62,10 +64,12 @@ public final class Lookup<E> implements ILookup<E> {
 		return result;
 	}
 
+	@Override
 	public int getSize() {
 		return this.array.length;
 	}
 
+	@Override
 	public E get(final int i) {
 		synchronized (this) {
 			E value = this.getNonBlocking(i);
@@ -81,6 +85,7 @@ public final class Lookup<E> implements ILookup<E> {
 		}
 	}
 
+	@Override
 	public boolean set(final E value, final int id) {
 		synchronized (this) {
 			if (id < this.array.length) {
@@ -102,6 +107,7 @@ public final class Lookup<E> implements ILookup<E> {
 		}
 	}
 
+	@Override
 	@Deprecated
 	public void setRecordReceiver(final IMonitoringRecordReceiver recordReceiver) {
 		throw new UnsupportedOperationException();

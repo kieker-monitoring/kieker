@@ -92,6 +92,7 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 	 *            amount of to calculate FC steps
 	 * @return ForecastResult
 	 */
+	@Override
 	public final IForecastResult forecast(final int numForecastSteps) {
 		final ITimeSeries<Double> history = this.getTsOriginal();
 
@@ -163,7 +164,7 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 
 		double fcQuality = Double.NaN;
 		if (forecastValues.length > 0) {
-			if ((this.modelFunc == null) || (this.strategy == ForecastMethod.TBATS)) {
+			if ((this.modelFunc == null) /* || (this.strategy == ForecastMethod.TBATS) */) { // Re-enable when TBATS included
 				fcQuality = AbstractRForecaster.RBRIDGE.eDbl("accuracy(" + varNameForecast + ")[6]");
 			} else {
 				fcQuality = AbstractRForecaster.RBRIDGE.eDbl("accuracy(" + varNameModel + ")[6]");

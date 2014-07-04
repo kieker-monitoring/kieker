@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,19 +19,19 @@ package kieker.tools.tslib;
 /**
  * @author Andre van Hoorn
  * @since 1.10
+ * 
  * @param <T>
+ *            The type of the point.
  */
 public interface ITimeSeriesPoint<T> {
 
 	/**
 	 * @since 1.10
-	 * @return Time
 	 */
 	public long getTime();
 
 	/**
 	 * @since 1.10
-	 * @return Value
 	 */
 	public T getValue();
 }

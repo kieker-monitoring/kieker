@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -116,7 +116,7 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 			AbstractCallTreeFilter.saveTreeToDotFile(this.root, outputFn, this.includeWeights, false, // do not include EOIs
 					this.shortLabels);
 			this.numGraphsSaved++;
-			this.printMessage(new String[] { "Wrote call tree to file '" + outputFn + "'", "Dot file can be converted using the dot tool",
+			this.printDebugLogMessage(new String[] { "Wrote call tree to file '" + outputFn + "'", "Dot file can be converted using the dot tool",
 				"Example: dot -T svg " + outputFn + " > " + outputFn + ".svg", });
 		}
 	}
@@ -125,7 +125,9 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	public void printStatusMessage() {
 		synchronized (this) {
 			super.printStatusMessage();
-			this.stdOutPrintln("Saved " + this.numGraphsSaved + " call tree" + (this.numGraphsSaved > 1 ? "s" : "")); // NOCS
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("Saved " + this.numGraphsSaved + " call tree" + (this.numGraphsSaved > 1 ? "s" : "")); // NOCS
+			}
 		}
 	}
 
@@ -153,10 +155,12 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 	 */
 	@Override
 	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration();
+		final Configuration configuration = super.getCurrentConfiguration();
+
 		configuration.setProperty(CONFIG_PROPERTY_NAME_INCLUDE_WEIGHTS, Boolean.toString(this.includeWeights));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_SHORT_LABELS, Boolean.toString(this.shortLabels));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_OUTPUT_FILENAME, this.dotOutputFile);
+
 		return configuration;
 	}
 
@@ -170,6 +174,7 @@ public abstract class AbstractAggregatedCallTreeFilter<T> extends AbstractCallTr
 			try {
 				AbstractCallTreeFilter.addTraceToTree(this.root, t, new IPairFactory<T>() {
 
+					@Override
 					public T createPair(final SynchronousCallMessage callMsg) {
 						return AbstractAggregatedCallTreeFilter.this.concreteCreatePair(callMsg);
 					}

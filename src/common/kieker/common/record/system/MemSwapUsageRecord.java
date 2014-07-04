@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ import kieker.common.util.registry.IRegistry;
  * @since 1.3
  */
 public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	public static final int SIZE = 60;
+	public static final int SIZE = TYPE_SIZE_LONG + TYPE_SIZE_STRING + (6 * TYPE_SIZE_LONG);
 	public static final Class<?>[] TYPES = {
 		long.class,
 		String.class,
@@ -142,6 +142,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object[] toArray() {
 		return new Object[] { this.getTimestamp(), this.getHostname(), this.getMemTotal(), this.getMemUsed(), this.getMemFree(), this.getSwapTotal(),
 			this.getSwapUsed(), this.getSwapFree(), };
@@ -150,6 +151,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putLong(this.getTimestamp());
 		buffer.putInt(stringRegistry.get(this.getHostname()));
@@ -166,6 +168,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public final void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
@@ -176,6 +179,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public final void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
@@ -184,6 +188,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
@@ -191,62 +196,39 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getSize() {
 		return SIZE;
 	}
 
-	/**
-	 * @return the memTotal
-	 */
 	public final long getMemTotal() {
 		return this.memTotal;
 	}
 
-	/**
-	 * @return the memUsed
-	 */
 	public final long getMemUsed() {
 		return this.memUsed;
 	}
 
-	/**
-	 * @return the memFree
-	 */
 	public final long getMemFree() {
 		return this.memFree;
 	}
 
-	/**
-	 * @return the swapTotal
-	 */
 	public final long getSwapTotal() {
 		return this.swapTotal;
 	}
 
-	/**
-	 * @return the swapUsed
-	 */
 	public final long getSwapUsed() {
 		return this.swapUsed;
 	}
 
-	/**
-	 * @return the swapFree
-	 */
 	public final long getSwapFree() {
 		return this.swapFree;
 	}
 
-	/**
-	 * @return the timestamp
-	 */
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
 
-	/**
-	 * @return the hostname
-	 */
 	public final String getHostname() {
 		return this.hostname;
 	}

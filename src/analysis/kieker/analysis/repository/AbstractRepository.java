@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,6 +74,7 @@ public abstract class AbstractRepository extends AbstractAnalysisComponent imple
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final String getRepositoryName() {
 		final String repositoryName = this.getClass().getAnnotation(Repository.class).name();
 		if (repositoryName.equals(Repository.NO_NAME)) {
@@ -86,6 +87,7 @@ public abstract class AbstractRepository extends AbstractAnalysisComponent imple
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final String getRepositoryDescription() {
 		return this.getClass().getAnnotation(Repository.class).description();
 	}

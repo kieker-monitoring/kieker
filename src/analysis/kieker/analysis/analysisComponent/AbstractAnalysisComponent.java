@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -96,7 +96,7 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 		this.name = tmpName;
 
 		// As we have now a name, we can create our logger
-		this.log = LogFactory.getLog(AbstractAnalysisComponent.class.getName() + "." + this.name);
+		this.log = LogFactory.getLog(this.getClass().getName() + " (" + this.name + ")");
 
 		// Try the record time unit
 		final String recordTimeunitProperty = projectContext.getProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT);
@@ -120,11 +120,13 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public abstract Configuration getCurrentConfiguration();
 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final String getName() {
 		return this.name;
 	}

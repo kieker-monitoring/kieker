@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2012 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -87,22 +87,27 @@ public class ForecastResult implements IForecastResult {
 		this(tsForecast, tsOriginal, 0, 0, tsForecast, tsForecast, fcStrategy); // tsForecast also lower/upper
 	}
 
+	@Override
 	public ITimeSeries<Double> getForecast() {
 		return this.tsForecast;
 	}
 
+	@Override
 	public int getConfidenceLevel() {
 		return this.confidenceLevel;
 	}
 
+	@Override
 	public ITimeSeries<Double> getUpper() {
 		return this.tsUpper;
 	}
 
+	@Override
 	public ITimeSeries<Double> getLower() {
 		return this.tsLower;
 	}
 
+	@Override
 	public ITimeSeries<Double> getOriginal() {
 		return this.tsOriginal;
 	}
@@ -124,10 +129,12 @@ public class ForecastResult implements IForecastResult {
 		return strB.toString();
 	}
 
+	@Override
 	public double getMeanAbsoluteScaledError() {
 		return this.meanAbsoluteScaledError;
 	}
 
+	@Override
 	public ForecastMethod getFcStrategy() {
 		return this.fcStrategy;
 	}
@@ -137,6 +144,7 @@ public class ForecastResult implements IForecastResult {
 	 * 
 	 * @return true if plausible, else false
 	 */
+	@Override
 	public boolean isPlausible() {
 		if ((this.meanAbsoluteScaledError == 0) || Double.isNaN(this.meanAbsoluteScaledError)) {
 			return false;

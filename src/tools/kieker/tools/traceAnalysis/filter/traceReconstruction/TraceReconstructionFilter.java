@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,8 @@ package kieker.tools.traceAnalysis.filter.traceReconstruction;
 import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.NavigableSet;
 import java.util.Set;
-import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
@@ -101,9 +101,10 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	private boolean traceProcessingErrorOccured; // false
 
 	/** Pending traces sorted by tin timestamps. */
-	private final SortedSet<ExecutionTrace> timeoutMap = new TreeSet<ExecutionTrace>(new Comparator<ExecutionTrace>() {
+	private final NavigableSet<ExecutionTrace> timeoutMap = new TreeSet<ExecutionTrace>(new Comparator<ExecutionTrace>() {
 
 		/** Order traces by tins */
+		@Override
 		public int compare(final ExecutionTrace t1, final ExecutionTrace t2) {
 			if (t1 == t2) { // NOPMD (no equals)
 				return 0;
@@ -298,10 +299,7 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	private void processTimeoutQueue() throws ExecutionEventProcessingException {
 		synchronized (this.timeoutMap) {
 			while (!this.timeoutMap.isEmpty() && (this.terminated || ((this.maxTout - this.timeoutMap.first().getMinTin()) > this.maxTraceDuration))) {
-				// Java 1.5 compatibility
-				final ExecutionTrace polledTrace = this.timeoutMap.first();
-				this.timeoutMap.remove(polledTrace);
-				// Java 1.6: final ExecutionTrace polledTrace = this.timeoutMap.pollFirst();
+				final ExecutionTrace polledTrace = this.timeoutMap.pollFirst();
 				final long curTraceId = polledTrace.getTraceId();
 				this.pendingTraces.remove(curTraceId);
 				this.processExecutionTrace(polledTrace);
@@ -354,8 +352,10 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 				final String maxToutStr = new StringBuilder().append(this.maxTout).append(" (")
 						.append(LoggingTimestampConverter.convertLoggingTimestampToUTCString(this.timeunit.toNanos(this.maxTout))).append(",")
 						.append(LoggingTimestampConverter.convertLoggingTimestampLocalTimeZoneString(this.maxTout)).append(")").toString();
-				this.stdOutPrintln("First timestamp: " + minTinStr);
-				this.stdOutPrintln("Last timestamp: " + maxToutStr);
+				if (LOG.isDebugEnabled()) {
+					LOG.debug("First timestamp: " + minTinStr);
+					LOG.debug("Last timestamp: " + maxToutStr);
+				}
 			}
 		}
 	}
@@ -365,10 +365,12 @@ public class TraceReconstructionFilter extends AbstractTraceProcessingFilter {
 	 */
 	@Override
 	public Configuration getCurrentConfiguration() {
-		final Configuration configuration = new Configuration();
+		final Configuration configuration = super.getCurrentConfiguration();
+
 		configuration.setProperty(CONFIG_PROPERTY_NAME_TIMEUNIT, this.timeunit.name());
 		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, Long.toString(this.maxTraceDuration));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_IGNORE_INVALID_TRACES, Boolean.toString(this.ignoreInvalidTraces));
+
 		return configuration;
 	}
 }

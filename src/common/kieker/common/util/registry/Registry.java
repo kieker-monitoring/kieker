@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package kieker.common.util.registry;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -120,6 +121,7 @@ public final class Registry<E> implements IRegistry<E> {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final void setRecordReceiver(final IMonitoringRecordReceiver recordReceiver) {
 		for (final Segment<E> segment : this.segments) {
 			segment.setRecordReceiver(recordReceiver);
@@ -129,6 +131,7 @@ public final class Registry<E> implements IRegistry<E> {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final int get(final E value) {
 		final int hash = Registry.hash(value);
 		return this.segments[(hash >>> this.segmentShift) & this.segmentMask].get(value, hash, this.nextId);
@@ -137,6 +140,7 @@ public final class Registry<E> implements IRegistry<E> {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final E get(final int id) {
 		final int capacity = this.nextId.get();
 		if (id > capacity) {
@@ -156,6 +160,7 @@ public final class Registry<E> implements IRegistry<E> {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public final E[] getAll() {
 		final int capacity = this.nextId.get();
 		if (this.eArrayCached.length != capacity) { // volatile read
@@ -166,15 +171,10 @@ public final class Registry<E> implements IRegistry<E> {
 			}
 			this.eArrayCached = eArray; // volatile write
 		}
-		// Java 1.5 compability
-		@SuppressWarnings("unchecked")
-		final E[] retArr = (E[]) new Object[capacity];
-		System.arraycopy(this.eArrayCached, 0, retArr, 0, capacity);
-		return retArr;
-		// for Java 1.6+:
-		// return Arrays.copyOf(this.eArrayCached, capacity);
+		return Arrays.copyOf(this.eArrayCached, capacity);
 	}
 
+	@Override
 	public final int getSize() {
 		return this.nextId.get();
 	}

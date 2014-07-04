@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -90,6 +90,7 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 	 * 
 	 * @return true if the reading terminated in a "normal" way. If an interrupt terminates the wait-method too early, false will be returned.
 	 */
+	@Override
 	public boolean read() {
 		// No need to initialize since we receive asynchronously
 		try {
@@ -109,6 +110,7 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 	 *            The new record object.
 	 * @return true if and only if the record has been delivered.
 	 */
+	@Override
 	public boolean newMonitoringRecord(final IMonitoringRecord rec) {
 		return super.deliver(OUTPUT_PORT_NAME_RECORDS, rec);
 	}
@@ -116,6 +118,7 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void notifyPipeClosed() {
 		// Notify main thread
 		this.terminationLatch.countDown();
@@ -124,6 +127,7 @@ public final class PipeReader extends AbstractReaderPlugin implements IPipeReade
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void terminate(final boolean error) {
 		// will lead to notifyPipeClosed() and the subsequent termination of read()
 		if (this.pipe != null) {
