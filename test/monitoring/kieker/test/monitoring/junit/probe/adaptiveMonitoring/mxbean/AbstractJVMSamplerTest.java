@@ -1,0 +1,142 @@
+/***************************************************************************
+ * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ***************************************************************************/
+
+package kieker.test.monitoring.junit.probe.adaptiveMonitoring.mxbean;
+
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import kieker.common.configuration.Configuration;
+import kieker.common.record.IMonitoringRecord;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
+import kieker.monitoring.core.controller.IMonitoringController;
+import kieker.monitoring.core.controller.MonitoringController;
+import kieker.monitoring.core.sampler.ISampler;
+
+import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.monitoring.util.NamedListWriter;
+
+/**
+ * @author Micky Singh Multani
+ * 
+ * @since 1.10
+ */
+public abstract class AbstractJVMSamplerTest extends AbstractKiekerTest {
+
+	private volatile String listName;
+	private volatile List<IMonitoringRecord> recordListFilledByListWriter;
+	private volatile IMonitoringController monitoringController;
+
+	protected abstract ISampler createJVMSampler();
+
+	protected abstract String createListName();
+
+	protected abstract String createJVMSignature();
+
+	protected abstract void isInstanceOf(List<IMonitoringRecord> recordList);
+
+	protected abstract void checkNumEventsBeforeProbeDisabled(int records);
+
+	protected abstract void checkNumEventsWhileProbeDisabled(int records);
+
+	protected abstract void checkNumEventsAfterProbeReEnabled(int records);
+
+	protected abstract void checkNumEventsBeforeMonitoringDisabled(int records);
+
+	protected abstract void checkNumEventsWhileMonitoringDisabled(int records);
+
+	protected abstract void checkNumEventsAfterMonitoringReEnabled(int records);
+
+	@Before
+	public void prepare() {
+		this.listName = this.createListName();
+		this.recordListFilledByListWriter = NamedListWriter.createNamedList(this.listName);
+		this.monitoringController = this.createMonitoringController();
+	}
+
+	@Test
+	public void testAdaptiveMonitoring() throws InterruptedException {
+
+		final long period = 1000; // 1000 ms
+		final long offset = 200; // 1st event after 200 ms
+
+		final ISampler sampler = this.createJVMSampler();
+
+		this.monitoringController.schedulePeriodicSampler(sampler, offset, period, TimeUnit.MILLISECONDS);
+
+		Thread.sleep(3500); // sleep 3,5 seconds
+
+		// PROBE DEACTIVATION AND REACTIVATION TEST
+
+		final int numEventsBeforeProbeDisabled = this.recordListFilledByListWriter.size();
+		this.checkNumEventsBeforeProbeDisabled(numEventsBeforeProbeDisabled);
+
+		final String pattern = this.createJVMSignature();
+		this.monitoringController.deactivateProbe(pattern);
+
+		Thread.sleep(2000); // sleep 2 seconds while probe being disabled
+
+		// There should be no new records while probe being disabled
+		final int numEventsWhileProbeDisabled = this.recordListFilledByListWriter.size() - numEventsBeforeProbeDisabled;
+		this.checkNumEventsWhileProbeDisabled(numEventsWhileProbeDisabled);
+
+		this.monitoringController.activateProbe(pattern);
+
+		Thread.sleep(2000); // sleep 2 seconds while probe being re-enabled
+
+		// There should be at least 1 new record after re-enabling (expecting 2)
+		final int numEventsAfterProbeReEnabled = this.recordListFilledByListWriter.size() - numEventsBeforeProbeDisabled;
+		this.checkNumEventsAfterProbeReEnabled(numEventsAfterProbeReEnabled);
+
+		this.isInstanceOf(this.recordListFilledByListWriter);
+
+		// DISABLING AND RE-ENABLING MONITORING TEST
+
+		final int numEventsBeforeMonitoringDisabled = this.recordListFilledByListWriter.size();
+		this.checkNumEventsBeforeMonitoringDisabled(numEventsBeforeMonitoringDisabled);
+
+		this.monitoringController.disableMonitoring();
+
+		Thread.sleep(2000); // sleep 2 seconds while monitoring being disabled
+
+		// There should be no new records while monitoring being disabled
+		final int numEventsWhileMonitoringDisabled = this.recordListFilledByListWriter.size() - numEventsBeforeMonitoringDisabled;
+		this.checkNumEventsWhileMonitoringDisabled(numEventsWhileMonitoringDisabled);
+
+		this.monitoringController.enableMonitoring();
+
+		Thread.sleep(2000); // sleep 2 seconds while monitoring being re-enabled
+
+		// There should be at least one new record
+		final int numEventsAfterMonitoringReEnabled = this.recordListFilledByListWriter.size() - numEventsBeforeProbeDisabled;
+		this.checkNumEventsAfterMonitoringReEnabled(numEventsAfterMonitoringReEnabled);
+
+		this.monitoringController.terminateMonitoring();
+	}
+
+	private IMonitoringController createMonitoringController() {
+		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
+		config.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED, "true");
+		config.setProperty(ConfigurationFactory.METADATA, "false");
+		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, NamedListWriter.class.getName());
+		config.setProperty(NamedListWriter.CONFIG_PROPERTY_NAME_LIST_NAME, this.listName);
+		return MonitoringController.createInstance(config);
+	}
+
+}
