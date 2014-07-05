@@ -111,8 +111,8 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 		// Expected: 4000 Application A
 		Assert.assertEquals(Double.valueOf(4000), Double.valueOf(sinkPlugin.getList().get(4).getDoubleValue()));
 		// Expected: Skipped two spans for Application A -> 2 time 0
-		Assert.assertEquals(Double.valueOf(0), Double.valueOf(sinkPlugin.getList().get(5).getDoubleValue()));
-		Assert.assertEquals(Double.valueOf(0), Double.valueOf(sinkPlugin.getList().get(6).getDoubleValue()));
+		Assert.assertEquals(Double.NaN, sinkPlugin.getList().get(5).getDoubleValue(), 0.0000001d);
+		Assert.assertEquals(Double.NaN, sinkPlugin.getList().get(6).getDoubleValue(), 0.0000001d);
 		// Expected: 6000 Application A
 		Assert.assertEquals(Double.valueOf(6000), Double.valueOf(sinkPlugin.getList().get(7).getDoubleValue()));
 		// Expected: (5000 + 1000) / 2 = 3000 Application B
@@ -120,6 +120,6 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 		// Expected: 5000 Application B
 		Assert.assertEquals(Double.valueOf(5000), Double.valueOf(sinkPlugin.getList().get(9).getDoubleValue()));
 		// Expected: Skipped one span for Application B -> 1 time 0
-		Assert.assertEquals(Double.valueOf(0), Double.valueOf(sinkPlugin.getList().get(10).getDoubleValue()));
+		Assert.assertEquals(Double.NaN, sinkPlugin.getList().get(10).getDoubleValue(), 0.0000001d);
 	}
 }
