@@ -29,7 +29,7 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult {
 
 	private static final long serialVersionUID = -5529586414782099554L;
 
-	private static final int SIZE = 44;
+	private static final int SIZE = TYPE_SIZE_STRING + TYPE_SIZE_DOUBLE + TYPE_SIZE_LONG + TYPE_SIZE_DOUBLE + TYPE_SIZE_DOUBLE + TYPE_SIZE_DOUBLE;
 
 	private static final Class<?>[] TYPES = {
 		String.class, // application
