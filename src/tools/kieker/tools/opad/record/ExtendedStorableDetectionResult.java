@@ -16,7 +16,13 @@
 
 package kieker.tools.opad.record;
 
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+import java.util.Arrays;
+
 import kieker.common.record.AbstractMonitoringRecord;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * Extended StorableDetectionResult class that extends the StorableDetectionResult class by anomaly threshold.
@@ -27,19 +33,18 @@ import kieker.common.record.AbstractMonitoringRecord;
  */
 public class ExtendedStorableDetectionResult extends StorableDetectionResult {
 
-	private static final long serialVersionUID = -5529586414782099554L;
+	public static final int SIZE = StorableDetectionResult.SIZE + TYPE_SIZE_DOUBLE;
 
-	private static final int SIZE = TYPE_SIZE_STRING + TYPE_SIZE_DOUBLE + TYPE_SIZE_LONG + TYPE_SIZE_DOUBLE + TYPE_SIZE_DOUBLE + TYPE_SIZE_DOUBLE;
-
-	private static final Class<?>[] TYPES = {
-		String.class, // application
-		double.class, //
-		long.class,
-		double.class,
-		double.class,
+	public static final Class<?>[] TYPES = {
+		String.class, // applicationName
+		double.class, // value
+		long.class, // timestamp
+		double.class, // forecast
+		double.class, // score
 		double.class,
 	};
 
+	private static final long serialVersionUID = -5529586414782099554L;
 	private final double anomalyThreshold;
 
 	/**
@@ -84,9 +89,14 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult {
 	 *            values of members as Object array
 	 */
 	public ExtendedStorableDetectionResult(final Object[] values) { // NOPMD
-		super(values);
+		super(Arrays.copyOfRange(values, 0, values.length - 1));
 		AbstractMonitoringRecord.checkArray(values, ExtendedStorableDetectionResult.TYPES);
 		this.anomalyThreshold = (Double) values[5];
+	}
+
+	public ExtendedStorableDetectionResult(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		super(buffer, stringRegistry);
+		this.anomalyThreshold = buffer.getDouble();
 	}
 
 	/**
@@ -94,7 +104,7 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult {
 	 */
 	@Override
 	public Class<?>[] getValueTypes() {
-		return ExtendedStorableDetectionResult.TYPES.clone();
+		return TYPES; // NOPMD
 	}
 
 	/**
@@ -113,7 +123,7 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult {
 	 */
 	@Override
 	public Object[] toArray() {
-		return new Object[] { this.applicationName, this.value, this.timestamp, this.forecast, this.score };
+		return new Object[] { super.getApplication(), super.getValue(), super.getTimestamp(), super.getForecast(), super.getScore(), this.getAnomalyThreshold() };
 	}
 
 	@Override
@@ -184,5 +194,11 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult {
 	 */
 	public double getAnomalyThreshold() {
 		return this.anomalyThreshold;
+	}
+
+	@Override
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		super.writeBytes(buffer, stringRegistry);
+		buffer.putDouble(this.anomalyThreshold);
 	}
 }
