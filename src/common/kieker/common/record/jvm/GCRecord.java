@@ -73,7 +73,8 @@ public class GCRecord extends AbstractJVMRecord {
 
 	@Override
 	public Object[] toArray() {
-		return new Object[] { super.getTimestamp(), super.getHostname(), super.getVmName(), this.getGcName(), this.getCollectionCount(), this.getCollectionTimeMS() };
+		return new Object[] { super.getTimestamp(), super.getHostname(), super.getVmName(), this.getGcName(), this.getCollectionCount(),
+			this.getCollectionTimeMS() };
 	}
 
 	@Override

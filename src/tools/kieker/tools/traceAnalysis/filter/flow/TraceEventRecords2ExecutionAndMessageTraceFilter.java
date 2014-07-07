@@ -375,7 +375,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 
 		private boolean isPrevEventMatchingCall(final BeforeOperationEvent beforeOperationEvent, final AbstractTraceEvent prevEvent,
 				final Class<? extends CallOperationEvent> callClass) {
-			if ((prevEvent != null) && callClass.isAssignableFrom(prevEvent.getClass()) && (prevEvent.getOrderIndex() == (beforeOperationEvent.getOrderIndex() - 1))) {
+			if ((prevEvent != null) && callClass.isAssignableFrom(prevEvent.getClass())
+					&& (prevEvent.getOrderIndex() == (beforeOperationEvent.getOrderIndex() - 1))) {
 				if (((CallOperationEvent) prevEvent).callsReferencedOperationOf(beforeOperationEvent)) {
 					return true;
 				} else if (this.enhanceCallDetection) { // perhaps we don't find a perfect match, but can guess one!

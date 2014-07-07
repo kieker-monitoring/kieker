@@ -141,7 +141,8 @@ public final class Constants {
 	public static final Options CMDL_OPTIONS = new Options();
 	public static final List<Option> SORTED_OPTION_LIST = new CopyOnWriteArrayList<Option>();
 
-	public static final String DECORATORS_OPTION_NAME = "responseTimes | responseTimes-ns | responseTimes-us | responseTimes-ms | responseTimes-s> <responseTimeColoring threshold(ms)";
+	public static final String DECORATORS_OPTION_NAME = "responseTimes | responseTimes-ns | responseTimes-us | responseTimes-ms | responseTimes-s> "
+			+ "<responseTimeColoring threshold(ms)";
 	public static final char DECORATOR_SEPARATOR = ',';
 	/**
 	 * @deprecated Replaced by {@link Constants#RESPONSE_TIME_DECORATOR_FLAG_MS}. To be removed for 1.11 if possible.
