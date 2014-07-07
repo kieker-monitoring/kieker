@@ -79,12 +79,6 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 		this.score = sc;
 	}
 
-	/**
-	 * Creates an Instance of this class based on a single object array.
-	 * 
-	 * @param values
-	 *            Object array containing the application name, value, timestamp, forecast and anomaly score.
-	 */
 	public StorableDetectionResult(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		this.applicationName = stringRegistry.get(buffer.getInt());
 		this.value = buffer.getDouble();
@@ -93,6 +87,12 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 		this.score = buffer.getDouble();
 	}
 
+	/**
+	 * Creates an Instance of this class based on a single object array.
+	 * 
+	 * @param values
+	 *            Object array containing the application name, value, timestamp, forecast and anomaly score.
+	 */
 	public StorableDetectionResult(final Object[] values) { // NOPMD (direct store of values)
 		AbstractMonitoringRecord.checkArray(values, StorableDetectionResult.TYPES);
 
