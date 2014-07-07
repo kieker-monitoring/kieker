@@ -70,6 +70,11 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 		return new Object[] { this.getTimestamp(), this.getValue(), this.getName(), };
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
+	 */
 	@Override
 	@Deprecated
 	public void initFromArray(final Object[] values) {

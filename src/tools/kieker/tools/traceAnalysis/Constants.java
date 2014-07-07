@@ -143,6 +143,9 @@ public final class Constants {
 
 	public static final String DECORATORS_OPTION_NAME = "responseTimes | responseTimes-ns | responseTimes-us | responseTimes-ms | responseTimes-s> <responseTimeColoring threshold(ms)";
 	public static final char DECORATOR_SEPARATOR = ',';
+	/**
+	 * @deprecated Replaced by {@link Constants#RESPONSE_TIME_DECORATOR_FLAG_MS}. To be removed for 1.11 if possible.
+	 */
 	@Deprecated
 	public static final String RESPONSE_TIME_DECORATOR_FLAG = "responseTimes";
 	public static final String RESPONSE_TIME_DECORATOR_FLAG_NS = "responseTimes-ns";
