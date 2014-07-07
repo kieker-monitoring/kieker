@@ -32,9 +32,9 @@ import kieker.monitoring.sampler.mxbean.ClassLoadingSampler;
  */
 public class TestClassLoadingSampler extends AbstractJVMSamplerTest {
 
-	private final static String LISTNAME = TestClassLoadingSampler.class.getName();
-	private final static String SIGNATURE = SignatureFactory.createJVMClassLoadSignature();
-	private final static ClassLoadingSampler SAMPLER = new ClassLoadingSampler();
+	private static final String LISTNAME = TestClassLoadingSampler.class.getName();
+	private static final String SIGNATURE = SignatureFactory.createJVMClassLoadSignature();
+	private static final ClassLoadingSampler SAMPLER = new ClassLoadingSampler();
 
 	public TestClassLoadingSampler() {
 		super(LISTNAME, SIGNATURE, SAMPLER);
@@ -47,24 +47,8 @@ public class TestClassLoadingSampler extends AbstractJVMSamplerTest {
 	}
 
 	@Override
-	protected void checkNumEventsBeforeProbeDisabled(final int records) {
-		Assert.assertEquals("Unexpected number of triggering events before disabling", 4, records);
-	}
-
-	@Override
 	protected void checkNumEventsBeforeMonitoringDisabled(final int records) {
-		Assert.assertEquals("Unexpected number of triggering events before disabling", 6, records);
-	}
-
-	@Override
-	protected void checkNumEventsWhileMonitoringDisabled(final int records) {
-		Assert.assertEquals("Unexpected number of triggering events while disabled", 0, records);
-	}
-
-	@Override
-	protected void checkNumEventsAfterMonitoringReEnabled(final int records) {
-		Assert.assertTrue("Expected at least one triggering event after being re-enabled. Found " + records,
-				records > 0);
+		Assert.assertEquals("Unexpected number of triggering events before disabling", 4, records);
 	}
 
 }

@@ -19,6 +19,7 @@ package kieker.test.monitoring.junit.probe.adaptiveMonitoring.mxbean;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -53,13 +54,7 @@ public abstract class AbstractJVMSamplerTest extends AbstractKiekerTest {
 
 	protected abstract void isInstanceOf(List<IMonitoringRecord> recordList);
 
-	protected abstract void checkNumEventsBeforeProbeDisabled(int records);
-
 	protected abstract void checkNumEventsBeforeMonitoringDisabled(int records);
-
-	protected abstract void checkNumEventsWhileMonitoringDisabled(int records);
-
-	protected abstract void checkNumEventsAfterMonitoringReEnabled(int records);
 
 	@Before
 	public void prepare() {
@@ -68,7 +63,7 @@ public abstract class AbstractJVMSamplerTest extends AbstractKiekerTest {
 	}
 
 	@Test
-	public void testAdaptiveMonitoring() throws InterruptedException { // NOPMD (JUnitTestsShouldIncludeAssert)
+	public void testAdaptiveMonitoring() throws InterruptedException {
 
 		final long period = 1000; // 1000 ms
 		final long offset = 200; // 1st event after 200 ms
@@ -80,7 +75,7 @@ public abstract class AbstractJVMSamplerTest extends AbstractKiekerTest {
 		// PROBE DEACTIVATION AND REACTIVATION TEST
 
 		final int numEventsBeforeProbeDisabled = this.recordListFilledByListWriter.size();
-		this.checkNumEventsBeforeProbeDisabled(numEventsBeforeProbeDisabled);
+		this.checkNumEventsBeforeMonitoringDisabled(numEventsBeforeProbeDisabled);
 
 		this.monitoringController.deactivateProbe(this.jvmSignature); // DEACTIVATION (probe)
 
@@ -88,21 +83,22 @@ public abstract class AbstractJVMSamplerTest extends AbstractKiekerTest {
 
 		// There should be no new records while probe being disabled
 		final int numEventsWhileProbeDisabled = this.recordListFilledByListWriter.size() - numEventsBeforeProbeDisabled;
-		this.checkNumEventsWhileMonitoringDisabled(numEventsWhileProbeDisabled);
+		Assert.assertEquals("Unexpected number of triggering events while probe being disabled", 0, numEventsWhileProbeDisabled);
 
 		this.monitoringController.activateProbe(this.jvmSignature); // REACTIVATION (probe)
 
 		Thread.sleep(2000); // sleep 2 seconds while probe being re-enabled
 
-		// There should be at least 1 new record after re-enabling (expecting 2)
+		// There should be at least 1 new record after re-enabling
 		final int numEventsAfterProbeReEnabled = this.recordListFilledByListWriter.size() - numEventsBeforeProbeDisabled;
-		this.checkNumEventsAfterMonitoringReEnabled(numEventsAfterProbeReEnabled);
+		Assert.assertTrue("Expected at least one triggering event after being re-enabled. Found " + numEventsAfterProbeReEnabled,
+				numEventsAfterProbeReEnabled > 0);
 
 		this.isInstanceOf(this.recordListFilledByListWriter);
 
 		// DISABLING AND RE-ENABLING MONITORING TEST
 
-		final int numEventsBeforeMonitoringDisabled = this.recordListFilledByListWriter.size();
+		final int numEventsBeforeMonitoringDisabled = this.recordListFilledByListWriter.size() - numEventsAfterProbeReEnabled;
 		this.checkNumEventsBeforeMonitoringDisabled(numEventsBeforeMonitoringDisabled);
 
 		this.monitoringController.disableMonitoring(); // DEACTIVATION (monitoring)
@@ -110,16 +106,17 @@ public abstract class AbstractJVMSamplerTest extends AbstractKiekerTest {
 		Thread.sleep(2000); // sleep 2 seconds while monitoring being disabled
 
 		// There should be no new records while monitoring being disabled
-		final int numEventsWhileMonitoringDisabled = this.recordListFilledByListWriter.size() - numEventsBeforeMonitoringDisabled;
-		this.checkNumEventsWhileMonitoringDisabled(numEventsWhileMonitoringDisabled);
+		final int numEventsWhileMonitoringDisabled = this.recordListFilledByListWriter.size() - (numEventsBeforeMonitoringDisabled + numEventsAfterProbeReEnabled);
+		Assert.assertEquals("Unexpected number of triggering events while monitoring being disabled", 0, numEventsWhileMonitoringDisabled);
 
 		this.monitoringController.enableMonitoring(); // REACTIVATION (monitoring)
 
 		Thread.sleep(2000); // sleep 2 seconds while monitoring being re-enabled
 
 		// There should be at least one new record
-		final int numEventsAfterMonitoringReEnabled = this.recordListFilledByListWriter.size() - numEventsBeforeProbeDisabled;
-		this.checkNumEventsAfterMonitoringReEnabled(numEventsAfterMonitoringReEnabled);
+		final int numEventsAfterMonitoringReEnabled = this.recordListFilledByListWriter.size() - (numEventsBeforeMonitoringDisabled + numEventsAfterProbeReEnabled);
+		Assert.assertTrue("Expected at least one triggering event after being re-enabled. Found " + numEventsAfterMonitoringReEnabled,
+				numEventsAfterMonitoringReEnabled > 0);
 
 		this.monitoringController.terminateMonitoring();
 	}

@@ -32,9 +32,9 @@ import kieker.monitoring.sampler.mxbean.GCSampler;
  */
 public class TestGCSampler extends AbstractJVMSamplerTest {
 
-	private final static String LISTNAME = TestGCSampler.class.getName();
-	private final static String SIGNATURE = SignatureFactory.createJVMGarbageCollectorSignature();
-	private final static GCSampler SAMPLER = new GCSampler();
+	private static final String LISTNAME = TestGCSampler.class.getName();
+	private static final String SIGNATURE = SignatureFactory.createJVMGarbageCollectorSignature();
+	private static final GCSampler SAMPLER = new GCSampler();
 
 	public TestGCSampler() {
 		super(LISTNAME, SIGNATURE, SAMPLER);
@@ -47,24 +47,8 @@ public class TestGCSampler extends AbstractJVMSamplerTest {
 	}
 
 	@Override
-	protected void checkNumEventsBeforeProbeDisabled(final int records) {
-		Assert.assertEquals("Unexpected number of triggering events before disabling", 8, records);
-	}
-
-	@Override
 	protected void checkNumEventsBeforeMonitoringDisabled(final int records) {
-		Assert.assertEquals("Unexpected number of triggering events before disabling", 12, records);
-	}
-
-	@Override
-	protected void checkNumEventsWhileMonitoringDisabled(final int records) {
-		Assert.assertEquals("Unexpected number of triggering events while disabled", 0, records);
-	}
-
-	@Override
-	protected void checkNumEventsAfterMonitoringReEnabled(final int records) {
-		Assert.assertTrue("Expected at least one triggering event after being re-enabled. Found " + records,
-				records > 0);
+		Assert.assertTrue("Unexpected number of triggering events before disabling", records >= 6);
 	}
 
 }

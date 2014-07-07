@@ -32,9 +32,9 @@ import kieker.monitoring.sampler.mxbean.UptimeSampler;
  */
 public class TestUptimeSampler extends AbstractJVMSamplerTest {
 
-	private final static String LISTNAME = TestUptimeSampler.class.getName();
-	private final static String SIGNATURE = SignatureFactory.createJVMUpTimeSignature();
-	private final static UptimeSampler SAMPLER = new UptimeSampler();
+	private static final String LISTNAME = TestUptimeSampler.class.getName();
+	private static final String SIGNATURE = SignatureFactory.createJVMUpTimeSignature();
+	private static final UptimeSampler SAMPLER = new UptimeSampler();
 
 	public TestUptimeSampler() {
 		super(LISTNAME, SIGNATURE, SAMPLER);
@@ -47,24 +47,8 @@ public class TestUptimeSampler extends AbstractJVMSamplerTest {
 	}
 
 	@Override
-	protected void checkNumEventsBeforeProbeDisabled(final int records) {
-		Assert.assertEquals("Unexpected number of triggering events before disabling", 4, records);
-	}
-
-	@Override
 	protected void checkNumEventsBeforeMonitoringDisabled(final int records) {
-		Assert.assertEquals("Unexpected number of triggering events before disabling", 6, records);
-	}
-
-	@Override
-	protected void checkNumEventsWhileMonitoringDisabled(final int records) {
-		Assert.assertEquals("Unexpected number of triggering events while disabled", 0, records);
-	}
-
-	@Override
-	protected void checkNumEventsAfterMonitoringReEnabled(final int records) {
-		Assert.assertTrue("Expected at least one triggering event after being re-enabled. Found " + records,
-				records > 0);
+		Assert.assertEquals("Unexpected number of triggering events before disabling", 4, records);
 	}
 
 }
