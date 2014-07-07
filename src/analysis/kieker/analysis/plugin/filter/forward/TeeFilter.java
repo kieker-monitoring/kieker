@@ -59,7 +59,7 @@ public final class TeeFilter extends AbstractFilterPlugin {
 	public static final String CONFIG_PROPERTY_NAME_STREAM = "stream";
 	/** The name of the property determining the used encoding. */
 	public static final String CONFIG_PROPERTY_NAME_ENCODING = "characterEncoding";
-	/** The name of the property determining whether or not the stream appends or overwrites to files */
+	/** The name of the property determining whether or not the stream appends or overwrites to files. */
 	public static final String CONFIG_PROPERTY_NAME_APPEND = "append";
 
 	/** The value of the stream property which determines that the filter uses the standard output. */

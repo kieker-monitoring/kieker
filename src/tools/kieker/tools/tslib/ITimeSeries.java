@@ -76,7 +76,7 @@ public interface ITimeSeries<T> {
 	public List<ITimeSeriesPoint<T>> getPoints();
 
 	/**
-	 * Returns a list of all {@code getPoints()getValues()}
+	 * Returns a list of all {@code getPoints()getValues()}.
 	 * 
 	 * @since 1.9
 	 */
@@ -92,14 +92,14 @@ public interface ITimeSeries<T> {
 	public int getCapacity();
 
 	/**
-	 * Returns the number of value contained in the time series
+	 * Returns the number of value contained in the time series.
 	 * 
 	 * @since 1.9
 	 */
 	public int size();
 
 	/**
-	 * Returns the time corresponding to the most recent value in the time series
+	 * Returns the time corresponding to the most recent value in the time series.
 	 * 
 	 * @since 1.9
 	 */

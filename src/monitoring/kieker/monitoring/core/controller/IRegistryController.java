@@ -50,7 +50,7 @@ public interface IRegistryController {
 	public abstract String getStringForUniqueId(final int id);
 
 	/**
-	 * Gets the used IRegistry<String>
+	 * Gets the used IRegistry<String>.
 	 * 
 	 * @return
 	 *         the registry
