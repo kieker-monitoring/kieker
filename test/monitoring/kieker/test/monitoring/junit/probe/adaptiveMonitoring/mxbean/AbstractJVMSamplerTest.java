@@ -42,20 +42,18 @@ public abstract class AbstractJVMSamplerTest extends AbstractKiekerTest {
 	private volatile String listName;
 	private volatile List<IMonitoringRecord> recordListFilledByListWriter;
 	private volatile IMonitoringController monitoringController;
+	private final String jvmSignature;
+	private final ISampler sampler;
 
-	protected abstract ISampler createJVMSampler();
-
-	protected abstract String createListName();
-
-	protected abstract String createJVMSignature();
+	AbstractJVMSamplerTest(final String listName, final String jvmSignature, final ISampler sampler) {
+		this.listName = listName;
+		this.sampler = sampler;
+		this.jvmSignature = jvmSignature;
+	}
 
 	protected abstract void isInstanceOf(List<IMonitoringRecord> recordList);
 
 	protected abstract void checkNumEventsBeforeProbeDisabled(int records);
-
-	protected abstract void checkNumEventsWhileProbeDisabled(int records);
-
-	protected abstract void checkNumEventsAfterProbeReEnabled(int records);
 
 	protected abstract void checkNumEventsBeforeMonitoringDisabled(int records);
 
@@ -65,20 +63,17 @@ public abstract class AbstractJVMSamplerTest extends AbstractKiekerTest {
 
 	@Before
 	public void prepare() {
-		this.listName = this.createListName();
 		this.recordListFilledByListWriter = NamedListWriter.createNamedList(this.listName);
 		this.monitoringController = this.createMonitoringController();
 	}
 
 	@Test
-	public void testAdaptiveMonitoring() throws InterruptedException {
+	public void testAdaptiveMonitoring() throws InterruptedException { // NOPMD (JUnitTestsShouldIncludeAssert)
 
 		final long period = 1000; // 1000 ms
 		final long offset = 200; // 1st event after 200 ms
 
-		final ISampler sampler = this.createJVMSampler();
-
-		this.monitoringController.schedulePeriodicSampler(sampler, offset, period, TimeUnit.MILLISECONDS);
+		this.monitoringController.schedulePeriodicSampler(this.sampler, offset, period, TimeUnit.MILLISECONDS);
 
 		Thread.sleep(3500); // sleep 3,5 seconds
 
@@ -87,22 +82,21 @@ public abstract class AbstractJVMSamplerTest extends AbstractKiekerTest {
 		final int numEventsBeforeProbeDisabled = this.recordListFilledByListWriter.size();
 		this.checkNumEventsBeforeProbeDisabled(numEventsBeforeProbeDisabled);
 
-		final String pattern = this.createJVMSignature();
-		this.monitoringController.deactivateProbe(pattern);
+		this.monitoringController.deactivateProbe(this.jvmSignature); // DEACTIVATION (probe)
 
 		Thread.sleep(2000); // sleep 2 seconds while probe being disabled
 
 		// There should be no new records while probe being disabled
 		final int numEventsWhileProbeDisabled = this.recordListFilledByListWriter.size() - numEventsBeforeProbeDisabled;
-		this.checkNumEventsWhileProbeDisabled(numEventsWhileProbeDisabled);
+		this.checkNumEventsWhileMonitoringDisabled(numEventsWhileProbeDisabled);
 
-		this.monitoringController.activateProbe(pattern);
+		this.monitoringController.activateProbe(this.jvmSignature); // REACTIVATION (probe)
 
 		Thread.sleep(2000); // sleep 2 seconds while probe being re-enabled
 
 		// There should be at least 1 new record after re-enabling (expecting 2)
 		final int numEventsAfterProbeReEnabled = this.recordListFilledByListWriter.size() - numEventsBeforeProbeDisabled;
-		this.checkNumEventsAfterProbeReEnabled(numEventsAfterProbeReEnabled);
+		this.checkNumEventsAfterMonitoringReEnabled(numEventsAfterProbeReEnabled);
 
 		this.isInstanceOf(this.recordListFilledByListWriter);
 
@@ -111,7 +105,7 @@ public abstract class AbstractJVMSamplerTest extends AbstractKiekerTest {
 		final int numEventsBeforeMonitoringDisabled = this.recordListFilledByListWriter.size();
 		this.checkNumEventsBeforeMonitoringDisabled(numEventsBeforeMonitoringDisabled);
 
-		this.monitoringController.disableMonitoring();
+		this.monitoringController.disableMonitoring(); // DEACTIVATION (monitoring)
 
 		Thread.sleep(2000); // sleep 2 seconds while monitoring being disabled
 
@@ -119,7 +113,7 @@ public abstract class AbstractJVMSamplerTest extends AbstractKiekerTest {
 		final int numEventsWhileMonitoringDisabled = this.recordListFilledByListWriter.size() - numEventsBeforeMonitoringDisabled;
 		this.checkNumEventsWhileMonitoringDisabled(numEventsWhileMonitoringDisabled);
 
-		this.monitoringController.enableMonitoring();
+		this.monitoringController.enableMonitoring(); // REACTIVATION (monitoring)
 
 		Thread.sleep(2000); // sleep 2 seconds while monitoring being re-enabled
 

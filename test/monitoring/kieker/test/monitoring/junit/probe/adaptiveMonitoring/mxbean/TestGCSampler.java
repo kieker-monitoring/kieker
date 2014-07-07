@@ -17,116 +17,54 @@
 package kieker.test.monitoring.junit.probe.adaptiveMonitoring.mxbean;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
 
-import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.jvm.GCRecord;
-import kieker.monitoring.core.configuration.ConfigurationFactory;
-import kieker.monitoring.core.controller.IMonitoringController;
-import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.signaturePattern.SignatureFactory;
 import kieker.monitoring.sampler.mxbean.GCSampler;
-
-import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.monitoring.util.NamedListWriter;
 
 /**
  * @author Micky Singh Multani
  * 
  * @since 1.10
  */
-public class TestGCSampler extends AbstractKiekerTest {
+public class TestGCSampler extends AbstractJVMSamplerTest {
 
-	private volatile String listName;
-	private volatile List<IMonitoringRecord> recordListFilledByListWriter;
-	private volatile IMonitoringController monitoringController;
+	private final static String LISTNAME = TestGCSampler.class.getName();
+	private final static String SIGNATURE = SignatureFactory.createJVMGarbageCollectorSignature();
+	private final static GCSampler SAMPLER = new GCSampler();
 
-	@Before
-	public void prepare() {
-		this.listName = TestGCSampler.class.getName();
-		this.recordListFilledByListWriter = NamedListWriter.createNamedList(this.listName);
-		this.monitoringController = this.createMonitoringController();
+	public TestGCSampler() {
+		super(LISTNAME, SIGNATURE, SAMPLER);
 	}
 
-	@Test
-	public void testAdaptiveMonitoring() throws InterruptedException {
-
-		final long period = 1000; // 1000 ms
-		final long offset = 200; // 1st event after 200 ms
-
-		final GCSampler sampler = new GCSampler();
-
-		this.monitoringController.schedulePeriodicSampler(sampler, offset, period, TimeUnit.MILLISECONDS);
-
-		Thread.sleep(3500); // sleep 3,5 seconds
-
-		// PROBE DEACTIVATION AND REACTIVATION TEST
-
-		// There should be 8 saved records
-		final int numEventsBeforeProbeDisabled = this.recordListFilledByListWriter.size();
-
-		final String pattern = SignatureFactory.createJVMGarbageCollectorSignature();
-		this.monitoringController.deactivateProbe(pattern);
-
-		Thread.sleep(2000); // sleep 2 seconds while probe being disabled
-
-		// There should be no new records while probe being disabled
-		final int numEventsWhileProbeDisabled = this.recordListFilledByListWriter.size() - numEventsBeforeProbeDisabled;
-
-		this.monitoringController.activateProbe(pattern);
-
-		Thread.sleep(2000); // sleep 2 seconds while probe being re-enabled
-
-		// There should be at least 1 new record after re-enabling
-		final int numEventsAfterProbeReEnabled = this.recordListFilledByListWriter.size() - numEventsBeforeProbeDisabled;
-
-		final boolean isInstanceOf = this.recordListFilledByListWriter.get(0) instanceof GCRecord;
-
+	@Override
+	protected void isInstanceOf(final List<IMonitoringRecord> recordList) {
+		final boolean isInstanceOf = recordList.get(0) instanceof GCRecord;
 		Assert.assertTrue("Unexpected instance of IMonitoringRecord", isInstanceOf);
-		Assert.assertEquals("Unexpected number of triggering events before disabling", 8, numEventsBeforeProbeDisabled);
-		Assert.assertEquals("Unexpected number of triggering events while disabled", 0, numEventsWhileProbeDisabled);
-		Assert.assertTrue("Expected at least one triggering event after being re-enabled. Found " + numEventsAfterProbeReEnabled,
-				numEventsAfterProbeReEnabled > 0);
-
-		// DISABLING AND RE-ENABLING MONITORING TEST
-
-		// There should be 12 saved records
-		final int numEventsBeforeMonitoringDisabled = this.recordListFilledByListWriter.size();
-
-		this.monitoringController.disableMonitoring();
-
-		Thread.sleep(2000); // sleep 2 seconds while monitoring being disabled
-
-		// There should be no new records while monitoring being disabled
-		final int numEventsWhileMonitoringDisabled = this.recordListFilledByListWriter.size() - numEventsBeforeMonitoringDisabled;
-
-		this.monitoringController.enableMonitoring();
-
-		Thread.sleep(2000); // sleep 2 seconds while monitoring being re-enabled
-
-		// There should be at least one new record
-		final int numEventsAfterMonitoringReEnabled = this.recordListFilledByListWriter.size() - numEventsBeforeProbeDisabled;
-
-		Assert.assertEquals("Unexpected number of triggering events before disabling", 12, numEventsBeforeMonitoringDisabled);
-		Assert.assertEquals("Unexpected number of triggering events while disabled", 0, numEventsWhileMonitoringDisabled);
-		Assert.assertTrue("Expected at least one triggering event after being re-enabled. Found " + numEventsAfterMonitoringReEnabled,
-				numEventsAfterMonitoringReEnabled > 0);
-
-		this.monitoringController.terminateMonitoring();
 	}
 
-	private IMonitoringController createMonitoringController() {
-		final Configuration config = ConfigurationFactory.createDefaultConfiguration();
-		config.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED, "true");
-		config.setProperty(ConfigurationFactory.METADATA, "false");
-		config.setProperty(ConfigurationFactory.WRITER_CLASSNAME, NamedListWriter.class.getName());
-		config.setProperty(NamedListWriter.CONFIG_PROPERTY_NAME_LIST_NAME, this.listName);
-		return MonitoringController.createInstance(config);
+	@Override
+	protected void checkNumEventsBeforeProbeDisabled(final int records) {
+		Assert.assertEquals("Unexpected number of triggering events before disabling", 8, records);
+	}
+
+	@Override
+	protected void checkNumEventsBeforeMonitoringDisabled(final int records) {
+		Assert.assertEquals("Unexpected number of triggering events before disabling", 12, records);
+	}
+
+	@Override
+	protected void checkNumEventsWhileMonitoringDisabled(final int records) {
+		Assert.assertEquals("Unexpected number of triggering events while disabled", 0, records);
+	}
+
+	@Override
+	protected void checkNumEventsAfterMonitoringReEnabled(final int records) {
+		Assert.assertTrue("Expected at least one triggering event after being re-enabled. Found " + records,
+				records > 0);
 	}
 
 }
