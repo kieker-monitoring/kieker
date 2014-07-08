@@ -30,8 +30,6 @@ import kieker.common.util.registry.IRegistry;
  * 
  * @author Tom Frotscher, Thomas Düllmann
  * @since 1.10
- * 
- * @since 1.9
  */
 public class StorableDetectionResult extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 
