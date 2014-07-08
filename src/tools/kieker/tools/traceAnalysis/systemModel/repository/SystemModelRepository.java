@@ -207,7 +207,8 @@ public class SystemModelRepository extends AbstractRepository {
 			}
 			final String[] cells = new String[] {
 				this.htmlEntityLabel(type.getId(), Integer.toString(type.getId()), EntityType.COMPONENT_TYPE),
-				SystemModelRepository.simpleHTMLEscape(type.getPackageName()), SystemModelRepository.simpleHTMLEscape(type.getTypeName()), opListBuilder.toString(), };
+				SystemModelRepository.simpleHTMLEscape(type.getPackageName()), SystemModelRepository.simpleHTMLEscape(type.getTypeName()),
+				opListBuilder.toString(), };
 			this.printHtmlTableRow(ps, cells);
 		}
 		this.printCloseHtmlTable(ps);

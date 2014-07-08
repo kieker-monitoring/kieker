@@ -299,6 +299,11 @@ public class ConversionStep extends AbstractStep {
 		return true;
 	}
 
+	/**
+	 * @author Nils Christian Ehmke
+	 * 
+	 * @since 1.10
+	 */
 	private static class ChooseDirectoryActionListener implements ActionListener {
 
 		private final JTextField textField;
@@ -321,6 +326,11 @@ public class ConversionStep extends AbstractStep {
 
 	}
 
+	/**
+	 * @author Nils Christian Ehmke
+	 * 
+	 * @since 1.10
+	 */
 	private static class FileNameExtensionFilter implements FilenameFilter {
 
 		private final String extension;

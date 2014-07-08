@@ -114,9 +114,9 @@ public class MemoryRecord extends AbstractJVMRecord {
 
 	@Override
 	public Object[] toArray() {
-		return new Object[] { super.getTimestamp(), super.getHostname(), super.getVmName(), this.getHeapMaxBytes(), this.getHeapUsedBytes(), this.getHeapCommittedBytes(),
-			this.getHeapInitBytes(), this.getNonHeapMaxBytes(), this.getNonHeapUsedBytes(), this.getNonHeapCommittedBytes(), this.getNonHeapInitBytes(),
-			this.getObjectPendingFinalizationCount(), };
+		return new Object[] { super.getTimestamp(), super.getHostname(), super.getVmName(), this.getHeapMaxBytes(), this.getHeapUsedBytes(),
+			this.getHeapCommittedBytes(), this.getHeapInitBytes(), this.getNonHeapMaxBytes(), this.getNonHeapUsedBytes(), this.getNonHeapCommittedBytes(),
+			this.getNonHeapInitBytes(), this.getObjectPendingFinalizationCount(), };
 	}
 
 	@Override

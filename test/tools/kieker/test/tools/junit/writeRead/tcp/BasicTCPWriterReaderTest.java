@@ -49,7 +49,8 @@ public class BasicTCPWriterReaderTest extends AbstractWriterReaderTest { // NOPM
 	private volatile AnalysisControllerThread analysisThread = null; // NOPMD (init for findbugs)
 
 	@Override
-	protected IMonitoringController createController(final int numRecordsWritten) throws IllegalStateException, AnalysisConfigurationException, InterruptedException {
+	protected IMonitoringController createController(final int numRecordsWritten) throws IllegalStateException, AnalysisConfigurationException,
+			InterruptedException {
 		this.analysisController = new AnalysisController();
 
 		final Configuration readerConfig = new Configuration();

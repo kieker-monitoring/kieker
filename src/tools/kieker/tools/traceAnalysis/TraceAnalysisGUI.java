@@ -249,6 +249,11 @@ public class TraceAnalysisGUI extends JFrame {
 		gui.setVisible(true);
 	}
 
+	/**
+	 * @author Nils Christian Ehmke
+	 * 
+	 * @since 1.9
+	 */
 	private class StartTraceAnalysisActionListener implements ActionListener {
 
 		public StartTraceAnalysisActionListener() {

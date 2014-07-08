@@ -79,7 +79,7 @@ public interface ITimeSeries<T> {
 	public List<ITimeSeriesPoint<T>> getPoints();
 
 	/**
-	 * Returns a list of all values from {@link #getPoints()}.
+	 * Returns a list of all {@code getPoints()getValues()}.
 	 * 
 	 * @since 1.10
 	 */

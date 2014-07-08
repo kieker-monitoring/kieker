@@ -44,7 +44,7 @@ public final class AspectJLoader {
 	}
 
 	/**
-	 * JSR-163 preMain entry method
+	 * JSR-163 preMain entry method.
 	 * 
 	 * @param options
 	 * @param instrumentation

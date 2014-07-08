@@ -144,6 +144,11 @@ public class FinalStep extends AbstractStep {
 		return false;
 	}
 
+	/**
+	 * @author Nils Christian Ehmke
+	 * 
+	 * @since 1.10
+	 */
 	private final class ClearLogClickListener implements ActionListener {
 
 		public ClearLogClickListener() {
@@ -158,6 +163,11 @@ public class FinalStep extends AbstractStep {
 
 	}
 
+	/**
+	 * @author Nils Christian Ehmke
+	 * 
+	 * @since 1.9
+	 */
 	private final class LogOutputStream extends OutputStream {
 
 		private final String lineSeperator = System.getProperty("line.separator");
