@@ -30,9 +30,11 @@ import kieker.tools.traceAnalysis.systemModel.AbstractTrace;
  */
 public class TraceStartTimestampComparator implements Comparator<AbstractTrace>, Serializable {
 
-	public TraceStartTimestampComparator() { /* Empty default constructor */}
-
 	private static final long serialVersionUID = -8372489878918932083L;
+
+	public TraceStartTimestampComparator() {
+		// Empty default constructor
+	}
 
 	@Override
 	public int compare(final AbstractTrace o1, final AbstractTrace o2) {

@@ -186,7 +186,9 @@ public abstract class AbstractSession<T extends AbstractTrace> {
 
 	private class UnmodifiableState implements ISessionState<T> {
 
-		public UnmodifiableState() { /* Empty default constructor */}
+		public UnmodifiableState() {
+			// Empty default constructor
+		}
 
 		@Override
 		public void addTrace(final T trace) {
