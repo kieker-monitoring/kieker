@@ -20,6 +20,8 @@ import java.lang.management.ManagementFactory;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.jvm.ClassLoadingRecord;
+import kieker.monitoring.core.controller.IMonitoringController;
+import kieker.monitoring.core.signaturePattern.SignatureFactory;
 
 /**
  * A sampler using the MXBean interface to access information about the class loading. The sampler produces a {@link ClassLoadingRecord} each time the {@code sample}
@@ -36,7 +38,13 @@ public class ClassLoadingSampler extends AbstractMXBeanSampler {
 	}
 
 	@Override
-	protected IMonitoringRecord[] createNewMonitoringRecords(final long timestamp, final String hostname, final String vmName) {
+	protected IMonitoringRecord[] createNewMonitoringRecords(final long timestamp, final String hostname, final String vmName,
+			final IMonitoringController monitoringCtr) {
+
+		if (!monitoringCtr.isProbeActivated(SignatureFactory.createJVMClassLoadSignature())) {
+			return new IMonitoringRecord[] {};
+		}
+
 		final ClassLoadingMXBean classLoadingBean = ManagementFactory.getClassLoadingMXBean();
 		return new IMonitoringRecord[] { new ClassLoadingRecord(timestamp, hostname, vmName, classLoadingBean.getTotalLoadedClassCount(),
 				classLoadingBean.getLoadedClassCount(), classLoadingBean.getUnloadedClassCount()), };
