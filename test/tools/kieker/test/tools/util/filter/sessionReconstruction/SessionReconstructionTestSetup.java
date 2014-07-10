@@ -18,13 +18,13 @@ package kieker.test.tools.util.filter.sessionReconstruction;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
-import kieker.tools.traceAnalysis.filter.sessionReconstruction.SessionReconstructionFilter;
 import kieker.tools.traceAnalysis.systemModel.AbstractSession;
 
 import kieker.test.tools.util.GenericTestSetup;
 
 /**
- * Specific test setup for tests of the session reconstruction filter (see {@link SessionReconstructionFilter}).
+ * Specific test setup for tests of the session reconstruction filter (see
+ * {@link kieker.tools.traceAnalysis.filter.sessionReconstruction.SessionReconstructionFilter}).
  * 
  * @author Holger Knoche
  * @since 1.10

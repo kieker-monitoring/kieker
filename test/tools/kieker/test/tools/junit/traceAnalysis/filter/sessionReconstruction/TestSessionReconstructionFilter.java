@@ -25,7 +25,6 @@ import org.junit.Test;
 
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.tools.traceAnalysis.filter.sessionReconstruction.SessionReconstructionFilter;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTraceBasedSession;
 
 import kieker.test.common.junit.AbstractKiekerTest;
@@ -33,7 +32,7 @@ import kieker.test.tools.util.filter.sessionReconstruction.SessionReconstruction
 import kieker.test.tools.util.filter.sessionReconstruction.SessionReconstructionTestUtil;
 
 /**
- * Test suite for the {@link SessionReconstructionFilter}.
+ * Test suite for the {@link kieker.tools.traceAnalysis.filter.sessionReconstruction.SessionReconstructionFilter}.
  * 
  * @author Holger Knoche
  * @since 1.10
@@ -67,10 +66,10 @@ public class TestSessionReconstructionFilter extends AbstractKiekerTest { // NOC
 	private static List<OperationExecutionRecord> createSimpleExecutionTrace() {
 		final List<OperationExecutionRecord> records = new ArrayList<OperationExecutionRecord>();
 		long time = 0;
-		long traceId = 0;
+		final long traceId = 0;
 
 		records.add(TestSessionReconstructionFilter.createOperationExecutionRecord(OPERATION_SIGNATURE, SESSION_ID_1, traceId, time++, time++, 0, 0));
-		records.add(TestSessionReconstructionFilter.createOperationExecutionRecord(OPERATION_SIGNATURE, SESSION_ID_1, ++traceId, time++, time, 0, 0));
+		records.add(TestSessionReconstructionFilter.createOperationExecutionRecord(OPERATION_SIGNATURE, SESSION_ID_1, traceId + 1, time++, time, 0, 0));
 
 		return records;
 	}
@@ -83,11 +82,11 @@ public class TestSessionReconstructionFilter extends AbstractKiekerTest { // NOC
 	private static List<OperationExecutionRecord> createSplitSessionExecutionTrace() {
 		final List<OperationExecutionRecord> records = new ArrayList<OperationExecutionRecord>();
 		long time = 0;
-		long traceId = 0;
+		final long traceId = 0;
 
 		records.add(TestSessionReconstructionFilter.createOperationExecutionRecord(OPERATION_SIGNATURE, SESSION_ID_1, traceId, time++, time++, 0, 0));
 		time += (MAX_THINK_TIME_NANOS + 1);
-		records.add(TestSessionReconstructionFilter.createOperationExecutionRecord(OPERATION_SIGNATURE, SESSION_ID_1, ++traceId, time++, time, 0, 0));
+		records.add(TestSessionReconstructionFilter.createOperationExecutionRecord(OPERATION_SIGNATURE, SESSION_ID_1, traceId + 1, time++, time, 0, 0));
 
 		return records;
 	}
@@ -99,10 +98,10 @@ public class TestSessionReconstructionFilter extends AbstractKiekerTest { // NOC
 	private static List<OperationExecutionRecord> createTwoSessionsExecutionTrace() {
 		final List<OperationExecutionRecord> records = new ArrayList<OperationExecutionRecord>();
 		long time = 0;
-		long traceId = 0;
+		final long traceId = 0;
 
 		records.add(TestSessionReconstructionFilter.createOperationExecutionRecord(OPERATION_SIGNATURE, SESSION_ID_1, traceId, time++, time++, 0, 0));
-		records.add(TestSessionReconstructionFilter.createOperationExecutionRecord(OPERATION_SIGNATURE, SESSION_ID_2, ++traceId, time++, time, 0, 0));
+		records.add(TestSessionReconstructionFilter.createOperationExecutionRecord(OPERATION_SIGNATURE, SESSION_ID_2, traceId + 1, time++, time, 0, 0));
 
 		return records;
 	}

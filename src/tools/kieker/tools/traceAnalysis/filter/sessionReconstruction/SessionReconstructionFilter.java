@@ -89,7 +89,7 @@ public class SessionReconstructionFilter extends AbstractFilterPlugin {
 
 	private final long maxThinkTime;
 
-	private final Map<String, ExecutionTraceBasedSession> openExecutionBasedSessions = new ConcurrentHashMap<String, ExecutionTraceBasedSession>();
+	private final ConcurrentHashMap<String, ExecutionTraceBasedSession> openExecutionBasedSessions = new ConcurrentHashMap<String, ExecutionTraceBasedSession>();
 	private final PriorityQueue<ExecutionTraceBasedSession> executionSessionTimeoutQueue =
 			new PriorityQueue<ExecutionTraceBasedSession>(DEFAULT_QUEUE_SIZE, new SessionEndTimestampComparator());
 
@@ -161,7 +161,7 @@ public class SessionReconstructionFilter extends AbstractFilterPlugin {
 
 	private <T extends AbstractSession<?>> void closeAndDispatchAllSessions(final PriorityQueue<T> timeoutQueue, final Map<String, T> openSessions,
 			final String outputPortName) {
-		synchronized (openSessions) {
+		synchronized (this) {
 			while (!timeoutQueue.isEmpty()) {
 				final T session = timeoutQueue.poll();
 				openSessions.remove(session.getSessionId());
@@ -183,7 +183,7 @@ public class SessionReconstructionFilter extends AbstractFilterPlugin {
 	 */
 	@InputPort(name = INPUT_PORT_NAME_EXECUTION_TRACES, description = "Receives execution traces", eventTypes = { ExecutionTrace.class })
 	public void processExecutionTrace(final ExecutionTrace executionTrace) {
-		synchronized (this.openExecutionBasedSessions) {
+		synchronized (this) {
 			// Purge timed-out sessions before processing the next trace
 			final long currentTimestamp = executionTrace.getStartTimestamp();
 			this.processTimeouts(currentTimestamp, OUTPUT_PORT_NAME_EXECUTION_TRACE_SESSIONS, this.executionSessionTimeoutQueue, this.openExecutionBasedSessions);
