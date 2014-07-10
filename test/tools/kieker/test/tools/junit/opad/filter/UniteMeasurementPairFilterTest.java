@@ -41,7 +41,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * 
  * @author Tom Frotscher, Nils Christian Ehmke
  * 
- * @since 1.9
+ * @since 1.10
  */
 public class UniteMeasurementPairFilterTest extends AbstractKiekerTest {
 
@@ -103,7 +103,8 @@ public class UniteMeasurementPairFilterTest extends AbstractKiekerTest {
 		// READER TSPoints
 		final Configuration readerUniteConfigurationTS = new Configuration();
 		readerUniteConfigurationTS.setProperty(ListReader.CONFIG_PROPERTY_NAME_AWAIT_TERMINATION, Boolean.FALSE.toString());
-		final ListReader<NamedDoubleTimeSeriesPoint> theReaderUniteTSPoints = new ListReader<NamedDoubleTimeSeriesPoint>(readerUniteConfigurationTS, this.controller);
+		final ListReader<NamedDoubleTimeSeriesPoint> theReaderUniteTSPoints = new ListReader<NamedDoubleTimeSeriesPoint>(readerUniteConfigurationTS,
+				this.controller);
 		theReaderUniteTSPoints.addAllObjects(this.createInputEventSetUnite());
 
 		// READER Forecasts
@@ -161,5 +162,4 @@ public class UniteMeasurementPairFilterTest extends AbstractKiekerTest {
 		Assert.assertEquals(0.46, this.sinkPlugin.getList().get(6).getForecasted(), 1e-5);
 		Assert.assertEquals(0.55, this.sinkPlugin.getList().get(7).getForecasted(), 1e-5);
 	}
-
 }

@@ -25,7 +25,7 @@ import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
 /**
  * 
  * @author Tom Frotscher
- * @since 1.9
+ * @since 1.10
  * 
  */
 public class AggregationVariableSet {

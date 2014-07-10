@@ -107,6 +107,9 @@ public final class Lookup<E> implements ILookup<E> {
 		}
 	}
 
+	/**
+	 * @deprecated This method is not supported by this implementation.
+	 */
 	@Override
 	@Deprecated
 	public void setRecordReceiver(final IMonitoringRecordReceiver recordReceiver) {

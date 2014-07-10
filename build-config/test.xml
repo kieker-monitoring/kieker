@@ -8,6 +8,7 @@
 	<taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask" />
 
 	<target name="run-tests-junit" depends="compile-tests" description="Runs the JUnit tests">
+		
 		<path id="kieker.test-junit-run-classpath">
 			<fileset dir="${lib.dir}">
 				<include name="hamcrest-core-*.jar" />
@@ -31,6 +32,17 @@
 				<include name="kahadb-5.7.0.jar"/>
 				<include name="slf4j-api-1.7.*.jar"/>
 				<include name="javax.jms-*.jar" /> <!-- Needed for the JMSReader/Writer test -->
+				
+				<!-- Opad begin -->
+				<include name="commons-math-*.jar"/>
+				<include name="commons-lang-*.jar"/>
+				<include name="REngine-*.jar"/>
+				<include name="Rsession-*.jar"/>
+				<include name="Rserve-*.jar"/>
+				<include name="mongo-*.jar"/>
+				<include name="org.json.min-*.jar"/>
+				<!-- Opad end -->
+				
 			</fileset>
 			<fileset dir="${lib.sigar.dir}">
 				<include name="sigar-*.jar" />
@@ -51,7 +63,17 @@
 		<delete dir="${tests.junit-results.dir}" />
 		<mkdir dir="${tests.junit-results.dir}" />
 
-		<junit fork="false" printsummary="yes">
+		<!-- Make sure that no other rserve instance is running -->
+		<antcall target="-stop-rserve.tools"></antcall>
+		
+		<!-- Start fresh rserve instance -->
+		<antcall target="-start-rserve.tools"></antcall>
+		
+		<junit fork="no" printsummary="yes">
+			
+			<!-- If you want to execute R-related tests set this to true, otherwise to false -->
+			<sysproperty key="TestKiekerRTests" value="true" />
+			
 			<classpath refid="kieker.test-junit-run-classpath" />
 								
 			<formatter type="xml" />
@@ -64,6 +86,7 @@
 				</fileset>
 			</batchtest>
 		</junit>
+		<antcall target="-stop-rserve.tools"></antcall>
 
 		<antcall target="-test.junit.report" />
 	</target>
@@ -79,5 +102,18 @@
 
 		<echo message="To see the test report, open ${tests.junit-results.dir}/report/index.html in your Web browser." />
 	</target>
+	
+	<target name="-start-rserve.tools" depends="">
+		<echo message="Starting Rserve ..." />
+		<exec executable="${tests.rserve-control-script.sh}" spawn="true"> <!-- failonerror="true" -->
+			<arg value="start" />
+		</exec>
+	</target>
 
+	<target name="-stop-rserve.tools" depends="">
+		<echo message="Stopping Rserve ..." />
+		<exec executable="${tests.rserve-control-script.sh}" failonerror="true">
+			<arg value="stop" />
+		</exec>
+	</target>
 </project>

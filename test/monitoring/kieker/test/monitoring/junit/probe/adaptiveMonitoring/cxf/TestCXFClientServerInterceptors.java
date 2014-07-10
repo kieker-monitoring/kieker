@@ -135,8 +135,10 @@ public class TestCXFClientServerInterceptors extends AbstractKiekerTest {
 		Assert.assertEquals("Unexpected return value", "any", retVal);
 		Assert.assertEquals("Unexpected return value", 2, this.recordListFilledByListWriter.size());
 
-		final String clientPattern = "public void kieker.monitoring.probe.cxf.OperationExecutionSOAPResponseInInterceptor.handleMessage(org.apache.cxf.message.Message)";
-		final String serverPattern = "public void kieker.monitoring.probe.cxf.OperationExecutionSOAPResponseOutInterceptor.handleMessage(org.apache.cxf.binding.soap.SoapMessage)";
+		final String clientPattern = "public void "
+				+ "kieker.monitoring.probe.cxf.OperationExecutionSOAPResponseInInterceptor.handleMessage(org.apache.cxf.message.Message)";
+		final String serverPattern = "public void "
+				+ "kieker.monitoring.probe.cxf.OperationExecutionSOAPResponseOutInterceptor.handleMessage(org.apache.cxf.binding.soap.SoapMessage)";
 
 		this.clientMonitoringController.deactivateProbe(clientPattern);
 		this.client.searchBook("any"); // only the server side record should be monitored

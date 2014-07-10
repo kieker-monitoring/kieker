@@ -18,19 +18,22 @@ package kieker.tools.tslib;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
+
 /**
  * This is a thread-safe buffer for time series points, which has or has not a fixed capacity.
  * 
  * @author Tom Frotscher, Nils Christian Ehmke
- * 
- * @since 1.9
+ * @since 1.10
  * 
  * @param <T>
  *            The type of the buffer.
  */
-public class TimeSeriesPointsBuffer<T extends ITimeSeriesPoint<?>> extends ConcurrentLinkedQueue<T> implements ITimeSeriesPointsBuffer<T> {
+public class TimeSeriesPointsBuffer<T> extends ConcurrentLinkedQueue<T> implements ITimeSeriesPointsBuffer<T> {
 
 	private static final long serialVersionUID = -7988633509408488397L;
+	private static final Log LOG = LogFactory.getLog(TimeSeriesPointsBuffer.class);
 
 	private final int capacity;
 	private final boolean unbounded;
@@ -54,7 +57,7 @@ public class TimeSeriesPointsBuffer<T extends ITimeSeriesPoint<?>> extends Concu
 	}
 
 	@Override
-	public boolean add(final T o) {
+	public synchronized boolean add(final T o) { // NOPMD It would not make sense to sync within this method
 		if (this.unbounded) {
 			return super.add(o);
 		} else {
@@ -62,11 +65,11 @@ public class TimeSeriesPointsBuffer<T extends ITimeSeriesPoint<?>> extends Concu
 		}
 	}
 
-	private boolean addBounded(final T o) {
-		synchronized (this) {
-			if (this.size() == this.capacity) {
-				super.poll();
-			}
+	private synchronized boolean addBounded(final T o) { // NOPMD It would not make sense to sync within this method
+		if (this.size() == this.capacity) {
+			super.poll();
+			return super.add(o);
+		} else {
 			return super.add(o);
 		}
 	}
@@ -81,4 +84,10 @@ public class TimeSeriesPointsBuffer<T extends ITimeSeriesPoint<?>> extends Concu
 		return this.size();
 	}
 
+	/**
+	 * print buffer.
+	 */
+	public void printBuffer() {
+		LOG.info(this.toString());
+	}
 }

@@ -16,13 +16,16 @@
 
 package kieker.tools.opad.filter;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 import kieker.analysis.IProjectContext;
+import kieker.analysis.configuration.AbstractUpdateableFilterPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
-import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
+import kieker.tools.opad.record.ExtendedStorableDetectionResult;
 import kieker.tools.opad.record.StorableDetectionResult;
 
 /**
@@ -31,65 +34,87 @@ import kieker.tools.opad.record.StorableDetectionResult;
  * into two output ports, depending on whether the threshold was reached or not. This filter has configuration properties for the (critical) threshold. Although the
  * configuration of the critical threshold is possible, the value is currently not used by the filter.
  * 
- * @author Tillmann Carlos Bielefeld
+ * @author Tillmann Carlos Bielefeld, Thomas Duellmann, Tobias Rudolph
+ * @since 1.10
  * 
- * @since 1.9
  */
-@Plugin(name = "Anomaly Detection Filter",
-		outputPorts = {
-			@OutputPort(eventTypes = { StorableDetectionResult.class }, name = AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY),
-			@OutputPort(eventTypes = { StorableDetectionResult.class }, name = AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_ELSE) },
-		configuration = {
-			@Property(name = AnomalyDetectionFilter.CONFIG_PROPERTY_NAME_THRESHOLD,
-					defaultValue = AnomalyDetectionFilter.CONFIG_PROPERTY_VALUE_THRESHOLD),
-			@Property(name = AnomalyDetectionFilter.CONFIG_PROPERTY_NAME_THRESHOLD_CRITICAL,
-					defaultValue = AnomalyDetectionFilter.CONFIG_PROPERTY_VALUE_THRESHOLD_CRITICAL)
-		})
-public class AnomalyDetectionFilter extends AbstractFilterPlugin {
+@Plugin(name = "AnomalyScore Detection Filter", outputPorts = {
+	@OutputPort(eventTypes = { StorableDetectionResult.class }, name = AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY),
+	@OutputPort(eventTypes = { StorableDetectionResult.class }, name = AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_ELSE),
+	@OutputPort(eventTypes = { ExtendedStorableDetectionResult.class }, name = AnomalyDetectionFilter.OUTPUT_PORT_ALL) }, configuration = {
+	@Property(name = AnomalyDetectionFilter.CONFIG_PROPERTY_NAME_THRESHOLD, defaultValue = "0.5", updateable = true) })
+public class AnomalyDetectionFilter extends AbstractUpdateableFilterPlugin {
 
 	public static final String INPUT_PORT_ANOMALY_SCORE = "anomalyscore";
 
+	/**
+	 * Name of the output port delivering the anomalyscore if it exceeds the
+	 * threshhold.
+	 */
 	public static final String OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY = "anomalyscore_anomaly";
+
+	/**
+	 * Name of the output port delivering the anomalyscore if it remains below
+	 * the threshhold.
+	 */
 	public static final String OUTPUT_PORT_ANOMALY_SCORE_ELSE = "anomalyscore_else";
 
+	/**
+	 * Name of the output port that delivers all data independent of their
+	 * anomaly .
+	 */
+	public static final String OUTPUT_PORT_ALL = "allOutputData";
+
+	/** Name of the property determining the threshold. */
 	public static final String CONFIG_PROPERTY_NAME_THRESHOLD = "threshold";
-	public static final String CONFIG_PROPERTY_NAME_THRESHOLD_CRITICAL = "thresholdcritical";
 
-	public static final String CONFIG_PROPERTY_VALUE_THRESHOLD = "0.5";
-	public static final String CONFIG_PROPERTY_VALUE_THRESHOLD_CRITICAL = "0.95";
+	private AtomicReference<Double> threshold;
 
-	private final double threshold;
-	private final double thresholdCritical;
-
-	public AnomalyDetectionFilter(final Configuration configuration, final IProjectContext projectContext) {
+	/**
+	 * Creates a new instance of this class.
+	 * 
+	 * @param configuration
+	 *            Configuration of this component
+	 * @param projectContext
+	 *            ProjectContext of this component
+	 */
+	public AnomalyDetectionFilter(final Configuration configuration,
+			final IProjectContext projectContext) {
 		super(configuration, projectContext);
-
-		final String sThreshold = super.configuration.getStringProperty(CONFIG_PROPERTY_NAME_THRESHOLD);
-		this.threshold = Double.parseDouble(sThreshold);
-
-		final String sThresholdCritical = super.configuration.getStringProperty(CONFIG_PROPERTY_NAME_THRESHOLD_CRITICAL);
-		this.thresholdCritical = Double.parseDouble(sThresholdCritical);
+		final String sThreshold = super.configuration
+				.getStringProperty(CONFIG_PROPERTY_NAME_THRESHOLD);
+		this.threshold = new AtomicReference<Double>(
+				Double.parseDouble(sThreshold));
 	}
 
 	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration config = new Configuration();
-
-		config.setProperty(CONFIG_PROPERTY_NAME_THRESHOLD, Double.toString(this.threshold));
-		config.setProperty(CONFIG_PROPERTY_NAME_THRESHOLD_CRITICAL, Double.toString(this.thresholdCritical));
-
+		config.setProperty(CONFIG_PROPERTY_NAME_THRESHOLD, Double.toString(this.threshold.get()));
 		return config;
 	}
 
 	@InputPort(eventTypes = { StorableDetectionResult.class }, name = AnomalyDetectionFilter.INPUT_PORT_ANOMALY_SCORE)
-	public void inputForecastAndMeasurement(final StorableDetectionResult anomalyScore) {
-		if (anomalyScore.getScore() >= this.thresholdCritical) {
-			super.deliver(OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY, anomalyScore);
-		} else if (anomalyScore.getScore() >= this.threshold) {
+	public void inputForecastAndMeasurement(
+			final StorableDetectionResult anomalyScore) {
+
+		if (anomalyScore.getScore() >= this.threshold.get()) {
 			super.deliver(OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY, anomalyScore);
 		} else {
 			super.deliver(OUTPUT_PORT_ANOMALY_SCORE_ELSE, anomalyScore);
 		}
+
+		final ExtendedStorableDetectionResult extAnomalyScore = new ExtendedStorableDetectionResult(
+				anomalyScore, this.threshold.get().doubleValue());
+		super.deliver(OUTPUT_PORT_ALL, extAnomalyScore);
 	}
 
+	@Override
+	public void setCurrentConfiguration(final Configuration config, final boolean update) {
+		if (!update || this.isPropertyUpdateable(CONFIG_PROPERTY_NAME_THRESHOLD)) {
+			this.threshold = new AtomicReference<Double>(
+					Double.parseDouble(config
+							.getStringProperty(CONFIG_PROPERTY_NAME_THRESHOLD)));
+		}
+	}
 }

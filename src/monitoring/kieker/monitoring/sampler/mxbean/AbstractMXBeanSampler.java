@@ -39,16 +39,22 @@ public abstract class AbstractMXBeanSampler implements ISampler {
 
 	@Override
 	public final void sample(final IMonitoringController monitoringController) throws Exception {
+
+		if (!monitoringController.isMonitoringEnabled()) {
+			return;
+		}
+
 		final long timestamp = monitoringController.getTimeSource().getTime();
 		final String hostname = monitoringController.getHostname();
 
-		final IMonitoringRecord[] records = this.createNewMonitoringRecords(timestamp, hostname, VM_NAME);
+		final IMonitoringRecord[] records = this.createNewMonitoringRecords(timestamp, hostname, VM_NAME, monitoringController);
 
 		for (final IMonitoringRecord record : records) {
 			monitoringController.newMonitoringRecord(record);
 		}
 	}
 
-	protected abstract IMonitoringRecord[] createNewMonitoringRecords(final long timestamp, final String hostname, final String vmName);
+	protected abstract IMonitoringRecord[] createNewMonitoringRecords(final long timestamp, final String hostname, final String vmName,
+			final IMonitoringController monitoringCtr);
 
 }

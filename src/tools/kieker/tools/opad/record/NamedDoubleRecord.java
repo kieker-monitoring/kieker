@@ -29,7 +29,7 @@ import kieker.common.util.registry.IRegistry;
  * 
  * @author Tom Frotscher
  * 
- * @since 1.9
+ * @since 1.10
  */
 public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 
@@ -127,5 +127,4 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 	public int getSize() {
 		return SIZE;
 	}
-
 }

@@ -16,35 +16,59 @@
 
 package kieker.tools.tslib.forecast;
 
+import java.util.List;
+
+import kieker.tools.tslib.ForecastMethod;
 import kieker.tools.tslib.ITimeSeries;
 
 /**
  * Result of a time series forecast, e.g., computed by {@link IForecaster}. If additional fields are required, {@link IForecaster}s should extend this class.
  * 
+ * @since 1.10
  * @author Andre van Hoorn
  * 
- * @since 1.9
- * 
- * @param <T>
- *            The type of the forecast result.
  */
-public class ForecastResult<T> implements IForecastResult<T> {
+public class ForecastResult implements IForecastResult {
 
-	private final ITimeSeries<T> tsForecast;
-	private final ITimeSeries<T> tsOriginal;
+	private final ITimeSeries<Double> tsForecast;
+	private final ITimeSeries<Double> tsOriginal;
 
 	private final int confidenceLevel;
-	private final ITimeSeries<T> tsUpper;
-	private final ITimeSeries<T> tsLower;
+	private final double meanAbsoluteScaledError;
+	private final ForecastMethod fcStrategy;
 
-	public ForecastResult(final ITimeSeries<T> tsForecast, final ITimeSeries<T> tsOriginal, final int confidenceLevel, final ITimeSeries<T> tsLower,
-			final ITimeSeries<T> tsUpper) {
+	private final ITimeSeries<Double> tsUpper;
+	private final ITimeSeries<Double> tsLower;
+
+	/**
+	 * 
+	 * @param tsForecast
+	 *            TimesSeries
+	 * @param tsOriginal
+	 *            TimeSeries
+	 * @param tsconfidenceLevel
+	 *            confidentLevel
+	 * @param tsmeanAbsoluteScaledError
+	 *            MASE
+	 * @param tsLower
+	 *            ??
+	 * @param tsUpper
+	 *            ??
+	 * @param fcStrategy
+	 *            FC Method
+	 */
+	public ForecastResult(final ITimeSeries<Double> tsForecast, final ITimeSeries<Double> tsOriginal, final int tsconfidenceLevel,
+			final double tsmeanAbsoluteScaledError, final ITimeSeries<Double> tsLower,
+			final ITimeSeries<Double> tsUpper, final ForecastMethod fcStrategy) {
 		this.tsForecast = tsForecast;
 		this.tsOriginal = tsOriginal;
+		this.meanAbsoluteScaledError = tsmeanAbsoluteScaledError;
 
-		this.confidenceLevel = confidenceLevel;
+		this.confidenceLevel = tsconfidenceLevel;
 		this.tsUpper = tsUpper;
 		this.tsLower = tsLower;
+		this.fcStrategy = fcStrategy;
+
 	}
 
 	/**
@@ -52,13 +76,19 @@ public class ForecastResult<T> implements IForecastResult<T> {
 	 * forecast series.
 	 * 
 	 * @param tsForecast
+	 *            Timeseries with forecast
+	 * @param tsOriginal
+	 *            Timeseries with orginal
+	 * @param fcStrategy
+	 *            forecastMethod
+	 * 
 	 */
-	public ForecastResult(final ITimeSeries<T> tsForecast, final ITimeSeries<T> tsOriginal) {
-		this(tsForecast, tsOriginal, 0, tsForecast, tsForecast); // tsForecast also lower/upper
+	public ForecastResult(final ITimeSeries<Double> tsForecast, final ITimeSeries<Double> tsOriginal, final ForecastMethod fcStrategy) {
+		this(tsForecast, tsOriginal, 0, 0, tsForecast, tsForecast, fcStrategy); // tsForecast also lower/upper
 	}
 
 	@Override
-	public ITimeSeries<T> getForecast() {
+	public ITimeSeries<Double> getForecast() {
 		return this.tsForecast;
 	}
 
@@ -68,32 +98,81 @@ public class ForecastResult<T> implements IForecastResult<T> {
 	}
 
 	@Override
-	public ITimeSeries<T> getUpper() {
+	public ITimeSeries<Double> getUpper() {
 		return this.tsUpper;
 	}
 
 	@Override
-	public ITimeSeries<T> getLower() {
+	public ITimeSeries<Double> getLower() {
 		return this.tsLower;
 	}
 
 	@Override
-	public ITimeSeries<T> getOriginal() {
+	public ITimeSeries<Double> getOriginal() {
 		return this.tsOriginal;
 	}
 
 	@Override
 	public String toString() {
-		final String lineSeperator = System.getProperty("line.separatorr");
-		final StringBuilder strB = new StringBuilder(59); // There are at least 59 characters in the following appening
-
-		strB.append(lineSeperator);
-		strB.append("tsForecast: ").append(this.tsForecast.toString()).append(lineSeperator);
-		strB.append("tsOriginal: ").append(this.tsOriginal.toString()).append(lineSeperator);
-		strB.append("confidenceLevel: ").append(this.confidenceLevel).append(lineSeperator);
-		strB.append("tsUpper: ").append(this.tsUpper).append(lineSeperator);
-		strB.append("tsLower: ").append(this.tsLower).append(lineSeperator);
-
+		final StringBuilder strB = new StringBuilder(71);
+		strB.append('\n' + "tsForecast: ");
+		strB.append(this.tsForecast.toString());
+		strB.append('\n' + "tsOriginal: ");
+		strB.append(this.tsOriginal.toString());
+		strB.append('\n' + "confidenceLevel: ");
+		strB.append(this.confidenceLevel);
+		strB.append('\n' + "tsUpper: ");
+		strB.append(this.tsUpper);
+		strB.append('\n' + "tsLower: ");
+		strB.append(this.tsLower);
+		strB.append('\n');
 		return strB.toString();
+	}
+
+	@Override
+	public double getMeanAbsoluteScaledError() {
+		return this.meanAbsoluteScaledError;
+	}
+
+	@Override
+	public ForecastMethod getFcStrategy() {
+		return this.fcStrategy;
+	}
+
+	/**
+	 * Checks whether the input seems to be plausible.
+	 * 
+	 * @return true if plausible, else false
+	 */
+	@Override
+	public boolean isPlausible() {
+		if ((this.meanAbsoluteScaledError == 0) || Double.isNaN(this.meanAbsoluteScaledError)) {
+			return false;
+		}
+		final double maximumObserved = ForecastResult.calcMaximum(this.tsOriginal);
+		final List<Double> values = this.tsForecast.getValues();
+		for (final Double value : values) {
+			if ((value > (maximumObserved * 2)) || (value < 0)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	// Was extracted from ClassificationUtility in WCF/TBATS as it is not yet integrated:
+	/**
+	 * @param ts
+	 *            timeseries
+	 * @return maximum value of the time series
+	 */
+	private static double calcMaximum(final ITimeSeries<Double> ts) {
+		final List<Double> values = ts.getValues();
+		double max = 0;
+		for (final double t : values) {
+			if (t > max) {
+				max = t;
+			}
+		}
+		return max;
 	}
 }

@@ -16,50 +16,73 @@
 
 package kieker.tools.tslib.forecast;
 
+import kieker.tools.tslib.ForecastMethod;
 import kieker.tools.tslib.ITimeSeries;
 
 /**
  * @author Andre van Hoorn
- * 
- * @since 1.9
- * 
- * @param <T>
- *            The type of the forecast result.
+ * @since 1.10
  */
-public interface IForecastResult<T> {
+public interface IForecastResult {
 
 	/**
 	 * Returns the point forecasts.
 	 * 
-	 * @since 1.9
+	 * @since 1.10
 	 */
-	public ITimeSeries<T> getForecast();
+	public ITimeSeries<Double> getForecast();
 
 	/**
 	 * Returns the confidence level for the forecast interval.
 	 * 
-	 * @since 1.9
+	 * @since 1.10
 	 */
 	public int getConfidenceLevel();
 
 	/**
 	 * Returns the upper limits for forecast interval with respect to the confidence level {@link #getConfidenceLevel()}.
 	 * 
-	 * @since 1.9
+	 * @since 1.10
 	 */
-	public ITimeSeries<T> getUpper();
+	public ITimeSeries<Double> getUpper();
 
 	/**
 	 * Returns the lower limits for forecast interval with respect to the confidence level {@link #getConfidenceLevel()}.
 	 * 
-	 * @since 1.9
+	 * @since 1.10
 	 */
-	public ITimeSeries<T> getLower();
+	public ITimeSeries<Double> getLower();
 
 	/**
 	 * Returns the original time series that was the basis for the forecast.
 	 * 
-	 * @since 1.9
+	 * @since 1.10
+	 * @return orginal Timeseries
 	 */
-	public ITimeSeries<T> getOriginal();
+	public ITimeSeries<Double> getOriginal();
+
+	/**
+	 * Returns the MeanAbsoluteScaledError.
+	 * 
+	 * @since 1.10
+	 * @return MASE
+	 */
+	public double getMeanAbsoluteScaledError();
+
+	/**
+	 * Returns the forecasting strategy that has been used for this forecast.
+	 * 
+	 * @since 1.10
+	 * @return ForecastMethod
+	 */
+	public ForecastMethod getFcStrategy();
+
+	/**
+	 * Returns whether the result is plausible - mean forecast bigger than 0 and smaller than 1.5*maximum.
+	 * 
+	 * @since 1.10
+	 * @return if result is plausible
+	 */
+	public boolean isPlausible();
+
 }

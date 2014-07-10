@@ -20,11 +20,13 @@ import org.apache.commons.math.stat.StatUtils;
 
 /**
  * @author Tom Frotscher
- * 
- * @since 1.9
+ * @since 1.10
  */
 public enum AggregationMethod {
 
+	/**
+	 * different aggregationmethods
+	 */
 	GEOMETRIC_MEAN, MAX, MEAN, MIN, PERCENTILE90, PERCENTILE95, PRODUCT, SUM, SUMLOG, SUMSQ, VARIANCE;
 
 	/**

@@ -41,7 +41,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * converted input timestamp from the incoming record.
  * 
  * @author Tom Frotscher
- * @since 1.9
+ * @since 1.10
  * 
  */
 public class ExtractionFilterTest extends AbstractKiekerTest {

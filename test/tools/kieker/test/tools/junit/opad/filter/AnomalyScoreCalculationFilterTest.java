@@ -39,8 +39,8 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * Test for the AnomalyScoreCalculationFilter. Therefore comparing the result of the Filter with some
  * previous manually calculated Results.
  * 
+ * @since 1.10
  * @author Tom Frotscher
- * @since 1.9
  */
 public class AnomalyScoreCalculationFilterTest extends AbstractKiekerTest {
 

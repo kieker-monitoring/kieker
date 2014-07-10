@@ -30,6 +30,7 @@ import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 import kieker.tools.opad.filter.AnomalyDetectionFilter;
+import kieker.tools.opad.record.ExtendedStorableDetectionResult;
 import kieker.tools.opad.record.StorableDetectionResult;
 
 import kieker.test.common.junit.AbstractKiekerTest;
@@ -44,7 +45,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * - 0.6 and 0.7 to be an anomaly
  * 
  * @author Tillmann Carlos Bielefeld
- * @since 1.9
+ * @since 1.10
  */
 public class AnomalyDetectionFilterTest extends AbstractKiekerTest {
 
@@ -52,6 +53,7 @@ public class AnomalyDetectionFilterTest extends AbstractKiekerTest {
 
 	private ListCollectionFilter<StorableDetectionResult> sinkPluginIfAnomaly;
 	private ListCollectionFilter<StorableDetectionResult> sinkPluginElse;
+	private ListCollectionFilter<ExtendedStorableDetectionResult> sinkPluginAll;
 	private AnalysisController controller;
 
 	/**
@@ -102,6 +104,9 @@ public class AnomalyDetectionFilterTest extends AbstractKiekerTest {
 		// SINK 2
 		this.sinkPluginElse = new ListCollectionFilter<StorableDetectionResult>(new Configuration(), this.controller);
 
+		// SINK 3
+		this.sinkPluginAll = new ListCollectionFilter<ExtendedStorableDetectionResult>(new Configuration(), this.controller);
+
 		// CONNECT the filters
 		this.controller.connect(theReader, ListReader.OUTPUT_PORT_NAME,
 				anomalyDetectionFilter, AnomalyDetectionFilter.INPUT_PORT_ANOMALY_SCORE);
@@ -109,8 +114,12 @@ public class AnomalyDetectionFilterTest extends AbstractKiekerTest {
 				this.sinkPluginIfAnomaly, ListCollectionFilter.INPUT_PORT_NAME);
 		this.controller.connect(anomalyDetectionFilter, AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_ELSE,
 				this.sinkPluginElse, ListCollectionFilter.INPUT_PORT_NAME);
+		this.controller.connect(anomalyDetectionFilter, AnomalyDetectionFilter.OUTPUT_PORT_ALL,
+				this.sinkPluginAll, ListCollectionFilter.INPUT_PORT_NAME);
 
 		Assert.assertTrue(this.sinkPluginIfAnomaly.getList().isEmpty());
+		Assert.assertTrue(this.sinkPluginElse.getList().isEmpty());
+		Assert.assertTrue(this.sinkPluginAll.getList().isEmpty());
 	}
 
 	/**
@@ -134,6 +143,7 @@ public class AnomalyDetectionFilterTest extends AbstractKiekerTest {
 
 		Assert.assertEquals(2, this.sinkPluginIfAnomaly.getList().size());
 		Assert.assertEquals(1, this.sinkPluginElse.getList().size());
+		Assert.assertEquals(3, this.sinkPluginAll.getList().size());
 	}
 
 }

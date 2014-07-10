@@ -29,13 +29,13 @@ import kieker.tools.tslib.TimeSeries;
 import kieker.tools.tslib.forecast.IForecastResult;
 import kieker.tools.tslib.forecast.windowstart.WindowStartForecaster;
 
-import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.tools.junit.AbstractKiekerRTest;
 
 /**
  * @author Tillmann Carlos Bielefeld
- * @since 1.9
+ * @since 1.10
  */
-public class WindowStartForecasterTest extends AbstractKiekerTest {
+public class WindowStartForecasterTest extends AbstractKiekerRTest {
 
 	private static final Log LOG = LogFactory.getLog(WindowStartForecasterTest.class);
 
@@ -73,7 +73,7 @@ public class WindowStartForecasterTest extends AbstractKiekerTest {
 		LOG.info("TS so far: " + ts);
 
 		final WindowStartForecaster forecaster = new WindowStartForecaster(ts);
-		final IForecastResult<Double> forecast = forecaster.forecast(3);
+		final IForecastResult forecast = forecaster.forecast(3);
 
 		final ITimeSeries<Double> forecastSeries = forecast.getForecast();
 		Assert.assertEquals(3, forecastSeries.getPoints().size());

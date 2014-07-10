@@ -26,8 +26,7 @@ import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Tillmann Carlos Bielefeld
- * 
- * @since 1.9
+ * @since 1.10
  */
 public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, INamedElement, IDoubleValue, IMonitoringRecord.BinaryFactory {
 
@@ -44,6 +43,15 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 	private final double value;
 	private final String name;
 
+	/**
+	 * 
+	 * @param timestamp
+	 *            Timestamp
+	 * @param value
+	 *            value of TSPoint
+	 * @param name
+	 *            name of TS
+	 */
 	public NamedTSPoint(final long timestamp, final double value, final String name) {
 		this.timestamp = timestamp;
 		this.value = value;
@@ -70,6 +78,11 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 		return new Object[] { this.getTimestamp(), this.getValue(), this.getName(), };
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
+	 */
 	@Override
 	@Deprecated
 	public void initFromArray(final Object[] values) {

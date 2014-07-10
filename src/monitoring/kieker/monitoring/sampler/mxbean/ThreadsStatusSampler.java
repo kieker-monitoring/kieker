@@ -20,6 +20,8 @@ import java.lang.management.ThreadMXBean;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.jvm.ThreadsStatusRecord;
+import kieker.monitoring.core.controller.IMonitoringController;
+import kieker.monitoring.core.signaturePattern.SignatureFactory;
 
 /**
  * A sampler using the MXBean interface to access information about the threads in the JVM. The sampler produces a {@link ThreadsStatusRecord} each time the
@@ -36,8 +38,15 @@ public class ThreadsStatusSampler extends AbstractMXBeanSampler {
 	}
 
 	@Override
-	protected IMonitoringRecord[] createNewMonitoringRecords(final long timestamp, final String hostname, final String vmName) {
+	protected IMonitoringRecord[] createNewMonitoringRecords(final long timestamp, final String hostname, final String vmName,
+			final IMonitoringController monitoringCtr) {
+
+		if (!monitoringCtr.isProbeActivated(SignatureFactory.createJVMThreadsSignature())) {
+			return new IMonitoringRecord[] {};
+		}
+
 		final ThreadMXBean threadBean = ManagementFactory.getThreadMXBean();
+
 		return new IMonitoringRecord[] { new ThreadsStatusRecord(timestamp, hostname, vmName, threadBean.getThreadCount(), threadBean.getDaemonThreadCount(),
 				threadBean.getPeakThreadCount(), threadBean.getTotalStartedThreadCount()), };
 	}

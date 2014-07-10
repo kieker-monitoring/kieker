@@ -28,9 +28,8 @@ import kieker.common.util.registry.IRegistry;
  * This class contains the data that will be stored in the database after each complete analysis. Therefore, containing the value, the application name, the forecast
  * calculated from the value, the timestamp and the corresponding anomaly score.
  * 
- * @author Tom Frotscher
- * 
- * @since 1.9
+ * @author Tom Frotscher, Thomas Düllmann
+ * @since 1.10
  */
 public class StorableDetectionResult extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 
@@ -45,10 +44,29 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 
 	private static final long serialVersionUID = 7325786584057491433L;
 
+	/**
+	 * Name of the application.
+	 */
 	protected final String applicationName;
+
+	/**
+	 * Latency of the application.
+	 */
 	protected final double value;
+
+	/**
+	 * Timestamp of the record.
+	 */
 	protected final long timestamp;
+
+	/**
+	 * Forecast value.
+	 */
 	protected final double forecast;
+
+	/**
+	 * Anomaly score.
+	 */
 	protected final double score;
 
 	public StorableDetectionResult(final String app, final double val, final long timest, final double fore, final double sc) {
@@ -67,6 +85,12 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 		this.score = buffer.getDouble();
 	}
 
+	/**
+	 * Creates an Instance of this class based on a single object array.
+	 * 
+	 * @param values
+	 *            Object array containing the application name, value, timestamp, forecast and anomaly score.
+	 */
 	public StorableDetectionResult(final Object[] values) { // NOPMD (direct store of values)
 		AbstractMonitoringRecord.checkArray(values, StorableDetectionResult.TYPES);
 

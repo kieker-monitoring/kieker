@@ -41,11 +41,16 @@
 	<classpathentry kind="lib" path="lib/javassist-3.18.0.jar"/>
 	<classpathentry kind="lib" path="lib/javax.jms-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/jgraphx-2.1.1.0.jar"/>
+	<classpathentry kind="lib" path="lib/org.json.min-2014-05-22.jar"/>
 	<classpathentry kind="lib" path="lib/junit-4.11.jar"/>
+	<classpathentry kind="lib" path="lib/mongo-2.10.1.jar"/>
 	<classpathentry kind="lib" path="lib/org.eclipse.emf.common_2.9.2.v20131212-0545.jar"/>
 	<classpathentry kind="lib" path="lib/org.eclipse.emf.ecore.xmi_2.9.1.v20131212-0545.jar"/>
 	<classpathentry kind="lib" path="lib/org.eclipse.emf.ecore_2.9.2.v20131212-0545.jar"/>
 	<classpathentry kind="lib" path="lib/reflections-0.9.9-RC1.jar"/>
+	<classpathentry kind="lib" path="lib/REngine-0.6-1.jar"/>
+	<classpathentry kind="lib" path="lib/Rserve-0.6-1.jar"/>
+	<classpathentry kind="lib" path="lib/Rsession-2012-09-04.r114.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-api-1.7.6.jar"/>
 	<classpathentry kind="lib" path="lib/disl-2.0/disl-server.jar"/>
 	<classpathentry kind="lib" path="lib/framework-libs/cxf/cxf-2.6.13.jar"/>

@@ -732,14 +732,15 @@
         </module>
 
         <!-- Checks that variables have Javadoc comments. !-->
+		<!-- Deactivated due to #1345 !-->
         <!-- See http://checkstyle.sf.net/config_javadoc.html#JavadocVariable !-->
-        <module name="JavadocVariable">
+        <!-- <module name="JavadocVariable">
             <property name="severity" value="info"/>
-            <property name="scope"        value="protected"/>
+            <property name="scope"        value="protected"/>  !-->
             <!--
             <property name="excludeScope" value=""/>
             !-->
-        </module>
+        <!-- </module>  !-->
 
         <!-- Outputs a JavaDoc tag as information. !-->
         <!-- See http://checkstyle.sourceforge.net/config_javadoc.html#WriteTag !-->

@@ -90,8 +90,10 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 		Assume.assumeTrue(CTRLNAME.equals(monitoringController.getName()));
 		Assert.assertNotNull(this.ctx);
 
-		final String getBookPattern = "public kieker.test.monitoring.junit.probe.spring.executions.jetty.bookstore.Book kieker.test.monitoring.junit.probe.spring.executions.jetty.bookstore.Catalog.getBook(boolean)";
-		final String searchBookPattern = "public kieker.test.monitoring.junit.probe.spring.executions.jetty.bookstore.Book kieker.test.monitoring.junit.probe.spring.executions.jetty.bookstore.Bookstore.searchBook(java.lang.String)";
+		final String getBookPattern = "public kieker.test.monitoring.junit.probe.spring.executions.jetty.bookstore.Book "
+				+ "kieker.test.monitoring.junit.probe.spring.executions.jetty.bookstore.Catalog.getBook(boolean)";
+		final String searchBookPattern = "public kieker.test.monitoring.junit.probe.spring.executions.jetty.bookstore.Book "
+				+ "kieker.test.monitoring.junit.probe.spring.executions.jetty.bookstore.Bookstore.searchBook(java.lang.String)";
 
 		Assert.assertEquals("Unexpected size of records. Should be 0, found " + this.recordListFilledByListWriter.size(), 0,
 				this.recordListFilledByListWriter.size());

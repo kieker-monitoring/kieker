@@ -22,8 +22,7 @@ import kieker.tools.tslib.forecast.IForecastResult;
 /**
  * 
  * @author Tillmann Carlos Bielefeld
- * 
- * @since 1.9
+ * @since 1.10
  * 
  * @param <T>
  *            The type of the calculator.
@@ -31,8 +30,15 @@ import kieker.tools.tslib.forecast.IForecastResult;
 public interface IAnomalyCalculator<T> {
 
 	/**
-	 * @since 1.9
+	 * 
+	 * @since 1.10
+	 * @param forecast
+	 *            Forecast Result
+	 * @param current
+	 *            current Timeseries
+	 * 
+	 * @return AnomalScore
 	 */
-	public AnomalyScore calculateAnomaly(IForecastResult<T> forecast, ITimeSeriesPoint<T> current);
-
+	public AnomalyScore calculateAnomaly(IForecastResult forecast,
+			ITimeSeriesPoint<T> current);
 }

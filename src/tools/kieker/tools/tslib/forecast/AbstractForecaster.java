@@ -21,8 +21,7 @@ import kieker.tools.tslib.TimeSeries;
 
 /**
  * @author Andre van Hoorn, Tillmann Carlos Bielefeld
- * 
- * @since 1.9
+ * @since 1.10
  * 
  * @param <T>
  *            The type of the forecaster.
@@ -36,6 +35,13 @@ public abstract class AbstractForecaster<T> implements IForecaster<T> {
 		this(historyTimeseries, 0);
 	}
 
+	/**
+	 * 
+	 * @param historyTimeseries
+	 *            TS
+	 * @param confidenceLevel
+	 *            value for confidencelevel
+	 */
 	public AbstractForecaster(final ITimeSeries<T> historyTimeseries, final int confidenceLevel) {
 		this.historyTimeseries = historyTimeseries;
 		this.confidenceLevel = confidenceLevel;
@@ -46,12 +52,13 @@ public abstract class AbstractForecaster<T> implements IForecaster<T> {
 		return this.historyTimeseries;
 	}
 
+	/**
+	 * 
+	 * @return TS
+	 */
 	protected ITimeSeries<T> prepareForecastTS() {
 		final ITimeSeries<T> history = this.getTsOriginal();
 
-		// The starting point of the FC series is calculated by _one_ additional
-		// tick...
-		// ... plus the end point of the historic series
 		final long startTime = history.getEndTime();
 		final TimeSeries<T> tsFC = new TimeSeries<T>(startTime,
 				history.getDeltaTime(), history.getDeltaTimeUnit());

@@ -19,17 +19,17 @@ package kieker.tools.tslib;
 /**
  * 
  * @author Tom Frotscher
- * 
- * @since 1.9
+ * @since 1.10
  * 
  * @param <T>
  *            The type of the buffer.
  */
-public interface ITimeSeriesPointsBuffer<T extends ITimeSeriesPoint<?>> {
+public interface ITimeSeriesPointsBuffer<T> {
 
 	/**
 	 * Add an Object to the tail of the Buffer.
 	 * 
+	 * @since 1.10
 	 * @param o
 	 *            The Value to add
 	 * @return
@@ -42,6 +42,7 @@ public interface ITimeSeriesPointsBuffer<T extends ITimeSeriesPoint<?>> {
 	/**
 	 * Removes a Value from the buffer in FIFO order.
 	 * 
+	 * @since 1.10
 	 * @return
 	 *         Returns the removed Object
 	 * 
@@ -52,6 +53,7 @@ public interface ITimeSeriesPointsBuffer<T extends ITimeSeriesPoint<?>> {
 	/**
 	 * Returns the current size of the buffer.
 	 * 
+	 * @since 1.10
 	 * @return Returned Buffersize
 	 * 
 	 * @since 1.9

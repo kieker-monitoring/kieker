@@ -21,27 +21,28 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author Andre van Hoorn
+ * @author Andre van Hoorn, Tobias Rudolph, Andreas Eberlein
  * 
- * @since 1.9
- * 
+ * @since 1.10
  * @param <T>
  *            The type of the time series.
  */
 public class TimeSeries<T> implements ITimeSeries<T> {
-
 	private final long startTime;
 	private long nextTime;
 	private final long deltaTime;
 	private final TimeUnit deltaTimeUnit;
+	private final int frequency;
 	private final int capacity;
 	private final TimeSeriesPointsBuffer<ITimeSeriesPoint<T>> points;
 	private long oneStepMillis;
 
-	public TimeSeries(final long startTime, final long deltaTime, final TimeUnit deltaTimeUnit, final int capacity) {
+	public TimeSeries(final long startTime, final long deltaTime, final TimeUnit deltaTimeUnit, final int frequency,
+			final int capacity) {
 		this.startTime = startTime;
 		this.deltaTime = deltaTime;
 		this.deltaTimeUnit = deltaTimeUnit;
+		this.frequency = frequency;
 		this.capacity = capacity;
 		this.oneStepMillis = TimeUnit.MILLISECONDS.convert(this.deltaTime, this.deltaTimeUnit);
 
@@ -55,6 +56,29 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 		this.setNextTime();
 	}
 
+	/**
+	 * @param startTime
+	 *            start time of Timeseries
+	 * @param deltaTime
+	 *            time of timeseries
+	 * @param deltaTimeUnit
+	 *            Time unit
+	 * @param capacity
+	 *            length of timeseries
+	 */
+	public TimeSeries(final long startTime, final long deltaTime, final TimeUnit deltaTimeUnit, final int capacity) {
+		// frequenc = 24 best practice
+		this(startTime, deltaTime, deltaTimeUnit, 24, capacity);
+	}
+
+	/**
+	 * @param startTime
+	 *            start time of Timeseries
+	 * @param deltaTime
+	 *            time of timeseries
+	 * @param deltaTimeUnit
+	 *            Time unit
+	 */
 	public TimeSeries(final long startTime, final long deltaTime, final TimeUnit deltaTimeUnit) {
 		this(startTime, deltaTime, deltaTimeUnit, ITimeSeries.INFINITE_CAPACITY);
 	}
@@ -74,14 +98,23 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 		return this.deltaTimeUnit;
 	}
 
+	/**
+	 * @param value
+	 *            value which should append to timeseries
+	 * 
+	 * @return tspoint
+	 */
 	@Override
 	public ITimeSeriesPoint<T> append(final T value) {
-		synchronized (this) {
-			final ITimeSeriesPoint<T> point = new TimeSeriesPoint<T>(this.nextTime, value);
+		final ITimeSeriesPoint<T> point;
+
+		synchronized (value) {
+			point = new TimeSeriesPoint<T>(this.nextTime, value);
 			this.points.add(point);
 			this.setNextTime();
-			return point;
 		}
+
+		return point;
 	}
 
 	private void setNextTime() {
@@ -135,5 +168,10 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 			buf.append(curPoint);
 		}
 		return buf.toString();
+	}
+
+	@Override
+	public int getFrequency() {
+		return this.frequency;
 	}
 }

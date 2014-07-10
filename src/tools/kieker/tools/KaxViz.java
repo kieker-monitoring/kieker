@@ -189,7 +189,8 @@ public final class KaxViz extends AbstractCommandLineTool {
 
 					@Override
 					public void windowClosing(final WindowEvent e) {
-						final Document doc = mxCellRenderer.createSvgDocument(KaxVizFrame.this.graph, null, 1d, Color.WHITE, KaxVizFrame.this.graph.getGraphBounds());
+						final Document doc = mxCellRenderer.createSvgDocument(KaxVizFrame.this.graph, null, 1d, Color.WHITE,
+								KaxVizFrame.this.graph.getGraphBounds());
 						try {
 							mxUtils.writeFile(mxXmlUtils.getXml(doc), outFilename);
 						} catch (final IOException ex) {
