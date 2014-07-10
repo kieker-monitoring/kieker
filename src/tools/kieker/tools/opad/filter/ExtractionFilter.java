@@ -31,6 +31,7 @@ import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
 /**
  * An instance of this class extracts the data from incoming records.
  * 
+ * @since 1.10
  * @author Tom Frotscher
  * 
  * @since 1.9
@@ -59,7 +60,6 @@ public class ExtractionFilter extends AbstractFilterPlugin {
 			configTimeunit = TimeUnit.NANOSECONDS;
 		}
 		this.timeunit = configTimeunit;
-
 	}
 
 	@Override

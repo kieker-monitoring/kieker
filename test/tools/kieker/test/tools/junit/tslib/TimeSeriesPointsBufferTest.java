@@ -20,7 +20,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysis.exception.AnalysisConfigurationException;
-import kieker.tools.tslib.TimeSeriesPoint;
 import kieker.tools.tslib.TimeSeriesPointsBuffer;
 
 import kieker.test.common.junit.AbstractKiekerTest;
@@ -28,7 +27,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
 /**
  * 
  * @author Tom Frotscher
- * @since 1.9
+ * @since 1.10
  * 
  */
 public class TimeSeriesPointsBufferTest extends AbstractKiekerTest {
@@ -52,15 +51,13 @@ public class TimeSeriesPointsBufferTest extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testBoundedBuffer() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
-		final TimeSeriesPointsBuffer<TimeSeriesPoint<Integer>> bounded = new TimeSeriesPointsBuffer<TimeSeriesPoint<Integer>>(3);
-		bounded.add(new TimeSeriesPoint<Integer>(1, 1));
-		bounded.add(new TimeSeriesPoint<Integer>(1, 2));
-		bounded.add(new TimeSeriesPoint<Integer>(1, 3));
-
+		final TimeSeriesPointsBuffer<Integer> bounded = new TimeSeriesPointsBuffer<Integer>(3);
+		bounded.add(1);
+		bounded.add(2);
+		bounded.add(3);
 		// Next Value exceed the boundary
-		bounded.add(new TimeSeriesPoint<Integer>(1, 4));
+		bounded.add(4);
 		Assert.assertEquals(3, bounded.getSize());
-
 		// Test remove
 		bounded.remove();
 		Assert.assertEquals(2, bounded.getSize());
@@ -78,10 +75,10 @@ public class TimeSeriesPointsBufferTest extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testUnboundedBuffer() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
-		final TimeSeriesPointsBuffer<TimeSeriesPoint<Integer>> unbounded = new TimeSeriesPointsBuffer<TimeSeriesPoint<Integer>>(-1);
+		final TimeSeriesPointsBuffer<Integer> unbounded = new TimeSeriesPointsBuffer<Integer>(-1);
 		int i = 0;
 		while (i < 100) {
-			unbounded.add(new TimeSeriesPoint<Integer>(1, i));
+			unbounded.add(i);
 			i++;
 		}
 		Assert.assertEquals(i, unbounded.getSize());

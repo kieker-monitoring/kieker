@@ -16,6 +16,7 @@
 
 package kieker.tools.tslib.forecast.windowstart;
 
+import kieker.tools.tslib.ForecastMethod;
 import kieker.tools.tslib.ITimeSeries;
 import kieker.tools.tslib.ITimeSeriesPoint;
 import kieker.tools.tslib.forecast.AbstractForecaster;
@@ -29,17 +30,27 @@ import kieker.tools.tslib.forecast.IForecastResult;
  * periodicity.
  * 
  * @author Tillmann Carlos Bielefeld
+ * @since 1.10
  * 
- * @since 1.9
  */
 public class WindowStartForecaster extends AbstractForecaster<Double> {
 
+	/**
+	 * 
+	 * @param historyTimeseries
+	 *            Timeseries
+	 */
 	public WindowStartForecaster(final ITimeSeries<Double> historyTimeseries) {
 		super(historyTimeseries);
 	}
 
+	/**
+	 * @param numForecastSteps
+	 *            number of values the forecaster return
+	 * @return ForecastResult
+	 */
 	@Override
-	public IForecastResult<Double> forecast(final int numForecastSteps) {
+	public IForecastResult forecast(final int numForecastSteps) {
 		final ITimeSeries<Double> history = this.getTsOriginal();
 		final ITimeSeries<Double> tsFC = this.prepareForecastTS();
 
@@ -52,7 +63,7 @@ public class WindowStartForecaster extends AbstractForecaster<Double> {
 			}
 		}
 
-		return new ForecastResult<Double>(tsFC, this.getTsOriginal());
+		return new ForecastResult(tsFC, this.getTsOriginal(), ForecastMethod.WINDOWSTART);
 	}
 
 }

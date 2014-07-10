@@ -48,19 +48,34 @@ public class AnomalyScoreCalculationFilter extends AbstractFilterPlugin {
 		return new Configuration();
 	}
 
+	/**
+	 * Representing the input port for pairs of measurements and forecasts.
+	 * 
+	 * @param fmp
+	 *            Pair consisting of measurement and forecast
+	 */
 	@InputPort(eventTypes = { IForecastMeasurementPair.class }, name = AnomalyScoreCalculationFilter.INPUT_PORT_CURRENT_FORECAST_PAIR)
 	public void inputForecastAndMeasurement(final IForecastMeasurementPair fmp) {
+		Double score = 0.0;
+
 		if (null != fmp.getForecasted()) {
-			final double forecastedValue = fmp.getForecasted();
-			final double actualValue = fmp.getValue();
+			final double nextpredicted = fmp.getForecasted();
 
-			final double difference = forecastedValue - actualValue;
-			final double sum = forecastedValue + actualValue;
-			final double anomalyScore = Math.abs(difference / sum);
+			final double measuredValue = fmp.getValue();
 
-			final StorableDetectionResult result = new StorableDetectionResult(fmp.getName(), fmp.getValue(), fmp.getTime(), fmp.getForecasted(), anomalyScore);
-			super.deliver(OUTPUT_PORT_ANOMALY_SCORE, result);
+			final double difference = nextpredicted - measuredValue;
+			final double sum = nextpredicted + measuredValue;
+
+			if (Double.isNaN(nextpredicted) && Double.isNaN(measuredValue)) {
+				score = 0.0d;
+			} else if (Double.isNaN(nextpredicted) || Double.isNaN(measuredValue)) {
+				score = 1.0d;
+			} else {
+				score = Math.abs(difference / sum);
+			}
 		}
-	}
 
+		final StorableDetectionResult dr = new StorableDetectionResult(fmp.getName(), fmp.getValue(), fmp.getTime(), fmp.getForecasted(), score);
+		super.deliver(OUTPUT_PORT_ANOMALY_SCORE, dr);
+	}
 }

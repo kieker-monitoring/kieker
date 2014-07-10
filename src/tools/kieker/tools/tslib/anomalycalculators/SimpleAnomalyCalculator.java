@@ -22,16 +22,24 @@ import kieker.tools.tslib.forecast.IForecastResult;
 /**
  * @author Tillmann Carlos Bielefeld
  * 
- * @since 1.9
+ * @since 1.10
  */
 public class SimpleAnomalyCalculator implements IAnomalyCalculator<Double> {
 
 	public SimpleAnomalyCalculator() {
-		// No code necessary
+		// empty default constructor
 	}
 
+	/**
+	 * @param forecast
+	 *            Forecast Result
+	 * @param current
+	 *            current Timeseries
+	 * 
+	 * @return AnomalScore
+	 */
 	@Override
-	public AnomalyScore calculateAnomaly(final IForecastResult<Double> forecast, final ITimeSeriesPoint<Double> current) {
+	public AnomalyScore calculateAnomaly(final IForecastResult forecast, final ITimeSeriesPoint<Double> current) {
 		if (forecast.getForecast().getPoints().size() == 0) {
 			return null;
 		}

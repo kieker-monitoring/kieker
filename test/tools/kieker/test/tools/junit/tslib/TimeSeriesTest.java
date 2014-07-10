@@ -29,7 +29,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
 /**
  * 
  * @author Tillmann Carlos Bielefeld
- * @since 1.9
+ * @since 1.10
  * 
  */
 public class TimeSeriesTest extends AbstractKiekerTest {
@@ -121,5 +121,4 @@ public class TimeSeriesTest extends AbstractKiekerTest {
 		}
 		Assert.assertEquals(Integer.valueOf(lastNumber), this.boundedTS.getPoints().get(this.bounds - 1).getValue());
 	}
-
 }

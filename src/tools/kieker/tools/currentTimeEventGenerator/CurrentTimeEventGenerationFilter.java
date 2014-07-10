@@ -77,7 +77,11 @@ public class CurrentTimeEventGenerationFilter extends AbstractFilterPlugin {
 	/** This is the name of the property to determine the time resolution. */
 	public static final String CONFIG_PROPERTY_NAME_TIME_RESOLUTION = "timeResolution";
 
+	/**
+	 * Property name for the configuration of the timeunit.
+	 */
 	public static final String CONFIG_PROPERTY_NAME_TIMEUNIT = "timeunit";
+
 	public static final String CONFIG_PROPERTY_VALUE_TIMEUNIT = "NANOSECONDS"; // TimeUnit.NANOSECONDS.name()
 
 	/**

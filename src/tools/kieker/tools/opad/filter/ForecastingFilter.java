@@ -18,13 +18,16 @@ package kieker.tools.opad.filter;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 
 import kieker.analysis.IProjectContext;
+import kieker.analysis.configuration.AbstractUpdateableFilterPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
-import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.tools.opad.record.ForecastMeasurementPair;
 import kieker.tools.opad.record.IForecastMeasurementPair;
@@ -38,9 +41,9 @@ import kieker.tools.tslib.forecast.IForecaster;
 /**
  * Computes a forecast for every incoming measurement from different applications.
  * 
- * @author Tom Frotscher
+ * @since 1.10
+ * @author Tom Frotscher, Thomas Duellmann, Tobias Rudolph
  * 
- * @since 1.9
  */
 @Plugin(name = "Forecast Filter", outputPorts = {
 	@OutputPort(eventTypes = { IForecastResult.class }, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECAST),
@@ -48,10 +51,10 @@ import kieker.tools.tslib.forecast.IForecaster;
 		configuration = {
 			@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_DELTA_TIME, defaultValue = "1000"),
 			@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_DELTA_UNIT, defaultValue = "MILLISECONDS"),
-			@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_FC_METHOD, defaultValue = "MEAN"),
+			@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_FC_METHOD, defaultValue = "MEAN", updateable = true),
 			@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_TS_WINDOW_CAPACITY, defaultValue = "60")
 		})
-public class ForecastingFilter extends AbstractFilterPlugin {
+public class ForecastingFilter extends AbstractUpdateableFilterPlugin {
 
 	public static final String INPUT_PORT_NAME_TSPOINT = "tspoint";
 
@@ -64,62 +67,111 @@ public class ForecastingFilter extends AbstractFilterPlugin {
 	public static final String CONFIG_PROPERTY_NAME_TS_WINDOW_CAPACITY = "tswcapacity";
 
 	private final ConcurrentHashMap<String, ITimeSeries<Double>> applicationForecastingWindow;
-	private final int timeSeriesWindowCapacity;
-	private final ForecastMethod forecastMethod;
 
-	private final long deltat;
-	private final TimeUnit tunit;
+	private AtomicInteger timeSeriesWindowCapacity;
+	private final AtomicReference<ForecastMethod> forecastMethod = new AtomicReference<ForecastMethod>();
+	private AtomicLong deltat;
+	private TimeUnit tunit;
 
+	/**
+	 * Creates a new instance of this class.
+	 * 
+	 * @param configuration
+	 *            Configuration of this component
+	 * @param projectContext
+	 *            ProjectContext of this component
+	 */
 	public ForecastingFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
-
 		this.applicationForecastingWindow = new ConcurrentHashMap<String, ITimeSeries<Double>>();
-		this.deltat = configuration.getLongProperty(CONFIG_PROPERTY_NAME_DELTA_TIME);
-		this.tunit = TimeUnit.valueOf(configuration.getStringProperty(CONFIG_PROPERTY_NAME_DELTA_UNIT));
-		this.timeSeriesWindowCapacity = configuration.getIntProperty(CONFIG_PROPERTY_NAME_TS_WINDOW_CAPACITY);
-
-		this.forecastMethod = ForecastMethod.valueOf(configuration.getStringProperty(CONFIG_PROPERTY_NAME_FC_METHOD));
+		this.setCurrentConfiguration(configuration, false);
 	}
 
 	@Override
 	public Configuration getCurrentConfiguration() {
 		final Configuration configuration = new Configuration();
-
-		configuration.setProperty(CONFIG_PROPERTY_NAME_DELTA_TIME, Long.toString(this.deltat));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_DELTA_TIME, Long.toString(this.deltat.get()));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_DELTA_UNIT, this.tunit.name());
-		configuration.setProperty(CONFIG_PROPERTY_NAME_FC_METHOD, this.forecastMethod.name());
-		configuration.setProperty(CONFIG_PROPERTY_NAME_TS_WINDOW_CAPACITY, Integer.toString(this.timeSeriesWindowCapacity));
-
+		configuration.setProperty(CONFIG_PROPERTY_NAME_FC_METHOD, this.forecastMethod.get().name());
+		configuration.setProperty(CONFIG_PROPERTY_NAME_TS_WINDOW_CAPACITY, Integer.toString(this.timeSeriesWindowCapacity.get()));
 		return configuration;
 	}
 
-	@InputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = ForecastingFilter.INPUT_PORT_NAME_TSPOINT)
-	public void inputEvent(final NamedDoubleTimeSeriesPoint input) {
-		this.createWindowIfNotAlreadyInitialized(input.getName());
-		this.processInput(input);
-	}
+	@Override
+	public void setCurrentConfiguration(final Configuration config, final boolean update) {
+		if (!update || this.isPropertyUpdateable(CONFIG_PROPERTY_NAME_DELTA_TIME)) {
+			this.deltat = new AtomicLong(config.getLongProperty(CONFIG_PROPERTY_NAME_DELTA_TIME));
+		}
 
-	private void createWindowIfNotAlreadyInitialized(final String windowName) {
-		if (!this.applicationForecastingWindow.containsKey(windowName)) {
-			final ITimeSeries<Double> newWindow = new TimeSeries<Double>(System.currentTimeMillis(), this.deltat, this.tunit, this.timeSeriesWindowCapacity);
-			this.applicationForecastingWindow.putIfAbsent(windowName, newWindow);
+		if (!update || this.isPropertyUpdateable(CONFIG_PROPERTY_NAME_DELTA_UNIT)) {
+			this.tunit = TimeUnit.valueOf(config.getStringProperty(CONFIG_PROPERTY_NAME_DELTA_UNIT));
+		}
+
+		if (!update || this.isPropertyUpdateable(CONFIG_PROPERTY_NAME_FC_METHOD)) {
+			this.forecastMethod.set(ForecastMethod.valueOf(config.getStringProperty(CONFIG_PROPERTY_NAME_FC_METHOD)));
+		}
+
+		if (!update || this.isPropertyUpdateable(CONFIG_PROPERTY_NAME_TS_WINDOW_CAPACITY)) {
+			this.timeSeriesWindowCapacity = new AtomicInteger(config.getIntProperty(CONFIG_PROPERTY_NAME_TS_WINDOW_CAPACITY));
 		}
 	}
 
-	private void processInput(final NamedDoubleTimeSeriesPoint input) {
-		final long timestamp = input.getTime();
-		final String windowName = input.getName();
-
-		final ITimeSeries<Double> actualWindow = this.applicationForecastingWindow.get(windowName);
-		actualWindow.append(input.getValue());
-
-		final IForecaster<Double> forecaster = this.forecastMethod.createForecaster(actualWindow);
-		final IForecastResult<Double> result = forecaster.forecast(1);
-
-		super.deliver(OUTPUT_PORT_NAME_FORECAST, result);
-
-		final ForecastMeasurementPair fmp = new ForecastMeasurementPair(windowName, result.getForecast().getPoints().get(0).getValue(), input.getValue(), timestamp);
-		super.deliver(OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, fmp);
+	/**
+	 * Represents the input port for measurements.
+	 * 
+	 * @param input
+	 *            Incoming measurements
+	 */
+	@InputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = ForecastingFilter.INPUT_PORT_NAME_TSPOINT)
+	public void inputEvent(final NamedDoubleTimeSeriesPoint input) {
+		if (this.checkInitialization(input.getName())) {
+			this.processInput(input, input.getTime(), input.getName());
+		} else {
+			// Initialization of the forecasting variables for a new application
+			this.applicationForecastingWindow.put(input.getName(),
+					new TimeSeries<Double>(System.currentTimeMillis(), this.deltat.get(), this.tunit, this.timeSeriesWindowCapacity.get()));
+			this.processInput(input, input.getTime(), input.getName());
+		}
 	}
 
+	/**
+	 * Calculating the Forecast and delivers it.
+	 * 
+	 * @param input
+	 *            Incoming measurement
+	 * @param timestamp
+	 *            Timestamp of the measurement
+	 * @param name
+	 *            Name of the application of the measurement
+	 */
+	public void processInput(final NamedDoubleTimeSeriesPoint input, final long timestamp, final String name) {
+
+		final ITimeSeries<Double> currentWindow = this.applicationForecastingWindow.get(name);
+		currentWindow.append(input.getValue());
+		final IForecaster<Double> forecaster = this.forecastMethod.get().getForecaster(currentWindow);
+		final IForecastResult result = forecaster.forecast(1);
+		super.deliver(OUTPUT_PORT_NAME_FORECAST, result);
+
+		// Check whether we have forecasted points
+		if (result.getForecast().getPoints().size() > 0) {
+			final ForecastMeasurementPair fmp = new ForecastMeasurementPair(
+					name,
+					result.getForecast().getPoints().get(0).getValue(),
+					input.getValue(),
+					timestamp);
+			super.deliver(OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, fmp);
+		} else {
+			this.log.error("There are no forecast points to deliver. Perhaps Rserve is not running?");
+		}
+	}
+
+	/**
+	 * Checks if the current application is already known to this filter.
+	 * 
+	 * @param name
+	 *            application name
+	 */
+	private boolean checkInitialization(final String name) {
+		return this.applicationForecastingWindow.containsKey(name);
+	}
 }

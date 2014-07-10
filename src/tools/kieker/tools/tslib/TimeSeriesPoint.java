@@ -18,8 +18,7 @@ package kieker.tools.tslib;
 
 /**
  * @author Andre van Hoorn
- * 
- * @since 1.9
+ * @since 1.10
  * 
  * @param <T>
  *            The type of the point.

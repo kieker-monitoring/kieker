@@ -20,13 +20,23 @@ import kieker.tools.tslib.TimeSeriesPoint;
 
 /**
  * @author Tillmann Carlos Bielefeld
+ * @since 1.10
  * 
- * @since 1.9
  */
 public class NamedDoubleTimeSeriesPoint extends TimeSeriesPoint<Double> implements INamedElement {
 
 	private final String name;
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param time
+	 *            timestamp
+	 * @param value
+	 *            measurement value
+	 * @param name
+	 *            name of the ts point
+	 */
 	public NamedDoubleTimeSeriesPoint(final long time, final Double value, final String name) {
 		super(time, value);
 		this.name = name;

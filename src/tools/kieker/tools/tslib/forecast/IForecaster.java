@@ -20,8 +20,7 @@ import kieker.tools.tslib.ITimeSeries;
 
 /**
  * @author Andre van Hoorn
- * 
- * @since 1.9
+ * @since 1.10
  * 
  * @param <T>
  *            The type of the forecaster.
@@ -32,22 +31,24 @@ public interface IForecaster<T> {
 	 * Performs a time series forecast for the given number of steps in the future.
 	 * 
 	 * @param numForecastSteps
+	 *            number of steps which will be forecated
+	 * @return ForecastResult
 	 * 
-	 * @since 1.9
+	 * @since 1.10
 	 */
-	public IForecastResult<T> forecast(final int numForecastSteps);
+	public IForecastResult forecast(final int numForecastSteps);
 
 	/**
 	 * Returns the original time series used for the forecast.
 	 * 
-	 * @since 1.9
+	 * @since 1.10
 	 */
 	public ITimeSeries<T> getTsOriginal();
 
 	/**
 	 * Returns the confidence level to be computed for the forecast.
 	 * 
-	 * @since 1.9
+	 * @since 1.10
 	 */
 	public int getConfidenceLevel();
 }
