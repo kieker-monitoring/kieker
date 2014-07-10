@@ -24,7 +24,6 @@ import kieker.tools.tslib.forecast.arima.ARIMAForecaster;
 import kieker.tools.tslib.forecast.croston.CrostonForecaster;
 import kieker.tools.tslib.forecast.cs.CSForecaster;
 import kieker.tools.tslib.forecast.ets.ETSForecaster;
-import kieker.tools.tslib.forecast.historicdata.PatternCheckingForecaster;
 import kieker.tools.tslib.forecast.mean.MeanForecaster;
 import kieker.tools.tslib.forecast.mean.MeanForecasterJava;
 import kieker.tools.tslib.forecast.naive.NaiveForecaster;
@@ -63,7 +62,8 @@ public enum ForecastMethod {
 	NAIVE,
 
 	/**
-	 * {@link PatternCheckingForecaster}. {@link #getForecaster(ITimeSeries)} and {@link #getForecaster(ITimeSeries, int)} not supported
+	 * {@link kieker.tools.tslib.forecast.historicdata.PatternCheckingForecaster}. {@link #getForecaster(ITimeSeries)} and {@link #getForecaster(ITimeSeries, int)}
+	 * not supported
 	 * for this algorithm!
 	 */
 	PatternChecking,
