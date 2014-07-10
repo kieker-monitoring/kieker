@@ -55,8 +55,6 @@ public class MeanForecasterJava extends AbstractForecaster<Double> {
 
 		tsFC.appendAll(forecastValues);
 
-		// TODO #1217: compute confidence interval and set this value along with upper and lower time series
-
 		return new ForecastResult<Double>(tsFC, this.getTsOriginal());
 	}
 

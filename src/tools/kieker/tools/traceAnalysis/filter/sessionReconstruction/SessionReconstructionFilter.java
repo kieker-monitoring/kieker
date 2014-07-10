@@ -42,7 +42,6 @@ import kieker.tools.traceAnalysis.systemModel.ExecutionTraceBasedSession;
  * @since 1.10
  * 
  */
-// TODO: #699: Add input and output ports for {@link MessageTrace}s
 @Plugin(description = "Reconstructs sessions from execution or message traces",
 		outputPorts = {
 			@OutputPort(name = SessionReconstructionFilter.OUTPUT_PORT_NAME_EXECUTION_TRACE_SESSIONS, description = "Reconstructed execution trace-based sessions",

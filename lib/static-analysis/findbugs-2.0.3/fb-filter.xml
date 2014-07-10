@@ -2,6 +2,11 @@
 	<!-- Example: http://findbugs.sourceforge.net/manual/filter.html#d0e2103 -->
 
 	<Match>
+		<Class name="kieker.tools.traceAnalysis.filter.sessionReconstruction.SessionReconstructionFilter" />
+		<Bug pattern="AT_OPERATION_SEQUENCE_ON_CONCURRENT_ABSTRACTION" />
+	</Match>
+
+	<Match>
 		<Class name="kieker.analysis.plugin.reader.tcp.TCPReader" />
 		<Bug pattern="UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" />
 	</Match>

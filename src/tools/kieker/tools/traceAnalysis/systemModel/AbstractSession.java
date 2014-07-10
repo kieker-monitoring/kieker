@@ -31,7 +31,6 @@ import java.util.TreeSet;
  * @param <T>
  *            The concrete type of trace this session is based on
  */
-// TODO: #699: Is the implementation with ISessionState &quot;over-complicating&quot; things?
 public abstract class AbstractSession<T extends AbstractTrace> {
 
 	private final SortedSet<T> containedTraces; // protected visibility to avoid synthetic access
@@ -122,7 +121,7 @@ public abstract class AbstractSession<T extends AbstractTrace> {
 
 	}
 
-	// TODO: Fix warnings for synthetic-accesses (note: do not use the respective getter methods!)
+	// Note: currently synthetic-accesses to variables are used. Do not use the respective getter methods!
 	private class ModifiableState implements ISessionState<T> {
 
 		// avoid warnings creating objects of this type without an explicit (default) constructor
