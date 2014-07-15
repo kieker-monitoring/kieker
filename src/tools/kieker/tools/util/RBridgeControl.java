@@ -32,10 +32,9 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 
 /**
- * 
  * @author Tillmann Carlos Bielefeld
- * @since 1.10
  * 
+ * @since 1.10
  */
 public final class RBridgeControl {
 
@@ -45,10 +44,7 @@ public final class RBridgeControl {
 	private Rsession rCon;
 
 	protected RBridgeControl() {
-
-		final OutputStream out;
-
-		out = new OutputStream2StandardLog();
+		final OutputStream out = new OutputStream2StandardLog();
 		try {
 			this.rCon = Rsession.newLocalInstance(new PrintStream(out, true, "UTF-8"), null);
 		} catch (final UnsupportedEncodingException e) {
@@ -57,14 +53,16 @@ public final class RBridgeControl {
 	}
 
 	/**
-	 * wraps the execution of an arbitrary R expression. Logs result and error
+	 * Wraps the execution of an arbitrary R expression. Both errors and results are logged.
 	 * 
 	 * @param input
-	 *            R expression
-	 * @return result/error
+	 *            The R expression to evaluate.
+	 * 
+	 * @return The result or the error of the evaluation of the given R expression. The method tries to convert it into a string, if possible.
 	 */
 	public Object evalWithR(final String input) {
 		Object out = null;
+
 		try {
 			out = this.rCon.eval(input);
 
@@ -79,11 +77,10 @@ public final class RBridgeControl {
 			}
 
 			RBridgeControl.LOG.info("> REXP: " + input + " return: " + output);
-
 		} catch (final REXPMismatchException exc) {
-			RBridgeControl.LOG.error("Error R expr.: " + input + " Cause: "
-					+ exc, exc);
+			RBridgeControl.LOG.error("Error R expr.: " + input + " Cause: " + exc, exc);
 		}
+
 		return out;
 	}
 
@@ -247,28 +244,37 @@ public final class RBridgeControl {
 	}
 
 	/**
-	 * Returns a globally unique variable name.
+	 * Returns a globally unique variable name, even during the access of multiple threads.
 	 * 
-	 * @return string unique name
+	 * @return A unique variable name of the form {@code var_1, var_2, ...}.
 	 */
 	public static String uniqueVarname() {
-		return String.format("var_%s",
-				RBridgeControl.NEXTVARID.getAndIncrement());
+		return String.format("var_%s", RBridgeControl.NEXTVARID.getAndIncrement());
 	}
 
-	// GET SINGLETON INSTANCE
-	// #############################
+	/**
+	 * Delivers the singleton instance of this class.
+	 * 
+	 * @return The singleton instance.
+	 */
 	public static final RBridgeControl getInstance() {
 		return LazyHolder.INSTANCE;
 	}
 
 	/**
-	 * SINGLETON.
+	 * This is a helper class, holding the singleton instance of {@link RBridgeControl} and making sure that the object is lazily created.
+	 * 
+	 * @author Tillmann Carlos Bielefeld
+	 * 
+	 * @since 1.10
 	 */
 	private static final class LazyHolder { // NOCS
-		static final RBridgeControl INSTANCE;
+
+		static final RBridgeControl INSTANCE; // NOPMD (private modifier would require an additional getter method)
+
 		static {
 			INSTANCE = new RBridgeControl();
 		}
+
 	}
 }
