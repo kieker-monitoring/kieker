@@ -14,29 +14,23 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.monitoring.probe.aspectj.flow.operationExecutionObjectInterface;
+package kicker.common.record.flow;
 
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
+import kicker.common.record.flow.IFlowRecord;
 
 /**
- * @author Jan Waller
+ * Interface for all flow records that describe interfaces.
  * 
- * @since 1.6
+ * @author Florian Fittkau
+ * 
+ * @since 1.10
  */
-@Aspect
-public class FullInstrumentationNoGetterAndSetter extends AbstractAspect {
+public interface IInterfaceRecord extends IFlowRecord {
 
 	/**
-	 * Default constructor.
+	 * @return The interface.
+	 * 
+	 * @since 1.10
 	 */
-	public FullInstrumentationNoGetterAndSetter() {
-		// empty default constructor
-	}
-
-	@Override
-	@Pointcut("execution(* *(..)) && noGetterAndSetter()")
-	public void monitoredOperation() {
-		// Aspect Declaration (MUST be empty)
-	}
+	public abstract String getInterface();
 }

@@ -14,15 +14,15 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.record.flow.trace.operation.object.interfaceimpl;
+package kicker.common.record.flow.trace.operation.object.interfaceimpl;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
-import kieker.common.record.flow.IInterfaceRecord;
-import kieker.common.record.flow.trace.operation.object.BeforeOperationObjectEvent;
-import kieker.common.util.registry.IRegistry;
+import kicker.common.record.flow.IInterfaceRecord;
+import kicker.common.record.flow.trace.operation.object.BeforeOperationObjectEvent;
+import kicker.common.util.registry.IRegistry;
 
 /**
  * @author Florian Fittkau

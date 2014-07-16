@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.monitoring.probe.aspectj.flow.operationExecutionObjectInterface;
+package kicker.monitoring.probe.aspectj.flow.operationExecutionObjectInterface;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -22,15 +22,15 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
-import kieker.common.record.flow.trace.TraceMetadata;
-import kieker.common.record.flow.trace.operation.object.AfterOperationFailedObjectEvent;
-import kieker.common.record.flow.trace.operation.object.AfterOperationObjectEvent;
-import kieker.common.record.flow.trace.operation.object.interfaceimpl.BeforeOperationObjectInterfaceEvent;
-import kieker.monitoring.core.controller.IMonitoringController;
-import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.core.registry.TraceRegistry;
-import kieker.monitoring.probe.aspectj.AbstractAspectJProbe;
-import kieker.monitoring.timer.ITimeSource;
+import kicker.common.record.flow.trace.TraceMetadata;
+import kicker.common.record.flow.trace.operation.object.AfterOperationFailedObjectEvent;
+import kicker.common.record.flow.trace.operation.object.AfterOperationObjectEvent;
+import kicker.common.record.flow.trace.operation.object.interfaceimpl.BeforeOperationObjectInterfaceEvent;
+import kicker.monitoring.core.controller.IMonitoringController;
+import kicker.monitoring.core.controller.MonitoringController;
+import kicker.monitoring.core.registry.TraceRegistry;
+import kicker.monitoring.probe.aspectj.AbstractAspectJProbe;
+import kicker.monitoring.timer.ITimeSource;
 
 /**
  * @author Jan Waller
@@ -49,7 +49,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	@Pointcut
 	public abstract void monitoredOperation();
 
-	@Around("monitoredOperation() && this(thisObject) && notWithinKieker()")
+	@Around("monitoredOperation() && this(thisObject) && notWithinKicker()")
 	public Object operation(final Object thisObject, final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return thisJoinPoint.proceed();
@@ -110,7 +110,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	 * 
 	 * @throws Throwable
 	 */
-	@Around("monitoredOperation() && !this(java.lang.Object) && notWithinKieker()")
+	@Around("monitoredOperation() && !this(java.lang.Object) && notWithinKicker()")
 	public Object staticOperation(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return thisJoinPoint.proceed();
