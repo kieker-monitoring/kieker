@@ -97,6 +97,10 @@
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecutionObject.FullInstrumentation" /> -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecutionObject.FullInstrumentationNoGetterAndSetter" />  -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecutionObject.Annotation" /> -->
+		
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecutionObjectInterface.FullInstrumentation" /> -->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecutionObjectInterface.FullInstrumentationNoGetterAndSetter" />  -->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationExecutionObjectInterface.Annotation" /> -->
 
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationCall.FullInstrumentation" /> -->
 		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.operationCall.FullInstrumentationNoGetterAndSetter" /> -->
