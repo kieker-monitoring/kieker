@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.monitoring.probe.aspectj.flow.constructorExecutionObjectInterface;
+package kicker.monitoring.probe.aspectj.flow.constructorExecutionObjectInterface;
 
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -25,17 +25,17 @@ import org.aspectj.lang.annotation.Pointcut;
  * @since 1.10
  */
 @Aspect
-public class FullInstrumentation extends AbstractAspect {
+public class Annotation extends AbstractAspect {
 
 	/**
 	 * Default constructor.
 	 */
-	public FullInstrumentation() {
+	public Annotation() {
 		// empty default constructor
 	}
 
 	@Override
-	@Pointcut("execution(new(..))")
+	@Pointcut("execution(@kicker.monitoring.annotation.OperationExecutionMonitoringProbe new(..))")
 	public void monitoredConstructor() {
 		// Aspect Declaration (MUST be empty)
 	}

@@ -14,22 +14,22 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.monitoring.probe.aspectj.flow.constructorExecutionObjectInterface;
+package kicker.monitoring.probe.aspectj.flow.constructorExecutionObjectInterface;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
-import kieker.common.record.flow.trace.TraceMetadata;
-import kieker.common.record.flow.trace.operation.constructor.object.AfterConstructorFailedObjectEvent;
-import kieker.common.record.flow.trace.operation.constructor.object.AfterConstructorObjectEvent;
-import kieker.common.record.flow.trace.operation.constructor.object.interfaceimpl.BeforeConstructorObjectInterfaceEvent;
-import kieker.monitoring.core.controller.IMonitoringController;
-import kieker.monitoring.core.controller.MonitoringController;
-import kieker.monitoring.core.registry.TraceRegistry;
-import kieker.monitoring.probe.aspectj.AbstractAspectJProbe;
-import kieker.monitoring.timer.ITimeSource;
+import kicker.common.record.flow.trace.TraceMetadata;
+import kicker.common.record.flow.trace.operation.constructor.object.AfterConstructorFailedObjectEvent;
+import kicker.common.record.flow.trace.operation.constructor.object.AfterConstructorObjectEvent;
+import kicker.common.record.flow.trace.operation.constructor.object.interfaceimpl.BeforeConstructorObjectInterfaceEvent;
+import kicker.monitoring.core.controller.IMonitoringController;
+import kicker.monitoring.core.controller.MonitoringController;
+import kicker.monitoring.core.registry.TraceRegistry;
+import kicker.monitoring.probe.aspectj.AbstractAspectJProbe;
+import kicker.monitoring.timer.ITimeSource;
 
 /**
  * @author Jan Waller
@@ -59,7 +59,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	 * 
 	 * @throws Throwable
 	 */
-	@Around("monitoredConstructor() && this(thisObject) && notWithinKieker()")
+	@Around("monitoredConstructor() && this(thisObject) && notWithinKicker()")
 	public Object constructor(final Object thisObject, final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return thisJoinPoint.proceed();
