@@ -106,10 +106,21 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final StringBuilder sb = new StringBuilder();
 
 		sb.append('[');
-		for (int idx = 0; idx < interfaces.length; idx++) {
-			sb.append(interfaces[idx].getName());
-			if (idx < (interfaces.length - 1)) {
-				sb.append(", ");
+		if (interfaces.length == 0) {
+			final Class<?> superClass = thisJoinPoint.getSignature().getDeclaringType()
+					.getSuperclass();
+			if (superClass != null) {
+				final String superClassName = superClass.toString();
+				if (!superClassName.equalsIgnoreCase("java.lang.Object")) {
+					return superClassName;
+				}
+			}
+		} else {
+			for (int idx = 0; idx < interfaces.length; idx++) {
+				sb.append(interfaces[idx].getName());
+				if (idx < (interfaces.length - 1)) {
+					sb.append(", ");
+				}
 			}
 		}
 		sb.append(']');
