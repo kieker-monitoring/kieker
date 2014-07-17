@@ -1,32 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="KiekerLiveDemoExample" default="build-all" basedir=".">
 	<property name="dist" value="dist"/>
+	<property name="livedemo.basedir" value="livedemo"/>
+	<property name="livedemo.webcontent" value="${livedemo.basedir}/WebContent"/>
+	<property name="livedemo.lib.dir" value="${livedemo.basedir}/lib"/>
+	<property name="kieker.dist.dir" value="../../dist/"/>
+	
 	<property name="build" value="build"/>
-	<property name="src" value="livedemo"/>
-	<property name="classes" value="${build}/WEB-INF/classes"/>
-	<property name="webcontent" value="${src}/WebContent"/>
-	<property name="src.lib.dir" value="${src}/lib"/>
+	<property name="build.classes" value="${build}/WEB-INF/classes"/>
 	<property name="dest.lib.dir" value="${build}/WEB-INF/lib"/>
 	
-	<property name="war.demo.name" value="${dist}/livedemo.war"/>
-	<property name="war.petstore.name" value="${dist}/jpetstore.war"/>
+	<property name="dist.livedemo.war" value="${dist}/livedemo.war"/>
 		
 	<property name="jetty.webapps" value="jetty/webapps/root"/>
 	<property name="jetty.lib.dir" value="jetty/lib"/>
 	
 	<path id="demo-compile-classpath">
-		<fileset dir="${src.lib.dir}">
+		<fileset dir="${livedemo.lib.dir}">
 			<include name="primefaces-*.jar" />
 			<include name="ApacheJMeter_core.jar" />
 			<include name="jsf-api-*.jar" />
-			<include name="kieker-*.jar" />
 		</fileset>
 		<fileset dir="${jetty.lib.dir}/annotations/">
 			<include name="javax.annotation-*.jar" />
 		</fileset>
+		<fileset dir="${kieker.dist.dir}">
+			<include name="kieker-*.jar" /> <!-- matches more than one but fine for compilation -->
+		</fileset>
 	</path>
 
-	<target name="build-all" depends="init,copy,compile,war,unwar" />
+	<target name="build-all" depends="clean,init,copy,compile,war,unwar" />
 	
 	<target name="init">
 		<mkdir dir="${build}"/>
@@ -35,38 +38,37 @@
 	
 	<target name="copy" depends="init">
 		<copy todir="${build}">
-			<fileset dir="${webcontent}"/>
+			<fileset dir="${livedemo.webcontent}"/>
 		</copy>
 		<copy todir="${dest.lib.dir}">
-			<fileset dir="${src.lib.dir}"/>
+			<fileset dir="${livedemo.lib.dir}"/>
 		</copy>
-		<copy file="${src.lib.dir}/ApacheJMeter.jar" todir="${build}/WEB-INF/bin"/>
+		<copy file="${livedemo.lib.dir}/ApacheJMeter.jar" todir="${build}/WEB-INF/bin"/>
 		<mkdir dir="${dest.lib.dir}/ext"/>
 		<mkdir dir="${dest.lib.dir}/junit"/>
 	</target>
 
 	<target name="compile" depends="copy">
-		<mkdir dir="${classes}"/>
-		<javac srcdir="${src}/src" destdir="${classes}" classpathref="demo-compile-classpath"/>
+		<mkdir dir="${build.classes}"/>
+		<javac srcdir="${livedemo.basedir}/src" destdir="${build.classes}" classpathref="demo-compile-classpath"/>
 	</target>
 
 	<target name="war" depends="compile">
 		
-		<war destfile="${war.demo.name}">
+		<war destfile="${dist.livedemo.war}">
 			<fileset dir="${build}"/>
 		</war>
-		
-		<!--
-		<war destfile="${war.petstore.name}">
-			<fileset dir="jetty/webapps/jpetstore"/>
-		</war>
-		-->
 		
 		<delete dir="${build}"/>
 	</target>
 	
 	<target name="unwar" depends="war">
-		<unwar src="${war.demo.name}" dest="${jetty.webapps}"/>
+		<unwar src="${dist.livedemo.war}" dest="${jetty.webapps}"/>
 	</target>
 	
+    <target name="clean">
+        <delete dir="${build}" includeemptydirs="true" />
+    	<delete dir="${dist}" includeemptydirs="true" />
+    	<delete dir="${jetty.webapps}" includeemptydirs="true" />
+      </target>	
 </project>
