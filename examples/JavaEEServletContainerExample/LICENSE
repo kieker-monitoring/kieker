@@ -9,7 +9,7 @@ for which other license conditions apply:
    directory. We included a subset of the external libraries contained in the 
    Jetty release to be found in the `lib/` directory as-is without additional 
    license information. For additional libraries added to the directory by us 
-   as part of this Kieker example, we included a `*.jar.LICENSE` file.
+   as part of this Kieker example, we include a `*.LICENSE` file.
 
 2. MyBatis JPetStore (http://code.google.com/p/mybatis/)
    The directory `jetty-hightide-jpetstore/webapps/jpetstore/` contains a 
@@ -18,10 +18,15 @@ for which other license conditions apply:
    external libraries contained in the JPetStore release to be found in the 
    `WEB-INF/lib/` directory as-is without additional license information. 
    For additional libraries added to the directory by us as part of this Kieker 
-   example, we included a `*.jar.LICENSE` file. For additional modifications 
+   example, we include a `*.LICENSE` file. For additional modifications 
    to the example by us as part of this Kieker example see the README file 
    contained in the `jpetstore/`  directory. 
 
+3. Kieker LiveDemo
+   The directory `livedemo/` contains the source code for the Kieker live
+   demo also available online at http://demo.kieker-monitoring.net/. 
+   Exernal libraries can be found in the `lib/` directory. We include
+   a `*.LICENSE` file for each library.
 ===
 
                                  Apache License
