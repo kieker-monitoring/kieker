@@ -40,6 +40,9 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 		int.class, // objectId
 		String.class, // OperationEvent.interface
 	};
+
+	private static final String NO_INTERFACES = "<no-interfaces>";
+
 	private static final long serialVersionUID = 7966590180113667840L;
 	private final String interfaceImpl;
 
@@ -60,10 +63,9 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 	 *            The object ID.
 	 */
 	public BeforeOperationObjectInterfaceEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature,
-			final String classSignature,
-			final int objectId, final String interfaceImpl) {
+			final String classSignature, final int objectId, final String interfaceImpl) {
 		super(timestamp, traceId, orderIndex, operationSignature, classSignature, objectId);
-		this.interfaceImpl = interfaceImpl;
+		this.interfaceImpl = ("".equals(interfaceImpl)) ? NO_INTERFACES : interfaceImpl; // NOCS
 	}
 
 	/**
