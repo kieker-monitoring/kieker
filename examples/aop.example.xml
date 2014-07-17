@@ -83,6 +83,9 @@
 		<!-- <aspect name="kicker.monitoring.probe.aspectj.flow.constructorExecutionObject.FullInstrumentation" /> -->
 		<!-- <aspect name="kicker.monitoring.probe.aspectj.flow.constructorExecutionObject.Annotation" /> -->
 
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.constructorExecutionObjectInterface.FullInstrumentation" /> -->
+		<!-- <aspect name="kieker.monitoring.probe.aspectj.flow.constructorExecutionObjectInterface.Annotation" /> -->
+
 		<!-- <aspect name="kicker.monitoring.probe.aspectj.flow.constructorCall.FullInstrumentation" /> -->
 		<!-- <aspect name="kicker.monitoring.probe.aspectj.flow.constructorCall.Annotation" /> -->
 

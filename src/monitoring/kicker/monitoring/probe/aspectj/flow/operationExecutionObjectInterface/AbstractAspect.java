@@ -70,7 +70,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final int objectId = System.identityHashCode(thisObject);
 		// measure before execution
 		CTRLINST.newMonitoringRecord(new BeforeOperationObjectInterfaceEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature, clazz, objectId,
-				this.getInterface(thisJoinPoint)));
+				AbstractAspect.getInterface(thisJoinPoint)));
 		// execution of the called method
 		final Object retval;
 		try {
@@ -90,7 +90,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		return retval;
 	}
 
-	private String getInterface(final ProceedingJoinPoint thisJoinPoint) {
+	private static final String getInterface(final ProceedingJoinPoint thisJoinPoint) {
 		final Class<?>[] interfaces = thisJoinPoint.getSignature().getDeclaringType().getInterfaces();
 		final StringBuilder sb = new StringBuilder();
 
@@ -136,7 +136,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final long traceId = trace.getTraceId();
 		final String clazz = sig.getDeclaringTypeName();
 		// measure before execution
-		CTRLINST.newMonitoringRecord(new BeforeOperationObjectInterfaceEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature, clazz, 0, this
+		CTRLINST.newMonitoringRecord(new BeforeOperationObjectInterfaceEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature, clazz, 0, AbstractAspect
 				.getInterface(thisJoinPoint)));
 		// execution of the called method
 		final Object retval;
