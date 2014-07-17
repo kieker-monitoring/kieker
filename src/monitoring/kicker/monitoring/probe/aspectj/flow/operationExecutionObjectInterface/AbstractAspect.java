@@ -91,13 +91,19 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 	}
 
 	private String getInterface(final ProceedingJoinPoint thisJoinPoint) {
-		@SuppressWarnings("rawtypes")
-		final Class[] interfaces = thisJoinPoint.getSignature().getDeclaringType().getInterfaces();
-		if (interfaces.length == 1) {
-			return interfaces[0].getName();
-		}
+		final Class<?>[] interfaces = thisJoinPoint.getSignature().getDeclaringType().getInterfaces();
+		final StringBuilder sb = new StringBuilder();
 
-		return "";
+		sb.append('[');
+		for (int idx = 0; idx < interfaces.length; idx++) {
+			sb.append(interfaces[idx].getName());
+			if (idx < (interfaces.length - 1)) {
+				sb.append(", ");
+			}
+		}
+		sb.append(']');
+
+		return sb.toString();
 	}
 
 	/**
