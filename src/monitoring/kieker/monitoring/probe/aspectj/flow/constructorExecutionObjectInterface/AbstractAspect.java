@@ -110,9 +110,9 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			final Class<?> superClass = thisJoinPoint.getSignature().getDeclaringType()
 					.getSuperclass();
 			if (superClass != null) {
-				final String superClassName = superClass.toString();
-				if (!superClassName.equalsIgnoreCase("java.lang.Object")) {
-					return superClassName;
+				final String superClassName = superClass.getName();
+				if (!superClassName.equals("java.lang.Object")) {
+					sb.append(superClassName);
 				}
 			}
 		} else {
