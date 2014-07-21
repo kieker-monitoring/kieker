@@ -100,7 +100,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 					.getSuperclass();
 			if (superClass != null) {
 				final String superClassName = superClass.getName();
-				if (!superClassName.equals("java.lang.Object")) {
+				if (!"java.lang.Object".equals(superClassName)) {
 					sb.append(superClassName);
 				}
 			}
