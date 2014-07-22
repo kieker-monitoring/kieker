@@ -129,7 +129,7 @@ final class ExplorVizExportWriterThread extends AbstractAsyncThread {
 		// sizes from ExplorViz not Kieker!
 		int recordSize = 0;
 		if (monitoringRecord instanceof BeforeOperationEvent) {
-			recordSize = 29;
+			recordSize = 37;
 		} else if (monitoringRecord instanceof AfterOperationFailedEvent) {
 			recordSize = 25;
 		} else if (monitoringRecord instanceof AfterOperationEvent) {
@@ -164,6 +164,13 @@ final class ExplorVizExportWriterThread extends AbstractAsyncThread {
 				buffer.putInt(0);
 			}
 			buffer.putInt(this.monitoringController.getUniqueIdForString(kiekerBefore.getOperationSignature()));
+			buffer.putInt(this.monitoringController.getUniqueIdForString(kiekerBefore.getClassSignature()));
+			// if (kiekerRecord instanceof IInterfaceRecord) {
+			// final IInterfaceRecord iInterfaceRecord = (IInterfaceRecord) kiekerRecord;
+			// buffer.putInt(this.monitoringController.getUniqueIdForString(iInterfaceRecord.getInterface()));
+			// } else {
+			buffer.putInt(this.monitoringController.getUniqueIdForString(""));
+			// }
 		} else if (kiekerRecord instanceof AfterOperationFailedEvent) {
 			final AfterOperationFailedEvent kiekerAfterFailed = (AfterOperationFailedEvent) kiekerRecord;
 			buffer.put(AFTER_FAILED_OPERATION_CLAZZ_ID);
