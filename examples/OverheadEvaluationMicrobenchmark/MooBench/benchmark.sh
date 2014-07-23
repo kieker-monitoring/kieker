@@ -7,7 +7,7 @@ BASEDIR=./
 RESULTSDIR="${BASEDIR}tmp/results-kieker/"
 
 SLEEPTIME=30            ## 30
-NUM_LOOPS=5            ## 10
+NUM_LOOPS=10            ## 10
 THREADS=1               ## 1
 RECURSIONDEPTH=10       ## 10
 TOTALCALLS=2000000      ## 2000000
