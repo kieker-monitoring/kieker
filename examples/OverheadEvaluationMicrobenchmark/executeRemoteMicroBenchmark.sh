@@ -31,5 +31,5 @@ scp ${REMOTE_NODE}:MooBench/tmp/${RESULTS_FOLDER_NAME}/results-text.csv ${RESULT
 ssh ${REMOTE_NODE} "cp MooBench/tmp/${RESULTS_FOLDER_NAME}/results.zip old-results --backup=t; exit"
 ssh ${REMOTE_NODE} "cd old-results; ls -A1t | sed -e '1,100d' | xargs -d '\n' rm; exit"
 ssh ${REMOTE_NODE} 'mv old-results /tmp/; exit'
-ssh ${REMOTE_NODE} 'rm -rf *; exit'
+ssh ${REMOTE_NODE} 'rm -rf MooBench; exit'
 ssh ${REMOTE_NODE} 'mv /tmp/old-results .; exit'
