@@ -28,7 +28,7 @@ ssh ${REMOTE_NODE} 'cd MooBench; chmod +x benchmark.sh; ./benchmark.sh; exit'
 scp ${REMOTE_NODE}:MooBench/tmp/${RESULTS_FOLDER_NAME}/results-text.csv ${RESULTS_TARGET_FILE}
 
 # Save up to 100 results from previous benchmarks on the remote node and clean up
-ssh ${REMOTE_NODE} 'cp MooBench/tmp/${RESULTS_FOLDER_NAME}/results.zip old-results --backup=t; exit'
+ssh ${REMOTE_NODE} 'cp MooBench/tmp/\${RESULTS_FOLDER_NAME}/results.zip old-results --backup=t; exit'
 ssh ${REMOTE_NODE} "cd old-results; ls -A1t | sed -e '1,100d' | xargs -d '\n' rm; exit"
 ssh ${REMOTE_NODE} 'mv old-results /tmp/; exit'
 ssh ${REMOTE_NODE} 'rm -rf *; exit'
