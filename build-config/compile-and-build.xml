@@ -8,8 +8,13 @@
 	<target name="build-all" depends="clean,-init,build-kieker.main,build-kieker.main.aspectj,build-kieker.main.emf" description="Compiles and packages the Kieker Jar and War files (calls the 'build-kieker-*' targets)">
 	</target>
 
-	<!-- Build kieker.common	-->
-	<target name="-compile-kieker.common" depends="-init" description="Compiles the sources commonly used by all Kieker components">
+	<!-- Build kieker.common -->
+	<target name="-generate-kieker.common" depends="-init" description="">
+		<exec executable="${bin.dir}/dev/irl-compiler.sh">
+			<arg line="-l java -p Kieker -s src -d src-gen -r ."/>	
+		</exec>
+	</target>
+	<target name="-compile-kieker.common" depends="-init,-generate-kieker.common" description="Compiles the sources commonly used by all Kieker components">
 		<delete dir="${build.kieker.common.dir}" />
 		<mkdir dir="${build.kieker.common.dir}" />
 		<javac destDir="${build.kieker.common.dir}" source="1.6" target="1.6" srcdir="${src.kieker.common.dir}" debug="true" classpathref="kieker.common-compile-classpath" includeAntRuntime="false">
@@ -17,6 +22,7 @@
 		</javac>
 	</target>
 
+	<!-- build kieker.monitoring -->
 	<target name="-compile-kieker.monitoring" depends="-init,-compile-kieker.common" description="Compiles the sources of the Kieker.Monitoring component">
 		<delete dir="${build.kieker.monitoring.dir}" />
 		<mkdir dir="${build.kieker.monitoring.dir}" />
