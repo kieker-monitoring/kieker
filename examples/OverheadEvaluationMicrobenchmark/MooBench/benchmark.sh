@@ -44,6 +44,7 @@ JAVAARGS_KIEKER_DEACTV="${JAVAARGS_LTW} -Dkieker.monitoring.enabled=false -Dkiek
 JAVAARGS_KIEKER_NOLOGGING="${JAVAARGS_LTW} -Dkieker.monitoring.writer=kieker.monitoring.writer.DummyWriter"
 JAVAARGS_KIEKER_LOGGING_ASCII="${JAVAARGS_LTW} -Dkieker.monitoring.writer=kieker.monitoring.writer.filesystem.AsyncFsWriter -Dkieker.monitoring.writer.filesystem.AsyncFsWriter.customStoragePath=${BASEDIR}tmp"
 JAVAARGS_KIEKER_LOGGING_BIN="${JAVAARGS_LTW} -Dkieker.monitoring.writer=kieker.monitoring.writer.filesystem.AsyncBinaryFsWriter -Dkieker.monitoring.writer.filesystem.AsyncBinaryFsWriter.customStoragePath=${BASEDIR}tmp"
+JAVAARGS_KIEKER_LOGGING_TCP="${JAVAARGS_LTW} -Dkieker.monitoring.writer=kieker.monitoring.writer.tcp.TCPWriter"
 
 ## Write configuration
 uname -a >${RESULTSDIR}configuration.txt
@@ -137,6 +138,7 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         --recursiondepth ${j} \
         ${MOREPARAMS}
     #pkill sar
+	du -h ${BASEDIR}tmp/kieker-*
     rm -rf ${BASEDIR}tmp/kieker-*
     [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot-${i}-${j}-${k}.log
     echo >>${BASEDIR}kieker.log
@@ -156,12 +158,33 @@ for ((i=1;i<=${NUM_LOOPS};i+=1)); do
         --recursiondepth ${j} \
         ${MOREPARAMS}
     #pkill sar
+	du -h ${BASEDIR}tmp/kieker-*
     rm -rf ${BASEDIR}tmp/kieker-*
     [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot-${i}-${j}-${k}.log
     echo >>${BASEDIR}kieker.log
     echo >>${BASEDIR}kieker.log
     sync
     sleep ${SLEEPTIME}
+	
+	k=`expr ${k} + 1`
+    echo " # ${i}.${j}.${k} Logging (TCP)"
+    echo " # ${i}.${j}.${k} Logging (TCP)" >>${BASEDIR}kieker.log
+	#  sar -o ${RESULTSDIR}stat/sar-${i}-${j}-${k}.data 5 2000 1>/dev/null 2>&1 &
+	${JAVABIN}java -classpath MooBench.jar kieker.tcp.TestExperiment0 >> ${BASEDIR}kieker.tcp.log &
+    ${JAVABIN}java  ${JAVAARGS_KIEKER_LOGGING_TCP} ${JAR} \
+        --output-filename ${RAWFN}-${i}-${j}-${k}.csv \
+        --totalcalls ${TOTALCALLS} \
+        --methodtime ${METHODTIME} \
+        --totalthreads ${THREADS} \
+        --recursiondepth ${j} \
+        ${MOREPARAMS}
+    #pkill sar
+    [ -f ${BASEDIR}hotspot.log ] && mv ${BASEDIR}hotspot.log ${RESULTSDIR}hotspot-${i}-${j}-${k}.log
+    echo >>${BASEDIR}kieker.log
+    echo >>${BASEDIR}kieker.log
+    sync
+    sleep ${SLEEPTIME}
+	
 	
 done
 #zip -jqr ${RESULTSDIR}stat.zip ${RESULTSDIR}stat
@@ -177,7 +200,7 @@ outtxt_fn="${RESULTSDIR}results-text.txt"
 outcsv_fn="${RESULTSDIR}results-text.csv"
 configs.loop=${NUM_LOOPS}
 configs.recursion=c(${RECURSIONDEPTH})
-configs.labels=c("No Probe","Deactivated Probe","Collecting Data","Writer (ASCII)", "Writer (Bin)")
+configs.labels=c("No Probe","Deactivated Probe","Collecting Data","Writer (ASCII)", "Writer (Bin)", "Writer (TCP)")
 results.count=${TOTALCALLS}
 results.skip=${TOTALCALLS}/2
 source("${RSCRIPTDIR}stats.csv.r")
