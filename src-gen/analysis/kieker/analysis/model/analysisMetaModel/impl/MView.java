@@ -327,4 +327,4 @@ public class MView extends EObjectImpl implements MIView {
 		return result.toString();
 	}
 
-} // MView
+} //MView

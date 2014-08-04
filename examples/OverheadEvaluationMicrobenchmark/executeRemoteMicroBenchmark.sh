@@ -2,7 +2,7 @@
 
 # The following constant specifies user name and address of the remote node executing the benchmark.
 # We recommend to use SSH keys for the access and to install Java (>= 1.6) and R (> 3.0) on the remote node.
-REMOTE_NODE=ubuntu@192.168.48.60
+REMOTE_NODE=jenkins@blade1
 
 # The following constant specifies location and name of the benchmarked jar file relative to the workspace. 
 BENCHMARKED_JAR=dist/kieker-1.10-SNAPSHOT_aspectj.jar 
@@ -28,8 +28,7 @@ ssh ${REMOTE_NODE} 'cd MooBench; chmod +x benchmark.sh; ./benchmark.sh; exit'
 scp ${REMOTE_NODE}:MooBench/tmp/${RESULTS_FOLDER_NAME}/results-text.csv ${RESULTS_TARGET_FILE}
 
 # Save up to 100 results from previous benchmarks on the remote node and clean up
-ssh ${REMOTE_NODE} 'cp MooBench/tmp/${RESULTS_FOLDER_NAME}/results.zip old-results --backup=t; exit'
-ssh ${REMOTE_NODE} "cd old-results; ls -A1t | sed -e '1,100d' | xargs -d '\n' rm; exit"
-ssh ${REMOTE_NODE} 'mv old-results /tmp/; exit'
-ssh ${REMOTE_NODE} 'rm -rf *; exit'
-ssh ${REMOTE_NODE} 'mv /tmp/old-results .; exit'
+BACKUP_FOLDER_NAME="$(date +%Y-%m-%d-%H-%M-%S)"
+ssh ${REMOTE_NODE} "mkdir old-results/${BACKUP_FOLDER_NAME}; cp MooBench/tmp/${RESULTS_FOLDER_NAME}/results.zip old-results/${BACKUP_FOLDER_NAME}/; exit"
+ssh ${REMOTE_NODE} "cd old-results; ls -A1t | sed -e '1,100d' | xargs -d '\n' rm -rf; exit"
+ssh ${REMOTE_NODE} 'rm -rf MooBench; exit'

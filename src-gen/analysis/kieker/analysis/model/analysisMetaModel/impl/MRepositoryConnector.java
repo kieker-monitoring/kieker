@@ -276,4 +276,4 @@ public class MRepositoryConnector extends EObjectImpl implements MIRepositoryCon
 		return result.toString();
 	}
 
-} // MRepositoryConnector
+} //MRepositoryConnector

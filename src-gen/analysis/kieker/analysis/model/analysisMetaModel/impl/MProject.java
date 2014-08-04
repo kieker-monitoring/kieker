@@ -367,4 +367,4 @@ public class MProject extends EObjectImpl implements MIProject {
 		return result.toString();
 	}
 
-} // MProject
+} //MProject

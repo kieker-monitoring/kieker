@@ -257,4 +257,4 @@ public abstract class MPort extends EObjectImpl implements MIPort {
 		return result.toString();
 	}
 
-} // MPort
+} //MPort

@@ -147,7 +147,8 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	 * factory method {@link #init init()}, which also performs
 	 * initialization of the package, or returns the registered package,
 	 * if one already exists.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.emf.ecore.EPackage.Registry
 	 * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelPackage#eNS_URI
 	 * @see #init()
@@ -169,7 +170,8 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 	 * 
 	 * <p>This method is used to initialize {@link MIAnalysisMetaModelPackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #eNS_URI
 	 * @see #createPackageContents()
 	 * @see #initializePackageContents()
@@ -858,4 +860,4 @@ public class MAnalysisMetaModelPackage extends EPackageImpl implements MIAnalysi
 		createResource(eNS_URI);
 	}
 
-} // MAnalysisMetaModelPackage
+} //MAnalysisMetaModelPackage

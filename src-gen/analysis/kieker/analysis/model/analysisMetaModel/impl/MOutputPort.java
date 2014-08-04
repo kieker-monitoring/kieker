@@ -233,4 +233,4 @@ public class MOutputPort extends MPort implements MIOutputPort {
 		return super.eIsSet(featureID);
 	}
 
-} // MOutputPort
+} //MOutputPort

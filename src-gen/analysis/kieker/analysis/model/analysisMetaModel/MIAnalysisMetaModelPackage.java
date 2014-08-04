@@ -12,10 +12,10 @@ import org.eclipse.emf.ecore.EReference;
  * The <b>Package</b> for the model.
  * It contains accessors for the meta objects to represent
  * <ul>
- * <li>each class,</li>
- * <li>each feature of each class,</li>
- * <li>each enum,</li>
- * <li>and each data type</li>
+ *   <li>each class,</li>
+ *   <li>each feature of each class,</li>
+ *   <li>each enum,</li>
+ *   <li>and each data type</li>
  * </ul>
  * <!-- end-user-doc -->
  * @see kieker.analysis.model.analysisMetaModel.MIAnalysisMetaModelFactory
@@ -916,6 +916,7 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 */
 	int DISPLAY_CONNECTOR_FEATURE_COUNT = 3;
 
+
 	/**
 	 * Returns the meta object for class '{@link kieker.analysis.model.analysisMetaModel.MIProject <em>Project</em>}'.
 	 * <!-- begin-user-doc -->
@@ -1475,10 +1476,10 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 	 * <!-- begin-user-doc -->
 	 * Defines literals for the meta objects that represent
 	 * <ul>
-	 * <li>each class,</li>
-	 * <li>each feature of each class,</li>
-	 * <li>each enum,</li>
-	 * <li>and each data type</li>
+	 *   <li>each class,</li>
+	 *   <li>each feature of each class,</li>
+	 *   <li>each enum,</li>
+	 *   <li>and each data type</li>
 	 * </ul>
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1924,4 +1925,4 @@ public interface MIAnalysisMetaModelPackage extends EPackage {
 
 	}
 
-} // MIAnalysisMetaModelPackage
+} //MIAnalysisMetaModelPackage

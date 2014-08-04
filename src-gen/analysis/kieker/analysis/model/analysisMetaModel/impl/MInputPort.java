@@ -192,4 +192,4 @@ public class MInputPort extends MPort implements MIInputPort {
 		return super.eIsSet(featureID);
 	}
 
-} // MInputPort
+} //MInputPort
