@@ -29,7 +29,8 @@ public interface MIPort extends EObject {
 	 * Returns the value of the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Name</em>' attribute isn't clear, there really should be more of a description here...
+	 * If the meaning of the '<em>Name</em>' attribute isn't clear,
+	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Name</em>' attribute.
@@ -55,7 +56,8 @@ public interface MIPort extends EObject {
 	 * The list contents are of type {@link java.lang.String}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Event Types</em>' attribute list isn't clear, there really should be more of a description here...
+	 * If the meaning of the '<em>Event Types</em>' attribute list isn't clear,
+	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Event Types</em>' attribute list.
@@ -69,7 +71,8 @@ public interface MIPort extends EObject {
 	 * Returns the value of the '<em><b>Id</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Id</em>' attribute isn't clear, there really should be more of a description here...
+	 * If the meaning of the '<em>Id</em>' attribute isn't clear,
+	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Id</em>' attribute.

@@ -27,7 +27,8 @@ public interface MIOutputPort extends MIPort {
 	 * The list contents are of type {@link kieker.analysis.model.analysisMetaModel.MIInputPort}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Subscribers</em>' reference list isn't clear, there really should be more of a description here...
+	 * If the meaning of the '<em>Subscribers</em>' reference list isn't clear,
+	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Subscribers</em>' reference list.
@@ -42,7 +43,8 @@ public interface MIOutputPort extends MIPort {
 	 * It is bidirectional and its opposite is '{@link kieker.analysis.model.analysisMetaModel.MIPlugin#getOutputPorts <em>Output Ports</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Parent</em>' container reference isn't clear, there really should be more of a description here...
+	 * If the meaning of the '<em>Parent</em>' container reference isn't clear,
+	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Parent</em>' container reference.

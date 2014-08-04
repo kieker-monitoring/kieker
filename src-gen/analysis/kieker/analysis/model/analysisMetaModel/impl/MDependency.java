@@ -160,4 +160,4 @@ public class MDependency extends EObjectImpl implements MIDependency {
 		return result.toString();
 	}
 
-} // MDependency
+} //MDependency

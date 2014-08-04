@@ -276,4 +276,4 @@ public class MDisplayConnector extends EObjectImpl implements MIDisplayConnector
 		return result.toString();
 	}
 
-} // MDisplayConnector
+} //MDisplayConnector

@@ -213,4 +213,4 @@ public class MAnalysisMetaModelFactory extends EFactoryImpl implements MIAnalysi
 		return MIAnalysisMetaModelPackage.eINSTANCE;
 	}
 
-} // MAnalysisMetaModelFactory
+} //MAnalysisMetaModelFactory

@@ -66,7 +66,7 @@ public class AnalysisMetaModelAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	protected AnalysisMetaModelSwitch<Adapter> modelSwitch =
-			new AnalysisMetaModelSwitch<Adapter>() {
+		new AnalysisMetaModelSwitch<Adapter>() {
 			@Override
 			public Adapter caseProject(MIProject object) {
 				return createProjectAdapter();
@@ -145,6 +145,7 @@ public class AnalysisMetaModelAdapterFactory extends AdapterFactoryImpl {
 	public Adapter createAdapter(Notifier target) {
 		return modelSwitch.doSwitch((EObject)target);
 	}
+
 
 	/**
 	 * Creates a new adapter for an object of class '{@link kieker.analysis.model.analysisMetaModel.MIProject <em>Project</em>}'.
@@ -368,4 +369,4 @@ public class AnalysisMetaModelAdapterFactory extends AdapterFactoryImpl {
 		return null;
 	}
 
-} // AnalysisMetaModelAdapterFactory
+} //AnalysisMetaModelAdapterFactory

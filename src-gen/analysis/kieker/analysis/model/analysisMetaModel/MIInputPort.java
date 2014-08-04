@@ -2,6 +2,7 @@
  */
 package kieker.analysis.model.analysisMetaModel;
 
+
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Input Port</b></em>'.
@@ -24,7 +25,8 @@ public interface MIInputPort extends MIPort {
 	 * It is bidirectional and its opposite is '{@link kieker.analysis.model.analysisMetaModel.MIFilter#getInputPorts <em>Input Ports</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Parent</em>' container reference isn't clear, there really should be more of a description here...
+	 * If the meaning of the '<em>Parent</em>' container reference isn't clear,
+	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Parent</em>' container reference.

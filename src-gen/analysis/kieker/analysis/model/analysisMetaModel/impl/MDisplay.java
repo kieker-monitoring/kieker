@@ -315,4 +315,4 @@ public class MDisplay extends EObjectImpl implements MIDisplay {
 		return result.toString();
 	}
 
-} // MDisplay
+} //MDisplay
