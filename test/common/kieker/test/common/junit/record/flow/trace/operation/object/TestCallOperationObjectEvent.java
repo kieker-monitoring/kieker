@@ -26,6 +26,7 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.common.junit.record.UtilityClass;
 
 /**
  * @author Andre van Hoorn, Jan Waller
@@ -80,8 +81,7 @@ public class TestCallOperationObjectEvent extends AbstractKiekerTest {
 
 		Assert.assertEquals(event1, event2);
 		Assert.assertEquals(0, event1.compareTo(event2));
-		Assert.assertTrue(event1.refersToSameOperationAs(event2));
-		Assert.assertTrue(event1.refersToSameOperationAs(event2));
+		Assert.assertTrue(UtilityClass.refersToSameOperationAs(event1, event2));
 	}
 
 	/**
@@ -113,8 +113,7 @@ public class TestCallOperationObjectEvent extends AbstractKiekerTest {
 
 		Assert.assertEquals(event1, event2);
 		Assert.assertEquals(0, event1.compareTo(event2));
-		Assert.assertTrue(event1.refersToSameOperationAs(event2));
-		Assert.assertTrue(event1.refersToSameOperationAs(event2));
+		Assert.assertTrue(UtilityClass.refersToSameOperationAs(event1, event2));
 	}
 
 	@Test
@@ -126,6 +125,6 @@ public class TestCallOperationObjectEvent extends AbstractKiekerTest {
 				new CallOperationObjectEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CALLEE_OPERATION_SIGNATURE, FQ_CALLEE_CLASSNAME,
 						FQ_CALLEE_OPERATION_SIGNATURE, FQ_CALLEE_CLASSNAME, CALLER_OBJECT_ID, CALLEE_OBJECT_ID);
 
-		Assert.assertTrue(event1.callsReferencedOperationOf(event2));
+		Assert.assertTrue(UtilityClass.callsReferencedOperationOf(event1, event2));
 	}
 }

@@ -26,6 +26,7 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.common.junit.record.UtilityClass;
 
 /**
  * @author Jan Waller
@@ -73,7 +74,7 @@ public class TestAfterOperationFailedEvent extends AbstractKiekerTest {
 
 		Assert.assertEquals(event1, event2);
 		Assert.assertEquals(0, event1.compareTo(event2));
-		Assert.assertTrue(event1.refersToSameOperationAs(event2));
+		Assert.assertTrue(UtilityClass.refersToSameOperationAs(event1, event2));
 	}
 
 	/**
@@ -101,6 +102,6 @@ public class TestAfterOperationFailedEvent extends AbstractKiekerTest {
 
 		Assert.assertEquals(event1, event2);
 		Assert.assertEquals(0, event1.compareTo(event2));
-		Assert.assertTrue(event1.refersToSameOperationAs(event2));
+		Assert.assertTrue(UtilityClass.refersToSameOperationAs(event1, event2));
 	}
 }

@@ -35,7 +35,7 @@ public class Bookstore {
 		final OperationExecutionRecord e = new OperationExecutionRecord(
 				"public void " + this.catalog.getClass().getName() + ".getBook(boolean)",
 				OperationExecutionRecord.NO_SESSION_ID,
-				OperationExecutionRecord.NO_TRACEID,
+				OperationExecutionRecord.NO_TRACE_ID,
 				tin, tout, "myHost",
 				OperationExecutionRecord.NO_EOI_ESS,
 				OperationExecutionRecord.NO_EOI_ESS);

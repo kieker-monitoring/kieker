@@ -271,7 +271,25 @@ public final class AnalysisController implements IAnalysisController { // NOPMD 
 	 *            the KiekerMetadataRecord containing the information
 	 */
 	public final void handleKiekerMetadataRecord(final KiekerMetadataRecord record) {
-		LOG.info(record.toFormattedString());
+		final StringBuilder sb = new StringBuilder(512);
+		sb.append("Kieker metadata: version='");
+		sb.append(record.getVersion());
+		sb.append("', controllerName='");
+		sb.append(record.getControllerName());
+		sb.append("', hostname='");
+		sb.append(record.getHostname());
+		sb.append("', experimentId='");
+		sb.append(record.getExperimentId());
+		sb.append("', debugMode='");
+		sb.append(record.isDebugMode());
+		sb.append("', timeOffset='");
+		sb.append(record.getTimeOffset());
+		sb.append("', timeUnit='");
+		sb.append(record.getTimeUnit());
+		sb.append("', numberOfRecords='");
+		sb.append(record.getNumberOfRecords());
+		sb.append('\'');
+		LOG.info(sb.toString());
 	}
 
 	/**

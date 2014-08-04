@@ -128,7 +128,7 @@ public final class RecordConverterTest extends AbstractKiekerTest {
 
 		oer = new OperationExecutionRecord(RecordConverterTest.operationSignature,
 				OperationExecutionRecord.NO_SESSION_ID,
-				OperationExecutionRecord.NO_TRACEID,
+				OperationExecutionRecord.NO_TRACE_ID,
 				RecordConverterTest.timeIn,
 				RecordConverterTest.timeOut,
 				RecordConverterTest.hostAppInput,

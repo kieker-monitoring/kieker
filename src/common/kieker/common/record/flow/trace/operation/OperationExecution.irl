@@ -1,0 +1,17 @@
+package kieker.common.record.flow.trace.operation
+
+import kieker.common.record.flow.trace.AbstractTraceEvent
+import kieker.common.record.flow.IExceptionRecord
+import kieker.common.record.flow.ICallRecord
+import kieker.common.record.flow.IOperationRecord
+
+abstract entity AbstractOperationEvent extends AbstractTraceEvent : IOperationRecord
+
+entity AfterOperationEvent extends AbstractOperationEvent
+
+entity AfterOperationFailedEvent extends AfterOperationEvent : IExceptionRecord
+
+entity BeforeOperationEvent extends AbstractOperationEvent
+
+entity CallOperationEvent extends AbstractOperationEvent : ICallRecord
+

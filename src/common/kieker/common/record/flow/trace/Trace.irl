@@ -1,0 +1,22 @@
+package kieker.common.record.flow.trace
+
+import kieker.common.record.flow.AbstractEvent
+import kieker.common.record.flow.ITraceRecord
+import kieker.common.record.flow.IFlowRecord
+
+abstract entity AbstractTraceEvent extends AbstractEvent : ITraceRecord
+
+entity ConstructionEvent extends AbstractTraceEvent {
+	string classSignature = ""
+	int objectId = 0
+}
+
+// Removed temporarily, as TraceMetadata also provides a non-data property nextOrderId.
+// entity TraceMetadata : IFlowRecord {
+// 	long traceId = 0
+// 	long threadId = 0
+// 	string sessionId = ""
+// 	string hostname = "<nohost>"
+// 	long parentTraceId = 0
+// 	int parentOrderId = 0
+//}

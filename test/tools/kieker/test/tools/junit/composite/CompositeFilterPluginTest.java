@@ -112,7 +112,7 @@ public class CompositeFilterPluginTest extends AbstractKiekerTest {
 	private void simulate() throws IllegalStateException, AnalysisConfigurationException {
 		final OperationExecutionRecord oer = new OperationExecutionRecord(operationSignature,
 				OperationExecutionRecord.NO_SESSION_ID,
-				OperationExecutionRecord.NO_TRACEID,
+				OperationExecutionRecord.NO_TRACE_ID,
 				timeIn,
 				timeOut,
 				hostName,

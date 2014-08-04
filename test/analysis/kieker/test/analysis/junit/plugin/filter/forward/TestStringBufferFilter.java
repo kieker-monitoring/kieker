@@ -188,7 +188,7 @@ public class TestStringBufferFilter extends AbstractKiekerTest {
 
 	private static OperationExecutionRecord createOperationExecutionRecord(final long loggingTimestamp) {
 		final OperationExecutionRecord opRec = new OperationExecutionRecord("mySignatureStringWhichShouldBeCached", OperationExecutionRecord.NO_SESSION_ID,
-				OperationExecutionRecord.NO_TRACEID, OperationExecutionRecord.NO_TIMESTAMP, OperationExecutionRecord.NO_TIMESTAMP,
+				OperationExecutionRecord.NO_TRACE_ID, OperationExecutionRecord.NO_TIMESTAMP, OperationExecutionRecord.NO_TIMESTAMP,
 				OperationExecutionRecord.NO_HOSTNAME, OperationExecutionRecord.NO_EOI_ESS, OperationExecutionRecord.NO_EOI_ESS);
 		opRec.setLoggingTimestamp(loggingTimestamp);
 		return opRec;

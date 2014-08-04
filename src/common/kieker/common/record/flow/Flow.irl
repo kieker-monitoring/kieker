@@ -1,0 +1,61 @@
+package kieker.common.record.flow
+
+abstract entity AbstractEvent : IEventRecord
+
+template ICallObjectRecord : ICallRecord, IObjectRecord {
+	alias objectId as callerObjectId
+	int calleeObjectId = 0
+}
+
+template ICallRecord : IOperationRecord {
+	alias classSignature as callerClassSignature
+	alias operationSignature as callerOperationSignature 
+	string calleeClassSignature = ""
+	string calleeOperationSignature = ""
+	// cannot be created
+	//public abstract boolean callsReferencedOperationOf(final IOperationRecord record);
+}
+
+template IConstructorRecord : IOperationRecord
+
+template IEventRecord : IFlowRecord {
+    long timestamp = 0
+}
+
+template IExceptionRecord : IFlowRecord {
+	string cause = ""
+}
+
+template IClassSignature {
+	string classSignature = ""
+}
+
+template IFlowRecord
+
+template IObjectRecord : IFlowRecord, IClassSignature {
+	int objectId = 0
+}
+
+template IOperationRecord : IFlowRecord, IClassSignature {
+	string operationSignature = ""
+
+	// not supported
+	/**
+	 * @param record
+	 *            The record to check.
+	 * 
+	 * @return True iff the specified record refers to the same operation as this record.
+	 * 
+	 * @since 1.6
+	 */
+	//public abstract boolean refersToSameOperationAs(final IOperationRecord record);
+}
+
+template ITraceRecord : IFlowRecord {
+	long traceId = -1 // fkey TraceMetadata.traceId
+	int orderIndex = -1
+}
+
+template IInterfaceRecord : IFlowRecord {
+	string interface
+}

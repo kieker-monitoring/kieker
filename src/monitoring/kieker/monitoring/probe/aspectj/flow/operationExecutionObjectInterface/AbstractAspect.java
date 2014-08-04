@@ -25,7 +25,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.object.AfterOperationFailedObjectEvent;
 import kieker.common.record.flow.trace.operation.object.AfterOperationObjectEvent;
-import kieker.common.record.flow.trace.operation.object.interfaceimpl.BeforeOperationObjectInterfaceEvent;
+import kieker.common.record.flow.trace.operation.object.BeforeOperationObjectInterfaceEvent;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.TraceRegistry;

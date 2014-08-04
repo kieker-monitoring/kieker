@@ -1,0 +1,25 @@
+package kieker.common.record.flow.trace.concurrency.monitor
+
+import kieker.common.record.flow.trace.*
+
+abstract entity AbstractMonitorEvent extends AbstractTraceEvent { 
+	int lockId = 0
+}
+
+entity MonitorEntryEvent extends AbstractMonitorEvent
+
+entity MonitorExitEvent extends AbstractMonitorEvent
+
+entity MonitorNotifyAllEvent extends AbstractMonitorEvent
+
+entity MonitorNotifyEvent extends AbstractMonitorEvent
+
+entity MonitorRequestEvent extends AbstractMonitorEvent
+
+entity MonitorWaitEvent extends AbstractMonitorEvent
+
+
+
+
+
+ 

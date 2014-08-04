@@ -377,7 +377,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 				final Class<? extends CallOperationEvent> callClass) {
 			if ((prevEvent != null) && callClass.isAssignableFrom(prevEvent.getClass())
 					&& (prevEvent.getOrderIndex() == (beforeOperationEvent.getOrderIndex() - 1))) {
-				if (((CallOperationEvent) prevEvent).callsReferencedOperationOf(beforeOperationEvent)) {
+				if (this.callsReferencedOperationOf((CallOperationEvent) prevEvent, beforeOperationEvent)) {
 					return true;
 				} else if (this.enhanceCallDetection) { // perhaps we don't find a perfect match, but can guess one!
 					final boolean isConstructor = beforeOperationEvent instanceof BeforeConstructorEvent;
@@ -398,6 +398,14 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 			return false;
 		}
 
+		/**
+		 * Check if a previous event callee is the present operation.
+		 */
+		private boolean callsReferencedOperationOf(final CallOperationEvent prevEvent, final BeforeOperationEvent presentEvent) {
+			return prevEvent.getCalleeOperationSignature().equals(presentEvent.getOperationSignature()) &&
+					prevEvent.getCalleeClassSignature().equals(presentEvent.getClassSignature());
+		}
+
 		private void handleAfterEvent(final AfterOperationEvent afterOperationEvent,
 				final Class<? extends BeforeOperationEvent> beforeClass,
 				final Class<? extends CallOperationEvent> callClass) throws InvalidTraceException {
@@ -411,7 +419,7 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 						+ afterOperationEvent.toString() + " (found: " + potentialBeforeEvent + ").");
 			}
 			// ... and must reference the same operation as the given after-operation event.
-			if (!afterOperationEvent.refersToSameOperationAs((BeforeOperationEvent) potentialBeforeEvent)) {
+			if (!this.refersToSameOperationAs(afterOperationEvent, (BeforeOperationEvent) potentialBeforeEvent)) {
 				throw new InvalidTraceException("Components of before (" + potentialBeforeEvent + ") " + "and after (" + afterOperationEvent
 						+ ") events do not match.");
 			}
@@ -437,6 +445,11 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 					afterOperationEvent.getTimestamp(),
 					!(definiteCall || this.ignoreAssumedCalls),
 					beforeOperationEvent instanceof BeforeConstructorEvent);
+		}
+
+		private boolean refersToSameOperationAs(final AfterOperationEvent afterOperationEvent, final BeforeOperationEvent potentialBeforeEvent) {
+			return afterOperationEvent.getOperationSignature().equals(potentialBeforeEvent.getOperationSignature()) &&
+					afterOperationEvent.getClassSignature().equals(potentialBeforeEvent.getClassSignature());
 		}
 
 		public void handleAfterOperationEvent(final AfterOperationEvent afterOperationEvent) throws InvalidTraceException {
