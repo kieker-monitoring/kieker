@@ -10,14 +10,14 @@
 
 	<!-- Build kieker.common -->
 	<target name="-generate-kieker.common" depends="-init" description="">
-		<exec executable="${bin.dir}/dev/irl-compiler.sh">
-			<arg line="-l java -p Kieker -s src -d src-gen -r ."/>	
+		<exec executable="${bin.dir}/dev/run-irl-compiler.sh">
+			<arg line="-r .. -a 'Kieker Build' -d src-gen/common -s src/common -l java -n kieker -p Kieker -v 1.10"/>	
 		</exec>
 	</target>
 	<target name="-compile-kieker.common" depends="-init,-generate-kieker.common" description="Compiles the sources commonly used by all Kieker components">
 		<delete dir="${build.kieker.common.dir}" />
 		<mkdir dir="${build.kieker.common.dir}" />
-		<javac destDir="${build.kieker.common.dir}" source="1.6" target="1.6" srcdir="${src.kieker.common.dir}" debug="true" classpathref="kieker.common-compile-classpath" includeAntRuntime="false">
+		<javac destDir="${build.kieker.common.dir}" source="1.6" target="1.6" srcdir="${src.kieker.common.dir}:${src.gen.kieker.common.dir}" debug="true" classpathref="kieker.common-compile-classpath" includeAntRuntime="false">
 			<compilerarg value="-Xlint:all" />
 		</javac>
 	</target>
