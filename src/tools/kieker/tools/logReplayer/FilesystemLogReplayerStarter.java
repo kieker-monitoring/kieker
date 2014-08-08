@@ -25,7 +25,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 
 import kieker.common.logging.Log;
@@ -75,33 +75,59 @@ public final class FilesystemLogReplayerStarter extends AbstractCommandLineTool 
 	}
 
 	@Override
-	@SuppressWarnings("static-access")
 	protected void addAdditionalOptions(final Options options) {
-		options.addOption(OptionBuilder.withArgName(OPTION_EXAMPLE_FILE_MONITORING_PROPERTIES).hasArg()
-				.withLongOpt(CMD_OPT_NAME_MONITORING_CONFIGURATION).isRequired(false)
-				.withDescription("Configuration to use for the Kieker monitoring instance").withValueSeparator('=').create("c"));
-		options.addOption(OptionBuilder.withArgName("dir1 ... dirN").hasArgs()
-				.withLongOpt(CMD_OPT_NAME_INPUTDIRS).isRequired(true).withDescription("Log directories to read data from")
-				.withValueSeparator('=').create("i"));
-		options.addOption(OptionBuilder.withArgName("true|false").hasArg()
-				.withLongOpt(CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS).isRequired(false)
-				.withDescription("Replay the original logging timestamps (defaults to true)?").withValueSeparator('=').create("k"));
-		options.addOption(OptionBuilder.withArgName("true|false").hasArg()
-				.withLongOpt(CMD_OPT_NAME_REALTIME).isRequired(true).withDescription("Replay log data in realtime?")
-				.withValueSeparator('=').create("r"));
-		options.addOption(OptionBuilder.withArgName("num").hasArg()
-				.withLongOpt(CMD_OPT_NAME_NUM_REALTIME_WORKERS).isRequired(false)
-				.withDescription("Number of worker threads used in realtime mode (defaults to 1).").withValueSeparator('=').create("n"));
-		options.addOption(OptionBuilder.withArgName("factor").hasArg().withLongOpt(CMD_OPT_NAME_REALTIME_ACCELERATION_FACTOR).isRequired(false)
-				.withDescription(
-						"Factor by which to accelerate (>1.0) or slow down (<1.0) the replay in realtime mode (defaults to 1.0, i.e., no acceleration/slow down).")
-				.withValueSeparator('=').create("a"));
-		options.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_IGNORERECORDSBEFOREDATE)
-				.withArgName(DATE_FORMAT_PATTERN_CMD_USAGE_HELP).hasArg().isRequired(false)
-				.withDescription("Records logged before this date (UTC timezone) are ignored (disabled by default).").create());
-		options.addOption(OptionBuilder.withLongOpt(CMD_OPT_NAME_IGNORERECORDSAFTERDATE)
-				.withArgName(DATE_FORMAT_PATTERN_CMD_USAGE_HELP).hasArg().isRequired(false)
-				.withDescription("Records logged after this date (UTC timezone) are ignored (disabled by default).").create());
+		Option option;
+
+		option = new Option("c", CMD_OPT_NAME_MONITORING_CONFIGURATION, true,
+				"Configuration to use for the Kieker monitoring instance");
+		option.setArgName(OPTION_EXAMPLE_FILE_MONITORING_PROPERTIES);
+		option.setRequired(false);
+		option.setValueSeparator('=');
+		options.addOption(option);
+
+		option = new Option("i", CMD_OPT_NAME_INPUTDIRS, true, "Log directories to read data from");
+		option.setArgName("dir1 ... dirN");
+		option.setRequired(true);
+		option.setArgs(Option.UNLIMITED_VALUES);
+		options.addOption(option);
+
+		option = new Option("k", CMD_OPT_NAME_KEEPORIGINALLOGGINGTIMESTAMPS, true,
+				"Replay the original logging timestamps (defaults to true)?");
+		option.setArgName("true|false");
+		option.setRequired(false);
+		option.setValueSeparator('=');
+		options.addOption(option);
+
+		option = new Option("r", CMD_OPT_NAME_REALTIME, true, "Replay log data in realtime?");
+		option.setArgName("true|false");
+		option.setRequired(true);
+		option.setValueSeparator('=');
+		options.addOption(option);
+
+		option = new Option("n", CMD_OPT_NAME_NUM_REALTIME_WORKERS, true,
+				"Number of worker threads used in realtime mode (defaults to 1).");
+		option.setArgName("num");
+		option.setRequired(false);
+		options.addOption(option);
+
+		option = new Option("a", CMD_OPT_NAME_REALTIME_ACCELERATION_FACTOR, true,
+				"Factor by which to accelerate (>1.0) or slow down (<1.0) the replay in realtime mode (defaults to 1.0, i.e., no acceleration/slow down).");
+		option.setArgName("factor");
+		option.setRequired(false);
+		option.setValueSeparator('=');
+		options.addOption(option);
+
+		option = new Option(null, CMD_OPT_NAME_IGNORERECORDSBEFOREDATE, true,
+				"Records logged before this date (UTC timezone) are ignored (disabled by default).");
+		option.setArgName(DATE_FORMAT_PATTERN_CMD_USAGE_HELP);
+		option.setRequired(false);
+		options.addOption(option);
+
+		option = new Option(null, CMD_OPT_NAME_IGNORERECORDSAFTERDATE, true,
+				"Records logged after this date (UTC timezone) are ignored (disabled by default).");
+		option.setArgName(DATE_FORMAT_PATTERN_CMD_USAGE_HELP);
+		option.setRequired(false);
+		options.addOption(option);
 	}
 
 	@Override

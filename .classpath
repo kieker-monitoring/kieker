@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry kind="src" path="model/analysis"/>
+	<classpathentry kind="src" path="model/records"/>
 	<classpathentry kind="src" path="src/common"/>
 	<classpathentry kind="src" path="src/analysis"/>
 	<classpathentry kind="src" path="src/monitoring"/>
 	<classpathentry kind="src" path="src/tools"/>
+	<classpathentry kind="src" path="src-gen/common"/>
 	<classpathentry kind="src" path="src-gen/analysis"/>
 	<classpathentry kind="src" path="test/common"/>
 	<classpathentry kind="src" path="test/analysis"/>
@@ -26,7 +29,6 @@
 	<classpathentry kind="src" path="examples/analysis/opad-anomaly-detection/src"/>
 	<classpathentry kind="src" path="examples/analysis/kax-files/src"/>
 	<classpathentry kind="src" path="examples/monitoring/probe-manual/src"/>
-	<classpathentry kind="src" path="src-gen/common"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="lib" path="lib/activemq-core-5.4.3.jar"/>

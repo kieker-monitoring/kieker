@@ -17,7 +17,7 @@
 package kieker.tools.loggingTimestampConverter;
 
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 
 import kieker.common.logging.Log;
@@ -35,7 +35,7 @@ import kieker.tools.util.LoggingTimestampConverter;
 public final class LoggingTimestampConverterTool extends AbstractCommandLineTool {
 
 	private static final Log LOG = LogFactory.getLog(LoggingTimestampConverterTool.class);
-	private static final char FLAG_TIMESTAMPS_PARAMETER = 't';
+	private static final String FLAG_TIMESTAMPS_PARAMETER = "t";
 
 	private long[] timestampsLong;
 
@@ -48,10 +48,11 @@ public final class LoggingTimestampConverterTool extends AbstractCommandLineTool
 	}
 
 	@Override
-	@SuppressWarnings("static-access")
 	protected void addAdditionalOptions(final Options options) {
-		options.addOption(OptionBuilder.withLongOpt("timestamps").withArgName("timestamp1 ... timestampN").hasArgs().isRequired()
-				.withDescription("List of timestamps (UTC timezone) to convert").create(FLAG_TIMESTAMPS_PARAMETER));
+		final Option option = new Option(FLAG_TIMESTAMPS_PARAMETER, "timestamps", true,
+				"List of timestamps (UTC timezone) to convert");
+		option.setArgName("timestamp1 ... timestampN");
+		option.setArgs(Option.UNLIMITED_VALUES);
 	}
 
 	@Override
