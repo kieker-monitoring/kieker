@@ -85,7 +85,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	 */
 	public MemSwapUsageRecord(final long timestamp, final String hostname, final long memUsed, final long memFree, final long memTotal, final long swapTotal, final long swapUsed, final long swapFree) {
 		this.timestamp = timestamp;
-		this.hostname = hostname;
+		this.hostname = hostname == null?"":hostname;
 		this.memUsed = memUsed;
 		this.memFree = memFree;
 		this.memTotal = memTotal;

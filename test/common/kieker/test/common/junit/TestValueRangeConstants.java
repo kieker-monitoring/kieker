@@ -22,7 +22,7 @@ package kieker.test.common.junit;
  * @since 1.10
  */
 public class TestValueRangeConstants {
-	public static int[] INTEGER_VALUES = new int[] { Integer.MIN_VALUE, 0, Integer.MAX_VALUE };
+	public static int[] INT_VALUES = new int[] { Integer.MIN_VALUE, 0, Integer.MAX_VALUE };
 	public static short[] SHORT_VALUES = new short[] { Short.MIN_VALUE, 0, Short.MAX_VALUE };
 	public static long[] LONG_VALUES = new long[] { Long.MIN_VALUE, 0, Long.MAX_VALUE };
 	public static byte[] BYTE_VALUES = new byte[] { Byte.MIN_VALUE, 0, Byte.MAX_VALUE };
@@ -36,6 +36,8 @@ public class TestValueRangeConstants {
 	public static double[] DOUBLE_VALUES = new double[] { Double.MIN_VALUE, Double.MIN_EXPONENT, Double.MIN_NORMAL,
 		0, Double.MAX_VALUE, Double.MAX_EXPONENT,
 		Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY };
+
+	public static String[] STRING_VALUES = new String[] { null, "", "abcdefghijklmnopqrstuvwxyz0123456789/.()$_ !%& *+-=#~" };
 
 	public static int ARRAY_LENGTH = 8;
 }

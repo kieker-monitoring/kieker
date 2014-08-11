@@ -65,7 +65,7 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IM
 	 */
 	public AfterOperationFailedEvent(final long timestamp, final long traceId, final int orderIndex, final String classSignature, final String operationSignature, final String cause) {
 		super(timestamp, traceId, orderIndex, classSignature, operationSignature);
-		this.cause = cause;
+		this.cause = cause == null?"":cause;
 	}
 
 	/**
