@@ -26,7 +26,7 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.record.flow.trace.concurrency.monitor.AbstractMonitorEvent;
 
 /**
- * @author Generic Kieker
+ * @author Kieker Build
  * 
  * @since 1.10
  */
