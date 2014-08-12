@@ -114,8 +114,9 @@ Navigation bar styles
 }
 .topNav {
     background-image:url(resources/kieker-header.png);
-    background-repeat:repeat-x;
-    color:#FFFFFF;
+    background-repeat:no-repeat;
+	font-weight: bold;
+    color:#295aa3;
     float:left;
     padding:0;
     width:100%;
@@ -164,7 +165,11 @@ ul.subNavList li{
     float:left;
     font-size:90%;
 }
-.topNav a:link, .topNav a:active, .topNav a:visited, .bottomNav a:link, .bottomNav a:active, .bottomNav a:visited {
+.topNav a:link, .topNav a:active, .topNav a:visited{
+    color:#295aa3;
+    text-decoration:none;
+}
+.bottomNav a:link, .bottomNav a:active, .bottomNav a:visited {
     color:#FFFFFF;
     text-decoration:none;
 }
