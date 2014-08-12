@@ -77,8 +77,8 @@ public class CallOperationEvent extends AbstractOperationEvent implements IMonit
 	 */
 	public CallOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String classSignature, final String operationSignature, final String calleeClassSignature, final String calleeOperationSignature) {
 		super(timestamp, traceId, orderIndex, classSignature, operationSignature);
-		this.calleeClassSignature = calleeClassSignature;
-		this.calleeOperationSignature = calleeOperationSignature;
+		this.calleeClassSignature = calleeClassSignature == null?"":calleeClassSignature;
+		this.calleeOperationSignature = calleeOperationSignature == null?"":calleeOperationSignature;
 	}
 
 	/**

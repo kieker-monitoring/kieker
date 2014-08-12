@@ -54,8 +54,8 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 	 */
 	public AbstractOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String classSignature, final String operationSignature) {
 		super(timestamp, traceId, orderIndex);
-		this.classSignature = classSignature;
-		this.operationSignature = operationSignature;
+		this.classSignature = classSignature == null?"":classSignature;
+		this.operationSignature = operationSignature == null?"":operationSignature;
 	}
 
 	
