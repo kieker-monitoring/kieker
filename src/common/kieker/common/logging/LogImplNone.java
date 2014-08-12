@@ -18,19 +18,30 @@ package kieker.common.logging;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.6
  */
 public final class LogImplNone implements Log {
 	/**
 	 * Creates a new instance of this class.
-	 * 
+	 *
 	 * @param name
 	 *            The name of the logger.
 	 */
 	protected LogImplNone(final String name) { // NOPMD (does nothing)
 		// nothing to do here
 	}
+
+	@Override
+	public boolean isTraceEnabled() {
+		return false;
+	}
+
+	@Override
+	public void trace(final String message) {} // NOPMD (does nothing)
+
+	@Override
+	public void trace(final String message, final Throwable t) {} // NOPMD (does nothing)
 
 	@Override
 	public boolean isDebugEnabled() {
@@ -84,4 +95,5 @@ public final class LogImplNone implements Log {
 	 */
 	@Override
 	public final void error(final String message, final Throwable t) {} // NOPMD (does nothing)
+
 }

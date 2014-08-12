@@ -18,9 +18,9 @@ package kieker.common.logging;
 
 /**
  * This is an actual implementation of the logging interface used by the common logger of the JVM.
- * 
+ *
  * @author Jan Waller
- * 
+ *
  * @since 1.5
  */
 public final class LogImplCommonsLogging implements Log {
@@ -40,7 +40,7 @@ public final class LogImplCommonsLogging implements Log {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param name
 	 *            The name of the logger to be used.
 	 */
@@ -50,6 +50,21 @@ public final class LogImplCommonsLogging implements Log {
 		} else {
 			this.log = org.apache.commons.logging.LogFactory.getLog(name);
 		}
+	}
+
+	@Override
+	public boolean isTraceEnabled() {
+		return this.log.isTraceEnabled();
+	}
+
+	@Override
+	public void trace(final String message) {
+		this.log.trace(message);
+	}
+
+	@Override
+	public void trace(final String message, final Throwable t) {
+		this.log.trace(message, t);
 	}
 
 	/**
@@ -139,4 +154,5 @@ public final class LogImplCommonsLogging implements Log {
 			this.log.error(message, t);
 		}
 	}
+
 }
