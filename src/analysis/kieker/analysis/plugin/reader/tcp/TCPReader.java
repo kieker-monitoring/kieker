@@ -33,6 +33,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.CachedRecordFactoryRepository;
 import kieker.common.record.factory.IRecordFactory;
@@ -128,7 +129,13 @@ public final class TCPReader extends AbstractReaderPlugin {
 						final IMonitoringRecord record;
 						try { // NOCS (Nested try-catch)
 							final IRecordFactory recordFactory = this.recordFactories.get(recordClassName);
-							record = recordFactory.create(buffer, this.stringRegistry);
+							// FIXME never returns null, but throws an exception.
+							// need to buffer classpath search result to avoid performance problems when instantiating records w/o a record factory
+							if (null == recordFactory) {
+								record = AbstractMonitoringRecord.createFromByteBuffer(clazzId, buffer, this.stringRegistry);
+							} else {
+								record = recordFactory.create(buffer, this.stringRegistry);
+							}
 							record.setLoggingTimestamp(loggingTimestamp);
 							super.deliver(OUTPUT_PORT_NAME_RECORDS, record);
 						} catch (final MonitoringRecordException ex) {
