@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.record.factory;
+package kieker.common.record.factory.old;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -25,6 +25,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.factory.CachedClassForNameResolver;
 import kieker.common.util.registry.IRegistry;
 
 /**
@@ -35,18 +36,18 @@ import kieker.common.util.registry.IRegistry;
 public class CachedReflectionRecordFactory {
 
 	private IRegistry<String> stringRegistry;
-	private final ClassForNameResolver<IMonitoringRecord> classForNameResolver;
+	private final CachedClassForNameResolver<IMonitoringRecord> classForNameResolver;
 	private final ReflectionRecordFactory reflectionFactory;
 
 	private final ConcurrentMap<String, Constructor<? extends IMonitoringRecord>> bufferConstructors = new ConcurrentHashMap<String, Constructor<? extends IMonitoringRecord>>();
 	private final ConcurrentMap<String, Constructor<? extends IMonitoringRecord>> arrayConstructors = new ConcurrentHashMap<String, Constructor<? extends IMonitoringRecord>>();
 
 	@Deprecated
-	public CachedReflectionRecordFactory(final ClassForNameResolver<IMonitoringRecord> classForNameResolver) {
+	public CachedReflectionRecordFactory(final CachedClassForNameResolver<IMonitoringRecord> classForNameResolver) {
 		this(null, classForNameResolver);
 	}
 
-	public CachedReflectionRecordFactory(final IRegistry<String> stringRegistry, final ClassForNameResolver<IMonitoringRecord> classForNameResolver) {
+	public CachedReflectionRecordFactory(final IRegistry<String> stringRegistry, final CachedClassForNameResolver<IMonitoringRecord> classForNameResolver) {
 		this.stringRegistry = stringRegistry;
 		this.classForNameResolver = classForNameResolver;
 		this.reflectionFactory = new ReflectionRecordFactory(stringRegistry, this.classForNameResolver);

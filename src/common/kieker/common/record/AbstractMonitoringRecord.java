@@ -24,8 +24,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import kieker.common.exception.MonitoringRecordException;
-import kieker.common.record.factory.CachedReflectionRecordFactory;
+import kieker.common.record.factory.CachedClassForNameResolver;
 import kieker.common.record.factory.ClassForNameResolver;
+import kieker.common.record.factory.old.CachedReflectionRecordFactory;
 import kieker.common.util.registry.IRegistry;
 
 /**
@@ -52,7 +53,8 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 
 	private volatile long loggingTimestamp = -1;
 
-	private final static ClassForNameResolver<IMonitoringRecord> classForNameResolver = new ClassForNameResolver<IMonitoringRecord>(IMonitoringRecord.class);
+	private final static CachedClassForNameResolver<IMonitoringRecord> classForNameResolver = new CachedClassForNameResolver<IMonitoringRecord>(
+			new ClassForNameResolver<IMonitoringRecord>(IMonitoringRecord.class));
 	private final static CachedReflectionRecordFactory cachedReflectionRecordFactory = new CachedReflectionRecordFactory(classForNameResolver);
 
 	static {

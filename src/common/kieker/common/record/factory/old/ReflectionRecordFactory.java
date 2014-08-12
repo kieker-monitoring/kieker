@@ -14,12 +14,13 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.record.factory;
+package kieker.common.record.factory.old;
 
 import java.nio.ByteBuffer;
 
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.factory.CachedClassForNameResolver;
 import kieker.common.util.registry.IRegistry;
 
 /**
@@ -30,9 +31,9 @@ import kieker.common.util.registry.IRegistry;
 public class ReflectionRecordFactory {
 
 	private final IRegistry<String> stringRegistry;
-	private final ClassForNameResolver<IMonitoringRecord> classForNameResolver;
+	private final CachedClassForNameResolver<IMonitoringRecord> classForNameResolver;
 
-	public ReflectionRecordFactory(final IRegistry<String> stringRegistry, final ClassForNameResolver<IMonitoringRecord> classForNameResolver) {
+	public ReflectionRecordFactory(final IRegistry<String> stringRegistry, final CachedClassForNameResolver<IMonitoringRecord> classForNameResolver) {
 		this.stringRegistry = stringRegistry;
 		this.classForNameResolver = classForNameResolver;
 	}

@@ -16,6 +16,9 @@
 
 package kieker.common.record.factory;
 
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
 import kieker.common.exception.MonitoringRecordException;
 
 /**
@@ -23,12 +26,13 @@ import kieker.common.exception.MonitoringRecordException;
  *
  * @since 1.10
  */
-public class ClassForNameResolver<T> {
+public class CachedClassForNameResolver<T> {
 
-	private final Class<T> classToCast;
+	private final ConcurrentMap<String, Class<? extends T>> cachedClasses = new ConcurrentHashMap<String, Class<? extends T>>(); // NOCS
+	private final ClassForNameResolver<T> classForNameResolver;
 
-	public ClassForNameResolver(final Class<T> classToCast) {
-		this.classToCast = classToCast;
+	public CachedClassForNameResolver(final ClassForNameResolver<T> classForNameResolver) {
+		this.classForNameResolver = classForNameResolver;
 	}
 
 	/**
@@ -43,13 +47,11 @@ public class ClassForNameResolver<T> {
 	 *             If either a class with the given name could not be found or if the class doesn't implement {@link T}.
 	 */
 	public final Class<? extends T> classForName(final String classname) throws MonitoringRecordException {
-		try {
-			final Class<? extends T> clazz = Class.forName(classname).asSubclass(this.classToCast);
-			return clazz;
-		} catch (final ClassNotFoundException ex) {
-			throw new MonitoringRecordException("Failed to get record type of name " + classname, ex);
-		} catch (final ClassCastException ex) {
-			throw new MonitoringRecordException("Failed to get record type of name " + classname, ex);
+		Class<? extends T> clazz = this.cachedClasses.get(classname);
+		if (clazz == null) {
+			clazz = this.classForNameResolver.classForName(classname);
+			this.cachedClasses.putIfAbsent(classname, clazz);
 		}
+		return clazz;
 	}
 }

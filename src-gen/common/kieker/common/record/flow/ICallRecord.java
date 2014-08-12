@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2013 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,20 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.record.factory;
-
-import java.nio.ByteBuffer;
-
-import kieker.common.record.IMonitoringRecord;
-import kieker.common.util.registry.IRegistry;
+package kieker.common.record.flow;
 
 /**
- * @author Christian Wulf
- *
+ * @author Generic Kieker
+ * 
  * @since 1.10
  */
-public interface IRecordFactoryMethod {
-
-	IMonitoringRecord create(ByteBuffer buffer, IRegistry<String> stringRegistry);
-
+public interface ICallRecord extends IOperationRecord {
+	public String getCallerClassSignature() ;
+		
+	public String getCallerOperationSignature() ;
+		
+	public String getCalleeClassSignature() ;
+		
+	public String getCalleeOperationSignature() ;
+		
 }
