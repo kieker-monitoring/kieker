@@ -99,12 +99,12 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	 *            ess
 	 */
 	public OperationExecutionRecord(final String operationSignature, final String sessionId, final long traceId, final long tin, final long tout, final String hostname, final int eoi, final int ess) {
-		this.operationSignature = operationSignature == null?"noOperation":operationSignature;
-		this.sessionId = sessionId == null?"<no-session-id>":sessionId;
+		this.operationSignature = operationSignature;
+		this.sessionId = sessionId;
 		this.traceId = traceId;
 		this.tin = tin;
 		this.tout = tout;
-		this.hostname = hostname == null?"<default-host>":hostname;
+		this.hostname = hostname;
 		this.eoi = eoi;
 		this.ess = ess;
 	}

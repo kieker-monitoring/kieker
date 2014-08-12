@@ -97,13 +97,13 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 	 *            numberOfRecords
 	 */
 	public KiekerMetadataRecord(final String version, final String controllerName, final String hostname, final int experimentId, final boolean debugMode, final long timeOffset, final String timeUnit, final long numberOfRecords) {
-		this.version = version == null?"1.9":version;
-		this.controllerName = controllerName == null?"<no-controller-name>":controllerName;
-		this.hostname = hostname == null?"<no-hostname>":hostname;
+		this.version = version;
+		this.controllerName = controllerName;
+		this.hostname = hostname;
 		this.experimentId = experimentId;
 		this.debugMode = debugMode;
 		this.timeOffset = timeOffset;
-		this.timeUnit = timeUnit == null?"NANOSECONDS":timeUnit;
+		this.timeUnit = timeUnit;
 		this.numberOfRecords = numberOfRecords;
 	}
 

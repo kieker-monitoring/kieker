@@ -76,7 +76,7 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 	 */
 	public BeforeConstructorObjectInterfaceEvent(final long timestamp, final long traceId, final int orderIndex, final String classSignature, final String operationSignature, final int objectId, final String _interface) {
 		super(timestamp, traceId, orderIndex, classSignature, operationSignature, objectId);
-		this._interface = _interface == null?"":_interface;
+		this._interface = _interface;
 	}
 
 	/**

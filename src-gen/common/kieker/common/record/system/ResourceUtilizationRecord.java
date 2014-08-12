@@ -70,8 +70,8 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	 */
 	public ResourceUtilizationRecord(final long timestamp, final String hostname, final String resourceName, final double utilization) {
 		this.timestamp = timestamp;
-		this.hostname = hostname == null?"":hostname;
-		this.resourceName = resourceName == null?"":resourceName;
+		this.hostname = hostname;
+		this.resourceName = resourceName;
 		this.utilization = utilization;
 	}
 

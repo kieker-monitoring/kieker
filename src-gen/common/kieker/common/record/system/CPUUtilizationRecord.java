@@ -106,8 +106,8 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	 */
 	public CPUUtilizationRecord(final long timestamp, final String hostname, final String cpuID, final double user, final double system, final double wait, final double nice, final double irq, final double totalUtilization, final double idle) {
 		this.timestamp = timestamp;
-		this.hostname = hostname == null?"":hostname;
-		this.cpuID = cpuID == null?"":cpuID;
+		this.hostname = hostname;
+		this.cpuID = cpuID;
 		this.user = user;
 		this.system = system;
 		this.wait = wait;

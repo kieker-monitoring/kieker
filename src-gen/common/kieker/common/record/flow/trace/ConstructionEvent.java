@@ -70,7 +70,7 @@ public class ConstructionEvent extends AbstractTraceEvent implements IMonitoring
 	 */
 	public ConstructionEvent(final long timestamp, final long traceId, final int orderIndex, final String classSignature, final int objectId) {
 		super(timestamp, traceId, orderIndex);
-		this.classSignature = classSignature == null?"":classSignature;
+		this.classSignature = classSignature;
 		this.objectId = objectId;
 	}
 
