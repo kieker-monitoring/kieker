@@ -31,7 +31,11 @@ import kieker.common.record.flow.trace.AbstractTraceEvent;
  * @since 1.10
  */
 public class SplitEvent extends AbstractTraceEvent implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	public static final int SIZE = 20; // serialization size (without variable part of strings)
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
+			 + TYPE_SIZE_LONG // ITraceRecord.traceId
+			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
+	;
 	private static final long serialVersionUID = -2615894047548395769L;
 	
 	private static final Class<?>[] TYPES = {
@@ -94,6 +98,7 @@ public class SplitEvent extends AbstractTraceEvent implements IMonitoringRecord.
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object[] toArray() {
 		return new Object[] {
 			this.getTimestamp(),
@@ -105,6 +110,7 @@ public class SplitEvent extends AbstractTraceEvent implements IMonitoringRecord.
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putLong(this.getTimestamp());
 		buffer.putLong(this.getTraceId());
@@ -114,6 +120,7 @@ public class SplitEvent extends AbstractTraceEvent implements IMonitoringRecord.
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
@@ -121,6 +128,7 @@ public class SplitEvent extends AbstractTraceEvent implements IMonitoringRecord.
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getSize() {
 		return SIZE;
 	}
@@ -129,6 +137,7 @@ public class SplitEvent extends AbstractTraceEvent implements IMonitoringRecord.
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
@@ -139,6 +148,7 @@ public class SplitEvent extends AbstractTraceEvent implements IMonitoringRecord.
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();

@@ -31,7 +31,16 @@ import kieker.common.util.registry.IRegistry;
  * @since 1.10
  */
 public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	public static final int SIZE = 60; // serialization size (without variable part of strings)
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_LONG // MemSwapUsageRecord.timestamp
+			 + TYPE_SIZE_STRING // MemSwapUsageRecord.hostname
+			 + TYPE_SIZE_LONG // MemSwapUsageRecord.memUsed
+			 + TYPE_SIZE_LONG // MemSwapUsageRecord.memFree
+			 + TYPE_SIZE_LONG // MemSwapUsageRecord.memTotal
+			 + TYPE_SIZE_LONG // MemSwapUsageRecord.swapTotal
+			 + TYPE_SIZE_LONG // MemSwapUsageRecord.swapUsed
+			 + TYPE_SIZE_LONG // MemSwapUsageRecord.swapFree
+	;
 	private static final long serialVersionUID = 7372856570663572439L;
 	
 	private static final Class<?>[] TYPES = {
@@ -155,6 +164,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object[] toArray() {
 		return new Object[] {
 			this.getTimestamp(),
@@ -171,6 +181,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putLong(this.getTimestamp());
 		buffer.putInt(stringRegistry.get(this.getHostname()));
@@ -185,6 +196,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
@@ -192,6 +204,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getSize() {
 		return SIZE;
 	}
@@ -200,6 +213,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
@@ -210,6 +224,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();

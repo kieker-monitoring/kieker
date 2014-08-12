@@ -31,7 +31,13 @@ import kieker.common.record.flow.trace.operation.AbstractOperationEvent;
  * @since 1.10
  */
 public class AfterOperationEvent extends AbstractOperationEvent implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	public static final int SIZE = 28; // serialization size (without variable part of strings)
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
+			 + TYPE_SIZE_LONG // ITraceRecord.traceId
+			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
+			 + TYPE_SIZE_STRING // IClassSignature.classSignature
+			 + TYPE_SIZE_STRING // IOperationRecord.operationSignature
+	;
 	private static final long serialVersionUID = -7820788362643933781L;
 	
 	private static final Class<?>[] TYPES = {
@@ -100,6 +106,7 @@ public class AfterOperationEvent extends AbstractOperationEvent implements IMoni
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object[] toArray() {
 		return new Object[] {
 			this.getTimestamp(),
@@ -113,6 +120,7 @@ public class AfterOperationEvent extends AbstractOperationEvent implements IMoni
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putLong(this.getTimestamp());
 		buffer.putLong(this.getTraceId());
@@ -124,6 +132,7 @@ public class AfterOperationEvent extends AbstractOperationEvent implements IMoni
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
@@ -131,6 +140,7 @@ public class AfterOperationEvent extends AbstractOperationEvent implements IMoni
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getSize() {
 		return SIZE;
 	}
@@ -139,6 +149,7 @@ public class AfterOperationEvent extends AbstractOperationEvent implements IMoni
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
@@ -149,6 +160,7 @@ public class AfterOperationEvent extends AbstractOperationEvent implements IMoni
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();

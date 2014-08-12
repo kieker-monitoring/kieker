@@ -31,7 +31,12 @@ import kieker.common.record.flow.trace.AbstractTraceEvent;
  * @since 1.10
  */
 public class JoinEvent extends AbstractTraceEvent implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	public static final int SIZE = 28; // serialization size (without variable part of strings)
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
+			 + TYPE_SIZE_LONG // ITraceRecord.traceId
+			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
+			 + TYPE_SIZE_LONG // JoinEvent.joinedTraceId
+	;
 	private static final long serialVersionUID = 8247379140800787016L;
 	
 	private static final Class<?>[] TYPES = {
@@ -103,6 +108,7 @@ public class JoinEvent extends AbstractTraceEvent implements IMonitoringRecord.F
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object[] toArray() {
 		return new Object[] {
 			this.getTimestamp(),
@@ -115,6 +121,7 @@ public class JoinEvent extends AbstractTraceEvent implements IMonitoringRecord.F
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putLong(this.getTimestamp());
 		buffer.putLong(this.getTraceId());
@@ -125,6 +132,7 @@ public class JoinEvent extends AbstractTraceEvent implements IMonitoringRecord.F
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
@@ -132,6 +140,7 @@ public class JoinEvent extends AbstractTraceEvent implements IMonitoringRecord.F
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getSize() {
 		return SIZE;
 	}
@@ -140,6 +149,7 @@ public class JoinEvent extends AbstractTraceEvent implements IMonitoringRecord.F
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
@@ -150,6 +160,7 @@ public class JoinEvent extends AbstractTraceEvent implements IMonitoringRecord.F
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();

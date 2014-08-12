@@ -31,7 +31,18 @@ import kieker.common.util.registry.IRegistry;
  * @since 1.10
  */
 public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	public static final int SIZE = 72; // serialization size (without variable part of strings)
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_LONG // CPUUtilizationRecord.timestamp
+			 + TYPE_SIZE_STRING // CPUUtilizationRecord.hostname
+			 + TYPE_SIZE_STRING // CPUUtilizationRecord.cpuID
+			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.user
+			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.system
+			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.wait
+			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.nice
+			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.irq
+			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.totalUtilization
+			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.idle
+	;
 	private static final long serialVersionUID = 1353686422654272736L;
 	
 	private static final Class<?>[] TYPES = {
@@ -173,6 +184,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object[] toArray() {
 		return new Object[] {
 			this.getTimestamp(),
@@ -191,6 +203,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putLong(this.getTimestamp());
 		buffer.putInt(stringRegistry.get(this.getHostname()));
@@ -207,6 +220,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
@@ -214,6 +228,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getSize() {
 		return SIZE;
 	}
@@ -222,6 +237,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
@@ -232,6 +248,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
