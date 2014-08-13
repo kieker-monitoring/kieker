@@ -30,9 +30,9 @@ import kieker.common.logging.LogFactory;
  * <b>Do not</b> inherit directly from this class! Instead inherit from the class {@link kieker.analysis.plugin.filter.AbstractFilterPlugin},
  * {@link kieker.analysis.plugin.reader.AbstractReaderPlugin} or {@link kieker.analysis.repository.AbstractRepository}. This is the base class for all other analysis
  * components within Kieker, like repositories or plugins. It should therefore <b>only</b> be used by the Kieker components itself as a base.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.7
  */
 public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
@@ -59,16 +59,16 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 
 	/**
 	 * Each AnalysisComponent requires a constructor with a Configuration object and a IProjectContext.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this component.
 	 * @param projectContext
 	 *            The project context for this component. The component will be registered.
-	 * 
+	 *
 	 * @throws NullPointerException
 	 *             If configuration or projectContext null
 	 */
-	public AbstractAnalysisComponent(final Configuration configuration, final IProjectContext projectContext) {
+	public AbstractAnalysisComponent(final Configuration configuration, final IProjectContext projectContext) throws NullPointerException {
 		if (null == projectContext) {
 			throw new NullPointerException("Missing projectContext");
 		}
@@ -112,7 +112,7 @@ public abstract class AbstractAnalysisComponent implements IAnalysisComponent {
 
 	/**
 	 * This method delivers an instance of {@code Configuration} containing the default properties for this class.
-	 * 
+	 *
 	 * @return The default properties.
 	 */
 	protected abstract Configuration getDefaultConfiguration();

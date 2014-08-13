@@ -26,7 +26,7 @@ import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.10
  */
 public abstract class AbstractJVMRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
@@ -45,18 +45,38 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord impleme
 	private final String hostname;
 	private final String vmName;
 
+	/**
+	 * Constructor.
+	 *
+	 * @param timestamp
+	 * @param hostname
+	 * @param vmName
+	 */
 	public AbstractJVMRecord(final long timestamp, final String hostname, final String vmName) {
 		this.timestamp = timestamp;
 		this.hostname = hostname;
 		this.vmName = vmName;
 	}
 
+	/**
+	 * Constructor.
+	 *
+	 * @param values
+	 */
 	public AbstractJVMRecord(final Object[] values) { // NOPMD (direct store of values)
 		this.timestamp = (Long) values[0];
 		this.hostname = (String) values[1];
 		this.vmName = (String) values[2];
 	}
 
+	/**
+	 * Buffer based constructor.
+	 *
+	 * @param buffer
+	 * @param stringRegistry
+	 *
+	 * @throws BufferUnderflowException
+	 */
 	public AbstractJVMRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		this.timestamp = buffer.getLong();
 		this.hostname = stringRegistry.get(buffer.getInt());
@@ -77,7 +97,7 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord impleme
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
@@ -88,7 +108,7 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord impleme
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
