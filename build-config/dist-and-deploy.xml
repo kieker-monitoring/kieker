@@ -53,7 +53,7 @@
 			<tag name="ordered" />
 			<tag name="model" />
 		</javadoc>
-		<copy file="build-config/kieker-header.png" todir="build/javadoc/resources"/>
+		<copy file="build-config/kieker-javadoc-header.png" todir="build/javadoc/resources"/>
 	</target>
 
 	<target name="dist-kieker-sources" depends="-init" description="Packages the source archives (.zip|.tar.gz) for a release">
