@@ -26,7 +26,7 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.common.junit.TestValueRangeConstants;
+import kieker.test.common.junit.ValueRangeConstants;
 import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
 		
 /**
@@ -48,7 +48,7 @@ public class TestGeneratedEmptyRecord extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testToArray() { // NOPMD (assert missing)
-	for (int i=0;i<TestValueRangeConstants.ARRAY_LENGTH;i++) {
+	for (int i=0;i<ValueRangeConstants.ARRAY_LENGTH;i++) {
 			// initialize
 			EmptyRecord record = new EmptyRecord();
 			
@@ -72,7 +72,7 @@ public class TestGeneratedEmptyRecord extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testBuffer() { // NOPMD (assert missing)
-		for (int i=0;i<TestValueRangeConstants.ARRAY_LENGTH;i++) {
+		for (int i=0;i<ValueRangeConstants.ARRAY_LENGTH;i++) {
 			// initialize
 			EmptyRecord record = new EmptyRecord();
 			
@@ -85,7 +85,7 @@ public class TestGeneratedEmptyRecord extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testParameterConstruction() { // NOPMD (assert missing)
-		for (int i=0;i<TestValueRangeConstants.ARRAY_LENGTH;i++) {
+		for (int i=0;i<ValueRangeConstants.ARRAY_LENGTH;i++) {
 			// initialize
 			EmptyRecord record = new EmptyRecord();
 			

@@ -26,7 +26,7 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.common.junit.TestValueRangeConstants;
+import kieker.test.common.junit.ValueRangeConstants;
 import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
 		
 /**
@@ -48,18 +48,18 @@ public class TestGeneratedAfterOperationFailedObjectEvent extends AbstractKieker
 	 */
 	@Test
 	public void testToArray() { // NOPMD (assert missing)
-	for (int i=0;i<TestValueRangeConstants.ARRAY_LENGTH;i++) {
+	for (int i=0;i<ValueRangeConstants.ARRAY_LENGTH;i++) {
 			// initialize
-			AfterOperationFailedObjectEvent record = new AfterOperationFailedObjectEvent(TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], TestValueRangeConstants.INT_VALUES[i%TestValueRangeConstants.INT_VALUES.length], TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length], TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length], TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length], TestValueRangeConstants.INT_VALUES[i%TestValueRangeConstants.INT_VALUES.length]);
+			AfterOperationFailedObjectEvent record = new AfterOperationFailedObjectEvent(ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], ValueRangeConstants.INT_VALUES[i%ValueRangeConstants.INT_VALUES.length], ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length], ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length], ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length], ValueRangeConstants.INT_VALUES[i%ValueRangeConstants.INT_VALUES.length]);
 			
 			// check values
-			Assert.assertEquals("AfterOperationFailedObjectEvent.timestamp values are not equal.", TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], record.getTimestamp());
-			Assert.assertEquals("AfterOperationFailedObjectEvent.traceId values are not equal.", TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], record.getTraceId());
-			Assert.assertEquals("AfterOperationFailedObjectEvent.orderIndex values are not equal.", TestValueRangeConstants.INT_VALUES[i%TestValueRangeConstants.INT_VALUES.length], record.getOrderIndex());
-			Assert.assertEquals("AfterOperationFailedObjectEvent.classSignature values are not equal.", TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length] == null?"":TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length], record.getClassSignature());
-			Assert.assertEquals("AfterOperationFailedObjectEvent.operationSignature values are not equal.", TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length] == null?"":TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length], record.getOperationSignature());
-			Assert.assertEquals("AfterOperationFailedObjectEvent.cause values are not equal.", TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length] == null?"":TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length], record.getCause());
-			Assert.assertEquals("AfterOperationFailedObjectEvent.objectId values are not equal.", TestValueRangeConstants.INT_VALUES[i%TestValueRangeConstants.INT_VALUES.length], record.getObjectId());
+			Assert.assertEquals("AfterOperationFailedObjectEvent.timestamp values are not equal.", ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], record.getTimestamp());
+			Assert.assertEquals("AfterOperationFailedObjectEvent.traceId values are not equal.", ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], record.getTraceId());
+			Assert.assertEquals("AfterOperationFailedObjectEvent.orderIndex values are not equal.", ValueRangeConstants.INT_VALUES[i%ValueRangeConstants.INT_VALUES.length], record.getOrderIndex());
+			Assert.assertEquals("AfterOperationFailedObjectEvent.classSignature values are not equal.", ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length] == null?"":ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length], record.getClassSignature());
+			Assert.assertEquals("AfterOperationFailedObjectEvent.operationSignature values are not equal.", ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length] == null?"":ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length], record.getOperationSignature());
+			Assert.assertEquals("AfterOperationFailedObjectEvent.cause values are not equal.", ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length] == null?"":ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length], record.getCause());
+			Assert.assertEquals("AfterOperationFailedObjectEvent.objectId values are not equal.", ValueRangeConstants.INT_VALUES[i%ValueRangeConstants.INT_VALUES.length], record.getObjectId());
 			
 			Object[] values = record.toArray();
 			
@@ -85,26 +85,26 @@ public class TestGeneratedAfterOperationFailedObjectEvent extends AbstractKieker
 			Assert.assertTrue("Type of array value [6] " + values[6].getClass().getCanonicalName() + " does not match the desired type Integer", values[6] instanceof Integer);
 								
 			// check all object values 
-			Assert.assertEquals("Array value [0] " + values[0] + " does not match the desired value " + TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length],
-				TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], (long) (Long)values[0]
+			Assert.assertEquals("Array value [0] " + values[0] + " does not match the desired value " + ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length],
+				ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], (long) (Long)values[0]
 					);
-			Assert.assertEquals("Array value [1] " + values[1] + " does not match the desired value " + TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length],
-				TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], (long) (Long)values[1]
+			Assert.assertEquals("Array value [1] " + values[1] + " does not match the desired value " + ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length],
+				ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], (long) (Long)values[1]
 					);
-			Assert.assertEquals("Array value [2] " + values[2] + " does not match the desired value " + TestValueRangeConstants.INT_VALUES[i%TestValueRangeConstants.INT_VALUES.length],
-				TestValueRangeConstants.INT_VALUES[i%TestValueRangeConstants.INT_VALUES.length], (int) (Integer)values[2]
+			Assert.assertEquals("Array value [2] " + values[2] + " does not match the desired value " + ValueRangeConstants.INT_VALUES[i%ValueRangeConstants.INT_VALUES.length],
+				ValueRangeConstants.INT_VALUES[i%ValueRangeConstants.INT_VALUES.length], (int) (Integer)values[2]
 					);
-			Assert.assertEquals("Array value [3] " + values[3] + " does not match the desired value " + TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length],
-				TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length] == null?"":TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length], values[3]
+			Assert.assertEquals("Array value [3] " + values[3] + " does not match the desired value " + ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length],
+				ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length] == null?"":ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length], values[3]
 			);
-			Assert.assertEquals("Array value [4] " + values[4] + " does not match the desired value " + TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length],
-				TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length] == null?"":TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length], values[4]
+			Assert.assertEquals("Array value [4] " + values[4] + " does not match the desired value " + ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length],
+				ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length] == null?"":ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length], values[4]
 			);
-			Assert.assertEquals("Array value [5] " + values[5] + " does not match the desired value " + TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length],
-				TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length] == null?"":TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length], values[5]
+			Assert.assertEquals("Array value [5] " + values[5] + " does not match the desired value " + ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length],
+				ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length] == null?"":ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length], values[5]
 			);
-			Assert.assertEquals("Array value [6] " + values[6] + " does not match the desired value " + TestValueRangeConstants.INT_VALUES[i%TestValueRangeConstants.INT_VALUES.length],
-				TestValueRangeConstants.INT_VALUES[i%TestValueRangeConstants.INT_VALUES.length], (int) (Integer)values[6]
+			Assert.assertEquals("Array value [6] " + values[6] + " does not match the desired value " + ValueRangeConstants.INT_VALUES[i%ValueRangeConstants.INT_VALUES.length],
+				ValueRangeConstants.INT_VALUES[i%ValueRangeConstants.INT_VALUES.length], (int) (Integer)values[6]
 					);
 		}
 	}
@@ -114,18 +114,18 @@ public class TestGeneratedAfterOperationFailedObjectEvent extends AbstractKieker
 	 */
 	@Test
 	public void testBuffer() { // NOPMD (assert missing)
-		for (int i=0;i<TestValueRangeConstants.ARRAY_LENGTH;i++) {
+		for (int i=0;i<ValueRangeConstants.ARRAY_LENGTH;i++) {
 			// initialize
-			AfterOperationFailedObjectEvent record = new AfterOperationFailedObjectEvent(TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], TestValueRangeConstants.INT_VALUES[i%TestValueRangeConstants.INT_VALUES.length], TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length], TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length], TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length], TestValueRangeConstants.INT_VALUES[i%TestValueRangeConstants.INT_VALUES.length]);
+			AfterOperationFailedObjectEvent record = new AfterOperationFailedObjectEvent(ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], ValueRangeConstants.INT_VALUES[i%ValueRangeConstants.INT_VALUES.length], ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length], ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length], ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length], ValueRangeConstants.INT_VALUES[i%ValueRangeConstants.INT_VALUES.length]);
 			
 			// check values
-			Assert.assertEquals("AfterOperationFailedObjectEvent.timestamp values are not equal.", TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], record.getTimestamp());
-			Assert.assertEquals("AfterOperationFailedObjectEvent.traceId values are not equal.", TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], record.getTraceId());
-			Assert.assertEquals("AfterOperationFailedObjectEvent.orderIndex values are not equal.", TestValueRangeConstants.INT_VALUES[i%TestValueRangeConstants.INT_VALUES.length], record.getOrderIndex());
-			Assert.assertEquals("AfterOperationFailedObjectEvent.classSignature values are not equal.", TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length] == null?"":TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length], record.getClassSignature());
-			Assert.assertEquals("AfterOperationFailedObjectEvent.operationSignature values are not equal.", TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length] == null?"":TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length], record.getOperationSignature());
-			Assert.assertEquals("AfterOperationFailedObjectEvent.cause values are not equal.", TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length] == null?"":TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length], record.getCause());
-			Assert.assertEquals("AfterOperationFailedObjectEvent.objectId values are not equal.", TestValueRangeConstants.INT_VALUES[i%TestValueRangeConstants.INT_VALUES.length], record.getObjectId());
+			Assert.assertEquals("AfterOperationFailedObjectEvent.timestamp values are not equal.", ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], record.getTimestamp());
+			Assert.assertEquals("AfterOperationFailedObjectEvent.traceId values are not equal.", ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], record.getTraceId());
+			Assert.assertEquals("AfterOperationFailedObjectEvent.orderIndex values are not equal.", ValueRangeConstants.INT_VALUES[i%ValueRangeConstants.INT_VALUES.length], record.getOrderIndex());
+			Assert.assertEquals("AfterOperationFailedObjectEvent.classSignature values are not equal.", ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length] == null?"":ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length], record.getClassSignature());
+			Assert.assertEquals("AfterOperationFailedObjectEvent.operationSignature values are not equal.", ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length] == null?"":ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length], record.getOperationSignature());
+			Assert.assertEquals("AfterOperationFailedObjectEvent.cause values are not equal.", ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length] == null?"":ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length], record.getCause());
+			Assert.assertEquals("AfterOperationFailedObjectEvent.objectId values are not equal.", ValueRangeConstants.INT_VALUES[i%ValueRangeConstants.INT_VALUES.length], record.getObjectId());
 		}
 	}
 	
@@ -134,18 +134,18 @@ public class TestGeneratedAfterOperationFailedObjectEvent extends AbstractKieker
 	 */
 	@Test
 	public void testParameterConstruction() { // NOPMD (assert missing)
-		for (int i=0;i<TestValueRangeConstants.ARRAY_LENGTH;i++) {
+		for (int i=0;i<ValueRangeConstants.ARRAY_LENGTH;i++) {
 			// initialize
-			AfterOperationFailedObjectEvent record = new AfterOperationFailedObjectEvent(TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], TestValueRangeConstants.INT_VALUES[i%TestValueRangeConstants.INT_VALUES.length], TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length], TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length], TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length], TestValueRangeConstants.INT_VALUES[i%TestValueRangeConstants.INT_VALUES.length]);
+			AfterOperationFailedObjectEvent record = new AfterOperationFailedObjectEvent(ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], ValueRangeConstants.INT_VALUES[i%ValueRangeConstants.INT_VALUES.length], ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length], ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length], ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length], ValueRangeConstants.INT_VALUES[i%ValueRangeConstants.INT_VALUES.length]);
 			
 			// check values
-			Assert.assertEquals("AfterOperationFailedObjectEvent.timestamp values are not equal.", TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], record.getTimestamp());
-			Assert.assertEquals("AfterOperationFailedObjectEvent.traceId values are not equal.", TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], record.getTraceId());
-			Assert.assertEquals("AfterOperationFailedObjectEvent.orderIndex values are not equal.", TestValueRangeConstants.INT_VALUES[i%TestValueRangeConstants.INT_VALUES.length], record.getOrderIndex());
-			Assert.assertEquals("AfterOperationFailedObjectEvent.classSignature values are not equal.", TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length] == null?"":TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length], record.getClassSignature());
-			Assert.assertEquals("AfterOperationFailedObjectEvent.operationSignature values are not equal.", TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length] == null?"":TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length], record.getOperationSignature());
-			Assert.assertEquals("AfterOperationFailedObjectEvent.cause values are not equal.", TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length] == null?"":TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length], record.getCause());
-			Assert.assertEquals("AfterOperationFailedObjectEvent.objectId values are not equal.", TestValueRangeConstants.INT_VALUES[i%TestValueRangeConstants.INT_VALUES.length], record.getObjectId());
+			Assert.assertEquals("AfterOperationFailedObjectEvent.timestamp values are not equal.", ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], record.getTimestamp());
+			Assert.assertEquals("AfterOperationFailedObjectEvent.traceId values are not equal.", ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], record.getTraceId());
+			Assert.assertEquals("AfterOperationFailedObjectEvent.orderIndex values are not equal.", ValueRangeConstants.INT_VALUES[i%ValueRangeConstants.INT_VALUES.length], record.getOrderIndex());
+			Assert.assertEquals("AfterOperationFailedObjectEvent.classSignature values are not equal.", ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length] == null?"":ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length], record.getClassSignature());
+			Assert.assertEquals("AfterOperationFailedObjectEvent.operationSignature values are not equal.", ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length] == null?"":ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length], record.getOperationSignature());
+			Assert.assertEquals("AfterOperationFailedObjectEvent.cause values are not equal.", ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length] == null?"":ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length], record.getCause());
+			Assert.assertEquals("AfterOperationFailedObjectEvent.objectId values are not equal.", ValueRangeConstants.INT_VALUES[i%ValueRangeConstants.INT_VALUES.length], record.getObjectId());
 		}
 	}
 }

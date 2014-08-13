@@ -36,7 +36,7 @@ public class EmptyRecord extends AbstractMonitoringRecord implements IMonitoring
 	;
 	private static final long serialVersionUID = 3933678505883033716L;
 	
-	private static final Class<?>[] TYPES = {
+	public static final Class<?>[] TYPES = {
 	};
 	
 	

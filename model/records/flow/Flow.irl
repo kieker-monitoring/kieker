@@ -38,17 +38,6 @@ template IObjectRecord : IFlowRecord, IClassSignature {
 
 template IOperationRecord : IFlowRecord, IClassSignature {
 	string operationSignature = ""
-
-	// not supported
-	/**
-	 * @param record
-	 *            The record to check.
-	 * 
-	 * @return True iff the specified record refers to the same operation as this record.
-	 * 
-	 * @since 1.6
-	 */
-	//public abstract boolean refersToSameOperationAs(final IOperationRecord record);
 }
 
 template ITraceRecord : IFlowRecord {

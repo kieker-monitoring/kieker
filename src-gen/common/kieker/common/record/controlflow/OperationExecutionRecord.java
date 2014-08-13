@@ -43,15 +43,15 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	;
 	private static final long serialVersionUID = -4883357436134811919L;
 	
-	private static final Class<?>[] TYPES = {
+	public static final Class<?>[] TYPES = {
 		String.class, // OperationExecutionRecord.operationSignature
 		String.class, // OperationExecutionRecord.sessionId
-		Long.class, // OperationExecutionRecord.traceId
-		Long.class, // OperationExecutionRecord.tin
-		Long.class, // OperationExecutionRecord.tout
+		long.class, // OperationExecutionRecord.traceId
+		long.class, // OperationExecutionRecord.tin
+		long.class, // OperationExecutionRecord.tout
 		String.class, // OperationExecutionRecord.hostname
-		Integer.class, // OperationExecutionRecord.eoi
-		Integer.class, // OperationExecutionRecord.ess
+		int.class, // OperationExecutionRecord.eoi
+		int.class, // OperationExecutionRecord.ess
 	};
 	
 	public static final String NO_HOSTNAME = "<default-host>";

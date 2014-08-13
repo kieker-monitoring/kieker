@@ -45,17 +45,17 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	;
 	private static final long serialVersionUID = 1353686422654272736L;
 	
-	private static final Class<?>[] TYPES = {
-		Long.class, // CPUUtilizationRecord.timestamp
+	public static final Class<?>[] TYPES = {
+		long.class, // CPUUtilizationRecord.timestamp
 		String.class, // CPUUtilizationRecord.hostname
 		String.class, // CPUUtilizationRecord.cpuID
-		Double.class, // CPUUtilizationRecord.user
-		Double.class, // CPUUtilizationRecord.system
-		Double.class, // CPUUtilizationRecord.wait
-		Double.class, // CPUUtilizationRecord.nice
-		Double.class, // CPUUtilizationRecord.irq
-		Double.class, // CPUUtilizationRecord.totalUtilization
-		Double.class, // CPUUtilizationRecord.idle
+		double.class, // CPUUtilizationRecord.user
+		double.class, // CPUUtilizationRecord.system
+		double.class, // CPUUtilizationRecord.wait
+		double.class, // CPUUtilizationRecord.nice
+		double.class, // CPUUtilizationRecord.irq
+		double.class, // CPUUtilizationRecord.totalUtilization
+		double.class, // CPUUtilizationRecord.idle
 	};
 	
 	public static final long TIMESTAMP = 0L;

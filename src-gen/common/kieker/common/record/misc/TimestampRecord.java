@@ -36,8 +36,8 @@ public class TimestampRecord extends AbstractMonitoringRecord implements IMonito
 	;
 	private static final long serialVersionUID = 8853230651626771232L;
 	
-	private static final Class<?>[] TYPES = {
-		Long.class, // TimestampRecord.timestamp
+	public static final Class<?>[] TYPES = {
+		long.class, // TimestampRecord.timestamp
 	};
 	
 	public static final long TIMESTAMP = 0L;

@@ -43,13 +43,13 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 	;
 	private static final long serialVersionUID = 8963478598536384777L;
 	
-	private static final Class<?>[] TYPES = {
-		Long.class, // IEventRecord.timestamp
-		Long.class, // ITraceRecord.traceId
-		Integer.class, // ITraceRecord.orderIndex
+	public static final Class<?>[] TYPES = {
+		long.class, // IEventRecord.timestamp
+		long.class, // ITraceRecord.traceId
+		int.class, // ITraceRecord.orderIndex
 		String.class, // IClassSignature.classSignature
 		String.class, // IOperationRecord.operationSignature
-		Integer.class, // IObjectRecord.objectId
+		int.class, // IObjectRecord.objectId
 		String.class, // IInterfaceRecord.interface
 	};
 	

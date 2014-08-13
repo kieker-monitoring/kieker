@@ -26,7 +26,7 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.common.junit.TestValueRangeConstants;
+import kieker.test.common.junit.ValueRangeConstants;
 import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
 		
 /**
@@ -48,15 +48,15 @@ public class TestGeneratedJoinEvent extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testToArray() { // NOPMD (assert missing)
-	for (int i=0;i<TestValueRangeConstants.ARRAY_LENGTH;i++) {
+	for (int i=0;i<ValueRangeConstants.ARRAY_LENGTH;i++) {
 			// initialize
-			JoinEvent record = new JoinEvent(TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], TestValueRangeConstants.INT_VALUES[i%TestValueRangeConstants.INT_VALUES.length], TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length]);
+			JoinEvent record = new JoinEvent(ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], ValueRangeConstants.INT_VALUES[i%ValueRangeConstants.INT_VALUES.length], ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length]);
 			
 			// check values
-			Assert.assertEquals("JoinEvent.timestamp values are not equal.", TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], record.getTimestamp());
-			Assert.assertEquals("JoinEvent.traceId values are not equal.", TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], record.getTraceId());
-			Assert.assertEquals("JoinEvent.orderIndex values are not equal.", TestValueRangeConstants.INT_VALUES[i%TestValueRangeConstants.INT_VALUES.length], record.getOrderIndex());
-			Assert.assertEquals("JoinEvent.joinedTraceId values are not equal.", TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], record.getJoinedTraceId());
+			Assert.assertEquals("JoinEvent.timestamp values are not equal.", ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], record.getTimestamp());
+			Assert.assertEquals("JoinEvent.traceId values are not equal.", ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], record.getTraceId());
+			Assert.assertEquals("JoinEvent.orderIndex values are not equal.", ValueRangeConstants.INT_VALUES[i%ValueRangeConstants.INT_VALUES.length], record.getOrderIndex());
+			Assert.assertEquals("JoinEvent.joinedTraceId values are not equal.", ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], record.getJoinedTraceId());
 			
 			Object[] values = record.toArray();
 			
@@ -76,17 +76,17 @@ public class TestGeneratedJoinEvent extends AbstractKiekerTest {
 			Assert.assertTrue("Type of array value [3] " + values[3].getClass().getCanonicalName() + " does not match the desired type Long", values[3] instanceof Long);
 								
 			// check all object values 
-			Assert.assertEquals("Array value [0] " + values[0] + " does not match the desired value " + TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length],
-				TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], (long) (Long)values[0]
+			Assert.assertEquals("Array value [0] " + values[0] + " does not match the desired value " + ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length],
+				ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], (long) (Long)values[0]
 					);
-			Assert.assertEquals("Array value [1] " + values[1] + " does not match the desired value " + TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length],
-				TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], (long) (Long)values[1]
+			Assert.assertEquals("Array value [1] " + values[1] + " does not match the desired value " + ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length],
+				ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], (long) (Long)values[1]
 					);
-			Assert.assertEquals("Array value [2] " + values[2] + " does not match the desired value " + TestValueRangeConstants.INT_VALUES[i%TestValueRangeConstants.INT_VALUES.length],
-				TestValueRangeConstants.INT_VALUES[i%TestValueRangeConstants.INT_VALUES.length], (int) (Integer)values[2]
+			Assert.assertEquals("Array value [2] " + values[2] + " does not match the desired value " + ValueRangeConstants.INT_VALUES[i%ValueRangeConstants.INT_VALUES.length],
+				ValueRangeConstants.INT_VALUES[i%ValueRangeConstants.INT_VALUES.length], (int) (Integer)values[2]
 					);
-			Assert.assertEquals("Array value [3] " + values[3] + " does not match the desired value " + TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length],
-				TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], (long) (Long)values[3]
+			Assert.assertEquals("Array value [3] " + values[3] + " does not match the desired value " + ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length],
+				ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], (long) (Long)values[3]
 					);
 		}
 	}
@@ -96,15 +96,15 @@ public class TestGeneratedJoinEvent extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testBuffer() { // NOPMD (assert missing)
-		for (int i=0;i<TestValueRangeConstants.ARRAY_LENGTH;i++) {
+		for (int i=0;i<ValueRangeConstants.ARRAY_LENGTH;i++) {
 			// initialize
-			JoinEvent record = new JoinEvent(TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], TestValueRangeConstants.INT_VALUES[i%TestValueRangeConstants.INT_VALUES.length], TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length]);
+			JoinEvent record = new JoinEvent(ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], ValueRangeConstants.INT_VALUES[i%ValueRangeConstants.INT_VALUES.length], ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length]);
 			
 			// check values
-			Assert.assertEquals("JoinEvent.timestamp values are not equal.", TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], record.getTimestamp());
-			Assert.assertEquals("JoinEvent.traceId values are not equal.", TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], record.getTraceId());
-			Assert.assertEquals("JoinEvent.orderIndex values are not equal.", TestValueRangeConstants.INT_VALUES[i%TestValueRangeConstants.INT_VALUES.length], record.getOrderIndex());
-			Assert.assertEquals("JoinEvent.joinedTraceId values are not equal.", TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], record.getJoinedTraceId());
+			Assert.assertEquals("JoinEvent.timestamp values are not equal.", ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], record.getTimestamp());
+			Assert.assertEquals("JoinEvent.traceId values are not equal.", ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], record.getTraceId());
+			Assert.assertEquals("JoinEvent.orderIndex values are not equal.", ValueRangeConstants.INT_VALUES[i%ValueRangeConstants.INT_VALUES.length], record.getOrderIndex());
+			Assert.assertEquals("JoinEvent.joinedTraceId values are not equal.", ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], record.getJoinedTraceId());
 		}
 	}
 	
@@ -113,15 +113,15 @@ public class TestGeneratedJoinEvent extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testParameterConstruction() { // NOPMD (assert missing)
-		for (int i=0;i<TestValueRangeConstants.ARRAY_LENGTH;i++) {
+		for (int i=0;i<ValueRangeConstants.ARRAY_LENGTH;i++) {
 			// initialize
-			JoinEvent record = new JoinEvent(TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], TestValueRangeConstants.INT_VALUES[i%TestValueRangeConstants.INT_VALUES.length], TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length]);
+			JoinEvent record = new JoinEvent(ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], ValueRangeConstants.INT_VALUES[i%ValueRangeConstants.INT_VALUES.length], ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length]);
 			
 			// check values
-			Assert.assertEquals("JoinEvent.timestamp values are not equal.", TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], record.getTimestamp());
-			Assert.assertEquals("JoinEvent.traceId values are not equal.", TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], record.getTraceId());
-			Assert.assertEquals("JoinEvent.orderIndex values are not equal.", TestValueRangeConstants.INT_VALUES[i%TestValueRangeConstants.INT_VALUES.length], record.getOrderIndex());
-			Assert.assertEquals("JoinEvent.joinedTraceId values are not equal.", TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], record.getJoinedTraceId());
+			Assert.assertEquals("JoinEvent.timestamp values are not equal.", ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], record.getTimestamp());
+			Assert.assertEquals("JoinEvent.traceId values are not equal.", ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], record.getTraceId());
+			Assert.assertEquals("JoinEvent.orderIndex values are not equal.", ValueRangeConstants.INT_VALUES[i%ValueRangeConstants.INT_VALUES.length], record.getOrderIndex());
+			Assert.assertEquals("JoinEvent.joinedTraceId values are not equal.", ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], record.getJoinedTraceId());
 		}
 	}
 }

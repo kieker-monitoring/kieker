@@ -39,11 +39,11 @@ public class MonitorNotifyEvent extends AbstractMonitorEvent implements IMonitor
 	;
 	private static final long serialVersionUID = 7236216410102261440L;
 	
-	private static final Class<?>[] TYPES = {
-		Long.class, // IEventRecord.timestamp
-		Long.class, // ITraceRecord.traceId
-		Integer.class, // ITraceRecord.orderIndex
-		Integer.class, // AbstractMonitorEvent.lockId
+	public static final Class<?>[] TYPES = {
+		long.class, // IEventRecord.timestamp
+		long.class, // ITraceRecord.traceId
+		int.class, // ITraceRecord.orderIndex
+		int.class, // AbstractMonitorEvent.lockId
 	};
 	
 	

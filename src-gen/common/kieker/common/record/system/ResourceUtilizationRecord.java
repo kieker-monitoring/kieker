@@ -39,11 +39,11 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	;
 	private static final long serialVersionUID = 2644828043690936993L;
 	
-	private static final Class<?>[] TYPES = {
-		Long.class, // ResourceUtilizationRecord.timestamp
+	public static final Class<?>[] TYPES = {
+		long.class, // ResourceUtilizationRecord.timestamp
 		String.class, // ResourceUtilizationRecord.hostname
 		String.class, // ResourceUtilizationRecord.resourceName
-		Double.class, // ResourceUtilizationRecord.utilization
+		double.class, // ResourceUtilizationRecord.utilization
 	};
 	
 	public static final long TIMESTAMP = 0L;

@@ -21,7 +21,7 @@ package kieker.test.common.junit;
  * 
  * @since 1.10
  */
-public class TestValueRangeConstants {
+public class ValueRangeConstants {
 	public static int[] INT_VALUES = new int[] { Integer.MIN_VALUE, 0, Integer.MAX_VALUE };
 	public static short[] SHORT_VALUES = new short[] { Short.MIN_VALUE, 0, Short.MAX_VALUE };
 	public static long[] LONG_VALUES = new long[] { Long.MIN_VALUE, 0, Long.MAX_VALUE };

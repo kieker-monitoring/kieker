@@ -40,12 +40,12 @@ public class ConstructionEvent extends AbstractTraceEvent implements IMonitoring
 	;
 	private static final long serialVersionUID = -3519441499400826996L;
 	
-	private static final Class<?>[] TYPES = {
-		Long.class, // IEventRecord.timestamp
-		Long.class, // ITraceRecord.traceId
-		Integer.class, // ITraceRecord.orderIndex
+	public static final Class<?>[] TYPES = {
+		long.class, // IEventRecord.timestamp
+		long.class, // ITraceRecord.traceId
+		int.class, // ITraceRecord.orderIndex
 		String.class, // ConstructionEvent.classSignature
-		Integer.class, // ConstructionEvent.objectId
+		int.class, // ConstructionEvent.objectId
 	};
 	
 	public static final String CLASS_SIGNATURE = "";

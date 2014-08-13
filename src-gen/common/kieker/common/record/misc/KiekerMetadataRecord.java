@@ -43,15 +43,15 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 	;
 	private static final long serialVersionUID = 7506050189318057340L;
 	
-	private static final Class<?>[] TYPES = {
+	public static final Class<?>[] TYPES = {
 		String.class, // KiekerMetadataRecord.version
 		String.class, // KiekerMetadataRecord.controllerName
 		String.class, // KiekerMetadataRecord.hostname
-		Integer.class, // KiekerMetadataRecord.experimentId
-		Boolean.class, // KiekerMetadataRecord.debugMode
-		Long.class, // KiekerMetadataRecord.timeOffset
+		int.class, // KiekerMetadataRecord.experimentId
+		boolean.class, // KiekerMetadataRecord.debugMode
+		long.class, // KiekerMetadataRecord.timeOffset
 		String.class, // KiekerMetadataRecord.timeUnit
-		Long.class, // KiekerMetadataRecord.numberOfRecords
+		long.class, // KiekerMetadataRecord.numberOfRecords
 	};
 	
 	public static final String NO_CONTROLLERNAME = "<no-controller-name>";

@@ -42,10 +42,10 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IM
 	;
 	private static final long serialVersionUID = -7300825614065386027L;
 	
-	private static final Class<?>[] TYPES = {
-		Long.class, // IEventRecord.timestamp
-		Long.class, // ITraceRecord.traceId
-		Integer.class, // ITraceRecord.orderIndex
+	public static final Class<?>[] TYPES = {
+		long.class, // IEventRecord.timestamp
+		long.class, // ITraceRecord.traceId
+		int.class, // ITraceRecord.orderIndex
 		String.class, // IClassSignature.classSignature
 		String.class, // IOperationRecord.operationSignature
 		String.class, // IExceptionRecord.cause

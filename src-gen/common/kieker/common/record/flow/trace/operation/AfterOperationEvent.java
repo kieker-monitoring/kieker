@@ -40,10 +40,10 @@ public class AfterOperationEvent extends AbstractOperationEvent implements IMoni
 	;
 	private static final long serialVersionUID = -7820788362643933781L;
 	
-	private static final Class<?>[] TYPES = {
-		Long.class, // IEventRecord.timestamp
-		Long.class, // ITraceRecord.traceId
-		Integer.class, // ITraceRecord.orderIndex
+	public static final Class<?>[] TYPES = {
+		long.class, // IEventRecord.timestamp
+		long.class, // ITraceRecord.traceId
+		int.class, // ITraceRecord.orderIndex
 		String.class, // IClassSignature.classSignature
 		String.class, // IOperationRecord.operationSignature
 	};

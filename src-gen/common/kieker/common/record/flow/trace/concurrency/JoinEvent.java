@@ -39,11 +39,11 @@ public class JoinEvent extends AbstractTraceEvent implements IMonitoringRecord.F
 	;
 	private static final long serialVersionUID = 8247379140800787016L;
 	
-	private static final Class<?>[] TYPES = {
-		Long.class, // IEventRecord.timestamp
-		Long.class, // ITraceRecord.traceId
-		Integer.class, // ITraceRecord.orderIndex
-		Long.class, // JoinEvent.joinedTraceId
+	public static final Class<?>[] TYPES = {
+		long.class, // IEventRecord.timestamp
+		long.class, // ITraceRecord.traceId
+		int.class, // ITraceRecord.orderIndex
+		long.class, // JoinEvent.joinedTraceId
 	};
 	
 	public static final long JOINED_TRACE_ID = 0L;

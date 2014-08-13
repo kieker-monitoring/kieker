@@ -41,10 +41,10 @@ public class BeforeConstructorEvent extends BeforeOperationEvent implements IMon
 	;
 	private static final long serialVersionUID = 4992296160420366105L;
 	
-	private static final Class<?>[] TYPES = {
-		Long.class, // IEventRecord.timestamp
-		Long.class, // ITraceRecord.traceId
-		Integer.class, // ITraceRecord.orderIndex
+	public static final Class<?>[] TYPES = {
+		long.class, // IEventRecord.timestamp
+		long.class, // ITraceRecord.traceId
+		int.class, // ITraceRecord.orderIndex
 		String.class, // IClassSignature.classSignature
 		String.class, // IOperationRecord.operationSignature
 	};

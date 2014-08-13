@@ -26,7 +26,7 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.common.junit.TestValueRangeConstants;
+import kieker.test.common.junit.ValueRangeConstants;
 import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
 		
 /**
@@ -48,16 +48,16 @@ public class TestGeneratedResourceUtilizationRecord extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testToArray() { // NOPMD (assert missing)
-	for (int i=0;i<TestValueRangeConstants.ARRAY_LENGTH;i++) {
+	for (int i=0;i<ValueRangeConstants.ARRAY_LENGTH;i++) {
 			// initialize
-			ResourceUtilizationRecord record = new ResourceUtilizationRecord(TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length], TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length], TestValueRangeConstants.DOUBLE_VALUES[i%TestValueRangeConstants.DOUBLE_VALUES.length]);
+			ResourceUtilizationRecord record = new ResourceUtilizationRecord(ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length], ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length], ValueRangeConstants.DOUBLE_VALUES[i%ValueRangeConstants.DOUBLE_VALUES.length]);
 			
 			// check values
-			Assert.assertEquals("ResourceUtilizationRecord.timestamp values are not equal.", TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], record.getTimestamp());
-			Assert.assertEquals("ResourceUtilizationRecord.hostname values are not equal.", TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length] == null?"":TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length], record.getHostname());
-			Assert.assertEquals("ResourceUtilizationRecord.resourceName values are not equal.", TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length] == null?"":TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length], record.getResourceName());
+			Assert.assertEquals("ResourceUtilizationRecord.timestamp values are not equal.", ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], record.getTimestamp());
+			Assert.assertEquals("ResourceUtilizationRecord.hostname values are not equal.", ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length] == null?"":ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length], record.getHostname());
+			Assert.assertEquals("ResourceUtilizationRecord.resourceName values are not equal.", ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length] == null?"":ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length], record.getResourceName());
 			Assert.assertEquals("ResourceUtilizationRecord.utilization values are not equal.", 
-			TestValueRangeConstants.DOUBLE_VALUES[i%TestValueRangeConstants.DOUBLE_VALUES.length], record.getUtilization(), 0.0000001);
+			ValueRangeConstants.DOUBLE_VALUES[i%ValueRangeConstants.DOUBLE_VALUES.length], record.getUtilization(), 0.0000001);
 			
 			Object[] values = record.toArray();
 			
@@ -77,17 +77,17 @@ public class TestGeneratedResourceUtilizationRecord extends AbstractKiekerTest {
 			Assert.assertTrue("Type of array value [3] " + values[3].getClass().getCanonicalName() + " does not match the desired type Double", values[3] instanceof Double);
 								
 			// check all object values 
-			Assert.assertEquals("Array value [0] " + values[0] + " does not match the desired value " + TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length],
-				TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], (long) (Long)values[0]
+			Assert.assertEquals("Array value [0] " + values[0] + " does not match the desired value " + ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length],
+				ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], (long) (Long)values[0]
 					);
-			Assert.assertEquals("Array value [1] " + values[1] + " does not match the desired value " + TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length],
-				TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length] == null?"":TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length], values[1]
+			Assert.assertEquals("Array value [1] " + values[1] + " does not match the desired value " + ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length],
+				ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length] == null?"":ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length], values[1]
 			);
-			Assert.assertEquals("Array value [2] " + values[2] + " does not match the desired value " + TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length],
-				TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length] == null?"":TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length], values[2]
+			Assert.assertEquals("Array value [2] " + values[2] + " does not match the desired value " + ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length],
+				ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length] == null?"":ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length], values[2]
 			);
-			Assert.assertEquals("Array value [3] " + values[3] + " does not match the desired value " + TestValueRangeConstants.DOUBLE_VALUES[i%TestValueRangeConstants.DOUBLE_VALUES.length],
-				TestValueRangeConstants.DOUBLE_VALUES[i%TestValueRangeConstants.DOUBLE_VALUES.length], (double) (Double)values[3], 0.0000001
+			Assert.assertEquals("Array value [3] " + values[3] + " does not match the desired value " + ValueRangeConstants.DOUBLE_VALUES[i%ValueRangeConstants.DOUBLE_VALUES.length],
+				ValueRangeConstants.DOUBLE_VALUES[i%ValueRangeConstants.DOUBLE_VALUES.length], (double) (Double)values[3], 0.0000001
 			);
 		}
 	}
@@ -97,16 +97,16 @@ public class TestGeneratedResourceUtilizationRecord extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testBuffer() { // NOPMD (assert missing)
-		for (int i=0;i<TestValueRangeConstants.ARRAY_LENGTH;i++) {
+		for (int i=0;i<ValueRangeConstants.ARRAY_LENGTH;i++) {
 			// initialize
-			ResourceUtilizationRecord record = new ResourceUtilizationRecord(TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length], TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length], TestValueRangeConstants.DOUBLE_VALUES[i%TestValueRangeConstants.DOUBLE_VALUES.length]);
+			ResourceUtilizationRecord record = new ResourceUtilizationRecord(ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length], ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length], ValueRangeConstants.DOUBLE_VALUES[i%ValueRangeConstants.DOUBLE_VALUES.length]);
 			
 			// check values
-			Assert.assertEquals("ResourceUtilizationRecord.timestamp values are not equal.", TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], record.getTimestamp());
-			Assert.assertEquals("ResourceUtilizationRecord.hostname values are not equal.", TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length] == null?"":TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length], record.getHostname());
-			Assert.assertEquals("ResourceUtilizationRecord.resourceName values are not equal.", TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length] == null?"":TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length], record.getResourceName());
+			Assert.assertEquals("ResourceUtilizationRecord.timestamp values are not equal.", ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], record.getTimestamp());
+			Assert.assertEquals("ResourceUtilizationRecord.hostname values are not equal.", ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length] == null?"":ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length], record.getHostname());
+			Assert.assertEquals("ResourceUtilizationRecord.resourceName values are not equal.", ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length] == null?"":ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length], record.getResourceName());
 			Assert.assertEquals("ResourceUtilizationRecord.utilization values are not equal.", 
-			TestValueRangeConstants.DOUBLE_VALUES[i%TestValueRangeConstants.DOUBLE_VALUES.length], record.getUtilization(), 0.0000001);
+			ValueRangeConstants.DOUBLE_VALUES[i%ValueRangeConstants.DOUBLE_VALUES.length], record.getUtilization(), 0.0000001);
 		}
 	}
 	
@@ -115,16 +115,16 @@ public class TestGeneratedResourceUtilizationRecord extends AbstractKiekerTest {
 	 */
 	@Test
 	public void testParameterConstruction() { // NOPMD (assert missing)
-		for (int i=0;i<TestValueRangeConstants.ARRAY_LENGTH;i++) {
+		for (int i=0;i<ValueRangeConstants.ARRAY_LENGTH;i++) {
 			// initialize
-			ResourceUtilizationRecord record = new ResourceUtilizationRecord(TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length], TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length], TestValueRangeConstants.DOUBLE_VALUES[i%TestValueRangeConstants.DOUBLE_VALUES.length]);
+			ResourceUtilizationRecord record = new ResourceUtilizationRecord(ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length], ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length], ValueRangeConstants.DOUBLE_VALUES[i%ValueRangeConstants.DOUBLE_VALUES.length]);
 			
 			// check values
-			Assert.assertEquals("ResourceUtilizationRecord.timestamp values are not equal.", TestValueRangeConstants.LONG_VALUES[i%TestValueRangeConstants.LONG_VALUES.length], record.getTimestamp());
-			Assert.assertEquals("ResourceUtilizationRecord.hostname values are not equal.", TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length] == null?"":TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length], record.getHostname());
-			Assert.assertEquals("ResourceUtilizationRecord.resourceName values are not equal.", TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length] == null?"":TestValueRangeConstants.STRING_VALUES[i%TestValueRangeConstants.STRING_VALUES.length], record.getResourceName());
+			Assert.assertEquals("ResourceUtilizationRecord.timestamp values are not equal.", ValueRangeConstants.LONG_VALUES[i%ValueRangeConstants.LONG_VALUES.length], record.getTimestamp());
+			Assert.assertEquals("ResourceUtilizationRecord.hostname values are not equal.", ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length] == null?"":ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length], record.getHostname());
+			Assert.assertEquals("ResourceUtilizationRecord.resourceName values are not equal.", ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length] == null?"":ValueRangeConstants.STRING_VALUES[i%ValueRangeConstants.STRING_VALUES.length], record.getResourceName());
 			Assert.assertEquals("ResourceUtilizationRecord.utilization values are not equal.", 
-			TestValueRangeConstants.DOUBLE_VALUES[i%TestValueRangeConstants.DOUBLE_VALUES.length], record.getUtilization(), 0.0000001);
+			ValueRangeConstants.DOUBLE_VALUES[i%ValueRangeConstants.DOUBLE_VALUES.length], record.getUtilization(), 0.0000001);
 		}
 	}
 }
