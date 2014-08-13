@@ -21,12 +21,12 @@ import kieker.common.record.flow.trace.operation.CallOperationEvent;
 
 /**
  * This class contains a set of common routines used throughout the test cases.
- * 
+ *
  * @author Reiner Jung
- * 
+ *
  * @since 1.10
  */
-public class UtilityClass {
+public final class UtilityClass {
 
 	/**
 	 * Utility class constructor.

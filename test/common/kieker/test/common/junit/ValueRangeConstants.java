@@ -18,44 +18,44 @@ package kieker.test.common.junit;
 
 /**
  * @author Reiner Jung
- * 
+ *
  * @since 1.10
  */
-public class ValueRangeConstants {
-	public final static int[] INT_VALUES = new int[] {
+public final class ValueRangeConstants {
+	public static final int[] INT_VALUES = new int[] {
 		Integer.MIN_VALUE,
 		0,
 		Integer.MAX_VALUE,
 	};
-	public final static short[] SHORT_VALUES = new short[] {
-		Short.MIN_VALUE,
+	public static final short[] SHORT_VALUES = new short[] { // NOPMD (ignore short type warning)
+	Short.MIN_VALUE,
 		0,
 		Short.MAX_VALUE,
 	};
-	public final static long[] LONG_VALUES = new long[] {
+	public static final long[] LONG_VALUES = new long[] {
 		Long.MIN_VALUE,
 		0,
 		Long.MAX_VALUE,
 	};
-	public final static byte[] BYTE_VALUES = new byte[] {
+	public static final byte[] BYTE_VALUES = new byte[] {
 		Byte.MIN_VALUE,
 		0,
 		Byte.MAX_VALUE,
 	};
 
-	public final static char[] CHARACTER_VALUES = new char[] { Character.MIN_VALUE, Character.MAX_VALUE, };
-	public final static boolean[] BOOLEAN_VALUES = new boolean[] { false, true, };
+	public static final char[] CHARACTER_VALUES = new char[] { Character.MIN_VALUE, Character.MAX_VALUE, };
+	public static final boolean[] BOOLEAN_VALUES = new boolean[] { false, true, };
 
-	public final static float[] FLOAT_VALUES = new float[] { Float.MIN_VALUE, Float.MIN_EXPONENT, Float.MIN_NORMAL,
+	public static final float[] FLOAT_VALUES = new float[] { Float.MIN_VALUE, Float.MIN_EXPONENT, Float.MIN_NORMAL,
 		0, Float.MAX_VALUE, Float.MAX_EXPONENT,
 		Float.NEGATIVE_INFINITY, Float.POSITIVE_INFINITY, };
-	public final static double[] DOUBLE_VALUES = new double[] { Double.MIN_VALUE, Double.MIN_EXPONENT, Double.MIN_NORMAL,
+	public static final double[] DOUBLE_VALUES = new double[] { Double.MIN_VALUE, Double.MIN_EXPONENT, Double.MIN_NORMAL,
 		0, Double.MAX_VALUE, Double.MAX_EXPONENT,
 		Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, };
 
-	public final static String[] STRING_VALUES = new String[] { null, "", "abcdefghijklmnopqrstuvwxyz0123456789/.()$_ !%& *+-=#~", };
+	public static final String[] STRING_VALUES = new String[] { null, "", "abcdefghijklmnopqrstuvwxyz0123456789/.()$_ !%& *+-=#~", };
 
-	public static int ARRAY_LENGTH = 8;
+	public static final int ARRAY_LENGTH = 8;
 
 	/**
 	 * Utility class.
