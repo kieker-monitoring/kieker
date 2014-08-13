@@ -29,18 +29,25 @@ import kieker.common.record.flow.trace.operation.CallOperationEvent;
 public class UtilityClass {
 
 	/**
+	 * Utility class constructor.
+	 */
+	private UtilityClass() {
+
+	}
+
+	/**
 	 * Checks if two events refer to the same operation of the same class.
 	 */
 	public static boolean refersToSameOperationAs(final IOperationRecord left, final IOperationRecord right) {
-		return left.getOperationSignature().equals(right.getOperationSignature()) &&
-				left.getClassSignature().equals(right.getClassSignature());
+		return left.getOperationSignature().equals(right.getOperationSignature())
+				&& left.getClassSignature().equals(right.getClassSignature());
 	}
 
 	/**
 	 * Check if a callee signature references another signature of another event.
 	 */
 	public static boolean callsReferencedOperationOf(final CallOperationEvent left, final CallOperationEvent right) {
-		return left.getCalleeOperationSignature().equals(right.getOperationSignature()) &&
-				left.getCalleeClassSignature().equals(right.getClassSignature());
+		return left.getCalleeOperationSignature().equals(right.getOperationSignature())
+				&& left.getCalleeClassSignature().equals(right.getClassSignature());
 	}
 }

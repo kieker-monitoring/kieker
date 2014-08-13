@@ -402,8 +402,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 		 * Check if a previous event callee is the present operation.
 		 */
 		private boolean callsReferencedOperationOf(final CallOperationEvent prevEvent, final BeforeOperationEvent presentEvent) {
-			return prevEvent.getCalleeOperationSignature().equals(presentEvent.getOperationSignature()) &&
-					prevEvent.getCalleeClassSignature().equals(presentEvent.getClassSignature());
+			return prevEvent.getCalleeOperationSignature().equals(presentEvent.getOperationSignature())
+					&& prevEvent.getCalleeClassSignature().equals(presentEvent.getClassSignature());
 		}
 
 		private void handleAfterEvent(final AfterOperationEvent afterOperationEvent,
@@ -448,8 +448,8 @@ public class TraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractTr
 		}
 
 		private boolean refersToSameOperationAs(final AfterOperationEvent afterOperationEvent, final BeforeOperationEvent potentialBeforeEvent) {
-			return afterOperationEvent.getOperationSignature().equals(potentialBeforeEvent.getOperationSignature()) &&
-					afterOperationEvent.getClassSignature().equals(potentialBeforeEvent.getClassSignature());
+			return afterOperationEvent.getOperationSignature().equals(potentialBeforeEvent.getOperationSignature())
+					&& afterOperationEvent.getClassSignature().equals(potentialBeforeEvent.getClassSignature());
 		}
 
 		public void handleAfterOperationEvent(final AfterOperationEvent afterOperationEvent) throws InvalidTraceException {
