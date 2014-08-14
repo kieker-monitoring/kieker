@@ -26,7 +26,7 @@ import kieker.common.record.flow.trace.operation.constructor.AfterConstructorEve
 import kieker.common.record.flow.IObjectRecord;
 
 /**
- * @author Generic Kieker
+ * @author Kieker Build
  * 
  * @since 1.10
  */

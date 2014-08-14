@@ -25,7 +25,7 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.record.jvm.AbstractJVMRecord;
 
 /**
- * @author Generic Kieker
+ * @author Kieker Build
  * 
  * @since 1.10
  */

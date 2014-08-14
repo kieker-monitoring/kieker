@@ -26,7 +26,7 @@ import kieker.common.record.flow.trace.operation.AbstractOperationEvent;
 import kieker.common.record.flow.ICallRecord;
 
 /**
- * @author Generic Kieker
+ * @author Kieker Build
  * 
  * @since 1.10
  */
