@@ -78,4 +78,9 @@ public abstract class AbstractGeneratedKiekerTest extends AbstractKiekerTest {
 
 	protected static final int ARRAY_LENGTH = 8;
 
+	/**
+	 * Empty Default constructor.
+	 */
+	public AbstractGeneratedKiekerTest() {}
+
 }
