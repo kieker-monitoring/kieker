@@ -20,7 +20,6 @@ import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
-import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
 
 import kieker.common.record.flow.trace.operation.constructor.BeforeConstructorEvent;
@@ -31,7 +30,7 @@ import kieker.common.record.flow.IObjectRecord;
  * 
  * @since 1.10
  */
-public class BeforeConstructorObjectEvent extends BeforeConstructorEvent implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory, IObjectRecord {
+public class BeforeConstructorObjectEvent extends BeforeConstructorEvent implements IObjectRecord {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
 			 + TYPE_SIZE_LONG // ITraceRecord.traceId
@@ -76,7 +75,8 @@ public class BeforeConstructorObjectEvent extends BeforeConstructorEvent impleme
 	}
 
 	/**
-	 * This constructor converts the given array into a record. It is recommended to use the array which is the result of a call to {@link #toArray()}.
+	 * This constructor converts the given array into a record.
+	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
 	 * 
 	 * @param values
 	 *            The values for the record.

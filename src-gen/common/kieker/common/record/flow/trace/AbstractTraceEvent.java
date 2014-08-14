@@ -19,7 +19,6 @@ package kieker.common.record.flow.trace;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
-import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
 
 import kieker.common.record.flow.AbstractEvent;
@@ -30,7 +29,7 @@ import kieker.common.record.flow.ITraceRecord;
  * 
  * @since 1.10
  */
-public abstract class AbstractTraceEvent extends AbstractEvent implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory, ITraceRecord {
+public abstract class AbstractTraceEvent extends AbstractEvent implements ITraceRecord {
 		private static final long serialVersionUID = 161681009968355282L;
 	
 	
