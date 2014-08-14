@@ -33,10 +33,10 @@ public abstract class AbstractGeneratedKiekerTest extends AbstractKiekerTest {
 			Integer.MAX_VALUE
 			));
 
-	protected static final List<Short> SHORT_VALUES = Collections.unmodifiableList(Arrays.asList(
-			Short.MIN_VALUE,
-			(short) 0,
-			Short.MAX_VALUE
+	protected static final List<Short> SHORT_VALUES = Collections.unmodifiableList(Arrays.asList( // NOPMD
+			Short.MIN_VALUE, // NOPMD (pmd does not like short, however, we have to test it)
+			(short) 0, // NOPMD
+			Short.MAX_VALUE // NOPMD
 			));
 
 	protected static final List<Long> LONG_VALUES = Collections.unmodifiableList(Arrays.asList(
@@ -81,6 +81,8 @@ public abstract class AbstractGeneratedKiekerTest extends AbstractKiekerTest {
 	/**
 	 * Empty Default constructor.
 	 */
-	public AbstractGeneratedKiekerTest() {}
+	public AbstractGeneratedKiekerTest() {
+		// Emtpy constructor.
+	}
 
 }
