@@ -26,7 +26,7 @@ import kieker.common.util.registry.IRegistry;
 
 
 /**
- * @author Kieker Build
+ * @author Generic Kieker
  * 
  * @since 1.10
  */

@@ -26,7 +26,7 @@ import kieker.common.record.flow.trace.operation.constructor.CallConstructorEven
 import kieker.common.record.flow.ICallObjectRecord;
 
 /**
- * @author Kieker Build
+ * @author Generic Kieker
  * 
  * @since 1.10
  */

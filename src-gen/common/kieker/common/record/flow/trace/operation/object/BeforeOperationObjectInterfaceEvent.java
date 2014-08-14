@@ -26,7 +26,7 @@ import kieker.common.record.flow.trace.operation.object.BeforeOperationObjectEve
 import kieker.common.record.flow.IInterfaceRecord;
 
 /**
- * @author Kieker Build
+ * @author Generic Kieker
  * 
  * @since 1.10
  */
