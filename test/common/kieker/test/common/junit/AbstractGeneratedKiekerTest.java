@@ -16,17 +16,23 @@
 
 package kieker.test.common.junit;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+
 /**
  * @author Reiner Jung
  * 
  * @since 1.10
  */
 public abstract class AbstractGeneratedKiekerTest extends AbstractKiekerTest {
-	protected static final int[] INT_VALUES = {
-		Integer.MIN_VALUE,
-		0,
-		Integer.MAX_VALUE,
-	};
+
+	protected static final Collection<Integer> INT_VALUES = Collections.unmodifiableCollection(Arrays.asList(
+			Integer.MIN_VALUE,
+			0,
+			Integer.MAX_VALUE
+			));
+
 	protected static final short[] SHORT_VALUES = { // NOPMD (ignore short type warning)
 	Short.MIN_VALUE,
 		0,
