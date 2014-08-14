@@ -395,6 +395,23 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		}
 	}
 
+	/**
+	 * This method creates a new monitoring record from a byte buffer containing a serialized record.
+	 * 
+	 * @param clazzid
+	 *            The class id of the monitoring record.
+	 * @param buffer
+	 *            The byte buffer containing the data.
+	 * @param stringRegistry
+	 *            the string registry used to find the correct strings for the given string ids in the serialization.
+	 * 
+	 * @return An initialized record instance.
+	 * 
+	 * @throws MonitoringRecordException
+	 *             If this method failed to create the record for some reason.
+	 * @throws BufferUnderflowException
+	 *             If the byte buffer is to small to hold all necessary information for a record.
+	 */
 	public static final IMonitoringRecord createFromByteBuffer(final int clazzid, final ByteBuffer buffer, final IRegistry<String> stringRegistry)
 			throws MonitoringRecordException, BufferUnderflowException {
 		try {
@@ -432,6 +449,19 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		}
 	}
 
+	/**
+	 * This method creates a new monitoring record from the given data encoded in strings.
+	 * 
+	 * @param clazz
+	 *            The class of the monitoring record.
+	 * @param values
+	 *            The string array which will be used to initialize the fields of the record.
+	 * 
+	 * @return An initialized record instance.
+	 * 
+	 * @throws MonitoringRecordException
+	 *             If this method failed to create the record for some reason.
+	 */
 	public static final IMonitoringRecord createFromStringArray(final Class<? extends IMonitoringRecord> clazz, final String[] values)
 			throws MonitoringRecordException {
 		try {

@@ -20,11 +20,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- *
+ * 
  * This is an actual implementation of the logging interface used by the JUnit logger.
- *
+ * 
  * @author Jan Waller
- *
+ * 
  * @since 1.6
  */
 public final class LogImplJUnit implements Log {
@@ -37,7 +37,7 @@ public final class LogImplJUnit implements Log {
 
 	/**
 	 * Creates a new instance of this class.
-	 *
+	 * 
 	 * @param name
 	 *            The name of the logger.
 	 */
@@ -178,6 +178,12 @@ public final class LogImplJUnit implements Log {
 		this.log(java.util.logging.Level.SEVERE, message, t);
 	}
 
+	/**
+	 * Add a throwable to the list of throwables to be ignored for normal logging.
+	 * 
+	 * @param clazz
+	 *            throwable class
+	 */
 	public static final void disableThrowable(final Class<? extends Throwable> clazz) {
 		synchronized (DISABLED_THROWABLES) {
 			DISABLED_THROWABLES.add(clazz);
@@ -185,6 +191,9 @@ public final class LogImplJUnit implements Log {
 		LOG.info("Logging " + clazz.getName() + " only to DEBUG log level.");
 	}
 
+	/**
+	 * Clear list of disabled throwables.
+	 */
 	public static final void reset() {
 		synchronized (DISABLED_THROWABLES) {
 			if (!DISABLED_THROWABLES.isEmpty()) {

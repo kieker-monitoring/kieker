@@ -47,6 +47,14 @@ public class SimpleLoggingFormatter extends Formatter {
 		return sb.toString();
 	}
 
+	/**
+	 * Populates the string builder with logging information.
+	 * 
+	 * @param sb
+	 *            the string builder
+	 * @param record
+	 *            one log record to be used for population of the string builder
+	 */
 	protected void fillStringBuilderWithMessage(final StringBuilder sb, final LogRecord record) {
 		final Date date = new Date(record.getMillis());
 		final String dateText = this.dateFormat.format(date);

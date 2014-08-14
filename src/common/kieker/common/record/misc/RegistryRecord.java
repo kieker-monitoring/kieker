@@ -93,6 +93,8 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	 * 
 	 * @param buffer
 	 *            The bytes for the record.
+	 * @param stringRegistry
+	 *            the string registry to decode the string ids in the byte buffer.
 	 * 
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
@@ -187,6 +189,17 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 		return this.string;
 	}
 
+	/**
+	 * Static function used to register strings stored in a byte buffer as string in the string registry with the proper id.
+	 * 
+	 * @param buffer
+	 *            the byte buffer containing the string
+	 * @param stringRegistry
+	 *            the registry where the string is stored
+	 * 
+	 * @throws BufferOverflowException
+	 *             if the length encoded in the buffer exceeds the buffers boundary
+	 */
 	public static final void registerRecordInRegistry(final ByteBuffer buffer, final ILookup<String> stringRegistry) throws BufferOverflowException {
 		final int id = buffer.getInt();
 		final byte[] strBytes = new byte[buffer.getInt()];

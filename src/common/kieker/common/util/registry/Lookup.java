@@ -29,6 +29,9 @@ public final class Lookup<E> implements ILookup<E> {
 
 	private transient volatile E[] array;
 
+	/**
+	 * Create a new lookup entry.
+	 */
 	@SuppressWarnings("unchecked")
 	public Lookup() {
 		this.array = (E[]) new Object[0];
@@ -47,6 +50,14 @@ public final class Lookup<E> implements ILookup<E> {
 		return -1;
 	}
 
+	/**
+	 * Get a record from the underlying object array.
+	 * 
+	 * @param i
+	 *            the index for the array
+	 * 
+	 * @return the object in the array or null if the array bounds are exceeded
+	 */
 	public E getNonBlocking(final int i) {
 		final E[] arr = this.array; // work on this "copy" to prevent concurrent modification
 		if (i < arr.length) {
@@ -109,6 +120,9 @@ public final class Lookup<E> implements ILookup<E> {
 
 	/**
 	 * @deprecated This method is not supported by this implementation.
+	 * 
+	 * @param recordReceiver
+	 *            has no special property.
 	 */
 	@Override
 	@Deprecated
