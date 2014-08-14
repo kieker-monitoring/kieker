@@ -49,17 +49,17 @@ public class TestGeneratedMemSwapUsageRecord extends AbstractGeneratedKiekerTest
 	public void testToArray() { // NOPMD (assert missing)
 	for (int i=0;i<ARRAY_LENGTH;i++) {
 			// initialize
-			MemSwapUsageRecord record = new MemSwapUsageRecord(LONG_VALUES[i%LONG_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length]);
+			MemSwapUsageRecord record = new MemSwapUsageRecord(LONG_VALUES.get(i % LONG_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()));
 			
 			// check values
-			Assert.assertEquals("MemSwapUsageRecord.timestamp values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getTimestamp());
-			Assert.assertEquals("MemSwapUsageRecord.hostname values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getHostname());
-			Assert.assertEquals("MemSwapUsageRecord.memUsed values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getMemUsed());
-			Assert.assertEquals("MemSwapUsageRecord.memFree values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getMemFree());
-			Assert.assertEquals("MemSwapUsageRecord.memTotal values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getMemTotal());
-			Assert.assertEquals("MemSwapUsageRecord.swapTotal values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getSwapTotal());
-			Assert.assertEquals("MemSwapUsageRecord.swapUsed values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getSwapUsed());
-			Assert.assertEquals("MemSwapUsageRecord.swapFree values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getSwapFree());
+			Assert.assertEquals("MemSwapUsageRecord.timestamp values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTimestamp());
+			Assert.assertEquals("MemSwapUsageRecord.hostname values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getHostname());
+			Assert.assertEquals("MemSwapUsageRecord.memUsed values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getMemUsed());
+			Assert.assertEquals("MemSwapUsageRecord.memFree values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getMemFree());
+			Assert.assertEquals("MemSwapUsageRecord.memTotal values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getMemTotal());
+			Assert.assertEquals("MemSwapUsageRecord.swapTotal values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getSwapTotal());
+			Assert.assertEquals("MemSwapUsageRecord.swapUsed values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getSwapUsed());
+			Assert.assertEquals("MemSwapUsageRecord.swapFree values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getSwapFree());
 			
 			Object[] values = record.toArray();
 			
@@ -87,29 +87,29 @@ public class TestGeneratedMemSwapUsageRecord extends AbstractGeneratedKiekerTest
 			Assert.assertTrue("Type of array value [7] " + values[7].getClass().getCanonicalName() + " does not match the desired type Long", values[7] instanceof Long);
 								
 			// check all object values 
-			Assert.assertEquals("Array value [0] " + values[0] + " does not match the desired value " + LONG_VALUES[i%LONG_VALUES.length],
-				LONG_VALUES[i%LONG_VALUES.length], (long) (Long)values[0]
+			Assert.assertEquals("Array value [0] " + values[0] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
+				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[0]
 					);
-			Assert.assertEquals("Array value [1] " + values[1] + " does not match the desired value " + STRING_VALUES[i%STRING_VALUES.length],
-				STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], values[1]
+			Assert.assertEquals("Array value [1] " + values[1] + " does not match the desired value " + STRING_VALUES.get(i % STRING_VALUES.size()),
+				STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), values[1]
 			);
-			Assert.assertEquals("Array value [2] " + values[2] + " does not match the desired value " + LONG_VALUES[i%LONG_VALUES.length],
-				LONG_VALUES[i%LONG_VALUES.length], (long) (Long)values[2]
+			Assert.assertEquals("Array value [2] " + values[2] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
+				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[2]
 					);
-			Assert.assertEquals("Array value [3] " + values[3] + " does not match the desired value " + LONG_VALUES[i%LONG_VALUES.length],
-				LONG_VALUES[i%LONG_VALUES.length], (long) (Long)values[3]
+			Assert.assertEquals("Array value [3] " + values[3] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
+				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[3]
 					);
-			Assert.assertEquals("Array value [4] " + values[4] + " does not match the desired value " + LONG_VALUES[i%LONG_VALUES.length],
-				LONG_VALUES[i%LONG_VALUES.length], (long) (Long)values[4]
+			Assert.assertEquals("Array value [4] " + values[4] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
+				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[4]
 					);
-			Assert.assertEquals("Array value [5] " + values[5] + " does not match the desired value " + LONG_VALUES[i%LONG_VALUES.length],
-				LONG_VALUES[i%LONG_VALUES.length], (long) (Long)values[5]
+			Assert.assertEquals("Array value [5] " + values[5] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
+				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[5]
 					);
-			Assert.assertEquals("Array value [6] " + values[6] + " does not match the desired value " + LONG_VALUES[i%LONG_VALUES.length],
-				LONG_VALUES[i%LONG_VALUES.length], (long) (Long)values[6]
+			Assert.assertEquals("Array value [6] " + values[6] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
+				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[6]
 					);
-			Assert.assertEquals("Array value [7] " + values[7] + " does not match the desired value " + LONG_VALUES[i%LONG_VALUES.length],
-				LONG_VALUES[i%LONG_VALUES.length], (long) (Long)values[7]
+			Assert.assertEquals("Array value [7] " + values[7] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
+				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[7]
 					);
 		}
 	}
@@ -121,17 +121,17 @@ public class TestGeneratedMemSwapUsageRecord extends AbstractGeneratedKiekerTest
 	public void testBuffer() { // NOPMD (assert missing)
 		for (int i=0;i<ARRAY_LENGTH;i++) {
 			// initialize
-			MemSwapUsageRecord record = new MemSwapUsageRecord(LONG_VALUES[i%LONG_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length]);
+			MemSwapUsageRecord record = new MemSwapUsageRecord(LONG_VALUES.get(i % LONG_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()));
 			
 			// check values
-			Assert.assertEquals("MemSwapUsageRecord.timestamp values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getTimestamp());
-			Assert.assertEquals("MemSwapUsageRecord.hostname values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getHostname());
-			Assert.assertEquals("MemSwapUsageRecord.memUsed values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getMemUsed());
-			Assert.assertEquals("MemSwapUsageRecord.memFree values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getMemFree());
-			Assert.assertEquals("MemSwapUsageRecord.memTotal values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getMemTotal());
-			Assert.assertEquals("MemSwapUsageRecord.swapTotal values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getSwapTotal());
-			Assert.assertEquals("MemSwapUsageRecord.swapUsed values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getSwapUsed());
-			Assert.assertEquals("MemSwapUsageRecord.swapFree values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getSwapFree());
+			Assert.assertEquals("MemSwapUsageRecord.timestamp values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTimestamp());
+			Assert.assertEquals("MemSwapUsageRecord.hostname values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getHostname());
+			Assert.assertEquals("MemSwapUsageRecord.memUsed values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getMemUsed());
+			Assert.assertEquals("MemSwapUsageRecord.memFree values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getMemFree());
+			Assert.assertEquals("MemSwapUsageRecord.memTotal values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getMemTotal());
+			Assert.assertEquals("MemSwapUsageRecord.swapTotal values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getSwapTotal());
+			Assert.assertEquals("MemSwapUsageRecord.swapUsed values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getSwapUsed());
+			Assert.assertEquals("MemSwapUsageRecord.swapFree values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getSwapFree());
 		}
 	}
 	
@@ -142,17 +142,17 @@ public class TestGeneratedMemSwapUsageRecord extends AbstractGeneratedKiekerTest
 	public void testParameterConstruction() { // NOPMD (assert missing)
 		for (int i=0;i<ARRAY_LENGTH;i++) {
 			// initialize
-			MemSwapUsageRecord record = new MemSwapUsageRecord(LONG_VALUES[i%LONG_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length]);
+			MemSwapUsageRecord record = new MemSwapUsageRecord(LONG_VALUES.get(i % LONG_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()));
 			
 			// check values
-			Assert.assertEquals("MemSwapUsageRecord.timestamp values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getTimestamp());
-			Assert.assertEquals("MemSwapUsageRecord.hostname values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getHostname());
-			Assert.assertEquals("MemSwapUsageRecord.memUsed values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getMemUsed());
-			Assert.assertEquals("MemSwapUsageRecord.memFree values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getMemFree());
-			Assert.assertEquals("MemSwapUsageRecord.memTotal values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getMemTotal());
-			Assert.assertEquals("MemSwapUsageRecord.swapTotal values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getSwapTotal());
-			Assert.assertEquals("MemSwapUsageRecord.swapUsed values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getSwapUsed());
-			Assert.assertEquals("MemSwapUsageRecord.swapFree values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getSwapFree());
+			Assert.assertEquals("MemSwapUsageRecord.timestamp values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTimestamp());
+			Assert.assertEquals("MemSwapUsageRecord.hostname values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getHostname());
+			Assert.assertEquals("MemSwapUsageRecord.memUsed values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getMemUsed());
+			Assert.assertEquals("MemSwapUsageRecord.memFree values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getMemFree());
+			Assert.assertEquals("MemSwapUsageRecord.memTotal values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getMemTotal());
+			Assert.assertEquals("MemSwapUsageRecord.swapTotal values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getSwapTotal());
+			Assert.assertEquals("MemSwapUsageRecord.swapUsed values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getSwapUsed());
+			Assert.assertEquals("MemSwapUsageRecord.swapFree values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getSwapFree());
 		}
 	}
 }

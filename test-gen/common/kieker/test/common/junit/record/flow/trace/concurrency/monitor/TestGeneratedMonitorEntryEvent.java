@@ -49,13 +49,13 @@ public class TestGeneratedMonitorEntryEvent extends AbstractGeneratedKiekerTest 
 	public void testToArray() { // NOPMD (assert missing)
 	for (int i=0;i<ARRAY_LENGTH;i++) {
 			// initialize
-			MonitorEntryEvent record = new MonitorEntryEvent(LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], INT_VALUES[i%INT_VALUES.length], INT_VALUES[i%INT_VALUES.length]);
+			MonitorEntryEvent record = new MonitorEntryEvent(LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()));
 			
 			// check values
-			Assert.assertEquals("MonitorEntryEvent.timestamp values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getTimestamp());
-			Assert.assertEquals("MonitorEntryEvent.traceId values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getTraceId());
-			Assert.assertEquals("MonitorEntryEvent.orderIndex values are not equal.", INT_VALUES[i%INT_VALUES.length], record.getOrderIndex());
-			Assert.assertEquals("MonitorEntryEvent.lockId values are not equal.", INT_VALUES[i%INT_VALUES.length], record.getLockId());
+			Assert.assertEquals("MonitorEntryEvent.timestamp values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTimestamp());
+			Assert.assertEquals("MonitorEntryEvent.traceId values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTraceId());
+			Assert.assertEquals("MonitorEntryEvent.orderIndex values are not equal.", (int) INT_VALUES.get(i % INT_VALUES.size()), record.getOrderIndex());
+			Assert.assertEquals("MonitorEntryEvent.lockId values are not equal.", (int) INT_VALUES.get(i % INT_VALUES.size()), record.getLockId());
 			
 			Object[] values = record.toArray();
 			
@@ -75,17 +75,17 @@ public class TestGeneratedMonitorEntryEvent extends AbstractGeneratedKiekerTest 
 			Assert.assertTrue("Type of array value [3] " + values[3].getClass().getCanonicalName() + " does not match the desired type Integer", values[3] instanceof Integer);
 								
 			// check all object values 
-			Assert.assertEquals("Array value [0] " + values[0] + " does not match the desired value " + LONG_VALUES[i%LONG_VALUES.length],
-				LONG_VALUES[i%LONG_VALUES.length], (long) (Long)values[0]
+			Assert.assertEquals("Array value [0] " + values[0] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
+				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[0]
 					);
-			Assert.assertEquals("Array value [1] " + values[1] + " does not match the desired value " + LONG_VALUES[i%LONG_VALUES.length],
-				LONG_VALUES[i%LONG_VALUES.length], (long) (Long)values[1]
+			Assert.assertEquals("Array value [1] " + values[1] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
+				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[1]
 					);
-			Assert.assertEquals("Array value [2] " + values[2] + " does not match the desired value " + INT_VALUES[i%INT_VALUES.length],
-				INT_VALUES[i%INT_VALUES.length], (int) (Integer)values[2]
+			Assert.assertEquals("Array value [2] " + values[2] + " does not match the desired value " + INT_VALUES.get(i % INT_VALUES.size()),
+				(int) INT_VALUES.get(i % INT_VALUES.size()), (int) (Integer)values[2]
 					);
-			Assert.assertEquals("Array value [3] " + values[3] + " does not match the desired value " + INT_VALUES[i%INT_VALUES.length],
-				INT_VALUES[i%INT_VALUES.length], (int) (Integer)values[3]
+			Assert.assertEquals("Array value [3] " + values[3] + " does not match the desired value " + INT_VALUES.get(i % INT_VALUES.size()),
+				(int) INT_VALUES.get(i % INT_VALUES.size()), (int) (Integer)values[3]
 					);
 		}
 	}
@@ -97,13 +97,13 @@ public class TestGeneratedMonitorEntryEvent extends AbstractGeneratedKiekerTest 
 	public void testBuffer() { // NOPMD (assert missing)
 		for (int i=0;i<ARRAY_LENGTH;i++) {
 			// initialize
-			MonitorEntryEvent record = new MonitorEntryEvent(LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], INT_VALUES[i%INT_VALUES.length], INT_VALUES[i%INT_VALUES.length]);
+			MonitorEntryEvent record = new MonitorEntryEvent(LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()));
 			
 			// check values
-			Assert.assertEquals("MonitorEntryEvent.timestamp values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getTimestamp());
-			Assert.assertEquals("MonitorEntryEvent.traceId values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getTraceId());
-			Assert.assertEquals("MonitorEntryEvent.orderIndex values are not equal.", INT_VALUES[i%INT_VALUES.length], record.getOrderIndex());
-			Assert.assertEquals("MonitorEntryEvent.lockId values are not equal.", INT_VALUES[i%INT_VALUES.length], record.getLockId());
+			Assert.assertEquals("MonitorEntryEvent.timestamp values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTimestamp());
+			Assert.assertEquals("MonitorEntryEvent.traceId values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTraceId());
+			Assert.assertEquals("MonitorEntryEvent.orderIndex values are not equal.", (int) INT_VALUES.get(i % INT_VALUES.size()), record.getOrderIndex());
+			Assert.assertEquals("MonitorEntryEvent.lockId values are not equal.", (int) INT_VALUES.get(i % INT_VALUES.size()), record.getLockId());
 		}
 	}
 	
@@ -114,13 +114,13 @@ public class TestGeneratedMonitorEntryEvent extends AbstractGeneratedKiekerTest 
 	public void testParameterConstruction() { // NOPMD (assert missing)
 		for (int i=0;i<ARRAY_LENGTH;i++) {
 			// initialize
-			MonitorEntryEvent record = new MonitorEntryEvent(LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], INT_VALUES[i%INT_VALUES.length], INT_VALUES[i%INT_VALUES.length]);
+			MonitorEntryEvent record = new MonitorEntryEvent(LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()));
 			
 			// check values
-			Assert.assertEquals("MonitorEntryEvent.timestamp values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getTimestamp());
-			Assert.assertEquals("MonitorEntryEvent.traceId values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getTraceId());
-			Assert.assertEquals("MonitorEntryEvent.orderIndex values are not equal.", INT_VALUES[i%INT_VALUES.length], record.getOrderIndex());
-			Assert.assertEquals("MonitorEntryEvent.lockId values are not equal.", INT_VALUES[i%INT_VALUES.length], record.getLockId());
+			Assert.assertEquals("MonitorEntryEvent.timestamp values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTimestamp());
+			Assert.assertEquals("MonitorEntryEvent.traceId values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTraceId());
+			Assert.assertEquals("MonitorEntryEvent.orderIndex values are not equal.", (int) INT_VALUES.get(i % INT_VALUES.size()), record.getOrderIndex());
+			Assert.assertEquals("MonitorEntryEvent.lockId values are not equal.", (int) INT_VALUES.get(i % INT_VALUES.size()), record.getLockId());
 		}
 	}
 }

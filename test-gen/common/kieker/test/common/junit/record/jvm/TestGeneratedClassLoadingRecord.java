@@ -49,15 +49,15 @@ public class TestGeneratedClassLoadingRecord extends AbstractGeneratedKiekerTest
 	public void testToArray() { // NOPMD (assert missing)
 	for (int i=0;i<ARRAY_LENGTH;i++) {
 			// initialize
-			ClassLoadingRecord record = new ClassLoadingRecord(LONG_VALUES[i%LONG_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], INT_VALUES[i%INT_VALUES.length], LONG_VALUES[i%LONG_VALUES.length]);
+			ClassLoadingRecord record = new ClassLoadingRecord(LONG_VALUES.get(i % LONG_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()));
 			
 			// check values
-			Assert.assertEquals("ClassLoadingRecord.timestamp values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getTimestamp());
-			Assert.assertEquals("ClassLoadingRecord.hostname values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getHostname());
-			Assert.assertEquals("ClassLoadingRecord.vmName values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getVmName());
-			Assert.assertEquals("ClassLoadingRecord.totalLoadedClassCount values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getTotalLoadedClassCount());
-			Assert.assertEquals("ClassLoadingRecord.loadedClassCount values are not equal.", INT_VALUES[i%INT_VALUES.length], record.getLoadedClassCount());
-			Assert.assertEquals("ClassLoadingRecord.unloadedClassCount values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getUnloadedClassCount());
+			Assert.assertEquals("ClassLoadingRecord.timestamp values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTimestamp());
+			Assert.assertEquals("ClassLoadingRecord.hostname values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getHostname());
+			Assert.assertEquals("ClassLoadingRecord.vmName values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getVmName());
+			Assert.assertEquals("ClassLoadingRecord.totalLoadedClassCount values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTotalLoadedClassCount());
+			Assert.assertEquals("ClassLoadingRecord.loadedClassCount values are not equal.", (int) INT_VALUES.get(i % INT_VALUES.size()), record.getLoadedClassCount());
+			Assert.assertEquals("ClassLoadingRecord.unloadedClassCount values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getUnloadedClassCount());
 			
 			Object[] values = record.toArray();
 			
@@ -81,23 +81,23 @@ public class TestGeneratedClassLoadingRecord extends AbstractGeneratedKiekerTest
 			Assert.assertTrue("Type of array value [5] " + values[5].getClass().getCanonicalName() + " does not match the desired type Long", values[5] instanceof Long);
 								
 			// check all object values 
-			Assert.assertEquals("Array value [0] " + values[0] + " does not match the desired value " + LONG_VALUES[i%LONG_VALUES.length],
-				LONG_VALUES[i%LONG_VALUES.length], (long) (Long)values[0]
+			Assert.assertEquals("Array value [0] " + values[0] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
+				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[0]
 					);
-			Assert.assertEquals("Array value [1] " + values[1] + " does not match the desired value " + STRING_VALUES[i%STRING_VALUES.length],
-				STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], values[1]
+			Assert.assertEquals("Array value [1] " + values[1] + " does not match the desired value " + STRING_VALUES.get(i % STRING_VALUES.size()),
+				STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), values[1]
 			);
-			Assert.assertEquals("Array value [2] " + values[2] + " does not match the desired value " + STRING_VALUES[i%STRING_VALUES.length],
-				STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], values[2]
+			Assert.assertEquals("Array value [2] " + values[2] + " does not match the desired value " + STRING_VALUES.get(i % STRING_VALUES.size()),
+				STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), values[2]
 			);
-			Assert.assertEquals("Array value [3] " + values[3] + " does not match the desired value " + LONG_VALUES[i%LONG_VALUES.length],
-				LONG_VALUES[i%LONG_VALUES.length], (long) (Long)values[3]
+			Assert.assertEquals("Array value [3] " + values[3] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
+				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[3]
 					);
-			Assert.assertEquals("Array value [4] " + values[4] + " does not match the desired value " + INT_VALUES[i%INT_VALUES.length],
-				INT_VALUES[i%INT_VALUES.length], (int) (Integer)values[4]
+			Assert.assertEquals("Array value [4] " + values[4] + " does not match the desired value " + INT_VALUES.get(i % INT_VALUES.size()),
+				(int) INT_VALUES.get(i % INT_VALUES.size()), (int) (Integer)values[4]
 					);
-			Assert.assertEquals("Array value [5] " + values[5] + " does not match the desired value " + LONG_VALUES[i%LONG_VALUES.length],
-				LONG_VALUES[i%LONG_VALUES.length], (long) (Long)values[5]
+			Assert.assertEquals("Array value [5] " + values[5] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
+				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[5]
 					);
 		}
 	}
@@ -109,15 +109,15 @@ public class TestGeneratedClassLoadingRecord extends AbstractGeneratedKiekerTest
 	public void testBuffer() { // NOPMD (assert missing)
 		for (int i=0;i<ARRAY_LENGTH;i++) {
 			// initialize
-			ClassLoadingRecord record = new ClassLoadingRecord(LONG_VALUES[i%LONG_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], INT_VALUES[i%INT_VALUES.length], LONG_VALUES[i%LONG_VALUES.length]);
+			ClassLoadingRecord record = new ClassLoadingRecord(LONG_VALUES.get(i % LONG_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()));
 			
 			// check values
-			Assert.assertEquals("ClassLoadingRecord.timestamp values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getTimestamp());
-			Assert.assertEquals("ClassLoadingRecord.hostname values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getHostname());
-			Assert.assertEquals("ClassLoadingRecord.vmName values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getVmName());
-			Assert.assertEquals("ClassLoadingRecord.totalLoadedClassCount values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getTotalLoadedClassCount());
-			Assert.assertEquals("ClassLoadingRecord.loadedClassCount values are not equal.", INT_VALUES[i%INT_VALUES.length], record.getLoadedClassCount());
-			Assert.assertEquals("ClassLoadingRecord.unloadedClassCount values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getUnloadedClassCount());
+			Assert.assertEquals("ClassLoadingRecord.timestamp values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTimestamp());
+			Assert.assertEquals("ClassLoadingRecord.hostname values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getHostname());
+			Assert.assertEquals("ClassLoadingRecord.vmName values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getVmName());
+			Assert.assertEquals("ClassLoadingRecord.totalLoadedClassCount values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTotalLoadedClassCount());
+			Assert.assertEquals("ClassLoadingRecord.loadedClassCount values are not equal.", (int) INT_VALUES.get(i % INT_VALUES.size()), record.getLoadedClassCount());
+			Assert.assertEquals("ClassLoadingRecord.unloadedClassCount values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getUnloadedClassCount());
 		}
 	}
 	
@@ -128,15 +128,15 @@ public class TestGeneratedClassLoadingRecord extends AbstractGeneratedKiekerTest
 	public void testParameterConstruction() { // NOPMD (assert missing)
 		for (int i=0;i<ARRAY_LENGTH;i++) {
 			// initialize
-			ClassLoadingRecord record = new ClassLoadingRecord(LONG_VALUES[i%LONG_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], INT_VALUES[i%INT_VALUES.length], LONG_VALUES[i%LONG_VALUES.length]);
+			ClassLoadingRecord record = new ClassLoadingRecord(LONG_VALUES.get(i % LONG_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()));
 			
 			// check values
-			Assert.assertEquals("ClassLoadingRecord.timestamp values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getTimestamp());
-			Assert.assertEquals("ClassLoadingRecord.hostname values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getHostname());
-			Assert.assertEquals("ClassLoadingRecord.vmName values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getVmName());
-			Assert.assertEquals("ClassLoadingRecord.totalLoadedClassCount values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getTotalLoadedClassCount());
-			Assert.assertEquals("ClassLoadingRecord.loadedClassCount values are not equal.", INT_VALUES[i%INT_VALUES.length], record.getLoadedClassCount());
-			Assert.assertEquals("ClassLoadingRecord.unloadedClassCount values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getUnloadedClassCount());
+			Assert.assertEquals("ClassLoadingRecord.timestamp values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTimestamp());
+			Assert.assertEquals("ClassLoadingRecord.hostname values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getHostname());
+			Assert.assertEquals("ClassLoadingRecord.vmName values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getVmName());
+			Assert.assertEquals("ClassLoadingRecord.totalLoadedClassCount values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTotalLoadedClassCount());
+			Assert.assertEquals("ClassLoadingRecord.loadedClassCount values are not equal.", (int) INT_VALUES.get(i % INT_VALUES.size()), record.getLoadedClassCount());
+			Assert.assertEquals("ClassLoadingRecord.unloadedClassCount values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getUnloadedClassCount());
 		}
 	}
 }

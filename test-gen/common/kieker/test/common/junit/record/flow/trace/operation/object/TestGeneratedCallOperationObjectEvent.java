@@ -49,18 +49,18 @@ public class TestGeneratedCallOperationObjectEvent extends AbstractGeneratedKiek
 	public void testToArray() { // NOPMD (assert missing)
 	for (int i=0;i<ARRAY_LENGTH;i++) {
 			// initialize
-			CallOperationObjectEvent record = new CallOperationObjectEvent(LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], INT_VALUES[i%INT_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], INT_VALUES[i%INT_VALUES.length], INT_VALUES[i%INT_VALUES.length]);
+			CallOperationObjectEvent record = new CallOperationObjectEvent(LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()));
 			
 			// check values
-			Assert.assertEquals("CallOperationObjectEvent.timestamp values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getTimestamp());
-			Assert.assertEquals("CallOperationObjectEvent.traceId values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getTraceId());
-			Assert.assertEquals("CallOperationObjectEvent.orderIndex values are not equal.", INT_VALUES[i%INT_VALUES.length], record.getOrderIndex());
-			Assert.assertEquals("CallOperationObjectEvent.classSignature values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getClassSignature());
-			Assert.assertEquals("CallOperationObjectEvent.operationSignature values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getOperationSignature());
-			Assert.assertEquals("CallOperationObjectEvent.calleeClassSignature values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getCalleeClassSignature());
-			Assert.assertEquals("CallOperationObjectEvent.calleeOperationSignature values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getCalleeOperationSignature());
-			Assert.assertEquals("CallOperationObjectEvent.objectId values are not equal.", INT_VALUES[i%INT_VALUES.length], record.getObjectId());
-			Assert.assertEquals("CallOperationObjectEvent.calleeObjectId values are not equal.", INT_VALUES[i%INT_VALUES.length], record.getCalleeObjectId());
+			Assert.assertEquals("CallOperationObjectEvent.timestamp values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTimestamp());
+			Assert.assertEquals("CallOperationObjectEvent.traceId values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTraceId());
+			Assert.assertEquals("CallOperationObjectEvent.orderIndex values are not equal.", (int) INT_VALUES.get(i % INT_VALUES.size()), record.getOrderIndex());
+			Assert.assertEquals("CallOperationObjectEvent.classSignature values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getClassSignature());
+			Assert.assertEquals("CallOperationObjectEvent.operationSignature values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getOperationSignature());
+			Assert.assertEquals("CallOperationObjectEvent.calleeClassSignature values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getCalleeClassSignature());
+			Assert.assertEquals("CallOperationObjectEvent.calleeOperationSignature values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getCalleeOperationSignature());
+			Assert.assertEquals("CallOperationObjectEvent.objectId values are not equal.", (int) INT_VALUES.get(i % INT_VALUES.size()), record.getObjectId());
+			Assert.assertEquals("CallOperationObjectEvent.calleeObjectId values are not equal.", (int) INT_VALUES.get(i % INT_VALUES.size()), record.getCalleeObjectId());
 			
 			Object[] values = record.toArray();
 			
@@ -90,32 +90,32 @@ public class TestGeneratedCallOperationObjectEvent extends AbstractGeneratedKiek
 			Assert.assertTrue("Type of array value [8] " + values[8].getClass().getCanonicalName() + " does not match the desired type Integer", values[8] instanceof Integer);
 								
 			// check all object values 
-			Assert.assertEquals("Array value [0] " + values[0] + " does not match the desired value " + LONG_VALUES[i%LONG_VALUES.length],
-				LONG_VALUES[i%LONG_VALUES.length], (long) (Long)values[0]
+			Assert.assertEquals("Array value [0] " + values[0] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
+				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[0]
 					);
-			Assert.assertEquals("Array value [1] " + values[1] + " does not match the desired value " + LONG_VALUES[i%LONG_VALUES.length],
-				LONG_VALUES[i%LONG_VALUES.length], (long) (Long)values[1]
+			Assert.assertEquals("Array value [1] " + values[1] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
+				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[1]
 					);
-			Assert.assertEquals("Array value [2] " + values[2] + " does not match the desired value " + INT_VALUES[i%INT_VALUES.length],
-				INT_VALUES[i%INT_VALUES.length], (int) (Integer)values[2]
+			Assert.assertEquals("Array value [2] " + values[2] + " does not match the desired value " + INT_VALUES.get(i % INT_VALUES.size()),
+				(int) INT_VALUES.get(i % INT_VALUES.size()), (int) (Integer)values[2]
 					);
-			Assert.assertEquals("Array value [3] " + values[3] + " does not match the desired value " + STRING_VALUES[i%STRING_VALUES.length],
-				STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], values[3]
+			Assert.assertEquals("Array value [3] " + values[3] + " does not match the desired value " + STRING_VALUES.get(i % STRING_VALUES.size()),
+				STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), values[3]
 			);
-			Assert.assertEquals("Array value [4] " + values[4] + " does not match the desired value " + STRING_VALUES[i%STRING_VALUES.length],
-				STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], values[4]
+			Assert.assertEquals("Array value [4] " + values[4] + " does not match the desired value " + STRING_VALUES.get(i % STRING_VALUES.size()),
+				STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), values[4]
 			);
-			Assert.assertEquals("Array value [5] " + values[5] + " does not match the desired value " + STRING_VALUES[i%STRING_VALUES.length],
-				STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], values[5]
+			Assert.assertEquals("Array value [5] " + values[5] + " does not match the desired value " + STRING_VALUES.get(i % STRING_VALUES.size()),
+				STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), values[5]
 			);
-			Assert.assertEquals("Array value [6] " + values[6] + " does not match the desired value " + STRING_VALUES[i%STRING_VALUES.length],
-				STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], values[6]
+			Assert.assertEquals("Array value [6] " + values[6] + " does not match the desired value " + STRING_VALUES.get(i % STRING_VALUES.size()),
+				STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), values[6]
 			);
-			Assert.assertEquals("Array value [7] " + values[7] + " does not match the desired value " + INT_VALUES[i%INT_VALUES.length],
-				INT_VALUES[i%INT_VALUES.length], (int) (Integer)values[7]
+			Assert.assertEquals("Array value [7] " + values[7] + " does not match the desired value " + INT_VALUES.get(i % INT_VALUES.size()),
+				(int) INT_VALUES.get(i % INT_VALUES.size()), (int) (Integer)values[7]
 					);
-			Assert.assertEquals("Array value [8] " + values[8] + " does not match the desired value " + INT_VALUES[i%INT_VALUES.length],
-				INT_VALUES[i%INT_VALUES.length], (int) (Integer)values[8]
+			Assert.assertEquals("Array value [8] " + values[8] + " does not match the desired value " + INT_VALUES.get(i % INT_VALUES.size()),
+				(int) INT_VALUES.get(i % INT_VALUES.size()), (int) (Integer)values[8]
 					);
 		}
 	}
@@ -127,18 +127,18 @@ public class TestGeneratedCallOperationObjectEvent extends AbstractGeneratedKiek
 	public void testBuffer() { // NOPMD (assert missing)
 		for (int i=0;i<ARRAY_LENGTH;i++) {
 			// initialize
-			CallOperationObjectEvent record = new CallOperationObjectEvent(LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], INT_VALUES[i%INT_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], INT_VALUES[i%INT_VALUES.length], INT_VALUES[i%INT_VALUES.length]);
+			CallOperationObjectEvent record = new CallOperationObjectEvent(LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()));
 			
 			// check values
-			Assert.assertEquals("CallOperationObjectEvent.timestamp values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getTimestamp());
-			Assert.assertEquals("CallOperationObjectEvent.traceId values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getTraceId());
-			Assert.assertEquals("CallOperationObjectEvent.orderIndex values are not equal.", INT_VALUES[i%INT_VALUES.length], record.getOrderIndex());
-			Assert.assertEquals("CallOperationObjectEvent.classSignature values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getClassSignature());
-			Assert.assertEquals("CallOperationObjectEvent.operationSignature values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getOperationSignature());
-			Assert.assertEquals("CallOperationObjectEvent.calleeClassSignature values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getCalleeClassSignature());
-			Assert.assertEquals("CallOperationObjectEvent.calleeOperationSignature values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getCalleeOperationSignature());
-			Assert.assertEquals("CallOperationObjectEvent.objectId values are not equal.", INT_VALUES[i%INT_VALUES.length], record.getObjectId());
-			Assert.assertEquals("CallOperationObjectEvent.calleeObjectId values are not equal.", INT_VALUES[i%INT_VALUES.length], record.getCalleeObjectId());
+			Assert.assertEquals("CallOperationObjectEvent.timestamp values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTimestamp());
+			Assert.assertEquals("CallOperationObjectEvent.traceId values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTraceId());
+			Assert.assertEquals("CallOperationObjectEvent.orderIndex values are not equal.", (int) INT_VALUES.get(i % INT_VALUES.size()), record.getOrderIndex());
+			Assert.assertEquals("CallOperationObjectEvent.classSignature values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getClassSignature());
+			Assert.assertEquals("CallOperationObjectEvent.operationSignature values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getOperationSignature());
+			Assert.assertEquals("CallOperationObjectEvent.calleeClassSignature values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getCalleeClassSignature());
+			Assert.assertEquals("CallOperationObjectEvent.calleeOperationSignature values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getCalleeOperationSignature());
+			Assert.assertEquals("CallOperationObjectEvent.objectId values are not equal.", (int) INT_VALUES.get(i % INT_VALUES.size()), record.getObjectId());
+			Assert.assertEquals("CallOperationObjectEvent.calleeObjectId values are not equal.", (int) INT_VALUES.get(i % INT_VALUES.size()), record.getCalleeObjectId());
 		}
 	}
 	
@@ -149,18 +149,18 @@ public class TestGeneratedCallOperationObjectEvent extends AbstractGeneratedKiek
 	public void testParameterConstruction() { // NOPMD (assert missing)
 		for (int i=0;i<ARRAY_LENGTH;i++) {
 			// initialize
-			CallOperationObjectEvent record = new CallOperationObjectEvent(LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], INT_VALUES[i%INT_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], INT_VALUES[i%INT_VALUES.length], INT_VALUES[i%INT_VALUES.length]);
+			CallOperationObjectEvent record = new CallOperationObjectEvent(LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()));
 			
 			// check values
-			Assert.assertEquals("CallOperationObjectEvent.timestamp values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getTimestamp());
-			Assert.assertEquals("CallOperationObjectEvent.traceId values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getTraceId());
-			Assert.assertEquals("CallOperationObjectEvent.orderIndex values are not equal.", INT_VALUES[i%INT_VALUES.length], record.getOrderIndex());
-			Assert.assertEquals("CallOperationObjectEvent.classSignature values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getClassSignature());
-			Assert.assertEquals("CallOperationObjectEvent.operationSignature values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getOperationSignature());
-			Assert.assertEquals("CallOperationObjectEvent.calleeClassSignature values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getCalleeClassSignature());
-			Assert.assertEquals("CallOperationObjectEvent.calleeOperationSignature values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getCalleeOperationSignature());
-			Assert.assertEquals("CallOperationObjectEvent.objectId values are not equal.", INT_VALUES[i%INT_VALUES.length], record.getObjectId());
-			Assert.assertEquals("CallOperationObjectEvent.calleeObjectId values are not equal.", INT_VALUES[i%INT_VALUES.length], record.getCalleeObjectId());
+			Assert.assertEquals("CallOperationObjectEvent.timestamp values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTimestamp());
+			Assert.assertEquals("CallOperationObjectEvent.traceId values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTraceId());
+			Assert.assertEquals("CallOperationObjectEvent.orderIndex values are not equal.", (int) INT_VALUES.get(i % INT_VALUES.size()), record.getOrderIndex());
+			Assert.assertEquals("CallOperationObjectEvent.classSignature values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getClassSignature());
+			Assert.assertEquals("CallOperationObjectEvent.operationSignature values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getOperationSignature());
+			Assert.assertEquals("CallOperationObjectEvent.calleeClassSignature values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getCalleeClassSignature());
+			Assert.assertEquals("CallOperationObjectEvent.calleeOperationSignature values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getCalleeOperationSignature());
+			Assert.assertEquals("CallOperationObjectEvent.objectId values are not equal.", (int) INT_VALUES.get(i % INT_VALUES.size()), record.getObjectId());
+			Assert.assertEquals("CallOperationObjectEvent.calleeObjectId values are not equal.", (int) INT_VALUES.get(i % INT_VALUES.size()), record.getCalleeObjectId());
 		}
 	}
 }

@@ -49,16 +49,16 @@ public class TestGeneratedThreadsStatusRecord extends AbstractGeneratedKiekerTes
 	public void testToArray() { // NOPMD (assert missing)
 	for (int i=0;i<ARRAY_LENGTH;i++) {
 			// initialize
-			ThreadsStatusRecord record = new ThreadsStatusRecord(LONG_VALUES[i%LONG_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length]);
+			ThreadsStatusRecord record = new ThreadsStatusRecord(LONG_VALUES.get(i % LONG_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()));
 			
 			// check values
-			Assert.assertEquals("ThreadsStatusRecord.timestamp values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getTimestamp());
-			Assert.assertEquals("ThreadsStatusRecord.hostname values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getHostname());
-			Assert.assertEquals("ThreadsStatusRecord.vmName values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getVmName());
-			Assert.assertEquals("ThreadsStatusRecord.threadCount values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getThreadCount());
-			Assert.assertEquals("ThreadsStatusRecord.daemonThreadCount values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getDaemonThreadCount());
-			Assert.assertEquals("ThreadsStatusRecord.peakThreadCount values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getPeakThreadCount());
-			Assert.assertEquals("ThreadsStatusRecord.totalStartedThreadCount values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getTotalStartedThreadCount());
+			Assert.assertEquals("ThreadsStatusRecord.timestamp values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTimestamp());
+			Assert.assertEquals("ThreadsStatusRecord.hostname values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getHostname());
+			Assert.assertEquals("ThreadsStatusRecord.vmName values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getVmName());
+			Assert.assertEquals("ThreadsStatusRecord.threadCount values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getThreadCount());
+			Assert.assertEquals("ThreadsStatusRecord.daemonThreadCount values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getDaemonThreadCount());
+			Assert.assertEquals("ThreadsStatusRecord.peakThreadCount values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getPeakThreadCount());
+			Assert.assertEquals("ThreadsStatusRecord.totalStartedThreadCount values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTotalStartedThreadCount());
 			
 			Object[] values = record.toArray();
 			
@@ -84,26 +84,26 @@ public class TestGeneratedThreadsStatusRecord extends AbstractGeneratedKiekerTes
 			Assert.assertTrue("Type of array value [6] " + values[6].getClass().getCanonicalName() + " does not match the desired type Long", values[6] instanceof Long);
 								
 			// check all object values 
-			Assert.assertEquals("Array value [0] " + values[0] + " does not match the desired value " + LONG_VALUES[i%LONG_VALUES.length],
-				LONG_VALUES[i%LONG_VALUES.length], (long) (Long)values[0]
+			Assert.assertEquals("Array value [0] " + values[0] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
+				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[0]
 					);
-			Assert.assertEquals("Array value [1] " + values[1] + " does not match the desired value " + STRING_VALUES[i%STRING_VALUES.length],
-				STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], values[1]
+			Assert.assertEquals("Array value [1] " + values[1] + " does not match the desired value " + STRING_VALUES.get(i % STRING_VALUES.size()),
+				STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), values[1]
 			);
-			Assert.assertEquals("Array value [2] " + values[2] + " does not match the desired value " + STRING_VALUES[i%STRING_VALUES.length],
-				STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], values[2]
+			Assert.assertEquals("Array value [2] " + values[2] + " does not match the desired value " + STRING_VALUES.get(i % STRING_VALUES.size()),
+				STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), values[2]
 			);
-			Assert.assertEquals("Array value [3] " + values[3] + " does not match the desired value " + LONG_VALUES[i%LONG_VALUES.length],
-				LONG_VALUES[i%LONG_VALUES.length], (long) (Long)values[3]
+			Assert.assertEquals("Array value [3] " + values[3] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
+				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[3]
 					);
-			Assert.assertEquals("Array value [4] " + values[4] + " does not match the desired value " + LONG_VALUES[i%LONG_VALUES.length],
-				LONG_VALUES[i%LONG_VALUES.length], (long) (Long)values[4]
+			Assert.assertEquals("Array value [4] " + values[4] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
+				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[4]
 					);
-			Assert.assertEquals("Array value [5] " + values[5] + " does not match the desired value " + LONG_VALUES[i%LONG_VALUES.length],
-				LONG_VALUES[i%LONG_VALUES.length], (long) (Long)values[5]
+			Assert.assertEquals("Array value [5] " + values[5] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
+				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[5]
 					);
-			Assert.assertEquals("Array value [6] " + values[6] + " does not match the desired value " + LONG_VALUES[i%LONG_VALUES.length],
-				LONG_VALUES[i%LONG_VALUES.length], (long) (Long)values[6]
+			Assert.assertEquals("Array value [6] " + values[6] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
+				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[6]
 					);
 		}
 	}
@@ -115,16 +115,16 @@ public class TestGeneratedThreadsStatusRecord extends AbstractGeneratedKiekerTes
 	public void testBuffer() { // NOPMD (assert missing)
 		for (int i=0;i<ARRAY_LENGTH;i++) {
 			// initialize
-			ThreadsStatusRecord record = new ThreadsStatusRecord(LONG_VALUES[i%LONG_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length]);
+			ThreadsStatusRecord record = new ThreadsStatusRecord(LONG_VALUES.get(i % LONG_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()));
 			
 			// check values
-			Assert.assertEquals("ThreadsStatusRecord.timestamp values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getTimestamp());
-			Assert.assertEquals("ThreadsStatusRecord.hostname values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getHostname());
-			Assert.assertEquals("ThreadsStatusRecord.vmName values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getVmName());
-			Assert.assertEquals("ThreadsStatusRecord.threadCount values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getThreadCount());
-			Assert.assertEquals("ThreadsStatusRecord.daemonThreadCount values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getDaemonThreadCount());
-			Assert.assertEquals("ThreadsStatusRecord.peakThreadCount values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getPeakThreadCount());
-			Assert.assertEquals("ThreadsStatusRecord.totalStartedThreadCount values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getTotalStartedThreadCount());
+			Assert.assertEquals("ThreadsStatusRecord.timestamp values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTimestamp());
+			Assert.assertEquals("ThreadsStatusRecord.hostname values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getHostname());
+			Assert.assertEquals("ThreadsStatusRecord.vmName values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getVmName());
+			Assert.assertEquals("ThreadsStatusRecord.threadCount values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getThreadCount());
+			Assert.assertEquals("ThreadsStatusRecord.daemonThreadCount values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getDaemonThreadCount());
+			Assert.assertEquals("ThreadsStatusRecord.peakThreadCount values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getPeakThreadCount());
+			Assert.assertEquals("ThreadsStatusRecord.totalStartedThreadCount values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTotalStartedThreadCount());
 		}
 	}
 	
@@ -135,16 +135,16 @@ public class TestGeneratedThreadsStatusRecord extends AbstractGeneratedKiekerTes
 	public void testParameterConstruction() { // NOPMD (assert missing)
 		for (int i=0;i<ARRAY_LENGTH;i++) {
 			// initialize
-			ThreadsStatusRecord record = new ThreadsStatusRecord(LONG_VALUES[i%LONG_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length]);
+			ThreadsStatusRecord record = new ThreadsStatusRecord(LONG_VALUES.get(i % LONG_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()));
 			
 			// check values
-			Assert.assertEquals("ThreadsStatusRecord.timestamp values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getTimestamp());
-			Assert.assertEquals("ThreadsStatusRecord.hostname values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getHostname());
-			Assert.assertEquals("ThreadsStatusRecord.vmName values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getVmName());
-			Assert.assertEquals("ThreadsStatusRecord.threadCount values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getThreadCount());
-			Assert.assertEquals("ThreadsStatusRecord.daemonThreadCount values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getDaemonThreadCount());
-			Assert.assertEquals("ThreadsStatusRecord.peakThreadCount values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getPeakThreadCount());
-			Assert.assertEquals("ThreadsStatusRecord.totalStartedThreadCount values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getTotalStartedThreadCount());
+			Assert.assertEquals("ThreadsStatusRecord.timestamp values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTimestamp());
+			Assert.assertEquals("ThreadsStatusRecord.hostname values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getHostname());
+			Assert.assertEquals("ThreadsStatusRecord.vmName values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getVmName());
+			Assert.assertEquals("ThreadsStatusRecord.threadCount values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getThreadCount());
+			Assert.assertEquals("ThreadsStatusRecord.daemonThreadCount values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getDaemonThreadCount());
+			Assert.assertEquals("ThreadsStatusRecord.peakThreadCount values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getPeakThreadCount());
+			Assert.assertEquals("ThreadsStatusRecord.totalStartedThreadCount values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTotalStartedThreadCount());
 		}
 	}
 }

@@ -49,26 +49,26 @@ public class TestGeneratedCPUUtilizationRecord extends AbstractGeneratedKiekerTe
 	public void testToArray() { // NOPMD (assert missing)
 	for (int i=0;i<ARRAY_LENGTH;i++) {
 			// initialize
-			CPUUtilizationRecord record = new CPUUtilizationRecord(LONG_VALUES[i%LONG_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], DOUBLE_VALUES[i%DOUBLE_VALUES.length], DOUBLE_VALUES[i%DOUBLE_VALUES.length], DOUBLE_VALUES[i%DOUBLE_VALUES.length], DOUBLE_VALUES[i%DOUBLE_VALUES.length], DOUBLE_VALUES[i%DOUBLE_VALUES.length], DOUBLE_VALUES[i%DOUBLE_VALUES.length], DOUBLE_VALUES[i%DOUBLE_VALUES.length]);
+			CPUUtilizationRecord record = new CPUUtilizationRecord(LONG_VALUES.get(i % LONG_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()));
 			
 			// check values
-			Assert.assertEquals("CPUUtilizationRecord.timestamp values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getTimestamp());
-			Assert.assertEquals("CPUUtilizationRecord.hostname values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getHostname());
-			Assert.assertEquals("CPUUtilizationRecord.cpuID values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getCpuID());
+			Assert.assertEquals("CPUUtilizationRecord.timestamp values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTimestamp());
+			Assert.assertEquals("CPUUtilizationRecord.hostname values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getHostname());
+			Assert.assertEquals("CPUUtilizationRecord.cpuID values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getCpuID());
 			Assert.assertEquals("CPUUtilizationRecord.user values are not equal.", 
-			DOUBLE_VALUES[i%DOUBLE_VALUES.length], record.getUser(), 0.0000001);
+			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getUser(), 0.0000001);
 			Assert.assertEquals("CPUUtilizationRecord.system values are not equal.", 
-			DOUBLE_VALUES[i%DOUBLE_VALUES.length], record.getSystem(), 0.0000001);
+			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getSystem(), 0.0000001);
 			Assert.assertEquals("CPUUtilizationRecord.wait values are not equal.", 
-			DOUBLE_VALUES[i%DOUBLE_VALUES.length], record.getWait(), 0.0000001);
+			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getWait(), 0.0000001);
 			Assert.assertEquals("CPUUtilizationRecord.nice values are not equal.", 
-			DOUBLE_VALUES[i%DOUBLE_VALUES.length], record.getNice(), 0.0000001);
+			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getNice(), 0.0000001);
 			Assert.assertEquals("CPUUtilizationRecord.irq values are not equal.", 
-			DOUBLE_VALUES[i%DOUBLE_VALUES.length], record.getIrq(), 0.0000001);
+			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getIrq(), 0.0000001);
 			Assert.assertEquals("CPUUtilizationRecord.totalUtilization values are not equal.", 
-			DOUBLE_VALUES[i%DOUBLE_VALUES.length], record.getTotalUtilization(), 0.0000001);
+			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getTotalUtilization(), 0.0000001);
 			Assert.assertEquals("CPUUtilizationRecord.idle values are not equal.", 
-			DOUBLE_VALUES[i%DOUBLE_VALUES.length], record.getIdle(), 0.0000001);
+			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getIdle(), 0.0000001);
 			
 			Object[] values = record.toArray();
 			
@@ -100,35 +100,35 @@ public class TestGeneratedCPUUtilizationRecord extends AbstractGeneratedKiekerTe
 			Assert.assertTrue("Type of array value [9] " + values[9].getClass().getCanonicalName() + " does not match the desired type Double", values[9] instanceof Double);
 								
 			// check all object values 
-			Assert.assertEquals("Array value [0] " + values[0] + " does not match the desired value " + LONG_VALUES[i%LONG_VALUES.length],
-				LONG_VALUES[i%LONG_VALUES.length], (long) (Long)values[0]
+			Assert.assertEquals("Array value [0] " + values[0] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
+				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[0]
 					);
-			Assert.assertEquals("Array value [1] " + values[1] + " does not match the desired value " + STRING_VALUES[i%STRING_VALUES.length],
-				STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], values[1]
+			Assert.assertEquals("Array value [1] " + values[1] + " does not match the desired value " + STRING_VALUES.get(i % STRING_VALUES.size()),
+				STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), values[1]
 			);
-			Assert.assertEquals("Array value [2] " + values[2] + " does not match the desired value " + STRING_VALUES[i%STRING_VALUES.length],
-				STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], values[2]
+			Assert.assertEquals("Array value [2] " + values[2] + " does not match the desired value " + STRING_VALUES.get(i % STRING_VALUES.size()),
+				STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), values[2]
 			);
-			Assert.assertEquals("Array value [3] " + values[3] + " does not match the desired value " + DOUBLE_VALUES[i%DOUBLE_VALUES.length],
-				DOUBLE_VALUES[i%DOUBLE_VALUES.length], (double) (Double)values[3], 0.0000001
+			Assert.assertEquals("Array value [3] " + values[3] + " does not match the desired value " + DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()),
+				(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), (double) (Double)values[3], 0.0000001
 			);
-			Assert.assertEquals("Array value [4] " + values[4] + " does not match the desired value " + DOUBLE_VALUES[i%DOUBLE_VALUES.length],
-				DOUBLE_VALUES[i%DOUBLE_VALUES.length], (double) (Double)values[4], 0.0000001
+			Assert.assertEquals("Array value [4] " + values[4] + " does not match the desired value " + DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()),
+				(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), (double) (Double)values[4], 0.0000001
 			);
-			Assert.assertEquals("Array value [5] " + values[5] + " does not match the desired value " + DOUBLE_VALUES[i%DOUBLE_VALUES.length],
-				DOUBLE_VALUES[i%DOUBLE_VALUES.length], (double) (Double)values[5], 0.0000001
+			Assert.assertEquals("Array value [5] " + values[5] + " does not match the desired value " + DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()),
+				(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), (double) (Double)values[5], 0.0000001
 			);
-			Assert.assertEquals("Array value [6] " + values[6] + " does not match the desired value " + DOUBLE_VALUES[i%DOUBLE_VALUES.length],
-				DOUBLE_VALUES[i%DOUBLE_VALUES.length], (double) (Double)values[6], 0.0000001
+			Assert.assertEquals("Array value [6] " + values[6] + " does not match the desired value " + DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()),
+				(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), (double) (Double)values[6], 0.0000001
 			);
-			Assert.assertEquals("Array value [7] " + values[7] + " does not match the desired value " + DOUBLE_VALUES[i%DOUBLE_VALUES.length],
-				DOUBLE_VALUES[i%DOUBLE_VALUES.length], (double) (Double)values[7], 0.0000001
+			Assert.assertEquals("Array value [7] " + values[7] + " does not match the desired value " + DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()),
+				(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), (double) (Double)values[7], 0.0000001
 			);
-			Assert.assertEquals("Array value [8] " + values[8] + " does not match the desired value " + DOUBLE_VALUES[i%DOUBLE_VALUES.length],
-				DOUBLE_VALUES[i%DOUBLE_VALUES.length], (double) (Double)values[8], 0.0000001
+			Assert.assertEquals("Array value [8] " + values[8] + " does not match the desired value " + DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()),
+				(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), (double) (Double)values[8], 0.0000001
 			);
-			Assert.assertEquals("Array value [9] " + values[9] + " does not match the desired value " + DOUBLE_VALUES[i%DOUBLE_VALUES.length],
-				DOUBLE_VALUES[i%DOUBLE_VALUES.length], (double) (Double)values[9], 0.0000001
+			Assert.assertEquals("Array value [9] " + values[9] + " does not match the desired value " + DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()),
+				(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), (double) (Double)values[9], 0.0000001
 			);
 		}
 	}
@@ -140,26 +140,26 @@ public class TestGeneratedCPUUtilizationRecord extends AbstractGeneratedKiekerTe
 	public void testBuffer() { // NOPMD (assert missing)
 		for (int i=0;i<ARRAY_LENGTH;i++) {
 			// initialize
-			CPUUtilizationRecord record = new CPUUtilizationRecord(LONG_VALUES[i%LONG_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], DOUBLE_VALUES[i%DOUBLE_VALUES.length], DOUBLE_VALUES[i%DOUBLE_VALUES.length], DOUBLE_VALUES[i%DOUBLE_VALUES.length], DOUBLE_VALUES[i%DOUBLE_VALUES.length], DOUBLE_VALUES[i%DOUBLE_VALUES.length], DOUBLE_VALUES[i%DOUBLE_VALUES.length], DOUBLE_VALUES[i%DOUBLE_VALUES.length]);
+			CPUUtilizationRecord record = new CPUUtilizationRecord(LONG_VALUES.get(i % LONG_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()));
 			
 			// check values
-			Assert.assertEquals("CPUUtilizationRecord.timestamp values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getTimestamp());
-			Assert.assertEquals("CPUUtilizationRecord.hostname values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getHostname());
-			Assert.assertEquals("CPUUtilizationRecord.cpuID values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getCpuID());
+			Assert.assertEquals("CPUUtilizationRecord.timestamp values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTimestamp());
+			Assert.assertEquals("CPUUtilizationRecord.hostname values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getHostname());
+			Assert.assertEquals("CPUUtilizationRecord.cpuID values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getCpuID());
 			Assert.assertEquals("CPUUtilizationRecord.user values are not equal.", 
-			DOUBLE_VALUES[i%DOUBLE_VALUES.length], record.getUser(), 0.0000001);
+			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getUser(), 0.0000001);
 			Assert.assertEquals("CPUUtilizationRecord.system values are not equal.", 
-			DOUBLE_VALUES[i%DOUBLE_VALUES.length], record.getSystem(), 0.0000001);
+			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getSystem(), 0.0000001);
 			Assert.assertEquals("CPUUtilizationRecord.wait values are not equal.", 
-			DOUBLE_VALUES[i%DOUBLE_VALUES.length], record.getWait(), 0.0000001);
+			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getWait(), 0.0000001);
 			Assert.assertEquals("CPUUtilizationRecord.nice values are not equal.", 
-			DOUBLE_VALUES[i%DOUBLE_VALUES.length], record.getNice(), 0.0000001);
+			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getNice(), 0.0000001);
 			Assert.assertEquals("CPUUtilizationRecord.irq values are not equal.", 
-			DOUBLE_VALUES[i%DOUBLE_VALUES.length], record.getIrq(), 0.0000001);
+			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getIrq(), 0.0000001);
 			Assert.assertEquals("CPUUtilizationRecord.totalUtilization values are not equal.", 
-			DOUBLE_VALUES[i%DOUBLE_VALUES.length], record.getTotalUtilization(), 0.0000001);
+			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getTotalUtilization(), 0.0000001);
 			Assert.assertEquals("CPUUtilizationRecord.idle values are not equal.", 
-			DOUBLE_VALUES[i%DOUBLE_VALUES.length], record.getIdle(), 0.0000001);
+			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getIdle(), 0.0000001);
 		}
 	}
 	
@@ -170,26 +170,26 @@ public class TestGeneratedCPUUtilizationRecord extends AbstractGeneratedKiekerTe
 	public void testParameterConstruction() { // NOPMD (assert missing)
 		for (int i=0;i<ARRAY_LENGTH;i++) {
 			// initialize
-			CPUUtilizationRecord record = new CPUUtilizationRecord(LONG_VALUES[i%LONG_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], DOUBLE_VALUES[i%DOUBLE_VALUES.length], DOUBLE_VALUES[i%DOUBLE_VALUES.length], DOUBLE_VALUES[i%DOUBLE_VALUES.length], DOUBLE_VALUES[i%DOUBLE_VALUES.length], DOUBLE_VALUES[i%DOUBLE_VALUES.length], DOUBLE_VALUES[i%DOUBLE_VALUES.length], DOUBLE_VALUES[i%DOUBLE_VALUES.length]);
+			CPUUtilizationRecord record = new CPUUtilizationRecord(LONG_VALUES.get(i % LONG_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()));
 			
 			// check values
-			Assert.assertEquals("CPUUtilizationRecord.timestamp values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getTimestamp());
-			Assert.assertEquals("CPUUtilizationRecord.hostname values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getHostname());
-			Assert.assertEquals("CPUUtilizationRecord.cpuID values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getCpuID());
+			Assert.assertEquals("CPUUtilizationRecord.timestamp values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTimestamp());
+			Assert.assertEquals("CPUUtilizationRecord.hostname values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getHostname());
+			Assert.assertEquals("CPUUtilizationRecord.cpuID values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getCpuID());
 			Assert.assertEquals("CPUUtilizationRecord.user values are not equal.", 
-			DOUBLE_VALUES[i%DOUBLE_VALUES.length], record.getUser(), 0.0000001);
+			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getUser(), 0.0000001);
 			Assert.assertEquals("CPUUtilizationRecord.system values are not equal.", 
-			DOUBLE_VALUES[i%DOUBLE_VALUES.length], record.getSystem(), 0.0000001);
+			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getSystem(), 0.0000001);
 			Assert.assertEquals("CPUUtilizationRecord.wait values are not equal.", 
-			DOUBLE_VALUES[i%DOUBLE_VALUES.length], record.getWait(), 0.0000001);
+			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getWait(), 0.0000001);
 			Assert.assertEquals("CPUUtilizationRecord.nice values are not equal.", 
-			DOUBLE_VALUES[i%DOUBLE_VALUES.length], record.getNice(), 0.0000001);
+			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getNice(), 0.0000001);
 			Assert.assertEquals("CPUUtilizationRecord.irq values are not equal.", 
-			DOUBLE_VALUES[i%DOUBLE_VALUES.length], record.getIrq(), 0.0000001);
+			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getIrq(), 0.0000001);
 			Assert.assertEquals("CPUUtilizationRecord.totalUtilization values are not equal.", 
-			DOUBLE_VALUES[i%DOUBLE_VALUES.length], record.getTotalUtilization(), 0.0000001);
+			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getTotalUtilization(), 0.0000001);
 			Assert.assertEquals("CPUUtilizationRecord.idle values are not equal.", 
-			DOUBLE_VALUES[i%DOUBLE_VALUES.length], record.getIdle(), 0.0000001);
+			(double) DOUBLE_VALUES.get(i % DOUBLE_VALUES.size()), record.getIdle(), 0.0000001);
 		}
 	}
 }

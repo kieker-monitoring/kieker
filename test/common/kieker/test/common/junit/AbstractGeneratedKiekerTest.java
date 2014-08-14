@@ -17,8 +17,8 @@
 package kieker.test.common.junit;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Reiner Jung
@@ -27,50 +27,54 @@ import java.util.Collections;
  */
 public abstract class AbstractGeneratedKiekerTest extends AbstractKiekerTest {
 
-	protected static final Collection<Integer> INT_VALUES = Collections.unmodifiableCollection(Arrays.asList(
+	protected static final List<Integer> INT_VALUES = Collections.unmodifiableList(Arrays.asList(
 			Integer.MIN_VALUE,
 			0,
 			Integer.MAX_VALUE
 			));
 
-	protected static final short[] SHORT_VALUES = { // NOPMD (ignore short type warning)
-	Short.MIN_VALUE,
-		0,
-		Short.MAX_VALUE,
-	};
-	protected static final long[] LONG_VALUES = {
-		Long.MIN_VALUE,
-		0,
-		Long.MAX_VALUE,
-	};
-	protected static final byte[] BYTE_VALUES = {
-		Byte.MIN_VALUE,
-		0,
-		Byte.MAX_VALUE,
-	};
+	protected static final List<Short> SHORT_VALUES = Collections.unmodifiableList(Arrays.asList(
+			Short.MIN_VALUE,
+			(short) 0,
+			Short.MAX_VALUE
+			));
 
-	protected static final char[] CHARACTER_VALUES = {
-		Character.MIN_VALUE,
-		Character.MAX_VALUE,
-	};
-	protected static final boolean[] BOOLEAN_VALUES = { false, true, };
+	protected static final List<Long> LONG_VALUES = Collections.unmodifiableList(Arrays.asList(
+			Long.MIN_VALUE,
+			0L,
+			Long.MAX_VALUE
+			));
 
-	protected static final float[] FLOAT_VALUES = {
-		Float.MIN_VALUE, Float.MIN_EXPONENT, Float.MIN_NORMAL,
-		0, Float.MAX_VALUE, Float.MAX_EXPONENT,
-		Float.NEGATIVE_INFINITY, Float.POSITIVE_INFINITY,
-	};
-	protected static final double[] DOUBLE_VALUES = {
-		Double.MIN_VALUE, Double.MIN_EXPONENT, Double.MIN_NORMAL,
-		0, Double.MAX_VALUE, Double.MAX_EXPONENT,
-		Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY,
-	};
+	protected static final List<Byte> BYTE_VALUES = Collections.unmodifiableList(Arrays.asList(
+			Byte.MIN_VALUE,
+			(byte) 0,
+			Byte.MAX_VALUE
+			));
 
-	protected static final String[] STRING_VALUES = {
-		null,
-		"",
-		"abcdefghijklmnopqrstuvwxyz0123456789/.()$_ !%& *+-=#~",
-	};
+	protected static final List<Character> CHARACTER_VALUES = Collections.unmodifiableList(Arrays.asList(
+			Character.MIN_VALUE,
+			Character.MAX_VALUE
+			));
+
+	protected static final List<Boolean> BOOLEAN_VALUES = Collections.unmodifiableList(Arrays.asList(false, true));
+
+	protected static final List<Float> FLOAT_VALUES = Collections.unmodifiableList(Arrays.asList(
+			Float.MIN_VALUE, (float) Math.pow(1.0f, Float.MIN_EXPONENT), Float.MIN_NORMAL,
+			0.0f, Float.MAX_VALUE, (float) Math.pow(1.0f, Float.MAX_EXPONENT),
+			Float.NEGATIVE_INFINITY, Float.POSITIVE_INFINITY
+			));
+
+	protected static final List<Double> DOUBLE_VALUES = Collections.unmodifiableList(Arrays.asList(
+			Double.MIN_VALUE, Math.pow(1.0f, Double.MIN_EXPONENT), Double.MIN_NORMAL,
+			0.0, Double.MAX_VALUE, Math.pow(1.0, Double.MAX_EXPONENT),
+			Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY
+			));
+
+	protected static final List<String> STRING_VALUES = Collections.unmodifiableList(Arrays.asList(
+			null,
+			"",
+			"abcdefghijklmnopqrstuvwxyz0123456789/.()$_ !%& *+-=#~"
+			));
 
 	protected static final int ARRAY_LENGTH = 8;
 

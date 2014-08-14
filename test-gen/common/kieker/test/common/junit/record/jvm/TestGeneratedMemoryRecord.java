@@ -49,21 +49,21 @@ public class TestGeneratedMemoryRecord extends AbstractGeneratedKiekerTest {
 	public void testToArray() { // NOPMD (assert missing)
 	for (int i=0;i<ARRAY_LENGTH;i++) {
 			// initialize
-			MemoryRecord record = new MemoryRecord(LONG_VALUES[i%LONG_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], INT_VALUES[i%INT_VALUES.length]);
+			MemoryRecord record = new MemoryRecord(LONG_VALUES.get(i % LONG_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()));
 			
 			// check values
-			Assert.assertEquals("MemoryRecord.timestamp values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getTimestamp());
-			Assert.assertEquals("MemoryRecord.hostname values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getHostname());
-			Assert.assertEquals("MemoryRecord.vmName values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getVmName());
-			Assert.assertEquals("MemoryRecord.heapMaxBytes values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getHeapMaxBytes());
-			Assert.assertEquals("MemoryRecord.heapUsedBytes values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getHeapUsedBytes());
-			Assert.assertEquals("MemoryRecord.heapCommittedBytes values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getHeapCommittedBytes());
-			Assert.assertEquals("MemoryRecord.heapInitBytes values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getHeapInitBytes());
-			Assert.assertEquals("MemoryRecord.nonHeapMaxBytes values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getNonHeapMaxBytes());
-			Assert.assertEquals("MemoryRecord.nonHeapUsedBytes values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getNonHeapUsedBytes());
-			Assert.assertEquals("MemoryRecord.nonHeapCommittedBytes values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getNonHeapCommittedBytes());
-			Assert.assertEquals("MemoryRecord.nonHeapInitBytes values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getNonHeapInitBytes());
-			Assert.assertEquals("MemoryRecord.objectPendingFinalizationCount values are not equal.", INT_VALUES[i%INT_VALUES.length], record.getObjectPendingFinalizationCount());
+			Assert.assertEquals("MemoryRecord.timestamp values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTimestamp());
+			Assert.assertEquals("MemoryRecord.hostname values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getHostname());
+			Assert.assertEquals("MemoryRecord.vmName values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getVmName());
+			Assert.assertEquals("MemoryRecord.heapMaxBytes values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getHeapMaxBytes());
+			Assert.assertEquals("MemoryRecord.heapUsedBytes values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getHeapUsedBytes());
+			Assert.assertEquals("MemoryRecord.heapCommittedBytes values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getHeapCommittedBytes());
+			Assert.assertEquals("MemoryRecord.heapInitBytes values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getHeapInitBytes());
+			Assert.assertEquals("MemoryRecord.nonHeapMaxBytes values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getNonHeapMaxBytes());
+			Assert.assertEquals("MemoryRecord.nonHeapUsedBytes values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getNonHeapUsedBytes());
+			Assert.assertEquals("MemoryRecord.nonHeapCommittedBytes values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getNonHeapCommittedBytes());
+			Assert.assertEquals("MemoryRecord.nonHeapInitBytes values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getNonHeapInitBytes());
+			Assert.assertEquals("MemoryRecord.objectPendingFinalizationCount values are not equal.", (int) INT_VALUES.get(i % INT_VALUES.size()), record.getObjectPendingFinalizationCount());
 			
 			Object[] values = record.toArray();
 			
@@ -99,41 +99,41 @@ public class TestGeneratedMemoryRecord extends AbstractGeneratedKiekerTest {
 			Assert.assertTrue("Type of array value [11] " + values[11].getClass().getCanonicalName() + " does not match the desired type Integer", values[11] instanceof Integer);
 								
 			// check all object values 
-			Assert.assertEquals("Array value [0] " + values[0] + " does not match the desired value " + LONG_VALUES[i%LONG_VALUES.length],
-				LONG_VALUES[i%LONG_VALUES.length], (long) (Long)values[0]
+			Assert.assertEquals("Array value [0] " + values[0] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
+				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[0]
 					);
-			Assert.assertEquals("Array value [1] " + values[1] + " does not match the desired value " + STRING_VALUES[i%STRING_VALUES.length],
-				STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], values[1]
+			Assert.assertEquals("Array value [1] " + values[1] + " does not match the desired value " + STRING_VALUES.get(i % STRING_VALUES.size()),
+				STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), values[1]
 			);
-			Assert.assertEquals("Array value [2] " + values[2] + " does not match the desired value " + STRING_VALUES[i%STRING_VALUES.length],
-				STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], values[2]
+			Assert.assertEquals("Array value [2] " + values[2] + " does not match the desired value " + STRING_VALUES.get(i % STRING_VALUES.size()),
+				STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), values[2]
 			);
-			Assert.assertEquals("Array value [3] " + values[3] + " does not match the desired value " + LONG_VALUES[i%LONG_VALUES.length],
-				LONG_VALUES[i%LONG_VALUES.length], (long) (Long)values[3]
+			Assert.assertEquals("Array value [3] " + values[3] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
+				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[3]
 					);
-			Assert.assertEquals("Array value [4] " + values[4] + " does not match the desired value " + LONG_VALUES[i%LONG_VALUES.length],
-				LONG_VALUES[i%LONG_VALUES.length], (long) (Long)values[4]
+			Assert.assertEquals("Array value [4] " + values[4] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
+				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[4]
 					);
-			Assert.assertEquals("Array value [5] " + values[5] + " does not match the desired value " + LONG_VALUES[i%LONG_VALUES.length],
-				LONG_VALUES[i%LONG_VALUES.length], (long) (Long)values[5]
+			Assert.assertEquals("Array value [5] " + values[5] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
+				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[5]
 					);
-			Assert.assertEquals("Array value [6] " + values[6] + " does not match the desired value " + LONG_VALUES[i%LONG_VALUES.length],
-				LONG_VALUES[i%LONG_VALUES.length], (long) (Long)values[6]
+			Assert.assertEquals("Array value [6] " + values[6] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
+				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[6]
 					);
-			Assert.assertEquals("Array value [7] " + values[7] + " does not match the desired value " + LONG_VALUES[i%LONG_VALUES.length],
-				LONG_VALUES[i%LONG_VALUES.length], (long) (Long)values[7]
+			Assert.assertEquals("Array value [7] " + values[7] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
+				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[7]
 					);
-			Assert.assertEquals("Array value [8] " + values[8] + " does not match the desired value " + LONG_VALUES[i%LONG_VALUES.length],
-				LONG_VALUES[i%LONG_VALUES.length], (long) (Long)values[8]
+			Assert.assertEquals("Array value [8] " + values[8] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
+				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[8]
 					);
-			Assert.assertEquals("Array value [9] " + values[9] + " does not match the desired value " + LONG_VALUES[i%LONG_VALUES.length],
-				LONG_VALUES[i%LONG_VALUES.length], (long) (Long)values[9]
+			Assert.assertEquals("Array value [9] " + values[9] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
+				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[9]
 					);
-			Assert.assertEquals("Array value [10] " + values[10] + " does not match the desired value " + LONG_VALUES[i%LONG_VALUES.length],
-				LONG_VALUES[i%LONG_VALUES.length], (long) (Long)values[10]
+			Assert.assertEquals("Array value [10] " + values[10] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
+				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[10]
 					);
-			Assert.assertEquals("Array value [11] " + values[11] + " does not match the desired value " + INT_VALUES[i%INT_VALUES.length],
-				INT_VALUES[i%INT_VALUES.length], (int) (Integer)values[11]
+			Assert.assertEquals("Array value [11] " + values[11] + " does not match the desired value " + INT_VALUES.get(i % INT_VALUES.size()),
+				(int) INT_VALUES.get(i % INT_VALUES.size()), (int) (Integer)values[11]
 					);
 		}
 	}
@@ -145,21 +145,21 @@ public class TestGeneratedMemoryRecord extends AbstractGeneratedKiekerTest {
 	public void testBuffer() { // NOPMD (assert missing)
 		for (int i=0;i<ARRAY_LENGTH;i++) {
 			// initialize
-			MemoryRecord record = new MemoryRecord(LONG_VALUES[i%LONG_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], INT_VALUES[i%INT_VALUES.length]);
+			MemoryRecord record = new MemoryRecord(LONG_VALUES.get(i % LONG_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()));
 			
 			// check values
-			Assert.assertEquals("MemoryRecord.timestamp values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getTimestamp());
-			Assert.assertEquals("MemoryRecord.hostname values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getHostname());
-			Assert.assertEquals("MemoryRecord.vmName values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getVmName());
-			Assert.assertEquals("MemoryRecord.heapMaxBytes values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getHeapMaxBytes());
-			Assert.assertEquals("MemoryRecord.heapUsedBytes values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getHeapUsedBytes());
-			Assert.assertEquals("MemoryRecord.heapCommittedBytes values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getHeapCommittedBytes());
-			Assert.assertEquals("MemoryRecord.heapInitBytes values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getHeapInitBytes());
-			Assert.assertEquals("MemoryRecord.nonHeapMaxBytes values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getNonHeapMaxBytes());
-			Assert.assertEquals("MemoryRecord.nonHeapUsedBytes values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getNonHeapUsedBytes());
-			Assert.assertEquals("MemoryRecord.nonHeapCommittedBytes values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getNonHeapCommittedBytes());
-			Assert.assertEquals("MemoryRecord.nonHeapInitBytes values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getNonHeapInitBytes());
-			Assert.assertEquals("MemoryRecord.objectPendingFinalizationCount values are not equal.", INT_VALUES[i%INT_VALUES.length], record.getObjectPendingFinalizationCount());
+			Assert.assertEquals("MemoryRecord.timestamp values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTimestamp());
+			Assert.assertEquals("MemoryRecord.hostname values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getHostname());
+			Assert.assertEquals("MemoryRecord.vmName values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getVmName());
+			Assert.assertEquals("MemoryRecord.heapMaxBytes values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getHeapMaxBytes());
+			Assert.assertEquals("MemoryRecord.heapUsedBytes values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getHeapUsedBytes());
+			Assert.assertEquals("MemoryRecord.heapCommittedBytes values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getHeapCommittedBytes());
+			Assert.assertEquals("MemoryRecord.heapInitBytes values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getHeapInitBytes());
+			Assert.assertEquals("MemoryRecord.nonHeapMaxBytes values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getNonHeapMaxBytes());
+			Assert.assertEquals("MemoryRecord.nonHeapUsedBytes values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getNonHeapUsedBytes());
+			Assert.assertEquals("MemoryRecord.nonHeapCommittedBytes values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getNonHeapCommittedBytes());
+			Assert.assertEquals("MemoryRecord.nonHeapInitBytes values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getNonHeapInitBytes());
+			Assert.assertEquals("MemoryRecord.objectPendingFinalizationCount values are not equal.", (int) INT_VALUES.get(i % INT_VALUES.size()), record.getObjectPendingFinalizationCount());
 		}
 	}
 	
@@ -170,21 +170,21 @@ public class TestGeneratedMemoryRecord extends AbstractGeneratedKiekerTest {
 	public void testParameterConstruction() { // NOPMD (assert missing)
 		for (int i=0;i<ARRAY_LENGTH;i++) {
 			// initialize
-			MemoryRecord record = new MemoryRecord(LONG_VALUES[i%LONG_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], STRING_VALUES[i%STRING_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], LONG_VALUES[i%LONG_VALUES.length], INT_VALUES[i%INT_VALUES.length]);
+			MemoryRecord record = new MemoryRecord(LONG_VALUES.get(i % LONG_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), STRING_VALUES.get(i % STRING_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), LONG_VALUES.get(i % LONG_VALUES.size()), INT_VALUES.get(i % INT_VALUES.size()));
 			
 			// check values
-			Assert.assertEquals("MemoryRecord.timestamp values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getTimestamp());
-			Assert.assertEquals("MemoryRecord.hostname values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getHostname());
-			Assert.assertEquals("MemoryRecord.vmName values are not equal.", STRING_VALUES[i%STRING_VALUES.length] == null?"":STRING_VALUES[i%STRING_VALUES.length], record.getVmName());
-			Assert.assertEquals("MemoryRecord.heapMaxBytes values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getHeapMaxBytes());
-			Assert.assertEquals("MemoryRecord.heapUsedBytes values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getHeapUsedBytes());
-			Assert.assertEquals("MemoryRecord.heapCommittedBytes values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getHeapCommittedBytes());
-			Assert.assertEquals("MemoryRecord.heapInitBytes values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getHeapInitBytes());
-			Assert.assertEquals("MemoryRecord.nonHeapMaxBytes values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getNonHeapMaxBytes());
-			Assert.assertEquals("MemoryRecord.nonHeapUsedBytes values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getNonHeapUsedBytes());
-			Assert.assertEquals("MemoryRecord.nonHeapCommittedBytes values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getNonHeapCommittedBytes());
-			Assert.assertEquals("MemoryRecord.nonHeapInitBytes values are not equal.", LONG_VALUES[i%LONG_VALUES.length], record.getNonHeapInitBytes());
-			Assert.assertEquals("MemoryRecord.objectPendingFinalizationCount values are not equal.", INT_VALUES[i%INT_VALUES.length], record.getObjectPendingFinalizationCount());
+			Assert.assertEquals("MemoryRecord.timestamp values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTimestamp());
+			Assert.assertEquals("MemoryRecord.hostname values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getHostname());
+			Assert.assertEquals("MemoryRecord.vmName values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), record.getVmName());
+			Assert.assertEquals("MemoryRecord.heapMaxBytes values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getHeapMaxBytes());
+			Assert.assertEquals("MemoryRecord.heapUsedBytes values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getHeapUsedBytes());
+			Assert.assertEquals("MemoryRecord.heapCommittedBytes values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getHeapCommittedBytes());
+			Assert.assertEquals("MemoryRecord.heapInitBytes values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getHeapInitBytes());
+			Assert.assertEquals("MemoryRecord.nonHeapMaxBytes values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getNonHeapMaxBytes());
+			Assert.assertEquals("MemoryRecord.nonHeapUsedBytes values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getNonHeapUsedBytes());
+			Assert.assertEquals("MemoryRecord.nonHeapCommittedBytes values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getNonHeapCommittedBytes());
+			Assert.assertEquals("MemoryRecord.nonHeapInitBytes values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getNonHeapInitBytes());
+			Assert.assertEquals("MemoryRecord.objectPendingFinalizationCount values are not equal.", (int) INT_VALUES.get(i % INT_VALUES.size()), record.getObjectPendingFinalizationCount());
 		}
 	}
 }
