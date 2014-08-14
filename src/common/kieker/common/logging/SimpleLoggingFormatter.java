@@ -34,6 +34,9 @@ public class SimpleLoggingFormatter extends Formatter {
 	protected static final String LINE_SEPERATOR = System.getProperty("line.separator");
 	private final DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
 
+	/**
+	 * Empty constructor.
+	 */
 	public SimpleLoggingFormatter() {
 		// No code necessary
 	}

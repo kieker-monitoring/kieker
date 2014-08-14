@@ -47,7 +47,9 @@ public final class AspectJLoader {
 	 * JSR-163 preMain entry method.
 	 * 
 	 * @param options
+	 *            for the weaver agent
 	 * @param instrumentation
+	 *            java API instrumentation object
 	 */
 	public static void premain(final String options, final Instrumentation instrumentation) {
 		if (!AspectJLoader.checkConfigurationFileAvailable()) {

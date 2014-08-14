@@ -33,7 +33,7 @@ public abstract class AbstractGeneratedKiekerTest extends AbstractKiekerTest {
 			Integer.MAX_VALUE
 			));
 
-	protected static final List<Short> SHORT_VALUES = Collections.unmodifiableList(Arrays.asList( // NOPMD
+	protected static final List<Short> SHORT_VALUES = Collections.unmodifiableList(Arrays.asList( // NOPMD NOCS (CS complains about white space)
 			Short.MIN_VALUE, // NOPMD (pmd does not like short, however, we have to test it)
 			(short) 0, // NOPMD
 			Short.MAX_VALUE // NOPMD
