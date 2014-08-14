@@ -75,6 +75,9 @@ public class TestProbeController extends AbstractKiekerTest {
 		// empty default constructor
 	}
 
+	/**
+	 * Initialize configuration file.
+	 */
 	@Before
 	public void init() throws IOException {
 		this.configFile = this.tmpFolder.newFile("adaptiveMonitoring.configFile");
@@ -88,18 +91,29 @@ public class TestProbeController extends AbstractKiekerTest {
 		this.tmpFolder.delete();
 	}
 
+	/**
+	 * Test if the default configuration for adaptive monitoring really has an empty probe pattern.
+	 */
 	@Test
 	public void testInitializationDefaultConfigLocation() {
 		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
 		configuration.setProperty(ConfigurationFactory.WRITER_CLASSNAME, DummyWriter.class.getName());
 		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED, "true");
+
 		final IMonitoringController ctrl = MonitoringController.createInstance(configuration);
+
 		Assert.assertFalse(ctrl.isMonitoringTerminated());
+
 		final List<String> list = ctrl.getProbePatternList();
+
 		Assert.assertTrue(list.isEmpty());
+
 		ctrl.terminateMonitoring();
 	}
 
+	/**
+	 * Test the adaptive pattern registry by adding test patterns.
+	 */
 	@Test
 	public void testInitializationWithCustomConfiguration() throws UnsupportedEncodingException, FileNotFoundException, InterruptedException {
 		this.writeToConfigFile(new String[] { "+ *", "- * test.Test()", "test invalid line in config file", "- InvalidPatternException expected", });

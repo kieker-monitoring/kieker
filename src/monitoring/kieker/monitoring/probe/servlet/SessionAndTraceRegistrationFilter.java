@@ -86,6 +86,9 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 
 	private volatile boolean logFilterExecution = true; // default
 
+	/**
+	 * Create an SessionAndTraceRegistrationFilter and initialize the filter operation signature.
+	 */
 	public SessionAndTraceRegistrationFilter() {
 		final Signature methodSignature =
 				new Signature("doFilter", // operation name
@@ -97,6 +100,12 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 		this.filterOperationSignatureString = filterOperationSignaturePair.toString();
 	}
 
+	/**
+	 * Create an SessionAndTraceRegistrationFilter and initialize the filter operation signature.
+	 * 
+	 * @param logFilterExecution
+	 *            true enables logging of the filter execution
+	 */
 	public SessionAndTraceRegistrationFilter(final boolean logFilterExecution) {
 		this();
 		this.logFilterExecution = logFilterExecution;
@@ -142,7 +151,9 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 	 *            The filter chain to be used.
 	 * 
 	 * @throws IOException
+	 *             on io errors
 	 * @throws ServletException
+	 *             on servlet errors
 	 */
 	@Override
 	public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {

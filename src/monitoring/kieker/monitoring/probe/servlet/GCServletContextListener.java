@@ -73,6 +73,9 @@ public class GCServletContextListener extends AbstractRegularSamplingServletCont
 	public static final String CONTEXT_PARAM_NAME_INITIAL_SAMPLING_DELAY_SECONDS = CONTEXT_PARAM_NAME_PREFIX // NOCS (decl. order)
 			+ ".initialSamplingDelaySeconds";
 
+	/**
+	 * Empty constructor.
+	 */
 	public GCServletContextListener() {
 		// nothing to do
 	}

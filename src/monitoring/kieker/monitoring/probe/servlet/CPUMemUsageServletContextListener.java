@@ -75,6 +75,9 @@ public class CPUMemUsageServletContextListener extends AbstractRegularSamplingSe
 	public static final String CONTEXT_PARAM_NAME_INITIAL_SAMPLING_DELAY_SECONDS = CONTEXT_PARAM_NAME_PREFIX // NOCS (decl. order)
 			+ ".initialSamplingDelaySeconds";
 
+	/**
+	 * Empty constructor.
+	 */
 	public CPUMemUsageServletContextListener() {
 		// nothing to do
 	}
