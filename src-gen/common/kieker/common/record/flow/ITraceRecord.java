@@ -16,8 +16,9 @@
 
 package kieker.common.record.flow;
 
+
 /**
- * @author Kieker Build
+ * @author Generic Kieker
  * 
  * @since 1.10
  */

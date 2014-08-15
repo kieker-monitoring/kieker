@@ -5,6 +5,7 @@ import kieker.common.record.flow.IExceptionRecord
 import kieker.common.record.flow.ICallRecord
 import kieker.common.record.flow.IOperationRecord
 
+@author 'Jan Waller' @since 1.6
 abstract entity AbstractOperationEvent extends AbstractTraceEvent : IOperationRecord
 
 entity AfterOperationEvent extends AbstractOperationEvent

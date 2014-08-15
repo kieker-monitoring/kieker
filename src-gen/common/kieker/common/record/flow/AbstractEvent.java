@@ -26,7 +26,7 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.record.flow.IEventRecord;
 
 /**
- * @author Kieker Build
+ * @author Generic Kieker
  * 
  * @since 1.10
  */

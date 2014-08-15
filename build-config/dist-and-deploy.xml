@@ -67,9 +67,10 @@
 			<include name="${src.dir}/**/*.java" />
 			<include name="${src.dir}/**/META-INF/*" />
 			<include name="${src.gen}/**/*.java" />
-			<include name="${src.model.dir}/*.ecore" />
-			<include name="${src.model.dir}/*.ecorediag" />
-			<include name="${src.model.dir}/*.genmodel" />
+			<include name="${src.model.dir}/records/**/*.irl" />
+			<include name="${src.model.dir}/analysis/*.ecore" />
+			<include name="${src.model.dir}/analysis/*.ecorediag" />
+			<include name="${src.model.dir}/analysis/*.genmodel" />
 			<include name="${test.dir}/**/*.java" />
 			<include name="${test.dir}/**/META-INF/*" />
 			<include name="${test.dir}/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/jetty.xml" />

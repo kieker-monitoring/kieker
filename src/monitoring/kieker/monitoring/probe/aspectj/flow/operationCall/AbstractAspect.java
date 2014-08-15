@@ -74,7 +74,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final String calleeClazz = targetObject.getClass().getName();
 		// measure before call
 		CTRLINST.newMonitoringRecord(new CallOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(),
-				caller, callerClazz, callee, calleeClazz));
+				callerClazz, caller, calleeClazz, callee));
 		// call of the called method
 		final Object retval;
 		try {
@@ -114,7 +114,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final String calleeClazz = targetObject.getClass().getName();
 		// measure before call
 		CTRLINST.newMonitoringRecord(new CallOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(),
-				caller, callerClazz, callee, calleeClazz));
+				callerClazz, caller, calleeClazz, callee));
 		// call of the called method
 		final Object retval;
 		try {
@@ -153,7 +153,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final String calleeClazz = calleeSig.getDeclaringTypeName();
 		// measure before call
 		CTRLINST.newMonitoringRecord(new CallOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(),
-				caller, callerClazz, callee, calleeClazz));
+				callerClazz, caller, calleeClazz, callee));
 		// call of the called method
 		final Object retval;
 		try {
@@ -193,7 +193,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final String calleeClazz = calleeSig.getDeclaringTypeName();
 		// measure before call
 		CTRLINST.newMonitoringRecord(new CallOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(),
-				caller, callerClazz, callee, calleeClazz));
+				callerClazz, caller, calleeClazz, callee));
 		// call of the called method
 		final Object retval;
 		try {

@@ -69,14 +69,14 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final String clazz = thisObject.getClass().getName();
 		final int objectId = System.identityHashCode(thisObject);
 		// measure before execution
-		CTRLINST.newMonitoringRecord(new BeforeOperationObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature, clazz, objectId));
+		CTRLINST.newMonitoringRecord(new BeforeOperationObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), clazz, signature, objectId));
 		// execution of the called method
 		final Object retval;
 		try {
 			retval = thisJoinPoint.proceed();
 		} catch (final Throwable th) { // NOPMD NOCS (catch throw might ok here)
 			// measure after failed execution
-			CTRLINST.newMonitoringRecord(new AfterOperationFailedObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature, clazz,
+			CTRLINST.newMonitoringRecord(new AfterOperationFailedObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), clazz, signature,
 					th.toString(), objectId));
 			throw th;
 		} finally {
@@ -85,7 +85,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			}
 		}
 		// measure after successful execution
-		CTRLINST.newMonitoringRecord(new AfterOperationObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature, clazz, objectId));
+		CTRLINST.newMonitoringRecord(new AfterOperationObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), clazz, signature, objectId));
 		return retval;
 	}
 
@@ -119,14 +119,14 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final long traceId = trace.getTraceId();
 		final String clazz = sig.getDeclaringTypeName();
 		// measure before execution
-		CTRLINST.newMonitoringRecord(new BeforeOperationObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature, clazz, 0));
+		CTRLINST.newMonitoringRecord(new BeforeOperationObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), clazz, signature, 0));
 		// execution of the called method
 		final Object retval;
 		try {
 			retval = thisJoinPoint.proceed();
 		} catch (final Throwable th) { // NOPMD NOCS (catch throw might ok here)
 			// measure after failed execution
-			CTRLINST.newMonitoringRecord(new AfterOperationFailedObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature, clazz,
+			CTRLINST.newMonitoringRecord(new AfterOperationFailedObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), clazz, signature,
 					th.toString(), 0));
 			throw th;
 		} finally {
@@ -135,7 +135,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			}
 		}
 		// measure after successful execution
-		CTRLINST.newMonitoringRecord(new AfterOperationObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature, clazz, 0));
+		CTRLINST.newMonitoringRecord(new AfterOperationObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), clazz, signature, 0));
 		return retval;
 	}
 }

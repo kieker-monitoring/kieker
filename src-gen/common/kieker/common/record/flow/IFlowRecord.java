@@ -16,10 +16,12 @@
 
 package kieker.common.record.flow;
 
+import kieker.common.record.IMonitoringRecord;
+
 /**
- * @author Kieker Build
+ * @author Generic Kieker
  * 
  * @since 1.10
  */
-public interface IFlowRecord {
+public interface IFlowRecord extends IMonitoringRecord {
 }

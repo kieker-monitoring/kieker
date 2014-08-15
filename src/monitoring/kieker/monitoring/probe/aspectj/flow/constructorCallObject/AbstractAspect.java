@@ -91,7 +91,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final int calleeObjectId = System.identityHashCode(targetObject);
 		// measure before call
 		CTRLINST.newMonitoringRecord(new CallConstructorObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(),
-				caller, callerClazz, callee, calleeClazz, callerObjectId, calleeObjectId));
+				callerClazz, caller, calleeClazz, callee, callerObjectId, calleeObjectId));
 		// call of the called method
 		final Object retval;
 		try {
@@ -144,7 +144,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final int calleeObjectId = System.identityHashCode(targetObject);
 		// measure before call
 		CTRLINST.newMonitoringRecord(new CallConstructorObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(),
-				caller, callerClazz, callee, calleeClazz, 0, calleeObjectId));
+				callerClazz, caller, calleeClazz, callee, 0, calleeObjectId));
 		// call of the called method
 		final Object retval;
 		try {

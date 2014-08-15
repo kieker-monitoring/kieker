@@ -16,12 +16,14 @@
 
 package kieker.common.record.flow;
 
+import kieker.common.record.IMonitoringRecord;
+
 /**
- * @author Kieker Build
+ * @author Generic Kieker
  * 
  * @since 1.10
  */
-public interface IClassSignature {
+public interface IClassSignature extends IMonitoringRecord {
 	public String getClassSignature() ;
 		
 }
