@@ -26,9 +26,9 @@ import kieker.common.record.flow.trace.operation.CallOperationEvent;
 import kieker.common.record.flow.IConstructorRecord;
 
 /**
- * @author Generic Kieker
+ * @author Jan Waller
  * 
- * @since 1.10
+ * @since 1.6
  */
 public class CallConstructorEvent extends CallOperationEvent implements IConstructorRecord {
 	/** Descriptive definition of the serialization size of the record. */

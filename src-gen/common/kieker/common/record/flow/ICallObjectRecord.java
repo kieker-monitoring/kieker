@@ -18,9 +18,9 @@ package kieker.common.record.flow;
 
 
 /**
- * @author Generic Kieker
+ * @author Jan Waller
  * 
- * @since 1.10
+ * @since 1.6
  */
 public interface ICallObjectRecord extends ICallRecord, IObjectRecord {
 	public int getCallerObjectId() ;

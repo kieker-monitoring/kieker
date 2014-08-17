@@ -1,5 +1,6 @@
 package kieker.common.record.system
 
+@author 'Andre van Hoorn, Jan Waller' @since '1.3'
 entity CPUUtilizationRecord {
 	/**
 	 * Date/time of measurement. The value should be interpreted as the number of nano-seconds elapsed since Jan 1st, 1970 UTC.
@@ -58,6 +59,7 @@ entity CPUUtilizationRecord {
 	double idle = 0.0
 }
 
+@author 'Andre van Hoorn, Jan Waller' @since '1.3'
 entity MemSwapUsageRecord {
 	long timestamp = 0
 	string hostname = ""
@@ -69,6 +71,7 @@ entity MemSwapUsageRecord {
 	long swapFree = 0
 }
 
+@author 'Andre van Hoorn, Jan Waller' @since '1.3'
 entity ResourceUtilizationRecord {
 	long timestamp = 0
 

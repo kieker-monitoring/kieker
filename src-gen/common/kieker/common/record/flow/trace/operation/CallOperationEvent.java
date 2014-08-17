@@ -26,9 +26,9 @@ import kieker.common.record.flow.trace.operation.AbstractOperationEvent;
 import kieker.common.record.flow.ICallRecord;
 
 /**
- * @author Generic Kieker
+ * @author Andre van Hoorn, Holger Knoche, Jan Waller
  * 
- * @since 1.10
+ * @since 1.5
  */
 public class CallOperationEvent extends AbstractOperationEvent implements ICallRecord {
 	/** Descriptive definition of the serialization size of the record. */

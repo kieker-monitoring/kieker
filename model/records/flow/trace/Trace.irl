@@ -4,14 +4,18 @@ import kieker.common.record.flow.AbstractEvent
 import kieker.common.record.flow.ITraceRecord
 import kieker.common.record.flow.IFlowRecord
 
+@author 'Jan Waller' @since '1.5'
 abstract entity AbstractTraceEvent extends AbstractEvent : ITraceRecord
 
+@author 'Jan Waller' @since '1.5'
 entity ConstructionEvent extends AbstractTraceEvent {
 	string classSignature = ""
 	int objectId = 0
 }
 
 // Removed temporarily, as TraceMetadata also provides a non-data property nextOrderId.
+// @author 'Jan Waller'
+// @since '1.5'
 // entity TraceMetadata : IFlowRecord {
 // 	long traceId = 0
 // 	long threadId = 0

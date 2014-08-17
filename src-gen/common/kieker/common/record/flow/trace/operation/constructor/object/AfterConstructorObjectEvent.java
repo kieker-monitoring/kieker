@@ -26,9 +26,9 @@ import kieker.common.record.flow.trace.operation.constructor.AfterConstructorEve
 import kieker.common.record.flow.IObjectRecord;
 
 /**
- * @author Generic Kieker
+ * @author Jan Waller
  * 
- * @since 1.10
+ * @since 1.6
  */
 public class AfterConstructorObjectEvent extends AfterConstructorEvent implements IObjectRecord {
 	/** Descriptive definition of the serialization size of the record. */

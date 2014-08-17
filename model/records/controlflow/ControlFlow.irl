@@ -1,5 +1,7 @@
 package kieker.common.record.controlflow
 
+@author 'Andre van Hoorn, Jan Waller'
+@since '0.91'
 entity OperationExecutionRecord { 
 	const string NO_HOSTNAME = "<default-host>"
 	const string NO_SESSION_ID = "<no-session-id>"
@@ -18,6 +20,8 @@ entity OperationExecutionRecord {
 	int ess = NO_EOI_ESS
 }
 
+@author 'Andre van Hoorn, Jan Waller'
+@since '1.2'
 entity BranchingRecord {
 	long timestamp = 0
 	int branchID = 0

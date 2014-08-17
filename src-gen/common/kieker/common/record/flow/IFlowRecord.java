@@ -19,9 +19,9 @@ package kieker.common.record.flow;
 import kieker.common.record.IMonitoringRecord;
 
 /**
- * @author Generic Kieker
+ * @author Jan Waller
  * 
- * @since 1.10
+ * @since 1.5
  */
 public interface IFlowRecord extends IMonitoringRecord {
 }

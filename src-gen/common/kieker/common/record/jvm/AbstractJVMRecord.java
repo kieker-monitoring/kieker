@@ -25,7 +25,7 @@ import kieker.common.util.registry.IRegistry;
 
 
 /**
- * @author Generic Kieker
+ * @author Nils Christian Ehmke
  * 
  * @since 1.10
  */

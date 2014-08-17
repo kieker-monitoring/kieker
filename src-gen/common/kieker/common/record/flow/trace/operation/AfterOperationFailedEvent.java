@@ -26,9 +26,9 @@ import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.IExceptionRecord;
 
 /**
- * @author Generic Kieker
+ * @author Jan Waller
  * 
- * @since 1.10
+ * @since 1.5
  */
 public class AfterOperationFailedEvent extends AfterOperationEvent implements IExceptionRecord {
 	/** Descriptive definition of the serialization size of the record. */

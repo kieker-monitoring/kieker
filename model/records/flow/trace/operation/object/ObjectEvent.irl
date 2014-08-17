@@ -24,12 +24,17 @@ import kieker.common.record.flow.IObjectRecord
 import kieker.common.record.flow.ICallObjectRecord
 import kieker.common.record.flow.IInterfaceRecord
 
+@author 'Jan Waller' @since '1.6'
 entity AfterOperationFailedObjectEvent extends AfterOperationFailedEvent : IObjectRecord
 
+@author 'Jan Waller' @since '1.6'
 entity AfterOperationObjectEvent extends AfterOperationEvent : IObjectRecord
 
+@author 'Jan Waller' @since '1.6'
 entity BeforeOperationObjectEvent extends BeforeOperationEvent : IObjectRecord
 
+@author 'Jan Waller' @since '1.6'
 entity CallOperationObjectEvent extends CallOperationEvent : ICallObjectRecord
 
+@author 'Florian Fittkau' @since '1.10'
 entity BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEvent : IInterfaceRecord

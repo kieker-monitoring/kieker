@@ -25,9 +25,9 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.record.flow.trace.concurrency.monitor.AbstractMonitorEvent;
 
 /**
- * @author Generic Kieker
+ * @author Jan Waller
  * 
- * @since 1.10
+ * @since 1.8
  */
 public class MonitorNotifyAllEvent extends AbstractMonitorEvent  {
 	/** Descriptive definition of the serialization size of the record. */

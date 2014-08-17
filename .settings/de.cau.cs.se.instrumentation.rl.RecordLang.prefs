@@ -12,6 +12,7 @@ outlet.java.cleanDirectory=false
 outlet.java.cleanupDerived=true
 outlet.java.createDirectory=true
 outlet.java.derived=true
+outlet.java.directory=./src-gen/common
 outlet.java.hideLocalSyntheticVariables=true
 outlet.java.installDslAsPrimarySource=false
 outlet.java.keepLocalHistory=true

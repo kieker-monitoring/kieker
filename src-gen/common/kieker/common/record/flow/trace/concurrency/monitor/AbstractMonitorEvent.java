@@ -24,9 +24,9 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 
 /**
- * @author Generic Kieker
+ * @author Jan Waller
  * 
- * @since 1.10
+ * @since 1.8
  */
 public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
 		private static final long serialVersionUID = -7113928259748697225L;

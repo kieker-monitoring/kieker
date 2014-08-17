@@ -9,12 +9,17 @@ import kieker.common.record.flow.trace.operation.constructor.AfterConstructorEve
 import kieker.common.record.flow.trace.operation.constructor.BeforeConstructorEvent
 import kieker.common.record.flow.trace.operation.constructor.CallConstructorEvent
 
+@author 'Jan Waller' @since '1.6'
 entity AfterConstructorFailedObjectEvent extends AfterConstructorFailedEvent : IObjectRecord 
 
+@author 'Jan Waller' @since '1.6'
 entity AfterConstructorObjectEvent extends AfterConstructorEvent : IObjectRecord
 
+@author 'Jan Waller' @since '1.6'
 entity BeforeConstructorObjectEvent extends BeforeConstructorEvent : IObjectRecord
 
+@author 'Jan Waller' @since '1.6'
 entity CallConstructorObjectEvent extends CallConstructorEvent : ICallObjectRecord
 
+@author 'Florian Fittkau' @since '1.10'
 entity BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObjectEvent : IInterfaceRecord

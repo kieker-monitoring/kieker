@@ -19,7 +19,7 @@ package kieker.common.record.flow;
 import kieker.common.record.IMonitoringRecord;
 
 /**
- * @author Generic Kieker
+ * @author Reiner Jung
  * 
  * @since 1.10
  */

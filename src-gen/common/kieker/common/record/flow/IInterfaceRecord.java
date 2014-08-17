@@ -18,7 +18,7 @@ package kieker.common.record.flow;
 
 
 /**
- * @author Generic Kieker
+ * @author Florian Fittkau
  * 
  * @since 1.10
  */

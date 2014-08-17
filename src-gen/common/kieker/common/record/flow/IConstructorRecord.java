@@ -18,9 +18,9 @@ package kieker.common.record.flow;
 
 
 /**
- * @author Generic Kieker
+ * @author Jan Waller
  * 
- * @since 1.10
+ * @since 1.8
  */
 public interface IConstructorRecord extends IOperationRecord {
 }

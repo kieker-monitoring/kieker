@@ -25,9 +25,9 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.record.flow.trace.operation.AbstractOperationEvent;
 
 /**
- * @author Generic Kieker
+ * @author Jan Waller
  * 
- * @since 1.10
+ * @since 1.6
  */
 public class AfterOperationEvent extends AbstractOperationEvent  {
 	/** Descriptive definition of the serialization size of the record. */

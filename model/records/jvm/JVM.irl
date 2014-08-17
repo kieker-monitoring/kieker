@@ -15,29 +15,34 @@
  ***************************************************************************/
 package kieker.common.record.jvm
 
+@author 'Nils Christian Ehmke' @since '1.10'
 abstract entity AbstractJVMRecord {
 	long timestamp
 	string hostname
 	string vmName
 }
 
+@author 'Nils Christian Ehmke' @since '1.10'
 entity ClassLoadingRecord extends AbstractJVMRecord {
 	long totalLoadedClassCount
 	int loadedClassCount
 	long unloadedClassCount
 }
 
+@author 'Nils Christian Ehmke' @since '1.10'
 entity CompilationRecord extends AbstractJVMRecord {
 	string jitCompilerName
 	long totalCompilationTimeMS
 }
 
+@author 'Nils Christian Ehmke' @since '1.10'
 entity GCRecord extends AbstractJVMRecord {
 	string gcName
 	long collectionCount
 	long collectionTimeMS
 }
 
+@author 'Nils Christian Ehmke' @since '1.10'
 entity MemoryRecord extends AbstractJVMRecord {
 	long heapMaxBytes
 	long heapUsedBytes
@@ -52,6 +57,7 @@ entity MemoryRecord extends AbstractJVMRecord {
 	int objectPendingFinalizationCount
 }
 
+@author 'Nils Christian Ehmke' @since '1.10'
 entity ThreadsStatusRecord extends AbstractJVMRecord {
 	long threadCount
 	long daemonThreadCount
@@ -59,6 +65,7 @@ entity ThreadsStatusRecord extends AbstractJVMRecord {
 	long totalStartedThreadCount
 }
 
+@author 'Nils Christian Ehmke' @since '1.10'
 entity UptimeRecord extends AbstractJVMRecord {
 	long uptimeMS
 }
