@@ -2,7 +2,7 @@
 
 KIEKER_DIR="$1"
 OUTDIR="$2"
-EXAMPLE_LOG=${KIEKER_DIR}/examples/userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC
+EXAMPLE_LOG=${KIEKER_DIR}/examples/userguide/ch5--trace-monitoring-aspectj/testdata/
 TRACE_ANALYSIS_SH=${KIEKER_DIR}/bin/trace-analysis.sh
 FILE_CONVERTER_SH=${KIEKER_DIR}/bin/dotPic-fileConverter.sh
 
@@ -51,6 +51,18 @@ ${TRACE_ANALYSIS_SH} \
     --plot-Aggregated-Deployment-Call-Tree \
     --plot-Aggregated-Assembly-Call-Tree \
     --short-labels
+	
+# Dependency graphs with responseTimes
+${TRACE_ANALYSIS_SH} \
+    --verbose \
+    --inputdirs "${EXAMPLE_LOG}" --outputdir "./${OUTDIR}" \
+	--p responseTimes-
+	--plot-Deployment-Component-Dependency-Graph responseTimes-ms \
+	--plot-Assembly-Component-Dependency-Graph responseTimes-ns  \
+	--plot-Deployment-Operation-Dependency-Graph responseTimes-ms  \
+	--plot-Assembly-Operation-Dependency-Graph responseTimes-ns \
+    --short-labels
+	
 
 # Deployment-level representatives: 6488138950668976141 6488138950668976129 6488138950668976130 6488138950668976131
 # Assembly-level representative:    6488138950668976129

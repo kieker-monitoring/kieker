@@ -1,0 +1,54 @@
+digraph G {
+ rankdir=LR;
+"depNode_0" [label="'Entry'",shape="none"]
+subgraph "cluster_container2" {
+ label = "<<execution container>>\nSRV0";
+ shape = "box";
+ style = "filled";
+ fillcolor = "white";
+subgraph "cluster_component_2" {
+ label = "<<deployment component>>\n@1:bookstoreTracing.Catalog";
+ shape = "box";
+ style = "filled";
+ fillcolor = "white";
+"depNode_4" [label="getBook(..)\nmin: 2ms, avg: 4ms, max: 122ms,
+total: 4170ms",shape="oval",style="filled",color="#000000",fillcolor="white"]
+}
+subgraph "cluster_component_3" {
+ label = "<<deployment component>>\n@2:bookstoreTracing.CRM";
+ shape = "box";
+ style = "filled";
+ fillcolor = "white";
+"depNode_3" [label="getOffers()\nmin: 2ms, avg: 7ms, max: 378ms,
+total: 11323ms",shape="oval",style="filled",color="#000000",fillcolor="white"]
+}
+subgraph "cluster_component_4" {
+ label = "<<deployment component>>\n@3:bookstoreTracing.Bookstore";
+ shape = "box";
+ style = "filled";
+ fillcolor = "white";
+"depNode_1" [label="searchBook()\nmin: 4ms, avg: 22ms, max: 381ms,
+total: 36599ms",shape="oval",style="filled",color="#000000",fillcolor="white"]
+}
+}
+subgraph "cluster_container1" {
+ label = "<<execution container>>\nSRV1";
+ shape = "box";
+ style = "filled";
+ fillcolor = "white";
+subgraph "cluster_component_1" {
+ label = "<<deployment component>>\n@1:bookstoreTracing.Catalog";
+ shape = "box";
+ style = "filled";
+ fillcolor = "white";
+"depNode_2" [label="getBook(..)\nmin: 2ms, avg: 3ms, max: 123ms,
+total: 7522ms",shape="oval",style="filled",color="#000000",fillcolor="white"]
+}
+}
+depNode_0->depNode_1[label=1635, style="solid", arrowhead="open", color="#000000"]
+depNode_1->depNode_2[label=1092, style="solid", arrowhead="open", color="#000000"]
+depNode_1->depNode_3[label=1635, style="solid", arrowhead="open", color="#000000"]
+depNode_1->depNode_4[label=543, style="solid", arrowhead="open", color="#000000"]
+depNode_3->depNode_2[label=1062, style="solid", arrowhead="open", color="#000000"]
+depNode_3->depNode_4[label=573, style="solid", arrowhead="open", color="#000000"]
+}
