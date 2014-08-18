@@ -38,7 +38,7 @@ public final class AnalysisStarter {
 		// Create the filters
 		final Configuration fsReaderConfig = new Configuration();
 		fsReaderConfig
-				.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, "/home/duelle/repositories/git/kieker/examples/analysis/opad-anomaly-detection/testdata");
+		.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, "testdata");
 		final FSReader fsReader = new FSReader(fsReaderConfig, analysisController);
 		final ExtractionFilter extractionFilter = new ExtractionFilter(new Configuration(), analysisController);
 		final TimeSeriesPointAggregatorFilter tsPointAggregatorFilter = new TimeSeriesPointAggregatorFilter(new Configuration(), analysisController);
