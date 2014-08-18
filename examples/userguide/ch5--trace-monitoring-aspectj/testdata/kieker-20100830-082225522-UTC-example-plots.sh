@@ -2,7 +2,7 @@
 
 KIEKER_DIR="$1"
 OUTDIR="$2"
-EXAMPLE_LOG=${KIEKER_DIR}/examples/userguide/ch5--trace-monitoring-aspectj/testdata/
+EXAMPLE_LOG=${KIEKER_DIR}/examples/userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC
 TRACE_ANALYSIS_SH=${KIEKER_DIR}/bin/trace-analysis.sh
 FILE_CONVERTER_SH=${KIEKER_DIR}/bin/dotPic-fileConverter.sh
 
