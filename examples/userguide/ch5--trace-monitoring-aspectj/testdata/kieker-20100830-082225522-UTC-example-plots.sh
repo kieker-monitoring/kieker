@@ -59,7 +59,7 @@ ${TRACE_ANALYSIS_SH} \
 	--p responseTime- \
 	--plot-Deployment-Component-Dependency-Graph responseTimes-ms \
 	--plot-Assembly-Component-Dependency-Graph responseTimes-ns  \
-	--plot-Deployment-Operation-Dependency-Graph responseTimes-ms  \
+	--plot-Deployment-Operation-Dependency-Graph responseTimes-us  \
 	--plot-Assembly-Operation-Dependency-Graph responseTimes-ns \
     --short-labels
 	

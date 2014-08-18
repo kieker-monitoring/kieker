@@ -2,7 +2,7 @@ digraph G {
  rankdir=LR;
 "depNode_0" [label="'Entry'",shape="none"]
 subgraph "cluster_component_2" {
- label = "<<assembly component>>\n@2:bookstoreTracing.CRM";
+ label = "<<assembly component>>\n@2:..CRM";
  shape = "box";
  style = "filled";
  fillcolor = "white";
@@ -10,7 +10,7 @@ subgraph "cluster_component_2" {
 total: 11684295790ns",shape="oval",style="filled",color="#000000",fillcolor="white"]
 }
 subgraph "cluster_component_1" {
- label = "<<assembly component>>\n@1:bookstoreTracing.Catalog";
+ label = "<<assembly component>>\n@1:..Catalog";
  shape = "box";
  style = "filled";
  fillcolor = "white";
@@ -18,7 +18,7 @@ subgraph "cluster_component_1" {
 total: 12335505819ns",shape="oval",style="filled",color="#000000",fillcolor="white"]
 }
 subgraph "cluster_component_3" {
- label = "<<assembly component>>\n@3:bookstoreTracing.Bookstore";
+ label = "<<assembly component>>\n@3:..Bookstore";
  shape = "box";
  style = "filled";
  fillcolor = "white";
