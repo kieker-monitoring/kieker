@@ -51,6 +51,18 @@ ${TRACE_ANALYSIS_SH} \
     --plot-Aggregated-Deployment-Call-Tree \
     --plot-Aggregated-Assembly-Call-Tree \
     --short-labels
+	
+# Dependency graphs with responseTimes
+${TRACE_ANALYSIS_SH} \
+    --verbose \
+    --inputdirs "${EXAMPLE_LOG}" --outputdir "./${OUTDIR}" \
+	--p responseTime- \
+	--plot-Deployment-Component-Dependency-Graph responseTimes-ms \
+	--plot-Assembly-Component-Dependency-Graph responseTimes-ns  \
+	--plot-Deployment-Operation-Dependency-Graph responseTimes-us  \
+	--plot-Assembly-Operation-Dependency-Graph responseTimes-ns \
+    --short-labels
+	
 
 # Deployment-level representatives: 6488138950668976141 6488138950668976129 6488138950668976130 6488138950668976131
 # Assembly-level representative:    6488138950668976129
