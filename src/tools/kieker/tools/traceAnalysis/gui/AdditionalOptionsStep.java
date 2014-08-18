@@ -189,7 +189,7 @@ public class AdditionalOptionsStep extends AbstractStep {
 
 		if (this.maxTraceDurationMS.isSelected()) {
 			parameters.add("--" + Constants.CMD_OPT_NAME_MAXTRACEDURATION);
-			parameters.add(((Long) this.maxTraceDurationMSInput.getValue()).toString());
+			parameters.add(this.maxTraceDurationMSInput.getValue().toString());
 		}
 
 		if (this.ignoreAssumedCalls.isSelected()) {
