@@ -39,6 +39,6 @@ public final class AnomalyPrinter extends AbstractFilterPlugin {
 
 	@InputPort(name = INPUT_PORT_NAME_EVENTS, eventTypes = { StorableDetectionResult.class })
 	public final void inputEvent(final StorableDetectionResult result) {
-		System.out.println("Forecasted value: " + result.getForecast() + ", Actual value: " + result.getValue());
+		System.out.println("Forecasted value: " + result.getForecast() + ", Actual value: " + result.getValue() + ", Anomaly score: " + result.getScore());
 	}
 }
