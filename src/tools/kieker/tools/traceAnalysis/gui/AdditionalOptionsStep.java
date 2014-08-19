@@ -235,11 +235,47 @@ public class AdditionalOptionsStep extends AbstractStep {
 				}
 			}
 		});
+
+		this.description.addActionListener(new ActionListener() {
+
+			@Override
+			@SuppressWarnings("synthetic-access")
+			public void actionPerformed(final ActionEvent e) {
+				AdditionalOptionsStep.this.descriptionInput.setEnabled(AdditionalOptionsStep.this.description.isSelected());
+				AdditionalOptionsStep.this.descriptionChooseButton.setEnabled(AdditionalOptionsStep.this.description.isSelected());
+			}
+		});
+
+		this.traceColoringMap.addActionListener(new ActionListener() {
+
+			@Override
+			@SuppressWarnings("synthetic-access")
+			public void actionPerformed(final ActionEvent e) {
+				AdditionalOptionsStep.this.traceColoringMapInput.setEnabled(AdditionalOptionsStep.this.traceColoringMap.isSelected());
+				AdditionalOptionsStep.this.traceColoringMapChooseButton.setEnabled(AdditionalOptionsStep.this.traceColoringMap.isSelected());
+			}
+		});
+
+		this.maxTraceDurationMS.addActionListener(new ActionListener() {
+
+			@Override
+			@SuppressWarnings("synthetic-access")
+			public void actionPerformed(final ActionEvent e) {
+				AdditionalOptionsStep.this.maxTraceDurationMSInput.setEnabled(AdditionalOptionsStep.this.maxTraceDurationMS.isSelected());
+			}
+		});
 	}
 
 	@Override
 	public void loadDefaultConfiguration() {
 		this.maxTraceDurationMSInput.setValue(600000);
+
+		this.traceColoringMapInput.setEnabled(false);
+		this.descriptionInput.setEnabled(false);
+		this.descriptionChooseButton.setEnabled(false);
+		this.traceColoringMapInput.setEnabled(false);
+		this.traceColoringMapChooseButton.setEnabled(false);
+		this.maxTraceDurationMSInput.setEnabled(false);
 	}
 
 	@Override
@@ -270,6 +306,12 @@ public class AdditionalOptionsStep extends AbstractStep {
 		this.descriptionInput.setText(properties.getProperty(PROPERTY_KEY_DESCRIPTION_INPUT));
 		this.traceColoringMapInput.setText(properties.getProperty(PROPERTY_KEY_TRACE_COLORING_MAP_INPUT));
 		this.maxTraceDurationMSInput.setValue(Integer.parseInt(properties.getProperty(PROPERTY_KEY_MAX_TRACE_DURATION_INPUT)));
+
+		this.descriptionInput.setEnabled(this.description.isSelected());
+		this.descriptionChooseButton.setEnabled(this.description.isSelected());
+		this.traceColoringMapInput.setEnabled(this.traceColoringMap.isSelected());
+		this.traceColoringMapChooseButton.setEnabled(this.traceColoringMap.isSelected());
+		this.maxTraceDurationMSInput.setEnabled(this.maxTraceDurationMS.isSelected());
 	}
 
 	@Override
