@@ -1,10 +1,262 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Kieker" default="build-all" basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
-	<echo>Java Version: ${ant.java.version}</echo> 
-	<property file="build-config/build.properties" />
-	<import file="build-config/init-and-clean.xml"/>
-	<import file="build-config/compile-and-build.xml"/>
-	<import file="build-config/test.xml"/>
-	<import file="build-config/dist-and-deploy.xml"/>
-	<import file="build-config/quality.xml"/>
+<project name="Kieker" default="jar" basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+
+	<echo>Java Version: ${java.version}</echo> 
+	
+	<property file="build.properties" />
+
+	<path id="libraries">
+		<fileset dir="${lib.dir}">
+			<include name="**/*.jar" />
+			<exclude name="derby*.jar" />
+			<exclude name="**/MooBench/**" />
+		</fileset>
+	</path>
+	
+	<target name="jar" depends="-jar-main, -jar-emf, -jar-aspectj">
+	</target>
+	
+	<target name="test" depends="-compile-tests">
+		<path id="build">
+			<pathelement location="${build.dir}/" />
+			<fileset dir="${lib.dir}">
+				<include name="**/*.jar" />
+				<exclude name="**/MooBench/**" />
+			</fileset>
+		</path>
+	
+		<taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask" />
+		<junit fork="no" printsummary="yes">
+			<!-- If you want to execute R-related tests set this to true, otherwise to false -->
+			<sysproperty key="TestKiekerRTests" value="false" />
+			
+			<classpath refid="build" />
+								
+			<formatter type="xml" />
+
+			<batchtest fork="true" todir="${tests.junit-results.dir}">
+				<fileset dir="${build.dir}/">
+					<include name="**/junit/**/*Test*.class" />
+					<exclude name="**/junit/**/Abstract*.class" />
+					<exclude name="**/*$*.class" />
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+	
+	<target name="quality" depends="findbugs, pmd, checkstyle, cpd">
+	</target>
+	
+	<target name="findbugs" depends="-compile-tests">
+		<taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" classpath="${lib.fb.dir}/lib/findbugs-ant.jar" />
+		<findbugs home="${lib.fb.dir}" reportLevel="low" effort="max" maxRank="20" excludeFilter="${lib.fb.dir}/fb-filter.xml" output="xml" outputFile="${tmp.dir}/kieker-fb.xml">
+			<auxClasspath refid="libraries"/>
+			
+			<sourcePath path="${src.dir}" />
+			<sourcePath path="${test.dir}" />
+			
+			<class location="${build.dir}" />
+		</findbugs>
+		<echo message="PMD report written to '${tmp.dir}/kieker-fb.xml'" />
+	</target>
+	
+	<target name="pmd" depends="-compile-tests">
+		<path id="pmd.libs">
+			<fileset dir="${lib.pmd.dir}/lib">
+				<include name="*.jar" />
+			</fileset>
+		</path>
+		<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="pmd.libs" />
+		<pmd shortFilenames="true" rulesetfiles="${lib.pmd.dir}/pmdrules.xml">
+			<sourcelanguage name="java" version="1.6" />
+			<formatter type="xml" toFile="${tmp.dir}/pmd_report.xml" />
+			<fileset dir="${src.dir}" includes="**/*.java" />
+			<fileset dir="${test.dir}" includes="**/*.java" />
+		</pmd>
+		<echo message="PMD report written to '${tmp.dir}/pmd_report.xml'" />
+	</target>
+	
+	<target name="checkstyle" depends="-compile-tests">
+	</target>
+	
+	<target name="cpd" depends="-compile-tests">
+	</target>
+	
+	<target name="compile" depends="-compile-tools">
+	</target>
+	
+	<target name="javadoc" depends="compile">
+		<path id="javadoc-sourcepath">
+			<dirset dir=".">
+				<include name="${src.common.dir}" />
+				<include name="${src.analysis.dir}" />
+				<include name="${src.gen.analysis.dir}" />
+				<include name="${src.gen.common.dir}" />
+				<include name="${src.monitoring.dir}" />
+				<include name="${src.tools.dir}" />
+			</dirset>
+		</path>
+		<path id="build">
+			<pathelement location="${build.dir}/" />
+			<path refid="libraries" />
+		</path>
+		<javadoc stylesheetfile="${build.resources.dir}/javadoc.css" sourcepathref="javadoc-sourcepath" destdir="${build.api.dir}" packagenames="kieker.*" access="public" author="true" version="false" failonerror="true" use="true" doctitle="Kieker Monitoring and Analysis Framework, Vers. ${kieker.version}&lt;br/&gt;API Documentation" header="Kieker ${kieker.version}" footer="Kieker ${kieker.version}" bottom="Copyright ${year} ${copyright}, &lt;a href=&quot;http://kieker-monitoring.net&quot;&gt;http://kieker-monitoring.net&lt;/&gt;">
+			<classpath refid="build" />
+			<link href="http://docs.oracle.com/javase/6/docs/api/" />
+			<tag name="generated" />
+			<tag name="ordered" />
+			<tag name="model" />
+		</javadoc>
+		<copy file="${build.resources.dir}/kieker-javadoc-header.png" todir="build/javadoc/resources"/>
+	</target>
+	
+	<target name="archive" depends="jar, test, quality, javadoc, userguide, -examples">
+	</target>
+	
+	<target name="release" depends="archive">
+	</target>
+
+	<target name="userguide" depends="-init">
+	</target>
+	
+	<target name="-examples" depends="jar">
+	</target>
+	
+	<target name="-jar-main" depends="compile">
+		<jar destfile="${dist.dir}/${dist.kieker.main.jar}">
+			<fileset dir="${build.dir}" />
+			<fileset dir="." includes="${license.file}" />
+			<manifest>
+				<section name="kieker">
+					<attribute name="Specification-Title" value="${kieker.name}" />
+					<attribute name="Specification-Version" value="${kieker.version}" />
+					<attribute name="Specification-Vendor" value="${copyright}" />
+					<attribute name="Implementation-Title" value="${kieker.name}" />
+					<attribute name="Implementation-Version" value="${kieker.version} (${TODAY})" />
+					<attribute name="Implementation-Vendor" value="${copyright}" />
+				</section>
+			</manifest>
+		</jar>
+	</target>
+	
+	<target name="-jar-emf" depends="compile">
+		<fileset dir="${lib.dir}" id="org.eclipse.emf.common-jar-set">
+			<include name="org.eclipse.emf.common_*.jar" />
+		</fileset>
+		<pathconvert property="org.eclipse.emf.common-jar" refid="org.eclipse.emf.common-jar-set" />
+		<fileset dir="${lib.dir}" id="org.eclipse.emf.ecore.xmi-jar-set">
+			<include name="org.eclipse.emf.ecore.xmi_*.jar" />
+		</fileset>
+		<pathconvert property="org.eclipse.emf.ecore.xmi-jar" refid="org.eclipse.emf.ecore.xmi-jar-set" />
+		<fileset dir="${lib.dir}" id="org.eclipse.emf.ecore-jar-set">
+			<include name="org.eclipse.emf.ecore_*.jar" />
+		</fileset>
+		<pathconvert property="org.eclipse.emf.ecore-jar" refid="org.eclipse.emf.ecore-jar-set" />
+		<jar destfile="${dist.dir}/${dist.kieker.emf.jar}" duplicate="fail" filesetmanifest="skip">
+			<manifest> <!-- would be better to take it from the jar, but somehow doesn't work -->
+				<section name="kieker">
+					<attribute name="Specification-Title" value="${kieker.name}" />
+					<attribute name="Specification-Version" value="${kieker.version}" />
+					<attribute name="Specification-Vendor" value="${copyright}" />
+					<attribute name="Implementation-Title" value="${kieker.name}" />
+					<attribute name="Implementation-Version" value="${kieker.version} (${TODAY})" />
+					<attribute name="Implementation-Vendor" value="${copyright}" />
+				</section>
+			</manifest>
+			<zipfileset src="${dist.dir}/${dist.kieker.main.jar}" />
+			<zipfileset src="${org.eclipse.emf.common-jar}">
+				<exclude name="META-INF/*.RSA" />
+				<exclude name="META-INF/*.SF" />
+				<exclude name="META-INF/eclipse.inf" />
+				<exclude name="plugin.*" />
+				<exclude name="about.*" />
+				<exclude name="modeling32.png" />
+			</zipfileset>
+			<zipfileset src="${org.eclipse.emf.ecore.xmi-jar}">
+				<exclude name="META-INF/*.RSA" />
+				<exclude name="META-INF/*.SF" />
+				<exclude name="META-INF/eclipse.inf" />
+				<exclude name="plugin.*" />
+				<exclude name="about.*" />
+				<exclude name="modeling32.png" />
+			</zipfileset>
+			<zipfileset src="${org.eclipse.emf.ecore-jar}">
+				<exclude name="META-INF/*.RSA" />
+				<exclude name="META-INF/*.SF" />
+				<exclude name="META-INF/eclipse.inf" />
+				<exclude name="plugin.*" />
+				<exclude name="about.*" />
+				<exclude name="modeling32.png" />
+			</zipfileset>
+			<zipfileset src="${org.eclipse.emf.common-jar}" fullpath="org.eclipse.emf.common-about.html" includes="about.html" />
+			<zipfileset src="${org.eclipse.emf.ecore.xmi-jar}" fullpath="org.eclipse.emf.ecore.xmi-about.html" includes="about.html" />
+			<zipfileset src="${org.eclipse.emf.ecore-jar}" fullpath="org.eclipse.emf.ecore-about.html" includes="about.html" />
+			<fileset dir="${lib.dir}" includes="org.eclipse.emf.*.LICENSE" />
+		</jar>
+	</target>
+	
+	<target name="-jar-aspectj" depends="-jar-main">
+		<fileset dir="${lib.dir}" id="aspectjweaver-jar-set">
+			<include name="aspectjweaver-*.jar" />
+		</fileset>
+		<pathconvert property="aspectjweaver-jar" refid="aspectjweaver-jar-set" />
+		
+		<jar destfile="${dist.dir}/${dist.kieker.aspectj.jar}" duplicate="fail" filesetmanifest="merge">
+			<zipfileset src="${dist.dir}/${dist.kieker.main.jar}" />
+			<zipfileset src="${aspectjweaver-jar}" />
+			<fileset dir="${lib.dir}" includes="aspectjweaver-*.LICENSE" />
+			<manifest>
+				<attribute name="Premain-Class" value="kieker.monitoring.probe.aspectj.AspectJLoader" />
+				<attribute name="Can-Redefine-Classes" value="true" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="-compile-common" depends="-init">
+		<javac destDir="${build.dir}" source="${sourcecode.version}" target="${sourcecode.version}" srcdir="${src.common.dir}:${src.gen.common.dir}" classpathref="libraries" debug="true" includeAntRuntime="false">
+			<compilerarg value="-Xlint:all" />
+		</javac>
+	</target>
+	
+	<target name="-compile-analysis" depends="-init, -compile-common">
+		<javac destDir="${build.dir}" source="${sourcecode.version}" target="${sourcecode.version}" srcdir="${src.analysis.dir}:${src.gen.analysis.dir}" classpathref="libraries" debug="true" includeAntRuntime="false">
+			<compilerarg value="-Xlint:all" />
+		</javac>
+	</target>
+	
+	<target name="-compile-monitoring" depends="-init, -compile-common">
+		<javac destDir="${build.dir}" source="${sourcecode.version}" target="${sourcecode.version}" srcdir="${src.monitoring.dir}" classpathref="libraries" debug="true" includeAntRuntime="false">
+			<compilerarg value="-Xlint:all" />
+		</javac>
+	</target>
+	
+	<target name="-compile-tools" depends="-init, -compile-analysis, -compile-monitoring">
+		<javac destDir="${build.dir}" source="${sourcecode.version}" target="${sourcecode.version}" srcdir="${src.tools.dir}" classpathref="libraries" debug="true" includeAntRuntime="false">
+			<compilerarg value="-Xlint:all" />
+		</javac> 
+	</target>
+	
+	<target name="-compile-tests" depends = "-init, -compile-tools">
+		<javac destDir="${build.dir}" source="${sourcecode.version}" target="${sourcecode.version}" srcdir="${test.dir}:${test.gen.dir}" classpathref="libraries" debug="true" includeAntRuntime="false">
+			<compilerarg value="-Xlint:all" />
+		</javac>
+	</target>
+	
+	<target name="-init" depends="clean">
+		<mkdir dir="${tmp.dir}" />
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${tests.junit-results.dir}" />
+		<mkdir dir="${build.api.dir}" />
+		
+		<tstamp />
+	</target>
+	
+	<target name="clean">
+		<delete dir="${tmp.dir}" includeemptydirs="true" />
+		<delete dir="${build.dir}" includeemptydirs="true" />
+		<delete dir="${dist.dir}" includeemptydirs="true" />
+		<delete dir="${tests.junit-results.dir}" includeemptydirs="true" />
+		<delete dir="${build.api.dir}" />
+	</target>
+	
 </project>
