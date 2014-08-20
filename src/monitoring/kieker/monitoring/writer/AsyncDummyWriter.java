@@ -38,6 +38,7 @@ public class AsyncDummyWriter extends AbstractAsyncWriter {
 	@Override
 	protected void init() throws Exception {
 		this.addWorker(new AsyncDummyWriterThread(this.monitoringController, this.blockingQueue));
+		this.addWorker(new AsyncDummyWriterThread(this.monitoringController, this.prioritizedBlockingQueue));
 	}
 }
 
