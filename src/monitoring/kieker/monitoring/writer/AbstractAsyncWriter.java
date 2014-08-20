@@ -28,7 +28,6 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.misc.RegistryRecord;
 
 /**
  * @author Jan Waller
@@ -51,7 +50,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	// internal variables
 	/** The queue containing the records to be written. */
 	protected final BlockingQueue<IMonitoringRecord> blockingQueue;
-	/** The queue containing prioritized records (mostly {@link RegistryRecord}) to be written. */
+	/** The queue containing prioritized records (mostly {@link kieker.common.record.misc.RegistryRecord}) to be written. */
 	protected final BlockingQueue<IMonitoringRecord> prioritizedBlockingQueue;
 	private final List<AbstractAsyncThread> workers = new CopyOnWriteArrayList<AbstractAsyncThread>();
 	private final int queueFullBehavior;
