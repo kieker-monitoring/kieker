@@ -64,10 +64,10 @@
 		<mkdir dir="${tests.junit-results.dir}" />
 
 		<!-- Make sure that no other rserve instance is running -->
-		<antcall target="-stop-rserve.tools"></antcall>
+		<!-- <antcall target="-stop-rserve.tools"></antcall> -->
 		
 		<!-- Start fresh rserve instance -->
-		<antcall target="-start-rserve.tools"></antcall>
+		<!-- <antcall target="-start-rserve.tools"></antcall> -->
 		
 		<junit fork="no" printsummary="yes">
 			
@@ -86,9 +86,9 @@
 				</fileset>
 			</batchtest>
 		</junit>
-		<antcall target="-stop-rserve.tools"></antcall>
+		<!-- <antcall target="-stop-rserve.tools"></antcall> -->
 
-		<antcall target="-test.junit.report" />
+		<!-- <antcall target="-test.junit.report" /> -->
 	</target>
 
 	<target name="-test.junit.report" depends="" description="Creates the report for the JUnit tests">
