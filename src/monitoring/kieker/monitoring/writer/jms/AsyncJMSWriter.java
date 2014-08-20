@@ -78,6 +78,8 @@ public final class AsyncJMSWriter extends AbstractAsyncWriter {
 	protected void init() throws Exception {
 		this.addWorker(new JMSWriterThread(this.monitoringController, this.blockingQueue, this.configContextFactoryType,
 				this.configProviderUrl, this.configFactoryLookupName, this.configTopic, this.configMessageTimeToLive));
+		this.addWorker(new JMSWriterThread(this.monitoringController, this.prioritizedBlockingQueue, this.configContextFactoryType,
+				this.configProviderUrl, this.configFactoryLookupName, this.configTopic, this.configMessageTimeToLive));
 	}
 }
 

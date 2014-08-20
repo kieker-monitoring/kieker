@@ -122,6 +122,8 @@ public abstract class AbstractAsyncFSWriter extends AbstractAsyncWriter {
 		// Create writer thread
 		this.addWorker(this.initWorker(super.monitoringController, this.blockingQueue, mappingFileWriter, path, this.configMaxEntriesInFile, this.configMaxlogSize,
 				this.configMaxLogFiles));
+		this.addWorker(this.initWorker(super.monitoringController, this.prioritizedBlockingQueue, mappingFileWriter, path, this.configMaxEntriesInFile,
+				this.configMaxlogSize, this.configMaxLogFiles));
 	}
 
 	protected abstract AbstractFsWriterThread initWorker(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,

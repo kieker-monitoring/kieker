@@ -99,6 +99,8 @@ public final class AsyncDbWriter extends AbstractAsyncWriter {
 			for (int i = 0; i < this.connections; i++) {
 				this.addWorker(new DbWriterThread(super.monitoringController, super.blockingQueue, this.connectionString, this.tablePrefix, tableCounter, recordId,
 						this.overwrite));
+				this.addWorker(new DbWriterThread(super.monitoringController, super.prioritizedBlockingQueue, this.connectionString, this.tablePrefix, tableCounter,
+						recordId, this.overwrite));
 			}
 		} catch (final SQLException ex) {
 			throw new Exception("SQLException with SQLState: '" + ex.getSQLState() + "' and VendorError: '" + ex.getErrorCode() + "'", ex);

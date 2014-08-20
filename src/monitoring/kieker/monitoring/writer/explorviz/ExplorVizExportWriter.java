@@ -67,6 +67,8 @@ public class ExplorVizExportWriter extends AbstractAsyncWriter {
 	@Override
 	protected void init() throws Exception {
 		this.addWorker(new ExplorVizExportWriterThread(this.monitoringController, this.blockingQueue, this.hostname, this.port, this.bufferSize, this.flush));
+		this.addWorker(new ExplorVizExportWriterThread(this.monitoringController, this.prioritizedBlockingQueue, this.hostname, this.port, this.bufferSize,
+				this.flush));
 	}
 }
 
