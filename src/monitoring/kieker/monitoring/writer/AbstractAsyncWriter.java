@@ -89,7 +89,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 		final Configuration configuration = new Configuration(super.getDefaultConfiguration());
 		final String prefix = this.getClass().getName() + "."; // can't use this.prefix, maybe uninitialized
 		configuration.setProperty(prefix + CONFIG_QUEUESIZE, "10000");
-		configuration.setProperty(prefix + CONFIG_PRIORITIZED_QUEUESIZE, "1000");
+		configuration.setProperty(prefix + CONFIG_PRIORITIZED_QUEUESIZE, "100");
 		configuration.setProperty(prefix + CONFIG_BEHAVIOR, "0");
 		configuration.setProperty(prefix + CONFIG_SHUTDOWNDELAY, "-1");
 		return configuration;
@@ -141,11 +141,6 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	 */
 	@Override
 	public final boolean newMonitoringRecord(final IMonitoringRecord monitoringRecord) {
-		// RegistryRecords must always be placed in the queue
-		if (monitoringRecord instanceof RegistryRecord) {
-			return this.newMonitoringRecordNonBlocking(monitoringRecord);
-		}
-
 		try {
 			switch (this.queueFullBehavior) {
 			case 1: // blocks when queue full
