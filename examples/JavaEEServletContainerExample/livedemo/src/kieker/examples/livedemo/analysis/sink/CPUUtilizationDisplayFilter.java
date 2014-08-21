@@ -93,7 +93,7 @@ public class CPUUtilizationDisplayFilter extends AbstractFilterPlugin {
 		return this.models;
 	}
 
-	@InputPort(name = AbstractNonAggregatingDisplayFilter.INPUT_PORT_NAME_RECORDS, eventTypes = { IMonitoringRecord.class })
+	@InputPort(name = CPUUtilizationDisplayFilter.INPUT_PORT_NAME_RECORDS, eventTypes = { CPUUtilizationRecord.class })
 	public synchronized void inputRecords(final CPUUtilizationRecord record) {
 		final Date date = new Date(TimeUnit.MILLISECONDS.convert(record.getLoggingTimestamp(), this.timeunit));
 		final String minutesAndSeconds = date.toString().substring(14, 19);
@@ -101,7 +101,7 @@ public class CPUUtilizationDisplayFilter extends AbstractFilterPlugin {
 		this.fillChartModelWithRecordData(record, minutesAndSeconds, this.numberOfEntries);
 	}
 
-	private void fillChartModelWithRecordData(final CPUUtilizationRecord record, final String minutesAndSeconds, final int numberOfEntries2) {
+	private void fillChartModelWithRecordData(final CPUUtilizationRecord record, final String minutesAndSeconds, final int numberOfEntries) {
 		final String id = record.getHostname() + " - " + record.getCpuID();
 		if (this.ids.contains(id)) {
 			for (final Model<CartesianChartModel> model : this.models) {
