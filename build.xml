@@ -76,10 +76,21 @@
 		<echo message="PMD report written to '${tmp.dir}/pmd_report.xml'" />
 	</target>
 	
-	<target name="checkstyle" depends="-compile-tests">
+	<target name="checkstyle" depends="-compile-tests" description="Uses Checkstyle to find potential problems">
 	</target>
 	
 	<target name="cpd" depends="-compile-tests">
+		<path id="pmd.libs">
+			<fileset dir="${lib.pmd.dir}/lib">
+				<include name="*.jar" />
+			</fileset>
+		</path>
+		<taskdef name="cpd" classname="net.sourceforge.pmd.cpd.CPDTask" classpathref="pmd.libs" />
+		<cpd minimumTokenCount="100" format="xml" outputFile="${tmp.dir}/cpd_report.xml">
+			<fileset dir="${src.dir}" includes="**/*.java" />
+			<fileset dir="${test.dir}" includes="**/*.java" />
+		</cpd>
+		<echo message="CPD report written to '${tmp.dir}/cpd_report.xml'" />
 	</target>
 	
 	<target name="compile" depends="-compile-tools">
@@ -117,6 +128,37 @@
 	</target>
 
 	<target name="userguide" depends="-init">
+            <replaceregexp file="${src.userguide.dir}/Macros.tex" match="newcommand\{\\version\}\{.*\}" replace="newcommand\{\\\\\\version\}\{${kieker.version}\}" flags="g" />
+            <replaceregexp file="${src.userguide.dir}/Macros.tex" match="newcommand\{\\mainJar\}\{.*\}" replace="newcommand\{\\\\\\mainJar\}\{${dist.kieker.main.jar}\}" flags="g" />
+            <replaceregexp file="${src.userguide.dir}/Macros.tex" match="newcommand\{\\mainJarEMF\}\{.*\}" replace="newcommand\{\\\\\\mainJarEMF\}\{${kieker.packagenamebase}-${kieker.version}\\\\\\_emf.jar\}" flags="g" />
+            <replaceregexp file="${src.userguide.dir}/Macros.tex" match="newcommand\{\\mainJarWeaver\}\{.*\}" replace="newcommand\{\\\\\\mainJarWeaver\}\{${kieker.packagenamebase}-${kieker.version}\\\\\\_aspectj.jar\}" flags="g" />
+            <exec executable="pdflatex" dir="${src.userguide.dir}" failonerror="false">
+                    <arg value="kieker-userguide" />
+            </exec>
+            <exec executable="bibtex" dir="${src.userguide.dir}" failonerror="false">
+                    <arg value="kieker-userguide" />
+            </exec>
+            <exec executable="pdflatex" dir="${src.userguide.dir}" failonerror="false">
+                    <arg value="kieker-userguide" />
+            </exec>
+            <exec executable="pdflatex" dir="${src.userguide.dir}" failonerror="true">
+                    <arg value="kieker-userguide" />
+            </exec>
+            <delete>
+                <fileset dir="${src.userguide.dir}" includes="*.aux"/>
+                <fileset dir="${src.userguide.dir}" includes="*.bbl"/>
+                <fileset dir="${src.userguide.dir}" includes="*.blg"/>
+                <fileset dir="${src.userguide.dir}" includes="*.glo"/>
+                <fileset dir="${src.userguide.dir}" includes="*.idx"/>
+                <fileset dir="${src.userguide.dir}" includes="*.log"/>
+                <fileset dir="${src.userguide.dir}" includes="*.toc"/>
+                <fileset dir="${src.userguide.dir}" includes="*.snm"/>
+                <fileset dir="${src.userguide.dir}" includes="*.out"/>
+                <fileset dir="${src.userguide.dir}" includes="*.nav"/>
+                <fileset dir="${src.userguide.dir}" includes="*.bak"/>
+                <fileset dir="${src.userguide.dir}" includes="*.vrb"/>
+                <fileset dir="${src.userguide.dir}" includes="*.backup"/>
+            </delete>
 	</target>
 	
 	<target name="-examples" depends="jar">
