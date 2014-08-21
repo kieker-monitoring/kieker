@@ -51,7 +51,7 @@ import kieker.monitoring.core.signaturePattern.PatternEntry;
 import kieker.monitoring.core.signaturePattern.PatternParser;
 
 /**
- * @author Jan Waller, Bjoern Weissenfels
+ * @author Jan Waller, Bjoern Weissenfels, Nils Christian Ehmke
  * 
  * @since 1.6
  */
