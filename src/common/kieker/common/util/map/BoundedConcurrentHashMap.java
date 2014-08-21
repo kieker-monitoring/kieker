@@ -79,6 +79,12 @@ public class BoundedConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> {
 			}
 			elementCanBeAdded = true;
 			break;
+		case CLEAR_CACHE:
+			if (this.size() >= this.maxCacheSize) {
+				this.clear();
+			}
+			elementCanBeAdded = true;
+			break;
 		default:
 			// Ignored
 			elementCanBeAdded = true;
@@ -94,7 +100,7 @@ public class BoundedConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> {
 	 * @since 1.10
 	 */
 	public enum BoundedCacheBehaviour {
-		IGNORE_NEW_ENTRIES, REMOVE_RANDOM_ENTRY
+		IGNORE_NEW_ENTRIES, REMOVE_RANDOM_ENTRY, CLEAR_CACHE,
 	}
 
 }

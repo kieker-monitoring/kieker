@@ -59,4 +59,16 @@ public class BoundedConcurrentHashMapTest extends AbstractKiekerTest {
 		Assert.assertEquals("Bounded map contains wrong number of entries", 5, map.size());
 	}
 
+	@Test
+	public void testClearBehaviour() {
+		final BoundedConcurrentHashMap<Integer, Integer> map = new BoundedConcurrentHashMap<Integer, Integer>(BoundedCacheBehaviour.CLEAR_CACHE, 5);
+
+		for (int i = 0; i < 6; i++) {
+			map.put(i, i);
+		}
+
+		Assert.assertEquals("Bounded map contains wrong number of entries", 1, map.size());
+		Assert.assertTrue("Bounded map does not contain expected entry (5)", map.contains(5));
+	}
+
 }

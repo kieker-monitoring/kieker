@@ -85,11 +85,32 @@ public class ProbeController extends AbstractController implements IProbeControl
 			this.configFileReadIntervall = configuration.getIntProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL);
 			this.maxCacheSize = configuration.getIntProperty(ConfigurationFactory.ADAPTIVE_MONITORING_MAX_CACHE_SIZE);
 			this.boundedCacheBehaviour = configuration.getIntProperty(ConfigurationFactory.ADAPTIVE_MONITORING_BOUNDED_CACHE_BEHAVIOUR);
-			if (this.maxCacheSize > 0) {
+			if (this.maxCacheSize >= 0) {
 				// Bounded cache
-				final BoundedConcurrentHashMap.BoundedCacheBehaviour behaviour =
-						(this.boundedCacheBehaviour == 0) ? BoundedCacheBehaviour.IGNORE_NEW_ENTRIES : BoundedCacheBehaviour.REMOVE_RANDOM_ENTRY; // NOCS
-				this.signatureCache = new BoundedConcurrentHashMap<String, Boolean>(behaviour, this.maxCacheSize);
+				final BoundedConcurrentHashMap.BoundedCacheBehaviour behaviour;
+				switch (this.boundedCacheBehaviour) {
+				case 0:
+					behaviour = BoundedCacheBehaviour.IGNORE_NEW_ENTRIES;
+					break;
+				case 1:
+					behaviour = BoundedCacheBehaviour.REMOVE_RANDOM_ENTRY;
+					break;
+				case 2:
+					behaviour = BoundedCacheBehaviour.CLEAR_CACHE;
+					break;
+				default:
+					LOG.warn("Unexpected value for property '" + ConfigurationFactory.ADAPTIVE_MONITORING_BOUNDED_CACHE_BEHAVIOUR + "'. Using default value 0.");
+					behaviour = BoundedCacheBehaviour.IGNORE_NEW_ENTRIES;
+					break;
+				}
+				final int cacheSize;
+				if (this.maxCacheSize >= 1) {
+					cacheSize = this.maxCacheSize;
+				} else {
+					LOG.warn("Invalid value for property '" + ConfigurationFactory.ADAPTIVE_MONITORING_MAX_CACHE_SIZE + "'. Using default value 100.");
+					cacheSize = 100;
+				}
+				this.signatureCache = new BoundedConcurrentHashMap<String, Boolean>(behaviour, cacheSize);
 			} else {
 				// Unbounded cache
 				this.signatureCache = new ConcurrentHashMap<String, Boolean>();
@@ -146,6 +167,12 @@ public class ProbeController extends AbstractController implements IProbeControl
 			}
 			sb.append("\n\tUpdate pattern file with additional patterns: ");
 			sb.append(this.configFileUpdate);
+			sb.append("\n\tSignature cache: ");
+			if (this.maxCacheSize >= 0) {
+				sb.append("bounded");
+			} else {
+				sb.append("unbounded");
+			}
 		} else {
 			sb.append("disabled");
 		}
