@@ -297,6 +297,8 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 				case 3: // s
 					parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_S);
 					break;
+				default:
+					// default not required nevertheless added because of PMD
 				}
 			}
 		}
@@ -317,6 +319,8 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 				case 3: // s
 					parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_S);
 					break;
+				default:
+					// default not required nevertheless added because of PMD
 				}
 			}
 		}
@@ -341,6 +345,8 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 				case 3: // s
 					parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_S);
 					break;
+				default:
+					// default not required nevertheless added because of PMD
 				}
 			}
 		}
@@ -361,6 +367,8 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 				case 3: // s
 					parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_S);
 					break;
+				default:
+					// default not required nevertheless added because of PMD
 				}
 			}
 		}
@@ -415,8 +423,8 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 		this.deploymentComponentDependencyGraph.setSelected(Boolean.parseBoolean(properties.getProperty(PROPERTY_KEY_DEPLOYMENT_COMPONENT_DEPENDENCY_GRAPH)));
 		this.deploymentComponentDependencyGraphResponseTime.setSelected(Boolean.parseBoolean(properties
 				.getProperty(PROPERTY_KEY_DEPLOYMENT_COMPONENT_DEPENDENCY_GRAPH_RT)));
-		this.deploymentComponentDependencyGraphResponseTimeComboBox.setSelectedIndex((Integer.parseInt(properties
-				.getProperty(PROPERTY_KEY_DEPLOYMENT_COMPONENT_DEPENDENCY_GRAPH_RT_CB))));
+		this.deploymentComponentDependencyGraphResponseTimeComboBox.setSelectedIndex(Integer.parseInt(properties
+				.getProperty(PROPERTY_KEY_DEPLOYMENT_COMPONENT_DEPENDENCY_GRAPH_RT_CB)));
 		this.assemblyComponentDependencyGraph.setSelected(Boolean.parseBoolean(properties.getProperty(PROPERTY_KEY_ASSEMBLY_COMPONENT_DEPENDENCY_GRAPH)));
 		this.assemblyComponentDependencyGraphResponseTime.setSelected(Boolean.parseBoolean(properties
 				.getProperty(PROPERTY_KEY_ASSEMBLY_COMPONENT_DEPENDENCY_GRAPH_RT)));
