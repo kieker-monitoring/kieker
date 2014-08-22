@@ -43,7 +43,7 @@
 				<include name="${src.kieker.tools.dir}" />
 			</dirset>
 		</path>
-		<javadoc stylesheetfile="${build.config.dir}/javadoc-header/javadoc.css" sourcepathref="javadoc-sourcepath" destdir="${build.api.dir}" packagenames="kieker.*" access="public" author="true" version="false" failonerror="true" use="true" doctitle="Kieker Monitoring and Analysis Framework, Vers. ${kieker.version}&lt;br/&gt;API Documentation" header="Kieker ${kieker.version}" footer="Kieker ${kieker.version}" bottom="Copyright ${year} ${copyright}, &lt;a href=&quot;http://kieker-monitoring.net&quot;&gt;http://kieker-monitoring.net&lt;/&gt;">
+		<javadoc sourcepathref="javadoc-sourcepath" destdir="${build.api.dir}" packagenames="kieker.*" access="public" author="true" version="false" failonerror="true" use="true" doctitle="Kieker Monitoring and Analysis Framework, Vers. ${kieker.version}&lt;br/&gt;API Documentation" header="Kieker ${kieker.version}" footer="Kieker ${kieker.version}" bottom="Copyright ${year} ${copyright}, &lt;a href=&quot;http://kieker-monitoring.net&quot;&gt;http://kieker-monitoring.net&lt;/&gt;">
 			<classpath refid="kieker.common-compile-classpath" />
 			<classpath refid="kieker.analysis-compile-classpath" />
 			<classpath refid="kieker.monitoring-compile-classpath" />
@@ -54,7 +54,6 @@
 			<tag name="ordered" />
 			<tag name="model" />
 		</javadoc>
-		<copy file="${build.config.dir}/javadoc-header/kieker-javadoc-header.png" todir="${build.api.dir}/resources"/>
 	</target>
 
 	<target name="dist-kieker-sources" depends="-init" description="Packages the source archives (.zip|.tar.gz) for a release">
