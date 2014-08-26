@@ -39,9 +39,19 @@ public final class AnalysisStarter {
 		final Configuration fsReaderConfig = new Configuration();
 		fsReaderConfig.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, "testdata");
 		final FSReader fsReader = new FSReader(fsReaderConfig, analysisController);
+
 		final ExtractionFilter extractionFilter = new ExtractionFilter(new Configuration(), analysisController);
-		final TimeSeriesPointAggregatorFilter tsPointAggregatorFilter = new TimeSeriesPointAggregatorFilter(new Configuration(), analysisController);
-		final ForecastingFilter forecastingFilter = new ForecastingFilter(new Configuration(), analysisController);
+
+		final Configuration tsPointAggregatorConfig = new Configuration();
+		tsPointAggregatorConfig.setProperty(TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_SPAN, "1");
+		tsPointAggregatorConfig.setProperty(TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT, "NANOSECONDS");
+		tsPointAggregatorConfig.setProperty(TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_METHOD, "MEANJAVA");
+		final TimeSeriesPointAggregatorFilter tsPointAggregatorFilter = new TimeSeriesPointAggregatorFilter(tsPointAggregatorConfig, analysisController);
+
+		final Configuration forecastingConfig = new Configuration();
+		forecastingConfig.setProperty(ForecastingFilter.CONFIG_PROPERTY_NAME_FC_METHOD, "MEANJAVA");
+		final ForecastingFilter forecastingFilter = new ForecastingFilter(forecastingConfig, analysisController);
+
 		final UniteMeasurementPairFilter uniteMeasurementPairFilter = new UniteMeasurementPairFilter(new Configuration(), analysisController);
 		final AnomalyScoreCalculationFilter anomalyScoreCalcFilter = new AnomalyScoreCalculationFilter(new Configuration(), analysisController);
 		final AnomalyDetectionFilter anomalyDetectionFilter = new AnomalyDetectionFilter(new Configuration(), analysisController);
