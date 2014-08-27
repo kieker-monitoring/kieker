@@ -6,24 +6,21 @@ subgraph "cluster_component_2" {
  shape = "box";
  style = "filled";
  fillcolor = "white";
-"depNode_3" [label="getOffers()\nmin: 2029633ns, avg: 7146358ns, max: 378468467ns,
-total: 11684295790ns",shape="oval",style="filled",color="#000000",fillcolor="white"]
+"depNode_3" [label="getOffers()\nmin: 2029633ns, avg: 7146358ns, max: 378468467ns,\ntotal: 11684295790ns",shape="oval",style="filled",color="#000000",fillcolor="white"]
 }
 subgraph "cluster_component_1" {
  label = "<<assembly component>>\n@1:..Catalog";
  shape = "box";
  style = "filled";
  fillcolor = "white";
-"depNode_2" [label="getBook(..)\nmin: 2011586ns, avg: 3772326ns, max: 123431549ns,
-total: 12335505819ns",shape="oval",style="filled",color="#000000",fillcolor="white"]
+"depNode_2" [label="getBook(..)\nmin: 2011586ns, avg: 3772326ns, max: 123431549ns,\ntotal: 12335505819ns",shape="oval",style="filled",color="#000000",fillcolor="white"]
 }
 subgraph "cluster_component_3" {
  label = "<<assembly component>>\n@3:..Bookstore";
  shape = "box";
  style = "filled";
  fillcolor = "white";
-"depNode_1" [label="searchBook()\nmin: 4131472ns, avg: 22748177ns, max: 381493365ns,
-total: 37193268756ns",shape="oval",style="filled",color="#000000",fillcolor="white"]
+"depNode_1" [label="searchBook()\nmin: 4131472ns, avg: 22748177ns, max: 381493365ns,\ntotal: 37193268756ns",shape="oval",style="filled",color="#000000",fillcolor="white"]
 }
 depNode_0->depNode_1[label=1635, style="solid", arrowhead="open", color="#000000"]
 depNode_1->depNode_2[label=1635, style="solid", arrowhead="open", color="#000000"]

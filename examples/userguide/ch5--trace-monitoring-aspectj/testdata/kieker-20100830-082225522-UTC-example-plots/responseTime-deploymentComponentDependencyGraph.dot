@@ -6,20 +6,16 @@ subgraph "cluster_container2" {
  shape = "box";
  style = "filled";
  fillcolor = "white";
-"depNode_2" [label="<<deployment component>>\n@1:..Catalog\nmin: 2ms, avg: 4ms, max: 122ms,
-total: 4170ms",shape="box",style="filled",color="#000000",fillcolor="white"]
-"depNode_3" [label="<<deployment component>>\n@2:..CRM\nmin: 2ms, avg: 7ms, max: 378ms,
-total: 11323ms",shape="box",style="filled",color="#000000",fillcolor="white"]
-"depNode_4" [label="<<deployment component>>\n@3:..Bookstore\nmin: 4ms, avg: 22ms, max: 381ms,
-total: 36599ms",shape="box",style="filled",color="#000000",fillcolor="white"]
+"depNode_2" [label="<<deployment component>>\n@1:..Catalog\nmin: 2ms, avg: 4ms, max: 122ms,\ntotal: 4170ms",shape="box",style="filled",color="#000000",fillcolor="white"]
+"depNode_3" [label="<<deployment component>>\n@2:..CRM\nmin: 2ms, avg: 7ms, max: 378ms,\ntotal: 11323ms",shape="box",style="filled",color="#000000",fillcolor="white"]
+"depNode_4" [label="<<deployment component>>\n@3:..Bookstore\nmin: 4ms, avg: 22ms, max: 381ms,\ntotal: 36599ms",shape="box",style="filled",color="#000000",fillcolor="white"]
 }
 subgraph "cluster_container1" {
  label = "<<execution container>>\nSRV1";
  shape = "box";
  style = "filled";
  fillcolor = "white";
-"depNode_1" [label="<<deployment component>>\n@1:..Catalog\nmin: 2ms, avg: 3ms, max: 123ms,
-total: 7522ms",shape="box",style="filled",color="#000000",fillcolor="white"]
+"depNode_1" [label="<<deployment component>>\n@1:..Catalog\nmin: 2ms, avg: 3ms, max: 123ms,\ntotal: 7522ms",shape="box",style="filled",color="#000000",fillcolor="white"]
 }
 depNode_0->depNode_4[label=1635, style="solid", arrowhead="open", color="#000000"]
 depNode_3->depNode_2[label=573, style="solid", arrowhead="open", color="#000000"]
