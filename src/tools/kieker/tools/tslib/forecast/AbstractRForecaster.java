@@ -20,36 +20,53 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.rosuda.REngine.REXPLogical;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.tools.tslib.ForecastMethod;
 import kieker.tools.tslib.ITimeSeries;
 import kieker.tools.util.RBridgeControl;
 
 /**
  * Convenience class to implement an {@link IForecaster} with R.
- *
+ * 
  * @since 1.10
  * @author Andre van Hoorn, Nikolas Herbst, Andreas Eberlein, Tobias Rudolph
- *
+ * 
  */
 public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
+
+	private static final Log LOG = LogFactory.getLog(AbstractRForecaster.class);
+
 	private static final RBridgeControl RBRIDGE = RBridgeControl.getInstance();
 	private final String modelFunc;
 	private final String forecastFunc;
 	private final ForecastMethod strategy;
+	private static Object forecastPackageLoadResult;
+	private static boolean forecastPackageAvailable;
 
 	/**
 	 * Acquire an instance of the {@link RBridgeControl} once.
 	 */
 	static {
-		AbstractRForecaster.RBRIDGE.evalWithR("require(forecast)");
+		forecastPackageLoadResult = AbstractRForecaster.RBRIDGE.evalWithR("require(forecast)");
+		if (false == AbstractRForecaster.checkForecastModuleAvailableAndLoaded(forecastPackageLoadResult)) {
+			LOG.error("Could not load \"forecast\" package in R. Perhaps it is not installed in R?", new IllegalStateException(
+					"\"forecast\" package could not be loaded in R."));
+			forecastPackageAvailable = false;
+		}
+		else
+		{
+			forecastPackageAvailable = true;
+		}
 	}
 
 	/**
-	 *
+	 * 
 	 * @param historyTimeseries
 	 *            timeseries
-	 *
+	 * 
 	 * @param modelFunc
 	 *            modelFunction
 	 * @param forecastFunc
@@ -66,7 +83,7 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 	}
 
 	/**
-	 *
+	 * 
 	 * @param historyTimeseries
 	 *            timeseries
 	 * @param modelFunc
@@ -75,7 +92,7 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 	 *            forecastfunction
 	 * @param confidenceLevel
 	 *            value of confedenclevel
-	 *
+	 * 
 	 * @param strategy
 	 *            FC strategy
 	 */
@@ -87,6 +104,17 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 		this.strategy = strategy;
 	}
 
+	private static boolean checkForecastModuleAvailableAndLoaded(final Object forecastPackageLoadResult) {
+		if (forecastPackageLoadResult instanceof REXPLogical) {
+			final REXPLogical returnValue = (REXPLogical) forecastPackageLoadResult;
+			final boolean hasAttr = returnValue.hasAttribute("attr");
+			final boolean[] istrue = returnValue.isTRUE();
+
+			return !hasAttr && (istrue.length > 0) && istrue[0];
+		}
+		return false;
+	}
+
 	/**
 	 * @param numForecastSteps
 	 *            amount of to calculate FC steps
@@ -94,6 +122,10 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 	 */
 	@Override
 	public final IForecastResult forecast(final int numForecastSteps) {
+		if (!forecastPackageAvailable) {
+			throw new IllegalStateException("\"forecast\" package not available. See error log for details.");
+		}
+
 		final ITimeSeries<Double> history = this.getTsOriginal();
 
 		final String varNameValues = RBridgeControl.uniqueVarname();
@@ -223,20 +255,20 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 
 	/**
 	 * Returns additional parameters to be appended to the call of the R function {@link #getModelFuncName()}.
-	 *
+	 * 
 	 * @return the parameters or null if none
 	 */
 	protected abstract String[] getModelFuncParams();
 
 	/**
 	 * Returns additional parameters to be appended to the call of the R function {@link #getForecastFuncName()}.
-	 *
+	 * 
 	 * @return the parameters or null if none
 	 */
 	protected abstract String[] getForecastFuncParams();
 
 	/**
-	 *
+	 * 
 	 * @param allHistory
 	 *            List there null values should be deleted in this function
 	 * @return List/Array with no NullValues
