@@ -32,7 +32,7 @@ import kieker.tools.util.RBridgeControl;
  * Convenience class to implement an {@link IForecaster} with R.
  *
  * @since 1.10
- * @author Andre van Hoorn, Nikolas Herbst, Andreas Eberlein, Tobias Rudolph
+ * @author Andre van Hoorn, Nikolas Herbst, Andreas Eberlein, Tobias Rudolph, Thomas Düllmann
  *
  */
 public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
@@ -50,16 +50,8 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 	 * Acquire an instance of the {@link RBridgeControl} once.
 	 */
 	static {
-		forecastPackageLoadResult = AbstractRForecaster.RBRIDGE.evalWithR("require(forecast)");
-		if (false == AbstractRForecaster.checkForecastModuleAvailableAndLoaded(forecastPackageLoadResult)) {
-			LOG.error("Could not load \"forecast\" package in R. Perhaps it is not installed in R?", new IllegalStateException(
-					"\"forecast\" package could not be loaded in R."));
-			forecastPackageAvailable = false;
-		}
-		else
-		{
-			forecastPackageAvailable = true;
-		}
+		forecastPackageLoadResult = AbstractRForecaster.RBRIDGE.evalWithR("require(forecastzu)");
+		AbstractRForecaster.setForecastModuleAvailableAndLoadedFlag(forecastPackageLoadResult);
 	}
 
 	/**
@@ -80,6 +72,10 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 		this.modelFunc = modelFunc;
 		this.forecastFunc = forecastFunc;
 		this.strategy = strategy;
+
+		if (!forecastPackageAvailable) {
+			this.logForecastModuleNotAvailableOrLoaded();
+		}
 	}
 
 	/**
@@ -102,17 +98,29 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 		this.modelFunc = modelFunc;
 		this.forecastFunc = forecastFunc;
 		this.strategy = strategy;
+
+		if (!forecastPackageAvailable) {
+			this.logForecastModuleNotAvailableOrLoaded();
+		}
 	}
 
-	private static boolean checkForecastModuleAvailableAndLoaded(final Object forecastPackageLoadResult) {
+	private static void setForecastModuleAvailableAndLoadedFlag(final Object forecastPackageLoadResult) {
 		if (forecastPackageLoadResult instanceof REXPLogical) {
 			final REXPLogical returnValue = (REXPLogical) forecastPackageLoadResult;
 			final boolean hasAttr = returnValue.hasAttribute("attr");
 			final boolean[] istrue = returnValue.isTRUE();
 
-			return !hasAttr && (istrue.length > 0) && istrue[0];
+			if (!hasAttr && (istrue.length > 0) && istrue[0]) {
+				forecastPackageAvailable = false;
+				return;
+			}
 		}
-		return false;
+		forecastPackageAvailable = true;
+	}
+
+	private void logForecastModuleNotAvailableOrLoaded() {
+		final IllegalStateException ise = new IllegalStateException("\"forecast\" package could not be loaded in R.");
+		LOG.error("Could not load \"forecast\" package in R. Perhaps it is not installed in R?", ise);
 	}
 
 	/**
@@ -122,10 +130,6 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 	 */
 	@Override
 	public final IForecastResult forecast(final int numForecastSteps) {
-		if (!forecastPackageAvailable) {
-			throw new IllegalStateException("\"forecast\" package not available. See error log for details.");
-		}
-
 		final ITimeSeries<Double> history = this.getTsOriginal();
 
 		final String varNameValues = RBridgeControl.uniqueVarname();
