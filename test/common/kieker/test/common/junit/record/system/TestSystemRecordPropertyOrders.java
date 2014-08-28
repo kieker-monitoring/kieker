@@ -30,6 +30,8 @@ import kieker.common.util.registry.Registry;
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
+ * Tests for System.irl records.
+ * 
  * @author Reiner Jung
  * 
  * @since 1.10
@@ -62,10 +64,16 @@ public class TestSystemRecordPropertyOrders extends AbstractKiekerTest {
 	private static final String PROPERTY_RESOURCE_NAME = "<resource name>";
 	private static final double PROPERTY_UTILIZATION = 8.0;
 
+	/**
+	 * Empty constructor.
+	 */
 	public TestSystemRecordPropertyOrders() {}
 
+	/**
+	 * Test property order processing of CPUUtilizationRecord constructors.
+	 */
 	@Test
-	public void testCPUUtilizationRecordPropertyOrder() {
+	public void testCPUUtilizationRecordPropertyOrder() { // NOPMD
 		this.assertCPUUtilizationRecord(new CPUUtilizationRecord(PROPERTY_TIMESTAMP, PROPERTY_HOSTNAME, PROPERTY_CPU_ID, PROPERTY_USER,
 				PROPERTY_SYSTEM, PROPERTY_WAIT, PROPERTY_NICE, PROPERTY_IRQ, PROPERTY_TOTAL_UTILIZATION, PROPERTY_IDLE));
 
@@ -77,8 +85,11 @@ public class TestSystemRecordPropertyOrders extends AbstractKiekerTest {
 		this.assertCPUUtilizationRecord(new CPUUtilizationRecord(buffer, this.makeStringRegistry()));
 	}
 
+	/**
+	 * Test property order processing of MemSwapUsageRecord constructors.
+	 */
 	@Test
-	public void testMemSwapUsageRecordPropertyOrder() {
+	public void testMemSwapUsageRecordPropertyOrder() { // NOPMD
 		this.assertMemSwapUsageRecord(new MemSwapUsageRecord(PROPERTY_TIMESTAMP, PROPERTY_HOSTNAME,
 				PROPERTY_MEM_TOTAL, PROPERTY_MEM_USED, PROPERTY_MEM_FREE,
 				PROPERTY_SWAP_TOTAL, PROPERTY_SWAP_USED, PROPERTY_SWAP_FREE));
@@ -91,8 +102,11 @@ public class TestSystemRecordPropertyOrders extends AbstractKiekerTest {
 		this.assertMemSwapUsageRecord(new MemSwapUsageRecord(buffer, this.makeStringRegistry()));
 	}
 
+	/**
+	 * Test property order processing of ResourceUtilizationRecord constructors.
+	 */
 	@Test
-	public void testResourceUtilizationRecordPropertyOrder() {
+	public void testResourceUtilizationRecordPropertyOrder() { // NOPMD
 		this.assertResourceUtilizationRecord(new ResourceUtilizationRecord(PROPERTY_TIMESTAMP, PROPERTY_HOSTNAME,
 				PROPERTY_RESOURCE_NAME, PROPERTY_UTILIZATION));
 
@@ -194,7 +208,7 @@ public class TestSystemRecordPropertyOrders extends AbstractKiekerTest {
 			} else if (object instanceof Double) {
 				buffer.putDouble((Double) object);
 			} else if (object instanceof Boolean) {
-				buffer.put((byte) ((Boolean) object ? 1 : 0));
+				buffer.put((byte) ((Boolean) object ? 1 : 0)); // NOCS
 			} else if (object instanceof Character) {
 				buffer.putChar((Character) object);
 			} else if (object instanceof String) {
