@@ -104,14 +104,14 @@
 	
 	<target name="-start-rserve.tools" depends="">
 		<echo message="Trying to start Rserve (this might fail on systems that are not able to execute bash scripts or do not have R/Rserve installed" />
-		<exec executable="${tests.rserve-control-script.sh}" spawn="true" failonerror="false">
+		<exec executable="${tests.rserve-control-script.sh}" spawn="true" failonerror="false" failifexecutionfails="false">
 			<arg value="start" />
 		</exec>
 	</target>
 
 	<target name="-stop-rserve.tools" depends="">
 		<echo message="Trying to stop Rserve (Trying to start Rserve (this might fail on systems that are not able to execute bash scripts or do not have R/Rserve installed)" />
-		<exec executable="${tests.rserve-control-script.sh}" failonerror="false">
+		<exec executable="${tests.rserve-control-script.sh}" failonerror="false" failifexecutionfails="false">
 			<arg value="stop" />
 		</exec>
 	</target>
