@@ -18,6 +18,8 @@ package kieker.tools.traceAnalysis.gui;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Collection;
 import java.util.Properties;
 
@@ -245,15 +247,47 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 
 		this.deploymentComponentDependencyGraph.addItemListener(new SelectionBindingItemListener(this.deploymentComponentDependencyGraphResponseTime, true));
 		this.deploymentComponentDependencyGraphResponseTime.addItemListener(new SelectionBindingItemListener(this.deploymentComponentDependencyGraph, false));
+		this.deploymentComponentDependencyGraphResponseTime.addActionListener(new ActionListener() {
+			@Override
+			@SuppressWarnings("synthetic-access")
+			public void actionPerformed(final ActionEvent e) {
+				PlotStep.this.deploymentComponentDependencyGraphResponseTimeComboBox.setEnabled(PlotStep.this.deploymentComponentDependencyGraphResponseTime
+						.isSelected());
+			}
+		});
 
 		this.assemblyComponentDependencyGraph.addItemListener(new SelectionBindingItemListener(this.assemblyComponentDependencyGraphResponseTime, true));
 		this.assemblyComponentDependencyGraphResponseTime.addItemListener(new SelectionBindingItemListener(this.assemblyComponentDependencyGraph, false));
+		this.assemblyComponentDependencyGraphResponseTime.addActionListener(new ActionListener() {
+			@Override
+			@SuppressWarnings("synthetic-access")
+			public void actionPerformed(final ActionEvent e) {
+				PlotStep.this.assemblyComponentDependencyGraphResponseTimeComboBox.setEnabled(PlotStep.this.assemblyComponentDependencyGraphResponseTime
+						.isSelected());
+			}
+		});
 
 		this.deploymentOperationDependencyGraph.addItemListener(new SelectionBindingItemListener(this.deploymentOperationDependencyGraphResponseTime, true));
 		this.deploymentOperationDependencyGraphResponseTime.addItemListener(new SelectionBindingItemListener(this.deploymentOperationDependencyGraph, false));
+		this.deploymentOperationDependencyGraphResponseTime.addActionListener(new ActionListener() {
+			@Override
+			@SuppressWarnings("synthetic-access")
+			public void actionPerformed(final ActionEvent e) {
+				PlotStep.this.deploymentOperationDependencyGraphResponseTimeComboBox.setEnabled(PlotStep.this.deploymentOperationDependencyGraphResponseTime
+						.isSelected());
+			}
+		});
 
 		this.assemblyOperationDependencyGraph.addItemListener(new SelectionBindingItemListener(this.assemblyOperationDependencyGraphResponseTime, true));
 		this.assemblyOperationDependencyGraphResponseTime.addItemListener(new SelectionBindingItemListener(this.assemblyOperationDependencyGraph, false));
+		this.assemblyOperationDependencyGraphResponseTime.addActionListener(new ActionListener() {
+			@Override
+			@SuppressWarnings("synthetic-access")
+			public void actionPerformed(final ActionEvent e) {
+				PlotStep.this.assemblyOperationDependencyGraphResponseTimeComboBox.setEnabled(PlotStep.this.assemblyOperationDependencyGraphResponseTime
+						.isSelected());
+			}
+		});
 	}
 
 	@Override
@@ -444,21 +478,30 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 		this.aggregatedDeploymentCallTree.setSelected(Boolean.parseBoolean(properties.getProperty(PROPERTY_KEY_AGGREGATED_DEPLOYMENT_CALL_TREE)));
 		this.aggregatedAssemblyCallTree.setSelected(Boolean.parseBoolean(properties.getProperty(PROPERTY_KEY_AGGREGATED_ASSEMBLY_CALL_TREE)));
 		this.callTrees.setSelected(Boolean.parseBoolean(properties.getProperty(PROPERTY_KEY_CALL_TREES)));
+
+		this.assemblyComponentDependencyGraphResponseTimeComboBox.setEnabled(this.assemblyComponentDependencyGraphResponseTime.isSelected());
+		this.assemblyOperationDependencyGraphResponseTimeComboBox.setEnabled(this.assemblyOperationDependencyGraphResponseTime.isSelected());
+		this.deploymentComponentDependencyGraphResponseTimeComboBox.setEnabled(this.deploymentComponentDependencyGraphResponseTime.isSelected());
+		this.deploymentOperationDependencyGraphResponseTimeComboBox.setEnabled(this.deploymentOperationDependencyGraphResponseTime.isSelected());
 	}
 
 	@Override
 	public void loadDefaultConfiguration() {
 		this.assemblyComponentDependencyGraph.setSelected(true);
 		this.assemblyComponentDependencyGraphResponseTime.setSelected(true);
+		this.assemblyComponentDependencyGraphResponseTimeComboBox.setEnabled(true);
 
 		this.assemblyOperationDependencyGraph.setSelected(true);
 		this.assemblyOperationDependencyGraphResponseTime.setSelected(true);
+		this.assemblyOperationDependencyGraphResponseTimeComboBox.setEnabled(true);
 
 		this.deploymentComponentDependencyGraph.setSelected(true);
 		this.deploymentComponentDependencyGraphResponseTime.setSelected(true);
+		this.deploymentComponentDependencyGraphResponseTimeComboBox.setEnabled(true);
 
 		this.deploymentOperationDependencyGraph.setSelected(true);
 		this.deploymentOperationDependencyGraphResponseTime.setSelected(true);
+		this.deploymentOperationDependencyGraphResponseTimeComboBox.setEnabled(true);
 	}
 
 }
