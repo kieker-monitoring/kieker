@@ -17,12 +17,14 @@
 package kieker.common.record.factory;
 
 import kieker.common.exception.MonitoringRecordException;
+import kieker.common.record.IMonitoringRecord;
 
 /**
  * @author Christian Wulf
  *
  * @since 1.10
  */
+@SuppressWarnings("rawtypes")
 public class RecordFactoryRepository {
 
 	private final ClassForNameResolver<IRecordFactory> classForNameResolver;
@@ -31,7 +33,8 @@ public class RecordFactoryRepository {
 		this.classForNameResolver = new ClassForNameResolver<IRecordFactory>(IRecordFactory.class);
 	}
 
-	public IRecordFactory get(final String recordClassName) throws MonitoringRecordException {
+	@SuppressWarnings("unchecked")
+	public IRecordFactory<? extends IMonitoringRecord> get(final String recordClassName) throws MonitoringRecordException {
 		final String recordFactoryClassName = recordClassName + "Factory";
 		final Class<? extends IRecordFactory> recordFactoryClass = this.classForNameResolver.classForName(recordFactoryClassName);
 

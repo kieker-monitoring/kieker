@@ -25,7 +25,6 @@ import java.util.concurrent.ConcurrentMap;
 
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.factory.CachedClassForNameResolver;
 import kieker.common.util.registry.IRegistry;
 
 /**

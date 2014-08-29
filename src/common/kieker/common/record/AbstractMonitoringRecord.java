@@ -17,15 +17,14 @@
 package kieker.common.record;
 
 import java.lang.reflect.Field;
-import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import kieker.common.exception.MonitoringRecordException;
-import kieker.common.record.factory.CachedClassForNameResolver;
 import kieker.common.record.factory.ClassForNameResolver;
+import kieker.common.record.factory.old.CachedClassForNameResolver;
 import kieker.common.record.factory.old.CachedReflectionRecordFactory;
 import kieker.common.util.registry.IRegistry;
 
@@ -373,8 +372,17 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 
 	@Deprecated
 	public static final IMonitoringRecord createFromByteBuffer(final int clazzid, final ByteBuffer buffer, final IRegistry<String> stringRegistry)
-			throws MonitoringRecordException, BufferUnderflowException {
+			throws MonitoringRecordException {
 		final String recordClassName = stringRegistry.get(clazzid);
+		return AbstractMonitoringRecord.createFromByteBuffer(recordClassName, buffer, stringRegistry);
+	}
+
+	/**
+	 * @since 1.10
+	 */
+	@Deprecated
+	public static final IMonitoringRecord createFromByteBuffer(final String recordClassName, final ByteBuffer buffer, final IRegistry<String> stringRegistry)
+			throws MonitoringRecordException {
 		cachedReflectionRecordFactory.setStringRegistry(stringRegistry);
 		return cachedReflectionRecordFactory.create(recordClassName, buffer);
 	}

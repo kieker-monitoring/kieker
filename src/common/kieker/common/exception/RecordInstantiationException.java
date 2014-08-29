@@ -14,20 +14,19 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.record.factory;
-
-import java.nio.ByteBuffer;
-
-import kieker.common.util.registry.IRegistry;
+package kieker.common.exception;
 
 /**
  * @author Christian Wulf
  *
  * @since 1.10
  */
-public interface IRecordFactory<T> {
+public class RecordInstantiationException extends RuntimeException {
 
-	T create(ByteBuffer buffer, IRegistry<String> stringRegistry);
+	private static final long serialVersionUID = -2968478850093576098L;
 
-	T create(Object[] values, IRegistry<String> stringRegistry);
+	public RecordInstantiationException(final Throwable throwable) {
+		super(throwable);
+	}
+
 }

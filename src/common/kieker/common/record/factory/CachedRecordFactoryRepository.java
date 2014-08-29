@@ -20,6 +20,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import kieker.common.exception.MonitoringRecordException;
+import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.factory.old.RecordFactoryWrapper;
 
 /**
  * @author Christian Wulf
@@ -28,7 +30,7 @@ import kieker.common.exception.MonitoringRecordException;
  */
 public class CachedRecordFactoryRepository {
 
-	private final ConcurrentMap<String, IRecordFactory> recordFactories = new ConcurrentHashMap<String, IRecordFactory>();
+	private final ConcurrentMap<String, IRecordFactory<? extends IMonitoringRecord>> recordFactories = new ConcurrentHashMap<String, IRecordFactory<? extends IMonitoringRecord>>();
 	private final RecordFactoryRepository recordFactoryRepository;
 
 	public CachedRecordFactoryRepository(final RecordFactoryRepository recordFactoryRepository) {
@@ -37,14 +39,22 @@ public class CachedRecordFactoryRepository {
 
 	/**
 	 * @param recordClassName
-	 * @return a cached record factory instance of the record class indicated by <code>recordClassName</code>. If the cache does not contain a record factory
-	 *         instance, a new one is searched and instantiated via Java's Reflection API.
+	 * @return a cached record factory instance of the record class indicated by <code>recordClassName</code>.
+	 *         <ul>
+	 *         <li>If the cache does not contain a record factory instance, a new one is searched and instantiated via Java's Reflection API.
+	 *         <li>If there is no factory for the given <code>recordClassName</code>, a new {@code RecordFactoryWrapper} is created and stored for the given
+	 *         <code>recordClassName</code>.
+	 *         </ul>
 	 * @hint This method uses convention over configuration when searching for a record factory class.
 	 */
-	public IRecordFactory get(final String recordClassName) throws MonitoringRecordException {
-		IRecordFactory recordFactory = this.recordFactories.get(recordClassName);
+	public IRecordFactory<? extends IMonitoringRecord> get(final String recordClassName) {
+		IRecordFactory<? extends IMonitoringRecord> recordFactory = this.recordFactories.get(recordClassName);
 		if (null == recordFactory) {
-			recordFactory = this.recordFactoryRepository.get(recordClassName);
+			try {
+				recordFactory = this.recordFactoryRepository.get(recordClassName);
+			} catch (final MonitoringRecordException e) {
+				recordFactory = new RecordFactoryWrapper(recordClassName);
+			}
 			this.recordFactories.putIfAbsent(recordClassName, recordFactory);
 		}
 		return recordFactory;
