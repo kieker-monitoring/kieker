@@ -19,7 +19,6 @@ package kieker.common.record.factory;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import kieker.common.exception.MonitoringRecordException;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.factory.old.RecordFactoryWrapper;
 
@@ -52,7 +51,7 @@ public class CachedRecordFactoryRepository {
 		if (null == recordFactory) {
 			try {
 				recordFactory = this.recordFactoryRepository.get(recordClassName);
-			} catch (final MonitoringRecordException e) {
+			} catch (final Exception e) {
 				recordFactory = new RecordFactoryWrapper(recordClassName);
 			}
 			this.recordFactories.putIfAbsent(recordClassName, recordFactory);

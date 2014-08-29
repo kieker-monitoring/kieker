@@ -33,9 +33,13 @@ public class RecordFactoryRepository {
 		this.classForNameResolver = new ClassForNameResolver<IRecordFactory>(IRecordFactory.class);
 	}
 
+	private String buildRecordFactoryClassName(final String recordClassName) {
+		return recordClassName + "Factory";
+	}
+
 	@SuppressWarnings("unchecked")
-	public IRecordFactory<? extends IMonitoringRecord> get(final String recordClassName) throws MonitoringRecordException {
-		final String recordFactoryClassName = recordClassName + "Factory";
+	public IRecordFactory<? extends IMonitoringRecord> get(final String recordClassName) throws MonitoringRecordException, ClassNotFoundException {
+		final String recordFactoryClassName = this.buildRecordFactoryClassName(recordClassName);
 		final Class<? extends IRecordFactory> recordFactoryClass = this.classForNameResolver.classForName(recordFactoryClassName);
 
 		try {

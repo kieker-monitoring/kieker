@@ -55,7 +55,12 @@ public class CachedReflectionRecordFactory {
 	public IMonitoringRecord create(final String recordClassName, final ByteBuffer buffer) throws MonitoringRecordException {
 		Constructor<? extends IMonitoringRecord> constructor = this.bufferConstructors.get(recordClassName);
 		if (constructor == null) {
-			final Class<? extends IMonitoringRecord> clazz = this.classForNameResolver.classForName(recordClassName);
+			Class<? extends IMonitoringRecord> clazz;
+			try {
+				clazz = this.classForNameResolver.classForName(recordClassName);
+			} catch (final ClassNotFoundException e) {
+				throw new MonitoringRecordException("", e);
+			}
 
 			if (!IMonitoringRecord.BinaryFactory.class.isAssignableFrom(clazz)) {
 				// fall-through: use the regular record factory
@@ -77,7 +82,12 @@ public class CachedReflectionRecordFactory {
 	public IMonitoringRecord create(final String recordClassName, final Object[] values) throws MonitoringRecordException {
 		Constructor<? extends IMonitoringRecord> constructor = this.arrayConstructors.get(recordClassName);
 		if (constructor == null) {
-			final Class<? extends IMonitoringRecord> clazz = this.classForNameResolver.classForName(recordClassName);
+			Class<? extends IMonitoringRecord> clazz;
+			try {
+				clazz = this.classForNameResolver.classForName(recordClassName);
+			} catch (final ClassNotFoundException e) {
+				throw new MonitoringRecordException("", e);
+			}
 
 			if (!IMonitoringRecord.Factory.class.isAssignableFrom(clazz)) {
 				// fall-through: use the regular record factory

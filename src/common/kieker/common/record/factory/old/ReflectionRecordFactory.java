@@ -38,7 +38,12 @@ public class ReflectionRecordFactory {
 	}
 
 	public IMonitoringRecord create(final String recordClassName, final ByteBuffer buffer) throws MonitoringRecordException {
-		final Class<? extends IMonitoringRecord> clazz = this.classForNameResolver.classForName(recordClassName);
+		Class<? extends IMonitoringRecord> clazz;
+		try {
+			clazz = this.classForNameResolver.classForName(recordClassName);
+		} catch (final Exception e) {
+			throw new MonitoringRecordException("", e);
+		}
 
 		return this.create(clazz, buffer);
 	}
@@ -50,7 +55,12 @@ public class ReflectionRecordFactory {
 	}
 
 	public IMonitoringRecord create(final String recordClassName, final Object[] values) throws MonitoringRecordException {
-		final Class<? extends IMonitoringRecord> clazz = this.classForNameResolver.classForName(recordClassName);
+		Class<? extends IMonitoringRecord> clazz;
+		try {
+			clazz = this.classForNameResolver.classForName(recordClassName);
+		} catch (final Exception e) {
+			throw new MonitoringRecordException("", e);
+		}
 
 		return this.create(clazz, values);
 	}

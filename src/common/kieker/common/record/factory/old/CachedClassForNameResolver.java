@@ -19,7 +19,6 @@ package kieker.common.record.factory.old;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import kieker.common.exception.MonitoringRecordException;
 import kieker.common.record.factory.ClassForNameResolver;
 
 /**
@@ -44,10 +43,9 @@ public class CachedClassForNameResolver<T> {
 	 *
 	 * @return A {@link Class} instance corresponding to the given name, if it exists.
 	 *
-	 * @throws MonitoringRecordException
-	 *             If either a class with the given name could not be found or if the class doesn't implement {@link T}.
+	 * @throws ClassNotFoundException
 	 */
-	public final Class<? extends T> classForName(final String classname) throws MonitoringRecordException {
+	public final Class<? extends T> classForName(final String classname) throws ClassNotFoundException {
 		Class<? extends T> clazz = this.cachedClasses.get(classname);
 		if (clazz == null) {
 			clazz = this.classForNameResolver.classForName(classname);

@@ -14,33 +14,28 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.record.factory;
+package kieker.common.record.flow.trace.operation;
+
+import java.nio.ByteBuffer;
+
+import kieker.common.record.factory.IRecordFactory;
+import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Christian Wulf
  *
  * @since 1.10
  */
-public class ClassForNameResolver<T> {
+public class AfterOperationEventFactory implements IRecordFactory<AfterOperationEvent> {
 
-	private final Class<T> classToCast;
-
-	public ClassForNameResolver(final Class<T> classToCast) {
-		this.classToCast = classToCast;
+	@Override
+	public AfterOperationEvent create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+		return new AfterOperationEvent(buffer, stringRegistry);
 	}
 
-	/**
-	 * This method tries to find a class with the given name.
-	 *
-	 * @param classname
-	 *            The name of the class.
-	 *
-	 * @return A {@link Class} instance corresponding to the given name, if it exists.
-	 * @throws ClassNotFoundException
-	 *
-	 */
-	public final Class<? extends T> classForName(final String classname) throws ClassNotFoundException {
-		final Class<?> clazz = Class.forName(classname);
-		return clazz.asSubclass(this.classToCast);
+	@Override
+	public AfterOperationEvent create(final Object[] values, final IRegistry<String> stringRegistry) {
+		return new AfterOperationEvent(values);
 	}
+
 }

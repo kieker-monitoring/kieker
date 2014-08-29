@@ -303,7 +303,13 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	 */
 	@Deprecated
 	public static final Class<? extends IMonitoringRecord> classForName(final String classname) throws MonitoringRecordException {
-		return classForNameResolver.classForName(classname);
+		try {
+			return classForNameResolver.classForName(classname);
+		} catch (final ClassNotFoundException e) {
+			throw new MonitoringRecordException("", e);
+		} catch (final ClassCastException e) {
+			throw new MonitoringRecordException("", e);
+		}
 	}
 
 	/**
