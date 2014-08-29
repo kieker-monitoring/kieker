@@ -137,7 +137,6 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 		this.add(this.deploymentComponentDependencyGraphResponseTime, deploymentComponentDependencyGraphResponseTimeConstraints);
 
 		final GridBagConstraints responseTimeComboBoxConstraints = new GridBagConstraints();
-		this.deploymentComponentDependencyGraphResponseTimeComboBox.setSelectedIndex(2);
 		responseTimeComboBoxConstraints.gridwidth = GridBagConstraints.REMAINDER;
 		responseTimeComboBoxConstraints.anchor = GridBagConstraints.LINE_START;
 		responseTimeComboBoxConstraints.insets.set(0, 5, 0, 0);
@@ -160,7 +159,6 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 		assemblyComponentDependencyGraphResponseTimeConstraints.gridy = 5;
 		this.add(this.assemblyComponentDependencyGraphResponseTime, assemblyComponentDependencyGraphResponseTimeConstraints);
 
-		this.assemblyComponentDependencyGraphResponseTimeComboBox.setSelectedIndex(2);
 		responseTimeComboBoxConstraints.gridy = 5;
 		this.add(this.assemblyComponentDependencyGraphResponseTimeComboBox, responseTimeComboBoxConstraints);
 
@@ -184,7 +182,6 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 		deploymentOperationDependencyGraphResponseTimeConstraints.gridy = 7;
 		this.add(this.deploymentOperationDependencyGraphResponseTime, deploymentOperationDependencyGraphResponseTimeConstraints);
 
-		this.deploymentOperationDependencyGraphResponseTimeComboBox.setSelectedIndex(2);
 		responseTimeComboBoxConstraints.gridy = 7;
 		this.add(this.deploymentOperationDependencyGraphResponseTimeComboBox, responseTimeComboBoxConstraints);
 
@@ -202,7 +199,6 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 		assemblyOperationDependencyGraphResponseTimeConstraints.gridy = 8;
 		this.add(this.assemblyOperationDependencyGraphResponseTime, assemblyOperationDependencyGraphResponseTimeConstraints);
 
-		this.assemblyOperationDependencyGraphResponseTimeComboBox.setSelectedIndex(2);
 		responseTimeComboBoxConstraints.gridy = 8;
 		this.add(this.assemblyOperationDependencyGraphResponseTimeComboBox, responseTimeComboBoxConstraints);
 
@@ -489,18 +485,22 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 	public void loadDefaultConfiguration() {
 		this.assemblyComponentDependencyGraph.setSelected(true);
 		this.assemblyComponentDependencyGraphResponseTime.setSelected(true);
+		this.assemblyComponentDependencyGraphResponseTimeComboBox.setSelectedIndex(2);
 		this.assemblyComponentDependencyGraphResponseTimeComboBox.setEnabled(true);
 
 		this.assemblyOperationDependencyGraph.setSelected(true);
 		this.assemblyOperationDependencyGraphResponseTime.setSelected(true);
+		this.assemblyOperationDependencyGraphResponseTimeComboBox.setSelectedIndex(2);
 		this.assemblyOperationDependencyGraphResponseTimeComboBox.setEnabled(true);
 
 		this.deploymentComponentDependencyGraph.setSelected(true);
 		this.deploymentComponentDependencyGraphResponseTime.setSelected(true);
+		this.deploymentComponentDependencyGraphResponseTimeComboBox.setSelectedIndex(2);
 		this.deploymentComponentDependencyGraphResponseTimeComboBox.setEnabled(true);
 
 		this.deploymentOperationDependencyGraph.setSelected(true);
 		this.deploymentOperationDependencyGraphResponseTime.setSelected(true);
+		this.deploymentOperationDependencyGraphResponseTimeComboBox.setSelectedIndex(2);
 		this.deploymentOperationDependencyGraphResponseTimeComboBox.setEnabled(true);
 	}
 
