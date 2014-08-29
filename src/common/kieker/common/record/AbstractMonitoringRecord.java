@@ -370,6 +370,11 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	}
 
 	@Deprecated
+	public static final IMonitoringRecord createFromArray(final String recordClassName, final Object[] values) throws MonitoringRecordException {
+		return cachedReflectionRecordFactory.create(recordClassName, values);
+	}
+
+	@Deprecated
 	public static final IMonitoringRecord createFromStringArray(final Class<? extends IMonitoringRecord> clazz, final String[] values)
 			throws MonitoringRecordException {
 		final Object[] arguments = AbstractMonitoringRecord.fromStringArrayToTypedArray(values, AbstractMonitoringRecord.typesForClass(clazz));

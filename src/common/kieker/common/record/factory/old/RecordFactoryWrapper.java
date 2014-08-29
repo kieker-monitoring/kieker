@@ -48,9 +48,13 @@ public class RecordFactoryWrapper implements IRecordFactory<IMonitoringRecord> {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public IMonitoringRecord create(final Object[] values, final IRegistry<String> stringRegistry) {
-		throw new UnsupportedOperationException();
+		try {
+			return AbstractMonitoringRecord.createFromArray(this.recordClassName, values);
+		} catch (final MonitoringRecordException e) {
+			throw new RecordInstantiationException(e);
+		}
 	}
-
 }
