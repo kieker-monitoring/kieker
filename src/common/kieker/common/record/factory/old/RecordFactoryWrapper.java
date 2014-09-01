@@ -30,7 +30,7 @@ import kieker.common.util.registry.IRegistry;
  *
  * @since 1.10
  */
-public class RecordFactoryWrapper implements IRecordFactory<IMonitoringRecord> {
+public final class RecordFactoryWrapper implements IRecordFactory<IMonitoringRecord> {
 
 	private final String recordClassName;
 

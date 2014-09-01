@@ -52,6 +52,7 @@ public class CachedRecordFactoryRepository {
 			try {
 				recordFactory = this.recordFactoryRepository.get(recordClassName);
 			} catch (final Exception e) {
+				// if a corresponding factory could not be found
 				recordFactory = new RecordFactoryWrapper(recordClassName);
 			}
 			this.recordFactories.putIfAbsent(recordClassName, recordFactory);
