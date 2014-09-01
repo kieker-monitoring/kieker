@@ -67,7 +67,9 @@ public class TestSystemRecordPropertyOrders extends AbstractKiekerTest {
 	/**
 	 * Empty constructor.
 	 */
-	public TestSystemRecordPropertyOrders() {}
+	public TestSystemRecordPropertyOrders() {
+		// No code necessary
+	}
 
 	/**
 	 * Test property order processing of CPUUtilizationRecord constructors.
