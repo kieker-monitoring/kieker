@@ -301,21 +301,17 @@ public class ConversionStep extends AbstractStep {
 
 		if (performThisStep) {
 			final boolean graphvizAvailable = this.checkGraphvizExecutable();
-			int result = 0;
-
 			if (!graphvizAvailable) {
-				result = JOptionPane.showConfirmDialog(this, "The Graphviz executable could not be found. Continue?", "Graphviz Executable",
+				final int result = JOptionPane.showConfirmDialog(this, "The Graphviz executable could not be found. Continue?", "Graphviz Executable",
 						JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-			}
-
-			if (JOptionPane.NO_OPTION == result) {
-				return false;
+				if (JOptionPane.NO_OPTION == result) { // NOPMD (deeply nested if)
+					return false;
+				}
 			}
 
 			final boolean pic2PlotAvailable = this.checkPic2PlotExecutable();
-
 			if (!pic2PlotAvailable) {
-				result = JOptionPane.showConfirmDialog(this, "The Pic2Plot executable could not be found. Continue?", "Pic2Plot Executable",
+				final int result = JOptionPane.showConfirmDialog(this, "The Pic2Plot executable could not be found. Continue?", "Pic2Plot Executable",
 						JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 				return (JOptionPane.YES_OPTION == result);
 			}
