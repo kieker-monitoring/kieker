@@ -22,29 +22,43 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @author Andre van Hoorn, Tobias Rudolph, Andreas Eberlein
- * 
+ *
  * @since 1.10
  * @param <T>
  *            The type of the time series.
  */
 public class TimeSeries<T> implements ITimeSeries<T> {
 	private final long startTime;
+	private final TimeUnit timeSeriesTimeUnit;
 	private long nextTime;
 	private final long deltaTime;
 	private final TimeUnit deltaTimeUnit;
 	private final int frequency;
 	private final int capacity;
 	private final TimeSeriesPointsBuffer<ITimeSeriesPoint<T>> points;
-	private long oneStepMillis;
+	private long timeSeriesStepSize;
 
-	public TimeSeries(final long startTime, final long deltaTime, final TimeUnit deltaTimeUnit, final int frequency,
+	/**
+	 * @param startTime
+	 *            start time of Timeseries
+	 * @param timeSeriesTimeUnit
+	 *            time unit of the startTime
+	 * @param deltaTime
+	 *            time of timeseries
+	 * @param deltaTimeUnit
+	 *            Time unit
+	 * @param capacity
+	 *            length of timeseries
+	 */
+	public TimeSeries(final long startTime, final TimeUnit timeSeriesTimeUnit, final long deltaTime, final TimeUnit deltaTimeUnit, final int frequency,
 			final int capacity) {
 		this.startTime = startTime;
+		this.timeSeriesTimeUnit = timeSeriesTimeUnit;
 		this.deltaTime = deltaTime;
 		this.deltaTimeUnit = deltaTimeUnit;
 		this.frequency = frequency;
 		this.capacity = capacity;
-		this.oneStepMillis = TimeUnit.MILLISECONDS.convert(this.deltaTime, this.deltaTimeUnit);
+		this.timeSeriesStepSize = timeSeriesTimeUnit.convert(this.deltaTime, this.deltaTimeUnit);
 
 		if (ITimeSeries.INFINITE_CAPACITY == capacity) {
 			this.points = new TimeSeriesPointsBuffer<ITimeSeriesPoint<T>>();
@@ -59,6 +73,8 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 	/**
 	 * @param startTime
 	 *            start time of Timeseries
+	 * @param timeSeriesTimeUnit
+	 *            time unit of the startTime
 	 * @param deltaTime
 	 *            time of timeseries
 	 * @param deltaTimeUnit
@@ -66,26 +82,53 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 	 * @param capacity
 	 *            length of timeseries
 	 */
-	public TimeSeries(final long startTime, final long deltaTime, final TimeUnit deltaTimeUnit, final int capacity) {
+	public TimeSeries(final long startTime, final TimeUnit timeSeriesTimeUnit, final long deltaTime, final TimeUnit deltaTimeUnit, final int capacity) {
 		// frequenc = 24 best practice
-		this(startTime, deltaTime, deltaTimeUnit, 24, capacity);
+		this(startTime, timeSeriesTimeUnit, deltaTime, deltaTimeUnit, 24, capacity);
 	}
 
 	/**
 	 * @param startTime
 	 *            start time of Timeseries
+	 * @param timeSeriesTimeUnit
+	 *            time unit of the startTime
 	 * @param deltaTime
 	 *            time of timeseries
 	 * @param deltaTimeUnit
 	 *            Time unit
 	 */
-	public TimeSeries(final long startTime, final long deltaTime, final TimeUnit deltaTimeUnit) {
-		this(startTime, deltaTime, deltaTimeUnit, ITimeSeries.INFINITE_CAPACITY);
+	public TimeSeries(final long startTime, final TimeUnit timeSeriesTimeUnit, final long deltaTime, final TimeUnit deltaTimeUnit) {
+		this(startTime, timeSeriesTimeUnit, deltaTime, deltaTimeUnit, ITimeSeries.INFINITE_CAPACITY);
+	}
+
+	/**
+	 * Constructor using the timeunit as unit for internal usage and deltatime time unit.
+	 * Furthermore using infinite capacity and a frequency of 24 by default.
+	 */
+	public TimeSeries(final long startTime, final TimeUnit timeUnit, final long deltaTime) {
+		this(startTime, timeUnit, deltaTime, timeUnit);
+	}
+
+	/**
+	 * Constructor using the timeunit as unit for internal usage and deltatime time unit
+	 */
+	public TimeSeries(final long startTime, final TimeUnit timeUnit, final long deltaTime, final int frequency,
+			final int capacity) {
+		this(startTime, timeUnit, deltaTime, timeUnit, frequency, capacity);
+	}
+
+	public TimeSeries(final long startTime, final TimeUnit timeUnit, final long deltaTime, final int frequency) {
+		this(startTime, timeUnit, deltaTime, timeUnit, frequency, ITimeSeries.INFINITE_CAPACITY);
 	}
 
 	@Override
 	public long getStartTime() {
 		return this.startTime;
+	}
+
+	@Override
+	public TimeUnit getTimeSeriesTimeUnit() {
+		return this.timeSeriesTimeUnit;
 	}
 
 	@Override
@@ -99,9 +142,18 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 	}
 
 	/**
+	 * Returns the step size between each item in the timeseries. The {@link TimeUnit} of the stepSize is equal to the {@link #timeSeriesTimeUnit}.
+	 *
+	 * @return step size
+	 */
+	public long getStepSize() {
+		return this.timeSeriesStepSize;
+	}
+
+	/**
 	 * @param value
 	 *            value which should append to timeseries
-	 * 
+	 *
 	 * @return tspoint
 	 */
 	@Override
@@ -118,7 +170,7 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 	}
 
 	private void setNextTime() {
-		this.nextTime = this.nextTime + this.oneStepMillis;
+		this.nextTime = this.nextTime + this.timeSeriesStepSize;
 	}
 
 	@Override
@@ -148,7 +200,7 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 
 	@Override
 	public long getEndTime() {
-		return this.getStartTime() + (this.oneStepMillis * this.size());
+		return this.getStartTime() + (this.timeSeriesStepSize * this.size());
 	}
 
 	@Override
@@ -163,7 +215,7 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 	@Override
 	public String toString() {
 		final StringBuffer buf = new StringBuffer();
-		buf.append("Time Series with delta: " + this.deltaTime + " " + this.deltaTimeUnit + " starting at: " + this.getStartTime());
+		buf.append("Time Series with delta: " + this.deltaTime + " " + this.deltaTimeUnit + " starting at: " + this.getStartTime() + " " + this.timeSeriesTimeUnit);
 		for (final ITimeSeriesPoint<T> curPoint : this.getPoints()) {
 			buf.append(curPoint);
 		}

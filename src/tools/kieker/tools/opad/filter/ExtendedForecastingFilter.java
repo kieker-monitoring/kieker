@@ -46,23 +46,23 @@ import kieker.tools.tslib.forecast.historicdata.PatternCheckingForecaster;
  * Computes a forecast for every incoming measurement from different
  * applications. If an collective anomaly is assumed, an alternative forecasting
  * approach (pattern checking forecaster) is used.
- * 
+ *
  * @author Tom Frotscher, Thomas Düllmann, Tobias Rudolph, Andreas Eberlein
  * @since 1.10
- * 
+ *
  */
 @Plugin(name = "Extended Forecasting Filter", outputPorts = {
-	@OutputPort(eventTypes = { IForecastResult.class }, name = ExtendedForecastingFilter.OUTPUT_PORT_NAME_FORECAST),
-	@OutputPort(eventTypes = { IForecastMeasurementPair.class }, name = ExtendedForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT) }, configuration = {
-	@Property(name = ExtendedForecastingFilter.CONFIG_PROPERTY_DELTA_TIME, defaultValue = "1000"),
-	@Property(name = ExtendedForecastingFilter.CONFIG_PROPERTY_DELTA_UNIT, defaultValue = "MILLISECONDS"),
-	@Property(name = ExtendedForecastingFilter.CONFIG_PROPERTY_FC_METHOD, defaultValue = "MEANJAVA", updateable = true),
-	@Property(name = ExtendedForecastingFilter.CONFIG_PROPERTY_TS_WINDOW_CAPACITY, defaultValue = "60"),
-	@Property(name = ExtendedForecastingFilter.CONFIG_PROPERTY_ANOMALY_THRESHOLD, defaultValue = "0.5", updateable = true),
-	@Property(name = ExtendedForecastingFilter.CONFIG_PROPERTY_CONSECUTIVE_ANOMALY_THRESHOLD, defaultValue = "5", updateable = true),
-	@Property(name = ExtendedForecastingFilter.CONFIG_PROPERTY_PATTERN_LENGTH, defaultValue = "24"),
-	@Property(name = ExtendedForecastingFilter.CONFIG_PROPERTY_PATTERN_UNIT, defaultValue = "HOURS"),
-	@Property(name = ExtendedForecastingFilter.CONFIG_PROPERTY_PATTERN_WINDOW_UNIT, defaultValue = "MINUTES") })
+		@OutputPort(eventTypes = { IForecastResult.class }, name = ExtendedForecastingFilter.OUTPUT_PORT_NAME_FORECAST),
+		@OutputPort(eventTypes = { IForecastMeasurementPair.class }, name = ExtendedForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT) }, configuration = {
+		@Property(name = ExtendedForecastingFilter.CONFIG_PROPERTY_DELTA_TIME, defaultValue = "1000"),
+		@Property(name = ExtendedForecastingFilter.CONFIG_PROPERTY_DELTA_UNIT, defaultValue = "MILLISECONDS"),
+		@Property(name = ExtendedForecastingFilter.CONFIG_PROPERTY_FC_METHOD, defaultValue = "MEANJAVA", updateable = true),
+		@Property(name = ExtendedForecastingFilter.CONFIG_PROPERTY_TS_WINDOW_CAPACITY, defaultValue = "60"),
+		@Property(name = ExtendedForecastingFilter.CONFIG_PROPERTY_ANOMALY_THRESHOLD, defaultValue = "0.5", updateable = true),
+		@Property(name = ExtendedForecastingFilter.CONFIG_PROPERTY_CONSECUTIVE_ANOMALY_THRESHOLD, defaultValue = "5", updateable = true),
+		@Property(name = ExtendedForecastingFilter.CONFIG_PROPERTY_PATTERN_LENGTH, defaultValue = "24"),
+		@Property(name = ExtendedForecastingFilter.CONFIG_PROPERTY_PATTERN_UNIT, defaultValue = "HOURS"),
+		@Property(name = ExtendedForecastingFilter.CONFIG_PROPERTY_PATTERN_WINDOW_UNIT, defaultValue = "MINUTES") })
 public class ExtendedForecastingFilter extends AbstractUpdateableFilterPlugin {
 
 	/**
@@ -122,7 +122,7 @@ public class ExtendedForecastingFilter extends AbstractUpdateableFilterPlugin {
 
 	/**
 	 * Creates a new instance of this class.
-	 * 
+	 *
 	 * @param configuration
 	 *            Configuration of this component
 	 * @param projectContext
@@ -158,7 +158,7 @@ public class ExtendedForecastingFilter extends AbstractUpdateableFilterPlugin {
 
 	/**
 	 * Represents the input port for measurements.
-	 * 
+	 *
 	 * @param input
 	 *            Incoming measurements
 	 */
@@ -167,7 +167,7 @@ public class ExtendedForecastingFilter extends AbstractUpdateableFilterPlugin {
 		if (this.checkInitialization(input.getName())) {
 			this.processInput(input, input.getTime(), input.getName(), this.consecutiveAnomalyCount.get(input.getName()));
 		} else {
-			this.applicationForecastingWindow.put(input.getName(), new TimeSeries<Double>(System.currentTimeMillis(), this.deltat.get(), this.tunit.get(),
+			this.applicationForecastingWindow.put(input.getName(), new TimeSeries<Double>(input.getTime(), this.tunit.get(), this.deltat.get(),
 					this.timeSeriesWindowCapacity.get()));
 			this.consecutiveAnomalyCount.put(input.getName(), 0);
 			this.processInput(input, input.getTime(), input.getName(), this.consecutiveAnomalyCount.get(input.getName()));
@@ -176,7 +176,7 @@ public class ExtendedForecastingFilter extends AbstractUpdateableFilterPlugin {
 
 	/**
 	 * Calculating the Forecast and delivers it.
-	 * 
+	 *
 	 * @param input
 	 *            Incoming measurement
 	 * @param timestamp
@@ -195,7 +195,7 @@ public class ExtendedForecastingFilter extends AbstractUpdateableFilterPlugin {
 			final IForecastResult result = histForecaster.forecast(1);
 
 			// Clear Sliding Window because else it is filled with abnormal values
-			this.applicationForecastingWindow.put(name, new TimeSeries<Double>(System.currentTimeMillis(), this.deltat.get(), this.tunit.get(),
+			this.applicationForecastingWindow.put(name, new TimeSeries<Double>(input.getTime(), this.tunit.get(), this.deltat.get(),
 					this.timeSeriesWindowCapacity.get()));
 			this.adjustConsecutiveCount(result.getForecast().getPoints().get(0).getValue(), input);
 
@@ -218,7 +218,7 @@ public class ExtendedForecastingFilter extends AbstractUpdateableFilterPlugin {
 	 * Adjusts the consecutive anomaly count. If additional anomaly is found,
 	 * then the count is increased, if normal value is found, the count is set
 	 * to 0.
-	 * 
+	 *
 	 * @param altValue
 	 *            alternative forecasting value from the pattern checking
 	 *            forecaster
@@ -243,7 +243,7 @@ public class ExtendedForecastingFilter extends AbstractUpdateableFilterPlugin {
 	/**
 	 * Calculates the anomaly score, based on the actual values and the long
 	 * term data extracted from the database.
-	 * 
+	 *
 	 * @param altValue
 	 *            Alternative reference value
 	 * @param dr
@@ -265,7 +265,7 @@ public class ExtendedForecastingFilter extends AbstractUpdateableFilterPlugin {
 
 	/**
 	 * Checks if the current application is already known to this filter.
-	 * 
+	 *
 	 * @param name
 	 *            Application name
 	 */

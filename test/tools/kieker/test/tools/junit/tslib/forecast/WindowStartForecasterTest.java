@@ -60,7 +60,7 @@ public class WindowStartForecasterTest extends AbstractKiekerRTest {
 		final long startTime = 0;
 		final long endTime = startTime + (windowLength * delta);
 
-		final TimeSeries<Double> ts = new TimeSeries<Double>(startTime, 60 * 60, TimeUnit.SECONDS);
+		final TimeSeries<Double> ts = new TimeSeries<Double>(startTime, TimeUnit.MILLISECONDS, 60 * 60, TimeUnit.SECONDS);
 		LOG.info("TS so far: " + ts);
 		Assert.assertEquals(startTime, ts.getStartTime());
 

@@ -31,7 +31,7 @@ import kieker.tools.tslib.forecast.ses.SESRForecaster;
 import kieker.tools.tslib.forecast.windowstart.WindowStartForecaster;
 
 /**
- * 
+ *
  * @author Andre van Hoorn, Tillmann Carlos Bielefeld, Tobias Rudolph, Andreas Eberlein
  * @since 1.10
  */
@@ -75,7 +75,7 @@ public enum ForecastMethod {
 	WINDOWSTART;
 
 	/**
-	 * 
+	 *
 	 * @param history
 	 *            Timeseries which will be forecasted
 	 * @return the forecaster for this algorithm
@@ -112,7 +112,7 @@ public enum ForecastMethod {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param history
 	 *            Timeseries which will be forecasted
 	 * @param alpha
@@ -151,7 +151,7 @@ public enum ForecastMethod {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return calculated anomaly
 	 */
 	public IAnomalyCalculator<Double> getAnomalyCalculator() {
@@ -161,7 +161,7 @@ public enum ForecastMethod {
 	// Was extracted from ClassificationUtility in WCF/TBATS as it is not yet integrated:
 	/**
 	 * Returns a new time series object shortened to the last x values.
-	 * 
+	 *
 	 * @param ts
 	 *            timeseries
 	 * @param x
@@ -178,7 +178,8 @@ public enum ForecastMethod {
 			}
 			long newStartTime = ts.getStartTime();
 			newStartTime += (ts.size() - x) * ts.getDeltaTimeUnit().toMillis(ts.getDeltaTime());
-			final ITimeSeries<Double> tsLastX = new TimeSeries<Double>(newStartTime, ts.getDeltaTime(), ts.getDeltaTimeUnit(), ts.getCapacity());
+			final ITimeSeries<Double> tsLastX = new TimeSeries<Double>(newStartTime, ts.getTimeSeriesTimeUnit(), ts.getDeltaTime(), ts.getDeltaTimeUnit(),
+					ts.getCapacity());
 			tsLastX.appendAll(b);
 			return tsLastX;
 		} else {
