@@ -8,12 +8,13 @@ case "$1" in
 	R CMD Rserve --vanilla &
 	#R CMD Rserve.dbg --vanilla > /tmp/rserve.dbg.log &
 	RET=$?
-	if [ $RET = 0 ] && (ps ax | grep -i "rserve --no-save" | grep -qv grep); then
+	if [ $RET = 0 ] && (ps ax | grep -i "rserve --vanilla" | grep -qv grep); then
 		echo "done."
+		exit 0
 	else
 		echo "failed (exit status >0 or Rserve could not be started)."
+		exit 1
 	fi
-	exit 1
         ;;
     stop)
 	echo -n "Trying to stop Rserve..."
