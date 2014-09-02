@@ -45,7 +45,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * available OPAD Filter. The ResponseTimeDoubleRecords are create as records from different
  * applications. (Requires MongoDB Connection and also writes to the database because of the
  * SendAndStoreDetectionResultsFilter)
- * 
+ *
  * @author Tom Frotscher
  * @since 1.10
  */
@@ -104,7 +104,7 @@ public class OpadIntegrationTest extends AbstractKiekerTest {
 
 	/**
 	 * Setup for the VariateOPADIntegrationTest.
-	 * 
+	 *
 	 * @throws IllegalStateException
 	 *             If illegal state
 	 * @throws AnalysisConfigurationException
@@ -133,7 +133,7 @@ public class OpadIntegrationTest extends AbstractKiekerTest {
 		// TimeSeriesPointAggregator Configuration
 		final Configuration aggregationConfiguration = new Configuration();
 		aggregationConfiguration.setProperty(TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_SPAN, "2");
-		aggregationConfiguration.setProperty(TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT, "MILLISECONDS");
+		aggregationConfiguration.setProperty(TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT, "NANOSECONDS");
 		final TimeSeriesPointAggregatorFilter aggregationFilter = new TimeSeriesPointAggregatorFilter(aggregationConfiguration, this.controller);
 		// End - TimeSeriesPointAggregatorFilter
 
@@ -141,8 +141,7 @@ public class OpadIntegrationTest extends AbstractKiekerTest {
 		// ForecastingFilter Configuration
 		final Configuration forecastConfiguration = new Configuration();
 		forecastConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_NAME_DELTA_TIME, "10");
-		forecastConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_NAME_DELTA_UNIT,
-				"MILLISECONDS");
+		forecastConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_NAME_DELTA_UNIT, "MILLISECONDS");
 		forecastConfiguration.setProperty(ForecastingFilter.CONFIG_PROPERTY_NAME_FC_METHOD, "MEANJAVA");
 		final ForecastingFilter forecasting = new ForecastingFilter(forecastConfiguration, this.controller);
 		// End - ForecastingFilter
@@ -209,7 +208,7 @@ public class OpadIntegrationTest extends AbstractKiekerTest {
 	/**
 	 * Starts a complete test flow through all currently available filters. In this case, the NamedDoubleRecords can
 	 * be from different applications and will still be treated correctly.
-	 * 
+	 *
 	 * @throws InterruptedException
 	 *             If interrupted
 	 */

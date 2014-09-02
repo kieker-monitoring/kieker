@@ -29,10 +29,10 @@ import kieker.tools.tslib.forecast.ses.SESRForecaster;
 import kieker.test.tools.junit.AbstractKiekerRTest;
 
 /**
- * 
+ *
  * @author Tillmann Carlos Bielefeld
  * @since 1.10
- * 
+ *
  */
 public class SESRForecasterTest extends AbstractKiekerRTest {
 
@@ -52,8 +52,7 @@ public class SESRForecasterTest extends AbstractKiekerRTest {
 		final TimeUnit timeUnit = TimeUnit.MILLISECONDS;
 		final long startTime = System.currentTimeMillis() - (deltaTime * 10);
 
-		final TimeSeries<Double> ts = new TimeSeries<Double>(startTime, deltaTime,
-				timeUnit);
+		final TimeSeries<Double> ts = new TimeSeries<Double>(startTime, TimeUnit.NANOSECONDS, deltaTime, timeUnit);
 		ts.append(1.0);
 		ts.append(2.0);
 		ts.append(3.0);

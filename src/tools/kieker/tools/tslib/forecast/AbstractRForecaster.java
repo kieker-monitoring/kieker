@@ -40,16 +40,16 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 	private static final Log LOG = LogFactory.getLog(AbstractRForecaster.class);
 
 	private static final RBridgeControl RBRIDGE = RBridgeControl.getInstance();
+	private static boolean forecastPackageAvailable;
 	private final String modelFunc;
 	private final String forecastFunc;
 	private final ForecastMethod strategy;
-	private static boolean forecastPackageAvailable;
 
 	/**
 	 * Acquire an instance of the {@link RBridgeControl} once.
 	 */
 	static {
-		final Object forecastPackageLoadResult = AbstractRForecaster.RBRIDGE.evalWithR("require(forecastzu)");
+		final Object forecastPackageLoadResult = AbstractRForecaster.RBRIDGE.evalWithR("require(forecast)");
 		AbstractRForecaster.setForecastModuleAvailableAndLoadedFlag(forecastPackageLoadResult);
 	}
 
