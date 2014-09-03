@@ -24,7 +24,6 @@ import org.junit.rules.ExpectedException;
 
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationEventFactory;
 
@@ -55,7 +54,7 @@ public class RecordFactoryRepositoryTest {
 	@Test
 	public void testRecordWithoutFactory() throws ClassNotFoundException, MonitoringRecordException {
 		this.thrown.expect(ClassNotFoundException.class);
-		final String recordClassName = OperationExecutionRecord.class.getName();
+		final String recordClassName = TestRecord.class.getName();
 		@SuppressWarnings("unused")
 		final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.recordFactories.get(recordClassName);
 	}

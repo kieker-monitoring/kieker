@@ -64,7 +64,7 @@ public class CachedRecordFactoryRepositoryTest {
 
 	@Test
 	public void testRecordWithoutFactory() {
-		final String recordClassName = OperationExecutionRecord.class.getName();
+		final String recordClassName = TestRecord.class.getName();
 		final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.cachedRecordFactories.get(recordClassName);
 		Assert.assertEquals(RecordFactoryWrapper.class, recordFactory.getClass());
 
