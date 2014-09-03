@@ -1,0 +1,11 @@
+package kieker.common.record.flow.trace.concurrency
+
+import kieker.common.record.flow.trace.*
+
+@author 'Jan Waller' @since '1.8'
+entity JoinEvent extends AbstractTraceEvent {
+	long joinedTraceId = 0
+}
+
+@author 'Jan Waller' @since '1.5'
+entity SplitEvent extends AbstractTraceEvent

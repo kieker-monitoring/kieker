@@ -86,6 +86,9 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 
 	private volatile boolean logFilterExecution = true; // default
 
+	/**
+	 * Create an SessionAndTraceRegistrationFilter and initialize the filter operation signature.
+	 */
 	public SessionAndTraceRegistrationFilter() {
 		final Signature methodSignature =
 				new Signature("doFilter", // operation name
@@ -97,6 +100,12 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 		this.filterOperationSignatureString = filterOperationSignaturePair.toString();
 	}
 
+	/**
+	 * Create an SessionAndTraceRegistrationFilter and initialize the filter operation signature.
+	 * 
+	 * @param logFilterExecution
+	 *            true enables logging of the filter execution
+	 */
 	public SessionAndTraceRegistrationFilter(final boolean logFilterExecution) {
 		this();
 		this.logFilterExecution = logFilterExecution;
@@ -142,7 +151,9 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 	 *            The filter chain to be used.
 	 * 
 	 * @throws IOException
+	 *             on io errors
 	 * @throws ServletException
+	 *             on servlet errors
 	 */
 	@Override
 	public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
@@ -157,7 +168,7 @@ public class SessionAndTraceRegistrationFilter implements Filter, IMonitoringPro
 
 		// Register session information which needs to be reset after the chain has been executed.
 		String sessionId = this.registerSessionInformation(request); // {@link OperationExecutionRecord#NO_SESSION_ID} if no session ID
-		long traceId = OperationExecutionRecord.NO_TRACEID; // note that we must NOT register anything to the CF_REGISTRY here!
+		long traceId = OperationExecutionRecord.NO_TRACE_ID; // note that we must NOT register anything to the CF_REGISTRY here!
 
 		// If this filter execution shall be part of the traced control flow, we need to register some control flow information.
 		if (this.logFilterExecution) {

@@ -61,7 +61,7 @@ public class TestCXFClientServerInterceptorsSessionRegisteredBefore extends Abst
 		 * 1. The record produced on the client side (eoi,ess = 0,0)
 		 */
 		int curIdx = -1;
-		long traceId = OperationExecutionRecord.NO_TRACEID;
+		long traceId = OperationExecutionRecord.NO_TRACE_ID;
 		String sessionID = OperationExecutionRecord.NO_SESSION_ID;
 		for (final IMonitoringRecord record : records) {
 			final OperationExecutionRecord opRec = (OperationExecutionRecord) record;
@@ -73,7 +73,7 @@ public class TestCXFClientServerInterceptorsSessionRegisteredBefore extends Abst
 				Assert.assertEquals("Unexpected hostname", SERVER_HOSTNAME, opRec.getHostname());
 				Assert.assertEquals("Unexpected signature", OperationExecutionSOAPResponseOutInterceptor.SIGNATURE, opRec.getOperationSignature());
 				traceId = opRec.getTraceId();
-				Assert.assertTrue("Unexpected traceId: " + traceId, traceId != OperationExecutionRecord.NO_TRACEID);
+				Assert.assertTrue("Unexpected traceId: " + traceId, traceId != OperationExecutionRecord.NO_TRACE_ID);
 				sessionID = opRec.getSessionId();
 				Assert.assertFalse("Unexpected session ID: " + sessionID, OperationExecutionRecord.NO_SESSION_ID.equals(sessionID)); // do not use == here, because
 																																		// of SOAP transformations

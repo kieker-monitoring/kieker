@@ -73,6 +73,9 @@ public class ClassLoadingServletContextListener extends AbstractRegularSamplingS
 	public static final String CONTEXT_PARAM_NAME_INITIAL_SAMPLING_DELAY_SECONDS = CONTEXT_PARAM_NAME_PREFIX // NOCS (decl. order)
 			+ ".initialSamplingDelaySeconds";
 
+	/**
+	 * Empty constructor.
+	 */
 	public ClassLoadingServletContextListener() {
 		// nothing to do
 	}

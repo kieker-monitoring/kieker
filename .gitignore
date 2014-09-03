@@ -11,3 +11,6 @@ plugin.xml
 /*.log
 .DS_Store
 /TraceAnalysisGUI.properties
+/activemq-data
+/invalidTraceArtifacts-yyyyMMdd-HHmmssSSS.txt
+/messageTraces-yyyyMMdd-HHmmssSSS.txt

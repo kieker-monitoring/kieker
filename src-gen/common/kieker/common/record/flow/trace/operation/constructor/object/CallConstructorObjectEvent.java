@@ -20,31 +20,40 @@ import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
-import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
 
 import kieker.common.record.flow.trace.operation.constructor.CallConstructorEvent;
 import kieker.common.record.flow.ICallObjectRecord;
 
 /**
- * @author Generic Kieker
+ * @author Jan Waller
  * 
- * @since 1.10
+ * @since 1.6
  */
-public class CallConstructorObjectEvent extends CallConstructorEvent implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory, ICallObjectRecord {
-	public static final int SIZE = 44; // serialization size (without variable part of strings)
+public class CallConstructorObjectEvent extends CallConstructorEvent implements ICallObjectRecord {
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
+			 + TYPE_SIZE_LONG // ITraceRecord.traceId
+			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
+			 + TYPE_SIZE_STRING // IClassSignature.classSignature
+			 + TYPE_SIZE_STRING // IOperationRecord.operationSignature
+			 + TYPE_SIZE_STRING // ICallRecord.calleeClassSignature
+			 + TYPE_SIZE_STRING // ICallRecord.calleeOperationSignature
+			 + TYPE_SIZE_INT // IObjectRecord.objectId
+			 + TYPE_SIZE_INT // ICallObjectRecord.calleeObjectId
+	;
 	private static final long serialVersionUID = -3991606008605176780L;
 	
-	private static final Class<?>[] TYPES = {
-		Long.class, // IEventRecord.timestamp
-		Long.class, // ITraceRecord.traceId
-		Integer.class, // ITraceRecord.orderIndex
+	public static final Class<?>[] TYPES = {
+		long.class, // IEventRecord.timestamp
+		long.class, // ITraceRecord.traceId
+		int.class, // ITraceRecord.orderIndex
 		String.class, // IClassSignature.classSignature
 		String.class, // IOperationRecord.operationSignature
 		String.class, // ICallRecord.calleeClassSignature
 		String.class, // ICallRecord.calleeOperationSignature
-		Integer.class, // IObjectRecord.objectId
-		Integer.class, // ICallObjectRecord.calleeObjectId
+		int.class, // IObjectRecord.objectId
+		int.class, // ICallObjectRecord.calleeObjectId
 	};
 	
 	
@@ -80,7 +89,8 @@ public class CallConstructorObjectEvent extends CallConstructorEvent implements 
 	}
 
 	/**
-	 * This constructor converts the given array into a record. It is recommended to use the array which is the result of a call to {@link #toArray()}.
+	 * This constructor converts the given array into a record.
+	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
 	 * 
 	 * @param values
 	 *            The values for the record.
@@ -123,6 +133,7 @@ public class CallConstructorObjectEvent extends CallConstructorEvent implements 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object[] toArray() {
 		return new Object[] {
 			this.getTimestamp(),
@@ -140,6 +151,7 @@ public class CallConstructorObjectEvent extends CallConstructorEvent implements 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putLong(this.getTimestamp());
 		buffer.putLong(this.getTraceId());
@@ -155,6 +167,7 @@ public class CallConstructorObjectEvent extends CallConstructorEvent implements 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
@@ -162,6 +175,7 @@ public class CallConstructorObjectEvent extends CallConstructorEvent implements 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getSize() {
 		return SIZE;
 	}
@@ -170,6 +184,7 @@ public class CallConstructorObjectEvent extends CallConstructorEvent implements 
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
@@ -180,6 +195,7 @@ public class CallConstructorObjectEvent extends CallConstructorEvent implements 
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();

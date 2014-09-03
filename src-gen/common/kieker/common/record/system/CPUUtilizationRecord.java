@@ -26,25 +26,36 @@ import kieker.common.util.registry.IRegistry;
 
 
 /**
- * @author Generic Kieker
+ * @author Andre van Hoorn, Jan Waller
  * 
- * @since 1.10
+ * @since 1.3
  */
 public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	public static final int SIZE = 72; // serialization size (without variable part of strings)
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_LONG // CPUUtilizationRecord.timestamp
+			 + TYPE_SIZE_STRING // CPUUtilizationRecord.hostname
+			 + TYPE_SIZE_STRING // CPUUtilizationRecord.cpuID
+			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.user
+			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.system
+			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.wait
+			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.nice
+			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.irq
+			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.totalUtilization
+			 + TYPE_SIZE_DOUBLE // CPUUtilizationRecord.idle
+	;
 	private static final long serialVersionUID = 1353686422654272736L;
 	
-	private static final Class<?>[] TYPES = {
-		Long.class, // CPUUtilizationRecord.timestamp
+	public static final Class<?>[] TYPES = {
+		long.class, // CPUUtilizationRecord.timestamp
 		String.class, // CPUUtilizationRecord.hostname
 		String.class, // CPUUtilizationRecord.cpuID
-		Double.class, // CPUUtilizationRecord.user
-		Double.class, // CPUUtilizationRecord.system
-		Double.class, // CPUUtilizationRecord.wait
-		Double.class, // CPUUtilizationRecord.nice
-		Double.class, // CPUUtilizationRecord.irq
-		Double.class, // CPUUtilizationRecord.totalUtilization
-		Double.class, // CPUUtilizationRecord.idle
+		double.class, // CPUUtilizationRecord.user
+		double.class, // CPUUtilizationRecord.system
+		double.class, // CPUUtilizationRecord.wait
+		double.class, // CPUUtilizationRecord.nice
+		double.class, // CPUUtilizationRecord.irq
+		double.class, // CPUUtilizationRecord.totalUtilization
+		double.class, // CPUUtilizationRecord.idle
 	};
 	
 	public static final long TIMESTAMP = 0L;
@@ -95,8 +106,8 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	 */
 	public CPUUtilizationRecord(final long timestamp, final String hostname, final String cpuID, final double user, final double system, final double wait, final double nice, final double irq, final double totalUtilization, final double idle) {
 		this.timestamp = timestamp;
-		this.hostname = hostname;
-		this.cpuID = cpuID;
+		this.hostname = hostname == null?"":hostname;
+		this.cpuID = cpuID == null?"":cpuID;
 		this.user = user;
 		this.system = system;
 		this.wait = wait;
@@ -107,7 +118,8 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	}
 
 	/**
-	 * This constructor converts the given array into a record. It is recommended to use the array which is the result of a call to {@link #toArray()}.
+	 * This constructor converts the given array into a record.
+	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
 	 * 
 	 * @param values
 	 *            The values for the record.
@@ -173,6 +185,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object[] toArray() {
 		return new Object[] {
 			this.getTimestamp(),
@@ -191,6 +204,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putLong(this.getTimestamp());
 		buffer.putInt(stringRegistry.get(this.getHostname()));
@@ -207,6 +221,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
@@ -214,6 +229,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getSize() {
 		return SIZE;
 	}
@@ -222,6 +238,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
@@ -232,6 +249,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();

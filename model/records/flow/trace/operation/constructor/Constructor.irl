@@ -1,0 +1,19 @@
+package kieker.common.record.flow.trace.operation.constructor
+
+import kieker.common.record.flow.trace.operation.AfterOperationEvent
+import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent
+import kieker.common.record.flow.trace.operation.BeforeOperationEvent
+import kieker.common.record.flow.trace.operation.CallOperationEvent
+import kieker.common.record.flow.IConstructorRecord
+
+@author 'Jan Waller' @since '1.6'
+entity AfterConstructorEvent extends AfterOperationEvent : IConstructorRecord
+
+@author 'Jan Waller' @since '1.6'
+entity AfterConstructorFailedEvent extends AfterOperationFailedEvent : IConstructorRecord
+
+@author 'Jan Waller' @since '1.6'
+entity BeforeConstructorEvent extends BeforeOperationEvent : IConstructorRecord
+
+@author 'Jan Waller' @since '1.6'
+entity CallConstructorEvent extends CallOperationEvent : IConstructorRecord

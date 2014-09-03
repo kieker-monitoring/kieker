@@ -19,18 +19,17 @@ package kieker.common.record.flow.trace;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
-import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
 
 import kieker.common.record.flow.AbstractEvent;
 import kieker.common.record.flow.ITraceRecord;
 
 /**
- * @author Generic Kieker
+ * @author Jan Waller
  * 
- * @since 1.10
+ * @since 1.5
  */
-public abstract class AbstractTraceEvent extends AbstractEvent implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory, ITraceRecord {
+public abstract class AbstractTraceEvent extends AbstractEvent implements ITraceRecord {
 		private static final long serialVersionUID = 161681009968355282L;
 	
 	
@@ -89,6 +88,7 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements IMonit
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
@@ -99,6 +99,7 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements IMonit
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();

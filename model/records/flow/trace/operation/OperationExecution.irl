@@ -1,0 +1,22 @@
+package kieker.common.record.flow.trace.operation
+
+import kieker.common.record.flow.trace.AbstractTraceEvent
+import kieker.common.record.flow.IExceptionRecord
+import kieker.common.record.flow.ICallRecord
+import kieker.common.record.flow.IOperationRecord
+
+@author 'Jan Waller' @since '1.5'
+abstract entity AbstractOperationEvent extends AbstractTraceEvent : IOperationRecord
+
+@author 'Jan Waller' @since '1.6'
+entity AfterOperationEvent extends AbstractOperationEvent
+
+@author 'Jan Waller' @since '1.5'
+entity AfterOperationFailedEvent extends AfterOperationEvent : IExceptionRecord
+
+@author 'Jan Waller' @since '1.5'
+entity BeforeOperationEvent extends AbstractOperationEvent
+
+@author 'Andre van Hoorn, Holger Knoche, Jan Waller' @since '1.5'
+entity CallOperationEvent extends AbstractOperationEvent : ICallRecord
+

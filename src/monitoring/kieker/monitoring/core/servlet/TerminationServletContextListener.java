@@ -43,6 +43,12 @@ public class TerminationServletContextListener implements ServletContextListener
 		this.ctrl = MonitoringController.getInstance();
 	}
 
+	/**
+	 * Create a new instance utilizing an external state controller.
+	 * 
+	 * @param ctrl
+	 *            state controller
+	 */
 	public TerminationServletContextListener(final IStateController ctrl) {
 		this.ctrl = ctrl;
 	}

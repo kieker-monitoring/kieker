@@ -1,0 +1,26 @@
+package kieker.common.record.flow.trace.concurrency.monitor
+
+import kieker.common.record.flow.trace.*
+
+@author 'Jan Waller' @since '1.8'
+abstract entity AbstractMonitorEvent extends AbstractTraceEvent { 
+	int lockId = 0
+}
+
+@author 'Jan Waller' @since '1.8'
+entity MonitorEntryEvent extends AbstractMonitorEvent
+
+@author 'Jan Waller' @since '1.8'
+entity MonitorExitEvent extends AbstractMonitorEvent
+
+@author 'Jan Waller' @since '1.8'
+entity MonitorNotifyAllEvent extends AbstractMonitorEvent
+
+@author 'Jan Waller' @since '1.8'
+entity MonitorNotifyEvent extends AbstractMonitorEvent
+
+@author 'Jan Waller' @since '1.8'
+entity MonitorRequestEvent extends AbstractMonitorEvent
+
+@author 'Jan Waller' @since '1.8'
+entity MonitorWaitEvent extends AbstractMonitorEvent

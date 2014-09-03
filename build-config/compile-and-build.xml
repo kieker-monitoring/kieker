@@ -8,15 +8,29 @@
 	<target name="build-all" depends="clean,-init,build-kieker.main,build-kieker.main.aspectj,build-kieker.main.emf" description="Compiles and packages the Kieker Jar and War files (calls the 'build-kieker-*' targets)">
 	</target>
 
-	<!-- Build kieker.common	-->
+	<!-- Build kieker.common -->
+	<target name="generate-kieker.common" depends="-init" description="Generate java code for records.">
+		<java classname="de.cau.cs.se.instrumentation.rl.cli.CLICompilerMain" fork="yes">
+			<classpath>
+				<pathelement location="${bin.dir}/dev/target/de.cau.cs.se.instrumentation.rl.cli-1.0.0-SNAPSHOT.jar"/>
+				<pathelement location="${bin.dir}/dev/lib/org.eclipse.emf.mwe.core_1.2.1.v201402030544.jar"/>
+				<pathelement location="${bin.dir}/dev/lib/org.eclipse.xtext.common.types_2.5.3.v201402240820.jar"/>
+				<pathelement location="${bin.dir}/dev/lib/org.eclipse.emf.mwe.utils_1.3.1.v201402030544.jar"/>
+				<pathelement location="${bin.dir}/dev/lib/org.eclipse.xtext.common.types.ui_2.5.3.v201402240820.jar"/>
+			</classpath>
+			<arg line="-r .. -a 'Kieker Build' -d src-gen/common -s model/records -l java -n kieker -p Kieker -v 1.10"/>	
+		</java>
+	</target>
+	
 	<target name="-compile-kieker.common" depends="-init" description="Compiles the sources commonly used by all Kieker components">
 		<delete dir="${build.kieker.common.dir}" />
 		<mkdir dir="${build.kieker.common.dir}" />
-		<javac destDir="${build.kieker.common.dir}" source="1.6" target="1.6" srcdir="${src.kieker.common.dir}" debug="true" classpathref="kieker.common-compile-classpath" includeAntRuntime="false">
+		<javac destDir="${build.kieker.common.dir}" source="1.6" target="1.6" srcdir="${src.kieker.common.dir}:${src.gen.kieker.common.dir}" debug="true" classpathref="kieker.common-compile-classpath" includeAntRuntime="false">
 			<compilerarg value="-Xlint:all" />
 		</javac>
 	</target>
 
+	<!-- build kieker.monitoring -->
 	<target name="-compile-kieker.monitoring" depends="-init,-compile-kieker.common" description="Compiles the sources of the Kieker.Monitoring component">
 		<delete dir="${build.kieker.monitoring.dir}" />
 		<mkdir dir="${build.kieker.monitoring.dir}" />

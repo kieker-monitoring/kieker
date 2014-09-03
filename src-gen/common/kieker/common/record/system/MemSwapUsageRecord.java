@@ -26,39 +26,48 @@ import kieker.common.util.registry.IRegistry;
 
 
 /**
- * @author Generic Kieker
+ * @author Andre van Hoorn, Jan Waller
  * 
- * @since 1.10
+ * @since 1.3
  */
 public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	public static final int SIZE = 60; // serialization size (without variable part of strings)
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_LONG // MemSwapUsageRecord.timestamp
+			 + TYPE_SIZE_STRING // MemSwapUsageRecord.hostname
+			 + TYPE_SIZE_LONG // MemSwapUsageRecord.memTotal
+			 + TYPE_SIZE_LONG // MemSwapUsageRecord.memUsed
+			 + TYPE_SIZE_LONG // MemSwapUsageRecord.memFree
+			 + TYPE_SIZE_LONG // MemSwapUsageRecord.swapTotal
+			 + TYPE_SIZE_LONG // MemSwapUsageRecord.swapUsed
+			 + TYPE_SIZE_LONG // MemSwapUsageRecord.swapFree
+	;
 	private static final long serialVersionUID = 7372856570663572439L;
 	
-	private static final Class<?>[] TYPES = {
-		Long.class, // MemSwapUsageRecord.timestamp
+	public static final Class<?>[] TYPES = {
+		long.class, // MemSwapUsageRecord.timestamp
 		String.class, // MemSwapUsageRecord.hostname
-		Long.class, // MemSwapUsageRecord.memUsed
-		Long.class, // MemSwapUsageRecord.memFree
-		Long.class, // MemSwapUsageRecord.memTotal
-		Long.class, // MemSwapUsageRecord.swapTotal
-		Long.class, // MemSwapUsageRecord.swapUsed
-		Long.class, // MemSwapUsageRecord.swapFree
+		long.class, // MemSwapUsageRecord.memTotal
+		long.class, // MemSwapUsageRecord.memUsed
+		long.class, // MemSwapUsageRecord.memFree
+		long.class, // MemSwapUsageRecord.swapTotal
+		long.class, // MemSwapUsageRecord.swapUsed
+		long.class, // MemSwapUsageRecord.swapFree
 	};
 	
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
+	public static final long MEM_TOTAL = 0L;
 	public static final long MEM_USED = 0L;
 	public static final long MEM_FREE = 0L;
-	public static final long MEM_TOTAL = 0L;
 	public static final long SWAP_TOTAL = 0L;
 	public static final long SWAP_USED = 0L;
 	public static final long SWAP_FREE = 0L;
 	
 	private final long timestamp;
 	private final String hostname;
+	private final long memTotal;
 	private final long memUsed;
 	private final long memFree;
-	private final long memTotal;
 	private final long swapTotal;
 	private final long swapUsed;
 	private final long swapFree;
@@ -70,12 +79,12 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	 *            timestamp
 	 * @param hostname
 	 *            hostname
+	 * @param memTotal
+	 *            memTotal
 	 * @param memUsed
 	 *            memUsed
 	 * @param memFree
 	 *            memFree
-	 * @param memTotal
-	 *            memTotal
 	 * @param swapTotal
 	 *            swapTotal
 	 * @param swapUsed
@@ -83,19 +92,20 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	 * @param swapFree
 	 *            swapFree
 	 */
-	public MemSwapUsageRecord(final long timestamp, final String hostname, final long memUsed, final long memFree, final long memTotal, final long swapTotal, final long swapUsed, final long swapFree) {
+	public MemSwapUsageRecord(final long timestamp, final String hostname, final long memTotal, final long memUsed, final long memFree, final long swapTotal, final long swapUsed, final long swapFree) {
 		this.timestamp = timestamp;
-		this.hostname = hostname;
+		this.hostname = hostname == null?"":hostname;
+		this.memTotal = memTotal;
 		this.memUsed = memUsed;
 		this.memFree = memFree;
-		this.memTotal = memTotal;
 		this.swapTotal = swapTotal;
 		this.swapUsed = swapUsed;
 		this.swapFree = swapFree;
 	}
 
 	/**
-	 * This constructor converts the given array into a record. It is recommended to use the array which is the result of a call to {@link #toArray()}.
+	 * This constructor converts the given array into a record.
+	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
 	 * 
 	 * @param values
 	 *            The values for the record.
@@ -104,9 +114,9 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 		AbstractMonitoringRecord.checkArray(values, TYPES);
 		this.timestamp = (Long) values[0];
 		this.hostname = (String) values[1];
-		this.memUsed = (Long) values[2];
-		this.memFree = (Long) values[3];
-		this.memTotal = (Long) values[4];
+		this.memTotal = (Long) values[2];
+		this.memUsed = (Long) values[3];
+		this.memFree = (Long) values[4];
 		this.swapTotal = (Long) values[5];
 		this.swapUsed = (Long) values[6];
 		this.swapFree = (Long) values[7];
@@ -124,9 +134,9 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 		AbstractMonitoringRecord.checkArray(values, valueTypes);
 		this.timestamp = (Long) values[0];
 		this.hostname = (String) values[1];
-		this.memUsed = (Long) values[2];
-		this.memFree = (Long) values[3];
-		this.memTotal = (Long) values[4];
+		this.memTotal = (Long) values[2];
+		this.memUsed = (Long) values[3];
+		this.memFree = (Long) values[4];
 		this.swapTotal = (Long) values[5];
 		this.swapUsed = (Long) values[6];
 		this.swapFree = (Long) values[7];
@@ -144,9 +154,9 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	public MemSwapUsageRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		this.timestamp = buffer.getLong();
 		this.hostname = stringRegistry.get(buffer.getInt());
+		this.memTotal = buffer.getLong();
 		this.memUsed = buffer.getLong();
 		this.memFree = buffer.getLong();
-		this.memTotal = buffer.getLong();
 		this.swapTotal = buffer.getLong();
 		this.swapUsed = buffer.getLong();
 		this.swapFree = buffer.getLong();
@@ -155,13 +165,14 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object[] toArray() {
 		return new Object[] {
 			this.getTimestamp(),
 			this.getHostname(),
+			this.getMemTotal(),
 			this.getMemUsed(),
 			this.getMemFree(),
-			this.getMemTotal(),
 			this.getSwapTotal(),
 			this.getSwapUsed(),
 			this.getSwapFree()
@@ -171,12 +182,13 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putLong(this.getTimestamp());
 		buffer.putInt(stringRegistry.get(this.getHostname()));
+		buffer.putLong(this.getMemTotal());
 		buffer.putLong(this.getMemUsed());
 		buffer.putLong(this.getMemFree());
-		buffer.putLong(this.getMemTotal());
 		buffer.putLong(this.getSwapTotal());
 		buffer.putLong(this.getSwapUsed());
 		buffer.putLong(this.getSwapFree());
@@ -185,6 +197,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
@@ -192,6 +205,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getSize() {
 		return SIZE;
 	}
@@ -200,6 +214,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
@@ -210,6 +225,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();
@@ -223,16 +239,16 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 		return this.hostname;
 	}
 	
+	public final long getMemTotal() {
+		return this.memTotal;
+	}
+	
 	public final long getMemUsed() {
 		return this.memUsed;
 	}
 	
 	public final long getMemFree() {
 		return this.memFree;
-	}
-	
-	public final long getMemTotal() {
-		return this.memTotal;
 	}
 	
 	public final long getSwapTotal() {

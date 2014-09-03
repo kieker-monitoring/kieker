@@ -20,29 +20,36 @@ import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
-import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
 
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
 import kieker.common.record.flow.IObjectRecord;
 
 /**
- * @author Generic Kieker
+ * @author Jan Waller
  * 
- * @since 1.10
+ * @since 1.6
  */
-public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory, IObjectRecord {
-	public static final int SIZE = 36; // serialization size (without variable part of strings)
+public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent implements IObjectRecord {
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
+			 + TYPE_SIZE_LONG // ITraceRecord.traceId
+			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
+			 + TYPE_SIZE_STRING // IClassSignature.classSignature
+			 + TYPE_SIZE_STRING // IOperationRecord.operationSignature
+			 + TYPE_SIZE_STRING // IExceptionRecord.cause
+			 + TYPE_SIZE_INT // IObjectRecord.objectId
+	;
 	private static final long serialVersionUID = 5675043694442669903L;
 	
-	private static final Class<?>[] TYPES = {
-		Long.class, // IEventRecord.timestamp
-		Long.class, // ITraceRecord.traceId
-		Integer.class, // ITraceRecord.orderIndex
+	public static final Class<?>[] TYPES = {
+		long.class, // IEventRecord.timestamp
+		long.class, // ITraceRecord.traceId
+		int.class, // ITraceRecord.orderIndex
 		String.class, // IClassSignature.classSignature
 		String.class, // IOperationRecord.operationSignature
 		String.class, // IExceptionRecord.cause
-		Integer.class, // IObjectRecord.objectId
+		int.class, // IObjectRecord.objectId
 	};
 	
 	
@@ -72,7 +79,8 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 	}
 
 	/**
-	 * This constructor converts the given array into a record. It is recommended to use the array which is the result of a call to {@link #toArray()}.
+	 * This constructor converts the given array into a record.
+	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
 	 * 
 	 * @param values
 	 *            The values for the record.
@@ -112,6 +120,7 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object[] toArray() {
 		return new Object[] {
 			this.getTimestamp(),
@@ -127,6 +136,7 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putLong(this.getTimestamp());
 		buffer.putLong(this.getTraceId());
@@ -140,6 +150,7 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
@@ -147,6 +158,7 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getSize() {
 		return SIZE;
 	}
@@ -155,6 +167,7 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
@@ -165,6 +178,7 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();

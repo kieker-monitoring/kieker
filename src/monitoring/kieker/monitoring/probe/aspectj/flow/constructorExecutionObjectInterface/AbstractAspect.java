@@ -24,7 +24,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.constructor.object.AfterConstructorFailedObjectEvent;
 import kieker.common.record.flow.trace.operation.constructor.object.AfterConstructorObjectEvent;
-import kieker.common.record.flow.trace.operation.constructor.object.interfaceimpl.BeforeConstructorObjectInterfaceEvent;
+import kieker.common.record.flow.trace.operation.constructor.object.BeforeConstructorObjectInterfaceEvent;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.TraceRegistry;
@@ -79,7 +79,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final String clazz = thisObject.getClass().getName();
 		final int objectId = System.identityHashCode(thisObject);
 		// measure before execution
-		CTRLINST.newMonitoringRecord(new BeforeConstructorObjectInterfaceEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature, clazz, objectId,
+		CTRLINST.newMonitoringRecord(new BeforeConstructorObjectInterfaceEvent(TIME.getTime(), traceId, trace.getNextOrderId(), clazz, signature, objectId,
 				AbstractAspect
 						.getInterface(thisJoinPoint)));
 		// execution of the called method
@@ -89,7 +89,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		} catch (final Throwable th) { // NOPMD NOCS (catch throw might ok here)
 			// measure after failed execution
 			CTRLINST.newMonitoringRecord(
-					new AfterConstructorFailedObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature, clazz, th.toString(), objectId));
+					new AfterConstructorFailedObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), clazz, signature, th.toString(), objectId));
 			throw th;
 		} finally {
 			if (newTrace) { // close the trace
@@ -97,7 +97,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			}
 		}
 		// measure after successful execution
-		CTRLINST.newMonitoringRecord(new AfterConstructorObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature, clazz, objectId));
+		CTRLINST.newMonitoringRecord(new AfterConstructorObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), clazz, signature, objectId));
 		return retval;
 	}
 

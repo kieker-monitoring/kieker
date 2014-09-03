@@ -17,11 +17,11 @@
 package kieker.common.logging;
 
 /**
- * 
+ *
  * This is an actual implementation of the logging interface used by SLF4J logger.
- * 
+ *
  * @author Jan Waller
- * 
+ *
  * @since 1.6
  */
 public class LogImplSLF4JLogging implements Log {
@@ -30,12 +30,27 @@ public class LogImplSLF4JLogging implements Log {
 
 	/**
 	 * Creates a new instance of this class.
-	 * 
+	 *
 	 * @param name
 	 *            The name of the logger.
 	 */
 	public LogImplSLF4JLogging(final String name) {
 		this.log = org.slf4j.LoggerFactory.getLogger(name);
+	}
+
+	@Override
+	public boolean isTraceEnabled() {
+		return this.log.isTraceEnabled();
+	}
+
+	@Override
+	public void trace(final String message) {
+		this.log.trace(message);
+	}
+
+	@Override
+	public void trace(final String message, final Throwable t) {
+		this.log.trace(message, t);
 	}
 
 	/**
@@ -109,4 +124,5 @@ public class LogImplSLF4JLogging implements Log {
 	public void error(final String message, final Throwable t) {
 		this.log.error(message, t);
 	}
+
 }

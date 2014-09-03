@@ -16,10 +16,11 @@
 
 package kieker.common.record.flow;
 
+
 /**
- * @author Generic Kieker
+ * @author Jan Waller
  * 
- * @since 1.10
+ * @since 1.5
  */
 public interface IOperationRecord extends IFlowRecord, IClassSignature {
 	public String getOperationSignature() ;

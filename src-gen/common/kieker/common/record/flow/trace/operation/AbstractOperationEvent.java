@@ -19,18 +19,17 @@ package kieker.common.record.flow.trace.operation;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
-import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
 
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.flow.IOperationRecord;
 
 /**
- * @author Generic Kieker
+ * @author Jan Waller
  * 
- * @since 1.10
+ * @since 1.5
  */
-public abstract class AbstractOperationEvent extends AbstractTraceEvent implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory, IOperationRecord {
+public abstract class AbstractOperationEvent extends AbstractTraceEvent implements IOperationRecord {
 		private static final long serialVersionUID = -910233516407209980L;
 	
 	
@@ -54,8 +53,8 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 	 */
 	public AbstractOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String classSignature, final String operationSignature) {
 		super(timestamp, traceId, orderIndex);
-		this.classSignature = classSignature;
-		this.operationSignature = operationSignature;
+		this.classSignature = classSignature == null?"":classSignature;
+		this.operationSignature = operationSignature == null?"":operationSignature;
 	}
 
 	
@@ -93,6 +92,7 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
@@ -103,6 +103,7 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();

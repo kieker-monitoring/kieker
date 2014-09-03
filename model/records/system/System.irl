@@ -1,0 +1,94 @@
+package kieker.common.record.system
+
+@author 'Andre van Hoorn, Jan Waller' @since '1.3'
+entity CPUUtilizationRecord {
+	/**
+	 * Date/time of measurement. The value should be interpreted as the number of nano-seconds elapsed since Jan 1st, 1970 UTC.
+	 */
+	long timestamp = 0
+
+	/**
+	 * Name of the host, the resource belongs to.
+	 */
+	string hostname = '' 
+
+	/**
+	 * Identifier which is unique for a CPU on a given host.
+	 */
+	string cpuID = ''
+
+	/**
+	 * Fraction of time during which the CPU was used for user-space processes.
+	 * The value should be in the range <code>[0,1]</code>
+	 */
+	double user = 0.0
+
+	/**
+	 * Fraction of time during which the CPU was used by the kernel. The value
+	 * should be in the range <code>[0,1]</code>
+	 */
+	double system = 0.0
+
+	/**
+	 * Fraction of CPU wait time. The value should be in the range <code>[0,1]</code>
+	 */
+	double wait = 0.0
+
+	/**
+	 * Fraction of time during which the CPU was used by user space processes
+	 * with a high nice value. The value should be in the range <code>[0,1]</code>
+	 */
+	double nice = 0.0
+
+	/**
+	 * Fraction of time during which the CPU was used by user space processes
+	 * with a high nice value. The value should be in the range <code>[0,1]</code>
+	 */
+	double irq = 0.0
+
+	/**
+	 * Fraction of time during which the CPU was utilized. Typically, this is
+	 * the sum of {@link #user}, {@link #system}, {@link #wait}, and {@link #nice}. The value should be in the range <code>[0,1]</code>
+	 */
+	double totalUtilization = 0.0
+
+	/**
+	 * Fraction of time during which the CPU was idle. The value should be in
+	 * the range <code>[0,1]</code>
+	 */
+	double idle = 0.0
+}
+
+@author 'Andre van Hoorn, Jan Waller' @since '1.3'
+entity MemSwapUsageRecord {
+	long timestamp = 0
+	string hostname = ""
+	
+	long memTotal = 0
+	long memUsed = 0
+	long memFree = 0
+	
+	long swapTotal = 0
+	long swapUsed = 0
+	long swapFree = 0
+}
+
+@author 'Andre van Hoorn, Jan Waller' @since '1.3'
+entity ResourceUtilizationRecord {
+	long timestamp = 0
+
+	/**
+	 * Name of the host, the resource belongs to.
+	 */
+	string hostname = ""
+
+	/**
+	 * Name of the resource.
+	 */
+	string resourceName = ""
+
+	/**
+	 * Value of utilization. The value should be in the range <code>[0,1]</code>
+	 */
+	double utilization = 0.0
+}

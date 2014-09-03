@@ -52,6 +52,9 @@ public abstract class AbstractRegularSamplingServletContextListener implements S
 	private volatile long sensorIntervalSeconds = DEFAULT_SENSOR_INTERVAL_SECONDS;
 	private volatile long initialDelaySeconds = DEFAULT_SENSOR_INITIAL_DELAY_SECONDS;
 
+	/**
+	 * Empty default constructor.
+	 */
 	public AbstractRegularSamplingServletContextListener() {
 		// nothing to do
 	}
@@ -128,10 +131,25 @@ public abstract class AbstractRegularSamplingServletContextListener implements S
 		}
 	}
 
+	/**
+	 * Parameter name for the sampling interval to be used in the web.xml file.
+	 * 
+	 * @return the parameter name
+	 */
 	protected abstract String getContextParameterNameSamplingIntervalSeconds();
 
+	/**
+	 * Parameter name for the sampling delay to be used in the web.xml file.
+	 * 
+	 * @return the parameter name
+	 */
 	protected abstract String getContextParameterNameSamplingDelaySeconds();
 
+	/**
+	 * Create samplers for the specific sampling class.
+	 * 
+	 * @return array of samplers
+	 */
 	protected abstract ISampler[] createSamplers();
 
 }

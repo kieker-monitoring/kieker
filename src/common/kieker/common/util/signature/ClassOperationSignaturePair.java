@@ -113,6 +113,16 @@ public class ClassOperationSignaturePair {
 		return ClassOperationSignaturePair.splitOperationSignatureStr(operationSignatureStr, false);
 	}
 
+	/**
+	 * Split up an operation signature string and populate a class operation signature pair.
+	 * 
+	 * @param operationSignatureStr
+	 *            the signature string
+	 * @param javaConstructor
+	 *            if true the string holds an constructor signature
+	 * 
+	 * @return a ClassOperationSignaturePair
+	 */
 	public static ClassOperationSignaturePair splitOperationSignatureStr(final String operationSignatureStr, final boolean javaConstructor) {
 		final String fqClassname;
 		final String returnType;

@@ -27,6 +27,9 @@ import java.util.logging.LogRecord; // NOCS
  */
 public class FullLoggingFormatter extends SimpleLoggingFormatter {
 
+	/**
+	 * Create a new formatter instance.
+	 */
 	public FullLoggingFormatter() {
 		// No code necessary
 	}

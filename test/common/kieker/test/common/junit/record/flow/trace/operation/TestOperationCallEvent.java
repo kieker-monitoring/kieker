@@ -26,6 +26,7 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.common.junit.record.UtilityClass;
 
 /**
  * @author Andre van Hoorn, Jan Waller
@@ -59,8 +60,8 @@ public class TestOperationCallEvent extends AbstractKiekerTest {
 	public void testSerializeDeserializeEquals() {
 
 		final CallOperationEvent event1 =
-				new CallOperationEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CALLER_OPERATION_SIGNATURE, FQ_CALLER_CLASSNAME,
-						FQ_CALLEE_OPERATION_SIGNATURE, FQ_CALLEE_CLASSNAME);
+				new CallOperationEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CALLER_CLASSNAME, FQ_CALLER_OPERATION_SIGNATURE,
+						FQ_CALLEE_CLASSNAME, FQ_CALLEE_OPERATION_SIGNATURE);
 
 		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
 		Assert.assertEquals("Unexpected trace ID", TRACE_ID, event1.getTraceId());
@@ -76,8 +77,7 @@ public class TestOperationCallEvent extends AbstractKiekerTest {
 
 		Assert.assertEquals(event1, event2);
 		Assert.assertEquals(0, event1.compareTo(event2));
-		Assert.assertTrue(event1.refersToSameOperationAs(event2));
-		Assert.assertTrue(event1.refersToSameOperationAs(event2));
+		Assert.assertTrue(UtilityClass.refersToSameOperationAs(event1, event2));
 	}
 
 	/**
@@ -87,8 +87,8 @@ public class TestOperationCallEvent extends AbstractKiekerTest {
 	public void testSerializeDeserializeBinaryEquals() {
 
 		final CallOperationEvent event1 =
-				new CallOperationEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CALLER_OPERATION_SIGNATURE, FQ_CALLER_CLASSNAME,
-						FQ_CALLEE_OPERATION_SIGNATURE, FQ_CALLEE_CLASSNAME);
+				new CallOperationEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CALLER_CLASSNAME, FQ_CALLER_OPERATION_SIGNATURE,
+						FQ_CALLEE_CLASSNAME, FQ_CALLEE_OPERATION_SIGNATURE);
 
 		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
 		Assert.assertEquals("Unexpected trace ID", TRACE_ID, event1.getTraceId());
@@ -107,19 +107,18 @@ public class TestOperationCallEvent extends AbstractKiekerTest {
 
 		Assert.assertEquals(event1, event2);
 		Assert.assertEquals(0, event1.compareTo(event2));
-		Assert.assertTrue(event1.refersToSameOperationAs(event2));
-		Assert.assertTrue(event1.refersToSameOperationAs(event2));
+		Assert.assertTrue(UtilityClass.refersToSameOperationAs(event1, event2));
 	}
 
 	@Test
 	public void testCallsReferencedOperationOf() {
 		final CallOperationEvent event1 =
-				new CallOperationEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CALLER_OPERATION_SIGNATURE, FQ_CALLER_CLASSNAME,
-						FQ_CALLEE_OPERATION_SIGNATURE, FQ_CALLEE_CLASSNAME);
+				new CallOperationEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CALLER_CLASSNAME, FQ_CALLER_OPERATION_SIGNATURE,
+						FQ_CALLEE_CLASSNAME, FQ_CALLEE_OPERATION_SIGNATURE);
 		final CallOperationEvent event2 =
-				new CallOperationEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CALLEE_OPERATION_SIGNATURE, FQ_CALLEE_CLASSNAME,
-						FQ_CALLEE_OPERATION_SIGNATURE, FQ_CALLEE_CLASSNAME);
+				new CallOperationEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CALLEE_CLASSNAME, FQ_CALLEE_OPERATION_SIGNATURE,
+						FQ_CALLEE_CLASSNAME, FQ_CALLEE_OPERATION_SIGNATURE);
 
-		Assert.assertTrue(event1.callsReferencedOperationOf(event2));
+		Assert.assertTrue(UtilityClass.callsReferencedOperationOf(event1, event2));
 	}
 }

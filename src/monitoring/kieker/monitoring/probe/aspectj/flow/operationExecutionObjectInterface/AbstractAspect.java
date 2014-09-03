@@ -25,7 +25,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.object.AfterOperationFailedObjectEvent;
 import kieker.common.record.flow.trace.operation.object.AfterOperationObjectEvent;
-import kieker.common.record.flow.trace.operation.object.interfaceimpl.BeforeOperationObjectInterfaceEvent;
+import kieker.common.record.flow.trace.operation.object.BeforeOperationObjectInterfaceEvent;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.TraceRegistry;
@@ -69,7 +69,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final String clazz = thisObject.getClass().getName();
 		final int objectId = System.identityHashCode(thisObject);
 		// measure before execution
-		CTRLINST.newMonitoringRecord(new BeforeOperationObjectInterfaceEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature, clazz, objectId,
+		CTRLINST.newMonitoringRecord(new BeforeOperationObjectInterfaceEvent(TIME.getTime(), traceId, trace.getNextOrderId(), clazz, signature, objectId,
 				AbstractAspect.getInterface(thisJoinPoint)));
 		// execution of the called method
 		final Object retval;
@@ -77,7 +77,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			retval = thisJoinPoint.proceed();
 		} catch (final Throwable th) { // NOPMD NOCS (catch throw might ok here)
 			// measure after failed execution
-			CTRLINST.newMonitoringRecord(new AfterOperationFailedObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature, clazz,
+			CTRLINST.newMonitoringRecord(new AfterOperationFailedObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), clazz, signature,
 					th.toString(), objectId));
 			throw th;
 		} finally {
@@ -86,7 +86,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			}
 		}
 		// measure after successful execution
-		CTRLINST.newMonitoringRecord(new AfterOperationObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature, clazz, objectId));
+		CTRLINST.newMonitoringRecord(new AfterOperationObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), clazz, signature, objectId));
 		return retval;
 	}
 
@@ -147,7 +147,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final long traceId = trace.getTraceId();
 		final String clazz = sig.getDeclaringTypeName();
 		// measure before execution
-		CTRLINST.newMonitoringRecord(new BeforeOperationObjectInterfaceEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature, clazz, 0, AbstractAspect
+		CTRLINST.newMonitoringRecord(new BeforeOperationObjectInterfaceEvent(TIME.getTime(), traceId, trace.getNextOrderId(), clazz, signature, 0, AbstractAspect
 				.getInterface(thisJoinPoint)));
 		// execution of the called method
 		final Object retval;
@@ -155,7 +155,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			retval = thisJoinPoint.proceed();
 		} catch (final Throwable th) { // NOPMD NOCS (catch throw might ok here)
 			// measure after failed execution
-			CTRLINST.newMonitoringRecord(new AfterOperationFailedObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature, clazz,
+			CTRLINST.newMonitoringRecord(new AfterOperationFailedObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), clazz, signature,
 					th.toString(), 0));
 			throw th;
 		} finally {
@@ -164,7 +164,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			}
 		}
 		// measure after successful execution
-		CTRLINST.newMonitoringRecord(new AfterOperationObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature, clazz, 0));
+		CTRLINST.newMonitoringRecord(new AfterOperationObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), clazz, signature, 0));
 		return retval;
 	}
 }

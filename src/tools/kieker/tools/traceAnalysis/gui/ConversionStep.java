@@ -36,6 +36,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -296,7 +297,47 @@ public class ConversionStep extends AbstractStep {
 
 	@Override
 	public boolean isNextStepAllowed() {
+		final boolean performThisStep = this.performStep.isSelected();
+
+		if (performThisStep) {
+			final boolean graphvizAvailable = this.checkGraphvizExecutable();
+			if (!graphvizAvailable) {
+				final int result = JOptionPane.showConfirmDialog(this, "The Graphviz executable could not be found. Continue?", "Graphviz Executable",
+						JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+				if (JOptionPane.NO_OPTION == result) { // NOPMD (deeply nested if)
+					return false;
+				}
+			}
+
+			final boolean pic2PlotAvailable = this.checkPic2PlotExecutable();
+			if (!pic2PlotAvailable) {
+				final int result = JOptionPane.showConfirmDialog(this, "The Pic2Plot executable could not be found. Continue?", "Pic2Plot Executable",
+						JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+				return (JOptionPane.YES_OPTION == result);
+			}
+		}
+
 		return true;
+	}
+
+	private boolean checkPic2PlotExecutable() {
+		return this.checkExecutable(this.pic2plotDirectoryField.getText() + "/pic2plot", "--v");
+	}
+
+	private boolean checkGraphvizExecutable() {
+		return this.checkExecutable(this.graphvizDirectoryField.getText() + "/dot", "-V");
+	}
+
+	private boolean checkExecutable(final String command, final String parameter) {
+		Process p;
+		try {
+			p = Runtime.getRuntime().exec(new String[] { command, parameter, });
+			return (0 == p.waitFor());
+		} catch (final IOException e) {
+			return false;
+		} catch (final InterruptedException e) {
+			return false;
+		}
 	}
 
 	/**

@@ -78,14 +78,14 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final long traceId = trace.getTraceId();
 		final String clazz = thisObject.getClass().getName();
 		// measure before execution
-		CTRLINST.newMonitoringRecord(new BeforeConstructorEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature, clazz));
+		CTRLINST.newMonitoringRecord(new BeforeConstructorEvent(TIME.getTime(), traceId, trace.getNextOrderId(), clazz, signature));
 		// execution of the called method
 		final Object retval;
 		try {
 			retval = thisJoinPoint.proceed();
 		} catch (final Throwable th) { // NOPMD NOCS (catch throw might ok here)
 			// measure after failed execution
-			CTRLINST.newMonitoringRecord(new AfterConstructorFailedEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature, clazz, th.toString()));
+			CTRLINST.newMonitoringRecord(new AfterConstructorFailedEvent(TIME.getTime(), traceId, trace.getNextOrderId(), clazz, signature, th.toString()));
 			throw th;
 		} finally {
 			if (newTrace) { // close the trace
@@ -93,7 +93,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			}
 		}
 		// measure after successful execution
-		CTRLINST.newMonitoringRecord(new AfterConstructorEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature, clazz));
+		CTRLINST.newMonitoringRecord(new AfterConstructorEvent(TIME.getTime(), traceId, trace.getNextOrderId(), clazz, signature));
 		return retval;
 	}
 }

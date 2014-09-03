@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import kieker.common.logging.Log;
@@ -50,6 +51,7 @@ public class WindowStartForecasterTest extends AbstractKiekerRTest {
 	 * Test of the WindowStartForecaster for the seasonal pattern of one day.
 	 */
 	@Test
+	@Ignore("Deactivated RServe Script (#1420)")
 	public void testWindowOfADay() {
 
 		// Time: 2011-12-19 10:05:00 Unix: 1324285500000

@@ -26,6 +26,7 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.common.junit.record.UtilityClass;
 
 /**
  * @author Jan Waller
@@ -58,7 +59,7 @@ public class TestAfterOperationFailedEvent extends AbstractKiekerTest {
 	public void testSerializeDeserializeEquals() {
 
 		final AfterOperationFailedEvent event1 =
-				new AfterOperationFailedEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_OPERATION_SIGNATURE, FQ_CLASSNAME, CAUSE);
+				new AfterOperationFailedEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CLASSNAME, FQ_OPERATION_SIGNATURE, CAUSE);
 
 		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
 		Assert.assertEquals("Unexpected trace ID", TRACE_ID, event1.getTraceId());
@@ -73,7 +74,7 @@ public class TestAfterOperationFailedEvent extends AbstractKiekerTest {
 
 		Assert.assertEquals(event1, event2);
 		Assert.assertEquals(0, event1.compareTo(event2));
-		Assert.assertTrue(event1.refersToSameOperationAs(event2));
+		Assert.assertTrue(UtilityClass.refersToSameOperationAs(event1, event2));
 	}
 
 	/**
@@ -83,7 +84,7 @@ public class TestAfterOperationFailedEvent extends AbstractKiekerTest {
 	public void testSerializeDeserializeBinaryEquals() {
 
 		final AfterOperationFailedEvent event1 =
-				new AfterOperationFailedEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_OPERATION_SIGNATURE, FQ_CLASSNAME, CAUSE);
+				new AfterOperationFailedEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CLASSNAME, FQ_OPERATION_SIGNATURE, CAUSE);
 
 		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
 		Assert.assertEquals("Unexpected trace ID", TRACE_ID, event1.getTraceId());
@@ -101,6 +102,6 @@ public class TestAfterOperationFailedEvent extends AbstractKiekerTest {
 
 		Assert.assertEquals(event1, event2);
 		Assert.assertEquals(0, event1.compareTo(event2));
-		Assert.assertTrue(event1.refersToSameOperationAs(event2));
+		Assert.assertTrue(UtilityClass.refersToSameOperationAs(event1, event2));
 	}
 }

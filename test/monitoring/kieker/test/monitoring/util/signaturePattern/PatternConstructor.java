@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * This class realizes an pattern generator for the adaptive monitoring.
+ * 
  * @author Bjoern Weissenfels, Jan Waller
  * 
  * @since 1.6
@@ -60,7 +62,12 @@ public final class PatternConstructor {
 		// empty default constructor
 	}
 
-	public List<String> getPattern() {
+	/**
+	 * Construct a list of pattern.
+	 * 
+	 * @return List of strings representing pattern
+	 */
+	public List<String> createPatterns() {
 		if (this.visibilityList.isEmpty()) {
 			this.visibilityList.add(PatternConstructor.DEFAULT_VISIBILITY);
 		}
@@ -196,61 +203,97 @@ public final class PatternConstructor {
 		return result;
 	}
 
+	/**
+	 * Add a visibility modifier, like public, private, protected.
+	 */
 	public PatternConstructor addVisibilityVariant(final String visibility) {
 		this.visibilityList.add(visibility);
 		return this;
 	}
 
+	/**
+	 * Add abstract and non_abstract to the pattern list.
+	 */
 	public PatternConstructor addAbstractNonAbstractVariant(final String abstractNonAbstract) {
 		this.abstractNonAbstractList.add(abstractNonAbstract);
 		return this;
 	}
 
+	/**
+	 * Add static and non static to the pattern list.
+	 */
 	public PatternConstructor addStaticNonStaticVariant(final String staticNonStatic) {
 		this.staticNonStaticList.add(staticNonStatic);
 		return this;
 	}
 
+	/**
+	 * Add final/non-final to the pattern list.
+	 */
 	public PatternConstructor addFinalNonFinalVariant(final String finalNonFinal) {
 		this.finalNonFinalList.add(finalNonFinal);
 		return this;
 	}
 
+	/**
+	 * Add synchronized/non-synchronized to the pattern list.
+	 */
 	public PatternConstructor addSynchronizedNonSynchronizedVariant(final String synchronizedNonSynchronized) {
 		this.synchronizedNonSynchronizedList.add(synchronizedNonSynchronized);
 		return this;
 	}
 
+	/**
+	 * Add native/non-native to the pattern list.
+	 */
 	public PatternConstructor addNativeNonNativeVariant(final String nativeNonNative) {
 		this.nativeNonNativeList.add(nativeNonNative);
 		return this;
 	}
 
+	/**
+	 * Add return type to the return type list for the patterns.
+	 */
 	public PatternConstructor addreturnTypeVariant(final String returnType) {
 		this.returnTypeList.add(returnType);
 		return this;
 	}
 
+	/**
+	 * Add class names to the pattern list.
+	 */
 	public PatternConstructor addfqClassNameVariant(final String fqClassName) {
 		this.fqClassNameList.add(fqClassName);
 		return this;
 	}
 
+	/**
+	 * Add operation names to the pattern list.
+	 */
 	public PatternConstructor addoperationNameVariant(final String operationName) {
 		this.operationNameList.add(operationName);
 		return this;
 	}
 
+	/**
+	 * Add parameter names to the pattern list.
+	 */
 	public PatternConstructor addparameterListVariant(final String parameterList) {
 		this.parameterListList.add(parameterList);
 		return this;
 	}
 
+	/**
+	 * Add exception names to the pattern list.
+	 */
 	public PatternConstructor addthrowsListVariant(final String throwsList) {
 		this.throwsListList.add(throwsList);
 		return this;
 	}
 
+	/**
+	 * Add different whitespace variants to the pattern list.
+	 */
 	public PatternConstructor addwhitespaceVariant(final String whitespace) {
 		this.whiteSpaceList.add(whitespace);
 		return this;

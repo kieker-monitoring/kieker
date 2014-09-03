@@ -28,9 +28,9 @@ import java.util.concurrent.ArrayBlockingQueue;
 /**
  * This is a simple logger for the Kieker WebGUI. It stores the log messages within a buffer of a static size. If the buffer is full, the oldest entry will be
  * removed for new entries. As the entries have to be accessible from outside, the queues are stored statically.
- * 
+ *
  * @author Jan Waller, Nils Christian Ehmke
- * 
+ *
  * @since 1.6
  */
 public final class LogImplWebguiLogging implements Log {
@@ -43,7 +43,7 @@ public final class LogImplWebguiLogging implements Log {
 
 	/**
 	 * Creates a new instance of this class.
-	 * 
+	 *
 	 * @param name
 	 *            The name of the logger.
 	 */
@@ -52,6 +52,17 @@ public final class LogImplWebguiLogging implements Log {
 		this.date = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
 		this.date.setTimeZone(TimeZone.getTimeZone("UTC"));
 	}
+
+	@Override
+	public boolean isTraceEnabled() {
+		return false;
+	}
+
+	@Override
+	public void trace(final String message) {} // NOPMD (does nothing)
+
+	@Override
+	public void trace(final String message, final Throwable t) {} // NOPMD (does nothing)
 
 	/**
 	 * {@inheritDoc}
@@ -65,17 +76,13 @@ public final class LogImplWebguiLogging implements Log {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void debug(final String message) {
-		// Ignore
-	}
+	public void debug(final String message) {} // NOPMD (does nothing)
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void debug(final String message, final Throwable t) {
-		// Ignore
-	}
+	public void debug(final String message, final Throwable t) {} // NOPMD (does nothing)
 
 	/**
 	 * {@inheritDoc}
@@ -166,7 +173,7 @@ public final class LogImplWebguiLogging implements Log {
 
 	/**
 	 * Delivers an array with the names of all used loggers.
-	 * 
+	 *
 	 * @return The available log names.
 	 */
 	public static String[] getAvailableLogs() {
@@ -177,7 +184,7 @@ public final class LogImplWebguiLogging implements Log {
 
 	/**
 	 * Delivers an array with all entries of the logger with the given name.
-	 * 
+	 *
 	 * @param name
 	 *            The name of the logger.
 	 * @return The stored entries of the logger. If a logger with the given name doesn't exist, an empty array will be returned.
@@ -197,4 +204,5 @@ public final class LogImplWebguiLogging implements Log {
 			return queue.toArray(new String[queue.size()]);
 		}
 	}
+
 }

@@ -61,7 +61,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 				.addparameterListVariant("int, java.lang.String")
 				.addwhitespaceVariant(" ").addwhitespaceVariant("\t").addwhitespaceVariant("\f").addwhitespaceVariant("\r").addwhitespaceVariant("\n");
 
-		final List<String> positivePatternList = positivePattern.getPattern();
+		final List<String> positivePatternList = positivePattern.createPatterns();
 		for (final String pattern : positivePatternList) {
 			Assert.assertTrue("pattern: " + pattern + "; signature: " + signature, PatternParser.parseToPattern(pattern).matcher(signature).matches());
 		}
@@ -90,7 +90,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 				.addthrowsListVariant("")
 				.addwhitespaceVariant(" ");
 
-		final List<String> positivePatternList = positivePattern.getPattern();
+		final List<String> positivePatternList = positivePattern.createPatterns();
 		for (final String pattern : positivePatternList) {
 			Assert.assertTrue(PatternParser.parseToPattern(pattern).matcher(signature).matches());
 		}
@@ -119,7 +119,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 				.addthrowsListVariant("Exception").addthrowsListVariant("..")
 				.addwhitespaceVariant(" ");
 
-		final List<String> positivePatternList = positivePattern.getPattern();
+		final List<String> positivePatternList = positivePattern.createPatterns();
 		for (final String pattern : positivePatternList) {
 			Assert.assertTrue(PatternParser.parseToPattern(pattern).matcher(signature).matches());
 		}
@@ -138,7 +138,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 				.addparameterListVariant("..").addparameterListVariant("int, java.lang.String").addparameterListVariant("int,..").addparameterListVariant("..*,..*")
 				.addthrowsListVariant("Exception").addthrowsListVariant("..")
 				.addwhitespaceVariant(" ");
-		final List<String> wrongVisibilityPatternList = wrongVisibilityPattern.getPattern();
+		final List<String> wrongVisibilityPatternList = wrongVisibilityPattern.createPatterns();
 		for (final String pattern : wrongVisibilityPatternList) {
 			Assert.assertFalse(PatternParser.parseToPattern(pattern).matcher(signature).matches());
 		}
@@ -157,7 +157,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 				.addparameterListVariant("..").addparameterListVariant("int, java.lang.String").addparameterListVariant("int,..").addparameterListVariant("..*,..*")
 				.addthrowsListVariant("Exception").addthrowsListVariant("..")
 				.addwhitespaceVariant(" ");
-		final List<String> wrongAbstractPatternList = wrongAbstractPattern.getPattern();
+		final List<String> wrongAbstractPatternList = wrongAbstractPattern.createPatterns();
 		for (final String pattern : wrongAbstractPatternList) {
 			Assert.assertFalse(PatternParser.parseToPattern(pattern).matcher(signature).matches());
 		}
@@ -176,7 +176,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 				.addparameterListVariant("..").addparameterListVariant("int, java.lang.String").addparameterListVariant("int,..").addparameterListVariant("..*,..*")
 				.addthrowsListVariant("Exception").addthrowsListVariant("..")
 				.addwhitespaceVariant(" ");
-		final List<String> wrongStaticPatternList = wrongStaticPattern.getPattern();
+		final List<String> wrongStaticPatternList = wrongStaticPattern.createPatterns();
 		for (final String pattern : wrongStaticPatternList) {
 			Assert.assertFalse(PatternParser.parseToPattern(pattern).matcher(signature).matches());
 		}
@@ -195,7 +195,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 				.addparameterListVariant("..").addparameterListVariant("int, java.lang.String").addparameterListVariant("int,..").addparameterListVariant("..*,..*")
 				.addthrowsListVariant("Exception").addthrowsListVariant("..")
 				.addwhitespaceVariant(" ");
-		final List<String> wrongFinalPatternList = wrongFinalPattern.getPattern();
+		final List<String> wrongFinalPatternList = wrongFinalPattern.createPatterns();
 		for (final String pattern : wrongFinalPatternList) {
 			Assert.assertFalse(PatternParser.parseToPattern(pattern).matcher(signature).matches());
 		}
@@ -214,7 +214,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 				.addparameterListVariant("..").addparameterListVariant("int, java.lang.String").addparameterListVariant("int,..").addparameterListVariant("..*,..*")
 				.addthrowsListVariant("Exception").addthrowsListVariant("..")
 				.addwhitespaceVariant(" ");
-		final List<String> wrongSynchronizedPatternList = wrongSynchronizedPattern.getPattern();
+		final List<String> wrongSynchronizedPatternList = wrongSynchronizedPattern.createPatterns();
 		for (final String pattern : wrongSynchronizedPatternList) {
 			Assert.assertFalse(PatternParser.parseToPattern(pattern).matcher(signature).matches());
 		}
@@ -233,7 +233,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 				.addparameterListVariant("..").addparameterListVariant("int, java.lang.String").addparameterListVariant("int,..").addparameterListVariant("..*,..*")
 				.addthrowsListVariant("Exception").addthrowsListVariant("..")
 				.addwhitespaceVariant(" ");
-		final List<String> wrongNativePatternList = wrongNativePattern.getPattern();
+		final List<String> wrongNativePatternList = wrongNativePattern.createPatterns();
 		for (final String pattern : wrongNativePatternList) {
 			Assert.assertFalse(PatternParser.parseToPattern(pattern).matcher(signature).matches());
 		}
@@ -252,7 +252,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 				.addparameterListVariant("..").addparameterListVariant("int, java.lang.String").addparameterListVariant("int,..").addparameterListVariant("..*,..*")
 				.addthrowsListVariant("Exception").addthrowsListVariant("..")
 				.addwhitespaceVariant(" ");
-		final List<String> wrongRetTypePatternList = wrongRetTypePattern.getPattern();
+		final List<String> wrongRetTypePatternList = wrongRetTypePattern.createPatterns();
 		for (final String pattern : wrongRetTypePatternList) {
 			Assert.assertFalse(PatternParser.parseToPattern(pattern).matcher(signature).matches());
 		}
@@ -270,7 +270,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 				.addparameterListVariant("..").addparameterListVariant("int, java.lang.String").addparameterListVariant("int,..").addparameterListVariant("..*,..*")
 				.addthrowsListVariant("Exception").addthrowsListVariant("..")
 				.addwhitespaceVariant(" ");
-		final List<String> wrongClassNamePatternList = wrongClassNamePattern.getPattern();
+		final List<String> wrongClassNamePatternList = wrongClassNamePattern.createPatterns();
 		for (final String pattern : wrongClassNamePatternList) {
 			Assert.assertFalse(PatternParser.parseToPattern(pattern).matcher(signature).matches());
 		}
@@ -289,7 +289,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 				.addparameterListVariant("..").addparameterListVariant("int, java.lang.String").addparameterListVariant("int,..").addparameterListVariant("..*,..*")
 				.addthrowsListVariant("Exception").addthrowsListVariant("..")
 				.addwhitespaceVariant(" ");
-		final List<String> wrongOperationNamePatternList = wrongOperationNamePattern.getPattern();
+		final List<String> wrongOperationNamePatternList = wrongOperationNamePattern.createPatterns();
 		for (final String pattern : wrongOperationNamePatternList) {
 			Assert.assertFalse(PatternParser.parseToPattern(pattern).matcher(signature).matches());
 		}
@@ -308,7 +308,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 				.addparameterListVariant("").addparameterListVariant("int").addparameterListVariant("int,String").addparameterListVariant("java.lang.String")
 				.addthrowsListVariant("Exception").addthrowsListVariant("..")
 				.addwhitespaceVariant(" ");
-		final List<String> wrongParamListPatternList = wrongParamListPattern.getPattern();
+		final List<String> wrongParamListPatternList = wrongParamListPattern.createPatterns();
 		for (final String pattern : wrongParamListPatternList) {
 			Assert.assertFalse(PatternParser.parseToPattern(pattern).matcher(signature).matches());
 		}
@@ -327,7 +327,7 @@ public class TestPatternParser extends AbstractKiekerTest {
 				.addparameterListVariant("..").addparameterListVariant("int, java.lang.String").addparameterListVariant("int,..").addparameterListVariant("..*,..*")
 				.addthrowsListVariant("").addthrowsListVariant("SpecialException")
 				.addwhitespaceVariant(" ");
-		final List<String> wrongThrowsListPatternList = wrongThrowsListPattern.getPattern();
+		final List<String> wrongThrowsListPatternList = wrongThrowsListPattern.createPatterns();
 		for (final String pattern : wrongThrowsListPatternList) {
 			Assert.assertFalse(PatternParser.parseToPattern(pattern).matcher(signature).matches());
 		}

@@ -216,9 +216,11 @@ function assert_files_exist_common {
 function assert_files_exist_src {
 	assert_files_exist_common
 	assert_dir_exists "model/"
-	assert_file_exists_regular "model/AnalysisMetaModel.ecore"
-	assert_file_exists_regular "model/AnalysisMetaModel.ecorediag"
-	assert_file_exists_regular "model/AnalysisMetaModel.genmodel"
+	assert_dir_exists "model/analysis/"
+	assert_dir_exists "model/records/"
+	assert_file_exists_regular "model/analysis/AnalysisMetaModel.ecore"
+	assert_file_exists_regular "model/analysis/AnalysisMetaModel.ecorediag"
+	assert_file_exists_regular "model/analysis/AnalysisMetaModel.genmodel"
 	assert_dir_exists "lib/static-analysis/"
 	assert_dir_exists "src/"
 	assert_dir_exists "src-gen/"
@@ -241,6 +243,8 @@ function assert_files_exist_src {
 	assert_file_exists_regular "build-config/init-and-clean.xml"
 	assert_file_exists_regular "build-config/quality.xml"
 	assert_file_exists_regular "build-config/test.xml"
+	assert_file_exists_regular "build-config/javadoc-header/javadoc.css"
+	assert_file_exists_regular "build-config/javadoc-header/kieker-javadoc-header.png"
 	assert_file_exists_regular "kieker-eclipse.importorder"
 	assert_file_exists_regular "kieker-eclipse-cleanup.xml"
 	assert_file_exists_regular "kieker-eclipse-formatter.xml"
@@ -415,8 +419,8 @@ function check_bin_archive {
 	fi
 	for f in $(ls "${REFERENCE_OUTPUT_DIR}" | egrep "(dot$|pic$|html$|txt$)"); do 
 		echo -n "Comparing to reference file $f ... "
-    if test -z "$f"; then
-      echo "File $f does not exist or is empty"
+		if test -z "$f"; then
+			echo "File $f does not exist or is empty"
 			exit 1;
 		fi
 		# Note that this is a hack because sometimes the line order differs

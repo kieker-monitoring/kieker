@@ -58,7 +58,13 @@ public final class JMXController extends AbstractController implements IJMXContr
 		Fallback, Sun
 	}
 
-	// The error handling in this block is correct, see ticket #293
+	/**
+	 * Create a new JMX controller.
+	 * Note: The error handling in this block is correct, see ticket #293
+	 * 
+	 * @param configuration
+	 *            the Kieker configuration facitlity
+	 */
 	protected JMXController(final Configuration configuration) {
 		super(configuration);
 		ObjectName controllerObjectNameTmp = null;

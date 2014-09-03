@@ -20,26 +20,31 @@ import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
-import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
 
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 
 /**
- * @author Generic Kieker
+ * @author Jan Waller
  * 
- * @since 1.10
+ * @since 1.5
  */
-public class ConstructionEvent extends AbstractTraceEvent implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	public static final int SIZE = 28; // serialization size (without variable part of strings)
+public class ConstructionEvent extends AbstractTraceEvent  {
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
+			 + TYPE_SIZE_LONG // ITraceRecord.traceId
+			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
+			 + TYPE_SIZE_STRING // ConstructionEvent.classSignature
+			 + TYPE_SIZE_INT // ConstructionEvent.objectId
+	;
 	private static final long serialVersionUID = -3519441499400826996L;
 	
-	private static final Class<?>[] TYPES = {
-		Long.class, // IEventRecord.timestamp
-		Long.class, // ITraceRecord.traceId
-		Integer.class, // ITraceRecord.orderIndex
+	public static final Class<?>[] TYPES = {
+		long.class, // IEventRecord.timestamp
+		long.class, // ITraceRecord.traceId
+		int.class, // ITraceRecord.orderIndex
 		String.class, // ConstructionEvent.classSignature
-		Integer.class, // ConstructionEvent.objectId
+		int.class, // ConstructionEvent.objectId
 	};
 	
 	public static final String CLASS_SIGNATURE = "";
@@ -64,12 +69,13 @@ public class ConstructionEvent extends AbstractTraceEvent implements IMonitoring
 	 */
 	public ConstructionEvent(final long timestamp, final long traceId, final int orderIndex, final String classSignature, final int objectId) {
 		super(timestamp, traceId, orderIndex);
-		this.classSignature = classSignature;
+		this.classSignature = classSignature == null?"":classSignature;
 		this.objectId = objectId;
 	}
 
 	/**
-	 * This constructor converts the given array into a record. It is recommended to use the array which is the result of a call to {@link #toArray()}.
+	 * This constructor converts the given array into a record.
+	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
 	 * 
 	 * @param values
 	 *            The values for the record.
@@ -112,6 +118,7 @@ public class ConstructionEvent extends AbstractTraceEvent implements IMonitoring
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object[] toArray() {
 		return new Object[] {
 			this.getTimestamp(),
@@ -125,6 +132,7 @@ public class ConstructionEvent extends AbstractTraceEvent implements IMonitoring
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putLong(this.getTimestamp());
 		buffer.putLong(this.getTraceId());
@@ -136,6 +144,7 @@ public class ConstructionEvent extends AbstractTraceEvent implements IMonitoring
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
@@ -143,6 +152,7 @@ public class ConstructionEvent extends AbstractTraceEvent implements IMonitoring
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getSize() {
 		return SIZE;
 	}
@@ -151,6 +161,7 @@ public class ConstructionEvent extends AbstractTraceEvent implements IMonitoring
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
@@ -161,6 +172,7 @@ public class ConstructionEvent extends AbstractTraceEvent implements IMonitoring
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();

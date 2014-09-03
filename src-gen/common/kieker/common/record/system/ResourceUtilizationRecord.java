@@ -26,19 +26,24 @@ import kieker.common.util.registry.IRegistry;
 
 
 /**
- * @author Generic Kieker
+ * @author Andre van Hoorn, Jan Waller
  * 
- * @since 1.10
+ * @since 1.3
  */
 public class ResourceUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	public static final int SIZE = 24; // serialization size (without variable part of strings)
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_LONG // ResourceUtilizationRecord.timestamp
+			 + TYPE_SIZE_STRING // ResourceUtilizationRecord.hostname
+			 + TYPE_SIZE_STRING // ResourceUtilizationRecord.resourceName
+			 + TYPE_SIZE_DOUBLE // ResourceUtilizationRecord.utilization
+	;
 	private static final long serialVersionUID = 2644828043690936993L;
 	
-	private static final Class<?>[] TYPES = {
-		Long.class, // ResourceUtilizationRecord.timestamp
+	public static final Class<?>[] TYPES = {
+		long.class, // ResourceUtilizationRecord.timestamp
 		String.class, // ResourceUtilizationRecord.hostname
 		String.class, // ResourceUtilizationRecord.resourceName
-		Double.class, // ResourceUtilizationRecord.utilization
+		double.class, // ResourceUtilizationRecord.utilization
 	};
 	
 	public static final long TIMESTAMP = 0L;
@@ -65,13 +70,14 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	 */
 	public ResourceUtilizationRecord(final long timestamp, final String hostname, final String resourceName, final double utilization) {
 		this.timestamp = timestamp;
-		this.hostname = hostname;
-		this.resourceName = resourceName;
+		this.hostname = hostname == null?"":hostname;
+		this.resourceName = resourceName == null?"":resourceName;
 		this.utilization = utilization;
 	}
 
 	/**
-	 * This constructor converts the given array into a record. It is recommended to use the array which is the result of a call to {@link #toArray()}.
+	 * This constructor converts the given array into a record.
+	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
 	 * 
 	 * @param values
 	 *            The values for the record.
@@ -119,6 +125,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object[] toArray() {
 		return new Object[] {
 			this.getTimestamp(),
@@ -131,6 +138,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putLong(this.getTimestamp());
 		buffer.putInt(stringRegistry.get(this.getHostname()));
@@ -141,6 +149,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
@@ -148,6 +157,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getSize() {
 		return SIZE;
 	}
@@ -156,6 +166,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
@@ -166,6 +177,7 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();

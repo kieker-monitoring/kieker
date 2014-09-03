@@ -66,6 +66,21 @@ public final class LogImplJUnit implements Log {
 		}
 	}
 
+	@Override
+	public boolean isTraceEnabled() {
+		return this.logger.isLoggable(java.util.logging.Level.FINER);
+	}
+
+	@Override
+	public void trace(final String message) {
+		this.log(java.util.logging.Level.FINER, message, null);
+	}
+
+	@Override
+	public void trace(final String message, final Throwable t) {
+		this.log(java.util.logging.Level.FINER, message, t);
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -163,6 +178,12 @@ public final class LogImplJUnit implements Log {
 		this.log(java.util.logging.Level.SEVERE, message, t);
 	}
 
+	/**
+	 * Add a throwable to the list of throwables to be ignored for normal logging.
+	 * 
+	 * @param clazz
+	 *            throwable class
+	 */
 	public static final void disableThrowable(final Class<? extends Throwable> clazz) {
 		synchronized (DISABLED_THROWABLES) {
 			DISABLED_THROWABLES.add(clazz);
@@ -170,6 +191,9 @@ public final class LogImplJUnit implements Log {
 		LOG.info("Logging " + clazz.getName() + " only to DEBUG log level.");
 	}
 
+	/**
+	 * Clear list of disabled throwables.
+	 */
 	public static final void reset() {
 		synchronized (DISABLED_THROWABLES) {
 			if (!DISABLED_THROWABLES.isEmpty()) {
@@ -178,4 +202,5 @@ public final class LogImplJUnit implements Log {
 			}
 		}
 	}
+
 }

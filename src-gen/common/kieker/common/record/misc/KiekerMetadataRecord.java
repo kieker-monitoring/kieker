@@ -26,23 +26,32 @@ import kieker.common.util.registry.IRegistry;
 
 
 /**
- * @author Generic Kieker
+ * @author Jan Waller
  * 
- * @since 1.10
+ * @since 1.7
  */
 public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
-	public static final int SIZE = 37; // serialization size (without variable part of strings)
+	/** Descriptive definition of the serialization size of the record. */
+	public static final int SIZE = TYPE_SIZE_STRING // KiekerMetadataRecord.version
+			 + TYPE_SIZE_STRING // KiekerMetadataRecord.controllerName
+			 + TYPE_SIZE_STRING // KiekerMetadataRecord.hostname
+			 + TYPE_SIZE_INT // KiekerMetadataRecord.experimentId
+			 + TYPE_SIZE_BOOLEAN // KiekerMetadataRecord.debugMode
+			 + TYPE_SIZE_LONG // KiekerMetadataRecord.timeOffset
+			 + TYPE_SIZE_STRING // KiekerMetadataRecord.timeUnit
+			 + TYPE_SIZE_LONG // KiekerMetadataRecord.numberOfRecords
+	;
 	private static final long serialVersionUID = 7506050189318057340L;
 	
-	private static final Class<?>[] TYPES = {
+	public static final Class<?>[] TYPES = {
 		String.class, // KiekerMetadataRecord.version
 		String.class, // KiekerMetadataRecord.controllerName
 		String.class, // KiekerMetadataRecord.hostname
-		Integer.class, // KiekerMetadataRecord.experimentId
-		Boolean.class, // KiekerMetadataRecord.debugMode
-		Long.class, // KiekerMetadataRecord.timeOffset
+		int.class, // KiekerMetadataRecord.experimentId
+		boolean.class, // KiekerMetadataRecord.debugMode
+		long.class, // KiekerMetadataRecord.timeOffset
 		String.class, // KiekerMetadataRecord.timeUnit
-		Long.class, // KiekerMetadataRecord.numberOfRecords
+		long.class, // KiekerMetadataRecord.numberOfRecords
 	};
 	
 	public static final String NO_CONTROLLERNAME = "<no-controller-name>";
@@ -88,18 +97,19 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 	 *            numberOfRecords
 	 */
 	public KiekerMetadataRecord(final String version, final String controllerName, final String hostname, final int experimentId, final boolean debugMode, final long timeOffset, final String timeUnit, final long numberOfRecords) {
-		this.version = version;
-		this.controllerName = controllerName;
-		this.hostname = hostname;
+		this.version = version == null?"1.9":version;
+		this.controllerName = controllerName == null?"<no-controller-name>":controllerName;
+		this.hostname = hostname == null?"<no-hostname>":hostname;
 		this.experimentId = experimentId;
 		this.debugMode = debugMode;
 		this.timeOffset = timeOffset;
-		this.timeUnit = timeUnit;
+		this.timeUnit = timeUnit == null?"NANOSECONDS":timeUnit;
 		this.numberOfRecords = numberOfRecords;
 	}
 
 	/**
-	 * This constructor converts the given array into a record. It is recommended to use the array which is the result of a call to {@link #toArray()}.
+	 * This constructor converts the given array into a record.
+	 * It is recommended to use the array which is the result of a call to {@link #toArray()}.
 	 * 
 	 * @param values
 	 *            The values for the record.
@@ -159,6 +169,7 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Object[] toArray() {
 		return new Object[] {
 			this.getVersion(),
@@ -175,6 +186,7 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
 		buffer.putInt(stringRegistry.get(this.getVersion()));
 		buffer.putInt(stringRegistry.get(this.getControllerName()));
@@ -189,6 +201,7 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Class<?>[] getValueTypes() {
 		return TYPES; // NOPMD
 	}
@@ -196,6 +209,7 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getSize() {
 		return SIZE;
 	}
@@ -204,6 +218,7 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public void initFromArray(final Object[] values) {
 		throw new UnsupportedOperationException();
@@ -214,6 +229,7 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 	 * 
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
+	@Override
 	@Deprecated
 	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		throw new UnsupportedOperationException();

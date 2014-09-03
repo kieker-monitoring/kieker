@@ -18,9 +18,9 @@ package kieker.common.logging;
 
 /**
  * This is an actual implementation of the logging interface used by the JDK 14 logger.
- * 
+ *
  * @author Jan Waller
- * 
+ *
  * @since 1.5
  */
 public final class LogImplJDK14 implements Log {
@@ -29,7 +29,7 @@ public final class LogImplJDK14 implements Log {
 
 	/**
 	 * Creates a new instance of this class.
-	 * 
+	 *
 	 * @param name
 	 *            The name of the logger.
 	 */
@@ -56,6 +56,21 @@ public final class LogImplJDK14 implements Log {
 				this.logger.logp(level, sourceClass, sourceMethod, message);
 			}
 		}
+	}
+
+	@Override
+	public boolean isTraceEnabled() {
+		return this.logger.isLoggable(java.util.logging.Level.FINER);
+	}
+
+	@Override
+	public void trace(final String message) {
+		this.log(java.util.logging.Level.FINER, message, null);
+	}
+
+	@Override
+	public void trace(final String message, final Throwable t) {
+		this.log(java.util.logging.Level.FINER, message, t);
 	}
 
 	/**
@@ -129,4 +144,5 @@ public final class LogImplJDK14 implements Log {
 	public final void error(final String message, final Throwable t) {
 		this.log(java.util.logging.Level.SEVERE, message, t);
 	}
+
 }

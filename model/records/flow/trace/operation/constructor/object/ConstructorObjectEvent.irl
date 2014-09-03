@@ -1,0 +1,25 @@
+package kieker.common.record.flow.trace.operation.constructor.object
+
+import kieker.common.record.flow.IObjectRecord
+import kieker.common.record.flow.ICallObjectRecord
+import kieker.common.record.flow.IInterfaceRecord
+
+import kieker.common.record.flow.trace.operation.constructor.AfterConstructorFailedEvent
+import kieker.common.record.flow.trace.operation.constructor.AfterConstructorEvent
+import kieker.common.record.flow.trace.operation.constructor.BeforeConstructorEvent
+import kieker.common.record.flow.trace.operation.constructor.CallConstructorEvent
+
+@author 'Jan Waller' @since '1.6'
+entity AfterConstructorFailedObjectEvent extends AfterConstructorFailedEvent : IObjectRecord 
+
+@author 'Jan Waller' @since '1.6'
+entity AfterConstructorObjectEvent extends AfterConstructorEvent : IObjectRecord
+
+@author 'Jan Waller' @since '1.6'
+entity BeforeConstructorObjectEvent extends BeforeConstructorEvent : IObjectRecord
+
+@author 'Jan Waller' @since '1.6'
+entity CallConstructorObjectEvent extends CallConstructorEvent : ICallObjectRecord
+
+@author 'Florian Fittkau' @since '1.10'
+entity BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObjectEvent : IInterfaceRecord
