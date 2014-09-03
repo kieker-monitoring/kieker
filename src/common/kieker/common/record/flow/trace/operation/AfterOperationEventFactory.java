@@ -34,7 +34,7 @@ public class AfterOperationEventFactory implements IRecordFactory<AfterOperation
 	}
 
 	@Override
-	public AfterOperationEvent create(final Object[] values, final IRegistry<String> stringRegistry) {
+	public AfterOperationEvent create(final Object[] values) {
 		return new AfterOperationEvent(values);
 	}
 

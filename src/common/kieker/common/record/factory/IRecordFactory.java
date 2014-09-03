@@ -29,5 +29,5 @@ public interface IRecordFactory<T> {
 
 	T create(ByteBuffer buffer, IRegistry<String> stringRegistry);
 
-	T create(Object[] values, IRegistry<String> stringRegistry);
+	T create(Object[] values);
 }

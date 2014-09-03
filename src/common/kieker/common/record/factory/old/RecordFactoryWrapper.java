@@ -50,7 +50,7 @@ public final class RecordFactoryWrapper implements IRecordFactory<IMonitoringRec
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public IMonitoringRecord create(final Object[] values, final IRegistry<String> stringRegistry) {
+	public IMonitoringRecord create(final Object[] values) {
 		try {
 			return AbstractMonitoringRecord.createFromArray(this.recordClassName, values);
 		} catch (final MonitoringRecordException e) {
