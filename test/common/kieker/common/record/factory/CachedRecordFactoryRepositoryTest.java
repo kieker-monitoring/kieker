@@ -26,7 +26,6 @@ import org.junit.rules.ExpectedException;
 
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.record.factory.old.RecordFactoryWrapper;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationEventFactory;
@@ -51,30 +50,50 @@ public class CachedRecordFactoryRepositoryTest {
 	public void before() throws Exception {
 		final RecordFactoryRepository recordFactoryRepository = new RecordFactoryRepository();
 		this.cachedRecordFactories = new CachedRecordFactoryRepository(recordFactoryRepository);
-		this.buffer = ByteBuffer.allocateDirect(1024 * 8);
+		this.buffer = ByteBuffer.allocateDirect(1024);
 		this.stringRegistry = new Registry<String>();
 	}
 
 	@Test
-	public void testRecordWithFactory() {
+	public void testRecordWithFactoryIsAssignedItsFactory() {
 		final String recordClassName = AfterOperationEvent.class.getName();
 		final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.cachedRecordFactories.get(recordClassName);
 		Assert.assertEquals(AfterOperationEventFactory.class, recordFactory.getClass());
 	}
 
 	@Test
-	public void testRecordWithoutFactory() {
-		final String recordClassName = TestRecord.class.getName();
+	public void testRecordConstructionWithFactory() {
+		final String recordClassName = AfterOperationEvent.class.getName();
 		final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.cachedRecordFactories.get(recordClassName);
-		Assert.assertEquals(RecordFactoryWrapper.class, recordFactory.getClass());
 
-		final OperationExecutionRecord operationExecutionRecord = new OperationExecutionRecord("test()", "1111-1111", 1, 1000, 2500, "localhost", 0, 0);
-		operationExecutionRecord.writeBytes(this.buffer, this.stringRegistry);
-		recordFactory.create(this.buffer, this.stringRegistry);
+		final String operationSignature = "isEmpty()";
+		final String classSignature = "java.util.List";
+		final int orderIndex = 333;
+		final long traceId = 666;
+		final long timestamp = 111;
+		final AfterOperationEvent expectedEvent = new AfterOperationEvent(timestamp, traceId, orderIndex, classSignature, operationSignature);
+		expectedEvent.writeBytes(this.buffer, this.stringRegistry);
+		this.buffer.flip();
+		final IMonitoringRecord event = recordFactory.create(this.buffer, this.stringRegistry);
+
+		Assert.assertEquals(expectedEvent.getClass(), event.getClass());
+		final AfterOperationEvent castedEvent = (AfterOperationEvent) event;
+		Assert.assertEquals(expectedEvent.getTimestamp(), castedEvent.getTimestamp());
+		Assert.assertEquals(expectedEvent.getTraceId(), castedEvent.getTraceId());
+		Assert.assertEquals(expectedEvent.getOrderIndex(), castedEvent.getOrderIndex());
+		Assert.assertEquals(expectedEvent.getClassSignature(), castedEvent.getClassSignature());
+		Assert.assertEquals(expectedEvent.getOperationSignature(), castedEvent.getOperationSignature());
 	}
 
 	@Test
-	public void testNotExistingRecord() {
+	public void testRecordWithoutFactoryIsAssignedFactoryWrapper() {
+		final String recordClassName = TestRecord.class.getName();
+		final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.cachedRecordFactories.get(recordClassName);
+		Assert.assertEquals(RecordFactoryWrapper.class, recordFactory.getClass());
+	}
+
+	@Test
+	public void testNotExistingRecordThrowsException() {
 		final String recordClassName = "record.that.does.not.exist";
 		final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.cachedRecordFactories.get(recordClassName);
 		Assert.assertEquals(RecordFactoryWrapper.class, recordFactory.getClass());
