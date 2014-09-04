@@ -119,15 +119,14 @@
 				<include name="org.eclipse.emf.*.jar" />
 				<!-- Bridge begin -->
 				<include name="activemq-*.jar" />
-				<include name="kahadb-5.7.0.jar"/>
 				<include name="javax.jms-*.jar" />
 				<include name="reflections-*.jar"/>
 				<include name="geronimo-j2ee-management_1.1_spec-*.jar"/>
 				<!-- Bridge end -->
 				<!-- OPAD begin -->
 				<include name="mongo-*.jar"/>
-				<include name="commons-math-*.jar"/>
-				<include name="commons-lang-*.jar"/>
+				<include name="commons-math3-*.jar"/>
+				<include name="commons-lang3-*.jar"/>
 				<include name="REngine-*.jar"/>
 				<include name="Rserve-*.jar"/>
 				<include name="Rsession-*.jar"/>
