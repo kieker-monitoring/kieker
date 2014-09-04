@@ -19,7 +19,7 @@ package kieker.tools.tslib.forecast.historicdata;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.math.stat.StatUtils;
+import org.apache.commons.math3.stat.StatUtils;
 import org.json.JSONObject;
 
 import com.mongodb.BasicDBObject;
@@ -38,10 +38,10 @@ import kieker.tools.tslib.forecast.IForecastResult;
  * The prediction searches for a time series point in the past. This point is determined with the help of a
  * seasonal pattern (distance, timeunit). Around the found time series point a new time series window is established,
  * the values of the time series window are aggregated and used as prediction.
- * 
+ *
  * @since 1.10
  * @author Tom Frotscher
- * 
+ *
  */
 public class PatternCheckingForecaster extends AbstractForecaster<Double> {
 
@@ -56,7 +56,7 @@ public class PatternCheckingForecaster extends AbstractForecaster<Double> {
 
 	/**
 	 * Creates a net historic data forecaster.
-	 * 
+	 *
 	 * @param historyTimeseries
 	 *            actual sliding window
 	 * @param dist
@@ -85,10 +85,10 @@ public class PatternCheckingForecaster extends AbstractForecaster<Double> {
 
 	/**
 	 * Proceeds the forecast of the historic data forecaster.
-	 * 
+	 *
 	 * @param numForecastSteps
 	 *            Number of steps predicted in the future
-	 * 
+	 *
 	 * @return
 	 *         forecast result
 	 */
@@ -110,7 +110,7 @@ public class PatternCheckingForecaster extends AbstractForecaster<Double> {
 	 * Get the data from the data base that matches to the configured pattern. Is also used to check
 	 * whether the historic forecaster can be used (there is a corresponding time point in the database)
 	 * or not.
-	 * 
+	 *
 	 * @return
 	 *         true if corresponding time series point in the past can be found, else false
 	 */
@@ -132,7 +132,7 @@ public class PatternCheckingForecaster extends AbstractForecaster<Double> {
 	/**
 	 * This methods extract a value of the alternative reference model. It calculates the mean of all
 	 * values of the found corresponding time window.
-	 * 
+	 *
 	 * @param cursor
 	 *            DB reference holding the corresponding time window
 	 * @return

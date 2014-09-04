@@ -19,7 +19,7 @@ package kieker.tools.tslib.forecast;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
 
 import kieker.tools.tslib.ForecastMethod;
 import kieker.tools.tslib.ITimeSeries;
@@ -27,10 +27,10 @@ import kieker.tools.util.RBridgeControl;
 
 /**
  * Convenience class to implement an {@link IForecaster} with R.
- * 
+ *
  * @since 1.10
  * @author Andre van Hoorn, Nikolas Herbst, Andreas Eberlein, Tobias Rudolph
- * 
+ *
  */
 public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 	private static final RBridgeControl RBRIDGE = RBridgeControl.getInstance();
@@ -46,10 +46,10 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param historyTimeseries
 	 *            timeseries
-	 * 
+	 *
 	 * @param modelFunc
 	 *            modelFunction
 	 * @param forecastFunc
@@ -66,7 +66,7 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param historyTimeseries
 	 *            timeseries
 	 * @param modelFunc
@@ -75,7 +75,7 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 	 *            forecastfunction
 	 * @param confidenceLevel
 	 *            value of confedenclevel
-	 * 
+	 *
 	 * @param strategy
 	 *            FC strategy
 	 */
@@ -223,20 +223,20 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 
 	/**
 	 * Returns additional parameters to be appended to the call of the R function {@link #getModelFuncName()}.
-	 * 
+	 *
 	 * @return the parameters or null if none
 	 */
 	protected abstract String[] getModelFuncParams();
 
 	/**
 	 * Returns additional parameters to be appended to the call of the R function {@link #getForecastFuncName()}.
-	 * 
+	 *
 	 * @return the parameters or null if none
 	 */
 	protected abstract String[] getForecastFuncParams();
 
 	/**
-	 * 
+	 *
 	 * @param allHistory
 	 *            List there null values should be deleted in this function
 	 * @return List/Array with no NullValues
