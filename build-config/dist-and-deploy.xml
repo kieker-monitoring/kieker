@@ -310,9 +310,9 @@
 						prefix="${kieker.dist.name}/${src.example.analysis.kax.dir}/lib" />	
 			<tarfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
 						prefix="${kieker.dist.name}/${src.example.analysis.opad.dir}/lib" />	
-			<tarfileset file="${lib.dir}/commons-lang-*.jar"
+			<tarfileset file="${lib.dir}/commons-lang3-*.jar"
 						prefix="${kieker.dist.name}/${src.example.analysis.opad.dir}/lib" />
-			<tarfileset file="${lib.dir}/commons-math-*.jar"
+			<tarfileset file="${lib.dir}/commons-math3-*.jar"
 						prefix="${kieker.dist.name}/${src.example.analysis.opad.dir}/lib" />			
 			<tarfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
 						prefix="${kieker.dist.name}/${src.example.monitoring.aspectj.dir}/lib" />		
@@ -432,9 +432,9 @@
 						prefix="${kieker.dist.name}/${src.example.analysis.opad.dir}/lib" />				
 			<zipfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
 						prefix="${kieker.dist.name}/${src.example.monitoring.aspectj.dir}/lib" />	
-			<zipfileset file="${lib.dir}/commons-lang-*.jar"
+			<zipfileset file="${lib.dir}/commons-lang3-*.jar"
 						prefix="${kieker.dist.name}/${src.example.analysis.opad.dir}/lib" />
-			<zipfileset file="${lib.dir}/commons-math-*.jar"
+			<zipfileset file="${lib.dir}/commons-math3-*.jar"
 						prefix="${kieker.dist.name}/${src.example.analysis.opad.dir}/lib" />			
 			<zipfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
 						prefix="${kieker.dist.name}/${src.example.monitoring.adaptive.dir}/lib" />		
