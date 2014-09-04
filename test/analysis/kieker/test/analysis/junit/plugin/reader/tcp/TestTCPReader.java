@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.plugin.reader.tcp;
+package kieker.test.analysis.junit.plugin.reader.tcp;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -30,6 +30,7 @@ import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
+import kieker.analysis.plugin.reader.tcp.TCPReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
