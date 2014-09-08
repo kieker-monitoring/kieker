@@ -67,7 +67,6 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 		}
 
 		this.nextTime = this.startTime;
-		this.setNextTime();
 	}
 
 	/**
@@ -83,7 +82,7 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 	 *            length of timeseries
 	 */
 	public TimeSeries(final long startTime, final TimeUnit timeSeriesTimeUnit, final long deltaTime, final TimeUnit deltaTimeUnit, final int capacity) {
-		// frequenc = 24 best practice
+		// frequency = 24 best practice
 		this(startTime, timeSeriesTimeUnit, deltaTime, deltaTimeUnit, 24, capacity);
 	}
 
@@ -161,11 +160,11 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 		final ITimeSeriesPoint<T> point;
 
 		synchronized (value) {
+			// this.setNextTime();
 			point = new TimeSeriesPoint<T>(this.nextTime, value);
 			this.points.add(point);
-			this.setNextTime();
+			this.nextTime = this.points.peek().getTime();
 		}
-
 		return point;
 	}
 
@@ -200,7 +199,11 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 
 	@Override
 	public long getEndTime() {
-		return this.getStartTime() + (this.timeSeriesStepSize * this.size());
+		if (this.getPoints().isEmpty()) {
+			throw new IllegalStateException("The TimeSeries is empty, so no end time can be returned.");
+		} else {
+			return this.getStartTime() + (this.timeSeriesStepSize * (this.getPoints().size() - 1));
+		}
 	}
 
 	@Override

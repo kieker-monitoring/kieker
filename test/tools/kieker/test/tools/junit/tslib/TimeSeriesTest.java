@@ -129,7 +129,9 @@ public class TimeSeriesTest extends AbstractKiekerTest {
 		Assert.assertEquals(TimeUnit.NANOSECONDS, testTS.getTimeSeriesTimeUnit());
 		Assert.assertEquals(TimeUnit.MILLISECONDS, testTS.getDeltaTimeUnit());
 		Assert.assertEquals(1L, testTS.getStartTime());
+		Assert.assertEquals(1L, testTS.getEndTime());
 		Assert.assertEquals(10000000L, testTS.getStepSize());
+		testTS.append(1.0);
 		Assert.assertEquals(10000001L, testTS.getEndTime());
 	}
 }
