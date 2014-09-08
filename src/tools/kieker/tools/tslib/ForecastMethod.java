@@ -28,7 +28,6 @@ import kieker.tools.tslib.forecast.mean.MeanForecaster;
 import kieker.tools.tslib.forecast.mean.MeanForecasterJava;
 import kieker.tools.tslib.forecast.naive.NaiveForecaster;
 import kieker.tools.tslib.forecast.ses.SESRForecaster;
-import kieker.tools.tslib.forecast.windowstart.WindowStartForecaster;
 
 /**
  *
@@ -69,10 +68,7 @@ public enum ForecastMethod {
 	PatternChecking,
 
 	/** {@link SESRForecaster} */
-	SES,
-
-	/** {@link WindowStartForecaster} */
-	WINDOWSTART;
+	SES;
 
 	/**
 	 *
@@ -104,8 +100,6 @@ public enum ForecastMethod {
 			throw new IllegalArgumentException("Forecaster " + this.toString() + " not instantiable");
 		case SES:
 			return new SESRForecaster(history);
-		case WINDOWSTART:
-			return new WindowStartForecaster(history);
 		default:
 			throw new IllegalArgumentException("No forecaster defined for " + this.toString());
 		}
@@ -143,8 +137,6 @@ public enum ForecastMethod {
 			throw new IllegalArgumentException("Forecaster " + this.toString() + " not instantiable");
 		case SES:
 			return new SESRForecaster(history, alpha);
-		case WINDOWSTART:
-			return new WindowStartForecaster(history); // confidence level? #1346
 		default:
 			throw new IllegalArgumentException("No forecaster defined for " + this.toString());
 		}
