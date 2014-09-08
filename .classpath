@@ -30,6 +30,7 @@
 	<classpathentry kind="src" path="examples/analysis/kax-files/src"/>
 	<classpathentry kind="src" path="examples/monitoring/probe-manual/src"/>
 	<classpathentry kind="src" path="test-gen/common"/>
+	<classpathentry kind="src" path="test-gen/api"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="lib" path="lib/activemq-broker-5.10.0.jar"/>
