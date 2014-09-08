@@ -30,10 +30,10 @@ import kieker.tools.composite.CompositeOutputRelay;
 
 /**
  * Filter plugin that contains the whole opad pipes/filter structure.
- * 
+ *
  * @author Thomas Düllmann, Tobias Rudolph
  * @since 1.10
- * 
+ *
  */
 @Plugin(description = "Cumulated filters that opad consists of",
 		outputPorts = @OutputPort(name = OpadFilterPlugin.OUTPUT_PORT_NAME_ANOMALY_SCORE, eventTypes = { IMonitoringRecord.class }),
@@ -65,7 +65,7 @@ public class OpadFilterPlugin extends AbstractCompositeFilterPlugin {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param configuration
 	 *            configuration for this plugin
 	 * @param projectContext
@@ -95,9 +95,9 @@ public class OpadFilterPlugin extends AbstractCompositeFilterPlugin {
 			 */
 
 			final Configuration forecastConfiguration = new Configuration();
-			this.updateConfiguration(forecastConfiguration, ExtendedForecastingFilter.class);
-			final ExtendedForecastingFilter extForecastingFilter = new ExtendedForecastingFilter(forecastConfiguration, this.controller);
-			this.configRegistry.registerUpdateableFilterPlugin("extForecastingFilter", extForecastingFilter);
+			this.updateConfiguration(forecastConfiguration, ForecastingFilter.class);
+			final ForecastingFilter forecastingFilter = new ForecastingFilter(forecastConfiguration, this.controller);
+			this.configRegistry.registerUpdateableFilterPlugin("extForecastingFilter", forecastingFilter);
 
 			/**
 			 * UniteMeasurementPairFilter
@@ -121,13 +121,6 @@ public class OpadFilterPlugin extends AbstractCompositeFilterPlugin {
 			final AnomalyDetectionFilter anomalyDetectionFilter = new AnomalyDetectionFilter(configAnomaly, this.controller);
 			this.configRegistry.registerUpdateableFilterPlugin("anomalyDetectionFilter", anomalyDetectionFilter);
 
-			/**
-			 * SendAndStoreDetectionResultsFilter
-			 */
-			final Configuration configSaS = new Configuration();
-			this.updateConfiguration(configSaS, SendAndStoreDetectionResultFilter.class);
-			final SendAndStoreDetectionResultFilter sendAndStoreDetectionResultFilter = new SendAndStoreDetectionResultFilter(configSaS, this.controller);
-
 			// StringBufferFilter -> ExtractionFilter
 			this.controller.connect(this.inputRelay, CompositeInputRelay.INPUTRELAY_OUTPUTPORT, extractionFilter, ExtractionFilter.INPUT_PORT_NAME_VALUE);
 
@@ -136,15 +129,15 @@ public class OpadFilterPlugin extends AbstractCompositeFilterPlugin {
 					TimeSeriesPointAggregatorFilter.INPUT_PORT_NAME_TSPOINT); // NOCS
 
 			// TSPointAggregatorFilter -> ExtendedForecastingFilter
-			this.controller.connect(tsPointAggregatorFilter, TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, extForecastingFilter,
-					ExtendedForecastingFilter.INPUT_PORT_NAME_TSPOINT); // NOCS
+			this.controller.connect(tsPointAggregatorFilter, TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, forecastingFilter,
+					ForecastingFilter.INPUT_PORT_NAME_TSPOINT); // NOCS
 
 			// TSPointAggregatorfilter -> UniteMeasurementPairFilter
 			this.controller.connect(tsPointAggregatorFilter, TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, uniteFilter,
 					UniteMeasurementPairFilter.INPUT_PORT_NAME_TSPOINT); // NOCS
 
 			// ExtendedForecastingFilter -> UniteMeasurementPairFilter
-			this.controller.connect(extForecastingFilter, ExtendedForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, uniteFilter,
+			this.controller.connect(forecastingFilter, ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, uniteFilter,
 					UniteMeasurementPairFilter.INPUT_PORT_NAME_FORECAST); // NOCS
 
 			// UniteMeasurementPairFilter -> AnomalyScoreCalculationFilter
@@ -155,12 +148,8 @@ public class OpadFilterPlugin extends AbstractCompositeFilterPlugin {
 			this.controller.connect(scoreCalculationFilter, AnomalyScoreCalculationFilter.OUTPUT_PORT_ANOMALY_SCORE, anomalyDetectionFilter,
 					AnomalyDetectionFilter.INPUT_PORT_ANOMALY_SCORE); // NOCS
 
-			// AnomalyScoreDetectionFilter -> SendAndStoreDetectionResultFilter
+			// AnomalyScoreDetectionFilter -> OutputRelay
 			this.controller.connect(anomalyDetectionFilter, AnomalyDetectionFilter.OUTPUT_PORT_ALL,
-					sendAndStoreDetectionResultFilter, SendAndStoreDetectionResultFilter.INPUT_PORT_DETECTION_RESULTS);
-
-			// SendAndStoreDetectionResultFilter -> OpadOutputCompositionFilter
-			this.controller.connect(sendAndStoreDetectionResultFilter, SendAndStoreDetectionResultFilter.OUTPUT_PORT_SENT_DATA,
 					this.outputRelay, CompositeOutputRelay.INPUT_PORT_NAME_EVENTS);
 
 		} catch (final IllegalStateException ise) {
@@ -183,7 +172,7 @@ public class OpadFilterPlugin extends AbstractCompositeFilterPlugin {
 
 	/**
 	 * Relays the incoming monitoring record to the contained filter input ports.
-	 * 
+	 *
 	 * @param monitoringRecord
 	 *            the incoming monitoring record
 	 */
