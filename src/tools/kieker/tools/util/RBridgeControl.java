@@ -76,7 +76,7 @@ public final class RBridgeControl {
 				output = out;
 			}
 
-			RBridgeControl.LOG.info("> REXP: " + input + " return: " + output);
+			RBridgeControl.LOG.trace("> REXP: " + input + " return: " + output);
 		} catch (final REXPMismatchException exc) {
 			RBridgeControl.LOG.error("Error R expr.: " + input + " Cause: " + exc, exc);
 		}
