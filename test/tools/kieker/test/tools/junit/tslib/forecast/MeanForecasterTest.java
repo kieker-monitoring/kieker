@@ -56,7 +56,7 @@ public class MeanForecasterTest extends AbstractKiekerRTest {
 
 	/**
 	 * Set up of the MeanForecasterTest.
-	 *
+	 * 
 	 * @throws Exception
 	 *             If exception appears
 	 */
@@ -72,7 +72,7 @@ public class MeanForecasterTest extends AbstractKiekerRTest {
 
 	/**
 	 * Initiation of the test, setting up the test time series.
-	 *
+	 * 
 	 * @param timeUnit
 	 *            Used time unit
 	 */
@@ -110,7 +110,7 @@ public class MeanForecasterTest extends AbstractKiekerRTest {
 	public void testForecastStartingIsAccordingToLastAppendSecondsTU() {
 		this.initForecastWithTimeUnit(TimeUnit.SECONDS);
 
-		final long expectedStartTime = this.startTime;// + TimeUnit.MILLISECONDS.convert(this.deltaTime * 2, TimeUnit.SECONDS);
+		final long expectedStartTime = this.startTime;
 		Assert.assertEquals(expectedStartTime, this.forecastSeries.getStartTime());
 	}
 
