@@ -60,8 +60,8 @@ public class TestCallConstructorEvent extends AbstractKiekerTest {
 	public void testSerializeDeserializeEquals() {
 
 		final CallConstructorEvent event1 =
-				new CallConstructorEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CALLER_CLASSNAME, FQ_CALLER_OPERATION_SIGNATURE,
-						FQ_CALLEE_CLASSNAME, FQ_CALLEE_OPERATION_SIGNATURE);
+				new CallConstructorEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CALLER_OPERATION_SIGNATURE, FQ_CALLER_CLASSNAME,
+						FQ_CALLEE_OPERATION_SIGNATURE, FQ_CALLEE_CLASSNAME);
 
 		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
 		Assert.assertEquals("Unexpected trace ID", TRACE_ID, event1.getTraceId());
@@ -87,8 +87,8 @@ public class TestCallConstructorEvent extends AbstractKiekerTest {
 	public void testSerializeDeserializeBinaryEquals() {
 
 		final CallConstructorEvent event1 =
-				new CallConstructorEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CALLER_CLASSNAME, FQ_CALLER_OPERATION_SIGNATURE,
-						FQ_CALLEE_CLASSNAME, FQ_CALLEE_OPERATION_SIGNATURE);
+				new CallConstructorEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CALLER_OPERATION_SIGNATURE, FQ_CALLER_CLASSNAME,
+						FQ_CALLEE_OPERATION_SIGNATURE, FQ_CALLEE_CLASSNAME);
 
 		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
 		Assert.assertEquals("Unexpected trace ID", TRACE_ID, event1.getTraceId());

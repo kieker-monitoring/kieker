@@ -25,7 +25,7 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.record.jvm.AbstractJVMRecord;
 
 /**
- * @author Nils Christian Ehmke
+ * @author Generic Kieker
  * 
  * @since 1.10
  */

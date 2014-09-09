@@ -35,8 +35,8 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
 			 + TYPE_SIZE_LONG // ITraceRecord.traceId
 			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
+			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
 			 + TYPE_SIZE_STRING // IClassSignature.classSignature
-			 + TYPE_SIZE_STRING // IOperationRecord.operationSignature
 			 + TYPE_SIZE_STRING // IExceptionRecord.cause
 			 + TYPE_SIZE_INT // IObjectRecord.objectId
 	;
@@ -46,8 +46,8 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 		long.class, // IEventRecord.timestamp
 		long.class, // ITraceRecord.traceId
 		int.class, // ITraceRecord.orderIndex
+		String.class, // IOperationSignature.operationSignature
 		String.class, // IClassSignature.classSignature
-		String.class, // IOperationRecord.operationSignature
 		String.class, // IExceptionRecord.cause
 		int.class, // IObjectRecord.objectId
 	};
@@ -64,17 +64,17 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 	 *            traceId
 	 * @param orderIndex
 	 *            orderIndex
-	 * @param classSignature
-	 *            classSignature
 	 * @param operationSignature
 	 *            operationSignature
+	 * @param classSignature
+	 *            classSignature
 	 * @param cause
 	 *            cause
 	 * @param objectId
 	 *            objectId
 	 */
-	public AfterConstructorFailedObjectEvent(final long timestamp, final long traceId, final int orderIndex, final String classSignature, final String operationSignature, final String cause, final int objectId) {
-		super(timestamp, traceId, orderIndex, classSignature, operationSignature, cause);
+	public AfterConstructorFailedObjectEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature, final String cause, final int objectId) {
+		super(timestamp, traceId, orderIndex, operationSignature, classSignature, cause);
 		this.objectId = objectId;
 	}
 
@@ -126,8 +126,8 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 			this.getTimestamp(),
 			this.getTraceId(),
 			this.getOrderIndex(),
-			this.getClassSignature(),
 			this.getOperationSignature(),
+			this.getClassSignature(),
 			this.getCause(),
 			this.getObjectId()
 		};
@@ -141,8 +141,8 @@ public class AfterConstructorFailedObjectEvent extends AfterConstructorFailedEve
 		buffer.putLong(this.getTimestamp());
 		buffer.putLong(this.getTraceId());
 		buffer.putInt(this.getOrderIndex());
-		buffer.putInt(stringRegistry.get(this.getClassSignature()));
 		buffer.putInt(stringRegistry.get(this.getOperationSignature()));
+		buffer.putInt(stringRegistry.get(this.getClassSignature()));
 		buffer.putInt(stringRegistry.get(this.getCause()));
 		buffer.putInt(this.getObjectId());
 	}

@@ -35,8 +35,8 @@ public class BeforeConstructorEvent extends BeforeOperationEvent implements ICon
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
 			 + TYPE_SIZE_LONG // ITraceRecord.traceId
 			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
+			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
 			 + TYPE_SIZE_STRING // IClassSignature.classSignature
-			 + TYPE_SIZE_STRING // IOperationRecord.operationSignature
 	;
 	private static final long serialVersionUID = 4992296160420366105L;
 	
@@ -44,8 +44,8 @@ public class BeforeConstructorEvent extends BeforeOperationEvent implements ICon
 		long.class, // IEventRecord.timestamp
 		long.class, // ITraceRecord.traceId
 		int.class, // ITraceRecord.orderIndex
+		String.class, // IOperationSignature.operationSignature
 		String.class, // IClassSignature.classSignature
-		String.class, // IOperationRecord.operationSignature
 	};
 	
 	
@@ -59,13 +59,13 @@ public class BeforeConstructorEvent extends BeforeOperationEvent implements ICon
 	 *            traceId
 	 * @param orderIndex
 	 *            orderIndex
-	 * @param classSignature
-	 *            classSignature
 	 * @param operationSignature
 	 *            operationSignature
+	 * @param classSignature
+	 *            classSignature
 	 */
-	public BeforeConstructorEvent(final long timestamp, final long traceId, final int orderIndex, final String classSignature, final String operationSignature) {
-		super(timestamp, traceId, orderIndex, classSignature, operationSignature);
+	public BeforeConstructorEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature) {
+		super(timestamp, traceId, orderIndex, operationSignature, classSignature);
 	}
 
 	/**
@@ -113,8 +113,8 @@ public class BeforeConstructorEvent extends BeforeOperationEvent implements ICon
 			this.getTimestamp(),
 			this.getTraceId(),
 			this.getOrderIndex(),
-			this.getClassSignature(),
-			this.getOperationSignature()
+			this.getOperationSignature(),
+			this.getClassSignature()
 		};
 	}
 
@@ -126,8 +126,8 @@ public class BeforeConstructorEvent extends BeforeOperationEvent implements ICon
 		buffer.putLong(this.getTimestamp());
 		buffer.putLong(this.getTraceId());
 		buffer.putInt(this.getOrderIndex());
-		buffer.putInt(stringRegistry.get(this.getClassSignature()));
 		buffer.putInt(stringRegistry.get(this.getOperationSignature()));
+		buffer.putInt(stringRegistry.get(this.getClassSignature()));
 	}
 
 	/**

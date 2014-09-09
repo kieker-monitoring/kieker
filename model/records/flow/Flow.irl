@@ -11,10 +11,10 @@ template ICallObjectRecord : ICallRecord, IObjectRecord {
 
 @author 'Jan Waller' @since '1.6'
 template ICallRecord : IOperationRecord {
-	alias classSignature as callerClassSignature
-	alias operationSignature as callerOperationSignature 
-	string calleeClassSignature = ""
+	alias operationSignature as callerOperationSignature
+	alias classSignature as callerClassSignature 
 	string calleeOperationSignature = ""
+	string calleeClassSignature = ""
 }
 
 @author 'Jan Waller' @since '1.8'
@@ -39,6 +39,11 @@ template IClassSignature {
 	string classSignature = ""
 }
 
+@author 'Reiner Jung' @since '1.10'
+template IOperationSignature {
+	string operationSignature = ""	
+}
+
 @author 'Jan Waller' @since '1.5'
 template IFlowRecord
 
@@ -49,9 +54,7 @@ template IObjectRecord : IFlowRecord, IClassSignature {
 }
 
 @author 'Jan Waller' @since '1.5'
-template IOperationRecord : IFlowRecord, IClassSignature {
-	string operationSignature = ""
-}
+template IOperationRecord : IFlowRecord, IOperationSignature, IClassSignature 
 
 @author 'Jan Waller' @since '1.6'
 template ITraceRecord : IFlowRecord {

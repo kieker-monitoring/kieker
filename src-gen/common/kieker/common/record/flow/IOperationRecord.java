@@ -22,7 +22,5 @@ package kieker.common.record.flow;
  * 
  * @since 1.5
  */
-public interface IOperationRecord extends IFlowRecord, IClassSignature {
-	public String getOperationSignature() ;
-		
+public interface IOperationRecord extends IFlowRecord, IOperationSignature, IClassSignature {
 }

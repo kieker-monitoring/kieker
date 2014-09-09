@@ -25,9 +25,9 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 
 /**
- * @author Jan Waller
+ * @author Generic Kieker
  * 
- * @since 1.8
+ * @since 1.10
  */
 public class JoinEvent extends AbstractTraceEvent  {
 	/** Descriptive definition of the serialization size of the record. */

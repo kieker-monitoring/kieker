@@ -26,9 +26,9 @@ import kieker.common.util.registry.IRegistry;
 
 
 /**
- * @author Jan Waller
+ * @author Generic Kieker
  * 
- * @since 1.7
+ * @since 1.10
  */
 public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 	/** Descriptive definition of the serialization size of the record. */

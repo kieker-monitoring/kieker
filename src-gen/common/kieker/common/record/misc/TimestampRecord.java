@@ -26,9 +26,9 @@ import kieker.common.util.registry.IRegistry;
 
 
 /**
- * @author Andre van Hoorn, Jan Waller
+ * @author Generic Kieker
  * 
- * @since 1.5
+ * @since 1.10
  */
 public class TimestampRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 	/** Descriptive definition of the serialization size of the record. */
