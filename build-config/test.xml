@@ -38,7 +38,6 @@
 				<include name="REngine-*.jar"/>
 				<include name="Rsession-*.jar"/>
 				<include name="Rserve-*.jar"/>
-				<include name="org.json.min-*.jar"/>
 				<!-- Opad end -->
 				
 			</fileset>
