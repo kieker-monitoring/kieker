@@ -22,13 +22,13 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @author Andre van Hoorn, Tobias Rudolph, Andreas Eberlein
- *
+ * 
  * @since 1.10
  * @param <T>
  *            The type of the time series.
  */
 public class TimeSeries<T> implements ITimeSeries<T> {
-	private final long startTime;
+	private volatile long startTime;
 	private final TimeUnit timeSeriesTimeUnit;
 	private long nextTime;
 	private final long deltaTime;
@@ -36,7 +36,7 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 	private final int frequency;
 	private final int capacity;
 	private final TimeSeriesPointsBuffer<ITimeSeriesPoint<T>> points;
-	private long timeSeriesStepSize;
+	private final long timeSeriesStepSize;
 
 	/**
 	 * @param startTime
@@ -142,7 +142,7 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 
 	/**
 	 * Returns the step size between each item in the timeseries. The {@link TimeUnit} of the stepSize is equal to the {@link #timeSeriesTimeUnit}.
-	 *
+	 * 
 	 * @return step size
 	 */
 	public long getStepSize() {
@@ -152,7 +152,7 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 	/**
 	 * @param value
 	 *            value which should append to timeseries
-	 *
+	 * 
 	 * @return tspoint
 	 */
 	@Override
@@ -160,16 +160,12 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 		final ITimeSeriesPoint<T> point;
 
 		synchronized (value) {
-			// this.setNextTime();
 			point = new TimeSeriesPoint<T>(this.nextTime, value);
 			this.points.add(point);
-			this.nextTime = this.points.peek().getTime();
+			this.startTime = this.points.peek().getTime(); // we have a bounded buffer so the first element might be gone
+			this.nextTime = this.nextTime + this.timeSeriesStepSize;
 		}
 		return point;
-	}
-
-	private void setNextTime() {
-		this.nextTime = this.nextTime + this.timeSeriesStepSize;
 	}
 
 	@Override
