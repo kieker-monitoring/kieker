@@ -487,7 +487,11 @@
 		</exec>
 	</target>
 
+	<target name="enable-r-tests" depends="">
+		<property name="rTestsEnabled" value="true" /> 
+	</target>
+	
 	<!-- http://kieker.uni-kiel.de/trac/ticket/292: add run-tests-integration BEFORE static-analysis -->
-	<target name="run-hudson-kieker" depends="build-all,run-tests-junit,static-analysis" description="Ant target used by the Hudson build (includes run-tests-junit,run-tests-integration,static-analysis)" />
+	<target name="run-hudson-kieker" depends="enable-r-tests,build-all,run-tests-junit,static-analysis" description="Ant target used by the Hudson build (includes run-tests-junit,run-tests-integration,static-analysis)" />
 
 </project>

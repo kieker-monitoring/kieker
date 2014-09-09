@@ -69,8 +69,8 @@
 		
 		<junit fork="no" printsummary="yes">
 			
-			<!-- If you want to execute R-related tests set this to true, otherwise to false -->
-			<sysproperty key="TestKiekerRTests" value="false" />
+			<!-- If you want to execute R-related tests set this to true, otherwise to false (default) -->
+			<sysproperty key="TestKiekerRTests" value="${rTestsEnabled}" />
 			
 			<classpath refid="kieker.test-junit-run-classpath" />
 								
