@@ -26,7 +26,7 @@ import kieker.common.record.flow.trace.operation.constructor.object.BeforeConstr
 import kieker.common.record.flow.IInterfaceRecord;
 
 /**
- * @author Generic Kieker
+ * @author Florian Fittkau
  * 
  * @since 1.10
  */
@@ -35,8 +35,8 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
 			 + TYPE_SIZE_LONG // ITraceRecord.traceId
 			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
+			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
 			 + TYPE_SIZE_STRING // IClassSignature.classSignature
-			 + TYPE_SIZE_STRING // IOperationRecord.operationSignature
 			 + TYPE_SIZE_INT // IObjectRecord.objectId
 			 + TYPE_SIZE_STRING // IInterfaceRecord.interface
 	;
@@ -46,13 +46,14 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 		long.class, // IEventRecord.timestamp
 		long.class, // ITraceRecord.traceId
 		int.class, // ITraceRecord.orderIndex
+		String.class, // IOperationSignature.operationSignature
 		String.class, // IClassSignature.classSignature
-		String.class, // IOperationRecord.operationSignature
 		int.class, // IObjectRecord.objectId
 		String.class, // IInterfaceRecord.interface
 	};
 	
 	
+	private final String _interface;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -63,17 +64,18 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 	 *            traceId
 	 * @param orderIndex
 	 *            orderIndex
-	 * @param classSignature
-	 *            classSignature
 	 * @param operationSignature
 	 *            operationSignature
+	 * @param classSignature
+	 *            classSignature
 	 * @param objectId
 	 *            objectId
 	 * @param _interface
 	 *            _interface
 	 */
-	public BeforeConstructorObjectInterfaceEvent(final long timestamp, final long traceId, final int orderIndex, final String classSignature, final String operationSignature, final int objectId, final String _interface) {
-		super(timestamp, traceId, orderIndex, classSignature, operationSignature, objectId);
+	public BeforeConstructorObjectInterfaceEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature, final int objectId, final String _interface) {
+		super(timestamp, traceId, orderIndex, operationSignature, classSignature, objectId);
+		this._interface = _interface == null?"":_interface;
 	}
 
 	/**
@@ -85,6 +87,7 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 	 */
 	public BeforeConstructorObjectInterfaceEvent(final Object[] values) { // NOPMD (direct store of values)
 		super(values, TYPES);
+		this._interface = (String) values[6];
 	}
 	
 	/**
@@ -97,6 +100,7 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 	 */
 	protected BeforeConstructorObjectInterfaceEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes);
+		this._interface = (String) values[6];
 	}
 
 	/**
@@ -110,6 +114,7 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 	 */
 	public BeforeConstructorObjectInterfaceEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		super(buffer, stringRegistry);
+		this._interface = stringRegistry.get(buffer.getInt());
 	}
 
 	/**
@@ -121,8 +126,8 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 			this.getTimestamp(),
 			this.getTraceId(),
 			this.getOrderIndex(),
-			this.getClassSignature(),
 			this.getOperationSignature(),
+			this.getClassSignature(),
 			this.getObjectId(),
 			this.getInterface()
 		};
@@ -136,8 +141,8 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 		buffer.putLong(this.getTimestamp());
 		buffer.putLong(this.getTraceId());
 		buffer.putInt(this.getOrderIndex());
-		buffer.putInt(stringRegistry.get(this.getClassSignature()));
 		buffer.putInt(stringRegistry.get(this.getOperationSignature()));
+		buffer.putInt(stringRegistry.get(this.getClassSignature()));
 		buffer.putInt(this.getObjectId());
 		buffer.putInt(stringRegistry.get(this.getInterface()));
 	}

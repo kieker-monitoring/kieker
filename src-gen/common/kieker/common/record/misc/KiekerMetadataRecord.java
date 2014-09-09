@@ -67,6 +67,14 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 	public static final String TIME_UNIT = "NANOSECONDS";
 	public static final long NUMBER_OF_RECORDS = 0L;
 	
+	private final String version;
+	private final String controllerName;
+	private final String hostname;
+	private final int experimentId;
+	private final boolean debugMode;
+	private final long timeOffset;
+	private final String timeUnit;
+	private final long numberOfRecords;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -89,6 +97,14 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 	 *            numberOfRecords
 	 */
 	public KiekerMetadataRecord(final String version, final String controllerName, final String hostname, final int experimentId, final boolean debugMode, final long timeOffset, final String timeUnit, final long numberOfRecords) {
+		this.version = version == null?"1.9":version;
+		this.controllerName = controllerName == null?"<no-controller-name>":controllerName;
+		this.hostname = hostname == null?"<no-hostname>":hostname;
+		this.experimentId = experimentId;
+		this.debugMode = debugMode;
+		this.timeOffset = timeOffset;
+		this.timeUnit = timeUnit == null?"NANOSECONDS":timeUnit;
+		this.numberOfRecords = numberOfRecords;
 	}
 
 	/**
@@ -100,6 +116,14 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 	 */
 	public KiekerMetadataRecord(final Object[] values) { // NOPMD (direct store of values)
 		AbstractMonitoringRecord.checkArray(values, TYPES);
+		this.version = (String) values[0];
+		this.controllerName = (String) values[1];
+		this.hostname = (String) values[2];
+		this.experimentId = (Integer) values[3];
+		this.debugMode = (Boolean) values[4];
+		this.timeOffset = (Long) values[5];
+		this.timeUnit = (String) values[6];
+		this.numberOfRecords = (Long) values[7];
 	}
 	
 	/**
@@ -112,6 +136,14 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 	 */
 	protected KiekerMetadataRecord(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		AbstractMonitoringRecord.checkArray(values, valueTypes);
+		this.version = (String) values[0];
+		this.controllerName = (String) values[1];
+		this.hostname = (String) values[2];
+		this.experimentId = (Integer) values[3];
+		this.debugMode = (Boolean) values[4];
+		this.timeOffset = (Long) values[5];
+		this.timeUnit = (String) values[6];
+		this.numberOfRecords = (Long) values[7];
 	}
 
 	/**
@@ -124,6 +156,14 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 	 *             if buffer not sufficient
 	 */
 	public KiekerMetadataRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		this.version = stringRegistry.get(buffer.getInt());
+		this.controllerName = stringRegistry.get(buffer.getInt());
+		this.hostname = stringRegistry.get(buffer.getInt());
+		this.experimentId = buffer.getInt();
+		this.debugMode = buffer.get()==1?true:false;
+		this.timeOffset = buffer.getLong();
+		this.timeUnit = stringRegistry.get(buffer.getInt());
+		this.numberOfRecords = buffer.getLong();
 	}
 
 	/**

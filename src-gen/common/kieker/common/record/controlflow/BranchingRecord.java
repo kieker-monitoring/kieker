@@ -26,9 +26,9 @@ import kieker.common.util.registry.IRegistry;
 
 
 /**
- * @author Generic Kieker
+ * @author Andre van Hoorn, Jan Waller
  * 
- * @since 1.10
+ * @since 1.2
  */
 public class BranchingRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 	/** Descriptive definition of the serialization size of the record. */
@@ -48,6 +48,9 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	public static final int BRANCH_ID = 0;
 	public static final int BRANCHING_OUTCOME = 0;
 	
+	private final long timestamp;
+	private final int branchID;
+	private final int branchingOutcome;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -60,6 +63,9 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	 *            branchingOutcome
 	 */
 	public BranchingRecord(final long timestamp, final int branchID, final int branchingOutcome) {
+		this.timestamp = timestamp;
+		this.branchID = branchID;
+		this.branchingOutcome = branchingOutcome;
 	}
 
 	/**
@@ -71,6 +77,9 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	 */
 	public BranchingRecord(final Object[] values) { // NOPMD (direct store of values)
 		AbstractMonitoringRecord.checkArray(values, TYPES);
+		this.timestamp = (Long) values[0];
+		this.branchID = (Integer) values[1];
+		this.branchingOutcome = (Integer) values[2];
 	}
 	
 	/**
@@ -83,6 +92,9 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	 */
 	protected BranchingRecord(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		AbstractMonitoringRecord.checkArray(values, valueTypes);
+		this.timestamp = (Long) values[0];
+		this.branchID = (Integer) values[1];
+		this.branchingOutcome = (Integer) values[2];
 	}
 
 	/**
@@ -95,6 +107,9 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 	 *             if buffer not sufficient
 	 */
 	public BranchingRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		this.timestamp = buffer.getLong();
+		this.branchID = buffer.getInt();
+		this.branchingOutcome = buffer.getInt();
 	}
 
 	/**

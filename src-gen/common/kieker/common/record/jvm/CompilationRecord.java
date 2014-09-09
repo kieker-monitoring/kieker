@@ -25,7 +25,7 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.record.jvm.AbstractJVMRecord;
 
 /**
- * @author Generic Kieker
+ * @author Nils Christian Ehmke
  * 
  * @since 1.10
  */
@@ -48,6 +48,8 @@ public class CompilationRecord extends AbstractJVMRecord  {
 	};
 	
 	
+	private final String jitCompilerName;
+	private final long totalCompilationTimeMS;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -65,6 +67,8 @@ public class CompilationRecord extends AbstractJVMRecord  {
 	 */
 	public CompilationRecord(final long timestamp, final String hostname, final String vmName, final String jitCompilerName, final long totalCompilationTimeMS) {
 		super(timestamp, hostname, vmName);
+		this.jitCompilerName = jitCompilerName == null?"":jitCompilerName;
+		this.totalCompilationTimeMS = totalCompilationTimeMS;
 	}
 
 	/**
@@ -76,6 +80,8 @@ public class CompilationRecord extends AbstractJVMRecord  {
 	 */
 	public CompilationRecord(final Object[] values) { // NOPMD (direct store of values)
 		super(values, TYPES);
+		this.jitCompilerName = (String) values[3];
+		this.totalCompilationTimeMS = (Long) values[4];
 	}
 	
 	/**
@@ -88,6 +94,8 @@ public class CompilationRecord extends AbstractJVMRecord  {
 	 */
 	protected CompilationRecord(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes);
+		this.jitCompilerName = (String) values[3];
+		this.totalCompilationTimeMS = (Long) values[4];
 	}
 
 	/**
@@ -101,6 +109,8 @@ public class CompilationRecord extends AbstractJVMRecord  {
 	 */
 	public CompilationRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		super(buffer, stringRegistry);
+		this.jitCompilerName = stringRegistry.get(buffer.getInt());
+		this.totalCompilationTimeMS = buffer.getLong();
 	}
 
 	/**

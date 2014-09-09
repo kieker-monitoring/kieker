@@ -25,7 +25,7 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.record.jvm.AbstractJVMRecord;
 
 /**
- * @author Generic Kieker
+ * @author Nils Christian Ehmke
  * 
  * @since 1.10
  */
@@ -50,6 +50,9 @@ public class GCRecord extends AbstractJVMRecord  {
 	};
 	
 	
+	private final String gcName;
+	private final long collectionCount;
+	private final long collectionTimeMS;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -69,6 +72,9 @@ public class GCRecord extends AbstractJVMRecord  {
 	 */
 	public GCRecord(final long timestamp, final String hostname, final String vmName, final String gcName, final long collectionCount, final long collectionTimeMS) {
 		super(timestamp, hostname, vmName);
+		this.gcName = gcName == null?"":gcName;
+		this.collectionCount = collectionCount;
+		this.collectionTimeMS = collectionTimeMS;
 	}
 
 	/**
@@ -80,6 +86,9 @@ public class GCRecord extends AbstractJVMRecord  {
 	 */
 	public GCRecord(final Object[] values) { // NOPMD (direct store of values)
 		super(values, TYPES);
+		this.gcName = (String) values[3];
+		this.collectionCount = (Long) values[4];
+		this.collectionTimeMS = (Long) values[5];
 	}
 	
 	/**
@@ -92,6 +101,9 @@ public class GCRecord extends AbstractJVMRecord  {
 	 */
 	protected GCRecord(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes);
+		this.gcName = (String) values[3];
+		this.collectionCount = (Long) values[4];
+		this.collectionTimeMS = (Long) values[5];
 	}
 
 	/**
@@ -105,6 +117,9 @@ public class GCRecord extends AbstractJVMRecord  {
 	 */
 	public GCRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		super(buffer, stringRegistry);
+		this.gcName = stringRegistry.get(buffer.getInt());
+		this.collectionCount = buffer.getLong();
+		this.collectionTimeMS = buffer.getLong();
 	}
 
 	/**

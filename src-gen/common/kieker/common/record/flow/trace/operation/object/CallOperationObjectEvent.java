@@ -57,7 +57,8 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 	};
 	
 	
-	private final int callerObjectId;
+	private final int objectId;
+	private final int calleeObjectId;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -83,7 +84,8 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 	 */
 	public CallOperationObjectEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature, final String calleeOperationSignature, final String calleeClassSignature, final int objectId, final int calleeObjectId) {
 		super(timestamp, traceId, orderIndex, operationSignature, classSignature, calleeOperationSignature, calleeClassSignature);
-		this.callerObjectId = callerObjectId;
+		this.objectId = objectId;
+		this.calleeObjectId = calleeObjectId;
 	}
 
 	/**
@@ -95,7 +97,8 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 	 */
 	public CallOperationObjectEvent(final Object[] values) { // NOPMD (direct store of values)
 		super(values, TYPES);
-		this.callerObjectId = (Integer) values[7];
+		this.objectId = (Integer) values[7];
+		this.calleeObjectId = (Integer) values[8];
 	}
 	
 	/**
@@ -108,7 +111,8 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 	 */
 	protected CallOperationObjectEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes);
-		this.callerObjectId = (Integer) values[7];
+		this.objectId = (Integer) values[7];
+		this.calleeObjectId = (Integer) values[8];
 	}
 
 	/**
@@ -122,7 +126,8 @@ public class CallOperationObjectEvent extends CallOperationEvent implements ICal
 	 */
 	public CallOperationObjectEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		super(buffer, stringRegistry);
-		this.callerObjectId = buffer.getInt();
+		this.objectId = buffer.getInt();
+		this.calleeObjectId = buffer.getInt();
 	}
 
 	/**

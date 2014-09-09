@@ -25,7 +25,7 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.record.jvm.AbstractJVMRecord;
 
 /**
- * @author Generic Kieker
+ * @author Nils Christian Ehmke
  * 
  * @since 1.10
  */
@@ -62,6 +62,15 @@ public class MemoryRecord extends AbstractJVMRecord  {
 	};
 	
 	
+	private final long heapMaxBytes;
+	private final long heapUsedBytes;
+	private final long heapCommittedBytes;
+	private final long heapInitBytes;
+	private final long nonHeapMaxBytes;
+	private final long nonHeapUsedBytes;
+	private final long nonHeapCommittedBytes;
+	private final long nonHeapInitBytes;
+	private final int objectPendingFinalizationCount;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -93,6 +102,15 @@ public class MemoryRecord extends AbstractJVMRecord  {
 	 */
 	public MemoryRecord(final long timestamp, final String hostname, final String vmName, final long heapMaxBytes, final long heapUsedBytes, final long heapCommittedBytes, final long heapInitBytes, final long nonHeapMaxBytes, final long nonHeapUsedBytes, final long nonHeapCommittedBytes, final long nonHeapInitBytes, final int objectPendingFinalizationCount) {
 		super(timestamp, hostname, vmName);
+		this.heapMaxBytes = heapMaxBytes;
+		this.heapUsedBytes = heapUsedBytes;
+		this.heapCommittedBytes = heapCommittedBytes;
+		this.heapInitBytes = heapInitBytes;
+		this.nonHeapMaxBytes = nonHeapMaxBytes;
+		this.nonHeapUsedBytes = nonHeapUsedBytes;
+		this.nonHeapCommittedBytes = nonHeapCommittedBytes;
+		this.nonHeapInitBytes = nonHeapInitBytes;
+		this.objectPendingFinalizationCount = objectPendingFinalizationCount;
 	}
 
 	/**
@@ -104,6 +122,15 @@ public class MemoryRecord extends AbstractJVMRecord  {
 	 */
 	public MemoryRecord(final Object[] values) { // NOPMD (direct store of values)
 		super(values, TYPES);
+		this.heapMaxBytes = (Long) values[3];
+		this.heapUsedBytes = (Long) values[4];
+		this.heapCommittedBytes = (Long) values[5];
+		this.heapInitBytes = (Long) values[6];
+		this.nonHeapMaxBytes = (Long) values[7];
+		this.nonHeapUsedBytes = (Long) values[8];
+		this.nonHeapCommittedBytes = (Long) values[9];
+		this.nonHeapInitBytes = (Long) values[10];
+		this.objectPendingFinalizationCount = (Integer) values[11];
 	}
 	
 	/**
@@ -116,6 +143,15 @@ public class MemoryRecord extends AbstractJVMRecord  {
 	 */
 	protected MemoryRecord(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes);
+		this.heapMaxBytes = (Long) values[3];
+		this.heapUsedBytes = (Long) values[4];
+		this.heapCommittedBytes = (Long) values[5];
+		this.heapInitBytes = (Long) values[6];
+		this.nonHeapMaxBytes = (Long) values[7];
+		this.nonHeapUsedBytes = (Long) values[8];
+		this.nonHeapCommittedBytes = (Long) values[9];
+		this.nonHeapInitBytes = (Long) values[10];
+		this.objectPendingFinalizationCount = (Integer) values[11];
 	}
 
 	/**
@@ -129,6 +165,15 @@ public class MemoryRecord extends AbstractJVMRecord  {
 	 */
 	public MemoryRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		super(buffer, stringRegistry);
+		this.heapMaxBytes = buffer.getLong();
+		this.heapUsedBytes = buffer.getLong();
+		this.heapCommittedBytes = buffer.getLong();
+		this.heapInitBytes = buffer.getLong();
+		this.nonHeapMaxBytes = buffer.getLong();
+		this.nonHeapUsedBytes = buffer.getLong();
+		this.nonHeapCommittedBytes = buffer.getLong();
+		this.nonHeapInitBytes = buffer.getLong();
+		this.objectPendingFinalizationCount = buffer.getInt();
 	}
 
 	/**

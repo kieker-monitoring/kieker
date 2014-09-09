@@ -53,6 +53,7 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 	};
 	
 	
+	private final int objectId;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -74,6 +75,7 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 	 */
 	public AfterOperationFailedObjectEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature, final String cause, final int objectId) {
 		super(timestamp, traceId, orderIndex, operationSignature, classSignature, cause);
+		this.objectId = objectId;
 	}
 
 	/**
@@ -85,6 +87,7 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 	 */
 	public AfterOperationFailedObjectEvent(final Object[] values) { // NOPMD (direct store of values)
 		super(values, TYPES);
+		this.objectId = (Integer) values[6];
 	}
 	
 	/**
@@ -97,6 +100,7 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 	 */
 	protected AfterOperationFailedObjectEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes);
+		this.objectId = (Integer) values[6];
 	}
 
 	/**
@@ -110,6 +114,7 @@ public class AfterOperationFailedObjectEvent extends AfterOperationFailedEvent i
 	 */
 	public AfterOperationFailedObjectEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		super(buffer, stringRegistry);
+		this.objectId = buffer.getInt();
 	}
 
 	/**

@@ -25,15 +25,17 @@ import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.record.flow.IOperationRecord;
 
 /**
- * @author Generic Kieker
+ * @author Jan Waller
  * 
- * @since 1.10
+ * @since 1.5
  */
 public abstract class AbstractOperationEvent extends AbstractTraceEvent implements IOperationRecord {
 		private static final long serialVersionUID = -910233516407209980L;
 	
 	
 	
+	private final String operationSignature;
+	private final String classSignature;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -44,13 +46,15 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 	 *            traceId
 	 * @param orderIndex
 	 *            orderIndex
-	 * @param classSignature
-	 *            classSignature
 	 * @param operationSignature
 	 *            operationSignature
+	 * @param classSignature
+	 *            classSignature
 	 */
-	public AbstractOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String classSignature, final String operationSignature) {
+	public AbstractOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature) {
 		super(timestamp, traceId, orderIndex);
+		this.operationSignature = operationSignature == null?"":operationSignature;
+		this.classSignature = classSignature == null?"":classSignature;
 	}
 
 	
@@ -64,6 +68,8 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 	 */
 	protected AbstractOperationEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes);
+		this.operationSignature = (String) values[3];
+		this.classSignature = (String) values[4];
 	}
 
 	/**
@@ -77,6 +83,8 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 	 */
 	public AbstractOperationEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		super(buffer, stringRegistry);
+		this.operationSignature = stringRegistry.get(buffer.getInt());
+		this.classSignature = stringRegistry.get(buffer.getInt());
 	}
 
 	/**
@@ -101,12 +109,12 @@ public abstract class AbstractOperationEvent extends AbstractTraceEvent implemen
 		throw new UnsupportedOperationException();
 	}
 
-	public final String getClassSignature() {
-		return this.classSignature;
-	}
-	
 	public final String getOperationSignature() {
 		return this.operationSignature;
+	}
+	
+	public final String getClassSignature() {
+		return this.classSignature;
 	}
 	
 }

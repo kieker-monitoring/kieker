@@ -25,7 +25,7 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.record.jvm.AbstractJVMRecord;
 
 /**
- * @author Generic Kieker
+ * @author Nils Christian Ehmke
  * 
  * @since 1.10
  */
@@ -46,6 +46,7 @@ public class UptimeRecord extends AbstractJVMRecord  {
 	};
 	
 	
+	private final long uptimeMS;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -61,6 +62,7 @@ public class UptimeRecord extends AbstractJVMRecord  {
 	 */
 	public UptimeRecord(final long timestamp, final String hostname, final String vmName, final long uptimeMS) {
 		super(timestamp, hostname, vmName);
+		this.uptimeMS = uptimeMS;
 	}
 
 	/**
@@ -72,6 +74,7 @@ public class UptimeRecord extends AbstractJVMRecord  {
 	 */
 	public UptimeRecord(final Object[] values) { // NOPMD (direct store of values)
 		super(values, TYPES);
+		this.uptimeMS = (Long) values[3];
 	}
 	
 	/**
@@ -84,6 +87,7 @@ public class UptimeRecord extends AbstractJVMRecord  {
 	 */
 	protected UptimeRecord(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes);
+		this.uptimeMS = (Long) values[3];
 	}
 
 	/**
@@ -97,6 +101,7 @@ public class UptimeRecord extends AbstractJVMRecord  {
 	 */
 	public UptimeRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		super(buffer, stringRegistry);
+		this.uptimeMS = buffer.getLong();
 	}
 
 	/**
