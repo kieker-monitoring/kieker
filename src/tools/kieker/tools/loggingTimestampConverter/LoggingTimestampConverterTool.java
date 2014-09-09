@@ -52,6 +52,7 @@ public final class LoggingTimestampConverterTool extends AbstractCommandLineTool
 		final Option option = new Option(FLAG_TIMESTAMPS_PARAMETER, "timestamps", true,
 				"List of timestamps (UTC timezone) to convert");
 		option.setArgName("timestamp1 ... timestampN");
+		option.setRequired(true);
 		option.setArgs(Option.UNLIMITED_VALUES);
 
 		options.addOption(option);

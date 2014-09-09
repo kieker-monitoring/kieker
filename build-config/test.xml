@@ -22,15 +22,14 @@
 				<include name="framework-libs/spring/*.jar" /> <!-- needed for the spring tests -->
 				<include name="javax.jms-*.jar" /> 	<!-- Needed for TestPluginConfigurationRetention. -->
 				<include name="commons-cli-*.jar" /> <!-- Needed for TestPluginConfigurationRetention. -->
-				<include name="commons-math-*.jar" /> <!-- Needed for some of the OPAD tests. -->
-				<include name="commons-lang-*.jar" /> <!-- Needed for some of the OPAD tests. -->
+				<include name="commons-math3-*.jar" /> <!-- Needed for some of the OPAD tests. -->
+				<include name="commons-lang3-*.jar" /> <!-- Needed for some of the OPAD tests. -->
 
 				<!-- used in tests for bridge JMS connector -->
-				<include name="activemq-core-5.4.3.jar" />
-				<include name="reflections-0.9.9-RC1.jar"/>
-				<include name="geronimo-j2ee-management_1.1_spec-1.0.1.jar"/>
-				<include name="kahadb-5.7.0.jar"/>
-				<include name="slf4j-api-1.7.*.jar"/>
+				<include name="activemq-*.jar" />
+				<include name="reflections-*.jar"/>
+				<include name="geronimo-j2ee-management_1.1_spec-*.jar"/>
+				<include name="slf4j-api-*.jar"/>
 				<include name="javax.jms-*.jar" /> <!-- Needed for the JMSReader/Writer test -->
 				
 				<!-- Opad begin -->
@@ -71,7 +70,7 @@
 		<junit fork="no" printsummary="yes">
 			
 			<!-- If you want to execute R-related tests set this to true, otherwise to false -->
-			<sysproperty key="TestKiekerRTests" value="true" />
+			<sysproperty key="TestKiekerRTests" value="false" />
 			
 			<classpath refid="kieker.test-junit-run-classpath" />
 								
@@ -87,7 +86,7 @@
 		</junit>
 		<antcall target="-stop-rserve.tools"></antcall>
 
-		<antcall target="-test.junit.report" />
+		<antcall target="-test.junit.report" /> 
 	</target>
 
 	<target name="-test.junit.report" depends="" description="Creates the report for the JUnit tests">

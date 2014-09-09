@@ -20,8 +20,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.math.stat.StatUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.math3.stat.StatUtils;
 
 import kieker.tools.tslib.ForecastMethod;
 import kieker.tools.tslib.ITimeSeries;
@@ -31,14 +31,14 @@ import kieker.tools.tslib.forecast.IForecastResult;
 
 /**
  * A Java-based time series forecaster which computes a forecast based on the mean value of the historic values.
- * 
+ *
  * @author Andre van Hoorn
  * @since 1.10
  */
 public class MeanForecasterJava extends AbstractForecaster<Double> {
 
 	/**
-	 * 
+	 *
 	 * @param historyTimeseries
 	 *            TimeSeries
 	 */
@@ -49,7 +49,7 @@ public class MeanForecasterJava extends AbstractForecaster<Double> {
 	/**
 	 * @param numForecastSteps
 	 *            number of values the forecaster is going to forecast
-	 * 
+	 *
 	 * @return Forecast Result
 	 */
 	@Override
@@ -70,7 +70,7 @@ public class MeanForecasterJava extends AbstractForecaster<Double> {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param allHistory
 	 *            List there null values should deltet in this function
 	 * @return List/Array with no NullValues

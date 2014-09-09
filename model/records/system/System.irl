@@ -63,9 +63,11 @@ entity CPUUtilizationRecord {
 entity MemSwapUsageRecord {
 	long timestamp = 0
 	string hostname = ""
+	
+	long memTotal = 0
 	long memUsed = 0
 	long memFree = 0
-	long memTotal = 0
+	
 	long swapTotal = 0
 	long swapUsed = 0
 	long swapFree = 0

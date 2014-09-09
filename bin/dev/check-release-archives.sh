@@ -243,6 +243,8 @@ function assert_files_exist_src {
 	assert_file_exists_regular "build-config/init-and-clean.xml"
 	assert_file_exists_regular "build-config/quality.xml"
 	assert_file_exists_regular "build-config/test.xml"
+	assert_file_exists_regular "build-config/javadoc-header/javadoc.css"
+	assert_file_exists_regular "build-config/javadoc-header/kieker-javadoc-header.png"
 	assert_file_exists_regular "kieker-eclipse.importorder"
 	assert_file_exists_regular "kieker-eclipse-cleanup.xml"
 	assert_file_exists_regular "kieker-eclipse-formatter.xml"

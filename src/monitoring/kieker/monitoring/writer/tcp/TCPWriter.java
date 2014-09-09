@@ -64,7 +64,8 @@ public final class TCPWriter extends AbstractAsyncWriter {
 
 	@Override
 	protected void init() throws Exception {
-		this.addWorker(new TCPWriterThread(this.monitoringController, this.blockingQueue, this.hostname, this.port1, this.port2, this.bufferSize, this.flush));
+		this.addWorker(new TCPWriterThread(this.monitoringController, this.blockingQueue, this.hostname, this.port1, this.bufferSize, this.flush));
+		this.addWorker(new TCPWriterThread(this.monitoringController, this.prioritizedBlockingQueue, this.hostname, this.port2, this.bufferSize, this.flush));
 	}
 }
 
@@ -77,18 +78,16 @@ public final class TCPWriter extends AbstractAsyncWriter {
 final class TCPWriterThread extends AbstractAsyncThread {
 	private static final Log LOG = LogFactory.getLog(TCPWriterThread.class);
 
-	private final SocketChannel socketChannelRecords;
-	private final SocketChannel socketChannelStrings;
+	private final SocketChannel socketChannel;
 	private final ByteBuffer byteBuffer;
 	private final IRegistry<String> stringRegistry;
 	private final boolean flush;
 
 	public TCPWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue, final String hostname,
-			final int port1, final int port2, final int bufferSize, final boolean flush) throws IOException {
+			final int port, final int bufferSize, final boolean flush) throws IOException {
 		super(monitoringController, writeQueue);
 		this.byteBuffer = ByteBuffer.allocateDirect(bufferSize);
-		this.socketChannelRecords = SocketChannel.open(new InetSocketAddress(hostname, port1));
-		this.socketChannelStrings = SocketChannel.open(new InetSocketAddress(hostname, port2));
+		this.socketChannel = SocketChannel.open(new InetSocketAddress(hostname, port));
 		this.stringRegistry = this.monitoringController.getStringRegistry();
 		this.flush = flush;
 	}
@@ -100,14 +99,14 @@ final class TCPWriterThread extends AbstractAsyncThread {
 			monitoringRecord.writeBytes(buffer, this.stringRegistry);
 			buffer.flip();
 			while (buffer.hasRemaining()) {
-				this.socketChannelStrings.write(buffer);
+				this.socketChannel.write(buffer);
 			}
 		} else {
 			final ByteBuffer buffer = this.byteBuffer;
 			if ((monitoringRecord.getSize() + 4 + 8) > buffer.remaining()) {
 				buffer.flip();
 				while (buffer.hasRemaining()) {
-					this.socketChannelRecords.write(buffer);
+					this.socketChannel.write(buffer);
 				}
 				buffer.clear();
 			}
@@ -117,7 +116,7 @@ final class TCPWriterThread extends AbstractAsyncThread {
 			if (this.flush) {
 				buffer.flip();
 				while (buffer.hasRemaining()) {
-					this.socketChannelRecords.write(buffer);
+					this.socketChannel.write(buffer);
 				}
 				buffer.clear();
 			}
@@ -130,14 +129,9 @@ final class TCPWriterThread extends AbstractAsyncThread {
 			final ByteBuffer buffer = this.byteBuffer;
 			buffer.flip();
 			while (buffer.hasRemaining()) {
-				this.socketChannelRecords.write(buffer);
+				this.socketChannel.write(buffer);
 			}
-			this.socketChannelRecords.close();
-		} catch (final IOException ex) {
-			LOG.error("Error closing connection", ex);
-		}
-		try {
-			this.socketChannelStrings.close();
+			this.socketChannel.close();
 		} catch (final IOException ex) {
 			LOG.error("Error closing connection", ex);
 		}

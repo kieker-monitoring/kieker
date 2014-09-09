@@ -54,13 +54,13 @@
 			<tag name="ordered" />
 			<tag name="model" />
 		</javadoc>
-		<copy file="build-config/javadoc-header/kieker-javadoc-header.png" todir="build/javadoc/resources"/>
+		<copy file="${build.config.dir}/javadoc-header/kieker-javadoc-header.png" todir="${build.api.dir}/resources"/>
 	</target>
 
 	<target name="dist-kieker-sources" depends="-init" description="Packages the source archives (.zip|.tar.gz) for a release">
 		<!-- <echo message="${test.dir}/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/jetty.xml" /> -->
 		<patternset id="dist_src_files-nonbinmode"> <!-- NOTE that the order of includes/excludes seems to have no effect. So be careful with excludes -->
-			<include name="${build.config.dir}/*" />
+			<include name="${build.config.dir}/**/*" />
 			<include name="${bin.dir}/logging.properties" />
 			<include name="${bin.dir}/*.bat" />
 			<include name="${src.userguide.dir}/**/*" />
@@ -310,9 +310,9 @@
 						prefix="${kieker.dist.name}/${src.example.analysis.kax.dir}/lib" />	
 			<tarfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
 						prefix="${kieker.dist.name}/${src.example.analysis.opad.dir}/lib" />	
-			<tarfileset file="${lib.dir}/commons-lang-*.jar"
+			<tarfileset file="${lib.dir}/commons-lang3-*.jar"
 						prefix="${kieker.dist.name}/${src.example.analysis.opad.dir}/lib" />
-			<tarfileset file="${lib.dir}/commons-math-*.jar"
+			<tarfileset file="${lib.dir}/commons-math3-*.jar"
 						prefix="${kieker.dist.name}/${src.example.analysis.opad.dir}/lib" />			
 			<tarfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
 						prefix="${kieker.dist.name}/${src.example.monitoring.aspectj.dir}/lib" />		
@@ -432,9 +432,9 @@
 						prefix="${kieker.dist.name}/${src.example.analysis.opad.dir}/lib" />				
 			<zipfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
 						prefix="${kieker.dist.name}/${src.example.monitoring.aspectj.dir}/lib" />	
-			<zipfileset file="${lib.dir}/commons-lang-*.jar"
+			<zipfileset file="${lib.dir}/commons-lang3-*.jar"
 						prefix="${kieker.dist.name}/${src.example.analysis.opad.dir}/lib" />
-			<zipfileset file="${lib.dir}/commons-math-*.jar"
+			<zipfileset file="${lib.dir}/commons-math3-*.jar"
 						prefix="${kieker.dist.name}/${src.example.analysis.opad.dir}/lib" />			
 			<zipfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
 						prefix="${kieker.dist.name}/${src.example.monitoring.adaptive.dir}/lib" />		

@@ -28,7 +28,6 @@ import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
-import kieker.common.record.misc.RegistryRecord;
 
 /**
  * @author Jan Waller
@@ -39,6 +38,8 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 
 	/** The name of the configuration determining the size of the queue of this writer. */
 	public static final String CONFIG_QUEUESIZE = "QueueSize";
+	/** The name of the configuration determining the size of the prioritized queue of this writer. */
+	public static final String CONFIG_PRIORITIZED_QUEUESIZE = "PrioritizedQueueSize";
 	/** The name of the configuration determining the behavior of this writer in case of a full queue. */
 	public static final String CONFIG_BEHAVIOR = "QueueFullBehavior";
 	/** The name of the configuration determining the maximal shutdown delay of this writer (in milliseconds). */
@@ -49,6 +50,8 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	// internal variables
 	/** The queue containing the records to be written. */
 	protected final BlockingQueue<IMonitoringRecord> blockingQueue;
+	/** The queue containing prioritized records (mostly {@link kieker.common.record.misc.RegistryRecord}) to be written. */
+	protected final BlockingQueue<IMonitoringRecord> prioritizedBlockingQueue;
 	private final List<AbstractAsyncThread> workers = new CopyOnWriteArrayList<AbstractAsyncThread>();
 	private final int queueFullBehavior;
 	private final int maxShutdownDelay;
@@ -73,6 +76,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 		}
 		this.missedRecords = new AtomicLong(0);
 		this.blockingQueue = new ArrayBlockingQueue<IMonitoringRecord>(configuration.getIntProperty(prefix + CONFIG_QUEUESIZE));
+		this.prioritizedBlockingQueue = new ArrayBlockingQueue<IMonitoringRecord>(configuration.getIntProperty(prefix + CONFIG_PRIORITIZED_QUEUESIZE));
 		this.maxShutdownDelay = configuration.getIntProperty(prefix + CONFIG_SHUTDOWNDELAY);
 	}
 
@@ -84,6 +88,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 		final Configuration configuration = new Configuration(super.getDefaultConfiguration());
 		final String prefix = this.getClass().getName() + "."; // can't use this.prefix, maybe uninitialized
 		configuration.setProperty(prefix + CONFIG_QUEUESIZE, "10000");
+		configuration.setProperty(prefix + CONFIG_PRIORITIZED_QUEUESIZE, "100");
 		configuration.setProperty(prefix + CONFIG_BEHAVIOR, "0");
 		configuration.setProperty(prefix + CONFIG_SHUTDOWNDELAY, "-1");
 		return configuration;
@@ -151,19 +156,9 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 				return false;
 			case 2: // does nothing if queue is full
 				if (!this.blockingQueue.offer(monitoringRecord)) {
-					// RegistryRecords must always be placed in the queue
-					if (monitoringRecord instanceof RegistryRecord) {
-						try {
-							this.blockingQueue.put(monitoringRecord);
-						} catch (final InterruptedException ignore) {
-							LOG.error("Interrupted while adding RegistryRecord. Monitorig log will be corrupted!");
-							return false;
-						}
-					} else {
-						final long tmpMissedRecords = this.missedRecords.getAndIncrement();
-						if ((tmpMissedRecords % 1024) == 0) {
-							LOG.warn("Queue is full, dropping records. Number of already dropped records: " + tmpMissedRecords);
-						}
+					final long tmpMissedRecords = this.missedRecords.getAndIncrement();
+					if ((tmpMissedRecords % 1024) == 0) {
+						LOG.warn("Queue is full, dropping records. Number of already dropped records: " + tmpMissedRecords);
 					}
 				}
 				return true;
@@ -185,12 +180,12 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	@Override
 	public final boolean newMonitoringRecordNonBlocking(final IMonitoringRecord monitoringRecord) {
 		try {
-			if (!this.blockingQueue.offer(monitoringRecord)) {
+			if (!this.prioritizedBlockingQueue.offer(monitoringRecord)) {
 				new Thread() {
 					@Override
 					public void run() {
 						try {
-							AbstractAsyncWriter.this.blockingQueue.put(monitoringRecord);
+							AbstractAsyncWriter.this.prioritizedBlockingQueue.put(monitoringRecord);
 							return;
 						} catch (final InterruptedException ignore) {
 							Thread.currentThread().interrupt(); // propagate interrupt

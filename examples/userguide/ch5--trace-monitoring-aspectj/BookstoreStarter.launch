@@ -8,5 +8,5 @@
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="kieker.examples.userguide.ch5bookstore.BookstoreStarter"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="Kieker Example 4 ch5--trace-monitoring-aspectj"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-javaagent:${workspace_loc:Kieker/lib}/aspectjweaver-1.8.0.jar"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-javaagent:${workspace_loc:Kieker/lib}/aspectjweaver-1.8.2.jar"/>
 </launchConfiguration>
