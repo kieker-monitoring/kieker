@@ -125,7 +125,6 @@
 				<include name="geronimo-j2ee-management_1.1_spec-*.jar"/>
 				<!-- Bridge end -->
 				<!-- OPAD begin -->
-				<include name="mongo-*.jar"/>
 				<include name="commons-math3-*.jar"/>
 				<include name="commons-lang3-*.jar"/>
 				<include name="REngine-*.jar"/>

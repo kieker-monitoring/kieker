@@ -38,7 +38,6 @@
 				<include name="REngine-*.jar"/>
 				<include name="Rsession-*.jar"/>
 				<include name="Rserve-*.jar"/>
-				<include name="mongo-*.jar"/>
 				<include name="org.json.min-*.jar"/>
 				<!-- Opad end -->
 				
@@ -62,11 +61,11 @@
 		<delete dir="${tests.junit-results.dir}" />
 		<mkdir dir="${tests.junit-results.dir}" />
 
-		<!-- Make sure that no other rserve instance is running -->
-		<!-- <antcall target="-stop-rserve.tools"></antcall> -->
+		<echo message="Killing all running RServe instances (if present) ... " />
+		<antcall target="-stop-rserve.tools"></antcall>
 		
 		<!-- Start fresh rserve instance -->
-		<!-- <antcall target="-start-rserve.tools"></antcall> -->
+		<antcall target="-start-rserve.tools"></antcall>
 		
 		<junit fork="no" printsummary="yes">
 			
@@ -85,7 +84,7 @@
 				</fileset>
 			</batchtest>
 		</junit>
-		<!-- <antcall target="-stop-rserve.tools"></antcall> -->
+		<antcall target="-stop-rserve.tools"></antcall>
 
 		<antcall target="-test.junit.report" /> 
 	</target>
@@ -103,14 +102,14 @@
 	</target>
 	
 	<target name="-start-rserve.tools" depends="">
-		<echo message="Trying to start Rserve (this might fail on systems that are not able to execute bash scripts or do not have R/Rserve installed" />
-		<exec executable="${tests.rserve-control-script.sh}" spawn="true" failonerror="false" failifexecutionfails="false" osfamily="unix">
+		<echo message="Trying to start Rserve (this might fail on systems that are not able to execute bash scripts or do not have R/Rserve installed)" />
+		<exec executable="${tests.rserve-control-script.sh}" spawn="true" failonerror="false" osfamily="unix"> <!-- failifexecutionfails="false" not compatible with spawn -->
 			<arg value="start" />
 		</exec>
 	</target>
 
 	<target name="-stop-rserve.tools" depends="">
-		<echo message="Trying to stop Rserve (Trying to start Rserve (this might fail on systems that are not able to execute bash scripts or do not have R/Rserve installed)" />
+		<echo message="Trying to stop Rserve (this might fail on systems that are not able to execute bash scripts or do not have R/Rserve installed)" />
 		<exec executable="${tests.rserve-control-script.sh}" failonerror="false" failifexecutionfails="false" osfamily="unix">
 			<arg value="stop" />
 		</exec>
