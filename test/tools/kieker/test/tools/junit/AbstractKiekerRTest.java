@@ -29,12 +29,14 @@ import kieker.test.common.junit.AbstractKiekerTest;
 /**
  * Test that ensures that every time a R-dependent test is run, a fresh
  * Rserve instance is started beforehand and terminated afterwards.
- *
+ * 
  * @since 1.10
  * @author Thomas Düllmann
- *
+ * 
  */
 public abstract class AbstractKiekerRTest extends AbstractKiekerTest {
+
+	private static final String PROPERTY_NAME_KIEKER_R_TEST = "TestKiekerRTests";
 
 	/**
 	 * Check whether the SystemProperty is set that states, that Kieker R-related tests
@@ -43,13 +45,15 @@ public abstract class AbstractKiekerRTest extends AbstractKiekerTest {
 	@Before
 	public void preCheckForRSysPropertyAndConnection() {
 
-		Assume.assumeTrue(this.isTestKiekerRTestsSet());
+		final String messageWhenPropertyNotSet =
+				"Skipping " + this.getClass() + "because system property " + PROPERTY_NAME_KIEKER_R_TEST + " not true";
+		Assume.assumeTrue(messageWhenPropertyNotSet, this.isTestKiekerRTestsSet());
 
 		try {
 			final RConnection rConnection = new RConnection();
 			Assume.assumeTrue(rConnection.isConnected());
 			rConnection.close();
-		} catch (final RserveException e) {
+		} catch (final RserveException e) { // thrown on new RConnection();
 			if (this.isTestKiekerRTestsSet()) {
 				Assert.fail("You chose to execute KiekerRTests, but no connection to Rserve can be established.");
 			}
@@ -58,7 +62,7 @@ public abstract class AbstractKiekerRTest extends AbstractKiekerTest {
 
 	/**
 	 * Checks whether the given TimeSeries contains items.
-	 *
+	 * 
 	 * @param timeSeries
 	 *            TimeSeries
 	 * @return true if TimeSeries contains one or more items, else false
@@ -69,7 +73,7 @@ public abstract class AbstractKiekerRTest extends AbstractKiekerTest {
 
 	/**
 	 * Gets the first (index = 0) TimeSeries point from the given TimeSeries.
-	 *
+	 * 
 	 * @param timeSeries
 	 *            TimeSeries
 	 * @return First (index = 0) TimeSeries item if there are any, else 0d (and Test fails)
@@ -84,11 +88,11 @@ public abstract class AbstractKiekerRTest extends AbstractKiekerTest {
 	}
 
 	/**
-	 * Checks whether the system property "TestKiekerRTests" is set to true.
-	 *
+	 * Checks whether the system property {@value #PROPERTY_NAME_KIEKER_R_TEST} is set to true.
+	 * 
 	 * @return true if set correctly (to true), else false
 	 */
 	private boolean isTestKiekerRTestsSet() {
-		return "true".equals(System.getProperty("TestKiekerRTests"));
+		return "true".equals(System.getProperty(PROPERTY_NAME_KIEKER_R_TEST));
 	}
 }
