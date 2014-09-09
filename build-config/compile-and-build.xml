@@ -315,6 +315,25 @@
 			<compilerarg value="-Xlint:all" />
 		</javac>
 	</target>
+	
+	<target name="-compile-tests-api" depends="build-kieker.main" description="Compiles the tests for api test of common classes">
+		<path id="common-test-compile-classpath">
+			<fileset dir="${lib.dir}">
+				<include name="hamcrest-core-*.jar" />
+				<include name="junit-*.jar" />
+			</fileset>
+			<!-- This part is necessary as one of the tests uses helper methods from this jar. -->
+			<fileset dir="${lib.dir}/framework-libs/cxf">
+				<include name="cxf-*.jar" />
+			</fileset>
+			<fileset dir="${dist.dir}">
+				<include name="${dist.kieker.main.jar}" />
+			</fileset>
+		</path>
+		<javac source="1.6" target="1.6" destDir="${build.tests.dir}" classpathref="common-test-compile-classpath" srcdir="${test.gen.kieker.common.dir}" debug="true" includeAntRuntime="false">
+			<compilerarg value="-Xlint:all" />
+		</javac>
+	</target>
 
 	<target name="-compile-tests-monitoring" depends="-compile-tests-common,build-kieker.main,build-kieker.main.aspectj" description="Compiles the tests for the Kieker.Monitoring component">
 		<path id="monitoring-test-compile-classpath">
@@ -387,7 +406,7 @@
 		</javac>
 	</target>
 
-	<target name="compile-tests" depends="-compile-tests-common,-compile-tests-analysis,-compile-tests-monitoring,-compile-tests-tools" description="Compile the tests for the Kieker components">
+	<target name="compile-tests" depends="-compile-tests-common,-compile-tests-api,-compile-tests-analysis,-compile-tests-monitoring,-compile-tests-tools" description="Compile the tests for the Kieker components">
 	</target>
 
 	<!--
