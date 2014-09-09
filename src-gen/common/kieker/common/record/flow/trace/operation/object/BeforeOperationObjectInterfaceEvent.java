@@ -53,7 +53,6 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 	};
 	
 	
-	private final String _interface;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -75,7 +74,6 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 	 */
 	public BeforeOperationObjectInterfaceEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature, final int objectId, final String _interface) {
 		super(timestamp, traceId, orderIndex, operationSignature, classSignature, objectId);
-		this._interface = _interface == null?"":_interface;
 	}
 
 	/**
@@ -87,7 +85,6 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 	 */
 	public BeforeOperationObjectInterfaceEvent(final Object[] values) { // NOPMD (direct store of values)
 		super(values, TYPES);
-		this._interface = (String) values[6];
 	}
 	
 	/**
@@ -100,7 +97,6 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 	 */
 	protected BeforeOperationObjectInterfaceEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes);
-		this._interface = (String) values[6];
 	}
 
 	/**
@@ -114,7 +110,6 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 	 */
 	public BeforeOperationObjectInterfaceEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		super(buffer, stringRegistry);
-		this._interface = stringRegistry.get(buffer.getInt());
 	}
 
 	/**

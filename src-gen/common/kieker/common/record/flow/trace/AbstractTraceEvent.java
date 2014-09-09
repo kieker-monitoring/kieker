@@ -34,8 +34,6 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 	
 	
 	
-	private final long traceId;
-	private final int orderIndex;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -49,8 +47,6 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 	 */
 	public AbstractTraceEvent(final long timestamp, final long traceId, final int orderIndex) {
 		super(timestamp);
-		this.traceId = traceId;
-		this.orderIndex = orderIndex;
 	}
 
 	
@@ -64,8 +60,6 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 	 */
 	protected AbstractTraceEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes);
-		this.traceId = (Long) values[1];
-		this.orderIndex = (Integer) values[2];
 	}
 
 	/**
@@ -79,8 +73,6 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 	 */
 	public AbstractTraceEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		super(buffer, stringRegistry);
-		this.traceId = buffer.getLong();
-		this.orderIndex = buffer.getInt();
 	}
 
 	/**

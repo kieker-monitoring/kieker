@@ -26,17 +26,17 @@ import kieker.common.record.flow.trace.operation.constructor.BeforeConstructorEv
 import kieker.common.record.flow.IObjectRecord;
 
 /**
- * @author Jan Waller
+ * @author Generic Kieker
  * 
- * @since 1.6
+ * @since 1.10
  */
 public class BeforeConstructorObjectEvent extends BeforeConstructorEvent implements IObjectRecord {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
 			 + TYPE_SIZE_LONG // ITraceRecord.traceId
 			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
-			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
 			 + TYPE_SIZE_STRING // IClassSignature.classSignature
+			 + TYPE_SIZE_STRING // IOperationRecord.operationSignature
 			 + TYPE_SIZE_INT // IObjectRecord.objectId
 	;
 	private static final long serialVersionUID = -7768703595634330464L;
@@ -45,13 +45,12 @@ public class BeforeConstructorObjectEvent extends BeforeConstructorEvent impleme
 		long.class, // IEventRecord.timestamp
 		long.class, // ITraceRecord.traceId
 		int.class, // ITraceRecord.orderIndex
-		String.class, // IOperationSignature.operationSignature
 		String.class, // IClassSignature.classSignature
+		String.class, // IOperationRecord.operationSignature
 		int.class, // IObjectRecord.objectId
 	};
 	
 	
-	private final int objectId;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -62,16 +61,15 @@ public class BeforeConstructorObjectEvent extends BeforeConstructorEvent impleme
 	 *            traceId
 	 * @param orderIndex
 	 *            orderIndex
-	 * @param operationSignature
-	 *            operationSignature
 	 * @param classSignature
 	 *            classSignature
+	 * @param operationSignature
+	 *            operationSignature
 	 * @param objectId
 	 *            objectId
 	 */
-	public BeforeConstructorObjectEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature, final int objectId) {
-		super(timestamp, traceId, orderIndex, operationSignature, classSignature);
-		this.objectId = objectId;
+	public BeforeConstructorObjectEvent(final long timestamp, final long traceId, final int orderIndex, final String classSignature, final String operationSignature, final int objectId) {
+		super(timestamp, traceId, orderIndex, classSignature, operationSignature);
 	}
 
 	/**
@@ -83,7 +81,6 @@ public class BeforeConstructorObjectEvent extends BeforeConstructorEvent impleme
 	 */
 	public BeforeConstructorObjectEvent(final Object[] values) { // NOPMD (direct store of values)
 		super(values, TYPES);
-		this.objectId = (Integer) values[5];
 	}
 	
 	/**
@@ -96,7 +93,6 @@ public class BeforeConstructorObjectEvent extends BeforeConstructorEvent impleme
 	 */
 	protected BeforeConstructorObjectEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes);
-		this.objectId = (Integer) values[5];
 	}
 
 	/**
@@ -110,7 +106,6 @@ public class BeforeConstructorObjectEvent extends BeforeConstructorEvent impleme
 	 */
 	public BeforeConstructorObjectEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		super(buffer, stringRegistry);
-		this.objectId = buffer.getInt();
 	}
 
 	/**
@@ -122,8 +117,8 @@ public class BeforeConstructorObjectEvent extends BeforeConstructorEvent impleme
 			this.getTimestamp(),
 			this.getTraceId(),
 			this.getOrderIndex(),
-			this.getOperationSignature(),
 			this.getClassSignature(),
+			this.getOperationSignature(),
 			this.getObjectId()
 		};
 	}
@@ -136,8 +131,8 @@ public class BeforeConstructorObjectEvent extends BeforeConstructorEvent impleme
 		buffer.putLong(this.getTimestamp());
 		buffer.putLong(this.getTraceId());
 		buffer.putInt(this.getOrderIndex());
-		buffer.putInt(stringRegistry.get(this.getOperationSignature()));
 		buffer.putInt(stringRegistry.get(this.getClassSignature()));
+		buffer.putInt(stringRegistry.get(this.getOperationSignature()));
 		buffer.putInt(this.getObjectId());
 	}
 

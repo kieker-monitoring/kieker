@@ -35,7 +35,6 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 	
 	
 	
-	private final long timestamp;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -44,7 +43,6 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 	 *            timestamp
 	 */
 	public AbstractEvent(final long timestamp) {
-		this.timestamp = timestamp;
 	}
 
 	
@@ -58,7 +56,6 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 	 */
 	protected AbstractEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		AbstractMonitoringRecord.checkArray(values, valueTypes);
-		this.timestamp = (Long) values[0];
 	}
 
 	/**
@@ -71,7 +68,6 @@ public abstract class AbstractEvent extends AbstractMonitoringRecord implements 
 	 *             if buffer not sufficient
 	 */
 	public AbstractEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.timestamp = buffer.getLong();
 	}
 
 	/**

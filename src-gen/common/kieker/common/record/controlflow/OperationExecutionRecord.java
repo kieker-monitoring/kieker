@@ -69,14 +69,6 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	public static final int EOI = -1;
 	public static final int ESS = -1;
 	
-	private final String operationSignature;
-	private final String sessionId;
-	private final long traceId;
-	private final long tin;
-	private final long tout;
-	private final String hostname;
-	private final int eoi;
-	private final int ess;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -99,14 +91,6 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	 *            ess
 	 */
 	public OperationExecutionRecord(final String operationSignature, final String sessionId, final long traceId, final long tin, final long tout, final String hostname, final int eoi, final int ess) {
-		this.operationSignature = operationSignature == null?"noOperation":operationSignature;
-		this.sessionId = sessionId == null?"<no-session-id>":sessionId;
-		this.traceId = traceId;
-		this.tin = tin;
-		this.tout = tout;
-		this.hostname = hostname == null?"<default-host>":hostname;
-		this.eoi = eoi;
-		this.ess = ess;
 	}
 
 	/**
@@ -118,14 +102,6 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	 */
 	public OperationExecutionRecord(final Object[] values) { // NOPMD (direct store of values)
 		AbstractMonitoringRecord.checkArray(values, TYPES);
-		this.operationSignature = (String) values[0];
-		this.sessionId = (String) values[1];
-		this.traceId = (Long) values[2];
-		this.tin = (Long) values[3];
-		this.tout = (Long) values[4];
-		this.hostname = (String) values[5];
-		this.eoi = (Integer) values[6];
-		this.ess = (Integer) values[7];
 	}
 	
 	/**
@@ -138,14 +114,6 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	 */
 	protected OperationExecutionRecord(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		AbstractMonitoringRecord.checkArray(values, valueTypes);
-		this.operationSignature = (String) values[0];
-		this.sessionId = (String) values[1];
-		this.traceId = (Long) values[2];
-		this.tin = (Long) values[3];
-		this.tout = (Long) values[4];
-		this.hostname = (String) values[5];
-		this.eoi = (Integer) values[6];
-		this.ess = (Integer) values[7];
 	}
 
 	/**
@@ -158,14 +126,6 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	 *             if buffer not sufficient
 	 */
 	public OperationExecutionRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.operationSignature = stringRegistry.get(buffer.getInt());
-		this.sessionId = stringRegistry.get(buffer.getInt());
-		this.traceId = buffer.getLong();
-		this.tin = buffer.getLong();
-		this.tout = buffer.getLong();
-		this.hostname = stringRegistry.get(buffer.getInt());
-		this.eoi = buffer.getInt();
-		this.ess = buffer.getInt();
 	}
 
 	/**

@@ -34,9 +34,6 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord impleme
 	
 	
 	
-	private final long timestamp;
-	private final String hostname;
-	private final String vmName;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -49,9 +46,6 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord impleme
 	 *            vmName
 	 */
 	public AbstractJVMRecord(final long timestamp, final String hostname, final String vmName) {
-		this.timestamp = timestamp;
-		this.hostname = hostname == null?"":hostname;
-		this.vmName = vmName == null?"":vmName;
 	}
 
 	
@@ -65,9 +59,6 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord impleme
 	 */
 	protected AbstractJVMRecord(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		AbstractMonitoringRecord.checkArray(values, valueTypes);
-		this.timestamp = (Long) values[0];
-		this.hostname = (String) values[1];
-		this.vmName = (String) values[2];
 	}
 
 	/**
@@ -80,9 +71,6 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord impleme
 	 *             if buffer not sufficient
 	 */
 	public AbstractJVMRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.timestamp = buffer.getLong();
-		this.hostname = stringRegistry.get(buffer.getInt());
-		this.vmName = stringRegistry.get(buffer.getInt());
 	}
 
 	/**

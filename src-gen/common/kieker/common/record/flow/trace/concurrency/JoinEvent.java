@@ -47,7 +47,6 @@ public class JoinEvent extends AbstractTraceEvent  {
 	
 	public static final long JOINED_TRACE_ID = 0L;
 	
-	private final long joinedTraceId;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -63,7 +62,6 @@ public class JoinEvent extends AbstractTraceEvent  {
 	 */
 	public JoinEvent(final long timestamp, final long traceId, final int orderIndex, final long joinedTraceId) {
 		super(timestamp, traceId, orderIndex);
-		this.joinedTraceId = joinedTraceId;
 	}
 
 	/**
@@ -75,7 +73,6 @@ public class JoinEvent extends AbstractTraceEvent  {
 	 */
 	public JoinEvent(final Object[] values) { // NOPMD (direct store of values)
 		super(values, TYPES);
-		this.joinedTraceId = (Long) values[3];
 	}
 	
 	/**
@@ -88,7 +85,6 @@ public class JoinEvent extends AbstractTraceEvent  {
 	 */
 	protected JoinEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes);
-		this.joinedTraceId = (Long) values[3];
 	}
 
 	/**
@@ -102,7 +98,6 @@ public class JoinEvent extends AbstractTraceEvent  {
 	 */
 	public JoinEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		super(buffer, stringRegistry);
-		this.joinedTraceId = buffer.getLong();
 	}
 
 	/**

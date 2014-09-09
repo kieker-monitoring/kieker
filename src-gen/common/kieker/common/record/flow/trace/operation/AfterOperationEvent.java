@@ -25,17 +25,17 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.record.flow.trace.operation.AbstractOperationEvent;
 
 /**
- * @author Jan Waller
+ * @author Generic Kieker
  * 
- * @since 1.6
+ * @since 1.10
  */
 public class AfterOperationEvent extends AbstractOperationEvent  {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
 			 + TYPE_SIZE_LONG // ITraceRecord.traceId
 			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
-			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
 			 + TYPE_SIZE_STRING // IClassSignature.classSignature
+			 + TYPE_SIZE_STRING // IOperationRecord.operationSignature
 	;
 	private static final long serialVersionUID = -7820788362643933781L;
 	
@@ -43,8 +43,8 @@ public class AfterOperationEvent extends AbstractOperationEvent  {
 		long.class, // IEventRecord.timestamp
 		long.class, // ITraceRecord.traceId
 		int.class, // ITraceRecord.orderIndex
-		String.class, // IOperationSignature.operationSignature
 		String.class, // IClassSignature.classSignature
+		String.class, // IOperationRecord.operationSignature
 	};
 	
 	
@@ -58,13 +58,13 @@ public class AfterOperationEvent extends AbstractOperationEvent  {
 	 *            traceId
 	 * @param orderIndex
 	 *            orderIndex
-	 * @param operationSignature
-	 *            operationSignature
 	 * @param classSignature
 	 *            classSignature
+	 * @param operationSignature
+	 *            operationSignature
 	 */
-	public AfterOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature) {
-		super(timestamp, traceId, orderIndex, operationSignature, classSignature);
+	public AfterOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String classSignature, final String operationSignature) {
+		super(timestamp, traceId, orderIndex, classSignature, operationSignature);
 	}
 
 	/**
@@ -112,8 +112,8 @@ public class AfterOperationEvent extends AbstractOperationEvent  {
 			this.getTimestamp(),
 			this.getTraceId(),
 			this.getOrderIndex(),
-			this.getOperationSignature(),
-			this.getClassSignature()
+			this.getClassSignature(),
+			this.getOperationSignature()
 		};
 	}
 
@@ -125,8 +125,8 @@ public class AfterOperationEvent extends AbstractOperationEvent  {
 		buffer.putLong(this.getTimestamp());
 		buffer.putLong(this.getTraceId());
 		buffer.putInt(this.getOrderIndex());
-		buffer.putInt(stringRegistry.get(this.getOperationSignature()));
 		buffer.putInt(stringRegistry.get(this.getClassSignature()));
+		buffer.putInt(stringRegistry.get(this.getOperationSignature()));
 	}
 
 	/**

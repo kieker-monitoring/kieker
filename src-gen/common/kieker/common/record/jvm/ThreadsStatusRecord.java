@@ -52,10 +52,6 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 	};
 	
 	
-	private final long threadCount;
-	private final long daemonThreadCount;
-	private final long peakThreadCount;
-	private final long totalStartedThreadCount;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -77,10 +73,6 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 	 */
 	public ThreadsStatusRecord(final long timestamp, final String hostname, final String vmName, final long threadCount, final long daemonThreadCount, final long peakThreadCount, final long totalStartedThreadCount) {
 		super(timestamp, hostname, vmName);
-		this.threadCount = threadCount;
-		this.daemonThreadCount = daemonThreadCount;
-		this.peakThreadCount = peakThreadCount;
-		this.totalStartedThreadCount = totalStartedThreadCount;
 	}
 
 	/**
@@ -92,10 +84,6 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 	 */
 	public ThreadsStatusRecord(final Object[] values) { // NOPMD (direct store of values)
 		super(values, TYPES);
-		this.threadCount = (Long) values[3];
-		this.daemonThreadCount = (Long) values[4];
-		this.peakThreadCount = (Long) values[5];
-		this.totalStartedThreadCount = (Long) values[6];
 	}
 	
 	/**
@@ -108,10 +96,6 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 	 */
 	protected ThreadsStatusRecord(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes);
-		this.threadCount = (Long) values[3];
-		this.daemonThreadCount = (Long) values[4];
-		this.peakThreadCount = (Long) values[5];
-		this.totalStartedThreadCount = (Long) values[6];
 	}
 
 	/**
@@ -125,10 +109,6 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 	 */
 	public ThreadsStatusRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		super(buffer, stringRegistry);
-		this.threadCount = buffer.getLong();
-		this.daemonThreadCount = buffer.getLong();
-		this.peakThreadCount = buffer.getLong();
-		this.totalStartedThreadCount = buffer.getLong();
 	}
 
 	/**

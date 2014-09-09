@@ -26,9 +26,9 @@ import kieker.common.util.registry.IRegistry;
 
 
 /**
- * @author Generic Kieker
+ * @author Andre van Hoorn, Jan Waller
  * 
- * @since 1.10
+ * @since 1.5
  */
 public class TimestampRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 	/** Descriptive definition of the serialization size of the record. */
@@ -42,7 +42,6 @@ public class TimestampRecord extends AbstractMonitoringRecord implements IMonito
 	
 	public static final long TIMESTAMP = 0L;
 	
-	private final long timestamp;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -51,7 +50,6 @@ public class TimestampRecord extends AbstractMonitoringRecord implements IMonito
 	 *            timestamp
 	 */
 	public TimestampRecord(final long timestamp) {
-		this.timestamp = timestamp;
 	}
 
 	/**
@@ -63,7 +61,6 @@ public class TimestampRecord extends AbstractMonitoringRecord implements IMonito
 	 */
 	public TimestampRecord(final Object[] values) { // NOPMD (direct store of values)
 		AbstractMonitoringRecord.checkArray(values, TYPES);
-		this.timestamp = (Long) values[0];
 	}
 	
 	/**
@@ -76,7 +73,6 @@ public class TimestampRecord extends AbstractMonitoringRecord implements IMonito
 	 */
 	protected TimestampRecord(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		AbstractMonitoringRecord.checkArray(values, valueTypes);
-		this.timestamp = (Long) values[0];
 	}
 
 	/**
@@ -89,7 +85,6 @@ public class TimestampRecord extends AbstractMonitoringRecord implements IMonito
 	 *             if buffer not sufficient
 	 */
 	public TimestampRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.timestamp = buffer.getLong();
 	}
 
 	/**

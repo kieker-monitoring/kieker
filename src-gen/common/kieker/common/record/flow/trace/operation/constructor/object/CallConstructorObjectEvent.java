@@ -26,19 +26,19 @@ import kieker.common.record.flow.trace.operation.constructor.CallConstructorEven
 import kieker.common.record.flow.ICallObjectRecord;
 
 /**
- * @author Jan Waller
+ * @author Generic Kieker
  * 
- * @since 1.6
+ * @since 1.10
  */
 public class CallConstructorObjectEvent extends CallConstructorEvent implements ICallObjectRecord {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
 			 + TYPE_SIZE_LONG // ITraceRecord.traceId
 			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
-			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
 			 + TYPE_SIZE_STRING // IClassSignature.classSignature
-			 + TYPE_SIZE_STRING // ICallRecord.calleeOperationSignature
+			 + TYPE_SIZE_STRING // IOperationRecord.operationSignature
 			 + TYPE_SIZE_STRING // ICallRecord.calleeClassSignature
+			 + TYPE_SIZE_STRING // ICallRecord.calleeOperationSignature
 			 + TYPE_SIZE_INT // IObjectRecord.objectId
 			 + TYPE_SIZE_INT // ICallObjectRecord.calleeObjectId
 	;
@@ -48,17 +48,16 @@ public class CallConstructorObjectEvent extends CallConstructorEvent implements 
 		long.class, // IEventRecord.timestamp
 		long.class, // ITraceRecord.traceId
 		int.class, // ITraceRecord.orderIndex
-		String.class, // IOperationSignature.operationSignature
 		String.class, // IClassSignature.classSignature
-		String.class, // ICallRecord.calleeOperationSignature
+		String.class, // IOperationRecord.operationSignature
 		String.class, // ICallRecord.calleeClassSignature
+		String.class, // ICallRecord.calleeOperationSignature
 		int.class, // IObjectRecord.objectId
 		int.class, // ICallObjectRecord.calleeObjectId
 	};
 	
 	
-	private final int objectId;
-	private final int calleeObjectId;
+	private final int callerObjectId;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -69,23 +68,22 @@ public class CallConstructorObjectEvent extends CallConstructorEvent implements 
 	 *            traceId
 	 * @param orderIndex
 	 *            orderIndex
-	 * @param operationSignature
-	 *            operationSignature
 	 * @param classSignature
 	 *            classSignature
-	 * @param calleeOperationSignature
-	 *            calleeOperationSignature
+	 * @param operationSignature
+	 *            operationSignature
 	 * @param calleeClassSignature
 	 *            calleeClassSignature
+	 * @param calleeOperationSignature
+	 *            calleeOperationSignature
 	 * @param objectId
 	 *            objectId
 	 * @param calleeObjectId
 	 *            calleeObjectId
 	 */
-	public CallConstructorObjectEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature, final String calleeOperationSignature, final String calleeClassSignature, final int objectId, final int calleeObjectId) {
-		super(timestamp, traceId, orderIndex, operationSignature, classSignature, calleeOperationSignature, calleeClassSignature);
-		this.objectId = objectId;
-		this.calleeObjectId = calleeObjectId;
+	public CallConstructorObjectEvent(final long timestamp, final long traceId, final int orderIndex, final String classSignature, final String operationSignature, final String calleeClassSignature, final String calleeOperationSignature, final int objectId, final int calleeObjectId) {
+		super(timestamp, traceId, orderIndex, classSignature, operationSignature, calleeClassSignature, calleeOperationSignature);
+		this.callerObjectId = callerObjectId;
 	}
 
 	/**
@@ -97,8 +95,7 @@ public class CallConstructorObjectEvent extends CallConstructorEvent implements 
 	 */
 	public CallConstructorObjectEvent(final Object[] values) { // NOPMD (direct store of values)
 		super(values, TYPES);
-		this.objectId = (Integer) values[7];
-		this.calleeObjectId = (Integer) values[8];
+		this.callerObjectId = (Integer) values[7];
 	}
 	
 	/**
@@ -111,8 +108,7 @@ public class CallConstructorObjectEvent extends CallConstructorEvent implements 
 	 */
 	protected CallConstructorObjectEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes);
-		this.objectId = (Integer) values[7];
-		this.calleeObjectId = (Integer) values[8];
+		this.callerObjectId = (Integer) values[7];
 	}
 
 	/**
@@ -126,8 +122,7 @@ public class CallConstructorObjectEvent extends CallConstructorEvent implements 
 	 */
 	public CallConstructorObjectEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		super(buffer, stringRegistry);
-		this.objectId = buffer.getInt();
-		this.calleeObjectId = buffer.getInt();
+		this.callerObjectId = buffer.getInt();
 	}
 
 	/**
@@ -139,10 +134,10 @@ public class CallConstructorObjectEvent extends CallConstructorEvent implements 
 			this.getTimestamp(),
 			this.getTraceId(),
 			this.getOrderIndex(),
-			this.getOperationSignature(),
 			this.getClassSignature(),
-			this.getCalleeOperationSignature(),
+			this.getOperationSignature(),
 			this.getCalleeClassSignature(),
+			this.getCalleeOperationSignature(),
 			this.getObjectId(),
 			this.getCalleeObjectId()
 		};
@@ -156,10 +151,10 @@ public class CallConstructorObjectEvent extends CallConstructorEvent implements 
 		buffer.putLong(this.getTimestamp());
 		buffer.putLong(this.getTraceId());
 		buffer.putInt(this.getOrderIndex());
-		buffer.putInt(stringRegistry.get(this.getOperationSignature()));
 		buffer.putInt(stringRegistry.get(this.getClassSignature()));
-		buffer.putInt(stringRegistry.get(this.getCalleeOperationSignature()));
+		buffer.putInt(stringRegistry.get(this.getOperationSignature()));
 		buffer.putInt(stringRegistry.get(this.getCalleeClassSignature()));
+		buffer.putInt(stringRegistry.get(this.getCalleeOperationSignature()));
 		buffer.putInt(this.getObjectId());
 		buffer.putInt(this.getCalleeObjectId());
 	}

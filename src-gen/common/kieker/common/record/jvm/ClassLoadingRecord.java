@@ -50,9 +50,6 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 	};
 	
 	
-	private final long totalLoadedClassCount;
-	private final int loadedClassCount;
-	private final long unloadedClassCount;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -72,9 +69,6 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 	 */
 	public ClassLoadingRecord(final long timestamp, final String hostname, final String vmName, final long totalLoadedClassCount, final int loadedClassCount, final long unloadedClassCount) {
 		super(timestamp, hostname, vmName);
-		this.totalLoadedClassCount = totalLoadedClassCount;
-		this.loadedClassCount = loadedClassCount;
-		this.unloadedClassCount = unloadedClassCount;
 	}
 
 	/**
@@ -86,9 +80,6 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 	 */
 	public ClassLoadingRecord(final Object[] values) { // NOPMD (direct store of values)
 		super(values, TYPES);
-		this.totalLoadedClassCount = (Long) values[3];
-		this.loadedClassCount = (Integer) values[4];
-		this.unloadedClassCount = (Long) values[5];
 	}
 	
 	/**
@@ -101,9 +92,6 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 	 */
 	protected ClassLoadingRecord(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes);
-		this.totalLoadedClassCount = (Long) values[3];
-		this.loadedClassCount = (Integer) values[4];
-		this.unloadedClassCount = (Long) values[5];
 	}
 
 	/**
@@ -117,9 +105,6 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 	 */
 	public ClassLoadingRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		super(buffer, stringRegistry);
-		this.totalLoadedClassCount = buffer.getLong();
-		this.loadedClassCount = buffer.getInt();
-		this.unloadedClassCount = buffer.getLong();
 	}
 
 	/**

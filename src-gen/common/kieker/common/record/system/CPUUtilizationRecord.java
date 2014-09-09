@@ -26,9 +26,9 @@ import kieker.common.util.registry.IRegistry;
 
 
 /**
- * @author Andre van Hoorn, Jan Waller
+ * @author Generic Kieker
  * 
- * @since 1.3
+ * @since 1.10
  */
 public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 	/** Descriptive definition of the serialization size of the record. */
@@ -69,16 +69,6 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	public static final double TOTAL_UTILIZATION = 0.0;
 	public static final double IDLE = 0.0;
 	
-	private final long timestamp;
-	private final String hostname;
-	private final String cpuID;
-	private final double user;
-	private final double system;
-	private final double wait;
-	private final double nice;
-	private final double irq;
-	private final double totalUtilization;
-	private final double idle;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -105,16 +95,6 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	 *            idle
 	 */
 	public CPUUtilizationRecord(final long timestamp, final String hostname, final String cpuID, final double user, final double system, final double wait, final double nice, final double irq, final double totalUtilization, final double idle) {
-		this.timestamp = timestamp;
-		this.hostname = hostname == null?"":hostname;
-		this.cpuID = cpuID == null?"":cpuID;
-		this.user = user;
-		this.system = system;
-		this.wait = wait;
-		this.nice = nice;
-		this.irq = irq;
-		this.totalUtilization = totalUtilization;
-		this.idle = idle;
 	}
 
 	/**
@@ -126,16 +106,6 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	 */
 	public CPUUtilizationRecord(final Object[] values) { // NOPMD (direct store of values)
 		AbstractMonitoringRecord.checkArray(values, TYPES);
-		this.timestamp = (Long) values[0];
-		this.hostname = (String) values[1];
-		this.cpuID = (String) values[2];
-		this.user = (Double) values[3];
-		this.system = (Double) values[4];
-		this.wait = (Double) values[5];
-		this.nice = (Double) values[6];
-		this.irq = (Double) values[7];
-		this.totalUtilization = (Double) values[8];
-		this.idle = (Double) values[9];
 	}
 	
 	/**
@@ -148,16 +118,6 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	 */
 	protected CPUUtilizationRecord(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		AbstractMonitoringRecord.checkArray(values, valueTypes);
-		this.timestamp = (Long) values[0];
-		this.hostname = (String) values[1];
-		this.cpuID = (String) values[2];
-		this.user = (Double) values[3];
-		this.system = (Double) values[4];
-		this.wait = (Double) values[5];
-		this.nice = (Double) values[6];
-		this.irq = (Double) values[7];
-		this.totalUtilization = (Double) values[8];
-		this.idle = (Double) values[9];
 	}
 
 	/**
@@ -170,16 +130,6 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	 *             if buffer not sufficient
 	 */
 	public CPUUtilizationRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.timestamp = buffer.getLong();
-		this.hostname = stringRegistry.get(buffer.getInt());
-		this.cpuID = stringRegistry.get(buffer.getInt());
-		this.user = buffer.getDouble();
-		this.system = buffer.getDouble();
-		this.wait = buffer.getDouble();
-		this.nice = buffer.getDouble();
-		this.irq = buffer.getDouble();
-		this.totalUtilization = buffer.getDouble();
-		this.idle = buffer.getDouble();
 	}
 
 	/**

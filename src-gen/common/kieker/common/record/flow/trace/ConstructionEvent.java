@@ -50,8 +50,6 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 	public static final String CLASS_SIGNATURE = "";
 	public static final int OBJECT_ID = 0;
 	
-	private final String classSignature;
-	private final int objectId;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -69,8 +67,6 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 	 */
 	public ConstructionEvent(final long timestamp, final long traceId, final int orderIndex, final String classSignature, final int objectId) {
 		super(timestamp, traceId, orderIndex);
-		this.classSignature = classSignature == null?"":classSignature;
-		this.objectId = objectId;
 	}
 
 	/**
@@ -82,8 +78,6 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 	 */
 	public ConstructionEvent(final Object[] values) { // NOPMD (direct store of values)
 		super(values, TYPES);
-		this.classSignature = (String) values[3];
-		this.objectId = (Integer) values[4];
 	}
 	
 	/**
@@ -96,8 +90,6 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 	 */
 	protected ConstructionEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes);
-		this.classSignature = (String) values[3];
-		this.objectId = (Integer) values[4];
 	}
 
 	/**
@@ -111,8 +103,6 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 	 */
 	public ConstructionEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		super(buffer, stringRegistry);
-		this.classSignature = stringRegistry.get(buffer.getInt());
-		this.objectId = buffer.getInt();
 	}
 
 	/**

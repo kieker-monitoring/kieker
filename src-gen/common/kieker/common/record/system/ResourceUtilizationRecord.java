@@ -26,9 +26,9 @@ import kieker.common.util.registry.IRegistry;
 
 
 /**
- * @author Andre van Hoorn, Jan Waller
+ * @author Generic Kieker
  * 
- * @since 1.3
+ * @since 1.10
  */
 public class ResourceUtilizationRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 	/** Descriptive definition of the serialization size of the record. */
@@ -51,10 +51,6 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	public static final String RESOURCE_NAME = "";
 	public static final double UTILIZATION = 0.0;
 	
-	private final long timestamp;
-	private final String hostname;
-	private final String resourceName;
-	private final double utilization;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -69,10 +65,6 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	 *            utilization
 	 */
 	public ResourceUtilizationRecord(final long timestamp, final String hostname, final String resourceName, final double utilization) {
-		this.timestamp = timestamp;
-		this.hostname = hostname == null?"":hostname;
-		this.resourceName = resourceName == null?"":resourceName;
-		this.utilization = utilization;
 	}
 
 	/**
@@ -84,10 +76,6 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	 */
 	public ResourceUtilizationRecord(final Object[] values) { // NOPMD (direct store of values)
 		AbstractMonitoringRecord.checkArray(values, TYPES);
-		this.timestamp = (Long) values[0];
-		this.hostname = (String) values[1];
-		this.resourceName = (String) values[2];
-		this.utilization = (Double) values[3];
 	}
 	
 	/**
@@ -100,10 +88,6 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	 */
 	protected ResourceUtilizationRecord(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		AbstractMonitoringRecord.checkArray(values, valueTypes);
-		this.timestamp = (Long) values[0];
-		this.hostname = (String) values[1];
-		this.resourceName = (String) values[2];
-		this.utilization = (Double) values[3];
 	}
 
 	/**
@@ -116,10 +100,6 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	 *             if buffer not sufficient
 	 */
 	public ResourceUtilizationRecord(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		this.timestamp = buffer.getLong();
-		this.hostname = stringRegistry.get(buffer.getInt());
-		this.resourceName = stringRegistry.get(buffer.getInt());
-		this.utilization = buffer.getDouble();
 	}
 
 	/**

@@ -34,7 +34,6 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
 	
 	public static final int LOCK_ID = 0;
 	
-	private final int lockId;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -50,7 +49,6 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
 	 */
 	public AbstractMonitorEvent(final long timestamp, final long traceId, final int orderIndex, final int lockId) {
 		super(timestamp, traceId, orderIndex);
-		this.lockId = lockId;
 	}
 
 	
@@ -64,7 +62,6 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
 	 */
 	protected AbstractMonitorEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes);
-		this.lockId = (Integer) values[3];
 	}
 
 	/**
@@ -78,7 +75,6 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
 	 */
 	public AbstractMonitorEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		super(buffer, stringRegistry);
-		this.lockId = buffer.getInt();
 	}
 
 	/**
