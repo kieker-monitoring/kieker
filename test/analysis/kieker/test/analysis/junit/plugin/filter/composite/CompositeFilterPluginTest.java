@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.junit.composite;
+package kieker.test.analysis.junit.plugin.filter.composite;
 
 // CHECKSTYLE:OFF
 import java.util.List;
@@ -38,8 +38,8 @@ import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 
+import kieker.test.analysis.junit.plugin.filter.composite.CompositeImplementation.Distributor;
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.tools.junit.composite.CompositeImplementation.Distributor;
 
 //CHECKSTYLE:ON
 
