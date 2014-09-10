@@ -22,7 +22,7 @@ import org.junit.Assert;
 
 import kieker.monitoring.timer.ITimeSource;
 
-import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.monitoring.junit.AbstractKiekerTest;
 
 /**
  * @author Jan Waller

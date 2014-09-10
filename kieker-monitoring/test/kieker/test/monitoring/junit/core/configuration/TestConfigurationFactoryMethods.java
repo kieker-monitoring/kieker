@@ -23,7 +23,7 @@ import kieker.common.configuration.Configuration;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.MonitoringController;
 
-import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.monitoring.junit.AbstractKiekerTest;
 import kieker.test.monitoring.util.DefaultConfigurationFactory;
 
 /**

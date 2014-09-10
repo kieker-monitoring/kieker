@@ -27,7 +27,7 @@ import org.junit.rules.TemporaryFolder;
 import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 
-import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.monitoring.junit.AbstractKiekerTest;
 
 /**
  * @author Jan Waller

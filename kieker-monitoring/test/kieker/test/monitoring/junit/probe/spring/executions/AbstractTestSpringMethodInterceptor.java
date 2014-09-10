@@ -43,7 +43,7 @@ import kieker.monitoring.probe.spring.executions.OperationExecutionMethodInvocat
 import kieker.monitoring.writer.filesystem.AbstractAsyncFSWriter;
 import kieker.monitoring.writer.filesystem.AsyncFsWriter;
 
-import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.monitoring.junit.AbstractKiekerTest;
 
 /**
  * Tests the {@link kieker.monitoring.probe.spring.executions.OperationExecutionMethodInvocationInterceptor}.

@@ -18,7 +18,7 @@ package kieker.test.monitoring.junit.core.controller;
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.monitoring.junit.AbstractKiekerTest;
 
 /**
  * This test is now included in {@link kieker.test.tools.junit.writeRead.jmx.BasicJMXWriterReaderTest}

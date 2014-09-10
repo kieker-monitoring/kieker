@@ -51,7 +51,7 @@ import kieker.monitoring.core.signaturePattern.InvalidPatternException;
 import kieker.monitoring.core.signaturePattern.SignatureFactory;
 import kieker.monitoring.writer.DummyWriter;
 
-import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.monitoring.junit.AbstractKiekerTest;
 
 /**
  * @author Bjoern Weissenfels, Jan Waller

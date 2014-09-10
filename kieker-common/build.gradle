@@ -19,5 +19,6 @@ dependencies {
 	compile files('../lib/framework-libs/cxf/cxf-2.6.15.jar')
 	
 	testCompile files('../lib/junit-4.11.jar')
+	
 	testRuntime files('../lib/hamcrest-core-1.3.jar')
 }
