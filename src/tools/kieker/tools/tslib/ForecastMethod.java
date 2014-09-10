@@ -61,7 +61,7 @@ public enum ForecastMethod {
 	NAIVE,
 
 	/**
-	 * {@link PatternCh} {@link #getForecaster(ITimeSeries)} and {@link #getForecaster(ITimeSeries, int)} not supported
+	 * {@link #getForecaster(ITimeSeries)} and {@link #getForecaster(ITimeSeries, int)} not supported
 	 * for this algorithm!
 	 */
 	PatternChecking,
