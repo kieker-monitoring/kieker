@@ -33,6 +33,9 @@ import kieker.monitoring.core.signaturePattern.SignatureFactory;
  */
 public class CompilationSampler extends AbstractMXBeanSampler {
 
+	/**
+	 * Create a new CompilationSampler.
+	 */
 	public CompilationSampler() {
 		// Empty default constructor
 	}

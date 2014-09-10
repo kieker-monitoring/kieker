@@ -42,6 +42,27 @@ public final class FsWriterThread extends AbstractFsWriterThread {
 	private final boolean autoflush;
 	private final int bufferSize;
 
+	/**
+	 * Create a new FsWriterThread.
+	 * 
+	 * @param monitoringController
+	 *            the monitoring controller accessed by this thread
+	 * @param writeQueue
+	 *            the queue where the writer fetches its records from
+	 * @param mappingFileWriter
+	 *            writer for the mapping file (the file where class names are mapped to record ids)
+	 * @param path
+	 *            location where to files should go to (the path must point to a directory)
+	 * @param maxEntriesInfile
+	 *            limit for the number of records per log file
+	 * @param maxLogSize
+	 * @param maxLogFiles
+	 *            limit of the number of log files
+	 * @param autoflush
+	 *            if true do not use an output buffer while writing
+	 * @param bufferSize
+	 *            size of the output buffer
+	 */
 	public FsWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
 			final MappingFileWriter mappingFileWriter, final String path, final int maxEntiresInFile, final int maxLogSize, final int maxLogFiles,
 			final boolean autoflush, final int bufferSize) {

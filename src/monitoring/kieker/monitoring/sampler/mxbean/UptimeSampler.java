@@ -33,6 +33,9 @@ import kieker.monitoring.core.signaturePattern.SignatureFactory;
  */
 public class UptimeSampler extends AbstractMXBeanSampler {
 
+	/**
+	 * Create new UptimeSampler.
+	 */
 	public UptimeSampler() {
 		// Empty default constructor
 	}
