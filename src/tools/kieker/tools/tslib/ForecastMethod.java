@@ -60,12 +60,6 @@ public enum ForecastMethod {
 	/** {@link NaiveForecaster} */
 	NAIVE,
 
-	/**
-	 * {@link #getForecaster(ITimeSeries)} and {@link #getForecaster(ITimeSeries, int)} not supported
-	 * for this algorithm!
-	 */
-	PatternChecking,
-
 	/** {@link SESRForecaster} */
 	SES;
 
@@ -95,8 +89,6 @@ public enum ForecastMethod {
 			return new MeanForecasterJava(history);
 		case NAIVE:
 			return new NaiveForecaster(history);
-		case PatternChecking:
-			throw new IllegalArgumentException("Forecaster " + this.toString() + " not instantiable");
 		case SES:
 			return new SESRForecaster(history);
 		default:
@@ -132,8 +124,6 @@ public enum ForecastMethod {
 			return new MeanForecasterJava(ForecastMethod.getLastXofTS(history, 10)); // confidence level? #1346
 		case NAIVE:
 			return new NaiveForecaster(history, alpha);
-		case PatternChecking:
-			throw new IllegalArgumentException("Forecaster " + this.toString() + " not instantiable");
 		case SES:
 			return new SESRForecaster(history, alpha);
 		default:
