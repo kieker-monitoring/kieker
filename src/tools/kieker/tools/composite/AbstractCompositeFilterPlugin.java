@@ -23,11 +23,11 @@ import java.util.Map.Entry;
 import kieker.analysis.IAnalysisController;
 import kieker.analysis.IProjectContext;
 import kieker.analysis.configuration.GlobalConfigurationRegistry;
+import kieker.analysis.configuration.IConfigurationRegistry;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.tools.configuration.IConfigurationRegistry;
 
 /**
  * Abstract class that makes it possible to encapsulate filters in a composite plugin.

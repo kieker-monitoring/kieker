@@ -16,8 +16,6 @@
 
 package kieker.analysis.configuration;
 
-import kieker.tools.configuration.AbstractConfigurationRegistry;
-import kieker.tools.configuration.IConfigurationRegistry;
 
 /**
  * 
