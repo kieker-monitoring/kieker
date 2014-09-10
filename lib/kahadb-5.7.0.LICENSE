@@ -1,8 +1,8 @@
 The Apache Software License - ASL - v2.0
-Project: http://activemq.apache.org/
-Description: Apache ActiveMQ is the most popular and powerful open source messaging and Integration Patterns server.
-License: http://www.apache.org/licenses/LICENSE-2.0.txt
-Required by: KDB JMSEmbeddedConnector (embedded JMS server) and JMSClientConnector
+Project: http://activemq.apache.org
+Description: KahaDB is a file based persistence database for the message broker
+License: http://www.apache.org/licenses/LICENSE-2.0
+Required by: activemq
 
                                  Apache License
                            Version 2.0, January 2004

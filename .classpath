@@ -32,8 +32,6 @@
 	<classpathentry kind="src" path="test-gen/api"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
-	<classpathentry kind="lib" path="lib/activemq-broker-5.10.0.jar"/>
-	<classpathentry kind="lib" path="lib/activemq-kahadb-store-5.10.0.jar"/>
 	<classpathentry kind="lib" path="lib/aspectjrt-1.8.2.jar"/>
 	<classpathentry kind="lib" path="lib/aspectjweaver-1.8.2.jar"/>
 	<classpathentry kind="lib" path="lib/commons-cli-1.2.jar"/>
@@ -113,5 +111,8 @@
 	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/aopalliance-1.0.jar"/>
 	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/asm-3.1.jar"/>
 	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/lib/cglib-2.2.jar"/>
+	<classpathentry kind="lib" path="lib/activemq-protobuf-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/activemq-core-5.7.0.jar"/>
+	<classpathentry kind="lib" path="lib/kahadb-5.7.0.jar"/>
 	<classpathentry kind="output" path="build-eclipse"/>
 </classpath>
