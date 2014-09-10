@@ -26,9 +26,10 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-
+import kieker.test.common.junit.util.UtilityAPITestFunctions;
+			
 /**
- * Tests for kieker.common.record.controlflow.OperationExecutionRecord records.
+ * Test API of {@link kieker.common.record.controlflow.OperationExecutionRecord}.
  * 
  * @author Reiner Jung
  * 
@@ -40,32 +41,60 @@ public class TestOperationExecutionRecordPropertyOrder extends AbstractKiekerTes
 	 * All numbers and values must be pairwise unequal. As the string registry also uses integers,
 	 * we must guarantee this criteria by starting with 1000 instead of 0.
 	 */
+	/** Constant value parameter for operationSignature. */
 	private static final String PROPERTY_OPERATION_SIGNATURE = "<operationSignature>";
+	/** Constant value parameter for sessionId. */
 	private static final String PROPERTY_SESSION_ID = "<sessionId>";
+	/** Constant value parameter for traceId. */
 	private static final long PROPERTY_TRACE_ID = 2L;
+	/** Constant value parameter for tin. */
 	private static final long PROPERTY_TIN = 3L;
+	/** Constant value parameter for tout. */
 	private static final long PROPERTY_TOUT = 4L;
+	/** Constant value parameter for hostname. */
 	private static final String PROPERTY_HOSTNAME = "<hostname>";
+	/** Constant value parameter for eoi. */
 	private static final int PROPERTY_EOI = 1001;
+	/** Constant value parameter for ess. */
 	private static final int PROPERTY_ESS = 1002;
 							
 	/**
 	 * Empty constructor.
 	 */
-	public TestOperationExecutionRecordPropertyOrder() {}
+	public TestOperationExecutionRecordPropertyOrder() {
+		// Empty constructor for test class.
+	}
 
 	/**
-	 * Test property order processing of CPUUtilizationRecord constructors.
+	 * Test property order processing of {@link kieker.common.record.controlflow.OperationExecutionRecord} constructors and
+	 * different serialization routines.
 	 */
 	@Test
 	public void testOperationExecutionRecordPropertyOrder() { // NOPMD
 		final IRegistry<String> stringRegistry = this.makeStringRegistry();
-		final ByteBuffer inputBuffer = this.createByteBuffer(OperationExecutionRecord.SIZE, 
-			this.makeStringRegistry(),
-			PROPERTY_OPERATION_SIGNATURE, PROPERTY_SESSION_ID, PROPERTY_TRACE_ID, PROPERTY_TIN, PROPERTY_TOUT, PROPERTY_HOSTNAME, PROPERTY_EOI, PROPERTY_ESS);
-		final Object[] values = { PROPERTY_OPERATION_SIGNATURE, PROPERTY_SESSION_ID, PROPERTY_TRACE_ID, PROPERTY_TIN, PROPERTY_TOUT, PROPERTY_HOSTNAME, PROPERTY_EOI, PROPERTY_ESS };
+		final Object[] values = {
+			PROPERTY_OPERATION_SIGNATURE,
+			PROPERTY_SESSION_ID,
+			PROPERTY_TRACE_ID,
+			PROPERTY_TIN,
+			PROPERTY_TOUT,
+			PROPERTY_HOSTNAME,
+			PROPERTY_EOI,
+			PROPERTY_ESS,
+		};
+		final ByteBuffer inputBuffer = UtilityAPITestFunctions.createByteBuffer(OperationExecutionRecord.SIZE, 
+			this.makeStringRegistry(), values);
 					
-		final OperationExecutionRecord recordInitParameter = new OperationExecutionRecord(PROPERTY_OPERATION_SIGNATURE, PROPERTY_SESSION_ID, PROPERTY_TRACE_ID, PROPERTY_TIN, PROPERTY_TOUT, PROPERTY_HOSTNAME, PROPERTY_EOI, PROPERTY_ESS);
+		final OperationExecutionRecord recordInitParameter = new OperationExecutionRecord(
+			PROPERTY_OPERATION_SIGNATURE,
+			PROPERTY_SESSION_ID,
+			PROPERTY_TRACE_ID,
+			PROPERTY_TIN,
+			PROPERTY_TOUT,
+			PROPERTY_HOSTNAME,
+			PROPERTY_EOI,
+			PROPERTY_ESS
+		);
 		final OperationExecutionRecord recordInitBuffer = new OperationExecutionRecord(inputBuffer, this.makeStringRegistry());
 		final OperationExecutionRecord recordInitArray = new OperationExecutionRecord(values);
 		
@@ -120,49 +149,5 @@ public class TestOperationExecutionRecordPropertyOrder extends AbstractKiekerTes
 		stringRegistry.get(PROPERTY_HOSTNAME);
 
 		return stringRegistry;
-	}
-
-	/**
-	 * Compose a byte buffer for record deserialization.
-	 * 
-	 * @param size
-	 *            the size of the serialized record
-	 * @param stringRegistry
-	 *            the registry for the string lookup
-	 * @param a
-	 *            list of "objects" containing an arbitrary number of records
-	 * 
-	 * @return the completely filled buffer
-	 */
-	private ByteBuffer createByteBuffer(final int size, final IRegistry<String> stringRegistry, final Object... objects) {
-		final ByteBuffer buffer = ByteBuffer.allocate(size);
-		for (final Object object : objects) {
-			if (object instanceof Byte) {
-				buffer.put((Byte) object);
-			} else if (object instanceof Short) {
-				buffer.putShort((Short) object);
-			} else if (object instanceof Integer) {
-				buffer.putInt((Integer) object);
-			} else if (object instanceof Long) {
-				buffer.putLong((Long) object);
-			} else if (object instanceof Float) {
-				buffer.putFloat((Float) object);
-			} else if (object instanceof Double) {
-				buffer.putDouble((Double) object);
-			} else if (object instanceof Boolean) {
-				buffer.put((byte) ((Boolean) object ? 1 : 0)); // NOCS
-			} else if (object instanceof Character) {
-				buffer.putChar((Character) object);
-			} else if (object instanceof String) {
-				buffer.putInt(stringRegistry.get((String) object));
-			} else {
-				Assert.fail("Unsupported record value type " + object.getClass().getName());
-			}
-		}
-
-		Assert.assertEquals("Buffer size and usage differ.", buffer.position(), size);
-		buffer.position(0);
-
-		return buffer;
 	}
 }

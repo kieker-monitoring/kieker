@@ -26,9 +26,10 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-
+import kieker.test.common.junit.util.UtilityAPITestFunctions;
+			
 /**
- * Tests for kieker.common.record.misc.KiekerMetadataRecord records.
+ * Test API of {@link kieker.common.record.misc.KiekerMetadataRecord}.
  * 
  * @author Reiner Jung
  * 
@@ -40,32 +41,60 @@ public class TestKiekerMetadataRecordPropertyOrder extends AbstractKiekerTest {
 	 * All numbers and values must be pairwise unequal. As the string registry also uses integers,
 	 * we must guarantee this criteria by starting with 1000 instead of 0.
 	 */
+	/** Constant value parameter for version. */
 	private static final String PROPERTY_VERSION = "<version>";
+	/** Constant value parameter for controllerName. */
 	private static final String PROPERTY_CONTROLLER_NAME = "<controllerName>";
+	/** Constant value parameter for hostname. */
 	private static final String PROPERTY_HOSTNAME = "<hostname>";
+	/** Constant value parameter for experimentId. */
 	private static final int PROPERTY_EXPERIMENT_ID = 1001;
+	/** Constant value parameter for debugMode. */
 	private static final boolean PROPERTY_DEBUG_MODE = true;
+	/** Constant value parameter for timeOffset. */
 	private static final long PROPERTY_TIME_OFFSET = 2L;
+	/** Constant value parameter for timeUnit. */
 	private static final String PROPERTY_TIME_UNIT = "<timeUnit>";
+	/** Constant value parameter for numberOfRecords. */
 	private static final long PROPERTY_NUMBER_OF_RECORDS = 3L;
 							
 	/**
 	 * Empty constructor.
 	 */
-	public TestKiekerMetadataRecordPropertyOrder() {}
+	public TestKiekerMetadataRecordPropertyOrder() {
+		// Empty constructor for test class.
+	}
 
 	/**
-	 * Test property order processing of CPUUtilizationRecord constructors.
+	 * Test property order processing of {@link kieker.common.record.misc.KiekerMetadataRecord} constructors and
+	 * different serialization routines.
 	 */
 	@Test
 	public void testKiekerMetadataRecordPropertyOrder() { // NOPMD
 		final IRegistry<String> stringRegistry = this.makeStringRegistry();
-		final ByteBuffer inputBuffer = this.createByteBuffer(KiekerMetadataRecord.SIZE, 
-			this.makeStringRegistry(),
-			PROPERTY_VERSION, PROPERTY_CONTROLLER_NAME, PROPERTY_HOSTNAME, PROPERTY_EXPERIMENT_ID, PROPERTY_DEBUG_MODE, PROPERTY_TIME_OFFSET, PROPERTY_TIME_UNIT, PROPERTY_NUMBER_OF_RECORDS);
-		final Object[] values = { PROPERTY_VERSION, PROPERTY_CONTROLLER_NAME, PROPERTY_HOSTNAME, PROPERTY_EXPERIMENT_ID, PROPERTY_DEBUG_MODE, PROPERTY_TIME_OFFSET, PROPERTY_TIME_UNIT, PROPERTY_NUMBER_OF_RECORDS };
+		final Object[] values = {
+			PROPERTY_VERSION,
+			PROPERTY_CONTROLLER_NAME,
+			PROPERTY_HOSTNAME,
+			PROPERTY_EXPERIMENT_ID,
+			PROPERTY_DEBUG_MODE,
+			PROPERTY_TIME_OFFSET,
+			PROPERTY_TIME_UNIT,
+			PROPERTY_NUMBER_OF_RECORDS,
+		};
+		final ByteBuffer inputBuffer = UtilityAPITestFunctions.createByteBuffer(KiekerMetadataRecord.SIZE, 
+			this.makeStringRegistry(), values);
 					
-		final KiekerMetadataRecord recordInitParameter = new KiekerMetadataRecord(PROPERTY_VERSION, PROPERTY_CONTROLLER_NAME, PROPERTY_HOSTNAME, PROPERTY_EXPERIMENT_ID, PROPERTY_DEBUG_MODE, PROPERTY_TIME_OFFSET, PROPERTY_TIME_UNIT, PROPERTY_NUMBER_OF_RECORDS);
+		final KiekerMetadataRecord recordInitParameter = new KiekerMetadataRecord(
+			PROPERTY_VERSION,
+			PROPERTY_CONTROLLER_NAME,
+			PROPERTY_HOSTNAME,
+			PROPERTY_EXPERIMENT_ID,
+			PROPERTY_DEBUG_MODE,
+			PROPERTY_TIME_OFFSET,
+			PROPERTY_TIME_UNIT,
+			PROPERTY_NUMBER_OF_RECORDS
+		);
 		final KiekerMetadataRecord recordInitBuffer = new KiekerMetadataRecord(inputBuffer, this.makeStringRegistry());
 		final KiekerMetadataRecord recordInitArray = new KiekerMetadataRecord(values);
 		
@@ -121,49 +150,5 @@ public class TestKiekerMetadataRecordPropertyOrder extends AbstractKiekerTest {
 		stringRegistry.get(PROPERTY_TIME_UNIT);
 
 		return stringRegistry;
-	}
-
-	/**
-	 * Compose a byte buffer for record deserialization.
-	 * 
-	 * @param size
-	 *            the size of the serialized record
-	 * @param stringRegistry
-	 *            the registry for the string lookup
-	 * @param a
-	 *            list of "objects" containing an arbitrary number of records
-	 * 
-	 * @return the completely filled buffer
-	 */
-	private ByteBuffer createByteBuffer(final int size, final IRegistry<String> stringRegistry, final Object... objects) {
-		final ByteBuffer buffer = ByteBuffer.allocate(size);
-		for (final Object object : objects) {
-			if (object instanceof Byte) {
-				buffer.put((Byte) object);
-			} else if (object instanceof Short) {
-				buffer.putShort((Short) object);
-			} else if (object instanceof Integer) {
-				buffer.putInt((Integer) object);
-			} else if (object instanceof Long) {
-				buffer.putLong((Long) object);
-			} else if (object instanceof Float) {
-				buffer.putFloat((Float) object);
-			} else if (object instanceof Double) {
-				buffer.putDouble((Double) object);
-			} else if (object instanceof Boolean) {
-				buffer.put((byte) ((Boolean) object ? 1 : 0)); // NOCS
-			} else if (object instanceof Character) {
-				buffer.putChar((Character) object);
-			} else if (object instanceof String) {
-				buffer.putInt(stringRegistry.get((String) object));
-			} else {
-				Assert.fail("Unsupported record value type " + object.getClass().getName());
-			}
-		}
-
-		Assert.assertEquals("Buffer size and usage differ.", buffer.position(), size);
-		buffer.position(0);
-
-		return buffer;
 	}
 }

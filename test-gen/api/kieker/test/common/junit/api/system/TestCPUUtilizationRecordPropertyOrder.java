@@ -26,9 +26,10 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-
+import kieker.test.common.junit.util.UtilityAPITestFunctions;
+			
 /**
- * Tests for kieker.common.record.system.CPUUtilizationRecord records.
+ * Test API of {@link kieker.common.record.system.CPUUtilizationRecord}.
  * 
  * @author Reiner Jung
  * 
@@ -40,34 +41,68 @@ public class TestCPUUtilizationRecordPropertyOrder extends AbstractKiekerTest {
 	 * All numbers and values must be pairwise unequal. As the string registry also uses integers,
 	 * we must guarantee this criteria by starting with 1000 instead of 0.
 	 */
+	/** Constant value parameter for timestamp. */
 	private static final long PROPERTY_TIMESTAMP = 2L;
+	/** Constant value parameter for hostname. */
 	private static final String PROPERTY_HOSTNAME = "<hostname>";
+	/** Constant value parameter for cpuID. */
 	private static final String PROPERTY_CPU_I_D = "<cpuID>";
+	/** Constant value parameter for user. */
 	private static final double PROPERTY_USER = 2.0;
+	/** Constant value parameter for system. */
 	private static final double PROPERTY_SYSTEM = 3.0;
+	/** Constant value parameter for wait. */
 	private static final double PROPERTY_WAIT = 4.0;
+	/** Constant value parameter for nice. */
 	private static final double PROPERTY_NICE = 5.0;
+	/** Constant value parameter for irq. */
 	private static final double PROPERTY_IRQ = 6.0;
+	/** Constant value parameter for totalUtilization. */
 	private static final double PROPERTY_TOTAL_UTILIZATION = 7.0;
+	/** Constant value parameter for idle. */
 	private static final double PROPERTY_IDLE = 8.0;
 							
 	/**
 	 * Empty constructor.
 	 */
-	public TestCPUUtilizationRecordPropertyOrder() {}
+	public TestCPUUtilizationRecordPropertyOrder() {
+		// Empty constructor for test class.
+	}
 
 	/**
-	 * Test property order processing of CPUUtilizationRecord constructors.
+	 * Test property order processing of {@link kieker.common.record.system.CPUUtilizationRecord} constructors and
+	 * different serialization routines.
 	 */
 	@Test
 	public void testCPUUtilizationRecordPropertyOrder() { // NOPMD
 		final IRegistry<String> stringRegistry = this.makeStringRegistry();
-		final ByteBuffer inputBuffer = this.createByteBuffer(CPUUtilizationRecord.SIZE, 
-			this.makeStringRegistry(),
-			PROPERTY_TIMESTAMP, PROPERTY_HOSTNAME, PROPERTY_CPU_I_D, PROPERTY_USER, PROPERTY_SYSTEM, PROPERTY_WAIT, PROPERTY_NICE, PROPERTY_IRQ, PROPERTY_TOTAL_UTILIZATION, PROPERTY_IDLE);
-		final Object[] values = { PROPERTY_TIMESTAMP, PROPERTY_HOSTNAME, PROPERTY_CPU_I_D, PROPERTY_USER, PROPERTY_SYSTEM, PROPERTY_WAIT, PROPERTY_NICE, PROPERTY_IRQ, PROPERTY_TOTAL_UTILIZATION, PROPERTY_IDLE };
+		final Object[] values = {
+			PROPERTY_TIMESTAMP,
+			PROPERTY_HOSTNAME,
+			PROPERTY_CPU_I_D,
+			PROPERTY_USER,
+			PROPERTY_SYSTEM,
+			PROPERTY_WAIT,
+			PROPERTY_NICE,
+			PROPERTY_IRQ,
+			PROPERTY_TOTAL_UTILIZATION,
+			PROPERTY_IDLE,
+		};
+		final ByteBuffer inputBuffer = UtilityAPITestFunctions.createByteBuffer(CPUUtilizationRecord.SIZE, 
+			this.makeStringRegistry(), values);
 					
-		final CPUUtilizationRecord recordInitParameter = new CPUUtilizationRecord(PROPERTY_TIMESTAMP, PROPERTY_HOSTNAME, PROPERTY_CPU_I_D, PROPERTY_USER, PROPERTY_SYSTEM, PROPERTY_WAIT, PROPERTY_NICE, PROPERTY_IRQ, PROPERTY_TOTAL_UTILIZATION, PROPERTY_IDLE);
+		final CPUUtilizationRecord recordInitParameter = new CPUUtilizationRecord(
+			PROPERTY_TIMESTAMP,
+			PROPERTY_HOSTNAME,
+			PROPERTY_CPU_I_D,
+			PROPERTY_USER,
+			PROPERTY_SYSTEM,
+			PROPERTY_WAIT,
+			PROPERTY_NICE,
+			PROPERTY_IRQ,
+			PROPERTY_TOTAL_UTILIZATION,
+			PROPERTY_IDLE
+		);
 		final CPUUtilizationRecord recordInitBuffer = new CPUUtilizationRecord(inputBuffer, this.makeStringRegistry());
 		final CPUUtilizationRecord recordInitArray = new CPUUtilizationRecord(values);
 		
@@ -123,49 +158,5 @@ public class TestCPUUtilizationRecordPropertyOrder extends AbstractKiekerTest {
 		stringRegistry.get(PROPERTY_CPU_I_D);
 
 		return stringRegistry;
-	}
-
-	/**
-	 * Compose a byte buffer for record deserialization.
-	 * 
-	 * @param size
-	 *            the size of the serialized record
-	 * @param stringRegistry
-	 *            the registry for the string lookup
-	 * @param a
-	 *            list of "objects" containing an arbitrary number of records
-	 * 
-	 * @return the completely filled buffer
-	 */
-	private ByteBuffer createByteBuffer(final int size, final IRegistry<String> stringRegistry, final Object... objects) {
-		final ByteBuffer buffer = ByteBuffer.allocate(size);
-		for (final Object object : objects) {
-			if (object instanceof Byte) {
-				buffer.put((Byte) object);
-			} else if (object instanceof Short) {
-				buffer.putShort((Short) object);
-			} else if (object instanceof Integer) {
-				buffer.putInt((Integer) object);
-			} else if (object instanceof Long) {
-				buffer.putLong((Long) object);
-			} else if (object instanceof Float) {
-				buffer.putFloat((Float) object);
-			} else if (object instanceof Double) {
-				buffer.putDouble((Double) object);
-			} else if (object instanceof Boolean) {
-				buffer.put((byte) ((Boolean) object ? 1 : 0)); // NOCS
-			} else if (object instanceof Character) {
-				buffer.putChar((Character) object);
-			} else if (object instanceof String) {
-				buffer.putInt(stringRegistry.get((String) object));
-			} else {
-				Assert.fail("Unsupported record value type " + object.getClass().getName());
-			}
-		}
-
-		Assert.assertEquals("Buffer size and usage differ.", buffer.position(), size);
-		buffer.position(0);
-
-		return buffer;
 	}
 }

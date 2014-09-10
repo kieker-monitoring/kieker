@@ -26,12 +26,13 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-
+import kieker.test.common.junit.util.UtilityAPITestFunctions;
+			
 /**
- * Tests for kieker.common.record.flow.trace.operation.object.AfterOperationObjectEvent records.
- *
+ * Test API of {@link kieker.common.record.flow.trace.operation.object.AfterOperationObjectEvent}.
+ * 
  * @author Reiner Jung
- *
+ * 
  * @since 1.10
  */
 public class TestAfterOperationObjectEventPropertyOrder extends AbstractKiekerTest {
@@ -40,35 +41,55 @@ public class TestAfterOperationObjectEventPropertyOrder extends AbstractKiekerTe
 	 * All numbers and values must be pairwise unequal. As the string registry also uses integers,
 	 * we must guarantee this criteria by starting with 1000 instead of 0.
 	 */
+	/** Constant value parameter for timestamp. */
 	private static final long PROPERTY_TIMESTAMP = 2L;
+	/** Constant value parameter for traceId. */
 	private static final long PROPERTY_TRACE_ID = 3L;
+	/** Constant value parameter for orderIndex. */
 	private static final int PROPERTY_ORDER_INDEX = 1001;
-	private static final String PROPERTY_OPERATION_SIGANTURE = "<operationSiganture>";
+	/** Constant value parameter for operationSignature. */
+	private static final String PROPERTY_OPERATION_SIGNATURE = "<operationSignature>";
+	/** Constant value parameter for classSignature. */
 	private static final String PROPERTY_CLASS_SIGNATURE = "<classSignature>";
+	/** Constant value parameter for objectId. */
 	private static final int PROPERTY_OBJECT_ID = 1002;
-
+							
 	/**
 	 * Empty constructor.
 	 */
-	public TestAfterOperationObjectEventPropertyOrder() {}
+	public TestAfterOperationObjectEventPropertyOrder() {
+		// Empty constructor for test class.
+	}
 
 	/**
-	 * Test property order processing of CPUUtilizationRecord constructors.
+	 * Test property order processing of {@link kieker.common.record.flow.trace.operation.object.AfterOperationObjectEvent} constructors and
+	 * different serialization routines.
 	 */
 	@Test
 	public void testAfterOperationObjectEventPropertyOrder() { // NOPMD
 		final IRegistry<String> stringRegistry = this.makeStringRegistry();
-		final ByteBuffer inputBuffer = this.createByteBuffer(AfterOperationObjectEvent.SIZE,
-				this.makeStringRegistry(),
-				PROPERTY_TIMESTAMP, PROPERTY_TRACE_ID, PROPERTY_ORDER_INDEX, PROPERTY_OPERATION_SIGANTURE, PROPERTY_CLASS_SIGNATURE, PROPERTY_OBJECT_ID);
-		final Object[] values = { PROPERTY_TIMESTAMP, PROPERTY_TRACE_ID, PROPERTY_ORDER_INDEX, PROPERTY_OPERATION_SIGANTURE, PROPERTY_CLASS_SIGNATURE,
-				PROPERTY_OBJECT_ID };
-
-		final AfterOperationObjectEvent recordInitParameter = new AfterOperationObjectEvent(PROPERTY_TIMESTAMP, PROPERTY_TRACE_ID, PROPERTY_ORDER_INDEX,
-				PROPERTY_OPERATION_SIGANTURE, PROPERTY_CLASS_SIGNATURE, PROPERTY_OBJECT_ID);
+		final Object[] values = {
+			PROPERTY_TIMESTAMP,
+			PROPERTY_TRACE_ID,
+			PROPERTY_ORDER_INDEX,
+			PROPERTY_OPERATION_SIGNATURE,
+			PROPERTY_CLASS_SIGNATURE,
+			PROPERTY_OBJECT_ID,
+		};
+		final ByteBuffer inputBuffer = UtilityAPITestFunctions.createByteBuffer(AfterOperationObjectEvent.SIZE, 
+			this.makeStringRegistry(), values);
+					
+		final AfterOperationObjectEvent recordInitParameter = new AfterOperationObjectEvent(
+			PROPERTY_TIMESTAMP,
+			PROPERTY_TRACE_ID,
+			PROPERTY_ORDER_INDEX,
+			PROPERTY_OPERATION_SIGNATURE,
+			PROPERTY_CLASS_SIGNATURE,
+			PROPERTY_OBJECT_ID
+		);
 		final AfterOperationObjectEvent recordInitBuffer = new AfterOperationObjectEvent(inputBuffer, this.makeStringRegistry());
 		final AfterOperationObjectEvent recordInitArray = new AfterOperationObjectEvent(values);
-
+		
 		this.assertAfterOperationObjectEvent(recordInitParameter);
 		this.assertAfterOperationObjectEvent(recordInitBuffer);
 		this.assertAfterOperationObjectEvent(recordInitArray);
@@ -102,64 +123,20 @@ public class TestAfterOperationObjectEventPropertyOrder extends AbstractKiekerTe
 		Assert.assertEquals("'timestamp' value assertion failed.", record.getTimestamp(), PROPERTY_TIMESTAMP);
 		Assert.assertEquals("'traceId' value assertion failed.", record.getTraceId(), PROPERTY_TRACE_ID);
 		Assert.assertEquals("'orderIndex' value assertion failed.", record.getOrderIndex(), PROPERTY_ORDER_INDEX);
-		Assert.assertEquals("'operationSiganture' value assertion failed.", record.getOperationSignature(), PROPERTY_OPERATION_SIGANTURE);
+		Assert.assertEquals("'operationSignature' value assertion failed.", record.getOperationSignature(), PROPERTY_OPERATION_SIGNATURE);
 		Assert.assertEquals("'classSignature' value assertion failed.", record.getClassSignature(), PROPERTY_CLASS_SIGNATURE);
 		Assert.assertEquals("'objectId' value assertion failed.", record.getObjectId(), PROPERTY_OBJECT_ID);
 	}
-
+			
 	/**
 	 * Build a populated string registry for all tests.
 	 */
 	private IRegistry<String> makeStringRegistry() {
 		final IRegistry<String> stringRegistry = new Registry<String>();
 		// get registers string and returns their ID
-		stringRegistry.get(PROPERTY_OPERATION_SIGANTURE);
+		stringRegistry.get(PROPERTY_OPERATION_SIGNATURE);
 		stringRegistry.get(PROPERTY_CLASS_SIGNATURE);
 
 		return stringRegistry;
-	}
-
-	/**
-	 * Compose a byte buffer for record deserialization.
-	 *
-	 * @param size
-	 *            the size of the serialized record
-	 * @param stringRegistry
-	 *            the registry for the string lookup
-	 * @param a
-	 *            list of "objects" containing an arbitrary number of records
-	 *
-	 * @return the completely filled buffer
-	 */
-	private ByteBuffer createByteBuffer(final int size, final IRegistry<String> stringRegistry, final Object... objects) {
-		final ByteBuffer buffer = ByteBuffer.allocate(size);
-		for (final Object object : objects) {
-			if (object instanceof Byte) {
-				buffer.put((Byte) object);
-			} else if (object instanceof Short) {
-				buffer.putShort((Short) object);
-			} else if (object instanceof Integer) {
-				buffer.putInt((Integer) object);
-			} else if (object instanceof Long) {
-				buffer.putLong((Long) object);
-			} else if (object instanceof Float) {
-				buffer.putFloat((Float) object);
-			} else if (object instanceof Double) {
-				buffer.putDouble((Double) object);
-			} else if (object instanceof Boolean) {
-				buffer.put((byte) ((Boolean) object ? 1 : 0)); // NOCS
-			} else if (object instanceof Character) {
-				buffer.putChar((Character) object);
-			} else if (object instanceof String) {
-				buffer.putInt(stringRegistry.get((String) object));
-			} else {
-				Assert.fail("Unsupported record value type " + object.getClass().getName());
-			}
-		}
-
-		Assert.assertEquals("Buffer size and usage differ.", buffer.position(), size);
-		buffer.position(0);
-
-		return buffer;
 	}
 }

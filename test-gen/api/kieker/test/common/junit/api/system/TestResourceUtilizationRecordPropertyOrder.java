@@ -26,9 +26,10 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-
+import kieker.test.common.junit.util.UtilityAPITestFunctions;
+			
 /**
- * Tests for kieker.common.record.system.ResourceUtilizationRecord records.
+ * Test API of {@link kieker.common.record.system.ResourceUtilizationRecord}.
  * 
  * @author Reiner Jung
  * 
@@ -40,28 +41,44 @@ public class TestResourceUtilizationRecordPropertyOrder extends AbstractKiekerTe
 	 * All numbers and values must be pairwise unequal. As the string registry also uses integers,
 	 * we must guarantee this criteria by starting with 1000 instead of 0.
 	 */
+	/** Constant value parameter for timestamp. */
 	private static final long PROPERTY_TIMESTAMP = 2L;
+	/** Constant value parameter for hostname. */
 	private static final String PROPERTY_HOSTNAME = "<hostname>";
+	/** Constant value parameter for resourceName. */
 	private static final String PROPERTY_RESOURCE_NAME = "<resourceName>";
+	/** Constant value parameter for utilization. */
 	private static final double PROPERTY_UTILIZATION = 2.0;
 							
 	/**
 	 * Empty constructor.
 	 */
-	public TestResourceUtilizationRecordPropertyOrder() {}
+	public TestResourceUtilizationRecordPropertyOrder() {
+		// Empty constructor for test class.
+	}
 
 	/**
-	 * Test property order processing of CPUUtilizationRecord constructors.
+	 * Test property order processing of {@link kieker.common.record.system.ResourceUtilizationRecord} constructors and
+	 * different serialization routines.
 	 */
 	@Test
 	public void testResourceUtilizationRecordPropertyOrder() { // NOPMD
 		final IRegistry<String> stringRegistry = this.makeStringRegistry();
-		final ByteBuffer inputBuffer = this.createByteBuffer(ResourceUtilizationRecord.SIZE, 
-			this.makeStringRegistry(),
-			PROPERTY_TIMESTAMP, PROPERTY_HOSTNAME, PROPERTY_RESOURCE_NAME, PROPERTY_UTILIZATION);
-		final Object[] values = { PROPERTY_TIMESTAMP, PROPERTY_HOSTNAME, PROPERTY_RESOURCE_NAME, PROPERTY_UTILIZATION };
+		final Object[] values = {
+			PROPERTY_TIMESTAMP,
+			PROPERTY_HOSTNAME,
+			PROPERTY_RESOURCE_NAME,
+			PROPERTY_UTILIZATION,
+		};
+		final ByteBuffer inputBuffer = UtilityAPITestFunctions.createByteBuffer(ResourceUtilizationRecord.SIZE, 
+			this.makeStringRegistry(), values);
 					
-		final ResourceUtilizationRecord recordInitParameter = new ResourceUtilizationRecord(PROPERTY_TIMESTAMP, PROPERTY_HOSTNAME, PROPERTY_RESOURCE_NAME, PROPERTY_UTILIZATION);
+		final ResourceUtilizationRecord recordInitParameter = new ResourceUtilizationRecord(
+			PROPERTY_TIMESTAMP,
+			PROPERTY_HOSTNAME,
+			PROPERTY_RESOURCE_NAME,
+			PROPERTY_UTILIZATION
+		);
 		final ResourceUtilizationRecord recordInitBuffer = new ResourceUtilizationRecord(inputBuffer, this.makeStringRegistry());
 		final ResourceUtilizationRecord recordInitArray = new ResourceUtilizationRecord(values);
 		
@@ -111,49 +128,5 @@ public class TestResourceUtilizationRecordPropertyOrder extends AbstractKiekerTe
 		stringRegistry.get(PROPERTY_RESOURCE_NAME);
 
 		return stringRegistry;
-	}
-
-	/**
-	 * Compose a byte buffer for record deserialization.
-	 * 
-	 * @param size
-	 *            the size of the serialized record
-	 * @param stringRegistry
-	 *            the registry for the string lookup
-	 * @param a
-	 *            list of "objects" containing an arbitrary number of records
-	 * 
-	 * @return the completely filled buffer
-	 */
-	private ByteBuffer createByteBuffer(final int size, final IRegistry<String> stringRegistry, final Object... objects) {
-		final ByteBuffer buffer = ByteBuffer.allocate(size);
-		for (final Object object : objects) {
-			if (object instanceof Byte) {
-				buffer.put((Byte) object);
-			} else if (object instanceof Short) {
-				buffer.putShort((Short) object);
-			} else if (object instanceof Integer) {
-				buffer.putInt((Integer) object);
-			} else if (object instanceof Long) {
-				buffer.putLong((Long) object);
-			} else if (object instanceof Float) {
-				buffer.putFloat((Float) object);
-			} else if (object instanceof Double) {
-				buffer.putDouble((Double) object);
-			} else if (object instanceof Boolean) {
-				buffer.put((byte) ((Boolean) object ? 1 : 0)); // NOCS
-			} else if (object instanceof Character) {
-				buffer.putChar((Character) object);
-			} else if (object instanceof String) {
-				buffer.putInt(stringRegistry.get((String) object));
-			} else {
-				Assert.fail("Unsupported record value type " + object.getClass().getName());
-			}
-		}
-
-		Assert.assertEquals("Buffer size and usage differ.", buffer.position(), size);
-		buffer.position(0);
-
-		return buffer;
 	}
 }
