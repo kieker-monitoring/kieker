@@ -30,7 +30,7 @@ import kieker.tools.tslib.forecast.naive.NaiveForecaster;
 import kieker.tools.tslib.forecast.ses.SESRForecaster;
 
 /**
- *
+ * 
  * @author Andre van Hoorn, Tillmann Carlos Bielefeld, Tobias Rudolph, Andreas Eberlein
  * @since 1.10
  */
@@ -61,8 +61,7 @@ public enum ForecastMethod {
 	NAIVE,
 
 	/**
-	 * {@link kieker.tools.tslib.forecast.historicdata.PatternCheckingForecaster}. {@link #getForecaster(ITimeSeries)} and {@link #getForecaster(ITimeSeries, int)}
-	 * not supported
+	 * {@link PatternCh} {@link #getForecaster(ITimeSeries)} and {@link #getForecaster(ITimeSeries, int)} not supported
 	 * for this algorithm!
 	 */
 	PatternChecking,
@@ -71,7 +70,7 @@ public enum ForecastMethod {
 	SES;
 
 	/**
-	 *
+	 * 
 	 * @param history
 	 *            Timeseries which will be forecasted
 	 * @return the forecaster for this algorithm
@@ -106,7 +105,7 @@ public enum ForecastMethod {
 	}
 
 	/**
-	 *
+	 * 
 	 * @param history
 	 *            Timeseries which will be forecasted
 	 * @param alpha
@@ -143,7 +142,7 @@ public enum ForecastMethod {
 	}
 
 	/**
-	 *
+	 * 
 	 * @return calculated anomaly
 	 */
 	public IAnomalyCalculator<Double> getAnomalyCalculator() {
@@ -153,7 +152,7 @@ public enum ForecastMethod {
 	// Was extracted from ClassificationUtility in WCF/TBATS as it is not yet integrated:
 	/**
 	 * Returns a new time series object shortened to the last x values.
-	 *
+	 * 
 	 * @param ts
 	 *            timeseries
 	 * @param x
