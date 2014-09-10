@@ -1,0 +1,21 @@
+subprojects {
+    apply plugin: 'java'
+	
+    version = '1.10-SNAPSHOT' 
+	
+	sourceCompatibility = '1.6'
+	targetCompatibility = '1.6'
+	
+	sourceSets {
+		main { 
+			java { 
+				srcDir 'src' 
+			} 
+		}
+		test {
+			java {
+				srcDir 'test' 
+			} 
+		}
+	}
+}

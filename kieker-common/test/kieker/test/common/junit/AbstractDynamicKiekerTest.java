@@ -72,8 +72,8 @@ public abstract class AbstractDynamicKiekerTest extends AbstractKiekerTest {
 		for (final File file : files) {
 			final String pathName = file.getPath();
 			String className = pathName.substring(0, pathName.length() - 5).replace(File.separator, ".");
-			final int secondPointPos = className.indexOf('.', 5);
-			className = className.substring(secondPointPos + 1);
+			final int firstPointPos = className.indexOf('.');
+			className = className.substring(firstPointPos + 1);
 
 			result.add(className);
 		}
