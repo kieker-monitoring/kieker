@@ -26,7 +26,9 @@
 				<include name="commons-lang3-*.jar" /> <!-- Needed for some of the OPAD tests. -->
 
 				<!-- used in tests for bridge JMS connector -->
-				<include name="activemq-*.jar" />
+				<include name="activemq-core*.jar" />
+				<include name="activemq-protobuf*.jar" />
+				<include name="kahadb-*.jar" />
 				<include name="reflections-*.jar"/>
 				<include name="geronimo-j2ee-management_1.1_spec-*.jar"/>
 				<include name="slf4j-api-*.jar"/>
