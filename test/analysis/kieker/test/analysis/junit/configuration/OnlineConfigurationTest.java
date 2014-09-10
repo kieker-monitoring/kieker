@@ -26,6 +26,8 @@ import kieker.analysis.AnalysisController;
 import kieker.analysis.IAnalysisController;
 import kieker.analysis.IProjectContext;
 import kieker.analysis.configuration.AbstractUpdateableFilterPlugin;
+import kieker.analysis.configuration.GlobalConfigurationRegistry;
+import kieker.analysis.configuration.exception.PluginNotFoundException;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
@@ -35,8 +37,6 @@ import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
-import kieker.tools.configuration.GlobalConfigurationRegistry;
-import kieker.tools.configuration.exception.PluginNotFoundException;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 

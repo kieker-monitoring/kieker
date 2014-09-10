@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.configuration.exception;
+package kieker.analysis.configuration.exception;
 
 import kieker.common.configuration.Configuration;
 

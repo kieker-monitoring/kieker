@@ -14,13 +14,12 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.configuration;
+package kieker.analysis.configuration;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import kieker.analysis.configuration.AbstractUpdateableFilterPlugin;
+import kieker.analysis.configuration.exception.PluginNotFoundException;
 import kieker.common.configuration.Configuration;
-import kieker.tools.configuration.exception.PluginNotFoundException;
 
 /**
  * Abstract class for a ConfigurationRegistry.<br>
