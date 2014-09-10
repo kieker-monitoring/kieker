@@ -23,11 +23,11 @@ import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
+import kieker.analysis.plugin.filter.composite.AbstractCompositeFilterPlugin;
+import kieker.analysis.plugin.filter.composite.CompositeInputRelay;
+import kieker.analysis.plugin.filter.composite.CompositeOutputRelay;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
-import kieker.tools.composite.AbstractCompositeFilterPlugin;
-import kieker.tools.composite.CompositeInputRelay;
-import kieker.tools.composite.CompositeOutputRelay;
 
 /**
  * @author Markus Fischer

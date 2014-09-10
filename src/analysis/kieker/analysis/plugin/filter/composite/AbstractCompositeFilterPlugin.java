@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.composite;
+package kieker.analysis.plugin.filter.composite;
 
 import java.util.ArrayList;
 import java.util.List;

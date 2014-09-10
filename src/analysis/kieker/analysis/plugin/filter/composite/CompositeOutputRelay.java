@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.composite;
+package kieker.analysis.plugin.filter.composite;
 
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.InputPort;
