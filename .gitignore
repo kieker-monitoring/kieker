@@ -1,3 +1,4 @@
 /.gradle
 /kieker-common/build
 /kieker-monitoring/build
+/kieker-analysis/build
