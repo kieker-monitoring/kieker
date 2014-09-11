@@ -24,10 +24,12 @@ import java.util.concurrent.TimeUnit;
  * @author Andre van Hoorn, Tobias Rudolph, Andreas Eberlein
  * 
  * @since 1.10
+ * 
  * @param <T>
  *            The type of the time series.
  */
 public class TimeSeries<T> implements ITimeSeries<T> {
+
 	private volatile long startTime;
 	private final TimeUnit timeSeriesTimeUnit;
 	private long nextTime;

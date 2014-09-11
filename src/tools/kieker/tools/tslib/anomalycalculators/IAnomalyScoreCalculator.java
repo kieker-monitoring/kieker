@@ -20,44 +20,29 @@ import kieker.tools.tslib.ITimeSeriesPoint;
 import kieker.tools.tslib.forecast.IForecastResult;
 
 /**
+ * Classes implementing this interface calculate anomaly scores based on a forecasted and an actual value.
+ * 
  * @author Tillmann Carlos Bielefeld
  * 
  * @since 1.10
+ * 
+ * @param <T>
+ *            The type of the calculator.
  */
-public class SimpleAnomalyCalculator implements IAnomalyCalculator<Double> {
-
-	public SimpleAnomalyCalculator() {
-		// empty default constructor
-	}
+public interface IAnomalyScoreCalculator<T> {
 
 	/**
-	 * @param forecast
-	 *            Forecast Result
-	 * @param current
-	 *            current Timeseries
+	 * Calculates an anomaly score based on the given values.
 	 * 
-	 * @return AnomalScore
+	 * @param forecast
+	 *            The forecasted value.
+	 * @param current
+	 *            The actual value.
+	 * 
+	 * @return An anomaly score for the given values.
+	 * 
+	 * @since 1.10
 	 */
-	@Override
-	public AnomalyScore calculateAnomaly(final IForecastResult forecast, final ITimeSeriesPoint<Double> current) {
-		if (forecast.getForecast().getPoints().size() == 0) {
-			return null;
-		}
+	public AnomalyScore calculateAnomalyScore(IForecastResult forecast, ITimeSeriesPoint<T> current);
 
-		final Double nextpredicted = forecast.getForecast().getPoints().get(0).getValue();
-		if (null == nextpredicted) {
-			return null;
-		}
-
-		double measuredValue = 0.0;
-
-		measuredValue = current.getValue();
-
-		double difference = nextpredicted - measuredValue;
-		final double sum = nextpredicted + measuredValue;
-
-		difference = Math.abs(difference / sum);
-
-		return new AnomalyScore(difference);
-	}
 }
