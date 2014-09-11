@@ -1,1 +1,1 @@
-include "kieker-common", "kieker-monitoring", "kieker-analysis"
+include "kieker-common", "kieker-monitoring", "kieker-analysis", "kieker-tools"
