@@ -49,8 +49,6 @@ public class BinaryZipWriterThread extends AbstractZipWriterThread {
 	 *            location where to files should go to (the path must point to a directory)
 	 * @param maxEntriesInFile
 	 *            limit for the number of records per log file
-	 * @param maxLogFiles
-	 *            limit of the number of log files
 	 * @param bufferSize
 	 *            size of the output buffer
 	 * @param level
