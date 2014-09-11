@@ -29,7 +29,7 @@ import kieker.common.record.misc.EmptyRecord;
 import kieker.monitoring.core.controller.IMonitoringController;
 
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
-import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.tools.junit.AbstractKiekerTest;
 
 /**
  * @author Andre van Hoorn

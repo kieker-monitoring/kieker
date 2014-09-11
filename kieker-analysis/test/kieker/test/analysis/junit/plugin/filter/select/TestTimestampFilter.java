@@ -33,7 +33,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 import kieker.common.util.registry.IRegistry;
 
-import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.analysis.junit.AbstractKiekerTest;
 
 /**
  * A test for the class {@link TimestampFilter}.

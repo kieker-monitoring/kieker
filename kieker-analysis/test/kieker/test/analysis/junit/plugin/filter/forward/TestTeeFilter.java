@@ -34,7 +34,7 @@ import kieker.analysis.plugin.filter.forward.TeeFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 
-import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.analysis.junit.AbstractKiekerTest;
 
 /**
  * This test makes sure that the {@link TeeFilter} writes (with regard to the append property) correctly into files.

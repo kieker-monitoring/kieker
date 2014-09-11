@@ -30,7 +30,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 
 import kieker.test.analysis.util.plugin.filter.flow.BookstoreEventRecordFactory;
-import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.analysis.junit.AbstractKiekerTest;
 
 /**
  * @author Andre van Hoorn, Jan Waller

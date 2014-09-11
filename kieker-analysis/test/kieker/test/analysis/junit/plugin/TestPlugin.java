@@ -32,7 +32,7 @@ import kieker.common.configuration.Configuration;
 
 import kieker.test.analysis.util.plugin.filter.SimpleForwardFilterWithRepository;
 import kieker.test.analysis.util.repository.SimpleRepository;
-import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.analysis.junit.AbstractKiekerTest;
 
 /**
  * A simple test for the plugins in general. It tests for example if the chaining of different plugins does work.

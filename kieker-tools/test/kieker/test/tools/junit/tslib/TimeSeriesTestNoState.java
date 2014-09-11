@@ -25,7 +25,7 @@ import org.junit.Test;
 
 import kieker.tools.tslib.TimeSeries;
 
-import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.tools.junit.AbstractKiekerTest;
 
 /**
  * Some tests in addition to {@link TimeSeriesTest}. Since I'm following a slightly different style of writing tests

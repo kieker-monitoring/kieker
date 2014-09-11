@@ -38,7 +38,7 @@ import kieker.common.configuration.Configuration;
 import kieker.tools.configuration.GlobalConfigurationRegistry;
 import kieker.tools.configuration.exception.PluginNotFoundException;
 
-import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.analysis.junit.AbstractKiekerTest;
 
 /**
  * Test for Configuration plugins during runtime.

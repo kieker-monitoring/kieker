@@ -22,7 +22,7 @@ import org.junit.Test;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.tools.tslib.TimeSeriesPointsBuffer;
 
-import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.tools.junit.AbstractKiekerTest;
 
 /**
  * 

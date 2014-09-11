@@ -30,7 +30,7 @@ import kieker.tools.bridge.connector.ConnectorEndOfDataException;
 import kieker.tools.bridge.connector.IServiceConnector;
 import kieker.tools.bridge.connector.ServiceConnectorFactory;
 
-import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.tools.junit.AbstractKiekerTest;
 
 /**
  * Class for all connector tests providing three methods for initialization,

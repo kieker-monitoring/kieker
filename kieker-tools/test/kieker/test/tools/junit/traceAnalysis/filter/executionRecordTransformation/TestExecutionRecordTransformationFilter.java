@@ -34,7 +34,7 @@ import kieker.tools.traceAnalysis.filter.executionRecordTransformation.Execution
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
-import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.tools.junit.AbstractKiekerTest;
 import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
 import kieker.test.tools.util.filter.ExecutionSinkClass;
 

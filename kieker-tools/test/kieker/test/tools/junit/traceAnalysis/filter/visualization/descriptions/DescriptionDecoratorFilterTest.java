@@ -39,7 +39,7 @@ import kieker.tools.traceAnalysis.repository.DescriptionRepository;
 import kieker.tools.traceAnalysis.repository.DescriptionRepository.DescriptionRepositoryData;
 import kieker.tools.traceAnalysis.systemModel.AllocationComponent;
 
-import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.tools.junit.AbstractKiekerTest;
 import kieker.test.tools.util.graph.DependencyGraphTestUtil;
 import kieker.test.tools.util.graph.GraphReceiverPlugin;
 import kieker.test.tools.util.graph.GraphTestSetup;

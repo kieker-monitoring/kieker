@@ -38,7 +38,7 @@ import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.tools.composite.AbstractCompositeFilterPlugin;
 import kieker.tools.composite.PortWrapper;
 
-import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.tools.junit.AbstractKiekerTest;
 import kieker.test.tools.junit.composite.CompositeImplementation.Distributor;
 
 //CHECKSTYLE:ON
