@@ -26,9 +26,10 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-
+import kieker.test.common.junit.util.APIEvaluationFunctions;
+			
 /**
- * Tests for kieker.common.record.flow.trace.ConstructionEvent records.
+ * Test API of {@link kieker.common.record.flow.trace.ConstructionEvent}.
  * 
  * @author Reiner Jung
  * 
@@ -40,29 +41,48 @@ public class TestConstructionEventPropertyOrder extends AbstractKiekerTest {
 	 * All numbers and values must be pairwise unequal. As the string registry also uses integers,
 	 * we must guarantee this criteria by starting with 1000 instead of 0.
 	 */
+	/** Constant value parameter for timestamp. */
 	private static final long PROPERTY_TIMESTAMP = 2L;
+	/** Constant value parameter for traceId. */
 	private static final long PROPERTY_TRACE_ID = 3L;
+	/** Constant value parameter for orderIndex. */
 	private static final int PROPERTY_ORDER_INDEX = 1001;
+	/** Constant value parameter for classSignature. */
 	private static final String PROPERTY_CLASS_SIGNATURE = "<classSignature>";
+	/** Constant value parameter for objectId. */
 	private static final int PROPERTY_OBJECT_ID = 1002;
 							
 	/**
 	 * Empty constructor.
 	 */
-	public TestConstructionEventPropertyOrder() {}
+	public TestConstructionEventPropertyOrder() {
+		// Empty constructor for test class.
+	}
 
 	/**
-	 * Test property order processing of CPUUtilizationRecord constructors.
+	 * Test property order processing of {@link kieker.common.record.flow.trace.ConstructionEvent} constructors and
+	 * different serialization routines.
 	 */
 	@Test
 	public void testConstructionEventPropertyOrder() { // NOPMD
 		final IRegistry<String> stringRegistry = this.makeStringRegistry();
-		final ByteBuffer inputBuffer = this.createByteBuffer(ConstructionEvent.SIZE, 
-			this.makeStringRegistry(),
-			PROPERTY_TIMESTAMP, PROPERTY_TRACE_ID, PROPERTY_ORDER_INDEX, PROPERTY_CLASS_SIGNATURE, PROPERTY_OBJECT_ID);
-		final Object[] values = { PROPERTY_TIMESTAMP, PROPERTY_TRACE_ID, PROPERTY_ORDER_INDEX, PROPERTY_CLASS_SIGNATURE, PROPERTY_OBJECT_ID };
+		final Object[] values = {
+			PROPERTY_TIMESTAMP,
+			PROPERTY_TRACE_ID,
+			PROPERTY_ORDER_INDEX,
+			PROPERTY_CLASS_SIGNATURE,
+			PROPERTY_OBJECT_ID,
+		};
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(ConstructionEvent.SIZE, 
+			this.makeStringRegistry(), values);
 					
-		final ConstructionEvent recordInitParameter = new ConstructionEvent(PROPERTY_TIMESTAMP, PROPERTY_TRACE_ID, PROPERTY_ORDER_INDEX, PROPERTY_CLASS_SIGNATURE, PROPERTY_OBJECT_ID);
+		final ConstructionEvent recordInitParameter = new ConstructionEvent(
+			PROPERTY_TIMESTAMP,
+			PROPERTY_TRACE_ID,
+			PROPERTY_ORDER_INDEX,
+			PROPERTY_CLASS_SIGNATURE,
+			PROPERTY_OBJECT_ID
+		);
 		final ConstructionEvent recordInitBuffer = new ConstructionEvent(inputBuffer, this.makeStringRegistry());
 		final ConstructionEvent recordInitArray = new ConstructionEvent(values);
 		
@@ -112,49 +132,5 @@ public class TestConstructionEventPropertyOrder extends AbstractKiekerTest {
 		stringRegistry.get(PROPERTY_CLASS_SIGNATURE);
 
 		return stringRegistry;
-	}
-
-	/**
-	 * Compose a byte buffer for record deserialization.
-	 * 
-	 * @param size
-	 *            the size of the serialized record
-	 * @param stringRegistry
-	 *            the registry for the string lookup
-	 * @param a
-	 *            list of "objects" containing an arbitrary number of records
-	 * 
-	 * @return the completely filled buffer
-	 */
-	private ByteBuffer createByteBuffer(final int size, final IRegistry<String> stringRegistry, final Object... objects) {
-		final ByteBuffer buffer = ByteBuffer.allocate(size);
-		for (final Object object : objects) {
-			if (object instanceof Byte) {
-				buffer.put((Byte) object);
-			} else if (object instanceof Short) {
-				buffer.putShort((Short) object);
-			} else if (object instanceof Integer) {
-				buffer.putInt((Integer) object);
-			} else if (object instanceof Long) {
-				buffer.putLong((Long) object);
-			} else if (object instanceof Float) {
-				buffer.putFloat((Float) object);
-			} else if (object instanceof Double) {
-				buffer.putDouble((Double) object);
-			} else if (object instanceof Boolean) {
-				buffer.put((byte) ((Boolean) object ? 1 : 0)); // NOCS
-			} else if (object instanceof Character) {
-				buffer.putChar((Character) object);
-			} else if (object instanceof String) {
-				buffer.putInt(stringRegistry.get((String) object));
-			} else {
-				Assert.fail("Unsupported record value type " + object.getClass().getName());
-			}
-		}
-
-		Assert.assertEquals("Buffer size and usage differ.", buffer.position(), size);
-		buffer.position(0);
-
-		return buffer;
 	}
 }

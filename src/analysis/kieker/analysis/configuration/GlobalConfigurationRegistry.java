@@ -14,7 +14,8 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.configuration;
+package kieker.analysis.configuration;
+
 
 /**
  * 

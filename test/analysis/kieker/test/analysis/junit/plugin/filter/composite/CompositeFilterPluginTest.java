@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.junit.composite;
+package kieker.test.analysis.junit.plugin.filter.composite;
 
 // CHECKSTYLE:OFF
 import java.util.List;
@@ -31,15 +31,15 @@ import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
+import kieker.analysis.plugin.filter.composite.AbstractCompositeFilterPlugin;
+import kieker.analysis.plugin.filter.composite.PortWrapper;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.controlflow.OperationExecutionRecord;
-import kieker.tools.composite.AbstractCompositeFilterPlugin;
-import kieker.tools.composite.PortWrapper;
 
-import kieker.test.tools.junit.AbstractKiekerTest;
-import kieker.test.tools.junit.composite.CompositeImplementation.Distributor;
+import kieker.test.analysis.junit.plugin.filter.composite.CompositeImplementation.Distributor;
+import kieker.test.common.junit.AbstractKiekerTest;
 
 //CHECKSTYLE:ON
 

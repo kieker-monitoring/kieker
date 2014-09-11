@@ -77,6 +77,9 @@ public class TestProbeController extends AbstractKiekerTest {
 
 	/**
 	 * Initialize configuration file.
+	 * 
+	 * @throws IOException
+	 *             when file creation fails
 	 */
 	@Before
 	public void init() throws IOException {
@@ -113,6 +116,11 @@ public class TestProbeController extends AbstractKiekerTest {
 
 	/**
 	 * Test the adaptive pattern registry by adding test patterns.
+	 * 
+	 * @throws UnsupportedEncodingException
+	 *             when UTF-8 encoding is not supported
+	 * @throws FileNotFoundException
+	 * @throws InterruptedException
 	 */
 	@Test
 	public void testInitializationWithCustomConfiguration() throws UnsupportedEncodingException, FileNotFoundException, InterruptedException {
@@ -138,6 +146,9 @@ public class TestProbeController extends AbstractKiekerTest {
 		ctrl.terminateMonitoring();
 	}
 
+	/**
+	 * Test if probe activation/deactivation works properly and is not affected by enabling and disabling monitoring.
+	 */
 	@Test
 	public void testEnabledDisabledMatching() {
 		{ // NOCS // adaptive enabled
@@ -179,6 +190,13 @@ public class TestProbeController extends AbstractKiekerTest {
 		}
 	}
 
+	/**
+	 * Test if automated reading from test file works.
+	 * 
+	 * @throws UnsupportedEncodingException
+	 * @throws FileNotFoundException
+	 * @throws InterruptedException
+	 */
 	@Test
 	public void testAutomatedReadingFromConfigFile() throws UnsupportedEncodingException, FileNotFoundException, InterruptedException {
 		final int readIntervall = 2;
@@ -211,6 +229,12 @@ public class TestProbeController extends AbstractKiekerTest {
 		ctrl.terminateMonitoring();
 	}
 
+	/**
+	 * Test if automated write to configuration file works.
+	 * 
+	 * @throws IOException
+	 *             if file access fails
+	 */
 	@Test
 	public void testAutomatedWriteBackToConfigFile() throws IOException {
 		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
@@ -267,24 +291,9 @@ public class TestProbeController extends AbstractKiekerTest {
 		}
 	}
 
-	// Replaces the old content of the config file with the given pattern and a few additional information.
-	private void writeToConfigFile(final String[] pattern) throws UnsupportedEncodingException, FileNotFoundException, InterruptedException {
-		Thread.sleep(1000); // enforce last modified timestamp to be different than before
-		final PrintWriter pw = new PrintWriter(
-				new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.configFile, false), TestProbeController.ENCODING)));
-		pw.print("## Adaptive Monitoring Config File: ");
-		pw.println(this.configFile.getAbsolutePath());
-		pw.print("## written on: ");
-		final DateFormat date = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
-		date.setTimeZone(TimeZone.getTimeZone("UTC"));
-		pw.println(date.format(new java.util.Date()));
-		pw.println('#');
-		for (final String s : pattern) {
-			pw.println(s);
-		}
-		pw.close();
-	}
-
+	/**
+	 * Test pattern matching algorithm.
+	 */
 	@Test
 	public void testMatching() {
 		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
@@ -310,6 +319,9 @@ public class TestProbeController extends AbstractKiekerTest {
 		ctrl.terminateMonitoring();
 	}
 
+	/**
+	 * Test if activation and deactivation work for sample probes.
+	 */
 	@Test
 	public void testSpecialProbes() {
 		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
@@ -340,5 +352,25 @@ public class TestProbeController extends AbstractKiekerTest {
 
 		Assert.assertFalse(ctrl.isMonitoringTerminated());
 		ctrl.terminateMonitoring();
+	}
+
+	/**
+	 * Replaces the old content of the config file with the given pattern and a few additional information.
+	 */
+	private void writeToConfigFile(final String[] pattern) throws UnsupportedEncodingException, FileNotFoundException, InterruptedException {
+		Thread.sleep(1000); // enforce last modified timestamp to be different than before
+		final PrintWriter pw = new PrintWriter(
+				new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.configFile, false), TestProbeController.ENCODING)));
+		pw.print("## Adaptive Monitoring Config File: ");
+		pw.println(this.configFile.getAbsolutePath());
+		pw.print("## written on: ");
+		final DateFormat date = new SimpleDateFormat("yyyyMMdd'-'HHmmssSSS", Locale.US);
+		date.setTimeZone(TimeZone.getTimeZone("UTC"));
+		pw.println(date.format(new java.util.Date()));
+		pw.println('#');
+		for (final String s : pattern) {
+			pw.println(s);
+		}
+		pw.close();
 	}
 }

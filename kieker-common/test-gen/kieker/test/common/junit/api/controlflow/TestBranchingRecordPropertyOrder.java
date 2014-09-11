@@ -26,9 +26,10 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-
+import kieker.test.common.junit.util.APIEvaluationFunctions;
+			
 /**
- * Tests for kieker.common.record.controlflow.BranchingRecord records.
+ * Test API of {@link kieker.common.record.controlflow.BranchingRecord}.
  * 
  * @author Reiner Jung
  * 
@@ -40,27 +41,40 @@ public class TestBranchingRecordPropertyOrder extends AbstractKiekerTest {
 	 * All numbers and values must be pairwise unequal. As the string registry also uses integers,
 	 * we must guarantee this criteria by starting with 1000 instead of 0.
 	 */
+	/** Constant value parameter for timestamp. */
 	private static final long PROPERTY_TIMESTAMP = 2L;
+	/** Constant value parameter for branchID. */
 	private static final int PROPERTY_BRANCH_I_D = 1001;
+	/** Constant value parameter for branchingOutcome. */
 	private static final int PROPERTY_BRANCHING_OUTCOME = 1002;
 							
 	/**
 	 * Empty constructor.
 	 */
-	public TestBranchingRecordPropertyOrder() {}
+	public TestBranchingRecordPropertyOrder() {
+		// Empty constructor for test class.
+	}
 
 	/**
-	 * Test property order processing of CPUUtilizationRecord constructors.
+	 * Test property order processing of {@link kieker.common.record.controlflow.BranchingRecord} constructors and
+	 * different serialization routines.
 	 */
 	@Test
 	public void testBranchingRecordPropertyOrder() { // NOPMD
 		final IRegistry<String> stringRegistry = this.makeStringRegistry();
-		final ByteBuffer inputBuffer = this.createByteBuffer(BranchingRecord.SIZE, 
-			this.makeStringRegistry(),
-			PROPERTY_TIMESTAMP, PROPERTY_BRANCH_I_D, PROPERTY_BRANCHING_OUTCOME);
-		final Object[] values = { PROPERTY_TIMESTAMP, PROPERTY_BRANCH_I_D, PROPERTY_BRANCHING_OUTCOME };
+		final Object[] values = {
+			PROPERTY_TIMESTAMP,
+			PROPERTY_BRANCH_I_D,
+			PROPERTY_BRANCHING_OUTCOME,
+		};
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(BranchingRecord.SIZE, 
+			this.makeStringRegistry(), values);
 					
-		final BranchingRecord recordInitParameter = new BranchingRecord(PROPERTY_TIMESTAMP, PROPERTY_BRANCH_I_D, PROPERTY_BRANCHING_OUTCOME);
+		final BranchingRecord recordInitParameter = new BranchingRecord(
+			PROPERTY_TIMESTAMP,
+			PROPERTY_BRANCH_I_D,
+			PROPERTY_BRANCHING_OUTCOME
+		);
 		final BranchingRecord recordInitBuffer = new BranchingRecord(inputBuffer, this.makeStringRegistry());
 		final BranchingRecord recordInitArray = new BranchingRecord(values);
 		
@@ -107,49 +121,5 @@ public class TestBranchingRecordPropertyOrder extends AbstractKiekerTest {
 		// get registers string and returns their ID
 
 		return stringRegistry;
-	}
-
-	/**
-	 * Compose a byte buffer for record deserialization.
-	 * 
-	 * @param size
-	 *            the size of the serialized record
-	 * @param stringRegistry
-	 *            the registry for the string lookup
-	 * @param a
-	 *            list of "objects" containing an arbitrary number of records
-	 * 
-	 * @return the completely filled buffer
-	 */
-	private ByteBuffer createByteBuffer(final int size, final IRegistry<String> stringRegistry, final Object... objects) {
-		final ByteBuffer buffer = ByteBuffer.allocate(size);
-		for (final Object object : objects) {
-			if (object instanceof Byte) {
-				buffer.put((Byte) object);
-			} else if (object instanceof Short) {
-				buffer.putShort((Short) object);
-			} else if (object instanceof Integer) {
-				buffer.putInt((Integer) object);
-			} else if (object instanceof Long) {
-				buffer.putLong((Long) object);
-			} else if (object instanceof Float) {
-				buffer.putFloat((Float) object);
-			} else if (object instanceof Double) {
-				buffer.putDouble((Double) object);
-			} else if (object instanceof Boolean) {
-				buffer.put((byte) ((Boolean) object ? 1 : 0)); // NOCS
-			} else if (object instanceof Character) {
-				buffer.putChar((Character) object);
-			} else if (object instanceof String) {
-				buffer.putInt(stringRegistry.get((String) object));
-			} else {
-				Assert.fail("Unsupported record value type " + object.getClass().getName());
-			}
-		}
-
-		Assert.assertEquals("Buffer size and usage differ.", buffer.position(), size);
-		buffer.position(0);
-
-		return buffer;
 	}
 }

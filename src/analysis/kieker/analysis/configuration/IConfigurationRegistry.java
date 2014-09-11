@@ -14,13 +14,12 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.configuration;
+package kieker.analysis.configuration;
 
 import java.util.Map;
 
-import kieker.analysis.configuration.AbstractUpdateableFilterPlugin;
+import kieker.analysis.configuration.exception.PluginNotFoundException;
 import kieker.common.configuration.Configuration;
-import kieker.tools.configuration.exception.PluginNotFoundException;
 
 /**
  * @since 1.10
