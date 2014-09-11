@@ -56,6 +56,9 @@ public class BinaryZipWriterThread extends AbstractZipWriterThread {
 	 *            size of the output buffer
 	 * @param level
 	 *            compression level
+	 * 
+	 * @throws IOException
+	 *             when file operation fails
 	 */
 	public BinaryZipWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
 			final StringMappingFileWriter mappingFileWriter, final String path, final int maxEntriesInFile, final int bufferSize, final int level)

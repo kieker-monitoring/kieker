@@ -120,7 +120,9 @@ public class TestProbeController extends AbstractKiekerTest {
 	 * @throws UnsupportedEncodingException
 	 *             when UTF-8 encoding is not supported
 	 * @throws FileNotFoundException
+	 *             when file creation fails
 	 * @throws InterruptedException
+	 *             when the sleep call was interrupted
 	 */
 	@Test
 	public void testInitializationWithCustomConfiguration() throws UnsupportedEncodingException, FileNotFoundException, InterruptedException {
@@ -148,54 +150,63 @@ public class TestProbeController extends AbstractKiekerTest {
 
 	/**
 	 * Test if probe activation/deactivation works properly and is not affected by enabling and disabling monitoring.
+	 * Starting with enabled adaptive monitoring.
 	 */
 	@Test
-	public void testEnabledDisabledMatching() {
-		{ // NOCS // adaptive enabled
-			final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
-			configuration.setProperty(ConfigurationFactory.WRITER_CLASSNAME, DummyWriter.class.getName());
-			configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED, "true");
-			final IMonitoringController ctrl = MonitoringController.createInstance(configuration);
-			Assert.assertTrue(ctrl.isMonitoringEnabled());
-			Assert.assertTrue(ctrl.isProbeActivated("void test.Test()"));
-			ctrl.disableMonitoring();
-			Assert.assertFalse(ctrl.isMonitoringEnabled());
-			Assert.assertTrue(ctrl.isProbeActivated("void test.Test()"));
-			ctrl.enableMonitoring();
-			Assert.assertTrue(ctrl.isMonitoringEnabled());
-			Assert.assertTrue(ctrl.isProbeActivated("void test.Test()"));
-			ctrl.deactivateProbe("*");
-			Assert.assertTrue(ctrl.isMonitoringEnabled());
-			Assert.assertFalse(ctrl.isProbeActivated("void test.Test()"));
-			ctrl.activateProbe("*");
-			Assert.assertTrue(ctrl.isMonitoringEnabled());
-			Assert.assertTrue(ctrl.isProbeActivated("void test.Test()"));
-			ctrl.terminateMonitoring();
-		}
-		{ // NOCS // adaptive disabled
-			final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
-			configuration.setProperty(ConfigurationFactory.WRITER_CLASSNAME, DummyWriter.class.getName());
-			configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED, "false");
-			final IMonitoringController ctrl = MonitoringController.createInstance(configuration);
-			ctrl.deactivateProbe("*");
-			Assert.assertTrue(ctrl.isMonitoringEnabled());
-			Assert.assertTrue(ctrl.isProbeActivated("void test.Test()"));
-			ctrl.disableMonitoring();
-			Assert.assertFalse(ctrl.isMonitoringEnabled());
-			Assert.assertTrue(ctrl.isProbeActivated("void test.Test()"));
-			ctrl.enableMonitoring();
-			Assert.assertTrue(ctrl.isMonitoringEnabled());
-			Assert.assertTrue(ctrl.isProbeActivated("void test.Test()"));
-			ctrl.terminateMonitoring();
-		}
+	public void testEnabledDisabledMatchingWithAdaptiveMonitoring() {
+		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
+		configuration.setProperty(ConfigurationFactory.WRITER_CLASSNAME, DummyWriter.class.getName());
+		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED, "true");
+		final IMonitoringController ctrl = MonitoringController.createInstance(configuration);
+		Assert.assertTrue(ctrl.isMonitoringEnabled());
+		Assert.assertTrue(ctrl.isProbeActivated("void test.Test()"));
+		ctrl.disableMonitoring();
+		Assert.assertFalse(ctrl.isMonitoringEnabled());
+		Assert.assertTrue(ctrl.isProbeActivated("void test.Test()"));
+		ctrl.enableMonitoring();
+		Assert.assertTrue(ctrl.isMonitoringEnabled());
+		Assert.assertTrue(ctrl.isProbeActivated("void test.Test()"));
+		ctrl.deactivateProbe("*");
+		Assert.assertTrue(ctrl.isMonitoringEnabled());
+		Assert.assertFalse(ctrl.isProbeActivated("void test.Test()"));
+		ctrl.activateProbe("*");
+		Assert.assertTrue(ctrl.isMonitoringEnabled());
+		Assert.assertTrue(ctrl.isProbeActivated("void test.Test()"));
+		ctrl.terminateMonitoring();
+	}
+
+	/**
+	 * Test if probe activation/deactivation works properly and is not affected by enabling and disabling monitoring.
+	 * Starting with disabled adaptive monitoring.
+	 */
+	@Test
+	public void testEnabledDisabledMatchingWithoutAdaptiveMonitoring() {
+		final Configuration configuration = ConfigurationFactory.createSingletonConfiguration();
+		configuration.setProperty(ConfigurationFactory.WRITER_CLASSNAME, DummyWriter.class.getName());
+		configuration.setProperty(ConfigurationFactory.ADAPTIVE_MONITORING_ENABLED, "false");
+		final IMonitoringController ctrl = MonitoringController.createInstance(configuration);
+		ctrl.deactivateProbe("*");
+		Assert.assertTrue(ctrl.isMonitoringEnabled());
+		Assert.assertTrue(ctrl.isProbeActivated("void test.Test()"));
+		ctrl.disableMonitoring();
+		Assert.assertFalse(ctrl.isMonitoringEnabled());
+		Assert.assertTrue(ctrl.isProbeActivated("void test.Test()"));
+		ctrl.enableMonitoring();
+		Assert.assertTrue(ctrl.isMonitoringEnabled());
+		Assert.assertTrue(ctrl.isProbeActivated("void test.Test()"));
+		ctrl.terminateMonitoring();
+
 	}
 
 	/**
 	 * Test if automated reading from test file works.
 	 * 
 	 * @throws UnsupportedEncodingException
+	 *             when UTF-8 encoding is not supported
 	 * @throws FileNotFoundException
+	 *             when file creation fails
 	 * @throws InterruptedException
+	 *             when the sleep call was interrupted
 	 */
 	@Test
 	public void testAutomatedReadingFromConfigFile() throws UnsupportedEncodingException, FileNotFoundException, InterruptedException {
@@ -271,7 +282,13 @@ public class TestProbeController extends AbstractKiekerTest {
 		ctrl.terminateMonitoring();
 	}
 
-	// Reads the significant content of the config file.
+	/**
+	 * Reads the significant content of the config file.
+	 * 
+	 * @returns List of string representing a config file
+	 * @throws IOException
+	 *             when reading the file fails
+	 */
 	private List<String> readFromConfigFile() throws IOException {
 		BufferedReader reader = null;
 		try {

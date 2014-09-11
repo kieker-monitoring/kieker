@@ -34,6 +34,9 @@ import kieker.test.monitoring.util.DefaultConfigurationFactory;
  */
 public class TestControllerConstruction extends AbstractKiekerTest { // NOCS
 
+	/**
+	 * Test if the initialization of the monitoring controller from a given configuration works.
+	 */
 	@Test
 	public void testConstructionFromConfig() {
 

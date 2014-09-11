@@ -72,10 +72,13 @@ public abstract class AbstractZipWriterThread extends AbstractAsyncThread {
 	 *            writer for the mapping file (the file where class names are mapped to record ids)
 	 * @param path
 	 *            location where to files should go to (the path must point to a directory)
-	 * @param maxEntriesInfile
+	 * @param maxEntriesInFile
 	 *            limit for the number of records per log file
 	 * @param level
 	 *            compression level
+	 * 
+	 * @throws IOException
+	 *             when file operation fails
 	 */
 	public AbstractZipWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
 			final StringMappingFileWriter mappingFileWriter, final String path, final int maxEntriesInFile, final int level) throws IOException {

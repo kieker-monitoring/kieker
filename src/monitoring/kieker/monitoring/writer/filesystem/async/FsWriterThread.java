@@ -53,9 +53,10 @@ public final class FsWriterThread extends AbstractFsWriterThread {
 	 *            writer for the mapping file (the file where class names are mapped to record ids)
 	 * @param path
 	 *            location where to files should go to (the path must point to a directory)
-	 * @param maxEntriesInfile
+	 * @param maxEntriesInFile
 	 *            limit for the number of records per log file
 	 * @param maxLogSize
+	 *            limit of the log file size
 	 * @param maxLogFiles
 	 *            limit of the number of log files
 	 * @param autoflush

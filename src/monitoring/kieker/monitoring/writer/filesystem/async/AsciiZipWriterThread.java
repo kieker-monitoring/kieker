@@ -47,12 +47,15 @@ public class AsciiZipWriterThread extends AbstractZipWriterThread {
 	 *            writer for the mapping file (the file where class names are mapped to record ids)
 	 * @param path
 	 *            location where to files should go to (the path must point to a directory)
-	 * @param maxEntriesInfile
+	 * @param maxEntriesInFile
 	 *            limit for the number of records per log file
 	 * @param bufferSize
 	 *            size of the output buffer
 	 * @param level
 	 *            compression level
+	 * 
+	 * @throws IOException
+	 *             when file operation fails
 	 */
 	public AsciiZipWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
 			final StringMappingFileWriter mappingFileWriter, final String path, final int maxEntriesInFile, final int bufferSize, final int level)
