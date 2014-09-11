@@ -36,7 +36,7 @@ public class BoundedConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> {
 	private final int maxCacheSize;
 
 	/**
-	 * Initialize a bounded concurrent hashmap.
+	 * Initialize a bounded concurrent hash map.
 	 * 
 	 * @param boundedCacheBehaviour
 	 *            set the cache behavior
@@ -77,8 +77,9 @@ public class BoundedConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> {
 	 * if the given element could not be added due to map limitations.
 	 * 
 	 * @param key
-	 *            key
+	 *            key-value
 	 * @param value
+	 *            the associated value
 	 * 
 	 * @return the previous value or null
 	 */
