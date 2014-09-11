@@ -40,7 +40,7 @@ public class BoundedConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> {
 	 * 
 	 * @param boundedCacheBehaviour
 	 *            set the cache behavior
-	 * @param maxCachSize
+	 * @param maxCacheSize
 	 *            define limit of the cache
 	 */
 	public BoundedConcurrentHashMap(final BoundedCacheBehaviour boundedCacheBehaviour, final int maxCacheSize) {
