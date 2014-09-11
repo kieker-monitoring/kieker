@@ -26,7 +26,7 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.common.junit.util.UtilityAPITestFunctions;
+import kieker.test.common.junit.util.APIEvaluationFunctions;
 			
 /**
  * Test API of {@link kieker.common.record.misc.KiekerMetadataRecord}.
@@ -82,7 +82,7 @@ public class TestKiekerMetadataRecordPropertyOrder extends AbstractKiekerTest {
 			PROPERTY_TIME_UNIT,
 			PROPERTY_NUMBER_OF_RECORDS,
 		};
-		final ByteBuffer inputBuffer = UtilityAPITestFunctions.createByteBuffer(KiekerMetadataRecord.SIZE, 
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(KiekerMetadataRecord.SIZE, 
 			this.makeStringRegistry(), values);
 					
 		final KiekerMetadataRecord recordInitParameter = new KiekerMetadataRecord(

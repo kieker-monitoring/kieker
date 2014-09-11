@@ -26,7 +26,7 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.common.junit.util.UtilityAPITestFunctions;
+import kieker.test.common.junit.util.APIEvaluationFunctions;
 			
 /**
  * Test API of {@link kieker.common.record.system.MemSwapUsageRecord}.
@@ -82,7 +82,7 @@ public class TestMemSwapUsageRecordPropertyOrder extends AbstractKiekerTest {
 			PROPERTY_SWAP_USED,
 			PROPERTY_SWAP_FREE,
 		};
-		final ByteBuffer inputBuffer = UtilityAPITestFunctions.createByteBuffer(MemSwapUsageRecord.SIZE, 
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(MemSwapUsageRecord.SIZE, 
 			this.makeStringRegistry(), values);
 					
 		final MemSwapUsageRecord recordInitParameter = new MemSwapUsageRecord(

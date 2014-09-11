@@ -26,7 +26,7 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.common.junit.util.UtilityAPITestFunctions;
+import kieker.test.common.junit.util.APIEvaluationFunctions;
 			
 /**
  * Test API of {@link kieker.common.record.system.ResourceUtilizationRecord}.
@@ -70,7 +70,7 @@ public class TestResourceUtilizationRecordPropertyOrder extends AbstractKiekerTe
 			PROPERTY_RESOURCE_NAME,
 			PROPERTY_UTILIZATION,
 		};
-		final ByteBuffer inputBuffer = UtilityAPITestFunctions.createByteBuffer(ResourceUtilizationRecord.SIZE, 
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(ResourceUtilizationRecord.SIZE, 
 			this.makeStringRegistry(), values);
 					
 		final ResourceUtilizationRecord recordInitParameter = new ResourceUtilizationRecord(

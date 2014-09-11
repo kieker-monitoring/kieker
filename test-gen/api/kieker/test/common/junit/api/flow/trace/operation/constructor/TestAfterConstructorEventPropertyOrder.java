@@ -26,7 +26,7 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.common.junit.util.UtilityAPITestFunctions;
+import kieker.test.common.junit.util.APIEvaluationFunctions;
 			
 /**
  * Test API of {@link kieker.common.record.flow.trace.operation.constructor.AfterConstructorEvent}.
@@ -73,7 +73,7 @@ public class TestAfterConstructorEventPropertyOrder extends AbstractKiekerTest {
 			PROPERTY_OPERATION_SIGNATURE,
 			PROPERTY_CLASS_SIGNATURE,
 		};
-		final ByteBuffer inputBuffer = UtilityAPITestFunctions.createByteBuffer(AfterConstructorEvent.SIZE, 
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(AfterConstructorEvent.SIZE, 
 			this.makeStringRegistry(), values);
 					
 		final AfterConstructorEvent recordInitParameter = new AfterConstructorEvent(

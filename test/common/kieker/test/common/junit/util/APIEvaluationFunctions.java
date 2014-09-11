@@ -31,17 +31,18 @@ import kieker.common.util.registry.IRegistry;
  * @since 1.10
  */
 @SuppressWarnings({ "PMD.ModifiedCyclomaticComplexity", "PMD.StdCyclomaticComplexity" })
-public final class UtilityAPITestFunctions {
+public final class APIEvaluationFunctions {
 
 	/**
 	 * Utility class.
 	 */
-	private UtilityAPITestFunctions() {
+	private APIEvaluationFunctions() {
 		// Not for instantiation
 	}
 
 	/**
-	 * Compose a byte buffer for record deserialization.
+	 * Allocate a byte buffer and initialize it with values from an object array
+	 * representing the values of a record.
 	 * 
 	 * @param size
 	 *            the size of the serialized record

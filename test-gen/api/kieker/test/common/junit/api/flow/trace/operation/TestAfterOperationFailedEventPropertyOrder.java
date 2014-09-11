@@ -26,7 +26,7 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.common.junit.util.UtilityAPITestFunctions;
+import kieker.test.common.junit.util.APIEvaluationFunctions;
 			
 /**
  * Test API of {@link kieker.common.record.flow.trace.operation.AfterOperationFailedEvent}.
@@ -76,7 +76,7 @@ public class TestAfterOperationFailedEventPropertyOrder extends AbstractKiekerTe
 			PROPERTY_CLASS_SIGNATURE,
 			PROPERTY_CAUSE,
 		};
-		final ByteBuffer inputBuffer = UtilityAPITestFunctions.createByteBuffer(AfterOperationFailedEvent.SIZE, 
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(AfterOperationFailedEvent.SIZE, 
 			this.makeStringRegistry(), values);
 					
 		final AfterOperationFailedEvent recordInitParameter = new AfterOperationFailedEvent(

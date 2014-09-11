@@ -26,7 +26,7 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.common.junit.util.UtilityAPITestFunctions;
+import kieker.test.common.junit.util.APIEvaluationFunctions;
 			
 /**
  * Test API of {@link kieker.common.record.flow.trace.concurrency.SplitEvent}.
@@ -67,7 +67,7 @@ public class TestSplitEventPropertyOrder extends AbstractKiekerTest {
 			PROPERTY_TRACE_ID,
 			PROPERTY_ORDER_INDEX,
 		};
-		final ByteBuffer inputBuffer = UtilityAPITestFunctions.createByteBuffer(SplitEvent.SIZE, 
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(SplitEvent.SIZE, 
 			this.makeStringRegistry(), values);
 					
 		final SplitEvent recordInitParameter = new SplitEvent(

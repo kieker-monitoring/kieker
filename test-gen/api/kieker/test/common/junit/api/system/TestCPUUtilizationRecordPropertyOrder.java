@@ -26,7 +26,7 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.common.junit.util.UtilityAPITestFunctions;
+import kieker.test.common.junit.util.APIEvaluationFunctions;
 			
 /**
  * Test API of {@link kieker.common.record.system.CPUUtilizationRecord}.
@@ -88,7 +88,7 @@ public class TestCPUUtilizationRecordPropertyOrder extends AbstractKiekerTest {
 			PROPERTY_TOTAL_UTILIZATION,
 			PROPERTY_IDLE,
 		};
-		final ByteBuffer inputBuffer = UtilityAPITestFunctions.createByteBuffer(CPUUtilizationRecord.SIZE, 
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(CPUUtilizationRecord.SIZE, 
 			this.makeStringRegistry(), values);
 					
 		final CPUUtilizationRecord recordInitParameter = new CPUUtilizationRecord(

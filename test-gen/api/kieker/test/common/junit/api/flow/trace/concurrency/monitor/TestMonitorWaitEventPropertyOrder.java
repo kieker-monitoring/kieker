@@ -26,7 +26,7 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.common.junit.util.UtilityAPITestFunctions;
+import kieker.test.common.junit.util.APIEvaluationFunctions;
 			
 /**
  * Test API of {@link kieker.common.record.flow.trace.concurrency.monitor.MonitorWaitEvent}.
@@ -70,7 +70,7 @@ public class TestMonitorWaitEventPropertyOrder extends AbstractKiekerTest {
 			PROPERTY_ORDER_INDEX,
 			PROPERTY_LOCK_ID,
 		};
-		final ByteBuffer inputBuffer = UtilityAPITestFunctions.createByteBuffer(MonitorWaitEvent.SIZE, 
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(MonitorWaitEvent.SIZE, 
 			this.makeStringRegistry(), values);
 					
 		final MonitorWaitEvent recordInitParameter = new MonitorWaitEvent(

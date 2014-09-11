@@ -26,7 +26,7 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.common.junit.util.UtilityAPITestFunctions;
+import kieker.test.common.junit.util.APIEvaluationFunctions;
 			
 /**
  * Test API of {@link kieker.common.record.controlflow.BranchingRecord}.
@@ -67,7 +67,7 @@ public class TestBranchingRecordPropertyOrder extends AbstractKiekerTest {
 			PROPERTY_BRANCH_I_D,
 			PROPERTY_BRANCHING_OUTCOME,
 		};
-		final ByteBuffer inputBuffer = UtilityAPITestFunctions.createByteBuffer(BranchingRecord.SIZE, 
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(BranchingRecord.SIZE, 
 			this.makeStringRegistry(), values);
 					
 		final BranchingRecord recordInitParameter = new BranchingRecord(

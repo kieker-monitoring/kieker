@@ -26,7 +26,7 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.common.junit.util.UtilityAPITestFunctions;
+import kieker.test.common.junit.util.APIEvaluationFunctions;
 			
 /**
  * Test API of {@link kieker.common.record.flow.trace.TraceMetadata}.
@@ -76,7 +76,7 @@ public class TestTraceMetadataPropertyOrder extends AbstractKiekerTest {
 			PROPERTY_PARENT_TRACE_ID,
 			PROPERTY_PARENT_ORDER_ID,
 		};
-		final ByteBuffer inputBuffer = UtilityAPITestFunctions.createByteBuffer(TraceMetadata.SIZE, 
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(TraceMetadata.SIZE, 
 			this.makeStringRegistry(), values);
 					
 		final TraceMetadata recordInitParameter = new TraceMetadata(

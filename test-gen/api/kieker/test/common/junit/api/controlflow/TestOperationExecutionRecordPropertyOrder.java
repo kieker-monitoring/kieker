@@ -26,7 +26,7 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.common.junit.util.UtilityAPITestFunctions;
+import kieker.test.common.junit.util.APIEvaluationFunctions;
 			
 /**
  * Test API of {@link kieker.common.record.controlflow.OperationExecutionRecord}.
@@ -82,7 +82,7 @@ public class TestOperationExecutionRecordPropertyOrder extends AbstractKiekerTes
 			PROPERTY_EOI,
 			PROPERTY_ESS,
 		};
-		final ByteBuffer inputBuffer = UtilityAPITestFunctions.createByteBuffer(OperationExecutionRecord.SIZE, 
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(OperationExecutionRecord.SIZE, 
 			this.makeStringRegistry(), values);
 					
 		final OperationExecutionRecord recordInitParameter = new OperationExecutionRecord(

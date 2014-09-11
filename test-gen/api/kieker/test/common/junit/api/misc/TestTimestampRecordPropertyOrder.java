@@ -26,7 +26,7 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
-import kieker.test.common.junit.util.UtilityAPITestFunctions;
+import kieker.test.common.junit.util.APIEvaluationFunctions;
 			
 /**
  * Test API of {@link kieker.common.record.misc.TimestampRecord}.
@@ -61,7 +61,7 @@ public class TestTimestampRecordPropertyOrder extends AbstractKiekerTest {
 		final Object[] values = {
 			PROPERTY_TIMESTAMP,
 		};
-		final ByteBuffer inputBuffer = UtilityAPITestFunctions.createByteBuffer(TimestampRecord.SIZE, 
+		final ByteBuffer inputBuffer = APIEvaluationFunctions.createByteBuffer(TimestampRecord.SIZE, 
 			this.makeStringRegistry(), values);
 					
 		final TimestampRecord recordInitParameter = new TimestampRecord(
