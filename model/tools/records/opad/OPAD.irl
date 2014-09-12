@@ -35,3 +35,10 @@ entity StorableDetectionResult {
 entity ExtendedStorableDetectionResult extends StorableDetectionResult {
 	double anomalyThreshold
 }
+
+@author 'Tillmann Carlos Bielefeld' @since '1.10'
+entity NamedTSPoint {
+	long timestamp
+	double value
+	string name
+}
