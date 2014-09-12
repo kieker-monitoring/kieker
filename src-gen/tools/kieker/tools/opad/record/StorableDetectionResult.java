@@ -26,7 +26,7 @@ import kieker.common.util.registry.IRegistry;
 
 
 /**
- * @author Tom Frotscher, Thomas DÃ¼llmann
+ * @author Tom Frotscher, Thomas Düllmann
  * 
  * @since 1.10
  */

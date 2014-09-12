@@ -20,57 +20,43 @@ import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
+import kieker.common.record.AbstractMonitoringRecord;
+import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
 
-import kieker.tools.opad.record.StorableDetectionResult;
 
 /**
  * @author Thomas Düllmann
  * 
  * @since 1.10
  */
-public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
+public class AggregationWindow extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 	/** Descriptive definition of the serialization size of the record. */
-	public static final int SIZE = TYPE_SIZE_STRING // StorableDetectionResult.applicationName
-			 + TYPE_SIZE_DOUBLE // StorableDetectionResult.value
-			 + TYPE_SIZE_LONG // StorableDetectionResult.timestamp
-			 + TYPE_SIZE_DOUBLE // StorableDetectionResult.forecast
-			 + TYPE_SIZE_DOUBLE // StorableDetectionResult.score
-			 + TYPE_SIZE_DOUBLE // ExtendedStorableDetectionResult.anomalyThreshold
+	public static final int SIZE = TYPE_SIZE_LONG // AggregationWindow.windowStart
+			 + TYPE_SIZE_LONG // AggregationWindow.windowEnd
 	;
-	private static final long serialVersionUID = 5201527358214171119L;
+	private static final long serialVersionUID = 3008527186261564671L;
 	
 	public static final Class<?>[] TYPES = {
-		String.class, // StorableDetectionResult.applicationName
-		double.class, // StorableDetectionResult.value
-		long.class, // StorableDetectionResult.timestamp
-		double.class, // StorableDetectionResult.forecast
-		double.class, // StorableDetectionResult.score
-		double.class, // ExtendedStorableDetectionResult.anomalyThreshold
+		long.class, // AggregationWindow.windowStart
+		long.class, // AggregationWindow.windowEnd
 	};
 	
 	
-	private final double anomalyThreshold;
+	private final long windowStart;
+	private final long windowEnd;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
 	 * 
-	 * @param applicationName
-	 *            applicationName
-	 * @param value
-	 *            value
-	 * @param timestamp
-	 *            timestamp
-	 * @param forecast
-	 *            forecast
-	 * @param score
-	 *            score
-	 * @param anomalyThreshold
-	 *            anomalyThreshold
+	 * @param windowStart
+	 *            windowStart
+	 * @param windowEnd
+	 *            windowEnd
 	 */
-	public ExtendedStorableDetectionResult(final String applicationName, final double value, final long timestamp, final double forecast, final double score, final double anomalyThreshold) {
-		super(applicationName, value, timestamp, forecast, score);
-		this.anomalyThreshold = anomalyThreshold;
+	public AggregationWindow(final long windowStart, final long windowEnd) {
+		this.windowStart = windowStart;
+		this.windowEnd = windowEnd;
 	}
 
 	/**
@@ -80,9 +66,10 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 	 * @param values
 	 *            The values for the record.
 	 */
-	public ExtendedStorableDetectionResult(final Object[] values) { // NOPMD (direct store of values)
-		super(values, TYPES);
-		this.anomalyThreshold = (Double) values[5];
+	public AggregationWindow(final Object[] values) { // NOPMD (direct store of values)
+		AbstractMonitoringRecord.checkArray(values, TYPES);
+		this.windowStart = (Long) values[0];
+		this.windowEnd = (Long) values[1];
 	}
 	
 	/**
@@ -93,9 +80,10 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 	 * @param valueTypes
 	 *            The types of the elements in the first array.
 	 */
-	protected ExtendedStorableDetectionResult(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
-		super(values, valueTypes);
-		this.anomalyThreshold = (Double) values[5];
+	protected AggregationWindow(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
+		AbstractMonitoringRecord.checkArray(values, valueTypes);
+		this.windowStart = (Long) values[0];
+		this.windowEnd = (Long) values[1];
 	}
 
 	/**
@@ -107,9 +95,9 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
-	public ExtendedStorableDetectionResult(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
-		super(buffer, stringRegistry);
-		this.anomalyThreshold = buffer.getDouble();
+	public AggregationWindow(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		this.windowStart = buffer.getLong();
+		this.windowEnd = buffer.getLong();
 	}
 
 	/**
@@ -118,12 +106,8 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 	@Override
 	public Object[] toArray() {
 		return new Object[] {
-			this.getApplicationName(),
-			this.getValue(),
-			this.getTimestamp(),
-			this.getForecast(),
-			this.getScore(),
-			this.getAnomalyThreshold()
+			this.getWindowStart(),
+			this.getWindowEnd()
 		};
 	}
 
@@ -132,12 +116,8 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 	 */
 	@Override
 	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
-		buffer.putInt(stringRegistry.get(this.getApplicationName()));
-		buffer.putDouble(this.getValue());
-		buffer.putLong(this.getTimestamp());
-		buffer.putDouble(this.getForecast());
-		buffer.putDouble(this.getScore());
-		buffer.putDouble(this.getAnomalyThreshold());
+		buffer.putLong(this.getWindowStart());
+		buffer.putLong(this.getWindowEnd());
 	}
 
 	/**
@@ -177,8 +157,12 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 		throw new UnsupportedOperationException();
 	}
 
-	public final double getAnomalyThreshold() {
-		return this.anomalyThreshold;
+	public final long getWindowStart() {
+		return this.windowStart;
+	}
+	
+	public final long getWindowEnd() {
+		return this.windowEnd;
 	}
 	
 }
