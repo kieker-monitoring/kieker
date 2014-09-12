@@ -47,6 +47,7 @@ dependencies {
 	testRuntime files('../lib/framework-libs/cxf/xmlschema-core-2.0.3.jar')
 	testRuntime files('../lib/framework-libs/cxf/neethi-3.0.3.jar')
 	testRuntime files('../lib/framework-libs/cxf/woodstox-core-asl-4.4.0.jar')
+	testRuntime files('../lib/framework-libs/cxf/stax2-api-3.1.4.jar')
 	testRuntime files('../lib/framework-libs/spring/spring-expression-3.2.8.RELEASE.jar')
 	testRuntime fileTree(dir: '../examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/', include: 'jetty-*.jar')
 }
