@@ -20,7 +20,7 @@ package kieker.tools.dataexchange;
  * Tuple that keeps an anomaly score and the corresponding timestamp.
  * 
  * @author Dominik Olp, Yannic Noller
- * @version 0.2
+ * 
  * @since 1.10
  */
 public class AnomalyRecord {

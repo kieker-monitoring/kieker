@@ -24,7 +24,7 @@ import kieker.tools.traceAnalysis.systemModel.Execution;
  * Data class to store an operation signature in a handy format.
  * 
  * @author Dominik Olp, Yannic Noller, Thomas Düllmann
- * @version 0.4
+ * 
  * @since 1.10
  */
 public class OperationSignature {
