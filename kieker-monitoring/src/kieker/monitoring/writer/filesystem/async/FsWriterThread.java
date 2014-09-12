@@ -53,9 +53,10 @@ public final class FsWriterThread extends AbstractFsWriterThread {
 	 *            writer for the mapping file (the file where class names are mapped to record ids)
 	 * @param path
 	 *            location where to files should go to (the path must point to a directory)
-	 * @param maxEntriesInfile
+	 * @param maxEntriesInFile
 	 *            limit for the number of records per log file
 	 * @param maxLogSize
+	 *            limit of the log file size
 	 * @param maxLogFiles
 	 *            limit of the number of log files
 	 * @param autoflush
@@ -64,9 +65,9 @@ public final class FsWriterThread extends AbstractFsWriterThread {
 	 *            size of the output buffer
 	 */
 	public FsWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
-			final MappingFileWriter mappingFileWriter, final String path, final int maxEntiresInFile, final int maxLogSize, final int maxLogFiles,
+			final MappingFileWriter mappingFileWriter, final String path, final int maxEntriesInFile, final int maxLogSize, final int maxLogFiles,
 			final boolean autoflush, final int bufferSize) {
-		super(monitoringController, writeQueue, mappingFileWriter, path, maxEntiresInFile, maxLogSize, maxLogFiles);
+		super(monitoringController, writeQueue, mappingFileWriter, path, maxEntriesInFile, maxLogSize, maxLogFiles);
 		this.autoflush = autoflush;
 		this.bufferSize = bufferSize;
 	}

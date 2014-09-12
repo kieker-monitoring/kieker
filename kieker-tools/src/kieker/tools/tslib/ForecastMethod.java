@@ -16,8 +16,8 @@
 
 package kieker.tools.tslib;
 
-import kieker.tools.tslib.anomalycalculators.IAnomalyCalculator;
-import kieker.tools.tslib.anomalycalculators.SimpleAnomalyCalculator;
+import kieker.tools.tslib.anomalycalculators.IAnomalyScoreCalculator;
+import kieker.tools.tslib.anomalycalculators.SimpleAnomalyScoreCalculator;
 import kieker.tools.tslib.forecast.IForecaster;
 import kieker.tools.tslib.forecast.arima.ARIMA101Forecaster;
 import kieker.tools.tslib.forecast.arima.ARIMAForecaster;
@@ -131,12 +131,8 @@ public enum ForecastMethod {
 		}
 	}
 
-	/**
-	 * 
-	 * @return calculated anomaly
-	 */
-	public IAnomalyCalculator<Double> getAnomalyCalculator() {
-		return new SimpleAnomalyCalculator();
+	public IAnomalyScoreCalculator<Double> getAnomalyScoreCalculator() {
+		return new SimpleAnomalyScoreCalculator();
 	}
 
 	// Was extracted from ClassificationUtility in WCF/TBATS as it is not yet integrated:

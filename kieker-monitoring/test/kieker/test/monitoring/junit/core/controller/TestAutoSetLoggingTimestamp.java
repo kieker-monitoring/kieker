@@ -79,11 +79,17 @@ public class TestAutoSetLoggingTimestamp extends AbstractKiekerTest { // NOCS
 		}
 	}
 
+	/**
+	 * Test if setting the automatic logging timestamp works.
+	 */
 	@Test
 	public void testSetLoggingTimestampEnabled() { // NOPMD (assert in method)
 		this.executeTestSetLoggingTimestamp(true);
 	}
 
+	/**
+	 * Test if setting the explicit logging timestamp works.
+	 */
 	@Test
 	public void testSetLoggingTimestampDisabled() { // NOPMD (assert in method)
 		this.executeTestSetLoggingTimestamp(false);
