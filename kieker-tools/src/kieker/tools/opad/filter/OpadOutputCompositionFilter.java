@@ -78,7 +78,7 @@ public class OpadOutputCompositionFilter extends AbstractFilterPlugin {
 	 */
 	@InputPort(name = OpadOutputCompositionFilter.INPUT_PORT_NAME_DETECTION_RESULTS, eventTypes = { ExtendedStorableDetectionResult.class })
 	public void readData(final ExtendedStorableDetectionResult sdr) {
-		final String[] splitData = sdr.getApplication().split(":", 2);
+		final String[] splitData = sdr.getApplicationName().split(":", 2);
 		if (splitData.length == 2) {
 			final String hostdata = splitData[0];
 			final String operation = splitData[1];

@@ -217,7 +217,8 @@ function assert_files_exist_src {
 	assert_files_exist_common
 	assert_dir_exists "model/"
 	assert_dir_exists "model/analysis/"
-	assert_dir_exists "model/records/"
+	assert_dir_exists "model/common/records/"
+	assert_dir_exists "model/tools/records/"
 	assert_file_exists_regular "model/analysis/AnalysisMetaModel.ecore"
 	assert_file_exists_regular "model/analysis/AnalysisMetaModel.ecorediag"
 	assert_file_exists_regular "model/analysis/AnalysisMetaModel.genmodel"
