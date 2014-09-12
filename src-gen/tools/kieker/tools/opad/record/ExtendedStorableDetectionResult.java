@@ -25,7 +25,7 @@ import kieker.common.util.registry.IRegistry;
 import kieker.tools.opad.record.StorableDetectionResult;
 
 /**
- * @author Thomas Düllmann
+ * @author Thomas DÃ¼llmann
  * 
  * @since 1.10
  */
