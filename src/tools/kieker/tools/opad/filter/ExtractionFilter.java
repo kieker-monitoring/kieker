@@ -74,7 +74,7 @@ public class ExtractionFilter extends AbstractFilterPlugin {
 	@InputPort(name = INPUT_PORT_NAME_VALUE, eventTypes = { NamedDoubleRecord.class })
 	public void inputExecutionRecord(final NamedDoubleRecord record) {
 		final long timestampMillis = this.timeunit.convert(record.getTimestamp(), super.recordsTimeUnitFromProjectContext);
-		final NamedDoubleTimeSeriesPoint tspoint = new NamedDoubleTimeSeriesPoint(timestampMillis, record.getValue(), record.getApplication());
+		final NamedDoubleTimeSeriesPoint tspoint = new NamedDoubleTimeSeriesPoint(timestampMillis, record.getResponseTime(), record.getApplicationName());
 
 		super.deliver(OUTPUT_PORT_NAME_VALUE, tspoint);
 	}

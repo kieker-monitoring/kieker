@@ -21,3 +21,17 @@ entity NamedDoubleRecord {
 	long timestamp
 	double responseTime
 }
+
+@author 'Tom Frotscher, Thomas Düllmann' @since '1.10'
+entity StorableDetectionResult {
+	string applicationName
+	double value
+	long timestamp
+	double forecast
+	double score
+}
+
+@author 'Thomas Düllmann' @since '1.10'
+entity ExtendedStorableDetectionResult extends StorableDetectionResult {
+	double anomalyThreshold
+}
