@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="model/analysis"/>
-	<classpathentry kind="src" path="model/records"/>
+	<classpathentry kind="src" path="model/common"/>
+	<classpathentry kind="src" path="model/tools"/>
 	<classpathentry kind="src" path="src/common"/>
 	<classpathentry kind="src" path="src/analysis"/>
 	<classpathentry kind="src" path="src/monitoring"/>
 	<classpathentry kind="src" path="src/tools"/>
 	<classpathentry kind="src" path="src-gen/common"/>
 	<classpathentry kind="src" path="src-gen/analysis"/>
+	<classpathentry kind="src" path="src-gen/tools"/>
 	<classpathentry kind="src" path="test/common"/>
 	<classpathentry kind="src" path="test/analysis"/>
 	<classpathentry kind="src" path="test/monitoring"/>
