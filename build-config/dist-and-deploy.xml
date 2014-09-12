@@ -69,7 +69,7 @@
 			<include name="${src.dir}/**/*.java" />
 			<include name="${src.dir}/**/META-INF/*" />
 			<include name="${src.gen}/**/*.java" />
-			<include name="${src.model.dir}/records/**/*.irl" />
+			<include name="${src.model.dir}/**/*.irl" />
 			<include name="${src.model.dir}/analysis/*.ecore" />
 			<include name="${src.model.dir}/analysis/*.ecorediag" />
 			<include name="${src.model.dir}/analysis/*.genmodel" />
