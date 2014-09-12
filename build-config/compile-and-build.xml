@@ -12,12 +12,14 @@
 	<target name="generate-kieker.common" depends="-init" description="Generate java code for records.">
 		<java classname="de.cau.cs.se.instrumentation.rl.cli.CLICompilerMain" fork="yes">
 			<classpath>
-				<!-- WARNING: the libs must be updated iff the compilers base-line changes -->
-				<pathelement location="${bin.dir}/dev/target/de.cau.cs.se.instrumentation.rl.cli-*.jar"/>
-				<pathelement location="${bin.dir}/dev/lib/org.eclipse.emf.mwe.core_*.jar"/>
-				<pathelement location="${bin.dir}/dev/lib/org.eclipse.xtext.common.types_*.jar"/>
-				<pathelement location="${bin.dir}/dev/lib/org.eclipse.emf.mwe.utils_*.jar"/>
-				<pathelement location="${bin.dir}/dev/lib/org.eclipse.xtext.common.types.ui_*.jar"/>
+				<fileset dir="${bin.dir}/dev">
+					<!-- WARNING: the libs must be updated iff the compilers base-line changes -->
+					<include name="target/de.cau.cs.se.instrumentation.rl.cli-*.jar" />
+					<include name="lib/org.eclipse.emf.mwe.core_*.jar"/>
+					<include name="lib/org.eclipse.xtext.common.types_*.jar"/>
+					<include name="lib/org.eclipse.emf.mwe.utils_*.jar"/>
+					<include name="lib/org.eclipse.xtext.common.types.ui_*.jar"/>
+				</fileset>
 			</classpath>
 			<arg line="-r .. -a 'Kieker Build' -d src-gen/common -s model/records -l java -n kieker -p Kieker -v 1.10"/>	
 		</java>
