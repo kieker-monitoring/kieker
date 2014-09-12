@@ -17,8 +17,10 @@
 package kieker.test.monitoring.junit.probe.spring.executions.jetty;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 
@@ -64,7 +66,7 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 	}
 
 	@Before
-	public void startServer() throws IOException {
+	public void startServer() throws IOException, URISyntaxException {
 		this.tmpFolder.create();
 		final String listName = NamedListWriter.FALLBACK_LIST_NAME;
 		this.recordListFilledByListWriter = NamedListWriter.createNamedList(listName);
@@ -75,7 +77,9 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 		System.setProperty(ConfigurationFactory.HOST_NAME, HOSTNAME);
 
 		// start the server
-		this.ctx = new FileSystemXmlApplicationContext("test/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/jetty.xml");
+		final String configPath = new File(this.getClass().getResource("/kieker/test/monitoring/junit/probe/spring/executions/jetty/jetty.xml").toURI())
+				.getAbsolutePath();
+		this.ctx = new FileSystemXmlApplicationContext(configPath);
 
 		// Note that the Spring interceptor is configure in
 		// test/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/webapp/WEB-INF/spring/servlet-context.xml to only instrument

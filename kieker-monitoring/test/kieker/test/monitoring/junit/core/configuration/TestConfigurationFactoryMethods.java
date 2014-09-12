@@ -16,6 +16,9 @@
 
 package kieker.test.monitoring.junit.core.configuration;
 
+import java.io.File;
+import java.net.URISyntaxException;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -36,7 +39,18 @@ import kieker.test.monitoring.util.DefaultConfigurationFactory;
  */
 public class TestConfigurationFactoryMethods extends AbstractKiekerTest {
 
-	private static final String EXAMPLE_CONFIG_FILE_IN_TRUNK = "test/monitoring/META-INF/kieker.monitoring.test.properties";
+	private static final String EXAMPLE_CONFIG_FILE_IN_TRUNK;
+
+	static {
+		String tempPath;
+		try {
+			tempPath = new File(TestConfigurationFactoryMethods.class.getResource("/META-INF/kieker.monitoring.test.properties").toURI()).getAbsolutePath();
+		} catch (final URISyntaxException e) {
+			tempPath = null;
+		}
+
+		EXAMPLE_CONFIG_FILE_IN_TRUNK = tempPath;
+	}
 
 	/**
 	 * Default constructor.

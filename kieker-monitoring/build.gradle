@@ -32,12 +32,21 @@ dependencies {
 	compile files('../lib/framework-libs/spring/spring-core-3.2.8.RELEASE.jar')
 	compile files('../lib//framework-libs/spring/aopalliance-1.0.jar')
 	
+	// This is a workaround. It allows kieker.test.monitoring to depend on kieker.test.common.
+	// I do not recommend to do this.
+	testCompile project(':kieker-common').sourceSets.test.output
+	
 	testCompile files('../lib/junit-4.11.jar')
 	testCompile files('../lib/framework-libs/spring/spring-beans-3.2.8.RELEASE.jar')
+	
 	
 	testRuntime files('../lib/framework-libs/cxf/wsdl4j-1.6.3.jar')
 	testRuntime files('../lib/hamcrest-core-1.3.jar')
 	testRuntime files('../lib/framework-libs/cxf/wsdl4j-1.6.3.jar')
 	testRuntime files('../lib/hamcrest-core-1.3.jar')
 	testRuntime files('../lib/framework-libs/cxf/xmlschema-core-2.0.3.jar')
+	testRuntime files('../lib/framework-libs/cxf/neethi-3.0.3.jar')
+	testRuntime files('../lib/framework-libs/cxf/woodstox-core-asl-4.4.0.jar')
+	testRuntime files('../lib/framework-libs/spring/spring-expression-3.2.8.RELEASE.jar')
+	testRuntime fileTree(dir: '../examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/', include: 'jetty-*.jar')
 }
