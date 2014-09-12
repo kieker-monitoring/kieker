@@ -90,7 +90,7 @@
 	<target name="-compile-kieker.tools" depends="-init,-compile-kieker.common,-compile-kieker.monitoring,-compile-kieker.analysis" description="Compiles the sources of Kieker tools">
 		<delete dir="${build.kieker.tools.dir}" />
 		<mkdir dir="${build.kieker.tools.dir}" />
-		<javac destDir="${build.kieker.tools.dir}" source="1.6" target="1.6" srcdir="${src.kieker.tools.dir}" debug="true" classpathref="kieker.tools-compile-classpath" includeAntRuntime="false">
+		<javac destDir="${build.kieker.tools.dir}" source="1.6" target="1.6" srcdir="${src.kieker.tools.dir}:${src.gen.kieker.tools.dir}" debug="true" classpathref="kieker.tools-compile-classpath" includeAntRuntime="false">
 			<compilerarg value="-Xlint:all" />
 		</javac>
 		<copy file="${sequence.pic}" tofile="${build.kieker.tools.dir}/META-INF/sequence.pic" />
