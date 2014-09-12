@@ -27,7 +27,7 @@ import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.tools.traceAnalysis.systemModel.ExecutionTraceBasedSession;
 
-import kieker.test.tools.junit.AbstractKiekerTest;
+import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.tools.util.filter.sessionReconstruction.SessionReconstructionTestSetup;
 import kieker.test.tools.util.filter.sessionReconstruction.SessionReconstructionTestUtil;
 

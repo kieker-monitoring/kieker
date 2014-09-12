@@ -39,7 +39,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.misc.EmptyRecord;
 
-import kieker.test.analysis.junit.AbstractKiekerTest;
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * This test is for the class {@link RealtimeRecordDelayFilter}.

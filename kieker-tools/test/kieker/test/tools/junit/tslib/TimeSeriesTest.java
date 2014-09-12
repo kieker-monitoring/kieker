@@ -24,7 +24,7 @@ import org.junit.Test;
 
 import kieker.tools.tslib.TimeSeries;
 
-import kieker.test.tools.junit.AbstractKiekerTest;
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  *

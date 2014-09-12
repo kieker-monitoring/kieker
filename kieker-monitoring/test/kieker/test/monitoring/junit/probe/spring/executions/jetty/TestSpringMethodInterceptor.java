@@ -38,7 +38,7 @@ import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.MonitoringController;
 
-import kieker.test.monitoring.junit.AbstractKiekerTest;
+import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.monitoring.junit.probe.spring.executions.jetty.bookstore.Bookstore;
 import kieker.test.monitoring.junit.probe.spring.executions.jetty.bookstore.Catalog;
 import kieker.test.monitoring.util.NamedListWriter;

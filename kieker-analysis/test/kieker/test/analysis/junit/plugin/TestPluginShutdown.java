@@ -33,7 +33,7 @@ import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.analysis.plugin.reader.AbstractReaderPlugin;
 import kieker.common.configuration.Configuration;
 
-import kieker.test.analysis.junit.AbstractKiekerTest;
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * This is a test to make sure that the plugins are shutdown in the correct order, when the analysis terminates.

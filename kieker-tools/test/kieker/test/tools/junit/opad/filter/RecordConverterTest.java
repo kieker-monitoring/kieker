@@ -31,7 +31,7 @@ import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.tools.opad.filter.RecordConverter;
 import kieker.tools.opad.record.NamedDoubleRecord;
 
-import kieker.test.tools.junit.AbstractKiekerTest;
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * Tests the RecordConverter.

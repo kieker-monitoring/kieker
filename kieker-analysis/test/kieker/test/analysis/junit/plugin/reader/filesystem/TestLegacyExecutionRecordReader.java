@@ -35,7 +35,7 @@ import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.common.configuration.Configuration;
 import kieker.common.util.filesystem.FSUtil;
 
-import kieker.test.analysis.junit.AbstractKiekerTest;
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Jan Waller

@@ -28,7 +28,7 @@ import kieker.common.configuration.Configuration;
 import kieker.common.namedRecordPipe.IPipeWriter;
 import kieker.common.record.misc.EmptyRecord;
 
-import kieker.test.analysis.junit.AbstractKiekerTest;
+import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.common.util.namedRecordPipe.NamedPipeWriterFactory;
 
 /**

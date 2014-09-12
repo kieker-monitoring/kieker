@@ -33,7 +33,7 @@ import kieker.tools.opad.filter.ForecastingFilter;
 import kieker.tools.opad.record.ForecastMeasurementPair;
 import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
 
-import kieker.test.tools.junit.AbstractKiekerTest;
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * Basically compares the results of the forecaster with previous manually calculated forecasted results.

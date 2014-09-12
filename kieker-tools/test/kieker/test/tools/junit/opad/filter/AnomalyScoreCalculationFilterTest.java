@@ -33,7 +33,7 @@ import kieker.tools.opad.filter.AnomalyScoreCalculationFilter;
 import kieker.tools.opad.record.ForecastMeasurementPair;
 import kieker.tools.opad.record.StorableDetectionResult;
 
-import kieker.test.tools.junit.AbstractKiekerTest;
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * Test for the AnomalyScoreCalculationFilter. Therefore comparing the result of the Filter with some

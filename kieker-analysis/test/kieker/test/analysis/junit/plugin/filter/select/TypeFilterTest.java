@@ -28,7 +28,7 @@ import kieker.analysis.plugin.filter.select.TypeFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 
-import kieker.test.analysis.junit.AbstractKiekerTest;
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * A test for the class {@link TypeFilter}.

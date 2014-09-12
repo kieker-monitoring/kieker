@@ -24,7 +24,7 @@ import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 
-import kieker.test.analysis.junit.AbstractKiekerTest;
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * This test makes sure that the "global configuration" of an analysis instance works.

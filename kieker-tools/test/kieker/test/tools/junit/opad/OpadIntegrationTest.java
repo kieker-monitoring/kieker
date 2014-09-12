@@ -38,7 +38,7 @@ import kieker.tools.opad.filter.UniteMeasurementPairFilter;
 import kieker.tools.opad.record.NamedDoubleRecord;
 import kieker.tools.opad.record.StorableDetectionResult;
 
-import kieker.test.tools.junit.AbstractKiekerTest;
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * This test creates some ResponseTimeDoubleRecords and let them run through all currently

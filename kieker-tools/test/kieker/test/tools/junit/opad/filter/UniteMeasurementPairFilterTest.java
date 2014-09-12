@@ -33,7 +33,7 @@ import kieker.tools.opad.record.ForecastMeasurementPair;
 import kieker.tools.opad.record.IForecastMeasurementPair;
 import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
 
-import kieker.test.tools.junit.AbstractKiekerTest;
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * Checks if the forecasts are assigned to the correct real values. Also checks, if a dummy is created for the first real value, that can not have a calculated

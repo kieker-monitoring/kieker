@@ -33,7 +33,7 @@ import kieker.tools.opad.filter.ExtractionFilter;
 import kieker.tools.opad.record.NamedDoubleRecord;
 import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
 
-import kieker.test.tools.junit.AbstractKiekerTest;
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * This Filter creates some NamedDoubleRecords and let them run trough the

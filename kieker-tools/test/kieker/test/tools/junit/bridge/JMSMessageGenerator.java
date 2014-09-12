@@ -35,7 +35,7 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.bridge.connector.jms.JMSClientConnector;
 
-import kieker.test.tools.junit.AbstractKiekerTest;
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * Implements a JMS client sending Kieker records to a JMS queue.

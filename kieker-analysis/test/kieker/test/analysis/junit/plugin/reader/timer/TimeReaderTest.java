@@ -27,7 +27,7 @@ import kieker.analysis.plugin.filter.forward.CountingFilter;
 import kieker.analysis.plugin.reader.timer.TimeReader;
 import kieker.common.configuration.Configuration;
 
-import kieker.test.analysis.junit.AbstractKiekerTest;
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * A JUnit test for the {@link TimeReader}.<br>

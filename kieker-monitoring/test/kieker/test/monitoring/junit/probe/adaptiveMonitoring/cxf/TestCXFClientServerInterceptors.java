@@ -40,7 +40,7 @@ import kieker.monitoring.probe.cxf.OperationExecutionSOAPResponseInInterceptor;
 import kieker.monitoring.probe.cxf.OperationExecutionSOAPResponseOutInterceptor;
 import kieker.monitoring.probe.cxf.SOAPTraceRegistry;
 
-import kieker.test.monitoring.junit.AbstractKiekerTest;
+import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.monitoring.junit.probe.cxf.executions.bookstore.BookstoreImpl;
 import kieker.test.monitoring.junit.probe.cxf.executions.bookstore.IBookstore;
 import kieker.test.monitoring.util.NamedListWriter;

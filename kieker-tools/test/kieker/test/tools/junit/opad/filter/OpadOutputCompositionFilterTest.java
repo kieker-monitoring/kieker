@@ -31,7 +31,7 @@ import kieker.tools.opad.filter.OpadOutputCompositionFilter;
 import kieker.tools.opad.record.ExtendedStorableDetectionResult;
 import kieker.tools.opad.record.OpadOutputData;
 
-import kieker.test.tools.junit.AbstractKiekerTest;
+import kieker.test.common.junit.AbstractKiekerTest;
 
 //NOCS
 

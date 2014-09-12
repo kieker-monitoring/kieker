@@ -34,7 +34,7 @@ import kieker.monitoring.sampler.sigar.ISigarSamplerFactory;
 import kieker.monitoring.sampler.sigar.SigarSamplerFactory;
 import kieker.monitoring.sampler.sigar.samplers.CPUsCombinedPercSampler;
 
-import kieker.test.monitoring.junit.AbstractKiekerTest;
+import kieker.test.common.junit.AbstractKiekerTest;
 import kieker.test.monitoring.util.NamedListWriter;
 
 /**

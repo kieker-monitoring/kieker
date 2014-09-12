@@ -27,7 +27,7 @@ import kieker.common.configuration.Configuration;
 import kieker.tools.opad.filter.TimeSeriesPointAggregatorFilter;
 import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
 
-import kieker.test.tools.junit.AbstractKiekerTest;
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * Checks if values in the given timespan (10 milliseconds) are aggregated correctly.

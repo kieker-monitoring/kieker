@@ -32,7 +32,7 @@ import kieker.common.record.misc.EmptyRecord;
 import kieker.common.record.misc.TimestampRecord;
 import kieker.tools.currentTimeEventGenerator.CurrentTimeEventGenerationFilter;
 
-import kieker.test.tools.junit.AbstractKiekerTest;
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * Each test is executed for both input ports, {@link CurrentTimeEventGenerationFilter#inputTimestamp(Long)} and

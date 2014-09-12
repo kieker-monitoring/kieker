@@ -30,7 +30,7 @@ import kieker.monitoring.writer.filesystem.AsyncFsWriter;
 import kieker.tools.bridge.ServiceContainer;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 
-import kieker.test.tools.junit.AbstractKiekerTest;
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * Test the {@link ServiceContainer} for the proper use of the {@link kieker.tools.bridge.connector.IServiceConnector} interface.
