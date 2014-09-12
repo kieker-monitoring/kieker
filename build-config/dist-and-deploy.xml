@@ -39,6 +39,7 @@
 				<include name="${src.kieker.analysis.dir}" />
 				<include name="${src.gen.kieker.analysis.dir}" />
 				<include name="${src.gen.kieker.common.dir}" />
+				<include name="${src.gen.kieker.tools.dir}" />
 				<include name="${src.kieker.monitoring.dir}" />
 				<include name="${src.kieker.tools.dir}" />
 			</dirset>
