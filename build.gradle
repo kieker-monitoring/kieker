@@ -1,7 +1,11 @@
+apply plugin: 'java'
+
+def projectVersion = "1.10-SNAPSHOT"
+
 subprojects {
     apply plugin: 'java'
 	
-    version = '1.10-SNAPSHOT' 
+    version = "$projectVersion"
 	
 	sourceCompatibility = '1.6'
 	targetCompatibility = '1.6'
@@ -18,4 +22,31 @@ subprojects {
 			} 
 		}
 	}
+}
+
+task mainJar( type: Jar, dependsOn:  subprojects.tasks["build"] ) {
+	baseName = "kieker-$projectVersion"
+    subprojects.each { subproject ->
+        from subproject.configurations.archives.allArtifacts.files.collect {
+            zipTree(it)
+        }
+    }
+}
+
+task emfJar( type: Jar, dependsOn:  subprojects.tasks["build"] ) {
+	baseName = "kieker-${projectVersion}_emf"
+    subprojects.each { subproject ->
+        from subproject.configurations.archives.allArtifacts.files.collect {
+            zipTree(it)
+        }
+    }
+}
+
+task aspectJJar( type: Jar, dependsOn:  subprojects.tasks["build"] ) {
+	baseName = "kieker-${projectVersion}_aspectj"
+    subprojects.each { subproject ->
+        from subproject.configurations.archives.allArtifacts.files.collect {
+            zipTree(it)
+        }
+    }
 }
