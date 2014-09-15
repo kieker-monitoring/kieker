@@ -22,6 +22,10 @@ subprojects {
 			} 
 		}
 	}
+	
+	test {
+		ignoreFailures = true
+	}
 }
 
 def today() {
