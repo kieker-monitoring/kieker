@@ -44,7 +44,8 @@ task mainJar( type: Jar, dependsOn:  subprojects.tasks["build"] ) {
 			"Specification-Vendor": "Kieker Project",
 			"Implementation-Title": "Kieker Framework",
 			"Implementation-Version": "${projectVersion} (" + today() + ")",
-			"Implementation-Vendor": "Kieker Project"
+			"Implementation-Vendor": "Kieker Project",
+			"kieker"
 		)
     }
 }
