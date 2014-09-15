@@ -24,12 +24,28 @@ subprojects {
 	}
 }
 
+def today() {
+    def date = new Date()
+    def formattedDate = date.format('yyyy-MM-dd')
+    return formattedDate
+}
+
 task mainJar( type: Jar, dependsOn:  subprojects.tasks["build"] ) {
 	baseName = "kieker-$projectVersion"
     subprojects.each { subproject ->
         from subproject.configurations.archives.allArtifacts.files.collect {
             zipTree(it)
         }
+    }
+	
+	manifest {
+		attributes (
+			"Specification-Version": "${projectVersion}",
+			"Specification-Vendor": "Kieker Project",
+			"Implementation-Title": "Kieker Framework",
+			"Implementation-Version": "${projectVersion} (" + today() + ")",
+			"Implementation-Vendor": "Kieker Project"
+		)
     }
 }
 

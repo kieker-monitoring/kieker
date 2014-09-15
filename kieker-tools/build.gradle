@@ -2,6 +2,7 @@ sourceSets {
 	main { 
 		java { 
 			srcDir 'src' 
+			srcDir 'src-gen' 
 		} 
 		resources {
 			srcDir 'src-resources'
