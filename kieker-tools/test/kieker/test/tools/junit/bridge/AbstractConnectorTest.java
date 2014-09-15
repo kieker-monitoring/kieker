@@ -116,9 +116,9 @@ public abstract class AbstractConnectorTest extends AbstractKiekerTest {
 	 */
 	protected void deserialize(final int numberOfRecords, final boolean honorOrderId) {
 		for (int i = 0; i < numberOfRecords; i++) {
-			// if (LOG.isDebugEnabled()) {
-			LOG.info("Receive record " + i);
-			// }
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("Receive record " + i);
+			}
 			try {
 				final OperationExecutionRecord record = (OperationExecutionRecord) this.connector.deserializeNextRecord();
 				Assert.assertEquals("Tin is not equal", ConfigurationParameters.TEST_TIN, record.getTin());
