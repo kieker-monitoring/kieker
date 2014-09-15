@@ -32,11 +32,28 @@ subprojects {
 		ignoreFailures = true
 
 		ruleSetFiles = files("../lib/static-analysis/pmd-5.0.5/pmdrules.xml")
-		toolVersion = "5.0.5"
+	}
+	
+	apply plugin: 'checkstyle'
+	checkstyle {
+		ignoreFailures = true
+		showViolations = false
+		
+		configFile = file("../lib/static-analysis/checkstyle-5.6/cs-conf.xml")
+	}
+
+	apply plugin: 'findbugs'
+	findbugs {
+		ignoreFailures = true 
+		effort = "max"
+		reportLevel = "low"
+		excludeFilter = file("../lib/static-analysis/findbugs-2.0.3/fb-filter.xml")
 	}
 
 	dependencies {
 		pmd fileTree(dir: '../lib/static-analysis/pmd-5.0.5/lib', include: '*.jar')
+		checkstyle fileTree(dir: '../lib/static-analysis/checkstyle-5.6/lib', include: '*.jar')
+		findbugs fileTree(dir: '../lib/static-analysis/findbugs-2.0.3/lib', include: '*.jar')
 	}
 	
 }
