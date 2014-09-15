@@ -50,6 +50,8 @@ subprojects {
 		
 		configFile = file("../lib/static-analysis/checkstyle-5.6/cs-conf.xml")		
 	}
+	
+	checkstyleTest.classpath += sourceSets.main.runtimeClasspath
 
 	apply plugin: 'findbugs'
 	findbugs {
