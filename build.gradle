@@ -14,11 +14,13 @@ subprojects {
 		main { 
 			java { 
 				srcDir 'src' 
+				srcDir 'src-gen' 
 			} 
 		}
 		test {
 			java {
 				srcDir 'test' 
+				srcDir 'test-gen' 
 			} 
 		}
 	}
@@ -31,20 +33,8 @@ subprojects {
 	pmd {
 		ignoreFailures = true
 
+		ruleSets = []
 		ruleSetFiles = files("../lib/static-analysis/pmd-5.0.5/pmdrules.xml")
-		
-		sourceSets {
-			main { 
-				java { 
-					srcDir 'src' 
-				} 
-			}
-			test {
-				java {
-					srcDir 'test' 
-				} 
-			}
-		}	
 	}
 	
 	apply plugin: 'checkstyle'
@@ -52,20 +42,7 @@ subprojects {
 		ignoreFailures = true
 		showViolations = false
 		
-		configFile = file("../lib/static-analysis/checkstyle-5.6/cs-conf.xml")
-		
-		sourceSets {
-			main { 
-				java { 
-					srcDir 'src' 
-				} 
-			}
-			test {
-				java {
-					srcDir 'test' 
-				} 
-			}
-		}		
+		configFile = file("../lib/static-analysis/checkstyle-5.6/cs-conf.xml")		
 	}
 
 	apply plugin: 'findbugs'
