@@ -16,12 +16,18 @@ subprojects {
 				srcDir 'src' 
 				srcDir 'src-gen' 
 			} 
+			resources {
+				srcDir 'src-resources'
+			}
 		}
 		test {
 			java {
-				srcDir 'test' 
 				srcDir 'test-gen' 
+				srcDir 'test' 
 			} 
+			resources {
+				srcDir 'test-resources'
+			}
 		}
 	}
 	

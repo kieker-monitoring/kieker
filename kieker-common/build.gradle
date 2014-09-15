@@ -1,18 +1,3 @@
-sourceSets {
-	main { 
-		java { 
-			srcDir 'src' 
-			srcDir 'src-gen' 
-		} 
-	}
-	test { 
-		java { 
-			srcDir 'test' 
-			srcDir 'test-gen' 
-		} 
-	}
-}
-
 dependencies {
 	compile files('../lib/commons-logging-1.2.jar')
 	compile files('../lib/slf4j-api-1.7.7.jar')
