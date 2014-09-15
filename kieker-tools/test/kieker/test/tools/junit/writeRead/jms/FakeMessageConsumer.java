@@ -26,7 +26,7 @@ import javax.jms.MessageListener;
 
 /**
  * This class is part of a very basic fake JMS message broker. It uses a very simple design to deliver messages synchronously from a singleton producer to a
- * singleton consumer. It has only been designed for test purposes ({@link BasicJMSWriterReaderTest}) and should <b>not</b> be used outside this test.
+ * singleton consumer. It has only been designed for test purposes ( {@link BasicJMSWriterReaderTest}) and should <b>not</b> be used outside this test.
  * 
  * @author Nils Christian Ehmke
  * 
