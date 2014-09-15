@@ -27,3 +27,5 @@ dependencies {
 	testRuntime files('../lib/geronimo-j2ee-management_1.1_spec-1.0.1.jar')
 	testRuntime files('../lib/kahadb-5.7.0.jar')
 }
+
+checkstyleMain.excludes = ["**/tools/opad/record/**"]
