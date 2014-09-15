@@ -26,6 +26,19 @@ subprojects {
 	test {
 		ignoreFailures = true
 	}
+
+	apply plugin: 'pmd'
+	pmd {
+		ignoreFailures = true
+
+		ruleSetFiles = files("../lib/static-analysis/pmd-5.0.5/pmdrules.xml")
+		toolVersion = "5.0.5"
+	}
+
+	dependencies {
+		pmd fileTree(dir: '../lib/static-analysis/pmd-5.0.5/lib', include: '*.jar')
+	}
+	
 }
 
 def today() {
