@@ -32,6 +32,19 @@ subprojects {
 		ignoreFailures = true
 
 		ruleSetFiles = files("../lib/static-analysis/pmd-5.0.5/pmdrules.xml")
+		
+		sourceSets {
+			main { 
+				java { 
+					srcDir 'src' 
+				} 
+			}
+			test {
+				java {
+					srcDir 'test' 
+				} 
+			}
+		}	
 	}
 	
 	apply plugin: 'checkstyle'
@@ -40,6 +53,19 @@ subprojects {
 		showViolations = false
 		
 		configFile = file("../lib/static-analysis/checkstyle-5.6/cs-conf.xml")
+		
+		sourceSets {
+			main { 
+				java { 
+					srcDir 'src' 
+				} 
+			}
+			test {
+				java {
+					srcDir 'test' 
+				} 
+			}
+		}		
 	}
 
 	apply plugin: 'findbugs'
