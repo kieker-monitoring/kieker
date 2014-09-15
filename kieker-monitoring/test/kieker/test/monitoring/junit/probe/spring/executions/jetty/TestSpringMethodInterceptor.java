@@ -17,7 +17,6 @@
 package kieker.test.monitoring.junit.probe.spring.executions.jetty;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
@@ -78,13 +77,7 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 
 		// start the server
 		final URL configURL = this.getClass().getResource("/kieker/test/monitoring/junit/probe/spring/executions/jetty/jetty.xml");
-		System.out.println(configURL);
-		System.out.println(configURL.getPath());
-		System.out.println(configURL.getFile());
-		System.out.println(configURL.toURI());
-		System.out.println(new File(configURL.toURI()).toPath());
-		System.out.println(configURL.toExternalForm());
-		this.ctx = new FileSystemXmlApplicationContext(configURL.getPath());
+		this.ctx = new FileSystemXmlApplicationContext(configURL.toExternalForm());
 
 		// Note that the Spring interceptor is configure in
 		// test/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/webapp/WEB-INF/spring/servlet-context.xml to only instrument

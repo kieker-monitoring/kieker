@@ -79,7 +79,7 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 
 		// start the server
 		final URL configURL = this.getClass().getResource("/kieker/test/monitoring/junit/probe/spring/executions/jetty/jetty.xml");
-		this.ctx = new FileSystemXmlApplicationContext(configURL.getPath());
+		this.ctx = new FileSystemXmlApplicationContext(configURL.toExternalForm());
 
 		// Note that the Spring interceptor is configure in
 		// test/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/webapp/WEB-INF/spring/servlet-context.xml to only instrument
