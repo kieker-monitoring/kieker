@@ -42,3 +42,9 @@ entity NamedTSPoint {
 	double value
 	string name
 }
+
+@author 'Thomas Düllmann' @since '1.10'
+entity AggregationWindow {
+	long windowStart
+	long windowEnd
+}
