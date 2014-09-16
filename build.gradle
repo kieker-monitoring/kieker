@@ -1,14 +1,12 @@
 apply plugin: 'java'
 
-def projectVersion = "1.10-SNAPSHOT"
-
 subprojects {
     apply plugin: 'java'
 	
-    version = "$projectVersion"
+    version = project['kieker.version']
 	
-	sourceCompatibility = '1.6'
-	targetCompatibility = '1.6'
+	sourceCompatibility = project['java.version']
+	targetCompatibility = project['java.version']
 	
 	sourceSets {
 		main { 
@@ -39,8 +37,9 @@ subprojects {
 	pmd {
 		ignoreFailures = true
 
+		// Clear the rule set first. Otherwise we would have a lot of additional rules in our rule set.
 		ruleSets = []
-		ruleSetFiles = files("../lib/static-analysis/pmd-5.0.5/pmdrules.xml")
+		ruleSetFiles = fileTree(dir: '../lib/static-analysis/', include: 'pmd-*/pmdrules.xml')
 	}
 	
 	apply plugin: 'checkstyle'
@@ -51,22 +50,29 @@ subprojects {
 		configFile = file("../lib/static-analysis/checkstyle-5.6/cs-conf.xml")		
 	}
 	
-	checkstyleTest.classpath += sourceSets.main.runtimeClasspath
-	checkstyleMain.classpath += configurations.compile
-	checkstyleMain.source = "src"
-	
 	apply plugin: 'findbugs'
-	findbugs {
+	findbugs { 
 		ignoreFailures = true 
 		effort = "max"
 		reportLevel = "low"
+		
 		excludeFilter = file("../lib/static-analysis/findbugs-2.0.3/fb-filter.xml")
 	}
-
+	
+	// CS is a little bit weird, when it comes to dependencies. 
+	checkstyleTest.classpath += sourceSets.main.runtimeClasspath
+	checkstyleMain.classpath += configurations.compile
+	checkstyleMain.source = 'src'
+	
+	// Those are some dependencies which are needed by all submodules
 	dependencies {
-		pmd fileTree(dir: '../lib/static-analysis/pmd-5.0.5/lib', include: '*.jar')
-		checkstyle fileTree(dir: '../lib/static-analysis/checkstyle-5.6/lib', include: '*.jar')
-		findbugs fileTree(dir: '../lib/static-analysis/findbugs-2.0.3/lib', include: '*.jar')
+		pmd fileTree(dir: '../lib/static-analysis', include: 'pmd-*/lib/*.jar')
+		checkstyle fileTree(dir: '../lib/static-analysis', include: 'checkstyle-*/lib/*.jar')
+		findbugs fileTree(dir: '../lib/static-analysis', include: 'findbugs-*/lib/*.jar')
+		
+		testCompile fileTree(dir: '../lib', include: 'junit-*.jar')
+		
+		testRuntime fileTree(dir: '../lib', include: 'hamcrest-core-*.jar')
 	}
 	
 }
@@ -77,8 +83,8 @@ def today() {
     return formattedDate
 }
 
-task mainJar( type: Jar, dependsOn:  subprojects.tasks["build"] ) {
-	baseName = "kieker-$projectVersion"
+task mainJar(type: Jar, dependsOn:  subprojects.tasks["build"] ) {
+	baseName = project['kieker.packagenamebase'] + "-" + project['kieker.version']
     subprojects.each { subproject ->
         from subproject.configurations.archives.allArtifacts.files.collect {
             zipTree(it)
@@ -87,18 +93,18 @@ task mainJar( type: Jar, dependsOn:  subprojects.tasks["build"] ) {
 	
 	manifest {
 		attributes (
-			"Specification-Version": "${projectVersion}",
-			"Specification-Vendor": "Kieker Project",
-			"Implementation-Title": "Kieker Framework",
-			"Implementation-Version": "${projectVersion} (" + today() + ")",
-			"Implementation-Vendor": "Kieker Project",
-			"kieker"
+			"Specification-Version": project['kieker.version'],
+			"Specification-Vendor": project['kieker.copyright'],
+			"Implementation-Title": project['kieker.name'],
+			"Implementation-Version": project['kieker.version'] + " (" + today() + ")",
+			"Implementation-Vendor": project['kieker.copyright'],
+			"kieker" // The section name
 		)
     }
 }
 
-task emfJar( type: Jar, dependsOn:  subprojects.tasks["build"] ) {
-	baseName = "kieker-${projectVersion}_emf"
+task emfJar(type: Jar, dependsOn:  subprojects.tasks["build"] ) {
+	baseName = project['kieker.packagenamebase'] + "-" + project['kieker.version'] + "_emf"
     subprojects.each { subproject ->
         from subproject.configurations.archives.allArtifacts.files.collect {
             zipTree(it)
@@ -106,8 +112,8 @@ task emfJar( type: Jar, dependsOn:  subprojects.tasks["build"] ) {
     }
 }
 
-task aspectJJar( type: Jar, dependsOn:  subprojects.tasks["build"] ) {
-	baseName = "kieker-${projectVersion}_aspectj"
+task aspectJJar(type: Jar, dependsOn:  subprojects.tasks["build"] ) {
+	baseName = project['kieker.packagenamebase'] + "-" + project['kieker.version'] + "_aspectj"
     subprojects.each { subproject ->
         from subproject.configurations.archives.allArtifacts.files.collect {
             zipTree(it)

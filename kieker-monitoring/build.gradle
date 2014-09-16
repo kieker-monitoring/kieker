@@ -1,32 +1,36 @@
 dependencies {
 	compile project(':kieker-common')
 	
-	compile files('../lib/javax.jms-1.1.jar')
-	compile files('../lib/framework-libs/cxf/cxf-2.6.15.jar')
-	compile files('../lib/aspectjweaver-1.8.2.jar')
-	compile files('../lib/disl-2.0/disl-server.jar')
-	compile files('../lib/sigar/sigar-1.6.4.jar')
-	compile files('../lib/framework-libs/javax.servlet-3.0.jar')
-	compile files('../lib/framework-libs/spring/spring-context-3.2.8.RELEASE.jar')
-	compile files('../lib/framework-libs/spring/spring-web-3.2.8.RELEASE.jar')
-	compile files('../lib/framework-libs/spring/spring-core-3.2.8.RELEASE.jar')
-	compile files('../lib/framework-libs/spring/aopalliance-1.0.jar')
+	compile fileTree('../lib') {
+		include 'javax.jms-*.jar'
+		include 'framework-libs/cxf/cxf-*.jar'
+		include 'aspectjweaver-*.jar'
+		include 'disl-2.0/disl-server.jar'
+		include 'sigar/sigar-*.jar'
+		include 'framework-libs/javax.servlet-*.jar'
+		include 'framework-libs/spring/spring-context-*.jar'
+		include 'framework-libs/spring/spring-web-*.jar'
+		include 'framework-libs/spring/spring-core-*.jar'
+		include 'framework-libs/spring/aopalliance-*.jar'
+	}
 	
-	// This is a workaround. It allows kieker.test.monitoring to depend on kieker.test.common.
-	// I do not recommend to do this.
+	// This is a workaround allowing the Kieker tests to depend on each other. I do not recommend to do this.
 	testCompile project(':kieker-common').sourceSets.test.output
 	
-	testCompile files('../lib/junit-4.11.jar')
-	testCompile files('../lib/framework-libs/spring/spring-beans-3.2.8.RELEASE.jar')
+	testCompile fileTree('../lib') {
+		include 'framework-libs/spring/spring-beans-*.jar'
+	}
 	
-	testRuntime files('../lib/framework-libs/cxf/wsdl4j-1.6.3.jar')
-	testRuntime files('../lib/hamcrest-core-1.3.jar')
-	testRuntime files('../lib/framework-libs/cxf/wsdl4j-1.6.3.jar')
-	testRuntime files('../lib/hamcrest-core-1.3.jar')
-	testRuntime files('../lib/framework-libs/cxf/xmlschema-core-2.0.3.jar')
-	testRuntime files('../lib/framework-libs/cxf/neethi-3.0.3.jar')
-	testRuntime files('../lib/framework-libs/cxf/woodstox-core-asl-4.4.0.jar')
-	testRuntime files('../lib/framework-libs/cxf/stax2-api-3.1.4.jar')
-	testRuntime files('../lib/framework-libs/spring/spring-expression-3.2.8.RELEASE.jar')
-	testRuntime fileTree(dir: '../examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/', include: 'jetty-*.jar')
+	testRuntime fileTree('../lib') {
+		include 'framework-libs/cxf/wsdl4j-*.jar'
+		include 'framework-libs/cxf/xmlschema-core-*.jar'
+		include 'framework-libs/cxf/neethi-*.jar'
+		include 'framework-libs/cxf/woodstox-core-asl-*.jar'
+		include 'framework-libs/cxf/stax2-api-*.jar'
+		include 'framework-libs/spring/spring-expression-*.jar'
+	}
+	
+	testRuntime fileTree('../examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/') {
+		include 'jetty-*.jar'
+	}
 }
