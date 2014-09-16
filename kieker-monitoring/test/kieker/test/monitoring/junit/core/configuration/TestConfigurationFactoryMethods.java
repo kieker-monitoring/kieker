@@ -46,7 +46,7 @@ public class TestConfigurationFactoryMethods extends AbstractKiekerTest {
 		try {
 			tempPath = new File(TestConfigurationFactoryMethods.class.getResource("/META-INF/kieker.monitoring.test.properties").toURI()).getAbsolutePath();
 		} catch (final URISyntaxException e) {
-			tempPath = null;
+			tempPath = null; // NOPMD (null assignment could lead to an exception - but this is a unit test)
 		}
 
 		EXAMPLE_CONFIG_FILE_IN_TRUNK = tempPath;

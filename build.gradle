@@ -52,7 +52,9 @@ subprojects {
 	}
 	
 	checkstyleTest.classpath += sourceSets.main.runtimeClasspath
-
+	checkstyleMain.classpath += configurations.compile
+	checkstyleMain.source = "src"
+	
 	apply plugin: 'findbugs'
 	findbugs {
 		ignoreFailures = true 
