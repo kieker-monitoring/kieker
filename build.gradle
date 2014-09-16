@@ -110,6 +110,9 @@ task emfJar(type: Jar, dependsOn:  subprojects.tasks["build"] ) {
             zipTree(it)
         }
     }
+	from fileTree(dir: 'lib', include: '*emf*.jar').collect {
+		zipTree(it)
+	}
 }
 
 task aspectJJar(type: Jar, dependsOn:  subprojects.tasks["build"] ) {
@@ -119,4 +122,13 @@ task aspectJJar(type: Jar, dependsOn:  subprojects.tasks["build"] ) {
             zipTree(it)
         }
     }
+	from fileTree(dir: 'lib', include: 'aspectjweaver-*.jar').collect {
+		zipTree(it)
+	}
+}
+
+task jenkinsBuild(dependsOn: [mainJar, emfJar, aspectJJar]) {
+}
+
+task jenkinsNightlyBuild(dependsOn: [jenkinsBuild]) {
 }
