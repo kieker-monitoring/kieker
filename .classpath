@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="model/common"/>
-	<classpathentry kind="src" path="model/tools"/>
 	<classpathentry kind="src" path="kieker-analysis/src"/>
 	<classpathentry kind="src" path="kieker-analysis/src-gen"/>
 	<classpathentry kind="src" path="kieker-analysis/test"/>
@@ -14,6 +12,9 @@
 	<classpathentry kind="src" path="kieker-tools/src"/>
 	<classpathentry kind="src" path="kieker-tools/src-gen"/>
 	<classpathentry kind="src" path="kieker-tools/test"/>
+	<classpathentry kind="src" path="kieker-common/model"/>
+	<classpathentry kind="src" path="kieker-tools/model"/>
+	<classpathentry kind="src" path="kieker-analysis/model"/>
 	<classpathentry kind="lib" path="lib/framework-libs/javax.servlet-3.0.jar"/>
 	<classpathentry kind="lib" path="lib/activemq-core-5.7.0.jar"/>
 	<classpathentry kind="lib" path="lib/aspectjweaver-1.8.2.jar"/>
