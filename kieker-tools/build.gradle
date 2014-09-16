@@ -30,3 +30,17 @@ dependencies {
 		include 'kahadb-*.jar'
 	}
 }
+
+task generateRecords() << {
+	javaexec {
+		classpath = fileTree('../bin/dev') {
+			include 'target/de.cau.cs.se.instrumentation.rl.cli-*.jar'
+			include 'lib/org.eclipse.emf.mwe.core_*.jar'
+			include 'lib/org.eclipse.xtext.common.types_*.jar'
+			include 'lib/org.eclipse.emf.mwe.utils_*.jar'
+			include 'lib/org.eclipse.xtext.common.types.ui_*.jar'
+		}				
+		main = "de.cau.cs.se.instrumentation.rl.cli.CLICompilerMain"
+		args "-r", "..", "-a", "'Kieker Build'", "-d", "src-gen", "-s", "model/records", "-l", "java", "-n", "kieker-tools", "-p", "kieker-tools", "-v", "1.10"	
+	}
+}

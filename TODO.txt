@@ -2,4 +2,3 @@
 * Add necessary files and manifests to _emf and _aspectj jars
 * Assemble archives (.zip, .tar.gz)
 * Include Andrè's check script
-* Generator for records
