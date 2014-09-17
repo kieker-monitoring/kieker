@@ -33,18 +33,18 @@ import kieker.tools.util.AggregationVariableSet;
 
 /**
  * This Filter aggregates the incoming DoubleTImeSeriesPoints over a configurable period of time.
- * 
+ *
  * @author Tom Frotscher
  * @since 1.10
  */
 @Plugin(name = "Variate TimeSeriesPoint Aggregator", outputPorts = {
-	@OutputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATED_TSPOINT),
-	@OutputPort(eventTypes = { AggregationWindow.class }, name = TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATION_WINDOW) },
+		@OutputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATED_TSPOINT),
+		@OutputPort(eventTypes = { AggregationWindow.class }, name = TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATION_WINDOW) },
 		configuration = {
-			@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_METHOD, defaultValue = "MEAN"),
-			@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_SPAN, defaultValue = "1000"),
-			@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT, defaultValue = "MILLISECONDS")
-		})
+		@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_METHOD, defaultValue = "MEANJAVA"),
+		@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_SPAN, defaultValue = "1000"),
+		@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT, defaultValue = "MILLISECONDS")
+})
 public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME_TSPOINT = "tspoint";
@@ -112,7 +112,7 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 
 	/**
 	 * This method represents the input port for the incoming measurements.
-	 * 
+	 *
 	 * @param input
 	 *            The next incoming measurement
 	 */
@@ -129,7 +129,7 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 
 	/**
 	 * Checks if the current application is already known to this filter.
-	 * 
+	 *
 	 * @param name
 	 *            Application name
 	 */
@@ -191,9 +191,9 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 
 	/**
 	 * Returns the first timestamp included in the interval that corresponds to the given timestamp.
-	 * 
+	 *
 	 * @param timestamp
-	 * 
+	 *
 	 * @return The timestamp in question.
 	 */
 	private long computeFirstTimestampInInterval(final long timestamp, final AggregationVariableSet variables) {
@@ -210,7 +210,7 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 
 	/**
 	 * Returns the last timestamp included in the interval that corresponds to the given timestamp.
-	 * 
+	 *
 	 * @param timestamp
 	 * @return The timestamp in question.
 	 */

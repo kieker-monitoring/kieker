@@ -27,6 +27,7 @@ import kieker.analysis.plugin.filter.composite.CompositeInputRelay;
 import kieker.analysis.plugin.filter.composite.CompositeOutputRelay;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.IMonitoringRecord;
+import kieker.tools.opad.record.StorableDetectionResult;
 
 /**
  * Filter plugin that contains the whole opad pipes/filter structure.
@@ -36,13 +37,18 @@ import kieker.common.record.IMonitoringRecord;
  *
  */
 @Plugin(description = "Cumulated filters that opad consists of",
-		outputPorts = @OutputPort(name = OpadFilterPlugin.OUTPUT_PORT_NAME_ANOMALY_SCORE, eventTypes = { IMonitoringRecord.class }),
+outputPorts = {
+		@OutputPort(name = OpadFilterPlugin.OUTPUT_PORT_NAME_ANOMALY_SCORE, eventTypes = { StorableDetectionResult.class }) },
 		configuration = {
-			@Property(name = OpadFilterPlugin.PROPERTY_NAME_FC_METHOD, defaultValue = "MEAN", updateable = true),
-			@Property(name = OpadFilterPlugin.PROPERTY_NAME_THRESHOLD, defaultValue = "0.5", updateable = true)
-		})
+		@Property(name = OpadFilterPlugin.PROPERTY_NAME_FC_METHOD, defaultValue = "MEANJAVA", updateable = true),
+		@Property(name = OpadFilterPlugin.PROPERTY_NAME_THRESHOLD, defaultValue = "0.23", updateable = true),
+		@Property(name = OpadFilterPlugin.PROPERTY_NAME_FC_DELTA_TIME, defaultValue = "10"),
+		@Property(name = OpadFilterPlugin.PROPERTY_NAME_FC_DELTA_UNIT, defaultValue = "MILLISECONDS"),
+		@Property(name = OpadFilterPlugin.PROPERTY_NAME_TSAGGREGATOR_AGGREGATION_SPAN, defaultValue = "2"),
+		@Property(name = OpadFilterPlugin.PROPERTY_NAME_TSAGGREGATOR_AGGREGATION_TIMEUNIT, defaultValue = "NANOSECONDS"),
+		@Property(name = OpadFilterPlugin.PROPERTY_NAME_EXTRACTOR_TIMEUNIT, defaultValue = "MILLISECONDS")
+})
 public class OpadFilterPlugin extends AbstractCompositeFilterPlugin {
-
 	/**
 	 * Output port that sends the resulting data including anomaly scores.
 	 */
@@ -53,15 +59,22 @@ public class OpadFilterPlugin extends AbstractCompositeFilterPlugin {
 	 */
 	public static final String INPUT_PORT_NAME_VALUES = "Values";
 
+	public static final String PROPERTY_NAME_EXTRACTOR_TIMEUNIT = "ExtractionFilter.timeUnit";
+
+	public static final String PROPERTY_NAME_TSAGGREGATOR_AGGREGATION_SPAN = "TimeSeriesPointAggregatorFilter.aggregationSpan";
+	public static final String PROPERTY_NAME_TSAGGREGATOR_AGGREGATION_TIMEUNIT = "TimeSeriesPointAggregatorFilter.timeUnit";
+
 	/**
 	 * Property that sets the forecasting method.
 	 */
-	public static final String PROPERTY_NAME_FC_METHOD = "fcmethod";
+	public static final String PROPERTY_NAME_FC_METHOD = "ForecastingFilter.fcmethod";
+	public static final String PROPERTY_NAME_FC_DELTA_TIME = "ForecastingFilter.deltatime";
+	public static final String PROPERTY_NAME_FC_DELTA_UNIT = "ForecastingFilter.deltaunit";
 
 	/**
 	 * Property that sets the threshold that indicates whether an anomaly score is treated as an anomaly.
 	 */
-	public static final String PROPERTY_NAME_THRESHOLD = "threshold";
+	public static final String PROPERTY_NAME_THRESHOLD = "AnomalyDetectionFilter.threshold";
 
 	/**
 	 * Constructor.
@@ -128,7 +141,7 @@ public class OpadFilterPlugin extends AbstractCompositeFilterPlugin {
 			this.controller.connect(extractionFilter, ExtractionFilter.OUTPUT_PORT_NAME_VALUE, tsPointAggregatorFilter,
 					TimeSeriesPointAggregatorFilter.INPUT_PORT_NAME_TSPOINT); // NOCS
 
-			// TSPointAggregatorFilter -> ExtendedForecastingFilter
+			// TSPointAggregatorFilter -> ForecastingFilter
 			this.controller.connect(tsPointAggregatorFilter, TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, forecastingFilter,
 					ForecastingFilter.INPUT_PORT_NAME_TSPOINT); // NOCS
 
@@ -162,12 +175,16 @@ public class OpadFilterPlugin extends AbstractCompositeFilterPlugin {
 	@Override
 	public Configuration getCurrentConfiguration() {
 		if (!this.configuration.containsKey(OpadFilterPlugin.PROPERTY_NAME_FC_METHOD)) {
-			this.configuration.setProperty(OpadFilterPlugin.PROPERTY_NAME_FC_METHOD, "MEAN");
+			this.configuration.setProperty(OpadFilterPlugin.PROPERTY_NAME_FC_METHOD, "MEANJAVA");
 		}
 		if (!this.configuration.containsKey(OpadFilterPlugin.PROPERTY_NAME_THRESHOLD)) {
 			this.configuration.setProperty(OpadFilterPlugin.PROPERTY_NAME_THRESHOLD, "0.5");
 		}
-		return this.configuration;
+
+		final Configuration config = new Configuration();
+		config.setProperty(OpadFilterPlugin.PROPERTY_NAME_FC_METHOD, this.configuration.getStringProperty(OpadFilterPlugin.PROPERTY_NAME_FC_METHOD));
+		config.setProperty(OpadFilterPlugin.PROPERTY_NAME_THRESHOLD, this.configuration.getStringProperty(OpadFilterPlugin.PROPERTY_NAME_THRESHOLD));
+		return config;
 	}
 
 	/**

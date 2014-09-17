@@ -31,7 +31,7 @@ import kieker.common.configuration.Configuration;
 
 /**
  * Abstract class that makes it possible to encapsulate filters in a composite plugin.
- * 
+ *
  * @author Markus Fischer, Thomas Düllmann
  * @since 1.10
  */
@@ -59,7 +59,7 @@ public abstract class AbstractCompositeFilterPlugin extends AbstractFilterPlugin
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param configuration
 	 *            Configuration of the composite plugin
 	 * @param projectContext
@@ -79,7 +79,7 @@ public abstract class AbstractCompositeFilterPlugin extends AbstractFilterPlugin
 
 	/**
 	 * Returns a List of PortWrapper containing all ports suitable for the method input to broadcast.
-	 * 
+	 *
 	 * @param object
 	 *            for which the returned OutputPorts need to be suited
 	 * @return List of PortWrappers containing the EventClass and the Portname
@@ -101,7 +101,7 @@ public abstract class AbstractCompositeFilterPlugin extends AbstractFilterPlugin
 
 	/**
 	 * Method to broadcast an Object to the given outputPort.
-	 * 
+	 *
 	 * @param outputPortName
 	 *            The name of the OutputPort to be broadcasted to
 	 * @param data
@@ -116,7 +116,7 @@ public abstract class AbstractCompositeFilterPlugin extends AbstractFilterPlugin
 	 * Update the current configuration of a FilterPlugin. The given configurations properties will be updated if
 	 * suitable properties were given to the Configuration of the implementing class. The properties have to be named
 	 * "simpleClassName.propertyName".
-	 * 
+	 *
 	 * @param config
 	 *            The Configuration that is updated
 	 * @param clazz
