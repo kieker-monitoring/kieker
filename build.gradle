@@ -62,6 +62,7 @@ subprojects {
 	// CS is a little bit weird, when it comes to dependencies. 
 	checkstyleTest.classpath += sourceSets.main.runtimeClasspath
 	checkstyleMain.classpath += configurations.compile
+	// This part makes sure that CS does not check the classes inside src-gen
 	checkstyleMain.source = 'src'
 	
 	// Those are some dependencies which are needed by all submodules
@@ -127,7 +128,7 @@ task aspectJJar(type: Jar, dependsOn:  subprojects.tasks["build"] ) {
 	}
 }
 
-task distribute(group: 'distribution', description: 'Distributes binary and source archives.', dependsOn: [':distributeBinary', ':distributeSource'])
+task distribute(group: 'distribution', description: 'Distributes binary and source archives.', dependsOn: [':distributeBinaryZip', ':distributeSourceZip',':distributeBinaryTar', ':distributeSourceTar'])
 
 def binaryContent = project.copySpec {
 	from (projectDir) {
@@ -137,10 +138,23 @@ def binaryContent = project.copySpec {
 		
 		include 'bin/**'
 		include 'lib/**'
+		include 'javadoc/**'
+		include 'build/libs/**'
 	}
 }
 
-task distributeBinary(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar]) {
+task docs(type: Javadoc) {
+    source subprojects.collect {project -> project.sourceSets.main.allJava } 
+    classpath = files(subprojects.collect {project -> project.sourceSets.main.compileClasspath}) 
+    destinationDir = new File(projectDir, 'javadoc')
+}
+
+task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, docs]) {
+	classifier = 'bin'
+	with binaryContent
+}
+
+task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, docs]) {
 	classifier = 'bin'
 	with binaryContent
 }
@@ -154,7 +168,12 @@ def sourceContent = project.copySpec {
 	}
 }
 
-task distributeSource(type: Zip, group: 'distribution', description: 'Distributes source archive.', dependsOn: [mainJar, emfJar, aspectJJar]) {
+task distributeSourceZip(type: Zip, group: 'distribution', description: 'Distributes source archive.', dependsOn: [mainJar, emfJar, aspectJJar]) {
+	classifier = 'src'
+	with sourceContent
+}
+
+task distributeSourceTar(type: Tar, group: 'distribution', description: 'Distributes source archive.', dependsOn: [mainJar, emfJar, aspectJJar]) {
 	classifier = 'src'
 	with sourceContent
 }
