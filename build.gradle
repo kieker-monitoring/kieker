@@ -127,8 +127,40 @@ task aspectJJar(type: Jar, dependsOn:  subprojects.tasks["build"] ) {
 	}
 }
 
+task distribute(group: 'distribution', description: 'Distributes binary and source archives.', dependsOn: [':distributeBinary', ':distributeSource'])
+
+def binaryContent = project.copySpec {
+	from (projectDir) {
+		include 'LICENSE'
+		include 'HISTORY'
+		include 'README'
+		
+		include 'bin/**'
+		include 'lib/**'
+	}
+}
+
+task distributeBinary(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar]) {
+	classifier = 'bin'
+	with binaryContent
+}
+
+def sourceContent = project.copySpec {
+	from (projectDir) {
+		include '*'
+		include 'bin/**'
+		include 'src/**'
+		include 'lib/**'
+	}
+}
+
+task distributeSource(type: Zip, group: 'distribution', description: 'Distributes source archive.', dependsOn: [mainJar, emfJar, aspectJJar]) {
+	classifier = 'src'
+	with sourceContent
+}
+
 task jenkinsBuild(dependsOn: [mainJar, emfJar, aspectJJar]) {
 }
 
-task jenkinsNightlyBuild(dependsOn: [jenkinsBuild]) {
+task jenkinsNightlyBuild(dependsOn: [distribute]) {
 }
