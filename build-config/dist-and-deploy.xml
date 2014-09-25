@@ -66,7 +66,6 @@
 			<include name="${bin.dir}/*.bat" />
 			<include name="${src.userguide.dir}/**/*" />
 			<exclude name="${src.userguide.dir}/**/*.sh" /> <!-- will be added in bin mode -->
-			<exclude name="META-INF/" /><!-- not required in source release release -->
 			<include name="${src.dir}/**/*.java" />
 			<include name="${src.dir}/**/META-INF/*" />
 			<include name="${src.gen}/**/*.java" />
@@ -114,7 +113,6 @@
 		</patternset>
 
 		<tar destfile="${release.dir}/${dist.kieker.srcBaseName}.tar" longfile="gnu">
-			<!-- ${kieker.dist.name}/META-INF/kieker.monitoring.properties not required in source release release! -->
 			<tarfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
 				<patternset refid="dist_src_files-nonbinmode" />
 			</tarfileset>
@@ -128,7 +126,6 @@
 		<delete file="${release.dir}/${dist.kieker.srcBaseName}.tar" />
 
 		<zip zipfile="${release.dir}/${dist.kieker.srcBaseName}.zip">
-			<!-- ${kieker.dist.name}/META-INF/kieker.monitoring.properties not required in source release release! -->
 			<zipfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
 				<patternset refid="dist_src_files-nonbinmode" />
 			</zipfileset>
@@ -236,8 +233,7 @@
 		</patternset>
 
 		<tar destfile="${release.dir}/${dist.kieker.binBaseName}.tar" longfile="gnu">
-			<tarfileset file="${kieker.monitoring.adaptiveMonitoring.default.conf}" fullpath="${kieker.dist.name}/META-INF/kieker.monitoring.adaptiveMonitoring.conf" />
-			<tarfileset file="${kieker.monitoring.default.properties}" fullpath="${kieker.dist.name}/META-INF/kieker.monitoring.properties" />
+			<tarfileset file="${kieker.monitoring.default.properties}" fullpath="${kieker.dist.name}/${examples.dir}/kieker.monitoring.example.properties" />
 			<tarfileset file="${src.userguide.pdf}" fullpath="${kieker.dist.name}/doc/${dist.kieker.userguide.pdf}" />
 			<tarfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
 				<patternset refid="dist_bin_files-nonbinmode" />
@@ -355,8 +351,7 @@
 		<delete file="${release.dir}/${dist.kieker.binBaseName}.tar" />
 
 		<zip zipfile="${release.dir}/${dist.kieker.binBaseName}.zip">
-			<zipfileset file="${kieker.monitoring.adaptiveMonitoring.default.conf}" fullpath="${kieker.dist.name}/META-INF/kieker.monitoring.adaptiveMonitoring.conf" />
-			<zipfileset file="${kieker.monitoring.default.properties}" fullpath="${kieker.dist.name}/META-INF/kieker.monitoring.properties" />
+			<zipfileset file="${kieker.monitoring.default.properties}" fullpath="${kieker.dist.name}/${examples.dir}/kieker.monitoring.example.properties" />
 			<zipfileset file="${src.userguide.pdf}" fullpath="${kieker.dist.name}/doc/${dist.kieker.userguide.pdf}" />
 			<zipfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
 				<patternset refid="dist_bin_files-nonbinmode" />
