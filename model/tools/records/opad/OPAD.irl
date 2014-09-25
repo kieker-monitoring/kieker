@@ -22,7 +22,7 @@ entity NamedDoubleRecord {
 	double responseTime
 }
 
-@author 'Tom Frotscher, Thomas Düllmann' @since '1.10'
+@author 'Tom Frotscher, Thomas Duellmann' @since '1.10'
 entity StorableDetectionResult {
 	string applicationName
 	double value
@@ -31,7 +31,7 @@ entity StorableDetectionResult {
 	double score
 }
 
-@author 'Thomas Düllmann' @since '1.10'
+@author 'Thomas Duellmann' @since '1.10'
 entity ExtendedStorableDetectionResult extends StorableDetectionResult {
 	double anomalyThreshold
 }
@@ -43,7 +43,7 @@ entity NamedTSPoint {
 	string name
 }
 
-@author 'Thomas Düllmann' @since '1.10'
+@author 'Thomas Duellmann' @since '1.10'
 entity AggregationWindow {
 	long windowStart
 	long windowEnd
