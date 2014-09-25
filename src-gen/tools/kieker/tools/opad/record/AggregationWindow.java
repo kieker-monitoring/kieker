@@ -24,25 +24,23 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
 
-
 /**
- * @author Thomas Düllmann
+ * @author Thomas Duellmann
  * 
  * @since 1.10
  */
 public class AggregationWindow extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_LONG // AggregationWindow.windowStart
-			 + TYPE_SIZE_LONG // AggregationWindow.windowEnd
+			+ TYPE_SIZE_LONG // AggregationWindow.windowEnd
 	;
 	private static final long serialVersionUID = 3008527186261564671L;
-	
+
 	public static final Class<?>[] TYPES = {
 		long.class, // AggregationWindow.windowStart
 		long.class, // AggregationWindow.windowEnd
 	};
-	
-	
+
 	private final long windowStart;
 	private final long windowEnd;
 
@@ -71,7 +69,7 @@ public class AggregationWindow extends AbstractMonitoringRecord implements IMoni
 		this.windowStart = (Long) values[0];
 		this.windowEnd = (Long) values[1];
 	}
-	
+
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
 	 * 
@@ -135,6 +133,7 @@ public class AggregationWindow extends AbstractMonitoringRecord implements IMoni
 	public int getSize() {
 		return SIZE;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -160,9 +159,9 @@ public class AggregationWindow extends AbstractMonitoringRecord implements IMoni
 	public final long getWindowStart() {
 		return this.windowStart;
 	}
-	
+
 	public final long getWindowEnd() {
 		return this.windowEnd;
 	}
-	
+
 }

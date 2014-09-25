@@ -31,7 +31,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * Rserve instance is started beforehand and terminated afterwards.
  * 
  * @since 1.10
- * @author Thomas Düllmann
+ * @author Thomas Duellmann
  * 
  */
 public abstract class AbstractKiekerRTest extends AbstractKiekerTest {
