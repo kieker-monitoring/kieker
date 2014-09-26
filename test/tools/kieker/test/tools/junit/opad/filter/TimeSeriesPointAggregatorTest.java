@@ -32,10 +32,10 @@ import kieker.test.common.junit.AbstractKiekerTest;
 /**
  * Checks if values in the given timespan (10 milliseconds) are aggregated correctly.
  * Also checks if zero values are created for timestamps with no incoming values.
- * 
+ *
  * @author Tom Frotscher
  * @since 1.10
- * 
+ *
  */
 public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 
@@ -65,27 +65,28 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 		final ListReader<NamedDoubleTimeSeriesPoint> theReaderAggregator = new ListReader<NamedDoubleTimeSeriesPoint>(readerAggregationConfiguration,
 				controller);
 
-		theReaderAggregator.addObject(this.createNDTSP(1369127812664L, 1000, OP_SIGNATURE_A));
-		theReaderAggregator.addObject(this.createNDTSP(1369127812665L, 2000, OP_SIGNATURE_A));
-		theReaderAggregator.addObject(this.createNDTSP(1369127812664L, 1000, OP_SIGNATURE_C));
-		theReaderAggregator.addObject(this.createNDTSP(1369127812668L, 5500, OP_SIGNATURE_C));
-		theReaderAggregator.addObject(this.createNDTSP(1369127812674L, 2000, OP_SIGNATURE_B));
-		theReaderAggregator.addObject(this.createNDTSP(1369127812674L, 3000, OP_SIGNATURE_A));
-		theReaderAggregator.addObject(this.createNDTSP(1369127812684L, 4000, OP_SIGNATURE_A));
-		theReaderAggregator.addObject(this.createNDTSP(1369127812674L, 2000, OP_SIGNATURE_C));
-		theReaderAggregator.addObject(this.createNDTSP(1369127812684L, 5000, OP_SIGNATURE_B));
-		theReaderAggregator.addObject(this.createNDTSP(1369127812687L, 1000, OP_SIGNATURE_B));
+		theReaderAggregator.addObject(this.createNDTSP(664L, 1000, OP_SIGNATURE_A));
+		theReaderAggregator.addObject(this.createNDTSP(665L, 2000, OP_SIGNATURE_A));
+		theReaderAggregator.addObject(this.createNDTSP(664L, 1000, OP_SIGNATURE_C));
+		theReaderAggregator.addObject(this.createNDTSP(668L, 5500, OP_SIGNATURE_C));
+		theReaderAggregator.addObject(this.createNDTSP(674L, 2000, OP_SIGNATURE_B));
+		theReaderAggregator.addObject(this.createNDTSP(674L, 3000, OP_SIGNATURE_A));
+		theReaderAggregator.addObject(this.createNDTSP(684L, 4000, OP_SIGNATURE_A));
+		theReaderAggregator.addObject(this.createNDTSP(674L, 2000, OP_SIGNATURE_C));
+		theReaderAggregator.addObject(this.createNDTSP(684L, 5000, OP_SIGNATURE_B));
+		theReaderAggregator.addObject(this.createNDTSP(687L, 1000, OP_SIGNATURE_B));
 		// Skipped two timespans for application A, so two empty points should be created
-		theReaderAggregator.addObject(this.createNDTSP(1369127812714L, 6000, OP_SIGNATURE_A));
-		theReaderAggregator.addObject(this.createNDTSP(1369127812724L, 7000, OP_SIGNATURE_A));
-		theReaderAggregator.addObject(this.createNDTSP(1369127812694L, 5000, OP_SIGNATURE_B));
+		theReaderAggregator.addObject(this.createNDTSP(714L, 6000, OP_SIGNATURE_A));
+		theReaderAggregator.addObject(this.createNDTSP(724L, 7000, OP_SIGNATURE_A));
+		theReaderAggregator.addObject(this.createNDTSP(694L, 5000, OP_SIGNATURE_B));
 		// Skipped one timespans for application B, so one empty point should be created
-		theReaderAggregator.addObject(this.createNDTSP(1369127812714L, 5000, OP_SIGNATURE_B));
+		theReaderAggregator.addObject(this.createNDTSP(714L, 5000, OP_SIGNATURE_B));
 
 		// AGGREGATIONFILTER
 		final Configuration aggregationConfiguration = new Configuration();
 		aggregationConfiguration.setProperty(TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_SPAN, "10");
-		aggregationConfiguration.setProperty(TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT, "MILLISECONDS");
+		aggregationConfiguration.setProperty(TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT, "NANOSECONDS");
+		aggregationConfiguration.setProperty(TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_METHOD, "MEANJAVA");
 		final TimeSeriesPointAggregatorFilter aggregator = new TimeSeriesPointAggregatorFilter(aggregationConfiguration, controller);
 
 		// SINK 1
@@ -100,6 +101,7 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 		Assert.assertEquals(0, sinkPlugin.getList().size());
 		controller.run();
 
+		Assert.assertEquals(11, sinkPlugin.getList().size());
 		// Expected: (1000 + 2000) / 2 = 1500 Application A
 		Assert.assertEquals(Double.valueOf(1500), Double.valueOf(sinkPlugin.getList().get(0).getDoubleValue()));
 		// Expected: 3000 Application A
@@ -121,5 +123,95 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 		Assert.assertEquals(Double.valueOf(5000), Double.valueOf(sinkPlugin.getList().get(9).getDoubleValue()));
 		// Expected: Skipped one span for Application B -> 1 time 0
 		Assert.assertEquals(Double.NaN, sinkPlugin.getList().get(10).getDoubleValue(), 0.0000001d);
+	}
+
+	@Test
+	public void testTimestampTimeUnitNano() throws IllegalStateException, AnalysisConfigurationException {
+		final AnalysisController controller = new AnalysisController();
+
+		// READER
+		final Configuration readerAggregationConfiguration = new Configuration();
+		final ListReader<NamedDoubleTimeSeriesPoint> listReader = new ListReader<NamedDoubleTimeSeriesPoint>(readerAggregationConfiguration,
+				controller);
+
+		listReader.addObject(this.createNDTSP(1L, 3, OP_SIGNATURE_A));
+		listReader.addObject(this.createNDTSP(13L, 13, OP_SIGNATURE_A));
+		listReader.addObject(this.createNDTSP(16L, 16, OP_SIGNATURE_A));
+
+		// AGGREGATIONFILTER
+		final Configuration aggregationConfiguration = new Configuration();
+		aggregationConfiguration.setProperty(TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_SPAN, "5");
+		aggregationConfiguration.setProperty(TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT, "NANOSECONDS");
+		aggregationConfiguration.setProperty(TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_METHOD, "MEANJAVA");
+		final TimeSeriesPointAggregatorFilter aggregator = new TimeSeriesPointAggregatorFilter(aggregationConfiguration, controller);
+
+		// SINK
+		final ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPlugin = new ListCollectionFilter<NamedDoubleTimeSeriesPoint>(new Configuration(),
+				controller);
+		Assert.assertTrue(sinkPlugin.getList().isEmpty());
+
+		// CONNECTION
+		controller.connect(listReader, ListReader.OUTPUT_PORT_NAME, aggregator, TimeSeriesPointAggregatorFilter.INPUT_PORT_NAME_TSPOINT);
+		controller.connect(aggregator, TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, sinkPlugin,
+				ListCollectionFilter.INPUT_PORT_NAME);
+		Assert.assertEquals(0, sinkPlugin.getList().size());
+		controller.run();
+
+		Assert.assertEquals(3, sinkPlugin.getList().size());
+
+		// check for correct windows
+		Assert.assertEquals(5L, sinkPlugin.getList().get(0).getTime());
+		Assert.assertEquals(10L, sinkPlugin.getList().get(1).getTime());
+		Assert.assertEquals(15L, sinkPlugin.getList().get(2).getTime());
+
+		// check for empty window
+		Assert.assertEquals(Double.NaN, sinkPlugin.getList().get(1).getDoubleValue(), 0.001d);
+
+		// the third created item is not available in the sink as its window was not closed when the controller terminated
+	}
+
+	@Test
+	public void testTimestampTimeUnitMilli() throws IllegalStateException, AnalysisConfigurationException {
+		final AnalysisController controller = new AnalysisController();
+
+		// READER
+		final Configuration readerAggregationConfiguration = new Configuration();
+		final ListReader<NamedDoubleTimeSeriesPoint> listReader = new ListReader<NamedDoubleTimeSeriesPoint>(readerAggregationConfiguration,
+				controller);
+
+		listReader.addObject(this.createNDTSP(1000000L, 3, OP_SIGNATURE_A));
+		listReader.addObject(this.createNDTSP(13000000L, 13, OP_SIGNATURE_A));
+		listReader.addObject(this.createNDTSP(16000000L, 16, OP_SIGNATURE_A));
+
+		// AGGREGATIONFILTER
+		final Configuration aggregationConfiguration = new Configuration();
+		aggregationConfiguration.setProperty(TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_SPAN, "5");
+		aggregationConfiguration.setProperty(TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT, "MILLISECONDS");
+		aggregationConfiguration.setProperty(TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_METHOD, "MEANJAVA");
+		final TimeSeriesPointAggregatorFilter aggregator = new TimeSeriesPointAggregatorFilter(aggregationConfiguration, controller);
+
+		// SINK
+		final ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPlugin = new ListCollectionFilter<NamedDoubleTimeSeriesPoint>(new Configuration(),
+				controller);
+		Assert.assertTrue(sinkPlugin.getList().isEmpty());
+
+		// CONNECTION
+		controller.connect(listReader, ListReader.OUTPUT_PORT_NAME, aggregator, TimeSeriesPointAggregatorFilter.INPUT_PORT_NAME_TSPOINT);
+		controller.connect(aggregator, TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, sinkPlugin,
+				ListCollectionFilter.INPUT_PORT_NAME);
+		Assert.assertEquals(0, sinkPlugin.getList().size());
+		controller.run();
+
+		Assert.assertEquals(3, sinkPlugin.getList().size());
+
+		// check for correct windows
+		Assert.assertEquals(5999999L, sinkPlugin.getList().get(0).getTime());
+		Assert.assertEquals(10999999L, sinkPlugin.getList().get(1).getTime());
+		Assert.assertEquals(15999999L, sinkPlugin.getList().get(2).getTime());
+
+		// check for empty window
+		Assert.assertEquals(Double.NaN, sinkPlugin.getList().get(1).getDoubleValue(), 0.001d);
+
+		// the third created item is not available in the sink as its window was not closed when the controller terminated
 	}
 }

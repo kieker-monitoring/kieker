@@ -35,6 +35,14 @@ public class BoundedConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> {
 	private final BoundedCacheBehaviour boundedCacheBehaviour;
 	private final int maxCacheSize;
 
+	/**
+	 * Initialize a bounded concurrent hash map.
+	 * 
+	 * @param boundedCacheBehaviour
+	 *            set the cache behavior
+	 * @param maxCacheSize
+	 *            define limit of the cache
+	 */
 	public BoundedConcurrentHashMap(final BoundedCacheBehaviour boundedCacheBehaviour, final int maxCacheSize) {
 		super();
 
@@ -43,7 +51,17 @@ public class BoundedConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> {
 	}
 
 	/**
-	 * Works like the overriden method, except that {@code null} is returned, if the given element could not be added due to map limitations.
+	 * Works like the overriden method, except that {@code null} is returned,
+	 * if the given element could not be added due to map limitations.
+	 * 
+	 * @param key
+	 *            key-value
+	 * @param value
+	 *            the associated value
+	 * 
+	 * @return the previous value associated with key,
+	 *         or null if there was no mapping for key,
+	 *         or null if the bounds limit was reached
 	 */
 	@Override
 	public V put(final K key, final V value) {
@@ -55,7 +73,15 @@ public class BoundedConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> {
 	}
 
 	/**
-	 * Works like the overriden method, except that {@code null} is returned, if the given element could not be added due to map limitations.
+	 * Works like the overriden method, except that {@code null} is returned,
+	 * if the given element could not be added due to map limitations.
+	 * 
+	 * @param key
+	 *            key-value
+	 * @param value
+	 *            the associated value
+	 * 
+	 * @return the previous value or null
 	 */
 	@Override
 	public V putIfAbsent(final K key, final V value) {

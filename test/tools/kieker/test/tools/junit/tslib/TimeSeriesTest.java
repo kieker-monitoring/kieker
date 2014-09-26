@@ -27,10 +27,10 @@ import kieker.tools.tslib.TimeSeries;
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
- * 
+ *
  * @author Tillmann Carlos Bielefeld
  * @since 1.10
- * 
+ *
  */
 public class TimeSeriesTest extends AbstractKiekerTest {
 
@@ -49,7 +49,7 @@ public class TimeSeriesTest extends AbstractKiekerTest {
 
 	/**
 	 * Setup of the test case.
-	 * 
+	 *
 	 * @throws Exception
 	 *             Thrown if exception appears
 	 */
@@ -58,10 +58,10 @@ public class TimeSeriesTest extends AbstractKiekerTest {
 		final long deltaTime = 1000;
 		this.timeUnit = TimeUnit.MILLISECONDS;
 		this.startTime = System.currentTimeMillis() - (deltaTime * 10);
-		this.unboundTS = new TimeSeries<Double>(this.startTime, deltaTime, this.timeUnit);
+		this.unboundTS = new TimeSeries<Double>(this.startTime, this.timeUnit, deltaTime, this.timeUnit);
 
 		this.bounds = 3;
-		this.boundedTS = new TimeSeries<Integer>(this.startTime, deltaTime, this.timeUnit, this.bounds);
+		this.boundedTS = new TimeSeries<Integer>(this.startTime, this.timeUnit, deltaTime, this.timeUnit, this.bounds);
 	}
 
 	/**
@@ -120,5 +120,18 @@ public class TimeSeriesTest extends AbstractKiekerTest {
 			this.boundedTS.append(i);
 		}
 		Assert.assertEquals(Integer.valueOf(lastNumber), this.boundedTS.getPoints().get(this.bounds - 1).getValue());
+	}
+
+	@Test
+	public void testTimeUnitPropagation() {
+		final TimeSeries<Double> testTS = new TimeSeries<Double>(1L, TimeUnit.NANOSECONDS, 10L, TimeUnit.MILLISECONDS);
+		testTS.append(1.0);
+		Assert.assertEquals(TimeUnit.NANOSECONDS, testTS.getTimeSeriesTimeUnit());
+		Assert.assertEquals(TimeUnit.MILLISECONDS, testTS.getDeltaTimeUnit());
+		Assert.assertEquals(1L, testTS.getStartTime());
+		Assert.assertEquals(1L, testTS.getEndTime());
+		Assert.assertEquals(10000000L, testTS.getStepSize());
+		testTS.append(1.0);
+		Assert.assertEquals(10000001L, testTS.getEndTime());
 	}
 }

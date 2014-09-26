@@ -16,7 +16,7 @@
 
 package kieker.tools.tslib;
 
-import org.apache.commons.math.stat.StatUtils;
+import org.apache.commons.math3.stat.StatUtils;
 
 /**
  * @author Tom Frotscher
@@ -31,7 +31,7 @@ public enum AggregationMethod {
 
 	/**
 	 * This method returns the result of the aggregation under one of the defined aggregation methods.
-	 * 
+	 *
 	 * @param aggregationValues
 	 *            Values to be aggregated
 	 * @return

@@ -34,6 +34,9 @@ import kieker.monitoring.core.signaturePattern.SignatureFactory;
  */
 public class MemorySampler extends AbstractMXBeanSampler {
 
+	/**
+	 * Create new GCSampler.
+	 */
 	public MemorySampler() {
 		// Empty default constructor
 	}

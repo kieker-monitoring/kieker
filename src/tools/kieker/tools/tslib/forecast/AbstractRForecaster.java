@@ -19,8 +19,11 @@ package kieker.tools.tslib.forecast;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.rosuda.REngine.REXPLogical;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.tools.tslib.ForecastMethod;
 import kieker.tools.tslib.ITimeSeries;
 import kieker.tools.util.RBridgeControl;
@@ -29,11 +32,15 @@ import kieker.tools.util.RBridgeControl;
  * Convenience class to implement an {@link IForecaster} with R.
  * 
  * @since 1.10
- * @author Andre van Hoorn, Nikolas Herbst, Andreas Eberlein, Tobias Rudolph
+ * @author Andre van Hoorn, Nikolas Herbst, Andreas Eberlein, Tobias Rudolph, Thomas Duellmann
  * 
  */
 public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
+
+	private static final Log LOG = LogFactory.getLog(AbstractRForecaster.class);
+
 	private static final RBridgeControl RBRIDGE = RBridgeControl.getInstance();
+	private static boolean forecastPackageAvailable;
 	private final String modelFunc;
 	private final String forecastFunc;
 	private final ForecastMethod strategy;
@@ -42,7 +49,8 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 	 * Acquire an instance of the {@link RBridgeControl} once.
 	 */
 	static {
-		AbstractRForecaster.RBRIDGE.evalWithR("require(forecast)");
+		final Object forecastPackageLoadResult = AbstractRForecaster.RBRIDGE.evalWithR("require(forecast)");
+		AbstractRForecaster.setForecastModuleAvailableAndLoadedFlag(forecastPackageLoadResult);
 	}
 
 	/**
@@ -63,6 +71,10 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 		this.modelFunc = modelFunc;
 		this.forecastFunc = forecastFunc;
 		this.strategy = strategy;
+
+		if (!forecastPackageAvailable) {
+			this.logForecastModuleNotAvailableOrLoaded();
+		}
 	}
 
 	/**
@@ -85,6 +97,29 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 		this.modelFunc = modelFunc;
 		this.forecastFunc = forecastFunc;
 		this.strategy = strategy;
+
+		if (!forecastPackageAvailable) {
+			this.logForecastModuleNotAvailableOrLoaded();
+		}
+	}
+
+	private static void setForecastModuleAvailableAndLoadedFlag(final Object forecastPackageLoadResult) {
+		if (forecastPackageLoadResult instanceof REXPLogical) {
+			final REXPLogical returnValue = (REXPLogical) forecastPackageLoadResult;
+			final boolean hasAttr = returnValue.hasAttribute("attr");
+			final boolean[] istrue = returnValue.isTRUE();
+
+			if (!hasAttr && (istrue.length > 0) && istrue[0]) {
+				forecastPackageAvailable = false;
+				return;
+			}
+		}
+		forecastPackageAvailable = true;
+	}
+
+	private void logForecastModuleNotAvailableOrLoaded() {
+		final IllegalStateException ise = new IllegalStateException("\"forecast\" package could not be loaded in R.");
+		LOG.error("Could not load \"forecast\" package in R. Perhaps it is not installed in R?", ise);
 	}
 
 	/**

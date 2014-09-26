@@ -29,14 +29,12 @@ The \Kieker{} download site\footnote{\KiekerDownloadURL{}} provides archives of 
       .3 \ldots. %\servletWar.
     .2 \DirInDirTree{doc/}\DTcomment{}.
       .3 kieker-\version\_userguide.pdf\DTcomment{PDF file of this document}.
-    .2 \DirInDirTree{examples/}.
+    .2 \DirInDirTree{examples/}\DTcomment{Example projects and configuration files}.
       .3 \DirInDirTree{userguide/}\DTcomment{Source code of the examples in this document}.
                         .4 \ldots.
+      .3 \kiekerMonitoringProperties{}.
     .2 \DirInDirTree{lib/}\DTcomment{Libraries required by \Kieker{}}.
 %       .3 \commonsLoggingJar.
-      .3 \ldots.
-    .2 \DirInDirTree{META-INF/}\DTcomment{Example configuration files}.
-      .3 \kiekerMonitoringProperties{}.
       .3 \ldots.
 }
 \end{graybox}
@@ -48,7 +46,7 @@ The \Kieker{} download site\footnote{\KiekerDownloadURL{}} provides archives of 
 
 The Java sources presented in this user guide, as well as pre-compiled binaries, are included in the \file{\exampleDir/} directory. The file \file{\mainJar{}} contains the \KiekerMonitoringPart{} and \KiekerAnalysisPart{} components, as well as the \KiekerTraceAnalysis{} tool. The sample \KiekerMonitoringPart{}
 configuration file %
-\file{\kiekerMonitoringProperties{}} will be detailed in Chapter~\ref{chap:componentsMonitoring}. %
+\file{\kiekerExampleMonitoringProperties{}} will be detailed in Chapter~\ref{chap:componentsMonitoring}. %
 In addition to the \file{\mainJar{}} file, the \file{dist/} directory includes %
 variants of this \file{.jar} files with integrated third-party libraries. Additional %
 information on these \file{.jar} files and when to use them will follow later in this document. %

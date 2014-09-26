@@ -30,10 +30,16 @@ import kieker.test.common.junit.AbstractKiekerTest;
  */
 public class BoundedConcurrentHashMapTest extends AbstractKiekerTest {
 
+	/**
+	 * Test class constructor.
+	 */
 	public BoundedConcurrentHashMapTest() {
 		// No code necessary
 	}
 
+	/**
+	 * Test if inserted values make it to the hash map.
+	 */
 	@Test
 	public void testMaxEntryBehaviour() {
 		final BoundedConcurrentHashMap<Integer, Integer> map = new BoundedConcurrentHashMap<Integer, Integer>(BoundedCacheBehaviour.IGNORE_NEW_ENTRIES, 5);

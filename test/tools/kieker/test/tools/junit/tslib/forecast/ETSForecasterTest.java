@@ -34,7 +34,7 @@ import kieker.test.tools.junit.AbstractKiekerRTest;
 /**
  * @since 1.10
  * @author Tillmann Carlos Bielefeld
- * 
+ *
  */
 public class ETSForecasterTest extends AbstractKiekerRTest {
 	private static final long START_TIME = 98890787;
@@ -62,7 +62,7 @@ public class ETSForecasterTest extends AbstractKiekerRTest {
 		}
 
 		final TimeSeries<Double> ts =
-				new TimeSeries<Double>(ETSForecasterTest.START_TIME, ETSForecasterTest.DELTA_TIME_MILLIS, TimeUnit.MILLISECONDS);
+				new TimeSeries<Double>(ETSForecasterTest.START_TIME, TimeUnit.NANOSECONDS, ETSForecasterTest.DELTA_TIME_MILLIS, TimeUnit.MILLISECONDS);
 		ts.appendAll(values);
 
 		final ETSForecaster forecaster = new ETSForecaster(ts, ETSForecasterTest.CONFIDENCE_LEVEL);

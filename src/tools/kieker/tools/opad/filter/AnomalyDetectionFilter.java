@@ -104,8 +104,8 @@ public class AnomalyDetectionFilter extends AbstractUpdateableFilterPlugin {
 			super.deliver(OUTPUT_PORT_ANOMALY_SCORE_ELSE, anomalyScore);
 		}
 
-		final ExtendedStorableDetectionResult extAnomalyScore = new ExtendedStorableDetectionResult(
-				anomalyScore, this.threshold.get().doubleValue());
+		final ExtendedStorableDetectionResult extAnomalyScore = new ExtendedStorableDetectionResult(anomalyScore.getApplicationName(), anomalyScore.getValue(),
+				anomalyScore.getTimestamp(), anomalyScore.getForecast(), anomalyScore.getScore(), this.threshold.get().doubleValue());
 		super.deliver(OUTPUT_PORT_ALL, extAnomalyScore);
 	}
 

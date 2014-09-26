@@ -16,8 +16,8 @@
 
 package kieker.test.tools.junit.writeRead.jms;
 
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -26,7 +26,7 @@ import javax.jms.MessageListener;
 
 /**
  * This class is part of a very basic fake JMS message broker. It uses a very simple design to deliver messages synchronously from a singleton producer to a
- * singleton consumer. It has only been designed for test purposes ({@link BasicJMSWriterReaderTest}) and should <b>not</b> be used outside this test.
+ * singleton consumer. It has only been designed for test purposes ( {@link BasicJMSWriterReaderTest}) and should <b>not</b> be used outside this test.
  * 
  * @author Nils Christian Ehmke
  * 
@@ -35,7 +35,7 @@ import javax.jms.MessageListener;
 public class FakeMessageConsumer implements MessageConsumer {
 
 	private MessageListener messageListener;
-	private final Queue<Message> messages = new ConcurrentLinkedQueue<Message>();
+	private final BlockingQueue<Message> messages = new LinkedBlockingQueue<Message>();
 
 	/**
 	 * Default constructor.
@@ -91,7 +91,11 @@ public class FakeMessageConsumer implements MessageConsumer {
 	 */
 	@Override
 	public Message receive() throws JMSException {
-		return this.messages.poll();
+		try {
+			return this.messages.take();
+		} catch (final InterruptedException e) {
+			return null;
+		}
 	}
 
 	/**

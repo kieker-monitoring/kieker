@@ -23,12 +23,12 @@ package kieker.common.record.flow;
  * @since 1.6
  */
 public interface ICallRecord extends IOperationRecord {
-	public String getCallerClassSignature() ;
-		
 	public String getCallerOperationSignature() ;
 		
-	public String getCalleeClassSignature() ;
+	public String getCallerClassSignature() ;
 		
 	public String getCalleeOperationSignature() ;
+		
+	public String getCalleeClassSignature() ;
 		
 }

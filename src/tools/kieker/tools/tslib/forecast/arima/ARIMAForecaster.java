@@ -29,7 +29,7 @@ import kieker.tools.tslib.forecast.AbstractRForecaster;
  * (http://dx.doi.org/10.1002/cpe.3224), authored by Herbst et al.
  * 
  * @since 1.10
- * @author Andre van Hoorn + Nikolas Herbst <nikolas.herbst@uni-wuerzburg.de>
+ * @author Andre van Hoorn, Nikolas Herbst <nikolas.herbst@uni-wuerzburg.de>
  * 
  *         The automated ARIMA model selection process of the R forecasting package starts
  *         with a complex estimation of an appropriate ARIMA(p, d, q)(P, D, Q)m model by using

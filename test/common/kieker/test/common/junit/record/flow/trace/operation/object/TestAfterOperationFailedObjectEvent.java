@@ -60,7 +60,7 @@ public class TestAfterOperationFailedObjectEvent extends AbstractKiekerTest {
 	public void testSerializeDeserializeEquals() {
 
 		final AfterOperationFailedObjectEvent event1 =
-				new AfterOperationFailedObjectEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CLASSNAME, FQ_OPERATION_SIGNATURE, CAUSE, OBJECT_ID);
+				new AfterOperationFailedObjectEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_OPERATION_SIGNATURE, FQ_CLASSNAME, CAUSE, OBJECT_ID);
 
 		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
 		Assert.assertEquals("Unexpected trace ID", TRACE_ID, event1.getTraceId());
@@ -86,7 +86,7 @@ public class TestAfterOperationFailedObjectEvent extends AbstractKiekerTest {
 	public void testSerializeDeserializeBinaryEquals() {
 
 		final AfterOperationFailedObjectEvent event1 =
-				new AfterOperationFailedObjectEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CLASSNAME, FQ_OPERATION_SIGNATURE, CAUSE, OBJECT_ID);
+				new AfterOperationFailedObjectEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_OPERATION_SIGNATURE, FQ_CLASSNAME, CAUSE, OBJECT_ID);
 
 		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
 		Assert.assertEquals("Unexpected trace ID", TRACE_ID, event1.getTraceId());

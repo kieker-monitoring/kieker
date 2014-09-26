@@ -58,7 +58,7 @@ public class TestBeforeConstructorEvent extends AbstractKiekerTest {
 	public void testSerializeDeserializeEquals() {
 
 		final BeforeConstructorEvent event1 =
-				new BeforeConstructorEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CLASSNAME, FQ_OPERATION_SIGNATURE);
+				new BeforeConstructorEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_OPERATION_SIGNATURE, FQ_CLASSNAME);
 
 		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
 		Assert.assertEquals("Unexpected trace ID", TRACE_ID, event1.getTraceId());
@@ -82,7 +82,7 @@ public class TestBeforeConstructorEvent extends AbstractKiekerTest {
 	public void testSerializeDeserializeBinaryEquals() {
 
 		final BeforeConstructorEvent event1 =
-				new BeforeConstructorEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_CLASSNAME, FQ_OPERATION_SIGNATURE);
+				new BeforeConstructorEvent(TSTAMP, TRACE_ID, ORDER_INDEX, FQ_OPERATION_SIGNATURE, FQ_CLASSNAME);
 
 		Assert.assertEquals("Unexpected timestamp", TSTAMP, event1.getTimestamp());
 		Assert.assertEquals("Unexpected trace ID", TRACE_ID, event1.getTraceId());

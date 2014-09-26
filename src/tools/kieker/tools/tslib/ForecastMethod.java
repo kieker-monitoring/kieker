@@ -16,8 +16,8 @@
 
 package kieker.tools.tslib;
 
-import kieker.tools.tslib.anomalycalculators.IAnomalyCalculator;
-import kieker.tools.tslib.anomalycalculators.SimpleAnomalyCalculator;
+import kieker.tools.tslib.anomalycalculators.IAnomalyScoreCalculator;
+import kieker.tools.tslib.anomalycalculators.SimpleAnomalyScoreCalculator;
 import kieker.tools.tslib.forecast.IForecaster;
 import kieker.tools.tslib.forecast.arima.ARIMA101Forecaster;
 import kieker.tools.tslib.forecast.arima.ARIMAForecaster;
@@ -28,7 +28,6 @@ import kieker.tools.tslib.forecast.mean.MeanForecaster;
 import kieker.tools.tslib.forecast.mean.MeanForecasterJava;
 import kieker.tools.tslib.forecast.naive.NaiveForecaster;
 import kieker.tools.tslib.forecast.ses.SESRForecaster;
-import kieker.tools.tslib.forecast.windowstart.WindowStartForecaster;
 
 /**
  * 
@@ -61,18 +60,8 @@ public enum ForecastMethod {
 	/** {@link NaiveForecaster} */
 	NAIVE,
 
-	/**
-	 * {@link kieker.tools.tslib.forecast.historicdata.PatternCheckingForecaster}. {@link #getForecaster(ITimeSeries)} and {@link #getForecaster(ITimeSeries, int)}
-	 * not supported
-	 * for this algorithm!
-	 */
-	PatternChecking,
-
 	/** {@link SESRForecaster} */
-	SES,
-
-	/** {@link WindowStartForecaster} */
-	WINDOWSTART;
+	SES;
 
 	/**
 	 * 
@@ -100,12 +89,8 @@ public enum ForecastMethod {
 			return new MeanForecasterJava(history);
 		case NAIVE:
 			return new NaiveForecaster(history);
-		case PatternChecking:
-			throw new IllegalArgumentException("Forecaster " + this.toString() + " not instantiable");
 		case SES:
 			return new SESRForecaster(history);
-		case WINDOWSTART:
-			return new WindowStartForecaster(history);
 		default:
 			throw new IllegalArgumentException("No forecaster defined for " + this.toString());
 		}
@@ -139,23 +124,15 @@ public enum ForecastMethod {
 			return new MeanForecasterJava(ForecastMethod.getLastXofTS(history, 10)); // confidence level? #1346
 		case NAIVE:
 			return new NaiveForecaster(history, alpha);
-		case PatternChecking:
-			throw new IllegalArgumentException("Forecaster " + this.toString() + " not instantiable");
 		case SES:
 			return new SESRForecaster(history, alpha);
-		case WINDOWSTART:
-			return new WindowStartForecaster(history); // confidence level? #1346
 		default:
 			throw new IllegalArgumentException("No forecaster defined for " + this.toString());
 		}
 	}
 
-	/**
-	 * 
-	 * @return calculated anomaly
-	 */
-	public IAnomalyCalculator<Double> getAnomalyCalculator() {
-		return new SimpleAnomalyCalculator();
+	public IAnomalyScoreCalculator<Double> getAnomalyScoreCalculator() {
+		return new SimpleAnomalyScoreCalculator();
 	}
 
 	// Was extracted from ClassificationUtility in WCF/TBATS as it is not yet integrated:
@@ -178,7 +155,8 @@ public enum ForecastMethod {
 			}
 			long newStartTime = ts.getStartTime();
 			newStartTime += (ts.size() - x) * ts.getDeltaTimeUnit().toMillis(ts.getDeltaTime());
-			final ITimeSeries<Double> tsLastX = new TimeSeries<Double>(newStartTime, ts.getDeltaTime(), ts.getDeltaTimeUnit(), ts.getCapacity());
+			final ITimeSeries<Double> tsLastX = new TimeSeries<Double>(newStartTime, ts.getTimeSeriesTimeUnit(), ts.getDeltaTime(), ts.getDeltaTimeUnit(),
+					ts.getCapacity());
 			tsLastX.appendAll(b);
 			return tsLastX;
 		} else {

@@ -34,7 +34,7 @@ import kieker.test.tools.junit.AbstractKiekerRTest;
 /**
  * @since 1.10
  * @author Tillmann Carlos Bielefeld
- * 
+ *
  */
 public class ARIMA101ForecasterTest extends AbstractKiekerRTest {
 
@@ -75,7 +75,7 @@ public class ARIMA101ForecasterTest extends AbstractKiekerRTest {
 		}
 
 		final TimeSeries<Double> ts =
-				new TimeSeries<Double>(ARIMA101ForecasterTest.START_TIME, ARIMA101ForecasterTest.DELTA_TIME_MILLIS, TimeUnit.MILLISECONDS);
+				new TimeSeries<Double>(ARIMA101ForecasterTest.START_TIME, TimeUnit.MILLISECONDS, ARIMA101ForecasterTest.DELTA_TIME_MILLIS);
 		ts.appendAll(values);
 
 		final ARIMA101Forecaster forecaster = new ARIMA101Forecaster(ts, ARIMA101ForecasterTest.CONFIDENCE_LEVEL);

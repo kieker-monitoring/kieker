@@ -1,0 +1,68 @@
+package kieker.common.record.flow
+
+@author 'Jan Waller' @since '1.5'
+abstract entity AbstractEvent : IEventRecord
+
+@author 'Jan Waller' @since '1.6'
+template ICallObjectRecord : ICallRecord, IObjectRecord {
+	alias objectId as callerObjectId
+	int calleeObjectId = 0
+}
+
+@author 'Jan Waller' @since '1.6'
+template ICallRecord : IOperationRecord {
+	alias operationSignature as callerOperationSignature
+	alias classSignature as callerClassSignature 
+	string calleeOperationSignature = ""
+	string calleeClassSignature = ""
+}
+
+@author 'Jan Waller' @since '1.8'
+template IConstructorRecord : IOperationRecord
+
+@author 'Jan Waller' @since '1.6'
+template IEventRecord : IFlowRecord {
+    long timestamp = 0
+}
+
+@author 'Jan Waller' @since '1.6'
+template IExceptionRecord : IFlowRecord {
+	string cause = ""
+}
+
+/**
+ * Externalize property to circumvent inheritance problems when
+ * inheriting IOperationRecord and IObjectRecord
+ */
+@author 'Reiner Jung' @since '1.10'
+template IClassSignature {
+	string classSignature = ""
+}
+
+@author 'Reiner Jung' @since '1.10'
+template IOperationSignature {
+	string operationSignature = ""	
+}
+
+@author 'Jan Waller' @since '1.5'
+template IFlowRecord
+
+
+@author 'Jan Waller' @since '1.6'
+template IObjectRecord : IFlowRecord, IClassSignature {
+	int objectId = 0
+}
+
+@author 'Jan Waller' @since '1.5'
+template IOperationRecord : IFlowRecord, IOperationSignature, IClassSignature 
+
+@author 'Jan Waller' @since '1.6'
+template ITraceRecord : IFlowRecord {
+	long traceId = -1 // fkey TraceMetadata.traceId
+	int orderIndex = -1
+}
+
+@author 'Florian Fittkau' @since '1.10'
+template IInterfaceRecord : IFlowRecord {
+	string interface
+}

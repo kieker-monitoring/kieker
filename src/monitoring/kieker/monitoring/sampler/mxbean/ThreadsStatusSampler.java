@@ -33,6 +33,9 @@ import kieker.monitoring.core.signaturePattern.SignatureFactory;
  */
 public class ThreadsStatusSampler extends AbstractMXBeanSampler {
 
+	/**
+	 * Create new ThreadsStatusSampler.
+	 */
 	public ThreadsStatusSampler() {
 		// Empty default constructor
 	}
