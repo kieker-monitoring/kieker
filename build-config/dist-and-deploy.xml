@@ -486,7 +486,6 @@
 
 	<target name="enable-r-tests" depends="">
 		<property name="rTestsEnabled" value="true" />
-		<echo message="R-Tests enabled: ${rTestsEnabled}" />
 	</target>
 	
 	<!-- http://kieker.uni-kiel.de/trac/ticket/292: add run-tests-integration BEFORE static-analysis -->
