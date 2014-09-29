@@ -25,10 +25,10 @@ import org.junit.Test;
 import kieker.analysis.AnalysisController;
 import kieker.analysis.IAnalysisController;
 import kieker.analysis.IProjectContext;
-import kieker.analysis.configuration.AbstractUpdateableFilterPlugin;
 import kieker.analysis.configuration.GlobalConfigurationRegistry;
-import kieker.analysis.configuration.exception.PluginNotFoundException;
 import kieker.analysis.exception.AnalysisConfigurationException;
+import kieker.analysis.exception.PluginNotFoundException;
+import kieker.analysis.plugin.AbstractUpdateableFilterPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -37,7 +37,6 @@ import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
-
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
@@ -49,18 +48,13 @@ import kieker.test.common.junit.AbstractKiekerTest;
  */
 public class OnlineConfigurationTest extends AbstractKiekerTest {
 
-	/**
-	 * Id for a Filter.
-	 */
-	private static final String UPDATEABLE_FILTER_ID = "updateableFilter-ID";
 
-	/**
-	 * value for a filters property.
-	 */
 	private static final String UPDATED = "updated";
 
+	private int updateableFilterID;
 	private int noPNFExceptions;
 
+	
 	private final IAnalysisController analysisController;
 	private final ListReader<String> simpleListReader;
 	private final ListCollectionFilter<String> listCollectionfilterSTR;
@@ -87,7 +81,7 @@ public class OnlineConfigurationTest extends AbstractKiekerTest {
 	@Before
 	public void setUp() {
 
-		GlobalConfigurationRegistry.getInstance().registerUpdateableFilterPlugin(UPDATEABLE_FILTER_ID, this.updateable);
+		updateableFilterID = GlobalConfigurationRegistry.getInstance().registerUpdateableFilterPlugin(this.updateable);
 		try {
 			this.analysisController.connect(this.simpleListReader, ListReader.OUTPUT_PORT_NAME, this.updater, Updater.INPUT);
 			this.analysisController.connect(this.simpleListReader, ListReader.OUTPUT_PORT_NAME, this.updateable, Updateable.INPUT);
@@ -117,7 +111,7 @@ public class OnlineConfigurationTest extends AbstractKiekerTest {
 	public void testNewProperty() {
 		final boolean notYetUpdated = this.listCollectionfilterSTR.getList().get(0).equals(Updateable.TEST_PROPERTY_UPDATEABLE);
 		final boolean updated = this.listCollectionfilterSTR.getList().get(1)
-				.equals(this.updateable.getCurrentConfiguration().getStringProperty(Updateable.TEST_PROPERTY_UPDATEABLE));
+.equals(this.updateable.getCurrentConfiguration().getStringProperty(Updateable.TEST_PROPERTY_UPDATEABLE));
 		Assert.assertTrue("Updating wrent wrong ", notYetUpdated && updated);
 	}
 
@@ -193,8 +187,8 @@ public class OnlineConfigurationTest extends AbstractKiekerTest {
 			config.setProperty(Updateable.TEST_PROPERTY_UPDATEABLE, UPDATED);
 			try {
 				if (this.update) {
-					GlobalConfigurationRegistry.getInstance().updateConfiguration(UPDATEABLE_FILTER_ID, config, true);
-					GlobalConfigurationRegistry.getInstance().updateConfiguration("non-Existent-ID", config, true);
+					GlobalConfigurationRegistry.getInstance().updateConfiguration(updateableFilterID, config, true);
+					GlobalConfigurationRegistry.getInstance().updateConfiguration(42, config, true);
 				}
 			} catch (final PluginNotFoundException e) {
 				OnlineConfigurationTest.this.increaseExceptionCount();

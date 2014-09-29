@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.configuration;
+package kieker.analysis.plugin;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,30 +26,34 @@ import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 
 /**
- * Extends the AbstractFilterPlugin with possibilities to update properties that are marked as updateable.
+ * Extends the {@link AbstractFilterPlugin} with possibilities to update properties that are marked as updateable.
  * 
  * @author Thomas Duellmann, Tobias Rudolph, Markus Fischer
+ * 
  * @since 1.10
  */
-
 public abstract class AbstractUpdateableFilterPlugin extends AbstractFilterPlugin {
 
-	// Possible improvements: set up hashmap out of reflection in constructor(s) to be able to tell which props are updateable
-
 	/**
-	 * Constructor.
+	 * Each Plugin requires a constructor with a Configuration object and an IProjectContext.
 	 * 
 	 * @param configuration
-	 *            configuration for this plugin
+	 *            The configuration for this component.
 	 * @param projectContext
-	 *            project context
+	 *            The project context for this component. The component will be registered.
 	 */
 	public AbstractUpdateableFilterPlugin(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 	}
 
 	/**
-	 * Set current configuration.
+	 * Set current configuration. Example implementation:
+	 * <pre>
+	 * // The following condition is true, if key exists in config object AND (update and isUpdateable is true OR update is false)
+	 * if(!update || isPropertyUpdateable(CONFIG_PROPERTY_PROP_NAME)) {
+	 *    this.localProperty = config.getLongProperty(CONFIG_PROPERTY_PROP_NAME);
+	 * }
+	 * </pre>
 	 * 
 	 * @param config
 	 *            Configuration object that contains the configuration to be set.
@@ -57,12 +61,6 @@ public abstract class AbstractUpdateableFilterPlugin extends AbstractFilterPlugi
 	 *            If false, set all properties, else overwrite only properties that are marked as updateable
 	 */
 	public abstract void setCurrentConfiguration(Configuration config, boolean update);
-
-	// Example implementation of setCurrentConfiguration
-	// The following condition is true, if key exists in config object AND (update and isUpdateable is true OR update is false)
-	// if(!update || isPropertyUpdateable(CONFIG_PROPERTY_PROP_NAME)) {
-	// this.localProperty = config.getLongProperty(CONFIG_PROPERTY_PROP_NAME);
-	// }
 
 	/**
 	 * Checks whether the property with the given name is marked as updateable.

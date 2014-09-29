@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.analysis.configuration.exception;
+package kieker.analysis.exception;
 
 import kieker.common.configuration.Configuration;
 
@@ -30,7 +30,7 @@ import kieker.common.configuration.Configuration;
 public class PluginNotFoundException extends Exception {
 
 	private static final long serialVersionUID = -8803287298408230964L;
-	private final String pluginID;
+	private final int pluginID;
 	private final Configuration configuration;
 
 	/**
@@ -41,7 +41,7 @@ public class PluginNotFoundException extends Exception {
 	 * @param configuration
 	 *            requesting configuration
 	 */
-	public PluginNotFoundException(final String id, final Configuration configuration) {
+	public PluginNotFoundException(final int id, final Configuration configuration) {
 		this.pluginID = id;
 		this.configuration = configuration;
 	}
@@ -49,7 +49,7 @@ public class PluginNotFoundException extends Exception {
 	/**
 	 * @return the pluginID
 	 */
-	public String getPluginID() {
+	public int getPluginID() {
 		return this.pluginID;
 	}
 
