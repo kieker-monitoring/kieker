@@ -30,14 +30,14 @@ import kieker.common.util.registry.Registry;
  */
 public final class GlobalConfigurationRegistry {
 
-	private static final GlobalConfigurationRegistry instance = new GlobalConfigurationRegistry();
+	private static final GlobalConfigurationRegistry INSTANCE = new GlobalConfigurationRegistry();
 
 	private final Registry<AbstractUpdateableFilterPlugin> updateableFilters = new Registry<AbstractUpdateableFilterPlugin>();
 
 	private GlobalConfigurationRegistry() {}
 
 	public static GlobalConfigurationRegistry getInstance() {
-		return instance;
+		return INSTANCE;
 	}
 
 	/**

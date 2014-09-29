@@ -16,10 +16,7 @@
 
 package kieker.test.analysis.junit.configuration;
 
-import java.util.Map.Entry;
-
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
@@ -29,14 +26,11 @@ import kieker.analysis.configuration.GlobalConfigurationRegistry;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.exception.PluginNotFoundException;
 import kieker.analysis.plugin.AbstractUpdateableFilterPlugin;
-import kieker.analysis.plugin.annotation.InputPort;
-import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
-import kieker.analysis.plugin.filter.AbstractFilterPlugin;
-import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
+
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
@@ -56,13 +50,13 @@ public class OnlineConfigurationTest extends AbstractKiekerTest {
 	public void testUpdatingNonExistingPlugin() throws PluginNotFoundException {
 		GlobalConfigurationRegistry.getInstance().updateConfiguration(42, new Configuration(), true);
 	}
-	
+
 	@Test
 	@SuppressWarnings("unused")
 	public void testUpdatingPlugin() throws PluginNotFoundException, IllegalStateException, AnalysisConfigurationException {
 		final IAnalysisController analysisController = new AnalysisController();
 
-		final ListReader<String> reader = new ListReader<String>(new Configuration(), analysisController);
+		new ListReader<String>(new Configuration(), analysisController);
 		final UpdateableFilter filter = new UpdateableFilter(new Configuration(), analysisController);
 
 		// Make sure the default configuration is loaded
@@ -72,11 +66,11 @@ public class OnlineConfigurationTest extends AbstractKiekerTest {
 
 		// Now update the configuration
 		final int pluginID = GlobalConfigurationRegistry.getInstance().registerUpdateableFilterPlugin(filter);
-	
+
 		final Configuration newConfiguration = new Configuration();
 		newConfiguration.setProperty(UpdateableFilter.PROPERTY_NAME, "new-configuration");
 		GlobalConfigurationRegistry.getInstance().updateConfiguration(pluginID, newConfiguration, true);
-		
+
 		Assert.assertEquals("new-configuration", filter.getConfiguredContent());
 	}
 
@@ -96,20 +90,20 @@ public class OnlineConfigurationTest extends AbstractKiekerTest {
 
 		private String configuredContent;
 
-		public UpdateableFilter(Configuration configuration, IProjectContext projectContext) {
+		public UpdateableFilter(final Configuration configuration, final IProjectContext projectContext) {
 			super(configuration, projectContext);
 
-			configuredContent = configuration.getStringProperty(PROPERTY_NAME);
+			this.configuredContent = configuration.getStringProperty(PROPERTY_NAME);
 		}
 
 		public String getConfiguredContent() {
 
-			return configuredContent;
+			return this.configuredContent;
 		}
 
 		@Override
 		public void setCurrentConfiguration(final Configuration configuration, final boolean update) {
-			if (!update || isPropertyUpdateable(PROPERTY_NAME)) {
+			if (!update || this.isPropertyUpdateable(PROPERTY_NAME)) {
 				this.configuredContent = configuration.getStringProperty(PROPERTY_NAME);
 			}
 		}
