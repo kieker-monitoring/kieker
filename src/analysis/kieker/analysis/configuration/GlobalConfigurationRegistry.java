@@ -45,8 +45,6 @@ public final class GlobalConfigurationRegistry {
 	 * 
 	 * @param plugin
 	 *            plugin to be registered
-	 * 
-	 * @since 1.10
 	 */
 	public int registerUpdateableFilterPlugin(final AbstractUpdateableFilterPlugin plugin) {
 		return this.updateableFilters.get(plugin);

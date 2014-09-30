@@ -17,7 +17,9 @@
 package kieker.test.analysis.junit.configuration;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.IAnalysisController;
@@ -42,12 +44,16 @@ import kieker.test.common.junit.AbstractKiekerTest;
  */
 public class OnlineConfigurationTest extends AbstractKiekerTest {
 
+	@Rule
+	public ExpectedException exception = ExpectedException.none();
+
 	public OnlineConfigurationTest() {
 		// No code necessary
 	}
 
-	@Test(expected = PluginNotFoundException.class)
+	@Test
 	public void testUpdatingNonExistingPlugin() throws PluginNotFoundException {
+		this.exception.expect(PluginNotFoundException.class);
 		GlobalConfigurationRegistry.getInstance().updateConfiguration(42, new Configuration(), true);
 	}
 
