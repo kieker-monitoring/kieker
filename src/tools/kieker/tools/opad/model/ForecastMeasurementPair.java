@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.opad.record;
+package kieker.tools.opad.model;
 
 /**
  * 

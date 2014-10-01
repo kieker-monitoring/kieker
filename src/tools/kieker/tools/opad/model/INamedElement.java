@@ -14,23 +14,21 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.opad.record;
-
-import kieker.tools.tslib.ITimeSeriesPoint;
+package kieker.tools.opad.model;
 
 /**
  * @author Tillmann Carlos Bielefeld
  * @since 1.10
  * 
  */
-public interface IForecastMeasurementPair extends INamedElement, ITimeSeriesPoint<Double> {
+public interface INamedElement {
 
 	/**
-	 * Returns the forecasted Double value.
+	 * Returns the name of the element.
 	 * 
 	 * @since 1.10
-	 * @return forecasted Double value
+	 * @return name of the element
 	 */
-	public Double getForecasted();
+	public String getName();
 
 }
