@@ -119,7 +119,7 @@ public class ClassOperationSignaturePair {
 	 * @param operationSignatureStr
 	 *            the signature string
 	 * @param javaConstructor
-	 *            if true the string holds an constructor signature
+	 *            if true the string holds a constructor signature
 	 * 
 	 * @return a ClassOperationSignaturePair
 	 */
@@ -187,10 +187,6 @@ public class ClassOperationSignaturePair {
 	 * @return An operation signature string as defined by the given parameters.
 	 */
 	public static String createOperationSignatureString(final String fqClassName, final Signature signature) {
-		if ((signature.getModifier().length != 0) && (!signature.hasReturnType())) {
-			throw new IllegalArgumentException("Modifier not list empty but return type null/empty");
-		}
-
 		final StringBuilder strBuilder = new StringBuilder();
 		// Append modifiers and return type
 		if ((signature.getReturnType() != null) && (signature.getReturnType().length() != 0)) {
