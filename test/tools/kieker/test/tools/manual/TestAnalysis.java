@@ -47,7 +47,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.5
  */
 public final class TestAnalysis {
@@ -55,7 +55,7 @@ public final class TestAnalysis {
 	private static final boolean LOADCONFIG = false;
 
 	private static final String KAX_FILENAME = "tmp/testproject.kax";
-	private static final String SRC_FILENAME = "tmp/testdata-ascii/";
+	private static final String SRC_FILENAME = "examples/userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20140821-113933692-UTC/";
 
 	private TestAnalysis() {}
 
@@ -106,13 +106,13 @@ public final class TestAnalysis {
 
 		final Configuration confTeeFilter2 = new Configuration();
 		confTeeFilter2.setProperty(TeeFilter.CONFIG_PROPERTY_NAME_STREAM, TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_STDERR);
-		// confTeeFilter2.setProperty(TeeFilter.CONFIG_PROPERTY_NAME_STREAM, TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_NULL);
+		confTeeFilter2.setProperty(TeeFilter.CONFIG_PROPERTY_NAME_STREAM, TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_NULL);
 		confTeeFilter2.setProperty(AbstractAnalysisComponent.CONFIG_NAME, "CountBegin");
 		final TeeFilter teeFilter2 = new TeeFilter(confTeeFilter2, analysisController);
 
 		final Configuration confTeeFilter3 = new Configuration();
 		confTeeFilter3.setProperty(TeeFilter.CONFIG_PROPERTY_NAME_STREAM, TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_STDERR);
-		// confTeeFilter3.setProperty(TeeFilter.CONFIG_PROPERTY_NAME_STREAM, TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_NULL);
+		confTeeFilter3.setProperty(TeeFilter.CONFIG_PROPERTY_NAME_STREAM, TeeFilter.CONFIG_PROPERTY_VALUE_STREAM_NULL);
 		confTeeFilter3.setProperty(AbstractAnalysisComponent.CONFIG_NAME, "CountAfter");
 		final TeeFilter teeFilter3 = new TeeFilter(confTeeFilter3, analysisController);
 

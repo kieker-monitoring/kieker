@@ -33,7 +33,7 @@ import kieker.monitoring.timer.ITimeSource;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.10
  */
 @Aspect
@@ -51,12 +51,12 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 
 	/**
 	 * The advice used around the constructor executions.
-	 * 
+	 *
 	 * @param thisObject
 	 * @param thisJoinPoint
-	 * 
+	 *
 	 * @return The result of the joint point's {@code proceed} method.
-	 * 
+	 *
 	 * @throws Throwable
 	 */
 	@Around("monitoredConstructor() && this(thisObject) && notWithinKieker()")
@@ -64,8 +64,8 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return thisJoinPoint.proceed();
 		}
-		final String signature = this.signatureToLongString(thisJoinPoint.getSignature());
-		if (!CTRLINST.isProbeActivated(signature)) {
+		final String operationSignature = this.signatureToLongString(thisJoinPoint.getSignature());
+		if (!CTRLINST.isProbeActivated(operationSignature)) {
 			return thisJoinPoint.proceed();
 		}
 		// common fields
@@ -79,7 +79,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final String clazz = thisObject.getClass().getName();
 		final int objectId = System.identityHashCode(thisObject);
 		// measure before execution
-		CTRLINST.newMonitoringRecord(new BeforeConstructorObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), clazz, signature, objectId));
+		CTRLINST.newMonitoringRecord(new BeforeConstructorObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), operationSignature, clazz, objectId));
 		// execution of the called method
 		final Object retval;
 		try {
@@ -87,7 +87,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		} catch (final Throwable th) { // NOPMD NOCS (catch throw might ok here)
 			// measure after failed execution
 			CTRLINST.newMonitoringRecord(
-					new AfterConstructorFailedObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), clazz, signature, th.toString(), objectId));
+					new AfterConstructorFailedObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), operationSignature, clazz, th.toString(), objectId));
 			throw th;
 		} finally {
 			if (newTrace) { // close the trace
@@ -95,7 +95,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			}
 		}
 		// measure after successful execution
-		CTRLINST.newMonitoringRecord(new AfterConstructorObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), clazz, signature, objectId));
+		CTRLINST.newMonitoringRecord(new AfterConstructorObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), operationSignature, clazz, objectId));
 		return retval;
 	}
 }
