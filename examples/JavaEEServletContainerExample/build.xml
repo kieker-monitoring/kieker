@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="KiekerLiveDemoExample" default="build-all" basedir=".">
 	<property name="dist" value="dist"/>
-	<property name="livedemo.basedir" value="livedemo"/>
+	<property name="livedemo.basedir" value="livedemo-source"/>
 	<property name="livedemo.webcontent" value="${livedemo.basedir}/WebContent"/>
 	<property name="livedemo.lib.dir" value="${livedemo.basedir}/lib"/>
 	<property name="kieker.dist.dir" value="../../dist/"/>
@@ -29,7 +29,9 @@
 		</fileset>
 	</path>
 
-	<target name="build-all" depends="clean,init,copy,compile,war,unwar" />
+	<target name="build-all" depends="clean-all,init,copy,compile,war,unwar">
+	  <antcall target="clean-local" /> <!-- not called (again) when appended to depends list above -->
+	</target>
 	
 	<target name="init">
 		<mkdir dir="${build}"/>
@@ -54,21 +56,23 @@
 	</target>
 
 	<target name="war" depends="compile">
-		
 		<war destfile="${dist.livedemo.war}">
 			<fileset dir="${build}"/>
 		</war>
-		
-		<delete dir="${build}"/>
 	</target>
 	
 	<target name="unwar" depends="war">
 		<unwar src="${dist.livedemo.war}" dest="${jetty.webapps}"/>
 	</target>
-	
-    <target name="clean">
+
+    <target name="clean-local">
         <delete dir="${build}" includeemptydirs="true" />
     	<delete dir="${dist}" includeemptydirs="true" />
+    </target>	
+	
+    <target name="clean-jetty">
     	<delete dir="${jetty.webapps}" includeemptydirs="true" />
-      </target>	
+    </target>	
+
+    <target name="clean-all" depends="clean-local,clean-jetty"/>	
 </project>
