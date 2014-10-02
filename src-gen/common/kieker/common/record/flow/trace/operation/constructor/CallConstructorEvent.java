@@ -35,10 +35,10 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
 			 + TYPE_SIZE_LONG // ITraceRecord.traceId
 			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
+			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
 			 + TYPE_SIZE_STRING // IClassSignature.classSignature
-			 + TYPE_SIZE_STRING // IOperationRecord.operationSignature
-			 + TYPE_SIZE_STRING // ICallRecord.calleeClassSignature
 			 + TYPE_SIZE_STRING // ICallRecord.calleeOperationSignature
+			 + TYPE_SIZE_STRING // ICallRecord.calleeClassSignature
 	;
 	private static final long serialVersionUID = 3476841214127074670L;
 	
@@ -46,10 +46,10 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 		long.class, // IEventRecord.timestamp
 		long.class, // ITraceRecord.traceId
 		int.class, // ITraceRecord.orderIndex
+		String.class, // IOperationSignature.operationSignature
 		String.class, // IClassSignature.classSignature
-		String.class, // IOperationRecord.operationSignature
-		String.class, // ICallRecord.calleeClassSignature
 		String.class, // ICallRecord.calleeOperationSignature
+		String.class, // ICallRecord.calleeClassSignature
 	};
 	
 	
@@ -63,17 +63,17 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 	 *            traceId
 	 * @param orderIndex
 	 *            orderIndex
-	 * @param classSignature
-	 *            classSignature
 	 * @param operationSignature
 	 *            operationSignature
-	 * @param calleeClassSignature
-	 *            calleeClassSignature
+	 * @param classSignature
+	 *            classSignature
 	 * @param calleeOperationSignature
 	 *            calleeOperationSignature
+	 * @param calleeClassSignature
+	 *            calleeClassSignature
 	 */
-	public CallConstructorEvent(final long timestamp, final long traceId, final int orderIndex, final String classSignature, final String operationSignature, final String calleeClassSignature, final String calleeOperationSignature) {
-		super(timestamp, traceId, orderIndex, classSignature, operationSignature, calleeClassSignature, calleeOperationSignature);
+	public CallConstructorEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature, final String calleeOperationSignature, final String calleeClassSignature) {
+		super(timestamp, traceId, orderIndex, operationSignature, classSignature, calleeOperationSignature, calleeClassSignature);
 	}
 
 	/**
@@ -121,10 +121,10 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 			this.getTimestamp(),
 			this.getTraceId(),
 			this.getOrderIndex(),
-			this.getClassSignature(),
 			this.getOperationSignature(),
-			this.getCalleeClassSignature(),
-			this.getCalleeOperationSignature()
+			this.getClassSignature(),
+			this.getCalleeOperationSignature(),
+			this.getCalleeClassSignature()
 		};
 	}
 
@@ -136,10 +136,10 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 		buffer.putLong(this.getTimestamp());
 		buffer.putLong(this.getTraceId());
 		buffer.putInt(this.getOrderIndex());
-		buffer.putInt(stringRegistry.get(this.getClassSignature()));
 		buffer.putInt(stringRegistry.get(this.getOperationSignature()));
-		buffer.putInt(stringRegistry.get(this.getCalleeClassSignature()));
+		buffer.putInt(stringRegistry.get(this.getClassSignature()));
 		buffer.putInt(stringRegistry.get(this.getCalleeOperationSignature()));
+		buffer.putInt(stringRegistry.get(this.getCalleeClassSignature()));
 	}
 
 	/**

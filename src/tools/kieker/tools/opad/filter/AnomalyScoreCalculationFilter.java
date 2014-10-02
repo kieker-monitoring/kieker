@@ -22,7 +22,7 @@ import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.tools.opad.record.IForecastMeasurementPair;
+import kieker.tools.opad.model.IForecastMeasurementPair;
 import kieker.tools.opad.record.StorableDetectionResult;
 
 /**

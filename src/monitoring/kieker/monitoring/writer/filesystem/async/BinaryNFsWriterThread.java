@@ -44,6 +44,26 @@ public class BinaryNFsWriterThread extends AbstractFsWriterThread {
 	private final ByteBuffer byteBuffer;
 	private final IRegistry<String> stringRegistry;
 
+	/**
+	 * Create a new BinaryNFsWriterThread.
+	 * 
+	 * @param monitoringController
+	 *            the monitoring controller accessed by this thread
+	 * @param writeQueue
+	 *            the queue where the writer fetches its records from
+	 * @param mappingFileWriter
+	 *            writer for the mapping file (the file where class names are mapped to record ids)
+	 * @param path
+	 *            location where to files should go to (the path must point to a directory)
+	 * @param maxEntriesInFile
+	 *            limit for the number of records per log file
+	 * @param maxLogSize
+	 *            limit of the log file size
+	 * @param maxLogFiles
+	 *            limit of the number of log files
+	 * @param bufferSize
+	 *            size of the output buffer
+	 */
 	public BinaryNFsWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
 			final MappingFileWriter mappingFileWriter, final String path, final int maxEntriesInFile, final int maxLogSize, final int maxLogFiles,
 			final int bufferSize) {

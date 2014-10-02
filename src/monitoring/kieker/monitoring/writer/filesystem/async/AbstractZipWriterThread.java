@@ -61,6 +61,25 @@ public abstract class AbstractZipWriterThread extends AbstractAsyncThread {
 	private long previousFileDate;
 	private long sameFilenameCounter;
 
+	/**
+	 * Create a new AbstractZipWriterThread.
+	 * 
+	 * @param monitoringController
+	 *            the monitoring controller accessed by this thread
+	 * @param writeQueue
+	 *            the queue where the writer fetches its records from
+	 * @param mappingFileWriter
+	 *            writer for the mapping file (the file where class names are mapped to record ids)
+	 * @param path
+	 *            location where to files should go to (the path must point to a directory)
+	 * @param maxEntriesInFile
+	 *            limit for the number of records per log file
+	 * @param level
+	 *            compression level
+	 * 
+	 * @throws IOException
+	 *             when file operation fails
+	 */
 	public AbstractZipWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
 			final StringMappingFileWriter mappingFileWriter, final String path, final int maxEntriesInFile, final int level) throws IOException {
 		super(monitoringController, writeQueue);
@@ -104,6 +123,11 @@ public abstract class AbstractZipWriterThread extends AbstractAsyncThread {
 		}
 	}
 
+	/**
+	 * Return the filename of a log file.
+	 * 
+	 * @return log file name
+	 */
 	protected final String getFilename() {
 		final long date = System.currentTimeMillis();
 		if (this.previousFileDate == date) {

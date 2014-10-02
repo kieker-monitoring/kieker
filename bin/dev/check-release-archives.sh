@@ -181,14 +181,16 @@ function assert_files_exist_common {
 		assert_file_exists_regular "${JAR_BASE}.LICENSE"
 	done
 	
-	# Make sure that required-by info included in each LICENSE file in lib/ (excluding subdirs)
-	for l in lib/*.LICENSE; do 
-	    echo -n "Asserting '$l' contains 'Required by:' information .. "
-	    if ! grep -q "Required by:" $l; then 
-		echo "Required by: missing in $l"; 
-		exit 1
-	    fi; 
-	    echo "OK"
+	# Make sure that required infos included in each LICENSE file in lib/ (excluding subdirs)
+	for info in "Project" "Description" "License" "Required by"; do
+	    for l in lib/*.LICENSE; do 
+		echo -n "Asserting '$l' contains '${info}' information .. "
+		if ! (grep -q "${info}:" $l); then 
+		    echo "'${info}' missing in $l"; 
+		    exit 1
+		fi; 
+		echo "OK"
+	    done
 	done
 
 	echo -n "Making sure that no references to old Kieker Jars included ..."
@@ -217,7 +219,8 @@ function assert_files_exist_src {
 	assert_files_exist_common
 	assert_dir_exists "model/"
 	assert_dir_exists "model/analysis/"
-	assert_dir_exists "model/records/"
+	assert_dir_exists "model/common/records/"
+	assert_dir_exists "model/tools/records/"
 	assert_file_exists_regular "model/analysis/AnalysisMetaModel.ecore"
 	assert_file_exists_regular "model/analysis/AnalysisMetaModel.ecorediag"
 	assert_file_exists_regular "model/analysis/AnalysisMetaModel.genmodel"
@@ -243,6 +246,8 @@ function assert_files_exist_src {
 	assert_file_exists_regular "build-config/init-and-clean.xml"
 	assert_file_exists_regular "build-config/quality.xml"
 	assert_file_exists_regular "build-config/test.xml"
+	assert_file_exists_regular "build-config/javadoc-header/javadoc.css"
+	assert_file_exists_regular "build-config/javadoc-header/kieker-javadoc-header.png"
 	assert_file_exists_regular "kieker-eclipse.importorder"
 	assert_file_exists_regular "kieker-eclipse-cleanup.xml"
 	assert_file_exists_regular "kieker-eclipse-formatter.xml"
@@ -261,8 +266,7 @@ function assert_files_exist_bin {
 	assert_file_exists_regular "doc/kieker-"*"_userguide.pdf"
 	assert_dir_exists "dist/"
 	MAIN_JAR=$(ls "dist/kieker-"*".jar" | grep -v emf | grep -v aspectj )
-	assert_file_exists_regular "META-INF/kieker.monitoring.properties"
-	assert_file_exists_regular "META-INF/kieker.monitoring.adaptiveMonitoring.conf"
+	assert_file_NOT_exists "META-INF/"
 	assert_file_exists_regular ${MAIN_JAR}
 	assert_file_exists_regular "dist/kieker-"*"_aspectj.jar"
 	assert_zip_file_content_exist "dist/kieker-"*"_aspectj.jar" " org/aspectj"
@@ -271,6 +275,8 @@ function assert_files_exist_bin {
 	assert_file_exists_regular "dist/kieker-"*"_emf.jar"
 	assert_zip_file_content_exist "dist/kieker-"*"_emf.jar" " model/"
 	assert_zip_file_content_exist "dist/kieker-"*"_emf.jar" " org/eclipse/"
+	assert_file_exists_regular "examples/kieker.monitoring.example.properties"
+	assert_file_exists_regular "examples/kieker.monitoring.adaptiveMonitoring.example.conf"
 	assert_file_exists_regular "examples/userguide/ch2--manual-instrumentation/lib/kieker-"*"_emf.jar"
 	assert_file_exists_regular "examples/userguide/ch3-4--custom-components/lib/kieker-"*"_emf.jar"
 	assert_file_exists_regular "examples/userguide/ch5--trace-monitoring-aspectj/lib/kieker-"*"_aspectj.jar"

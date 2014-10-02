@@ -22,25 +22,22 @@
 				<include name="framework-libs/spring/*.jar" /> <!-- needed for the spring tests -->
 				<include name="javax.jms-*.jar" /> 	<!-- Needed for TestPluginConfigurationRetention. -->
 				<include name="commons-cli-*.jar" /> <!-- Needed for TestPluginConfigurationRetention. -->
-				<include name="commons-math-*.jar" /> <!-- Needed for some of the OPAD tests. -->
-				<include name="commons-lang-*.jar" /> <!-- Needed for some of the OPAD tests. -->
 
 				<!-- used in tests for bridge JMS connector -->
-				<include name="activemq-core-5.4.3.jar" />
-				<include name="reflections-0.9.9-RC1.jar"/>
-				<include name="geronimo-j2ee-management_1.1_spec-1.0.1.jar"/>
-				<include name="kahadb-5.7.0.jar"/>
-				<include name="slf4j-api-1.7.*.jar"/>
+				<include name="activemq-core*.jar" />
+				<include name="activemq-protobuf*.jar" />
+				<include name="kahadb-*.jar" />
+				<include name="reflections-*.jar"/>
+				<include name="geronimo-j2ee-management_1.1_spec-*.jar"/>
+				<include name="slf4j-api-*.jar"/>
 				<include name="javax.jms-*.jar" /> <!-- Needed for the JMSReader/Writer test -->
 				
 				<!-- Opad begin -->
-				<include name="commons-math-*.jar"/>
-				<include name="commons-lang-*.jar"/>
+				<include name="commons-math3-*.jar" /> <!-- Needed for some of the OPAD tests. -->
+				<include name="commons-lang3-*.jar" /> <!-- Needed for some of the OPAD tests. -->
 				<include name="REngine-*.jar"/>
 				<include name="Rsession-*.jar"/>
 				<include name="Rserve-*.jar"/>
-				<include name="mongo-*.jar"/>
-				<include name="org.json.min-*.jar"/>
 				<!-- Opad end -->
 				
 			</fileset>
@@ -63,16 +60,16 @@
 		<delete dir="${tests.junit-results.dir}" />
 		<mkdir dir="${tests.junit-results.dir}" />
 
-		<!-- Make sure that no other rserve instance is running -->
-		<!-- <antcall target="-stop-rserve.tools"></antcall> -->
+		<echo message="Killing all running RServe instances (if present) ... " />
+		<antcall target="-stop-rserve.tools"></antcall>
 		
 		<!-- Start fresh rserve instance -->
-		<!-- <antcall target="-start-rserve.tools"></antcall> -->
+		<antcall target="-start-rserve.tools"></antcall>
 		
 		<junit fork="no" printsummary="yes">
 			
-			<!-- If you want to execute R-related tests set this to true, otherwise to false -->
-			<sysproperty key="TestKiekerRTests" value="false" />
+			<!-- If you want to execute R-related tests set rTestsEnabled variable (see dist-and-debploy.xml) to true, otherwise to false (default) -->
+			<sysproperty key="TestKiekerRTests" value="${rTestsEnabled}" />
 			
 			<classpath refid="kieker.test-junit-run-classpath" />
 								
@@ -86,7 +83,7 @@
 				</fileset>
 			</batchtest>
 		</junit>
-		<!-- <antcall target="-stop-rserve.tools"></antcall> -->
+		<antcall target="-stop-rserve.tools"></antcall>
 
 		<antcall target="-test.junit.report" /> 
 	</target>
@@ -104,15 +101,15 @@
 	</target>
 	
 	<target name="-start-rserve.tools" depends="">
-		<echo message="Starting Rserve ..." />
-		<exec executable="${tests.rserve-control-script.sh}" spawn="true"> <!-- failonerror="true" -->
+		<echo message="Trying to start Rserve (this might fail on systems that are not able to execute bash scripts or do not have R/Rserve installed)" />
+		<exec executable="${tests.rserve-control-script.sh}" spawn="true" failonerror="false" osfamily="unix"> <!-- failifexecutionfails="false" not compatible with spawn -->
 			<arg value="start" />
 		</exec>
 	</target>
 
 	<target name="-stop-rserve.tools" depends="">
-		<echo message="Stopping Rserve ..." />
-		<exec executable="${tests.rserve-control-script.sh}" failonerror="true">
+		<echo message="Trying to stop Rserve (this might fail on systems that are not able to execute bash scripts or do not have R/Rserve installed)" />
+		<exec executable="${tests.rserve-control-script.sh}" failonerror="false" failifexecutionfails="false" osfamily="unix">
 			<arg value="stop" />
 		</exec>
 	</target>

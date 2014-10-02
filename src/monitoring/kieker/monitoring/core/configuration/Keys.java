@@ -72,4 +72,7 @@ interface Keys { // NOPMD NOCS (static list)
 	public static final String ADAPTIVE_MONITORING_CONFIG_FILE = PREFIX + "adaptiveMonitoring.configFile";
 	public static final String ADAPTIVE_MONITORING_CONFIG_FILE_UPDATE = PREFIX + "adaptiveMonitoring.updateConfigFile";
 	public static final String ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL = PREFIX + "adaptiveMonitoring.readInterval";
+	public static final String ADAPTIVE_MONITORING_MAX_CACHE_SIZE = PREFIX + "adaptiveMonitoring.maxCacheSize";
+	public static final String ADAPTIVE_MONITORING_BOUNDED_CACHE_BEHAVIOUR = PREFIX + "adaptiveMonitoring.boundedCacheBehaviour";
+
 }

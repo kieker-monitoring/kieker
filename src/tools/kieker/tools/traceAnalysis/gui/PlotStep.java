@@ -18,10 +18,13 @@ package kieker.tools.traceAnalysis.gui;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Collection;
 import java.util.Properties;
 
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -46,13 +49,21 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 	private static final String PROPERTY_KEY_ASSEMBLY_SEQUENCE_DIAGRAMS = PROPERTY_KEY_IDENTIFIER + ".assemblySequenceDiagrams";
 	private static final String PROPERTY_KEY_DEPLOYMENT_COMPONENT_DEPENDENCY_GRAPH = PROPERTY_KEY_IDENTIFIER + ".deploymentComponentDependencyGraph";
 	private static final String PROPERTY_KEY_DEPLOYMENT_COMPONENT_DEPENDENCY_GRAPH_RT = PROPERTY_KEY_IDENTIFIER + ".deploymentComponentDependencyGraphResponseTime";
+	private static final String PROPERTY_KEY_DEPLOYMENT_COMPONENT_DEPENDENCY_GRAPH_RT_CB = PROPERTY_KEY_IDENTIFIER
+			+ ".deploymentComponentDependencyGraphResponseTimeComboBox";
 	private static final String PROPERTY_KEY_ASSEMBLY_COMPONENT_DEPENDENCY_GRAPH = PROPERTY_KEY_IDENTIFIER + ".assemblyComponentDependencyGraph";
 	private static final String PROPERTY_KEY_ASSEMBLY_COMPONENT_DEPENDENCY_GRAPH_RT = PROPERTY_KEY_IDENTIFIER + ".assemblyComponentDependencyGraphResponseTime";
+	private static final String PROPERTY_KEY_ASSEMBLY_COMPONENT_DEPENDENCY_GRAPH_RT_CB = PROPERTY_KEY_IDENTIFIER
+			+ ".assemblyComponentDependencyGraphResponseTimeComboBox";
 	private static final String PROPERTY_KEY_CONTAINER_DEPENDENCY_GRAPH = PROPERTY_KEY_IDENTIFIER + ".containerDependencyGraph";
 	private static final String PROPERTY_KEY_DEPLOYMENT_OPERATION_DEPENDENCY_GRAPH = PROPERTY_KEY_IDENTIFIER + ".deploymentOperationDependencyGraph";
 	private static final String PROPERTY_KEY_DEPLOYMENT_OPERATION_DEPENDENCY_GRAPH_RT = PROPERTY_KEY_IDENTIFIER + ".deploymentOperationDependencyGraphResponseTime";
+	private static final String PROPERTY_KEY_DEPLOYMENT_OPERATION_DEPENDENCY_GRAPH_RT_CB = PROPERTY_KEY_IDENTIFIER
+			+ ".deploymentOperationDependencyGraphResponseTimeComboBox";
 	private static final String PROPERTY_KEY_ASSEMBLY_OPERATION_DEPENDENCY_GRAPH = PROPERTY_KEY_IDENTIFIER + ".assemblyOperationDependencyGraph";
 	private static final String PROPERTY_KEY_ASSEMBLY_OPERATION_DEPENDENCY_GRAPH_RT = PROPERTY_KEY_IDENTIFIER + ".assemblyOperationDependencyGraphResponseTime";
+	private static final String PROPERTY_KEY_ASSEMBLY_OPERATION_DEPENDENCY_GRAPH_RT_CB = PROPERTY_KEY_IDENTIFIER
+			+ ".assemblyOperationDependencyGraphResponseTimeCOmboBox";
 	private static final String PROPERTY_KEY_AGGREGATED_DEPLOYMENT_CALL_TREE = PROPERTY_KEY_IDENTIFIER + ".aggregatedDeploymentCallTree";
 	private static final String PROPERTY_KEY_AGGREGATED_ASSEMBLY_CALL_TREE = PROPERTY_KEY_IDENTIFIER + ".aggregatedAssemblyCallTree";
 	private static final String PROPERTY_KEY_CALL_TREES = PROPERTY_KEY_IDENTIFIER + ".callTrees";
@@ -75,6 +86,12 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 	private final JCheckBox callTrees = new JCheckBox("Call Trees");
 	private final JCheckBox allGraphs = new JCheckBox("Select All");
 	private final JPanel expandingPanel = new JPanel();
+
+	private final String[] responseTimeStrings = { "ns", "us", "ms", "s" };
+	private final JComboBox deploymentComponentDependencyGraphResponseTimeComboBox = new JComboBox(this.responseTimeStrings);
+	private final JComboBox assemblyComponentDependencyGraphResponseTimeComboBox = new JComboBox(this.responseTimeStrings);
+	private final JComboBox deploymentOperationDependencyGraphResponseTimeComboBox = new JComboBox(this.responseTimeStrings);
+	private final JComboBox assemblyOperationDependencyGraphResponseTimeComboBox = new JComboBox(this.responseTimeStrings);
 
 	public PlotStep() {
 		this.addAndLayoutComponents();
@@ -106,28 +123,44 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 		this.add(this.assemblySequenceDiagrams, assemblySequenceDiagramsConstraints);
 
 		final GridBagConstraints deploymentComponentDependencyGraphConstraints = new GridBagConstraints();
-		deploymentComponentDependencyGraphConstraints.gridwidth = GridBagConstraints.RELATIVE;
 		deploymentComponentDependencyGraphConstraints.insets.set(0, 5, 0, 0);
 		deploymentComponentDependencyGraphConstraints.fill = GridBagConstraints.BOTH;
+		deploymentComponentDependencyGraphConstraints.gridx = 1;
+		deploymentComponentDependencyGraphConstraints.gridy = 4;
 		this.add(this.deploymentComponentDependencyGraph, deploymentComponentDependencyGraphConstraints);
 
 		final GridBagConstraints deploymentComponentDependencyGraphResponseTimeConstraints = new GridBagConstraints();
-		deploymentComponentDependencyGraphResponseTimeConstraints.gridwidth = GridBagConstraints.REMAINDER;
 		deploymentComponentDependencyGraphResponseTimeConstraints.insets.set(0, 5, 0, 0);
 		deploymentComponentDependencyGraphResponseTimeConstraints.fill = GridBagConstraints.BOTH;
+		deploymentComponentDependencyGraphResponseTimeConstraints.gridx = 2;
+		deploymentComponentDependencyGraphResponseTimeConstraints.gridy = 4;
 		this.add(this.deploymentComponentDependencyGraphResponseTime, deploymentComponentDependencyGraphResponseTimeConstraints);
 
+		final GridBagConstraints responseTimeComboBoxConstraints = new GridBagConstraints();
+		responseTimeComboBoxConstraints.gridwidth = GridBagConstraints.REMAINDER;
+		responseTimeComboBoxConstraints.anchor = GridBagConstraints.LINE_START;
+		responseTimeComboBoxConstraints.insets.set(0, 5, 0, 0);
+		responseTimeComboBoxConstraints.fill = GridBagConstraints.NONE;
+		responseTimeComboBoxConstraints.gridx = 3;
+		responseTimeComboBoxConstraints.gridy = 4;
+		this.add(this.deploymentComponentDependencyGraphResponseTimeComboBox, responseTimeComboBoxConstraints);
+
 		final GridBagConstraints assemblyComponentDependencyGraphConstraints = new GridBagConstraints();
-		assemblyComponentDependencyGraphConstraints.gridwidth = GridBagConstraints.RELATIVE;
 		assemblyComponentDependencyGraphConstraints.insets.set(0, 5, 0, 0);
 		assemblyComponentDependencyGraphConstraints.fill = GridBagConstraints.BOTH;
+		assemblyComponentDependencyGraphConstraints.gridx = 1;
+		assemblyComponentDependencyGraphConstraints.gridy = 5;
 		this.add(this.assemblyComponentDependencyGraph, assemblyComponentDependencyGraphConstraints);
 
 		final GridBagConstraints assemblyComponentDependencyGraphResponseTimeConstraints = new GridBagConstraints();
-		assemblyComponentDependencyGraphResponseTimeConstraints.gridwidth = GridBagConstraints.REMAINDER;
 		assemblyComponentDependencyGraphResponseTimeConstraints.insets.set(0, 5, 0, 0);
 		assemblyComponentDependencyGraphResponseTimeConstraints.fill = GridBagConstraints.BOTH;
+		assemblyComponentDependencyGraphResponseTimeConstraints.gridx = 2;
+		assemblyComponentDependencyGraphResponseTimeConstraints.gridy = 5;
 		this.add(this.assemblyComponentDependencyGraphResponseTime, assemblyComponentDependencyGraphResponseTimeConstraints);
+
+		responseTimeComboBoxConstraints.gridy = 5;
+		this.add(this.assemblyComponentDependencyGraphResponseTimeComboBox, responseTimeComboBoxConstraints);
 
 		final GridBagConstraints containerDependencyGraphConstraints = new GridBagConstraints();
 		containerDependencyGraphConstraints.gridwidth = GridBagConstraints.REMAINDER;
@@ -136,28 +169,38 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 		this.add(this.containerDependencyGraph, containerDependencyGraphConstraints);
 
 		final GridBagConstraints deploymentOperationDependencyGraphConstraints = new GridBagConstraints();
-		deploymentOperationDependencyGraphConstraints.gridwidth = GridBagConstraints.RELATIVE;
 		deploymentOperationDependencyGraphConstraints.insets.set(0, 5, 0, 0);
 		deploymentOperationDependencyGraphConstraints.fill = GridBagConstraints.BOTH;
+		deploymentOperationDependencyGraphConstraints.gridx = 1;
+		deploymentOperationDependencyGraphConstraints.gridy = 7;
 		this.add(this.deploymentOperationDependencyGraph, deploymentOperationDependencyGraphConstraints);
 
 		final GridBagConstraints deploymentOperationDependencyGraphResponseTimeConstraints = new GridBagConstraints();
-		deploymentOperationDependencyGraphResponseTimeConstraints.gridwidth = GridBagConstraints.REMAINDER;
 		deploymentOperationDependencyGraphResponseTimeConstraints.insets.set(0, 5, 0, 0);
 		deploymentOperationDependencyGraphResponseTimeConstraints.fill = GridBagConstraints.BOTH;
+		deploymentOperationDependencyGraphResponseTimeConstraints.gridx = 2;
+		deploymentOperationDependencyGraphResponseTimeConstraints.gridy = 7;
 		this.add(this.deploymentOperationDependencyGraphResponseTime, deploymentOperationDependencyGraphResponseTimeConstraints);
 
+		responseTimeComboBoxConstraints.gridy = 7;
+		this.add(this.deploymentOperationDependencyGraphResponseTimeComboBox, responseTimeComboBoxConstraints);
+
 		final GridBagConstraints assemblyOperationDependencyGraphConstraints = new GridBagConstraints();
-		assemblyOperationDependencyGraphConstraints.gridwidth = GridBagConstraints.RELATIVE;
 		assemblyOperationDependencyGraphConstraints.insets.set(0, 5, 0, 0);
 		assemblyOperationDependencyGraphConstraints.fill = GridBagConstraints.BOTH;
+		assemblyOperationDependencyGraphConstraints.gridx = 1;
+		assemblyOperationDependencyGraphConstraints.gridy = 8;
 		this.add(this.assemblyOperationDependencyGraph, assemblyOperationDependencyGraphConstraints);
 
 		final GridBagConstraints assemblyOperationDependencyGraphResponseTimeConstraints = new GridBagConstraints();
-		assemblyOperationDependencyGraphResponseTimeConstraints.gridwidth = GridBagConstraints.REMAINDER;
 		assemblyOperationDependencyGraphResponseTimeConstraints.insets.set(0, 5, 0, 0);
 		assemblyOperationDependencyGraphResponseTimeConstraints.fill = GridBagConstraints.BOTH;
+		assemblyOperationDependencyGraphResponseTimeConstraints.gridx = 2;
+		assemblyOperationDependencyGraphResponseTimeConstraints.gridy = 8;
 		this.add(this.assemblyOperationDependencyGraphResponseTime, assemblyOperationDependencyGraphResponseTimeConstraints);
+
+		responseTimeComboBoxConstraints.gridy = 8;
+		this.add(this.assemblyOperationDependencyGraphResponseTimeComboBox, responseTimeComboBoxConstraints);
 
 		final GridBagConstraints aggregatedDeploymentCallTreeConstraints = new GridBagConstraints();
 		aggregatedDeploymentCallTreeConstraints.gridwidth = GridBagConstraints.REMAINDER;
@@ -200,15 +243,47 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 
 		this.deploymentComponentDependencyGraph.addItemListener(new SelectionBindingItemListener(this.deploymentComponentDependencyGraphResponseTime, true));
 		this.deploymentComponentDependencyGraphResponseTime.addItemListener(new SelectionBindingItemListener(this.deploymentComponentDependencyGraph, false));
+		this.deploymentComponentDependencyGraphResponseTime.addActionListener(new ActionListener() {
+			@Override
+			@SuppressWarnings("synthetic-access")
+			public void actionPerformed(final ActionEvent e) {
+				PlotStep.this.deploymentComponentDependencyGraphResponseTimeComboBox.setEnabled(PlotStep.this.deploymentComponentDependencyGraphResponseTime
+						.isSelected());
+			}
+		});
 
 		this.assemblyComponentDependencyGraph.addItemListener(new SelectionBindingItemListener(this.assemblyComponentDependencyGraphResponseTime, true));
 		this.assemblyComponentDependencyGraphResponseTime.addItemListener(new SelectionBindingItemListener(this.assemblyComponentDependencyGraph, false));
+		this.assemblyComponentDependencyGraphResponseTime.addActionListener(new ActionListener() {
+			@Override
+			@SuppressWarnings("synthetic-access")
+			public void actionPerformed(final ActionEvent e) {
+				PlotStep.this.assemblyComponentDependencyGraphResponseTimeComboBox.setEnabled(PlotStep.this.assemblyComponentDependencyGraphResponseTime
+						.isSelected());
+			}
+		});
 
 		this.deploymentOperationDependencyGraph.addItemListener(new SelectionBindingItemListener(this.deploymentOperationDependencyGraphResponseTime, true));
 		this.deploymentOperationDependencyGraphResponseTime.addItemListener(new SelectionBindingItemListener(this.deploymentOperationDependencyGraph, false));
+		this.deploymentOperationDependencyGraphResponseTime.addActionListener(new ActionListener() {
+			@Override
+			@SuppressWarnings("synthetic-access")
+			public void actionPerformed(final ActionEvent e) {
+				PlotStep.this.deploymentOperationDependencyGraphResponseTimeComboBox.setEnabled(PlotStep.this.deploymentOperationDependencyGraphResponseTime
+						.isSelected());
+			}
+		});
 
 		this.assemblyOperationDependencyGraph.addItemListener(new SelectionBindingItemListener(this.assemblyOperationDependencyGraphResponseTime, true));
 		this.assemblyOperationDependencyGraphResponseTime.addItemListener(new SelectionBindingItemListener(this.assemblyOperationDependencyGraph, false));
+		this.assemblyOperationDependencyGraphResponseTime.addActionListener(new ActionListener() {
+			@Override
+			@SuppressWarnings("synthetic-access")
+			public void actionPerformed(final ActionEvent e) {
+				PlotStep.this.assemblyOperationDependencyGraphResponseTimeComboBox.setEnabled(PlotStep.this.assemblyOperationDependencyGraphResponseTime
+						.isSelected());
+			}
+		});
 	}
 
 	@Override
@@ -239,14 +314,44 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 		if (this.deploymentComponentDependencyGraph.isSelected()) {
 			parameters.add("--" + Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG);
 			if (this.deploymentComponentDependencyGraphResponseTime.isSelected()) {
-				parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_MS);
+				switch (this.deploymentComponentDependencyGraphResponseTimeComboBox.getSelectedIndex()) {
+				case 0: // ns
+					parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_NS);
+					break;
+				case 1: // us
+					parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_US);
+					break;
+				case 2: // ms
+					parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_MS);
+					break;
+				case 3: // s
+					parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_S);
+					break;
+				default:
+					// default not required nevertheless added because of PMD
+				}
 			}
 		}
 
 		if (this.assemblyComponentDependencyGraph.isSelected()) {
 			parameters.add("--" + Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYCOMPONENTDEPG);
 			if (this.assemblyComponentDependencyGraphResponseTime.isSelected()) {
-				parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_MS);
+				switch (this.assemblyComponentDependencyGraphResponseTimeComboBox.getSelectedIndex()) {
+				case 0: // ns
+					parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_NS);
+					break;
+				case 1: // us
+					parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_US);
+					break;
+				case 2: // ms
+					parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_MS);
+					break;
+				case 3: // s
+					parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_S);
+					break;
+				default:
+					// default not required nevertheless added because of PMD
+				}
 			}
 		}
 
@@ -257,14 +362,44 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 		if (this.deploymentOperationDependencyGraph.isSelected()) {
 			parameters.add("--" + Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONOPERATIONDEPG);
 			if (this.deploymentOperationDependencyGraphResponseTime.isSelected()) {
-				parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_MS);
+				switch (this.deploymentOperationDependencyGraphResponseTimeComboBox.getSelectedIndex()) {
+				case 0: // ns
+					parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_NS);
+					break;
+				case 1: // us
+					parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_US);
+					break;
+				case 2: // ms
+					parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_MS);
+					break;
+				case 3: // s
+					parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_S);
+					break;
+				default:
+					// default not required nevertheless added because of PMD
+				}
 			}
 		}
 
 		if (this.assemblyOperationDependencyGraph.isSelected()) {
 			parameters.add("--" + Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYOPERATIONDEPG);
 			if (this.assemblyOperationDependencyGraphResponseTime.isSelected()) {
-				parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_MS);
+				switch (this.assemblyOperationDependencyGraphResponseTimeComboBox.getSelectedIndex()) {
+				case 0: // ns
+					parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_NS);
+					break;
+				case 1: // us
+					parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_US);
+					break;
+				case 2: // ms
+					parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_MS);
+					break;
+				case 3: // s
+					parameters.add(Constants.RESPONSE_TIME_DECORATOR_FLAG_S);
+					break;
+				default:
+					// default not required nevertheless added because of PMD
+				}
 			}
 		}
 		if (this.aggregatedDeploymentCallTree.isSelected()) {
@@ -288,16 +423,24 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 		properties.setProperty(PROPERTY_KEY_DEPLOYMENT_COMPONENT_DEPENDENCY_GRAPH, Boolean.toString(this.deploymentComponentDependencyGraph.isSelected()));
 		properties.setProperty(PROPERTY_KEY_DEPLOYMENT_COMPONENT_DEPENDENCY_GRAPH_RT,
 				Boolean.toString(this.deploymentComponentDependencyGraphResponseTime.isSelected()));
+		properties.setProperty(PROPERTY_KEY_DEPLOYMENT_COMPONENT_DEPENDENCY_GRAPH_RT_CB,
+				Integer.toString(this.deploymentComponentDependencyGraphResponseTimeComboBox.getSelectedIndex()));
 		properties.setProperty(PROPERTY_KEY_ASSEMBLY_COMPONENT_DEPENDENCY_GRAPH, Boolean.toString(this.assemblyComponentDependencyGraph.isSelected()));
 		properties
 				.setProperty(PROPERTY_KEY_ASSEMBLY_COMPONENT_DEPENDENCY_GRAPH_RT, Boolean.toString(this.assemblyComponentDependencyGraphResponseTime.isSelected()));
+		properties.setProperty(PROPERTY_KEY_ASSEMBLY_COMPONENT_DEPENDENCY_GRAPH_RT_CB,
+				Integer.toString(this.assemblyComponentDependencyGraphResponseTimeComboBox.getSelectedIndex()));
 		properties.setProperty(PROPERTY_KEY_CONTAINER_DEPENDENCY_GRAPH, Boolean.toString(this.containerDependencyGraph.isSelected()));
 		properties.setProperty(PROPERTY_KEY_DEPLOYMENT_OPERATION_DEPENDENCY_GRAPH, Boolean.toString(this.deploymentOperationDependencyGraph.isSelected()));
 		properties.setProperty(PROPERTY_KEY_DEPLOYMENT_OPERATION_DEPENDENCY_GRAPH_RT,
 				Boolean.toString(this.deploymentOperationDependencyGraphResponseTime.isSelected()));
+		properties.setProperty(PROPERTY_KEY_DEPLOYMENT_OPERATION_DEPENDENCY_GRAPH_RT_CB,
+				Integer.toString(this.deploymentOperationDependencyGraphResponseTimeComboBox.getSelectedIndex()));
 		properties.setProperty(PROPERTY_KEY_ASSEMBLY_OPERATION_DEPENDENCY_GRAPH, Boolean.toString(this.assemblyOperationDependencyGraph.isSelected()));
 		properties
 				.setProperty(PROPERTY_KEY_ASSEMBLY_OPERATION_DEPENDENCY_GRAPH_RT, Boolean.toString(this.assemblyOperationDependencyGraphResponseTime.isSelected()));
+		properties.setProperty(PROPERTY_KEY_ASSEMBLY_OPERATION_DEPENDENCY_GRAPH_RT_CB,
+				Integer.toString(this.assemblyOperationDependencyGraphResponseTimeComboBox.getSelectedIndex()));
 		properties.setProperty(PROPERTY_KEY_AGGREGATED_DEPLOYMENT_CALL_TREE, Boolean.toString(this.aggregatedDeploymentCallTree.isSelected()));
 		properties.setProperty(PROPERTY_KEY_AGGREGATED_ASSEMBLY_CALL_TREE, Boolean.toString(this.aggregatedAssemblyCallTree.isSelected()));
 		properties.setProperty(PROPERTY_KEY_CALL_TREES, Boolean.toString(this.callTrees.isSelected()));
@@ -310,34 +453,55 @@ public class PlotStep extends AbstractStep { // NOPMD (number of fields)
 		this.deploymentComponentDependencyGraph.setSelected(Boolean.parseBoolean(properties.getProperty(PROPERTY_KEY_DEPLOYMENT_COMPONENT_DEPENDENCY_GRAPH)));
 		this.deploymentComponentDependencyGraphResponseTime.setSelected(Boolean.parseBoolean(properties
 				.getProperty(PROPERTY_KEY_DEPLOYMENT_COMPONENT_DEPENDENCY_GRAPH_RT)));
+		this.deploymentComponentDependencyGraphResponseTimeComboBox.setSelectedIndex(Integer.parseInt(properties
+				.getProperty(PROPERTY_KEY_DEPLOYMENT_COMPONENT_DEPENDENCY_GRAPH_RT_CB)));
 		this.assemblyComponentDependencyGraph.setSelected(Boolean.parseBoolean(properties.getProperty(PROPERTY_KEY_ASSEMBLY_COMPONENT_DEPENDENCY_GRAPH)));
 		this.assemblyComponentDependencyGraphResponseTime.setSelected(Boolean.parseBoolean(properties
 				.getProperty(PROPERTY_KEY_ASSEMBLY_COMPONENT_DEPENDENCY_GRAPH_RT)));
+		this.assemblyComponentDependencyGraphResponseTimeComboBox.setSelectedIndex(Integer.parseInt(properties
+				.getProperty(PROPERTY_KEY_ASSEMBLY_COMPONENT_DEPENDENCY_GRAPH_RT_CB)));
 		this.containerDependencyGraph.setSelected(Boolean.parseBoolean(properties.getProperty(PROPERTY_KEY_CONTAINER_DEPENDENCY_GRAPH)));
 		this.deploymentOperationDependencyGraph.setSelected(Boolean.parseBoolean(properties.getProperty(PROPERTY_KEY_DEPLOYMENT_OPERATION_DEPENDENCY_GRAPH)));
 		this.deploymentOperationDependencyGraphResponseTime.setSelected(Boolean.parseBoolean(properties
 				.getProperty(PROPERTY_KEY_DEPLOYMENT_OPERATION_DEPENDENCY_GRAPH_RT)));
+		this.deploymentOperationDependencyGraphResponseTimeComboBox.setSelectedIndex(Integer.parseInt(properties
+				.getProperty(PROPERTY_KEY_DEPLOYMENT_OPERATION_DEPENDENCY_GRAPH_RT_CB)));
 		this.assemblyOperationDependencyGraph.setSelected(Boolean.parseBoolean(properties.getProperty(PROPERTY_KEY_ASSEMBLY_OPERATION_DEPENDENCY_GRAPH)));
 		this.assemblyOperationDependencyGraphResponseTime.setSelected(Boolean.parseBoolean(properties
 				.getProperty(PROPERTY_KEY_ASSEMBLY_OPERATION_DEPENDENCY_GRAPH_RT)));
+		this.assemblyOperationDependencyGraphResponseTimeComboBox.setSelectedIndex(Integer.parseInt(properties
+				.getProperty(PROPERTY_KEY_ASSEMBLY_OPERATION_DEPENDENCY_GRAPH_RT_CB)));
 		this.aggregatedDeploymentCallTree.setSelected(Boolean.parseBoolean(properties.getProperty(PROPERTY_KEY_AGGREGATED_DEPLOYMENT_CALL_TREE)));
 		this.aggregatedAssemblyCallTree.setSelected(Boolean.parseBoolean(properties.getProperty(PROPERTY_KEY_AGGREGATED_ASSEMBLY_CALL_TREE)));
 		this.callTrees.setSelected(Boolean.parseBoolean(properties.getProperty(PROPERTY_KEY_CALL_TREES)));
+
+		this.assemblyComponentDependencyGraphResponseTimeComboBox.setEnabled(this.assemblyComponentDependencyGraphResponseTime.isSelected());
+		this.assemblyOperationDependencyGraphResponseTimeComboBox.setEnabled(this.assemblyOperationDependencyGraphResponseTime.isSelected());
+		this.deploymentComponentDependencyGraphResponseTimeComboBox.setEnabled(this.deploymentComponentDependencyGraphResponseTime.isSelected());
+		this.deploymentOperationDependencyGraphResponseTimeComboBox.setEnabled(this.deploymentOperationDependencyGraphResponseTime.isSelected());
 	}
 
 	@Override
 	public void loadDefaultConfiguration() {
 		this.assemblyComponentDependencyGraph.setSelected(true);
 		this.assemblyComponentDependencyGraphResponseTime.setSelected(true);
+		this.assemblyComponentDependencyGraphResponseTimeComboBox.setSelectedIndex(2);
+		this.assemblyComponentDependencyGraphResponseTimeComboBox.setEnabled(true);
 
 		this.assemblyOperationDependencyGraph.setSelected(true);
 		this.assemblyOperationDependencyGraphResponseTime.setSelected(true);
+		this.assemblyOperationDependencyGraphResponseTimeComboBox.setSelectedIndex(2);
+		this.assemblyOperationDependencyGraphResponseTimeComboBox.setEnabled(true);
 
 		this.deploymentComponentDependencyGraph.setSelected(true);
 		this.deploymentComponentDependencyGraphResponseTime.setSelected(true);
+		this.deploymentComponentDependencyGraphResponseTimeComboBox.setSelectedIndex(2);
+		this.deploymentComponentDependencyGraphResponseTimeComboBox.setEnabled(true);
 
 		this.deploymentOperationDependencyGraph.setSelected(true);
 		this.deploymentOperationDependencyGraphResponseTime.setSelected(true);
+		this.deploymentOperationDependencyGraphResponseTimeComboBox.setSelectedIndex(2);
+		this.deploymentOperationDependencyGraphResponseTimeComboBox.setEnabled(true);
 	}
 
 }

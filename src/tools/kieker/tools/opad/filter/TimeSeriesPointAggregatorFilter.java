@@ -26,8 +26,8 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
+import kieker.tools.opad.model.NamedDoubleTimeSeriesPoint;
 import kieker.tools.opad.record.AggregationWindow;
-import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
 import kieker.tools.tslib.AggregationMethod;
 import kieker.tools.util.AggregationVariableSet;
 
@@ -74,17 +74,19 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 
 		this.aggregationVariables = new ConcurrentHashMap<String, AggregationVariableSet>();
 
+		this.timeunit = super.recordsTimeUnitFromProjectContext;
+
 		// Determine Aggregation time unit
-		TimeUnit configTimeUnit = super.recordsTimeUnitFromProjectContext;
+		TimeUnit configTimeUnit;
 		final String configTimeunitProperty = configuration.getStringProperty(CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT);
 		try {
 			configTimeUnit = TimeUnit.valueOf(configTimeunitProperty);
 		} catch (final IllegalArgumentException ex) {
+			configTimeUnit = this.timeunit;
 			this.log.warn(configTimeunitProperty + " is no valid TimeUnit! Using inherited value of " + configTimeUnit.name() + " instead.");
 		}
-		this.timeunit = configTimeUnit;
 
-		// Determine aggreation span method
+		// Determine aggregation span method
 		AggregationMethod configAggregationMethod;
 		try {
 			configAggregationMethod = AggregationMethod.valueOf(configuration.getStringProperty(CONFIG_PROPERTY_NAME_AGGREGATION_METHOD));
@@ -94,7 +96,7 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 		this.aggregationMethod = configAggregationMethod;
 
 		// Determine aggregation span
-		this.aggregationSpan = TimeUnit.MILLISECONDS.convert(configuration.getIntProperty(CONFIG_PROPERTY_NAME_AGGREGATION_SPAN), this.timeunit);
+		this.aggregationSpan = this.timeunit.convert(configuration.getIntProperty(CONFIG_PROPERTY_NAME_AGGREGATION_SPAN), configTimeUnit);
 	}
 
 	@Override

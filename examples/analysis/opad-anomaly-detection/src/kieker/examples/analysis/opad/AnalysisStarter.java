@@ -25,6 +25,8 @@ import kieker.tools.opad.filter.AnomalyDetectionFilter;
 import kieker.tools.opad.filter.AnomalyScoreCalculationFilter;
 import kieker.tools.opad.filter.ExtractionFilter;
 import kieker.tools.opad.filter.ForecastingFilter;
+import kieker.tools.opad.filter.TimeSeriesPointAggregatorFilter;
+import kieker.tools.opad.filter.UniteMeasurementPairFilter;
 
 public final class AnalysisStarter {
 
@@ -39,7 +41,18 @@ public final class AnalysisStarter {
 		final FSReader fsReader = new FSReader(fsReaderConfig, analysisController);
 
 		final ExtractionFilter extractionFilter = new ExtractionFilter(new Configuration(), analysisController);
-		final ForecastingFilter forecastingFilter = new ForecastingFilter(new Configuration(), analysisController);
+
+		final Configuration tsPointAggregatorConfig = new Configuration();
+		tsPointAggregatorConfig.setProperty(TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_SPAN, "1");
+		tsPointAggregatorConfig.setProperty(TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT, "NANOSECONDS");
+		tsPointAggregatorConfig.setProperty(TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_METHOD, "MEANJAVA");
+		final TimeSeriesPointAggregatorFilter tsPointAggregatorFilter = new TimeSeriesPointAggregatorFilter(tsPointAggregatorConfig, analysisController);
+
+		final Configuration forecastingConfig = new Configuration();
+		forecastingConfig.setProperty(ForecastingFilter.CONFIG_PROPERTY_NAME_FC_METHOD, "MEANJAVA");
+		final ForecastingFilter forecastingFilter = new ForecastingFilter(forecastingConfig, analysisController);
+
+		final UniteMeasurementPairFilter uniteMeasurementPairFilter = new UniteMeasurementPairFilter(new Configuration(), analysisController);
 		final AnomalyScoreCalculationFilter anomalyScoreCalcFilter = new AnomalyScoreCalculationFilter(new Configuration(), analysisController);
 		final AnomalyDetectionFilter anomalyDetectionFilter = new AnomalyDetectionFilter(new Configuration(), analysisController);
 		final AnomalyPrinter anomalyPrinter = new AnomalyPrinter(new Configuration(), analysisController);
@@ -47,9 +60,16 @@ public final class AnalysisStarter {
 
 		// Connect the filters
 		analysisController.connect(fsReader, FSReader.OUTPUT_PORT_NAME_RECORDS, extractionFilter, ExtractionFilter.INPUT_PORT_NAME_VALUE);
-		analysisController.connect(extractionFilter, ExtractionFilter.OUTPUT_PORT_NAME_VALUE, forecastingFilter, ForecastingFilter.INPUT_PORT_NAME_TSPOINT);
+		analysisController.connect(extractionFilter, ExtractionFilter.OUTPUT_PORT_NAME_VALUE, tsPointAggregatorFilter,
+				TimeSeriesPointAggregatorFilter.INPUT_PORT_NAME_TSPOINT);
+		analysisController.connect(tsPointAggregatorFilter, TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, forecastingFilter,
+				ForecastingFilter.INPUT_PORT_NAME_TSPOINT);
+		analysisController.connect(tsPointAggregatorFilter, TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, uniteMeasurementPairFilter,
+				UniteMeasurementPairFilter.INPUT_PORT_NAME_TSPOINT);
 		analysisController.connect(forecastingFilter, ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT,
-				anomalyScoreCalcFilter, AnomalyScoreCalculationFilter.INPUT_PORT_CURRENT_FORECAST_PAIR);
+				uniteMeasurementPairFilter, UniteMeasurementPairFilter.INPUT_PORT_NAME_FORECAST);
+		analysisController.connect(uniteMeasurementPairFilter, UniteMeasurementPairFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, anomalyScoreCalcFilter,
+				AnomalyScoreCalculationFilter.INPUT_PORT_CURRENT_FORECAST_PAIR);
 		analysisController.connect(anomalyScoreCalcFilter, AnomalyScoreCalculationFilter.OUTPUT_PORT_ANOMALY_SCORE,
 				anomalyDetectionFilter, AnomalyDetectionFilter.INPUT_PORT_ANOMALY_SCORE);
 		analysisController.connect(anomalyDetectionFilter, AnomalyDetectionFilter.OUTPUT_PORT_ANOMALY_SCORE_IF_ANOMALY,

@@ -25,8 +25,8 @@ import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
+import kieker.tools.opad.model.NamedDoubleTimeSeriesPoint;
 import kieker.tools.opad.record.NamedDoubleRecord;
-import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
 
 /**
  * An instance of this class extracts the data from incoming records.
@@ -74,7 +74,7 @@ public class ExtractionFilter extends AbstractFilterPlugin {
 	@InputPort(name = INPUT_PORT_NAME_VALUE, eventTypes = { NamedDoubleRecord.class })
 	public void inputExecutionRecord(final NamedDoubleRecord record) {
 		final long timestampMillis = this.timeunit.convert(record.getTimestamp(), super.recordsTimeUnitFromProjectContext);
-		final NamedDoubleTimeSeriesPoint tspoint = new NamedDoubleTimeSeriesPoint(timestampMillis, record.getValue(), record.getApplication());
+		final NamedDoubleTimeSeriesPoint tspoint = new NamedDoubleTimeSeriesPoint(timestampMillis, record.getResponseTime(), record.getApplicationName());
 
 		super.deliver(OUTPUT_PORT_NAME_VALUE, tspoint);
 	}

@@ -22,7 +22,7 @@ import kieker.tools.tslib.TimeSeries;
 /**
  * @author Andre van Hoorn, Tillmann Carlos Bielefeld
  * @since 1.10
- * 
+ *
  * @param <T>
  *            The type of the forecaster.
  */
@@ -36,7 +36,7 @@ public abstract class AbstractForecaster<T> implements IForecaster<T> {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param historyTimeseries
 	 *            TS
 	 * @param confidenceLevel
@@ -53,16 +53,15 @@ public abstract class AbstractForecaster<T> implements IForecaster<T> {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return TS
 	 */
 	protected ITimeSeries<T> prepareForecastTS() {
 		final ITimeSeries<T> history = this.getTsOriginal();
 
-		final long startTime = history.getEndTime();
-		final TimeSeries<T> tsFC = new TimeSeries<T>(startTime,
+		final long startTime = history.getStartTime();
+		final TimeSeries<T> tsFC = new TimeSeries<T>(startTime, history.getTimeSeriesTimeUnit(),
 				history.getDeltaTime(), history.getDeltaTimeUnit());
-
 		return tsFC;
 	}
 

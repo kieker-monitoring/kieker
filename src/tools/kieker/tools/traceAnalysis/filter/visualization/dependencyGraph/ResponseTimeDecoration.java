@@ -131,7 +131,7 @@ public class ResponseTimeDecoration extends AbstractVertexDecoration {
 		sb.append(", max: ");
 		sb.append(this.getMaximalResponseTime());
 		sb.append(this.timeUnitShortname);
-		sb.append(",\ntotal: ");
+		sb.append(",\\ntotal: ");
 		sb.append(this.getTotalResponseTime());
 		sb.append(this.timeUnitShortname);
 		return sb.toString();

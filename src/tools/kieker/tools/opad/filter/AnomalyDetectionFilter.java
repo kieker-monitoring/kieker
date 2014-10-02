@@ -19,7 +19,7 @@ package kieker.tools.opad.filter;
 import java.util.concurrent.atomic.AtomicReference;
 
 import kieker.analysis.IProjectContext;
-import kieker.analysis.configuration.AbstractUpdateableFilterPlugin;
+import kieker.analysis.plugin.AbstractUpdateableFilterPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
@@ -104,17 +104,15 @@ public class AnomalyDetectionFilter extends AbstractUpdateableFilterPlugin {
 			super.deliver(OUTPUT_PORT_ANOMALY_SCORE_ELSE, anomalyScore);
 		}
 
-		final ExtendedStorableDetectionResult extAnomalyScore = new ExtendedStorableDetectionResult(
-				anomalyScore, this.threshold.get().doubleValue());
+		final ExtendedStorableDetectionResult extAnomalyScore = new ExtendedStorableDetectionResult(anomalyScore.getApplicationName(), anomalyScore.getValue(),
+				anomalyScore.getTimestamp(), anomalyScore.getForecast(), anomalyScore.getScore(), this.threshold.get().doubleValue());
 		super.deliver(OUTPUT_PORT_ALL, extAnomalyScore);
 	}
 
 	@Override
 	public void setCurrentConfiguration(final Configuration config, final boolean update) {
 		if (!update || this.isPropertyUpdateable(CONFIG_PROPERTY_NAME_THRESHOLD)) {
-			this.threshold = new AtomicReference<Double>(
-					Double.parseDouble(config
-							.getStringProperty(CONFIG_PROPERTY_NAME_THRESHOLD)));
+			this.threshold = new AtomicReference<Double>(Double.parseDouble(config.getStringProperty(CONFIG_PROPERTY_NAME_THRESHOLD)));
 		}
 	}
 }

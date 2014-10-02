@@ -33,6 +33,9 @@ import kieker.monitoring.core.signaturePattern.SignatureFactory;
  */
 public class ClassLoadingSampler extends AbstractMXBeanSampler {
 
+	/**
+	 * Create a new ClassLoadingSampler.
+	 */
 	public ClassLoadingSampler() {
 		// Empty default constructor
 	}

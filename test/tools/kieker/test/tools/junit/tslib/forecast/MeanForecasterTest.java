@@ -77,7 +77,7 @@ public class MeanForecasterTest extends AbstractKiekerRTest {
 	 *            Used time unit
 	 */
 	private void initForecastWithTimeUnit(final TimeUnit tu) {
-		this.ts = new TimeSeries<Double>(this.startTime, this.deltaTime, tu);
+		this.ts = new TimeSeries<Double>(this.startTime, TimeUnit.MILLISECONDS, this.deltaTime, tu);
 
 		this.steps = 1;
 		this.mean = Double.valueOf(2.0);
@@ -99,7 +99,7 @@ public class MeanForecasterTest extends AbstractKiekerRTest {
 		Assert.assertEquals(this.ts, this.forecaster.getTsOriginal());
 
 		// we added three timepoints, so we must be here:
-		final long expectedStartTime = this.startTime + (this.deltaTime * 3);
+		final long expectedStartTime = this.startTime;
 		Assert.assertEquals(expectedStartTime, this.forecastSeries.getStartTime());
 	}
 
@@ -110,7 +110,7 @@ public class MeanForecasterTest extends AbstractKiekerRTest {
 	public void testForecastStartingIsAccordingToLastAppendSecondsTU() {
 		this.initForecastWithTimeUnit(TimeUnit.SECONDS);
 
-		final long expectedStartTime = this.startTime + TimeUnit.MILLISECONDS.convert(this.deltaTime * 3, TimeUnit.SECONDS);
+		final long expectedStartTime = this.startTime;
 		Assert.assertEquals(expectedStartTime, this.forecastSeries.getStartTime());
 	}
 

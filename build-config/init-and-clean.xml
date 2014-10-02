@@ -7,7 +7,14 @@
 		<tstamp />
 		<property name="kieker.name" value="Kieker Framework" />
 		<property name="kieker.version" value="1.10-SNAPSHOT" />
-		<property name="year" value="2014" />
+		
+        <tstamp>
+		  <format property="year" pattern="yyyy" /> <!-- e.g., 2014 -->
+        </tstamp>
+        <tstamp>
+		  <format property="monthMMM" pattern="MMM" /> <!-- e.g., Mar, Sep, Oct -->
+        </tstamp>
+		
 		<property name="copyright" value="Kieker Project" />
 
 		<property name="dist.kieker.main.sources.jar" value="${kieker.main.packagenamebase}-${kieker.version}-${kieker-src.suffix}.jar" />
@@ -35,6 +42,9 @@
 
 	<target name="-update-version" unless="version.noupdate" depends="-init-version" description="Updates the version number contained in the Kieker sources">
 		<replaceregexp file="${src.kieker.common.dir}/kieker/common/util/Version.java" match="VERSION = &quot;.*?&quot;" replace="VERSION = &quot;${kieker.version}&quot;" />
+		<replaceregexp file="doc/userguide/bibliography.bib" match="Kieker .* User Guide" replace="Kieker ${kieker.version} User Guide" />
+		<replaceregexp file="doc/userguide/bibliography.bib" match="CURYEAR = .* " replace="CURYEAR = ${year} " />
+		<replaceregexp file="doc/userguide/bibliography.bib" match="CURMONTH = .* " replace="CURMONTH = ${monthMMM} " />
 		<replaceregexp file="bin/dev/check-release-archives.sh" match="KIEKER_VERSION=&quot;.*?&quot;" replace="KIEKER_VERSION=&quot;${kieker.version}&quot;" />
 		<!-- Not sure if String valid today, but replacing it #1199: -->
 		<replaceregexp file="test/tools/kieker/test/tools/manual/TestTCPReader.java" match="lib/kieker-.*_aspectj.jar" replace="lib/kieker-${kieker.version}_aspectj.jar" />
@@ -119,19 +129,16 @@
 				<include name="org.eclipse.emf.*.jar" />
 				<!-- Bridge begin -->
 				<include name="activemq-*.jar" />
-				<include name="kahadb-5.7.0.jar"/>
 				<include name="javax.jms-*.jar" />
 				<include name="reflections-*.jar"/>
 				<include name="geronimo-j2ee-management_1.1_spec-*.jar"/>
 				<!-- Bridge end -->
 				<!-- OPAD begin -->
-				<include name="mongo-*.jar"/>
-				<include name="commons-math-*.jar"/>
-				<include name="commons-lang-*.jar"/>
+				<include name="commons-math3-*.jar"/>
+				<include name="commons-lang3-*.jar"/>
 				<include name="REngine-*.jar"/>
 				<include name="Rserve-*.jar"/>
 				<include name="Rsession-*.jar"/>
-				<include name="org.json.min-*.jar"/>
 				<!-- OPAD end -->
 			</fileset>
 			<pathelement location="${build.kieker.common.dir}/" />

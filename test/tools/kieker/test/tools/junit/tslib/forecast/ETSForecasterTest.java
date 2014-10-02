@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import kieker.tools.tslib.ITimeSeries;
@@ -53,7 +52,6 @@ public class ETSForecasterTest extends AbstractKiekerRTest {
 	 * Test of the ETSForecaster via Rserve.
 	 */
 	@Test
-	@Ignore("Deactivated RServe Script (#1420)")
 	public void testETSPredictor() { // NOPMD assertEqualsWithTolerance is a custom method
 		final Double[] values = { 1.0, 2.0, 3.0, 4.0 };
 		final List<Double> expectedValues = new ArrayList<Double>(values.length);
@@ -62,7 +60,7 @@ public class ETSForecasterTest extends AbstractKiekerRTest {
 		}
 
 		final TimeSeries<Double> ts =
-				new TimeSeries<Double>(ETSForecasterTest.START_TIME, ETSForecasterTest.DELTA_TIME_MILLIS, TimeUnit.MILLISECONDS);
+				new TimeSeries<Double>(ETSForecasterTest.START_TIME, TimeUnit.NANOSECONDS, ETSForecasterTest.DELTA_TIME_MILLIS, TimeUnit.MILLISECONDS);
 		ts.appendAll(values);
 
 		final ETSForecaster forecaster = new ETSForecaster(ts, ETSForecasterTest.CONFIDENCE_LEVEL);

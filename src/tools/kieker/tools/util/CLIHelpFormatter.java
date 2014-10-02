@@ -65,7 +65,7 @@ public class CLIHelpFormatter extends HelpFormatter {
 			if (option.getOpt() == null) {
 				optBuf.append(lpad).append("   ").append(this.getLongOptPrefix()).append(option.getLongOpt());
 			} else {
-				optBuf.append(lpad).append(this.getLongOptPrefix()).append(option.getOpt());
+				optBuf.append(lpad).append(this.getOptPrefix()).append(option.getOpt());
 
 				if (option.hasLongOpt()) {
 					optBuf.append(',').append(this.getLongOptPrefix()).append(option.getLongOpt());

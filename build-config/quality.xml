@@ -10,7 +10,7 @@
 
 	<target name="findbugs" depends="build-all,compile-tests" description="Performs a byte code analysis to find potential bugs employing findbugs">
 		<taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" classpath="${lib.fb.dir}/lib/findbugs-ant.jar" />
-		<findbugs home="${lib.fb.dir}" reportLevel="low" effort="max" maxRank="20" excludeFilter="${lib.fb.dir}/fb-filter.xml" output="xml" outputFile="${tmp.dir}/kieker-fb.xml">
+		<findbugs home="${lib.fb.dir}" reportLevel="low" effort="max" maxRank="20" excludeFilter="${quality.config.dir}/fb-filter.xml" output="xml" outputFile="${tmp.dir}/kieker-fb.xml">
 			<auxClasspath>
 				<fileset dir="${lib.dir}" includes="*.jar" />
 				<fileset dir="${lib.dir}/disl-2.0/" includes="*.jar" />
@@ -46,7 +46,7 @@
 			</fileset>
 		</path>
 		<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="pmd.libs" />
-		<pmd shortFilenames="true" rulesetfiles="${lib.pmd.dir}/pmdrules.xml">
+		<pmd shortFilenames="true" rulesetfiles="${quality.config.dir}/pmdrules.xml">
 			<sourcelanguage name="java" version="1.6" />
 			<formatter type="xml" toFile="${tmp.dir}/pmd_report.xml" />
 			<fileset dir="${src.dir}" includes="**/*.java" />
@@ -59,7 +59,7 @@
 		<!-- We have to add the test directory from the build to the classpath as it contains some checkstyle checks. Checkstyle has to know these classes. As the
 				 checks need some classes from the analysis and the common part, we have to add those build directories as well. -->
 		<taskdef resource="checkstyletask.properties" classpath="${lib.cs.dir}/lib/checkstyle-all.jar;${build.tests.dir};${build.kieker.analysis.dir};${build.kieker.common.dir}" />
-		<checkstyle config="${lib.cs.dir}/cs-conf.xml" failOnViolation="false">
+		<checkstyle config="${quality.config.dir}/cs-conf.xml" failOnViolation="false">
 			<classpath>
 				<fileset dir="${lib.dir}" includes="*.jar" />
 				<fileset dir="${lib.dir}/framework-libs/" includes="**/*.jar" />

@@ -11,24 +11,21 @@ subgraph "cluster_component_2" {
  shape = "box";
  style = "filled";
  fillcolor = "white";
-"depNode_4" [label="getBook(..)\nmin: 2012us, avg: 3941us, max: 122668us,
-total: 4398058us",shape="oval",style="filled",color="#000000",fillcolor="white"]
+"depNode_4" [label="getBook(..)\nmin: 2012us, avg: 3941us, max: 122668us,\ntotal: 4398058us",shape="oval",style="filled",color="#000000",fillcolor="white"]
 }
 subgraph "cluster_component_3" {
  label = "<<deployment component>>\n@2:..CRM";
  shape = "box";
  style = "filled";
  fillcolor = "white";
-"depNode_3" [label="getOffers()\nmin: 2029us, avg: 7146us, max: 378468us,
-total: 11683463us",shape="oval",style="filled",color="#000000",fillcolor="white"]
+"depNode_3" [label="getOffers()\nmin: 2029us, avg: 7146us, max: 378468us,\ntotal: 11683463us",shape="oval",style="filled",color="#000000",fillcolor="white"]
 }
 subgraph "cluster_component_4" {
  label = "<<deployment component>>\n@3:..Bookstore";
  shape = "box";
  style = "filled";
  fillcolor = "white";
-"depNode_1" [label="searchBook()\nmin: 4131us, avg: 22748us, max: 381493us,
-total: 37192428us",shape="oval",style="filled",color="#000000",fillcolor="white"]
+"depNode_1" [label="searchBook()\nmin: 4131us, avg: 22748us, max: 381493us,\ntotal: 37192428us",shape="oval",style="filled",color="#000000",fillcolor="white"]
 }
 }
 subgraph "cluster_container1" {
@@ -41,8 +38,7 @@ subgraph "cluster_component_1" {
  shape = "box";
  style = "filled";
  fillcolor = "white";
-"depNode_2" [label="getBook(..)\nmin: 2011us, avg: 3684us, max: 123431us,
-total: 7935809us",shape="oval",style="filled",color="#000000",fillcolor="white"]
+"depNode_2" [label="getBook(..)\nmin: 2011us, avg: 3684us, max: 123431us,\ntotal: 7935809us",shape="oval",style="filled",color="#000000",fillcolor="white"]
 }
 }
 depNode_0->depNode_1[label=1635, style="solid", arrowhead="open", color="#000000"]

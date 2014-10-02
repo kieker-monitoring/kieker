@@ -36,7 +36,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
 /**
  * Tests the RecordConverter.
  * 
- * @author Thomas Düllmann
+ * @author Thomas Duellmann
  * @since 1.10
  * 
  */
@@ -168,7 +168,7 @@ public final class RecordConverterTest extends AbstractKiekerTest {
 	@Test
 	public void testConversionLatency() {
 		Assert.assertEquals("Check whether latency has been computed correctly",
-				RecordConverterTest.timeOut - RecordConverterTest.timeIn, this.conversionResult.getValue(), 0d);
+				RecordConverterTest.timeOut - RecordConverterTest.timeIn, this.conversionResult.getResponseTime(), 0d);
 	}
 
 	/**
@@ -177,7 +177,7 @@ public final class RecordConverterTest extends AbstractKiekerTest {
 	@Test
 	public void testConversionIdentifier() {
 		Assert.assertEquals("Check whether host and appname have been extracted correctly",
-				RecordConverterTest.hostAppInput + ":" + RecordConverterTest.operationSignature, this.conversionResult.getApplication());
+				RecordConverterTest.hostAppInput + ":" + RecordConverterTest.operationSignature, this.conversionResult.getApplicationName());
 	}
 
 }

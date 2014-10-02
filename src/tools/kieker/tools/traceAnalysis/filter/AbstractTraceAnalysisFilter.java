@@ -16,8 +16,6 @@
 
 package kieker.tools.traceAnalysis.filter;
 
-import java.io.PrintStream;
-
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.RepositoryPort;
@@ -170,57 +168,4 @@ public abstract class AbstractTraceAnalysisFilter extends AbstractFilterPlugin {
 		return this.systemEntityFactory;
 	}
 
-	/**
-	 * Sets the for info output addressed to users, e.g., number of traces processed, files processed etc.
-	 * If not set explicitly, this class uses {@link System#err}.
-	 * 
-	 * @param outStream
-	 *            the outStream to set
-	 * 
-	 * @deprecated To be removed in 1.10
-	 */
-	@Deprecated
-	public void setOutStream(final PrintStream outStream) {
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * Sets the for info output addressed to users, e.g., number of traces processed, files processed etc.
-	 * If not set explicitly, this class uses {@link System#err}.
-	 * 
-	 * @param errStream
-	 *            the errStream to set
-	 * 
-	 * @deprecated To be removed in 1.10
-	 */
-	@Deprecated
-	public void setErrStream(final PrintStream errStream) {
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * Writes a line to the configured standard output stream for this plugin.
-	 * 
-	 * @param message
-	 *            The message to be printed.
-	 * 
-	 * @deprecated To be removed in 1.10
-	 */
-	@Deprecated
-	protected void stdOutPrintln(final String message) {
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * Writes a line to the configured error output stream for this plugin.
-	 * 
-	 * @param message
-	 *            The message to be printed.
-	 * 
-	 * @deprecated To be removed in 1.10
-	 */
-	@Deprecated
-	protected void errOutPrintln(final String message) {
-		throw new UnsupportedOperationException();
-	}
 }

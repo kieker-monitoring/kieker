@@ -30,8 +30,8 @@ import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 import kieker.tools.opad.filter.ExtractionFilter;
+import kieker.tools.opad.model.NamedDoubleTimeSeriesPoint;
 import kieker.tools.opad.record.NamedDoubleRecord;
-import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 

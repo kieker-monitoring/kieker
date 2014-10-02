@@ -23,15 +23,15 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 import kieker.analysis.IProjectContext;
-import kieker.analysis.configuration.AbstractUpdateableFilterPlugin;
+import kieker.analysis.plugin.AbstractUpdateableFilterPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
 import kieker.common.configuration.Configuration;
-import kieker.tools.opad.record.ForecastMeasurementPair;
-import kieker.tools.opad.record.IForecastMeasurementPair;
-import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
+import kieker.tools.opad.model.ForecastMeasurementPair;
+import kieker.tools.opad.model.IForecastMeasurementPair;
+import kieker.tools.opad.model.NamedDoubleTimeSeriesPoint;
 import kieker.tools.tslib.ForecastMethod;
 import kieker.tools.tslib.ITimeSeries;
 import kieker.tools.tslib.TimeSeries;
@@ -40,10 +40,10 @@ import kieker.tools.tslib.forecast.IForecaster;
 
 /**
  * Computes a forecast for every incoming measurement from different applications.
- * 
+ *
  * @since 1.10
  * @author Tom Frotscher, Thomas Duellmann, Tobias Rudolph
- * 
+ *
  */
 @Plugin(name = "Forecast Filter", outputPorts = {
 	@OutputPort(eventTypes = { IForecastResult.class }, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECAST),
@@ -75,7 +75,7 @@ public class ForecastingFilter extends AbstractUpdateableFilterPlugin {
 
 	/**
 	 * Creates a new instance of this class.
-	 * 
+	 *
 	 * @param configuration
 	 *            Configuration of this component
 	 * @param projectContext
@@ -118,7 +118,7 @@ public class ForecastingFilter extends AbstractUpdateableFilterPlugin {
 
 	/**
 	 * Represents the input port for measurements.
-	 * 
+	 *
 	 * @param input
 	 *            Incoming measurements
 	 */
@@ -129,14 +129,14 @@ public class ForecastingFilter extends AbstractUpdateableFilterPlugin {
 		} else {
 			// Initialization of the forecasting variables for a new application
 			this.applicationForecastingWindow.put(input.getName(),
-					new TimeSeries<Double>(System.currentTimeMillis(), this.deltat.get(), this.tunit, this.timeSeriesWindowCapacity.get()));
+					new TimeSeries<Double>(input.getTime(), super.recordsTimeUnitFromProjectContext, this.deltat.get(), this.timeSeriesWindowCapacity.get()));
 			this.processInput(input, input.getTime(), input.getName());
 		}
 	}
 
 	/**
 	 * Calculating the Forecast and delivers it.
-	 * 
+	 *
 	 * @param input
 	 *            Incoming measurement
 	 * @param timestamp
@@ -167,7 +167,7 @@ public class ForecastingFilter extends AbstractUpdateableFilterPlugin {
 
 	/**
 	 * Checks if the current application is already known to this filter.
-	 * 
+	 *
 	 * @param name
 	 *            application name
 	 */

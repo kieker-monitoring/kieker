@@ -59,6 +59,24 @@ public abstract class AbstractFsWriterThread extends AbstractAsyncThread {
 	private long previousFileDate;
 	private long sameFilenameCounter;
 
+	/**
+	 * Create a new AbstractFsWriterThread.
+	 * 
+	 * @param monitoringController
+	 *            the monitoring controller accessed by this thread
+	 * @param writeQueue
+	 *            the queue where the writer fetches its records from
+	 * @param mappingFileWriter
+	 *            writer for the mapping file (the file where class names are mapped to record ids)
+	 * @param path
+	 *            location where to files should go to (the path must point to a directory)
+	 * @param maxEntriesInFile
+	 *            limit for the number of records per log file
+	 * @param maxLogSize
+	 *            limit of log file size
+	 * @param maxLogFiles
+	 *            limit of log files
+	 */
 	public AbstractFsWriterThread(final IMonitoringController monitoringController, final BlockingQueue<IMonitoringRecord> writeQueue,
 			final MappingFileWriter mappingFileWriter, final String path, final int maxEntriesInFile, final int maxLogSize, final int maxLogFiles) {
 		super(monitoringController, writeQueue);
@@ -82,6 +100,11 @@ public abstract class AbstractFsWriterThread extends AbstractAsyncThread {
 		this.dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 	}
 
+	/**
+	 * Return the filename of a log file.
+	 * 
+	 * @return log file name
+	 */
 	protected final String getFilename() {
 		final String threadName = this.getName();
 		final long date = System.currentTimeMillis();

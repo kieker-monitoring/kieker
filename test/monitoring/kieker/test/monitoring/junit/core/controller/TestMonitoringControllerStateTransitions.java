@@ -33,46 +33,55 @@ import kieker.test.monitoring.util.DefaultConfigurationFactory;
  * @since 1.3
  */
 public class TestMonitoringControllerStateTransitions extends AbstractKiekerTest { // NOCS
+
+	/**
+	 * Test if disabling enabled monitoring works.
+	 */
 	@Test
 	public void testMonitoringEnabledToDisabled() {
 		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();
 		configuration.setProperty(ConfigurationFactory.MONITORING_ENABLED, "true");
 		final IMonitoringController kieker = MonitoringController.createInstance(configuration);
-		{ // Check values when enabled // NOCS
-			Assert.assertEquals("Unexpected monitoringEnabled value", true, kieker.isMonitoringEnabled());
-			Assert.assertEquals("Unexpected monitoringTerminated value", false, kieker.isMonitoringTerminated());
-		}
-		{// NOCS
-			// Change to disabled
-			Assert.assertTrue("disableMonitoring returned false", kieker.disableMonitoring());
-		}
-		{// Check values when disabled // NOCS
-			Assert.assertEquals("Unexpected monitoringEnabled value", false, kieker.isMonitoringEnabled());
-			Assert.assertEquals("Unexpected monitoringTerminated value", false, kieker.isMonitoringTerminated());
-		}
+
+		// Check values when enabled
+		Assert.assertEquals("Unexpected monitoringEnabled value", true, kieker.isMonitoringEnabled());
+		Assert.assertEquals("Unexpected monitoringTerminated value", false, kieker.isMonitoringTerminated());
+
+		// Change to disabled
+		Assert.assertTrue("disableMonitoring returned false", kieker.disableMonitoring());
+
+		// Check values when disabled
+		Assert.assertEquals("Unexpected monitoringEnabled value", false, kieker.isMonitoringEnabled());
+		Assert.assertEquals("Unexpected monitoringTerminated value", false, kieker.isMonitoringTerminated());
+
 		kieker.terminateMonitoring();
 	}
 
+	/**
+	 * Test if enabling monitoring when starting disabled works.
+	 */
 	@Test
 	public void testMonitoringDisabledToEnabled() {
 		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();
 		configuration.setProperty(ConfigurationFactory.MONITORING_ENABLED, "false");
 		final IMonitoringController kieker = MonitoringController.createInstance(configuration);
-		{ // Check values when disabled // NOCS
-			Assert.assertEquals("Unexpected monitoringEnabled value", false, kieker.isMonitoringEnabled());
-			Assert.assertEquals("Unexpected monitoringTerminated value", false, kieker.isMonitoringTerminated());
-		}
-		{// NOCS
-			// Change to enabled
-			Assert.assertTrue("enableMonitoring returned false", kieker.enableMonitoring());
-		}
-		{// Check values when enabled // NOCS
-			Assert.assertEquals("Unexpected monitoringEnabled value", true, kieker.isMonitoringEnabled());
-			Assert.assertEquals("Unexpected monitoringTerminated value", false, kieker.isMonitoringTerminated());
-		}
+		// Check values when disabled
+		Assert.assertEquals("Unexpected monitoringEnabled value", false, kieker.isMonitoringEnabled());
+		Assert.assertEquals("Unexpected monitoringTerminated value", false, kieker.isMonitoringTerminated());
+
+		// Change to enabled
+		Assert.assertTrue("enableMonitoring returned false", kieker.enableMonitoring());
+
+		// Check values when enabled
+		Assert.assertEquals("Unexpected monitoringEnabled value", true, kieker.isMonitoringEnabled());
+		Assert.assertEquals("Unexpected monitoringTerminated value", false, kieker.isMonitoringTerminated());
+
 		kieker.terminateMonitoring();
 	}
 
+	/**
+	 * Test if terminating an enabled controller works.
+	 */
 	@Test
 	public void testMonitoringEnabledToTerminated() {
 		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();
@@ -80,13 +89,17 @@ public class TestMonitoringControllerStateTransitions extends AbstractKiekerTest
 		final IMonitoringController kieker = MonitoringController.createInstance(configuration);
 		// Change to terminated
 		kieker.terminateMonitoring();
-		{ // Check values when terminated // NOCS
-			Assert.assertEquals("Unexpected monitoringEnabled value", false, kieker.isMonitoringEnabled());
-			Assert.assertEquals("Unexpected monitoringTerminated value", true, kieker.isMonitoringTerminated());
-		}
+
+		// Check values when terminated
+		Assert.assertEquals("Unexpected monitoringEnabled value", false, kieker.isMonitoringEnabled());
+		Assert.assertEquals("Unexpected monitoringTerminated value", true, kieker.isMonitoringTerminated());
+
 		kieker.terminateMonitoring();
 	}
 
+	/**
+	 * Test if terminating an disabled controller works.
+	 */
 	@Test
 	public void testMonitoringDisabledToTerminated() {
 		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();
@@ -101,6 +114,9 @@ public class TestMonitoringControllerStateTransitions extends AbstractKiekerTest
 		kieker.terminateMonitoring();
 	}
 
+	/**
+	 * Test if enabling of a terminated controller fails (as expected).
+	 */
 	@Test
 	public void testMonitoringTerminatedToEnabledMustFail() {
 		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();
@@ -112,6 +128,9 @@ public class TestMonitoringControllerStateTransitions extends AbstractKiekerTest
 		kieker.terminateMonitoring();
 	}
 
+	/**
+	 * Test if disabling of a terminated controller fails (as expected).
+	 */
 	@Test
 	public void testMonitoringTerminatedToDisabledMustFail() {
 		final Configuration configuration = DefaultConfigurationFactory.createDefaultConfigurationWithDummyWriter();

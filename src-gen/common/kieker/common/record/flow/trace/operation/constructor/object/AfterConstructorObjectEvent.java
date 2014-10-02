@@ -35,8 +35,8 @@ public class AfterConstructorObjectEvent extends AfterConstructorEvent implement
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
 			 + TYPE_SIZE_LONG // ITraceRecord.traceId
 			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
+			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
 			 + TYPE_SIZE_STRING // IClassSignature.classSignature
-			 + TYPE_SIZE_STRING // IOperationRecord.operationSignature
 			 + TYPE_SIZE_INT // IObjectRecord.objectId
 	;
 	private static final long serialVersionUID = 1550126459458563411L;
@@ -45,8 +45,8 @@ public class AfterConstructorObjectEvent extends AfterConstructorEvent implement
 		long.class, // IEventRecord.timestamp
 		long.class, // ITraceRecord.traceId
 		int.class, // ITraceRecord.orderIndex
+		String.class, // IOperationSignature.operationSignature
 		String.class, // IClassSignature.classSignature
-		String.class, // IOperationRecord.operationSignature
 		int.class, // IObjectRecord.objectId
 	};
 	
@@ -62,15 +62,15 @@ public class AfterConstructorObjectEvent extends AfterConstructorEvent implement
 	 *            traceId
 	 * @param orderIndex
 	 *            orderIndex
-	 * @param classSignature
-	 *            classSignature
 	 * @param operationSignature
 	 *            operationSignature
+	 * @param classSignature
+	 *            classSignature
 	 * @param objectId
 	 *            objectId
 	 */
-	public AfterConstructorObjectEvent(final long timestamp, final long traceId, final int orderIndex, final String classSignature, final String operationSignature, final int objectId) {
-		super(timestamp, traceId, orderIndex, classSignature, operationSignature);
+	public AfterConstructorObjectEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature, final int objectId) {
+		super(timestamp, traceId, orderIndex, operationSignature, classSignature);
 		this.objectId = objectId;
 	}
 
@@ -122,8 +122,8 @@ public class AfterConstructorObjectEvent extends AfterConstructorEvent implement
 			this.getTimestamp(),
 			this.getTraceId(),
 			this.getOrderIndex(),
-			this.getClassSignature(),
 			this.getOperationSignature(),
+			this.getClassSignature(),
 			this.getObjectId()
 		};
 	}
@@ -136,8 +136,8 @@ public class AfterConstructorObjectEvent extends AfterConstructorEvent implement
 		buffer.putLong(this.getTimestamp());
 		buffer.putLong(this.getTraceId());
 		buffer.putInt(this.getOrderIndex());
-		buffer.putInt(stringRegistry.get(this.getClassSignature()));
 		buffer.putInt(stringRegistry.get(this.getOperationSignature()));
+		buffer.putInt(stringRegistry.get(this.getClassSignature()));
 		buffer.putInt(this.getObjectId());
 	}
 

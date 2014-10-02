@@ -35,10 +35,10 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	public static final int SIZE = TYPE_SIZE_LONG // IEventRecord.timestamp
 			 + TYPE_SIZE_LONG // ITraceRecord.traceId
 			 + TYPE_SIZE_INT // ITraceRecord.orderIndex
+			 + TYPE_SIZE_STRING // IOperationSignature.operationSignature
 			 + TYPE_SIZE_STRING // IClassSignature.classSignature
-			 + TYPE_SIZE_STRING // IOperationRecord.operationSignature
-			 + TYPE_SIZE_STRING // ICallRecord.calleeClassSignature
 			 + TYPE_SIZE_STRING // ICallRecord.calleeOperationSignature
+			 + TYPE_SIZE_STRING // ICallRecord.calleeClassSignature
 	;
 	private static final long serialVersionUID = -1777034164507512479L;
 	
@@ -46,15 +46,15 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 		long.class, // IEventRecord.timestamp
 		long.class, // ITraceRecord.traceId
 		int.class, // ITraceRecord.orderIndex
+		String.class, // IOperationSignature.operationSignature
 		String.class, // IClassSignature.classSignature
-		String.class, // IOperationRecord.operationSignature
-		String.class, // ICallRecord.calleeClassSignature
 		String.class, // ICallRecord.calleeOperationSignature
+		String.class, // ICallRecord.calleeClassSignature
 	};
 	
 	
-	private final String calleeClassSignature;
 	private final String calleeOperationSignature;
+	private final String calleeClassSignature;
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
@@ -65,19 +65,19 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	 *            traceId
 	 * @param orderIndex
 	 *            orderIndex
-	 * @param classSignature
-	 *            classSignature
 	 * @param operationSignature
 	 *            operationSignature
-	 * @param calleeClassSignature
-	 *            calleeClassSignature
+	 * @param classSignature
+	 *            classSignature
 	 * @param calleeOperationSignature
 	 *            calleeOperationSignature
+	 * @param calleeClassSignature
+	 *            calleeClassSignature
 	 */
-	public CallOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String classSignature, final String operationSignature, final String calleeClassSignature, final String calleeOperationSignature) {
-		super(timestamp, traceId, orderIndex, classSignature, operationSignature);
-		this.calleeClassSignature = calleeClassSignature == null?"":calleeClassSignature;
+	public CallOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature, final String calleeOperationSignature, final String calleeClassSignature) {
+		super(timestamp, traceId, orderIndex, operationSignature, classSignature);
 		this.calleeOperationSignature = calleeOperationSignature == null?"":calleeOperationSignature;
+		this.calleeClassSignature = calleeClassSignature == null?"":calleeClassSignature;
 	}
 
 	/**
@@ -89,8 +89,8 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	 */
 	public CallOperationEvent(final Object[] values) { // NOPMD (direct store of values)
 		super(values, TYPES);
-		this.calleeClassSignature = (String) values[5];
-		this.calleeOperationSignature = (String) values[6];
+		this.calleeOperationSignature = (String) values[5];
+		this.calleeClassSignature = (String) values[6];
 	}
 	
 	/**
@@ -103,8 +103,8 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	 */
 	protected CallOperationEvent(final Object[] values, final Class<?>[] valueTypes) { // NOPMD (values stored directly)
 		super(values, valueTypes);
-		this.calleeClassSignature = (String) values[5];
-		this.calleeOperationSignature = (String) values[6];
+		this.calleeOperationSignature = (String) values[5];
+		this.calleeClassSignature = (String) values[6];
 	}
 
 	/**
@@ -118,8 +118,8 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	 */
 	public CallOperationEvent(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
 		super(buffer, stringRegistry);
-		this.calleeClassSignature = stringRegistry.get(buffer.getInt());
 		this.calleeOperationSignature = stringRegistry.get(buffer.getInt());
+		this.calleeClassSignature = stringRegistry.get(buffer.getInt());
 	}
 
 	/**
@@ -131,10 +131,10 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 			this.getTimestamp(),
 			this.getTraceId(),
 			this.getOrderIndex(),
-			this.getClassSignature(),
 			this.getOperationSignature(),
-			this.getCalleeClassSignature(),
-			this.getCalleeOperationSignature()
+			this.getClassSignature(),
+			this.getCalleeOperationSignature(),
+			this.getCalleeClassSignature()
 		};
 	}
 
@@ -146,10 +146,10 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 		buffer.putLong(this.getTimestamp());
 		buffer.putLong(this.getTraceId());
 		buffer.putInt(this.getOrderIndex());
-		buffer.putInt(stringRegistry.get(this.getClassSignature()));
 		buffer.putInt(stringRegistry.get(this.getOperationSignature()));
-		buffer.putInt(stringRegistry.get(this.getCalleeClassSignature()));
+		buffer.putInt(stringRegistry.get(this.getClassSignature()));
 		buffer.putInt(stringRegistry.get(this.getCalleeOperationSignature()));
+		buffer.putInt(stringRegistry.get(this.getCalleeClassSignature()));
 	}
 
 	/**
@@ -189,20 +189,20 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 		throw new UnsupportedOperationException();
 	}
 
-	public final String getCallerClassSignature() {
-		return this.getClassSignature();
-	}
-	
 	public final String getCallerOperationSignature() {
 		return this.getOperationSignature();
 	}
 	
-	public final String getCalleeClassSignature() {
-		return this.calleeClassSignature;
+	public final String getCallerClassSignature() {
+		return this.getClassSignature();
 	}
 	
 	public final String getCalleeOperationSignature() {
 		return this.calleeOperationSignature;
+	}
+	
+	public final String getCalleeClassSignature() {
+		return this.calleeClassSignature;
 	}
 	
 }

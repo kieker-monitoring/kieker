@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pmd>
 	<useProjectRuleSet>true</useProjectRuleSet>
-	<ruleSetFile>lib/static-analysis/pmd-5.0.5/pmdrules.xml</ruleSetFile>
+	<ruleSetFile>build-config/static-analysis/pmdrules.xml</ruleSetFile>
 	<includeDerivedFiles>false</includeDerivedFiles>
 	<violationsAsErrors>true</violationsAsErrors>
 </pmd>

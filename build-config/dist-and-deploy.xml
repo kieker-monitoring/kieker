@@ -39,6 +39,7 @@
 				<include name="${src.kieker.analysis.dir}" />
 				<include name="${src.gen.kieker.analysis.dir}" />
 				<include name="${src.gen.kieker.common.dir}" />
+				<include name="${src.gen.kieker.tools.dir}" />
 				<include name="${src.kieker.monitoring.dir}" />
 				<include name="${src.kieker.tools.dir}" />
 			</dirset>
@@ -54,22 +55,21 @@
 			<tag name="ordered" />
 			<tag name="model" />
 		</javadoc>
-		<copy file="build-config/javadoc-header/kieker-javadoc-header.png" todir="build/javadoc/resources"/>
+		<copy file="${build.config.dir}/javadoc-header/kieker-javadoc-header.png" todir="${build.api.dir}/resources"/>
 	</target>
 
 	<target name="dist-kieker-sources" depends="-init" description="Packages the source archives (.zip|.tar.gz) for a release">
 		<!-- <echo message="${test.dir}/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/jetty.xml" /> -->
 		<patternset id="dist_src_files-nonbinmode"> <!-- NOTE that the order of includes/excludes seems to have no effect. So be careful with excludes -->
-			<include name="${build.config.dir}/*" />
+			<include name="${build.config.dir}/**/*" />
 			<include name="${bin.dir}/logging.properties" />
 			<include name="${bin.dir}/*.bat" />
 			<include name="${src.userguide.dir}/**/*" />
 			<exclude name="${src.userguide.dir}/**/*.sh" /> <!-- will be added in bin mode -->
-			<exclude name="META-INF/" /><!-- not required in source release release -->
 			<include name="${src.dir}/**/*.java" />
 			<include name="${src.dir}/**/META-INF/*" />
 			<include name="${src.gen}/**/*.java" />
-			<include name="${src.model.dir}/records/**/*.irl" />
+			<include name="${src.model.dir}/**/*.irl" />
 			<include name="${src.model.dir}/analysis/*.ecore" />
 			<include name="${src.model.dir}/analysis/*.ecorediag" />
 			<include name="${src.model.dir}/analysis/*.genmodel" />
@@ -77,6 +77,7 @@
 			<include name="${test.dir}/**/META-INF/*" />
 			<include name="${test.dir}/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/jetty.xml" />
 			<include name="${test.dir}/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/webapp/**" />
+			<include name="${test.gen.dir}/**/*.java" />
 			<include name="${lib.dir}/**/*" />
 			<include name="${examples.dir}/**/*" />
 			<exclude name="${examples.dir}/**/.classpath-binrelease.generated" />
@@ -112,7 +113,6 @@
 		</patternset>
 
 		<tar destfile="${release.dir}/${dist.kieker.srcBaseName}.tar" longfile="gnu">
-			<!-- ${kieker.dist.name}/META-INF/kieker.monitoring.properties not required in source release release! -->
 			<tarfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
 				<patternset refid="dist_src_files-nonbinmode" />
 			</tarfileset>
@@ -126,7 +126,6 @@
 		<delete file="${release.dir}/${dist.kieker.srcBaseName}.tar" />
 
 		<zip zipfile="${release.dir}/${dist.kieker.srcBaseName}.zip">
-			<!-- ${kieker.dist.name}/META-INF/kieker.monitoring.properties not required in source release release! -->
 			<zipfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
 				<patternset refid="dist_src_files-nonbinmode" />
 			</zipfileset>
@@ -234,8 +233,7 @@
 		</patternset>
 
 		<tar destfile="${release.dir}/${dist.kieker.binBaseName}.tar" longfile="gnu">
-			<tarfileset file="${kieker.monitoring.adaptiveMonitoring.default.conf}" fullpath="${kieker.dist.name}/META-INF/kieker.monitoring.adaptiveMonitoring.conf" />
-			<tarfileset file="${kieker.monitoring.default.properties}" fullpath="${kieker.dist.name}/META-INF/kieker.monitoring.properties" />
+			<tarfileset file="${kieker.monitoring.default.properties}" fullpath="${kieker.dist.name}/${examples.dir}/kieker.monitoring.example.properties" />
 			<tarfileset file="${src.userguide.pdf}" fullpath="${kieker.dist.name}/doc/${dist.kieker.userguide.pdf}" />
 			<tarfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
 				<patternset refid="dist_bin_files-nonbinmode" />
@@ -310,9 +308,9 @@
 						prefix="${kieker.dist.name}/${src.example.analysis.kax.dir}/lib" />	
 			<tarfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
 						prefix="${kieker.dist.name}/${src.example.analysis.opad.dir}/lib" />	
-			<tarfileset file="${lib.dir}/commons-lang-*.jar"
+			<tarfileset file="${lib.dir}/commons-lang3-*.jar"
 						prefix="${kieker.dist.name}/${src.example.analysis.opad.dir}/lib" />
-			<tarfileset file="${lib.dir}/commons-math-*.jar"
+			<tarfileset file="${lib.dir}/commons-math3-*.jar"
 						prefix="${kieker.dist.name}/${src.example.analysis.opad.dir}/lib" />			
 			<tarfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
 						prefix="${kieker.dist.name}/${src.example.monitoring.aspectj.dir}/lib" />		
@@ -353,8 +351,7 @@
 		<delete file="${release.dir}/${dist.kieker.binBaseName}.tar" />
 
 		<zip zipfile="${release.dir}/${dist.kieker.binBaseName}.zip">
-			<zipfileset file="${kieker.monitoring.adaptiveMonitoring.default.conf}" fullpath="${kieker.dist.name}/META-INF/kieker.monitoring.adaptiveMonitoring.conf" />
-			<zipfileset file="${kieker.monitoring.default.properties}" fullpath="${kieker.dist.name}/META-INF/kieker.monitoring.properties" />
+			<zipfileset file="${kieker.monitoring.default.properties}" fullpath="${kieker.dist.name}/${examples.dir}/kieker.monitoring.example.properties" />
 			<zipfileset file="${src.userguide.pdf}" fullpath="${kieker.dist.name}/doc/${dist.kieker.userguide.pdf}" />
 			<zipfileset dir="." prefix="${kieker.dist.name}" defaultexcludes="yes">
 				<patternset refid="dist_bin_files-nonbinmode" />
@@ -432,9 +429,9 @@
 						prefix="${kieker.dist.name}/${src.example.analysis.opad.dir}/lib" />				
 			<zipfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
 						prefix="${kieker.dist.name}/${src.example.monitoring.aspectj.dir}/lib" />	
-			<zipfileset file="${lib.dir}/commons-lang-*.jar"
+			<zipfileset file="${lib.dir}/commons-lang3-*.jar"
 						prefix="${kieker.dist.name}/${src.example.analysis.opad.dir}/lib" />
-			<zipfileset file="${lib.dir}/commons-math-*.jar"
+			<zipfileset file="${lib.dir}/commons-math3-*.jar"
 						prefix="${kieker.dist.name}/${src.example.analysis.opad.dir}/lib" />			
 			<zipfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
 						prefix="${kieker.dist.name}/${src.example.monitoring.adaptive.dir}/lib" />		
@@ -487,7 +484,11 @@
 		</exec>
 	</target>
 
+	<target name="enable-r-tests" depends="">
+		<property name="rTestsEnabled" value="true" />
+	</target>
+	
 	<!-- http://kieker.uni-kiel.de/trac/ticket/292: add run-tests-integration BEFORE static-analysis -->
-	<target name="run-hudson-kieker" depends="build-all,run-tests-junit,static-analysis" description="Ant target used by the Hudson build (includes run-tests-junit,run-tests-integration,static-analysis)" />
+	<target name="run-hudson-kieker" depends="enable-r-tests,build-all,run-tests-junit,static-analysis" description="Ant target used by the Hudson build (includes run-tests-junit,run-tests-integration,static-analysis)" />
 
 </project>

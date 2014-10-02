@@ -8,17 +8,40 @@
 	<target name="build-all" depends="clean,-init,build-kieker.main,build-kieker.main.aspectj,build-kieker.main.emf" description="Compiles and packages the Kieker Jar and War files (calls the 'build-kieker-*' targets)">
 	</target>
 
+	<target name="generate-kieker" depends="generate-kieker.common, generate-kieker.tools" description="Generate java code for records.">
+	</target>
+	
 	<!-- Build kieker.common -->
 	<target name="generate-kieker.common" depends="-init" description="Generate java code for records.">
 		<java classname="de.cau.cs.se.instrumentation.rl.cli.CLICompilerMain" fork="yes">
 			<classpath>
-				<pathelement location="${bin.dir}/dev/target/de.cau.cs.se.instrumentation.rl.cli-1.0.0-SNAPSHOT.jar"/>
-				<pathelement location="${bin.dir}/dev/lib/org.eclipse.emf.mwe.core_1.2.1.v201402030544.jar"/>
-				<pathelement location="${bin.dir}/dev/lib/org.eclipse.xtext.common.types_2.5.3.v201402240820.jar"/>
-				<pathelement location="${bin.dir}/dev/lib/org.eclipse.emf.mwe.utils_1.3.1.v201402030544.jar"/>
-				<pathelement location="${bin.dir}/dev/lib/org.eclipse.xtext.common.types.ui_2.5.3.v201402240820.jar"/>
+				<fileset dir="${bin.dir}/dev">
+					<!-- WARNING: the libs must be updated iff the compilers base-line changes -->
+					<include name="target/de.cau.cs.se.instrumentation.rl.cli-*.jar" />
+					<include name="lib/org.eclipse.emf.mwe.core_*.jar"/>
+					<include name="lib/org.eclipse.xtext.common.types_*.jar"/>
+					<include name="lib/org.eclipse.emf.mwe.utils_*.jar"/>
+					<include name="lib/org.eclipse.xtext.common.types.ui_*.jar"/>
+				</fileset>
 			</classpath>
-			<arg line="-r .. -a 'Kieker Build' -d src-gen/common -s model/records -l java -n kieker -p Kieker -v 1.10"/>	
+			<arg line="-r .. -a 'Kieker Build' -d src-gen/common -s model/common/records -l java -n kieker -p Kieker -v 1.10"/>	
+		</java>
+	</target>
+	
+	<!-- Build kieker.tools -->
+	<target name="generate-kieker.tools" depends="-init" description="Generate java code for records.">
+		<java classname="de.cau.cs.se.instrumentation.rl.cli.CLICompilerMain" fork="yes">
+			<classpath>
+				<fileset dir="${bin.dir}/dev">
+					<!-- WARNING: the libs must be updated iff the compilers base-line changes -->
+					<include name="target/de.cau.cs.se.instrumentation.rl.cli-*.jar" />
+					<include name="lib/org.eclipse.emf.mwe.core_*.jar"/>
+					<include name="lib/org.eclipse.xtext.common.types_*.jar"/>
+					<include name="lib/org.eclipse.emf.mwe.utils_*.jar"/>
+					<include name="lib/org.eclipse.xtext.common.types.ui_*.jar"/>
+				</fileset>
+			</classpath>
+			<arg line="-r .. -a 'Kieker Build' -d src-gen/tools -s model/tools/records -l java -n kieker -p Kieker -v 1.10"/>	
 		</java>
 	</target>
 	
@@ -67,7 +90,7 @@
 	<target name="-compile-kieker.tools" depends="-init,-compile-kieker.common,-compile-kieker.monitoring,-compile-kieker.analysis" description="Compiles the sources of Kieker tools">
 		<delete dir="${build.kieker.tools.dir}" />
 		<mkdir dir="${build.kieker.tools.dir}" />
-		<javac destDir="${build.kieker.tools.dir}" source="1.6" target="1.6" srcdir="${src.kieker.tools.dir}" debug="true" classpathref="kieker.tools-compile-classpath" includeAntRuntime="false">
+		<javac destDir="${build.kieker.tools.dir}" source="1.6" target="1.6" srcdir="${src.kieker.tools.dir}:${src.gen.kieker.tools.dir}" debug="true" classpathref="kieker.tools-compile-classpath" includeAntRuntime="false">
 			<compilerarg value="-Xlint:all" />
 		</javac>
 		<copy file="${sequence.pic}" tofile="${build.kieker.tools.dir}/META-INF/sequence.pic" />
@@ -315,6 +338,25 @@
 			<compilerarg value="-Xlint:all" />
 		</javac>
 	</target>
+	
+	<target name="-compile-tests-api" depends="build-kieker.main" description="Compiles the tests for api test of common classes">
+		<path id="common-test-compile-classpath">
+			<fileset dir="${lib.dir}">
+				<include name="hamcrest-core-*.jar" />
+				<include name="junit-*.jar" />
+			</fileset>
+			<!-- This part is necessary as one of the tests uses helper methods from this jar. -->
+			<fileset dir="${lib.dir}/framework-libs/cxf">
+				<include name="cxf-*.jar" />
+			</fileset>
+			<fileset dir="${dist.dir}">
+				<include name="${dist.kieker.main.jar}" />
+			</fileset>
+		</path>
+		<javac source="1.6" target="1.6" destDir="${build.tests.dir}" classpathref="common-test-compile-classpath" srcdir="${test.gen.kieker.common.dir}" debug="true" includeAntRuntime="false">
+			<compilerarg value="-Xlint:all" />
+		</javac>
+	</target>
 
 	<target name="-compile-tests-monitoring" depends="-compile-tests-common,build-kieker.main,build-kieker.main.aspectj" description="Compiles the tests for the Kieker.Monitoring component">
 		<path id="monitoring-test-compile-classpath">
@@ -358,20 +400,17 @@
 			<fileset dir="${lib.dir}">
 				<include name="hamcrest-core-*.jar" />
 				<include name="junit-*.jar" />
-				<include name="activemq-core-5.4.3.jar" />
-				<include name="reflections-0.9.9-RC1.jar"/>
-				<include name="geronimo-j2ee-management_1.1_spec-1.0.1.jar"/>
-				<include name="kahadb-5.7.0.jar"/>
+				<include name="activemq-*.jar" />
+				<include name="reflections-*.jar"/>
+				<include name="geronimo-j2ee-management_1.1_spec-*.jar"/>
 				<include name="javax.jms-*.jar" />
 				
 				<!-- OPAD includes begin -->
-				<include name="commons-math-*.jar"/>
-				<include name="commons-lang-*.jar"/>
+				<include name="commons-math3-*.jar"/>
+				<include name="commons-lang3-*.jar"/>
 				<include name="Rsession-*.jar"/>
-				<include name="mongo-*.jar"/>
 				<include name="REngine-*.jar"/>
 				<include name="Rserve-*.jar"/>
-				<include name="org.json.min-*.jar"/>
 				<!-- OPAD includes end -->
 				
 			</fileset>
@@ -388,7 +427,7 @@
 		</javac>
 	</target>
 
-	<target name="compile-tests" depends="-compile-tests-common,-compile-tests-analysis,-compile-tests-monitoring,-compile-tests-tools" description="Compile the tests for the Kieker components">
+	<target name="compile-tests" depends="-compile-tests-common,-compile-tests-api,-compile-tests-analysis,-compile-tests-monitoring,-compile-tests-tools" description="Compile the tests for the Kieker components">
 	</target>
 
 	<!--

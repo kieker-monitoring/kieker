@@ -43,13 +43,15 @@ import java.util.regex.Pattern;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.common.util.map.BoundedConcurrentHashMap;
+import kieker.common.util.map.BoundedConcurrentHashMap.BoundedCacheBehaviour;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.signaturePattern.InvalidPatternException;
 import kieker.monitoring.core.signaturePattern.PatternEntry;
 import kieker.monitoring.core.signaturePattern.PatternParser;
 
 /**
- * @author Jan Waller, Bjoern Weissenfels
+ * @author Jan Waller, Bjoern Weissenfels, Nils Christian Ehmke
  * 
  * @since 1.6
  */
@@ -61,9 +63,11 @@ public class ProbeController extends AbstractController implements IProbeControl
 	private final String configFilePathname;
 	private final boolean configFileUpdate;
 	private final int configFileReadIntervall;
+	private final int maxCacheSize;
+	private final int boundedCacheBehaviour;
 	private final ConfigFileReader configFileReader;
 
-	private final ConcurrentMap<String, Boolean> signatureCache = new ConcurrentHashMap<String, Boolean>();
+	private final ConcurrentMap<String, Boolean> signatureCache;
 	private final List<PatternEntry> patternList = new ArrayList<PatternEntry>(); // only accessed synchronized
 
 	/**
@@ -79,6 +83,38 @@ public class ProbeController extends AbstractController implements IProbeControl
 			this.configFilePathname = configuration.getPathProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE);
 			this.configFileUpdate = configuration.getBooleanProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_UPDATE);
 			this.configFileReadIntervall = configuration.getIntProperty(ConfigurationFactory.ADAPTIVE_MONITORING_CONFIG_FILE_READ_INTERVALL);
+			this.maxCacheSize = configuration.getIntProperty(ConfigurationFactory.ADAPTIVE_MONITORING_MAX_CACHE_SIZE);
+			this.boundedCacheBehaviour = configuration.getIntProperty(ConfigurationFactory.ADAPTIVE_MONITORING_BOUNDED_CACHE_BEHAVIOUR);
+			if (this.maxCacheSize >= 0) {
+				// Bounded cache
+				final BoundedConcurrentHashMap.BoundedCacheBehaviour behaviour;
+				switch (this.boundedCacheBehaviour) {
+				case 0:
+					behaviour = BoundedCacheBehaviour.IGNORE_NEW_ENTRIES;
+					break;
+				case 1:
+					behaviour = BoundedCacheBehaviour.REMOVE_RANDOM_ENTRY;
+					break;
+				case 2:
+					behaviour = BoundedCacheBehaviour.CLEAR_CACHE;
+					break;
+				default:
+					LOG.warn("Unexpected value for property '" + ConfigurationFactory.ADAPTIVE_MONITORING_BOUNDED_CACHE_BEHAVIOUR + "'. Using default value 0.");
+					behaviour = BoundedCacheBehaviour.IGNORE_NEW_ENTRIES;
+					break;
+				}
+				final int cacheSize;
+				if (this.maxCacheSize >= 1) {
+					cacheSize = this.maxCacheSize;
+				} else {
+					LOG.warn("Invalid value for property '" + ConfigurationFactory.ADAPTIVE_MONITORING_MAX_CACHE_SIZE + "'. Using default value 100.");
+					cacheSize = 100;
+				}
+				this.signatureCache = new BoundedConcurrentHashMap<String, Boolean>(behaviour, cacheSize);
+			} else {
+				// Unbounded cache
+				this.signatureCache = new ConcurrentHashMap<String, Boolean>();
+			}
 			this.configFileReader = new ConfigFileReader(this.configFilePathname);
 			// run once to get the initial file contents
 			this.configFileReader.readFile(true);
@@ -86,7 +122,10 @@ public class ProbeController extends AbstractController implements IProbeControl
 			this.configFilePathname = null; // NOPMD (null)
 			this.configFileUpdate = false;
 			this.configFileReadIntervall = 0;
+			this.maxCacheSize = 0;
+			this.boundedCacheBehaviour = 0;
 			this.configFileReader = null; // NOPMD (null)
+			this.signatureCache = new ConcurrentHashMap<String, Boolean>();
 		}
 	}
 
@@ -128,6 +167,12 @@ public class ProbeController extends AbstractController implements IProbeControl
 			}
 			sb.append("\n\tUpdate pattern file with additional patterns: ");
 			sb.append(this.configFileUpdate);
+			sb.append("\n\tSignature cache: ");
+			if (this.maxCacheSize >= 0) {
+				sb.append("bounded");
+			} else {
+				sb.append("unbounded");
+			}
 		} else {
 			sb.append("disabled");
 		}

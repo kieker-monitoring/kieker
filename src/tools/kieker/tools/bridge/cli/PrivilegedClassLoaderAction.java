@@ -20,8 +20,8 @@ import java.net.URLClassLoader;
 import java.security.PrivilegedAction;
 
 /**
- * @author Reiner Jung
- * @author Nils Ehmke
+ * @author Reiner Jung, Nils Christian Ehmke
+ * 
  * @since 1.8
  */
 public class PrivilegedClassLoaderAction implements PrivilegedAction<URLClassLoader> {

@@ -33,10 +33,19 @@ public abstract class AbstractMXBeanSampler implements ISampler {
 
 	private static final String VM_NAME = ManagementFactory.getRuntimeMXBean().getName();
 
+	/**
+	 * Empty constructor.
+	 */
 	public AbstractMXBeanSampler() {
 		// Empty default constructor
 	}
 
+	/**
+	 * Perform one measurement with potential multiple records.
+	 * 
+	 * @throws Exception
+	 *             depending on the concrete sampler different exceptions can be raised
+	 */
 	@Override
 	public final void sample(final IMonitoringController monitoringController) throws Exception {
 
@@ -54,6 +63,20 @@ public abstract class AbstractMXBeanSampler implements ISampler {
 		}
 	}
 
+	/**
+	 * Abstract method used as interface to realize concrete samplers.
+	 * 
+	 * @param timestamp
+	 *            the current time.
+	 * @param hostname
+	 *            the hostname of the machine where this measurement is performed
+	 * @param vmName
+	 *            name of the vm
+	 * @param monitoringCtr
+	 *            monitoring controller used in the measurement
+	 * 
+	 * @return returns an array of records containing the measurement
+	 */
 	protected abstract IMonitoringRecord[] createNewMonitoringRecords(final long timestamp, final String hostname, final String vmName,
 			final IMonitoringController monitoringCtr);
 

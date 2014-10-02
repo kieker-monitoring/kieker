@@ -30,10 +30,10 @@ import kieker.test.common.junit.AbstractKiekerTest;
 /**
  * Some tests in addition to {@link TimeSeriesTest}. Since I'm following a slightly different style of writing tests
  * (refuse state in tests), I've decided to add the tests to a separate class. Might be consolidated later.
- * 
+ *
  * @author Andre van Hoorn
  * @since 1.10
- * 
+ *
  */
 public class TimeSeriesTestNoState extends AbstractKiekerTest {
 	private static final long STARTTIME = 98890787;
@@ -57,7 +57,7 @@ public class TimeSeriesTestNoState extends AbstractKiekerTest {
 			expectedValues.add(curVal);
 		}
 
-		final TimeSeries<Double> ts = new TimeSeries<Double>(TimeSeriesTestNoState.STARTTIME, TimeSeriesTestNoState.DELTATIMEMILIS, TimeUnit.MILLISECONDS);
+		final TimeSeries<Double> ts = new TimeSeries<Double>(TimeSeriesTestNoState.STARTTIME, TimeUnit.MILLISECONDS, TimeSeriesTestNoState.DELTATIMEMILIS);
 		ts.appendAll(values);
 
 		final List<Double> tsValues = ts.getValues();
