@@ -52,7 +52,7 @@ public class OnlineConfigurationTest extends AbstractKiekerTest {
 	}
 
 	@Test
-	public void testUpdatingNonExistingPlugin() throws PluginNotFoundException {
+	public void testUpdatingNonExistingPlugin() throws PluginNotFoundException { // NOPMD (missing assert - we expect an exception)
 		this.exception.expect(PluginNotFoundException.class);
 		GlobalConfigurationRegistry.getInstance().updateConfiguration(42, new Configuration(), true);
 	}
