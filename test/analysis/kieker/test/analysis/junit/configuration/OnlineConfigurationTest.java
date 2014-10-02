@@ -45,7 +45,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
 public class OnlineConfigurationTest extends AbstractKiekerTest {
 
 	@Rule
-	public ExpectedException exception = ExpectedException.none();
+	public ExpectedException exception = ExpectedException.none(); // NOPMD NOCS
 
 	public OnlineConfigurationTest() {
 		// No code necessary
