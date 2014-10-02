@@ -1,170 +1,170 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Project xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="platform:/resource/Kieker/model/AnalysisMetaModel.ecore" name="AnalysisProject">
-  <plugins xsi:type="Reader" name="FSReader-2" classname="kieker.analysis.plugin.reader.filesystem.FSReader" id="_A7NVwSkpEeSLmektj4V9zA">
+  <plugins xsi:type="Reader" name="FSReader-2" classname="kieker.analysis.plugin.reader.filesystem.FSReader" id="_WF8T0EoHEeSfCcUctGR1AQ">
     <properties name="ignoreUnknownRecordTypes" value="true"/>
-    <properties name="inputDirs" value="C:/Users/Nils Christian Ehmke/Repositories/kieker/examples/userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20140821-113933692-UTC"/>
-    <outputPorts name="monitoringRecords" id="_A7NVwikpEeSLmektj4V9zA" subscribers="_A7WfsCkpEeSLmektj4V9zA"/>
+    <properties name="inputDirs" value="/home/avh/git_work/kieker/examples/userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20140821-113933692-UTC"/>
+    <outputPorts name="monitoringRecords" id="_WF-JAEoHEeSfCcUctGR1AQ" subscribers="_WF_-MEoHEeSfCcUctGR1AQ"/>
   </plugins>
-  <plugins xsi:type="Filter" name="StringBufferFilter-3" classname="kieker.analysis.plugin.filter.forward.StringBufferFilter" id="_A7NVwykpEeSLmektj4V9zA">
-    <outputPorts name="relayed-events" id="_A7NVxCkpEeSLmektj4V9zA" subscribers="_A7WftykpEeSLmektj4V9zA _A7WftSkpEeSLmektj4V9zA"/>
-    <inputPorts name="received-events" id="_A7WfsCkpEeSLmektj4V9zA"/>
+  <plugins xsi:type="Filter" name="StringBufferFilter-3" classname="kieker.analysis.plugin.filter.forward.StringBufferFilter" id="_WF_XIEoHEeSfCcUctGR1AQ">
+    <outputPorts name="relayed-events" id="_WF_XIUoHEeSfCcUctGR1AQ" subscribers="_WGAlQ0oHEeSfCcUctGR1AQ _WGAlQkoHEeSfCcUctGR1AQ"/>
+    <inputPorts name="received-events" id="_WF_-MEoHEeSfCcUctGR1AQ"/>
   </plugins>
-  <plugins xsi:type="Filter" name="TimestampFilter-4" classname="kieker.analysis.plugin.filter.select.TimestampFilter" id="_A7WfsSkpEeSLmektj4V9zA">
+  <plugins xsi:type="Filter" name="TimestampFilter-4" classname="kieker.analysis.plugin.filter.select.TimestampFilter" id="_WF_-MUoHEeSfCcUctGR1AQ">
     <properties name="timeunit" value="NANOSECONDS"/>
     <properties name="ignoreAfterTimestamp" value="9223372036854775807"/>
     <properties name="ignoreBeforeTimestamp" value="0"/>
-    <outputPorts name="recordsWithinTimePeriod" id="_A7WfsikpEeSLmektj4V9zA" subscribers="_A7WfuykpEeSLmektj4V9zA"/>
-    <outputPorts name="recordsOutsidePeriod" id="_A7WfsykpEeSLmektj4V9zA"/>
-    <inputPorts name="monitoringRecordsCombined" id="_A7WftCkpEeSLmektj4V9zA"/>
-    <inputPorts name="monitoringRecordsFlow" id="_A7WftSkpEeSLmektj4V9zA"/>
-    <inputPorts name="monitoringRecordsAny" id="_A7WftikpEeSLmektj4V9zA"/>
-    <inputPorts name="monitoringRecordsExecution" id="_A7WftykpEeSLmektj4V9zA"/>
+    <outputPorts name="recordsWithinTimePeriod" id="_WF_-MkoHEeSfCcUctGR1AQ" subscribers="_WGBMUEoHEeSfCcUctGR1AQ"/>
+    <outputPorts name="recordsOutsidePeriod" id="_WF_-M0oHEeSfCcUctGR1AQ"/>
+    <inputPorts name="monitoringRecordsCombined" id="_WGAlQEoHEeSfCcUctGR1AQ"/>
+    <inputPorts name="monitoringRecordsAny" id="_WGAlQUoHEeSfCcUctGR1AQ"/>
+    <inputPorts name="monitoringRecordsFlow" id="_WGAlQkoHEeSfCcUctGR1AQ"/>
+    <inputPorts name="monitoringRecordsExecution" id="_WGAlQ0oHEeSfCcUctGR1AQ"/>
   </plugins>
-  <plugins xsi:type="Filter" name="TraceIdFilter-5" classname="kieker.analysis.plugin.filter.select.TraceIdFilter" id="_A7WfuCkpEeSLmektj4V9zA">
+  <plugins xsi:type="Filter" name="TraceIdFilter-5" classname="kieker.analysis.plugin.filter.select.TraceIdFilter" id="_WGAlREoHEeSfCcUctGR1AQ">
     <properties name="selectedTraceIds" value=""/>
     <properties name="acceptAllTraces" value="true"/>
-    <outputPorts name="recordsMatchingId" id="_A7WfuSkpEeSLmektj4V9zA" subscribers="_A7WfwSkpEeSLmektj4V9zA _A7WfyykpEeSLmektj4V9zA"/>
-    <outputPorts name="recordsNotMatchingId" id="_A7WfuikpEeSLmektj4V9zA"/>
-    <inputPorts name="monitoringRecordsCombined" id="_A7WfuykpEeSLmektj4V9zA"/>
-    <inputPorts name="monitoringRecordsFlow" id="_A7WfvCkpEeSLmektj4V9zA"/>
-    <inputPorts name="monitoringRecordsExecution" id="_A7WfvSkpEeSLmektj4V9zA"/>
+    <outputPorts name="recordsMatchingId" id="_WGAlRUoHEeSfCcUctGR1AQ" subscribers="_WGBzYkoHEeSfCcUctGR1AQ _WGDBgUoHEeSfCcUctGR1AQ"/>
+    <outputPorts name="recordsNotMatchingId" id="_WGAlRkoHEeSfCcUctGR1AQ"/>
+    <inputPorts name="monitoringRecordsCombined" id="_WGBMUEoHEeSfCcUctGR1AQ"/>
+    <inputPorts name="monitoringRecordsFlow" id="_WGBMUUoHEeSfCcUctGR1AQ"/>
+    <inputPorts name="monitoringRecordsExecution" id="_WGBMUkoHEeSfCcUctGR1AQ"/>
   </plugins>
-  <plugins xsi:type="Filter" name="Execution record transformation" classname="kieker.tools.traceAnalysis.filter.executionRecordTransformation.ExecutionRecordTransformationFilter" id="_A7WfvikpEeSLmektj4V9zA">
-    <repositories name="systemModelRepository" repository="_A7NVwCkpEeSLmektj4V9zA" id="_A7WfvykpEeSLmektj4V9zA"/>
-    <outputPorts name="transformedExecutions" id="_A7WfwCkpEeSLmektj4V9zA" subscribers="_A7WfxykpEeSLmektj4V9zA"/>
-    <inputPorts name="operationExecutionRecords" id="_A7WfwSkpEeSLmektj4V9zA"/>
+  <plugins xsi:type="Filter" name="Execution record transformation" classname="kieker.tools.traceAnalysis.filter.executionRecordTransformation.ExecutionRecordTransformationFilter" id="_WGBMU0oHEeSfCcUctGR1AQ">
+    <repositories name="systemModelRepository" repository="_WF7swUoHEeSfCcUctGR1AQ" id="_WGBzYEoHEeSfCcUctGR1AQ"/>
+    <outputPorts name="transformedExecutions" id="_WGBzYUoHEeSfCcUctGR1AQ" subscribers="_WGCadEoHEeSfCcUctGR1AQ"/>
+    <inputPorts name="operationExecutionRecords" id="_WGBzYkoHEeSfCcUctGR1AQ"/>
   </plugins>
-  <plugins xsi:type="Filter" name="Trace reconstruction (execution records -> execution traces)" classname="kieker.tools.traceAnalysis.filter.traceReconstruction.TraceReconstructionFilter" id="_A7WfwikpEeSLmektj4V9zA">
+  <plugins xsi:type="Filter" name="Trace reconstruction (execution records -> execution traces)" classname="kieker.tools.traceAnalysis.filter.traceReconstruction.TraceReconstructionFilter" id="_WGBzY0oHEeSfCcUctGR1AQ">
     <properties name="timeunit" value="NANOSECONDS"/>
     <properties name="ignoreInvalidTraces" value="false"/>
     <properties name="maxTraceDuration" value="600000000000"/>
-    <repositories name="systemModelRepository" repository="_A7NVwCkpEeSLmektj4V9zA" id="_A7WfwykpEeSLmektj4V9zA"/>
-    <outputPorts name="messageTraces" id="_A7WfxCkpEeSLmektj4V9zA" subscribers="_A7Wf5CkpEeSLmektj4V9zA _A7Wf6CkpEeSLmektj4V9zA _A7Wf7CkpEeSLmektj4V9zA _A7Wf8CkpEeSLmektj4V9zA _A7Wf9CkpEeSLmektj4V9zA _A7Wf9ykpEeSLmektj4V9zA _A7Wf-ikpEeSLmektj4V9zA"/>
-    <outputPorts name="executionTraces" id="_A7WfxSkpEeSLmektj4V9zA" subscribers="_A7Wf2ykpEeSLmektj4V9zA _A7Wf4CkpEeSLmektj4V9zA"/>
-    <outputPorts name="invalidExecutionTraces" id="_A7WfxikpEeSLmektj4V9zA"/>
-    <inputPorts name="executions" id="_A7WfxykpEeSLmektj4V9zA"/>
+    <repositories name="systemModelRepository" repository="_WF7swUoHEeSfCcUctGR1AQ" id="_WGCacEoHEeSfCcUctGR1AQ"/>
+    <outputPorts name="messageTraces" id="_WGCacUoHEeSfCcUctGR1AQ" subscribers="_WGE2sEoHEeSfCcUctGR1AQ _WGE2tEoHEeSfCcUctGR1AQ _WGFdwEoHEeSfCcUctGR1AQ _WGFdxEoHEeSfCcUctGR1AQ _WGGE0EoHEeSfCcUctGR1AQ _WGGE00oHEeSfCcUctGR1AQ _WGGr4EoHEeSfCcUctGR1AQ"/>
+    <outputPorts name="executionTraces" id="_WGCackoHEeSfCcUctGR1AQ" subscribers="_WGEPoEoHEeSfCcUctGR1AQ _WGEPpUoHEeSfCcUctGR1AQ"/>
+    <outputPorts name="invalidExecutionTraces" id="_WGCac0oHEeSfCcUctGR1AQ"/>
+    <inputPorts name="executions" id="_WGCadEoHEeSfCcUctGR1AQ"/>
   </plugins>
-  <plugins xsi:type="Filter" name="Trace reconstruction (trace event records -> event record traces)" classname="kieker.analysis.plugin.filter.flow.EventRecordTraceReconstructionFilter" id="_A7WfyCkpEeSLmektj4V9zA">
+  <plugins xsi:type="Filter" name="Trace reconstruction (trace event records -> event record traces)" classname="kieker.analysis.plugin.filter.flow.EventRecordTraceReconstructionFilter" id="_WGCadUoHEeSfCcUctGR1AQ">
     <properties name="timeunit" value="NANOSECONDS"/>
     <properties name="maxTraceTimeout" value="9223372036854775807"/>
     <properties name="maxTraceDuration" value="600000000000"/>
-    <outputPorts name="validTraces" id="_A7WfySkpEeSLmektj4V9zA" subscribers="_A7WfzykpEeSLmektj4V9zA _A7Wf1ikpEeSLmektj4V9zA"/>
-    <outputPorts name="invalidTraces" id="_A7WfyikpEeSLmektj4V9zA" subscribers="_A7Wf0CkpEeSLmektj4V9zA"/>
-    <inputPorts name="traceRecords" id="_A7WfyykpEeSLmektj4V9zA"/>
-    <inputPorts name="timestamps" id="_A7WfzCkpEeSLmektj4V9zA"/>
-    <inputPorts name="traceEventRecords" id="_A7WfzSkpEeSLmektj4V9zA"/>
+    <outputPorts name="validTraces" id="_WGCadkoHEeSfCcUctGR1AQ" subscribers="_WGDokEoHEeSfCcUctGR1AQ _WGDol0oHEeSfCcUctGR1AQ"/>
+    <outputPorts name="invalidTraces" id="_WGCad0oHEeSfCcUctGR1AQ" subscribers="_WGDokUoHEeSfCcUctGR1AQ"/>
+    <inputPorts name="timestamps" id="_WGDBgEoHEeSfCcUctGR1AQ"/>
+    <inputPorts name="traceRecords" id="_WGDBgUoHEeSfCcUctGR1AQ"/>
+    <inputPorts name="traceEventRecords" id="_WGDBgkoHEeSfCcUctGR1AQ"/>
   </plugins>
-  <plugins xsi:type="Filter" name="Trace reconstruction (event records -> event record traces)" classname="kieker.tools.traceAnalysis.filter.flow.EventRecordTraceCounter" id="_A7WfzikpEeSLmektj4V9zA">
+  <plugins xsi:type="Filter" name="Trace reconstruction (event records -> event record traces)" classname="kieker.tools.traceAnalysis.filter.flow.EventRecordTraceCounter" id="_WGDBg0oHEeSfCcUctGR1AQ">
     <properties name="logInvalidTraces" value="true"/>
-    <inputPorts name="validEventRecordTraces" id="_A7WfzykpEeSLmektj4V9zA"/>
-    <inputPorts name="invalidEventRecordTraces" id="_A7Wf0CkpEeSLmektj4V9zA"/>
+    <inputPorts name="validEventRecordTraces" id="_WGDokEoHEeSfCcUctGR1AQ"/>
+    <inputPorts name="invalidEventRecordTraces" id="_WGDokUoHEeSfCcUctGR1AQ"/>
   </plugins>
-  <plugins xsi:type="Filter" name="Trace reconstruction (event record traces -> execution traces)" classname="kieker.tools.traceAnalysis.filter.flow.TraceEventRecords2ExecutionAndMessageTraceFilter" id="_A7Wf0SkpEeSLmektj4V9zA">
+  <plugins xsi:type="Filter" name="Trace reconstruction (event record traces -> execution traces)" classname="kieker.tools.traceAnalysis.filter.flow.TraceEventRecords2ExecutionAndMessageTraceFilter" id="_WGDokkoHEeSfCcUctGR1AQ">
     <properties name="enhanceJavaConstructors" value="true"/>
     <properties name="enhanceCallDetection" value="true"/>
     <properties name="ignoreAssumed" value="false"/>
-    <repositories name="systemModelRepository" repository="_A7NVwCkpEeSLmektj4V9zA" id="_A7Wf0ikpEeSLmektj4V9zA"/>
-    <outputPorts name="executionTrace" id="_A7Wf0ykpEeSLmektj4V9zA" subscribers="_A7Wf2ykpEeSLmektj4V9zA _A7Wf4CkpEeSLmektj4V9zA"/>
-    <outputPorts name="messageTrace" id="_A7Wf1CkpEeSLmektj4V9zA" subscribers="_A7Wf5CkpEeSLmektj4V9zA _A7Wf6CkpEeSLmektj4V9zA _A7Wf7CkpEeSLmektj4V9zA _A7Wf8CkpEeSLmektj4V9zA _A7Wf9CkpEeSLmektj4V9zA _A7Wf9ykpEeSLmektj4V9zA _A7Wf-ikpEeSLmektj4V9zA"/>
-    <outputPorts name="invalidTrace" id="_A7Wf1SkpEeSLmektj4V9zA"/>
-    <inputPorts name="traceEvents" id="_A7Wf1ikpEeSLmektj4V9zA"/>
+    <repositories name="systemModelRepository" repository="_WF7swUoHEeSfCcUctGR1AQ" id="_WGDok0oHEeSfCcUctGR1AQ"/>
+    <outputPorts name="executionTrace" id="_WGDolEoHEeSfCcUctGR1AQ" subscribers="_WGEPoEoHEeSfCcUctGR1AQ _WGEPpUoHEeSfCcUctGR1AQ"/>
+    <outputPorts name="messageTrace" id="_WGDolUoHEeSfCcUctGR1AQ" subscribers="_WGE2sEoHEeSfCcUctGR1AQ _WGE2tEoHEeSfCcUctGR1AQ _WGFdwEoHEeSfCcUctGR1AQ _WGFdxEoHEeSfCcUctGR1AQ _WGGE0EoHEeSfCcUctGR1AQ _WGGE00oHEeSfCcUctGR1AQ _WGGr4EoHEeSfCcUctGR1AQ"/>
+    <outputPorts name="invalidTrace" id="_WGDolkoHEeSfCcUctGR1AQ"/>
+    <inputPorts name="traceEvents" id="_WGDol0oHEeSfCcUctGR1AQ"/>
   </plugins>
-  <plugins xsi:type="Filter" name="Trace equivalence class filter (deployment mode)" classname="kieker.tools.traceAnalysis.filter.traceFilter.TraceEquivalenceClassFilter" id="_A7Wf1ykpEeSLmektj4V9zA">
+  <plugins xsi:type="Filter" name="Trace equivalence class filter (deployment mode)" classname="kieker.tools.traceAnalysis.filter.traceFilter.TraceEquivalenceClassFilter" id="_WGDomEoHEeSfCcUctGR1AQ">
     <properties name="equivalenceMode" value="ALLOCATION"/>
-    <repositories name="systemModelRepository" repository="_A7NVwCkpEeSLmektj4V9zA" id="_A7Wf2CkpEeSLmektj4V9zA"/>
-    <outputPorts name="messageTraceRepresentatives" id="_A7Wf2SkpEeSLmektj4V9zA"/>
-    <outputPorts name="executionTraceRepresentatives" id="_A7Wf2ikpEeSLmektj4V9zA"/>
-    <inputPorts name="executionTraces" id="_A7Wf2ykpEeSLmektj4V9zA"/>
+    <repositories name="systemModelRepository" repository="_WF7swUoHEeSfCcUctGR1AQ" id="_WGDomUoHEeSfCcUctGR1AQ"/>
+    <outputPorts name="messageTraceRepresentatives" id="_WGDomkoHEeSfCcUctGR1AQ"/>
+    <outputPorts name="executionTraceRepresentatives" id="_WGDom0oHEeSfCcUctGR1AQ"/>
+    <inputPorts name="executionTraces" id="_WGEPoEoHEeSfCcUctGR1AQ"/>
   </plugins>
-  <plugins xsi:type="Filter" name="Trace equivalence class filter (assembly mode)" classname="kieker.tools.traceAnalysis.filter.traceFilter.TraceEquivalenceClassFilter" id="_A7Wf3CkpEeSLmektj4V9zA">
+  <plugins xsi:type="Filter" name="Trace equivalence class filter (assembly mode)" classname="kieker.tools.traceAnalysis.filter.traceFilter.TraceEquivalenceClassFilter" id="_WGEPoUoHEeSfCcUctGR1AQ">
     <properties name="equivalenceMode" value="ASSEMBLY"/>
-    <repositories name="systemModelRepository" repository="_A7NVwCkpEeSLmektj4V9zA" id="_A7Wf3SkpEeSLmektj4V9zA"/>
-    <outputPorts name="messageTraceRepresentatives" id="_A7Wf3ikpEeSLmektj4V9zA"/>
-    <outputPorts name="executionTraceRepresentatives" id="_A7Wf3ykpEeSLmektj4V9zA"/>
-    <inputPorts name="executionTraces" id="_A7Wf4CkpEeSLmektj4V9zA"/>
+    <repositories name="systemModelRepository" repository="_WF7swUoHEeSfCcUctGR1AQ" id="_WGEPokoHEeSfCcUctGR1AQ"/>
+    <outputPorts name="messageTraceRepresentatives" id="_WGEPo0oHEeSfCcUctGR1AQ"/>
+    <outputPorts name="executionTraceRepresentatives" id="_WGEPpEoHEeSfCcUctGR1AQ"/>
+    <inputPorts name="executionTraces" id="_WGEPpUoHEeSfCcUctGR1AQ"/>
   </plugins>
-  <plugins xsi:type="Filter" name="ComponentDependencyGraphAllocationFilter-6" classname="kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ComponentDependencyGraphAllocationFilter" id="_A7Wf4SkpEeSLmektj4V9zA">
-    <repositories name="systemModelRepository" repository="_A7NVwCkpEeSLmektj4V9zA" id="_A7Wf4ikpEeSLmektj4V9zA"/>
-    <outputPorts name="graphs" id="_A7Wf4ykpEeSLmektj4V9zA" subscribers="_A7Wf_CkpEeSLmektj4V9zA"/>
-    <inputPorts name="messageTraces" id="_A7Wf5CkpEeSLmektj4V9zA"/>
+  <plugins xsi:type="Filter" name="ComponentDependencyGraphAllocationFilter-6" classname="kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ComponentDependencyGraphAllocationFilter" id="_WGEPpkoHEeSfCcUctGR1AQ">
+    <repositories name="systemModelRepository" repository="_WF7swUoHEeSfCcUctGR1AQ" id="_WGEPp0oHEeSfCcUctGR1AQ"/>
+    <outputPorts name="graphs" id="_WGEPqEoHEeSfCcUctGR1AQ" subscribers="_WGGr4koHEeSfCcUctGR1AQ"/>
+    <inputPorts name="messageTraces" id="_WGE2sEoHEeSfCcUctGR1AQ"/>
   </plugins>
-  <plugins xsi:type="Filter" name="ComponentDependencyGraphAssemblyFilter-7" classname="kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ComponentDependencyGraphAssemblyFilter" id="_A7Wf5SkpEeSLmektj4V9zA">
-    <repositories name="systemModelRepository" repository="_A7NVwCkpEeSLmektj4V9zA" id="_A7Wf5ikpEeSLmektj4V9zA"/>
-    <outputPorts name="graphs" id="_A7Wf5ykpEeSLmektj4V9zA" subscribers="_A7Wf_ikpEeSLmektj4V9zA"/>
-    <inputPorts name="messageTraces" id="_A7Wf6CkpEeSLmektj4V9zA"/>
+  <plugins xsi:type="Filter" name="ComponentDependencyGraphAssemblyFilter-7" classname="kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ComponentDependencyGraphAssemblyFilter" id="_WGE2sUoHEeSfCcUctGR1AQ">
+    <repositories name="systemModelRepository" repository="_WF7swUoHEeSfCcUctGR1AQ" id="_WGE2skoHEeSfCcUctGR1AQ"/>
+    <outputPorts name="graphs" id="_WGE2s0oHEeSfCcUctGR1AQ" subscribers="_WGHS8EoHEeSfCcUctGR1AQ"/>
+    <inputPorts name="messageTraces" id="_WGE2tEoHEeSfCcUctGR1AQ"/>
   </plugins>
-  <plugins xsi:type="Filter" name="ContainerDependencyGraphFilter-8" classname="kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ContainerDependencyGraphFilter" id="_A7Wf6SkpEeSLmektj4V9zA">
-    <repositories name="systemModelRepository" repository="_A7NVwCkpEeSLmektj4V9zA" id="_A7Wf6ikpEeSLmektj4V9zA"/>
-    <outputPorts name="graphs" id="_A7Wf6ykpEeSLmektj4V9zA" subscribers="_A7WgACkpEeSLmektj4V9zA"/>
-    <inputPorts name="messageTraces" id="_A7Wf7CkpEeSLmektj4V9zA"/>
+  <plugins xsi:type="Filter" name="ContainerDependencyGraphFilter-8" classname="kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.ContainerDependencyGraphFilter" id="_WGE2tUoHEeSfCcUctGR1AQ">
+    <repositories name="systemModelRepository" repository="_WF7swUoHEeSfCcUctGR1AQ" id="_WGE2tkoHEeSfCcUctGR1AQ"/>
+    <outputPorts name="graphs" id="_WGE2t0oHEeSfCcUctGR1AQ" subscribers="_WGHS8koHEeSfCcUctGR1AQ"/>
+    <inputPorts name="messageTraces" id="_WGFdwEoHEeSfCcUctGR1AQ"/>
   </plugins>
-  <plugins xsi:type="Filter" name="OperationDependencyGraphAllocationFilter-9" classname="kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.OperationDependencyGraphAllocationFilter" id="_A7Wf7SkpEeSLmektj4V9zA">
-    <repositories name="systemModelRepository" repository="_A7NVwCkpEeSLmektj4V9zA" id="_A7Wf7ikpEeSLmektj4V9zA"/>
-    <outputPorts name="graphs" id="_A7Wf7ykpEeSLmektj4V9zA" subscribers="_A7WgAikpEeSLmektj4V9zA"/>
-    <inputPorts name="messageTraces" id="_A7Wf8CkpEeSLmektj4V9zA"/>
+  <plugins xsi:type="Filter" name="OperationDependencyGraphAllocationFilter-9" classname="kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.OperationDependencyGraphAllocationFilter" id="_WGFdwUoHEeSfCcUctGR1AQ">
+    <repositories name="systemModelRepository" repository="_WF7swUoHEeSfCcUctGR1AQ" id="_WGFdwkoHEeSfCcUctGR1AQ"/>
+    <outputPorts name="graphs" id="_WGFdw0oHEeSfCcUctGR1AQ" subscribers="_WGHS9EoHEeSfCcUctGR1AQ"/>
+    <inputPorts name="messageTraces" id="_WGFdxEoHEeSfCcUctGR1AQ"/>
   </plugins>
-  <plugins xsi:type="Filter" name="OperationDependencyGraphAssemblyFilter-10" classname="kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.OperationDependencyGraphAssemblyFilter" id="_A7Wf8SkpEeSLmektj4V9zA">
-    <repositories name="systemModelRepository" repository="_A7NVwCkpEeSLmektj4V9zA" id="_A7Wf8ikpEeSLmektj4V9zA"/>
-    <outputPorts name="graphs" id="_A7Wf8ykpEeSLmektj4V9zA" subscribers="_A7WgBCkpEeSLmektj4V9zA"/>
-    <inputPorts name="messageTraces" id="_A7Wf9CkpEeSLmektj4V9zA"/>
+  <plugins xsi:type="Filter" name="OperationDependencyGraphAssemblyFilter-10" classname="kieker.tools.traceAnalysis.filter.visualization.dependencyGraph.OperationDependencyGraphAssemblyFilter" id="_WGFdxUoHEeSfCcUctGR1AQ">
+    <repositories name="systemModelRepository" repository="_WF7swUoHEeSfCcUctGR1AQ" id="_WGFdxkoHEeSfCcUctGR1AQ"/>
+    <outputPorts name="graphs" id="_WGFdx0oHEeSfCcUctGR1AQ" subscribers="_WGHS9koHEeSfCcUctGR1AQ"/>
+    <inputPorts name="messageTraces" id="_WGGE0EoHEeSfCcUctGR1AQ"/>
   </plugins>
-  <plugins xsi:type="Filter" name="Aggregated call tree (deployment level)" classname="kieker.tools.traceAnalysis.filter.visualization.callTree.AggregatedAllocationComponentOperationCallTreeFilter" id="_A7Wf9SkpEeSLmektj4V9zA">
+  <plugins xsi:type="Filter" name="Aggregated call tree (deployment level)" classname="kieker.tools.traceAnalysis.filter.visualization.callTree.AggregatedAllocationComponentOperationCallTreeFilter" id="_WGGE0UoHEeSfCcUctGR1AQ">
     <properties name="shortLabels" value="true"/>
     <properties name="includeWeights" value="true"/>
-    <properties name="dotOutputFn" value="C:/Users/Nils Christian Ehmke/Repositories/kieker/bin/out/aggregatedDeploymentCallTree.dot"/>
-    <repositories name="systemModelRepository" repository="_A7NVwCkpEeSLmektj4V9zA" id="_A7Wf9ikpEeSLmektj4V9zA"/>
-    <inputPorts name="messageTraces" id="_A7Wf9ykpEeSLmektj4V9zA"/>
+    <properties name="dotOutputFn" value="kieker-20140821-113933692-UTC-example-plots77/aggregatedDeploymentCallTree.dot"/>
+    <repositories name="systemModelRepository" repository="_WF7swUoHEeSfCcUctGR1AQ" id="_WGGE0koHEeSfCcUctGR1AQ"/>
+    <inputPorts name="messageTraces" id="_WGGE00oHEeSfCcUctGR1AQ"/>
   </plugins>
-  <plugins xsi:type="Filter" name="Aggregated call tree (assembly level)" classname="kieker.tools.traceAnalysis.filter.visualization.callTree.AggregatedAssemblyComponentOperationCallTreeFilter" id="_A7Wf-CkpEeSLmektj4V9zA">
+  <plugins xsi:type="Filter" name="Aggregated call tree (assembly level)" classname="kieker.tools.traceAnalysis.filter.visualization.callTree.AggregatedAssemblyComponentOperationCallTreeFilter" id="_WGGE1EoHEeSfCcUctGR1AQ">
     <properties name="shortLabels" value="true"/>
     <properties name="includeWeights" value="true"/>
-    <properties name="dotOutputFn" value="C:/Users/Nils Christian Ehmke/Repositories/kieker/bin/out/aggregatedAssemblyCallTree.dot"/>
-    <repositories name="systemModelRepository" repository="_A7NVwCkpEeSLmektj4V9zA" id="_A7Wf-SkpEeSLmektj4V9zA"/>
-    <inputPorts name="messageTraces" id="_A7Wf-ikpEeSLmektj4V9zA"/>
+    <properties name="dotOutputFn" value="kieker-20140821-113933692-UTC-example-plots77/aggregatedAssemblyCallTree.dot"/>
+    <repositories name="systemModelRepository" repository="_WF7swUoHEeSfCcUctGR1AQ" id="_WGGE1UoHEeSfCcUctGR1AQ"/>
+    <inputPorts name="messageTraces" id="_WGGr4EoHEeSfCcUctGR1AQ"/>
   </plugins>
-  <plugins xsi:type="Filter" name="Component dependency graph (deployment level)" classname="kieker.tools.traceAnalysis.filter.visualization.GraphWriterPlugin" id="_A7Wf-ykpEeSLmektj4V9zA">
-    <properties name="outputPath" value="C:/Users/Nils Christian Ehmke/Repositories/kieker/bin/out/"/>
-    <properties name="shortLabels" value="true"/>
-    <properties name="selfLoops" value="false"/>
-    <properties name="includeWeights" value="true"/>
-    <properties name="dotOutputFn" value=""/>
-    <inputPorts name="inputGraph" id="_A7Wf_CkpEeSLmektj4V9zA"/>
-  </plugins>
-  <plugins xsi:type="Filter" name="Component dependency graph (assembly level)" classname="kieker.tools.traceAnalysis.filter.visualization.GraphWriterPlugin" id="_A7Wf_SkpEeSLmektj4V9zA">
-    <properties name="outputPath" value="C:/Users/Nils Christian Ehmke/Repositories/kieker/bin/out/"/>
+  <plugins xsi:type="Filter" name="Component dependency graph (deployment level)" classname="kieker.tools.traceAnalysis.filter.visualization.GraphWriterPlugin" id="_WGGr4UoHEeSfCcUctGR1AQ">
+    <properties name="outputPath" value="kieker-20140821-113933692-UTC-example-plots77/"/>
     <properties name="shortLabels" value="true"/>
     <properties name="selfLoops" value="false"/>
     <properties name="includeWeights" value="true"/>
     <properties name="dotOutputFn" value=""/>
-    <inputPorts name="inputGraph" id="_A7Wf_ikpEeSLmektj4V9zA"/>
+    <inputPorts name="inputGraph" id="_WGGr4koHEeSfCcUctGR1AQ"/>
   </plugins>
-  <plugins xsi:type="Filter" name="Container dependency graph" classname="kieker.tools.traceAnalysis.filter.visualization.GraphWriterPlugin" id="_A7Wf_ykpEeSLmektj4V9zA">
-    <properties name="outputPath" value="C:/Users/Nils Christian Ehmke/Repositories/kieker/bin/out/"/>
+  <plugins xsi:type="Filter" name="Component dependency graph (assembly level)" classname="kieker.tools.traceAnalysis.filter.visualization.GraphWriterPlugin" id="_WGGr40oHEeSfCcUctGR1AQ">
+    <properties name="outputPath" value="kieker-20140821-113933692-UTC-example-plots77/"/>
     <properties name="shortLabels" value="true"/>
     <properties name="selfLoops" value="false"/>
     <properties name="includeWeights" value="true"/>
     <properties name="dotOutputFn" value=""/>
-    <inputPorts name="inputGraph" id="_A7WgACkpEeSLmektj4V9zA"/>
+    <inputPorts name="inputGraph" id="_WGHS8EoHEeSfCcUctGR1AQ"/>
   </plugins>
-  <plugins xsi:type="Filter" name="Operation dependency graph (deployment level)" classname="kieker.tools.traceAnalysis.filter.visualization.GraphWriterPlugin" id="_A7WgASkpEeSLmektj4V9zA">
-    <properties name="outputPath" value="C:/Users/Nils Christian Ehmke/Repositories/kieker/bin/out/"/>
+  <plugins xsi:type="Filter" name="Container dependency graph" classname="kieker.tools.traceAnalysis.filter.visualization.GraphWriterPlugin" id="_WGHS8UoHEeSfCcUctGR1AQ">
+    <properties name="outputPath" value="kieker-20140821-113933692-UTC-example-plots77/"/>
     <properties name="shortLabels" value="true"/>
     <properties name="selfLoops" value="false"/>
     <properties name="includeWeights" value="true"/>
     <properties name="dotOutputFn" value=""/>
-    <inputPorts name="inputGraph" id="_A7WgAikpEeSLmektj4V9zA"/>
+    <inputPorts name="inputGraph" id="_WGHS8koHEeSfCcUctGR1AQ"/>
   </plugins>
-  <plugins xsi:type="Filter" name="Operation dependency graph (assembly level)" classname="kieker.tools.traceAnalysis.filter.visualization.GraphWriterPlugin" id="_A7WgAykpEeSLmektj4V9zA">
-    <properties name="outputPath" value="C:/Users/Nils Christian Ehmke/Repositories/kieker/bin/out/"/>
+  <plugins xsi:type="Filter" name="Operation dependency graph (deployment level)" classname="kieker.tools.traceAnalysis.filter.visualization.GraphWriterPlugin" id="_WGHS80oHEeSfCcUctGR1AQ">
+    <properties name="outputPath" value="kieker-20140821-113933692-UTC-example-plots77/"/>
     <properties name="shortLabels" value="true"/>
     <properties name="selfLoops" value="false"/>
     <properties name="includeWeights" value="true"/>
     <properties name="dotOutputFn" value=""/>
-    <inputPorts name="inputGraph" id="_A7WgBCkpEeSLmektj4V9zA"/>
+    <inputPorts name="inputGraph" id="_WGHS9EoHEeSfCcUctGR1AQ"/>
   </plugins>
-  <plugins xsi:type="Filter" name="SystemModel2FileFilter-11" classname="kieker.tools.traceAnalysis.filter.systemModel.SystemModel2FileFilter" id="_A7WgBSkpEeSLmektj4V9zA">
-    <properties name="outputFnHtml" value="C:/Users/Nils Christian Ehmke/Repositories/kieker/bin/out/system-entities.html"/>
-    <repositories name="systemModelRepository" repository="_A7NVwCkpEeSLmektj4V9zA" id="_A7WgBikpEeSLmektj4V9zA"/>
+  <plugins xsi:type="Filter" name="Operation dependency graph (assembly level)" classname="kieker.tools.traceAnalysis.filter.visualization.GraphWriterPlugin" id="_WGHS9UoHEeSfCcUctGR1AQ">
+    <properties name="outputPath" value="kieker-20140821-113933692-UTC-example-plots77/"/>
+    <properties name="shortLabels" value="true"/>
+    <properties name="selfLoops" value="false"/>
+    <properties name="includeWeights" value="true"/>
+    <properties name="dotOutputFn" value=""/>
+    <inputPorts name="inputGraph" id="_WGHS9koHEeSfCcUctGR1AQ"/>
   </plugins>
-  <repositories classname="kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository" id="_A7NVwCkpEeSLmektj4V9zA"/>
+  <plugins xsi:type="Filter" name="SystemModel2FileFilter-11" classname="kieker.tools.traceAnalysis.filter.systemModel.SystemModel2FileFilter" id="_WGHS90oHEeSfCcUctGR1AQ">
+    <properties name="outputFnHtml" value="kieker-20140821-113933692-UTC-example-plots77/system-entities.html"/>
+    <repositories name="systemModelRepository" repository="_WF7swUoHEeSfCcUctGR1AQ" id="_WGHS-EoHEeSfCcUctGR1AQ"/>
+  </plugins>
+  <repositories classname="kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository" id="_WF7swUoHEeSfCcUctGR1AQ"/>
 </Project>

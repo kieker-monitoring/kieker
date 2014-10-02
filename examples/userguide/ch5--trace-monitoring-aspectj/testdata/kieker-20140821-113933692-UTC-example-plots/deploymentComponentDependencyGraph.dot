@@ -6,8 +6,8 @@ subgraph "cluster_container1" {
  shape = "box";
  style = "filled";
  fillcolor = "white";
-"depNode_1" [label="<<deployment component>>\n@1:..Bookstore",shape="box",style="filled",color="#000000",fillcolor="gray"]
 "depNode_2" [label="<<deployment component>>\n@2:..BookstoreStarter$1",shape="box",style="filled",color="#000000",fillcolor="white"]
+"depNode_1" [label="<<deployment component>>\n@1:..Bookstore",shape="box",style="filled",color="#000000",fillcolor="gray"]
 "depNode_3" [label="<<deployment component>>\n@3:..BookstoreStarter",shape="box",style="filled",color="#000000",fillcolor="white"]
 }
 depNode_0->depNode_2[label=1, style="solid", arrowhead="open", color="#000000"]

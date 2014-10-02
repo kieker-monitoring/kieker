@@ -25,14 +25,14 @@ subgraph "cluster_component_3" {
  shape = "box";
  style = "filled";
  fillcolor = "white";
-"depNode_3" [label="main(..)",shape="oval",style="filled",color="#000000",fillcolor="white"]
 "depNode_4" [label="extractNumRequestsFromArgs(..)",shape="oval",style="filled",color="#000000",fillcolor="gray"]
 "depNode_5" [label="spawnAsyncRequest(..)",shape="oval",style="filled",color="#000000",fillcolor="gray"]
+"depNode_3" [label="main(..)",shape="oval",style="filled",color="#000000",fillcolor="white"]
 }
 }
 depNode_0->depNode_1[label=1, style="solid", arrowhead="open", color="#000000"]
 depNode_0->depNode_3[label=1, style="solid", arrowhead="open", color="#000000"]
 depNode_1->depNode_2[label=1, style="dashed", arrowhead="open", color="#000000"]
-depNode_3->depNode_4[label=1, style="dashed", arrowhead="open", color="#000000"]
 depNode_3->depNode_5[label=1, style="dashed", arrowhead="open", color="#000000"]
+depNode_3->depNode_4[label=1, style="dashed", arrowhead="open", color="#000000"]
 }

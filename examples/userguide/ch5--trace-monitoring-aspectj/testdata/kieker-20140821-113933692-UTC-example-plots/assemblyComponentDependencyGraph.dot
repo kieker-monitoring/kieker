@@ -2,9 +2,9 @@ digraph G {
  rankdir=LR;
 "depNode_0" [label="'Entry'",shape="none"]
 
-"depNode_1" [label="<<assembly component>>\n@1:..Bookstore",shape="box",style="filled",color="#000000",fillcolor="gray"]
-
 "depNode_2" [label="<<assembly component>>\n@2:..BookstoreStarter$1",shape="box",style="filled",color="#000000",fillcolor="white"]
+
+"depNode_1" [label="<<assembly component>>\n@1:..Bookstore",shape="box",style="filled",color="#000000",fillcolor="gray"]
 
 "depNode_3" [label="<<assembly component>>\n@3:..BookstoreStarter",shape="box",style="filled",color="#000000",fillcolor="white"]
 

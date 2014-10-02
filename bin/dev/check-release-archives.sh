@@ -400,45 +400,46 @@ function check_bin_archive {
 		echo "Unexpected result executinǵ bin/convertLoggingTimestamp.sh"
 		exit 1
 	fi
-	
 
-	# now perform some trace analysis tests and compare results with reference data
-	ARCHDIR=$(pwd)
-	create_subdir_n_cd
-	REFERENCE_OUTPUT_DIR="${ARCHDIR}/examples/userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC-example-plots"
-	PLOT_SCRIPT="${ARCHDIR}/examples/userguide/ch5--trace-monitoring-aspectj/testdata/kieker-20100830-082225522-UTC-example-plots.sh"
-	if ! test -x ${PLOT_SCRIPT}; then
+        # now perform some trace analysis tests and compare results with reference data
+	for testset in "kieker-20100830-082225522-UTC-example-plots" "kieker-20140821-113933692-UTC-example-plots"; do   
+	    ARCHDIR=$(pwd)
+	    create_subdir_n_cd
+	    REFERENCE_OUTPUT_DIR="${ARCHDIR}/examples/userguide/ch5--trace-monitoring-aspectj/testdata/${testset}"
+	    PLOT_SCRIPT="${ARCHDIR}/examples/userguide/ch5--trace-monitoring-aspectj/testdata/${testset}.sh"
+	    if ! test -x ${PLOT_SCRIPT}; then
 		echo "${PLOT_SCRIPT} does not exist or is not executable"
 		exit 1
-	fi
-	if ! ${PLOT_SCRIPT} "${ARCHDIR}" "."; then # passing kieker dir and output dir
+	    fi
+	    if ! ${PLOT_SCRIPT} "${ARCHDIR}" "."; then # passing kieker dir and output dir
 		echo "${PLOT_SCRIPT} returned with error"
 		exit 1
-	fi
-	for f in $(ls "${REFERENCE_OUTPUT_DIR}" | egrep "(dot$|pic$|html$|txt$)"); do 
+	    fi
+	    for f in $(ls "${REFERENCE_OUTPUT_DIR}" | egrep "(dot$|pic$|html$|txt$)"); do 
 		echo -n "Comparing to reference file $f ... "
 		if test -z "$f"; then
-			echo "File $f does not exist or is empty"
-			exit 1;
+		    echo "File $f does not exist or is empty"
+		    exit 1;
 		fi
 		# Note that this is a hack because sometimes the line order differs
 		(cat "$f" | sort) > left.tmp
 		(cat "${REFERENCE_OUTPUT_DIR}/$f" | sort) > right.tmp
 		if test "$f" = "traceDeploymentEquivClasses.txt" || test "$f" = "traceAssemblyEquivClasses.txt"; then
 			# only the basic test already performed because the assignment to classes is not deterministic
-			echo "OK"
-			continue;
+		    echo "OK"
+		    continue;
 		fi
 		if ! diff --context=5	 left.tmp right.tmp; then
-			echo "Detected deviation between files: '$f', '${REFERENCE_OUTPUT_DIR}/${f}'"
-			exit 1
+		    echo "Detected deviation between files: '$f', '${REFERENCE_OUTPUT_DIR}/${f}'"
+		    exit 1
 		else 
-			echo "OK"
+		    echo "OK"
 		fi
-	done
+	    done
 
-	# Return to archive base dir
-	cd ${ARCHDIR}
+	    # Return to archive base dir
+	    cd ${ARCHDIR}
+	done
 
 	# TODO: test examples ...
 }
