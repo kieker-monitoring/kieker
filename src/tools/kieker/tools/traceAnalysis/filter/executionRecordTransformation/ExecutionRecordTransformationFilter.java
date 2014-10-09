@@ -24,6 +24,7 @@ import kieker.analysis.plugin.annotation.RepositoryPort;
 import kieker.common.configuration.Configuration;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.common.util.signature.ClassOperationSignaturePair;
+import kieker.common.util.signature.Signature;
 import kieker.tools.traceAnalysis.filter.AbstractTraceAnalysisFilter;
 import kieker.tools.traceAnalysis.systemModel.Execution;
 import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
@@ -77,7 +78,11 @@ public class ExecutionRecordTransformationFilter extends AbstractTraceAnalysisFi
 			description = "Receives operation execution records to be transformed",
 			eventTypes = { OperationExecutionRecord.class })
 	public void inputOperationExecutionRecords(final OperationExecutionRecord execRec) {
-		final ClassOperationSignaturePair fqComponentNameSignaturePair = ClassOperationSignaturePair.splitOperationSignatureStr(execRec.getOperationSignature());
+		final String operationSignature = execRec.getOperationSignature();
+		final boolean isConstructor = operationSignature.contains(Signature.CONSTRUCTOR_METHOD_NAME);
+
+		final ClassOperationSignaturePair fqComponentNameSignaturePair =
+				ClassOperationSignaturePair.splitOperationSignatureStr(execRec.getOperationSignature(), isConstructor);
 
 		final Execution execution = this.createExecutionByEntityNames(execRec.getHostname(), fqComponentNameSignaturePair.getFqClassname(),
 				fqComponentNameSignaturePair.getSignature(),
