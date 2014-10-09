@@ -29,7 +29,7 @@ import kieker.common.record.factory.old.RecordFactoryWrapper;
  */
 public class CachedRecordFactoryRepository {
 
-	private final ConcurrentMap<String, IRecordFactory<? extends IMonitoringRecord>> recordFactories = new ConcurrentHashMap<String, IRecordFactory<? extends IMonitoringRecord>>();
+	private final ConcurrentMap<String, IRecordFactory<? extends IMonitoringRecord>> cachedRecordFactories = new ConcurrentHashMap<String, IRecordFactory<? extends IMonitoringRecord>>();
 	private final RecordFactoryRepository recordFactoryRepository;
 
 	public CachedRecordFactoryRepository(final RecordFactoryRepository recordFactoryRepository) {
@@ -47,7 +47,7 @@ public class CachedRecordFactoryRepository {
 	 * @hint This method uses convention over configuration when searching for a record factory class.
 	 */
 	public IRecordFactory<? extends IMonitoringRecord> get(final String recordClassName) {
-		IRecordFactory<? extends IMonitoringRecord> recordFactory = this.recordFactories.get(recordClassName);
+		IRecordFactory<? extends IMonitoringRecord> recordFactory = this.cachedRecordFactories.get(recordClassName);
 		if (null == recordFactory) {
 			try {
 				recordFactory = this.recordFactoryRepository.get(recordClassName);
@@ -55,7 +55,7 @@ public class CachedRecordFactoryRepository {
 				// if a corresponding factory could not be found
 				recordFactory = new RecordFactoryWrapper(recordClassName);
 			}
-			this.recordFactories.putIfAbsent(recordClassName, recordFactory);
+			this.cachedRecordFactories.putIfAbsent(recordClassName, recordFactory);
 		}
 		return recordFactory;
 	}
