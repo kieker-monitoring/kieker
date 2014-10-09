@@ -31,6 +31,7 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
+import kieker.tools.AbstractCommandLineTool;
 import kieker.tools.traceAnalysis.Constants;
 
 /**
@@ -172,7 +173,7 @@ public class AdditionalOptionsStep extends AbstractStep {
 	@SuppressWarnings("synthetic-access")
 	public void addSelectedTraceAnalysisParameters(final Collection<String> parameters) {
 		if (this.verbose.isSelected()) {
-			parameters.add("--" + Constants.CMD_OPT_NAME_VERBOSE);
+			parameters.add("--" + AbstractCommandLineTool.CMD_OPT_NAME_VERBOSE_LONG);
 		}
 
 		if (this.ignoreInvalidTraces.isSelected()) {
