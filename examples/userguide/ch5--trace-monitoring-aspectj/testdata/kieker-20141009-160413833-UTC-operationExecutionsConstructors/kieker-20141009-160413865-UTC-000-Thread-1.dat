@@ -1,0 +1,13 @@
+$0;1412870653864208971;1.9;KIEKER;avh-ThinkPad-RSS;1;false;0;NANOSECONDS;1
+$1;1412870653863550806;public kieker.examples.userguide.ch5bookstore.Catalog.<init>();<no-session-id>;1091700697172279297;1412870653863374285;1412870653863381200;avh-ThinkPad-RSS;2;2
+$1;1412870653872527618;public kieker.examples.userguide.ch5bookstore.CRM.<init>(kieker.examples.userguide.ch5bookstore.Catalog);<no-session-id>;1091700697172279297;1412870653872507802;1412870653872521839;avh-ThinkPad-RSS;3;2
+$1;1412870653872542552;public kieker.examples.userguide.ch5bookstore.Bookstore.<init>();<no-session-id>;1091700697172279297;1412870653855969031;1412870653872539896;avh-ThinkPad-RSS;1;1
+$1;1412870653873721318;private static int kieker.examples.userguide.ch5bookstore.BookstoreStarter.extractNumRequestsFromArgs(java.lang.String[]);<no-session-id>;1091700697172279297;1412870653872645629;1412870653873715650;avh-ThinkPad-RSS;4;1
+$1;1412870653885017177;kieker.examples.userguide.ch5bookstore.BookstoreStarter$1.<init>(kieker.examples.userguide.ch5bookstore.Bookstore, java.util.concurrent.CountDownLatch);<no-session-id>;1091700697172279297;1412870653884999306;1412870653885011505;avh-ThinkPad-RSS;6;2
+$1;1412870653885191512;private static void kieker.examples.userguide.ch5bookstore.BookstoreStarter.spawnAsyncRequest(kieker.examples.userguide.ch5bookstore.Bookstore, java.util.concurrent.CountDownLatch);<no-session-id>;1091700697172279297;1412870653873960579;1412870653885187499;avh-ThinkPad-RSS;5;1
+$1;1412870653887666704;public void kieker.examples.userguide.ch5bookstore.Catalog.getBook(boolean);<no-session-id>;1091700697172279298;1412870653885502771;1412870653887641910;avh-ThinkPad-RSS;2;2
+$1;1412870653890395358;public void kieker.examples.userguide.ch5bookstore.Catalog.getBook(boolean);<no-session-id>;1091700697172279298;1412870653888233163;1412870653890375973;avh-ThinkPad-RSS;4;3
+$1;1412870653890475822;public void kieker.examples.userguide.ch5bookstore.CRM.getOffers();<no-session-id>;1091700697172279298;1412870653888161690;1412870653890456968;avh-ThinkPad-RSS;3;2
+$1;1412870653890511858;public void kieker.examples.userguide.ch5bookstore.Bookstore.searchBook();<no-session-id>;1091700697172279298;1412870653885427003;1412870653890503527;avh-ThinkPad-RSS;1;1
+$1;1412870653890622687;public void kieker.examples.userguide.ch5bookstore.BookstoreStarter$1.run();<no-session-id>;1091700697172279298;1412870653885360903;1412870653890611629;avh-ThinkPad-RSS;0;0
+$1;1412870653890697728;public static void kieker.examples.userguide.ch5bookstore.BookstoreStarter.main(java.lang.String[]);<no-session-id>;1091700697172279297;1412870653855632583;1412870653890685334;avh-ThinkPad-RSS;0;0

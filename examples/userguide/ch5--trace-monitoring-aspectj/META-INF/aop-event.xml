@@ -6,6 +6,15 @@
     </weaver>
     
     <aspects>
-      <aspect name="kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFull"/>
-    </aspects>
+		<!-- KiekerFlow Aspects-->
+		<!-- Construction -->
+		<aspect name="kieker.monitoring.probe.aspectj.flow.construction.Annotation" />
+
+		<!-- OperationCall -->
+		<aspect name="kieker.monitoring.probe.aspectj.flow.operationExecution.Annotation" />
+		
+		<!-- OperationExecution -->
+		<aspect name="kieker.monitoring.probe.aspectj.flow.operationCall.Annotation" />
+		
+   </aspects>
 </aspectj>
