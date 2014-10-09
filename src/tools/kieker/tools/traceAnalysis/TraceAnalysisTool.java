@@ -160,7 +160,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 	@Override
 	protected boolean readPropertiesFromCommandLine(final CommandLine commandLine) {
 		this.cmdl = commandLine;
-		return (this.initFromArgs(commandLine) && this.assertOutputDirExists()) || this.assertInputDirsExistsAndAreMonitoringLogs();
+		return (this.initFromArgs(commandLine) && this.assertOutputDirExists() && this.assertInputDirsExistsAndAreMonitoringLogs());
 	}
 
 	@Override
@@ -276,23 +276,26 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 	 *         otherwise
 	 */
 	private boolean assertOutputDirExists() {
+		if ((this.outputDir == null) || this.outputDir.isEmpty()) {
+			LOG.error("No output directory configured");
+			return false;
+		}
+
 		final File outputDirFile = new File(this.outputDir);
+
 		try {
 			if (!outputDirFile.exists()) {
-				System.err.println(""); // NOPMD (System.out)
-				System.err.println("The specified output directory '" + outputDirFile.getCanonicalPath() + "' does not exist"); // NOPMD (System.out)
+				LOG.error("The specified output directory '" + outputDirFile.getCanonicalPath() + "' does not exist");
 				return false;
 			}
 
 			if (!outputDirFile.isDirectory()) {
-				System.err.println(""); // NOPMD (System.out)
-				System.err.println("The specified output directory '" + outputDirFile.getCanonicalPath() + "' is not a directory"); // NOPMD (System.out)
+				LOG.error("The specified output directory '" + outputDirFile.getCanonicalPath() + "' is not a directory");
 				return false;
 			}
 
 		} catch (final IOException e) { // thrown by File.getCanonicalPath()
-			System.err.println(""); // NOPMD (System.out)
-			System.err.println("Error resolving name of output directory: '" + this.outputDir + "'"); // NOPMD (System.out)
+			LOG.error("Error resolving name of output directory: '" + this.outputDir + "'");
 		}
 
 		return true;
@@ -349,6 +352,11 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 	 *         otherwise
 	 */
 	private boolean assertInputDirsExistsAndAreMonitoringLogs() {
+		if (this.inputDirs == null) {
+			LOG.error("No input directories configured");
+			return false;
+		}
+
 		for (final String inputDir : this.inputDirs) {
 			final File inputDirFile = new File(inputDir);
 			try {
@@ -865,7 +873,8 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 			this.attachGraphProcessors(allGraphProducers, this.analysisController, this.cmdl);
 
 			if (numRequestedTasks == 0) {
-				LOG.warn("No task requested");
+				LOG.error("No task requested");
+				LOG.info("Use the option `--" + CMD_OPT_NAME_HELP_LONG + "` for usage information");
 				return false;
 			}
 
@@ -950,7 +959,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 				val = this.outputDir;
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_OUTPUTFNPREFIX)) {
 				val = this.outputFnPrefix;
-			} else if (longOpt.equals(Constants.CMD_OPT_NAME_VERBOSE) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT)
+			} else if (longOpt.equals(Constants.CMD_OPT_NAME_TASK_ALLOCATIONEQUIVCLASSREPORT)
 					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_ASSEMBLYEQUIVCLASSREPORT) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONSEQDS)
 					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYSEQDS) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTALLOCATIONCOMPONENTDEPG)
 					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTASSEMBLYCOMPONENTDEPG) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTCONTAINERDEPG)
@@ -960,7 +969,8 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTAGGREGATEDASSEMBLYCALLTREE) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PLOTCALLTREES)
 					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTEXECTRACES) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTINVALIDEXECTRACES)
 					|| longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTMSGTRACES) || longOpt.equals(Constants.CMD_OPT_NAME_TASK_PRINTSYSTEMMODEL)
-					|| longOpt.equals(Constants.CMD_OPT_NAME_DEBUG) || longOpt.equals(Constants.CMD_OPT_NAME_VERBOSE)) {
+					|| longOpt.equals(AbstractCommandLineTool.CMD_OPT_NAME_DEBUG_LONG) || longOpt.equals(AbstractCommandLineTool.CMD_OPT_NAME_VERBOSE_LONG)
+					|| longOpt.equals(AbstractCommandLineTool.CMD_OPT_NAME_HELP_LONG)) {
 				val = this.cmdl.hasOption(longOpt) ? "true" : "false"; // NOCS
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_SELECTTRACES)) {
 				if (this.selectedTraces != null) {

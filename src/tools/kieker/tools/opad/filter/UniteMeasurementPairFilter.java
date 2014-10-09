@@ -27,9 +27,9 @@ import kieker.analysis.plugin.annotation.OutputPort;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
-import kieker.tools.opad.record.ForecastMeasurementPair;
-import kieker.tools.opad.record.IForecastMeasurementPair;
-import kieker.tools.opad.record.NamedDoubleTimeSeriesPoint;
+import kieker.tools.opad.model.ForecastMeasurementPair;
+import kieker.tools.opad.model.IForecastMeasurementPair;
+import kieker.tools.opad.model.NamedDoubleTimeSeriesPoint;
 
 /**
  * This Filter brings a Measurement Point and a corresponding Forecasting value together.

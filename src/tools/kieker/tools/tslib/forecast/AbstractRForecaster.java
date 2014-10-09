@@ -32,7 +32,7 @@ import kieker.tools.util.RBridgeControl;
  * Convenience class to implement an {@link IForecaster} with R.
  * 
  * @since 1.10
- * @author Andre van Hoorn, Nikolas Herbst, Andreas Eberlein, Tobias Rudolph, Thomas Düllmann
+ * @author Andre van Hoorn, Nikolas Herbst, Andreas Eberlein, Tobias Rudolph, Thomas Duellmann
  * 
  */
 public abstract class AbstractRForecaster extends AbstractForecaster<Double> {

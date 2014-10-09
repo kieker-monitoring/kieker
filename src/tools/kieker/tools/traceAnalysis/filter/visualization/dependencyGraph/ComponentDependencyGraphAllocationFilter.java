@@ -40,7 +40,8 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * This class has exactly one input port named "in". The produced graph is emitted through
  * the single output port.
  * 
- * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr, Jan Waller
+ * @author Andre van Hoorn, Lena Stoever, Matthias Rohr, Jan Waller
+ * 
  * 
  * @since 0.95a
  */

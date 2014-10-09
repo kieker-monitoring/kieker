@@ -34,7 +34,7 @@ import kieker.monitoring.timer.ITimeSource;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.6
  */
 @Aspect
@@ -54,8 +54,8 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return thisJoinPoint.proceed();
 		}
-		final String signature = this.signatureToLongString(thisJoinPoint.getSignature());
-		if (!CTRLINST.isProbeActivated(signature)) {
+		final String operationSignature = this.signatureToLongString(thisJoinPoint.getSignature());
+		if (!CTRLINST.isProbeActivated(operationSignature)) {
 			return thisJoinPoint.proceed();
 		}
 		// common fields
@@ -69,14 +69,14 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final String clazz = thisObject.getClass().getName();
 		final int objectId = System.identityHashCode(thisObject);
 		// measure before execution
-		CTRLINST.newMonitoringRecord(new BeforeOperationObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), clazz, signature, objectId));
+		CTRLINST.newMonitoringRecord(new BeforeOperationObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), operationSignature, clazz, objectId));
 		// execution of the called method
 		final Object retval;
 		try {
 			retval = thisJoinPoint.proceed();
 		} catch (final Throwable th) { // NOPMD NOCS (catch throw might ok here)
 			// measure after failed execution
-			CTRLINST.newMonitoringRecord(new AfterOperationFailedObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), clazz, signature,
+			CTRLINST.newMonitoringRecord(new AfterOperationFailedObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), operationSignature, clazz,
 					th.toString(), objectId));
 			throw th;
 		} finally {
@@ -85,18 +85,18 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			}
 		}
 		// measure after successful execution
-		CTRLINST.newMonitoringRecord(new AfterOperationObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), clazz, signature, objectId));
+		CTRLINST.newMonitoringRecord(new AfterOperationObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), operationSignature, clazz, objectId));
 		return retval;
 	}
 
 	/**
 	 * This advice is used around static operations.
-	 * 
+	 *
 	 * @param thisJoinPoint
 	 *            The joint point of the advice.
-	 * 
+	 *
 	 * @return The return value of the joint point's {@code proceed} method.
-	 * 
+	 *
 	 * @throws Throwable
 	 */
 	@Around("monitoredOperation() && !this(java.lang.Object) && notWithinKieker()")
@@ -105,8 +105,8 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			return thisJoinPoint.proceed();
 		}
 		final Signature sig = thisJoinPoint.getSignature();
-		final String signature = this.signatureToLongString(sig);
-		if (!CTRLINST.isProbeActivated(signature)) {
+		final String operationSignature = this.signatureToLongString(sig);
+		if (!CTRLINST.isProbeActivated(operationSignature)) {
 			return thisJoinPoint.proceed();
 		}
 		// common fields
@@ -119,14 +119,14 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final long traceId = trace.getTraceId();
 		final String clazz = sig.getDeclaringTypeName();
 		// measure before execution
-		CTRLINST.newMonitoringRecord(new BeforeOperationObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), clazz, signature, 0));
+		CTRLINST.newMonitoringRecord(new BeforeOperationObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), operationSignature, clazz, 0));
 		// execution of the called method
 		final Object retval;
 		try {
 			retval = thisJoinPoint.proceed();
 		} catch (final Throwable th) { // NOPMD NOCS (catch throw might ok here)
 			// measure after failed execution
-			CTRLINST.newMonitoringRecord(new AfterOperationFailedObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), clazz, signature,
+			CTRLINST.newMonitoringRecord(new AfterOperationFailedObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), operationSignature, clazz,
 					th.toString(), 0));
 			throw th;
 		} finally {
@@ -135,7 +135,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			}
 		}
 		// measure after successful execution
-		CTRLINST.newMonitoringRecord(new AfterOperationObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), clazz, signature, 0));
+		CTRLINST.newMonitoringRecord(new AfterOperationObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(), operationSignature, clazz, 0));
 		return retval;
 	}
 }

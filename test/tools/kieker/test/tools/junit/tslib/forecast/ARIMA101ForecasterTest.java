@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import kieker.tools.tslib.ITimeSeries;
@@ -34,7 +33,7 @@ import kieker.test.tools.junit.AbstractKiekerRTest;
 /**
  * @since 1.10
  * @author Tillmann Carlos Bielefeld
- *
+ * 
  */
 public class ARIMA101ForecasterTest extends AbstractKiekerRTest {
 
@@ -54,7 +53,6 @@ public class ARIMA101ForecasterTest extends AbstractKiekerRTest {
 	 * steps
 	 * Test of the ARIMA101 Forecaster via Rserve.
 	 */
-	@Ignore("Deactivated RServe Script (#1420)")
 	@Test
 	public void testARIMAPredictor() { // NOPMD assertEqualsWithTolerance is a custom method
 

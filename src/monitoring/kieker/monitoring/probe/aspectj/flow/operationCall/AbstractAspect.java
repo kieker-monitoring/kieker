@@ -33,7 +33,7 @@ import kieker.monitoring.timer.ITimeSource;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.5
  */
 @Aspect
@@ -73,8 +73,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		// callee
 		final String calleeClazz = targetObject.getClass().getName();
 		// measure before call
-		CTRLINST.newMonitoringRecord(new CallOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(),
-				callerClazz, caller, calleeClazz, callee));
+		CTRLINST.newMonitoringRecord(new CallOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(), caller, callerClazz, callee, calleeClazz));
 		// call of the called method
 		final Object retval;
 		try {
@@ -113,8 +112,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 
 		final String calleeClazz = targetObject.getClass().getName();
 		// measure before call
-		CTRLINST.newMonitoringRecord(new CallOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(),
-				callerClazz, caller, calleeClazz, callee));
+		CTRLINST.newMonitoringRecord(new CallOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(), caller, callerClazz, callee, calleeClazz));
 		// call of the called method
 		final Object retval;
 		try {
@@ -152,8 +150,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		// callee
 		final String calleeClazz = calleeSig.getDeclaringTypeName();
 		// measure before call
-		CTRLINST.newMonitoringRecord(new CallOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(),
-				callerClazz, caller, calleeClazz, callee));
+		CTRLINST.newMonitoringRecord(new CallOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(), caller, callerClazz, callee, calleeClazz));
 		// call of the called method
 		final Object retval;
 		try {
@@ -192,8 +189,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		// callee
 		final String calleeClazz = calleeSig.getDeclaringTypeName();
 		// measure before call
-		CTRLINST.newMonitoringRecord(new CallOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(),
-				callerClazz, caller, calleeClazz, callee));
+		CTRLINST.newMonitoringRecord(new CallOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(), caller, callerClazz, callee, calleeClazz));
 		// call of the called method
 		final Object retval;
 		try {

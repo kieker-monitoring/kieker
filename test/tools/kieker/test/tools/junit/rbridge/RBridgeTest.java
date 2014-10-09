@@ -17,7 +17,6 @@
 package kieker.test.tools.junit.rbridge;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import kieker.common.logging.Log;
@@ -49,7 +48,6 @@ public class RBridgeTest extends AbstractKiekerRTest {
 	 *             If exception is thrown
 	 */
 	@Test
-	@Ignore("Deactivated RServe Script (#1420)")
 	public void test() throws Exception {
 
 		final RBridgeControl r = RBridgeControl.getInstance();

@@ -32,7 +32,7 @@ import kieker.monitoring.timer.ITimeSource;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.5
  */
 @Aspect
@@ -50,7 +50,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 
 	/**
 	 * This is an advice which will be used after the construction of an object.
-	 * 
+	 *
 	 * @param thisObject
 	 * @param jp
 	 *            The static information about this joint point.
@@ -72,8 +72,8 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			trace = TRACEREGISTRY.registerTrace();
 			CTRLINST.newMonitoringRecord(trace);
 		}
-		final ConstructionEvent crecord = new ConstructionEvent(TIME.getTime(), trace.getTraceId(), trace.getNextOrderId(),
-				signature.getDeclaringTypeName(), System.identityHashCode(thisObject));
+		final ConstructionEvent crecord = new ConstructionEvent(TIME.getTime(), trace.getTraceId(), trace.getNextOrderId(), signature.getDeclaringTypeName(),
+				System.identityHashCode(thisObject));
 		CTRLINST.newMonitoringRecord(crecord);
 	}
 }

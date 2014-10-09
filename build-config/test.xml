@@ -22,8 +22,6 @@
 				<include name="framework-libs/spring/*.jar" /> <!-- needed for the spring tests -->
 				<include name="javax.jms-*.jar" /> 	<!-- Needed for TestPluginConfigurationRetention. -->
 				<include name="commons-cli-*.jar" /> <!-- Needed for TestPluginConfigurationRetention. -->
-				<include name="commons-math3-*.jar" /> <!-- Needed for some of the OPAD tests. -->
-				<include name="commons-lang3-*.jar" /> <!-- Needed for some of the OPAD tests. -->
 
 				<!-- used in tests for bridge JMS connector -->
 				<include name="activemq-core*.jar" />
@@ -35,8 +33,8 @@
 				<include name="javax.jms-*.jar" /> <!-- Needed for the JMSReader/Writer test -->
 				
 				<!-- Opad begin -->
-				<include name="commons-math-*.jar"/>
-				<include name="commons-lang-*.jar"/>
+				<include name="commons-math3-*.jar" /> <!-- Needed for some of the OPAD tests. -->
+				<include name="commons-lang3-*.jar" /> <!-- Needed for some of the OPAD tests. -->
 				<include name="REngine-*.jar"/>
 				<include name="Rsession-*.jar"/>
 				<include name="Rserve-*.jar"/>
@@ -70,7 +68,7 @@
 		
 		<junit fork="no" printsummary="yes">
 			
-			<!-- If you want to execute R-related tests set this to true, otherwise to false (default) -->
+			<!-- If you want to execute R-related tests set rTestsEnabled variable (see dist-and-debploy.xml) to true, otherwise to false (default) -->
 			<sysproperty key="TestKiekerRTests" value="${rTestsEnabled}" />
 			
 			<classpath refid="kieker.test-junit-run-classpath" />

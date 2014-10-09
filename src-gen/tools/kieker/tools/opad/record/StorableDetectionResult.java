@@ -24,22 +24,21 @@ import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
 
-
 /**
- * @author Tom Frotscher, Thomas Düllmann
+ * @author Tom Frotscher, Thomas Duellmann
  * 
  * @since 1.10
  */
 public class StorableDetectionResult extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_STRING // StorableDetectionResult.applicationName
-			 + TYPE_SIZE_DOUBLE // StorableDetectionResult.value
-			 + TYPE_SIZE_LONG // StorableDetectionResult.timestamp
-			 + TYPE_SIZE_DOUBLE // StorableDetectionResult.forecast
-			 + TYPE_SIZE_DOUBLE // StorableDetectionResult.score
+			+ TYPE_SIZE_DOUBLE // StorableDetectionResult.value
+			+ TYPE_SIZE_LONG // StorableDetectionResult.timestamp
+			+ TYPE_SIZE_DOUBLE // StorableDetectionResult.forecast
+			+ TYPE_SIZE_DOUBLE // StorableDetectionResult.score
 	;
 	private static final long serialVersionUID = 6603400678579037205L;
-	
+
 	public static final Class<?>[] TYPES = {
 		String.class, // StorableDetectionResult.applicationName
 		double.class, // StorableDetectionResult.value
@@ -47,8 +46,7 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 		double.class, // StorableDetectionResult.forecast
 		double.class, // StorableDetectionResult.score
 	};
-	
-	
+
 	private final String applicationName;
 	private final double value;
 	private final long timestamp;
@@ -70,7 +68,7 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 	 *            score
 	 */
 	public StorableDetectionResult(final String applicationName, final double value, final long timestamp, final double forecast, final double score) {
-		this.applicationName = applicationName == null?"":applicationName;
+		this.applicationName = applicationName == null ? "" : applicationName;
 		this.value = value;
 		this.timestamp = timestamp;
 		this.forecast = forecast;
@@ -92,7 +90,7 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 		this.forecast = (Double) values[3];
 		this.score = (Double) values[4];
 	}
-	
+
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
 	 * 
@@ -168,6 +166,7 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 	public int getSize() {
 		return SIZE;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -193,21 +192,21 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 	public final String getApplicationName() {
 		return this.applicationName;
 	}
-	
+
 	public final double getValue() {
 		return this.value;
 	}
-	
+
 	public final long getTimestamp() {
 		return this.timestamp;
 	}
-	
+
 	public final double getForecast() {
 		return this.forecast;
 	}
-	
+
 	public final double getScore() {
 		return this.score;
 	}
-	
+
 }

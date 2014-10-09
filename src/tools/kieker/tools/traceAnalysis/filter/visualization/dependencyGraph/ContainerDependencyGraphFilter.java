@@ -41,7 +41,7 @@ import kieker.tools.traceAnalysis.systemModel.repository.SystemModelRepository;
  * This class has exactly one input port named "in". The data which is send to
  * this plugin is not delegated in any way.
  * 
- * @author Andre van Hoorn, Lena St&ouml;ver, Matthias Rohr,
+ * @author Andre van Hoorn, Lena Stoever, Matthias Rohr,
  * 
  * @since 1.1
  */

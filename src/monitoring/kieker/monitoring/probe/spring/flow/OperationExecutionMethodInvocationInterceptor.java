@@ -79,14 +79,14 @@ public class OperationExecutionMethodInvocationInterceptor implements MethodInte
 		final String clazz = invocation.getThis().getClass().getName();
 
 		// measure before execution
-		this.monitoringCtrl.newMonitoringRecord(new BeforeOperationEvent(this.timeSource.getTime(), traceId, trace.getNextOrderId(), clazz, signature));
+		this.monitoringCtrl.newMonitoringRecord(new BeforeOperationEvent(this.timeSource.getTime(), traceId, trace.getNextOrderId(), signature, clazz));
 		// execution of the called method
 		final Object retval;
 		try {
 			retval = invocation.proceed();
 		} catch (final Throwable th) { // NOPMD NOCS (catch throw might ok here)
 			// measure after failed execution
-			this.monitoringCtrl.newMonitoringRecord(new AfterOperationFailedEvent(this.timeSource.getTime(), traceId, trace.getNextOrderId(), clazz, signature,
+			this.monitoringCtrl.newMonitoringRecord(new AfterOperationFailedEvent(this.timeSource.getTime(), traceId, trace.getNextOrderId(), signature, clazz,
 					th.toString()));
 			throw th;
 		} finally {
@@ -95,7 +95,7 @@ public class OperationExecutionMethodInvocationInterceptor implements MethodInte
 			}
 		}
 		// measure after successful execution
-		this.monitoringCtrl.newMonitoringRecord(new AfterOperationEvent(this.timeSource.getTime(), traceId, trace.getNextOrderId(), clazz, signature));
+		this.monitoringCtrl.newMonitoringRecord(new AfterOperationEvent(this.timeSource.getTime(), traceId, trace.getNextOrderId(), signature, clazz));
 		return retval;
 	}
 }

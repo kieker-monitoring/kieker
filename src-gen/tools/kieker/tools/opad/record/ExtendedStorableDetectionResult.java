@@ -22,24 +22,22 @@ import java.nio.ByteBuffer;
 
 import kieker.common.util.registry.IRegistry;
 
-import kieker.tools.opad.record.StorableDetectionResult;
-
 /**
- * @author Thomas Düllmann
+ * @author Thomas Duellmann
  * 
  * @since 1.10
  */
-public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
+public class ExtendedStorableDetectionResult extends StorableDetectionResult {
 	/** Descriptive definition of the serialization size of the record. */
 	public static final int SIZE = TYPE_SIZE_STRING // StorableDetectionResult.applicationName
-			 + TYPE_SIZE_DOUBLE // StorableDetectionResult.value
-			 + TYPE_SIZE_LONG // StorableDetectionResult.timestamp
-			 + TYPE_SIZE_DOUBLE // StorableDetectionResult.forecast
-			 + TYPE_SIZE_DOUBLE // StorableDetectionResult.score
-			 + TYPE_SIZE_DOUBLE // ExtendedStorableDetectionResult.anomalyThreshold
+			+ TYPE_SIZE_DOUBLE // StorableDetectionResult.value
+			+ TYPE_SIZE_LONG // StorableDetectionResult.timestamp
+			+ TYPE_SIZE_DOUBLE // StorableDetectionResult.forecast
+			+ TYPE_SIZE_DOUBLE // StorableDetectionResult.score
+			+ TYPE_SIZE_DOUBLE // ExtendedStorableDetectionResult.anomalyThreshold
 	;
 	private static final long serialVersionUID = 5201527358214171119L;
-	
+
 	public static final Class<?>[] TYPES = {
 		String.class, // StorableDetectionResult.applicationName
 		double.class, // StorableDetectionResult.value
@@ -48,8 +46,7 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 		double.class, // StorableDetectionResult.score
 		double.class, // ExtendedStorableDetectionResult.anomalyThreshold
 	};
-	
-	
+
 	private final double anomalyThreshold;
 
 	/**
@@ -68,7 +65,8 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 	 * @param anomalyThreshold
 	 *            anomalyThreshold
 	 */
-	public ExtendedStorableDetectionResult(final String applicationName, final double value, final long timestamp, final double forecast, final double score, final double anomalyThreshold) {
+	public ExtendedStorableDetectionResult(final String applicationName, final double value, final long timestamp, final double forecast, final double score,
+			final double anomalyThreshold) {
 		super(applicationName, value, timestamp, forecast, score);
 		this.anomalyThreshold = anomalyThreshold;
 	}
@@ -84,7 +82,7 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 		super(values, TYPES);
 		this.anomalyThreshold = (Double) values[5];
 	}
-	
+
 	/**
 	 * This constructor uses the given array to initialize the fields of this record.
 	 * 
@@ -155,6 +153,7 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 	public int getSize() {
 		return SIZE;
 	}
+
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -180,5 +179,5 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 	public final double getAnomalyThreshold() {
 		return this.anomalyThreshold;
 	}
-	
+
 }

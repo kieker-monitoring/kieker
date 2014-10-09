@@ -36,7 +36,7 @@ import kieker.test.common.junit.AbstractKiekerTest;
 /**
  * Tests the RecordConverter.
  * 
- * @author Thomas Düllmann
+ * @author Thomas Duellmann
  * @since 1.10
  * 
  */
