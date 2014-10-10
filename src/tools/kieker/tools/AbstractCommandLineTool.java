@@ -30,12 +30,10 @@ import kieker.tools.util.ToolsUtil;
 
 /**
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.10
  */
 public abstract class AbstractCommandLineTool {
-
-	private static final Log LOG = LogFactory.getLog(AbstractCommandLineTool.class);
 
 	public static final String CMD_OPT_NAME_HELP_LONG = "help";
 	public static final String CMD_OPT_NAME_HELP_SHORT = "h";
@@ -45,6 +43,8 @@ public abstract class AbstractCommandLineTool {
 
 	public static final String CMD_OPT_NAME_DEBUG_LONG = "debug";
 	public static final String CMD_OPT_NAME_DEBUG_SHORT = "d";
+
+	private static final Log LOG = LogFactory.getLog(AbstractCommandLineTool.class);
 
 	private final boolean useSystemExit;
 
