@@ -25,22 +25,31 @@ import kieker.common.record.factory.old.RecordFactoryWrapper;
 /**
  * @author Christian Wulf
  *
- * @since 1.10
+ * @since 1.11
  */
-public class CachedRecordFactoryRepository {
+public class CachedRecordFactoryCatalog {
+
+	private static CachedRecordFactoryCatalog INSTANCE = new CachedRecordFactoryCatalog(new RecordFactoryResolver());
+
+	/**
+	 * Returns the only instance of this class.
+	 */
+	public static CachedRecordFactoryCatalog getInstance() {
+		return INSTANCE;
+	}
 
 	private final ConcurrentMap<String, IRecordFactory<? extends IMonitoringRecord>> cachedRecordFactories = new ConcurrentHashMap<String, IRecordFactory<? extends IMonitoringRecord>>();
-	private final RecordFactoryRepository recordFactoryRepository;
+	private final RecordFactoryResolver recordFactoryResolver;
 
-	public CachedRecordFactoryRepository(final RecordFactoryRepository recordFactoryRepository) {
-		this.recordFactoryRepository = recordFactoryRepository;
+	private CachedRecordFactoryCatalog(final RecordFactoryResolver recordFactoryResolver) {
+		this.recordFactoryResolver = recordFactoryResolver;
 	}
 
 	/**
 	 * @param recordClassName
 	 * @return a cached record factory instance of the record class indicated by <code>recordClassName</code>.
 	 *         <ul>
-	 *         <li>If the cache does not contain a record factory instance, a new one is searched and instantiated via Java's Reflection API.
+	 *         <li>If the cache does not contain a record factory instance, a new one is searched and instantiated via class path resolution.
 	 *         <li>If there is no factory for the given <code>recordClassName</code>, a new {@code RecordFactoryWrapper} is created and stored for the given
 	 *         <code>recordClassName</code>.
 	 *         </ul>
@@ -49,10 +58,8 @@ public class CachedRecordFactoryRepository {
 	public IRecordFactory<? extends IMonitoringRecord> get(final String recordClassName) {
 		IRecordFactory<? extends IMonitoringRecord> recordFactory = this.cachedRecordFactories.get(recordClassName);
 		if (null == recordFactory) {
-			try {
-				recordFactory = this.recordFactoryRepository.get(recordClassName);
-			} catch (final Exception e) {
-				// if a corresponding factory could not be found
+			recordFactory = this.recordFactoryResolver.get(recordClassName);
+			if (null == recordFactory) { // if a corresponding factory could not be found
 				recordFactory = new RecordFactoryWrapper(recordClassName);
 			}
 			this.cachedRecordFactories.putIfAbsent(recordClassName, recordFactory);

@@ -22,7 +22,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import kieker.common.exception.MonitoringRecordException;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationEventFactory;
@@ -30,42 +29,41 @@ import kieker.common.record.flow.trace.operation.AfterOperationEventFactory;
 /**
  * @author Christian Wulf
  *
- * @since 1.10
+ * @since 1.11
  */
-public class RecordFactoryRepositoryTest {
+public class RecordFactoryResolverTest {
 
-	private RecordFactoryRepository recordFactories;
+	private RecordFactoryResolver recordFactoryResolver;
 
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
 
 	@Before
 	public void before() throws Exception {
-		this.recordFactories = new RecordFactoryRepository();
+		this.recordFactoryResolver = new RecordFactoryResolver();
 	}
 
 	@Test
-	public void testRecordWithFactory() throws ClassNotFoundException, MonitoringRecordException {
+	public void testRecordWithFactory() {
 		final String recordClassName = AfterOperationEvent.class.getName();
-		final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.recordFactories.get(recordClassName);
+		final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.recordFactoryResolver.get(recordClassName);
 		Assert.assertEquals(AfterOperationEventFactory.class, recordFactory.getClass());
 	}
 
 	@Test
-	public void testRecordWithoutFactory() throws ClassNotFoundException, MonitoringRecordException {
-		this.thrown.expect(ClassNotFoundException.class);
+	public void testRecordWithoutFactory() {
 		final String recordClassName = TestRecord.class.getName();
 		@SuppressWarnings("unused")
-		final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.recordFactories.get(recordClassName);
+		final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.recordFactoryResolver.get(recordClassName);
+		Assert.assertNull(recordFactory);
 	}
 
 	@Test
-	public void testNotExistingRecord() throws ClassNotFoundException, MonitoringRecordException {
-		this.thrown.expect(ClassNotFoundException.class);
-		// this.thrown.expectMessage(substring);
+	public void testNotExistingRecord() {
 		final String recordClassName = "record.that.does.not.exist";
 		@SuppressWarnings("unused")
-		final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.recordFactories.get(recordClassName);
+		final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.recordFactoryResolver.get(recordClassName);
+		Assert.assertNull(recordFactory);
 	}
 
 }

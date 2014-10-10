@@ -16,20 +16,19 @@
 
 package kieker.common.record.factory;
 
-import kieker.common.exception.MonitoringRecordException;
 import kieker.common.record.IMonitoringRecord;
 
 /**
  * @author Christian Wulf
  *
- * @since 1.10
+ * @since 1.11
  */
 @SuppressWarnings("rawtypes")
-public class RecordFactoryRepository {
+public class RecordFactoryResolver {
 
 	private final ClassForNameResolver<IRecordFactory> classForNameResolver;
 
-	public RecordFactoryRepository() {
+	public RecordFactoryResolver() {
 		this.classForNameResolver = new ClassForNameResolver<IRecordFactory>(IRecordFactory.class);
 	}
 
@@ -37,17 +36,24 @@ public class RecordFactoryRepository {
 		return recordClassName + "Factory";
 	}
 
+	/**
+	 * @param recordClassName
+	 * @return a new instance of the record factory belonging to the given <code>recordClassName</code> or <code>null</code> if such a record factory could not be
+	 *         found or instantiated
+	 */
 	@SuppressWarnings("unchecked")
-	public IRecordFactory<? extends IMonitoringRecord> get(final String recordClassName) throws MonitoringRecordException, ClassNotFoundException {
+	public IRecordFactory<? extends IMonitoringRecord> get(final String recordClassName) {
 		final String recordFactoryClassName = this.buildRecordFactoryClassName(recordClassName);
-		final Class<? extends IRecordFactory> recordFactoryClass = this.classForNameResolver.classForName(recordFactoryClassName);
 
 		try {
+			final Class<? extends IRecordFactory> recordFactoryClass = this.classForNameResolver.classForName(recordFactoryClassName);
 			return recordFactoryClass.newInstance();
+		} catch (final ClassNotFoundException e) {
+			return null;
 		} catch (final InstantiationException e) {
-			throw new MonitoringRecordException("Unable to create an instance of " + recordFactoryClass, e);
+			return null;
 		} catch (final IllegalAccessException e) {
-			throw new MonitoringRecordException("Unable to create an instance of " + recordFactoryClass, e);
+			return null;
 		}
 	}
 }

@@ -28,7 +28,7 @@ import kieker.common.util.registry.IRegistry;
 /**
  * @author Christian Wulf
  *
- * @since 1.10
+ * @since 1.11
  */
 public final class RecordFactoryWrapper implements IRecordFactory<IMonitoringRecord> {
 

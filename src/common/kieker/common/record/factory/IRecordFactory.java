@@ -23,7 +23,7 @@ import kieker.common.util.registry.IRegistry;
 /**
  * @author Christian Wulf
  *
- * @since 1.10
+ * @since 1.11
  */
 public interface IRecordFactory<T> {
 

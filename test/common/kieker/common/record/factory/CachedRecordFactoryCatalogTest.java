@@ -35,11 +35,11 @@ import kieker.common.util.registry.Registry;
 /**
  * @author Christian Wulf
  *
- * @since 1.10
+ * @since 1.11
  */
-public class CachedRecordFactoryRepositoryTest {
+public class CachedRecordFactoryCatalogTest {
 
-	private CachedRecordFactoryRepository cachedRecordFactories;
+	private CachedRecordFactoryCatalog cachedRecordFactories;
 	private ByteBuffer buffer;
 	private IRegistry<String> stringRegistry;
 
@@ -48,8 +48,7 @@ public class CachedRecordFactoryRepositoryTest {
 
 	@Before
 	public void before() throws Exception {
-		final RecordFactoryRepository recordFactoryRepository = new RecordFactoryRepository();
-		this.cachedRecordFactories = new CachedRecordFactoryRepository(recordFactoryRepository);
+		this.cachedRecordFactories = CachedRecordFactoryCatalog.getInstance();
 		this.buffer = ByteBuffer.allocateDirect(1024);
 		this.stringRegistry = new Registry<String>();
 	}
