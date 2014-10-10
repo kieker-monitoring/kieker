@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure_9_0.dtd">
+<!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure.dtd">
 
 
 <!-- =============================================================== -->
@@ -8,7 +8,7 @@
 <!-- other configuration files.  e.g.                                -->
 <!--    java -jar start.jar etc/jetty-logging.xml                    -->
 <!-- =============================================================== -->
-<Configure id="logging" class="org.eclipse.jetty.util.log.Log">
+<Configure id="Server" class="org.eclipse.jetty.server.Server">
 
     <New id="ServerLog" class="java.io.PrintStream">
       <Arg>
@@ -22,11 +22,9 @@
       </Arg>
     </New>
 
-    <Get name="rootLogger">
-      <Call name="info"><Arg>Redirecting stderr/stdout to <Ref refid="ServerLogName"/></Arg></Call>
-    </Get>
-    <Call class="java.lang.System" name="setErr"><Arg><Ref refid="ServerLog"/></Arg></Call>
-    <Call class="java.lang.System" name="setOut"><Arg><Ref refid="ServerLog"/></Arg></Call>
+    <Call class="org.eclipse.jetty.util.log.Log" name="info"><Arg>Redirecting stderr/stdout to <Ref id="ServerLogName"/></Arg></Call>
+    <Call class="java.lang.System" name="setErr"><Arg><Ref id="ServerLog"/></Arg></Call>
+    <Call class="java.lang.System" name="setOut"><Arg><Ref id="ServerLog"/></Arg></Call>
 
 </Configure>
 

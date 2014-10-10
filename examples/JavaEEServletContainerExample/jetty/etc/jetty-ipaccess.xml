@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure_9_0.dtd">
+<!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure.dtd">
 
 <!-- =============================================================== -->
 <!-- Mixin the Statistics Handler                                    -->
@@ -12,20 +12,20 @@
 
     <Set name="handler">
      <New id="IPAccessHandler" class="org.eclipse.jetty.server.handler.IPAccessHandler">
-      <Set name="handler"><Ref refid="oldhandler"/></Set>
+      <Set name="handler"><Ref id="oldhandler"/></Set>
       <Set name="white">
         <Array type="String">
-	      <Item>127.0.0.1</Item>
-	      <Item>127.0.0.2/*.html</Item>
-	    </Array>
+	  <Item>127.0.0.1</Item>
+	  <Item>127.0.0.2/*.html</Item>
+	</Array>
       </Set>
       <Set name="black">
         <Array type="String">
-	      <Item>127.0.0.1/blacklisted</Item>
-	      <Item>127.0.0.2/black.html</Item>
-	    </Array>
+	  <Item>127.0.0.1/blacklisted</Item>
+	  <Item>127.0.0.2/black.html</Item>
+	</Array>
       </Set>
-      <Set name="whiteListByPath">false</Set>
      </New>
     </Set>
+    
 </Configure>

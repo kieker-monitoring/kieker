@@ -1,18 +1,40 @@
 
 JETTY
 =====
+
 The Jetty project is a 100% Java HTTP Server, HTTP Client
-and Servlet Container from the eclipse foundation
+and Servlet Container.
+
+
+The Jetty @ eclipse project is based on the Jetty project at codehaus
+
+  http://jetty.codehaus.org
+
+Ongoing development is now at the eclipse foundation
 
   http://www.eclipse.org/jetty/
 
-Jetty is open source and is dual licensed using the Apache 2.0 and
-Eclipse Public License 1.0.   You may choose either license when
-distributing Jetty.
+
+Jetty @ eclipse is open source and is dual licensed using the apache 2.0 and
+eclipse public license 1.0.   You may choose either license when distributing
+jetty.
+
+
+
+BUILDING JETTY
+==============
+
+Jetty uses maven 2 as its build system.  Maven will fetch
+the dependancies, build the server and assemble a runnable
+version:
+
+  mvn install
+
 
 
 RUNNING JETTY
 =============
+
 The run directory is either the top-level of a binary release
 or jetty-distribution/target/assembly-prep directory when built from
 source.
@@ -26,27 +48,23 @@ provided by the start.ini file:
 
   java -jar start.jar --help
 
+To run with extra configuration file(s) appended, eg SSL
 
-Many Jetty features can be enabled by using the --module command
-For example:
+  java -jar start.jar etc/jetty-ssl.xml
 
-  java -jar start.jar --module=https,deploy
+To run with properties 
 
-Will enable HTTPS and its dependencies in the files start.ini
-To list the know modules:
+  java -jar start.jar jetty.port=8081
 
-  java -jar start.jar --list-modules
+To run with extra configuration file(s) prepended, eg logging & jmx
 
+  java -jar start.jar --pre=etc/jetty-logging.xml --pre=etc/jetty-jmx.xml 
 
+To run without the args from start.ini 
 
-JETTY BASE
-==========
+  java -jar start.jar --ini OPTIONS=Server,websocket etc/jetty.xml etc/jetty-deploy.xml etc/jetty-ssl.xml
 
-If the property jetty.base is defined on the command line, then the jetty start.jar
-mechanism will look for start.ini, start.d, webapps and etc files relative to the
-jetty.base and jetty.home directories
+to list the know OPTIONS:
 
-  java -jar start.jar jetty.base=/opt/myjettybase/
-
-
+  java -jar start.jar --list-options
 
