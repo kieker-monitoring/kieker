@@ -200,7 +200,7 @@
 		<patternset id="dist_bin_files-nonbinmode"> <!-- NOTE that the order of includes/excludes seems to have no effect. So be careful with excludes -->
 			<include name="${history.file}" />
 			<include name="${license.file}" />
-			<include name="${bin.dir}/logging.properties" />
+			<include name="${bin.dir}/*.properties" />
 			<include name="${bin.dir}/*.bat" />
 			<include name="${dist.dir}/*.jar" />
 			<include name="${dist.dir}/*.war" />

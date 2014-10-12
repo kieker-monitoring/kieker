@@ -157,6 +157,8 @@ function assert_zip_file_content_contains {
 function assert_files_exist_common {
 	assert_dir_exists "bin/"
 	assert_file_exists_regular "bin/logging.properties"
+	assert_file_exists_regular "bin/logging.debug.properties"
+	assert_file_exists_regular "bin/logging.verbose.properties"
 	assert_dir_exists "doc/"
 	assert_dir_exists "examples/"
 	assert_dir_exists "lib/"
