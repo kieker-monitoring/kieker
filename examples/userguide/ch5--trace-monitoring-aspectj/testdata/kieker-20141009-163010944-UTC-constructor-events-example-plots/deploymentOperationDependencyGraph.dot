@@ -1,0 +1,89 @@
+digraph G {
+ rankdir=LR;
+"depNode_0" [label="'Entry'",shape="none"]
+subgraph "cluster_container1" {
+ label = "<<execution container>>\navh-ThinkPad-RSS";
+ shape = "box";
+ style = "filled";
+ fillcolor = "white";
+subgraph "cluster_component_1" {
+ label = "<<deployment component>>\n@1:..Catalog";
+ shape = "box";
+ style = "filled";
+ fillcolor = "white";
+"depNode_3" [label="<init>()",shape="oval",style="filled",color="#000000",fillcolor="white"]
+"depNode_10" [label="getBook(..)",shape="oval",style="filled",color="#000000",fillcolor="white"]
+}
+subgraph "cluster_component_2" {
+ label = "<<deployment component>>\n@2:..CRM";
+ shape = "box";
+ style = "filled";
+ fillcolor = "white";
+"depNode_4" [label="<init>(..)",shape="oval",style="filled",color="#000000",fillcolor="white"]
+"depNode_11" [label="getOffers()",shape="oval",style="filled",color="#000000",fillcolor="white"]
+}
+subgraph "cluster_component_3" {
+ label = "<<deployment component>>\n@3:..Bookstore";
+ shape = "box";
+ style = "filled";
+ fillcolor = "white";
+"depNode_9" [label="searchBook()",shape="oval",style="filled",color="#000000",fillcolor="white"]
+"depNode_2" [label="<init>()",shape="oval",style="filled",color="#000000",fillcolor="white"]
+}
+subgraph "cluster_component_4" {
+ label = "<<deployment component>>\n@4:..BookstoreStarter";
+ shape = "box";
+ style = "filled";
+ fillcolor = "white";
+"depNode_6" [label="spawnAsyncRequest(..)",shape="oval",style="filled",color="#000000",fillcolor="white"]
+"depNode_5" [label="extractNumRequestsFromArgs(..)",shape="oval",style="filled",color="#000000",fillcolor="white"]
+"depNode_1" [label="main(..)",shape="oval",style="filled",color="#000000",fillcolor="white"]
+}
+subgraph "cluster_component_5" {
+ label = "<<deployment component>>\n@5:..BookstoreStarter$1";
+ shape = "box";
+ style = "filled";
+ fillcolor = "white";
+"depNode_8" [label="run()",shape="oval",style="filled",color="#000000",fillcolor="white"]
+"depNode_7" [label="<init>(..)",shape="oval",style="filled",color="#000000",fillcolor="white"]
+}
+subgraph "cluster_component_6" {
+ label = "<<deployment component>>\n@6:..StringBuilder";
+ shape = "box";
+ style = "filled";
+ fillcolor = "white";
+"depNode_12" [label="<init>()",shape="oval",style="filled",color="#000000",fillcolor="gray"]
+}
+subgraph "cluster_component_7" {
+ label = "<<deployment component>>\n@7:..CountDownLatch";
+ shape = "box";
+ style = "filled";
+ fillcolor = "white";
+"depNode_13" [label="<init>(..)",shape="oval",style="filled",color="#000000",fillcolor="gray"]
+}
+subgraph "cluster_component_8" {
+ label = "<<deployment component>>\n@8:..Thread";
+ shape = "box";
+ style = "filled";
+ fillcolor = "white";
+"depNode_14" [label="<init>(..)",shape="oval",style="filled",color="#000000",fillcolor="gray"]
+}
+}
+depNode_6->depNode_7[label=1, style="solid", arrowhead="open", color="#000000"]
+depNode_0->depNode_7[label=1, style="solid", arrowhead="open", color="#000000"]
+depNode_0->depNode_8[label=1, style="solid", arrowhead="open", color="#000000"]
+depNode_0->depNode_2[label=1, style="solid", arrowhead="open", color="#000000"]
+depNode_0->depNode_1[label=1, style="solid", arrowhead="open", color="#000000"]
+depNode_0->depNode_12[label=2, style="dashed", arrowhead="open", color="#000000"]
+depNode_0->depNode_13[label=1, style="dashed", arrowhead="open", color="#000000"]
+depNode_0->depNode_14[label=1, style="dashed", arrowhead="open", color="#000000"]
+depNode_8->depNode_9[label=1, style="solid", arrowhead="open", color="#000000"]
+depNode_9->depNode_10[label=1, style="solid", arrowhead="open", color="#000000"]
+depNode_9->depNode_11[label=1, style="solid", arrowhead="open", color="#000000"]
+depNode_2->depNode_3[label=2, style="solid", arrowhead="open", color="#000000"]
+depNode_2->depNode_4[label=2, style="solid", arrowhead="open", color="#000000"]
+depNode_1->depNode_6[label=1, style="solid", arrowhead="open", color="#000000"]
+depNode_1->depNode_5[label=1, style="solid", arrowhead="open", color="#000000"]
+depNode_1->depNode_2[label=1, style="solid", arrowhead="open", color="#000000"]
+depNode_11->depNode_10[label=1, style="solid", arrowhead="open", color="#000000"]
+}
