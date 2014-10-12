@@ -153,21 +153,6 @@ public class TestClassOperationSignaturePair extends AbstractKiekerTest {
 	}
 
 	/**
-	 * A test for the class when using modifiers but no return type.
-	 */
-	@Test(expected = IllegalArgumentException.class)
-	public void testModifierButNoReturnType() {
-		final String fqClassName = "a.b.c.D";
-		final String opName = "op1";
-		final String[] modifiers = { "public" };
-		final String[] paramTypes = { Boolean.class.getName(), Integer.class.getName() };
-		final Signature inputSignature = new Signature(opName, modifiers, null, paramTypes);
-		// Obtain operation signature string based on class name and signature.
-		// In this case, we expect an exception to be thrown
-		ClassOperationSignaturePair.createOperationSignatureString(fqClassName, inputSignature);
-	}
-
-	/**
 	 * A test for the class when using no parameters.
 	 */
 	@Test
