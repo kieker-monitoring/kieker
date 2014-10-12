@@ -161,14 +161,10 @@ public class ClassOperationSignaturePair {
 			System.arraycopy(modRetNameArr, 0, modifierList, 0, modifierList.length);
 		}
 		final int opNameIdx = name.lastIndexOf('.');
-		if (javaConstructor) {
-			fqClassname = name;
+		if (opNameIdx != -1) {
+			fqClassname = name.substring(0, opNameIdx);
 		} else {
-			if (opNameIdx != -1) {
-				fqClassname = name.substring(0, opNameIdx);
-			} else {
-				fqClassname = "";
-			}
+			fqClassname = "";
 		}
 		opName = name.substring(opNameIdx + 1);
 		return new ClassOperationSignaturePair(fqClassname, new Signature(opName, modifierList, returnType, paramTypeList));

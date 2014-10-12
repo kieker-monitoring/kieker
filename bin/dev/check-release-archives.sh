@@ -408,7 +408,8 @@ function check_bin_archive {
 	fi
 
         # now perform some trace analysis tests and compare results with reference data
-	for testset in "kieker-20100830-082225522-UTC-example-plots" "kieker-20141008-101258768-UTC-example-plots"; do   
+	for testset in "kieker-20100830-082225522-UTC-example-plots" "kieker-20141008-101258768-UTC-example-plots" \
+	    "kieker-20141009-160413833-UTC-operationExecutionsConstructors-example-plots"; do   
 	    ARCHDIR=$(pwd)
 	    create_subdir_n_cd
 	    REFERENCE_OUTPUT_DIR="${ARCHDIR}/examples/userguide/ch5--trace-monitoring-aspectj/testdata/${testset}"

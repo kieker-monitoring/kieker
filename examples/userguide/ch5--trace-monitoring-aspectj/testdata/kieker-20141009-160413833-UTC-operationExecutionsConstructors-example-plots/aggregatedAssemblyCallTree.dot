@@ -1,0 +1,40 @@
+digraph G {
+0[label ="'Entry'",shape=none];
+1[label ="@4:..BookstoreStarter\n.main(..)",shape=none];
+2[label ="@3:..Bookstore\n.<init>()",shape=none];
+3[label ="@1:..Catalog\n.<init>()",shape=none];
+4[label ="@2:..CRM\n.<init>(..)",shape=none];
+5[label ="@4:..BookstoreStarter\n.extractNumRequestsFromArgs(..)",shape=none];
+6[label ="@4:..BookstoreStarter\n.spawnAsyncRequest(..)",shape=none];
+7[label ="@5:..BookstoreStarter$1\n.<init>(..)",shape=none];
+8[label ="@5:..BookstoreStarter$1\n.run()",shape=none];
+9[label ="@3:..Bookstore\n.searchBook()",shape=none];
+10[label ="@1:..Catalog\n.getBook(..)",shape=none];
+11[label ="@2:..CRM\n.getOffers()",shape=none];
+12[label ="@1:..Catalog\n.getBook(..)",shape=none];
+
+0->1[style=solid,arrowhead=none,label="1" ]
+
+1->2[style=solid,arrowhead=none,label="1" ]
+
+2->3[style=solid,arrowhead=none,label="1" ]
+
+2->4[style=solid,arrowhead=none,label="1" ]
+
+1->5[style=solid,arrowhead=none,label="1" ]
+
+1->6[style=solid,arrowhead=none,label="1" ]
+
+6->7[style=solid,arrowhead=none,label="1" ]
+
+0->8[style=solid,arrowhead=none,label="1" ]
+
+8->9[style=solid,arrowhead=none,label="1" ]
+
+9->10[style=solid,arrowhead=none,label="1" ]
+
+9->11[style=solid,arrowhead=none,label="1" ]
+
+11->12[style=solid,arrowhead=none,label="1" ]
+
+}
