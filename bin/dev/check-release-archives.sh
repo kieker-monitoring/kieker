@@ -159,6 +159,7 @@ function assert_files_exist_common {
 	assert_file_exists_regular "bin/logging.properties"
 	assert_dir_exists "doc/"
 	assert_dir_exists "examples/"
+	assert_file_NOT_exists "examples/JavaEEServletContainerExample/jetty/javadoc/"
 	assert_dir_exists "lib/"
 	assert_dir_exists "lib/framework-libs/"
 	assert_file_exists_regular "lib/sigar/libsigar-x86-linux.so"
