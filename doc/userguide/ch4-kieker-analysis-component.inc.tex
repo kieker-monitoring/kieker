@@ -431,13 +431,13 @@ with prefix \method{REPOSITORY\_PORT\_NAME\_}, in order to ease the programmatic
 connection of repositories to readers and filters. %
 
 \setJavaCodeListing
-\lstinputlisting[firstline=42, firstnumber=42, lastline=43, caption={Declaration of required repositories in the @Repository annotation}, label=listing:RepositoryRequirementDeclaration]%
+\lstinputlisting[firstline=40, firstnumber=40, lastline=41, caption={Declaration of required repositories in the @Repository annotation}, label=listing:RepositoryRequirementDeclaration]%
 {../../src/tools/kieker/tools/traceAnalysis/filter/AbstractTraceAnalysisFilter.java}
 
 \noindent Plugins can access their connected repositories via the \method{getRepository} %
 method provided by the super class, as shown in Listing~\ref{listing:RepositoryAccess}. %
 
 \setJavaCodeListing
-\lstinputlisting[firstline=151, firstnumber=151, lastline=152, caption={Accessing a repository within a plugin}, label=listing:RepositoryAccess]%
+\lstinputlisting[firstline=161, firstnumber=161, lastline=162, caption={Accessing a repository within a plugin}, label=listing:RepositoryAccess]%
 {../../src/tools/kieker/tools/traceAnalysis/filter/AbstractTraceAnalysisFilter.java}
 
