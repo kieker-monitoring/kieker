@@ -16,270 +16,107 @@
 
 package kieker.test.analysis.junit.configuration;
 
-import java.util.Map.Entry;
-
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import kieker.analysis.AnalysisController;
 import kieker.analysis.IAnalysisController;
 import kieker.analysis.IProjectContext;
-import kieker.analysis.configuration.AbstractUpdateableFilterPlugin;
 import kieker.analysis.configuration.GlobalConfigurationRegistry;
-import kieker.analysis.configuration.exception.PluginNotFoundException;
 import kieker.analysis.exception.AnalysisConfigurationException;
-import kieker.analysis.plugin.annotation.InputPort;
-import kieker.analysis.plugin.annotation.OutputPort;
+import kieker.analysis.exception.PluginNotFoundException;
+import kieker.analysis.plugin.AbstractUpdateableFilterPlugin;
 import kieker.analysis.plugin.annotation.Plugin;
 import kieker.analysis.plugin.annotation.Property;
-import kieker.analysis.plugin.filter.AbstractFilterPlugin;
-import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
- * Test for Configuration plugins during runtime.
+ * This is a test making sure that it is possible to update the configuration of specific plugins during runtime.
  * 
- * @author Markus Fischer
+ * @author Markus Fischer, Nils Christian Ehmke
+ * 
  * @since 1.10
- * 
  */
 public class OnlineConfigurationTest extends AbstractKiekerTest {
 
-	/**
-	 * Id for a Filter.
-	 */
-	private static final String UPDATEABLE_FILTER_ID = "updateableFilter-ID";
+	@Rule
+	public ExpectedException exception = ExpectedException.none(); // NOPMD NOCS
 
-	/**
-	 * value for a filters property.
-	 */
-	private static final String UPDATED = "updated";
-
-	private int noPNFExceptions;
-
-	private final IAnalysisController analysisController;
-	private final ListReader<String> simpleListReader;
-	private final ListCollectionFilter<String> listCollectionfilterSTR;
-
-	private final Updater updater;
-	private final Updateable updateable;
-
-	/**
-	 * Mandatory Constructor.
-	 */
 	public OnlineConfigurationTest() {
-		this.analysisController = new AnalysisController();
-		this.simpleListReader = new ListReader<String>(new Configuration(), this.analysisController);
-		this.listCollectionfilterSTR = new ListCollectionFilter<String>(new Configuration(), this.analysisController);
-
-		this.updater = new Updater(new Configuration(), this.analysisController);
-		final Configuration updateableConfig = new Configuration();
-		this.updateable = new Updateable(updateableConfig, this.analysisController);
+		// No code necessary
 	}
 
-	/**
-	 * Set up the tests.
-	 */
-	@Before
-	public void setUp() {
-
-		GlobalConfigurationRegistry.getInstance().registerUpdateableFilterPlugin(UPDATEABLE_FILTER_ID, this.updateable);
-		try {
-			this.analysisController.connect(this.simpleListReader, ListReader.OUTPUT_PORT_NAME, this.updater, Updater.INPUT);
-			this.analysisController.connect(this.simpleListReader, ListReader.OUTPUT_PORT_NAME, this.updateable, Updateable.INPUT);
-			this.analysisController.connect(this.updateable, Updateable.OUPUT_STRING, this.listCollectionfilterSTR, ListCollectionFilter.INPUT_PORT_NAME);
-			this.simulate();
-		} catch (final IllegalStateException e) {
-			this.nothing();
-			// e.printStackTrace();
-		} catch (final AnalysisConfigurationException e) {
-			this.nothing();
-			// e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Tests if the right number of exceptions was thrown.
-	 */
 	@Test
-	public void numberOfExceptionsTest() {
-		Assert.assertEquals("Wrong number of PNF-Exceptions thrown", 1, this.noPNFExceptions);
+	public void testUpdatingNonExistingPlugin() throws PluginNotFoundException { // NOPMD (missing assert - we expect an exception)
+		this.exception.expect(PluginNotFoundException.class);
+		GlobalConfigurationRegistry.getInstance().updateConfiguration(42, new Configuration(), true);
 	}
 
-	/**
-	 * Tests if properties were set properly.
-	 */
 	@Test
-	public void testNewProperty() {
-		final boolean notYetUpdated = this.listCollectionfilterSTR.getList().get(0).equals(Updateable.TEST_PROPERTY_UPDATEABLE);
-		final boolean updated = this.listCollectionfilterSTR.getList().get(1)
-				.equals(this.updateable.getCurrentConfiguration().getStringProperty(Updateable.TEST_PROPERTY_UPDATEABLE));
-		Assert.assertTrue("Updating wrent wrong ", notYetUpdated && updated);
+	@SuppressWarnings("unused")
+	public void testUpdatingPlugin() throws PluginNotFoundException, IllegalStateException, AnalysisConfigurationException {
+		final IAnalysisController analysisController = new AnalysisController();
+
+		new ListReader<String>(new Configuration(), analysisController);
+		final UpdateableFilter filter = new UpdateableFilter(new Configuration(), analysisController);
+
+		// Make sure the default configuration is loaded
+		Assert.assertEquals("original-configuration", filter.getConfiguredContent());
+
+		analysisController.run();
+
+		// Now update the configuration
+		final int pluginID = GlobalConfigurationRegistry.getInstance().registerUpdateableFilterPlugin(filter);
+
+		final Configuration newConfiguration = new Configuration();
+		newConfiguration.setProperty(UpdateableFilter.PROPERTY_NAME, "new-configuration");
+		GlobalConfigurationRegistry.getInstance().updateConfiguration(pluginID, newConfiguration, true);
+
+		Assert.assertEquals("new-configuration", filter.getConfiguredContent());
 	}
 
 	/**
-	 * Increases exception count.
-	 */
-	public void increaseExceptionCount() {
-		this.noPNFExceptions++;
-	}
-
-	/**
-	 * empty Method.
-	 */
-	private void nothing() {
-		// empty Method
-	}
-
-	/**
-	 * @throws AnalysisConfigurationException
-	 * @throws IllegalStateException
+	 * A simple plugin that can be updated.
 	 * 
-	 */
-	private void simulate() throws IllegalStateException, AnalysisConfigurationException {
-		this.simpleListReader.addObject("a");
-		this.simpleListReader.addObject("b");
-		this.simpleListReader.addObject("c");
-		this.analysisController.run();
-	}
-
-	/**
-	 * An inner class for testing purposes. <br>
-	 * Reconfigures a Plugin every second message.
+	 * @author Markus Fischer, Nils Christian Ehmke
 	 * 
-	 * @author Markus Fischer
 	 * @since 1.10
-	 * 
 	 */
-	@Plugin(description = "Updater")
-	public class Updater extends AbstractFilterPlugin {
+	@Plugin(programmaticOnly = true,
+			configuration = @Property(name = UpdateableFilter.PROPERTY_NAME, defaultValue = UpdateableFilter.PROPERTY_VALUE, updateable = true))
+	public static class UpdateableFilter extends AbstractUpdateableFilterPlugin {
 
-		/**
-		 * Inputportname.
-		 */
-		public static final String INPUT = "updater-input";
-		private boolean update;
+		public static final String PROPERTY_NAME = "property";
+		public static final String PROPERTY_VALUE = "original-configuration";
 
-		/**
-		 * Constructor.
-		 * 
-		 * @param configuration
-		 *            configuration
-		 * @param projectContext
-		 *            projectContext
-		 */
-		public Updater(final Configuration configuration, final IProjectContext projectContext) {
+		private String configuredContent;
+
+		public UpdateableFilter(final Configuration configuration, final IProjectContext projectContext) {
 			super(configuration, projectContext);
+
+			this.configuredContent = configuration.getStringProperty(PROPERTY_NAME);
+		}
+
+		public String getConfiguredContent() {
+
+			return this.configuredContent;
+		}
+
+		@Override
+		public void setCurrentConfiguration(final Configuration configuration, final boolean update) {
+			if (!update || this.isPropertyUpdateable(PROPERTY_NAME)) {
+				this.configuredContent = configuration.getStringProperty(PROPERTY_NAME);
+			}
 		}
 
 		@Override
 		public Configuration getCurrentConfiguration() {
-			return this.configuration;
-		}
-
-		/**
-		 * inputport.
-		 * 
-		 * @param string
-		 *            string
-		 */
-		@InputPort(name = Updater.INPUT, eventTypes = { String.class })
-		public void startAnalysis(final String string) {
-			final Configuration config = new Configuration();
-			config.setProperty(Updateable.TEST_PROPERTY_UPDATEABLE, UPDATED);
-			try {
-				if (this.update) {
-					GlobalConfigurationRegistry.getInstance().updateConfiguration(UPDATEABLE_FILTER_ID, config, true);
-					GlobalConfigurationRegistry.getInstance().updateConfiguration("non-Existent-ID", config, true);
-				}
-			} catch (final PluginNotFoundException e) {
-				OnlineConfigurationTest.this.increaseExceptionCount();
-				// e.printStackTrace();
-			} finally {
-				this.update = !this.update;
-			}
-		}
-	}
-
-	/**
-	 * Plugin that can be updated.
-	 * Passes through its current property value as message.
-	 * 
-	 * @author Markus Fischer
-	 * @since 1.10
-	 * 
-	 */
-	@Plugin(description = "Updateable",
-			outputPorts = {
-				@OutputPort(name = Updateable.OUPUT_STRING, eventTypes = { String.class }) },
-			configuration = {
-				@Property(name = Updateable.TEST_PROPERTY_UPDATEABLE, defaultValue = Updateable.TEST_PROPERTY_UPDATEABLE, updateable = true),
-				@Property(name = Updateable.TEST_PROPERTY_TWO, defaultValue = Updateable.TEST_PROPERTY_TWO)
-			})
-	public static class Updateable extends AbstractUpdateableFilterPlugin {
-
-		/**
-		 * Inputportname.
-		 */
-		public static final String INPUT = "updateable-input";
-
-		/**
-		 * Outputportname.
-		 */
-		public static final String OUPUT_STRING = "updateable-string";
-
-		/**
-		 * Propertyname.
-		 */
-		public static final String TEST_PROPERTY_UPDATEABLE = "property-one";
-
-		/**
-		 * Propertyname.
-		 */
-		public static final String TEST_PROPERTY_TWO = "property-two";
-
-		/**
-		 * Constructor.
-		 * 
-		 * @param configuration
-		 *            configuration
-		 * @param projectContext
-		 *            projectContext
-		 */
-		public Updateable(final Configuration configuration, final IProjectContext projectContext) {
-			super(configuration, projectContext);
-		}
-
-		@Override
-		public Configuration getCurrentConfiguration() {
-			return this.configuration;
-		}
-
-		/**
-		 * inputportmethod.
-		 * 
-		 * @param string
-		 *            string
-		 */
-		@InputPort(name = Updateable.INPUT, eventTypes = { String.class })
-		public void startAnalysis(final String string) {
-			// aktuelle property-werte weitergeben
-			final String s = this.getCurrentConfiguration().getStringProperty(TEST_PROPERTY_UPDATEABLE);
-			super.deliver(Updateable.OUPUT_STRING, s);
-		}
-
-		@Override
-		public void setCurrentConfiguration(final Configuration config, final boolean update) {
-			for (final Entry<Object, Object> entry : this.configuration.getPropertiesStartingWith("").entrySet()) {
-				final String propertyName = (String) entry.getKey();
-				if (this.isPropertyUpdateable(propertyName)) {
-					this.configuration.setProperty(propertyName, config.getStringProperty(propertyName));
-				}
-			}
+			throw new UnsupportedOperationException();
 		}
 	}
 

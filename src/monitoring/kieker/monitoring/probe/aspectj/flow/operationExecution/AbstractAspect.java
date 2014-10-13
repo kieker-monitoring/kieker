@@ -34,7 +34,7 @@ import kieker.monitoring.timer.ITimeSource;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.6
  */
 @Aspect
@@ -55,8 +55,8 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return thisJoinPoint.proceed();
 		}
-		final String signature = this.signatureToLongString(thisJoinPoint.getSignature());
-		if (!CTRLINST.isProbeActivated(signature)) {
+		final String operationSignature = this.signatureToLongString(thisJoinPoint.getSignature());
+		if (!CTRLINST.isProbeActivated(operationSignature)) {
 			return thisJoinPoint.proceed();
 		}
 		// common fields
@@ -69,15 +69,14 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final long traceId = trace.getTraceId();
 		final String clazz = thisObject.getClass().getName();
 		// measure before execution
-		CTRLINST.newMonitoringRecord(new BeforeOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(), clazz, signature));
+		CTRLINST.newMonitoringRecord(new BeforeOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(), operationSignature, clazz));
 		// execution of the called method
 		final Object retval;
 		try {
 			retval = thisJoinPoint.proceed();
 		} catch (final Throwable th) { // NOPMD NOCS (catch throw might ok here)
 			// measure after failed execution
-			CTRLINST.newMonitoringRecord(new AfterOperationFailedEvent(TIME.getTime(), traceId, trace.getNextOrderId(), clazz, signature,
-					th.toString()));
+			CTRLINST.newMonitoringRecord(new AfterOperationFailedEvent(TIME.getTime(), traceId, trace.getNextOrderId(), operationSignature, clazz, th.toString()));
 			throw th;
 		} finally {
 			if (newTrace) { // close the trace
@@ -85,7 +84,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			}
 		}
 		// measure after successful execution
-		CTRLINST.newMonitoringRecord(new AfterOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(), clazz, signature));
+		CTRLINST.newMonitoringRecord(new AfterOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(), operationSignature, clazz));
 		return retval;
 	}
 
@@ -95,8 +94,8 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			return thisJoinPoint.proceed();
 		}
 		final Signature sig = thisJoinPoint.getSignature();
-		final String signature = this.signatureToLongString(sig);
-		if (!CTRLINST.isProbeActivated(signature)) {
+		final String operationSignature = this.signatureToLongString(sig);
+		if (!CTRLINST.isProbeActivated(operationSignature)) {
 			return thisJoinPoint.proceed();
 		}
 		// common fields
@@ -109,15 +108,14 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final long traceId = trace.getTraceId();
 		final String clazz = sig.getDeclaringTypeName();
 		// measure before execution
-		CTRLINST.newMonitoringRecord(new BeforeOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(), clazz, signature));
+		CTRLINST.newMonitoringRecord(new BeforeOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(), operationSignature, clazz));
 		// execution of the called method
 		final Object retval;
 		try {
 			retval = thisJoinPoint.proceed();
 		} catch (final Throwable th) { // NOPMD NOCS (catch throw might ok here)
 			// measure after failed execution
-			CTRLINST.newMonitoringRecord(new AfterOperationFailedEvent(TIME.getTime(), traceId, trace.getNextOrderId(), clazz, signature,
-					th.toString()));
+			CTRLINST.newMonitoringRecord(new AfterOperationFailedEvent(TIME.getTime(), traceId, trace.getNextOrderId(), operationSignature, clazz, th.toString()));
 			throw th;
 		} finally {
 			if (newTrace) { // close the trace
@@ -125,7 +123,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 			}
 		}
 		// measure after successful execution
-		CTRLINST.newMonitoringRecord(new AfterOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(), clazz, signature));
+		CTRLINST.newMonitoringRecord(new AfterOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(), operationSignature, clazz));
 		return retval;
 	}
 }

@@ -109,18 +109,47 @@ public class TestClassOperationSignaturePair extends AbstractKiekerTest {
 	}
 
 	/**
-	 * A test for the class when using modifiers but no return type.
+	 * A test for the class when using no return type.
 	 */
-	@Test(expected = IllegalArgumentException.class)
-	public void testModifierButNoReturnType() {
+	@Test
+	public void testConstructorNoModifier() {
 		final String fqClassName = "a.b.c.D";
-		final String opName = "op1";
+		final String opName = "<init>";
+		final String[] modifiers = {};
+		final String[] paramTypes = { Boolean.class.getName(), Integer.class.getName() };
+		final Signature inputSignature = new Signature(opName, modifiers, null, paramTypes);
+
+		// Obtain operation signature string based on class name and signature and compare with expected string.
+		final String opSignatureString = ClassOperationSignaturePair.createOperationSignatureString(fqClassName, inputSignature);
+		final String expectedOpSignatureString = fqClassName + "." + opName + "(" + paramTypes[0] + ", " + paramTypes[1] + ")";
+		Assert.assertEquals("Unexpected result", expectedOpSignatureString, opSignatureString);
+
+		// Now split expectedOpSignatureString and compare class name and signature
+		final ClassOperationSignaturePair compSigPair = ClassOperationSignaturePair.splitOperationSignatureStr(expectedOpSignatureString, true);
+		Assert.assertEquals("FQ classnames not equal", fqClassName, compSigPair.getFqClassname());
+		Assert.assertEquals("Signatures not equal", inputSignature, compSigPair.getSignature());
+	}
+
+	/**
+	 * A test for the class when using no return type.
+	 */
+	@Test
+	public void testConstructorPublicModifier() {
+		final String fqClassName = "a.b.c.D";
+		final String opName = "<init>";
 		final String[] modifiers = { "public" };
 		final String[] paramTypes = { Boolean.class.getName(), Integer.class.getName() };
 		final Signature inputSignature = new Signature(opName, modifiers, null, paramTypes);
-		// Obtain operation signature string based on class name and signature.
-		// In this case, we expect an exception to be thrown
-		ClassOperationSignaturePair.createOperationSignatureString(fqClassName, inputSignature);
+
+		// Obtain operation signature string based on class name and signature and compare with expected string.
+		final String opSignatureString = ClassOperationSignaturePair.createOperationSignatureString(fqClassName, inputSignature);
+		final String expectedOpSignatureString = "public " + fqClassName + "." + opName + "(" + paramTypes[0] + ", " + paramTypes[1] + ")";
+		Assert.assertEquals("Unexpected result", expectedOpSignatureString, opSignatureString);
+
+		// Now split expectedOpSignatureString and compare class name and signature
+		final ClassOperationSignaturePair compSigPair = ClassOperationSignaturePair.splitOperationSignatureStr(expectedOpSignatureString, true);
+		Assert.assertEquals("FQ classnames not equal", fqClassName, compSigPair.getFqClassname());
+		Assert.assertEquals("Signatures not equal", inputSignature, compSigPair.getSignature());
 	}
 
 	/**

@@ -87,7 +87,7 @@ public final class FilesystemLogReplayerStarter extends AbstractCommandLineTool 
 
 		option = new Option("i", CMD_OPT_NAME_INPUTDIRS, true, "Log directories to read data from");
 		option.setArgName("dir1 ... dirN");
-		option.setRequired(true);
+		option.setRequired(false);
 		option.setArgs(Option.UNLIMITED_VALUES);
 		options.addOption(option);
 
@@ -100,7 +100,7 @@ public final class FilesystemLogReplayerStarter extends AbstractCommandLineTool 
 
 		option = new Option("r", CMD_OPT_NAME_REALTIME, true, "Replay log data in realtime?");
 		option.setArgName("true|false");
-		option.setRequired(true);
+		option.setRequired(false);
 		option.setValueSeparator('=');
 		options.addOption(option);
 
@@ -139,6 +139,10 @@ public final class FilesystemLogReplayerStarter extends AbstractCommandLineTool 
 
 		// 1.) init inputDirs
 		this.inputDirs = commandLine.getOptionValues(CMD_OPT_NAME_INPUTDIRS);
+		if (this.inputDirs == null) {
+			LOG.error("No input directory configured");
+			retVal = false;
+		}
 
 		// 2.) init keepOriginalLoggingTimestamps
 		final String keepOriginalLoggingTimestampsOptValStr = commandLine.getOptionValue(
@@ -220,6 +224,10 @@ public final class FilesystemLogReplayerStarter extends AbstractCommandLineTool 
 					+ DATE_FORMAT_PATTERN_CMD_USAGE_HELP;
 			LOG.error(erorMsg, ex);
 			return false;
+		}
+
+		if (!retVal) {
+			LOG.info("Use the option `--" + CMD_OPT_NAME_HELP_LONG + "` for usage information");
 		}
 
 		// log configuration

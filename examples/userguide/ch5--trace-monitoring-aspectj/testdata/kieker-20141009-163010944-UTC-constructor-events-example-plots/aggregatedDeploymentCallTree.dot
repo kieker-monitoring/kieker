@@ -1,0 +1,85 @@
+digraph G {
+0[label ="'Entry'",shape=none];
+1[label ="avh-ThinkPad-RSS::\n@4:..BookstoreStarter\n.main(..)",shape=none];
+2[label ="avh-ThinkPad-RSS::\n@3:..Bookstore\n.<init>()",shape=none];
+3[label ="avh-ThinkPad-RSS::\n@1:..Catalog\n.<init>()",shape=none];
+4[label ="avh-ThinkPad-RSS::\n@2:..CRM\n.<init>(..)",shape=none];
+5[label ="avh-ThinkPad-RSS::\n@4:..BookstoreStarter\n.extractNumRequestsFromArgs(..)",shape=none];
+6[label ="avh-ThinkPad-RSS::\n@4:..BookstoreStarter\n.spawnAsyncRequest(..)",shape=none];
+7[label ="avh-ThinkPad-RSS::\n@5:..BookstoreStarter$1\n.<init>(..)",shape=none];
+8[label ="avh-ThinkPad-RSS::\n@5:..BookstoreStarter$1\n.run()",shape=none];
+9[label ="avh-ThinkPad-RSS::\n@3:..Bookstore\n.searchBook()",shape=none];
+10[label ="avh-ThinkPad-RSS::\n@1:..Catalog\n.getBook(..)",shape=none];
+11[label ="avh-ThinkPad-RSS::\n@2:..CRM\n.getOffers()",shape=none];
+12[label ="avh-ThinkPad-RSS::\n@1:..Catalog\n.getBook(..)",shape=none];
+13[label ="avh-ThinkPad-RSS::\n@5:..BookstoreStarter$1\n.<init>(..)",shape=none];
+14[label ="avh-ThinkPad-RSS::\n@5:..BookstoreStarter$1\n.<init>(..)",shape=none];
+15[label ="avh-ThinkPad-RSS::\n@5:..BookstoreStarter$1\n.<init>(..)",shape=none];
+16[label ="avh-ThinkPad-RSS::\n@6:..StringBuilder\n.<init>()",shape=none];
+17[label ="avh-ThinkPad-RSS::\n@7:..CountDownLatch\n.<init>(..)",shape=none];
+18[label ="avh-ThinkPad-RSS::\n@8:..Thread\n.<init>(..)",shape=none];
+19[label ="avh-ThinkPad-RSS::\n@3:..Bookstore\n.<init>()",shape=none];
+20[label ="avh-ThinkPad-RSS::\n@3:..Bookstore\n.<init>()",shape=none];
+21[label ="avh-ThinkPad-RSS::\n@3:..Bookstore\n.<init>()",shape=none];
+22[label ="avh-ThinkPad-RSS::\n@1:..Catalog\n.<init>()",shape=none];
+23[label ="avh-ThinkPad-RSS::\n@1:..Catalog\n.<init>()",shape=none];
+24[label ="avh-ThinkPad-RSS::\n@1:..Catalog\n.<init>()",shape=none];
+25[label ="avh-ThinkPad-RSS::\n@2:..CRM\n.<init>(..)",shape=none];
+26[label ="avh-ThinkPad-RSS::\n@2:..CRM\n.<init>(..)",shape=none];
+27[label ="avh-ThinkPad-RSS::\n@2:..CRM\n.<init>(..)",shape=none];
+
+0->1[style=solid,arrowhead=none,label="1" ]
+
+1->2[style=solid,arrowhead=none,label="1" ]
+
+2->3[style=solid,arrowhead=none,label="1" ]
+
+2->4[style=solid,arrowhead=none,label="1" ]
+
+1->5[style=solid,arrowhead=none,label="1" ]
+
+1->6[style=solid,arrowhead=none,label="1" ]
+
+6->7[style=solid,arrowhead=none,label="1" ]
+
+0->8[style=solid,arrowhead=none,label="1" ]
+
+8->9[style=solid,arrowhead=none,label="1" ]
+
+9->10[style=solid,arrowhead=none,label="1" ]
+
+9->11[style=solid,arrowhead=none,label="1" ]
+
+11->12[style=solid,arrowhead=none,label="1" ]
+
+0->13[style=solid,arrowhead=none,label="1" ]
+
+13->14[style=solid,arrowhead=none,label="1" ]
+
+14->15[style=solid,arrowhead=none,label="1" ]
+
+0->16[style=solid,arrowhead=none,label="2" ]
+
+0->17[style=solid,arrowhead=none,label="1" ]
+
+0->18[style=solid,arrowhead=none,label="1" ]
+
+0->19[style=solid,arrowhead=none,label="1" ]
+
+19->20[style=solid,arrowhead=none,label="1" ]
+
+20->21[style=solid,arrowhead=none,label="1" ]
+
+21->22[style=solid,arrowhead=none,label="1" ]
+
+22->23[style=solid,arrowhead=none,label="1" ]
+
+23->24[style=solid,arrowhead=none,label="1" ]
+
+21->25[style=solid,arrowhead=none,label="1" ]
+
+25->26[style=solid,arrowhead=none,label="1" ]
+
+26->27[style=solid,arrowhead=none,label="1" ]
+
+}

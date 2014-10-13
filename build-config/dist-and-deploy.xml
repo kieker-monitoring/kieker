@@ -62,7 +62,7 @@
 		<!-- <echo message="${test.dir}/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/jetty.xml" /> -->
 		<patternset id="dist_src_files-nonbinmode"> <!-- NOTE that the order of includes/excludes seems to have no effect. So be careful with excludes -->
 			<include name="${build.config.dir}/**/*" />
-			<include name="${bin.dir}/logging.properties" />
+			<include name="${bin.dir}/*.properties" />
 			<include name="${bin.dir}/*.bat" />
 			<include name="${src.userguide.dir}/**/*" />
 			<exclude name="${src.userguide.dir}/**/*.sh" /> <!-- will be added in bin mode -->
@@ -200,7 +200,7 @@
 		<patternset id="dist_bin_files-nonbinmode"> <!-- NOTE that the order of includes/excludes seems to have no effect. So be careful with excludes -->
 			<include name="${history.file}" />
 			<include name="${license.file}" />
-			<include name="${bin.dir}/logging.properties" />
+			<include name="${bin.dir}/*.properties" />
 			<include name="${bin.dir}/*.bat" />
 			<include name="${dist.dir}/*.jar" />
 			<include name="${dist.dir}/*.war" />
@@ -485,7 +485,7 @@
 	</target>
 
 	<target name="enable-r-tests" depends="">
-		<property name="rTestsEnabled" value="true" /> 
+		<property name="rTestsEnabled" value="true" />
 	</target>
 	
 	<!-- http://kieker.uni-kiel.de/trac/ticket/292: add run-tests-integration BEFORE static-analysis -->

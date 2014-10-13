@@ -1,0 +1,13 @@
+$0;1412763178835942258;1.9;KIEKER-SINGLETON;SE;1;false;0;NANOSECONDS;1
+$1;1412763178834633375;3881283897249497088;1;<no-session-id>;SE;3881283897249497088;-1
+$2;1412763178849813012;1412763178849798259;3881283897249497088;0;public static void kieker.examples.monitoring.aspectj.BookstoreStarter.main(java.lang.String[]);kieker.examples.monitoring.aspectj.BookstoreStarter
+$2;1412763178851721652;1412763178851719086;3881283897249497088;1;private static int kieker.examples.monitoring.aspectj.BookstoreStarter.extractNumRequestsFromArgs(java.lang.String[]);kieker.examples.monitoring.aspectj.BookstoreStarter
+$3;1412763178853435612;1412763178853429518;3881283897249497088;2;private static int kieker.examples.monitoring.aspectj.BookstoreStarter.extractNumRequestsFromArgs(java.lang.String[]);kieker.examples.monitoring.aspectj.BookstoreStarter
+$2;1412763178853643763;1412763178853641518;3881283897249497088;3;private static void kieker.examples.monitoring.aspectj.BookstoreStarter.spawnAsyncRequest(kieker.examples.monitoring.aspectj.Bookstore, java.util.concurrent.CountDownLatch);kieker.examples.monitoring.aspectj.BookstoreStarter
+$3;1412763178860055074;1412763178860048339;3881283897249497088;4;private static void kieker.examples.monitoring.aspectj.BookstoreStarter.spawnAsyncRequest(kieker.examples.monitoring.aspectj.Bookstore, java.util.concurrent.CountDownLatch);kieker.examples.monitoring.aspectj.BookstoreStarter
+$1;1412763178860271564;3881283897249497089;13;<no-session-id>;SE;3881283897249497089;-1
+$2;1412763178860305881;1412763178860300750;3881283897249497089;0;public void kieker.examples.monitoring.aspectj.BookstoreStarter$1.run();kieker.examples.monitoring.aspectj.BookstoreStarter$1
+$2;1412763178860355273;1412763178860350783;3881283897249497089;1;public void kieker.examples.monitoring.aspectj.Bookstore.searchBook();kieker.examples.monitoring.aspectj.Bookstore
+$3;1412763178864633757;1412763178864617079;3881283897249497089;2;public void kieker.examples.monitoring.aspectj.Bookstore.searchBook();kieker.examples.monitoring.aspectj.Bookstore
+$3;1412763178864687960;1412763178864684753;3881283897249497088;5;public static void kieker.examples.monitoring.aspectj.BookstoreStarter.main(java.lang.String[]);kieker.examples.monitoring.aspectj.BookstoreStarter
+$3;1412763178864702072;1412763178864697902;3881283897249497089;3;public void kieker.examples.monitoring.aspectj.BookstoreStarter$1.run();kieker.examples.monitoring.aspectj.BookstoreStarter$1

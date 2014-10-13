@@ -33,7 +33,7 @@ import kieker.monitoring.timer.ITimeSource;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.10
  */
 @Aspect
@@ -51,16 +51,16 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 
 	/**
 	 * This is an advice used around calls from members to constructors.
-	 * 
+	 *
 	 * @param thisObject
 	 *            The caller object.
 	 * @param thisJoinPoint
 	 *            The joint point of the callee.
 	 * @param thisEnclosingJoinPoint
 	 *            The joint point of the caller.
-	 * 
+	 *
 	 * @return The result of {@code proceed method} of the given joint point.
-	 * 
+	 *
 	 * @throws Throwable
 	 */
 	@Around("monitoredConstructor() && this(thisObject) && target(targetObject)  && notWithinKieker()")
@@ -91,7 +91,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final int calleeObjectId = System.identityHashCode(targetObject);
 		// measure before call
 		CTRLINST.newMonitoringRecord(new CallConstructorObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(),
-				callerClazz, caller, calleeClazz, callee, callerObjectId, calleeObjectId));
+				caller, callerClazz, callee, calleeClazz, callerObjectId, calleeObjectId));
 		// call of the called method
 		final Object retval;
 		try {
@@ -106,14 +106,14 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 
 	/**
 	 * This is an advice used around calls from static elements to constructors.
-	 * 
+	 *
 	 * @param thisJoinPoint
 	 *            The joint point of the callee.
 	 * @param thisEnclosingJoinPoint
 	 *            The joint point of the caller.
-	 * 
+	 *
 	 * @return The result of {@code proceed method} of the given joint point.
-	 * 
+	 *
 	 * @throws Throwable
 	 */
 	@Around("monitoredConstructor() && !this(java.lang.Object) && target(targetObject) && notWithinKieker()")
@@ -144,7 +144,7 @@ public abstract class AbstractAspect extends AbstractAspectJProbe {
 		final int calleeObjectId = System.identityHashCode(targetObject);
 		// measure before call
 		CTRLINST.newMonitoringRecord(new CallConstructorObjectEvent(TIME.getTime(), traceId, trace.getNextOrderId(),
-				callerClazz, caller, calleeClazz, callee, 0, calleeObjectId));
+				caller, callerClazz, callee, calleeClazz, 0, calleeObjectId));
 		// call of the called method
 		final Object retval;
 		try {

@@ -30,6 +30,8 @@ public class Signature {
 	/** This constant can be used to mark that a signature has no return type. */
 	public static final String NO_RETURN_TYPE = "<NO-RETURN-TYPE>";
 
+	public static final String CONSTRUCTOR_METHOD_NAME = "<init>";
+
 	private final String name;
 
 	private final String[] modifierList;

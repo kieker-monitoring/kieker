@@ -1,0 +1,10 @@
+$0=kieker.common.record.misc.KiekerMetadataRecord
+$1=kieker.common.record.flow.trace.TraceMetadata
+$2=kieker.common.record.flow.trace.operation.constructor.CallConstructorEvent
+$3=kieker.common.record.flow.trace.operation.constructor.BeforeConstructorEvent
+$4=kieker.common.record.flow.trace.operation.constructor.object.BeforeConstructorObjectInterfaceEvent
+$5=kieker.common.record.flow.trace.operation.constructor.object.BeforeConstructorObjectEvent
+$6=kieker.common.record.flow.trace.operation.constructor.object.AfterConstructorObjectEvent
+$7=kieker.common.record.flow.trace.ConstructionEvent
+$8=kieker.common.record.flow.trace.operation.constructor.AfterConstructorEvent
+$9=kieker.common.record.controlflow.OperationExecutionRecord

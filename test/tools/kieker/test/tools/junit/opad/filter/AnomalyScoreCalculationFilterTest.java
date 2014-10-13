@@ -30,7 +30,7 @@ import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.list.ListReader;
 import kieker.common.configuration.Configuration;
 import kieker.tools.opad.filter.AnomalyScoreCalculationFilter;
-import kieker.tools.opad.record.ForecastMeasurementPair;
+import kieker.tools.opad.model.ForecastMeasurementPair;
 import kieker.tools.opad.record.StorableDetectionResult;
 
 import kieker.test.common.junit.AbstractKiekerTest;

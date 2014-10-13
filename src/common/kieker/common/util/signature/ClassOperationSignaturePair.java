@@ -119,7 +119,7 @@ public class ClassOperationSignaturePair {
 	 * @param operationSignatureStr
 	 *            the signature string
 	 * @param javaConstructor
-	 *            if true the string holds an constructor signature
+	 *            if true the string holds a constructor signature
 	 * 
 	 * @return a ClassOperationSignaturePair
 	 */
@@ -161,14 +161,10 @@ public class ClassOperationSignaturePair {
 			System.arraycopy(modRetNameArr, 0, modifierList, 0, modifierList.length);
 		}
 		final int opNameIdx = name.lastIndexOf('.');
-		if (javaConstructor) {
-			fqClassname = name;
+		if (opNameIdx != -1) {
+			fqClassname = name.substring(0, opNameIdx);
 		} else {
-			if (opNameIdx != -1) {
-				fqClassname = name.substring(0, opNameIdx);
-			} else {
-				fqClassname = "";
-			}
+			fqClassname = "";
 		}
 		opName = name.substring(opNameIdx + 1);
 		return new ClassOperationSignaturePair(fqClassname, new Signature(opName, modifierList, returnType, paramTypeList));
@@ -187,10 +183,6 @@ public class ClassOperationSignaturePair {
 	 * @return An operation signature string as defined by the given parameters.
 	 */
 	public static String createOperationSignatureString(final String fqClassName, final Signature signature) {
-		if ((signature.getModifier().length != 0) && (!signature.hasReturnType())) {
-			throw new IllegalArgumentException("Modifier not list empty but return type null/empty");
-		}
-
 		final StringBuilder strBuilder = new StringBuilder();
 		// Append modifiers and return type
 		if ((signature.getReturnType() != null) && (signature.getReturnType().length() != 0)) {

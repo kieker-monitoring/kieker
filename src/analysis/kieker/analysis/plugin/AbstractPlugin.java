@@ -70,7 +70,7 @@ public abstract class AbstractPlugin extends AbstractAnalysisComponent implement
 	private volatile STATE state = STATE.READY;
 
 	/**
-	 * Each Plugin requires a constructor with a Configuration object and a IProjectContext.
+	 * Each Plugin requires a constructor with a Configuration object and an IProjectContext.
 	 * 
 	 * @param configuration
 	 *            The configuration for this component.

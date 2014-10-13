@@ -1,0 +1,14 @@
+digraph G {
+ rankdir=LR;
+"depNode_0" [label="'Entry'",shape="none"]
+
+"depNode_1" [label="<<assembly component>>\n@1:..BookstoreStarter",shape="box",style="filled",color="#000000",fillcolor="white"]
+
+"depNode_2" [label="<<assembly component>>\n@2:..Bookstore",shape="box",style="filled",color="#000000",fillcolor="gray"]
+
+"depNode_3" [label="<<assembly component>>\n@3:..BookstoreStarter$1",shape="box",style="filled",color="#000000",fillcolor="white"]
+
+depNode_0->depNode_1[label=1, style="solid", arrowhead="open", color="#000000"]
+depNode_0->depNode_3[label=1, style="solid", arrowhead="open", color="#000000"]
+depNode_3->depNode_2[label=1, style="dashed", arrowhead="open", color="#000000"]
+}

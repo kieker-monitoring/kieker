@@ -30,10 +30,19 @@ import kieker.tools.util.ToolsUtil;
 
 /**
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.10
  */
 public abstract class AbstractCommandLineTool {
+
+	public static final String CMD_OPT_NAME_HELP_LONG = "help";
+	public static final String CMD_OPT_NAME_HELP_SHORT = "h";
+
+	public static final String CMD_OPT_NAME_VERBOSE_LONG = "verbose";
+	public static final String CMD_OPT_NAME_VERBOSE_SHORT = "v";
+
+	public static final String CMD_OPT_NAME_DEBUG_LONG = "debug";
+	public static final String CMD_OPT_NAME_DEBUG_SHORT = "d";
 
 	private static final Log LOG = LogFactory.getLog(AbstractCommandLineTool.class);
 
@@ -51,12 +60,26 @@ public abstract class AbstractCommandLineTool {
 
 		final CommandLine commandLine = this.parseCommandLineArguments(options, args);
 
-		final boolean success;
+		boolean success;
 		if (null != commandLine) {
 			this.initializeLogger(commandLine);
+
+			if (commandLine.hasOption(CMD_OPT_NAME_HELP_SHORT)) {
+				this.printUsage(options);
+				System.exit(0);
+			}
+
 			// Using && instead of & should make sure that performTask is not executed when the readPropertiesFromCommandLine method returns false
-			success = this.readPropertiesFromCommandLine(commandLine) && this.performTask();
+			success = this.readPropertiesFromCommandLine(commandLine);
+
+			if (!success) {
+				LOG.info("Use the option `--" + CMD_OPT_NAME_HELP_LONG + "` for usage information");
+			} else {
+				success = this.performTask();
+			}
+
 		} else {
+			LOG.info("Use the option `--" + CMD_OPT_NAME_HELP_LONG + "` for usage information");
 			success = false;
 		}
 
@@ -76,9 +99,16 @@ public abstract class AbstractCommandLineTool {
 		}
 	}
 
+	private void printUsage(final Options options) {
+		final HelpFormatter formatter = this.getHelpFormatter();
+		formatter.printHelp(this.getClass().getName(), options, true);
+	}
+
 	private void addDefaultOptions(final Options options) {
 		options.addOption(new Option("v", "verbose", false, "verbosely prints additional information"));
 		options.addOption(new Option("d", "debug", false, "prints additional debug information"));
+		options.addOption(new Option(CMD_OPT_NAME_HELP_SHORT, CMD_OPT_NAME_HELP_LONG, false,
+				"prints the usage information for the tool, including available options"));
 	}
 
 	private CommandLine parseCommandLineArguments(final Options options, final String[] arguments) {
@@ -87,10 +117,10 @@ public abstract class AbstractCommandLineTool {
 		try {
 			return parser.parse(options, arguments);
 		} catch (final ParseException ex) {
-			LOG.error("An error occurred while parsing the command line arguments", ex);
-
-			final HelpFormatter formatter = this.getHelpFormatter();
-			formatter.printHelp(this.getClass().getName(), options, true);
+			// Note that we append ex.getMessage() to the log message on purpose to improve the
+			// logging output on the console.
+			LOG.error("An error occurred while parsing the command line arguments: " + ex.getMessage(), ex);
+			LOG.info("Use the option `--" + CMD_OPT_NAME_HELP_LONG + "` for usage information");
 
 			return null;
 		}

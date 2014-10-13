@@ -1,0 +1,7 @@
+Class 0 ; cardinality: 1; # executions: 3; representative: -6537193855215730684; max. stack depth: 2
+Class 1 ; cardinality: 2; # executions: 1; representative: -6537193855215730685; max. stack depth: 0
+Class 2 ; cardinality: 1; # executions: 1; representative: -6537193855215730686; max. stack depth: 0
+Class 3 ; cardinality: 1; # executions: 5; representative: 2944650468858527746; max. stack depth: 3
+Class 4 ; cardinality: 1; # executions: 1; representative: -6537193855215730683; max. stack depth: 0
+Class 5 ; cardinality: 1; # executions: 7; representative: 2944650468858527745; max. stack depth: 2
+Class 6 ; cardinality: 1; # executions: 9; representative: -6537193855215730688; max. stack depth: 5

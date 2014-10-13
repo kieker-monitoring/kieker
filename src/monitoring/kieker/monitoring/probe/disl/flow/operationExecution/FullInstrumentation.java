@@ -77,7 +77,7 @@ public class FullInstrumentation { // NOPMD NOCS (disl class)
 		traceId = trace.getTraceId();
 		clazz = dc.getThis().getClass().toString();
 		// measure before execution
-		CTRLINST.newMonitoringRecord(new BeforeOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(), clazz, signature));
+		CTRLINST.newMonitoringRecord(new BeforeOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature, clazz));
 	}
 
 	@AfterReturning(marker = BodyMarker.class, scope = "")
@@ -89,7 +89,7 @@ public class FullInstrumentation { // NOPMD NOCS (disl class)
 			TRACEREGISTRY.unregisterTrace();
 		}
 		// measure after successful execution
-		CTRLINST.newMonitoringRecord(new AfterOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(), clazz, signature));
+		CTRLINST.newMonitoringRecord(new AfterOperationEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature, clazz));
 	}
 
 	@AfterThrowing(marker = BodyMarker.class, scope = "")
@@ -101,7 +101,6 @@ public class FullInstrumentation { // NOPMD NOCS (disl class)
 			TRACEREGISTRY.unregisterTrace();
 		}
 		// measure after failed execution
-		CTRLINST.newMonitoringRecord(new AfterOperationFailedEvent(TIME.getTime(), traceId, trace.getNextOrderId(), clazz, signature,
-				dc.getException().toString()));
+		CTRLINST.newMonitoringRecord(new AfterOperationFailedEvent(TIME.getTime(), traceId, trace.getNextOrderId(), signature, clazz, dc.getException().toString()));
 	}
 }
