@@ -79,7 +79,6 @@ public abstract class AbstractCommandLineTool {
 			}
 
 		} else {
-			LOG.info("Use the option `--" + CMD_OPT_NAME_HELP_LONG + "` for usage information");
 			success = false;
 		}
 
