@@ -62,7 +62,7 @@
 		<!-- <echo message="${test.dir}/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/jetty.xml" /> -->
 		<patternset id="dist_src_files-nonbinmode"> <!-- NOTE that the order of includes/excludes seems to have no effect. So be careful with excludes -->
 			<include name="${build.config.dir}/**/*" />
-			<include name="${bin.dir}/logging.properties" />
+			<include name="${bin.dir}/*.properties" />
 			<include name="${bin.dir}/*.bat" />
 			<include name="${src.userguide.dir}/**/*" />
 			<exclude name="${src.userguide.dir}/**/*.sh" /> <!-- will be added in bin mode -->
