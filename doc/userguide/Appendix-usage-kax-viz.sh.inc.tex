@@ -1,6 +1,16 @@
-usage: kieker.tools.KaxViz -i <filename> [-svg <filename>]
- --i,--input <filename>
+usage: kieker.tools.KaxViz [-d] [-h] -i <filename> [-svg <filename>] [-v]
+ -d,--debug
+        prints additional debug information
+
+ -h,--help
+        prints the usage information for the tool, including available
+        options
+
+ -i,--input <filename>
         the analysis project file (.kax) loaded
 
- --svg <filename>
+ -svg <filename>
         name of svg saved on close
+
+ -v,--verbose
+        verbosely prints additional information
