@@ -5,12 +5,19 @@ http://kieker-monitoring.net) contains details on the changes.
 
 Please refer to the Kieker User Guide for details on using Kieker.
 
-* 1.10 (upcoming)
+* 1.10 (October 15, 2014)
 - New features (selection)
-  - Various samplers to collect data from the JVM	
+  - Instrumentation record language 
+  - Various samplers to collect data from the JVM       
+  - Major refinements and extensions to TSLib and OPAD 
+    (e.g., various forecasters based on R)
+  - Filter for session reconstruction
+  - Updateable filters
+  - Additional examples
+- Support for Java 1.8 (via AspectJ)
+- Bug fixes and improvements to code, performance, tests, build scripts, 
+  documentation, examples
   
-- support for Java 1.8 (via AspectJ)
-
 * 1.9 (April 16, 2014)
 - New features (selection)
   - Binary monitoring writers using Java NIO 
