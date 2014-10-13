@@ -219,6 +219,8 @@
 			<exclude name="${examples.dir}/**/.classpath*" />
 			<exclude name="${src.userguide.examples.dir}/**/lib/**/*" />
 			<include name="${example.javaee.dir}/README" />
+			<exclude name="${example.javaee.dir}/build.xml" />
+			<exclude name="${example.javaee.dir}/livedemo-source/**" />
 			<include name="${example.javaee.dir}/${license.file}" />
 			<!-- (re-)enable as soon as existent <include name="${example.javaee.dir}/kieker-testdata/**" /> -->
 			<include name="${example.javaee.jetty.dir}/**" />

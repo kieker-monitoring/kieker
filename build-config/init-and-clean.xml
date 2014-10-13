@@ -150,6 +150,7 @@
 		<path id="javaee.demo-compile-classpath">
 			<fileset dir="${example.javaee.demo.lib.dir}">
 				<include name="primefaces-*.jar" />
+				<include name="ApacheJMeter_core.jar" />
 				<include name="jsf-api-*.jar" />
 			</fileset>
 			<fileset dir="${example.javaee.jetty.lib.dir}/annotations/">

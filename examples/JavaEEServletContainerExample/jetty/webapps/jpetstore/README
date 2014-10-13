@@ -1,0 +1,12 @@
+This is a decompressed version of the MyBatis JPetStore's `jpetstore.war` file 
+obtained from https://github.com/mybatis/jpetstore-6. The following changes have 
+been made for inclusion as a Kieker example:
+
+- Kieker's Servlet filters are included in the file `WEB-INF/web.xml`.
+  The original version of the file is `WEB-INF/web.original.xml`.
+- Kieker's Spring interceptors are included as (comments) in the file `WEB-INF/applicationContext.xml`.
+  The original version of the file is `WEB-INF/applicationContext.original.xml`.
+- The log level is reduced in the file `log4j.properties`.
+  The original version of the file is `log4j.original.properties`.
+- Kieker's AspectJ monitoring probes are included in the file `WEB-INF/classes/META-INF/aop.xml`.
+- The `LICENSE` and `NOTICE`, obtained from the MyBatis JPetStore release archive were added.
