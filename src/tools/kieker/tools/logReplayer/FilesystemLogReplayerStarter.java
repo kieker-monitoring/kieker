@@ -34,9 +34,9 @@ import kieker.tools.AbstractCommandLineTool;
 
 /**
  * Command-line tool for replaying a filesystem monitoring log using the {@link FilesystemLogReplayer}.
- * 
+ *
  * @author Andre van Hoorn, Nils Christian Ehmke
- * 
+ *
  * @since 0.95a
  */
 @SuppressWarnings("static-access")
@@ -224,10 +224,6 @@ public final class FilesystemLogReplayerStarter extends AbstractCommandLineTool 
 					+ DATE_FORMAT_PATTERN_CMD_USAGE_HELP;
 			LOG.error(erorMsg, ex);
 			return false;
-		}
-
-		if (!retVal) {
-			LOG.info("Use the option `--" + CMD_OPT_NAME_HELP_LONG + "` for usage information");
 		}
 
 		// log configuration
