@@ -40,26 +40,14 @@ Under \UnixLikeSystems{}, you'll need to set the executable-bit of the start scr
 \noindent Also under \UnixLikeSystems{}, make sure that the file \file{bin/activemq} %
 includes UNIX line endings (e.g., using your favorite editor or the \textit{dos2unix} tool).
 
-\subsection{Copy Kieker and ActiveMQ Libraries}
-
-\paragraph*{Kieker Libraries}
-
-Copy the following file from Kieker's binary distribution to %
-the example's \dir{lib/} directory.
-
-\enlargethispage{0.5cm}
-\medskip
-
-\begin{compactenum}
- \item \file{\mainJarEMF} (from \dir{dist/})
-\end{compactenum}
-
-\paragraph*{ActiveMQ Libraries}
+\subsection{Copy ActiveMQ Libraries}
 
 Copy the following files from the ActiveMQ release to the %
 \dir{lib/} directory of this example:
 
 \medskip
+
+\enlargethispage{0.5cm}
 
 \begin{compactenum}
 \item \file{activemq-all-<version>.jar} (from ActiveMQ's base directory)
@@ -123,20 +111,7 @@ and decompress it to the root directory of the example.
   </queue>
 \end{lstlisting}
 
-\subsection{Copy Kieker and HornetQ Libraries}
-
-\paragraph*{Kieker Libraries}
-
-Copy the following file from Kieker's binary distribution to %
-the example's \dir{lib/} directory.
-
-\medskip
-
-\begin{compactenum}
- \item \file{\mainJarEMF} (from \dir{dist/})
-\end{compactenum}
-
-\paragraph*{HornetQ Libraries}
+\subsection{Copy HornetQ Libraries}
 
 Copy the following files from the HornetQ \dir{lib/} folder to the %
 \dir{lib/} directory of this example:
@@ -193,6 +168,8 @@ Note that the script must be called from within HornetQ's \dir{bin/} directory.
 \end{lstlisting}
 \end{enumerate}
 
+\WARNBOX{\quad\\Note that recent HornetQ versions require Java > 6.}
+
 \section{OpenJMS}\label{example:jms:openjms}
 
 \subsection{Download and Prepare OpenJMS}
@@ -200,21 +177,7 @@ Note that the script must be called from within HornetQ's \dir{bin/} directory.
 Download an OpenJMS install archive from \url{http://openjms.sourceforge.net} %
 and decompress it to the root directory of the example. Under UNIX-like systems, make sure that the executable-bit of all scripts within the \dir{bin/} directory are set.
 
-\subsection{Copy Kieker and OpenJMS Libraries}
-
-\paragraph*{Kieker Libraries}
-
-Copy the following files from Kieker's binary distribution to %
-the example's \dir{lib/} directory.
-
-\medskip
-
-\begin{compactenum}
- \item \file{\mainJarEMF} (from \dir{dist/})
- \item \file{\commonsLoggingJar} (from \dir{lib/})
-\end{compactenum}
-
-\paragraph*{OpenJMS Libraries}
+\subsection{Copy OpenJMS Libraries}
 
 Copy the following files from the OpenJMS \dir{lib/} folder to the %
 \dir{lib/} directory of this example:
