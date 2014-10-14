@@ -48,7 +48,7 @@
 	<target name="-compile-kieker.common" depends="-init" description="Compiles the sources commonly used by all Kieker components">
 		<delete dir="${build.kieker.common.dir}" />
 		<mkdir dir="${build.kieker.common.dir}" />
-		<javac destDir="${build.kieker.common.dir}" source="1.6" target="1.6" srcdir="${src.kieker.common.dir}:${src.gen.kieker.common.dir}" debug="true" classpathref="kieker.common-compile-classpath" includeAntRuntime="false">
+		<javac destDir="${build.kieker.common.dir}" source="1.6" target="1.6" srcdir="${src.kieker.common.dir}:${src.gen.kieker.common.dir}:${src.gen.factory.kieker.common.dir}" debug="true" classpathref="kieker.common-compile-classpath" includeAntRuntime="false">
 			<compilerarg value="-Xlint:all" />
 		</javac>
 	</target>
