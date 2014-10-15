@@ -6,7 +6,7 @@
 	<target name="-init-version" description="Initializes variables based on the Kieker version number">
 		<tstamp />
 		<property name="kieker.name" value="Kieker Framework" />
-		<property name="kieker.version" value="1.10-SNAPSHOT" />
+		<property name="kieker.version" value="1.11-SNAPSHOT" />
 		
         <tstamp>
 		  <format property="year" pattern="yyyy" /> <!-- e.g., 2014 -->
