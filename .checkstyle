@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <fileset-config file-format-version="1.2.0" simple-config="true" sync-formatter="false">
-	<local-check-config name="Kieker Checkstyle" location="build-config/static-analysis/cs-conf.xml" type="project" description="">
-		<additional-data name="protect-config-file" value="true"/>
-	</local-check-config>
-	<fileset name="all" enabled="true" check-config-name="Kieker Checkstyle" local="true">
-		<file-match-pattern match-pattern="." include-pattern="true"/>
-	</fileset>
-	<filter name="FilesFromPackage" enabled="true">
-		<filter-data value="examples/userguide/ch2--bookstore-application/src"/>
-		<filter-data value="examples/userguide/ch2--manual-instrumentation/src"/>
-		<filter-data value="examples/userguide/ch3-4--custom-components/src"/>
-		<filter-data value="examples/userguide/ch5--trace-monitoring-aspectj/src"/>
-		<filter-data value="examples/userguide/appendix-JMS/src"/>
-		<filter-data value="examples/userguide/appendix-Sigar/src"/>
-		<filter-data value="src-gen/analysis"/>
-	</filter>
-	<filter name="NonSrcDirs" enabled="true"/>
+  <local-check-config name="Kieker Checkstyle" location="build-config/static-analysis/cs-conf.xml" type="project" description="">
+    <additional-data name="protect-config-file" value="true"/>
+  </local-check-config>
+  <fileset name="all" enabled="true" check-config-name="Kieker Checkstyle" local="true">
+    <file-match-pattern match-pattern="." include-pattern="true"/>
+  </fileset>
+  <filter name="FilesFromPackage" enabled="true">
+    <filter-data value="src-gen/common"/>
+    <filter-data value="src-gen/analysis"/>
+    <filter-data value="src-gen/tools"/>
+    <filter-data value="examples/userguide/ch2--bookstore-application/src"/>
+    <filter-data value="examples/userguide/ch2--manual-instrumentation/src"/>
+    <filter-data value="examples/userguide/ch3-4--custom-components/src"/>
+    <filter-data value="examples/userguide/ch5--trace-monitoring-aspectj/src"/>
+    <filter-data value="examples/userguide/appendix-JMS/src"/>
+    <filter-data value="examples/userguide/appendix-Sigar/src"/>
+  </filter>
 </fileset-config>
