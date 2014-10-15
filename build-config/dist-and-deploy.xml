@@ -286,6 +286,8 @@
 						prefix="${kieker.dist.name}/${example.javaee.jpetstore.lib.dir}" />
 			<tarfileset file="${license.file}"
 						fullpath="${kieker.dist.name}/${example.javaee.jpetstore.lib.dir}/${dist.kieker.main.aspectj.jar}.LICENSE" />
+			<tarfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
+						prefix="${kieker.dist.name}/${src.example.benchmark.dir}/MooBench/lib/" />
 			<tarfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
 						prefix="${kieker.dist.name}/${src.userguide.example.manual.dir}/lib" />
 			<tarfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
@@ -405,6 +407,8 @@
 						prefix="${kieker.dist.name}/${example.javaee.jetty.dir}/webapps/jpetstore/WEB-INF/lib" />
 			<zipfileset file="${license.file}"
 						fullpath="${kieker.dist.name}/${example.javaee.jetty.dir}/webapps/jpetstore/WEB-INF/lib/${dist.kieker.main.aspectj.jar}.LICENSE" />
+			<zipfileset file="${dist.dir}/${dist.kieker.main.aspectj.jar}"
+						prefix="${kieker.dist.name}/${src.example.benchmark.dir}/MooBench/lib/" />
 			<zipfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
 						prefix="${kieker.dist.name}/${src.userguide.example.manual.dir}/lib" />
 			<zipfileset file="${dist.dir}/${dist.kieker.main.emf.jar}"
