@@ -21,7 +21,7 @@
 	<classpathentry kind="src" path="examples/userguide/appendix-JMS/src"/>
 	<classpathentry kind="src" path="examples/userguide/appendix-Sigar/src"/>
 	<classpathentry kind="src" path="examples/SPECjEnterprise2010/src"/>
-	<classpathentry kind="src" path="examples/JavaEEServletContainerExample/livedemo/src"/>
+	<classpathentry kind="src" path="examples/JavaEEServletContainerExample/livedemo-source/src"/>
 	<classpathentry kind="src" path="examples/monitoring/sampler-sigar/src"/>
 	<classpathentry kind="src" path="examples/monitoring/sampler-jvm/src"/>
 	<classpathentry kind="src" path="examples/monitoring/probe-aspectj/src"/>
@@ -88,8 +88,8 @@
 	<classpathentry kind="lib" path="lib/sigar/sigar-1.6.4.jar"/>
 	<classpathentry kind="lib" path="lib/static-analysis/checkstyle-5.6/lib/checkstyle-all.jar"/>
 	<classpathentry kind="lib" path="lib/kahadb-5.7.0.jar"/>
-	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/livedemo/lib/ApacheJMeter_core.jar"/>
-	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/livedemo/lib/jsf-api-2.1.20.jar"/>
-	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/livedemo/lib/primefaces-3.4.2.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/livedemo-source/lib/ApacheJMeter_core.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/livedemo-source/lib/jsf-api-2.1.20.jar"/>
+	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/livedemo-source/lib/primefaces-3.4.2.jar"/>
 	<classpathentry kind="output" path="build-eclipse"/>
 </classpath>
