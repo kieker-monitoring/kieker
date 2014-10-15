@@ -17,5 +17,15 @@
     <filter-data value="examples/userguide/ch5--trace-monitoring-aspectj/src"/>
     <filter-data value="examples/userguide/appendix-JMS/src"/>
     <filter-data value="examples/userguide/appendix-Sigar/src"/>
+    <filter-data value="examples/JavaEEServletContainerExample/src"/>
+    <filter-data value="examples/monitoring/sampler-sigar/src"/>
+    <filter-data value="examples/monitoring/sampler-jvm/src"/>
+    <filter-data value="examples/monitoring/probe-aspectj/src"/>
+    <filter-data value="examples/monitoring/probe-spring/src"/>
+    <filter-data value="examples/monitoring/adaptive-monitoring/src"/>
+    <filter-data value="examples/monitoring/custom-timesource/src"/>
+    <filter-data value="examples/analysis/opad-anomaly-detection/src"/>
+    <filter-data value="examples/analysis/kax-files/src"/>
+    <filter-data value="examples/monitoring/probe-manual/src"/>
   </filter>
 </fileset-config>
