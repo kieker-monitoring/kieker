@@ -30,7 +30,7 @@
 
 	<target name="run-analysis" depends="-check-files, -build-jar-analysis">
 		<java fork="true" classname="${main-class-analysis}">
-			<arg line="${analysis.directory}" />
+			<arg value="${analysis.directory}" />
 			<classpath>
 				<path refid="classpath" />
 				<path location="${jar.file.analysis}" />

@@ -70,7 +70,7 @@
 	
 	<target name="run-analysis-activemq" depends="-check-files, -check-files-activemq, -build-jar-analysis">
 		<java fork="true" classname="${main-class-analysis}">
-			<arg line="${connection-factory.activemq} ${provider-url.activemq} ${queue.activemq}" />
+			<arg value="${connection-factory.activemq} ${provider-url.activemq} ${queue.activemq}" />
 			<classpath>
 				<path refid="classpath" />
 				<path location="${jar.file.analysis}" />
@@ -97,7 +97,7 @@
 	
 	<target name="run-analysis-openjms" depends="-check-files, -check-files-openjms, -build-jar-analysis">
 		<java fork="true" classname="${main-class-analysis}">
-			<arg line="${connection-factory.openjms} ${provider-url.openjms} ${queue.openjms}" />
+			<arg value="${connection-factory.openjms} ${provider-url.openjms} ${queue.openjms}" />
 			<classpath>
 				<path refid="classpath" />
 				<path location="${jar.file.analysis}" />
@@ -125,7 +125,7 @@
 	
 	<target name="run-analysis-hornetq" depends="-check-files, -check-files-hornetq, -build-jar-analysis">
 		<java fork="true" classname="${main-class-analysis}">
-			<arg line="${connection-factory.hornetq} ${provider-url.hornetq} ${queue.hornetq}" />
+			<arg value="${connection-factory.hornetq} ${provider-url.hornetq} ${queue.hornetq}" />
 			<classpath>
 				<path refid="classpath" />
 				<path location="${jar.file.analysis}" />

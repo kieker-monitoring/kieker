@@ -24,7 +24,7 @@
 				<path refid="classpath" />
 				<path location="${jar.file}" />
 			</classpath>
-            <arg line="${num.requests}" />
+            <arg value="${num.requests}" />
 			<jvmarg value="-javaagent:${lib.dir}/${jar.file.kieker}" />
 			<jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true" />
 			<jvmarg value="-Daj.weaving.verbose=true" />
@@ -37,7 +37,7 @@
 				<path refid="classpath" />
 				<path location="${jar.file}" />
 			</classpath>
-            <arg line="${num.requests}" />
+            <arg value="${num.requests}" />
 			<jvmarg value="-javaagent:${lib.dir}/${jar.file.kieker}" />
 			<jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true" />
 			<jvmarg value="-Daj.weaving.verbose=true" />
@@ -48,7 +48,7 @@
 
 	<target name="run-hostname-rewriter" depends="-check-files, -build-jar">
 		<java fork="true" classname="${main-class-hostname-rewriter}">
-			<arg line="${analysis.directory}" />
+			<arg value="${analysis.directory}" />
 			<classpath>
 				<path refid="classpath" />
 				<path location="${jar.file}" />
