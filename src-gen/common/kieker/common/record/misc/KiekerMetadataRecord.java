@@ -58,7 +58,7 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 	public static final String NO_HOSTNAME = "<no-hostname>";
 	public static final String NO_TIMESOURCE = "<no-timesource>";
 	public static final String NO_TIMEUNIT = "NANOSECONDS";
-	public static final String VERSION = "1.9";
+	public static final String VERSION = "1.10";
 	public static final String CONTROLLER_NAME = "<no-controller-name>";
 	public static final String HOSTNAME = "<no-hostname>";
 	public static final int EXPERIMENT_ID = 0;
@@ -97,7 +97,7 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 	 *            numberOfRecords
 	 */
 	public KiekerMetadataRecord(final String version, final String controllerName, final String hostname, final int experimentId, final boolean debugMode, final long timeOffset, final String timeUnit, final long numberOfRecords) {
-		this.version = version == null?"1.9":version;
+		this.version = version == null?"1.10":version;
 		this.controllerName = controllerName == null?"<no-controller-name>":controllerName;
 		this.hostname = hostname == null?"<no-hostname>":hostname;
 		this.experimentId = experimentId;
