@@ -23,7 +23,7 @@ import org.junit.Assert;
  *
  * @since 1.10
  */
-public final class AssertHelper {
+public class AssertHelper {
 
 	private AssertHelper() {
 		// utility class

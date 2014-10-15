@@ -27,9 +27,9 @@ import kieker.common.record.factory.old.RecordFactoryWrapper;
  *
  * @since 1.11
  */
-public final class CachedRecordFactoryCatalog {
+public class CachedRecordFactoryCatalog {
 
-	private static final CachedRecordFactoryCatalog INSTANCE = new CachedRecordFactoryCatalog(new RecordFactoryResolver());
+	private static CachedRecordFactoryCatalog INSTANCE = new CachedRecordFactoryCatalog(new RecordFactoryResolver());
 
 	/**
 	 * Returns the only instance of this class.
