@@ -62,7 +62,11 @@ public final class CachedRecordFactoryCatalog {
 			if (null == recordFactory) { // if a corresponding factory could not be found
 				recordFactory = new RecordFactoryWrapper(recordClassName);
 			}
-			this.cachedRecordFactories.putIfAbsent(recordClassName, recordFactory);
+			final IRecordFactory<? extends IMonitoringRecord> existingFactory = this.cachedRecordFactories.putIfAbsent(recordClassName, recordFactory);
+			if (existingFactory != null) {
+				recordFactory = existingFactory;
+			}
+
 		}
 		return recordFactory;
 	}
