@@ -8,7 +8,6 @@
 	<classpathentry kind="src" path="src/monitoring"/>
 	<classpathentry kind="src" path="src/tools"/>
 	<classpathentry kind="src" path="src-gen/common"/>
-	<classpathentry kind="src" path="src-gen/java-factory"/>
 	<classpathentry kind="src" path="src-gen/analysis"/>
 	<classpathentry kind="src" path="src-gen/tools"/>
 	<classpathentry kind="src" path="test/common"/>
