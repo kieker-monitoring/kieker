@@ -43,9 +43,9 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * This test is for the class {@link RealtimeRecordDelayFilter}.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.6
  */
 public abstract class AbstractTestRealtimeRecordDelayFilter extends AbstractKiekerTest {
@@ -78,12 +78,12 @@ public abstract class AbstractTestRealtimeRecordDelayFilter extends AbstractKiek
 	private ListCollectionFilter<Long> sinkThroughput;
 
 	/**
-	 * 
+	 *
 	 * @param eventTimeOffsetsSeconds
 	 *            points in time for which to generate an event (relative to start; in seconds)
 	 * @param expectedThroughputListOffsetSecondsInterval5Secs
 	 *            expected number of events per intervals (of length 5 seconds; relative to start time; in seconds)
-	 * @param acceleration
+	 * @param accelerationFactor
 	 *            factor to be passed to the {@link RealtimeRecordDelayFilter}
 	 */
 	public AbstractTestRealtimeRecordDelayFilter(final long[] eventTimeOffsetsSeconds, final long[] expectedThroughputListOffsetSecondsInterval5Secs,

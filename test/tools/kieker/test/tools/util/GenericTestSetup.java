@@ -25,10 +25,10 @@ import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 /**
  * Generic test setups encapsulate a configured analysis controller (i.e. with a fully configured pipes-and-filters structure)
  * together with a list collection filter which collects the produced data.
- * 
+ *
  * @author Holger Knoche
  * @since 1.10
- * 
+ *
  * @param <T>
  *            The type of the result data
  * @param <P>
@@ -41,7 +41,7 @@ public class GenericTestSetup<T, P extends ListCollectionFilter<T>> {
 
 	/**
 	 * Creates a new test setup using the given data.
-	 * 
+	 *
 	 * @param analysisController
 	 *            The analysis controller to use for this setup
 	 * @param resultCollectionPlugin
@@ -54,7 +54,7 @@ public class GenericTestSetup<T, P extends ListCollectionFilter<T>> {
 
 	/**
 	 * Returns the analysis controller for this setup.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public AnalysisController getAnalysisController() {
@@ -62,8 +62,8 @@ public class GenericTestSetup<T, P extends ListCollectionFilter<T>> {
 	}
 
 	/**
-	 * Returns the result collection plugin for this setup-
-	 * 
+	 * Returns the result collection plugin for this setup.
+	 *
 	 * @return See above
 	 */
 	public P getResultCollectionPlugin() {
@@ -72,7 +72,7 @@ public class GenericTestSetup<T, P extends ListCollectionFilter<T>> {
 
 	/**
 	 * Returns the result produced by this setup. Note that this method does not invoke {@link #run()} automatically.
-	 * 
+	 *
 	 * @return See above
 	 */
 	public List<T> getResult() {
@@ -81,7 +81,7 @@ public class GenericTestSetup<T, P extends ListCollectionFilter<T>> {
 
 	/**
 	 * Runs the setup by starting the enclosed analysis controller.
-	 * 
+	 *
 	 * @throws AnalysisConfigurationException
 	 *             If an invalid configuration is detected
 	 */

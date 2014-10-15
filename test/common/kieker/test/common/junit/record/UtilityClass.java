@@ -37,6 +37,13 @@ public final class UtilityClass {
 
 	/**
 	 * Checks if two events refer to the same operation of the same class.
+	 *
+	 * @param left
+	 *            The first record.
+	 * @param right
+	 *            The second record
+	 *
+	 * @return true if and only if the given records refer to the same operation of the same class.
 	 */
 	public static boolean refersToSameOperationAs(final IOperationRecord left, final IOperationRecord right) {
 		return left.getOperationSignature().equals(right.getOperationSignature())
@@ -45,6 +52,13 @@ public final class UtilityClass {
 
 	/**
 	 * Check if a callee signature references another signature of another event.
+	 * 
+	 * @param left
+	 *            The first record.
+	 * @param right
+	 *            The second record
+	 *
+	 * @return true if and only if the content of the first record references the content of the second record.
 	 */
 	public static boolean callsReferencedOperationOf(final CallOperationEvent left, final CallOperationEvent right) {
 		return left.getCalleeOperationSignature().equals(right.getOperationSignature())

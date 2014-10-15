@@ -24,9 +24,9 @@ import kieker.monitoring.core.sampler.ISampler;
 
 /**
  * This is an abstract base for all sampler using the MXBean interface to access information from the JVM.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.10
  */
 public abstract class AbstractMXBeanSampler implements ISampler {
@@ -42,7 +42,10 @@ public abstract class AbstractMXBeanSampler implements ISampler {
 
 	/**
 	 * Perform one measurement with potential multiple records.
-	 * 
+	 *
+	 * @param monitoringController
+	 *            The monitoring controller for this probe.
+	 *
 	 * @throws Exception
 	 *             depending on the concrete sampler different exceptions can be raised
 	 */
@@ -65,7 +68,7 @@ public abstract class AbstractMXBeanSampler implements ISampler {
 
 	/**
 	 * Abstract method used as interface to realize concrete samplers.
-	 * 
+	 *
 	 * @param timestamp
 	 *            the current time.
 	 * @param hostname
@@ -74,7 +77,7 @@ public abstract class AbstractMXBeanSampler implements ISampler {
 	 *            name of the vm
 	 * @param monitoringCtr
 	 *            monitoring controller used in the measurement
-	 * 
+	 *
 	 * @return returns an array of records containing the measurement
 	 */
 	protected abstract IMonitoringRecord[] createNewMonitoringRecords(final long timestamp, final String hostname, final String vmName,

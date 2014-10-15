@@ -40,9 +40,9 @@ import kieker.test.tools.util.ExecutionFactory;
 
 /**
  * A test for the {@link TraceReconstructionFilter}.
- * 
+ *
  * @author Andre van Hoorn, Nils Christian Ehmke
- * 
+ *
  * @since 1.2
  */
 public class TestTraceReconstructionFilter extends AbstractKiekerTest {
@@ -78,7 +78,7 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 
 	/**
 	 * Generates an execution trace representation of the "well-known" bookstore trace.
-	 * 
+	 *
 	 * @return
 	 * @throws InvalidTraceException
 	 *             If the internally assembled execution trace is somehow invalid.
@@ -99,7 +99,7 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 
 	/**
 	 * Tests whether a valid trace is correctly reconstructed and passed to the right output port.
-	 * 
+	 *
 	 * @throws InvalidTraceException
 	 * @throws AnalysisConfigurationException
 	 *             If the internally assembled analysis configuration is somehow invalid.
@@ -174,15 +174,15 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 
 	/**
 	 * Creates a broken execution trace version of the "well-known" Bookstore trace.
-	 * 
+	 *
 	 * The trace is broken in that the eoi/ess values of an execution with eoi/ess [1,1] are replaced by the eoi/ess values [1,3]. Since ess values must only
 	 * increment/decrement by 1, this test must lead to an exception.
-	 * 
+	 *
 	 * @param executionFactory
 	 *            The factory to be used to create the executions.
-	 * 
+	 *
 	 * @return The execution trace in question.
-	 * 
+	 *
 	 * @throws InvalidTraceException
 	 *             If the traceIds of the execution trace and the executions are incompatible.
 	 */
@@ -204,8 +204,9 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 
 	/**
 	 * Tests whether a broken trace is correctly detected and passed to the right output port.
-	 * 
+	 *
 	 * @throws InvalidTraceException
+	 *             If the trace to reconstruct is somehow invalid.
 	 * @throws AnalysisConfigurationException
 	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
@@ -277,9 +278,10 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 	/**
 	 * Generates an incomplete execution trace representation of the "well-known" bookstore trace. The outer bookstore.searchBook(..) execution with eoi/ess 0/0 is
 	 * missing.
-	 * 
+	 *
 	 * @return
 	 * @throws InvalidTraceException
+	 *             If the trace to reconstruct is somehow invalid.
 	 */
 	private ExecutionTrace genBookstoreTraceWithoutEntryExecution() throws InvalidTraceException {
 		// Create an Execution Trace and add Executions in arbitrary order
@@ -294,8 +296,9 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 
 	/**
 	 * Tests the timeout of pending (incomplete) traces. A corresponding test for a valid trace is not required.
-	 * 
+	 *
 	 * @throws InvalidTraceException
+	 *             If the trace to reconstruct is somehow invalid.
 	 * @throws AnalysisConfigurationException
 	 *             If the internally assembled analysis configuration is somehow invalid.
 	 * @throws IllegalStateException
@@ -309,7 +312,7 @@ public class TestTraceReconstructionFilter extends AbstractKiekerTest {
 
 		/**
 		 * We will now create a trace that contains an execution which would make the incomplete trace complete.
-		 * 
+		 *
 		 * But: Then, it would exceed the maximum trace duration.
 		 */
 		final ExecutionTrace completingExecutionTrace = new ExecutionTrace(incompleteExecutionTrace.getTraceId(), incompleteExecutionTrace.getSessionId());

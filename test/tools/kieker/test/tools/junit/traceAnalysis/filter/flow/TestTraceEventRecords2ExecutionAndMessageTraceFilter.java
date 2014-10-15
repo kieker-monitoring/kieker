@@ -39,7 +39,7 @@ import kieker.test.tools.util.BookstoreExecutionFactory;
 
 /**
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.5
  */
 public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends AbstractKiekerTest {
@@ -132,9 +132,9 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 	/**
 	 * Generates an execution trace representation of the "well-known" bookstore
 	 * trace.
-	 * 
+	 *
 	 * Borrowed from {@link kieker.test.tools.junit.traceAnalysis.filter.TestTraceReconstructionFilter}.
-	 * 
+	 *
 	 * @return
 	 * @throws InvalidTraceException
 	 *             If the internally assembled execution trace is somehow invalid.
@@ -182,7 +182,7 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 
 	@Test
 	public void testValidTraceWithBeforeAndAfterOperationEventsAndAdditionalCallEvents() throws InvalidTraceException, IllegalStateException, // NOPMD
-			AnalysisConfigurationException {
+	AnalysisConfigurationException {
 		// Create an EventRecordTrace, containing only Before- and AfterOperation events.
 		final TraceEventRecords traceEvents =
 				BookstoreEventRecordFactory.validSyncTraceAdditionalCallEvents(this.exec0_0__bookstore_searchBook.getTin(),
@@ -195,7 +195,10 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 
 	/**
 	 * Borrowed from {@link kieker.test.tools.junit.traceAnalysis.filter.TestTraceReconstructionFilter}.
-	 * 
+	 *
+	 * @throws InvalidTraceException
+	 *             If the trace to reconstruct is somehow invalid.
+	 *
 	 * @return An execution trace from the Bookstore example.
 	 */
 	public ExecutionTrace genValidBookstoreTraceNoExitGetOrders() throws InvalidTraceException {
@@ -226,7 +229,7 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 
 	@Test
 	public void testValidTraceWithBeforeAndAfterOperationEventsAndAdditionalCallEventsAndGap() throws InvalidTraceException, IllegalStateException, // NOPMD
-			AnalysisConfigurationException {
+	AnalysisConfigurationException {
 		// Create an EventRecordTrace, containing only Before- and AfterOperation events.
 		final TraceEventRecords traceEvents =
 				BookstoreEventRecordFactory.validSyncTraceAdditionalCallEventsGap(this.exec0_0__bookstore_searchBook.getTin(),
@@ -265,9 +268,9 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 	 * Generates an a modified version of the the "well-known" bookstore
 	 * trace, which included only the execution of <code>Bookstore.searchBook(..)</code> and the
 	 * nested execution of <code>Catalog.getBook(..)</code>.
-	 * 
+	 *
 	 * Borrowed from {@link kieker.test.tools.junit.traceAnalysis.filter.TestTraceReconstructionFilter}.
-	 * 
+	 *
 	 * @return
 	 * @throws InvalidTraceException
 	 *             If the internally assembled execution trace is somehow invalid.
@@ -317,9 +320,9 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 	/**
 	 * Generates an a modified version of the the "well-known" bookstore trace, which includes only the execution of <code>Bookstore.searchBook(..)</code> and the
 	 * nested (i.e., called both by <code>Bookstore.searchBook(..)</code>) executions of <code>Catalog.getBook(..)</code> and <code>CRM.getOrder(..)</code>.
-	 * 
+	 *
 	 * Borrowed from {@link kieker.test.tools.junit.traceAnalysis.filter.TestTraceReconstructionFilter}.
-	 * 
+	 *
 	 * @return
 	 * @throws InvalidTraceException
 	 *             If the internally assembled execution trace is somehow invalid.
@@ -378,9 +381,9 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 	/**
 	 * Generates an a modified version of the the "well-known" bookstore trace, which includes the execution of <code>Bookstore.searchBook(..)</code> with a nested
 	 * execution of <code>CRM.getOrder(..)</code> which again wraps the nested execution of <code>Catalog.getBook(..)</code>.
-	 * 
+	 *
 	 * Borrowed from {@link kieker.test.tools.junit.traceAnalysis.filter.TestTraceReconstructionFilter}.
-	 * 
+	 *
 	 * @return
 	 * @throws InvalidTraceException
 	 *             If the internally assembled execution trace is somehow invalid.
@@ -440,11 +443,11 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 	}
 
 	/**
-	 * Generates an a modified version of the the "well-known" bookstore trace, which includes the execution of <code>Bookstore.searchBook(..)<code> 
+	 * Generates an a modified version of the the "well-known" bookstore trace, which includes the execution of <code>Bookstore.searchBook(..)<code>
 	 * with a nested execution of <code>CRM.getOrder(..)</code> which again wraps the nested execution of <code>Catalog.getBook(..)</code>.
-	 * 
+	 *
 	 * Borrowed from {@link kieker.test.tools.junit.traceAnalysis.filter.TestTraceReconstructionFilter}.
-	 * 
+	 *
 	 * @return
 	 * @throws InvalidTraceException
 	 */
@@ -495,7 +498,7 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 	}
 
 	/**
-	 * 
+	 *
 	 * @param traceEvents
 	 * @param expectedExecutionTrace
 	 * @throws InvalidTraceException
@@ -503,10 +506,10 @@ public class TestTraceEventRecords2ExecutionAndMessageTraceFilter extends Abstra
 	 *             If the internally assembled analysis is in an invalid state.
 	 * @throws AnalysisConfigurationException
 	 *             If the internally assembled analysis configuration is somehow invalid.
-	 * 
+	 *
 	 */
 	private void checkTrace(final TraceEventRecords traceEvents, final ExecutionTrace expectedExecutionTrace) throws InvalidTraceException,
-			IllegalStateException, AnalysisConfigurationException {
+	IllegalStateException, AnalysisConfigurationException {
 		// Create the SimpleListReader
 		final Configuration readerConfiguration = new Configuration();
 		final ListReader<TraceEventRecords> reader = new ListReader<TraceEventRecords>(readerConfiguration, this.analysisController);

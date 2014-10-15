@@ -22,9 +22,9 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @author Andre van Hoorn, Tobias Rudolph, Andreas Eberlein
- * 
+ *
  * @since 1.10
- * 
+ *
  * @param <T>
  *            The type of the time series.
  */
@@ -111,7 +111,7 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 	}
 
 	/**
-	 * Constructor using the timeunit as unit for internal usage and deltatime time unit
+	 * Constructor using the timeunit as unit for internal usage and deltatime time unit.
 	 */
 	public TimeSeries(final long startTime, final TimeUnit timeUnit, final long deltaTime, final int frequency,
 			final int capacity) {
@@ -144,7 +144,7 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 
 	/**
 	 * Returns the step size between each item in the timeseries. The {@link TimeUnit} of the stepSize is equal to the {@link #timeSeriesTimeUnit}.
-	 * 
+	 *
 	 * @return step size
 	 */
 	public long getStepSize() {
@@ -154,7 +154,7 @@ public class TimeSeries<T> implements ITimeSeries<T> {
 	/**
 	 * @param value
 	 *            value which should append to timeseries
-	 * 
+	 *
 	 * @return tspoint
 	 */
 	@Override

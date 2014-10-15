@@ -30,7 +30,7 @@ import kieker.tools.tslib.forecast.naive.NaiveForecaster;
 import kieker.tools.tslib.forecast.ses.SESRForecaster;
 
 /**
- * 
+ *
  * @author Andre van Hoorn, Tillmann Carlos Bielefeld, Tobias Rudolph, Andreas Eberlein
  * @since 1.10
  */
@@ -64,14 +64,16 @@ public enum ForecastMethod {
 	SES;
 
 	/**
-	 * 
+	 *
 	 * @param history
 	 *            Timeseries which will be forecasted
+	 *
 	 * @return the forecaster for this algorithm
+	 *
 	 * @throws IllegalArgumentException
 	 *             if forecaster not instantiable or not defined.
 	 */
-	public IForecaster<Double> getForecaster(final ITimeSeries<Double> history) {
+	public IForecaster<Double> getForecaster(final ITimeSeries<Double> history) throws IllegalArgumentException {
 		switch (this) {
 		case ARIMA:
 			return new ARIMAForecaster(history);
@@ -97,16 +99,18 @@ public enum ForecastMethod {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param history
 	 *            Timeseries which will be forecasted
 	 * @param alpha
+	 *
 	 *            confidence level
 	 * @return the forecaster for this algorithm
+	 *
 	 * @throws IllegalArgumentException
 	 *             if forecaster not instantiable or not defined.
 	 */
-	public IForecaster<Double> getForecaster(final ITimeSeries<Double> history, final int alpha) {
+	public IForecaster<Double> getForecaster(final ITimeSeries<Double> history, final int alpha) throws IllegalArgumentException {
 		switch (this) {
 		case ARIMA:
 			return new ARIMAForecaster(history, alpha);
@@ -138,7 +142,7 @@ public enum ForecastMethod {
 	// Was extracted from ClassificationUtility in WCF/TBATS as it is not yet integrated:
 	/**
 	 * Returns a new time series object shortened to the last x values.
-	 * 
+	 *
 	 * @param ts
 	 *            timeseries
 	 * @param x
