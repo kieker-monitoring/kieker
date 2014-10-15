@@ -61,6 +61,11 @@ public final class LoggingTimestampConverterTool extends AbstractCommandLineTool
 	@Override
 	protected boolean readPropertiesFromCommandLine(final CommandLine commandLine) {
 		final String[] timestampsStr = commandLine.getOptionValues(FLAG_TIMESTAMPS_PARAMETER);
+		if ((timestampsStr == null) || (timestampsStr.length == 0)) {
+			LOG.error("No timestamp passed as argument.");
+			return false;
+		}
+
 		this.timestampsLong = new long[timestampsStr.length];
 
 		for (int curIdx = 0; curIdx < timestampsStr.length; curIdx++) {
