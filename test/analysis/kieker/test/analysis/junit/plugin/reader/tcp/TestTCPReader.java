@@ -44,14 +44,13 @@ import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.writer.tcp.TCPWriter;
 
 import kieker.test.analysis.util.AssertHelper;
-import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Christian Wulf
  *
  * @since 1.10
  */
-public class TestTCPReader extends AbstractKiekerTest {
+public class TestTCPReader {
 
 	static final Log LOG = LogFactory.getLog(TestTCPReader.class);
 
