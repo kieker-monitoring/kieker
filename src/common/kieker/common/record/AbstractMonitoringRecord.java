@@ -50,9 +50,9 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	private static final ConcurrentMap<String, Class<? extends IMonitoringRecord>> CACHED_KIEKERRECORD_CLASSES = new ConcurrentHashMap<String, Class<? extends IMonitoringRecord>>(); // NOCS
 	private static final ConcurrentMap<Class<? extends IMonitoringRecord>, Class<?>[]> CACHED_KIEKERRECORD_FIELDTYPES = new ConcurrentHashMap<Class<? extends IMonitoringRecord>, Class<?>[]>(); // NOCS
 
-	private static final CachedClassForNameResolver<IMonitoringRecord> CLASS_FOR_NAME_RESOLVER = new CachedClassForNameResolver<IMonitoringRecord>(
+	private final static CachedClassForNameResolver<IMonitoringRecord> CLASS_FOR_NAME_RESOLVER = new CachedClassForNameResolver<IMonitoringRecord>(
 			new ClassForNameResolver<IMonitoringRecord>(IMonitoringRecord.class));
-	private static final CachedReflectionRecordFactory CACHED_REFLECTION_RECORD_FACTORY = new CachedReflectionRecordFactory(CLASS_FOR_NAME_RESOLVER);
+	private final static CachedReflectionRecordFactory CACHED_REFLECTION_RECORD_FACTORY = new CachedReflectionRecordFactory(CLASS_FOR_NAME_RESOLVER);
 
 	private volatile long loggingTimestamp = -1;
 
