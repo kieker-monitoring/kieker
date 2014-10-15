@@ -416,10 +416,4 @@
 		<Field name="TYPES" />
 		<Bug pattern="MS_PKGPROTECT, MS_MUTABLE_ARRAY" />
 	</Match>
-	
-	<Match>
-		<Class name="kieker.common.record.factory.old.CachedClassForNameResolver" />
-		<Bug pattern="RV_RETURN_VALUE_OF_PUTIFABSENT_IGNORED" />
-	</Match>
-
 </FindBugsFilter>

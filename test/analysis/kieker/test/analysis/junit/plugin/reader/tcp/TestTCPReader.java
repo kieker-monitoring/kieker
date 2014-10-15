@@ -19,7 +19,6 @@ package kieker.test.analysis.junit.plugin.reader.tcp;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 import org.junit.Assert;
@@ -27,7 +26,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import kieker.analysis.AnalysisController;
-import kieker.analysis.AnalysisControllerThread;
 import kieker.analysis.IAnalysisController;
 import kieker.analysis.exception.AnalysisConfigurationException;
 import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
@@ -63,17 +61,7 @@ public class TestTCPReader {
 	@Before
 	public void before() throws FileNotFoundException, IOException {
 		this.monitoringConfiguration = new Configuration();
-
-		InputStream inputStream = null;
-		try {
-			inputStream = new FileInputStream(this.CURRENT_TEST_DIR + "/kieker.monitoring.properties");
-			this.monitoringConfiguration.load(inputStream);
-		} finally {
-			if (inputStream != null) {
-				inputStream.close();
-			}
-		}
-
+		this.monitoringConfiguration.load(new FileInputStream(this.CURRENT_TEST_DIR + "/kieker.monitoring.properties"));
 		this.monitoringConfiguration.setProperty(ConfigurationFactory.AUTO_SET_LOGGINGTSTAMP, "false");
 
 		this.port1 = this.monitoringConfiguration.getPathProperty(TCPWriter.CONFIG_PORT1);
@@ -92,13 +80,24 @@ public class TestTCPReader {
 
 		analysisController.connect(tcpReader, TCPReader.OUTPUT_PORT_NAME_RECORDS, collectionFilter, ListCollectionFilter.INPUT_PORT_NAME);
 
-		final AnalysisControllerThread analysisControllerThread = new AnalysisControllerThread(analysisController);
-		analysisControllerThread.start();
+		final Thread thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					analysisController.run();
+				} catch (final AnalysisConfigurationException e) {
+					LOG.error("An exception occurred", e);
+				}
+
+			}
+		});
+
+		thread.start();
 
 		final List<IMonitoringRecord> records = this.loadRecordsFromFilesystem();
 		this.writeViaTcp(records);
 
-		analysisControllerThread.join();
+		thread.join();
 
 		Assert.assertEquals(AnalysisController.STATE.TERMINATED, analysisController.getState());
 		final long EXPECTED_NUM_RECORDS = 10;
