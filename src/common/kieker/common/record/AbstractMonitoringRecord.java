@@ -50,11 +50,11 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	private static final ConcurrentMap<String, Class<? extends IMonitoringRecord>> CACHED_KIEKERRECORD_CLASSES = new ConcurrentHashMap<String, Class<? extends IMonitoringRecord>>(); // NOCS
 	private static final ConcurrentMap<Class<? extends IMonitoringRecord>, Class<?>[]> CACHED_KIEKERRECORD_FIELDTYPES = new ConcurrentHashMap<Class<? extends IMonitoringRecord>, Class<?>[]>(); // NOCS
 
-	private volatile long loggingTimestamp = -1;
-
-	private final static CachedClassForNameResolver<IMonitoringRecord> classForNameResolver = new CachedClassForNameResolver<IMonitoringRecord>(
+	private final static CachedClassForNameResolver<IMonitoringRecord> CLASS_FOR_NAME_RESOLVER = new CachedClassForNameResolver<IMonitoringRecord>(
 			new ClassForNameResolver<IMonitoringRecord>(IMonitoringRecord.class));
-	private final static CachedReflectionRecordFactory cachedReflectionRecordFactory = new CachedReflectionRecordFactory(classForNameResolver);
+	private final static CachedReflectionRecordFactory CACHED_REFLECTION_RECORD_FACTORY = new CachedReflectionRecordFactory(CLASS_FOR_NAME_RESOLVER);
+
+	private volatile long loggingTimestamp = -1;
 
 	static {
 		CACHED_KIEKERRECORD_CLASSES.put("kieker.tpmon.monitoringRecord.executions.KiekerExecutionRecord",
@@ -304,7 +304,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	@Deprecated
 	public static final Class<? extends IMonitoringRecord> classForName(final String classname) throws MonitoringRecordException {
 		try {
-			return classForNameResolver.classForName(classname);
+			return CLASS_FOR_NAME_RESOLVER.classForName(classname);
 		} catch (final ClassNotFoundException e) {
 			throw new MonitoringRecordException("", e);
 		} catch (final ClassCastException e) {
@@ -366,12 +366,12 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	 */
 	@Deprecated
 	public static final IMonitoringRecord createFromArray(final Class<? extends IMonitoringRecord> clazz, final Object[] values) throws MonitoringRecordException {
-		return cachedReflectionRecordFactory.create(clazz, values);
+		return CACHED_REFLECTION_RECORD_FACTORY.create(clazz, values);
 	}
 
 	@Deprecated
 	public static final IMonitoringRecord createFromArray(final String recordClassName, final Object[] values) throws MonitoringRecordException {
-		return cachedReflectionRecordFactory.create(recordClassName, values);
+		return CACHED_REFLECTION_RECORD_FACTORY.create(recordClassName, values);
 	}
 
 	@Deprecated
@@ -394,7 +394,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	@Deprecated
 	public static final IMonitoringRecord createFromByteBuffer(final String recordClassName, final ByteBuffer buffer, final IRegistry<String> stringRegistry)
 			throws MonitoringRecordException {
-		cachedReflectionRecordFactory.setStringRegistry(stringRegistry);
-		return cachedReflectionRecordFactory.create(recordClassName, buffer);
+		CACHED_REFLECTION_RECORD_FACTORY.setStringRegistry(stringRegistry);
+		return CACHED_REFLECTION_RECORD_FACTORY.create(recordClassName, buffer);
 	}
 }

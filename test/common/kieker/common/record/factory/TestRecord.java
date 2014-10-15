@@ -49,7 +49,7 @@ public class TestRecord implements IMonitoringRecord {
 
 	@Override
 	public Object[] toArray() {
-		return null;
+		return new Object[0];
 	}
 
 	@Override
@@ -63,7 +63,7 @@ public class TestRecord implements IMonitoringRecord {
 
 	@Override
 	public Class<?>[] getValueTypes() {
-		return null;
+		return new Class<?>[0];
 	}
 
 	@Override
