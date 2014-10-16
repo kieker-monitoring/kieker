@@ -467,13 +467,13 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		}
 	}
 
-	public static IMonitoringRecord createFromByteBuffer(final String recordClassName, final ByteBuffer buffer, final IRegistry<String> stringRegistry)
+	public static final IMonitoringRecord createFromByteBuffer(final String recordClassName, final ByteBuffer buffer, final IRegistry<String> stringRegistry)
 			throws BufferUnderflowException, MonitoringRecordException {
 		final int clazzid = stringRegistry.get(recordClassName);
 		return AbstractMonitoringRecord.createFromByteBuffer(clazzid, buffer, stringRegistry);
 	}
 
-	public static IMonitoringRecord createFromArray(final String recordClassName, final Object[] values) throws MonitoringRecordException {
+	public static final IMonitoringRecord createFromArray(final String recordClassName, final Object[] values) throws MonitoringRecordException {
 		final Class<? extends IMonitoringRecord> clazz = AbstractMonitoringRecord.classForName(recordClassName);
 		return AbstractMonitoringRecord.createFromArray(clazz, values);
 	}
