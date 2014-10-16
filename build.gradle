@@ -41,7 +41,7 @@ subprojects {
 
 		// Clear the rule set first. Otherwise we would have a lot of additional rules in our rule set.
 		ruleSets = []
-		ruleSetFiles = fileTree(dir: '../$config', include: 'pmd-*/pmdrules.xml')
+		ruleSetFiles = fileTree(dir: "$config", include: 'pmdrules.xml')
 	}
 	
 	apply plugin: 'checkstyle'
@@ -49,7 +49,7 @@ subprojects {
 		ignoreFailures = true
 		showViolations = false
 		
-		configFile = file("../$config/cs-conf.xml")		
+		configFile = file("$config/cs-conf.xml")		
 	}
 	
 	apply plugin: 'findbugs'
@@ -58,7 +58,7 @@ subprojects {
 		effort = "max"
 		reportLevel = "low"
 		
-		excludeFilter = file("../$config/fb-filter.xml")
+		excludeFilter = file("$config/fb-filter.xml")
 	}
 	
 	// CS is a little bit weird, when it comes to dependencies. 
@@ -74,8 +74,7 @@ subprojects {
 		findbugs fileTree(dir: '../lib/static-analysis', include: 'findbugs-*/lib/*.jar')
 		
 		testCompile fileTree(dir: '../lib', include: 'junit-*.jar')
-		
-		testRuntime fileTree(dir: '../lib', include: 'hamcrest-core-*.jar')
+		testCompile fileTree(dir: '../lib', include: 'hamcrest-core-*.jar')
 	}
 	
 }

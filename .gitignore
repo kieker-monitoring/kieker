@@ -15,3 +15,8 @@ plugin.xml
 /invalidTraceArtifacts-yyyyMMdd-HHmmssSSS.txt
 /messageTraces-yyyyMMdd-HHmmssSSS.txt
 /examples/JavaEEServletContainerExample/livedemo/build-eclipse
+/.gradle
+/kieker-analysis/build
+/kieker-common/build
+/kieker-monitoring/build
+/kieker-tools/build
