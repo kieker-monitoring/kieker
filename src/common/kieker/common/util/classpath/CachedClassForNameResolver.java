@@ -47,7 +47,10 @@ public class CachedClassForNameResolver<T> {
 		Class<? extends T> clazz = this.cachedClasses.get(classname);
 		if (clazz == null) {
 			clazz = this.classForNameResolver.classForName(classname);
-			this.cachedClasses.putIfAbsent(classname, clazz);
+			final Class<? extends T> previousClass = this.cachedClasses.putIfAbsent(classname, clazz);
+			if (null != previousClass) {
+				clazz = previousClass;
+			}
 		}
 		return clazz;
 	}

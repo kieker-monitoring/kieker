@@ -45,7 +45,9 @@ public class TestRecord implements IMonitoringRecord {
 	}
 
 	@Override
-	public void setLoggingTimestamp(final long timestamp) {}
+	public void setLoggingTimestamp(final long timestamp) {
+		// not used in test
+	}
 
 	@Override
 	public Object[] toArray() {
@@ -53,13 +55,19 @@ public class TestRecord implements IMonitoringRecord {
 	}
 
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {}
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		// not used in test
+	}
 
 	@Override
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {}
+	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		// not used in test
+	}
 
 	@Override
-	public void initFromArray(final Object[] values) {}
+	public void initFromArray(final Object[] values) {
+		// not used in test
+	}
 
 	@Override
 	public Class<?>[] getValueTypes() {

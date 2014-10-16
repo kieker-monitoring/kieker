@@ -34,8 +34,6 @@ import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.analysis.plugin.reader.filesystem.FSReader;
 import kieker.analysis.plugin.reader.tcp.TCPReader;
 import kieker.common.configuration.Configuration;
-import kieker.common.logging.Log;
-import kieker.common.logging.LogFactory;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.controlflow.OperationExecutionRecord;
 import kieker.monitoring.core.configuration.ConfigurationFactory;
@@ -52,8 +50,6 @@ import kieker.test.common.junit.AbstractKiekerTest;
  * @since 1.10
  */
 public class TestTCPReader extends AbstractKiekerTest {
-
-	static final Log LOG = LogFactory.getLog(TestTCPReader.class);
 
 	private final String CURRENT_TEST_DIR = "test/analysis/" + TestTCPReader.class.getPackage().getName().replaceAll("\\.", "/");
 
@@ -133,11 +129,8 @@ public class TestTCPReader extends AbstractKiekerTest {
 	private void writeViaTcp(final List<IMonitoringRecord> records) throws Exception {
 		final IMonitoringController monitoringController = MonitoringController.createInstance(this.monitoringConfiguration);
 
-		LOG.debug("Sending " + records.size() + " records");
 		for (final IMonitoringRecord record : records) {
-			LOG.debug("record.ts: " + record.getLoggingTimestamp());
-			final boolean success = monitoringController.newMonitoringRecord(record);
-			LOG.debug(success ? "done" : "failt");
+			monitoringController.newMonitoringRecord(record);
 		}
 
 		monitoringController.terminateMonitoring();
