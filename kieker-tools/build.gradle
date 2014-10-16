@@ -1,0 +1,46 @@
+dependencies {
+	compile project(':kieker-common')
+	compile project(':kieker-analysis')
+	compile project(':kieker-monitoring')
+		
+	compile fileTree('../lib') {
+		include 'commons-cli-*.jar'
+		include 'jgraphx-*.jar'
+		include 'commons-math3-*.jar'
+		include 'commons-lang3-*.jar'
+		include 'Rsession-*.jar'
+		include 'Rserve-*.jar'
+		include 'REngine-*.jar'
+		include 'reflections-*.jar'
+		include 'activemq-core-*.jar'
+	}	
+	
+	// This is a workaround allowing the Kieker tests to depend on each other. I do not recommend to do this.
+	testCompile project(':kieker-common').sourceSets.test.output
+	testCompile project(':kieker-analysis').sourceSets.test.output
+	testCompile project(':kieker-monitoring').sourceSets.test.output
+	
+	testCompile fileTree('../lib') {
+		include 'static-analysis/checkstyle-*/lib/checkstyle-all.jar'
+	}
+
+	testRuntime fileTree('../lib') {
+		include 'derby-*.jar'
+		include 'geronimo-j2ee-management_1.1_spec-*.jar'
+		include 'kahadb-*.jar'
+	}
+}
+
+task generateRecords() << {
+	javaexec {
+		classpath = fileTree('../bin/dev') {
+			include 'target/de.cau.cs.se.instrumentation.rl.cli-*.jar'
+			include 'lib/org.eclipse.emf.mwe.core_*.jar'
+			include 'lib/org.eclipse.xtext.common.types_*.jar'
+			include 'lib/org.eclipse.emf.mwe.utils_*.jar'
+			include 'lib/org.eclipse.xtext.common.types.ui_*.jar'
+		}				
+		main = "de.cau.cs.se.instrumentation.rl.cli.CLICompilerMain"
+		args "-r", "..", "-a", "'Kieker Build'", "-d", "src-gen", "-s", "model/records", "-l", "java", "-l", "java.factory", "-n", "kieker-tools", "-p", "kieker-tools", "-v", "1.10"	
+	}
+}

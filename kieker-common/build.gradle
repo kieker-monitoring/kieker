@@ -1,0 +1,21 @@
+dependencies {
+	compile fileTree('../lib') {
+		include 'commons-logging-*.jar'
+		include 'slf4j-api-*.jar'
+		include 'framework-libs/cxf/cxf-*.jar'
+	}
+}
+
+task generateRecords() << {
+	javaexec {
+		classpath = fileTree('../bin/dev') {
+			include 'target/de.cau.cs.se.instrumentation.rl.cli-*.jar'
+			include 'lib/org.eclipse.emf.mwe.core_*.jar'
+			include 'lib/org.eclipse.xtext.common.types_*.jar'
+			include 'lib/org.eclipse.emf.mwe.utils_*.jar'
+			include 'lib/org.eclipse.xtext.common.types.ui_*.jar'
+		}				
+		main = "de.cau.cs.se.instrumentation.rl.cli.CLICompilerMain"
+		args "-r", "..", "-a", "'Kieker Build'", "-d", "src-gen", "-s", "model/records", "-l", "java", "-l", "java.factory", "-n", "kieker-common", "-p", "kieker-common", "-v", "1.10"	
+	}
+}

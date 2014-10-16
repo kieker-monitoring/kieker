@@ -1,0 +1,187 @@
+apply plugin: 'java'
+
+def config = "../" + project['dir.config']
+
+subprojects {
+    apply plugin: 'java'
+	
+    version = project['kieker.version']
+	
+	sourceCompatibility = project['java.version']
+	targetCompatibility = project['java.version']
+	
+	sourceSets {
+		main { 
+			java { 
+				srcDir 'src' 
+				srcDir 'src-gen' 
+			} 
+			resources {
+				srcDir 'src-resources'
+			}
+		}
+		test {
+			java {
+				srcDir 'test-gen' 
+				srcDir 'test' 
+			} 
+			resources {
+				srcDir 'test-resources'
+			}
+		}
+	}
+	
+	test {
+		ignoreFailures = true
+	}
+
+	apply plugin: 'pmd'
+	pmd {
+		ignoreFailures = true
+
+		// Clear the rule set first. Otherwise we would have a lot of additional rules in our rule set.
+		ruleSets = []
+		ruleSetFiles = fileTree(dir: '../$config', include: 'pmd-*/pmdrules.xml')
+	}
+	
+	apply plugin: 'checkstyle'
+	checkstyle {
+		ignoreFailures = true
+		showViolations = false
+		
+		configFile = file("../$config/cs-conf.xml")		
+	}
+	
+	apply plugin: 'findbugs'
+	findbugs { 
+		ignoreFailures = true 
+		effort = "max"
+		reportLevel = "low"
+		
+		excludeFilter = file("../$config/fb-filter.xml")
+	}
+	
+	// CS is a little bit weird, when it comes to dependencies. 
+	checkstyleTest.classpath += sourceSets.main.runtimeClasspath
+	checkstyleMain.classpath += configurations.compile
+	// This part makes sure that CS does not check the classes inside src-gen
+	checkstyleMain.source = 'src'
+	
+	// Those are some dependencies which are needed by all submodules
+	dependencies {
+		pmd fileTree(dir: '../lib/static-analysis', include: 'pmd-*/lib/*.jar')
+		checkstyle fileTree(dir: '../lib/static-analysis', include: 'checkstyle-*/lib/*.jar')
+		findbugs fileTree(dir: '../lib/static-analysis', include: 'findbugs-*/lib/*.jar')
+		
+		testCompile fileTree(dir: '../lib', include: 'junit-*.jar')
+		
+		testRuntime fileTree(dir: '../lib', include: 'hamcrest-core-*.jar')
+	}
+	
+}
+
+def today() {
+    def date = new Date()
+    def formattedDate = date.format('yyyy-MM-dd')
+    return formattedDate
+}
+
+task mainJar(type: Jar, dependsOn:  subprojects.tasks["build"] ) {
+	baseName = project['kieker.packagenamebase'] + "-" + project['kieker.version']
+    subprojects.each { subproject ->
+        from subproject.configurations.archives.allArtifacts.files.collect {
+            zipTree(it)
+        }
+    }
+	
+	manifest {
+		attributes (
+			"Specification-Version": project['kieker.version'],
+			"Specification-Vendor": project['kieker.copyright'],
+			"Implementation-Title": project['kieker.name'],
+			"Implementation-Version": project['kieker.version'] + " (" + today() + ")",
+			"Implementation-Vendor": project['kieker.copyright'],
+			"kieker" // The section name
+		)
+    }
+}
+
+task emfJar(type: Jar, dependsOn:  subprojects.tasks["build"] ) {
+	baseName = project['kieker.packagenamebase'] + "-" + project['kieker.version'] + "_emf"
+    subprojects.each { subproject ->
+        from subproject.configurations.archives.allArtifacts.files.collect {
+            zipTree(it)
+        }
+    }
+	from fileTree(dir: 'lib', include: '*emf*.jar').collect {
+		zipTree(it)
+	}
+}
+
+task aspectJJar(type: Jar, dependsOn:  subprojects.tasks["build"] ) {
+	baseName = project['kieker.packagenamebase'] + "-" + project['kieker.version'] + "_aspectj"
+    subprojects.each { subproject ->
+        from subproject.configurations.archives.allArtifacts.files.collect {
+            zipTree(it)
+        }
+    }
+	from fileTree(dir: 'lib', include: 'aspectjweaver-*.jar').collect {
+		zipTree(it)
+	}
+}
+
+task distribute(group: 'distribution', description: 'Distributes binary and source archives.', dependsOn: [':distributeBinaryZip', ':distributeSourceZip',':distributeBinaryTar', ':distributeSourceTar'])
+
+def binaryContent = project.copySpec {
+	from (projectDir) {
+		include 'LICENSE'
+		include 'HISTORY'
+		include 'README'
+		
+		include 'bin/**'
+		include 'lib/**'
+		include 'javadoc/**'
+		include 'build/libs/**'
+	}
+}
+
+task docs(type: Javadoc) {
+    source subprojects.collect {project -> project.sourceSets.main.allJava } 
+    classpath = files(subprojects.collect {project -> project.sourceSets.main.compileClasspath}) 
+    destinationDir = new File(projectDir, 'javadoc')
+}
+
+task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, docs]) {
+	classifier = 'bin'
+	with binaryContent
+}
+
+task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, docs]) {
+	classifier = 'bin'
+	with binaryContent
+}
+
+def sourceContent = project.copySpec {
+	from (projectDir) {
+		include '*'
+		include 'bin/**'
+		include 'src/**'
+		include 'lib/**'
+	}
+}
+
+task distributeSourceZip(type: Zip, group: 'distribution', description: 'Distributes source archive.', dependsOn: [mainJar, emfJar, aspectJJar]) {
+	classifier = 'src'
+	with sourceContent
+}
+
+task distributeSourceTar(type: Tar, group: 'distribution', description: 'Distributes source archive.', dependsOn: [mainJar, emfJar, aspectJJar]) {
+	classifier = 'src'
+	with sourceContent
+}
+
+task jenkinsBuild(dependsOn: [mainJar, emfJar, aspectJJar]) {
+}
+
+task jenkinsNightlyBuild(dependsOn: [distribute]) {
+}
