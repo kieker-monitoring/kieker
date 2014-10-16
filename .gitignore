@@ -14,3 +14,4 @@ plugin.xml
 /activemq-data
 /invalidTraceArtifacts-yyyyMMdd-HHmmssSSS.txt
 /messageTraces-yyyyMMdd-HHmmssSSS.txt
+/examples/JavaEEServletContainerExample/livedemo/build-eclipse

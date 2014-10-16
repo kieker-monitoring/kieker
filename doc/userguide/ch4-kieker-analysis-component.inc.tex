@@ -365,7 +365,7 @@ configuration and connects to the named pipe. Optionally, the reader can overrid
 and forwards these to its output port.
 
 \setJavaCodeListing
-\lstinputlisting[firstline=60, firstnumber=60, lastline=79, caption={Example reader's \method{read} method}, label=listing:MyPipeReaderRead]%
+\lstinputlisting[firstline=60, firstnumber=60, lastline=80, caption={Example reader's \method{read} method}, label=listing:MyPipeReaderRead]%
 {\customComponentsBookstoreApplicationDir/src/kieker/examples/userguide/ch3and4bookstore/MyPipeReader.java}
 
 \vspace{-0.2cm}
@@ -382,7 +382,7 @@ filters may override the methods \method{init} and %
 The \class{@Plugin} annotation of the example filter \class{MyResponseTimeFilter} %
 was shown in Listing~\ref{listing:MyResponseTimeFilterPluginAnnotationOutputs} already.
 
-\enlargethispage{1cm}
+% \enlargethispage{1cm}
 
 Filters receive events via methods marked with the \class{@InputPort} %
 annotation. These methods must accept a single argument, which has to be %
@@ -433,6 +433,8 @@ connection of repositories to readers and filters. %
 \setJavaCodeListing
 \lstinputlisting[firstline=40, firstnumber=40, lastline=41, caption={Declaration of required repositories in the @Repository annotation}, label=listing:RepositoryRequirementDeclaration]%
 {../../src/tools/kieker/tools/traceAnalysis/filter/AbstractTraceAnalysisFilter.java}
+
+\pagebreak
 
 \noindent Plugins can access their connected repositories via the \method{getRepository} %
 method provided by the super class, as shown in Listing~\ref{listing:RepositoryAccess}. %

@@ -48,6 +48,11 @@
 		<replaceregexp file="bin/dev/check-release-archives.sh" match="KIEKER_VERSION=&quot;.*?&quot;" replace="KIEKER_VERSION=&quot;${kieker.version}&quot;" />
 		<!-- Not sure if String valid today, but replacing it #1199: -->
 		<replaceregexp file="test/tools/kieker/test/tools/manual/TestTCPReader.java" match="lib/kieker-.*_aspectj.jar" replace="lib/kieker-${kieker.version}_aspectj.jar" />
+		<replaceregexp file="examples/monitoring/custom-timesource/build.properties" match="kieker-.*_aspectj.jar" replace="kieker-${kieker.version}_aspectj.jar" />
+		<replaceregexp file="examples/monitoring/probe-aspectj/build.properties" match="kieker-.*_aspectj.jar" replace="kieker-${kieker.version}_aspectj.jar" />
+		<replaceregexp file="examples/monitoring/adaptive-monitoring/build.properties" match="kieker-.*_aspectj.jar" replace="kieker-${kieker.version}_aspectj.jar" />
+		<replaceregexp file="examples/OverheadEvaluationMicrobenchmark/MooBench/benchmark.sh" match="kieker-.*_aspectj.jar" replace="kieker-${kieker.version}_aspectj.jar" />
+		<replaceregexp file="examples/OverheadEvaluationMicrobenchmark/executeRemoteMicroBenchmark.sh" match="kieker-.*_aspectj.jar" replace="kieker-${kieker.version}_aspectj.jar" />
 
 		<!-- Update the AspectJ version in various files -->
 		<replaceregexp byline="true" flags="g">
@@ -150,6 +155,7 @@
 		<path id="javaee.demo-compile-classpath">
 			<fileset dir="${example.javaee.demo.lib.dir}">
 				<include name="primefaces-*.jar" />
+				<include name="ApacheJMeter_core.jar" />
 				<include name="jsf-api-*.jar" />
 			</fileset>
 			<fileset dir="${example.javaee.jetty.lib.dir}/annotations/">

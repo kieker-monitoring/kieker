@@ -10,7 +10,7 @@ analysis application known from \url{http://demo.kieker-monitoring.net/}. %
 
 \section{Setting}
 
-The subdirectory \file{jetty-hightide-jpetstore/} includes the %
+The subdirectory \file{jetty/} includes the %
 Jetty server with the JPetStore application already deployed to the server's %
 \file{webapps/} directory. The example is prepared to use two alternative %
 types of \Kieker{} probes: either the \Kieker{} Spring interceptor (default) or the 
@@ -30,7 +30,7 @@ The file \file{web.xml} is located in the webapps's %
 \dir{WEB-INF/} directory. \Kieker{}'s Servlet filters are already enabled: 
 
 \setXMLListing
-\lstinputlisting[firstline=50,lastline=61, numbers=none, linewidth=1\textwidth, caption=Enabling the Servlet filter in \file{web.xml}]{\JavaEEServletExampleDir/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/web.xml}
+\lstinputlisting[firstline=50,lastline=61, numbers=none, linewidth=1\textwidth, caption=Enabling the Servlet filter in \file{web.xml}]{\JavaEEServletExampleDir/jetty/webapps/jpetstore/WEB-INF/web.xml}
 
 \noindent This filter can be used with both the Spring-based and the %
 AspectJ-based instrumentation mode.
@@ -41,7 +41,7 @@ AspectJ-based instrumentation mode.
 \file{applicationContext.xml}, located in the webapps's \dir{WEB-INF/} directory: 
 
 \setXMLListing
-\lstinputlisting[firstline=38,lastline=43, numbers=none, linewidth=1\textwidth, caption=Enabling the Spring interceptor in \file{applicationContext.xml}]{\JavaEEServletExampleDir/jetty-hightide-jpetstore/webapps/jpetstore/WEB-INF/applicationContext.xml}
+\lstinputlisting[firstline=38,lastline=43, numbers=none, linewidth=1\textwidth, caption=Enabling the Spring interceptor in \file{applicationContext.xml}]{\JavaEEServletExampleDir/jetty/webapps/jpetstore/WEB-INF/applicationContext.xml}
 
 \NOTIFYBOX{When using, for example, the \texttt{@Autowired} feature in your Spring beans, it can be necessary to force the usage of CGLIB proxy objects with \texttt{<aop:aspectj-autoproxy proxy-target-class="true"/>}.}
 
@@ -53,12 +53,9 @@ In order to use AspectJ-based instrumentation, the following changes need to
 be performed. The file \file{start.ini}, located in Jetty's root directory, %
 allows to pass various JVM arguments, JVM system properties, and other options %
 to the server on startup. When using AspectJ for instrumentation, the respective %
-JVM argument needs to be activated in this file: %
+JVM argument needs to be activated in this file. %
 
-\setPropertiesListing
-\lstinputlisting[firstline=32,lastline=35, linewidth=1\textwidth,caption=Enabling the AspectJ weaver in Jetty's \file{start.ini}]{\JavaEEServletExampleDir/jetty-hightide-jpetstore/start.KiekerAspectJActivated.ini}
-
-\noindent The AspectJ configuration file \file{aop.xml} is already located in the %
+The AspectJ configuration file \file{aop.xml} is already located in the %
 webapps's\linebreak \dir{WEB-INF/classes/META-INF/} directory and configured to instrument %
 the JPetStore classes with \Kieker{}'s \class{OperationExecutionAspectFull} aspect %
 (Section~\ref{chap:aspectJ}). 
@@ -84,7 +81,7 @@ interceptor in the file \file{applicationContext.xml}, mentioned above. %
 \item   Browse through the application to generate some monitoring data. %
 \item In this example, \Kieker{} is configured to write the monitoring data %
       to JMX in order to communicate with the \Kieker-based demo analysis %
-      application, which is accessible via \url{localhost:8080/demo/}.
+      application, which is accessible via \url{localhost:8080/}.
    
 \item In order to write the monitoring data to the file system, the %
       JMX writer needs to be disabled in the file \file{kieker.monitoring.properties}, %

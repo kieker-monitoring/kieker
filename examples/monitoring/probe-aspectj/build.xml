@@ -24,7 +24,7 @@
 				<path refid="classpath" />
 				<path location="${jar.file}" />
 			</classpath>
-            <arg line="${num.requests}" />
+            <arg value="${num.requests}" />
 			<jvmarg value="-javaagent:${lib.dir}/${jar.file.kieker}" />
 			<jvmarg value="-Dorg.aspectj.weaver.showWeaveInfo=true" />
 			<jvmarg value="-Daj.weaving.verbose=true" />

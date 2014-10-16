@@ -24,7 +24,7 @@
 				<path refid="classpath" />
 				<path location="${jar.file}" />
 			</classpath>
-            <arg line="${num.requests}" />
+            <arg value="${num.requests}" />
 			<jvmarg value="-Dkieker.monitoring.writer.filesystem.AsyncFsWriter.customStoragePath=${monitoring.logs.dir}" />
 		</java>
 	</target>

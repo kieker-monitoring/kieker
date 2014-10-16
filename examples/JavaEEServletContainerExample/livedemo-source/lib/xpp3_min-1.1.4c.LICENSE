@@ -1,0 +1,79 @@
+Indiana University Extreme! Lab Software License, Version 1.1.1 
+AND Public Domain 
+AND Apache Software License, Version 1.1
+Project: http://www.extreme.indiana.edu/xgws/xsoap/xpp/mxp1/ AND http://mvnrepository.com/artifact/xpp3/xpp3/1.1.4c
+Description: MXP1 is a stable XmlPull parsing engine that is based on ideas from XPP and in particular XPP2 but completely revised and rewritten to take the best advantage of latest JIT JVMs such as Hotspot in JDK 1.4+.
+Licenses: 
+- http://www.extreme.indiana.edu/viewcvs/~checkout~/XPP3/java/LICENSE.txt
+- https://creativecommons.org/licenses/publicdomain/
+- https://www.apache.org/licenses/LICENSE-1.1
+
+Copyright-Only Dedication* (based on United States law) or Public Domain Certification
+--------------------------------------------------------------------------------------
+The person or persons who have associated work with this document (the "Dedicator" or "Certifier") hereby either (a) certifies that, to the best of his knowledge, the work of authorship identified is in the public domain of the country from which the work is published, or (b) hereby dedicates whatever copyright the dedicators holds in the work of authorship identified below (the "Work") to the public domain. A certifier, moreover, dedicates any copyright interest he may have in the associated work, and for these purposes, is described as a "dedicator" below.
+
+A certifier has taken reasonable steps to verify the copyright status of this work. Certifier recognizes that his good faith efforts may not shield him from liability if in fact the work certified is not in the public domain.
+
+Dedicator makes this dedication for the benefit of the public at large and to the detriment of the Dedicator's heirs and successors. Dedicator intends this dedication to be an overt act of relinquishment in perpetuity of all present and future rights under copyright law, whether vested or contingent, in the Work. Dedicator understands that such relinquishment of all rights includes the relinquishment of all rights to enforce (by lawsuit or otherwise) those copyrights in the Work.
+
+Dedicator recognizes that, once placed in the public domain, the Work may be freely reproduced, distributed, transmitted, used, modified, built upon, or otherwise exploited by anyone for any purpose, commercial or non-commercial, and in any way, including by methods that have not yet been invented or conceived.
+
+
+ The Apache Software License, Version 1.1
+
+ Copyright (c) 2000 The Apache Software Foundation.  All rights
+ reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions
+ are met:
+
+ 1. Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+
+ 2. Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in
+    the documentation and/or other materials provided with the
+    distribution.
+
+ 3. The end-user documentation included with the redistribution,
+    if any, must include the following acknowledgment:
+       "This product includes software developed by the
+        Apache Software Foundation (http://www.apache.org/)."
+    Alternately, this acknowledgment may appear in the software itself,
+    if and wherever such third-party acknowledgments normally appear.
+
+ 4. The names "Apache" and "Apache Software Foundation" must
+    not be used to endorse or promote products derived from this
+    software without prior written permission. For written
+    permission, please contact apache@apache.org.
+
+ 5. Products derived from this software may not be called "Apache",
+    nor may "Apache" appear in their name, without prior written
+    permission of the Apache Software Foundation.
+
+ THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
+ WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ DISCLAIMED.  IN NO EVENT SHALL THE APACHE SOFTWARE FOUNDATION OR
+ ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
+ USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ SUCH DAMAGE.
+ ====================================================================
+
+ This software consists of voluntary contributions made by many
+ individuals on behalf of the Apache Software Foundation.  For more
+ information on the Apache Software Foundation, please see
+ <http://www.apache.org/>.
+
+ Portions of this software are based upon public domain software
+ originally written at the National Center for Supercomputing Applications,
+ University of Illinois, Urbana-Champaign.
+
+
+

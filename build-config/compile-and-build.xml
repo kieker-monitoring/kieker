@@ -100,11 +100,10 @@
 	</target>
 	
 	<target name="-compile-javaee.demo" depends="-init" description="Compiles the sources of the JavaEE example">
-			<delete dir="${example.javaee.demo.classes.dir}" />
-			<mkdir dir="${example.javaee.demo.classes.dir}" />
-			<javac destDir="${example.javaee.demo.classes.dir}" source="1.6" target="1.6" srcdir="${example.javaee.dir}/src" debug="true" classpathref="javaee.demo-compile-classpath" includeAntRuntime="false">
-				<compilerarg value="-Xlint:all" />
-			</javac>
+		<ant antfile="build.xml" dir="${example.javaee.dir}">
+			<reference refid="classpath" />
+			<target name="build-all" />
+		</ant>
 	</target>
 
 	<target name="build-kieker.main" depends="-init,compile-kieker" description="Compiles and packages the Kieker Jar file">
