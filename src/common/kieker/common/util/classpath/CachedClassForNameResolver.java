@@ -20,9 +20,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
- * @author Christian Wulf
+ * @param <T>
+ *            the type that is used to cast a type that was found in the class path
  *
- * @since 1.10
+ * @author Christian Wulf
+ * @since 1.11
  */
 public class CachedClassForNameResolver<T> {
 

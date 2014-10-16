@@ -44,7 +44,7 @@ public class CachedRecordFactoryCatalogTest {
 	private IRegistry<String> stringRegistry;
 
 	@Rule
-	public ExpectedException thrown = ExpectedException.none();
+	private final ExpectedException thrown = ExpectedException.none();
 
 	@Before
 	public void before() throws Exception {

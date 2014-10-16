@@ -17,7 +17,6 @@
 package kieker.test.analysis.junit.plugin.reader.tcp;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -46,24 +45,23 @@ import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Christian Wulf
- *
- * @since 1.10
+ * @since 1.11
  */
 public class TestTCPReader extends AbstractKiekerTest {
 
-	private final String CURRENT_TEST_DIR = "test/analysis/" + TestTCPReader.class.getPackage().getName().replaceAll("\\.", "/");
+	private static final String CURRENT_TEST_DIR = "test/analysis/" + TestTCPReader.class.getPackage().getName().replaceAll("\\.", "/");
 
 	private Configuration monitoringConfiguration;
 	private String port1;
 	private String port2;
 
 	@Before
-	public void before() throws FileNotFoundException, IOException {
+	public void before() throws IOException {
 		this.monitoringConfiguration = new Configuration();
 
 		InputStream inputStream = null;
 		try {
-			inputStream = new FileInputStream(this.CURRENT_TEST_DIR + "/kieker.monitoring.properties");
+			inputStream = new FileInputStream(TestTCPReader.CURRENT_TEST_DIR + "/kieker.monitoring.properties");
 			this.monitoringConfiguration.load(inputStream);
 		} finally {
 			if (inputStream != null) {
@@ -103,10 +101,10 @@ public class TestTCPReader extends AbstractKiekerTest {
 
 		final IMonitoringRecord firstRecord = collectionFilter.getList().get(0);
 		final OperationExecutionRecord castedFirstRecord = AssertHelper.assertInstanceOf(OperationExecutionRecord.class, firstRecord);
-		Assert.assertEquals(1378814632852360525l, castedFirstRecord.getLoggingTimestamp());
+		Assert.assertEquals(1378814632852360525L, castedFirstRecord.getLoggingTimestamp());
 		Assert.assertEquals("<no-session-id>", castedFirstRecord.getSessionId());
-		Assert.assertEquals(1378814632849896821l, castedFirstRecord.getTin());
-		Assert.assertEquals(1378814632852105483l, castedFirstRecord.getTout());
+		Assert.assertEquals(1378814632849896821L, castedFirstRecord.getTin());
+		Assert.assertEquals(1378814632852105483L, castedFirstRecord.getTout());
 		Assert.assertEquals("myHost", castedFirstRecord.getHostname());
 	}
 
@@ -114,7 +112,7 @@ public class TestTCPReader extends AbstractKiekerTest {
 		final IAnalysisController analysisController = new AnalysisController();
 
 		final Configuration configurationFSReader = new Configuration();
-		final String INPUT_DIR = this.CURRENT_TEST_DIR + "/log-data";
+		final String INPUT_DIR = TestTCPReader.CURRENT_TEST_DIR + "/log-data";
 		configurationFSReader.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, INPUT_DIR);
 		final FSReader reader = new FSReader(configurationFSReader, analysisController);
 

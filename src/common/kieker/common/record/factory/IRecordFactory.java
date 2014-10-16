@@ -21,13 +21,33 @@ import java.nio.ByteBuffer;
 import kieker.common.util.registry.IRegistry;
 
 /**
- * @author Christian Wulf
+ * @param <T>
+ *            the record type to used for creating new record instances
  *
+ * @author Christian Wulf
  * @since 1.11
  */
 public interface IRecordFactory<T> {
 
+	/**
+	 *
+	 * @param buffer
+	 *            the buffer to read from
+	 * @param stringRegistry
+	 *            the registry to read strings from
+	 *
+	 * @return a new instance of {@link T}
+	 * @since 1.11
+	 */
 	T create(ByteBuffer buffer, IRegistry<String> stringRegistry);
 
+	/**
+	 *
+	 * @param values
+	 *            the values used to fill the new instance
+	 *
+	 * @return a new instance of {@link T}
+	 * @since 1.11
+	 */
 	T create(Object[] values);
 }
