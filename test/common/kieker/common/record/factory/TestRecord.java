@@ -36,7 +36,7 @@ public class TestRecord extends AbstractMonitoringRecord {
 
 	@Override
 	public Object[] toArray() {
-		return null;
+		return new Object[0];
 	}
 
 	@Override
