@@ -1,0 +1,14 @@
+def DOCBASEFN = "design-documentation"
+
+task document(type: Exec) {
+  commandLine 'pdflatex', "$DOCBASEFN"
+  commandLine 'bibtex', "$DOCBASEFN"
+  commandLine 'pdflatex', "$DOCBASEFN"
+  commandLine 'pdflatex', "$DOCBASEFN"
+}
+
+task clean(type: Delete) {
+  delete fileTree(dir: '.', includes: ['*.aux, *.bbl', '*.blg', '*.glo', '*.idx', '*.log', '*.toc', '*.snm', '*.out', '*.nav', '*.bak', '*.vrb', 'backup'])  
+}
+
+document.finalizedBy clean

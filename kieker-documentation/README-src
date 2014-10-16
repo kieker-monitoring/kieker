@@ -3,6 +3,6 @@ performance monitoring and dynamic software analysis.
 
 Detailed information about Kieker is provided at http://kieker-monitoring.net/
 
-Ant is used as the build tool. A `build.xml` is provided. Also, the sources can 
+Gradle is used as the build tool. A `build.gradle` is provided. Also, the sources can 
 be imported into Eclipse. The developer guide contains additional information 
 on the build environment: http://trac.kieker-monitoring.net/wiki/DevGuide 
