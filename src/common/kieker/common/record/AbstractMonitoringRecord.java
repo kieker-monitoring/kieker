@@ -26,8 +26,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import kieker.common.exception.MonitoringRecordException;
-import kieker.common.util.classpath.CachedClassForNameResolver;
-import kieker.common.util.classpath.ClassForNameResolver;
 import kieker.common.util.registry.IRegistry;
 
 /**
@@ -49,8 +47,8 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final CachedClassForNameResolver<IMonitoringRecord> CACHED_CLASS_FOR_NAME_RESOLVER = new CachedClassForNameResolver<IMonitoringRecord>(
-			new ClassForNameResolver<IMonitoringRecord>(IMonitoringRecord.class));
+	// private static final CachedClassForNameResolver<IMonitoringRecord> CACHED_CLASS_FOR_NAME_RESOLVER = new CachedClassForNameResolver<IMonitoringRecord>(
+	// new ClassForNameResolver<IMonitoringRecord>(IMonitoringRecord.class));
 
 	private static final ConcurrentMap<String, Class<? extends IMonitoringRecord>> CACHED_KIEKERRECORDS = new ConcurrentHashMap<String, Class<? extends IMonitoringRecord>>(); // NOCS
 	private static final ConcurrentMap<Class<? extends IMonitoringRecord>, Class<?>[]> CACHED_KIEKERRECORD_TYPES = new ConcurrentHashMap<Class<? extends IMonitoringRecord>, Class<?>[]>(); // NOCS
