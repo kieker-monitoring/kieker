@@ -1,1 +1,1 @@
-include "kieker-common", "kieker-monitoring", "kieker-analysis", "kieker-tools"
+include "kieker-common", "kieker-monitoring", "kieker-analysis", "kieker-tools", "kieker-examples:userguide:ch2--bookstore-application"

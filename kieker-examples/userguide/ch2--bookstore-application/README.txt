@@ -3,7 +3,7 @@ the 'java' tool using the following command:
  $ java -jar BookstoreApplication.jar
 
 Alternatively, you can compile the sources and start the application using
-'ant' with the given 'build.xml' file:
- $ ant run-jar
+'gradle' with the given 'build.gradle' file:
+ $ gradle run
 
 Please see Chapter 2 of the Kieker User Guide for details on this example.

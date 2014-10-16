@@ -20,3 +20,5 @@ plugin.xml
 /kieker-common/build
 /kieker-monitoring/build
 /kieker-tools/build
+/kieker-examples/userguide/ch2--bookstore-application/build
+/kieker-examples/userguide/ch2--bookstore-application/.gradle

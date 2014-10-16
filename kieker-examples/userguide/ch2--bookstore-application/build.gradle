@@ -1,0 +1,18 @@
+apply plugin: 'application'
+
+// Simplify the JAR's file name
+archivesBaseName = 'BookstoreApplication'
+version = ''
+
+// Create the JAR file in the root directory of the example
+libsDirName = '..'
+
+// Make the JAR file executable
+
+mainClassName = 'kieker.examples.userguide.ch2bookstore.BookstoreStarter'
+
+jar {
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+}

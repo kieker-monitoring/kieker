@@ -85,9 +85,11 @@ def today() {
     return formattedDate
 }
 
-task mainJar(type: Jar, dependsOn:  subprojects.tasks["build"] ) {
+def subprojectsMain = subprojects - project(":kieker-examples:userguide:ch2--bookstore-application")
+
+task mainJar(type: Jar, dependsOn:  subprojectsMain.tasks["build"] ) {
 	baseName = project['kieker.packagenamebase'] + "-" + project['kieker.version']
-    subprojects.each { subproject ->
+    subprojectsMain.each { subproject ->
         from subproject.configurations.archives.allArtifacts.files.collect {
             zipTree(it)
         }
@@ -105,9 +107,9 @@ task mainJar(type: Jar, dependsOn:  subprojects.tasks["build"] ) {
     }
 }
 
-task emfJar(type: Jar, dependsOn:  subprojects.tasks["build"] ) {
+task emfJar(type: Jar, dependsOn:  subprojectsMain.tasks["build"] ) {
 	baseName = project['kieker.packagenamebase'] + "-" + project['kieker.version'] + "_emf"
-    subprojects.each { subproject ->
+    subprojectsMain.each { subproject ->
         from subproject.configurations.archives.allArtifacts.files.collect {
             zipTree(it)
         }
@@ -117,9 +119,9 @@ task emfJar(type: Jar, dependsOn:  subprojects.tasks["build"] ) {
 	}
 }
 
-task aspectJJar(type: Jar, dependsOn:  subprojects.tasks["build"] ) {
+task aspectJJar(type: Jar, dependsOn:  subprojectsMain.tasks["build"] ) {
 	baseName = project['kieker.packagenamebase'] + "-" + project['kieker.version'] + "_aspectj"
-    subprojects.each { subproject ->
+    subprojectsMain.each { subproject ->
         from subproject.configurations.archives.allArtifacts.files.collect {
             zipTree(it)
         }
