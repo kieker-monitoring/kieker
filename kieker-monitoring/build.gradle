@@ -30,7 +30,7 @@ dependencies {
 		include 'framework-libs/spring/spring-expression-*.jar'
 	}
 	
-	testRuntime fileTree('../examples/JavaEEServletContainerExample/jetty-hightide-jpetstore/lib/') {
+	testRuntime fileTree('../examples/JavaEEServletContainerExample/jetty/lib/') {
 		include 'jetty-*.jar'
 	}
 }
