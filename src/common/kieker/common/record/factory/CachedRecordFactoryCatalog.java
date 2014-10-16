@@ -34,15 +34,15 @@ public final class CachedRecordFactoryCatalog {
 	private final ConcurrentMap<String, IRecordFactory<? extends IMonitoringRecord>> cachedRecordFactories = new ConcurrentHashMap<String, IRecordFactory<? extends IMonitoringRecord>>();
 	private final RecordFactoryResolver recordFactoryResolver;
 
+	private CachedRecordFactoryCatalog(final RecordFactoryResolver recordFactoryResolver) {
+		this.recordFactoryResolver = recordFactoryResolver;
+	}
+
 	/**
 	 * Returns the only instance of this class.
 	 */
 	public static CachedRecordFactoryCatalog getInstance() {
 		return INSTANCE;
-	}
-
-	private CachedRecordFactoryCatalog(final RecordFactoryResolver recordFactoryResolver) {
-		this.recordFactoryResolver = recordFactoryResolver;
 	}
 
 	/**
