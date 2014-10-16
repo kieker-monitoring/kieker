@@ -18,9 +18,7 @@ package kieker.common.record.factory;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
@@ -34,9 +32,6 @@ import kieker.common.record.flow.trace.operation.AfterOperationEventFactory;
 public class RecordFactoryResolverTest {
 
 	private RecordFactoryResolver recordFactoryResolver;
-
-	@Rule
-	public ExpectedException thrown = ExpectedException.none();
 
 	@Before
 	public void before() throws Exception {

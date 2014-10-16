@@ -20,7 +20,7 @@ import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
-import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
 
 /**
@@ -30,28 +30,13 @@ import kieker.common.util.registry.IRegistry;
  *
  * @since 1.11
  */
-public class TestRecord implements IMonitoringRecord {
+public class TestRecord extends AbstractMonitoringRecord {
 
-	private static final long serialVersionUID = 1635647941139174690L;
-
-	@Override
-	public int compareTo(final IMonitoringRecord o) {
-		return 0;
-	}
-
-	@Override
-	public long getLoggingTimestamp() {
-		return 0;
-	}
-
-	@Override
-	public void setLoggingTimestamp(final long timestamp) {
-		// not used in test
-	}
+	private static final long serialVersionUID = 9088190056147961692L;
 
 	@Override
 	public Object[] toArray() {
-		return new Object[0];
+		return null;
 	}
 
 	@Override
@@ -71,7 +56,7 @@ public class TestRecord implements IMonitoringRecord {
 
 	@Override
 	public Class<?>[] getValueTypes() {
-		return new Class<?>[0];
+		return null;
 	}
 
 	@Override
