@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.record.factory;
+package kieker.common.util.classpath;
 
 /**
  * @author Christian Wulf

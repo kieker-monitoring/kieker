@@ -26,8 +26,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import kieker.common.exception.MonitoringRecordException;
-import kieker.common.record.factory.ClassForNameResolver;
-import kieker.common.record.factory.old.CachedClassForNameResolver;
+import kieker.common.util.classpath.CachedClassForNameResolver;
+import kieker.common.util.classpath.ClassForNameResolver;
 import kieker.common.util.registry.IRegistry;
 
 /**
@@ -49,7 +49,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final CachedClassForNameResolver<IMonitoringRecord> CLASS_FOR_NAME_RESOLVER = new CachedClassForNameResolver<IMonitoringRecord>(
+	private static final CachedClassForNameResolver<IMonitoringRecord> CACHED_CLASS_FOR_NAME_RESOLVER = new CachedClassForNameResolver<IMonitoringRecord>(
 			new ClassForNameResolver<IMonitoringRecord>(IMonitoringRecord.class));
 
 	private static final ConcurrentMap<String, Class<? extends IMonitoringRecord>> CACHED_KIEKERRECORDS = new ConcurrentHashMap<String, Class<? extends IMonitoringRecord>>(); // NOCS
@@ -304,13 +304,18 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	 *             If either a class with the given name could not be found or if the class doesn't implement {@link IMonitoringRecord}.
 	 */
 	public static final Class<? extends IMonitoringRecord> classForName(final String classname) throws MonitoringRecordException {
-		try {
-			return CLASS_FOR_NAME_RESOLVER.classForName(classname);
-		} catch (final ClassNotFoundException ex) {
-			throw new MonitoringRecordException("Failed to get record type of name " + classname, ex);
-		} catch (final ClassCastException ex) {
-			throw new MonitoringRecordException("Failed to get record type of name " + classname, ex);
+		Class<? extends IMonitoringRecord> clazz = CACHED_KIEKERRECORDS.get(classname);
+		if (clazz == null) {
+			try {
+				clazz = Class.forName(classname).asSubclass(IMonitoringRecord.class);
+				CACHED_KIEKERRECORDS.putIfAbsent(classname, clazz);
+			} catch (final ClassNotFoundException ex) {
+				throw new MonitoringRecordException("Failed to get record type of name " + classname, ex);
+			} catch (final ClassCastException ex) {
+				throw new MonitoringRecordException("Failed to get record type of name " + classname, ex);
+			}
 		}
+		return clazz;
 	}
 
 	/**
@@ -395,21 +400,6 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		}
 	}
 
-	public static IMonitoringRecord createFromArray(final String recordClassName, final Object[] values) throws MonitoringRecordException {
-		try {
-			final Class<? extends IMonitoringRecord> clazz = CLASS_FOR_NAME_RESOLVER.classForName(recordClassName);
-			return AbstractMonitoringRecord.createFromArray(clazz, values);
-		} catch (final ClassNotFoundException ex) {
-			throw new MonitoringRecordException("Class not found", ex);
-		}
-	}
-
-	public static IMonitoringRecord createFromByteBuffer(final String recordClassName, final ByteBuffer buffer, final IRegistry<String> stringRegistry)
-			throws BufferUnderflowException, MonitoringRecordException {
-		final int clazzid = stringRegistry.get(recordClassName);
-		return AbstractMonitoringRecord.createFromByteBuffer(clazzid, buffer, stringRegistry);
-	}
-
 	public static final IMonitoringRecord createFromByteBuffer(final int clazzid, final ByteBuffer buffer, final IRegistry<String> stringRegistry)
 			throws MonitoringRecordException, BufferUnderflowException {
 		try {
@@ -479,4 +469,14 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 		}
 	}
 
+	public static IMonitoringRecord createFromByteBuffer(final String recordClassName, final ByteBuffer buffer, final IRegistry<String> stringRegistry)
+			throws BufferUnderflowException, MonitoringRecordException {
+		final int clazzid = stringRegistry.get(recordClassName);
+		return AbstractMonitoringRecord.createFromByteBuffer(clazzid, buffer, stringRegistry);
+	}
+
+	public static IMonitoringRecord createFromArray(final String recordClassName, final Object[] values) throws MonitoringRecordException {
+		final Class<? extends IMonitoringRecord> clazz = AbstractMonitoringRecord.classForName(recordClassName);
+		return AbstractMonitoringRecord.createFromArray(clazz, values);
+	}
 }

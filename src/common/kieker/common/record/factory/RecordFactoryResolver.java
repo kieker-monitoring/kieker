@@ -17,6 +17,7 @@
 package kieker.common.record.factory;
 
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.classpath.ClassForNameResolver;
 
 /**
  * @author Christian Wulf

@@ -20,6 +20,7 @@ import java.nio.ByteBuffer;
 
 import kieker.common.exception.MonitoringRecordException;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.util.classpath.CachedClassForNameResolver;
 import kieker.common.util.registry.IRegistry;
 
 /**

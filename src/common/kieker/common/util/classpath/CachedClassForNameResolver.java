@@ -14,12 +14,10 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.record.factory.old;
+package kieker.common.util.classpath;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-
-import kieker.common.record.factory.ClassForNameResolver;
 
 /**
  * @author Christian Wulf
