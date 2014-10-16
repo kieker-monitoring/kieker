@@ -16,6 +16,9 @@
 
 package kieker.test.monitoring.junit.core.configuration;
 
+import java.io.File;
+import java.net.URISyntaxException;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -29,14 +32,25 @@ import kieker.test.monitoring.util.DefaultConfigurationFactory;
 /**
  * Tests whether the factory methods of {@link Configuration} return
  * instances and performs basic checks on these.
- * 
+ *
  * @author Andre van Hoorn, Jan Waller
- * 
+ *
  * @since 1.3
  */
 public class TestConfigurationFactoryMethods extends AbstractKiekerTest {
 
-	private static final String EXAMPLE_CONFIG_FILE_IN_TRUNK = "test/monitoring/META-INF/kieker.monitoring.test.properties";
+	private static final String EXAMPLE_CONFIG_FILE_IN_TRUNK;
+
+	static {
+		String tempPath;
+		try {
+			tempPath = new File(TestConfigurationFactoryMethods.class.getResource("/META-INF/kieker.monitoring.test.properties").toURI()).getAbsolutePath();
+		} catch (final URISyntaxException e) {
+			tempPath = null; // NOPMD (null assignment could lead to an exception - but this is a unit test)
+		}
+
+		EXAMPLE_CONFIG_FILE_IN_TRUNK = tempPath;
+	}
 
 	/**
 	 * Default constructor.
@@ -131,7 +145,7 @@ public class TestConfigurationFactoryMethods extends AbstractKiekerTest {
 
 	/**
 	 * Tests {@link Configuration#createSingletonConfiguration()}.
-	 * 
+	 *
 	 * Test combinations of JVM-Params, Filenames, etc.
 	 */
 	@Test

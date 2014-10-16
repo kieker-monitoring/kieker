@@ -43,7 +43,7 @@ import kieker.test.monitoring.util.NamedListWriter;
 
 /**
  * @author Andre van Hoorn
- * 
+ *
  * @since 1.5
  */
 public class TestSpringMethodInterceptor extends AbstractKiekerTest {
@@ -75,7 +75,8 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 		System.setProperty(ConfigurationFactory.HOST_NAME, HOSTNAME);
 
 		// start the server
-		this.ctx = new FileSystemXmlApplicationContext("test/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/jetty.xml");
+		final URL configURL = TestSpringMethodInterceptor.class.getResource("/kieker/test/monitoring/junit/probe/spring/executions/jetty/jetty.xml");
+		this.ctx = new FileSystemXmlApplicationContext(configURL.toExternalForm());
 
 		// Note that the Spring interceptor is configure in
 		// test/monitoring/kieker/test/monitoring/junit/probe/spring/executions/jetty/webapp/WEB-INF/spring/servlet-context.xml to only instrument
@@ -104,7 +105,7 @@ public class TestSpringMethodInterceptor extends AbstractKiekerTest {
 
 	/**
 	 * Performs some basic tests on the received records.
-	 * 
+	 *
 	 * @param records
 	 */
 	private void checkRecordList(final List<IMonitoringRecord> records) {
