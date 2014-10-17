@@ -1,14 +1,14 @@
 apply plugin: 'java'
 
-def config = "../" + project['dir.config']
+def config = "../" + dirConfig
 
 subprojects {
     apply plugin: 'java'
 	
-    version = project['kieker.version']
+    version = kiekerVersion
 	
-	sourceCompatibility = project['java.version']
-	targetCompatibility = project['java.version']
+	sourceCompatibility = 1.6
+	targetCompatibility = 1.6
 	
 	sourceSets {
 		main { 
@@ -34,9 +34,9 @@ subprojects {
 	test {
 		ignoreFailures = true
 	}
-
+	
 	apply plugin: 'pmd'
-	pmd {
+	pmd { 
 		ignoreFailures = true
 
 		// Clear the rule set first. Otherwise we would have a lot of additional rules in our rule set.
@@ -48,7 +48,7 @@ subprojects {
 	checkstyle {
 		ignoreFailures = true
 		showViolations = false
-		
+
 		configFile = file("$config/cs-conf.xml")		
 	}
 	
@@ -85,11 +85,12 @@ def today() {
     return formattedDate
 }
 
-def subprojectsMain = subprojects - project(":kieker-examples:userguide:ch2--bookstore-application") - project(":kieker-examples:userguide:ch2--manual-instrumentation")
+// We have multiple subprojects -but we do not want all of them in our JAR files.
+def mainSubprojects = [project(':kieker-common'), project(':kieker-monitoring'), project(':kieker-analysis'), project(':kieker-tools')]
 
-task mainJar(type: Jar, dependsOn:  subprojectsMain.tasks["build"] ) {
-	baseName = project['kieker.packagenamebase'] + "-" + project['kieker.version']
-    subprojectsMain.each { subproject ->
+task mainJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
+	baseName = kiekerPackagenamebase + "-" + kiekerVersion
+    mainSubprojects.each { subproject ->
         from subproject.configurations.archives.allArtifacts.files.collect {
             zipTree(it)
         }
@@ -97,19 +98,19 @@ task mainJar(type: Jar, dependsOn:  subprojectsMain.tasks["build"] ) {
 	
 	manifest {
 		attributes (
-			"Specification-Version": project['kieker.version'],
-			"Specification-Vendor": project['kieker.copyright'],
-			"Implementation-Title": project['kieker.name'],
-			"Implementation-Version": project['kieker.version'] + " (" + today() + ")",
-			"Implementation-Vendor": project['kieker.copyright'],
+			"Specification-Version": kiekerVersion,
+			"Specification-Vendor": kiekerCopyright,
+			"Implementation-Title": kiekerName,
+			"Implementation-Version": kiekerVersion + " (" + today() + ")",
+			"Implementation-Vendor": kiekerCopyright,
 			"kieker" // The section name
 		)
     }
 }
 
-task emfJar(type: Jar, dependsOn:  subprojectsMain.tasks["build"] ) {
-	baseName = project['kieker.packagenamebase'] + "-" + project['kieker.version'] + "_emf"
-    subprojectsMain.each { subproject ->
+task emfJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
+	baseName = kiekerPackagenamebase + "-" + kiekerVersion + "_emf"
+    mainSubprojects.each { subproject ->
         from subproject.configurations.archives.allArtifacts.files.collect {
             zipTree(it)
         }
@@ -119,9 +120,9 @@ task emfJar(type: Jar, dependsOn:  subprojectsMain.tasks["build"] ) {
 	}
 }
 
-task aspectJJar(type: Jar, dependsOn:  subprojectsMain.tasks["build"] ) {
-	baseName = project['kieker.packagenamebase'] + "-" + project['kieker.version'] + "_aspectj"
-    subprojectsMain.each { subproject ->
+task aspectJJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
+	baseName = kiekerPackagenamebase + "-" + kiekerVersion + "_aspectj"
+    mainSubprojects.each { subproject ->
         from subproject.configurations.archives.allArtifacts.files.collect {
             zipTree(it)
         }
