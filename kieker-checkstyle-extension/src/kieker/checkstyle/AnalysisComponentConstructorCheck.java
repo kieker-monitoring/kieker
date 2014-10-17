@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.cs;
+package kieker.checkstyle;
 
 import com.puppycrawl.tools.checkstyle.api.Check;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
@@ -29,17 +29,17 @@ import kieker.common.configuration.Configuration;
  * This is an additional checkstyle check which makes sure that all analysis components supply the default constructor (using a {@link Configuration} and an
  * {@link IProjectContext} object) we need for the framework.<br>
  * </br>
- * 
+ *
  * Keep in mind that the check is not perfect, as checkstyle has some limitations. The main drawback is that we cannot check types. We can therefore not recognize
  * whether a class inherits directly or indirectly from {@link kieker.analysis.analysisComponent.AbstractAnalysisComponent}. Instead we use the annotations
  * {@link Plugin} and {@link Repository} to check whether a class is an analysis component or not. This can lead to false positives. Furthermore we cannot check the
  * types of the parameters for the constructors either. We use the names of the types to check this. This can lead to false positives as well.<br>
  * </br>
- * 
+ *
  * The check provides a property to ignore abstract classes.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.7
  */
 public class AnalysisComponentConstructorCheck extends Check {
@@ -87,10 +87,10 @@ public class AnalysisComponentConstructorCheck extends Check {
 
 	/**
 	 * Checks whether the given constructor seems to be a valid one or not.
-	 * 
+	 *
 	 * @param constructor
 	 *            The constructor in question.
-	 * 
+	 *
 	 * @return true if and only if the constructor seems to be valid.
 	 */
 	private static boolean isValidConstructor(final DetailAST constructor) {
@@ -113,10 +113,10 @@ public class AnalysisComponentConstructorCheck extends Check {
 
 	/**
 	 * This method finds out whether the given class is an analysis component or not (by searching for annotations with the names "Plugin" or "Repository").
-	 * 
+	 *
 	 * @param clazz
 	 *            The class in question.
-	 * 
+	 *
 	 * @return true if and only if the class is an analysis component.
 	 */
 	private static boolean isAnalysisComponent(final DetailAST clazz) {
@@ -145,7 +145,7 @@ public class AnalysisComponentConstructorCheck extends Check {
 
 	/**
 	 * Setter for the property {@link #ignoreAbstractClasses}.
-	 * 
+	 *
 	 * @param ignoreAbstractClasses
 	 *            The new value of the property.
 	 */

@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.cs;
+package kieker.checkstyle;
 
 import java.util.List;
 import java.util.Locale;
@@ -29,9 +29,9 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 /**
  * This class extends checkstyle with a new check which makes sure that no block comments (expect for javadoc and comments containing {@code (non-javadoc)}) are
  * used within the source files. The check detects all files with a package declaration.
- * 
+ *
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.7
  */
 public class NoBlockCommentsCheck extends Check {
@@ -46,7 +46,7 @@ public class NoBlockCommentsCheck extends Check {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.puppycrawl.tools.checkstyle.api.Check#getDefaultTokens()
 	 */
 	@Override

@@ -12,6 +12,7 @@
 	<classpathentry kind="src" path="kieker-tools/src"/>
 	<classpathentry kind="src" path="kieker-tools/src-gen"/>
 	<classpathentry kind="src" path="kieker-tools/test"/>
+	<classpathentry kind="src" path="kieker-checkstyle-extension/src"/>
 	<classpathentry kind="src" path="kieker-common/model"/>
 	<classpathentry kind="src" path="kieker-tools/model"/>
 	<classpathentry kind="src" path="kieker-analysis/model"/>
