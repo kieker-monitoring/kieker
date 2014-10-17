@@ -3,32 +3,26 @@ dependencies {
 	compile project(':kieker-analysis')
 	compile project(':kieker-monitoring')
 		
-	compile fileTree('../lib') {
-		include 'commons-cli-*.jar'
-		include 'jgraphx-*.jar'
-		include 'commons-math3-*.jar'
-		include 'commons-lang3-*.jar'
-		include 'Rsession-*.jar'
-		include 'Rserve-*.jar'
-		include 'REngine-*.jar'
-		include 'reflections-*.jar'
-		include 'activemq-core-*.jar'
-	}	
+	compile resolveLibrary('commons-cli-*.jar')
+	compile resolveLibrary('jgraphx-*.jar')
+	compile resolveLibrary('commons-math3-*.jar')
+	compile resolveLibrary('commons-lang3-*.jar')
+	compile resolveLibrary('Rsession-*.jar')
+	compile resolveLibrary('Rserve-*.jar')
+	compile resolveLibrary('REngine-*.jar')
+	compile resolveLibrary('reflections-*.jar')
+	compile resolveLibrary('activemq-core-*.jar')
 	
 	// This is a workaround allowing the Kieker tests to depend on each other. I do not recommend to do this.
 	testCompile project(':kieker-common').sourceSets.test.output
 	testCompile project(':kieker-analysis').sourceSets.test.output
 	testCompile project(':kieker-monitoring').sourceSets.test.output
 	
-	testCompile fileTree('../lib') {
-		include 'static-analysis/checkstyle-*/lib/checkstyle-all.jar'
-	}
+	testCompile resolveLibrary('static-analysis/checkstyle-*/lib/checkstyle-all.jar')
 
-	testRuntime fileTree('../lib') {
-		include 'derby-*.jar'
-		include 'geronimo-j2ee-management_1.1_spec-*.jar'
-		include 'kahadb-*.jar'
-	}
+	testRuntime resolveLibrary('derby-*.jar')
+	testRuntime resolveLibrary('geronimo-j2ee-management_1.1_spec-*.jar')
+	testRuntime resolveLibrary('kahadb-*.jar')
 }
 
 task generateRecords() << {
