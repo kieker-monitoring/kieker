@@ -33,14 +33,14 @@ subprojects {
 		ignoreFailures = true
 	}
 	
-	apply plugin: 'pmd'
-	pmd { 
-		ignoreFailures = true
-
+	//apply plugin: 'pmd'
+	//pmd { 
+	//	ignoreFailures = true
+//
 		// Clear the rule set first. Otherwise we would have a lot of additional rules in our rule set.
-		ruleSets = []
-		ruleSetFiles = files(resolveRelativeToParent(dirConfig, 'pmdrules.xml'))
-	}
+	//	ruleSets = []
+	//	ruleSetFiles = files(resolveRelativeToParent(dirConfig, 'pmdrules.xml'))
+	//}
 	
 	apply plugin: 'checkstyle'
 	checkstyle {
@@ -53,7 +53,7 @@ subprojects {
 	//apply plugin: 'findbugs'
 	//findbugs { 
 	//	ignoreFailures = true 
-	//	effort = "max"
+	//	effort = "min"
 	//	reportLevel = "low"
 	//	
 	//	excludeFilter = resolveRelativeToParent(dirConfig, 'fb-filter.xml')
@@ -67,7 +67,7 @@ subprojects {
 	
 	// Those are some dependencies which are needed by all submodules
 	dependencies {
-		pmd resolveLibrary('**/pmd-*/**/*.jar')
+		//pmd resolveLibrary('**/pmd-*/**/*.jar')
 		checkstyle resolveLibrary('**/checkstyle-*/**/*.jar')
 		checkstyle project(':kieker-checkstyle-extension')
 		//findbugs resolveLibrary('**/findbugs-*/**/*.jar')
