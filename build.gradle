@@ -85,7 +85,7 @@ def today() {
     return formattedDate
 }
 
-def subprojectsMain = subprojects - project(":kieker-examples:userguide:ch2--bookstore-application")
+def subprojectsMain = subprojects - project(":kieker-examples:userguide:ch2--bookstore-application") - project(":kieker-examples:userguide:ch2--manual-instrumentation")
 
 task mainJar(type: Jar, dependsOn:  subprojectsMain.tasks["build"] ) {
 	baseName = project['kieker.packagenamebase'] + "-" + project['kieker.version']

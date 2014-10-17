@@ -22,3 +22,8 @@ plugin.xml
 /kieker-tools/build
 /kieker-examples/userguide/ch2--bookstore-application/build
 /kieker-examples/userguide/ch2--bookstore-application/.gradle
+/kieker-examples/build
+/kieker-tools/*.log
+/kieker-tools/activemq-data
+/kieker-examples/userguide/build
+/kieker-analysis/*.log
