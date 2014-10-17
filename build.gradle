@@ -27,7 +27,26 @@ subprojects {
 				srcDir 'test-resources'
 			}
 		}
+		integrationTest {
+			java {
+				srcDir 'test-integration' 
+				
+				compileClasspath += main.output + test.output
+				runtimeClasspath += main.output + test.output
+			}
+		}
 	}
+	
+	configurations {
+		integrationTestCompile.extendsFrom testCompile
+		integrationTestRuntime.extendsFrom testRuntime
+	}
+	 
+	task integrationTest(type: Test){
+		testClassesDir = project.sourceSets.integrationTest.output.classesDir
+		classpath = project.sourceSets.integrationTest.runtimeClasspath
+	}
+	check.dependsOn integrationTest
 	
 	test {
 		ignoreFailures = true
