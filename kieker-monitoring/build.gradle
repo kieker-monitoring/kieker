@@ -23,5 +23,6 @@ dependencies {
 	testRuntime resolveLibrary('framework-libs/cxf/woodstox-core-asl-*.jar')
 	testRuntime resolveLibrary('framework-libs/cxf/stax2-api-*.jar')
 	testRuntime resolveLibrary('framework-libs/spring/spring-expression-*.jar')
-	testRuntime resolveLibrary('../examples/JavaEEServletContainerExample/jetty/lib/jetty-*.jar')
+
+	testRuntime fileTree(dir: rootProject.file('examples/JavaEEServletContainerExample/jetty/lib'), include: 'jetty-*.jar')
 }
