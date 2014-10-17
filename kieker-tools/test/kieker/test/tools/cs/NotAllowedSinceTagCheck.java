@@ -14,29 +14,27 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.checkstyle;
-
-import java.util.Collection;
+package kieker.test.tools.cs;
 
 import com.puppycrawl.tools.checkstyle.api.Check;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 
 /**
- * This is an additional checkstyle check which makes sure that classes, interfaces, enums, annotations and methods within interfaces have a since tag.
- *
+ * This is an additional checkstyle check which makes sure that <b>only</b> classes, interfaces, annotations, enums and methods within interfaces have a since tag.
+ * 
  * @author Nils Christian Ehmke
- *
+ * 
  * @since 1.7
- *
- * @see NotAllowedSinceTagCheck
+ * 
+ * @see MissingSinceTagCheck
  */
-public class MissingSinceTagCheck extends Check {
+public class NotAllowedSinceTagCheck extends Check {
 
 	/**
 	 * Creates a new instance of this class.
 	 */
-	public MissingSinceTagCheck() {
+	public NotAllowedSinceTagCheck() {
 		// Nothing to do here
 		super();
 	}
@@ -44,30 +42,14 @@ public class MissingSinceTagCheck extends Check {
 	@Override
 	public int[] getDefaultTokens() {
 		// This here makes sure that we just get the correct components
-		return new int[] { TokenTypes.CLASS_DEF, TokenTypes.INTERFACE_DEF, TokenTypes.ANNOTATION_DEF, TokenTypes.ENUM_DEF };
+		return new int[] { TokenTypes.METHOD_DEF, TokenTypes.VARIABLE_DEF };
 	}
 
 	@Override
 	public void visitToken(final DetailAST ast) {
-		// Do not check private classes etc.
-		if (!CSUtility.isPrivate(ast)) {
-			this.checkSinceTag(ast);
-
-			if (ast.getType() == TokenTypes.INTERFACE_DEF) {
-				this.checkSinceTag(CSUtility.getMethodsFromClass(ast));
-			}
+		if (CSUtility.sinceTagAvailable(this, ast) && ((ast.getType() == TokenTypes.VARIABLE_DEF) || !(CSUtility.parentIsInterface(ast)))) {
+			this.log(ast.getLineNo(), "@since tag not allowed");
 		}
 	}
 
-	private void checkSinceTag(final Collection<DetailAST> asts) {
-		for (final DetailAST ast : asts) {
-			this.checkSinceTag(ast);
-		}
-	}
-
-	private void checkSinceTag(final DetailAST ast) {
-		if (!CSUtility.sinceTagAvailable(this, ast)) {
-			this.log(ast.getLineNo(), "@since tag missing");
-		}
-	}
 }

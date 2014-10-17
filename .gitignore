@@ -27,4 +27,3 @@ plugin.xml
 /kieker-tools/activemq-data
 /kieker-examples/userguide/build
 /kieker-analysis/*.log
-/kieker-checkstyle-extension/build

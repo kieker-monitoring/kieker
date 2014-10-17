@@ -14,26 +14,29 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.checkstyle;
+package kieker.test.tools.cs;
 
-import com.puppycrawl.tools.checkstyle.api.AnnotationUtility;
+import java.util.Collection;
+
 import com.puppycrawl.tools.checkstyle.api.Check;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 
 /**
- * This is an additional checkstyle check which makes sure that JUnit tests do not use the {@code @ignore} annotation.
- *
+ * This is an additional checkstyle check which makes sure that classes, interfaces, enums, annotations and methods within interfaces have a since tag.
+ * 
  * @author Nils Christian Ehmke
- *
- * @since 1.10
+ * 
+ * @since 1.7
+ * 
+ * @see NotAllowedSinceTagCheck
  */
-public class NotAllowedIgnoreAnnotationCheck extends Check {
+public class MissingSinceTagCheck extends Check {
 
 	/**
 	 * Creates a new instance of this class.
 	 */
-	public NotAllowedIgnoreAnnotationCheck() {
+	public MissingSinceTagCheck() {
 		// Nothing to do here
 		super();
 	}
@@ -41,22 +44,30 @@ public class NotAllowedIgnoreAnnotationCheck extends Check {
 	@Override
 	public int[] getDefaultTokens() {
 		// This here makes sure that we just get the correct components
-		return new int[] { TokenTypes.METHOD_DEF };
+		return new int[] { TokenTypes.CLASS_DEF, TokenTypes.INTERFACE_DEF, TokenTypes.ANNOTATION_DEF, TokenTypes.ENUM_DEF };
 	}
 
 	@Override
 	public void visitToken(final DetailAST ast) {
-		if (this.hasTestAnnotation(ast) && this.hasIgnoreAnnotation(ast)) {
-			this.log(ast.getLineNo(), "@ignore annotation not allowed");
+		// Do not check private classes etc.
+		if (!CSUtility.isPrivate(ast)) {
+			this.checkSinceTag(ast);
+
+			if (ast.getType() == TokenTypes.INTERFACE_DEF) {
+				this.checkSinceTag(CSUtility.getMethodsFromClass(ast));
+			}
 		}
 	}
 
-	private boolean hasTestAnnotation(final DetailAST ast) {
-		return AnnotationUtility.containsAnnotation(ast, "Test");
+	private void checkSinceTag(final Collection<DetailAST> asts) {
+		for (final DetailAST ast : asts) {
+			this.checkSinceTag(ast);
+		}
 	}
 
-	private boolean hasIgnoreAnnotation(final DetailAST ast) {
-		return AnnotationUtility.containsAnnotation(ast, "Ignore");
+	private void checkSinceTag(final DetailAST ast) {
+		if (!CSUtility.sinceTagAvailable(this, ast)) {
+			this.log(ast.getLineNo(), "@since tag missing");
+		}
 	}
-
 }

@@ -1,7 +1,9 @@
 dependencies {
-	compile resolveLibrary('commons-logging-*.jar')
-	compile resolveLibrary('slf4j-api-*.jar')
-	compile resolveLibrary('framework-libs/cxf/cxf-*.jar')
+	compile fileTree('../lib') {
+		include 'commons-logging-*.jar'
+		include 'slf4j-api-*.jar'
+		include 'framework-libs/cxf/cxf-*.jar'
+	}
 }
 
 task generateRecords() << {

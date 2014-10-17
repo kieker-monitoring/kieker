@@ -14,27 +14,26 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.checkstyle;
+package kieker.test.tools.cs;
 
+import com.puppycrawl.tools.checkstyle.api.AnnotationUtility;
 import com.puppycrawl.tools.checkstyle.api.Check;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 
 /**
- * This is an additional checkstyle check which makes sure that <b>only</b> classes, interfaces, annotations, enums and methods within interfaces have a since tag.
- *
+ * This is an additional checkstyle check which makes sure that JUnit tests do not use the {@code @ignore} annotation.
+ * 
  * @author Nils Christian Ehmke
- *
- * @since 1.7
- *
- * @see MissingSinceTagCheck
+ * 
+ * @since 1.10
  */
-public class NotAllowedSinceTagCheck extends Check {
+public class NotAllowedIgnoreAnnotationCheck extends Check {
 
 	/**
 	 * Creates a new instance of this class.
 	 */
-	public NotAllowedSinceTagCheck() {
+	public NotAllowedIgnoreAnnotationCheck() {
 		// Nothing to do here
 		super();
 	}
@@ -42,14 +41,22 @@ public class NotAllowedSinceTagCheck extends Check {
 	@Override
 	public int[] getDefaultTokens() {
 		// This here makes sure that we just get the correct components
-		return new int[] { TokenTypes.METHOD_DEF, TokenTypes.VARIABLE_DEF };
+		return new int[] { TokenTypes.METHOD_DEF };
 	}
 
 	@Override
 	public void visitToken(final DetailAST ast) {
-		if (CSUtility.sinceTagAvailable(this, ast) && ((ast.getType() == TokenTypes.VARIABLE_DEF) || !(CSUtility.parentIsInterface(ast)))) {
-			this.log(ast.getLineNo(), "@since tag not allowed");
+		if (this.hasTestAnnotation(ast) && this.hasIgnoreAnnotation(ast)) {
+			this.log(ast.getLineNo(), "@ignore annotation not allowed");
 		}
+	}
+
+	private boolean hasTestAnnotation(final DetailAST ast) {
+		return AnnotationUtility.containsAnnotation(ast, "Test");
+	}
+
+	private boolean hasIgnoreAnnotation(final DetailAST ast) {
+		return AnnotationUtility.containsAnnotation(ast, "Ignore");
 	}
 
 }

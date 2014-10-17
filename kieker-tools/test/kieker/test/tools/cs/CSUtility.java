@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.checkstyle;
+package kieker.test.tools.cs;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,9 +31,9 @@ import com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocUtils.JavadocTagTyp
 
 /**
  * This is a simple utility class providing some methods which can be useful for other checkstyle checks as well.
- *
+ * 
  * @author Nils Christian Ehmke
- *
+ * 
  * @since 1.7
  */
 public final class CSUtility {
@@ -46,12 +46,12 @@ public final class CSUtility {
 
 	/**
 	 * This method checks whether the given component has a javadoc comment with a valid since tag.
-	 *
+	 * 
 	 * @param check
 	 *            The current check.
 	 * @param ast
 	 *            The component to check for the tag.
-	 *
+	 * 
 	 * @return true if and only if there is a since tag in the javadoc comment of the given component.
 	 */
 	public static boolean sinceTagAvailable(final Check check, final DetailAST ast) {
@@ -77,10 +77,10 @@ public final class CSUtility {
 
 	/**
 	 * This method extracts all method definitions from the given class (or interface).
-	 *
+	 * 
 	 * @param ast
 	 *            The class (or interface).
-	 *
+	 * 
 	 * @return A collection of available methods.
 	 */
 	public static Collection<DetailAST> getMethodsFromClass(final DetailAST ast) {
@@ -101,10 +101,10 @@ public final class CSUtility {
 
 	/**
 	 * Checks whether the "parent" (the containing element) of the method is an interface or not.
-	 *
+	 * 
 	 * @param ast
 	 *            The method to check.
-	 *
+	 * 
 	 * @return true if and only if the method is contained in an interface.
 	 */
 	public static boolean parentIsInterface(final DetailAST ast) {
@@ -113,10 +113,10 @@ public final class CSUtility {
 
 	/**
 	 * Checks whether the given class is marked as private or not.
-	 *
+	 * 
 	 * @param clazz
 	 *            The class to check.
-	 *
+	 * 
 	 * @return true if and only if the class contains a private modifier.
 	 */
 	public static boolean isPrivate(final DetailAST clazz) {
@@ -127,10 +127,10 @@ public final class CSUtility {
 
 	/**
 	 * Checks whether the given class is marked as abstract or not.
-	 *
+	 * 
 	 * @param clazz
 	 *            The class to check.
-	 *
+	 * 
 	 * @return true if and only if the class contains an abstract modifier.
 	 */
 	public static boolean isAbstract(final DetailAST clazz) {

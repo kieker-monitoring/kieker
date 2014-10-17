@@ -174,25 +174,25 @@
         <!-- KIEKER -->
         <property name="tabWidth" value="4"/>
         <!-- KIEKER -->
-        <module name="kieker.checkstyle.AnalysisComponentConstructorCheck">
+        <module name="kieker.test.tools.cs.AnalysisComponentConstructorCheck">
             <property name="ignoreAbstractClasses" value="true"/>
-            <property name="severity" value="error" default="ignore"/>
+            <property name="severity" value="${checkstyle.ignoreCustomKieker}" default="ignore"/>
         </module>
-        <module name="kieker.checkstyle.MonitoringRecordFactoryConventionCheck">
+        <module name="kieker.test.tools.cs.MonitoringRecordFactoryConventionCheck">
             <property name="ignoreAbstractClasses" value="true"/>
-            <property name="severity" value="error" default="ignore"/>
+            <property name="severity" value="${checkstyle.ignoreCustomKieker}" default="ignore"/>
         </module>
-        <module name="kieker.checkstyle.MissingSinceTagCheck">
-            <property name="severity" value="error" default="ignore"/>
+        <module name="kieker.test.tools.cs.MissingSinceTagCheck">
+            <property name="severity" value="${checkstyle.ignoreCustomKieker}" default="ignore"/>
         </module>
-        <module name="kieker.checkstyle.NotAllowedSinceTagCheck">
-            <property name="severity" value="error" default="ignore"/>
+        <module name="kieker.test.tools.cs.NotAllowedSinceTagCheck">
+            <property name="severity" value="${checkstyle.ignoreCustomKieker}" default="ignore"/>
         </module>
-        <module name="kieker.checkstyle.NoBlockCommentsCheck">
-            <property name="severity" value="error" default="ignore"/>
+        <module name="kieker.test.tools.cs.NoBlockCommentsCheck">
+            <property name="severity" value="${checkstyle.ignoreCustomKieker}" default="ignore"/>
         </module>
-		<module name="kieker.checkstyle.NotAllowedIgnoreAnnotationCheck">
-            <property name="severity" value="error" default="ignore"/>
+		<module name="kieker.test.tools.cs.NotAllowedIgnoreAnnotationCheck">
+            <property name="severity" value="${checkstyle.ignoreCustomKieker}" default="ignore"/>
         </module>
         <module name="FileContentsHolder"/>
 

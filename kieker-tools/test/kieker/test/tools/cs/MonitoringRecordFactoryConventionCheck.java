@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.checkstyle;
+package kieker.test.tools.cs;
 
 import com.puppycrawl.tools.checkstyle.api.Check;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
@@ -26,14 +26,14 @@ import kieker.common.record.IMonitoringRecord;
  * This class extends checkstyle with a new check which makes sure that classes, which implement the {@link IMonitoringRecord.Factory} interface, supply the
  * necessary static field (for the types) and the constructor (working with an array of {@link Object}) for the framework.<br>
  * </br>
- *
+ * 
  * Keep in mind that the check is not perfect, as checkstyle has some limitations. There can therefore be some false positives.<br>
  * </br>
- *
+ * 
  * The check provides a property to ignore abstract classes.
- *
+ * 
  * @author Nils Christian Ehmke
- *
+ * 
  * @since 1.7
  */
 public class MonitoringRecordFactoryConventionCheck extends Check {
@@ -113,7 +113,7 @@ public class MonitoringRecordFactoryConventionCheck extends Check {
 
 	/**
 	 * This method checks the fields of the record.
-	 *
+	 * 
 	 * @param ast
 	 *            The record class.
 	 */
@@ -134,7 +134,7 @@ public class MonitoringRecordFactoryConventionCheck extends Check {
 
 	/**
 	 * This method checks the constructors of the record.
-	 *
+	 * 
 	 * @param ast
 	 *            The record class.
 	 */
@@ -155,10 +155,10 @@ public class MonitoringRecordFactoryConventionCheck extends Check {
 
 	/**
 	 * Checks whether the given field is valid or not.
-	 *
+	 * 
 	 * @param field
 	 *            The field to check.
-	 *
+	 * 
 	 * @return true if and only if the field is a valid one.
 	 */
 	private static boolean isValidTypeField(final DetailAST field) {
@@ -179,12 +179,12 @@ public class MonitoringRecordFactoryConventionCheck extends Check {
 
 	/**
 	 * This method checks whether the given trees are more or less equal. This is necessary as the available methods do not work as expected for this special case.
-	 *
+	 * 
 	 * @param actual
 	 *            The actual tree.
 	 * @param expected
 	 *            The expected tree.
-	 *
+	 * 
 	 * @return true if and only if the trees are (more or less) equal.
 	 */
 	private static boolean treeCompare(final DetailAST actual, final DetailAST expected) {
@@ -217,10 +217,10 @@ public class MonitoringRecordFactoryConventionCheck extends Check {
 
 	/**
 	 * Checks whether the given constructor seems to be a valid one or not.
-	 *
+	 * 
 	 * @param constructor
 	 *            The constructor in question.
-	 *
+	 * 
 	 * @return true if and only if the constructor seems to be valid.
 	 */
 	private static boolean isValidConstructor(final DetailAST constructor) {
@@ -242,10 +242,10 @@ public class MonitoringRecordFactoryConventionCheck extends Check {
 
 	/**
 	 * This method finds out whether the given class implements the record factory or not.
-	 *
+	 * 
 	 * @param clazz
 	 *            The class in question.
-	 *
+	 * 
 	 * @return true if and only if the class implements the record factory.
 	 */
 	private static boolean implementsFactory(final DetailAST clazz) {
@@ -271,7 +271,7 @@ public class MonitoringRecordFactoryConventionCheck extends Check {
 
 	/**
 	 * Setter for the property {@link #ignoreAbstractClasses}.
-	 *
+	 * 
 	 * @param ignoreAbstractClasses
 	 *            The new value of the property.
 	 */
