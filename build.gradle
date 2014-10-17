@@ -69,6 +69,7 @@ subprojects {
 	dependencies {
 		pmd resolveLibrary('**/pmd-*/**/*.jar')
 		checkstyle resolveLibrary('**/checkstyle-*/**/*.jar')
+		checkstyle project(':kieker-checkstyle-extension')
 		findbugs resolveLibrary('**/findbugs-*/**/*.jar')
 		
 		testCompile resolveLibrary('junit-*.jar')

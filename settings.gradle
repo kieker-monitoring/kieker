@@ -1,4 +1,5 @@
 // This file defines the subprojects of Kieker.
 include 'kieker-common', 'kieker-monitoring', 'kieker-analysis', 'kieker-tools', 
+		'kieker-checkstyle-extension',
         'kieker-examples:userguide:ch2--bookstore-application', 
 		'kieker-examples:userguide:ch2--manual-instrumentation'

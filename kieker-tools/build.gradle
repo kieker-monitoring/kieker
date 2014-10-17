@@ -17,8 +17,6 @@ dependencies {
 	testCompile project(':kieker-common').sourceSets.test.output
 	testCompile project(':kieker-analysis').sourceSets.test.output
 	testCompile project(':kieker-monitoring').sourceSets.test.output
-	
-	testCompile resolveLibrary('static-analysis/checkstyle-*/lib/checkstyle-all.jar')
 
 	testRuntime resolveLibrary('derby-*.jar')
 	testRuntime resolveLibrary('geronimo-j2ee-management_1.1_spec-*.jar')

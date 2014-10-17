@@ -1,0 +1,6 @@
+dependencies {
+	compile project(':kieker-common')
+	compile project(':kieker-analysis')
+
+	compile resolveLibrary('**/checkstyle-*/**/*.jar')
+}
