@@ -1,6 +1,4 @@
-apply plugin: 'java'
-
-subprojects {
+allprojects {
     apply plugin: 'java'
 	
     version = kiekerVersion
@@ -117,10 +115,12 @@ def year() {
    return formattedDate
 }
 
-// We have multiple subprojects -but we do not want all of them in our JAR files.
+// We have multiple subprojects - but we do not want all of them in our JAR files.
 def mainSubprojects = [project(':kieker-common'), project(':kieker-monitoring'), project(':kieker-analysis'), project(':kieker-tools')]
 
 task apidoc(type: Javadoc) {
+    description = 'Generate the Javadoc API documentation for the Kieker Framework'
+
     source mainSubprojects.collect {project -> project.sourceSets.main.allJava } 
     classpath = files(mainSubprojects.collect {project -> project.sourceSets.main.compileClasspath}) 
     destinationDir = new File(projectDir, 'docs')
@@ -219,18 +219,22 @@ def sourceContent = project.copySpec {
 	}
 }
 
-task distributeSourceZip(type: Zip, group: 'distribution', description: 'Distributes source archive.', dependsOn: [mainJar, emfJar, aspectJJar]) {
+task distributeSourceZip(type: Zip, group: 'distribution', dependsOn: [mainJar, emfJar, aspectJJar]) {
+	description = 'Distributes source archive.'
 	classifier = 'src'
 	with sourceContent
 }
 
-task distributeSourceTar(type: Tar, group: 'distribution', description: 'Distributes source archive.', dependsOn: [mainJar, emfJar, aspectJJar]) {
+task distributeSourceTar(type: Tar, group: 'distribution', dependsOn: [mainJar, emfJar, aspectJJar]) {
+	description = 'Distributes source archive.'
 	classifier = 'src'
 	with sourceContent
 }
 
 task jenkinsBuild(dependsOn: [mainJar, emfJar, aspectJJar]) {
+	description = 'Builds and tests the JAR files of the Kieker Framework'
 }
 
 task jenkinsNightlyBuild(dependsOn: [distribute]) {
+	description = 'Builds and tests the release of the Kieker Framework'
 }
