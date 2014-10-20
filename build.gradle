@@ -111,8 +111,29 @@ def today() {
     return formattedDate
 }
 
+def year() {
+   def date = new Date()
+   def formattedDate = date.format('yyyy')
+   return formattedDate
+}
+
 // We have multiple subprojects -but we do not want all of them in our JAR files.
 def mainSubprojects = [project(':kieker-common'), project(':kieker-monitoring'), project(':kieker-analysis'), project(':kieker-tools')]
+
+task apidoc(type: Javadoc) {
+    source mainSubprojects.collect {project -> project.sourceSets.main.allJava } 
+    classpath = files(mainSubprojects.collect {project -> project.sourceSets.main.compileClasspath}) 
+    destinationDir = new File(projectDir, 'docs')
+	
+	title = "Kieker Monitoring and Analysis Framework, Vers. $kiekerVersion<br/>API Documentation"
+	options.header = "Kieker $kiekerVersion"
+	options.footer = "Kieker $kiekerVersion"
+	options.bottom = "Copyright " + year() + " $kiekerCopyright, <a href=\"http://kieker-monitoring.net\">http://kieker-monitoring.net</a>"
+	options.author = "true"
+	options.version = "false"
+	options.use = "true"
+	options.tags = ["generated", "ordered", "model"]
+}
 
 task mainJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 	baseName = kiekerPackagenamebase + "-" + kiekerVersion

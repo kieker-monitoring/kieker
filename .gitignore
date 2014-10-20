@@ -28,3 +28,4 @@ plugin.xml
 /kieker-examples/userguide/build
 /kieker-analysis/*.log
 /kieker-checkstyle-extension/build
+/docs
