@@ -137,6 +137,7 @@ task apidoc(type: Javadoc) {
 
 task mainJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 	baseName = kiekerPackagenamebase + "-" + kiekerVersion
+	version = ''
     mainSubprojects.each { subproject ->
         from subproject.configurations.archives.allArtifacts.files.collect {
             zipTree(it)
@@ -157,6 +158,7 @@ task mainJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 
 task emfJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 	baseName = kiekerPackagenamebase + "-" + kiekerVersion + "_emf"
+	version = ''
     mainSubprojects.each { subproject ->
         from subproject.configurations.archives.allArtifacts.files.collect {
             zipTree(it)
@@ -169,6 +171,7 @@ task emfJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 
 task aspectJJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 	baseName = kiekerPackagenamebase + "-" + kiekerVersion + "_aspectj"
+	version = ''
     mainSubprojects.each { subproject ->
         from subproject.configurations.archives.allArtifacts.files.collect {
             zipTree(it)

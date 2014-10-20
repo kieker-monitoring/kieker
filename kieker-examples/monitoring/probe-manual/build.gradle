@@ -1,0 +1,30 @@
+dependencies {
+	compile fileTree('../../../build/libs') {
+		include 'kieker-*.jar'
+	}
+}
+
+compileJava.dependsOn rootProject.mainJar
+
+// Create the JAR file in the root directory of the example
+libsDirName = '..'
+
+// Simplify the JAR's file name
+version = ''
+	
+task copyRuntimeLibs(type: Copy, dependsOn: rootProject.emfJar) {  
+	into "lib"  
+	from configurations.runtime  
+}	
+	
+task monitoringJar(type: Jar, dependsOn: copyRuntimeLibs) {
+	baseName = 'BookstoreApplication'
+	
+	from sourceSets.main.output
+}
+
+task runMonitoring(type: JavaExec) {
+	main = 'kieker.examples.monitoring.manual.BookstoreStarter'
+	classpath = sourceSets.main.runtimeClasspath
+	jvmArgs = ['-Dkieker.monitoring.writer.filesystem.AsyncFsWriter.customStoragePath=monitoring-logs']
+}
