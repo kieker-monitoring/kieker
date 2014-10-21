@@ -32,12 +32,12 @@ import kieker.tools.util.LoggingTimestampConverter;
 
 /**
  * This class is a container for a whole trace of executions (represented as instances of {@link Execution}).
- * 
+ *
  * Note that no assumptions about the {@link java.util.concurrent.TimeUnit} used for the
  * timestamps are made.
- * 
+ *
  * @author Andre van Hoorn
- * 
+ *
  * @since 0.95a
  */
 public class ExecutionTrace extends AbstractTrace {
@@ -50,10 +50,11 @@ public class ExecutionTrace extends AbstractTrace {
 	private long maxTout = -1;
 	private int maxEss = -1;
 	private final SortedSet<Execution> set = new TreeSet<Execution>(ExecutionTrace.createExecutionTraceComparator());
+	private final SortedSet<Execution> unmodifiableExecutions = Collections.unmodifiableSortedSet(this.set);
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param traceId
 	 *            The ID of this trace.
 	 */
@@ -63,7 +64,7 @@ public class ExecutionTrace extends AbstractTrace {
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param traceId
 	 *            The ID of this trace.
 	 * @param sessionId
@@ -75,10 +76,10 @@ public class ExecutionTrace extends AbstractTrace {
 
 	/**
 	 * Adds an execution to the trace.
-	 * 
+	 *
 	 * @param execution
 	 *            The execution object which will be added to this trace.
-	 * 
+	 *
 	 * @throws InvalidTraceException
 	 *             If the traceId of the passed Execution object is not the same as the traceId of this ExecutionTrace object.
 	 */
@@ -110,15 +111,15 @@ public class ExecutionTrace extends AbstractTrace {
 
 	/**
 	 * Returns the message trace representation for this trace.<br/>
-	 * 
+	 *
 	 * The transformation to a message trace is only computed during the first execution of this method. After this, the stored reference is returned --- unless
 	 * executions are added to the trace afterwards.
-	 * 
+	 *
 	 * @param rootExecution
 	 *            The root execution object.
-	 * 
+	 *
 	 * @return The resulting message trace.
-	 * 
+	 *
 	 * @throws InvalidTraceException
 	 *             If the given execution is somehow inconsistent or invalid.
 	 */
@@ -204,24 +205,25 @@ public class ExecutionTrace extends AbstractTrace {
 
 	/**
 	 * Returns a sorted set (unmodifiable) of {@link Execution}s in this trace.
-	 * 
+	 *
 	 * Note that the returned data structure is the (wrapped )internal data structure of this {@link ExecutionTrace} object, to which further elements may be added
 	 * by the {@link kieker.tools.traceAnalysis.systemModel.ExecutionTrace#add(Execution)} method. Consider to create a copy
 	 * of the returned list, while
 	 * synchronizing on this (i.e., the {@link ExecutionTrace}) object.
-	 * 
+	 *
 	 * @return the sorted set of {@link Execution}s in this trace
 	 */
 	public final SortedSet<Execution> getTraceAsSortedExecutionSet() {
+		// The justification why this works can be found in #1537.
 		synchronized (this) {
-			return Collections.unmodifiableSortedSet(this.set);
+			return this.unmodifiableExecutions;
 		}
 	}
 
 	/**
 	 * Returns the length of this trace in terms of the number of contained
 	 * executions.
-	 * 
+	 *
 	 * @return the length of this trace.
 	 */
 	public final int getLength() {
@@ -251,7 +253,7 @@ public class ExecutionTrace extends AbstractTrace {
 	/**
 	 * Returns the maximum execution stack size (ess) value, i.e., the maximum
 	 * stack depth, within the trace.
-	 * 
+	 *
 	 * @return the maximum ess; -1 if the trace contains no executions.
 	 */
 	public int getMaxEss() {
@@ -262,7 +264,7 @@ public class ExecutionTrace extends AbstractTrace {
 
 	/**
 	 * Returns the maximum execution order index (eoi) value within the trace.
-	 * 
+	 *
 	 * @return the maximum eoi; -1 if the trace contains no executions.
 	 */
 	public int getMaxEoi() {
@@ -273,7 +275,7 @@ public class ExecutionTrace extends AbstractTrace {
 
 	/**
 	 * Returns the minimum execution order index (eoi) value within the trace.
-	 * 
+	 *
 	 * @return the minimum eoi; -1 if the trace contains no executions.
 	 */
 	public int getMinEoi() {
@@ -284,10 +286,10 @@ public class ExecutionTrace extends AbstractTrace {
 
 	/**
 	 * Returns the duration of this (possibly incomplete) trace.
-	 * 
+	 *
 	 * This value is the difference between the maximum tout and the minimum
 	 * tin value. Note that no specific assumptions about the {@link java.util.concurrent.TimeUnit} are made.
-	 * 
+	 *
 	 * @return the duration of this trace.
 	 */
 	public long getDuration() {
@@ -298,10 +300,10 @@ public class ExecutionTrace extends AbstractTrace {
 
 	/**
 	 * Returns the maximum timestamp value of an execution return in this trace.
-	 * 
+	 *
 	 * Notice that you should need use this value to reason about the
 	 * control flow --- particularly in distributed scenarios.
-	 * 
+	 *
 	 * @return the maxmum timestamp value; -1 if the trace contains no executions.
 	 */
 	public long getMaxTout() {
@@ -312,10 +314,10 @@ public class ExecutionTrace extends AbstractTrace {
 
 	/**
 	 * Returns the minimum timestamp of an execution start in this trace.
-	 * 
+	 *
 	 * Notice that you should need use this value to reason about the
 	 * control flow --- particularly in distributed scenarios.
-	 * 
+	 *
 	 * @return the minimum timestamp value; -1 if the trace contains no executions.
 	 */
 	public long getMinTin() {
@@ -342,10 +344,10 @@ public class ExecutionTrace extends AbstractTrace {
 
 	/**
 	 * Returns whether this Execution Trace and the passed Object are equal. Two execution traces are equal if the set of contained executions is equal.
-	 * 
+	 *
 	 * @param obj
 	 *            The object to be compared for equality with this.
-	 * 
+	 *
 	 * @return true if and only if the two objects are equal.
 	 */
 	@Override
@@ -370,7 +372,7 @@ public class ExecutionTrace extends AbstractTrace {
 	/**
 	 * Returns an instance of the {@link Comparator} used by the internal {@link TreeSet} to
 	 * compare {@link Execution}s.
-	 * 
+	 *
 	 * @return A comparator instance to compare execution objects.
 	 */
 	public static final Comparator<Execution> createExecutionTraceComparator() {
@@ -394,12 +396,12 @@ public class ExecutionTrace extends AbstractTrace {
 		/**
 		 * Note that this method is not only used by {@link ExecutionTrace#add(Execution)} but also by {@link TreeSet#equals(Object)} utilized in
 		 * {@link ExecutionTrace#equals(Object)}.
-		 * 
+		 *
 		 * @param e1
 		 *            The first execution object.
 		 * @param e2
 		 *            The second execution object.
-		 * 
+		 *
 		 * @return -1 if e1 < e2, 1 if e1 > e2, 0 otherwise.
 		 */
 		@Override
