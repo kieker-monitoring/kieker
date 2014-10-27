@@ -49,6 +49,7 @@ import kieker.tools.bridge.ServiceContainer;
 import kieker.tools.bridge.connector.ConnectorDataTransmissionException;
 import kieker.tools.bridge.connector.IServiceConnector;
 import kieker.tools.bridge.connector.ServiceConnectorFactory;
+import kieker.tools.bridge.connector.http.HTTPConnector;
 import kieker.tools.bridge.connector.jms.JMSClientConnector;
 import kieker.tools.bridge.connector.jms.JMSEmbeddedConnector;
 import kieker.tools.bridge.connector.tcp.TCPClientConnector;
@@ -58,7 +59,7 @@ import kieker.tools.util.CLIHelpFormatter;
 
 /**
  * The command line server of the KDB.
- * 
+ *
  * @author Reiner Jung
  * @since 1.8
  */
@@ -86,6 +87,9 @@ public final class CLIServerMain {
 
 	private static final String CMD_URL = "l";
 	private static final String CMD_URL_LONG = "url";
+
+	private static final String CMD_CONTEXT = "k";
+	private static final String CMD_CONTEXT_LONG = "context";
 
 	private static final String CMD_KIEKER_CONFIGURATION = "c";
 	private static final String CMD_KIEKER_CONFIGURATION_LONG = "configuration";
@@ -128,7 +132,7 @@ public final class CLIServerMain {
 
 	/**
 	 * CLI server main.
-	 * 
+	 *
 	 * @param args
 	 *            command line arguments
 	 */
@@ -170,6 +174,7 @@ public final class CLIServerMain {
 				configuration.setProperty(TCPSingleServerConnector.PORT, commandLine.getOptionValue(CMD_PORT));
 				configuration.setProperty(TCPMultiServerConnector.PORT, commandLine.getOptionValue(CMD_PORT));
 				configuration.setProperty(TCPClientConnector.PORT, commandLine.getOptionValue(CMD_PORT));
+				configuration.setProperty(HTTPConnector.PORT, commandLine.getOptionValue(CMD_PORT));
 			}
 			if (commandLine.hasOption(CMD_HOST)) {
 				configuration.setProperty(TCPClientConnector.HOSTNAME, commandLine.getOptionValue(CMD_HOST));
@@ -182,6 +187,10 @@ public final class CLIServerMain {
 			}
 			if (commandLine.hasOption(CMD_URL)) {
 				configuration.setProperty(JMSClientConnector.URI, commandLine.getOptionValue(CMD_URL));
+				configuration.setProperty(HTTPConnector.REST_URL, commandLine.getOptionValue(CMD_URL));
+			}
+			if (commandLine.hasOption(CMD_CONTEXT)) {
+				configuration.setProperty(HTTPConnector.CONTEXT, commandLine.getOptionValue(CMD_CONTEXT));
 			}
 			if (commandLine.hasOption(CMD_TYPE)) {
 				final Reflections reflections = new Reflections("kieker.tools.bridge.connector");
@@ -229,9 +238,9 @@ public final class CLIServerMain {
 
 	/**
 	 * Execute the bridge service.
-	 * 
+	 *
 	 * @param connector
-	 * 
+	 *
 	 * @throws ConnectorDataTransmissionException
 	 *             if an error occured during connector operations
 	 */
@@ -241,6 +250,7 @@ public final class CLIServerMain {
 			container.setListenerUpdateInterval((updateIntervalParam != null) ? Long.parseLong(updateIntervalParam) // NOCS
 					: ServiceContainer.DEFAULT_LISTENER_UPDATE_INTERVAL); // NOCS
 			container.addListener(new IServiceListener() {
+				@Override
 				public void handleEvent(final long count, final String message) {
 					CLIServerMain.getLog().info("Received " + count + " records");
 				}
@@ -282,7 +292,7 @@ public final class CLIServerMain {
 
 	/**
 	 * Hook for the shutdwon thread so it can access the container's shutdown routine.
-	 * 
+	 *
 	 * @throws ConnectorDataTransmissionException
 	 *             if any internal shutdown calls fail
 	 */
@@ -292,7 +302,7 @@ public final class CLIServerMain {
 
 	/**
 	 * Create a record map of classes implementing IMonitoringRecord interface out of libraries with such classes and a textual mapping file.
-	 * 
+	 *
 	 * @return A record map. null is never returned as a call of usage terminates the program.
 	 * @throws IOException
 	 *             if an error occured reading the mapping file
@@ -320,10 +330,10 @@ public final class CLIServerMain {
 
 	/**
 	 * Interpret command line type option.
-	 * 
+	 *
 	 * @param lookupEntityMap
 	 *            the map for ids to Kieker records
-	 * 
+	 *
 	 * @return a reference to an ServiceContainer
 	 * @throws CLIConfigurationErrorException
 	 *             if an error occured in setting up a connector or if an unknown service connector was specified
@@ -341,7 +351,7 @@ public final class CLIServerMain {
 
 	/**
 	 * Create a connector instance for the given class.
-	 * 
+	 *
 	 * @param connector
 	 *            the connector class
 	 * @param configuration
@@ -373,7 +383,7 @@ public final class CLIServerMain {
 
 	/**
 	 * Print out the server usage and an additional message describing the cause of the failure. Finally terminate the server.
-	 * 
+	 *
 	 * @param message
 	 *            the message to be printed
 	 * @param code
@@ -387,12 +397,12 @@ public final class CLIServerMain {
 
 	/**
 	 * Read the CLI server Kieker classes to id mapping file.
-	 * 
+	 *
 	 * @param libraries
 	 *            array representing a list of library files (*.jar)
 	 * @param filename
 	 *            the path of the mapping file.
-	 * 
+	 *
 	 * @return a complete IMonitoringRecord to id mapping
 	 * @throws IOException
 	 *             If one or more of the given library URLs is somehow invalid or one of the given files could not be accessed.
@@ -439,7 +449,7 @@ public final class CLIServerMain {
 
 	/**
 	 * Compile the options for the CLI server.
-	 * 
+	 *
 	 * @return The composed options for the CLI server
 	 */
 	private static Options declareOptions() {
@@ -447,7 +457,7 @@ public final class CLIServerMain {
 		Option option;
 
 		// Type selection
-		option = new Option(CMD_TYPE, CMD_TYPE_LONG, true, "select the service type: tcp-client, tcp-server, tcp-single-server, jms-client, jms-embedded");
+		option = new Option(CMD_TYPE, CMD_TYPE_LONG, true, "select the service type: tcp-client, tcp-server, tcp-single-server, jms-client, jms-embedded, http-rest");
 		option.setArgName("type");
 		option.setRequired(true);
 		options.addOption(option);
@@ -458,7 +468,7 @@ public final class CLIServerMain {
 		options.addOption(option);
 
 		// TCP server
-		option = new Option(CMD_PORT, CMD_PORT_LONG, true, "listen at port (tcp-server or jms-embedded) or connect to port (tcp-client)");
+		option = new Option(CMD_PORT, CMD_PORT_LONG, true, "listen at port (tcp-server, jms-embedded, or http-rest) or connect to port (tcp-client)");
 		option.setArgName("number");
 		option.setType(Number.class);
 		options.addOption(option);
@@ -470,9 +480,14 @@ public final class CLIServerMain {
 		option = new Option(CMD_PASSWORD, CMD_PASSWORD_LONG, true, "password for a JMS service");
 		option.setArgName("password");
 		options.addOption(option);
-		option = new Option(CMD_URL, CMD_URL_LONG, true, "URL for JMS server");
+		option = new Option(CMD_URL, CMD_URL_LONG, true, "URL for JMS server or HTTP servlet");
 		option.setArgName("jms-url");
 		option.setType(URL.class);
+		options.addOption(option);
+
+		// HTTP client
+		option = new Option(CMD_CONTEXT, CMD_CONTEXT_LONG, true, "context for the HTTP servlet");
+		option.setArgName("context");
 		options.addOption(option);
 
 		// kieker configuration file
@@ -516,7 +531,7 @@ public final class CLIServerMain {
 
 	/**
 	 * Check for pid file.
-	 * 
+	 *
 	 * @return A pid file object
 	 * @throws IOException
 	 *             if file definition fails or the file already exists
@@ -541,7 +556,7 @@ public final class CLIServerMain {
 
 	/**
 	 * Return the logger.
-	 * 
+	 *
 	 * @return Returns the logger
 	 */
 	public static Log getLog() {

@@ -17,6 +17,11 @@
 				<fileset dir="${lib.dir}/sigar/" includes="*.jar" />
 				<fileset dir="${lib.dir}/framework-libs/" includes="**/*.jar" />
 				<fileset dir="${lib.cs.dir}/lib/" includes="checkstyle-all.jar" />
+				<fileset dir="${example.javaee.jetty.lib.dir}">
+					<include name="jetty-server-*.jar" />
+					<include name="jetty-util-*.jar" />
+					<include name="jetty-servlet-*.jar" />
+				</fileset>	
 			</auxClasspath>
 			<sourcePath path="${src.dir}" />
 			<sourcePath path="${test.dir}" />
