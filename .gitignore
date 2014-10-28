@@ -29,3 +29,4 @@ plugin.xml
 /kieker-analysis/*.log
 /kieker-checkstyle-extension/build
 /docs
+/build-eclipse/
