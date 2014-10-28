@@ -82,12 +82,10 @@
      !-->
     <!-- Checks that each Java package has a Javadoc file used for commenting. !-->
     <!-- See http://checkstyle.sourceforge.net/config_javadoc.html#JavadocPackage !-->
-    <!-- KIEKER: OFF
     <module name="JavadocPackage">
         <property name="severity" value="info"/>
         <property name="allowLegacy" value="false"/>
     </module>
-    !-->
 
     <!--
      !________________________________________________________________________________________
