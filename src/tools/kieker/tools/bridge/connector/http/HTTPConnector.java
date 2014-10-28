@@ -166,6 +166,12 @@ public final class HTTPConnector extends AbstractConnector {
 			} catch (final MonitoringRecordException ex) {
 				LOG.warn("Could not deserialize monitoring record", ex);
 				response.sendError(400, "Could not deserialize monitoring record");
+			} catch (final NullPointerException ex) {
+				LOG.warn("Invalid data received", ex);
+				response.sendError(400, "Invalid data received");
+			} catch (final IllegalStateException ex) {
+				LOG.warn("Invalid data received", ex);
+				response.sendError(400, "Invalid data received");
 			}
 		}
 	}
