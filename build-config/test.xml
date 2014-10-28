@@ -55,6 +55,16 @@
 			<fileset dir="${dist.dir}">
 				<include name="${dist.kieker.main.jar}" />
 			</fileset>
+			<!-- Bridge begin -->
+			<fileset dir="${example.javaee.jetty.lib.dir}">
+				<include name="jetty-server-*.jar" />
+				<include name="jetty-util-*.jar" />
+				<include name="jetty-servlet-*.jar" />
+				<include name="jetty-client-*.jar" />
+				<include name="jetty-io-*.jar" />
+				<include name="jetty-http-*.jar" />
+			</fileset>
+			<!-- Bridge end -->
 		</path>
 
 		<delete dir="${tests.junit-results.dir}" />

@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.tools.bridge.connector.http;
+package kieker.test.tools.junit.bridge.connector.http;
 
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
