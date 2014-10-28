@@ -30,9 +30,9 @@ import kieker.common.logging.LogFactory;
 
 /**
  * A simple execution of analysis configurations.
- * 
+ *
  * @author Jan Waller, Nils Christian Ehmke
- * 
+ *
  * @since 1.5
  */
 public final class KaxRun extends AbstractCommandLineTool {
@@ -47,7 +47,7 @@ public final class KaxRun extends AbstractCommandLineTool {
 
 	/**
 	 * Starts the execution of a .kax file.
-	 * 
+	 *
 	 * @param args
 	 *            The command line arguments (including the name of the .kax file in question).
 	 */
@@ -58,7 +58,6 @@ public final class KaxRun extends AbstractCommandLineTool {
 	@Override
 	protected void addAdditionalOptions(final Options options) {
 		final Option inputOption = new Option("i", "input", true, "the analysis project file (.kax) loaded");
-		inputOption.setRequired(true);
 		inputOption.setArgName("filename");
 
 		options.addOption(inputOption);
@@ -67,6 +66,15 @@ public final class KaxRun extends AbstractCommandLineTool {
 	@Override
 	protected boolean readPropertiesFromCommandLine(final CommandLine commandLine) {
 		this.kaxFilename = commandLine.getOptionValue('i');
+
+		return this.assertInputFileExists();
+	}
+
+	private boolean assertInputFileExists() {
+		if (this.kaxFilename == null) {
+			LOG.error("No input file configured");
+			return false;
+		}
 
 		return true;
 	}
