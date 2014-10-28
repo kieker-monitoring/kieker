@@ -37,9 +37,9 @@ import kieker.monitoring.writer.AbstractAsyncThread;
 import kieker.monitoring.writer.AbstractAsyncWriter;
 
 /**
- * 
+ *
  * @author Florian Fittkau, Jan Waller
- * 
+ *
  * @since 1.9
  */
 public class ExplorVizExportWriter extends AbstractAsyncWriter {
@@ -67,15 +67,20 @@ public class ExplorVizExportWriter extends AbstractAsyncWriter {
 	@Override
 	protected void init() throws Exception {
 		this.addWorker(new ExplorVizExportWriterThread(this.monitoringController, this.blockingQueue, this.hostname, this.port, this.bufferSize, this.flush));
-		this.addWorker(new ExplorVizExportWriterThread(this.monitoringController, this.prioritizedBlockingQueue, this.hostname, this.port, this.bufferSize,
-				this.flush));
 	}
+
+	@Override
+	public boolean newMonitoringRecordNonBlocking(final IMonitoringRecord monitoringRecord) {
+		// Redirect the prioritized records to the usual queue
+		return super.newMonitoringRecord(monitoringRecord);
+	}
+
 }
 
 /**
- * 
+ *
  * @author Florian Fittkau, Jan Waller
- * 
+ *
  * @since 1.9
  */
 final class ExplorVizExportWriterThread extends AbstractAsyncThread {
