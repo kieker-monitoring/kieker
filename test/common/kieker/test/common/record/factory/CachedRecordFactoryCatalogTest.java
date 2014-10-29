@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.record.factory;
+package kieker.test.common.record.factory;
 
 import java.nio.ByteBuffer;
 
@@ -26,25 +26,33 @@ import org.junit.rules.ExpectedException;
 
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.factory.CachedRecordFactoryCatalog;
+import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.factory.old.RecordFactoryWrapper;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationEventFactory;
 import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 
+import kieker.test.common.junit.AbstractKiekerTest;
+
 /**
  * @author Christian Wulf
  *
  * @since 1.11
  */
-public class CachedRecordFactoryCatalogTest {
+public class CachedRecordFactoryCatalogTest extends AbstractKiekerTest {
+
+	@Rule
+	public final ExpectedException thrown = ExpectedException.none(); // NOCS (rule)
 
 	private CachedRecordFactoryCatalog cachedRecordFactories;
 	private ByteBuffer buffer;
 	private IRegistry<String> stringRegistry;
 
-	@Rule
-	private final ExpectedException thrown = ExpectedException.none();
+	public CachedRecordFactoryCatalogTest() {
+		// Nothing to do
+	}
 
 	@Before
 	public void before() throws Exception {

@@ -55,6 +55,10 @@ public class TestTCPReader extends AbstractKiekerTest {
 	private String port1;
 	private String port2;
 
+	public TestTCPReader() {
+		// Nothing to do
+	}
+
 	@Before
 	public void before() throws IOException {
 		this.monitoringConfiguration = new Configuration();
@@ -96,8 +100,8 @@ public class TestTCPReader extends AbstractKiekerTest {
 		analysisControllerThread.join();
 
 		Assert.assertEquals(AnalysisController.STATE.TERMINATED, analysisController.getState());
-		final long EXPECTED_NUM_RECORDS = 10;
-		Assert.assertEquals(EXPECTED_NUM_RECORDS, collectionFilter.getList().size());
+		final long expectedNumRecords = 10;
+		Assert.assertEquals(expectedNumRecords, collectionFilter.getList().size());
 
 		final IMonitoringRecord firstRecord = collectionFilter.getList().get(0);
 		final OperationExecutionRecord castedFirstRecord = AssertHelper.assertInstanceOf(OperationExecutionRecord.class, firstRecord);
@@ -112,8 +116,8 @@ public class TestTCPReader extends AbstractKiekerTest {
 		final IAnalysisController analysisController = new AnalysisController();
 
 		final Configuration configurationFSReader = new Configuration();
-		final String INPUT_DIR = TestTCPReader.CURRENT_TEST_DIR + "/log-data";
-		configurationFSReader.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, INPUT_DIR);
+		final String inputDir = TestTCPReader.CURRENT_TEST_DIR + "/log-data";
+		configurationFSReader.setProperty(FSReader.CONFIG_PROPERTY_NAME_INPUTDIRS, inputDir);
 		final FSReader reader = new FSReader(configurationFSReader, analysisController);
 
 		final ListCollectionFilter<IMonitoringRecord> collectionFilter = new ListCollectionFilter<IMonitoringRecord>(new Configuration(), analysisController);

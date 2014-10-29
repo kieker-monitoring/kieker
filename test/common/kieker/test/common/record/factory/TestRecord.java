@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.record.factory;
+package kieker.test.common.record.factory;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
@@ -33,6 +33,10 @@ import kieker.common.util.registry.IRegistry;
 public class TestRecord extends AbstractMonitoringRecord {
 
 	private static final long serialVersionUID = 9088190056147961692L;
+
+	public TestRecord() {
+		// Nothing to do
+	}
 
 	@Override
 	public Object[] toArray() {
@@ -56,7 +60,7 @@ public class TestRecord extends AbstractMonitoringRecord {
 
 	@Override
 	public Class<?>[] getValueTypes() {
-		return null;
+		return new Class<?>[0];
 	}
 
 	@Override

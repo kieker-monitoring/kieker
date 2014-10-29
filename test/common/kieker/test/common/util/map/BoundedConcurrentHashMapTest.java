@@ -14,18 +14,19 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.util.map;
+package kieker.test.common.util.map;
 
 import org.junit.Assert;
 import org.junit.Test;
 
+import kieker.common.util.map.BoundedConcurrentHashMap;
 import kieker.common.util.map.BoundedConcurrentHashMap.BoundedCacheBehaviour;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Nils Christian Ehmke
- * 
+ *
  * @since 1.10
  */
 public class BoundedConcurrentHashMapTest extends AbstractKiekerTest {

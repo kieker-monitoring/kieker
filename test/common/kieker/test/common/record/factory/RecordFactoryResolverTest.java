@@ -14,24 +14,32 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.common.record.factory;
+package kieker.test.common.record.factory;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import kieker.common.record.IMonitoringRecord;
+import kieker.common.record.factory.IRecordFactory;
+import kieker.common.record.factory.RecordFactoryResolver;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationEventFactory;
+
+import kieker.test.common.junit.AbstractKiekerTest;
 
 /**
  * @author Christian Wulf
  *
  * @since 1.11
  */
-public class RecordFactoryResolverTest {
+public class RecordFactoryResolverTest extends AbstractKiekerTest {
 
 	private RecordFactoryResolver recordFactoryResolver;
+
+	public RecordFactoryResolverTest() {
+		// Nothing to do
+	}
 
 	@Before
 	public void before() throws Exception {
