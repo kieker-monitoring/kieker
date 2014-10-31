@@ -211,6 +211,9 @@ task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distrib
 task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, docs]) {
 	classifier = 'bin'
 	with binaryContent
+	
+	compression = Compression.GZIP 
+	extension = 'tar.gz'
 }
 
 def sourceContent = project.copySpec {
@@ -236,6 +239,9 @@ task distributeSourceTar(type: Tar, group: 'distribution', dependsOn: [mainJar, 
 	description = 'Distributes source archive.'
 	classifier = 'src'
 	with sourceContent
+	
+	compression = Compression.GZIP 
+	extension = 'tar.gz'
 }
 
 task startRServe(type: Exec) {
@@ -245,8 +251,11 @@ distribute.mustRunAfter startRServe
 
 task stopRServe(type: Exec) {
 	commandLine 'bin/dev/rserve-control.sh', 'stop'
+	
+	ignoreExitValue = true
 }
-distribute.finalizedBy stopRServe
+startRServe.finalizedBy stopRServe
+stopRServe.mustRunAfter distribute
 
 task enableRTests() << {
 	tasks.withType(Test) {
@@ -259,6 +268,6 @@ task jenkinsBuild(dependsOn: [mainJar, emfJar, aspectJJar]) {
 	description = 'Builds and tests the JAR files of the Kieker Framework'
 }
 
-task jenkinsNightlyBuild(dependsOn: [startRServe, enableRTests, distribute, checkReleaseArchives, stopRServe]) {
+task jenkinsNightlyBuild(dependsOn: [startRServe, enableRTests, distribute, checkReleaseArchives]) {
 	description = 'Builds and tests the release of the Kieker Framework'
 }
