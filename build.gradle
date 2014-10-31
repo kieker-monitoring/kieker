@@ -222,6 +222,10 @@ def sourceContent = project.copySpec {
 	}
 }
 
+task checkReleaseArchives(type: Exec, dependsOn: [distribute]) {
+	commandLine 'bin/dev/check-release-archives.sh'
+}
+
 task distributeSourceZip(type: Zip, group: 'distribution', dependsOn: [mainJar, emfJar, aspectJJar]) {
 	description = 'Distributes source archive.'
 	classifier = 'src'
@@ -238,6 +242,6 @@ task jenkinsBuild(dependsOn: [mainJar, emfJar, aspectJJar]) {
 	description = 'Builds and tests the JAR files of the Kieker Framework'
 }
 
-task jenkinsNightlyBuild(dependsOn: [distribute]) {
+task jenkinsNightlyBuild(dependsOn: [distribute, checkReleaseArchives]) {
 	description = 'Builds and tests the release of the Kieker Framework'
 }
