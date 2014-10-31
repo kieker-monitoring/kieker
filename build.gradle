@@ -238,10 +238,27 @@ task distributeSourceTar(type: Tar, group: 'distribution', dependsOn: [mainJar, 
 	with sourceContent
 }
 
+task startRServe(type: Exec) {
+	commandLine 'bin/dev/rserve-control.sh', 'start'
+}
+distribute.mustRunAfter startRServe
+
+task stopRServe(type: Exec) {
+	commandLine 'bin/dev/rserve-control.sh', 'stop'
+}
+distribute.finalizedBy stopRServe
+
+task enableRTests() << {
+	tasks.withType(Test) {
+		systemProperties['TestKiekerRTests'] = 'true'
+	}
+}
+distribute.mustRunAfter enableRTests
+
 task jenkinsBuild(dependsOn: [mainJar, emfJar, aspectJJar]) {
 	description = 'Builds and tests the JAR files of the Kieker Framework'
 }
 
-task jenkinsNightlyBuild(dependsOn: [distribute, checkReleaseArchives]) {
+task jenkinsNightlyBuild(dependsOn: [startRServe, enableRTests, distribute, checkReleaseArchives, stopRServe]) {
 	description = 'Builds and tests the release of the Kieker Framework'
 }
