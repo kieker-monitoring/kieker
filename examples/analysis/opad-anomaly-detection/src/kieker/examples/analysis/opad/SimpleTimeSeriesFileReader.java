@@ -39,12 +39,12 @@ import kieker.tools.opad.model.NamedDoubleTimeSeriesPoint;
  */
 
 @Plugin(description = "A filter to read a timeseries from a file with one value per line.",
-		outputPorts = @OutputPort(name = SimpleTimeSeriesFileReader.OUTPUT_PORT_NAME_TS_POINTS, description = "Provides the read data from file as Timeseries.", eventTypes = { NamedDoubleTimeSeriesPoint.class }),
-		configuration = {
-			@Property(name = SimpleTimeSeriesFileReader.CONFIG_PROPERTY_NAME_INPUT_FILE, description = "", defaultValue = "inputTS.csv"),
-			@Property(name = SimpleTimeSeriesFileReader.CONFIG_PROPERTY_NAME_ENCODING, description = "", defaultValue = "UTF-8"),
-			@Property(name = SimpleTimeSeriesFileReader.CONFIG_PROPERTY_NAME_TS_INTERVAL, description = "", defaultValue = "1"),
-		})
+outputPorts = @OutputPort(name = SimpleTimeSeriesFileReader.OUTPUT_PORT_NAME_TS_POINTS, description = "Provides the read data from file as Timeseries.", eventTypes = { NamedDoubleTimeSeriesPoint.class }),
+configuration = {
+	@Property(name = SimpleTimeSeriesFileReader.CONFIG_PROPERTY_NAME_INPUT_FILE, description = "", defaultValue = "inputTS.csv"),
+	@Property(name = SimpleTimeSeriesFileReader.CONFIG_PROPERTY_NAME_ENCODING, description = "", defaultValue = "UTF-8"),
+	@Property(name = SimpleTimeSeriesFileReader.CONFIG_PROPERTY_NAME_TS_INTERVAL, description = "", defaultValue = "1"),
+})
 public class SimpleTimeSeriesFileReader extends AbstractReaderPlugin {
 
 	private static final Log LOG = LogFactory.getLog(SimpleTimeSeriesFileReader.class);
@@ -87,7 +87,6 @@ public class SimpleTimeSeriesFileReader extends AbstractReaderPlugin {
 		this.inputFile = this.configuration.getPathProperty(CONFIG_PROPERTY_NAME_INPUT_FILE);
 		this.encoding = this.configuration.getStringProperty(CONFIG_PROPERTY_NAME_ENCODING);
 		this.tsInterval = this.configuration.getIntProperty(CONFIG_PROPERTY_NAME_TS_INTERVAL);
-		this.readInputFile(this.inputFile, this.encoding);
 	}
 
 	public void readInputFile(final String inputFile, final String encoding)
@@ -124,18 +123,15 @@ public class SimpleTimeSeriesFileReader extends AbstractReaderPlugin {
 			isr = new InputStreamReader(fis, this.encoding);
 			br = new BufferedReader(isr);
 
-			// TimeSeriesPoint<Long> tsp;
 			NamedDoubleTimeSeriesPoint ndtsp;
 			LOG.info("Starting to read the file \"" + this.inputFile + "\" using encoding: " + this.encoding);
 
-			// As we only have the values, we use a continouous timestamp starting at 1
 			long timestamp = 0;
 			while (br.ready()) {
 				final String readLine = br.readLine();
 				Double tsValue;
 				try {
 					tsValue = Double.valueOf(readLine);
-					// tsp = new TimeSeriesPoint<Long>(timestamp, tsValue);
 					ndtsp = new NamedDoubleTimeSeriesPoint(timestamp, tsValue, "experiment");
 					super.deliver(SimpleTimeSeriesFileReader.OUTPUT_PORT_NAME_TS_POINTS, ndtsp);
 					timestamp = timestamp + this.tsInterval;

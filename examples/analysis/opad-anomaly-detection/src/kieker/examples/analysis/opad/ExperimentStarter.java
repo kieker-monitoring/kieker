@@ -16,16 +16,20 @@
 
 package kieker.examples.analysis.opad;
 
+import java.util.List;
+
 import kieker.analysis.AnalysisController;
 import kieker.analysis.IAnalysisController;
 import kieker.analysis.IProjectContext;
 import kieker.analysis.exception.AnalysisConfigurationException;
-import kieker.analysis.plugin.filter.forward.TeeFilter;
+import kieker.analysis.plugin.filter.forward.ListCollectionFilter;
 import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.opad.filter.ForecastingFilter;
 import kieker.tools.opad.filter.UniteMeasurementPairFilter;
+import kieker.tools.opad.model.ForecastMeasurementPair;
+import kieker.tools.tslib.ForecastMethod;
 
 public final class ExperimentStarter {
 
@@ -34,11 +38,14 @@ public final class ExperimentStarter {
 	private ExperimentStarter() {}
 
 	public static void main(final String[] args) throws IllegalStateException, AnalysisConfigurationException, InterruptedException {
-		ExperimentStarter.startWikipediaExperiment();
+		for (final ForecastMethod fm : ForecastMethod.values()) {
+			ExperimentStarter.startWikipediaExperiment(fm);
+		}
+
 		// ExperimentStarter.startExperiment();
 	}
 
-	private static void startWikipediaExperiment() throws IllegalStateException, AnalysisConfigurationException {
+	private static void startWikipediaExperiment(final ForecastMethod fcMethod) throws IllegalStateException, AnalysisConfigurationException {
 		final Configuration controllerConfig = new Configuration();
 		controllerConfig.setProperty(IProjectContext.CONFIG_PROPERTY_NAME_RECORDS_TIME_UNIT, "HOURS");
 		final IAnalysisController analysisController = new AnalysisController(controllerConfig);
@@ -50,14 +57,17 @@ public final class ExperimentStarter {
 		final SimpleTimeSeriesFileReader tsReader = new SimpleTimeSeriesFileReader(readerConfig, analysisController);
 
 		final Configuration forecastConfig = new Configuration();
-		forecastConfig.setProperty(ForecastingFilter.CONFIG_PROPERTY_NAME_FC_METHOD, "MEANJAVA");
+		forecastConfig.setProperty(ForecastingFilter.CONFIG_PROPERTY_NAME_FC_METHOD, fcMethod.name());
 		forecastConfig.setProperty(ForecastingFilter.CONFIG_PROPERTY_NAME_DELTA_TIME, "1");
 		forecastConfig.setProperty(ForecastingFilter.CONFIG_PROPERTY_NAME_DELTA_UNIT, "HOURS");
 		final ForecastingFilter forecaster = new ForecastingFilter(forecastConfig, analysisController);
 
 		final UniteMeasurementPairFilter uniteFilter = new UniteMeasurementPairFilter(new Configuration(), analysisController);
 
-		final TeeFilter tee = new TeeFilter(new Configuration(), analysisController);
+		// final TeeFilter tee = new TeeFilter(new Configuration(), analysisController);
+
+		final ListCollectionFilter<ForecastMeasurementPair> listCollector = new ListCollectionFilter<ForecastMeasurementPair>(new Configuration(),
+				analysisController);
 
 		analysisController.connect(
 				tsReader, SimpleTimeSeriesFileReader.OUTPUT_PORT_NAME_TS_POINTS,
@@ -73,10 +83,46 @@ public final class ExperimentStarter {
 
 		analysisController.connect(
 				uniteFilter, UniteMeasurementPairFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT,
-				tee, TeeFilter.INPUT_PORT_NAME_EVENTS);
+				// tee, TeeFilter.INPUT_PORT_NAME_EVENTS);
+				//
+				// analysisController.connect(
+				// tee, TeeFilter.OUTPUT_PORT_NAME_RELAYED_EVENTS,
+				listCollector, ListCollectionFilter.INPUT_PORT_NAME);
 
 		// Start the analysis
 		analysisController.run();
+
+		try {
+			Thread.sleep(3000);
+		} catch (final InterruptedException e) {
+			LOG.warn("An exception occurred", e);
+		}
+		analysisController.terminate();
+
+		ExperimentStarter.analyzeData(listCollector.getList(), fcMethod.name());
+
+	}
+
+	private static void analyzeData(final List<ForecastMeasurementPair> resultList, final String methodName) {
+		double diffSum = 0;
+		double difference = 0;
+		// StringBuilder sb;
+		for (final ForecastMeasurementPair fmPair : resultList) {
+			difference = Math.abs(fmPair.getForecasted() - fmPair.getValue());
+			diffSum += difference;
+			// sb = new StringBuilder();
+			// sb.append("[");
+			// sb.append(fmPair.getTime());
+			// sb.append("]");
+			// sb.append(" Forecasted: ");
+			// sb.append(fmPair.getForecasted());
+			// sb.append(", Measured: ");
+			// sb.append(fmPair.getValue());
+			// sb.append(", Difference: ");
+			// sb.append(difference);
+			// System.out.println(sb.toString());
+		}
+		System.out.println("[" + methodName + "] The average difference was: " + (diffSum / resultList.size()));
 	}
 
 	// private static void startExperiment() throws IllegalStateException, AnalysisConfigurationException {
