@@ -1,3 +1,13 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'de.aaschmid.gradle.plugins:gradle-cpd-plugin:0.1'
+    }
+}
+
 allprojects {
     apply plugin: 'java'
 	
@@ -50,6 +60,15 @@ allprojects {
 		ignoreFailures = true
 	}
 	
+	apply plugin: 'cpd'
+	tasks.cpd {
+		reports {
+			xml.enabled = true
+			xml.destination = file("${buildDir}/reports/cpd/cpd.xml")
+		}
+		source = 'src'
+	}
+
 	apply plugin: 'pmd'
 	pmd { 
 		ignoreFailures = true
@@ -85,6 +104,7 @@ allprojects {
 	// Those are some dependencies which are needed by all submodules
 	dependencies {
 		pmd resolveLibrary('**/pmd-*/**/*.jar')
+		cpd resolveLibrary('**/pmd-*/**/*.jar')
 		checkstyle resolveLibrary('**/checkstyle-*/**/*.jar')
 		checkstyle project(':kieker-checkstyle-extension')
 		findbugs resolveLibrary('**/findbugs-*/lib/*.jar')
