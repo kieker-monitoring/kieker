@@ -245,12 +245,12 @@ task distributeSourceTar(type: Tar, group: 'distribution', dependsOn: [mainJar, 
 }
 
 task startRServe(type: Exec) {
-	commandLine 'bin/dev/rserve-control.sh', 'start', '&'
+	'bin/dev/rserve-control.sh start'.execute()
 }
 distribute.mustRunAfter startRServe
 
 task stopRServe(type: Exec) {
-	commandLine 'bin/dev/rserve-control.sh', 'stop', '&'
+	commandLine 'bin/dev/rserve-control.sh', 'stop'
 	
 	ignoreExitValue = true
 }
