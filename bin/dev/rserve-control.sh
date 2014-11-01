@@ -5,7 +5,7 @@
 case "$1" in
     start)
 	echo -n "Trying to start Rserve..."
-	R CMD Rserve --vanilla &
+	R CMD Rserve --vanilla
 	#R CMD Rserve.dbg --vanilla > /tmp/rserve.dbg.log &
 	RET=$?
 	if [ $RET = 0 ] && (ps ax | grep -i "rserve --vanilla" | grep -qv grep); then
