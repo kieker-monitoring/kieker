@@ -1,7 +1,7 @@
 #!/bin/bash
 
 KIEKER_VERSION="1.11-SNAPSHOT"
-BASE_TMP_DIR="$(dirname $0)/../../tmp/"
+BASE_TMP_DIR="$(dirname $0)/../../build/"
 
 function change_dir {
 	echo "Changing dir to $1 ..."
@@ -505,7 +505,7 @@ BASE_TMP_DIR_ABS=$(pwd)
 change_dir "${BASE_TMP_DIR_ABS}"
 create_subdir_n_cd
 DIR=$(pwd)
-BINZIP=$(ls ../../dist/release/*_binaries.zip)
+BINZIP=$(ls ../../build/distributions/*-binaries.zip)
 assert_file_exists_regular ${BINZIP}
 check_bin_archive "${BINZIP}"
 rm -rf ${DIR}
@@ -513,7 +513,7 @@ rm -rf ${DIR}
 change_dir "${BASE_TMP_DIR_ABS}"
 create_subdir_n_cd
 DIR=$(pwd)
-BINTGZ=$(ls ../../dist/release/*_binaries.tar.gz)
+BINTGZ=$(ls ../../build/distributions/*-binaries.tar.gz)
 assert_file_exists_regular ${BINTGZ}
 check_bin_archive "${BINTGZ}"
 rm -rf ${DIR}
@@ -521,7 +521,7 @@ rm -rf ${DIR}
 change_dir "${BASE_TMP_DIR_ABS}"
 create_subdir_n_cd
 DIR=$(pwd)
-SRCZIP=$(ls ../../dist/release/*_sources.zip)
+SRCZIP=$(ls ../../build/distributions/*-sources.zip)
 assert_file_exists_regular ${SRCZIP}
 check_src_archive "${SRCZIP}"
 rm -rf ${DIR}
@@ -529,7 +529,7 @@ rm -rf ${DIR}
 change_dir "${BASE_TMP_DIR_ABS}"
 create_subdir_n_cd
 DIR=$(pwd)
-SRCTGZ=$(ls ../../dist/release/*_sources.tar.gz)
+SRCTGZ=$(ls ../../build/distributions/*-sources.tar.gz)
 assert_file_exists_regular ${SRCTGZ}
 check_src_archive "${SRCTGZ}"
 rm -rf ${DIR}

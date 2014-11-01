@@ -195,6 +195,21 @@ def binaryContent = project.copySpec {
 		include 'javadoc/**'
 		include 'build/libs/**'
 	}
+	into kiekerPackagenamebase + "-" + kiekerVersion
+}
+
+def manualContent = project.copySpec {
+	from (projectDir) {
+		include 'kieker-documentation/userguide/kieker-userguide.pdf'
+	}
+	into kiekerPackagenamebase + "-" + kiekerVersion + "/doc"
+}
+
+def exampleContent = project.copySpec {
+	from (projectDir) {
+		include 'kieker-examples/**'
+	}
+	into kiekerPackagenamebase + "-" + kiekerVersion + "/examples"
 }
 
 task docs(type: Javadoc) {
@@ -204,12 +219,12 @@ task docs(type: Javadoc) {
 }
 
 task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, docs]) {
-	classifier = 'bin'
-	with binaryContent
+	classifier = 'binaries'
+	with binaryContent, manualContent, exampleContent
 }
 
 task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, docs]) {
-	classifier = 'bin'
+	classifier = 'binaries'
 	with binaryContent
 	
 	compression = Compression.GZIP 
@@ -223,6 +238,7 @@ def sourceContent = project.copySpec {
 		include 'src/**'
 		include 'lib/**'
 	}
+	into kiekerPackagenamebase + "-" + kiekerVersion
 }
 
 task checkReleaseArchives(type: Exec, dependsOn: [distribute]) {
@@ -231,13 +247,13 @@ task checkReleaseArchives(type: Exec, dependsOn: [distribute]) {
 
 task distributeSourceZip(type: Zip, group: 'distribution', dependsOn: [mainJar, emfJar, aspectJJar]) {
 	description = 'Distributes source archive.'
-	classifier = 'src'
+	classifier = 'sources'
 	with sourceContent
 }
 
 task distributeSourceTar(type: Tar, group: 'distribution', dependsOn: [mainJar, emfJar, aspectJJar]) {
 	description = 'Distributes source archive.'
-	classifier = 'src'
+	classifier = 'sources'
 	with sourceContent
 	
 	compression = Compression.GZIP 
