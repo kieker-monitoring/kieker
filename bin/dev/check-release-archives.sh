@@ -496,7 +496,7 @@ function assert_no_common_files_in_archives {
 ## "main" 
 ##
 
-aspectjversion="$(grep "lib.aspectj.version=" build-config/build.properties | sed s/.*=//g)"
+aspectjversion="$(grep "libAspectjVersion = " gradle.properties | sed s/.*=.//g)"
 
 assert_dir_exists ${BASE_TMP_DIR}
 change_dir "${BASE_TMP_DIR}"
@@ -505,7 +505,7 @@ BASE_TMP_DIR_ABS=$(pwd)
 change_dir "${BASE_TMP_DIR_ABS}"
 create_subdir_n_cd
 DIR=$(pwd)
-BINZIP=$(ls ../../build/distributions/*-binaries.zip)
+BINZIP=$(ls ../../dist/releases/*-binaries.zip)
 assert_file_exists_regular ${BINZIP}
 check_bin_archive "${BINZIP}"
 rm -rf ${DIR}
@@ -513,7 +513,7 @@ rm -rf ${DIR}
 change_dir "${BASE_TMP_DIR_ABS}"
 create_subdir_n_cd
 DIR=$(pwd)
-BINTGZ=$(ls ../../build/distributions/*-binaries.tar.gz)
+BINTGZ=$(ls ../../dist/releases/*-binaries.tar.gz)
 assert_file_exists_regular ${BINTGZ}
 check_bin_archive "${BINTGZ}"
 rm -rf ${DIR}
@@ -521,7 +521,7 @@ rm -rf ${DIR}
 change_dir "${BASE_TMP_DIR_ABS}"
 create_subdir_n_cd
 DIR=$(pwd)
-SRCZIP=$(ls ../../build/distributions/*-sources.zip)
+SRCZIP=$(ls ../../dist/releases/*-sources.zip)
 assert_file_exists_regular ${SRCZIP}
 check_src_archive "${SRCZIP}"
 rm -rf ${DIR}
@@ -529,7 +529,7 @@ rm -rf ${DIR}
 change_dir "${BASE_TMP_DIR_ABS}"
 create_subdir_n_cd
 DIR=$(pwd)
-SRCTGZ=$(ls ../../build/distributions/*-sources.tar.gz)
+SRCTGZ=$(ls ../../dist/releases/*-sources.tar.gz)
 assert_file_exists_regular ${SRCTGZ}
 check_src_archive "${SRCTGZ}"
 rm -rf ${DIR}
