@@ -2,7 +2,7 @@
 
 # The following constant specifies user name and address of the remote node executing the benchmark.
 # We recommend to use SSH keys for the access and to install Java (>= 1.6) and R (> 3.0) on the remote node.
-REMOTE_NODE=jenkins@blade1
+REMOTE_NODE=jenkins@blade8
 
 # The following constant specifies location and name of the benchmarked jar file relative to the workspace. 
 BENCHMARKED_JAR=dist/kieker-1.11-SNAPSHOT_aspectj.jar 

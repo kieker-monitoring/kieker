@@ -31,7 +31,7 @@ import kieker.common.record.IMonitoringRecord;
 
 /**
  * @author Jan Waller
- * 
+ *
  * @since 1.3
  */
 public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
@@ -59,7 +59,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 
 	/**
 	 * This constructor initializes the writer based on the given configuration.
-	 * 
+	 *
 	 * @param configuration
 	 *            The configuration for this writer.
 	 */
@@ -96,7 +96,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 
 	/**
 	 * This method must be called at the end of the child constructor!
-	 * 
+	 *
 	 * @param worker
 	 *            The new worker.
 	 */
@@ -178,7 +178,7 @@ public abstract class AbstractAsyncWriter extends AbstractMonitoringWriter {
 	}
 
 	@Override
-	public final boolean newMonitoringRecordNonBlocking(final IMonitoringRecord monitoringRecord) {
+	public boolean newMonitoringRecordNonBlocking(final IMonitoringRecord monitoringRecord) {
 		try {
 			if (!this.prioritizedBlockingQueue.offer(monitoringRecord)) {
 				new Thread() {
