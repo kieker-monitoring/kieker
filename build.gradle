@@ -225,13 +225,13 @@ task docs(type: Javadoc) {
     destinationDir = new File(projectDir, 'javadoc')
 }
 
-task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, docs]) {
+task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, docs, 'kieker-documentation:userguide:buildDocumentation']) {
 	classifier = 'binaries'
 	destinationDir = file('dist/releases')
 	with binaryContent, manualContent, exampleContent
 }
 
-task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, docs]) {
+task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, docs, 'kieker-documentation:userguide:buildDocumentation']) {
 	classifier = 'binaries'
 	destinationDir = file('dist/releases')
 	with binaryContent, manualContent, exampleContent
