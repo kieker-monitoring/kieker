@@ -21,6 +21,9 @@
 					<include name="jetty-server-*.jar" />
 					<include name="jetty-util-*.jar" />
 					<include name="jetty-servlet-*.jar" />
+					<include name="jetty-client-*.jar" />
+					<include name="jetty-io-*.jar" />
+					<include name="jetty-http-*.jar" />
 				</fileset>	
 			</auxClasspath>
 			<sourcePath path="${src.dir}" />
