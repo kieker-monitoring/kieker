@@ -24,7 +24,7 @@
 					<include name="lib/org.eclipse.xtext.common.types.ui_*.jar"/>
 				</fileset>
 			</classpath>
-			<arg line="-r .. -a 'Kieker Build' -d src-gen/common -s model/common/records -l java -n kieker -p Kieker -v 1.10"/>	
+			<arg line="-r .. -a 'Kieker Build' -d src-gen/common -s model/common/records -l java -l java.factory -n kieker -p Kieker -v 1.10"/>	
 		</java>
 	</target>
 	
@@ -41,7 +41,7 @@
 					<include name="lib/org.eclipse.xtext.common.types.ui_*.jar"/>
 				</fileset>
 			</classpath>
-			<arg line="-r .. -a 'Kieker Build' -d src-gen/tools -s model/tools/records -l java -n kieker -p Kieker -v 1.10"/>	
+			<arg line="-r .. -a 'Kieker Build' -d src-gen/tools -s model/tools/records -l java -l java.factory -n kieker -p Kieker -v 1.10"/>	
 		</java>
 	</target>
 	
