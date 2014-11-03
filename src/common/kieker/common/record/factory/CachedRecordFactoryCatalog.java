@@ -46,6 +46,8 @@ public final class CachedRecordFactoryCatalog {
 	}
 
 	/**
+	 * Hint: This method uses convention over configuration when searching for a record factory class.
+	 *
 	 * @param recordClassName
 	 * @return a cached record factory instance of the record class indicated by <code>recordClassName</code>.
 	 *         <ul>
@@ -53,7 +55,6 @@ public final class CachedRecordFactoryCatalog {
 	 *         <li>If there is no factory for the given <code>recordClassName</code>, a new {@code RecordFactoryWrapper} is created and stored for the given
 	 *         <code>recordClassName</code>.
 	 *         </ul>
-	 * @hint This method uses convention over configuration when searching for a record factory class.
 	 */
 	public IRecordFactory<? extends IMonitoringRecord> get(final String recordClassName) {
 		IRecordFactory<? extends IMonitoringRecord> recordFactory = this.cachedRecordFactories.get(recordClassName);
