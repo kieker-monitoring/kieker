@@ -1,5 +1,5 @@
 dependencies {
-	compile fileTree('../../../build/libs') {
+	compile fileTree('../../../dist') {
 		include 'kieker-*_emf.jar'
 	}
 }
