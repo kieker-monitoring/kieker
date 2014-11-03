@@ -36,7 +36,7 @@ public interface IRecordFactory<T> {
 	 * @param stringRegistry
 	 *            the registry to read strings from
 	 *
-	 * @return a new instance of {@link T}
+	 * @return a new instance of the declared record type
 	 * @since 1.11
 	 */
 	T create(ByteBuffer buffer, IRegistry<String> stringRegistry);
@@ -46,7 +46,7 @@ public interface IRecordFactory<T> {
 	 * @param values
 	 *            the values used to fill the new instance
 	 *
-	 * @return a new instance of {@link T}
+	 * @return a new instance of the declared record type
 	 * @since 1.11
 	 */
 	T create(Object[] values);
