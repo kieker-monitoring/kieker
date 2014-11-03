@@ -14,7 +14,7 @@ REM Set every variable we will need for the execution.
 SET BINDIR=%cd%
 
 REM Now start the tool, but don't forget to deliver the parameters.
-java %JAVAARGS% -cp "%BINDIR%\..\lib\*";"%BINDIR%\..\dist\*";"%BINDIR%\..\examples\JavaEEServletContainerExample\jetty\lib\*" %MAINCLASSNAME% %*
+java %JAVAARGS% -cp "%BINDIR%\..\lib\*";"%BINDIR%\..\dist\*";"%BINDIR%\..\examples\JavaEEServletContainerExample\jetty\lib\*";"%BINDIR%" %MAINCLASSNAME% %*
 
 REM Don't close the window immediately.
 @echo on
