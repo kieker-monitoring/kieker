@@ -41,9 +41,9 @@ import kieker.common.util.registry.Lookup;
 
 /**
  * This is a reader which reads the records from a TCP port.
- * 
+ *
  * @author Jan Waller
- * 
+ *
  * @since 1.8
  */
 @Plugin(description = "A reader which reads records from a TCP port",
@@ -115,16 +115,7 @@ public final class TCPReader extends AbstractReaderPlugin {
 				try {
 					while (buffer.hasRemaining()) {
 						buffer.mark();
-						final int clazzid = buffer.getInt();
-						final long loggingTimestamp = buffer.getLong();
-						final IMonitoringRecord record;
-						try { // NOCS (Nested try-catch)
-							record = AbstractMonitoringRecord.createFromByteBuffer(clazzid, buffer, this.stringRegistry);
-							record.setLoggingTimestamp(loggingTimestamp);
-							super.deliver(OUTPUT_PORT_NAME_RECORDS, record);
-						} catch (final MonitoringRecordException ex) {
-							this.log.error("Failed to create record.", ex);
-						}
+						this.read(buffer);
 					}
 					buffer.clear();
 				} catch (final BufferUnderflowException ex) {
@@ -156,6 +147,18 @@ public final class TCPReader extends AbstractReaderPlugin {
 		return true;
 	}
 
+	private void read(final ByteBuffer buffer) {
+		final int clazzid = buffer.getInt();
+		final long loggingTimestamp = buffer.getLong();
+		try { // NOCS (Nested try-catch)
+			final IMonitoringRecord record = AbstractMonitoringRecord.createFromByteBuffer(clazzid, buffer, this.stringRegistry);
+			record.setLoggingTimestamp(loggingTimestamp);
+			super.deliver(OUTPUT_PORT_NAME_RECORDS, record);
+		} catch (final MonitoringRecordException ex) {
+			this.log.error("Failed to create record.", ex);
+		}
+	}
+
 	@Override
 	public void terminate(final boolean error) {
 		this.log.info("Shutdown of TCPReader requested.");
@@ -168,9 +171,9 @@ public final class TCPReader extends AbstractReaderPlugin {
 }
 
 /**
- * 
+ *
  * @author Jan Waller
- * 
+ *
  * @since 1.8
  */
 class TCPStringReader extends Thread {
