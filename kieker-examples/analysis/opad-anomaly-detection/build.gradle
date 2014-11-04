@@ -1,0 +1,33 @@
+dependencies {
+	compile fileTree('../../../dist') {
+		include "kieker-${version}.jar"
+	}
+	runtime fileTree('../../../lib') {
+		include 'commons-lang3-*.jar'
+		include 'commons-math3-*.jar'
+	}
+}
+
+compileJava.dependsOn rootProject.mainJar
+
+// Create the JAR file in the root directory of the example
+libsDirName = '..'
+
+// Simplify the JAR's file name
+version = ''
+	
+task copyRuntimeLibs(type: Copy, dependsOn: rootProject.emfJar) {  
+	into "lib"  
+	from configurations.runtime  
+}	
+	
+task analysisJar(type: Jar, dependsOn: copyRuntimeLibs) {
+	baseName = 'OpadAnomalyExample'
+	
+	from sourceSets.main.output
+}
+
+task runAnalysis(type: JavaExec) {
+	main = 'kieker.examples.analysis.opad.AnalysisStarter'
+	classpath = sourceSets.main.runtimeClasspath
+}
