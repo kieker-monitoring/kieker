@@ -2,6 +2,9 @@ dependencies {
 	compile fileTree('../../../dist') {
 		include "kieker-${version}.jar"
 	}
+	runtime fileTree('../../../lib/sigar') {
+		include '*'
+	}
 }
 
 compileJava.dependsOn rootProject.mainJar
@@ -18,13 +21,13 @@ task copyRuntimeLibs(type: Copy, dependsOn: rootProject.emfJar) {
 }	
 	
 task monitoringJar(type: Jar, dependsOn: copyRuntimeLibs) {
-	baseName = 'BookstoreApplication'
+	baseName = 'SigarMonitoring'
 	
 	from sourceSets.main.output
 }
 
 task runMonitoring(type: JavaExec) {
-	main = 'kieker.examples.monitoring.manual.BookstoreStarter'
+	main = 'kieker.examples.monitoring.sigar.MonitoringStarter'
 	classpath = sourceSets.main.runtimeClasspath
 	jvmArgs = ['-Dkieker.monitoring.writer.filesystem.AsyncFsWriter.customStoragePath=monitoring-logs']
 }
