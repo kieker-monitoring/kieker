@@ -1,0 +1,12 @@
+apply plugin: 'java'
+
+sourceSets {
+	main { 
+		resources {
+			srcDir 'src-resources'
+		}
+	}
+}
+
+libsDirName = '../dist'
+archivesBaseName = 'KiekerInstr'

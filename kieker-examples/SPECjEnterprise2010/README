@@ -1,4 +1,4 @@
-Build with a call of ant.
+Build with a call of 'gradle jar'.
 
 Files to copy in the server lib directory:
   KiekerInstr.jar       (the build of this example)
