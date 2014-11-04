@@ -5,4 +5,5 @@ include 'kieker-common', 'kieker-monitoring', 'kieker-analysis', 'kieker-tools',
 		'kieker-examples:userguide:ch2--manual-instrumentation',
 		'kieker-examples:monitoring:probe-manual',
 		'kieker-examples:monitoring:sampler-sigar',
+		'kieker-examples:monitoring:sampler-jvm',
 		'kieker-documentation:userguide'
