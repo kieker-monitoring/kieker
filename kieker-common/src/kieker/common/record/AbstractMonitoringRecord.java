@@ -493,4 +493,14 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 			throw new MonitoringRecordException("Failed to instatiate new monitoring record of type " + clazz.getName(), ex);
 		}
 	}
+	public static final IMonitoringRecord createFromByteBuffer(final String recordClassName, final ByteBuffer buffer, final IRegistry<String> stringRegistry)
+			throws BufferUnderflowException, MonitoringRecordException {
+		final int clazzid = stringRegistry.get(recordClassName);
+		return AbstractMonitoringRecord.createFromByteBuffer(clazzid, buffer, stringRegistry);
+	}
+
+	public static final IMonitoringRecord createFromArray(final String recordClassName, final Object[] values) throws MonitoringRecordException {
+		final Class<? extends IMonitoringRecord> clazz = AbstractMonitoringRecord.classForName(recordClassName);
+		return AbstractMonitoringRecord.createFromArray(clazz, values);
+	}
 }

@@ -13,5 +13,5 @@ cd %~dp0
 REM Set every variable we will need for the execution.
 SET BINDIR=%cd%
 
-start javaw %JAVAARGS% -cp "%BINDIR%\..\lib\*";"%BINDIR%\..\dist\*" %MAINCLASSNAME%
+start javaw %JAVAARGS% -cp "%BINDIR%\..\lib\*";"%BINDIR%\..\dist\*";"%BINDIR%" %MAINCLASSNAME%
 @echo on 
