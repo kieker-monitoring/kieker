@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.common.junit.record.factory;
+package kieker.test.common.util.record.factory;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;

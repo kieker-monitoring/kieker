@@ -27,6 +27,7 @@ import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationEventFactory;
 
 import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.common.util.record.factory.TestRecord;
 
 /**
  * @author Christian Wulf
