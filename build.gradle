@@ -186,9 +186,28 @@ task emfJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
             zipTree(it)
         }
     }
-	from fileTree(dir: 'lib', include: '*emf*.jar').collect {
-		zipTree(it)
-	}
+	from(fileTree(dir: 'lib', include: '*emf*.jar').collect {
+		zipTree(it)		
+	}) {
+		exclude "META-INF/*.RSA"
+        exclude "META-INF/*.SF"
+		exclude "META-INF/eclipse.inf"
+        exclude "META-INF/*.DSA"
+        exclude "plugin.*"
+		exclude "about.*"
+		exclude "modeling32.png"
+    }
+	
+	manifest {
+		attributes (
+			"Specification-Version": kiekerVersion,
+			"Specification-Vendor": kiekerCopyright,
+			"Implementation-Title": kiekerName,
+			"Implementation-Version": kiekerVersion + " (" + today() + ")",
+			"Implementation-Vendor": kiekerCopyright,
+			"kieker" // The section name
+		)
+    }
 }
 
 task aspectJJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
