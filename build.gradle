@@ -204,6 +204,12 @@ task emfJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 		exclude "modeling32.png"
     }
 	
+	from file('LICENSE')
+	
+	from (file('kieker-examples/aop.example.xml')) {
+		into 'META-INF'
+	}
+	
 	manifest {
 		attributes (
 			"Specification-Version": kiekerVersion,
@@ -227,6 +233,12 @@ task aspectJJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
     }
 	from fileTree(dir: 'lib', include: 'aspectjweaver-*.jar').collect {
 		zipTree(it)
+	}
+	
+	from file('LICENSE')
+	
+	from (file('kieker-examples/aop.example.xml')) {
+		into 'META-INF'
 	}
 }
 
