@@ -12,7 +12,7 @@ libsDirName = '..'
 // Simplify the JAR's file name
 version = ''
 	
-task copyRuntimeLibs(type: Copy, dependsOn: rootProject.emfJar) {  
+task copyRuntimeLibs(type: Copy, dependsOn: rootProject.mainJar) {  
 	into "lib"  
 	from configurations.runtime  
 }	

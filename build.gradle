@@ -240,6 +240,21 @@ task aspectJJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 	from (file('kieker-examples/aop.example.xml')) {
 		into 'META-INF'
 	}
+	
+	manifest {
+		attributes (
+			"Specification-Version": kiekerVersion,
+			"Specification-Vendor": kiekerCopyright,
+			"Implementation-Title": kiekerName,
+			"Implementation-Version": kiekerVersion + " (" + today() + ")",
+			"Implementation-Vendor": kiekerCopyright,
+			"kieker" // The section name
+		)
+		attributes (
+			"Can-Redefine-Classes": 'true',
+			"Premain-Class": 'kieker.monitoring.probe.aspectj.AspectJLoader'
+		)
+    }
 }
 
 task distribute(group: 'distribution', description: 'Distributes binary and source archives.', dependsOn: [':distributeBinaryZip', ':distributeSourceZip',':distributeBinaryTar', ':distributeSourceTar'])
