@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.common.record.factory;
+package kieker.test.common.junit.record.factory;
 
 import java.nio.ByteBuffer;
 
