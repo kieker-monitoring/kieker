@@ -1,0 +1,34 @@
+dependencies {
+	compile fileTree('../../../dist') {
+		include "kieker-*_aspectj.jar"
+	}
+}
+
+compileJava.dependsOn rootProject.aspectJJar
+
+// Create the JAR file in the root directory of the example
+libsDirName = '..'
+
+// Simplify the JAR's file name
+// version = ''
+	
+task copyRuntimeLibs(type: Copy, dependsOn: rootProject.aspectJJar) {  
+	into "lib"  
+	from configurations.runtime  
+}	
+	
+task monitoringJar(type: Jar, dependsOn: copyRuntimeLibs) {
+	baseName = 'BookstoreApplication'
+	
+	from sourceSets.main.output
+}
+
+task runMonitoring(type: JavaExec, dependsOn: copyRuntimeLibs) {
+	main = 'kieker.examples.monitoring.customTimeSource.BookstoreStarter'
+	classpath = sourceSets.main.runtimeClasspath
+	jvmArgs = ['-Dkieker.monitoring.writer.filesystem.AsyncFsWriter.customStoragePath=monitoring-logs',
+			   '-Dkieker.monitoring.timer=kieker.monitoring.timer.CustomTimeSource',
+	           "-javaagent:lib/kieker-${version}_aspectj.jar",
+			   '-Dorg.aspectj.weaver.showWeaveInfo=true',
+			   '-Daj.weaving.verbose=true']
+}
