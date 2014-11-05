@@ -1,0 +1,44 @@
+dependencies {
+	compile fileTree('../../../dist') {
+		include 'kieker-*_emf.jar'
+	}
+	runtime fileTree('../../../lib/sigar') {
+		include '*'
+	}
+}
+
+compileJava.dependsOn rootProject.emfJar
+
+// Create the JAR file in the root directory of the example
+libsDirName = '..'
+
+// Simplify the JAR's file name
+version = ''
+	
+task copyRuntimeLibs(type: Copy, dependsOn: rootProject.emfJar) {  
+	into "lib"  
+	from configurations.runtime  
+}	
+	
+task monitoringJar(type: Jar, dependsOn: copyRuntimeLibs) {
+	baseName = 'SigarMonitoring'
+	
+	from sourceSets.main.output
+}
+
+task analysisJar(type: Jar, dependsOn: copyRuntimeLibs) {
+	baseName = 'SigarAnalysis'
+	
+	from sourceSets.main.output
+}
+
+task runMonitoring(type: JavaExec) {
+	main = 'kieker.examples.userguide.appendixSigar.MonitoringStarter'
+	classpath = sourceSets.main.runtimeClasspath
+}
+
+task runAnalysis(type: JavaExec) {
+	main = 'kieker.examples.userguide.appendixSigar.AnalysisStarter'
+	classpath = sourceSets.main.runtimeClasspath
+	args = [System.getProperty("analysis.directory", ".")]
+}
