@@ -165,6 +165,12 @@ task mainJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
         }
     }
 	
+	from file('LICENSE')
+	
+	from (file('kieker-examples/aop.example.xml')) {
+		into 'META-INF'
+	}
+	
 	manifest {
 		attributes (
 			"Specification-Version": kiekerVersion,
