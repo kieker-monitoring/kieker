@@ -144,8 +144,16 @@ public final class HTTPConnector extends AbstractConnector {
 
 				// Extract the delivered values
 				final String classname = (String) jsonObject.get("class");
-				final long timestamp = Integer.parseInt((String) jsonObject.get("timestamp"));
+				final String rawTimestamp = (String) jsonObject.get("timestamp");
 				final Object[] rawValues = (Object[]) jsonObject.get("values");
+
+				if ((classname == null) || (rawTimestamp == null) || (rawValues == null)) {
+					LOG.warn("Invalid data received");
+					response.sendError(400, "Invalid data received");
+					return;
+				}
+
+				final long timestamp = Integer.parseInt(rawTimestamp);
 				final String[] values = Arrays.copyOf(rawValues, rawValues.length, String[].class);
 
 				// Try to deserialize a monitoring record from the given values
@@ -166,9 +174,6 @@ public final class HTTPConnector extends AbstractConnector {
 			} catch (final MonitoringRecordException ex) {
 				LOG.warn("Could not deserialize monitoring record", ex);
 				response.sendError(400, "Could not deserialize monitoring record");
-			} catch (final NullPointerException ex) {
-				LOG.warn("Invalid data received", ex);
-				response.sendError(400, "Invalid data received");
 			} catch (final IllegalStateException ex) {
 				LOG.warn("Invalid data received", ex);
 				response.sendError(400, "Invalid data received");
