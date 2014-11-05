@@ -35,5 +35,5 @@ task generateRecords(type: JavaExec) {
 		include 'lib/org.eclipse.xtext.common.types.ui_*.jar'
 	}				
 	main = 'de.cau.cs.se.instrumentation.rl.cli.CLICompilerMain'
-	args '-r', '..', '-a', 'Kieker Build', '-d', 'src-gen', '-s', 'model/records', '-l', 'java', '-n', 'kieker-tools', '-p', 'kieker-tools', '-v', '1.10'	
+	args '-r', '..', '-a', 'Kieker Build', '-d', 'src-gen', '-s', 'model/records', '-l', 'java', '-l', 'java.factory', '-n', 'kieker-tools', '-p', 'kieker-tools', '-v', '1.10'	
 }
