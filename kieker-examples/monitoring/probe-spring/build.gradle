@@ -1,0 +1,42 @@
+dependencies {
+	compile fileTree('../../../dist') {
+		include "kieker-${version}.jar"
+	}
+	compile fileTree('../../../lib/framework-libs/spring') {
+		include "aopalliance-*.jar"
+		include "spring-aop-*.jar"
+		include "spring-beans-*.jar"
+		include "spring-context-*.jar"
+		include "spring-core-*.jar"
+		include "spring-expression-*.jar"
+	}
+	runtime fileTree('../../../lib') {
+		include "aspectjweaver-*.jar"
+		include "commons-logging-*.jar"
+	}
+}
+
+compileJava.dependsOn rootProject.mainJar
+
+// Create the JAR file in the root directory of the example
+libsDirName = '..'
+
+// Simplify the JAR's file name
+version = ''
+	
+task copyRuntimeLibs(type: Copy, dependsOn: rootProject.mainJar) {  
+	into "lib"  
+	from configurations.runtime  
+}	
+	
+task monitoringJar(type: Jar, dependsOn: copyRuntimeLibs) {
+	baseName = 'BookstoreApplication'
+	
+	from sourceSets.main.output
+}
+
+task runMonitoring(type: JavaExec, dependsOn: copyRuntimeLibs) {
+	main = 'kieker.examples.monitoring.spring.BookstoreStarter'
+	classpath = sourceSets.main.runtimeClasspath
+	jvmArgs = ['-Dkieker.monitoring.writer.filesystem.AsyncFsWriter.customStoragePath=monitoring-logs']
+}
