@@ -138,6 +138,7 @@ public abstract class AbstractWriterReaderTest extends AbstractKiekerTest {
 
 		for (final IMonitoringRecord record : someEvents) {
 			ctrl.newMonitoringRecord(record);
+			Thread.sleep(500);
 		}
 
 		Thread.sleep(1000); // wait a second to give the FS writer the chance to write the monitoring log.
