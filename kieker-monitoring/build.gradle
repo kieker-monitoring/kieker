@@ -26,3 +26,26 @@ dependencies {
 
 	testRuntime fileTree(dir: rootProject.file('examples/JavaEEServletContainerExample/jetty/lib'), include: 'jetty-*.jar')
 }
+
+task iajc(dependsOn: classes) << {
+	 ant.taskdef(resource: 'org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties') {
+        classpath {
+            fileset(dir: '../lib', includes: "aspectjtools-*.jar")
+        }
+    }
+	ant.iajc(XlintFile: 'aspectjXlint.properties', X: 'joinpoints:synchronization', source: sourceCompatibility, target: targetCompatibility, debug: 'true', destdir: sourceSets.main.output.classesDir) {
+		sourceroots {
+			pathElement(location: 'src/kieker/monitoring/probe/aspectj/')
+		}
+		classpath {
+			fileset(dir: '../lib', includes: "aspectjweaver-*.jar")
+			fileset(dir: '../lib', includes: "aspectjrt-*.jar")
+			fileset(dir: '../lib/framework-libs', includes: "javax.servlet-*.jar")
+
+			pathElement(location: project(':kieker-common').sourceSets.main.output.classesDir)
+			pathElement(location: sourceSets.main.output.classesDir)
+		}
+	}			
+}
+classes.finalizedBy iajc
+jar.mustRunAfter iajc

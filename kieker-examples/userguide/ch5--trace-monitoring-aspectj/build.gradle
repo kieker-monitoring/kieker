@@ -1,0 +1,45 @@
+dependencies {
+	compile fileTree('../../../dist') {
+		include "kieker-*_aspectj.jar"
+	}
+}
+
+compileJava.dependsOn rootProject.aspectJJar
+
+// Create the JAR file in the root directory of the example
+libsDirName = '..'
+
+// Simplify the JAR's file name
+// version = ''
+	
+task copyRuntimeLibs(type: Copy, dependsOn: rootProject.aspectJJar) {  
+	into "lib"  
+	from configurations.runtime  
+}	
+
+task run(type: JavaExec, dependsOn: copyRuntimeLibs) {
+	main = 'kieker.examples.userguide.ch5bookstore.BookstoreStarter'
+	classpath = sourceSets.main.runtimeClasspath
+	args = [System.getProperty("analysis.directory", ".")]
+	jvmArgs = ["-javaagent:lib/kieker-${version}_aspectj.jar",
+			   '-Dorg.aspectj.weaver.showWeaveInfo=true']
+}
+
+task runEvent(type: JavaExec, dependsOn: copyRuntimeLibs) {
+	main = 'kieker.examples.userguide.ch5bookstore.BookstoreStarter'
+	classpath = sourceSets.main.runtimeClasspath
+	args = [System.getProperty("analysis.directory", ".")]
+	jvmArgs = ["-javaagent:lib/kieker-${version}_aspectj.jar",
+	           '-Daj.weaving.verbose=true',
+			   '-Dkieker.monitoring.writer.filesystem.AsyncFsWriter.QueueSize=30000',
+			   '-Dorg.aspectj.weaver.showWeaveInfo=true',
+			   '-Dorg.aspectj.weaver.loadtime.configuration=META-INF/aop-event.xml']
+}
+
+
+
+task ruHostnameRewriter(type: JavaExec) {
+	main = 'kieker.examples.userguide.ch5bookstore.BookstoreHostnameRewriter'
+	classpath = sourceSets.main.runtimeClasspath
+	args = [System.getProperty("analysis.directory", ".")]
+}
