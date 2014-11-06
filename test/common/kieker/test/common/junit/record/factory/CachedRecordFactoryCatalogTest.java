@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.common.record.factory;
+package kieker.test.common.junit.record.factory;
 
 import java.nio.ByteBuffer;
 
@@ -35,6 +35,7 @@ import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 
 import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.common.util.record.factory.TestRecord;
 
 /**
  * @author Christian Wulf

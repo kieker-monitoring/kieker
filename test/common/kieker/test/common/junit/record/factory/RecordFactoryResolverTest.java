@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.common.record.factory;
+package kieker.test.common.junit.record.factory;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -27,6 +27,7 @@ import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationEventFactory;
 
 import kieker.test.common.junit.AbstractKiekerTest;
+import kieker.test.common.util.record.factory.TestRecord;
 
 /**
  * @author Christian Wulf

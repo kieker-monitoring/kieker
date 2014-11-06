@@ -160,4 +160,58 @@ public class HTTPConnectorTest extends AbstractKiekerTest {
 		Assert.assertEquals(400, exchange.getResponseStatus());
 	}
 
+	@Test
+	public void testMissingTimestamp() throws IOException, InterruptedException, ConnectorDataTransmissionException, ConnectorEndOfDataException {
+		// Send the record and make sure that the returned codes are as expected
+		final String jsonString = "{\"class\" : \"kieker.common.record.jvm.UptimeRecord\", \"values\" : [\"1\", \"SE\", \"VM\", \"50\"]}";
+
+		final ContentExchange exchange = new ContentExchange();
+		exchange.setMethod("POST");
+		exchange.setURL(FULL_URL);
+		exchange.setRequestContent(new ByteArrayBuffer(jsonString.getBytes("UTF-8")));
+
+		this.client.send(exchange);
+
+		final int exchangeState = exchange.waitForDone();
+
+		Assert.assertEquals(HttpExchange.STATUS_COMPLETED, exchangeState);
+		Assert.assertEquals(400, exchange.getResponseStatus());
+	}
+
+	@Test
+	public void testMissingValues() throws IOException, InterruptedException, ConnectorDataTransmissionException, ConnectorEndOfDataException {
+		// Send the record and make sure that the returned codes are as expected
+		final String jsonString = "{\"class\" : \"kieker.common.record.jvm.UptimeRecord\", \"timestamp\" : \"42\"}";
+
+		final ContentExchange exchange = new ContentExchange();
+		exchange.setMethod("POST");
+		exchange.setURL(FULL_URL);
+		exchange.setRequestContent(new ByteArrayBuffer(jsonString.getBytes("UTF-8")));
+
+		this.client.send(exchange);
+
+		final int exchangeState = exchange.waitForDone();
+
+		Assert.assertEquals(HttpExchange.STATUS_COMPLETED, exchangeState);
+		Assert.assertEquals(400, exchange.getResponseStatus());
+	}
+
+	@Test
+	public void testMissingClass() throws IOException, InterruptedException, ConnectorDataTransmissionException, ConnectorEndOfDataException {
+		// Send the record and make sure that the returned codes are as expected
+		final String jsonString = "{\"timestamp\" : \"42\", \"values\" : [\"1\", \"SE\", \"VM\", \"50\"]}";
+
+		final ContentExchange exchange = new ContentExchange();
+		exchange.setMethod("POST");
+		exchange.setURL(FULL_URL);
+		exchange.setRequestContent(new ByteArrayBuffer(jsonString.getBytes("UTF-8")));
+
+		this.client.send(exchange);
+
+		final int exchangeState = exchange.waitForDone();
+
+		Assert.assertEquals(HttpExchange.STATUS_COMPLETED, exchangeState);
+		Assert.assertEquals(400, exchange.getResponseStatus());
+	}
+
 }

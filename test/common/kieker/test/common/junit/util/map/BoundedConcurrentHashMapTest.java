@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.common.util.map;
+package kieker.test.common.junit.util.map;
 
 import org.junit.Assert;
 import org.junit.Test;
