@@ -1,13 +1,17 @@
-def DOCBASEFN = "kieker-userguide"
+def documentBaseFilename = 'kieker-userguide'
 
 task buildDocumentation(type: Exec) {
-  commandLine 'pdflatex', "$DOCBASEFN"
-  commandLine 'bibtex', "$DOCBASEFN"
-  commandLine 'pdflatex', "$DOCBASEFN"
-  commandLine 'pdflatex', "$DOCBASEFN"
+  description 'Builds the user guide manual for Kieker'
+
+  commandLine 'pdflatex', documentBaseFilename
+  commandLine 'bibtex', documentBaseFilename
+  commandLine 'pdflatex', documentBaseFilename
+  commandLine 'pdflatex', documentBaseFilename
 }
 
 task cleanDocumentation(type: Delete) {
+  description 'Deletes temporary files'
+  
   delete fileTree(dir: '.', includes: ['*.aux, *.bbl', '*.blg', '*.glo', '*.idx', '*.log', '*.toc', '*.snm', '*.out', '*.nav', '*.bak', '*.vrb', 'backup'])  
 }
 

@@ -27,13 +27,23 @@ dependencies {
 }
 
 task generateRecords(type: JavaExec) {
-	classpath = fileTree('../bin/dev') {
-		include 'target/de.cau.cs.se.instrumentation.rl.cli-*.jar'
-		include 'lib/org.eclipse.emf.mwe.core_*.jar'
-		include 'lib/org.eclipse.xtext.common.types_*.jar'
-		include 'lib/org.eclipse.emf.mwe.utils_*.jar'
-		include 'lib/org.eclipse.xtext.common.types.ui_*.jar'
-	}				
-	main = 'de.cau.cs.se.instrumentation.rl.cli.CLICompilerMain'
-	args '-r', '..', '-a', 'Kieker Build', '-d', 'src-gen', '-s', 'model/records', '-l', 'java', '-l', 'java.factory', '-n', 'kieker-tools', '-p', 'kieker-tools', '-v', '1.10'	
+  description 'Generates the sources for the Kieker records using the IRL model specification'
+
+  classpath = fileTree('../bin/dev') {
+    include 'target/de.cau.cs.se.instrumentation.rl.cli-*.jar'
+    include 'lib/org.eclipse.emf.mwe.core_*.jar'
+    include 'lib/org.eclipse.xtext.common.types_*.jar'
+    include 'lib/org.eclipse.emf.mwe.utils_*.jar'
+    include 'lib/org.eclipse.xtext.common.types.ui_*.jar'
+  }				
+  main = 'de.cau.cs.se.instrumentation.rl.cli.CLICompilerMain'
+  args '-r', '..',            // the root directory
+       '-a', 'Kieker Build',
+       '-d', 'src-gen',       // the destination directory
+       '-s', 'model/records', // the source directory
+       '-l', 'java',          // generate the records
+       '-l', 'java.factory',  // generate the record factories
+       '-n', 'kieker-tools',
+       '-p', 'kieker-tools',
+       '-v', '1.10'	          // generate code for Kieker 1.10
 }

@@ -28,15 +28,17 @@ dependencies {
 }
 
 task iajc(dependsOn: classes) << {
-	 ant.taskdef(resource: 'org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties') {
-        classpath {
-            fileset(dir: '../lib', includes: "aspectjtools-*.jar")
-        }
+  description 'Uses the AspectJ compiler to add the required code to the Kieker probes'
+
+  ant.taskdef(resource: 'org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties') {
+    classpath {
+      fileset(dir: '../lib', includes: "aspectjtools-*.jar")
     }
+  }
 	ant.iajc(XlintFile: 'aspectjXlint.properties', X: 'joinpoints:synchronization', source: sourceCompatibility, target: targetCompatibility, debug: 'true', destdir: sourceSets.main.output.classesDir) {
-		sourceroots {
-			pathElement(location: 'src/kieker/monitoring/probe/aspectj/')
-		}
+  sourceroots {
+    pathElement(location: 'src/kieker/monitoring/probe/aspectj/')
+  }
 		classpath {
 			fileset(dir: '../lib', includes: "aspectjweaver-*.jar")
 			fileset(dir: '../lib', includes: "aspectjrt-*.jar")
