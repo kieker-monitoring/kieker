@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.monitoring.junit.writer.explorviz;
+package kieker.test.tools.junit.writer.explorviz;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,7 +97,7 @@ public class TestExplorVizExportWriter extends AbstractWriterReaderTest {
 				final AfterOperationFailedEvent sentRecord = (AfterOperationFailedEvent) eventsPassedToController.get(i);
 				final CustomAfterOperationFailedEvent receivedRecord = (CustomAfterOperationFailedEvent) eventFromMonitoringLog.get(i + 2);
 				Assert.assertEquals(
-						"Unexpected set of records ",
+						"Unexpected set of records - sent record does not match received record",
 						(sentRecord.getTimestamp() + ", " + sentRecord.getTraceId() + ", " + sentRecord.getOrderIndex()
 								+ ", " + sentRecord.getCause()),
 						(receivedRecord.getTimestamp() + ", " + receivedRecord.getTraceId() + ", " + receivedRecord.getOrderIndex() + ", "
@@ -106,14 +106,15 @@ public class TestExplorVizExportWriter extends AbstractWriterReaderTest {
 			} else if (eventFromMonitoringLog.get(i + 2) instanceof CustomAfterOperationEvent) {
 				final AfterOperationEvent sentRecord = (AfterOperationEvent) eventsPassedToController.get(i);
 				final CustomAfterOperationEvent receivedRecord = (CustomAfterOperationEvent) eventFromMonitoringLog.get(i + 2);
-				Assert.assertEquals("Unexpected set of records", (sentRecord.getTimestamp() + ", " + sentRecord.getTraceId() + ", " + sentRecord.getOrderIndex()),
+				Assert.assertEquals("Unexpected set of records - sent record does not match received record",
+						(sentRecord.getTimestamp() + ", " + sentRecord.getTraceId() + ", " + sentRecord.getOrderIndex()),
 						(receivedRecord.getTimestamp() + ", " + receivedRecord.getTraceId() + ", " + receivedRecord.getOrderIndex()));
 
 			} else if (eventFromMonitoringLog.get(i + 2) instanceof BeforeOperationEvent) {
 				final BeforeOperationEvent sentRecord = (BeforeOperationEvent) eventsPassedToController.get(i);
 				final BeforeOperationEvent receivedRecord = (BeforeOperationEvent) eventFromMonitoringLog.get(i + 2);
 				Assert.assertEquals(
-						"Unexpected set of records",
+						"Unexpected set of records - sent record does not match received record",
 						(sentRecord.getTimestamp() + ", " + sentRecord.getTraceId() + ", " + sentRecord.getOrderIndex()
 								+ ", " + sentRecord.getOperationSignature() + ", " + sentRecord.getClassSignature()),
 						(receivedRecord.getTimestamp() + ", " + receivedRecord.getTraceId() + ", " + receivedRecord.getOrderIndex() + ", "
@@ -123,7 +124,7 @@ public class TestExplorVizExportWriter extends AbstractWriterReaderTest {
 				final RegistryRecord sentRecord = (RegistryRecord) eventsPassedToController.get(i);
 				final RegistryRecord receivedRecord = (RegistryRecord) eventFromMonitoringLog.get(i + 2);
 				Assert.assertEquals(
-						"Unexpected set of records",
+						"Unexpected set of records - sent record does not match received record",
 						(sentRecord.getId() + ", " + sentRecord.getString()), (receivedRecord.getId() + ", " + receivedRecord.getString()));
 			}
 		}

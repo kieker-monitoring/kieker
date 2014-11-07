@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.monitoring.junit.writer.explorviz;
+package kieker.test.tools.junit.writer.explorviz;
 
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
@@ -58,7 +58,7 @@ public class CustomAfterOperationEvent implements IMonitoringRecord {
 		return new Object[] {
 			this.getTimestamp(),
 			this.getTraceId(),
-			this.getOrderIndex()
+			this.getOrderIndex(),
 		};
 	}
 
@@ -73,19 +73,19 @@ public class CustomAfterOperationEvent implements IMonitoringRecord {
 	}
 
 	@Override
-	public void setLoggingTimestamp(final long timestamp) {}
+	public void setLoggingTimestamp(final long timestamp) {} // NOPMD
 
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {}
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {} // NOPMD
 
 	@Override
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {}
+	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {} // NOPMD
 
 	@Override
-	public void initFromArray(final Object[] values) {}
+	public void initFromArray(final Object[] values) {} // NOPMD
 
 	@Override
-	public Class<?>[] getValueTypes() {
+	public Class<?>[] getValueTypes() { // NOPMD
 		return null;
 	}
 

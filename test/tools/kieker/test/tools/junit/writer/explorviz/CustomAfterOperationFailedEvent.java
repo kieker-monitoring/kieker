@@ -14,7 +14,7 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.test.monitoring.junit.writer.explorviz;
+package kieker.test.tools.junit.writer.explorviz;
 
 /**
  * @author Micky Singh Multani
