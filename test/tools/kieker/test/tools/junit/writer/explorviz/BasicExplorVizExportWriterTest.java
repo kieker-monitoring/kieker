@@ -45,7 +45,7 @@ import kieker.test.tools.junit.writeRead.AbstractWriterReaderTest;
  * 
  * @since 1.11
  */
-public class TestExplorVizExportWriter extends AbstractWriterReaderTest {
+public class BasicExplorVizExportWriterTest extends AbstractWriterReaderTest { // NOPMD NOCS (TestClassWithoutTestCases)
 
 	private static final String PORT = "10555";
 
@@ -59,7 +59,7 @@ public class TestExplorVizExportWriter extends AbstractWriterReaderTest {
 		this.analysisController = new AnalysisController();
 
 		final Configuration readerConfig = new Configuration();
-		readerConfig.setProperty(ExplorVizReader.CONFIG_PROPERTY_NAME_PORT, TestExplorVizExportWriter.PORT);
+		readerConfig.setProperty(ExplorVizReader.CONFIG_PROPERTY_NAME_PORT, BasicExplorVizExportWriterTest.PORT);
 		final ExplorVizReader explorvizReader = new ExplorVizReader(readerConfig, this.analysisController);
 		this.sinkFilter = new ListCollectionFilter<IMonitoringRecord>(new Configuration(), this.analysisController);
 		this.analysisController.connect(explorvizReader, ExplorVizReader.OUTPUT_PORT_NAME_RECORDS, this.sinkFilter, ListCollectionFilter.INPUT_PORT_NAME);
@@ -70,7 +70,7 @@ public class TestExplorVizExportWriter extends AbstractWriterReaderTest {
 
 		final Configuration monitoringConfig = ConfigurationFactory.createDefaultConfiguration();
 		monitoringConfig.setProperty(ConfigurationFactory.WRITER_CLASSNAME, ExplorVizExportWriter.class.getName());
-		monitoringConfig.setProperty(ExplorVizExportWriter.CONFIG_PORT, TestExplorVizExportWriter.PORT);
+		monitoringConfig.setProperty(ExplorVizExportWriter.CONFIG_PORT, BasicExplorVizExportWriterTest.PORT);
 		return MonitoringController.createInstance(monitoringConfig);
 	}
 
