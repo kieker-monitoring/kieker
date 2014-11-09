@@ -63,34 +63,42 @@ public class CustomAfterOperationEvent implements IMonitoringRecord {
 	}
 
 	@Override
-	public int compareTo(final IMonitoringRecord o) {
+	public long getLoggingTimestamp() { // not used method
 		return 0;
 	}
 
 	@Override
-	public long getLoggingTimestamp() {
-		return 0;
+	public void setLoggingTimestamp(final long timestamp) { // NOCS
+		// No code necessary
 	}
 
 	@Override
-	public void setLoggingTimestamp(final long timestamp) {} // NOPMD
+	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {
+		// No code necessary
+	}
 
 	@Override
-	public void writeBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferOverflowException {} // NOPMD
+	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {
+		// No code necessary
+	}
 
 	@Override
-	public void initFromBytes(final ByteBuffer buffer, final IRegistry<String> stringRegistry) throws BufferUnderflowException {} // NOPMD
+	public void initFromArray(final Object[] values) {
+		// No code necessary
+	}
 
 	@Override
-	public void initFromArray(final Object[] values) {} // NOPMD
-
-	@Override
-	public Class<?>[] getValueTypes() { // NOPMD
-		return null;
+	public Class<?>[] getValueTypes() { // NOPMD (not used method)
+		return (Class<?>[]) this.toArray();
 	}
 
 	@Override
 	public int getSize() {
+		return 0;
+	}
+
+	@Override
+	public int compareTo(final IMonitoringRecord o) { // not used method
 		return 0;
 	}
 
