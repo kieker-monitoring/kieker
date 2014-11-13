@@ -1,0 +1,66 @@
+dependencies {
+	compile fileTree('../../../dist') {
+		include "*.jar"
+	}
+}
+
+def monitoringConfigurationActiveMQ = 'META-INF/kieker.monitoring.properties-activemq'
+def monitoringConfigurationHornetQ = 'META-INF/kieker.monitoring.properties-hornetq'
+def monitoringConfigurationOpenJMS = 'META-INF/kieker.monitoring.properties-openjms'
+
+compileJava.dependsOn rootProject.mainJar
+
+// Create the JAR file in the root directory of the example
+libsDirName = '..'
+
+// Simplify the JAR's file name
+version = ''
+	
+task copyRuntimeLibs(type: Copy, dependsOn: rootProject.mainJar) {  
+	into "lib"  
+	from configurations.runtime  
+}	
+
+def monitoringConfiguration = {
+  main = 'kieker.examples.userguide.appendixJMS.BookstoreStarter'
+  classpath = sourceSets.main.runtimeClasspath
+  
+  jvmArgs = ['-Dlog4j.configuration=META-INF/log4j.properties']
+}
+
+task runMonitoringActiveMQ(type: JavaExec) {
+  configure monitoringConfiguration
+  jvmArgs += "-Dkieker.monitoring.configuration=${monitoringConfigurationActiveMQ}"
+}
+
+task runMonitoringHornetQ(type: JavaExec, dependsOn: copyRuntimeLibs) {
+  configure monitoringConfiguration
+  jvmArgs += "-Dkieker.monitoring.configuration=${monitoringConfigurationHornetQ}"
+}
+
+task runMonitoringOpenJMS(type: JavaExec, dependsOn: copyRuntimeLibs) {
+  configure monitoringConfiguration
+  jvmArgs += "-Dkieker.monitoring.configuration=${monitoringConfigurationOpenJMS}"
+}
+
+def analysisConfiguration = {
+  main = 'kieker.examples.userguide.appendixJMS.JMSAnalysisStarter'
+	classpath = sourceSets.main.runtimeClasspath
+  
+  jvmArgs = ['-Dlog4j.configuration=META-INF/log4j.properties']
+}
+
+task runAnalysisActiveMQ(type: JavaExec, dependsOn: copyRuntimeLibs) {
+  configure analysisConfiguration
+	args = ['org.apache.activemq.jndi.ActiveMQInitialContextFactory', 'tcp://127.0.0.1:61616/', 'queue1']
+}
+
+task runAnalysisHornetQ(type: JavaExec, dependsOn: copyRuntimeLibs) {
+  configure analysisConfiguration
+	args = ['org.jnp.interfaces.NamingContextFactory', 'jnp://localhost:1099', '/queue/queue1']
+}
+
+task runAnalysisOpenJMS(type: JavaExec, dependsOn: copyRuntimeLibs) {
+  configure analysisConfiguration
+	args = ['org.exolab.jms.jndi.InitialContextFactory', 'tcp://127.0.0.1:3035/', 'queue1']
+}
