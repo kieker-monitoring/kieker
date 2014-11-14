@@ -291,13 +291,18 @@ def binaryContent = project.copySpec {
 def manualContent = project.copySpec {
 	from ('kieker-documentation/userguide') {
 		include 'kieker-userguide.pdf'
+		rename 'kieker-userguide.pdf', "kieker-${kiekerVersion}_userguide.pdf"
 	}
 	into kiekerPackagenamebase + "-" + kiekerVersion + "/doc"
 }
 
 def exampleContent = project.copySpec {
-	from (projectDir) {
-		include 'kieker-examples/**'
+	from ('kieker-examples') {
+		include '**'
+	}
+	from ('kieker-monitoring/src-resources/META-INF') {
+		include 'kieker.monitoring.default.properties'	
+		rename 'kieker.monitoring.default.properties', 'kieker.monitoring.example.properties'
 	}
 	into kiekerPackagenamebase + "-" + kiekerVersion + "/examples"
 }
