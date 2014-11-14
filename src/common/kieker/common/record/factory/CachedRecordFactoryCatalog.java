@@ -31,10 +31,15 @@ public final class CachedRecordFactoryCatalog {
 
 	private static final CachedRecordFactoryCatalog INSTANCE = new CachedRecordFactoryCatalog(new RecordFactoryResolver());
 
-	private final ConcurrentMap<String, IRecordFactory<? extends IMonitoringRecord>> cachedRecordFactories = new ConcurrentHashMap<String, IRecordFactory<? extends IMonitoringRecord>>();
+	private final ConcurrentMap<String, IRecordFactory<? extends IMonitoringRecord>> cachedRecordFactories;
 	private final RecordFactoryResolver recordFactoryResolver;
 
-	private CachedRecordFactoryCatalog(final RecordFactoryResolver recordFactoryResolver) {
+	public CachedRecordFactoryCatalog() {
+		this(new RecordFactoryResolver());
+	}
+
+	CachedRecordFactoryCatalog(final RecordFactoryResolver recordFactoryResolver) {
+		this.cachedRecordFactories = new ConcurrentHashMap<String, IRecordFactory<? extends IMonitoringRecord>>();
 		this.recordFactoryResolver = recordFactoryResolver;
 	}
 
