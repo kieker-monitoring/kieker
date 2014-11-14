@@ -300,11 +300,24 @@ def exampleContent = project.copySpec {
 	from ('kieker-examples') {
 		include '**'
 	}
+  from ('examples') {
+		include '**'
+	}
+  exclude '**/JavaEEServletContainerExample/build.xml'
+  exclude '**/livedemo-source/**'
 	from ('kieker-monitoring/src-resources/META-INF') {
 		include 'kieker.monitoring.default.properties'	
 		rename 'kieker.monitoring.default.properties', 'kieker.monitoring.example.properties'
 	}
 	into kiekerPackagenamebase + "-" + kiekerVersion + "/examples"
+}
+
+def exampleJavaEEContent = project.copySpec {
+	from ('kieker-monitoring/src-resources/META-INF') {
+		include 'kieker.monitoring.default.properties'	
+		rename 'kieker.monitoring.default.properties', 'kieker.monitoring.properties'
+	}
+	into kiekerPackagenamebase + "-" + kiekerVersion + "/examples/JavaEEServletContainerExample/jetty"
 }
 
 task docs(type: Javadoc) {
@@ -323,13 +336,13 @@ task prepareExamplesForDistribution(dependsOn: ['kieker-examples:userguide:ch2--
 task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, docs, 'kieker-documentation:userguide:buildDocumentation', prepareExamplesForDistribution]) {
 	classifier = 'binaries'
 	destinationDir = file('dist/releases')
-	with binaryContent, manualContent, exampleContent
+	with binaryContent, manualContent, exampleContent, exampleJavaEEContent
 }
 
 task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, docs, 'kieker-documentation:userguide:buildDocumentation', prepareExamplesForDistribution]) {
 	classifier = 'binaries'
 	destinationDir = file('dist/releases')
-	with binaryContent, manualContent, exampleContent
+	with binaryContent, manualContent, exampleContent, exampleJavaEEContent
 	
 	compression = Compression.GZIP 
 	extension = 'tar.gz'
