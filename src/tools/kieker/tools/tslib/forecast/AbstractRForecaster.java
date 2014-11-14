@@ -198,7 +198,7 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 		// 3. Calculate Forecast Quality Metric
 
 		double fcQuality = Double.NaN;
-		if (forecastValues.length > 0) {
+		if (forecastValues.length > 1) {
 			if ((this.modelFunc == null)) { // Re-enable when TBATS included: || (this.strategy == ForecastMethod.TBATS)
 				fcQuality = AbstractRForecaster.RBRIDGE.eDbl("accuracy(" + varNameForecast + ")[6]");
 			} else {
