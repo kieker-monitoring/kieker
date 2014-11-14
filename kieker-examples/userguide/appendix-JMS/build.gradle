@@ -1,7 +1,10 @@
 dependencies {
 	compile fileTree('../../../dist') {
-		include "*.jar"
+		include "kieker-*_emf.jar"
 	}
+  compile fileTree('../../../lib') {
+    include "commons-logging-*.jar"
+  }
 }
 
 def monitoringConfigurationActiveMQ = 'META-INF/kieker.monitoring.properties-activemq'
