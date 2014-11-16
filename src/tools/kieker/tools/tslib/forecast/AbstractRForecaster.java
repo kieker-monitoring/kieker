@@ -176,7 +176,7 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 					params.append(param);
 				}
 			}
-			AbstractRForecaster.RBRIDGE.evalWithR(String.format("%s <<- %s(%s)", varNameModel, this.modelFunc, params));
+			AbstractRForecaster.RBRIDGE.evalWithR(String.format("%s <- %s(%s)", varNameModel, this.modelFunc, params));
 		}
 		// remove temporal variable:
 		AbstractRForecaster.RBRIDGE.evalWithR(String.format("rm(%s)", varNameValues));
@@ -184,10 +184,10 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 		// 2. Perform forecast based on stochastic model
 
 		if (this.getConfidenceLevel() == 0) {
-			AbstractRForecaster.RBRIDGE.evalWithR(String.format("%s <<- %s(%s, h=%d)", varNameForecast, this.forecastFunc, varNameModel,
+			AbstractRForecaster.RBRIDGE.evalWithR(String.format("%s <- %s(%s, h=%d)", varNameForecast, this.forecastFunc, varNameModel,
 					numForecastSteps));
 		} else {
-			AbstractRForecaster.RBRIDGE.evalWithR(String.format("%s <<- %s(%s, h=%d, level=c(%d))", varNameForecast, this.forecastFunc, varNameModel,
+			AbstractRForecaster.RBRIDGE.evalWithR(String.format("%s <- %s(%s, h=%d, level=c(%d))", varNameForecast, this.forecastFunc, varNameModel,
 					numForecastSteps, this.getConfidenceLevel()));
 		}
 

@@ -126,10 +126,10 @@ public final class RBridgeControl {
 	 *
 	 * @param input
 	 *            string
-	 * @return -666.666 error, else dbvalue
+	 * @return {@link Double#NaN} in case of error, else dbvalue
 	 */
 	public double eDbl(final String input) {
-		final double resultOnFailure = -666.666;
+		final double resultOnFailure = Double.NaN;
 
 		try {
 			final Object evaluationResult = this.evalWithR(input);
