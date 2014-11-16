@@ -21,15 +21,16 @@ import org.junit.Test;
 
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.tools.util.InvalidREvaluationResultException;
 import kieker.tools.util.RBridgeControl;
 
 import kieker.test.tools.junit.AbstractKiekerRTest;
 
 /**
- * 
+ *
  * @author Tillmann Carlos Bielefeld
  * @since 1.10
- * 
+ *
  */
 public class RBridgeTest extends AbstractKiekerRTest {
 	private static final Log LOG = LogFactory.getLog(RBridgeTest.class);
@@ -43,7 +44,7 @@ public class RBridgeTest extends AbstractKiekerRTest {
 
 	/**
 	 * Test of the RBridge, connects to Rserve.
-	 * 
+	 *
 	 * @throws Exception
 	 *             If exception is thrown
 	 */
@@ -62,5 +63,17 @@ public class RBridgeTest extends AbstractKiekerRTest {
 
 		Assert.assertTrue(result != null);
 		Assert.assertTrue(result instanceof org.rosuda.REngine.REXPDouble);
+	}
+
+	/**
+	 * Test to make sure that InvalidREvaluationResultException within the evalWithR() method are caught correctly.
+	 *
+	 * @throws InvalidREvaluationResultException
+	 *             if exceptions are handled correctly.
+	 */
+	@Test(expected = InvalidREvaluationResultException.class)
+	public void testNullPointerEvaluationEvalWithR() {
+		final RBridgeControl r = RBridgeControl.getInstance();
+		r.evalWithR("accuracy(NULL)[6]");
 	}
 }
