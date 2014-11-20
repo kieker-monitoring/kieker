@@ -56,6 +56,8 @@ public class ExplorVizReader extends AbstractReaderPlugin {
 	/** The name of the output port delivering the received records. */
 	public static final String OUTPUT_PORT_NAME_RECORDS = "monitoringRecords";
 
+	public static final String ENCODING = "UTF-8";
+
 	/** The name of the configuration determining the TCP port. */
 	public static final String CONFIG_PROPERTY_NAME_PORT = "port";
 
@@ -153,11 +155,8 @@ public class ExplorVizReader extends AbstractReaderPlugin {
 		long timestamp;
 		long traceID;
 		int orderIndex;
-		byte notNeededClazzID; // NOPMD
-		final int notRelevant; // NOPMD
 		final int opSinatureStringID;
 		final int classSignatureStringID;
-		final int emptyStringID3; // NOPMD
 		final int causeStringID;
 		final String opSignature;
 		final String classSignature;
@@ -167,15 +166,15 @@ public class ExplorVizReader extends AbstractReaderPlugin {
 			timestamp = buffer.getLong();
 			traceID = buffer.getLong();
 			orderIndex = buffer.getInt();
-			notRelevant = buffer.getInt();
+			buffer.getInt(); // not needed value
 			opSinatureStringID = buffer.getInt();
 			classSignatureStringID = buffer.getInt();
-			emptyStringID3 = buffer.getInt();
-			notNeededClazzID = buffer.get();
+			buffer.getInt(); // not needed emptyStringID
+			buffer.get(); // not needed ClazzID
 			RegistryRecord.registerRecordInRegistry(buffer, this.stringRegistry);
-			notNeededClazzID = buffer.get();
+			buffer.get(); // not needed ClazzID
 			RegistryRecord.registerRecordInRegistry(buffer, this.stringRegistry);
-			notNeededClazzID = buffer.get();
+			buffer.get(); // not needed ClazzID
 			RegistryRecord.registerRecordInRegistry(buffer, this.stringRegistry);
 			opSignature = this.stringRegistry.get(opSinatureStringID);
 			classSignature = this.stringRegistry.get(classSignatureStringID);
@@ -190,7 +189,7 @@ public class ExplorVizReader extends AbstractReaderPlugin {
 			traceID = buffer.getLong();
 			orderIndex = buffer.getInt();
 			causeStringID = buffer.getInt();
-			notNeededClazzID = buffer.get();
+			buffer.get(); // not needed ClazzID
 			RegistryRecord.registerRecordInRegistry(buffer, this.stringRegistry);
 			final String cause = this.stringRegistry.get(causeStringID);
 
@@ -209,9 +208,9 @@ public class ExplorVizReader extends AbstractReaderPlugin {
 			buffer.get(strBytes);
 			String string;
 			try {
-				string = new String(strBytes, RegistryRecord.ENCODING);
+				string = new String(strBytes, ENCODING);
 			} catch (final UnsupportedEncodingException e) {
-				string = new String(strBytes); // NOPMD
+				string = "EncodingDidNotWork";
 			}
 			final RegistryRecord record = new RegistryRecord(id, string);
 			super.deliver(OUTPUT_PORT_NAME_RECORDS, record);
@@ -219,18 +218,17 @@ public class ExplorVizReader extends AbstractReaderPlugin {
 	}
 
 	public void skipBufferToFirstTestRecord(final ByteBuffer buffer) {
-		byte testByte; // NOPMD
-		int testInt; // NOPMD
-
-		testByte = buffer.get();
-		for (int i = 0; i < 4; i++) {
-			testInt = buffer.getInt();
+		int i;
+		int j;
+		buffer.get();
+		for (i = 0; i < 4; i++) {
+			buffer.getInt();
 		}
-		for (int j = 0; j < 4; j++) {
-			testByte = buffer.get();
-			testInt = buffer.getInt();
-			testInt = buffer.getInt();
-			testByte = buffer.get();
+		for (j = 0; j < 4; j++) {
+			buffer.get();
+			buffer.getInt();
+			buffer.getInt();
+			buffer.get();
 		}
 	}
 
