@@ -146,7 +146,7 @@ public class BasicExplorVizExportWriterTest extends AbstractWriterReaderTest { /
 		final List<IMonitoringRecord> someEvents = new ArrayList<IMonitoringRecord>();
 		final Object[] testValues1 = { 22L, 11L, 101, "BeOpEv", "BeforeOperationEvent" };
 		final Object[] testValues2 = { 6L, 8L, 120, "AfOpEv", "AfterOperationEvent" };
-		final Object[] testValues3 = { 10L, 12L, 150, "AfOpFaEv", "AfterOperationFailedEvent", "<cause>" };
+		final Object[] testValues3 = { 10L, 12L, 150, "AfOpFaEv", "AfterOperationFailedEvent", "cause" };
 
 		final BeforeOperationEvent testBeforeOperationEvent = new BeforeOperationEvent(testValues1);
 		final AfterOperationEvent testAfterOperationEvent = new AfterOperationEvent(testValues2);

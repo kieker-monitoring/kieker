@@ -102,4 +102,17 @@ public class CustomAfterOperationEvent implements IMonitoringRecord {
 		return 0;
 	}
 
+	@Override
+	public final boolean equals(final Object obj) { // not used method (needed for findbugs)
+		if (this == obj) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() { // not used method (needed for findbugs)
+		return 1;
+	}
+
 }
