@@ -22,31 +22,68 @@ package kieker.examples.analysis.opad.experimentModel;
  * @since 1.11
  */
 public class WikiGer24_Oct11_21d_OutputModel {
-	private long pageRequests;
-	private long forecast;
-	private double confidence;
+	private double pageRequests;
+	private double forecast;
+	private int confidence;
+	private double confidenceUpper;
+	private double confidenceLower;
+	private String forecaster;
 
-	public long getForecast() {
+	public WikiGer24_Oct11_21d_OutputModel(final double pageRequests, final double forecast, final int confidence, final double confidenceUpper,
+			final double confidenceLower, final String forecaster) {
+		this.pageRequests = pageRequests;
+		this.forecast = forecast;
+		this.confidence = confidence;
+		this.confidenceUpper = confidenceUpper;
+		this.confidenceLower = confidenceLower;
+		this.forecaster = forecaster;
+	}
+
+	public double getForecast() {
 		return this.forecast;
 	}
 
-	public void setForecast(final long forecast) {
+	public void setForecast(final double forecast) {
 		this.forecast = forecast;
 	}
 
-	public double getConfidence() {
+	public int getConfidence() {
 		return this.confidence;
 	}
 
-	public void setConfidence(final double confidence) {
+	public void setConfidence(final int confidence) {
 		this.confidence = confidence;
 	}
 
-	public long getPageRequests() {
+	public double getPageRequests() {
 		return this.pageRequests;
 	}
 
-	public void setPageRequests(final long pageRequests) {
+	public void setPageRequests(final double pageRequests) {
 		this.pageRequests = pageRequests;
+	}
+
+	public double getConfidenceUpper() {
+		return this.confidenceUpper;
+	}
+
+	public void setConfidenceUpper(final double confidenceUpper) {
+		this.confidenceUpper = confidenceUpper;
+	}
+
+	public double getConfidenceLower() {
+		return this.confidenceLower;
+	}
+
+	public void setConfidenceLower(final double confidenceLower) {
+		this.confidenceLower = confidenceLower;
+	}
+
+	public String getForecaster() {
+		return this.forecaster;
+	}
+
+	public void setForecaster(final String forecaster) {
+		this.forecaster = forecaster;
 	}
 }

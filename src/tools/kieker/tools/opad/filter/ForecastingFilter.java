@@ -46,14 +46,15 @@ import kieker.tools.tslib.forecast.IForecaster;
  *
  */
 @Plugin(name = "Forecast Filter", outputPorts = {
-	@OutputPort(eventTypes = { IForecastResult.class }, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECAST),
-	@OutputPort(eventTypes = { IForecastMeasurementPair.class }, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT) },
+		@OutputPort(eventTypes = { IForecastResult.class }, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECAST),
+		@OutputPort(eventTypes = { IForecastMeasurementPair.class }, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT) },
 		configuration = {
-			@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_DELTA_TIME, defaultValue = "1000"),
-			@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_DELTA_UNIT, defaultValue = "MILLISECONDS"),
-			@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_FC_METHOD, defaultValue = "MEAN", updateable = true),
-			@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_TS_WINDOW_CAPACITY, defaultValue = "60")
-		})
+		@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_DELTA_TIME, defaultValue = "1000"),
+		@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_DELTA_UNIT, defaultValue = "MILLISECONDS"),
+		@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_FC_METHOD, defaultValue = "MEAN", updateable = true),
+		@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_TS_WINDOW_CAPACITY, defaultValue = "60"),
+		@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_FC_CONFIDENCE, defaultValue = "0")
+})
 public class ForecastingFilter extends AbstractUpdateableFilterPlugin {
 
 	public static final String INPUT_PORT_NAME_TSPOINT = "tspoint";
@@ -65,10 +66,12 @@ public class ForecastingFilter extends AbstractUpdateableFilterPlugin {
 	public static final String CONFIG_PROPERTY_NAME_DELTA_UNIT = "deltaunit";
 	public static final String CONFIG_PROPERTY_NAME_FC_METHOD = "fcmethod";
 	public static final String CONFIG_PROPERTY_NAME_TS_WINDOW_CAPACITY = "tswcapacity";
+	public static final String CONFIG_PROPERTY_NAME_FC_CONFIDENCE = "confidence";
 
 	private final ConcurrentHashMap<String, ITimeSeries<Double>> applicationForecastingWindow;
 
 	private AtomicInteger timeSeriesWindowCapacity;
+	private AtomicInteger forecastConfidence;
 	private final AtomicReference<ForecastMethod> forecastMethod = new AtomicReference<ForecastMethod>();
 	private AtomicLong deltat;
 	private TimeUnit tunit;
@@ -94,6 +97,7 @@ public class ForecastingFilter extends AbstractUpdateableFilterPlugin {
 		configuration.setProperty(CONFIG_PROPERTY_NAME_DELTA_UNIT, this.tunit.name());
 		configuration.setProperty(CONFIG_PROPERTY_NAME_FC_METHOD, this.forecastMethod.get().name());
 		configuration.setProperty(CONFIG_PROPERTY_NAME_TS_WINDOW_CAPACITY, Integer.toString(this.timeSeriesWindowCapacity.get()));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_FC_CONFIDENCE, Integer.toString(this.forecastConfidence.get()));
 		return configuration;
 	}
 
@@ -113,6 +117,10 @@ public class ForecastingFilter extends AbstractUpdateableFilterPlugin {
 
 		if (!update || this.isPropertyUpdateable(CONFIG_PROPERTY_NAME_TS_WINDOW_CAPACITY)) {
 			this.timeSeriesWindowCapacity = new AtomicInteger(config.getIntProperty(CONFIG_PROPERTY_NAME_TS_WINDOW_CAPACITY));
+		}
+
+		if (!update || this.isPropertyUpdateable(CONFIG_PROPERTY_NAME_FC_CONFIDENCE)) {
+			this.forecastConfidence = new AtomicInteger(config.getIntProperty(CONFIG_PROPERTY_NAME_FC_CONFIDENCE));
 		}
 	}
 
@@ -148,17 +156,36 @@ public class ForecastingFilter extends AbstractUpdateableFilterPlugin {
 
 		final ITimeSeries<Double> currentWindow = this.applicationForecastingWindow.get(name);
 		currentWindow.append(input.getValue());
-		final IForecaster<Double> forecaster = this.forecastMethod.get().getForecaster(currentWindow);
+
+		final IForecaster<Double> forecaster = this.forecastMethod.get().getForecaster(currentWindow, this.forecastConfidence.get());
+
 		final IForecastResult result = forecaster.forecast(1);
 		super.deliver(OUTPUT_PORT_NAME_FORECAST, result);
 
 		// Check whether we have forecasted points
 		if (result.getForecast().getPoints().size() > 0) {
+
+			final double confidenceUpper;
+			if (result.getUpper().getValues().size() > 0) {
+				confidenceUpper = result.getUpper().getValues().get(0);
+			} else {
+				confidenceUpper = Double.NaN;
+			}
+
+			final double confidenceLower;
+			if (result.getLower().getValues().size() > 0) {
+				confidenceLower = result.getLower().getValues().get(0);
+			} else {
+				confidenceLower = Double.NaN;
+			}
+
 			final ForecastMeasurementPair fmp = new ForecastMeasurementPair(
 					name,
 					result.getForecast().getPoints().get(0).getValue(),
 					input.getValue(),
-					timestamp);
+					timestamp,
+					result.getConfidenceLevel(),
+					confidenceUpper, confidenceLower);
 			super.deliver(OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, fmp);
 		} else {
 			this.log.error("There are no forecast points to deliver. Perhaps Rserve is not running?");

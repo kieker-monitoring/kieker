@@ -26,7 +26,7 @@ import kieker.common.logging.LogFactory;
 /**
  * Implementation of an {@link OutputStream} that redirects data received via
  * its {@link #write(int)} method to an instance of {@link Log}.
- * 
+ *
  * @since 1.10
  * @author Andre van Hoorn, Tillmann Carlos Bielefeld
  */
@@ -46,7 +46,7 @@ public class OutputStream2StandardLog extends OutputStream {
 	@Override
 	public void write(final int b) throws IOException {
 		if (b == LINE_END) {
-			LOG.info(this.baos.toString("UTF-8")); // Redirect previous log message from RSession as log message
+			LOG.trace(this.baos.toString("UTF-8")); // Redirect previous log message from RSession as log message
 			this.baos.reset();
 		} else {
 			this.baos.write(b);

@@ -75,7 +75,7 @@ public final class RBridgeControl {
 			} else if (out != null) {
 				output = out;
 			} else {
-				throw new NullPointerException("Got a null result for evaluation input: \"" + input + "\"");
+				throw new InvalidREvaluationResultException("Got a null result for evaluation input: \"" + input + "\"");
 			}
 
 			RBridgeControl.LOG.trace("> REXP: " + input + " return: " + output);
@@ -140,7 +140,7 @@ public final class RBridgeControl {
 			RBridgeControl.LOG.error("Error casting value from R: " + input
 					+ " Cause: " + exc);
 			return resultOnFailure;
-		} catch (final NullPointerException exc) {
+		} catch (final InvalidREvaluationResultException exc) {
 			RBridgeControl.LOG.error(exc.getMessage(), exc);
 			return resultOnFailure;
 		}
@@ -160,7 +160,7 @@ public final class RBridgeControl {
 			final REXPString stringResult = (REXPString) evaluationResult;
 
 			return stringResult.toString();
-		} catch (final NullPointerException exc) {
+		} catch (final InvalidREvaluationResultException exc) {
 			RBridgeControl.LOG.error(exc.getMessage(), exc);
 			return resultOnFailure;
 		}
@@ -181,7 +181,7 @@ public final class RBridgeControl {
 			return vectorResult.asDoubles();
 		} catch (final REXPMismatchException e) {
 			return resultOnFailure;
-		} catch (final NullPointerException e) {
+		} catch (final InvalidREvaluationResultException e) {
 			RBridgeControl.LOG.error(e.getMessage(), e);
 			return resultOnFailure;
 		}
