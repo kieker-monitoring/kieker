@@ -22,6 +22,7 @@ import java.nio.ByteBuffer;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
+import kieker.common.util.Version;
 
 
 /**
@@ -33,7 +34,11 @@ public abstract class AbstractJVMRecord extends AbstractMonitoringRecord impleme
 		private static final long serialVersionUID = 3817833790306987100L;
 	
 	
-	
+	/* user-defined constants */
+	/* default constants */
+	public static final String HOSTNAME = "";
+	public static final String VM_NAME = "";
+	/* property declarations */
 	private final long timestamp;
 	private final String hostname;
 	private final String vmName;

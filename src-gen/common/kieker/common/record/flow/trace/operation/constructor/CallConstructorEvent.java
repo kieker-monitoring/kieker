@@ -21,6 +21,7 @@ import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
 import kieker.common.util.registry.IRegistry;
+import kieker.common.util.Version;
 
 import kieker.common.record.flow.trace.operation.CallOperationEvent;
 import kieker.common.record.flow.IConstructorRecord;
@@ -52,7 +53,9 @@ public class CallConstructorEvent extends CallOperationEvent implements IConstru
 		String.class, // ICallRecord.calleeClassSignature
 	};
 	
-	
+	/* user-defined constants */
+	/* default constants */
+	/* property declarations */
 
 	/**
 	 * Creates a new instance of this class using the given parameters.

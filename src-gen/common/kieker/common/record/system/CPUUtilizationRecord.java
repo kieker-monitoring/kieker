@@ -23,6 +23,7 @@ import java.nio.ByteBuffer;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
+import kieker.common.util.Version;
 
 
 /**
@@ -58,6 +59,8 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 		double.class, // CPUUtilizationRecord.idle
 	};
 	
+	/* user-defined constants */
+	/* default constants */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
 	public static final String CPU_ID = "";
@@ -68,7 +71,7 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	public static final double IRQ = 0.0;
 	public static final double TOTAL_UTILIZATION = 0.0;
 	public static final double IDLE = 0.0;
-	
+	/* property declarations */
 	private final long timestamp;
 	private final String hostname;
 	private final String cpuID;
@@ -106,8 +109,8 @@ public class CPUUtilizationRecord extends AbstractMonitoringRecord implements IM
 	 */
 	public CPUUtilizationRecord(final long timestamp, final String hostname, final String cpuID, final double user, final double system, final double wait, final double nice, final double irq, final double totalUtilization, final double idle) {
 		this.timestamp = timestamp;
-		this.hostname = hostname == null?"":hostname;
-		this.cpuID = cpuID == null?"":cpuID;
+		this.hostname = hostname == null?HOSTNAME:hostname;
+		this.cpuID = cpuID == null?CPU_ID:cpuID;
 		this.user = user;
 		this.system = system;
 		this.wait = wait;

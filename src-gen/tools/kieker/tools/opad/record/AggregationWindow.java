@@ -23,6 +23,7 @@ import java.nio.ByteBuffer;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
+import kieker.common.util.Version;
 
 
 /**
@@ -42,7 +43,9 @@ public class AggregationWindow extends AbstractMonitoringRecord implements IMoni
 		long.class, // AggregationWindow.windowEnd
 	};
 	
-	
+	/* user-defined constants */
+	/* default constants */
+	/* property declarations */
 	private final long windowStart;
 	private final long windowEnd;
 

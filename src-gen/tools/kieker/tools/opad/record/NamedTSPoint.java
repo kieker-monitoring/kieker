@@ -23,6 +23,7 @@ import java.nio.ByteBuffer;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
+import kieker.common.util.Version;
 
 
 /**
@@ -44,7 +45,10 @@ public class NamedTSPoint extends AbstractMonitoringRecord implements IMonitorin
 		String.class, // NamedTSPoint.name
 	};
 	
-	
+	/* user-defined constants */
+	/* default constants */
+	public static final String NAME = "";
+	/* property declarations */
 	private final long timestamp;
 	private final double value;
 	private final String name;

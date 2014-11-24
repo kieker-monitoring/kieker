@@ -21,6 +21,7 @@ import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
 import kieker.common.util.registry.IRegistry;
+import kieker.common.util.Version;
 
 import kieker.common.record.flow.trace.operation.constructor.CallConstructorEvent;
 import kieker.common.record.flow.ICallObjectRecord;
@@ -56,7 +57,11 @@ public class CallConstructorObjectEvent extends CallConstructorEvent implements 
 		int.class, // ICallObjectRecord.calleeObjectId
 	};
 	
-	
+	/* user-defined constants */
+	/* default constants */
+	public static final int OBJECT_ID = 0;
+	public static final int CALLEE_OBJECT_ID = 0;
+	/* property declarations */
 	private final int objectId;
 	private final int calleeObjectId;
 

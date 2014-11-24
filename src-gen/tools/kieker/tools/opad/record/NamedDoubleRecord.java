@@ -23,6 +23,7 @@ import java.nio.ByteBuffer;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
+import kieker.common.util.Version;
 
 
 /**
@@ -44,7 +45,10 @@ public class NamedDoubleRecord extends AbstractMonitoringRecord implements IMoni
 		double.class, // NamedDoubleRecord.responseTime
 	};
 	
-	
+	/* user-defined constants */
+	/* default constants */
+	public static final String APPLICATION_NAME = "";
+	/* property declarations */
 	private final String applicationName;
 	private final long timestamp;
 	private final double responseTime;

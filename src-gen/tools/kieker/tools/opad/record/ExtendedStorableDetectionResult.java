@@ -21,6 +21,7 @@ import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
 import kieker.common.util.registry.IRegistry;
+import kieker.common.util.Version;
 
 import kieker.tools.opad.record.StorableDetectionResult;
 
@@ -49,7 +50,9 @@ public class ExtendedStorableDetectionResult extends StorableDetectionResult  {
 		double.class, // ExtendedStorableDetectionResult.anomalyThreshold
 	};
 	
-	
+	/* user-defined constants */
+	/* default constants */
+	/* property declarations */
 	private final double anomalyThreshold;
 
 	/**

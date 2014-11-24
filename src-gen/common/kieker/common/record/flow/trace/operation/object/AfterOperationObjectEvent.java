@@ -21,6 +21,7 @@ import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
 import kieker.common.util.registry.IRegistry;
+import kieker.common.util.Version;
 
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.IObjectRecord;
@@ -50,7 +51,10 @@ public class AfterOperationObjectEvent extends AfterOperationEvent implements IO
 		int.class, // IObjectRecord.objectId
 	};
 	
-	
+	/* user-defined constants */
+	/* default constants */
+	public static final int OBJECT_ID = 0;
+	/* property declarations */
 	private final int objectId;
 
 	/**

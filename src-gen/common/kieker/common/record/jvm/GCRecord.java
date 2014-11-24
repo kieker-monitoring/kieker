@@ -21,6 +21,7 @@ import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
 import kieker.common.util.registry.IRegistry;
+import kieker.common.util.Version;
 
 import kieker.common.record.jvm.AbstractJVMRecord;
 
@@ -49,7 +50,10 @@ public class GCRecord extends AbstractJVMRecord  {
 		long.class, // GCRecord.collectionTimeMS
 	};
 	
-	
+	/* user-defined constants */
+	/* default constants */
+	public static final String GC_NAME = "";
+	/* property declarations */
 	private final String gcName;
 	private final long collectionCount;
 	private final long collectionTimeMS;

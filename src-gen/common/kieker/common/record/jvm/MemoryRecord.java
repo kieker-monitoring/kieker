@@ -21,6 +21,7 @@ import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
 import kieker.common.util.registry.IRegistry;
+import kieker.common.util.Version;
 
 import kieker.common.record.jvm.AbstractJVMRecord;
 
@@ -61,7 +62,9 @@ public class MemoryRecord extends AbstractJVMRecord  {
 		int.class, // MemoryRecord.objectPendingFinalizationCount
 	};
 	
-	
+	/* user-defined constants */
+	/* default constants */
+	/* property declarations */
 	private final long heapMaxBytes;
 	private final long heapUsedBytes;
 	private final long heapCommittedBytes;

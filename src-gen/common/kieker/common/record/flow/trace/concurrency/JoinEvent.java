@@ -21,6 +21,7 @@ import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
 import kieker.common.util.registry.IRegistry;
+import kieker.common.util.Version;
 
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 
@@ -45,8 +46,10 @@ public class JoinEvent extends AbstractTraceEvent  {
 		long.class, // JoinEvent.joinedTraceId
 	};
 	
+	/* user-defined constants */
+	/* default constants */
 	public static final long JOINED_TRACE_ID = 0L;
-	
+	/* property declarations */
 	private final long joinedTraceId;
 
 	/**

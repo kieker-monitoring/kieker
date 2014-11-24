@@ -20,6 +20,7 @@ import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
 import kieker.common.util.registry.IRegistry;
+import kieker.common.util.Version;
 
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 
@@ -32,8 +33,10 @@ public abstract class AbstractMonitorEvent extends AbstractTraceEvent  {
 		private static final long serialVersionUID = -7113928259748697225L;
 	
 	
+	/* user-defined constants */
+	/* default constants */
 	public static final int LOCK_ID = 0;
-	
+	/* property declarations */
 	private final int lockId;
 
 	/**

@@ -21,6 +21,7 @@ import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
 import kieker.common.util.registry.IRegistry;
+import kieker.common.util.Version;
 
 import kieker.common.record.jvm.AbstractJVMRecord;
 
@@ -49,7 +50,9 @@ public class ClassLoadingRecord extends AbstractJVMRecord  {
 		long.class, // ClassLoadingRecord.unloadedClassCount
 	};
 	
-	
+	/* user-defined constants */
+	/* default constants */
+	/* property declarations */
 	private final long totalLoadedClassCount;
 	private final int loadedClassCount;
 	private final long unloadedClassCount;

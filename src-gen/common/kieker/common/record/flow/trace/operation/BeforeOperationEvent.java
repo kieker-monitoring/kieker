@@ -21,6 +21,7 @@ import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
 import kieker.common.util.registry.IRegistry;
+import kieker.common.util.Version;
 
 import kieker.common.record.flow.trace.operation.AbstractOperationEvent;
 
@@ -47,7 +48,9 @@ public class BeforeOperationEvent extends AbstractOperationEvent  {
 		String.class, // IClassSignature.classSignature
 	};
 	
-	
+	/* user-defined constants */
+	/* default constants */
+	/* property declarations */
 
 	/**
 	 * Creates a new instance of this class using the given parameters.

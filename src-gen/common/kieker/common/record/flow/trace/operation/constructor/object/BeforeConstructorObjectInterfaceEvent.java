@@ -21,6 +21,7 @@ import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
 import kieker.common.util.registry.IRegistry;
+import kieker.common.util.Version;
 
 import kieker.common.record.flow.trace.operation.constructor.object.BeforeConstructorObjectEvent;
 import kieker.common.record.flow.IInterfaceRecord;
@@ -52,7 +53,10 @@ public class BeforeConstructorObjectInterfaceEvent extends BeforeConstructorObje
 		String.class, // IInterfaceRecord.interface
 	};
 	
-	
+	/* user-defined constants */
+	/* default constants */
+	public static final String INTERFACE = "";
+	/* property declarations */
 	private final String _interface;
 
 	/**

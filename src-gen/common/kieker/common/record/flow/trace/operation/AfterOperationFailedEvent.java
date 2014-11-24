@@ -21,6 +21,7 @@ import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
 import kieker.common.util.registry.IRegistry;
+import kieker.common.util.Version;
 
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.IExceptionRecord;
@@ -50,7 +51,10 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 		String.class, // IExceptionRecord.cause
 	};
 	
-	
+	/* user-defined constants */
+	/* default constants */
+	public static final String CAUSE = "";
+	/* property declarations */
 	private final String cause;
 
 	/**
@@ -71,7 +75,7 @@ public class AfterOperationFailedEvent extends AfterOperationEvent implements IE
 	 */
 	public AfterOperationFailedEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature, final String cause) {
 		super(timestamp, traceId, orderIndex, operationSignature, classSignature);
-		this.cause = cause == null?"":cause;
+		this.cause = cause == null?CAUSE:cause;
 	}
 
 	/**
