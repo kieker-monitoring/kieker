@@ -26,6 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import kieker.common.exception.MonitoringRecordException;
+import kieker.common.util.registry.ILookup;
 import kieker.common.util.registry.IRegistry;
 
 /**
@@ -548,4 +549,10 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 			throw new MonitoringRecordException(FAILED_TO_INSTANTIATE_NEW_MONITORING_RECORD_OF_TYPE + stringRegistry.get(recordClassName), ex);
 		}
 	}
+
+	@Override
+	public void registerStrings(final ILookup<String> stringRegistry) { // NOPMD (default empty method body)
+
+	}
+
 }
