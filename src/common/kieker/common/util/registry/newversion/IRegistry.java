@@ -23,9 +23,24 @@ package kieker.common.util.registry.newversion;
  */
 public interface IRegistry<T> {
 
+	/**
+	 * Registers the passed <code>element</code> if it has not yet been registered
+	 *
+	 * @since 1.11
+	 */
 	void addIfAbsent(T element);
 
+	/**
+	 * @return the registered unique identifier for the passed <code>element</code>
+	 *
+	 * @since 1.11
+	 */
 	int get(T element);
 
+	/**
+	 * @return the current number of registered elements
+	 *
+	 * @since 1.11
+	 */
 	int getSize();
 }

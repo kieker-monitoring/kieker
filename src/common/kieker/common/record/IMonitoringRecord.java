@@ -21,7 +21,6 @@ import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
-import kieker.common.util.registry.ILookup;
 import kieker.common.util.registry.IRegistry;
 
 /**
@@ -87,7 +86,7 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	 *
 	 * @since 1.11
 	 */
-	public void registerStrings(final ILookup<String> stringRegistry);
+	public void registerStrings(final IRegistry<String> stringRegistry);
 
 	/**
 	 * This method should deliver an byte array containing the content of the record. It should be possible to convert this array later into a record again.

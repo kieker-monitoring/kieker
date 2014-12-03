@@ -26,7 +26,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import kieker.common.exception.MonitoringRecordException;
-import kieker.common.util.registry.ILookup;
 import kieker.common.util.registry.IRegistry;
 
 /**
@@ -551,7 +550,7 @@ public abstract class AbstractMonitoringRecord implements IMonitoringRecord {
 	}
 
 	@Override
-	public void registerStrings(final ILookup<String> stringRegistry) { // NOPMD (default empty method body)
+	public void registerStrings(final IRegistry<String> stringRegistry) { // NOPMD (default empty method body)
 
 	}
 

@@ -16,24 +16,37 @@
 
 package kieker.common.util.registry.newversion;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author Christian Wulf
  *
  * @since 1.11
  */
-public interface ILookup<T> {
+public final class Registry<T> implements IRegistry<T> {
 
-	/**
-	 * @since 1.11
-	 */
-	void add(int uniqueId, T element);
+	// TODO use a HPC implementation with primitive int values
+	// I recommend: http://labs.carrotsearch.com/hppc.html
+	private final Map<T, Integer> registeredEntries = new HashMap<T, Integer>();
+	private int nextIdentifier;
 
-	/**
-	 * @return the <code>element</code> that is associated with the passed <code>uniqueId</code>
-	 *
-	 * @since 1.11
-	 */
-	T get(int uniqueId);
+	@Override
+	public void addIfAbsent(final T element) {
+		if (!this.registeredEntries.containsKey(element)) {
+			final int newIdentifier = this.nextIdentifier++;
+			this.registeredEntries.put(element, newIdentifier);
+		}
+	}
 
-	// int getSize();
+	@Override
+	public final int get(final T element) {
+		return this.registeredEntries.get(element);
+	}
+
+	@Override
+	public int getSize() {
+		return this.registeredEntries.size();
+	}
+
 }
