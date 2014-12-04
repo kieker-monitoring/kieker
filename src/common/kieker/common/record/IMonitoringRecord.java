@@ -82,8 +82,6 @@ public interface IMonitoringRecord extends Serializable, Comparable<IMonitoringR
 	/**
 	 * Registers the string attributes of the record at the given <code>stringRegistry</code>.
 	 *
-	 * @author Christian Wulf
-	 *
 	 * @since 1.11
 	 */
 	public void registerStrings(final IRegistry<String> stringRegistry);
