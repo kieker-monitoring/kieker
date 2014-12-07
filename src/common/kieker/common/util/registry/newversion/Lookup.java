@@ -29,7 +29,7 @@ import java.util.Map;
  */
 public final class Lookup<T> implements ILookup<T> {
 
-	// TODO use a HPC implementation with primitive int keys
+	// TODO: use a HPC implementation with primitive int keys
 	// I recommend: http://labs.carrotsearch.com/hppc.html
 	private final Map<Integer, T> registeredEntries;
 

@@ -29,7 +29,7 @@ import java.util.Map;
  */
 public final class Registry<T> implements IRegistry<T> {
 
-	// TODO use a HPC implementation with primitive int values
+	// TODO: use a HPC implementation with primitive int values
 	// I recommend: http://labs.carrotsearch.com/hppc.html
 	private final Map<T, Integer> registeredEntries;
 	private int nextIdentifier;
