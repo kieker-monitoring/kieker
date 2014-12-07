@@ -20,6 +20,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * @param <T>
+ *            the type of the elements
+ *
  * @author Christian Wulf
  *
  * @since 1.11
@@ -28,8 +31,12 @@ public final class Registry<T> implements IRegistry<T> {
 
 	// TODO use a HPC implementation with primitive int values
 	// I recommend: http://labs.carrotsearch.com/hppc.html
-	private final Map<T, Integer> registeredEntries = new HashMap<T, Integer>();
+	private final Map<T, Integer> registeredEntries;
 	private int nextIdentifier;
+
+	public Registry() {
+		this.registeredEntries = new HashMap<T, Integer>();
+	}
 
 	@Override
 	public void addIfAbsent(final T element) {

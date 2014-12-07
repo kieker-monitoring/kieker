@@ -20,6 +20,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * @param <T>
+ *            the type of the elements
+ *
  * @author Christian Wulf
  *
  * @since 1.11
@@ -28,7 +31,11 @@ public final class Lookup<T> implements ILookup<T> {
 
 	// TODO use a HPC implementation with primitive int keys
 	// I recommend: http://labs.carrotsearch.com/hppc.html
-	private final Map<Integer, T> registeredEntries = new HashMap<Integer, T>();
+	private final Map<Integer, T> registeredEntries;
+
+	public Lookup() {
+		this.registeredEntries = new HashMap<Integer, T>();
+	}
 
 	@Override
 	public void add(final int uniqueId, final T element) {
