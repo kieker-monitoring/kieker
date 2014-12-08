@@ -44,7 +44,6 @@ public class TestNoOutputPortsForVisualizations extends AbstractDynamicKiekerTes
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
 	public void test() throws ClassNotFoundException {
 		final Collection<Class<?>> availableClasses = super.deliverAllAvailableClassesFromSourceDirectory();
 		final Collection<Class<?>> notAbstractClasses = super.filterOutAbstractClasses(availableClasses);

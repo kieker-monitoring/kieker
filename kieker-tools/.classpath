@@ -1,27 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="test"/>
-	<classpathentry kind="src" path="src-gen"/>
 	<classpathentry kind="src" path="model"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="src-gen"/>
+	<classpathentry kind="src" path="test"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/kieker-analysis"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/kieker-common"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/kieker-monitoring"/>
+	<classpathentry kind="lib" path="../lib/REngine-0.6-1.jar"/>
+	<classpathentry kind="lib" path="../lib/Rserve-0.6-1.jar"/>
+	<classpathentry kind="lib" path="../lib/Rsession-2012-09-04.r114.jar"/>
+	<classpathentry kind="lib" path="../lib/activemq-core-5.7.0.jar"/>
+	<classpathentry kind="lib" path="../lib/commons-cli-1.2.jar"/>
+	<classpathentry kind="lib" path="../lib/commons-lang3-3.3.2.jar"/>
+	<classpathentry kind="lib" path="../lib/commons-math3-3.3.jar"/>
+	<classpathentry kind="lib" path="../lib/framework-libs/javax.servlet-3.0.jar"/>
+	<classpathentry kind="lib" path="../lib/javax.jms-1.1.jar"/>
+	<classpathentry kind="lib" path="../lib/jgraphx-2.1.1.0.jar"/>
 	<classpathentry kind="lib" path="../lib/junit-4.11.jar"/>
 	<classpathentry kind="lib" path="../lib/org.eclipse.emf.common_2.10.0.v20140514-1158.jar"/>
 	<classpathentry kind="lib" path="../lib/org.eclipse.emf.ecore.xmi_2.10.0.v20140514-1158.jar"/>
 	<classpathentry kind="lib" path="../lib/org.eclipse.emf.ecore_2.10.0.v20140514-1158.jar"/>
-	<classpathentry kind="lib" path="../lib/commons-lang3-3.3.2.jar"/>
-	<classpathentry kind="lib" path="../lib/commons-cli-1.2.jar"/>
-	<classpathentry kind="lib" path="../lib/activemq-core-5.7.0.jar"/>
-	<classpathentry kind="lib" path="../lib/javax.jms-1.1.jar"/>
-	<classpathentry kind="lib" path="../lib/jgraphx-2.1.1.0.jar"/>
 	<classpathentry kind="lib" path="../lib/reflections-0.9.9-RC1.jar"/>
-	<classpathentry kind="lib" path="../lib/commons-math3-3.3.jar"/>
-	<classpathentry kind="lib" path="../lib/REngine-0.6-1.jar"/>
-	<classpathentry kind="lib" path="../lib/Rserve-0.6-1.jar"/>
-	<classpathentry kind="lib" path="../lib/Rsession-2012-09-04.r114.jar"/>
-	<classpathentry kind="lib" path="../lib/static-analysis/checkstyle-5.6/lib/checkstyle-all.jar"/>
+	<classpathentry kind="lib" path="../lib/static-analysis/checkstyle-6.0/lib/checkstyle-all.jar"/>
+	<classpathentry kind="lib" path="lib/jetty/jetty-server-8.1.16.v20140903.jar"/>
+	<classpathentry kind="lib" path="lib/jetty/jetty-servlet-8.1.16.v20140903.jar"/>
+	<classpathentry kind="lib" path="lib/jetty/jetty-util-8.1.16.v20140903.jar"/>
+	<classpathentry kind="lib" path="lib/jetty/jetty-client-8.1.16.v20140903.jar"/>
+	<classpathentry kind="lib" path="lib/jetty/jetty-io-8.1.16.v20140903.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
