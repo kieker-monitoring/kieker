@@ -4,7 +4,7 @@ dependencies {
 	}
 }
 
-compileJava.dependsOn rootProject.mainJar
+compileJava.dependsOn rootProject.emfJar
 
 // Create the JAR file in the root directory of the example
 libsDirName = '..'

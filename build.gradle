@@ -155,6 +155,18 @@ task apidoc(type: Javadoc) {
 	options.tags = ["generated", "ordered", "model"]
 }
 
+ext.sharedManifest = manifest {
+	attributes (
+		"Specification-Title": kiekerName,
+		"Specification-Version": kiekerVersion,
+		"Specification-Vendor": kiekerCopyright,
+		"Implementation-Title": kiekerName,
+		"Implementation-Version": kiekerVersion + " (" + today() + ")",
+		"Implementation-Vendor": kiekerCopyright,
+		"kieker" // The section name
+	)
+}
+
 task mainJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 	baseName = kiekerPackagenamebase + "-" + kiekerVersion
 	destinationDir = file('dist')
@@ -171,16 +183,9 @@ task mainJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 		into 'META-INF'
 	}
 	
-	manifest {
-		attributes (
-			"Specification-Version": kiekerVersion,
-			"Specification-Vendor": kiekerCopyright,
-			"Implementation-Title": kiekerName,
-			"Implementation-Version": kiekerVersion + " (" + today() + ")",
-			"Implementation-Vendor": kiekerCopyright,
-			"kieker" // The section name
-		)
-    }
+	manifest = project.manifest {
+		from sharedManifest
+	}
 }
 
 task emfJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
@@ -210,16 +215,9 @@ task emfJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 		into 'META-INF'
 	}
 	
-	manifest {
-		attributes (
-			"Specification-Version": kiekerVersion,
-			"Specification-Vendor": kiekerCopyright,
-			"Implementation-Title": kiekerName,
-			"Implementation-Version": kiekerVersion + " (" + today() + ")",
-			"Implementation-Vendor": kiekerCopyright,
-			"kieker" // The section name
-		)
-    }
+	manifest = project.manifest {
+		from sharedManifest
+	}
 }
 
 task aspectJJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
@@ -241,15 +239,8 @@ task aspectJJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 		into 'META-INF'
 	}
 	
-	manifest {
-		attributes (
-			"Specification-Version": kiekerVersion,
-			"Specification-Vendor": kiekerCopyright,
-			"Implementation-Title": kiekerName,
-			"Implementation-Version": kiekerVersion + " (" + today() + ")",
-			"Implementation-Vendor": kiekerCopyright,
-			"kieker" // The section name
-		)
+	manifest = project.manifest {
+		from sharedManifest
 		attributes (
 			"Can-Redefine-Classes": 'true',
 			"Premain-Class": 'kieker.monitoring.probe.aspectj.AspectJLoader'
