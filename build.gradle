@@ -167,6 +167,14 @@ ext.sharedManifest = manifest {
 	)
 }
 
+def allArtifacts = {
+	mainSubprojects.each { subproject ->
+		from subproject.configurations.archives.allArtifacts.files.collect {
+			zipTree(it)
+		}
+	}
+}
+
 def licence = {
 	from file('LICENSE')
 }
@@ -181,12 +189,7 @@ task mainJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 	baseName = kiekerPackagenamebase + "-" + kiekerVersion
 	destinationDir = file('dist')
 	version = ''
-    mainSubprojects.each { subproject ->
-        from subproject.configurations.archives.allArtifacts.files.collect {
-            zipTree(it)
-        }
-    }
-	
+	configure allArtifacts
 	configure licence
 	configure aopxml
 	
@@ -199,11 +202,10 @@ task emfJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 	baseName = kiekerPackagenamebase + "-" + kiekerVersion + "_emf"
 	destinationDir = file('dist')
 	version = ''
-    mainSubprojects.each { subproject ->
-        from subproject.configurations.archives.allArtifacts.files.collect {
-            zipTree(it)
-        }
-    }
+	configure allArtifacts
+	configure licence
+	configure aopxml
+	
 	from(fileTree(dir: 'lib', include: '*emf*.jar').collect {
 		zipTree(it)		
 	}) {
@@ -216,9 +218,6 @@ task emfJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 		exclude "modeling32.png"
     }
 	
-	configure licence
-	configure aopxml
-	
 	manifest = project.manifest {
 		from sharedManifest
 	}
@@ -228,17 +227,15 @@ task aspectJJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 	baseName = kiekerPackagenamebase + "-" + kiekerVersion + "_aspectj"
 	destinationDir = file('dist')
 	version = ''
-    mainSubprojects.each { subproject ->
-        from subproject.configurations.archives.allArtifacts.files.collect {
-            zipTree(it)
-        }
-    }
+	configure allArtifacts
+	configure licence
+	configure aopxml
+	
 	from fileTree(dir: 'lib', include: 'aspectjweaver-*.jar').collect {
 		zipTree(it)
 	}
 	
-	configure licence
-	configure aopxml
+	// aspectj licence
 	
 	manifest = project.manifest {
 		from sharedManifest
@@ -260,7 +257,8 @@ task aspectJJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
     }
 }
 
-task distribute(group: 'distribution', description: 'Distributes binary and source archives.', dependsOn: [':distributeBinaryZip', ':distributeSourceZip',':distributeBinaryTar', ':distributeSourceTar'])
+task distribute(group: 'distribution', description: 'Distributes binary and source archives.', 
+		dependsOn: [':distributeBinaryZip', ':distributeSourceZip',':distributeBinaryTar', ':distributeSourceTar'])
 
 def binaryContent = project.copySpec {
 	from (projectDir) {
