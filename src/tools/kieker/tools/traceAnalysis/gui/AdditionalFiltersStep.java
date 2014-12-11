@@ -49,6 +49,9 @@ public class AdditionalFiltersStep extends AbstractStep {
 	private static final String PROPERTY_KEY_IGNORE_AFTER = PROPERTY_KEY_IDENTIFIER + ".ignoreAfter";
 	private static final String PROPERTY_KEY_IGNORE_AFTER_INPUT = PROPERTY_KEY_IDENTIFIER + ".ignoreAfterInput";
 
+	private static final String SELECT_ONLY_TRACES_TOOLTIP = "Consider only the traces whose trace IDs are listed. Defaults to all traces.";
+	private static final String FILTER_TRACES_TOOLTIP = "Don't consider the traces whose trace IDs are listed. Defaults to no traces.";
+
 	private final JLabel infoLabel = new JLabel("<html>In this step you manage additional filters and selections for the trace analysis.</html>");
 	private final JPanel expandingPanel = new JPanel();
 	private final JCheckBox selectOnlyTraces = new JCheckBox("Select Only Traces with Following IDs:");
@@ -63,6 +66,7 @@ public class AdditionalFiltersStep extends AbstractStep {
 	public AdditionalFiltersStep() {
 		this.addAndLayoutComponents();
 		this.addLogicToComponents();
+		this.addToolTipsToComponents();
 	}
 
 	private void addAndLayoutComponents() {
@@ -197,6 +201,11 @@ public class AdditionalFiltersStep extends AbstractStep {
 				AdditionalFiltersStep.this.ignoreBeforeInput.setEnabled(AdditionalFiltersStep.this.ignoreBefore.isSelected());
 			}
 		});
+	}
+
+	private void addToolTipsToComponents() {
+		this.selectOnlyTraces.setToolTipText(SELECT_ONLY_TRACES_TOOLTIP);
+		this.filterTraces.setToolTipText(FILTER_TRACES_TOOLTIP);
 	}
 
 	@Override
