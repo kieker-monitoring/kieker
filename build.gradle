@@ -216,10 +216,16 @@ task emfJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 		include "org.eclipse.emf.ecore.xmi_${libEmfVersion}.LICENSE"
 		include "org.eclipse.emf.ecore.xmi-about.html"	// NOT FOUND
 	}
-	
-	from(fileTree(dir: 'lib', include: '*emf*.jar').collect {
-		zipTree(it)		
-	}) {
+
+	def emfJarsTree = fileTree(dir: 'lib', include: '*emf*.jar').collect {
+		zipTree(it)
+	}
+/*
+	from(emfJarsTree) {
+		include "about.html"
+	}
+*/
+	from(emfJarsTree) {
 		exclude "META-INF/*.RSA"
         exclude "META-INF/*.SF"
 		exclude "META-INF/eclipse.inf"
