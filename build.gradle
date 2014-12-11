@@ -167,6 +167,16 @@ ext.sharedManifest = manifest {
 	)
 }
 
+def licence = {
+	from file('LICENSE')
+}
+
+def aopxml = {
+	from (file('kieker-examples/aop.example.xml')) {
+		into 'META-INF'
+	}
+}
+
 task mainJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 	baseName = kiekerPackagenamebase + "-" + kiekerVersion
 	destinationDir = file('dist')
@@ -177,11 +187,8 @@ task mainJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
         }
     }
 	
-	from file('LICENSE')
-	
-	from (file('kieker-examples/aop.example.xml')) {
-		into 'META-INF'
-	}
+	configure licence
+	configure aopxml
 	
 	manifest = project.manifest {
 		from sharedManifest
@@ -209,11 +216,8 @@ task emfJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 		exclude "modeling32.png"
     }
 	
-	from file('LICENSE')
-	
-	from (file('kieker-examples/aop.example.xml')) {
-		into 'META-INF'
-	}
+	configure licence
+	configure aopxml
 	
 	manifest = project.manifest {
 		from sharedManifest
@@ -233,11 +237,8 @@ task aspectJJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 		zipTree(it)
 	}
 	
-	from file('LICENSE')
-	
-	from (file('kieker-examples/aop.example.xml')) {
-		into 'META-INF'
-	}
+	configure licence
+	configure aopxml
 	
 	manifest = project.manifest {
 		from sharedManifest
@@ -252,8 +253,8 @@ task aspectJJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 			"Implementation-Title": "org.aspectj.weaver",
 			"Implementation-Version": "1.8.2",
 			"Implementation-Vendor": "aspectj.org",
-			"Premain-Class": "org.aspectj.weaver.loadtime.Agent",
 			"Can-Redefine-Classes": "true",
+			"Premain-Class": "org.aspectj.weaver.loadtime.Agent",
 			"org/aspectj/weaver/" // The section name
 		)
     }
