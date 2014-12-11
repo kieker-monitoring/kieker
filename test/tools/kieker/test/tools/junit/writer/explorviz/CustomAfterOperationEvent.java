@@ -115,4 +115,9 @@ public class CustomAfterOperationEvent implements IMonitoringRecord {
 		return 1;
 	}
 
+	@Override
+	public void registerStrings(final IRegistry<String> stringRegistry) {
+		// No code necessary
+	}
+
 }
