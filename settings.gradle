@@ -16,4 +16,5 @@ include 'kieker-common', 'kieker-monitoring', 'kieker-analysis', 'kieker-tools',
 		'kieker-examples:monitoring:custom-timesource',
 		'kieker-examples:analysis:opad-anomaly-detection',
 		'kieker-examples:analysis:kax-files',
+    'kieker-examples:JavaEEServletContainerExample',
 		'kieker-documentation:userguide'

@@ -1,0 +1,30 @@
+apply plugin: 'war'
+
+sourceSets {
+  main { 
+    java { 
+      srcDir 'livedemo-source/src' 
+    } 
+  }
+}
+
+webAppDirName = 'livedemo-source/WebContent'
+
+dependencies {
+	compile fileTree('../../dist') {
+		include 'kieker-*_emf.jar'
+	}
+  compile fileTree('livedemo-source/lib') {
+    include '*.jar'
+  }
+}
+
+//compileJava.dependsOn rootProject.emfJar
+
+task unwar(type: Copy) {
+  from war
+  into 'jetty/webapps'
+}
+
+task buildExample(dependsOn: [war, unwar]) << {
+}

@@ -94,7 +94,7 @@ allprojects {
 		
 		excludeFilter = resolveRelativeToParent(dirConfig, 'fb-filter.xml')
 	}
-	
+	build.dependsOn.remove('check')
 	// CS is a little bit weird, when it comes to dependencies. 
 	checkstyleTest.classpath += sourceSets.main.runtimeClasspath
 	checkstyleMain.classpath += configurations.compile
@@ -331,7 +331,8 @@ task prepareExamplesForDistribution(dependsOn: ['kieker-examples:userguide:ch2--
                                                 'kieker-examples:userguide:ch3-4--custom-components:copyRuntimeLibs',
                                                 'kieker-examples:userguide:ch5--trace-monitoring-aspectj:copyRuntimeLibs',
                                                 'kieker-examples:userguide:appendix-JMS:copyRuntimeLibs',
-                                                'kieker-examples:userguide:appendix-Sigar:copyRuntimeLibs']) << {
+                                                'kieker-examples:userguide:appendix-Sigar:copyRuntimeLibs',
+                                                'kieker-examples:JavaEEServletContainerExample:buildExample']) << {
 }
 
 task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, docs, 'kieker-documentation:userguide:buildDocumentation', prepareExamplesForDistribution]) {
