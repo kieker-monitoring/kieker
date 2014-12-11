@@ -19,12 +19,27 @@ dependencies {
   }
 }
 
-//compileJava.dependsOn rootProject.emfJar
+compileJava.dependsOn rootProject.emfJar
 
 task unwar(type: Copy) {
   from war
   into 'jetty/webapps'
+  rename '(.*).war', 'livedemo.war'
 }
 
-task buildExample(dependsOn: [war, unwar]) << {
+task copyAspectJ(type: Copy, dependsOn: rootProject.aspectJJar) {
+  from ('../../dist') {
+		include 'kieker-*_aspectj.jar'
+	}
+  into 'jetty/webapps/jpetstore/WEB-INF/lib'
+}
+
+task copySigar(type: Copy) {
+  from ('../../lib/sigar') {
+		include '*'
+	}
+  into 'jetty/webapps/jpetstore/WEB-INF/lib'
+}
+
+task buildExample(dependsOn: [war, unwar, copyAspectJ, copySigar]) << {
 }

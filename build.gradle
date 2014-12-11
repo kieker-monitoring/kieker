@@ -94,7 +94,7 @@ allprojects {
 		
 		excludeFilter = resolveRelativeToParent(dirConfig, 'fb-filter.xml')
 	}
-	build.dependsOn.remove('check')
+
 	// CS is a little bit weird, when it comes to dependencies. 
 	checkstyleTest.classpath += sourceSets.main.runtimeClasspath
 	checkstyleMain.classpath += configurations.compile
