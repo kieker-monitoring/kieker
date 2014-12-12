@@ -208,13 +208,8 @@ task emfJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 	
 	from('lib') {
 		include "org.eclipse.emf.common_${libEmfVersion}.LICENSE"
-		include "org.eclipse.emf.common-about.html"	// NOT FOUND
-		
 		include "org.eclipse.emf.ecore_${libEmfVersion}.LICENSE"
-		include "org.eclipse.emf.ecore-about.html"	// NOT FOUND
-		
 		include "org.eclipse.emf.ecore.xmi_${libEmfVersion}.LICENSE"
-		include "org.eclipse.emf.ecore.xmi-about.html"	// NOT FOUND
 	}
 
 	def emfJarsTree = fileTree(dir: 'lib', include: '*emf*.jar').collect {
