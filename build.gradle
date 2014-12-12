@@ -220,11 +220,6 @@ task emfJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 	def emfJarsTree = fileTree(dir: 'lib', include: '*emf*.jar').collect {
 		zipTree(it)
 	}
-/*
-	from(emfJarsTree) {
-		include "about.html"
-	}
-*/
 	from(emfJarsTree) {
 		exclude "META-INF/*.RSA"
         exclude "META-INF/*.SF"
