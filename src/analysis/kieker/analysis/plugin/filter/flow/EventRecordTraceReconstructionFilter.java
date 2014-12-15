@@ -18,7 +18,9 @@ package kieker.analysis.plugin.filter.flow;
 
 import java.io.Serializable;
 import java.util.Comparator;
+import java.util.Deque;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.SortedSet;
@@ -316,6 +318,9 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 
 		private long traceId = -1;
 
+		private final Deque<BeforeOperationEvent> eventStack = new LinkedList<BeforeOperationEvent>();
+		private final Deque<AbstractTraceEvent> eventsAfterCheck = new LinkedList<AbstractTraceEvent>();
+
 		/**
 		 * Creates a new instance of this class.
 		 */
@@ -323,39 +328,89 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 			// default empty constructor
 		}
 
-		public void insertEvent(final AbstractTraceEvent event) {
-			final long myTraceId = event.getTraceId();
-			synchronized (this) {
-				if (this.traceId == -1) {
-					this.traceId = myTraceId;
-				} else if (this.traceId != myTraceId) {
-					LOG.error("Invalid traceId! Expected: " + this.traceId + " but found: " + myTraceId + " in event " + event.toString());
-					this.damaged = true;
-				}
-				final long loggingTimestamp = event.getTimestamp();
-				if (loggingTimestamp > this.maxLoggingTimestamp) {
-					this.maxLoggingTimestamp = loggingTimestamp;
-				}
-				if (loggingTimestamp < this.minLoggingTimestamp) {
-					this.minLoggingTimestamp = loggingTimestamp;
-				}
-				final int orderIndex = event.getOrderIndex();
-				if (orderIndex > this.maxOrderIndex) {
-					this.maxOrderIndex = orderIndex;
-				}
-				if (event instanceof BeforeOperationEvent) {
-					if (orderIndex == 0) {
-						this.closeable = true;
+		public void insertEvent(AbstractTraceEvent event) {
+			this.checkEventIfAfterEventMissingAndRepair(event);
+			while (!this.eventsAfterCheck.isEmpty()) {
+				event = this.eventsAfterCheck.removeFirst();
+				final long myTraceId = event.getTraceId();
+				synchronized (this) {
+					if (this.traceId == -1) {
+						this.traceId = myTraceId;
+					} else if (this.traceId != myTraceId) {
+						LOG.error("Invalid traceId! Expected: " + this.traceId + " but found: " + myTraceId + " in event " + event.toString());
+						this.damaged = true;
 					}
-					this.openEvents++;
-				} else if (event instanceof AfterOperationEvent) {
-					this.openEvents--;
-				} else if (event instanceof AfterOperationFailedEvent) {
-					this.openEvents--;
+					final long loggingTimestamp = event.getTimestamp();
+					if (loggingTimestamp > this.maxLoggingTimestamp) {
+						this.maxLoggingTimestamp = loggingTimestamp;
+					}
+					if (loggingTimestamp < this.minLoggingTimestamp) {
+						this.minLoggingTimestamp = loggingTimestamp;
+					}
+					final int orderIndex = event.getOrderIndex();
+					if (orderIndex > this.maxOrderIndex) {
+						this.maxOrderIndex = orderIndex;
+					}
+					if (event instanceof BeforeOperationEvent) {
+						if (orderIndex == 0) {
+							this.closeable = true;
+						}
+						this.openEvents++;
+					} else if (event instanceof AfterOperationEvent) {
+						this.openEvents--;
+					} else if (event instanceof AfterOperationFailedEvent) {
+						this.openEvents--;
+					}
+					if (!this.events.add(event)) {
+						LOG.error("Duplicate entry for orderIndex " + orderIndex + " with traceId " + myTraceId);
+						this.damaged = true;
+					}
 				}
-				if (!this.events.add(event)) {
-					LOG.error("Duplicate entry for orderIndex " + orderIndex + " with traceId " + myTraceId);
-					this.damaged = true;
+			}
+		}
+
+		// Short description: All incoming BeforeEvents are added into a stack and it proceeds as before.
+		// If a AfterEvent arrives, it is matched to the last added BeforeEvent.
+		// If it matches, all is good and it proceeds normally.
+		// Otherwise AfterEvents corresponding to the last added BeforeEvent are manually added.
+		// Afterwards the BeforeEvent is released, and the matching process continues with the next BeforeEvent in the stack.
+
+		// In general: I used a LinkedList as a stack (LIFO Use) to collect all BeforeEvents. In addition I used a LinkedList (FIFO Use) to add all events in a list.
+		// I used a List for all incoming events for the case we add some AfterEvents manually. I did not know another solution to add all Events in the
+		// inserEvent(..) method above.
+		// Therefore I added that loop in the insertEvent(..) method above.
+		public void checkEventIfAfterEventMissingAndRepair(final AbstractTraceEvent event) {
+			int orderIndex = event.getOrderIndex();
+			final int shortTimeGapBetweenBeforeAndAfter = 100000; // Used for some time gap between manually added AfterEvent and his BeforeEvent
+
+			// Only true, if AfterEvents were already added manually -> OrderIndex of all following events are not correct, so must be changed
+			if (orderIndex < this.maxOrderIndex) {
+				orderIndex = this.maxOrderIndex + 1;
+			}
+
+			if (event instanceof BeforeOperationEvent) {
+				this.eventStack.addLast((BeforeOperationEvent) event);
+				this.eventsAfterCheck.add(event);
+			} else if (event instanceof AfterOperationEvent) {
+				while ((this.eventStack.getLast().getOperationSignature() != ((AfterOperationEvent) event).getOperationSignature()) &&
+						(this.eventStack.getLast().getClassSignature() != ((AfterOperationEvent) event).getClassSignature())) {
+
+					// adds new AfterOperationEvent according to his BeforeEvent (AfterEvent was missing)
+					this.eventsAfterCheck.add(new AfterOperationEvent(this.eventStack.getLast().getTimestamp() + shortTimeGapBetweenBeforeAndAfter,
+							event.getTraceId(), orderIndex,
+							this.eventStack.getLast().getOperationSignature(), this.eventStack.getLast().getClassSignature()));
+					this.eventStack.removeLast();
+					orderIndex++;
+				}
+				this.eventStack.removeLast();
+				// True, if current AfterOperationEvent matches to the BeforeOperationEvent in the stack at beginning -> event can be passed without changes
+				if ((orderIndex - 1) == this.maxOrderIndex) {
+					this.eventsAfterCheck.add(event);
+				} else {
+					// One or more AfterOperationEvent(s) had to be added manually
+					// the actual event needs a new orderIndex, because of the new added AfterOperationEvent(s)
+					this.eventsAfterCheck.add(new AfterOperationEvent(event.getTimestamp(), event.getTraceId(), orderIndex,
+							((AfterOperationEvent) event).getOperationSignature(), ((AfterOperationEvent) event).getClassSignature()));
 				}
 			}
 		}
