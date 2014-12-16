@@ -56,6 +56,16 @@ public class AdditionalOptionsStep extends AbstractStep {
 	private static final String PROPERTY_KEY_DESCRIPTION = PROPERTY_KEY_IDENTIFIER + ".description";
 	private static final String PROPERTY_KEY_DESCRIPTION_INPUT = PROPERTY_KEY_IDENTIFIER + ".descriptionInput";
 
+	private static final String IGNORE_INVALID_TRACES_TOOLTIP = "The execution ignores the occurence of invalid traces so they will not effect the execution.";
+	private static final String IGNORE_ASSUMED_CALLS_TOOLTIP = "Assumed calls are visualized just as regular calls.";
+	private static final String USE_SHORT_LABELS_TOOLTIP = "Abbreviated labels (e.g. package names) are used in visualizations.";
+	private static final String INCLUDE_SELF_LOOPS_TOOLTIP = "Self-loops are included in vizualisations.";
+	private static final String MAX_TRACE_DURATION_MS = "Threshold (in ms) after which incomplete traces become invalid. Defaults to 600.000 (i.e, 10 minutes)";
+	private static final String TRACE_COLORING_MAP_TOOLTIP = "<html>Color traces according to the given color map (properties file).<br>"
+			+ "(key: trace ID, value: color in hex format, e.g., 0xff0000 for red; use trace ID 'default' to specify the default color.)</html> ";
+	private static final String DESCRIPTION_TOOLTIP = "<html>Adds descriptions to elements according to the given file (properties file).<br>"
+			+ "(key:component ID, e.g., @1; value: description)</html>";
+
 	private final JLabel infoLabel = new JLabel("<html>In this step you manage additional options for the trace analysis.</html>");
 	private final JPanel expandingPanel = new JPanel();
 	private final JCheckBox verbose = new JCheckBox("Verbosely list used parameters and processed traces");
@@ -75,6 +85,7 @@ public class AdditionalOptionsStep extends AbstractStep {
 	public AdditionalOptionsStep() {
 		this.addAndLayoutComponents();
 		this.addLogicToComponents();
+		this.addToolTipsToComponents();
 	}
 
 	private void addAndLayoutComponents() {
@@ -265,6 +276,16 @@ public class AdditionalOptionsStep extends AbstractStep {
 				AdditionalOptionsStep.this.maxTraceDurationMSInput.setEnabled(AdditionalOptionsStep.this.maxTraceDurationMS.isSelected());
 			}
 		});
+	}
+
+	private void addToolTipsToComponents() {
+		this.ignoreAssumedCalls.setToolTipText(IGNORE_ASSUMED_CALLS_TOOLTIP);
+		this.ignoreInvalidTraces.setToolTipText(IGNORE_INVALID_TRACES_TOOLTIP);
+		this.useShortLabels.setToolTipText(USE_SHORT_LABELS_TOOLTIP);
+		this.includeSelfLoops.setToolTipText(INCLUDE_SELF_LOOPS_TOOLTIP);
+		this.maxTraceDurationMS.setToolTipText(MAX_TRACE_DURATION_MS);
+		this.traceColoringMap.setToolTipText(TRACE_COLORING_MAP_TOOLTIP);
+		this.description.setToolTipText(DESCRIPTION_TOOLTIP);
 	}
 
 	@Override

@@ -58,6 +58,9 @@ public class ConversionStep extends AbstractStep {
 	private static final String PROPERTY_KEY_PIC2PLOT = PROPERTY_KEY_IDENTIFIER + ".pic2plotDirectoryField";
 	private static final String PROPERTY_KEY_OUTPUT_FORMAT = PROPERTY_KEY_IDENTIFIER + ".outputFormatField";
 
+	private static final String GRAPHVIZ_DIR_TEXT_FIELD_TOOLTIP = "The graphviz directory contains the path to the graphviz binary. Required for conversion.";
+	private static final String PIC2PLOT_DIR_TEXT_FIELD_TOOLTIP = "The pic2plot directory contains the path to the pic2plot binary. Required for conversion.";
+
 	private static final Log LOG = LogFactory.getLog(ConversionStep.class);
 	private final String currentPath = new File(".").getAbsolutePath();
 
@@ -78,6 +81,7 @@ public class ConversionStep extends AbstractStep {
 	public ConversionStep() {
 		this.addAndLayoutComponents();
 		this.addLogicToComponents();
+		this.addToolTipsToComponents();
 	}
 
 	private void addAndLayoutComponents() {
@@ -196,6 +200,11 @@ public class ConversionStep extends AbstractStep {
 				ConversionStep.this.outputFormatField.setEnabled(ConversionStep.this.performStep.isSelected());
 			}
 		});
+	}
+
+	private void addToolTipsToComponents() {
+		this.graphvizDirectoryField.setToolTipText(GRAPHVIZ_DIR_TEXT_FIELD_TOOLTIP);
+		this.pic2plotDirectoryField.setToolTipText(PIC2PLOT_DIR_TEXT_FIELD_TOOLTIP);
 	}
 
 	@Override
