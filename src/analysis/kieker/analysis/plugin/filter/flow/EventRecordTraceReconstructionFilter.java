@@ -328,40 +328,40 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 			// default empty constructor
 		}
 
-		public void insertEvent(AbstractTraceEvent event) {
-			this.checkEventIfAfterEventMissingAndRepair(event);
-			while (!this.eventsAfterCheck.isEmpty()) {
-				event = this.eventsAfterCheck.removeFirst();
-				final long myTraceId = event.getTraceId();
-				synchronized (this) {
+		public void insertEvent(final AbstractTraceEvent event) {
+			final long myTraceId = event.getTraceId();
+			synchronized (this) {
+				this.checkEventIfAfterEventMissingAndRepair(event);
+				while (!this.eventsAfterCheck.isEmpty()) {
+					final AbstractTraceEvent receivedEvent = this.eventsAfterCheck.removeFirst();
 					if (this.traceId == -1) {
 						this.traceId = myTraceId;
 					} else if (this.traceId != myTraceId) {
 						LOG.error("Invalid traceId! Expected: " + this.traceId + " but found: " + myTraceId + " in event " + event.toString());
 						this.damaged = true;
 					}
-					final long loggingTimestamp = event.getTimestamp();
+					final long loggingTimestamp = receivedEvent.getTimestamp();
 					if (loggingTimestamp > this.maxLoggingTimestamp) {
 						this.maxLoggingTimestamp = loggingTimestamp;
 					}
 					if (loggingTimestamp < this.minLoggingTimestamp) {
 						this.minLoggingTimestamp = loggingTimestamp;
 					}
-					final int orderIndex = event.getOrderIndex();
+					final int orderIndex = receivedEvent.getOrderIndex();
 					if (orderIndex > this.maxOrderIndex) {
 						this.maxOrderIndex = orderIndex;
 					}
-					if (event instanceof BeforeOperationEvent) {
+					if (receivedEvent instanceof BeforeOperationEvent) {
 						if (orderIndex == 0) {
 							this.closeable = true;
 						}
 						this.openEvents++;
-					} else if (event instanceof AfterOperationEvent) {
+					} else if (receivedEvent instanceof AfterOperationEvent) {
 						this.openEvents--;
-					} else if (event instanceof AfterOperationFailedEvent) {
+					} else if (receivedEvent instanceof AfterOperationFailedEvent) {
 						this.openEvents--;
 					}
-					if (!this.events.add(event)) {
+					if (!this.events.add(receivedEvent)) {
 						LOG.error("Duplicate entry for orderIndex " + orderIndex + " with traceId " + myTraceId);
 						this.damaged = true;
 					}
@@ -379,7 +379,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		// I used a List for all incoming events for the case we add some AfterEvents manually. I did not know another solution to add all Events in the
 		// inserEvent(..) method above.
 		// Therefore I added that loop in the insertEvent(..) method above.
-		public void checkEventIfAfterEventMissingAndRepair(final AbstractTraceEvent event) {
+		public synchronized void checkEventIfAfterEventMissingAndRepair(final AbstractTraceEvent event) { // NOPMD will fix that later
 			int orderIndex = event.getOrderIndex();
 			final int shortTimeGapBetweenBeforeAndAfter = 100000; // Used for some time gap between manually added AfterEvent and his BeforeEvent
 
@@ -392,8 +392,9 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 				this.eventStack.addLast((BeforeOperationEvent) event);
 				this.eventsAfterCheck.add(event);
 			} else if (event instanceof AfterOperationEvent) {
-				while ((this.eventStack.getLast().getOperationSignature() != ((AfterOperationEvent) event).getOperationSignature()) &&
-						(this.eventStack.getLast().getClassSignature() != ((AfterOperationEvent) event).getClassSignature())) {
+				while ((!this.eventStack.getLast().getOperationSignature().equals(((AfterOperationEvent) event).getOperationSignature()))
+						&&
+						(!this.eventStack.getLast().getClassSignature().equals(((AfterOperationEvent) event).getClassSignature()))) {
 
 					// adds new AfterOperationEvent according to his BeforeEvent (AfterEvent was missing)
 					this.eventsAfterCheck.add(new AfterOperationEvent(this.eventStack.getLast().getTimestamp() + shortTimeGapBetweenBeforeAndAfter,
