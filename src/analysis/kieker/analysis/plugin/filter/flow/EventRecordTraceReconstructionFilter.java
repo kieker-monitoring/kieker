@@ -39,10 +39,21 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.common.record.flow.IFlowRecord;
 import kieker.common.record.flow.trace.AbstractTraceEvent;
+import kieker.common.record.flow.trace.ConstructionEvent;
 import kieker.common.record.flow.trace.TraceMetadata;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationFailedEvent;
 import kieker.common.record.flow.trace.operation.BeforeOperationEvent;
+import kieker.common.record.flow.trace.operation.CallOperationEvent;
+import kieker.common.record.flow.trace.operation.constructor.AfterConstructorEvent;
+import kieker.common.record.flow.trace.operation.constructor.AfterConstructorFailedEvent;
+import kieker.common.record.flow.trace.operation.constructor.BeforeConstructorEvent;
+import kieker.common.record.flow.trace.operation.constructor.object.AfterConstructorFailedObjectEvent;
+import kieker.common.record.flow.trace.operation.constructor.object.AfterConstructorObjectEvent;
+import kieker.common.record.flow.trace.operation.constructor.object.BeforeConstructorObjectEvent;
+import kieker.common.record.flow.trace.operation.object.AfterOperationFailedObjectEvent;
+import kieker.common.record.flow.trace.operation.object.AfterOperationObjectEvent;
+import kieker.common.record.flow.trace.operation.object.BeforeOperationObjectEvent;
 
 /**
  * @author Jan Waller
@@ -111,11 +122,17 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	 * The default value of the time unit property (nanoseconds).
 	 */
 	public static final String CONFIG_PROPERTY_VALUE_TIMEUNIT = "NANOSECONDS"; // TimeUnit.NANOSECONDS.name()
+	/**
+	 * This is the name of the property determining
+	 * whether to repair traces with missing AfterEvents (e.g. because of system crash) or not.
+	 */
+	public static final String CONFIG_PROPERTY_NAME_REPAIR_TRACES_WITH_MISSING_AFTEREVENTS = "repairTracesWithMissingAfterEvents";
 
 	private final TimeUnit timeunit;
 	private final long maxTraceDuration;
 	private final long maxTraceTimeout;
 	private final boolean timeout;
+	private final boolean isRepairTraceWithMissingAfterEventEnabled;
 	private long maxEncounteredLoggingTimestamp = -1;
 
 	private final Map<Long, TraceBuffer> traceId2trace;
@@ -142,6 +159,8 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 			configTimeunit = this.timeunit;
 		}
 
+		this.isRepairTraceWithMissingAfterEventEnabled = configuration
+				.getBooleanProperty(CONFIG_PROPERTY_NAME_REPAIR_TRACES_WITH_MISSING_AFTEREVENTS);
 		this.maxTraceDuration = this.timeunit.convert(configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION), configTimeunit);
 		this.maxTraceTimeout = this.timeunit.convert(configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT), configTimeunit);
 		this.timeout = !((this.maxTraceTimeout == Long.MAX_VALUE) && (this.maxTraceDuration == Long.MAX_VALUE));
@@ -208,6 +227,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 					traceBuffer = this.traceId2trace.get(traceId);
 					if (traceBuffer == null) { // NOCS (DCL)
 						traceBuffer = new TraceBuffer();
+						traceBuffer.setRepairAfterRecordsEnabled(this.isRepairTraceWithMissingAfterEventEnabled);
 						this.traceId2trace.put(traceId, traceBuffer);
 					}
 				}
@@ -222,6 +242,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 					traceBuffer = this.traceId2trace.get(traceId);
 					if (traceBuffer == null) { // NOCS (DCL)
 						traceBuffer = new TraceBuffer();
+						traceBuffer.setRepairAfterRecordsEnabled(this.isRepairTraceWithMissingAfterEventEnabled);
 						this.traceId2trace.put(traceId, traceBuffer);
 					}
 				}
@@ -256,6 +277,9 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		synchronized (this) {
 			for (final Entry<Long, TraceBuffer> entry : this.traceId2trace.entrySet()) {
 				final TraceBuffer traceBuffer = entry.getValue();
+				if (!traceBuffer.getEventStack().isEmpty() && this.isRepairTraceWithMissingAfterEventEnabled) {
+					traceBuffer.repairAllBeforeEventsLeftInStackAtTermination();
+				}
 				if (traceBuffer.isInvalid()) {
 					super.deliver(OUTPUT_PORT_NAME_TRACE_INVALID, traceBuffer.toTraceEvents());
 				} else {
@@ -293,6 +317,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		configuration.setProperty(CONFIG_PROPERTY_NAME_TIMEUNIT, this.timeunit.name());
 		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, String.valueOf(this.maxTraceDuration));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT, String.valueOf(this.maxTraceTimeout));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_REPAIR_TRACES_WITH_MISSING_AFTEREVENTS, Boolean.toString(this.isRepairTraceWithMissingAfterEventEnabled));
 		return configuration;
 	}
 
@@ -318,8 +343,11 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 
 		private long traceId = -1;
 
-		private final Deque<BeforeOperationEvent> eventStack = new LinkedList<BeforeOperationEvent>();
-		private final Deque<AbstractTraceEvent> eventsAfterCheck = new LinkedList<AbstractTraceEvent>();
+		private boolean isBeforeEventStackEmptyAtTermination;
+		private boolean isRepairAfterRecordsEnabled;
+
+		private final Deque<BeforeOperationEvent> beforeEventStack = new LinkedList<BeforeOperationEvent>();
+		private final Deque<AbstractTraceEvent> eventQueue = new LinkedList<AbstractTraceEvent>();
 
 		/**
 		 * Creates a new instance of this class.
@@ -330,10 +358,19 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 
 		public void insertEvent(final AbstractTraceEvent event) {
 			final long myTraceId = event.getTraceId();
+			if (this.isRepairAfterRecordsEnabled) {
+				if ((event instanceof CallOperationEvent) || (event instanceof ConstructionEvent)
+						|| this.isBeforeEventStackEmptyAtTermination) {
+					this.eventQueue.add(event);
+				} else {
+					this.checkIfAfterEventsMissingThenRepair(event);
+				}
+			} else {
+				this.eventQueue.add(event);
+			}
 			synchronized (this) {
-				this.checkEventIfAfterEventMissingAndRepair(event);
-				while (!this.eventsAfterCheck.isEmpty()) {
-					final AbstractTraceEvent receivedEvent = this.eventsAfterCheck.removeFirst();
+				while (!this.eventQueue.isEmpty()) {
+					final AbstractTraceEvent receivedEvent = this.eventQueue.removeFirst();
 					if (this.traceId == -1) {
 						this.traceId = myTraceId;
 					} else if (this.traceId != myTraceId) {
@@ -369,50 +406,104 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 			}
 		}
 
-		// Short description: All incoming BeforeEvents are added into a stack and it proceeds as before.
-		// If a AfterEvent arrives, it is matched to the last added BeforeEvent.
-		// If it matches, all is good and it proceeds normally.
-		// Otherwise AfterEvents corresponding to the last added BeforeEvent are manually added.
-		// Afterwards the BeforeEvent is released, and the matching process continues with the next BeforeEvent in the stack.
-
-		// In general: I used a LinkedList as a stack (LIFO Use) to collect all BeforeEvents. In addition I used a LinkedList (FIFO Use) to add all events in a list.
-		// I used a List for all incoming events for the case we add some AfterEvents manually. I did not know another solution to add all Events in the
-		// inserEvent(..) method above.
-		// Therefore I added that loop in the insertEvent(..) method above.
-		public synchronized void checkEventIfAfterEventMissingAndRepair(final AbstractTraceEvent event) { // NOPMD will fix that later
+		public void checkIfAfterEventsMissingThenRepair(final AbstractTraceEvent event) {
 			int orderIndex = event.getOrderIndex();
-			final int shortTimeGapBetweenBeforeAndAfter = 100000; // Used for some time gap between manually added AfterEvent and his BeforeEvent
 
-			// Only true, if AfterEvents were already added manually -> OrderIndex of all following events are not correct, so must be changed
+			// true, as soon as one AfterEvent manually added, thus OrderIndex has to change for upcoming events
 			if (orderIndex < this.maxOrderIndex) {
 				orderIndex = this.maxOrderIndex + 1;
 			}
 
 			if (event instanceof BeforeOperationEvent) {
-				this.eventStack.addLast((BeforeOperationEvent) event);
-				this.eventsAfterCheck.add(event);
+				this.beforeEventStack.addLast((BeforeOperationEvent) event);
+				this.eventQueue.add(event);
 			} else if (event instanceof AfterOperationEvent) {
-				while ((!this.eventStack.getLast().getOperationSignature().equals(((AfterOperationEvent) event).getOperationSignature()))
+				while ((!this.beforeEventStack.getLast().getOperationSignature().equals(((AfterOperationEvent) event).getOperationSignature()))
 						&&
-						(!this.eventStack.getLast().getClassSignature().equals(((AfterOperationEvent) event).getClassSignature()))) {
+						(!(this.beforeEventStack.getLast().getClassSignature()).equals(((AfterOperationEvent) event).getClassSignature()))) {
+					final BeforeOperationEvent beforeEvent = this.beforeEventStack.getLast();
+					final String opSignature = beforeEvent.getOperationSignature();
+					final String classSignature = beforeEvent.getClassSignature();
+					final long timestamp = event.getTimestamp();
+					final long traceID = event.getTraceId();
 
-					// adds new AfterOperationEvent according to his BeforeEvent (AfterEvent was missing)
-					this.eventsAfterCheck.add(new AfterOperationEvent(this.eventStack.getLast().getTimestamp() + shortTimeGapBetweenBeforeAndAfter,
-							event.getTraceId(), orderIndex,
-							this.eventStack.getLast().getOperationSignature(), this.eventStack.getLast().getClassSignature()));
-					this.eventStack.removeLast();
+					if (beforeEvent instanceof BeforeConstructorObjectEvent) {
+						this.eventQueue.add(new AfterConstructorObjectEvent(timestamp, traceID, orderIndex, opSignature, classSignature,
+								((BeforeConstructorObjectEvent) this.beforeEventStack.getLast()).getObjectId()));
+					} else if (beforeEvent instanceof BeforeConstructorEvent) {
+						this.eventQueue.add(new AfterConstructorEvent(timestamp, traceID, orderIndex, opSignature, classSignature));
+					} else if (beforeEvent instanceof BeforeOperationObjectEvent) {
+						this.eventQueue.add(new AfterOperationObjectEvent(timestamp, traceID, orderIndex, opSignature, classSignature,
+								((BeforeOperationObjectEvent) this.beforeEventStack.getLast()).getObjectId()));
+					} else {
+						this.eventQueue.add(new AfterOperationEvent(timestamp, traceID, orderIndex, opSignature, classSignature));
+					}
+					this.beforeEventStack.removeLast();
 					orderIndex++;
 				}
-				this.eventStack.removeLast();
-				// True, if current AfterOperationEvent matches to the BeforeOperationEvent in the stack at beginning -> event can be passed without changes
+
+				this.beforeEventStack.removeLast();
+				// true, if the received AfterEvent matched to the first BeforeEvent in the stack, thus event passes without orderIndex adjustment
 				if ((orderIndex - 1) == this.maxOrderIndex) {
-					this.eventsAfterCheck.add(event);
+					this.eventQueue.add(event);
 				} else {
-					// One or more AfterOperationEvent(s) had to be added manually
-					// the actual event needs a new orderIndex, because of the new added AfterOperationEvent(s)
-					this.eventsAfterCheck.add(new AfterOperationEvent(event.getTimestamp(), event.getTraceId(), orderIndex,
-							((AfterOperationEvent) event).getOperationSignature(), ((AfterOperationEvent) event).getClassSignature()));
+					final String opSignature = ((AfterOperationEvent) event).getOperationSignature();
+					final String classSignature = ((AfterOperationEvent) event).getClassSignature();
+					final long timestamp = event.getTimestamp();
+					final long traceID = event.getTraceId();
+
+					if (event instanceof AfterConstructorFailedObjectEvent) {
+						this.eventQueue.add(new AfterConstructorFailedObjectEvent(timestamp, traceID, orderIndex, opSignature, classSignature,
+								((AfterConstructorFailedObjectEvent) event).getCause(),
+								((AfterConstructorFailedObjectEvent) event).getObjectId()));
+					} else if (event instanceof AfterConstructorObjectEvent) {
+						this.eventQueue.add(new AfterConstructorObjectEvent(timestamp, traceID, orderIndex, opSignature, classSignature,
+								((AfterConstructorObjectEvent) event).getObjectId()));
+					} else if (event instanceof AfterConstructorFailedEvent) {
+						this.eventQueue.add(new AfterConstructorFailedEvent(timestamp, traceID, orderIndex, opSignature, classSignature,
+								((AfterConstructorFailedEvent) event).getCause()));
+					} else if (event instanceof AfterConstructorEvent) {
+						this.eventQueue.add(new AfterConstructorEvent(timestamp, traceID, orderIndex, opSignature, classSignature));
+					} else if (event instanceof AfterOperationFailedObjectEvent) {
+						this.eventQueue.add(new AfterOperationFailedObjectEvent(timestamp, traceID, orderIndex, opSignature, classSignature,
+								((AfterOperationFailedObjectEvent) event).getCause(),
+								((AfterOperationFailedObjectEvent) event).getObjectId()));
+					} else if (event instanceof AfterOperationObjectEvent) {
+						this.eventQueue.add(new AfterOperationObjectEvent(timestamp, traceID, orderIndex, opSignature, classSignature,
+								((AfterOperationObjectEvent) event).getObjectId()));
+					} else if (event instanceof AfterOperationFailedEvent) {
+						this.eventQueue.add(new AfterOperationFailedEvent(timestamp, traceID, orderIndex, opSignature, classSignature,
+								((AfterOperationFailedEvent) event).getCause()));
+					} else {
+						this.eventQueue.add(new AfterOperationEvent(timestamp, traceID, orderIndex, opSignature, classSignature));
+					}
 				}
+			}
+		}
+
+		public void repairAllBeforeEventsLeftInStackAtTermination() {
+
+			this.isBeforeEventStackEmptyAtTermination = true;
+			while (!this.beforeEventStack.isEmpty()) {
+				final BeforeOperationEvent beforeEvent = this.beforeEventStack.getLast();
+				final String opSignature = beforeEvent.getOperationSignature();
+				final String classSignature = beforeEvent.getClassSignature();
+				final long timestamp = beforeEvent.getTimestamp();
+				final long traceID = beforeEvent.getTraceId();
+				final int orderIndex = this.maxOrderIndex + 1;
+
+				if (beforeEvent instanceof BeforeConstructorObjectEvent) {
+					this.insertEvent(new AfterConstructorObjectEvent(timestamp, traceID, orderIndex, opSignature, classSignature,
+							((BeforeConstructorObjectEvent) this.beforeEventStack.getLast()).getObjectId()));
+				} else if (beforeEvent instanceof BeforeConstructorEvent) {
+					this.insertEvent(new AfterConstructorEvent(timestamp, traceID, orderIndex, opSignature, classSignature));
+				} else if (beforeEvent instanceof BeforeOperationObjectEvent) {
+					this.insertEvent(new AfterOperationObjectEvent(timestamp, traceID, orderIndex, opSignature, classSignature,
+							((BeforeConstructorObjectEvent) this.beforeEventStack.getLast()).getObjectId()));
+				} else {
+					this.insertEvent(new AfterOperationEvent(timestamp, traceID, orderIndex, opSignature, classSignature));
+				}
+				this.beforeEventStack.removeLast();
 			}
 		}
 
@@ -462,6 +553,14 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 			synchronized (this) {
 				return this.minLoggingTimestamp;
 			}
+		}
+
+		public void setRepairAfterRecordsEnabled(final boolean isRepairAfterRecordsActivated) {
+			this.isRepairAfterRecordsEnabled = isRepairAfterRecordsActivated;
+		}
+
+		public Deque<BeforeOperationEvent> getEventStack() {
+			return this.beforeEventStack;
 		}
 
 		/**
