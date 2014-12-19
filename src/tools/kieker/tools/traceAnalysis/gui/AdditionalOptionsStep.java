@@ -47,7 +47,7 @@ public class AdditionalOptionsStep extends AbstractStep { // NOPMD (long class)
 	private static final String PROPERTY_KEY_VERBOSE = PROPERTY_KEY_IDENTIFIER + ".verbose";
 	private static final String PROPERTY_KEY_IGNORE_INVALID_TRACES = PROPERTY_KEY_IDENTIFIER + ".ignoreInvalidTraces";
 	private static final String PROPERTY_KEY_IGNORE_ASSUMED_CALLS = PROPERTY_KEY_IDENTIFIER + ".ignoreAssumedCalls";
-	private static final String PROPERTY_KEY_REPAIR_MISSING_AFTEREVENTS = PROPERTY_KEY_IDENTIFIER + ".repairMissingAfterEvents";
+	private static final String PROPERTY_KEY_REPAIR_EVENT_BASED_TRACES = PROPERTY_KEY_IDENTIFIER + ".repairEventBasedTraces";
 	private static final String PROPERTY_KEY_USE_SHORT_LABELS = PROPERTY_KEY_IDENTIFIER + ".useShortLabels";
 	private static final String PROPERTY_KEY_INCLUDE_SELF_LOOPS = PROPERTY_KEY_IDENTIFIER + ".includeSelfLoops";
 	private static final String PROPERTY_KEY_MAX_TRACE_DURATION = PROPERTY_KEY_IDENTIFIER + ".maxTraceDurationMS";
@@ -66,14 +66,14 @@ public class AdditionalOptionsStep extends AbstractStep { // NOPMD (long class)
 			+ "(key: trace ID, value: color in hex format, e.g., 0xff0000 for red; use trace ID 'default' to specify the default color.)</html> ";
 	private static final String DESCRIPTION_TOOLTIP = "<html>Adds descriptions to elements according to the given file (properties file).<br>"
 			+ "(key:component ID, e.g., @1; value: description)</html>";
-	private static final String REPAIR_MISSING_AFTEREVENTS_TOOLTIP = "If selected, traces with missing AfterEvents e.g. because of software crash will be repaired.";
+	private static final String REPAIR_EVENT_BASED_TRACES_TOOLTIP = "If selected, BeforeEvents with missing AfterEvents e.g. because of software crash will be repaired.";
 
 	private final JLabel infoLabel = new JLabel("<html>In this step you manage additional options for the trace analysis.</html>");
 	private final JPanel expandingPanel = new JPanel();
 	private final JCheckBox verbose = new JCheckBox("Verbosely list used parameters and processed traces");
 	private final JCheckBox ignoreInvalidTraces = new JCheckBox("Ignore Invalid Traces");
 	private final JCheckBox ignoreAssumedCalls = new JCheckBox("Draw Assumed Calls As Usual Calls");
-	private final JCheckBox repairTraceWithMissingAfterEvent = new JCheckBox("Repair Traces With Missing AfterEvents");
+	private final JCheckBox repairEventBasedTraces = new JCheckBox("Repair Event Based Traces");
 	private final JCheckBox useShortLabels = new JCheckBox("Use Short Labels");
 	private final JCheckBox includeSelfLoops = new JCheckBox("Include Self Loops");
 	private final JCheckBox maxTraceDurationMS = new JCheckBox("Maximal Duration of Traces in Milliseconds:");
@@ -117,7 +117,7 @@ public class AdditionalOptionsStep extends AbstractStep { // NOPMD (long class)
 
 		gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
 		gridBagConstraints.insets.set(0, 5, 0, 0);
-		this.add(this.repairTraceWithMissingAfterEvent, gridBagConstraints);
+		this.add(this.repairEventBasedTraces, gridBagConstraints);
 
 		gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
 		gridBagConstraints.insets.set(0, 5, 0, 0);
@@ -198,8 +198,8 @@ public class AdditionalOptionsStep extends AbstractStep { // NOPMD (long class)
 			parameters.add("--" + Constants.CMD_OPT_NAME_IGNOREINVALIDTRACES);
 		}
 
-		if (this.repairTraceWithMissingAfterEvent.isSelected()) {
-			parameters.add("--" + Constants.CMD_OPT_NAME_REPAIR_TRACE_WITH_MISSING_AFTEREVENT);
+		if (this.repairEventBasedTraces.isSelected()) {
+			parameters.add("--" + Constants.CMD_OPT_NAME_REPAIR_EVENT_BASED_TRACES);
 		}
 
 		if (this.useShortLabels.isSelected()) {
@@ -297,7 +297,7 @@ public class AdditionalOptionsStep extends AbstractStep { // NOPMD (long class)
 		this.maxTraceDurationMS.setToolTipText(MAX_TRACE_DURATION_MS);
 		this.traceColoringMap.setToolTipText(TRACE_COLORING_MAP_TOOLTIP);
 		this.description.setToolTipText(DESCRIPTION_TOOLTIP);
-		this.repairTraceWithMissingAfterEvent.setToolTipText(REPAIR_MISSING_AFTEREVENTS_TOOLTIP);
+		this.repairEventBasedTraces.setToolTipText(REPAIR_EVENT_BASED_TRACES_TOOLTIP);
 	}
 
 	@Override
@@ -315,7 +315,7 @@ public class AdditionalOptionsStep extends AbstractStep { // NOPMD (long class)
 	public void saveCurrentConfiguration(final Properties properties) {
 		properties.setProperty(PROPERTY_KEY_VERBOSE, Boolean.toString(this.verbose.isSelected()));
 		properties.setProperty(PROPERTY_KEY_IGNORE_INVALID_TRACES, Boolean.toString(this.ignoreInvalidTraces.isSelected()));
-		properties.setProperty(PROPERTY_KEY_REPAIR_MISSING_AFTEREVENTS, Boolean.toString(this.repairTraceWithMissingAfterEvent.isSelected()));
+		properties.setProperty(PROPERTY_KEY_REPAIR_EVENT_BASED_TRACES, Boolean.toString(this.repairEventBasedTraces.isSelected()));
 		properties.setProperty(PROPERTY_KEY_USE_SHORT_LABELS, Boolean.toString(this.useShortLabels.isSelected()));
 		properties.setProperty(PROPERTY_KEY_INCLUDE_SELF_LOOPS, Boolean.toString(this.includeSelfLoops.isSelected()));
 		properties.setProperty(PROPERTY_KEY_MAX_TRACE_DURATION, Boolean.toString(this.maxTraceDurationMS.isSelected()));
@@ -331,7 +331,7 @@ public class AdditionalOptionsStep extends AbstractStep { // NOPMD (long class)
 	public void loadCurrentConfiguration(final Properties properties) {
 		this.verbose.setSelected(Boolean.parseBoolean(properties.getProperty(PROPERTY_KEY_VERBOSE)));
 		this.ignoreInvalidTraces.setSelected(Boolean.parseBoolean(properties.getProperty(PROPERTY_KEY_IGNORE_INVALID_TRACES)));
-		this.repairTraceWithMissingAfterEvent.setSelected(Boolean.parseBoolean(properties.getProperty(PROPERTY_KEY_REPAIR_MISSING_AFTEREVENTS)));
+		this.repairEventBasedTraces.setSelected(Boolean.parseBoolean(properties.getProperty(PROPERTY_KEY_REPAIR_EVENT_BASED_TRACES)));
 		this.useShortLabels.setSelected(Boolean.parseBoolean(properties.getProperty(PROPERTY_KEY_USE_SHORT_LABELS)));
 		this.includeSelfLoops.setSelected(Boolean.parseBoolean(properties.getProperty(PROPERTY_KEY_INCLUDE_SELF_LOOPS)));
 		this.maxTraceDurationMS.setSelected(Boolean.parseBoolean(properties.getProperty(PROPERTY_KEY_MAX_TRACE_DURATION)));

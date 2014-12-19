@@ -126,13 +126,13 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	 * This is the name of the property determining
 	 * whether to repair traces with missing AfterEvents (e.g. because of system crash) or not.
 	 */
-	public static final String CONFIG_PROPERTY_NAME_REPAIR_TRACES_WITH_MISSING_AFTEREVENTS = "repairTracesWithMissingAfterEvents";
+	public static final String CONFIG_PROPERTY_NAME_REPAIR_EVENT_BASED_TRACES = "repairEventBasedTraces";
 
 	private final TimeUnit timeunit;
 	private final long maxTraceDuration;
 	private final long maxTraceTimeout;
 	private final boolean timeout;
-	private final boolean isRepairTraceWithMissingAfterEventEnabled;
+	private final boolean repairEventBasedTracesEnabled;
 	private long maxEncounteredLoggingTimestamp = -1;
 
 	private final Map<Long, TraceBuffer> traceId2trace;
@@ -159,8 +159,8 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 			configTimeunit = this.timeunit;
 		}
 
-		this.isRepairTraceWithMissingAfterEventEnabled = configuration
-				.getBooleanProperty(CONFIG_PROPERTY_NAME_REPAIR_TRACES_WITH_MISSING_AFTEREVENTS);
+		this.repairEventBasedTracesEnabled = configuration
+				.getBooleanProperty(CONFIG_PROPERTY_NAME_REPAIR_EVENT_BASED_TRACES);
 		this.maxTraceDuration = this.timeunit.convert(configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION), configTimeunit);
 		this.maxTraceTimeout = this.timeunit.convert(configuration.getLongProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT), configTimeunit);
 		this.timeout = !((this.maxTraceTimeout == Long.MAX_VALUE) && (this.maxTraceDuration == Long.MAX_VALUE));
@@ -227,7 +227,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 					traceBuffer = this.traceId2trace.get(traceId);
 					if (traceBuffer == null) { // NOCS (DCL)
 						traceBuffer = new TraceBuffer();
-						traceBuffer.setRepairAfterRecordsEnabled(this.isRepairTraceWithMissingAfterEventEnabled);
+						traceBuffer.setRepairEventBasedTracesEnabled(this.repairEventBasedTracesEnabled);
 						this.traceId2trace.put(traceId, traceBuffer);
 					}
 				}
@@ -242,7 +242,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 					traceBuffer = this.traceId2trace.get(traceId);
 					if (traceBuffer == null) { // NOCS (DCL)
 						traceBuffer = new TraceBuffer();
-						traceBuffer.setRepairAfterRecordsEnabled(this.isRepairTraceWithMissingAfterEventEnabled);
+						traceBuffer.setRepairEventBasedTracesEnabled(this.repairEventBasedTracesEnabled);
 						this.traceId2trace.put(traceId, traceBuffer);
 					}
 				}
@@ -277,7 +277,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		synchronized (this) {
 			for (final Entry<Long, TraceBuffer> entry : this.traceId2trace.entrySet()) {
 				final TraceBuffer traceBuffer = entry.getValue();
-				if (!traceBuffer.getEventStack().isEmpty() && this.isRepairTraceWithMissingAfterEventEnabled) {
+				if (this.repairEventBasedTracesEnabled && !traceBuffer.getEventStack().isEmpty()) {
 					traceBuffer.repairAllBeforeEventsLeftInStackAtTermination();
 				}
 				if (traceBuffer.isInvalid()) {
@@ -317,7 +317,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 		configuration.setProperty(CONFIG_PROPERTY_NAME_TIMEUNIT, this.timeunit.name());
 		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION, String.valueOf(this.maxTraceDuration));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT, String.valueOf(this.maxTraceTimeout));
-		configuration.setProperty(CONFIG_PROPERTY_NAME_REPAIR_TRACES_WITH_MISSING_AFTEREVENTS, Boolean.toString(this.isRepairTraceWithMissingAfterEventEnabled));
+		configuration.setProperty(CONFIG_PROPERTY_NAME_REPAIR_EVENT_BASED_TRACES, Boolean.toString(this.repairEventBasedTracesEnabled));
 		return configuration;
 	}
 
@@ -343,8 +343,8 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 
 		private long traceId = -1;
 
-		private boolean isBeforeEventStackEmptyAtTermination;
-		private boolean isRepairAfterRecordsEnabled;
+		private boolean beforeEventStackEmptyAtTermination;
+		private boolean repairEventBasedTracesEnabled;
 
 		private final Deque<BeforeOperationEvent> beforeEventStack = new LinkedList<BeforeOperationEvent>();
 		private final Deque<AbstractTraceEvent> eventQueue = new LinkedList<AbstractTraceEvent>();
@@ -358,9 +358,9 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 
 		public void insertEvent(final AbstractTraceEvent event) {
 			final long myTraceId = event.getTraceId();
-			if (this.isRepairAfterRecordsEnabled) {
+			if (this.repairEventBasedTracesEnabled) {
 				if ((event instanceof CallOperationEvent) || (event instanceof ConstructionEvent)
-						|| this.isBeforeEventStackEmptyAtTermination) {
+						|| this.beforeEventStackEmptyAtTermination) {
 					this.eventQueue.add(event);
 				} else {
 					this.checkIfAfterEventsMissingThenRepair(event);
@@ -483,7 +483,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 
 		public void repairAllBeforeEventsLeftInStackAtTermination() {
 
-			this.isBeforeEventStackEmptyAtTermination = true;
+			this.beforeEventStackEmptyAtTermination = true;
 			while (!this.beforeEventStack.isEmpty()) {
 				final BeforeOperationEvent beforeEvent = this.beforeEventStack.getLast();
 				final String opSignature = beforeEvent.getOperationSignature();
@@ -555,8 +555,8 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 			}
 		}
 
-		public void setRepairAfterRecordsEnabled(final boolean isRepairAfterRecordsActivated) {
-			this.isRepairAfterRecordsEnabled = isRepairAfterRecordsActivated;
+		public void setRepairEventBasedTracesEnabled(final boolean isEnabled) {
+			this.repairEventBasedTracesEnabled = isEnabled;
 		}
 
 		public Deque<BeforeOperationEvent> getEventStack() {
