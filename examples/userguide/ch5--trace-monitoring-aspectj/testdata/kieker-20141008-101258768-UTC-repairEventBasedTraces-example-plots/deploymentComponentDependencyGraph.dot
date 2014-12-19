@@ -1,0 +1,16 @@
+digraph G {
+ rankdir=LR;
+"depNode_0" [label="'Entry'",shape="none"]
+subgraph "cluster_container1" {
+ label = "<<execution container>>\nSE";
+ shape = "box";
+ style = "filled";
+ fillcolor = "white";
+"depNode_2" [label="<<deployment component>>\n@2:kieker.examples.monitoring.aspectj.Bookstore",shape="box",style="filled",color="#000000",fillcolor="gray"]
+"depNode_1" [label="<<deployment component>>\n@1:kieker.examples.monitoring.aspectj.BookstoreStarter",shape="box",style="filled",color="#000000",fillcolor="white"]
+"depNode_3" [label="<<deployment component>>\n@3:kieker.examples.monitoring.aspectj.BookstoreStarter$1",shape="box",style="filled",color="#000000",fillcolor="white"]
+}
+depNode_0->depNode_1[label=1, style="solid", arrowhead="open", color="#000000"]
+depNode_0->depNode_3[label=1, style="solid", arrowhead="open", color="#000000"]
+depNode_3->depNode_2[label=1, style="dashed", arrowhead="open", color="#000000"]
+}
