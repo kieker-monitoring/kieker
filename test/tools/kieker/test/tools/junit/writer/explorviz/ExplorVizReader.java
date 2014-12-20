@@ -17,13 +17,14 @@
 package kieker.test.tools.junit.writer.explorviz;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ClosedByInterruptException;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.util.Deque;
+import java.util.LinkedList;
 
 import kieker.analysis.IProjectContext;
 import kieker.analysis.plugin.annotation.OutputPort;
@@ -67,6 +68,7 @@ public class ExplorVizReader extends AbstractReaderPlugin {
 	private volatile boolean terminated = false; // NOPMD
 	private final int port;
 	private final ILookup<String> stringRegistry = new Lookup<String>();
+	private final Deque<Number> recordValues = new LinkedList<Number>();
 
 	public ExplorVizReader(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
@@ -97,7 +99,6 @@ public class ExplorVizReader extends AbstractReaderPlugin {
 				buffer.flip();
 				try {
 					while (buffer.hasRemaining()) {
-
 						buffer.mark();
 
 						if (flag) {
@@ -107,7 +108,6 @@ public class ExplorVizReader extends AbstractReaderPlugin {
 
 						clazzid = buffer.get();
 						this.createReceivedRecord(clazzid, buffer);
-
 					}
 					buffer.clear();
 				} catch (final BufferUnderflowException ex) {
@@ -139,6 +139,7 @@ public class ExplorVizReader extends AbstractReaderPlugin {
 
 	@Override
 	public void terminate(final boolean error) {
+		this.deliverRecords();
 		this.log.info("Shutdown of ExplorVizReader requested.");
 		this.terminated = true;
 		this.readerThread.interrupt();
@@ -152,68 +153,34 @@ public class ExplorVizReader extends AbstractReaderPlugin {
 	}
 
 	public void createReceivedRecord(final byte clazzid, final ByteBuffer buffer) {
-		long timestamp;
-		long traceID;
-		int orderIndex;
-		final int opSinatureStringID;
-		final int classSignatureStringID;
-		final int causeStringID;
-		final String opSignature;
-		final String classSignature;
-
 		// BeforeOperationEvent
 		if (clazzid == 1) {
-			timestamp = buffer.getLong();
-			traceID = buffer.getLong();
-			orderIndex = buffer.getInt();
+			this.recordValues.add(clazzid);
+			this.recordValues.add(buffer.getLong());
+			this.recordValues.add(buffer.getLong());
+			this.recordValues.add(buffer.getInt());
 			buffer.getInt(); // not needed value
-			opSinatureStringID = buffer.getInt();
-			classSignatureStringID = buffer.getInt();
-			buffer.getInt(); // not needed emptyStringID
-			buffer.get(); // not needed ClazzID
-			RegistryRecord.registerRecordInRegistry(buffer, this.stringRegistry);
-			buffer.get(); // not needed ClazzID
-			RegistryRecord.registerRecordInRegistry(buffer, this.stringRegistry);
-			buffer.get(); // not needed ClazzID
-			RegistryRecord.registerRecordInRegistry(buffer, this.stringRegistry);
-			opSignature = this.stringRegistry.get(opSinatureStringID);
-			classSignature = this.stringRegistry.get(classSignatureStringID);
+			this.recordValues.add(buffer.getInt());
+			this.recordValues.add(buffer.getInt());
 
-			final BeforeOperationEvent record = new BeforeOperationEvent(timestamp, traceID, orderIndex,
-					opSignature, classSignature);
-			super.deliver(OUTPUT_PORT_NAME_RECORDS, record);
-
-			// AfterFailedOperationEvent
+			// AfterOperationFailedEvent
 		} else if (clazzid == 2) {
-			timestamp = buffer.getLong();
-			traceID = buffer.getLong();
-			orderIndex = buffer.getInt();
-			causeStringID = buffer.getInt();
-			buffer.get(); // not needed ClazzID
-			RegistryRecord.registerRecordInRegistry(buffer, this.stringRegistry);
-			final String cause = this.stringRegistry.get(causeStringID);
-
-			final CustomAfterOperationFailedEvent record = new CustomAfterOperationFailedEvent(timestamp, traceID, orderIndex, cause);
-			super.deliver(OUTPUT_PORT_NAME_RECORDS, record);
+			this.recordValues.add(clazzid);
+			this.recordValues.add(buffer.getLong());
+			this.recordValues.add(buffer.getLong());
+			this.recordValues.add(buffer.getInt());
+			this.recordValues.add(buffer.getInt());
 
 			// AfterOperationEvent
 		} else if (clazzid == 3) {
-			final CustomAfterOperationEvent record = new CustomAfterOperationEvent(buffer.getLong(), buffer.getLong(), buffer.getInt());
-			super.deliver(OUTPUT_PORT_NAME_RECORDS, record);
+			this.recordValues.add(clazzid);
+			this.recordValues.add(buffer.getLong());
+			this.recordValues.add(buffer.getLong());
+			this.recordValues.add(buffer.getInt());
 
 			// RegistryRecord
-		} else if (clazzid == 4) {
-			final int id = buffer.getInt();
-			final byte[] strBytes = new byte[buffer.getInt()];
-			buffer.get(strBytes);
-			String string;
-			try {
-				string = new String(strBytes, ENCODING);
-			} catch (final UnsupportedEncodingException e) {
-				string = "EncodingDidNotWork";
-			}
-			final RegistryRecord record = new RegistryRecord(id, string);
-			super.deliver(OUTPUT_PORT_NAME_RECORDS, record);
+		} else {
+			RegistryRecord.registerRecordInRegistry(buffer, this.stringRegistry);
 		}
 	}
 
@@ -232,4 +199,37 @@ public class ExplorVizReader extends AbstractReaderPlugin {
 		}
 	}
 
+	public void deliverRecords() {
+		while (!this.recordValues.isEmpty()) {
+			final byte clazzid = (Byte) this.recordValues.removeFirst();
+			final long timestamp = (Long) this.recordValues.removeFirst();
+			final long traceID = (Long) this.recordValues.removeFirst();
+			final int orderIndex = (Integer) this.recordValues.removeFirst();
+
+			if (clazzid == 1) {
+				final int opSinatureStringID = (Integer) this.recordValues.removeFirst();
+				final int classSignatureStringID = (Integer) this.recordValues.removeFirst();
+				final String opSignature = this.stringRegistry.get(opSinatureStringID);
+				final String classSignature = this.stringRegistry.get(classSignatureStringID);
+
+				final BeforeOperationEvent record = new BeforeOperationEvent(timestamp, traceID, orderIndex,
+						opSignature, classSignature);
+				super.deliver(OUTPUT_PORT_NAME_RECORDS, record);
+
+			} else if (clazzid == 2) {
+				final int causeStringID = (Integer) this.recordValues.removeFirst();
+				final String cause = this.stringRegistry.get(causeStringID);
+
+				final CustomAfterOperationFailedEvent record = new CustomAfterOperationFailedEvent(timestamp, traceID, orderIndex, cause);
+				super.deliver(OUTPUT_PORT_NAME_RECORDS, record);
+
+			} else {
+				final CustomAfterOperationEvent record = new CustomAfterOperationEvent(timestamp, traceID, orderIndex);
+				super.deliver(OUTPUT_PORT_NAME_RECORDS, record);
+			}
+		}
+		final String rString = this.stringRegistry.get(10); // sent RegistryRecordID is 10
+		final RegistryRecord record = new RegistryRecord(10, rString);
+		super.deliver(OUTPUT_PORT_NAME_RECORDS, record);
+	}
 }
