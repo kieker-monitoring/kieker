@@ -43,6 +43,7 @@ import kieker.common.logging.LogFactory;
 import kieker.examples.analysis.opad.experimentModel.WikiGer24_Oct11_21d_InputModel;
 import kieker.examples.analysis.opad.experimentModel.WikiGer24_Oct11_21d_OutputModel;
 import kieker.tools.opad.filter.ForecastingFilter;
+import kieker.tools.opad.filter.UniteMeasurementPairFilter;
 import kieker.tools.opad.model.ForecastMeasurementPair;
 import kieker.tools.opad.model.NamedDoubleTimeSeriesPoint;
 import kieker.tools.tslib.ForecastMethod;
@@ -57,9 +58,12 @@ public final class ExperimentStarter {
 		// READ CSV
 		final String fileName = "examples/analysis/opad-anomaly-detection/src/kieker/examples/analysis/opad/experiment-data/wikiGer24_Oct11_21d";
 
-		// erroneous: ARIMA101, CROSTON, CS, ETS, SES
-		// ok: ARIMA, MEAN, NAIVE
 		final List<ForecastMethod> methods = new ArrayList<ForecastMethod>();
+		methods.add(ForecastMethod.ARIMA101);
+		// methods.add(ForecastMethod.CROSTON);
+		methods.add(ForecastMethod.CS);
+		methods.add(ForecastMethod.ETS);
+		methods.add(ForecastMethod.SES);
 		methods.add(ForecastMethod.ARIMA);
 		methods.add(ForecastMethod.MEAN);
 		methods.add(ForecastMethod.NAIVE);
@@ -68,13 +72,13 @@ public final class ExperimentStarter {
 		final List<NamedDoubleTimeSeriesPoint> readData = ExperimentStarter.readFromCsv(fileName);
 		ExperimentStarter.LOG.info("Done reading data from " + fileName + ".csv");
 
-		// for (final ForecastMethod fcMethod : ForecastMethod.values()) {
 		for (final ForecastMethod fcMethod : methods) {
 			ExperimentStarter.LOG.info("Starting experiment for " + fcMethod.name());
 			final List<ForecastMeasurementPair> measurements = ExperimentStarter.forecastWithR(readData, fcMethod);
 			ExperimentStarter.writeToCsv(measurements, fileName, fcMethod);
 			ExperimentStarter.LOG.info("Done with experiment for " + fcMethod.name());
 		}
+		ExperimentStarter.LOG.info("All experiments completed.");
 
 	}
 
@@ -116,6 +120,8 @@ public final class ExperimentStarter {
 
 		final ListReader<NamedDoubleTimeSeriesPoint> listReader = new ListReader<NamedDoubleTimeSeriesPoint>(new Configuration(), analysisController);
 
+		final UniteMeasurementPairFilter uniteFilter = new UniteMeasurementPairFilter(new Configuration(), analysisController);
+
 		final Configuration forecastConfig = new Configuration();
 		forecastConfig.setProperty(ForecastingFilter.CONFIG_PROPERTY_NAME_FC_METHOD, fcMethod.name());
 		forecastConfig.setProperty(ForecastingFilter.CONFIG_PROPERTY_NAME_DELTA_TIME, "1");
@@ -126,9 +132,20 @@ public final class ExperimentStarter {
 		final ListCollectionFilter<ForecastMeasurementPair> listCollector = new ListCollectionFilter<ForecastMeasurementPair>(new Configuration(),
 				analysisController);
 
+		// analysisController.connect(
+		// listReader, ListReader.OUTPUT_PORT_NAME,
+		// uniteFilter, UniteMeasurementPairFilter.INPUT_PORT_NAME_TSPOINT);
+
 		analysisController.connect(
 				listReader, ListReader.OUTPUT_PORT_NAME,
 				forecaster, ForecastingFilter.INPUT_PORT_NAME_TSPOINT);
+
+		// analysisController.connect(
+		// forecaster, ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT,
+		// uniteFilter, UniteMeasurementPairFilter.INPUT_PORT_NAME_FORECAST);
+
+		// analysisController.connect(uniteFilter, UniteMeasurementPairFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT,
+		// listCollector, ListCollectionFilter.INPUT_PORT_NAME);
 
 		analysisController.connect(
 				forecaster, ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT,

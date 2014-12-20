@@ -16,6 +16,8 @@
 
 package kieker.tools.tslib.forecast;
 
+import kieker.common.logging.Log;
+import kieker.common.logging.LogFactory;
 import kieker.tools.tslib.ITimeSeries;
 import kieker.tools.tslib.TimeSeries;
 
@@ -27,6 +29,8 @@ import kieker.tools.tslib.TimeSeries;
  *            The type of the forecaster.
  */
 public abstract class AbstractForecaster<T> implements IForecaster<T> {
+
+	private static final Log LOG = LogFactory.getLog(AbstractForecaster.class);
 
 	private final ITimeSeries<T> historyTimeseries;
 	private final int confidenceLevel;
@@ -44,7 +48,12 @@ public abstract class AbstractForecaster<T> implements IForecaster<T> {
 	 */
 	public AbstractForecaster(final ITimeSeries<T> historyTimeseries, final int confidenceLevel) {
 		this.historyTimeseries = historyTimeseries;
-		this.confidenceLevel = confidenceLevel;
+		if (this.supportsConfidence()) {
+			this.confidenceLevel = confidenceLevel;
+		} else {
+			this.confidenceLevel = 0;
+			LOG.warn("This forecaster does not support confidence level. Falling back to 0.0.");
+		}
 	}
 
 	@Override
@@ -63,6 +72,10 @@ public abstract class AbstractForecaster<T> implements IForecaster<T> {
 		final TimeSeries<T> tsFC = new TimeSeries<T>(startTime, history.getTimeSeriesTimeUnit(),
 				history.getDeltaTime(), history.getDeltaTimeUnit());
 		return tsFC;
+	}
+
+	protected boolean supportsConfidence() {
+		return true;
 	}
 
 	@Override

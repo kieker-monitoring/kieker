@@ -23,7 +23,7 @@ package kieker.tools.util;
  *
  * @since 1.11
  */
-public class InvalidREvaluationResultException extends NullPointerException {
+public class InvalidREvaluationResultException extends Exception {
 
 	private static final long serialVersionUID = 2368292926336488354L;
 
