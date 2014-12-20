@@ -66,7 +66,8 @@ public class AdditionalOptionsStep extends AbstractStep { // NOPMD (long class)
 			+ "(key: trace ID, value: color in hex format, e.g., 0xff0000 for red; use trace ID 'default' to specify the default color.)</html> ";
 	private static final String DESCRIPTION_TOOLTIP = "<html>Adds descriptions to elements according to the given file (properties file).<br>"
 			+ "(key:component ID, e.g., @1; value: description)</html>";
-	private static final String REPAIR_EVENT_BASED_TRACES_TOOLTIP = "If selected, BeforeEvents with missing AfterEvents e.g. because of software crash will be repaired.";
+	private static final String REPAIR_EVENT_BASED_TRACES_TOOLTIP = "If selected, BeforeEvents with missing AfterEvents e.g. "
+			+ "because of software crash will be repaired.";
 
 	private final JLabel infoLabel = new JLabel("<html>In this step you manage additional options for the trace analysis.</html>");
 	private final JPanel expandingPanel = new JPanel();
