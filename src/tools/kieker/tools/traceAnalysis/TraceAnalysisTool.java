@@ -999,6 +999,8 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 				val = this.ignoreAssumedCalls ? "true" : "false"; // NOCS
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_IGNOREINVALIDTRACES)) {
 				val = this.ignoreInvalidTraces ? "true" : "false"; // NOCS
+			} else if (longOpt.equals(Constants.CMD_OPT_NAME_REPAIR_EVENT_BASED_TRACES)) {
+				val = this.repairEventBasedTraces ? "true" : "false"; // NOCS
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_MAXTRACEDURATION)) {
 				val = this.maxTraceDurationMillis + " ms";
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_IGNOREEXECUTIONSBEFOREDATE)) {

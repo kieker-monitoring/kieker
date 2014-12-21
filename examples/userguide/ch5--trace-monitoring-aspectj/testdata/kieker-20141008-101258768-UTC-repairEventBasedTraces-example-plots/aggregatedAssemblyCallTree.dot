@@ -1,10 +1,10 @@
 digraph G {
 0[label ="'Entry'",shape=none];
-1[label ="@1:kieker.examples.monitoring.aspectj.BookstoreStarter\n.main(..)",shape=none];
-2[label ="@1:kieker.examples.monitoring.aspectj.BookstoreStarter\n.extractNumRequestsFromArgs(..)",shape=none];
-3[label ="@1:kieker.examples.monitoring.aspectj.BookstoreStarter\n.spawnAsyncRequest(..)",shape=none];
-4[label ="@3:kieker.examples.monitoring.aspectj.BookstoreStarter$1\n.run()",shape=none];
-5[label ="@2:kieker.examples.monitoring.aspectj.Bookstore\n.searchBook()",shape=none];
+1[label ="@1:..BookstoreStarter\n.main(..)",shape=none];
+2[label ="@1:..BookstoreStarter\n.extractNumRequestsFromArgs(..)",shape=none];
+3[label ="@1:..BookstoreStarter\n.spawnAsyncRequest(..)",shape=none];
+4[label ="@3:..BookstoreStarter$1\n.run()",shape=none];
+5[label ="@2:..Bookstore\n.searchBook()",shape=none];
 
 0->1[style=solid,arrowhead=none,label="1" ]
 

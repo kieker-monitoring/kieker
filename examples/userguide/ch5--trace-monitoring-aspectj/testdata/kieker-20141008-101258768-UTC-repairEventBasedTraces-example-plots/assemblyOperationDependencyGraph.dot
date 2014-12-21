@@ -2,14 +2,14 @@ digraph G {
  rankdir=LR;
 "depNode_0" [label="'Entry'",shape="none"]
 subgraph "cluster_component_2" {
- label = "<<assembly component>>\n@2:kieker.examples.monitoring.aspectj.Bookstore";
+ label = "<<assembly component>>\n@2:..Bookstore";
  shape = "box";
  style = "filled";
  fillcolor = "white";
 "depNode_5" [label="searchBook()",shape="oval",style="filled",color="#000000",fillcolor="gray"]
 }
 subgraph "cluster_component_1" {
- label = "<<assembly component>>\n@1:kieker.examples.monitoring.aspectj.BookstoreStarter";
+ label = "<<assembly component>>\n@1:..BookstoreStarter";
  shape = "box";
  style = "filled";
  fillcolor = "white";
@@ -18,7 +18,7 @@ subgraph "cluster_component_1" {
 "depNode_3" [label="spawnAsyncRequest(..)",shape="oval",style="filled",color="#000000",fillcolor="gray"]
 }
 subgraph "cluster_component_3" {
- label = "<<assembly component>>\n@3:kieker.examples.monitoring.aspectj.BookstoreStarter$1";
+ label = "<<assembly component>>\n@3:..BookstoreStarter$1";
  shape = "box";
  style = "filled";
  fillcolor = "white";

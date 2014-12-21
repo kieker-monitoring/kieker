@@ -79,7 +79,10 @@ import kieker.common.record.flow.trace.operation.object.BeforeOperationObjectEve
 					defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TIME),
 			@Property(
 					name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_TIMEOUT,
-					defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TIME) })
+					defaultValue = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_VALUE_MAX_TIME),
+			@Property(
+					name = EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_REPAIR_EVENT_BASED_TRACES,
+					defaultValue = "false") })
 public final class EventRecordTraceReconstructionFilter extends AbstractFilterPlugin {
 	/**
 	 * The name of the output port delivering the valid traces.
@@ -124,7 +127,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 	public static final String CONFIG_PROPERTY_VALUE_TIMEUNIT = "NANOSECONDS"; // TimeUnit.NANOSECONDS.name()
 	/**
 	 * This is the name of the property determining
-	 * whether to repair traces with missing AfterEvents (e.g. because of system crash) or not.
+	 * whether to repair BeforeEvents with missing AfterEvents (e.g. because of software crash) or not.
 	 */
 	public static final String CONFIG_PROPERTY_NAME_REPAIR_EVENT_BASED_TRACES = "repairEventBasedTraces";
 

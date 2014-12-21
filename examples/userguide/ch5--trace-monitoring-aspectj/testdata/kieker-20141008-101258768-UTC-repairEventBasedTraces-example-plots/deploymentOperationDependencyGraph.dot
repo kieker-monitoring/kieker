@@ -7,7 +7,7 @@ subgraph "cluster_container1" {
  style = "filled";
  fillcolor = "white";
 subgraph "cluster_component_1" {
- label = "<<deployment component>>\n@1:kieker.examples.monitoring.aspectj.BookstoreStarter";
+ label = "<<deployment component>>\n@1:..BookstoreStarter";
  shape = "box";
  style = "filled";
  fillcolor = "white";
@@ -16,14 +16,14 @@ subgraph "cluster_component_1" {
 "depNode_2" [label="extractNumRequestsFromArgs(..)",shape="oval",style="filled",color="#000000",fillcolor="gray"]
 }
 subgraph "cluster_component_2" {
- label = "<<deployment component>>\n@2:kieker.examples.monitoring.aspectj.Bookstore";
+ label = "<<deployment component>>\n@2:..Bookstore";
  shape = "box";
  style = "filled";
  fillcolor = "white";
 "depNode_5" [label="searchBook()",shape="oval",style="filled",color="#000000",fillcolor="gray"]
 }
 subgraph "cluster_component_3" {
- label = "<<deployment component>>\n@3:kieker.examples.monitoring.aspectj.BookstoreStarter$1";
+ label = "<<deployment component>>\n@3:..BookstoreStarter$1";
  shape = "box";
  style = "filled";
  fillcolor = "white";
