@@ -179,7 +179,7 @@ public class ExplorVizReader extends AbstractReaderPlugin {
 			this.recordValues.add(buffer.getInt());
 
 			// RegistryRecord
-		} else {
+		} else if (clazzid == 4) {
 			RegistryRecord.registerRecordInRegistry(buffer, this.stringRegistry);
 		}
 	}
