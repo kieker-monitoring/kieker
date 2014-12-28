@@ -411,9 +411,9 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 
 		public void checkIfAfterEventsMissingThenRepair(final AbstractTraceEvent event) {
 			int orderIndex = event.getOrderIndex();
+			final boolean alreadyRepairedSomeEvents = orderIndex <= this.maxOrderIndex;
 
-			// true, as soon as one AfterEvent manually added, thus OrderIndex has to change for upcoming events
-			if (orderIndex < this.maxOrderIndex) {
+			if (alreadyRepairedSomeEvents) {
 				orderIndex = this.maxOrderIndex + 1;
 			}
 
@@ -446,8 +446,8 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 				}
 
 				this.beforeEventStack.removeLast();
-				// true, if the received AfterEvent matched to the first BeforeEvent in the stack, thus event passes without orderIndex adjustment
-				if ((orderIndex - 1) == this.maxOrderIndex) {
+				// true as long as no events repaired, event passes without orderIndex adjustment
+				if (!alreadyRepairedSomeEvents && ((orderIndex - 1) == this.maxOrderIndex)) {
 					this.eventQueue.add(event);
 				} else {
 					final String opSignature = ((AfterOperationEvent) event).getOperationSignature();
@@ -502,7 +502,7 @@ public final class EventRecordTraceReconstructionFilter extends AbstractFilterPl
 					this.insertEvent(new AfterConstructorEvent(timestamp, traceID, orderIndex, opSignature, classSignature));
 				} else if (beforeEvent instanceof BeforeOperationObjectEvent) {
 					this.insertEvent(new AfterOperationObjectEvent(timestamp, traceID, orderIndex, opSignature, classSignature,
-							((BeforeConstructorObjectEvent) this.beforeEventStack.getLast()).getObjectId()));
+							((BeforeOperationObjectEvent) this.beforeEventStack.getLast()).getObjectId()));
 				} else {
 					this.insertEvent(new AfterOperationEvent(timestamp, traceID, orderIndex, opSignature, classSignature));
 				}
