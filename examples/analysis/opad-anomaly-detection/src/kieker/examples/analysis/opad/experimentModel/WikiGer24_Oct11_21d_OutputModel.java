@@ -17,7 +17,7 @@
 package kieker.examples.analysis.opad.experimentModel;
 
 /**
- * @author duelle
+ * @author Thomas Duellmann
  *
  * @since 1.11
  */
@@ -28,15 +28,17 @@ public class WikiGer24_Oct11_21d_OutputModel {
 	private double confidenceUpper;
 	private double confidenceLower;
 	private String forecaster;
+	private double mase;
 
 	public WikiGer24_Oct11_21d_OutputModel(final double pageRequests, final double forecast, final int confidence, final double confidenceUpper,
-			final double confidenceLower, final String forecaster) {
+			final double confidenceLower, final String forecaster, final double mase) {
 		this.pageRequests = pageRequests;
 		this.forecast = forecast;
 		this.confidence = confidence;
 		this.confidenceUpper = confidenceUpper;
 		this.confidenceLower = confidenceLower;
 		this.forecaster = forecaster;
+		this.mase = mase;
 	}
 
 	public double getForecast() {
@@ -85,5 +87,13 @@ public class WikiGer24_Oct11_21d_OutputModel {
 
 	public void setForecaster(final String forecaster) {
 		this.forecaster = forecaster;
+	}
+
+	public double getMase() {
+		return this.mase;
+	}
+
+	public void setMase(final double mase) {
+		this.mase = mase;
 	}
 }

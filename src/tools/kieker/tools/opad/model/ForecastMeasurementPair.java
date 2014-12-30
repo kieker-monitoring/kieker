@@ -28,24 +28,26 @@ public class ForecastMeasurementPair implements IForecastMeasurementPair {
 	private final String name;
 	private final Double forecast;
 	private final Double measurement;
+	private final Double mase; // MASE = Mean Absolute Scaled Error
 	private final long time;
 	private int confidenceLevel = -1;
 	private double confidenceUpper = Double.NaN;
 	private double confidenceLower = Double.NaN;
 
 	public ForecastMeasurementPair(final String name, final Double forecast, final Double measurement, final long time, final int confidenceLevel,
-			final double confidenceUpper, final double confidenceLower) {
-		this(name, forecast, measurement, time);
+			final double confidenceUpper, final double confidenceLower, final Double mase) {
+		this(name, forecast, measurement, time, mase);
 		this.confidenceLevel = confidenceLevel;
 		this.confidenceUpper = confidenceUpper;
 		this.confidenceLower = confidenceLower;
 	}
 
-	public ForecastMeasurementPair(final String name, final Double forecast, final Double measurement, final long time) {
+	public ForecastMeasurementPair(final String name, final Double forecast, final Double measurement, final long time, final Double mase) {
 		this.name = name;
 		this.forecast = forecast;
 		this.measurement = measurement;
 		this.time = time;
+		this.mase = mase;
 	}
 
 	@Override
@@ -78,5 +80,9 @@ public class ForecastMeasurementPair implements IForecastMeasurementPair {
 
 	public double getConfidenceLower() {
 		return this.confidenceLower;
+	}
+
+	public Double getMASE() {
+		return this.mase;
 	}
 }

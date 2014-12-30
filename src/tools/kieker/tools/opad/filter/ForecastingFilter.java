@@ -23,6 +23,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 import kieker.analysis.IProjectContext;
+import kieker.analysis.analysisComponent.AbstractAnalysisComponent;
 import kieker.analysis.plugin.AbstractUpdateableFilterPlugin;
 import kieker.analysis.plugin.annotation.InputPort;
 import kieker.analysis.plugin.annotation.OutputPort;
@@ -47,7 +48,8 @@ import kieker.tools.tslib.forecast.IForecaster;
  */
 @Plugin(name = "Forecast Filter", outputPorts = {
 		@OutputPort(eventTypes = { IForecastResult.class }, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECAST),
-		@OutputPort(eventTypes = { IForecastMeasurementPair.class }, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT) },
+		@OutputPort(eventTypes = { IForecastMeasurementPair.class }, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT),
+		@OutputPort(eventTypes = { IForecastMeasurementPair.class }, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_MEASURED) },
 		configuration = {
 		@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_DELTA_TIME, defaultValue = "1000"),
 		@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_DELTA_UNIT, defaultValue = "MILLISECONDS"),
@@ -61,6 +63,7 @@ public class ForecastingFilter extends AbstractUpdateableFilterPlugin {
 
 	public static final String OUTPUT_PORT_NAME_FORECAST = "forecast";
 	public static final String OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT = "forecastedcurrent";
+	public static final String OUTPUT_PORT_NAME_FORECASTED_AND_MEASURED = "forecastedandmeasured";
 
 	public static final String CONFIG_PROPERTY_NAME_DELTA_TIME = "deltatime";
 	public static final String CONFIG_PROPERTY_NAME_DELTA_UNIT = "deltaunit";
@@ -69,6 +72,7 @@ public class ForecastingFilter extends AbstractUpdateableFilterPlugin {
 	public static final String CONFIG_PROPERTY_NAME_FC_CONFIDENCE = "confidence";
 
 	private final ConcurrentHashMap<String, ITimeSeries<Double>> applicationForecastingWindow;
+	private final ConcurrentHashMap<String, ForecastMeasurementPair> previousFCPair;
 
 	private AtomicInteger timeSeriesWindowCapacity;
 	private AtomicInteger forecastConfidence;
@@ -87,6 +91,7 @@ public class ForecastingFilter extends AbstractUpdateableFilterPlugin {
 	public ForecastingFilter(final Configuration configuration, final IProjectContext projectContext) {
 		super(configuration, projectContext);
 		this.applicationForecastingWindow = new ConcurrentHashMap<String, ITimeSeries<Double>>();
+		this.previousFCPair = new ConcurrentHashMap<String, ForecastMeasurementPair>();
 		this.setCurrentConfiguration(configuration, false);
 	}
 
@@ -179,17 +184,41 @@ public class ForecastingFilter extends AbstractUpdateableFilterPlugin {
 				confidenceLower = Double.NaN;
 			}
 
-			final ForecastMeasurementPair fmp = new ForecastMeasurementPair(
+			final ForecastMeasurementPair previousForecastPair = this.previousFCPair.get(name);
+
+			Double forecast = Double.NaN;
+			if (previousForecastPair != null) {
+				forecast = previousForecastPair.getForecasted();
+			}
+
+			final ForecastMeasurementPair forecastedAndMeasuredResult = new ForecastMeasurementPair(
+					name,
+					forecast,
+					input.getValue(),
+					timestamp,
+					result.getConfidenceLevel(),
+					confidenceUpper,
+					confidenceLower,
+					result.getMeanAbsoluteScaledError());
+			AbstractAnalysisComponent.LOG.info("Forecast: " + forecast + ", Measurement: " + input.getValue() + ", MASE: " + result.getMeanAbsoluteScaledError());
+			super.deliver(OUTPUT_PORT_NAME_FORECASTED_AND_MEASURED, forecastedAndMeasuredResult);
+
+			final ForecastMeasurementPair currentForecastPair = new ForecastMeasurementPair(
 					name,
 					result.getForecast().getPoints().get(0).getValue(),
 					input.getValue(),
 					timestamp,
 					result.getConfidenceLevel(),
-					confidenceUpper, confidenceLower);
-			super.deliver(OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, fmp);
+					confidenceUpper, confidenceLower,
+					result.getMeanAbsoluteScaledError());
+
+			this.previousFCPair.put(name, currentForecastPair);
+
+			super.deliver(OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT, currentForecastPair);
 		} else {
 			this.log.error("There are no forecast points to deliver. Perhaps Rserve is not running?");
 		}
+
 	}
 
 	/**

@@ -43,7 +43,6 @@ import kieker.common.logging.LogFactory;
 import kieker.examples.analysis.opad.experimentModel.WikiGer24_Oct11_21d_InputModel;
 import kieker.examples.analysis.opad.experimentModel.WikiGer24_Oct11_21d_OutputModel;
 import kieker.tools.opad.filter.ForecastingFilter;
-import kieker.tools.opad.filter.UniteMeasurementPairFilter;
 import kieker.tools.opad.model.ForecastMeasurementPair;
 import kieker.tools.opad.model.NamedDoubleTimeSeriesPoint;
 import kieker.tools.tslib.ForecastMethod;
@@ -61,7 +60,7 @@ public final class ExperimentStarter {
 		final List<ForecastMethod> methods = new ArrayList<ForecastMethod>();
 		methods.add(ForecastMethod.ARIMA101);
 		// methods.add(ForecastMethod.CROSTON);
-		methods.add(ForecastMethod.CS);
+		// methods.add(ForecastMethod.CS);
 		methods.add(ForecastMethod.ETS);
 		methods.add(ForecastMethod.SES);
 		methods.add(ForecastMethod.ARIMA);
@@ -120,7 +119,7 @@ public final class ExperimentStarter {
 
 		final ListReader<NamedDoubleTimeSeriesPoint> listReader = new ListReader<NamedDoubleTimeSeriesPoint>(new Configuration(), analysisController);
 
-		final UniteMeasurementPairFilter uniteFilter = new UniteMeasurementPairFilter(new Configuration(), analysisController);
+		// final UniteMeasurementPairFilter uniteFilter = new UniteMeasurementPairFilter(new Configuration(), analysisController);
 
 		final Configuration forecastConfig = new Configuration();
 		forecastConfig.setProperty(ForecastingFilter.CONFIG_PROPERTY_NAME_FC_METHOD, fcMethod.name());
@@ -148,7 +147,7 @@ public final class ExperimentStarter {
 		// listCollector, ListCollectionFilter.INPUT_PORT_NAME);
 
 		analysisController.connect(
-				forecaster, ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT,
+				forecaster, ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_MEASURED,
 				listCollector, ListCollectionFilter.INPUT_PORT_NAME);
 
 		listReader.addAllObjects(data);
@@ -173,7 +172,7 @@ public final class ExperimentStarter {
 		WikiGer24_Oct11_21d_OutputModel outputItem;
 		for (final ForecastMeasurementPair fmp : measurements) {
 			outputItem = new WikiGer24_Oct11_21d_OutputModel(fmp.getValue(), fmp.getForecasted(), fmp.getConfidenceLevel(), fmp.getConfidenceUpper(),
-					fmp.getConfidenceLower(), forecaster.name());
+					fmp.getConfidenceLower(), forecaster.name(), fmp.getMASE());
 			outputList.add(outputItem);
 		}
 
@@ -182,7 +181,7 @@ public final class ExperimentStarter {
 			writer = new CSVWriter(osw, ';');
 			final ColumnPositionMappingStrategy<WikiGer24_Oct11_21d_OutputModel> strategy = new ColumnPositionMappingStrategy<WikiGer24_Oct11_21d_OutputModel>();
 			strategy.setType(WikiGer24_Oct11_21d_OutputModel.class);
-			final String[] columns = new String[] { "pageRequests", "forecast", "forecaster", "confidence", "confidenceUpper", "confidenceLower" };
+			final String[] columns = new String[] { "pageRequests", "forecast", "forecaster", "confidence", "confidenceUpper", "confidenceLower", "mase" };
 			strategy.setColumnMapping(columns);
 
 			final BeanToCsv<WikiGer24_Oct11_21d_OutputModel> bean = new BeanToCsv<WikiGer24_Oct11_21d_OutputModel>();

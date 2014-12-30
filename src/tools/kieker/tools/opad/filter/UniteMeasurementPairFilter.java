@@ -64,7 +64,7 @@ public class UniteMeasurementPairFilter extends AbstractFilterPlugin {
 
 	@InputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = UniteMeasurementPairFilter.INPUT_PORT_NAME_TSPOINT)
 	public void inputTSPoint(final NamedDoubleTimeSeriesPoint input) {
-		if (!this.checkCorrespondingForecast(input)) {
+		if (!this.checkAndAddCorrespondingForecast(input)) {
 			// no matching point found --> add it to the waiting map
 			this.addTsPoint(input);
 		}
@@ -73,7 +73,7 @@ public class UniteMeasurementPairFilter extends AbstractFilterPlugin {
 	@InputPort(eventTypes = { IForecastMeasurementPair.class }, name = UniteMeasurementPairFilter.INPUT_PORT_NAME_FORECAST)
 	public void inputForecastValue(final IForecastMeasurementPair input) {
 		final NamedDoubleTimeSeriesPoint pointFromForecast = new NamedDoubleTimeSeriesPoint(input.getTime(), input.getForecasted(), input.getName());
-		if (!this.checkCorrespondingMeasurement(pointFromForecast)) {
+		if (!this.checkAndAddCorrespondingMeasurement(pointFromForecast)) {
 			// no matching point found --> add it to the waiting map
 			this.addTsPoint(pointFromForecast);
 		}
@@ -100,7 +100,7 @@ public class UniteMeasurementPairFilter extends AbstractFilterPlugin {
 	 *         True, if corresponding forecast found
 	 *         False, else
 	 */
-	private boolean checkCorrespondingForecast(final NamedDoubleTimeSeriesPoint p) {
+	private boolean checkAndAddCorrespondingForecast(final NamedDoubleTimeSeriesPoint p) {
 		// The first measurement of each application has no corresponding forecast --> submit a dummy (the measurement itself as forecast replacement)
 		if (!this.firstIncomingTSPointList.contains(p.getName())) {
 			this.firstIncomingTSPointList.add(p.getName());
@@ -129,7 +129,7 @@ public class UniteMeasurementPairFilter extends AbstractFilterPlugin {
 	 *         True, if corresponding measurement found
 	 *         False, else
 	 */
-	private boolean checkCorrespondingMeasurement(final NamedDoubleTimeSeriesPoint p) {
+	private boolean checkAndAddCorrespondingMeasurement(final NamedDoubleTimeSeriesPoint p) {
 		final String key = p.getTime() + "." + p.getName();
 		if (this.tsPointMap.containsKey(key)) {
 			final NamedDoubleTimeSeriesPoint m = this.tsPointMap.get(key);
