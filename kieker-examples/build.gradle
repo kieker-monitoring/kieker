@@ -1,0 +1,20 @@
+/* 
+ * TODOS:
+ * 1. Copy Required libs to subdirectories
+ * 2. Extend to all subdirectories <-- What's the best way to do this in Gradle?
+ * 3. Add/extend clean tasks to call example's clean tasks via cleanStandaloneExamples
+ */
+
+defaultTasks 'cleanStandaloneExamples', 'buildStandaloneExamples'
+ 
+task buildStandaloneExamples(type: GradleBuild) {
+	description = 'Builds the stand-alone Kieker examples in the subdirectories.'
+	buildFile = 'userguide/ch2--bookstore-application/build.gradle'
+	tasks = ['jar']
+}
+
+task cleanStandaloneExamples(type: GradleBuild) {
+	description = 'Builds the stand-alone Kieker examples in the subdirectories.'
+	buildFile = 'userguide/ch2--bookstore-application/build.gradle'
+	tasks = ['clean']
+}

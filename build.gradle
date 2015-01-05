@@ -51,17 +51,16 @@ allprojects {
 	}
 	
 	/*
-	 * Downloads the Gradle wrapper scripts `gradlew(.bat)` into 
-	 * the current directory.
-	 * 
 	 * This task should only be executed when updating to a 
 	 * newer Gradle version. Note that manual changes to the 
 	 * previous scripts will need to be merged to the new 
-	 * wrapper script manually. 
+	 * wrapper script manually. Note that this tasks also 
+	 * creates/updates the wrapper scripts in subdirectories.
 	 * */  
 	task wrapper(type: Wrapper) {
+		description = 'Downloads the Gradle wrapper scripts.'
 		gradleVersion = '2.2.1'
-		}
+	}
 	
 	task integrationTest(type: Test){
 		testClassesDir = project.sourceSets.integrationTest.output.classesDir
@@ -336,7 +335,8 @@ task docs(type: Javadoc) {
     destinationDir = new File(projectDir, 'javadoc')
 }
 
-task prepareExamplesForDistribution(dependsOn: ['kieker-examples:userguide:ch2--manual-instrumentation:copyRuntimeLibs', 
+task prepareExamplesForDistribution(dependsOn: ['kieker-examples:buildStandaloneExamples', 
+	                                            'kieker-examples:userguide:ch2--manual-instrumentation:copyRuntimeLibs', 
                                                 'kieker-examples:userguide:ch3-4--custom-components:copyRuntimeLibs',
                                                 'kieker-examples:userguide:ch5--trace-monitoring-aspectj:copyRuntimeLibs',
                                                 'kieker-examples:userguide:appendix-JMS:copyRuntimeLibs',
