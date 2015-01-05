@@ -49,7 +49,20 @@ allprojects {
 		integrationTestCompile.extendsFrom testCompile
 		integrationTestRuntime.extendsFrom testRuntime
 	}
-	 
+	
+	/*
+	 * Downloads the Gradle wrapper scripts `gradlew(.bat)` into 
+	 * the current directory.
+	 * 
+	 * This task should only be executed when updating to a 
+	 * newer Gradle version. Note that manual changes to the 
+	 * previous scripts will need to be merged to the new 
+	 * wrapper script manually. 
+	 * */  
+	task wrapper(type: Wrapper) {
+		gradleVersion = '2.2.1'
+		}
+	
 	task integrationTest(type: Test){
 		testClassesDir = project.sourceSets.integrationTest.output.classesDir
 		classpath = project.sourceSets.integrationTest.runtimeClasspath
