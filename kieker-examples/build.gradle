@@ -1,20 +1,43 @@
 /* 
  * TODOS:
+ * 0. Dependency to ~ rootProject:jar
  * 1. Copy Required libs to subdirectories
  * 2. Extend to all subdirectories <-- What's the best way to do this in Gradle?
  * 3. Add/extend clean tasks to call example's clean tasks via cleanStandaloneExamples
  */
 
-defaultTasks 'cleanStandaloneExamples', 'buildStandaloneExamples'
+dependencies {
+	 compile fileTree('../../dist') {
+		 include 'kieker-*_emf.jar'
+	 }
+}
  
-task buildStandaloneExamples(type: GradleBuild) {
-	description = 'Builds the stand-alone Kieker examples in the subdirectories.'
+defaultTasks 'cleanStandaloneExamples', 'buildStandaloneExamples'
+
+task copyLibs(type: Copy, dependsOn: rootProject.emfJar) {
+	description = 'Copies the required Kieker libs to the examples'
+	from '../../dist/kieker-*_emf.jar'
+	into 'userguide/ch2--manual-instrumentation/lib/'
+}
+
+task buildStandaloneExamples(dependsOn: ['copyLibs', 
+	                                     'buildStandaloneExamplesCh2App', 
+	                                     'buildStandaloneExamplesCh2Instr']) {
+}
+	
+task buildStandaloneExamplesCh2App(type: GradleBuild) {
 	buildFile = 'userguide/ch2--bookstore-application/build.gradle'
 	tasks = ['jar']
 }
 
+task buildStandaloneExamplesCh2Instr(type: GradleBuild) {
+	buildFile = 'userguide/ch2--manual-instrumentation/build.gradle'
+	tasks = ['jar']
+}
+
+/**
 task cleanStandaloneExamples(type: GradleBuild) {
 	description = 'Builds the stand-alone Kieker examples in the subdirectories.'
 	buildFile = 'userguide/ch2--bookstore-application/build.gradle'
 	tasks = ['clean']
-}
+}*/

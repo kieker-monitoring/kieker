@@ -4,16 +4,16 @@ the 'java' tool using the following commands:
 Monitoring:
 
 -UNIX-like systems:
- $ java -cp ch2--manual-instrumentation.jar:lib/kieker-1.11-SNAPSHOT_emf.jar kieker.examples.userguide.ch2bookstore.manual.BookstoreStarter
+ $ java -cp BookstoreApplicationMonitoringAnalysis.jar:lib/kieker-1.11-SNAPSHOT_emf.jar kieker.examples.userguide.ch2bookstore.manual.BookstoreStarter
 - Windows:
- $ java -cp ch2--manual-instrumentation.jar;lib\kieker-1.11-SNAPSHOT_emf.jar kieker.examples.userguide.ch2bookstore.manual.BookstoreStarter
+ $ java -cp BookstoreApplicationMonitoringAnalysis.jar;lib\kieker-1.11-SNAPSHOT_emf.jar kieker.examples.userguide.ch2bookstore.manual.BookstoreStarter
 
 Analysis:
 
 -UNIX-like systems:
- $ java -cp ch2--manual-instrumentation.jar:lib/kieker-1.11-SNAPSHOT_emf.jar kieker.examples.userguide.ch2bookstore.manual.BookstoreAnalysisStarter </path/to/monitoring-log/>
+ $ java -cp BookstoreApplicationMonitoringAnalysis.jar:lib/kieker-1.11-SNAPSHOT_emf.jar kieker.examples.userguide.ch2bookstore.manual.BookstoreAnalysisStarter </path/to/monitoring-log/>
 - Windows:
- $ java -cp ch2--manual-instrumentation.jar;lib\kieker-1.11-SNAPSHOT_emf.jar kieker.examples.userguide.ch2bookstore.manual.BookstoreAnalysisStarter <path\to\monitoring-log\>
+ $ java -cp BookstoreApplicationMonitoringAnalysis.jar;lib\kieker-1.11-SNAPSHOT_emf.jar kieker.examples.userguide.ch2bookstore.manual.BookstoreAnalysisStarter <path\to\monitoring-log\>
 
 Alternatively, you can compile the sources and start the application using
 'gradle' with the given 'build.gradle' file:
@@ -23,5 +23,9 @@ Monitoring:
 
 Analysis:
  $ gradle runAnalysis -Danalysis.directory=</path/to/monitoring-log/>
+
+In order to re-compile the sources into BookstoreApplicationMonitoringAnalysis.jar, run the 
+following command:
+ $ gradle jar
 
 Please see Chapter 2 of the Kieker User Guide for details on this example.

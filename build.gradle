@@ -335,8 +335,8 @@ task docs(type: Javadoc) {
     destinationDir = new File(projectDir, 'javadoc')
 }
 
-task prepareExamplesForDistribution(dependsOn: ['kieker-examples:buildStandaloneExamples', 
-	                                            'kieker-examples:userguide:ch2--manual-instrumentation:copyRuntimeLibs', 
+task prepareExamplesForDistribution(dependsOn: ['kieker-examples:copyLibs',
+	                                            'kieker-examples:buildStandaloneExamples',  
                                                 'kieker-examples:userguide:ch3-4--custom-components:copyRuntimeLibs',
                                                 'kieker-examples:userguide:ch5--trace-monitoring-aspectj:copyRuntimeLibs',
                                                 'kieker-examples:userguide:appendix-JMS:copyRuntimeLibs',

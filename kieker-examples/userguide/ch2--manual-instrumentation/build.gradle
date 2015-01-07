@@ -1,34 +1,18 @@
+apply plugin: 'application'
+
 dependencies {
-	compile fileTree('../../../dist') {
+	compile fileTree('lib') {
 		include 'kieker-*_emf.jar'
 	}
 }
 
-compileJava.dependsOn rootProject.emfJar
+// Simplify the JAR's file name
+archivesBaseName = 'BookstoreApplicationMonitoringAnalysis'
+version = ''
 
 // Create the JAR file in the root directory of the example
 libsDirName = '..'
-
-// Simplify the JAR's file name
-version = ''
 	
-task copyRuntimeLibs(type: Copy, dependsOn: rootProject.emfJar) {  
-	into "lib"  
-	from configurations.runtime  
-}	
-	
-task monitoringJar(type: Jar, dependsOn: copyRuntimeLibs) {
-	baseName = 'BookstoreMonitoring'
-	
-	from sourceSets.main.output
-}
-
-task analysisJar(type: Jar, dependsOn: copyRuntimeLibs) {
-	baseName = 'BookstoreAnalysis'
-	
-	from sourceSets.main.output
-}
-
 task runMonitoring(type: JavaExec) {
 	main = 'kieker.examples.userguide.ch2bookstore.manual.BookstoreStarter'
 	classpath = sourceSets.main.runtimeClasspath
