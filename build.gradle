@@ -336,8 +336,7 @@ task docs(type: Javadoc) {
 }
 
 task prepareExamplesForDistribution(dependsOn: ['kieker-examples:copyLibs',
-	                                            'kieker-examples:buildStandaloneExamples',  
-                                                'kieker-examples:userguide:ch3-4--custom-components:copyRuntimeLibs',
+	                                            'kieker-examples:buildStandaloneExamples',
                                                 'kieker-examples:userguide:ch5--trace-monitoring-aspectj:copyRuntimeLibs',
                                                 'kieker-examples:userguide:appendix-JMS:copyRuntimeLibs',
                                                 'kieker-examples:userguide:appendix-Sigar:copyRuntimeLibs',

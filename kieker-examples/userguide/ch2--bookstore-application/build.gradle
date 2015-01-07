@@ -7,7 +7,7 @@ version = ''
 // Create the JAR file in the root directory of the example
 libsDirName = '..'
 
-// Make the JAR file executable
+sourceSets.main.java.srcDirs = ['src']
 
 mainClassName = 'kieker.examples.userguide.ch2bookstore.BookstoreStarter'
 
