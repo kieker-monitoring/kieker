@@ -22,7 +22,8 @@ task copyLibs(type: Copy, dependsOn: rootProject.emfJar) {
 
 task buildStandaloneExamples(dependsOn: ['copyLibs', 
 	                                     'buildStandaloneExamplesCh2App', 
-	                                     'buildStandaloneExamplesCh2Instr']) {
+	                                     'buildStandaloneExamplesCh2Instr', 
+										 'buildStandaloneExamplesCh3']) {
 }
 	
 task buildStandaloneExamplesCh2App(type: GradleBuild) {
@@ -32,6 +33,11 @@ task buildStandaloneExamplesCh2App(type: GradleBuild) {
 
 task buildStandaloneExamplesCh2Instr(type: GradleBuild) {
 	buildFile = 'userguide/ch2--manual-instrumentation/build.gradle'
+	tasks = ['jar']
+}
+
+task buildStandaloneExamplesCh3(type: GradleBuild) {
+	buildFile = 'userguide/ch3-4--custom-components/build.gradle'
 	tasks = ['jar']
 }
 
