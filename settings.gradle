@@ -2,7 +2,6 @@
 include 'kieker-common', 'kieker-monitoring', 'kieker-analysis', 'kieker-tools', 
 		'kieker-checkstyle-extension', 
 		'kieker-examples', 
-		'kieker-examples:userguide:ch5--trace-monitoring-aspectj',
 		'kieker-examples:userguide:appendix-Sigar',
     'kieker-examples:userguide:appendix-JMS',
 		'kieker-examples:monitoring:probe-manual',

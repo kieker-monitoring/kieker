@@ -9,12 +9,14 @@
 dependencies {
 	 compile fileTree('../../dist') {
 		 include 'kieker-*_emf.jar'
+		 include 'kieker-*_aspectj.jar'
 	 }
 }
  
 defaultTasks 'cleanStandaloneExamples', 'buildStandaloneExamples'
 
-task copyLibs(type: Copy, dependsOn: rootProject.emfJar) {
+// TODO: Extend to other examples. However, currently not executed.
+task copyLibs(type: Copy, dependsOn: [rootProject.emfJar, rootProject.aspectJJar]) {
 	description = 'Copies the required Kieker libs to the examples'
 	from '../../dist/kieker-*_emf.jar'
 	into 'userguide/ch2--manual-instrumentation/lib/'
@@ -23,7 +25,8 @@ task copyLibs(type: Copy, dependsOn: rootProject.emfJar) {
 task buildStandaloneExamples(dependsOn: ['copyLibs', 
 	                                     'buildStandaloneExamplesCh2App', 
 	                                     'buildStandaloneExamplesCh2Instr', 
-										 'buildStandaloneExamplesCh3']) {
+										 'buildStandaloneExamplesCh34',
+										 'buildStandaloneExamplesCh5']) {
 }
 	
 task buildStandaloneExamplesCh2App(type: GradleBuild) {
@@ -36,14 +39,19 @@ task buildStandaloneExamplesCh2Instr(type: GradleBuild) {
 	tasks = ['jar']
 }
 
-task buildStandaloneExamplesCh3(type: GradleBuild) {
+task buildStandaloneExamplesCh34(type: GradleBuild) {
 	buildFile = 'userguide/ch3-4--custom-components/build.gradle'
 	tasks = ['jar']
 }
 
-/**
+task buildStandaloneExamplesCh5(type: GradleBuild) {
+	buildFile = 'userguide/ch5--trace-monitoring-aspectj/build.gradle'
+	tasks = ['jar']
+}
+
+// TODO: Get this working for all examples
 task cleanStandaloneExamples(type: GradleBuild) {
 	description = 'Builds the stand-alone Kieker examples in the subdirectories.'
-	buildFile = 'userguide/ch2--bookstore-application/build.gradle'
-	tasks = ['clean']
-}*/
+	/*buildFile = 'userguide/ch2--bookstore-application/build.gradle'
+	tasks = ['clean'] */
+}
