@@ -5,17 +5,16 @@
  * 2. Extend to all subdirectories <-- What's the best way to do this in Gradle?
  * 3. Add/extend clean tasks to call example's clean tasks via cleanStandaloneExamples
  */
-
-dependencies {
-	 compile fileTree('../../dist') {
-		 include 'kieker-*_emf.jar'
-		 include 'kieker-*_aspectj.jar'
-	 }
-}
  
 defaultTasks 'cleanStandaloneExamples', 'buildStandaloneExamples'
 
-// TODO: Extend to other examples. However, currently not executed.
+/* 
+ * TODO: Extend to other examples. However, currently not executed.
+ * 
+ * 	kieker-*_emf.jar --- all but ch5
+ *	kieker-*_aspectj.jar --- ch5
+ *  sigar* --- appendix-Sigar
+ */
 task copyLibs(type: Copy, dependsOn: [rootProject.emfJar, rootProject.aspectJJar]) {
 	description = 'Copies the required Kieker libs to the examples'
 	from '../../dist/kieker-*_emf.jar'
@@ -26,7 +25,8 @@ task buildStandaloneExamples(dependsOn: ['copyLibs',
 	                                     'buildStandaloneExamplesCh2App', 
 	                                     'buildStandaloneExamplesCh2Instr', 
 										 'buildStandaloneExamplesCh34',
-										 'buildStandaloneExamplesCh5']) {
+										 'buildStandaloneExamplesCh5',
+										 'buildStandaloneExamplesAppendixSigar']) {
 }
 	
 task buildStandaloneExamplesCh2App(type: GradleBuild) {
@@ -46,6 +46,11 @@ task buildStandaloneExamplesCh34(type: GradleBuild) {
 
 task buildStandaloneExamplesCh5(type: GradleBuild) {
 	buildFile = 'userguide/ch5--trace-monitoring-aspectj/build.gradle'
+	tasks = ['jar']
+}
+
+task buildStandaloneExamplesAppendixSigar(type: GradleBuild) {
+	buildFile = 'userguide/appendix-Sigar/build.gradle'
 	tasks = ['jar']
 }
 

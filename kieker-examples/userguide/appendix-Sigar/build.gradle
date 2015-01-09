@@ -1,36 +1,23 @@
+apply plugin: 'application'
+
 dependencies {
-	compile fileTree('../../../dist') {
-		include 'kieker-*_emf.jar'
+	compile fileTree('lib') {
+			include 'kieker-*_emf.jar'
 	}
-	runtime fileTree('../../../lib/sigar') {
-		include '*'
+	runtime fileTree('lib') {
+			include 'sigar*.jar'
 	}
 }
 
-compileJava.dependsOn rootProject.emfJar
+// Simplify the JAR's file name
+archivesBaseName = 'SigarMonitoringAnalysis'
+version = ''
+
 
 // Create the JAR file in the root directory of the example
 libsDirName = '..'
-
-// Simplify the JAR's file name
-version = ''
 	
-task copyRuntimeLibs(type: Copy, dependsOn: rootProject.emfJar) {  
-	into "lib"  
-	from configurations.runtime  
-}	
-	
-task monitoringJar(type: Jar, dependsOn: copyRuntimeLibs) {
-	baseName = 'SigarMonitoring'
-	
-	from sourceSets.main.output
-}
-
-task analysisJar(type: Jar, dependsOn: copyRuntimeLibs) {
-	baseName = 'SigarAnalysis'
-	
-	from sourceSets.main.output
-}
+sourceSets.main.java.srcDirs = ['src']
 
 task runMonitoring(type: JavaExec) {
 	main = 'kieker.examples.userguide.appendixSigar.MonitoringStarter'
