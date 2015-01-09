@@ -7,8 +7,13 @@ the 'java' tool using the following commands ('5' starts five requests):
  $ java -javaagent:lib\kieker-1.11-SNAPSHOT_aspectj.jar -jar BookstoreApplication.jar 5
 
 Alternatively, you can compile the sources and start the application using
-'ant' with the given 'build.xml' file:
+'gradle' with the given 'build.gradle' file:
 
- $ ant run
+Run example:
+ $ gradle runMonitoringAndAnalysis
+
+In order to re-compile the sources into BookstoreApplication.jar, run the 
+following command:
+ $ gradle jar
  
 Please see Chapter 5 of the Kieker User Guide for details on this example.
