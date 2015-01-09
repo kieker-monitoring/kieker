@@ -26,7 +26,8 @@ task buildStandaloneExamples(dependsOn: ['copyLibs',
 	                                     'buildStandaloneExamplesCh2Instr', 
 										 'buildStandaloneExamplesCh34',
 										 'buildStandaloneExamplesCh5',
-										 'buildStandaloneExamplesAppendixSigar']) {
+										 'buildStandaloneExamplesAppendixSigar',
+										 'buildStandaloneExamplesAppendixJMS']) {
 }
 	
 task buildStandaloneExamplesCh2App(type: GradleBuild) {
@@ -51,6 +52,11 @@ task buildStandaloneExamplesCh5(type: GradleBuild) {
 
 task buildStandaloneExamplesAppendixSigar(type: GradleBuild) {
 	buildFile = 'userguide/appendix-Sigar/build.gradle'
+	tasks = ['jar']
+}
+
+task buildStandaloneExamplesAppendixJMS(type: GradleBuild) {
+	buildFile = 'userguide/appendix-JMS/build.gradle'
 	tasks = ['jar']
 }
 

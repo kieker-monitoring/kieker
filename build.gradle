@@ -337,7 +337,6 @@ task docs(type: Javadoc) {
 
 task prepareExamplesForDistribution(dependsOn: ['kieker-examples:copyLibs',
 	                                            'kieker-examples:buildStandaloneExamples',
-                                                'kieker-examples:userguide:appendix-JMS:copyRuntimeLibs',
                                                 'kieker-examples:JavaEEServletContainerExample:buildExample']) << {
 }
 
