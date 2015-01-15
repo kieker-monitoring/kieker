@@ -1,33 +1,33 @@
+apply plugin: 'application'
+
 dependencies {
-	compile fileTree('../../../dist') {
-		include "kieker-${version}.jar"
+	compile fileTree('lib') {
+		include "kieker-*.jar"
 	}
-	runtime fileTree('../../../lib/sigar') {
+	runtime fileTree('lib') {
 		include '*'
 	}
 }
 
-compileJava.dependsOn rootProject.mainJar
+// Simplify the JAR's file name
+archivesBaseName = 'SigarMonitoring'
+version = ''
 
 // Create the JAR file in the root directory of the example
 libsDirName = '..'
+	
+sourceSets.main.java.srcDirs = ['src']
 
-// Simplify the JAR's file name
-version = ''
-	
-task copyRuntimeLibs(type: Copy, dependsOn: rootProject.mainJar) {  
-	into "lib"  
-	from configurations.runtime  
-}	
-	
-task monitoringJar(type: Jar, dependsOn: copyRuntimeLibs) {
-	baseName = 'SigarMonitoring'
-	
-	from sourceSets.main.output
+mainClassName = 'kieker.examples.monitoring.sigar.MonitoringStarter'
+
+jar {
+	manifest {
+		attributes 'Main-Class': mainClassName
+	}
 }
 
 task runMonitoring(type: JavaExec) {
-	main = 'kieker.examples.monitoring.sigar.MonitoringStarter'
+	main = mainClassName
 	classpath = sourceSets.main.runtimeClasspath
 	jvmArgs = ['-Dkieker.monitoring.writer.filesystem.AsyncFsWriter.customStoragePath=monitoring-logs']
 }

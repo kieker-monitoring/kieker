@@ -13,7 +13,6 @@ dependencies {
 archivesBaseName = 'SigarMonitoringAnalysis'
 version = ''
 
-
 // Create the JAR file in the root directory of the example
 libsDirName = '..'
 	

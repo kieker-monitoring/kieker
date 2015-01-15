@@ -1,30 +1,30 @@
+apply plugin: 'application'
+
 dependencies {
-	compile fileTree('../../../dist') {
-		include "kieker-${version}.jar"
+	compile fileTree('lib') {
+		include "kieker-*.jar"
 	}
 }
 
-compileJava.dependsOn rootProject.mainJar
+// Simplify the JAR's file name
+archivesBaseName = 'JVMMonitoring'
+version = ''
 
 // Create the JAR file in the root directory of the example
 libsDirName = '..'
+	
+sourceSets.main.java.srcDirs = ['src']
 
-// Simplify the JAR's file name
-version = ''
-	
-task copyRuntimeLibs(type: Copy, dependsOn: rootProject.mainJar) {  
-	into "lib"  
-	from configurations.runtime  
-}	
-	
-task monitoringJar(type: Jar, dependsOn: copyRuntimeLibs) {
-	baseName = 'JVMMonitoring'
-	
-	from sourceSets.main.output
+mainClassName = 'kieker.examples.monitoring.jvm.MonitoringStarter'
+
+jar {
+	manifest {
+		attributes 'Main-Class': mainClassName
+	}
 }
 
 task runMonitoring(type: JavaExec) {
-	main = 'kieker.examples.monitoring.jvm.MonitoringStarter'
+	main = mainClassName
 	classpath = sourceSets.main.runtimeClasspath
 	jvmArgs = ['-Dkieker.monitoring.writer.filesystem.AsyncFsWriter.customStoragePath=monitoring-logs']
 }
