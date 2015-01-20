@@ -32,6 +32,8 @@ import kieker.common.util.registry.IRegistry;
  */
 public final class RecordFactoryWrapper implements IRecordFactory<IMonitoringRecord> {
 
+	public static final int UNKNOWN_SIZE = -1;
+
 	private final String recordClassName;
 
 	public RecordFactoryWrapper(final String recordClassName) {
@@ -56,5 +58,9 @@ public final class RecordFactoryWrapper implements IRecordFactory<IMonitoringRec
 		} catch (final MonitoringRecordException e) {
 			throw new RecordInstantiationException(e);
 		}
+	}
+
+	public int getRecordSizeInBytes() {
+		return UNKNOWN_SIZE;
 	}
 }
