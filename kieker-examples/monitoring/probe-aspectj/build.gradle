@@ -1,33 +1,33 @@
+apply plugin: 'application'
+
 dependencies {
-	compile fileTree('../../../dist') {
+	compile fileTree('lib') {
 		include "kieker-*_aspectj.jar"
 	}
 }
 
-compileJava.dependsOn rootProject.aspectJJar
+// Simplify the JAR's file name
+archivesBaseName = 'BookstoreApplication'
+version = ''
 
 // Create the JAR file in the root directory of the example
 libsDirName = '..'
 
-// Simplify the JAR's file name
-// version = ''
-	
-task copyRuntimeLibs(type: Copy, dependsOn: rootProject.aspectJJar) {  
-	into "lib"  
-	from configurations.runtime  
-}	
-	
-task monitoringJar(type: Jar, dependsOn: copyRuntimeLibs) {
-	baseName = 'JVMMonitoring'
-	
-	from sourceSets.main.output
-}
+sourceSets.main.java.srcDirs = ['src']
 
-task runMonitoring(type: JavaExec, dependsOn: copyRuntimeLibs) {
-	main = 'kieker.examples.monitoring.aspectj.BookstoreStarter'
+mainClassName = 'kieker.examples.monitoring.aspectj.BookstoreStarter'
+
+jar {
+	manifest {
+		attributes 'Main-Class': mainClassName
+	}
+}
+	
+task runMonitoring(type: JavaExec) {
+	main = mainClassName
 	classpath = sourceSets.main.runtimeClasspath
 	jvmArgs = ['-Dkieker.monitoring.writer.filesystem.AsyncFsWriter.customStoragePath=monitoring-logs',
-	           "-javaagent:lib/kieker-${version}_aspectj.jar",
+	           "-javaagent:lib/kieker-1.11-SNAPSHOT_aspectj.jar",
 			   '-Dorg.aspectj.weaver.showWeaveInfo=true',
 			   '-Daj.weaving.verbose=true']
 }

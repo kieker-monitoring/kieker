@@ -1,29 +1,29 @@
+apply plugin: 'application'
+
 dependencies {
-	compile fileTree('../../../dist') {
+	compile fileTree('lib') {
 		include 'kieker-*_emf.jar'
 	}
 }
 
-compileJava.dependsOn rootProject.emfJar
+// Simplify the JAR's file name
+archivesBaseName = 'KaxFiles'
+version = ''
 
 // Create the JAR file in the root directory of the example
 libsDirName = '..'
 
-// Simplify the JAR's file name
-version = ''
-	
-task copyRuntimeLibs(type: Copy, dependsOn: rootProject.emfJar) {  
-	into "lib"  
-	from configurations.runtime  
-}	
-	
-task analysisJar(type: Jar, dependsOn: copyRuntimeLibs) {
-	baseName = 'KaxFiles'
-	
-	from sourceSets.main.output
+sourceSets.main.java.srcDirs = ['src']
+
+mainClassName = 'kieker.examples.analysis.kax.AnalysisStarter'
+
+jar {
+	manifest {
+		attributes 'Main-Class': mainClassName
+	}
 }
 
 task runAnalysis(type: JavaExec) {
-	main = 'kieker.examples.analysis.kax.AnalysisStarter'
+	main = mainClassName
 	classpath = sourceSets.main.runtimeClasspath
 }

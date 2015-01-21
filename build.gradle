@@ -335,9 +335,7 @@ task docs(type: Javadoc) {
     destinationDir = new File(projectDir, 'javadoc')
 }
 
-task prepareExamplesForDistribution(dependsOn: ['kieker-examples:copyLibs',
-	                                            'kieker-examples:buildStandaloneExamples',
-                                                'kieker-examples:JavaEEServletContainerExample:buildExample']) << {
+task prepareExamplesForDistribution(dependsOn: ['kieker-examples:buildStandaloneExamples' ]) << {
 }
 
 task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, docs, 'kieker-documentation:userguide:buildDocumentation', prepareExamplesForDistribution]) {

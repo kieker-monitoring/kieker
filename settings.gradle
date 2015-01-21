@@ -2,11 +2,4 @@
 include 'kieker-common', 'kieker-monitoring', 'kieker-analysis', 'kieker-tools', 
 		'kieker-checkstyle-extension', 
 		'kieker-examples', 
-		'kieker-examples:monitoring:probe-manual',
-		'kieker-examples:monitoring:probe-aspectj',
-		'kieker-examples:monitoring:adaptive-monitoring',
-		'kieker-examples:monitoring:custom-timesource',
-		'kieker-examples:analysis:opad-anomaly-detection',
-		'kieker-examples:analysis:kax-files',
-    'kieker-examples:JavaEEServletContainerExample',
 		'kieker-documentation:userguide'

@@ -12,7 +12,9 @@ version = ''
 
 // Create the JAR file in the root directory of the example
 libsDirName = '..'
-	
+
+sourceSets.main.java.srcDirs = ['src']
+
 task runMonitoring(type: JavaExec) {
 	main = 'kieker.examples.userguide.ch2bookstore.manual.BookstoreStarter'
 	classpath = sourceSets.main.runtimeClasspath

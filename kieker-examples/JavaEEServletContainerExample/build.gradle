@@ -11,15 +11,10 @@ sourceSets {
 webAppDirName = 'livedemo-source/WebContent'
 
 dependencies {
-	compile fileTree('../../dist') {
-		include 'kieker-*_emf.jar'
-	}
   compile fileTree('livedemo-source/lib') {
     include '*.jar'
   }
 }
-
-compileJava.dependsOn rootProject.emfJar
 
 task unwar(type: Copy) {
   from war
@@ -27,19 +22,5 @@ task unwar(type: Copy) {
   rename '(.*).war', 'livedemo.war'
 }
 
-task copyAspectJ(type: Copy, dependsOn: rootProject.aspectJJar) {
-  from ('../../dist') {
-		include 'kieker-*_aspectj.jar'
-	}
-  into 'jetty/webapps/jpetstore/WEB-INF/lib'
-}
-
-task copySigar(type: Copy) {
-  from ('../../lib/sigar') {
-		include '*'
-	}
-  into 'jetty/webapps/jpetstore/WEB-INF/lib'
-}
-
-task buildExample(dependsOn: [war, unwar, copyAspectJ, copySigar]) << {
+task buildExample(dependsOn: [war, unwar]) << {
 }

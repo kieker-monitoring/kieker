@@ -2,7 +2,6 @@ apply plugin: 'application'
 
 dependencies {
 	compile fileTree('lib') {
-		include "kieker-${version}.jar"
 		include "aopalliance-*.jar"
 		include "spring-aop-*.jar"
 		include "spring-beans-*.jar"
@@ -11,6 +10,7 @@ dependencies {
 		include "spring-expression-*.jar"
 	}
 	runtime fileTree('lib') {
+		include "kieker-*.jar"
 		include "aspectjweaver-*.jar"
 		include "commons-logging-*.jar"
 	}
@@ -24,6 +24,7 @@ version = ''
 libsDirName = '..'
 	
 sourceSets.main.java.srcDirs = ['src']
+sourceSets.main.resources.srcDirs = ['src-resources']
 
 mainClassName = 'kieker.examples.monitoring.spring.BookstoreStarter'
 
