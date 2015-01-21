@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,21 +23,21 @@ import kieker.common.util.registry.IRegistry;
 
 /**
  * @author Andre van Hoorn, Jan Waller
- *
+ * 
  * @since 1.2
  */
 public final class BranchingRecordFactory implements IRecordFactory<BranchingRecord> {
-
+	
 	@Override
 	public BranchingRecord create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
 		return new BranchingRecord(buffer, stringRegistry);
 	}
-
+	
 	@Override
 	public BranchingRecord create(final Object[] values) {
 		return new BranchingRecord(values);
 	}
-
+	
 	public int getRecordSizeInBytes() {
 		return BranchingRecord.SIZE;
 	}
