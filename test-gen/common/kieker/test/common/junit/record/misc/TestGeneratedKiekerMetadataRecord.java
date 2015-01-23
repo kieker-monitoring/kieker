@@ -54,7 +54,7 @@ public class TestGeneratedKiekerMetadataRecord extends AbstractGeneratedKiekerTe
 					STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "1.10" : STRING_VALUES.get(i % STRING_VALUES.size()), record.getVersion());
 			Assert.assertEquals("KiekerMetadataRecord.controllerName values are not equal.",
 					STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "<no-controller-name>" : STRING_VALUES.get(i % STRING_VALUES.size()),
-					record.getControllerName());
+							record.getControllerName());
 			Assert.assertEquals("KiekerMetadataRecord.hostname values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "<no-hostname>"
 					: STRING_VALUES.get(i % STRING_VALUES.size()), record.getHostname());
 			Assert.assertEquals("KiekerMetadataRecord.experimentId values are not equal.", (int) INT_VALUES.get(i % INT_VALUES.size()), record.getExperimentId());
@@ -143,7 +143,7 @@ public class TestGeneratedKiekerMetadataRecord extends AbstractGeneratedKiekerTe
 					STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "1.10" : STRING_VALUES.get(i % STRING_VALUES.size()), record.getVersion());
 			Assert.assertEquals("KiekerMetadataRecord.controllerName values are not equal.",
 					STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "<no-controller-name>" : STRING_VALUES.get(i % STRING_VALUES.size()),
-					record.getControllerName());
+							record.getControllerName());
 			Assert.assertEquals("KiekerMetadataRecord.hostname values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "<no-hostname>"
 					: STRING_VALUES.get(i % STRING_VALUES.size()), record.getHostname());
 			Assert.assertEquals("KiekerMetadataRecord.experimentId values are not equal.", (int) INT_VALUES.get(i % INT_VALUES.size()), record.getExperimentId());
@@ -173,12 +173,12 @@ public class TestGeneratedKiekerMetadataRecord extends AbstractGeneratedKiekerTe
 					STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "1.10" : STRING_VALUES.get(i % STRING_VALUES.size()), record.getVersion());
 			Assert.assertEquals("KiekerMetadataRecord.controllerName values are not equal.",
 					STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "<no-controller-name>" : STRING_VALUES.get(i % STRING_VALUES.size()),
-					record.getControllerName());
+							record.getControllerName());
 			Assert.assertEquals("KiekerMetadataRecord.hostname values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "<no-hostname>"
 					: STRING_VALUES.get(i % STRING_VALUES.size()), record.getHostname());
 			Assert.assertEquals("KiekerMetadataRecord.experimentId values are not equal.", (int) INT_VALUES.get(i % INT_VALUES.size()), record.getExperimentId());
-			Assert.assertEquals("KiekerMetadataRecord.debugMode values are not equal.", (boolean) BOOLEAN_VALUES.get(i % BOOLEAN_VALUES.size()),
-					record.isDebugMode());
+			Assert.assertEquals("KiekerMetadataRecord.debugMode values are not equal.", BOOLEAN_VALUES.get(i % BOOLEAN_VALUES.size()),
+					Boolean.valueOf(record.isDebugMode()));
 			Assert.assertEquals("KiekerMetadataRecord.timeOffset values are not equal.", (long) LONG_VALUES.get(i % LONG_VALUES.size()), record.getTimeOffset());
 			Assert.assertEquals("KiekerMetadataRecord.timeUnit values are not equal.", STRING_VALUES.get(i % STRING_VALUES.size()) == null ? "NANOSECONDS"
 					: STRING_VALUES.get(i % STRING_VALUES.size()), record.getTimeUnit());
