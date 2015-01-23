@@ -28,6 +28,12 @@ import kieker.tools.opad.filter.ForecastingFilter;
 import kieker.tools.opad.filter.TimeSeriesPointAggregatorFilter;
 import kieker.tools.opad.filter.UniteMeasurementPairFilter;
 
+/**
+ * @author Thomas Duellmann
+ *
+ * @since 1.11
+ */
+
 public final class AnalysisStarter {
 
 	private AnalysisStarter() {}

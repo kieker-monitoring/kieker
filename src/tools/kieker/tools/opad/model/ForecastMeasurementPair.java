@@ -50,6 +50,10 @@ public class ForecastMeasurementPair implements IForecastMeasurementPair {
 		this.mase = mase;
 	}
 
+	public ForecastMeasurementPair(final String name, final Double forecast, final Double measurement, final long time) {
+		this(name, forecast, measurement, time, Double.NaN);
+	}
+
 	@Override
 	public String getName() {
 		return this.name;

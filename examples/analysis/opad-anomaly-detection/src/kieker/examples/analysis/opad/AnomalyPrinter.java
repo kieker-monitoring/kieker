@@ -23,6 +23,12 @@ import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.tools.opad.record.StorableDetectionResult;
 
+/**
+ * @author Thomas Duellmann
+ *
+ * @since 1.11
+ */
+
 @Plugin
 public final class AnomalyPrinter extends AbstractFilterPlugin {
 
