@@ -51,9 +51,9 @@ public interface IRecordFactory<T> {
 	 */
 	T create(Object[] values);
 
-	// /**
-	// * @return the size (in bytes) of the record in the serialized form
-	// * @since 1.11
-	// */
-	// int getRecordSizeInBytes();
+	/**
+	 * @return the size (in bytes) of the record in the serialized form
+	 * @since 1.11
+	 */
+	int getRecordSizeInBytes();
 }

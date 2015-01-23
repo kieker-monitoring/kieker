@@ -8,6 +8,7 @@ outlet.c.hideLocalSyntheticVariables=true
 outlet.c.installDslAsPrimarySource=false
 outlet.c.keepLocalHistory=true
 outlet.c.override=true
+outlet.java-factory.directory=./src-gen/common
 outlet.java.cleanDirectory=false
 outlet.java.cleanupDerived=true
 outlet.java.createDirectory=true
