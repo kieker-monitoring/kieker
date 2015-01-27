@@ -45,11 +45,11 @@
 	<classpathentry kind="lib" path="lib/sigar/sigar-1.6.4.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-api-1.7.7.jar"/>
 	<classpathentry kind="lib" path="lib/static-analysis/checkstyle-6.0/lib/checkstyle-all.jar"/>
-	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty/lib/jetty-io-8.1.16.v20140903.jar"/>
-	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty/lib/jetty-client-8.1.16.v20140903.jar"/>
-	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty/lib/jetty-util-8.1.16.v20140903.jar"/>
-	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty/lib/jetty-server-8.1.16.v20140903.jar"/>
-	<classpathentry kind="lib" path="examples/JavaEEServletContainerExample/jetty/lib/jetty-servlet-8.1.16.v20140903.jar"/>
+	<classpathentry kind="lib" path="kieker-examples/JavaEEServletContainerExample/jetty/lib/jetty-io-8.1.16.v20140903.jar"/>
+	<classpathentry kind="lib" path="kieker-examples/JavaEEServletContainerExample/jetty/lib/jetty-client-8.1.16.v20140903.jar"/>
+	<classpathentry kind="lib" path="kieker-examples/JavaEEServletContainerExample/jetty/lib/jetty-util-8.1.16.v20140903.jar"/>
+	<classpathentry kind="lib" path="kieker-examples/JavaEEServletContainerExample/jetty/lib/jetty-server-8.1.16.v20140903.jar"/>
+	<classpathentry kind="lib" path="kieker-examples/JavaEEServletContainerExample/jetty/lib/jetty-servlet-8.1.16.v20140903.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="kieker-tools/bin"/>
 </classpath>
