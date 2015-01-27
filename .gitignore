@@ -31,3 +31,4 @@ plugin.xml
 /docs
 /build-eclipse/
 /javadoc
+**/.gradle

@@ -289,6 +289,8 @@ def binaryContent = project.copySpec {
 		include 'lib/**'
 		include 'javadoc/**'
 		include 'dist/*'
+    
+    exclude '**/.gradle/**'
 	}
 	from ('kieker-documentation') {
 		include 'README-bin'
@@ -314,6 +316,8 @@ def exampleContent = project.copySpec {
 	}
   exclude '**/JavaEEServletContainerExample/build.xml'
   exclude '**/livedemo-source/**'
+  exclude '**/.gradle/**'
+  
 	from ('kieker-monitoring/src-resources/META-INF') {
 		include 'kieker.monitoring.default.properties'	
 		rename 'kieker.monitoring.default.properties', 'kieker.monitoring.example.properties'
@@ -359,6 +363,8 @@ def sourceContent = project.copySpec {
 		include 'bin/**'
 		include 'src/**'
 		include 'lib/**'
+    
+    exclude '**/.gradle/**'
 	}
 	into kiekerPackagenamebase + "-" + kiekerVersion
 }
