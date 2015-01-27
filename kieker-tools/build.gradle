@@ -27,6 +27,7 @@ dependencies {
 	testRuntime resolveLibrary('derby-*.jar')
 	testRuntime resolveLibrary('geronimo-j2ee-management_1.1_spec-*.jar')
 	testRuntime resolveLibrary('kahadb-*.jar')
+  testRuntime fileTree(dir: rootProject.file('kieker-examples/JavaEEServletContainerExample/jetty/lib'), include: 'jetty-*.jar')
 }
 
 task generateRecords(type: JavaExec) {
