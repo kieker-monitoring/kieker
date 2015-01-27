@@ -32,7 +32,7 @@ import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
  * Creates {@link OperationExecutionRecord}s via the available constructors and
  * checks the values passed values via getters.
  * 
- * @author Generic Kieker
+ * @author Kieker Build
  * 
  * @since 1.10
  */

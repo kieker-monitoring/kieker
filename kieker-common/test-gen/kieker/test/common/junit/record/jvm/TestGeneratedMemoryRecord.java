@@ -32,7 +32,7 @@ import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
  * Creates {@link OperationExecutionRecord}s via the available constructors and
  * checks the values passed values via getters.
  * 
- * @author Generic Kieker
+ * @author Kieker Build
  * 
  * @since 1.10
  */
@@ -100,7 +100,7 @@ public class TestGeneratedMemoryRecord extends AbstractGeneratedKiekerTest {
 								
 			// check all object values 
 			Assert.assertEquals("Array value [0] " + values[0] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
-				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[0]
+				LONG_VALUES.get(i % LONG_VALUES.size()), values[0]
 					);
 			Assert.assertEquals("Array value [1] " + values[1] + " does not match the desired value " + STRING_VALUES.get(i % STRING_VALUES.size()),
 				STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), values[1]
@@ -109,31 +109,31 @@ public class TestGeneratedMemoryRecord extends AbstractGeneratedKiekerTest {
 				STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), values[2]
 			);
 			Assert.assertEquals("Array value [3] " + values[3] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
-				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[3]
+				LONG_VALUES.get(i % LONG_VALUES.size()), values[3]
 					);
 			Assert.assertEquals("Array value [4] " + values[4] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
-				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[4]
+				LONG_VALUES.get(i % LONG_VALUES.size()), values[4]
 					);
 			Assert.assertEquals("Array value [5] " + values[5] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
-				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[5]
+				LONG_VALUES.get(i % LONG_VALUES.size()), values[5]
 					);
 			Assert.assertEquals("Array value [6] " + values[6] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
-				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[6]
+				LONG_VALUES.get(i % LONG_VALUES.size()), values[6]
 					);
 			Assert.assertEquals("Array value [7] " + values[7] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
-				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[7]
+				LONG_VALUES.get(i % LONG_VALUES.size()), values[7]
 					);
 			Assert.assertEquals("Array value [8] " + values[8] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
-				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[8]
+				LONG_VALUES.get(i % LONG_VALUES.size()), values[8]
 					);
 			Assert.assertEquals("Array value [9] " + values[9] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
-				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[9]
+				LONG_VALUES.get(i % LONG_VALUES.size()), values[9]
 					);
 			Assert.assertEquals("Array value [10] " + values[10] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
-				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[10]
+				LONG_VALUES.get(i % LONG_VALUES.size()), values[10]
 					);
 			Assert.assertEquals("Array value [11] " + values[11] + " does not match the desired value " + INT_VALUES.get(i % INT_VALUES.size()),
-				(int) INT_VALUES.get(i % INT_VALUES.size()), (int) (Integer)values[11]
+				INT_VALUES.get(i % INT_VALUES.size()), values[11]
 					);
 		}
 	}

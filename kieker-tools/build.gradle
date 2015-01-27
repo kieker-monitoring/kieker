@@ -51,3 +51,24 @@ task generateRecords(type: JavaExec) {
        '-p', 'kieker-tools',
        '-v', '1.10'	          // generate code for Kieker 1.10
 }
+
+task generateRecordTests(type: JavaExec) {
+  description 'Generates the sources for the Kieker records tests using the IRL model specification'
+
+  classpath = fileTree('../bin/dev') {
+    include 'target/de.cau.cs.se.instrumentation.rl.cli-*.jar'
+    include 'lib/org.eclipse.emf.mwe.core_*.jar'
+    include 'lib/org.eclipse.xtext.common.types_*.jar'
+    include 'lib/org.eclipse.emf.mwe.utils_*.jar'
+    include 'lib/org.eclipse.xtext.common.types.ui_*.jar'
+  }				
+  main = 'de.cau.cs.se.instrumentation.rl.cli.CLICompilerMain'
+  args '-r', '..',            // the root directory
+       '-a', 'Kieker Build',
+       '-d', 'test-gen',       // the destination directory
+       '-s', 'model/records', // the source directory
+       '-l', 'java.junit',          // generate the records
+       '-n', 'kieker-tools',
+       '-p', 'kieker-tools',
+       '-v', '1.10'	          // generate code for Kieker 1.10
+}

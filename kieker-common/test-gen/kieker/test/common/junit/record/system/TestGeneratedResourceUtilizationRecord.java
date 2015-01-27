@@ -32,7 +32,7 @@ import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
  * Creates {@link OperationExecutionRecord}s via the available constructors and
  * checks the values passed values via getters.
  * 
- * @author Generic Kieker
+ * @author Kieker Build
  * 
  * @since 1.10
  */
@@ -77,7 +77,7 @@ public class TestGeneratedResourceUtilizationRecord extends AbstractGeneratedKie
 								
 			// check all object values 
 			Assert.assertEquals("Array value [0] " + values[0] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
-				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[0]
+				LONG_VALUES.get(i % LONG_VALUES.size()), values[0]
 					);
 			Assert.assertEquals("Array value [1] " + values[1] + " does not match the desired value " + STRING_VALUES.get(i % STRING_VALUES.size()),
 				STRING_VALUES.get(i % STRING_VALUES.size()) == null?"":STRING_VALUES.get(i % STRING_VALUES.size()), values[1]

@@ -32,7 +32,7 @@ import kieker.test.common.util.record.BookstoreOperationExecutionRecordFactory;
  * Creates {@link OperationExecutionRecord}s via the available constructors and
  * checks the values passed values via getters.
  * 
- * @author Generic Kieker
+ * @author Kieker Build
  * 
  * @since 1.10
  */
@@ -94,22 +94,22 @@ public class TestGeneratedOperationExecutionRecord extends AbstractGeneratedKiek
 				STRING_VALUES.get(i % STRING_VALUES.size()) == null?"<no-session-id>":STRING_VALUES.get(i % STRING_VALUES.size()), values[1]
 			);
 			Assert.assertEquals("Array value [2] " + values[2] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
-				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[2]
+				LONG_VALUES.get(i % LONG_VALUES.size()), values[2]
 					);
 			Assert.assertEquals("Array value [3] " + values[3] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
-				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[3]
+				LONG_VALUES.get(i % LONG_VALUES.size()), values[3]
 					);
 			Assert.assertEquals("Array value [4] " + values[4] + " does not match the desired value " + LONG_VALUES.get(i % LONG_VALUES.size()),
-				(long) LONG_VALUES.get(i % LONG_VALUES.size()), (long) (Long)values[4]
+				LONG_VALUES.get(i % LONG_VALUES.size()), values[4]
 					);
 			Assert.assertEquals("Array value [5] " + values[5] + " does not match the desired value " + STRING_VALUES.get(i % STRING_VALUES.size()),
 				STRING_VALUES.get(i % STRING_VALUES.size()) == null?"<default-host>":STRING_VALUES.get(i % STRING_VALUES.size()), values[5]
 			);
 			Assert.assertEquals("Array value [6] " + values[6] + " does not match the desired value " + INT_VALUES.get(i % INT_VALUES.size()),
-				(int) INT_VALUES.get(i % INT_VALUES.size()), (int) (Integer)values[6]
+				INT_VALUES.get(i % INT_VALUES.size()), values[6]
 					);
 			Assert.assertEquals("Array value [7] " + values[7] + " does not match the desired value " + INT_VALUES.get(i % INT_VALUES.size()),
-				(int) INT_VALUES.get(i % INT_VALUES.size()), (int) (Integer)values[7]
+				INT_VALUES.get(i % INT_VALUES.size()), values[7]
 					);
 		}
 	}
