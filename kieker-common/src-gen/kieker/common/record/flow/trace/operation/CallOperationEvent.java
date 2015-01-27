@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
 import kieker.common.util.registry.IRegistry;
+import kieker.common.util.Version;
 
 import kieker.common.record.flow.trace.operation.AbstractOperationEvent;
 import kieker.common.record.flow.ICallRecord;
@@ -52,7 +53,11 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 		String.class, // ICallRecord.calleeClassSignature
 	};
 	
-	
+	/* user-defined constants */
+	/* default constants */
+	public static final String CALLEE_OPERATION_SIGNATURE = "";
+	public static final String CALLEE_CLASS_SIGNATURE = "";
+	/* property declarations */
 	private final String calleeOperationSignature;
 	private final String calleeClassSignature;
 
@@ -76,8 +81,8 @@ public class CallOperationEvent extends AbstractOperationEvent implements ICallR
 	 */
 	public CallOperationEvent(final long timestamp, final long traceId, final int orderIndex, final String operationSignature, final String classSignature, final String calleeOperationSignature, final String calleeClassSignature) {
 		super(timestamp, traceId, orderIndex, operationSignature, classSignature);
-		this.calleeOperationSignature = calleeOperationSignature == null?"":calleeOperationSignature;
-		this.calleeClassSignature = calleeClassSignature == null?"":calleeClassSignature;
+		this.calleeOperationSignature = calleeOperationSignature == null?CALLEE_OPERATION_SIGNATURE:calleeOperationSignature;
+		this.calleeClassSignature = calleeClassSignature == null?CALLEE_CLASS_SIGNATURE:calleeClassSignature;
 	}
 
 	/**

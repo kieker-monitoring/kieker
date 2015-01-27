@@ -33,7 +33,7 @@ import kieker.common.logging.LogFactory;
 
 /**
  * @author Tillmann Carlos Bielefeld
- * 
+ *
  * @since 1.10
  */
 public final class RBridgeControl {
@@ -54,10 +54,10 @@ public final class RBridgeControl {
 
 	/**
 	 * Wraps the execution of an arbitrary R expression. Both errors and results are logged.
-	 * 
+	 *
 	 * @param input
 	 *            The R expression to evaluate.
-	 * 
+	 *
 	 * @return The result or the error of the evaluation of the given R expression. The method tries to convert it into a string, if possible.
 	 */
 	public Object evalWithR(final String input) {
@@ -72,8 +72,10 @@ public final class RBridgeControl {
 				output = ((REXPString) out).asString();
 			} else if (out instanceof REXPLogical) {
 				output = ((REXPLogical) out).toDebugString();
-			} else {
+			} else if (out != null) {
 				output = out;
+			} else {
+				throw new InvalidREvaluationResultException("Got a null result for evaluation input: \"" + input + "\"");
 			}
 
 			RBridgeControl.LOG.trace("> REXP: " + input + " return: " + output);
@@ -85,7 +87,7 @@ public final class RBridgeControl {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param variable
 	 *            variable to R
 	 */
@@ -101,7 +103,7 @@ public final class RBridgeControl {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param variable
 	 *            variable to R
 	 * @param frequency
@@ -121,56 +123,75 @@ public final class RBridgeControl {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param input
 	 *            string
-	 * @return -666.666 error, else dbvalue
+	 * @return {@link Double#NaN} in case of error, else dbvalue
 	 */
 	public double eDbl(final String input) {
+		final double resultOnFailure = Double.NaN;
+
 		try {
-			return ((REXPDouble) this.evalWithR(input)).asDouble();
+			final Object evaluationResult = this.evalWithR(input);
+			final REXPDouble doubleResult = (REXPDouble) evaluationResult;
+			return doubleResult.asDouble();
+
 		} catch (final REXPMismatchException exc) {
 			RBridgeControl.LOG.error("Error casting value from R: " + input
 					+ " Cause: " + exc);
-			return -666.666;
+			return resultOnFailure;
+		} catch (final InvalidREvaluationResultException exc) {
+			RBridgeControl.LOG.error(exc.getMessage(), exc);
+			return resultOnFailure;
 		}
 	}
 
 	/**
-	 * 
+	 *
 	 * @param input
 	 *            inputstring
 	 * @return Rdata
 	 */
 	public String eString(final String input) {
-		final REXPString str = (REXPString) this.evalWithR(input);
-		if (str != null) {
-			return str.toString();
-		} else {
-			return "";
+		final String resultOnFailure = "";
+
+		try {
+			final Object evaluationResult = this.evalWithR(input);
+			final REXPString stringResult = (REXPString) evaluationResult;
+
+			return stringResult.toString();
+		} catch (final InvalidREvaluationResultException exc) {
+			RBridgeControl.LOG.error(exc.getMessage(), exc);
+			return resultOnFailure;
 		}
 	}
 
 	/**
-	 * 
+	 *
 	 * @param input
 	 *            inputstring
 	 * @return Rdata
 	 */
 	public double[] eDblArr(final String input) {
+		final double[] resultOnFailure = new double[0];
+
 		try {
-			final REXPVector res = (REXPVector) this.evalWithR(input);
-			return res.asDoubles();
+			final Object evaluationResult = this.evalWithR(input);
+			final REXPVector vectorResult = (REXPVector) evaluationResult;
+			return vectorResult.asDoubles();
 		} catch (final REXPMismatchException e) {
-			return new double[0];
+			return resultOnFailure;
+		} catch (final InvalidREvaluationResultException e) {
+			RBridgeControl.LOG.error(e.getMessage(), e);
+			return resultOnFailure;
 		}
 	}
 
 	/**
-	 * 
+	 *
 	 * @param variable
 	 *            string
-	 * 
+	 *
 	 * @param values
 	 *            assign value
 	 */
@@ -192,7 +213,7 @@ public final class RBridgeControl {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param variable
 	 *            string
 	 * @param values
@@ -220,7 +241,7 @@ public final class RBridgeControl {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param variable
 	 *            string
 	 * @param values
@@ -245,7 +266,7 @@ public final class RBridgeControl {
 
 	/**
 	 * Returns a globally unique variable name, even during the access of multiple threads.
-	 * 
+	 *
 	 * @return A unique variable name of the form {@code var_1, var_2, ...}.
 	 */
 	public static String uniqueVarname() {
@@ -254,7 +275,7 @@ public final class RBridgeControl {
 
 	/**
 	 * Delivers the singleton instance of this class.
-	 * 
+	 *
 	 * @return The singleton instance.
 	 */
 	public static final RBridgeControl getInstance() {
@@ -263,9 +284,9 @@ public final class RBridgeControl {
 
 	/**
 	 * This is a helper class, holding the singleton instance of {@link RBridgeControl} and making sure that the object is lazily created.
-	 * 
+	 *
 	 * @author Tillmann Carlos Bielefeld
-	 * 
+	 *
 	 * @since 1.10
 	 */
 	private static final class LazyHolder { // NOCS

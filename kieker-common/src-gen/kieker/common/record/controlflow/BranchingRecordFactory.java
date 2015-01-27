@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,5 +36,9 @@ public final class BranchingRecordFactory implements IRecordFactory<BranchingRec
 	@Override
 	public BranchingRecord create(final Object[] values) {
 		return new BranchingRecord(values);
+	}
+	
+	public int getRecordSizeInBytes() {
+		return BranchingRecord.SIZE;
 	}
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import java.nio.ByteBuffer;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
+import kieker.common.util.Version;
 
 
 /**
@@ -54,19 +55,21 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 		long.class, // KiekerMetadataRecord.numberOfRecords
 	};
 	
+	/* user-defined constants */
 	public static final String NO_CONTROLLERNAME = "<no-controller-name>";
 	public static final String NO_HOSTNAME = "<no-hostname>";
 	public static final String NO_TIMESOURCE = "<no-timesource>";
 	public static final String NO_TIMEUNIT = "NANOSECONDS";
+	/* default constants */
 	public static final String VERSION = "1.10";
-	public static final String CONTROLLER_NAME = "<no-controller-name>";
-	public static final String HOSTNAME = "<no-hostname>";
+	public static final String CONTROLLER_NAME = NO_CONTROLLERNAME;
+	public static final String HOSTNAME = NO_HOSTNAME;
 	public static final int EXPERIMENT_ID = 0;
 	public static final boolean DEBUG_MODE = false;
 	public static final long TIME_OFFSET = 0L;
-	public static final String TIME_UNIT = "NANOSECONDS";
+	public static final String TIME_UNIT = NO_TIMEUNIT;
 	public static final long NUMBER_OF_RECORDS = 0L;
-	
+	/* property declarations */
 	private final String version;
 	private final String controllerName;
 	private final String hostname;
@@ -97,13 +100,13 @@ public class KiekerMetadataRecord extends AbstractMonitoringRecord implements IM
 	 *            numberOfRecords
 	 */
 	public KiekerMetadataRecord(final String version, final String controllerName, final String hostname, final int experimentId, final boolean debugMode, final long timeOffset, final String timeUnit, final long numberOfRecords) {
-		this.version = version == null?"1.10":version;
-		this.controllerName = controllerName == null?"<no-controller-name>":controllerName;
-		this.hostname = hostname == null?"<no-hostname>":hostname;
+		this.version = version == null?VERSION:version;
+		this.controllerName = controllerName == null?NO_CONTROLLERNAME:controllerName;
+		this.hostname = hostname == null?NO_HOSTNAME:hostname;
 		this.experimentId = experimentId;
 		this.debugMode = debugMode;
 		this.timeOffset = timeOffset;
-		this.timeUnit = timeUnit == null?"NANOSECONDS":timeUnit;
+		this.timeUnit = timeUnit == null?NO_TIMEUNIT:timeUnit;
 		this.numberOfRecords = numberOfRecords;
 	}
 

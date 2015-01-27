@@ -44,6 +44,9 @@ public class WelcomeStep extends AbstractStep {
 	private static final String PROPERTY_KEY_OUTPUT_DIRECTORY = PROPERTY_KEY_IDENTIFIER + ".outputDirectory";
 	private static final String PROPERTY_KEY_INPUT_DIRECTORY = PROPERTY_KEY_IDENTIFIER + ".inputDirectory";
 
+	private static final String INPUT_DIR_TEXT_FIELD_TOOLTIP = "The input directory contains usually monitoring records for the analysis.";
+	private static final String OUTPUT_DIR_TEXT_FIELD_TOOLTIP = "The output directory is used to write the visual representations from the analysis.";
+
 	private final JLabel welcomeLabel = new JLabel("<html>Welcome to Kieker's Trace Analysis GUI.<br/>This wizard helps you generating visual representatons "
 			+ "based on a trace analysis of your records.<br/><br/>In this step you choose the input input and output directories.</html>");
 	private final JLabel inputDirectoryLabel = new JLabel("Input Directory: ");
@@ -147,8 +150,8 @@ public class WelcomeStep extends AbstractStep {
 	}
 
 	private void addToolTipsToComponents() {
-		this.inputDirectoryTextField.setToolTipText("The input directory contains usually monitoring records for the analysis.");
-		this.outputDirectoryTextField.setToolTipText("The output directory is used to write the visual representations from the analysis.");
+		this.inputDirectoryTextField.setToolTipText(INPUT_DIR_TEXT_FIELD_TOOLTIP);
+		this.outputDirectoryTextField.setToolTipText(OUTPUT_DIR_TEXT_FIELD_TOOLTIP);
 	}
 
 	@Override

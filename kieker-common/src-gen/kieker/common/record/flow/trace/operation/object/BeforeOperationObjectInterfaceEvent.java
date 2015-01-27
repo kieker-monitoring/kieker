@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
 import kieker.common.util.registry.IRegistry;
+import kieker.common.util.Version;
 
 import kieker.common.record.flow.trace.operation.object.BeforeOperationObjectEvent;
 import kieker.common.record.flow.IInterfaceRecord;
@@ -52,7 +53,10 @@ public class BeforeOperationObjectInterfaceEvent extends BeforeOperationObjectEv
 		String.class, // IInterfaceRecord.interface
 	};
 	
-	
+	/* user-defined constants */
+	/* default constants */
+	public static final String INTERFACE = "";
+	/* property declarations */
 	private final String _interface;
 
 	/**

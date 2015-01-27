@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import java.nio.ByteBuffer;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
+import kieker.common.util.Version;
 
 
 /**
@@ -54,21 +55,23 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 		int.class, // OperationExecutionRecord.ess
 	};
 	
+	/* user-defined constants */
 	public static final String NO_HOSTNAME = "<default-host>";
 	public static final String NO_SESSION_ID = "<no-session-id>";
 	public static final String NO_OPERATION_SIGNATURE = "noOperation";
 	public static final long NO_TRACE_ID = -1L;
 	public static final long NO_TIMESTAMP = -1L;
 	public static final int NO_EOI_ESS = -1;
-	public static final String OPERATION_SIGNATURE = "noOperation";
-	public static final String SESSION_ID = "<no-session-id>";
-	public static final long TRACE_ID = -1L;
-	public static final long TIN = -1L;
-	public static final long TOUT = -1L;
-	public static final String HOSTNAME = "<default-host>";
-	public static final int EOI = -1;
-	public static final int ESS = -1;
-	
+	/* default constants */
+	public static final String OPERATION_SIGNATURE = NO_OPERATION_SIGNATURE;
+	public static final String SESSION_ID = NO_SESSION_ID;
+	public static final long TRACE_ID = NO_TRACE_ID;
+	public static final long TIN = NO_TIMESTAMP;
+	public static final long TOUT = NO_TIMESTAMP;
+	public static final String HOSTNAME = NO_HOSTNAME;
+	public static final int EOI = NO_EOI_ESS;
+	public static final int ESS = NO_EOI_ESS;
+	/* property declarations */
 	private final String operationSignature;
 	private final String sessionId;
 	private final long traceId;
@@ -99,12 +102,12 @@ public class OperationExecutionRecord extends AbstractMonitoringRecord implement
 	 *            ess
 	 */
 	public OperationExecutionRecord(final String operationSignature, final String sessionId, final long traceId, final long tin, final long tout, final String hostname, final int eoi, final int ess) {
-		this.operationSignature = operationSignature == null?"noOperation":operationSignature;
-		this.sessionId = sessionId == null?"<no-session-id>":sessionId;
+		this.operationSignature = operationSignature == null?NO_OPERATION_SIGNATURE:operationSignature;
+		this.sessionId = sessionId == null?NO_SESSION_ID:sessionId;
 		this.traceId = traceId;
 		this.tin = tin;
 		this.tout = tout;
-		this.hostname = hostname == null?"<default-host>":hostname;
+		this.hostname = hostname == null?NO_HOSTNAME:hostname;
 		this.eoi = eoi;
 		this.ess = ess;
 	}

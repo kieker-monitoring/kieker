@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
 import kieker.common.util.registry.IRegistry;
+import kieker.common.util.Version;
 
 import kieker.common.record.flow.AbstractEvent;
 import kieker.common.record.flow.ITraceRecord;
@@ -33,7 +34,11 @@ public abstract class AbstractTraceEvent extends AbstractEvent implements ITrace
 		private static final long serialVersionUID = 161681009968355282L;
 	
 	
-	
+	/* user-defined constants */
+	/* default constants */
+	public static final long TRACE_ID = -1L;
+	public static final int ORDER_INDEX = -1;
+	/* property declarations */
 	private final long traceId;
 	private final int orderIndex;
 

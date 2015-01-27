@@ -28,9 +28,9 @@ import kieker.common.util.registry.IRegistry;
 
 /**
  * Record used to associate Objects (typically Strings) with unique ids.
- * 
+ *
  * @author Jan Waller
- * 
+ *
  * @since 1.5
  */
 public final class RegistryRecord extends AbstractMonitoringRecord implements IMonitoringRecord.Factory, IMonitoringRecord.BinaryFactory {
@@ -41,6 +41,7 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 	};
 
 	public static final String ENCODING = "UTF-8";
+	public static final int CLASS_ID = -1;
 
 	private static final long serialVersionUID = -8264706549927546468L;
 
@@ -50,7 +51,7 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 
 	/**
 	 * Creates a new instance of this class using the given parameters.
-	 * 
+	 *
 	 * @param id
 	 *            The ID.
 	 * @param string
@@ -70,7 +71,7 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 
 	/**
 	 * This constructor converts the given array into a record. It is recommended to use the array which is the result of a call to {@link #toArray()}.
-	 * 
+	 *
 	 * @param values
 	 *            The values for the record.
 	 */
@@ -90,12 +91,12 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 
 	/**
 	 * This constructor converts the given array into a record.
-	 * 
+	 *
 	 * @param buffer
 	 *            The bytes for the record.
 	 * @param stringRegistry
 	 *            the string registry to decode the string ids in the byte buffer.
-	 * 
+	 *
 	 * @throws BufferUnderflowException
 	 *             if buffer not sufficient
 	 */
@@ -132,7 +133,7 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.Factory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
@@ -143,7 +144,7 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @deprecated This record uses the {@link kieker.common.record.IMonitoringRecord.BinaryFactory} mechanism. Hence, this method is not implemented.
 	 */
 	@Override
@@ -191,12 +192,12 @@ public final class RegistryRecord extends AbstractMonitoringRecord implements IM
 
 	/**
 	 * Static function used to register strings stored in a byte buffer as string in the string registry with the proper id.
-	 * 
+	 *
 	 * @param buffer
 	 *            the byte buffer containing the string
 	 * @param stringRegistry
 	 *            the registry where the string is stored
-	 * 
+	 *
 	 * @throws BufferOverflowException
 	 *             if the length encoded in the buffer exceeds the buffers boundary
 	 */

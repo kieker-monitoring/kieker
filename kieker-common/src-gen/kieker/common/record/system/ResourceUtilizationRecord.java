@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import java.nio.ByteBuffer;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
+import kieker.common.util.Version;
 
 
 /**
@@ -46,11 +47,13 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 		double.class, // ResourceUtilizationRecord.utilization
 	};
 	
+	/* user-defined constants */
+	/* default constants */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
 	public static final String RESOURCE_NAME = "";
 	public static final double UTILIZATION = 0.0;
-	
+	/* property declarations */
 	private final long timestamp;
 	private final String hostname;
 	private final String resourceName;
@@ -70,8 +73,8 @@ public class ResourceUtilizationRecord extends AbstractMonitoringRecord implemen
 	 */
 	public ResourceUtilizationRecord(final long timestamp, final String hostname, final String resourceName, final double utilization) {
 		this.timestamp = timestamp;
-		this.hostname = hostname == null?"":hostname;
-		this.resourceName = resourceName == null?"":resourceName;
+		this.hostname = hostname == null?HOSTNAME:hostname;
+		this.resourceName = resourceName == null?RESOURCE_NAME:resourceName;
 		this.utilization = utilization;
 	}
 

@@ -417,6 +417,7 @@ function check_bin_archive {
 
         # now perform some trace analysis tests and compare results with reference data
 	for testset in "kieker-20100830-082225522-UTC-example-plots" "kieker-20141008-101258768-UTC-example-plots" \
+		"kieker-20141008-101258768-UTC-repairEventBasedTraces-example-plots" \
 	    "kieker-20141009-160413833-UTC-operationExecutionsConstructors-example-plots" \
 	    "kieker-20141009-163010944-UTC-constructor-events-example-plots"; do   
 	    ARCHDIR=$(pwd)

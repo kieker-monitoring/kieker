@@ -20,9 +20,11 @@ import java.nio.ByteBuffer;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.runners.MethodSorters;
 
 import kieker.common.exception.RecordInstantiationException;
 import kieker.common.record.IMonitoringRecord;
@@ -31,6 +33,7 @@ import kieker.common.record.factory.IRecordFactory;
 import kieker.common.record.factory.old.RecordFactoryWrapper;
 import kieker.common.record.flow.trace.operation.AfterOperationEvent;
 import kieker.common.record.flow.trace.operation.AfterOperationEventFactory;
+import kieker.common.record.system.CPUUtilizationRecord;
 import kieker.common.util.registry.IRegistry;
 import kieker.common.util.registry.Registry;
 
@@ -42,6 +45,7 @@ import kieker.test.common.util.record.factory.TestRecord;
  *
  * @since 1.11
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CachedRecordFactoryCatalogTest extends AbstractKiekerTest {
 
 	@Rule
@@ -57,7 +61,7 @@ public class CachedRecordFactoryCatalogTest extends AbstractKiekerTest {
 
 	@Before
 	public void before() throws Exception {
-		this.cachedRecordFactories = CachedRecordFactoryCatalog.getInstance();
+		this.cachedRecordFactories = new CachedRecordFactoryCatalog();
 		this.buffer = ByteBuffer.allocateDirect(1024);
 		this.stringRegistry = new Registry<String>();
 	}
@@ -73,6 +77,7 @@ public class CachedRecordFactoryCatalogTest extends AbstractKiekerTest {
 	public void testRecordConstructionWithFactory() {
 		final String recordClassName = AfterOperationEvent.class.getName();
 		final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.cachedRecordFactories.get(recordClassName);
+		Assert.assertEquals(AfterOperationEventFactory.class, recordFactory.getClass());
 
 		final String operationSignature = "isEmpty()";
 		final String classSignature = "java.util.List";
@@ -101,10 +106,42 @@ public class CachedRecordFactoryCatalogTest extends AbstractKiekerTest {
 	}
 
 	@Test
-	public void testNotExistingRecordThrowsException() {
+	public void testAVirtualRecord() {
+		final String recordClassName = "kieker.common.record.CPUUtilizationRecord";
+		final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.cachedRecordFactories.get(recordClassName);
+		Assert.assertEquals(RecordFactoryWrapper.class, recordFactory.getClass());
+
+		Assert.assertEquals(0, this.stringRegistry.getSize());
+
+		final long timestamp = 111;
+		final String hostname = "www.test.de";
+		final String cpuID = "cpuTestId";
+		final double user = 5.555;
+		final double system = 3.333;
+		final double wait = 1.111;
+		final double nice = 0;
+		final double irq = 1;
+		final double totalUtilization = 98.9;
+		final double idle = 0.666;
+		final CPUUtilizationRecord cpuRecord = new CPUUtilizationRecord(timestamp, hostname, cpuID, user, system, wait, nice, irq, totalUtilization, idle);
+		cpuRecord.writeBytes(this.buffer, this.stringRegistry);
+		this.buffer.flip();
+		final IMonitoringRecord record = recordFactory.create(this.buffer, this.stringRegistry);
+		Assert.assertEquals(CPUUtilizationRecord.class, record.getClass());
+
+		// final String[] strings = this.stringRegistry.getAll(); // causes a ClassCastException => Bug; However, method is not used within Kieker
+		Assert.assertEquals(2, this.stringRegistry.getSize());
+		Assert.assertEquals(hostname, this.stringRegistry.get(0));
+		Assert.assertEquals(cpuID, this.stringRegistry.get(1));
+	}
+
+	@Test
+	public void testBNotExistingRecordThrowsException() {
 		final String recordClassName = "record.that.does.not.exist";
 		final IRecordFactory<? extends IMonitoringRecord> recordFactory = this.cachedRecordFactories.get(recordClassName);
 		Assert.assertEquals(RecordFactoryWrapper.class, recordFactory.getClass());
+
+		Assert.assertEquals(0, this.stringRegistry.getSize());
 
 		this.thrown.expect(RecordInstantiationException.class);
 		recordFactory.create(this.buffer, this.stringRegistry);

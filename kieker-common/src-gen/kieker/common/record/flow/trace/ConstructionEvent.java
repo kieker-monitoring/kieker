@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
 import kieker.common.util.registry.IRegistry;
+import kieker.common.util.Version;
 
 import kieker.common.record.flow.trace.AbstractTraceEvent;
 
@@ -47,9 +48,11 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 		int.class, // ConstructionEvent.objectId
 	};
 	
+	/* user-defined constants */
+	/* default constants */
 	public static final String CLASS_SIGNATURE = "";
 	public static final int OBJECT_ID = 0;
-	
+	/* property declarations */
 	private final String classSignature;
 	private final int objectId;
 
@@ -69,7 +72,7 @@ public class ConstructionEvent extends AbstractTraceEvent  {
 	 */
 	public ConstructionEvent(final long timestamp, final long traceId, final int orderIndex, final String classSignature, final int objectId) {
 		super(timestamp, traceId, orderIndex);
-		this.classSignature = classSignature == null?"":classSignature;
+		this.classSignature = classSignature == null?CLASS_SIGNATURE:classSignature;
 		this.objectId = objectId;
 	}
 

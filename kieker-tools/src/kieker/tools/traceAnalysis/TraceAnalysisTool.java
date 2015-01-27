@@ -121,6 +121,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 	private boolean shortLabels = true;
 	private boolean includeSelfLoops; // false
 	private boolean ignoreInvalidTraces; // false
+	private boolean repairEventBasedTraces; // false
 	private int maxTraceDurationMillis = 10 * 60 * 1000; // 10 minutes default
 	private long ignoreExecutionsBeforeTimestamp = Long.parseLong(TimestampFilter.CONFIG_PROPERTY_VALUE_MIN_TIMESTAMP);
 	private long ignoreExecutionsAfterTimestamp = Long.parseLong(TimestampFilter.CONFIG_PROPERTY_VALUE_MAX_TIMESTAMP);
@@ -218,6 +219,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 		this.includeSelfLoops = commandLine.hasOption(Constants.CMD_OPT_NAME_INCLUDESELFLOOPS);
 		this.ignoreInvalidTraces = commandLine.hasOption(Constants.CMD_OPT_NAME_IGNOREINVALIDTRACES);
 		this.ignoreAssumedCalls = commandLine.hasOption(Constants.CMD_OPT_NAME_IGNORE_ASSUMED);
+		this.repairEventBasedTraces = commandLine.hasOption(Constants.CMD_OPT_NAME_REPAIR_EVENT_BASED_TRACES);
 
 		final String maxTraceDurationStr = commandLine.getOptionValue(Constants.CMD_OPT_NAME_MAXTRACEDURATION,
 				Integer.toString(this.maxTraceDurationMillis));
@@ -496,6 +498,9 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 						TimeUnit.MILLISECONDS.name());
 				configurationEventRecordTraceGenerationFilter.setProperty(EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_MAX_TRACE_DURATION,
 						Long.toString(this.maxTraceDurationMillis));
+				configurationEventRecordTraceGenerationFilter.setProperty(
+						EventRecordTraceReconstructionFilter.CONFIG_PROPERTY_NAME_REPAIR_EVENT_BASED_TRACES,
+						Boolean.toString(this.repairEventBasedTraces));
 				eventTraceReconstructionFilter = new EventRecordTraceReconstructionFilter(configurationEventRecordTraceGenerationFilter, this.analysisController);
 
 				if (this.invertTraceIdFilter) {
@@ -994,6 +999,8 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 				val = this.ignoreAssumedCalls ? "true" : "false"; // NOCS
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_IGNOREINVALIDTRACES)) {
 				val = this.ignoreInvalidTraces ? "true" : "false"; // NOCS
+			} else if (longOpt.equals(Constants.CMD_OPT_NAME_REPAIR_EVENT_BASED_TRACES)) {
+				val = this.repairEventBasedTraces ? "true" : "false"; // NOCS
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_MAXTRACEDURATION)) {
 				val = this.maxTraceDurationMillis + " ms";
 			} else if (longOpt.equals(Constants.CMD_OPT_NAME_IGNOREEXECUTIONSBEFOREDATE)) {
