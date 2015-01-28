@@ -30,6 +30,11 @@ import kieker.common.util.registry.IRegistry;
 public interface IRecordFactory<T> {
 
 	/**
+	 * Represents the size of a record whose size is unknown in advance
+	 */
+	public static final int UNKNOWN_RECORD_SIZE = -1;
+
+	/**
 	 *
 	 * @param buffer
 	 *            the buffer to read from
@@ -52,7 +57,9 @@ public interface IRecordFactory<T> {
 	T create(Object[] values);
 
 	/**
-	 * @return the size (in bytes) of the record in the serialized form
+	 * @return the size (in bytes) of the record in the serialized form, or a negative value represented by the constant {@link #UNKNOWN_RECORD_SIZE} if the
+	 *         size is unknown
+	 *         in advance.
 	 * @since 1.11
 	 */
 	int getRecordSizeInBytes();

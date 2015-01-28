@@ -26,13 +26,13 @@ import kieker.common.record.factory.IRecordFactory;
 import kieker.common.util.registry.IRegistry;
 
 /**
+ * Represents a record factory for a record that does not have a dedicated record factory.
+ *
  * @author Christian Wulf
  *
  * @since 1.11
  */
 public final class RecordFactoryWrapper implements IRecordFactory<IMonitoringRecord> {
-
-	public static final int UNKNOWN_SIZE = -1;
 
 	private final String recordClassName;
 
@@ -60,7 +60,8 @@ public final class RecordFactoryWrapper implements IRecordFactory<IMonitoringRec
 		}
 	}
 
+	@Override
 	public int getRecordSizeInBytes() {
-		return UNKNOWN_SIZE;
+		return IRecordFactory.UNKNOWN_RECORD_SIZE;
 	}
 }
