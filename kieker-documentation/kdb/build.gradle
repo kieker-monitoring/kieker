@@ -1,18 +1,41 @@
 def documentBaseFilename = 'design-documentation'
 
-task buildDocumentation(type: Exec) {
-  description 'Builds the documentation for the Kieker Data Bridge'
-  
-  commandLine 'pdflatex', documentBaseFilename
-  commandLine 'bibtex', documentBaseFilename
-  commandLine 'pdflatex', documentBaseFilename
+task fstLatexRun(type: Exec) {
   commandLine 'pdflatex', documentBaseFilename
 }
 
-task cleanDocumentation(type: Delete) {
-  description 'Deletes temporary files'
-  
+task sndLatexRun(type: Exec) {
+  commandLine 'pdflatex', documentBaseFilename
+}
+
+task thrdLatexRun(type: Exec) {
+  commandLine 'pdflatex', documentBaseFilename
+}
+
+task bibtexRun(type: Exec) {
+  commandLine 'bibtex', documentBaseFilename
+}
+
+task cleanDocumentation(type: Delete) {  
   delete fileTree(dir: '.', includes: ['*.aux, *.bbl', '*.blg', '*.glo', '*.idx', '*.log', '*.toc', '*.snm', '*.out', '*.nav', '*.bak', '*.vrb', 'backup'])  
 }
 
-buildDocumentation.finalizedBy cleanDocumentation
+task buildDocumentation() {
+  description 'Builds the documentation for the Kieker Data Bridge'
+  
+  inputs.files fileTree('.') {
+    include '*.tex'
+    include '*.bib'
+    include 'images/*'
+  }
+  outputs.file file(documentBaseFilename + '.pdf')
+  
+  doLast {
+     tasks.fstLatexRun.execute()
+     tasks.sndLatexRun.execute()
+     tasks.bibtexRun.execute()
+     tasks.thrdLatexRun.execute()
+     tasks.cleanDocumentation.execute()
+  }
+}
+
