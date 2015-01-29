@@ -132,9 +132,9 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 		if ((forecastPackageLoadResult != null) && (forecastPackageLoadResult instanceof REXPLogical)) {
 			final REXPLogical returnValue = (REXPLogical) forecastPackageLoadResult;
 			final boolean hasAttr = returnValue.hasAttribute("attr");
-			final boolean[] istrue = returnValue.isTRUE();
+			final boolean[] isTrue = returnValue.isTRUE();
 
-			if (!hasAttr && (istrue.length > 0) && istrue[0]) {
+			if (!hasAttr && (isTrue.length > 0) && isTrue[0]) {
 				forecastPackageAvailable = true;
 				return;
 			}
