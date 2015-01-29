@@ -1,5 +1,4 @@
-forecasters=c("ARIMA","ARIMA101","CS","MEAN", "NAIVE", "ETS" ,"SES") 
-#"CROSTON"
+forecasters=c("ARIMA", "ARIMA101", "CS", "MEAN", "NAIVE", "ETS" ,"SES", "MEANJAVA", "CROSTON") 
 inputPath="output-data/wikiGer24_Oct11_21d-"
 outputPath="output-plots/wikiGer24_Oct11_21d-"
 fileExtension=".csv"
@@ -44,42 +43,42 @@ sanitizedMASE <- function(f,y) {
 for (i in forecasters)
 {
   filenamex=paste(inputPath,i,fileExtension,sep="")
-  results=read.table(file=filenamex, header=TRUE, sep=";", dec=".")
-  printMase=FALSE
-  maseString=""
-  
-  if(results$confidence[1] > 0)
-  {
-    printMase=TRUE
+  if(file.exists(filenamex)){
+    results=read.table(file=filenamex, header=TRUE, sep=";", dec=".")
+    printMase=FALSE
+    maseString=""
     
-    # mase calculation cant handle NaN. For now we cut the first 4 (NaN) values
-    start=1
-    end=length(results$forecast)
-    mase=sanitizedMASE(f=results$forecast[start:end],y=results$pageRequests[start:end])
-    maseString = paste(" (MASE: ",mase,")",sep="")
-    # print(paste(i,": ",mase,sep=""))
+    if(results$confidence[1] > 0)
+    {
+      printMase=TRUE
+      start=1
+      end=length(results$forecast)
+      mase=sanitizedMASE(f=results$forecast[start:end],y=results$pageRequests[start:end])
+      maseString = paste(" (MASE: ",mase,")",sep="")
+      # print(paste(i,": ",mase,sep=""))
+    }
+    
+    pdf(width=42,file=paste(outputPath, i, ".pdf",sep=""))
+    plot(x=sequence_count,y=results$pageRequests,type="l",main=paste(i, maseString, sep=""),ylab="Page Requests",xlab="")
+    lines(x=sequence_count,y=results$forecast,type="l",col="red")
+    
+    colors=c("black", "red")
+    legends=c("Measurements", "Forecasts")
+    
+    if(printMase) {
+      lines(x=sequence_count,y=results$confidenceUpper,lty=2,col="gray")
+      lines(x=sequence_count,y=results$confidenceLower,lty=2,col="gray")
+      colors=c("black", "red", "gray", "gray")
+      legends=c("Measurements", "Forecasts (95% CI)", "Upper Confidence (95% CI)", "Lower Confidence (95% CI)")
+    }
+  
+    # abline(h=mase,col="yellow")
+    legend(
+      "topleft",
+      col=colors,
+      lty=1,
+      legend=legends)
+    dev.off()
   }
-  
-  pdf(width=42,file=paste(outputPath, i, ".pdf",sep=""))
-  plot(x=sequence_count,y=results$pageRequests,type="l",main=paste(i, maseString, sep=""),ylab="Page Requests",xlab="")
-  lines(x=sequence_count,y=results$forecast,type="l",col="red")
-  
-  colors=c("black", "red")
-  legends=c("Measurements", "Forecasts")
-  
-  if(printMase) {
-    lines(x=sequence_count,y=results$confidenceUpper,lty=2,col="gray")
-    lines(x=sequence_count,y=results$confidenceLower,lty=2,col="gray")
-    colors=c("black", "red", "gray", "gray")
-    legends=c("Measurements", "Forecasts (95% CI)", "Upper Confidence (95% CI)", "Lower Confidence (95% CI)")
-  }
-
-  # abline(h=mase,col="yellow")
-  legend(
-    "topleft",
-    col=colors,
-    lty=1,
-    legend=legends)
-  dev.off()
 }
 
