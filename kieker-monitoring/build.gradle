@@ -27,27 +27,30 @@ dependencies {
 	testRuntime fileTree(dir: rootProject.file('kieker-examples/JavaEEServletContainerExample/jetty/lib'), include: 'jetty-*.jar')
 }
 
-task iajc(dependsOn: classes) << {
-  description 'Uses the AspectJ compiler to add the required code to the Kieker probes'
-
-  ant.taskdef(resource: 'org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties') {
-    classpath {
-      fileset(dir: '../lib', includes: "aspectjtools-*.jar")
-    }
-  }
-	ant.iajc(XlintFile: 'aspectjXlint.properties', X: 'joinpoints:synchronization', source: sourceCompatibility, target: targetCompatibility, debug: 'true', destdir: sourceSets.main.output.classesDir) {
-  sourceroots {
-    pathElement(location: 'src/kieker/monitoring/probe/aspectj/')
-  }
-		classpath {
-			fileset(dir: '../lib', includes: "aspectjweaver-*.jar")
-			fileset(dir: '../lib', includes: "aspectjrt-*.jar")
-			fileset(dir: '../lib/framework-libs', includes: "javax.servlet-*.jar")
-
-			pathElement(location: project(':kieker-common').sourceSets.main.output.classesDir)
-			pathElement(location: sourceSets.main.output.classesDir)
-		}
-	}			
+task iajc(dependsOn: classes) {
+    doLast {
+        ant.taskdef(resource: 'org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties') {
+            classpath {
+                fileset(dir: '../lib', includes: "aspectjtools-*.jar")
+            }
+        }
+        ant.iajc(XlintFile: 'aspectjXlint.properties', X: 'joinpoints:synchronization', source: sourceCompatibility, target: targetCompatibility, debug: 'true', destdir: sourceSets.main.output.classesDir) {
+            sourceroots {
+                pathElement(location: 'src/kieker/monitoring/probe/aspectj')
+            }
+           
+            classpath {
+                fileset(dir: '../lib', includes: "aspectjweaver-*.jar")
+                fileset(dir: '../lib', includes: "aspectjrt-*.jar")
+				fileset(dir: '../lib/framework-libs', includes: "javax.servlet-*.jar")
+				
+				pathElement(location: project(':kieker-common').sourceSets.main.output.classesDir)
+                pathElement(location: sourceSets.main.output.classesDir)
+            }
+        }
+    }   
 }
-classes.finalizedBy iajc
-jar.mustRunAfter iajc
+
+compileJava.doLast {
+    tasks.iajc.execute()
+}

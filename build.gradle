@@ -317,6 +317,7 @@ def exampleContent = project.copySpec {
   exclude '**/JavaEEServletContainerExample/build.xml'
   exclude '**/livedemo-source/**'
   exclude '**/.gradle/**'
+  exclude '**/build/**'
   
 	from ('kieker-monitoring/src-resources/META-INF') {
 		include 'kieker.monitoring.default.properties'	
