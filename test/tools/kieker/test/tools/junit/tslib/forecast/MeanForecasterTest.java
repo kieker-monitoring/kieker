@@ -56,7 +56,7 @@ public class MeanForecasterTest extends AbstractKiekerRTest {
 
 	/**
 	 * Set up of the MeanForecasterTest.
-	 * 
+	 *
 	 * @throws Exception
 	 *             If exception appears
 	 */
@@ -72,7 +72,7 @@ public class MeanForecasterTest extends AbstractKiekerRTest {
 
 	/**
 	 * Initiation of the test, setting up the test time series.
-	 * 
+	 *
 	 * @param timeUnit
 	 *            Used time unit
 	 */
@@ -81,9 +81,11 @@ public class MeanForecasterTest extends AbstractKiekerRTest {
 
 		this.steps = 1;
 		this.mean = Double.valueOf(2.0);
+		this.ts.append(this.mean - 2);
 		this.ts.append(this.mean - 1);
 		this.ts.append(this.mean);
 		this.ts.append(this.mean + 1);
+		this.ts.append(this.mean + 2);
 		this.forecaster = new MeanForecaster(this.ts, MeanForecasterTest.CONFIDENCE_LEVEL);
 		this.forecast = this.forecaster.forecast(this.steps);
 		this.forecastSeries = this.forecast.getForecast();

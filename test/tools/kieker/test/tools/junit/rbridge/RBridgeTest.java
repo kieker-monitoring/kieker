@@ -67,13 +67,13 @@ public class RBridgeTest extends AbstractKiekerRTest {
 
 	/**
 	 * Test to make sure that NullPointerExceptions within the evalWithR() method are caught correctly.
-	 * 
+	 *
 	 * @throws InvalidREvaluationResultException
 	 *
 	 * @throws NullPointerException
 	 *             if exceptions are handled correctly.
 	 */
-	@Test(expected = NullPointerException.class)
+	@Test(expected = InvalidREvaluationResultException.class)
 	public void TestNullPointerEvaluationEvalWithR() throws InvalidREvaluationResultException {
 		final RBridgeControl r = RBridgeControl.getInstance();
 		r.evalWithR("accuracy(NULL)[6]");
