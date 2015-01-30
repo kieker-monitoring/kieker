@@ -51,12 +51,7 @@ public abstract class AbstractForecaster<T> implements IForecaster<T> {
 	 */
 	public AbstractForecaster(final ITimeSeries<T> historyTimeseries, final int confidenceLevel) {
 		this.historyTimeseries = historyTimeseries;
-		if (this.supportsConfidence()) {
-			this.confidenceLevel = confidenceLevel;
-		} else {
-			this.confidenceLevel = 0;
-			LOG.warn("This forecaster does not support confidence level. Falling back to 0.0.");
-		}
+		this.confidenceLevel = confidenceLevel;
 	}
 
 	@Override
@@ -83,6 +78,11 @@ public abstract class AbstractForecaster<T> implements IForecaster<T> {
 
 	@Override
 	public int getConfidenceLevel() {
-		return this.confidenceLevel;
+		if (this.supportsConfidence()) {
+			return this.confidenceLevel;
+		} else {
+			LOG.warn("This forecaster does not support confidence level. Falling back to 0.0.");
+			return 0;
+		}
 	}
 }

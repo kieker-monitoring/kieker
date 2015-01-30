@@ -47,16 +47,16 @@ import kieker.tools.tslib.forecast.IForecaster;
  *
  */
 @Plugin(name = "Forecast Filter", outputPorts = {
-	@OutputPort(eventTypes = { IForecastResult.class }, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECAST),
-	@OutputPort(eventTypes = { IForecastMeasurementPair.class }, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT),
-	@OutputPort(eventTypes = { IForecastMeasurementPair.class }, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_MEASURED) },
+		@OutputPort(eventTypes = { IForecastResult.class }, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECAST),
+		@OutputPort(eventTypes = { IForecastMeasurementPair.class }, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT),
+		@OutputPort(eventTypes = { IForecastMeasurementPair.class }, name = ForecastingFilter.OUTPUT_PORT_NAME_FORECASTED_AND_MEASURED) },
 		configuration = {
-			@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_DELTA_TIME, defaultValue = "1000"),
-			@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_DELTA_UNIT, defaultValue = "MILLISECONDS"),
-			@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_FC_METHOD, defaultValue = "MEAN", updateable = true),
-			@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_TS_WINDOW_CAPACITY, defaultValue = "60"),
-			@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_FC_CONFIDENCE, defaultValue = "0")
-		})
+		@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_DELTA_TIME, defaultValue = "1000"),
+		@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_DELTA_UNIT, defaultValue = "MILLISECONDS"),
+		@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_FC_METHOD, defaultValue = "MEAN", updateable = true),
+		@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_TS_WINDOW_CAPACITY, defaultValue = "60"),
+		@Property(name = ForecastingFilter.CONFIG_PROPERTY_NAME_FC_CONFIDENCE, defaultValue = "0")
+})
 public class ForecastingFilter extends AbstractUpdateableFilterPlugin {
 
 	public static final String INPUT_PORT_NAME_TSPOINT = "tspoint";
@@ -200,7 +200,10 @@ public class ForecastingFilter extends AbstractUpdateableFilterPlugin {
 					confidenceUpper,
 					confidenceLower,
 					result.getMeanAbsoluteScaledError());
-			AbstractAnalysisComponent.LOG.debug("Forecast: " + forecast + ", Measurement: " + input.getValue() + ", MASE: " + result.getMeanAbsoluteScaledError());
+			if (AbstractAnalysisComponent.LOG.isDebugEnabled()) {
+				AbstractAnalysisComponent.LOG.debug("Forecast: " + forecast + ", Measurement: " + input.getValue() + ", MASE: "
+						+ result.getMeanAbsoluteScaledError());
+			}
 			super.deliver(OUTPUT_PORT_NAME_FORECASTED_AND_MEASURED, forecastedAndMeasuredResult);
 
 			final ForecastMeasurementPair currentForecastPair = new ForecastMeasurementPair(
