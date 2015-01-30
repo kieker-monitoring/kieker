@@ -35,6 +35,8 @@ public abstract class AbstractForecaster<T> implements IForecaster<T> {
 	 */
 	private static final Log LOG = LogFactory.getLog(AbstractForecaster.class);
 
+	private static final boolean CONFIDENCE_SUPPORTED_BY_DEFAULT = true;
+
 	private final ITimeSeries<T> historyTimeseries;
 	private final int confidenceLevel;
 
@@ -73,7 +75,7 @@ public abstract class AbstractForecaster<T> implements IForecaster<T> {
 	}
 
 	protected boolean supportsConfidence() {
-		return true;
+		return CONFIDENCE_SUPPORTED_BY_DEFAULT;
 	}
 
 	@Override
