@@ -20,33 +20,15 @@ function create_subdir_n_cd {
 }
 
 # build with ant (target may be passed as $1)
-function run_ant {
-	echo "Trying to invoke ant with target '$1' ..."
-	if ! which ant; then
-		echo "Ant not found in path"
+function run_gradle {
+	echo "Trying to invoke gradle with target '$1' ..."
+	if ! which gradle; then
+		echo "Gradle not found in path"
 		exit 1
 	fi
-	if ! ant $1; then
-		echo "Ant build failed"
+	if ! gradle $1; then
+		echo "Gradle build failed"
 		exit 1
-	fi
-}
-
-# provide content list of archive
-function print_archive_contents {
-	if [ -z "$1" ]; then
-		echo "No archive provided"
-		exit 1
-	fi
-	
-	if echo "$1" | grep "zip"; then
-		unzip -l "$1" | awk '{ print $4 }'
-		return
-	fi
-	
-	if echo "$1" | grep "tar.gz"; then
-		tar -tzf "$1"
-		return
 	fi
 }
 
@@ -69,6 +51,24 @@ function extract_archive_n_cd {
 	change_dir kieker-*
 }
 
+# provide content list of archive
+function print_archive_contents {
+	if [ -z "$1" ]; then
+		echo "No archive provided"
+		exit 1
+	fi
+	
+	if echo "$1" | grep "zip"; then
+		unzip -l "$1" | awk '{ print $4 }'
+		return
+	fi
+	
+	if echo "$1" | grep "tar.gz"; then
+		tar -tzf "$1"
+		return
+	fi
+}
+
 # lists the files included in an archive without extracting it
 function cat_archive_content {
 	if [ -z "$1" ]; then
@@ -84,6 +84,17 @@ function cat_archive_content {
 		echo "Archive '$1' is neither zip nor .tar.gz"
 		exit 1
 	fi 
+}
+
+function assert_no_duplicate_files_in_archive {
+    echo -n "Making sure that no duplicate files in '$1' ..."
+    (cat_archive_content $1 | sort) > tmp.content.original
+    (cat_archive_content $1 | sort | uniq) > tmp.content.original.uniq
+    if ! diff tmp.content.original tmp.content.original.uniq; then 
+	echo "Archive contains duplicate files."
+	exit 1
+    fi
+    echo OK
 }
 
 function assert_file_NOT_exists {
@@ -160,7 +171,6 @@ function assert_files_exist_common {
 	assert_file_exists_regular "bin/logging.debug.properties"
 	assert_file_exists_regular "bin/logging.verbose.properties"
 	assert_dir_exists "doc/"
-	assert_dir_exists "examples/"
 	assert_file_NOT_exists "examples/JavaEEServletContainerExample/jetty/javadoc/"
 	assert_dir_exists "lib/"
 	assert_dir_exists "lib/framework-libs/"
@@ -196,10 +206,10 @@ function assert_files_exist_common {
 	    done
 	done
 
-	echo -n "Making sure that no references to old Kieker Jars included ..."
-	if (grep -R "kieker-[[:digit:]].*\.jar" * | grep -Ev "kieker-${KIEKER_VERSION}((\\\\)?_[[:alpha:]]+)?\.jar"); then
+	echo -n "Making sure that no references to old Kieker Jars included (note that we cannot check inside binary files) ..."
+	if (grep -R "kieker-[[:digit:]].*\.jar" * | grep -v "Binary" |  grep -Ev "kieker-${KIEKER_VERSION}((\\\\)?_[[:alpha:]]+)?\.jar"); then
 	    # Don't ask why results not dumped to stdout above
-	    echo "Found old version string. Add/correct replacement regexp in ant file?"
+	    echo "Found old version string. Add/correct replacement regexp in Gradle file?"
 	    echo "Due to a strange issue with the grep above, please use the grep regexp above to see where the problem is."
 	    exit 1
 	fi
@@ -207,52 +217,37 @@ function assert_files_exist_common {
 
 	# make sure that specified AspectJ version matches the present files
 	assert_file_exists_regular "lib/aspectjrt-${aspectjversion}.jar"
-	assert_file_exists_regular "lib/aspectjweaver-${aspectjversion}.jar"
-	
-	assert_file_exists_regular "examples/userguide/appendix-JMS/.classpath"
-	assert_file_exists_regular "examples/userguide/ch2--manual-instrumentation/.classpath"
-	assert_file_exists_regular "examples/userguide/ch2--bookstore-application/.classpath"
-	assert_file_exists_regular "examples/userguide/appendix-Sigar/.classpath"
-	assert_file_exists_regular "examples/userguide/ch5--trace-monitoring-aspectj/.classpath"
-	assert_file_exists_regular "examples/userguide/ch3-4--custom-components/.classpath"
+	assert_file_exists_regular "lib/aspectjweaver-${aspectjversion}.jar"	
 }
 
 # Asserts the existence of files in the src release
 function assert_files_exist_src {
 	assert_files_exist_common
-	assert_dir_exists "model/"
-	assert_dir_exists "model/analysis/"
-	assert_dir_exists "model/common/records/"
-	assert_dir_exists "model/tools/records/"
-	assert_file_exists_regular "model/analysis/AnalysisMetaModel.ecore"
-	assert_file_exists_regular "model/analysis/AnalysisMetaModel.ecorediag"
-	assert_file_exists_regular "model/analysis/AnalysisMetaModel.genmodel"
 	assert_dir_exists "lib/static-analysis/"
 	assert_dir_exists "src/"
-	assert_dir_exists "src-gen/"
 	assert_dir_exists "test/"
-	assert_file_exists_regular "src/monitoring/META-INF/kieker.monitoring.default.properties"
 	assert_file_NOT_exists "dist/"
 	assert_file_NOT_exists "META-INF/"
 	
-	assert_file_NOT_exists "examples/userguide/ch2--manual-instrumentation/lib/*.jar"
-	assert_file_NOT_exists "examples/userguide/ch3-4--custom-components/lib/*.jar"
-	assert_file_NOT_exists "examples/userguide/ch5--trace-monitoring-aspectj/lib/*.jar"
-	assert_file_NOT_exists "examples/userguide/appendix-JMS/lib/*.jar"
-	assert_file_NOT_exists "examples/userguide/appendix-Sigar/lib/*.jar"
+	assert_file_NOT_exists "kieker-examples/userguide/ch2--manual-instrumentation/lib/*.jar"
+	assert_file_NOT_exists "kieker-examples/userguide/ch3-4--custom-components/lib/*.jar"
+	assert_file_NOT_exists "kieker-examples/userguide/ch5--trace-monitoring-aspectj/lib/*.jar"
+	assert_file_NOT_exists "kieker-examples/userguide/appendix-JMS/lib/*.jar"
+	assert_file_NOT_exists "kieker-examples/userguide/appendix-Sigar/lib/*.jar"
 
-	assert_file_exists_regular "examples/JavaEEServletContainerExample/build.xml"
-	assert_file_exists_regular "examples/JavaEEServletContainerExample/livedemo-source/"	
-	assert_file_NOT_exists "examples/JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib/kieker-*.jar"
-	assert_file_exists_regular "build.xml"
-	assert_file_exists_regular "build-config/build.properties"
-	assert_file_exists_regular "build-config/compile-and-build.xml"
-	assert_file_exists_regular "build-config/dist-and-deploy.xml"
-	assert_file_exists_regular "build-config/init-and-clean.xml"
-	assert_file_exists_regular "build-config/quality.xml"
-	assert_file_exists_regular "build-config/test.xml"
-	assert_file_exists_regular "build-config/javadoc-header/javadoc.css"
-	assert_file_exists_regular "build-config/javadoc-header/kieker-javadoc-header.png"
+	assert_file_exists_regular "kieker-examples/JavaEEServletContainerExample/build.gradle"
+	assert_file_exists_regular "kieker-examples/JavaEEServletContainerExample/livedemo-source/"	
+	assert_file_NOT_exists "kieker-examples/JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib/kieker-*.jar"
+
+	assert_file_exists_regular "kieker-examples/userguide/appendix-JMS/.classpath"
+	assert_file_exists_regular "kieker-examples/userguide/ch2--manual-instrumentation/.classpath"
+	assert_file_exists_regular "kieker-examples/userguide/ch2--bookstore-application/.classpath"
+	assert_file_exists_regular "kieker-examples/userguide/appendix-Sigar/.classpath"
+	assert_file_exists_regular "kieker-examples/userguide/ch5--trace-monitoring-aspectj/.classpath"
+	assert_file_exists_regular "kieker-examples/userguide/ch3-4--custom-components/.classpath"
+
+	assert_file_exists_regular "config/javadoc-header/javadoc.css"
+	assert_file_exists_regular "config/javadoc-header/kieker-javadoc-header.png"
 	assert_file_exists_regular "kieker-eclipse.importorder"
 	assert_file_exists_regular "kieker-eclipse-cleanup.xml"
 	assert_file_exists_regular "kieker-eclipse-formatter.xml"
@@ -261,8 +256,8 @@ function assert_files_exist_src {
 	assert_file_exists_regular ".checkstyle"
 	assert_file_exists_regular ".pmd"
 	assert_dir_exists ".settings/"
-	assert_file_exists_regular "doc/README-bin"
-	assert_file_exists_regular "doc/README-src"
+	assert_file_exists_regular "kieker-documentation/README-bin"
+	assert_file_exists_regular "kieker-documentation/README-src"
 }
 
 # Asserts the existence of files in the bin release and some basic checks on the Kieker jars
@@ -278,8 +273,8 @@ function assert_files_exist_bin {
 	assert_zip_file_content_exist "dist/kieker-"*"_aspectj.jar" " aj/"
 	assert_zip_file_content_contains "dist/kieker-"*"_aspectj.jar" "META-INF/MANIFEST.MF" "Premain-Class: org.aspectj.weaver.loadtime.Agent"
 	assert_file_exists_regular "dist/kieker-"*"_emf.jar"
-	assert_zip_file_content_exist "dist/kieker-"*"_emf.jar" " model/"
 	assert_zip_file_content_exist "dist/kieker-"*"_emf.jar" " org/eclipse/"
+	assert_dir_exists "examples/"
 	assert_file_exists_regular "examples/kieker.monitoring.example.properties"
 	assert_file_exists_regular "examples/kieker.monitoring.adaptiveMonitoring.example.conf"
 	assert_file_exists_regular "examples/userguide/ch2--manual-instrumentation/lib/kieker-"*"_emf.jar"
@@ -292,8 +287,15 @@ function assert_files_exist_bin {
 	assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/libsigar-"*".so"
 	assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/sigar-"*".dll"
 	assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/sigar-"*".lib"
+
+	assert_file_exists_regular "examples/userguide/appendix-JMS/.classpath"
+	assert_file_exists_regular "examples/userguide/ch2--manual-instrumentation/.classpath"
+	assert_file_exists_regular "examples/userguide/ch2--bookstore-application/.classpath"
+	assert_file_exists_regular "examples/userguide/appendix-Sigar/.classpath"
+	assert_file_exists_regular "examples/userguide/ch5--trace-monitoring-aspectj/.classpath"
+	assert_file_exists_regular "examples/userguide/ch3-4--custom-components/.classpath"
 	
-	assert_file_NOT_exists "examples/JavaEEServletContainerExample/build.xml"
+	assert_file_NOT_regular "examples/JavaEEServletContainerExample/build.gradle"
 	assert_file_NOT_exists "examples/JavaEEServletContainerExample/livedemo-source/"
 	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty/kieker.monitoring.properties"
 	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib/kieker-"*"_aspectj.jar"
@@ -301,11 +303,9 @@ function assert_files_exist_bin {
 
 	assert_file_NOT_exists "lib/static-analysis/"
 	assert_file_NOT_exists "dist/release/"
-	assert_file_NOT_exists "bin/dev/"
+	assert_file_NOT_exists "bin/dev/check-release-archives*" 
 	assert_file_NOT_exists "doc/userguide/"
-	assert_file_NOT_exists "model/"
 	assert_file_NOT_exists "src/"
-	assert_file_NOT_exists "src-gen/"
 	assert_file_NOT_exists "test/"
 	assert_file_NOT_exists "kieker-eclipse.importorder"
 	assert_file_NOT_exists "kieker-eclipse-cleanup.xml"
@@ -315,8 +315,19 @@ function assert_files_exist_bin {
 	assert_file_NOT_exists ".checkstyle"
 	assert_file_NOT_exists ".pmd"
 	assert_file_NOT_exists ".settings/"
-	assert_file_NOT_exists "doc/README-bin"
-	assert_file_NOT_exists "doc/README-src"
+	assert_file_NOT_exists "kieker-documentation/README-bin"
+	assert_file_NOT_exists "kieker-documentation/README-src"
+}
+
+function assert_all_sh_scripts_executable {
+    for sh in $(find -name "*.sh"); do
+	echo -n "Checking for exectuable flag: $sh ... "
+	if ! test -x $sh; then
+	    echo " not executable"
+	    exit 1
+	fi
+	echo OK
+    done
 }
 
 function check_src_archive {
@@ -337,8 +348,18 @@ function check_src_archive {
 
 	assert_files_exist_src
 
-	# now compile sources
-	run_ant
+	assert_all_sh_scripts_executable
+
+	# Making sure that no JavaDoc warnings reported by the `javadoc` tool
+	echo -n "Making sure that no JavaDoc warnings (ignoring generated sources) ..."
+	if (gradle apidoc | grep -v "src-gen" | grep "warning -"); then 
+	    echo "One or more JavaDoc warnings"
+	    exit 1
+	fi
+	echo "OK"
+
+	# now build release from source (including checks and tests)
+	run_gradle distribute
 	# make sure that the expected files are present
 	assert_dir_exists "dist/"
 	assert_file_exists_regular $(ls "dist/kieker-"*".jar" | grep -v emf | grep -v aspectj ) # the core jar
@@ -358,24 +379,6 @@ function check_src_archive {
 	fi
 	echo "OK"
 
-	# now execute junt tests (which compiles the sources again ...)
-	run_ant run-tests-junit
-	# make sure that no errors occured 
-	if ! grep "100.00\%" tmp/junit-results/report/overview-summary.html; then
-		echo "The JUnit tests didn't return with 100% success"
-		exit 1
-	fi
-
-	# Run static analysis tools (which compiles the sources again ...)
-	run_ant static-analysis
-
-	# Making sure that no JavaDoc warnings reported by the `javadoc` tool
-	echo -n "Making sure that no JavaDoc warnings (ignoring generated sources) ..."
-	if (ant dist-kieker-javadoc | grep "warning -" | grep -v "src-gen"); then 
-	    echo "One or more JavaDoc warnings"
-	    exit 1
-	fi
-	echo "OK"
 }
 
 function check_bin_archive {
@@ -395,6 +398,8 @@ function check_bin_archive {
 	touch $(basename "$1") # just to mark where this dir comes from
 
 	assert_files_exist_bin
+
+	assert_all_sh_scripts_executable
 
 	# check bytecode version of classes contained in jar
 	echo -n "Making sure that bytecode version of class in jar is version 50.0 (Java 1.6)"
@@ -469,8 +474,6 @@ function assert_no_common_files_in_archives {
 		exit 1
 	fi
 
-
-
 	CONTENT1_FN="$(basename $1).txt"
 	CONTENT2_FN="$(basename $2).txt"
 
@@ -508,6 +511,7 @@ create_subdir_n_cd
 DIR=$(pwd)
 BINZIP=$(ls ../../dist/releases/*-binaries.zip)
 assert_file_exists_regular ${BINZIP}
+assert_no_duplicate_files_in_archive ${BINZIP} 
 check_bin_archive "${BINZIP}"
 rm -rf ${DIR}
 
@@ -516,6 +520,7 @@ create_subdir_n_cd
 DIR=$(pwd)
 BINTGZ=$(ls ../../dist/releases/*-binaries.tar.gz)
 assert_file_exists_regular ${BINTGZ}
+assert_no_duplicate_files_in_archive ${BINTGZ} 
 check_bin_archive "${BINTGZ}"
 rm -rf ${DIR}
 
@@ -524,6 +529,7 @@ create_subdir_n_cd
 DIR=$(pwd)
 SRCZIP=$(ls ../../dist/releases/*-sources.zip)
 assert_file_exists_regular ${SRCZIP}
+assert_no_duplicate_files_in_archive ${SRCZIP} 
 check_src_archive "${SRCZIP}"
 rm -rf ${DIR}
 
@@ -532,6 +538,7 @@ create_subdir_n_cd
 DIR=$(pwd)
 SRCTGZ=$(ls ../../dist/releases/*-sources.tar.gz)
 assert_file_exists_regular ${SRCTGZ}
+assert_no_duplicate_files_in_archive ${SRCTGZ} 
 check_src_archive "${SRCTGZ}"
 rm -rf ${DIR}
 

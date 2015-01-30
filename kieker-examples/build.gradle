@@ -1,9 +1,6 @@
 /* 
  * TODOS:
- * 0. Dependency to ~ rootProject:jar
- * 1. Copy Required libs to subdirectories
- * 2. Extend to all subdirectories <-- What's the best way to do this in Gradle?
- * 3. Add/extend clean tasks to call example's clean tasks via cleanStandaloneExamples
+ * 1. Add/extend clean tasks to call example's clean tasks via cleanStandaloneExamples
  */
  
 defaultTasks 'cleanStandaloneExamples', 'buildStandaloneExamples'
@@ -86,6 +83,9 @@ task copyLibsStandaloneExamplesUserguideAppendixJMS(type: Copy, dependsOn: [root
 	from ('../dist') {
 		include "kieker-${version}_emf.jar"
 	}
+	from ('../lib') {
+		include "commons-logging-*.jar"
+	}
 	into 'userguide/appendix-JMS/lib/'
 }
 
@@ -104,6 +104,10 @@ task copyLiveDemoLibsStandaloneExamplesUserguideAppendixJavaEE(type: Copy, depen
 task copyJettyLibsStandaloneExamplesUserguideAppendixJavaEE(type: Copy, dependsOn: [rootProject.aspectJJar]) {
 	from ('../dist') {
 		include "kieker-${version}_aspectj.jar"
+	}
+	from ('..') {
+		include "LICENSE"
+		rename "LICENSE", "kieker-${version}_aspectj.jar.LICENSE"
 	}
 	from ('../lib/sigar') {
 		include '*'

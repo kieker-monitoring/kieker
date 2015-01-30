@@ -290,7 +290,9 @@ def binaryContent = project.copySpec {
 		include 'javadoc/**'
 		include 'dist/*'
     
-    exclude '**/.gradle/**'
+		exclude '**/.gradle/**'
+		exclude 'lib/static-analysis/'
+		exclude 'bin/dev/check-release-archives*'
 	}
 	from ('kieker-documentation') {
 		include 'README-bin'
@@ -311,13 +313,13 @@ def exampleContent = project.copySpec {
 	from ('kieker-examples') {
 		include '**'
 	}
-  from ('examples') {
+	from ('examples') {
 		include '**'
 	}
-  exclude '**/JavaEEServletContainerExample/build.xml'
-  exclude '**/livedemo-source/**'
-  exclude '**/.gradle/**'
-  exclude '**/build/**'
+	exclude '**/JavaEEServletContainerExample/build.xml'
+	exclude '**/livedemo-source/**'
+	exclude '**/.gradle/**'
+	exclude '**/build/**'
   
 	from ('kieker-monitoring/src-resources/META-INF') {
 		include 'kieker.monitoring.default.properties'	
@@ -360,12 +362,19 @@ task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distrib
 
 def sourceContent = project.copySpec {
 	from (projectDir) {
-		include '*'
+		include '**/**' // '*' doesn't seem to include hidden files
 		include 'bin/**'
 		include 'src/**'
 		include 'lib/**'
     
-    exclude '**/.gradle/**'
+		exclude 'build/'
+		exclude 'build-eclipse/'
+		exclude 'dist'
+		exclude '**/.gradle/**'
+	}
+	from ('kieker-documentation') {
+		include 'README-src'
+		rename 'README-src', 'README'
 	}
 	into kiekerPackagenamebase + "-" + kiekerVersion
 }
