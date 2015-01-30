@@ -38,34 +38,52 @@ import kieker.tools.util.InvalidREvaluationResultException;
 import kieker.tools.util.RBridgeControl;
 
 /**
+ * Starts the forecast on the given data using different forecasting methods,
+ * stores it in the output-data folder and plots the corresponding graphs
+ * using an R-script.
+ *
  * @author Thomas Duellmann
  *
  * @since 1.11
  */
-
 public final class ExperimentStarter {
 
+	/**
+	 * Get Logger for this class.
+	 */
 	private static final Log LOG = LogFactory.getLog(ExperimentStarter.class);
 
-	/* Basename of the input data file. This will be the prefix of all resulting data. */
+	/**
+	 * Basename of the input data file. This will be the prefix of all resulting data.
+	 */
 	private static final String DATA_BASENAME = "wikiGer24_Oct11_21d";
 
-	/* Folder where the following subfolders and the R-script are located. */
+	/**
+	 * Folder where the following subfolders and the R-script are located.
+	 */
 	private static final String OPAD_EXAMPLE_FOLDER = "examples/analysis/opad-anomaly-detection/src/kieker/examples/analysis/opad/";
 
-	/* Folder where the input file is located. */
+	/**
+	 * Folder where the input file is located. *
+	 */
 	private static final String INPUT_DATA_FOLDER = OPAD_EXAMPLE_FOLDER + "input-data/";
 
-	/* Folder where the output files will be located after the forecasting is finished. */
+	/**
+	 * Folder where the output files will be located after the forecasting is finished.
+	 */
 	private static final String OUTPUT_DATA_FOLDER = OPAD_EXAMPLE_FOLDER + "output-data/";
 
-	/* Name of the R plotting script. */
+	/**
+	 * Name of the R plotting script.
+	 */
 	private static final String R_PLOT_SCRIPT = "dataPlot.r";
 
 	private ExperimentStarter() {}
 
+	/**
+	 * Executing the main method starts the experiment.
+	 */
 	public static void main(final String[] args) throws IllegalStateException, AnalysisConfigurationException, InterruptedException {
-
 		final List<ForecastMethod> methods = new ArrayList<ForecastMethod>();
 		methods.add(ForecastMethod.ARIMA101);
 		methods.add(ForecastMethod.CS);

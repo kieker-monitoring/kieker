@@ -30,6 +30,9 @@ import kieker.tools.tslib.TimeSeries;
  */
 public abstract class AbstractForecaster<T> implements IForecaster<T> {
 
+	/**
+	 * Get Logger for this class.
+	 */
 	private static final Log LOG = LogFactory.getLog(AbstractForecaster.class);
 
 	private final ITimeSeries<T> historyTimeseries;
