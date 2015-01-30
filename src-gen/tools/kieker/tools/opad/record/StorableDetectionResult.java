@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import java.nio.ByteBuffer;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
+import kieker.common.util.Version;
 
 
 /**
@@ -48,7 +49,10 @@ public class StorableDetectionResult extends AbstractMonitoringRecord implements
 		double.class, // StorableDetectionResult.score
 	};
 	
-	
+	/* user-defined constants */
+	/* default constants */
+	public static final String APPLICATION_NAME = "";
+	/* property declarations */
 	private final String applicationName;
 	private final double value;
 	private final long timestamp;

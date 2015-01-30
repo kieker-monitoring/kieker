@@ -137,6 +137,7 @@
 				<include name="javax.jms-*.jar" />
 				<include name="reflections-*.jar"/>
 				<include name="geronimo-j2ee-management_1.1_spec-*.jar"/>
+				<include name="framework-libs/javax.servlet-*.jar" />
 				<!-- Bridge end -->
 				<!-- OPAD begin -->
 				<include name="commons-math3-*.jar"/>
@@ -146,6 +147,13 @@
 				<include name="Rsession-*.jar"/>
 				<!-- OPAD end -->
 			</fileset>
+			<!-- Bridge begin -->
+			<fileset dir="${example.javaee.jetty.lib.dir}">
+				<include name="jetty-server-*.jar" />
+				<include name="jetty-util-*.jar" />
+				<include name="jetty-servlet-*.jar" />
+			</fileset>	
+			<!-- Bridge end -->
 			<pathelement location="${build.kieker.common.dir}/" />
 			<pathelement location="${build.kieker.monitoring.dir}/" />
 			<pathelement location="${build.kieker.analysis.dir}/" />

@@ -86,7 +86,7 @@
 	<classpathentry kind="lib" path="lib/framework-libs/spring/spring-webmvc-3.2.8.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/framework-libs/spring/spring-webmvc-portlet-3.2.8.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/sigar/sigar-1.6.4.jar"/>
-	<classpathentry kind="lib" path="lib/static-analysis/checkstyle-5.6/lib/checkstyle-all.jar"/>
+	<classpathentry kind="lib" path="lib/static-analysis/checkstyle-6.0/lib/checkstyle-all.jar"/>
 	<classpathentry kind="lib" path="lib/activemq-protobuf-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/activemq-core-5.7.0.jar"/>
 	<classpathentry kind="lib" path="lib/kahadb-5.7.0.jar"/>

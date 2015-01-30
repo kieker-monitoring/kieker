@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import java.nio.ByteBuffer;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
+import kieker.common.util.Version;
 
 
 /**
@@ -54,6 +55,8 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 		long.class, // MemSwapUsageRecord.swapFree
 	};
 	
+	/* user-defined constants */
+	/* default constants */
 	public static final long TIMESTAMP = 0L;
 	public static final String HOSTNAME = "";
 	public static final long MEM_TOTAL = 0L;
@@ -62,7 +65,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	public static final long SWAP_TOTAL = 0L;
 	public static final long SWAP_USED = 0L;
 	public static final long SWAP_FREE = 0L;
-	
+	/* property declarations */
 	private final long timestamp;
 	private final String hostname;
 	private final long memTotal;
@@ -94,7 +97,7 @@ public class MemSwapUsageRecord extends AbstractMonitoringRecord implements IMon
 	 */
 	public MemSwapUsageRecord(final long timestamp, final String hostname, final long memTotal, final long memUsed, final long memFree, final long swapTotal, final long swapUsed, final long swapFree) {
 		this.timestamp = timestamp;
-		this.hostname = hostname == null?"":hostname;
+		this.hostname = hostname == null?HOSTNAME:hostname;
 		this.memTotal = memTotal;
 		this.memUsed = memUsed;
 		this.memFree = memFree;

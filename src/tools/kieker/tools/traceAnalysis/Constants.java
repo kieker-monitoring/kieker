@@ -49,6 +49,8 @@ public final class Constants {
 	public static final String CMD_OPT_NAME_INCLUDESELFLOOPS = "include-self-loops";
 	/** Command whether to ignore invalid traces or not. */
 	public static final String CMD_OPT_NAME_IGNOREINVALIDTRACES = "ignore-invalid-traces";
+	/** Command whether to repair traces with missing AfterEvents (e.g. because of software crash) or not. */
+	public static final String CMD_OPT_NAME_REPAIR_EVENT_BASED_TRACES = "repair-event-based-traces";
 	/** Command whether to plot deployment sequence diagrams or not. */
 	public static final String CMD_OPT_NAME_TASK_PLOTALLOCATIONSEQDS = "plot-Deployment-Sequence-Diagrams";
 	/** Command whether to plot assembly sequence diagrams or not. */
@@ -219,6 +221,8 @@ public final class Constants {
 				.withDescription("Consider only the traces not identified by the list of trace IDs. Defaults to no traces.").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_IGNOREINVALIDTRACES).hasArg(false).isRequired(false)
 				.withDescription("If selected, the execution aborts on the occurence of an invalid trace.").create());
+		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_REPAIR_EVENT_BASED_TRACES).hasArg(false).isRequired(false)
+				.withDescription("If selected, BeforeEvents with missing AfterEvents e.g. because of software crash will be repaired.").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_MAXTRACEDURATION).withArgName("duration in ms").hasArg().isRequired(false)
 				.withDescription("Threshold (in ms) after which incomplete traces become invalid. Defaults to 600,000 (i.e, 10 minutes).").create());
 		SORTED_OPTION_LIST.add(OptionBuilder.withLongOpt(CMD_OPT_NAME_IGNOREEXECUTIONSBEFOREDATE)

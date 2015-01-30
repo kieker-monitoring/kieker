@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import java.nio.ByteBuffer;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
+import kieker.common.util.Version;
 
 
 /**
@@ -44,10 +45,12 @@ public class BranchingRecord extends AbstractMonitoringRecord implements IMonito
 		int.class, // BranchingRecord.branchingOutcome
 	};
 	
+	/* user-defined constants */
+	/* default constants */
 	public static final long TIMESTAMP = 0L;
 	public static final int BRANCH_ID = 0;
 	public static final int BRANCHING_OUTCOME = 0;
-	
+	/* property declarations */
 	private final long timestamp;
 	private final int branchID;
 	private final int branchingOutcome;

@@ -13,13 +13,5 @@ cd %~dp0
 REM Set every variable we will need for the execution.
 SET BINDIR=%cd%
 
-SET CLASSPATH=%BINDIR%
-for /F "delims=" %%i in ('dir /B /S "%BINDIR%\..\lib\*.jar"') do (
-SET CLASSPATH=!CLASSPATH!;%%i
-)
-for /F "delims=" %%i in ('dir /B /S "%BINDIR%\..\dist\*.jar"') do (
-SET CLASSPATH=!CLASSPATH!;%%i
-)
-
-start javaw %JAVAARGS% -cp "%CLASSPATH%" %MAINCLASSNAME%
+start javaw %JAVAARGS% -cp "%BINDIR%\..\lib\*";"%BINDIR%\..\dist\*";"%BINDIR%" %MAINCLASSNAME%
 @echo on 

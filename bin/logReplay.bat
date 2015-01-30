@@ -15,15 +15,8 @@ SET BINDIR=%cd%
 
 SET CLASSPATH=%BINDIR%
 
-for /F "delims=" %%i in ('dir /B /S "%BINDIR%\..\lib\*.jar"') do (
-SET CLASSPATH=!CLASSPATH!;%%i
-)
-for /F "delims=" %%i in ('dir /B /S "%BINDIR%\..\dist\*.jar"') do (
-SET CLASSPATH=!CLASSPATH!;%%i
-)
-
 REM Now start the tool, but don't forget to deliver the parameters.
-java %JAVAARGS% -cp "%CLASSPATH%" %MAINCLASSNAME% %*
+java %JAVAARGS% -cp "%BINDIR%\..\lib\*";"%BINDIR%\..\dist\*";"%BINDIR%" %MAINCLASSNAME% %*
 
 REM Don't close the window immediately.
 @echo on

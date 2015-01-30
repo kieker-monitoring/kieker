@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
 import kieker.common.util.registry.IRegistry;
+import kieker.common.util.Version;
 
 import kieker.common.record.jvm.AbstractJVMRecord;
 
@@ -51,7 +52,9 @@ public class ThreadsStatusRecord extends AbstractJVMRecord  {
 		long.class, // ThreadsStatusRecord.totalStartedThreadCount
 	};
 	
-	
+	/* user-defined constants */
+	/* default constants */
+	/* property declarations */
 	private final long threadCount;
 	private final long daemonThreadCount;
 	private final long peakThreadCount;

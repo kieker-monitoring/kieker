@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import java.nio.ByteBuffer;
 import kieker.common.record.AbstractMonitoringRecord;
 import kieker.common.record.IMonitoringRecord;
 import kieker.common.util.registry.IRegistry;
+import kieker.common.util.Version;
 
 
 /**
@@ -39,7 +40,9 @@ public class EmptyRecord extends AbstractMonitoringRecord implements IMonitoring
 	public static final Class<?>[] TYPES = {
 	};
 	
-	
+	/* user-defined constants */
+	/* default constants */
+	/* property declarations */
 
 	/**
 	 * Creates a new instance of this class using the given parameters.

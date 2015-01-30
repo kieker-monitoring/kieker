@@ -7,19 +7,15 @@ setlocal enabledelayedexpansion
 SET JAVAARGS=-Dkieker.common.logging.Log=JDK -Djava.util.logging.config.file=./logging.properties -Xms56m -Xmx1024m
 SET MAINCLASSNAME=kieker.tools.traceAnalysis.TraceAnalysisTool
 
-REM Set every variable we will need for the execution.
-SET BINDIR=%~dp0
 
-SET CLASSPATH=%BINDIR%
-for /F "delims=" %%i in ('dir /B /S "%BINDIR%\..\lib\*.jar"') do (
-SET CLASSPATH=!CLASSPATH!;%%i
-)
-for /F "delims=" %%i in ('dir /B /S "%BINDIR%\..\dist\*.jar"') do (
-SET CLASSPATH=!CLASSPATH!;%%i
-)
+REM Get the directory of this file and change the working directory to it.
+cd %~dp0
+
+REM Set every variable we will need for the execution.
+SET BINDIR=%cd%
 
 REM Now start the tool, but don't forget to deliver the parameters.
-java %JAVAARGS% -cp "%CLASSPATH%" %MAINCLASSNAME% %*
+java %JAVAARGS% -cp "%BINDIR%\..\lib\*";"%BINDIR%\..\dist\*";"%BINDIR%" %MAINCLASSNAME% %*
 
 REM Don't close the window immediately.
 @echo on

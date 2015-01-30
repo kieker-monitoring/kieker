@@ -24,7 +24,7 @@
 					<include name="lib/org.eclipse.xtext.common.types.ui_*.jar"/>
 				</fileset>
 			</classpath>
-			<arg line="-r .. -a 'Kieker Build' -d src-gen/common -s model/common/records -l java -n kieker -p Kieker -v 1.10"/>	
+			<arg line="-r .. -a 'Kieker Build' -d src-gen/common -s model/common/records -l java -l java.factory -n kieker -p Kieker -v 1.10"/>	
 		</java>
 	</target>
 	
@@ -41,7 +41,7 @@
 					<include name="lib/org.eclipse.xtext.common.types.ui_*.jar"/>
 				</fileset>
 			</classpath>
-			<arg line="-r .. -a 'Kieker Build' -d src-gen/tools -s model/tools/records -l java -n kieker -p Kieker -v 1.10"/>	
+			<arg line="-r .. -a 'Kieker Build' -d src-gen/tools -s model/tools/records -l java -l java.factory -n kieker -p Kieker -v 1.10"/>	
 		</java>
 	</target>
 	
@@ -420,6 +420,16 @@
 			<fileset dir="${lib.cs.dir}">
 				<include name="**/*.jar" />
 			</fileset>
+			<!-- Bridge begin -->
+			<fileset dir="${example.javaee.jetty.lib.dir}">
+				<include name="jetty-server-*.jar" />
+				<include name="jetty-util-*.jar" />
+				<include name="jetty-servlet-*.jar" />
+				<include name="jetty-client-*.jar" />
+				<include name="jetty-io-*.jar" />
+				<include name="jetty-http-*.jar" />
+			</fileset>
+			<!-- Bridge end -->
 		</path>
 		<javac source="1.6" target="1.6" destDir="${build.tests.dir}" classpathref="tools-test-compile-classpath" srcdir="${test.kieker.tools.dir}" debug="true" includeAntRuntime="false">
 			<compilerarg value="-Xlint:all" />

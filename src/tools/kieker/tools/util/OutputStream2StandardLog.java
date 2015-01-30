@@ -46,7 +46,9 @@ public class OutputStream2StandardLog extends OutputStream {
 	@Override
 	public void write(final int b) throws IOException {
 		if (b == LINE_END) {
-			LOG.trace(this.baos.toString("UTF-8")); // Redirect previous log message from RSession as log message
+			if (LOG.isTraceEnabled()) {
+				LOG.trace(this.baos.toString("UTF-8")); // Redirect previous log message from RSession as log message
+			}
 			this.baos.reset();
 		} else {
 			this.baos.write(b);

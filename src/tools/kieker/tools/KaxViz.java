@@ -61,9 +61,9 @@ import kieker.common.logging.LogFactory;
 
 /**
  * A simple visualization of analysis configurations.
- * 
+ *
  * @author Jan Waller, Nils Christian Ehmke
- * 
+ *
  * @since 1.5
  */
 public final class KaxViz extends AbstractCommandLineTool {
@@ -79,7 +79,7 @@ public final class KaxViz extends AbstractCommandLineTool {
 
 	/**
 	 * Starts the visualization of a .kax file.
-	 * 
+	 *
 	 * @param args
 	 *            The command line arguments (including the name of the .kax file in question).
 	 */
@@ -92,7 +92,6 @@ public final class KaxViz extends AbstractCommandLineTool {
 		final Option inputOption = new Option("i", "input", true, "the analysis project file (.kax) loaded");
 		final Option outputoption = new Option("svg", true, "name of svg saved on close");
 
-		inputOption.setRequired(true);
 		inputOption.setArgName("filename");
 		outputoption.setArgName("filename");
 
@@ -104,6 +103,15 @@ public final class KaxViz extends AbstractCommandLineTool {
 	protected boolean readPropertiesFromCommandLine(final CommandLine commandLine) {
 		this.kaxFilename = commandLine.getOptionValue('i');
 		this.svgFilename = commandLine.getOptionValue("svg");
+
+		return this.assertInputFileExists();
+	}
+
+	private boolean assertInputFileExists() {
+		if (this.kaxFilename == null) {
+			LOG.error("No input file configured");
+			return false;
+		}
 
 		return true;
 	}
