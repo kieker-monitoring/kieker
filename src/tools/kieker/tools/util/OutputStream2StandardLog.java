@@ -26,7 +26,7 @@ import kieker.common.logging.LogFactory;
 /**
  * Implementation of an {@link OutputStream} that redirects data received via
  * its {@link #write(int)} method to an instance of {@link Log}.
- * 
+ *
  * @since 1.10
  * @author Andre van Hoorn, Tillmann Carlos Bielefeld
  */

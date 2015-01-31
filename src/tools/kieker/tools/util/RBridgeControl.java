@@ -60,7 +60,7 @@ public final class RBridgeControl {
 	 *
 	 * @return The result or the error of the evaluation of the given R expression. The method tries to convert it into a string, if possible.
 	 */
-	public Object evalWithR(final String input) {
+	public Object evalWithR(final String input) throws InvalidREvaluationResultException {
 		Object out = null;
 
 		try {
@@ -90,12 +90,13 @@ public final class RBridgeControl {
 	 *
 	 * @param variable
 	 *            variable to R
+	 * @throws InvalidREvaluationResultException
 	 */
-	public void toTS(final String variable) {
+	public void toTS(final String variable) throws InvalidREvaluationResultException {
 		if (variable != null) {
 			final StringBuffer buf = new StringBuffer();
 			buf.append(variable);
-			buf.append(" <<- ts(");
+			buf.append(" <- ts(");
 			buf.append(variable);
 			buf.append(')');
 			this.evalWithR(buf.toString());
@@ -108,12 +109,13 @@ public final class RBridgeControl {
 	 *            variable to R
 	 * @param frequency
 	 *            frequency to R
+	 * @throws InvalidREvaluationResultException
 	 */
-	public void toTS(final String variable, final long frequency) {
+	public void toTS(final String variable, final long frequency) throws InvalidREvaluationResultException {
 		if (variable != null) {
 			final StringBuffer buf = new StringBuffer(21);
 			buf.append(variable);
-			buf.append(" <<- ts(");
+			buf.append(" <- ts(");
 			buf.append(variable);
 			buf.append(", frequency=");
 			buf.append(frequency);
@@ -194,11 +196,12 @@ public final class RBridgeControl {
 	 *
 	 * @param values
 	 *            assign value
+	 * @throws InvalidREvaluationResultException
 	 */
-	public void assign(final String variable, final double[] values) {
+	public void assign(final String variable, final double[] values) throws InvalidREvaluationResultException {
 		final StringBuffer buf = new StringBuffer();
 		buf.append(variable);
-		buf.append(" <<- c(");
+		buf.append(" <- c(");
 		boolean first = true;
 		for (final double item : values) {
 			if (!first) {
@@ -218,11 +221,12 @@ public final class RBridgeControl {
 	 *            string
 	 * @param values
 	 *            assign vaules
+	 * @throws InvalidREvaluationResultException
 	 */
-	public void assign(final String variable, final Double[] values) {
+	public void assign(final String variable, final Double[] values) throws InvalidREvaluationResultException {
 		final StringBuffer buf = new StringBuffer();
 		buf.append(variable);
-		buf.append(" <<- c(");
+		buf.append(" <- c(");
 		boolean first = true;
 		for (final Double item : values) {
 			if (!first) {
@@ -246,11 +250,12 @@ public final class RBridgeControl {
 	 *            string
 	 * @param values
 	 *            assign vaules
+	 * @throws InvalidREvaluationResultException
 	 */
-	public void assign(final String variable, final Long[] values) {
+	public void assign(final String variable, final Long[] values) throws InvalidREvaluationResultException {
 		final StringBuffer buf = new StringBuffer();
 		buf.append(variable);
-		buf.append(" <<- c(");
+		buf.append(" <- c(");
 		boolean first = true;
 		for (final Long item : values) {
 			if (!first) {

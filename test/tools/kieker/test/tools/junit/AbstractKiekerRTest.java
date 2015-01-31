@@ -29,10 +29,10 @@ import kieker.test.common.junit.AbstractKiekerTest;
 /**
  * Test that ensures that every time a R-dependent test is run, a fresh
  * Rserve instance is started beforehand and terminated afterwards.
- * 
+ *
  * @since 1.10
  * @author Thomas Duellmann
- * 
+ *
  */
 public abstract class AbstractKiekerRTest extends AbstractKiekerTest {
 
@@ -46,7 +46,7 @@ public abstract class AbstractKiekerRTest extends AbstractKiekerTest {
 	public void preCheckForRSysPropertyAndConnection() {
 
 		final String messageWhenPropertyNotSet =
-				"Skipping " + this.getClass() + "because system property " + PROPERTY_NAME_KIEKER_R_TEST + " not true";
+				"Skipping " + this.getClass() + " because system property " + PROPERTY_NAME_KIEKER_R_TEST + " not true";
 		Assume.assumeTrue(messageWhenPropertyNotSet, this.isTestKiekerRTestsSet());
 
 		try {
@@ -62,7 +62,7 @@ public abstract class AbstractKiekerRTest extends AbstractKiekerTest {
 
 	/**
 	 * Checks whether the given TimeSeries contains items.
-	 * 
+	 *
 	 * @param timeSeries
 	 *            TimeSeries
 	 * @return true if TimeSeries contains one or more items, else false
@@ -73,7 +73,7 @@ public abstract class AbstractKiekerRTest extends AbstractKiekerTest {
 
 	/**
 	 * Gets the first (index = 0) TimeSeries point from the given TimeSeries.
-	 * 
+	 *
 	 * @param timeSeries
 	 *            TimeSeries
 	 * @return First (index = 0) TimeSeries item if there are any, else 0d (and Test fails)
@@ -89,7 +89,7 @@ public abstract class AbstractKiekerRTest extends AbstractKiekerTest {
 
 	/**
 	 * Checks whether the system property {@value #PROPERTY_NAME_KIEKER_R_TEST} is set to true.
-	 * 
+	 *
 	 * @return true if set correctly (to true), else false
 	 */
 	private boolean isTestKiekerRTestsSet() {

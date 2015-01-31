@@ -17,6 +17,7 @@
 package kieker.tools.tslib.forecast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -26,19 +27,21 @@ import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
 import kieker.tools.tslib.ForecastMethod;
 import kieker.tools.tslib.ITimeSeries;
+import kieker.tools.util.InvalidREvaluationResultException;
 import kieker.tools.util.RBridgeControl;
 
 /**
  * Convenience class to implement an {@link IForecaster} with R.
- * 
+ *
  * @since 1.10
  * @author Andre van Hoorn, Nikolas Herbst, Andreas Eberlein, Tobias Rudolph, Thomas Duellmann
- * 
+ *
  */
 public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 
-	private static final Log LOG = LogFactory.getLog(AbstractRForecaster.class);
+	public static final int MIN_TS_SIZE_DEFAULT = 5;
 
+	private static final Log LOG = LogFactory.getLog(AbstractRForecaster.class);
 	private static final RBridgeControl RBRIDGE = RBridgeControl.getInstance();
 	private static boolean forecastPackageAvailable;
 	private final String modelFunc;
@@ -49,15 +52,22 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 	 * Acquire an instance of the {@link RBridgeControl} once.
 	 */
 	static {
-		final Object forecastPackageLoadResult = AbstractRForecaster.RBRIDGE.evalWithR("require(forecast)");
-		AbstractRForecaster.setForecastModuleAvailableAndLoadedFlag(forecastPackageLoadResult);
+		Object forecastPackageLoadResult = null;
+		try {
+			forecastPackageLoadResult = AbstractRForecaster.RBRIDGE.evalWithR("require(forecast)");
+		} catch (final InvalidREvaluationResultException e) {
+			LOG.warn("An exception occurred in R", e);
+		} finally {
+			AbstractRForecaster.setForecastModuleAvailableAndLoadedFlag(forecastPackageLoadResult);
+		}
+
 	}
 
 	/**
-	 * 
+	 *
 	 * @param historyTimeseries
 	 *            timeseries
-	 * 
+	 *
 	 * @param modelFunc
 	 *            modelFunction
 	 * @param forecastFunc
@@ -78,7 +88,7 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param historyTimeseries
 	 *            timeseries
 	 * @param modelFunc
@@ -87,7 +97,7 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 	 *            forecastfunction
 	 * @param confidenceLevel
 	 *            value of confedenclevel
-	 * 
+	 *
 	 * @param strategy
 	 *            FC strategy
 	 */
@@ -103,18 +113,33 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 		}
 	}
 
+	protected IForecastResult createNaNForecast(final ITimeSeries<Double> timeseries, final int numForecastSteps) {
+		final ITimeSeries<Double> tsForecast = this.prepareForecastTS();
+		final ITimeSeries<Double> tsLower = this.prepareForecastTS();
+		final ITimeSeries<Double> tsUpper = this.prepareForecastTS();
+		final Double fcQuality = Double.NaN;
+
+		final Double[] nanArray = new Double[numForecastSteps];
+		Arrays.fill(nanArray, Double.NaN);
+		tsForecast.appendAll(nanArray);
+		tsLower.appendAll(nanArray);
+		tsUpper.appendAll(nanArray);
+
+		return new ForecastResult(tsForecast, this.getTsOriginal(), this.getConfidenceLevel(), fcQuality, tsLower, tsUpper, this.strategy);
+	}
+
 	private static void setForecastModuleAvailableAndLoadedFlag(final Object forecastPackageLoadResult) {
-		if (forecastPackageLoadResult instanceof REXPLogical) {
+		if ((forecastPackageLoadResult != null) && (forecastPackageLoadResult instanceof REXPLogical)) {
 			final REXPLogical returnValue = (REXPLogical) forecastPackageLoadResult;
 			final boolean hasAttr = returnValue.hasAttribute("attr");
-			final boolean[] istrue = returnValue.isTRUE();
+			final boolean[] isTrue = returnValue.isTRUE();
 
-			if (!hasAttr && (istrue.length > 0) && istrue[0]) {
-				forecastPackageAvailable = false;
+			if (!hasAttr && (isTrue.length > 0) && isTrue[0]) {
+				forecastPackageAvailable = true;
 				return;
 			}
 		}
-		forecastPackageAvailable = true;
+		forecastPackageAvailable = false;
 	}
 
 	private void logForecastModuleNotAvailableOrLoaded() {
@@ -130,6 +155,26 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 	@Override
 	public final IForecastResult forecast(final int numForecastSteps) {
 		final ITimeSeries<Double> history = this.getTsOriginal();
+		IForecastResult forecast = null;
+		if (this.satisfiesInputTSRequirements(history)) {
+			try {
+				forecast = this.forecastWithR(numForecastSteps);
+			} catch (final InvalidREvaluationResultException exception) {
+				LOG.warn("Exception occured when forecast with R", exception);
+			}
+		}
+
+		if (forecast == null) {
+			LOG.warn("Null result for forecast. Falling back to Double.NaN result.");
+			forecast = this.createNaNForecast(history, numForecastSteps);
+		}
+		return forecast;
+
+	}
+
+	private ForecastResult forecastWithR(final int numForecastSteps) throws InvalidREvaluationResultException {
+		final ITimeSeries<Double> history = this.getTsOriginal();
+		final ITimeSeries<Double> tsForecast = this.prepareForecastTS();
 
 		final String varNameValues = RBridgeControl.uniqueVarname();
 		final String varNameModel = RBridgeControl.uniqueVarname();
@@ -139,6 +184,7 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 		final Double[] histValuesNotNull = AbstractRForecaster.removeNullValues(allHistory);
 		final double[] values = ArrayUtils.toPrimitive(histValuesNotNull);
 
+		double fcQuality = Double.NaN;
 		// 0. Assign values to temporal variable
 
 		AbstractRForecaster.RBRIDGE.assign(varNameValues, values);
@@ -176,29 +222,26 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 					params.append(param);
 				}
 			}
-			AbstractRForecaster.RBRIDGE.evalWithR(String.format("%s <<- %s(%s)", varNameModel, this.modelFunc, params));
+			AbstractRForecaster.RBRIDGE.evalWithR(String.format("%s <- %s(%s)", varNameModel, this.modelFunc, params));
 		}
 		// remove temporal variable:
 		AbstractRForecaster.RBRIDGE.evalWithR(String.format("rm(%s)", varNameValues));
 
 		// 2. Perform forecast based on stochastic model
 
-		if (this.getConfidenceLevel() == 0) {
-			AbstractRForecaster.RBRIDGE.evalWithR(String.format("%s <<- %s(%s, h=%d)", varNameForecast, this.forecastFunc, varNameModel,
+		if ((this.getConfidenceLevel() == 0) || !this.supportsConfidence()) {
+			AbstractRForecaster.RBRIDGE.evalWithR(String.format("%s <- %s(%s, h=%d)", varNameForecast, this.forecastFunc, varNameModel,
 					numForecastSteps));
 		} else {
-			AbstractRForecaster.RBRIDGE.evalWithR(String.format("%s <<- %s(%s, h=%d, level=c(%d))", varNameForecast, this.forecastFunc, varNameModel,
+			AbstractRForecaster.RBRIDGE.evalWithR(String.format("%s <- %s(%s, h=%d, level=c(%d))", varNameForecast, this.forecastFunc, varNameModel,
 					numForecastSteps, this.getConfidenceLevel()));
 		}
 
-		final double[] lowerValues = AbstractRForecaster.RBRIDGE.eDblArr(this.lowerOperationOnResult(varNameForecast));
 		final double[] forecastValues = AbstractRForecaster.RBRIDGE.eDblArr(this.forecastOperationOnResult(varNameForecast));
-		final double[] upperValues = AbstractRForecaster.RBRIDGE.eDblArr(this.upperOperationOnResult(varNameForecast));
 
 		// 3. Calculate Forecast Quality Metric
 
-		double fcQuality = Double.NaN;
-		if (forecastValues.length > 0) {
+		if (forecastValues.length > 1) {
 			if ((this.modelFunc == null)) { // Re-enable when TBATS included: || (this.strategy == ForecastMethod.TBATS)
 				fcQuality = AbstractRForecaster.RBRIDGE.eDbl("accuracy(" + varNameForecast + ")[6]");
 			} else {
@@ -206,27 +249,37 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 			}
 		}
 
-		// remove temporal variable:
-		AbstractRForecaster.RBRIDGE.evalWithR(String.format("rm(%s)", varNameModel));
-		AbstractRForecaster.RBRIDGE.evalWithR(String.format("rm(%s)", varNameValues));
-		AbstractRForecaster.RBRIDGE.evalWithR(String.format("rm(%s)", varNameForecast));
-
-		final ITimeSeries<Double> tsForecast = this.prepareForecastTS();
+		tsForecast.appendAll(ArrayUtils.toObject(forecastValues));
 		final ITimeSeries<Double> tsLower;
 		final ITimeSeries<Double> tsUpper;
-		tsForecast.appendAll(ArrayUtils.toObject(forecastValues));
 
-		if (this.getConfidenceLevel() == 0) {
+		if ((this.getConfidenceLevel() == 0) || !this.supportsConfidence()) {
 			tsLower = tsForecast;
 			tsUpper = tsForecast;
 		} else {
+			final double[] lowerValues = AbstractRForecaster.RBRIDGE.eDblArr(this.lowerOperationOnResult(varNameForecast));
+			final double[] upperValues = AbstractRForecaster.RBRIDGE.eDblArr(this.upperOperationOnResult(varNameForecast));
 			tsLower = this.prepareForecastTS();
 			tsLower.appendAll(ArrayUtils.toObject(lowerValues));
 			tsUpper = this.prepareForecastTS();
 			tsUpper.appendAll(ArrayUtils.toObject(upperValues));
 		}
 
+		// remove temporal variable:
+		AbstractRForecaster.RBRIDGE.evalWithR(String.format("rm(%s)", varNameModel));
+		AbstractRForecaster.RBRIDGE.evalWithR(String.format("rm(%s)", varNameValues));
+		AbstractRForecaster.RBRIDGE.evalWithR(String.format("rm(%s)", varNameForecast));
+
 		return new ForecastResult(tsForecast, this.getTsOriginal(), this.getConfidenceLevel(), fcQuality, tsLower, tsUpper, this.strategy);
+	}
+
+	/**
+	 * Checks whether the requirements for the input TS are met.
+	 * This default implementation checks whether the length of the time series is greater or equal to {@value #MIN_TS_SIZE_DEFAULT}.
+	 * This method can be overridden by any forecaster if more specific requirements are needed.
+	 */
+	protected boolean satisfiesInputTSRequirements(final ITimeSeries<Double> timeSeries) {
+		return timeSeries.size() >= MIN_TS_SIZE_DEFAULT;
 	}
 
 	/**
@@ -258,20 +311,20 @@ public abstract class AbstractRForecaster extends AbstractForecaster<Double> {
 
 	/**
 	 * Returns additional parameters to be appended to the call of the R function {@link #getModelFuncName()}.
-	 * 
+	 *
 	 * @return the parameters or null if none
 	 */
 	protected abstract String[] getModelFuncParams();
 
 	/**
 	 * Returns additional parameters to be appended to the call of the R function {@link #getForecastFuncName()}.
-	 * 
+	 *
 	 * @return the parameters or null if none
 	 */
 	protected abstract String[] getForecastFuncParams();
 
 	/**
-	 * 
+	 *
 	 * @param allHistory
 	 *            List there null values should be deleted in this function
 	 * @return List/Array with no NullValues

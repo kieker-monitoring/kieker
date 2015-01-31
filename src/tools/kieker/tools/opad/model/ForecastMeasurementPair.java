@@ -17,10 +17,10 @@
 package kieker.tools.opad.model;
 
 /**
- * 
- * @author Tillmann Carlos Bielefeld
+ *
+ * @author Tillmann Carlos Bielefeld, Thomas Duellmann
  * @since 1.10
- * 
+ *
  * @since 1.9
  */
 public class ForecastMeasurementPair implements IForecastMeasurementPair {
@@ -28,13 +28,30 @@ public class ForecastMeasurementPair implements IForecastMeasurementPair {
 	private final String name;
 	private final Double forecast;
 	private final Double measurement;
+	private final Double mase; // MASE = Mean Absolute Scaled Error
 	private final long time;
+	private int confidenceLevel = -1;
+	private double confidenceUpper = Double.NaN;
+	private double confidenceLower = Double.NaN;
 
-	public ForecastMeasurementPair(final String name, final Double forecast, final Double measurement, final long time) {
+	public ForecastMeasurementPair(final String name, final Double forecast, final Double measurement, final long time, final int confidenceLevel,
+			final double confidenceUpper, final double confidenceLower, final Double mase) {
+		this(name, forecast, measurement, time, mase);
+		this.confidenceLevel = confidenceLevel;
+		this.confidenceUpper = confidenceUpper;
+		this.confidenceLower = confidenceLower;
+	}
+
+	public ForecastMeasurementPair(final String name, final Double forecast, final Double measurement, final long time, final Double mase) {
 		this.name = name;
 		this.forecast = forecast;
 		this.measurement = measurement;
 		this.time = time;
+		this.mase = mase;
+	}
+
+	public ForecastMeasurementPair(final String name, final Double forecast, final Double measurement, final long time) {
+		this(name, forecast, measurement, time, Double.NaN);
 	}
 
 	@Override
@@ -57,4 +74,19 @@ public class ForecastMeasurementPair implements IForecastMeasurementPair {
 		return this.forecast;
 	}
 
+	public int getConfidenceLevel() {
+		return this.confidenceLevel;
+	}
+
+	public double getConfidenceUpper() {
+		return this.confidenceUpper;
+	}
+
+	public double getConfidenceLower() {
+		return this.confidenceLower;
+	}
+
+	public Double getMASE() {
+		return this.mase;
+	}
 }
