@@ -223,8 +223,6 @@ function assert_files_exist_common {
 function assert_files_exist_src {
 	assert_files_exist_common
 	assert_dir_exists "lib/static-analysis/"
-	assert_dir_exists "src/"
-	assert_dir_exists "test/"
 	assert_file_NOT_exists "dist/"
 	assert_file_NOT_exists "META-INF/"
 	
