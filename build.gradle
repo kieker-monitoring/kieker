@@ -1,3 +1,5 @@
+apply plugin: 'maven'
+
 buildscript {
     repositories {
         mavenCentral()
@@ -427,4 +429,17 @@ task jenkinsBuild(dependsOn: [mainJar, emfJar, aspectJJar]) {
 
 task jenkinsNightlyBuild(dependsOn: [startRServe, enableRTests, distribute, checkReleaseArchives]) {
 	description = 'Builds and tests the release of the Kieker Framework'
+}
+
+uploadArchives {
+	repositories {
+		mavenDeployer {
+			pom.artifactId = 'kieker'
+			pom.groupId = 'net.kieker-monitoring'
+			repository(url: "file://localhost/tmp/myRepo/")
+            addFilter('api') {artifact, file ->
+                artifact.name == 'api'
+            }
+		}
+	}
 }
