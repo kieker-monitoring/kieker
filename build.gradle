@@ -110,8 +110,9 @@ allprojects {
 	// CS is a little bit weird, when it comes to dependencies. 
 	checkstyleTest.classpath += sourceSets.main.runtimeClasspath
 	checkstyleMain.classpath += configurations.compile
-	// This part makes sure that CS does not check the classes inside src-gen
+	// This part makes sure that CS does not check the classes inside src-gen and test-gen
 	checkstyleMain.source = 'src'
+	checkstyleTest.source = 'test'
 	
 	// Those are some dependencies which are needed by all submodules
 	dependencies {

@@ -10,6 +10,7 @@
 
   <!-- exclude generated code -->
   <exclude-pattern>.*/src-gen/.*</exclude-pattern>
+  <exclude-pattern>.*/test-gen/.*</exclude-pattern>
   <!-- exclude userguide examples -->
   <exclude-pattern>.*/examples/userguide/.*</exclude-pattern>
 
