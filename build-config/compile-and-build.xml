@@ -251,10 +251,10 @@
 			<reference refid="classpath" />
 			<target name="-build-jar" />
 		</ant>
-		<!--<ant antfile="build.xml" dir="${src.example.analysis.opad.dir}">
+		<ant antfile="build.xml" dir="${src.example.analysis.opad.dir}">
 			<reference refid="classpath" />
 			<target name="-build-jar" />
-		</ant>-->
+		</ant>
 		<ant antfile="build.xml" dir="${src.example.monitoring.adaptive.dir}">
 			<reference refid="classpath" />
 			<target name="-build-jar" />
