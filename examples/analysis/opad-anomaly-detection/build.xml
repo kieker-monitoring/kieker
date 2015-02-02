@@ -7,11 +7,12 @@
 	</path>
 
 	<condition property="not-all-files-available">
-		<resourcecount property="num.requiredLibsFound" when="ne" count="3">
+		<resourcecount property="num.requiredLibsFound" when="ne" count="4">
 			<fileset dir="${lib.dir}">
 				<include name="${jar.file.kieker}" />
 				<include name="${jar.file.commons.lang}" />
 				<include name="${jar.file.commons.math}" />
+				<include name="${jar.file.opencsv}" />
 			</fileset>
 		</resourcecount>
 	</condition>
