@@ -2,21 +2,19 @@
 
 	<property file="build.properties" />
 
-	<path id="classpath">
+	<path id="classpath.local">
 		<fileset dir="${lib.dir}" includes="**/*.jar" />
 	</path>
 
 	<condition property="not-all-files-available">
-		<resourcecount property="num.requiredLibsFound" when="ne" count="4">
+		<resourcecount property="num.requiredLibsFound" when="ne" count="2">
 			<fileset dir="${lib.dir}">
 				<include name="${jar.file.kieker}" />
-				<include name="${jar.file.commons.lang}" />
-				<include name="${jar.file.commons.math}" />
 				<include name="${jar.file.opencsv}" />
 			</fileset>
 		</resourcecount>
 	</condition>
-	
+
 	<target name="-check-files" if="not-all-files-available">
 		<fail message="${msg.filesNotFound}" />
 	</target>
@@ -40,7 +38,10 @@
 	</target>
 
 	<target name="-compile" depends="-init">
-		<javac source="1.6" target="1.6" srcdir="${src.dir}" destdir="${build.dir}" classpathref="classpath" includeAntRuntime="false" />
+		<javac source="1.6" target="1.6" srcdir="${src.dir}" destdir="${build.dir}" includeAntRuntime="false">
+			<classpath refid="classpath"/>
+			<classpath refid="classpath.local"/>
+		</javac>
 	</target>
 
 	<target name="-init">
