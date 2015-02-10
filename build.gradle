@@ -200,8 +200,23 @@ def aopxml = {
 	}
 }
 
+// Remove the default 'jar' artifact because we have our own artifacts: mainJar, emfJar, aspectJJar
+// If you don't do this, we get trouble with the Maven upload task having two Jars (default, mainJar)
+// with the same type and classifier.
+configurations.archives.artifacts.with { archives ->
+    def jarArtifact
+    archives.each {
+       if (it.file =~ 'jar') {
+         jarArtifact = it
+       }
+     }
+     println "JAR to delete: ${jarArtifact}"
+     remove(jarArtifact)
+} 
+
 task mainJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
-	baseName = kiekerPackagenamebase + "-" + kiekerVersion
+	// default archiveName is [baseName]-[appendix]-[version]-[classifier].[extension]
+	archiveName = kiekerPackagenamebase + "-" + kiekerVersion + ".jar"
 	destinationDir = file('dist')
 	version = ''
 	configure allArtifacts
@@ -214,9 +229,11 @@ task mainJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 }
 
 task emfJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
-	baseName = kiekerPackagenamebase + "-" + kiekerVersion + "_emf"
+	// default archiveName is [baseName]-[appendix]-[version]-[classifier].[extension]
+	archiveName = kiekerPackagenamebase + "-" + kiekerVersion + "_emf" + ".jar"
 	destinationDir = file('dist')
 	version = ''
+	classifier = 'emf'
 	configure allArtifacts
 	configure licence
 	configure aopxml
@@ -246,9 +263,11 @@ task emfJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 }
 
 task aspectJJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
-	baseName = kiekerPackagenamebase + "-" + kiekerVersion + "_aspectj"
+	// default archiveName is [baseName]-[appendix]-[version]-[classifier].[extension]
+	archiveName = kiekerPackagenamebase + "-" + kiekerVersion + "_aspectj" + ".jar"
 	destinationDir = file('dist')
 	version = ''
+	classifier = 'aspectj'
 	configure allArtifacts
 	configure licence
 	configure aopxml
@@ -277,6 +296,25 @@ task aspectJJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 			"org/aspectj/weaver/" // The section name
 		)
     }
+}
+
+task sourcesJar(type: Jar, dependsOn:classes) {
+	classifier = 'sources'
+	from mainSubprojects.collect {project -> project.sourceSets.main.allJava }
+}
+
+task javadocJar(type: Jar, dependsOn:apidoc) {
+	classifier = 'javadoc'
+	from apidoc.destinationDir
+}
+
+artifacts {
+	archives mainJar
+	archives emfJar
+	archives aspectJJar
+	
+	archives sourcesJar
+	archives javadocJar
 }
 
 task distribute(group: 'distribution', description: 'Distributes binary and source archives.', 
@@ -431,15 +469,97 @@ task jenkinsNightlyBuild(dependsOn: [startRServe, enableRTests, distribute, chec
 	description = 'Builds and tests the release of the Kieker Framework'
 }
 
+project.ext{
+	releaseRepoUrl = "file://localhost/tmp/myRepo/releases"
+	snapshotRepoUrl = "file://localhost/tmp/myRepo/snapshots"
+  }
+
 uploadArchives {
 	repositories {
 		mavenDeployer {
 			pom.artifactId = 'kieker'
 			pom.groupId = 'net.kieker-monitoring'
-			repository(url: "file://localhost/tmp/myRepo/")
-            addFilter('api') {artifact, file ->
-                artifact.name == 'api'
-            }
+			
+			pom.project {
+				parent {
+					groupId = 'org.sonatype.oss'
+					artifactId = 'oss-parent'
+					version = '7'
+				}
+				
+				packaging = 'jar'
+				name = 'Kieker Monitoring and Analysis Framework'
+				description = 'Kieker: Application Performance Monitoring and Dynamic Software Analysis'
+				url = 'http://kieker-monitoring.net'
+				inceptionYear = '2006'
+				
+				organization {
+					name = 'Kieker Project'
+					url = 'http://kieker-monitoring.net'
+				}
+				
+				licenses {
+					license {
+						name 'The Apache Software License, Version 2.0'
+						url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+						distribution 'repo'
+					}
+				}
+				
+				developers {
+					developer {
+						id = 'avh' 
+						name = 'Andre van Hoorn' 
+						email = 'van.hoorn@informatik.uni-stuttgart.de'
+					}
+					developer {
+						id = 'jwa' 
+						name = 'Jan Waller' 
+						email = 'jwa@informatik.uni-kiel.de'
+					}
+					developer { 
+						id = 'nie' 
+						name = 'Nils Christian Ehmke' 
+						email = 'nie@informatik.uni-kiel.de' 
+					}
+				}
+				
+				mailingLists {
+					mailingList {
+						name = 'Kieker-users'
+						subscribe = 'https://lists.sourceforge.net/lists/listinfo/kieker-users'
+						unsubscribe = 'https://lists.sourceforge.net/lists/listinfo/kieker-users'
+						post = 'kieker-users@lists.sourceforge.net'
+						archive = 'http://sourceforge.net/mailarchive/forum.php?forum_name=kieker-users'
+					}
+					mailingList {
+						name = 'Kieker-developers' 
+						subscribe = 'https://lists.sourceforge.net/lists/listinfo/kieker-developers'
+						unsubscribe = 'https://lists.sourceforge.net/lists/listinfo/kieker-developers' 
+						post = 'kieker-developers@lists.sourceforge.net'
+						archive = 'http://sourceforge.net/mailarchive/forum.php?forum_name=kieker-developers'
+					}
+				}
+				
+				scm {
+					connection = 'scm:git:http://git.kieker-monitoring.net/kieker.git'
+					developerConnection 'scm:git:ssh://gitlab@git.kieker-monitoring.net:kieker/kieker.git'
+					url = 'http://trac.kieker-monitoring.net/browser/kieker-git'
+				}
+				
+				issueManagement {
+					system = 'Trac' 
+					url = 'http://trac.kieker-monitoring.net'
+				}
+				
+				ciManagement {
+					system = 'Jenkins' 
+					url = 'http://build.kieker-monitoring.net'
+				}
+			}
+			
+			repository(url: project.releaseRepoUrl)
+			snapshotRepository(url: project.snapshotRepoUrl)
 		}
 	}
 }
