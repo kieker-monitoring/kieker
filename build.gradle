@@ -470,6 +470,11 @@ task jenkinsNightlyBuild(dependsOn: [startRServe, enableRTests, distribute, chec
 	description = 'Builds and tests the release of the Kieker Framework'
 }
 
+// For signing, the following properties (e.g., provided in ~/.gradle/gradle.properties) are needed
+// signing.keyId=8E97E26A
+// signing.password=XXXXXXXXXXXX
+// signing.secretKeyRingFile=/home/USER/.gnupg/secring.gpg
+//
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 signing {
 	required { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
@@ -570,6 +575,14 @@ uploadArchives {
 					system = 'Jenkins' 
 					url = 'http://build.kieker-monitoring.net'
 				}
+			}
+
+			// The following properties should be defined in ~/.gradle/gradle.properties			
+			if (!project.hasProperty('kiekerMavenUser')) {
+				kiekerMavenUser = 'NoMavenUser'
+			}
+			if (!project.hasProperty('kiekerMavenPassword')) {
+				kiekerMavenPassword = 'NoMavenPassword'
 			}
 			
 			repository(url: project.releaseRepoUrl) {
