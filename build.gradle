@@ -1,4 +1,5 @@
 apply plugin: 'maven'
+apply plugin: 'signing'
 
 buildscript {
     repositories {
@@ -465,18 +466,31 @@ task jenkinsBuild(dependsOn: [mainJar, emfJar, aspectJJar]) {
 	description = 'Builds and tests the JAR files of the Kieker Framework'
 }
 
-task jenkinsNightlyBuild(dependsOn: [startRServe, enableRTests, distribute, checkReleaseArchives]) {
+task jenkinsNightlyBuild(dependsOn: [startRServe, enableRTests, distribute, checkReleaseArchives, uploadArchives]) {
 	description = 'Builds and tests the release of the Kieker Framework'
 }
 
+ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
+signing {
+	required { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
+	sign configurations.archives
+}
+
 project.ext{
-	releaseRepoUrl = "file://localhost/tmp/myRepo/releases"
-	snapshotRepoUrl = "file://localhost/tmp/myRepo/snapshots"
+	// for local tests: 
+	//releaseRepoUrl = "file://localhost/tmp/myRepo/releases"
+	//snapshotRepoUrl = "file://localhost/tmp/myRepo/snapshots"
+	
+	// Maven central:
+	releaseRepoUrl =  'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+	snapshotRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
   }
 
 uploadArchives {
 	repositories {
 		mavenDeployer {
+			beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+			
 			pom.artifactId = 'kieker'
 			pom.groupId = 'net.kieker-monitoring'
 			
@@ -558,8 +572,12 @@ uploadArchives {
 				}
 			}
 			
-			repository(url: project.releaseRepoUrl)
-			snapshotRepository(url: project.snapshotRepoUrl)
+			repository(url: project.releaseRepoUrl) {
+				authentication(userName: kiekerMavenUser, password: kiekerMavenPassword)
+			}
+			snapshotRepository(url: project.snapshotRepoUrl) {
+				authentication(userName: kiekerMavenUser, password: kiekerMavenPassword)
+			}
 		}
 	}
 }
