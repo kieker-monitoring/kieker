@@ -246,7 +246,14 @@ task copyLibsStandaloneExamplesAnalysisOpad(type: Copy, dependsOn: [rootProject.
 	into 'analysis/opad-anomaly-detection/lib/'
 }
 
-task buildStandaloneExamplesAnalysisOpad(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesAnalysisOpad') {
+task copyScriptsStandaloneExamplesAnalysisOpad(type: Copy, dependsOn: [rootProject.mainJar]) {
+	from ('../bin/dev') {
+		include "rserve-control.sh"
+	}
+	into 'analysis/opad-anomaly-detection/'
+}
+
+task buildStandaloneExamplesAnalysisOpad(type: GradleBuild, dependsOn: [ 'copyLibsStandaloneExamplesAnalysisOpad', 'copyScriptsStandaloneExamplesAnalysisOpad' ]) {
 	buildFile = 'analysis/opad-anomaly-detection/build.gradle'
 	tasks = ['jar']
 }

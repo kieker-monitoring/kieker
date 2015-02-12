@@ -85,6 +85,7 @@ public final class ExperimentStarter {
 	 */
 	public static void main(final String[] args) throws IllegalStateException, AnalysisConfigurationException, InterruptedException {
 		final List<ForecastMethod> methods = new ArrayList<ForecastMethod>();
+		/*
 		methods.add(ForecastMethod.ARIMA101);
 		methods.add(ForecastMethod.CS);
 		methods.add(ForecastMethod.ETS);
@@ -93,6 +94,7 @@ public final class ExperimentStarter {
 		methods.add(ForecastMethod.MEAN);
 		methods.add(ForecastMethod.NAIVE);
 		methods.add(ForecastMethod.MEANJAVA);
+		*/
 
 		// Forecasting with CROSTON takes a very long time - therefore it is disabled by default
 		// methods.add(ForecastMethod.CROSTON);
@@ -124,6 +126,7 @@ public final class ExperimentStarter {
 
 			// Set the working directory of R to the OPAD_EXAMPLE_FOLDER
 			final String setwdCmdString = "setwd('" + baseFolder + "')";
+			System.out.println("PWD:" + setwdCmdString);
 			ExperimentStarter.LOG.info("Setting working directory ( " + setwdCmdString + " )");
 			rBridge.evalWithR(setwdCmdString);
 
