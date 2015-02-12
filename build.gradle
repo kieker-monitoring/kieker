@@ -577,19 +577,21 @@ uploadArchives {
 				}
 			}
 
-			// The following properties should be defined in ~/.gradle/gradle.properties			
-			if (!project.hasProperty('kiekerMavenUser')) {
-				kiekerMavenUser = 'NoMavenUser'
+			// The following properties should be defined in ~/.gradle/gradle.properties (neede only for Maven upload)
+			def mavenUser = "NoMavenUser"
+			if (project.hasProperty("kiekerMavenUser")) {
+				mavenUser = project.property("kiekerMavenUser")
 			}
-			if (!project.hasProperty('kiekerMavenPassword')) {
-				kiekerMavenPassword = 'NoMavenPassword'
+			def mavenPassword = "NoMavenPassword"
+			if (project.hasProperty("kiekerMavenPassword")) {
+				mavenPassword = project.property("kiekerMavenPassword")
 			}
 			
 			repository(url: project.releaseRepoUrl) {
-				authentication(userName: kiekerMavenUser, password: kiekerMavenPassword)
+				authentication(userName: mavenUser, password: mavenPassword)
 			}
 			snapshotRepository(url: project.snapshotRepoUrl) {
-				authentication(userName: kiekerMavenUser, password: kiekerMavenPassword)
+				authentication(userName: mavenUser, password: mavenPassword)
 			}
 		}
 	}
