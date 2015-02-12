@@ -22,10 +22,10 @@ import kieker.tools.tslib.forecast.AbstractRForecaster;
 
 /**
  * An R-based time series forecaster which computes a forecast based on exponential smoothing.
- * 
+ *
  * @since 1.10
  * @author Andre van Hoorn, Tillmann Carlos Bielefeld
- * 
+ *
  */
 public class ARIMA101Forecaster extends AbstractRForecaster {
 
@@ -34,7 +34,7 @@ public class ARIMA101Forecaster extends AbstractRForecaster {
 	private final String[] emptyString = new String[0];
 
 	/**
-	 * 
+	 *
 	 * @param historyTimeseries
 	 *            timeseries used by forecating algo
 	 */
@@ -43,7 +43,7 @@ public class ARIMA101Forecaster extends AbstractRForecaster {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param historyTimeseries
 	 *            timeseries used by forecating algo
 	 * @param confidenceLevel
@@ -55,7 +55,8 @@ public class ARIMA101Forecaster extends AbstractRForecaster {
 
 	@Override
 	protected String[] getModelFuncParams() {
-		return new String[] { "c(1,0,1)", "method=\"CSS-ML\"" };
+		return new String[] { "c(1,0,1)", "method=\"ML\"" };
+		// return new String[] { "c(1,0,1)", "method=\"CSS-ML\"" };
 	}
 
 	@Override

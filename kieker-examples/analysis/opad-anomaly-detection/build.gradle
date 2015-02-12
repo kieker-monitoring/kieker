@@ -3,10 +3,14 @@ apply plugin: 'application'
 dependencies {
 	compile fileTree('lib') {
 		include "kieker-*.jar"
+		include 'opencsv-*.jar'
 	}
 	runtime fileTree('lib') {
 		include 'commons-lang3-*.jar'
 		include 'commons-math3-*.jar'
+		include 'REngine-*.jar'
+		include 'Rserve-*.jar'
+		include 'Rsession-*.jar'
 	}
 }
 
@@ -19,7 +23,7 @@ libsDirName = '..'
 
 sourceSets.main.java.srcDirs = ['src']
 
-mainClassName = 'kieker.examples.analysis.opad.AnalysisStarter'
+mainClassName = 'kieker.examples.analysis.opad.ExperimentStarter'
 
 jar {
 	manifest {

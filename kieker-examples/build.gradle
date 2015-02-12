@@ -239,6 +239,9 @@ task copyLibsStandaloneExamplesAnalysisOpad(type: Copy, dependsOn: [rootProject.
 	from ('../lib') {
 		include 'commons-lang3-*.jar'
 		include 'commons-math3-*.jar'
+		include 'REngine-*.jar'
+		include 'Rserve-*.jar'
+		include 'Rsession-*.jar'
 	}
 	into 'analysis/opad-anomaly-detection/lib/'
 }

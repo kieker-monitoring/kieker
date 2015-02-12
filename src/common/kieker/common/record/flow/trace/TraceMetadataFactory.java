@@ -14,19 +14,33 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.util;
+package kieker.common.record.flow.trace;
+
+import java.nio.ByteBuffer;
+
+import kieker.common.record.factory.IRecordFactory;
+import kieker.common.util.registry.IRegistry;
 
 /**
- * Exception that states, that the results from a R evaluation are invalid.
- *
- * @author Thomas Duellmann
+ * @author Christian Wulf
  *
  * @since 1.11
  */
-public class InvalidREvaluationResultException extends NullPointerException {
-	private static final long serialVersionUID = 2368292926336488354L;
+public final class TraceMetadataFactory implements IRecordFactory<TraceMetadata> {
 
-	public InvalidREvaluationResultException(final String message) {
-		super(message);
+	@Override
+	public TraceMetadata create(final ByteBuffer buffer, final IRegistry<String> stringRegistry) {
+		return new TraceMetadata(buffer, stringRegistry);
 	}
+
+	@Override
+	public TraceMetadata create(final Object[] values) {
+		return new TraceMetadata(values);
+	}
+
+	@Override
+	public int getRecordSizeInBytes() {
+		return TraceMetadata.SIZE;
+	}
+
 }

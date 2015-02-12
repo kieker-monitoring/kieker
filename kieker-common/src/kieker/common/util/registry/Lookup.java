@@ -16,13 +16,15 @@
 
 package kieker.common.util.registry;
 
+import java.util.Arrays;
+
 /**
- * 
+ *
  * @param <E>
  *            the type of the objects
- * 
+ *
  * @author Jan Waller
- * 
+ *
  * @since 1.8
  */
 public final class Lookup<E> implements ILookup<E> {
@@ -52,10 +54,10 @@ public final class Lookup<E> implements ILookup<E> {
 
 	/**
 	 * Get a record from the underlying object array.
-	 * 
+	 *
 	 * @param i
 	 *            the index for the array
-	 * 
+	 *
 	 * @return the object in the array or null if the array bounds are exceeded
 	 */
 	public E getNonBlocking(final int i) {
@@ -120,7 +122,7 @@ public final class Lookup<E> implements ILookup<E> {
 
 	/**
 	 * @deprecated This method is not supported by this implementation.
-	 * 
+	 *
 	 * @param recordReceiver
 	 *            has no special property.
 	 */
@@ -128,5 +130,10 @@ public final class Lookup<E> implements ILookup<E> {
 	@Deprecated
 	public void setRecordReceiver(final IMonitoringRecordReceiver recordReceiver) {
 		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public String toString() {
+		return Arrays.toString(this.getAll());
 	}
 }

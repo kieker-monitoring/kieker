@@ -14,19 +14,27 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.util;
+package kieker.examples.analysis.opad.experimentModel;
+
+import kieker.tools.opad.model.NamedDoubleTimeSeriesPoint;
 
 /**
- * Exception that states, that the results from a R evaluation are invalid.
- *
  * @author Thomas Duellmann
  *
  * @since 1.11
  */
-public class InvalidREvaluationResultException extends NullPointerException {
-	private static final long serialVersionUID = 2368292926336488354L;
+public class WikiGer24_Oct11_21d_InputModel {
+	private double pageRequests;
 
-	public InvalidREvaluationResultException(final String message) {
-		super(message);
+	public double getPageRequests() {
+		return this.pageRequests;
+	}
+
+	public void setPageRequests(final double pageRequests) {
+		this.pageRequests = pageRequests;
+	}
+
+	public NamedDoubleTimeSeriesPoint getNDTSP(final long timestamp, final String name) {
+		return new NamedDoubleTimeSeriesPoint(timestamp, this.pageRequests, name);
 	}
 }

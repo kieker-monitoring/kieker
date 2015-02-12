@@ -33,7 +33,7 @@ import kieker.test.tools.junit.AbstractKiekerRTest;
 /**
  * @since 1.10
  * @author Tillmann Carlos Bielefeld
- * 
+ *
  */
 public class ARIMA101ForecasterTest extends AbstractKiekerRTest {
 
@@ -58,9 +58,9 @@ public class ARIMA101ForecasterTest extends AbstractKiekerRTest {
 
 		// Test values resulting from this calculation:
 
-		// var_1 <<- c(1.0,2.0,3.0,4.0)
-		// var_2<<-arima(var_1,c(1,0,1))
-		// var_3<<-predict(var_2,h=1,level=c(90))
+		// var_1 <- c(1.0,2.0,3.0,4.0)
+		// var_2 <-arima(var_1,c(1,0,1))
+		// var_3 <-predict(var_2,h=1,level=c(90))
 		// dprint(var_3)
 		// dprint(var_3$pred[1])
 		// dprint(var_3$pred[1] + var_3$se[1])
