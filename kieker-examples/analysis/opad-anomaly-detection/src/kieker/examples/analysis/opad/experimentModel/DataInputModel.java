@@ -17,6 +17,8 @@
 package kieker.examples.analysis.opad.experimentModel;
 
 /**
+ * Default model for experiment input.
+ * 
  * @author Thomas Duellmann
  *
  * @since 1.11

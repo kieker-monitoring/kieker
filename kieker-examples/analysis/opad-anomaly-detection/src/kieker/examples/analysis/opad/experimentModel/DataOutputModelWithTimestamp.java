@@ -17,6 +17,8 @@
 package kieker.examples.analysis.opad.experimentModel;
 
 /**
+ * Output model with added timestamp property.
+ * 
  * @author Thomas Duellmann
  *
  * @since 1.11
