@@ -34,7 +34,7 @@ public class DataOutputModelWithTimestamp extends DataOutputModel{
 	private long timestamp;
 
 	public DataOutputModelWithTimestamp(final double measurement, final double forecast, final int confidence, final double confidenceUpper,
-			final double confidenceLower, final String forecaster, final double mase, final double timestamp) {
+			final double confidenceLower, final String forecaster, final double mase, final long timestamp) {
 		super(measurement,forecast,confidence,confidenceUpper,confidenceLower,forecaster,mase);
 		this.timestamp = timestamp;
 	}
