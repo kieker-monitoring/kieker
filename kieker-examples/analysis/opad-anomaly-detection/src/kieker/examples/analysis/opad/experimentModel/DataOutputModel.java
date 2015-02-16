@@ -32,7 +32,7 @@ public class DataOutputModel {
 	private String forecaster;
 	private double mase;
 
-	public WikiGer24_Oct11_21d_OutputModel(final double measurement, final double forecast, final int confidence, final double confidenceUpper,
+	public DataOutputModel(final double measurement, final double forecast, final int confidence, final double confidenceUpper,
 			final double confidenceLower, final String forecaster, final double mase) {
 		this.measurement = measurement;
 		this.forecast = forecast;
