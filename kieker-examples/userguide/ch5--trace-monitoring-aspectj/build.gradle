@@ -6,9 +6,6 @@ dependencies {
 	}
 }
 
-// Create the JAR file in the root directory of the example
-libsDirName = '..'
-
 // Simplify the JAR's file name
 archivesBaseName = 'BookstoreApplication'
 version = ''

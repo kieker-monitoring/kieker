@@ -19,9 +19,6 @@ dependencies {
 // Simplify the JAR's file name
 archivesBaseName = 'BookstoreApplication'
 version = ''
-
-// Create the JAR file in the root directory of the example
-libsDirName = '..'
 	
 sourceSets.main.java.srcDirs = ['src']
 sourceSets.main.resources.srcDirs = ['src-resources']
