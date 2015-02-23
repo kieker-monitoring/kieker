@@ -443,13 +443,22 @@ task distributeSourceTar(type: Tar, group: 'distribution', dependsOn: [mainJar, 
 }
 
 task startRServe() << {
-	'bin/dev/rserve-control.sh start'.execute()
+    String osName = System.getProperty("os.name").toLowerCase();
+	if (osName.contains("windows")) {
+		'bin/dev/rserve-control.bat start'.execute()
+	} else {
+		'bin/dev/rserve-control.sh start'.execute()
+	}	
 }
 distribute.mustRunAfter startRServe
 
 task stopRServe(type: Exec) {
-	commandLine 'bin/dev/rserve-control.sh', 'stop'
-	
+    String osName = System.getProperty("os.name").toLowerCase();
+	if (osName.contains("windows")) {
+		'bin/dev/rserve-control.bat stop'.execute()
+	} else {
+		'bin/dev/rserve-control.sh stop'.execute()
+	}
 	ignoreExitValue = true
 }
 startRServe.finalizedBy stopRServe
