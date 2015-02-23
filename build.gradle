@@ -455,9 +455,9 @@ distribute.mustRunAfter startRServe
 task stopRServe(type: Exec) {
     String osName = System.getProperty("os.name").toLowerCase();
 	if (osName.contains("windows")) {
-		'bin/dev/rserve-control.bat stop'.execute()
+		 commandLine 'bin/dev/rserve-control.bat', 'stop' 
 	} else {
-		'bin/dev/rserve-control.sh stop'.execute()
+		 commandLine 'bin/dev/rserve-control.sh', 'stop' 
 	}
 	ignoreExitValue = true
 }
