@@ -14,23 +14,35 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.opad.model;
+package kieker.tools.opad.timeseries.anomalycalculators;
 
 import kieker.tools.opad.timeseries.ITimeSeriesPoint;
+import kieker.tools.opad.timeseries.forecast.IForecastResult;
 
 /**
+ * Classes implementing this interface calculate anomaly scores based on a forecasted and an actual value.
+ * 
  * @author Tillmann Carlos Bielefeld
+ * 
  * @since 1.10
  * 
+ * @param <T>
+ *            The type of the calculator.
  */
-public interface IForecastMeasurementPair extends INamedElement, ITimeSeriesPoint<Double> {
+public interface IAnomalyScoreCalculator<T> {
 
 	/**
-	 * Returns the forecasted Double value.
+	 * Calculates an anomaly score based on the given values.
+	 * 
+	 * @param forecast
+	 *            The forecasted value.
+	 * @param current
+	 *            The actual value.
+	 * 
+	 * @return An anomaly score for the given values.
 	 * 
 	 * @since 1.10
-	 * @return forecasted Double value
 	 */
-	public Double getForecasted();
+	public AnomalyScore calculateAnomalyScore(IForecastResult forecast, ITimeSeriesPoint<T> current);
 
 }

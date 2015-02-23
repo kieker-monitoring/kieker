@@ -20,7 +20,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import kieker.analysis.exception.AnalysisConfigurationException;
-import kieker.tools.tslib.TimeSeriesPointsBuffer;
+import kieker.tools.opad.timeseries.TimeSeriesPointsBuffer;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 

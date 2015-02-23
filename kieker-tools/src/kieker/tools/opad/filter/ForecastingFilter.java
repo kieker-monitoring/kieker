@@ -33,11 +33,11 @@ import kieker.common.configuration.Configuration;
 import kieker.tools.opad.model.ForecastMeasurementPair;
 import kieker.tools.opad.model.IForecastMeasurementPair;
 import kieker.tools.opad.model.NamedDoubleTimeSeriesPoint;
-import kieker.tools.tslib.ForecastMethod;
-import kieker.tools.tslib.ITimeSeries;
-import kieker.tools.tslib.TimeSeries;
-import kieker.tools.tslib.forecast.IForecastResult;
-import kieker.tools.tslib.forecast.IForecaster;
+import kieker.tools.opad.timeseries.ForecastMethod;
+import kieker.tools.opad.timeseries.ITimeSeries;
+import kieker.tools.opad.timeseries.TimeSeries;
+import kieker.tools.opad.timeseries.forecast.IForecastResult;
+import kieker.tools.opad.timeseries.forecast.IForecaster;
 
 /**
  * Computes a forecast for every incoming measurement from different applications.

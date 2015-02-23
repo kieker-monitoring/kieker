@@ -14,23 +14,41 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.opad.model;
+package kieker.tools.opad.timeseries.forecast;
 
-import kieker.tools.opad.timeseries.ITimeSeriesPoint;
+import kieker.tools.opad.timeseries.ITimeSeries;
 
 /**
- * @author Tillmann Carlos Bielefeld
+ * @author Andre van Hoorn
  * @since 1.10
  * 
+ * @param <T>
+ *            The type of the forecaster.
  */
-public interface IForecastMeasurementPair extends INamedElement, ITimeSeriesPoint<Double> {
+public interface IForecaster<T> {
 
 	/**
-	 * Returns the forecasted Double value.
+	 * Performs a time series forecast for the given number of steps in the future.
+	 * 
+	 * @param numForecastSteps
+	 *            number of steps which will be forecated
+	 * @return ForecastResult
 	 * 
 	 * @since 1.10
-	 * @return forecasted Double value
 	 */
-	public Double getForecasted();
+	public IForecastResult forecast(final int numForecastSteps);
 
+	/**
+	 * Returns the original time series used for the forecast.
+	 * 
+	 * @since 1.10
+	 */
+	public ITimeSeries<T> getTsOriginal();
+
+	/**
+	 * Returns the confidence level to be computed for the forecast.
+	 * 
+	 * @since 1.10
+	 */
+	public int getConfidenceLevel();
 }

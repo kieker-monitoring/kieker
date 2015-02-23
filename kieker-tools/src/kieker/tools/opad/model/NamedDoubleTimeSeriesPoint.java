@@ -16,7 +16,7 @@
 
 package kieker.tools.opad.model;
 
-import kieker.tools.tslib.TimeSeriesPoint;
+import kieker.tools.opad.timeseries.TimeSeriesPoint;
 
 /**
  * @author Tillmann Carlos Bielefeld

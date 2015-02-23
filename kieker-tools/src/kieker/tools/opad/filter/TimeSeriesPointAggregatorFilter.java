@@ -28,7 +28,7 @@ import kieker.analysis.plugin.filter.AbstractFilterPlugin;
 import kieker.common.configuration.Configuration;
 import kieker.tools.opad.model.NamedDoubleTimeSeriesPoint;
 import kieker.tools.opad.record.AggregationWindow;
-import kieker.tools.tslib.AggregationMethod;
+import kieker.tools.opad.timeseries.AggregationMethod;
 import kieker.tools.util.AggregationVariableSet;
 
 /**

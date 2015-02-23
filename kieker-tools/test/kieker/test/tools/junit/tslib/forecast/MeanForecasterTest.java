@@ -22,11 +22,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import kieker.tools.tslib.ITimeSeries;
-import kieker.tools.tslib.ITimeSeriesPoint;
-import kieker.tools.tslib.TimeSeries;
-import kieker.tools.tslib.forecast.IForecastResult;
-import kieker.tools.tslib.forecast.mean.MeanForecaster;
+import kieker.tools.opad.timeseries.ITimeSeries;
+import kieker.tools.opad.timeseries.ITimeSeriesPoint;
+import kieker.tools.opad.timeseries.TimeSeries;
+import kieker.tools.opad.timeseries.forecast.IForecastResult;
+import kieker.tools.opad.timeseries.forecast.mean.MeanForecaster;
 
 import kieker.test.tools.junit.AbstractKiekerRTest;
 

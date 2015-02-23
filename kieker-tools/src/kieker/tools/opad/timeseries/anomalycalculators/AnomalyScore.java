@@ -14,23 +14,25 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.opad.model;
-
-import kieker.tools.opad.timeseries.ITimeSeriesPoint;
+package kieker.tools.opad.timeseries.anomalycalculators;
 
 /**
- * @author Tillmann Carlos Bielefeld
- * @since 1.10
+ * A simple container for an anomaly score.
  * 
+ * @author Tillmann Carlos Bielefeld
+ * 
+ * @since 1.10
  */
-public interface IForecastMeasurementPair extends INamedElement, ITimeSeriesPoint<Double> {
+public class AnomalyScore {
 
-	/**
-	 * Returns the forecasted Double value.
-	 * 
-	 * @since 1.10
-	 * @return forecasted Double value
-	 */
-	public Double getForecasted();
+	private final double score;
+
+	public AnomalyScore(final double score) {
+		this.score = score;
+	}
+
+	public double getScore() {
+		return this.score;
+	}
 
 }

@@ -14,23 +14,50 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.opad.model;
-
-import kieker.tools.opad.timeseries.ITimeSeriesPoint;
+package kieker.tools.opad.timeseries;
 
 /**
- * @author Tillmann Carlos Bielefeld
+ * 
+ * @author Tom Frotscher
  * @since 1.10
  * 
+ * @param <T>
+ *            The type of the buffer.
  */
-public interface IForecastMeasurementPair extends INamedElement, ITimeSeriesPoint<Double> {
+public interface ITimeSeriesPointsBuffer<T> {
 
 	/**
-	 * Returns the forecasted Double value.
+	 * Add an Object to the tail of the Buffer.
 	 * 
 	 * @since 1.10
-	 * @return forecasted Double value
+	 * @param o
+	 *            The Value to add
+	 * @return
+	 *         Returns true if Object is added successfully
+	 * 
+	 * @since 1.9
 	 */
-	public Double getForecasted();
+	public boolean add(T o);
+
+	/**
+	 * Removes a Value from the buffer in FIFO order.
+	 * 
+	 * @since 1.10
+	 * @return
+	 *         Returns the removed Object
+	 * 
+	 * @since 1.9
+	 */
+	public T remove();
+
+	/**
+	 * Returns the current size of the buffer.
+	 * 
+	 * @since 1.10
+	 * @return Returned Buffersize
+	 * 
+	 * @since 1.9
+	 */
+	public int getSize();
 
 }

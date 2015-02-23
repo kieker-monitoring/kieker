@@ -14,23 +14,38 @@
  * limitations under the License.
  ***************************************************************************/
 
-package kieker.tools.opad.model;
-
-import kieker.tools.opad.timeseries.ITimeSeriesPoint;
+package kieker.tools.opad.timeseries;
 
 /**
- * @author Tillmann Carlos Bielefeld
+ * @author Andre van Hoorn
  * @since 1.10
  * 
+ * @param <T>
+ *            The type of the point.
  */
-public interface IForecastMeasurementPair extends INamedElement, ITimeSeriesPoint<Double> {
+public class TimeSeriesPoint<T> implements ITimeSeriesPoint<T> {
 
-	/**
-	 * Returns the forecasted Double value.
-	 * 
-	 * @since 1.10
-	 * @return forecasted Double value
-	 */
-	public Double getForecasted();
+	private final long time;
+	private final T value;
+
+	public TimeSeriesPoint(final long time, final T value) {
+		this.time = time;
+		this.value = value;
+	}
+
+	@Override
+	public long getTime() {
+		return this.time;
+	}
+
+	@Override
+	public T getValue() {
+		return this.value;
+	}
+
+	@Override
+	public String toString() {
+		return "[" + this.getTime() + "=" + this.getValue() + "]";
+	}
 
 }

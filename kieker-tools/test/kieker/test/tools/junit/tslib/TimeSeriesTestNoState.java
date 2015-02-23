@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.tools.tslib.TimeSeries;
+import kieker.tools.opad.timeseries.TimeSeries;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 

@@ -39,7 +39,7 @@ import kieker.examples.analysis.opad.experimentModel.WikiGer24_Oct11_21d_OutputM
 import kieker.tools.opad.filter.ForecastingFilter;
 import kieker.tools.opad.model.ForecastMeasurementPair;
 import kieker.tools.opad.model.NamedDoubleTimeSeriesPoint;
-import kieker.tools.tslib.ForecastMethod;
+import kieker.tools.opad.timeseries.ForecastMethod;
 
 /**
  * @author Thomas Duellmann

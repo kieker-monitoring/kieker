@@ -22,7 +22,7 @@ import org.junit.Before;
 import org.rosuda.REngine.Rserve.RConnection;
 import org.rosuda.REngine.Rserve.RserveException;
 
-import kieker.tools.tslib.ITimeSeries;
+import kieker.tools.opad.timeseries.ITimeSeries;
 
 import kieker.test.common.junit.AbstractKiekerTest;
 

@@ -21,10 +21,10 @@ import java.util.concurrent.TimeUnit;
 import org.junit.Assert;
 import org.junit.Test;
 
-import kieker.tools.tslib.ITimeSeries;
-import kieker.tools.tslib.TimeSeries;
-import kieker.tools.tslib.forecast.IForecastResult;
-import kieker.tools.tslib.forecast.ses.SESRForecaster;
+import kieker.tools.opad.timeseries.ITimeSeries;
+import kieker.tools.opad.timeseries.TimeSeries;
+import kieker.tools.opad.timeseries.forecast.IForecastResult;
+import kieker.tools.opad.timeseries.forecast.ses.SESRForecaster;
 
 import kieker.test.tools.junit.AbstractKiekerRTest;
 
