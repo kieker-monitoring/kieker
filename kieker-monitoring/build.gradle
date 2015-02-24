@@ -3,6 +3,9 @@ dependencies {
 	
 	compile resolveLibrary('javax.jms-*.jar')
 	compile resolveLibrary('framework-libs/cxf/cxf-*.jar')
+	compile resolveLibrary('framework-libs/ribbon/ribbon-core-*.jar')
+	compile resolveLibrary('framework-libs/ribbon/ribbon-httpclient-*.jar')
+	compile resolveLibrary('framework-libs/ribbon/jsr311-api-*.jar')
 	compile resolveLibrary('aspectjweaver-*.jar')
 	compile resolveLibrary('disl-2.0/disl-server.jar')
 	compile resolveLibrary('sigar/sigar-*.jar')
