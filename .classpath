@@ -67,8 +67,10 @@
 	<classpathentry kind="lib" path="kieker-examples/JavaEEServletContainerExample/jetty/lib/jetty-servlet-8.1.16.v20140903.jar"/>
 	<classpathentry kind="lib" path="kieker-examples/analysis/opad-anomaly-detection/lib/opencsv-2.4-SNAPSHOT.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/framework-libs/netty/netty-3.2.10.Final.jar"/>
+	<classpathentry kind="lib" path="lib/framework-libs/jsr311-api-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/framework-libs/ribbon/ribbon-core-0.1.2.jar"/>
-	<classpathentry kind="lib" path="lib/framework-libs/ribbon/ribbon-httpclient-0.1.11.jar"/>
-	<classpathentry kind="lib" path="lib/framework-libs/ribbon/jsr311-api-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/framework-libs/ribbon/ribbon-httpclient-0.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/framework-libs/jersey/jersey-server-1.13.jar"/>
 	<classpathentry kind="output" path="build-eclipse"/>
 </classpath>
