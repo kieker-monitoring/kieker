@@ -52,6 +52,7 @@ task iajc(dependsOn: classes) {
                 fileset(dir: '../lib/framework-libs/netty', includes: "*.jar")
                 fileset(dir: '../lib/framework-libs', includes: "jsr311-api-1.1.1.jar")
                 fileset(dir: '../lib/framework-libs/jersey', includes: "jersey-server-1.13.jar")
+                fileset(dir: '../lib/framework-libs/rssreader', includes: "*.jar")
 				
 				pathElement(location: project(':kieker-common').sourceSets.main.output.classesDir)
                 pathElement(location: sourceSets.main.output.classesDir)

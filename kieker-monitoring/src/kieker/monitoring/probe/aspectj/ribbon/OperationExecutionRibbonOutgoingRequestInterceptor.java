@@ -24,6 +24,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.DeclarePrecedence;
 
 import com.netflix.niws.client.http.HttpClientResponse;
 
@@ -43,6 +44,7 @@ import kieker.monitoring.timer.ITimeSource;
  * @since 1.12
  */
 @Aspect
+@DeclarePrecedence("kieker.monitoring.probe.aspectj.operationExecution.*,kieker.monitoring.probe.aspectj.ribbon.*")
 public class OperationExecutionRibbonOutgoingRequestInterceptor extends AbstractAspectJProbe {
 	private static final Log LOG = LogFactory.getLog(OperationExecutionRibbonOutgoingRequestInterceptor.class);
 
@@ -77,8 +79,10 @@ public class OperationExecutionRibbonOutgoingRequestInterceptor extends Abstract
 			ess = 0;
 		} else {
 			entrypoint = false;
-			eoi = CF_REGISTRY.incrementAndRecallThreadLocalEOI(); // ess > 1
-			ess = CF_REGISTRY.recallAndIncrementThreadLocalESS(); // ess >= 0
+			// eoi = CF_REGISTRY.incrementAndRecallThreadLocalEOI(); // ess > 1
+			// ess = CF_REGISTRY.recallAndIncrementThreadLocalESS(); // ess >= 0
+			eoi = CF_REGISTRY.recallThreadLocalEOI();
+			ess = CF_REGISTRY.recallThreadLocalESS();
 			if ((eoi == -1) || (ess == -1)) {
 				LOG.error("eoi and/or ess have invalid values:" + " eoi == " + eoi + " ess == " + ess);
 				CTRLINST.terminateMonitoring();
@@ -94,7 +98,7 @@ public class OperationExecutionRibbonOutgoingRequestInterceptor extends Abstract
 			final MultivaluedMap<String, String> requestHeader = new MultivaluedHashMap<String, String>();
 			final List<String> requestHeaderList = new ArrayList<String>(4);
 			requestHeaderList.add(Long.toString(traceId) + "," + sessionId + "," + Integer.toString(eoi) + "," + Integer.toString(ess));
-			// LOG.error("header = " + headerList);
+			LOG.error("requestHeader = " + requestHeaderList);
 			requestHeader.put(RibbonHeaderConstants.OPERATION_EXECUTION_HEADER, requestHeaderList);
 
 			args[2] = requestHeader;
@@ -107,7 +111,7 @@ public class OperationExecutionRibbonOutgoingRequestInterceptor extends Abstract
 		try {
 			retval = thisJoinPoint.proceed(args);
 
-			LOG.error("retval = " + retval.getClass().getName());
+			// LOG.error("retval = " + retval.getClass().getName());
 			if (retval instanceof HttpClientResponse) {
 				final HttpClientResponse response = (HttpClientResponse) retval;
 				final MultivaluedMap<String, String> responseHeader = response.getHeaders();
@@ -115,7 +119,7 @@ public class OperationExecutionRibbonOutgoingRequestInterceptor extends Abstract
 					final List<String> responseHeaderList = responseHeader.get(RibbonHeaderConstants.OPERATION_EXECUTION_HEADER);
 					if (responseHeaderList != null) {
 						LOG.error("");
-						LOG.error(responseHeaderList.toString());
+						LOG.error("responseHeader = " + responseHeaderList.toString());
 						LOG.error("");
 						final String[] responseArray = responseHeaderList.get(0).split(",");
 
@@ -124,6 +128,7 @@ public class OperationExecutionRibbonOutgoingRequestInterceptor extends Abstract
 						if (retTraceIdStr != "null") {
 							final Long retTraceId = Long.parseLong(retTraceIdStr);
 						}
+						// check trace id should be the same
 
 						// Extract session id
 						String retSessionId = responseArray[1];
@@ -137,37 +142,25 @@ public class OperationExecutionRibbonOutgoingRequestInterceptor extends Abstract
 						if (!retEOIStr.equals("null")) {
 							try {
 								retEOI = Integer.parseInt(retEOIStr);
+								CF_REGISTRY.storeThreadLocalEOI(retEOI);
 							} catch (final NumberFormatException exc) {
 								LOG.warn("Invalid eoi", exc);
 							}
 						}
 
-						// Extract ESS
-						int retESS = -1;
-						final String retESSStr = responseArray[3];
-						if (!retESSStr.equals("null")) {
-							try {
-								retESS = Integer.parseInt(retESSStr);
-							} catch (final NumberFormatException exc) {
-								LOG.warn("Invalid ess", exc);
-							}
-						}
-
-						// Set trace id, etc
-						// TODO
 					} else {
 						LOG.error("No monitoring data found in the response header");
-						CTRLINST.terminateMonitoring();
+						// CTRLINST.terminateMonitoring();
 					}
 				} else {
 					LOG.error("Response header is null");
-					CTRLINST.terminateMonitoring();
+					// CTRLINST.terminateMonitoring();
 				}
 			}
 		} finally {
 			// measure after
 			final long tout = TIME.getTime();
-			CTRLINST.newMonitoringRecord(new OperationExecutionRecord(signature, sessionId, traceId, tin, tout, hostname, eoi, ess));
+			// CTRLINST.newMonitoringRecord(new OperationExecutionRecord(signature, sessionId, traceId, tin, tout, hostname, eoi, ess));
 			// cleanup
 			if (entrypoint) {
 				CF_REGISTRY.unsetThreadLocalTraceId();
