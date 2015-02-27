@@ -14,4 +14,3 @@ IF "%1"=="" (
   :: Print usage
   ECHO "Usage: %0 (start|stop)"
 )
-
