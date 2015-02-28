@@ -249,6 +249,8 @@ task copyLibsStandaloneExamplesAnalysisOpad(type: Copy, dependsOn: [rootProject.
 task copyScriptsStandaloneExamplesAnalysisOpad(type: Copy, dependsOn: [rootProject.mainJar]) {
 	from ('../bin/dev') {
 		include "rserve-control.sh"
+		include "rserve-control.bat"
+		include "RserveStart.R"
 	}
 	into 'analysis/opad-anomaly-detection/'
 }
