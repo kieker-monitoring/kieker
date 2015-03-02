@@ -69,8 +69,8 @@ public class OperationExecutionNettyIncomingRequestInterceptor extends AbstractA
 			return thisJoinPoint.proceed();
 		}
 
-		boolean entrypoint = true;
-		final String hostname = VMNAME;
+		// boolean entrypoint = true;
+		// final String hostname = VMNAME;
 
 		// Set traceId, sessionId, eoi, ess
 		final MessageEvent messageEvent = (MessageEvent) thisJoinPoint.getArgs()[1];
@@ -78,13 +78,16 @@ public class OperationExecutionNettyIncomingRequestInterceptor extends AbstractA
 
 		// This is a hack to get all values
 		final List<String> headerList = request.getHeaders(RibbonHeaderConstants.OPERATION_EXECUTION_HEADER);
-		if (headerList == null) {
+		if ((headerList == null) || (headerList.size() == 0)) {
 			LOG.error("No monitoring data found in the incoming request header");
+			LOG.error("Will continue without sending back reponse header");
 			// CTRLINST.terminateMonitoring();
 			return thisJoinPoint.proceed();
 		}
 		final String operationExecutionHeader = headerList.get(0);
-		LOG.error("Received header: " + operationExecutionHeader);
+		// LOG.info("");
+		LOG.info("requestHeader: " + operationExecutionHeader);
+		// LOG.info("");
 		final String[] headerArray = operationExecutionHeader.split(",");
 
 		// Extract session id
@@ -125,7 +128,7 @@ public class OperationExecutionNettyIncomingRequestInterceptor extends AbstractA
 		} else {
 			traceId = CF_REGISTRY.getUniqueTraceId();
 			sessionId = SESSION_ID_ASYNC_TRACE;
-			entrypoint = true;
+			// entrypoint = true;
 			eoi = 0; // EOI of this execution
 			ess = 0; // ESS of this execution
 		}
@@ -141,16 +144,16 @@ public class OperationExecutionNettyIncomingRequestInterceptor extends AbstractA
 		NETTY_REGISTRY.storeThreadLocalInRequestTin(tin);
 		NETTY_REGISTRY.storeThreadLocalInRequestEOI(eoi);
 		NETTY_REGISTRY.storeThreadLocalInRequestESS(ess);
-		LOG.error("registry tin = " + NETTY_REGISTRY.recallThreadLocalInRequestTin());
-		LOG.error("registry eoi = " + NETTY_REGISTRY.recallThreadLocalInRequestEOI());
-		LOG.error("registry ess = " + NETTY_REGISTRY.recallThreadLocalInRequestESS());
+		// LOG.info("registry tin = " + NETTY_REGISTRY.recallThreadLocalInRequestTin());
+		// LOG.info("registry eoi = " + NETTY_REGISTRY.recallThreadLocalInRequestEOI());
+		// LOG.info("registry ess = " + NETTY_REGISTRY.recallThreadLocalInRequestESS());
 		// execution of the called method
 		final Object retval;
 		try {
 			retval = thisJoinPoint.proceed();
 		} finally {
 			// measure after
-			final long tout = TIME.getTime();
+			// final long tout = TIME.getTime();
 			// CTRLINST.newMonitoringRecord(new OperationExecutionRecord(signature, sessionId, traceId, tin, tout, hostname, eoi, ess));
 			// cleanup
 			// if (entrypoint) {
@@ -160,6 +163,8 @@ public class OperationExecutionNettyIncomingRequestInterceptor extends AbstractA
 			// } else {
 			// CF_REGISTRY.storeThreadLocalESS(ess); // next operation is ess
 			// }
+			this.unsetKiekerThreadLocalData();
+			this.unsetKiekerNettyRegistry();
 		}
 		return retval;
 	}
@@ -179,20 +184,21 @@ public class OperationExecutionNettyIncomingRequestInterceptor extends AbstractA
 		String sessionId;
 		final long traceId = CF_REGISTRY.recallThreadLocalTraceId();
 		final long tin = NETTY_REGISTRY.recallThreadLocalInRequestTin();
-		LOG.error("registry tin = " + NETTY_REGISTRY.recallThreadLocalInRequestTin());
-		LOG.error("registry eoi = " + NETTY_REGISTRY.recallThreadLocalInRequestEOI());
-		LOG.error("registry ess = " + NETTY_REGISTRY.recallThreadLocalInRequestESS());
-		// final long tout;
-		final boolean isEntryCall = true;
+		// LOG.info("registry tin = " + NETTY_REGISTRY.recallThreadLocalInRequestTin());
+		// LOG.info("registry eoi = " + NETTY_REGISTRY.recallThreadLocalInRequestEOI());
+		// LOG.info("registry ess = " + NETTY_REGISTRY.recallThreadLocalInRequestESS());
+
+		// final boolean isEntryCall = true;
 		int eoi = -1;
 		int ess = -1;
-		final int myEoi = -1;
-		final int myEss = -1;
+		// final int myEoi = -1;
+		// final int myEss = -1;
 
 		if (traceId == -1) {
 			// Kieker trace Id not registered. Should not happen, since this is a response message!
 			LOG.warn("Kieker traceId not registered. Will unset all threadLocal variables and return.");
 			this.unsetKiekerThreadLocalData(); // unset all variables
+			this.unsetKiekerNettyRegistry();
 			return null;
 		} else {
 			// thread-local traceId exists: eoi, ess, and sessionID should have been registered before
@@ -213,21 +219,30 @@ public class OperationExecutionNettyIncomingRequestInterceptor extends AbstractA
 			responseHeaderList.add(Long.toString(traceId) + ","
 					+ sessionId + ","
 					+ Integer.toString(CF_REGISTRY.recallThreadLocalEOI()));
-			LOG.error("responseHeader = " + responseHeaderList.toString());
+			// LOG.info("");
+			LOG.info("responseHeader = " + responseHeaderList.toString());
+			// LOG.info("");
 			responseHeader.put(RibbonHeaderConstants.OPERATION_EXECUTION_HEADER, responseHeaderList);
 		}
 
 		// execution of the called method
 		final Object retval;
 		try {
-			retval = thisJoinPoint.proceed(args);
+
+			if ((tin == -1) || (eoi == -1) || (ess == -1)) {
+				LOG.warn("Continue without sending back response header");
+				retval = thisJoinPoint.proceed();
+			} else {
+				retval = thisJoinPoint.proceed(args);
+			}
 		} finally {
 			// measure after
 			final long tout = TIME.getTime();
 			CTRLINST.newMonitoringRecord(new OperationExecutionRecord("messageReceivedandWriteStatusAndHeader", sessionId, traceId, tin, tout, hostname, eoi, ess));
 			// cleanup
 			// if (entrypoint) {
-			this.unsetKiekerThreadLocalData();
+			// this.unsetKiekerThreadLocalData();
+			// this.unsetKiekerNettyRegistry();
 			// } else {
 			// CF_REGISTRY.storeThreadLocalESS(ess); // next operation is ess
 			// }
@@ -239,5 +254,11 @@ public class OperationExecutionNettyIncomingRequestInterceptor extends AbstractA
 		CF_REGISTRY.unsetThreadLocalTraceId();
 		CF_REGISTRY.unsetThreadLocalEOI();
 		CF_REGISTRY.unsetThreadLocalESS();
+	}
+
+	private final void unsetKiekerNettyRegistry() {
+		NETTY_REGISTRY.unsetThreadLocalInRequestTin();
+		NETTY_REGISTRY.unsetThreadLocalInRequestEOI();
+		NETTY_REGISTRY.unsetThreadLocalInRequestESS();
 	}
 }

@@ -36,7 +36,6 @@ import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
 import kieker.monitoring.probe.aspectj.AbstractAspectJProbe;
-import kieker.monitoring.timer.ITimeSource;
 
 /**
  * @author Teerat Pitakrat
@@ -49,8 +48,8 @@ public class OperationExecutionRibbonOutgoingRequestInterceptor extends Abstract
 	private static final Log LOG = LogFactory.getLog(OperationExecutionRibbonOutgoingRequestInterceptor.class);
 
 	private static final IMonitoringController CTRLINST = MonitoringController.getInstance();
-	private static final ITimeSource TIME = CTRLINST.getTimeSource();
-	private static final String VMNAME = CTRLINST.getHostname();
+	// private static final ITimeSource TIME = CTRLINST.getTimeSource();
+	// private static final String VMNAME = CTRLINST.getHostname();
 	private static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
 	private static final SessionRegistry SESSIONREGISTRY = SessionRegistry.INSTANCE;
 
@@ -65,7 +64,7 @@ public class OperationExecutionRibbonOutgoingRequestInterceptor extends Abstract
 		}
 		// collect data
 		final boolean entrypoint;
-		final String hostname = VMNAME;
+		// final String hostname = VMNAME;
 		final String sessionId = SESSIONREGISTRY.recallThreadLocalSessionId();
 		final int eoi; // this is executionOrderIndex-th execution in this trace
 		final int ess; // this is the height in the dynamic call tree of this execution
@@ -98,14 +97,16 @@ public class OperationExecutionRibbonOutgoingRequestInterceptor extends Abstract
 			final MultivaluedMap<String, String> requestHeader = new MultivaluedHashMap<String, String>();
 			final List<String> requestHeaderList = new ArrayList<String>(4);
 			requestHeaderList.add(Long.toString(traceId) + "," + sessionId + "," + Integer.toString(eoi) + "," + Integer.toString(ess));
-			LOG.error("requestHeader = " + requestHeaderList);
+			// LOG.info("");
+			LOG.info("requestHeader = " + requestHeaderList);
+			// LOG.info("");
 			requestHeader.put(RibbonHeaderConstants.OPERATION_EXECUTION_HEADER, requestHeaderList);
 
 			args[2] = requestHeader;
 		}
 
 		// measure before
-		final long tin = TIME.getTime();
+		// final long tin = TIME.getTime();
 		// execution of the called method
 		final Object retval;
 		try {
@@ -118,9 +119,9 @@ public class OperationExecutionRibbonOutgoingRequestInterceptor extends Abstract
 				if (responseHeader != null) {
 					final List<String> responseHeaderList = responseHeader.get(RibbonHeaderConstants.OPERATION_EXECUTION_HEADER);
 					if (responseHeaderList != null) {
-						LOG.error("");
-						LOG.error("responseHeader = " + responseHeaderList.toString());
-						LOG.error("");
+						// LOG.info("");
+						LOG.info("responseHeader = " + responseHeaderList.toString());
+						// LOG.info("");
 						final String[] responseArray = responseHeaderList.get(0).split(",");
 
 						// Extract trace id
@@ -149,17 +150,19 @@ public class OperationExecutionRibbonOutgoingRequestInterceptor extends Abstract
 						}
 
 					} else {
-						LOG.error("No monitoring data found in the response header");
+						LOG.warn("No monitoring data found in the response header");
+						LOG.warn("Is middletier instrumented?");
 						// CTRLINST.terminateMonitoring();
 					}
 				} else {
-					LOG.error("Response header is null");
+					LOG.warn("Response header is null");
+					LOG.warn("Is middletier instrumented?");
 					// CTRLINST.terminateMonitoring();
 				}
 			}
 		} finally {
 			// measure after
-			final long tout = TIME.getTime();
+			// final long tout = TIME.getTime();
 			// CTRLINST.newMonitoringRecord(new OperationExecutionRecord(signature, sessionId, traceId, tin, tout, hostname, eoi, ess));
 			// cleanup
 			if (entrypoint) {
