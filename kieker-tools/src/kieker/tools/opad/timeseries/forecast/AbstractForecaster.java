@@ -40,6 +40,8 @@ public abstract class AbstractForecaster<T> implements IForecaster<T> {
 	private final ITimeSeries<T> historyTimeseries;
 	private final int confidenceLevel;
 
+	private boolean warningAlreadyLogged = false;
+
 	public AbstractForecaster(final ITimeSeries<T> historyTimeseries) {
 		this(historyTimeseries, 0);
 	}
@@ -52,9 +54,6 @@ public abstract class AbstractForecaster<T> implements IForecaster<T> {
 	 *            value for confidencelevel
 	 */
 	public AbstractForecaster(final ITimeSeries<T> historyTimeseries, final int confidenceLevel) {
-		if (!this.supportsConfidence()) {
-			LOG.warn("Confidence level not supported. Falling back to 0.0.");
-		}
 		this.historyTimeseries = historyTimeseries;
 		this.confidenceLevel = confidenceLevel;
 	}
@@ -86,6 +85,10 @@ public abstract class AbstractForecaster<T> implements IForecaster<T> {
 		if (this.supportsConfidence()) {
 			return this.confidenceLevel;
 		} else {
+			if (!this.warningAlreadyLogged) {
+				LOG.warn("Confidence level not supported. Falling back to 0.0.");
+				this.warningAlreadyLogged = true;
+			}
 			return 0;
 		}
 	}
