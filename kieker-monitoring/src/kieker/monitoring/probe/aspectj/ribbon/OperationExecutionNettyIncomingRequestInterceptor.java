@@ -224,7 +224,7 @@ public class OperationExecutionNettyIncomingRequestInterceptor extends AbstractA
 		} finally {
 			// measure after
 			final long tout = TIME.getTime();
-			CTRLINST.newMonitoringRecord(new OperationExecutionRecord("nettyLogicalEntryPoint", sessionId, traceId, tin, tout, hostname, eoi, ess));
+			CTRLINST.newMonitoringRecord(new OperationExecutionRecord("messageReceivedandWriteStatusAndHeader", sessionId, traceId, tin, tout, hostname, eoi, ess));
 			// cleanup
 			// if (entrypoint) {
 			this.unsetKiekerThreadLocalData();
