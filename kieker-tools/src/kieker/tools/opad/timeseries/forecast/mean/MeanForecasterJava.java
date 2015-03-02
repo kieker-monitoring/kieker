@@ -60,12 +60,10 @@ public class MeanForecasterJava extends AbstractForecaster<Double> {
 		final List<Double> allHistory = new ArrayList<Double>(history.getValues());
 		final Double[] histValuesNotNull = MeanForecasterJava.removeNullValues(allHistory);
 		final double mean = StatUtils.mean(ArrayUtils.toPrimitive(histValuesNotNull));
-
 		final Double[] forecastValues = new Double[numForecastSteps];
 		Arrays.fill(forecastValues, mean);
 
 		tsFC.appendAll(forecastValues);
-
 		return new ForecastResult(tsFC, this.getTsOriginal(), ForecastMethod.MEAN);
 	}
 
@@ -84,5 +82,11 @@ public class MeanForecasterJava extends AbstractForecaster<Double> {
 			}
 		}
 		return newList.toArray(new Double[newList.size()]);
+	}
+
+	@Override
+	protected boolean supportsConfidence() {
+		// Does not support confidence;
+		return false;
 	}
 }

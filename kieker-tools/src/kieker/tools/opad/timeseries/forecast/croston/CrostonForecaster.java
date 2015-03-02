@@ -74,7 +74,7 @@ public class CrostonForecaster extends AbstractRForecaster {
 
 	@Override
 	protected boolean supportsConfidence() {
-		// Croston does not support confidence;
+		// Does not support confidence;
 		return false;
 	}
 }
