@@ -151,7 +151,7 @@ public class OperationExecutionRibbonOutgoingRequestInterceptor extends Abstract
 
 					} else {
 						LOG.warn("No monitoring data found in the response header");
-						LOG.warn("Is middletier instrumented?");
+						LOG.warn("Is the next tier instrumented?");
 						// CTRLINST.terminateMonitoring();
 					}
 				} else {
