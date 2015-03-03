@@ -46,7 +46,7 @@ import kieker.monitoring.timer.ITimeSource;
  * @since 1.12
  */
 @Aspect
-@DeclarePrecedence("kieker.monitoring.probe.aspectj.operationExecution.*,kieker.monitoring.probe.aspectj.ribbon.*")
+@DeclarePrecedence("kieker.monitoring.probe.aspectj.ribbon.*,kieker.monitoring.probe.aspectj.operationExecution.*")
 public class OperationExecutionNettyIncomingRequestInterceptor extends AbstractAspectJProbe {
 	private static final Log LOG = LogFactory.getLog(OperationExecutionNettyIncomingRequestInterceptor.class);
 
@@ -101,7 +101,8 @@ public class OperationExecutionNettyIncomingRequestInterceptor extends AbstractA
 		int eoi = -1;
 		try {
 			// LOG.error("EOI before = " + eoiStr);
-			eoi = 1 + Integer.parseInt(eoiStr);
+			// eoi = 1 + Integer.parseInt(eoiStr);
+			eoi = Integer.parseInt(eoiStr);
 			// LOG.error("EOI after = " + Integer.toString(eoi));
 		} catch (final NumberFormatException exc) {
 			LOG.warn("Invalid eoi", exc);
@@ -136,7 +137,8 @@ public class OperationExecutionNettyIncomingRequestInterceptor extends AbstractA
 		// Store thread-local values
 		CF_REGISTRY.storeThreadLocalTraceId(traceId);
 		CF_REGISTRY.storeThreadLocalEOI(eoi); // this execution has EOI=eoi; next execution will get eoi with incrementAndRecall
-		CF_REGISTRY.storeThreadLocalESS(ess + 1); // this execution has ESS=ess
+		// CF_REGISTRY.storeThreadLocalESS(ess + 1); // this execution has ESS=ess
+		CF_REGISTRY.storeThreadLocalESS(ess); // this execution has ESS=ess
 		SESSION_REGISTRY.storeThreadLocalSessionId(sessionId);
 
 		// measure before
@@ -151,18 +153,12 @@ public class OperationExecutionNettyIncomingRequestInterceptor extends AbstractA
 		final Object retval;
 		try {
 			retval = thisJoinPoint.proceed();
+			eoi = NETTY_REGISTRY.recallThreadLocalInRequestEOI();
 		} finally {
 			// measure after
 			// final long tout = TIME.getTime();
-			// CTRLINST.newMonitoringRecord(new OperationExecutionRecord(signature, sessionId, traceId, tin, tout, hostname, eoi, ess));
-			// cleanup
-			// if (entrypoint) {
-			// CF_REGISTRY.unsetThreadLocalTraceId();
-			// CF_REGISTRY.unsetThreadLocalEOI();
-			// CF_REGISTRY.unsetThreadLocalESS();
-			// } else {
-			// CF_REGISTRY.storeThreadLocalESS(ess); // next operation is ess
-			// }
+			// CTRLINST.newMonitoringRecord(new OperationExecutionRecord("messageReceivedandWriteStatusAndHeader", sessionId, traceId, tin, tout, hostname, eoi,
+			// ess));
 			this.unsetKiekerThreadLocalData();
 			this.unsetKiekerNettyRegistry();
 		}
@@ -179,9 +175,9 @@ public class OperationExecutionNettyIncomingRequestInterceptor extends AbstractA
 			return thisJoinPoint.proceed();
 		}
 
-		final String hostname = VMNAME;
+		// final String hostname = VMNAME;
 
-		String sessionId;
+		final String sessionId;
 		final long traceId = CF_REGISTRY.recallThreadLocalTraceId();
 		final long tin = NETTY_REGISTRY.recallThreadLocalInRequestTin();
 		// LOG.info("registry tin = " + NETTY_REGISTRY.recallThreadLocalInRequestTin());
@@ -237,8 +233,9 @@ public class OperationExecutionNettyIncomingRequestInterceptor extends AbstractA
 			}
 		} finally {
 			// measure after
-			final long tout = TIME.getTime();
-			CTRLINST.newMonitoringRecord(new OperationExecutionRecord("messageReceivedandWriteStatusAndHeader", sessionId, traceId, tin, tout, hostname, eoi, ess));
+			// final long tout = TIME.getTime();
+			// CTRLINST.newMonitoringRecord(new OperationExecutionRecord("messageReceivedandWriteStatusAndHeader", sessionId, traceId, tin, tout, hostname, eoi,
+			// ess));
 			// cleanup
 			// if (entrypoint) {
 			// this.unsetKiekerThreadLocalData();
