@@ -22,22 +22,25 @@ import kieker.common.util.registry.IMonitoringRecordReceiver;
 /**
  * The methods must not throw any exceptions but indicate problems via its
  * respective return value.
- * 
+ *
  * @author Andre van Hoorn, Jan Waller, Robert von Massow
- * 
+ *
  * @since 1.3
  */
 public interface IWriterController extends IMonitoringRecordReceiver {
 
 	/**
-	 * Called for each new record.
-	 * 
+	 * <p>
+	 * Called for each new record to write it out to the pre-configured target (e.g., file system, database, or messaging queue). This method could invoke the given
+	 * <code>record</code>'s methods declared in {@link IMonitoringRecord} and thus alter its <code>loggingTimestamp</code> property.
+	 *
+	 * <p>
 	 * Notice, that this method should not throw an exception, but indicate an error by the return value false.
-	 * 
+	 *
 	 * @param record
 	 *            the record.
 	 * @return true on success; false in case of an error.
-	 * 
+	 *
 	 * @since 1.3
 	 */
 	@Override
@@ -46,9 +49,9 @@ public interface IWriterController extends IMonitoringRecordReceiver {
 	/**
 	 * Shows how many inserts have been performed since last restart of the
 	 * execution environment.
-	 * 
+	 *
 	 * @return long
-	 * 
+	 *
 	 * @since 1.3
 	 */
 	public abstract long getNumberOfInserts();
