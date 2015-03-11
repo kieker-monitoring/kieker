@@ -2,7 +2,7 @@ apply plugin: 'application'
 
 dependencies {
 	compile fileTree('lib') {
-		include 'kieker-*_emf.jar'
+		include 'kieker-*-emf.jar'
 	}
 }
 

@@ -217,9 +217,7 @@ configurations.archives.artifacts.with { archives ->
 
 task mainJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 	// default archiveName is [baseName]-[appendix]-[version]-[classifier].[extension]
-	archiveName = kiekerPackagenamebase + "-" + kiekerVersion + ".jar"
 	destinationDir = file('dist')
-	version = ''
 	configure allArtifacts
 	configure licence
 	configure aopxml
@@ -231,9 +229,7 @@ task mainJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 
 task emfJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 	// default archiveName is [baseName]-[appendix]-[version]-[classifier].[extension]
-	archiveName = kiekerPackagenamebase + "-" + kiekerVersion + "_emf" + ".jar"
 	destinationDir = file('dist')
-	version = ''
 	classifier = 'emf'
 	configure allArtifacts
 	configure licence
@@ -265,9 +261,7 @@ task emfJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 
 task aspectJJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 	// default archiveName is [baseName]-[appendix]-[version]-[classifier].[extension]
-	archiveName = kiekerPackagenamebase + "-" + kiekerVersion + "_aspectj" + ".jar"
 	destinationDir = file('dist')
-	version = ''
 	classifier = 'aspectj'
 	configure allArtifacts
 	configure licence
