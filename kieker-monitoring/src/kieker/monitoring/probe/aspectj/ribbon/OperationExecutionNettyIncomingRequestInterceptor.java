@@ -38,6 +38,7 @@ import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
 import kieker.monitoring.probe.aspectj.AbstractAspectJProbe;
+import kieker.monitoring.probe.aspectj.jersey.JerseyHeaderConstants;
 import kieker.monitoring.timer.ITimeSource;
 
 /**
@@ -77,7 +78,7 @@ public class OperationExecutionNettyIncomingRequestInterceptor extends AbstractA
 		final HttpRequest request = (HttpRequest) messageEvent.getMessage();
 
 		// This is a hack to get all values
-		final List<String> headerList = request.getHeaders(RibbonHeaderConstants.OPERATION_EXECUTION_HEADER);
+		final List<String> headerList = request.getHeaders(JerseyHeaderConstants.OPERATION_EXECUTION_JERSEY_HEADER);
 		if ((headerList == null) || (headerList.size() == 0)) {
 			LOG.error("No monitoring data found in the incoming request header");
 			LOG.error("Will continue without sending back reponse header");
