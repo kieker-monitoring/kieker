@@ -38,9 +38,7 @@ public abstract class AbstractNodeDecorator {
 	 * @return An appropriate node decorator or {@code null} if none can be determined
 	 */
 	public static AbstractNodeDecorator createFromName(final String optionName) {
-		if (Constants.RESPONSE_TIME_DECORATOR_FLAG.equals(optionName)) {
-			return new ResponseTimeNodeDecorator(TimeUnit.NANOSECONDS);
-		} else if (Constants.RESPONSE_TIME_DECORATOR_FLAG_NS.equals(optionName)) {
+		if (Constants.RESPONSE_TIME_DECORATOR_FLAG_NS.equals(optionName)) {
 			return new ResponseTimeNodeDecorator(TimeUnit.NANOSECONDS);
 		} else if (Constants.RESPONSE_TIME_DECORATOR_FLAG_US.equals(optionName)) {
 			return new ResponseTimeNodeDecorator(TimeUnit.MICROSECONDS);

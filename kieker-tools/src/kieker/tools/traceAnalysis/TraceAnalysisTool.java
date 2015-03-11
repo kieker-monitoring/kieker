@@ -312,10 +312,7 @@ public final class TraceAnalysisTool extends AbstractCommandLineTool { // NOPMD 
 
 		while (decoratorIterator.hasNext()) {
 			final String currentDecoratorStr = decoratorIterator.next();
-			if (Constants.RESPONSE_TIME_DECORATOR_FLAG.equals(currentDecoratorStr)) {
-				plugin.addDecorator(new ResponseTimeNodeDecorator(TimeUnit.MILLISECONDS));
-				continue;
-			} else if (Constants.RESPONSE_TIME_DECORATOR_FLAG_NS.equals(currentDecoratorStr)) {
+			if (Constants.RESPONSE_TIME_DECORATOR_FLAG_NS.equals(currentDecoratorStr)) {
 				plugin.addDecorator(new ResponseTimeNodeDecorator(TimeUnit.NANOSECONDS));
 				continue;
 			} else if (Constants.RESPONSE_TIME_DECORATOR_FLAG_US.equals(currentDecoratorStr)) {
