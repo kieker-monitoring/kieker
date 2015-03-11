@@ -72,5 +72,7 @@
 	<classpathentry kind="lib" path="lib/framework-libs/ribbon/ribbon-core-0.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/framework-libs/ribbon/ribbon-httpclient-0.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/framework-libs/jersey/jersey-server-1.13.jar"/>
+	<classpathentry kind="lib" path="lib/framework-libs/jersey/jersey-client-1.9.1.jar"/>
+	<classpathentry kind="lib" path="lib/framework-libs/eureka/eureka-client-1.1.148.jar"/>
 	<classpathentry kind="output" path="build-eclipse"/>
 </classpath>
