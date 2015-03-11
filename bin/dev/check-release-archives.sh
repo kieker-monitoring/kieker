@@ -217,6 +217,22 @@ function assert_files_exist_common {
 	# make sure that specified AspectJ version matches the present files
 	assert_file_exists_regular "lib/aspectjrt-${aspectjversion}.jar"
 	assert_file_exists_regular "lib/aspectjweaver-${aspectjversion}.jar"	
+
+	echo "Making sure that for each gradle script, the Gradle wrapper environment exists ..."	
+	for d in $(find -name "build.gradle" -exec dirname {} \;); do 
+	    assert_file_exists_regular $d/gradlew
+	    assert_file_exists_regular $d/gradle/
+	    assert_file_exists_regular $d/gradlew.bat
+	done
+	echo OK
+
+	echo "Making sure that for each Gradle wrapper environment, a gradle script exists ..."	
+	for d in $(find -name "assert_file_exists_regular $d/gradlew.bat" -exec dirname {} \;); do 
+	    assert_file_exists_regular $d/build.gradle	    
+	done	
+	echo OK
+
+	exit 1
 }
 
 # Asserts the existence of files in the src release
