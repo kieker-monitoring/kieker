@@ -227,12 +227,10 @@ function assert_files_exist_common {
 	echo OK
 
 	echo "Making sure that for each Gradle wrapper environment, a gradle script exists ..."	
-	for d in $(find -name "assert_file_exists_regular $d/gradlew.bat" -exec dirname {} \;); do 
+	for d in $(find -name "gradlew.bat" -exec dirname {} \;); do 
 	    assert_file_exists_regular $d/build.gradle	    
 	done	
 	echo OK
-
-	exit 1
 }
 
 # Asserts the existence of files in the src release
