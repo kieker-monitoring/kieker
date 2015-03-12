@@ -60,12 +60,6 @@ public class OperationExecutionJerseyServerInterceptor extends AbstractAspectJPr
 
 	@Around("execution(private void com.sun.jersey.server.impl.application.WebApplicationImpl._handleRequest(com.sun.jersey.server.impl.application.WebApplicationContext, com.sun.jersey.spi.container.ContainerRequest, com.sun.jersey.spi.container.ContainerResponse))")
 	public Object operationHandleRequest(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
-		// LOG.error("");
-		// LOG.error("");
-		// LOG.error("Inside jersey server!");
-		// LOG.error("");
-		// LOG.error("");
-
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return thisJoinPoint.proceed();
 		}
@@ -78,34 +72,25 @@ public class OperationExecutionJerseyServerInterceptor extends AbstractAspectJPr
 		final String hostname = VMNAME;
 		String sessionId = SESSIONREGISTRY.recallThreadLocalSessionId();
 		Long traceId = -1L;
-		// boolean requestHeaderContainsMonitoringTrace = false;
 		int eoi; // this is executionOrderIndex-th execution in this trace
 		int ess; // this is the height in the dynamic call tree of this execution
 
 		final Object[] args = thisJoinPoint.getArgs();
 		final ContainerRequest request = (ContainerRequest) args[1];
-		final ContainerResponse response = (ContainerResponse) args[2];
 
 		final MultivaluedMap<String, String> requestHeader = request.getRequestHeaders();
 		final List<String> requestJerseyHeader = requestHeader.get(JerseyHeaderConstants.OPERATION_EXECUTION_JERSEY_HEADER);
 		if ((requestJerseyHeader == null) || (requestJerseyHeader.size() == 0)) {
 			LOG.error("No monitoring data found in the incoming request header");
 			LOG.error("Will continue without sending back reponse header");
-			// requestHeaderContainsMonitoringTrace = false;
-			// JERSEY_REGISTRY.setRequestHeaderContainsMonitoringTrace(false);
 			traceId = CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId();
 			CF_REGISTRY.storeThreadLocalEOI(0);
 			CF_REGISTRY.storeThreadLocalESS(1); // next operation is ess + 1
 			eoi = 0;
 			ess = 0;
-			// return thisJoinPoint.proceed();
 		} else {
-			// requestHeaderContainsMonitoringTrace = true;
-			// JERSEY_REGISTRY.setRequestHeaderContainsMonitoringTrace(true);
 			final String operationExecutionHeader = requestJerseyHeader.get(0);
-			LOG.info("");
 			LOG.info("requestHeader: " + operationExecutionHeader);
-			LOG.info("");
 			final String[] headerArray = operationExecutionHeader.split(",");
 
 			// Extract session id
@@ -118,10 +103,7 @@ public class OperationExecutionJerseyServerInterceptor extends AbstractAspectJPr
 			final String eoiStr = headerArray[2];
 			eoi = -1;
 			try {
-				// LOG.error("EOI before = " + eoiStr);
 				eoi = 1 + Integer.parseInt(eoiStr);
-				// eoi = Integer.parseInt(eoiStr);
-				// LOG.error("EOI after = " + Integer.toString(eoi));
 			} catch (final NumberFormatException exc) {
 				LOG.warn("Invalid eoi", exc);
 			}
@@ -155,15 +137,10 @@ public class OperationExecutionJerseyServerInterceptor extends AbstractAspectJPr
 			CF_REGISTRY.storeThreadLocalTraceId(traceId);
 			CF_REGISTRY.storeThreadLocalEOI(eoi); // this execution has EOI=eoi; next execution will get eoi with incrementAndRecall
 			CF_REGISTRY.storeThreadLocalESS(ess + 1); // this execution has ESS=ess
-			// CF_REGISTRY.storeThreadLocalESS(ess); // this execution has ESS=ess
-			// SESSION_REGISTRY.storeThreadLocalSessionId(sessionId);
-			// JERSEY_REGISTRY.storeThreadLocalInRequestEOI(eoi);
-			// JERSEY_REGISTRY.storeThreadLocalInRequestESS(ess);
 		}
 
 		// measure before
 		final long tin = TIME.getTime();
-		// JERSEY_REGISTRY.storeThreadLocalInRequestTin(tin);
 		// execution of the called method
 		final Object retval;
 		try {
@@ -191,33 +168,14 @@ public class OperationExecutionJerseyServerInterceptor extends AbstractAspectJPr
 		if (!CTRLINST.isProbeActivated(signature)) {
 			return thisJoinPoint.proceed();
 		}
-		// if (!JERSEY_REGISTRY.requestHeaderContainsMonitoringTrace()) {
-		// return thisJoinPoint.proceed();
-		// }
-
-		// LOG.error("");
-		// LOG.error("Class = " + thisJoinPoint.getTarget().getClass().getName());
-		// LOG.error("");
 
 		final String sessionId = null;
-		final String hostname = VMNAME;
 		final long traceId = CF_REGISTRY.recallThreadLocalTraceId();
-
-		int eoi = -1;
-		int ess = -1;
 
 		if (traceId == -1) {
 			// Kieker trace Id not registered. Should not happen, since this is a response message!
 			LOG.warn("Kieker traceId not registered. Will unset all threadLocal variables and return.");
-			// this.unsetKiekerThreadLocalData(); // unset all variables
-			// this.unsetKiekerNettyRegistry();
 			return thisJoinPoint.proceed();
-		} else {
-			// thread-local traceId exists: eoi, ess, and sessionID should have been registered before
-			eoi = CF_REGISTRY.recallThreadLocalEOI();
-			ess = CF_REGISTRY.recallThreadLocalESS();
-			// eoi = JERSEY_REGISTRY.recallThreadLocalInRequestEOI();
-			// ess = JERSEY_REGISTRY.recallThreadLocalInRequestESS();
 		}
 
 		final ContainerResponse containerResponse = (ContainerResponse) thisJoinPoint.getTarget();
@@ -226,9 +184,7 @@ public class OperationExecutionJerseyServerInterceptor extends AbstractAspectJPr
 		// Pass back trace id, session id, eoi but not ess (use old value before the request)
 		final List<Object> responseHeaderList = new ArrayList<Object>();
 		responseHeaderList.add(Long.toString(traceId) + "," + sessionId + "," + Integer.toString(CF_REGISTRY.recallThreadLocalEOI()));
-		// LOG.info("");
 		LOG.info("responseHeader = " + responseHeaderList.toString());
-		// LOG.info("");
 		responseHeader.put(JerseyHeaderConstants.OPERATION_EXECUTION_JERSEY_HEADER, responseHeaderList);
 
 		final Object retval;

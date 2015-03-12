@@ -61,9 +61,6 @@ public class OperationExecutionJerseyClientInterceptor extends AbstractAspectJPr
 
 	@Around("execution(public com.sun.jersey.api.client.ClientResponse com.sun.jersey.client.apache4.ApacheHttpClient4Handler.handle(com.sun.jersey.api.client.ClientRequest))")
 	public Object operation(final ProceedingJoinPoint thisJoinPoint) throws Throwable { // NOCS (Throwable)
-		// LOG.error("");
-		// LOG.error("Inside jersey!");
-		// LOG.error("");
 		if (!CTRLINST.isMonitoringEnabled()) {
 			return thisJoinPoint.proceed();
 		}
@@ -89,8 +86,6 @@ public class OperationExecutionJerseyClientInterceptor extends AbstractAspectJPr
 			nextESS = 1;
 		} else {
 			entrypoint = false;
-			// eoi = CF_REGISTRY.incrementAndRecallThreadLocalEOI(); // ess > 1
-			// ess = CF_REGISTRY.recallAndIncrementThreadLocalESS(); // ess >= 0
 			eoi = CF_REGISTRY.incrementAndRecallThreadLocalEOI();
 			ess = CF_REGISTRY.recallAndIncrementThreadLocalESS();
 			nextESS = ess + 1;
@@ -106,7 +101,7 @@ public class OperationExecutionJerseyClientInterceptor extends AbstractAspectJPr
 		final URI uri = request.getURI();
 		LOG.info("URI = " + uri.toString());
 
-		// This is a hack to get all values
+		// This is a hack to put all values in the header
 		MultivaluedMap<String, Object> requestHeader = request.getHeaders();
 		if (requestHeader == null) {
 			requestHeader = new MultivaluedHashMap<String, Object>();
@@ -131,9 +126,7 @@ public class OperationExecutionJerseyClientInterceptor extends AbstractAspectJPr
 				if (responseHeader != null) {
 					final List<String> responseHeaderList = responseHeader.get(JerseyHeaderConstants.OPERATION_EXECUTION_JERSEY_HEADER);
 					if (responseHeaderList != null) {
-						// LOG.info("");
 						LOG.info("responseHeaderList = " + responseHeaderList);
-						// LOG.info("");
 						final String[] responseHeaderArray = responseHeaderList.get(0).split(",");
 
 						// Extract trace id
@@ -172,13 +165,11 @@ public class OperationExecutionJerseyClientInterceptor extends AbstractAspectJPr
 						LOG.warn("No monitoring data found in the response header");
 						LOG.warn("Is the next tier instrumented?");
 						LOG.warn("URI = " + uri.toString());
-						// CTRLINST.terminateMonitoring();
 					}
 				} else {
 					LOG.warn("Response header is null");
 					LOG.warn("Is the next tier instrumented?");
 					LOG.warn("URI = " + uri.toString());
-					// CTRLINST.terminateMonitoring();
 				}
 			}
 		} finally {
