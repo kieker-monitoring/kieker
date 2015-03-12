@@ -6,23 +6,35 @@
 defaultTasks 'cleanStandaloneExamples', 'buildStandaloneExamples'
 
 task buildStandaloneExamples(dependsOn: ['buildStandaloneExamplesUserguideCh2App', 
-	                                     'buildStandaloneExamplesUserguideCh2Instr', 
-										 'buildStandaloneExamplesUserguideCh34',
-										 'buildStandaloneExamplesUserguideCh5',
-										 'buildStandaloneExamplesUserguideAppendixSigar',
-										 'buildStandaloneExamplesUserguideAppendixJMS', 
-										 'buildStandaloneExamplesMonitoringSigar',
-										 'buildStandaloneExamplesMonitoringJVM',
-										 'buildStandaloneExamplesMonitoringSpring',
-										 'buildStandaloneExamplesMonitoringManual',
-										 'buildStandaloneExamplesMonitoringAspectJ',
-										 'buildStandaloneExamplesMonitoringAdaptive',
-										 'buildStandaloneExamplesMonitoringTimesource',
-										 'buildStandaloneExamplesAnalysisKax',
-										 'buildStandaloneExamplesAnalysisOpad',
-										 'buildStandaloneExamplesUserguideAppendixJavaEE']) {
+     					 'buildStandaloneExamplesUserguideCh2Instr', 
+					 'buildStandaloneExamplesUserguideCh34',
+					 'buildStandaloneExamplesUserguideCh5',
+					 'buildStandaloneExamplesUserguideAppendixSigar',
+					 'buildStandaloneExamplesUserguideAppendixJMS', 
+					 'buildStandaloneExamplesMonitoringSigar',
+					 'buildStandaloneExamplesMonitoringJVM',
+					 'buildStandaloneExamplesMonitoringSpring',
+					 'buildStandaloneExamplesMonitoringManual',
+					 'buildStandaloneExamplesMonitoringAspectJ',
+					 'buildStandaloneExamplesMonitoringAdaptive',
+					 'buildStandaloneExamplesMonitoringTimesource',
+					 'buildStandaloneExamplesAnalysisKax',
+					 'buildStandaloneExamplesAnalysisOpad',
+					 'buildStandaloneExamplesUserguideAppendixJavaEE']) {
 }
-										 
+
+regexpReplaceInFiles(project.file("monitoring/custom-timesource/build.gradle"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
+regexpReplaceInFiles(project.file("monitoring/probe-aspectj/build.gradle"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
+regexpReplaceInFiles(project.file("monitoring/adaptive-monitoring/build.gradle"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
+regexpReplaceInFiles(project.file("OverheadEvaluationMicrobenchmark/MooBench/benchmark.sh"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
+regexpReplaceInFiles(project.file("OverheadEvaluationMicrobenchmark/executeRemoteMicroBenchmark.sh"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
+regexpReplaceInFiles(project.file("JavaEEServletContainerExample/jetty/start.ini"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
+regexpReplaceInFiles(project.file("userguide/ch2--manual-instrumentation/README.txt"), "kieker-.*-emf.jar", "${rootProject.emfJar.archiveName}")
+regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/build.gradle"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
+regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/README.txt"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
+regexpReplaceInFiles(project.file("userguide/ch3-4--custom-components/README.txt"), "kieker-.*-emf.jar", "${rootProject.emfJar.archiveName}")
+regexpReplaceInFiles(project.file("monitoring/probe-spring/.classpath"), "aspectjweaver-.*.jar", "aspectjweaver-${libAspectjVersion}.jar")
+
 task buildStandaloneExamplesUserguideCh2App(type: GradleBuild) {
 	buildFile = 'userguide/ch2--bookstore-application/build.gradle'
 	tasks = ['jar']
@@ -263,6 +275,6 @@ task buildStandaloneExamplesAnalysisOpad(type: GradleBuild, dependsOn: [ 'copyLi
 // TODO: Get this working for all examples
 task cleanStandaloneExamples(type: GradleBuild) {
 	description = 'Builds the stand-alone Kieker examples in the subdirectories.'
-	/*buildFile = 'userguide/ch2--bookstore-application/build.gradle'
-	tasks = ['clean'] */
+	//buildFile = 'userguide/ch2--bookstore-application/build.gradle'
+	//tasks = ['clean']
 }

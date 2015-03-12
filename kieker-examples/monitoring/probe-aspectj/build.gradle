@@ -2,7 +2,7 @@ apply plugin: 'application'
 
 dependencies {
 	compile fileTree('lib') {
-		include "kieker-*-aspectj.jar"
+		include "kieker-1.11-SNAPSHOT-aspectj.jar"
 	}
 }
 

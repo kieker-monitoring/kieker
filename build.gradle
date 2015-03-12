@@ -130,6 +130,15 @@ allprojects {
 	}
 }
 
+regexpReplaceInFiles(project.file("bin/dev/check-release-archives.sh"), "KIEKER_VERSION=\".*?\"", "KIEKER_VERSION=\"${version}\"")
+
+def regexpReplaceInFiles(File file, String searchExp, String replaceExp) {
+		//println "Replacing $searchExp by $replaceExp in $file"
+		String contents = file.getText('UTF-8')
+		contents = contents.replaceAll(searchExp, replaceExp)
+		file.write(contents, 'UTF-8')
+}
+
 def resolveRelativeToParent(String directory, String file) {
 	return rootProject.file(directory + '/' + file)
 }
@@ -148,6 +157,12 @@ def today() {
 def year() {
    def date = new Date()
    def formattedDate = date.format('yyyy')
+   return formattedDate
+}
+
+def monthMMM() {
+   def date = new Date()
+   def formattedDate = date.format('MMM')
    return formattedDate
 }
 
