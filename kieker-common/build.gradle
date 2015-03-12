@@ -4,7 +4,11 @@ dependencies {
   compile resolveLibrary('framework-libs/cxf/cxf-*.jar')
 }
 
-regexpReplaceInFiles(project.file("src/kieker/common/util/Version.java"), "VERSION = \".*?\"", "VERSION = \"${version}\"")
+task replaceHardCodedVersionNames() << {
+	regexpReplaceInFiles(project.file("src/kieker/common/util/Version.java"), "VERSION = \".*?\"", "VERSION = \"${version}\"")
+}
+
+compileJava.dependsOn replaceHardCodedVersionNames
 
 task generateRecords(type: JavaExec) {
   description 'Generates the sources for the Kieker records using the IRL model specification'

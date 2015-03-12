@@ -5,8 +5,10 @@
  
 defaultTasks 'cleanStandaloneExamples', 'buildStandaloneExamples'
 
-task buildStandaloneExamples(dependsOn: ['buildStandaloneExamplesUserguideCh2App', 
-     					 'buildStandaloneExamplesUserguideCh2Instr', 
+task buildStandaloneExamples(dependsOn: [
+					 'replaceHardCodedVersionNames',
+                     'buildStandaloneExamplesUserguideCh2App', 
+     				 'buildStandaloneExamplesUserguideCh2Instr', 
 					 'buildStandaloneExamplesUserguideCh34',
 					 'buildStandaloneExamplesUserguideCh5',
 					 'buildStandaloneExamplesUserguideAppendixSigar',
@@ -23,17 +25,20 @@ task buildStandaloneExamples(dependsOn: ['buildStandaloneExamplesUserguideCh2App
 					 'buildStandaloneExamplesUserguideAppendixJavaEE']) {
 }
 
-regexpReplaceInFiles(project.file("monitoring/custom-timesource/build.gradle"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
-regexpReplaceInFiles(project.file("monitoring/probe-aspectj/build.gradle"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
-regexpReplaceInFiles(project.file("monitoring/adaptive-monitoring/build.gradle"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
-regexpReplaceInFiles(project.file("OverheadEvaluationMicrobenchmark/MooBench/benchmark.sh"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
-regexpReplaceInFiles(project.file("OverheadEvaluationMicrobenchmark/executeRemoteMicroBenchmark.sh"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
-regexpReplaceInFiles(project.file("JavaEEServletContainerExample/jetty/start.ini"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
-regexpReplaceInFiles(project.file("userguide/ch2--manual-instrumentation/README.txt"), "kieker-.*-emf.jar", "${rootProject.emfJar.archiveName}")
-regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/build.gradle"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
-regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/README.txt"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
-regexpReplaceInFiles(project.file("userguide/ch3-4--custom-components/README.txt"), "kieker-.*-emf.jar", "${rootProject.emfJar.archiveName}")
-regexpReplaceInFiles(project.file("monitoring/probe-spring/.classpath"), "aspectjweaver-.*.jar", "aspectjweaver-${libAspectjVersion}.jar")
+task replaceHardCodedVersionNames() << {
+	regexpReplaceInFiles(project.file("monitoring/custom-timesource/build.gradle"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
+	regexpReplaceInFiles(project.file("monitoring/probe-aspectj/build.gradle"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
+	regexpReplaceInFiles(project.file("monitoring/adaptive-monitoring/build.gradle"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
+	regexpReplaceInFiles(project.file("OverheadEvaluationMicrobenchmark/MooBench/benchmark.sh"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
+	regexpReplaceInFiles(project.file("OverheadEvaluationMicrobenchmark/executeRemoteMicroBenchmark.sh"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
+	regexpReplaceInFiles(project.file("JavaEEServletContainerExample/jetty/start.ini"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
+	regexpReplaceInFiles(project.file("userguide/ch2--manual-instrumentation/README.txt"), "kieker-.*-emf.jar", "${rootProject.emfJar.archiveName}")
+	regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/build.gradle"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
+	regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/README.txt"), "kieker-.*-aspectj.jar", "${rootProject.aspectJJar.archiveName}")
+	regexpReplaceInFiles(project.file("userguide/ch3-4--custom-components/README.txt"), "kieker-.*-emf.jar", "${rootProject.emfJar.archiveName}")
+	regexpReplaceInFiles(project.file("monitoring/probe-spring/.classpath"), "aspectjweaver-.*.jar", "aspectjweaver-${libAspectjVersion}.jar")
+}
+
 
 task buildStandaloneExamplesUserguideCh2App(type: GradleBuild) {
 	buildFile = 'userguide/ch2--bookstore-application/build.gradle'

@@ -20,14 +20,17 @@ task cleanDocumentation(type: Delete) {
   delete fileTree(dir: '.', includes: ['*.aux, *.bbl', '*.blg', '*.glo', '*.idx', '*.log', '*.toc', '*.snm', '*.out', '*.nav', '*.bak', '*.vrb', 'backup'])  
 }
 
-regexpReplaceInFiles(project.file("bibliography.bib"), "CURYEAR = .* ", "CURYEAR = " + year() + " ")
-regexpReplaceInFiles(project.file("bibliography.bib"), "CURMONTH = .* ", "CURMONTH = " + monthMMM() + " ")
-regexpReplaceInFiles(project.file("bibliography.bib"), "Kieker .* User Guide", "Kieker $version User Guide")
-regexpReplaceInFiles(project.file("Macros.tex"), "mainJar\\}\\{kieker-.*.jar", "mainJar\\}\\{${rootProject.mainJar.archiveName}")
-regexpReplaceInFiles(project.file("Macros.tex"), "mainJarEMF\\}\\{kieker-.*.jar", "mainJarEMF\\}\\{${rootProject.emfJar.archiveName}")
-regexpReplaceInFiles(project.file("Macros.tex"), "mainJarWeaver\\}\\{kieker-.*.jar", "mainJarWeaver\\}\\{${rootProject.aspectJJar.archiveName}")
 
-task buildDocumentation() {
+task replaceHardCodedVersionNames() << {
+	regexpReplaceInFiles(project.file("bibliography.bib"), "CURYEAR = .* ", "CURYEAR = " + year() + " ")
+	regexpReplaceInFiles(project.file("bibliography.bib"), "CURMONTH = .* ", "CURMONTH = " + monthMMM() + " ")
+	regexpReplaceInFiles(project.file("bibliography.bib"), "Kieker .* User Guide", "Kieker $version User Guide")
+	regexpReplaceInFiles(project.file("Macros.tex"), "mainJar\\}\\{kieker-.*.jar", "mainJar\\}\\{${rootProject.mainJar.archiveName}")
+	regexpReplaceInFiles(project.file("Macros.tex"), "mainJarEMF\\}\\{kieker-.*.jar", "mainJarEMF\\}\\{${rootProject.emfJar.archiveName}")
+	regexpReplaceInFiles(project.file("Macros.tex"), "mainJarWeaver\\}\\{kieker-.*.jar", "mainJarWeaver\\}\\{${rootProject.aspectJJar.archiveName}")
+}
+
+task buildDocumentation(dependsOn: replaceHardCodedVersionNames) {
   description 'Builds the user guide manual for Kieker'
   
   inputs.files fileTree('.') {
