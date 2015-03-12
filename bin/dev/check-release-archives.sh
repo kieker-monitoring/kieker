@@ -22,11 +22,7 @@ function create_subdir_n_cd {
 # build with ant (target may be passed as $1)
 function run_gradle {
 	echo "Trying to invoke gradle with target '$1' ..."
-	if ! which gradle; then
-		echo "Gradle not found in path"
-		exit 1
-	fi
-	if ! gradle $1; then
+	if ! ./gradlew $1; then
 		echo "Gradle build failed"
 		exit 1
 	fi
