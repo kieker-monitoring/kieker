@@ -206,7 +206,7 @@ function assert_files_exist_common {
 	done
 
 	echo -n "Making sure that no references to old Kieker Jars included (note that we cannot check inside binary files) ..."
-	if (grep -R "kieker-[[:digit:]].*\.jar" * | grep -v "Binary" |  grep -Ev "kieker-${KIEKER_VERSION}((\\\\)?_[[:alpha:]]+)?\.jar"); then
+	if (grep -R "kieker-[[:digit:]].*\.jar" * | grep -v "Binary" |  grep -Ev "kieker-${KIEKER_VERSION}((\\\\)?-[[:alpha:]]+)?\.jar"); then
 	    # Don't ask why results not dumped to stdout above
 	    echo "Found old version string. Add/correct replacement regexp in Gradle file?"
 	    echo "Due to a strange issue with the grep above, please use the grep regexp above to see where the problem is."
@@ -279,21 +279,21 @@ function assert_files_exist_bin {
 	MAIN_JAR=$(ls "dist/kieker-"*".jar" | grep -v emf | grep -v aspectj )
 	assert_file_NOT_exists "META-INF/"
 	assert_file_exists_regular ${MAIN_JAR}
-	assert_file_exists_regular "dist/kieker-"*"_aspectj.jar"
-	assert_zip_file_content_exist "dist/kieker-"*"_aspectj.jar" " org/aspectj"
-	assert_zip_file_content_exist "dist/kieker-"*"_aspectj.jar" " aj/"
-	assert_zip_file_content_contains "dist/kieker-"*"_aspectj.jar" "META-INF/MANIFEST.MF" "Premain-Class: org.aspectj.weaver.loadtime.Agent"
-	assert_file_exists_regular "dist/kieker-"*"_emf.jar"
-	assert_zip_file_content_exist "dist/kieker-"*"_emf.jar" " org/eclipse/"
+	assert_file_exists_regular "dist/kieker-"*"-aspectj.jar"
+	assert_zip_file_content_exist "dist/kieker-"*"-aspectj.jar" " org/aspectj"
+	assert_zip_file_content_exist "dist/kieker-"*"-aspectj.jar" " aj/"
+	assert_zip_file_content_contains "dist/kieker-"*"-aspectj.jar" "META-INF/MANIFEST.MF" "Premain-Class: org.aspectj.weaver.loadtime.Agent"
+	assert_file_exists_regular "dist/kieker-"*"-emf.jar"
+	assert_zip_file_content_exist "dist/kieker-"*"-emf.jar" " org/eclipse/"
 	assert_dir_exists "examples/"
 	assert_file_exists_regular "examples/kieker.monitoring.example.properties"
 	assert_file_exists_regular "examples/kieker.monitoring.adaptiveMonitoring.example.conf"
-	assert_file_exists_regular "examples/userguide/ch2--manual-instrumentation/lib/kieker-"*"_emf.jar"
-	assert_file_exists_regular "examples/userguide/ch3-4--custom-components/lib/kieker-"*"_emf.jar"
-	assert_file_exists_regular "examples/userguide/ch5--trace-monitoring-aspectj/lib/kieker-"*"_aspectj.jar"
-	assert_file_exists_regular "examples/userguide/appendix-JMS/lib/kieker-"*"_emf.jar"
+	assert_file_exists_regular "examples/userguide/ch2--manual-instrumentation/lib/kieker-"*"-emf.jar"
+	assert_file_exists_regular "examples/userguide/ch3-4--custom-components/lib/kieker-"*"-emf.jar"
+	assert_file_exists_regular "examples/userguide/ch5--trace-monitoring-aspectj/lib/kieker-"*"-aspectj.jar"
+	assert_file_exists_regular "examples/userguide/appendix-JMS/lib/kieker-"*"-emf.jar"
 	assert_file_exists_regular "examples/userguide/appendix-JMS/lib/commons-logging-"*".jar"
-	assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/kieker-"*"_emf.jar"
+	assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/kieker-"*"-emf.jar"
 	assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/sigar-"*".jar"
 	assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/libsigar-"*".so"
 	assert_file_exists_regular "examples/userguide/appendix-Sigar/lib/sigar-"*".dll"
@@ -309,8 +309,8 @@ function assert_files_exist_bin {
 	assert_file_NOT_regular "examples/JavaEEServletContainerExample/build.gradle"
 	assert_file_NOT_exists "examples/JavaEEServletContainerExample/livedemo-source/"
 	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty/kieker.monitoring.properties"
-	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib/kieker-"*"_aspectj.jar"
-	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib/kieker-"*"_aspectj.jar.LICENSE"
+	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib/kieker-"*"-aspectj.jar"
+	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib/kieker-"*"-aspectj.jar.LICENSE"
 
 	assert_file_NOT_exists "lib/static-analysis/"
 	assert_file_NOT_exists "dist/release/"
@@ -374,8 +374,8 @@ function check_src_archive {
 	# make sure that the expected files are present
 	assert_dir_exists "dist/"
 	assert_file_exists_regular $(ls "dist/kieker-"*".jar" | grep -v emf | grep -v aspectj ) # the core jar
-	assert_file_exists_regular "dist/kieker-"*"_aspectj.jar"
-	assert_file_exists_regular "dist/kieker-"*"_emf.jar"
+	assert_file_exists_regular "dist/kieker-"*"-aspectj.jar"
+	assert_file_exists_regular "dist/kieker-"*"-emf.jar"
 	assert_file_NOT_exists "dist/kieker-monitoring-servlet-"*".war"
 
 	# check bytecode version of classes contained in jar
