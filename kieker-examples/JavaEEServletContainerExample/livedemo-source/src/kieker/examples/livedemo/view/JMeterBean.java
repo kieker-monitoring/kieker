@@ -39,15 +39,11 @@ public class JMeterBean {
 	@ManagedProperty(value = "#{analysisBean}")
 	private AnalysisBean analysisBean;
 
-	private final boolean disabled;
 	private long timestamp;
-	private final String buttonText;
 	private String[] arguments;
 
 	public JMeterBean() {
-		this.disabled = false;
 		this.timestamp = System.currentTimeMillis();
-		this.buttonText = this.defaultButtonText;
 	}
 
 	@PostConstruct
@@ -65,12 +61,9 @@ public class JMeterBean {
 		this.analysisBean = analysisBean;
 	}
 
-	public String getButtonText() {
-		return this.buttonText;
-	}
-
 	public boolean isDisabled() {
-		return this.disabled;
+		final long actualtime = System.currentTimeMillis();
+		return (actualtime < this.timestamp);
 	}
 
 	public void runJMeter() {
@@ -85,16 +78,13 @@ public class JMeterBean {
 		this.jMeter.start(this.arguments);
 	}
 
-	// @Override
-	// public void update(final Observable arg0, final Object arg1) {
-	// final long actualtime = System.currentTimeMillis();
-	// if (actualtime > this.timestamp) {
-	// this.buttonText = this.defaultButtonText;
-	// this.disabled = false;
-	// } else {
-	// this.buttonText = "Generate Load for " + String.valueOf((int) ((this.timestamp - actualtime) / 1000)) + " s";
-	// this.disabled = true;
-	// }
-	// }
+	public String getButtonText() {
+		final long actualtime = System.currentTimeMillis();
+		if (actualtime >= this.timestamp) {
+			return this.defaultButtonText;
+		} else {
+			return "Generate Load for " + String.valueOf((int) ((this.timestamp - actualtime) / 1000)) + " s";
+		}
+	}
 
 }
