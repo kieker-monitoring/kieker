@@ -83,13 +83,19 @@ the definition of the provider URL and the context factory:
 \end{lstlisting}
 \item Start the analysis part (in a new terminal):
 \setBashListing
-\begin{lstlisting}[caption=]
-#\lstshellprompt{}# ant run-analysis-activemq
+\begin{lstlisting}[caption=Start the analysis part under UNIX-like systems]
+#\lstshellprompt{}# ./gradlew run-analysis-activemq
+\end{lstlisting}
+\begin{lstlisting}[caption=Start the analysis part under Windows]
+#\lstshellprompt{}# gradlew.bat run-analysis-activemq
 \end{lstlisting}
 \item Start the instrumented Bookstore (in a new terminal):
 \setBashListing
-\begin{lstlisting}[caption=]
-#\lstshellprompt{}# ant run-monitoring-activemq
+\begin{lstlisting}[caption=Start the analysis part under UNIX-like systems]
+#\lstshellprompt{}# ./gradlew run-monitoring-activemq
+\end{lstlisting}
+\begin{lstlisting}[caption=Start the analysis part under Windows]
+#\lstshellprompt{}# gradlew.bat run-monitoring-activemq
 \end{lstlisting}
 \end{enumerate}
 
@@ -158,13 +164,19 @@ Note that the script must be called from within HornetQ's \dir{bin/} directory.
 
 \item Start the analysis part (in a new terminal):
 \setBashListing
-\begin{lstlisting}[caption=]
-#\lstshellprompt{}# ant run-analysis-hornetq
+\begin{lstlisting}[caption=Start the analysis part under UNIX-like systems]
+#\lstshellprompt{}# ./gradlew run-analysis-hornetq
+\end{lstlisting}
+\begin{lstlisting}[caption=Start the analysis part under Windows]
+#\lstshellprompt{}# gradlew.bat run-analysis-hornetq
 \end{lstlisting}
 \item Start the instrumented Bookstore (in a new terminal):
 \setBashListing
-\begin{lstlisting}[caption=]
-#\lstshellprompt{}# ant run-monitoring-hornetq
+\begin{lstlisting}[caption=Start the analysis part under UNIX-like systems]
+#\lstshellprompt{}# ./gradlew run-monitoring-hornetq
+\end{lstlisting}
+\begin{lstlisting}[caption=Start the analysis part under Windows]
+#\lstshellprompt{}# gradlew.bat run-monitoring-hornetq
 \end{lstlisting}
 \end{enumerate}
 
@@ -221,12 +233,18 @@ the definition of the provider URL and the context factory:
 \end{lstlisting}
 \item Start the analysis part (in a new terminal):
 \setBashListing
-\begin{lstlisting}[caption=]
-#\lstshellprompt{}# ant run-analysis-openjms
+\begin{lstlisting}[caption=Start of the JMS server under UNIX-like systems]
+#\lstshellprompt{}# ./gradlew run-analysis-openjms
+\end{lstlisting}
+\begin{lstlisting}[caption=Start of the JMS server under Windows]
+#\lstshellprompt{}# gradlew.bat run-analysis-openjms
 \end{lstlisting}
 \item Start the instrumented Bookstore (in a new terminal):
 \setBashListing
-\begin{lstlisting}[caption=]
-#\lstshellprompt{}# ant run-monitoring-openjms
+\begin{lstlisting}[caption=Start of the JMS server under UNIX-like systems]
+#\lstshellprompt{}# ./gradlew run-monitoring-openjms
+\end{lstlisting}
+\begin{lstlisting}[caption=Start of the JMS server under Windows]
+#\lstshellprompt{}# gradlew.bat run-monitoring-openjms
 \end{lstlisting}
 \end{enumerate}
