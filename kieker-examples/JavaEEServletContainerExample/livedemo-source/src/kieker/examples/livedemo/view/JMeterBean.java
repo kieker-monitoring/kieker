@@ -20,6 +20,8 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 
 import org.apache.jmeter.JMeter;
 
@@ -48,12 +50,12 @@ public class JMeterBean {
 
 	@PostConstruct
 	public void init() {
-		final String userDir = System.getProperty("user.dir");
-		final String fileSeparator = System.getProperty("file.separator");
-		final String bin = "webapps" + fileSeparator + "root" + fileSeparator + "WEB-INF" + fileSeparator + "bin";
-		final String newUserDir = userDir + fileSeparator + bin;
-		System.setProperty("user.dir", newUserDir);
-		final String testplan = bin + fileSeparator + "Testplan.jmx";
+		final ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+
+		final String bin = context.getRealPath("WEB-INF/bin/");
+		System.setProperty("user.dir", bin);
+		final String testplan = context.getRealPath("WEB-INF/bin/Testplan.jmx");
+
 		this.arguments = new String[] { "-n", "-t", testplan };
 	}
 
