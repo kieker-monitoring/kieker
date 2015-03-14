@@ -137,12 +137,6 @@ def regexpReplaceInFiles(File file, String searchExp, String replaceExp) {
 		file.write(contents, 'UTF-8')
 }
 
-task replaceHardCodedVersionNames() << {
-	regexpReplaceInFiles(project.file("bin/dev/check-release-archives.sh"), "KIEKER_VERSION=\".*?\"", "KIEKER_VERSION=\"${version}\"")
-}
-
-compileJava.dependsOn replaceHardCodedVersionNames
-
 def resolveRelativeToParent(String directory, String file) {
 	return rootProject.file(directory + '/' + file)
 }
@@ -331,8 +325,12 @@ artifacts {
 	archives javadocJar
 }
 
+task replaceHardCodedVersionNames() << {
+	regexpReplaceInFiles(project.file("bin/dev/check-release-archives.sh"), "KIEKER_VERSION=\".*?\"", "KIEKER_VERSION=\"${version}\"")
+}
+
 task distribute(group: 'distribution', description: 'Distributes binary and source archives.', 
-		dependsOn: [':distributeBinaryZip', ':distributeSourceZip',':distributeBinaryTar', ':distributeSourceTar'])
+		dependsOn: [':distributeBinaryZip', ':distributeSourceZip',':distributeBinaryTar', ':distributeSourceTar', ':replaceHardCodedVersionNames'])
 
 def binaryContent = project.copySpec {
 	from (projectDir) {

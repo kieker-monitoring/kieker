@@ -1,6 +1,6 @@
 #!/bin/bash
 
-KIEKER_VERSION="1.11-SNAPSHOT"
+KIEKER_VERSION="1.11"
 BASE_TMP_DIR="$(dirname $0)/../../build/"
 
 function change_dir {
