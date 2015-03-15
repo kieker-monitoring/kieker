@@ -141,6 +141,14 @@ task replaceHardCodedVersionNames() << {
 	regexpReplaceInFiles(project.file("bin/dev/check-release-archives.sh"), "KIEKER_VERSION=\".*?\"", "KIEKER_VERSION=\"${version}\"")
 }
 
+task updateLicenseHeaderYear() << {
+	FileTree tree = fileTree(dir: '.', include: '**/*.java')
+	tree.each { File file ->
+		regexpReplaceInFiles(file, 'Copyright 20\\d\\d Kieker Project', 'Copyright 2015 Kieker Project')
+	}
+}
+
+
 compileJava.dependsOn replaceHardCodedVersionNames
 
 def resolveRelativeToParent(String directory, String file) {
