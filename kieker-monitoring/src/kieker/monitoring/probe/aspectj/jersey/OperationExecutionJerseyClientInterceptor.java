@@ -162,14 +162,14 @@ public class OperationExecutionJerseyClientInterceptor extends AbstractAspectJPr
 						}
 
 					} else {
-						LOG.warn("No monitoring data found in the response header");
-						LOG.warn("Is the next tier instrumented?");
-						LOG.warn("URI = " + uri.toString());
+						LOG.info("No monitoring data found in the response header");
+						LOG.info("Is the next tier instrumented?");
+						LOG.info("URI = " + uri.toString());
 					}
 				} else {
-					LOG.warn("Response header is null");
-					LOG.warn("Is the next tier instrumented?");
-					LOG.warn("URI = " + uri.toString());
+					LOG.info("Response header is null");
+					LOG.info("Is the next tier instrumented?");
+					LOG.info("URI = " + uri.toString());
 				}
 			}
 		} finally {
