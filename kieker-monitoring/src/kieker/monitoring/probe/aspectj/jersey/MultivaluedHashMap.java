@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package kieker.monitoring.probe.aspectj.ribbon;
+package kieker.monitoring.probe.aspectj.jersey;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -47,6 +47,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.core.MultivaluedMap;
+
+import kieker.monitoring.probe.aspectj.ribbon.AbstractMultivaluedMap;
 
 /**
  * A hash table based implementation of {@link MultivaluedMap} interface.
