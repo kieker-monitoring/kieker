@@ -38,7 +38,6 @@ import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.registry.ControlFlowRegistry;
 import kieker.monitoring.core.registry.SessionRegistry;
 import kieker.monitoring.probe.aspectj.AbstractAspectJProbe;
-import kieker.monitoring.probe.aspectj.ribbon.MultivaluedHashMap;
 import kieker.monitoring.timer.ITimeSource;
 
 /**

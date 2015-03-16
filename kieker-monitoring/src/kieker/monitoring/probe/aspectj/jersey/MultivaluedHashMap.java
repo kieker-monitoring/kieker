@@ -48,8 +48,6 @@ import java.util.Map;
 
 import javax.ws.rs.core.MultivaluedMap;
 
-import kieker.monitoring.probe.aspectj.ribbon.AbstractMultivaluedMap;
-
 /**
  * A hash table based implementation of {@link MultivaluedMap} interface.
  *
