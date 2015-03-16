@@ -54,7 +54,6 @@ public class OperationExecutionJerseyServerInterceptor extends AbstractAspectJPr
 	private static final String VMNAME = CTRLINST.getHostname();
 	private static final ControlFlowRegistry CF_REGISTRY = ControlFlowRegistry.INSTANCE;
 	private static final SessionRegistry SESSIONREGISTRY = SessionRegistry.INSTANCE;
-	// private static final JerseyTraceRegistry JERSEY_REGISTRY = JerseyTraceRegistry.getInstance();
 
 	public static final String SESSION_ID_ASYNC_TRACE = "NOSESSION-ASYNCIN";
 
