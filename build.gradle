@@ -362,20 +362,25 @@ def manualContent = project.copySpec {
 def exampleContent = project.copySpec {
 	from ('kieker-examples') {
 		include '**'
+		
+		exclude '**/JavaEEServletContainerExample/build.xml'
+		exclude '**/livedemo-source/**'
+		exclude '**/.gradle/**'
+		exclude '**/build/**'
 	}
-	from ('examples') {
-		include '**'
-	}
-	exclude '**/JavaEEServletContainerExample/build.xml'
-	exclude '**/livedemo-source/**'
-	exclude '**/.gradle/**'
-	exclude '**/build/**'
-  
+
 	from ('kieker-monitoring/src-resources/META-INF') {
 		include 'kieker.monitoring.default.properties'	
 		rename 'kieker.monitoring.default.properties', 'kieker.monitoring.example.properties'
 	}
 	into kiekerPackagenamebase + "-" + kiekerVersion + "/examples"
+	
+	with {
+		from ('kieker-examples') {
+			include '**/build/libs/**'
+		}
+		includeEmptyDirs = false
+	}
 }
 
 def exampleJavaEEContent = project.copySpec {
