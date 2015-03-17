@@ -46,7 +46,7 @@ task buildStandaloneExamplesUserguideCh2App(type: GradleBuild) {
 }
 
 task copyLibsStandaloneExamplesUserguideCh2Instr(type: Copy, dependsOn: [rootProject.emfJar]) {
-	from ('../dist') {
+	from ('../build/libs') {
 		include "kieker-${version}-emf.jar"
 	}
 	into 'userguide/ch2--manual-instrumentation/lib/'
@@ -58,7 +58,7 @@ task buildStandaloneExamplesUserguideCh2Instr(type: GradleBuild, dependsOn: 'cop
 }
 
 task copyLibsStandaloneExamplesUserguideCh34(type: Copy, dependsOn: [rootProject.emfJar]) {
-	from ('../dist') {
+	from ('../build/libs') {
 		include "kieker-${version}-emf.jar"
 	}
 	into 'userguide/ch3-4--custom-components/lib/'
@@ -70,7 +70,7 @@ task buildStandaloneExamplesUserguideCh34(type: GradleBuild, dependsOn: 'copyLib
 }
 
 task copyLibsStandaloneExamplesUserguideCh5(type: Copy, dependsOn: [rootProject.aspectJJar]) {
-	from ('../dist') {
+	from ('../build/libs') {
 		include "kieker-${version}-aspectj.jar"
 	}
 	into 'userguide/ch5--trace-monitoring-aspectj/lib/'
@@ -82,7 +82,7 @@ task buildStandaloneExamplesUserguideCh5(type: GradleBuild, dependsOn: 'copyLibs
 }
 
 task copyLibsStandaloneExamplesUserguideAppendixSigar(type: Copy, dependsOn: [rootProject.emfJar]) {
-	from ('../dist') {
+	from ('../build/libs') {
 		include "kieker-${version}-emf.jar"
 	}
 	from ('../lib/sigar') {
@@ -97,7 +97,7 @@ task buildStandaloneExamplesUserguideAppendixSigar(type: GradleBuild, dependsOn:
 }
 
 task copyLibsStandaloneExamplesUserguideAppendixJMS(type: Copy, dependsOn: [rootProject.emfJar]) {
-	from ('../dist') {
+	from ('../build/libs') {
 		include "kieker-${version}-emf.jar"
 	}
 	from ('../lib') {
@@ -112,14 +112,14 @@ task buildStandaloneExamplesUserguideAppendixJMS(type: GradleBuild, dependsOn: '
 }
 
 task copyLiveDemoLibsStandaloneExamplesUserguideAppendixJavaEE(type: Copy, dependsOn: [rootProject.emfJar]) {
-	from ('../dist') {
+	from ('../build/libs') {
 		include "kieker-${version}-emf.jar"
 	}
 	into 'JavaEEServletContainerExample/livedemo-source/lib'
 }
 
 task copyJettyLibsStandaloneExamplesUserguideAppendixJavaEE(type: Copy, dependsOn: [rootProject.aspectJJar]) {
-	from ('../dist') {
+	from ('../build/libs') {
 		include "kieker-${version}-aspectj.jar"
 	}
 	from ('..') {
@@ -139,7 +139,7 @@ task buildStandaloneExamplesUserguideAppendixJavaEE(type: GradleBuild, dependsOn
 
 
 task copyLibsStandaloneExamplesMonitoringSigar(type: Copy, dependsOn: [rootProject.mainJar]) {
-	from ('../dist') {
+	from ('../build/libs') {
 		include "kieker-${version}.jar"
 	}
 	from ('../lib/sigar') {
@@ -154,7 +154,7 @@ task buildStandaloneExamplesMonitoringSigar(type: GradleBuild, dependsOn: 'copyL
 }
 
 task copyLibsStandaloneExamplesMonitoringJVM(type: Copy, dependsOn: [rootProject.mainJar]) {
-	from ('../dist') {
+	from ('../build/libs') {
 		include "kieker-${version}.jar"
 	}
 	into 'monitoring/sampler-jvm/lib/'
@@ -166,7 +166,7 @@ task buildStandaloneExamplesMonitoringJVM(type: GradleBuild, dependsOn: 'copyLib
 }
 
 task copyLibsStandaloneExamplesMonitoringSpring(type: Copy, dependsOn: [rootProject.mainJar]) {
-	from ('../dist') {
+	from ('../build/libs') {
 		include "kieker-${version}.jar"
 	}
 	from ('../lib') {
@@ -190,7 +190,7 @@ task buildStandaloneExamplesMonitoringSpring(type: GradleBuild, dependsOn: 'copy
 }
 
 task copyLibsStandaloneExamplesMonitoringManual(type: Copy, dependsOn: [rootProject.mainJar]) {
-	from ('../dist') {
+	from ('../build/libs') {
 		include "kieker-${version}.jar"
 	}
 	into 'monitoring/probe-manual/lib/'
@@ -202,7 +202,7 @@ task buildStandaloneExamplesMonitoringManual(type: GradleBuild, dependsOn: 'copy
 }
 
 task copyLibsStandaloneExamplesMonitoringAspectJ(type: Copy, dependsOn: [rootProject.aspectJJar]) {
-	from ('../dist') {
+	from ('../build/libs') {
 		include "kieker-${version}-aspectj.jar"
 	}
 	into 'monitoring/probe-aspectj/lib/'
@@ -214,7 +214,7 @@ task buildStandaloneExamplesMonitoringAspectJ(type: GradleBuild, dependsOn: 'cop
 }
 
 task copyLibsStandaloneExamplesMonitoringAdaptive(type: Copy, dependsOn: [rootProject.aspectJJar]) {
-	from ('../dist') {
+	from ('../build/libs') {
 		include "kieker-${version}-aspectj.jar"
 	}
 	into 'monitoring/adaptive-monitoring/lib/'
@@ -226,7 +226,7 @@ task buildStandaloneExamplesMonitoringAdaptive(type: GradleBuild, dependsOn: 'co
 }
 
 task copyLibsStandaloneExamplesMonitoringTimesource(type: Copy, dependsOn: [rootProject.aspectJJar]) {
-	from ('../dist') {
+	from ('../build/libs') {
 		include "kieker-${version}-aspectj.jar"
 	}
 	into 'monitoring/custom-timesource/lib/'
@@ -238,7 +238,7 @@ task buildStandaloneExamplesMonitoringTimesource(type: GradleBuild, dependsOn: '
 }
 
 task copyLibsStandaloneExamplesAnalysisKax(type: Copy, dependsOn: [rootProject.emfJar]) {
-	from ('../dist') {
+	from ('../build/libs') {
 		include "kieker-${version}-emf.jar"
 	}
 	into 'analysis/kax-files/lib/'
@@ -250,7 +250,7 @@ task buildStandaloneExamplesAnalysisKax(type: GradleBuild, dependsOn: 'copyLibsS
 }
 
 task copyLibsStandaloneExamplesAnalysisOpad(type: Copy, dependsOn: [rootProject.mainJar]) {
-	from ('../dist') {
+	from ('../build/libs') {
 		include "kieker-${version}.jar"
 	}
 	from ('../lib') {
