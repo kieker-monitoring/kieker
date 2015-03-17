@@ -24,7 +24,7 @@ The \Kieker{} download site\footnote{\KiekerDownloadURL{}} provides archives of 
   .1 \DirInDirTree{\KiekerDir/}.
     .2 \DirInDirTree{bin/}\DTcomment{Call scripts for \Kieker{} tools}.
       .3 \ldots.
-    .2 \DirInDirTree{dist/}\DTcomment{The \Kieker{} framework libraries}.
+    .2 \DirInDirTree{build/libs/}\DTcomment{The \Kieker{} framework libraries}.
       .3 \mainJar.
       .3 \ldots. %\servletWar.
     .2 \DirInDirTree{doc/}\DTcomment{}.
@@ -47,7 +47,7 @@ The \Kieker{} download site\footnote{\KiekerDownloadURL{}} provides archives of 
 The Java sources presented in this user guide, as well as pre-compiled binaries, are included in the \file{\exampleDir/} directory. The file \file{\mainJar{}} contains the \KiekerMonitoringPart{} and \KiekerAnalysisPart{} components, as well as the \KiekerTraceAnalysis{} tool. The sample \KiekerMonitoringPart{}
 configuration file %
 \file{\kiekerExampleMonitoringProperties{}} will be detailed in Chapter~\ref{chap:componentsMonitoring}. %
-In addition to the \file{\mainJar{}} file, the \file{dist/} directory includes %
+In addition to the \file{\mainJar{}} file, the \file{build/libs/} directory includes %
 variants of this \file{.jar} files with integrated third-party libraries. Additional %
 information on these \file{.jar} files and when to use them will follow later in this document. %
 
@@ -173,7 +173,7 @@ instrumentation in detail, the quick start example uses manual instrumentation.}
 
 \
 
-\noindent The first step is to copy the \Kieker{} jar-file \file{\mainJarEMF} to the \dir{lib/} directory of the example directory~(see Section~\ref{sec:example:bookstore}). The file is located in the \dir{\KiekerDir/dist/} directory of the extracted \Kieker{} archive, as described in Section~\ref{sec:example:downloadInstall}. %
+\noindent The first step is to copy the \Kieker{} jar-file \file{\mainJarEMF} to the \dir{lib/} directory of the example directory~(see Section~\ref{sec:example:bookstore}). The file is located in the \dir{\KiekerDir/build/libs/} directory of the extracted \Kieker{} archive, as described in Section~\ref{sec:example:downloadInstall}. %
 The final layout of the example directory is illustrated in Figure~\ref{fig:KiekerBookstoreExample}.
 
 \begin{figure}[H]
