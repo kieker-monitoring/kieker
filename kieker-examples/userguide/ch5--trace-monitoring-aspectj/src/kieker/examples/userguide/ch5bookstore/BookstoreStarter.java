@@ -33,7 +33,7 @@ public final class BookstoreStarter {
 			System.out.println("Bookstore.main: Starting request " + i);
 			BookstoreStarter.spawnAsyncRequest(bookstore, latch);
 		}
-		// Now, wait for all threads requests to complete
+		// Now, wait for all threads to complete
 		latch.await();
 	}
 
