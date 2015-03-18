@@ -42,8 +42,8 @@ task buildDocumentation(dependsOn: replaceHardCodedVersionNames) {
   
   doLast {
      tasks.fstLatexRun.execute()
-     tasks.sndLatexRun.execute()
      tasks.bibtexRun.execute()
+     tasks.sndLatexRun.execute()
      tasks.thrdLatexRun.execute()
      tasks.cleanDocumentation.execute()
   }
