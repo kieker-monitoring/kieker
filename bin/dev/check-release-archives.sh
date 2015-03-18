@@ -114,6 +114,16 @@ function assert_dir_NOT_exists {
 	echo OK
 }
 
+function assert_file_NOT_exists_recursive {
+	echo -n "Asserting '$1' does not exist as file or directory in any of the subdirs ..."
+	NUM_DIRS=$(find -name "$1" | wc -l)
+	if [ ${NUM_DIRS} -gt 0 ]; then 
+	    echo "$1 exists: $(find -name "$1")"
+	    exit 1
+	fi
+	echo OK
+}
+
 function assert_dir_exists {
 	echo -n "Asserting '$1' is a directory ..."
 	if ! test -d "$1"; then
@@ -245,7 +255,8 @@ function assert_files_exist_src {
 	assert_files_exist_common
 	assert_dir_exists "lib/static-analysis/"
 	assert_file_NOT_exists "dist/"
-	assert_file_NOT_exists "build/"
+	assert_file_NOT_exists_recursive "build"
+
 	assert_file_NOT_exists "META-INF/"
 	
 	assert_file_NOT_exists "kieker-examples/userguide/ch2--manual-instrumentation/lib/*.jar"
@@ -283,6 +294,12 @@ function assert_files_exist_src {
 function assert_files_exist_bin {
 	assert_files_exist_common
 	assert_file_exists_regular "doc/kieker-"*"_userguide.pdf"
+
+	echo -n "Making sure (recursively) that 'build' only exists with build/libs/ ..."
+	if find | grep "/build/" | grep -v "build/libs"; then
+	    exit 1
+	fi
+
 	assert_dir_exists "${DIST_JAR_DIR}"
 	MAIN_JAR=$(ls "${DIST_JAR_DIR}/kieker-"*".jar" | grep -v emf | grep -v aspectj )
 	assert_file_NOT_exists "META-INF/"
