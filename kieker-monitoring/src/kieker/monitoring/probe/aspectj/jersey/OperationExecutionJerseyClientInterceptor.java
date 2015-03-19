@@ -98,25 +98,28 @@ public class OperationExecutionJerseyClientInterceptor extends AbstractAspectJPr
 		final Object[] args = thisJoinPoint.getArgs();
 		final ClientRequest request = (ClientRequest) args[0];
 		final URI uri = request.getURI();
-		LOG.info("URI = " + uri.toString());
+		// LOG.info("URI = " + uri.toString());
 
 		// This is a hack to put all values in the header
 		MultivaluedMap<String, Object> requestHeader = request.getHeaders();
 		if (requestHeader == null) {
-			requestHeader = new MultivaluedHashMap<String, Object>();
+			requestHeader = new javax.ws.rs.core.MultivaluedHashMap<String, Object>();
 		}
 
 		final List<Object> requestHeaderList = new ArrayList<Object>(4);
 		requestHeaderList.add(Long.toString(traceId) + "," + sessionId + "," + Integer.toString(eoi) + "," + Integer.toString(nextESS));
-		LOG.info("requestHeaderList = " + requestHeaderList);
 		requestHeader.put(JerseyHeaderConstants.OPERATION_EXECUTION_JERSEY_HEADER, requestHeaderList);
+		LOG.info("Sending request to " + uri.toString() + " requestHeaderList = " + requestHeaderList);
 
 		// measure before
 		final long tin = TIME.getTime();
 		// execution of the called method
-		final Object retval;
+		Object retval = null;
 		try {
 			retval = thisJoinPoint.proceed(args);
+		} finally {
+			// measure after
+			final long tout = TIME.getTime();
 
 			// Process response
 			if (retval instanceof ClientResponse) {
@@ -125,7 +128,7 @@ public class OperationExecutionJerseyClientInterceptor extends AbstractAspectJPr
 				if (responseHeader != null) {
 					final List<String> responseHeaderList = responseHeader.get(JerseyHeaderConstants.OPERATION_EXECUTION_JERSEY_HEADER);
 					if (responseHeaderList != null) {
-						LOG.info("responseHeaderList = " + responseHeaderList);
+						LOG.info("Received response from " + uri.toString() + " responseHeaderList = " + responseHeaderList);
 						final String[] responseHeaderArray = responseHeaderList.get(0).split(",");
 
 						// Extract trace id
@@ -139,7 +142,7 @@ public class OperationExecutionJerseyClientInterceptor extends AbstractAspectJPr
 							}
 						}
 						if (traceId != retTraceId) {
-							LOG.error("TraceId in response header is different from that in request header");
+							LOG.error("TraceId in response header (" + traceId + ") is different from that in request header (" + retTraceIdStr);
 						}
 
 						// Extract session id
@@ -163,17 +166,13 @@ public class OperationExecutionJerseyClientInterceptor extends AbstractAspectJPr
 					} else {
 						LOG.info("No monitoring data found in the response header");
 						LOG.info("Is the next tier instrumented?");
-						LOG.info("URI = " + uri.toString());
 					}
 				} else {
 					LOG.info("Response header is null");
 					LOG.info("Is the next tier instrumented?");
-					LOG.info("URI = " + uri.toString());
 				}
 			}
-		} finally {
-			// measure after
-			final long tout = TIME.getTime();
+
 			CTRLINST.newMonitoringRecord(new OperationExecutionRecord(signature, sessionId, traceId, tin, tout, hostname, eoi, ess));
 			// cleanup
 			if (entrypoint) {
