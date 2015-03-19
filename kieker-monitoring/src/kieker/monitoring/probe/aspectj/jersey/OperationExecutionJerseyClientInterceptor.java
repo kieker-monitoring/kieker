@@ -142,7 +142,7 @@ public class OperationExecutionJerseyClientInterceptor extends AbstractAspectJPr
 							}
 						}
 						if (traceId != retTraceId) {
-							LOG.error("TraceId in response header (" + traceId + ") is different from that in request header (" + retTraceIdStr);
+							LOG.error("TraceId in response header (" + retTraceId + ") is different from that in request header (" + traceId + ")");
 						}
 
 						// Extract session id
