@@ -337,6 +337,13 @@ function assert_files_exist_bin {
 	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib/kieker-"*"-aspectj.jar"
 	assert_file_exists_regular "examples/JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib/kieker-"*"-aspectj.jar.LICENSE"
 
+	echo "Making sure that for each .project, a '.classpath' and a '.settings/org.eclipse.jdt.core.prefs' exists ..."	
+	for d in $(find -name ".project" -exec dirname {} \;); do 
+	    assert_file_exists_regular $d/.classpath
+	    assert_file_exists_regular $d/.settings/org.eclipse.jdt.core.prefs
+	done
+	echo OK
+
 	assert_file_NOT_exists "lib/static-analysis/"
 	assert_file_NOT_exists "dist/"
 	assert_file_NOT_exists "bin/dev/check-release-archives*" 

@@ -6,7 +6,7 @@ dependencies {
 		include "kieker-*.jar"
 	}
 	runtime fileTree('lib') {
-		include '*'
+		include 'sigar-*.jar'
 	}
 }
 
