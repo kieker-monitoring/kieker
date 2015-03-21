@@ -269,13 +269,6 @@ function assert_files_exist_src {
 	assert_file_exists_regular "kieker-examples/JavaEEServletContainerExample/livedemo-source/"	
 	assert_file_NOT_exists "kieker-examples/JavaEEServletContainerExample/jetty/webapps/jpetstore/WEB-INF/lib/kieker-*.jar"
 
-	assert_file_exists_regular "kieker-examples/userguide/appendix-JMS/.classpath"
-	assert_file_exists_regular "kieker-examples/userguide/ch2--manual-instrumentation/.classpath"
-	assert_file_exists_regular "kieker-examples/userguide/ch2--bookstore-application/.classpath"
-	assert_file_exists_regular "kieker-examples/userguide/appendix-Sigar/.classpath"
-	assert_file_exists_regular "kieker-examples/userguide/ch5--trace-monitoring-aspectj/.classpath"
-	assert_file_exists_regular "kieker-examples/userguide/ch3-4--custom-components/.classpath"
-
 	assert_file_exists_regular "config/javadoc-header/javadoc.css"
 	assert_file_exists_regular "config/javadoc-header/kieker-javadoc-header.png"
 	assert_file_exists_regular "kieker-eclipse.importorder"
