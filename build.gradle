@@ -336,10 +336,6 @@ artifacts {
 	archives javadocJar
 }
 
-task replaceHardCodedVersionNames() << {
-	regexpReplaceInFiles(project.file("bin/dev/check-release-archives.sh"), "KIEKER_VERSION=\".*?\"", "KIEKER_VERSION=\"${version}\"")
-}
-
 task distribute(group: 'distribution', description: 'Distributes binary and source archives.', 
 		dependsOn: [':distributeBinaryZip', ':distributeSourceZip',':distributeBinaryTar', ':distributeSourceTar', ':replaceHardCodedVersionNames'])
 
@@ -435,6 +431,12 @@ def sourceContent = project.copySpec {
 		include 'src/**'
 		include 'lib/**'
     
+		exclude 'kieker-examples/analysis/**/.classpath'
+		exclude 'kieker-examples/monitoring/**/.classpath'
+		exclude 'kieker-examples/userguide/**/.classpath'
+		exclude 'kieker-examples/analysis/**/.settings'
+		exclude 'kieker-examples/monitoring/**/.settings'
+		exclude 'kieker-examples/userguide/**/.settings'
 		exclude '**/build/**'
 		exclude 'build-eclipse/'
 		exclude '**/.gradle/**'
