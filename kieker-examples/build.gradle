@@ -7,8 +7,8 @@ defaultTasks 'cleanStandaloneExamples', 'buildStandaloneExamples'
 
 task buildStandaloneExamples(dependsOn: [
 					 'replaceHardCodedVersionNames',
-                     'buildStandaloneExamplesUserguideCh2App', 
-     				 'buildStandaloneExamplesUserguideCh2Instr', 
+					 'buildStandaloneExamplesUserguideCh2App', 
+					 'buildStandaloneExamplesUserguideCh2Instr', 
 					 'buildStandaloneExamplesUserguideCh34',
 					 'buildStandaloneExamplesUserguideCh5',
 					 'buildStandaloneExamplesUserguideAppendixSigar',
@@ -22,7 +22,8 @@ task buildStandaloneExamples(dependsOn: [
 					 'buildStandaloneExamplesMonitoringTimesource',
 					 'buildStandaloneExamplesAnalysisKax',
 					 'buildStandaloneExamplesAnalysisOpad',
-					 'buildStandaloneExamplesUserguideAppendixJavaEE']) {
+					 'buildStandaloneExamplesUserguideAppendixJavaEE', 
+					 'replaceAbsoluteByRelativePathsEclipse']) {
 }
 
 task replaceHardCodedVersionNames() << {
@@ -39,10 +40,27 @@ task replaceHardCodedVersionNames() << {
 	regexpReplaceInFiles(project.file("monitoring/probe-spring/.classpath"), "aspectjweaver-.*.jar", "aspectjweaver-${libAspectjVersion}.jar")
 }
 
+task replaceAbsoluteByRelativePathsEclipse << {
+        regexpReplaceInFiles(project.file("analysis/kax-files/.classpath"), "path=\".*/lib/", "path=\"lib/")
+	regexpReplaceInFiles(project.file("analysis/opad-anomaly-detection/.classpath"), "path=\".*/lib/", "path=\"lib/")
+	regexpReplaceInFiles(project.file("monitoring/probe-spring/.classpath"), "path=\".*/lib/", "path=\"lib/")
+	regexpReplaceInFiles(project.file("monitoring/custom-timesource/.classpath"), "path=\".*/lib/", "path=\"lib/")
+	regexpReplaceInFiles(project.file("monitoring/probe-manual/.classpath"), "path=\".*/lib/", "path=\"lib/")
+	regexpReplaceInFiles(project.file("monitoring/sampler-sigar/.classpath"), "path=\".*/lib/", "path=\"lib/")
+	regexpReplaceInFiles(project.file("monitoring/probe-aspectj/.classpath"), "path=\".*/lib/", "path=\"lib/")
+	regexpReplaceInFiles(project.file("monitoring/adaptive-monitoring/.classpath"), "path=\".*/lib/", "path=\"lib/")
+	regexpReplaceInFiles(project.file("monitoring/sampler-jvm/.classpath"), "path=\".*/lib/", "path=\"lib/")
+	regexpReplaceInFiles(project.file("userguide/appendix-JMS/.classpath"), "path=\".*/lib/", "path=\"lib/")
+	regexpReplaceInFiles(project.file("userguide/ch2--manual-instrumentation/.classpath"), "path=\".*/lib/", "path=\"lib/")
+	regexpReplaceInFiles(project.file("userguide/ch2--bookstore-application/.classpath"), "path=\".*/lib/", "path=\"lib/")
+	regexpReplaceInFiles(project.file("userguide/appendix-Sigar/.classpath"), "path=\".*/lib/", "path=\"lib/")
+	regexpReplaceInFiles(project.file("userguide/ch5--trace-monitoring-aspectj/.classpath"), "path=\".*/lib/", "path=\"lib/")
+	regexpReplaceInFiles(project.file("userguide/ch3-4--custom-components/.classpath"), "path=\".*/lib/", "path=\"lib/")
+}
 
 task buildStandaloneExamplesUserguideCh2App(type: GradleBuild) {
 	buildFile = 'userguide/ch2--bookstore-application/build.gradle'
-	tasks = ['jar']
+	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
 }
 
 task copyLibsStandaloneExamplesUserguideCh2Instr(type: Copy, dependsOn: [rootProject.emfJar]) {
@@ -54,7 +72,7 @@ task copyLibsStandaloneExamplesUserguideCh2Instr(type: Copy, dependsOn: [rootPro
 
 task buildStandaloneExamplesUserguideCh2Instr(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesUserguideCh2Instr') {
 	buildFile = 'userguide/ch2--manual-instrumentation/build.gradle'
-	tasks = ['jar']
+	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
 }
 
 task copyLibsStandaloneExamplesUserguideCh34(type: Copy, dependsOn: [rootProject.emfJar]) {
@@ -66,7 +84,7 @@ task copyLibsStandaloneExamplesUserguideCh34(type: Copy, dependsOn: [rootProject
 
 task buildStandaloneExamplesUserguideCh34(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesUserguideCh34') {
 	buildFile = 'userguide/ch3-4--custom-components/build.gradle'
-	tasks = ['jar']
+	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
 }
 
 task copyLibsStandaloneExamplesUserguideCh5(type: Copy, dependsOn: [rootProject.aspectJJar]) {
@@ -78,7 +96,7 @@ task copyLibsStandaloneExamplesUserguideCh5(type: Copy, dependsOn: [rootProject.
 
 task buildStandaloneExamplesUserguideCh5(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesUserguideCh5') {
 	buildFile = 'userguide/ch5--trace-monitoring-aspectj/build.gradle'
-	tasks = ['jar']
+	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
 }
 
 task copyLibsStandaloneExamplesUserguideAppendixSigar(type: Copy, dependsOn: [rootProject.emfJar]) {
@@ -93,7 +111,7 @@ task copyLibsStandaloneExamplesUserguideAppendixSigar(type: Copy, dependsOn: [ro
 
 task buildStandaloneExamplesUserguideAppendixSigar(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesUserguideAppendixSigar') {
 	buildFile = 'userguide/appendix-Sigar/build.gradle'
-	tasks = ['jar']
+	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
 }
 
 task copyLibsStandaloneExamplesUserguideAppendixJMS(type: Copy, dependsOn: [rootProject.emfJar]) {
@@ -108,7 +126,7 @@ task copyLibsStandaloneExamplesUserguideAppendixJMS(type: Copy, dependsOn: [root
 
 task buildStandaloneExamplesUserguideAppendixJMS(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesUserguideAppendixJMS') {
 	buildFile = 'userguide/appendix-JMS/build.gradle'
-	tasks = ['jar']
+	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
 }
 
 task copyLiveDemoLibsStandaloneExamplesUserguideAppendixJavaEE(type: Copy, dependsOn: [rootProject.emfJar]) {
@@ -150,7 +168,7 @@ task copyLibsStandaloneExamplesMonitoringSigar(type: Copy, dependsOn: [rootProje
 
 task buildStandaloneExamplesMonitoringSigar(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesMonitoringSigar') {
 	buildFile = 'monitoring/sampler-sigar/build.gradle'
-	tasks = ['jar']
+	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
 }
 
 task copyLibsStandaloneExamplesMonitoringJVM(type: Copy, dependsOn: [rootProject.mainJar]) {
@@ -162,7 +180,7 @@ task copyLibsStandaloneExamplesMonitoringJVM(type: Copy, dependsOn: [rootProject
 
 task buildStandaloneExamplesMonitoringJVM(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesMonitoringJVM') {
 	buildFile = 'monitoring/sampler-jvm/build.gradle'
-	tasks = ['jar']
+	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
 }
 
 task copyLibsStandaloneExamplesMonitoringSpring(type: Copy, dependsOn: [rootProject.mainJar]) {
@@ -186,7 +204,7 @@ task copyLibsStandaloneExamplesMonitoringSpring(type: Copy, dependsOn: [rootProj
 
 task buildStandaloneExamplesMonitoringSpring(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesMonitoringSpring') {
 	buildFile = 'monitoring/probe-spring/build.gradle'
-	tasks = ['jar']
+	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
 }
 
 task copyLibsStandaloneExamplesMonitoringManual(type: Copy, dependsOn: [rootProject.mainJar]) {
@@ -198,7 +216,7 @@ task copyLibsStandaloneExamplesMonitoringManual(type: Copy, dependsOn: [rootProj
 
 task buildStandaloneExamplesMonitoringManual(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesMonitoringManual') {
 	buildFile = 'monitoring/probe-manual/build.gradle'
-	tasks = ['jar']
+	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
 }
 
 task copyLibsStandaloneExamplesMonitoringAspectJ(type: Copy, dependsOn: [rootProject.aspectJJar]) {
@@ -210,7 +228,7 @@ task copyLibsStandaloneExamplesMonitoringAspectJ(type: Copy, dependsOn: [rootPro
 
 task buildStandaloneExamplesMonitoringAspectJ(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesMonitoringAspectJ') {
 	buildFile = 'monitoring/probe-aspectj/build.gradle'
-	tasks = ['jar']
+	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
 }
 
 task copyLibsStandaloneExamplesMonitoringAdaptive(type: Copy, dependsOn: [rootProject.aspectJJar]) {
@@ -222,7 +240,7 @@ task copyLibsStandaloneExamplesMonitoringAdaptive(type: Copy, dependsOn: [rootPr
 
 task buildStandaloneExamplesMonitoringAdaptive(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesMonitoringAdaptive') {
 	buildFile = 'monitoring/adaptive-monitoring/build.gradle'
-	tasks = ['jar']
+	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
 }
 
 task copyLibsStandaloneExamplesMonitoringTimesource(type: Copy, dependsOn: [rootProject.aspectJJar]) {
@@ -234,7 +252,7 @@ task copyLibsStandaloneExamplesMonitoringTimesource(type: Copy, dependsOn: [root
 
 task buildStandaloneExamplesMonitoringTimesource(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesMonitoringTimesource') {
 	buildFile = 'monitoring/custom-timesource/build.gradle'
-	tasks = ['jar']
+	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
 }
 
 task copyLibsStandaloneExamplesAnalysisKax(type: Copy, dependsOn: [rootProject.emfJar]) {
@@ -246,7 +264,7 @@ task copyLibsStandaloneExamplesAnalysisKax(type: Copy, dependsOn: [rootProject.e
 
 task buildStandaloneExamplesAnalysisKax(type: GradleBuild, dependsOn: 'copyLibsStandaloneExamplesAnalysisKax') {
 	buildFile = 'analysis/kax-files/build.gradle'
-	tasks = ['jar']
+	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
 }
 
 task copyLibsStandaloneExamplesAnalysisOpad(type: Copy, dependsOn: [rootProject.mainJar]) {
@@ -274,7 +292,7 @@ task copyScriptsStandaloneExamplesAnalysisOpad(type: Copy, dependsOn: [rootProje
 
 task buildStandaloneExamplesAnalysisOpad(type: GradleBuild, dependsOn: [ 'copyLibsStandaloneExamplesAnalysisOpad', 'copyScriptsStandaloneExamplesAnalysisOpad' ]) {
 	buildFile = 'analysis/opad-anomaly-detection/build.gradle'
-	tasks = ['jar']
+	tasks = ['jar', 'eclipseClasspath', 'eclipseJdt']
 }
 
 // TODO: Get this working for all examples
