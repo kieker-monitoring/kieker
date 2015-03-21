@@ -367,6 +367,7 @@ def exampleContent = project.copySpec {
 		exclude '**/livedemo-source/**'
 		exclude '**/.gradle/**'
 		exclude '**/build/**'
+		exclude '*gradle*'
 	}
 
 	from ('kieker-monitoring/src-resources/META-INF') {
