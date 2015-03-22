@@ -111,18 +111,32 @@ binary release.}
 .2 \DirInDirTree{userguide/}.
 .3 \DirInDirTree{ch5--trace-monitoring-aspectj/}.
 .4 \DirInDirTree{build/}\DTcomment{Directory for the Java class files}.
-.5 \DirInDirTree{META-INF/}.
-.4 \DirInDirTree{META-INF/} \DTcomment{Directory for the configuration files}.
-.5 \newFileDirInDirTree{\aopConfigFile}.
-.5 \kiekerMonitoringProperties{}.
+.5 \DirInDirTree{libs/}.
+.6 BookstoreApplication.jar.
+.4 \DirInDirTree{gradle/}.
+.5 \DirInDirTree{wrapper/}\DTcomment{Directory for the gradle wrapper}.
+.6 \newFileDirInDirTree{gradle-wrapper.jar}.
+.6 \newFileDirInDirTree{gradle-wrapper.properties}.
 .4 \DirInDirTree{lib/} \DTcomment{Directory for the needed libraries}.
 .5 \newFileDirInDirTree{\mainJarWeaver}.
 .4 \DirInDirTree{src/}\DTcomment{Directory for the source code files}.
-.5 \DirInDirTree{bookstoreTracing/}.
+.5 \DirInDirTree{../ch5bookstore/}.
 .6 Bookstore.java.
+.6 BookstoreHostnameRewriter.java.
 .6 BookstoreStarter.java.
 .6 Catalog.java.
 .6 CRM.java.
+.4 \DirInDirTree{src-resources/}.
+.5 \DirInDirTree{META-INF/}\DTcomment{Directory for the configuration files}.
+.6 aop.xml.
+.6 aop-event.xml.
+.6 aop-full.xml.
+.6 kieker.monitoring.adaptiveMonitoring.conf.
+.6 \kiekerMonitoringProperties{}. 
+.3 build.gradle.
+.3 gradlew.
+.3 gradlew.bat.
+.3 README.txt.
 }
 \end{graybox}
 
