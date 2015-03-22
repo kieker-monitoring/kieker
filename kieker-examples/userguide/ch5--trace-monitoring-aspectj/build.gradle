@@ -1,8 +1,9 @@
 apply plugin: 'application'
+apply plugin: 'eclipse'
 
 dependencies {
 	compile fileTree('lib') {
-		include "kieker-*_aspectj.jar"
+		include "kieker-1.11-aspectj.jar"
 	}
 }
 
@@ -11,6 +12,7 @@ archivesBaseName = 'BookstoreApplication'
 version = ''
 	
 sourceSets.main.java.srcDirs = ['src']
+sourceSets.main.resources.srcDirs = ['src-resources']
 
 mainClassName = 'kieker.examples.userguide.ch5bookstore.BookstoreStarter'
 
@@ -24,20 +26,17 @@ task runExampleOperationExecutions(type: JavaExec) {
 	main = mainClassName
 	classpath = sourceSets.main.runtimeClasspath
 	args = [System.getProperty("analysis.directory", ".")]
-	jvmArgs = ["-javaagent:lib/kieker-1.11-SNAPSHOT_aspectj.jar",
-			   //'-Dorg.aspectj.weaver.showWeaveInfo=true'
-		       '-Dorg.aspectj.weaver.loadtime.configuration=META-INF/aop-event.xml'
-			   ]
+	jvmArgs = ["-javaagent:lib/kieker-1.11-aspectj.jar"]
 }
 
 task runExampleFlowEvents(type: JavaExec) {
 	main = mainClassName
 	classpath = sourceSets.main.runtimeClasspath
 	args = [System.getProperty("analysis.directory", ".")]
-	jvmArgs = ["-javaagent:lib/kieker-1.11-SNAPSHOT_aspectj.jar",
-			   '-Dkieker.monitoring.writer.filesystem.AsyncFsWriter.QueueSize=30000'
+	jvmArgs = ["-javaagent:lib/kieker-1.11-aspectj.jar",
+			   '-Dkieker.monitoring.writer.filesystem.AsyncFsWriter.QueueSize=30000',
 			   //'-Dorg.aspectj.weaver.showWeaveInfo=true', 
-			   //'-Dorg.aspectj.weaver.loadtime.configuration=META-INF/aop-event.xml'
+			   '-Dorg.aspectj.weaver.loadtime.configuration=META-INF/aop-event.xml'
 			   ]
 }
 

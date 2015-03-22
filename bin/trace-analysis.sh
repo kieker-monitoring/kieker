@@ -12,4 +12,4 @@ MAINCLASSNAME=kieker.tools.traceAnalysis.TraceAnalysisTool
 
 #echo java ${JAVAARGS} -cp "${CLASSPATH}" ${MAINCLASSNAME} "$@"
 
-time java ${JAVAARGS} -cp "${BINDIR}/../lib/*":"${BINDIR}/../dist/*":"${BINDIR}" ${MAINCLASSNAME} "$@"
+time java ${JAVAARGS} -cp "${BINDIR}/../lib/*":"${BINDIR}/../build/libs/*":"${BINDIR}" ${MAINCLASSNAME} "$@"

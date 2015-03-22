@@ -1,6 +1,6 @@
 This directory contains a pre-compiled Jar file which can be started with 
 the 'java' tool using the following command:
- $ java -jar BookstoreApplication.jar
+ $ java -jar build/libs/BookstoreApplication.jar
 
 Alternatively, you can compile the sources and start the application using
 'gradle' with the given 'build.gradle' file:

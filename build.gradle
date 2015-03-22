@@ -130,6 +130,27 @@ allprojects {
 	}
 }
 
+def regexpReplaceInFiles(File file, String searchExp, String replaceExp) {
+		//println "Replacing $searchExp by $replaceExp in $file"
+		String contents = file.getText('UTF-8')
+		contents = contents.replaceAll(searchExp, replaceExp)
+		file.write(contents, 'UTF-8')
+}
+
+task replaceHardCodedVersionNames() << {
+	regexpReplaceInFiles(project.file("bin/dev/check-release-archives.sh"), "KIEKER_VERSION=\".*?\"", "KIEKER_VERSION=\"${version}\"")
+}
+
+task updateLicenseHeaderYear() << {
+	FileTree tree = fileTree(dir: '.', include: '**/*.java')
+	tree.each { File file ->
+		regexpReplaceInFiles(file, 'Copyright 20\\d\\d Kieker Project', 'Copyright 2015 Kieker Project')
+	}
+}
+
+
+compileJava.dependsOn replaceHardCodedVersionNames
+
 def resolveRelativeToParent(String directory, String file) {
 	return rootProject.file(directory + '/' + file)
 }
@@ -148,6 +169,12 @@ def today() {
 def year() {
    def date = new Date()
    def formattedDate = date.format('yyyy')
+   return formattedDate
+}
+
+def monthMMM() {
+   def date = new Date()
+   def formattedDate = date.format('MMM')
    return formattedDate
 }
 
@@ -217,9 +244,6 @@ configurations.archives.artifacts.with { archives ->
 
 task mainJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 	// default archiveName is [baseName]-[appendix]-[version]-[classifier].[extension]
-	archiveName = kiekerPackagenamebase + "-" + kiekerVersion + ".jar"
-	destinationDir = file('dist')
-	version = ''
 	configure allArtifacts
 	configure licence
 	configure aopxml
@@ -231,9 +255,6 @@ task mainJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 
 task emfJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 	// default archiveName is [baseName]-[appendix]-[version]-[classifier].[extension]
-	archiveName = kiekerPackagenamebase + "-" + kiekerVersion + "_emf" + ".jar"
-	destinationDir = file('dist')
-	version = ''
 	classifier = 'emf'
 	configure allArtifacts
 	configure licence
@@ -265,9 +286,6 @@ task emfJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 
 task aspectJJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 	// default archiveName is [baseName]-[appendix]-[version]-[classifier].[extension]
-	archiveName = kiekerPackagenamebase + "-" + kiekerVersion + "_aspectj" + ".jar"
-	destinationDir = file('dist')
-	version = ''
 	classifier = 'aspectj'
 	configure allArtifacts
 	configure licence
@@ -319,7 +337,7 @@ artifacts {
 }
 
 task distribute(group: 'distribution', description: 'Distributes binary and source archives.', 
-		dependsOn: [':distributeBinaryZip', ':distributeSourceZip',':distributeBinaryTar', ':distributeSourceTar'])
+		dependsOn: [':distributeBinaryZip', ':distributeSourceZip',':distributeBinaryTar', ':distributeSourceTar', ':replaceHardCodedVersionNames'])
 
 def binaryContent = project.copySpec {
 	from (projectDir) {
@@ -330,7 +348,7 @@ def binaryContent = project.copySpec {
 		include 'bin/**'
 		include 'lib/**'
 		include 'javadoc/**'
-		include 'dist/*'
+		include 'build/libs/*'
     
 		exclude '**/.gradle/**'
 		exclude 'lib/static-analysis/'
@@ -354,20 +372,26 @@ def manualContent = project.copySpec {
 def exampleContent = project.copySpec {
 	from ('kieker-examples') {
 		include '**'
+		
+		exclude '**/JavaEEServletContainerExample/build.xml'
+		exclude '**/livedemo-source/**'
+		exclude '**/.gradle/**'
+		exclude '**/build/**'
+		exclude '*gradle*'
 	}
-	from ('examples') {
-		include '**'
-	}
-	exclude '**/JavaEEServletContainerExample/build.xml'
-	exclude '**/livedemo-source/**'
-	exclude '**/.gradle/**'
-	exclude '**/build/**'
-  
+
 	from ('kieker-monitoring/src-resources/META-INF') {
 		include 'kieker.monitoring.default.properties'	
 		rename 'kieker.monitoring.default.properties', 'kieker.monitoring.example.properties'
 	}
 	into kiekerPackagenamebase + "-" + kiekerVersion + "/examples"
+	
+	with {
+		from ('kieker-examples') {
+			include '**/build/libs/**'
+		}
+		includeEmptyDirs = false
+	}
 }
 
 def exampleJavaEEContent = project.copySpec {
@@ -389,13 +413,11 @@ task prepareExamplesForDistribution(dependsOn: ['kieker-examples:buildStandalone
 
 task distributeBinaryZip(type: Zip, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, docs, 'kieker-documentation:userguide:buildDocumentation', prepareExamplesForDistribution]) {
 	classifier = 'binaries'
-	destinationDir = file('dist/releases')
 	with binaryContent, manualContent, exampleContent, exampleJavaEEContent
 }
 
 task distributeBinaryTar(type: Tar, group: 'distribution', description: 'Distributes binary archive.', dependsOn: [mainJar, emfJar, aspectJJar, docs, 'kieker-documentation:userguide:buildDocumentation', prepareExamplesForDistribution]) {
 	classifier = 'binaries'
-	destinationDir = file('dist/releases')
 	with binaryContent, manualContent, exampleContent, exampleJavaEEContent
 	
 	compression = Compression.GZIP 
@@ -409,9 +431,14 @@ def sourceContent = project.copySpec {
 		include 'src/**'
 		include 'lib/**'
     
-		exclude 'build/'
+		exclude 'kieker-examples/analysis/**/.classpath'
+		exclude 'kieker-examples/monitoring/**/.classpath'
+		exclude 'kieker-examples/userguide/**/.classpath'
+		exclude 'kieker-examples/analysis/**/.settings'
+		exclude 'kieker-examples/monitoring/**/.settings'
+		exclude 'kieker-examples/userguide/**/.settings'
+		exclude '**/build/**'
 		exclude 'build-eclipse/'
-		exclude 'dist'
 		exclude '**/.gradle/**'
 	}
 	from ('kieker-documentation') {
@@ -427,14 +454,12 @@ task checkReleaseArchives(type: Exec, dependsOn: [distribute]) {
 
 task distributeSourceZip(type: Zip, group: 'distribution', dependsOn: [mainJar, emfJar, aspectJJar]) {
 	description = 'Distributes source archive.'
-	destinationDir = file('dist/releases')
 	classifier = 'sources'
 	with sourceContent
 }
 
 task distributeSourceTar(type: Tar, group: 'distribution', dependsOn: [mainJar, emfJar, aspectJJar]) {
 	description = 'Distributes source archive.'
-	destinationDir = file('dist/releases')
 	classifier = 'sources'
 	with sourceContent
 	

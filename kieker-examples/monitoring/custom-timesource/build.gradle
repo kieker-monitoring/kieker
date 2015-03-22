@@ -1,8 +1,9 @@
 apply plugin: 'application'
+apply plugin: 'eclipse'
 
 dependencies {
 	compile fileTree('lib') {
-		include "kieker-*_aspectj.jar"
+		include "kieker-1.11-aspectj.jar"
 	}
 }
 
@@ -28,7 +29,7 @@ task runMonitoring(type: JavaExec) {
 	classpath = sourceSets.main.runtimeClasspath
 	jvmArgs = ['-Dkieker.monitoring.writer.filesystem.AsyncFsWriter.customStoragePath=monitoring-logs',
 			   '-Dkieker.monitoring.timer=kieker.monitoring.timer.CustomTimeSource',
-	           "-javaagent:lib/kieker-1.11-SNAPSHOT_aspectj.jar",
+	           "-javaagent:lib/kieker-1.11-aspectj.jar",
 			   '-Dorg.aspectj.weaver.showWeaveInfo=true',
 			   '-Daj.weaving.verbose=true']
 }
