@@ -193,7 +193,7 @@ public final class ResourceMonitor extends AbstractCommandLineTool {
 
 	@Override
 	protected boolean performTask() {
-		this.logParameters();
+		LOG.info(this.toString());
 
 		final CountDownLatch cdl = new CountDownLatch(1);
 
@@ -239,15 +239,17 @@ public final class ResourceMonitor extends AbstractCommandLineTool {
 		return true;
 	}
 
-	private void logParameters() {
-		LOG.info("");
-		LOG.info("Configuration:");
-		LOG.info("\tSampling interval = " + this.interval);
-		LOG.info("\tSampling interval unit = " + this.intervalUnit);
-		LOG.info("\tInitial delay = " + this.initialDelay);
-		LOG.info("\tInitial delay unit = " + this.initialDelayUnit);
-		LOG.info("\tDuration = " + this.duration);
-		LOG.info("\tDuration unit = " + this.durationUnit);
-		LOG.info("");
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder(2048);
+		final String lineSeparator = System.getProperty("line.separator");
+		sb.append("Resource Monitoring Configuration:" + lineSeparator);
+		sb.append("\tSampling interval = " + this.interval + lineSeparator);
+		sb.append("\tSampling interval unit = " + this.intervalUnit + lineSeparator);
+		sb.append("\tInitial delay = " + this.initialDelay + lineSeparator);
+		sb.append("\tInitial delay unit = " + this.initialDelayUnit + lineSeparator);
+		sb.append("\tDuration = " + this.duration + lineSeparator);
+		sb.append("\tDuration unit = " + this.durationUnit + lineSeparator);
+		return sb.toString();
 	}
 }
