@@ -130,6 +130,27 @@ allprojects {
 	}
 }
 
+def regexpReplaceInFiles(File file, String searchExp, String replaceExp) {
+		//println "Replacing $searchExp by $replaceExp in $file"
+		String contents = file.getText('UTF-8')
+		contents = contents.replaceAll(searchExp, replaceExp)
+		file.write(contents, 'UTF-8')
+}
+
+task replaceHardCodedVersionNames() << {
+	regexpReplaceInFiles(project.file("bin/dev/check-release-archives.sh"), "KIEKER_VERSION=\".*?\"", "KIEKER_VERSION=\"${version}\"")
+}
+
+task updateLicenseHeaderYear() << {
+	FileTree tree = fileTree(dir: '.', include: '**/*.java')
+	tree.each { File file ->
+		regexpReplaceInFiles(file, 'Copyright 20\\d\\d Kieker Project', 'Copyright 2015 Kieker Project')
+	}
+}
+
+
+compileJava.dependsOn replaceHardCodedVersionNames
+
 def resolveRelativeToParent(String directory, String file) {
 	return rootProject.file(directory + '/' + file)
 }
@@ -148,6 +169,12 @@ def today() {
 def year() {
    def date = new Date()
    def formattedDate = date.format('yyyy')
+   return formattedDate
+}
+
+def monthMMM() {
+   def date = new Date()
+   def formattedDate = date.format('MMM')
    return formattedDate
 }
 
@@ -217,9 +244,7 @@ configurations.archives.artifacts.with { archives ->
 
 task mainJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 	// default archiveName is [baseName]-[appendix]-[version]-[classifier].[extension]
-	archiveName = kiekerPackagenamebase + "-" + kiekerVersion + ".jar"
 	destinationDir = file('dist')
-	version = ''
 	configure allArtifacts
 	configure licence
 	configure aopxml
@@ -231,9 +256,7 @@ task mainJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 
 task emfJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 	// default archiveName is [baseName]-[appendix]-[version]-[classifier].[extension]
-	archiveName = kiekerPackagenamebase + "-" + kiekerVersion + "_emf" + ".jar"
 	destinationDir = file('dist')
-	version = ''
 	classifier = 'emf'
 	configure allArtifacts
 	configure licence
@@ -265,9 +288,7 @@ task emfJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 
 task aspectJJar(type: Jar, dependsOn:  mainSubprojects.tasks["build"] ) {
 	// default archiveName is [baseName]-[appendix]-[version]-[classifier].[extension]
-	archiveName = kiekerPackagenamebase + "-" + kiekerVersion + "_aspectj" + ".jar"
 	destinationDir = file('dist')
-	version = ''
 	classifier = 'aspectj'
 	configure allArtifacts
 	configure licence
@@ -443,13 +464,22 @@ task distributeSourceTar(type: Tar, group: 'distribution', dependsOn: [mainJar, 
 }
 
 task startRServe() << {
-	'bin/dev/rserve-control.sh start'.execute()
+    String osName = System.getProperty("os.name").toLowerCase();
+	if (osName.contains("windows")) {
+		'bin/dev/rserve-control.bat start'.execute()
+	} else {
+		'bin/dev/rserve-control.sh start'.execute()
+	}	
 }
 distribute.mustRunAfter startRServe
 
 task stopRServe(type: Exec) {
-	commandLine 'bin/dev/rserve-control.sh', 'stop'
-	
+    String osName = System.getProperty("os.name").toLowerCase();
+	if (osName.contains("windows")) {
+		 commandLine 'bin/dev/rserve-control.bat', 'stop' 
+	} else {
+		 commandLine 'bin/dev/rserve-control.sh', 'stop' 
+	}
 	ignoreExitValue = true
 }
 startRServe.finalizedBy stopRServe

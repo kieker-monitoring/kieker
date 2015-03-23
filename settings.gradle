@@ -1,4 +1,6 @@
-// This file defines the subprojects of Kieker.
+rootProject.name = 'kieker'
+
+// Kieker's subprojects:
 include 'kieker-common', 'kieker-monitoring', 'kieker-analysis', 'kieker-tools', 
 		'kieker-checkstyle-extension', 
 		'kieker-examples', 

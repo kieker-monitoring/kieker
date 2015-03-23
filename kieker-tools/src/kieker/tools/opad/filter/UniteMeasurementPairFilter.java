@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,10 +34,12 @@ import kieker.tools.opad.model.NamedDoubleTimeSeriesPoint;
 /**
  * This Filter brings a Measurement Point and a corresponding Forecasting value together.
  * 
+ * @deprecated to be removed in Kieker 1.12
  * @author Tom Frotscher
  * @since 1.10
  * 
  */
+@Deprecated
 @Plugin(name = "VariateUniteForecastingMeasurementPair Filter", outputPorts = {
 	@OutputPort(eventTypes = { IForecastMeasurementPair.class }, name = UniteMeasurementPairFilter.OUTPUT_PORT_NAME_FORECASTED_AND_CURRENT) })
 public class UniteMeasurementPairFilter extends AbstractFilterPlugin {

@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,12 +60,10 @@ public class MeanForecasterJava extends AbstractForecaster<Double> {
 		final List<Double> allHistory = new ArrayList<Double>(history.getValues());
 		final Double[] histValuesNotNull = MeanForecasterJava.removeNullValues(allHistory);
 		final double mean = StatUtils.mean(ArrayUtils.toPrimitive(histValuesNotNull));
-
 		final Double[] forecastValues = new Double[numForecastSteps];
 		Arrays.fill(forecastValues, mean);
 
 		tsFC.appendAll(forecastValues);
-
 		return new ForecastResult(tsFC, this.getTsOriginal(), ForecastMethod.MEAN);
 	}
 
@@ -84,5 +82,11 @@ public class MeanForecasterJava extends AbstractForecaster<Double> {
 			}
 		}
 		return newList.toArray(new Double[newList.size()]);
+	}
+
+	@Override
+	protected boolean supportsConfidence() {
+		// Does not support confidence;
+		return false;
 	}
 }

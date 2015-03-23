@@ -1,5 +1,5 @@
 /***************************************************************************
- * Copyright 2014 Kieker Project (http://kieker-monitoring.net)
+ * Copyright 2015 Kieker Project (http://kieker-monitoring.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,6 +39,8 @@ public abstract class AbstractForecaster<T> implements IForecaster<T> {
 
 	private final ITimeSeries<T> historyTimeseries;
 	private final int confidenceLevel;
+
+	private boolean warningAlreadyLogged = false;
 
 	public AbstractForecaster(final ITimeSeries<T> historyTimeseries) {
 		this(historyTimeseries, 0);
@@ -83,7 +85,10 @@ public abstract class AbstractForecaster<T> implements IForecaster<T> {
 		if (this.supportsConfidence()) {
 			return this.confidenceLevel;
 		} else {
-			LOG.warn("This forecaster does not support confidence level. Falling back to 0.0.");
+			if (!this.warningAlreadyLogged) {
+				LOG.warn("Confidence level not supported. Falling back to 0.0.");
+				this.warningAlreadyLogged = true;
+			}
 			return 0;
 		}
 	}
