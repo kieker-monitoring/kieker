@@ -11,9 +11,6 @@ dependencies {
 archivesBaseName = 'BookstoreApplication'
 version = ''
 
-// Create the JAR file in the root directory of the example
-libsDirName = '..'
-
 sourceSets.main.java.srcDirs = ['src']
 
 mainClassName = 'kieker.examples.monitoring.adaptive.BookstoreStarter'
