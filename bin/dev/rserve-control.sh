@@ -2,10 +2,12 @@
 
 # Script that either starts or stops Rserve
 
+BINDIR=$(cd "$(dirname "$0")"; pwd)/
+
 case "$1" in
     start)
 	echo -n "Trying to start Rserve..."
-	R CMD BATCH RserveStart.R RserveStart.log --vanilla &
+	R CMD BATCH "${BINDIR}/RserveStart.R" RserveStart.log --vanilla &
 	#R CMD Rserve.dbg --vanilla > /tmp/rserve.dbg.log &
 	RET=$?
 	if [ $RET = 0 ] && (ps ax | grep -i "rserve --vanilla" | grep -qv grep); then
