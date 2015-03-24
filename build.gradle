@@ -432,7 +432,8 @@ def sourceContent = project.copySpec {
 		include 'bin/**'
 		include 'src/**'
 		include 'lib/**'
-    
+
+		exclude 'javadoc/**'    
 		exclude 'kieker-examples/analysis/**/.classpath'
 		exclude 'kieker-examples/monitoring/**/.classpath'
 		exclude 'kieker-examples/userguide/**/.classpath'

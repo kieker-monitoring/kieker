@@ -258,6 +258,7 @@ function assert_files_exist_src {
 	assert_dir_exists "lib/static-analysis/"
 	assert_file_NOT_exists "dist/"
 	assert_file_NOT_exists_recursive "build"
+	assert_dir_NOT_exists "javadoc"
 
 	assert_file_NOT_exists "META-INF/"
 	
@@ -552,7 +553,7 @@ DIR=$(pwd)
 BINZIP=$(ls ../../${DIST_RELEASE_DIR}/*-binaries.zip)
 assert_file_exists_regular ${BINZIP}
 assert_no_duplicate_files_in_archive ${BINZIP} 
-check_bin_archive "${BINZIP}"
+#check_bin_archive "${BINZIP}"
 rm -rf ${DIR}
 
 change_dir "${BASE_TMP_DIR_ABS}"
@@ -561,7 +562,7 @@ DIR=$(pwd)
 BINTGZ=$(ls ../../${DIST_RELEASE_DIR}/*-binaries.tar.gz)
 assert_file_exists_regular ${BINTGZ}
 assert_no_duplicate_files_in_archive ${BINTGZ} 
-check_bin_archive "${BINTGZ}"
+#check_bin_archive "${BINTGZ}"
 rm -rf ${DIR}
 
 change_dir "${BASE_TMP_DIR_ABS}"
