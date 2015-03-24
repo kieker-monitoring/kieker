@@ -358,6 +358,7 @@ def binaryContent = project.copySpec {
 		include 'README-bin'
 		rename 'README-bin', 'README' 
 	}
+	exclude '**/*.log'
 	into kiekerPackagenamebase + "-" + kiekerVersion
 }
 
@@ -378,6 +379,7 @@ def exampleContent = project.copySpec {
 		exclude '**/.gradle/**'
 		exclude '**/build/**'
 		exclude '*gradle*'
+		exclude '**/*.log'
 	}
 
 	from ('kieker-monitoring/src-resources/META-INF') {
@@ -440,6 +442,7 @@ def sourceContent = project.copySpec {
 		exclude '**/build/**'
 		exclude 'build-eclipse/'
 		exclude '**/.gradle/**'
+		exclude '**/*.log'
 	}
 	from ('kieker-documentation') {
 		include 'README-src'

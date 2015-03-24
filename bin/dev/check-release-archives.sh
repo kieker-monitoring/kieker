@@ -195,6 +195,8 @@ function assert_files_exist_common {
 	assert_file_NOT_exists "tmp/"
 	assert_file_NOT_exists ".git/"
 	assert_file_NOT_exists ".gitignore/"
+
+	assert_file_NOT_exists_recursive "*.log"
 	
 	echo -n "Make sure that no class files included (only exception is inside WEB-INF/classes) ..."
 	NUM_CLASS=$(find -name "*.class" | grep -v "WEB-INF/classes" | wc -l)
