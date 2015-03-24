@@ -10,7 +10,7 @@ IF "%1"=="start" (
 )
 
 IF "%1"=="stop" (
-  "Trying to stop Rserve..."
+  ECHO "Trying to stop Rserve..."
   TASKKILL /F /IM Rserve.exe /T
 )
 
