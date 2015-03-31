@@ -77,7 +77,7 @@ annotation \class{@OperationExecutionMonitoringProbe}. %
 This section demonstrates how to use the AspectJ-based probes to monitor %
 traces based on the Bookstore application from Chapter~\ref{chap:example}. %
 
-\enlargethispage{1.0cm}
+% \enlargethispage{1.0cm}
 
 \NOTIFYBOX{The Java sources of the example presented in %
 this section, as well as a pre-compiled binary, can be found in the %
@@ -115,8 +115,7 @@ binary release.}
 .6 BookstoreApplication.jar.
 .4 \DirInDirTree{gradle/}.
 .5 \DirInDirTree{wrapper/}\DTcomment{Directory for the gradle wrapper}.
-.6 \newFileDirInDirTree{gradle-wrapper.jar}.
-.6 \newFileDirInDirTree{gradle-wrapper.properties}.
+.6 \ldots.
 .4 \DirInDirTree{lib/} \DTcomment{Directory for the needed libraries}.
 .5 \newFileDirInDirTree{\mainJarWeaver}.
 .4 \DirInDirTree{src/}\DTcomment{Directory for the source code files}.
@@ -152,6 +151,8 @@ the Java classes. It will be configured based on the configuration file %
 example's \dir{META-INF/} directory. Instead of registering the \file{\mainJarWeaver} %
 as an agent to the JVM, the \file{\aspectJWeaverJar} can be used. In this case, %
 the \file{\mainJar} needs to be added to the classpath.
+
+\pagebreak
 
 Once the necessary files have been copied to the example directory, the source code can be instrumented with the annotation
 \class{OperationExecutionMonitoringProbe}. Listing~\ref{lst:BookstoreAspectJ} shows how the annotation is used.
