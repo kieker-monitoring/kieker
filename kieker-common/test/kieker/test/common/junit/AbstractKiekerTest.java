@@ -118,19 +118,30 @@ public abstract class AbstractKiekerTest { // NOPMD (no abstract methods)
 	/**
 	 * Turns a path relative to the module directory (e.g., kieker-common) into
 	 * a path relative to the working directory.
+	 * 
+	 * @param path
+	 *            the path relative to the module directory
+	 * @return the converted path
 	 */
 	protected String modulePathToWorkingPath(final String path) {
+		if (this.workingDirectoryIsModuleDirectory) {
+			return path;
+		}
 		return this.testModulePrefix + path;
 	}
 
 	/**
 	 * Turns a path relative to the working directory into a path relative to the module directory (e.g., kieker-common).
+	 * 
+	 * @param path
+	 *            the path relative to the working directory
+	 * @return the converted path
 	 */
 	protected String workingPathToModulePath(final String path) {
 		if (this.workingDirectoryIsModuleDirectory) {
 			return path;
 		}
-		return path.substring(this.testModulePrefix.length());
+		return path.substring(this.testModulePrefix.length()); // remove module prefix
 	}
 
 	/**
