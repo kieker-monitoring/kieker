@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="kieker-analysis/src"/>
+	<classpathentry kind="src" path="kieker-monitoring/test-resources"/>
+	<classpathentry kind="src" path="kieker-monitoring/src-resources"/>
 	<classpathentry kind="src" path="kieker-analysis/src-gen"/>
 	<classpathentry kind="src" path="kieker-analysis/test"/>
 	<classpathentry kind="src" path="kieker-common/src"/>
@@ -16,21 +18,21 @@
 	<classpathentry kind="src" path="kieker-common/model"/>
 	<classpathentry kind="src" path="kieker-tools/model"/>
 	<classpathentry kind="src" path="kieker-analysis/model"/>
-  <classpathentry kind="src" path="kieker-examples/analysis/kax-files/src"/>
-  <classpathentry kind="src" path="kieker-examples/analysis/opad-anomaly-detection/src"/>
-  <classpathentry kind="src" path="kieker-examples/monitoring/adaptive-monitoring/src"/>
-  <classpathentry kind="src" path="kieker-examples/monitoring/custom-timesource/src"/>
-  <classpathentry kind="src" path="kieker-examples/monitoring/probe-aspectj/src"/>
-  <classpathentry kind="src" path="kieker-examples/monitoring/probe-manual/src"/>
-  <classpathentry kind="src" path="kieker-examples/monitoring/probe-spring/src"/>
-  <classpathentry kind="src" path="kieker-examples/monitoring/sampler-jvm/src"/>
-  <classpathentry kind="src" path="kieker-examples/monitoring/sampler-sigar/src"/>
-  <classpathentry kind="src" path="kieker-examples/userguide/appendix-JMS/src"/>
-  <classpathentry kind="src" path="kieker-examples/userguide/appendix-Sigar/src"/>
-  <classpathentry kind="src" path="kieker-examples/userguide/ch2--bookstore-application/src"/>
-  <classpathentry kind="src" path="kieker-examples/userguide/ch2--manual-instrumentation/src"/>
-  <classpathentry kind="src" path="kieker-examples/userguide/ch3-4--custom-components/src"/>
-  <classpathentry kind="src" path="kieker-examples/userguide/ch5--trace-monitoring-aspectj/src"/>
+	<classpathentry kind="src" path="kieker-examples/analysis/kax-files/src"/>
+	<classpathentry kind="src" path="kieker-examples/analysis/opad-anomaly-detection/src"/>
+	<classpathentry kind="src" path="kieker-examples/monitoring/adaptive-monitoring/src"/>
+	<classpathentry kind="src" path="kieker-examples/monitoring/custom-timesource/src"/>
+	<classpathentry kind="src" path="kieker-examples/monitoring/probe-aspectj/src"/>
+	<classpathentry kind="src" path="kieker-examples/monitoring/probe-manual/src"/>
+	<classpathentry kind="src" path="kieker-examples/monitoring/probe-spring/src"/>
+	<classpathentry kind="src" path="kieker-examples/monitoring/sampler-jvm/src"/>
+	<classpathentry kind="src" path="kieker-examples/monitoring/sampler-sigar/src"/>
+	<classpathentry kind="src" path="kieker-examples/userguide/appendix-JMS/src"/>
+	<classpathentry kind="src" path="kieker-examples/userguide/appendix-Sigar/src"/>
+	<classpathentry kind="src" path="kieker-examples/userguide/ch2--bookstore-application/src"/>
+	<classpathentry kind="src" path="kieker-examples/userguide/ch2--manual-instrumentation/src"/>
+	<classpathentry kind="src" path="kieker-examples/userguide/ch3-4--custom-components/src"/>
+	<classpathentry kind="src" path="kieker-examples/userguide/ch5--trace-monitoring-aspectj/src"/>
 	<classpathentry kind="lib" path="lib/framework-libs/javax.servlet-3.0.jar"/>
 	<classpathentry kind="lib" path="lib/activemq-core-5.7.0.jar"/>
 	<classpathentry kind="lib" path="lib/aspectjweaver-1.8.2.jar"/>
@@ -67,5 +69,40 @@
 	<classpathentry kind="lib" path="kieker-examples/JavaEEServletContainerExample/jetty/lib/jetty-servlet-8.1.16.v20140903.jar"/>
 	<classpathentry kind="lib" path="kieker-examples/analysis/opad-anomaly-detection/lib/opencsv-2.4-SNAPSHOT.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/framework-libs/spring/spring-expression-3.2.8.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/framework-libs/cxf/wsdl4j-1.6.3.jar"/>
+	<classpathentry kind="lib" path="kieker-examples/JavaEEServletContainerExample/jetty/lib/jetty-http-8.1.16.v20140903.jar"/>
+	<classpathentry kind="lib" path="kieker-examples/JavaEEServletContainerExample/jetty/lib/jetty-ajp-8.1.16.v20140903.jar"/>
+	<classpathentry kind="lib" path="kieker-examples/JavaEEServletContainerExample/jetty/lib/jetty-annotations-8.1.16.v20140903.jar"/>
+	<classpathentry kind="lib" path="kieker-examples/JavaEEServletContainerExample/jetty/lib/jetty-continuation-8.1.16.v20140903.jar"/>
+	<classpathentry kind="lib" path="kieker-examples/JavaEEServletContainerExample/jetty/lib/jetty-deploy-8.1.16.v20140903.jar"/>
+	<classpathentry kind="lib" path="kieker-examples/JavaEEServletContainerExample/jetty/lib/jetty-jmx-8.1.16.v20140903.jar"/>
+	<classpathentry kind="lib" path="kieker-examples/JavaEEServletContainerExample/jetty/lib/jetty-jndi-8.1.16.v20140903.jar"/>
+	<classpathentry kind="lib" path="kieker-examples/JavaEEServletContainerExample/jetty/lib/jetty-overlay-deployer-8.1.16.v20140903.jar"/>
+	<classpathentry kind="lib" path="kieker-examples/JavaEEServletContainerExample/jetty/lib/jetty-plus-8.1.16.v20140903.jar"/>
+	<classpathentry kind="lib" path="kieker-examples/JavaEEServletContainerExample/jetty/lib/jetty-policy-8.1.16.v20140903.jar"/>
+	<classpathentry kind="lib" path="kieker-examples/JavaEEServletContainerExample/jetty/lib/jetty-rewrite-8.1.16.v20140903.jar"/>
+	<classpathentry kind="lib" path="kieker-examples/JavaEEServletContainerExample/jetty/lib/jetty-security-8.1.16.v20140903.jar"/>
+	<classpathentry kind="lib" path="kieker-examples/JavaEEServletContainerExample/jetty/lib/jetty-servlets-8.1.16.v20140903.jar"/>
+	<classpathentry kind="lib" path="kieker-examples/JavaEEServletContainerExample/jetty/lib/jetty-webapp-8.1.16.v20140903.jar"/>
+	<classpathentry kind="lib" path="kieker-examples/JavaEEServletContainerExample/jetty/lib/jetty-websocket-8.1.16.v20140903.jar"/>
+	<classpathentry kind="lib" path="kieker-examples/JavaEEServletContainerExample/jetty/lib/jetty-xml-8.1.16.v20140903.jar"/>
+	<classpathentry kind="lib" path="lib/framework-libs/cxf/geronimo-activation_1.1_spec-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/framework-libs/cxf/geronimo-annotation_1.0_spec-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/framework-libs/cxf/geronimo-javamail_1.4_spec-1.7.1.jar"/>
+	<classpathentry kind="lib" path="lib/framework-libs/cxf/geronimo-jaxws_2.2_spec-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/framework-libs/cxf/geronimo-stax-api_1.0_spec-1.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/framework-libs/cxf/geronimo-ws-metadata_2.0_spec-1.1.3.jar"/>
+	<classpathentry kind="lib" path="lib/framework-libs/cxf/jaxb-api-2.2.5.jar"/>
+	<classpathentry kind="lib" path="lib/framework-libs/cxf/jaxb-impl-2.2.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/framework-libs/cxf/neethi-3.0.3.jar"/>
+	<classpathentry kind="lib" path="lib/framework-libs/cxf/saaj-api-1.3.4.jar"/>
+	<classpathentry kind="lib" path="lib/framework-libs/cxf/saaj-impl-1.3.19.jar"/>
+	<classpathentry kind="lib" path="lib/framework-libs/cxf/stax2-api-3.1.4.jar"/>
+	<classpathentry kind="lib" path="lib/framework-libs/cxf/woodstox-core-asl-4.4.0.jar"/>
+	<classpathentry kind="lib" path="lib/framework-libs/cxf/xmlschema-core-2.0.3.jar"/>
+	<classpathentry kind="lib" path="lib/geronimo-j2ee-management_1.1_spec-1.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/derby-10.11.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/kahadb-5.7.0.jar"/>
 	<classpathentry kind="output" path="build-eclipse"/>
 </classpath>
