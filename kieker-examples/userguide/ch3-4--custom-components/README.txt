@@ -16,4 +16,9 @@ In order to re-compile the sources into BookstoreApplicationMonitoringAnalysis.j
 following command:
  $ gradle jar
 
+The example includes the Gradle wrapper scripts `gradlew{.bat}` for UNIX-like and
+Windows systems. These scripts automatically download and install the right 
+Gradle version. They can be used just like the gradle command, e.g., `./gradlew jar`
+
+
 Please see Chapters 3 and 4 of the Kieker User Guide for details on this example.

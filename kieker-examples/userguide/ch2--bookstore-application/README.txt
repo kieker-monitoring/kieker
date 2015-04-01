@@ -10,4 +10,9 @@ In order to re-compile the sources into BookstoreApplication.jar, run the
 following command:
  $ gradle jar
 
+The example includes the Gradle wrapper scripts `gradlew{.bat}` for UNIX-like and
+Windows systems. These scripts automatically download and install the right 
+Gradle version. They can be used just like the gradle command, e.g., `./gradlew jar`
+
+
 Please see Chapter 2 of the Kieker User Guide for details on this example.
