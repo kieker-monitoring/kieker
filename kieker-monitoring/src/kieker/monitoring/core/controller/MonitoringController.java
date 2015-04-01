@@ -39,6 +39,13 @@ import kieker.monitoring.timer.ITimeSource;
 public final class MonitoringController extends AbstractController implements IMonitoringController {
 	static final Log LOG = LogFactory.getLog(MonitoringController.class); // NOPMD package for inner class
 
+	/**
+	 * Number of milliseconds the ShutdownHook waits after being triggered to send the termination signal
+	 * to the MonitoringController. The reason for introducing this was that a shutdown might be initiated
+	 * before all records (and particularly mapping enries) are written. #1634
+	 */
+	private static final long SHUTDOWN_DELAY_MILLIS = 1000;
+
 	private final StateController stateController;
 	private final SamplingController samplingController;
 	private final JMXController jmxController;
@@ -114,8 +121,13 @@ public final class MonitoringController extends AbstractController implements IM
 					public void run() {
 						if (!monitoringController.isMonitoringTerminated()) {
 							// WONTFIX: We should not use a logger in shutdown hooks, logger may already be down! (#26)
-							LOG.info("ShutdownHook notifies controller to initiate shutdown");
+							LOG.info("ShutdownHook notifies controller to initiate shutdown in " + SHUTDOWN_DELAY_MILLIS + " milliseconds");
 							// System.err.println(monitoringController.toString());
+							try {
+								Thread.sleep(SHUTDOWN_DELAY_MILLIS);
+							} catch (final InterruptedException e) {
+								LOG.warn("ShutdownHook was interrupted while waiting");
+							}
 							monitoringController.terminateMonitoring();
 						}
 					}
