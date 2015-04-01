@@ -1,6 +1,6 @@
 #!/bin/bash
 
-KIEKER_VERSION="1.11"
+KIEKER_VERSION="1.12-SNAPSHOT"
 BASE_TMP_DIR="$(dirname $0)/../../build/"
 
 DIST_RELEASE_DIR="build/distributions/"
