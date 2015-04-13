@@ -8,7 +8,6 @@ case "$1" in
     start)
 	echo -n "Trying to start Rserve..."
 	R CMD BATCH "${BINDIR}/RserveStart.R" RserveStart.log --vanilla &
-	#R CMD Rserve.dbg --vanilla > /tmp/rserve.dbg.log &
 	RET=$?
 	if [ $RET = 0 ] && (ps ax | grep -i "rserve --slave" | grep -qv grep); then
 		echo "done."
