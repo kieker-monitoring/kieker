@@ -10,7 +10,7 @@ case "$1" in
 	R CMD BATCH "${BINDIR}/RserveStart.R" RserveStart.log --vanilla &
 	#R CMD Rserve.dbg --vanilla > /tmp/rserve.dbg.log &
 	RET=$?
-	if [ $RET = 0 ] && (ps ax | grep -i "rserve --vanilla" | grep -qv grep); then
+	if [ $RET = 0 ] && (ps ax | grep -i "rserve --slave" | grep -qv grep); then
 		echo "done."
 		exit 0
 	else
