@@ -16,7 +16,6 @@
 
 package kieker.monitoring.probe.aspectj.jersey;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,12 +76,11 @@ public class OperationExecutionJerseyServerInterceptor extends AbstractAspectJPr
 
 		final Object[] args = thisJoinPoint.getArgs();
 		final ContainerRequest request = (ContainerRequest) args[1];
-		final URI clientURI = request.getAbsolutePath();
 
 		final MultivaluedMap<String, String> requestHeader = request.getRequestHeaders();
 		final List<String> requestJerseyHeader = requestHeader.get(JerseyHeaderConstants.OPERATION_EXECUTION_JERSEY_HEADER);
 		if ((requestJerseyHeader == null) || (requestJerseyHeader.size() == 0)) {
-			LOG.info("No monitoring data found in the incoming request header");
+			LOG.debug("No monitoring data found in the incoming request header");
 			// LOG.info("Will continue without sending back reponse header");
 			traceId = CF_REGISTRY.getAndStoreUniqueThreadLocalTraceId();
 			CF_REGISTRY.storeThreadLocalEOI(0);
@@ -91,7 +89,7 @@ public class OperationExecutionJerseyServerInterceptor extends AbstractAspectJPr
 			ess = 0;
 		} else {
 			final String operationExecutionHeader = requestJerseyHeader.get(0);
-			LOG.info("Received request from " + clientURI.toString() + " requestHeader = " + operationExecutionHeader);
+			LOG.debug("Received request: " + request.getRequestUri() + "with header = " + requestHeader.toString());
 			final String[] headerArray = operationExecutionHeader.split(",");
 
 			// Extract session id
@@ -185,8 +183,8 @@ public class OperationExecutionJerseyServerInterceptor extends AbstractAspectJPr
 		// Pass back trace id, session id, eoi but not ess (use old value before the request)
 		final List<Object> responseHeaderList = new ArrayList<Object>();
 		responseHeaderList.add(Long.toString(traceId) + "," + sessionId + "," + Integer.toString(CF_REGISTRY.recallThreadLocalEOI()));
-		LOG.info("Sending response responseHeader = " + responseHeaderList.toString());
 		responseHeader.put(JerseyHeaderConstants.OPERATION_EXECUTION_JERSEY_HEADER, responseHeaderList);
+		LOG.debug("Sending response with header = " + responseHeader.toString() + " to the request: " + containerResponse.getContainerRequest().getRequestUri());
 
 		final Object retval;
 		try {

@@ -20,6 +20,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -103,13 +104,13 @@ public class OperationExecutionJerseyClientInterceptor extends AbstractAspectJPr
 		// This is a hack to put all values in the header
 		MultivaluedMap<String, Object> requestHeader = request.getHeaders();
 		if (requestHeader == null) {
-			requestHeader = new javax.ws.rs.core.MultivaluedHashMap<String, Object>();
+			requestHeader = new MultivaluedHashMap<String, Object>();
 		}
 
 		final List<Object> requestHeaderList = new ArrayList<Object>(4);
 		requestHeaderList.add(Long.toString(traceId) + "," + sessionId + "," + Integer.toString(eoi) + "," + Integer.toString(nextESS));
 		requestHeader.put(JerseyHeaderConstants.OPERATION_EXECUTION_JERSEY_HEADER, requestHeaderList);
-		LOG.info("Sending request to " + uri.toString() + " requestHeaderList = " + requestHeaderList);
+		LOG.debug("Sending request to " + uri.toString() + " with header = " + requestHeader.toString());
 
 		// measure before
 		final long tin = TIME.getTime();
@@ -128,7 +129,7 @@ public class OperationExecutionJerseyClientInterceptor extends AbstractAspectJPr
 				if (responseHeader != null) {
 					final List<String> responseHeaderList = responseHeader.get(JerseyHeaderConstants.OPERATION_EXECUTION_JERSEY_HEADER);
 					if (responseHeaderList != null) {
-						LOG.info("Received response from " + uri.toString() + " responseHeaderList = " + responseHeaderList);
+						LOG.debug("Received response from " + uri.toString() + " with header = " + responseHeader.toString());
 						final String[] responseHeaderArray = responseHeaderList.get(0).split(",");
 
 						// Extract trace id
@@ -164,12 +165,10 @@ public class OperationExecutionJerseyClientInterceptor extends AbstractAspectJPr
 						}
 
 					} else {
-						LOG.info("No monitoring data found in the response header");
-						LOG.info("Is the next tier instrumented?");
+						LOG.debug("No monitoring data found in the response header from " + uri.toString() + ". Is it instrumented?");
 					}
 				} else {
-					LOG.info("Response header is null");
-					LOG.info("Is the next tier instrumented?");
+					LOG.debug("Response header from " + uri.toString() + " is null. Is it instrumented?");
 				}
 			}
 
