@@ -16,6 +16,7 @@
 
 package kieker.tools.opad.filter;
 
+import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -118,13 +119,11 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 	 */
 	@InputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = TimeSeriesPointAggregatorFilter.INPUT_PORT_NAME_TSPOINT)
 	public void inputTSPoint(final NamedDoubleTimeSeriesPoint input) {
-		if (this.checkInitialization(input.getName())) {
-			this.processInput(input, input.getTime(), input.getName());
-		} else {
-			// Initialization of the aggregation variables for a new application
-			this.aggregationVariables.put(input.getName(), new AggregationVariableSet());
-			this.processInput(input, input.getTime(), input.getName());
+		final String name = input.getName();
+		if (!this.aggregationVariables.containsKey(name)) {
+			this.aggregationVariables.put(name, new AggregationVariableSet());
 		}
+		this.processInput(input);
 	}
 
 	/**
@@ -167,7 +166,74 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 			variables.getAggregationList().clear();
 		}
 		variables.getAggregationList().add(input);
+	}
 
+	private void processInput(final NamedDoubleTimeSeriesPoint input) {
+		final long currentTime = input.getTime();
+		final AggregationVariableSet inputVariables = this.aggregationVariables.get(input.getName());
+		final long startOfInputTimestampsInterval = this.computeFirstTimestampInInterval(currentTime, inputVariables);
+		final long endOfInputTimestampsInterval = this.computeLastTimestampInInterval(currentTime, inputVariables);
+
+		if (this.recentWindow.getWindowEnd() != endOfInputTimestampsInterval) {
+			this.recentWindow = new AggregationWindow(startOfInputTimestampsInterval, endOfInputTimestampsInterval);
+			super.deliver(OUTPUT_PORT_NAME_AGGREGATION_WINDOW, this.recentWindow);
+		}
+
+		final TreeMap<Long, NamedDoubleTimeSeriesPoint> orderedTsPoints = new TreeMap<Long, NamedDoubleTimeSeriesPoint>();
+
+		for (final String appname : this.aggregationVariables.keySet()) {
+			final AggregationVariableSet variables = this.aggregationVariables.get(appname);
+			final long startOfTimestampsInterval = this.computeFirstTimestampInInterval(currentTime, variables);
+			final long endOfTimestampsInterval = this.computeLastTimestampInInterval(currentTime, variables);
+			if (endOfTimestampsInterval > variables.getLastTimestampInCurrentInterval()) {
+				if (variables.getFirstTimestampInCurrentInterval() >= 0) { // don't do this for the first record (only used for initialization of variables)
+					if (variables.getAggregationList().size() > 0) {
+						final NamedDoubleTimeSeriesPoint newTsPoint = this.calculateAggregationValue(variables);
+						orderedTsPoints.put(newTsPoint.getTime(), newTsPoint);
+					}
+					final long numIntervalsElapsed = (endOfTimestampsInterval - variables.getLastTimestampInCurrentInterval()) / this.aggregationSpan;
+					if (numIntervalsElapsed > 1) {
+						for (int i = 1; i < numIntervalsElapsed; i++) {
+							final NamedDoubleTimeSeriesPoint nanTsPoint = new NamedDoubleTimeSeriesPoint(variables.getLastTimestampInCurrentInterval()
+									+ (i * this.aggregationSpan), Double.NaN, appname);
+							orderedTsPoints.put(nanTsPoint.getTime(), nanTsPoint);
+						}
+					}
+
+				}
+				variables.setFirstTimestampInCurrentInterval(startOfTimestampsInterval);
+				variables.setLastTimestampInCurrentInterval(endOfTimestampsInterval);
+				variables.getAggregationList().clear();
+			}
+		}
+
+		inputVariables.getAggregationList().add(input);
+
+		for (final long timestamp : orderedTsPoints.keySet()) {
+			super.deliver(OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, orderedTsPoints.get(timestamp));
+		}
+	}
+
+	private NamedDoubleTimeSeriesPoint calculateAggregationValue(final AggregationVariableSet variables) {
+		final double aggregationValue;
+		final NamedDoubleTimeSeriesPoint tsPoint;
+		synchronized (this) {
+			final int listSize = variables.getAggregationList().size();
+			if (listSize <= 0) {
+				throw new IllegalStateException("The aggregation list should not be empty");
+			}
+			final double[] a = new double[listSize];
+			for (int i = 0; i < listSize; i++) {
+				a[i] = variables.getAggregationList().get(i).getValue();
+			}
+			aggregationValue = this.aggregationMethod.getAggregationValue(a);
+			tsPoint = new NamedDoubleTimeSeriesPoint(variables.getLastTimestampInCurrentInterval(),
+					aggregationValue,
+					variables.getAggregationList().get(0).getName()); // use name of first element (any will do)
+			variables.getAggregationList().clear();
+
+		}
+		return tsPoint;
 	}
 
 	private void calculateAndDeliverAggregationValue(final AggregationVariableSet variables) {
