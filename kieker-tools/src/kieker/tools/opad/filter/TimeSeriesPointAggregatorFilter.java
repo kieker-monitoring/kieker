@@ -34,8 +34,8 @@ import kieker.tools.util.AggregationVariableSet;
 
 /**
  * This Filter aggregates the incoming DoubleTImeSeriesPoints over a configurable period of time.
- * 
- * @author Tom Frotscher
+ *
+ * @author Tom Frotscher, Teerat Pitakrat
  * @since 1.10
  */
 @Plugin(name = "Variate TimeSeriesPoint Aggregator", outputPorts = {
@@ -44,7 +44,8 @@ import kieker.tools.util.AggregationVariableSet;
 		configuration = {
 			@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_METHOD, defaultValue = "MEAN"),
 			@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_SPAN, defaultValue = "1000"),
-			@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT, defaultValue = "MILLISECONDS")
+			@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT, defaultValue = "MILLISECONDS"),
+			@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_REALTIME_PROCESSING, defaultValue = "false")
 		})
 public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 
@@ -60,6 +61,7 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 	public static final String CONFIG_PROPERTY_NAME_AGGREGATION_METHOD = "aggregationMethod";
 	public static final String CONFIG_PROPERTY_NAME_AGGREGATION_SPAN = "aggregationSpan";
 	public static final String CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT = "timeUnit";
+	public static final String CONFIG_PROPERTY_NAME_REALTIME_PROCESSING = "realtimeProcessing";
 
 	/** Saves the variables and the measurements, that are needed to calculate the intervals and the result for the aggregations per application. */
 	private final ConcurrentHashMap<String, AggregationVariableSet> aggregationVariables;
@@ -67,6 +69,7 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 	private final long aggregationSpan; // default from annotation used
 	private final TimeUnit timeunit; // default from annotation used
 	private final AggregationMethod aggregationMethod; // default from annotation used
+	private final boolean realtimeProcessing;
 
 	private AggregationWindow recentWindow = new AggregationWindow(0L, 0L);
 
@@ -98,6 +101,14 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 
 		// Determine aggregation span
 		this.aggregationSpan = this.timeunit.convert(configuration.getIntProperty(CONFIG_PROPERTY_NAME_AGGREGATION_SPAN), configTimeUnit);
+
+		// Determine realtime processing flag
+		final Boolean realtimeProcessingFlag = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_REALTIME_PROCESSING);
+		if (realtimeProcessingFlag == null) {
+			this.realtimeProcessing = false;
+		} else {
+			this.realtimeProcessing = realtimeProcessingFlag;
+		}
 	}
 
 	@Override
@@ -107,13 +118,14 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 		configuration.setProperty(CONFIG_PROPERTY_NAME_AGGREGATION_SPAN, Long.toString(this.aggregationSpan));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT, this.timeunit.name());
 		configuration.setProperty(CONFIG_PROPERTY_NAME_AGGREGATION_METHOD, this.aggregationMethod.name());
+		configuration.setProperty(CONFIG_PROPERTY_NAME_REALTIME_PROCESSING, Boolean.toString(this.realtimeProcessing));
 
 		return configuration;
 	}
 
 	/**
 	 * This method represents the input port for the incoming measurements.
-	 * 
+	 *
 	 * @param input
 	 *            The next incoming measurement
 	 */
@@ -123,12 +135,17 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 		if (!this.aggregationVariables.containsKey(name)) {
 			this.aggregationVariables.put(name, new AggregationVariableSet());
 		}
-		this.processInput(input);
+
+		if (this.realtimeProcessing) {
+			this.processInputInRealtime(input);
+		} else {
+			this.processInput(input);
+		}
 	}
 
 	/**
 	 * Checks if the current application is already known to this filter.
-	 * 
+	 *
 	 * @param name
 	 *            Application name
 	 */
@@ -136,7 +153,9 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 		return this.aggregationVariables.containsKey(name);
 	}
 
-	private void processInput(final NamedDoubleTimeSeriesPoint input, final long currentTime, final String appname) {
+	private void processInput(final NamedDoubleTimeSeriesPoint input) {
+		final long currentTime = input.getTime();
+		final String appname = input.getName();
 		final AggregationVariableSet variables = this.aggregationVariables.get(appname);
 		final long startOfTimestampsInterval = this.computeFirstTimestampInInterval(currentTime, variables);
 		final long endOfTimestampsInterval = this.computeLastTimestampInInterval(currentTime, variables);
@@ -168,7 +187,7 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 		variables.getAggregationList().add(input);
 	}
 
-	private void processInput(final NamedDoubleTimeSeriesPoint input) {
+	private void processInputInRealtime(final NamedDoubleTimeSeriesPoint input) {
 		final long currentTime = input.getTime();
 		final AggregationVariableSet inputVariables = this.aggregationVariables.get(input.getName());
 		final long startOfInputTimestampsInterval = this.computeFirstTimestampInInterval(currentTime, inputVariables);
@@ -257,9 +276,9 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 
 	/**
 	 * Returns the first timestamp included in the interval that corresponds to the given timestamp.
-	 * 
+	 *
 	 * @param timestamp
-	 * 
+	 *
 	 * @return The timestamp in question.
 	 */
 	private long computeFirstTimestampInInterval(final long timestamp, final AggregationVariableSet variables) {
@@ -276,7 +295,7 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 
 	/**
 	 * Returns the last timestamp included in the interval that corresponds to the given timestamp.
-	 * 
+	 *
 	 * @param timestamp
 	 * @return The timestamp in question.
 	 */
