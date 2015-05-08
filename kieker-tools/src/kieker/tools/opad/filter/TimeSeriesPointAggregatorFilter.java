@@ -18,6 +18,7 @@ package kieker.tools.opad.filter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -197,7 +198,7 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 			super.deliver(OUTPUT_PORT_NAME_AGGREGATION_WINDOW, this.recentWindow);
 		}
 
-		final TreeMap<Long, List<NamedDoubleTimeSeriesPoint>> orderedTsPoints = new TreeMap<Long, List<NamedDoubleTimeSeriesPoint>>();
+		final Map<Long, List<NamedDoubleTimeSeriesPoint>> orderedTsPoints = new TreeMap<Long, List<NamedDoubleTimeSeriesPoint>>();
 
 		for (final String appname : this.aggregationVariables.keySet()) {
 			final AggregationVariableSet variables = this.aggregationVariables.get(appname);
@@ -258,7 +259,7 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 		return tsPoint;
 	}
 
-	private void addNewTsPoint(final TreeMap<Long, List<NamedDoubleTimeSeriesPoint>> orderedTsPoints, final NamedDoubleTimeSeriesPoint newTsPoint) {
+	private void addNewTsPoint(final Map<Long, List<NamedDoubleTimeSeriesPoint>> orderedTsPoints, final NamedDoubleTimeSeriesPoint newTsPoint) {
 		final long newTsPointTimestamp = newTsPoint.getTime();
 		if (!orderedTsPoints.containsKey(newTsPointTimestamp)) {
 			orderedTsPoints.put(newTsPointTimestamp, new ArrayList<NamedDoubleTimeSeriesPoint>());
