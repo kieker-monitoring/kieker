@@ -228,21 +228,28 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 		/**
 		 * <pre>
 		 * 
-		 * [X,Y] = aggregation window
-		 * X = first timestamp
-		 * Y = last timestamp
-		 * 
-		 *        [1,10]         [11,20]            [21,30]            [31,40]
+		 *       1.[1,10]        5.[11,20]         9.[21,30]          13.[31,40]
 		 * A -[1--------10]-[11--------18---]-[----------------]-[----------------]-[------------
 		 * 
-		 *                  [8,17]               [18,27]          [28,37]           [38,47]    
+		 *                 4.[8,17]            8.[18,27]        12.[28,37]         16.[38,47]    
 		 * B -------[8---------12--------]-[------------28]-[----------------]-[----------------]
 		 * 
-		 *             [5,14]           [15,24]            [25,34]            [35,44]
+		 *            3.[5,14]          7.[15,24]         11.[25,34]         15.[35,44]
 		 * C ----[5--------------]-[---18----------]-[----------------]-[----------------]-[---48
 		 * 
-		 *             [5,14]           [15,24]            [25,34]            [35,44]
+		 *            2.[5,14]          6.[15,24]         10.[25,34]         14.[35,44]
 		 * D ----[5--------------]-[---18----------]-[----------------]-[----------------]-[-----
+		 * 
+		 * 
+		 * Description:
+		 * A -[1--------10]--- = A has two monitoring records at timestamp 1 and 10
+		 * [ = Begining of aggregation window
+		 * ] = End of aggregation window
+		 * 
+		 * X.[Y,Z] = aggregation window
+		 * X = expected order of aggregated window from the filter
+		 * Y = first timestamp
+		 * Z = last timestamp
 		 * 
 		 * </pre>
 		 */
@@ -258,6 +265,8 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 		theReaderAggregator.addObject(new NamedDoubleTimeSeriesPoint(18L, 5000.0, OP_SIGNATURE_D));
 		theReaderAggregator.addObject(new NamedDoubleTimeSeriesPoint(18L, 5000.0, OP_SIGNATURE_A));
 		theReaderAggregator.addObject(new NamedDoubleTimeSeriesPoint(28L, 6000.0, OP_SIGNATURE_B));
+		theReaderAggregator.addObject(new NamedDoubleTimeSeriesPoint(10L, 7000.0, OP_SIGNATURE_C)); // should be ignored by the filter
+		theReaderAggregator.addObject(new NamedDoubleTimeSeriesPoint(17L, 7000.0, OP_SIGNATURE_B)); // should be ignored by the filter
 		theReaderAggregator.addObject(new NamedDoubleTimeSeriesPoint(48L, 7000.0, OP_SIGNATURE_C));
 
 		// AGGREGATIONFILTER
@@ -265,7 +274,8 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 		aggregationConfiguration.setProperty(TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_SPAN, "10");
 		aggregationConfiguration.setProperty(TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT, "NANOSECONDS");
 		aggregationConfiguration.setProperty(TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_METHOD, "MEANJAVA");
-		aggregationConfiguration.setProperty(TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_REALTIME_PROCESSING, "true");
+		aggregationConfiguration.setProperty(TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_TIMESCOPE,
+				TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_VALUE_AGGREGATION_TIMESCOPE_GLOBAL);
 		final TimeSeriesPointAggregatorFilter aggregator = new TimeSeriesPointAggregatorFilter(aggregationConfiguration, controller);
 
 		// SINK 1

@@ -47,7 +47,7 @@ import kieker.tools.util.AggregationVariableSet;
 			@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_METHOD, defaultValue = "MEAN"),
 			@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_SPAN, defaultValue = "1000"),
 			@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT, defaultValue = "MILLISECONDS"),
-			@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_REALTIME_PROCESSING, defaultValue = "false")
+			@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_TIMESCOPE, defaultValue = "perVariable")
 		})
 public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 
@@ -63,7 +63,10 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 	public static final String CONFIG_PROPERTY_NAME_AGGREGATION_METHOD = "aggregationMethod";
 	public static final String CONFIG_PROPERTY_NAME_AGGREGATION_SPAN = "aggregationSpan";
 	public static final String CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT = "timeUnit";
-	public static final String CONFIG_PROPERTY_NAME_REALTIME_PROCESSING = "realtimeProcessing";
+	public static final String CONFIG_PROPERTY_NAME_AGGREGATION_TIMESCOPE = "timeScope";
+
+	public static final String CONFIG_PROPERTY_VALUE_AGGREGATION_TIMESCOPE_PER_VARIABLE = "perVariable";
+	public static final String CONFIG_PROPERTY_VALUE_AGGREGATION_TIMESCOPE_GLOBAL = "global";
 
 	/** Saves the variables and the measurements, that are needed to calculate the intervals and the result for the aggregations per application. */
 	private final ConcurrentHashMap<String, AggregationVariableSet> aggregationVariables;
@@ -71,7 +74,7 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 	private final long aggregationSpan; // default from annotation used
 	private final TimeUnit timeunit; // default from annotation used
 	private final AggregationMethod aggregationMethod; // default from annotation used
-	private final boolean realtimeProcessing;
+	private final boolean aggregationTimescopeGlobal;
 
 	private AggregationWindow recentWindow = new AggregationWindow(0L, 0L);
 
@@ -105,11 +108,11 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 		this.aggregationSpan = this.timeunit.convert(configuration.getIntProperty(CONFIG_PROPERTY_NAME_AGGREGATION_SPAN), configTimeUnit);
 
 		// Determine realtime processing flag
-		final Boolean realtimeProcessingFlag = configuration.getBooleanProperty(CONFIG_PROPERTY_NAME_REALTIME_PROCESSING);
-		if (realtimeProcessingFlag == null) {
-			this.realtimeProcessing = false;
+		final String scope = configuration.getStringProperty(CONFIG_PROPERTY_NAME_AGGREGATION_TIMESCOPE);
+		if (CONFIG_PROPERTY_VALUE_AGGREGATION_TIMESCOPE_GLOBAL.equals(scope)) {
+			this.aggregationTimescopeGlobal = true;
 		} else {
-			this.realtimeProcessing = realtimeProcessingFlag;
+			this.aggregationTimescopeGlobal = false;
 		}
 	}
 
@@ -120,7 +123,11 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 		configuration.setProperty(CONFIG_PROPERTY_NAME_AGGREGATION_SPAN, Long.toString(this.aggregationSpan));
 		configuration.setProperty(CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT, this.timeunit.name());
 		configuration.setProperty(CONFIG_PROPERTY_NAME_AGGREGATION_METHOD, this.aggregationMethod.name());
-		configuration.setProperty(CONFIG_PROPERTY_NAME_REALTIME_PROCESSING, Boolean.toString(this.realtimeProcessing));
+		if (this.aggregationTimescopeGlobal) {
+			configuration.setProperty(CONFIG_PROPERTY_NAME_AGGREGATION_TIMESCOPE, CONFIG_PROPERTY_VALUE_AGGREGATION_TIMESCOPE_GLOBAL);
+		} else {
+			configuration.setProperty(CONFIG_PROPERTY_NAME_AGGREGATION_TIMESCOPE, CONFIG_PROPERTY_VALUE_AGGREGATION_TIMESCOPE_PER_VARIABLE);
+		}
 
 		return configuration;
 	}
@@ -138,14 +145,14 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 			this.aggregationVariables.put(name, new AggregationVariableSet());
 		}
 
-		if (this.realtimeProcessing) {
-			this.processInputInRealtime(input);
+		if (this.aggregationTimescopeGlobal) {
+			this.processInputGlobalScope(input);
 		} else {
-			this.processInput(input);
+			this.processInputVariableScope(input);
 		}
 	}
 
-	private void processInput(final NamedDoubleTimeSeriesPoint input) {
+	private void processInputVariableScope(final NamedDoubleTimeSeriesPoint input) {
 		final long currentTime = input.getTime();
 		final String appname = input.getName();
 		final AggregationVariableSet variables = this.aggregationVariables.get(appname);
@@ -179,7 +186,7 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 		variables.getAggregationList().add(input);
 	}
 
-	private void processInputInRealtime(final NamedDoubleTimeSeriesPoint input) {
+	private void processInputGlobalScope(final NamedDoubleTimeSeriesPoint input) {
 		final long inputTimestamp = input.getTime();
 		final AggregationVariableSet inputVariables = this.aggregationVariables.get(input.getName());
 		final long startOfInputTimestampsInterval = this.computeFirstTimestampInInterval(inputTimestamp, inputVariables);
@@ -214,7 +221,10 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 			}
 		}
 
-		inputVariables.getAggregationList().add(input);
+		// Ignore input if the timestamp is before the current window
+		if (inputTimestamp >= inputVariables.getFirstTimestampInCurrentInterval()) {
+			inputVariables.getAggregationList().add(input);
+		}
 
 		for (final long timestamp : orderedTsPoints.keySet()) {
 			final List<NamedDoubleTimeSeriesPoint> tsPointList = orderedTsPoints.get(timestamp);
