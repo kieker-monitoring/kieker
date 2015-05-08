@@ -145,16 +145,6 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 		}
 	}
 
-	/**
-	 * Checks if the current application is already known to this filter.
-	 * 
-	 * @param name
-	 *            Application name
-	 */
-	private boolean checkInitialization(final String name) {
-		return this.aggregationVariables.containsKey(name);
-	}
-
 	private void processInput(final NamedDoubleTimeSeriesPoint input) {
 		final long currentTime = input.getTime();
 		final String appname = input.getName();

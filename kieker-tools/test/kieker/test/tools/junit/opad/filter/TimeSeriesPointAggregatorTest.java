@@ -55,11 +55,6 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 		// empty default constructor
 	}
 
-	// HelperMethods ForecastingFilter
-	private NamedDoubleTimeSeriesPoint createNDTSP(final long timestamp, final double value, final String signature) {
-		return new NamedDoubleTimeSeriesPoint(timestamp, value, signature);
-	}
-
 	@Test
 	public void testAggregatorOnly() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
 
@@ -70,22 +65,22 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 		final ListReader<NamedDoubleTimeSeriesPoint> theReaderAggregator = new ListReader<NamedDoubleTimeSeriesPoint>(readerAggregationConfiguration,
 				controller);
 
-		theReaderAggregator.addObject(this.createNDTSP(664L, 1000, OP_SIGNATURE_A));
-		theReaderAggregator.addObject(this.createNDTSP(665L, 2000, OP_SIGNATURE_A));
-		theReaderAggregator.addObject(this.createNDTSP(664L, 1000, OP_SIGNATURE_C));
-		theReaderAggregator.addObject(this.createNDTSP(668L, 5500, OP_SIGNATURE_C));
-		theReaderAggregator.addObject(this.createNDTSP(674L, 2000, OP_SIGNATURE_B));
-		theReaderAggregator.addObject(this.createNDTSP(674L, 3000, OP_SIGNATURE_A));
-		theReaderAggregator.addObject(this.createNDTSP(684L, 4000, OP_SIGNATURE_A));
-		theReaderAggregator.addObject(this.createNDTSP(674L, 2000, OP_SIGNATURE_C));
-		theReaderAggregator.addObject(this.createNDTSP(684L, 5000, OP_SIGNATURE_B));
-		theReaderAggregator.addObject(this.createNDTSP(687L, 1000, OP_SIGNATURE_B));
+		theReaderAggregator.addObject(new NamedDoubleTimeSeriesPoint(664L, 1000.0, OP_SIGNATURE_A));
+		theReaderAggregator.addObject(new NamedDoubleTimeSeriesPoint(665L, 2000.0, OP_SIGNATURE_A));
+		theReaderAggregator.addObject(new NamedDoubleTimeSeriesPoint(664L, 1000.0, OP_SIGNATURE_C));
+		theReaderAggregator.addObject(new NamedDoubleTimeSeriesPoint(668L, 5500.0, OP_SIGNATURE_C));
+		theReaderAggregator.addObject(new NamedDoubleTimeSeriesPoint(674L, 2000.0, OP_SIGNATURE_B));
+		theReaderAggregator.addObject(new NamedDoubleTimeSeriesPoint(674L, 3000.0, OP_SIGNATURE_A));
+		theReaderAggregator.addObject(new NamedDoubleTimeSeriesPoint(684L, 4000.0, OP_SIGNATURE_A));
+		theReaderAggregator.addObject(new NamedDoubleTimeSeriesPoint(674L, 2000.0, OP_SIGNATURE_C));
+		theReaderAggregator.addObject(new NamedDoubleTimeSeriesPoint(684L, 5000.0, OP_SIGNATURE_B));
+		theReaderAggregator.addObject(new NamedDoubleTimeSeriesPoint(687L, 1000.0, OP_SIGNATURE_B));
 		// Skipped two timespans for application A, so two empty points should be created
-		theReaderAggregator.addObject(this.createNDTSP(714L, 6000, OP_SIGNATURE_A));
-		theReaderAggregator.addObject(this.createNDTSP(724L, 7000, OP_SIGNATURE_A));
-		theReaderAggregator.addObject(this.createNDTSP(694L, 5000, OP_SIGNATURE_B));
+		theReaderAggregator.addObject(new NamedDoubleTimeSeriesPoint(714L, 6000.0, OP_SIGNATURE_A));
+		theReaderAggregator.addObject(new NamedDoubleTimeSeriesPoint(724L, 7000.0, OP_SIGNATURE_A));
+		theReaderAggregator.addObject(new NamedDoubleTimeSeriesPoint(694L, 5000.0, OP_SIGNATURE_B));
 		// Skipped one timespans for application B, so one empty point should be created
-		theReaderAggregator.addObject(this.createNDTSP(714L, 5000, OP_SIGNATURE_B));
+		theReaderAggregator.addObject(new NamedDoubleTimeSeriesPoint(714L, 5000.0, OP_SIGNATURE_B));
 
 		// AGGREGATIONFILTER
 		final Configuration aggregationConfiguration = new Configuration();
@@ -139,9 +134,9 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 		final ListReader<NamedDoubleTimeSeriesPoint> listReader = new ListReader<NamedDoubleTimeSeriesPoint>(readerAggregationConfiguration,
 				controller);
 
-		listReader.addObject(this.createNDTSP(1L, 3, OP_SIGNATURE_A));
-		listReader.addObject(this.createNDTSP(13L, 13, OP_SIGNATURE_A));
-		listReader.addObject(this.createNDTSP(16L, 16, OP_SIGNATURE_A));
+		listReader.addObject(new NamedDoubleTimeSeriesPoint(1L, 3.0, OP_SIGNATURE_A));
+		listReader.addObject(new NamedDoubleTimeSeriesPoint(13L, 13.0, OP_SIGNATURE_A));
+		listReader.addObject(new NamedDoubleTimeSeriesPoint(16L, 16.0, OP_SIGNATURE_A));
 
 		// AGGREGATIONFILTER
 		final Configuration aggregationConfiguration = new Configuration();
@@ -184,9 +179,9 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 		final ListReader<NamedDoubleTimeSeriesPoint> listReader = new ListReader<NamedDoubleTimeSeriesPoint>(readerAggregationConfiguration,
 				controller);
 
-		listReader.addObject(this.createNDTSP(1000000L, 3, OP_SIGNATURE_A));
-		listReader.addObject(this.createNDTSP(13000000L, 13, OP_SIGNATURE_A));
-		listReader.addObject(this.createNDTSP(16000000L, 16, OP_SIGNATURE_A));
+		listReader.addObject(new NamedDoubleTimeSeriesPoint(1000000L, 3.0, OP_SIGNATURE_A));
+		listReader.addObject(new NamedDoubleTimeSeriesPoint(13000000L, 13.0, OP_SIGNATURE_A));
+		listReader.addObject(new NamedDoubleTimeSeriesPoint(16000000L, 16.0, OP_SIGNATURE_A));
 
 		// AGGREGATIONFILTER
 		final Configuration aggregationConfiguration = new Configuration();
@@ -252,18 +247,18 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 		 * </pre>
 		 */
 
-		theReaderAggregator.addObject(this.createNDTSP(1L, 1000, OP_SIGNATURE_A));
-		theReaderAggregator.addObject(this.createNDTSP(5L, 1000, OP_SIGNATURE_C));
-		theReaderAggregator.addObject(this.createNDTSP(5L, 1000, OP_SIGNATURE_D));
-		theReaderAggregator.addObject(this.createNDTSP(8L, 2000, OP_SIGNATURE_B));
-		theReaderAggregator.addObject(this.createNDTSP(10L, 2000, OP_SIGNATURE_A));
-		theReaderAggregator.addObject(this.createNDTSP(11L, 3000, OP_SIGNATURE_A));
-		theReaderAggregator.addObject(this.createNDTSP(12L, 4000, OP_SIGNATURE_B));
-		theReaderAggregator.addObject(this.createNDTSP(18L, 5000, OP_SIGNATURE_C));
-		theReaderAggregator.addObject(this.createNDTSP(18L, 5000, OP_SIGNATURE_D));
-		theReaderAggregator.addObject(this.createNDTSP(18L, 5000, OP_SIGNATURE_A));
-		theReaderAggregator.addObject(this.createNDTSP(28L, 6000, OP_SIGNATURE_B));
-		theReaderAggregator.addObject(this.createNDTSP(48L, 7000, OP_SIGNATURE_C));
+		theReaderAggregator.addObject(new NamedDoubleTimeSeriesPoint(1L, 1000.0, OP_SIGNATURE_A));
+		theReaderAggregator.addObject(new NamedDoubleTimeSeriesPoint(5L, 1000.0, OP_SIGNATURE_C));
+		theReaderAggregator.addObject(new NamedDoubleTimeSeriesPoint(5L, 1000.0, OP_SIGNATURE_D));
+		theReaderAggregator.addObject(new NamedDoubleTimeSeriesPoint(8L, 2000.0, OP_SIGNATURE_B));
+		theReaderAggregator.addObject(new NamedDoubleTimeSeriesPoint(10L, 2000.0, OP_SIGNATURE_A));
+		theReaderAggregator.addObject(new NamedDoubleTimeSeriesPoint(11L, 3000.0, OP_SIGNATURE_A));
+		theReaderAggregator.addObject(new NamedDoubleTimeSeriesPoint(12L, 4000.0, OP_SIGNATURE_B));
+		theReaderAggregator.addObject(new NamedDoubleTimeSeriesPoint(18L, 5000.0, OP_SIGNATURE_C));
+		theReaderAggregator.addObject(new NamedDoubleTimeSeriesPoint(18L, 5000.0, OP_SIGNATURE_D));
+		theReaderAggregator.addObject(new NamedDoubleTimeSeriesPoint(18L, 5000.0, OP_SIGNATURE_A));
+		theReaderAggregator.addObject(new NamedDoubleTimeSeriesPoint(28L, 6000.0, OP_SIGNATURE_B));
+		theReaderAggregator.addObject(new NamedDoubleTimeSeriesPoint(48L, 7000.0, OP_SIGNATURE_C));
 
 		// AGGREGATIONFILTER
 		final Configuration aggregationConfiguration = new Configuration();
