@@ -16,6 +16,8 @@
 
 package kieker.test.tools.junit.opad.filter;
 
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -32,16 +34,19 @@ import kieker.test.common.junit.AbstractKiekerTest;
 /**
  * Checks if values in the given timespan (10 milliseconds) are aggregated correctly.
  * Also checks if zero values are created for timestamps with no incoming values.
- *
- * @author Tom Frotscher
+ * 
+ * @author Tom Frotscher, Teerat Pitakrat
  * @since 1.10
- *
+ * 
  */
 public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 
 	private static final String OP_SIGNATURE_A = "a.A.opA";
 	private static final String OP_SIGNATURE_B = "b.B.opB";
 	private static final String OP_SIGNATURE_C = "c.C.opC";
+	private static final String OP_SIGNATURE_D = "d.D.opD";
+
+	private static final double EPSILON = 1e-8;
 
 	/**
 	 * Creates an instance of this class.
@@ -213,5 +218,122 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 		Assert.assertEquals(Double.NaN, sinkPlugin.getList().get(1).getDoubleValue(), 0.001d);
 
 		// the third created item is not available in the sink as its window was not closed when the controller terminated
+	}
+
+	@Test
+	public void testRealtimeProcessing() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
+
+		final AnalysisController controller = new AnalysisController();
+
+		// READER
+		final Configuration readerAggregationConfiguration = new Configuration();
+		final ListReader<NamedDoubleTimeSeriesPoint> theReaderAggregator = new ListReader<NamedDoubleTimeSeriesPoint>(readerAggregationConfiguration,
+				controller);
+
+		/**
+		 * <pre>
+		 * 
+		 * [X,Y] = aggregation window
+		 * X = first timestamp
+		 * Y = last timestamp
+		 * 
+		 *        [1,10]         [11,20]            [21,30]            [31,40]
+		 * A -[1--------10]-[11--------18---]-[----------------]-[----------------]-[------------
+		 * 
+		 *                  [8,17]               [18,27]          [28,37]           [38,47]    
+		 * B -------[8---------12--------]-[------------28]-[----------------]-[----------------]
+		 * 
+		 *             [5,14]           [15,24]            [25,34]            [35,44]
+		 * C ----[5--------------]-[---18----------]-[----------------]-[----------------]-[---48
+		 * 
+		 *             [5,14]           [15,24]            [25,34]            [35,44]
+		 * D ----[5--------------]-[---18----------]-[----------------]-[----------------]-[-----
+		 * 
+		 * </pre>
+		 */
+
+		theReaderAggregator.addObject(this.createNDTSP(1L, 1000, OP_SIGNATURE_A));
+		theReaderAggregator.addObject(this.createNDTSP(5L, 1000, OP_SIGNATURE_C));
+		theReaderAggregator.addObject(this.createNDTSP(5L, 1000, OP_SIGNATURE_D));
+		theReaderAggregator.addObject(this.createNDTSP(8L, 2000, OP_SIGNATURE_B));
+		theReaderAggregator.addObject(this.createNDTSP(10L, 2000, OP_SIGNATURE_A));
+		theReaderAggregator.addObject(this.createNDTSP(11L, 3000, OP_SIGNATURE_A));
+		theReaderAggregator.addObject(this.createNDTSP(12L, 4000, OP_SIGNATURE_B));
+		theReaderAggregator.addObject(this.createNDTSP(18L, 5000, OP_SIGNATURE_C));
+		theReaderAggregator.addObject(this.createNDTSP(18L, 5000, OP_SIGNATURE_D));
+		theReaderAggregator.addObject(this.createNDTSP(18L, 5000, OP_SIGNATURE_A));
+		theReaderAggregator.addObject(this.createNDTSP(28L, 6000, OP_SIGNATURE_B));
+		theReaderAggregator.addObject(this.createNDTSP(48L, 7000, OP_SIGNATURE_C));
+
+		// AGGREGATIONFILTER
+		final Configuration aggregationConfiguration = new Configuration();
+		aggregationConfiguration.setProperty(TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_SPAN, "10");
+		aggregationConfiguration.setProperty(TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT, "NANOSECONDS");
+		aggregationConfiguration.setProperty(TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_METHOD, "MEANJAVA");
+		aggregationConfiguration.setProperty(TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_REALTIME_PROCESSING, "true");
+		final TimeSeriesPointAggregatorFilter aggregator = new TimeSeriesPointAggregatorFilter(aggregationConfiguration, controller);
+
+		// SINK 1
+		final ListCollectionFilter<NamedDoubleTimeSeriesPoint> sinkPlugin = new ListCollectionFilter<NamedDoubleTimeSeriesPoint>(new Configuration(),
+				controller);
+		Assert.assertTrue(sinkPlugin.getList().isEmpty());
+
+		// CONNECTION
+		controller.connect(theReaderAggregator, ListReader.OUTPUT_PORT_NAME, aggregator, TimeSeriesPointAggregatorFilter.INPUT_PORT_NAME_TSPOINT);
+		controller.connect(aggregator, TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATED_TSPOINT, sinkPlugin,
+				ListCollectionFilter.INPUT_PORT_NAME);
+		Assert.assertEquals(0, sinkPlugin.getList().size());
+		controller.run();
+
+		final List<NamedDoubleTimeSeriesPoint> sinkList = sinkPlugin.getList();
+		Assert.assertEquals(16, sinkList.size());
+		// Expected: (1000 + 2000) / 2 = 1500 Application A
+		Assert.assertEquals(OP_SIGNATURE_A, sinkList.get(0).getName());
+		Assert.assertEquals(1500.0, sinkList.get(0).getDoubleValue(), EPSILON);
+		// Expected: 1000 Application D
+		Assert.assertEquals(OP_SIGNATURE_D, sinkList.get(1).getName());
+		Assert.assertEquals(1000.0, sinkList.get(1).getDoubleValue(), EPSILON);
+		// Expected: 1000 Application C
+		Assert.assertEquals(OP_SIGNATURE_C, sinkList.get(2).getName());
+		Assert.assertEquals(1000.0, sinkList.get(2).getDoubleValue(), EPSILON);
+		// Expected: (2000+4000) / 2 = 3000 Application B
+		Assert.assertEquals(OP_SIGNATURE_B, sinkList.get(3).getName());
+		Assert.assertEquals(3000.0, sinkList.get(3).getDoubleValue(), EPSILON);
+		// Expected: (3000+5000) / 2 = 4000 Application A
+		Assert.assertEquals(OP_SIGNATURE_A, sinkList.get(4).getName());
+		Assert.assertEquals(4000.0, sinkList.get(4).getDoubleValue(), EPSILON);
+		// Expected: 5000 Application D
+		Assert.assertEquals(OP_SIGNATURE_D, sinkList.get(5).getName());
+		Assert.assertEquals(5000.0, sinkList.get(5).getDoubleValue(), EPSILON);
+		// Expected: 5000 Application C
+		Assert.assertEquals(OP_SIGNATURE_C, sinkList.get(6).getName());
+		Assert.assertEquals(5000.0, sinkList.get(6).getDoubleValue(), EPSILON);
+		// Expected: NaN Application B
+		Assert.assertEquals(OP_SIGNATURE_B, sinkList.get(7).getName());
+		Assert.assertEquals(Double.NaN, sinkList.get(7).getDoubleValue(), EPSILON);
+		// Expected: NaN Application A
+		Assert.assertEquals(OP_SIGNATURE_A, sinkList.get(8).getName());
+		Assert.assertEquals(Double.NaN, sinkList.get(8).getDoubleValue(), EPSILON);
+		// Expected: NaN Application D
+		Assert.assertEquals(OP_SIGNATURE_D, sinkList.get(9).getName());
+		Assert.assertEquals(Double.NaN, sinkList.get(9).getDoubleValue(), EPSILON);
+		// Expected: NaN Application C
+		Assert.assertEquals(OP_SIGNATURE_C, sinkList.get(10).getName());
+		Assert.assertEquals(Double.NaN, sinkList.get(10).getDoubleValue(), EPSILON);
+		// Expected: NaN Application B
+		Assert.assertEquals(OP_SIGNATURE_B, sinkList.get(11).getName());
+		Assert.assertEquals(6000.0, sinkList.get(11).getDoubleValue(), EPSILON);
+		// Expected: NaN Application A
+		Assert.assertEquals(OP_SIGNATURE_A, sinkList.get(12).getName());
+		Assert.assertEquals(Double.NaN, sinkList.get(12).getDoubleValue(), EPSILON);
+		// Expected: NaN Application D
+		Assert.assertEquals(OP_SIGNATURE_D, sinkList.get(13).getName());
+		Assert.assertEquals(Double.NaN, sinkList.get(13).getDoubleValue(), EPSILON);
+		// Expected: NaN Application C
+		Assert.assertEquals(OP_SIGNATURE_C, sinkList.get(14).getName());
+		Assert.assertEquals(Double.NaN, sinkList.get(14).getDoubleValue(), EPSILON);
+		// Expected: NaN Application B
+		Assert.assertEquals(OP_SIGNATURE_B, sinkList.get(15).getName());
+		Assert.assertEquals(Double.NaN, sinkList.get(15).getDoubleValue(), EPSILON);
 	}
 }
