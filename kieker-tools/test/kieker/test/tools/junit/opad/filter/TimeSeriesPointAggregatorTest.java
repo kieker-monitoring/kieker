@@ -216,7 +216,7 @@ public class TimeSeriesPointAggregatorTest extends AbstractKiekerTest {
 	}
 
 	@Test
-	public void testRealtimeProcessing() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
+	public void testGlobalTimescope() throws InterruptedException, IllegalStateException, AnalysisConfigurationException {
 
 		final AnalysisController controller = new AnalysisController();
 
