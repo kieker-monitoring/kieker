@@ -66,6 +66,12 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 	public static final String CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT = "timeUnit";
 	public static final String CONFIG_PROPERTY_NAME_AGGREGATION_TIMESCOPE = "timeScope";
 
+	/**
+	 * Time scope
+	 *
+	 * PER_VARIABLE: The aggregated value of each variable is processed only when a new input of that variable arrives. This is the default behavior.
+	 * GLOBAL: All variables are processed when any input arrives.
+	 */
 	public static final String CONFIG_PROPERTY_VALUE_AGGREGATION_TIMESCOPE_PER_VARIABLE = "perVariable";
 	public static final String CONFIG_PROPERTY_VALUE_AGGREGATION_TIMESCOPE_GLOBAL = "global";
 
