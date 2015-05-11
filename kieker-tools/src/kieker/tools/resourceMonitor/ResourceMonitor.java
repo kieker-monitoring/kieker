@@ -17,6 +17,7 @@
 package kieker.tools.resourceMonitor;
 
 import java.io.File;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CountDownLatch;
@@ -39,9 +40,9 @@ import kieker.tools.AbstractCommandLineTool;
 
 /**
  * This tool can be used to monitor system resources.
- * 
+ *
  * @author Teerat Pitakrat
- * 
+ *
  * @since 1.12
  */
 public final class ResourceMonitor extends AbstractCommandLineTool {
@@ -53,18 +54,18 @@ public final class ResourceMonitor extends AbstractCommandLineTool {
 	private static final String OPTION_EXAMPLE_FILE_MONITORING_PROPERTIES = File.separator + "path" + File.separator + "to" + File.separator
 			+ "monitoring.properties";
 
-	protected volatile IMonitoringController monitoringController;
+	private volatile IMonitoringController monitoringController;
 
-	protected volatile long interval = 15;
-	protected volatile TimeUnit intervalUnit = TimeUnit.SECONDS;
+	private volatile long interval = 15;
+	private volatile TimeUnit intervalUnit = TimeUnit.SECONDS;
 
-	protected volatile long initialDelay = 0;
-	protected volatile TimeUnit initialDelayUnit = TimeUnit.SECONDS;
+	private volatile long initialDelay;
+	private volatile TimeUnit initialDelayUnit = TimeUnit.SECONDS;
 
-	protected volatile long duration = -1;
-	protected volatile TimeUnit durationUnit = TimeUnit.MINUTES;
+	private volatile long duration = -1;
+	private volatile TimeUnit durationUnit = TimeUnit.MINUTES;
 
-	private String monitoringConfigurationFile;
+	private volatile String monitoringConfigurationFile;
 
 	private ResourceMonitor() {
 		super(true);
@@ -74,12 +75,12 @@ public final class ResourceMonitor extends AbstractCommandLineTool {
 		new ResourceMonitor().start(args);
 	}
 
-	protected ISampler[] createSamplers() {
+	private ISampler[] createSamplers() {
 		final ISigarSamplerFactory sigarFactory = SigarSamplerFactory.INSTANCE;
 		return new ISampler[] { sigarFactory.createSensorCPUsDetailedPerc(), sigarFactory.createSensorMemSwapUsage() };
 	}
 
-	protected void initSensors() {
+	private void initSensors() {
 		final ISampler[] samplers = this.createSamplers();
 		for (final ISampler sampler : samplers) {
 			this.monitoringController.schedulePeriodicSampler(sampler,
@@ -149,7 +150,7 @@ public final class ResourceMonitor extends AbstractCommandLineTool {
 		final String intervalUnitStr = commandLine.getOptionValue("interval-unit");
 		if (intervalUnitStr != null) {
 			try {
-				this.intervalUnit = TimeUnit.valueOf(intervalUnitStr.toUpperCase());
+				this.intervalUnit = TimeUnit.valueOf(intervalUnitStr.toUpperCase(Locale.US));
 			} catch (final IllegalArgumentException ex) {
 				LOG.error("Failed to parse interval unit: " + intervalUnitStr, ex);
 				return false;
@@ -172,7 +173,7 @@ public final class ResourceMonitor extends AbstractCommandLineTool {
 		final String initialDelayUnitStr = commandLine.getOptionValue("initial-delay-unit");
 		if (initialDelayUnitStr != null) {
 			try {
-				this.initialDelayUnit = TimeUnit.valueOf(initialDelayUnitStr.toUpperCase());
+				this.initialDelayUnit = TimeUnit.valueOf(initialDelayUnitStr.toUpperCase(Locale.US));
 			} catch (final IllegalArgumentException ex) {
 				LOG.error("Failed to parse initial delay unit: " + initialDelayUnitStr, ex);
 				return false;
@@ -195,7 +196,7 @@ public final class ResourceMonitor extends AbstractCommandLineTool {
 		final String durationUnitStr = commandLine.getOptionValue("duration-unit");
 		if (durationUnitStr != null) {
 			try {
-				this.durationUnit = TimeUnit.valueOf(durationUnitStr.toUpperCase());
+				this.durationUnit = TimeUnit.valueOf(durationUnitStr.toUpperCase(Locale.US));
 			} catch (final IllegalArgumentException ex) {
 				LOG.error("Failed to parse duration unit: " + durationUnitStr, ex);
 				return false;
@@ -263,16 +264,30 @@ public final class ResourceMonitor extends AbstractCommandLineTool {
 	public String toString() {
 		final StringBuilder sb = new StringBuilder(2048);
 		final String lineSeparator = System.getProperty("line.separator");
-		sb.append("Resource Monitoring Configuration:" + lineSeparator);
-		sb.append("\tSampling interval = " + this.interval + lineSeparator);
-		sb.append("\tSampling interval unit = " + this.intervalUnit + lineSeparator);
-		sb.append("\tInitial delay = " + this.initialDelay + lineSeparator);
-		sb.append("\tInitial delay unit = " + this.initialDelayUnit + lineSeparator);
+		sb.append("Resource Monitoring Configuration:");
+		sb.append(lineSeparator);
+		sb.append("\tSampling interval = ");
+		sb.append(this.interval);
+		sb.append(lineSeparator);
+		sb.append("\tSampling interval unit = ");
+		sb.append(this.intervalUnit);
+		sb.append(lineSeparator);
+		sb.append("\tInitial delay = ");
+		sb.append(this.initialDelay);
+		sb.append(lineSeparator);
+		sb.append("\tInitial delay unit = ");
+		sb.append(this.initialDelayUnit);
+		sb.append(lineSeparator);
 		if (this.duration < 0) {
-			sb.append("\tDuration = INFINITE" + lineSeparator);
+			sb.append("\tDuration = INFINITE");
+			sb.append(lineSeparator);
 		} else {
-			sb.append("\tDuration = " + this.duration + lineSeparator);
-			sb.append("\tDuration unit = " + this.durationUnit + lineSeparator);
+			sb.append("\tDuration = ");
+			sb.append(this.duration);
+			sb.append(lineSeparator);
+			sb.append("\tDuration unit = ");
+			sb.append(this.durationUnit);
+			sb.append(lineSeparator);
 		}
 		return sb.toString();
 	}
