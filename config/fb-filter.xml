@@ -416,4 +416,11 @@
 		<Field name="TYPES" />
 		<Bug pattern="MS_PKGPROTECT, MS_MUTABLE_ARRAY" />
 	</Match>
+
+	<Match>
+		<Class name="kieker.tools.resourceMonitor.ResourceMonitor" />
+		<Method name="performTask" params="" returns="boolean" />
+		<Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON" />
+	</Match>
+	
 </FindBugsFilter>

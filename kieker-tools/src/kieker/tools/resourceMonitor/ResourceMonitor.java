@@ -154,7 +154,7 @@ public final class ResourceMonitor extends AbstractCommandLineTool {
 			} catch (final IllegalArgumentException ex) {
 				LOG.error("Failed to parse interval unit: " + intervalUnitStr, ex);
 				return false;
-			} catch (final NullPointerException ex) {
+			} catch (final NullPointerException ex) { // NOPMD (AvoidCatchingGenericException)
 				LOG.error("No interval unit passed as argument", ex);
 				return false;
 			}
@@ -177,7 +177,7 @@ public final class ResourceMonitor extends AbstractCommandLineTool {
 			} catch (final IllegalArgumentException ex) {
 				LOG.error("Failed to parse initial delay unit: " + initialDelayUnitStr, ex);
 				return false;
-			} catch (final NullPointerException ex) {
+			} catch (final NullPointerException ex) { // NOPMD (AvoidCatchingGenericException)
 				LOG.error("No initial delay unit passed as argument", ex);
 				return false;
 			}
@@ -200,7 +200,7 @@ public final class ResourceMonitor extends AbstractCommandLineTool {
 			} catch (final IllegalArgumentException ex) {
 				LOG.error("Failed to parse duration unit: " + durationUnitStr, ex);
 				return false;
-			} catch (final NullPointerException ex) {
+			} catch (final NullPointerException ex) { // NOPMD (AvoidCatchingGenericException)
 				LOG.error("No duration unit passed as argument", ex);
 				return false;
 			}
