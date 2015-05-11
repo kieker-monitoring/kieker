@@ -1,7 +1,6 @@
 #!/bin/bash
 
-# Converts the logging timestamp to a human-readable
-# format using the date tool
+# Starts a stand-alone tool to monitor the CPU utilization and memory/swap usage
 #
 # @author Andre van Hoorn
 

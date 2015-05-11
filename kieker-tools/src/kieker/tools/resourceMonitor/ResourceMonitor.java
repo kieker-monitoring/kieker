@@ -16,6 +16,7 @@
 
 package kieker.tools.resourceMonitor;
 
+import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CountDownLatch;
@@ -25,8 +26,10 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 
+import kieker.common.configuration.Configuration;
 import kieker.common.logging.Log;
 import kieker.common.logging.LogFactory;
+import kieker.monitoring.core.configuration.ConfigurationFactory;
 import kieker.monitoring.core.controller.IMonitoringController;
 import kieker.monitoring.core.controller.MonitoringController;
 import kieker.monitoring.core.sampler.ISampler;
@@ -36,16 +39,21 @@ import kieker.tools.AbstractCommandLineTool;
 
 /**
  * This tool can be used to monitor system resources.
- *
+ * 
  * @author Teerat Pitakrat
- *
+ * 
  * @since 1.12
  */
 public final class ResourceMonitor extends AbstractCommandLineTool {
 
 	private static final Log LOG = LogFactory.getLog(ResourceMonitor.class);
 
-	protected final IMonitoringController monitoringController = MonitoringController.getInstance();
+	private static final String CMD_OPT_NAME_MONITORING_CONFIGURATION = "monitoring.configuration";
+
+	private static final String OPTION_EXAMPLE_FILE_MONITORING_PROPERTIES = File.separator + "path" + File.separator + "to" + File.separator
+			+ "monitoring.properties";
+
+	protected volatile IMonitoringController monitoringController;
 
 	protected volatile long interval = 15;
 	protected volatile TimeUnit intervalUnit = TimeUnit.SECONDS;
@@ -55,6 +63,8 @@ public final class ResourceMonitor extends AbstractCommandLineTool {
 
 	protected volatile long duration = -1;
 	protected volatile TimeUnit durationUnit = TimeUnit.MINUTES;
+
+	private String monitoringConfigurationFile;
 
 	private ResourceMonitor() {
 		super(true);
@@ -80,41 +90,48 @@ public final class ResourceMonitor extends AbstractCommandLineTool {
 
 	@Override
 	protected void addAdditionalOptions(final Options options) {
-		final Option intervalOption = new Option("i", "interval", true, "Sampling interval");
+		final Option intervalOption = new Option(null, "interval", true, "Sampling interval");
 		intervalOption.setArgName("interval");
 		intervalOption.setRequired(false);
 		intervalOption.setArgs(1);
 		options.addOption(intervalOption);
 
-		final Option intervalUnitOption = new Option("iu", "interval-unit", true, "Sampling interval time unit");
+		final Option intervalUnitOption = new Option(null, "interval-unit", true, "Sampling interval time unit (default: SECONDS)");
 		intervalOption.setArgName("interval-unit");
 		intervalOption.setRequired(false);
 		intervalOption.setArgs(1);
 		options.addOption(intervalUnitOption);
 
-		final Option initialDelayOption = new Option("id", "initial-delay", true, "Initial delay");
+		final Option initialDelayOption = new Option(null, "initial-delay", true, "Initial delay");
 		initialDelayOption.setArgName("initial-delay");
 		initialDelayOption.setRequired(false);
 		initialDelayOption.setArgs(1);
 		options.addOption(initialDelayOption);
 
-		final Option durationUnitOption = new Option("idu", "initial-delay-unit", true, "Initial delay time unit");
+		final Option durationUnitOption = new Option(null, "initial-delay-unit", true, "Initial delay time unit (default: SECONDS)");
 		durationUnitOption.setArgName("initial-delay-unit");
 		durationUnitOption.setRequired(false);
 		durationUnitOption.setArgs(1);
 		options.addOption(durationUnitOption);
 
-		final Option initialDelayUnitOption = new Option("d", "duration", true, "Monitoring duration");
+		final Option initialDelayUnitOption = new Option(null, "duration", true, "Monitoring duration");
 		initialDelayUnitOption.setArgName("duration");
 		initialDelayUnitOption.setRequired(false);
 		initialDelayUnitOption.setArgs(1);
 		options.addOption(initialDelayUnitOption);
 
-		final Option durationOption = new Option("du", "duration-unit", true, "Monitoring duration time unit");
+		final Option durationOption = new Option(null, "duration-unit", true, "Monitoring duration time unit (default: MINUTES)");
 		durationOption.setArgName("duration-unit");
 		durationOption.setRequired(false);
 		durationOption.setArgs(1);
 		options.addOption(durationOption);
+
+		final Option configurationFileOption = new Option("c", CMD_OPT_NAME_MONITORING_CONFIGURATION, true,
+				"Configuration to use for the Kieker monitoring instance");
+		configurationFileOption.setArgName(OPTION_EXAMPLE_FILE_MONITORING_PROPERTIES);
+		configurationFileOption.setRequired(false);
+		configurationFileOption.setValueSeparator('=');
+		options.addOption(configurationFileOption);
 	}
 
 	@Override
@@ -188,6 +205,8 @@ public final class ResourceMonitor extends AbstractCommandLineTool {
 			}
 		}
 
+		this.monitoringConfigurationFile = commandLine.getOptionValue(CMD_OPT_NAME_MONITORING_CONFIGURATION);
+
 		return true;
 	}
 
@@ -204,12 +223,13 @@ public final class ResourceMonitor extends AbstractCommandLineTool {
 			}
 		});
 
-		LOG.info("Initial " + this.initialDelay + " " + this.initialDelayUnit + " delay...");
-		try {
-			Thread.sleep(TimeUnit.MILLISECONDS.convert(this.initialDelay, this.initialDelayUnit));
-		} catch (final InterruptedException ex) {
-			LOG.warn("The monitoring has been interrupted", ex);
+		final Configuration controllerConfiguration;
+		if (this.monitoringConfigurationFile != null) {
+			controllerConfiguration = ConfigurationFactory.createConfigurationFromFile(this.monitoringConfigurationFile);
+		} else {
+			controllerConfiguration = ConfigurationFactory.createSingletonConfiguration();
 		}
+		this.monitoringController = MonitoringController.createInstance(controllerConfiguration);
 
 		this.initSensors();
 		LOG.info("Monitoring started");
@@ -248,8 +268,12 @@ public final class ResourceMonitor extends AbstractCommandLineTool {
 		sb.append("\tSampling interval unit = " + this.intervalUnit + lineSeparator);
 		sb.append("\tInitial delay = " + this.initialDelay + lineSeparator);
 		sb.append("\tInitial delay unit = " + this.initialDelayUnit + lineSeparator);
-		sb.append("\tDuration = " + this.duration + lineSeparator);
-		sb.append("\tDuration unit = " + this.durationUnit + lineSeparator);
+		if (this.duration < 0) {
+			sb.append("\tDuration = INFINITE" + lineSeparator);
+		} else {
+			sb.append("\tDuration = " + this.duration + lineSeparator);
+			sb.append("\tDuration unit = " + this.durationUnit + lineSeparator);
+		}
 		return sb.toString();
 	}
 }
