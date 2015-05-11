@@ -42,14 +42,14 @@ import kieker.tools.util.AggregationVariableSet;
  * @since 1.10
  */
 @Plugin(name = "Variate TimeSeriesPoint Aggregator", outputPorts = {
-	@OutputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATED_TSPOINT),
-	@OutputPort(eventTypes = { AggregationWindow.class }, name = TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATION_WINDOW) },
+		@OutputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATED_TSPOINT),
+		@OutputPort(eventTypes = { AggregationWindow.class }, name = TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATION_WINDOW) },
 		configuration = {
-			@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_METHOD, defaultValue = "MEAN"),
-			@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_SPAN, defaultValue = "1000"),
-			@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT, defaultValue = "MILLISECONDS"),
-			@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_TIMESCOPE, defaultValue = "perVariable")
-		})
+		@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_METHOD, defaultValue = "MEAN"),
+		@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_SPAN, defaultValue = "1000"),
+		@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT, defaultValue = "MILLISECONDS"),
+		@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_TIMESCOPE, defaultValue = "perVariable")
+})
 public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME_TSPOINT = "tspoint";
@@ -202,7 +202,9 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 			super.deliver(OUTPUT_PORT_NAME_AGGREGATION_WINDOW, this.recentWindow);
 		}
 
-		final TreeMap<Long, List<NamedDoubleTimeSeriesPoint>> orderedTsPoints = new TreeMap<Long, List<NamedDoubleTimeSeriesPoint>>();
+		final Map<Long, List<NamedDoubleTimeSeriesPoint>> orderedTsPoints = new TreeMap<Long, List<NamedDoubleTimeSeriesPoint>>(); // NOPMD - There is no
+																																	// ConcurrentTreeMap
+																																	// implementation
 
 		for (final String appname : this.aggregationVariables.keySet()) {
 			final AggregationVariableSet variables = this.aggregationVariables.get(appname);
