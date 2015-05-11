@@ -37,19 +37,19 @@ import kieker.tools.util.AggregationVariableSet;
 
 /**
  * This Filter aggregates the incoming DoubleTImeSeriesPoints over a configurable period of time.
- * 
+ *
  * @author Tom Frotscher, Teerat Pitakrat
  * @since 1.10
  */
 @Plugin(name = "Variate TimeSeriesPoint Aggregator", outputPorts = {
-	@OutputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATED_TSPOINT),
-	@OutputPort(eventTypes = { AggregationWindow.class }, name = TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATION_WINDOW) },
+		@OutputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATED_TSPOINT),
+		@OutputPort(eventTypes = { AggregationWindow.class }, name = TimeSeriesPointAggregatorFilter.OUTPUT_PORT_NAME_AGGREGATION_WINDOW) },
 		configuration = {
-			@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_METHOD, defaultValue = "MEAN"),
-			@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_SPAN, defaultValue = "1000"),
-			@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT, defaultValue = "MILLISECONDS"),
-			@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_TIMESCOPE, defaultValue = "perVariable")
-		})
+		@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_METHOD, defaultValue = "MEAN"),
+		@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_SPAN, defaultValue = "1000"),
+		@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_TIMEUNIT, defaultValue = "MILLISECONDS"),
+		@Property(name = TimeSeriesPointAggregatorFilter.CONFIG_PROPERTY_NAME_AGGREGATION_TIMESCOPE, defaultValue = "perVariable")
+})
 public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 
 	public static final String INPUT_PORT_NAME_TSPOINT = "tspoint";
@@ -141,16 +141,14 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 
 	/**
 	 * This method represents the input port for the incoming measurements.
-	 * 
+	 *
 	 * @param input
 	 *            The next incoming measurement
 	 */
 	@InputPort(eventTypes = { NamedDoubleTimeSeriesPoint.class }, name = TimeSeriesPointAggregatorFilter.INPUT_PORT_NAME_TSPOINT)
 	public void inputTSPoint(final NamedDoubleTimeSeriesPoint input) {
 		final String name = input.getName();
-		if (!this.aggregationVariables.containsKey(name)) {
-			this.aggregationVariables.put(name, new AggregationVariableSet());
-		}
+		this.aggregationVariables.putIfAbsent(name, new AggregationVariableSet());
 
 		if (this.aggregationTimescopeGlobal) {
 			this.processInputGlobalScope(input);
@@ -159,7 +157,7 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 		}
 	}
 
-	private void processInputVariableScope(final NamedDoubleTimeSeriesPoint input) {
+	private synchronized void processInputVariableScope(final NamedDoubleTimeSeriesPoint input) {
 		final long currentTime = input.getTime();
 		final String appname = input.getName();
 		final AggregationVariableSet variables = this.aggregationVariables.get(appname);
@@ -193,7 +191,7 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 		variables.getAggregationList().add(input);
 	}
 
-	private void processInputGlobalScope(final NamedDoubleTimeSeriesPoint input) {
+	private synchronized void processInputGlobalScope(final NamedDoubleTimeSeriesPoint input) {
 		final long inputTimestamp = input.getTime();
 		final AggregationVariableSet inputVariables = this.aggregationVariables.get(input.getName());
 		final long startOfInputTimestampsInterval = this.computeFirstTimestampInInterval(inputTimestamp, inputVariables);
@@ -295,9 +293,9 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 
 	/**
 	 * Returns the first timestamp included in the interval that corresponds to the given timestamp.
-	 * 
+	 *
 	 * @param timestamp
-	 * 
+	 *
 	 * @return The timestamp in question.
 	 */
 	private long computeFirstTimestampInInterval(final long timestamp, final AggregationVariableSet variables) {
@@ -314,7 +312,7 @@ public class TimeSeriesPointAggregatorFilter extends AbstractFilterPlugin {
 
 	/**
 	 * Returns the last timestamp included in the interval that corresponds to the given timestamp.
-	 * 
+	 *
 	 * @param timestamp
 	 * @return The timestamp in question.
 	 */
