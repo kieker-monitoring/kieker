@@ -418,8 +418,12 @@
 	</Match>
 
 	<Match>
-		<Class name="kieker.tools.resourceMonitor.ResourceMonitor" />
-		<Method name="performTask" params="" returns="boolean" />
+		<Class name="kieker.tools.resourceMonitor.ResourceMonitor$1" />
+		<Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON" />
+	</Match>
+
+	<Match>
+		<Class name="kieker.tools.resourceMonitor.ResourceMonitor$2" />
 		<Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON" />
 	</Match>
 	
