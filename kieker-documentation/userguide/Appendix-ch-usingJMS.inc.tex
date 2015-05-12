@@ -1,6 +1,6 @@
 This chapter gives a brief description on how to use the \class{AsyncJMSWriter} and \class{JMSReader} %
-classes. The directory \dir{\JMSBookstoreApplicationDirDistro/} contains the %
-sources, ant scripts etc.\ used in this example. It is based on the Bookstore %
+classes. The directory \dir{\JMSBookstoreApplicationReleaseDirDistro/} contains the %
+sources, gradle scripts etc.\ used in this example. It is based on the Bookstore %
 application with manual instrumentation presented in Chapter~\ref{chap:example}. %
 
 The following sections provide step-by-step instructions for the %
@@ -57,15 +57,15 @@ Copy the following files from the ActiveMQ release to the %
 
 \subsection{Kieker Monitoring Configuration for ActiveMQ}
 
-The file \file{\JMSBookstoreApplicationDirDistro/META-INF/kieker.monitoring.\-pro\-perties-activeMQ} %
+The file \file{src-resources/META-INF/kieker.\-monitoring.\-pro\-perties-activeMQ} %
 is already configured to use the \class{AsyncJMSWriter} via ActiveMQ. The important properties are %
 the definition of the provider URL and the context factory:
 
 \setPropertiesListing
-\lstinputlisting[firstline=12,lastline=12,caption=Excerpt from \file{kieker.monitoring.properties-activemq} configuring the provider URL of the JMS writer via ActiveMQ]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-activemq}
+\lstinputlisting[firstline=12,lastline=12,caption=Excerpt from \file{kieker.monitoring.properties-activemq} configuring the provider URL of the JMS writer via ActiveMQ]{\JMSBookstoreApplicationDir/src-resources/META-INF/kieker.monitoring.properties-activemq}
 
 \setPropertiesListing
-\lstinputlisting[firstline=21,lastline=21,caption=Excerpt from \file{kieker.monitoring.properties-activemq} configuring the context factory of the JMS writer via ActiveMQ]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-activemq}
+\lstinputlisting[firstline=21,lastline=21,caption=Excerpt from \file{kieker.monitoring.properties-activemq} configuring the context factory of the JMS writer via ActiveMQ]{\JMSBookstoreApplicationDir/src-resources/META-INF/kieker.monitoring.properties-activemq}
 
 \subsection{Running the Example}
 
@@ -83,13 +83,19 @@ the definition of the provider URL and the context factory:
 \end{lstlisting}
 \item Start the analysis part (in a new terminal):
 \setBashListing
-\begin{lstlisting}[caption=]
-#\lstshellprompt{}# ant run-analysis-activemq
+\begin{lstlisting}[caption=Start the analysis part under UNIX-like systems]
+#\lstshellprompt{}# ./gradlew runAnalysisActiveMQ
+\end{lstlisting}
+\begin{lstlisting}[caption=Start the analysis part under Windows]
+#\lstshellprompt{}# gradlew.bat runAnalysisActiveMQ
 \end{lstlisting}
 \item Start the instrumented Bookstore (in a new terminal):
 \setBashListing
-\begin{lstlisting}[caption=]
-#\lstshellprompt{}# ant run-monitoring-activemq
+\begin{lstlisting}[caption=Start the analysis part under UNIX-like systems]
+#\lstshellprompt{}# ./gradlew runMonitoringActiveMQ
+\end{lstlisting}
+\begin{lstlisting}[caption=Start the analysis part under Windows]
+#\lstshellprompt{}# gradlew.bat runMonitoringActiveMQ
 \end{lstlisting}
 \end{enumerate}
 
@@ -129,15 +135,15 @@ Copy the following files from the HornetQ \dir{lib/} folder to the %
 
 \subsection{Kieker Monitoring Configuration for HornetQ}
 
-The file \file{\JMSBookstoreApplicationDirDistro/META-INF/kieker.monitoring.\-pro\-perties-hornetq} %
+The file \file{src-resources/META-INF/kieker.\-monitoring.\-pro\-perties-hornetq} %
 is already configured to use the \class{AsyncJMSWriter} via HornetQ. The important properties are %
 the definition of the provider URL, the context factory, and the queue:
 
 \setPropertiesListing
-\lstinputlisting[firstline=12,lastline=12,caption=Excerpt from \file{kieker.monitoring.properties-hornetq} configuring the provider URL of the JMS writer via HornetQ]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-hornetq}
+\lstinputlisting[firstline=12,lastline=12,caption=Excerpt from \file{kieker.monitoring.properties-hornetq} configuring the provider URL of the JMS writer via HornetQ]{\JMSBookstoreApplicationDir/src-resources/META-INF/kieker.monitoring.properties-hornetq}
 
 \setPropertiesListing
-\lstinputlisting[firstline=21,lastline=21,caption=Excerpt from \file{kieker.monitoring.properties-hornetq} configuring the context factory of the JMS writer via HornetQ]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-hornetq}
+\lstinputlisting[firstline=21,lastline=21,caption=Excerpt from \file{kieker.monitoring.properties-hornetq} configuring the context factory of the JMS writer via HornetQ]{\JMSBookstoreApplicationDir/src-resources/META-INF/kieker.monitoring.properties-hornetq}
 
 \subsection{Running the Example}
 
@@ -158,13 +164,19 @@ Note that the script must be called from within HornetQ's \dir{bin/} directory.
 
 \item Start the analysis part (in a new terminal):
 \setBashListing
-\begin{lstlisting}[caption=]
-#\lstshellprompt{}# ant run-analysis-hornetq
+\begin{lstlisting}[caption=Start the analysis part under UNIX-like systems]
+#\lstshellprompt{}# ./gradlew runAnalysisHornetQ
+\end{lstlisting}
+\begin{lstlisting}[caption=Start the analysis part under Windows]
+#\lstshellprompt{}# gradlew.bat runAnalysisHornetQ
 \end{lstlisting}
 \item Start the instrumented Bookstore (in a new terminal):
 \setBashListing
-\begin{lstlisting}[caption=]
-#\lstshellprompt{}# ant run-monitoring-hornetq
+\begin{lstlisting}[caption=Start the analysis part under UNIX-like systems]
+#\lstshellprompt{}# ./gradlew runMonitoringHornetQ
+\end{lstlisting}
+\begin{lstlisting}[caption=Start the analysis part under Windows]
+#\lstshellprompt{}# gradlew.bat runMonitoringHornetQ
 \end{lstlisting}
 \end{enumerate}
 
@@ -195,15 +207,15 @@ Copy the following files from the OpenJMS \dir{lib/} folder to the %
 
 \subsection{Kieker Monitoring Configuration for OpenJMS}
 
-The file \file{\JMSBookstoreApplicationDirDistro/META-INF/kieker.monitoring.\-pro\-perties-openjms} %
+The file \file{src-resources/META-INF/kieker.monitoring.\-pro\-perties-openjms} %
 is already configured to use the \class{AsyncJMSWriter} via OpenJMS. The important properties are %
 the definition of the provider URL and the context factory:
 
 \setPropertiesListing
-\lstinputlisting[firstline=12,lastline=12,caption=Excerpt from \file{kieker.monitoring.properties-openjms} configuring the provider URL of the JMS writer via OpenJMS]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-openjms}
+\lstinputlisting[firstline=12,lastline=12,caption=Excerpt from \file{kieker.monitoring.properties-openjms} configuring the provider URL of the JMS writer via OpenJMS]{\JMSBookstoreApplicationDir/src-resources/META-INF/kieker.monitoring.properties-openjms}
 
 \setPropertiesListing
-\lstinputlisting[firstline=21,lastline=21,caption=Excerpt from \file{kieker.monitoring.properties-openjms} configuring the context factory of the JMS writer via OpenJMS]{\JMSBookstoreApplicationDir/META-INF/kieker.monitoring.properties-openjms}
+\lstinputlisting[firstline=21,lastline=21,caption=Excerpt from \file{kieker.monitoring.properties-openjms} configuring the context factory of the JMS writer via OpenJMS]{\JMSBookstoreApplicationDir/src-resources/META-INF/kieker.monitoring.properties-openjms}
 
 \subsection{Running the Example}
 
@@ -221,12 +233,18 @@ the definition of the provider URL and the context factory:
 \end{lstlisting}
 \item Start the analysis part (in a new terminal):
 \setBashListing
-\begin{lstlisting}[caption=]
-#\lstshellprompt{}# ant run-analysis-openjms
+\begin{lstlisting}[caption=Start of the JMS server under UNIX-like systems]
+#\lstshellprompt{}# ./gradlew runAnalysisOpenJMS
+\end{lstlisting}
+\begin{lstlisting}[caption=Start of the JMS server under Windows]
+#\lstshellprompt{}# gradlew.bat runAnalysisOpenJMS
 \end{lstlisting}
 \item Start the instrumented Bookstore (in a new terminal):
 \setBashListing
-\begin{lstlisting}[caption=]
-#\lstshellprompt{}# ant run-monitoring-openjms
+\begin{lstlisting}[caption=Start of the JMS server under UNIX-like systems]
+#\lstshellprompt{}# ./gradlew runMonitoringOpenJMS
+\end{lstlisting}
+\begin{lstlisting}[caption=Start of the JMS server under Windows]
+#\lstshellprompt{}# gradlew.bat runMonitoringOpenJMS
 \end{lstlisting}
 \end{enumerate}

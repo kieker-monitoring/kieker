@@ -24,7 +24,7 @@ The \Kieker{} download site\footnote{\KiekerDownloadURL{}} provides archives of 
   .1 \DirInDirTree{\KiekerDir/}.
     .2 \DirInDirTree{bin/}\DTcomment{Call scripts for \Kieker{} tools}.
       .3 \ldots.
-    .2 \DirInDirTree{dist/}\DTcomment{The \Kieker{} framework libraries}.
+    .2 \DirInDirTree{build/libs/}\DTcomment{The \Kieker{} framework libraries}.
       .3 \mainJar.
       .3 \ldots. %\servletWar.
     .2 \DirInDirTree{doc/}\DTcomment{}.
@@ -32,7 +32,7 @@ The \Kieker{} download site\footnote{\KiekerDownloadURL{}} provides archives of 
     .2 \DirInDirTree{examples/}\DTcomment{Example projects and configuration files}.
       .3 \DirInDirTree{userguide/}\DTcomment{Source code of the examples in this document}.
                         .4 \ldots.
-      .3 \kiekerMonitoringProperties{}.
+      .3 \kiekerExampleMonitoringProperties{}.
     .2 \DirInDirTree{lib/}\DTcomment{Libraries required by \Kieker{}}.
 %       .3 \commonsLoggingJar.
       .3 \ldots.
@@ -44,10 +44,10 @@ The \Kieker{} download site\footnote{\KiekerDownloadURL{}} provides archives of 
 
 \pagebreak
 
-The Java sources presented in this user guide, as well as pre-compiled binaries, are included in the \file{\exampleDir/} directory. The file \file{\mainJar{}} contains the \KiekerMonitoringPart{} and \KiekerAnalysisPart{} components, as well as the \KiekerTraceAnalysis{} tool. The sample \KiekerMonitoringPart{}
+The Java sources presented in this user guide, as well as pre-compiled binaries, are included in the \file{\exampleReleaseDir/} directory. The file \file{\mainJar{}} contains the \KiekerMonitoringPart{} and \KiekerAnalysisPart{} components, as well as the \KiekerTraceAnalysis{} tool. The sample \KiekerMonitoringPart{}
 configuration file %
 \file{\kiekerExampleMonitoringProperties{}} will be detailed in Chapter~\ref{chap:componentsMonitoring}. %
-In addition to the \file{\mainJar{}} file, the \file{dist/} directory includes %
+In addition to the \file{\mainJar{}} file, the \file{build/libs/} directory includes %
 variants of this \file{.jar} files with integrated third-party libraries. Additional %
 information on these \file{.jar} files and when to use them will follow later in this document. %
 
@@ -88,8 +88,10 @@ The directory structure of the Bookstore example is shown in Figure~\ref{fig:Pla
 .6 BookstoreStarter.java.
 .6 Catalog.java.
 .6 CRM.java.
-.5 build.properties.
-.5 build.xml\DTcomment{Optional built script for the application}.
+.5 build.gradle\DTcomment{Optional build script for the application}.
+.5 gradlew.
+.5 gradlew.bat.
+.5 README.txt.
 }
 \end{graybox}
 
@@ -97,7 +99,7 @@ The directory structure of the Bookstore example is shown in Figure~\ref{fig:Pla
 \label{fig:PlainBookstoreExample}
 \end{figure}
 
-\NOTIFYBOX{The Java sources and a pre-compiled binary of the uninstrumented Bookstore application can be found in the \file{\plainBookstoreApplicationDirDistro{}/} directory.}
+\NOTIFYBOX{The Java sources and a pre-compiled binary of the uninstrumented Bookstore application can be found in the \file{\plainBookstoreApplicationReleaseDirDistro{}/} directory.}
 
 \quad\
 
@@ -173,7 +175,7 @@ instrumentation in detail, the quick start example uses manual instrumentation.}
 
 \
 
-\noindent The first step is to copy the \Kieker{} jar-file \file{\mainJarEMF} to the \dir{lib/} directory of the example directory~(see Section~\ref{sec:example:bookstore}). The file is located in the \dir{\KiekerDir/dist/} directory of the extracted \Kieker{} archive, as described in Section~\ref{sec:example:downloadInstall}. %
+\noindent The first step is to copy the \Kieker{} jar-file \file{\mainJarEMF} to the \dir{lib/} directory of the example directory~(see Section~\ref{sec:example:bookstore}). The file is located in the \dir{\KiekerDir/build/libs/} directory of the extracted \Kieker{} archive, as described in Section~\ref{sec:example:downloadInstall}. %
 The final layout of the example directory is illustrated in Figure~\ref{fig:KiekerBookstoreExample}.
 
 \begin{figure}[H]
@@ -194,7 +196,7 @@ The final layout of the example directory is illustrated in Figure~\ref{fig:Kiek
 \end{figure}
 
 \NOTIFYBOX{The Java sources and pre-compiled binaries of the manually instrumented Bookstore application described in %
-this section can be found in the \file{\manualInstrumentedBookstoreApplicationDirDistro{}/} directory.}
+this section can be found in the \file{\manualInstrumentedBookstoreApplicationReleaseDirDistro{}/} directory.}
 
 \quad\
 
@@ -246,7 +248,7 @@ Finally, a record is created (see lines~40--46) and stored by calling the monito
 
 \noindent %
 The next step after instrumenting the code is running the instrumented application. Listing~\ref{lst:bookstoreStarterLinux} shows the commands to compile and run the application under \UnixLikeSystems{}. Listing \ref{lst:bookstoreStarterWin} shows the same commands for Windows. The expected working directory is the base directory of this example, i.e. %
- \dir{\manualInstrumentedBookstoreApplicationDirDistro{}/}.
+ \dir{\manualInstrumentedBookstoreApplicationReleaseDirDistro{}/}.
  
 % \pagebreak
 
@@ -357,7 +359,7 @@ be found in \Kieker's \file{lib/} directory) need to be added to the classpath. 
 
 \noindent The analysis application developed in this section comprises the file %
 \file{BookstoreAnalysisStarter.java}, as shown in Figure~\ref{lst:analysisExampleLayout}. %
-This file can also be found in the directory \dir{\manualInstrumentedBookstoreApplicationDirDistro{}/}.
+This file can also be found in the directory \dir{\manualInstrumentedBookstoreApplicationReleaseDirDistro{}/}.
 The file sets up the basic pipe-and-filter configuration depicted in Figure~\ref{fig:example:ch2:pipe-and-filter}: %
 \Kieker{}'s file system reader (\class{FSReader}) reads monitoring records %
 from a file system monitoring log (as produced in the previous Section~\ref{sec:example:monitoring}) %

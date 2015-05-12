@@ -16,7 +16,7 @@ SET BINDIR=%cd%
 SET CLASSPATH=%BINDIR%
 
 REM Now start the tool, but don't forget to deliver the parameters.
-java %JAVAARGS% -cp "%BINDIR%\..\lib\*";"%BINDIR%\..\dist\*";"%BINDIR%" %MAINCLASSNAME% %*
+java %JAVAARGS% -cp "%BINDIR%\..\lib\*";"%BINDIR%\..\build\libs/*";"%BINDIR%" %MAINCLASSNAME% %*
 
 REM Don't close the window immediately.
 @echo on

@@ -28,6 +28,7 @@ task replaceHardCodedVersionNames() << {
 	regexpReplaceInFiles(project.file("Macros.tex"), "mainJar\\}\\{kieker-.*.jar", "mainJar\\}\\{${rootProject.mainJar.archiveName}")
 	regexpReplaceInFiles(project.file("Macros.tex"), "mainJarEMF\\}\\{kieker-.*.jar", "mainJarEMF\\}\\{${rootProject.emfJar.archiveName}")
 	regexpReplaceInFiles(project.file("Macros.tex"), "mainJarWeaver\\}\\{kieker-.*.jar", "mainJarWeaver\\}\\{${rootProject.aspectJJar.archiveName}")
+	regexpReplaceInFiles(project.file("Macros.tex"), "version\\}\\{.*\\}", "version\\}\\{${version}\\}")
 }
 
 task buildDocumentation(dependsOn: replaceHardCodedVersionNames) {
@@ -42,8 +43,8 @@ task buildDocumentation(dependsOn: replaceHardCodedVersionNames) {
   
   doLast {
      tasks.fstLatexRun.execute()
-     tasks.sndLatexRun.execute()
      tasks.bibtexRun.execute()
+     tasks.sndLatexRun.execute()
      tasks.thrdLatexRun.execute()
      tasks.cleanDocumentation.execute()
   }

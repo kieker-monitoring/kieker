@@ -4,7 +4,7 @@ demonstrates how to employ \KiekerMonitoringPart{} for monitoring a Java applica
 running in a Java~EE container---in this case Jetty.\footnote{\url{http://www.eclipse.org/jetty/}} %
 Monitoring probes based on the Java~EE Servlet API, Spring, %
 and AspectJ are used to monitor execution, trace, and session data (see Section~\ref{chap:aspectJ}). %
-The directory \dir{\JavaEEServletExampleDistro/} contains the prepared Jetty %
+The directory \dir{\JavaEEServletExampleReleaseDirDistro/} contains the prepared Jetty %
 server with the MyBatis JPetStore application and the \Kieker-based demo %
 analysis application known from \url{http://demo.kieker-monitoring.net/}. %
 
@@ -81,7 +81,7 @@ interceptor in the file \file{applicationContext.xml}, mentioned above. %
 \item   Browse through the application to generate some monitoring data. %
 \item In this example, \Kieker{} is configured to write the monitoring data %
       to JMX in order to communicate with the \Kieker-based demo analysis %
-      application, which is accessible via \url{localhost:8080/}.
+      application, which is accessible via \url{localhost:8080/livedemo/}.
    
 \item In order to write the monitoring data to the file system, the %
       JMX writer needs to be disabled in the file \file{kieker.monitoring.properties}, %
