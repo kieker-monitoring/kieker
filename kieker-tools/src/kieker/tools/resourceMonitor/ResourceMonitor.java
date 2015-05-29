@@ -98,9 +98,9 @@ public final class ResourceMonitor extends AbstractCommandLineTool {
 		options.addOption(intervalOption);
 
 		final Option intervalUnitOption = new Option(null, "interval-unit", true, "Sampling interval time unit (default: SECONDS)");
-		intervalOption.setArgName("interval-unit");
-		intervalOption.setRequired(false);
-		intervalOption.setArgs(1);
+		intervalUnitOption.setArgName("interval-unit");
+		intervalUnitOption.setRequired(false);
+		intervalUnitOption.setArgs(1);
 		options.addOption(intervalUnitOption);
 
 		final Option initialDelayOption = new Option(null, "initial-delay", true, "Initial delay");
