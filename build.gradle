@@ -343,7 +343,6 @@ def binaryContent = project.copySpec {
 	from (projectDir) {
 		include 'LICENSE'
 		include 'HISTORY'
-		include 'README'
 		
 		include 'bin/**'
 		include 'lib/**'
@@ -433,6 +432,7 @@ def sourceContent = project.copySpec {
 		include 'src/**'
 		include 'lib/**'
 
+        exclude 'README'
 		exclude 'javadoc/**'    
 		exclude 'kieker-examples/analysis/**/.classpath'
 		exclude 'kieker-examples/monitoring/**/.classpath'
